@@ -366,9 +366,9 @@ qtmp4_reader_c::parse_header_priv_atoms(qtmp4_demuxer_t *dmx,
       add_atom_size = mio.read_uint32_be();
       add_atom = mio.read_uint32_be();
       add_atom_size -= 8;
-      mxverb(2, PFX "%*sAudio private data size: %u, type: "
-             "'%c%c%c%c'\n", (level + 1) * 2, "", add_atom_size + 8,
-             BE2STR(add_atom));
+      mxverb(2, PFX "%*s%s private data size: %u, type: "
+             "'%c%c%c%c'\n", (level + 1) * 2, "", dmx->type == 'a' ? "Audio" :
+             "Video", add_atom_size + 8, BE2STR(add_atom));
       if (dmx->priv == NULL) {
         uint32_t patom_size, patom;
 
@@ -1063,6 +1063,8 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     throw exception();
   mxverb(2, PFX "%*sesds: decoder specific descriptor, len: %u\n", lsp, "",
          len);
+  mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n", lsp + 2, "");
+  mxhexdump(3, e->decoder_config, e->decoder_config_len);
 
   tag = memio.read_uint8();
   if (tag != MP4DT_SL_CONFIG) {
