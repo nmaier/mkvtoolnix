@@ -332,19 +332,20 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
   block_duration = 0;
   for (i = 0; i < rg->durations.size(); i++)
     block_duration += rg->durations[i];
-  def_duration = RND_TIMECODE_SCALE(rg->source->get_track_default_duration());
-  mxverb(3, "cluster_helper::set_duration: block_duration %lld def_duration "
+  def_duration = rg->source->get_track_default_duration();
+  mxverb(3, "cluster_helper::set_duration: block_duration %lld "
+         "rounded duration %lld def_duration "
          "%lld use_durations %d rg->duration_mandatory %d\n",
-         block_duration, RND_TIMECODE_SCALE(def_duration),
+         block_duration, RND_TIMECODE_SCALE(block_duration), def_duration,
          use_durations ? 1 : 0, rg->duration_mandatory ? 1 : 0);
 
   if (rg->duration_mandatory) {
     if ((block_duration == 0) ||
         ((block_duration > 0) && (block_duration != def_duration)))
-      group->SetBlockDuration(block_duration);
+      group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
   } else if (use_durations && (block_duration > 0) &&
              (block_duration != def_duration))
-    group->SetBlockDuration(block_duration);
+    group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
 }
 
 /*
