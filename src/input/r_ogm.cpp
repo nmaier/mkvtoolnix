@@ -25,6 +25,9 @@
 #include <string.h>
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
+#if defined(HAVE_FLAC_FORMAT_H)
+#include <FLAC/stream_decoder.h>
+#endif
 
 extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
@@ -42,6 +45,106 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_textsubs.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
+
+#if defined(HAVE_FLAC_FORMAT_H)
+#define FPFX "flac_header_extraction: "
+
+static FLAC__StreamDecoderReadStatus
+fhe_read_cb(const FLAC__StreamDecoder *decoder, FLAC__byte buffer[],
+            unsigned *bytes, void *client_data) {
+  unsigned int num, bytes_left;
+  flac_header_extractor_c *fhe;
+
+  fhe = (flac_header_extractor_c *)client_data;
+
+  bytes_left = fhe->mem->get_size() - fhe->mem->getFilePointer();
+  mxverb(2, FPFX "read cb, left %u\n", bytes_left);
+  if (bytes_left == 0)
+    return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
+
+  if (fhe->first_packet) {
+    memcpy(buffer, "fLaC", 4);
+    *bytes = 4;
+    fhe->first_packet = false;
+    return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
+  }
+
+  num = *bytes;
+  if (num > bytes_left)
+    num = bytes_left;
+  fhe->mem->read((unsigned char *)buffer, num);
+  *bytes = num;
+
+  return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
+}
+
+static FLAC__StreamDecoderWriteStatus
+fhe_write_cb(const FLAC__StreamDecoder *, const FLAC__Frame *,
+             const FLAC__int32 * const [], void *) {
+
+  mxverb(2, FPFX "write cb\n");
+
+  return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
+}
+
+static void fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
+                            const FLAC__StreamMetadata *metadata,
+                            void *client_data) {
+  flac_header_extractor_c *fhe;
+
+  fhe = (flac_header_extractor_c *)client_data;
+  mxverb(2, FPFX "metadata cb\n");
+}
+
+static void fhe_error_cb(const FLAC__StreamDecoder *,
+                         FLAC__StreamDecoderErrorStatus status, void *) {
+  mxverb(2, FPFX "error (%d)\n", (int)status);
+}
+
+flac_header_extractor_c::flac_header_extractor_c():
+  metadata_parsed(false), first_packet(true), mem(NULL) {
+  decoder = FLAC__stream_decoder_new();
+  if (decoder == NULL)
+    mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
+  FLAC__stream_decoder_set_client_data(decoder, this);
+  if (!FLAC__stream_decoder_set_read_callback(decoder, fhe_read_cb))
+    mxerror(FPFX "Could not set the read callback.\n");
+  if (!FLAC__stream_decoder_set_write_callback(decoder, fhe_write_cb))
+    mxerror(FPFX "Could not set the write callback.\n");
+  if (!FLAC__stream_decoder_set_metadata_callback(decoder, fhe_metadata_cb))
+    mxerror(FPFX "Could not set the metadata callback.\n");
+  if (!FLAC__stream_decoder_set_error_callback(decoder, fhe_error_cb))
+    mxerror(FPFX "Could not set the error callback.\n");
+  if (FLAC__stream_decoder_init(decoder) !=
+      FLAC__STREAM_DECODER_SEARCH_FOR_METADATA)
+    mxerror(FPFX "Could not initialize the FLAC decoder.\n");
+}
+
+flac_header_extractor_c::~flac_header_extractor_c() {
+  FLAC__stream_decoder_reset(decoder);
+  FLAC__stream_decoder_delete(decoder);
+  if (mem != NULL)
+    delete mem;
+}
+
+bool flac_header_extractor_c::extract(unsigned char *new_mem, int size) {
+  if (mem != NULL)
+    delete mem;
+  mem = new mm_mem_io_c(new_mem, size);
+
+  mxverb(2, FPFX "extract\n");
+  while (!mem->eof()) {
+    int result =
+      (int)FLAC__stream_decoder_process_single(decoder);
+    mxverb(2, FPFX "extract, result: %d\n", result);
+           
+  }
+  delete mem;
+  mem = NULL;
+
+  return metadata_parsed;
+}
+#endif // HAVE_FLAC_FORMAT_H
 
 /*
  * Probes a file by simply comparing the first four bytes to 'OggS'.
@@ -419,7 +522,6 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
   // FLAC
   if ((op.bytes >= 4) && !strncmp((char *)op.packet, "fLaC", 4)) {
-    mxerror("FLAC in Ogg is not supported yet.\n");
     nastreams++;
     numstreams++;
     if (!demuxing_requested('a', ogg_page_serialno(og))) {
@@ -427,6 +529,12 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       delete dmx;
       return;
     }
+#if !defined(HAVE_FLAC_FORMAT_H)
+    mxerror("mkvmerge has not been compiled with FLAC support but handling "
+            "of this stream has been requested.\n");
+#endif
+    mxerror("mkvmerge does not yet support FLAC but handling "
+            "of this stream has been requested.\n");
 
     dmx->stype = OGM_STREAM_TYPE_FLAC;
     dmx->serial = ogg_page_serialno(og);
@@ -608,12 +716,26 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
   if (dmx == NULL)
     return;
 
+  if (dmx->stype == OGM_STREAM_TYPE_FLAC) {
+    if (dmx->headers_read)
+      return;
+#if defined HAVE_FLAC_FORMAT_H
+    if (dmx->fhe.extract(op.packet, op.bytes))
+      dmx->headers_read = true;
+#else
+    dmx->headers_read = true;
+    return;
+#endif
+  }
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     dmx->packet_data.push_back((unsigned char *)
                                safememdup(op.packet, op.bytes));
     dmx->packet_sizes.push_back(op.bytes);
   }
+
+  if ((dmx->stype == OGM_STREAM_TYPE_VORBIS) && (dmx->packet_data.size() == 3))
+    dmx->headers_read = true;
 }
 
 /*
@@ -642,8 +764,9 @@ int ogm_reader_c::read_headers() {
 
       for (i = 0; i < num_sdemuxers; i++) {
         dmx = sdemuxers[i];
-        if ((dmx->stype == OGM_STREAM_TYPE_VORBIS) &&
-            (dmx->packet_data.size() < 3)) {
+        if (((dmx->stype == OGM_STREAM_TYPE_VORBIS) ||
+             (dmx->stype == OGM_STREAM_TYPE_FLAC)) &&
+            !dmx->headers_read) {
           // Not all three headers have been found for this Vorbis stream.
           done = 0;
           break;

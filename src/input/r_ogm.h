@@ -26,6 +26,9 @@
 #include <stdio.h>
 
 #include <ogg/ogg.h>
+#if defined(HAVE_FLAC_FORMAT_H)
+#include <FLAC/stream_decoder.h>
+#endif
 
 #include <vector>
 
@@ -42,17 +45,36 @@
 #define OGM_STREAM_TYPE_TEXT    6
 #define OGM_STREAM_TYPE_FLAC    7
 
+#if defined(HAVE_FLAC_FORMAT_H)
+class flac_header_extractor_c {
+public:
+  FLAC__StreamDecoder *decoder;
+  bool metadata_parsed, first_packet;
+  int channels, sample_rate, bits_per_sample;
+  mm_mem_io_c *mem;
+
+public:
+  flac_header_extractor_c();
+  ~flac_header_extractor_c();
+  bool extract(unsigned char *new_mem, int size);
+};
+#endif
+
 struct ogm_demuxer_t {
   ogg_stream_state os;
   generic_packetizer_c *packetizer;
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
+  bool headers_read;
   vector<unsigned char *> packet_data;
   vector<int> packet_sizes;
+#if defined(HAVE_FLAC_FORMAT_H)
+  flac_header_extractor_c fhe;
+#endif
 
   ogm_demuxer_t():
     packetizer(NULL), sid(0), stype(0), serial(0), eos(0), units_processed(0),
-    vorbis_rate(0) {
+    vorbis_rate(0), headers_read(false) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
   ~ogm_demuxer_t() {
