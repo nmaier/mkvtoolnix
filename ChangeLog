@@ -1,5 +1,8 @@
 2004-08-01  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: The CUE extraction wrote UTF-8 characters
+	but no UTF-8 BOM (byte order marker) at the beginning.
+
 	* mkvmerge: bug fix: Handle TTA files with ID3 tags correctly ( =
 	skip the ID3 tags).
 

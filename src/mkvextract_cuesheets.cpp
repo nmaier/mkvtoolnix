@@ -284,6 +284,8 @@ write_cuesheet(const char *file_name,
   if (chapters.ListSize() == 0)
     return;
 
+  out.write_bom("UTF-8");
+
   print_if_global("CATALOG", "CATALOG %s\n");
   print_if_global("ARTIST", "PERFORMER \"%s\"\n");
   print_if_global("TITLE", "TITLE \"%s\"\n");
