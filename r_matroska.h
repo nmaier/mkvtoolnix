@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.7 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.8 2003/05/03 19:53:06 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -94,9 +94,6 @@ private:
 
   float segment_duration, last_timecode;
 
-  int64_t block_timecode, block_duration, block_ref1, block_ref2;
-  mkv_track_t *block_track;
-     
 public:
   mkv_reader_c(track_info_t *nti) throw (error_c);
   virtual ~mkv_reader_c();
@@ -118,9 +115,6 @@ private:
   virtual mkv_track_t *find_track_by_num(uint32_t num, mkv_track_t *c = NULL);
   virtual void verify_tracks();
   virtual int packets_available();
-  virtual void add_buffer(DataBuffer &dbuffer);
-  virtual void free_buffers();
-  virtual void handle_blocks();
 };
 
 
