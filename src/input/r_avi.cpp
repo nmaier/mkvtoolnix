@@ -44,6 +44,7 @@ extern "C" {
 #include "aac_common.h"
 #include "common.h"
 #include "error.h"
+#include "mpeg4_common.h"
 #include "r_avi.h"
 #include "p_aac.h"
 #include "p_ac3.h"
@@ -778,6 +779,8 @@ void
 avi_reader_c::identify() {
   int i;
   const char *type;
+  uint32_t par_num, par_den;
+  bool extended_info_shown;
 #ifdef HAVE_AVICLASSES
   w32AVISTREAMINFO stream_info;
   w32WAVEFORMATEX *wfe;
@@ -835,7 +838,46 @@ avi_reader_c::identify() {
     i++;
   }
 #else
-  mxinfo("Track ID 0: video (%s)\n", AVI_video_compressor(avi));
+  extended_info_shown = false;
+  type = AVI_video_compressor(avi);
+  if (!strncasecmp(type, "MP42", 4) ||
+      !strncasecmp(type, "DIV2", 4) ||
+      !strncasecmp(type, "DIVX", 4) ||
+      !strncasecmp(type, "XVID", 4) ||
+      !strncasecmp(type, "DX50", 4)) {
+    unsigned char *buffer;
+    uint32_t width, height, disp_width, disp_height;
+    float aspect_ratio;
+    int size, key;
+    string extended_info;
+
+    size = AVI_frame_size(avi, 0);
+    if (size > 0) {
+      buffer = (unsigned char *)safemalloc(size);
+      AVI_read_frame(avi, (char *)buffer, &key);
+      if (mpeg4_extract_par(buffer, size, par_num, par_den)) {
+        width = AVI_video_width(avi);
+        height = AVI_video_height(avi);
+        aspect_ratio = (float)width / (float)height * (float)par_num /
+          (float)par_den;
+        if (aspect_ratio > ((float)width / (float)height)) {
+          disp_width = irnd(height * aspect_ratio);
+          disp_height = height;
+        } else {
+          disp_width = width;
+          disp_height = irnd(width / aspect_ratio);
+        }
+        if (identify_verbose)
+          extended_info = mxsprintf(" [display_dimensions:%ux%u ]",
+                                    disp_width, disp_height);
+        mxinfo("Track ID 0: video (%s)%s\n", type, extended_info.c_str());
+        extended_info_shown = true;
+      }
+      safefree(buffer);
+    }
+  }
+  if (!extended_info_shown)
+    mxinfo("Track ID 0: video (%s)\n", AVI_video_compressor(avi));
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
     switch (AVI_audio_format(avi)) {

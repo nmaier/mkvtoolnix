@@ -1,5 +1,9 @@
 2004-06-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: mmg will set the 'display dimensions'
+	automatically for AVI files whose video track is MPEG4 and has the
+	pixel aspect ratio stored in the bitstream.
+
 	* mkvmerge: bug fix: The improved MP3 garbage detection was broken
 	resulting in an error message from mkvmerge in some weird
 	situations.
