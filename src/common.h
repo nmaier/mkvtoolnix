@@ -64,11 +64,11 @@ using namespace libebml;
 #define TYPEQTMP4    15
 
 /* compression types */
-#define COMPRESSION_UNSPECIFIED  -1
-#define COMPRESSION_NONE          0
-#define COMPRESSION_LZO           1
-#define COMPRESSION_ZLIB          2
-#define COMPRESSION_BZ2           3
+#define COMPRESSION_UNSPECIFIED   0
+#define COMPRESSION_NONE          1
+#define COMPRESSION_LZO           2
+#define COMPRESSION_ZLIB          3
+#define COMPRESSION_BZ2           4
 
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
