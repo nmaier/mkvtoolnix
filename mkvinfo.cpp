@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.44 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.45 2003/05/22 10:38:37 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -199,7 +199,7 @@ int is_ebmlvoid(EbmlElement *l, int level) {
 }
 
 void process_file() {
-  int upper_lvl_el, exit_loop, i, delete_object, ms_compat;
+  int upper_lvl_el, exit_loop, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   EbmlElement *l5 = NULL;
@@ -207,10 +207,9 @@ void process_file() {
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
   char track_type;
+  bool ms_compat;
 
   try {
-    delete_object = 1;
-
     es = new EbmlStream(*in);
     if (es == NULL)
       die("new EbmlStream");
@@ -368,6 +367,7 @@ void process_file() {
             fprintf(stdout, "\n");
 
             track_type = '?';
+            ms_compat = false;
 
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
@@ -496,8 +496,6 @@ void process_file() {
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
-                ms_compat = 0;
-
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
@@ -590,7 +588,7 @@ void process_file() {
                      (track_type == 'v')) ||
                     (!strcmp((char *)&binary(codec_id), MKV_A_ACM) &&
                      (track_type == 'a')))
-                  ms_compat = 1;
+                  ms_compat = true;
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
