@@ -32,6 +32,7 @@
 #include "matroska.h"
 #include "mkvmerge.h"
 #include "p_aac.h"
+#include "p_mp3.h"
 #include "p_passthrough.h"
 #include "p_pcm.h"
 #include "p_video.h"
@@ -240,12 +241,23 @@ qtmp4_reader_c::parse_headers() {
     }
 
     if ((dmx->type == 'a') &&
-        !strncasecmp(dmx->fourcc, "MP4A", 4) &&
-        (dmx->esds.decoder_config == NULL)) {
-      mxwarn(PFX "AAC track %u is missing the esds atom/the decoder config. "
-             "Skipping this track.\n", dmx->id);
+        !strncasecmp(dmx->fourcc, "MP4A", 4)) {
+      if ((dmx->esds.object_type_id != 64) && // AAC
+          (dmx->esds.object_type_id != 103) && // AAC, too?
+          (dmx->esds.object_type_id != 107)) { // MP2/3
+        mxwarn(PFX "The audio track %u is using an unsupported 'object type "
+               "id' of %u in the 'esds' atom. Skipping this track.\n",
+               dmx->id, dmx->esds.object_type_id);
+        continue;
+      }
 
-      continue;
+      if (((dmx->esds.object_type_id == 64) ||
+           (dmx->esds.object_type_id == 103)) &&
+          (dmx->esds.decoder_config == NULL)) {
+        mxwarn(PFX "The AAC track %u is missing the esds atom/the decoder "
+               "config. Skipping this track.\n", dmx->id);
+        continue;
+      }
     }
 
     if (dmx->type == 'v') {
@@ -1149,7 +1161,9 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s)."
                "\n", ti->fname, (int64_t)dmx->id, dmx->fourcc);
 
-      } else if (!strncasecmp(dmx->fourcc, "MP4A", 4)) {
+      } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
+                 ((dmx->esds.object_type_id == 64) ||
+                  (dmx->esds.object_type_id == 103))) {
         int profile, sample_rate, channels, output_sample_rate;
         bool sbraac;
 
@@ -1177,6 +1191,14 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           mxerror(FMT_TID "AAC found, but decoder config data has length %u."
                   "\n", ti->fname, (int64_t)dmx->id,
                   dmx->esds.decoder_config_len);
+
+      } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
+                 (dmx->esds.object_type_id == 107)) {
+        dmx->ptzr =
+          add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate,
+                                              dmx->a_channels, true, ti));
+        mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
+               (int64_t)dmx->id);
 
       } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
                  !strncasecmp(dmx->fourcc, "swot", 4)) {
