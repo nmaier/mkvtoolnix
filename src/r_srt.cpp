@@ -69,6 +69,7 @@ srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   bool is_utf8;
 
+  act_wchar = 0;
   try {
     mm_io = new mm_text_io_c(ti->fname);
     if (!srt_reader_c::probe_file(mm_io, 0))
@@ -90,56 +91,113 @@ srt_reader_c::~srt_reader_c() {
     delete textsubs_packetizer;
 }
 
+#define STATE_INITIAL         0
+#define STATE_SUBS            1
+#define STATE_SUBS_OR_NUMBER  2
+#define STATE_TIME            3
+
 int srt_reader_c::read(generic_packetizer_c *) {
   int64_t start, end;
   char *chunk;
   subtitles_c subs;
   string s, subtitles;
+  int state, i, line_number;
+  bool non_number_found;
 
+  state = STATE_INITIAL;
+  line_number = 0;
+  subtitles = "";
   while (1) {
     if (!mm_io->getline2(s))
       break;
+    line_number++;
     strip(s);
-    if (s.length() == 0)
+
+    if (s.length() == 0) {
+      if ((state == STATE_INITIAL) || (state == STATE_TIME))
+        continue;
+      state = STATE_SUBS_OR_NUMBER;
+      if (subtitles.length() > 0)
+        subtitles += "\n";
+      subtitles += "\n";
       continue;
-    if (!mm_io->getline2(s))
-      break;
-    if ((s.length() < 29) || !issrttimecode(s.c_str()))
-      break;
+    }
 
-// 00:00:00,000 --> 00:00:00,000
-// 01234567890123456789012345678
-//           1         2
-    chunk = safestrdup(s.c_str());
-    chunk[2] = 0;
-    chunk[5] = 0;
-    chunk[8] = 0;
-    chunk[12] = 0;
-    chunk[19] = 0;
-    chunk[22] = 0;
-    chunk[25] = 0;
-    chunk[29] = 0;
-
-    start = atol(chunk) * 3600000 + atol(&chunk[3]) * 60000 +
-            atol(&chunk[6]) * 1000 + atol(&chunk[9]);
-    end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +
-          atol(&chunk[23]) * 1000 + atol(&chunk[26]);
-
-    safefree(chunk);
-
-    subtitles = "";
-    while (1) {
-      if (!mm_io->getline2(s))
+    if (state == STATE_INITIAL) {
+      non_number_found = false;
+      for (i = 0; i < s.length(); i++)
+        if (!isdigit(s[i])) {
+          mxwarn("srt_reader: Error in line %d: expected subtitle number "
+                 "and found some text.\n", line_number);
+          non_number_found = true;
+          break;
+        }
+      if (non_number_found)
         break;
-      if (s.length() == 0)
-        break;
+      state = STATE_TIME;
 
+    } else if (state == STATE_TIME) {
+      if ((s.length() < 29) || !issrttimecode(s.c_str())) {
+        mxwarn("srt_reader: Error in line %d: expected a SRT timecode "
+               "line but found something else. Aborting this file.\n",
+               line_number);
+        break;
+      }
+
+      if (subtitles.length() > 0) {
+        strip(subtitles, true);
+        subs.add(start, end, subtitles.c_str());
+      }
+
+      // 00:00:00,000 --> 00:00:00,000
+      // 01234567890123456789012345678
+      //           1         2
+      chunk = safestrdup(s.c_str());
+      chunk[2] = 0;
+      chunk[5] = 0;
+      chunk[8] = 0;
+      chunk[12] = 0;
+      chunk[19] = 0;
+      chunk[22] = 0;
+      chunk[25] = 0;
+      chunk[29] = 0;
+
+      start = atol(chunk) * 3600000 + atol(&chunk[3]) * 60000 +
+        atol(&chunk[6]) * 1000 + atol(&chunk[9]);
+      end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +
+        atol(&chunk[23]) * 1000 + atol(&chunk[26]);
+
+      safefree(chunk);
+
+      subtitles = "";
+      state = STATE_SUBS;
+
+    } else if (state == STATE_SUBS) {
       if (subtitles.length() > 0)
         subtitles += "\n";
       subtitles += s;
+
+    } else {
+      non_number_found = false;
+      for (i = 0; i < s.length(); i++)
+        if (!isdigit(s[i])) {
+          non_number_found = true;
+          break;
+        }
+
+      if (!non_number_found)
+        state = STATE_TIME;
+      else {
+        if (subtitles.length() > 0)
+          subtitles += "\n";
+        subtitles += s;
+      }
     }
-    if (subtitles.length() > 0)
-      subs.add(start, end, subtitles.c_str());
+  }
+
+  if (subtitles.length() > 0) {
+    strip(subtitles, true);
+    subs.add(start, end, subtitles.c_str());
   }
 
   if ((subs.check() != 0) && verbose)
