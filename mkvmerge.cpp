@@ -18,6 +18,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include "os.h"
+
 #include <errno.h>
 #include <ctype.h>
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN)
@@ -27,10 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-
-#if defined(COMP_MSC)
 #include <unistd.h>
-#endif
 
 #include <iostream>
 #include <string>
