@@ -1,5 +1,0 @@
-# mkvtoolnix - Makefile for MinGW
-# because I was fed up fighting against libtool
-
-all clean:
-	make -C .. $@

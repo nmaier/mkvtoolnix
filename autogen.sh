@@ -2,46 +2,6 @@
 # Run this to set up the build system: configure, makefiles, etc.
 # (based on the version in enlightenment's cvs)
 
-# For MinGW I use my very own Makefile system. So just copy them over
-# to Makefile for convenience's sake.
-if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
-  echo Detected MinGW. Will copy the Makefile.mingw to Makefile and
-  echo make some adjustments.
-  echo ''
-
-  for i in `find -name Makefile.mingw`; do
-    n=`echo $i | sed 's/\.mingw//'`
-    echo "Creating $n from $i"
-    cp $i $n
-  done
-
-  if test "x$1" = "x"; then
-    if [ ! -f Makefile.options ]; then
-      echo "Creating Makefile.options from Makefile.mingw.options"
-      cp Makefile.mingw.options Makefile.options
-    else
-      echo 'Not overwriting Makefile.options.'
-    fi
-    # Extract the version number from configure.in
-    VERSION=`grep '^VERSION=' configure.in | sed -e 's;.*=;;' -e 's;";;g'`
-    echo "Creating config.h from config.h.mingw (version is $VERSION)"
-    sed -e 's/#define VERSION.*/#define VERSION "'$VERSION'"/' < config.h.mingw > config.h
-    echo ''
-    echo 'Creating dependencies (calling "make depend")'
-    echo ''
-    make depend
-  else
-    echo 'Not creating config.h.'
-    echo 'Not creating the dependencies.'
-  fi
-  echo ''
-
-  echo 'Done with the preparations. Please review and edit the'
-  echo 'settings in Makefile.options. Then run "make".'
-
-  exit $?
-fi
-
 package="mkvtoolnix"
 
 olddir=`pwd`
