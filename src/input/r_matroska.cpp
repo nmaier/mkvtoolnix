@@ -2155,19 +2155,6 @@ kax_reader_c::identify() {
 
 // }}}
 
-int64_t
-kax_reader_c::get_queued_bytes() {
-  int64_t bytes;
-  uint32_t i;
-
-  bytes = 0;
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->ptzr != -1)
-      bytes += PTZR(tracks[i]->ptzr)->get_queued_bytes();
-
-  return bytes;
-}
-
 void
 kax_reader_c::add_attachments(KaxAttachments *a) {
   uint32_t i;

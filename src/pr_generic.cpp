@@ -1158,6 +1158,18 @@ generic_reader_c::add_requested_track_id(int64_t id) {
     requested_track_ids.push_back(id);
 }
 
+int64_t
+generic_reader_c::get_queued_bytes() {
+  vector<packetizer_container_t>::const_iterator it;
+  int64_t bytes;
+
+  bytes = 0;
+  foreach(it, reader_packetizers)
+    bytes += it->orig->get_queued_bytes();
+
+  return bytes;
+}
+
 //
 //--------------------------------------------------------------------
 

@@ -163,7 +163,6 @@ protected:
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
-  virtual int64_t get_queued_bytes();
   virtual bool reverse_encodings(kax_track_t *track, unsigned char *&data,
                                  uint32_t &size, uint32_t type);
   virtual void flush_packetizers();
