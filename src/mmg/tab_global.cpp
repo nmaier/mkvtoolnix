@@ -115,84 +115,48 @@ tab_global::tab_global(wxWindow *parent):
                                     "files."));
   tc_split_max_files->Enable(false);
 
-  new wxStaticBox(this, -1, _("Misc options"), wxPoint(10, 140),
-                  wxSize(475, 50));
-  new wxStaticText(this, -1, _("Aspect ratio:"), wxPoint(15, 160),
-                   wxDefaultSize, 0);
-  cob_aspect_ratio =
-    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(100, 160 + YOFF),
-                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
-  cob_aspect_ratio->Append("");
-  cob_aspect_ratio->Append("4/3");
-  cob_aspect_ratio->Append("1.66");
-  cob_aspect_ratio->Append("16/9");
-  cob_aspect_ratio->Append("1.85");
-  cob_aspect_ratio->Append("2.00");
-  cob_aspect_ratio->Append("2.21");
-  cob_aspect_ratio->Append("2.35");
-  cob_aspect_ratio->SetToolTip(_T("Sets the display aspect ratio of the movie."
-                                  " The format can be either 'a/b' in which "
-                                  "case both numbers must be integer (e.g. "
-                                  "16/9) or just a single floting point "
-                                  "number 'f' (e.g. 2.35)."));
-  new wxStaticText(this, -1, _("FourCC:"), wxPoint(230, 160),
-                   wxDefaultSize, 0);
-  cob_fourcc =
-    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(285, 160 + YOFF),
-                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
-  cob_fourcc->Append("");
-  cob_fourcc->Append("DIVX");
-  cob_fourcc->Append("DIV3");
-  cob_fourcc->Append("DX50");
-  cob_fourcc->Append("XVID");
-  cob_fourcc->SetToolTip(_T("Forces the FourCC of the video track to this "
-                            "value. Note that this only works for video "
-                            "tracks that use the AVI compatibility mode "
-                            "or for QuickTime video tracks. This option "
-                            "CANNOT be used to change Matroska's CodecID."));
-
-  new wxStaticBox(this, -1, _("File/segment linking"), wxPoint(10, 195),
+  new wxStaticBox(this, -1, _("File/segment linking"), wxPoint(10, 140),
                   wxSize(475, 75));
-  new wxStaticText(this, -1, _("Previous segment UID:"), wxPoint(15, 215),
+  new wxStaticText(this, -1, _("Previous segment UID:"), wxPoint(15, 160),
                    wxDefaultSize);
   tc_previous_segment_uid =
     new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""),
-                   wxPoint(160, 215 + YOFF), wxSize(318, -1), 0);
+                   wxPoint(160, 160 + YOFF), wxSize(318, -1), 0);
   tc_previous_segment_uid->SetToolTip(_T("For an in-depth explanantion of "
                                          "file/segment linking and this "
                                          "feature please read mkvmerge's "
                                          "documentation."));
-  new wxStaticText(this, -1, _("Next segment UID:"), wxPoint(15, 240),
+  new wxStaticText(this, -1, _("Next segment UID:"), wxPoint(15, 185),
                    wxDefaultSize);
   tc_next_segment_uid =
     new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""),
-                   wxPoint(160, 240 + YOFF), wxSize(318, -1), 0);
+                   wxPoint(160, 185 + YOFF), wxSize(318, -1), 0);
   tc_next_segment_uid->SetToolTip(_T("For an in-depth explanantion of "
                                      "file/segment linking and this "
                                      "feature please read mkvmerge's "
                                      "documentation."));
 
-  new wxStaticBox(this, -1, _("Chapters"), wxPoint(10, 275), wxSize(475, 75));
-  new wxStaticText(this, -1, _("Chapter file:"), wxPoint(15, 295),
+  new wxStaticBox(this, -1, _("Chapters"), wxPoint(10, 220), wxSize(475, 75));
+  new wxStaticText(this, -1, _("Chapter file:"), wxPoint(15, 240),
                    wxDefaultSize, 0);
   tc_chapters =
-    new wxTextCtrl(this, ID_TC_CHAPTERS, _(""), wxPoint(100, 295 + YOFF),
+    new wxTextCtrl(this, ID_TC_CHAPTERS, _(""), wxPoint(100, 240 + YOFF),
                    wxSize(290, -1), wxTE_READONLY);
   tc_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: The "
                              "OGM like text format and the full featured "
                              "XML format."));
   wxButton *b_browse_chapters =
     new wxButton(this, ID_B_BROWSECHAPTERS, _("Browse"),
-                 wxPoint(400, 295 + YOFF), wxDefaultSize, 0);
+                 wxPoint(400, 240 + YOFF), wxDefaultSize, 0);
   b_browse_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: "
                                    "The OGM like text format and the full "
                                    "featured XML format."));
 
-  new wxStaticText(this, -1, _("Language:"), wxPoint(15, 320),
+  new wxStaticText(this, -1, _("Language:"), wxPoint(15, 265),
                    wxDefaultSize, 0);
   cob_chap_language =
     new wxComboBox(this, ID_CB_CHAPTERLANGUAGE, _(""),
-                   wxPoint(100, 320 + YOFF),
+                   wxPoint(100, 265 + YOFF),
                    wxSize(160, -1), 0, NULL, wxCB_DROPDOWN);
   cob_chap_language->Append("");
   for (i = 0; i < sorted_iso_codes.Count(); i++)
@@ -204,11 +168,11 @@ tab_global::tab_global(wxWindow *parent):
                                    "with chapters if the OGM chapter format "
                                    "is used. It is ignored for XML chapter "
                                    "files."));
-  new wxStaticText(this, -1, _("Charset:"), wxPoint(270, 320),
+  new wxStaticText(this, -1, _("Charset:"), wxPoint(270, 265),
                    wxDefaultSize, 0);
   cob_chap_charset =
     new wxComboBox(this, ID_CB_CHAPTERCHARSET, _(""),
-                   wxPoint(330, 320 + YOFF),
+                   wxPoint(330, 265 + YOFF),
                    wxSize(150, -1), 0, NULL, wxCB_DROPDOWN);
   cob_chap_charset->Append("");
   for (i = 0; i < sorted_charsets.Count(); i++)
@@ -221,12 +185,12 @@ tab_global::tab_global(wxWindow *parent):
                                   "can be used to correct that. This option "
                                   "is ignored for XML chapter files."));
 
-  new wxStaticBox(this, -1, _("Global tags"), wxPoint(10, 355),
+  new wxStaticBox(this, -1, _("Global tags"), wxPoint(10, 300),
                   wxSize(475, 50));
-  new wxStaticText(this, -1, _("Tag file:"), wxPoint(15, 375),
+  new wxStaticText(this, -1, _("Tag file:"), wxPoint(15, 320),
                    wxDefaultSize, 0);
   tc_global_tags =
-    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 375 + YOFF),
+    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 320 + YOFF),
                    wxSize(290, -1), wxTE_READONLY);
   tc_global_tags->SetToolTip(_T("The difference between tags associated with "
                                 "a track and global tags is explained in "
@@ -235,7 +199,7 @@ tab_global::tab_global(wxWindow *parent):
                                 "with a track on the 'input' tab."));
   wxButton *b_browse_global_tags =
     new wxButton(this, ID_B_BROWSEGLOBALTAGS, _("Browse"),
-                 wxPoint(400, 375 + YOFF), wxDefaultSize, 0);
+                 wxPoint(400, 320 + YOFF), wxDefaultSize, 0);
   b_browse_global_tags->SetToolTip(_T("The difference between tags associated "
                                       "with a track and global tags is "
                                       "explained in mkvmerge's documentation. "
@@ -244,23 +208,23 @@ tab_global::tab_global(wxWindow *parent):
                                       "on the 'input' tab."));
 
   new wxStaticBox(this, -1, _("Advanced options (DO NOT CHANGE!)"),
-                  wxPoint(10, 410), wxSize(475, 50));
+                  wxPoint(10, 415), wxSize(475, 50));
   cb_no_cues =
-    new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 430),
+    new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 435),
                    wxDefaultSize, 0);
   cb_no_cues->SetToolTip(_T("Do not write the cues (the index). DO NOT "
                             "ENABLE this option unless you REALLY know "
                             "what you're doing!"));
   cb_no_clusters =
     new wxCheckBox(this, ID_CB_NOCLUSTERSINMETASEEK,
-                   _("No clusters in meta seek"), wxPoint(110, 430),
+                   _("No clusters in meta seek"), wxPoint(110, 435),
                    wxDefaultSize, 0);
   cb_no_clusters->SetToolTip(_T("Do not put all the clusters into the cues "
                                 "(the index). DO NOT ENABLE this option "
                                 "unless you REALLY know what you're doing!"));
   cb_enable_lacing =
     new wxCheckBox(this, ID_CB_ENABLELACING, _("Enable lacing"),
-                   wxPoint(300, 430), wxDefaultSize, 0);
+                   wxPoint(300, 435), wxDefaultSize, 0);
   cb_enable_lacing->SetToolTip(_T("Enable lacing for audio tracks. DO NOT "
                                   "ENABLE this option unless you REALLY know "
                                   "what you're doing!"));
@@ -337,11 +301,6 @@ void tab_global::load(wxConfigBase *cfg) {
   cb_dontlink->Enable(ec);
   tc_split_max_files->Enable(ec);
 
-  cfg->Read("aspect_ratio", &s);
-  cob_aspect_ratio->SetValue(s);
-  cfg->Read("fourcc", &s);
-  cob_fourcc->SetValue(s);
-
   cfg->Read("previous_segment_uid", &s);
   tc_previous_segment_uid->SetValue(s);
   cfg->Read("next_segment_uid", &s);
@@ -375,9 +334,6 @@ void tab_global::save(wxConfigBase *cfg) {
   cfg->Write("split_after_time", cob_split_by_time->GetValue());
   cfg->Write("split_max_files", tc_split_max_files->GetValue());
   cfg->Write("dont_link", cb_dontlink->IsChecked());
-
-  cfg->Write("aspect_ratio", cob_aspect_ratio->GetValue());
-  cfg->Write("fourcc", cob_fourcc->GetValue());
 
   cfg->Write("previous_segment_uid", tc_previous_segment_uid->GetValue());
   cfg->Write("next_segment_uid", tc_next_segment_uid->GetValue());

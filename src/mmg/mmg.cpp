@@ -566,6 +566,20 @@ void mmg_dialog::update_command_line() {
         clargs.Add("--tags");
         clargs.Add(sid + ":" + *t->tags);
       }
+
+      if (t->aspect_ratio->Length() > 0) {
+        cmdline += "--aspect-ratio \"" +
+          shell_escape(*t->aspect_ratio) + "\" ";
+        clargs.Add("--aspect-ratio");
+        clargs.Add(*t->aspect_ratio);
+      }
+
+      if (t->fourcc->Length() > 0) {
+        cmdline += "--fourcc \"" + shell_escape(*t->fourcc) + "\" ";
+        clargs.Add("--fourcc");
+        clargs.Add(*t->fourcc);
+      }
+
     }
 
     if (tracks_present_here) {
@@ -579,6 +593,7 @@ void mmg_dialog::update_command_line() {
         cmdline += "-D ";
         clargs.Add("-D");
       }
+
       if (no_audio) {
         cmdline += "-A ";
         clargs.Add("-A");
@@ -646,20 +661,6 @@ void mmg_dialog::update_command_line() {
       cmdline += "--dont-link ";
       clargs.Add("--dont-link");
     }
-  }
-
-  if (global_page->cob_aspect_ratio->GetValue().Length() > 0) {
-    cmdline += "--aspect-ratio \"" +
-      shell_escape(global_page->cob_aspect_ratio->GetValue()) + "\" ";
-    clargs.Add("--aspect-ratio");
-    clargs.Add(global_page->cob_aspect_ratio->GetValue());
-  }
-
-  if (global_page->cob_fourcc->GetValue().Length() > 0) {
-    cmdline += "--fourcc \"" +
-      shell_escape(global_page->cob_fourcc->GetValue()) + "\" ";
-    clargs.Add("--fourcc");
-    clargs.Add(global_page->cob_fourcc->GetValue());
   }
 
   if (global_page->tc_previous_segment_uid->GetValue().Length() > 0) {

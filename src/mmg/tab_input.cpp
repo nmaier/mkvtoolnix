@@ -126,7 +126,7 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0);
 
   cob_cues =
-    new wxComboBox(this, ID_CB_CUES, _(""), wxPoint(90, 335),
+    new wxComboBox(this, ID_CB_CUES, _(""), wxPoint(90, 335 + YOFF),
                    wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_cues->SetToolTip(_("Selects for which blocks mkvmerge will produce "
                          "index entries ( = cue entries). \"default\" is a "
@@ -156,16 +156,51 @@ tab_input::tab_input(wxWindow *parent):
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_sub_charset->Append(sorted_charsets[i]);
 
+  new wxStaticText(this, -1, _("Aspect ratio:"), wxPoint(5, 360),
+                   wxDefaultSize, 0);
+  cob_aspect_ratio =
+    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(90, 360 + YOFF),
+                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_aspect_ratio->Append("");
+  cob_aspect_ratio->Append("4/3");
+  cob_aspect_ratio->Append("1.66");
+  cob_aspect_ratio->Append("16/9");
+  cob_aspect_ratio->Append("1.85");
+  cob_aspect_ratio->Append("2.00");
+  cob_aspect_ratio->Append("2.21");
+  cob_aspect_ratio->Append("2.35");
+  cob_aspect_ratio->SetToolTip(_T("Sets the display aspect ratio of the track."
+                                  " The format can be either 'a/b' in which "
+                                  "case both numbers must be integer (e.g. "
+                                  "16/9) or just a single floting point "
+                                  "number 'f' (e.g. 2.35)."));
+
+  new wxStaticText(this, -1, _("FourCC:"), wxPoint(255, 360),
+                   wxDefaultSize, 0);
+  cob_fourcc =
+    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(355, 360 + YOFF),
+                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_fourcc->Append("");
+  cob_fourcc->Append("DIVX");
+  cob_fourcc->Append("DIV3");
+  cob_fourcc->Append("DX50");
+  cob_fourcc->Append("XVID");
+  cob_fourcc->SetToolTip(_T("Forces the FourCC of the video track to this "
+                            "value. Note that this only works for video "
+                            "tracks that use the AVI compatibility mode "
+                            "or for QuickTime video tracks. This option "
+                            "CANNOT be used to change Matroska's CodecID."));
+
   cb_default =
     new wxCheckBox(this, ID_CB_MAKEDEFAULT, _("Make default track"),
-                   wxPoint(5, 355), wxSize(200, -1), 0);
+                   wxPoint(5, 385), wxSize(200, -1), 0);
   cb_default->SetValue(false);
   cb_default->SetToolTip(_("Make this track the default track for its type "
                            "(audio, video, subtitles). Players should prefer "
                            "tracks with the default track flag set."));
   cb_aac_is_sbr =
     new wxCheckBox(this, ID_CB_AACISSBR, _("AAC is SBR/HE-AAC/AAC+"),
-                   wxPoint(255, 355), wxSize(200, -1), 0);
+                   wxPoint(255, 385), wxSize(200, -1), 0);
   cb_aac_is_sbr->SetValue(false);
   cb_aac_is_sbr->SetToolTip(_("This track contains SBR AAC/HE-AAC/AAC+ data. "
                               "Only needed for AAC input files, because SBR "
@@ -173,18 +208,21 @@ tab_input::tab_input(wxWindow *parent):
                               "these files. Not needed for AAC tracks read "
                               "from MP4 or Matroska files."));
 
-  new wxStaticText(this, wxID_STATIC, _("Tags:"), wxPoint(5, 385),
+  new wxStaticText(this, wxID_STATIC, _("Tags:"), wxPoint(5, 415),
                    wxDefaultSize, 0);
   tc_tags =
-    new wxTextCtrl(this, ID_TC_TAGS, _(""), wxPoint(90, 385 + YOFF),
+    new wxTextCtrl(this, ID_TC_TAGS, _(""), wxPoint(90, 415 + YOFF),
                    wxSize(280, -1), wxTE_READONLY);
   b_browse_tags =
-    new wxButton(this, ID_B_BROWSETAGS, _("Browse"), wxPoint(390, 385 + YOFF),
+    new wxButton(this, ID_B_BROWSETAGS, _("Browse"), wxPoint(390, 415 + YOFF),
                  wxDefaultSize, 0);
 
   no_track_mode();
   selected_file = -1;
   selected_track = -1;
+
+  value_copy_timer.SetOwner(this, ID_T_INPUTVALUES);
+  value_copy_timer.Start(333);
 }
 
 void tab_input::no_track_mode() {
@@ -198,6 +236,8 @@ void tab_input::no_track_mode() {
   cb_aac_is_sbr->Enable(false);
   tc_tags->Enable(false);
   b_browse_tags->Enable(false);
+  cob_aspect_ratio->Enable(false);
+  cob_fourcc->Enable(false);
 }
 
 void tab_input::audio_track_mode() {
@@ -211,6 +251,8 @@ void tab_input::audio_track_mode() {
   cb_aac_is_sbr->Enable(true);
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
+  cob_aspect_ratio->Enable(false);
+  cob_fourcc->Enable(false);
 }
 
 void tab_input::video_track_mode() {
@@ -224,6 +266,8 @@ void tab_input::video_track_mode() {
   cb_aac_is_sbr->Enable(false);
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
+  cob_aspect_ratio->Enable(true);
+  cob_fourcc->Enable(true);
 }
 
 void tab_input::subtitle_track_mode() {
@@ -237,6 +281,8 @@ void tab_input::subtitle_track_mode() {
   cb_aac_is_sbr->Enable(false);
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
+  cob_aspect_ratio->Enable(false);
+  cob_fourcc->Enable(false);
 }
 
 void tab_input::on_add_file(wxCommandEvent &evt) {
@@ -319,6 +365,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
         track.delay = new wxString("");
         track.stretch = new wxString("");
         track.tags = new wxString("");
+        track.aspect_ratio = new wxString("");
+        track.fourcc = new wxString("");
 
         file.tracks->push_back(track);
       }
@@ -362,6 +410,8 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
     delete t->delay;
     delete t->stretch;
     delete t->tags;
+    delete t->aspect_ratio;
+    delete t->fourcc;
   }
   delete f->tracks;
   delete f->file_name;
@@ -537,6 +587,33 @@ void tab_input::on_track_name_changed(wxCommandEvent &evt) {
     tc_track_name->GetValue();
 }
 
+void tab_input::on_aspect_ratio_changed(wxCommandEvent &evt) {
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  *(*files[selected_file].tracks)[selected_track].aspect_ratio =
+    cob_aspect_ratio->GetStringSelection();
+}
+
+void tab_input::on_fourcc_changed(wxCommandEvent &evt) {
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  *(*files[selected_file].tracks)[selected_track].fourcc =
+    cob_fourcc->GetStringSelection();
+}
+
+void tab_input::on_value_copy_timer(wxTimerEvent &evt) {
+  mmg_track_t *t;
+
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  t = &(*files[selected_file].tracks)[selected_track];
+  *t->aspect_ratio = cob_aspect_ratio->GetValue();
+  *t->fourcc = cob_fourcc->GetValue();
+}
+
 void tab_input::save(wxConfigBase *cfg) {
   uint32_t fidx, tidx;
   mmg_file_t *f;
@@ -575,6 +652,9 @@ void tab_input::save(wxConfigBase *cfg) {
       cfg->Write("stretch", *t->stretch);
       cfg->Write("sub_charset", *t->sub_charset);
       cfg->Write("tags", *t->tags);
+      cfg->Write("aspect_ratio", *t->aspect_ratio);
+      cfg->Write("fourcc", *t->fourcc);
+
       cfg->SetPath("..");
     }
 
@@ -611,6 +691,8 @@ void tab_input::load(wxConfigBase *cfg) {
       delete t->sub_charset;
       delete t->tags;
       delete t->stretch;
+      delete t->aspect_ratio;
+      delete t->fourcc;
     }
     delete f->tracks;
   }
@@ -668,6 +750,10 @@ void tab_input::load(wxConfigBase *cfg) {
       tr.sub_charset = new wxString(s);
       cfg->Read("tags", &s);
       tr.tags = new wxString(s);
+      cfg->Read("aspect_ratio", &s);
+      tr.aspect_ratio = new wxString(s);
+      cfg->Read("fourcc", &s);
+      tr.fourcc = new wxString(s);
 
       fi.tracks->push_back(tr);
       cfg->SetPath("..");
@@ -704,9 +790,13 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_COMBOBOX(ID_CB_LANGUAGE, tab_input::on_language_selected)
   EVT_COMBOBOX(ID_CB_CUES, tab_input::on_cues_selected)
   EVT_COMBOBOX(ID_CB_SUBTITLECHARSET, tab_input::on_subcharset_selected)
+  EVT_COMBOBOX(ID_CB_ASPECTRATIO, tab_input::on_aspect_ratio_changed)
+  EVT_COMBOBOX(ID_CB_FOURCC, tab_input::on_fourcc_changed)
   EVT_TEXT(ID_CB_SUBTITLECHARSET, tab_input::on_subcharset_selected)
   EVT_TEXT(ID_TC_DELAY, tab_input::on_delay_changed)
   EVT_TEXT(ID_TC_STRETCH, tab_input::on_stretch_changed)
   EVT_TEXT(ID_TC_TRACKNAME, tab_input::on_track_name_changed)
+
+  EVT_TIMER(ID_T_INPUTVALUES, tab_input::on_value_copy_timer)
 
 END_EVENT_TABLE();

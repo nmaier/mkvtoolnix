@@ -1,5 +1,8 @@
 2003-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bugfix: Moved the aspect ratio and FourCC input fields from
+        the global tab to the input tab where they belong to.
+
         * mkvmerge: new feature: RealAudio can be read from Matroska files.
 
         * mkvmerge: bugfix: RealVideo was not read correctly from Matroska

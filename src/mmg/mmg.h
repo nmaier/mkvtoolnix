@@ -97,6 +97,7 @@ using namespace std;
 #define ID_B_MUX_SAVELOG 10056
 #define ID_B_MUX_ABORT 10057
 #define ID_T_ATTACHMENTVALUES 10058
+#define ID_T_INPUTVALUES 10059
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -121,7 +122,7 @@ typedef struct {
 
   bool default_track, aac_is_sbr;
   wxString *language, *track_name, *cues, *delay, *stretch, *sub_charset;
-  wxString *tags;
+  wxString *tags, *fourcc, *aspect_ratio;
 } mmg_track_t;
 
 typedef struct {
@@ -156,7 +157,10 @@ protected:
   wxCheckBox *cb_no_chapters, *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;
   wxComboBox *cob_language, *cob_cues, *cob_sub_charset;
+  wxComboBox *cob_aspect_ratio, *cob_fourcc;
   wxTextCtrl *tc_delay, *tc_track_name, *tc_stretch, *tc_tags;
+
+  wxTimer value_copy_timer;
 
   int selected_file, selected_track;
 
@@ -178,6 +182,9 @@ public:
   void on_delay_changed(wxCommandEvent &evt);
   void on_stretch_changed(wxCommandEvent &evt);
   void on_track_name_changed(wxCommandEvent &evt);
+  void on_aspect_ratio_changed(wxCommandEvent &evt);
+  void on_fourcc_changed(wxCommandEvent &evt);
+  void on_value_copy_timer(wxTimerEvent &evt);
 
   void no_track_mode();
   void audio_track_mode();
@@ -246,7 +253,6 @@ public:
   wxCheckBox *cb_split, *cb_dontlink;
   wxRadioButton *rb_split_by_size, *rb_split_by_time;
   wxComboBox *cob_split_by_size, *cob_split_by_time;
-  wxComboBox *cob_fourcc, *cob_aspect_ratio;
   wxComboBox *cob_chap_language, *cob_chap_charset;
   wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_enable_lacing;
 
