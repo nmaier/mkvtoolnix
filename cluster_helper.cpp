@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.13 2003/05/05 20:18:32 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.14 2003/05/06 07:51:24 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -159,6 +159,7 @@ int cluster_helper_c::render(IOCallback *out) {
   int i;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
+  int64_t block_duration = 0;
 
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
@@ -214,8 +215,11 @@ int cluster_helper_c::render(IOCallback *out) {
         cue_writing_requested = 1;
       }
     }
-    if (pack->duration != -1)
-      new_group->SetBlockDuration(pack->duration * 1000000);
+    if (new_group != last_block_group)
+      block_duration = 0;
+    block_duration += pack->duration;
+    if (pack->duration_mandatory)
+      new_group->SetBlockDuration(block_duration * 1000000);
     pack->group = new_group;
     last_block_group = new_group;
   }

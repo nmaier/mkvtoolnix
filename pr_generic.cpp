@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.35 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.36 2003/05/06 07:51:24 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -293,8 +293,9 @@ void generic_packetizer_c::set_headers() {
 }
 
 void generic_packetizer_c::add_packet(unsigned char  *data, int length,
-                                      int64_t timecode, int64_t bref,
-                                      int64_t fref, int64_t duration) {
+                                      int64_t timecode,
+                                      int64_t duration, int duration_mandatory,
+                                      int64_t bref, int64_t fref) {
   packet_t *pack;
 
   if (data == NULL)
@@ -310,6 +311,7 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   pack->bref = bref;
   pack->fref = fref;
   pack->duration = duration;
+  pack->duration_mandatory = duration_mandatory;
   pack->source = this;
 
   packet_queue.push_back(pack);

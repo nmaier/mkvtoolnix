@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.20 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.21 2003/05/06 07:51:24 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -161,7 +161,8 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
       samples += samples_here;
       last_bs = this_bs;
       samples_here = (this_bs + last_bs) / 4;
-      add_packet(zero, 2, samples * 1000 / vi.rate);
+      add_packet(zero, 2, samples * 1000 / vi.rate, samples_here * 1000 /
+                 vi.rate);
     }
 
     ti->async.displacement = 0;
@@ -176,8 +177,6 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   samples += samples_here;
   last_bs = this_bs;
 
-//   fprintf(stdout, "samples in this Vorbis packet: %llu\n", samples_here);
-
   // Handle the displacement.
   timecode += ti->async.displacement;
 
@@ -188,7 +187,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   if (timecode < 0)
     return EMOREDATA;
 
-  add_packet(data, size, (int64_t)timecode);
+  add_packet(data, size, (int64_t)timecode, samples_here * 1000 / vi.rate);
 
   return EMOREDATA;
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.16 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.17 2003/05/06 07:51:24 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -106,18 +106,14 @@ mp3_reader_c::~mp3_reader_c() {
 int mp3_reader_c::read() {
   int nread;
   
-  do {
-    if (mp3packetizer->packet_available())
-      return EMOREDATA;
+  nread = fread(chunk, 1, 4096, file);
+  if (nread <= 0)
+    return 0;
 
-    nread = fread(chunk, 1, 4096, file);
-    if (nread <= 0)
-      return 0;
+  mp3packetizer->process(chunk, nread);
+  bytes_processed += nread;
 
-    mp3packetizer->process(chunk, nread);
-    bytes_processed += nread;
-
-  } while (1);
+  return EMOREDATA;
 }
 
 packet_t *mp3_reader_c::get_packet() {

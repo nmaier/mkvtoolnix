@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.57 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.58 2003/05/06 07:51:24 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -959,11 +959,13 @@ int main(int argc, char **argv) {
     */
     for (i = 0; i < packetizers.size(); i++) {
       ptzr = packetizers[i];
-      if ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
-          !ptzr->packetizer->packet_available())
+      while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
+             (ptzr->packetizer->packet_available() < 2))
         ptzr->status = ptzr->packetizer->read();
       if (ptzr->pack == NULL) 
         ptzr->pack = ptzr->packetizer->get_packet();
+      if ((ptzr->pack != NULL) && !ptzr->packetizer->packet_available())
+        ptzr->pack->duration_mandatory = 1;
     }
 
     /* Step 2: Pick the packet with the lowest timecode and 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.26 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.27 2003/05/06 07:51:24 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -673,41 +673,18 @@ int ogm_reader_c::read_headers() {
  * a page available OR that the corresponding stream is finished.
  */
 int ogm_reader_c::read() {
-  int done, i;
-  ogm_demuxer_t *dmx;
+  int i;
   ogg_page og;
-  
-  if (packet_available())
-    return EMOREDATA;
-  
-  done = 0;
-  while (!done) {
+
+  do {
     // Make sure we have a page that we can work with.
     if (read_page(&og) == 0)
       return 0;
 
-    // Is this the first page of a new stream?
-    if (ogg_page_bos(&og))
-      continue;
-    else // No, so process it normally.
+    // Is this the first page of a new stream? No, so process it normally.
+    if (!ogg_page_bos(&og))
       process_page(&og);    
-
-    done = 1;
-    if (num_sdemuxers == 0) 
-      // We haven't encountered a stream yet that we want to extract.
-      done = 0;
-    else
-      for (i = 0; i < num_sdemuxers; i++) {
-        dmx = sdemuxers[i];
-        if (!dmx->eos && !dmx->packetizer->packet_available())
-          // This stream is not finished but has not produced a new page yet.
-          done = 0;
-      }
-  }
-  // Each known stream has now produced a new page or is at its end.
-  
-  if (num_sdemuxers == 0)
-    return EMOREDATA;
+  } while (ogg_page_bos(&og));
 
   // Are there streams that have not finished yet?
   for (i = 0; i < num_sdemuxers; i++)

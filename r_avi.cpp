@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.27 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.28 2003/05/06 07:51:24 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -317,22 +317,23 @@ int avi_reader_c::read() {
   need_more_data = 0;
   if ((vpacketizer != NULL) && !video_done) {
     last_frame = 0;
-    while (!vpacketizer->packet_available() && !last_frame) {
-      done = 0;
-      
-      // Make sure we have a frame to work with.
-      if (old_chunk == NULL) {
-        nread = AVI_read_frame(avi, (char *)chunk, &key);
-        if (nread < 0) {
-          frames = maxframes + 1;
-          break;
-        }
+    done = 0;
+
+    // Make sure we have a frame to work with.
+    if (old_chunk == NULL) {
+      nread = AVI_read_frame(avi, (char *)chunk, &key);
+      if (nread < 0) {
+        frames = maxframes + 1;
+        done = 1;
+      } else {
         key = is_keyframe(chunk, nread, key);
         old_chunk = (unsigned char *)safememdup(chunk, nread);
         old_key = key;
         old_nread = nread;
         frames++;
       }
+    }
+    if (!done) {
       frames_read = 1;
       done = 0;
       // Check whether we have identical frames
@@ -371,6 +372,7 @@ int avi_reader_c::read() {
                                key ? -1 : 0);
       }
     }
+
     if (last_frame) {
       frames = maxframes + 1;
       video_done = 1;
@@ -380,25 +382,23 @@ int avi_reader_c::read() {
   
   demuxer = ademuxers;
   while (demuxer != NULL) {
-    while (!demuxer->eos && !demuxer->packetizer->packet_available()) {
-      AVI_set_audio_track(avi, demuxer->aid);
-      if (AVI_audio_format(avi) == 0x0001)
-        size = demuxer->channels * demuxer->bits_per_sample *
-          demuxer->samples_per_second / 8;
-      else
-        size = 16384;
+    AVI_set_audio_track(avi, demuxer->aid);
+    if (AVI_audio_format(avi) == 0x0001)
+      size = demuxer->channels * demuxer->bits_per_sample *
+        demuxer->samples_per_second / 8;
+    else
+      size = 16384;
 
-      nread = AVI_read_audio(avi, (char *)chunk, size);
-      if (nread > 0) {
-        if (nread < size)
-          demuxer->eos = 1;
-        else
-          demuxer->eos = 0;
-        demuxer->packetizer->process(chunk, nread);
-      }
+    nread = AVI_read_audio(avi, (char *)chunk, size);
+    if (nread > 0) {
+      if (nread < size)
+        demuxer->eos = 1;
+      else
+        demuxer->eos = 0;
+      demuxer->packetizer->process(chunk, nread);
     }
     if (!demuxer->eos)
-      need_more_data = 1;
+     need_more_data = 1;
     demuxer = demuxer->next;
   }
   

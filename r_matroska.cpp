@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.24 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.25 2003/05/06 07:51:24 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -838,8 +838,6 @@ int mkv_reader_c::read() {
 
   if (num_tracks == 0)
     return 0;
-  if (packets_available())
-    return EMOREDATA;
 
   l0 = segment;
 

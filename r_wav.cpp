@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.16 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.17 2003/05/06 07:51:24 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -90,9 +90,6 @@ wav_reader_c::~wav_reader_c() {
 int wav_reader_c::read() {
   int nread;
     
-  if (pcmpacketizer->packet_available())
-    return EMOREDATA;
-  
   nread = fread(chunk, 1, bps, file);
   if (nread <= 0)
     return 0;

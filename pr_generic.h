@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.36 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.37 2003/05/06 07:51:24 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -42,12 +42,12 @@ typedef struct {
   double linear;
 } audio_sync_t;
 
-typedef struct packet_t {
+typedef struct {
   KaxBlockGroup *group;
   KaxBlock *block;
   KaxCluster *cluster;
   unsigned char *data;
-  int length, superseeded;
+  int length, superseeded, duration_mandatory;
   int64_t timecode, bref, fref, duration;
   void *source;
 } packet_t;
@@ -109,8 +109,8 @@ public:
   virtual int read();
 
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
-                          int64_t bref = -1, int64_t fref = -1,
-                          int64_t duration = -1);
+                          int64_t duration, int duration_mandatory = 0,
+                          int64_t bref = -1, int64_t fref = -1);
   virtual packet_t *get_packet();
   virtual int packet_available();
   virtual int64_t get_smallest_timecode();

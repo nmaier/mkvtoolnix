@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.18 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.19 2003/05/06 07:51:24 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -96,18 +96,14 @@ ac3_reader_c::~ac3_reader_c() {
 int ac3_reader_c::read() {
   int nread;
   
-  do {
-    if (ac3packetizer->packet_available())
-      return EMOREDATA;
+  nread = fread(chunk, 1, 4096, file);
+  if (nread <= 0)
+    return 0;
 
-    nread = fread(chunk, 1, 4096, file);
-    if (nread <= 0)
-      return 0;
+  ac3packetizer->process(chunk, nread);
+  bytes_processed += nread;
 
-    ac3packetizer->process(chunk, nread);
-    bytes_processed += nread;
-
-  } while (1);
+  return EMOREDATA;
 }
 
 packet_t *ac3_reader_c::get_packet() {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.31 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.32 2003/05/06 07:51:24 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -82,11 +82,11 @@ int video_packetizer_c::process(unsigned char *buf, int size,
 
   if (bref == -1) {
     // Add a key frame and save its timecode so that we can reference it later.
-    add_packet(buf, size, timecode);
+    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps));
     ref_timecode = timecode;
   } else {
     // This is a P frame - let's reference the last frame.
-    add_packet(buf, size, timecode, ref_timecode);
+    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps), 0, ref_timecode);
     ref_timecode = timecode;
   }
 
