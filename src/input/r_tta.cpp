@@ -1,22 +1,17 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  r_tta.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file r_tta.cpp
-    \version $Id$
-    \brief TTA demultiplexer module
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ * 
+ * TTA demultiplexer module
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <stdlib.h>
 #include <stdio.h>

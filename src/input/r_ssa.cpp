@@ -1,22 +1,18 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  r_ssa.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief SSA/ASS subtitle parser
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * SSA/ASS subtitle parser
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <ctype.h>
 #include <stdlib.h>

@@ -1,23 +1,18 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  r_dts.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief DTS demultiplexer module
-    \author Peter Niemayer <niemayer@isg.de>
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ * 
+ * DTS demultiplexer module
+ *
+ * Written by Peter Niemayer <niemayer@isg.de>.
+ * Modified by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
