@@ -336,7 +336,7 @@ void generic_packetizer_c::set_language(char *language) {
 }
 
 void generic_packetizer_c::set_headers() {
-  int idx;
+  int idx, disp_width, disp_height;
   KaxTag *tag;
 
   if (track_entry == NULL) {
@@ -408,26 +408,32 @@ void generic_packetizer_c::set_headers() {
     KaxTrackVideo &video =
       GetChild<KaxTrackVideo>(*track_entry);
 
-    if (hvideo_pixel_height != -1) {
-      *(static_cast<EbmlUInteger *>
-        (&GetChild<KaxVideoPixelHeight>(video))) = hvideo_pixel_height;
-      KaxVideoDisplayHeight &dheight =
-        GetChild<KaxVideoDisplayHeight>(video);
-      *(static_cast<EbmlUInteger *>(&dheight)) = hvideo_pixel_height;
-      dheight.SetDefaultSize(4);
-    }
+    if ((hvideo_pixel_height != -1) && (hvideo_pixel_width != -1)) {
+      if (ti->aspect_ratio >
+          ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
+        disp_width = (int)(hvideo_pixel_height * ti->aspect_ratio);
+        disp_height = hvideo_pixel_height;
 
-    if (hvideo_pixel_width != -1) {
+      } else {
+        disp_width = hvideo_pixel_width;
+        disp_height = (int)(hvideo_pixel_width * ti->aspect_ratio);
+
+      }
+
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxVideoPixelWidth>(video))) = hvideo_pixel_width;
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoPixelHeight>(video))) = hvideo_pixel_height;
+
       KaxVideoDisplayWidth &dwidth =
         GetChild<KaxVideoDisplayWidth>(video);
-      if (ti->aspect_ratio != 1.0)
-        *(static_cast<EbmlUInteger *>(&dwidth)) =
-          (uint64_t)(hvideo_pixel_height * ti->aspect_ratio);
-      else
-        *(static_cast<EbmlUInteger *>(&dwidth)) = hvideo_pixel_width;
+      *(static_cast<EbmlUInteger *>(&dwidth)) = disp_width;
       dwidth.SetDefaultSize(4);
+
+      KaxVideoDisplayHeight &dheight =
+        GetChild<KaxVideoDisplayHeight>(video);
+      *(static_cast<EbmlUInteger *>(&dheight)) = disp_height;
+      dheight.SetDefaultSize(4);
     }
 
   } else if (htrack_type == track_audio) {

@@ -1,5 +1,9 @@
 2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: The aspect ratio setting will only cause upscaling of
+        the current video dimensions which are then put into
+        KaxVideoDisplayWidth and KaxVideoDisplayHeight.
+
         * mkvextract: Changed how the global elements are handled by
         taking the parent's size into account. This re-enables processing
         of files produced with the latest VirtualDubMod.
