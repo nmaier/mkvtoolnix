@@ -52,6 +52,8 @@ extern bool no_lacing, no_linking;
 
 extern bool identifying;
 
+extern char *dump_packets;
+
 void add_packetizer(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 

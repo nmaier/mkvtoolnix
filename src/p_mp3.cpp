@@ -200,6 +200,10 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
       return EMOREDATA;
     }
 
+#ifdef DEBUG
+    dump_packet(packet, mp3header.framesize + 4);
+#endif    
+
     if (timecode == -1)
       my_timecode = (int64_t)(1000.0 * packetno * spf * ti->async.linear /
                               samples_per_sec);

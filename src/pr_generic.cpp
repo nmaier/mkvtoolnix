@@ -132,6 +132,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   hvideo_pixel_width = -1;
   hvideo_pixel_height = -1;
+
+  dumped_packet_number = 0;
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
@@ -542,6 +544,26 @@ void generic_packetizer_c::rerender_headers(mm_io_c *out) {
   out->save_pos(track_entry->GetElementPosition());
   track_entry->Render(*out);
   out->restore_pos();
+}
+
+void generic_packetizer_c::dump_packet(const void *buffer, int size) {
+  char *path;
+  mm_io_c *out;
+
+  if (dump_packets == NULL)
+    return;
+
+  path = (char *)safemalloc(strlen(dump_packets) + 1 + 15);
+  mxprints(path, "%s/%u-%010lld", dump_packets, hserialno,
+           dumped_packet_number);
+  dumped_packet_number++;
+  try {
+    out = new mm_io_c(path, MODE_CREATE);
+    out->write(buffer, size);
+    delete out;
+  } catch(...) {
+  }
+  safefree(path);
 }
 
 //--------------------------------------------------------------------

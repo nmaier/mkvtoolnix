@@ -141,6 +141,8 @@ protected:
 
   int hvideo_pixel_width, hvideo_pixel_height;
 
+  int64_t dumped_packet_number;
+
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
     throw (error_c);
@@ -201,6 +203,9 @@ public:
   virtual void force_default_track(int type);
 
   virtual void set_tag_track_uid();
+
+protected:
+  virtual void dump_packet(const void *buffer, int size);
 };
 
 class generic_reader_c {

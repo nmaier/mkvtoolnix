@@ -148,6 +148,8 @@ int default_tracks[3];
 
 bool identifying = false;
 
+char *dump_packets = NULL;
+
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment *kax_segment;
 KaxInfo *kax_infos;
@@ -1231,6 +1233,14 @@ static void parse_args(int argc, char **argv) {
 
       chapter_file_name = safestrdup(argv[i + 1]);
       kax_chapters = parse_chapters(argv[i + 1]);
+      i++;
+
+    } else if (!strcmp(argv[i], "--dump-packets")) {
+      if ((i + 1) >= argc)
+        mxerror("--dump-packets lacks the output path.\n");
+
+      safefree(dump_packets);
+      dump_packets = safestrdup(argv[i + 1]);
       i++;
 
     }
