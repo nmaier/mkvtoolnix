@@ -5,6 +5,7 @@ bin_PROGRAMS = mkvmerge mkvinfo mkvextract
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			aac_common.cpp aac_common.h \
 			ac3_common.cpp ac3_common.h \
+			base64.cpp base64.h \
 			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \
@@ -33,7 +34,9 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_ssa.cpp r_ssa.h \
 			r_ogm.cpp r_ogm.h \
 			r_wav.cpp r_wav.h \
-			subtitles.cpp subtitles.h
+			subtitles.cpp subtitles.h \
+			tagparser_start.cpp tagparser.h \
+			tagparser_end.cpp
 
 mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			common.cpp common.h \
@@ -48,7 +51,7 @@ mkvextract_SOURCES = mkvextract.cpp \
 
 mkvmerge_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \
-		@ICONV_LIBS@ @MINGW_LIBS@
+		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ -lexpat
 
 mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
 		@WXWINDOWS_LIBS@ @MINGW_LIBS@

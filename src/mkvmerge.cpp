@@ -80,6 +80,7 @@
 #include "r_srt.h"
 #include "r_ssa.h"
 #include "r_wav.h"
+#include "tagparser.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
