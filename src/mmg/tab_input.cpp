@@ -780,7 +780,8 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
   clb_tracks->Enable(true);
   selected_track = -1;
   selected_file = new_sel;
-  no_track_mode();
+  clb_tracks->SetSelection(0);
+  on_track_selected(evt);
 }
 
 void tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
@@ -842,9 +843,10 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   cob_aspect_ratio->SetValue(*t->aspect_ratio);
   tc_display_width->SetValue(*t->dwidth); 
   tc_display_height->SetValue(*t->dheight);
- selected_track = new_sel;
+  selected_track = new_sel;
   cob_compression->SetValue(*t->compression);
   tc_timecodes->SetValue(*t->timecodes);
+  tc_track_name->SetFocus();
 }
 
 void tab_input::on_track_enabled(wxCommandEvent &evt) {

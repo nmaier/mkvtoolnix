@@ -1,5 +1,9 @@
 2003-12-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: The input box will automatically select the first track
+	when a file is selected. Upon track selection the input focus is
+	set to the track name input box.
+
 	* mmg: The chapter editor automatically focuses the chapter name
 	input box whenever a chapter entry is selected.
 
