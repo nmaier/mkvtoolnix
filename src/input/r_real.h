@@ -102,6 +102,13 @@ protected:
   virtual void flush_packetizers();
   virtual void deliver_aac_frames(real_demuxer_t *dmx, unsigned char *chunk,
                                   uint32_t length);
+  virtual void queue_audio_frames(real_demuxer_t *dmx, unsigned char *chunk,
+                                  uint32_t length, uint64_t timecode,
+                                  uint32_t flags);
+  virtual void queue_one_audio_frame(real_demuxer_t *dmx, unsigned char *chunk,
+                                     uint32_t length, uint64_t timecode,
+                                     uint32_t flags);
+  virtual void deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration);
 };
 
 #endif  // __R_REAL_H

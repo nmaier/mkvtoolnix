@@ -35,6 +35,8 @@
 #include "p_passthrough.h"
 #include "p_video.h"
 
+#define PFX "real_reader: "
+
 /*
  * Description of the RealMedia file format:
  * http://www.pcisys.net/~melanson/codecs/rmff.htm
@@ -153,10 +155,10 @@ real_reader_c::real_reader_c(track_info_c *nti)
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);
     if (!real_reader_c::probe_file(io, file_size))
-      throw error_c("real_reader: Source is not a valid RealMedia file.");
+      throw error_c(PFX "Source is not a valid RealMedia file.");
 
   } catch (exception &ex) {
-    throw error_c("real_reader: Could not read the source file.");
+    throw error_c(PFX "Could not read the source file.");
   }
 
   done = false;
@@ -284,16 +286,16 @@ real_reader_c::parse_headers() {
 
       } else if (object_id == FOURCC('M', 'D', 'P', 'R')) {
         id = io->read_uint16_be();
-        mxverb(2, "real_reader MDPR: id %u\n", id);
-        mxverb(2, "real_reader MDPR: max_bit_rate %u\n", io->read_uint32_be());
-        mxverb(2, "real_reader MDPR: avg_bit_rate %u\n", io->read_uint32_be());
-        mxverb(2, "real_reader MDPR: max_packet_size %u\n",
+        mxverb(2, PFX "MDPR: id %u\n", id);
+        mxverb(2, PFX "MDPR: max_bit_rate %u\n", io->read_uint32_be());
+        mxverb(2, PFX "MDPR: avg_bit_rate %u\n", io->read_uint32_be());
+        mxverb(2, PFX "MDPR: max_packet_size %u\n",
                io->read_uint32_be());
-        mxverb(2, "real_reader MDPR: avg_packet_size %u\n",
+        mxverb(2, PFX "MDPR: avg_packet_size %u\n",
                io->read_uint32_be());
         start_time = io->read_uint32_be();
         preroll = io->read_uint32_be();
-        mxverb(2, "real_reader MDPR: start_time %u\nreal_reader MDPR: "
+        mxverb(2, PFX "MDPR: start_time %u\nreal_reader MDPR: "
                "preroll %u\nreal_reader MDPR: duration %u\n", start_time,
                preroll, io->read_uint32_be());
 
@@ -303,7 +305,7 @@ real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          mxverb(2, "real_reader MDPR stream_name: '%s'\n", buffer);
+          mxverb(2, PFX "MDPR stream_name: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -314,7 +316,7 @@ real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          mxverb(2, "real_reader MDPR mime_type: '%s'\n", buffer);
+          mxverb(2, PFX "MDPR mime_type: '%s'\n", buffer);
           if (!strcmp(buffer, "audio/x-pn-realaudio") ||
               !strcmp(buffer, "video/x-pn-realvideo"))
             mime_type_ok = true;
@@ -382,7 +384,7 @@ real_reader_c::parse_headers() {
               slen = (unsigned char)p[0];
               p++;
               if (slen != 4) {
-                mxwarn("real_reader: Couldn't find RealAudio"
+                mxwarn(PFX "Couldn't find RealAudio"
                        " FourCC for id %u (description length: %d) Skipping "
                        "track.\n", id, slen);
                 ok = false;
@@ -413,7 +415,7 @@ real_reader_c::parse_headers() {
                                               dmx->extra_data_size);
               }
             }
-            mxverb(2, "real_reader: extra_data_size: %d\n",
+            mxverb(2, PFX "extra_data_size: %d\n",
                    dmx->extra_data_size);
 
             if (ok) {
@@ -436,7 +438,7 @@ real_reader_c::parse_headers() {
         break;                  // We're finished!
 
       } else {
-        mxwarn("real_reader: Unknown header type (0x%08x, "
+        mxwarn(PFX "Unknown header type (0x%08x, "
                "%c%c%c%c).\n", object_id, (char)(object_id >> 24),
                (char)((object_id & 0x00ff0000) >> 16),
                (char)((object_id & 0x0000ff00) >> 8),
@@ -446,7 +448,7 @@ real_reader_c::parse_headers() {
     }
 
   } catch (exception &ex) {
-    throw error_c("real_reader: Could not parse the RealMedia headers.");
+    throw error_c(PFX "Could not parse the RealMedia headers.");
   }
 }
 
@@ -516,13 +518,13 @@ real_reader_c::create_packetizer(int64_t tid) {
         extra_data_parsed = false;
         if (dmx->extra_data_size > 4) {
           extra_len = get_uint32_be(dmx->extra_data);
-          mxverb(2, "real_reader: extra_len: %u\n", extra_len);
+          mxverb(2, PFX "extra_len: %u\n", extra_len);
           if (dmx->extra_data_size >= (4 + extra_len)) {
             extra_data_parsed = true;
             parse_aac_data(&dmx->extra_data[4 + 1], extra_len - 1,
                            profile, channels, sample_rate, output_sample_rate,
                            sbr);
-            mxverb(2, "real_reader: 1. profile: %d, channels: %d, "
+            mxverb(2, PFX "1. profile: %d, channels: %d, "
                    "sample_rate: %d, output_sample_rate: %d, sbr: %d\n",
                    profile, channels, sample_rate, output_sample_rate,
                    (int)sbr);
@@ -550,7 +552,7 @@ real_reader_c::create_packetizer(int64_t tid) {
             profile = AAC_PROFILE_SBR;
             break;
           }
-        mxverb(2, "real_reader: 2. profile: %d, channels: %d, sample_rate: "
+        mxverb(2, PFX "2. profile: %d, channels: %d, sample_rate: "
                "%d, output_sample_rate: %d, sbr: %d\n", profile, channels,
                sample_rate, output_sample_rate, (int)sbr);
         ti->private_data = NULL;
@@ -576,6 +578,7 @@ real_reader_c::create_packetizer(int64_t tid) {
       } else {
         ptzr = new passthrough_packetizer_c(this, ti);
         dmx->packetizer = ptzr;
+        dmx->segments = new vector<rv_segment_t>;
 
         mxprints(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]),
                  toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
@@ -631,10 +634,9 @@ real_reader_c::finish() {
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
-    if ((dmx->type == 'a') && (dmx->c_data != NULL)) {
+    if ((dmx->type == 'a') && (dmx->segments != NULL)) {
       dur = dmx->c_timecode / dmx->c_numpackets;
-      dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode + dur,
-                               dur, dmx->c_keyframe ? -1 : dmx->c_reftimecode);
+      deliver_audio_frames(dmx, dur);
     }
   }
 
@@ -686,7 +688,7 @@ real_reader_c::read(generic_packetizer_c *) {
     flags = io->read_uint8();
 
     if (length < 12) {
-      mxwarn("real_reader: %s: Data packet length is too "
+      mxwarn(PFX "%s: Data packet length is too "
              "small: %u. Other values: object_version: 0x%04x, id: 0x%04x, "
              "timecode: %lld, flags: 0x%02x. File position: %lld. Aborting "
              "this file.\n", ti->fname, length, object_version, id, timecode,
@@ -700,7 +702,7 @@ real_reader_c::read(generic_packetizer_c *) {
       return EMOREDATA;
     }
 
-    mxverb(4, "real_reader: %u/'%s': timecode = %lldms\n", dmx->id, ti->fname,
+    mxverb(4, PFX "%u/'%s': timecode = %lldms\n", dmx->id, ti->fname,
            timecode / 1000000);
 
     length -= 12;
@@ -720,21 +722,8 @@ real_reader_c::read(generic_packetizer_c *) {
     } else if (dmx->is_aac)
       deliver_aac_frames(dmx, chunk, length);
 
-    else {
-      if (dmx->c_data != NULL)
-        dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode,
-                                 timecode - dmx->c_timecode,
-                                 dmx->c_keyframe ? -1 : dmx->c_reftimecode);
-      dmx->c_data = chunk;
-      dmx->c_len = length;
-      dmx->c_reftimecode = dmx->c_timecode;
-      dmx->c_timecode = timecode;
-      if ((flags & 2) == 2)
-        dmx->c_keyframe = true;
-      else
-        dmx->c_keyframe = false;
-      dmx->c_numpackets++;
-    }
+    else
+      queue_audio_frames(dmx, chunk, length, timecode, flags);
 
   } catch (exception &ex) {
     return finish();
@@ -744,21 +733,83 @@ real_reader_c::read(generic_packetizer_c *) {
 }
 
 void
+real_reader_c::queue_one_audio_frame(real_demuxer_t *dmx,
+                                     unsigned char *chunk,
+                                     uint32_t length,
+                                     uint64_t timecode,
+                                     uint32_t flags) {
+  rv_segment_t segment;
+
+  segment.data = chunk;
+  segment.size = length;
+  segment.offset = flags;
+  dmx->segments->push_back(segment);
+  dmx->c_timecode = timecode;
+  mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
+         "0x%08x\n", dmx->id, ti->fname, length, timecode, flags);
+}
+
+void
+real_reader_c::queue_audio_frames(real_demuxer_t *dmx,
+                                  unsigned char *chunk,
+                                  uint32_t length,
+                                  uint64_t timecode,
+                                  uint32_t flags) {
+  // Enqueue the packets if no packets are in the queue or if the current
+  // packet's timecode is the same as the timecode of those before.
+  if ((dmx->segments->size() == 0) ||
+      (dmx->c_timecode == timecode)) {
+    queue_one_audio_frame(dmx, chunk, length, timecode, flags);
+    return;
+  }
+
+  // This timecode is different. So let's push the packets out.
+  deliver_audio_frames(dmx, (timecode - dmx->c_timecode) /
+                       dmx->segments->size());
+  // Enqueue this packet.
+  queue_one_audio_frame(dmx, chunk, length, timecode, flags);
+}
+
+void
+real_reader_c::deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration) {
+  uint32_t i;
+  rv_segment_t segment;
+
+  if (dmx->segments->size() == 0)
+    return;
+
+  for (i = 0; i < dmx->segments->size(); i++) {
+    segment = (*dmx->segments)[i];
+    mxverb(2, "delivering audio for %u/'%s' length %llu timecode %llu flags "
+           "0x%08x duration %llu\n", dmx->id, ti->fname, segment.size,
+           dmx->c_timecode, (uint32_t)segment.offset, duration);
+    dmx->packetizer->process(segment.data, segment.size,
+                             dmx->c_timecode, duration,
+                             (segment.offset & 2) == 2 ? -1 :
+                             dmx->c_reftimecode);
+    if ((segment.offset & 2) == 2)
+      dmx->c_reftimecode = dmx->c_timecode;
+  }
+  dmx->c_numpackets += dmx->segments->size();
+  dmx->segments->clear();
+}
+
+void
 real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
                                   unsigned char *chunk,
                                   uint32_t length) {
   uint32_t num_sub_packets, data_idx, i, sub_length, len_check;
 
   if (length < 2) {
-    mxwarn("real_reader: Short AAC audio packet for track ID %u of "
+    mxwarn(PFX "Short AAC audio packet for track ID %u of "
            "'%s' (length: %u < 2)\n", dmx->id, ti->fname, length);
     safefree(chunk);
     return;
   }
   num_sub_packets = chunk[1] >> 4;
-  mxverb(2, "real_reader: num_sub_packets = %u\n", num_sub_packets);
+  mxverb(2, PFX "num_sub_packets = %u\n", num_sub_packets);
   if (length < (2 + num_sub_packets * 2)) {
-    mxwarn("real_reader: Short AAC audio packet for track ID %u of "
+    mxwarn(PFX "Short AAC audio packet for track ID %u of "
            "'%s' (length: %u < %u)\n", dmx->id, ti->fname, length,
            2 + num_sub_packets * 2);
     safefree(chunk);
@@ -767,11 +818,11 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   len_check = 2 + num_sub_packets * 2;
   for (i = 0; i < num_sub_packets; i++) {
     sub_length = get_uint16_be(&chunk[2 + i * 2]);
-    mxverb(2, "real_reader: %u: length %u\n", i, sub_length);
+    mxverb(2, PFX "%u: length %u\n", i, sub_length);
     len_check += sub_length;
   }
   if (len_check != length) {
-    mxwarn("real_reader: Inconsistent AAC audio packet for track ID %u of "
+    mxwarn(PFX "Inconsistent AAC audio packet for track ID %u of "
            "'%s' (length: %u != len_check %u)\n", dmx->id, ti->fname,
            length, len_check);
     safefree(chunk);
@@ -1025,7 +1076,7 @@ real_reader_c::assemble_packet(real_demuxer_t *dmx,
     }
 
   } catch(...) {
-    die("real_reader: Caught exception during parsing of a video "
+    die(PFX "Caught exception during parsing of a video "
         "packet. Aborting.\n");
   }
 }
@@ -1171,7 +1222,7 @@ real_reader_c::get_information_from_data() {
       io->skip(4 + 1 + 1);
 
       if (length < 12)
-        die("real_reader: Data packet too small.");
+        die(PFX "Data packet too small.");
 
       dmx = find_demuxer(id);
 
