@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.11 2003/04/17 12:29:08 mosu Exp $
+    \version \$Id: queue.cpp,v 1.12 2003/04/18 08:42:20 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -55,13 +55,13 @@ q_c::~q_c() {
 }
 
 int64_t q_c::add_packet(unsigned char  *data, int length,
-                        int64_t timestamp, int64_t bref,
+                        int64_t timecode, int64_t bref,
                         int64_t fref) {
   q_page_t *qpage;
   
   if (data == NULL)
     return 0;
-  if (timestamp < 0)
+  if (timecode < 0)
     die("timecode < 0");
   qpage = (q_page_t *)malloc(sizeof(q_page_t));
   if (qpage == NULL)
@@ -75,7 +75,7 @@ int64_t q_c::add_packet(unsigned char  *data, int length,
     die("malloc");
   memcpy(qpage->pack->data, data, length);
   qpage->pack->length = length;
-  qpage->pack->timestamp = timestamp;
+  qpage->pack->timecode = timecode;
   qpage->pack->bref = bref;
   qpage->pack->fref = fref;
   qpage->pack->source = this;
@@ -115,9 +115,9 @@ int q_c::packet_available() {
     return 1;
 }
 
-stamp_t q_c::get_smallest_timestamp() {
+stamp_t q_c::get_smallest_timecode() {
   if (first != NULL)
-    return first->pack->timestamp;
+    return first->pack->timecode;
   else
     return MAX_TIMESTAMP;
 }

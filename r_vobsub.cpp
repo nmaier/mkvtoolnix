@@ -32,14 +32,14 @@
 #include <dmalloc.h>
 #endif
 
-#define istimestampstr(s)      (!strncmp(s, "timestamp: ", 11))
+#define istimecodestr(s)      (!strncmp(s, "timecode: ", 11))
 #define iscommafileposstr(s)   (!strncmp(s, ", filepos: ", 11))
 #define iscolon(s)             (*(s) == ':')
 #define istwodigits(s)         (isdigit(*(s)) && isdigit(*(s + 1)))
 #define isthreedigits(s)       (isdigit(*(s)) && isdigit(*(s + 1)) && \
                                 isdigit(*(s + 2)))
 #define istwodigitscolon(s)    (istwodigits(s) && iscolon(s + 2))
-#define istimestamp(s)         (istwodigitscolon(s) && \
+#define istimecode(s)         (istwodigitscolon(s) && \
                                 istwodigitscolon(s + 3) && \
                                 istwodigitscolon(s + 6) && \
                                 isthreedigits(s + 9))
@@ -53,7 +53,7 @@
                                 ishexdigit(*(s + 6)) && \
                                 ishexdigit(*(s + 7)) && \
                                 ishexdigit(*(s + 8)))
-#define isvobsubline(s)        (istimestampstr(s) && istimestamp(s + 11) && \
+#define isvobsubline(s)        (istimecodestr(s) && istimecode(s + 11) && \
                                 iscommafileposstr(s + 23) && \
                                 isfilepos(s + 34))
                         
@@ -253,7 +253,7 @@ int vobsub_reader_c::read() {
       }
       index = -1;
     } else {
-// timestamp: 00:00:03:440, filepos: 000000000
+// timecode: 00:00:03:440, filepos: 000000000
 // 0123456789012345678901234567890123456789012
 //           1         2         3         4
       chunk[13] = 0;

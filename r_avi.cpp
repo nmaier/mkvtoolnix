@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.18 2003/04/17 12:31:51 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.19 2003/04/18 08:42:20 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -438,8 +438,8 @@ packet_t *avi_reader_c::get_packet() {
       if (demuxer->packetizer->packet_available())
         winner = demuxer->packetizer;
     } else if (winner->packet_available() &&
-               (winner->get_smallest_timestamp() >
-                demuxer->packetizer->get_smallest_timestamp()))
+               (winner->get_smallest_timecode() >
+                demuxer->packetizer->get_smallest_timecode()))
       winner = demuxer->packetizer;
     demuxer = demuxer->next;
   }

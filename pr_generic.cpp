@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.17 2003/04/17 19:33:02 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.18 2003/04/18 08:42:20 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -124,8 +124,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   c->num_packets++;
   cluster_content_size += packet->length;
 
-  if (packet->timestamp > max_timecode)
-    max_timecode = packet->timestamp;
+  if (packet->timecode > max_timecode)
+    max_timecode = packet->timecode;
 
   walk_clusters();
 }
@@ -135,7 +135,7 @@ int64_t cluster_helper_c::get_timecode() {
     return 0;
   if (clusters[num_clusters - 1]->packets == NULL)
     return 0;
-  return clusters[num_clusters - 1]->packets[0]->timestamp;
+  return clusters[num_clusters - 1]->packets[0]->timecode;
 }
 
 packet_t *cluster_helper_c::get_packet(int num) {
@@ -222,15 +222,15 @@ int cluster_helper_c::render(IOCallback *out) {
         fref_packet = find_packet(pack->fref);
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
-        cluster->AddFrame(track_entry, pack->timestamp * 1000000LL,
+        cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
                           *pack->data_buffer, new_group, *bref_packet->group,
                           *fref_packet->group);
       } else {
-        cluster->AddFrame(track_entry, pack->timestamp * 1000000LL,
+        cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
                           *pack->data_buffer, new_group, *bref_packet->group);
       }
     } else {                    // This is a key frame. No references.
-      cluster->AddFrame(track_entry, pack->timestamp * 1000000LL,
+      cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
                         *pack->data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
@@ -303,7 +303,7 @@ void cluster_helper_c::check_clusters(int num) {
       if (clstr == NULL) {
         fprintf(stderr, "Error: backward refenrece could not be resolved "
                 "(%lld -> %lld), id %lld. Called from line %d.\n",
-                p->timestamp, p->bref, p->id, num);
+                p->timecode, p->bref, p->id, num);
         die("internal error");
       }
     }

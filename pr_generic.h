@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.18 2003/04/17 18:15:18 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.19 2003/04/18 08:42:20 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -94,7 +94,7 @@ public:
   virtual int       packet_available() = 0;
   virtual packet_t *get_packet() = 0;
   virtual void      set_header() = 0;
-  virtual stamp_t   get_smallest_timestamp() = 0;
+  virtual stamp_t   get_smallest_timecode() = 0;
   virtual int       process(unsigned char *data, int size,
                             int64_t timecode = -1, int64_t length = -1) = 0;
 };
@@ -118,7 +118,7 @@ typedef struct packet_t {
   KaxCluster          *cluster;
   unsigned char       *data;
   int                  length, superseeded;
-  int64_t              timestamp, id, bref, fref;
+  int64_t              timecode, id, bref, fref;
   generic_packetizer_c *source;
 } packet_t;
 

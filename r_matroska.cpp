@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.3 2003/04/17 12:35:45 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.4 2003/04/18 08:42:20 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -1009,8 +1009,8 @@ packet_t *mkv_reader_c::get_packet() {
       if (t->packetizer->packet_available())
         winner = t->packetizer;
     } else if (winner->packet_available() &&
-               (winner->get_smallest_timestamp() >
-                t->packetizer->get_smallest_timestamp()))
+               (winner->get_smallest_timecode() >
+                t->packetizer->get_smallest_timecode()))
       winner = t->packetizer;
   }
   

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.5 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.6 2003/04/18 08:42:20 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -38,12 +38,12 @@
 #define isthreedigits(s) (isdigit(*(s)) && isdigit(*(s + 1)) && \
                           isdigit(*(s + 2)))
 #define isarrow(s) (!strncmp((s), " --> ", 5))
-#define istimestamp(s) (istwodigits(s) && iscolon(s + 2) && \
+#define istimecode(s) (istwodigits(s) && iscolon(s + 2) && \
                         istwodigits(s + 3) && iscolon(s + 5) && \
                         istwodigits(s + 6) && iscomma(s + 8) && \
                         isthreedigits(s + 9))
-#define issrttimestamp(s) (istimestamp(s) && isarrow(s + 12) && \
-                           istimestamp(s + 17))
+#define issrttimecode(s) (istimecode(s) && isarrow(s + 12) && \
+                           istimecode(s + 17))
                         
 int srt_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
@@ -56,7 +56,7 @@ int srt_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
     return 0;
-  if ((strlen(chunk) < 29) ||  !issrttimestamp(chunk))
+  if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
     return 0;
@@ -92,7 +92,7 @@ int srt_reader_c::read() {
       break;
     if (fgets(chunk, 2047, file) == NULL)
       break;
-    if ((strlen(chunk) < 29) ||  !issrttimestamp(chunk))
+    if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
       break;
     chunk[2047] = 0;
 

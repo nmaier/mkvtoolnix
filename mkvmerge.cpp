@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.34 2003/04/17 19:33:02 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.35 2003/04/18 08:42:20 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -160,7 +160,7 @@ static void usage(void) {
     "  -y, --sync <d[,o[/p]]>   Ssynchronize, delay the audio track by d ms.\n"
     "                           d > 0: Pad with silent samples.\n"
     "                           d < 0: Remove samples from the beginning.\n"
-    "                           o/p: Adjust the timestamps by o/p to fix\n"
+    "                           o/p: Adjust the timecodes by o/p to fix\n"
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
@@ -741,7 +741,7 @@ static int write_packet(packet_t *pack) {
   cluster_helper->add_packet(pack);
   timecode = cluster_helper->get_timecode();
 
-  if (((pack->timestamp - timecode) > max_ms_per_cluster) ||
+  if (((pack->timecode - timecode) > max_ms_per_cluster) ||
       (cluster_helper->get_packet_count() > max_blocks_per_cluster) ||
       (cluster_helper->get_cluster_content_size() > 1500000)) {
     cluster_helper->render(out);
@@ -784,7 +784,7 @@ int main(int argc, char **argv) {
       file = file->next;
     }
 
-    /* Step 2: Pick the page with the lowest timestamp and 
+    /* Step 2: Pick the page with the lowest timecode and 
     ** stuff it into the Matroska file
     */
     file = input;
@@ -795,7 +795,7 @@ int main(int argc, char **argv) {
         if (winner->pack == NULL)
           winner = file;
         else if (file->pack &&
-                 (file->pack->timestamp < winner->pack->timestamp))
+                 (file->pack->timecode < winner->pack->timecode))
           winner = file;
       }
       file = file->next;
