@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.73 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.74 2003/05/22 11:10:40 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -113,7 +113,8 @@ filelist_t *input= NULL;
 off_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
-int write_cues = 1, cue_writing_requested = 0;
+bool write_cues = true, cue_writing_requested = false;
+bool video_track_present = false;
 
 float video_fps = -1.0;
 
@@ -127,7 +128,7 @@ EbmlVoid *kax_seekhead_void = NULL;
 KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
 
-int write_meta_seek = 1;
+bool write_meta_seek = true;
 int meta_seek_size = 0;
 
 // Specs say that track numbers should start at 1.
@@ -591,7 +592,10 @@ static void render_headers(mm_io_callback *out) {
       kax_seekhead = new KaxSeekHead();
       kax_seekhead_void = new EbmlVoid();
       if (meta_seek_size == 0)
-        meta_seek_size = (int)(file_sizes * 1.5 / 10240);
+        if (video_track_present)
+          meta_seek_size = (int)(file_sizes * 1.5 / 10240);
+        else
+          meta_seek_size = (int)(file_sizes * 3 / 4096);
       kax_seekhead_void->SetSize(meta_seek_size);
       kax_seekhead_void->Render(*out);
     }
@@ -719,10 +723,10 @@ static void parse_args(int argc, char **argv) {
       i++;
 
     } else if (!strcmp(argv[i], "--no-cues"))
-      write_cues = 0;
+      write_cues = false;
 
     else if (!strcmp(argv[i], "--no-meta-seek"))
-      write_meta_seek = 0;
+      write_meta_seek = false;
 
 
     // Options that apply to the next input file only.
@@ -1214,14 +1218,14 @@ int main(int argc, char **argv) {
               "mkvmerge with the additional parameters '--meta-seek-size "
               "%lld'.\n", kax_seekhead->ElementSize() + 100);
 
-      delete kax_seekhead;
-      kax_seekhead = new KaxSeekHead();
+      if (write_cues && cue_writing_requested) {
+        delete kax_seekhead;
 
-      if (write_cues && cue_writing_requested)
+        kax_seekhead = new KaxSeekHead();
         kax_seekhead->IndexThis(*kax_cues, *kax_segment);
-
-      kax_seekhead->UpdateSize();
-      kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true);
+        kax_seekhead->UpdateSize();
+        kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true);
+      }
     }
   }
 

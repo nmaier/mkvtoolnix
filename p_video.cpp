@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.35 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.36 2003/05/22 11:10:40 mosu Exp $
     \brief video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -25,6 +25,7 @@
 #include <errno.h>
 
 #include "common.h"
+#include "mkvmerge.h"
 #include "pr_generic.h"
 #include "p_video.h"
 #include "matroska.h"
@@ -46,6 +47,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   ref_timecode = -1;
   if (get_cue_creation() == CUES_UNSPECIFIED)
     set_cue_creation(CUES_IFRAMES);
+  video_track_present = true;
 
   set_track_type(track_video);
 }
