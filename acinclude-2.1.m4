@@ -639,3 +639,43 @@ dnl      [Define as const if the declaration of iconv() needs const.])
   AC_SUBST(ICONV_LIBS)
 ])
 
+dnl PATH_WXWINDOWS([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl Test for wxWindows, and define MATROSKA_CFLAGS and MATROSKA_LIBS
+dnl
+AC_DEFUN(PATH_WXWINDOWS,
+[
+  AC_MSG_CHECKING(for wxWindows)
+  if wx-config --cxxflags > /dev/null 2>&1; then
+    wxwversion=`wx-config --version`
+    wxwver_ok=`echo $wxwversion | sed 's;\.;\ ;g' | (read -a mver
+    if test ${mver[[0]]} -gt 2 ; then
+      wxwver_ok=1
+    elif test ${mver[[0]]} -lt 2 ; then
+      wxwver_ok=0
+    else
+      if test ${mver[[1]]} -ge 4 ; then
+        wxwver_ok=1
+      else
+        wxwver_ok=0
+      fi
+    fi
+    echo $wxwver_ok )`
+
+    if test "$wxwver_ok" = "1" ; then
+      WXWINDOWS_CFLAGS=$(wx-config --cxxflags)
+      WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
+      WXWINDOWS_LIBS=$(wx-config --libs)
+      echo '#define HAVE_WXWINDOWS 1' >> config.h
+      AC_MSG_RESULT($wxwversion ok)
+    else
+      AC_MSG_RESULT(no: version $wxwversion is too old)
+    fi
+  else
+    echo '/* #define HAVE_WXWINDOWS 1 */' >> config.h
+    AC_MSG_RESULT(no: wx-config was not found)
+  fi
+
+  AC_SUBST(WXWINDOWS_CFLAGS)
+  AC_SUBST(WXWINDOWS_LDFLAGS)
+  AC_SUBST(WXWINDOWS_LIBS)
+])
