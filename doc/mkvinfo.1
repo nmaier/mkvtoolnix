@@ -44,6 +44,13 @@ the seek head entries and the cue entries.
 level 2
 will also print the seek head entries, the cue entries and the file position
 at which each Matroska element can be found at.
+.TP
+level 3
+will print some information that is not directly connected to a Matroska
+element. All other elements only print stuff about the elements that were
+just found. Level 3 adds meta information to ease debugging (read: it's
+intended for developpers only). All lines written by level 3 are enclosed
+in square brackets to make filtering them out easy.
 .LP
 .SH AUTHOR
 .I mkvinfo

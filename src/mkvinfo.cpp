@@ -318,9 +318,10 @@ bool process_file(const char *file_name) {
   EbmlElement *l5 = NULL, *l6 = NULL, *l7 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
-  uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
+  uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size, lf_timecode;
+  int lf_tnum;
   char mkv_track_type;
-  bool ms_compat;
+  bool ms_compat, bref_found, fref_found;
   char *str;
   string strc;
   mm_io_c *in;
@@ -947,6 +948,9 @@ bool process_file(const char *file_name) {
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             show_element(l2, 2, "Block group");
 
+            bref_found = false;
+            fref_found = false;
+
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, false, 1);
@@ -964,6 +968,8 @@ bool process_file(const char *file_name) {
                              "timecode %.3fs)", block.TrackNum(),
                              block.NumberFrames(),
                              (float)block.GlobalTimecode() / 1000000000.0);
+                lf_timecode = block.GlobalTimecode() / 1000000;
+                lf_tnum = block.TrackNum();
                 for (i = 0; i < (int)block.NumberFrames(); i++) {
                   DataBuffer &data = block.GetBuffer(i);
                   show_element(NULL, 4, "Frame with size %u", data.Size());
@@ -984,6 +990,10 @@ bool process_file(const char *file_name) {
                 reference.ReadData(es->I_O());
                 show_element(l3, 3, "Reference block: %.3fms", 
                              ((float)int64(reference)) * tc_scale / 1000000.0);
+                if (int64(reference) < 0)
+                  bref_found = true;
+                else if (int64(reference) > 0)
+                  fref_found = true;
 
               } else if (EbmlId(*l3) ==
                          KaxReferencePriority::ClassInfos.GlobalId) {
@@ -1112,6 +1122,12 @@ bool process_file(const char *file_name) {
               }
 
             } // while (l3 != NULL)
+
+            if (verbose > 2)
+              show_element(NULL, 2, "[%c frame for track %u, timecode %u]",
+                           bref_found && fref_found ? 'B' :
+                           bref_found ? 'P' : !fref_found ? 'I' : '?',
+                           lf_tnum, lf_timecode);
 
           } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
