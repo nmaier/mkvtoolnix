@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.39 2003/05/06 10:22:55 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.40 2003/05/11 09:05:55 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -100,8 +100,6 @@ protected:
   int hvideo_pixel_width, hvideo_pixel_height;
   float hvideo_frame_rate;
 
-  int hdefault_track;
-
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
     throw (error_c);
@@ -129,7 +127,6 @@ public:
 
   virtual KaxTrackEntry *get_track_entry();
 
-  virtual void set_serial(int serial = -1);
   virtual int set_uid(uint32_t uid);
   virtual void set_track_type(int type);
   virtual void set_language(char *language);
@@ -149,7 +146,8 @@ public:
   virtual void set_video_aspect_ratio(float ar);
   virtual void set_video_frame_rate(float frame_rate);
 
-  virtual void set_as_default_track(char type);
+  virtual void set_as_default_track(int type);
+  virtual void force_default_track(int type);
 };
  
 class generic_reader_c {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.17 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.18 2003/05/11 09:05:55 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,21 +35,18 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   cc_utf8 = utf8_init(ti->sub_charset);
+
+  set_track_type(track_subtitle);
 }
 
 textsubs_packetizer_c::~textsubs_packetizer_c() {
 }
 
 void textsubs_packetizer_c::set_headers() {
-  set_serial(-1);
-  set_track_type(track_subtitle);
   if (ti->no_utf8_subs)
     set_codec_id(MKV_S_TEXTASCII);
   else
     set_codec_id(MKV_S_TEXTUTF8);
-
-  if (ti->default_track)
-    set_as_default_track('s');
 
   generic_packetizer_c::set_headers();
 

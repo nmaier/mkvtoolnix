@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.39 2003/05/08 18:46:25 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.40 2003/05/11 09:05:55 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,7 +39,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   free_refs = -1;
 
   // Set default header values to 'unset'.
-  hserialno = -2;
+  hserialno = track_number++;
   huid = 0;
   htrack_type = -1;
   htrack_min_cache = -1;
@@ -56,8 +56,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   hvideo_pixel_width = -1;
   hvideo_pixel_height = -1;
   hvideo_frame_rate = -1.0;
-
-  hdefault_track = -1;
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
@@ -93,10 +91,6 @@ KaxTrackEntry *generic_packetizer_c::get_track_entry() {
   return track_entry;
 }
 
-void generic_packetizer_c::set_serial(int serial) {
-  hserialno = serial;
-}
-
 int generic_packetizer_c::set_uid(uint32_t uid) {
   if (is_unique_uint32(uid)) {
     add_unique_uint32(uid);
@@ -109,6 +103,11 @@ int generic_packetizer_c::set_uid(uint32_t uid) {
 
 void generic_packetizer_c::set_track_type(int type) {
   htrack_type = type;
+
+  if (ti->default_track)
+    force_default_track(type);
+  else
+    set_as_default_track(type);
 }
 
 void generic_packetizer_c::set_codec_id(char *id) {
@@ -167,24 +166,40 @@ void generic_packetizer_c::set_video_frame_rate(float frame_rate) {
   hvideo_frame_rate = frame_rate;
 }
 
-void generic_packetizer_c::set_as_default_track(char type) {
+void generic_packetizer_c::set_as_default_track(int type) {
   int idx;
 
-  if (type == 'a')
+  if (type == track_audio)
     idx = 0;
-  else if (type == 'v')
+  else if (type == track_video)
     idx = 1;
-  else
+  else if (type == track_subtitle)
     idx = 2;
+  else
+    die("Unknown track type");
 
-  if (default_tracks[idx] != 0)
+  if (default_tracks[idx] == 0)
+    default_tracks[idx] = -1 * hserialno;
+}
+
+void generic_packetizer_c::force_default_track(int type) {
+  int idx;
+
+  if (type == track_audio)
+    idx = 0;
+  else if (type == track_video)
+    idx = 1;
+  else if (type == track_subtitle)
+    idx = 2;
+  else
+    die("Unknown track type");
+
+  if (default_tracks[idx] > 0)
     fprintf(stdout, "Warning: Another default track for %s tracks has already "
             "been set. Not setting the 'default' flag for this track.\n",
             idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle");
-  else {
-    default_tracks[idx] = 1;
-    hdefault_track = 1;
-  }
+  else
+    default_tracks[idx] = hserialno;
 }
 
 void generic_packetizer_c::set_language(char *language) {
@@ -193,6 +208,8 @@ void generic_packetizer_c::set_language(char *language) {
 }
 
 void generic_packetizer_c::set_headers() {
+  int idx;
+
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
       track_entry =
@@ -204,13 +221,9 @@ void generic_packetizer_c::set_headers() {
     kax_last_entry = track_entry;
   }
 
-  if (hserialno != -2) {  
-    if (hserialno == -1)
-      hserialno = track_number++;
-    KaxTrackNumber &tnumber =
-      GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
-    *(static_cast<EbmlUInteger *>(&tnumber)) = hserialno;
-  }
+  KaxTrackNumber &tnumber =
+    GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
+  *(static_cast<EbmlUInteger *>(&tnumber)) = hserialno;
 
   if (huid == 0)
     huid = create_unique_uint32();
@@ -248,11 +261,24 @@ void generic_packetizer_c::set_headers() {
                                    (*track_entry))))
       = htrack_max_cache;
 
-  if (hdefault_track != -1)
+  if (htrack_type == track_audio)
+    idx = 0;
+  else if (htrack_type == track_video)
+    idx = 1;
+  else
+    idx = 2;
+
+  if ((default_tracks[idx] == hserialno) ||
+      (default_tracks[idx] == -1 * hserialno))
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackFlagDefault>(static_cast<KaxTrackEntry &>
                                       (*track_entry))))
-      = hdefault_track;
+      = 1;
+  else
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackFlagDefault>(static_cast<KaxTrackEntry &>
+                                      (*track_entry))))
+      = 0;
 
   if (ti->language != NULL) {
     *(static_cast<EbmlString *>

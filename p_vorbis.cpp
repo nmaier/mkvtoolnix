@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.22 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.23 2003/05/11 09:05:55 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -67,6 +67,8 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
     if (vorbis_synthesis_headerin(&vi, &vc, &headers[i]) < 0)
       throw error_c("Error: vorbis_packetizer: Could not extract the "
                     "stream's parameters from the first packets.\n");
+
+  set_track_type(track_audio);
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
@@ -81,8 +83,6 @@ void vorbis_packetizer_c::set_headers() {
   unsigned char *buffer;
   int n, offset, i, lsize;
   
-  set_serial(-1);
-  set_track_type(track_audio);
   set_codec_id(MKV_A_VORBIS);
 
   // We use lacing for the blocks. The first bytes is the number of
@@ -120,9 +120,6 @@ void vorbis_packetizer_c::set_headers() {
 
   set_audio_sampling_freq((float)vi.rate);
   set_audio_channels(vi.channels);
-
-  if (ti->default_track)
-    set_as_default_track('a');
 
   generic_packetizer_c::set_headers();
 }

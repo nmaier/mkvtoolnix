@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.22 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.23 2003/05/11 09:05:55 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -45,6 +45,8 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
   remaining_sync = 0;
+
+  set_track_type(track_audio);
 }
 
 pcm_packetizer_c::~pcm_packetizer_c() {
@@ -53,15 +55,10 @@ pcm_packetizer_c::~pcm_packetizer_c() {
 }
 
 void pcm_packetizer_c::set_headers() {
-  set_serial(-1);
-  set_track_type(track_audio);
   set_codec_id(MKV_A_PCM);
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
   set_audio_bit_depth(bits_per_sample);
-
-  if (ti->default_track)
-    set_as_default_track('a');
 
   generic_packetizer_c::set_headers();
 }
