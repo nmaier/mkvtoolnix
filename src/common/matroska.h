@@ -58,6 +58,7 @@
 #define MKV_S_TEXTSSA    "S_TEXT/SSA"
 #define MKV_S_TEXTASS    "S_TEXT/ASS"
 #define MKV_S_TEXTUSF    "S_TEXT/USF"
+#define MKV_S_TEXTASCII  "S_TEXT/ASCII"
 #define MKV_S_VOBSUB     "S_VOBSUB"
 #define MKV_S_VOBSUBZLIB "S_VOBSUB/ZLIB"
 

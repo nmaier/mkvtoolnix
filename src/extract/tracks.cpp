@@ -368,7 +368,8 @@ check_output_files() {
         }
 
       } else if (tracks[i].track_type == 's') {
-        if (!strcmp(tracks[i].codec_id, MKV_S_TEXTUTF8))
+        if (!strcmp(tracks[i].codec_id, MKV_S_TEXTUTF8) ||
+            !strcmp(tracks[i].codec_id, MKV_S_TEXTASCII))
           tracks[i].type = TYPESRT;
         else if (!strcmp(tracks[i].codec_id, MKV_S_TEXTSSA) ||
                  !strcmp(tracks[i].codec_id, MKV_S_TEXTASS) ||
