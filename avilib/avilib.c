@@ -31,7 +31,6 @@
 #include <io.h>
 #define ftruncate _chsize
 #define strncasecmp _strnicmp
-typedef int ssize_t;
 #else // COMP_...
 #include <unistd.h>
 #endif
