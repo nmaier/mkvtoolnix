@@ -363,7 +363,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
     command = "\"" + mkvmerge_path + "\" --identify-verbose \"" +
       dlg.GetPath() + "\"";
     result = wxExecute(command, output, errors);
-    if ((result > 0) && (result < 10)) {
+    if ((result < 0) || (result > 1)) {
       name.Printf("'mkvmerge -i' failed. Return code: %d\n\n", result);
       for (i = 0; i < output.Count(); i++)
         name += break_line(output[i]) + "\n";

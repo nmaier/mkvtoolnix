@@ -1,3 +1,14 @@
+2003-11-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: Made mmg accept return codes of 1 when 'mkvmerge -i' is run
+	when an input file is added. This way mmg won't reject mkvmerge's
+	output if mkvmerge only printed some warnings which will result in
+	a return code of 1 instead of 0.
+
+	* mkvmerge: bug fix: If running in identification mode (-i, used
+	by mmg a lot) then don't output any warnings or mmg will not
+	accept this file.
+
 2003-11-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: CUE sheets can be used for chapters.

@@ -388,7 +388,7 @@ void generic_packetizer_c::force_default_track(int type) {
     die("pr_generic.cpp/generic_packetizer_c::force_default_track(): Unknown "
         "track type %d.", type);
 
-  if (default_tracks[idx] > 0)
+  if ((default_tracks[idx] > 0) && !identifying)
     mxwarn("Another default track for %s tracks has already "
            "been set. Not setting the 'default' flag for this track.\n",
            idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle");
