@@ -270,7 +270,10 @@ void tab_input::no_track_mode() {
   cob_compression->Enable(false);
 }
 
-void tab_input::audio_track_mode() {
+void tab_input::audio_track_mode(wxString ctype) {
+  wxString lctype;
+
+  lctype = ctype.Lower();
   cob_language->Enable(true);
   tc_delay->Enable(true);
   tc_track_name->Enable(true);
@@ -278,7 +281,7 @@ void tab_input::audio_track_mode() {
   cob_cues->Enable(true);
   cob_sub_charset->Enable(false);
   cb_default->Enable(true);
-  cb_aac_is_sbr->Enable(true);
+  cb_aac_is_sbr->Enable(lctype.Find("aac") >= 0);
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
   cob_aspect_ratio->Enable(false);
@@ -286,7 +289,7 @@ void tab_input::audio_track_mode() {
   cob_compression->Enable(false);
 }
 
-void tab_input::video_track_mode() {
+void tab_input::video_track_mode(wxString) {
   cob_language->Enable(true);
   tc_delay->Enable(false);
   tc_track_name->Enable(true);
@@ -302,28 +305,32 @@ void tab_input::video_track_mode() {
   cob_compression->Enable(false);
 }
 
-void tab_input::subtitle_track_mode() {
+void tab_input::subtitle_track_mode(wxString ctype) {
+  wxString lctype;
+
+  lctype = ctype.Lower();
   cob_language->Enable(true);
   tc_delay->Enable(true);
   tc_track_name->Enable(true);
   tc_stretch->Enable(true);
   cob_cues->Enable(true);
-  cob_sub_charset->Enable(true);
+  cob_sub_charset->Enable(lctype.Find("vobsub") < 0);
   cb_default->Enable(true);
   cb_aac_is_sbr->Enable(false);
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
   cob_aspect_ratio->Enable(false);
   cob_fourcc->Enable(false);
-  cob_compression->Enable(true);
+  cob_compression->Enable(lctype.Find("vobsub") >= 0);
 }
 
 void tab_input::on_add_file(wxCommandEvent &evt) {
   mmg_file_t file;
   wxString name, command, id, type, exact;
   wxArrayString output, errors;
-  int result;
-  unsigned int i;
+  vector<string> args, pair;
+  int result, pos;
+  unsigned int i, k;
 
   wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
                    _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;"
@@ -353,7 +360,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
 
-    command = "\"" + mkvmerge_path + "\" -i \"" + dlg.GetPath() + "\"";
+    command = "\"" + mkvmerge_path + "\" --identify-verbose \"" +
+      dlg.GetPath() + "\"";
     result = wxExecute(command, output, errors);
     if ((result > 0) && (result < 10)) {
       name.Printf("'mkvmerge -i' failed. Return code: %d\n\n", result);
@@ -376,15 +384,18 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
 
     memset(&file, 0, sizeof(mmg_file_t));
     file.tracks = new vector<mmg_track_t>;
+    file.title = new wxString;
 
     for (i = 0; i < output.Count(); i++) {
       if (output[i].Find("Track") == 0) {
+        wxString info;
         mmg_track_t track;
 
         memset(&track, 0, sizeof(mmg_track_t));
         id = output[i].AfterFirst(' ').AfterFirst(' ').BeforeFirst(':');
         type = output[i].AfterFirst(':').BeforeFirst('(').Mid(1).RemoveLast();
         exact = output[i].AfterFirst('(').BeforeFirst(')');
+        info = output[i].AfterFirst('[').BeforeLast(']');
         if (type == "audio")
           track.type = 'a';
         else if (type == "video")
@@ -407,12 +418,24 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
         track.fourcc = new wxString("");
         track.compression = new wxString("");
 
+        if (info.length() > 0) {
+          args = split(info.c_str(), " ");
+          for (k = 0; k < args.size(); k++) {
+            pair = split(args[k].c_str(), ":", 2);
+            if (pair[0] == "track_name")
+              *track.track_name = unescape(pair[1].c_str()).c_str();
+            else if (pair[0] == "language")
+              *track.language = unescape(pair[1].c_str()).c_str();
+          }
+        }
+
         file.tracks->push_back(track);
 
-      } else if (output[i].Find("container:") > 0) {
-        wxString container;
+      } else if ((pos = output[i].Find("container:")) > 0) {
+        wxString container, info;
 
-        container = output[i].AfterLast(' ');
+        container = output[i].Mid(pos + 11).BeforeFirst(' ');
+        info = output[i].Mid(pos + 11).AfterFirst('[').BeforeLast(']');
         if (container == "AAC")
           file.container = TYPEAAC;
         else if (container == "AC3")
@@ -441,6 +464,15 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
           file.container = TYPEWAV;
         else
           file.container = TYPEUNKNOWN;
+
+        if (info.length() > 0) {
+          args = split(info.c_str(), " ");
+          for (k = 0; k < args.size(); k++) {
+            pair = split(args[k].c_str(), ":", 2);
+            if ((pair.size() == 2) && (pair[0] == "title"))
+              *file.title = unescape(pair[1].c_str()).c_str();
+          }
+        }
       }
     }
 
@@ -458,6 +490,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
     lb_input_files->Append(name);
 
     file.file_name = new wxString(dlg.GetPath());
+    mdlg->set_title_maybe(file.title->c_str());
     files.push_back(file);
   }
 }
@@ -488,6 +521,7 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
   }
   delete f->tracks;
   delete f->file_name;
+  delete f->title;
   eit = files.begin();
   eit += selected_file;
   files.erase(eit);
@@ -577,11 +611,11 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   t = &(*f->tracks)[new_sel];
 
   if (t->type == 'a')
-    audio_track_mode();
+    audio_track_mode(*t->ctype);
   else if (t->type == 'v')
-    video_track_mode();
+    video_track_mode(*t->ctype);
   else if (t->type == 's')
-    subtitle_track_mode();
+    subtitle_track_mode(*t->ctype);
 
   cob_language->SetValue(*t->language);
   tc_track_name->SetValue(*t->track_name);

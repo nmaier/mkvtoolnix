@@ -981,6 +981,12 @@ void mmg_dialog::on_window_selected(wxCommandEvent &evt) {
   notebook->SetSelection(evt.GetId() - ID_M_WINDOW_INPUT);
 }
 
+void mmg_dialog::set_title_maybe(const char *new_title) {
+  if ((strlen(new_title) > 0) &&
+      (global_page->tc_title->GetValue().length() == 0))
+    global_page->tc_title->SetValue(new_title);
+}
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)

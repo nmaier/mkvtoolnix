@@ -171,7 +171,7 @@ typedef struct {
 } mmg_track_t;
 
 typedef struct {
-  wxString *file_name;
+  wxString *file_name, *title;
   int container;
   vector<mmg_track_t> *tracks;
   bool no_chapters, no_attachments, no_tags;
@@ -240,9 +240,9 @@ public:
   void on_value_copy_timer(wxTimerEvent &evt);
 
   void no_track_mode();
-  void audio_track_mode();
-  void video_track_mode();
-  void subtitle_track_mode();
+  void audio_track_mode(wxString ctype);
+  void video_track_mode(wxString ctype);
+  void subtitle_track_mode(wxString ctype);
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
@@ -482,6 +482,8 @@ public:
   void on_verify_chapters(wxCommandEvent &evt);
 
   void on_window_selected(wxCommandEvent &evt);
+
+  void set_title_maybe(const char *new_title);
 };
 
 class mmg_app: public wxApp {
