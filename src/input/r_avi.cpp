@@ -40,13 +40,15 @@ extern "C" {
 #endif
 
 #include "mkvmerge.h"
+#include "aac_common.h"
 #include "common.h"
 #include "error.h"
 #include "r_avi.h"
-#include "p_video.h"
-#include "p_pcm.h"
-#include "p_mp3.h"
+#include "p_aac.h"
 #include "p_ac3.h"
+#include "p_mp3.h"
+#include "p_pcm.h"
+#include "p_video.h"
 
 #define PFX "avi_reader: "
 #define MIN_CHUNK_SIZE 128000
@@ -373,10 +375,16 @@ avi_reader_c::add_audio_demuxer(int aid) {
   } else {
     ti->private_data = NULL;
     ti->private_size = 0;
+    codec_data_size = 0;
   }
 #else
   wfe = avi->wave_format_ex[aid];
   AVI_set_audio_track(avi, aid);
+  if (AVI_read_audio_chunk(avi, NULL) < 0) {
+    mxwarn("Could not find an index for audio track %d (avilib error message: "
+           "%s). Skipping track.\n", aid + 1, AVI_strerror());
+    return;
+  }
   audio_format = AVI_audio_format(avi);
   demuxer.samples_per_second = AVI_audio_rate(avi);
   demuxer.channels = AVI_audio_channels(avi);
@@ -394,7 +402,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   switch(audio_format) {
     case 0x0001: // raw PCM audio
       if (verbose)
-        mxinfo("+-> Using PCM output module for audio track ID %d.\n",
+        mxinfo("+-> Using the PCM output module for audio track ID %d.\n",
                aid + 1);
       packetizer = new pcm_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels,
@@ -402,21 +410,48 @@ avi_reader_c::add_audio_demuxer(int aid) {
       break;
     case 0x0055: // MP3
       if (verbose)
-        mxinfo("+-> Using MPEG audio output module for audio track ID %d.\n",
-               aid + 1);
+        mxinfo("+-> Using the MPEG audio output module for audio track ID "
+               "%d.\n", aid + 1);
       packetizer = new mp3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, ti);
       break;
     case 0x2000: // AC3
       if (verbose)
-        mxinfo("+-> Using AC3 output module for audio track ID %d.\n",
+        mxinfo("+-> Using the AC3 output module for audio track ID %d.\n",
                aid + 1);
       packetizer = new ac3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, 0, ti);
       break;
+    case 0x00ff: { // AAC
+      int profile, channels, sample_rate, output_sample_rate;
+      bool is_sbr;
+
+      if ((ti->private_size != 2) && (ti->private_size != 5))
+        mxerror("The AAC track %d does not contain valid headers. The extra "
+                "header size is %d bytes, expected were 2 or 5 bytes.\n",
+                aid + 1, ti->private_size);
+      if (!parse_aac_data(ti->private_data, ti->private_size, profile,
+                          channels, sample_rate, output_sample_rate,
+                          is_sbr))
+        mxerror("The AAC track %d does not contain valid headers. Could not "
+                "parse the AAC information.\n", aid + 1);
+      if (is_sbr)
+        profile = AAC_PROFILE_SBR;
+      demuxer.samples_per_second = sample_rate;
+      demuxer.channels = channels;
+      if (verbose)
+        mxinfo("+-> Using the AAC output module for audio track ID %d.\n",
+               aid + 1);
+      packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
+                                        demuxer.samples_per_second,
+                                        demuxer.channels, ti, false, true);
+      if (is_sbr)
+        packetizer->set_audio_output_sampling_freq(output_sample_rate);
+      break;
+    }
     default:
-      mxerror("Unknown audio format 0x%04x for audio track ID %d.\n",
-              audio_format, aid + 1);
+      mxerror("Unknown/unsupported audio format 0x%04x for audio track ID "
+              "%d.\n", audio_format, aid + 1);
   }
   demuxer.ptzr = add_packetizer(packetizer);
 
@@ -510,7 +545,8 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
         done = true;
       } else {
 //         key = is_keyframe(chunk, nread, key);
-        old_chunk = (unsigned char *)safememdup(chunk, nread);
+        old_chunk = chunk;
+        chunk = (unsigned char *)safemalloc(chunk_size);
         old_key = key;
         old_nread = nread;
         frames++;
@@ -564,7 +600,8 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
         if (! last_frame) {
           if (old_chunk != NULL)
             safefree(old_chunk);
-          old_chunk = (unsigned char *)safememdup(chunk, nread);
+          old_chunk = chunk;
+          chunk = (unsigned char *)safemalloc(chunk_size);
           old_key = key;
           old_nread = nread;
         } else if (nread > 0) {
@@ -613,24 +650,24 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
         demuxer->frame = demuxer->maxframes;
     }
 #else
+    unsigned char *audio_chunk;
+
     AVI_set_audio_track(avi, demuxer->aid);
-    if (AVI_audio_format(avi) == 0x0001) {
-      size = demuxer->channels * demuxer->bits_per_sample *
-        demuxer->samples_per_second / 8 / 4;
-      if (size > chunk_size)
-        size = chunk_size;
-    } else
-      size = MIN_CHUNK_SIZE;
+    size = AVI_read_audio_chunk(avi, NULL);
+    if (size > 0) {
+      audio_chunk = (unsigned char *)safemalloc(size);
 
-    debug_enter("AVI_read_audio");
-    nread = AVI_read_audio(avi, (char *)chunk, size);
-    debug_leave("AVI_read_audio");
+      debug_enter("AVI_read_audio");
+      nread = AVI_read_audio_chunk(avi, (char *)audio_chunk);
+      debug_leave("AVI_read_audio");
 
-    if (nread > 0) {
-      if (nread >= size)
-        need_more_data = true;
-      memory_c mem(chunk, nread, false);
-      PTZR(demuxer->ptzr)->process(mem);
+      if (nread > 0) {
+        if (nread >= size)
+          need_more_data = true;
+        memory_c mem(audio_chunk, nread, true);
+        PTZR(demuxer->ptzr)->process(mem);
+      } else
+        safefree(audio_chunk);
     }
 #endif
 
@@ -778,6 +815,9 @@ avi_reader_c::identify() {
       case 0x2000:
         type = "AC3";
         break;
+      case 0x00ff:
+        type = "AAC";
+        break;
       default:
         type = "unknown";
     }
@@ -798,6 +838,9 @@ avi_reader_c::identify() {
         break;
       case 0x2000:
         type = "AC3";
+        break;
+      case 0x00ff:
+        type = "AAC";
         break;
       default:
         type = "unknown";
