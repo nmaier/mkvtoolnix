@@ -375,7 +375,16 @@ dnl
                     ])
   fi
   if test x"$flac_found" = xyes ; then
-    opt_features_yes="$opt_features_yes; FLAC audio"
+    AC_CHECK_LIB(FLAC, FLAC__stream_decoder_skip_single_frame,
+                 [ flac_decoder_skip_found=yes ],
+                 [ flac_decoder_skip_found=no ],
+                 $FLAC_LIBS)
+    if test x"$flac_decoder_skip_found" = xyes; then
+      opt_features_yes="$opt_features_yes; FLAC audio (fast)"
+      AC_DEFINE(HAVE_FLAC_DECODER_SKIP, [1], [Define if FLAC__stream_decoder_skip_single_frame exists])
+    else
+      opt_features_yes="$opt_features_yes; FLAC audio"
+    fi
     AC_DEFINE(HAVE_FLAC_FORMAT_H, [1], [Define if the FLAC headers are present])
   else
     FLAC_LIBS=""
