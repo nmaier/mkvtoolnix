@@ -421,7 +421,7 @@ void mkv_reader_c::verify_tracks() {
         continue;
     }
 
-    if (t->ok && verbose)
+    if (t->ok && (verbose > 1))
       printf("matroska_reader: Track %u seems to be ok.\n", t->tnum);
   }
 }
@@ -448,22 +448,22 @@ int mkv_reader_c::read_headers() {
     // Don't verify its data for now.
     l0->SkipData(*es, l0->Generic().Context);
     delete l0;
-    if (verbose)
+    if (verbose > 1)
       fprintf(stdout, "matroska_reader: Found the head...\n");
 
     // Next element must be a segment
     l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
       if (verbose)
-        fprintf(stdout, "matroska_reader: but no segment :(\n");
+        fprintf(stdout, "matroska_reader: No segment found.\n");
       return 0;
     }
     if (!(EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)) {
       if (verbose)
-        fprintf(stdout, "matroska_reader: but no segment :(\n");
+        fprintf(stdout, "matroska_reader: No segment found.\n");
       return 0;
     }
-    if (verbose)
+    if (verbose > 1)
       fprintf(stdout, "matroska_reader: + a segment...\n");
 
     segment = l0;
@@ -480,7 +480,7 @@ int mkv_reader_c::read_headers() {
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
-        if (verbose)
+        if (verbose > 1)
           fprintf(stdout, "matroska_reader: |+ segment information...\n");
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -493,7 +493,7 @@ int mkv_reader_c::read_headers() {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
-            if (verbose)
+            if (verbose > 1)
               fprintf(stdout, "matroska_reader: | + timecode scale: %llu\n",
                       tc_scale);
 
@@ -502,17 +502,11 @@ int mkv_reader_c::read_headers() {
             duration.ReadData(es->I_O());
 
             segment_duration = float(duration) * tc_scale / 1000000000.0;
-            if (verbose)
+            if (verbose > 1)
               fprintf(stdout, "matroska_reader: | + duration: %.3fs\n",
                       segment_duration);
 
-          } else if (!is_ebmlvoid(l2) &&
-                     !(EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) &&
-                     !(EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) &&
-                     !(EbmlId(*l2) == KaxDateUTC::ClassInfos.GlobalId))
-            if (verbose)
-              fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
-                      typeid(*l2).name());
+          }
 
           if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
@@ -531,7 +525,7 @@ int mkv_reader_c::read_headers() {
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
-        if (verbose)
+        if (verbose > 1)
           fprintf(stdout, "matroska_reader: |+ segment tracks...\n");
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -542,7 +536,7 @@ int mkv_reader_c::read_headers() {
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             // We actually found a track entry :) We're happy now.
-            if (verbose)
+            if (verbose > 1)
               fprintf(stdout, "matroska_reader: | + a track...\n");
 
             track = new_mkv_track();
@@ -559,12 +553,12 @@ int mkv_reader_c::read_headers() {
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
                 KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
                 tnum.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Track number: %d\n",
                           uint8(tnum));
                 track->tnum = uint8(tnum);
                 if (find_track_by_num(track->tnum, track) != NULL)
-                  if (verbose)
+                  if (verbose > 1)
                     fprintf(stdout, "matroska_reader: |  + WARNING: There's "
                             "more than one track with the number %u.\n",
                             track->tnum);
@@ -572,12 +566,12 @@ int mkv_reader_c::read_headers() {
               } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
                 KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
                 tuid.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Track UID: %u\n",
                           uint32(tuid));
                 track->tuid = uint32(tuid);
                 if (find_track_by_uid(track->tuid, track) != NULL)
-                  if (verbose)
+                  if (verbose > 1)
                     fprintf(stdout, "matroska_reader: |  + WARNING: There's "
                             "more than one track with the UID %u.\n",
                             track->tnum);
@@ -588,7 +582,7 @@ int mkv_reader_c::read_headers() {
                   *static_cast<KaxTrackDefaultDuration *>(l3);
                 def_duration.ReadData(es->I_O());
                 track->v_frate = 1000000000.0 / (float)uint64(def_duration);
-                if (verbose) 
+                if (verbose > 1) 
                   fprintf(stdout, "matroska_reader: |  + Default duration: "
                           "%.3fms ( = %.3f fps)\n",
                           (float)uint64(def_duration) / 1000000.0,
@@ -597,34 +591,34 @@ int mkv_reader_c::read_headers() {
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
                 ttype.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Track type: ");
 
                 switch (uint8(ttype)) {
                   case track_audio:
-                    if (verbose)
+                    if (verbose > 1)
                       printf("Audio\n");
                     track->type = 'a';
                     break;
                   case track_video:
-                    if (verbose)
+                    if (verbose > 1)
                       printf("Video\n");
                     track->type = 'v';
                     break;
                   case track_subtitle:
-                    if (verbose)
+                    if (verbose > 1)
                       printf("Subtitle\n");
                     track->type = 's';
                     break;
                   default:
-                    if (verbose)
+                    if (verbose > 1)
                       printf("unknown\n");
                     track->type = '?';
                     break;
                 }
 
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Audio track\n");
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
@@ -638,7 +632,7 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxAudioSamplingFreq*>(l4);
                     freq.ReadData(es->I_O());
                     track->a_sfreq = float(freq);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Sampling "
                               "frequency: %f\n", track->a_sfreq);
 
@@ -648,7 +642,7 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxAudioChannels*>(l4);
                     channels.ReadData(es->I_O());
                     track->a_channels = uint8(channels);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Channels: %u\n",
                               track->a_channels);
 
@@ -658,12 +652,12 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxAudioBitDepth*>(l4);
                     bps.ReadData(es->I_O());
                     track->a_bps = uint8(bps);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Bit depth: %u\n",
                               track->a_bps);
 
                   } else if (!is_ebmlvoid(l4))
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + unknown "
                               "element@4: %s\n", typeid(*l4).name());
 
@@ -679,7 +673,7 @@ int mkv_reader_c::read_headers() {
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) == KaxTrackVideo::ClassInfos.GlobalId) {
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Video track\n");
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
@@ -692,7 +686,7 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxVideoPixelWidth *>(l4);
                     width.ReadData(es->I_O());
                     track->v_width = uint16(width);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Pixel width: "
                               "%u\n", track->v_width);
 
@@ -702,7 +696,7 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxVideoPixelHeight *>(l4);
                     height.ReadData(es->I_O());
                     track->v_height = uint16(height);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Pixel height: "
                               "%u\n", track->v_height);
 
@@ -712,7 +706,7 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxVideoDisplayWidth *>(l4);
                     width.ReadData(es->I_O());
                     track->v_dwidth = uint16(width);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Display width: "
                               "%u\n", track->v_dwidth);
 
@@ -722,7 +716,7 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxVideoDisplayHeight *>(l4);
                     height.ReadData(es->I_O());
                     track->v_dheight = uint16(height);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Display height: "
                               "%u\n", track->v_dheight);
 
@@ -733,12 +727,12 @@ int mkv_reader_c::read_headers() {
                       *static_cast<KaxVideoFrameRate *>(l4);
                     framerate.ReadData(es->I_O());
                     track->v_frate = float(framerate);
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + Frame rate: "
                               "%f\n", float(framerate));
 
                   } else if (!is_ebmlvoid(l4))
-                    if (verbose)
+                    if (verbose > 1)
                       fprintf(stdout, "matroska_reader: |   + unknown "
                               "element@4: %s\n", typeid(*l4).name());
 
@@ -756,7 +750,7 @@ int mkv_reader_c::read_headers() {
               } else if (EbmlId(*l3) == KaxCodecID::ClassInfos.GlobalId) {
                 KaxCodecID &codec_id = *static_cast<KaxCodecID*>(l3);
                 codec_id.ReadData(es->I_O()); 
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Codec ID: %s\n",
                           string(codec_id).c_str());
                 track->codec_id = safestrdup(string(codec_id).c_str());
@@ -764,7 +758,7 @@ int mkv_reader_c::read_headers() {
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
                 c_priv.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + CodecPrivate, length "
                           "%llu\n", c_priv.GetSize());
                 track->private_size = c_priv.GetSize();
@@ -777,7 +771,7 @@ int mkv_reader_c::read_headers() {
                 KaxTrackMinCache &min_cache =
                   *static_cast<KaxTrackMinCache*>(l3);
                 min_cache.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + MinCache: %u\n",
                           uint32(min_cache));
 
@@ -786,7 +780,7 @@ int mkv_reader_c::read_headers() {
                 KaxTrackMaxCache &max_cache =
                   *static_cast<KaxTrackMaxCache*>(l3);
                 max_cache.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + MaxCache: %u\n",
                           uint32(max_cache));
 
@@ -795,7 +789,7 @@ int mkv_reader_c::read_headers() {
                 KaxTrackFlagDefault &f_default =
                   *static_cast<KaxTrackFlagDefault *>(l3);
                 f_default.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Default flag: %d\n",
                           uint32(f_default));
                 track->default_track = uint32(f_default);
@@ -805,15 +799,12 @@ int mkv_reader_c::read_headers() {
                 KaxTrackLanguage &lang =
                   *static_cast<KaxTrackLanguage *>(l3);
                 lang.ReadData(es->I_O());
-                if (verbose)
+                if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + Language: %s\n",
                           string(lang).c_str());
                 track->language = safestrdup(string(lang).c_str());
 
-              } else if (!is_ebmlvoid(l3))
-                if (verbose)
-                  fprintf(stdout, "matroska_reader: |  + unknown element@3: "
-                          "%s\n", typeid(*l3).name());
+              }
 
               if (upper_lvl_el > 0) {  // we're coming from l4
                 upper_lvl_el--;
@@ -829,10 +820,8 @@ int mkv_reader_c::read_headers() {
               }
             } // while (l3 != NULL)
 
-          } else if (!is_ebmlvoid(l2))
-            if (verbose)
-              fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
-                      typeid(*l2).name());
+          }
+
           if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
             delete l2;
@@ -848,17 +837,13 @@ int mkv_reader_c::read_headers() {
         } // while (l2 != NULL)
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        if (verbose)
+        if (verbose > 1)
           fprintf(stdout, "matroska_reader: |+ found cluster, headers are "
                   "parsed completely :)\n");
         saved_l1 = l1;
         exit_loop = 1;
 
-      } else if (!(EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) &&
-                 !is_ebmlvoid(l1))
-        if (verbose)
-          fprintf(stdout, "matroska_reader: |+ unknown element@1: %s\n",
-                  typeid(*l1).name());
+      }
 
       if (exit_loop)      // we've found the first cluster, so get out
         break;
@@ -908,12 +893,15 @@ void mkv_reader_c::create_packetizers() {
     if (nti.language == 0)
       nti.language = t->language;
 
-    if (t->ok && demuxing_requested(t)) {
+    if (t->ok && demuxing_requested(t->type, t->tnum)) {
       switch (t->type) {
 
         case 'v':
           if (nti.fourcc[0] == 0)
             memcpy(nti.fourcc, t->v_fourcc, 5);
+          if (verbose)
+            fprintf(stdout, "Matroska demultiplexer (%s): using video output "
+                    "module for track ID %u.\n", ti->fname, t->tnum);
           t->packetizer = new video_packetizer_c(this, t->v_frate, t->v_width,
                                                  t->v_height, 24, 1, &nti);
           if (nti.aspect_ratio == 1.0) { // The user didn't set it.
@@ -928,20 +916,29 @@ void mkv_reader_c::create_packetizers() {
           break;
 
         case 'a':
-          if (t->a_formattag == 0x0001)
+          if (t->a_formattag == 0x0001) {
             t->packetizer = new pcm_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, t->a_bps,
                                                  &nti);
-          else if (t->a_formattag == 0x0055)
+            if (verbose)
+              fprintf(stdout, "Matroska demultiplexer (%s): using the PCM "
+                      "output module for track ID %u.\n", ti->fname, t->tnum);
+          } else if (t->a_formattag == 0x0055) {
             t->packetizer = new mp3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, &nti);
-          else if (t->a_formattag == 0x2000)
+            if (verbose)
+              fprintf(stdout, "Matroska demultiplexer (%s): using the MP3 "
+                      "output module for track ID %u.\n", ti->fname, t->tnum);
+          } else if (t->a_formattag == 0x2000) {
             t->packetizer = new ac3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, &nti);
-          else if (t->a_formattag == 0x2001) {
+            if (verbose)
+              fprintf(stdout, "Matroska demultiplexer (%s): using the AC3 "
+                      "output module for track ID %u.\n", ti->fname, t->tnum);
+          } else if (t->a_formattag == 0x2001) {
             fprintf(stderr, "Reading DTS from Matroska not implemented yet,"
                     "cannot we get a complete DTS_Header here for construction"
                     "of the packetizer?");
@@ -951,7 +948,7 @@ void mkv_reader_c::create_packetizers() {
                                                    (unsigned long)t->a_sfreq,
                                                    &nti);
             */
-          } else if (t->a_formattag == 0xFFFE)
+          } else if (t->a_formattag == 0xFFFE) {
             t->packetizer = new vorbis_packetizer_c(this,
                                                     t->headers[0],
                                                     t->header_sizes[0],
@@ -959,7 +956,10 @@ void mkv_reader_c::create_packetizers() {
                                                     t->header_sizes[1],
                                                     t->headers[2],
                                                     t->header_sizes[2], &nti);
-          else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
+            if (verbose)
+              fprintf(stdout, "Matroska demultiplexer (%s): using the Vorbis "
+                      " output module for track ID %u.\n", ti->fname, t->tnum);
+          } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
             // A_AAC/MPEG2/MAIN
             // 0123456789012345
             int id, profile;
@@ -990,6 +990,9 @@ void mkv_reader_c::create_packetizers() {
             t->packetizer = new aac_packetizer_c(this, id, profile,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, &nti, true);
+            if (verbose)
+              fprintf(stdout, "Matroska demultiplexer (%s): using the AAC "
+                      "output module for track ID %u.\n", ti->fname, t->tnum);
           } else {
             fprintf(stderr, "Error: matroska_reader: Unsupported track type "
                     "for track %d.\n", t->tnum);
@@ -1092,7 +1095,8 @@ int mkv_reader_c::read() {
                 block->SetParent(*cluster);
 
                 block_track = find_track_by_num(block->TrackNum());
-                if ((block_track != NULL) && demuxing_requested(block_track))
+                if ((block_track != NULL) &&
+                    demuxing_requested(block_track->type, block_track->tnum))
                   delete_element = 0;
                 else
                   block = NULL;
@@ -1176,10 +1180,7 @@ int mkv_reader_c::read() {
 
           }
         } // while (l2 != NULL)
-      } else if (!(EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) &&
-                 !is_ebmlvoid(l1))
-         printf("matroska_reader: Unknown element@1: %s\n",
-                typeid(*l1).name());
+      }
 
       if (exit_loop)
         break;
@@ -1208,33 +1209,6 @@ int mkv_reader_c::read() {
     return EMOREDATA;
   else
     return 0;
-}
-
-/*
- * Checks whether the user wants a certain stream extracted or not.
- */
-int mkv_reader_c::demuxing_requested(mkv_track_t *t) {
-  unsigned char *tracks;
-  int i;
-
-  if (t->type == 'v')
-    tracks = ti->vtracks;
-  else if ((t->type == 'a') || (t->type == 'V'))
-    tracks = ti->atracks;
-  else if (t->type == 's')
-    tracks = ti->stracks;
-  else
-    die("r_matroska.cpp/mkv_reader_c::demuxing_requested(): internal bug - "
-        "unknown stream type %d", t->type);
-
-  if (tracks == NULL)
-    return 1;
-
-  for (i = 0; i < strlen((char *)tracks); i++)
-    if (tracks[i] == t->tnum)
-      return 1;
-
-  return 0;
 }
 
 packet_t *mkv_reader_c::get_packet() {
@@ -1305,7 +1279,8 @@ void mkv_reader_c::set_headers() {
   int i;
 
   for (i = 0; i < num_tracks; i++)
-    tracks[i]->packetizer->set_headers();
+    if (demuxing_requested(tracks[i]->type, tracks[i]->tnum))
+      tracks[i]->packetizer->set_headers();
 }
 
 void mkv_reader_c::identify() {

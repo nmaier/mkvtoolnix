@@ -82,7 +82,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   }
   pos = find_mp3_header(chunk, 4096, &header);
   if (pos < 0)
-    throw error_c("mp3_reader: No valid MP3 packet found in the first " \
+    throw error_c("mp3_reader: No valid MP3 packet found in the first "
                   "4096 bytes.\n");
   decode_mp3_header(header, &mp3header);
 
@@ -91,7 +91,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
                                        mp3_freqs[mp3header.sampling_frequency],
                                        mp3header.stereo ? 2 : 1, ti);
   if (verbose)
-    fprintf(stdout, "Using MP3 demultiplexer for %s.\n+-> Using " \
+    fprintf(stdout, "Using MP3 demultiplexer for %s.\n+-> Using "
             "MP3 output module for audio stream.\n", ti->fname);
 }
 

@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-#ifdef LIBEBML_GCC2
+#if __GNUC__ == 2
 #include <typeinfo>
 #endif
 
@@ -247,7 +247,6 @@ bool no_lacing = false, no_linking = false;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
-bool identify_only = false;
 
 float video_fps = -1.0;
 int default_tracks[3];
@@ -461,58 +460,35 @@ void add_packetizer(generic_packetizer_c *packetizer) {
   packetizers.push_back(pack);
 }
 
-static unsigned char *parse_tracks(char *s) {
-  char *c = s;
-  char *nstart;
-  int n, ntracks;
-  unsigned char *tracks;
+static void parse_tracks(char *s, vector<int64_t> *tracks) {
+  char *comma;
+  int64_t tid;
 
-  nstart = NULL;
-  tracks = NULL;
-  ntracks = 0;
-  while (*c) {
-    if ((*c >= '0') && (*c <= '9')) {
-      if (nstart == NULL)
-        nstart = c;
-    } else if (*c == ',') {
-      *c = 0;
-      if (nstart != NULL) {
-        n = atoi(nstart);
-        if ((n <= 0) || (n > 255)) {
-          fprintf(stderr, "Error: stream number out of range (1..255): %d\n",
-                  n);
-          exit(1);
-        }
-        tracks = (unsigned char *)saferealloc(tracks, ntracks + 2);
-        tracks[ntracks] = (unsigned char)n;
-        tracks[ntracks + 1] = 0;
-        nstart = NULL;
-        ntracks++;
-      } else
-        fprintf(stderr, "Warning: useless use of ','\n");
-    } else if (!isspace(*c)) {
-      fprintf(stderr, "Error: unrecognized character in stream list: '%c'\n",
-              *c);
+  tracks->clear();
+
+  comma = strchr(s, ',');
+  while ((comma != NULL) && (*s != 0)) {
+    *comma = 0;
+
+    tid = strtol(s, NULL, 10);
+    if (errno == ERANGE) {
+      fprintf(stderr, "Error: Invalid track ID '%s'.\n", s);
       exit(1);
     }
-    c++;
+    tracks->push_back(tid);
+
+    s = &comma[1];
+    comma = strchr(s, ',');
   }
 
-  if (nstart != NULL) {
-    n = atoi(nstart);
-    if ((n <= 0) || (n > 255)) {
-      fprintf(stderr, "Error: stream number out of range (1..255): %d\n",
-              n);
+  if (*s != 0) {
+    tid = strtol(s, NULL, 10);
+    if (errno == ERANGE) {
+      fprintf(stderr, "Error: Invalid track ID '%s'.\n", s);
       exit(1);
     }
-    tracks = (unsigned char *)saferealloc(tracks, ntracks + 2);
-    tracks[ntracks] = (unsigned char)n;
-    tracks[ntracks + 1] = 0;
-    nstart = NULL;
-    ntracks++;
+    tracks->push_back(tid);
   }
-
-  return tracks;
 }
 
 static void parse_sync(char *s, audio_sync_t *async) {
@@ -758,77 +734,62 @@ static void create_readers() {
           break;
 #endif // HAVE_OGGVORBIS
         case TYPEAVI:
-          if (file->ti->stracks != NULL)
-            fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs)
+            fprintf(stderr, "Warning: -s/-S are ignored for AVI files.\n");
           file->reader = new avi_reader_c(file->ti);
           break;
         case TYPEWAV:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "WAVE files.\n");
           file->reader = new wav_reader_c(file->ti);
           break;
         case TYPESRT:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "SRT files.\n");
           file->reader = new srt_reader_c(file->ti);
           break;
         case TYPEMP3:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "MP3 files.\n");
           file->reader = new mp3_reader_c(file->ti);
           break;
         case TYPEAC3:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "AC3 files.\n");
           file->reader = new ac3_reader_c(file->ti);
           break;
         case TYPEDTS:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "DTS files.\n");
           file->reader = new dts_reader_c(file->ti);
           break;
         case TYPEAAC:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "AAC files.\n");
           file->reader = new aac_reader_c(file->ti);
           break;
-          //           case TYPECHAPTERS:
-          //             if (chapters != NULL) {
-          //               fprintf(stderr, "Error: only one chapter file allowed.\n");
-          //               exit(1);
-          //             }
-          //             chapters = chapter_information_read(file->name);
-          //             break;
-          //           case TYPEMICRODVD:
-          //             if ((atracks != NULL) || (vtracks != NULL) ||
-          //                 (stracks != NULL))
-          //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-            //                       "MicroDVD files.\n");
-            //             file->reader = new microdvd_reader_c(file->name, &async);
-            //             break;
-            //           case TYPEVOBSUB:
-            //             if ((atracks != NULL) || (vtracks != NULL) ||
-            //                 (stracks != NULL))
-            //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-            //                       "VobSub files.\n");
-            //             file->reader = new vobsub_reader_c(file->name, &async);
-            //             break;
-            default:
-              fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
-              exit(1);
-              break;
+        default:
+          fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
+          exit(1);
+          break;
       }
     } catch (error_c error) {
       fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
@@ -846,6 +807,9 @@ static void identify(const char *filename) {
   ti.async.linear = 1.0;
   ti.cues = CUES_UNSPECIFIED;
   ti.aspect_ratio = 1.0;
+  ti.atracks = new vector<int64_t>;
+  ti.vtracks = new vector<int64_t>;
+  ti.stracks = new vector<int64_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -876,18 +840,17 @@ static void identify(const char *filename) {
 
 static void parse_args(int argc, char **argv) {
   track_info_t ti;
-  int i, j, noaudio, novideo, nosubs;
+  int i, j;
   filelist_t *file;
   char *s;
-
-  noaudio = 0;
-  novideo = 0;
-  nosubs  = 0;
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.async.linear = 1.0;
   ti.cues = CUES_UNSPECIFIED;
   ti.aspect_ratio = 1.0;
+  ti.atracks = new vector<int64_t>;
+  ti.vtracks = new vector<int64_t>;
+  ti.stracks = new vector<int64_t>;
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -918,7 +881,7 @@ static void parse_args(int argc, char **argv) {
       outfile = safestrdup(argv[i + 1]);
       i++;
     } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
-      fprintf(stdout, "Known file types:\n  ext  description\n" \
+      fprintf(stdout, "Known file types:\n  ext  description\n"
               "  ---  --------------------------\n");
       for (j = 1; file_types[j].ext; j++)
         fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
@@ -1062,22 +1025,20 @@ static void parse_args(int argc, char **argv) {
 
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
-      noaudio = 1;
+      ti.no_audio = true;
 
     else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
-      novideo = 1;
+      ti.no_video = true;
 
     else if (!strcmp(argv[i], "-S") || !strcmp(argv[i], "--nosubs"))
-      nosubs = 1;
+      ti.no_subs = true;
 
     else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--atracks")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -a lacks the stream number(s).\n");
         exit(1);
       }
-      if (ti.atracks != NULL)
-        safefree(ti.atracks);
-      ti.atracks = parse_tracks(argv[i + 1]);
+      parse_tracks(argv[i + 1], ti.atracks);
       i++;
 
     } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vtracks")) {
@@ -1085,9 +1046,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: -d lacks the stream number(s).\n");
         exit(1);
       }
-      if (ti.vtracks != NULL)
-        safefree(ti.vtracks);
-      ti.vtracks = parse_tracks(argv[i + 1]);
+      parse_tracks(argv[i + 1], ti.vtracks);
       i++;
 
     } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stracks")) {
@@ -1095,9 +1054,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: -s lacks the stream number(s).\n");
         exit(1);
       }
-      if (ti.stracks != NULL)
-        safefree(ti.stracks);
-      ti.stracks = parse_tracks(argv[i + 1]);
+      parse_tracks(argv[i + 1], ti.stracks);
       i++;
 
     } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
@@ -1177,24 +1134,18 @@ static void parse_args(int argc, char **argv) {
 
     // The argument is an input file.
     else {
-      if ((ti.atracks != NULL) && noaudio) {
+      if ((ti.atracks->size() != 0) && ti.no_audio) {
         fprintf(stderr, "Error: -A and -a used on the same source file.\n");
         exit(1);
       }
-      if ((ti.vtracks != NULL) && novideo) {
+      if ((ti.vtracks->size() != 0) && ti.no_video) {
         fprintf(stderr, "Error: -D and -d used on the same source file.\n");
         exit(1);
       }
-      if ((ti.stracks != NULL) && nosubs) {
+      if ((ti.stracks->size() != 0) && ti.no_subs) {
         fprintf(stderr, "Error: -S and -s used on the same source file.\n");
         exit(1);
       }
-      if (noaudio)
-        ti.atracks = (unsigned char *)safestrdup("");
-      if (novideo)
-        ti.vtracks = (unsigned char *)safestrdup("");
-      if (nosubs)
-        ti.stracks = (unsigned char *)safestrdup("");
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
       file->name = argv[i];
@@ -1219,20 +1170,16 @@ static void parse_args(int argc, char **argv) {
       } else
         safefree(file);
 
-      noaudio = 0;
-      novideo = 0;
-      nosubs = 0;
-      if (ti.atracks != NULL)
-        safefree(ti.atracks);
-      if (ti.vtracks != NULL)
-        safefree(ti.vtracks);
-      if (ti.stracks != NULL)
-        safefree(ti.stracks);
-
+      delete ti.atracks;
+      delete ti.vtracks;
+      delete ti.stracks;
       memset(&ti, 0, sizeof(track_info_t));
       ti.async.linear = 1.0;
       ti.cues = CUES_UNSPECIFIED;
       ti.aspect_ratio = 1.0;
+      ti.atracks = new vector<int64_t>;
+      ti.vtracks = new vector<int64_t>;
+      ti.stracks = new vector<int64_t>;
     }
   }
 

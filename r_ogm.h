@@ -25,6 +25,8 @@
 
 #include <ogg/ogg.h>
 
+#include <vector>
+
 #include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
@@ -70,7 +72,6 @@ public:
 
 private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);
-  virtual int demuxing_requested(unsigned char *, int);
   virtual int read_page(ogg_page *);
   virtual void add_new_demuxer(ogm_demuxer_t *);
   virtual void handle_new_stream(ogg_page *);

@@ -172,7 +172,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     packetno++;
 
     if ((4 - ((header >> 17) & 3)) != 3) {
-      fprintf(stdout, "Warning: p_mp3: packet is not a valid MP3 packet (" \
+      fprintf(stdout, "Warning: p_mp3: packet is not a valid MP3 packet ("
               "packet number %lld)\n", packetno);
       safefree(packet);
       packetno++;

@@ -412,6 +412,36 @@ generic_reader_c::~generic_reader_c() {
   free_track_info(ti);
 }
 
+bool generic_reader_c::demuxing_requested(char type, int64_t id) {
+  vector<int64_t> *tracks;
+  int i;
+
+  if (type == 'v') {
+    if (ti->no_video)
+      return false;
+    tracks = ti->vtracks;
+  } else if (type == 'a') {
+    if (ti->no_audio)
+      return false;
+    tracks = ti->atracks;
+  } else if (type == 's') {
+    if (ti->no_subs)
+      return false;
+    tracks = ti->stracks;
+  } else
+    die("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track "
+        "type %c.", type);
+
+  if (tracks->size() == 0)
+    return true;
+
+  for (i = 0; i < tracks->size(); i++)
+    if ((*tracks)[i] == id)
+      return true;
+
+  return false;
+}
+
 //--------------------------------------------------------------------
 
 track_info_t *duplicate_track_info(track_info_t *src) {
@@ -422,9 +452,9 @@ track_info_t *duplicate_track_info(track_info_t *src) {
 
   dst = (track_info_t *)safememdup(src, sizeof(track_info_t));
   dst->fname = safestrdup(src->fname);
-  dst->atracks = safestrdup(src->atracks);
-  dst->vtracks = safestrdup(src->vtracks);
-  dst->stracks = safestrdup(src->stracks);
+  dst->atracks = new vector<int64_t>(*src->atracks);
+  dst->vtracks = new vector<int64_t>(*src->vtracks);
+  dst->stracks = new vector<int64_t>(*src->stracks);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->language = safestrdup(src->language);
@@ -438,9 +468,9 @@ void free_track_info(track_info_t *ti) {
     return;
 
   safefree(ti->fname);
-  safefree(ti->atracks);
-  safefree(ti->vtracks);
-  safefree(ti->stracks);
+  delete ti->atracks;
+  delete ti->vtracks;
+  delete ti->stracks;
   safefree(ti->private_data);
   safefree(ti->language);
   safefree(ti->sub_charset);

@@ -119,22 +119,6 @@ ogm_reader_c::~ogm_reader_c() {
   ti->private_data = NULL;
 }
 
-/*
- * Checks whether the user wants a certain stream extracted or not.
- */
-int ogm_reader_c::demuxing_requested(unsigned char *streams, int serialno) {
-  int i;
-
-  if (streams == NULL)
-    return 1;
-
-  for (i = 0; i < strlen((char *)streams); i++)
-    if (streams[i] == serialno)
-      return 1;
-
-  return 0;
-}
-
 ogm_demuxer_t *ogm_reader_c::find_demuxer(int serialno) {
   int i;
 
@@ -430,7 +414,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   if ((op.bytes >= 7) && !strncmp((char *)&op.packet[1], "vorbis", 6)) {
     nastreams++;
     numstreams++;
-    if (!demuxing_requested(ti->atracks, ogg_page_serialno(og))) {
+    if (!demuxing_requested('a', ogg_page_serialno(og))) {
       ogg_stream_clear(&new_oss);
       safefree(dmx->packet_data[0]);
       safefree(dmx);
@@ -453,7 +437,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!strncmp(sth->streamtype, "video", 5)) {
       nvstreams++;
       numstreams++;
-      if (!demuxing_requested(ti->vtracks, ogg_page_serialno(og))) {
+      if (!demuxing_requested('v', ogg_page_serialno(og))) {
         ogg_stream_clear(&new_oss);
         safefree(dmx->packet_data[0]);
         safefree(dmx);
@@ -474,7 +458,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!strncmp(sth->streamtype, "audio", 5)) {
       nastreams++;
       numstreams++;
-      if (!demuxing_requested(ti->atracks, ogg_page_serialno(og))) {
+      if (!demuxing_requested('a', ogg_page_serialno(og))) {
         ogg_stream_clear(&new_oss);
         return;
       }
@@ -510,7 +494,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
       ntstreams++;
       numstreams++;
-      if (!demuxing_requested(ti->stracks, ogg_page_serialno(og))) {
+      if (!demuxing_requested('s', ogg_page_serialno(og))) {
         ogg_stream_clear(&new_oss);
         return;
       }

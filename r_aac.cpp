@@ -69,7 +69,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
       throw error_c("aac_reader: ADIF header files are not supported.");
       adif = 1;
     } else if (find_aac_header(chunk, 4096, &aacheader) < 0)
-      throw error_c("aac_reader: No valid AAC packet found in the first " \
+      throw error_c("aac_reader: No valid AAC packet found in the first "
                     "4096 bytes.\n");
     else
       adif = 0;
@@ -81,7 +81,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("aac_reader: Could not open the file.");
   }
   if (verbose)
-    fprintf(stdout, "Using AAC demultiplexer for %s.\n+-> Using " \
+    fprintf(stdout, "Using AAC demultiplexer for %s.\n+-> Using "
             "AAC output module for audio stream.\n", ti->fname);
 }
 

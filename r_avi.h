@@ -23,6 +23,8 @@
 
 #include <stdio.h>
 
+#include <vector>
+
 extern "C" {
 #include <avilib.h>
 }
@@ -43,7 +45,6 @@ typedef struct avi_demuxer_t {
   int aid;
   int eos;
   int64_t bytes_processed;
-  avi_demuxer_t *next;
 } avi_demuxer_t;
 
 class avi_reader_c: public generic_reader_c {
@@ -51,7 +52,7 @@ private:
   unsigned char *chunk, *old_chunk;
   avi_t *avi;
   video_packetizer_c *vpacketizer;
-  avi_demuxer_t *ademuxers;
+  vector<avi_demuxer_t *> ademuxers;
   double fps;
   int frames, max_frame_size, act_wchar, old_key, old_nread;
   int video_done, maxframes, is_divx, rederive_keyframes;
@@ -70,7 +71,7 @@ public:
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
-  virtual int add_audio_demuxer(avi_t *avi, int aid);
+  virtual void add_audio_demuxer(avi_t *avi, int aid);
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);
 };
 

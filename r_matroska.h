@@ -109,7 +109,6 @@ public:
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
-  virtual int demuxing_requested(mkv_track_t *t);
   virtual int read_headers();
   virtual void create_packetizers();
   virtual mkv_track_t *new_mkv_track();

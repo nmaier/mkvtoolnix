@@ -77,7 +77,7 @@ srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("srt_reader: Could not open the source file.");
   }
   if (verbose)
-    fprintf(stdout, "Using SRT subtitle reader for %s.\n+-> Using " \
+    fprintf(stdout, "Using SRT subtitle reader for %s.\n+-> Using "
             "text subtitle output module for subtitles.\n", ti->fname);
 }
 
@@ -138,8 +138,8 @@ int srt_reader_c::read() {
   }
 
   if ((subs.check() != 0) && verbose)
-    fprintf(stdout, "srt_reader: Warning: The subtitle file seems to be " \
-            "badly broken. The output file might not be playable " \
+    fprintf(stdout, "srt_reader: Warning: The subtitle file seems to be "
+            "badly broken. The output file might not be playable "
             "correctly.\n");
   subs.process(textsubs_packetizer);
 

@@ -47,6 +47,7 @@
 #define VERSIONINFO "mkvmerge v" VERSION
 
 using namespace std;
+using namespace LIBEBML_NAMESPACE;
 
 #define DISPLAYPRIORITY_HIGH   10
 #define DISPLAYPRIORITY_MEDIUM  5

@@ -22,6 +22,7 @@
 #define __PR_GENERIC_H
 
 #include <deque>
+#include <vector>
 
 #include "KaxBlock.h"
 #include "KaxCluster.h"
@@ -55,7 +56,8 @@ typedef struct {
 typedef struct {
   // Options used by the readers.
   char *fname;
-  unsigned char *atracks, *vtracks, *stracks;
+  bool no_audio, no_video, no_subs;
+  vector<int64_t> *atracks, *vtracks, *stracks;
   int cues;
 
   // Options used by the packetizers.
@@ -169,6 +171,9 @@ public:
   virtual void display_progress() = 0;
   virtual void set_headers() = 0;
   virtual void identify() = 0;
+
+protected:
+  virtual bool demuxing_requested(char type, int64_t id);
 };
 
 track_info_t *duplicate_track_info(track_info_t *src);
