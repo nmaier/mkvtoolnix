@@ -73,7 +73,8 @@ void video_packetizer_c::set_headers() {
         !strncasecmp(fourcc, "XVID", 4) ||
         !strncasecmp(fourcc, "DX5", 3))
       is_mpeg4 = true;
-  } else if (!strncmp(hcodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
+  } else if ((hcodec_id != NULL) &&
+             !strncmp(hcodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
     is_mpeg4 = true;
 
   if (codec_id != NULL)
@@ -86,7 +87,7 @@ void video_packetizer_c::set_headers() {
   } else
     set_codec_id(MKV_V_MSCOMP);
   if ((!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES)) &&
-      !strcmp(hcodec_id, MKV_V_MSCOMP) &&
+      (hcodec_id != NULL) && !strcmp(hcodec_id, MKV_V_MSCOMP) &&
       (ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
       (ti->fourcc[0] != 0))

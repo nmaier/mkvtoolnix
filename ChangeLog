@@ -1,3 +1,8 @@
+2004-01-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Segfault when muxing some video formats due
+	to unchecked data (includes RealVideo).
+
 2004-01-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.8.0.
