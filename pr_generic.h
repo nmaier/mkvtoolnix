@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.20 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.21 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,9 +25,10 @@
 #include "KaxCluster.h"
 #include "KaxTracks.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+#include "error.h"
+#include "queue.h"
 
-class generic_packetizer_c;
+using namespace LIBMATROSKA_NAMESPACE;
 
 typedef struct {
   int    displacement;
@@ -48,18 +49,7 @@ typedef struct {
   audio_sync_t async;
 } track_info_t;
 
-typedef struct packet_t {
-  DataBuffer          *data_buffer;
-  KaxBlockGroup       *group;
-  KaxBlock            *block;
-  KaxCluster          *cluster;
-  unsigned char       *data;
-  int                  length, superseeded;
-  int64_t              timecode, id, bref, fref;
-  generic_packetizer_c *source;
-} packet_t;
-
-class generic_packetizer_c {
+class generic_packetizer_c: public q_c {
 protected:
   int serialno;
   track_info_t *ti;
@@ -67,14 +57,11 @@ protected:
 public:
   KaxTrackEntry *track_entry;
 
-  generic_packetizer_c(track_info_t *nti);
+  generic_packetizer_c(track_info_t *nti) throw (error_c);
   virtual ~generic_packetizer_c();
   virtual void      set_free_refs(int64_t nfree_refs);
   virtual int64_t   get_free_refs();
-  virtual int       packet_available() = 0;
-  virtual packet_t *get_packet() = 0;
   virtual void      set_header() = 0;
-  virtual int64_t   get_smallest_timecode() = 0;
   virtual int       process(unsigned char *data, int size,
                             int64_t timecode = -1, int64_t length = -1) = 0;
 };

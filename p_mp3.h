@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.h,v 1.9 2003/04/13 15:23:02 mosu Exp $
+    \version \$Id: p_mp3.h,v 1.10 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -22,10 +22,10 @@
 #define __P_MP3_H
 
 #include "common.h"
-#include "queue.h"
+#include "pr_generic.h"
 #include "mp3_common.h"
 
-class mp3_packetizer_c: public q_c {
+class mp3_packetizer_c: public generic_packetizer_c {
 private:
   int64_t        bytes_output, packetno;
   unsigned long  samples_per_sec;

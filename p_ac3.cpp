@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.10 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.11 2003/04/18 10:28:14 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,7 +24,7 @@
 #include <errno.h>
 
 #include "mkvmerge.h"
-#include "queue.h"
+#include "pr_generic.h"
 #include "ac3_common.h"
 #include "p_ac3.h"
 
@@ -37,8 +37,7 @@
 
 ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)
-  throw (error_c):
-  q_c(nti) {
+  throw (error_c): generic_packetizer_c(nti) {
   packetno = 0;
   bytes_output = 0;
   packet_buffer = NULL;

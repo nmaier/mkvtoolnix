@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.h,v 1.7 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: p_vorbis.h,v 1.8 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,9 +30,9 @@
 
 #include "common.h"
 #include "pr_generic.h"
-#include "queue.h"
+#include "pr_generic.h"
 
-class vorbis_packetizer_c: public q_c {
+class vorbis_packetizer_c: public generic_packetizer_c {
 private:
   int64_t         last_bs, samples;
   int             packetno;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.10 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.11 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -22,9 +22,9 @@
 #define __P_PCM_H
 
 #include "common.h"
-#include "queue.h"
+#include "pr_generic.h"
 
-class pcm_packetizer_c: public q_c {
+class pcm_packetizer_c: public generic_packetizer_c {
 private:
   int            packetno;
   int            bps, channels, bits_per_sample;

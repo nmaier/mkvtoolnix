@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.17 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: p_video.h,v 1.18 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -22,14 +22,14 @@
 #define __P_VIDEO_H
 
 #include "common.h"
-#include "queue.h"
+#include "pr_generic.h"
 
 #define VFT_IFRAME 0x10000000L
 #define VFT_PFRAME 0x20000000L
 #define VFT_BFRAME 0x40000000L
 #define VNUMFRAMES 0x0000FFFFL
 
-class video_packetizer_c: public q_c {
+class video_packetizer_c: public generic_packetizer_c {
 private:
   double         fps;
   int            width, height, bpp, packetno;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.11 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: queue.h,v 1.12 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -21,8 +21,22 @@
 #ifndef __QUEUE_H
 #define __QUEUE_H
 
-#include "error.h"
-#include "pr_generic.h"
+#include "KaxBlock.h"
+#include "KaxCluster.h"
+#include "KaxTracks.h"
+
+using namespace LIBMATROSKA_NAMESPACE;
+
+typedef struct packet_t {
+  DataBuffer    *data_buffer;
+  KaxBlockGroup *group;
+  KaxBlock      *block;
+  KaxCluster    *cluster;
+  unsigned char *data;
+  int            length, superseeded;
+  int64_t        timecode, id, bref, fref;
+  void          *source;
+} packet_t;
 
 // q_page_t is used internally only
 typedef struct q_page {
@@ -30,13 +44,13 @@ typedef struct q_page {
   struct q_page *next;
 } q_page_t;
 
-class q_c: public generic_packetizer_c {
+class q_c {
 private:
   static int64_t  id;
   struct q_page  *first, *current;
   
 public:
-  q_c(track_info_t *nti) throw (error_c);
+  q_c();
   virtual ~q_c();
     
   virtual int64_t   add_packet(unsigned char *data, int lenth,

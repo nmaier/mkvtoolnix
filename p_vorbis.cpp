@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.9 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.10 2003/04/18 10:28:14 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -49,7 +49,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(unsigned char *d_header, int l_header,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
                                          int l_codecsetup, track_info_t *nti)
-  throw (error_c): q_c(nti) {
+  throw (error_c): generic_packetizer_c(nti) {
   int i;
 
   packetno = 0;

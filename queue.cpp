@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.13 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: queue.cpp,v 1.14 2003/04/18 10:28:14 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,7 +33,7 @@
 
 int64_t q_c::id = 1;
 
-q_c::q_c(track_info_t *nti) throw (error_c) : generic_packetizer_c(nti) {
+q_c::q_c() {
   first = NULL;
   current = NULL;
 }

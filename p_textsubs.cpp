@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.3 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.4 2003/04/18 10:28:14 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,7 +36,7 @@
 #endif
 
 textsubs_packetizer_c::textsubs_packetizer_c(track_info_t *nti)
-  throw (error_c): q_c(nti) {
+  throw (error_c): generic_packetizer_c(nti) {
   packetno = 0;
   set_header();
 }

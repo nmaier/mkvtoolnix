@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.11 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.12 2003/04/18 10:28:14 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,7 @@
 
 #include "mkvmerge.h"
 #include "common.h"
-#include "queue.h"
+#include "pr_generic.h"
 #include "p_pcm.h"
 
 #include "KaxTracks.h"
@@ -38,7 +38,7 @@
 pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
                                    track_info_t *nti) throw (error_c):
-  q_c(nti) {
+  generic_packetizer_c(nti) {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
   tempbuf = (unsigned char *)malloc(bps + 128);

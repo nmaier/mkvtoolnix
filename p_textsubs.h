@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.h,v 1.2 2003/04/11 11:23:54 mosu Exp $
+    \version \$Id: p_textsubs.h,v 1.3 2003/04/18 10:28:14 mosu Exp $
     \brief class definition for the simple text subtitle packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,9 +23,9 @@
 
 #include "common.h"
 #include "pr_generic.h"
-#include "queue.h"
+#include "pr_generic.h"
 
-class textsubs_packetizer_c: public q_c {
+class textsubs_packetizer_c: public generic_packetizer_c {
 private:
   int packetno;
 

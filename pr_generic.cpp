@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.19 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.20 2003/04/18 10:28:14 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,7 +23,8 @@
 #include "common.h"
 #include "pr_generic.h"
 
-generic_packetizer_c::generic_packetizer_c(track_info_t *nti) {
+generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
+  q_c() {
   serialno = -1;
   track_entry = NULL;
   ti = duplicate_track_info(nti);

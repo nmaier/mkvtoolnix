@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.12 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.13 2003/04/18 10:28:14 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,7 +24,7 @@
 #include <errno.h>
 
 #include "mkvmerge.h"
-#include "queue.h"
+#include "pr_generic.h"
 #include "mp3_common.h"
 #include "p_mp3.h"
 
@@ -37,7 +37,7 @@
 
 mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)
-  throw (error_c): q_c(nti) {
+  throw (error_c): generic_packetizer_c(nti) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bytes_output = 0;

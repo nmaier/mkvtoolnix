@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.19 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.20 2003/04/18 10:28:14 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -26,7 +26,7 @@
 
 #include "mkvmerge.h"
 #include "common.h"
-#include "queue.h"
+#include "pr_generic.h"
 #include "p_video.h"
 
 #include "KaxTracks.h"
@@ -40,7 +40,7 @@
 video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int navi_compat_mode, track_info_t *nti)
-  throw (error_c) : q_c(nti) {
+  throw (error_c) : generic_packetizer_c(nti) {
   packetno = 0;
   fps = nfps;
   width = nwidth;
