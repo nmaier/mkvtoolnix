@@ -157,11 +157,15 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                       _T("Sta&rt muxing (run mkvmerge)\tCtrl-R"),
                       _T("Run mkvmerge and start the muxing process"));
   muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE,
-                      _T("&Copy to clipboard\tCtrl-C"),
+                      _T("&Copy command line to clipboard"),
                       _T("Copy the command line to the clipboard"));
   muxing_menu->Append(ID_M_MUXING_SAVE_CMDLINE,
-                      _T("Sa&ve command line\tCtrl-V"),
+                      _T("Sa&ve command line"),
                       _T("Save the command line to a file"));
+  muxing_menu->Append(ID_M_MUXING_CREATE_OPTIONFILE,
+                      _T("Create &option file"),
+                      _T("Save the command line to an option file "
+                         "that can be read by mkvmerge"));
 
   chapter_menu = new wxMenu();
   chapter_menu->Append(ID_M_CHAPTERS_NEW, _T("&New chapters"),
@@ -535,6 +539,24 @@ void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
     delete file;
 
     set_status_bar("Command line saved.");
+  }
+}
+
+void mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
+  wxFile *file;
+  uint32_t i;
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+                   _T(ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
+    file = new wxFile(dlg.GetPath(), wxFile::write);
+    for (i = 1; i < clargs.Count(); i++) {
+      file->Write(clargs[i]);
+      file->Write("\n");
+    }
+    delete file;
+
+    set_status_bar("Option file created.");
   }
 }
 
@@ -1046,6 +1068,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_START, mmg_dialog::on_run)
   EVT_MENU(ID_M_MUXING_COPY_CMDLINE, mmg_dialog::on_copy_to_clipboard)
   EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
+  EVT_MENU(ID_M_MUXING_CREATE_OPTIONFILE, mmg_dialog::on_create_optionfile)
   EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
   EVT_MENU(ID_M_FILE_LOADLAST1, mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST2, mmg_dialog::on_file_load_last)

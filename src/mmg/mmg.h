@@ -152,6 +152,7 @@ using namespace libmatroska;
 #define ID_M_MUXING_START 20100
 #define ID_M_MUXING_COPY_CMDLINE 20101
 #define ID_M_MUXING_SAVE_CMDLINE 20102
+#define ID_M_MUXING_CREATE_OPTIONFILE 20103
 
 #define ID_M_CHAPTERS_NEW 20200
 #define ID_M_CHAPTERS_LOAD 20201
@@ -502,6 +503,7 @@ public:
   void on_run(wxCommandEvent &evt);
   void on_save_cmdline(wxCommandEvent &evt);
   void on_copy_to_clipboard(wxCommandEvent &evt);
+  void on_create_optionfile(wxCommandEvent &evt);
 
   void on_quit(wxCommandEvent &evt);
   void on_file_new(wxCommandEvent &evt);

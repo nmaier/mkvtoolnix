@@ -1,5 +1,9 @@
 2003-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Removed the Ctrl-v and Ctrl-c accelerators that I
+	used for mmg functions which overrode the usual 'paste' and 'copy'
+	functionality.
+
 	* mmg: Command line arguments are put into an option file which is
 	then handed over to mkvmerge. This allows really long command
 	lines, even on Windows.
