@@ -156,7 +156,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
 
     ti->private_data = (unsigned char *)bih;
     if (ti->private_data != NULL)
-      ti->private_size = bih->biSize;
+      ti->private_size = get_uint32(&bih->biSize);
     if (ti->fourcc[0] == 0) {
       memcpy(ti->fourcc, codec, 4);
       ti->fourcc[4] = 0;
@@ -164,11 +164,13 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
       memcpy(&bih->biCompression, ti->fourcc, 4);
     ti->id = 0;                 // ID for the video track.
     vpacketizer = new video_packetizer_c(this, NULL, fps,
-                                         bih->biWidth, bih->biHeight,
+                                         get_uint32(&bih->biWidth),
+                                         get_uint32(&bih->biHeight),
                                          false, ti);
     if (verbose)
       mxinfo("+-> Using video output module for video track ID 0.\n");
-    mxverb(2, "6: width %u, height %u\n", bih->biWidth, bih->biHeight);
+    mxverb(2, "6: width %u, height %u\n", get_uint32(&bih->biWidth),
+           get_uint32(&bih->biHeight));
   } else
     vpacketizer = NULL;
 
@@ -228,7 +230,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
 
     ti->private_data = (unsigned char *)avi->bitmap_info_header;
     if (ti->private_data != NULL)
-      ti->private_size = avi->bitmap_info_header->bi_size;
+      ti->private_size = get_uint32(&avi->bitmap_info_header->bi_size);
     if (ti->fourcc[0] == 0) {
       memcpy(ti->fourcc, codec, 4);
       ti->fourcc[4] = 0;

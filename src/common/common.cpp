@@ -170,7 +170,7 @@ byte_cursor_c::byte_cursor_c(const unsigned char *ndata, int nsize) :
     throw exception();
 }
 
-unsigned char byte_cursor_c::get_byte() {
+unsigned char byte_cursor_c::get_uint8() {
   if ((pos + 1) > size)
     throw exception();
 
@@ -179,29 +179,49 @@ unsigned char byte_cursor_c::get_byte() {
   return data[pos - 1];
 }
 
-unsigned short byte_cursor_c::get_word() {
+unsigned short byte_cursor_c::get_uint16_be() {
   unsigned short v;
 
   if ((pos + 2) > size)
     throw exception();
 
-  v = data[pos];
-  v = (v << 8) | (data[pos + 1] & 0xff);
+  v = get_uint16_be(&data[pos]);
   pos += 2;
 
   return v;
 }
 
-unsigned int byte_cursor_c::get_dword() {
+unsigned int byte_cursor_c::get_uint32_be() {
   unsigned int v;
 
   if ((pos + 4) > size)
     throw exception();
 
-  v = data[pos];
-  v = (v << 8) | (data[pos + 1] & 0xff);
-  v = (v << 8) | (data[pos + 2] & 0xff);
-  v = (v << 8) | (data[pos + 3] & 0xff);
+  v = get_uint32_be(&data[pos]);
+  pos += 4;
+
+  return v;
+}
+
+unsigned short byte_cursor_c::get_uint16() {
+  unsigned short v;
+
+  if ((pos + 2) > size)
+    throw exception();
+
+  v = get_uint16(&data[pos]);
+  pos += 2;
+
+  return v;
+}
+
+unsigned int byte_cursor_c::get_uint32() {
+  unsigned int v;
+
+  if ((pos + 4) > size)
+    throw exception();
+
+  v = get_uint32(&data[pos]);
   pos += 4;
 
   return v;

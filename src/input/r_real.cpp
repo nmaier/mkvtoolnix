@@ -41,13 +41,7 @@
 
 // {{{ structs
 
-#if __GNUC__ == 2
-#pragma pack(2)
-#else
-#pragma pack(push,2)
-#endif
-
-typedef struct {
+typedef struct __attribute__((__packed__)) {
   uint32_t size;
   uint32_t fourcc1;
   uint32_t fourcc2;
@@ -60,7 +54,7 @@ typedef struct {
   uint32_t type2;
 } real_video_props_t;
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
   uint32_t fourcc1;             // '.', 'r', 'a', 0xfd
   uint16_t version1;            // 4 or 5
   uint16_t unknown1;            // 00 000
@@ -83,7 +77,7 @@ typedef struct {
   uint16_t channels;
 } real_audio_v4_props_t;
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
   uint32_t fourcc1;             // '.', 'r', 'a', 0xfd
   uint16_t version1;            // 4 or 5
   uint16_t unknown1;            // 00 000
@@ -108,12 +102,6 @@ typedef struct {
   uint32_t genr;                // "genr"
   uint32_t fourcc3;             // fourcc
 } real_audio_v5_props_t;
-
-#if __GNUC__ == 2
-#pragma pack()
-#else
-#pragma pack(pop)
-#endif
 
 typedef struct {
   uint32_t chunks;              // number of chunks
@@ -710,15 +698,15 @@ void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
   ptr++;
 
   if (dmx->f_merged) {
-    *((uint32_t *)ptr) = 1;
+    put_uint32(ptr, 1);
     ptr += 4;
-    *((uint32_t *)ptr) = 0;
+    put_uint32(ptr, 0);
     ptr += 4; 
   } else {
     for (i = 0; i < dmx->segments->size(); i++) {
-      *((uint32_t *)ptr) = 1;
+      put_uint32(ptr, 1);
       ptr += 4;
-      *((uint32_t *)ptr) = (*dmx->segments)[i].offset;
+      put_uint32(ptr, (*dmx->segments)[i].offset);
       ptr += 4;
     }
   }
@@ -769,7 +757,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
 
       // bit 7: 1=last block in block chain
       // bit 6: 1=short header (only one block?)
-      vpkg_header = bc.get_byte();
+      vpkg_header = bc.get_uint8();
 
       if ((vpkg_header & 0xc0) == 0x40) {
         // seems to be a very short header
@@ -780,18 +768,18 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       } else {
         if ((vpkg_header & 0x40) == 0)
           // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
-          vpkg_subseq = bc.get_byte() & 0x7f;
+          vpkg_subseq = bc.get_uint8() & 0x7f;
 
         // size of the complete packet
         // bit 14 is always one (same applies to the offset)
-        vpkg_length = bc.get_word();
+        vpkg_length = bc.get_uint16_be();
 
         if ((vpkg_length & 0x8000) == 0x8000)
           dmx->f_merged = true;
 
         if ((vpkg_length & 0x4000) == 0) {
           vpkg_length <<= 16;
-          vpkg_length |= bc.get_word();
+          vpkg_length |= bc.get_uint16_be();
           vpkg_length &= 0x3fffffff;
 
         } else
@@ -800,17 +788,17 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         // offset of the following data inside the complete packet
         // Note: if (hdr&0xC0)==0x80 then offset is relative to the
         // _end_ of the packet, so it's equal to fragment size!!!
-        vpkg_offset = bc.get_word();
+        vpkg_offset = bc.get_uint16_be();
 
         if ((vpkg_offset & 0x4000) == 0) {
           vpkg_offset <<= 16;
-          vpkg_offset |= bc.get_word();
+          vpkg_offset |= bc.get_uint16_be();
           vpkg_offset &= 0x3fffffff;
 
         } else
           vpkg_offset &= 0x3fff;
 
-        vpkg_seqnum = bc.get_byte();
+        vpkg_seqnum = bc.get_uint8();
 
         if ((vpkg_header & 0xc0) == 0xc0) {
           this_timecode = vpkg_offset;

@@ -564,7 +564,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       dmx->sid = nvstreams;
       add_new_demuxer(dmx);
       if (video_fps < 0)
-        video_fps = 10000000.0 / (float)sth->time_unit;
+        video_fps = 10000000.0 / (float)get_uint64(&sth->time_unit);
 
       return;
     }

@@ -266,9 +266,11 @@ private:
 public:
   byte_cursor_c(const unsigned char *ndata, int nsize);
 
-  virtual unsigned char get_byte();
-  virtual unsigned short get_word();
-  virtual unsigned int get_dword();
+  virtual unsigned char get_uint8();
+  virtual unsigned short get_uint16();
+  virtual unsigned int get_uint32();
+  virtual unsigned short get_uint16_be();
+  virtual unsigned int get_uint32_be();
   virtual void get_bytes(unsigned char *dst, int n);
 
   virtual void skip(int n);

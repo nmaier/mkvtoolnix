@@ -130,8 +130,9 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("wav_reader: Source is not a valid WAVE file.");
   if (mm_io->read(&wheader, sizeof(wheader)) != sizeof(wheader))
     throw error_c("wav_reader: could not read WAVE header.");
-  bps = wheader.common.wChannels * wheader.common.wBitsPerSample *
-    wheader.common.dwSamplesPerSec / 8;
+  bps = get_uint16(&wheader.common.wChannels) *
+    get_uint16(&wheader.common.wBitsPerSample) *
+    get_uint32(&wheader.common.dwSamplesPerSec) / 8;
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
@@ -190,9 +191,10 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
   }
 
   if (!dtspacketizer) {
-    pcmpacketizer = new pcm_packetizer_c(this, wheader.common.dwSamplesPerSec,
-                                         wheader.common.wChannels,
-                                         wheader.common.wBitsPerSample, ti);
+    pcmpacketizer =
+      new pcm_packetizer_c(this, get_uint32(&wheader.common.dwSamplesPerSec),
+                           get_uint16(&wheader.common.wChannels),
+                           get_uint16(&wheader.common.wBitsPerSample), ti);
 
     if (verbose)
       mxinfo("Using WAV demultiplexer for %s.\n+-> Using "
@@ -271,7 +273,7 @@ int wav_reader_c::display_priority() {
 }
 
 void wav_reader_c::display_progress(bool final) {
-  int samples = (wheader.riff.len - sizeof(wheader) + 8) / bps;
+  int samples = (get_uint32(&wheader.riff.len) - sizeof(wheader) + 8) / bps;
 
   if (final)
     mxinfo("progress: %d/%d seconds (100%%)\r", (int)samples, (int)samples);
