@@ -44,7 +44,7 @@ using namespace libmatroska;
 
 #define PFX "Quicktime/MP4 reader: "
 
-#if WORDS_BIGENDIAN == 1
+#if defined(ARCH_BIGENDIAN)
 #define BE2STR(a) ((char *)&a)[0], ((char *)&a)[1], ((char *)&a)[2], \
                   ((char *)&a)[3]
 #else

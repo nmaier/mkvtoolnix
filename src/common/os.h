@@ -54,4 +54,10 @@
 # define PATHSEP '/'
 #endif
 
+#if defined(WORDS_BIGENDIAN) && (WORDS_BIGENDIAN == 1)
+# define ARCH_BIGENDIAN
+#else
+# define ARCH_LITTLEENDIAN
+#endif
+
 #endif
