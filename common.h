@@ -26,7 +26,7 @@
 #elif defined WIN32
 #include <stdint.h>
 #define PACKAGE "mkvtoolnix"
-#define VERSION "0.4.3"
+#define VERSION "0.4.4"
 #endif
 #include <sys/types.h>
 
