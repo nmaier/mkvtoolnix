@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.12 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.13 2003/04/11 11:29:28 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -86,6 +86,8 @@ public:
   virtual packet_t *get_packet() = 0;
   virtual void      set_header() = 0;
   virtual stamp_t   get_smallest_timestamp() = 0;
+  virtual int       process(unsigned char *data, int size,
+                            int64_t timecode = -1, int64_t length = -1) = 0;
 };
  
 class generic_reader_c {

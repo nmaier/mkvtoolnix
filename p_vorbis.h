@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.h,v 1.5 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_vorbis.h,v 1.6 2003/04/11 11:29:15 mosu Exp $
     \brief class definition for the Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -47,7 +47,8 @@ public:
                       track_info_t *nti) throw (error_c);
   virtual ~vorbis_packetizer_c();
     
-  virtual int  process(unsigned char *data, int size, int64_t timecode);
+  virtual int  process(unsigned char *data, int size, int64_t timecode = -1,
+                       int64_t length = -1);
   virtual void set_header();
 };
 
