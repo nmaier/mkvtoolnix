@@ -22,10 +22,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
-#include "wx/notebook.h"
-#include "wx/listctrl.h"
-#include "wx/statline.h"
 #include "wx/config.h"
+#include "wx/listctrl.h"
+#include "wx/notebook.h"
+#include "wx/process.h"
+#include "wx/statline.h"
 
 #include "common.h"
 #include "matroskalogo_big.xpm"
@@ -168,12 +169,44 @@ tab_settings::validate_settings() {
 void
 tab_settings::query_mkvmerge_capabilities() {
   wxString tmp;
-  wxArrayString output, errors;
+  wxArrayString output;
   vector<wxString> parts;
   int result, i;
 
   tmp = wxS("\"") + mkvmerge_path + wxS("\" --capabilities");
-  result = wxExecute(tmp, output, errors);
+#if defined(SYS_WINDOWS)
+  result = wxExecute(tmp, output);
+#else
+  // Workaround for buggy behaviour of some wxWindows/GTK combinations.
+  wxProcess *process;
+  wxInputStream *out;
+  int c;
+
+  process = new wxProcess(this, 1);
+  process->Redirect();
+  result = wxExecute(tmp, wxEXEC_ASYNC, process);
+  if (result == 0)
+    return;
+  out = process->GetInputStream();
+  tmp = wxS("");
+  while (1) {
+    if (!out->Eof()) {
+      c = out->GetC();
+      if (c == wxC('\n')) {
+        output.Add(tmp);
+        tmp = wxS("");
+      } else if (c < 0)
+        break;
+      else if (c != wxC('\r'))
+        tmp += (wxChar)c;
+    } else
+      break;
+  }
+  if (tmp.length() > 0)
+    output.Add(tmp);
+  result = 0;
+#endif
+
   if (result == 0) {
     capabilities.clear();
     for (i = 0; i < output.Count(); i++) {
