@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.4 2003/03/13 09:28:23 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.5 2003/04/09 13:30:23 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,7 +23,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+//SLM
+#ifdef WIN32
+#include <assert.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <iostream>
 
@@ -545,6 +551,41 @@ void process_file() {
                   fprintf(stdout, "(%s) |   + frame with size %u\n", NAME,
                           data.Size());
                 }
+
+              } else if (EbmlId(*l3) ==
+                         KaxBlockAdditional::ClassInfos.GlobalId) {
+                KaxBlockAdditional &add =
+                  *static_cast<KaxBlockAdditional *>(l3);
+                add.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + block additional", NAME);
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
+                last_pos = in->getFilePointer();
+                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
+                                    0xFFFFFFFFL, true);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  fprintf(stdout, "(%s) |   + unknown element, level 4: %s",
+                          NAME, typeid(*l4).name());
+                  if (verbose > 1)
+                    fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, "\n");
+
+                  if (upper_lvl_el > 0) {
+									  assert(1 == 0);	// this should never happen
+                  } else {
+                    l4->SkipData(static_cast<EbmlStream &>(*es),
+                                 l4->Generic().Context);
+                    delete l4;
+                    last_pos = in->getFilePointer();
+                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
+                                        0xFFFFFFFFL, true);
+                  }
+                } // while (l4 != NULL)
 
               } else {
                  fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
