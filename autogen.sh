@@ -62,6 +62,10 @@ esac
 
 echo "Generating configuration files for $package, please wait...."
 
+if test -f config.h; then
+  rm config.h
+fi
+
 echo "  aclocal $ACLOCAL_FLAGS" && aclocal $ACLOCAL_FLAGS
 echo "  autoheader" && autoheader
 #echo "  libtoolize --automake" && libtoolize --automake
