@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.1 2003/05/17 21:01:28 mosu Exp $
+    \version \$Id: r_aac.cpp,v 1.2 2003/05/18 19:56:31 mosu Exp $
     \brief AAC demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,7 +31,6 @@
 
 int aac_reader_c::probe_file(FILE *file, int64_t size) { 
   char buf[4096];
-  int pos;
   aac_header_t aacheader;
   
   if (size < 4096)
@@ -43,9 +42,10 @@ int aac_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   }
   fseek(file, 0, SEEK_SET);
-  
-  pos = find_aac_header((unsigned char *)buf, 4096, &aacheader);
-  if (pos < 0)
+
+  if (parse_aac_adif_header((unsigned char *)buf, 4096, &aacheader))
+    return 1;
+  if (find_aac_header((unsigned char *)buf, 4096, &aacheader) < 0)
     return 0;
   
   return 1;    
@@ -53,7 +53,7 @@ int aac_reader_c::probe_file(FILE *file, int64_t size) {
 
 aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  int pos;
+  int adif;
   aac_header_t aacheader;
   
   if ((file = fopen(ti->fname, "rb")) == NULL)
@@ -68,14 +68,18 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("aac_reader: Could not read 4096 bytes.");
   if (fseek(file, 0, SEEK_SET) != 0)
     throw error_c("aac_reader: Could not seek to beginning of file.");
-  pos = find_aac_header(chunk, 4096, &aacheader);
-  if (pos < 0)
+  if (parse_aac_adif_header(chunk, 4096, &aacheader)) {
+    throw error_c("aac_reader: ADIF header files are not supported.");
+    adif = 1;
+  } else if (find_aac_header(chunk, 4096, &aacheader) < 0)
     throw error_c("aac_reader: No valid AAC packet found in the first " \
                   "4096 bytes.\n");
+  else
+    adif = 0;
   bytes_processed = 0;
   aacpacketizer = new aac_packetizer_c(this, aacheader.id,
                                        aacheader.sample_rate,
-                                       aacheader.channels, ti);
+                                       aacheader.channels, adif, ti);
   if (verbose)
     fprintf(stdout, "Using AAC demultiplexer for %s.\n+-> Using " \
             "AAC output module for audio stream.\n", ti->fname);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: aac_common.h,v 1.1 2003/05/17 21:01:28 mosu Exp $
+    \version \$Id: aac_common.h,v 1.2 2003/05/18 19:56:31 mosu Exp $
     \brief definitions and helper functions for AAC data
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,6 +31,8 @@ typedef struct {
   int header_bit_size, header_byte_size;
 } aac_header_t;
 
+int parse_aac_adif_header(unsigned char *buf, int size,
+                          aac_header_t *aac_header);
 int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header);
 
 #endif // __AACCOMMON_H

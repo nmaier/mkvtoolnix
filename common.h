@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.23 2003/05/17 20:51:34 mosu Exp $
+    \version \$Id: common.h,v 1.24 2003/05/18 19:56:31 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -66,7 +66,7 @@
 #define TYPEDTS      11
 #define TYPEAAC      12
 
-#define FOURCC(a, b, c, d) (unsigned long)((((unsigned char)a) << 24) + \
+#define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \
                            ((unsigned char)d))

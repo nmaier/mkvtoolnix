@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.1 2003/05/17 21:01:28 mosu Exp $
+    \version \$Id: p_aac.cpp,v 1.2 2003/05/18 19:56:31 mosu Exp $
     \brief AAC output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,7 +32,7 @@ using namespace LIBMATROSKA_NAMESPACE;
 
 aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti)
+                                   int nchannels, int adif, track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
@@ -41,6 +41,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   id = nid;
+  is_adif = adif;
 
   set_track_type(track_audio);
   duplicate_data_on_add(false);

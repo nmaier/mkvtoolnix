@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.h,v 1.1 2003/05/17 21:01:28 mosu Exp $
+    \version \$Id: p_aac.h,v 1.2 2003/05/18 19:56:31 mosu Exp $
     \brief class definition for the AAC output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -29,12 +29,12 @@ class aac_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, buffer_size, id;
+  int channels, buffer_size, id, is_adif;
   unsigned char *packet_buffer;
 
 public:
   aac_packetizer_c(generic_reader_c *nreader, int nid,
-                   unsigned long nsamples_per_sec, int nchannels,
+                   unsigned long nsamples_per_sec, int nchannels, int adif,
                    track_info_t *nti) throw (error_c);
   virtual ~aac_packetizer_c();
 
