@@ -990,15 +990,11 @@ generic_packetizer_c::connect(generic_packetizer_c *src) {
   htrack_type = src->htrack_type;
   htrack_default_duration = src->htrack_default_duration;
   huid  = src->huid;
-  if (hcompression != src->hcompression) {
-    if (compressor != NULL) {
-      delete compressor;
-      compressor = NULL;
-    }
-    hcompression = src->hcompression;
-    if (hcompression != COMPRESSION_NONE)
-      compressor = compression_c::create(hcompression);
-  }
+  if (compressor != NULL)
+    delete compressor;
+  hcompression = src->hcompression;
+  compressor = src->compressor;
+  src->compressor = NULL;
   last_cue_timecode = src->last_cue_timecode;
   correction_timecode_offset = 0;
   if (htrack_type != track_subtitle)
