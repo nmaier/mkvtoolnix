@@ -168,7 +168,8 @@ aac_reader_c::guess_adts_version() {
 }
 
 int
-aac_reader_c::read(generic_packetizer_c *) {
+aac_reader_c::read(generic_packetizer_c *,
+                   bool) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);

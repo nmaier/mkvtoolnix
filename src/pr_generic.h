@@ -258,7 +258,8 @@ public:
   generic_reader_c(track_info_c *nti);
   virtual ~generic_reader_c();
 
-  virtual int read(generic_packetizer_c *ptzr) = 0;
+  virtual int read(generic_packetizer_c *ptzr, bool force = false) = 0;
+  virtual int read_all();
   virtual int display_priority();
   virtual void display_progress(bool final = false);
   virtual void set_headers();

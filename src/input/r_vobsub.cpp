@@ -530,7 +530,8 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
 }
 
 int
-vobsub_reader_c::read(generic_packetizer_c *ptzr) {
+vobsub_reader_c::read(generic_packetizer_c *ptzr,
+                      bool force) {
   vobsub_track_c *track;
   uint32_t i, id;
 

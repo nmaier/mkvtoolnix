@@ -167,7 +167,8 @@ wav_reader_c::create_packetizer(int64_t) {
 }
 
 int
-wav_reader_c::read(generic_packetizer_c *) {
+wav_reader_c::read(generic_packetizer_c *,
+                   bool) {
   if (!is_dts) {
     int nread;
 

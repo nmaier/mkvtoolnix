@@ -207,7 +207,8 @@ flac_reader_c::parse_file() {
 }
 
 int
-flac_reader_c::read(generic_packetizer_c *) {
+flac_reader_c::read(generic_packetizer_c *,
+                    bool) {
   unsigned char *buf;
 
   if (current_block == blocks.end())

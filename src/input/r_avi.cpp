@@ -355,7 +355,8 @@ avi_reader_c::is_keyframe(unsigned char *data,
 // {{{ FUNCTION avi_reader_c::read
 
 int
-avi_reader_c::read(generic_packetizer_c *ptzr) {
+avi_reader_c::read(generic_packetizer_c *ptzr,
+                   bool force) {
   vector<avi_demuxer_t>::iterator demuxer;
   int key, last_frame, frames_read, size;
   long nread;

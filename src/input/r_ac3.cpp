@@ -106,7 +106,8 @@ ac3_reader_c::create_packetizer(int64_t) {
 }
 
 int
-ac3_reader_c::read(generic_packetizer_c *) {
+ac3_reader_c::read(generic_packetizer_c *,
+                   bool) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);

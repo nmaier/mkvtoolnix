@@ -420,7 +420,8 @@ real_reader_c::finish() {
 // {{{ FUNCTION real_reader_c::read()
 
 int
-real_reader_c::read(generic_packetizer_c *) {
+real_reader_c::read(generic_packetizer_c *,
+                    bool) {
   int size;
   unsigned char *chunk;
   real_demuxer_t *dmx;

@@ -228,7 +228,8 @@ ssa_reader_c::recode_text(vector<string> &fields) {
 }
 
 int
-ssa_reader_c::read(generic_packetizer_c *) {
+ssa_reader_c::read(generic_packetizer_c *,
+                   bool) {
   string line, stime, orig_line, comma;
   int i, num;
   int64_t start, end;

@@ -819,7 +819,8 @@ qtmp4_reader_c::handle_header_atoms(uint32_t parent,
 }
 
 int
-qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
+qtmp4_reader_c::read(generic_packetizer_c *ptzr,
+                     bool force) {
   uint32_t i, k, frame, frame_size;
   qtmp4_demuxer_t *dmx;
   bool chunks_left, is_keyframe;

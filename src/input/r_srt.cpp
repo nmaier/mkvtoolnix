@@ -107,7 +107,8 @@ srt_reader_c::create_packetizer(int64_t) {
 #define STATE_TIME            3
 
 int
-srt_reader_c::read(generic_packetizer_c *) {
+srt_reader_c::read(generic_packetizer_c *,
+                   bool) {
   int64_t start, end;
   char *chunk;
   subtitles_c subs;

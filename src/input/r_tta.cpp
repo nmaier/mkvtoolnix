@@ -115,7 +115,8 @@ tta_reader_c::create_packetizer(int64_t) {
 }
 
 int
-tta_reader_c::read(generic_packetizer_c *) {
+tta_reader_c::read(generic_packetizer_c *,
+                   bool) {
   unsigned char *buf;
   int nread;
 

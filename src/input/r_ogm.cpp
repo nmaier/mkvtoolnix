@@ -1032,7 +1032,8 @@ ogm_reader_c::read_headers() {
  * General reader. Read a page and hand it over for processing.
  */
 int
-ogm_reader_c::read(generic_packetizer_c *) {
+ogm_reader_c::read(generic_packetizer_c *,
+                   bool) {
   int i;
   ogg_page og;
 

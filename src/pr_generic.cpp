@@ -1107,6 +1107,13 @@ generic_reader_c::~generic_reader_c() {
   delete ti;
 }
 
+int
+generic_reader_c::read_all() {
+  while (read(NULL, true) != 0)
+    ;
+  return 0;
+}
+
 bool
 generic_reader_c::demuxing_requested(char type,
                                      int64_t id) {

@@ -1695,7 +1695,8 @@ kax_reader_c::create_packetizers() {
 // {{{ FUNCTION kax_reader_c::read()
 
 int
-kax_reader_c::read(generic_packetizer_c *) {
+kax_reader_c::read(generic_packetizer_c *,
+                   bool force) {
   int upper_lvl_el, i, bgidx;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
