@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.22 2003/04/18 13:08:04 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.23 2003/04/18 13:21:11 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -71,7 +71,8 @@ void video_packetizer_c::set_header() {
 }
 
 int video_packetizer_c::process(unsigned char *buf, int size,
-                                int64_t old_timecode, int64_t flags) {
+                                int64_t old_timecode, int64_t flags, int64_t,
+                                int64_t) {
   int64_t timecode;
   int num_frames;
 

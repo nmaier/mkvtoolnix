@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.22 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.23 2003/04/18 13:21:11 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -78,7 +78,8 @@ public:
   virtual int64_t get_free_refs();
   virtual void set_header();
   virtual int process(unsigned char *data, int size,
-                      int64_t timecode = -1,int64_t length = -1) = 0;
+                      int64_t timecode = -1, int64_t length = -1,
+                      int64_t bref = -1, int64_t fref = -1) = 0;
 
   virtual KaxTrackEntry *get_track_entry();
 

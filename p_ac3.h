@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.10 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.11 2003/04/18 13:21:11 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,7 +39,8 @@ public:
   virtual ~ac3_packetizer_c();
     
   virtual int            process(unsigned char *buf, int size,
-                                 int64_t timescode = -1, int64_t length = -1);
+                                 int64_t timecode = -1, int64_t length = -1,
+                                 int64_t bref = -1, int64_t fref = -1);
   virtual void           set_header();
     
 private:

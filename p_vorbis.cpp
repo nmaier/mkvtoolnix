@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.11 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.12 2003/04/18 13:21:11 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -144,7 +144,7 @@ void vorbis_packetizer_c::set_header() {
  * has to generate silence packets and put them into the Matroska file first.
  */
 int vorbis_packetizer_c::process(unsigned char *data, int size,
-                                 int64_t timecode, int64_t) {
+                                 int64_t timecode, int64_t, int64_t, int64_t) {
   unsigned char zero[2];
   ogg_packet op;
   int64_t this_bs, samples_here, samples_needed;

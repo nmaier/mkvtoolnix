@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.14 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.15 2003/04/18 13:21:11 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -165,7 +165,7 @@ void mp3_packetizer_c::set_header() {
 }
 
 int mp3_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t timecode, int64_t) {
+                              int64_t timecode, int64_t, int64_t, int64_t) {
   unsigned char *packet;
   unsigned long header;
   mp3_header_t mp3header;

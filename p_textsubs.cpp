@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.5 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.6 2003/04/18 13:21:11 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -52,7 +52,7 @@ void textsubs_packetizer_c::set_header() {
 }
 
 int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
-                                   int64_t length) {
+                                   int64_t length, int64_t, int64_t) {
   int num_newlines;
   char *subs, *idx1, *idx2, *tempbuf;
   int64_t end, duration, dlen, tmp;

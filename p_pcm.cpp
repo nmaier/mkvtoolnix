@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.13 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.14 2003/04/18 13:21:11 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -74,7 +74,7 @@ void pcm_packetizer_c::set_header() {
 }
 
 int pcm_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t, int64_t) {
+                              int64_t, int64_t, int64_t, int64_t) {
   int i, bytes_per_packet, remaining_bytes, complete_packets;
   unsigned char *new_buf;
 
