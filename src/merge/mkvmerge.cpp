@@ -257,6 +257,7 @@ static bool print_malloc_report = false;
 */
 static void
 print_capabilities() {
+  mxinfo("VERSION=" VERSIONINFO "\n");
 #if defined(HAVE_AVICLASSES)
   mxinfo("AVICLASSES\n");
 #endif
