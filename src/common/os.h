@@ -33,6 +33,8 @@
 # define SYS_UNIX
 # if defined(__bsdi__) || defined(__FreeBSD__) 
 #  define SYS_BSD
+# elif defined(__sun) && defined(__SVR4)
+#  define SYS_SOLARIS
 # else
 #  define SYS_LINUX
 # endif
@@ -82,12 +84,22 @@ typedef _fsize_t ssize_t;
 # define LLU "%llu"
 #endif // COMP_MINGW || COMP_MSC
 
+#if defined(HAVE_SYS_TYPES_H)
+#include <sys/types.h>
+#endif // HAVE_SYS_TYPES_H
 #if defined(HAVE_STDINT_H)
 #include <stdint.h>
 #endif // HAVE_STDINT_H
 #if defined(HAVE_INTTYPES_H)
 #include <inttypes.h>
 #endif // HAVE_INTTYPES_H
+
+#if defined(HAVE_NO_INT64_T)
+typedef INT64_TYPE int64_t;
+#endif
+#if defined(HAVE_NO_UINT64_T)
+typedef UINT64_TYPE uint64_t;
+#endif
 
 #if defined(SYS_WINDOWS)
 # define PATHSEP '\\'
