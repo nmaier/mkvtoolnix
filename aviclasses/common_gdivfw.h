@@ -19,6 +19,8 @@
 #ifndef __TOOLS_COMMON_GDIVFW_H__
 #define __TOOLS_COMMON_GDIVFW_H__
 
+#include "os.h"
+
 #include <ctype.h>
 
 #include "ac_common.h"
@@ -161,6 +163,7 @@ typedef struct {
 #define ICERR_CUSTOM      -400L    // errors less than ICERR_CUSTOM...
 #endif
 
+#if !defined(SYS_WINDOWS)
 #ifndef MMNOMMIO
 #define MMIOERR_BASE        256
 #define MMIOERR_FILENOTFOUND    (MMIOERR_BASE + 1)  /* file not found */
@@ -179,6 +182,7 @@ typedef struct {
 #define MMIOERR_NETWORKERROR    (MMIOERR_BASE + 14) /* network not responding */
 #define MMIOERR_TOOMANYOPENFILES  (MMIOERR_BASE + 15) /* no more file handles  */
 #define MMIOERR_INVALIDFILE      (MMIOERR_BASE + 16) /* default error file error */
+#endif
 #endif
 
 /*
@@ -249,9 +253,10 @@ typedef struct {
 //
 // Success codes
 //
+#if !defined(SYS_WINDOWS)
 #define S_OK                                   ((long)0x00000000L)
 #define S_FALSE                                ((long)0x00000001L)
-
+#endif
 
 #undef MAKE_SCODE
 #define MAKE_SCODE(sev,fac,code)                      \
