@@ -1890,11 +1890,6 @@ parse_args(vector<string> args) {
     }
   }
 
-  if (files.size() == 0) {
-    usage();
-    mxexit();
-  }
-
   if (no_linking &&
       ((seguid_link_previous != NULL) || (seguid_link_next != NULL))) {
     mxwarn(_("'--link' must be used if '--link-to-previous' or "
@@ -1942,7 +1937,7 @@ main(int argc,
 
   create_readers();
 
-  if (packetizers.size() == 0)
+  if ((packetizers.size() == 0) && (files.size() != 0))
     mxerror(_("No streams to output were found. Aborting.\n"));
 
   create_next_output_file();

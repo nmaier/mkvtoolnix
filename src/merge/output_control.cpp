@@ -584,14 +584,18 @@ render_headers(mm_io_c *rout) {
     kax_infos->Render(*rout, true);
     kax_sh_main->IndexThis(*kax_infos, *kax_segment);
 
-    kax_tracks->Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
-    kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
+    if (packetizers.size() > 0) {
+      kax_tracks->Render(*rout,
+                         !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+      kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
 
-    // Reserve some small amount of space for header changes by the
-    // packetizers.
-    void_after_track_headers = new EbmlVoid;
-    void_after_track_headers->SetSize(1024);
-    void_after_track_headers->Render(*rout);
+      // Reserve some small amount of space for header changes by the
+      // packetizers.
+      void_after_track_headers = new EbmlVoid;
+      void_after_track_headers->SetSize(1024);
+      void_after_track_headers->Render(*rout);
+    }
+
   } catch (exception &ex) {
     mxerror(_("The track headers could not be rendered correctly. %s.\n"),
             BUGMSG);
@@ -1251,7 +1255,7 @@ add_tags_from_cue_chapters() {
   uint32_t tuid;
   bool found;
 
-  if (tags_from_cue_chapters == NULL)
+  if ((tags_from_cue_chapters == NULL) || (ptzrs_in_header_order.size() == 0))
     return;
 
   found = false;
