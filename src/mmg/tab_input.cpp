@@ -1195,6 +1195,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxS("display_height"), *t->dheight);
       cfg->Write(wxS("fourcc"), *t->fourcc);
       cfg->Write(wxS("compression"), *t->compression);
+      cfg->Write(wxS("track_name_was_present"), t->track_name_was_present);
 
       cfg->SetPath(wxS(".."));
     }
@@ -1210,6 +1211,7 @@ tab_input::load(wxConfigBase *cfg) {
   mmg_track_t *t, tr;
   wxString s, c, id;
   int num_files, num_tracks;
+  bool b;
 
   clb_tracks->Clear();
   lb_input_files->Clear();
@@ -1321,6 +1323,9 @@ tab_input::load(wxConfigBase *cfg) {
       tr.compression = new wxString(s);
       cfg->Read(wxS("timecodes"), &s);
       tr.timecodes = new wxString(s);
+      if (!cfg->Read(wxS("track_name_was_present"), &b))
+        b = false;
+      tr.track_name_was_present = b;
 
       fi.tracks->push_back(tr);
       cfg->SetPath(wxS(".."));

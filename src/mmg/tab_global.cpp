@@ -315,6 +315,10 @@ void tab_global::load(wxConfigBase *cfg) {
 
   cfg->Read("global_tags", &s);
   tc_global_tags->SetValue(s);
+
+  if (!cfg->Read(wxS("title_was_present"), &b))
+    b = false;
+  title_was_present = b;
 }
 
 void tab_global::save(wxConfigBase *cfg) {
@@ -337,6 +341,8 @@ void tab_global::save(wxConfigBase *cfg) {
   cfg->Write("cue_name_format", tc_cue_name_format->GetValue());
 
   cfg->Write("global_tags", tc_global_tags->GetValue());
+
+  cfg->Write(wxS("title_was_present"), title_was_present);
 }
 
 bool tab_global::validate_settings() {

@@ -24,6 +24,8 @@
 
 #include "wx/dialog.h"
 #include "wx/listctrl.h"
+#include "wx/process.h"
+#include "wx/thread.h"
 
 #define ID_JOBS_B_UP                      17001
 #define ID_JOBS_B_DOWN                    17002
@@ -70,18 +72,15 @@ class job_run_dialog: public wxDialog {
   DECLARE_CLASS(job_run_dialog);
   DECLARE_EVENT_TABLE();
 protected:
-  long pid;
   bool abort;
-  wxTextCtrl *tc_output;
-  wxGauge *g_progress, *g_jobs;
-  wxButton *b_ok, *b_abort;
-  wxCheckBox *cb_abort_after_current;
-  wxStaticText *st_jobs;
+  long pid, exit_code;
+  wxSemaphore *lock;
 
 public:
   job_run_dialog(wxWindow *parent, vector<int> &jobs_to_start);
 
   void on_abort(wxCommandEvent &evt);
+  void on_end_process(wxProcessEvent &evt);
 };
 
 class job_dialog: public wxDialog {

@@ -61,14 +61,19 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
            wxSize(JOB_RUN_DIALOG_WIDTH, 155),
 #endif
            wxCAPTION) {
-  wxStaticText *st_current;
+  wxGauge *g_progress, *g_jobs;
+  wxButton *b_ok, *b_abort;
+  wxCheckBox *cb_abort_after_current;
+  wxStaticText *st_jobs, *st_current;
+  wxString line, tmp, opt_file_name;
+  wxInputStream *out;
+  wxArrayString *arg_list;
+  wxProcess *process;
   char c, *arg_utf8;
   long value;
-  wxString line, tmp;
-  wxInputStream *out;
   mm_io_c *opt_file;
   uint32_t i, job, ndx;
-  wxArrayString *arg_list;
+  bool got_char;
 
   c = 0;
   new wxStaticBox(this, -1, wxS("Status and progress"), wxPoint(10, 10),
@@ -105,146 +110,129 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
                                           jobs[ndx].id));
     while (app->Pending())
       app->Dispatch();
-    wxSleep(1);
-    g_progress->SetValue(50);
-    while (app->Pending())
-      app->Dispatch();
-    wxSleep(1);
-    g_progress->SetValue(100);
-    while (app->Pending())
-      app->Dispatch();
+
+    mdlg->load(wxString::Format(wxS("%s/jobs/%d.mmg"), wxGetCwd().c_str(),
+                                jobs[ndx].id));
+
+    process = new wxProcess(this, 1);
+    process->Redirect();
+    lock = new wxSemaphore();
+
+#if defined(SYS_WINDOWS)
+    opt_file_name.Printf("mmg-mkvmerge-options-%d-%d",
+                         (int)GetCurrentProcessId(), (int)time(NULL));
+#else
+    opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
+                         (int)time(NULL));
+#endif
+    try {
+      opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
+    } catch (...) {
+      jobs[ndx].log->Printf("Could not create a temporary file for mkvmerge's "
+                            "command line option called '%s' (error code %d, "
+                            "%s).", opt_file_name.c_str(), errno,
+                            strerror(errno));
+      jobs[ndx].status = jobs_failed;
+      mdlg->save_job_queue();
+      delete process;
+      continue;
+    }
+    opt_file->write_bom("UTF-8");
+
+    mdlg->update_command_line();
+    arg_list = &mdlg->get_command_line_args();
+    for (i = 1; i < arg_list->Count(); i++) {
+      if ((*arg_list)[i].Length() == 0)
+        opt_file->puts_unl("#EMPTY#");
+      else {
+        arg_utf8 = to_utf8(cc_local_utf8, (*arg_list)[i].c_str());
+        opt_file->puts_unl(arg_utf8);
+        safefree(arg_utf8);
+      }
+      opt_file->puts_unl("\n");
+    }
+    delete opt_file;
+
+    pid = wxExecute((*arg_list)[0] + " @" + opt_file_name, wxEXEC_ASYNC,
+                    process);
+    out = process->GetInputStream();
+    line = wxS("");
+    *jobs[ndx].log = wxS("");
+    while (1) {
+      got_char = false;
+      if (!out->Eof() && process->IsInputAvailable()) {
+        c = out->GetC();
+        got_char = true;
+      } else
+        wxUsleep(100);
+      mxinfo("yielding\n");
+      while (app->Pending())
+        app->Dispatch();
+
+      if (got_char && ((c == wxC('\n')) || (c == wxC('\r')) || out->Eof())) {
+        if (line.Find(wxS("progress")) == 0) {
+          if (line.Find(wxS("%)")) != 0) {
+            line.Remove(line.Find(wxS("%)")));
+            tmp = line.AfterLast(wxC('('));
+            tmp.ToLong(&value);
+            if ((value >= 0) && (value <= 100))
+              g_progress->SetValue(value);
+          }
+        } else if (line.Length() > 0)
+          *jobs[ndx].log += line + wxS("\n");
+        line = wxS("");
+      } else if ((unsigned char)c != 0xff)
+        line.Append(c);
+
+      if (out->Eof())
+        break;
+    }
+
+    while (1) {
+      if (lock->WaitTimeout(100) == wxSEMA_NO_ERROR)
+        break;
+      app->Yield();
+    }
+
+    if (abort)
+      jobs[ndx].status = jobs_aborted;
+    if (exit_code == 0)
+      jobs[ndx].status = jobs_done;
+    else if (exit_code == 1)
+      jobs[ndx].status = jobs_done_warnings;
+    else
+      jobs[ndx].status = jobs_failed;
+    mdlg->save_job_queue();
+    delete process;
+    wxRemoveFile(opt_file_name);
 
     g_jobs->SetValue(job + 1);
     if (cb_abort_after_current->IsChecked() || abort)
       break;
   }
 
+  b_abort->Enable(false);
+  cb_abort_after_current->Enable(false);
   b_ok->Enable(true);
   b_ok->SetFocus();
   ShowModal();
 }
 
-//   update_window("Muxing in progress.");
-//   Show(true);
-
-//   process = new mux_process(this);
-
-// #if defined(SYS_WINDOWS)
-//   opt_file_name.Printf("mmg-mkvmerge-options-%d-%d",
-//                        (int)GetCurrentProcessId(), (int)time(NULL));
-// #else
-//   opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
-//                        (int)time(NULL));
-// #endif
-//   try {
-//     opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
-//     opt_file->write_bom("UTF-8");
-//   } catch (...) {
-//     wxString error;
-//     error.Printf("Could not create a temporary file for mkvmerge's command "
-//                  "line option called '%s' (error code %d, %s).",
-//                  opt_file_name.c_str(), errno, strerror(errno));
-//     wxMessageBox(error, "File creation failed", wxOK | wxCENTER |
-//                  wxICON_ERROR);
-//     throw 0;
-//   }
-//   arg_list = &static_cast<mmg_dialog *>(parent)->get_command_line_args();
-//   for (i = 1; i < arg_list->Count(); i++) {
-//     if ((*arg_list)[i].Length() == 0)
-//       opt_file->puts_unl("#EMPTY#");
-//     else {
-//       arg_utf8 = to_utf8(cc_local_utf8, (*arg_list)[i].c_str());
-//       opt_file->puts_unl(arg_utf8);
-//       safefree(arg_utf8);
-//     }
-//     opt_file->puts_unl("\n");
-//   }
-//   delete opt_file;
-
-//   pid = wxExecute((*arg_list)[0] + " @" + opt_file_name, wxEXEC_ASYNC,
-//                   process);
-//   out = process->GetInputStream();
-
-//   line = "";
-//   log = "";
-//   while (1) {
-//     if (!out->Eof()) {
-//       c = out->GetC();
-//       if ((unsigned char)c != 0xff)
-//         log.Append(c);
-//     }
-//     while (app->Pending())
-//       app->Dispatch();
-
-//     if ((c == '\n') || (c == '\r') || out->Eof()) {
-//       if (line.Find("Warning:") == 0)
-//         tc_warnings->AppendText(line + "\n");
-//       else if (line.Find("Error:") == 0)
-//         tc_errors->AppendText(line + "\n");
-//       else if (line.Find("progress") == 0) {
-//         if (line.Find("%)") != 0) {
-//           line.Remove(line.Find("%)"));
-//           tmp = line.AfterLast('(');
-//           tmp.ToLong(&value);
-//           if ((value >= 0) && (value <= 100))
-//             update_gauge(value);
-//         }
-//       } else if (line.Length() > 0)
-//         tc_output->AppendText(line + "\n");
-//       line = "";
-//     } else if ((unsigned char)c != 0xff)
-//       line.Append(c);
-
-//     if (out->Eof())
-//       break;
-//   }
-
-//   b_ok->Enable(true);
-//   b_abort->Enable(false);
-//   b_ok->SetFocus();
-//   ShowModal();
-// }
-
-// mux_dialog::~mux_dialog() {
-//   delete process;
-//   unlink(opt_file_name.c_str());
-// }
-
-// void mux_dialog::update_window(wxString text) {
-//   st_jobs->SetLabel(text);
-// }
-
-// void mux_dialog::update_gauge(long value) {
-//   g_progress->SetValue(value);
-// }
-
-// void mux_dialog::on_ok(wxCommandEvent &evt) {
-//   Close(true);
-// }
-
-// void mux_dialog::on_save_log(wxCommandEvent &evt) {
-//   wxFile *file;
-//   wxString s;
-//   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
-//                    _T("Log files (*.txt)|*.txt|" ALLFILES),
-//                    wxSAVE | wxOVERWRITE_PROMPT);
-//   if(dlg.ShowModal() == wxID_OK) {
-//     last_open_dir = dlg.GetDirectory();
-//     file = new wxFile(dlg.GetPath(), wxFile::write);
-//     s = log + "\n";
-//     file->Write(s);
-//     delete file;
-//   }
-// }
-
 void
 job_run_dialog::on_abort(wxCommandEvent &evt) {
   abort = true;
-// #if defined(SYS_WINDOWS)
-//   wxKill(pid, wxSIGKILL);
-// #else
-//   wxKill(pid, wxSIGTERM);
-// #endif
+  lock->Post();
+#if defined(SYS_WINDOWS)
+  wxKill(pid, wxSIGKILL);
+#else
+  wxKill(pid, wxSIGTERM);
+#endif
+}
+
+void
+job_run_dialog::on_end_process(wxProcessEvent &evt) {
+  exit_code = evt.GetExitCode();
+  lock->Post();
 }
 
 // ---------------------------------------------------
@@ -575,11 +563,17 @@ job_dialog::start_jobs(vector<int> &jobs_to_start) {
 
   mdlg->load(temp_settings, true);
   wxRemoveFile(temp_settings);
+
+  for (i = 0; i < jobs_to_start.size(); i++) {
+    lv_jobs->DeleteItem(jobs_to_start[i]);
+    create_list_item(jobs_to_start[i]);
+  }
 }
 
 IMPLEMENT_CLASS(job_run_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_run_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_ABORT, job_run_dialog::on_abort)
+  EVT_END_PROCESS(1, job_run_dialog::on_end_process)
 END_EVENT_TABLE();
 
 IMPLEMENT_CLASS(job_log_dialog, wxDialog);

@@ -172,7 +172,6 @@ mux_dialog::mux_dialog(wxWindow *parent):
     if (out->Eof())
       break;
   }
-
   b_ok->Enable(true);
   b_abort->Enable(false);
   b_ok->SetFocus();
@@ -227,6 +226,7 @@ mux_process::mux_process(mux_dialog *mux_dlg):
 void mux_process::OnTerminate(int pid, int status) {
   wxString s;
 
+  mxinfo("000\n");
   s.Printf("mkvmerge %s with a return code of %d. %s\n",
            (status != 0) && (status != 1) ? "FAILED" : "finished", status,
            status == 0 ? "Everything went fine." :
