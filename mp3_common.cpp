@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mp3_common.cpp,v 1.5 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: mp3_common.cpp,v 1.6 2003/05/17 20:59:21 mosu Exp $
     \brief helper functions for MP3 data
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -76,7 +76,7 @@ void decode_mp3_header(unsigned long header, mp3_header_t *h) {
   }
   h->mode = (header >> 6) & 3;
   h->error_protection = ((header >> 16) & 1) ^ 1;
-  h->stereo = (h->mode == 3 ? 1 : 2);
+  h->stereo = (h->mode == 3 ? 0 : 1);
   if (h->lsf)
     h->ssize = (h->stereo == 1 ? 9 : 17);
   else
