@@ -1,5 +1,8 @@
 2005-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: "Splitting by time" was not selectable on Windows
+	Unicode builds (problem with wxWidgets 2.5.3).
+
 	* mmg: bug fix: mkvmerge's output during muxing was not converted
 	from UTF-8.
 

@@ -58,7 +58,8 @@ public:
   void on_browse_chapters(wxCommandEvent &evt);
   void on_browse_global_tags(wxCommandEvent &evt);
   void on_split_clicked(wxCommandEvent &evt);
-  void on_splitby_clicked(wxCommandEvent &evt);
+  void on_splitby_size_clicked(wxCommandEvent &evt);
+  void on_splitby_time_clicked(wxCommandEvent &evt);
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);

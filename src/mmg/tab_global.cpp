@@ -339,12 +339,19 @@ tab_global::on_split_clicked(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_splitby_clicked(wxCommandEvent &evt) {
-  bool er;
+tab_global::on_splitby_time_clicked(wxCommandEvent &evt) {
+  cob_split_by_size->Enable(false);
+  cob_split_by_time->Enable(true);
+  rb_split_by_size->SetValue(false);
+  rb_split_by_time->SetValue(true);
+}
 
-  er = rb_split_by_size->GetValue();
-  cob_split_by_size->Enable(er);
-  cob_split_by_time->Enable(!er);
+void
+tab_global::on_splitby_size_clicked(wxCommandEvent &evt) {
+  cob_split_by_size->Enable(true);
+  cob_split_by_time->Enable(false);
+  rb_split_by_size->SetValue(true);
+  rb_split_by_time->SetValue(false);
 }
 
 void
@@ -536,6 +543,6 @@ BEGIN_EVENT_TABLE(tab_global, wxPanel)
   EVT_BUTTON(ID_B_BROWSEGLOBALTAGS, tab_global::on_browse_global_tags)
   EVT_BUTTON(ID_B_BROWSECHAPTERS, tab_global::on_browse_chapters)
   EVT_CHECKBOX(ID_CB_SPLIT, tab_global::on_split_clicked)
-  EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE, tab_global::on_splitby_clicked)
-  EVT_RADIOBUTTON(ID_RB_SPLITBYTIME, tab_global::on_splitby_clicked)
+  EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE, tab_global::on_splitby_size_clicked)
+  EVT_RADIOBUTTON(ID_RB_SPLITBYTIME, tab_global::on_splitby_time_clicked)
 END_EVENT_TABLE();
