@@ -41,6 +41,7 @@ typedef struct rmff_file_internal_t {
   uint32_t data_contents_size;
   uint32_t index_offset;
   int num_index_chunks;
+  uint32_t total_bytes;
 } rmff_file_internal_t;
 
 typedef struct rmff_track_internal_t {
@@ -51,6 +52,9 @@ typedef struct rmff_track_internal_t {
   uint32_t highest_timecode;
   uint32_t num_packets;
   int index_this;
+  uint32_t last_timecode;
+  uint32_t bytes_since_timecode_change;
+  uint32_t total_bytes;
 } rmff_track_internal_t;
 
 int rmff_last_error = RMFF_ERR_OK;
@@ -357,6 +361,9 @@ open_file_for_writing(const char *path,
   file->size = -1;
   file->open_mode = RMFF_OPEN_MODE_WRITING;
   file->internal = safecalloc(sizeof(rmff_file_internal_t));
+
+  /* save allowed & perfect play */
+  rmff_put_uint16_be(&file->prop_header.flags, 1 | 2);
 
   clear_error();
   return file;
@@ -844,6 +851,17 @@ rmff_add_track(rmff_file_t *file,
 
 void
 rmff_set_std_audio_v4_values(real_audio_v4_props_t *props) {
+  if (props == NULL)
+    return;
+
+  memset(props, 0, sizeof(real_audio_v4_props_t));
+  rmff_put_uint32_be(&props->fourcc1, rmffFOURCC('.', 'r', 'a', 0xfd));
+  rmff_put_uint16_be(&props->version1, 4);
+  rmff_put_uint32_be(&props->fourcc2, rmffFOURCC('.', 'r', 'a', '4'));
+  rmff_put_uint32_be(&props->stream_length, 0x10000000);
+  rmff_put_uint16_be(&props->version2, 4);
+  rmff_put_uint16_be(&props->header_size, 0x4e);
+
 }
 
 void
@@ -1085,6 +1103,10 @@ rmff_fix_headers(rmff_file_t *file) {
 
   fint = (rmff_file_internal_t *)file->internal;
 
+  if (fint->highest_timecode > 0)
+    fint->avg_bit_rate = (int64_t)fint->total_bytes * 8 * 1000 /
+      fint->highest_timecode;
+
   prop = &file->prop_header;
   rmff_put_uint32_be(&prop->max_bit_rate, fint->max_bit_rate);
   rmff_put_uint32_be(&prop->avg_bit_rate, fint->avg_bit_rate);
@@ -1100,6 +1122,10 @@ rmff_fix_headers(rmff_file_t *file) {
     track = &file->tracks[i];
     mdpr = &track->mdpr_header;
     tint = (rmff_track_internal_t *)track->internal;
+
+    if (tint->highest_timecode > 0)
+      tint->avg_bit_rate = (int64_t)tint->total_bytes * 8 * 1000 /
+        tint->highest_timecode;
 
     rmff_put_uint16_be(&mdpr->id, track->id);
     rmff_put_uint32_be(&mdpr->max_bit_rate, tint->max_bit_rate);
@@ -1138,6 +1164,7 @@ rmff_write_frame(rmff_track_t *track,
   rmff_file_internal_t *fint;
   rmff_track_internal_t *tint;
   int bw, wanted_len;
+  uint32_t bit_rate;
   int64_t pos;
 
   if ((track == NULL) || (frame == NULL) || (frame->data == NULL) ||
@@ -1165,12 +1192,12 @@ rmff_write_frame(rmff_track_t *track,
   if (bw != wanted_len)
     return set_error(RMFF_ERR_IO, "Could not write the frame", RMFF_ERR_IO);
 
-  /* TODO: Update the max_bit_rate and avg_bit_rate. */
   if (wanted_len > fint->max_packet_size)
     fint->max_packet_size = wanted_len;
   fint->avg_packet_size = (fint->avg_packet_size * fint->num_packets +
                            wanted_len) / (fint->num_packets + 1);
   fint->num_packets++;
+  fint->total_bytes += frame->size;
   if (frame->timecode > fint->highest_timecode)
     fint->highest_timecode = frame->timecode;
   fint->data_contents_size += wanted_len;
@@ -1180,8 +1207,24 @@ rmff_write_frame(rmff_track_t *track,
   tint->avg_packet_size = (tint->avg_packet_size * tint->num_packets +
                            wanted_len) / (tint->num_packets + 1);
   tint->num_packets++;
+  tint->total_bytes += frame->size;
+
+  /* Update the max_bit_rates. Crude... */
   if (frame->timecode > tint->highest_timecode)
     tint->highest_timecode = frame->timecode;
+  if (frame->timecode != tint->last_timecode) {
+    if (tint->last_timecode != 0) {
+      bit_rate = (int64_t)tint->bytes_since_timecode_change * 8 * 1000 /
+        (frame->timecode - tint->last_timecode);
+      if (bit_rate > tint->max_bit_rate)
+        tint->max_bit_rate = bit_rate;
+      if (bit_rate > fint->max_bit_rate)
+        fint->max_bit_rate = bit_rate;
+    }
+    tint->last_timecode = frame->timecode;
+    tint->bytes_since_timecode_change = frame->size;
+  } else
+    tint->bytes_since_timecode_change += frame->size;
 
   return clear_error();
 }

@@ -223,7 +223,7 @@ typedef struct __attribute__((__packed__)) real_audio_v4_props_t {
   uint16_t version1;            /* 4 or 5 */
   uint16_t unknown1;            /* 00 00 */
   uint32_t fourcc2;             /* .ra4 or .ra5 */
-  uint32_t unknown2;            /* ??? */
+  uint32_t stream_length;       /* ??? */
   uint16_t version2;            /* 4 or 5 */
   uint32_t header_size;         /* == 0x4e */
   uint16_t flavor;              /* codec flavor id */
@@ -246,7 +246,7 @@ typedef struct __attribute__((__packed__)) real_audio_v5_props_t {
   uint16_t version1;            /* 4 or 5 */
   uint16_t unknown1;            /* 00 00 */
   uint32_t fourcc2;             /* .ra4 or .ra5 */
-  uint32_t unknown2;            /* ??? */
+  uint32_t stream_length;       /* ??? */
   uint16_t version2;            /* 4 or 5 */
   uint32_t header_size;         /* == 0x4e */
   uint16_t flavor;              /* codec flavor id */
