@@ -1,3 +1,9 @@
+2004-10-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: If the file title is read from an input file, not
+	modified by the user and that input file is removed again then the
+	file title will be unset.
+
 2004-10-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Converted the raw FLAC reader to use
