@@ -2268,7 +2268,7 @@ const mime_type_t mime_types[] = {
   {"text/english", ""},
   {"text/enriched", ""},
   {"text/h323", "323"},
-  {"text/html", "htm html"},
+  {"text/html", "htm html mht"},
   {"text/iuls", "uls"},
   {"text/mathml", "mml"},
   {"text/parityfec", ""},
