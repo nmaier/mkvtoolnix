@@ -520,6 +520,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
           args = split(info.c_str(), " ");
           for (k = 0; k < args.size(); k++) {
             pair = split(args[k].c_str(), ":", 2);
+            if (pair.size() != 2)
+              continue;
             if (pair[0] == "track_name")
               *track.track_name = unescape(pair[1].c_str()).c_str();
             else if (pair[0] == "language")

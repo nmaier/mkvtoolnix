@@ -1,3 +1,9 @@
+2003-12-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: If one added a Matroska file and the track name or
+	language of a track consisted of only blanks then mmg would
+	segfault. 
+
 2003-12-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: The input box will automatically select the first track
