@@ -131,7 +131,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(libavi_a_SOURCES)
-DIST_COMMON = Makefile.am Makefile.in
+DIST_COMMON = 
 SOURCES = $(libavi_a_SOURCES)
 
 all: all-am
@@ -141,8 +141,6 @@ all: all-am
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --foreign  avilib/Makefile
-Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 
 AR = ar
 
@@ -243,7 +241,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES)
+all-am: $(LIBRARIES)
 
 installdirs:
 
@@ -266,7 +264,7 @@ mostlyclean-generic:
 clean-generic:
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f $(CONFIG_CLEAN_FILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
