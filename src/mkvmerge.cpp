@@ -1030,7 +1030,7 @@ static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
     for (i = 0; i < files.size(); i++)
       files[i]->reader->set_headers();
 
-    kax_tracks->Render(*rout, hack_engaged(ENGAGE_SAVE_DEFAULT_HEADER_VALUES));
+    kax_tracks->Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
     kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
 
     // Reserve some small amount of space for header changes by the
@@ -1046,13 +1046,13 @@ static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
 void rerender_track_headers() {
   int64_t new_void_size;
 
-  kax_tracks->UpdateSize();
+  kax_tracks->UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
   new_void_size = void_after_track_headers->GetElementPosition() +
     void_after_track_headers->GetSize() -
     kax_tracks->GetElementPosition() -
     kax_tracks->ElementSize();
   out->save_pos(kax_tracks->GetElementPosition());
-  kax_tracks->Render(*out, hack_engaged(ENGAGE_SAVE_DEFAULT_HEADER_VALUES));
+  kax_tracks->Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
   delete void_after_track_headers;
   void_after_track_headers = new EbmlVoid;
   void_after_track_headers->SetSize(new_void_size);

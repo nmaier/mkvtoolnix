@@ -1076,6 +1076,11 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "Language: %s", string(language).c_str());
 
 #if LIBMATROSKA_VERSION >= 000503
+              } else if (is_id(l3, KaxTrackTimecodeScale)) {
+                KaxTrackTimecodeScale &tc_scale =
+                  *static_cast<KaxTrackTimecodeScale *>(l3);
+                show_element(l3, 3, "Timecode scale: %f", float(tc_scale));
+
               } else if (is_id(l3, KaxContentEncodings)) {
                 show_element(l3, 3, "Content encodings");
 
