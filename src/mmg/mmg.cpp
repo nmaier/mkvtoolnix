@@ -512,7 +512,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   }
 }
 
-void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
+void
+mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir,
                    tc_output->GetValue().AfterLast(PSEP),
                    _T("Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
@@ -520,24 +521,29 @@ void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     tc_output->SetValue(dlg.GetPath());
+    verified_output_file = dlg.GetPath();
   }
 }
 
-void mmg_dialog::set_status_bar(wxString text) {
+void
+mmg_dialog::set_status_bar(wxString text) {
   status_bar_timer.Stop();
   status_bar->SetStatusText(text);
   status_bar_timer.Start(4000, true);
 }
 
-void mmg_dialog::on_clear_status_bar(wxTimerEvent &evt) {
+void
+mmg_dialog::on_clear_status_bar(wxTimerEvent &evt) {
   status_bar->SetStatusText("");
 }
 
-void mmg_dialog::on_quit(wxCommandEvent &evt) {
+void
+mmg_dialog::on_quit(wxCommandEvent &evt) {
   Close(true);
 }
 
-void mmg_dialog::on_file_new(wxCommandEvent &evt) {
+void
+mmg_dialog::on_file_new(wxCommandEvent &evt) {
   wxFileConfig *cfg;
   wxString tmp_name;
 
@@ -552,11 +558,13 @@ void mmg_dialog::on_file_new(wxCommandEvent &evt) {
 
   delete cfg;
   unlink(tmp_name);
+  verified_output_file = wxS("");
 
   set_status_bar("Configuration cleared.");
 }
 
-void mmg_dialog::on_file_load(wxCommandEvent &evt) {
+void
+mmg_dialog::on_file_load(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
                    _T("mkvmerge GUI settings (*.mmg)|*.mmg|" ALLFILES),
                    wxOPEN);
@@ -571,7 +579,8 @@ void mmg_dialog::on_file_load(wxCommandEvent &evt) {
   }
 }
 
-void mmg_dialog::load(wxString file_name) {
+void
+mmg_dialog::load(wxString file_name) {
   wxFileConfig *cfg;
   wxString s;
   int version;
@@ -587,6 +596,7 @@ void mmg_dialog::load(wxString file_name) {
   set_last_settings_in_menu(file_name);
   cfg->Read("output_file_name", &s);
   tc_output->SetValue(s);
+  verified_output_file = wxS("");
 
   input_page->load(cfg);
   attachments_page->load(cfg);
@@ -598,7 +608,8 @@ void mmg_dialog::load(wxString file_name) {
   set_status_bar("Configuration loaded.");
 }
 
-void mmg_dialog::on_file_save(wxCommandEvent &evt) {
+void
+mmg_dialog::on_file_save(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
                    _T("mkvmerge GUI settings (*.mmg)|*.mmg|" ALLFILES),
                    wxSAVE | wxOVERWRITE_PROMPT);
@@ -608,7 +619,8 @@ void mmg_dialog::on_file_save(wxCommandEvent &evt) {
   }
 }
 
-void mmg_dialog::save(wxString file_name) {
+void
+mmg_dialog::save(wxString file_name) {
   wxFileConfig *cfg;
 
   set_last_settings_in_menu(file_name);
@@ -628,7 +640,8 @@ void mmg_dialog::save(wxString file_name) {
   set_status_bar("Configuration saved.");
 }
 
-void mmg_dialog::set_last_settings_in_menu(wxString name) {
+void
+mmg_dialog::set_last_settings_in_menu(wxString name) {
   uint32_t i;
   vector<wxString>::iterator eit;
   wxConfigBase *cfg;
@@ -658,7 +671,8 @@ void mmg_dialog::set_last_settings_in_menu(wxString name) {
   update_file_menu();
 }
 
-void mmg_dialog::set_last_chapters_in_menu(wxString name) {
+void
+mmg_dialog::set_last_chapters_in_menu(wxString name) {
   uint32_t i;
   vector<wxString>::iterator eit;
   wxConfigBase *cfg;
@@ -688,7 +702,8 @@ void mmg_dialog::set_last_chapters_in_menu(wxString name) {
   update_chapter_menu();
 }
 
-void mmg_dialog::on_run(wxCommandEvent &evt) {
+void
+mmg_dialog::on_run(wxCommandEvent &evt) {
   mux_dialog *mux_dlg;
 
   update_command_line();
@@ -705,11 +720,20 @@ void mmg_dialog::on_run(wxCommandEvent &evt) {
       !settings_page->validate_settings())
     return;
 
+  if ((verified_output_file != tc_output->GetValue()) &&
+      wxFile::Exists(tc_output->GetValue()) &&
+      (wxMessageBox(wxS("The output file '") + tc_output->GetValue() +
+                    wxS("' exists already. Do you want to overwrite it?"),
+                    wxS("Overwrite existing file?"), wxYES_NO) != wxYES))
+    return;
+  verified_output_file = tc_output->GetValue();
+
   mux_dlg = new mux_dialog(this);
   delete mux_dlg;
 }
 
-void mmg_dialog::on_about(wxCommandEvent &evt) {
+void
+mmg_dialog::on_about(wxCommandEvent &evt) {
   wxMessageBox(_("mkvmerge GUI v" VERSION "\n"
                  "This GUI was written by Moritz Bunkus <moritz@bunkus.org>\n"
                  "Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
@@ -725,7 +749,8 @@ void mmg_dialog::on_about(wxCommandEvent &evt) {
                "About mkvmerge's GUI", wxOK | wxCENTER | wxICON_INFORMATION);
 }
 
-void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
+void
+mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
@@ -741,7 +766,8 @@ void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
   }
 }
 
-void mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
+void
+mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
   uint32_t i;
   char *arg_utf8;
   mm_io_c *file;
@@ -775,7 +801,8 @@ void mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
   }
 }
 
-void mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
+void
+mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
   update_command_line();
   if (wxTheClipboard->Open()) {
     wxTheClipboard->SetData(new wxTextDataObject(cmdline));
@@ -785,19 +812,23 @@ void mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
     set_status_bar("Could not open the clipboard.");
 }
 
-wxString &mmg_dialog::get_command_line() {
+wxString &
+mmg_dialog::get_command_line() {
   return cmdline;
 }
 
-wxArrayString &mmg_dialog::get_command_line_args() {
+wxArrayString &
+mmg_dialog::get_command_line_args() {
   return clargs;
 }
 
-void mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
+void
+mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
   update_command_line();
 }
 
-void mmg_dialog::update_command_line() {
+void
+mmg_dialog::update_command_line() {
   uint32_t fidx, tidx, i, args_start;
   bool tracks_selected_here;
   bool no_audio, no_video, no_subs;
@@ -1082,7 +1113,8 @@ void mmg_dialog::update_command_line() {
     tc_cmdline->SetValue(cmdline);
 }
 
-void mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
+void
+mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
   if ((evt.GetId() < ID_M_FILE_LOADLAST1) ||
       ((evt.GetId() - ID_M_FILE_LOADLAST1) >= last_settings.size()))
     return;
@@ -1090,7 +1122,8 @@ void mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
   load(last_settings[evt.GetId() - ID_M_FILE_LOADLAST1]);
 }
 
-void mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
+void
+mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
   if ((evt.GetId() < ID_M_CHAPTERS_LOADLAST1) ||
       ((evt.GetId() - ID_M_CHAPTERS_LOADLAST1) >= last_chapters.size()))
     return;
@@ -1100,7 +1133,8 @@ void mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
                                           ID_M_CHAPTERS_LOADLAST1]);
 }
 
-void mmg_dialog::update_file_menu() {
+void
+mmg_dialog::update_file_menu() {
   uint32_t i;
   wxMenuItem *mi;
   wxString s;
@@ -1121,7 +1155,8 @@ void mmg_dialog::update_file_menu() {
   }
 }
 
-void mmg_dialog::update_chapter_menu() {
+void
+mmg_dialog::update_chapter_menu() {
   uint32_t i;
   wxMenuItem *mi;
   wxString s;
@@ -1142,46 +1177,55 @@ void mmg_dialog::update_chapter_menu() {
   }
 }
 
-void mmg_dialog::on_new_chapters(wxCommandEvent &evt) {
+void
+mmg_dialog::on_new_chapters(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_new_chapters(evt);
 }
 
-void mmg_dialog::on_load_chapters(wxCommandEvent &evt) {
+void
+mmg_dialog::on_load_chapters(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_load_chapters(evt);
 }
 
-void mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
+void
+mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_save_chapters(evt);
 }
 
-void mmg_dialog::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
+void
+mmg_dialog::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_save_chapters_to_kax_file(evt);
 }
 
-void mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
+void
+mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_save_chapters_as(evt);
 }
 
-void mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
+void
+mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_verify_chapters(evt);
 }
 
-void mmg_dialog::on_set_default_chapter_values(wxCommandEvent &evt) {
+void
+mmg_dialog::on_set_default_chapter_values(wxCommandEvent &evt) {
   notebook->SetSelection(5);
   chapter_editor_page->on_set_default_values(evt);
 }
 
-void mmg_dialog::on_window_selected(wxCommandEvent &evt) {
+void
+mmg_dialog::on_window_selected(wxCommandEvent &evt) {
   notebook->SetSelection(evt.GetId() - ID_M_WINDOW_INPUT);
 }
 
-void mmg_dialog::set_title_maybe(const char *new_title) {
+void
+mmg_dialog::set_title_maybe(const char *new_title) {
   if ((strlen(new_title) > 0) &&
       (global_page->tc_title->GetValue().length() == 0))
     global_page->tc_title->SetValue(new_title);
