@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.6 2003/03/03 23:20:44 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.7 2003/03/04 09:27:05 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -75,7 +75,7 @@ int ogm_reader_c::probe_file(FILE *file, u_int64_t size) {
  */
 ogm_reader_c::ogm_reader_c(char *fname, unsigned char *astreams,
                            unsigned char *vstreams, unsigned char *tstreams,
-                           audio_sync_t *nasync, range_t *nrange,
+                           audio_sync_t *nasync,
                            char *nfourcc) throw (error_c) {
   u_int64_t size;
   
@@ -129,9 +129,6 @@ ogm_reader_c::ogm_reader_c(char *fname, unsigned char *astreams,
     die("malloc");
 
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
-
-  o_eos = 0;
 
   if (read_headers() <= 0)
     throw error_c("ogm_reader: Could not read all header packets.");
@@ -295,7 +292,7 @@ void ogm_reader_c::create_packetizers() {
                                    (double)10000000 / (double)sth->time_unit, 
                                    sth->sh.video.width, sth->sh.video.height,
                                    sth->bits_per_sample, sth->buffersize, NULL,
-                                   &range, 1);
+                                   1);
         } catch (error_c &error) {
           fprintf(stderr, "Fatal: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
@@ -315,7 +312,7 @@ void ogm_reader_c::create_packetizers() {
           dmx->packetizer =
             new pcm_packetizer_c(NULL, 0, sth->samples_per_unit,
                                  sth->sh.audio.channels, 
-                                 sth->bits_per_sample, &async, &range);
+                                 sth->bits_per_sample, &async);
         } catch (error_c &error) {
           fprintf(stderr, "Fatal: ogm_reader: could not initialize PCM "
                   "packetizer for stream id %d. Will try to continue and "
@@ -335,7 +332,7 @@ void ogm_reader_c::create_packetizers() {
             new mp3_packetizer_c(NULL, 0, sth->samples_per_unit,
                                  sth->sh.audio.channels,
                                  sth->sh.audio.avgbytespersec * 8 / 1000,
-                                 &async, &range);
+                                 &async);
         } catch (error_c &error) {
           fprintf(stderr, "Fatal: ogm_reader: could not initialize MP3 "
                   "packetizer for stream id %d. Will try to continue and "
@@ -355,7 +352,7 @@ void ogm_reader_c::create_packetizers() {
             new ac3_packetizer_c(NULL, 0, sth->samples_per_unit,
                                  sth->sh.audio.channels,
                                  sth->sh.audio.avgbytespersec * 8 / 1000,
-                                 &async, &range);
+                                 &async);
         } catch (error_c &error) {
           fprintf(stderr, "FATAL: ogm_reader: could not initialize AC3 "
                   "packetizer for stream id %d. Will try to continue and "
@@ -383,7 +380,7 @@ void ogm_reader_c::create_packetizers() {
         vorbis_comment_clear(&vc);
         try {
           dmx->packetizer = 
-            new vorbis_packetizer_c(&async, &range,
+            new vorbis_packetizer_c(&async,
                                     dmx->packet_data[0], dmx->packet_sizes[0],
                                     dmx->packet_data[1], dmx->packet_sizes[1],
                                     dmx->packet_data[2], dmx->packet_sizes[2]);
@@ -566,7 +563,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
 //       try {
 //         dmx->packetizer =
-//           new textsubs_packetizer_c(&async, &range, comments);
+//           new textsubs_packetizer_c(&async);
 //       } catch (error_c error) {
 //         fprintf(stderr, "FATAL: ogm_reader: could not initialize text "
 //                 "subtitle packetizer for stream id %d. Will try to "
@@ -631,8 +628,6 @@ void ogm_reader_c::process_page(ogg_page *og) {
       }
 
     eos = op.e_o_s;
-    if (o_eos)
-      op.e_o_s = 0;
 
     if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
@@ -640,7 +635,6 @@ void ogm_reader_c::process_page(ogg_page *og) {
         case OGM_STREAM_TYPE_VORBIS:
           ((vorbis_packetizer_c *)dmx->packetizer)->
             process((char *)op.packet, op.bytes, -1);
-//                     ogg_page_granulepos(og) * 1000 / dmx->vorbis_rate);
           break;
 
         case OGM_STREAM_TYPE_VIDEO:
@@ -777,7 +771,7 @@ int ogm_reader_c::read() {
   ogm_demuxer_t *dmx;
   ogg_page       og;
   
-  if (packet_available() && !o_eos)
+  if (packet_available())
     return EMOREDATA;
   
   done = 0;
@@ -842,10 +836,6 @@ packet_t *ogm_reader_c::get_packet() {
     return NULL;
 }
 
-void ogm_reader_c::overwrite_eos(int no_eos) {
-  o_eos = no_eos;
-}
-
 int ogm_reader_c::display_priority() {
   int i;
   
@@ -873,18 +863,6 @@ void ogm_reader_c::display_progress() {
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
   fflush(stdout);
-}
-
-generic_packetizer_c *ogm_reader_c::set_packetizer(generic_packetizer_c *np) {
-  generic_packetizer_c *old;
-
-  if (sdemuxers == NULL)
-    return NULL;
-
-  old = sdemuxers[0]->packetizer;
-  sdemuxers[0]->packetizer = np;
-
-  return old;
 }
 
 #endif // HAVE_OGGVORBIS

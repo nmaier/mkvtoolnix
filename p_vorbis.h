@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.h,v 1.2 2003/03/03 23:20:44 mosu Exp $
+    \version \$Id: p_vorbis.h,v 1.3 2003/03/04 09:27:05 mosu Exp $
     \brief class definition for the Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,12 +37,11 @@ private:
   u_int64_t       last_bs, samples;
   int             packetno;
   audio_sync_t    async;
-  range_t         range;
   vorbis_info     vi;
   vorbis_comment  vc;
   ogg_packet      headers[3];
 public:
-  vorbis_packetizer_c(audio_sync_t *nasync, range_t *nrange,
+  vorbis_packetizer_c(audio_sync_t *nasync,
                       void *d_header, int l_header, void *d_comments,
                       int l_comments, void *d_codecsetup, int l_codecsetup)
     throw (error_c);

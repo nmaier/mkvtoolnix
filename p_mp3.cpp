@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.4 2003/02/27 09:35:55 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.5 2003/03/04 09:27:05 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,14 +37,13 @@
 mp3_packetizer_c::mp3_packetizer_c(void *pr_data, int pd_size,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nmp3rate,
-                                   audio_sync_t *nasync, range_t *nrange)
+                                   audio_sync_t *nasync)
                                    throw (error_c) : q_c() {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   mp3rate = nmp3rate;
   bytes_output = 0;
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
   packet_buffer = NULL;
   buffer_size = 0;
   packetno = 0;

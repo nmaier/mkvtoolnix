@@ -72,9 +72,8 @@ int vobsub_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;
 }
 
-vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync,
-                                 range_t *nrange, char **ncomments)
-                                 throw (error_c) {
+vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
+  throw (error_c) {
   char *name;
   
   if ((file = fopen(fname, "r")) == NULL)
@@ -104,7 +103,6 @@ vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync,
             "VobSub subtitle output module for subtitles.\n", fname, name);
   free(name);
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
   if (ncomments == NULL)
     comments = ncomments;
   else
@@ -131,7 +129,7 @@ void vobsub_reader_c::add_vobsub_packetizer(int width, int height,
   try {
     vobsub_packetizer = new vobsub_packetizer_c(width, height, palette,
                                                 langidx, id, index,
-                                                &async, &range, comments);
+                                                &async);
   } catch (error_c error) {
     fprintf(stderr, "Error: vobsub_reader: Could not create a new "
             "vobsub_packetizer: %s\n", error.get_error());

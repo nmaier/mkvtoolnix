@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.19 2003/03/03 13:47:50 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.20 2003/03/04 09:27:05 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -156,11 +156,6 @@ static void usage(void) {
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
-//     "  -r, --range <s-e>        Only process from start to end. Both values\n"
-//     "                           take the form 'HH:MM:SS.mmm' or 'SS.mmm',\n"
-//     "                           e.g. '00:01:00.500' or '60.500'. If one of\n"
-//     "                           s or e is omitted then it defaults to 0 or\n"
-//     "                           to end of the file respectively.\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video streams.\n"
     "\n"
@@ -377,23 +372,6 @@ static void parse_sync(char *s, audio_sync_t *async) {
 //   return seconds;
 // }
 
-// static void parse_range(char *s, range_t *range) {
-//   char *end;
-  
-//   end = strchr(s, '-');
-//   if (end != NULL) {
-//     *end = 0;
-//     end++;
-//     range->end = parse_time(end);
-//   } else
-//     range->end = 0;
-//   range->start = parse_time(s);
-//   if ((range->end != 0) && (range->end < range->start)) {
-//     fprintf(stderr, "Error: end time is set before start time.\n");
-//     exit(1);
-//   }
-// }
-
 static void render_head(StdIOCallback *out) {
   EbmlHead head;
 
@@ -414,7 +392,6 @@ static void parse_args(int argc, char **argv) {
   unsigned char   *astreams, *vstreams, *tstreams;
   filelist_t      *file;
   audio_sync_t     async;
-  range_t          range;
   char            *fourcc, *s;
 
   noaudio = 0;
@@ -423,7 +400,6 @@ static void parse_args(int argc, char **argv) {
   astreams = NULL;
   vstreams = NULL;
   tstreams = NULL;
-  memset(&range, 0, sizeof(range_t));
   async.displacement = 0;
   async.linear = 1.0;
   fourcc = NULL;
@@ -538,13 +514,6 @@ static void parse_args(int argc, char **argv) {
       }
       parse_sync(argv[i + 1], &async);
       i++;
-//     } else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--range")) {
-//       if ((i + 1) >= argc) {
-//         fprintf(stderr, "Error: -r lacks the range.\n");
-//         exit(1);
-//       }
-//       parse_range(argv[i + 1], &range);
-//       i++;
     } else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --cluster-length lacks the length.\n");
@@ -622,43 +591,42 @@ static void parse_args(int argc, char **argv) {
 #ifdef HAVE_OGGVORBIS
           case TYPEOGM:
             file->reader = new ogm_reader_c(file->name, astreams, vstreams, 
-                                            tstreams, &async, &range, fourcc);
+                                            tstreams, &async, fourcc);
             break;
 #endif // HAVE_OGGVORBIS
           case TYPEAVI:
             if (tstreams != NULL)
               fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
             file->reader = new avi_reader_c(file->name, astreams, vstreams,
-                                            &async, &range, fourcc);
+                                            &async, fourcc);
             break;
           case TYPEWAV:
             if ((astreams != NULL) || (vstreams != NULL) ||
                 (tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "WAVE files.\n");
-            file->reader = new wav_reader_c(file->name, &async, &range);
+            file->reader = new wav_reader_c(file->name, &async);
             break;
 //           case TYPESRT:
 //             if ((astreams != NULL) || (vstreams != NULL) ||
 //                 (tstreams != NULL))
 //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
 //                       "SRT files.\n");
-//             file->reader = new srt_reader_c(file->name, &async, &range,
-//                                             comments);
+//             file->reader = new srt_reader_c(file->name, &async);
 //             break;
           case TYPEMP3:
             if ((astreams != NULL) || (vstreams != NULL) ||
                 (tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "MP3 files.\n");
-            file->reader = new mp3_reader_c(file->name, &async, &range);
+            file->reader = new mp3_reader_c(file->name, &async);
             break;
           case TYPEAC3:
             if ((astreams != NULL) || (vstreams != NULL) ||
                 (tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "AC3 files.\n");
-            file->reader = new ac3_reader_c(file->name, &async, &range);
+            file->reader = new ac3_reader_c(file->name, &async);
             break;
 //           case TYPECHAPTERS:
 //             if (chapters != NULL) {
@@ -672,16 +640,14 @@ static void parse_args(int argc, char **argv) {
 //                 (tstreams != NULL))
 //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
 //                       "MicroDVD files.\n");
-//             file->reader = new microdvd_reader_c(file->name, &async, &range,
-//                                                  comments);
+//             file->reader = new microdvd_reader_c(file->name, &async);
 //             break;
 //           case TYPEVOBSUB:
 //             if ((astreams != NULL) || (vstreams != NULL) ||
 //                 (tstreams != NULL))
 //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
 //                       "VobSub files.\n");
-//             file->reader = new vobsub_reader_c(file->name, &async, &range,
-//                                                comments);
+//             file->reader = new vobsub_reader_c(file->name, &async);
 //             break;
           default:
             fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
@@ -716,7 +682,6 @@ static void parse_args(int argc, char **argv) {
       }
       async.displacement = 0;
       async.linear = 1.0;
-      memset(&range, 0, sizeof(range_t));
     }
   }
   

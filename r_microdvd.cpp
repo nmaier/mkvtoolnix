@@ -59,13 +59,12 @@ int microdvd_reader_c::probe_file(FILE *file, u_int64_t size) {
 }
 
 microdvd_reader_c::microdvd_reader_c(char *fname, audio_sync_t *nasync,
-                                     range_t *nrange, char **ncomments)
-                                     throw (error_c) {
+                                     char **ncomments) throw (error_c) {
   if ((file = fopen(fname, "r")) == NULL)
     throw error_c("microdvd_reader: Could not open source file.");
   if (!microdvd_reader_c::probe_file(file, 0))
     throw error_c("microdvd_reader: Source is not a valid MicroDVD file.");
-  textsubspacketizer = new textsubs_packetizer_c(nasync, nrange, ncomments);
+  textsubspacketizer = new textsubs_packetizer_c(nasync);
   if (verbose)
     fprintf(stdout, "Using MicroDVD subtitle reader for %s.\n+-> Using " \
             "text subtitle output module for subtitles.\n", fname);

@@ -1,3 +1,4 @@
+
 /*
   ogmmerge -- utility for splicing together ogg bitstreams
       from component media subtypes
@@ -35,12 +36,10 @@ private:
   int                   num_packetizers;
   int                   act_wchar;
   audio_sync_t          async;
-  range_t               range;
   char                **comments;
      
 public:
-  vobsub_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
-                  char **ncomments) throw (error_c);
+  vobsub_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
   virtual ~vobsub_reader_c();
 
   virtual int              read();

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.5 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.6 2003/03/04 09:27:05 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -59,7 +59,7 @@ int ac3_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;    
 }
 
-ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
+ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync)
   throw (error_c) {
   int          pos;
   ac3_header_t ac3header;
@@ -87,7 +87,7 @@ ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
   ac3packetizer = new ac3_packetizer_c(NULL, 0, ac3header.sample_rate,
                                        ac3header.channels,
                                        ac3header.bit_rate / 1000,
-                                       nasync, nrange);
+                                       nasync);
   if (verbose)
     fprintf(stdout, "Using AC3 demultiplexer for %s.\n+-> Using " \
             "AC3 output module for audio stream.\n", fname);

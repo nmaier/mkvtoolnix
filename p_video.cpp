@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.10 2003/03/03 17:08:16 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.11 2003/03/04 09:27:05 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,7 +39,7 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
                                        char *ncodec, double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int nmax_frame_size, audio_sync_t *as,
-                                       range_t *nrange, int navi_compat_mode)
+                                       int navi_compat_mode)
                                        throw (error_c) : q_c() {
   packetno = 0;
   memcpy(codec, ncodec, 4);
@@ -50,11 +50,8 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
   bpp = nbpp;
   max_frame_size = nmax_frame_size;
   tempbuf = (char *)malloc(max_frame_size + 1);
-  memcpy(&range, nrange, sizeof(range_t));
   if (tempbuf == NULL)
     die("malloc");
-  range.start *= fps;
-  range.end *= fps;
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
   avi_compat_mode = 1;
@@ -130,16 +127,14 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
   else
     timecode = old_timecode;
 
-  if ((packetno >= range.start) &&
-      ((range.end == 0) || (packetno < range.end))) {
-    if (key)
-      // Add a key frame and save its ID so that we can reference it later.
-      last_id = add_packet(buf, size, timecode);
-    else
-      // This is a P frame - let's reference the last frame.
-      last_id = add_packet(buf, size, timecode, last_id);
-    frames_output += num_frames;
-  }
+  if (key)
+    // Add a key frame and save its ID so that we can reference it later.
+    last_id = add_packet(buf, size, timecode);
+  else
+    // This is a P frame - let's reference the last frame.
+    last_id = add_packet(buf, size, timecode, last_id);
+  frames_output += num_frames;
+
   packetno++;
     
   return EMOREDATA;

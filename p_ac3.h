@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.4 2003/02/27 09:52:37 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.5 2003/03/04 09:27:05 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,15 +32,13 @@ private:
   int            channels;
   int            bitrate;
   audio_sync_t   async;
-  range_t        range;
   char          *packet_buffer;
   int            buffer_size;
 
 public:
   ac3_packetizer_c(void *nprivate_data, int nprivate_size,
                    unsigned long nsamples_per_sec, int nchannels,
-                   int nbitrate, audio_sync_t *nasync,
-                   range_t *nrange) throw (error_c);
+                   int nbitrate, audio_sync_t *nasync) throw (error_c);
   virtual ~ac3_packetizer_c();
     
   virtual int     process(char *buf, int size, int last_frame);

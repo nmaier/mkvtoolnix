@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.11 2003/02/28 13:01:29 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.12 2003/03/04 09:27:05 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -114,8 +114,7 @@ int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
  */
 avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
                            unsigned char *vstreams, audio_sync_t *nasync,
-                           range_t *nrange, char *nfourcc)
-                           throw (error_c) {
+                           char *nfourcc) throw (error_c) {
   int            fsize, i;
   u_int64_t      size;
   FILE          *f;
@@ -212,7 +211,7 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
-                                         fsize, NULL, nrange, 1);
+                                         fsize, NULL, 1);
     if (verbose)
       fprintf(stdout, "+-> Using video output module for video stream.\n");
   } else
@@ -223,7 +222,6 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
 #endif
   
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
   ademuxers = NULL;
   if (astreams != NULL) { // use only specific audio streams (or none at all)
     for (i = 0; i < strlen((char *)astreams); i++) {
@@ -323,7 +321,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
-                                                 &async, &range);
+                                                 &async);
       break;
     case 0x0055: // MP3
       if (verbose)
@@ -337,7 +335,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
-                                                 &async, &range);
+                                                 &async);
       break;
     case 0x2000: // AC3
       if (verbose)
@@ -351,7 +349,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
-                                                 &async, &range);
+                                                 &async);
       break;
     default:
       fprintf(stderr, "Error: Unknown audio format 0x%04x for audio stream " \

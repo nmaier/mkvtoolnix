@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.5 2003/02/27 09:52:37 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.6 2003/03/04 09:27:05 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -38,8 +38,7 @@ private:
   u_int64_t               size;
      
 public:
-  mp3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
-    throw (error_c);
+  mp3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
   virtual ~mp3_reader_c();
 
   virtual int       read();

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.6 2003/03/03 23:20:44 mosu Exp $
+    \version \$Id: r_ogm.h,v 1.7 2003/03/04 09:27:05 mosu Exp $
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -61,15 +61,14 @@ private:
   int               num_sdemuxers;
   int               nastreams, nvstreams, ntstreams, numstreams;
   audio_sync_t      async;
-  range_t           range;
   char            **comments;
   char             *fourcc;
-  int               o_eos, bos_pages_read;
+  int               bos_pages_read;
      
 public:
   ogm_reader_c(char *fname, unsigned char *astreams,
                unsigned char *vstreams, unsigned char *tstreams,
-               audio_sync_t *nasync, range_t *nrange, char *nfourcc)
+               audio_sync_t *nasync, char *nfourcc)
     throw (error_c);
   virtual ~ogm_reader_c();
 
@@ -78,9 +77,6 @@ public:
 
   virtual int                   display_priority();
   virtual void                  display_progress();
-  
-  virtual void                  overwrite_eos(int no_eos);
-  virtual generic_packetizer_c *set_packetizer(generic_packetizer_c *np);
   
   static int                    probe_file(FILE *file, u_int64_t size);
     

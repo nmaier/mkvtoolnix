@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.3 2003/02/28 13:00:26 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.4 2003/03/04 09:27:05 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@
 pcm_packetizer_c::pcm_packetizer_c(void *nprivate_data, int nprivate_size,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
-                                   audio_sync_t *nasync, range_t *nrange)
+                                   audio_sync_t *nasync)
                                    throw (error_c) : q_c() {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
@@ -49,7 +49,6 @@ pcm_packetizer_c::pcm_packetizer_c(void *nprivate_data, int nprivate_size,
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
   remaining_sync = 0;
   set_private_data(nprivate_data, nprivate_size);
   set_header();

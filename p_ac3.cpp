@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.3 2003/02/27 09:35:55 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.4 2003/03/04 09:27:05 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,12 +39,11 @@
 ac3_packetizer_c::ac3_packetizer_c(void *nprivate_data, int nprivate_size,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nbitrate,
-                                   audio_sync_t *nasync, range_t *nrange)
+                                   audio_sync_t *nasync)
   throw (error_c) : q_c() {
   packetno = 0;
   bytes_output = 0;
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
   packet_buffer = NULL;
   buffer_size = 0;
   set_params(nsamples_per_sec, nchannels, nbitrate);

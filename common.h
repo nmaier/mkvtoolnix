@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.5 2003/03/03 13:47:50 mosu Exp $
+    \version \$Id: common.h,v 1.6 2003/03/04 09:27:05 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -56,11 +56,6 @@ typedef struct {
   int    displacement;
   double linear;
 } audio_sync_t;
-
-typedef struct {
-  double start;
-  double end;
-} range_t;
 
 typedef double stamp_t;
 #define MAX_TIMESTAMP ((double)3.40282347e+38F)

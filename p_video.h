@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.11 2003/03/03 23:21:11 mosu Exp $
+    \version \$Id: p_video.h,v 1.12 2003/03/04 09:27:05 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,14 +32,13 @@ private:
   int               frames_output;
   char             *tempbuf;
   int               avi_compat_mode;
-  range_t           range;
   u_int64_t         last_id;
 
 public:
   video_packetizer_c(void *pr_data, int pd_size, char *ncodec, double nfps,
                      int nwidth, int nheight, int nbpp, int nmax_frame_size,
-                     audio_sync_t *nasync, range_t *nrange,
-                     int navi_compat_mode) throw (error_c);
+                     audio_sync_t *nasync, int navi_compat_mode)
+    throw (error_c);
   virtual ~video_packetizer_c();
     
   virtual int  process(char *buf, int size, int num_frames, int key,

@@ -34,8 +34,7 @@ private:
   int                    act_wchar;
      
 public:
-  microdvd_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
-                    char **ncomments) throw (error_c);
+  microdvd_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
   virtual ~microdvd_reader_c();
   
   virtual int              read();

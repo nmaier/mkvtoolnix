@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.4 2003/02/28 13:01:29 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.5 2003/03/04 09:27:05 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,13 +34,11 @@ private:
   int            bits_per_sample;
   char          *tempbuf;
   audio_sync_t   async;
-  range_t        range;
   
 public:
   pcm_packetizer_c(void *nprivate_data, int nprivate_size,
                    unsigned long nsamples_per_sec, int nchannels,
-                   int nbits_per_sample, audio_sync_t *nasync,
-                   range_t *nrange) throw (error_c);
+                   int nbits_per_sample, audio_sync_t *nasync) throw (error_c);
   virtual ~pcm_packetizer_c();
     
   virtual int  process(char *buf, int size, int last_frame);

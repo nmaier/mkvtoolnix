@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.2 2003/03/03 23:20:44 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.3 2003/03/04 09:27:05 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,7 +43,7 @@
 #include <dmalloc.h>
 #endif
 
-vorbis_packetizer_c::vorbis_packetizer_c(audio_sync_t *nasync, range_t *nrange,
+vorbis_packetizer_c::vorbis_packetizer_c(audio_sync_t *nasync,
                                          void *d_header, int l_header,
                                          void *d_comments, int l_comments,
                                          void *d_codecsetup, int l_codecsetup)
@@ -54,7 +54,6 @@ vorbis_packetizer_c::vorbis_packetizer_c(audio_sync_t *nasync, range_t *nrange,
   last_bs = 0;
   samples = 0;
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));
   memset(headers, 0, 3 * sizeof(ogg_packet));
   headers[0].packet = (unsigned char *)malloc(l_header);
   headers[1].packet = (unsigned char *)malloc(l_comments);
