@@ -1,5 +1,12 @@
 2004-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: new feature: --track-order now controls the track
+	creation order globally, meaning that it isn't used for each file
+	but only once. This allows the tracks to be created in ANY order
+	(before it was first ordered by file, then by track). For mmg this
+	means that the track list contains all available tracks and that
+	there are no 'up' and 'down' buttons in the file list anymore.
+
 	* mmg: new feature: Line wrap the tooltips on Windows.
 
 	* mmg: new feature: Suggest a name for a new job based on the

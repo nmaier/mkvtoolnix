@@ -52,8 +52,6 @@
 #define ID_RB_DISPLAYDIMENSIONS           11023
 #define ID_TC_DISPLAYWIDTH                11024
 #define ID_TC_DISPLAYHEIGHT               11025
-#define ID_B_INPUTUP                      11026
-#define ID_B_INPUTDOWN                    11027
 #define ID_B_TRACKUP                      11028
 #define ID_B_TRACKDOWN                    11029
 #define ID_T_INPUTVALUES                  11030
@@ -64,7 +62,7 @@ class tab_input: public wxPanel {
 protected:
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_browse_tags, *b_browse_timecodes;
-  wxButton *b_file_up, *b_file_down, *b_track_up, *b_track_down;
+  wxButton *b_track_up, *b_track_down;
   wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
   wxCheckBox *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;
@@ -90,8 +88,6 @@ public:
   void on_add_file(wxCommandEvent &evt);
   void add_file(const wxString &file_name);
   void on_remove_file(wxCommandEvent &evt);
-  void on_move_file_up(wxCommandEvent &evt);
-  void on_move_file_down(wxCommandEvent &evt);
   void on_file_selected(wxCommandEvent &evt);
   void on_move_track_up(wxCommandEvent &evt);
   void on_move_track_down(wxCommandEvent &evt);

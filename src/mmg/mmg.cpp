@@ -58,6 +58,7 @@ wxString mkvmerge_path;
 vector<wxString> last_settings;
 vector<wxString> last_chapters;
 vector<mmg_file_t> files;
+vector<mmg_track_t *> tracks;
 map<wxString, wxString, lt_wxString> capabilities;
 vector<job_t> jobs;
 
@@ -527,6 +528,26 @@ format_tooltip(const wxString &s) {
   return break_line(tooltip, 30);
 }
 #endif
+
+wxString
+create_track_order() {
+  int i;
+  wxString s, wformat;
+  string format;
+
+  fix_format("%lld", format);
+  wformat = wxU(format.c_str());
+  for (i = 0; i < tracks.size(); i++) {
+    if (!tracks[i]->enabled)
+      continue;
+    if (s.length() > 0)
+      s += wxT(",");
+    s += wxString::Format(wxT("%d:") + wformat, tracks[i]->source,
+                          tracks[i]->id);
+  }
+
+  return s;
+}
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
                                   wxPoint(0, 0),
@@ -1095,7 +1116,6 @@ mmg_dialog::update_command_line() {
     aids = wxT("");
     sids = wxT("");
     dids = wxT("");
-    track_order = wxT("");
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
       string format;
 
@@ -1106,9 +1126,6 @@ mmg_dialog::update_command_line() {
       tracks_selected_here = true;
       fix_format("%lld", format);
       sid.Printf(wxU(format.c_str()), t->id);
-      if (track_order.Length() > 0)
-        track_order += wxT(",");
-      track_order += sid;
 
       if (t->type == wxT('a')) {
         no_audio = false;
@@ -1235,11 +1252,14 @@ mmg_dialog::update_command_line() {
       if (no_subs)
         clargs.Add(wxT("-S"));
 
-      clargs.Add(wxT("--track-order"));
-      clargs.Add(track_order);
-
       clargs.Add(*f->file_name);
     }
+  }
+
+  track_order = create_track_order();
+  if (track_order.length() > 0) {
+    clargs.Add(wxT("--track-order"));
+    clargs.Add(track_order);
   }
 
   for (fidx = 0; fidx < attachments.size(); fidx++) {

@@ -85,24 +85,16 @@ tab_input::tab_input(wxWindow *parent):
   lb_input_files = new wxListBox(this, ID_LB_INPUTFILES);
   siz_line->Add(lb_input_files, 1, wxGROW, 0);
 
-  siz_fg = new wxFlexGridSizer(2);
+  siz_column = new wxBoxSizer(wxVERTICAL);
   b_add_file = new wxButton(this, ID_B_ADDFILE, wxT("add"), wxDefaultPosition,
                             wxSize(50, -1));
   b_remove_file = new wxButton(this, ID_B_REMOVEFILE, wxT("remove"),
                                wxDefaultPosition, wxSize(50, -1));
   b_remove_file->Enable(false);
-  b_file_up = new wxButton(this, ID_B_INPUTUP, wxT("up"), wxDefaultPosition,
-                           wxSize(50, -1));
-  b_file_up->Enable(false);
-  b_file_down = new wxButton(this, ID_B_INPUTDOWN, wxT("down"),
-                             wxDefaultPosition, wxSize(50, -1));
-  b_file_down->Enable(false);
 
-  siz_fg->Add(b_add_file, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
-  siz_fg->Add(b_file_up, 0, 0, 0);
-  siz_fg->Add(b_remove_file, 0, wxLEFT | wxRIGHT, 10);
-  siz_fg->Add(b_file_down, 0, 0, 0);
-  siz_line->Add(siz_fg, 0, 0, 0);
+  siz_column->Add(b_add_file, 0, wxBOTTOM, 10);
+  siz_column->Add(b_remove_file, 0, 0, 0);
+  siz_line->Add(siz_column, 0, wxLEFT, 10);
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
@@ -860,6 +852,27 @@ tab_input::add_file(const wxString &file_name) {
     mdlg->set_title_maybe(video_track_name);
   mdlg->set_output_maybe(*file.file_name);
   files.push_back(file);
+  for (i = 0; i < file.tracks->size(); i++) {
+    string format;
+    wxString label;
+    mmg_track_t *t;
+
+    t = &(*file.tracks)[i];
+    t->enabled = true;
+    t->source = files.size() - 1;
+    tracks.push_back(t);
+
+    fix_format("%s (ID %lld, type: %s) from %s", format);
+    label.Printf(wxU(format.c_str()), t->ctype->c_str(), t->id,
+                 t->type == 'a' ? wxT("audio") :
+                 t->type == 'v' ? wxT("video") :
+                 t->type == 's' ? wxT("subtitles") : wxT("unknown"),
+                 name.c_str());
+    clb_tracks->Append(label);
+    clb_tracks->Check(i, true);
+  }
+
+  clb_tracks->Enable(true);
 }
 
 void
@@ -867,12 +880,29 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   mmg_file_t *f;
   mmg_track_t *t;
   vector<mmg_file_t>::iterator eit;
+  vector<mmg_track_t *>::iterator tit;
   uint32_t i;
 
   if (selected_file == -1)
     return;
 
   f = &files[selected_file];
+
+  i = 0;
+  tit = tracks.begin();
+  while (i < tracks.size()) {
+    t = tracks[i];
+    if (t->source == selected_file) {
+      clb_tracks->Delete(i);
+      tracks.erase(tit);
+    } else {
+      if (t->source > selected_file)
+        t->source--;
+      i++;
+      tit++;
+    }
+  }
+
   for (i = 0; i < f->tracks->size(); i++) {
     t = &(*f->tracks)[i];
     delete t->ctype;
@@ -903,79 +933,34 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
-  b_file_up->Enable(false);
-  b_file_down->Enable(false);
   b_track_up->Enable(false);
   b_track_down->Enable(false);
-  clb_tracks->Enable(false);
   no_track_mode();
-}
-
-void
-tab_input::on_move_file_up(wxCommandEvent &evt) {
-  wxString s;
-  mmg_file_t f;
-
-  if (selected_file < 1)
-    return;
-
-  f = files[selected_file - 1];
-  files[selected_file - 1] = files[selected_file];
-  files[selected_file] = f;
-  s = lb_input_files->GetString(selected_file - 1);
-  lb_input_files->SetString(selected_file - 1,
-                            lb_input_files->GetString(selected_file));
-  lb_input_files->SetString(selected_file, s);
-  lb_input_files->SetSelection(selected_file - 1);
-  selected_file--;
-  b_file_up->Enable(selected_file > 0);
-  b_file_down->Enable(true);
-}
-
-void
-tab_input::on_move_file_down(wxCommandEvent &evt) {
-  wxString s;
-  mmg_file_t f;
-
-  if ((selected_file < 0) || (selected_file >= (files.size() - 1)))
-    return;
-
-  f = files[selected_file + 1];
-  files[selected_file + 1] = files[selected_file];
-  files[selected_file] = f;
-  s = lb_input_files->GetString(selected_file + 1);
-  lb_input_files->SetString(selected_file + 1,
-                            lb_input_files->GetString(selected_file));
-  lb_input_files->SetString(selected_file, s);
-  lb_input_files->SetSelection(selected_file + 1);
-  selected_file++;
-  b_file_up->Enable(true);
-  b_file_down->Enable(selected_file < (files.size() - 1));
+  if (tracks.size() == 0) {
+    clb_tracks->Enable(false);
+    selected_track = -1;
+  }
 }
 
 void
 tab_input::on_move_track_up(wxCommandEvent &evt) {
   wxString s;
-  mmg_track_t t;
-  mmg_file_t *f;
+  mmg_track_t *t;
 
-  if (selected_file < 0)
-    return;
-  f = &files[selected_file];
   if (selected_track < 1)
     return;
 
-  t = (*f->tracks)[selected_track - 1];
-  (*f->tracks)[selected_track - 1] = (*f->tracks)[selected_track];
-  (*f->tracks)[selected_track] = t;
+  t = tracks[selected_track - 1];
+  tracks[selected_track - 1] = tracks[selected_track];
+  tracks[selected_track] = t;
   s = clb_tracks->GetString(selected_track - 1);
   clb_tracks->SetString(selected_track - 1,
                         clb_tracks->GetString(selected_track));
   clb_tracks->SetString(selected_track, s);
   clb_tracks->SetSelection(selected_track - 1);
   clb_tracks->Check(selected_track - 1,
-                    (*f->tracks)[selected_track - 1].enabled);
-  clb_tracks->Check(selected_track, (*f->tracks)[selected_track].enabled);
+                    tracks[selected_track - 1]->enabled);
+  clb_tracks->Check(selected_track, tracks[selected_track]->enabled);
   selected_track--;
   b_track_up->Enable(selected_track > 0);
   b_track_down->Enable(true);
@@ -984,44 +969,38 @@ tab_input::on_move_track_up(wxCommandEvent &evt) {
 void
 tab_input::on_move_track_down(wxCommandEvent &evt) {
   wxString s;
-  mmg_track_t t;
-  mmg_file_t *f;
+  mmg_track_t *t;
 
-  if (selected_file < 0)
-    return;
-  f = &files[selected_file];
-  if ((selected_track < 0) || (selected_track >= (f->tracks->size() - 1)))
+  if ((selected_track < 0) || (selected_track >= tracks.size() - 1))
     return;
 
-  t = (*f->tracks)[selected_track + 1];
-  (*f->tracks)[selected_track + 1] = (*f->tracks)[selected_track];
-  (*f->tracks)[selected_track] = t;
+  t = tracks[selected_track + 1];
+  tracks[selected_track + 1] = tracks[selected_track];
+  tracks[selected_track] = t;
   s = clb_tracks->GetString(selected_track + 1);
   clb_tracks->SetString(selected_track + 1,
                         clb_tracks->GetString(selected_track));
   clb_tracks->SetString(selected_track, s);
   clb_tracks->SetSelection(selected_track + 1);
   clb_tracks->Check(selected_track + 1,
-                    (*f->tracks)[selected_track + 1].enabled);
-  clb_tracks->Check(selected_track, (*f->tracks)[selected_track].enabled);
+                    tracks[selected_track + 1]->enabled);
+  clb_tracks->Check(selected_track, tracks[selected_track]->enabled);
   selected_track++;
   b_track_up->Enable(true);
-  b_track_down->Enable(selected_track < (f->tracks->size() - 1));
+  b_track_down->Enable(selected_track < (tracks.size() - 1));
 }
 
 void
 tab_input::on_file_selected(wxCommandEvent &evt) {
-  uint32_t i;
-  int new_sel;
+  int new_sel, old_track;
   mmg_file_t *f;
-  mmg_track_t *t;
   wxString label;
 
   b_remove_file->Enable(true);
   selected_file = -1;
+  old_track = selected_track;
+  selected_track = -1;
   new_sel = lb_input_files->GetSelection();
-  b_file_up->Enable(new_sel > 0);
-  b_file_down->Enable(new_sel < (files.size() - 1));
   f = &files[new_sel];
   if (f->container == TYPEMATROSKA) {
     st_file_options->Enable(true);
@@ -1040,26 +1019,8 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
     cb_no_attachments->SetValue(false);
     cb_no_tags->SetValue(false);
   }
-
-  clb_tracks->Clear();
-  for (i = 0; i < f->tracks->size(); i++) {
-    string format;
-
-    t = &(*f->tracks)[i];
-    fix_format("%s (ID %lld, type: %s)", format);
-    label.Printf(wxU(format.c_str()), t->ctype->c_str(), t->id,
-                 t->type == 'a' ? wxT("audio") :
-                 t->type == 'v' ? wxT("video") :
-                 t->type == 's' ? wxT("subtitles") : wxT("unknown"));
-    clb_tracks->Append(label);
-    clb_tracks->Check(i, t->enabled);
-  }
-
-  clb_tracks->Enable(true);
-  selected_track = -1;
   selected_file = new_sel;
-  clb_tracks->SetSelection(0);
-  on_track_selected(evt);
+  selected_track = old_track;
 }
 
 void
@@ -1088,13 +1049,10 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   uint32_t i;
   wxString lang;
 
-  if (selected_file == -1)
-    return;
-
   selected_track = -1;
   new_sel = clb_tracks->GetSelection();
-  f = &files[selected_file];
-  t = &(*f->tracks)[new_sel];
+  t = tracks[new_sel];
+  f = &files[t->source];
 
   b_track_up->Enable(new_sel > 0);
   b_track_down->Enable(new_sel < (f->tracks->size() - 1));
@@ -1135,14 +1093,9 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
 void
 tab_input::on_track_enabled(wxCommandEvent &evt) {
   uint32_t i;
-  mmg_file_t *f;
 
-  if (selected_file == -1)
-    return;
-
-  f = &files[selected_file];
-  for (i = 0; i < f->tracks->size(); i++)
-    (*f->tracks)[i].enabled = clb_tracks->IsChecked(i);
+  for (i = 0; i < tracks.size(); i++)
+    tracks[i]->enabled = clb_tracks->IsChecked(i);
 }
 
 void
@@ -1150,10 +1103,10 @@ tab_input::on_default_track_clicked(wxCommandEvent &evt) {
   uint32_t i, k;
   mmg_track_t *t;
 
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  t = &(*files[selected_file].tracks)[selected_track];
+  t = tracks[selected_track];
   t->default_track = cb_default->GetValue();
   if (cb_default->GetValue())
     for (i = 0; i < files.size(); i++) {
@@ -1167,43 +1120,39 @@ tab_input::on_default_track_clicked(wxCommandEvent &evt) {
 
 void
 tab_input::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  (*files[selected_file].tracks)[selected_track].aac_is_sbr =
-    cb_aac_is_sbr->GetValue();
+  tracks[selected_track]->aac_is_sbr = cb_aac_is_sbr->GetValue();
 }
 
 void
 tab_input::on_language_selected(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].language =
-    cob_language->GetStringSelection();
+  *tracks[selected_track]->language = cob_language->GetStringSelection();
 }
 
 void
 tab_input::on_cues_selected(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].cues =
-    cob_cues->GetStringSelection();
+  *tracks[selected_track]->cues = cob_cues->GetStringSelection();
 }
 
 void
 tab_input::on_subcharset_selected(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].sub_charset =
-    cob_sub_charset->GetStringSelection();
+  *tracks[selected_track]->sub_charset = cob_sub_charset->GetStringSelection();
 }
 
 void
 tab_input::on_browse_tags(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
   wxFileDialog dlg(NULL, wxT("Choose a tag file"), last_open_dir, wxT(""),
@@ -1211,123 +1160,115 @@ tab_input::on_browse_tags(wxCommandEvent &evt) {
                    wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    *(*files[selected_file].tracks)[selected_track].tags = dlg.GetPath();
+    *tracks[selected_track]->tags = dlg.GetPath();
     tc_tags->SetValue(dlg.GetPath());
   }
 }
 
 void
 tab_input::on_browse_timecodes_clicked(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
   wxFileDialog dlg(NULL, wxT("Choose a timecodes file"), last_open_dir,
                    wxT(""), wxT("Tag files (*.txt)|*.txt|" ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    *(*files[selected_file].tracks)[selected_track].timecodes = dlg.GetPath();
+    *tracks[selected_track]->timecodes = dlg.GetPath();
     tc_timecodes->SetValue(dlg.GetPath());
   }
 }
 
 void
 tab_input::on_tags_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].tags =
-    tc_tags->GetValue();
+  *tracks[selected_track]->tags = tc_tags->GetValue();
 }
 
 void
 tab_input::on_timecodes_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].timecodes =
-    tc_timecodes->GetValue();
+  *tracks[selected_track]->timecodes = tc_timecodes->GetValue();
 }
 
 void
 tab_input::on_delay_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].delay =
-    tc_delay->GetValue();
+  *tracks[selected_track]->delay = tc_delay->GetValue();
 }
 
 void
 tab_input::on_stretch_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].stretch =
-    tc_stretch->GetValue();
+  *tracks[selected_track]->stretch = tc_stretch->GetValue();
 }
 
 void
 tab_input::on_track_name_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].track_name =
-    tc_track_name->GetValue();
+  *tracks[selected_track]->track_name = tc_track_name->GetValue();
 }
 
 void
 tab_input::on_aspect_ratio_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].aspect_ratio =
+  *tracks[selected_track]->aspect_ratio =
     cob_aspect_ratio->GetStringSelection();
 }
 
 void
 tab_input::on_fourcc_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].fourcc =
-    cob_fourcc->GetStringSelection();
+  *tracks[selected_track]->fourcc = cob_fourcc->GetStringSelection();
 }
 
 void
 tab_input::on_compression_selected(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].compression =
+  *tracks[selected_track]->compression =
     cob_compression->GetStringSelection();
 }
 
 void
 tab_input::on_display_width_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].dwidth =
-    tc_display_width->GetValue();
+  *tracks[selected_track]->dwidth = tc_display_width->GetValue();
 }
 
 void
 tab_input::on_display_height_changed(wxCommandEvent &evt) {
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  *(*files[selected_file].tracks)[selected_track].dheight =
-    tc_display_height->GetValue();
+  *tracks[selected_track]->dheight = tc_display_height->GetValue();
 }
 
 void
 tab_input::on_aspect_ratio_selected(wxCommandEvent &evt) {
   mmg_track_t *track;
 
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  track = &(*files[selected_file].tracks)[selected_track];
+  track = tracks[selected_track];
   track->display_dimensions_selected = false;
   enable_ar_controls(track);
 }
@@ -1336,10 +1277,10 @@ void
 tab_input::on_display_dimensions_selected(wxCommandEvent &evt) {
   mmg_track_t *track;
 
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  track = &(*files[selected_file].tracks)[selected_track];
+  track = tracks[selected_track];
   track->display_dimensions_selected = true;
   enable_ar_controls(track);
 }
@@ -1348,10 +1289,10 @@ void
 tab_input::on_value_copy_timer(wxTimerEvent &evt) {
   mmg_track_t *t;
 
-  if ((selected_file == -1) || (selected_track == -1))
+  if (selected_track == -1)
     return;
 
-  t = &(*files[selected_file].tracks)[selected_track];
+  t = tracks[selected_track];
   *t->aspect_ratio = cob_aspect_ratio->GetValue();
   *t->fourcc = cob_fourcc->GetValue();
 }
@@ -1413,14 +1354,17 @@ tab_input::save(wxConfigBase *cfg) {
 
     cfg->SetPath(wxT(".."));
   }
+  cfg->Write(wxT("track_order"), create_track_order());
 }
 
 void
 tab_input::load(wxConfigBase *cfg) {
-  uint32_t fidx, tidx;
+  long fidx, tidx, i;
   mmg_file_t *f, fi;
   mmg_track_t *t, tr;
-  wxString s, c, id;
+  wxString s, c, id, track_order;
+  string format;
+  vector<wxString> pair, entries;
   int num_files, num_tracks;
   bool b;
 
@@ -1457,13 +1401,15 @@ tab_input::load(wxConfigBase *cfg) {
     delete f->tracks;
   }
   files.clear();
+  tracks.clear();
 
   cfg->SetPath(wxT("/input"));
   if (!cfg->Read(wxT("number_of_files"), &num_files) || (num_files < 0))
     return;
 
-  for (fidx = 0; fidx < (uint32_t)num_files; fidx++) {
-    s.Printf(wxT("file %u"), fidx);
+  fix_format("%u:%lld", format);
+  for (fidx = 0; fidx < num_files; fidx++) {
+    s.Printf(wxT("file %ld"), fidx);
     cfg->SetPath(s);
     if (!cfg->Read(wxT("number_of_tracks"), &num_tracks) || (num_tracks < 0)) {
       cfg->SetPath(wxT(".."));
@@ -1486,7 +1432,7 @@ tab_input::load(wxConfigBase *cfg) {
     fi.tracks = new vector<mmg_track_t>;
 
     for (tidx = 0; tidx < (uint32_t)num_tracks; tidx++) {
-      s.Printf(wxT("track %u"), tidx);
+      s.Printf(wxT("track %ld"), tidx);
       cfg->SetPath(s);
       if (!cfg->Read(wxT("type"), &c) || (c.Length() != 1) ||
           !cfg->Read(wxT("id"), &id)) {
@@ -1537,6 +1483,10 @@ tab_input::load(wxConfigBase *cfg) {
       if (!cfg->Read(wxT("track_name_was_present"), &b))
         b = false;
       tr.track_name_was_present = b;
+      tr.source = files.size();
+      if (track_order.length() > 0)
+        track_order += wxT(",");
+      track_order += wxString::Format(format.c_str(), files.size(), tr.id);
 
       fi.tracks->push_back(tr);
       cfg->SetPath(wxT(".."));
@@ -1554,6 +1504,39 @@ tab_input::load(wxConfigBase *cfg) {
 
     cfg->SetPath(wxT(".."));
   }
+  s = wxT("");
+  if (!cfg->Read(wxT("track_order"), &s) || (s.length() == 0))
+    s = track_order;
+  strip(s);
+  if (s.length() > 0) {
+    entries = split(s, (wxString)wxT(","));
+    for (i = 0; i < entries.size(); i++) {
+      wxString label, name;
+      mmg_track_t *t;
+
+      pair = split(entries[i], (wxString)wxT(":"));
+      if (pair.size() != 2)
+        die("No, this should not have happened.");
+      if (!pair[0].ToLong(&fidx) || !pair[1].ToLong(&tidx) ||
+          (fidx >= files.size()) || (tidx >= files[fidx].tracks->size()))
+        die("No, this should not have happened #2.");
+      t = &(*files[fidx].tracks)[tidx];
+      t->enabled = true;
+      tracks.push_back(t);
+
+      fix_format("%s (ID %lld, type: %s) from %s", format);
+      name = fi.file_name->AfterLast(wxT(PSEP));
+      name += wxT(" (") + fi.file_name->BeforeLast(wxT(PSEP)) + wxT(")");
+      label.Printf(wxU(format.c_str()), t->ctype->c_str(), t->id,
+                   t->type == 'a' ? wxT("audio") :
+                   t->type == 'v' ? wxT("video") :
+                   t->type == 's' ? wxT("subtitles") : wxT("unknown"),
+                   name.c_str());
+      clb_tracks->Append(label);
+      clb_tracks->Check(i, true);
+    }
+  }
+  clb_tracks->Enable(tracks.size() > 0);
 }
 
 bool
@@ -1681,8 +1664,6 @@ IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)
   EVT_BUTTON(ID_B_REMOVEFILE, tab_input::on_remove_file) 
-  EVT_BUTTON(ID_B_INPUTUP, tab_input::on_move_file_up)
-  EVT_BUTTON(ID_B_INPUTDOWN, tab_input::on_move_file_down)
   EVT_BUTTON(ID_B_TRACKUP, tab_input::on_move_track_up)
   EVT_BUTTON(ID_B_TRACKDOWN, tab_input::on_move_track_down)
   EVT_BUTTON(ID_B_BROWSETAGS, tab_input::on_browse_tags)

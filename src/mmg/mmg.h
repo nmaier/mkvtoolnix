@@ -52,6 +52,7 @@ using namespace libebml;
 typedef struct {
   char type;
   int64_t id;
+  int source;
   wxString *ctype;
   bool enabled, display_dimensions_selected;
 
@@ -85,6 +86,7 @@ extern wxString mkvmerge_path;
 extern vector<wxString> last_settings;
 extern vector<wxString> last_chapters;
 extern vector<mmg_file_t> files;
+extern vector<mmg_track_t *> tracks;
 extern vector<mmg_attachment_t> attachments;
 extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
@@ -108,6 +110,7 @@ wxString format_date_time(time_t date_time);
 
 void set_on_top(bool on_top);
 void restore_on_top();
+wxString create_track_order();
 
 #if defined(SYS_WINDOWS)
 #define TIP(s) format_tooltip(wxT(s))
