@@ -81,57 +81,57 @@
 
 2003-10-18  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo: new feature: Dump unknown elements recursively.
+	* mkvinfo: new feature: Dump unknown elements recursively.
 
 2003-10-15  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: bug fix: Made the SRT reader more tolerant regarding
+	* mkvmerge: bug fix: Made the SRT reader more tolerant regarding
 	empty lines.
 
 2003-10-14  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.7.2.
+	* Released v0.7.2.
 
-        * mkvmerge: bug fix: If 'no linking' and splitting was active
+	* mkvmerge: bug fix: If 'no linking' and splitting was active
 	mkvmerge would abort on the start of the second output file due to
 	timecodes that were calculated incorrectly.
 
-        * mkvmerge: Implemented some speedups for a couple of container
+	* mkvmerge: Implemented some speedups for a couple of container
 	formats and track types (mainly AVI reader, MP3/AC3/AAC
 	packetizers). Especially noticeable when splitting is active as
 	well.
 
 2003-10-12  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvextract: bug fix: Support for extracting SBR AAC (previous
+	* mkvextract: bug fix: Support for extracting SBR AAC (previous
 	'fix' did not actually fix this).
 
-        * mkvextract: bug fix: All extracted subtitles where written to
+	* mkvextract: bug fix: All extracted subtitles where written to
 	the first output file given, not to the one they were supposed to
 	be written to.
 
 2003-10-11  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mmg: bug fix: The 'abort' button was doing nothing under
+	* mmg: bug fix: The 'abort' button was doing nothing under
 	Windows.
 
 2003-10-06  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mmg: bug fix: Audio, video and subtitle track selection was
+	* mmg: bug fix: Audio, video and subtitle track selection was
 	translated into the wrong command line options.
 
-        * mkvmerge: Replaced the avilib based AVI reading functions with
+	* mkvmerge: Replaced the avilib based AVI reading functions with
 	AVI classes from Cyrius.
 
 2003-10-03  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.7.1.
+	* Released v0.7.1.
 
-        * Added a guide for mmg including some pictures.
+	* Added a guide for mmg including some pictures.
 
 2003-10-01  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Changed the lacing strategy again. New defaults are
+	* mkvmerge: Changed the lacing strategy again. New defaults are
 	NOT to write duration elements for all blocks, NOT to use time
 	slices and to USE lacing for most audio tracks. This will save
 	some space. The downside is that the laced frames 'lose' their
@@ -144,647 +144,647 @@
 
 2003-09-29  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: new feature: Attachments are kept when reading
+	* mkvmerge: new feature: Attachments are kept when reading
 	Matroska files.
 
 2003-09-28  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mmg: new feature: Added a (nearly) full-featured chapter editor.
+	* mmg: new feature: Added a (nearly) full-featured chapter editor.
 
 2003-09-26  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: bug fix: XML chapters were not parsed correctly.
+	* mkvmerge: bug fix: XML chapters were not parsed correctly.
 
 2003-09-24  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: bug fix/new feature: Rewrote the complete MP3
+	* mkvmerge: bug fix/new feature: Rewrote the complete MP3
 	handling. Now files with ID3 tags (both v1 and v2) are handled
 	correctly. All MPEG-1 audio files (all layers) should be handled
 	correctly now.
 
 2003-09-23  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvextract: new feature: Support for extract HE-AAC tracks to
+	* mkvextract: new feature: Support for extract HE-AAC tracks to
 	.aac files. Bug fix: Missing elements (default values) are handled
 	correctly for audio tracks.
 
 2003-09-19  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: bugfix: If attachments were given with path components
+	* mkvmerge: bugfix: If attachments were given with path components
 	then the path component wasn't discarded for the attachment's
 	description on Windows (normally only the file name should be used
 	as the attachment's name).
 
-        * mmg: Fixed wrong order of the options --chapters,
+	* mmg: Fixed wrong order of the options --chapters,
 	--chapter-language and --chapter-charset.
 
 2003-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mmg: Added a lot of checks on the data given by the user so that
+	* mmg: Added a lot of checks on the data given by the user so that
 	invalid data is reported by mmg and not by mkvmerge.
 
-        * mmg: Made the app a GUI app which gets rid of the "DOS box" on
+	* mmg: Made the app a GUI app which gets rid of the "DOS box" on
 	Windows.
 
 2003-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mmg: bugfix: Moved the aspect ratio and FourCC input fields from
+	* mmg: bugfix: Moved the aspect ratio and FourCC input fields from
 	the global tab to the input tab where they belong to.
 
-        * mkvmerge: new feature: RealAudio can be read from Matroska
+	* mkvmerge: new feature: RealAudio can be read from Matroska
 	files.
 
-        * mkvmerge: bugfix: RealVideo was not read correctly from Matroska
+	* mkvmerge: bugfix: RealVideo was not read correctly from Matroska
 	files.
 
-        * mkvmerge: bugfix: The SRT reader would abort if there was more
+	* mkvmerge: bugfix: The SRT reader would abort if there was more
 	than one empty line between subtitle entries line.
 
-        * mkvextract: bugfix: Proper BOMs are written according to the
+	* mkvextract: bugfix: Proper BOMs are written according to the
 	desired charset when extracting text subtitles.
 
-        * Released v0.7.0.
+	* Released v0.7.0.
 
-        * mkvextract: Add an UTF-8 BOM to extracted SSA/ASS and SRT
+	* mkvextract: Add an UTF-8 BOM to extracted SSA/ASS and SRT
 	subtitle files. Print warnings for missing durations for text
 	subtitle tracks.
 
 2003-09-14  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added a complete GUI for mkvmerge, mkvmergeGUI (mmg) based on
+	* Added a complete GUI for mkvmerge, mkvmergeGUI (mmg) based on
 	the work of Florian Wagner.
 
 2003-09-12  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Support for setting the track names.
+	* mkvmerge: Support for setting the track names.
 
-        * mkvmerge: For Matroska source files: If the source contains
+	* mkvmerge: For Matroska source files: If the source contains
 	chapters then these are kept unless the user specified chapters
 	with --chapters.
 
 2003-09-11  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Implemented an experimental VobSub reader and
+	* mkvmerge: Implemented an experimental VobSub reader and
 	packetizer. No specs exist for these yet, though.
 
-        * mkvmerge: Improved the support for Matroska files with tracks
+	* mkvmerge: Improved the support for Matroska files with tracks
 	with big gaps between entries, e.g. subtitle tracks whose entries
 	are a minute or more apart.
 
-        * mkvmerge: When splitting is active and the source is a Matroska
+	* mkvmerge: When splitting is active and the source is a Matroska
 	file then splitpoints were borked, and the first pass was slow as
 	your average mole.
 
-        * mkvmerge: The track UIDs are kept when reading Matroska files
+	* mkvmerge: The track UIDs are kept when reading Matroska files
 	even when splitting is active.
 
 2003-09-09  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Added a QuickTime/MP4 reader. Can handle several
+	* mkvmerge: Added a QuickTime/MP4 reader. Can handle several
 	QuickTime video and QuickTime audio formats as well as AAC (both
 	'normal' AAC and SBR AAC).
 
 2003-09-08  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: DisplayWidth and DisplayHeight are kept intact when
-        reading from a Matroska file but can be overridden with
-        --aspect-ratio.
+	* mkvmerge: DisplayWidth and DisplayHeight are kept intact when
+	reading from a Matroska file but can be overridden with
+	--aspect-ratio.
 
 2003-08-30  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Wrote documentation, XML examples and the DTD for the XML
-        chapter files.
+	* Wrote documentation, XML examples and the DTD for the XML
+	chapter files.
 
-        * mkvinfo: Rewrote mkvinfo to use libebml's Read() function
-        instead of manually reading each and every element.
+	* mkvinfo: Rewrote mkvinfo to use libebml's Read() function
+	instead of manually reading each and every element.
 
-        * mkvmerge: Added support for XML based chapter files.
+	* mkvmerge: Added support for XML based chapter files.
 
 2003-08-29  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.6.5.
+	* Released v0.6.5.
 
 2003-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: On Windows the 'isspace()' function used to trim
-        leading and trailing white spaces from tags considered some parts
-        of valid UTF-8 character sequences to be white spaces as
-        well. Fixed by replacing 'isspace()' with 'isblank()'. Reported
-        by Liisachan.
+	* mkvmerge: On Windows the 'isspace()' function used to trim
+	leading and trailing white spaces from tags considered some parts
+	of valid UTF-8 character sequences to be white spaces as
+	well. Fixed by replacing 'isspace()' with 'isblank()'. Reported
+	by Liisachan.
 
-        * mkvmerge: Support for chosing the charset and language used in
-        simple chapter files. Suggestion by Liisachan.
+	* mkvmerge: Support for chosing the charset and language used in
+	simple chapter files. Suggestion by Liisachan.
 
-        * Rewrote the UTF-8 conversion routines. They should now handle
-        U+8000 characters correctly. Reported by Liisachan.
+	* Rewrote the UTF-8 conversion routines. They should now handle
+	U+8000 characters correctly. Reported by Liisachan.
 
-        * mkvmerge: Real reader: For RV40 the actual dimensions were also
-        used for the aspect ratio/display dimensions. This has been fixed:
-        the actual dimensions are used for PixelWidth/PixelHeight, the
-        dimensions stored in the RM container are used for the aspect
-        ratio/DisplayWidth & DisplayHeight. Reported by Karl Lillevold.
+	* mkvmerge: Real reader: For RV40 the actual dimensions were also
+	used for the aspect ratio/display dimensions. This has been fixed:
+	the actual dimensions are used for PixelWidth/PixelHeight, the
+	dimensions stored in the RM container are used for the aspect
+	ratio/DisplayWidth & DisplayHeight. Reported by Karl Lillevold.
 
 2003-08-27  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.6.4.
+	* Released v0.6.4.
 
-        * mkvextract: Support for re-creating dropped frames when
-        extracting video to an AVI. Works only well if the frame durations
-        in the source file are multiples of the frame rate, of course.
+	* mkvextract: Support for re-creating dropped frames when
+	extracting video to an AVI. Works only well if the frame durations
+	in the source file are multiples of the frame rate, of course.
 
-        * mkvmerge: The MP3 packetizer did not start at 0 with its
-        timecodes. It does now. Reported by alexnoe.
+	* mkvmerge: The MP3 packetizer did not start at 0 with its
+	timecodes. It does now. Reported by alexnoe.
 
-        * mkvmerge: Proper support for dropped frames when reading AVI
-        files. Reported by alley_cat, Horváth István.
+	* mkvmerge: Proper support for dropped frames when reading AVI
+	files. Reported by alley_cat, Horváth István.
 
-        * mkvmerge: Fixed some missing default values in the Matroska
-        reader (e.g. mono audio files). Reported by Liisachan.
+	* mkvmerge: Fixed some missing default values in the Matroska
+	reader (e.g. mono audio files). Reported by Liisachan.
 
 2003-08-25  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Improved all command line parsing error messages.
+	* mkvmerge: Improved all command line parsing error messages.
 
-        * mkvmerge: Improved the error message for the XML tag file parser
-        if an invalid &-sequence is found.
+	* mkvmerge: Improved the error message for the XML tag file parser
+	if an invalid &-sequence is found.
 
-        * mkvextract: Strings are postprocessed so that the special
-        characters &, <, >, " are replaced by their HTML equivalents
-        &amp;, &lt, &gt; and &quot;.
+	* mkvextract: Strings are postprocessed so that the special
+	characters &, <, >, " are replaced by their HTML equivalents
+	&amp;, &lt, &gt; and &quot;.
 
 2003-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Disabled lacing by default and renamed --no-lacing to
-        --enable-lacing. With all the proper info about the laced frames
-        lacing is actually producing larger files than without lacing.
+	* mkvmerge: Disabled lacing by default and renamed --no-lacing to
+	--enable-lacing. With all the proper info about the laced frames
+	lacing is actually producing larger files than without lacing.
 
-        * mkvmerge: Meta seek element is split into two elements. The
-        first's located at the start of the file containing only a small
-        number of level 1 elements. The clusters are referenced in a
-        second meta seek element located at the end of the file. Removed
-        the options "--meta-seek-size" and "--no-meta-seek". Added the
-        option to disable that second meta seek entry,
-        "--no-clusters-in-meta-seek".
+	* mkvmerge: Meta seek element is split into two elements. The
+	first's located at the start of the file containing only a small
+	number of level 1 elements. The clusters are referenced in a
+	second meta seek element located at the end of the file. Removed
+	the options "--meta-seek-size" and "--no-meta-seek". Added the
+	option to disable that second meta seek entry,
+	"--no-clusters-in-meta-seek".
 
 2003-08-22  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvextract: Backwards compatibility: Accepts S_SSA and S_ASS as
-        valid CodecIDs (new CodecIDs are S_TEXT/SSA and S_TEXT/ASS).
+	* mkvextract: Backwards compatibility: Accepts S_SSA and S_ASS as
+	valid CodecIDs (new CodecIDs are S_TEXT/SSA and S_TEXT/ASS).
 
-        * mkvmerge: Bugfix: If a subtitle packet was the last packet in a
-        cluster then its duration was not written resulting in a broken file.
+	* mkvmerge: Bugfix: If a subtitle packet was the last packet in a
+	cluster then its duration was not written resulting in a broken file.
 
 2003-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo: Added support for the following elements:
-        KaxPrevFilename, KaxNextFilename, KaxTrackFlagEnabled,
-        KaxTrackName, KaxCodecName, KaxCodecSettings, KaxCodecInfoURL,
-        KaxCodecDownloadURL, KaxCodecDecodeAll, KaxTrackOverlay,
-        KaxAudioPosition, KaxAudioOutputSamplingFreq, KaxVideoDisplayUnit,
-        KaxVideoColourSpace, KaxVideoGamma, KaxVideoFlagInterlaced,
-        KaxVideoStereoMode, KaxVideoAspectRatio, KaxClusterPosition,
-        KaxClusterPrevSize, KaxBlockVirtual, KaxBlockAdditions,
-        KaxBlockMore, KaxBlockAddID, KaxBlockAdditional,
-        KaxReferenceVirtual, KaxSliceBlockAddID, KaxChapters,
-        KaxEditionEntry, KaxChapterAtom, KaxChapterUID,
-        KaxChapterTimeStart, KaxChapterTimeEnd, KaxChapterTrack,
-        KaxChapterTrackNumber, KaxChapterDisplay, KaxChapterString,
-        KaxChapterLanguage, KaxChapterCountry
+	* mkvinfo: Added support for the following elements:
+	KaxPrevFilename, KaxNextFilename, KaxTrackFlagEnabled,
+	KaxTrackName, KaxCodecName, KaxCodecSettings, KaxCodecInfoURL,
+	KaxCodecDownloadURL, KaxCodecDecodeAll, KaxTrackOverlay,
+	KaxAudioPosition, KaxAudioOutputSamplingFreq, KaxVideoDisplayUnit,
+	KaxVideoColourSpace, KaxVideoGamma, KaxVideoFlagInterlaced,
+	KaxVideoStereoMode, KaxVideoAspectRatio, KaxClusterPosition,
+	KaxClusterPrevSize, KaxBlockVirtual, KaxBlockAdditions,
+	KaxBlockMore, KaxBlockAddID, KaxBlockAdditional,
+	KaxReferenceVirtual, KaxSliceBlockAddID, KaxChapters,
+	KaxEditionEntry, KaxChapterAtom, KaxChapterUID,
+	KaxChapterTimeStart, KaxChapterTimeEnd, KaxChapterTrack,
+	KaxChapterTrackNumber, KaxChapterDisplay, KaxChapterString,
+	KaxChapterLanguage, KaxChapterCountry
 
 2003-08-20  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.6.3.
+	* Released v0.6.3.
 
-        * mkvmerge: The Real reader accepts incomplete video packets and
-        tries to re-assemble them instead of aborting with 'die: len !=
-        total'.
+	* mkvmerge: The Real reader accepts incomplete video packets and
+	tries to re-assemble them instead of aborting with 'die: len !=
+	total'.
 
 2003-08-18  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Implemented a switch that has to be used for SBR AAC /
-        AAC+ / HE-AAC if the source file is an AAC file and the AAC file
-        contains SBR AAC data (no automatic detection possible in this case!).
+	* mkvmerge: Implemented a switch that has to be used for SBR AAC /
+	AAC+ / HE-AAC if the source file is an AAC file and the AAC file
+	contains SBR AAC data (no automatic detection possible in this case!).
 
 2003-08-14  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Low bitrate AC3 tracks from Real's DNET are identified
-        as A_AC3/BSID9 or A_AC3/BSID10.
+	* mkvmerge: Low bitrate AC3 tracks from Real's DNET are identified
+	as A_AC3/BSID9 or A_AC3/BSID10.
 
-        * mkvmerge: The RealMedia reader takes the number of packets into
-        account when reading which results in better end-of-file detection.
+	* mkvmerge: The RealMedia reader takes the number of packets into
+	account when reading which results in better end-of-file detection.
 
 2003-08-12  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Windows versions: Fixed a bug with files bigger than 2GB not
-        being recognized. The accompanying error message was "File NAME
-        has unknown type. Please have a look at the supported file
-        types..."
+	* Windows versions: Fixed a bug with files bigger than 2GB not
+	being recognized. The accompanying error message was "File NAME
+	has unknown type. Please have a look at the supported file
+	types..."
 
-        * all tools: Fixed a bug which would only allow Matroska files up
-        to 4GB to be read. The accompanying error message was "No segment
-        found" or something similar.
+	* all tools: Fixed a bug which would only allow Matroska files up
+	to 4GB to be read. The accompanying error message was "No segment
+	found" or something similar.
 
-        * mkvinfo: Unknown elements are properly skipped now.
+	* mkvinfo: Unknown elements are properly skipped now.
 
 2003-08-11  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: For RV40 (RealVideo 9) the actual video dimensions are
-        decoded from the first video frame.
+	* mkvmerge: For RV40 (RealVideo 9) the actual video dimensions are
+	decoded from the first video frame.
 
-        * Released v0.6.2.
+	* Released v0.6.2.
 
-        * mkvmerge: Video aspect ratio was set wrong if the user did not
-        specify any.
+	* mkvmerge: Video aspect ratio was set wrong if the user did not
+	specify any.
 
-        * Released v0.6.1.
+	* Released v0.6.1.
 
-        * mkvmerge: RealVideo: Support for all kinds of frames including
-        "short" and "merged" frames (results are identical to Gabest's
-        output).
+	* mkvmerge: RealVideo: Support for all kinds of frames including
+	"short" and "merged" frames (results are identical to Gabest's
+	output).
 
 2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: The aspect ratio setting will only cause upscaling of
-        the current video dimensions which are then put into
-        KaxVideoDisplayWidth and KaxVideoDisplayHeight.
+	* mkvmerge: The aspect ratio setting will only cause upscaling of
+	the current video dimensions which are then put into
+	KaxVideoDisplayWidth and KaxVideoDisplayHeight.
 
-        * mkvextract: Changed how the global elements are handled by
-        taking the parent's size into account. This re-enables processing
-        of files produced with the latest VirtualDubMod.
+	* mkvextract: Changed how the global elements are handled by
+	taking the parent's size into account. This re-enables processing
+	of files produced with the latest VirtualDubMod.
 
-        * mkvmerge: Changed how the Matroska reader handles global
-        elements by taking the parent's size into account. This re-enables
-        processing of files produced with the latest VirtualDubMod.
+	* mkvmerge: Changed how the Matroska reader handles global
+	elements by taking the parent's size into account. This re-enables
+	processing of files produced with the latest VirtualDubMod.
 
-        * mkvinfo: Changed how mkvinfo handles global elements by taking
-        the parent's size into account. Hopefully this is now correct.
+	* mkvinfo: Changed how mkvinfo handles global elements by taking
+	the parent's size into account. Hopefully this is now correct.
 
-        * mkvextract: Support for MultiComment tags.
+	* mkvextract: Support for MultiComment tags.
 
-        * mkvmerge: Fixed support for reading MultiComment tags from
-        XML tag files.
+	* mkvmerge: Fixed support for reading MultiComment tags from
+	XML tag files.
 
-        * mkvmerge: Allow some slightly broken Matroska files to be
-        processed correctly if the reference blocks are off by at most 1ms.
+	* mkvmerge: Allow some slightly broken Matroska files to be
+	processed correctly if the reference blocks are off by at most 1ms.
 
 2003-08-09  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: MP3: Better support for other MPEG versions and layers
-        (number of samples per packet).
+	* mkvmerge: MP3: Better support for other MPEG versions and layers
+	(number of samples per packet).
 
-        * mkvinfo: Added Adler32 calculation and display for frame
-        contents with the -c option.
+	* mkvinfo: Added Adler32 calculation and display for frame
+	contents with the -c option.
 
-        * mkvmerge: RealAudio: "dnet" is actually byte-swapped AC3 and is
-        being treated as such (re-swapped and output as AC3).
+	* mkvmerge: RealAudio: "dnet" is actually byte-swapped AC3 and is
+	being treated as such (re-swapped and output as AC3).
 
-        * mkvmerge: Fixed a bug with chapters and splitting which would
-        crash mkvmerge if no chapter belonged into the output file.
+	* mkvmerge: Fixed a bug with chapters and splitting which would
+	crash mkvmerge if no chapter belonged into the output file.
 
 2003-08-06  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Changes for compilation with gcc 2.95.
+	* Changes for compilation with gcc 2.95.
 
 2003-08-04  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.6.0.
+	* Released v0.6.0.
 
 2003-07-30  Moritz Bunkus  <moritz@bunkus.org>
 
-        * base64tool: Added a tool for Base64 encoding/decoding needed for
-        binary elements in the tags.
+	* base64tool: Added a tool for Base64 encoding/decoding needed for
+	binary elements in the tags.
 
 2003-07-29  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvextract: Support for extracting chapter information.
+	* mkvextract: Support for extracting chapter information.
 
-        * mkvmerge: Added support for simple chapter files (CHAPTER01=...,
-        CHAPTER01NAME=Hello World etc).
+	* mkvmerge: Added support for simple chapter files (CHAPTER01=...,
+	CHAPTER01NAME=Hello World etc).
 
 2003-07-26  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Added support tags based on XML files.
+	* mkvmerge: Added support tags based on XML files.
 
-        * mkvextract: Rewrote the command line syntax. Added extracting
-        attachments and tags as new options.
+	* mkvextract: Rewrote the command line syntax. Added extracting
+	attachments and tags as new options.
 
-        * mkvmerge: Fixed a bug in the SRT reader which would not always
-        handle Unix/DOS style new line cases correctly.
+	* mkvmerge: Fixed a bug in the SRT reader which would not always
+	handle Unix/DOS style new line cases correctly.
 
 2003-07-23  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Added support for the "SegmentTitle" (general title of
-        the file written).
+	* mkvmerge: Added support for the "SegmentTitle" (general title of
+	the file written).
 
 2003-07-16  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Added support for UTF-8 and UTF-16 encoded text files
-        for the SRT and SSA/ASS readers.
+	* mkvmerge: Added support for UTF-8 and UTF-16 encoded text files
+	for the SRT and SSA/ASS readers.
 
 2003-07-15  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: The SSA/ASS reader ignored the --sub-charset option
-        and always used the current charset to recode the subtitles.
+	* mkvmerge: The SSA/ASS reader ignored the --sub-charset option
+	and always used the current charset to recode the subtitles.
 
 2003-07-14  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Added support for attaching files to the output
-        file(s).
+	* mkvmerge: Added support for attaching files to the output
+	file(s).
 
-        * mkvinfo: Support for the elements dealing with attachments
-        (KaxAttachments, KaxAttached, KaxFileDescription, KaxFileName,
-        KaxMimeType, KaxFileData).
+	* mkvinfo: Support for the elements dealing with attachments
+	(KaxAttachments, KaxAttached, KaxFileDescription, KaxFileName,
+	KaxMimeType, KaxFileData).
 
 2003-07-13  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Changed the RealVideo packaging method: Subpackets are
-        assembled into complete packets so the demuxer does not have to do
-        that anymore.
+	* mkvmerge: Changed the RealVideo packaging method: Subpackets are
+	assembled into complete packets so the demuxer does not have to do
+	that anymore.
 
-        * mkvmerge: DisplayWidth and DisplayHeight, which form the display
-        aspect ratio, are now always written to ease changing them later
-        without having to completely remux the file.
+	* mkvmerge: DisplayWidth and DisplayHeight, which form the display
+	aspect ratio, are now always written to ease changing them later
+	without having to completely remux the file.
 
 2003-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Fixed some infinite-reading-from-a-file bug that
-        occured on Windows when reading SSA/ASS files.
+	* mkvmerge: Fixed some infinite-reading-from-a-file bug that
+	occured on Windows when reading SSA/ASS files.
 
-        * mkvmerge: Fixed a bug which would mostly appear with subtitles
-        that have very long ( > 60s) gaps between entries. Here the
-        cluster would not been rendered properly leaving mkvmerge either
-        comatose ( = endless loop) or just plain dead ( = crashing).
+	* mkvmerge: Fixed a bug which would mostly appear with subtitles
+	that have very long ( > 60s) gaps between entries. Here the
+	cluster would not been rendered properly leaving mkvmerge either
+	comatose ( = endless loop) or just plain dead ( = crashing).
 
 2003-07-07  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo: Added support for the rest of the tags:
-        KaxTagMultiComment, KaxTagMultiCommentName,
-        KaxTagMultiCommentComments and KaxTagMultiCommentLanguage. Almost
-        all tags have been successfully tested.
+	* mkvinfo: Added support for the rest of the tags:
+	KaxTagMultiComment, KaxTagMultiCommentName,
+	KaxTagMultiCommentComments and KaxTagMultiCommentLanguage. Almost
+	all tags have been successfully tested.
 
 2003-07-06  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added a RealMedia demuxer that can handle both RealVideo and
-        RealAudio (all codecs).
+	* Added a RealMedia demuxer that can handle both RealVideo and
+	RealAudio (all codecs).
 
 2003-07-02  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo: Added support for allmost all tags (totally untested):
-        KaxTag KaxTagArchivalLocation KaxTagAudioEncryption
-        KaxTagAudioGain KaxTagAudioGenre KaxTagAudioPeak
-        KaxTagAudioSpecific KaxTagBibliography KaxTagBPM KaxTagCaptureDPI
-        KaxTagCaptureLightness KaxTagCapturePaletteSetting
-        KaxTagCaptureSharpness KaxTagChapterUID KaxTagCommercial
-        KaxTagCropped KaxTagDate KaxTagDiscTrack KaxTagEncoder
-        KaxTagEncodeSettings KaxTagEntity KaxTagEqualisation KaxTagFile
-        KaxTagGeneral KaxTagGenres KaxTagIdentifier KaxTagImageSpecific
-        KaxTagInitialKey KaxTagKeywords KaxTagLanguage KaxTagLegal
-        KaxTagMood KaxTagMultiCommercial KaxTagMultiCommercialAddress
-        KaxTagMultiCommercialEmail KaxTagMultiCommercialType
-        KaxTagMultiCommercialURL KaxTagMultiDate KaxTagMultiDateDateBegin
-        KaxTagMultiDateDateEnd KaxTagMultiDateType KaxTagMultiEntity
-        KaxTagMultiEntityAddress KaxTagMultiEntityEmail
-        KaxTagMultiEntityName KaxTagMultiEntityType KaxTagMultiEntityURL
-        KaxTagMultiIdentifier KaxTagMultiIdentifierBinary
-        KaxTagMultiIdentifierString KaxTagMultiIdentifierType
-        KaxTagMultiLegal KaxTagMultiLegalAddress KaxTagMultiLegalType
-        KaxTagMultiLegalURL KaxTagMultiPrice KaxTagMultiPriceAmount
-        KaxTagMultiPriceCurrency KaxTagMultiPricePriceDate
-        KaxTagMultiTitle KaxTagMultiTitleAddress KaxTagMultiTitleEdition
-        KaxTagMultiTitleEmail KaxTagMultiTitleLanguage
-        KaxTagMultiTitleName KaxTagMultiTitleSubTitle KaxTagMultiTitleType
-        KaxTagMultiTitleURL KaxTagOfficialAudioFileURL
-        KaxTagOfficialAudioSourceURL KaxTagOriginalDimensions
-        KaxTagOriginalMediaType KaxTagPlayCounter KaxTagPopularimeter
-        KaxTagProduct KaxTagRating KaxTagRecordLocation KaxTags
-        KaxTagSetPart KaxTagSource KaxTagSourceForm KaxTagSubGenre
-        KaxTagSubject KaxTagTargets KaxTagTitle KaxTagTrackUID
-        KaxTagVideoGenre
+	* mkvinfo: Added support for allmost all tags (totally untested):
+	KaxTag KaxTagArchivalLocation KaxTagAudioEncryption
+	KaxTagAudioGain KaxTagAudioGenre KaxTagAudioPeak
+	KaxTagAudioSpecific KaxTagBibliography KaxTagBPM KaxTagCaptureDPI
+	KaxTagCaptureLightness KaxTagCapturePaletteSetting
+	KaxTagCaptureSharpness KaxTagChapterUID KaxTagCommercial
+	KaxTagCropped KaxTagDate KaxTagDiscTrack KaxTagEncoder
+	KaxTagEncodeSettings KaxTagEntity KaxTagEqualisation KaxTagFile
+	KaxTagGeneral KaxTagGenres KaxTagIdentifier KaxTagImageSpecific
+	KaxTagInitialKey KaxTagKeywords KaxTagLanguage KaxTagLegal
+	KaxTagMood KaxTagMultiCommercial KaxTagMultiCommercialAddress
+	KaxTagMultiCommercialEmail KaxTagMultiCommercialType
+	KaxTagMultiCommercialURL KaxTagMultiDate KaxTagMultiDateDateBegin
+	KaxTagMultiDateDateEnd KaxTagMultiDateType KaxTagMultiEntity
+	KaxTagMultiEntityAddress KaxTagMultiEntityEmail
+	KaxTagMultiEntityName KaxTagMultiEntityType KaxTagMultiEntityURL
+	KaxTagMultiIdentifier KaxTagMultiIdentifierBinary
+	KaxTagMultiIdentifierString KaxTagMultiIdentifierType
+	KaxTagMultiLegal KaxTagMultiLegalAddress KaxTagMultiLegalType
+	KaxTagMultiLegalURL KaxTagMultiPrice KaxTagMultiPriceAmount
+	KaxTagMultiPriceCurrency KaxTagMultiPricePriceDate
+	KaxTagMultiTitle KaxTagMultiTitleAddress KaxTagMultiTitleEdition
+	KaxTagMultiTitleEmail KaxTagMultiTitleLanguage
+	KaxTagMultiTitleName KaxTagMultiTitleSubTitle KaxTagMultiTitleType
+	KaxTagMultiTitleURL KaxTagOfficialAudioFileURL
+	KaxTagOfficialAudioSourceURL KaxTagOriginalDimensions
+	KaxTagOriginalMediaType KaxTagPlayCounter KaxTagPopularimeter
+	KaxTagProduct KaxTagRating KaxTagRecordLocation KaxTags
+	KaxTagSetPart KaxTagSource KaxTagSourceForm KaxTagSubGenre
+	KaxTagSubject KaxTagTargets KaxTagTitle KaxTagTrackUID
+	KaxTagVideoGenre
 
 2003-06-29  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: Support for handling native video tracks (e.g. B
-        frames) when reading Matroska files.
+	* mkvmerge: Support for handling native video tracks (e.g. B
+	frames) when reading Matroska files.
 
-        * mkvmerge: Implemented time slice durations , default block
-        duration and block durations for slices where necessary.
+	* mkvmerge: Implemented time slice durations , default block
+	duration and block durations for slices where necessary.
 
 2003-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo: Support for KaxSegmentFilename, KaxTitle, KaxSlices,
-        KaxTimeSlice, KaxSliceLaceNumber, KaxSliceFrameNumber,
-        KaxSliceDelay and KaxSliceDuration.
+	* mkvinfo: Support for KaxSegmentFilename, KaxTitle, KaxSlices,
+	KaxTimeSlice, KaxSliceLaceNumber, KaxSliceFrameNumber,
+	KaxSliceDelay and KaxSliceDuration.
 
 2003-06-22  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.5.0.
+	* Released v0.5.0.
 
-        * Added 'ReferencePriority' element to the known elements for
-        mkvinfo.
+	* Added 'ReferencePriority' element to the known elements for
+	mkvinfo.
 
-        * Removed "(mkvinfo) " from mkvinfo's output in order to improve
-        readability and save space.
+	* Removed "(mkvinfo) " from mkvinfo's output in order to improve
+	readability and save space.
 
-        * --sub-charset now also needs a track ID.
+	* --sub-charset now also needs a track ID.
 
-        * Modified the verbosity levels for mkvinfo: The seek head subentries
-        and cue subentries will only be shown at level 2 to make the 
-        output easier to read. 
+	* Modified the verbosity levels for mkvinfo: The seek head subentries
+	and cue subentries will only be shown at level 2 to make the 
+	output easier to read. 
 
-        * The language and default track settings are now kept again if
-        not overridden when reading from Matroska files.
+	* The language and default track settings are now kept again if
+	not overridden when reading from Matroska files.
 
 2003-06-21  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added mkvextract which can extract tracks from a Matroska file
-        into other files.
+	* Added mkvextract which can extract tracks from a Matroska file
+	into other files.
 
 2003-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Switched from cygwin to MinGW32 for the Windows binaries.
+	* Switched from cygwin to MinGW32 for the Windows binaries.
 
-        * Fixed a double free() on cleanup (after writing the cues) which
-        resulted in a segfault sometimes.
+	* Fixed a double free() on cleanup (after writing the cues) which
+	resulted in a segfault sometimes.
 
-        * Added a SSA/ASS reader.
+	* Added a SSA/ASS reader.
 
 2003-06-19  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Support for reading text subtitles from Matroska files.
+	* Support for reading text subtitles from Matroska files.
 
-        * Made the AAC reader automatically recognize if a MPEG4 AAC file
-        contains the emphasis header (deprecated) or not (current standard).
+	* Made the AAC reader automatically recognize if a MPEG4 AAC file
+	contains the emphasis header (deprecated) or not (current standard).
 
 2003-06-15  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.4.4.
+	* Released v0.4.4.
 
-        * Several options now need an explicity track ID to specify
-        which tracks of an input file the option should be applied
-        to. These options include --atracks, --vtracks, --stracks, --sync,
-        --default-track, --cues and --language.
+	* Several options now need an explicity track ID to specify
+	which tracks of an input file the option should be applied
+	to. These options include --atracks, --vtracks, --stracks, --sync,
+	--default-track, --cues and --language.
 
-        * The Matroska reader now handles track selection correctly.
+	* The Matroska reader now handles track selection correctly.
 
 2003-06-13  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added an option for identifying input files and their track types.
+	* Added an option for identifying input files and their track types.
 
 2003-06-12  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.4.3.
+	* Released v0.4.3.
 
 2003-06-11  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Support for proper linking of segments via the segment UIDs. The
-        first and last files created can be manually linked to given UIDs.
+	* Support for proper linking of segments via the segment UIDs. The
+	first and last files created can be manually linked to given UIDs.
 
 2003-06-08  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added support for splitting output files by size or by time and
-        limiting the number of output files.
+	* Added support for splitting output files by size or by time and
+	limiting the number of output files.
 
-        * Added support for the segment UID/next segment UID/previous
-        segment UID.
+	* Added support for the segment UID/next segment UID/previous
+	segment UID.
 
 2003-06-06  Moritz Bunkus  <moritz@bunkus.org>
 
-        * A lot of changes to comply with libmatroska/libebml 0.4.4.
+	* A lot of changes to comply with libmatroska/libebml 0.4.4.
 
 2003-06-03  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Implemented stricter content based file type identification for
-        MP3 and AC3 files so that those won't be mis-identified.
+	* Implemented stricter content based file type identification for
+	MP3 and AC3 files so that those won't be mis-identified.
 
 2003-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Some improvements to the mkvinfo GUI (thanks to jcsston for the
-        patch/the ideas).
+	* Some improvements to the mkvinfo GUI (thanks to jcsston for the
+	patch/the ideas).
 
 2003-05-29  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.4.2.
+	* Released v0.4.2.
 
-        * Support for some more tags in both mkvmerge and mkvinfo.
+	* Support for some more tags in both mkvmerge and mkvinfo.
 
-        * Fixed a segfault in the Matroska reader.
+	* Fixed a segfault in the Matroska reader.
 
-        * Removed the '--sub-type' switch as all text subtitles will be
-        stored in UTF-8 format. Made iconv mandatory in the configure
-        checks for this very reason.
+	* Removed the '--sub-type' switch as all text subtitles will be
+	stored in UTF-8 format. Made iconv mandatory in the configure
+	checks for this very reason.
 
-        * Added a GUI to mkvinfo.
+	* Added a GUI to mkvinfo.
 
 2003-05-23  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.4.1.
+	* Released v0.4.1.
 
-        * A lot of changes regarding file I/O. Files bigger than 2GB
-        should now be handled correctly on both Linux and Windows.
+	* A lot of changes regarding file I/O. Files bigger than 2GB
+	should now be handled correctly on both Linux and Windows.
 
 2003-05-22  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added checks for MP4/Quicktime files which will abort mkvmerge.
+	* Added checks for MP4/Quicktime files which will abort mkvmerge.
 
-        * Support for reading AAC tracks from Matroska files.
+	* Support for reading AAC tracks from Matroska files.
 
-        * Released v0.4.0.
+	* Released v0.4.0.
 
 2003-05-21  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Some internal changes and enhancements. Code requires libebml
-        and libmatroska 0.4.3 now.
+	* Some internal changes and enhancements. Code requires libebml
+	and libmatroska 0.4.3 now.
 
 2003-05-19  Moritz Bunkus  <moritz@bunkus.org>
 
-        * ADTS headers are stripped from the AAC streams. This is what I'd
-        call 'proper AAC support'.
+	* ADTS headers are stripped from the AAC streams. This is what I'd
+	call 'proper AAC support'.
 
 2003-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Better support for DTS streams in general and for DTS-in-WAV in
-        particular (patch by Peter Niemayer <niemayer AT isg.de>).
+	* Better support for DTS streams in general and for DTS-in-WAV in
+	particular (patch by Peter Niemayer <niemayer AT isg.de>).
 
 2003-05-17  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Renamed '--no-utf8-subs' to '--sub-type utf8'. Polished the man
-        page regarding subtitle handling.
+	* Renamed '--no-utf8-subs' to '--sub-type utf8'. Polished the man
+	page regarding subtitle handling.
 
-        * Fixed a bug with mono MP3 files.
+	* Fixed a bug with mono MP3 files.
 
-        * Added support for AAC files (only those with ADTS headers at the
-        moment).
+	* Added support for AAC files (only those with ADTS headers at the
+	moment).
 
 2003-05-15  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.3.3.
+	* Released v0.3.3.
 
-        * If an error occurs while writing to the destination file the
-        error is reported and mkvmerge aborts with a non-zero exit code.
+	* If an error occurs while writing to the destination file the
+	error is reported and mkvmerge aborts with a non-zero exit code.
 
-        * The OGM reader reported I frames as P frames and vice versa
-        round making seeking not really nice ;)
+	* The OGM reader reported I frames as P frames and vice versa
+	round making seeking not really nice ;)
 
 2003-05-11  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Fixed a bug with the AC3 timecode calculation (patch by Peter
-        Niemayer <niemayer AT isg.de>).
+	* Fixed a bug with the AC3 timecode calculation (patch by Peter
+	Niemayer <niemayer AT isg.de>).
 
-        * Support for reading DTS files & putting them into Matroska
-        (main patch by Peter Niemayer <niemayer AT isg.de>, a few things
-        by me).
+	* Support for reading DTS files & putting them into Matroska
+	(main patch by Peter Niemayer <niemayer AT isg.de>, a few things
+	by me).
 
-        * Released v0.3.2.
+	* Released v0.3.2.
 
-        * Fixed the huge memory need if reading from AVI files (introduced
-        on 2003-05-06 with the internal changes).
+	* Fixed the huge memory need if reading from AVI files (introduced
+	on 2003-05-06 with the internal changes).
 
-        * Proper handling of the 'default track' flag and the language for
-        the Matroska reader.
+	* Proper handling of the 'default track' flag and the language for
+	the Matroska reader.
 
-        * Proper handling of the 'default track' flag for all the packetizers.
+	* Proper handling of the 'default track' flag for all the packetizers.
 
 2003-05-09  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Made mkvtoolnix compile under cygwin.
+	* Made mkvtoolnix compile under cygwin.
 
 2003-05-06  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Added support for aspect ratio.
+	* Added support for aspect ratio.
 
-        * Subtitle charsets can be specified with --sub-charset and do not
-        rely on the current locale anymore.
+	* Subtitle charsets can be specified with --sub-charset and do not
+	rely on the current locale anymore.
 
-        * For the last packet of each track its duration is now stored.
+	* For the last packet of each track its duration is now stored.
 
-        * A lot of internal changes - I hope nothing has broken... (See
-        ChangeLog.cvs for details.)
+	* A lot of internal changes - I hope nothing has broken... (See
+	ChangeLog.cvs for details.)
 
-        * The matroska reader calculated wrong header lengths for Vorbis
-        tracks.
+	* The matroska reader calculated wrong header lengths for Vorbis
+	tracks.
 
 2003-05-04  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo reports the FourCC for video tracks with a 
-        CodecID of V_MS/VFW/FOURCC and the format tag for audio tracks
-        with a CodecID of A_MS/ACM.
+	* mkvinfo reports the FourCC for video tracks with a 
+	CodecID of V_MS/VFW/FOURCC and the format tag for audio tracks
+	with a CodecID of A_MS/ACM.
 
 2003-05-03  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.3.1.
+	* Released v0.3.1.
 
-        * Tracks read from a Matroska file will keep their UID if it
-        hasn't been used yet.
+	* Tracks read from a Matroska file will keep their UID if it
+	hasn't been used yet.
 
-        * Support for reading text subtitle streams from OGM files.
+	* Support for reading text subtitle streams from OGM files.
 
-        * Added support for EbmlVoid everywhere to mkvinfo.
+	* Added support for EbmlVoid everywhere to mkvinfo.
 
 2003-05-02  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Support for KaxTrackLanguage and ISO639 languages.
+	* Support for KaxTrackLanguage and ISO639 languages.
 
 2003-04-30  Moritz Bunkus  <moritz@bunkus.org>
 
-        * First public release.
+	* First public release.
 
