@@ -162,7 +162,11 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   char tz_sign;
   struct tm t;
   time_t tme;
+#ifdef SYS_UNIX
   struct timezone tz;
+#else
+  time_t tme_local, tme_gm;
+#endif
 
   strip(*pdata->bin);
   p = safestrdup(pdata->bin->c_str());
@@ -220,8 +224,14 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   if (tz_sign == '+')
     offset *= -1;
   tme += offset;
+#ifdef SYS_UNIX
   gettimeofday(NULL, &tz);
   tme -= tz.tz_minuteswest * 60;
+#else
+  tme_local = mktime(localtime(&tme));
+  tme_gm = mktime(gmtime(&tme));
+  tme -= (tme_gm - tme_local);
+#endif
   if (tme < 0)
     perror(pdata, "Invalid date specified (%s).", pdata->bin->c_str());
 
