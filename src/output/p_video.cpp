@@ -150,7 +150,7 @@ video_packetizer_c::process(memory_c &mem,
   }
 
   if ((fps < 0.0) &&
-      (mpeg_video == MPEG_VIDEO_V1) || (mpeg_video == MPEG_VIDEO_V2))
+      ((mpeg_video == MPEG_VIDEO_V1) || (mpeg_video == MPEG_VIDEO_V2)))
     extract_mpeg1_2_fps(mem.data, mem.size);
 
   if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
