@@ -23,15 +23,13 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "common.h"
-#include "pr_generic.h"
-#include "p_tta.h"
 #include "matroska.h"
+#include "mkvmerge.h"
+#include "p_tta.h"
+#include "tta_common.h"
 
 using namespace libmatroska;
-
-static const double tta_frame_time = 1.04489795918367346939l;
 
 tta_packetizer_c::tta_packetizer_c(generic_reader_c *nreader,
                                    int nchannels,
@@ -47,7 +45,7 @@ tta_packetizer_c::tta_packetizer_c(generic_reader_c *nreader,
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1000000000.0 * ti->async.linear *
-                                       tta_frame_time));
+                                       TTA_FRAME_TIME));
 }
 
 tta_packetizer_c::~tta_packetizer_c() {
@@ -66,14 +64,18 @@ tta_packetizer_c::set_headers() {
 int
 tta_packetizer_c::process(memory_c &mem,
                           int64_t,
-                          int64_t,
+                          int64_t duration,
                           int64_t,
                           int64_t) {
   debug_enter("tta_packetizer_c::process");
 
-  add_packet(mem, samples_output * 1000000000 / sample_rate,
-             (int64_t)(1000000000.0 * ti->async.linear * tta_frame_time));
-  samples_output += (int64_t)(tta_frame_time * sample_rate);
+  if (duration == -1)
+    add_packet(mem, samples_output * 1000000000 / sample_rate,
+               (int64_t)(1000000000.0 * ti->async.linear * TTA_FRAME_TIME));
+  else
+    add_packet(mem, samples_output * 1000000000 / sample_rate,
+               duration);
+  samples_output += (int64_t)(TTA_FRAME_TIME * sample_rate);
 
   debug_leave("tta_packetizer_c::process");
 

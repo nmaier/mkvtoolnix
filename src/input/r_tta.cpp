@@ -58,17 +58,13 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
     size = mm_io->get_size();
-    mm_io->setFilePointer(6, seek_beginning);
 
     if (identifying)
       return;
 
-    channels = mm_io->read_uint16();
-    bits_per_sample = mm_io->read_uint16();
-    sample_rate = mm_io->read_uint32();
-    data_length = mm_io->read_uint32();
-    mm_io->skip(4);
-
+    if (mm_io->read(&header, sizeof(tta_file_header_t)) !=
+        sizeof(tta_file_header_t))
+      mxerror(FMT_FN "The file header is too short.\n", ti->fname);
     seek_sum = mm_io->getFilePointer() + 4;
 
     do {
@@ -77,15 +73,16 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
       seek_points.push_back(seek_point);
     } while (seek_sum < size);
 
+    mxverb(2, "tta: ch %u bps %u sr %u dl %u seek_sum %lld size %lld num %u\n",
+           get_uint16(&header.channels), get_uint16(&header.bits_per_sample),
+           get_uint32(&header.sample_rate), get_uint32(&header.data_length),
+           seek_sum, size, seek_points.size());
+
     if (seek_sum != size)
       mxerror(FMT_FN "The seek table in this TTA file seems to be broken.\n",
               ti->fname);
 
     mm_io->skip(4);
-
-    mxverb(2, "tta: ch %u bps %u sr %u dl %u seek_sum %lld size %lld num %u\n",
-           channels, bits_per_sample, sample_rate, data_length, seek_sum, size,
-           seek_points.size());
 
     bytes_processed = 0;
     pos = 0;
@@ -108,8 +105,9 @@ tta_reader_c::create_packetizer(int64_t) {
 
   if (NPTZR() != 0)
     return;
-  ttapacketizer = new tta_packetizer_c(this, channels, bits_per_sample,
-                                       sample_rate, ti);
+  ttapacketizer = new tta_packetizer_c(this, get_uint16(&header.channels),
+                                       get_uint16(&header.bits_per_sample),
+                                       get_uint32(&header.sample_rate), ti);
   add_packetizer(ttapacketizer);
   mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname, (int64_t)0);
 }
@@ -129,11 +127,24 @@ tta_reader_c::read(generic_packetizer_c *,
     PTZR0->flush();
     return 0;
   }
+  pos++;
 
   memory_c mem(buf, nread, true);
-  PTZR0->process(mem);
+  if (pos >= seek_points.size()) {
+    int64_t samples_left;
+
+    samples_left = irnd(get_uint32(&header.data_length) -
+                        (seek_points.size() - 1) * TTA_FRAME_TIME *
+                        get_uint32(&header.sample_rate));
+
+    PTZR0->process(mem, -1, samples_left * 1000000000ll /
+                   get_uint32(&header.sample_rate));
+  } else
+    PTZR0->process(mem);
   bytes_processed += nread;
-  pos++;
+
+  if (pos >= seek_points.size())
+    return 0;
 
   return EMOREDATA;
 }

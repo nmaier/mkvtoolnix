@@ -29,16 +29,16 @@
 #include "error.h"
 #include "mm_io.h"
 #include "pr_generic.h"
+#include "tta_common.h"
 
 class tta_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
   mm_io_c *mm_io;
   int64_t bytes_processed, size;
-  uint16_t channels, bits_per_sample;
-  uint32_t sample_rate, data_length;
   vector<uint32_t> seek_points;
   int pos;
+  tta_file_header_t header;
 
 public:
   tta_reader_c(track_info_c *nti) throw (error_c);
