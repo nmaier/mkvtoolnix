@@ -98,7 +98,7 @@ depend:
 		o="`echo $$i | sed -e 's/\.c$$/.o/' -e 's/\.cpp$$/.o/'`" ; \
 		echo '  ' $$i: $$o ; \
 		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		$$i | sed "s;^.*o: ;$${o}: ;" >> .depend ; \
+		-MT $$o $$i >> .depend ; \
 	done
 
 config.h: configure.in
