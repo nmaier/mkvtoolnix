@@ -864,6 +864,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       kax_sh_cues = new KaxSeekHead();
 
     kax_infos->Render(*out);
+    kax_sh_main->IndexThis(*kax_infos, *kax_segment);
 
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
@@ -872,6 +873,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       files[i]->reader->set_headers();
 
     kax_tracks->Render(*out);
+    kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
   } catch (exception &ex) {
     mxerror("Could not render the track headers.\n");
   }
