@@ -67,10 +67,10 @@ static void chapter_error(const char *fmt, ...) {
   char *new_error;
   int len;
 
-  len = snprintf(NULL, 0, "Error: Simple chapter parser: ");
+  len = strlen("Error: Simple chapter parser: ");
   va_start(ap, fmt);
   fix_format(fmt, new_fmt);
-  len += vsnprintf(NULL, 0, new_fmt.c_str(), ap);
+  len += get_varg_len(new_fmt.c_str(), ap);
   new_error = (char *)safemalloc(len + 2);
   strcpy(new_error, "Error: Simple chapter parser: ");
   vsprintf(&new_error[strlen(new_error)], new_fmt.c_str(), ap);

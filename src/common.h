@@ -142,6 +142,9 @@ bool parse_int(const char *s, int64_t &value);
 bool parse_int(const char *s, int &value);
 string to_string(int64_t i);
 
+int get_arg_len(const char *fmt, ...);
+int get_varg_len(const char *fmt, va_list ap);
+
 extern int verbose;
 
 class bit_cursor_c {

@@ -69,12 +69,12 @@ static void cperror(parser_data_t *pdata, const char *fmt, ...) {
   int len;
 
   fix_format(fmt, new_fmt);
-  len = snprintf(NULL, 0, "Error: Chapter parser failed for '%s', line %d, "
-                 "column %d: ", pdata->file_name,
-                 XML_GetCurrentLineNumber(pdata->parser),
-                 XML_GetCurrentColumnNumber(pdata->parser));
+  len = get_arg_len("Error: Chapter parser failed for '%s', line %d, "
+                    "column %d: ", pdata->file_name,
+                    XML_GetCurrentLineNumber(pdata->parser),
+                    XML_GetCurrentColumnNumber(pdata->parser));
   va_start(ap, fmt);
-  len += vsnprintf(NULL, 0, new_fmt.c_str(), ap);
+  len += get_varg_len(new_fmt.c_str(), ap);
   new_string = (char *)safemalloc(len + 2);
   sprintf(new_string, "Error: Chapter parser failed for '%s', line %d, "
           "column %d: ", pdata->file_name,

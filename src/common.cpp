@@ -1319,3 +1319,34 @@ void mxexit(int code) {
 
   exit(0);
 }
+
+int get_arg_len(const char *fmt, ...) {
+  int size;
+  va_list ap;
+
+  va_start(ap, fmt);
+  size = get_varg_len(fmt, ap);
+  va_end(ap);
+
+  return size;
+}
+
+int get_varg_len(const char *fmt, va_list ap) {
+  int size, result;
+  char *dst;
+
+  size = 1024;
+  dst = (char *)safemalloc(size);
+  while (1) {
+    result = vsnprintf(dst, size - 1, fmt, ap);
+    if (result >= 0) {
+      safefree(dst);
+      return result;
+    }
+    size += 1024;
+    dst = (char *)saferealloc(dst, size);
+  }
+  safefree(dst);
+
+  return -1;
+}
