@@ -38,6 +38,11 @@
 #include <time.h>
 #include <wchar.h>
 
+#include <string>
+#include <vector>
+
+using namespace std;
+
 #include "common.h"
 #include "pr_generic.h"
 
@@ -576,6 +581,31 @@ char *UTFstring_to_cstr(const UTFstring &u) {
 
   return new_string;
 #endif
+}
+
+vector<string> split(const char *src, const char *pattern, int max_num) {
+  int num, i, plen;
+  char *copy, *p1, *p2;
+  vector<string> v;
+
+  plen = strlen(pattern);
+  copy = safestrdup(src);
+  p2 = copy;
+  p1 = strstr(p2, pattern);
+  num = 1;
+  while ((p1 != NULL) && ((max_num == -1) || (num < max_num))) {
+    for (i = 0; i < plen; i++)
+      p1[i] = 0;
+    v.push_back(string(p2));
+    p2 = &p1[plen];
+    p1 = strstr(p2, pattern);
+    num++;
+  }
+  if (*p2 != 0)
+    v.push_back(string(p2));
+  safefree(copy);
+
+  return v;
 }
 
 /*

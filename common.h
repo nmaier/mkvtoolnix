@@ -103,6 +103,9 @@ void *_safememdup(const void *src, size_t size, const char *file, int line);
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
 void *_saferealloc(void *mem, size_t size, const char *file, int line);
 
+vector<string> split(const char *src, const char *pattern = ",",
+                     int max_num = -1);
+
 UTFstring cstr_to_UTFstring(const char *c);
 char *UTFstring_to_cstr(const UTFstring &u);
 
