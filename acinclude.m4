@@ -454,11 +454,18 @@ dnl
 #include <stdlib.h>
 #include <string.h>
 #include <EbmlConfig.h>
-#include <KaxTypes.h>
+#include <KaxVersion.h>
+
+using namespace LIBMATROSKA_NAMESPACE;
 
 int main ()
 {
-  system("touch conf.matroskatest");
+  FILE *f;
+  f = fopen("conf.matroskatest", "wb");
+  if (f == NULL)
+    return 1;
+  fprintf(f, "%s\n", KaxCodeVersion.c_str());
+  fclose(f);
   return 0;
 }
 
@@ -468,42 +475,45 @@ int main ()
       LIBS="$ac_save_LIBS"
   fi
 
-  if test "x$no_matroska" = "x" ; then
+  if test "x$no_matroska" = "x" -a -f conf.matroskatest ; then
      AC_MSG_RESULT(yes)
      ifelse([$1], , :, [$1])     
   else
      AC_MSG_RESULT(no)
-     if test -f conf.matroskatest ; then
-       :
-     else
-       echo "*** Could not run Matroska test program, checking why..."
-       CFLAGS="$CFLAGS $MATROSKA_CFLAGS"
-       LIBS="$LIBS $MATROSKA_LIBS"
-       AC_TRY_LINK([
-#include <stdio.h>
-#include <EbmlConfig.h>
-#include <KaxTypes.h>
-],     [ return 0; ],
-       [ echo "*** The test program compiled, but did not run. This usually means"
-       echo "*** that the run-time linker is not finding Matroska or finding the wrong"
-       echo "*** version of Matroska. If it is not finding Matroska, you'll need to set your"
-       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
-       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
-       echo "*** is required on your system"
-       echo "***"
-       echo "*** If you have an old version installed, it is best to remove it, although"
-       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
-       [ echo "*** The test program failed to compile or link. See the file config.log for the"
-       echo "*** exact error that occured. This usually means Matroska was incorrectly installed"
-       echo "*** or that you have moved Matroska since it was installed."
-       exit 1 ])
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-     fi
-     MATROSKA_CFLAGS=""
-     MATROSKA_LIBS=""
-     ifelse([$2], , :, [$2])
+     exit 1
   fi
+
+  AC_MSG_CHECKING(Matroska version)
+
+  matroska_version=`cat conf.matroskatest`
+  mver_ok=`sed 's;\.;\ ;g' < conf.matroskatest | (read -a mver
+  if test ${mver[[0]]} -gt 0 ; then
+    mver_ok=1
+  elif test ${mver[[0]]} -lt 0 ; then
+    mver_ok=0
+  else
+    if test ${mver[[1]]} -gt 4 ; then
+      mver_ok=1
+    elif test ${mver[[1]]} -lt 4 ; then
+      mver_ok=0
+    else
+      if test ${mver[[2]]} -ge 2 ; then
+        mver_ok=1
+      else
+        mver_ok=0
+      fi
+    fi
+  fi
+  echo $mver_ok )`
+  if test "$mver_ok" = "1" ; then
+    AC_MSG_RESULT($matroska_version ok)
+  else
+    AC_MSG_RESULT($matroska_version too old)
+    echo '*** Your Matroska version is too old. Upgrade to at least version'
+    echo '*** 0.4.2 and re-run configure.'
+    exit 1
+  fi
+
   AC_SUBST(MATROSKA_CFLAGS)
   AC_SUBST(MATROSKA_LIBS)
   rm -f conf.matroskatest
