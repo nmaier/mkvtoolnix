@@ -211,7 +211,7 @@ string ssa_reader_c::recode_text(vector<string> &fields) {
   return res;
 }
 
-int ssa_reader_c::read() {
+int ssa_reader_c::read(generic_packetizer_c *) {
   string line, stime, orig_line, comma;
   int i, num;
   int64_t start, end;
@@ -288,10 +288,6 @@ int ssa_reader_c::read() {
   }
 
   return 0;
-}
-
-packet_t *ssa_reader_c::get_packet() {
-  return textsubs_packetizer->get_packet();
 }
 
 int ssa_reader_c::display_priority() {

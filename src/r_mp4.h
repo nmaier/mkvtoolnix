@@ -121,8 +121,7 @@ public:
   qtmp4_reader_c(track_info_t *nti) throw (error_c);
   virtual ~qtmp4_reader_c();
 
-  virtual int read();
-  virtual packet_t *get_packet();
+  virtual int read(generic_packetizer_c *ptzr);
   virtual int display_priority();
   virtual void display_progress();
   virtual void set_headers();

@@ -670,7 +670,7 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
   io->setFilePointer(target_pos);
 }
 
-int qtmp4_reader_c::read() {
+int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   uint32_t i, k, frame, frame_size;
   qtmp4_demuxer_t *dmx;
   bool chunks_left, is_keyframe;
@@ -684,7 +684,7 @@ int qtmp4_reader_c::read() {
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
 
-    if (dmx->packetizer == NULL)
+    if (dmx->packetizer != ptzr)
       continue;
 
     if (dmx->sample_size != 0) {
@@ -799,14 +799,16 @@ int qtmp4_reader_c::read() {
       if (dmx->pos < dmx->sample_table_len)
         chunks_left = true;
     }
+
+    if (chunks_left)
+      return EMOREDATA;
+    else {
+      done = true;
+      return 0;
+    }
   }
 
-  if (chunks_left)
-    return EMOREDATA;
-  else {
-    done = true;
-    return 0;
-  }
+  return 0;
 }
 
 void qtmp4_reader_c::create_packetizers() {
@@ -865,10 +867,6 @@ void qtmp4_reader_c::set_headers() {
   for (i = 0; i < demuxers.size(); i++)
     if (demuxers[i]->packetizer != NULL)
       demuxers[i]->packetizer->set_headers();
-}
-
-packet_t *qtmp4_reader_c::get_packet() {
-  return NULL;
 }
 
 int qtmp4_reader_c::display_priority() {

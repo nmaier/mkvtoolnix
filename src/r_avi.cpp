@@ -297,17 +297,17 @@ int avi_reader_c::is_keyframe(unsigned char *data, long size, int suggestion) {
 
 // {{{ FUNCTION avi_reader_c::read
 
-int avi_reader_c::read() {
+int avi_reader_c::read(generic_packetizer_c *ptzr) {
   int nread, key, last_frame, i;
   avi_demuxer_t *demuxer;
   bool need_more_data, done;
   int frames_read, size;
   int64_t duration;
 
-  debug_enter("avi_reader_c::read (video)");
+  if ((vpacketizer != NULL) && !video_done && (vpacketizer == ptzr)) {
+    debug_enter("avi_reader_c::read (video)");
 
-  need_more_data = false;
-  if ((vpacketizer != NULL) && !video_done) {
+    need_more_data = false;
     last_frame = 0;
     done = false;
 
@@ -377,16 +377,24 @@ int avi_reader_c::read() {
       video_done = 1;
     } else if (frames != (maxframes + 1))
       need_more_data = true;
-  }
 
-  debug_leave("avi_reader_c::read (video)");
-  debug_enter("avi_reader_c::read (audio)");
+    debug_leave("avi_reader_c::read (video)");
+
+    if (need_more_data)
+      return EMOREDATA;
+    else
+      return 0;
+  }
 
   for (i = 0; i < ademuxers.size(); i++) {
     demuxer = ademuxers[i];
-    if (demuxer->packetizer->packet_available() >= 2)
+
+    if (demuxer->packetizer != ptzr)
       continue;
 
+    debug_enter("avi_reader_c::read (audio)");
+
+    need_more_data = false;
     AVI_set_audio_track(avi, demuxer->aid);
     if (AVI_audio_format(avi) == 0x0001)
       size = demuxer->channels * demuxer->bits_per_sample *
@@ -406,45 +414,16 @@ int avi_reader_c::read() {
     }
     if (!demuxer->eos)
      need_more_data = true;
+
+    debug_leave("avi_reader_c::read (audio)");
+
+    if (need_more_data)
+      return EMOREDATA;
+    else
+      return 0;
   }
 
-  debug_leave("avi_reader_c::read (audio)");
-
-  if (need_more_data)
-    return EMOREDATA;
-  else
-    return 0;
-}
-
-// }}}
-
-// {{{ FUNCTION avi_reader_c::get_packet
-
-packet_t *avi_reader_c::get_packet() {
-  generic_packetizer_c *winner;
-  avi_demuxer_t *demuxer;
-  int i;
-
-  winner = NULL;
-
-  if ((vpacketizer != NULL) && (vpacketizer->packet_available()))
-    winner = vpacketizer;
-
-  for (i = 0; i < ademuxers.size(); i++) {
-    demuxer = ademuxers[i];
-    if (winner == NULL) {
-      if (demuxer->packetizer->packet_available())
-        winner = demuxer->packetizer;
-    } else if (winner->packet_available() &&
-               (winner->get_smallest_timecode() >
-                demuxer->packetizer->get_smallest_timecode()))
-      winner = demuxer->packetizer;
-  }
-
-  if (winner != NULL)
-    return winner->get_packet();
-  else
-    return NULL;
+  return 0;
 }
 
 // }}}

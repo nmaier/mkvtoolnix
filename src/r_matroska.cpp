@@ -1242,7 +1242,7 @@ void kax_reader_c::create_packetizers() {
 
 // {{{ FUNCTION kax_reader_c::read()
 
-int kax_reader_c::read() {
+int kax_reader_c::read(generic_packetizer_c *) {
   int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
@@ -1414,31 +1414,7 @@ int kax_reader_c::read() {
 
 // }}}
 
-// {{{ FUNCTIONS get_packet(), display_*, set_headers()
-
-packet_t *kax_reader_c::get_packet() {
-  generic_packetizer_c *winner;
-  kax_track_t *t;
-  int i;
-
-  winner = NULL;
-
-  for (i = 0; i < tracks.size(); i++) {
-    t = tracks[i];
-    if (winner == NULL) {
-      if (t->packetizer->packet_available())
-        winner = t->packetizer;
-    } else if (winner->packet_available() &&
-               (winner->get_smallest_timecode() >
-                t->packetizer->get_smallest_timecode()))
-      winner = t->packetizer;
-  }
-
-  if (winner != NULL)
-    return winner->get_packet();
-  else
-    return NULL;
-}
+// {{{ FUNCTIONS display_*, set_headers()
 
 int kax_reader_c::display_priority() {
   int i;

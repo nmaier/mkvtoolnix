@@ -104,7 +104,7 @@ mp3_reader_c::~mp3_reader_c() {
     delete mp3packetizer;
 }
 
-int mp3_reader_c::read() {
+int mp3_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
@@ -115,10 +115,6 @@ int mp3_reader_c::read() {
   bytes_processed += nread;
 
   return EMOREDATA;
-}
-
-packet_t *mp3_reader_c::get_packet() {
-  return mp3packetizer->get_packet();
 }
 
 int mp3_reader_c::display_priority() {

@@ -94,7 +94,7 @@ ac3_reader_c::~ac3_reader_c() {
     delete ac3packetizer;
 }
 
-int ac3_reader_c::read() {
+int ac3_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
@@ -105,10 +105,6 @@ int ac3_reader_c::read() {
   bytes_processed += nread;
 
   return EMOREDATA;
-}
-
-packet_t *ac3_reader_c::get_packet() {
-  return ac3packetizer->get_packet();
 }
 
 int ac3_reader_c::display_priority() {

@@ -63,8 +63,7 @@ public:
   ogm_reader_c(track_info_t *nti) throw (error_c);
   virtual ~ogm_reader_c();
 
-  virtual int read();
-  virtual packet_t *get_packet();
+  virtual int read(generic_packetizer_c *ptzr);
   virtual void set_headers();
   virtual void identify();
 

@@ -178,7 +178,7 @@ void generic_packetizer_c::set_tag_track_uid() {
 }
 
 int generic_packetizer_c::read() {
-  return reader->read();
+  return reader->read(this);
 }
 
 void generic_packetizer_c::reset() {

@@ -662,7 +662,7 @@ int ogm_reader_c::read_headers() {
  * General reader. Before returning it MUST guarantee that each demuxer has
  * a page available OR that the corresponding stream is finished.
  */
-int ogm_reader_c::read() {
+int ogm_reader_c::read(generic_packetizer_c *) {
   int i;
   ogg_page og;
 
@@ -683,30 +683,6 @@ int ogm_reader_c::read() {
 
   // No, we're done with this file.
   return 0;
-}
-
-packet_t *ogm_reader_c::get_packet() {
-  generic_packetizer_c *winner;
-  ogm_demuxer_t *demuxer;
-  int i;
-
-  winner = NULL;
-
-  for (i = 0; i < num_sdemuxers; i++) {
-    demuxer = sdemuxers[i];
-    if (winner == NULL) {
-      if (demuxer->packetizer->packet_available())
-        winner = demuxer->packetizer;
-    } else if (winner->packet_available() &&
-               (winner->get_smallest_timecode() >
-                demuxer->packetizer->get_smallest_timecode()))
-      winner = demuxer->packetizer;
-  }
-
-  if (winner != NULL)
-    return winner->get_packet();
-  else
-    return NULL;
 }
 
 int ogm_reader_c::display_priority() {

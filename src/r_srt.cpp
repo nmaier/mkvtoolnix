@@ -90,7 +90,7 @@ srt_reader_c::~srt_reader_c() {
     delete textsubs_packetizer;
 }
 
-int srt_reader_c::read() {
+int srt_reader_c::read(generic_packetizer_c *) {
   int64_t start, end;
   char *chunk;
   subtitles_c subs;
@@ -146,10 +146,6 @@ int srt_reader_c::read() {
   subs.process(textsubs_packetizer);
 
   return 0;
-}
-
-packet_t *srt_reader_c::get_packet() {
-  return textsubs_packetizer->get_packet();
 }
 
 int srt_reader_c::display_priority() {

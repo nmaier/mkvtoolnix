@@ -95,7 +95,7 @@ dts_reader_c::~dts_reader_c() {
     delete dtspacketizer;
 }
 
-int dts_reader_c::read() {
+int dts_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, max_dts_packet_size);
@@ -106,10 +106,6 @@ int dts_reader_c::read() {
   bytes_processed += nread;
 
   return EMOREDATA;
-}
-
-packet_t *dts_reader_c::get_packet() {
-  return dtspacketizer->get_packet();
 }
 
 int dts_reader_c::display_priority() {

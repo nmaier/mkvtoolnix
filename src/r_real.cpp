@@ -536,7 +536,7 @@ int real_reader_c::finish() {
 
 // {{{ FUNCTION real_reader_c::read()
 
-int real_reader_c::read() {
+int real_reader_c::read(generic_packetizer_c *) {
   uint32_t object_version, length, id, timecode, flags, object_id;
   unsigned char *chunk;
   real_demuxer_t *dmx;
@@ -632,31 +632,7 @@ int real_reader_c::read() {
 
 // }}}
 
-// {{{ FUNCTIONS get_packet(), display_*(), set_headers(), identify()
-
-packet_t *real_reader_c::get_packet() {
-  generic_packetizer_c *winner;
-  real_demuxer_t *demuxer;
-  int i;
-
-  winner = NULL;
-
-  for (i = 0; i < demuxers.size(); i++) {
-    demuxer = demuxers[i];
-    if (winner == NULL) {
-      if (demuxer->packetizer->packet_available())
-        winner = demuxer->packetizer;
-    } else if (winner->packet_available() &&
-               (winner->get_smallest_timecode() >
-                demuxer->packetizer->get_smallest_timecode()))
-      winner = demuxer->packetizer;
-  }
-
-  if (winner != NULL)
-    return winner->get_packet();
-  else
-    return NULL;
-}
+// {{{ FUNCTIONS display_*(), set_headers(), identify()
 
 int real_reader_c::display_priority() {
   return DISPLAYPRIORITY_MEDIUM;

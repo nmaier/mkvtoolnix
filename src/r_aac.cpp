@@ -141,7 +141,7 @@ void aac_reader_c::guess_adts_version() {
   }
 }
 
-int aac_reader_c::read() {
+int aac_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
@@ -152,10 +152,6 @@ int aac_reader_c::read() {
   bytes_processed += nread;
 
   return EMOREDATA;
-}
-
-packet_t *aac_reader_c::get_packet() {
-  return aacpacketizer->get_packet();
 }
 
 int aac_reader_c::display_priority() {

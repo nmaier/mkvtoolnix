@@ -211,7 +211,7 @@ wav_reader_c::~wav_reader_c() {
     delete dtspacketizer;
 }
 
-int wav_reader_c::read() {
+int wav_reader_c::read(generic_packetizer_c *) {
   if (pcmpacketizer) {
     int nread;
 
@@ -264,15 +264,6 @@ int wav_reader_c::read() {
   }
 
   return 0;
-}
-
-packet_t *wav_reader_c::get_packet() {
-  if (pcmpacketizer)
-    return pcmpacketizer->get_packet();
-  else if (dtspacketizer)
-    return dtspacketizer->get_packet();
-
-  return NULL;
 }
 
 int wav_reader_c::display_priority() {
