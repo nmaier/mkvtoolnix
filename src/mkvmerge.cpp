@@ -1415,6 +1415,7 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       ti.aspect_ratio = parse_aspect_ratio(argv[i + 1]);
+      ti.aspect_ratio_given = true;
       i++;
 
     } else if (!strcmp(argv[i], "-y") || !strcmp(argv[i], "--sync")) {
@@ -1529,7 +1530,7 @@ static void parse_args(int argc, char **argv) {
       ti.languages = new vector<language_t>;
       ti.sub_charsets = new vector<language_t>;
       ti.all_tags = new vector<tags_t>;
-      ti.aspect_ratio = 1.0;
+      ti.aspect_ratio = 0.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;
       ti.stracks = new vector<int64_t>;

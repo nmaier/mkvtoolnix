@@ -409,7 +409,7 @@ void generic_packetizer_c::set_headers() {
       GetChild<KaxTrackVideo>(*track_entry);
 
     if ((hvideo_pixel_height != -1) && (hvideo_pixel_width != -1)) {
-      if (ti->aspect_ratio == 0.0)
+      if (!ti->aspect_ratio_given)
         ti->aspect_ratio = (float)hvideo_pixel_width /
           (float)hvideo_pixel_height;
       if (ti->aspect_ratio >

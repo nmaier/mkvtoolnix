@@ -89,6 +89,7 @@ typedef struct {
 
   char fourcc[5];
   float aspect_ratio;
+  bool aspect_ratio_given;
 
   vector<audio_sync_t> *audio_syncs; // As given on the command line
   audio_sync_t async;           // For this very track
