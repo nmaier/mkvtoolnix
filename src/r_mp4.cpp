@@ -29,7 +29,6 @@ extern "C" {
 
 #include "common.h"
 #include "mkvmerge.h"
-#include "qtmp4_atoms.h"
 #include "r_mp4.h"
 
 using namespace std;
@@ -105,6 +104,7 @@ void qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
   safefree(dmx->durmap_table);
   safefree(dmx->keyframe_table);
   safefree(dmx->editlist_table);
+  safefree(dmx->v_desc);
 }
 
 void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
@@ -193,8 +193,8 @@ void qtmp4_reader_c::parse_headers() {
       last = dmx->chunkmap_table[i].first_chunk;
     }
 
-    for (i = 0; i < dmx->chunk_table_len; i++)
-      mxverb(2, "2Chunk %5d size: %u\n", i, dmx->chunk_table[i].size);
+//     for (i = 0; i < dmx->chunk_table_len; i++)
+//       mxverb(2, "2Chunk %5d size: %u\n", i, dmx->chunk_table[i].size);
 
     // calc pts of chunks:
     s = 0;
@@ -243,10 +243,10 @@ void qtmp4_reader_c::parse_headers() {
 
       for (i = 0; i < dmx->chunk_table[j].size; i++) {
         dmx->sample_table[s].pos = pos;
-        mxverb(2, "Sample %5d: pts=%8d  off=0x%08X  size=%d\n", s,
-               dmx->sample_table[s].pts,
-               (int)dmx->sample_table[s].pos,
-               dmx->sample_table[s].size);
+//         mxverb(2, "Sample %5d: pts=%8d  off=0x%08X  size=%d\n", s,
+//                dmx->sample_table[s].pts,
+//                (int)dmx->sample_table[s].pos,
+//                dmx->sample_table[s].size);
         pos += dmx->sample_table[s].size;
         s++;
       }
@@ -391,9 +391,9 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
         for (i = 0; i < count; i++) {
           new_dmx->durmap_table[i].number = io->read_uint32_be();
           new_dmx->durmap_table[i].duration = io->read_uint32_be();
-          mxverb(2, "Durmap %5d: num %8d dur %8d\n",
-                 i, new_dmx->durmap_table[i].number,
-                 new_dmx->durmap_table[i].duration);
+//           mxverb(2, "Durmap %5d: num %8d dur %8d\n",
+//                  i, new_dmx->durmap_table[i].number,
+//                  new_dmx->durmap_table[i].duration);
         }
         new_dmx->durmap_table_len = count;
 
@@ -477,6 +477,12 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
             new_dmx->v_width = get_uint16_be(&v_stsd.width);
             new_dmx->v_height = get_uint16_be(&v_stsd.height);
             new_dmx->v_bitdepth = get_uint16_be(&v_stsd.depth);
+            new_dmx->v_desc =
+              (video_stsd_atom_t *)safemalloc(size - 8);
+            io->setFilePointer(pos + 8);
+            if (io->read(new_dmx->v_desc, size - 8) != (size - 8))
+              throw exception();
+            new_dmx->v_desc_size = size - 8;
           }
 
           io->setFilePointer(pos + size);
@@ -729,10 +735,17 @@ int qtmp4_reader_c::read() {
   }
 }
 
+#define NATIVE_ID
+
 void qtmp4_reader_c::create_packetizers() {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
+#ifndef NATIVE_ID
   alBITMAPINFOHEADER bih;
+  unsigned char *private_data;
+#else
+  string codec_id;
+#endif
   char old_fourcc[4];
 
   for (i = 0; i < demuxers.size(); i++) {
@@ -741,19 +754,39 @@ void qtmp4_reader_c::create_packetizers() {
       continue;
 
     if (dmx->type == 'v') {
+#ifdef NATIVE_ID
+      ti->id = dmx->id;
+      memcpy(old_fourcc, ti->fourcc, 4);
+      if (ti->fourcc[0] == 0) {
+        memcpy(ti->fourcc, dmx->fourcc, 4);
+        ti->fourcc[4] = 0;
+      }
+
+      ti->private_size = dmx->v_desc_size;
+      ti->private_data = (unsigned char *)dmx->v_desc;
+      if (!strncasecmp(ti->fourcc, "SVQ", 3))
+        codec_id = "V_SORENSON/V" + to_string(ti->fourcc[3] - '0');
+      else if (!strncasecmp(ti->fourcc, "cvid", 4))
+        codec_id = "V_CINEPAK";
+      else
+        mxerror(PFX "Unknown/unsupported FourCC '%s'.\n", ti->fourcc);
+      dmx->packetizer =
+        new video_packetizer_c(this, codec_id.c_str(), 0.0, dmx->v_width,
+                               dmx->v_height, false, ti);
+      ti->private_data = NULL;
+      memcpy(ti->fourcc, old_fourcc, 4);
+#else
       memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
 
       // AVI compatibility mode. Fill in the values we've got and guess
       // the others.
-      bih.bi_size = sizeof(alBITMAPINFOHEADER);
+      bih.bi_size = sizeof(alBITMAPINFOHEADER) + dmx->v_desc_size;
       bih.bi_width = dmx->v_width;
       bih.bi_height = dmx->v_height;
       bih.bi_planes = 1;
       bih.bi_bit_count = dmx->v_bitdepth == 0 ? 24 : dmx->v_bitdepth;
       bih.bi_size_image = bih.bi_width * bih.bi_height * 3;
 
-      ti->private_data = (unsigned char *)&bih;
-      ti->private_size = sizeof(alBITMAPINFOHEADER);
       ti->id = dmx->id;
       memcpy(old_fourcc, ti->fourcc, 4);
       if (ti->fourcc[0] == 0) {
@@ -762,11 +795,19 @@ void qtmp4_reader_c::create_packetizers() {
       }
       memcpy(&bih.bi_compression, ti->fourcc, 4);
 
+      ti->private_size = sizeof(alBITMAPINFOHEADER) + dmx->v_desc_size;
+      private_data = (unsigned char *)safemalloc(ti->private_size);
+      memcpy(private_data, &bih, sizeof(alBITMAPINFOHEADER));
+      memcpy(&private_data[sizeof(alBITMAPINFOHEADER)], dmx->v_desc,
+             dmx->v_desc_size);
+      ti->private_data = private_data;
       dmx->packetizer =
         new video_packetizer_c(this, NULL, 0.0, dmx->v_width, dmx->v_height,
                                false, ti);
+      safefree(private_data);
       ti->private_data = NULL;
       memcpy(ti->fourcc, old_fourcc, 4);
+#endif
 
       dmx->packetizer->duplicate_data_on_add(false);
 

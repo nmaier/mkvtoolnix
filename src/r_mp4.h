@@ -30,6 +30,7 @@
 #include "common.h"
 #include "mm_io.h"
 #include "p_video.h"
+#include "qtmp4_atoms.h"
 
 typedef struct {
   uint32_t number;
@@ -90,6 +91,8 @@ typedef struct {
   uint32_t editlist_table_len;
 
   uint32_t v_width, v_height, v_bitdepth;
+  video_stsd_atom_t *v_desc;
+  uint32_t v_desc_size;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
 
