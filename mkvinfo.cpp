@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.52 2003/05/29 20:19:53 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.53 2003/05/31 09:08:02 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -344,7 +344,7 @@ bool process_file(const char *file_name) {
             if ((gmtime_r(&temptime, &tmutc) != NULL) &&
                 (asctime_r(&tmutc, buffer) != NULL)) {
               buffer[strlen(buffer) - 1] = 0;
-              show_element(l2, 2, "Date: %s", buffer);
+              show_element(l2, 2, "Date: %s UTC", buffer);
             } else
               show_element(l2, 2, "Date (invalid, value: %d)", temptime);
 

@@ -4,10 +4,17 @@
 
 #include "wx/wx.h"
 #include "wx/treectrl.h"
+#include "wx/dnd.h"
+
+#include "EbmlVersion.h"
+#include "KaxVersion.h"
 
 #include "common.h"
 #include "mkvinfo.h"
 #include "matroska.xpm"
+
+using namespace libebml;
+using namespace libmatroska;
 
 mi_frame *frame;
 
@@ -16,7 +23,7 @@ enum {
   mi_file_open = 2,
   mi_file_savetext = 3,
   mi_options_showall = 101,
-  mi_options_expandall = 102,
+  mi_options_expandimportant = 102,
   mi_help_about = wxID_ABOUT
 };
 
@@ -57,7 +64,7 @@ mi_frame::mi_frame(const wxString &title, const wxPoint &pos,
     show_all_elements = false;
   else
     show_all_elements = true;
-  show_all_elements_expanded = false;
+  expand_important_elements = true;
 
   SetIcon(wxICON(matroska));
 
@@ -80,11 +87,11 @@ mi_frame::mi_frame(const wxString &title, const wxPoint &pos,
                                 _T("Parse the file completely and show all "
                                    "elements"));
   menu_options->Check(mi_options_showall, show_all_elements);
-//   menu_options->AppendCheckItem(mi_options_expandall,
-//                                 _T("&Expand all elements\tCtrl-E"),
-//                                 _T("Show all elements expanded and not only "
-//                                    "the most important ones"));
-//   menu_options->Check(mi_options_expandall, false);
+  menu_options->AppendCheckItem(mi_options_expandimportant,
+                                _T("&Expand important elements\tCtrl-E"),
+                                _T("After loading a file expand the most "
+                                   "important elements"));
+  menu_options->Check(mi_options_expandimportant, expand_important_elements);
   menu_help->Append(mi_help_about, _T("&About...\tF1"),
                     _T("Show about dialog"));
 
@@ -94,45 +101,49 @@ mi_frame::mi_frame(const wxString &title, const wxPoint &pos,
 
   SetMenuBar(menu_bar);
 
+  tree = new wxTreeCtrl(this, -1);
+  dnd_load = new mi_dndfile();
+  tree->SetDropTarget(dnd_load);  
+
   CreateStatusBar(1);
   SetStatusText(_T("ready"));
+
+  last_dir = wxGetWorkingDirectory();
 }
 
 void mi_frame::open_file(const char *file_name) {
-  if (tree != NULL)
-    tree->Destroy();
-  tree = new wxTreeCtrl(this, -1);
+  tree->DeleteAllItems();
   item_ids[0] = tree->AddRoot(file_name);
   last_percent = -1;
-  tree->Freeze();
-  tree->Hide();
   num_elements = 0;
+  menu_file->Enable(mi_file_open, false);
+  menu_file->Enable(mi_file_savetext, false);
+  menu_options->Enable(mi_options_showall, false);
   if (process_file(file_name)) {
     file_open = true;
     menu_file->Enable(mi_file_savetext, true);
     current_file = file_name;
-    expand_elements();
-    tree->Thaw();
-    tree->Show();
+    if (expand_important_elements)
+      expand_elements();
   } else {
-    tree->Destroy();
+    tree->DeleteAllItems();
     menu_file->Enable(mi_file_savetext, false);
   }
+  menu_file->Enable(mi_file_open, true);
+  menu_options->Enable(mi_options_showall, true);
   SetStatusText(_T("ready"));
+  tree->Refresh();
 }
 
 void mi_frame::show_progress(int percent, const char *msg) {
   wxString s;
-  mi_app *app;
-
-  if ((percent / 5) == (last_percent / 5))
-    return;
-  s.Printf("%s: %d%%", msg, percent);
-  SetStatusText(s);
-  app = &wxGetApp();
-  while (app->Pending())
-    app->Dispatch();
-  last_percent = percent;
+  
+  if ((percent / 5) != (last_percent / 5)) {
+    s.Printf("%s: %d%%", msg, percent);
+    SetStatusText(s);
+    last_percent = percent;
+  }
+  wxYield();
 }
 
 void mi_frame::expand_all_elements(wxTreeItemId &root, bool expand) {
@@ -155,12 +166,6 @@ void mi_frame::expand_elements() {
   long cl0, cl1;
 
   Freeze();
-
-  if (show_all_elements_expanded) {
-    expand_all_elements(item_ids[0]);
-    Thaw();
-    return;
-  }
 
   expand_all_elements(item_ids[0], false);
   tree->Expand(item_ids[0]);
@@ -222,9 +227,11 @@ void mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
   wxFileDialog file_dialog(this, _T("Select Matroska file"), _T(""), _T(""),
                            _T("Matroska files (*.mkv;*.mka;*.mks)|"
                               "*.mkv;*.mka;*.mks|All files|*.*"));
-  file_dialog.SetDirectory(wxGetWorkingDirectory());
-  if (file_dialog.ShowModal() == wxID_OK)
+  file_dialog.SetDirectory(last_dir);
+  if (file_dialog.ShowModal() == wxID_OK) {
     open_file(file_dialog.GetPath().c_str());
+    last_dir = file_dialog.GetDirectory();
+  }
 }
 
 void mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
@@ -233,8 +240,9 @@ void mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
   wxFileDialog file_dialog(this, _T("Select output file"), _T(""), _T(""),
                            _T("Text files (*.txt)|*.txt|All files|*.*"),
                            wxSAVE | wxOVERWRITE_PROMPT);
-  file_dialog.SetDirectory(wxGetWorkingDirectory());
+  file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
+    last_dir = file_dialog.GetDirectory();
     f = fopen(file_dialog.GetPath().c_str(), "w");
     if (f == NULL) {
       wxString s;
@@ -244,7 +252,13 @@ void mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
       return;
     }
 
+    menu_file->Enable(mi_file_open, false);
+    menu_file->Enable(mi_file_savetext, false);
+    menu_options->Enable(mi_options_showall, false);
     save_elements(item_ids[0], -1, f);
+    menu_file->Enable(mi_file_open, true);
+    menu_file->Enable(mi_file_savetext, true);
+    menu_options->Enable(mi_options_showall, true);
 
     fclose(f);
   }
@@ -265,24 +279,44 @@ void mi_frame::on_options_showall(wxCommandEvent &WXUNUSED(event)) {
     open_file(current_file);
 }
 
-void mi_frame::on_options_expandall(wxCommandEvent &WXUNUSED(event)) {
-  show_all_elements_expanded = !show_all_elements_expanded;
-  menu_options->Check(mi_options_expandall, show_all_elements_expanded);
-  if (file_open) {
-    tree->Hide();
-    expand_elements();
-    tree->Show();
-  }
+void mi_frame::on_options_expandimportant(wxCommandEvent &WXUNUSED(event)) {
+  expand_important_elements = !expand_important_elements;
+  menu_options->Check(mi_options_expandimportant,
+                      expand_important_elements);
 }
 
 void mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
   wxString msg;
-  msg.Printf(_T("mkvinfo v" VERSION".\n\nThis program is licensed under the "
+  msg.Printf(_T("mkvinfo v" VERSION".\nCompiled with libebml %s + "
+                "libmatroska %s.\n\nThis program is licensed under the "
                 "GPL v2 (see COPYING).\nIt was written by Moritz Bunkus "
                 "<moritz@bunkus.org>.\nSources and the latest binaries are "
                 "always available at\nhttp://www.bunkus.org/videotools/"
-                "mkvtoolnix/"));
+                "mkvtoolnix/"),
+             EbmlCodeVersion.c_str(), KaxCodeVersion.c_str());
   wxMessageBox(msg, _T("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
+}
+
+bool mi_dndfile::OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString &filenames) {
+  wxString dnd_file;
+  unsigned int i;
+
+  for (i = 0; i < filenames.GetCount(); i++) {
+    dnd_file = filenames[i];
+    if ((dnd_file.Right(3).Lower() == "mka") ||
+        (dnd_file.Right(3).Lower() == "mkv") ||
+        (dnd_file.Right(3).Lower() == "mks")) {
+      frame->open_file(dnd_file);
+    } else {
+      wxString msg;
+      msg.Printf("The dragged file '%s'\nis not a Matroska file.",
+                 dnd_file.c_str());
+      frame->show_error(msg.c_str());
+      break;
+    }
+  }
+  return true;
 }
 
 BEGIN_EVENT_TABLE(mi_frame, wxFrame)
@@ -290,10 +324,11 @@ BEGIN_EVENT_TABLE(mi_frame, wxFrame)
   EVT_MENU(mi_file_savetext, mi_frame::on_file_savetext)
   EVT_MENU(mi_file_quit, mi_frame::on_file_quit)
   EVT_MENU(mi_options_showall, mi_frame::on_options_showall)
-  EVT_MENU(mi_options_expandall, mi_frame::on_options_expandall)
+  EVT_MENU(mi_options_expandimportant, mi_frame::on_options_expandimportant)
   EVT_MENU(mi_help_about, mi_frame::on_help_about)
 END_EVENT_TABLE()
 
+  // IMPLEMENT_APP_NO_MAIN(mi_app)
 IMPLEMENT_APP(mi_app)
 
 #endif // HAVE_WXWINDOWS

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.h,v 1.3 2003/05/29 18:35:19 mosu Exp $
+    \version \$Id: mkvinfo.h,v 1.4 2003/05/31 09:08:02 mosu Exp $
     \brief definition of global variables and functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -26,6 +26,7 @@
 
 #ifdef HAVE_WXWINDOWS
 #include <wx/wx.h>
+#include <wx/dnd.h>
 #include <wx/treectrl.h>
 #endif
 
@@ -44,15 +45,23 @@ public:
   virtual bool OnInit();
 };
 
+class mi_dndfile: public wxFileDropTarget {
+public:
+  virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                           const wxArrayString &filenames);
+};
+
 class mi_frame: public wxFrame {
 private:
+  //For Drag-n-Drop
+  mi_dndfile *dnd_load;
   wxMenu *menu_options, *menu_file;
-  bool show_all_elements, show_all_elements_expanded;
+  bool show_all_elements, expand_important_elements;
   bool file_open;
   int last_percent;
   int64_t num_elements, elements_saved;
-  wxString current_file;
-
+  wxString current_file, last_dir;
+  
   wxTreeCtrl *tree;
   wxTreeItemId item_ids[10];
 
@@ -70,7 +79,7 @@ protected:
   void on_file_savetext(wxCommandEvent &event);
   void on_file_quit(wxCommandEvent &event);
   void on_options_showall(wxCommandEvent &event);
-  void on_options_expandall(wxCommandEvent &event);
+  void on_options_expandimportant(wxCommandEvent &event);
   void on_help_about(wxCommandEvent &event);
 
   void expand_elements();
