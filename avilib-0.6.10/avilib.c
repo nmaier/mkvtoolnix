@@ -42,9 +42,9 @@
 #define INFO_LIST
 
 // add a new riff chunk after XX MB
-//#define NEW_RIFF_THRES (1900*1024*1024)
-#define NEW_RIFF_THRES (1900*1024*1024)
-//#define NEW_RIFF_THRES (10*1024*1024)
+/* #define NEW_RIFF_THRES (1900*1024*1024) */
+#define NEW_RIFF_THRES (990*1024*1024)
+/* #define NEW_RIFF_THRES (10*1024*1024) */
 
 // Maximum number of indices per stream
 #define NR_IXNN_CHUNKS 32
@@ -444,7 +444,7 @@ static int avi_add_odml_index_entry(avi_t *AVI, unsigned char *tag, long flags, 
     if (AVI->video_superindex && 
 	    (int64_t)(AVI->pos+towrite) > (int64_t)((int64_t)NEW_RIFF_THRES*AVI->video_superindex->nEntriesInUse)) {
 
-	fprintf(stderr, "Adding a new RIFF chunk: %d\n", AVI->video_superindex->nEntriesInUse);
+/* 	fprintf(stderr, "Adding a new RIFF chunk: %d\n", AVI->video_superindex->nEntriesInUse); */
 
 	// rotate ALL indices
 	AVI->video_superindex->nEntriesInUse++;
@@ -1372,16 +1372,16 @@ static int avi_close_output_file(avi_t *AVI)
 	   uint32_t r = (AVI->video_superindex->aIndex[k].qwOffset >> 32) & 0xffffffff;
 	   uint32_t s = (AVI->video_superindex->aIndex[k].qwOffset) & 0xffffffff;
 
-	printf("VID NrEntries %d/%ld (%c%c%c%c) |0x%llX|%ld|%ld|\n",  k, 
-		(unsigned long)AVI->video_superindex->nEntriesInUse,
-		AVI->video_superindex->dwChunkId[0],
-		AVI->video_superindex->dwChunkId[1],
-		AVI->video_superindex->dwChunkId[2],
-		AVI->video_superindex->dwChunkId[3],
-		(unsigned long long)AVI->video_superindex->aIndex[k].qwOffset,
-		(unsigned long)AVI->video_superindex->aIndex[k].dwSize,
-		(unsigned long)AVI->video_superindex->aIndex[k].dwDuration
-		);
+/* 	printf("VID NrEntries %d/%ld (%c%c%c%c) |0x%llX|%ld|%ld|\n",  k,  */
+/* 		(unsigned long)AVI->video_superindex->nEntriesInUse, */
+/* 		AVI->video_superindex->dwChunkId[0], */
+/* 		AVI->video_superindex->dwChunkId[1], */
+/* 		AVI->video_superindex->dwChunkId[2], */
+/* 		AVI->video_superindex->dwChunkId[3], */
+/* 		(unsigned long long)AVI->video_superindex->aIndex[k].qwOffset, */
+/* 		(unsigned long)AVI->video_superindex->aIndex[k].dwSize, */
+/* 		(unsigned long)AVI->video_superindex->aIndex[k].dwDuration */
+/* 		); */
 	   /*
 		*/
 
@@ -2860,7 +2860,7 @@ multiple_riff:
 
       AVI->n_idx = 0;
 
-      fprintf(stderr, "[avilib] Reconstructing index...");
+/*       fprintf(stderr, "[avilib] Reconstructing index..."); */
 
       // Number of frames; only one audio track supported
       nvi = AVI->video_frames = AVI->total_frames;
@@ -2945,10 +2945,10 @@ multiple_riff:
 	 }
 
       }
-      if (nvi < AVI->total_frames) {
-	  fprintf(stderr, "\n[avilib] Uh? Some frames seems missing (%ld/%d)\n", 
-		  nvi,  AVI->total_frames);
-      }
+/*       if (nvi < AVI->total_frames) { */
+/* 	  fprintf(stderr, "\n[avilib] Uh? Some frames seems missing (%ld/%d)\n",  */
+/* 		  nvi,  AVI->total_frames); */
+/*       } */
 
 
       AVI->video_frames = nvi;
@@ -2956,7 +2956,7 @@ multiple_riff:
 
       for(j=0; j<AVI->anum; ++j) AVI->track[j].audio_bytes = tot[j];
       idx_type = 1;
-      fprintf(stderr, "done. nvi=%ld nai=%ld tot=%ld\n", nvi, nai[0], tot[0]);
+/*       fprintf(stderr, "done. nvi=%ld nai=%ld tot=%ld\n", nvi, nai[0], tot[0]); */
 
    } // total_frames but no indx chunk (xawtv does this)
 
@@ -3297,7 +3297,7 @@ long AVI_read_audio(avi_t *AVI, char *audbuf, long bytes)
       xio_lseek(AVI->fdes, pos, SEEK_SET);
       if ( (ret = avi_read(AVI->fdes,audbuf+nr,todo)) != todo)
       {
-	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo);
+/* 	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo); */
          AVI_errno = AVI_ERR_READ;
          return -1;
       }
