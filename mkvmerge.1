@@ -300,14 +300,12 @@ $ \fBmkvmerge -o mymovie.mkv mymovie.avi mymovie.srt\fP
 .LP
 There are several text subtitle formats that can be embedded into Matroska.
 At the moment \fBmkvmerge\fR supports only one simple text subtitle formats:
-SRT (Subtitle Ripper). These subtitles should normally be recoded to UTF-8
+SRT (Subtitle Ripper). These subtitles must be recoded to UTF-8
 so that they can be displayed correctly by a player. For recoded subtitles
-Matroska specifies S_TEXT/UTF8 as the codec ID. There's also S_TEXT/ASCII
-which assumes that no conversion is necessary.
+Matroska specifies S_TEXT/UTF8 as the codec ID.
 .LP
 \fBmkvmerge\fR does this conversion automatically based on the system's current
-locale. If the user does not want that conversion then he has to use the
-\fB\-\-sub\-type ascii\fR switch. If the subtitle charset is not the same as
+locale. If the subtitle charset is not the same as
 the system's current charset then the user can use \fB\-\-sub\-charset\fR
 switch. If the subtitles are already encoded in UTF-8 then you can use
 \fB\-\-sub\-charset UTF\-8\fR.
