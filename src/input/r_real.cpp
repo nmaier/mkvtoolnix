@@ -628,13 +628,13 @@ int real_reader_c::read(generic_packetizer_c *) {
     }
 
     dmx = find_demuxer(id);
-    mxverb(4, "real_reader: %u/'%s': timecode = %u\n", dmx->id, ti->fname,
-           timecode);
-
     if (dmx == NULL) {
       io->skip(length - 12);
       return EMOREDATA;
     }
+
+    mxverb(4, "real_reader: %u/'%s': timecode = %u\n", dmx->id, ti->fname,
+           timecode);
 
     length -= 12;
 
