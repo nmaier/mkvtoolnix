@@ -18,6 +18,7 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,6 +28,7 @@
 #include "common.h"
 #include "error.h"
 #include "r_real.h"
+#include "p_passthrough.h"
 #include "p_video.h"
 
 #pragma pack(push,2)
@@ -43,6 +45,55 @@ typedef struct {
   uint32_t type1;
   uint32_t type2;
 } real_video_props_t;
+
+typedef struct {
+  uint32_t fourcc1;             // '.', 'r', 'a', 0xfd
+  uint16_t version1;            // 4 or 5
+  uint16_t unknown1;            // 00 000
+  uint32_t fourcc2;             // .ra4 or .ra5
+  uint32_t unknown2;            // ???
+  uint16_t version2;            // 4 or 5
+  uint32_t header_size;         // == 0x4e
+  uint16_t flavor;              // codec flavor id
+  uint32_t coded_frame_size;    // coded frame size
+  uint32_t unknown3;            // big number
+  uint32_t unknown4;            // bigger number
+  uint32_t unknown5;            // yet another number
+  uint16_t sub_packet_h;
+  uint16_t frame_size;
+  uint16_t sub_packet_size;
+  uint16_t unknown6;            // 00 00
+  uint16_t sample_rate;
+  uint16_t unknown8;            // 0
+  uint16_t sample_size;
+  uint16_t channels;
+} real_audio_v4_props_t;
+
+typedef struct {
+  uint32_t fourcc1;             // '.', 'r', 'a', 0xfd
+  uint16_t version1;            // 4 or 5
+  uint16_t unknown1;            // 00 000
+  uint32_t fourcc2;             // .ra4 or .ra5
+  uint32_t unknown2;            // ???
+  uint16_t version2;            // 4 or 5
+  uint32_t header_size;         // == 0x4e
+  uint16_t flavor;              // codec flavor id
+  uint32_t coded_frame_size;    // coded frame size
+  uint32_t unknown3;            // big number
+  uint32_t unknown4;            // bigger number
+  uint32_t unknown5;            // yet another number
+  uint16_t sub_packet_h;
+  uint16_t frame_size;
+  uint16_t sub_packet_size;
+  uint16_t unknown6;            // 00 00
+  uint8_t unknown7[6];          // 0, srate, 0
+  uint16_t sample_rate;
+  uint16_t unknown8;            // 0
+  uint16_t sample_size;
+  uint16_t channels;
+  uint32_t genr;                // "genr"
+  uint32_t fourcc3;             // fourcc
+} real_audio_v5_props_t;
 
 #pragma pack(pop)
 
@@ -89,7 +140,8 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
     fprintf(stdout, "Using RealMedia demultiplexer for %s.\n", ti->fname);
 
   parse_headers();
-  create_packetizers();
+  if (!identifying)
+    create_packetizers();
 }
 
 real_reader_c::~real_reader_c() {
@@ -112,7 +164,9 @@ void real_reader_c::parse_headers() {
   uint32_t object_id, i, id, start_time, preroll, size;
   char *buffer;
   real_demuxer_t *dmx;
-  real_video_props_t *vsp;
+  real_video_props_t *rvp;
+  real_audio_v4_props_t *ra4p;
+  real_audio_v5_props_t *ra5p;
 
   try {
     io->skip(4);                // object_id = ".RIF"
@@ -223,10 +277,12 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
 
-          vsp = (real_video_props_t *)buffer;
+          rvp = (real_video_props_t *)buffer;
+          ra4p = (real_audio_v4_props_t *)buffer;
+          ra5p = (real_audio_v5_props_t *)buffer;
 
           if ((size >= sizeof(real_video_props_t)) &&
-              (get_fourcc(&vsp->fourcc1) == FOURCC('V', 'I', 'D', 'O')) &&
+              (get_fourcc(&rvp->fourcc1) == FOURCC('V', 'I', 'D', 'O')) &&
               demuxing_requested('v', id)) {
 
             dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
@@ -234,18 +290,71 @@ void real_reader_c::parse_headers() {
             dmx->id = id;
             dmx->start_time = start_time;
             dmx->preroll = preroll;
-            memcpy(dmx->fourcc, &vsp->fourcc2, 4);
+            memcpy(dmx->fourcc, &rvp->fourcc2, 4);
             dmx->fourcc[4] = 0;
-            dmx->width = get_uint16_be(&vsp->width);
-            dmx->height = get_uint16_be(&vsp->height);
+            dmx->width = get_uint16_be(&rvp->width);
+            dmx->height = get_uint16_be(&rvp->height);
             dmx->type = 'v';
-            i = get_uint32_be(&vsp->fps);
+            i = get_uint32_be(&rvp->fps);
             dmx->fps = (float)((i & 0xffff0000) >> 16) +
               ((float)(i & 0x0000ffff)) / 65536.0;
             dmx->private_data = (unsigned char *)safememdup(buffer, size);
             dmx->private_size = size;
 
             demuxers.push_back(dmx);
+
+          } else if ((size >= sizeof(real_audio_v4_props_t)) &&
+                     (get_fourcc(&ra4p->fourcc1) ==
+                      FOURCC('.', 'r', 'a', 0xfd)) &&
+                     demuxing_requested('a', id)) {
+            bool ok;
+
+            ok = true;
+
+            dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
+            memset(dmx, 0, sizeof(real_demuxer_t));
+            dmx->id = id;
+            dmx->start_time = start_time;
+            dmx->preroll = preroll;
+            dmx->type = 'a';
+            if (get_uint16_be(&ra4p->version1) == 4) {
+              int slen;
+              char *p;
+
+              dmx->channels = get_uint16_be(&ra4p->channels);
+              dmx->samples_per_second = get_uint16_be(&ra4p->sample_rate);
+              dmx->bits_per_sample = get_uint16_be(&ra4p->sample_size);
+              p = (char *)(ra4p + 1);
+              slen = (unsigned char)p[0];
+              p += (slen + 1);
+              slen = (unsigned char)p[0];
+              p++;
+              if (slen != 4) {
+                fprintf(stdout, "real_reader: Warning: Couldn't find RealAudio"
+                        " FourCC for id %u (description length: %d) Skipping "
+                        "track.\n", id, slen);
+                ok = false;
+              } else {
+                memcpy(dmx->fourcc, p, 4);
+                dmx->fourcc[4] = 0;
+              }
+
+            } else {
+
+              memcpy(dmx->fourcc, &ra5p->fourcc3, 4);
+              dmx->fourcc[4] = 0;
+              dmx->channels = get_uint16_be(&ra5p->channels);
+              dmx->samples_per_second = get_uint16_be(&ra5p->sample_rate);
+              dmx->bits_per_sample = get_uint16_be(&ra5p->sample_size);
+            }
+
+            if (ok) {
+              dmx->private_data = (unsigned char *)safememdup(buffer, size);
+              dmx->private_size = size;
+
+              demuxers.push_back(dmx);
+            } else
+              free(dmx);
           }
 
           safefree(buffer);
@@ -280,6 +389,7 @@ void real_reader_c::create_packetizers() {
     dmx = demuxers[i];
     ti->private_data = dmx->private_data;
     ti->private_size = dmx->private_size;
+
     if (dmx->type == 'v') {
       char buffer[20];
 
@@ -291,7 +401,30 @@ void real_reader_c::create_packetizers() {
       if (verbose)
         fprintf(stdout, "+-> Using video output module for stream %u (FourCC: "
                 "%s).\n", dmx->id, dmx->fourcc);
+
+    } else {
+      char buffer[20];
+      passthrough_packetizer_c *ptzr;
+
+      ptzr = new passthrough_packetizer_c(this, ti);
+      dmx->packetizer = ptzr;
+
+      sprintf(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]), 
+              toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
+              toupper(dmx->fourcc[3]));
+
+      ptzr->set_track_type(track_audio);
+      ptzr->set_codec_id(buffer);
+      ptzr->set_codec_private(dmx->private_data, dmx->private_size);
+      ptzr->set_audio_sampling_freq((float)dmx->samples_per_second);
+      ptzr->set_audio_channels(dmx->channels);
+      ptzr->set_audio_bit_depth(dmx->bits_per_sample);
+
+      if (verbose)
+        fprintf(stdout, "+-> Using generic audio output module for stream %u "
+                "(FourCC: %s).\n", dmx->id, dmx->fourcc);
     }
+
     dmx->packetizer->duplicate_data_on_add(false);
   }
 
@@ -350,14 +483,19 @@ int real_reader_c::read() {
       return 0;
     }
 
-    if (((flags & 2) == 2) && (last_timestamp != timestamp))
-      bref = VFT_IFRAME;
-    else if (last_timestamp == timestamp)
-      bref = timestamp;
-    else
-      bref = VFT_PFRAMEAUTOMATIC;
+    if (dmx->type == 'v') {
+      if (((flags & 2) == 2) && (last_timestamp != timestamp))
+        bref = VFT_IFRAME;
+      else if (last_timestamp == timestamp)
+        bref = timestamp;
+      else
+        bref = VFT_PFRAMEAUTOMATIC;
 
-    dmx->packetizer->process(chunk, length, timestamp, -1, bref);
+      dmx->packetizer->process(chunk, length, timestamp, -1, bref);
+
+    } else
+      dmx->packetizer->process(chunk, length, timestamp);
+
     last_timestamp = timestamp;
 
   } catch (exception &ex) {

@@ -130,6 +130,8 @@ int split_max_num_files = 65535;
 float video_fps = -1.0;
 int default_tracks[3];
 
+bool identifying = false;
+
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment *kax_segment;
 KaxInfo *kax_infos;
@@ -834,6 +836,7 @@ static void identify(const char *filename) {
   files.push_back(file);
 
   verbose = 0;
+  identifying = true;
   create_readers();
 
   file->reader->identify();

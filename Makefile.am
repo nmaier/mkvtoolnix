@@ -19,6 +19,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			p_ac3.cpp p_ac3.h \
 			p_dts.cpp p_dts.h \
 			p_mp3.cpp p_mp3.h \
+			p_passthrough.cpp p_passthrough.h \
 			p_pcm.cpp p_pcm.h \
 			p_textsubs.cpp p_textsubs.h \
 			p_video.cpp p_video.h \
