@@ -72,6 +72,7 @@ class tab_chapters;
 class tab_global;
 class tab_input;
 class tab_settings;
+class job_dialog;
 
 class mmg_dialog: public wxFrame {    
   DECLARE_CLASS(mmg_dialog);
@@ -102,6 +103,9 @@ public:
   wxButton *b_start_muxing, *b_copy_to_clipboard, *b_add_to_jobqueue;
 
   int32_t last_job_id;
+
+  bool muxing_in_progress;
+  job_dialog *jdlg;
 
 public:
   mmg_dialog();
@@ -159,6 +163,11 @@ public:
 
   void load_job_queue();
   void save_job_queue();
+
+  void set_on_top(bool on_top);
+  void restore_on_top();
+
+  void muxing_has_finished();
 };
 
 extern mmg_dialog *mdlg;

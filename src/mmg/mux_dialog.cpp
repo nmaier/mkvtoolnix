@@ -111,7 +111,6 @@ mux_dialog::mux_dialog(wxWindow *parent):
   SetSizer(siz_all);
 
   update_window(wxT("Muxing in progress."));
-  MakeModal(true);
   Show(true);
 
   process = new mux_process(this);
@@ -184,9 +183,6 @@ mux_dialog::mux_dialog(wxWindow *parent):
     if (out->Eof())
       break;
   }
-
-  MakeModal(false);
-  ShowModal();
 }
 
 mux_dialog::~mux_dialog() {
@@ -237,6 +233,12 @@ mux_dialog::on_abort(wxCommandEvent &evt) {
 }
 
 void
+mux_dialog::on_close(wxCloseEvent &evt) {
+  mdlg->muxing_has_finished();
+  Destroy();
+}
+
+void
 mux_dialog::done() {
   SetTitle(wxT("mkvmerge has finished"));
 
@@ -278,4 +280,5 @@ BEGIN_EVENT_TABLE(mux_dialog, wxDialog)
   EVT_BUTTON(ID_B_MUX_OK, mux_dialog::on_ok)
   EVT_BUTTON(ID_B_MUX_SAVELOG, mux_dialog::on_save_log)
   EVT_BUTTON(ID_B_MUX_ABORT, mux_dialog::on_abort)
+  EVT_CLOSE(mux_dialog::on_close)
 END_EVENT_TABLE();

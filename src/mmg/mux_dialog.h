@@ -47,6 +47,7 @@ public:
   void on_ok(wxCommandEvent &evt);
   void on_save_log(wxCommandEvent &evt);
   void on_abort(wxCommandEvent &evt);
+  void on_close(wxCloseEvent &evt);
   void done();
 };
 
