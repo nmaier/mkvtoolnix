@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.92 2003/06/08 18:59:43 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.93 2003/06/09 09:07:41 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1468,7 +1468,7 @@ void main_loop() {
 }
 
 int main(int argc, char **argv) {
-  int i;
+  int i, k;
 
   init_globals();
 
@@ -1492,9 +1492,13 @@ int main(int argc, char **argv) {
 
     for (i = 0; i < cluster_helper_c::splitpoints.size(); i++) {
       splitpoint_t *sp = cluster_helper_c::splitpoints[i];
-      fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, pn: %lld\n",
+      fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, pn: %lld",
               i, sp->timecode, sp->filepos, sp->cues_size,
               sp->filepos + sp->cues_size, sp->packet_num);
+      if (sp->last_packets != NULL)
+        for (k = 1; k < track_number; k++)
+          fprintf(stdout, " %lld", sp->last_packets[k]);
+      fprintf(stdout, "\n");
     }
 
     delete cluster_helper;

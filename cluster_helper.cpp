@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.25 2003/06/08 18:59:43 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.26 2003/06/09 09:07:41 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -46,6 +46,7 @@ cluster_helper_c::cluster_helper_c() {
   packet_num = 0;
   out = NULL;
   timecode_offset = 0;
+  last_packets = NULL;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -247,6 +248,7 @@ int cluster_helper_c::render() {
   packet_t *pack, *bref_packet, *fref_packet;
   int64_t block_duration, old_max_timecode;
   splitpoint_t *sp;
+  generic_packetizer_c *source;
 
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
@@ -265,11 +267,11 @@ int cluster_helper_c::render() {
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
+    source = ((generic_packetizer_c *)pack->source);
 
     data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
-      static_cast<KaxTrackEntry &>
-      (*((generic_packetizer_c *)pack->source)->get_track_entry());
+      static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
     // Now put the packet into the cluster.
     if (pack->bref != -1) {      // P and B frames: add backward reference.
@@ -307,16 +309,10 @@ int cluster_helper_c::render() {
     else if (write_cues) {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
-      if ((((generic_packetizer_c *)pack->source)->get_cue_creation() ==
-           CUES_IFRAMES) && (pack->bref == -1)) {
-        kax_cues->AddBlockGroup(*new_group);
-        num_cue_elements++;
-        num_cue_elements_here++;
-        cue_writing_requested = 1;
-      }
+      if (((source->get_cue_creation() == CUES_IFRAMES) && (pack->bref == -1))
+          ||
       // ... or if the user requested entries for all frames.
-      else if (((generic_packetizer_c *)pack->source)->get_cue_creation() ==
-               CUES_ALL) {
+          (source->get_cue_creation() == CUES_ALL)) {
         kax_cues->AddBlockGroup(*new_group);
         num_cue_elements++;
         num_cue_elements_here++;
@@ -327,31 +323,50 @@ int cluster_helper_c::render() {
     if (new_group != last_block_group)
       block_duration = 0;
     block_duration += pack->duration;
-    if (pack->duration_mandatory)
+    if (pass == 2) {
+      if (next_splitpoint < splitpoints.size())
+        sp = splitpoints[next_splitpoint];
+      else
+        sp = NULL;
+    } else
+      sp = NULL;
+    if ((pack->duration_mandatory) ||
+        ((sp != NULL) && (sp->last_packets != NULL) &&
+         (sp->last_packets[source->get_track_num()] == pack->packet_num)))
       new_group->SetBlockDuration(block_duration * 1000000);
     pack->group = new_group;
     last_block_group = new_group;
 
     // The next stuff is for splitting files.
-    if ((pass == 1) &&          // first pass: find splitpoints
-        (pack->bref == -1) &&   // this is a keyframe
-        ((video_fps == -1) ||   // either no video track present...
-         (((generic_packetizer_c *)(pack->source))->get_track_type() ==
-          track_video))) {      // ...or this is the video track
-      sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
-      sp->timecode = pack->timecode;
-      if ((num_cue_elements - num_cue_elements_here) > 0) {
-        kax_cues->UpdateSize();
-        sp->cues_size = kax_cues->ElementSize();
-      } else
-        sp->cues_size = 0;
-      sp->filepos = out->getFilePointer() - header_overhead;
-      if (elements_in_cluster > 0) {
-        cluster->UpdateSize();
-        sp->filepos += cluster->ElementSize();
+    if (pass == 1) {            // first pass: find splitpoints
+      if ((pack->bref == -1) && // this is a keyframe
+          ((video_fps == -1) || // either no video track present...
+           // ...or this is the video track
+           (source->get_track_type() == track_video))) { 
+        sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
+        sp->timecode = pack->timecode;
+        if ((num_cue_elements - num_cue_elements_here) > 0) {
+          kax_cues->UpdateSize();
+          sp->cues_size = kax_cues->ElementSize();
+        } else
+          sp->cues_size = 0;
+        sp->filepos = out->getFilePointer() - header_overhead;
+        if (elements_in_cluster > 0) {
+          cluster->UpdateSize();
+          sp->filepos += cluster->ElementSize();
+        }
+        sp->packet_num = pack->packet_num;
+        sp->last_packets = last_packets;
+        last_packets = NULL;
+        splitpoints.push_back(sp);
+      } else {
+        if (last_packets == NULL) {
+          last_packets = (int64_t *)safemalloc(track_number * sizeof(int64_t));
+          memset(last_packets, 0, track_number * sizeof(int64_t));
+        }
+        last_packets[source->get_track_num()] = pack->packet_num;
       }
-      sp->packet_num = pack->packet_num;
-      splitpoints.push_back(sp);
+
 
     } else if ((pass == 2) &&   // second pass: process and split
                (next_splitpoint < splitpoints.size()) && // splitpoint's avail

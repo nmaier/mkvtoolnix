@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.8 2003/06/08 18:59:43 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.9 2003/06/09 09:07:41 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -35,6 +35,7 @@ typedef struct {
 
 typedef struct {
   int64_t timecode, filepos, cues_size, packet_num;
+  int64_t *last_packets;
 } splitpoint_t;
 
 class cluster_helper_c {
@@ -43,7 +44,7 @@ private:
   int num_clusters, cluster_content_size, next_splitpoint;
   KaxBlockGroup *last_block_group;
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
-  int64_t packet_num, timecode_offset;
+  int64_t packet_num, timecode_offset, *last_packets;
   mm_io_c *out;
 public:
   static vector<splitpoint_t *> splitpoints;
