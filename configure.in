@@ -651,20 +651,20 @@ dnl
 dnl Option to use the (old) avilib library instead of the AVI classes
 dnl
 AC_ARG_WITH(avilib,
-  [  --with-avilib=version         Which avilib should be used (noclasses, 0.6.10)],
+  [  --with-avilib=version         Which avilib should be used (classes, 0.6.10)],
   with_avilib_given=yes, with_avilib_given=no)
 
   AC_MSG_CHECKING(which AVI libraries to use)
-  # Defaults: use aviclasses and prefer the new avilib.
-  if test x"`uname -s`" = x"Darwin"; then
-    have_aviclasses=no
-  else
-    have_aviclasses=yes
-  fi
+  # Defaults: do not use aviclasses and prefer the new avilib.
+  have_aviclasses=no
+  have_avilib0_6_10=yes
   if test "x$with_avilib_given" = "xyes"; then
     set - `echo ${with_avilib} | sed 's/,/ /g'`
     while test "x$1" != "x"; do
       case "$1" in
+        classes)
+          have_aviclasses=yes
+          ;;
         noclasses)
           have_aviclasses=no
           ;;
@@ -676,7 +676,7 @@ AC_ARG_WITH(avilib,
           echo "*** Unknown AVI library \"$1\" in \"${with_avilib}\". "
           echo "*** Supported values are:"
           echo "*** 0.6.10    - the new avilib with OpenDML support"
-          echo "*** noclasses - Do not use the AVI classes by Cyrius with "
+          echo "*** classes   - Use the AVI classes by Cyrius with "
           echo "***             OpenDML support"
           exit 1
           ;;
@@ -685,6 +685,10 @@ AC_ARG_WITH(avilib,
     done
   fi
   if test "x$have_aviclasses" = "xyes"; then 
+    if test x"`uname -s`" = x"Darwin"; then
+      echo "*** WARNING:"
+      echo "*** Darwin is known not to compile the aviclasses library."
+    fi
     AC_DEFINE(HAVE_AVICLASSES, 1,
       [Define if the newer AVIclasses should be used.])
     AVICLASSES_LIBS="-laviclasses"
