@@ -31,6 +31,7 @@
 #include "mm_io.h"
 #include "p_vobsub.h"
 #include "r_vobsub.h"
+#include "subtitles.h"
 
 using namespace std;
 
@@ -144,8 +145,15 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
 vobsub_reader_c::~vobsub_reader_c() {
   uint32_t i;
 
-  for (i = 0; i < tracks.size(); i++)
+  for (i = 0; i < tracks.size(); i++) {
+    mxverb(2, "r_vobsub track %u SPU size: %lld, overall size: %lld, "
+           "overhead: %lld (%.3f%%)\n", i, tracks[i]->spu_size,
+           tracks[i]->spu_size + tracks[i]->overhead,
+           tracks[i]->overhead, (float)(100.0 * tracks[i]->overhead /
+                                        (tracks[i]->overhead +
+                                         tracks[i]->spu_size)));
     delete tracks[i];
+  }
   delete sub_file;
   delete idx_file;
 }
@@ -168,7 +176,7 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
       ti->language = NULL;
     tracks[i]->ptzr =
       add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(),
-                                             idx_data.length(), true, ti));
+                                             idx_data.length(), ti));
     if (tracks[i]->timecodes.size() > 0) {
       avg_duration = 0;
       for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
@@ -208,8 +216,7 @@ vobsub_reader_c::parse_headers() {
   vobsub_track_c *track;
   int64_t filepos, timestamp;
   int hour, minute, second, msecond, idx;
-  vector<int64_t> *positions, all_positions;
-  uint32_t i, k, tsize, psize;
+  uint32_t i, k, tsize;
 
   language[0] = 0;
   track = NULL;
@@ -279,52 +286,22 @@ vobsub_reader_c::parse_headers() {
   }
 
   if (!identifying) {
-    filepos = sub_file->get_size();
     tsize = tracks.size();
-
-    for (i = 0; i < tsize; i++) {
-      positions = &tracks[i]->positions;
-      psize = positions->size();
-      for (k = 0; k < psize; k++) {
-        all_positions.push_back((*positions)[k]);
-        if (k < (psize - 1))
-          tracks[i]->sizes.push_back((*positions)[k + 1] - (*positions)[k]);
-        else
-          tracks[i]->sizes.push_back(filepos - (*positions)[k]);
-      }
-    }
-
-    sort(all_positions.begin(), all_positions.end());
-    for (i = 0; i < tsize; i++) {
-      psize = tracks[i]->positions.size();
-      if (tracks[i]->sizes[psize - 1] <= 64000)
-        continue;
-      for (k = 0; k < all_positions.size(); k++)
-        if (tracks[i]->positions[psize - 1] < all_positions[k]) {
-          tracks[i]->sizes[psize - 1] = all_positions[k] -
-            tracks[i]->positions[psize - 1];
-          break;
-        }
-    }
-
     for (i = 0; i < tsize; i++)
-      if ((tracks[i]->positions.size() != tracks[i]->timecodes.size()) ||
-          (tracks[i]->positions.size() != tracks[i]->sizes.size()))
-        mxerror(PFX "Have %u positions, %u sizes and %u timecodes. This "
+      if (tracks[i]->positions.size() != tracks[i]->timecodes.size())
+        mxerror(PFX "Have %u positions and %u timecodes. This "
                 "should not have happened. Please file a bug report.\n",
-                tracks[i]->positions.size(), tracks[i]->sizes.size(),
-                tracks[i]->timecodes.size());
+                tracks[i]->positions.size(), tracks[i]->timecodes.size());
 
     if (verbose > 1) {
       for (i = 0; i < tsize; i++) {
         mxinfo("vobsub_reader: Track number %u\n", i);
         for (k = 0; k < tracks[i]->positions.size(); k++)
           mxinfo("vobsub_reader:  %04u position: %12lld (0x%04x%08x), "
-                 "size: %12lld (0x%06x), timecode: %12lld (" FMT_TIMECODE
-                 ")\n", k, tracks[i]->positions[k],
+                 "timecode: %12lld (" FMT_TIMECODE ")\n", k,
+                 tracks[i]->positions[k],
                  (uint32_t)(tracks[i]->positions[k] >> 32),
                  (uint32_t)(tracks[i]->positions[k] & 0xffffffff),
-                 tracks[i]->sizes[k], (uint32_t)tracks[i]->sizes[k],
                  tracks[i]->timecodes[k] / 1000000,
                  ARG_TIMECODE_NS(tracks[i]->timecodes[k]));
       }
@@ -332,10 +309,232 @@ vobsub_reader_c::parse_headers() {
   }
 }
 
+#define deliver() deliver_packet(dst_buf, dst_size, timecode, duration, \
+                                 PTZR(track->ptzr));
+int
+vobsub_reader_c::deliver_packet(unsigned char *buf,
+                                int size,
+                                int64_t timecode,
+                                int64_t default_duration,
+                                generic_packetizer_c *ptzr) {
+  int64_t duration;
+
+  if ((buf == NULL) || (size == 0)) {
+    safefree(buf);
+    return -1;
+  }
+
+  duration = spu_extract_duration(buf, size, timecode);
+  if (duration == -1) {
+    mxverb(2, PFX "Could not extract the duration for a SPU packet in track "
+           "%lld of '%s' (timecode: " FMT_TIMECODE ").\n", ti->id, ti->fname,
+           ARG_TIMECODE(timecode));
+    duration = default_duration;
+  }
+  if (duration != -2) {
+    memory_c mem(buf, size, true);
+    ptzr->process(mem, timecode, duration);
+  } else
+    safefree(buf);
+
+  return -1;
+}
+
+// Adopted from mplayer's vobsub.c
+int
+vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
+                                        int64_t duration,
+                                        int64_t track_id) {
+  unsigned char *dst_buf;
+  uint32_t len, idx, version, packet_size, dst_size;
+  int64_t extraction_start_pos;
+  int c, packet_aid, spu_len;
+  float pts;
+  /* Goto start of a packet, it starts with 0x000001?? */
+  const unsigned char wanted[] = { 0, 0, 1 };
+  unsigned char buf[5];
+  vobsub_track_c *track;
+
+  track = tracks[track_id];
+  extraction_start_pos = sub_file->getFilePointer();
+
+  pts = 0.0;
+  track->packet_num++;
+
+  dst_buf = NULL;
+  dst_size = 0;
+  packet_size = 0;
+  spu_len = -1;
+  while (1) {
+    if ((spu_len >= 0) && (dst_size >= spu_len))
+      return deliver();
+    if (sub_file->read(buf, 4) != 4)
+      return deliver();
+    while (memcmp(buf, wanted, sizeof(wanted)) != 0) {
+      c = sub_file->getch();
+      if (c < 0)
+        return deliver();
+      memmove(buf, buf + 1, 3);
+      buf[3] = c;
+    }
+    switch (buf[3]) {
+      case 0xb9:			/* System End Code */
+        return deliver();
+        break;
+
+      case 0xba:			/* Packet start code */
+        c = sub_file->getch();
+        if (c < 0)
+          return deliver();
+        if ((c & 0xc0) == 0x40)
+          version = 4;
+        else if ((c & 0xf0) == 0x20)
+          version = 2;
+        else {
+          if (!track->mpeg_version_warning_printed) {
+            mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet %lld for "
+                   "track %lld for timecode " FMT_TIMECODE ", assuming "
+                   "MPEG2. No further warnings will be printed for this "
+                   "track.\n", c, track->packet_num, track_id,
+                   ARG_TIMECODE_NS(timecode));
+            track->mpeg_version_warning_printed = true;
+          }
+          version = 2;
+        }
+
+        if (version == 4) {
+          if (!sub_file->setFilePointer2(9, seek_current))
+            return deliver();
+        } else if (version == 2) {
+          if (!sub_file->setFilePointer2(7, seek_current))
+            return deliver();
+        } else
+          abort();
+        break;
+
+      case 0xbd:			/* packet */
+        if (sub_file->read(buf, 2) != 2)
+          return deliver();
+        len = buf[0] << 8 | buf[1];
+        idx = sub_file->getFilePointer() - extraction_start_pos;
+        c = sub_file->getch();
+        if (c < 0)
+          return deliver();
+        if ((c & 0xC0) == 0x40) { /* skip STD scale & size */
+          if (sub_file->getch() < 0)
+            return deliver();
+          c = sub_file->getch();
+          if (c < 0)
+            return deliver();
+        }
+        if ((c & 0xf0) == 0x20) { /* System-1 stream timestamp */
+          /* Do we need this? */
+          abort();
+        } else if ((c & 0xf0) == 0x30) {
+          /* Do we need this? */
+          abort();
+        } else if ((c & 0xc0) == 0x80) { /* System-2 (.VOB) stream */
+          uint32_t pts_flags, hdrlen, dataidx;
+          c = sub_file->getch();
+          if (c < 0)
+            return deliver();
+          pts_flags = c;
+          c = sub_file->getch();
+          if (c < 0)
+            return deliver();
+          hdrlen = c;
+          dataidx = sub_file->getFilePointer() - extraction_start_pos + hdrlen;
+          if (dataidx > idx + len) {
+            mxwarn(PFX "Invalid header length: %d (total length: %d, "
+                   "idx: %d, dataidx: %d)\n", hdrlen, len, idx, dataidx);
+            return deliver();
+          }
+          if ((pts_flags & 0xc0) == 0x80) {
+            if (sub_file->read(buf, 5) != 5)
+              return deliver();
+            if (!(((buf[0] & 0xf0) == 0x20) && (buf[0] & 1) &&
+                  (buf[2] & 1) && (buf[4] & 1))) {
+              mxwarn(PFX "PTS error: 0x%02x %02x%02x %02x%02x \n",
+                     buf[0], buf[1], buf[2], buf[3], buf[4]);
+              pts = 0;
+            } else
+              pts = ((buf[0] & 0x0e) << 29 | buf[1] << 22 |
+                     (buf[2] & 0xfe) << 14 | buf[3] << 7 | (buf[4] >> 1));
+          } else /* if ((pts_flags & 0xc0) == 0xc0) */ {
+            /* what's this? */
+            /* abort(); */
+          }
+          sub_file->setFilePointer2(dataidx + extraction_start_pos,
+                                    seek_beginning);
+          packet_aid = sub_file->getch();
+          if (packet_aid < 0) {
+            mxwarn(PFX "Bogus aid %d\n", packet_aid);
+            return deliver();
+          }
+          packet_size = len - ((unsigned int)sub_file->getFilePointer() -
+                               extraction_start_pos - idx);
+          if (track->aid == -1)
+            track->aid = packet_aid;
+          else if (track->aid != packet_aid) {
+            // The packet does not belong to the current subtitle stream.
+            mxverb(3, PFX "skipping sub packet with aid %d (wanted aid: %d) "
+                   "with size %d at %lld\n", packet_aid, track->aid,
+                   packet_size, sub_file->getFilePointer() -
+                   extraction_start_pos);
+            sub_file->skip(packet_size);
+            idx = len;
+            break;
+          }
+          dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size +
+                                                 packet_size);
+          mxverb(3, PFX "sub packet data: aid: %d, pts: %.3fs, packet_size: "
+                 "%u\n", track->aid, pts, packet_size);
+          if (sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
+            mxwarn(PFX "sub_file->read failure");
+            return deliver();
+          }
+          if (spu_len == -1)
+            spu_len = get_uint16_be(dst_buf);
+          dst_size += packet_size;
+          track->spu_size += packet_size;
+          track->overhead += sub_file->getFilePointer() -
+            extraction_start_pos - packet_size;
+
+          idx = len;
+        }
+        break;
+
+      case 0xbe:			/* Padding */
+        if (sub_file->read(buf, 2) != 2)
+          return deliver();
+        len = buf[0] << 8 | buf[1];
+        if ((len > 0) && !sub_file->setFilePointer2(len, seek_current))
+          return deliver();
+        break;
+
+      default:
+        if ((0xc0 <= buf[3]) && (buf[3] < 0xf0)) {
+          /* MPEG audio or video */
+          if (sub_file->read(buf, 2) != 2)
+            return deliver();
+          len = (buf[0] << 8) | buf[1];
+          if ((len > 0) && !sub_file->setFilePointer2(len, seek_current))
+            return deliver();
+
+        } else {
+          mxwarn(PFX "unknown header 0x%02X%02X%02X%02X\n", buf[0], buf[1],
+                 buf[2], buf[3]);
+          return deliver();
+        }
+    }
+  }
+
+  return deliver();
+}
+
 int
 vobsub_reader_c::read(generic_packetizer_c *ptzr) {
   vobsub_track_c *track;
-  unsigned char *data;
   uint32_t i, id;
 
   track = NULL;
@@ -349,42 +548,12 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr) {
     return 0;
 
   id = i;
-  i = track->idx;
-  if ((track->sizes[i] > 64 * 1024) && hack_engaged(ENGAGE_SKIP_BIG_VOBSUBS)) {
-    mxwarn(PFX "Skipping entry at timecode %llds of track ID %u in '%s' "
-           "because it is too big (%lld bytes). This is usually the case for "
-           "the very last index lines for each track in the .idx file because "
-           "for those the packet size is assumed to reach until the end of "
-           "the file. If you have removed lines from the .idx file manually "
-           "then this should not worry you. In fact, this warning should not "
-           "worry anyone, but make sure that the very last subtitles are "
-           "present in the output file.\n",
-           track->timecodes[i] / 1000000000, track->idx, ti->fname,
-           track->sizes[i]);
-    track->idx++;
-    return EMOREDATA;
-  }
-  sub_file->setFilePointer(track->positions[i]);
-  data = (unsigned char *)safemalloc(track->sizes[i]);
-  if (sub_file->read(data, track->sizes[i]) != track->sizes[i]) {
-    mxwarn(PFX "Could not read %lld bytes from the .sub file. Aborting.\n",
-           track->sizes[i]);
-    safefree(data);
-    flush_packetizers();
-    return 0;
-  }
-  mxverb(2, PFX "track: %u, size: %lld (0x%06x), at: %lld (0x%04x%08x), "
-         "timecode: %lld (" FMT_TIMECODE "), duration: %lld\n", id,
-         track->sizes[i], (uint32_t)track->sizes[i], track->positions[i],
-         (uint32_t)(track->positions[i] >> 32),
-         (uint32_t)(track->positions[i] & 0xffffffff),
-         track->timecodes[i], ARG_TIMECODE_NS(track->timecodes[i]),
-         track->durations[i]);
-  memory_c mem(data, track->sizes[i], true);
-  PTZR(track->ptzr)->process(mem, track->timecodes[i], track->durations[i]);
+  sub_file->setFilePointer(track->positions[track->idx]);
+  extract_one_spu_packet(track->timecodes[track->idx],
+                         track->durations[track->idx], id);
   track->idx++;
 
-  if (track->idx >= track->sizes.size()) {
+  if (track->idx >= track->timecodes.size()) {
     flush_packetizers();
     return 0;
   } else

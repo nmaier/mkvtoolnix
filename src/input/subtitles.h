@@ -44,4 +44,7 @@ public:
   sub_t *get_next();
 };
 
+int64_t spu_extract_duration(unsigned char *data, int buf_size,
+                             int64_t timecode);
+
 #endif // __SUBTITLES_H

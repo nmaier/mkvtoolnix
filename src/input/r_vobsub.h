@@ -34,9 +34,10 @@ class vobsub_track_c {
 public:
   char *language;
   int ptzr;
-  vector<int64_t> positions, sizes, timecodes, durations;
-  int idx;
-  bool headers_set;
+  vector<int64_t> positions, timecodes, durations;
+  int idx, aid;
+  bool headers_set, mpeg_version_warning_printed;
+  int64_t packet_num, spu_size, overhead;
 
 public:
   vobsub_track_c(const char *new_language) {
@@ -44,6 +45,11 @@ public:
     ptzr = -1;
     idx = 0;
     headers_set = false;
+    mpeg_version_warning_printed = false;
+    packet_num = 0;
+    aid = -1;
+    spu_size = 0;
+    overhead = 0;
   };
   ~vobsub_track_c() {
     safefree(language);
@@ -74,6 +80,12 @@ protected:
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual void flush_packetizers();
+  virtual int deliver_packet(unsigned char *buf, int size,
+                             int64_t timecode, int64_t default_duration,
+                             generic_packetizer_c *ptzr);
+
+  virtual int extract_one_spu_packet(int64_t timecode, int64_t duration,
+                                     int64_t track_id);
 };
 
 #endif  // __R_VOBSUB_H

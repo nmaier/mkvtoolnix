@@ -30,14 +30,12 @@
 class vobsub_packetizer_c: public generic_packetizer_c {
 private:
   unsigned char *idx_data;
-  int idx_data_size, aid;
-  bool extract_from_mpeg, mpeg_version_warning_printed;
-  int64_t packet_num, spu_size, overhead;
+  int idx_data_size;
 
 public:
   vobsub_packetizer_c(generic_reader_c *nreader,
                       const void *nidx_data, int nidx_data_size,
-                      bool nextract_from_mpeg, track_info_c *nti)
+                      track_info_c *nti)
     throw (error_c);
   virtual ~vobsub_packetizer_c();
 
@@ -52,12 +50,6 @@ public:
     return "VobSub";
   }
   virtual int can_connect_to(generic_packetizer_c *src);
-
-protected:
-  virtual int64_t extract_duration(unsigned char *data, int buf_size,
-                                   int64_t timecode);
-  virtual int deliver_packet(unsigned char *buf, int size, int64_t timecode,
-                             int64_t default_duration);
 };
 
 #endif // __P_VOBSUB_H
