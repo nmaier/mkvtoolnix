@@ -291,6 +291,8 @@ get_file_type(const string &filename) {
     type = FILE_TYPE_TTA;
   else if (wavpack_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_WAVPACK4;
+  else if (mpeg_ps_reader_c::probe_file(mm_io, size))
+    type = FILE_TYPE_MPEG_PS;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
@@ -308,8 +310,6 @@ get_file_type(const string &filename) {
     type = FILE_TYPE_AAC;
   else if (vobbtn_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_VOBBTN;
-  else if (mpeg_ps_reader_c::probe_file(mm_io, size))
-    type = FILE_TYPE_MPEG_PS;
   else if (mpeg_es_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_MPEG_ES;
   else {
