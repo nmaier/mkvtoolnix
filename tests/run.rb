@@ -36,7 +36,9 @@ class Test
 
   def sys(command, *arg)
     @commands.push(command)
-    if (!system(command + " &> /dev/null"))
+    command += "&> /dev/null" unless (command =~ />/)
+    puts("[running #{command}]") if (ENV["DEBUG"] == "yes")
+    if (!system(command))
       if ((arg.size == 0) || ((arg[0] << 8) != $?))
         error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
       end
@@ -55,6 +57,7 @@ class Test
   end
 
   def hash_file(name)
+    puts("[running md5sum #{name}]") if (ENV["DEBUG"] == "yes")
     return `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
   end
 
@@ -65,6 +68,42 @@ class Test
       @tmp = nil
     end
     return output
+  end
+
+  def merge(*args)
+    command = "../src/mkvmerge --engage no_variable_data "
+    string_args = Array.new
+    retcode = 0
+    args.each do |a|
+      if (a.class == String)
+        string_args.push(a)
+      else
+        retcode = a
+      end
+    end
+
+    if ((string_args.size == 0) or (string_args.size > 2))
+      raise "Wrong use of the 'merge' function."
+    elsif (string_args.size == 1)
+      command += "-o " + tmp + " " + string_args[0]
+    else
+      command += "-o " + string_args[0] + " " + string_args[1]
+    end
+    sys(command, retcode)
+  end
+
+  def xtr_tracks_s(*args)
+    command = "../src/mkvextract tracks data/mkv/complex.mkv "
+    command += args.join(" ")
+    command += ":#{tmp}"
+    sys(command, 0)
+    return hash_tmp
+  end
+
+  def xtr_tracks(*args)
+    command = "../src/mkvextract tracks "
+    command += args.join(" ")
+    sys(command, 0)
   end
 end
 
@@ -132,28 +171,6 @@ class Results
     @results[name]["hash"] = hash
     save
   end
-end
-
-def merge(*args)
-  command = "../src/mkvmerge --engage no_variable_data "
-  string_args = Array.new
-  retcode = 0
-  args.each do |a|
-    if (a.class == String)
-      string_args.push(a)
-    else
-      retcode = a
-    end
-  end
-
-  if ((string_args.size == 0) or (string_args.size > 2))
-    raise "Wrong use of the 'merge' function."
-  elsif (string_args.size == 1)
-    command += "-o " + tmp + " " + string_args[0]
-  else
-    command += "-o " + string_args[0] + " " + string_args[1]
-  end
-  sys(command, retcode)
 end
 
 def main
