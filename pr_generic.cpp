@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.13 2003/04/17 12:27:17 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.14 2003/04/17 13:27:29 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,10 +32,19 @@ generic_packetizer_c::generic_packetizer_c(track_info_t *nti) {
   serialno = -1;
   track_entry = NULL;
   ti = duplicate_track_info(nti);
+  free_refs = -1;
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
   free_track_info(ti);
+}
+
+void generic_packetizer_c::set_free_refs(int64_t nfree_refs) {
+  free_refs = nfree_refs;
+}
+
+int64_t generic_packetizer_c::get_free_refs() {
+  return free_refs;
 }
 
 //--------------------------------------------------------------------
@@ -197,7 +206,6 @@ int cluster_helper_c::render(IOCallback *out) {
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
-    pack->rendered = 1;
 
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
@@ -282,7 +290,7 @@ void cluster_helper_c::check_clusters(int num) {
   for (i = 0; i < num_clusters; i++) {
     for (k = 0; k < clusters[i]->num_packets; k++) {
       p = clusters[i]->packets[k];
-      if (p->rendered && p->superseeded)
+      if (clusters[i]->rendered && p->superseeded)
         continue;
       if (p->bref == 0)
         continue;
@@ -307,6 +315,16 @@ int cluster_helper_c::free_clusters() {
 
   for (i = 0; i < num_clusters; i++)
     clusters[i]->is_referenced = 0;
+
+  // Part 1 - Mark all packets superseeded for which their source has
+  // an appropriate free_refs entry.
+  for (i = 0; i < num_clusters; i++) {
+    for (k = 0; k < clusters[i]->num_packets; k++) {
+      p = clusters[i]->packets[k];
+      if (p->source->get_free_refs() >= p->id)
+        p->superseeded = 1;
+    }
+  }
 
   // Part 2 - Mark all clusters that are still referenced.
   for (i = 0; i < num_clusters; i++) {
@@ -371,15 +389,5 @@ int cluster_helper_c::free_clusters() {
 }
 
 int cluster_helper_c::free_ref(int64_t pid, void *source) {
-  int i, k;
-  packet_t *p;
-
-  for (i = 0; i < num_clusters; i++)
-    for (k = 0; k < clusters[i]->num_packets; k++) {
-      p = clusters[i]->packets[k];
-      if ((source == p->source) && (p->id <= pid))
-        p->superseeded = 1;
-    }
-
-  return 1;
+   ((generic_packetizer_c *)source)->set_free_refs(pid);
 }
