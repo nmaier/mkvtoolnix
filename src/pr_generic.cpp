@@ -29,6 +29,7 @@
 #include "mkvmerge.h"
 #include "pr_generic.h"
 #include "tagparser.h"
+#include "tag_common.h"
 
 using namespace std;
 
@@ -268,6 +269,7 @@ generic_packetizer_c::set_tag_track_uid() {
   if (ti->tags == NULL)
     return;
 
+  convert_old_tags(*ti->tags);
   for (is = 0; is < ti->tags->ListSize(); is++) {
     tag = (KaxTag *)(*ti->tags)[is];
 

@@ -8,7 +8,7 @@
  *
  * $Id$
  *
- * XML tag parser. Functions for the start tags + helper functions
+ * XML tag parser
  *
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
@@ -22,7 +22,6 @@
 #include <string>
 #include <vector>
 
-#include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
 #include "error.h"
@@ -89,71 +88,4 @@ parse_xml_tags(const char *name,
   }
 
   delete in;
-}
-
-void
-fix_mandatory_tag_elements(EbmlElement *e) {
-  if (dynamic_cast<KaxTagSimple *>(e) != NULL) {
-    KaxTagSimple &s = *static_cast<KaxTagSimple *>(e);
-    GetChild<KaxTagLangue>(s);
-    GetChild<KaxTagDefault>(s);
-
-  } else if (dynamic_cast<KaxTagTargets *>(e) != NULL) {
-    KaxTagTargets &t = *static_cast<KaxTagTargets *>(e);
-    GetChild<KaxTagTargetTypeValue>(t);
-
-  }
-
-  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
-    EbmlMaster *m;
-    int i;
-
-    m = static_cast<EbmlMaster *>(e);
-    for (i = 0; i < m->ListSize(); i++)
-      fix_mandatory_tag_elements((*m)[i]);
-  }
-}
-
-KaxTags *
-select_tags_for_chapters(KaxTags &tags,
-                         KaxChapters &chapters) {
-  KaxTags *new_tags;
-  KaxTagTargets *targets;
-  KaxTagEditionUID *t_euid;
-  KaxTagChapterUID *t_cuid;
-  int tags_idx, targets_idx;
-  bool copy;
-
-  new_tags = NULL;
-  for (tags_idx = 0; tags_idx < tags.ListSize(); tags_idx++) {
-    if (dynamic_cast<KaxTag *>(tags[tags_idx]) == NULL)
-      continue;
-    copy = true;
-    targets = FINDFIRST(static_cast<EbmlMaster *>(tags[tags_idx]),
-                        KaxTagTargets);
-    if (targets != NULL) {
-      for (targets_idx = 0; targets_idx < targets->ListSize(); targets_idx++) {
-        t_euid = dynamic_cast<KaxTagEditionUID *>((*targets)[targets_idx]);
-        if ((t_euid != NULL) &&
-            (find_edition_with_uid(chapters, uint64(*t_euid)) == NULL)) {
-          copy = false;
-          break;
-        }
-        t_cuid = dynamic_cast<KaxTagChapterUID *>((*targets)[targets_idx]);
-        if ((t_cuid != NULL) &&
-            (find_chapter_with_uid(chapters, uint64(*t_cuid)) == NULL)) {
-          copy = false;
-          break;
-        }
-      }
-    }
-
-    if (copy) {
-      if (new_tags == NULL)
-        new_tags = new KaxTags;
-      new_tags->PushElement(*(tags[tags_idx]->Clone()));
-    }
-  }
-
-  return new_tags;
 }
