@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.25 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.26 2003/05/05 21:55:02 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -244,7 +244,8 @@ void ogm_reader_c::create_packetizers() {
 
         try {
           dmx->packetizer =
-            new video_packetizer_c((double)10000000 / (double)sth->time_unit, 
+            new video_packetizer_c(this,
+                                   (double)10000000 / (double)sth->time_unit, 
                                    sth->sh.video.width, sth->sh.video.height,
                                    sth->bits_per_sample, 1, ti);
         } catch (error_c &error) {
@@ -264,7 +265,7 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_PCM:
         try {
           dmx->packetizer =
-            new pcm_packetizer_c(sth->samples_per_unit,
+            new pcm_packetizer_c(this, sth->samples_per_unit,
                                  sth->sh.audio.channels, 
                                  sth->bits_per_sample, ti);
         } catch (error_c &error) {
@@ -283,7 +284,7 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_MP3:
         try {
           dmx->packetizer = 
-            new mp3_packetizer_c(sth->samples_per_unit,
+            new mp3_packetizer_c(this, sth->samples_per_unit,
                                  sth->sh.audio.channels, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize MP3 "
@@ -301,7 +302,7 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_AC3:
         try {
           dmx->packetizer = 
-            new ac3_packetizer_c(sth->samples_per_unit,
+            new ac3_packetizer_c(this, sth->samples_per_unit,
                                  sth->sh.audio.channels, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize AC3 "
@@ -330,7 +331,8 @@ void ogm_reader_c::create_packetizers() {
         vorbis_comment_clear(&vc);
         try {
           dmx->packetizer = 
-            new vorbis_packetizer_c(dmx->packet_data[0], dmx->packet_sizes[0],
+            new vorbis_packetizer_c(this,
+                                    dmx->packet_data[0], dmx->packet_sizes[0],
                                     dmx->packet_data[1], dmx->packet_sizes[1],
                                     dmx->packet_data[2], dmx->packet_sizes[2],
                                     ti);
@@ -350,7 +352,7 @@ void ogm_reader_c::create_packetizers() {
 
       case OGM_STREAM_TYPE_TEXT:
         try {
-          dmx->packetizer = new textsubs_packetizer_c(ti);
+          dmx->packetizer = new textsubs_packetizer_c(this, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize the "
                   "text subtitles packetizer for stream id %d. Will try to "

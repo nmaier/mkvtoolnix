@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.30 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.31 2003/05/05 21:55:02 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,10 +31,11 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 
-video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
+video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
+                                       double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int navi_compat_mode, track_info_t *nti)
-  throw (error_c) : generic_packetizer_c(nti) {
+  throw (error_c) : generic_packetizer_c(nreader, nti) {
   fps = nfps;
   width = nwidth;
   height = nheight;

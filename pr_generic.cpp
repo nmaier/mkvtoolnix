@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.34 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.35 2003/05/05 21:55:02 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -29,7 +29,11 @@
 
 static int default_tracks[3] = {0, 0, 0};
 
-generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c) {
+generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
+                                           track_info_t *nti) throw(error_c) {
+  reader = nreader;
+  add_packetizer(this);
+
   track_entry = NULL;
   ti = duplicate_track_info(nti);
   free_refs = -1;
@@ -63,6 +67,10 @@ generic_packetizer_c::~generic_packetizer_c() {
     safefree(hcodec_id);
   if (hcodec_private != NULL)
     safefree(hcodec_private);
+}
+
+int generic_packetizer_c::read() {
+  return reader->read();
 }
 
 void generic_packetizer_c::set_cue_creation(int ncreate_cue_data) {
@@ -320,10 +328,7 @@ packet_t *generic_packetizer_c::get_packet() {
 }
 
 int generic_packetizer_c::packet_available() {
-  if (packet_queue.size() == 0)
-    return 0;
-
-  return 1;
+  return packet_queue.size();
 }
 
 int64_t generic_packetizer_c::get_smallest_timecode() {

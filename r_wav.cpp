@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.15 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.16 2003/05/05 21:55:02 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -70,7 +70,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
         wheader.common.dwSamplesPerSec / 8;
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
-  pcmpacketizer = new pcm_packetizer_c(wheader.common.dwSamplesPerSec,
+  pcmpacketizer = new pcm_packetizer_c(this, wheader.common.dwSamplesPerSec,
                                        wheader.common.wChannels,
                                        wheader.common.wBitsPerSample, ti);
   if (verbose)

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.10 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.11 2003/05/05 21:55:02 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -68,7 +68,7 @@ srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("srt_reader: Could not open source file.");
   if (!srt_reader_c::probe_file(file, 0))
     throw error_c("srt_reader: Source is not a valid SRT file.");
-  textsubs_packetizer = new textsubs_packetizer_c(ti);
+  textsubs_packetizer = new textsubs_packetizer_c(this, ti);
   if (verbose)
     fprintf(stdout, "Using SRT subtitle reader for %s.\n+-> Using " \
             "text subtitle output module for subtitles.\n", ti->fname);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.20 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.21 2003/05/05 21:55:02 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,10 +31,11 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 
-pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
+pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
+                                   unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
                                    track_info_t *nti) throw (error_c):
-  generic_packetizer_c(nti) {
+  generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
   tempbuf = (unsigned char *)safemalloc(bps + 128);

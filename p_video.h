@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.23 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: p_video.h,v 1.24 2003/05/05 21:55:02 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,8 +36,9 @@ private:
   int64_t ref_timecode;
 
 public:
-  video_packetizer_c(double nfps, int nwidth, int nheight, int nbpp,
-                     int navi_compat_mode, track_info_t *nti) throw (error_c);
+  video_packetizer_c(generic_reader_c *nreader, double nfps, int nwidth,
+                     int nheight, int nbpp, int navi_compat_mode,
+                     track_info_t *nti) throw (error_c);
   virtual ~video_packetizer_c();
     
   virtual int process(unsigned char *buf, int size, int64_t old_timecode = -1,

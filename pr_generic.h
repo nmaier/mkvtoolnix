@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.35 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.36 2003/05/05 21:55:02 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -72,9 +72,12 @@ typedef struct {
   char *language, *sub_charset;
 } track_info_t;
 
+class generic_reader_c;
+
 class generic_packetizer_c {
 protected:
   deque<packet_t *> packet_queue;
+  generic_reader_c *reader;
 
   track_info_t *ti;
   int64_t free_refs;
@@ -99,8 +102,11 @@ protected:
   int hdefault_track;
 
 public:
-  generic_packetizer_c(track_info_t *nti) throw (error_c);
+  generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
+    throw (error_c);
   virtual ~generic_packetizer_c();
+
+  virtual int read();
 
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
                           int64_t bref = -1, int64_t fref = -1,

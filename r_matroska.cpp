@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.23 2003/05/05 20:18:32 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.24 2003/05/05 21:55:02 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -779,7 +779,7 @@ void mkv_reader_c::create_packetizers() {
           memcpy(old_fourcc, ti->fourcc, 5);
           if (ti->fourcc[0] == 0)
             memcpy(ti->fourcc, t->v_fourcc, 5);
-          t->packetizer = new video_packetizer_c(t->v_frate, t->v_width,
+          t->packetizer = new video_packetizer_c(this, t->v_frate, t->v_width,
                                                  t->v_height, 24, 1, ti);
           memcpy(ti->fourcc, old_fourcc, 5);
           break;
@@ -787,16 +787,20 @@ void mkv_reader_c::create_packetizers() {
         case 'a':
           
           if (t->a_formattag == 0x0001)
-            t->packetizer = new pcm_packetizer_c((unsigned long)t->a_sfreq,
+            t->packetizer = new pcm_packetizer_c(this,
+                                                 (unsigned long)t->a_sfreq,
                                                  t->a_channels, t->a_bps, ti);
           else if (t->a_formattag == 0x0055)
-            t->packetizer = new mp3_packetizer_c((unsigned long)t->a_sfreq,
+            t->packetizer = new mp3_packetizer_c(this,
+                                                 (unsigned long)t->a_sfreq,
                                                  t->a_channels, ti);
           else if (t->a_formattag == 0x2000)
-            t->packetizer = new ac3_packetizer_c((unsigned long)t->a_sfreq,
+            t->packetizer = new ac3_packetizer_c(this,
+                                                 (unsigned long)t->a_sfreq,
                                                  t->a_channels, ti);
           else if (t->a_formattag == 0xFFFE)
-            t->packetizer = new vorbis_packetizer_c(t->headers[0],
+            t->packetizer = new vorbis_packetizer_c(this,
+                                                    t->headers[0],
                                                     t->header_sizes[0],
                                                     t->headers[1],
                                                     t->header_sizes[1],

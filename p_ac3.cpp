@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.18 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.19 2003/05/05 21:55:02 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,9 +30,10 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 
-ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
+ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
+                                   unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)
-  throw (error_c): generic_packetizer_c(nti) {
+  throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
   packet_buffer = NULL;

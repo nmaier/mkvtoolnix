@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.17 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.18 2003/05/05 21:55:02 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -77,7 +77,7 @@ ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("ac3_reader: No valid AC3 packet found in the first " \
                   "4096 bytes.\n");
   bytes_processed = 0;
-  ac3packetizer = new ac3_packetizer_c(ac3header.sample_rate,
+  ac3packetizer = new ac3_packetizer_c(this, ac3header.sample_rate,
                                        ac3header.channels, ti);
   if (verbose)
     fprintf(stdout, "Using AC3 demultiplexer for %s.\n+-> Using " \

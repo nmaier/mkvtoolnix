@@ -115,7 +115,7 @@ void vobsub_reader_c::add_vobsub_packetizer(int width, int height,
                                                         (num_packetizers + 1) *
                                                         sizeof(void *));
   try {
-    vobsub_packetizer = new vobsub_packetizer_c(width, height, palette,
+    vobsub_packetizer = new vobsub_packetizer_c(this, width, height, palette,
                                                 langidx, id, index,
                                                 &async);
   } catch (error_c error) {

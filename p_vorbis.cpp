@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.19 2003/05/05 20:18:32 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.20 2003/05/05 21:55:02 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,12 +37,13 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 
-vorbis_packetizer_c::vorbis_packetizer_c(unsigned char *d_header, int l_header,
+vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
+                                         unsigned char *d_header, int l_header,
                                          unsigned char *d_comments,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
                                          int l_codecsetup, track_info_t *nti)
-  throw (error_c): generic_packetizer_c(nti) {
+  throw (error_c): generic_packetizer_c(nreader, nti) {
   int i;
 
   packetno = 0;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.h,v 1.11 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: p_vorbis.h,v 1.12 2003/05/05 21:55:02 mosu Exp $
     \brief class definition for the Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -41,7 +41,8 @@ private:
   vorbis_comment vc;
   ogg_packet headers[3];
 public:
-  vorbis_packetizer_c(unsigned char *d_header, int l_header,
+  vorbis_packetizer_c(generic_reader_c *nreader,
+                      unsigned char *d_header, int l_header,
                       unsigned char *d_comments, int l_comments,
                       unsigned char *d_codecsetup, int l_codecsetup,
                       track_info_t *nti) throw (error_c);

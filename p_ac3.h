@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.13 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.14 2003/05/05 21:55:02 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,10 +33,10 @@ private:
   unsigned char *packet_buffer;
 
 public:
-  ac3_packetizer_c(unsigned long nsamples_per_sec, int nchannels,
-                   track_info_t *nti) throw (error_c);
+  ac3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
+                   int nchannels, track_info_t *nti) throw (error_c);
   virtual ~ac3_packetizer_c();
-    
+
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);

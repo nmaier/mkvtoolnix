@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.56 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.57 2003/05/05 21:55:02 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #ifdef LIBEBML_GCC2
 #include <typeinfo>
@@ -96,6 +97,14 @@ typedef struct filelist_tag {
 
   struct filelist_tag *next;
 } filelist_t;
+
+typedef struct {
+  int status;
+  packet_t *pack;
+  generic_packetizer_c *packetizer;
+} packetizer_t;
+
+vector<packetizer_t *>packetizers;
 
 char *outfile = NULL;
 filelist_t *input= NULL;
@@ -262,7 +271,7 @@ static void add_file(filelist_t *file) {
 
 static int display_counter = 1;
 
-void display_progress(int force) {
+static void display_progress(int force) {
   filelist_t *winner, *current;
   
   if (((display_counter % 500) == 0) || force) {
@@ -278,6 +287,14 @@ void display_progress(int force) {
     winner->reader->display_progress();
   }
   display_counter++;
+}
+
+void add_packetizer(generic_packetizer_c *packetizer) {
+  packetizer_t *pack = (packetizer_t *)safemalloc(sizeof(packetizer_t));
+  pack->packetizer = packetizer;
+  pack->status = EMOREDATA;
+  pack->pack = NULL;
+  packetizers.push_back(pack);
 }
 
 static unsigned char *parse_tracks(char *s) {
@@ -906,8 +923,10 @@ static int write_packet(packet_t *pack) {
 }
 
 int main(int argc, char **argv) {
-  filelist_t *file, *winner;
   packet_t *pack;
+  int i;
+  packetizer_t *ptzr, *winner;
+  filelist_t *file;
 
   nice(2);
 
@@ -935,40 +954,33 @@ int main(int argc, char **argv) {
   
   /* let her rip! */
   while (1) {
-    /* Step 1: make sure an ogg page is available for each input 
-    ** as long we havne't already processed the last one
+    /* Step 1: make sure a packet is available for each output
+    ** as long we havne't already processed the last one.
     */
-    file = input;
-    while (file) {
-      if (file->status == EMOREDATA)
-        file->status = file->reader->read();
-      file = file->next;
+    for (i = 0; i < packetizers.size(); i++) {
+      ptzr = packetizers[i];
+      if ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
+          !ptzr->packetizer->packet_available())
+        ptzr->status = ptzr->packetizer->read();
+      if (ptzr->pack == NULL) 
+        ptzr->pack = ptzr->packetizer->get_packet();
     }
 
-    file = input;
-    while (file) {
-      if (file->pack == NULL)
-        file->pack = file->reader->get_packet();
-      file = file->next;
-    }
-
-    /* Step 2: Pick the page with the lowest timecode and 
-    ** stuff it into the Matroska file
+    /* Step 2: Pick the packet with the lowest timecode and 
+    ** stuff it into the Matroska file.
     */
-    file = input;
-    winner = file;
-    file = file->next;
-    while (file) {
-      if (file->pack != NULL) {
-        if (winner->pack == NULL)
-          winner = file;
-        else if (file->pack &&
-                 (file->pack->timecode < winner->pack->timecode))
-          winner = file;
+    winner = NULL;
+    for (i = 0; i < packetizers.size(); i++) {
+      ptzr = packetizers[i];
+      if (ptzr->pack != NULL) {
+        if ((winner == NULL) || (winner->pack == NULL))
+          winner = ptzr;
+        else if (ptzr->pack &&
+                 (ptzr->pack->timecode < winner->pack->timecode))
+          winner = ptzr;
       }
-      file = file->next;
     }
-    if (winner->pack != NULL)
+    if ((winner != NULL) && (winner->pack != NULL))
       pack = winner->pack;
     else /* exit if there are no more packets */
       break;
@@ -1028,6 +1040,11 @@ int main(int argc, char **argv) {
       delete file->reader;
     safefree(file);
     file = next;
+  }
+
+  while (packetizers.size()) {
+    safefree(packetizers[packetizers.size() - 1]);
+    packetizers.pop_back();
   }
   
   delete out;

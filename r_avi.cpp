@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.26 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.27 2003/05/05 21:55:02 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -134,7 +134,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
       ti->fourcc[4] = 0;
     } else
       memcpy(&avi->bitmap_info_header->bi_compression, ti->fourcc, 4);
-    vpacketizer = new video_packetizer_c(AVI_frame_rate(avi),
+    vpacketizer = new video_packetizer_c(this, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
@@ -240,7 +240,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_bits(avi);
-      demuxer->packetizer = new pcm_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new pcm_packetizer_c(this,
+                                                 demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample, ti);
       break;
@@ -251,7 +252,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new mp3_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new mp3_packetizer_c(this,
+                                                 demuxer->samples_per_second,
                                                  demuxer->channels, ti);
       break;
     case 0x2000: // AC3
@@ -261,7 +263,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new ac3_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new ac3_packetizer_c(this,
+                                                 demuxer->samples_per_second,
                                                  demuxer->channels, ti);
       break;
     default:

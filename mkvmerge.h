@@ -13,13 +13,15 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.6 2003/04/20 16:39:03 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.7 2003/05/05 21:55:02 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __MKVMERGE_H
 #define __MKVMERGE_H
+
+#include "pr_generic.h"
 
 #include "KaxCues.h"
 #include "KaxSegment.h"
@@ -36,5 +38,7 @@ extern int track_number;
 extern float video_fps;
 
 extern int write_cues, cue_writing_requested;
+
+void add_packetizer(generic_packetizer_c *packetizer);
 
 #endif // __MKVMERGE_H

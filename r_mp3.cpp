@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.15 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.16 2003/05/05 21:55:02 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -86,7 +86,8 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   decode_mp3_header(header, &mp3header);
 
   bytes_processed = 0;
-  mp3packetizer = new mp3_packetizer_c(mp3_freqs[mp3header.sampling_frequency],
+  mp3packetizer = new mp3_packetizer_c(this,
+                                       mp3_freqs[mp3header.sampling_frequency],
                                        mp3header.stereo ? 2 : 1, ti);
   if (verbose)
     fprintf(stdout, "Using MP3 demultiplexer for %s.\n+-> Using " \
