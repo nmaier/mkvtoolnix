@@ -14,7 +14,7 @@ aviclasses_libdirs = -L$(top_srcdir)/aviclasses
 endif
 
 DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
-	$(avilib_incdirs) $(avilib_6_10_incdirs) $(aviclasses_incdirs)
+	$(avilib_incdirs) $(avilib0_6_10_incdirs) $(aviclasses_incdirs)
 
 LDFLAGS = $(avilib_libdirs) $(avilib0_6_10_libdirs) $(aviclasses_libdirs)
 

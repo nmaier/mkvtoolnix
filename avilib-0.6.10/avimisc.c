@@ -21,9 +21,15 @@
  *
  */
 
+#include "os.h"
+
 #include <stdio.h>
 #include <stdlib.h>
+
+#if !defined(COMP_MSC)
 #include <unistd.h>
+#endif
+
 #include <sys/stat.h>
 #include <string.h>
 

@@ -25,13 +25,18 @@
  *
  */
 
-#include "avilib.h"
-#ifdef HAVE_CONFIG_H
-#include "../config.h"
-#else 
-#define PACKAGE "transcode"
-#define VERSION "0.6.10"
+#include "os.h"
+
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+#include <io.h>
+#define ftruncate _chsize
+#define strncasecmp _strnicmp
+typedef int ssize_t;
+#else // COMP_...
+#include <unistd.h>
 #endif
+
+#include "avilib.h"
 
 #define INFO_LIST
 
@@ -176,8 +181,8 @@ static int avi_add_chunk(avi_t *AVI, unsigned char *tag, unsigned char *data, in
    /* Output tag, length and data, restore previous position
       if the write fails */
 
-   if( avi_write(AVI->fdes,c,8) != 8 ||
-       avi_write(AVI->fdes,data,length) != length ||
+   if( avi_write(AVI->fdes,(char *)c,8) != 8 ||
+       avi_write(AVI->fdes,(char *)data,length) != length ||
        avi_write(AVI->fdes,&p,length&1) != (length&1)) // if len is uneven, write a pad byte
    {
       lseek(AVI->fdes,AVI->pos,SEEK_SET);
@@ -273,8 +278,16 @@ avi_t* AVI_open_output_file(char * filename)
       we do not truncate the file when we open it.
       Instead it is truncated when the AVI file is closed */
 
+#if defined(SYS_UNIX)
    AVI->fdes = open(filename, O_RDWR|O_CREAT,
 		    S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+#elif defined(COMP_MINGW) || defined(COMP_CYGWIN)
+   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, S_IRUSR | S_IWUSR);
+#else
+   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY,
+                    S_IRUSR | S_IWUSR | S_IGRP | S_IROTH);
+#endif
+
    if (AVI->fdes < 0)
    {
       AVI_errno = AVI_ERR_OPEN;
@@ -286,7 +299,7 @@ avi_t* AVI_open_output_file(char * filename)
       when we are finished with writing */
 
    for (i=0;i<HEADERBYTES;i++) AVI_header[i] = 0;
-   i = avi_write(AVI->fdes,AVI_header,HEADERBYTES);
+   i = avi_write(AVI->fdes,(char *)AVI_header,HEADERBYTES);
    if (i != HEADERBYTES)
    {
       close(AVI->fdes);
@@ -588,7 +601,7 @@ int avi_update_header(avi_t *AVI)
       actually written, report an error if someting goes wrong */
 
    if ( lseek(AVI->fdes,0,SEEK_SET)<0 ||
-        avi_write(AVI->fdes,AVI_header,HEADERBYTES)!=HEADERBYTES ||
+        avi_write(AVI->fdes,(char *)AVI_header,HEADERBYTES)!=HEADERBYTES ||
 	lseek(AVI->fdes,AVI->pos,SEEK_SET)<0)
      {
        AVI_errno = AVI_ERR_CLOSE;
@@ -735,6 +748,22 @@ static int avi_parse_comments (int fd, char *buf, int space_left)
     return len;
 }
 
+//SLM
+#ifndef S_IRUSR
+#define S_IRWXU       00700       /* read, write, execute: owner */
+#define S_IRUSR       00400       /* read permission: owner */
+#define S_IWUSR       00200       /* write permission: owner */
+#define S_IXUSR       00100       /* execute permission: owner */
+#define S_IRWXG       00070       /* read, write, execute: group */
+#define S_IRGRP       00040       /* read permission: group */
+#define S_IWGRP       00020       /* write permission: group */
+#define S_IXGRP       00010       /* execute permission: group */
+#define S_IRWXO       00007       /* read, write, execute: other */
+#define S_IROTH       00004       /* read permission: other */
+#define S_IWOTH       00002       /* write permission: other */
+#define S_IXOTH       00001       /* execute permission: other */
+#endif
+
 /*
   Write the header of an AVI file and close it.
   returns 0 on success, -1 on write error.
@@ -767,7 +796,7 @@ static int avi_close_output_file(avi_t *AVI)
 
    idxerror = 0;
    //   fprintf(stderr, "pos=%lu, index_len=%ld             \n", AVI->pos, AVI->n_idx*16);
-   ret = avi_add_chunk(AVI, "idx1", (void*)AVI->idx, AVI->n_idx*16);
+   ret = avi_add_chunk(AVI, (unsigned char *)"idx1", (unsigned char *)AVI->idx, AVI->n_idx*16);
    hasIndex = (ret==0);
    //fprintf(stderr, "pos=%lu, index_len=%d\n", AVI->pos, hasIndex);
 
@@ -1105,7 +1134,7 @@ static int avi_close_output_file(avi_t *AVI)
       actually written, report an error if someting goes wrong */
 
    if ( lseek(AVI->fdes,0,SEEK_SET)<0 ||
-        avi_write(AVI->fdes,AVI_header,HEADERBYTES)!=HEADERBYTES ||
+        avi_write(AVI->fdes,(char *)AVI_header,HEADERBYTES)!=HEADERBYTES ||
         ftruncate(AVI->fdes,AVI->pos)<0 )
    {
       AVI_errno = AVI_ERR_CLOSE;
@@ -1149,21 +1178,21 @@ static int avi_write_data(avi_t *AVI, char *data, unsigned long length, int audi
    /* Add index entry */
 
    //set tag for current audio track
-   sprintf(astr, "0%1dwb", AVI->aptr+1);
+   sprintf((char *)astr, "0%1dwb", (int)(AVI->aptr+1));
 
    if(audio)
      n = avi_add_index_entry(AVI,astr,0x10,AVI->pos,length);
    else
-     n = avi_add_index_entry(AVI,"00db",((keyframe)?0x10:0x0),AVI->pos,length);
+     n = avi_add_index_entry(AVI,(unsigned char *)"00db",((keyframe)?0x10:0x0),AVI->pos,length);
    
    if(n) return -1;
    
    /* Output tag and data */
    
    if(audio)
-     n = avi_add_chunk(AVI,astr,data,length);
+     n = avi_add_chunk(AVI,(unsigned char *)astr,data,length);
    else
-     n = avi_add_chunk(AVI,"00db",data,length);
+     n = avi_add_chunk(AVI,(unsigned char *)"00db",data,length);
    
    if (n) return -1;
    
@@ -1191,7 +1220,7 @@ int AVI_dup_frame(avi_t *AVI)
    if(AVI->mode==AVI_MODE_READ) { AVI_errno = AVI_ERR_NOT_PERM; return -1; }
 
    if(AVI->last_pos==0) return 0; /* No previous real frame */
-   if(avi_add_index_entry(AVI,"00db",0x10,AVI->last_pos,AVI->last_len)) return -1;
+   if(avi_add_index_entry(AVI,(unsigned char *)"00db",0x10,AVI->last_pos,AVI->last_len)) return -1;
    AVI->video_frames++;
    AVI->must_use_index = 1;
    return 0;
@@ -1233,7 +1262,7 @@ int AVI_append_audio(avi_t *AVI, char *data, long bytes)
   //update chunk header
   lseek(AVI->fdes, pos+4, SEEK_SET);
   long2str(c, length+bytes);     
-  avi_write(AVI->fdes, c, 4);
+  avi_write(AVI->fdes, (char *)c, 4);
 
   lseek(AVI->fdes, pos+8+length, SEEK_SET);
 
@@ -1337,6 +1366,12 @@ int AVI_close(avi_t *AVI)
        }
    }
 
+   if (AVI->bitmap_info_header)
+     free(AVI->bitmap_info_header);
+   for (j = 0; j < AVI->anum; j++)
+     if (AVI->wave_format_ex[j])
+       free(AVI->wave_format_ex[j]);
+
    free(AVI);
    AVI=NULL;
 
@@ -1368,8 +1403,12 @@ avi_t *AVI_open_input_indexfile(char *filename, int getIndex, char *indexfile)
   AVI->mode = AVI_MODE_READ; /* open for reading */
   
   /* Open the file */
-  
+
+#if defined(SYS_WINDOWS)  
+  AVI->fdes = open(filename,O_RDONLY|O_BINARY);
+#else
   AVI->fdes = open(filename,O_RDONLY);
+#endif
   if(AVI->fdes < 0)
     {
       AVI_errno = AVI_ERR_OPEN;
@@ -1649,7 +1688,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
       }
       oldpos=newpos;
 
-      n = str2ulong(data+4);
+      n = str2ulong((unsigned char *)data+4);
       n = PAD_EVEN(n);
 
       if(strncasecmp(data,"LIST",4) == 0)
@@ -1666,7 +1705,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    
 	    header_offset = lseek(AVI->fdes,0,SEEK_CUR);
 				 
-            if( avi_read(AVI->fdes,hdrl_data,n) != n ) ERR_EXIT(AVI_ERR_READ)
+            if( avi_read(AVI->fdes,(char *)hdrl_data,n) != n ) ERR_EXIT(AVI_ERR_READ)
          }
          else if(strncasecmp(data,"movi",4) == 0)
          {
@@ -1703,7 +1742,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
       printf("TAG %c%c%c%c\n", (hdrl_data+i)[0], (hdrl_data+i)[1], (hdrl_data+i)[2], (hdrl_data+i)[3]);
 #endif
 
-      if(strncasecmp(hdrl_data+i,"LIST",4)==0) { i+= 12; continue; }
+      if(strncasecmp((char *)hdrl_data+i,"LIST",4)==0) { i+= 12; continue; }
 
       n = str2ulong(hdrl_data+i+4);
       n = PAD_EVEN(n);
@@ -1711,13 +1750,13 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
       /* Interpret the tag and its args */
 
-      if(strncasecmp(hdrl_data+i,"strh",4)==0)
+      if(strncasecmp((char *)hdrl_data+i,"strh",4)==0)
       {
          i += 8;
 #ifdef DEBUG_ODML
 	 printf("TAG   %c%c%c%c\n", (hdrl_data+i)[0], (hdrl_data+i)[1], (hdrl_data+i)[2], (hdrl_data+i)[3]);
 #endif
-         if(strncasecmp(hdrl_data+i,"vids",4) == 0 && !vids_strh_seen)
+         if(strncasecmp((char *)hdrl_data+i,"vids",4) == 0 && !vids_strh_seen)
          {
             memcpy(AVI->compressor,hdrl_data+i+4,4);
             AVI->compressor[4] = 0;
@@ -1734,7 +1773,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
             vids_strh_seen = 1;
             lasttag = 1; /* vids */
          }
-         else if (strncasecmp (hdrl_data+i,"auds",4) ==0 && ! auds_strh_seen)
+         else if (strncasecmp ((char *)hdrl_data+i,"auds",4) ==0 && ! auds_strh_seen)
          {
 
 	   //inc audio tracks
@@ -1769,14 +1808,21 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 #endif
 	 i += 8;
       }
-      else if(strncasecmp(hdrl_data+i,"strf",4)==0)
+      else if(strncasecmp((char *)hdrl_data+i,"strf",4)==0)
       {
          i += 8;
          if(lasttag == 1)
          {
+            alBITMAPINFOHEADER bih;
+            
+            memcpy(&bih, hdrl_data + i, sizeof(alBITMAPINFOHEADER));
+            AVI->bitmap_info_header = (alBITMAPINFOHEADER *)malloc(bih.bi_size);
+            if (AVI->bitmap_info_header != NULL)
+              memcpy(AVI->bitmap_info_header, hdrl_data + i, bih.bi_size);
+            
             AVI->width  = str2ulong(hdrl_data+i+4);
             AVI->height = str2ulong(hdrl_data+i+8);
-            vids_strf_seen = 1;
+                    vids_strf_seen = 1;
 	    //ThOe
 	    AVI->v_codecf_off = header_offset + i+16;
 
@@ -1786,6 +1832,34 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          }
          else if(lasttag == 2)
          {
+            alWAVEFORMATEX *wfe;
+	    char *nwfe;
+            int wfes;
+            
+            if ((hdrl_len - i) < sizeof(alWAVEFORMATEX))
+              wfes = hdrl_len - i;
+            else
+              wfes = sizeof(alWAVEFORMATEX);
+            wfe = (alWAVEFORMATEX *)malloc(sizeof(alWAVEFORMATEX));
+            if (wfe != NULL) {
+              memset(wfe, 0, sizeof(alWAVEFORMATEX));
+	      memcpy(wfe, hdrl_data + i, wfes);
+	      if (wfe->cb_size != 0) {
+		nwfe = (char *)realloc(wfe, sizeof(alWAVEFORMATEX) +
+				       wfe->cb_size);
+		if (nwfe != 0) {
+		  off_t lpos = lseek(AVI->fdes, 0, SEEK_CUR);
+		  lseek(AVI->fdes, header_offset + i + sizeof(alWAVEFORMATEX),
+			SEEK_SET);
+		  wfe = (alWAVEFORMATEX *)nwfe;
+		  nwfe = &nwfe[sizeof(alWAVEFORMATEX)];
+		  avi_read(AVI->fdes, nwfe, wfe->cb_size);
+		  lseek(AVI->fdes, lpos, SEEK_SET);
+		}
+	      }
+	      AVI->wave_format_ex[AVI->aptr] = wfe;
+	    }
+
             AVI->track[AVI->aptr].a_fmt   = str2ushort(hdrl_data+i  );
 
 	    //ThOe
@@ -1973,7 +2047,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          it is in the file */
 
       for(i=0;i<AVI->n_idx;i++)
-         if( strncasecmp(AVI->idx[i],AVI->video_tag,3)==0 ) break;
+         if( strncasecmp((char *)AVI->idx[i],(char *)AVI->video_tag,3)==0 ) break;
       if(i>=AVI->n_idx) ERR_EXIT(AVI_ERR_NO_VIDS)
 
       pos = str2ulong(AVI->idx[i]+ 8);
@@ -1981,7 +2055,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
       lseek(AVI->fdes,pos,SEEK_SET);
       if(avi_read(AVI->fdes,data,8)!=8) ERR_EXIT(AVI_ERR_READ)
-      if( strncasecmp(data,AVI->idx[i],4)==0 && str2ulong(data+4)==len )
+      if( strncasecmp(data,(char *)AVI->idx[i],4)==0 && str2ulong((unsigned char *)data+4)==len )
       {
          idx_type = 1; /* Index from start of file */
       }
@@ -1989,7 +2063,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
       {
          lseek(AVI->fdes,pos+AVI->movi_start-4,SEEK_SET);
          if(avi_read(AVI->fdes,data,8)!=8) ERR_EXIT(AVI_ERR_READ)
-         if( strncasecmp(data,AVI->idx[i],4)==0 && str2ulong(data+4)==len )
+         if( strncasecmp(data,(char *)AVI->idx[i],4)==0 && str2ulong((unsigned char *)data+4)==len )
          {
             idx_type = 2; /* Index from start of movi list */
          }
@@ -2008,7 +2082,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
       while(1)
       {
          if( avi_read(AVI->fdes,data,8) != 8 ) break;
-         n = str2ulong(data+4);
+         n = str2ulong((unsigned char *)data+4);
 
          /* The movi list may contain sub-lists, ignore them */
 
@@ -2025,7 +2099,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	     || ( (data[2]=='w' || data[2]=='W') &&
 		  (data[3]=='b' || data[3]=='B') ) )
 	   {
-	   avi_add_index_entry(AVI,data,0,lseek(AVI->fdes,0,SEEK_CUR)-8,n);
+	   avi_add_index_entry(AVI,(unsigned char *)data,0,lseek(AVI->fdes,0,SEEK_CUR)-8,n);
          }
 	 
          lseek(AVI->fdes,PAD_EVEN(n),SEEK_CUR);
@@ -2180,9 +2254,9 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
    for(i=0;i<AVI->n_idx;i++) {
      
-     if(strncasecmp(AVI->idx[i],AVI->video_tag,3) == 0) nvi++;
+     if(strncasecmp((char *)AVI->idx[i],AVI->video_tag,3) == 0) nvi++;
      
-     for(j=0; j<AVI->anum; ++j) if(strncasecmp(AVI->idx[i], AVI->track[j].audio_tag,4) == 0) nai[j]++;
+     for(j=0; j<AVI->anum; ++j) if(strncasecmp((char *)AVI->idx[i], AVI->track[j].audio_tag,4) == 0) nai[j]++;
    }
    
    AVI->video_frames = nvi;
@@ -2195,7 +2269,8 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    
    for(j=0; j<AVI->anum; ++j) {
        if(AVI->track[j].audio_chunks) {
-	   AVI->track[j].audio_index = (audio_index_entry *) malloc(nai[j]*sizeof(audio_index_entry));
+	   AVI->track[j].audio_index = (audio_index_entry *) malloc((nai[j]+1)*sizeof(audio_index_entry));
+	   memset(AVI->track[j].audio_index, 0, (nai[j]+1)*(sizeof(audio_index_entry)));
 	   if(AVI->track[j].audio_index==0) ERR_EXIT(AVI_ERR_NO_MEM);
        }
    }   
@@ -2208,7 +2283,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    for(i=0;i<AVI->n_idx;i++) {
 
      //video
-     if(strncasecmp(AVI->idx[i],AVI->video_tag,3) == 0) {
+     if(strncasecmp((char *)AVI->idx[i],AVI->video_tag,3) == 0) {
        AVI->video_index[nvi].key = str2ulong(AVI->idx[i]+ 4);
        AVI->video_index[nvi].pos = str2ulong(AVI->idx[i]+ 8)+ioff;
        AVI->video_index[nvi].len = str2ulong(AVI->idx[i]+12);
@@ -2218,7 +2293,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
      //audio
      for(j=0; j<AVI->anum; ++j) {
 	 
-       if(strncasecmp(AVI->idx[i],AVI->track[j].audio_tag,4) == 0) {
+       if(strncasecmp((char *)AVI->idx[i],AVI->track[j].audio_tag,4) == 0) {
 	 AVI->track[j].audio_index[nai[j]].pos = str2ulong(AVI->idx[i]+ 8)+ioff;
 	 AVI->track[j].audio_index[nai[j]].len = str2ulong(AVI->idx[i]+12);
 	 AVI->track[j].audio_index[nai[j]].tot = tot[j];
@@ -2507,6 +2582,7 @@ long AVI_read_audio_chunk(avi_t *AVI, char *audbuf)
 
    if (AVI->track[AVI->aptr].audio_posc+1>AVI->track[AVI->aptr].audio_chunks) return -1;
 
+   if (AVI->track[AVI->aptr].audio_index[AVI->track[AVI->aptr].audio_posc].len == 0) return 0;
    left = AVI->track[AVI->aptr].audio_index[AVI->track[AVI->aptr].audio_posc].len - AVI->track[AVI->aptr].audio_posb;
    
    if (audbuf == NULL) return left;
@@ -2567,7 +2643,7 @@ int AVI_read_data(avi_t *AVI, char *vidbuf, long max_vidbuf,
          continue;
       }
 
-      n = PAD_EVEN(str2ulong(data+4));
+      n = PAD_EVEN(str2ulong((unsigned char *)data+4));
 
       if(strncasecmp(data,AVI->video_tag,3) == 0)
       {

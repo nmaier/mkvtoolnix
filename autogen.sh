@@ -62,9 +62,7 @@ esac
 
 echo "Generating configuration files for $package, please wait...."
 
-if test -f config.h; then
-  rm config.h
-fi
+rm -f config.h config.h.in stamp-h1 &> /dev/null
 
 echo "  aclocal $ACLOCAL_FLAGS" && aclocal $ACLOCAL_FLAGS
 echo "  autoheader" && autoheader

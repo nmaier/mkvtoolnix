@@ -25,12 +25,18 @@
  *
  */
 
+#include "os.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
 #include <fcntl.h>
+
+#if defined(COMP_MSC)
 #include <unistd.h>
 #include <inttypes.h>
+#endif
+
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
@@ -143,6 +149,57 @@ typedef struct track_s
 
 typedef struct
 {
+  uint32_t  bi_size;
+  uint32_t  bi_width;
+  uint32_t  bi_height;
+  uint16_t  bi_planes;
+  uint16_t  bi_bit_count;
+  uint32_t  bi_compression;
+  uint32_t  bi_size_image;
+  uint32_t  bi_x_pels_per_meter;
+  uint32_t  bi_y_pels_per_meter;
+  uint32_t  bi_clr_used;
+  uint32_t  bi_clr_important;
+} alBITMAPINFOHEADER;
+
+typedef struct
+{
+  uint16_t  w_format_tag;
+  uint16_t  n_channels;
+  uint32_t  n_samples_per_sec;
+  uint32_t  n_avg_bytes_per_sec;
+  uint16_t  n_block_align;
+  uint16_t  w_bits_per_sample;
+  uint16_t  cb_size;
+} alWAVEFORMATEX;
+
+typedef struct
+{
+  uint32_t fcc_type; 
+  uint32_t fcc_handler; 
+  uint32_t dw_flags; 
+  uint32_t dw_caps; 
+  uint16_t w_priority;
+  uint16_t w_language;
+  uint32_t dw_scale;
+  uint32_t dw_rate;
+  uint32_t dw_start;
+  uint32_t dw_length;
+  uint32_t dw_initial_frames;
+  uint32_t dw_suggested_buffer_size;
+  uint32_t dw_quality;
+  uint32_t dw_sample_size;
+  uint32_t dw_left;
+  uint32_t dw_top;
+  uint32_t dw_right;
+  uint32_t dw_bottom;
+  uint32_t dw_edit_count;
+  uint32_t dw_format_change_count;
+  char     sz_name[64];
+} alAVISTREAMINFO;
+
+typedef struct
+{
   
   long   fdes;              /* File descriptor of AVI file */
   long   mode;              /* 0 for reading, 1 for writing */
@@ -185,6 +242,8 @@ typedef struct
   int comment_fd;      // Read avi header comments from this fd
   char *index_file;    // read the avi index from this file
   
+  alBITMAPINFOHEADER *bitmap_info_header;
+  alWAVEFORMATEX *wave_format_ex[AVI_MAX_TRACKS];
 } avi_t;
 
 #define AVI_MODE_WRITE  0
@@ -340,7 +399,7 @@ int  AVI_get_comment_fd(avi_t *AVI);
 struct riff_struct 
 {
   unsigned char id[4];   /* RIFF */
-  unsigned long len;
+  uint32_t len;
   unsigned char wave_id[4]; /* WAVE */
 };
 
@@ -348,17 +407,17 @@ struct riff_struct
 struct chunk_struct 
 {
 	unsigned char id[4];
-	unsigned long len;
+	uint32_t len;
 };
 
 struct common_struct 
 {
-	unsigned short wFormatTag;
-	unsigned short wChannels;
-	unsigned long dwSamplesPerSec;
-	unsigned long dwAvgBytesPerSec;
-	unsigned short wBlockAlign;
-	unsigned short wBitsPerSample;  /* Only for PCM */
+	uint16_t wFormatTag;
+	uint16_t wChannels;
+	uint32_t dwSamplesPerSec;
+	uint32_t dwAvgBytesPerSec;
+	uint16_t wBlockAlign;
+	uint16_t wBitsPerSample;  /* Only for PCM */
 };
 
 struct wave_header 

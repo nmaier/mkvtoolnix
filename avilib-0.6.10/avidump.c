@@ -25,6 +25,8 @@
  *
  */
 
+#include "os.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -36,7 +38,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#if defined(__bsdi__) || defined(__FreeBSD__) || defined(__APPLE__)
+#if defined(SYS_UNIX) || defined(COMP_MSC) || defined(__APPLE__)
 typedef off_t off64_t;
 #define lseek64 lseek
 #endif
@@ -383,7 +385,7 @@ off_t_to_char(off_t val, int base, int len)
 	*(--p) = digit[ val % base ];
 	val = val / base;
     }
-    return p;
+    return (unsigned char *)p;
 }    
 
 /* Reads a chunk ID and the chunk's size from file f at actual
@@ -737,7 +739,11 @@ int AVI_scan(char *file_name)
 
     DWORD  chunksize;    /* size of the RIFF chunk data */
 
+#if defined(SYS_WINDOWS)
+    if (!(fd=open(file_name, O_RDONLY|O_BINARY))) {
+#else
     if (!(fd=open(file_name, O_RDONLY))) {
+#endif
 	printf("\n\n *** Error opening file %s. Program aborted!\n",
 	       file_name);
 	return(1);
@@ -772,7 +778,11 @@ int AVI_dump(char *file_name, int mode)
 
     DWORD  chunksize;    /* size of the RIFF chunk data */
 
+#if defined(SYS_WINDOWS)
+    if (!(fd=open(file_name,O_RDONLY|O_BINARY))) return(1);
+#else
     if (!(fd=open(file_name,O_RDONLY))) return(1);
+#endif
 
     filesize = lseek64(fd, 0, SEEK_END);
     lseek64(fd, 0, SEEK_SET);
