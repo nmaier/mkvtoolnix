@@ -47,7 +47,7 @@ bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
   return start < cmp.start;
 }
 
-int ssa_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int ssa_reader_c::probe_file(mm_text_io_c *mm_io, int64_t size) {
   string line;
 
   try {

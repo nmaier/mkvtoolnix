@@ -33,7 +33,6 @@
 
 class srt_reader_c: public generic_reader_c {
 private:
-  char chunk[2048];
   mm_text_io_c *mm_io;
   textsubs_packetizer_c *textsubs_packetizer;
   int act_wchar;
@@ -50,7 +49,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_text_io_c *mm_io, int64_t size);
 };
 
 #endif  // __R_SRT_H

@@ -38,7 +38,7 @@ public:
   subtitles_c();
   ~subtitles_c();
 
-  void add(int64_t, int64_t, char *);
+  void add(int64_t, int64_t, const char *);
   int check();
   void process(textsubs_packetizer_c *);
   sub_t *get_next();

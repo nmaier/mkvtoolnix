@@ -1500,7 +1500,7 @@ static void parse_args(int argc, char **argv) {
   }
 }
 
-static char **add_string(int &num, char **values, char *new_string) {
+static char **add_string(int &num, char **values, const char *new_string) {
   values = (char **)saferealloc(values, (num + 1) * sizeof(char *));
   values[num] = safestrdup(new_string);
   num++;
@@ -1508,54 +1508,32 @@ static char **add_string(int &num, char **values, char *new_string) {
   return values;
 }
 
-static char *strip(char *s) {
-  char *p;
-
-  if (s[0] == 0)
-    return s;
-
-  p = &s[strlen(s) - 1];
-  while ((p != s) && ((*p == '\n') || (*p == '\r') || isspace(*p))) {
-    *p = 0;
-    p--;
-  }
-
-  p = s;
-  while ((*p != 0) && isspace(*p))
-    p++;
-
-  memmove(s, p, strlen(p) + 1);
-
-  return s;
-}
-
 static char **read_args_from_file(int &num_args, char **args, char *filename) {
-  mm_io_c *mm_io;
-  char buffer[8192], *space;
+  mm_text_io_c *mm_io;
+  string buffer, opt1, opt2;
+  int space;
 
   try {
-    mm_io = new mm_io_c(filename, MODE_READ);
+    mm_io = new mm_text_io_c(filename);
   } catch (exception &ex) {
     mxprint(stderr, "Error: Could not open file '%s' for reading command line "
             "arguments from.", filename);
     exit(1);
   }
 
-  while (!mm_io->eof() && (mm_io->gets(buffer, 8191) != NULL)) {
-    buffer[8191] = 0;
+  while (!mm_io->eof() && mm_io->getline2(buffer)) {
     strip(buffer);
     if ((buffer[0] == '#') || (buffer[0] == 0))
       continue;
 
-    space = strchr(buffer, ' ');
-    if ((space != NULL) && (buffer[0] == '-')) {
-      *space = 0;
-      space++;
+    space = buffer.find(" ");
+    if (space >= 0) {
+      opt1 = buffer.substr(space + 1);
+      opt2 = buffer.substr(0, space);
+      args = add_string(num_args, args, opt1.c_str());
+      args = add_string(num_args, args, opt2.c_str());
     } else
-      space = NULL;
-    args = add_string(num_args, args, buffer);
-    if (space != NULL)
-      args = add_string(num_args, args, space);
+      args = add_string(num_args, args, buffer.c_str());
   }
 
   delete mm_io;

@@ -56,7 +56,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_text_io_c *mm_io, int64_t size);
 
 protected:
   virtual int64_t parse_time(string &time);

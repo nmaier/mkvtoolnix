@@ -44,7 +44,7 @@ subtitles_c::~subtitles_c() {
   }
 }
 
-void subtitles_c::add(int64_t nstart, int64_t nend, char *nsubs) {
+void subtitles_c::add(int64_t nstart, int64_t nend, const char *nsubs) {
   sub_t *s;
 
   s = (sub_t *)safemalloc(sizeof(sub_t));

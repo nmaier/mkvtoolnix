@@ -45,21 +45,19 @@ using namespace std;
 #define issrttimecode(s) (istimecode(s) && isarrow(s + 12) && \
                            istimecode(s + 17))
 
-int srt_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
-  char chunk[2048];
+int srt_reader_c::probe_file(mm_text_io_c *mm_io, int64_t) {
+  string s;
+  int64_t dummy;
 
   try {
     mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->gets(chunk, 2047) == NULL)
+    s = mm_io->getline();
+    if (!parse_int(s.c_str(), dummy))
       return 0;
-    if ((chunk[0] != '1') || ((chunk[1] != '\n') && (chunk[1] != '\r')))
+    s = mm_io->getline();
+    if ((s.length() < 29) || !issrttimecode(s.c_str()))
       return 0;
-    if (mm_io->gets(chunk, 2047) == NULL)
-      return 0;
-    if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
-      return 0;
-    if (mm_io->gets(chunk, 2047) == NULL)
-      return 0;
+    s = mm_io->getline();
     mm_io->setFilePointer(0, seek_beginning);
   } catch (exception &ex) {
     return 0;
@@ -94,21 +92,22 @@ srt_reader_c::~srt_reader_c() {
 
 int srt_reader_c::read() {
   int64_t start, end;
-  char *subtitles;
+  char *chunk;
   subtitles_c subs;
+  string s, subtitles;
 
   while (1) {
-    if (mm_io->gets(chunk, 2047) == NULL)
+    if (!mm_io->getline2(s))
       break;
-    if (mm_io->gets(chunk, 2047) == NULL)
+    if (!mm_io->getline2(s))
       break;
-    chunk[2047] = 0;
-    if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
+    if ((s.length() < 29) || !issrttimecode(s.c_str()))
       break;
 
 // 00:00:00,000 --> 00:00:00,000
 // 01234567890123456789012345678
 //           1         2
+    chunk = safestrdup(s.c_str());
     chunk[2] = 0;
     chunk[5] = 0;
     chunk[8] = 0;
@@ -122,25 +121,22 @@ int srt_reader_c::read() {
             atol(&chunk[6]) * 1000 + atol(&chunk[9]);
     end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +
           atol(&chunk[23]) * 1000 + atol(&chunk[26]);
-    subtitles = NULL;
+
+    safefree(chunk);
+
+    subtitles = "";
     while (1) {
-      if (mm_io->gets(chunk, 2047) == NULL)
+      if (!mm_io->getline2(s))
         break;
-      chunk[2047] = 0;
-      if ((*chunk == '\n') || (*chunk == '\r'))
+      if (s.length() == 0)
         break;
-      if (subtitles == NULL) {
-        subtitles = safestrdup(chunk);
-      } else {
-        subtitles = (char *)saferealloc(subtitles, strlen(chunk) + 1 +
-                                        strlen(subtitles));
-        strcat(subtitles, chunk);
-      }
+
+      if (subtitles.length() > 0)
+        subtitles += "\n";
+      subtitles += s;
     }
-    if (subtitles != NULL) {
-      subs.add(start, end, subtitles);
-      safefree(subtitles);
-    }
+    if (subtitles.length() > 0)
+      subs.add(start, end, subtitles.c_str());
   }
 
   if ((subs.check() != 0) && verbose)
