@@ -39,6 +39,9 @@
 #define ID_TC_GLOBALTAGS                  13014
 #define ID_TC_SEGMENTTITLE                13015
 #define ID_TC_CUENAMEFORMAT               13016
+#define ID_RB_SPLITAFTERCHAPTERS          13017
+#define ID_TC_SPLITAFTERCHAPTERS          13018
+#define ID_RB_SPLITAFTEREACHCHAPTER       13019
 
 class tab_global: public wxPanel {
   DECLARE_CLASS(tab_global);
@@ -47,10 +50,13 @@ public:
   wxTextCtrl *tc_chapters, *tc_global_tags, *tc_split_max_files, *tc_title;
   wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid;
   wxTextCtrl *tc_split_bytes, *tc_split_time, *tc_cue_name_format;
+  wxTextCtrl *tc_split_chapters;
   wxCheckBox *cb_split, *cb_link;
-  wxRadioButton *rb_split_by_size, *rb_split_by_time;
+  wxRadioButton *rb_split_by_size, *rb_split_by_time, *rb_split_each_chapter;
+  wxRadioButton *rb_split_chapters;
   wxComboBox *cob_split_by_size, *cob_split_by_time;
   wxComboBox *cob_chap_language, *cob_chap_charset;
+  wxStaticText *st_split, *st_split_max_files;
 
 public:
   tab_global(wxWindow *parent);

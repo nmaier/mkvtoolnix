@@ -36,8 +36,8 @@ tab_global::tab_global(wxWindow *parent):
           wxTAB_TRAVERSAL) {
   wxStaticBoxSizer *siz_fs_title, *siz_split, *siz_linking_box, *siz_chapters;
   wxStaticBoxSizer *siz_gl_tags;
-  wxFlexGridSizer *siz_linking, *siz_chap_l1_l2;
-  wxBoxSizer *siz_all, *siz_split_l1, *siz_split_l2;
+  wxFlexGridSizer *siz_linking, *siz_chap_l1_l2, *siz_fg;
+  wxBoxSizer *siz_all, *siz_line, *siz_line2;
   wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3;
   wxButton *b_browse_chapters, *b_browse_global_tags;
   uint32_t i;
@@ -56,19 +56,54 @@ tab_global::tab_global(wxWindow *parent):
   siz_split =
     new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Split")),
                          wxVERTICAL);
-  siz_split_l1 = new wxBoxSizer(wxHORIZONTAL);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_split = new wxCheckBox(this, ID_CB_SPLIT, wxT("Enable splitting"));
   cb_split->SetToolTip(wxT("Enables splitting of the output into more than "
                            "one file. You can split after a given size "
                            "or after a given amount of time has passed."));
-  siz_split_l1->Add(cb_split, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT,
-                    5);
+  siz_line->Add(cb_split, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
 
+  cb_link = new wxCheckBox(this, ID_CB_LINK, wxT("link files"));
+  cb_link->SetToolTip(wxT("Use 'segment linking' for the resulting "
+                          "files. For an in-depth explanation of this "
+                          "feature consult the mkvmerge documentation."));
+  cb_link->SetValue(false);
+  cb_link->Enable(false);
+  siz_line->Add(cb_link, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+
+  st_split_max_files = new wxStaticText(this, wxID_STATIC,
+                                  wxT("max. number of files:"));
+  st_split_max_files->Enable(false);
+  siz_line->Add(st_split_max_files, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  tc_split_max_files = new wxTextCtrl(this, ID_TC_SPLITMAXFILES, wxT(""));
+  tc_split_max_files->SetToolTip(wxT("The maximum number of files that will "
+                                     "be created even if the last file might "
+                                     "contain more bytes/time than wanted. "
+                                     "Useful e.g. when you want exactly two "
+                                     "files."));
+  tc_split_max_files->Enable(false);
+  siz_line->Add(tc_split_max_files, 0, wxALIGN_CENTER_VERTICAL, 0);
+
+  siz_split->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
+
+  siz_split->Add(0, 5, 0, 0, 0);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  st_split = new wxStaticText(this, -1, wxT("Split..."));
+  st_split->Enable(false);
+  siz_line->Add(st_split, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+
+  siz_fg = new wxFlexGridSizer(2);
+  siz_fg->AddGrowableCol(0);
+  siz_fg->AddGrowableCol(1);
+
+  siz_line2 = new wxBoxSizer(wxHORIZONTAL);
   rb_split_by_size =
     new wxRadioButton(this, ID_RB_SPLITBYSIZE, wxT("by size:"),
                       wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
   rb_split_by_size->Enable(false);
-  siz_split_l1->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_line2->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_split_by_size =
     new wxComboBox(this, ID_CB_SPLITBYSIZE, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
@@ -86,14 +121,14 @@ tab_global::tab_global(wxWindow *parent):
                                     "are based on 1024 (G = 1024^3, M = "
                                     "1024^2, K = 1024)."));
   cob_split_by_size->Enable(false);
-  siz_split_l1->Add(cob_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT,
-                    5);
-  siz_split_l1->Add(0, 0, 1, wxGROW, 0);
+  siz_line2->Add(cob_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  siz_fg->Add(siz_line2, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5);
 
+  siz_line2 = new wxBoxSizer(wxHORIZONTAL);
   rb_split_by_time = new wxRadioButton(this, ID_RB_SPLITBYTIME,
                                        wxT("by time:"));
   rb_split_by_time->Enable(false);
-  siz_split_l1->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_line2->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_split_by_time =
     new wxComboBox(this, ID_CB_SPLITBYTIME, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
@@ -107,33 +142,29 @@ tab_global::tab_global(wxWindow *parent):
                                     "Examples: 01:00:00 (after one hour) or "
                                     "1800s (after 1800 seconds)."));
   cob_split_by_time->Enable(false);
-  siz_split_l1->Add(cob_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT,
-                    5);
-  siz_split->Add(siz_split_l1, 0, wxGROW, 0);
+  siz_line2->Add(cob_split_by_time, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_fg->Add(siz_line2, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 5);
 
-  siz_split_l2 = new wxBoxSizer(wxHORIZONTAL);
-  cb_link = new wxCheckBox(this, ID_CB_LINK, wxT("link files"));
-  cb_link->SetToolTip(wxT("Use 'segment linking' for the resulting "
-                          "files. For an in-depth explanation of this "
-                          "feature consult the mkvmerge documentation."));
-  cb_link->SetValue(false);
-  cb_link->Enable(false);
-  siz_split_l2->Add(cb_link, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
-  siz_split_l2->Add(0, 0, 1, wxGROW, 0);
+//   siz_line2 = new wxBoxSizer(wxHORIZONTAL);
+//   rb_split_chapters =
+//     new wxRadioButton(this, ID_RB_SPLITAFTERCHAPTERS, wxT("after chapters"));
+//   rb_split_chapters->Enable(false);
+//   siz_line2->Add(rb_split_chapters, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
 
-  siz_split_l2->Add(new wxStaticText(this, wxID_STATIC,
-                                     wxT("max. number of files:")),
-                    0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  tc_split_max_files = new wxTextCtrl(this, ID_TC_SPLITMAXFILES, wxT(""));
-  tc_split_max_files->SetToolTip(wxT("The maximum number of files that will "
-                                     "be created even if the last file might "
-                                     "contain more bytes/time than wanted. "
-                                     "Useful e.g. when you want exactly two "
-                                     "files."));
-  tc_split_max_files->Enable(false);
-  siz_split_l2->Add(tc_split_max_files, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT,
-                    5);
-  siz_split->Add(siz_split_l2, 0, wxGROW, 0);
+//   tc_split_chapters = new wxTextCtrl(this, ID_TC_SPLITAFTERCHAPTERS, wxT(""));
+//   tc_split_chapters->Enable(false);
+//   siz_line2->Add(tc_split_chapters, 0, wxALIGN_CENTER_VERTICAL, 0);
+
+//   siz_fg->Add(siz_line2, 0, wxRIGHT, 10);
+
+//   rb_split_each_chapter =
+//     new wxRadioButton(this, ID_RB_SPLITAFTEREACHCHAPTER,
+//                       wxT("after each chapter"));
+//   rb_split_each_chapter->Enable(false);
+//   siz_fg->Add(rb_split_each_chapter, 0, 0, 0);
+
+  siz_line->Add(siz_fg, 0, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
+  siz_split->Add(siz_line, 0, wxLEFT | wxRIGHT, 5);
 
   siz_linking_box =
     new wxStaticBoxSizer(new wxStaticBox(this, -1,
@@ -302,6 +333,8 @@ void tab_global::on_split_clicked(wxCommandEvent &evt) {
 
   ec = cb_split->IsChecked();
   er = rb_split_by_size->GetValue();
+  st_split_max_files->Enable(ec);
+  st_split->Enable(ec);
   rb_split_by_size->Enable(ec);
   cob_split_by_size->Enable(ec && er);
   rb_split_by_time->Enable(ec);
