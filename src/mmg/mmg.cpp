@@ -1872,6 +1872,7 @@ mmg_app::OnInit() {
   uint32_t i;
   wxString k, v;
 
+  mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");
   xml_element_map_init();
 

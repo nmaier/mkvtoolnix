@@ -1964,6 +1964,7 @@ setup() {
   textdomain("mkvtoolnix");
 #endif
 
+  mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");
   init_cc_stdio();
 

@@ -91,6 +91,7 @@ protected:
 #endif
 #if HAVE_POSIX_FADVISE
   unsigned long read_count, write_count;
+  static bool use_posix_fadvise;
 #endif
   string file_name;
   void *file;
@@ -111,6 +112,8 @@ public:
   }
 
   virtual int truncate(int64_t pos);
+
+  static void setup();
 };
 
 class MTX_DLL_API mm_proxy_io_c: public mm_io_c {

@@ -15,7 +15,10 @@
 
 	* mkvmerge: new feature: Use the posix_fadvise function on *nix
 	systems. This results in a considerable speed up for the whole
-	muxing process.
+	muxing process. As the function call seems to be buggy on at least
+	Linux kernels 2.4.x it can be disabled completely during
+	configure. It will only be used on Linux with a kernel from the
+	2.6.x series or newer.
 
 2005-02-01  Moritz Bunkus  <moritz@bunkus.org>
 

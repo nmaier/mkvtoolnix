@@ -19,6 +19,7 @@
 #include <errno.h>
 #if HAVE_POSIX_FADVISE
 # include <fcntl.h>
+# include <sys/utsname.h>
 #endif
 #include <string.h>
 #include <stdarg.h>
@@ -41,6 +42,7 @@ using namespace std;
 # if HAVE_POSIX_FADVISE
 static const unsigned long read_using_willneed = 16 * 1024 * 1024;
 static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
+bool mm_file_io_c::use_posix_fadvise = false;
 # endif
 
 mm_file_io_c::mm_file_io_c(const string &path,
@@ -93,8 +95,9 @@ mm_file_io_c::mm_file_io_c(const string &path,
     throw error_c(mxsprintf("Error opening file %s", path.c_str()));
 
 # if HAVE_POSIX_FADVISE
-  if (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
-                         advise))
+  if (use_posix_fadvise &&
+      (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
+                          advise)))
     mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
             path.c_str(), errno, strerror(errno));
 # endif
@@ -133,7 +136,7 @@ mm_file_io_c::write(const void *buffer,
 
 # if HAVE_POSIX_FADVISE
   write_count += bwritten;
-  if (write_count > write_before_dontneed) {
+  if (use_posix_fadvise && (write_count > write_before_dontneed)) {
     uint64 pos = getFilePointer();
     write_count = 0;
     if (0 != posix_fadvise(fileno((FILE *)file), 0, pos, POSIX_FADV_DONTNEED))
@@ -153,7 +156,7 @@ mm_file_io_c::read(void *buffer,
   bread = fread(buffer, 1, size, (FILE *)file); 
 
 # if HAVE_POSIX_FADVISE
-  if (bread >= 0) {
+  if (use_posix_fadvise && (0 <= bread)) {
     read_count += bread;
     if (read_count > read_using_willneed) {
       uint64 pos = getFilePointer();
@@ -187,6 +190,31 @@ mm_file_io_c::eof() {
 int
 mm_file_io_c::truncate(int64_t pos) {
   return ftruncate(fileno((FILE *)file), pos);
+}
+
+/** \brief OS and kernel dependant setup
+
+   The \c posix_fadvise call can improve read/write performance a lot.
+   Unfortunately it is pretty new and a buggy on a couple of Linux kernels
+   in the 2.4.x series. So only enable its usage for 2.6.x kernels.
+*/
+void
+mm_file_io_c::setup() {
+# if HAVE_POSIX_FADVISE
+  struct utsname un;
+
+  use_posix_fadvise = false;
+  if ((0 == uname(&un)) && !strcasecmp(un.sysname, "Linux")) {
+    vector<string> versions;
+    int major, minor;
+
+    versions = split(un.release, ".");
+    if ((2 <= versions.size()) &&
+        parse_int(versions[0], major) && parse_int(versions[1], minor) &&
+        ((2 < major) || (6 <= minor)))
+      use_posix_fadvise = true;
+  }
+# endif // HAVE_POSIX_FADVISE
 }
 
 #else // SYS_WINDOWS
@@ -357,6 +385,10 @@ mm_file_io_c::truncate(int64_t pos) {
   }
   restore_pos();
   return -1;
+}
+
+void
+mm_file_io_c::setup() {
 }
 
 #endif // SYS_UNIX

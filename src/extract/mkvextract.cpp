@@ -379,6 +379,7 @@ main(int argc,
   textdomain("mkvtoolnix");
 #endif
 
+  mm_file_io_c::setup();
   srand(time(NULL));
   utf8_init("");
 
