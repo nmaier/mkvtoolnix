@@ -48,6 +48,7 @@
 
 using namespace std;
 
+#include "base64.h"
 #include "hacks.h"
 #include "mkvmerge.h"
 
@@ -1358,6 +1359,16 @@ void engage_hacks(const char *hacks) {
       mxinfo("Valid hacks are:\n");
       for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
         mxinfo("%s\n", mosu_hacks[hidx]);
+      mxexit(0);
+    } else if (engage_args[aidx] == "cow") {
+      const string initial = "ICAgICAgICAgIChfXykKICAgICAgICAgICgqKikg"
+        "IE9oIGhvbmV5LCB0aGF0J3Mgc28gc3dlZXQhCiAgIC8tLS0tLS0tXC8gICBPZiB"
+        "jb3Vyc2UgSSdsbCBtYXJyeSB5b3UhCiAgLyB8ICAgICB8fAogKiAgfHwtLS0tfH"
+        "wKICAgIF5eICAgIF5eCg==";
+      char correction[200];
+      memset(correction, 0, 200);
+      base64_decode(initial, (unsigned char *)correction);
+      mxinfo("%s", correction);
       mxexit(0);
     }
   for (aidx = 0; aidx < engage_args.size(); aidx++) {

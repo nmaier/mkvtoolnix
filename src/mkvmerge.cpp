@@ -1610,6 +1610,11 @@ parse_args(int argc,
       outfile = safestrdup(next_arg);
       i++;
 
+    } else if (!strcmp(this_arg, "--engage")) {
+      if (next_arg == NULL)
+        mxerror("'--engage' lacks its argument.\n");
+      engage_hacks(next_arg);
+      i++;
     }
   }
 
@@ -1628,19 +1633,14 @@ parse_args(int argc,
 
     // Ignore the options we took care of in the first step.
     if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output") ||
-        !strcmp(this_arg, "--command-line-charset")) {
+        !strcmp(this_arg, "--command-line-charset") ||
+        !strcmp(this_arg, "--engage")) {
       i++;
       continue;
     }
 
     // Global options
-    if (!strcmp(this_arg, "--engage")) {
-      if (next_arg == NULL)
-        mxerror("'--engage' lacks its argument.\n");
-      engage_hacks(next_arg);
-      i++;
-
-    } else if (!strcmp(this_arg, "--priority")) {
+    if (!strcmp(this_arg, "--priority")) {
       bool found;
 
       if (next_arg == NULL)
