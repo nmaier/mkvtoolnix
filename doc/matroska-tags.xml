@@ -147,12 +147,15 @@
       </Title>
     </MultiTitle>
 
-<!-- MultiComments don't work at the moment. -->
-<!--     <MultiComment> -->
-<!--       <Name>CommentName</Name> -->
-<!--       <Comments>Comments</Comments> -->
-<!--       <Language>ita</Language> -->
-<!--     </MultiComment> -->
+    <!-- MultiComments can contain any information and occur at any level -->
+    <!-- below Tag. They should be avoided if possible! They allow free -->
+    <!-- form tags similar to NAME=VALUE style tags but don't follow -->
+    <!-- any standard and are therefore difficult to evaluate by software. -->
+    <MultiComment>
+      <Name>CommentName</Name>
+      <Comments>Comments</Comments>
+      <Language>ita</Language>
+    </MultiComment>
 
   </Tag>
 </Tags>
