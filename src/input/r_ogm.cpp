@@ -1015,9 +1015,10 @@ ogm_reader_c::process_header_page(ogg_page *og) {
     dmx->packet_sizes.push_back(op.bytes);
   }
 
-  if ((dmx->stype == OGM_STREAM_TYPE_VORBIS) && (dmx->packet_data.size() == 3))
-    dmx->headers_read = true;
-  else if (dmx->packet_data.size() == 2)
+  if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
+    if (dmx->packet_data.size() == 3)
+      dmx->headers_read = true;
+  } else if (dmx->packet_data.size() == 2)
     dmx->headers_read = true;
 }
 
