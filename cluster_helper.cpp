@@ -114,6 +114,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
   if (((packet->timecode - timecode) > max_ms_per_cluster) ||
+      ((packet->timecode - timecode) > (60000 * 1000000 / TIMECODE_SCALE)) ||
       (get_packet_count() > max_blocks_per_cluster) ||
       (get_cluster_content_size() > 1500000)) {
     render();
@@ -325,7 +326,6 @@ int cluster_helper_c::render() {
       free_ref(pack->timecode, pack->source);
     }
 
-
     // Set the reference priority if it was wanted.
     if ((new_block_group != NULL) && (pack->ref_priority > 0))
       *static_cast<EbmlUInteger *>
@@ -377,8 +377,6 @@ int cluster_helper_c::render() {
 
       for (k = 0, block_duration = 0; k < durations.size(); k++)
         block_duration += durations[k];
-//       if ((pack->duration_mandatory) ||
-//           (def_duration != block_duration))
       if (def_duration != block_duration)
         last_block_group->SetBlockDuration(block_duration * 1000000);
 
@@ -467,8 +465,9 @@ int cluster_helper_c::render() {
 
   if (elements_in_cluster > 0) {
     def_duration = last_source->get_track_default_duration_ns() / 1000000;
-    if ((block_duration != 0) && (def_duration != block_duration))
+    if ((block_duration != 0) && (def_duration != block_duration)) {
       last_block_group->SetBlockDuration(block_duration * 1000000);
+    }
 
     cluster->Render(*out, *kax_cues);
 

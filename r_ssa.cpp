@@ -228,7 +228,12 @@ int ssa_reader_c::read() {
     // Parse the end time.
     stime = get_element("End", fields);
     end = parse_time(stime);
-    if (start < 0) {
+    if (end < 0) {
+      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
+              orig_line.c_str());
+      continue;
+    }
+    if (end < start) {
       fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
               orig_line.c_str());
       continue;

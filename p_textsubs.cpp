@@ -123,10 +123,10 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   if (recode) {
     utf8_subs = to_utf8(cc_utf8, subs);
     add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, length,
-               1, -1, -1);
+               true);
     safefree(utf8_subs);
   } else
-    add_packet((unsigned char *)subs, strlen(subs), start, length, 1, -1, -1);
+    add_packet((unsigned char *)subs, strlen(subs), start, length, true);
 
   safefree(subs);
 
