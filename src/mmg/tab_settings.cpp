@@ -71,6 +71,10 @@ tab_settings::tab_settings(wxWindow *parent):
                    "input file but with the extension '.mkv'. If unset mmg "
                    "will not touch the output filename."));
 
+  cb_ask_before_overwriting =
+    new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
+                   wxT("Ask before overwriting existing files"),
+                   wxPoint(230, 115 + YOFF));
 
   new wxStaticBox(this, -1, wxT("About"), wxPoint(10, 350),
                   wxSize(475, 104));
@@ -140,6 +144,9 @@ tab_settings::load_preferences() {
   if (!cfg->Read(wxT("autoset_output_filename"), &b))
     b = true;
   cb_autoset_output_filename->SetValue(b);
+  if (!cfg->Read(wxT("ask_before_overwriting"), &b))
+    b = true;
+  cb_ask_before_overwriting->SetValue(b);
 }
 
 void
@@ -150,6 +157,8 @@ tab_settings::save_preferences() {
   cfg->Write(wxT("process_priority"), cob_priority->GetValue());
   cfg->Write(wxT("autoset_output_filename"),
              cb_autoset_output_filename->IsChecked());
+  cfg->Write(wxT("ask_before_overwriting"),
+             cb_ask_before_overwriting->IsChecked());
   cfg->Flush();
 }
 

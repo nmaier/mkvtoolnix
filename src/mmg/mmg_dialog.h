@@ -87,7 +87,7 @@ protected:
   wxStaticBox *sb_commandline;
   wxTextCtrl *tc_output, *tc_cmdline;
 
-  wxString cmdline, verified_output_file;
+  wxString cmdline;
   wxArrayString clargs;
 
   wxTimer cmdline_timer;

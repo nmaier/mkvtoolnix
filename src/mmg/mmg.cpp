@@ -538,7 +538,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
 
     file = app->argv[1];
     if (!wxFileExists(file) || wxDirExists(file))
-      wxMessageBox(wxT("The file '") + file + wxT("' does exist."),
+      wxMessageBox(wxT("The file '") + file + wxT("' does not exist."),
                    wxT("Error loading settings"),
                    wxOK | wxCENTER | wxICON_ERROR);
     else {
@@ -564,7 +564,6 @@ mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     tc_output->SetValue(dlg.GetPath());
-    verified_output_file = dlg.GetPath();
   }
 }
 
@@ -601,7 +600,6 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
 
   delete cfg;
   wxRemoveFile(tmp_name);
-  verified_output_file = wxT("");
 
   set_status_bar(wxT("Configuration cleared."));
 }
@@ -613,7 +611,8 @@ mmg_dialog::on_file_load(wxCommandEvent &evt) {
                    wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     if (!wxFileExists(dlg.GetPath()) || wxDirExists(dlg.GetPath())) {
-      wxMessageBox(wxT("The file does exist."), wxT("Error loading settings"),
+      wxMessageBox(wxT("The file does not exist."),
+                   wxT("Error loading settings"),
                    wxOK | wxCENTER | wxICON_ERROR);
       return;
     }
@@ -641,7 +640,6 @@ mmg_dialog::load(wxString file_name,
   }
   cfg->Read(wxT("output_file_name"), &s);
   tc_output->SetValue(s);
-  verified_output_file = wxT("");
 
   input_page->load(cfg);
   attachments_page->load(cfg);
@@ -771,13 +769,12 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
       !settings_page->validate_settings())
     return;
 
-  if ((verified_output_file != tc_output->GetValue()) &&
+  if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
-                    wxT("' exists already. Do you want to overwrite it?"),
+                    wxT("' does already exists. Do you want to overwrite it?"),
                     wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
     return;
-  verified_output_file = tc_output->GetValue();
 
   mux_dlg = new mux_dialog(this);
   delete mux_dlg;
@@ -1323,13 +1320,12 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
       !settings_page->validate_settings())
     return;
 
-  if ((verified_output_file != tc_output->GetValue()) &&
+  if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
-                    wxT("' exists already. Do you want to overwrite it?"),
+                    wxT("' does already exists. Do you want to overwrite it?"),
                     wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
     return;
-  verified_output_file = tc_output->GetValue();
 
   description = wxGetTextFromUser(wxT("Please enter a description for the "
                                       "new job:"), wxT("Job description"),

@@ -26,6 +26,7 @@
 #define ID_B_BROWSEMKVMERGE                15001
 #define ID_COB_PRIORITY                    15002
 #define ID_CB_AUTOSET_OUTPUT_FILENAME      15003
+#define ID_CB_ASK_BEFORE_OVERWRITING       15004
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
@@ -33,6 +34,7 @@ class tab_settings: public wxPanel {
 public:
   wxTextCtrl *tc_mkvmerge;
   wxCheckBox *cb_show_commandline, *cb_autoset_output_filename;
+  wxCheckBox *cb_ask_before_overwriting;
   wxComboBox *cob_priority;
 
 public:
