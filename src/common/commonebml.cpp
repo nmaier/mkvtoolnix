@@ -24,6 +24,12 @@
 #include <windows.h>
 #endif
 
+#include <ebml/EbmlFloat.h>
+#include <ebml/EbmlSInteger.h>
+#include <ebml/EbmlString.h>
+#include <ebml/EbmlUInteger.h>
+#include <ebml/EbmlUnicodeString.h>
+
 #include "common.h"
 #include "commonebml.h"
 
@@ -35,6 +41,11 @@ __debug_dump_elements(EbmlElement *e,
                       int level) {
   int i;
   EbmlMaster *m;
+  EbmlString *s;
+  EbmlUnicodeString *us;
+  EbmlSInteger *si;
+  EbmlUInteger *ui;
+  EbmlFloat *f;
 
   for (i = 0; i < level; i++)
     mxprint(stdout, " ");
@@ -48,7 +59,17 @@ __debug_dump_elements(EbmlElement *e,
     mxprint(stdout, " (size: %u)\n", m->ListSize());
     for (i = 0; i < m->ListSize(); i++)
       debug_dump_elements((*m)[i], level + 1);
-  } else
+  } else if ((s = dynamic_cast<EbmlString *>(e)) != NULL)
+    mxprint(stdout, " (%s)\n", string(*s).c_str());
+  else if ((us = dynamic_cast<EbmlUnicodeString *>(e)) != NULL)
+    mxprint(stdout, " (%s)\n", UTFstring_to_cstrutf8(UTFstring(*us)).c_str());
+  else if ((si = dynamic_cast<EbmlSInteger *>(e)) != NULL)
+    mxprint(stdout, " (%lld)\n", int64(*si));
+  else if ((ui = dynamic_cast<EbmlUInteger *>(e)) != NULL)
+    mxprint(stdout, " (%llu)\n", uint64(*ui));
+  else if ((f = dynamic_cast<EbmlFloat *>(e)) != NULL)
+    mxprint(stdout, " (%f)\n", double(*f));
+  else
     mxprint(stdout, "\n");
 }
 #endif
