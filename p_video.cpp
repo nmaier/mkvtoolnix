@@ -126,7 +126,7 @@ video_packetizer_c::~video_packetizer_c() {
 }
 
 void video_packetizer_c::dump_debug_info() {
-  fprintf(stderr, "DBG> video_packetizer_c: queue: %d; frames_output: %d; "
+  mxprint(stderr, "DBG> video_packetizer_c: queue: %d; frames_output: %d; "
           "ref_timecode: %lld\n", packet_queue.size(), frames_output,
           ref_timecode);
 }

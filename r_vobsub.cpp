@@ -89,7 +89,7 @@ vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
   all_packetizers = NULL;
   num_packetizers = 0;
   if (verbose)
-    fprintf(stdout, "Using VobSub subtitle reader for %s/%s.\n+-> Using " \
+    mxprint(stdout, "Using VobSub subtitle reader for %s/%s.\n+-> Using " \
             "VobSub subtitle output module for subtitles.\n", fname, name);
   safefree(name);
   memcpy(&async, nasync, sizeof(audio_sync_t));
@@ -119,7 +119,7 @@ void vobsub_reader_c::add_vobsub_packetizer(int width, int height,
                                                 langidx, id, index,
                                                 &async);
   } catch (error_c error) {
-    fprintf(stderr, "Error: vobsub_reader: Could not create a new "
+    mxprint(stderr, "Error: vobsub_reader: Could not create a new "
             "vobsub_packetizer: %s\n", error.get_error());
     exit(1);
   }
@@ -151,19 +151,19 @@ int vobsub_reader_c::read() {
       if (sscanf(&chunk[6], "%dx%d", &width, &height) != 2) {
         width = -1;
         height = -1;
-        fprintf(stdout, "vobsub_reader: Warning: Incorrect \"size:\" entry "
+        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"size:\" entry "
                 "on line %d. Ignored.\n", lineno);
       }
     } else if (!strncmp(chunk, "palette: ", 9)) {
       if (strlen(chunk) < 10)
-        fprintf(stdout, "vobsub_reader: Warning: Incorrect \"palette:\" entry "
+        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"palette:\" entry "
                 "on line %d. Ignored.\n", lineno);
       else
         palette = safestrdup(&chunk[9]);
     } else if (!strncmp(chunk, "langidx: ", 9)) {
       langidx = strtol(&chunk[9], NULL, 10);
       if ((langidx < 0) || (errno != 0)) {
-        fprintf(stdout, "vobsub_reader: Warning: Incorrect \"langidx:\" entry "
+        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"langidx:\" entry "
                 "on line %d. Ignored.\n", lineno);
         langidx = -1;
       }
@@ -173,7 +173,7 @@ int vobsub_reader_c::read() {
         s++;
       s2 = strchr(s, ',');
       if (s2 == NULL) {
-        fprintf(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
+        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
                 "on line %d. Ignored.\n", lineno);
 
         continue;
@@ -184,7 +184,7 @@ int vobsub_reader_c::read() {
       while (isspace(*s))
         s++;
       if (strncmp(s, "index:", 6)) {
-        fprintf(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
+        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
                 "on line %d. Ignored.\n", lineno);
 
         continue;
@@ -194,31 +194,31 @@ int vobsub_reader_c::read() {
         s++;
       index = strtol(s, NULL, 10);
       if ((index < 0) || (errno != 0)) {
-        fprintf(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
+        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
                 "on line %d. Ignored.\n", lineno);
         continue;
       }
     } else if (!isvobsubline(chunk))
-      fprintf(stdout, "vobsub_reader: Warning: Unknown line format on line "
+      mxprint(stdout, "vobsub_reader: Warning: Unknown line format on line "
               "%d. Ignored.\n", lineno);
     else if (vobsub_packetizer == NULL) {
       if ((width == -1) || (height == -1)) {
-        fprintf(stdout, "vobsub_reader: No \"size:\" entry found. File seems "
+        mxprint(stdout, "vobsub_reader: No \"size:\" entry found. File seems "
                 "to be defect. Aborting.\n");
         exit(1);
       }
       if (palette == NULL) {
-        fprintf(stdout, "vobsub_reader: No \"palette:\" entry found. File "
+        mxprint(stdout, "vobsub_reader: No \"palette:\" entry found. File "
                 "seems to be defect. Aborting.\n");
         exit(1);
       }
       if (langidx == -1) {
-        fprintf(stdout, "vobsub_reader: No \"langidx:\" entry found. File "
+        mxprint(stdout, "vobsub_reader: No \"langidx:\" entry found. File "
                 "seems to be defect. Aborting.\n");
         exit(1);
       }
       if ((id == NULL) || (index == -1)) {
-              fprintf(stdout, "vobsub_reader: No \"id:\" entry found. File "
+              mxprint(stdout, "vobsub_reader: No \"id:\" entry found. File "
                 "seems to be defect. Aborting.\n");
         exit(1);
       }
@@ -250,16 +250,16 @@ int vobsub_reader_c::read() {
 
       if ((last_start != -1) && (last_filepos != -1)) {
         if (mm_io->setFilePointer(subfile, last_filepos, seek_beginning) != 0)
-          fprintf(stderr, "Warning: vobsub_reader: Could not seek to position "
+          mxprint(stderr, "Warning: vobsub_reader: Could not seek to position "
                   "%lld. Ignoring this entry.\n", last_filepos);
         else if (last_filepos == filepos)
-          fprintf(stderr, "Warning: vobsub_reader: This entry and the last "
+          mxprint(stderr, "Warning: vobsub_reader: This entry and the last "
                   "entry start at the same position in the file. Ignored.\n");
         else {
           s = (char *)safemalloc(filepos - last_filepos);
           if (mm_io->read(s, 1, filepos - last_filepos, subfile) !=
               (filepos - last_filepos))
-            fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
+            mxprint(stderr, "Warning: vobsub_reader: Could not read entry "
                     "from the sub file. Ignored.\n");
           else
             vobsub_packetizer->process(last_start, start - last_start, s,
@@ -270,30 +270,30 @@ int vobsub_reader_c::read() {
       last_start = start;
       last_filepos = filepos;
 
-      fprintf(stdout, "line %d, start %lld, filepos %lld\n", lineno,
+      mxprint(stdout, "line %d, start %lld, filepos %lld\n", lineno,
               start, filepos);
     }
   }
   if ((last_start != -1) && (last_filepos != -1) &&
       (vobsub_packetizer != NULL)) {
     if (mm_io->setFilePointer(subfile, 0, seek_end) != 0) {
-      fprintf(stderr, "Warning: vobsub_reader: Could not seek to end of "
+      mxprint(stderr, "Warning: vobsub_reader: Could not seek to end of "
               "the sub file. Ignoring last entry.\n");
       vobsub_packetizer->produce_eos_packet();
       return 0;
     }
     filepos = mm_io->getFilePointer();
     if (mm_io->setFilePointer(subfile, last_filepos, seek_beginning) != 0)
-      fprintf(stderr, "Warning: vobsub_reader: Could not seek to position "
+      mxprint(stderr, "Warning: vobsub_reader: Could not seek to position "
               "%lld. Ignoring this entry.\n", last_filepos);
     else if (last_filepos == filepos)
-      fprintf(stderr, "Warning: vobsub_reader: This entry and the last "
+      mxprint(stderr, "Warning: vobsub_reader: This entry and the last "
               "entry start at the same position in the file. Ignored.\n");
     else {
       s = (char *)safemalloc(filepos - last_filepos);
       if (mm_io->read(s, 1, filepos - last_filepos, subfile) !=
           (filepos - last_filepos))
-        fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
+        mxprint(stderr, "Warning: vobsub_reader: Could not read entry "
                 "from the sub file. Ignored.\n");
       else
         vobsub_packetizer->process(last_start, start - last_start, s,
@@ -332,7 +332,7 @@ void vobsub_reader_c::reset() {
 static char wchar[] = "-\\|/-\\|/-";
 
 void vobsub_reader_c::display_progress() {
-  fprintf(stdout, "working... %c\r", wchar[act_wchar]);
+  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;

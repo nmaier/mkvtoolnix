@@ -162,11 +162,11 @@ void bitvalue_c::generate_random() {
 void die(const char *fmt, ...) {
   va_list ap;
 
-  fprintf(stderr, "'die' called: ");
+  mxprint(stderr, "'die' called: ");
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
   va_end(ap);
-  fprintf(stderr, "\n");
+  mxprint(stderr, "\n");
 #ifdef DEBUG
   debug_c::dump_info();
 #endif
@@ -174,7 +174,7 @@ void die(const char *fmt, ...) {
 }
 
 void _trace(const char *func, const char *file, int line) {
-  fprintf(stdout, "trace: %s:%s (%d)\n", file, func, line);
+  mxprint(stdout, "trace: %s:%s (%d)\n", file, func, line);
 }
 
 /*
@@ -361,7 +361,7 @@ int utf8_init(const char *charset) {
 
   ict_to_utf8 = iconv_open("UTF-8", lc_charset);
   if (ict_to_utf8 == (iconv_t)(-1))
-    fprintf(stdout, "Warning: Could not initialize the iconv library for "
+    mxprint(stdout, "Warning: Could not initialize the iconv library for "
             "the conversion from %s to UFT-8. "
             "Some strings will not be converted to UTF-8 and the resulting "
             "Matroska file might not comply with the Matroska specs ("
@@ -369,7 +369,7 @@ int utf8_init(const char *charset) {
 
   ict_from_utf8 = iconv_open(lc_charset, "UTF-8");
   if (ict_from_utf8 == (iconv_t)(-1))
-    fprintf(stdout, "Warning: Could not initialize the iconv library for "
+    mxprint(stdout, "Warning: Could not initialize the iconv library for "
             "the conversion from UFT-8 to %s. "
             "Some strings cannot be converted from UTF-8 and might be "
             "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
@@ -823,10 +823,10 @@ void debug_c::dump_info() {
   debug_c *entry;
   uint64_t diff_calls, diff_time;
 
-  fprintf(stderr, "\nDBG> dumping time info:\n");
+  mxprint(stderr, "\nDBG> dumping time info:\n");
   for (i = 0; i < dbg_entries.size(); i++) {
     entry = dbg_entries[i];
-    fprintf(stderr, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
+    mxprint(stderr, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
             "time/call: %.3fms", entry->label, entry->number_of_calls,
             entry->elapsed_time / 1000000.0,
             entry->elapsed_time / (float)entry->number_of_calls / 1000.0);
@@ -835,18 +835,30 @@ void debug_c::dump_info() {
     if ((entry->last_elapsed_time != 0) &&
         (entry->last_number_of_calls != 0) &&
         (diff_calls > 0)) {
-      fprintf(stderr, ", since the last call: # calls: %llu, elapsed time: "
+      mxprint(stderr, ", since the last call: # calls: %llu, elapsed time: "
               "%.3fs, time/call: %.3fms", diff_calls, diff_time / 1000000.0,
               diff_time / (float)diff_calls / 1000.0);
     }
-    fprintf(stderr, "\n");
+    mxprint(stderr, "\n");
     entry->last_elapsed_time = entry->elapsed_time;
     entry->last_number_of_calls = entry->number_of_calls;
   }
 
-  fprintf(stderr, "DBG> dumping packetzer info:\n");
+  mxprint(stderr, "DBG> dumping packetzer info:\n");
   for (i = 0; i < dbg_packetizers.size(); i++)
     dbg_packetizers[i]->dump_debug_info();
 }
 
 #endif // DEBUG
+
+/*
+ * Other related news
+ */
+void mxprint(void *stream, const char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  vfprintf((FILE *)stream, fmt, ap);
+  fflush((FILE *)stream);
+  va_end(ap);
+}

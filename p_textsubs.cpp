@@ -80,7 +80,7 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
     start = 0;
 
   if (length < 0) {
-    fprintf(stderr, "Warning: textsubs_packetizer: Ignoring an entry which "
+    mxprint(stderr, "Warning: textsubs_packetizer: Ignoring an entry which "
             "starts after it ends.\n");
     return EMOREDATA;
   }
@@ -134,6 +134,6 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
 }
 
 void textsubs_packetizer_c::dump_debug_info() {
-  fprintf(stderr, "DBG> textsubs_packetizer_c: queue: %d\n",
+  mxprint(stderr, "DBG> textsubs_packetizer_c: queue: %d\n",
           packet_queue.size());
 }

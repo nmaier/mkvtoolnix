@@ -125,7 +125,7 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("ssa_reader: Could not open the source file.");
   }
   if (verbose)
-    fprintf(stdout, "Using SSA/ASS subtitle reader for %s.\n+-> Using "
+    mxprint(stdout, "Using SSA/ASS subtitle reader for %s.\n+-> Using "
             "text subtitle output module for subtitles.\n", ti->fname);
 }
 
@@ -220,7 +220,7 @@ int ssa_reader_c::read() {
     stime = get_element("Start", fields);
     start = parse_time(stime);
     if (start < 0) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
+      mxprint(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
               orig_line.c_str());
       continue;
     }
@@ -229,12 +229,12 @@ int ssa_reader_c::read() {
     stime = get_element("End", fields);
     end = parse_time(stime);
     if (end < 0) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
+      mxprint(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
               orig_line.c_str());
       continue;
     }
     if (end < start) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
+      mxprint(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
               orig_line.c_str());
       continue;
     }
@@ -288,7 +288,7 @@ int ssa_reader_c::display_priority() {
 static char wchar[] = "-\\|/-\\|/-";
 
 void ssa_reader_c::display_progress() {
-  fprintf(stdout, "working... %c\r", wchar[act_wchar]);
+  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
@@ -300,6 +300,6 @@ void ssa_reader_c::set_headers() {
 }
 
 void ssa_reader_c::identify() {
-  fprintf(stdout, "File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
+  mxprint(stdout, "File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
           "(SSA/ASS)\n", ti->fname);
 }

@@ -201,7 +201,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
 }
 
 void vorbis_packetizer_c::dump_debug_info() {
-  fprintf(stderr, "DBG> vorbis_packetizer_c: queue: %d\n",
+  mxprint(stderr, "DBG> vorbis_packetizer_c: queue: %d\n",
           packet_queue.size());
 }
 

@@ -134,5 +134,5 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void pcm_packetizer_c::dump_debug_info() {
-  fprintf(stderr, "DBG> pcm_packetizer_c: queue: %d\n", packet_queue.size());
+  mxprint(stderr, "DBG> pcm_packetizer_c: queue: %d\n", packet_queue.size());
 }

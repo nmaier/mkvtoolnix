@@ -167,7 +167,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
 
         if (pos >= 0) {
           if (verbose) {
-            fprintf(stderr,"Using WAV demultiplexer for %s.\n"
+            mxprint(stderr,"Using WAV demultiplexer for %s.\n"
                     "+-> Using DTS output module for audio stream. %s %s\n",
                     ti->fname, (dts_swap_bytes)? "(bytes swapped)" : "",
                     (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
@@ -195,7 +195,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
                                          wheader.common.wBitsPerSample, ti);
 
     if (verbose)
-      fprintf(stdout, "Using WAV demultiplexer for %s.\n+-> Using "
+      mxprint(stdout, "Using WAV demultiplexer for %s.\n+-> Using "
               "PCM output module for audio stream.\n", ti->fname);
     is_dts = false;
   }
@@ -281,7 +281,7 @@ int wav_reader_c::display_priority() {
 
 void wav_reader_c::display_progress() {
   int samples = (wheader.riff.len - sizeof(wheader) + 8) / bps;
-  fprintf(stdout, "progress: %d/%d seconds (%d%%)\r",
+  mxprint(stdout, "progress: %d/%d seconds (%d%%)\r",
           (int)(bytes_processed / bps), (int)samples,
           (int)(bytes_processed * 100L / bps / samples));
   fflush(stdout);
@@ -295,6 +295,6 @@ void wav_reader_c::set_headers() {
 }
 
 void wav_reader_c::identify() {
-  fprintf(stdout, "File '%s': container: WAV\nTrack ID 0: audio (%s)\n",
+  mxprint(stdout, "File '%s': container: WAV\nTrack ID 0: audio (%s)\n",
           ti->fname, is_dts ? "DTS" : "PCM");
 }

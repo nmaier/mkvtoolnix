@@ -129,14 +129,14 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
 
   bc.get_bits(7, t);
   if (t < 5)  {
-    fprintf(stderr,"DTS_Header problem: invalid number of blocks in frame\n");
+    mxprint(stderr,"DTS_Header problem: invalid number of blocks in frame\n");
     //return -1;
   }
   dts_header->num_pcm_sample_blocks = t + 1;
 
   bc.get_bits(14, t);
   if (t < 95) {
-    fprintf(stderr,"DTS_Header problem: invalid frame bytes size\n");
+    mxprint(stderr,"DTS_Header problem: invalid frame bytes size\n");
     return -1;
   }
   dts_header->frame_byte_size = t+1;
@@ -154,7 +154,7 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
   bc.get_bits(4, t);
   dts_header->core_sampling_frequency = core_samplefreqs[t];
   if (dts_header->core_sampling_frequency < 0) {
-    fprintf(stderr,"DTS_Header problem: invalid core sampling frequency\n");
+    mxprint(stderr,"DTS_Header problem: invalid core sampling frequency\n");
     return -1;
   }
 
@@ -192,7 +192,7 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
   bc.get_bits(4, t);
   dts_header->encoder_software_revision = t;
   if (t > 7) {
-    fprintf(stderr,"DTS_Header problem: encoded with an incompatible new "
+    mxprint(stderr,"DTS_Header problem: encoded with an incompatible new "
             "encoder version\n");
     return -1;
   }
@@ -233,7 +233,7 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
       break;
 
     default:
-      fprintf(stderr,"DTS_Header problem: invalid source PCM resolution\n");
+      mxprint(stderr,"DTS_Header problem: invalid source PCM resolution\n");
       return -1;
   }
 
@@ -251,7 +251,7 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
   }
 
   if (out_of_data) {
-    fprintf(stderr,"DTS_Header problem: not enough data to read header\n");
+    mxprint(stderr,"DTS_Header problem: not enough data to read header\n");
     return -1;
   }
 
@@ -263,115 +263,115 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
 
 void print_dts_header(const struct dts_header_s *h) {
 
-  fprintf(stderr,"DTS Frame Header Information:\n");
+  mxprint(stderr,"DTS Frame Header Information:\n");
 
-  fprintf(stderr,"Frame Type             : ");
+  mxprint(stderr,"Frame Type             : ");
   if (h->frametype == dts_header_s::frametype_normal) {
-    fprintf(stderr,"normal");
+    mxprint(stderr,"normal");
   } else {
-    fprintf(stderr,"termination, deficit sample count = %u",
+    mxprint(stderr,"termination, deficit sample count = %u",
             h->deficit_sample_count);
   }
-  fprintf(stderr,"\n");
+  mxprint(stderr,"\n");
 
-  fprintf(stderr,"CRC available          : %s\n", (h->crc_present)? "yes" :
+  mxprint(stderr,"CRC available          : %s\n", (h->crc_present)? "yes" :
           "no");
 
-  fprintf(stderr,"Frame Size             : PCM core samples=32*%u=%u, %f "
+  mxprint(stderr,"Frame Size             : PCM core samples=32*%u=%u, %f "
           "milliseconds, %u byte\n",
           h->num_pcm_sample_blocks, h->num_pcm_sample_blocks * 32,
           (h->num_pcm_sample_blocks * 32000.0) / h->core_sampling_frequency,
           h->frame_byte_size);
 
-  fprintf(stderr,"Audio Channels         : %d%s, arrangement: %s\n",
+  mxprint(stderr,"Audio Channels         : %d%s, arrangement: %s\n",
           h->audio_channels, (h->source_surround_in_es)? " ES" : "" ,
           h->audio_channel_arrangement);
 
-  fprintf(stderr,"Core sampling frequency: %u\n", h->core_sampling_frequency);
+  mxprint(stderr,"Core sampling frequency: %u\n", h->core_sampling_frequency);
 
-  fprintf(stderr,"Transmission_bitrate   : ");
+  mxprint(stderr,"Transmission_bitrate   : ");
   if (h->transmission_bitrate == -1) {
-    fprintf(stderr,"open");
+    mxprint(stderr,"open");
   } else if (h->transmission_bitrate == -2) {
-    fprintf(stderr,"variable");
+    mxprint(stderr,"variable");
   } else if (h->transmission_bitrate == -3) {
-    fprintf(stderr,"lossless");
+    mxprint(stderr,"lossless");
   } else {
-    fprintf(stderr,"%d", h->transmission_bitrate);
+    mxprint(stderr,"%d", h->transmission_bitrate);
   }
-  fprintf(stderr,"\n");
+  mxprint(stderr,"\n");
 
 
-  fprintf(stderr,"Embedded Down Mix      : %s\n",
+  mxprint(stderr,"Embedded Down Mix      : %s\n",
           (h->embedded_down_mix)? "yes" : "no");
-  fprintf(stderr,"Embedded Dynamic Range : %s\n",
+  mxprint(stderr,"Embedded Dynamic Range : %s\n",
           (h->embedded_dynamic_range)? "yes" : "no");
-  fprintf(stderr,"Embedded Time Stamp    : %s\n",
+  mxprint(stderr,"Embedded Time Stamp    : %s\n",
           (h->embedded_time_stamp)? "yes" : "no");
-  fprintf(stderr,"Embedded Auxiliary Data: %s\n",
+  mxprint(stderr,"Embedded Auxiliary Data: %s\n",
           (h->auxiliary_data)? "yes" : "no");
-  fprintf(stderr,"HDCD Master            : %s\n",
+  mxprint(stderr,"HDCD Master            : %s\n",
           (h->hdcd_master)? "yes" : "no");
 
-  fprintf(stderr,"Extended Coding        : ");
+  mxprint(stderr,"Extended Coding        : ");
   if (h->extended_coding) {
     switch (h->extension_audio_descriptor) {
       case dts_header_s::extension_xch:
-        fprintf(stderr,"Extra Channels");
+        mxprint(stderr,"Extra Channels");
         break;
       case dts_header_s::extension_x96k:
-        fprintf(stderr,"Extended frequency (x96k)");
+        mxprint(stderr,"Extended frequency (x96k)");
         break;
       case dts_header_s::extension_xch_x96k:
-        fprintf(stderr,"Extra Channels and Extended frequency (x96k)");
+        mxprint(stderr,"Extra Channels and Extended frequency (x96k)");
         break;
       default:
-        fprintf(stderr,"yes, but unknown");
+        mxprint(stderr,"yes, but unknown");
         break;
     }
   } else {
-    fprintf(stderr,"no");
+    mxprint(stderr,"no");
   }
-  fprintf(stderr,"\n");
+  mxprint(stderr,"\n");
 
-  fprintf(stderr,"Audio Sync in sub-subs : %s\n",
+  mxprint(stderr,"Audio Sync in sub-subs : %s\n",
           (h->audio_sync_word_in_sub_sub)? "yes" : "no");
 
-  fprintf(stderr,"Low Frequency Effects  : ");
+  mxprint(stderr,"Low Frequency Effects  : ");
   switch (h->lfe_type) {
     case dts_header_s::lfe_none:
-      fprintf(stderr,"none");
+      mxprint(stderr,"none");
       break;
     case dts_header_s::lfe_128:
-      fprintf(stderr,"yes, interpolation factor 128");
+      mxprint(stderr,"yes, interpolation factor 128");
       break;
     case dts_header_s::lfe_64:
-      fprintf(stderr,"yes, interpolation factor 64");
+      mxprint(stderr,"yes, interpolation factor 64");
       break;
     case dts_header_s::lfe_invalid:
-      fprintf(stderr,"Invalid");
+      mxprint(stderr,"Invalid");
       break;
   }
-  fprintf(stderr,"\n");
+  mxprint(stderr,"\n");
 
-  fprintf(stderr,"Predictor History used : %s\n",
+  mxprint(stderr,"Predictor History used : %s\n",
           (h->predictor_history_flag)? "yes" : "no");
 
-  fprintf(stderr,"Multirate Interpolator : %s\n",
+  mxprint(stderr,"Multirate Interpolator : %s\n",
           (h->multirate_interpolator == dts_header_s::mi_non_perfect)?
           "non perfect" : "perfect");
 
-  fprintf(stderr,"Encoder Software Vers. : %u\n",
+  mxprint(stderr,"Encoder Software Vers. : %u\n",
           h->encoder_software_revision);
-  fprintf(stderr,"Copy History Bits      : %u\n", h->copy_history);
-  fprintf(stderr,"Source PCM Resolution  : %d\n", h->source_pcm_resolution);
+  mxprint(stderr,"Copy History Bits      : %u\n", h->copy_history);
+  mxprint(stderr,"Source PCM Resolution  : %d\n", h->source_pcm_resolution);
 
-  fprintf(stderr,"Front Encoded as Diff. : %s\n",
+  mxprint(stderr,"Front Encoded as Diff. : %s\n",
           (h->front_sum_difference)? "yes" : "no");
-  fprintf(stderr,"Surr. Encoded as Diff. : %s\n",
+  mxprint(stderr,"Surr. Encoded as Diff. : %s\n",
           (h->surround_sum_difference)? "yes" : "no");
 
-  fprintf(stderr,"Dialog Normaliz. Gain  : %d\n",
+  mxprint(stderr,"Dialog Normaliz. Gain  : %d\n",
           h->dialog_normalization_gain);
 }
 

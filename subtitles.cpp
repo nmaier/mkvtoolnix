@@ -78,7 +78,7 @@ int subtitles_c::check() {
         for (c = short_subs; *c != 0; c++)
           if (*c == '\n')
             *c = ' ';
-        fprintf(stdout, "subtitles: Warning: current entry ends after "
+        mxprint(stdout, "subtitles: Warning: current entry ends after "
                 "the next one starts. This end: %02lld:%02lld:%02lld,%03lld"
                 "  next start: %02lld:%02lld:%02lld,%03lld  (\"%s\"...)\n",
                 current->end / (60 * 60 * 1000),
@@ -108,7 +108,7 @@ int subtitles_c::check() {
         for (c = short_subs; *c != 0; c++)
           if (*c == '\n')
             *c = ' ';
-        fprintf(stdout, "subtitles: Warning: after fixing the time the "
+        mxprint(stdout, "subtitles: Warning: after fixing the time the "
                 "current entry begins after it ends. This start: "
                 "%02lld:%02lld:%02lld,%03lld  this end: %02lld:%02lld:"
                 "%02lld,%03lld  (\"%s\"...)\n",

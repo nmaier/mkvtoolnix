@@ -76,7 +76,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   }
 
   if (verbose)
-    fprintf(stdout, "Using AVI demultiplexer for %s. Opening file. This "
+    mxprint(stdout, "Using AVI demultiplexer for %s. Opening file. This "
             "may take some time depending on the file's size.\n", ti->fname);
   rederive_keyframes = 0;
   if ((avi = AVI_open_input_file(ti->fname, 1)) == NULL) {
@@ -128,7 +128,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
                                          AVI_video_width(avi),
                                          AVI_video_height(avi), false, ti);
     if (verbose)
-      fprintf(stdout, "+-> Using video output module for video track ID 0.\n");
+      mxprint(stdout, "+-> Using video output module for video track ID 0.\n");
   } else
     vpacketizer = NULL;
 
@@ -199,7 +199,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   switch (AVI_audio_format(avi)) {
     case 0x0001: // raw PCM audio
       if (verbose)
-        fprintf(stdout, "+-> Using PCM output module for audio track ID %d.\n",
+        mxprint(stdout, "+-> Using PCM output module for audio track ID %d.\n",
                 aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
@@ -211,7 +211,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       break;
     case 0x0055: // MP3
       if (verbose)
-        fprintf(stdout, "+-> Using MP3 output module for audio track ID %d.\n",
+        mxprint(stdout, "+-> Using MP3 output module for audio track ID %d.\n",
                 aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
@@ -222,7 +222,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       break;
     case 0x2000: // AC3
       if (verbose)
-        fprintf(stdout, "+-> Using AC3 output module for audio track ID %d.\n",
+        mxprint(stdout, "+-> Using AC3 output module for audio track ID %d.\n",
                 aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
@@ -232,7 +232,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
                                                  demuxer->channels, ti);
       break;
     default:
-      fprintf(stderr, "Error: Unknown audio format 0x%04x for audio track ID "
+      mxprint(stderr, "Error: Unknown audio format 0x%04x for audio track ID "
               "%d.\n", AVI_audio_format(avi), aid + 1);
       return;
   }
@@ -327,7 +327,7 @@ int avi_reader_c::read() {
           if (old_chunk != NULL)
             safefree(old_chunk);
           if (nread == 0)
-            fprintf(stdout, "hmm\n");
+            mxprint(stdout, "hmm\n");
           old_chunk = (unsigned char *)safememdup(chunk, nread);
           old_key = key;
           old_nread = nread;
@@ -422,11 +422,11 @@ void avi_reader_c::display_progress() {
     int myframes = frames;
     if (frames == (maxframes + 1))
       myframes--;
-    fprintf(stdout, "progress: %d/%ld frames (%ld%%)\r",
+    mxprint(stdout, "progress: %d/%ld frames (%ld%%)\r",
             myframes, AVI_video_frames(avi),
             myframes * 100 / AVI_video_frames(avi));
   } else {
-    fprintf(stdout, "working... %c\r", wchar[act_wchar]);
+    mxprint(stdout, "working... %c\r", wchar[act_wchar]);
     act_wchar++;
     if (act_wchar == strlen(wchar))
       act_wchar = 0;
@@ -448,7 +448,7 @@ void avi_reader_c::identify() {
   int i;
   const char *type;
 
-  fprintf(stdout, "File '%s': container: AVI\nTrack ID 0: video (%s)\n",
+  mxprint(stdout, "File '%s': container: AVI\nTrack ID 0: video (%s)\n",
           ti->fname, AVI_video_compressor(avi));
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
@@ -465,6 +465,6 @@ void avi_reader_c::identify() {
       default:
         type = "unknown";
     }
-    fprintf(stdout, "Track ID %d: audio (%s)\n", i + 1, type);
+    mxprint(stdout, "Track ID %d: audio (%s)\n", i + 1, type);
   }
 }

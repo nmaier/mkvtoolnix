@@ -186,7 +186,7 @@ file_type_t file_types[] =
    {NULL,  -1,      NULL}};
 
 static void usage(void) {
-  fprintf(stdout,
+  mxprint(stdout,
     "mkvmerge -o out [global options] [options] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
     "  -v, --verbose            verbose status\n"
@@ -275,7 +275,7 @@ static int get_type(char *filename) {
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_current);
   } catch (exception &ex) {
-    fprintf(stderr, "Error: could not open source file or seek properly in it "
+    mxprint(stderr, "Error: could not open source file or seek properly in it "
             "(%s).\n", filename);
     exit(1);
   }
@@ -286,7 +286,7 @@ static int get_type(char *filename) {
   else if (wav_reader_c::probe_file(mm_io, size))
     type = TYPEWAV;
   else if (mp4_reader_c::probe_file(mm_io, size)) {
-    fprintf(stderr, "Error: MP4/Quicktime files are not supported (%s).\n",
+    mxprint(stderr, "Error: MP4/Quicktime files are not supported (%s).\n",
             filename);
     exit(1);
   }
@@ -355,7 +355,7 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
     *comma = 0;
 
     if (!parse_int(s, tid)) {
-      fprintf(stderr, "Error: Invalid track ID '%s'.\n", s);
+      mxprint(stderr, "Error: Invalid track ID '%s'.\n", s);
       exit(1);
     }
     tracks->push_back(tid);
@@ -366,7 +366,7 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
 
   if (*s != 0) {
     if (!parse_int(s, tid)) {
-      fprintf(stderr, "Error: Invalid track ID '%s'.\n", s);
+      mxprint(stderr, "Error: Invalid track ID '%s'.\n", s);
       exit(1);
     }
     tracks->push_back(tid);
@@ -379,18 +379,18 @@ static void parse_sync(char *s, audio_sync_t &async) {
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL) {
-    fprintf(stderr, "Error: Invalid sync option. No track ID specified (%s)."
+    mxprint(stderr, "Error: Invalid sync option. No track ID specified (%s)."
             "\n", s);
     exit(1);
   }
   *colon = 0;
   if (!parse_int(s, async.id)) {
-    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    mxprint(stderr, "Error: Invalid track ID specified.\n");
     exit(1);
   }
   s = &colon[1];
   if (*s == 0) {
-    fprintf(stderr, "Error: Invalid sync option specified.\n");
+    mxprint(stderr, "Error: Invalid sync option specified.\n");
     exit(1);
   }
 
@@ -407,13 +407,13 @@ static void parse_sync(char *s, audio_sync_t &async) {
       d1 = strtod(linear, NULL);
       d2 = strtod(div, NULL);
       if (d2 == 0.0) {
-        fprintf(stderr, "Error: linear sync: division by zero?\n");
+        mxprint(stderr, "Error: linear sync: division by zero?\n");
         exit(1);
       }
       async.linear = d1 / d2;
     }
     if (async.linear <= 0.0) {
-      fprintf(stderr, "Error: linear sync value may not be <= 0.\n");
+      mxprint(stderr, "Error: linear sync value may not be <= 0.\n");
       exit(1);
     }
   } else
@@ -432,17 +432,17 @@ static float parse_aspect_ratio(char *s) {
   *div = 0;
   div++;
   if (*s == 0) {
-    fprintf(stderr, "Error: aspect ratio: missing dividend.\n");
+    mxprint(stderr, "Error: aspect ratio: missing dividend.\n");
     exit(1);
   }
   if (*div == 0) {
-    fprintf(stderr, "Error: aspect ratio: missing divisor.\n");
+    mxprint(stderr, "Error: aspect ratio: missing divisor.\n");
     exit(1);
   }
   w = strtod(s, NULL);
   h = strtod(div, NULL);
   if (h == 0.0) {
-    fprintf(stderr, "Error: aspect ratio: divisor is 0.\n");
+    mxprint(stderr, "Error: aspect ratio: divisor is 0.\n");
     exit(1);
   }
 
@@ -454,7 +454,7 @@ static void parse_split(const char *arg) {
   char *s, *p;
 
   if ((arg == NULL) || (arg[0] == 0) || (arg[1] == 0)) {
-    fprintf(stderr, "Error: Invalid format for --split.\n");
+    mxprint(stderr, "Error: Invalid format for --split.\n");
     exit(1);
   }
 
@@ -474,7 +474,7 @@ static void parse_split(const char *arg) {
     split_after = secs + mins * 60 + hours * 3600;
     if ((hours < 0) || (mins < 0) || (mins > 59) ||
         (secs < 0) || (secs > 59) || (split_after < 10)) {
-      fprintf(stderr, "Error: Invalid time for --split.\n");
+      mxprint(stderr, "Error: Invalid time for --split.\n");
       exit(1);
     }
 
@@ -488,7 +488,7 @@ static void parse_split(const char *arg) {
   if ((s[strlen(s) - 1] == 's') || (s[strlen(s) - 1] == 'S')) {
     s[strlen(s) - 1] = 0;
     if (!parse_int(s, split_after)) {
-      fprintf(stderr, "Error: Invalid time for --split.\n");
+      mxprint(stderr, "Error: Invalid time for --split.\n");
       exit(1);
     }
 
@@ -511,12 +511,12 @@ static void parse_split(const char *arg) {
   if (modifier != 1)
     *p = 0;
   if (!parse_int(s, split_after)) {
-    fprintf(stderr, "Error: invalid split size.\n");
+    mxprint(stderr, "Error: invalid split size.\n");
     exit(1);
   }
   split_after *= modifier;
   if (split_after <= (1024 * 1024)) {
-    fprintf(stderr, "Error: invalid split size.\n");
+    mxprint(stderr, "Error: invalid split size.\n");
     exit(1);
   }
 
@@ -529,18 +529,18 @@ static void parse_cues(char *s, cue_creation_t &cues) {
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL) {
-    fprintf(stderr, "Error: Invalid cues option. No track ID specified (%s)."
+    mxprint(stderr, "Error: Invalid cues option. No track ID specified (%s)."
             "\n", s);
     exit(1);
   }
   *colon = 0;
   if (!parse_int(s, cues.id)) {
-    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    mxprint(stderr, "Error: Invalid track ID specified.\n");
     exit(1);
   }
   s = &colon[1];
   if (*s == 0) {
-    fprintf(stderr, "Error: Invalid cues option specified.\n");
+    mxprint(stderr, "Error: Invalid cues option specified.\n");
     exit(1);
   }
 
@@ -551,7 +551,7 @@ static void parse_cues(char *s, cue_creation_t &cues) {
   else if (!strcmp(s, "none"))
     cues.cues = CUES_NONE;
   else {
-    fprintf(stderr, "Error: '%s' is an unsupported argument for --cues.\n", s);
+    mxprint(stderr, "Error: '%s' is an unsupported argument for --cues.\n", s);
     exit(1);
   }
 }
@@ -561,23 +561,23 @@ static void parse_language(char *s, language_t &lang) {
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL) {
-    fprintf(stderr, "Error: Invalid language option. No track ID specified "
+    mxprint(stderr, "Error: Invalid language option. No track ID specified "
             "(%s).\n", s);
     exit(1);
   }
   *colon = 0;
   if (!parse_int(s, lang.id)) {
-    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    mxprint(stderr, "Error: Invalid track ID specified.\n");
     exit(1);
   }
   s = &colon[1];
   if (*s == 0) {
-    fprintf(stderr, "Error: Invalid language specified.\n");
+    mxprint(stderr, "Error: Invalid language specified.\n");
     exit(1);
   }
 
   if (!is_valid_iso639_2_code(s)) {
-    fprintf(stderr, "Error: '%s' is not a valid ISO639-2 code. See "
+    mxprint(stderr, "Error: '%s' is not a valid ISO639-2 code. See "
             "'mkvmerge --list-languages'.\n", s);
     exit(1);
   }
@@ -590,18 +590,18 @@ static void parse_sub_charset(char *s, language_t &sub_charset) {
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL) {
-    fprintf(stderr, "Error: Invalid sub charset option. No track ID specified "
+    mxprint(stderr, "Error: Invalid sub charset option. No track ID specified "
             "(%s).\n", s);
     exit(1);
   }
   *colon = 0;
   if (!parse_int(s, sub_charset.id)) {
-    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    mxprint(stderr, "Error: Invalid track ID specified.\n");
     exit(1);
   }
   s = &colon[1];
   if (*s == 0) {
-    fprintf(stderr, "Error: Invalid sub charset specified.\n");
+    mxprint(stderr, "Error: Invalid sub charset specified.\n");
     exit(1);
   }
 
@@ -698,7 +698,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
 
     kax_tracks->Render(*out);
   } catch (exception &ex) {
-    fprintf(stderr, "Error: Could not render the track headers.\n");
+    mxprint(stderr, "Error: Could not render the track headers.\n");
     exit(1);
   }
 }
@@ -721,12 +721,12 @@ static void create_readers() {
 #endif // HAVE_OGGVORBIS
         case TYPEAVI:
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs)
-            fprintf(stderr, "Warning: -s/-S are ignored for AVI files.\n");
+            mxprint(stderr, "Warning: -s/-S are ignored for AVI files.\n");
           file->reader = new avi_reader_c(file->ti);
           break;
         case TYPEREAL:
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs)
-            fprintf(stderr, "Warning: -s/-S are ignored for RealMedia "
+            mxprint(stderr, "Warning: -s/-S are ignored for RealMedia "
                     "files.\n");
           file->reader = new real_reader_c(file->ti);
           break;
@@ -734,7 +734,7 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "WAVE files.\n");
           file->reader = new wav_reader_c(file->ti);
           break;
@@ -742,7 +742,7 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "SRT files.\n");
           file->reader = new srt_reader_c(file->ti);
           break;
@@ -750,7 +750,7 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "MP3 files.\n");
           file->reader = new mp3_reader_c(file->ti);
           break;
@@ -758,7 +758,7 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "AC3 files.\n");
           file->reader = new ac3_reader_c(file->ti);
           break;
@@ -766,7 +766,7 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "DTS files.\n");
           file->reader = new dts_reader_c(file->ti);
           break;
@@ -774,7 +774,7 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "AAC files.\n");
           file->reader = new aac_reader_c(file->ti);
           break;
@@ -782,17 +782,17 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
               (file->ti->atracks->size() != 0) || file->ti->no_audio ||
               (file->ti->vtracks->size() != 0) || file->ti->no_video)
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+            mxprint(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "SSA/ASS files.\n");
           file->reader = new ssa_reader_c(file->ti);
           break;
         default:
-          fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
+          mxprint(stderr, "Error: EVIL internal bug! (unknown file type)\n");
           exit(1);
           break;
       }
     } catch (error_c error) {
-      fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
+      mxprint(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
               error.get_error());
       exit(1);
     }
@@ -821,7 +821,7 @@ static void identify(const char *filename) {
   ti.fname = file->name;
   
   if (file->type == TYPEUNKNOWN) {
-    fprintf(stderr, "Error: File %s has unknown type. Please have a look "
+    mxprint(stderr, "Error: File %s has unknown type. Please have a look "
             "at the supported file types ('mkvmerge --list-types') and "
             "contact me at moritz@bunkus.org if your file type is "
             "supported but not recognized properly.\n", file->name);
@@ -875,7 +875,7 @@ static void parse_args(int argc, char **argv) {
   // or that are needed right at the beginning.
   for (i = 0; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      fprintf(stdout, VERSIONINFO "\n");
+      mxprint(stdout, VERSIONINFO "\n");
       exit(0);
     } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
                !strcmp(argv[i], "--help")) {
@@ -883,31 +883,31 @@ static void parse_args(int argc, char **argv) {
       exit(0);
     } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -o lacks a file name.\n");
+        mxprint(stderr, "Error: -o lacks a file name.\n");
         exit(1);
       } else if (outfile != NULL) {
-        fprintf(stderr, "Error: only one output file allowed.\n");
+        mxprint(stderr, "Error: only one output file allowed.\n");
         exit(1);
       }
       outfile = safestrdup(argv[i + 1]);
       i++;
     } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
-      fprintf(stdout, "Known file types:\n  ext  description\n"
+      mxprint(stdout, "Known file types:\n  ext  description\n"
               "  ---  --------------------------\n");
       for (j = 1; file_types[j].ext; j++)
-        fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
+        mxprint(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
       exit(0);
     } else if (!strcmp(argv[i], "--list-languages")) {
       list_iso639_languages();
       exit(0);
     } else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--identify")) {
-      fprintf(stderr, "Error: --identify can only be used with a file name. "
+      mxprint(stderr, "Error: --identify can only be used with a file name. "
               "No other options are allowed.\n");
       exit(1);
     }
 
   if (outfile == NULL) {
-    fprintf(stderr, "Error: no output file given.\n\n");
+    mxprint(stderr, "Error: no output file given.\n\n");
     usage();
     exit(1);
   }
@@ -929,7 +929,7 @@ static void parse_args(int argc, char **argv) {
 
     else if (!strcmp(argv[i], "--split")) {
       if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
-        fprintf(stderr, "Error: --split lacks the size.\n");
+        mxprint(stderr, "Error: --split lacks the size.\n");
         exit(1);
       }
       parse_split(argv[i + 1]);
@@ -937,13 +937,13 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--split-max-files")) {
       if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
-        fprintf(stderr, "Error: --split-max-files lacks the number of files."
+        mxprint(stderr, "Error: --split-max-files lacks the number of files."
                 "\n");
         exit(1);
       }
       if (!parse_int(argv[i + 1], split_max_num_files) ||
           (split_max_num_files < 2)) {
-        fprintf(stderr, "Error: Wrong argument to --split-max-files.\n");
+        mxprint(stderr, "Error: Wrong argument to --split-max-files.\n");
         exit(1);
       }
       i++;
@@ -953,43 +953,43 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--link-to-previous")) {
       if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
-        fprintf(stderr, "Error: --link-to-previous lacks the previous UID."
+        mxprint(stderr, "Error: --link-to-previous lacks the previous UID."
                 "\n");
         exit(1);
       }
       if (seguid_link_previous != NULL) {
-        fprintf(stderr, "Error: Previous UID was already given.\n");
+        mxprint(stderr, "Error: Previous UID was already given.\n");
         exit(1);
       }
       try {
         seguid_link_previous = new bitvalue_c(argv[i + 1], 128);
       } catch (exception &ex) {
-        fprintf(stderr, "Error: Unknown format for the previous UID.\n");
+        mxprint(stderr, "Error: Unknown format for the previous UID.\n");
         exit(1);
       }
       i++;
 
     } else if (!strcmp(argv[i], "--link-to-next")) {
       if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
-        fprintf(stderr, "Error: --link-to-next lacks the previous UID."
+        mxprint(stderr, "Error: --link-to-next lacks the previous UID."
                 "\n");
         exit(1);
       }
       if (seguid_link_next != NULL) {
-        fprintf(stderr, "Error: Next UID was already given.\n");
+        mxprint(stderr, "Error: Next UID was already given.\n");
         exit(1);
       }
       try {
         seguid_link_next = new bitvalue_c(argv[i + 1], 128);
       } catch (exception &ex) {
-        fprintf(stderr, "Error: Unknown format for the next UID.\n");
+        mxprint(stderr, "Error: Unknown format for the next UID.\n");
         exit(1);
       }
       i++;
 
     } else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --cluster-length lacks the length.\n");
+        mxprint(stderr, "Error: --cluster-length lacks the length.\n");
         exit(1);
       }
       s = strstr("ms", argv[i + 1]);
@@ -998,7 +998,7 @@ static void parse_args(int argc, char **argv) {
         if (!parse_int(argv[i + 1], max_ms_per_cluster) ||
             (max_ms_per_cluster < 100) ||
             (max_ms_per_cluster > 32000)) {
-          fprintf(stderr, "Error: Cluster length out of range (100..32000)."
+          mxprint(stderr, "Error: Cluster length out of range (100..32000)."
                   "\n");
           exit(1);
         }
@@ -1007,7 +1007,7 @@ static void parse_args(int argc, char **argv) {
         if (!parse_int(argv[i + 1], max_blocks_per_cluster) ||
             (max_blocks_per_cluster < 0) ||
             (max_blocks_per_cluster > 60000)) {
-          fprintf(stderr, "Error: Cluster length out of range (0..60000).\n");
+          mxprint(stderr, "Error: Cluster length out of range (0..60000).\n");
           exit(1);
         }
         max_ms_per_cluster = 32000;
@@ -1016,11 +1016,11 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--meta-seek-size")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --meta-seek-size lacks the size argument.\n");
+        mxprint(stderr, "Error: --meta-seek-size lacks the size argument.\n");
         exit(1);
       }
       if (!parse_int(argv[i + 1], meta_seek_size) || (meta_seek_size < 1)) {
-        fprintf(stderr, "Error: Invalid size given for --meta-seek-size.\n");
+        mxprint(stderr, "Error: Invalid size given for --meta-seek-size.\n");
         exit(1);
       }
       i++;
@@ -1046,7 +1046,7 @@ static void parse_args(int argc, char **argv) {
 
     else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--atracks")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -a lacks the stream number(s).\n");
+        mxprint(stderr, "Error: -a lacks the stream number(s).\n");
         exit(1);
       }
       parse_tracks(argv[i + 1], ti.atracks);
@@ -1054,7 +1054,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vtracks")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -d lacks the stream number(s).\n");
+        mxprint(stderr, "Error: -d lacks the stream number(s).\n");
         exit(1);
       }
       parse_tracks(argv[i + 1], ti.vtracks);
@@ -1062,7 +1062,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stracks")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -s lacks the stream number(s).\n");
+        mxprint(stderr, "Error: -s lacks the stream number(s).\n");
         exit(1);
       }
       parse_tracks(argv[i + 1], ti.stracks);
@@ -1070,11 +1070,11 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -f lacks the FourCC.\n");
+        mxprint(stderr, "Error: -f lacks the FourCC.\n");
         exit(1);
       }
       if (strlen(argv[i + 1]) != 4) {
-        fprintf(stderr, "Error: The FourCC must be exactly four chars "
+        mxprint(stderr, "Error: The FourCC must be exactly four chars "
                 "long.\n");
         exit(1);
       }
@@ -1084,7 +1084,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--aspect-ratio")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --aspect-ratio lacks the aspect ratio.\n");
+        mxprint(stderr, "Error: --aspect-ratio lacks the aspect ratio.\n");
         exit(1);
       }
       ti.aspect_ratio = parse_aspect_ratio(argv[i + 1]);
@@ -1092,7 +1092,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "-y") || !strcmp(argv[i], "--sync")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -y lacks the audio delay.\n");
+        mxprint(stderr, "Error: -y lacks the audio delay.\n");
         exit(1);
       }
       parse_sync(argv[i + 1], async);
@@ -1101,7 +1101,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--cues")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --cues lacks its argument.\n");
+        mxprint(stderr, "Error: --cues lacks its argument.\n");
         exit(1);
       }
       parse_cues(argv[i + 1], cues);
@@ -1110,11 +1110,11 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--default-track")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --default-track lacks the track ID.\n");
+        mxprint(stderr, "Error: --default-track lacks the track ID.\n");
         exit(1);
       }
       if (!parse_int(argv[i + 1], id)) {
-        fprintf(stderr, "Error: Invalid track ID specified.\n");
+        mxprint(stderr, "Error: Invalid track ID specified.\n");
         exit(1);
       }
       ti.default_track_flags->push_back(id);
@@ -1122,7 +1122,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--language")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --language lacks its argument.\n");
+        mxprint(stderr, "Error: --language lacks its argument.\n");
         exit(1);
       }
       parse_language(argv[i + 1], lang);
@@ -1131,7 +1131,7 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--sub-charset")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: --sub-charset lacks its argument.\n");
+        mxprint(stderr, "Error: --sub-charset lacks its argument.\n");
         exit(1);
       }
       parse_sub_charset(argv[i + 1], lang);
@@ -1142,15 +1142,15 @@ static void parse_args(int argc, char **argv) {
     // The argument is an input file.
     else {
       if ((ti.atracks->size() != 0) && ti.no_audio) {
-        fprintf(stderr, "Error: -A and -a used on the same source file.\n");
+        mxprint(stderr, "Error: -A and -a used on the same source file.\n");
         exit(1);
       }
       if ((ti.vtracks->size() != 0) && ti.no_video) {
-        fprintf(stderr, "Error: -D and -d used on the same source file.\n");
+        mxprint(stderr, "Error: -D and -d used on the same source file.\n");
         exit(1);
       }
       if ((ti.stracks->size() != 0) && ti.no_subs) {
-        fprintf(stderr, "Error: -S and -s used on the same source file.\n");
+        mxprint(stderr, "Error: -S and -s used on the same source file.\n");
         exit(1);
       }
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
@@ -1160,7 +1160,7 @@ static void parse_args(int argc, char **argv) {
       ti.fname = argv[i];
 
       if (file->type == TYPEUNKNOWN) {
-        fprintf(stderr, "Error: File %s has unknown type. Please have a look "
+        mxprint(stderr, "Error: File %s has unknown type. Please have a look "
                 "at the supported file types ('mkvmerge --list-types') and "
                 "contact me at moritz@bunkus.org if your file type is "
                 "supported but not recognized properly.\n", file->name);
@@ -1205,12 +1205,12 @@ static void parse_args(int argc, char **argv) {
 
   if (no_linking) {
     if ((seguid_link_previous != NULL) || (seguid_link_next != NULL)) {
-      fprintf(stderr, "Error: '--dont-link' cannot be used together with "
+      mxprint(stderr, "Error: '--dont-link' cannot be used together with "
               "'--link-to-previous' or '--link-to-next'.\n");
       exit(1);
     }
     if (split_after <= 0)
-      fprintf(stderr, "Warning: '--dont-link' is only useful in combination "
+      mxprint(stderr, "Warning: '--dont-link' is only useful in combination "
               "with '--split'.\n");
   }
 }
@@ -1251,7 +1251,7 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
   try {
     mm_io = new mm_io_c(filename, MODE_READ);
   } catch (exception &ex) {
-    fprintf(stderr, "Error: Could not open file '%s' for reading command line "
+    mxprint(stderr, "Error: Could not open file '%s' for reading command line "
             "arguments from.", filename);
     exit(1);
   }
@@ -1302,7 +1302,7 @@ static void handle_args(int argc, char **argv) {
 static void setup() {
 #if ! defined(COMP_MSC)
   if (setlocale(LC_CTYPE, "") == NULL) {
-    fprintf(stderr, "Error: Could not set the locale properly. Check the "
+    mxprint(stderr, "Error: Could not set the locale properly. Check the "
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
     exit(1);
   }
@@ -1455,12 +1455,12 @@ void create_next_output_file(bool last_file, bool first_file) {
   try {
     out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
   } catch (exception &ex) {
-    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n",
+    mxprint(stderr, "Error: Couldn't open output file %s (%s).\n",
             this_outfile.c_str(), strerror(errno));
     exit(1);
   }
   if (verbose)
-    fprintf(stdout, "Opened '%s\' for writing.\n", this_outfile.c_str());
+    mxprint(stdout, "Opened '%s\' for writing.\n", this_outfile.c_str());
 
   cluster_helper->set_output(out);
   render_headers(out, last_file, first_file);
@@ -1475,10 +1475,10 @@ void finish_file() {
   // Render the cues.
   if (write_cues && cue_writing_requested) {
     if (verbose == 1)
-      fprintf(stdout, "Writing cue entries (the index)...");
+      mxprint(stdout, "Writing cue entries (the index)...");
     kax_cues->Render(*out);
     if (verbose == 1)
-      fprintf(stdout, "\n");
+      mxprint(stdout, "\n");
   }
 
   // Write meta seek information if it is not disabled.
@@ -1488,7 +1488,7 @@ void finish_file() {
 
     kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
-      fprintf(stdout, "Warning: Could not update the meta seek information "
+      mxprint(stdout, "Warning: Could not update the meta seek information "
               "as the space reserved for them was too small. Re-run "
               "mkvmerge with the additional parameters '--meta-seek-size "
               "%lld'.\n", kax_seekhead->ElementSize() + 100);
@@ -1587,7 +1587,7 @@ void main_loop() {
 
   if (verbose == 1) {
     display_progress(1);
-    fprintf(stdout, "\n");
+    mxprint(stdout, "\n");
   }
 }
 
@@ -1599,13 +1599,13 @@ int main(int argc, char **argv) {
   handle_args(argc, argv);
 
   if (split_after > 0) {
-    fprintf(stdout, "Pass 1: finding split points. This may take a while."
+    mxprint(stdout, "Pass 1: finding split points. This may take a while."
             "\n\n");
 
     create_readers();
 
     if (packetizers.size() == 0) {
-      fprintf(stdout, "Error: No streams to output found. Aborting.\n");
+      mxprint(stdout, "Error: No streams to output found. Aborting.\n");
       exit(0);
     }
 
@@ -1614,7 +1614,7 @@ int main(int argc, char **argv) {
     main_loop();
     finish_file();
 
-    fprintf(stdout, "\nPass 2: merging the files. This will take even longer."
+    mxprint(stdout, "\nPass 2: merging the files. This will take even longer."
             "\n\n");
 
     delete cluster_helper;
@@ -1636,7 +1636,7 @@ int main(int argc, char **argv) {
     create_readers();
 
     if (packetizers.size() == 0) {
-      fprintf(stdout, "Error: No streams to output found. Aborting.\n");
+      mxprint(stdout, "Error: No streams to output found. Aborting.\n");
       exit(0);
     }
 

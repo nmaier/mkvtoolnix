@@ -122,7 +122,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   }
 
   if (verbose && (pos > 1))
-    fprintf(stdout, "ac3_packetizer: skipping %d bytes (no valid AC3 header "
+    mxprint(stdout, "ac3_packetizer: skipping %d bytes (no valid AC3 header "
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
   buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
@@ -184,6 +184,6 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void ac3_packetizer_c::dump_debug_info() {
-  fprintf(stderr, "DBG> ac3_packetizer_c: queue: %d; buffer size: %d\n",
+  mxprint(stderr, "DBG> ac3_packetizer_c: queue: %d; buffer size: %d\n",
           packet_queue.size(), buffer_size);
 }

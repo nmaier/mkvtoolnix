@@ -81,7 +81,7 @@ dts_reader_c::dts_reader_c(track_info_t *nti) throw (error_c):
   dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
 
   if (verbose) {
-    fprintf(stdout, "Using DTS demultiplexer for %s.\n+-> Using "
+    mxprint(stdout, "Using DTS demultiplexer for %s.\n+-> Using "
             "DTS output module for audio stream.\n", ti->fname);
 
     print_dts_header(&dtsheader);
@@ -117,7 +117,7 @@ int dts_reader_c::display_priority() {
 }
 
 void dts_reader_c::display_progress() {
-  fprintf(stdout, "progress: %lld/%lld bytes (%d%%)\r",
+  mxprint(stdout, "progress: %lld/%lld bytes (%d%%)\r",
           bytes_processed, size,
           (int)(bytes_processed * 100L / size));
   fflush(stdout);
@@ -128,6 +128,6 @@ void dts_reader_c::set_headers() {
 }
 
 void dts_reader_c::identify() {
-  fprintf(stdout, "File '%s': container: DTS\nTrack ID 0: audio (DTS)\n",
+  mxprint(stdout, "File '%s': container: DTS\nTrack ID 0: audio (DTS)\n",
           ti->fname);
 }

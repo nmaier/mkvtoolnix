@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "common.h"
 #include "iso639.h"
 
 iso639_language_t iso639_languages[] =
@@ -564,12 +565,12 @@ void list_iso639_languages() {
   int i;
 
   i = 0;
-  fprintf(stdout, "                             English language name | "
+  mxprint(stdout, "                             English language name | "
           "ISO639-2 code | ISO639-1 code\n"
                   "---------------------------------------------------+-"
           "--------------+--------------\n");
   while (iso639_languages[i].iso639_2_code != NULL) {
-    fprintf(stdout, "%50s | %13s | %13s\n",
+    mxprint(stdout, "%50s | %13s | %13s\n",
             iso639_languages[i].english_name != NULL ?
             iso639_languages[i].english_name : "",
             iso639_languages[i].iso639_2_code,

@@ -90,7 +90,7 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
 
   bwritten = fwrite(buffer, 1, size, (FILE *)file);
   if (ferror((FILE *)file) != 0) {
-    fprintf(stderr, "Error writing to the output file: %d (%s)\n", errno,
+    mxprint(stderr, "Error writing to the output file: %d (%s)\n", errno,
             strerror(errno));
     exit(1);
   }

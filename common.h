@@ -71,6 +71,7 @@ using namespace LIBEBML_NAMESPACE;
 #define TIMECODE_SCALE 1000000
 
 void die(const char *fmt, ...);
+void mxprint(void *stream, const char *fmt, ...);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);

@@ -444,7 +444,7 @@ int cluster_helper_c::render() {
       old_max_timecode = max_timecode;
       max_timecode = pack->timecode;
 
-      fprintf(stdout, "\n");
+      mxprint(stdout, "\n");
       finish_file();
       create_next_output_file(next_splitpoint >= splitpoints.size());
 
@@ -631,10 +631,10 @@ int cluster_helper_c::free_clusters() {
   }
 
 #ifdef PRINT_CLUSTERS
-  fprintf(stdout, "numcl: %8d freed: %3d ", num_clusters, num_freed);
+  mxprint(stdout, "numcl: %8d freed: %3d ", num_clusters, num_freed);
   for (i = 0; i < num_clusters; i++)
-    fprintf(stdout, "#");
-  fprintf(stdout, "\n");
+    mxprint(stdout, "#");
+  mxprint(stdout, "\n");
 #endif
 
   return 1;

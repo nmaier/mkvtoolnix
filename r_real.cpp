@@ -137,7 +137,7 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
   last_timestamp = -1;
 
   if (verbose)
-    fprintf(stdout, "Using RealMedia demultiplexer for %s.\n", ti->fname);
+    mxprint(stdout, "Using RealMedia demultiplexer for %s.\n", ti->fname);
 
   parse_headers();
   if (!identifying)
@@ -330,7 +330,7 @@ void real_reader_c::parse_headers() {
               slen = (unsigned char)p[0];
               p++;
               if (slen != 4) {
-                fprintf(stdout, "real_reader: Warning: Couldn't find RealAudio"
+                mxprint(stdout, "real_reader: Warning: Couldn't find RealAudio"
                         " FourCC for id %u (description length: %d) Skipping "
                         "track.\n", id, slen);
                 ok = false;
@@ -367,7 +367,7 @@ void real_reader_c::parse_headers() {
         break;                  // We're finished!
 
       } else {
-        fprintf(stderr, "real_reader: Unknown header type (0x%08x, "
+        mxprint(stderr, "real_reader: Unknown header type (0x%08x, "
                 "%c%c%c%c).\n", object_id, (char)(object_id >> 24),
                 (char)((object_id & 0x00ff0000) >> 16),
                 (char)((object_id & 0x0000ff00) >> 8),
@@ -399,7 +399,7 @@ void real_reader_c::create_packetizers() {
                                                false, ti);
 
       if (verbose)
-        fprintf(stdout, "+-> Using video output module for stream %u (FourCC: "
+        mxprint(stdout, "+-> Using video output module for stream %u (FourCC: "
                 "%s).\n", dmx->id, dmx->fourcc);
 
     } else {
@@ -421,7 +421,7 @@ void real_reader_c::create_packetizers() {
       ptzr->set_audio_bit_depth(dmx->bits_per_sample);
 
       if (verbose)
-        fprintf(stdout, "+-> Using generic audio output module for stream %u "
+        mxprint(stdout, "+-> Using generic audio output module for stream %u "
                 "(FourCC: %s).\n", dmx->id, dmx->fourcc);
     }
 
@@ -536,7 +536,7 @@ int real_reader_c::display_priority() {
 static char wchar[] = "-\\|/-\\|/-";
 
 void real_reader_c::display_progress() {
-  fprintf(stdout, "working... %c (%d%%)\r", wchar[act_wchar],
+  mxprint(stdout, "working... %c (%d%%)\r", wchar[act_wchar],
           (int)(io->getFilePointer() * 100 / file_size));
   act_wchar++;
   if (act_wchar == strlen(wchar))
@@ -555,10 +555,10 @@ void real_reader_c::identify() {
   int i;
   real_demuxer_t *demuxer;
 
-  fprintf(stdout, "File '%s': container: RealMedia\n", ti->fname);
+  mxprint(stdout, "File '%s': container: RealMedia\n", ti->fname);
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
-    fprintf(stdout, "Track ID %d: %s (%s)\n", demuxer->id,
+    mxprint(stdout, "Track ID %d: %s (%s)\n", demuxer->id,
             demuxer->type == 'a' ? "audio" : "video",
             demuxer->fourcc);
   }

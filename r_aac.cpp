@@ -77,7 +77,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
         throw error_c("aac_reader: No valid AAC packet found in the first "
                       SINITCHUNKSIZE " bytes.\n");
       guess_adts_version();
-      fprintf(stdout, "emphasis_present: %s\n", emphasis_present ? "true" :
+      mxprint(stdout, "emphasis_present: %s\n", emphasis_present ? "true" :
               "false");
       adif = 0;
     }
@@ -91,7 +91,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("aac_reader: Could not open the file.");
   }
   if (verbose)
-    fprintf(stdout, "Using AAC demultiplexer for %s.\n+-> Using "
+    mxprint(stdout, "Using AAC demultiplexer for %s.\n+-> Using "
             "AAC output module for audio stream.\n", ti->fname);
 }
 
@@ -152,7 +152,7 @@ int aac_reader_c::display_priority() {
 }
 
 void aac_reader_c::display_progress() {
-  fprintf(stdout, "progress: %lld/%lld bytes (%d%%)\r",
+  mxprint(stdout, "progress: %lld/%lld bytes (%d%%)\r",
           bytes_processed, size,
           (int)(bytes_processed * 100L / size));
   fflush(stdout);
@@ -163,6 +163,6 @@ void aac_reader_c::set_headers() {
 }
 
 void aac_reader_c::identify() {
-  fprintf(stdout, "File '%s': container: AAC\nTrack ID 0: audio (AAC)\n",
+  mxprint(stdout, "File '%s': container: AAC\nTrack ID 0: audio (AAC)\n",
           ti->fname);
 }

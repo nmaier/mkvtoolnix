@@ -82,7 +82,7 @@ ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
   ac3packetizer = new ac3_packetizer_c(this, ac3header.sample_rate,
                                        ac3header.channels, ti);
   if (verbose)
-    fprintf(stdout, "Using AC3 demultiplexer for %s.\n+-> Using "
+    mxprint(stdout, "Using AC3 demultiplexer for %s.\n+-> Using "
             "AC3 output module for audio stream.\n", ti->fname);
 }
 
@@ -116,7 +116,7 @@ int ac3_reader_c::display_priority() {
 }
 
 void ac3_reader_c::display_progress() {
-  fprintf(stdout, "progress: %lld/%lld bytes (%d%%)\r",
+  mxprint(stdout, "progress: %lld/%lld bytes (%d%%)\r",
           bytes_processed, size,
           (int)(bytes_processed * 100L / size));
   fflush(stdout);
@@ -127,6 +127,6 @@ void ac3_reader_c::set_headers() {
 }
 
 void ac3_reader_c::identify() {
-  fprintf(stdout, "File '%s': container: AC3\nTrack ID 0: audio (AC3)\n",
+  mxprint(stdout, "File '%s': container: AC3\nTrack ID 0: audio (AC3)\n",
           ti->fname);
 }

@@ -61,7 +61,7 @@ microdvd_reader_c::microdvd_reader_c(char *fname, audio_sync_t *nasync,
     throw error_c("microdvd_reader: Source is not a valid MicroDVD file.");
   textsubspacketizer = new textsubs_packetizer_c(nasync);
   if (verbose)
-    fprintf(stdout, "Using MicroDVD subtitle reader for %s.\n+-> Using " \
+    mxprint(stdout, "Using MicroDVD subtitle reader for %s.\n+-> Using " \
             "text subtitle output module for subtitles.\n", fname);
 }
 
@@ -77,7 +77,7 @@ int microdvd_reader_c::read() {
   int i, j, lineno;
 
   if (video_fps < 0.0) {
-    fprintf(stderr, "Error: microdvd_reader: You have to add a video source "
+    mxprint(stderr, "Error: microdvd_reader: You have to add a video source "
             "before a MicroDVD source. Otherwise the frame numbers cannot be "
             "converted to time stamps.");
     exit(1);
@@ -95,7 +95,7 @@ int microdvd_reader_c::read() {
     if ((chunk[0] == 0) || (strchr("\n\r", chunk[0]) != NULL))
       continue;
     if ((chunk[0] != '{') || !isdigit(chunk[1])) {
-      fprintf(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
+      mxprint(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
               "Ignored.\n", lineno);
       continue;
     }
@@ -103,14 +103,14 @@ int microdvd_reader_c::read() {
     while (isdigit(chunk[i]))
       i++;
     if ((chunk[i] != '}') || (chunk[i + 1] != '{')) {
-      fprintf(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
+      mxprint(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
               "Ignored.\n", lineno);
       continue;
     }
     chunk[i] = 0;
     start = strtol(&chunk[1], NULL, 10);
     if ((start < 0) || (errno != 0)) {
-      fprintf(stdout, "microdvd_reader: Warning: Bad start frame '%s' on line "
+      mxprint(stdout, "microdvd_reader: Warning: Bad start frame '%s' on line "
               "%d. Ignored.\n", &chunk[1], lineno);
       continue;
     }
@@ -119,7 +119,7 @@ int microdvd_reader_c::read() {
     while (isdigit(chunk[i]))
       i++;
     if ((chunk[i] != '}') || (chunk[i + 1] == 0)) {
-      fprintf(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
+      mxprint(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
               "Ignored.\n", lineno);
       continue;
     }
@@ -128,7 +128,7 @@ int microdvd_reader_c::read() {
     chunk[i] = 0;
     end = strtol(&chunk[j], NULL, 10);
     if ((end < 0) || (errno != 0)) {
-      fprintf(stdout, "microdvd_reader: Warning: Bad end frame '%s' on line "
+      mxprint(stdout, "microdvd_reader: Warning: Bad end frame '%s' on line "
               "%d. Ignored.\n", &chunk[j], lineno);
       continue;
     }
@@ -143,7 +143,7 @@ int microdvd_reader_c::read() {
       s2--;
     }
     if (*s == 0) {
-      fprintf(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
+      mxprint(stdout, "microdvd_reader: Warning: Unrecognized line %d. "
               "Ignored.\n", lineno);
       continue;
     }
@@ -171,7 +171,7 @@ int microdvd_reader_c::read() {
   }
 
   if ((subs.check() != 0) && verbose)
-    fprintf(stdout, "MicroDVD_reader: Warning: The subtitle file seems to be "
+    mxprint(stdout, "MicroDVD_reader: Warning: The subtitle file seems to be "
             "badly broken. The output file might not be playable "
             "correctly.\n");
   subs.process(textsubspacketizer);
@@ -203,7 +203,7 @@ void microdvd_reader_c::reset() {
 static char wchar[] = "-\\|/-\\|/-";
 
 void microdvd_reader_c::display_progress() {
-  fprintf(stdout, "working... %c\r", wchar[act_wchar]);
+  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
