@@ -27,7 +27,7 @@
 
 #include <vector>
 
-#include "EbmlUnicodeString.h"
+#include <ebml/EbmlUnicodeString.h>
 #include "config.h"
 
 #define VERSIONINFO "mkvmerge v" VERSION

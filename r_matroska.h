@@ -30,9 +30,9 @@
 #include "pr_generic.h"
 #include "error.h"
 
-#include "KaxBlock.h"
-#include "KaxCluster.h"
-#include "StdIOCallback.h"
+#include <matroska/KaxBlock.h>
+#include <matroska/KaxCluster.h>
+#include <ebml/StdIOCallback.h>
 
 using namespace LIBMATROSKA_NAMESPACE;
 

@@ -6,8 +6,8 @@
 #include "wx/treectrl.h"
 #include "wx/dnd.h"
 
-#include "EbmlVersion.h"
-#include "KaxVersion.h"
+#include <ebml/EbmlVersion.h>
+#include <matroska/KaxVersion.h>
 
 #include "common.h"
 #include "mkvinfo.h"

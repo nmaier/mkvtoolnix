@@ -18,10 +18,10 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
-#include "KaxTracks.h"
-#include "KaxTrackEntryData.h"
-#include "KaxTrackAudio.h"
-#include "KaxTrackVideo.h"
+#include <matroska/KaxTracks.h>
+#include <matroska/KaxTrackEntryData.h>
+#include <matroska/KaxTrackAudio.h>
+#include <matroska/KaxTrackVideo.h>
 
 #include "common.h"
 #include "mkvmerge.h"

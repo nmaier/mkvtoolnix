@@ -27,10 +27,10 @@
 
 #include "pr_generic.h"
 
-#include "KaxCues.h"
-#include "KaxSeekHead.h"
-#include "KaxSegment.h"
-#include "KaxTracks.h"
+#include <matroska/KaxCues.h>
+#include <matroska/KaxSeekHead.h>
+#include <matroska/KaxSegment.h>
+#include <matroska/KaxTracks.h>
 
 using namespace std;
 using namespace LIBMATROSKA_NAMESPACE;

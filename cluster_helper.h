@@ -25,8 +25,8 @@
 
 #include "os.h"
 
-#include "KaxBlock.h"
-#include "KaxCluster.h"
+#include <matroska/KaxBlock.h>
+#include <matroska/KaxCluster.h>
 
 #include "mm_io.h"
 #include "pr_generic.h"

@@ -27,7 +27,7 @@
 
 #include <string>
 
-#include "IOCallback.h"
+#include <ebml/IOCallback.h>
 
 using namespace std;
 using namespace LIBEBML_NAMESPACE;

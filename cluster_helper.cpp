@@ -22,14 +22,14 @@
 
 #include <vector>
 
-#include "KaxBlockData.h"
+#include <matroska/KaxBlockData.h>
 
 #include "cluster_helper.h"
 #include "common.h"
 #include "mkvmerge.h"
 #include "p_video.h"
 
-#include "StdIOCallback.h"
+#include <ebml/StdIOCallback.h>
 
 vector<splitpoint_t *> cluster_helper_c::splitpoints;
 

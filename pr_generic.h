@@ -26,9 +26,9 @@
 #include <deque>
 #include <vector>
 
-#include "KaxBlock.h"
-#include "KaxCluster.h"
-#include "KaxTracks.h"
+#include <matroska/KaxBlock.h>
+#include <matroska/KaxCluster.h>
+#include <matroska/KaxTracks.h>
 
 #include "error.h"
 

@@ -294,7 +294,7 @@ AC_ARG_ENABLE(ebmltest, [  --disable-ebmltest            Do not try to compile a
     if test "x$ebml_include" != "x"; then
       EBML_CFLAGS="-I$ebml_include"
     else
-      EBML_CFLAGS="-I$prefix/include -I$prefix/include/ebml"
+      EBML_CFLAGS="-I$prefix/include"
     fi
     if test "x$ebml_lib" != "x"; then
       EBML_LIBS="-L$ebml_lib"
@@ -304,8 +304,6 @@ AC_ARG_ENABLE(ebmltest, [  --disable-ebmltest            Do not try to compile a
   else
     if test "x$ebml_include" != "x"; then
       EBML_CFLAGS="-I$ebml_include"
-    else
-      EBML_CFLAGS="-I/usr/include/ebml -I/usr/local/include/ebml"
     fi
     if test "x$ebml_lib" != "x"; then
       EBML_LIBS="-L$ebml_lib"
@@ -333,7 +331,7 @@ dnl
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <EbmlConfig.h>
+#include <ebml/EbmlConfig.h>
 
 int main ()
 {
@@ -359,7 +357,7 @@ int main ()
        LIBS="$LIBS $EBML_LIBS"
        AC_TRY_LINK([
 #include <stdio.h>
-#include <EbmlConfig.h>
+#include <ebml/EbmlConfig.h>
 ],     [ return 0; ],
        [ echo "*** The test program compiled, but did not run. This usually means"
        echo "*** that the run-time linker is not finding EBML or finding the wrong"
@@ -417,7 +415,7 @@ AC_ARG_ENABLE(matroskatest, [  --disable-matroskatest        Do not try to compi
     if test "x$matroska_include" != "x"; then
       MATROSKA_CFLAGS="-I$matroska_include"
     else
-      MATROSKA_CFLAGS="-I$prefix/include -I$prefix/include/matroska"
+      MATROSKA_CFLAGS="-I$prefix/include"
     fi
     if test "x$matroska_lib" != "x"; then
       MATROSKA_LIBS="-L$matroska_lib"
@@ -427,8 +425,6 @@ AC_ARG_ENABLE(matroskatest, [  --disable-matroskatest        Do not try to compi
   else
     if test "x$matroska_include" != "x"; then
       MATROSKA_CFLAGS="-I$matroska_include"
-    else
-      MATROSKA_CFLAGS="-I/usr/include/matroska -I/usr/local/include/matroska"
     fi
     if test "x$matroska_lib" != "x"; then
       MATROSKA_LIBS="-L$matroska_lib"
@@ -457,8 +453,8 @@ dnl
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <EbmlConfig.h>
-#include <KaxVersion.h>
+#include <ebml/EbmlConfig.h>
+#include <matroska/KaxVersion.h>
 
 using namespace LIBMATROSKA_NAMESPACE;
 
@@ -496,12 +492,12 @@ int main ()
   elif test ${mver[[0]]} -lt 0 ; then
     mver_ok=0
   else
-    if test ${mver[[1]]} -gt 4 ; then
+    if test ${mver[[1]]} -gt 5 ; then
       mver_ok=1
-    elif test ${mver[[1]]} -lt 4 ; then
+    elif test ${mver[[1]]} -lt 5 ; then
       mver_ok=0
     else
-      if test ${mver[[2]]} -ge 4 ; then
+      if test ${mver[[2]]} -ge 0 ; then
         mver_ok=1
       else
         mver_ok=0

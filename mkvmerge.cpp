@@ -39,28 +39,28 @@
 #include <typeinfo>
 #endif
 
-#include "EbmlHead.h"
-#include "EbmlSubHead.h"
-#include "EbmlVersion.h"
-#include "EbmlVoid.h"
+#include <ebml/EbmlHead.h>
+#include <ebml/EbmlSubHead.h>
+#include <ebml/EbmlVersion.h>
+#include <ebml/EbmlVoid.h>
 
-#include "FileKax.h"
-#include "KaxBlock.h"
-#include "KaxCluster.h"
-#include "KaxClusterData.h"
-#include "KaxCues.h"
-#include "KaxInfo.h"
-#include "KaxInfoData.h"
-#include "KaxSeekHead.h"
-#include "KaxSegment.h"
-#include "KaxTags.h"
-#include "KaxTag.h"
-#include "KaxTagMulti.h"
-#include "KaxTracks.h"
-#include "KaxTrackEntryData.h"
-#include "KaxTrackAudio.h"
-#include "KaxTrackVideo.h"
-#include "KaxVersion.h"
+#include <matroska/FileKax.h>
+#include <matroska/KaxBlock.h>
+#include <matroska/KaxCluster.h>
+#include <matroska/KaxClusterData.h>
+#include <matroska/KaxCues.h>
+#include <matroska/KaxInfo.h>
+#include <matroska/KaxInfoData.h>
+#include <matroska/KaxSeekHead.h>
+#include <matroska/KaxSegment.h>
+#include <matroska/KaxTags.h>
+#include <matroska/KaxTag.h>
+#include <matroska/KaxTagMulti.h>
+#include <matroska/KaxTracks.h>
+#include <matroska/KaxTrackEntryData.h>
+#include <matroska/KaxTrackAudio.h>
+#include <matroska/KaxTrackVideo.h>
+#include <matroska/KaxVersion.h>
 
 #include "cluster_helper.h"
 #include "common.h"
