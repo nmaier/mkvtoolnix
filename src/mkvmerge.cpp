@@ -1732,7 +1732,7 @@ guess_mime_type(const char *file_name) {
       if (!strcasecmp(extensions[k].c_str(), f.c_str())) {
         mxinfo(_("Automatic MIME type recognition for '%s': %s\n"),
                file_name, mime_types[i].name);
-        return extensions[k];
+        return mime_types[i].name;
       }
   }
 
@@ -1780,8 +1780,9 @@ parse_args(int argc,
   // two parameters are allowed: the --identify switch and the file.
   if (((argc == 2) || (argc == 3)) &&
       (!strcmp(argv[0], "-i") || !strcmp(argv[0], "--identify") ||
-       !strcmp(argv[0], "--identify-verbose"))) {
-    if (!strcmp(argv[0], "--identify-verbose"))
+       !strcmp(argv[0], "--identify-verbose") ||
+       !strcmp(argv[0], "-I"))) {
+    if (!strcmp(argv[0], "--identify-verbose") || !strcmp(argv[0], "-I"))
       identify_verbose = true;
     if (argc == 3)
       verbose = 3;
