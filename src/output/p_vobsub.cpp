@@ -78,47 +78,91 @@ void vobsub_packetizer_c::set_headers() {
                  (timecode - initial_displacement) % 1000
 #define FMT_TIMECODE "%02lld:%02lld:%02lld.%03lld"
 
+
+int a,b; /* Temporary vars */
+unsigned int date, type;
+unsigned int off;
+unsigned int start_off = 0;
+unsigned int next_off;
+unsigned int start_pts;
+unsigned int end_pts;
+unsigned int current_nibble[2];
+unsigned int control_start;
+unsigned int display = 0;
+unsigned int start_col = 0;
+unsigned int end_col = 0;
+unsigned int start_row = 0;
+unsigned int end_row = 0;
+unsigned int width = 0;
+unsigned int height = 0;
+unsigned int stride = 0;
+
 int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
                                           int64_t timecode) {
-  const int lengths[7] = {0, 0, 0, 2, 2, 6, 4};
-  int i, next_ctrlblk, packet_size, data_size, t, len;
+  uint32_t date, control_start, next_off, start_off, off;
+  int duration;
+  bool unknown;
 
-  packet_size = (data[0] << 8) | data[1];
-  data_size = (data[2] << 8) | data[3];
-  next_ctrlblk = data_size;
+  control_start = get_uint16_be(data + 2);
+  next_off = control_start;
+  duration = -1;
 
-  do {
-    i = next_ctrlblk;
-    t = (data[i] << 8) | data[i + 1];
-    i += 2;
-    next_ctrlblk = (data[i] << 8) | data[i + 1];
-    i += 2;
-
-    if((next_ctrlblk > packet_size) || (next_ctrlblk < data_size)) {
-      mxwarn(PFX "Inconsistent data in the SPU packets (next_ctrlblk: %d, "
-             "packet_size: %d, data_size: %d, timecode: " FMT_TIMECODE "). "
-             "Skipping this packet. This is NOT fatal.\n", next_ctrlblk,
-             packet_size, data_size, TIMECODE);
-      return -2;
+  while ((start_off != next_off) && (next_off < buf_size)) {
+    start_off = next_off;
+    date = get_uint16_be(data + start_off) * 1024;
+    next_off = get_uint16_be(data + start_off + 2);
+    mxverb(4, PFX "date = %u\n", date);
+    off = start_off + 4;
+    for (type = data[off++]; type != 0xff; type = data[off++]) {
+      mxverb(4, PFX "cmd = %d ",type);
+      unknown = false;
+      switch(type) {
+        case 0x00:
+          /* Menu ID, 1 byte */
+          mxverb(4, "menu ID");
+          break;
+        case 0x01:
+          /* Start display */
+          mxverb(4, "start display");
+          break;
+        case 0x02:
+          /* Stop display */
+          mxverb(4, "stop display: %u", date / 90);
+          duration = date / 90;
+          break;
+        case 0x03:
+          /* Palette */
+          mxverb(4, "palette");
+          off+=2;
+          break;
+        case 0x04:
+          /* Alpha */
+          mxverb(4, "alpha");
+          off+=2;
+          break;
+        case 0x05:
+          mxverb(4, "coords");
+          off+=6;
+          break;
+        case 0x06:
+          mxverb(4, "graphic lines");
+          off+=4;
+          break;
+        case 0xff:
+          /* All done, bye-bye */
+          mxverb(4, "done");
+          return duration;
+        default:
+          mxverb(4, "unknown (0x%02x), skipping %d bytes.", type,
+                 next_off - off);
+          unknown = true;
+      }
+      mxverb(4, "\n");
+      if (unknown)
+        break;
     }
-
-    if (data[i] <= 0x06)
-      len = lengths[data[i]];
-    else
-      len = 0;
-
-    if ((i + len) > packet_size) {
-      mxwarn(PFX "Warning: Wrong subpicture parameter blockending (i: %d, "
-             "len: %d, packet_size: %d, timecode: " FMT_TIMECODE ")n", i, len,
-             packet_size, TIMECODE);
-      break;
-    }
-    if (data[i] == 0x02)
-      return 1024 * t / 90;
-    i++;
-  } while ((i <= next_ctrlblk) && (i < packet_size));
-
-  return -1;
+  }
+  return duration;
 }
 
 #define deliver() deliver_packet(dst_buf, dst_size, timecode, duration);

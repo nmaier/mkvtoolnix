@@ -1,3 +1,11 @@
+2003-11-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Rewrote the SPU packet parsing code. It should not
+	abort anymore.
+
+	* everything: Committed a lot of cross-OS compatibility fixes
+	(thanks to Haali and thedj).
+
 2003-11-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.7.7.

@@ -656,7 +656,11 @@ AC_ARG_WITH(avilib,
 
   AC_MSG_CHECKING(which AVI libraries to use)
   # Defaults: use aviclasses and prefer the new avilib.
-  have_aviclasses=yes
+  if test x"`uname -s`" = x"Darwin"; then
+    have_aviclasses=no
+  else
+    have_aviclasses=yes
+  fi
   if test "x$with_avilib_given" = "xyes"; then
     set - `echo ${with_avilib} | sed 's/,/ /g'`
     while test "x$1" != "x"; do
@@ -686,21 +690,10 @@ AC_ARG_WITH(avilib,
     AVICLASSES_LIBS="-laviclasses"
     avi_libs_to_use="classes "
   fi
-  if test "x$have_avilib0_6_10" = "xyes" -a "x$have_avilib" = "xyes"; then
-    echo ""
-    echo "*** You cannot include both the old avilib and the new"
-    echo "*** one (0.6.10)."
-    exit 1
-  fi
-  if test "x$have_avilib" = "xyes"; then
-    avi_libs_to_use="${avi_libs_to_use}old "
-  else
-    AC_DEFINE(HAVE_AVILIB0_6_10, 1,
-      [Define if the newer avilib from transcode 0.6.10 should be used.])
-    avi_libs_to_use="${avi_libs_to_use}0.6.10 "
-    have_avilib0_6_10=yes
-  fi
-  AM_CONDITIONAL(HAVE_AVILIB, test x"$have_avilib0_6_10" != "xyes")
+  AC_DEFINE(HAVE_AVILIB0_6_10, 1,
+            [Define if the newer avilib from transcode 0.6.10 should be used.])
+  avi_libs_to_use="${avi_libs_to_use}0.6.10 "
+  have_avilib0_6_10=yes
   AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" = "xyes")
   AM_CONDITIONAL(HAVE_AVICLASSES, test x"$have_aviclasses" = "xyes")
 
