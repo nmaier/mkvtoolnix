@@ -1922,8 +1922,8 @@ void finish_file() {
       kax_as = NULL;
     }
 
-    kax_seekhead->UpdateSize();
-    emerg_seek_head->UpdateSize();
+    if (kax_seekhead->ListSize() > 0)
+      kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
       mxprint(stdout, "Warning: Could not update the meta seek information "
               "as the space reserved for them was too small. Re-run "
@@ -1931,7 +1931,10 @@ void finish_file() {
               "%lld'.\n", kax_seekhead->ElementSize() + 100);
 
       if (write_cues && cue_writing_requested)
-        kax_seekhead_void->ReplaceWith(*emerg_seek_head, *out, true);
+        if (emerg_seek_head->ListSize() > 0) {
+          emerg_seek_head->UpdateSize();
+          kax_seekhead_void->ReplaceWith(*emerg_seek_head, *out, true);
+        }
     }
   }
 
