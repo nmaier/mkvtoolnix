@@ -270,7 +270,7 @@ parse_chapters(const char *file_name,
 
   in = NULL;
   try {
-    in = new mm_text_io_c(file_name);
+    in = new mm_text_io_c(new mm_file_io_c(file_name));
   } catch (...) {
     if (exception_on_error)
       throw error_c(string("Could not open '") + string(file_name) +

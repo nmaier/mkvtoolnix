@@ -36,7 +36,7 @@ timecode_factory_c::create(const char *_file_name,
 
   in = NULL;                    // avoid gcc warning
   try {
-    in = new mm_text_io_c(_file_name);
+    in = new mm_text_io_c(new mm_file_io_c(_file_name));
   } catch(...) {
     mxerror(_("The timecode file '%s' could not be opened for reading.\n"),
             _file_name);

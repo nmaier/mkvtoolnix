@@ -895,7 +895,7 @@ generic_packetizer_c::dump_packet(const void *buffer,
            dumped_packet_number);
   dumped_packet_number++;
   try {
-    out = new mm_io_c(path, MODE_CREATE);
+    out = new mm_file_io_c(path, MODE_CREATE);
     out->write(buffer, size);
     delete out;
   } catch(...) {

@@ -28,23 +28,20 @@ using namespace libebml;
 
 class MTX_DLL_API mm_io_c: public IOCallback {
 protected:
-#if defined(SYS_WINDOWS)
-  bool _eof;
-#endif
-  char *file_name;
-  void *file;
-  stack<int64_t> positions;
   bool dos_style_newlines;
+  stack<int64_t> positions;
 
 public:
-  mm_io_c();
-  mm_io_c(const char *path, const open_mode mode);
-  virtual ~mm_io_c();
+  mm_io_c():
+    dos_style_newlines(false) {
+  }
+  virtual ~mm_io_c() { }
 
-  virtual uint64 getFilePointer();
-  virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
+  virtual uint64 getFilePointer() = 0;
+  virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning)
+    = 0;
   virtual bool setFilePointer2(int64 offset, seek_mode mode = seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
+  virtual uint32 read(void *buffer, size_t size) = 0;
   virtual uint32_t read(string &buffer, size_t size);
   virtual unsigned char read_uint8();
   virtual uint16_t read_uint16();
@@ -63,9 +60,11 @@ public:
   virtual int write_uint32_be(uint32_t value);
   virtual int write_uint64_be(uint64_t value);
   virtual void skip(int64 numbytes);
-  virtual size_t write(const void *buffer, size_t size);
-  virtual void close();
-  virtual bool eof();
+  virtual size_t write(const void *buffer, size_t size) = 0;
+  virtual bool eof() = 0;
+
+  virtual const char *get_file_name() const = 0;
+
   virtual string getline();
   virtual bool getline2(string &s);
   virtual size_t puts_unl(const char *s);
@@ -77,13 +76,70 @@ public:
 
   virtual int64_t get_size();
 
-  virtual const char *get_file_name();
-
-  virtual int truncate(int64_t pos);
+  virtual void close() = 0;
 
   virtual int printf(const char *fmt, ...);
   virtual void use_dos_style_newlines(bool yes) {
     dos_style_newlines = yes;
+  }
+};
+
+class MTX_DLL_API mm_file_io_c: public mm_io_c {
+protected:
+#if defined(SYS_WINDOWS)
+  bool _eof;
+#endif
+  char *file_name;
+  void *file;
+
+public:
+  mm_file_io_c(const char *path, const open_mode mode = MODE_READ);
+  virtual ~mm_file_io_c();
+
+  virtual uint64 getFilePointer();
+  virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
+  virtual uint32 read(void *buffer, size_t size);
+  virtual size_t write(const void *buffer, size_t size);
+  virtual void close();
+  virtual bool eof();
+
+  virtual const char *get_file_name() const;
+
+  virtual int truncate(int64_t pos);
+};
+
+class MTX_DLL_API mm_proxy_io_c: public mm_io_c {
+protected:
+  mm_io_c *proxy_io;
+  bool proxy_delete_io;
+
+public:
+  mm_proxy_io_c(mm_io_c *_proxy_io, bool _proxy_delete_io = true):
+    proxy_io(_proxy_io),
+    proxy_delete_io(_proxy_delete_io) {
+  }
+  virtual ~mm_proxy_io_c() {
+    close();
+  }
+
+  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning) {
+    return proxy_io->setFilePointer(offset, mode);
+  }
+  virtual uint64 getFilePointer() {
+    return proxy_io->getFilePointer();
+  }
+  virtual uint32 read(void *buffer, size_t size) {
+    return proxy_io->read(buffer, size);
+  }
+  virtual size_t write(const void *buffer, size_t size) {
+    return proxy_io->write(buffer, size);
+  }
+  virtual bool eof() {
+    return proxy_io->eof();
+  }
+  virtual void close();
+  virtual const char *get_file_name() const {
+    return proxy_io->get_file_name();
   }
 };
 
@@ -115,18 +171,21 @@ public:
   virtual size_t write(const void *buffer, size_t size);
   virtual void close();
   virtual bool eof();
+  virtual const char *get_file_name() const {
+    return "";
+  }
 };
 
 enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE,
                    BO_NONE};
 
-class MTX_DLL_API mm_text_io_c: public mm_io_c {
+class MTX_DLL_API mm_text_io_c: public mm_proxy_io_c {
 protected:
   byte_order_e byte_order;
   int bom_len;
 
 public:
-  mm_text_io_c(const char *path);
+  mm_text_io_c(mm_io_c *_in, bool _delete_in = true);
 
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
   virtual string getline();
@@ -143,6 +202,12 @@ public:
   virtual uint32 read(void *buffer, size_t size);
   virtual size_t write(const void *buffer, size_t size);
   virtual void close();
+  virtual bool eof() {
+    return false;
+  }
+  virtual const char *get_file_name() const {
+    return "";
+  }
 };
 
 #endif // __MM_IO_H

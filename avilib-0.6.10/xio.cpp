@@ -38,7 +38,7 @@ extern "C" {
 
 #define MAX_INSTANCES 4000
 
-static mm_io_c *instances[MAX_INSTANCES];
+static mm_file_io_c *instances[MAX_INSTANCES];
 static bool instances_initialized = false;
 
 int
@@ -71,7 +71,7 @@ xio_open(const char *pathname,
     omode = MODE_WRITE;
 
   try {
-    instances[idx] = new mm_io_c(pathname, omode);
+    instances[idx] = new mm_file_io_c(pathname, omode);
   } catch(...) {
     return -1;
   }

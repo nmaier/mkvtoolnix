@@ -482,10 +482,8 @@ get_type(char *filename) {
   mm_text_io = NULL;
   size = 0;
   try {
-    mm_io = new mm_io_c(filename, MODE_READ);
-    mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_current);
+    mm_io = new mm_file_io_c(filename);
+    size = mm_io->get_size();
   } catch (exception &ex) {
     mxerror(_("The source file '%s' could not be opened successfully, or "
               "retrieving its size by seeking to the end did not work.\n"),
@@ -528,7 +526,7 @@ get_type(char *filename) {
     delete mm_io;
 
     try {
-      mm_text_io = new mm_text_io_c(filename);
+      mm_text_io = new mm_text_io_c(new mm_file_io_c(filename));
       mm_text_io->setFilePointer(0, seek_end);
       size = mm_text_io->getFilePointer();
       mm_text_io->setFilePointer(0, seek_current);
@@ -1600,7 +1598,7 @@ render_attachments(IOCallback *rout) {
         create_unique_uint32(UNIQUE_ATTACHMENT_IDS);
 
       try {
-        io = new mm_io_c(attch->name, MODE_READ);
+        io = new mm_file_io_c(attch->name);
         size = io->get_size();
         buffer = new binary[size];
         io->read(buffer, size);
@@ -2129,7 +2127,7 @@ parse_args(int argc,
       if (!strcmp(this_arg, "--attach-file"))
         attachment->to_all_files = true;
       try {
-        io = new mm_io_c(attachment->name, MODE_READ);
+        io = new mm_file_io_c(attachment->name);
         attachment->size = io->get_size();
         delete io;
         if (attachment->size == 0)
@@ -2573,7 +2571,7 @@ read_args_from_file(int &num_args,
 
   mm_io = NULL;
   try {
-    mm_io = new mm_text_io_c(filename);
+    mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (exception &ex) {
     mxerror(_("The file '%s' could not be opened for reading command line "
               "arguments."), filename);
@@ -2894,7 +2892,7 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
+    out = new mm_file_io_c(this_outfile.c_str(), MODE_CREATE);
   } catch (exception &ex) {
     mxerror(_("The output file '%s' could not be opened for writing (%s).\n"),
             this_outfile.c_str(), strerror(errno));

@@ -460,7 +460,8 @@ create_output_files() {
           dummy_out_name = mxsprintf("%s.temp-tta-extraction-%u",
                                      tracks[i].out_name,
                                      (uint32_t)time(NULL));
-          tracks[i].out = new mm_io_c(dummy_out_name.c_str(), MODE_CREATE);
+          tracks[i].out = new mm_file_io_c(dummy_out_name.c_str(),
+                                           MODE_CREATE);
         } catch (exception &ex) {
           mxerror(_(" The file '%s' could not be opened for writing (%s).\n"),
                   dummy_out_name.c_str(), strerror(errno));
@@ -469,7 +470,7 @@ create_output_files() {
       } else {
 
         try {
-          tracks[i].out = new mm_io_c(tracks[i].out_name, MODE_CREATE);
+          tracks[i].out = new mm_file_io_c(tracks[i].out_name, MODE_CREATE);
         } catch (exception &ex) {
           mxerror(_(" The file '%s' could not be opened for writing (%s).\n"),
                   tracks[i].out_name, strerror(errno));
@@ -1034,13 +1035,13 @@ close_files() {
           temp_name = tracks[i].out->get_file_name();
           delete tracks[i].out;
           try {
-            tracks[i].out = new mm_io_c(tracks[i].out_name, MODE_CREATE);
+            tracks[i].out = new mm_file_io_c(tracks[i].out_name, MODE_CREATE);
           } catch (exception &ex) {
             mxerror(_(" The file '%s' could not be opened for writing (%s)."
                       "\n"), tracks[i].out_name, strerror(errno));
           }
           try {
-            temp_file = new mm_io_c(temp_name.c_str(), MODE_READ);
+            temp_file = new mm_file_io_c(temp_name.c_str());
           } catch (exception &ex) {
             mxerror(_(" The file '%s' could not be opened for reading (%s)."
                       "\n"), temp_name.c_str(), strerror(errno));
@@ -1143,7 +1144,7 @@ write_all_cuesheets(KaxChapters &chapters,
       cue_file_name += ".cue";
 
       try {
-        out = new mm_io_c(cue_file_name.c_str(), MODE_WRITE);
+        out = new mm_file_io_c(cue_file_name.c_str(), MODE_WRITE);
       } catch(...) {
         mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
                 cue_file_name.c_str(), strerror(errno));
@@ -1175,7 +1176,7 @@ extract_tracks(const char *file_name) {
   block = NULL;
   // open input file
   try {
-    in = new mm_io_c(file_name, MODE_READ);
+    in = new mm_file_io_c(file_name);
   } catch (std::exception &ex) {
     show_error(_("The file '%s' could not be opened for reading (%s).\n"),
                file_name, strerror(errno));

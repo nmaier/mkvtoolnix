@@ -73,19 +73,16 @@ main(int argc,
   maxlen = ((maxlen + 3) / 4) * 4;
 
   try {
-    if (mode == 'e')
-      in = new mm_io_c(argv[2], MODE_READ);
-    else {
-      intext = new mm_text_io_c(argv[2]);
-      in = intext;
-    }
+    in = new mm_file_io_c(argv[2]);
+    if (mode != 'e')
+      in = new mm_text_io_c(in);
   } catch(...) {
     mxerror(_("The file '%s' could not be opened for reading (%d, %s).\n"),
             argv[2], errno, strerror(errno));
   }
 
   try {
-    out = new mm_io_c(argv[3], MODE_WRITE);
+    out = new mm_file_io_c(argv[3], MODE_WRITE);
   } catch(...) {
     mxerror(_("The file '%s' could not be opened for writing (%d, %s).\n"),
             argv[3], errno, strerror(errno));

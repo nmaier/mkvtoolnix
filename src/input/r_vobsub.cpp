@@ -96,7 +96,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
   int len;
   
   try {
-    idx_file = new mm_text_io_c(ti->fname);
+    idx_file = new mm_text_io_c(new mm_file_io_c(ti->fname));
   } catch (...) {
     throw error_c(PFX "Cound not open the source file.");
   }
@@ -108,7 +108,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
   sub_name += ".sub";
 
   try {
-    sub_file = new mm_io_c(sub_name.c_str(), MODE_READ);
+    sub_file = new mm_file_io_c(sub_name.c_str());
   } catch (...) {
     string emsg = PFX "Could not open the sub file '";
     emsg += sub_name;

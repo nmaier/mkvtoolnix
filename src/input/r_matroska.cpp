@@ -816,7 +816,7 @@ kax_reader_c::read_headers() {
 
   exit_loop = false;
   try {
-    in = new mm_io_c(ti->fname, MODE_READ);
+    in = new mm_file_io_c(ti->fname);
     es = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.

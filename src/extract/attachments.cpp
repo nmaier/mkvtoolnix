@@ -128,7 +128,7 @@ handle_attachments(KaxAttachments *atts) {
                  "is written to '%s'.\n"), id, type.c_str(), size,
                tracks[k].out_name);
         try {
-          out = new mm_io_c(tracks[k].out_name, MODE_WRITE);
+          out = new mm_file_io_c(tracks[k].out_name, MODE_WRITE);
         } catch (...) {
           mxerror(_("The file '%s' could not be opened for writing "
                     "(%d, %s).\n"),
@@ -153,7 +153,7 @@ extract_attachments(const char *file_name,
 
   // open input file
   try {
-    in = new mm_io_c(file_name, MODE_READ);
+    in = new mm_file_io_c(file_name);
     qp = new kax_quickparser_c(*in, parse_fully);
   } catch (std::exception &ex) {
     show_error(_("The file '%s' could not be opened for reading (%s)."),

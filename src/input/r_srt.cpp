@@ -68,7 +68,7 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
 
   try {
-    mm_io = new mm_text_io_c(ti->fname);
+    mm_io = new mm_text_io_c(new mm_file_io_c(ti->fname));
     if (!srt_reader_c::probe_file(mm_io, 0))
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti->id = 0;                 // ID for this track.
