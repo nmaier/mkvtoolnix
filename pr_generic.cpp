@@ -152,8 +152,8 @@ void generic_packetizer_c::set_track_max_cache(int max_cache) {
   htrack_max_cache = max_cache;
 }
 
-void generic_packetizer_c::set_track_default_duration(int64_t def_duration) {
-  htrack_default_duration = def_duration * 1000000;
+void generic_packetizer_c::set_track_default_duration_ns(int64_t def_dur) {
+  htrack_default_duration = def_dur;
 }
 
 void generic_packetizer_c::set_audio_sampling_freq(float freq) {

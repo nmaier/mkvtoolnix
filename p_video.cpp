@@ -61,7 +61,7 @@ void video_packetizer_c::set_headers() {
   // if there are B-frames as well.
   set_track_min_cache(1);
   set_track_max_cache(1);
-  set_track_default_duration((int64_t)(1000 / fps));
+  set_track_default_duration_ns((int64_t)(1000000000.0 / fps));
 
   set_video_pixel_width(width);
   set_video_pixel_height(height);
