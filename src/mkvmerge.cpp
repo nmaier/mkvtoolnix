@@ -1878,7 +1878,8 @@ void finish_file() {
     end = cluster_helper->get_max_timecode() + offset;
 
     chapters_here = parse_chapters(chapter_file_name, start, end, offset);
-    kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
+    if (chapters_here != NULL)
+      kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
     delete kax_chapters_void;
     kax_chapters_void = NULL;
   } else
@@ -1901,7 +1902,7 @@ void finish_file() {
     if (chapters_here != NULL) {
       kax_seekhead->IndexThis(*chapters_here, *kax_segment);
       delete chapters_here;
-    } else if (kax_chapters != NULL)
+    } else if ((pass == 0) && (kax_chapters != NULL))
       kax_seekhead->IndexThis(*kax_chapters, *kax_segment);
 
     if (kax_as != NULL) {

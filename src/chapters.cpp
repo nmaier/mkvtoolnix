@@ -31,6 +31,8 @@
 using namespace std;
 using namespace libmatroska;
 
+// {{{ defines for chapter line recognition
+
 #define isequal(s) (*(s) == '=')
 #define iscolon(s) (*(s) == ':')
 #define isdot(s) (*(s) == '.')
@@ -56,6 +58,9 @@ using namespace libmatroska;
                           isequal(s + 13) && \
                           !isspace(*(s + 14)))
 
+// }}}
+// {{{ helper functions
+
 static void chapter_error(const char *fmt, ...) {
   va_list ap;
 
@@ -66,6 +71,23 @@ static void chapter_error(const char *fmt, ...) {
   mxprint(stderr, "\n");
   exit(1);
 }
+
+#define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
+#define is_id2(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
+
+static FILE *o;
+
+static void pt(int level, const char *tag) {
+  int i;
+
+  for (i = 0; i < level; i++)
+    mxprint(o, "  ");
+  mxprint(o, "%s", tag);
+}
+
+// }}}
+
+// {{{ simple chapter parsing
 
 static bool probe_simple_chapters(mm_text_io_c *in) {
   string line;
@@ -110,7 +132,7 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   KaxChapterDisplay *display;
   int64_t start, hour, minute, second, msecs;
   string name, line;
-  int mode;
+  int mode, num;
 
   in->setFilePointer(0);
   chaps = new KaxChapters;
@@ -118,8 +140,7 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   mode = 0;
   atom = NULL;
   edition = NULL;
-
-  printf("off: %lld\n", offset);
+  num = 0;
 
   while (in->getline2(line)) {
     strip(line);
@@ -167,14 +188,24 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
           cstr_to_UTFstring(name.c_str());
         *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
           "eng";
+
+        num++;
       }
     }
   }
 
   delete in;
 
+  if (num == 0) {
+    delete chaps;
+    return NULL;
+  }
+
   return chaps;
 }
+
+// }}}
+// {{{ XML chapters
 
 static bool probe_xml_chapters(mm_text_io_c *) {
   return false;
@@ -184,6 +215,8 @@ static KaxChapters *parse_xml_chapters(mm_text_io_c *, int64_t, int64_t,
                                        int64_t) {
   return NULL;
 }
+
+// }}}
 
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
                             int64_t max_tc, int64_t offset) {
@@ -210,18 +243,7 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   return NULL;
 }
 
-#define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-#define is_id2(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-
-static FILE *o;
-
-static void pt(int level, const char *tag) {
-  int i;
-
-  for (i = 0; i < level; i++)
-    mxprint(o, "  ");
-  mxprint(o, "%s", tag);
-}
+// {{{ XML chapter output
 
 static void write_chapter_atom_xml(KaxChapterAtom *atom, int level);
 
@@ -339,6 +361,9 @@ void write_chapters_xml(KaxChapters *chapters, FILE *out) {
     }
   }
 }
+
+// }}}
+// {{{ simple chapter output
 
 class chapter_entry_c {
 public:
@@ -493,3 +518,5 @@ void write_chapters_simple(int &chapter_num, KaxChapters *chapters,
   chapter_names.clear();
   chapter_entries.clear();
 }
+
+// }}}
