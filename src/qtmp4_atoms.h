@@ -136,4 +136,9 @@ typedef struct {
   uint16_t color_table_id;
 } video_stsd_atom_t;
 
+typedef struct {
+  uint32_t size;
+  video_stsd_atom_t id;
+} qt_image_description_t;
+
 #endif // __QTMP4_ATOMS_H

@@ -478,11 +478,11 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
             new_dmx->v_height = get_uint16_be(&v_stsd.height);
             new_dmx->v_bitdepth = get_uint16_be(&v_stsd.depth);
             new_dmx->v_desc =
-              (video_stsd_atom_t *)safemalloc(size - 8);
-            io->setFilePointer(pos + 8);
-            if (io->read(new_dmx->v_desc, size - 8) != (size - 8))
+              (qt_image_description_t *)safemalloc(size);
+            io->setFilePointer(pos);
+            if (io->read(new_dmx->v_desc, size) != size)
               throw exception();
-            new_dmx->v_desc_size = size - 8;
+            new_dmx->v_desc_size = size;
           }
 
           io->setFilePointer(pos + size);

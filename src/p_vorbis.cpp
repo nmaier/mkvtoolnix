@@ -192,6 +192,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     return EMOREDATA;
   }
 
+  mxverb(2, "Vorbis: samples_here: %lld\n", samples_here);
   add_packet(data, size, (int64_t)timecode, (int64_t)(samples_here * 1000 *
              ti->async.linear / vi.rate));
 
