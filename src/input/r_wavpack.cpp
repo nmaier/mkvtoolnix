@@ -50,27 +50,49 @@ wavpack_reader_c::probe_file(mm_io_c *mm_io,
 wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
+  int32_t packet_size;
 
   try {
     mm_io = new mm_file_io_c(ti->fname);
     size = mm_io->get_size();
 
-    int32_t packet_size = wv_parse_frame(mm_io, header, meta);
+    packet_size = wv_parse_frame(mm_io, header, meta);
     if (packet_size < 0)
       mxerror(FMT_FN "The file header was not read correctly.\n",
               ti->fname.c_str());
-
-    mm_io->setFilePointer(mm_io->getFilePointer() - sizeof(wavpack_header_t),
-                          seek_beginning);
-
   } catch (exception &ex) {
     throw error_c("wavpack_reader: Could not open the file.");
   }
+
+  mm_io->setFilePointer(mm_io->getFilePointer() - sizeof(wavpack_header_t),
+                        seek_beginning);
+
+  // correction file if applies
+  mm_io_correc = NULL;
+  meta.has_correction = false;
+  try {
+    if (header.flags & WV_HYBRID_FLAG) {
+      mm_io_correc = new mm_file_io_c(ti->fname + "c");
+      packet_size = wv_parse_frame(mm_io_correc, header_correc, meta_correc);
+      if (packet_size < 0)
+        mxerror(FMT_FN "The correction file header was not read correctly.\n",
+                ti->fname.c_str());
+      mm_io_correc->setFilePointer(-sizeof(wavpack_header_t),
+                                   seek_current);
+      meta.has_correction = true;
+    }
+  } catch (exception &ex) {
+    if (verbose)
+      mxinfo(FMT_FN "Could not open the corresponding correction file '%s'.\n",
+             ti->fname.c_str(), (ti->fname + "c").c_str());
+  }
+
   if (verbose)
     mxinfo(FMT_FN "Using the WAVPACK demultiplexer.\n", ti->fname.c_str());
 }
 
 wavpack_reader_c::~wavpack_reader_c() {
+  delete mm_io_correc;
   delete mm_io;
 }
 

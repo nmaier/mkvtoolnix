@@ -389,6 +389,7 @@ protected:
   bool default_duration_forced;
   bool default_track_warning_printed;
   uint32_t huid;
+  int htrack_max_add_block_ids;
 
   string hcodec_id;
   unsigned char *hcodec_private;
@@ -502,6 +503,7 @@ public:
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);
   virtual void set_track_default_duration(int64_t default_duration);
+  virtual void set_track_max_additionals(int max_add_block_ids);
   virtual int64_t get_track_default_duration();
 
   virtual void set_audio_sampling_freq(float freq);

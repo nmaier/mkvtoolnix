@@ -48,6 +48,7 @@ typedef struct {
   int bits_per_sample;
   uint32_t sample_rate;
   uint32_t samples_per_block;
+  bool has_correction;
 } wavpack_meta_t;
 
 // or-values for "flags"

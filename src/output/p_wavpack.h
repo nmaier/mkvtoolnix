@@ -27,6 +27,7 @@ private:
   int channels, sample_rate, bits_per_sample;
   int64_t samples_per_block;
   int64_t samples_output;
+  bool has_correction;
 
 public:
   wavpack_packetizer_c(generic_reader_c *nreader, wavpack_meta_t & meta,

@@ -28,10 +28,10 @@
 
 class wavpack_reader_c: public generic_reader_c {
 private:
-  mm_io_c *mm_io;
+  mm_io_c *mm_io,*mm_io_correc;
   int64_t size;
-  wavpack_header_t header;
-  wavpack_meta_t meta;
+  wavpack_header_t header, header_correc;
+  wavpack_meta_t meta, meta_correc;
 
 public:
   wavpack_reader_c(track_info_c *nti) throw (error_c);

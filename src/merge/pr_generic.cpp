@@ -230,6 +230,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   htrack_type = -1;
   htrack_min_cache = -1;
   htrack_max_cache = -1;
+  htrack_max_add_block_ids = -1;
 
   hcodec_id = "";
   hcodec_private = NULL;
@@ -393,6 +394,14 @@ generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
       htrack_default_duration;
+}
+
+void 
+generic_packetizer_c::set_track_max_additionals(int max_add_block_ids) {
+  htrack_max_add_block_ids = max_add_block_ids;
+  if (track_entry != NULL)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxMaxBlockAdditionID>(*track_entry))) = max_add_block_ids;
 }
 
 int64_t
@@ -592,6 +601,11 @@ generic_packetizer_c::set_headers() {
   if (htrack_max_cache != -1)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackMaxCache>(*track_entry))) = htrack_max_cache;
+
+  if (htrack_max_add_block_ids != -1)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxMaxBlockAdditionID>(*track_entry))) =
+      htrack_max_add_block_ids;
 
   htrack_default_duration =
     (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
