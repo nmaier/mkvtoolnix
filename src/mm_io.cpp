@@ -49,6 +49,9 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
     case MODE_CREATE:
       cmode = "wb+";
       break;
+    case MODE_SAFE:
+      cmode = "r+b";
+      break;
     default:
       throw 0;
   }
@@ -120,7 +123,7 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
 
   switch (mode) {
     case MODE_READ:
-      access_mode = GENERIC_READ | GENERIC_WRITE;
+      access_mode = GENERIC_READ;
       share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
       disposition = OPEN_EXISTING;
       break;
