@@ -381,29 +381,29 @@ void put_uint64(void *buf, uint64_t value) {
 typedef struct {
   iconv_t ict_from_utf8, ict_to_utf8;
   char *charset;
-} mkv_conv_t;
+} kax_conv_t;
 
-static mkv_conv_t *mkv_convs = NULL;
-static int num_mkv_convs = 0;
+static kax_conv_t *kax_convs = NULL;
+static int num_kax_convs = 0;
 int cc_local_utf8 = -1;
 
-int add_mkv_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
-  mkv_conv_t *c;
+int add_kax_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
+  kax_conv_t *c;
   int i;
 
-  for (i = 0; i < num_mkv_convs; i++)
-    if (!strcmp(mkv_convs[i].charset, charset))
+  for (i = 0; i < num_kax_convs; i++)
+    if (!strcmp(kax_convs[i].charset, charset))
       return i;
 
-  mkv_convs = (mkv_conv_t *)saferealloc(mkv_convs, (num_mkv_convs + 1) *
-                                        sizeof(mkv_conv_t));
-  c = &mkv_convs[num_mkv_convs];
+  kax_convs = (kax_conv_t *)saferealloc(kax_convs, (num_kax_convs + 1) *
+                                        sizeof(kax_conv_t));
+  c = &kax_convs[num_kax_convs];
   c->charset = safestrdup(charset);
   c->ict_from_utf8 = ict_from;
   c->ict_to_utf8 = ict_to;
-  num_mkv_convs++;
+  num_kax_convs++;
 
-  return num_mkv_convs - 1;
+  return num_kax_convs - 1;
 }
 
 int utf8_init(const char *charset) {
@@ -425,8 +425,8 @@ int utf8_init(const char *charset) {
   } else
     lc_charset = charset;
 
-  for (i = 0; i < num_mkv_convs; i++)
-    if (!strcmp(mkv_convs[i].charset, lc_charset))
+  for (i = 0; i < num_kax_convs; i++)
+    if (!strcmp(kax_convs[i].charset, lc_charset))
       return i;
 
   ict_to_utf8 = iconv_open("UTF-8", lc_charset);
@@ -445,21 +445,21 @@ int utf8_init(const char *charset) {
             "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
             strerror(errno));
 
-  return add_mkv_conv(lc_charset, ict_from_utf8, ict_to_utf8);
+  return add_kax_conv(lc_charset, ict_from_utf8, ict_to_utf8);
 }
 
 void utf8_done() {
   int i;
 
-  for (i = 0; i < num_mkv_convs; i++) {
-    if (mkv_convs[i].ict_from_utf8 != (iconv_t)(-1))
-      iconv_close(mkv_convs[i].ict_from_utf8);
-    if (mkv_convs[i].ict_to_utf8 != (iconv_t)(-1))
-      iconv_close(mkv_convs[i].ict_to_utf8);
-    safefree(mkv_convs[i].charset);
+  for (i = 0; i < num_kax_convs; i++) {
+    if (kax_convs[i].ict_from_utf8 != (iconv_t)(-1))
+      iconv_close(kax_convs[i].ict_from_utf8);
+    if (kax_convs[i].ict_to_utf8 != (iconv_t)(-1))
+      iconv_close(kax_convs[i].ict_to_utf8);
+    safefree(kax_convs[i].charset);
   }
-  if (mkv_convs != NULL)
-    safefree(mkv_convs);
+  if (kax_convs != NULL)
+    safefree(kax_convs);
 }
 
 static char *convert_charset(iconv_t ict, const char *src) {
@@ -498,11 +498,11 @@ char *to_utf8(int handle, const char *local) {
     return copy;
   }
 
-  if (handle >= num_mkv_convs)
+  if (handle >= num_kax_convs)
     die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %d).",
-        handle, num_mkv_convs);
+        handle, num_kax_convs);
 
-  return convert_charset(mkv_convs[handle].ict_to_utf8, local);
+  return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
 
 char *from_utf8(int handle, const char *utf8) {
@@ -513,11 +513,11 @@ char *from_utf8(int handle, const char *utf8) {
     return copy;
   }
 
-  if (handle >= num_mkv_convs)
+  if (handle >= num_kax_convs)
     die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %d).",
-        handle, num_mkv_convs);
+        handle, num_kax_convs);
 
-  return convert_charset(mkv_convs[handle].ict_from_utf8, utf8);
+  return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
 
 /*

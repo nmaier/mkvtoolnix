@@ -75,7 +75,7 @@ using namespace LIBMATROSKA_NAMESPACE;
  * Probes a file by simply comparing the first four bytes to the EBML
  * head signature.
  */
-int mkv_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
@@ -94,7 +94,7 @@ int mkv_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-mkv_reader_c::mkv_reader_c(track_info_t *nti) throw (error_c):
+kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   tracks = NULL;
   num_tracks = 0;
@@ -110,7 +110,7 @@ mkv_reader_c::mkv_reader_c(track_info_t *nti) throw (error_c):
   create_packetizers();
 }
 
-mkv_reader_c::~mkv_reader_c() {
+kax_reader_c::~kax_reader_c() {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -130,7 +130,7 @@ mkv_reader_c::~mkv_reader_c() {
     delete segment;
 }
 
-int mkv_reader_c::packets_available() {
+int kax_reader_c::packets_available() {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -143,13 +143,13 @@ int mkv_reader_c::packets_available() {
   return 1;
 }
 
-mkv_track_t *mkv_reader_c::new_mkv_track() {
-  mkv_track_t *t;
+kax_track_t *kax_reader_c::new_kax_track() {
+  kax_track_t *t;
 
-  t = (mkv_track_t *)safemalloc(sizeof(mkv_track_t));
-  memset(t, 0, sizeof(mkv_track_t));
-  tracks = (mkv_track_t **)saferealloc(tracks, (num_tracks + 1) *
-                                       sizeof(mkv_track_t *));
+  t = (kax_track_t *)safemalloc(sizeof(kax_track_t));
+  memset(t, 0, sizeof(kax_track_t));
+  tracks = (kax_track_t **)saferealloc(tracks, (num_tracks + 1) *
+                                       sizeof(kax_track_t *));
   tracks[num_tracks] = t;
   num_tracks++;
 
@@ -159,7 +159,7 @@ mkv_track_t *mkv_reader_c::new_mkv_track() {
   return t;
 }
 
-mkv_track_t *mkv_reader_c::find_track_by_num(uint32_t n, mkv_track_t *c) {
+kax_track_t *kax_reader_c::find_track_by_num(uint32_t n, kax_track_t *c) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -170,7 +170,7 @@ mkv_track_t *mkv_reader_c::find_track_by_num(uint32_t n, mkv_track_t *c) {
   return NULL;
 }
 
-mkv_track_t *mkv_reader_c::find_track_by_uid(uint32_t uid, mkv_track_t *c) {
+kax_track_t *kax_reader_c::find_track_by_uid(uint32_t uid, kax_track_t *c) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -181,11 +181,11 @@ mkv_track_t *mkv_reader_c::find_track_by_uid(uint32_t uid, mkv_track_t *c) {
   return NULL;
 }
 
-void mkv_reader_c::verify_tracks() {
+void kax_reader_c::verify_tracks() {
   int tnum, i;
   unsigned char *c;
   uint32_t u, offset, length;
-  mkv_track_t *t;
+  kax_track_t *t;
   alBITMAPINFOHEADER *bih;
   alWAVEFORMATEX *wfe;
 
@@ -422,7 +422,7 @@ void mkv_reader_c::verify_tracks() {
   }
 }
 
-void mkv_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
+void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
                                       EbmlElement *l0, int64_t pos) {
   KaxAttachments *atts;
   KaxAttached *att;
@@ -432,7 +432,7 @@ void mkv_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
   int64_t size, id;
   char *str;
   bool found;
-  mkv_attachment_t matt;
+  kax_attachment_t matt;
 
   io->save_pos(pos);
   l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
@@ -505,11 +505,11 @@ void mkv_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
 
-int mkv_reader_c::read_headers() {
+int kax_reader_c::read_headers() {
   int upper_lvl_el, exit_loop;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
-  mkv_track_t *track;
+  kax_track_t *track;
 
   try {
     // Create the interface between MPlayer's IO system and
@@ -626,7 +626,7 @@ int mkv_reader_c::read_headers() {
             if (verbose > 1)
               mxprint(stdout, "matroska_reader: | + a track...\n");
 
-            track = new_mkv_track();
+            track = new_kax_track();
             if (track == NULL)
               return 0;
 
@@ -1024,9 +1024,9 @@ int mkv_reader_c::read_headers() {
   return 1;
 }
 
-void mkv_reader_c::create_packetizers() {
+void kax_reader_c::create_packetizers() {
   int i;
-  mkv_track_t *t;
+  kax_track_t *t;
   track_info_t nti;
 
   for (i = 0; i < num_tracks; i++) {
@@ -1179,13 +1179,13 @@ void mkv_reader_c::create_packetizers() {
   }
 }
 
-int mkv_reader_c::read() {
+int kax_reader_c::read() {
   int upper_lvl_el, exit_loop, found_data, i, delete_element;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
   KaxBlock *block;
   int64_t block_fref, block_bref, block_duration;
-  mkv_track_t *block_track;
+  kax_track_t *block_track;
 
   if (num_tracks == 0)
     return 0;
@@ -1195,7 +1195,7 @@ int mkv_reader_c::read() {
   if (saved_l1 == NULL)         // We're done.
     return 0;
 
-  debug_enter("mkv_reader_c::read");
+  debug_enter("kax_reader_c::read");
 
   exit_loop = 0;
   upper_lvl_el = 0;
@@ -1402,7 +1402,7 @@ int mkv_reader_c::read() {
     return 0;
   }
 
-  debug_leave("mkv_reader_c::read");
+  debug_leave("kax_reader_c::read");
 
   if (found_data)
     return EMOREDATA;
@@ -1410,9 +1410,9 @@ int mkv_reader_c::read() {
     return 0;
 }
 
-packet_t *mkv_reader_c::get_packet() {
+packet_t *kax_reader_c::get_packet() {
   generic_packetizer_c *winner;
-  mkv_track_t *t;
+  kax_track_t *t;
   int i;
 
   winner = NULL;
@@ -1434,7 +1434,7 @@ packet_t *mkv_reader_c::get_packet() {
     return NULL;
 }
 
-int mkv_reader_c::display_priority() {
+int kax_reader_c::display_priority() {
   int i;
 
   if (segment_duration != 0.0)
@@ -1449,7 +1449,7 @@ int mkv_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void mkv_reader_c::display_progress() {
+void kax_reader_c::display_progress() {
   int i;
 
   if (segment_duration != 0.0) {
@@ -1474,7 +1474,7 @@ void mkv_reader_c::display_progress() {
   fflush(stdout);
 }
 
-void mkv_reader_c::set_headers() {
+void kax_reader_c::set_headers() {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -1483,7 +1483,7 @@ void mkv_reader_c::set_headers() {
       tracks[i]->packetizer->set_headers();
 }
 
-void mkv_reader_c::identify() {
+void kax_reader_c::identify() {
   int i;
 
   mxprint(stdout, "File '%s': container: Matroska\n", ti->fname);

@@ -38,7 +38,7 @@ using namespace LIBMATROSKA_NAMESPACE;
 typedef struct {
   string name, type;
   int64 size, id;
-} mkv_attachment_t;
+} kax_attachment_t;
 
 typedef struct {
   uint32_t tnum, tuid;
@@ -72,18 +72,18 @@ typedef struct {
   int ok;
 
   generic_packetizer_c *packetizer;
-} mkv_track_t;
+} kax_track_t;
 
 typedef struct {
   unsigned char *data;
   int length;
 } buffer_t;
 
-class mkv_reader_c: public generic_reader_c {
+class kax_reader_c: public generic_reader_c {
 private:
   int act_wchar;
 
-  mkv_track_t **tracks;
+  kax_track_t **tracks;
   int num_tracks;
 
   int64_t tc_scale;
@@ -101,11 +101,11 @@ private:
 
   float segment_duration, last_timecode, first_timecode;
 
-  vector<mkv_attachment_t> attachments;
+  vector<kax_attachment_t> attachments;
 
 public:
-  mkv_reader_c(track_info_t *nti) throw (error_c);
-  virtual ~mkv_reader_c();
+  kax_reader_c(track_info_t *nti) throw (error_c);
+  virtual ~kax_reader_c();
 
   virtual int read();
   virtual packet_t *get_packet();
@@ -120,9 +120,9 @@ public:
 private:
   virtual int read_headers();
   virtual void create_packetizers();
-  virtual mkv_track_t *new_mkv_track();
-  virtual mkv_track_t *find_track_by_num(uint32_t num, mkv_track_t *c = NULL);
-  virtual mkv_track_t *find_track_by_uid(uint32_t uid, mkv_track_t *c = NULL);
+  virtual kax_track_t *new_kax_track();
+  virtual kax_track_t *find_track_by_num(uint32_t num, kax_track_t *c = NULL);
+  virtual kax_track_t *find_track_by_uid(uint32_t uid, kax_track_t *c = NULL);
   virtual void verify_tracks();
   virtual int packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlStream *es,

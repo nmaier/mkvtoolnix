@@ -83,20 +83,20 @@ typedef struct {
   unsigned int tnum, tuid;
   char type;
   int64_t size;
-} mkv_track_t;
+} kax_track_t;
 
-mkv_track_t **tracks = NULL;
+kax_track_t **tracks = NULL;
 int num_tracks = 0;
 bool use_gui = false;
 
-void add_track(mkv_track_t *s) {
-  tracks = (mkv_track_t **)saferealloc(tracks, sizeof(mkv_track_t *) *
+void add_track(kax_track_t *s) {
+  tracks = (kax_track_t **)saferealloc(tracks, sizeof(kax_track_t *) *
                                    (num_tracks + 1));
   tracks[num_tracks] = s;
   num_tracks++;
 }
 
-mkv_track_t *find_track(int tnum) {
+kax_track_t *find_track(int tnum) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -106,7 +106,7 @@ mkv_track_t *find_track(int tnum) {
   return NULL;
 }
 
-mkv_track_t *find_track_by_uid(int tuid) {
+kax_track_t *find_track_by_uid(int tuid) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -320,7 +320,7 @@ bool process_file(const char *file_name) {
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size, lf_timecode;
   int lf_tnum;
-  char mkv_track_type;
+  char kax_track_type;
   bool ms_compat, bref_found, fref_found;
   char *str;
   string strc;
@@ -526,7 +526,7 @@ bool process_file(const char *file_name) {
             // We actually found a track entry :) We're happy now.
             show_element(l2, 2, "A track");
 
-            mkv_track_type = '?';
+            kax_track_type = '?';
             ms_compat = false;
 
             upper_lvl_el = 0;
@@ -561,22 +561,22 @@ bool process_file(const char *file_name) {
 
                 switch (uint8(ttype)) {
                   case track_audio:
-                    mkv_track_type = 'a';
+                    kax_track_type = 'a';
                     break;
                   case track_video:
-                    mkv_track_type = 'v';
+                    kax_track_type = 'v';
                     break;
                   case track_subtitle:
-                    mkv_track_type = 's';
+                    kax_track_type = 's';
                     break;
                   default:
-                    mkv_track_type = '?';
+                    kax_track_type = '?';
                     break;
                 }
                 show_element(l3, 3, "Track type: %s",
-                             mkv_track_type == 'a' ? "audio" :
-                             mkv_track_type == 'v' ? "video" :
-                             mkv_track_type == 's' ? "subtitles" :
+                             kax_track_type == 'a' ? "audio" :
+                             kax_track_type == 'v' ? "video" :
+                             kax_track_type == 's' ? "subtitles" :
                              "unknown");
 
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
@@ -690,16 +690,16 @@ bool process_file(const char *file_name) {
                 codec_id.ReadData(es->I_O());
                 show_element(l3, 3, "Codec ID: %s", string(codec_id).c_str());
                 if ((!strcmp(string(codec_id).c_str(), MKV_V_MSCOMP) &&
-                     (mkv_track_type == 'v')) ||
+                     (kax_track_type == 'v')) ||
                     (!strcmp(string(codec_id).c_str(), MKV_A_ACM) &&
-                     (mkv_track_type == 'a')))
+                     (kax_track_type == 'a')))
                   ms_compat = true;
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 char pbuffer[100];
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
                 c_priv.ReadData(es->I_O());
-                if (ms_compat && (mkv_track_type == 'v') &&
+                if (ms_compat && (kax_track_type == 'v') &&
                     (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
                   alBITMAPINFOHEADER *bih =
                     (alBITMAPINFOHEADER *)&binary(c_priv);
@@ -707,7 +707,7 @@ bool process_file(const char *file_name) {
                   sprintf(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
                           fcc[0], fcc[1], fcc[2], fcc[3],
                           get_uint32(&bih->bi_compression));
-                } else if (ms_compat && (mkv_track_type == 'a') &&
+                } else if (ms_compat && (kax_track_type == 'a') &&
                            (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
                   alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
                   sprintf(pbuffer, " (format tag: 0x%04x)",

@@ -313,7 +313,7 @@ static int get_type(char *filename) {
 
   if (avi_reader_c::probe_file(mm_io, size))
     type = TYPEAVI;
-  else if (mkv_reader_c::probe_file(mm_io, size))
+  else if (kax_reader_c::probe_file(mm_io, size))
     type = TYPEMATROSKA;
   else if (wav_reader_c::probe_file(mm_io, size))
     type = TYPEWAV;
@@ -900,7 +900,7 @@ static void create_readers() {
     try {
       switch (file->type) {
         case TYPEMATROSKA:
-          file->reader = new mkv_reader_c(file->ti);
+          file->reader = new kax_reader_c(file->ti);
           break;
 #ifdef HAVE_OGGVORBIS
         case TYPEOGM:
