@@ -41,9 +41,12 @@
 # define LLU "%llu"
 #endif // COMP_MINGW || COMP_MSC
 
-#if !defined(COMP_CYGWIN)
+#if defined(HAVE_STDINT_H)
 #include <stdint.h>
-#endif // !COMP_CYGWIN
+#endif // HAVE_STDINT_H
+#if defined(HAVE_INTTYPES_H)
+#include <inttypes.h>
+#endif // HAVE_INTTYPES_H
 
 #if defined(SYS_WINDOWS)
 # define PATHSEP '\\'

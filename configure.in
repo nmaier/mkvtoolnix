@@ -6,10 +6,16 @@ AC_PREREQ(2.50)
 AM_INIT_AUTOMAKE(mkvtoolnix,0.7.7)
 AM_CONFIG_HEADER(config.h)
 
+echo CFLAGS 1: $CFLAGS
+SAVED_CFLAGS="$CFLAGS"
 AC_PROG_CC
+CFLAGS="$SAVED_CFLAGS"
+echo CFLAGS 2: $CFLAGS
 AC_PROG_CC_C_O
 AC_PROG_CPP
+SAVED_CXXFLAGS="$CXXFLAGS"
 AC_PROG_CXX
+CXXFLAGS="$SAVED_CXXFLAGS"
 AC_PROG_MAKE_SET
 dnl Find the right ranlib, even when cross-compiling
 AC_CHECK_TOOL(RANLIB, ranlib, :)
@@ -94,6 +100,12 @@ AC_ARG_WITH(extra-libs,
   [  --with-extra-libs=DIR         Path to other library directories separated by ';'],,
   with_extra_libs_given=no)
   EXTRA_CFLAGS=
+
+  USER_CFLAGS="$CFLAGS"
+  USER_CPPFLAGS="$CPPFLAGS"
+  USER_CXXFLAGS="$CXXFLAGS"
+  USER_LDFLAGS="$LDFLAGS"
+
   if test "$with_extra_includes" != ""; then
     DIRS=`echo $with_extra_includes | cut -d '=' -f 2 | sed 's,;, -I,g'`
     EXTRA_CFLAGS="-I$DIRS"
@@ -237,8 +249,7 @@ dnl
   AC_CHECK_LIB(ogg, ogg_sync_init,
                [ OGG_LIBS="-logg"
                  ogg_found=yes ],
-               [ ogg_found=no ],
-               "$OGG_LIBS")
+               [ ogg_found=no ],)
   if test "$ogg_found" = "no"; then
     AC_MSG_ERROR([Could not find the Ogg library])
   fi
@@ -277,7 +288,7 @@ dnl
                [ FLAC_LIBS="-lFLAC -lm"
                  flac_found=yes ],
                [ flac_found=no ],
-               "$FLAC_LIBS")
+               "-lm")
   if test "$flac_found" = "yes"; then
     AC_CHECK_HEADERS(FLAC/format.h, , flac_found=no)
   else
@@ -588,29 +599,37 @@ dnl
   AC_MSG_CHECKING(for wxWindows)
   if wx-config --cxxflags > /dev/null 2>&1; then
     wxwversion=`wx-config --version`
-    wxwver_ok=`echo $wxwversion | sed 's;\.;\ ;g' | (read -a mver
-    if test ${mver[[0]]} -gt 2 ; then
-      wxwver_ok=1
-    elif test ${mver[[0]]} -lt 2 ; then
+    wxw_ver_req_major=2
+    wxw_ver_req_minor=4
+    wxw_ver_req_micro=0
+    set - `echo $wxwversion | sed 's/\./\ /g'`
+    if test "x$1" = "x" -o $1 -lt ${wxw_ver_req_major} ; then
       wxwver_ok=0
+    elif test $1 -gt ${wxw_ver_req_major} ; then
+      wxwver_ok=1
     else
-      if test ${mver[[1]]} -ge 4 ; then
+      if test "x$2" = "x" -o $2 -lt ${wxw_ver_req_minor} ; then
+        wxwver_ok=0
+      elif test $2 -gt ${wxw_ver_req_minor} ; then
         wxwver_ok=1
       else
-        wxwver_ok=0
+        if test "x$3" = "x" -o $3 -lt ${wxw_ver_req_micro} ; then
+          wxwver_ok=0
+        else
+          wxwver_ok=1
+        fi
       fi
     fi
-    echo $wxwver_ok )`
 
     if test "$wxwver_ok" = "1" ; then
       if test "$MINGW" = "1" ; then
-        WXWINDOWS_CFLAGS=$(wx-config --cxxflags | sed 's;-I;-Ic:/cygwin;g')
-        WXWINDOWS_LDFLAGS=$(wx-config --ldflags | sed 's;-L;-Lc:/cygwin;g')
-        WXWINDOWS_LIBS=$(wx-config --libs | sed -e 's;-L;-Lc:/cygwin;g' -e 's; /usr/local/lib/libwx; c:/cygwin/usr/local/lib/libwx;g')
+        WXWINDOWS_CFLAGS=`wx-config --cxxflags | sed 's;-I;-Ic:/cygwin;g'`
+        WXWINDOWS_LDFLAGS=`wx-config --ldflags | sed 's;-L;-Lc:/cygwin;g'`
+        WXWINDOWS_LIBS=`wx-config --libs | sed -e 's;-L;-Lc:/cygwin;g' -e 's; /usr/local/lib/libwx; c:/cygwin/usr/local/lib/libwx;g'`
       else
-        WXWINDOWS_CFLAGS=$(wx-config --cxxflags)
-        WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
-        WXWINDOWS_LIBS=$(wx-config --libs)
+        WXWINDOWS_CFLAGS=`wx-config --cxxflags`
+        WXWINDOWS_LDFLAGS=`wx-config --ldflags`
+        WXWINDOWS_LIBS=`wx-config --libs`
       fi
       AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
       MMG_SUBDIRS=mmg
@@ -684,7 +703,7 @@ AC_ARG_WITH(avilib,
     have_avilib0_6_10=yes
   fi
   AM_CONDITIONAL(HAVE_AVILIB, test x"$have_avilib0_6_10" != "xyes")
-  AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" == "xyes")
+  AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" = "xyes")
   AM_CONDITIONAL(HAVE_AVICLASSES, test x"$have_aviclasses" = "xyes")
 
   AVILIB_LIBS="-lavi"
@@ -694,9 +713,11 @@ AC_ARG_WITH(avilib,
 AC_SUBST(AVILIB_LIBS)
 AC_SUBST(AVICLASSES_LIBS)
 
-CFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
-CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
-CPPFLAGS="@EXTRA_CFLAGS@"
-LDFLAGS="@EXTRA_LDFLAGS@"
+echo CFLAGS 3: $CFLAGS
+CFLAGS="$USER_CFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
+echo CFLAGS 4: $CFLAGS
+CXXFLAGS="$USER_CXXFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
+CPPFLAGS="$USER_CPPFLAGS @EXTRA_CFLAGS@"
+LDFLAGS="$USER_LDFLAGS @EXTRA_LDFLAGS@"
 
 AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile doc/Makefile)

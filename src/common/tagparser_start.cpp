@@ -825,6 +825,7 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   XML_Error xerror;
   char *emsg;
 
+  io = NULL;
   try {
     io = new mm_io_c(name, MODE_READ);
   } catch(...) {

@@ -23,7 +23,6 @@
 #define __MMG_DIALOG_H
 
 #include <vector>
-#include <stdint.h>
 
 #include "matroska/KaxChapters.h"
 

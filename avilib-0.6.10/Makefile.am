@@ -6,7 +6,7 @@ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/src/common
 
 noinst_LIBRARIES = libavi.a
 
-CFLAGS=-O3 -funroll-loops -ffast-math -DLINUX -Wall @CFLAGS@
+CFLAGS=@CFLAGS@ -O3 -funroll-loops -ffast-math -DLINUX -Wall
 libavi_a_SOURCES = avilib.c avidump.c avimisc.c
 
 EXTRA_DIST = avilib.h README.avilib

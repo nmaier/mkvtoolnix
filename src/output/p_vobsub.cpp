@@ -154,6 +154,7 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
   const unsigned char wanted[] = { 0, 0, 1 };
   unsigned char buf[5];
 
+  pts = 0.0;
   packet_num++;
 
   timecode += initial_displacement;

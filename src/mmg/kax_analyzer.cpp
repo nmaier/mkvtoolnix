@@ -315,8 +315,7 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
   if (e == NULL)
     return false;
 
-//   dumpme(data);
-
+  found_where = 0;
   for (i = 0; i < data.size(); i++)
     data[i]->delete_this = false;
 

@@ -576,6 +576,7 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
   bool found;
   kax_attachment_t matt;
 
+  data = NULL;
   io->save_pos(pos);
   l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                            true);
@@ -697,9 +698,8 @@ int kax_reader_c::read_headers() {
   kax_track_t *track;
   bool exit_loop;
 
+  exit_loop = false;
   try {
-    // Create the interface between MPlayer's IO system and
-    // libmatroska's IO system.
     in = new mm_io_c(ti->fname, MODE_READ);
     es = new EbmlStream(*in);
 
@@ -734,7 +734,7 @@ int kax_reader_c::read_headers() {
     segment = l0;
 
     upper_lvl_el = 0;
-    exit_loop = 0;
+    exit_loop = false;
     tc_scale = TIMECODE_SCALE;
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
@@ -1326,6 +1326,8 @@ void kax_reader_c::create_packetizers() {
             // 0123456789012345
             int id, profile, sbridx;
 
+            id = 0;
+            profile = 0;
             if (t->codec_id[10] == '2')
               id = AAC_ID_MPEG2;
             else if (t->codec_id[10] == '4')

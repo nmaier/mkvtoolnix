@@ -597,6 +597,7 @@ int mm_text_io_c::read_next_char(char *buffer) {
   if (byte_order == BO_NONE)
     return read(buffer, 1);
 
+  size = 0;
   if (byte_order == BO_UTF8) {
     if (read(stream, 1) != 1)
       return 0;

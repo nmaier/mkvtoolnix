@@ -867,6 +867,7 @@ bool extract_tracks(const char *file_name) {
   int64_t block_duration;
   mm_io_c *in;
 
+  block = NULL;
   // open input file
   try {
     in = new mm_io_c(file_name, MODE_READ);

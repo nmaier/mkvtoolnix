@@ -47,6 +47,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   wxString line, tmp;
   wxInputStream *out;
 
+  c = 0;
   new wxStaticBox(this, -1, _("Status and progress"), wxPoint(10, 5),
                   wxSize(480, 70));
   st_label = new wxStaticText(this, -1, _(""), wxPoint(15, 25),

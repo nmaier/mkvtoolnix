@@ -53,6 +53,10 @@ int main(int argc, char *argv[]) {
   if (argc < 4)
     usage(0);
 
+  mode = 0;
+  in = NULL;
+  out = NULL;
+  intext = NULL;
   if (!strcmp(argv[1], "encode"))
     mode = 'e';
   else if (!strcmp(argv[1], "decode"))

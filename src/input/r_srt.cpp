@@ -104,6 +104,8 @@ int srt_reader_c::read(generic_packetizer_c *) {
   int state, i, line_number;
   bool non_number_found;
 
+  start = 0;
+  end = 0;
   state = STATE_INITIAL;
   line_number = 0;
   subtitles = "";

@@ -364,6 +364,7 @@ void generic_packetizer_c::set_video_aspect_ratio(float ar) {
 void generic_packetizer_c::set_as_default_track(int type) {
   int idx;
 
+  idx = 0;
   if (type == track_audio)
     idx = 0;
   else if (type == track_video)
@@ -381,6 +382,7 @@ void generic_packetizer_c::set_as_default_track(int type) {
 void generic_packetizer_c::force_default_track(int type) {
   int idx;
 
+  idx = 0;
   if (type == track_audio)
     idx = 0;
   else if (type == track_video)
@@ -709,6 +711,7 @@ void generic_packetizer_c::parse_ext_timecode_file(const char *name) {
   bool done;
   double default_fps;
 
+  in = NULL;
   try {
     in = new mm_text_io_c(name);
   } catch(...) {
@@ -890,6 +893,7 @@ bool generic_reader_c::demuxing_requested(char type, int64_t id) {
   vector<int64_t> *tracks;
   int i;
 
+  tracks = NULL;
   if (type == 'v') {
     if (ti->no_video)
       return false;

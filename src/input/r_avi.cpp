@@ -469,6 +469,7 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
   int size;
 #endif
 
+  key = 0;
   if ((vpacketizer != NULL) && !video_done && (vpacketizer == ptzr)) {
     debug_enter("avi_reader_c::read (video)");
 

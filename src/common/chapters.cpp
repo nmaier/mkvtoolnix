@@ -142,6 +142,8 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   atom = NULL;
   edition = NULL;
   num = 0;
+  start = 0;
+  cc_utf8 = 0;
 
   if (in->get_byte_order() == BO_NONE) {
     do_convert = true;
@@ -321,8 +323,10 @@ KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
     do_convert = true;
     cc_utf8 = utf8_init(charset);
 
-  } else
+  } else {
     do_convert = false;
+    cc_utf8 = 0;
+  }
 
   if (language == NULL)
     language = "eng";
@@ -481,6 +485,7 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
                             bool exception_on_error, bool *is_simple_format) {
   mm_text_io_c *in;
 
+  in = NULL;
   try {
     in = new mm_text_io_c(file_name);
   } catch (...) {

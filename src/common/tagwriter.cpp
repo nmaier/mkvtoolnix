@@ -19,8 +19,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-
-#include <typeinfo>
+#include <time.h>
 
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>

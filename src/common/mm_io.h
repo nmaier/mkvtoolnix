@@ -23,8 +23,6 @@
 
 #include "os.h"
 
-#include <stdint.h>
-
 #include <string>
 #include <stack>
 

@@ -64,6 +64,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
   unsigned char *buf, *src, *packet_buffer;
   double pims;
 
+  buf = NULL;
   packet_buffer = byte_buffer.get_buffer();
   size = byte_buffer.get_size();
   if (buf == NULL)
@@ -176,6 +177,7 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
 
   debug_enter("aac_packetizer_c::process");
 
+  my_timecode = 0;
   if (headerless) {
     if (timecode != -1)
       my_timecode = timecode;

@@ -758,6 +758,7 @@ void ogm_reader_c::process_page(ogg_page *og) {
   int hdrlen, eos, i;
   long lenbytes;
 
+  lenbytes = 0;
   dmx = find_demuxer(ogg_page_serialno(og));
   if (dmx == NULL)
     return;

@@ -24,7 +24,6 @@
 #include "os.h"
 
 #include <stdarg.h>
-#include <stdint.h>
 
 #include <vector>
 

@@ -116,6 +116,8 @@ static void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
   binary *buffer;
   mm_io_c *io;
 
+  result = 0;
+  buffer = NULL;
   strip(*pdata->bin, true);
   if (pdata->bin->length() == 0)
     tperror(pdata, "Found neither Base64 encoded data nor '@file' to read "

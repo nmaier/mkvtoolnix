@@ -557,6 +557,8 @@ bool process_file(const char *file_name) {
   string strc;
   mm_io_c *in;
 
+  lf_timecode = 0;
+  lf_tnum = 0;
   // open input file
   try {
     in = new mm_io_c(file_name, MODE_READ);

@@ -364,6 +364,9 @@ static int get_type(char *filename) {
   uint64_t size;
   int type;
 
+  mm_io = NULL;
+  mm_text_io = NULL;
+  size = 0;
   try {
     mm_io = new mm_io_c(filename, MODE_READ);
     mm_io->setFilePointer(0, seek_end);
@@ -1806,6 +1809,7 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
   string buffer, opt1, opt2;
   int space;
 
+  mm_io = NULL;
   try {
     mm_io = new mm_text_io_c(filename);
   } catch (exception &ex) {
@@ -1956,6 +1960,7 @@ string create_output_name() {
   bool ok;
   char buffer[20];
 
+  p2 = 0;
   // First possibility: %d
   p = s.find("%d");
   if (p >= 0) {

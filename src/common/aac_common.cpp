@@ -39,6 +39,9 @@ int parse_aac_adif_header(unsigned char *buf, int size,
   int channels;
   bit_cursor_c bc(buf, size);
 
+  eob = false;
+  comment_field_bytes = 0;
+  channels = 0;
   bc.get_bits(32, bits);
   if (bits != FOURCC('A', 'D', 'I', 'F'))
     return 0;

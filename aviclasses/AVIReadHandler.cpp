@@ -2377,7 +2377,7 @@ void AVIReadHandler::FixCacheProblems(AVIReadStream *arse) {
   // disable its cache.
 
   AVIStreamNode *stream_leader = NULL;
-  int stream_leader_no;
+  int stream_leader_no=0;
   int streamno=0;
 
   pasn = listStreams.AtHead();

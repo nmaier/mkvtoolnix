@@ -305,6 +305,7 @@ void cluster_helper_c::set_duration_and_timeslices(render_groups_t *rg) {
   if (rg->durations.size() == 0)
     return;
 
+  slice = NULL;
   group = rg->groups.back();
   block_duration = 0;
   for (i = 0; i < rg->durations.size(); i++)
@@ -367,6 +368,7 @@ int cluster_helper_c::render() {
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
 
+  max_timecode = 0;
   walk_clusters();
   clstr = clusters[num_clusters - 1];
   cluster = clstr->cluster;

@@ -785,6 +785,7 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   int64_t timecode, duration;
   unsigned char *buffer;
 
+  frame = 0;
   chunks_left = false;
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
@@ -1059,6 +1060,7 @@ void qtmp4_reader_c::create_packetizers() {
         int profile, srate_idx, channels, osrate_idx;
         bool sbraac;
 
+        osrate_idx = 0;
         if ((dmx->a_esds.decoder_config_len == 2) ||
             (dmx->a_esds.decoder_config_len == 5)) {
           profile = (dmx->a_esds.decoder_config[0] >> 3) - 1;

@@ -34,7 +34,6 @@
 
 #if defined(COMP_MSC)
 #include <unistd.h>
-#include <inttypes.h>
 #endif
 
 #include <limits.h>

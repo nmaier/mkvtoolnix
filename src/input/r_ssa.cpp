@@ -71,6 +71,7 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
   int i;
 
   is_ass = false;
+  section = 0;
 
   try {
     mm_io = new mm_text_io_c(ti->fname);

@@ -86,6 +86,7 @@ static void handle_attachments(mm_io_c *in, EbmlStream *es, EbmlElement *l0,
   bool found;
   mm_io_c *out;
 
+  out = NULL;
   in->save_pos(pos);
   l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                            true);
