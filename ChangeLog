@@ -1,3 +1,9 @@
+2004-01-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The I/O classes were not initialized
+	correctly on Windows resulting in spontaneous strange error
+	messages, especially when muxing VobSubs.
+
 2004-01-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: For some special atom sizes in Quicktime and

@@ -160,8 +160,8 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
 }
 
 mm_io_c::mm_io_c() {
+  file_name = NULL;
   file = NULL;
-  safefree(file_name);
 }
 
 mm_io_c::~mm_io_c() {
