@@ -55,10 +55,10 @@ tab_attachments::tab_attachments(wxWindow *parent):
   uint32_t i;
   wxStaticBox *sb_top, *sb_bottom;
   wxStaticBoxSizer *siz_box_top, *siz_box_bottom;
-  wxGridSizer *siz_ddlists;
+  wxFlexGridSizer *siz_ddlists;
   wxBoxSizer *siz_buttons, *siz_all;
 
-  sb_top = new wxStaticBox(this, wxID_STATIC, wxT("Attachments:"));
+  sb_top = new wxStaticBox(this, wxID_STATIC, wxT("Attachments"));
   siz_box_top = new wxStaticBoxSizer(sb_top,  wxHORIZONTAL);
 
   lb_attachments = new wxListBox(this, ID_LB_ATTACHMENTS);
@@ -75,22 +75,25 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   siz_box_top->Add(siz_buttons);
 
-  sb_bottom = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options:"));
+  sb_bottom = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options"));
   siz_box_bottom = new wxStaticBoxSizer(sb_bottom, wxVERTICAL);
 
   siz_box_bottom->Add(new wxStaticText(this, wxID_STATIC, wxT("Description:")),
-                      0, wxALIGN_LEFT | wxALL, 5);
+                      0, wxALIGN_LEFT | wxLEFT, 5);
   tc_description =
     new wxTextCtrl(this, ID_TC_DESCRIPTION, wxT(""), wxDefaultPosition,
                    wxDefaultSize, wxTE_MULTILINE | wxTE_WORDWRAP);
   siz_box_bottom->Add(tc_description, 1, wxGROW | wxALL, 5);
 
-  siz_ddlists = new wxGridSizer(2, 2);
+  siz_ddlists = new wxFlexGridSizer(2, 3, 0, 0);
+  siz_ddlists->AddGrowableCol(0);
+  siz_ddlists->AddGrowableCol(2);
   siz_ddlists->Add(new wxStaticText(this, wxID_STATIC, wxT("MIME type:")),
-                   0, wxALIGN_LEFT | wxLEFT | wxRIGHT, 5);
+                   1, wxALIGN_LEFT | wxLEFT | wxRIGHT, 5);
+  siz_ddlists->Add(5, 5, 0, 0, 0);
   siz_ddlists->Add(new wxStaticText(this, wxID_STATIC,
                                     wxT("Attachment style:")),
-                   0, wxALIGN_LEFT | wxRIGHT, 5);
+                   1, wxALIGN_LEFT | wxRIGHT, 5);
 
   cob_mimetype =
     new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxDefaultPosition,
@@ -102,6 +105,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   for (i = 0; mime_types[i].name != NULL; i++)
     cob_mimetype->Append(wxU(mime_types[i].name));
   siz_ddlists->Add(cob_mimetype, 1, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_ddlists->Add(0, 0, 0, 0, 0);
 
   cob_style =
     new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxT(""), wxDefaultPosition,
