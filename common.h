@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.12 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: common.h,v 1.13 2003/04/23 14:38:53 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -74,11 +74,13 @@ void _die(const char *s, const char *file, int line);
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);
 
-char *map_video_codec_fourcc(char *fourcc, int *set_codec_private);
-char *map_audio_codec_id(int id, int bps, int *set_codec_private);
-
 u_int16_t get_uint16(const void *buf);
 u_int32_t get_uint32(const void *buf);
+
+void utf8_init();
+void utf8_done();
+char *to_utf8(char *local);
+char *from_utf8(char *utf8);
 
 extern int verbose;
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.43 2003/04/23 13:10:43 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.44 2003/04/23 14:38:53 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -969,6 +969,8 @@ int main(int argc, char **argv) {
   }
   
   delete out;
+
+  utf8_done();
 
   return 0;
 }
