@@ -175,6 +175,7 @@ usage() {
 // {{{ FUNCTION parse_args
 
 static bool chapter_format_simple = false;
+static bool parse_fully = false;
 
 void
 parse_args(int argc,
@@ -235,6 +236,10 @@ parse_args(int argc,
   for (i = 3; i < argc; i++)
     if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose++;
+
+    else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--parse-fully"))
+      parse_fully = true;
+
     else if (!strcmp(argv[i], "-c")) {
       if (mode != MODE_TRACKS)
         mxerror(_("'-c' is only allowed when extracting tracks.\n"));
@@ -269,7 +274,7 @@ parse_args(int argc,
 
       chapter_format_simple = true;
 
-    } else {
+    } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS)) {
       copy = safestrdup(argv[i]);
       colon = strchr(copy, ':');
       if (colon == NULL)
@@ -303,7 +308,11 @@ parse_args(int argc,
       sub_charset = "UTF-8";
       embed_in_ogg = true;
       extract_cuesheet = false;
-    }
+
+    } else
+      mxerror(_("Unrecognized command line option '%s'. Maybe you put a "
+                "mode specific option before the input file name?\n"),
+              argv[i]);
 
   if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS) ||
       (mode == MODE_CUESHEET))
@@ -401,16 +410,16 @@ main(int argc,
       mxinfo(_("progress: 100%%\n"));
 
   } else if (mode == MODE_TAGS)
-    extract_tags(input_file);
+    extract_tags(input_file, parse_fully);
 
   else if (mode == MODE_ATTACHMENTS)
-    extract_attachments(input_file);
+    extract_attachments(input_file, parse_fully);
 
   else if (mode == MODE_CHAPTERS)
-    extract_chapters(input_file, chapter_format_simple);
+    extract_chapters(input_file, chapter_format_simple, parse_fully);
 
   else if (mode == MODE_CUESHEET)
-    extract_cuesheet(input_file);
+    extract_cuesheet(input_file, parse_fully);
 
   else
     die("mkvextract: Unknown mode!?");

@@ -61,129 +61,53 @@ extern "C" {
 
 #include "chapters.h"
 #include "common.h"
+#include "commonebml.h"
 #include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"
+#include "quickparser.h"
 #include "tagwriter.h"
 
 using namespace libmatroska;
 using namespace std;
 
 void
-extract_tags(const char *file_name) {
-  int upper_lvl_el;
-  // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
-  EbmlStream *es;
+extract_tags(const char *file_name,
+             bool parse_fully) {
+  EbmlMaster *m;
   mm_io_c *in;
   mm_stdio_c out;
-  bool tags_extracted = false;
+  kax_quickparser_c *qp;
+  KaxTags *tags;
 
   // open input file
   try {
     in = new mm_io_c(file_name, MODE_READ);
+    qp = new kax_quickparser_c(*in, parse_fully);
   } catch (std::exception &ex) {
     show_error(_("The file '%s' could not be opened for reading (%s)."),
                file_name, strerror(errno));
     return;
   }
 
-  try {
-    es = new EbmlStream(*in);
+  m = qp->read_all(KaxTags::ClassInfos);
+  if (m != NULL) {
+    tags = dynamic_cast<KaxTags *>(m);
+    assert(tags != NULL);
 
-    // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
-    if (l0 == NULL) {
-      show_error(_("Error: No EBML head found."));
-      delete es;
+    if (verbose > 0)
+      debug_dump_elements(tags, 0);
 
-      return;
-    }
-      
-    // Don't verify its data for now.
-    l0->SkipData(*es, l0->Generic().Context);
-    delete l0;
+    out.write_bom("UTF-8");
+    out.printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+               "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
+               "<Tags>\n");
+    write_tags_xml(*tags, &out);
+    out.printf("</Tags>\n");
 
-    while (1) {
-      // Next element must be a segment
-      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
-      if (l0 == NULL) {
-        show_error(_("No segment/level 0 element found."));
-        return;
-      }
-      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, _("Segment"));
-        break;
-      }
-
-      show_element(l0, 0, _("Next level 0 element is not a segment but %s"),
-                   l0->Generic().DebugName);
-
-      l0->SkipData(*es, l0->Generic().Context);
-      delete l0;
-    }
-
-    upper_lvl_el = 0;
-    // We've got our segment, so let's find the tags
-    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                             true, 1);
-    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-
-      if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
-        KaxTags &tags = *static_cast<KaxTags *>(l1);
-        tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
-
-        if (!tags_extracted) {
-          mxinfo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-                 "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-                 "<Tags>\n");
-          tags_extracted = true;
-        }
-
-        write_tags_xml(tags, &out);
-
-      } else
-        l1->SkipData(*es, l1->Generic().Context);
-
-      if (!in_parent(l0)) {
-        delete l1;
-        break;
-      }
-
-      if (upper_lvl_el > 0) {
-        upper_lvl_el--;
-        if (upper_lvl_el > 0)
-          break;
-        delete l1;
-        l1 = l2;
-        continue;
-
-      } else if (upper_lvl_el < 0) {
-        upper_lvl_el++;
-        if (upper_lvl_el < 0)
-          break;
-
-      }
-
-      l1->SkipData(*es, l1->Generic().Context);
-      delete l1;
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                               0xFFFFFFFFL, true);
-
-    } // while (l1 != NULL)
-
-    delete l0;
-    delete es;
-    delete in;
-
-  } catch (exception &ex) {
-    show_error(_("Caught exception: %s"), ex.what());
-    delete in;
-
-    return;
+    delete tags;
   }
 
-  if (tags_extracted)
-    mxprint(stdout, "</Tags>\n");
+  delete in;
+  delete qp;
 }
-

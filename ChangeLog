@@ -1,3 +1,9 @@
+2004-09-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: Sped up the extraction of attachments, chapters,
+	cuesheets and tags by using the seek head information and not
+	parsing the full file each time.
+
 2004-09-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The Matroska reader was not handling very big

@@ -106,10 +106,11 @@ kax_track_t *find_track(int tid);
 
 bool extract_tracks(const char *file_name);
 extern int conv_utf8;
-void extract_tags(const char *file_name);
-void extract_chapters(const char *file_name, bool chapter_format_simple);
-void extract_attachments(const char *file_name);
-void extract_cuesheet(const char *file_name);
+void extract_tags(const char *file_name, bool parse_fully);
+void extract_chapters(const char *file_name, bool chapter_format_simple,
+                      bool parse_fully);
+void extract_attachments(const char *file_name, bool parse_fully);
+void extract_cuesheet(const char *file_name, bool parse_fully);
 void write_cuesheet(const char *file_name, KaxChapters &chapters,
                     KaxTags &tags, int64_t tuid, mm_io_c &out);
 
