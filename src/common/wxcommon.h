@@ -16,13 +16,7 @@
 #define __WXCOMMON_H
 
 #if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-//# error Sorry, mkvtoolnix cannot be compiled if wxWindows has been built with Unicode support.
-# if defined(SYS_WINDOWS)
-#  error Sorry, mkvtoolnix cannot be compiled on Windows if wxWindows has been built with Unicode support.
-#  define wxU(s)                /* not implemented yet */
-# else
-#  define wxU(s) wxString(s, wxConvUTF8)
-# endif
+# define wxU(s) wxString(s, wxConvUTF8)
 # define wxCS(s) ((const wchar_t *)(s).c_str())
 # define wxMB(s) ((const char *)(s).mb_str(wxConvUTF8))
 # define wxMBL(s) ((const char *)(s).mb_str(wxConvLocal))

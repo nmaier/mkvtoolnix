@@ -512,18 +512,14 @@ format_tooltip(const wxString &s) {
 wxString
 create_track_order(bool all) {
   int i;
-  wxString s, wformat;
-  string format;
+  wxString s;
 
-  fix_format("%lld", format);
-  wformat = wxU(format.c_str());
   for (i = 0; i < tracks.size(); i++) {
     if (!all && (!tracks[i]->enabled || tracks[i]->appending))
       continue;
     if (s.length() > 0)
       s += wxT(",");
-    s += wxString::Format(wxT("%d:") + wformat, tracks[i]->source,
-                          tracks[i]->id);
+    s += wxString::Format(wxT("%d:" LLD), tracks[i]->source, tracks[i]->id);
   }
 
   return s;
@@ -532,17 +528,15 @@ create_track_order(bool all) {
 wxString
 create_append_mapping() {
   int i;
-  wxString s, wformat;
-  string format;
+  wxString s, format;
 
-  fix_format("%d:%lld:%d:%lld", format);
-  wformat = wxU(format.c_str());
+  format = wxT("%d:" LLD ":%d:" LLD);
   for (i = 1; i < tracks.size(); i++) {
     if (!tracks[i]->enabled || !tracks[i]->appending)
       continue;
     if (s.length() > 0)
       s += wxT(",");
-    s += wxString::Format(wformat, tracks[i]->source, tracks[i]->id,
+    s += wxString::Format(format, tracks[i]->source, tracks[i]->id,
                           tracks[i - 1]->source, tracks[i - 1]->id);
   }
 
@@ -908,7 +902,7 @@ mmg_dialog::save(wxString file_name,
   cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
   cfg->SetPath(wxT("/mkvmergeGUI"));
   cfg->Write(wxT("file_version"), 1);
-  cfg->Write(wxT("gui_version"), wxU(VERSION));
+  cfg->Write(wxT("gui_version"), wxT(VERSION));
   cfg->Write(wxT("output_file_name"), tc_output->GetValue());
   cfg->Write(wxT("cli_options"), cli_options);
 
@@ -1158,15 +1152,12 @@ mmg_dialog::update_command_line() {
     sids = wxT("");
     dids = wxT("");
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
-      string format;
-
       mmg_track_ptr &t = f->tracks[tidx];
       if (!t->enabled)
         continue;
 
       tracks_selected_here = true;
-      fix_format("%lld", format);
-      sid.Printf(wxU(format.c_str()), t->id);
+      sid.Printf(wxT(LLD), t->id);
 
       if (t->type == wxT('a')) {
         no_audio = false;
