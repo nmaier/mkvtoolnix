@@ -41,12 +41,109 @@ typedef struct {
   string *bin;
 
   vector<EbmlElement *> *parents;
+  vector<int> *parent_idxs;
 
   KaxChapters *chapters;
 
   jmp_buf parse_error_jmp;
   string *parse_error_msg;
 } parser_data_t;
+
+typedef void (*chapter_element_callback_t)(parser_data_t *pdata);
+
+namespace libmatroska {
+  extern EbmlId KaxChapters_TheId;
+  extern EbmlId KaxEditionEntry_TheId;
+  extern EbmlId KaxEditionUID_TheId;
+  extern EbmlId KaxEditionFlagHidden_TheId;
+  extern EbmlId KaxEditionFlagDefault_TheId;
+  extern EbmlId KaxEditionManaged_TheId;
+  extern EbmlId KaxChapterAtom_TheId;
+  extern EbmlId KaxChapterUID_TheId;
+  extern EbmlId KaxChapterTimeStart_TheId;
+  extern EbmlId KaxChapterTimeEnd_TheId;
+  extern EbmlId KaxChapterFlagHidden_TheId;
+  extern EbmlId KaxChapterFlagEnabled_TheId;
+  extern EbmlId KaxChapterPhysicalEquiv_TheId;
+  extern EbmlId KaxChapterTrack_TheId;
+  extern EbmlId KaxChapterTrackNumber_TheId;
+  extern EbmlId KaxChapterDisplay_TheId;
+  extern EbmlId KaxChapterString_TheId;
+  extern EbmlId KaxChapterLanguage_TheId;
+  extern EbmlId KaxChapterCountry_TheId;
+  extern EbmlId KaxChapterProcess_TheId;
+  extern EbmlId KaxChapterProcessTime_TheId;
+}
+
+enum ebml_type_t {ebmlt_master, ebmlt_int, ebmlt_uint, ebmlt_bool,
+                  ebmlt_string, ebmlt_ustring, ebmlt_time};
+
+#define NO_MIN_VALUE -9223372036854775807ll-1
+#define NO_MAX_VALUE 9223372036854775807ll
+
+typedef struct {
+  const char *name;
+  ebml_type_t type;
+  int level;
+  int64_t min_value;
+  int64_t max_value;
+  const EbmlId id;
+  chapter_element_callback_t start_hook;
+  chapter_element_callback_t end_hook;
+} parser_element_t;
+
+static void end_edition_entry(parser_data_t *pdata);
+static void end_edition_uid(parser_data_t *pdata);
+static void end_chapter_uid(parser_data_t *pdata);
+static void end_chapter_atom(parser_data_t *pdata);
+static void end_chapter_track(parser_data_t *pdata);
+static void end_chapter_display(parser_data_t *pdata);
+static void end_chapter_language(parser_data_t *pdata);
+static void end_chapter_country(parser_data_t *pdata);
+
+const parser_element_t chapter_elements[] = {
+  {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL},
+
+  {"EditionEntry", ebmlt_master, 1, 0, 0, KaxEditionEntry_TheId, NULL,
+   end_edition_entry},
+  {"EditionUID", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionUID_TheId, NULL,
+   end_edition_uid},
+  {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
+   NULL, NULL},
+  {"EditionManaged", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionManaged_TheId,
+   NULL, NULL},
+  {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
+   NULL, NULL},
+
+  {"ChapterAtom", ebmlt_master, 2, 0, 0, KaxChapterAtom_TheId, NULL,
+   end_chapter_atom},
+  {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxChapterUID_TheId, NULL,
+   end_chapter_uid},
+  {"ChapterTimeStart", ebmlt_time, 3, 0, 0, KaxChapterTimeStart_TheId, NULL,
+   NULL},
+  {"ChapterTimeEnd", ebmlt_time, 3, 0, 0, KaxChapterTimeEnd_TheId, NULL,
+   NULL},
+  {"ChapterFlagHidden", ebmlt_bool, 3, 0, 0, KaxChapterFlagHidden_TheId,
+   NULL, NULL},
+  {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, KaxChapterFlagEnabled_TheId,
+   NULL, NULL},
+
+  {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
+   NULL, end_chapter_track},
+  {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE,
+   KaxChapterTrackNumber_TheId, NULL, NULL},
+
+  {"ChapterDisplay", ebmlt_master, 3, 0, 0, KaxChapterDisplay_TheId,
+   NULL, end_chapter_display},
+  {"ChapterString", ebmlt_ustring, 4, 0, 0, KaxChapterString_TheId,
+   NULL, NULL},
+  {"ChapterLanguage", ebmlt_string, 4, 0, 0, KaxChapterLanguage_TheId,
+   NULL, end_chapter_language},
+  {"ChapterCountry", ebmlt_string, 4, 0, 0, KaxChapterCountry_TheId,
+   NULL, end_chapter_country},
+
+  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
+};
 
 // {{{ XML chapters
 
@@ -90,7 +187,6 @@ cperror(parser_data_t *pdata,
   longjmp(pdata->parse_error_jmp, 1);
 }
 
-#define el_get_bool(pdata, el) el_get_uint(pdata, el, 0, true)
 static void
 el_get_uint(parser_data_t *pdata,
             EbmlElement *el,
@@ -178,244 +274,10 @@ add_data(void *user_data,
 }
 
 static void
-start_next_level(parser_data_t *pdata,
-                 const char *name) {
-  EbmlMaster *m;
-
-  if (!strcmp(name, "ChapterAtom")) {
-    KaxChapterAtom *catom;
-
-    if (strcmp(parent_name, "EditionEntry") &&
-        strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    catom = &AddEmptyChild<KaxChapterAtom>(*m);
-    pdata->parents->push_back(catom);
-
-  } else if (!strcmp(name, "EditionUID")) {
-    KaxEditionUID *euid;
-
-    if (strcmp(parent_name, "EditionEntry"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxEditionUID::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    euid = new KaxEditionUID;
-    m->PushElement(*euid);
-    pdata->parents->push_back(euid);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "EditionFlagHidden")) {
-    KaxEditionFlagHidden *ehidden;
-
-    if (strcmp(parent_name, "EditionEntry"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxEditionFlagHidden::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    ehidden = new KaxEditionFlagHidden;
-    m->PushElement(*ehidden);
-    pdata->parents->push_back(ehidden);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "EditionManaged")) {
-    KaxEditionManaged *emanaged;
-
-    if (strcmp(parent_name, "EditionEntry"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxEditionManaged::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    emanaged = new KaxEditionManaged;
-    m->PushElement(*emanaged);
-    pdata->parents->push_back(emanaged);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "EditionFlagDefault")) {
-    KaxEditionFlagDefault *edefault;
-
-    if (strcmp(parent_name, "EditionEntry"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxEditionFlagDefault::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    edefault = new KaxEditionFlagDefault;
-    m->PushElement(*edefault);
-    pdata->parents->push_back(edefault);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterUID")) {
-    KaxChapterUID *cuid;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    cuid = new KaxChapterUID;
-    m->PushElement(*cuid);
-    pdata->parents->push_back(cuid);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterTimeStart")) {
-    KaxChapterTimeStart *cts;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    cts = new KaxChapterTimeStart;
-    m->PushElement(*cts);
-    pdata->parents->push_back(cts);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterTimeEnd")) {
-    KaxChapterTimeEnd *cte;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    cte = new KaxChapterTimeEnd;
-    m->PushElement(*cte);
-    pdata->parents->push_back(cte);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterFlagHidden")) {
-    KaxChapterFlagHidden *cfh;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterFlagHidden::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    cfh = new KaxChapterFlagHidden;
-    m->PushElement(*cfh);
-    pdata->parents->push_back(cfh);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterFlagEnabled")) {
-    KaxChapterFlagEnabled *cfe;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterFlagEnabled::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    cfe = new KaxChapterFlagEnabled;
-    m->PushElement(*cfe);
-    pdata->parents->push_back(cfe);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterTrack")) {
-    KaxChapterTrack *ct;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterTrack::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    ct = &GetEmptyChild<KaxChapterTrack>(*m);
-    pdata->parents->push_back(ct);
-
-  } else if (!strcmp(name, "ChapterDisplay")) {
-    KaxChapterDisplay *cd;
-
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    cd = &AddEmptyChild<KaxChapterDisplay>(*m);
-    pdata->parents->push_back(cd);
-
-  } else if (!strcmp(name, "ChapterTrackNumber")) {
-    KaxChapterTrackNumber *ctn;
-
-    if (strcmp(parent_name, "ChapterTrack"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    ctn = new KaxChapterTrackNumber;
-    m->PushElement(*ctn);
-    pdata->parents->push_back(ctn);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterString")) {
-    KaxChapterString *cs;
-
-    if (strcmp(parent_name, "ChapterDisplay"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterString::ClassInfos, false) != NULL)
-      cperror_oneinstance();
-
-    cs = new KaxChapterString;
-    m->PushElement(*cs);
-    pdata->parents->push_back(cs);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterLanguage")) {
-    KaxChapterLanguage *cl;
-
-    if (strcmp(parent_name, "ChapterDisplay"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    cl = new KaxChapterLanguage;
-    m->PushElement(*cl);
-    pdata->parents->push_back(cl);
-    pdata->data_allowed = true;
-
-  } else if (!strcmp(name, "ChapterCountry")) {
-    KaxChapterCountry *cc;
-
-    if (strcmp(parent_name, "ChapterDisplay"))
-      cperror_nochild();
-
-    m = static_cast<EbmlMaster *>(parent_elt);
-    cc = new KaxChapterCountry;
-    m->PushElement(*cc);
-    pdata->parents->push_back(cc);
-    pdata->data_allowed = true;
-
-  } else
-    cperror_nochild();
-}
-
-static void
 start_element(void *user_data,
               const char *name,
               const char **atts) {
   parser_data_t *pdata;
-  KaxChapters *chapters;
-  KaxEditionEntry *eentry;
 
   pdata = (parser_data_t *)user_data;
 
@@ -428,7 +290,7 @@ start_element(void *user_data,
   pdata->data_allowed = false;
 
   if (pdata->bin != NULL)
-    assert("start_element: pdata->bin != NULL");
+    die("start_element: pdata->bin != NULL");
 
   if (pdata->depth == 0) {
     if (pdata->done_reading)
@@ -438,120 +300,189 @@ start_element(void *user_data,
 
     pdata->chapters = new KaxChapters;
     pdata->parents->push_back(pdata->chapters);
+    pdata->parent_idxs->push_back(0);
 
-  } else if (pdata->depth == 1) {
-    if (strcmp(name, "EditionEntry"))
-      cperror_nochild();
+  } else {
+    EbmlElement *e;
+    EbmlMaster *m;
+    int elt_idx, parent_idx, i;
+    bool found;
 
-    chapters = static_cast<KaxChapters *>(parent_elt);
-    eentry = new KaxEditionEntry;
-    chapters->PushElement(*eentry);
-    pdata->parents->push_back(eentry);
+    parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
+    elt_idx = parent_idx;
+    found = false;
+    while (chapter_elements[elt_idx].name != NULL) {
+      if (!strcmp(chapter_elements[elt_idx].name, name)) {
+        found = true;
+        break;
+      }
+      elt_idx++;
+    }
 
-  } else
-    start_next_level(pdata, name);
+    if (!found)
+      cperror(pdata, "<%s> is not a valid child element of <%s>.", name,
+              chapter_elements[parent_idx].name);
+
+    const EbmlSemanticContext &context =
+      find_ebml_callbacks(KaxChapters::ClassInfos,
+                          chapter_elements[parent_idx].id).Context;
+    found = false;
+    for (i = 0; i < context.Size; i++)
+      if (chapter_elements[elt_idx].id ==
+          context.MyTable[i].GetCallbacks.GlobalId) {
+        found = true;
+        break;
+      }
+
+    if (!found)
+      cperror(pdata, "<%s> is not a valid child element of <%s>.", name,
+              chapter_elements[parent_idx].name);
+
+    const EbmlSemantic &semantic =
+      find_ebml_semantic(KaxChapters::ClassInfos,
+                         chapter_elements[elt_idx].id);
+    if (semantic.Unique) {
+      m = dynamic_cast<EbmlMaster *>(parent_elt);
+      assert(m != NULL);
+      for (i = 0; i < m->ListSize(); i++)
+        if ((*m)[i]->Generic().GlobalId == chapter_elements[elt_idx].id)
+          cperror(pdata, "Only one instance of <%s> is allowed beneath <%s>.",
+                  name, chapter_elements[parent_idx].name);
+    }
+
+    e = create_ebml_element(KaxChapters::ClassInfos,
+                            chapter_elements[elt_idx].id);
+    assert(e != NULL);
+    m = dynamic_cast<EbmlMaster *>(parent_elt);
+    assert(m != NULL);
+    m->PushElement(*e);
+
+    if (chapter_elements[elt_idx].start_hook != NULL)
+      chapter_elements[elt_idx].start_hook(pdata);
+
+    pdata->parents->push_back(e);
+    pdata->parent_idxs->push_back(elt_idx);
+
+    pdata->data_allowed = chapter_elements[elt_idx].type != ebmlt_master;
+  }
 
   (pdata->depth)++;
 }
 
 static void
-end_this_level(parser_data_t *pdata,
-               const char *name) {
+end_edition_entry(parser_data_t *pdata) {
+  EbmlMaster *m;
+  KaxEditionUID *euid;
+  int i, num;
+
+  m = static_cast<EbmlMaster *>(parent_elt);
+  num = 0;
+  euid = NULL;
+  for (i = 0; i < m->ListSize(); i++) {
+    if (is_id((*m)[i], KaxEditionUID))
+      euid = dynamic_cast<KaxEditionUID *>((*m)[i]);
+    else if (is_id((*m)[i], KaxChapterAtom))
+      num++;
+  }
+  if (num == 0)
+    cperror(pdata, "At least one <ChapterAtom> element is needed.");
+  if (euid == NULL) {
+    euid = new KaxEditionUID;
+    *static_cast<EbmlUInteger *>(euid) =
+      create_unique_uint32(UNIQUE_EDITION_IDS);
+    m->PushElement(*euid);
+  }
+}
+
+static void
+end_edition_uid(parser_data_t *pdata) {
+  KaxEditionUID *euid;
+
+  euid = static_cast<KaxEditionUID *>(parent_elt);
+  if (!is_unique_uint32(uint32(*euid), UNIQUE_EDITION_IDS)) {
+    mxwarn("Chapter parser: The EditionUID %u is not unique and could "
+           "not be reused. A new one will be created.\n", uint32(*euid));
+    *static_cast<EbmlUInteger *>(euid) =
+      create_unique_uint32(UNIQUE_EDITION_IDS);
+  }
+}
+
+static void
+end_chapter_uid(parser_data_t *pdata) {
+  KaxChapterUID *cuid;
+
+  cuid = static_cast<KaxChapterUID *>(parent_elt);
+  if (!is_unique_uint32(uint32(*cuid), UNIQUE_CHAPTER_IDS)) {
+    mxwarn("Chapter parser: The ChapterUID %u is not unique and could "
+           "not be reused. A new one will be created.\n", uint32(*cuid));
+    *static_cast<EbmlUInteger *>(cuid) =
+      create_unique_uint32(UNIQUE_CHAPTER_IDS);
+  }
+}
+
+static void
+end_chapter_atom(parser_data_t *pdata) {
   EbmlMaster *m;
 
-  if (!strcmp(name, "EditionUID")) {
-    KaxEditionUID *euid;
+  m = static_cast<EbmlMaster *>(parent_elt);
+  if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
+    cperror(pdata, "<ChapterAtom> is missing the <ChapterTimeStart> child.");
 
-    el_get_uint(pdata, parent_elt);
-    euid = static_cast<KaxEditionUID *>(parent_elt);
-    if (!is_unique_uint32(uint32(*euid), UNIQUE_EDITION_IDS)) {
-      mxwarn("Chapter parser: The EditionUID %u is not unique and could "
-             "not be reused. A new one will be created.\n", uint32(*euid));
-      *static_cast<EbmlUInteger *>(euid) =
-        create_unique_uint32(UNIQUE_EDITION_IDS);
-    }
-
-  } else if (!strcmp(name, "ChapterUID")) {
+  if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) == NULL) {
     KaxChapterUID *cuid;
 
-    el_get_uint(pdata, parent_elt);
-    cuid = static_cast<KaxChapterUID *>(parent_elt);
-    if (!is_unique_uint32(uint32(*cuid), UNIQUE_CHAPTER_IDS)) {
-      mxwarn("Chapter parser: The ChapterUID %u is not unique and could "
-             "not be reused. A new one will be created.\n", uint32(*cuid));
-      *static_cast<EbmlUInteger *>(cuid) =
-        create_unique_uint32(UNIQUE_CHAPTER_IDS);
-    }
+    cuid = new KaxChapterUID;
+    *static_cast<EbmlUInteger *>(cuid) =
+      create_unique_uint32(UNIQUE_CHAPTER_IDS);
+    m->PushElement(*cuid);
+  }
+}
 
-  } else if (!strcmp(name, "EditionFlagHidden"))
-    el_get_bool(pdata, parent_elt);
+static void
+end_chapter_track(parser_data_t *pdata) {
+  EbmlMaster *m;
 
-  else if (!strcmp(name, "EditionManaged"))
-    el_get_uint(pdata, parent_elt);
+  m = static_cast<EbmlMaster *>(parent_elt);
+  if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) == NULL)
+    cperror(pdata, "<ChapterTrack> is missing the <ChapterTrackNumber> "
+            "child.");
+}
 
-  else if (!strcmp(name, "EditionFlagDefault"))
-    el_get_bool(pdata, parent_elt);
+static void
+end_chapter_display(parser_data_t *pdata) {
+  EbmlMaster *m;
 
-  else if (!strcmp(name, "ChapterAtom")) {
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
-      cperror(pdata, "<ChapterAtom> is missing the <ChapterTimeStart> "
-              "child.");
+  m = static_cast<EbmlMaster *>(parent_elt);
+  if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
+    cperror(pdata, "<ChapterDisplay> is missing the <ChapterString> "
+            "child.");
+  if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL) {
+    KaxChapterLanguage *cl;
 
-    if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) == NULL) {
-      KaxChapterUID *cuid;
+    cl = new KaxChapterLanguage;
+    *static_cast<EbmlString *>(cl) = "und";
+    m->PushElement(*cl);
+  }
+}
 
-      cuid = new KaxChapterUID;
-      *static_cast<EbmlUInteger *>(cuid) =
-        create_unique_uint32(UNIQUE_CHAPTER_IDS);
-      m->PushElement(*cuid);
-    }
+static void
+end_chapter_language(parser_data_t *pdata) {
+  EbmlString *s;
 
-  } else if (!strcmp(name, "ChapterTimeStart"))
-    el_get_time(pdata, parent_elt);
+  s = static_cast<EbmlString *>(parent_elt);
+  if (!is_valid_iso639_2_code(string(*s).c_str()))
+    cperror(pdata, "'%s' is not a valid ISO639-2 language code.",
+            string(*s).c_str());
+}
 
-  else if (!strcmp(name, "ChapterTimeEnd"))
-    el_get_time(pdata, parent_elt);
+static void
+end_chapter_country(parser_data_t *pdata) {
+  EbmlString *s;
 
-  else if (!strcmp(name, "ChapterFlagHidden"))
-    el_get_bool(pdata, parent_elt);
-
-  else if (!strcmp(name, "ChapterFlagEnabled"))
-    el_get_bool(pdata, parent_elt);
-
-  else if (!strcmp(name, "ChapterTrack")) {
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) == NULL)
-      cperror(pdata, "<ChapterTrack> is missing the <ChapterTrackNumber> "
-              "child.");
-
-  } else if (!strcmp(name, "ChapterTrackNumber"))
-    el_get_uint(pdata, parent_elt, 1);
-
-  else if (!strcmp(name, "ChapterDisplay")) {
-    m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
-      cperror(pdata, "<ChapterDisplay> is missing the <ChapterString> "
-              "child.");
-    if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL) {
-      KaxChapterLanguage *cl;
-
-      cl = new KaxChapterLanguage;
-      *static_cast<EbmlString *>(cl) = "und";
-      m->PushElement(*cl);
-    }
-
-  } else if (!strcmp(name, "ChapterString"))
-    el_get_utf8string(pdata, parent_elt);
-
-  else if (!strcmp(name, "ChapterLanguage"))
-    el_get_string(pdata, parent_elt, true);
-
-  else if (!strcmp(name, "ChapterCountry"))
-    el_get_string(pdata, parent_elt);
-
-  else
-    die("chapter_parser_xml/end_this_level(): Unknown name '%s'.", name);
+  s = static_cast<EbmlString *>(parent_elt);
+  if (!is_valid_iso639_1_code(string(*s).c_str()))
+    cperror(pdata, "'%s' is not a valid ISO639-1 country code.",
+            string(*s).c_str());
 }
 
 static void
@@ -570,30 +501,48 @@ end_element(void *user_data,
     if (m->ListSize() == 0)
       cperror(pdata, "At least one <EditionEntry> element is needed.");
 
-  } else if (pdata->depth == 2) {
-    int i, num;
-    KaxEditionUID *euid;
+  } else {
+    int elt_idx;
+    bool found;
 
-    m = static_cast<EbmlMaster *>(parent_elt);
-    num = 0;
-    euid = NULL;
-    for (i = 0; i < m->ListSize(); i++) {
-      if (is_id((*m)[i], KaxEditionUID))
-        euid = dynamic_cast<KaxEditionUID *>((*m)[i]);
-      else if (is_id((*m)[i], KaxChapterAtom))
-        num++;
-    }
-    if (num == 0)
-      cperror(pdata, "At least one <ChapterAtom> element is needed.");
-    if (euid == NULL) {
-      euid = new KaxEditionUID;
-      *static_cast<EbmlUInteger *>(euid) =
-        create_unique_uint32(UNIQUE_EDITION_IDS);
-      m->PushElement(*euid);
+    found = false;
+    for (elt_idx = 0; chapter_elements[elt_idx].name != NULL; elt_idx++)
+      if (!strcmp(chapter_elements[elt_idx].name, name)) {
+        found = true;
+        break;
+      }
+    assert(found);
+
+    switch (chapter_elements[elt_idx].type) {
+      case ebmlt_master:
+        break;
+      case ebmlt_uint:
+        el_get_uint(pdata, parent_elt, chapter_elements[elt_idx].min_value,
+                    false);
+        break;
+      case ebmlt_bool:
+        el_get_uint(pdata, parent_elt, 0, true);
+        break;
+      case ebmlt_string:
+        el_get_string(pdata, parent_elt, false);
+        break;
+      case ebmlt_ustring:
+        el_get_utf8string(pdata, parent_elt);
+        break;
+      case ebmlt_time:
+        el_get_time(pdata, parent_elt);
+        break;
+      default:
+        assert(0);
     }
 
-  } else
-    end_this_level(pdata, name);
+    if (chapter_elements[elt_idx].end_hook != NULL)
+      chapter_elements[elt_idx].end_hook(pdata);
+  }
+
+
+//   } else
+//     end_this_level(pdata, name);
 
   if (pdata->bin != NULL) {
     delete pdata->bin;
@@ -603,6 +552,7 @@ end_element(void *user_data,
   pdata->data_allowed = false;
   pdata->depth--;
   pdata->parents->pop_back();
+  pdata->parent_idxs->pop_back();
 }
 
 static void
@@ -737,6 +687,7 @@ parse_xml_chapters(mm_text_io_c *in,
   pdata->parser = parser;
   pdata->file_name = in->get_file_name();
   pdata->parents = new vector<EbmlElement *>;
+  pdata->parent_idxs = new vector<int>;
   pdata->parse_error_msg = new string;
 
   XML_SetUserData(parser, pdata);
@@ -785,6 +736,7 @@ parse_xml_chapters(mm_text_io_c *in,
 
   XML_ParserFree(parser);
   delete pdata->parents;
+  delete pdata->parent_idxs;
   delete pdata->parse_error_msg;
   safefree(pdata);
 
