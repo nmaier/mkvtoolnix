@@ -829,6 +829,8 @@ def_handle2(audio_track,
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l4, KaxAudioPosition)) {
+      string strc;
+
       KaxAudioPosition &positions =
         *static_cast<KaxAudioPosition *>(l4);
       strc = format_binary(positions);
@@ -1462,6 +1464,9 @@ def_handle(cues) {
                            uint64(cue_cs));
 
             } else if (is_id(l4, KaxCueReference)) {
+              EbmlMaster *m4;
+
+              int i4;
               show_element(l4, 4, "Cue reference");
 
               m4 = static_cast<EbmlMaster *>(l4);
@@ -1644,6 +1649,8 @@ def_handle2(block_group,
                 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockVirtual)) {
+      string strc;
+
       KaxBlockVirtual &bvirt = *static_cast<KaxBlockVirtual *>(l3);
       strc = format_binary(bvirt);
       show_element(l3, 3, "Block virtual: %s", strc.c_str());
@@ -1675,6 +1682,8 @@ def_handle2(block_group,
                            uint64(add_id));
 
             } else if (is_id(l5, KaxBlockAdditional)) {
+              string strc;
+
               KaxBlockAdditional &block =
                 *static_cast<KaxBlockAdditional *>(l5);
               strc = format_binary(block);
