@@ -132,6 +132,7 @@ using namespace libmatroska;
 #define ID_RB_DISPLAYDIMENSIONS 10084
 #define ID_TC_DISPLAYWIDTH 10085
 #define ID_TC_DISPLAYHEIGHT 10086
+#define ID_B_SETVALUES 10087
 
 #define ID_M_FILE_NEW 20000
 #define ID_M_FILE_LOAD 20001
@@ -368,6 +369,7 @@ public:
   wxTreeCtrl *tc_chapters;
   wxTreeItemId tid_root;
   wxButton *b_add_chapter, *b_add_subchapter, *b_remove_chapter;
+  wxButton *b_set_values;
   wxMenu *m_chapters;
 
   wxTextCtrl *tc_chapter_name, *tc_language_codes, *tc_country_codes;
@@ -401,6 +403,9 @@ public:
   void on_language_code_selected(wxCommandEvent &evt);
   void on_country_code_selected(wxCommandEvent &evt);
   void on_set_default_values(wxCommandEvent &evt);
+  void on_set_values(wxCommandEvent &evt);
+  void set_values_recursively(wxTreeItemId id, string &language,
+                              bool set_language);
 
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(string s);

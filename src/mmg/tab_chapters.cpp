@@ -61,14 +61,22 @@ public:
   };
 };
 
+#define ID_CVD_CB_LANGUAGE 12000
+#define ID_CVD_CB_COUNTRY 12001
+
 class chapter_values_dlg: public wxDialog {
+  DECLARE_CLASS(chapter_values_dlg);
+  DECLARE_EVENT_TABLE();
 public:
   wxTextCtrl *tc_language, *tc_country;
+  wxCheckBox *cb_language, *cb_country;
 
 public:
   chapter_values_dlg(wxWindow *parent, bool set_defaults,
                      wxString old_def_language = "",
                      wxString old_def_country = "");
+  void on_language_clicked(wxCommandEvent &evt);
+  void on_country_clicked(wxCommandEvent &evt);
 };
 
 chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
@@ -88,6 +96,16 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
                      "then be changed if needed. The default values will be\n"
                      "saved when you exit mmg.",
                      wxPoint(10, 10), wxSize(380, 100), 0);
+
+    new wxStaticText(panel, wxID_STATIC, "Language:", wxPoint(10, 90));
+    tc_language =
+      new wxTextCtrl(panel, wxID_STATIC, old_def_language, wxPoint(90, 90),
+                     wxSize(220, -1));
+    new wxStaticText(panel, wxID_STATIC, "Country:", wxPoint(10, 125));
+    tc_country =
+      new wxTextCtrl(panel, wxID_STATIC, old_def_country, wxPoint(90, 125),
+                     wxSize(220, -1));
+
   } else {
     SetTitle("Select values to be applied");
     new wxStaticText(panel, wxID_STATIC,
@@ -95,16 +113,25 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
                      "country that you want to apply to all the chapters\n"
                      "below and including the currently selected entry.",
                      wxPoint(10, 10), wxSize(380, 100), 0);
-  }
 
-  new wxStaticText(panel, wxID_STATIC, "Language:", wxPoint(10, 90));
-  tc_language =
-    new wxTextCtrl(panel, wxID_STATIC, old_def_language, wxPoint(90, 90),
-                   wxSize(220, -1));
-  new wxStaticText(panel, wxID_STATIC, "Country:", wxPoint(10, 125));
-  tc_country =
-    new wxTextCtrl(panel, wxID_STATIC, old_def_country, wxPoint(90, 125),
-                   wxSize(220, -1));
+    cb_language =
+      new wxCheckBox(panel, ID_CVD_CB_LANGUAGE, "Set language to:",
+                     wxPoint(10, 90));
+    cb_language->SetValue(false);
+    tc_language =
+      new wxTextCtrl(panel, wxID_STATIC, old_def_language, wxPoint(135, 90),
+                     wxSize(175, -1));
+    tc_language->Enable(false);
+    cb_country =
+      new wxCheckBox(panel, ID_CVD_CB_COUNTRY, "Set country to:",
+                     wxPoint(10, 125));
+    cb_country->SetValue(false);
+    tc_country =
+      new wxTextCtrl(panel, wxID_STATIC, old_def_country, wxPoint(135, 125),
+                     wxSize(175, -1));
+    tc_country->Enable(false);
+
+  }
 
   b_ok = new wxButton(panel, wxID_OK, "Ok", wxPoint(0, 0));
   b_ok->SetDefault();
@@ -118,6 +145,14 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
                          b_cancel->GetSize().GetWidth() / 2,
                          GetSize().GetHeight() -
                          b_ok->GetSize().GetHeight() * 3 / 2));
+}
+
+void chapter_values_dlg::on_language_clicked(wxCommandEvent &evt) {
+  tc_language->Enable(cb_language->IsChecked());
+}
+
+void chapter_values_dlg::on_country_clicked(wxCommandEvent &evt) {
+  tc_country->Enable(cb_country->IsChecked());
 }
 
 void expand_subtree(wxTreeCtrl &tree, wxTreeItemId &root, bool expand = true) {
@@ -168,6 +203,14 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
   b_remove_chapter =
     new wxButton(this, ID_B_REMOVECHAPTER, _("Remove chapter"),
                  wxPoint(370, 76), wxSize(120, -1));
+
+  b_set_values =
+    new wxButton(this, ID_B_SETVALUES, _("Set values"), wxPoint(370, 128),
+                 wxSize(120, -1));
+  b_set_values->SetToolTip("Here you can set the values for the language and "
+                           "the country that you want to apply to all the "
+                           "chapters below and including the currently "
+                           "selected entry.");
 
   new wxStaticText(this, wxID_STATIC, _("Chapter name:"), wxPoint(10, 285));
   tc_chapter_name =
@@ -249,6 +292,7 @@ void tab_chapters::enable_buttons(bool enable) {
   b_add_chapter->Enable(enable);
   b_add_subchapter->Enable(enable);
   b_remove_chapter->Enable(enable);
+  b_set_values->Enable(enable);
 }
 
 void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
@@ -1022,6 +1066,90 @@ void tab_chapters::on_set_default_values(wxCommandEvent &evt) {
   default_country = join(" ", parts).c_str();
 }
 
+void tab_chapters::set_values_recursively(wxTreeItemId id, string &s,
+                                          bool set_language) {
+  uint32_t i;
+  KaxChapterDisplay *display;
+  KaxChapterLanguage *language;
+  KaxChapterCountry *country;
+  chapter_node_data_c *d;
+  wxTreeItemId next_child;
+  wxString text;
+  vector<string> codes;
+  long cookie;
+
+  if (!id.IsOk())
+    return;
+
+  d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
+  if ((d != NULL) && (d->is_atom)) {
+    codes = split(s.c_str(), " ");
+    if ((display = FindChild<KaxChapterDisplay>(*d->chapter)) == NULL)
+      display = &GetEmptyChild<KaxChapterDisplay>(*d->chapter);
+    i = 0;
+    while (i < display->ListSize()) {
+      if (set_language &&
+          (dynamic_cast<KaxChapterLanguage *>((*display)[i]) != NULL)) {
+        delete (*display)[i];
+        display->Remove(i);
+      } else if (!set_language &&
+                 (dynamic_cast<KaxChapterCountry *>((*display)[i]) != NULL)) {
+        delete (*display)[i];
+        display->Remove(i);
+      } else
+        i++;
+    }
+    for (i = 0; i < codes.size(); i++) {
+      if (set_language) {
+        language = new KaxChapterLanguage;
+        *static_cast<EbmlString *>(language) = codes[i].c_str();
+        display->PushElement(*language);
+      } else {
+        country = new KaxChapterCountry;
+        *static_cast<EbmlString *>(country) = codes[i].c_str();
+        display->PushElement(*country);
+      }
+    }
+    text = create_chapter_label(*d->chapter);
+    tc_chapters->SetItemText(id, text);
+    if (id == tc_chapters->GetSelection()) {
+      if (set_language)
+        tc_language_codes->SetValue(s.c_str());
+      else
+        tc_country_codes->SetValue(s.c_str());
+    }
+  }
+
+  next_child = tc_chapters->GetFirstChild(id, cookie);
+  while (next_child.IsOk()) {
+    set_values_recursively(next_child, s, set_language);
+    next_child = tc_chapters->GetNextChild(id, cookie);
+  }
+}
+
+void tab_chapters::on_set_values(wxCommandEvent &evt) {
+  wxTreeItemId id;
+  vector<string> parts;
+  string s;
+  chapter_values_dlg dlg(this, false);
+
+  id = tc_chapters->GetSelection();
+  if (!id.IsOk())
+    return;
+
+  if (dlg.ShowModal() != wxID_OK)
+    return;
+
+  if (dlg.cb_language->IsChecked()) {
+    s = dlg.tc_language->GetValue().c_str();
+    set_values_recursively(id, s, true);
+  }
+  if (dlg.cb_country->IsChecked()) {
+    s = dlg.tc_country->GetValue().c_str();
+    set_values_recursively(id, s, false);
+  }
+}
+
 bool tab_chapters::copy_values(wxTreeItemId id) {
   chapter_node_data_c *data;
   wxString label;
@@ -1063,39 +1191,8 @@ bool tab_chapters::copy_values(wxTreeItemId id) {
     ts_end = 0;
   }
 
-  s = tc_language_codes->GetValue();
-  strip(s);
-  l_codes = split(s.c_str(), " ");
-  i = 0;
-  while (i < l_codes.size())
-    if (!is_valid_iso639_2_code(l_codes[i].c_str())) {
-      wxMessageBox(_(wxString("'") + l_codes[i].c_str() +
-                     wxString("' is not a valid ISO639-2 language code. "
-                              "Removing this entry.")),
-                   _("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
-      eit = l_codes.begin();
-      eit += i;
-      l_codes.erase(eit);
-    } else
-      i++;
-
-  s = tc_country_codes->GetValue();
-  strip(s);
-  c_codes = split(s.c_str(), " ");
-  i = 0;
-  while (i < c_codes.size())
-    if ((c_codes[i].length() != 2) ||
-        (c_codes[i][0] < 'a') || (c_codes[i][0] > 'z') ||
-        (c_codes[i][1] < 'a') || (c_codes[i][1] > 'z')) {
-      wxMessageBox(_(wxString("'") + c_codes[i].c_str() +
-                     wxString("' is not a valid two-letter country "
-                              "code. Removing this entry.")),
-                   _("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
-      eit = c_codes.begin();
-      eit += i;
-      c_codes.erase(eit);
-    } else
-      i++;
+  verify_language_codes(tc_language_codes->GetValue().c_str(), l_codes);
+  verify_country_codes(tc_country_codes->GetValue().c_str(), c_codes);
 
   display = &GetChild<KaxChapterDisplay>(*chapter);
   i = 0;
@@ -1188,11 +1285,18 @@ int64_t tab_chapters::parse_time(string s) {
   return -1;
 }
 
+IMPLEMENT_CLASS(chapter_values_dlg, wxDialog);
+BEGIN_EVENT_TABLE(chapter_values_dlg, wxDialog)
+  EVT_CHECKBOX(ID_CVD_CB_LANGUAGE, chapter_values_dlg::on_language_clicked)
+  EVT_CHECKBOX(ID_CVD_CB_COUNTRY, chapter_values_dlg::on_country_clicked)
+END_EVENT_TABLE();
+
 IMPLEMENT_CLASS(tab_chapters, wxPanel);
 BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_BUTTON(ID_B_ADDCHAPTER, tab_chapters::on_add_chapter)
   EVT_BUTTON(ID_B_ADDSUBCHAPTER, tab_chapters::on_add_subchapter)
   EVT_BUTTON(ID_B_REMOVECHAPTER, tab_chapters::on_remove_chapter)
+  EVT_BUTTON(ID_B_SETVALUES, tab_chapters::on_set_values)
   EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS, tab_chapters::on_entry_selected)
   EVT_COMBOBOX(ID_CB_CHAPTERSELECTLANGUAGECODE,
                tab_chapters::on_language_code_selected)
