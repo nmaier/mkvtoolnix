@@ -276,8 +276,8 @@ generic_packetizer_c::set_tag_track_uid() {
 
 int
 generic_packetizer_c::set_uid(uint32_t uid) {
-  if (is_unique_uint32(uid)) {
-    add_unique_uint32(uid);
+  if (is_unique_uint32(uid, UNIQUE_TRACK_IDS)) {
+    add_unique_uint32(uid, UNIQUE_TRACK_IDS);
     huid = uid;
     if (track_entry != NULL)
       *(static_cast<EbmlUInteger *>(&GetChild<KaxTrackUID>(*track_entry))) =
@@ -506,7 +506,7 @@ generic_packetizer_c::set_headers() {
   *(static_cast<EbmlUInteger *>(&tnumber)) = hserialno;
 
   if (huid == 0)
-    huid = create_unique_uint32();
+    huid = create_unique_uint32(UNIQUE_TRACK_IDS);
 
   KaxTrackUID &tuid = GetChild<KaxTrackUID>(*track_entry);
   *(static_cast<EbmlUInteger *>(&tuid)) = huid;

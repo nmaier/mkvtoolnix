@@ -409,10 +409,11 @@ end_this_level(parser_data_t *pdata,
 
     el_get_uint(pdata, parent_elt);
     euid = static_cast<KaxEditionUID *>(parent_elt);
-    if (!is_unique_uint32(uint32(*euid))) {
+    if (!is_unique_uint32(uint32(*euid), UNIQUE_EDITION_IDS)) {
       mxwarn("Chapter parser: The EditionUID %u is not unique and could "
              "not be reused. A new one will be created.\n", uint32(*euid));
-      *static_cast<EbmlUInteger *>(euid) = create_unique_uint32();
+      *static_cast<EbmlUInteger *>(euid) =
+        create_unique_uint32(UNIQUE_EDITION_IDS);
     }
 
   } else if (!strcmp(name, "ChapterUID")) {
@@ -420,10 +421,11 @@ end_this_level(parser_data_t *pdata,
 
     el_get_uint(pdata, parent_elt);
     cuid = static_cast<KaxChapterUID *>(parent_elt);
-    if (!is_unique_uint32(uint32(*cuid))) {
+    if (!is_unique_uint32(uint32(*cuid), UNIQUE_CHAPTER_IDS)) {
       mxwarn("Chapter parser: The ChapterUID %u is not unique and could "
              "not be reused. A new one will be created.\n", uint32(*cuid));
-      *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32();
+      *static_cast<EbmlUInteger *>(cuid) =
+        create_unique_uint32(UNIQUE_CHAPTER_IDS);
     }
 
   } else if (!strcmp(name, "ChapterAtom")) {
@@ -436,7 +438,8 @@ end_this_level(parser_data_t *pdata,
       KaxChapterUID *cuid;
 
       cuid = new KaxChapterUID;
-      *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32();
+      *static_cast<EbmlUInteger *>(cuid) =
+        create_unique_uint32(UNIQUE_CHAPTER_IDS);
       m->PushElement(*cuid);
     }
 
@@ -520,7 +523,8 @@ end_element(void *user_data,
       cperror(pdata, "At least one <ChapterAtom> element is needed.");
     if (euid == NULL) {
       euid = new KaxEditionUID;
-      *static_cast<EbmlUInteger *>(euid) = create_unique_uint32();
+      *static_cast<EbmlUInteger *>(euid) =
+        create_unique_uint32(UNIQUE_EDITION_IDS);
       m->PushElement(*euid);
     }
 

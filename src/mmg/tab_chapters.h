@@ -42,6 +42,7 @@
 #define ID_B_ADJUSTTIMECODES              16016
 #define ID_CB_CHAPTERHIDDEN               16017
 #define ID_CB_CHAPTERENABLED              16018
+#define ID_TC_UID                         16019
 
 using namespace libmatroska;
 
@@ -56,11 +57,16 @@ public:
   wxMenu *m_chapters;
 
   wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
+  wxTextCtrl *tc_uid;
   wxComboBox *cob_language_code, *cob_country_code;
   wxListBox *lb_chapter_names;
   wxButton *b_add_chapter_name, *b_remove_chapter_name;
   wxCheckBox *cb_flag_hidden, *cb_flag_enabled;
   bool inputs_enabled, no_update;
+
+  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language;
+  wxStaticText *st_country;
+  wxStaticBox *sb_names;
 
   wxString file_name;
   bool source_is_kax_file, source_is_simple_format;

@@ -253,7 +253,7 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
   if (a.start_00 != -1) {
     atom = &GetChild<KaxChapterAtom>(*a.atom);
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
-      create_unique_uint32();
+      create_unique_uint32(UNIQUE_CHAPTER_IDS);
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
       a.start_00 - a.offset;
 
@@ -273,7 +273,7 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
       atom = &GetNextChild<KaxChapterAtom>(*a.atom, *atom);
 
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
-      create_unique_uint32();
+      create_unique_uint32(UNIQUE_CHAPTER_IDS);
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
       a.start_01 - a.offset;
 
@@ -316,7 +316,7 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   else
     a.atom = &GetNextChild<KaxChapterAtom>(*a.edition, *a.atom);
 
-  cuid = create_unique_uint32();
+  cuid = create_unique_uint32(UNIQUE_CHAPTER_IDS);
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*a.atom)) = cuid;
 
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*a.atom)) =
@@ -409,7 +409,7 @@ parse_cue_chapters(mm_text_io_c *in,
   a.line_num = 0;
   a.start_00 = -1;
   a.start_01 = -1;
-  a.edition_uid = create_unique_uint32();
+  a.edition_uid = create_unique_uint32(UNIQUE_EDITION_IDS);
   try {
     while (in->getline2(line)) {
       a.line_num++;
