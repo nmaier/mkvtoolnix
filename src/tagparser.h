@@ -118,6 +118,8 @@ using namespace libmatroska;
 typedef struct {
   XML_Parser parser;
 
+  const char *file_name;
+
   int depth;
   bool done_reading, data_allowed;
 

@@ -42,6 +42,41 @@ using namespace libmatroska;
   if (FindChild<c>(*p) != NULL) \
     perror_oneinstance();
 
+template <typename Type>Type &GetEmptyChild(EbmlMaster &master) {
+  EbmlElement *e;
+
+  e = master.FindFirstElt(Type::ClassInfos, true);
+  try {
+    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
+    if (m != NULL)
+      while (m->ListSize() > 0) {
+        delete (*m)[0];
+        m->Remove(0);
+      }
+  } catch (...) {
+  }
+
+	return *(static_cast<Type *>(e));
+}
+
+template <typename Type>Type &GetNextEmptyChild(EbmlMaster &master,
+                                                const Type &past_elt) {
+  EbmlElement *e;
+
+  e = master.FindNextElt(past_elt, true);
+  try {
+    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
+    if (m != NULL)
+      while (m->ListSize() > 0) {
+        delete (*m)[0];
+        m->Remove(0);
+      }
+  } catch (...) {
+  }
+
+	return *(static_cast<Type *>(e));
+}
+
 void start_level1(parser_data_t *pdata, const char *name) {
   string parent_name;
 
@@ -49,9 +84,9 @@ void start_level1(parser_data_t *pdata, const char *name) {
 
   if (!strcmp(name, "Tag")) {
     if (pdata->tag == NULL)
-      pdata->tag = &GetChild<KaxTag>(*pdata->tags);
+      pdata->tag = &GetEmptyChild<KaxTag>(*pdata->tags);
     else
-      pdata->tag = &GetNextChild<KaxTag>(*pdata->tags, *pdata->tag);
+      pdata->tag = &GetNextEmptyChild<KaxTag>(*pdata->tags, *pdata->tag);
 
   } else
     perror_nochild();
@@ -66,87 +101,87 @@ void start_level2(parser_data_t *pdata, const char *name) {
 
   if (!strcmp(name, "Targets")) {
     if (pdata->targets == NULL)
-      pdata->targets = &GetChild<KaxTagTargets>(*pdata->tag);
+      pdata->targets = &GetEmptyChild<KaxTagTargets>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_Targets);
 
   } else if (!strcmp(name, "General")) {
     if (pdata->general == NULL)
-      pdata->general = &GetChild<KaxTagGeneral>(*pdata->tag);
+      pdata->general = &GetEmptyChild<KaxTagGeneral>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_General);
 
   } else if (!strcmp(name, "Genres")) {
     if (pdata->genres == NULL)
-      pdata->genres = &GetChild<KaxTagGenres>(*pdata->tag);
+      pdata->genres = &GetEmptyChild<KaxTagGenres>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_Genres);
 
   } else if (!strcmp(name, "AudioSpecific")) {
     if (pdata->audio_specific == NULL)
-      pdata->audio_specific = &GetChild<KaxTagAudioSpecific>(*pdata->tag);
+      pdata->audio_specific = &GetEmptyChild<KaxTagAudioSpecific>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_AudioSpecific);
 
   } else if (!strcmp(name, "ImageSpecific")) {
     if (pdata->image_specific == NULL)
-      pdata->image_specific = &GetChild<KaxTagImageSpecific>(*pdata->tag);
+      pdata->image_specific = &GetEmptyChild<KaxTagImageSpecific>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_ImageSpecific);
 
   } else if (!strcmp(name, "MultiCommercial")) {
     if (pdata->m_commercial == NULL)
-      pdata->m_commercial = &GetChild<KaxTagMultiCommercial>(*pdata->tag);
+      pdata->m_commercial = &GetEmptyChild<KaxTagMultiCommercial>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_MultiCommercial);
 
   } else if (!strcmp(name, "MultiDate")) {
     if (pdata->m_date == NULL)
-      pdata->m_date = &GetChild<KaxTagMultiDate>(*pdata->tag);
+      pdata->m_date = &GetEmptyChild<KaxTagMultiDate>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_MultiDate);
 
   } else if (!strcmp(name, "MultiEntity")) {
     if (pdata->m_entity == NULL)
-      pdata->m_entity = &GetChild<KaxTagMultiEntity>(*pdata->tag);
+      pdata->m_entity = &GetEmptyChild<KaxTagMultiEntity>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_MultiEntity);
 
   } else if (!strcmp(name, "MultiIdentifier")) {
     if (pdata->m_identifier == NULL)
-      pdata->m_identifier = &GetChild<KaxTagMultiIdentifier>(*pdata->tag);
+      pdata->m_identifier = &GetEmptyChild<KaxTagMultiIdentifier>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_MultiIdentifier);
 
   } else if (!strcmp(name, "MultiLegal")) {
     if (pdata->m_legal == NULL)
-      pdata->m_legal = &GetChild<KaxTagMultiLegal>(*pdata->tag);
+      pdata->m_legal = &GetEmptyChild<KaxTagMultiLegal>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_MultiLegal);
 
   } else if (!strcmp(name, "MultiTitle")) {
     if (pdata->m_title == NULL)
-      pdata->m_title = &GetChild<KaxTagMultiTitle>(*pdata->tag);
+      pdata->m_title = &GetEmptyChild<KaxTagMultiTitle>(*pdata->tag);
     else
       perror_oneinstance();
     pdata->parents->push_back(E_MultiTitle);
 
   } else if (!strcmp(name, "MultiComment")) {
     if (pdata->m_comment == NULL)
-      pdata->m_comment = &GetChild<KaxTagMultiComment>(*pdata->tag);
+      pdata->m_comment = &GetEmptyChild<KaxTagMultiComment>(*pdata->tag);
     else
       pdata->m_comment =
-        &GetNextChild<KaxTagMultiComment>(*pdata->tag, *pdata->m_comment);
+        &GetNextEmptyChild<KaxTagMultiComment>(*pdata->tag, *pdata->m_comment);
     pdata->parents->push_back(E_MultiComment);
 
   } else
@@ -165,17 +200,17 @@ void start_level3(parser_data_t *pdata, const char *name) {
 
     if (!strcmp(name, "TrackUID")) {
       if (pdata->track_uid == NULL)
-        pdata->track_uid = &GetChild<KaxTagTrackUID>(*pdata->targets);
+        pdata->track_uid = &GetEmptyChild<KaxTagTrackUID>(*pdata->targets);
       else
         pdata->track_uid =
-          &GetNextChild<KaxTagTrackUID>(*pdata->targets, *pdata->track_uid);
+          &GetNextEmptyChild<KaxTagTrackUID>(*pdata->targets, *pdata->track_uid);
       pdata->parents->push_back(E_TrackUID);
     } else if (!strcmp(name, "ChapterUID")) {
       if (pdata->chapter_uid == NULL)
-        pdata->chapter_uid = &GetChild<KaxTagChapterUID>(*pdata->targets);
+        pdata->chapter_uid = &GetEmptyChild<KaxTagChapterUID>(*pdata->targets);
       else
         pdata->chapter_uid =
-          &GetNextChild<KaxTagChapterUID>(*pdata->targets,
+          &GetNextEmptyChild<KaxTagChapterUID>(*pdata->targets,
                                           *pdata->chapter_uid);
       pdata->parents->push_back(E_ChapterUID);
 
@@ -211,20 +246,21 @@ void start_level3(parser_data_t *pdata, const char *name) {
       pdata->parents->push_back(E_ArchivalLocation);
     } else if (!strcmp(name, "Keywords")) {
       if (pdata->keywords == NULL)
-        pdata->keywords = &GetChild<KaxTagKeywords>(*pdata->general);
+        pdata->keywords = &GetEmptyChild<KaxTagKeywords>(*pdata->general);
       else
         pdata->keywords =
-          &GetNextChild<KaxTagKeywords>(*pdata->general, *pdata->keywords);
+          &GetNextEmptyChild<KaxTagKeywords>(*pdata->general, *pdata->keywords);
       pdata->parents->push_back(E_Keywords);
     } else if (!strcmp(name, "Mood")) {
       check_instances(pdata->general, KaxTagMood);
       pdata->parents->push_back(E_Mood);
     } else if (!strcmp(name, "RecordLocation")) {
       if (pdata->rec_location == NULL)
-        pdata->rec_location = &GetChild<KaxTagRecordLocation>(*pdata->general);
+        pdata->rec_location =
+          &GetEmptyChild<KaxTagRecordLocation>(*pdata->general);
       else
         pdata->rec_location =
-          &GetNextChild<KaxTagRecordLocation>(*pdata->general,
+          &GetNextEmptyChild<KaxTagRecordLocation>(*pdata->general,
                                               *pdata->rec_location);
       pdata->parents->push_back(E_RecordLocation);
     } else if (!strcmp(name, "Source")) {
@@ -253,17 +289,17 @@ void start_level3(parser_data_t *pdata, const char *name) {
 
     if (!strcmp(name, "AudioGenre")) {
       if (pdata->audio_genre == NULL)
-        pdata->audio_genre = &GetChild<KaxTagAudioGenre>(*pdata->genres);
+        pdata->audio_genre = &GetEmptyChild<KaxTagAudioGenre>(*pdata->genres);
       else
         pdata->audio_genre =
-          &GetNextChild<KaxTagAudioGenre>(*pdata->genres, *pdata->audio_genre);
+          &GetNextEmptyChild<KaxTagAudioGenre>(*pdata->genres, *pdata->audio_genre);
       pdata->parents->push_back(E_AudioGenre);
     } else if (!strcmp(name, "VideoGenre")) {
       if (pdata->video_genre == NULL)
-        pdata->video_genre = &GetChild<KaxTagVideoGenre>(*pdata->genres);
+        pdata->video_genre = &GetEmptyChild<KaxTagVideoGenre>(*pdata->genres);
       else
         pdata->video_genre =
-          &GetNextChild<KaxTagVideoGenre>(*pdata->genres, *pdata->video_genre);
+          &GetNextEmptyChild<KaxTagVideoGenre>(*pdata->genres, *pdata->video_genre);
       pdata->parents->push_back(E_VideoGenre);
     } else if (!strcmp(name, "SubGenre")) {
       check_instances(pdata->genres, KaxTagSubGenre);
@@ -334,10 +370,11 @@ void start_level3(parser_data_t *pdata, const char *name) {
   } else if (parent == E_MultiCommercial) {
     if (!strcmp(name, "Commercial")) {
       if (pdata->commercial == NULL)
-        pdata->commercial = &GetChild<KaxTagCommercial>(*pdata->m_commercial);
+        pdata->commercial =
+          &GetEmptyChild<KaxTagCommercial>(*pdata->m_commercial);
       else
         pdata->commercial =
-          &GetNextChild<KaxTagCommercial>(*pdata->m_commercial,
+          &GetNextEmptyChild<KaxTagCommercial>(*pdata->m_commercial,
                                           *pdata->commercial);
      pdata->parents->push_back(E_Commercial);
     } else
@@ -346,10 +383,10 @@ void start_level3(parser_data_t *pdata, const char *name) {
   } else if (parent == E_MultiDate) {
     if (!strcmp(name, "Date")) {
       if (pdata->date == NULL)
-        pdata->date = &GetChild<KaxTagDate>(*pdata->m_date);
+        pdata->date = &GetEmptyChild<KaxTagDate>(*pdata->m_date);
       else
         pdata->date =
-          &GetNextChild<KaxTagDate>(*pdata->m_date, *pdata->date);
+          &GetNextEmptyChild<KaxTagDate>(*pdata->m_date, *pdata->date);
       pdata->parents->push_back(E_Date);
     } else
       perror_nochild();
@@ -357,10 +394,10 @@ void start_level3(parser_data_t *pdata, const char *name) {
   } else if (parent == E_MultiEntity) {
     if (!strcmp(name, "Entity")) {
       if (pdata->entity == NULL)
-        pdata->entity = &GetChild<KaxTagEntity>(*pdata->m_entity);
+        pdata->entity = &GetEmptyChild<KaxTagEntity>(*pdata->m_entity);
       else
         pdata->entity =
-          &GetNextChild<KaxTagEntity>(*pdata->m_entity, *pdata->entity);
+          &GetNextEmptyChild<KaxTagEntity>(*pdata->m_entity, *pdata->entity);
       pdata->parents->push_back(E_Entity);
     } else
       perror_nochild();
@@ -368,10 +405,11 @@ void start_level3(parser_data_t *pdata, const char *name) {
   } else if (parent == E_MultiIdentifier) {
     if (!strcmp(name, "Identifier")) {
       if (pdata->identifier == NULL)
-        pdata->identifier = &GetChild<KaxTagIdentifier>(*pdata->m_identifier);
+        pdata->identifier =
+          &GetEmptyChild<KaxTagIdentifier>(*pdata->m_identifier);
       else
         pdata->identifier =
-          &GetNextChild<KaxTagIdentifier>(*pdata->m_identifier,
+          &GetNextEmptyChild<KaxTagIdentifier>(*pdata->m_identifier,
                                           *pdata->identifier);
       pdata->parents->push_back(E_Identifier);
     } else
@@ -380,10 +418,10 @@ void start_level3(parser_data_t *pdata, const char *name) {
   } else if (parent == E_MultiLegal) {
     if (!strcmp(name, "Legal")) {
       if (pdata->legal == NULL)
-        pdata->legal = &GetChild<KaxTagLegal>(*pdata->m_legal);
+        pdata->legal = &GetEmptyChild<KaxTagLegal>(*pdata->m_legal);
       else
         pdata->legal =
-          &GetNextChild<KaxTagLegal>(*pdata->m_legal, *pdata->legal);
+          &GetNextEmptyChild<KaxTagLegal>(*pdata->m_legal, *pdata->legal);
       pdata->parents->push_back(E_Legal);
     } else
       perror_nochild();
@@ -391,10 +429,10 @@ void start_level3(parser_data_t *pdata, const char *name) {
   } else if (parent == E_MultiTitle) {
     if (!strcmp(name, "Title")) {
       if (pdata->title == NULL)
-        pdata->title = &GetChild<KaxTagTitle>(*pdata->m_title);
+        pdata->title = &GetEmptyChild<KaxTagTitle>(*pdata->m_title);
       else
         pdata->title =
-          &GetNextChild<KaxTagTitle>(*pdata->m_title, *pdata->title);
+          &GetNextEmptyChild<KaxTagTitle>(*pdata->m_title, *pdata->title);
       pdata->parents->push_back(E_Title);
     } else
       perror_nochild();
@@ -421,28 +459,29 @@ void start_level4(parser_data_t *pdata, const char *name) {
       pdata->parents->push_back(E_Address);
     } else if (!strcmp(name, "URL")) {
       if (pdata->c_url == NULL)
-        pdata->c_url = &GetChild<KaxTagMultiCommercialURL>(*pdata->commercial);
+        pdata->c_url =
+          &GetEmptyChild<KaxTagMultiCommercialURL>(*pdata->commercial);
       else
         pdata->c_url =
-          &GetNextChild<KaxTagMultiCommercialURL>(*pdata->commercial,
+          &GetNextEmptyChild<KaxTagMultiCommercialURL>(*pdata->commercial,
                                                   *pdata->c_url);
       pdata->parents->push_back(E_URL);
     } else if (!strcmp(name, "Email")) {
       if (pdata->c_email == NULL)
         pdata->c_email =
-          &GetChild<KaxTagMultiCommercialEmail>(*pdata->commercial);
+          &GetEmptyChild<KaxTagMultiCommercialEmail>(*pdata->commercial);
       else
         pdata->c_email =
-          &GetNextChild<KaxTagMultiCommercialEmail>(*pdata->commercial,
+          &GetNextEmptyChild<KaxTagMultiCommercialEmail>(*pdata->commercial,
                                                     *pdata->c_email);
       pdata->parents->push_back(E_Email);
     } else if (!strcmp(name, "MultiPrice")) {
       pdata->data_allowed = false;
       if (pdata->m_price == NULL)
-        pdata->m_price = &GetChild<KaxTagMultiPrice>(*pdata->commercial);
+        pdata->m_price = &GetEmptyChild<KaxTagMultiPrice>(*pdata->commercial);
       else
         pdata->m_price =
-          &GetNextChild<KaxTagMultiPrice>(*pdata->commercial, *pdata->m_price);
+          &GetNextEmptyChild<KaxTagMultiPrice>(*pdata->commercial, *pdata->m_price);
       pdata->parents->push_back(E_MultiPrice);
     } else
       perror_nochild();
@@ -473,17 +512,18 @@ void start_level4(parser_data_t *pdata, const char *name) {
       pdata->parents->push_back(E_Name);
     } else if (!strcmp(name, "URL")) {
       if (pdata->e_url == NULL)
-        pdata->e_url = &GetChild<KaxTagMultiEntityURL>(*pdata->entity);
+        pdata->e_url = &GetEmptyChild<KaxTagMultiEntityURL>(*pdata->entity);
       else
         pdata->e_url =
-          &GetNextChild<KaxTagMultiEntityURL>(*pdata->entity, *pdata->e_url);
+          &GetNextEmptyChild<KaxTagMultiEntityURL>(*pdata->entity, *pdata->e_url);
       pdata->parents->push_back(E_URL);
     } else if (!strcmp(name, "Email")) {
       if (pdata->e_email == NULL)
-        pdata->e_email = &GetChild<KaxTagMultiEntityEmail>(*pdata->entity);
+        pdata->e_email =
+          &GetEmptyChild<KaxTagMultiEntityEmail>(*pdata->entity);
       else
         pdata->e_email =
-          &GetNextChild<KaxTagMultiEntityEmail>(*pdata->entity,
+          &GetNextEmptyChild<KaxTagMultiEntityEmail>(*pdata->entity,
                                                 *pdata->e_email);
       pdata->parents->push_back(E_Email);
     } else if (!strcmp(name, "Address")) {
@@ -515,10 +555,10 @@ void start_level4(parser_data_t *pdata, const char *name) {
       pdata->parents->push_back(E_LegalType);
     } else if (!strcmp(name, "URL")) {
       if (pdata->l_url == NULL)
-        pdata->l_url = &GetChild<KaxTagMultiLegalURL>(*pdata->legal);
+        pdata->l_url = &GetEmptyChild<KaxTagMultiLegalURL>(*pdata->legal);
       else
         pdata->l_url =
-          &GetNextChild<KaxTagMultiLegalURL>(*pdata->legal, *pdata->l_url);
+          &GetNextEmptyChild<KaxTagMultiLegalURL>(*pdata->legal, *pdata->l_url);
       pdata->parents->push_back(E_URL);
     } else if (!strcmp(name, "Address")) {
       check_instances(pdata->legal, KaxTagMultiLegalAddress);
@@ -546,17 +586,17 @@ void start_level4(parser_data_t *pdata, const char *name) {
       pdata->parents->push_back(E_Address);
     } else if (!strcmp(name, "URL")) {
       if (pdata->t_url == NULL)
-        pdata->t_url = &GetChild<KaxTagMultiTitleURL>(*pdata->title);
+        pdata->t_url = &GetEmptyChild<KaxTagMultiTitleURL>(*pdata->title);
       else
         pdata->t_url =
-          &GetNextChild<KaxTagMultiTitleURL>(*pdata->title, *pdata->t_url);
+          &GetNextEmptyChild<KaxTagMultiTitleURL>(*pdata->title, *pdata->t_url);
       pdata->parents->push_back(E_URL);
     } else if (!strcmp(name, "Email")) {
       if (pdata->t_email == NULL)
-        pdata->t_email = &GetChild<KaxTagMultiTitleEmail>(*pdata->title);
+        pdata->t_email = &GetEmptyChild<KaxTagMultiTitleEmail>(*pdata->title);
       else
         pdata->t_email =
-          &GetNextChild<KaxTagMultiTitleEmail>(*pdata->title, *pdata->t_email);
+          &GetNextEmptyChild<KaxTagMultiTitleEmail>(*pdata->title, *pdata->t_email);
       pdata->parents->push_back(E_Email);
     } else if (!strcmp(name, "Language")) {
       check_instances(pdata->title, KaxTagMultiTitleLanguage);
@@ -641,8 +681,8 @@ void start_element(void *user_data, const char *name,
 void perror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
 
-  fprintf(stderr, "Tag parsing error, line %d, column %d: ",
-          XML_GetCurrentLineNumber(pdata->parser),
+  fprintf(stderr, "Tag parsing error in '%s', line %d, column %d: ",
+          pdata->file_name, XML_GetCurrentLineNumber(pdata->parser),
           XML_GetCurrentColumnNumber(pdata->parser));
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
@@ -708,6 +748,7 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   pdata->tags = tags;
   pdata->parent_names = new vector<string>;
   pdata->parents = new vector<int>;
+  pdata->file_name = name;
 
   XML_SetUserData(parser, pdata);
   XML_SetElementHandler(parser, start_element, end_element);

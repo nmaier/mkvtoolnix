@@ -400,6 +400,11 @@ void parse_and_add_tags(const char *file_name) {
 
   while (tags->ListSize() > 0) {
     tag = (KaxTag *)(*tags)[0];
+    if (!tag->CheckMandatory()) {
+      mxprint(stderr, "Error parsing the tags in '%s': some mandatory "
+              "elements are missing.\n", file_name);
+      exit(1);
+    }
     tags->Remove(0);
     add_tags(tag);
   }
