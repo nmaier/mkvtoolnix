@@ -132,51 +132,20 @@ el_get_utf8string(parser_data_t *pdata,
     cstrutf8_to_UTFstring(pdata->bin->c_str());
 }
 
-#define iscolon(s) (*(s) == ':')
-#define isdot(s) (*(s) == '.')
-#define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
-#define isthreedigits(s) (istwodigits(s) && isdigit(*(s + 2)))
-#define istimestamp(s) ((strlen(s) == 12) && \
-                        istwodigits(s) && iscolon(s + 2) && \
-                        istwodigits(s + 3) && iscolon(s + 5) && \
-                        istwodigits(s + 6) && isdot(s + 8) && \
-                        isthreedigits(s + 9))
-
 static void
 el_get_time(parser_data_t *pdata,
             EbmlElement *el) {
-  const char *errmsg = "Expected a time in the following format: HH:MM:SS.mmm"
-    " (HH = hour, MM = minute, SS = second, mmm = millisecond). Found '%s' "
-    "instead.";
-  char *p;
-  int64_t hour, minute, second, msec;
+  const char *errmsg = "Expected a time in the following format: HH:MM:SS.nnn"
+    " (HH = hour, MM = minute, SS = second, nnn = millisecond up to "
+    "nanosecond. You may use up to nine digits for 'n' which would mean "
+    "nanosecond precision). Found '%s' instead. Additional error message: %s";
+  int64_t usec;
 
   strip(*pdata->bin);
-  p = safestrdup(pdata->bin->c_str());
+  if (!parse_timecode(pdata->bin->c_str(), &usec))
+    cperror(pdata, errmsg, pdata->bin->c_str(), timecode_parser_error);
 
-  if (!istimestamp(p))
-    cperror(pdata, errmsg, pdata->bin->c_str());
-
-  p[2] = 0;
-  p[5] = 0;
-  p[8] = 0;
-
-  if (!parse_int(p, hour) || !parse_int(&p[3], minute) ||
-      !parse_int(&p[6], second) || !parse_int(&p[9], msec))
-    cperror(pdata, errmsg, pdata->bin->c_str());
-
-  if ((hour < 0) || (hour > 23))
-    cperror(pdata, "Invalid hour given (%d).", hour);
-  if ((minute < 0) || (minute > 59))
-    cperror(pdata, "Invalid minute given (%d).", minute);
-  if ((second < 0) || (second > 59))
-    cperror(pdata, "Invalid second given (%d).", second);
-
-  safefree(p);
-
-  *(static_cast<EbmlUInteger *>(el)) =
-    ((hour * 60 * 60 * 1000) + (minute * 60 * 1000) +
-     (second * 1000) + msec) * 1000000;
+  *(static_cast<EbmlUInteger *>(el)) = usec;
 }
 
 static void

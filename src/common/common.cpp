@@ -1383,3 +1383,49 @@ void engage_hacks(const char *hacks) {
       mxerror("'%s' is not a valid hack.\n", engage_args[aidx].c_str());
   }
 }
+
+const char *timecode_parser_error = NULL;
+
+static bool
+set_tcp_error(const char *error) {
+  timecode_parser_error = error;
+  return false;
+}
+
+bool
+parse_timecode(const char *src,
+               int64_t *timecode) {
+  // Recognized format:
+  // HH:MM:SS and HH:MM:SS.nnn with up to nine 'n' for ns precision
+  //              012345678901...
+  int h, m, s, n, i;
+  char format[10];
+
+  if ((strlen(src) < 8) || (strlen(src) > 18) || (src[2] != ':') ||
+      (src[5] != ':'))
+    return set_tcp_error("Invalid format");
+  if (sscanf(src, "%02d:%02d:%02d", &h, &m, &s) != 3)
+    return set_tcp_error("Invalid format (non-numbers encountered)");
+  if (h > 23)
+    return set_tcp_error("Invalid hour");
+  if (m > 59)
+    return set_tcp_error("Invalid minute");
+  if (s > 59)
+    return set_tcp_error("Invalid second");
+  if (strlen(src) > 9) {
+    if (src[8] != '.')
+      return set_tcp_error("Invalid format (expected a dot '.' after the "
+                           "seconds)");
+    sprintf(format, "%%0%dd", strlen(src) - 8);
+    if (sscanf(&src[9], format, &n) != 1)
+      return set_tcp_error("Invalid format (non-numbers encountered)");
+    for (i = strlen(src); i < 18; i++)
+      n *= 10;
+  } else
+    n = 0;
+  if (timecode != NULL)
+    *timecode = ((int64_t)h * 60 * 60 + (int64_t)m * 60 + (int64_t)s) *
+      1000000000 + n;
+  timecode_parser_error = "no error";
+  return true;
+}

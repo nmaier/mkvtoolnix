@@ -295,18 +295,16 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
 
     } else if (is_id(KaxChapterTimeStart)) {
       pt(level + 1, "<ChapterTimeStart>");
-      v = uint64(*static_cast<EbmlUInteger *>(e)) / 1000000;
-      mxprint(o, "%02llu:%02llu:%02llu.%03llu</ChapterTimeStart>\n",
-              v / 1000 / 60 / 60, (v / 1000 / 60) % 60, (v / 1000) % 60,
-              v % 1000);
+      v = uint64(*static_cast<EbmlUInteger *>(e));
+      mxprint(o, FMT_TIMECODEN "</ChapterTimeStart>\n",
+              ARG_TIMECODEN(v));
       start_time_found = true;
 
     } else if (is_id(KaxChapterTimeEnd)) {
       pt(level + 1, "<ChapterTimeEnd>");
-      v = uint64(*static_cast<EbmlUInteger *>(e)) / 1000000;
-      mxprint(o, "%02llu:%02llu:%02llu.%03llu</ChapterTimeEnd>\n",
-              v / 1000 / 60 / 60, (v / 1000 / 60) % 60, (v / 1000) % 60,
-              v % 1000);
+      v = uint64(*static_cast<EbmlUInteger *>(e));
+      mxprint(o, FMT_TIMECODEN "</ChapterTimeEnd>\n",
+              ARG_TIMECODEN(v));
 
     } else if (is_id(KaxChapterFlagHidden)) {
       pt(level + 1, "<ChapterFlagHidden>");

@@ -403,19 +403,15 @@ bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level) {
         uint64_t s;
         KaxChapterTimeStart &start =
           *static_cast<KaxChapterTimeStart *>(l1);
-        s = uint64(start) / 1000000;
-        show_element(l1, level + 1, "Start: %02llu:%02llu:%02llu.%03llu",
-                     (s / 1000 / 60 / 60), (s / 1000 / 60) % 60,
-                     (s / 1000) % 60, s % 1000);
+        s = uint64(start);
+        show_element(l1, level + 1, "Start: " FMT_TIMECODEN, ARG_TIMECODEN(s));
 
       } else if (is_id(l1, KaxChapterTimeEnd)) {
         uint64_t e;
         KaxChapterTimeEnd &end =
           *static_cast<KaxChapterTimeEnd *>(l1);
-        e = uint64(end) / 1000000;
-        show_element(l1, level + 1, "End: %02llu:%02llu:%02llu.%03llu",
-                     (e / 1000 / 60 / 60), (e / 1000 / 60) % 60,
-                     (e / 1000) % 60, e % 1000);
+        e = uint64(end);
+        show_element(l1, level + 1, "End: " FMT_TIMECODEN, ARG_TIMECODEN(e));
 
       } else if (is_id(l1, KaxChapterTrack)) {
         show_element(l1, level + 1, "Track");

@@ -255,12 +255,12 @@ tab_chapters::tab_chapters(wxWindow *parent,
   new wxStaticText(this, wxID_STATIC, _("Start:"), wxPoint(10, 235));
   tc_start_time =
     new wxTextCtrl(this, ID_TC_CHAPTERSTART, _(""),
-                   wxPoint(60, 235 + YOFF), wxSize(110, -1));
+                   wxPoint(50, 235 + YOFF), wxSize(125, -1));
 
-  new wxStaticText(this, wxID_STATIC, _("End:"), wxPoint(200, 235));
+  new wxStaticText(this, wxID_STATIC, _("End:"), wxPoint(190, 235));
   tc_end_time =
     new wxTextCtrl(this, ID_TC_CHAPTEREND, _(""),
-                   wxPoint(250, 235 + YOFF), wxSize(110, -1));
+                   wxPoint(235, 235 + YOFF), wxSize(125, -1));
 
   new wxStaticBox(this, wxID_STATIC, _("Chapter names and languages"),
                   wxPoint(10, 270), wxSize(480, 180));
@@ -397,14 +397,14 @@ tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
   label += " [";
   tstart = FindChild<KaxChapterTimeStart>(chapter);
   if (tstart != NULL) {
-    timestamp = uint64(*static_cast<EbmlUInteger *>(tstart)) / 1000000;
-    s.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
+    timestamp = uint64(*static_cast<EbmlUInteger *>(tstart));
+    s.Printf(FMT_TIMECODEN, ARG_TIMECODEN(timestamp));
     label += s;
 
     tend = FindChild<KaxChapterTimeEnd>(chapter);
     if (tend != NULL) {
-      timestamp = uint64(*static_cast<EbmlUInteger *>(tend)) / 1000000;
-      s.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
+      timestamp = uint64(*static_cast<EbmlUInteger *>(tend));
+      s.Printf(FMT_TIMECODEN, ARG_TIMECODEN(timestamp));
       label += " - " + s;
     }
 
@@ -1604,16 +1604,16 @@ tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
 
   tstart = FINDFIRST(atom, KaxChapterTimeStart);
   if (tstart != NULL) {
-    timestamp = uint64(*static_cast<EbmlUInteger *>(tstart)) / 1000000;
-    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
+    timestamp = uint64(*static_cast<EbmlUInteger *>(tstart));
+    label.Printf(FMT_TIMECODEN, ARG_TIMECODEN(timestamp));
     tc_start_time->SetValue(label);
   } else
     tc_start_time->SetValue("");
 
   tend = FINDFIRST(atom, KaxChapterTimeEnd);
   if (tend != NULL) {
-    timestamp = uint64(*static_cast<EbmlUInteger *>(tend)) / 1000000;
-    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
+    timestamp = uint64(*static_cast<EbmlUInteger *>(tend));
+    label.Printf(FMT_TIMECODEN, ARG_TIMECODEN(timestamp));
     tc_end_time->SetValue(label);
   } else
     tc_end_time->SetValue("");
@@ -1662,48 +1662,27 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
   no_update = false;
 }
 
-#define iscolon(s) (*(s) == ':')
-#define isdot(s) (*(s) == '.')
-#define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
-#define isthreedigits(s) (istwodigits(s) && isdigit(*(s + 2)))
-#define istimestamp(s) ((strlen(s) == 12) && \
-                        istwodigits(s) && iscolon(s + 2) && \
-                        istwodigits(s + 3) && iscolon(s + 5) && \
-                        istwodigits(s + 6) && isdot(s + 8) && \
-                        isthreedigits(s + 9))
-#define isshorttimestamp(s) ((strlen(s) == 8) && \
-                             istwodigits(s) && iscolon(s + 2) && \
-                             istwodigits(s + 3) && iscolon(s + 5) && \
-                             istwodigits(s + 6))
-
 int64_t
 tab_chapters::parse_time(wxString s) {
+  int64_t nsecs;
   const char *c;
-  int hour, minutes, seconds, msecs;
-  int64_t secs;
 
   strip(s);
   if (s.length() == 0)
     return -2;
 
   c = s.c_str();
-
-  if (istimestamp(c)) {
-    sscanf(c, FMT_TIMECODE, &hour, &minutes, &seconds, &msecs);
-    return ((int64_t)hour * 60 * 60 * 1000 +
-            (int64_t)minutes * 60 * 1000 +
-            (int64_t)seconds * 1000 + msecs) * 1000000;
-
-  } else if (isshorttimestamp(c)) {
-    sscanf(c, "%02d:%02d:%02d", &hour, &minutes, &seconds);
-    return ((int64_t)hour * 60 * 60 * 1000 +
-            (int64_t)minutes * 60 * 1000 +
-            (int64_t)seconds * 1000) * 1000000;
-
-  } else if (parse_int(c, secs))
-    return secs * 1000000000;
-
-  return -1;
+  while (*c != 0) {
+    if (!isdigit(*c)) {
+      if (parse_timecode(s.c_str(), &nsecs))
+        return nsecs;
+      return -1;
+    }
+    c++;
+  }
+  if (!parse_int(s.c_str(), nsecs))
+    return -1;
+  return nsecs * 1000000000;
 }
 
 IMPLEMENT_CLASS(chapter_values_dlg, wxDialog);

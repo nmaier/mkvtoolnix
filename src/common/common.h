@@ -78,11 +78,20 @@ using namespace std;
 #define MXMSG_DEBUG     8
 
 #define FMT_TIMECODE "%02d:%02d:%02d.%03d"
-#define ARG_TIMECODE(t) (int32_t)(t) / 60 / 60 / 1000, \
-                        (int32_t)((t) / 60 / 1000) % 60, \
-                        (int32_t)((t) / 1000) % 60, \
-                        (int32_t)(t) % 1000
+#define ARG_TIMECODEINT(t) (int32_t)((t) / 60 / 60 / 1000), \
+                           (int32_t)(((t) / 60 / 1000) % 60), \
+                           (int32_t)(((t) / 1000) % 60), \
+                           (int32_t)((t) % 1000)
+#define ARG_TIMECODE(t) ARG_TIMECODEINT((int64_t)t)
 #define ARG_TIMECODE_NS(t) ARG_TIMECODE(t / 1000000)
+#define FMT_TIMECODEN "%02d:%02d:%02d.%09d"
+#define ARG_TIMECODENINT(t) (int32_t)((t) / 60 / 60 / 1000000000), \
+                            (int32_t)(((t) / 60 / 1000000000) % 60), \
+                            (int32_t)(((t) / 1000000000) % 60), \
+                            (int32_t)((t) % 1000000000)
+#define ARG_TIMECODEN(t) ARG_TIMECODENINT((int64_t)t)
+extern const char * MTX_DLL_API timecode_parser_error;
+extern bool MTX_DLL_API parse_timecode(const char *src, int64_t *timecode);
 
 extern bool MTX_DLL_API suppress_warnings;
 void MTX_DLL_API fix_format(const char *fmt, string &new_fmt);
