@@ -248,9 +248,10 @@ tab_input::tab_input(wxWindow *parent):
   siz_fg->Add(st_stretch, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxT(""));
   tc_stretch->SetToolTip(TIP("Stretch the audio or subtitle track by a "
-                             "factor. This should be a positive floating "
-                             "point number. Not all formats can be stretched "
-                             "at the moment."));
+                             "factor. This entry can have two formats. It is "
+                             "either a positive floating point number, or a "
+                             "fraction like e.g. 1200/1253. Not all formats "
+                             "can be stretched at the moment."));
   tc_stretch->SetSizeHints(0, -1);
   siz_fg->Add(tc_stretch, 0, wxGROW, 0);
 
