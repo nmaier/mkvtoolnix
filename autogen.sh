@@ -24,8 +24,10 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
     else
       echo 'Not overwriting Makefile.options.'
     fi
-    echo "Creating config.h from config.h.mingw"
-    cp config.h.mingw config.h
+    # Extract the version number from os.h
+    VERSION=`grep '# define VERSION' src/common/os.h | sed -e 's;# define VERSION ;;' -e 's;";;g'`
+    echo "Creating config.h from config.h.mingw (version is $VERSION)"
+    sed -e 's/#define VERSION.*/#define VERSION "'$VERSION'"/' < config.h.mingw > config.h
     echo ''
     echo 'Creating dependencies (calling "make depend")'
     echo ''
