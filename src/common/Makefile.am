@@ -12,29 +12,6 @@ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 
 CXXFLAGS = @CXXFLAGS@ -Wshadow
 
-#lib_LTLIBRARIES = libmtxcommon.la libmtxebmlcommon.la libmtxkaxcommon.la \
-#		libmtxcomp.la
-
-#libmtxcommon_la_SOURCES = base64.cpp \
-#			aac_common.cpp \
-#			ac3_common.cpp \
-#			common.cpp \
-#			dts_common.cpp \
-#			iso639.cpp \
-#			mp3_common.cpp
-#
-#libmtxebmlcommon_la_SOURCES = commonebml.cpp \
-#			mm_io.cpp
-#
-#libmtxkaxcommon_la_SOURCES = chapters.cpp \
-#			chapter_parser_xml.cpp \
-#			chapter_writer.cpp \
-#			tagparser_start.cpp \
-#			tagparser_end.cpp \
-#			tagwriter.cpp
-#
-#libmtxcomp_la_SOURCES = compression.cpp
-#
 noinst_LIBRARIES = libmtxcommon.a libmtxebmlcommon.a libmtxkaxcommon.a \
 		libmtxcomp.a
 
