@@ -169,10 +169,17 @@
 
   \subsection packed_format Bitstream format
 
-  The bitstream for such a sub packet looks like this:
+  There are three layouts for how the bitstream for such a sub packet looks
+  like which depends on the first two bits.
 
-  <tt>AABBBBBB BCCCCCCC {DEFFFFFF FFFFFFFF (GGGGGGGG GGGGGGGG)
-  HIJJJJJJ JJJJJJJJ (KKKKKKKK KKKKKKKK) LLLLLLLL}</tt>
+  -# For <tt>AA = 00</tt> and <tt>AA = 10</tt>:\n
+  <tt>AABBBBBB BCCCCCCC DEFFFFFF FFFFFFFF (GGGGGGGG GGGGGGGG)
+  HIJJJJJJ JJJJJJJJ (KKKKKKKK KKKKKKKK) LLLLLLLL</tt>
+  -# For <tt>AA = 01</tt>:\n
+  <tt>AABBBBBB BCCCCCCC</tt>
+  -# For <tt>AA = 11</tt>:\n
+  <tt>AABBBBBB DEFFFFFF FFFFFFFF (GGGGGGGG GGGGGGGG)
+  HIJJJJJJ JJJJJJJJ (KKKKKKKK KKKKKKKK) LLLLLLLL</tt>
 
   - \c A, two bits: Sub packet type indicator
     - \c 00 partial frame
