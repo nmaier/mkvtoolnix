@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_ac3.h,v 1.3 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: r_ac3.h,v 1.4 2003/02/27 09:52:37 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,14 +30,14 @@
 #include "ac3_common.h"
 
 class ac3_reader_c: public generic_reader_c {
- private:
+private:
   unsigned char          *chunk;
   FILE                   *file;
   class ac3_packetizer_c *ac3packetizer;
   u_int64_t               bytes_processed;
   u_int64_t               size;
      
- public:
+public:
   ac3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
     throw (error_c);
   virtual ~ac3_reader_c();
@@ -50,4 +50,4 @@ class ac3_reader_c: public generic_reader_c {
   static int        probe_file(FILE *file, u_int64_t size);
 };
 
-#endif
+#endif // __R_AC3_H

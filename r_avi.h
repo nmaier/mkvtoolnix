@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.6 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: r_avi.h,v 1.7 2003/02/27 09:52:37 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -46,7 +46,7 @@ typedef struct avi_demuxer_t {
 } avi_demuxer_t;
 
 class avi_reader_c: public generic_reader_c {
- private:
+private:
   char               *chunk;
   avi_t              *avi;
   video_packetizer_c *vpacketizer;
@@ -64,7 +64,7 @@ class avi_reader_c: public generic_reader_c {
   int                 video_done, maxframes;
   int                 is_divx, rederive_keyframes;
      
- public:
+public:
   avi_reader_c(char *fname, unsigned char *astreams,
                unsigned char *vstreams, audio_sync_t *nasync,
                range_t *nrange, char *nfourcc) throw (error_c);
@@ -77,7 +77,7 @@ class avi_reader_c: public generic_reader_c {
 
   static int        probe_file(FILE *file, u_int64_t size);
     
- private:
+private:
   virtual int       add_audio_demuxer(avi_t *avi, int aid);
   virtual int       is_keyframe(unsigned char *data, long size,
                                 int suggestion);

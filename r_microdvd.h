@@ -27,13 +27,13 @@
 #include "p_textsubs.h"
 
 class microdvd_reader_c: public generic_reader_c {
- private:
+private:
   char                   chunk[2048];
   FILE                  *file;
   textsubs_packetizer_c *textsubspacketizer;
   int                    act_wchar;
      
- public:
+public:
   microdvd_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
                     char **ncomments) throw (error_c);
   virtual ~microdvd_reader_c();

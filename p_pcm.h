@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.2 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.3 2003/02/27 09:52:37 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,7 @@
 #include "queue.h"
 
 class pcm_packetizer_c: public q_c {
- private:
+private:
   int            packetno;
   int            bps;
   u_int64_t      bytes_output;
@@ -36,7 +36,7 @@ class pcm_packetizer_c: public q_c {
   audio_sync_t   async;
   range_t        range;
   
- public:
+public:
   pcm_packetizer_c(void *nprivate_data, int nprivate_size,
                    unsigned long nsamples_per_sec, int nchannels,
                    int nbits_per_sample, audio_sync_t *nasync,
@@ -49,4 +49,4 @@ class pcm_packetizer_c: public q_c {
 
 const int pcm_interleave = 16;
 
-#endif
+#endif // __P_PCM_H

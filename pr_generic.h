@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.5 2003/02/27 09:35:55 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.6 2003/02/27 09:52:37 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,7 +36,7 @@ extern int track_number;
 
 struct packet_t;
 
-typedef class cluster_helper_c {
+class cluster_helper_c {
 private:
   int          refcount;
   KaxCluster  *cluster;
@@ -54,9 +54,9 @@ public:
   int         get_packet_count();
   int         release();
   KaxCluster &operator *();
-} cluster_helper_c;
+};
 
-typedef class generic_packetizer_c {
+class generic_packetizer_c {
 protected:
   int serialno;
   void *private_data;
@@ -73,9 +73,9 @@ public:
   virtual void      set_private_data(void *data, int size);
   virtual void      added_packet_to_cluster(packet_t *packet,
                                             cluster_helper_c *helper);
-} generic_packetizer_c;
+};
  
-typedef class generic_reader_c {
+class generic_reader_c {
 public:
   generic_reader_c();
   virtual ~generic_reader_c();
@@ -83,7 +83,7 @@ public:
   virtual packet_t *get_packet() = 0;
   virtual int       display_priority() = 0;
   virtual void      display_progress() = 0;
-} generic_reader_c;
+};
 
 typedef struct packet_t {
   DataBuffer          *data_buffer;

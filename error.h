@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: error.h,v 1.4 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: error.h,v 1.5 2003/02/27 09:52:37 mosu Exp $
     \brief class definitions for the error exception class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,9 +27,9 @@
 #include "common.h"
 
 class error_c {
- private:
+private:
   char *error;
- public:
+public:
   error_c(char *nerror) { error = strdup(nerror); if (!error) die("strdup"); };
   ~error_c()            { if (error) free(error); };
   char *get_error()     { return error; };

@@ -27,7 +27,7 @@
 #include "p_vobsub.h"
 
 class vobsub_reader_c: public generic_reader_c {
- private:
+private:
   char                  chunk[2048];
   FILE                 *file, *subfile;
   vobsub_packetizer_c  *vobsub_packetizer;
@@ -38,7 +38,7 @@ class vobsub_reader_c: public generic_reader_c {
   range_t               range;
   char                **comments;
      
- public:
+public:
   vobsub_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
                   char **ncomments) throw (error_c);
   virtual ~vobsub_reader_c();
@@ -54,7 +54,8 @@ class vobsub_reader_c: public generic_reader_c {
   virtual void             display_progress();
 
   static int               probe_file(FILE *file, u_int64_t size);
- private:
+
+private:
   virtual void             add_vobsub_packetizer(int width, int height,
                                                  char *palette, int langidx,
                                                  char *id, int index);

@@ -44,7 +44,7 @@ typedef struct ogm_demuxer_t {
 } ogm_demuxer_t;
 
 class ogm_reader_c: public generic_reader_c {
- private:
+private:
   ogg_sync_state    oy;
   unsigned char    *astreams, *vstreams, *tstreams;
   FILE             *file;
@@ -58,7 +58,7 @@ class ogm_reader_c: public generic_reader_c {
   char             *fourcc;
   int               o_eos;
      
- public:
+public:
   ogm_reader_c(char *fname, unsigned char *astreams,
                unsigned char *vstreams, unsigned char *tstreams,
                audio_sync_t *nasync, range_t *nrange, char **ncomments,
@@ -80,7 +80,7 @@ class ogm_reader_c: public generic_reader_c {
   
   static int                    probe_file(FILE *file, u_int64_t size);
     
- private:
+private:
   virtual ogm_demuxer_t        *find_demuxer(int serialno);
   virtual int                   demuxing_requested(unsigned char *, int);
   virtual void                  flush_packetizers();
