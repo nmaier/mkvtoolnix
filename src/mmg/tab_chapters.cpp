@@ -371,7 +371,9 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->AddGrowableCol(1);
   st_name = new wxStaticText(this, wxID_STATIC, wxT("Name:"));
   siz_fg->Add(st_name, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 10);
-  tc_chapter_name = new wxTextCtrl(this, ID_TC_CHAPTERNAME, wxT(""));
+  tc_chapter_name = new wxTextCtrl(this, ID_TC_CHAPTERNAME, wxT(""),
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxTE_PROCESS_ENTER);
   siz_fg->Add(tc_chapter_name, 1, wxGROW | wxBOTTOM, 10);
 
   st_language = new wxStaticText(this, wxID_STATIC, wxT("Language:"));
@@ -1184,6 +1186,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
 
   lb_chapter_names->SetSelection(0);
   b_remove_chapter_name->Enable(lb_chapter_names->GetCount() > 1);
+  tc_chapter_name->SetSelection(-1, -1);
   tc_chapter_name->SetFocus();
 }
 
@@ -1798,6 +1801,43 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
 }
 
 void
+tab_chapters::on_chapter_name_enter(wxCommandEvent &evt) {
+  wxTreeItemId id;
+  wxTreeItemIdValue cookie;
+
+  id = tc_chapters->GetSelection();
+  if (!id.IsOk())
+    return;
+  id = tc_chapters->GetNextSibling(id);
+  if (id.IsOk()) {
+    tc_chapters->SelectItem(id);
+    return;
+  }
+
+  id = tc_chapters->GetItemParent(tc_chapters->GetSelection());
+  if (!id.IsOk())
+    return;
+  id = tc_chapters->GetNextSibling(id);
+  if (id.IsOk()) {
+    id = tc_chapters->GetFirstChild(id, cookie);
+    if (id.IsOk()) {
+      tc_chapters->SelectItem(id);
+      return;
+    }
+  }
+
+  id = tc_chapters->GetRootItem();
+  if (!id.IsOk())
+    return;
+  id = tc_chapters->GetFirstChild(id, cookie);
+  if (!id.IsOk())
+    return;
+  id = tc_chapters->GetFirstChild(id, cookie);
+  if (id.IsOk())
+    tc_chapters->SelectItem(id);
+}
+
+void
 tab_chapters::on_flag_hidden(wxCommandEvent &evt) {
   wxTreeItemId selected;
   chapter_node_data_c *t;
@@ -1974,4 +2014,5 @@ BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_TEXT(ID_TC_CHAPTERNAME, tab_chapters::on_chapter_name_changed)
   EVT_CHECKBOX(ID_CB_CHAPTERHIDDEN, tab_chapters::on_flag_hidden)
   EVT_CHECKBOX(ID_CB_CHAPTERENABLED, tab_chapters::on_flag_enabled)
+  EVT_TEXT_ENTER(ID_TC_CHAPTERNAME, tab_chapters::on_chapter_name_enter)
 END_EVENT_TABLE();

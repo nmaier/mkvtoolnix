@@ -93,6 +93,7 @@ public:
   void on_country_code_selected(wxCommandEvent &evt);
   void on_chapter_name_selected(wxCommandEvent &evt);
   void on_chapter_name_changed(wxCommandEvent &evt);
+  void on_chapter_name_enter(wxCommandEvent &evt);
   void on_add_chapter_name(wxCommandEvent &evt);
   void on_remove_chapter_name(wxCommandEvent &evt);
   void on_set_default_values(wxCommandEvent &evt);
