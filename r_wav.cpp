@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.24 2003/05/20 06:30:25 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.25 2003/05/21 22:17:33 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
@@ -26,6 +26,9 @@
 
 #ifdef __CYGWIN__
 #include <sys/unistd.h>         // Needed for swab()
+#elif defined LIBEBML_GCC2
+#define __USE_XOPEN
+#include <unistd.h>
 #endif
 
 #include "mkvmerge.h"

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.18 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.19 2003/05/21 22:17:33 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -224,7 +224,7 @@ int cluster_helper_c::render(IOCallback *out) {
     last_block_group = new_group;
   }
 
-  cluster->Render(static_cast<StdIOCallback &>(*out), *kax_cues);
+  cluster->Render(*out, *kax_cues);
 
   if (kax_seekhead != NULL)
     kax_seekhead->IndexThis(*cluster, *kax_segment);

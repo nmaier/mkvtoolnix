@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.43 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.44 2003/05/21 22:17:33 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -213,54 +213,43 @@ void generic_packetizer_c::set_headers() {
 
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
-      track_entry =
-        &GetChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks));
+      track_entry = &GetChild<KaxTrackEntry>(*kax_tracks);
     else
       track_entry =
-        &GetNextChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks),
-          static_cast<KaxTrackEntry &>(*kax_last_entry));
+        &GetNextChild<KaxTrackEntry>(*kax_tracks, *kax_last_entry);
     kax_last_entry = track_entry;
   }
 
-  KaxTrackNumber &tnumber =
-    GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
+  KaxTrackNumber &tnumber = GetChild<KaxTrackNumber>(*track_entry);
   *(static_cast<EbmlUInteger *>(&tnumber)) = hserialno;
 
   if (huid == 0)
     huid = create_unique_uint32();
 
-  KaxTrackUID &tuid =
-    GetChild<KaxTrackUID>(static_cast<KaxTrackEntry &>(*track_entry));
+  KaxTrackUID &tuid = GetChild<KaxTrackUID>(*track_entry);
   *(static_cast<EbmlUInteger *>(&tuid)) = huid;
 
   if (htrack_type != -1)
     *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackType>(static_cast<KaxTrackEntry &>(*track_entry)))) =
-        htrack_type;
+      (&GetChild<KaxTrackType>(*track_entry))) = htrack_type;
 
   if (hcodec_id != NULL) {
-    KaxCodecID &codec_id =
-      GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
+    KaxCodecID &codec_id = GetChild<KaxCodecID>(*track_entry);
     codec_id.CopyBuffer((binary *)hcodec_id, strlen(hcodec_id) + 1);
   }
 
   if (hcodec_private != NULL) {
-    KaxCodecPrivate &codec_private =
-      GetChild<KaxCodecPrivate>(static_cast<KaxTrackEntry &>(*track_entry));
+    KaxCodecPrivate &codec_private = GetChild<KaxCodecPrivate>(*track_entry);
     codec_private.CopyBuffer((binary *)hcodec_private, hcodec_private_length);
   }
 
   if (htrack_min_cache != -1)
     *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackMinCache>(static_cast<KaxTrackEntry &>
-                                   (*track_entry))))
-      = htrack_min_cache;
+      (&GetChild<KaxTrackMinCache>(*track_entry))) = htrack_min_cache;
 
   if (htrack_max_cache != -1)
     *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackMaxCache>(static_cast<KaxTrackEntry &>
-                                   (*track_entry))))
-      = htrack_max_cache;
+      (&GetChild<KaxTrackMaxCache>(*track_entry))) = htrack_max_cache;
 
   if (htrack_type == track_audio)
     idx = 0;
@@ -272,25 +261,19 @@ void generic_packetizer_c::set_headers() {
   if ((default_tracks[idx] == hserialno) ||
       (default_tracks[idx] == -1 * hserialno))
     *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackFlagDefault>(static_cast<KaxTrackEntry &>
-                                      (*track_entry))))
-      = 1;
+      (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 1;
   else
     *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackFlagDefault>(static_cast<KaxTrackEntry &>
-                                      (*track_entry))))
-      = 0;
+      (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 0;
 
   if (ti->language != NULL) {
     *(static_cast<EbmlString *>
-      (&GetChild<KaxTrackLanguage>(static_cast<KaxTrackEntry &>
-                                   (*track_entry))))
-      = ti->language;
+      (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
   }
 
   if (htrack_type == track_video) {
     KaxTrackVideo &video =
-      GetChild<KaxTrackVideo>(static_cast<KaxTrackEntry &>(*track_entry));
+      GetChild<KaxTrackVideo>(*track_entry);
 
     if (hvideo_pixel_height != -1) {
       *(static_cast<EbmlUInteger *>
@@ -317,7 +300,7 @@ void generic_packetizer_c::set_headers() {
 
   } else if (htrack_type == track_audio) {
     KaxTrackAudio &audio =
-      GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
+      GetChild<KaxTrackAudio>(*track_entry);
 
     if (haudio_sampling_freq != -1.0)
       *(static_cast<EbmlFloat *> (&GetChild<KaxAudioSamplingFreq>(audio))) =

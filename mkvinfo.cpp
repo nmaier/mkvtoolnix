@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.43 2003/05/21 21:01:57 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.44 2003/05/21 22:17:33 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -211,7 +211,7 @@ void process_file() {
   try {
     delete_object = 1;
 
-    es = new EbmlStream(static_cast<StdIOCallback &>(*in));
+    es = new EbmlStream(*in);
     if (es == NULL)
       die("new EbmlStream");
 
@@ -227,7 +227,7 @@ void process_file() {
     fprintf(stdout, "\n");
       
     // Don't verify its data for now.
-    l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
+    l0->SkipData(*es, l0->Generic().Context);
     delete l0;
 
     while (1) {
@@ -251,7 +251,7 @@ void process_file() {
         fprintf(stdout, " at %llu", l0->GetElementPosition());
       fprintf(stdout, "\n");
 
-      l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
+      l0->SkipData(*es, l0->Generic().Context);
       delete l0;
     }
 
@@ -298,8 +298,13 @@ void process_file() {
           } else if (EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) {
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
             muxingapp.ReadData(es->I_O());
+#ifdef NO_WSTRING
+            fprintf(stdout, "(%s) | + Muxing application: %s", NAME,
+                    UTFstring(muxingapp).c_str());
+#else
             fprintf(stdout, "(%s) | + Muxing application: %ls", NAME,
                     UTFstring(muxingapp).c_str());
+#endif
             if (verbose > 1)
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
@@ -307,8 +312,13 @@ void process_file() {
           } else if (EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) {
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
             writingapp.ReadData(es->I_O());
+#ifdef NO_WSTRING
+            fprintf(stdout, "(%s) | + Writing application: %s", NAME,
+                    UTFstring(writingapp).c_str());
+#else
             fprintf(stdout, "(%s) | + Writing application: %ls", NAME,
                     UTFstring(writingapp).c_str());
+#endif
             if (verbose > 1)
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
@@ -328,7 +338,7 @@ void process_file() {
             if (upper_lvl_el > 0)
               break;
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
+            l2->SkipData(*es,
                          l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -471,7 +481,7 @@ void process_file() {
                   if (upper_lvl_el > 0) {
                     assert(1 == 0);  // this should never happen
                   } else {
-                    l4->SkipData(static_cast<EbmlStream &>(*es),
+                    l4->SkipData(*es,
                                  l4->Generic().Context);
                     delete l4;
                     l4 = es->FindNextElement(l3->Generic().Context,
@@ -559,7 +569,7 @@ void process_file() {
                   if (upper_lvl_el > 0) {
                     assert(1 == 0);  // this should never happen
                   } else {
-                    l4->SkipData(static_cast<EbmlStream &>(*es),
+                    l4->SkipData(*es,
                                  l4->Generic().Context);
                     delete l4;
                     l4 = es->FindNextElement(l3->Generic().Context,
@@ -674,7 +684,7 @@ void process_file() {
                 if (upper_lvl_el > 0)
                   break;
               } else {
-                l3->SkipData(static_cast<EbmlStream &>(*es),
+                l3->SkipData(*es,
                              l3->Generic().Context);
                 delete l3;
                 l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -697,7 +707,7 @@ void process_file() {
             if (upper_lvl_el > 0)
               break;
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
+            l2->SkipData(*es,
                          l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -779,7 +789,7 @@ void process_file() {
               }
 
 
-              l3->SkipData(static_cast<EbmlStream &>(*es),
+              l3->SkipData(*es,
                            l3->Generic().Context);
               delete l3;
               l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -803,7 +813,7 @@ void process_file() {
               break;
 
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
+            l2->SkipData(*es,
                          l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -906,7 +916,7 @@ void process_file() {
                   break;
 
               } else {
-                l3->SkipData(static_cast<EbmlStream &>(*es),
+                l3->SkipData(*es,
                              l3->Generic().Context);
                 delete l3;
                 l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -930,7 +940,7 @@ void process_file() {
               break;
 
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
+            l2->SkipData(*es,
                          l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1098,7 +1108,7 @@ void process_file() {
                         fprintf(stdout, "\n");
                       }
 
-                      l5->SkipData(static_cast<EbmlStream &>(*es),
+                      l5->SkipData(*es,
                                    l5->Generic().Context);
                       delete l5;
                       l5 = es->FindNextElement(l4->Generic().Context,
@@ -1122,7 +1132,7 @@ void process_file() {
                       break;
 
                   } else {
-                    l4->SkipData(static_cast<EbmlStream &>(*es),
+                    l4->SkipData(*es,
                                  l4->Generic().Context);
                     delete l4;
                     l4 = es->FindNextElement(l3->Generic().Context,
@@ -1147,7 +1157,7 @@ void process_file() {
                   break;
 
               } else {
-                l3->SkipData(static_cast<EbmlStream &>(*es),
+                l3->SkipData(*es,
                              l3->Generic().Context);
                 delete l3;
                 l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -1171,7 +1181,7 @@ void process_file() {
               break;
 
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
+            l2->SkipData(*es,
                          l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1202,7 +1212,7 @@ void process_file() {
         if (upper_lvl_el > 0)
           break;
       } else {
-        l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
+        l1->SkipData(*es, l1->Generic().Context);
         delete l1;
         l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);

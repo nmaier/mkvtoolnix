@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.72 2003/05/21 21:14:40 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.73 2003/05/21 22:17:33 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -569,7 +569,7 @@ static void render_headers(mm_io_callback *out) {
       GetChild<EDocTypeReadVersion>(head);
     *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
 
-    head.Render(static_cast<IOCallback &>(*out));
+    head.Render(*out);
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
     KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
@@ -593,7 +593,7 @@ static void render_headers(mm_io_callback *out) {
       if (meta_seek_size == 0)
         meta_seek_size = (int)(file_sizes * 1.5 / 10240);
       kax_seekhead_void->SetSize(meta_seek_size);
-      kax_seekhead_void->Render(static_cast<IOCallback &>(*out));
+      kax_seekhead_void->Render(*out);
     }
 
     kax_infos->Render(*out);
@@ -607,7 +607,7 @@ static void render_headers(mm_io_callback *out) {
       file = file->next;
     }
 
-    kax_tracks->Render(static_cast<IOCallback &>(*out));
+    kax_tracks->Render(*out);
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Could not render the track headers.\n");
     exit(1);
@@ -1197,7 +1197,7 @@ int main(int argc, char **argv) {
   if (write_cues && cue_writing_requested) {
     if (verbose == 1)
       fprintf(stdout, "Writing cue entries (the index)...");
-    kax_cues->Render(*static_cast<mm_io_callback *>(out));
+    kax_cues->Render(*out);
     if (verbose == 1)
       fprintf(stdout, "\n");
   }
@@ -1208,9 +1208,7 @@ int main(int argc, char **argv) {
       kax_seekhead->IndexThis(*kax_cues, *kax_segment);
 
     kax_seekhead->UpdateSize();
-    if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
-                                       *static_cast<mm_io_callback *>(out),
-                                       true) == 0) {
+    if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
       fprintf(stdout, "Warning: Could not update the meta seek information "
               "as the space reserved for them was too small. Re-run "
               "mkvmerge with the additional parameters '--meta-seek-size "
@@ -1223,9 +1221,7 @@ int main(int argc, char **argv) {
         kax_seekhead->IndexThis(*kax_cues, *kax_segment);
 
       kax_seekhead->UpdateSize();
-      kax_seekhead_void->ReplaceWith(*kax_seekhead,
-                                     *static_cast<mm_io_callback *>(out),
-                                     true);
+      kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true);
     }
   }
 

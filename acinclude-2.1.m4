@@ -533,7 +533,7 @@ AC_DEFUN(PATH_CXXVERSION,
   CXXVER_CFLAGS=
   case "$CXXVER" in
     2.*)
-      CXXVER_CFLAGS=-DLIBEBML_GCC2
+      CXXVER_CFLAGS="-DLIBEBML_GCC2 -DNO_WSTRING"
       AC_MSG_RESULT(v2)
       ;;
     3*)
@@ -559,6 +559,7 @@ AC_DEFUN(PATH_CYGWIN,
     CYGWIN*)
       ICONV_LIBS="-liconv"
       AC_MSG_RESULT(yes)
+      CXXVER_CFLAGS="$CXXVER_CFLAGS -DNO_WSTRING"
       ;;
     *)
       ICONV_LIBS=""

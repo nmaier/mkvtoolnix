@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.24 2003/05/21 21:05:47 mosu Exp $
+    \version \$Id: common.cpp,v 1.25 2003/05/21 22:17:33 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "common.h"
 

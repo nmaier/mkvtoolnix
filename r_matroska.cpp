@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.35 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.36 2003/05/21 22:17:33 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -417,7 +417,7 @@ int mkv_reader_c::read_headers() {
     }
 
     // Don't verify its data for now.
-    l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
+    l0->SkipData(*es, l0->Generic().Context);
     delete l0;
     fprintf(stdout, "matroska_reader: Found the head...\n");
 
@@ -481,8 +481,7 @@ int mkv_reader_c::read_headers() {
             if (upper_lvl_el > 0)
               break;
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
-                         l2->Generic().Context);
+            l2->SkipData(*es, l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
@@ -603,8 +602,7 @@ int mkv_reader_c::read_headers() {
                   if (upper_lvl_el > 0) {
                     assert(1 == 0);  // this should never happen
                   } else {
-                    l4->SkipData(static_cast<EbmlStream &>(*es),
-                                 l4->Generic().Context);
+                    l4->SkipData(*es, l4->Generic().Context);
                     delete l4;
                     l4 = es->FindNextElement(l3->Generic().Context,
                                              upper_lvl_el, 0xFFFFFFFFL, true,
@@ -671,8 +669,7 @@ int mkv_reader_c::read_headers() {
                   if (upper_lvl_el > 0) {
                     assert(1 == 0);  // this should never happen
                   } else {
-                    l4->SkipData(static_cast<EbmlStream &>(*es),
-                                 l4->Generic().Context);
+                    l4->SkipData(*es, l4->Generic().Context);
                     delete l4;
                     l4 = es->FindNextElement(l3->Generic().Context,
                                              upper_lvl_el, 0xFFFFFFFFL, true,
@@ -741,8 +738,7 @@ int mkv_reader_c::read_headers() {
                 if (upper_lvl_el > 0)
                   break;
               } else {
-                l3->SkipData(static_cast<EbmlStream &>(*es),
-                             l3->Generic().Context);
+                l3->SkipData(*es, l3->Generic().Context);
                 delete l3;
                 l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
@@ -759,8 +755,7 @@ int mkv_reader_c::read_headers() {
             if (upper_lvl_el > 0)
               break;
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
-                         l2->Generic().Context);
+            l2->SkipData(*es, l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
@@ -788,7 +783,7 @@ int mkv_reader_c::read_headers() {
         if (upper_lvl_el > 0)
           break;
       } else {
-        l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
+        l1->SkipData(*es, l1->Generic().Context);
         delete l1;
         l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
@@ -1002,8 +997,7 @@ int mkv_reader_c::read() {
                            KaxBlockVirtual::ClassInfos.GlobalId))
                  printf("[mkv]   Uknown element@3: %s\n", typeid(*l3).name());
 
-              l3->SkipData(static_cast<EbmlStream &>(*es),
-                           l3->Generic().Context);
+              l3->SkipData(*es, l3->Generic().Context);
               if (delete_element)
                 delete l3;
               else
@@ -1052,8 +1046,7 @@ int mkv_reader_c::read() {
             if (upper_lvl_el > 0)
               break;
           } else {
-            l2->SkipData(static_cast<EbmlStream &>(*es),
-                         l2->Generic().Context);
+            l2->SkipData(*es, l2->Generic().Context);
             delete l2;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
@@ -1074,7 +1067,7 @@ int mkv_reader_c::read() {
         if (upper_lvl_el > 0)
           break;
       } else {
-        l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
+        l1->SkipData(*es, l1->Generic().Context);
         delete l1;
         l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
