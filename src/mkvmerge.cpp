@@ -187,6 +187,21 @@ mm_io_c *out;
 bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
+// Some hacks that are configurable via command line but which should ONLY!
+// be used by the author.
+#define ENGAGE_SPACE_AFTER_CHAPTERS 0x0000000000000001LLU
+
+typedef struct {
+  const char *arg;
+  uint64_t value;
+} mosu_hack_t;
+
+const mosu_hack_t mosu_hacks[] = {
+  {"space_after_chapters", ENGAGE_SPACE_AFTER_CHAPTERS},
+  {NULL, 0}
+};
+uint64_t engage_hacks = 0;
+
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
@@ -1153,7 +1168,30 @@ static void parse_args(int argc, char **argv) {
     }
 
     // Global options
-    if (!strcmp(this_arg, "-q"))
+    if (!strcmp(this_arg, "--engage")) {
+      vector<string> engage_args;
+      int aidx, hidx;
+      bool valid_hack;
+
+      if (next_arg == NULL)
+        mxerror("'--engage' lacks its argument.\n");
+      engage_args = split(next_arg, ",");
+      for (aidx = 0; aidx < engage_args.size(); aidx++) {
+        valid_hack = false;
+        for (hidx = 0; mosu_hacks[hidx].arg != NULL; hidx++)
+          if (engage_args[aidx] == mosu_hacks[hidx].arg) {
+            valid_hack = true;
+            engage_hacks |= mosu_hacks[hidx].value;
+            break;
+          }
+        if (!valid_hack)
+          mxerror("'%s' is not a valid hack.\n", engage_args[aidx].c_str());
+      }
+      mxverb(2, "Enabled hacks: 0x%08x%08x\n", (uint32_t)(engage_hacks >> 32),
+             (uint32_t)(engage_hacks & 0xffffffff));
+      i++;
+
+    } else if (!strcmp(this_arg, "-q"))
       verbose = 0;
 
     else if (!strcmp(this_arg, "-v") || !strcmp(this_arg, "--verbose"))
@@ -1849,6 +1887,11 @@ void create_next_output_file(bool last_file, bool first_file) {
       kax_chapters->UpdateSize();
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
+      if (engage_hacks & ENGAGE_SPACE_AFTER_CHAPTERS) {
+        EbmlVoid evoid;
+        evoid.SetSize(100);
+        evoid.Render(*out);
+      }
     }
 
     if (kax_tags != NULL) {
@@ -1887,8 +1930,19 @@ void create_next_output_file(bool last_file, bool first_file) {
       kax_chapters_void = new EbmlVoid;
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
-    } else
+      if (engage_hacks & ENGAGE_SPACE_AFTER_CHAPTERS) {
+        EbmlVoid evoid;
+        evoid.SetSize(100);
+        evoid.Render(*out);
+      }
+    } else {
       kax_chapters->Render(*out);
+      if (engage_hacks & ENGAGE_SPACE_AFTER_CHAPTERS) {
+        EbmlVoid evoid;
+        evoid.SetSize(100);
+        evoid.Render(*out);
+      }
+    }
   }
 
   if (kax_tags != NULL) {
