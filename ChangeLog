@@ -1,3 +1,9 @@
+2003-12-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The chapter editor did not properly escape the
+	chapter names resulting in invalid XML files if the special
+	characters &, < or > were used.
+
 2003-12-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: If splitting was active then a wrong CodecID

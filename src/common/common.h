@@ -139,6 +139,7 @@ string join(const char *pattern, vector<string> &strings);
 void strip(string &s, bool newlines = false);
 void strip(vector<string> &v, bool newlines = false);
 string escape(const char *src);
+string escape_xml(const char *src);
 string unescape(const char *src);
 bool starts_with(const string &s, const char *start);
 bool starts_with(const string &s, const string &start);

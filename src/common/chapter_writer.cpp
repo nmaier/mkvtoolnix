@@ -213,6 +213,7 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
   EbmlElement *e;
   char *s;
   bool string_found, language_found;
+  string escaped;
 
   pt(level, "<ChapterDisplay>\n");
 
@@ -224,7 +225,8 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
       pt(level + 1, "<ChapterString>");
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
-      mxprint(o, "%s</ChapterString>\n", s);
+      escaped = escape_xml(s);
+      mxprint(o, "%s</ChapterString>\n", escaped.c_str());
       safefree(s);
       string_found = true;
 

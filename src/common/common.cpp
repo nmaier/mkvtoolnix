@@ -1054,6 +1054,24 @@ string unescape(const char *src) {
   return dst;
 }
 
+string escape_xml(const char *src) {
+  string dst;
+
+  while (*src != 0) {
+    if (*src == '&')
+      dst += "&amp;";
+    else if (*src == '>')
+      dst += "&gt;";
+    else if (*src == '<')
+      dst += "&lt;";
+    else
+      dst += *src;
+    src++;
+  }
+
+  return dst;
+}
+
 bool starts_with(const string &s, const char *start) {
   return strncmp(s.c_str(), start, strlen(start)) == 0;
 }
