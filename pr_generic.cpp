@@ -57,7 +57,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
       break;
     }
   }
-  if (found && (ti->async.linear == 0.0)) {
+  if (!found && (ti->async.linear == 0.0)) {
     ti->async.linear = 1.0;
     ti->async.displacement = 0;
   }
