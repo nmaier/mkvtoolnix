@@ -97,6 +97,13 @@ typedef struct {
 
 #pragma pack(pop)
 
+typedef struct {
+  uint32_t chunks;              // number of chunks
+  uint32_t timestamp;           // timestamp from packet header
+  uint32_t len;                 // length of actual data
+  uint32_t chunktab;            // offset to chunk offset array
+} dp_hdr_t;
+
 int real_reader_c::probe_file(mm_io_c *io, int64_t size) {
   unsigned char data[4];
 
@@ -445,7 +452,6 @@ int real_reader_c::read() {
   uint32_t object_version, length, id, timestamp, flags, object_id;
   unsigned char *chunk;
   real_demuxer_t *dmx;
-  int64_t bref;
 
   try {
     object_version = io->read_uint16_be();
@@ -483,17 +489,9 @@ int real_reader_c::read() {
       return 0;
     }
 
-    if (dmx->type == 'v') {
-      if (((flags & 2) == 2) && (last_timestamp != timestamp))
-        bref = VFT_IFRAME;
-      else if (last_timestamp == timestamp)
-        bref = timestamp;
-      else
-        bref = VFT_PFRAMEAUTOMATIC;
-
-      dmx->packetizer->process(chunk, length, timestamp, -1, bref);
-
-    } else
+    if (dmx->type == 'v')
+      assemble_packet(dmx, chunk, length, timestamp, (flags & 2) == 2);
+    else
       dmx->packetizer->process(chunk, length, timestamp);
 
     last_timestamp = timestamp;
@@ -561,5 +559,224 @@ void real_reader_c::identify() {
     mxprint(stdout, "Track ID %d: %s (%s)\n", demuxer->id,
             demuxer->type == 'a' ? "audio" : "video",
             demuxer->fourcc);
+  }
+}
+
+
+// A lot of stuff here (well... almost all the stuff) comes from mplayer's
+// demux_real.c. Credit's due to all the guys contributing to it.
+void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
+                                    int size, int64_t timecode,
+                                    bool keyframe) {
+  int vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum, i, len;
+  byte_cursor_c bc(p, size);
+  unsigned char *dp_data, *buffer;
+  dp_hdr_t *dp_hdr;
+
+  try {
+    vpkg_subseq = 0;
+    vpkg_seqnum = -1;
+
+    while (bc.get_len() > 2) {
+      uint32_t *extra;
+
+      // bit 7: 1=last block in block chain
+      // bit 6: 1=short header (only one block?)
+      vpkg_header = bc.get_byte();
+
+      printf("\nPACKET: size: %d; fib: ", size);
+      for (i = 0; i < 8; i++)
+        printf("0x%02x ", p[i]);
+      printf("hdr: 0x%02x ", vpkg_header);
+      if ((vpkg_header & 0xc0) == 0x40) {
+        // seems to be a very short header
+        // 2 bytes, purpose of the second byte yet unknown
+        bc.skip(1);
+        vpkg_offset = 0;
+        vpkg_length = bc.get_len();
+        printf("short\n");
+
+      } else {
+        if ((vpkg_header & 0x40) == 0) {
+          // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
+          vpkg_subseq = bc.get_byte();
+          printf("subseq: %d ", vpkg_subseq);
+        }
+
+        // size of the complete packet
+        // bit 14 is always one (same applies to the offset)
+        vpkg_length = bc.get_word();
+        printf("l: %02x %02x ", vpkg_length >> 8,
+               vpkg_length & 0xff);
+
+        if ((vpkg_length & 0xc000) == 0) {
+          vpkg_length <<= 16;
+          vpkg_length |= bc.get_word();
+          printf("l+: %02x %02x ",
+                 (vpkg_length >> 8) & 0xff, vpkg_length & 0xff);
+        } else
+          vpkg_length &= 0x3fff;
+
+        // offset of the following data inside the complete packet
+        // Note: if (hdr&0xC0)==0x80 then offset is relative to the
+        // _end_ of the packet, so it's equal to fragment size!!!
+        vpkg_offset = bc.get_word();
+
+        printf("o: %02x %02x ", vpkg_offset >> 8,
+               vpkg_offset & 0xff);
+
+        if ((vpkg_offset & 0xc000) == 0) {
+          vpkg_offset <<= 16;
+          vpkg_offset |= bc.get_word();
+          printf("o+: %02x %02x ",
+                 (vpkg_offset >> 8 ) &0xff, vpkg_offset & 0xff);
+        } else
+          vpkg_offset &= 0x3fff;
+
+        vpkg_seqnum = bc.get_byte();
+        printf("seq: %02x\n", vpkg_seqnum);
+      }
+
+      if (dmx->last_packet) {
+        dp_hdr = (dp_hdr_t *)dmx->last_packet;
+        dp_data = dmx->last_packet + sizeof(dp_hdr_t);
+        extra = (uint32_t *)(dmx->last_packet + dp_hdr->chunktab);
+        printf("we have an incomplete packet "
+               "(oldseq=%d new=%d)\n", dmx->last_seq, vpkg_seqnum);
+
+        // we have an incomplete packet:
+        if (dmx->last_seq != vpkg_seqnum) {
+          // this fragment is for new packet, close the old one
+          printf("closing probably incomplete packet, "
+                 "len: %d\n", dmx->ctb_len);
+
+          buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
+                                               8 * (dp_hdr->chunks + 1));
+          buffer[0] = dp_hdr->chunks;
+          memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
+          memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
+                 dp_hdr->len);
+          safefree(dmx->last_packet);
+          dmx->last_packet = NULL;
+          dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                                   8 * (dp_hdr->chunks + 1), timecode, -1,
+                                   keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC,
+                                   VFT_NOBFRAME);
+
+        } else {
+          // append data to it!
+          dp_hdr->chunks++;
+          printf("[chunks=%d  subseq=%d]\n", dp_hdr->chunks, vpkg_subseq);
+
+          if ((int)(dp_hdr->chunktab + 8 * (1 + dp_hdr->chunks)) >
+              dmx->ctb_len) {
+            // increase buffer size, this should not happen!
+            printf("chunktab buffer too small!!!!!\n");
+            dmx->ctb_len = dp_hdr->chunktab + 8 * (4 + dp_hdr->chunks);
+            dmx->last_packet = (unsigned char *)realloc(dmx->last_packet,
+                                                        dmx->ctb_len);
+            // re-calc pointers:
+            dp_hdr = (dp_hdr_t *)dmx->last_packet;
+            dp_data = dmx->last_packet + sizeof(dp_hdr_t);
+            extra = (uint32_t *)(dmx->last_packet + dp_hdr->chunktab);
+          }
+
+          extra[2 * dp_hdr->chunks + 0] = 1;
+          extra[2 * dp_hdr->chunks + 1] = dp_hdr->len;
+
+          if ((vpkg_header & 0xc0) == 0x80) {
+            // last fragment!
+            if ((int)dp_hdr->len != (vpkg_length - vpkg_offset))
+              printf("warning! assembled.len=%d  "
+                     "frag.len=%d  total.len=%d\n",
+                     dmx->ctb_len, vpkg_offset, vpkg_length - vpkg_offset);
+            bc.get_bytes(dp_data + dp_hdr->len, vpkg_offset);
+            if ((dp_data[dp_hdr->len] & 0x20) &&
+                !strcmp(dmx->fourcc, "RV30"))
+              dp_hdr->chunks--;
+            else
+              dp_hdr->len += vpkg_offset;
+
+            printf("fragment (%d bytes) appended, %d "
+                   "bytes left\n", vpkg_offset, bc.get_len());
+
+            // we know that this is the last fragment. we can close the packet!
+            buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
+                                                 8 * (dp_hdr->chunks + 1));
+            buffer[0] = dp_hdr->chunks;
+            memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
+            memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
+                   dp_hdr->len);
+            safefree(dmx->last_packet);
+            dmx->last_packet = NULL;
+            dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                                     8 * (dp_hdr->chunks + 1), timecode, -1,
+                                     keyframe ? VFT_IFRAME :
+                                     VFT_PFRAMEAUTOMATIC);
+            dmx->last_packet = NULL;
+            // continue parsing
+            continue;
+          }
+
+          // non-last fragment:
+          if ((int)dp_hdr->len != vpkg_offset)
+            printf("warning! assembled.len=%d  "
+                   "offset=%d  frag.len=%d  total.len=%d  \n", dmx->ctb_len,
+                   vpkg_offset, bc.get_len(), vpkg_length);
+          len = bc.get_len();
+          bc.get_bytes(dp_data + dp_hdr->len, len);
+          if ((dp_data[dp_hdr->len] & 0x20) &&
+              !strcmp(dmx->fourcc, "RV30"))
+            dp_hdr->chunks--;
+          else
+            dp_hdr->len += len;
+
+          break; // no more fragments in this chunk!
+        }
+      }
+
+      // create new packet!
+      dmx->ctb_len = sizeof(dp_hdr_t) + vpkg_length +
+        8 * (1 + 2 * (vpkg_header & 0x3f));
+      dmx->last_packet = (unsigned char *)malloc(dmx->ctb_len);
+
+      // the timestamp seems to be in milliseconds
+      dmx->last_seq = vpkg_seqnum;
+      dp_hdr = (dp_hdr_t *)dmx->last_packet;
+      dp_hdr->chunks=0;
+      dp_hdr->timestamp = timecode;
+      dp_hdr->chunktab = sizeof(dp_hdr_t) + vpkg_length;
+      dp_data = dmx->last_packet + sizeof(dp_hdr_t);
+      extra = (uint32_t *)(dmx->last_packet + dp_hdr->chunktab);
+      extra[0]=1;
+      extra[1]=0; // offset of the first chunk
+
+      if((vpkg_header & 0xc0) == 0) {
+        // first fragment:
+        dp_hdr->len = bc.get_len();
+        bc.get_bytes(dp_data, bc.get_len());
+        break;
+      }
+
+      // whole packet (not fragmented):
+      dp_hdr->len = vpkg_length;
+      bc.get_bytes(dp_data, vpkg_length);
+      buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
+                                           8 * (dp_hdr->chunks + 1));
+      buffer[0] = dp_hdr->chunks;
+      memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
+      memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data, dp_hdr->len);
+      safefree(dmx->last_packet);
+      dmx->last_packet = NULL;
+      dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                               8 * (dp_hdr->chunks + 1), timecode, -1,
+                               keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+      break;
+    }
+
+  } catch(...) {
+    fprintf(stderr, "real_reader: Caught exception during parsing of a video "
+            "packet. Aborting.\n");
+    exit(1);
   }
 }

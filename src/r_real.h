@@ -48,6 +48,9 @@ typedef struct {
 
   unsigned char *private_data;
   int private_size;
+
+  unsigned char *last_packet;
+  int last_seq, last_len, ctb_len;
 } real_demuxer_t;
 
 class real_reader_c: public generic_reader_c {
@@ -74,6 +77,8 @@ private:
   virtual void parse_headers();
   virtual void create_packetizers();
   virtual real_demuxer_t *find_demuxer(int id);
+  virtual void assemble_packet(real_demuxer_t *dmx, unsigned char *p, int size,
+                               int64_t timecode, bool keyframe);
 };
 
 #endif  // __R_REAL_H
