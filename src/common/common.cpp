@@ -1291,6 +1291,7 @@ static const char *mosu_hacks[] = {
   ENGAGE_NO_VARIABLE_DATA,
   ENGAGE_NO_DEFAULT_HEADER_VALUES,
   ENGAGE_FORCE_PASSTHROUGH_PACKETIZER,
+  ENGAGE_SKIP_BIG_VOBSUBS,
   NULL
 };
 static vector<const char *> engaged_hacks;

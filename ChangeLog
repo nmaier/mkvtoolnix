@@ -1,5 +1,8 @@
 2004-01-31  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: The VobSub reader will not discard packets that exceed
+	a certain size (64KB) anymore.
+
 	* mkvmerge: Improved some internal memory freeing decisions. This
 	should help with files/sections in which are only few keyframes.
 

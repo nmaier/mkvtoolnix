@@ -32,6 +32,7 @@
 #define ENGAGE_NO_VARIABLE_DATA "no_variable_data"
 #define ENGAGE_NO_DEFAULT_HEADER_VALUES "no_default_header_values"
 #define ENGAGE_FORCE_PASSTHROUGH_PACKETIZER "force_passthrough_packetizer"
+#define ENGAGE_SKIP_BIG_VOBSUBS "skip_big_vobsubs"
 
 bool hack_engaged(const char *hack);
 

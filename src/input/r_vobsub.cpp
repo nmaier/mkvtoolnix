@@ -25,6 +25,7 @@
 #include <errno.h>
 
 #include "common.h"
+#include "hacks.h"
 #include "iso639.h"
 #include "mkvmerge.h"
 #include "mm_io.h"
@@ -325,7 +326,7 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr) {
 
   id = i;
   i = track->idx;
-  if (track->sizes[i] > 64 * 1024) {
+  if ((track->sizes[i] > 64 * 1024) && hack_engaged(ENGAGE_SKIP_BIG_VOBSUBS)) {
     mxwarn(PFX "Skipping entry at timecode %llds of track ID %u in '%s' "
            "because it is too big (%lld bytes). This is usually the case for "
            "the very last index lines for each track in the .idx file because "
