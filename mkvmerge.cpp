@@ -381,6 +381,39 @@ static void sighandler(int signum) {
 #endif // DEBUG
 }
 
+static bool parse_int(const char *s, int64_t &value) {
+  const char *p;
+  int sign;
+
+  sign = 1;
+  value = 0;
+  p = s;
+  if (*p == '-') {
+    sign = -1;
+    p++;
+  }
+  while (*p != 0) {
+    if (!isdigit(*p))
+      return false;
+    value *= 10;
+    value += *p - '0';
+    p++;
+  }
+  value *= sign;
+
+  return true;
+}
+
+static bool parse_int(const char *s, int &value) {
+  int64_t tmp;
+  bool result;
+
+  result = parse_int(s, tmp);
+  value = tmp;
+
+  return result;
+}
+
 static int get_type(char *filename) {
   mm_io_c *mm_io;
   off_t size;
@@ -467,8 +500,7 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
   while ((comma != NULL) && (*s != 0)) {
     *comma = 0;
 
-    tid = strtol(s, NULL, 10);
-    if (errno == ERANGE) {
+    if (!parse_int(s, tid)) {
       fprintf(stderr, "Error: Invalid track ID '%s'.\n", s);
       exit(1);
     }
@@ -479,8 +511,7 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
   }
 
   if (*s != 0) {
-    tid = strtol(s, NULL, 10);
-    if (errno == ERANGE) {
+    if (!parse_int(s, tid)) {
       fprintf(stderr, "Error: Invalid track ID '%s'.\n", s);
       exit(1);
     }
@@ -499,7 +530,10 @@ static void parse_sync(char *s, audio_sync_t *async) {
     exit(1);
   }
   *colon = 0;
-  async->id = strtol(s, NULL, 10);
+  if (!parse_int(s, async->id)) {
+    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    exit(1);
+  }
   s = &colon[1];
   if (*s == 0) {
     fprintf(stderr, "Error: Invalid sync option specified.\n");
@@ -580,9 +614,9 @@ static void parse_split(const char *arg) {
 
     s[2] = 0;
     s[5] = 0;
-    hours = strtol(s, NULL, 10);
-    mins = strtol(&s[3], NULL, 10);
-    secs = strtol(&s[6], NULL, 10);
+    parse_int(s, hours);
+    parse_int(&s[3], mins);
+    parse_int(&s[6], secs);
     split_after = secs + mins * 60 + hours * 3600;
     if ((hours < 0) || (mins < 0) || (mins > 59) ||
         (secs < 0) || (secs > 59) || (split_after < 10)) {
@@ -599,8 +633,7 @@ static void parse_split(const char *arg) {
   // Number of seconds: e.g. 1000s or 4254S
   if ((s[strlen(s) - 1] == 's') || (s[strlen(s) - 1] == 'S')) {
     s[strlen(s) - 1] = 0;
-    split_after = strtol(s, NULL, 10);
-    if (split_after < 10) {
+    if (!parse_int(s, split_after)) {
       fprintf(stderr, "Error: Invalid time for --split.\n");
       exit(1);
     }
@@ -623,7 +656,10 @@ static void parse_split(const char *arg) {
     modifier = 1;
   if (modifier != 1)
     *p = 0;
-  split_after = strtol(s, NULL, 10);
+  if (!parse_int(s, split_after)) {
+    fprintf(stderr, "Error: invalid split size.\n");
+    exit(1);
+  }
   split_after *= modifier;
   if (split_after <= (1024 * 1024)) {
     fprintf(stderr, "Error: invalid split size.\n");
@@ -644,7 +680,10 @@ static void parse_cues(char *s, cue_creation_t *cues) {
     exit(1);
   }
   *colon = 0;
-  cues->id = strtol(s, NULL, 10);
+  if (!parse_int(s, cues->id)) {
+    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    exit(1);
+  }
   s = &colon[1];
   if (*s == 0) {
     fprintf(stderr, "Error: Invalid cues option specified.\n");
@@ -846,7 +885,8 @@ static void identify(const char *filename) {
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.audio_syncs = new vector<audio_sync_t>;
-  ti.cues = CUES_UNSPECIFIED;
+  ti.cue_creations = new vector<cue_creation_t>;
+  ti.default_track_flags = new vector<int64_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -886,10 +926,12 @@ static void parse_args(int argc, char **argv) {
   char *s;
   audio_sync_t async;
   cue_creation_t cues;
+  int64_t id;
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.audio_syncs = new vector<audio_sync_t>;
   ti.cue_creations = new vector<cue_creation_t>;
+  ti.default_track_flags = new vector<int64_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -973,8 +1015,8 @@ static void parse_args(int argc, char **argv) {
                 "\n");
         exit(1);
       }
-      split_max_num_files = strtol(argv[i + 1], NULL, 10);
-      if (split_max_num_files < 2) {
+      if (!parse_int(argv[i + 1], split_max_num_files) ||
+          (split_max_num_files < 2)) {
         fprintf(stderr, "Error: Wrong argument to --split-max-files.\n");
         exit(1);
       }
@@ -1027,16 +1069,16 @@ static void parse_args(int argc, char **argv) {
       s = strstr("ms", argv[i + 1]);
       if (s != NULL) {
         *s = 0;
-        max_ms_per_cluster = strtol(argv[i + 1], NULL, 10);
-        if ((errno != 0) || (max_ms_per_cluster < 0) ||
+        if (!parse_int(argv[i + 1], max_ms_per_cluster) ||
+            (max_ms_per_cluster < 0) ||
             (max_ms_per_cluster > 65535)) {
           fprintf(stderr, "Error: Cluster length out of range (0..65535).\n");
           exit(1);
         }
         max_blocks_per_cluster = 65535;
       } else {
-        max_blocks_per_cluster = strtol(argv[i + 1], NULL, 10);
-        if ((errno != 0) || (max_blocks_per_cluster < 0) ||
+        if (!parse_int(argv[i + 1], max_blocks_per_cluster) ||
+            (max_blocks_per_cluster < 0) ||
             (max_blocks_per_cluster > 65535)) {
           fprintf(stderr, "Error: Cluster length out of range (0..65535).\n");
           exit(1);
@@ -1050,8 +1092,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: --meta-seek-size lacks the size argument.\n");
         exit(1);
       }
-      meta_seek_size = strtol(argv[i + 1], NULL, 10);
-      if (meta_seek_size < 1) {
+      if (!parse_int(argv[i + 1], meta_seek_size) || (meta_seek_size < 1)) {
         fprintf(stderr, "Error: Invalid size given for --meta-seek-size.\n");
         exit(1);
       }
@@ -1140,10 +1181,19 @@ static void parse_args(int argc, char **argv) {
       ti.cue_creations->push_back(cues);
       i++;
 
-    } else if (!strcmp(argv[i], "--default-track"))
-      ti.default_track = 1;
+    } else if (!strcmp(argv[i], "--default-track")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --default-track lacks the track ID.\n");
+        exit(1);
+      }
+      if (!parse_int(argv[i + 1], id)) {
+        fprintf(stderr, "Error: Invalid track ID specified.\n");
+        exit(1);
+      }
+      ti.default_track_flags->push_back(id);
+      i++;
 
-    else if (!strcmp(argv[i], "--language")) {
+    } else if (!strcmp(argv[i], "--language")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --language lacks its argument.\n");
         exit(1);
@@ -1210,9 +1260,11 @@ static void parse_args(int argc, char **argv) {
       delete ti.stracks;
       delete ti.audio_syncs;
       delete ti.cue_creations;
+      delete ti.default_track_flags;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
+      ti.default_track_flags = new vector<int64_t>;
       ti.aspect_ratio = 1.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;

@@ -75,13 +75,14 @@ typedef struct {
   char fourcc[5];
   float aspect_ratio;
 
-  vector<audio_sync_t> *audio_syncs;
-  audio_sync_t async;
+  vector<audio_sync_t> *audio_syncs; // As given on the command line
+  audio_sync_t async;           // For this very track
 
-  vector<cue_creation_t> *cue_creations;
-  int cues;
+  vector<cue_creation_t> *cue_creations; // As given on the command line
+  int cues;                     // For this very track
 
-  int default_track;
+  vector<int64_t> *default_track_flags; // As given on the command line
+  bool default_track;           // For this very track
 
   char *language, *sub_charset;
 } track_info_t;
