@@ -419,6 +419,7 @@ kax_reader_c::verify_tracks() {
             t->ms_compat = 1;
 
             wfe = (alWAVEFORMATEX *)t->private_data;
+            t->a_formattag = get_uint16(&wfe->w_format_tag);
             u = get_uint32(&wfe->n_samples_per_sec);
             if (((uint32_t)t->a_sfreq) != u) {
               if (verbose)
@@ -443,7 +444,7 @@ kax_reader_c::verify_tracks() {
 
             u = get_uint16(&wfe->w_bits_per_sample);
             if (t->a_bps != u) {
-              if (verbose)
+              if (verbose && (t->a_formattag == 0x0001))
                 mxwarn(PFX "(MS compatibility mode for "
                        "track %u) Matroska says that there are %u bits per "
                        "sample, but the WAVEFORMATEX says that there are %u."
@@ -451,8 +452,6 @@ kax_reader_c::verify_tracks() {
               if (t->a_bps == 0)
                 t->a_bps = u;
             }
-
-            t->a_formattag = get_uint16(&wfe->w_format_tag);
           }
         } else {
           if (!strncmp(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
@@ -1590,34 +1589,32 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                    t->header_sizes[2], nti));
           mxinfo(FMT_TID "Using the Vorbis output module.\n", ti->fname,
                  (int64_t)t->tnum);
-        } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
+        } else if ((t->a_formattag == FOURCC('M', 'P', '4', 'A')) ||
+                   (t->a_formattag == 0x00ff)) {
           // A_AAC/MPEG2/MAIN
           // 0123456789012345
           int id, profile, sbridx;
 
           id = 0;
           profile = 0;
-          if (t->codec_id[10] == '2')
-            id = AAC_ID_MPEG2;
-          else if (t->codec_id[10] == '4')
-            id = AAC_ID_MPEG4;
-          else
-            mxerror(FMT_TID "Malformed codec id '%s'.\n", ti->fname,
-                    (int64_t)t->tnum, t->codec_id);
+          if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
+            if (!parse_aac_codec_id(string(t->codec_id), id, profile))
+              mxerror(FMT_TID "Malformed codec id '%s'.\n", ti->fname,
+                      (int64_t)t->tnum, t->codec_id);
+          } else {
+            int channels, sfreq, osfreq;
+            bool sbr;
 
-          if (!strcmp(&t->codec_id[12], "MAIN"))
-            profile = AAC_PROFILE_MAIN;
-          else if (!strcmp(&t->codec_id[12], "LC"))
-            profile = AAC_PROFILE_LC;
-          else if (!strcmp(&t->codec_id[12], "SSR"))
-            profile = AAC_PROFILE_SSR;
-          else if (!strcmp(&t->codec_id[12], "LTP"))
-            profile = AAC_PROFILE_LTP;
-          else if (!strcmp(&t->codec_id[12], "LC/SBR"))
-            profile = AAC_PROFILE_SBR;
-          else
-            mxerror(FMT_TID "Malformed codec id '%s'.\n", ti->fname,
-                    (int64_t)t->tnum, t->codec_id);
+            id = AAC_ID_MPEG4;
+            if (!parse_aac_data(((unsigned char *)t->private_data) +
+                                sizeof(alWAVEFORMATEX),
+                                t->private_size - sizeof(alWAVEFORMATEX),
+                                profile, channels, sfreq, osfreq, sbr))
+              mxerror(FMT_TID "Malformed AAC codec initialization data "
+                      "found.\n", ti->fname, (int64_t)t->tnum);
+            if (sbr)
+              profile = AAC_PROFILE_SBR;
+          }
 
           for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
             if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||

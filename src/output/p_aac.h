@@ -23,15 +23,6 @@
 #include "pr_generic.h"
 #include "aac_common.h"
 
-#define AAC_ID_MPEG4 0
-#define AAC_ID_MPEG2 1
-
-#define AAC_PROFILE_MAIN 0
-#define AAC_PROFILE_LC   1
-#define AAC_PROFILE_SSR  2
-#define AAC_PROFILE_LTP  3
-#define AAC_PROFILE_SBR  4
-
 class aac_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno, last_timecode, num_packets_same_tc;

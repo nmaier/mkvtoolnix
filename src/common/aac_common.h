@@ -18,6 +18,21 @@
 
 #include "os.h"
 
+#include <string>
+
+using namespace std;
+
+#define AAC_ID_MPEG4 0
+#define AAC_ID_MPEG2 1
+
+#define AAC_PROFILE_MAIN 0
+#define AAC_PROFILE_LC   1
+#define AAC_PROFILE_SSR  2
+#define AAC_PROFILE_LTP  3
+#define AAC_PROFILE_SBR  4
+
+#define AAC_SYNC_EXTENSION_TYPE 0x02b7
+
 extern const int MTX_DLL_API aac_sampling_freq[16];
 
 typedef struct {
@@ -42,5 +57,7 @@ bool MTX_DLL_API parse_aac_data(unsigned char *data, int size,
 int MTX_DLL_API create_aac_data(unsigned char *data, int profile,
                                 int channels, int sample_rate,
                                 int output_sample_rate, bool sbr);
+bool MTX_DLL_API parse_aac_codec_id(const string &codec_id, int &id,
+                                    int &profile);
 
 #endif // __AACCOMMON_H
