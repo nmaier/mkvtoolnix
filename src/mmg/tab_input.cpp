@@ -293,10 +293,12 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
   unsigned int i;
 
   wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
-                   _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;*.mp3;*.mka;"
+                   _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp3;"
+                      "*.mka;"
                       "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;"
                       "*.wav)|"
-                      "*.aac;*.ac3;*.ass;*.avi;*.dts;*.mp3;*.mka;*.mkv;*.mov;"
+                      "*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp3;*.mka;*.mkv;"
+                      "*.mov;"
                       "*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;*.wav|"
                       "AAC (Advanced Audio Coding) (*.aac;*.mp4)|*.aac;*.mp4|"
                       "A/52 (aka AC3) (*.ac3)|*.ac3|"
@@ -309,6 +311,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
                       "RealMedia Files (*.rm;*.rmvb)|*.rm;*.rmvb|"
                       "SRT text subtitles (*.srt)|*.srt|"
                       "SSA/ASS text subtitles (*.ssa;*.ass)|*.ssa;*.ass|"
+                      "VobSub subtitles (*.idx)|*.idx|"
                       "WAVE (uncompressed PCM) (*.wav)|*.wav|" ALLFILES),
                    wxOPEN);
 
