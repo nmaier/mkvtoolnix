@@ -30,7 +30,7 @@
 #include "p_video.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
                                        const char *ncodec_id,

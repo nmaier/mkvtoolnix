@@ -82,7 +82,7 @@
 #include "r_wav.h"
 #include "tagparser.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 using namespace std;
 
 typedef struct {

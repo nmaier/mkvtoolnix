@@ -28,7 +28,7 @@
 #include "p_dts.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 bool operator!=(const dts_header_t &l, const dts_header_t &r) {
   //if (l.frametype != r.frametype) return true;

@@ -29,7 +29,7 @@
 #include "p_passthrough.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *nreader,
                                                    track_info_t *nti)

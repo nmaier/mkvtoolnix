@@ -37,7 +37,7 @@
 #include "p_vorbis.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
                                          unsigned char *d_header, int l_header,

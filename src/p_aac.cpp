@@ -28,7 +28,7 @@
 #include "p_aac.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
                                    int nprofile,

@@ -74,7 +74,7 @@ extern "C" {
 #include "mm_io.h"
 #include "tagwriter.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 using namespace std;
 
 #define NAME "mkvextract"

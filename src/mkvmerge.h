@@ -34,7 +34,7 @@
 #include <matroska/KaxTag.h>
 
 using namespace std;
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 extern KaxSegment *kax_segment;
 extern KaxTracks *kax_tracks;

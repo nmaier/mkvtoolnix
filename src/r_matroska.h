@@ -33,7 +33,7 @@
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 typedef struct {
   string name, type;

@@ -29,7 +29,7 @@
 #include "p_pcm.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,

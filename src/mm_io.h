@@ -31,7 +31,7 @@
 #include <ebml/IOCallback.h>
 
 using namespace std;
-using namespace LIBEBML_NAMESPACE;
+using namespace libebml;
 
 class mm_io_c: public IOCallback {
 protected:

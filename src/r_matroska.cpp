@@ -67,7 +67,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxTrackVideo.h>
 
 using namespace std;
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 #define is_ebmlvoid(e) (EbmlId(*e) == EbmlVoid::ClassInfos.GlobalId)
 

@@ -28,7 +28,7 @@
 #include "p_mp3.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,

@@ -28,7 +28,7 @@
 #include "p_textsubs.h"
 #include "matroska.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
                                              const char *ncodec_id,

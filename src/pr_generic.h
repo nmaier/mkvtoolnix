@@ -33,7 +33,7 @@
 
 #include "error.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 using namespace std;
 
 #define CUES_UNSPECIFIED -1

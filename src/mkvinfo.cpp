@@ -34,10 +34,7 @@
 #endif
 
 #include <iostream>
-
-#if __GNUC__ == 2
 #include <typeinfo>
-#endif
 
 extern "C" {
 #include <avilib.h>
@@ -76,7 +73,7 @@ extern "C" {
 #include "matroska.h"
 #include "mm_io.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 using namespace std;
 
 typedef struct {
