@@ -55,6 +55,7 @@ extern "C" {
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxClusterData.h>
+#include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxCues.h>
 #include <matroska/KaxCuesData.h>
 #include <matroska/KaxInfo.h>
@@ -69,8 +70,9 @@ extern "C" {
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 #include <matroska/KaxVersion.h>
-#if LIBMATROSKA_VERSION >= 000503
-#include <matroska/KaxContentEncoding.h>
+
+#if !defined(MATROSKA_VERSION)
+#define MATROSKA_VERSION 2
 #endif
 
 #include "mkvinfo.h"
@@ -819,12 +821,14 @@ bool process_file(const char *file_name) {
                       *static_cast<KaxAudioChannels *>(l4);
                     show_element(l4, 4, "Channels: %u", uint8(channels));
 
+#if MATROSKA_VERSION >= 2
                   } else if (is_id(l4, KaxAudioPosition)) {
                     KaxAudioPosition &positions =
                       *static_cast<KaxAudioPosition *>(l4);
                     strc = format_binary(positions);
                     show_element(l4, 4, "Channel positions: %s",
                                  strc.c_str());
+#endif
 
                   } else if (is_id(l4, KaxAudioBitDepth)) {
                     KaxAudioBitDepth &bps =
@@ -863,6 +867,7 @@ bool process_file(const char *file_name) {
                       *static_cast<KaxVideoDisplayHeight *>(l4);
                     show_element(l4, 4, "Display height: %u", uint16(height));
 
+#if MATROSKA_VERSION >= 2
                   } else if (is_id(l4, KaxVideoDisplayUnit)) {
                     KaxVideoDisplayUnit &unit =
                       *static_cast<KaxVideoDisplayUnit *>(l4);
@@ -871,21 +876,10 @@ bool process_file(const char *file_name) {
                                  uint16(unit) == 1 ? " (centimeters)" :
                                  uint16(unit) == 2 ? " (inches)" : "");
 
-                  } else if (is_id(l4, KaxVideoColourSpace)) {
-                    KaxVideoColourSpace &cspace =
-                      *static_cast<KaxVideoColourSpace *>(l4);
-                    strc = format_binary(cspace);
-                    show_element(l4, 4, "Colour space: %s", strc.c_str());
-
                   } else if (is_id(l4, KaxVideoGamma)) {
                     KaxVideoGamma &gamma =
                       *static_cast<KaxVideoGamma *>(l4);
                     show_element(l4, 4, "Gamma: %f", float(gamma));
-
-                  } else if (is_id(l4, KaxVideoFrameRate)) {
-                    KaxVideoFrameRate &framerate =
-                      *static_cast<KaxVideoFrameRate *>(l4);
-                    show_element(l4, 4, "Frame rate: %f", float(framerate));
 
                   } else if (is_id(l4, KaxVideoFlagInterlaced)) {
                     KaxVideoFlagInterlaced &f_interlaced =
@@ -910,6 +904,17 @@ bool process_file(const char *file_name) {
                                  uint8(ar_type) == 0 ? " (free resizing)" :
                                  uint8(ar_type) == 1 ? " (keep aspect ratio)" :
                                  uint8(ar_type) == 2 ? " (fixed)" : "");
+#endif
+                  } else if (is_id(l4, KaxVideoColourSpace)) {
+                    KaxVideoColourSpace &cspace =
+                      *static_cast<KaxVideoColourSpace *>(l4);
+                    strc = format_binary(cspace);
+                    show_element(l4, 4, "Colour space: %s", strc.c_str());
+
+                  } else if (is_id(l4, KaxVideoFrameRate)) {
+                    KaxVideoFrameRate &framerate =
+                      *static_cast<KaxVideoFrameRate *>(l4);
+                    show_element(l4, 4, "Frame rate: %f", float(framerate));
 
                   } else if (!is_global(es, l4, 4))
                     show_unknown_element(l4, 4);
@@ -954,10 +959,12 @@ bool process_file(const char *file_name) {
                              kax_track_type == 's' ? "subtitles" :
                              "unknown");
 
+#if MATROSKA_VERSION >= 2
               } else if (is_id(l3, KaxTrackFlagEnabled)) {
                 KaxTrackFlagEnabled &fenabled =
                   *static_cast<KaxTrackFlagEnabled *>(l3);
                 show_element(l3, 3, "Enabled: %u", uint8(fenabled));
+#endif
 
               } else if (is_id(l3, KaxTrackName)) {
                 KaxTrackName &name = *static_cast<KaxTrackName *>(l3);
@@ -1004,6 +1011,7 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "Codec name: %s", str);
                 safefree(str);
 
+#if MATROSKA_VERSION >= 2
               } else if (is_id(l3, KaxCodecSettings)) {
                 KaxCodecSettings &c_sets =
                   *static_cast<KaxCodecSettings *>(l3);
@@ -1032,6 +1040,7 @@ bool process_file(const char *file_name) {
               } else if (is_id(l3, KaxTrackOverlay)) {
                 KaxTrackOverlay &overlay = *static_cast<KaxTrackOverlay *>(l3);
                 show_element(l3, 3, "Track overlay: %u", uint16(overlay));
+#endif // MATROSKA_VERSION >= 2
 
               } else if (is_id(l3, KaxTrackMinCache)) {
                 KaxTrackMinCache &min_cache =
@@ -1326,10 +1335,12 @@ bool process_file(const char *file_name) {
                          (float)cluster_tc * (float)tc_scale / 1000000000.0);
             cluster->InitTimecode(cluster_tc, tc_scale);
 
+#if MATROSKA_VERSION >= 2
           } else if (is_id(l2, KaxClusterPosition)) {
             KaxClusterPosition &c_pos =
               *static_cast<KaxClusterPosition *>(l2);
             show_element(l2, 2, "Cluster position: %llu", uint64(c_pos));
+#endif
 
           } else if (is_id(l2, KaxClusterPrevSize)) {
             KaxClusterPrevSize &c_psize =
@@ -1368,11 +1379,6 @@ bool process_file(const char *file_name) {
                                adler);
                 }
 
-              } else if (is_id(l3, KaxBlockVirtual)) {
-                KaxBlockVirtual &bvirt = *static_cast<KaxBlockVirtual *>(l3);
-                strc = format_binary(bvirt);
-                show_element(l3, 3, "Block virtual: %s", strc.c_str());
-
               } else if (is_id(l3, KaxBlockDuration)) {
                 KaxBlockDuration &duration =
                   *static_cast<KaxBlockDuration *>(l3);
@@ -1395,6 +1401,12 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "Reference priority: %u",
                              uint32(priority));
                 
+#if MATROSKA_VERSION >= 2
+              } else if (is_id(l3, KaxBlockVirtual)) {
+                KaxBlockVirtual &bvirt = *static_cast<KaxBlockVirtual *>(l3);
+                strc = format_binary(bvirt);
+                show_element(l3, 3, "Block virtual: %s", strc.c_str());
+
               } else if (is_id(l3, KaxReferenceVirtual)) {
                 KaxReferenceVirtual &ref_virt =
                   *static_cast<KaxReferenceVirtual *>(l3);
@@ -1437,6 +1449,7 @@ bool process_file(const char *file_name) {
                     show_unknown_element(l4, 4);
 
                 } // while (l4 != NULL)
+#endif // MATROSKA_VERSION >= 2
 
               } else if (is_id(l3, KaxSlices)) {
                 show_element(l3, 3, "Slices");
@@ -1558,6 +1571,7 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Cue block number: %llu",
                                  uint64(cue_bn));
 
+#if MATROSKA_VERSION >= 2
                   } else if (is_id(l4, KaxCueCodecState)) {
                     KaxCueCodecState &cue_cs =
                       *static_cast<KaxCueCodecState *>(l4);
@@ -1599,6 +1613,7 @@ bool process_file(const char *file_name) {
                         show_unknown_element(l5, 5);
 
                     } // while (l5 != NULL)
+#endif // MATROSKA_VERSION >= 2
 
                   } else if (!is_global(es, l4, 4))
                     show_unknown_element(l4, 4);
