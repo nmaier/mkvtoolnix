@@ -64,6 +64,7 @@ private:
   mm_io_c *sub_file;
   mm_text_io_c *idx_file;
   int version, ifo_data_size;
+  int64_t num_indices, indices_processed;
   string idx_data;
 
   vector<vobsub_track_c *> tracks;
@@ -77,6 +78,7 @@ public:
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
+  virtual int get_progress();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 

@@ -257,8 +257,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr, bool force = false) = 0;
   virtual int read_all();
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
+  virtual int get_progress() = 0;
   virtual void set_headers();
   virtual void set_headers_for_track(int64_t tid);
   virtual void identify() = 0;

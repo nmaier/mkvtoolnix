@@ -52,13 +52,14 @@ private:
   int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
   int video_done, maxframes, is_divx, rederive_keyframes, chunk_size;
 
+  int64_t bytes_to_process, bytes_processed;
+
 public:
   avi_reader_c(track_info_c *nti) throw (error_c);
   virtual ~avi_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr, bool force = false);
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
+  virtual int get_progress();
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);

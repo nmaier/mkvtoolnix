@@ -119,6 +119,7 @@ private:
   int64_t cluster_tc;
 
   mm_io_c *in;
+  int64_t file_size;
 
   EbmlStream *es;
   EbmlElement *saved_l1, *saved_l2, *segment;
@@ -140,8 +141,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr, bool force = false);
 
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
+  virtual int get_progress();
   virtual void set_headers();
   virtual void identify();
   virtual void create_packetizers();

@@ -159,17 +159,8 @@ tta_reader_c::read(generic_packetizer_c *,
 }
 
 int
-tta_reader_c::display_priority() {
-  return DISPLAYPRIORITY_HIGH - 1;
-}
-
-void
-tta_reader_c::display_progress(bool final) {
-  if (final)
-    mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
-  else
-    mxinfo("progress: %lld/%lld bytes (%d%%)\r", bytes_processed, size,
-           (int)(bytes_processed * 100L / size));
+tta_reader_c::get_progress() {
+  return 100 * bytes_processed / size;
 }
 
 void

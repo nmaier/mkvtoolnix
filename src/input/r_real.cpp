@@ -571,19 +571,8 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
 }
 
 int
-real_reader_c::display_priority() {
-  return DISPLAYPRIORITY_MEDIUM;
-}
-
-void
-real_reader_c::display_progress(bool final) {
-  if (final)
-    mxinfo("progress: %u/%u packets (100%%)\r", file->num_packets_in_chunk,
-           file->num_packets_in_chunk);
-  else
-    mxinfo("progress: %u/%u packets (%u%%)\r", file->num_packets_read,
-           file->num_packets_in_chunk, file->num_packets_read * 100 /
-           file->num_packets_in_chunk);
+real_reader_c::get_progress() {
+  return 100 * file->num_packets_read / file->num_packets_in_chunk;
 }
 
 void

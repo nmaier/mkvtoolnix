@@ -192,6 +192,8 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
       avg_duration /= (track->entries.size() - 1);
     track->entries[track->entries.size() - 1].duration = avg_duration;
 
+    num_indices += track->entries.size();
+
     mxinfo(FMT_TID "Using the VobSub subtitle output module (language: %s).\n",
            ti->fname, (int64_t)tid, track->language);
     ti->language = NULL;
@@ -223,6 +225,8 @@ vobsub_reader_c::parse_headers() {
   line_no = 0;
   last_timestamp = 0;
   sort_required = false;
+  num_indices = 0;
+  indices_processed = 0;
 
   while (1) {
     if (!idx_file->getline2(line))
@@ -575,12 +579,18 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr,
   extract_one_spu_packet(track->entries[track->idx].timestamp,
                          track->entries[track->idx].duration, id);
   track->idx++;
+  indices_processed++;
 
   if (track->idx >= track->entries.size()) {
     flush_packetizers();
     return 0;
   } else
     return EMOREDATA;
+}
+
+int
+vobsub_reader_c::get_progress() {
+  return 100 * indices_processed / num_indices;
 }
 
 void

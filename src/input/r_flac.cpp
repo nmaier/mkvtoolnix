@@ -397,19 +397,8 @@ flac_reader_c::eof_cb() {
 }
 
 int
-flac_reader_c::display_priority() {
-  return DISPLAYPRIORITY_HIGH - 1;
-}
-
-void
-flac_reader_c::display_progress(bool final) {
-  if (final)
-    mxinfo("progress: %u/%u blocks (100%%)\r", blocks.size(), blocks.size());
-  else
-    mxinfo("progress: %d/%u blocks (%d%%)\r",
-           distance(blocks.begin(), current_block),
-           blocks.size(), distance(blocks.begin(), current_block) * 100 /
-           blocks.size());
+flac_reader_c::get_progress() {
+  return 100 * distance(blocks.begin(), current_block) / blocks.size();
 }
 
 void

@@ -171,9 +171,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
       else if (wx_line.Find(wxT("Error:")) == 0)
         tc_errors->AppendText(wx_line + wxT("\n"));
       else if (wx_line.Find(wxT("progress")) == 0) {
-        if (wx_line.Find(wxT("%)")) != 0) {
-          wx_line.Remove(wx_line.Find(wxT("%)")));
-          tmp = wx_line.AfterLast(wxT('('));
+        if (wx_line.Find(wxT("%")) != 0) {
+          wx_line.Remove(wx_line.Find(wxT("%")));
+          tmp = wx_line.AfterLast(wxT(' '));
           tmp.ToLong(&value);
           if ((value >= 0) && (value <= 100))
             update_gauge(value);

@@ -984,36 +984,8 @@ ogm_reader_c::read(generic_packetizer_c *,
 }
 
 int
-ogm_reader_c::display_priority() {
-  int i;
-
-  for (i = 0; i < sdemuxers.size(); i++)
-    if (sdemuxers[i]->in_use && (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO))
-      return DISPLAYPRIORITY_MEDIUM;
-
-  return DISPLAYPRIORITY_LOW;
-}
-
-void
-ogm_reader_c::display_progress(bool final) {
-  int i;
-
-  for (i = 0; i < sdemuxers.size(); i++)
-    if (sdemuxers[i]->in_use &&
-        (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO)) {
-      if (final)
-        mxinfo("progress: %d frames (100%%)\r", sdemuxers[i]->units_processed);
-      else
-        mxinfo("progress: %d frames (%d%%)\r", sdemuxers[i]->units_processed,
-               (int)(mm_io->getFilePointer() * 100 / file_size));
-      return;
-    }
-
-  if (final)
-    mxinfo("progress: 100%%\r");
-  else
-    mxinfo("progress: %d%%\r",
-           (int)(mm_io->getFilePointer() * 100 / file_size));
+ogm_reader_c::get_progress() {
+  return (int)(mm_io->getFilePointer() * 100 / file_size);
 }
 
 void

@@ -1241,12 +1241,7 @@ qtmp4_reader_c::create_packetizers() {
 }
 
 int
-qtmp4_reader_c::display_priority() {
-  return DISPLAYPRIORITY_MEDIUM;
-}
-
-void
-qtmp4_reader_c::display_progress(bool final) {
+qtmp4_reader_c::get_progress() {
   uint32_t max_chunks;
   qtmp4_demuxer_t *dmx;
 
@@ -1255,11 +1250,7 @@ qtmp4_reader_c::display_progress(bool final) {
     max_chunks = dmx->sample_table_len;
   else
     max_chunks = dmx->chunk_table_len;
-  if (final)
-    mxinfo("progress: %d/%d chunks (100%%)\r", max_chunks, max_chunks);
-  else
-    mxinfo("progress: %d/%d chunks (%d%%)\r", dmx->pos, max_chunks,
-           dmx->pos * 100 / max_chunks);
+  return 100 * dmx->pos / max_chunks;
 }
 
 void

@@ -39,9 +39,8 @@ public:
   virtual ~aac_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr, bool force = false);
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
   virtual void identify();
+  virtual int get_progress();
   virtual void create_packetizer(int64_t id);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);

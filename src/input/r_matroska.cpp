@@ -818,6 +818,7 @@ kax_reader_c::read_headers() {
   exit_loop = false;
   try {
     in = new mm_file_io_c(ti->fname);
+    file_size = in->get_size();
     es = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
@@ -2039,48 +2040,12 @@ kax_reader_c::read(generic_packetizer_c *,
 // {{{ FUNCTIONS display_*
 
 int
-kax_reader_c::display_priority() {
-  int i;
-
+kax_reader_c::get_progress() {
   if (segment_duration != 0.0)
-    return DISPLAYPRIORITY_HIGH;
+    return (int64_t)((last_timecode - first_timecode) / 10000000.0 /
+                     segment_duration);
 
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->type == 'v')
-      return DISPLAYPRIORITY_MEDIUM;
-
-  return DISPLAYPRIORITY_LOW;
-}
-
-static char wchar[] = "-\\|/-\\|/-";
-
-void
-kax_reader_c::display_progress(bool final) {
-  int i;
-
-  if (segment_duration != 0.0) {
-    if (final)
-      mxinfo("progress: %.3fs/%.3fs (100%%)\r", segment_duration,
-             segment_duration);
-    else
-      mxinfo("progress: %.3fs/%.3fs (%lld%%)\r",
-             (last_timecode - first_timecode) / 1000000000.0, segment_duration,
-             (int64_t)((last_timecode - first_timecode) / 10000000.0 /
-                       segment_duration));
-    return;
-  }
-
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->type == 'v') {
-      mxinfo("progress: %llu frames\r", tracks[i]->units_processed);
-      return;
-    }
-
-  mxinfo("working... %c\r", wchar[act_wchar]);
-  act_wchar++;
-  if (act_wchar == strlen(wchar))
-    act_wchar = 0;
-  fflush(stdout);
+  return 100 * in->getFilePointer() / file_size;
 }
 
 void

@@ -243,20 +243,9 @@ wav_reader_c::read(generic_packetizer_c *,
 }
 
 int
-wav_reader_c::display_priority() {
-  return DISPLAYPRIORITY_HIGH - 1;
-}
-
-void
-wav_reader_c::display_progress(bool final) {
-  int samples = (get_uint32(&wheader.riff.len) - sizeof(wheader) + 8) / bps;
-
-  if (final)
-    mxinfo("progress: %d/%d seconds (100%%)\r", (int)samples, (int)samples);
-  else
-    mxinfo("progress: %d/%d seconds (%d%%)\r",
-           (int)(bytes_processed / bps), (int)samples,
-           (int)(bytes_processed * 100L / bps / samples));
+wav_reader_c::get_progress() {
+  return 100 * bytes_processed / (get_uint32(&wheader.riff.len) -
+                                  sizeof(wheader) + 8);
 }
 
 void

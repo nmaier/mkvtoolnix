@@ -293,6 +293,11 @@ ssa_reader_c::read(generic_packetizer_c *,
   return 0;
 }
 
+int
+ssa_reader_c::get_progress() {
+  return 100;
+}
+
 void
 ssa_reader_c::identify() {
   mxinfo("File '%s': container: SSA/ASS\nTrack ID 0: subtitles "

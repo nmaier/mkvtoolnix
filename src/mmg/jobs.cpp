@@ -232,9 +232,9 @@ job_run_dialog::process_input() {
       wx_line = line.c_str();
 #endif
       if (wx_line.Find(wxT("progress")) == 0) {
-        if (wx_line.Find(wxT("%)")) != 0) {
-          wx_line.Remove(wx_line.Find(wxT("%)")));
-          tmp = wx_line.AfterLast(wxT('('));
+        if (wx_line.Find(wxT("%")) != 0) {
+          wx_line.Remove(wx_line.Find(wxT("%")));
+          tmp = wx_line.AfterLast(wxT(' '));
           tmp.ToLong(&value);
           if ((value >= 0) && (value <= 100))
             g_progress->SetValue(value);

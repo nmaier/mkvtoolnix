@@ -50,8 +50,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
 
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
+  virtual int get_progress();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 };

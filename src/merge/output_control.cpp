@@ -331,25 +331,21 @@ get_file_type(const string &filename) {
 }
 
 static int display_counter = 1;
+static int display_files_done = 0;
+static int display_path_length = 1;
 static generic_reader_c *display_reader = NULL;
 
 /** \brief Selects a reader for displaying its progress information
  */
 static void
-display_progress(bool force) {
-  generic_reader_c *winner;
-  int i;
-
-  if (((display_counter % 500) == 0) || force) {
+display_progress() {
+  if (display_reader == NULL)
+    display_reader = files[0].reader;
+  if ((display_counter % 500) == 0) {
     display_counter = 0;
-    if (display_reader == NULL) {
-      winner = files[0].reader;
-      for (i = 1; i < files.size(); i++)
-        if (files[i].reader->display_priority() > winner->display_priority())
-          winner = files[i].reader;
-      display_reader = winner;
-    }
-    display_reader->display_progress(force);
+    mxinfo("progress: %d%%\r",
+           (display_reader->get_progress() + display_files_done * 100) /
+           display_path_length);
   }
   display_counter++;
 }
@@ -960,6 +956,37 @@ check_append_mapping() {
     src_ptzr->connect(dst_ptzr);
     dst_file->appended_to = true;
   }
+
+  // Calculate the "longest path" -- meaning the maximum number of
+  // concatenated files. This is needed for displaying the progress.
+  foreach(amap, append_mapping) {
+    int path_length;
+
+    // Is this the first in a chain?
+    foreach(cmp_amap, append_mapping) {
+      if (amap == cmp_amap)
+        continue;
+      if ((amap->dst_file_id == cmp_amap->src_file_id) &&
+          (amap->dst_track_id == cmp_amap->src_track_id))
+        break;
+    }
+    if (cmp_amap != append_mapping.end())
+      continue;
+
+    // Find consecutive mappings.
+    path_length = 2;
+    do {
+      foreach(cmp_amap, append_mapping)
+        if ((amap->src_file_id == cmp_amap->dst_file_id) &&
+            (amap->src_track_id == cmp_amap->dst_track_id)) {
+          path_length++;
+          break;
+        }
+    } while (cmp_amap != append_mapping.end());
+
+    if (path_length > display_path_length)
+      display_path_length = path_length;
+  }
 }
 
 /** \brief Creates the file readers
@@ -1447,6 +1474,11 @@ append_track(packetizer_t &ptzr,
          ptzr.packetizer->ti->id, amap.dst_file_id,
          ptzr.packetizer->ti->fname);
 
+  if (display_reader == files[amap.dst_file_id].reader) {
+    display_files_done++;
+    display_reader = files[amap.src_file_id].reader;
+  }
+
   (*gptzr)->connect(ptzr.packetizer);
   ptzr.packetizer = *gptzr;
   ptzr.file = amap.src_file_id;
@@ -1546,7 +1578,7 @@ main_loop() {
 
       // display some progress information
       if (verbose >= 1)
-        display_progress(false);
+        display_progress();
     } else if (!appended_a_track) // exit if there are no more packets
       break;
   }
@@ -1556,7 +1588,7 @@ main_loop() {
     cluster_helper->render();
 
   if (verbose >= 1)
-    display_progress(true);
+    mxinfo("progress: 100%%\r");
 }
 
 /** \brief Global program initialization

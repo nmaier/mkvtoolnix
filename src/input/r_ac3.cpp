@@ -42,9 +42,7 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
 
   try {
     mm_io = new mm_file_io_c(ti->fname);
-    mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_beginning);
+    size = mm_io->get_size();
     chunk = (unsigned char *)safemalloc(4096);
     if (mm_io->read(chunk, 4096) != 4096)
       throw error_c("ac3_reader: Could not read 4096 bytes.");
@@ -95,17 +93,8 @@ ac3_reader_c::read(generic_packetizer_c *,
 }
 
 int
-ac3_reader_c::display_priority() {
-  return DISPLAYPRIORITY_HIGH - 1;
-}
-
-void
-ac3_reader_c::display_progress(bool final) {
-  if (final)
-    mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
-  else
-    mxinfo("progress: %lld/%lld bytes (%d%%)\r", bytes_processed, size,
-           (int)(bytes_processed * 100L / size));
+ac3_reader_c::get_progress() {
+  return 100 * bytes_processed / size;
 }
 
 void

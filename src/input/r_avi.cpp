@@ -63,8 +63,8 @@ avi_reader_c::probe_file(mm_io_c *mm_io,
   } catch (exception &ex) {
     return 0;
   }
-  if(strncasecmp((char *)data, "RIFF", 4) ||
-     strncasecmp((char *)data+8, "AVI ", 4))
+  if (strncasecmp((char *)data, "RIFF", 4) ||
+      strncasecmp((char *)data+8, "AVI ", 4))
     return 0;
   return 1;
 }
@@ -124,6 +124,8 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   old_chunk = NULL;
   video_done = 0;
   dropped_frames = 0;
+  bytes_to_process = 0;
+  bytes_processed = 0;
 }
 
 // }}}
@@ -148,6 +150,12 @@ avi_reader_c::create_packetizer(int64_t tid) {
   char *codec;
 
   if ((tid == 0) && demuxing_requested('v', 0) && (vptzr == -1)) {
+    int i, maxframes;
+
+    maxframes = AVI_video_frames(avi);
+    for (i = 0; i < maxframes; i++)
+      bytes_to_process += AVI_frame_size(avi, i);
+
     codec = AVI_video_compressor(avi);
     if (!strcasecmp(codec, "DIV3") ||
         !strcasecmp(codec, "AP41") || // Angel Potion
@@ -212,6 +220,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   avi_demuxer_t demuxer;
   alWAVEFORMATEX *wfe;
   uint32_t audio_format;
+  int maxchunks, i;
 
   foreach(it, ademuxers)
     if (it->aid == aid) // Demuxer already added?
@@ -317,6 +326,10 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.ptzr = add_packetizer(packetizer);
 
   ademuxers.push_back(demuxer);
+
+  maxchunks = AVI_audio_chunks(avi);
+  for (i = 0; i < maxchunks; i++)
+    bytes_to_process += AVI_audio_size(avi, i);
 }
 
 // }}}
@@ -408,6 +421,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
           memory_c mem(old_chunk, old_nread, true);
           PTZR(vptzr)->process(mem, -1, -1,
                                old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+          bytes_processed += old_nread;
           old_chunk = NULL;
           mxwarn(PFX "Reading frame number %d resulted in an error. "
                  "Aborting this track.\n", frames);
@@ -432,6 +446,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
         memory_c mem(old_chunk, old_nread, true);
         PTZR(vptzr)->process(mem, -1, duration,
                              old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+        bytes_processed += old_nread;
         old_chunk = NULL;
         if (! last_frame) {
           if (old_chunk != NULL)
@@ -444,6 +459,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
           memory_c mem(chunk, nread, false);
           PTZR(vptzr)->process(mem, -1, duration,
                                key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+          bytes_processed += nread;
         }
       }
     }
@@ -490,6 +506,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
         memory_c mem(audio_chunk, nread, true);
         PTZR(demuxer->ptzr)->add_avi_block_size(nread);
         PTZR(demuxer->ptzr)->process(mem);
+        bytes_processed += nread;
       } else
         safefree(audio_chunk);
     }
@@ -509,40 +526,12 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
 
 // }}}
 
-// {{{ FUNCTIONS avi_reader_c::display_priority/_progess
-
 int
-avi_reader_c::display_priority() {
-  if (vptzr != -1)
-    return DISPLAYPRIORITY_HIGH;
-  else
-    return DISPLAYPRIORITY_LOW;
+avi_reader_c::get_progress() {
+  if (bytes_to_process == 0)
+    return 0;
+  return 100 * bytes_processed / bytes_to_process;
 }
-
-static char wchar[] = "-\\|/-\\|/-";
-
-void
-avi_reader_c::display_progress(bool final) {
-  int myframes;
-
-  if (vptzr != -1) {
-    myframes = frames;
-    if (frames == (maxframes + 1))
-      myframes--;
-    if (final)
-      mxinfo("progress: %d/%d frames (100%%)\r", maxframes, maxframes);
-    else
-      mxinfo("progress: %d/%d frames (%d%%)\r", myframes, maxframes,
-             myframes * 100 / maxframes);
-  } else {
-    mxinfo("Working... %c\r", wchar[act_wchar]);
-    act_wchar++;
-    if (act_wchar == strlen(wchar))
-      act_wchar = 0;
-  }
-}
-
-// }}}
 
 // {{{ FUNCTION avi_reader_c::identify
 

@@ -180,17 +180,8 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
 }
 
 int
-mpeg_es_reader_c::display_priority() {
-  return DISPLAYPRIORITY_MEDIUM;
-}
-
-void
-mpeg_es_reader_c::display_progress(bool final) {
-  if (final)
-    mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
-  else
-    mxinfo("progress: %lld/%lld bytes (%d%%)\r", bytes_processed, size,
-           (int)(bytes_processed * 100L / size));
+mpeg_es_reader_c::get_progress() {
+  return 100 * bytes_processed / size;
 }
 
 void
