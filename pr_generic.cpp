@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.14 2003/04/17 13:27:29 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.15 2003/04/17 17:01:11 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -67,6 +67,7 @@ cluster_helper_c::cluster_helper_c() {
   clusters = NULL;
   cluster_content_size = 0;
   last_block_group = NULL;
+  max_timecode = 0;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -122,6 +123,9 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   c->packets[c->num_packets] = packet;
   c->num_packets++;
   cluster_content_size += packet->length;
+
+  if (packet->timestamp > max_timecode)
+    max_timecode = packet->timestamp;
 
   walk_clusters();
 }
@@ -181,7 +185,7 @@ void cluster_helper_c::add_cluster(KaxCluster *cluster) {
   num_clusters++;
   c->cluster = cluster;
   cluster_content_size = 0;
-  cluster->SetParent(kax_segment);
+  cluster->SetParent(*kax_segment);
   cluster->SetPreviousTimecode(0);
 }
 
@@ -389,5 +393,11 @@ int cluster_helper_c::free_clusters() {
 }
 
 int cluster_helper_c::free_ref(int64_t pid, void *source) {
-   ((generic_packetizer_c *)source)->set_free_refs(pid);
+  ((generic_packetizer_c *)source)->set_free_refs(pid);
+
+  return 1;
+}
+
+int64_t cluster_helper_c::get_max_timecode() {
+  return max_timecode;
 }

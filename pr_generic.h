@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.16 2003/04/17 13:27:29 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.17 2003/04/17 17:01:11 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,7 +33,7 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 
-extern KaxSegment kax_segment;
+extern KaxSegment *kax_segment;
 extern KaxTracks *kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
 extern int track_number;
@@ -51,6 +51,7 @@ private:
   ch_contents_t **clusters;
   int             num_clusters, cluster_content_size;
   KaxBlockGroup  *last_block_group;
+  int64_t         max_timecode;
 public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
@@ -65,6 +66,7 @@ public:
   int            free_ref(int64_t pid, void *source);
   int            free_clusters();
   int            get_cluster_content_size();
+  int64_t        get_max_timecode();
 
 private:
   int            find_cluster(KaxCluster *cluster);

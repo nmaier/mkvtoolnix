@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.31 2003/04/17 12:22:15 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.32 2003/04/17 17:01:11 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -99,10 +99,13 @@ int max_ms_per_cluster = 1000;
 float video_fps = -1.0;
 
 cluster_helper_c *cluster_helper = NULL;
-KaxSegment        kax_segment;
+KaxSegment       *kax_segment;
+KaxInfo          *kax_infos;
 KaxTracks        *kax_tracks;
 KaxTrackEntry    *kax_last_entry;
 int               track_number = 0;
+
+KaxDuration      *kax_duration;
 
 StdIOCallback *out;
 
@@ -450,17 +453,23 @@ static void parse_args(int argc, char **argv) {
 
   try {
     render_head(out);
-    kax_segment.Render(static_cast<StdIOCallback &>(*out));
 
-    KaxInfo &infos = GetChild<KaxInfo>(kax_segment);
-    KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(infos);
+    kax_segment = new KaxSegment();
+
+    kax_infos = &GetChild<KaxInfo>(*kax_segment);
+    KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
     *(static_cast<EbmlUInteger *>(&time_scale)) = TIMECODE_SCALE;
+
+    kax_duration = &GetChild<KaxDuration>(*kax_infos);
+    *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
+
+    kax_segment->Render(static_cast<StdIOCallback &>(*out));
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Could not render the file header.\n");
     exit(1);
   }
 
-  kax_tracks = &GetChild<KaxTracks>(kax_segment);
+  kax_tracks = &GetChild<KaxTracks>(*kax_segment);
   kax_last_entry = NULL;
   
   for (i = 1; i < argc; i++) {
@@ -804,8 +813,16 @@ int main(int argc, char **argv) {
       display_progress(0);
   }
 
+  // Render all remaining packets (if there are any).
   if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
     cluster_helper->render(out);
+
+  // Now re-render the kax_infos and fill in the biggest timecode
+  // as the file's duration.
+  *(static_cast<EbmlFloat *>(kax_duration)) =
+    cluster_helper->get_max_timecode() * 1000000.0 / TIMECODE_SCALE;
+  out->setFilePointer(kax_infos->GetElementPosition());
+  kax_infos->Render(*out);
 
   delete cluster_helper;
 
