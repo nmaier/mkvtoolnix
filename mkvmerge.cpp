@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.88 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.89 2003/06/07 23:19:09 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1299,25 +1299,37 @@ void main_loop() {
   }
 }
 
+extern vector<splitpoint_t *>splitpoints;
+
 int main(int argc, char **argv) {
+  int i;
+
   init_globals();
 
   setup();
 
   handle_args(argc, argv);
 
-  create_readers();
-
   if (split_after > 0) {
-    fprintf(stdout, "Pass 1: finding split points. This may take a while.\n");
+    fprintf(stdout, "Pass 1: finding split points. This may take a while."
+            "\n\n");
+
+    create_readers();
 
     pass = 1;
     open_new_output_file();
     main_loop();
     finish_file();
 
-    fprintf(stdout, "Pass 2: merging the files. This will take even longer."
-            "\n");
+    fprintf(stdout, "\nPass 2: merging the files. This will take even longer."
+            "\n\n");
+
+    for (i = 0; i < splitpoints.size(); i++) {
+      splitpoint_t *sp = splitpoints[i];
+      fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, nk: %lld\n",
+              i, sp->timecode, sp->filepos, sp->cues_size,
+              sp->filepos + sp->cues_size, sp->keyframe_num);
+    }
 
     delete cluster_helper;
     destroy_readers();
@@ -1332,6 +1344,8 @@ int main(int argc, char **argv) {
     finish_file();
 
   } else {
+
+    create_readers();
 
     pass = 0;
     open_new_output_file();

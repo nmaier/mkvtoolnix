@@ -13,18 +13,22 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.21 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.22 2003/06/07 23:19:09 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <assert.h>
 
+#include <vector>
+
 #include "cluster_helper.h"
 #include "common.h"
 #include "mkvmerge.h"
 
 #include "StdIOCallback.h"
+
+vector<splitpoint_t *> splitpoints;
 
 //#define walk_clusters() check_clusters(__LINE__)
 #define walk_clusters()
@@ -36,6 +40,10 @@ cluster_helper_c::cluster_helper_c() {
   last_block_group = NULL;
   max_timecode = 0;
   last_cluster_tc = 0;
+  num_cue_elements = 0;
+  next_splitpoint = 0;
+  header_overhead = -1;
+  num_keyframes = 0;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -153,6 +161,45 @@ int cluster_helper_c::get_cluster_content_size() {
   return cluster_content_size;
 }
 
+void cluster_helper_c::find_next_splitpoint() {
+  int i;
+  int64_t last_size, size_now;
+  splitpoint_t *sp;
+
+  if (next_splitpoint >= splitpoints.size()) {
+    next_splitpoint = splitpoints.size();
+    return;
+  }
+
+  sp = splitpoints[next_splitpoint];
+  last_size = sp->filepos + sp->cues_size;
+
+  i = next_splitpoint + 1;
+  while (i < splitpoints.size()) {
+    sp = splitpoints[i];
+
+    size_now = sp->filepos + sp->cues_size;
+    if ((size_now - last_size + header_overhead) > split_after) {
+      i--;
+      break;
+    }
+
+    i++;
+  }
+
+  if (i == next_splitpoint)
+    i++;
+
+  if (i < splitpoints.size()) {
+    size_now = splitpoints[i]->filepos + splitpoints[i]->cues_size;
+    fprintf(stdout, "Found a splitpoint: last: %d, next: %d, last_size: %lld,"
+            " size now: %lld, diff: %lld\n", next_splitpoint, i, last_size,
+            size_now, size_now - last_size);
+  } else
+    fprintf(stdout, "No more splitpoints found.\n");
+  next_splitpoint = i;
+}
+
 int cluster_helper_c::render(IOCallback *out) {
   KaxCluster *cluster;
   KaxBlockGroup *new_group;
@@ -161,9 +208,17 @@ int cluster_helper_c::render(IOCallback *out) {
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
   int64_t block_duration = 0;
+  splitpoint_t *sp;
 
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
+
+  if (header_overhead == -1) {
+    if (pass != 0)
+      header_overhead = out->getFilePointer();
+    if (pass == 2)
+      find_next_splitpoint();
+  }
 
   walk_clusters();
   clstr = clusters[num_clusters - 1];
@@ -177,7 +232,33 @@ int cluster_helper_c::render(IOCallback *out) {
       static_cast<KaxTrackEntry &>
       (*((generic_packetizer_c *)pack->source)->get_track_entry());
 
+    if ((pass == 1) && (pack->bref == -1) &&
+        ((video_fps == -1) ||
+         (((generic_packetizer_c *)(pack->source))->get_track_type() ==
+          track_video))) {
+      sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
+      sp->timecode = pack->timecode;
+      if (num_cue_elements > 0) {
+        kax_cues->UpdateSize();
+        sp->cues_size = kax_cues->ElementSize();
+      } else
+        sp->cues_size = 0;
+      sp->filepos = out->getFilePointer() - header_overhead;
+      if (i > 0) {
+        cluster->UpdateSize();
+        sp->filepos += cluster->ElementSize();
+      }
+      sp->keyframe_num = num_keyframes;
+      splitpoints.push_back(sp);
+    } else if ((pass == 2) && (pack->bref == -1) &&
+               (next_splitpoint < splitpoints.size()) &&
+               (splitpoints[next_splitpoint]->keyframe_num == num_keyframes)) {
+      fprintf(stdout, "weeeeeeee!\n");
+      find_next_splitpoint();
+    }
+
     if (pack->bref != -1) {      // P and B frames: add backward reference.
+      num_keyframes++;
       bref_packet = find_packet(pack->bref);
       assert(bref_packet != NULL);
       assert(bref_packet->group != NULL);
@@ -192,13 +273,16 @@ int cluster_helper_c::render(IOCallback *out) {
         cluster->AddFrame(track_entry, pack->timecode * 1000000,
                           *data_buffer, new_group, *bref_packet->group);
       }
+
     } else {                    // This is a key frame. No references.
+
       cluster->AddFrame(track_entry, pack->timecode * 1000000,
                         *data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);
     }
+
     if (new_group == NULL)
       new_group = last_block_group;
     else if (write_cues) {
@@ -207,15 +291,18 @@ int cluster_helper_c::render(IOCallback *out) {
       if ((((generic_packetizer_c *)pack->source)->get_cue_creation() ==
            CUES_IFRAMES) && (pack->bref == -1)) {
         kax_cues->AddBlockGroup(*new_group);
+        num_cue_elements++;
         cue_writing_requested = 1;
       }
       // ... or if the user requested entries for all frames.
       else if (((generic_packetizer_c *)pack->source)->get_cue_creation() ==
                CUES_ALL) {
         kax_cues->AddBlockGroup(*new_group);
+        num_cue_elements++;
         cue_writing_requested = 1;
       }
     }
+
     if (new_group != last_block_group)
       block_duration = 0;
     block_duration += pack->duration;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.5 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.6 2003/06/07 23:19:09 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -27,43 +27,45 @@
 #include "pr_generic.h"
 
 typedef struct {
-  KaxCluster  *cluster;
-  packet_t   **packets;
-  int          num_packets, is_referenced, rendered;
+  KaxCluster *cluster;
+  packet_t **packets;
+  int num_packets, is_referenced, rendered;
 } ch_contents_t;
 
 typedef struct {
-  int64_t timecode, filepos, cues_size, packet_num;
+  int64_t timecode, filepos, cues_size, keyframe_num;
 } splitpoint_t;
 
 class cluster_helper_c {
 private:
   ch_contents_t **clusters;
-  int             num_clusters, cluster_content_size;
-  KaxBlockGroup  *last_block_group;
-  int64_t         max_timecode, last_cluster_tc;
+  int num_clusters, cluster_content_size, next_splitpoint;
+  KaxBlockGroup *last_block_group;
+  int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
+  int64_t num_keyframes;
 public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
 
-  void           add_cluster(KaxCluster *cluster);
-  KaxCluster    *get_cluster();
-  void           add_packet(packet_t *packet);
-  int64_t        get_timecode();
-  packet_t      *get_packet(int num);
-  int            get_packet_count();
-  int            render(IOCallback *out);
-  int            free_ref(int64_t ref_timecode, void *source);
-  int            free_clusters();
-  int            get_cluster_content_size();
-  int64_t        get_max_timecode();
+  void add_cluster(KaxCluster *cluster);
+  KaxCluster *get_cluster();
+  void add_packet(packet_t *packet);
+  int64_t get_timecode();
+  packet_t *get_packet(int num);
+  int get_packet_count();
+  int render(IOCallback *out);
+  int free_ref(int64_t ref_timecode, void *source);
+  int free_clusters();
+  int get_cluster_content_size();
+  int64_t get_max_timecode();
 
 private:
-  int            find_cluster(KaxCluster *cluster);
+  int find_cluster(KaxCluster *cluster);
   ch_contents_t *find_packet_cluster(int64_t ref_timecode);
-  packet_t      *find_packet(int64_t ref_timecode);
-  void           free_contents(ch_contents_t *clstr);
-  void           check_clusters(int num);
+  packet_t *find_packet(int64_t ref_timecode);
+  void free_contents(ch_contents_t *clstr);
+  void check_clusters(int num);
+  void find_next_splitpoint();
 };
 
 extern cluster_helper_c *cluster_helper;

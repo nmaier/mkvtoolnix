@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.47 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.48 2003/06/07 23:19:09 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -134,6 +134,7 @@ public:
 
   virtual int set_uid(uint32_t uid);
   virtual void set_track_type(int type);
+  virtual int get_track_type();
   virtual void set_language(char *language);
 
   virtual void set_codec_id(char *id);

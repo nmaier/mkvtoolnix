@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.51 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.52 2003/06/07 23:19:09 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -114,6 +114,10 @@ void generic_packetizer_c::set_track_type(int type) {
     force_default_track(type);
   else
     set_as_default_track(type);
+}
+
+int generic_packetizer_c::get_track_type() {
+  return htrack_type;
 }
 
 void generic_packetizer_c::set_codec_id(char *id) {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.12 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.13 2003/06/07 23:19:09 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -47,5 +47,6 @@ void create_next_output_file();
 
 extern int pass;
 extern int default_tracks[3];
+extern int64_t split_after;
 
 #endif // __MKVMERGE_H
