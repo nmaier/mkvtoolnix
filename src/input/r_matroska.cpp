@@ -1747,11 +1747,11 @@ kax_reader_c::create_packetizer(int64_t tid) {
                  (int64_t)t->tnum);
 
         } else if (t->a_formattag == FOURCC('W', 'V', 'P', '4')) {
-          /* _todo_:
-             safefree(nti->private_data);
-             nti->private_data = NULL;
-             nti->private_size = 0;*/
           wavpack_meta_t meta;
+
+          safefree(nti->private_data);
+          nti->private_data = NULL;
+          nti->private_size = 0;
           meta.bits_per_sample = t->a_bps;
           meta.channel_count = t->a_channels;
           meta.sample_rate = (uint32_t)t->a_sfreq;

@@ -77,8 +77,8 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
       if (packet_size < 0)
         mxerror(FMT_FN "The correction file header was not read correctly.\n",
                 ti->fname.c_str());
-      mm_io_correc->setFilePointer(-sizeof(wavpack_header_t),
-                                   seek_current);
+      mm_io_correc->setFilePointer(mm_io->getFilePointer() -
+                                   sizeof(wavpack_header_t), seek_beginning);
       meta.has_correction = true;
     }
   } catch (exception &ex) {
@@ -88,7 +88,8 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the WAVPACK demultiplexer.\n", ti->fname.c_str());
+	  mxinfo(FMT_FN "Using the WAVPACK demultiplexer%s.\n", ti->fname.c_str(),
+           meta.has_correction ? " with a correction file" : "");
 }
 
 wavpack_reader_c::~wavpack_reader_c() {
@@ -109,7 +110,7 @@ wavpack_reader_c::create_packetizer(int64_t) {
 file_status_e
 wavpack_reader_c::read(generic_packetizer_c *ptzr,
                        bool force) {
-  wavpack_header_t dummy_header;
+  wavpack_header_t dummy_header, dummy_header_correc;
   wavpack_meta_t dummy_meta;
   int32_t data_size = wv_parse_frame(mm_io, dummy_header, dummy_meta);
 
@@ -135,7 +136,45 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
 
   memory_c mem(chunk, data_size + sizeof(wavpack_header_t) -
                WV_KEEP_HEADER_POSITION, true);
-  PTZR0->process(mem);
+
+  // find the if there is a correction file data corresponding
+  memories_c mems;
+  mems.push_back(&mem);
+
+  if (mm_io_correc) {
+    do {
+      data_size = wv_parse_frame(mm_io_correc, dummy_header_correc,
+                                 dummy_meta);
+      // no more correction to be found
+      if (data_size < 0) {
+        delete mm_io_correc;
+        mm_io_correc = NULL;
+        dummy_header_correc.block_samples = dummy_header.block_samples + 1;
+        break;
+      }
+    } while (dummy_header_correc.block_samples < dummy_header.block_samples);
+
+    if (dummy_header_correc.block_samples == dummy_header.block_samples) {
+
+      uint8_t *chunk_correc = (uint8_t *)safemalloc(data_size + 4);
+
+      // only keep the CRC in the header
+      put_uint32_le(chunk_correc, dummy_header_correc.crc);
+
+      if (mm_io_correc->read(&chunk_correc[4], data_size) < 0) {
+        delete mm_io_correc;
+        mm_io_correc = NULL;
+      }
+      else {
+        memory_c mem_correc(chunk_correc, data_size + 4, true);
+        mems.push_back(&mem_correc);
+        PTZR0->process(mems);
+      }
+    }
+  }
+
+  if (mems.size() == 1)
+    PTZR0->process(mem);
 
   return FILE_STATUS_MOREDATA;
 }

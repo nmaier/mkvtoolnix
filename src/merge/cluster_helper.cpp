@@ -69,18 +69,14 @@ cluster_helper_c::~cluster_helper_c() {
 
 void
 cluster_helper_c::free_contents(ch_contents_t *clstr) {
-  packet_t *p;
-  int i;
+  vector<packet_t *>::iterator i;
 
   assert(clstr != NULL);
   assert(clstr->cluster != NULL);
   delete clstr->cluster;
 
-  for (i = 0; i < clstr->packets.size(); i++) {
-    p = clstr->packets[i];
-    safefree(p->data);
-    safefree(p);
-  }
+  foreach(i, clstr->packets)
+    delete *i;
   delete clstr;
 }
 
@@ -503,6 +499,23 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       *static_cast<EbmlUInteger *>
         (&GetChild<KaxReferencePriority>(*new_block_group)) =
         pack->ref_priority;
+
+    // Handle BlockAdditions if needed
+    if ((new_block_group != NULL) && (pack->data_adds.size() > 0)) {
+      KaxBlockAdditions *additions = static_cast<KaxBlockAdditions *>
+        (&GetChild<KaxBlockAdditions>(*new_block_group));
+      for (k = 0; k < pack->data_adds.size(); k++) {
+        KaxBlockMore *block_more = static_cast<KaxBlockMore *>
+          (&GetChild<KaxBlockMore>(*additions));
+        *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(*block_more)) =
+          k + 1;
+        KaxBlockAdditional *block_additional =
+          static_cast<KaxBlockAdditional *>
+          (&GetChild<KaxBlockAdditional>(*block_more));
+        block_additional->SetBuffer((binary *)pack->data_adds[k],
+                                    pack->data_adds_lengths[k]);
+      }
+    }
 
     elements_in_cluster++;
 

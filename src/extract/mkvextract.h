@@ -45,12 +45,14 @@ typedef struct {
   char *out_name;
 
   mm_io_c *out;
+  mm_io_c *out2;
   avi_t *avi;
   ogg_stream_state osstate;
   rmff_track_t *rmtrack;
 
   int64_t tid, tuid;
   bool in_use, done;
+  int64_t max_blockadd_id;
 
   char track_type;
   int type;

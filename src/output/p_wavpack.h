@@ -37,6 +37,9 @@ public:
   virtual int process(memory_c &mem, int64_t timecode = -1,
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
+  virtual int process(memories_c &mem,
+                      int64_t timecode = -1, int64_t length = -1,
+                      int64_t bref = -1, int64_t fref = -1);
   virtual void set_headers();
 
   virtual void dump_debug_info();

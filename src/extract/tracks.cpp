@@ -68,6 +68,7 @@ extern "C" {
 #include "chapters.h"
 #include "checksums.h"
 #include "common.h"
+#include "commonebml.h"
 #include "librmff.h"
 #include "matroska.h"
 #include "mkvextract.h"
@@ -361,12 +362,6 @@ check_output_files() {
           tracks[i].type = FILE_TYPE_TTA;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_WAVPACK4)) {
-          if (tracks[i].private_data == NULL) {
-            mxwarn(_("Track ID %lld is missing some critical "
-                     "information. The track will be skipped.\n"),
-                   tracks[i].tid);
-            continue;
-          }
 
           tracks[i].type = FILE_TYPE_WAVPACK4;
 
@@ -476,6 +471,27 @@ create_output_files() {
           mxerror(_(" The file '%s' could not be opened for writing (%s).\n"),
                   dummy_out_name.c_str(), strerror(errno));
         }
+
+      } else if (tracks[i].type == FILE_TYPE_WAVPACK4) {
+
+        try {
+          tracks[i].out = new mm_file_io_c(tracks[i].out_name, MODE_CREATE);
+          if (tracks[i].max_blockadd_id != 0) {
+            string tmpstr = tracks[i].out_name;
+            size_t pos = tmpstr.rfind('.');
+            if ((pos != string::npos) && (pos != 0))
+              tmpstr = tmpstr.substr(0, pos - 1);
+            tmpstr += "wvc";
+            tracks[i].out2 = new mm_file_io_c(tmpstr, MODE_CREATE);
+          }
+        } catch (exception &ex) {
+          mxerror(_(" The file '%s' could not be opened for writing (%s).\n"),
+                  tracks[i].out_name, strerror(errno));
+        }
+
+        mxinfo(_("Track ID %lld is being extracted to a %s file '%s'.\n"),
+               tracks[i].tid, typenames[tracks[i].type],
+               tracks[i].out_name);
 
       } else {
 
@@ -643,6 +659,7 @@ create_output_files() {
 
 static void
 handle_data(KaxBlock *block,
+            KaxBlockAdditions *block_adds,
             int64_t block_duration,
             bool has_ref) {
   kax_track_t *track;
@@ -940,9 +957,27 @@ handle_data(KaxBlock *block,
         break;
 
       case FILE_TYPE_WAVPACK4:
-        // _todo_ support hybrid mode ?
+        track->out->write("wvpk", 4);
+        put_uint32_le(buffer, data.Size());
+        track->out->write(buffer, 4);
         track->out->write(data.Buffer(), data.Size());
-        track->bytes_written += data.Size();
+        // support hybrid mode data
+        if (track->out2 && block_adds) {
+          KaxBlockMore *block_more = FINDFIRST(block_adds, KaxBlockMore);
+          if (block_more == NULL)
+            break;
+          KaxBlockAdditional *block_addition =
+            FINDFIRST(block_more, KaxBlockAdditional);
+          if (block_addition == NULL)
+            break;
+
+          track->out2->write("wvpk", 4);
+          put_uint32_le(buffer, block_addition->GetSize() + 20);
+          track->out2->write(buffer, 4);
+          track->out2->write(data.Buffer(), 20);
+          track->out2->write(block_addition->GetBuffer(),
+                             block_addition->GetSize());
+        }
         break;
 
       case FILE_TYPE_TTA:
@@ -1119,6 +1154,7 @@ close_files() {
 
         default:
           delete tracks[i].out;
+          delete tracks[i].out2;
       }
     }
   }
@@ -1297,7 +1333,7 @@ extract_tracks(const char *file_name) {
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             int64_t tuid, default_duration;
             float a_sfreq, v_fps;
-            int a_channels, a_bps, v_width, v_height;
+            int a_channels, a_bps, v_width, v_height, max_blockadd_id;
             char kax_track_type, *codec_id;
             unsigned char *private_data;
             int private_size;
@@ -1319,6 +1355,7 @@ extract_tracks(const char *file_name) {
             private_data = NULL;
             private_size = 0;
             default_duration = 0;
+            max_blockadd_id = 0;
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -1339,6 +1376,13 @@ extract_tracks(const char *file_name) {
                 }
                 show_element(l3, 3, _("Track number: %u (%s)"), uint32(tnum),
                              msg);
+
+              } else if (is_id(l3, KaxMaxBlockAdditionID)) {
+                KaxMaxBlockAdditionID &max_badd_id =
+                  *static_cast<KaxMaxBlockAdditionID *>(l3);
+                max_badd_id.ReadData(es->I_O());
+                max_blockadd_id = uint64(max_badd_id);
+                show_element(l3, 3, _("Max BlockAdd ID: %u"), max_blockadd_id);
 
               } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
                 KaxTrackUID &el_tuid = *static_cast<KaxTrackUID *>(l3);
@@ -1611,6 +1655,9 @@ extract_tracks(const char *file_name) {
         create_output_files();
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
+        KaxBlockAdditions *blockadds;
+
+        blockadds = NULL;
         show_element(l1, 1, _("Cluster"));
         cluster = (KaxCluster *)l1;
 
@@ -1670,6 +1717,14 @@ extract_tracks(const char *file_name) {
                              ((float)int64(reference)) * tc_scale / 1000000.0);
 
                 has_reference = true;
+
+              } else if (EbmlId(*l3) ==
+                         KaxBlockAdditions::ClassInfos.GlobalId) {
+                blockadds = static_cast<KaxBlockAdditions *>(l3);
+                blockadds->ReadData(es->I_O(), SCOPE_ALL_DATA);
+                show_element(l3, 3, _("Block Additions"));
+
+                has_reference = true;
               } else
                 l3->SkipData(*es, l3->Generic().Context);
 
@@ -1696,7 +1751,7 @@ extract_tracks(const char *file_name) {
 
             // Now write the stuff to the file. Or not. Or get something to
             // drink. Or read a good book. Dunno, your choice, really.
-            handle_data(block, block_duration, has_reference);
+            handle_data(block, blockadds, block_duration, has_reference);
 
           } else
             l2->SkipData(*es, l2->Generic().Context);

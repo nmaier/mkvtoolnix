@@ -1093,6 +1093,12 @@ def_handle(tracks) {
             *static_cast<KaxTrackTimecodeScale *>(l3);
           show_element(l3, 3, "Timecode scale: %f", float(ttc_scale));
 
+        } else if (is_id(l3, KaxMaxBlockAdditionID)) {
+          KaxMaxBlockAdditionID &max_block_add_id =
+            *static_cast<KaxMaxBlockAdditionID *>(l3);
+          show_element(l3, 3, "Max BlockAddition ID: %u",
+                       uint32(max_block_add_id));
+
         } else if (is_id(l3, KaxContentEncodings))
           handle(content_encodings);
 
@@ -1462,6 +1468,7 @@ def_handle2(block_group,
       show_element(l3, 3, "Reference virtual: %lld",
                    int64(ref_virt));
 
+#endif // MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockAdditions)) {
       show_element(l3, 3, "Additions");
 
@@ -1500,7 +1507,6 @@ def_handle2(block_group,
           show_unknown_element(l4, 4);
 
       } // while (l4 != NULL)
-#endif // MATROSKA_VERSION >= 2
 
     } else if (is_id(l3, KaxSlices)) {
       show_element(l3, 3, "Slices");

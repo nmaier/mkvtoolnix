@@ -806,8 +806,7 @@ generic_packetizer_c::add_packet(memory_c &mem,
   if (reader->ptzr_first_packet == NULL)
     reader->ptzr_first_packet = this;
 
-  pack = (packet_t *)safemalloc(sizeof(packet_t));
-  memset(pack, 0, sizeof(packet_t));
+  pack = new packet_t;
 
   length = mem.size;
   if (compressor != NULL) {
@@ -837,6 +836,73 @@ generic_packetizer_c::add_packet(memory_c &mem,
 }
 
 void
+generic_packetizer_c::add_packet(memories_c &mems,
+                                 int64_t timecode,
+                                 int64_t duration,
+                                 bool duration_mandatory,
+                                 int64_t bref,
+                                 int64_t fref,
+                                 int ref_priority) {
+  int length, add_length, i;
+  packet_t *pack;
+
+  if (reader->ptzr_first_packet == NULL)
+    reader->ptzr_first_packet = this;
+
+  pack = (packet_t *)safemalloc(sizeof(packet_t));
+  memset(pack, 0, sizeof(packet_t));
+  pack->data_adds.clear();
+  pack->data_adds.resize(mems.size() - 1);
+
+  length = mems[0]->size;
+  if (compressor != NULL) {
+    pack->data = compressor->compress(mems[0]->data, length);
+    mems[0]->release();
+    for (i = 1; i < mems.size(); i++) {
+      add_length = mems[i]->size;
+      pack->data_adds.push_back(compressor->compress(mems[i]->data,
+                                                     add_length));
+      pack->data_adds_lengths.push_back(add_length);
+      mems[i]->release();
+    }
+  } else {
+    if (!mems[0]->is_free)
+      pack->data = (unsigned char *)safememdup(mems[0]->data, length);
+    else {
+      pack->data = mems[0]->data;
+      mems[0]->lock();
+    }
+    for (i = 1; i < mems.size(); i++) {
+      if (!mems[i]->is_free) {
+        add_length = mems[i]->size;
+        pack->data_adds.push_back((unsigned char *)safememdup(mems[i]->data,
+                                                              add_length));
+        pack->data_adds_lengths.push_back(add_length);
+      } else {
+        pack->data_adds.push_back(mems[i]->data);
+        pack->data_adds_lengths.push_back(mems[i]->size);
+        mems[i]->lock();
+      }
+    }
+  }
+  pack->length = length;
+  pack->timecode = timecode;
+  pack->bref = bref;
+  pack->fref = fref;
+  pack->ref_priority = ref_priority;
+  pack->duration = duration;
+  pack->duration_mandatory = duration_mandatory;
+  pack->source = this;
+
+  enqueued_bytes += pack->length;
+
+  if (connected_to != 1)
+    add_packet2(pack);
+  else
+    deferred_packets.push_back(pack);
+}
+
+void
 generic_packetizer_c::add_packet2(packet_t *pack) {
   int64_t factory_timecode;
 
@@ -847,8 +913,7 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
     pack->fref += correction_timecode_offset + append_timecode_offset;
 
   if (pack->timecode < 0) {
-    safefree(pack->data);
-    safefree(pack);
+    delete pack;
     return;
   }
 

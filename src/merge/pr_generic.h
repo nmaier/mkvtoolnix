@@ -107,6 +107,8 @@ public:
   }
 };
 
+typedef std::vector<memory_c *> memories_c;
+
 struct audio_sync_t {
   int64_t displacement;
   double linear;
@@ -132,7 +134,7 @@ enum default_track_priority_e {
 #define FMT_FN "'%s': "
 #define FMT_TID "'%s' track %lld: "
 
-typedef struct {
+struct packet_t {
   KaxBlockGroup *group;
   KaxBlock *block;
   KaxCluster *cluster;
@@ -142,7 +144,27 @@ typedef struct {
   int64_t unmodified_assigned_timecode, unmodified_duration;
   bool duration_mandatory, superseeded, gap_following;
   generic_packetizer_c *source;
-} packet_t;
+  vector<unsigned char *> data_adds;
+  vector<int> data_adds_lengths;
+
+  packet_t():
+    group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+    ref_priority(0),
+    timecode(0), bref(0), fref(0), duration(0), 
+    packet_num(0),
+    assigned_timecode(0), unmodified_assigned_timecode(0),
+    unmodified_duration(0),
+    duration_mandatory(false), superseeded(false), gap_following(false),
+    source(NULL) {}
+
+  virtual ~packet_t() {
+    vector<unsigned char *>::iterator i;
+
+    safefree(data);
+    foreach(i, data_adds)
+      safefree(*i);
+  }
+};
 
 struct cue_creation_t {
   cue_strategy_e cues;
@@ -433,6 +455,10 @@ public:
                           int64_t duration, bool duration_mandatory = false,
                           int64_t bref = -1, int64_t fref = -1,
                           int ref_priority = -1);
+  virtual void add_packet(memories_c &mems, int64_t timecode,
+                          int64_t duration, bool duration_mandatory = false,
+                          int64_t bref = -1, int64_t fref = -1,
+                          int ref_priority = -1);
   virtual void add_packet2(packet_t *pack);
   virtual void process_deferred_packets();
 
@@ -461,6 +487,12 @@ public:
   virtual int process(memory_c &mem,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;
+
+  virtual int process(memories_c &mems,
+                      int64_t timecode = -1, int64_t length = -1,
+                      int64_t bref = -1, int64_t fref = -1) {
+    return process(*mems[0], timecode, length, bref, fref);
+  }
 
   virtual void dump_debug_info() = 0;
 

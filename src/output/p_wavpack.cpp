@@ -47,9 +47,10 @@ wavpack_packetizer_c::set_headers() {
   set_audio_bit_depth(bits_per_sample);
   set_track_default_duration(samples_per_block * 1000000000 / sample_rate);
   set_track_max_additionals(has_correction ? 1 : 0);
-// _todo_ specify in the track header if it's using BlockAdditionals
 
   generic_packetizer_c::set_headers();
+
+  track_entry->EnableLacing(!has_correction);
 }
 
 int
@@ -69,6 +70,34 @@ wavpack_packetizer_c::process(memory_c &mem,
     mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
            duration);
     add_packet(mem, irnd((double)sample_index * 1000000000 / sample_rate),
+               duration);
+  }
+  samples_output = sample_index + samples;
+
+  debug_leave("wavpack_packetizer_c::process");
+
+  return FILE_STATUS_MOREDATA;
+}
+
+int
+wavpack_packetizer_c::process(memories_c &mems,
+                              int64_t,
+                              int64_t duration,
+                              int64_t,
+                              int64_t) {
+  debug_enter("wavpack_packetizer_c::process");
+  memory_c & mem = *mems[0];
+  //  memory_c & mem_correc = *mems[1];
+  int64_t samples = get_uint32_le(&mem.data[12]);
+  int64_t sample_index = get_uint32_le(&mem.data[8]);
+
+  if (duration == -1) {
+    add_packet(mems, irnd(sample_index * 1000000000 / sample_rate),
+               irnd(samples * 1000000000 / sample_rate));
+  } else {
+    mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
+           duration);
+    add_packet(mems, irnd((double)sample_index * 1000000000 / sample_rate),
                duration);
   }
   samples_output = sample_index + samples;

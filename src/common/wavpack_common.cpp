@@ -124,7 +124,7 @@ wv_parse_frame(mm_io_c *mm_io,
       meta.channel_count = (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
       total_bytes = wphdr.ck_size + 8;
       if (wphdr.flags & WV_FINAL_BLOCK) {
-        mxverb(2, "wavpack_reader: %s block: %s, %d bytes\n",
+        mxverb(3, "wavpack_reader: %s block: %s, %d bytes\n",
                (wphdr.flags & WV_MONO_FLAG) ? "mono" : "stereo",
                (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
                wphdr.ck_size + 8);
