@@ -72,17 +72,16 @@ int ogm_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
  */
 ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  int64_t size;
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
     mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
+    file_size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);
   } catch (exception &ex) {
     throw error_c("ogm_reader: Could not open the source file.");
   }
-  if (!ogm_reader_c::probe_file(mm_io, size))
+  if (!ogm_reader_c::probe_file(mm_io, file_size))
     throw error_c("ogm_reader: Source is not a valid OGG media file.");
 
   ogg_sync_init(&oy);
@@ -728,7 +727,9 @@ void ogm_reader_c::display_progress() {
 
   for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
-      fprintf(stdout, "progress: %d frames\r", sdemuxers[i]->units_processed);
+      fprintf(stdout, "progress: %d frames (%d%%)\r",
+              sdemuxers[i]->units_processed, (int)(mm_io->getFilePointer() *
+                                                   100 / file_size));
       fflush(stdout);
       return;
     }

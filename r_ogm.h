@@ -57,6 +57,7 @@ private:
   ogm_demuxer_t   **sdemuxers;
   char **comments;
   int bos_pages_read;
+  int64_t file_size;
 
 public:
   ogm_reader_c(track_info_t *nti) throw (error_c);
