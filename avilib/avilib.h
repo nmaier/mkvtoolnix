@@ -92,7 +92,6 @@ typedef struct
   uint32_t  bi_y_pels_per_meter;
   uint32_t  bi_clr_used;
   uint32_t  bi_clr_important;
-  void     *data;
 } BITMAPINFOHEADER;
 
 typedef struct
@@ -104,7 +103,6 @@ typedef struct
   uint16_t  n_block_align;
   uint16_t  w_bits_per_sample;
   uint16_t  cb_size;
-  void     *data;
 } WAVEFORMATEX;
 
 typedef struct
@@ -171,9 +169,8 @@ typedef struct
   int anum;            // total number of audio tracks 
   int aptr;            // current audio working track 
   
-  AVISTREAMINFO avi_stream_info;
-  BITMAPINFOHEADER bitmap_info_header;
-  WAVEFORMATEX wave_format_ex[AVI_MAX_TRACKS];
+  BITMAPINFOHEADER *bitmap_info_header;
+  WAVEFORMATEX *wave_format_ex[AVI_MAX_TRACKS];
 } avi_t;
 
 #define AVI_MODE_WRITE  0

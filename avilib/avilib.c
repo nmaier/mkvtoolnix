@@ -1022,7 +1022,7 @@ int AVI_get_audio_track(avi_t *AVI)
 
 int AVI_close(avi_t *AVI)
 {
-   int ret;
+   int ret, i;
 
    /* If the file was open for writing, the header and index still have
       to be written */
@@ -1040,6 +1040,11 @@ int AVI_close(avi_t *AVI)
    //FIXME
    //if(AVI->audio_index) free(AVI->audio_index);
    free(AVI);
+   if (AVI->bitmap_info_header)
+     free(AVI->bitmap_info_header);
+   for (i = 0; i < AVI_MAX_TRACKS; i++)
+     if (AVI->wave_format_ex[i])
+       free(AVI->wave_format_ex[i]);
 
    return ret;
 }
@@ -1206,7 +1211,6 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          i += 8;
          if(strncasecmp(hdrl_data+i,"vids",4) == 0 && !vids_strh_seen)
          {
-            memcpy(&AVI->avi_stream_info, hdrl_data+i, sizeof(AVISTREAMINFO));
             memcpy(AVI->compressor,hdrl_data+i+4,4);
             AVI->compressor[4] = 0;
 
@@ -1252,20 +1256,13 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          i += 8;
          if(lasttag == 1)
          {
-            memcpy(&AVI->bitmap_info_header, hdrl_data+i,
-                   sizeof(BITMAPINFOHEADER) - sizeof(void *));
-            if (AVI->bitmap_info_header.bi_size >
-                (sizeof(BITMAPINFOHEADER) - sizeof(void *))) {
-              AVI->bitmap_info_header.data =
-                malloc(AVI->bitmap_info_header.bi_size - sizeof(void *) -
-                       sizeof(BITMAPINFOHEADER));
-              if (AVI->bitmap_info_header.data != NULL)
-                memcpy(AVI->bitmap_info_header.data, hdrl_data + i +
-                       sizeof(BITMAPINFOHEADER) - sizeof(void *),
-                       AVI->bitmap_info_header.bi_size -
-                       sizeof(BITMAPINFOHEADER) + sizeof(void *));
-            } else
-              AVI->bitmap_info_header.data = NULL;
+            BITMAPINFOHEADER bih;
+            
+            memcpy(&bih, hdrl_data + i, sizeof(BITMAPINFOHEADER));
+            AVI->bitmap_info_header = (BITMAPINFOHEADER *)malloc(bih.bi_size);
+            if (AVI->bitmap_info_header != NULL)
+              memcpy(AVI->bitmap_info_header, hdrl_data + i, bih.bi_size);
+            
             AVI->width  = str2ulong(hdrl_data+i+4);
             AVI->height = str2ulong(hdrl_data+i+8);
                     vids_strf_seen = 1;
@@ -1278,18 +1275,15 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          }
          else if(lasttag == 2)
          {
-            memcpy(&AVI->wave_format_ex[AVI->aptr], hdrl_data+i,
-                   sizeof(WAVEFORMATEX) - sizeof(void *));
-            if (AVI->wave_format_ex[AVI->aptr].cb_size == 0)
-              AVI->wave_format_ex[AVI->aptr].data = NULL;
-            else {
-              AVI->wave_format_ex[AVI->aptr].data =
-                malloc(AVI->wave_format_ex[AVI->aptr].cb_size);
-              if (AVI->wave_format_ex[AVI->aptr].data != NULL)
-                memcpy(AVI->wave_format_ex[AVI->aptr].data,
-                       hdrl_data + i + sizeof(WAVEFORMATEX) - sizeof(void *),
-                       AVI->wave_format_ex[AVI->aptr].cb_size);
-            }
+            WAVEFORMATEX wfe;
+            
+            memcpy(&wfe, hdrl_data + i, sizeof(WAVEFORMATEX));
+            AVI->wave_format_ex[AVI->aptr] =
+              (WAVEFORMATEX *)malloc(sizeof(WAVEFORMATEX) + wfe.cb_size);
+            if (AVI->wave_format_ex[AVI->aptr] != NULL)
+              memcpy(AVI->wave_format_ex[AVI->aptr], hdrl_data + i,
+                     sizeof(WAVEFORMATEX) + wfe.cb_size);
+
             AVI->track[AVI->aptr].a_fmt   = str2ushort(hdrl_data+i  );
 
 	    //ThOe
