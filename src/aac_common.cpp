@@ -24,9 +24,9 @@
 #include "common.h"
 #include "aac_common.h"
 
-static const int sample_rates[16] = {96000, 88200, 64000, 48000, 44100, 32000,
-                                     24000, 22050, 16000, 12000, 11025,  8000,
-                                     0, 0, 0, 0}; // filling
+const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
+                                   24000, 22050, 16000, 12000, 11025,  8000,
+                                   0, 0, 0, 0}; // filling
 
 int parse_aac_adif_header(unsigned char *buf, int size,
                           aac_header_t *aac_header) {
@@ -99,7 +99,7 @@ int parse_aac_adif_header(unsigned char *buf, int size,
   if (eob)
     return 0;
 
-  aac_header->sample_rate = sample_rates[sfreq_index];
+  aac_header->sample_rate = aac_sampling_freq[sfreq_index];
   aac_header->id = 0;           // MPEG-4
   aac_header->profile = profile;
   aac_header->bytes = 0;
@@ -146,7 +146,7 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   if (eob)
     return 0;
 
-  aac_header->sample_rate = sample_rates[sfreq_index];
+  aac_header->sample_rate = aac_sampling_freq[sfreq_index];
   aac_header->id = id;
   aac_header->profile = profile;
   aac_header->bytes = frame_length;

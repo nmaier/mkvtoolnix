@@ -21,6 +21,8 @@
 #ifndef __AACCOMMON_H
 #define __AACCOMMON_H
 
+extern const int aac_sampling_freq[16];
+
 typedef struct {
   int sample_rate;
   int bit_rate;
