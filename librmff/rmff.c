@@ -21,6 +21,8 @@
  
  */
 
+#include "os.h"
+
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -28,6 +30,10 @@
 #include <string.h>
 
 #include "librmff.h"
+
+#if defined(COMP_MSC)
+#define inline __inline
+#endif
 
 typedef struct rmff_video_segment_t {
   uint32_t size;
@@ -808,7 +814,7 @@ rmff_read_next_frame(rmff_file_t *file,
     buffer = safemalloc(length);
     frame->allocated_by_rmff = 1;
   }
-  frame->data = buffer;
+  frame->data = (unsigned char *)buffer;
   frame->size = length - 12;
   frame->id = read_uint16_be();
   frame->timecode = read_uint32_be();

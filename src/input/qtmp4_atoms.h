@@ -17,7 +17,10 @@
 #define __QTMP4_ATOMS_H
 
 // 'Movie header' atom
-typedef struct __attribute__((__packed__)) {
+#if defined(COMP_MSC)
+#pragma pack(push,1)
+#endif
+typedef struct PACKED_STRUCTURE {
   uint8_t version;
   uint8_t flags[3];
   uint32_t creation_time;
@@ -38,7 +41,7 @@ typedef struct __attribute__((__packed__)) {
 } mvhd_atom_t;
 
 // 'Track header' atom
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   uint8_t version;
   uint8_t flags[3];
   uint32_t creation_time;
@@ -57,7 +60,7 @@ typedef struct __attribute__((__packed__)) {
 } tkhd_atom_t;
 
 // 'Media header' atom
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   uint8_t version;
   uint8_t flags[3];
   uint32_t creation_time;
@@ -69,7 +72,7 @@ typedef struct __attribute__((__packed__)) {
 } mdhd_atom_t;
 
 // 'Handler reference' atom
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   uint8_t version;
   uint8_t flags[3];
   uint32_t type;
@@ -80,14 +83,14 @@ typedef struct __attribute__((__packed__)) {
 } hdlr_atom_t;
 
 // Base for all 'sample data description' atoms
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   char fourcc[4];
   uint8_t reserved[6];
   uint16_t data_reference_index;
 } base_stsd_atom_t;
 
 // 'sound sample description' atom
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   base_stsd_atom_t base;
   uint16_t version;
   uint16_t revision;
@@ -100,7 +103,7 @@ typedef struct __attribute__((__packed__)) {
 } sound_v0_stsd_atom_t;
 
 // 'sound sample description' atom v2
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   sound_v0_stsd_atom_t v0;
   struct {
     uint32_t samples_per_packet;
@@ -111,7 +114,7 @@ typedef struct __attribute__((__packed__)) {
 } sound_v1_stsd_atom_t;
 
 // 'video sample description' atom
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   base_stsd_atom_t base;
   uint16_t version;
   uint16_t revision;
@@ -129,7 +132,7 @@ typedef struct __attribute__((__packed__)) {
   uint16_t color_table_id;
 } video_stsd_atom_t;
 
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   uint32_t size;
   video_stsd_atom_t id;
 } qt_image_description_t;
@@ -156,7 +159,7 @@ typedef struct __attribute__((__packed__)) {
 #define MP4DT_TAGS_END          0xFE 
 
 // MPEG4 esds structure
-typedef struct __attribute__((__packed__)) {
+typedef struct PACKED_STRUCTURE {
   uint8_t version;
   uint32_t flags;
   uint16_t esid;
@@ -171,5 +174,8 @@ typedef struct __attribute__((__packed__)) {
   uint8_t sl_config_len;
   unsigned char *sl_config;
 } esds_t;
+#if defined(COMP_MSC)
+#pragma pack(pop)
+#endif
 
 #endif // __QTMP4_ATOMS_H

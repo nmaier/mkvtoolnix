@@ -33,9 +33,7 @@
 #include "wx/statline.h"
 
 #if defined(SYS_WINDOWS)
-#include <windef.h>
-#include <winbase.h>
-#include <io.h>
+#include <windows.h>
 #endif
 
 #include "common.h"

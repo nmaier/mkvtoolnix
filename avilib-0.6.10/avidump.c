@@ -31,7 +31,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>
+#endif
 #include <ctype.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -70,6 +72,10 @@ typedef unsigned char boolean;
 #define TRUE  1
 #define FALSE 0
 #define BUFSIZE 4096
+
+#if !defined(STDOUT_FILENO)
+#define STDOUT_FILENO stdout
+#endif
 
 /* Macro to convert expressions of form 'F','O','U','R' to
    numbers of type FOURCC: */

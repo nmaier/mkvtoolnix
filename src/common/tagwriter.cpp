@@ -12,6 +12,8 @@
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
+#include "os.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <time.h>

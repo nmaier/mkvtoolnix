@@ -21,10 +21,7 @@
 #include <langinfo.h>
 #endif
 #if defined(SYS_WINDOWS)
-#include <stdarg.h>
-#include <windef.h>
-#include <winbase.h>
-#include <winnls.h>
+#include <windows.h>
 #endif
 
 #include "common.h"

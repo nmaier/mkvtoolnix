@@ -23,10 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #if defined(SYS_WINDOWS)
-#include <windef.h>
-#include <winbase.h>
-#include <wingdi.h>
-#include <winuser.h>
+#include <windows.h>
 #else
 #include <unistd.h>
 #endif // SYS_WINDOWS
@@ -364,7 +361,7 @@ mm_io_c::puts_unl(const char *s) {
 uint32_t
 mm_io_c::read(string &buffer,
               size_t size) {
-  char cbuffer[size + 1];
+  char *cbuffer = new char[size + 1];
   int nread;
 
   nread = read(buffer, size);
@@ -374,6 +371,7 @@ mm_io_c::read(string &buffer,
     cbuffer[nread] = 0;
     buffer = cbuffer;
   }
+  delete [] cbuffer;
 
   return nread;
 }

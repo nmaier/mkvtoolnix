@@ -29,13 +29,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if !defined(COMP_MSC)
 #include <sys/time.h>
+#endif
 #include <time.h>
 #include <wchar.h>
 #if defined(SYS_WINDOWS)
-#include <windef.h>
-#include <winbase.h>
-#include <winnls.h>
+#include <windows.h>
 #endif
 
 #include <string>
@@ -547,7 +547,7 @@ utf8_init(const char *charset) {
 
   if ((charset == NULL) || (*charset == 0)) {
     setlocale(LC_CTYPE, "");
-#if defined(COMP_MINGW)
+#if defined(COMP_MINGW) || defined(COMP_MSC)
     lc_charset = "CP" + to_string(GetACP());
 #else
     lc_charset = nl_langinfo(CODESET);

@@ -163,7 +163,10 @@ typedef struct
   uint32_t  bi_clr_important;
 } alBITMAPINFOHEADER;
 
-typedef struct __attribute__((__packed__))
+#if defined(COMP_MSC)
+#pragma pack(push,1)
+#endif
+typedef struct PACKED_STRUCTURE
 {
   uint16_t  w_format_tag;
   uint16_t  n_channels;
@@ -174,7 +177,7 @@ typedef struct __attribute__((__packed__))
   uint16_t  cb_size;
 } alWAVEFORMATEX;
 
-typedef struct __attribute__((__packed__))
+typedef struct PACKED_STRUCTURE
 {
   uint32_t fcc_type; 
   uint32_t fcc_handler; 
@@ -195,6 +198,9 @@ typedef struct __attribute__((__packed__))
   uint16_t dw_right;
   uint16_t dw_bottom;
 } alAVISTREAMHEADER;
+#if defined(COMP_MSC)
+#pragma pack(pop)
+#endif
 
 typedef struct
 {
