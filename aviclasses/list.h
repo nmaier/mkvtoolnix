@@ -137,7 +137,7 @@ public:
   T *begin() const { return AtHead(); }
   T *end() const { return AtTail(); }
 
-  void take(List2<T>& from) { List::take(from); }
+  void take(List2<T>& from) { List::Take(from); }
 
   class iterator {
   protected:
@@ -163,28 +163,28 @@ public:
     fwit() throw() {}
     fwit(const fwit& src) throw() : iterator(src) {}
     fwit(ListNode2<T> *start) throw() {
-      node = start;
-      next = start->NextFromHead();
+      iterator::node = start;
+      iterator::next = start->NextFromHead();
     }
 
     const fwit& operator=(ListNode2<T> *start) throw() {
-      node = start;
-      next = start->NextFromHead();
+      iterator::node = start;
+      iterator::next = start->NextFromHead();
 
       return *this;
     }
 
     fwit& operator++() throw() {
-      node = next;
-      next = node->NextFromHead();
+      iterator::node = iterator::next;
+      iterator::next = iterator::node->NextFromHead();
 
       return *this;
     }
 
     const fwit& operator+=(int v) throw() {
-      while(next && v--) {
-        node = next;
-        next = node->NextFromHead();
+      while(iterator::next && v--) {
+        iterator::node = iterator::next;
+        iterator::next = iterator::node->NextFromHead();
       }
 
       return *this;
@@ -210,28 +210,28 @@ public:
     rvit() throw() {}
 
     rvit(ListNode2<T> *start) throw() {
-      node = start;
-      next = start->NextFromTail();
+      iterator::node = iterator::start;
+      iterator::next = iterator::start->NextFromTail();
     }
 
     const rvit& operator=(ListNode2<T> *start) throw() {
-      node = start;
-      next = start->NextFromTail();
+      iterator::node = iterator::start;
+      iterator::next = iterator::start->NextFromTail();
 
       return *this;
     }
 
     rvit& operator--() throw() {
-      node = next;
-      next = node->NextFromTail();
+      iterator::node = iterator::next;
+      iterator::next = iterator::node->NextFromTail();
 
       return *this;
     }
 
     const rvit& operator-=(int v) throw() {
-      while(next && v--) {
-        node = next;
-        next = node->NextFromTail();
+      while(iterator::next && v--) {
+        iterator::node = iterator::next;
+        iterator::next = iterator::node->NextFromTail();
       }
 
       return *this;
@@ -253,20 +253,20 @@ public:
   };
 };
 
-template<class T>
-class ListAlloc : public List2<T> {
-public:
-  ListAlloc<T>() {}
-  ~ListAlloc<T>() {
-    dispose();
-  }
+/* template<class T> */
+/* class ListAlloc : public List2<T> { */
+/* public: */
+/*   ListAlloc<T>() {} */
+/*   ~ListAlloc<T>() { */
+/*     dispose(); */
+/*   } */
 
-  void dispose() {
-    T *node;
+/*   void dispose() { */
+/*     T *node; */
 
-    while(node = RemoveHead())
-      delete node;
-  }
-};
+/*     while(node = RemoveHead()) */
+/*       delete node; */
+/*   } */
+/* }; */
 
 #endif
