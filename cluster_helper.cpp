@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.20 2003/05/26 21:49:11 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.21 2003/06/07 12:26:08 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -35,6 +35,7 @@ cluster_helper_c::cluster_helper_c() {
   cluster_content_size = 0;
   last_block_group = NULL;
   max_timecode = 0;
+  last_cluster_tc = 0;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -77,7 +78,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
 
   if (clusters == NULL)
-    return;
+    add_cluster(new KaxCluster());
 
   c = clusters[num_clusters - 1];
   c->packets = (packet_t **)saferealloc(c->packets, sizeof(packet_t *) *
@@ -145,7 +146,7 @@ void cluster_helper_c::add_cluster(KaxCluster *cluster) {
   c->cluster = cluster;
   cluster_content_size = 0;
   cluster->SetParent(*kax_segment);
-  cluster->SetPreviousTimecode(0);
+  cluster->SetPreviousTimecode(last_cluster_tc, TIMECODE_SCALE);
 }
 
 int cluster_helper_c::get_cluster_content_size() {
@@ -226,6 +227,8 @@ int cluster_helper_c::render(IOCallback *out) {
 
   cluster->Render(*out, *kax_cues);
 
+  last_cluster_tc = cluster->GlobalTimecode();
+
   if (kax_seekhead != NULL)
     kax_seekhead->IndexThis(*cluster, *kax_segment);
 
@@ -284,9 +287,9 @@ void cluster_helper_c::check_clusters(int num) {
         continue;
       clstr = find_packet_cluster(p->bref);
       if (clstr == NULL)
-        die("Error: backward refenrece could not be resolved "
-            "(%lld -> %lld). Called from line %d.\n",
-            p->timecode, p->bref, num);
+        die("cluster_helper.cpp/cluster_helper_c::check_clusters(): Error: "
+            "backward refenrece could not be resolved (%lld -> %lld). Called "
+            "from line %d.\n", p->timecode, p->bref, num);
     }
   }
 }
@@ -327,8 +330,8 @@ int cluster_helper_c::free_clusters() {
           continue;
         clstr = find_packet_cluster(p->bref);
         if (clstr == NULL)
-          die("Error: backward refenrece could not be resolved "
-              "(%lld).\n", p->bref);
+          die("cluster_helper.cpp/cluster_helper_c::free_clusters(): Error: "
+              "backward refenrece could not be resolved (%lld).\n", p->bref);
         clstr->is_referenced = 1;
       }
     }

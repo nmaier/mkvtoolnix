@@ -282,7 +282,7 @@ void mi_frame::on_options_expandimportant(wxCommandEvent &WXUNUSED(event)) {
 
 void mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
   wxString msg;
-  msg.Printf(_T("mkvinfo v" VERSION".\nCompiled with libebml %s + "
+  msg.Printf(_T(VERSIONINFO ".\nCompiled with libebml %s + "
                 "libmatroska %s.\n\nThis program is licensed under the "
                 "GPL v2 (see COPYING).\nIt was written by Moritz Bunkus "
                 "<moritz@bunkus.org>.\nSources and the latest binaries are "

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.28 2003/06/06 20:56:28 mosu Exp $
+    \version \$Id: common.cpp,v 1.29 2003/06/07 12:26:08 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -40,11 +40,11 @@
 
 int verbose = 1;
 
-void _die(const char *fmt, const char *file, int line, ...) {
+void die(const char *fmt, ...) {
   va_list ap;
 
-  fprintf(stderr, "die @ %s/%d : ", file, line);
-  va_start(ap, line);
+  fprintf(stderr, "'die' called: ");
+  va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
   va_end(ap);
   fprintf(stderr, "\n");
@@ -224,7 +224,8 @@ char *to_utf8(int handle, const char *local) {
   }
 
   if (handle >= num_mkv_convs)
-    die("Invalid conversion handle %d (num: %d).", handle, num_mkv_convs);
+    die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %d).",
+        handle, num_mkv_convs);
 
   return convert_charset(mkv_convs[handle].ict_to_utf8, local);
 }
@@ -238,7 +239,8 @@ char *from_utf8(int handle, const char *utf8) {
   }
 
   if (handle >= num_mkv_convs)
-    die("Invalid conversion handle %d (num: %d).", handle, num_mkv_convs);
+    die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %d).",
+        handle, num_mkv_convs);
 
   return convert_charset(mkv_convs[handle].ict_from_utf8, utf8);
 }
@@ -293,11 +295,9 @@ char *_safestrdup(const char *s, const char *file, int line) {
     return NULL;
 
   copy = strdup(s);
-  if (copy == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL (%s)\n", file,
-            line, s);
-    exit(1);
-  }
+  if (copy == NULL)
+    die("common.cpp/safestrdup() called from file %s, line %d: strdup() "
+        "returned NULL for '%s'.", file, line, s);
 
   return copy;
 }
@@ -310,11 +310,9 @@ unsigned char *_safestrdup(const unsigned char *s, const char *file,
     return NULL;
 
   copy = strdup((const char *)s);
-  if (copy == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL (%s)\n", file,
-            line, s);
-    exit(1);
-  }
+  if (copy == NULL)
+    die("common.cpp/safestrdup() called from file %s, line %d: strdup() "
+        "returned NULL for '%s'.", file, line, s);
 
   return (unsigned char *)copy;
 }
@@ -326,11 +324,9 @@ void *_safememdup(const void *s, size_t size, const char *file, int line) {
     return NULL;
 
   copy = malloc(size);
-  if (copy == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safememdup: malloc == NULL (%d)\n", file,
-            line, size);
-    exit(1);
-  }
+  if (copy == NULL)
+    die("common.cpp/safememdup() called from file %s, line %d: malloc() "
+        "returned NULL for a size of %d bytes.", file, line, size);
   memcpy(copy, s, size);
 
   return copy;
@@ -340,22 +336,18 @@ void *_safemalloc(size_t size, const char *file, int line) {
   void *mem;
 
   mem = malloc(size);
-  if (mem == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safemalloc: malloc == NULL (%d)\n", file,
-            line, size);
-    exit(1);
-  }
+  if (mem == NULL)
+    die("common.cpp/safemalloc() called from file %s, line %d: malloc() "
+        "returned NULL for a size of %d bytes.", file, line, size);
 
   return mem;
 }
 
 void *_saferealloc(void *mem, size_t size, const char *file, int line) {
   mem = realloc(mem, size);
-  if (mem == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safemalloc: realloc == NULL (%d)\n",
-            file, line, size);
-    exit(1);
-  }
+  if (mem == NULL)
+    die("common.cpp/saferealloc() called from file %s, line %d: realloc() "
+        "returned NULL for a size of %d bytes.", file, line, size);
 
   return mem;
 }
@@ -369,8 +361,7 @@ UTFstring cstr_to_UTFstring(const char *c) {
   return UTFstring(c);
 #else
   wchar_t *new_string;
-  const char *sptr;
-  char *old_locale, *cconv;
+  char *old_locale;
   UTFstring u;
   int len;
 
@@ -380,7 +371,7 @@ UTFstring cstr_to_UTFstring(const char *c) {
   new_string[len] = L'\0';
   old_locale = setlocale(LC_CTYPE, NULL);
   setlocale(LC_CTYPE, "");
-  int res = mbstowcs(new_string, c, len);
+  mbstowcs(new_string, c, len);
   setlocale(LC_CTYPE, old_locale);
   u = UTFstring(new_string);
   safefree(new_string);
@@ -460,7 +451,7 @@ void debug_c::leave(const char *label) {
     }
 
   if ((entry == NULL) || (entry->entered_at == 0))
-    die("leave without enter: %s", label);
+    die("common.cpp/debug_c::leave() leave without enter: %s", label);
 
   entry->number_of_calls++;
   entry->elapsed_time += (uint64_t)tv.tv_sec * (uint64_t)1000000 +

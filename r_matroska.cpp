@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.43 2003/06/06 20:56:28 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.44 2003/06/07 12:26:08 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1004,7 +1004,7 @@ int mkv_reader_c::read() {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
             cluster_tc = uint64(ctc);
-            cluster->InitTimecode(cluster_tc);
+            cluster->InitTimecode(cluster_tc, tc_scale);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
 
@@ -1158,7 +1158,8 @@ int mkv_reader_c::demuxing_requested(mkv_track_t *t) {
   else if (t->type == 's')
     tracks = ti->stracks;
   else
-    die("internal bug - unknown stream type %d", t->type);
+    die("r_matroska.cpp/mkv_reader_c::demuxing_requested(): internal bug - "
+        "unknown stream type %d", t->type);
 
   if (tracks == NULL)
     return 1;

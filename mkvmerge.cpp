@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.85 2003/06/06 20:56:28 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.86 2003/06/07 12:26:08 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -567,7 +567,7 @@ static void parse_args(int argc, char **argv) {
   // or that are needed right at the beginning.
   for (i = 0; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      fprintf(stdout, "mkvmerge v" VERSION "\n");
+      fprintf(stdout, VERSIONINFO "\n");
       exit(0);
     } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
                !strcmp(argv[i], "--help")) {
@@ -1058,9 +1058,9 @@ int main(int argc, char **argv) {
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
+  kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
 
   cluster_helper = new cluster_helper_c();
-  cluster_helper->add_cluster(new KaxCluster());
 
   handle_args(argc, argv);
 

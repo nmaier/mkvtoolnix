@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.33 2003/06/06 20:56:28 mosu Exp $
+    \version \$Id: common.h,v 1.34 2003/06/07 12:26:08 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -26,7 +26,7 @@
 #elif defined WIN32
 #include <stdint.h>
 #define PACKAGE "mkvtoolnix"
-#define VERSION 0.4.1
+#define VERSION "0.4.3"
 #endif
 #include <sys/types.h>
 
@@ -42,9 +42,9 @@
 
 #include "config.h"
 
-using namespace std;
-
 #define VERSIONINFO "mkvmerge v" VERSION
+
+using namespace std;
 
 #define DISPLAYPRIORITY_HIGH   10
 #define DISPLAYPRIORITY_MEDIUM  5
@@ -79,8 +79,7 @@ using namespace std;
 
 #define TIMECODE_SCALE 1000000
 
-#define die(fmt, args...) _die(fmt, __FILE__, __LINE__, ## args)
-void _die(const char *fmt, const char *file, int line, ...);
+void die(const char *fmt, ...);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.55 2003/06/06 20:56:28 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.56 2003/06/07 12:26:08 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -155,7 +155,7 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   char level_buffer[10];
 
   if (level > 9)
-    die("level > 9: %d", level);
+    die("mkvinfo.cpp/show_element(): level > 9: %d", level);
 
   va_start(ap, fmt);
   args_buffer[ARGS_BUFFER_LEN - 1] = 0;
@@ -202,7 +202,7 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
       use_gui = true;
 #endif // HAVE_WXWINDOWS
     } else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      fprintf(stdout, "mkvinfo v" VERSION "\n");
+      fprintf(stdout, VERSIONINFO "\n");
       exit(0);
     } else if (!strcmp(argv[i], "-v") || ! strcmp(argv[i], "--verbose"))
       verbose++;
@@ -746,7 +746,7 @@ bool process_file(const char *file_name) {
             cluster_tc = uint64(ctc);
             show_element(l2, 2, "Cluster timecode: %.3fs", 
                          (float)cluster_tc * (float)tc_scale / 1000000000.0);
-            cluster->InitTimecode(cluster_tc);
+            cluster->InitTimecode(cluster_tc, tc_scale);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             show_element(l2, 2, "Block group");
