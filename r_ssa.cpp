@@ -24,6 +24,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <algorithm>
+
 #include "mkvmerge.h"
 #include "pr_generic.h"
 #include "r_ssa.h"
@@ -31,6 +33,18 @@
 #include "matroska.h"
 
 using namespace std;
+
+class ssa_line_c {
+public:
+  char *line;
+  int64_t start, end;
+
+  bool operator < (const ssa_line_c &cmp) const;
+};
+
+bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
+  return start < cmp.start;
+}
 
 int ssa_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   string line;
@@ -140,8 +154,10 @@ int64_t ssa_reader_c::parse_time(string &stime) {
 
 int ssa_reader_c::read() {
   string line, stime, orig_line;
-  int pos1, pos2;
+  int pos1, pos2, i;
   int64_t start, end;
+  vector<ssa_line_c> clines;
+  ssa_line_c cline;
 
   do {
     line = mm_io->getline();
@@ -195,10 +211,22 @@ int ssa_reader_c::read() {
     }
     line.erase(pos1, pos2 - pos1);
 
-    // Let the packetizer handle this line.
-    textsubs_packetizer->process((unsigned char *)line.c_str(), 0, start,
-                                 end - start);
+    cline.line = safestrdup(line.c_str());
+    cline.start = start;
+    cline.end = end;
+
+    clines.push_back(cline);
   } while (!mm_io->eof());
+
+  stable_sort(clines.begin(), clines.end());
+
+  for (i = 0; i < clines.size(); i++) {
+    // Let the packetizer handle this line.
+    textsubs_packetizer->process((unsigned char *)clines[i].line, 0,
+                                 clines[i].start,
+                                 clines[i].end - clines[i].start);
+    safefree(clines[i].line);
+  }
 
   return 0;
 }
