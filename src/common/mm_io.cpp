@@ -218,11 +218,27 @@ uint32 mm_io_c::read(void *buffer, size_t size) {
   return bytes_read;
 }
 
-size_t mm_io_c::write(const void *buffer,size_t size) {
+size_t mm_io_c::write(const void *buffer, size_t size) {
   DWORD bytes_written;
 
   if (!WriteFile((HANDLE)file, buffer, size, &bytes_written, NULL))
-    return 0;
+    bytes_written = 0;
+
+  if (bytes_written != size) {
+    DWORD error;
+    char *error_msg;
+
+    error = GetLastError();
+    error_msg = NULL;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+                  FORMAT_MESSAGE_FROM_SYSTEM | 
+                  FORMAT_MESSAGE_IGNORE_INSERTS, NULL,
+                  error,
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                  (LPTSTR)&error_msg, 0, NULL);
+    mxerror("Cound not write to the output file: %d (%s)\n", error,
+            error_msg != NULL ? error_msg : "unknown");
+  }
 
   return bytes_written;
 }
