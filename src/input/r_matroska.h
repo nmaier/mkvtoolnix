@@ -70,6 +70,7 @@ typedef struct {
 
   // Parameters for video tracks
   uint32_t v_width, v_height, v_dwidth, v_dheight;
+  uint32_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
   float v_frate;
   char v_fourcc[5];
   bool v_bframes;

@@ -191,6 +191,19 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
 
+  memset(&ti->pixel_cropping, 0, sizeof(pixel_crop_t));
+  ti->pixel_cropping.id = -2;
+  // Let's see if the user has specified a FourCC for this track.
+  for (i = 0; i < ti->pixel_crop_list->size(); i++) {
+    pixel_crop_t *cropping;
+    cropping = &(*ti->pixel_crop_list)[i];
+    if ((cropping->id == ti->id) || (cropping->id == -1)) { // -1 == all tracks
+      memcpy(&ti->pixel_cropping, cropping, sizeof(pixel_crop_t));
+      ti->fourcc[4] = 0;
+      break;
+    }
+  }
+
   // Set default header values to 'unset'.
   hserialno = create_track_number(reader, ti->id);
   huid = 0;
@@ -484,6 +497,35 @@ generic_packetizer_c::set_language(const char *language) {
 }
 
 void
+generic_packetizer_c::set_video_pixel_cropping(int left,
+                                               int top,
+                                               int right,
+                                               int bottom) {
+  ti->pixel_cropping.id = 0;
+  ti->pixel_cropping.left = left;
+  ti->pixel_cropping.top = top;
+  ti->pixel_cropping.right = right;
+  ti->pixel_cropping.bottom = bottom;
+
+  if (track_entry != NULL) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxVideoPixelCropLeft>(video))) =
+      ti->pixel_cropping.left;
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxVideoPixelCropTop>(video))) =
+      ti->pixel_cropping.top;
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxVideoPixelCropRight>(video))) =
+      ti->pixel_cropping.right;
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxVideoPixelCropBottom>(video))) =
+      ti->pixel_cropping.bottom;
+  }
+}
+
+void
 generic_packetizer_c::set_headers() {
   int idx, disp_width, disp_height;
   KaxTag *tag;
@@ -616,6 +658,21 @@ generic_packetizer_c::set_headers() {
       *(static_cast<EbmlUInteger *>(&dheight)) = disp_height;
       dheight.SetDefaultSize(4);
       ti->display_height = disp_height;
+
+      if (ti->pixel_cropping.id != -2) {
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoPixelCropLeft>(video))) =
+          ti->pixel_cropping.left;
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoPixelCropTop>(video))) =
+          ti->pixel_cropping.top;
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoPixelCropRight>(video))) =
+          ti->pixel_cropping.right;
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoPixelCropBottom>(video))) =
+          ti->pixel_cropping.bottom;
+      }
     }
 
   } else if (htrack_type == track_audio) {
@@ -1258,6 +1315,9 @@ track_info_c::track_info_c():
   compression_list = new vector<cue_creation_t>;
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
+  pixel_crop_list = new vector<pixel_crop_t>;
+  memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
+  pixel_cropping.id = -2;
   avi_block_sizes = NULL;
 }
 
@@ -1302,6 +1362,7 @@ track_info_c::free_contents() {
   delete all_fourccs;
   delete display_properties;
   delete avi_block_sizes;
+  delete pixel_crop_list;
 
   initialized = false;
 }
@@ -1380,6 +1441,9 @@ track_info_c::operator =(const track_info_c &src) {
     (*all_ext_timecodes)[i].language =
       safestrdup((*src.all_ext_timecodes)[i].language);
   ext_timecodes = safestrdup(src.ext_timecodes);
+
+  pixel_crop_list = new vector<pixel_crop_t>(*src.pixel_crop_list);
+  pixel_cropping = src.pixel_cropping;
 
   no_chapters = src.no_chapters;
   no_attachments = src.no_attachments;

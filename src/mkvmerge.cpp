@@ -350,6 +350,8 @@ usage() {
     "                           width and height for this aspect ratio.\n"
     "  --display-dimensions <TID:width>x<height>\n"
     "                           Explicitely set the display dimensions.\n"
+    "  --cropping <TID:left,top,right,bottom>\n"
+    "                           Sets the cropping parameters.\n"
     "\n Options that only apply to text subtitle tracks:\n"
     "  --sub-charset <TID:charset>\n"
     "                           Sets the charset the text subtitles are\n"
@@ -853,6 +855,43 @@ parse_display_dimensions(char *s,
   dprop.width = w;
   dprop.height = h;
   ti.display_properties->push_back(dprop);
+}
+
+/** \brief Parse the \c --cropping argument
+ *
+ * The argument must have the form \c TID:left,top,right,bottom e.g.
+ * \c 0:10,5,10,5
+ */
+static void
+parse_cropping(char *s,
+               track_info_c &ti) {
+  pixel_crop_t crop;
+  vector<string> v;
+
+  v = split(s, ":");
+  if (v.size() != 2)
+    mxerror(_("Cropping parameters: not given in the form "
+              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
+              "(argument was '%s').\n"), s);
+  if (!parse_int(v[0].c_str(), crop.id))
+    mxerror(_("Cropping parameters: not given in the form "
+              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
+              "(argument was '%s').\n"), s);
+
+  v = split(v[1].c_str(), ",");
+  if (v.size() != 4)
+    mxerror(_("Cropping parameters: not given in the form "
+              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
+              "(argument was '%s').\n"), s);
+  if (!parse_int(v[0].c_str(), crop.left) ||
+      !parse_int(v[1].c_str(), crop.top) ||
+      !parse_int(v[2].c_str(), crop.right) ||
+      !parse_int(v[3].c_str(), crop.bottom))
+    mxerror(_("Cropping parameters: not given in the form "
+              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
+              "(argument was '%s').\n"), s);
+
+  ti.pixel_crop_list->push_back(crop);
 }
 
 /** \brief Parse the \c --split argument
@@ -2188,6 +2227,13 @@ parse_args(int argc,
         mxerror(_("'--display-dimensions' lacks the dimensions.\n"));
 
       parse_display_dimensions(next_arg, *ti);
+      i++;
+
+    } else if (!strcmp(this_arg, "--cropping")) {
+      if (next_arg == NULL)
+        mxerror(_("'--cropping' lacks the crop parameters.\n"));
+
+      parse_cropping(next_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "-y") || !strcmp(this_arg, "--sync")) {

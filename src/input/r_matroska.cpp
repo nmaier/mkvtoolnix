@@ -1029,6 +1029,10 @@ kax_reader_c::read_headers() {
             KaxVideoDisplayWidth *kv_dwidth;
             KaxVideoDisplayHeight *kv_dheight;
             KaxVideoFrameRate *kv_frate;
+            KaxVideoPixelCropLeft *kv_pcleft;
+            KaxVideoPixelCropTop *kv_pctop;
+            KaxVideoPixelCropRight *kv_pcright;
+            KaxVideoPixelCropBottom *kv_pcbottom;
 
             kv_pwidth = FINDFIRST(ktvideo, KaxVideoPixelWidth);
             if (kv_pwidth != NULL) {
@@ -1066,6 +1070,34 @@ kax_reader_c::read_headers() {
               track->v_frate = float(*kv_frate);
               if (verbose > 1)
                 mxinfo(PFX "|   + Frame rate: %f\n", track->v_frate);
+            }
+
+            kv_pcleft = FINDFIRST(ktvideo, KaxVideoPixelCropLeft);
+            if (kv_pcleft != NULL) {
+              track->v_pcleft = uint16(*kv_pcleft);
+              if (verbose > 1)
+                mxinfo(PFX "|   + Pixel crop left: %u\n", track->v_pcleft);
+            }
+
+            kv_pctop = FINDFIRST(ktvideo, KaxVideoPixelCropTop);
+            if (kv_pctop != NULL) {
+              track->v_pctop = uint16(*kv_pctop);
+              if (verbose > 1)
+                mxinfo(PFX "|   + Pixel crop top: %u\n", track->v_pctop);
+            }
+
+            kv_pcright = FINDFIRST(ktvideo, KaxVideoPixelCropRight);
+            if (kv_pcright != NULL) {
+              track->v_pcright = uint16(*kv_pcright);
+              if (verbose > 1)
+                mxinfo(PFX "|   + Pixel crop right: %u\n", track->v_pcright);
+            }
+
+            kv_pcbottom = FINDFIRST(ktvideo, KaxVideoPixelCropBottom);
+            if (kv_pcbottom != NULL) {
+              track->v_pcbottom = uint16(*kv_pcbottom);
+              if (verbose > 1)
+                mxinfo(PFX "|   + Pixel crop bottom: %u\n", track->v_pcbottom);
             }
 
           }
@@ -1395,12 +1427,17 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   if (t->type == 'v') {
     ptzr->set_video_pixel_width(t->v_width);
     ptzr->set_video_pixel_height(t->v_height);
-    if (!ti->aspect_ratio_given) { // The user hasn't set it.
+    if (!ptzr->ti->aspect_ratio_given) { // The user hasn't set it.
       if (t->v_dwidth != 0)
         ptzr->set_video_display_width(t->v_dwidth);
       if (t->v_dheight != 0)
         ptzr->set_video_display_height(t->v_dheight);
     }
+    if ((ptzr->ti->pixel_cropping.id == -2) &&
+        ((t->v_pcleft > 0) || (t->v_pctop > 0) ||
+         (t->v_pcright > 0) || (t->v_pcbottom > 0)))
+      ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
+                                     t->v_pcright, t->v_pcbottom);
     if (ptzr->get_cue_creation() == CUES_UNSPECIFIED)
       ptzr->set_cue_creation(CUES_IFRAMES);
 
@@ -1482,12 +1519,19 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                           t->v_width,
                                                           t->v_height,
                                                           t->v_bframes, nti));
-          if (!nti->aspect_ratio_given) { // The user hasn't set it.
+          if (!PTZR(t->ptzr)->ti->aspect_ratio_given) {
+            // The user hasn't set it.
             if (t->v_dwidth != 0)
               PTZR(t->ptzr)->set_video_display_width(t->v_dwidth);
             if (t->v_dheight != 0)
               PTZR(t->ptzr)->set_video_display_height(t->v_dheight);
           }
+          if ((PTZR(t->ptzr)->ti->pixel_cropping.id == -2) &&
+              ((t->v_pcleft > 0) || (t->v_pctop > 0) ||
+               (t->v_pcright > 0) || (t->v_pcbottom > 0)))
+            PTZR(t->ptzr)->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
+                                                    t->v_pcright,
+                                                    t->v_pcbottom);
         } else 
           init_passthrough_packetizer(t);
 

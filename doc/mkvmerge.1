@@ -290,8 +290,10 @@ Sets the track name for the given track (see section \fBTRACK IDS\fR) to
 \fIname\fR.
 .TP
 \fB\-\-language\fR <\fITID\fR:\fIlanguage\fR>
-Sets the language for the given track (see section \fBTRACK IDS\fR). Only
-ISO639-2 codes are allowed. All languages including their ISO639-2 codes can be
+Sets the language for the given track (see section \fBTRACK IDS\fR). Both
+ISO639-2 language codes and ISO639-1 country codes are allowed. The country
+codes will be converted to language codes automatically.
+All languages including their ISO639-2 codes can be
 listed with the \fB\-\-list\-languages\fR option.
 .br
 This option can be used multiple times for an input file applying to several
@@ -355,6 +357,9 @@ The ratio can be given either as a floating point number or as
 Another way to specify the values is to use the
 \fB\-\-aspect\-ratio\fR option (see above). These options are mutually
 exclusive.
+.TP
+\fB\-\-cropping\fR <\fITID\fR:\fIleft\fR,\fItop\fR,\fIright\fR,\fIbottom\fR>
+Sets the pixel cropping parameters of a video track to the given values.
 .LP
 Options that only apply to text subtitle tracks:
 .TP
