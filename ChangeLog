@@ -1,3 +1,10 @@
+2004-10-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Converted the raw FLAC reader to use
+	another interface to the FLAC libraries. This results in a speedup
+	of up to 50%. Thanks to Josh Coalson for telling me about its
+	existence.
+
 2004-10-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added two warnings. One about invalid
