@@ -193,6 +193,7 @@ public:
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
+  bool validate_settings();
 };
 
 class tab_attachments: public wxPanel {
@@ -222,6 +223,7 @@ public:
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
+  bool validate_settings();
 };
 
 class tab_settings: public wxPanel {
@@ -241,6 +243,7 @@ public:
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
+  bool validate_settings();
 };
 
 class tab_global: public wxPanel {
@@ -266,6 +269,7 @@ public:
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
+  bool validate_settings();
 };
 
 class mux_dialog: public wxDialog {
@@ -322,6 +326,8 @@ protected:
   tab_attachments *attachments_page;
   tab_global *global_page;
   tab_settings *settings_page;
+
+  bool tracks_selected;
 
 public:
   mmg_dialog();

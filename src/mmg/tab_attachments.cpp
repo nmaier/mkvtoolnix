@@ -261,6 +261,23 @@ void tab_attachments::load(wxConfigBase *cfg) {
   }
 }
 
+bool tab_attachments::validate_settings() {
+  uint32_t i;
+  mmg_attachment_t *a;
+
+  for (i = 0; i < attachments.size(); i++) {
+    a = &attachments[i];
+    if (a->mime_type->Length() == 0) {
+      wxMessageBox(_T("No MIME type has been selected for the attachment '" +
+                      *a->file_name + "."), _T("Missing input"),
+                   wxOK | wxCENTER | wxICON_ERROR);
+      return false;
+    }
+  }
+
+  return true;
+}
+
 IMPLEMENT_CLASS(tab_attachments, wxPanel);
 BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
   EVT_BUTTON(ID_B_ADDATTACHMENT, tab_attachments::on_add_attachment)

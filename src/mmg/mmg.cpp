@@ -372,13 +372,27 @@ void mmg_dialog::set_last_settings_in_menu(wxString name) {
 void mmg_dialog::on_run(wxCommandEvent &evt) {
   mux_dialog *mdlg;
 
+  update_command_line();
+
+  if (!tracks_selected) {
+    wxMessageBox(_("You have not yet selected any input file and/or no "
+                   "tracks."),
+                 _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+
   if (tc_output->GetValue().Length() == 0) {
     wxMessageBox(_("You have not yet selected an output file."),
                  _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
     return;
   }
 
-  update_command_line();
+  if (!input_page->validate_settings() ||
+      !attachments_page->validate_settings() ||
+      !global_page->validate_settings() ||
+      !settings_page->validate_settings())
+    return;
+
   mdlg = new mux_dialog(this);
   delete mdlg;
 }
@@ -439,7 +453,7 @@ void mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
 
 void mmg_dialog::update_command_line() {
   uint32_t fidx, tidx;
-  bool tracks_present_here, tracks_present;
+  bool tracks_present_here;
   bool no_audio, no_video, no_subs;
   mmg_file_t *f;
   mmg_track_t *t;
@@ -454,7 +468,7 @@ void mmg_dialog::update_command_line() {
   clargs.Add("-o");
   clargs.Add(tc_output->GetValue());
 
-  tracks_present = false;
+  tracks_selected = false;
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
     tracks_present_here = false;
@@ -583,7 +597,7 @@ void mmg_dialog::update_command_line() {
     }
 
     if (tracks_present_here) {
-      tracks_present = true;
+      tracks_selected = true;
 
       if (f->no_chapters) {
         cmdline += "--no-chapters ";

@@ -349,6 +349,10 @@ void tab_global::save(wxConfigBase *cfg) {
   cfg->Write("enable_lacing", cb_enable_lacing->IsChecked());
 }
 
+bool tab_global::validate_settings() {
+  return true;
+}
+
 IMPLEMENT_CLASS(tab_global, wxPanel);
 BEGIN_EVENT_TABLE(tab_global, wxPanel)
   EVT_BUTTON(ID_B_BROWSEGLOBALTAGS, tab_global::on_browse_global_tags)

@@ -773,6 +773,10 @@ void tab_input::load(wxConfigBase *cfg) {
   }
 }
 
+bool tab_input::validate_settings() {
+  return true;
+}
+
 IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)

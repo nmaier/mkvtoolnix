@@ -100,6 +100,10 @@ void tab_settings::save(wxConfigBase *cfg) {
 void tab_settings::load(wxConfigBase *cfg) {
 }
 
+bool tab_settings::validate_settings() {
+  return true;
+}
+
 IMPLEMENT_CLASS(tab_settings, wxPanel);
 BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
