@@ -1758,9 +1758,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
         } else if (t->a_formattag == FOURCC('W', 'V', 'P', '4')) {
           wavpack_meta_t meta;
 
-          safefree(nti->private_data);
-          nti->private_data = NULL;
-          nti->private_size = 0;
+          nti->private_data = (unsigned char *)t->private_data;
+          nti->private_size = t->private_size;
           meta.bits_per_sample = t->a_bps;
           meta.channel_count = t->a_channels;
           meta.sample_rate = (uint32_t)t->a_sfreq;
@@ -1768,6 +1767,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
           if (t->v_frate > 0.0)
             meta.samples_per_block = (uint32_t)(t->a_sfreq / t->v_frate);
           t->ptzr = add_packetizer(new wavpack_packetizer_c(this, meta, nti));
+          nti->private_data = NULL;
+          nti->private_size = 0;
           mxinfo(FMT_TID "Using the WAVPACK output module.\n",
                  ti->fname.c_str(), (int64_t)t->tnum);
 

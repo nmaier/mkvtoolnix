@@ -963,38 +963,54 @@ handle_data(KaxBlock *block,
         break;
 
       case FILE_TYPE_WAVPACK4:
-        track->out->write("wvpk", 4);
+        // build the main header
+        binary wv_header[32], *mybuffer;
+        int32_t data_size;
+
+        wv_header[0] = 'w';
+        wv_header[1] = 'v';
+        wv_header[2] = 'p';
+        wv_header[3] = 'k';
+        memcpy(&wv_header[8], track->private_data, 2); // version
+        wv_header[10] = 0; // track_no
+        wv_header[11] = 0; // index_no
+        wv_header[12] = 0xFF; // total_samples is unknown
+        wv_header[13] = 0xFF;
+        wv_header[14] = 0xFF;
+        wv_header[15] = 0xFF;
+        put_uint32_le(&wv_header[16], track->number_of_samples); // block_index
+        mybuffer = data.Buffer();
+        data_size = data.Size();
+        track->number_of_samples += get_uint32_le(mybuffer);
+        // rest of the header:
+        memcpy(&wv_header[20], mybuffer, 3 * sizeof(uint32_t));
         // support multi-track files
         if (track->a_channels > 2) {
+          uint32_t block_size = get_uint32_le(&mybuffer[12]);
+
           flags.clear();
-          binary *mybuffer = data.Buffer();
-          int32_t data_size = data.Size();
-          uint32_t block_size = get_uint32_le(&mybuffer[24]);
-          put_uint32_le(buffer, block_size + 24);
-          track->out->write(buffer, 4);
-          track->out->write(data.Buffer(), 24);
-          flags.push_back(*(uint32_t*)&mybuffer[16]);
-          mybuffer += 28;
+          put_uint32_le(&wv_header[4], block_size + 24);  // ck_size
+          track->out->write(wv_header, 32);
+          flags.push_back(*(uint32_t *)&mybuffer[4]);
+          mybuffer += 16;
           track->out->write(mybuffer, block_size);
           mybuffer += block_size;
-          data_size -= block_size + 28;
+          data_size -= block_size + 16;
           while (data_size > 0) {
-            track->out->write("wvpk", 4);
             block_size = get_uint32_le(&mybuffer[8]);
-            put_uint32_le(buffer, block_size + 24);
-            track->out->write(buffer, 4);
-            track->out->write(data.Buffer(), 16);
-            track->out->write(mybuffer, 8);
-            flags.push_back(*(uint32_t*)mybuffer);
+            memcpy(&wv_header[24], mybuffer, 8);
+            put_uint32_le(&wv_header[4], block_size + 24);
+            track->out->write(wv_header, 32);
+            flags.push_back(*(uint32_t *)mybuffer);
             mybuffer += 12;
             track->out->write(mybuffer, block_size);
             mybuffer += block_size;
             data_size -= block_size + 12;
           }
         } else {
-          put_uint32_le(buffer, data.Size());
-          track->out->write(buffer, 4);
-          track->out->write(data.Buffer(), data.Size());
+          put_uint32_le(&wv_header[4], data_size + 12); // ck_size
+          track->out->write(wv_header, 32);
+          track->out->write(&mybuffer[12], data_size - 12); // the rest of the
         }
         // support hybrid mode data
         if (track->out2 && block_adds) {
@@ -1006,34 +1022,28 @@ handle_data(KaxBlock *block,
           if (block_addition == NULL)
             break;
 
+          data_size = block_addition->GetSize();
+          mybuffer = block_addition->GetBuffer();
           if (track->a_channels > 2) {
-            int32_t data_size = block_addition->GetSize();
-            binary *mybuffer = block_addition->GetBuffer();
             size_t flags_index = 0;
-            uint32_t flag;
+
             while (data_size > 0) {
-              track->out2->write("wvpk", 4);
               uint32_t block_size = get_uint32_le(&mybuffer[4]);
-              put_uint32_le(buffer, block_size + 24);
-              track->out2->write(buffer, 4);
-              track->out2->write(data.Buffer(), 16);
-              // write the flags from the lossy part
-              flag = flags[flags_index++];
-              track->out2->write(&flag, 4);
-              // write the CRC
-              track->out2->write(mybuffer, 4);
+
+              put_uint32_le(&wv_header[4], block_size + 24); // ck_size
+              memcpy(&wv_header[24], &flags[flags_index++], 4); // flags
+              memcpy(&wv_header[28], mybuffer, 4); // crc
+              track->out2->write(wv_header, 32);
               mybuffer += 8;
               track->out2->write(mybuffer, block_size);
               mybuffer += block_size;
               data_size -= 8 + block_size;
             }
           } else {
-            track->out2->write("wvpk", 4);
-            put_uint32_le(buffer, block_addition->GetSize() + 20);
-            track->out2->write(buffer, 4);
-            track->out2->write(data.Buffer(), 20);
-            track->out2->write(block_addition->GetBuffer(),
-                               block_addition->GetSize());
+            put_uint32_le(&wv_header[4], data_size + 20); // ck_size
+            memcpy(&wv_header[28], mybuffer, 4); // crc
+            track->out2->write(wv_header, 32);
+            track->out2->write(&mybuffer[4], data_size - 4);
           }
           delete block_adds;
         }

@@ -658,7 +658,7 @@ tab_input::on_add_file(wxCommandEvent &evt) {
   media_files += wxT("*.idx;*.m1v;*.m2v;*.m4a;*.mp2;*.mp3;*.mka;"
                      "*.mkv;*.mov;*.mp4;*.mpeg;*.mpg;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
-                     "*.srt;*.ssa;*.tta;*.wav|"
+                     "*.srt;*.ssa;*.tta;*.wav;*.wv|"
                      "AAC (Advanced Audio Coding) (*.aac;*.m4a;*.mp4)|"
                      "*.aac;*.m4a;*.mp4|"
                      "A/52 (aka AC3) (*.ac3)|*.ac3|"

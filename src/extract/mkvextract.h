@@ -93,6 +93,9 @@ typedef struct {
   // Needed for TTA.
   vector<int64_t> frame_sizes;
   int64_t last_duration;
+
+  // Needed for WAVPACK4.
+  uint64_t number_of_samples;
 } kax_track_t;
 
 extern vector<kax_track_t> tracks;

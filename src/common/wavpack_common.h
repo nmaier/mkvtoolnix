@@ -20,8 +20,6 @@
 #include "os.h"
 #include "pr_generic.h"
 
-const size_t WV_KEEP_HEADER_POSITION = 8;
-
 /* All integers are little endian. */
 
 #if defined(COMP_MSC)

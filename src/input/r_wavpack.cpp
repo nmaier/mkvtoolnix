@@ -100,9 +100,15 @@ wavpack_reader_c::~wavpack_reader_c() {
 
 void
 wavpack_reader_c::create_packetizer(int64_t) {
+  uint16_t version_le;
+
   if (NPTZR() != 0)
     return;
+  put_uint16_le(&version_le, header.version);
+  ti->private_data = (unsigned char *)&version_le;
+  ti->private_size = sizeof(uint16_t);
   add_packetizer(new wavpack_packetizer_c(this, meta, ti));
+  ti->private_data = NULL;
 
   mxinfo(FMT_TID "Using the WAVPACK output module.\n", ti->fname.c_str(),
          (int64_t)0);
@@ -133,38 +139,33 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
   if (data_size < 0)
     return FILE_STATUS_DONE;
 
-  data_size += sizeof(wavpack_header_t) - WV_KEEP_HEADER_POSITION;
+  data_size += 3 * sizeof(uint32_t);
   if (extra_frames_number)
-    data_size += (extra_frames_number * 12) + 4;
+    data_size += sizeof(uint32_t) + extra_frames_number * 3 * sizeof(uint32_t);
   chunk = (uint8_t *)safemalloc(data_size);
 
   // keep the header minus the ID & size (all found in Matroska)
-  put_uint16_le(chunk, dummy_header.version);
-  chunk[2] = dummy_header.track_no;
-  chunk[3] = dummy_header.index_no;
-  put_uint32_le(&chunk[4], dummy_header.total_samples);
-  put_uint32_le(&chunk[8], dummy_header.block_index);
-  put_uint32_le(&chunk[12], dummy_header.block_samples);
+  put_uint32_le(chunk, dummy_header.block_samples);
 
   mm_io->setFilePointer(initial_position);
 
   dummy_meta.channel_count = 0;
-  databuffer = &chunk[16];
-	while (dummy_meta.channel_count < meta.channel_count) {
-		block_size = wv_parse_frame(mm_io, dummy_header, dummy_meta, false, false);
-		put_uint32_le(databuffer, dummy_header.flags);
-		databuffer += 4;
-		put_uint32_le(databuffer, dummy_header.crc);
-		databuffer += 4;
-		if (meta.channel_count > 2) {
-			// not stored for the last block
-			put_uint32_le(databuffer, block_size);
-			databuffer += 4;
-		}
-		if (mm_io->read(databuffer, block_size) < 0)
-			return FILE_STATUS_DONE;
-		databuffer += block_size;
-	}
+  databuffer = &chunk[4];
+  while (dummy_meta.channel_count < meta.channel_count) {
+    block_size = wv_parse_frame(mm_io, dummy_header, dummy_meta, false, false);
+    put_uint32_le(databuffer, dummy_header.flags);
+    databuffer += 4;
+    put_uint32_le(databuffer, dummy_header.crc);
+    databuffer += 4;
+    if (meta.channel_count > 2) {
+      // not stored for the last block
+      put_uint32_le(databuffer, block_size);
+      databuffer += 4;
+    }
+    if (mm_io->read(databuffer, block_size) < 0)
+      return FILE_STATUS_DONE;
+    databuffer += block_size;
+  }
 
   memory_c mem(chunk, data_size, true);
 
@@ -204,9 +205,9 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
       mm_io_correc->setFilePointer(initial_position);
 
       if (meta.channel_count > 2)
-        data_size += extra_frames_number * 8;
+        data_size += extra_frames_number * 2 * sizeof(uint32_t);
       else
-        data_size += 4;
+        data_size += sizeof(uint32_t);
       chunk_correc = (uint8_t *)safemalloc(data_size);
 
       // only keep the CRC in the header

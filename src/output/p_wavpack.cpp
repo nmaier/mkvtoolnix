@@ -42,6 +42,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *nreader,
 void
 wavpack_packetizer_c::set_headers() {
   set_codec_id(MKV_A_WAVPACK4);
+  set_codec_private(ti->private_data, ti->private_size);
   set_audio_sampling_freq((float)sample_rate);
   set_audio_channels(channels);
   set_audio_bit_depth(bits_per_sample);
@@ -60,19 +61,18 @@ wavpack_packetizer_c::process(memory_c &mem,
                               int64_t,
                               int64_t) {
   debug_enter("wavpack_packetizer_c::process");
-  int64_t samples = get_uint32_le(&mem.data[12]);
-  int64_t sample_index = get_uint32_le(&mem.data[8]);
+  int64_t samples = get_uint32_le(mem.data);
 
   if (duration == -1) {
-    add_packet(mem, irnd(sample_index * 1000000000 / sample_rate),
+    add_packet(mem, irnd(samples_output * 1000000000 / sample_rate),
                irnd(samples * 1000000000 / sample_rate));
   } else {
     mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
            duration);
-    add_packet(mem, irnd((double)sample_index * 1000000000 / sample_rate),
+    add_packet(mem, irnd((double)samples_output * 1000000000 / sample_rate),
                duration);
   }
-  samples_output = sample_index + samples;
+  samples_output += samples;
 
   debug_leave("wavpack_packetizer_c::process");
 
@@ -86,20 +86,18 @@ wavpack_packetizer_c::process(memories_c &mems,
                               int64_t,
                               int64_t) {
   debug_enter("wavpack_packetizer_c::process");
-  memory_c & mem = *mems[0];
-  int64_t samples = get_uint32_le(&mem.data[12]);
-  int64_t sample_index = get_uint32_le(&mem.data[8]);
+  int64_t samples = get_uint32_le(mems[0]->data);
 
   if (duration == -1) {
-    add_packet(mems, irnd(sample_index * 1000000000 / sample_rate),
+    add_packet(mems, irnd(samples_output * 1000000000 / sample_rate),
                irnd(samples * 1000000000 / sample_rate));
   } else {
     mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
            duration);
-    add_packet(mems, irnd((double)sample_index * 1000000000 / sample_rate),
+    add_packet(mems, irnd((double)samples_output * 1000000000 / sample_rate),
                duration);
   }
-  samples_output = sample_index + samples;
+  samples_output += samples;
 
   debug_leave("wavpack_packetizer_c::process");
 
