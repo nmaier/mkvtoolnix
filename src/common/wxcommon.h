@@ -30,15 +30,15 @@
 # define wxCS(s) ((const wchar_t *)(s).c_str())
 # define wxMB(s) ((const char *)(s).mb_str(wxConvUTF8))
 # define wxMBL(s) ((const char *)(s).mb_str(wxConvLocal))
-# define wxCS2WS(s) wxU((s).c_str())
 # define wxUCS(s) wxU(s).c_str()
+# define wxCS2WS(s) wxUCS((s).c_str())
 # define WXUNICODE 1
 #else
-# define wxU(s) s
+# define wxU(s) wxString(s)
 # define wxCS(s) ((const char *)(s).c_str())
 # define wxMB(s) ((const char *)(s).c_str())
 # define wxMBL(s) ((const char *)(s).c_str())
-# define wxCS2WS(s) s
+# define wxCS2WS(s) ((const char *)(s).c_str())
 # define wxUCS(s) wxString(s).c_str()
 # define WXUNICODE 0
 #endif

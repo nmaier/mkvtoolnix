@@ -213,7 +213,7 @@ tab_settings::query_mkvmerge_capabilities() {
     for (i = 0; i < output.Count(); i++) {
       tmp = output[i];
       strip(tmp);
-      parts = split(tmp, wxT("="), 2);
+      parts = split(tmp, wxU("="), 2);
       if (parts.size() == 1)
         capabilities[parts[0]] = wxT("true");
       else

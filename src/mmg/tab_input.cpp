@@ -586,9 +586,9 @@ tab_input::on_add_file(wxCommandEvent &evt) {
         track.timecodes = new wxString(wxT(""));
 
         if (info.length() > 0) {
-          args = split(info, wxT(" "));
+          args = split(info, wxU(" "));
           for (k = 0; k < args.size(); k++) {
-            pair = split(args[k], wxT(":"), 2);
+            pair = split(args[k], wxU(":"), 2);
             if (pair.size() != 2)
               continue;
             if (pair[0] == wxT("track_name")) {
@@ -600,7 +600,7 @@ tab_input::on_add_file(wxCommandEvent &evt) {
               vector<wxString> dims;
               int64_t width, height;
 
-              dims = split(pair[1], wxT("x"));
+              dims = split(pair[1], wxU("x"));
               if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) &&
                   parse_int(wxMB(dims[1]), height)) {
                 track.dwidth->Printf(wxT("%d"), (int)width);
@@ -652,9 +652,9 @@ tab_input::on_add_file(wxCommandEvent &evt) {
           file.container = TYPEUNKNOWN;
 
         if (info.length() > 0) {
-          args = split(info, wxT(" "));
+          args = split(info, wxU(" "));
           for (k = 0; k < args.size(); k++) {
-            pair = split(args[k], wxT(":"), 2);
+            pair = split(args[k], wxU(":"), 2);
             if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
               *file.title = from_utf8(unescape(pair[1]));
               title_was_present = true;

@@ -338,8 +338,7 @@ mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
                  "<moritz@bunkus.org>.\nSources and the latest binaries are "
                  "always available at\nhttp://www.bunkus.org/videotools/"
                  "mkvtoolnix/"),
-             wxCS2WS(EbmlCodeVersion).c_str(),
-             wxCS2WS(KaxCodeVersion).c_str());
+             wxCS2WS(EbmlCodeVersion), wxCS2WS(KaxCodeVersion));
   wxMessageBox(msg, wxT("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
 }
 

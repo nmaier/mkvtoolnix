@@ -37,6 +37,7 @@
 
 #include "chapters.h"
 #include "common.h"
+#include "commonebml.h"
 #include "jobs.h"
 #if defined(SYS_UNIX) || defined(SYS_APPLE)
 #include "matroskalogo_big.xpm"
@@ -1161,7 +1162,7 @@ mmg_dialog::update_command_line() {
   }
 
 #if ! WXUNICODE
-  cmdline = to_utf8(cmdline);
+  cmdline = to_utf8(cmdline).c_str();
 #endif
   if (old_cmdline != cmdline)
     tc_cmdline->SetValue(cmdline);
