@@ -148,9 +148,10 @@ tab_input::tab_input(wxWindow *parent):
   b_track_down = new wxButton(this, ID_B_TRACKDOWN, wxT("down"),
                               wxDefaultPosition, wxSize(50, -1));
   b_track_down->Enable(false);
+  siz_column->Add(0, 1, 0, wxGROW, 0);
   siz_column->Add(b_track_down, 0, 0, 0);
-  siz_line->Add(siz_column, 0, wxALIGN_TOP | wxLEFT, 10);
-  siz_all->Add(siz_line, 3, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_line->Add(siz_column, 0, wxLEFT, 10);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
