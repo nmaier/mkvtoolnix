@@ -58,8 +58,9 @@ typedef struct {
   packetizer_t *ptzr;
 } deferred_connection_t;
 
-typedef struct {
-  char *name;
+struct filelist_t {
+  string name;
+  int64_t size;
 
   file_type_e type;
 
@@ -72,7 +73,13 @@ typedef struct {
 
   int num_unfinished_packetizers, old_num_unfinished_packetizers;
   vector<deferred_connection_t> deferred_connections;
-} filelist_t;
+
+  filelist_t():
+    size(0), type(FILE_TYPE_IS_UNKNOWN),
+    pack(NULL), reader(NULL),
+    ti(NULL), appending(false), appended_to(false), done(false),
+    num_unfinished_packetizers(0), old_num_unfinished_packetizers(0) {}
+};
 
 struct attachment_t {
   string name, mime_type, description;
@@ -154,7 +161,7 @@ extern bool split_by_time;
 
 extern double timecode_scale;
 
-file_type_e get_file_type(const string &filename);
+void get_file_type(filelist_t &file);
 void create_readers();
 
 void setup();

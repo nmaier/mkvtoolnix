@@ -248,12 +248,12 @@ sighandler(int signum) {
    Opens the input file and calls the \c probe_file function for each known
    file reader class. Uses \c mm_text_io_c for subtitle probing.
 */
-file_type_e
-get_file_type(const string &filename) {
+void
+get_file_type(filelist_t &file) {
   mm_io_c *mm_io;
   mm_text_io_c *mm_text_io;
-  uint64_t size;
   file_type_e type;
+  int64_t size;
   int i;
   const int probe_sizes[] = {16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024,
                              256 * 1024, 0};
@@ -262,14 +262,14 @@ get_file_type(const string &filename) {
   mm_text_io = NULL;
   size = 0;
   try {
-    mm_io = new mm_file_io_c(filename);
+    mm_io = new mm_file_io_c(file.name);
     mm_io->setFilePointer(0, seek_end);
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_current);
   } catch (exception &ex) {
     mxerror(_("The source file '%s' could not be opened successfully, or "
               "retrieving its size by seeking to the end did not work.\n"),
-            filename.c_str());
+            file.name.c_str());
   }
 
   type = FILE_TYPE_IS_UNKNOWN;
@@ -316,14 +316,14 @@ get_file_type(const string &filename) {
     delete mm_io;
 
     try {
-      mm_text_io = new mm_text_io_c(new mm_file_io_c(filename));
+      mm_text_io = new mm_text_io_c(new mm_file_io_c(file.name));
       mm_text_io->setFilePointer(0, seek_end);
       size = mm_text_io->getFilePointer();
       mm_text_io->setFilePointer(0, seek_current);
     } catch (exception &ex) {
       mxerror(_("The source file '%s' could not be opened successfully, or "
                 "retrieving its size by seeking to the end did not work.\n"),
-              filename.c_str());
+              file.name.c_str());
     }
 
     if (srt_reader_c::probe_file(mm_text_io, size))
@@ -342,7 +342,8 @@ get_file_type(const string &filename) {
 
   file_sizes += size;
 
-  return type;
+  file.size = size;
+  file.type = type;
 }
 
 static int display_counter = 0;
@@ -354,8 +355,17 @@ static generic_reader_c *display_reader = NULL;
 */
 static void
 display_progress() {
-  if (display_reader == NULL)
-    display_reader = files[0].reader;
+  if (display_reader == NULL) {
+    vector<filelist_t>::const_iterator i;
+    const filelist_t *winner;
+
+    winner = &files[0];
+    for (i = files.begin() + 1; i != files.end(); ++i)
+      if (i->size > winner->size)
+        winner = &(*i);
+
+    display_reader = winner->reader;
+  }
   if ((display_counter % 500) == 0) {
     display_counter = 0;
     mxinfo("progress: %d%%\r",
@@ -830,7 +840,7 @@ check_append_mapping() {
     if (!src_file->appending)
       mxerror("The file no. %lld ('%s') is not being appended. The argument "
               "for '--append-to' was invalid.\n", amap->src_file_id,
-              src_file->name);
+              src_file->name.c_str());
 
     // 3. Is there a file with the dst_file_id?
     if ((amap->dst_file_id < 0) || (amap->dst_file_id >= files.size()))
@@ -860,7 +870,8 @@ check_append_mapping() {
       mxerror("Only partial append mappings were given for the file no. %d "
               "('%s'). Either don't specify any mapping (in which case the "
               "default mapping will be used) or specify a mapping for all "
-              "tracks that are to be copied.\n", file_id, src_file->name);
+              "tracks that are to be copied.\n", file_id,
+              src_file->name.c_str());
     else if (count == 0) {
       string missing_mappings;
 
@@ -883,7 +894,7 @@ check_append_mapping() {
       mxinfo("No append mapping was given for the file no. %d ('%s'). "
              "A default mapping of %s will be used instead. Please keep "
              "that in mind if mkvmerge aborts complaining about invalid "
-             "'--append-to' options.\n", file_id, src_file->name,
+             "'--append-to' options.\n", file_id, src_file->name.c_str(),
              missing_mappings.c_str());
     }
   }
@@ -899,7 +910,7 @@ check_append_mapping() {
       mxerror("The file no. %lld ('%s') does not contain a track with the "
               "ID %lld, or that track is not to be copied. The argument "
               "for '--append-to' was invalid.\n", amap->src_file_id,
-              src_file->name, amap->src_track_id);
+              src_file->name.c_str(), amap->src_track_id);
 
     // 6. Does the "destination" file have a track with the dst_track_id, and
     // that track selected for copying?
@@ -907,7 +918,7 @@ check_append_mapping() {
       mxerror("The file no. %lld ('%s') does not contain a track with the "
               "ID %lld, or that track is not to be copied. Therefore no track "
               "can be appended to it. The argument for '--append-to' was "
-              "invalid.\n", amap->dst_file_id, dst_file->name,
+              "invalid.\n", amap->dst_file_id, dst_file->name.c_str(),
               amap->dst_track_id);
 
     // 7. Is this track already mapped to somewhere else?
@@ -919,7 +930,7 @@ check_append_mapping() {
         mxerror("The track %lld from file no. %lld ('%s') is to be appended "
                 "more than once. The argument for '--append-to' was "
                 "invalid.\n", amap->src_track_id, amap->src_file_id,
-                src_file->name);
+                src_file->name.c_str());
     }
 
     // 8. Is there another track that is being appended to the dst_track_id?
@@ -931,7 +942,7 @@ check_append_mapping() {
         mxerror("More than one track is to be appended to the track %lld "
                 "from file no. %lld ('%s'). The argument for '--append-to' "
                 "was invalid.\n", amap->dst_track_id, amap->dst_file_id,
-                dst_file->name);
+                dst_file->name.c_str());
     }
   }
 
@@ -962,8 +973,8 @@ check_append_mapping() {
     if (result != CAN_CONNECT_YES)
       mxerror("The track number %lld from the file '%s' cannot be appended "
               "to the track number %lld from the file '%s' because %s.\n",
-              amap->src_track_id, files[amap->src_file_id].name,
-              amap->dst_track_id, files[amap->dst_file_id].name,
+              amap->src_track_id, files[amap->src_file_id].name.c_str(),
+              amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
               result == CAN_CONNECT_NO_FORMAT ? "the formats do not match" :
               result == CAN_CONNECT_NO_PARAMETERS ?
               "the stream parameters do not match" :
@@ -1872,10 +1883,8 @@ cleanup() {
 
   destroy_readers();
 
-  foreach(file, files) {
+  foreach(file, files)
     delete (*file).ti;
-    safefree((*file).name);
-  }
   files.clear();
 
   attachments.clear();

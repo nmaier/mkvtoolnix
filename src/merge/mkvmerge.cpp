@@ -327,10 +327,8 @@ identify(const string &filename) {
   track_info_c ti;
   filelist_t file;
 
-  memset(&file, 0, sizeof(filelist_t));
-
-  file.name = safestrdup(filename);
-  file.type = get_file_type(file.name);
+  file.name = filename;
+  get_file_type(file);
   ti.fname = file.name;
   
   if (file.type == FILE_TYPE_IS_UNKNOWN)
@@ -338,12 +336,8 @@ identify(const string &filename) {
               "at the supported file types ('mkvmerge --list-types') and "
               "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
               "file type is supported but not recognized properly.\n"),
-            file.name);
+            file.name.c_str());
 
-  file.appending = false;
-  file.pack = NULL;
-  file.num_unfinished_packetizers = 0;
-  file.old_num_unfinished_packetizers = 0;
   file.ti = new track_info_c(ti);
 
   files.push_back(file);
@@ -1200,7 +1194,6 @@ parse_args(vector<string> args) {
                                        "highest"};
   track_info_c *ti;
   int i;
-  filelist_t file;
   vector<string>::const_iterator sit;
   string this_arg, next_arg;
   bool no_next_arg;
@@ -1844,6 +1837,8 @@ parse_args(vector<string> args) {
 
     // The argument is an input file.
     else {
+      filelist_t file;
+
       if (outfile == this_arg)
         mxerror(_("The name of the output file '%s' and of one of the input "
                   "files is the same. This would cause mkvmerge to overwrite "
@@ -1862,8 +1857,6 @@ parse_args(vector<string> args) {
       if ((ti->btracks.size() != 0) && ti->no_buttons)
         mxerror(_("'-B' and '-b' used on the same source file.\n"));
 
-      memset(&file, 0, sizeof(filelist_t));
-
       if (this_arg[0] == '+') {
         this_arg.erase(0, 1);
         if (this_arg.size() == 0)
@@ -1875,8 +1868,8 @@ parse_args(vector<string> args) {
                   "files to append to.\n");
         file.appending = true;
       }
-      file.name = safestrdup(this_arg);
-      file.type = get_file_type(file.name);
+      file.name = this_arg;
+      get_file_type(file);
       ti->fname = this_arg;
 
       if (file.type == FILE_TYPE_IS_UNKNOWN)
@@ -1884,19 +1877,14 @@ parse_args(vector<string> args) {
                   "at the supported file types ('mkvmerge --list-types') and "
                   "contact the author Moritz Bunkus <moritz@bunkus.org> if "
                   "your file type is supported but not recognized "
-                  "properly.\n"), file.name);
+                  "properly.\n"), file.name.c_str());
 
       if (file.type != FILE_TYPE_CHAPTERS) {
-        file.pack = NULL;
         file.ti = ti;
-        file.done = false;
 
         files.push_back(file);
-      } else {
+      } else
         delete ti;
-        safefree(file.name);
-        memset(&file, 0, sizeof(filelist_t));
-      }
 
       ti = new track_info_c;
     }
