@@ -29,6 +29,7 @@ using namespace libmatroska;
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels,
+                                   bool source_is_good,
                                    track_info_c *nti)
   throw (error_c):
   generic_packetizer_c(nreader, nti), byte_buffer(128 * 1024) {
@@ -38,7 +39,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   packetno = 0;
   spf = 1152;
   codec_id_set = false;
-  valid_headers_found = false;
+  valid_headers_found = source_is_good;
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1152000000000.0 * ti->async.linear /

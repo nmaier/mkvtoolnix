@@ -1503,7 +1503,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
         } else if (t->a_formattag == 0x0055) {
           t->ptzr =
             add_packetizer(new mp3_packetizer_c(this, (int32_t)t->a_sfreq,
-                                                t->a_channels, nti));
+                                                t->a_channels, true, nti));
           mxinfo(FMT_TID "Using the MPEG audio output module.\n",
                  ti->fname, (int64_t)t->tnum);
         } else if (t->a_formattag == 0x2000) {

@@ -478,7 +478,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
       case OGM_STREAM_TYPE_MP3:
         ptzr = new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                    get_uint16(&sth->sh.audio.channels), ti);
+                                    get_uint16(&sth->sh.audio.channels),
+                                    true, ti);
         mxinfo(FMT_TID "Using the MP3 output module.\n", ti->fname,
                (int64_t)dmx->serial);
         break;
