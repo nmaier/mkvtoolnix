@@ -18,6 +18,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+// {{{ includes
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -69,7 +71,11 @@ extern "C" {                    // for BITMAPINFOHEADER
 using namespace std;
 using namespace libmatroska;
 
+// }}}
+
 #define is_ebmlvoid(e) (EbmlId(*e) == EbmlVoid::ClassInfos.GlobalId)
+
+// {{{ FUNCTION kax_reader::probe_file()
 
 /*
  * Probes a file by simply comparing the first four bytes to the EBML
@@ -94,6 +100,10 @@ int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
+// }}}
+
+// {{{ C'TOR
+
 kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   tracks = NULL;
@@ -109,6 +119,10 @@ kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
 
   create_packetizers();
 }
+
+// }}}
+
+// {{{ D'TOR
 
 kax_reader_c::~kax_reader_c() {
   int i;
@@ -129,6 +143,10 @@ kax_reader_c::~kax_reader_c() {
   if (segment != NULL)
     delete segment;
 }
+
+// }}}
+
+// {{{ FUNCTIONS packets_available(), new_kax_track(), find_track*
 
 int kax_reader_c::packets_available() {
   int i;
@@ -180,6 +198,10 @@ kax_track_t *kax_reader_c::find_track_by_uid(uint32_t uid, kax_track_t *c) {
 
   return NULL;
 }
+
+// }}}
+
+// {{{ FUNCTION kax_reader_c::verify_tracks()
 
 void kax_reader_c::verify_tracks() {
   int tnum, i;
@@ -422,6 +444,10 @@ void kax_reader_c::verify_tracks() {
   }
 }
 
+// }}}
+
+// {{{ FUNCTION kax_reader_c::handle_attachments()
+
 void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
                                       EbmlElement *l0, int64_t pos) {
   KaxAttachments *atts;
@@ -502,14 +528,19 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
   io->restore_pos();
 }
 
-#define fits_parent(l, p) (l->GetElementPosition() < \
-                           (p->GetElementPosition() + p->ElementSize()))
+// }}}
+
+// {{{ FUNCTION kax_reader_c::read_headers()
+
+#define in_parent(p) (in->getFilePointer() < \
+                      (p->GetElementPosition() + p->ElementSize()))
 
 int kax_reader_c::read_headers() {
-  int upper_lvl_el, exit_loop;
+  int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   kax_track_t *track;
+  bool exit_loop;
 
   try {
     // Create the interface between MPlayer's IO system and
@@ -553,11 +584,7 @@ int kax_reader_c::read_headers() {
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
-    while (l1 != NULL) {
-      if ((upper_lvl_el > 0) || exit_loop)
-        break;
-      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
-        break;
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
@@ -566,11 +593,7 @@ int kax_reader_c::read_headers() {
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if ((upper_lvl_el > 0) || exit_loop)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
@@ -590,21 +613,33 @@ int kax_reader_c::read_headers() {
                       segment_duration);
 
           } else
-            upper_lvl_el = 0;
+            l2->SkipData(*es, l2->Generic().Context);
 
-          if (upper_lvl_el > 0) {  // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es, l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else
-            assert(upper_lvl_el >= 0);
+            l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
+
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
@@ -615,11 +650,7 @@ int kax_reader_c::read_headers() {
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if ((upper_lvl_el > 0) || exit_loop)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             // We actually found a track entry :) We're happy now.
@@ -632,11 +663,7 @@ int kax_reader_c::read_headers() {
 
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               // Now evaluate the data belonging to this track
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
@@ -711,11 +738,7 @@ int kax_reader_c::read_headers() {
                   mxprint(stdout, "matroska_reader: |  + Audio track\n");
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) ==
                       KaxAudioSamplingFreq::ClassInfos.GlobalId) {
@@ -747,23 +770,25 @@ int kax_reader_c::read_headers() {
                       mxprint(stdout, "matroska_reader: |   + Bit depth: %u\n",
                               track->a_bps);
 
-                  } else {
-                    upper_lvl_el = 0;
-                    if (!is_ebmlvoid(l4) && (verbose > 1))
-                      mxprint(stdout, "matroska_reader: |   + unknown "
-                              "element@4: %s\n", typeid(*l4).name());
+                  } else
+                    l4->SkipData(*es, l4->Generic().Context);
+
+                  if (!in_parent(l3)) {
+                    delete l4;
+                    break;
                   }
 
-                  if (upper_lvl_el > 0) {
-                    assert(1 == 0);  // this should never happen
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else
-                    assert(upper_lvl_el >= 0);
+                  if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -772,11 +797,7 @@ int kax_reader_c::read_headers() {
                   mxprint(stdout, "matroska_reader: |  + Video track\n");
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxVideoPixelWidth::ClassInfos.GlobalId) {
                     KaxVideoPixelWidth &width =
@@ -828,22 +849,25 @@ int kax_reader_c::read_headers() {
                       mxprint(stdout, "matroska_reader: |   + Frame rate: "
                               "%f\n", float(framerate));
 
-                  } else {
-                    upper_lvl_el = 0;
-                    if (!is_ebmlvoid(l4) && (verbose > 1))
-                      mxprint(stdout, "matroska_reader: |   + unknown "
-                              "element@4: %s\n", typeid(*l4).name());
+                  } else
+                    l4->SkipData(*es, l4->Generic().Context);
+
+                  if (!in_parent(l3)) {
+                    delete l4;
+                    break;
                   }
 
-                  if (upper_lvl_el > 0) {
-                    assert(1 == 0);  // this should never happen
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
-                  } else
-                    assert(upper_lvl_el >= 0);
+                  if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -907,43 +931,63 @@ int kax_reader_c::read_headers() {
                 track->language = safestrdup(string(lang).c_str());
 
               } else
-                upper_lvl_el = 0;
+                l3->SkipData(*es, l3->Generic().Context);
 
-              if (upper_lvl_el > 0) {  // we're coming from l4
-                upper_lvl_el--;
+              if (!in_parent(l2)) {
                 delete l3;
-                l3 = l4;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
                 if (upper_lvl_el > 0)
                   break;
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es, l3->Generic().Context);
-                delete l3;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              } else {
                 delete l3;
                 l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
               }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
+
 
             } // while (l3 != NULL)
 
+          } else
+            l2->SkipData(*es, l2->Generic().Context);
+
+          if (!in_parent(l1)) {
+            delete l2;
+            break;
           }
 
-          if (upper_lvl_el > 0) {  // we're coming from l3
+          if (upper_lvl_el > 0) {
             upper_lvl_el--;
-            delete l2;
-            l2 = l3;
             if (upper_lvl_el > 0)
               break;
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es, l2->Generic().Context);
-            delete l2;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -985,29 +1029,38 @@ int kax_reader_c::read_headers() {
           mxprint(stdout, "matroska_reader: |+ found cluster, headers are "
                   "parsed completely :)\n");
         saved_l1 = l1;
-        exit_loop = 1;
+        exit_loop = true;
 
       } else
-        upper_lvl_el = 0;
+        l1->SkipData(*es, l1->Generic().Context);
 
       if (exit_loop)      // we've found the first cluster, so get out
         break;
 
-      if (upper_lvl_el > 0) {    // we're coming from l2
-        upper_lvl_el--;
+      if (!in_parent(l0)) {
         delete l1;
-        l1 = l2;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
         if (upper_lvl_el > 0)
           break;
-      } else if (upper_lvl_el == 0) {
-        l1->SkipData(*es, l1->Generic().Context);
-        delete l1;
-        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-      } else {
         delete l1;
         l1 = l2;
+        continue;
+
+      } else if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
       }
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 
@@ -1023,6 +1076,10 @@ int kax_reader_c::read_headers() {
 
   return 1;
 }
+
+// }}}
+
+// {{{ FUNCTION kax_reader_c::create_packetizers()
 
 void kax_reader_c::create_packetizers() {
   int i;
@@ -1179,13 +1236,18 @@ void kax_reader_c::create_packetizers() {
   }
 }
 
+// }}}
+
+// {{{ FUNCTION kax_reader_c::read()
+
 int kax_reader_c::read() {
-  int upper_lvl_el, exit_loop, found_data, i, delete_element;
+  int upper_lvl_el, found_data, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
   KaxBlock *block;
   int64_t block_fref, block_bref, block_duration;
   kax_track_t *block_track;
+  bool exit_loop, delete_element;
 
   if (num_tracks == 0)
     return 0;
@@ -1197,19 +1259,15 @@ int kax_reader_c::read() {
 
   debug_enter("kax_reader_c::read");
 
-  exit_loop = 0;
+  exit_loop = false;
   upper_lvl_el = 0;
   l1 = saved_l1;
   saved_l1 = NULL;
   saved_l2 = NULL;
-  delete_element = 1;
+  delete_element = true;
   found_data = 0;
   try {
-    while (l1 != NULL)  {
-      if ((upper_lvl_el > 0) || exit_loop)
-        break;
-      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
-        break;
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
 
@@ -1221,16 +1279,12 @@ int kax_reader_c::read() {
         } else
           l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                    0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if ((found_data >= 1) && packets_available()) {
             saved_l2 = l2;
             saved_l1 = l1;
-            exit_loop = 1;
+            exit_loop = true;
             break;
           }
 
@@ -1253,11 +1307,8 @@ int kax_reader_c::read() {
 
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
+              delete_element = true;
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
                 block = (KaxBlock *)l3;
@@ -1267,7 +1318,7 @@ int kax_reader_c::read() {
                 block_track = find_track_by_num(block->TrackNum());
                 if ((block_track != NULL) &&
                     demuxing_requested(block_track->type, block_track->tnum))
-                  delete_element = 0;
+                  delete_element = false;
                 else
                   block = NULL;
 
@@ -1289,27 +1340,27 @@ int kax_reader_c::read() {
 
                 block_duration = (int64_t)uint64(duration);
 
-              } else {
-                upper_lvl_el = 0;
-                if (!(EbmlId(*l3) ==
-                      KaxBlockVirtual::ClassInfos.GlobalId) &&
-                    !(EbmlId(*l3) ==
-                      KaxReferencePriority::ClassInfos.GlobalId) &&
-                    (verbose > 1))
-                 mxprint(stdout, "matroska_reader:   Uknown element@3: %s\n",
-                         typeid(*l3).name());
-              }
-
-              if (upper_lvl_el == 0) {
+              } else
                 l3->SkipData(*es, l3->Generic().Context);
+
+              if (!in_parent(l2)) {
                 if (delete_element)
                   delete l3;
-                else
-                  delete_element = 1;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              } else
-                assert(upper_lvl_el == 0);
+                break;
+              }
+
+              if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
+              }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              if (delete_element)
+                delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
@@ -1355,46 +1406,67 @@ int kax_reader_c::read() {
 
               delete block;
             }
+
+          } else
+            l2->SkipData(*es, l2->Generic().Context);
+
+          if (!in_parent(l1)) {
+            delete l2;
+            break;
           }
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
+          if (upper_lvl_el > 0) {
             upper_lvl_el--;
-            delete l2;
-            l2 = l3;
             if (upper_lvl_el > 0)
               break;
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es, l2->Generic().Context);
-            delete l2;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
 
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
+
         } // while (l2 != NULL)
-      }
+
+      } else
+        l1->SkipData(*es, l1->Generic().Context);
 
       if (exit_loop)
         break;
 
-      if (upper_lvl_el > 0) {    // we're coming from l2
-        upper_lvl_el--;
+      if (!in_parent(l0)) {
         delete l1;
-        l1 = l2;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
         if (upper_lvl_el > 0)
           break;
-      } else if (upper_lvl_el == 0) {
-        l1->SkipData(*es, l1->Generic().Context);
-        delete l1;
-        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-      } else {
         delete l1;
         l1 = l2;
+        continue;
+
+      } else if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
       }
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
   } catch (exception ex) {
@@ -1409,6 +1481,10 @@ int kax_reader_c::read() {
   else
     return 0;
 }
+
+// }}}
+
+// {{{ FUNCTIONS get_packet(), display_*, set_headers()
 
 packet_t *kax_reader_c::get_packet() {
   generic_packetizer_c *winner;
@@ -1483,6 +1559,10 @@ void kax_reader_c::set_headers() {
       tracks[i]->packetizer->set_headers();
 }
 
+// }}}
+
+// {{{ FUNCTION kax_reader_c::identify()
+
 void kax_reader_c::identify() {
   int i;
 
@@ -1507,3 +1587,5 @@ void kax_reader_c::identify() {
       mxprint(stdout, "file name '%s'\n", attachments[i].name.c_str());
   }
 }
+
+// }}}

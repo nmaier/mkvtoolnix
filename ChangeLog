@@ -1,5 +1,9 @@
 2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: Changed how the Matroska reader handles global
+        elements by taking the parent's size into account. This re-enables
+        processing of files produced with the latest VirtualDubMod.
+
         * mkvinfo: Changed how mkvinfo handles global elements by taking
         the parent's size into account. Hopefully this is now correct.
 
