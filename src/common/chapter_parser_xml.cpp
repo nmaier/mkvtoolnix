@@ -762,7 +762,7 @@ parse_xml_chapters(mm_text_io_c *in,
           error += "Remember that special characters like &, <, > and \" "
             "must be escaped in the usual HTML way: &amp; for '&', "
             "&lt; for '<', &gt; for '>' and &quot; for '\"'. ";
-        error += "Aborting.";
+        error += "Aborting.\n";
         throw error_c(error);
       }
 
