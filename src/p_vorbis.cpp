@@ -36,6 +36,7 @@
 #include "pr_generic.h"
 #include "p_vorbis.h"
 #include "matroska.h"
+#include "mkvmerge.h"
 
 using namespace libmatroska;
 
@@ -69,8 +70,9 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
                     "stream's parameters from the first packets.\n");
 
   set_track_type(track_audio);
-  set_track_default_duration_ns((int64_t)(1024000000000.0 * ti->async.linear /
-                                          vi.rate));
+  if (use_durations)
+    set_track_default_duration_ns((int64_t)(1024000000000.0 *
+                                            ti->async.linear / vi.rate));
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {

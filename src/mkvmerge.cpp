@@ -67,6 +67,7 @@
 #include "chapters.h"
 #include "cluster_helper.h"
 #include "common.h"
+#include "hacks.h"
 #include "iso639.h"
 #include "mkvmerge.h"
 #include "mm_io.h"
@@ -138,10 +139,11 @@ int max_ms_per_cluster = 2000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
 bool write_meta_seek_for_clusters = true;
-bool no_lacing = true, no_linking = false;
+bool no_lacing = false, no_linking = false;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
+bool use_timeslices = false, use_durations = false;
 
 float video_fps = -1.0;
 int default_tracks[3];
@@ -186,12 +188,6 @@ mm_io_c *out;
 
 bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
-
-// Some hacks that are configurable via command line but which should ONLY!
-// be used by the author.
-#define ENGAGE_SPACE_AFTER_CHAPTERS "space_after_chapters"
-#define ENGAGE_NO_CHAPTERS_IN_META_SEEK "no_chapters_in_meta_seek"
-#define ENGAGE_NO_META_SEEK "no_meta_seek"
 
 const char *mosu_hacks[] = {
   ENGAGE_SPACE_AFTER_CHAPTERS,
@@ -270,7 +266,9 @@ static void usage() {
     "  --no-cues                Do not write the cue data (the index).\n"
     "  --no-clusters-in-meta-seek\n"
     "                           Do not write meta seek data for clusters.\n"
-    "  --enable-lacing          Use lacing.\n"
+    "  --disable-lacing         Do not Use lacing.\n"
+    "  --enable-timeslices      Use timeslices for laces.\n"
+    "  --enable-durations       Enable block durations for all blocks.\n"
     "\n File splitting and linking (more global options):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
@@ -1319,8 +1317,14 @@ static void parse_args(int argc, char **argv) {
     else if (!strcmp(this_arg, "--no-clusters-in-meta-seek"))
       write_meta_seek_for_clusters = false;
 
-    else if (!strcmp(this_arg, "--enable-lacing"))
-      no_lacing = false;
+    else if (!strcmp(this_arg, "--disable-lacing"))
+      no_lacing = true;
+
+    else if (!strcmp(this_arg, "--enable-timeslices"))
+      use_timeslices = true;
+
+    else if (!strcmp(this_arg, "--enable-durations"))
+      use_durations = true;
 
     else if (!strcmp(this_arg, "--attachment-description")) {
       if (next_arg == NULL)

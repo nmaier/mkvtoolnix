@@ -49,8 +49,9 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
   big_endian = nbig_endian;
 
   set_track_type(track_audio);
-  set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear /
-                                          pcm_interleave));
+  if (use_durations)
+    set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear /
+                                            pcm_interleave));
 }
 
 pcm_packetizer_c::~pcm_packetizer_c() {

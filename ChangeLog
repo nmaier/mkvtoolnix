@@ -1,3 +1,16 @@
+2003-10-01  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Changed the lacing strategy again. New defaults are
+        NOT to write duration elements for all blocks, NOT to use time
+        slices and to USE lacing for most audio tracks. This will save
+        some space. The downside is that the laced frames 'lose' their
+        precise timecode information. Current demuxers don't care and will
+        work nevertheless. More sophisticated applications that make use
+        of these advanced information (duration elements, time slices) are
+        not available at the moment. All these options can be toggled by
+        the user with the new/modified options --disable-lacing,
+        --enable-durations and --enable-timeslices.
+
 2003-09-29  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Attachments are kept when reading

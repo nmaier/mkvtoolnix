@@ -46,8 +46,10 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   spf = 1152;
 
   set_track_type(track_audio);
-  set_track_default_duration_ns((int64_t)(1152000000000.0 * ti->async.linear /
-                                          samples_per_sec));
+  if (use_durations)
+    set_track_default_duration_ns((int64_t)(1152000000000.0 *
+                                            ti->async.linear /
+                                            samples_per_sec));
   duplicate_data_on_add(false);
 }
 
@@ -103,7 +105,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 
   if (packetno == 0) {
     spf = mp3header->samples_per_channel;
-    if (spf != 1152) {
+    if ((spf != 1152) && use_durations) {
       set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
                                               samples_per_sec));

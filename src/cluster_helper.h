@@ -51,7 +51,6 @@ private:
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets, first_timecode;
   mm_io_c *out;
-  vector<int64_t> durations;
 public:
   static vector<splitpoint_t *> splitpoints;
 

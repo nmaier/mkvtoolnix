@@ -27,6 +27,7 @@
 #include "aac_common.h"
 #include "p_aac.h"
 #include "matroska.h"
+#include "mkvmerge.h"
 
 using namespace libmatroska;
 
@@ -49,8 +50,10 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   emphasis_present = nemphasis_present;
 
   set_track_type(track_audio);
-  set_track_default_duration_ns((int64_t)(1024000000000.0 * ti->async.linear /
-                                          samples_per_sec));
+  if (use_durations)
+    set_track_default_duration_ns((int64_t)(1024000000000.0 *
+                                            ti->async.linear /
+                                            samples_per_sec));
   duplicate_data_on_add(headerless);
 }
 
