@@ -165,17 +165,21 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
 
   chunk = (unsigned char *)safemalloc(20000);
   num_read = mm_io->read(chunk, 20000);
-  if (num_read <= 0) {
+  if (num_read < 0) {
     safefree(chunk);
     return FILE_STATUS_DONE;
   }
 
-  memory_c mem(chunk, num_read, true);
-  PTZR0->process(mem);
+  if (num_read > 0) {
+    memory_c mem(chunk, num_read, true);
+    PTZR0->process(mem);
+  }
+  if (num_read < 20000)
+    PTZR0->flush();
 
   bytes_processed = mm_io->getFilePointer();
 
-  return FILE_STATUS_MOREDATA;
+  return num_read < 20000 ? FILE_STATUS_DONE : FILE_STATUS_MOREDATA;
 }
 
 bool
@@ -857,6 +861,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       packet_pos = mm_io->getFilePointer() - 4;
       if (!parse_packet(new_id, timecode, length, aid)) {
         file_done = true;
+        flush_packetizers();
         mxverb(2, "mpeg_ps: file_done: !parse_packet\n");
         return FILE_STATUS_DONE;
       }
@@ -877,6 +882,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       if (mm_io->read(buf, length) != length) {
         safefree(buf);
         file_done = true;
+        flush_packetizers();
         mxverb(2, "mpeg_ps: file_done: mm_io->read\n");
         return FILE_STATUS_DONE;
       }
@@ -889,8 +895,17 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
   } catch(...) {
   }
   file_done = true;
+  flush_packetizers();
   mxverb(2, "mpeg_ps: file_done: exception\n");
   return FILE_STATUS_DONE;
+}
+
+void
+mpeg_ps_reader_c::flush_packetizers() {
+  vector<generic_packetizer_c *>::iterator i;
+
+  foreach(i, reader_packetizers)
+    (*i)->flush();
 }
 
 int

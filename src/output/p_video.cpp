@@ -455,3 +455,12 @@ mpeg_12_video_packetizer_c::process(memory_c &mem,
 
   return FILE_STATUS_MOREDATA;
 }
+
+void
+mpeg_12_video_packetizer_c::flush() {
+  memory_c dummy((unsigned char *)"", 0, false);
+
+  parser.SetEOS();
+  process(dummy);
+  video_packetizer_c::flush();
+}

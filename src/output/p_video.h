@@ -77,6 +77,7 @@ public:
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
                       int64_t fref = VFT_NOBFRAME);
+  virtual void flush();
 };
 
 #endif // __P_VIDEO_H
