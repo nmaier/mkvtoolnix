@@ -27,7 +27,13 @@
 #endif
 #include <locale.h>
 #include <stdarg.h>
-#include <stdio.h>
+#if defined(COMP_GCC) && (__GNUC__ < 3)
+# define __USE_ISOC99
+# include <stdio.h>
+# undef __USE_ISOC99
+#else
+# include <stdio.h>
+#endif // COMP_GCC && __GNUC__ < 3
 #include <stdlib.h>
 #include <string.h>
 #if !defined(COMP_MSC)

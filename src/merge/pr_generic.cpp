@@ -978,8 +978,6 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
 void
 generic_packetizer_c::connect(generic_packetizer_c *src,
                               int64_t _append_timecode_offset) {
-  deque<packet_t *>::iterator packet;
-
   free_refs = src->free_refs;
   track_entry = src->track_entry;
   hserialno = src->hserialno;

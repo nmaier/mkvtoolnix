@@ -1439,10 +1439,10 @@ parse_args(vector<string> &args) {
       chapter_file_name = from_utf8(cc_local_utf8, next_arg);
       if (kax_chapters != NULL)
         delete kax_chapters;
-      kax_chapters = parse_chapters(chapter_file_name.c_str(), 0, -1, 0,
+      kax_chapters = parse_chapters(chapter_file_name, 0, -1, 0,
                                     chapter_language.c_str(),
                                     chapter_charset.c_str(), false,
-                                    false, &tags_from_cue_chapters);
+                                    NULL, &tags_from_cue_chapters);
       sit++;
 
     } else if ((this_arg == "--no-chapters")) {

@@ -235,6 +235,8 @@ bool
 parse_aac_codec_id(const string &codec_id,
                    int &id,
                    int &profile) {
+  string sprofile;
+
   if (codec_id.size() < strlen(MKV_A_AAC_2LC))
     return false;
 
@@ -245,15 +247,16 @@ parse_aac_codec_id(const string &codec_id,
   else
     return false;
 
-  if (!strcmp(&codec_id[12], "MAIN"))
+  sprofile = codec_id.substr(12);
+  if (sprofile == "MAIN")
     profile = AAC_PROFILE_MAIN;
-  else if (!strcmp(&codec_id[12], "LC"))
+  else if (sprofile == "LC")
     profile = AAC_PROFILE_LC;
-  else if (!strcmp(&codec_id[12], "SSR"))
+  else if (sprofile == "SSR")
     profile = AAC_PROFILE_SSR;
-  else if (!strcmp(&codec_id[12], "LTP"))
+  else if (sprofile == "LTP")
     profile = AAC_PROFILE_LTP;
-  else if (!strcmp(&codec_id[12], "LC/SBR"))
+  else if (sprofile == "LC/SBR")
     profile = AAC_PROFILE_SBR;
   else
     return false;

@@ -329,7 +329,8 @@ parse_simple_chapters(mm_text_io_c *in,
  * \param exception_on_error If set to \c true then an exception is thrown
  *   if an error occurs. Otherwise \c NULL will be returned.
  * \param is_simple_format This boolean will be set to \c true if the chapter
- *   format is either the OGM style format or a CUE sheet.
+ *   format is either the OGM style format or a CUE sheet. May be \c NULL if
+ *   the caller is not interested in the result.
  * \param tags When parsing a CUE sheet tags will be created along with the
  *   chapter entries. These tags will be stored in this parameter.
  *
@@ -395,7 +396,8 @@ parse_chapters(const string &file_name,
  * \param exception_on_error If set to \c true then an exception is thrown
  *   if an error occurs. Otherwise \c NULL will be returned.
  * \param is_simple_format This boolean will be set to \c true if the chapter
- *   format is either the OGM style format or a CUE sheet.
+ *   format is either the OGM style format or a CUE sheet. May be \c NULL if
+ *   the caller is not interested in the result.
  * \param tags When parsing a CUE sheet tags will be created along with the
  *   chapter entries. These tags will be stored in this parameter.
  *

@@ -801,7 +801,6 @@ check_append_mapping() {
   vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
   vector<int64_t>::iterator id;
   vector<filelist_t>::iterator src_file, dst_file;
-  vector<packetizer_t>::iterator ptzr;
   int count, file_id;
 
   foreach(amap, append_mapping) {
@@ -1843,7 +1842,6 @@ void
 cleanup() {
   delete cluster_helper;
   vector<filelist_t>::const_iterator file;
-  vector<attachment_t>::const_iterator att;
 
   destroy_readers();
 

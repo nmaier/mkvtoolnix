@@ -79,7 +79,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     frame_rate = seq_hdr.frameRate;
     aspect_ratio = seq_hdr.aspectRatio;
 
-    mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %lf AR %lf\n",
+    mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %e AR %e\n",
            version, width, height, frame_rate, aspect_ratio);
 
     duration = 0;
