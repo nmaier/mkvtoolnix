@@ -472,6 +472,118 @@ static void end_element(void *user_data, const char *name) {
   pdata->parents->pop_back();
 }
 
+static void validate_chapters(int64_t parent_start_tc, int64_t parent_end_tc,
+                              EbmlMaster &m) {
+  int i;
+  KaxChapterAtom *atom;
+  KaxChapterTimeStart *cts;
+  KaxChapterTimeEnd *cte;
+  int64_t start_tc, end_tc;
+
+  for (i = 0; i < m.ListSize(); i++) {
+    if (EbmlId(*m[i]) == KaxChapterAtom::ClassInfos.GlobalId) {
+      atom = static_cast<KaxChapterAtom *>(m[i]);
+      cts = static_cast<KaxChapterTimeStart *>
+        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+      cte = static_cast<KaxChapterTimeEnd *>
+        (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
+
+      start_tc = uint64(*static_cast<EbmlUInteger *>(cts)) / 1000000;
+      if (start_tc < parent_start_tc)
+        mxerror("The sub-chapter starts before its parent starts: "
+                "%02lld:%02lld:%02lld.%03lld < %02lld:%02lld:%02lld.%03lld\n",
+                start_tc / 60 / 60 / 1000, (start_tc / 60 / 1000) % 60,
+                (start_tc / 1000) % 60, start_tc % 1000,
+                parent_start_tc / 60 / 60 / 1000,
+                (parent_start_tc / 60 / 1000) % 60,
+                (parent_start_tc / 1000) % 60, parent_start_tc % 1000);
+
+      
+      if (cte != NULL) {
+        end_tc = uint64(*static_cast<EbmlUInteger *>(cte)) / 1000000;
+        if (end_tc < start_tc)
+          mxerror("This chapter ends before it starts: "
+                  "%02lld:%02lld:%02lld.%03lld < %02lld:%02lld:%02lld.%03lld"
+                  "\n",
+                  end_tc / 60 / 60 / 1000, (end_tc / 60 / 1000) % 60,
+                  (end_tc / 1000) % 60, end_tc % 1000,
+                  start_tc / 60 / 60 / 1000, (start_tc / 60 / 1000) % 60,
+                  (start_tc / 1000) % 60, start_tc % 1000);
+
+        if ((parent_end_tc >= 0) && (end_tc > parent_end_tc))
+          mxerror("The sub-chapter ends after its parent ends: "
+                  "%02lld:%02lld:%02lld.%03lld < %02lld:%02lld:%02lld.%03lld"
+                  "\n",
+                  parent_end_tc / 60 / 60 / 1000,
+                  (parent_end_tc / 60 / 1000) % 60,
+                  (parent_end_tc / 1000) % 60, parent_end_tc % 1000,
+                  end_tc / 60 / 60 / 1000, (end_tc / 60 / 1000) % 60,
+                  (end_tc / 1000) % 60, end_tc % 1000);
+      } else
+        end_tc = -1;
+
+      validate_chapters(start_tc, end_tc, *atom);
+    }
+  }    
+}
+
+static void remove_entries(int64_t min_tc, int64_t max_tc, int64_t offset,
+                           EbmlMaster &m) {
+  int i;
+  bool remove;
+  KaxChapterAtom *atom;
+  KaxChapterTimeStart *cts;
+  KaxChapterTimeEnd *cte;
+  int64_t start_tc, end_tc;
+
+  i = 0;
+  while (i < m.ListSize()) {
+    if (EbmlId(*m[i]) == KaxChapterAtom::ClassInfos.GlobalId) {
+      atom = static_cast<KaxChapterAtom *>(m[i]);
+      cts = static_cast<KaxChapterTimeStart *>
+        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+
+      remove = false;
+
+      start_tc = uint64(*static_cast<EbmlUInteger *>(cts)) / 1000000;
+      if (start_tc < min_tc)
+        remove = true;
+      else if ((max_tc >= 0) && (start_tc > max_tc))
+        remove = true;
+
+      if (remove) {
+        m.Remove(i);
+        delete atom;
+      } else
+        i++;
+
+    } else
+      i++;
+  }
+
+  for (i = 0; i < m.ListSize(); i++) {
+    if (EbmlId(*m[i]) == KaxChapterAtom::ClassInfos.GlobalId) {
+      atom = static_cast<KaxChapterAtom *>(m[i]);
+      cts = static_cast<KaxChapterTimeStart *>
+        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+      cte = static_cast<KaxChapterTimeEnd *>
+        (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
+
+      *static_cast<EbmlUInteger *>(cts) =
+        uint64(*static_cast<EbmlUInteger *>(cts)) - (offset * 1000000);
+      if (cte != NULL) {
+        end_tc =  uint64(*static_cast<EbmlUInteger *>(cte)) / 1000000;
+        if (end_tc > max_tc)
+          end_tc = max_tc;
+        end_tc -= offset;
+        *static_cast<EbmlUInteger *>(cte) = end_tc * 1000000;
+      }
+
+      remove_entries(min_tc, max_tc, offset, *atom);
+    }
+  }    
+}
+
 bool probe_xml_chapters(mm_text_io_c *in) {
   string s;
 
@@ -496,8 +608,10 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   XML_Parser parser;
   XML_Error xerror;
   char *emsg;
+  int i;
   string buffer;
   KaxChapters *chapters;
+  KaxEditionEntry *eentry;
 
   done = 0;
 
@@ -535,8 +649,32 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   } while (!done);
 
   chapters = pdata->chapters;
-  if (!chapters->CheckMandatory())
-    die("chapters->CheckMandatory() failed. Should not have happened!");
+  if (chapters != NULL) {
+
+    for (i = 0; i < chapters->ListSize(); i++) {
+      validate_chapters(0, -1, *static_cast<EbmlMaster *>((*chapters)[i]));
+      remove_entries(min_tc, max_tc, offset,
+                     *static_cast<EbmlMaster *>((*chapters)[i]));
+    }
+
+    i = 0;
+    while (i < chapters->ListSize()) {
+      eentry = static_cast<KaxEditionEntry *>((*chapters)[i]);
+      if (eentry->ListSize() == 0) {
+        chapters->Remove(i);
+        delete eentry;
+
+      } else
+        i++;
+    }
+
+    if (chapters->ListSize() == 0) {
+      delete chapters;
+      chapters = NULL;
+
+    } else if (!chapters->CheckMandatory())
+      die("chapters->CheckMandatory() failed. Should not have happened!");
+  }
 
   XML_ParserFree(parser);
   delete pdata->parents;
@@ -549,4 +687,3 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
 }
 
 // }}}
-
