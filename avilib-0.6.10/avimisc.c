@@ -77,7 +77,7 @@ void AVI_info(avi_t *avifile)
       
       if(chan>0) {
 	  printf("[avilib] A: %ld Hz, format=0x%02x, bits=%d, channels=%d, bitrate=%ld kbps,\n", rate, format, bits, chan, mp3rate); 
-	  printf("[avilib]    %ld chunks, %ld bytes\n", chunks, tot_bytes);
+	  printf("[avilib]    %ld chunks, %ld bytes, %s\n", chunks, tot_bytes, (AVI_get_audio_vbr(avifile)?"VBR":"CBR"));
       } else
 	  printf("[avilib] A: no audio track found\n");
   }

@@ -38,7 +38,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#if defined(SYS_UNIX) || defined(COMP_MSC) || defined(__APPLE__)
+#if defined(SYS_UNIX) || defined(COMP_MSC) || defined(SYS_APPLE)
 #define lseek64 lseek
 #endif
 
@@ -349,6 +349,7 @@ static void dump_vals(int fd, int count, struct VAL *names)
     }
 }
 
+#if 0
 static void hexlog(unsigned char *buf, int count)
 {
     int l,i;
@@ -370,7 +371,7 @@ static void hexlog(unsigned char *buf, int count)
 	printf("\n");
     }
 }
-
+#endif
 static unsigned char*
 off_t_to_char(off_t val, int base, int len)
 {
@@ -510,7 +511,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 #ifdef AVI_DEBUG
 	    printf("enter [%d] size=%lu pos=%Lu left=%lu\n", RekDepth, subchunksize, datapos, *chunksize-datashowed); 
 #endif
-	    if (!ProcessChunk(fd, datapos, filesize, (off_t) 0,
+	    if (!ProcessChunk(fd, datapos, filesize,  0,
 			      RekDepth+1, &subchunksize)) return(FALSE);
 	    
 	    subchunklen = sizeof(FOURCC) +  /* this is the complete..   */
