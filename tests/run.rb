@@ -1,0 +1,181 @@
+#!/usr/bin/ruby
+
+class Test
+  attr_reader :description
+
+  def initialize
+    @description = "dummy test class"
+  end
+
+  def run
+    return error("Trying to run the base class")
+  end
+
+  def run_test
+    begin
+      return run
+    rescue
+      return nil
+    end
+  end
+
+  def error(reason)
+    puts("  Failed. Reason: #{reason}")
+    raise "test failed"
+  end
+
+  def sys(command, *arg)
+    if (!system(command + " &> /dev/null"))
+      if ((arg.size == 0) || ((arg[0] << 8) != $?))
+        error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
+      end
+    end
+  end
+
+  def tmp
+    @tmp ||= "/tmp/mkvtoolnix-auto-test-" + $$.to_s
+  end
+
+  def hash_file(name)
+    return `md5sum #{file}`.chomp.gsub(/\s+.*/, "")
+  end
+
+  def hash_tmp(erase = true)
+    output = hash_file(@tmp)
+    if (erase)
+      File.unlink(@tmp)
+      @tmp = nil
+    end
+    return output
+  end
+end
+
+class Results
+  def initialize
+    load
+  end
+
+  def load
+    @results = Hash.new
+    return unless (FileTest.exist?("results.txt"))
+    IO.readlines("results.txt").each do |line|
+      parts = line.chomp.split(/:/)
+      @results[parts[0]] = {"hash" => parts[1], "status" => parts[2]}
+    end
+  end
+
+  def save
+    f = File.new("results.txt", "w")
+    @results.keys.sort.each do |key|
+      f.puts("#{key}:" + @results[key]['hash'] + ":" + @results[key]['status'])
+    end
+    f.close
+  end
+
+  def exist?(name)
+    return @results.has_key?(name)
+  end
+
+  def hash?(name)
+    raise "No such result" unless (exist?(name))
+    return @results[name]['hash']
+  end
+
+  def status?(name)
+    raise "No such result" unless (exist?(name))
+    return @results[name]['status']
+  end
+
+  def add(name, hash)
+    raise "Test does already exist" if (exist?(name))
+    @results[name] = {"hash" => hash, "status" => "new"}
+    save
+  end
+
+  def set(name, status)
+    return unless (exist?(name))
+    @results[name]["status"] = status
+    save
+  end
+end
+
+def main
+  results = Results.new
+
+  test_failed = false
+  test_new = false
+  ARGV.each do |arg|
+    if ((arg == "-f") or (arg == "--failed"))
+      test_failed = true
+    elsif ((arg == "-n") or (arg == "--new"))
+      test_new = true
+    else
+      puts("Unknown argument '#{arg}'.")
+      exit(2)
+    end
+  end
+  test_all = (!test_failed && !test_new)
+
+  ENV['PATH'] = "../src:" + ENV['PATH']
+
+  num_tests = 0
+  num_failed = 0
+  Dir.entries(".").sort.each do |entry|
+    next unless (FileTest.file?(entry) and (entry =~ /^test-.*\.rb$/))
+
+    class_name = "T_" + entry.gsub(/^test-/, "").gsub(/\.rb$/, "")
+    test_this = test_all
+    if (results.exist?(class_name))
+      if (test_failed and (results.status?(class_name) == "failed"))
+        test_this = true
+      elsif (test_new and (results.status?(class_name) == "new"))
+        test_this = true
+      end
+    elsif (test_new || test_failed)
+      test_this = true
+    end
+    next unless (test_this)
+
+    num_tests += 1
+
+    if (!require("./" + entry))
+      puts(" Failed to load '#{entry}'.")
+      results.set(class_name, "failed")
+      num_failed += 1
+      next
+    end
+
+    begin
+      current_test = eval(class_name + ".new")
+    rescue
+      puts(" Failed to create an instance of class '#{class_name}'.")
+      results.set(class_name, "failed")
+      num_failed += 1
+      next
+    end
+
+    puts("Running '#{class_name}': #{current_test.description}")
+    result = current_test.run_test
+    if (result)
+      if (!results.exist?(class_name))
+        puts("  NEW test. Storing result '#{result}'.")
+        results.add(class_name, result)
+      elsif (results.hash?(class_name) != result)
+        puts("  FAILED: checksum is different")
+        results.set(class_name, "failed")
+        num_failed += 1
+      else
+        results.set(class_name, "passed")
+      end
+    else
+      num_failed += 1
+    end
+  end
+
+  puts("#{num_failed}/#{num_tests} failed (" +
+      (num_tests > 0 ? (num_failed * 100 / num_tests).to_s : "0") + "%)")
+
+  exit(num_failed > 0 ? 1 : 0)
+end
+
+main
