@@ -44,10 +44,12 @@ public:
   virtual int display_priority();
   virtual void display_progress(bool final = false);
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size, int64_t probe_range,
+                        int num_headers = 5);
 
 protected:
-  static int find_valid_headers(mm_io_c *mm_io);
+  static int find_valid_headers(mm_io_c *mm_io, int64_t probe_range,
+                                int num_headers);
 };
 
 #endif  // __R_MP3_H

@@ -455,7 +455,9 @@ get_type(char *filename) {
   mm_io_c *mm_io;
   mm_text_io_c *mm_text_io;
   uint64_t size;
-  int type;
+  int type, i;
+  const int probe_sizes[] = {16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024,
+                             256 * 1024, 0};
 
   mm_io = NULL;
   mm_text_io = NULL;
@@ -471,6 +473,7 @@ get_type(char *filename) {
             filename);
   }
 
+  type = TYPEUNKNOWN;
   if (avi_reader_c::probe_file(mm_io, size))
     type = TYPEAVI;
   else if (kax_reader_c::probe_file(mm_io, size))
@@ -487,10 +490,17 @@ get_type(char *filename) {
     type = TYPEQTMP4;
   else if (tta_reader_c::probe_file(mm_io, size))
     type = TYPETTA;
-  else if (mp3_reader_c::probe_file(mm_io, size))
+  else {
+    for (i = 0; (probe_sizes[i] != 0) && (type == TYPEUNKNOWN); i++)
+      if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
+        type = TYPEMP3;
+      else if (ac3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
+        type = TYPEAC3;
+  }
+  if (type != TYPEUNKNOWN)
+    ;
+  else if (mp3_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
     type = TYPEMP3;
-  else if (ac3_reader_c::probe_file(mm_io, size))
-    type = TYPEAC3;
   else if (dts_reader_c::probe_file(mm_io, size))
     type = TYPEDTS;
   else if (aac_reader_c::probe_file(mm_io, size))

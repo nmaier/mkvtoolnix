@@ -28,35 +28,12 @@ extern "C" {
 #include "r_ac3.h"
 #include "p_ac3.h"
 
-#define PROBESIZE 8192
-
 int
 ac3_reader_c::probe_file(mm_io_c *mm_io,
-                         int64_t size) {
-  unsigned char buf[PROBESIZE];
-  int pos;
-  ac3_header_t ac3header;
-
-  if (size < PROBESIZE)
-    return 0;
-  try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, PROBESIZE) != PROBESIZE)
-      return 0;
-    mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
-    return 0;
-  }
-
-  pos = find_ac3_header(buf, PROBESIZE, &ac3header);
-  if ((pos < 0) || ((pos + ac3header.bytes) >= PROBESIZE))
-    return 0;
-  pos = find_ac3_header(&buf[pos + ac3header.bytes], PROBESIZE - pos -
-                        ac3header.bytes, &ac3header);
-  if (pos != 0)
-    return 0;
-
-  return 1;
+                         int64_t size,
+                         int64_t probe_size,
+                         int num_headers) {
+  return (find_valid_headers(mm_io, probe_size, num_headers) != -1) ? 1 : 0;
 }
 
 ac3_reader_c::ac3_reader_c(track_info_c *nti)
@@ -135,4 +112,24 @@ ac3_reader_c::display_progress(bool final) {
 void
 ac3_reader_c::identify() {
   mxinfo("File '%s': container: AC3\nTrack ID 0: audio (AC3)\n", ti->fname);
+}
+
+int
+ac3_reader_c::find_valid_headers(mm_io_c *mm_io,
+                                 int64_t probe_range,
+                                 int num_headers) {
+  unsigned char *buf;
+  int pos, nread;
+
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    buf = (unsigned char *)safemalloc(probe_range);
+    nread = mm_io->read(buf, probe_range);
+    pos = find_consecutive_ac3_headers(buf, nread, num_headers);
+    safefree(buf);
+    mm_io->setFilePointer(0, seek_beginning);
+    return pos;
+  } catch (...) {
+    return -1;
+  }
 }
