@@ -7,12 +7,14 @@ SUBDIRS = avilib
 bin_PROGRAMS = mkvmerge mkvinfo
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
+			aac_common.cpp aac_common.h \
 			ac3_common.cpp ac3_common.h \
 			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \
 			iso639.cpp iso639.h \
 			mp3_common.cpp mp3_common.h \
+			p_aac.cpp p_aac.h \
 			p_ac3.cpp p_ac3.h \
 			p_dts.cpp p_dts.h \
 			p_mp3.cpp p_mp3.h \
@@ -21,6 +23,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			p_video.cpp p_video.h \
 			p_vorbis.cpp p_vorbis.h \
 			pr_generic.h pr_generic.cpp \
+			r_aac.cpp r_aac.h \
 			r_ac3.cpp r_ac3.h \
 			r_avi.cpp r_avi.h \
 			r_dts.cpp r_dts.h \

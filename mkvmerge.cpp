@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.64 2003/05/15 09:38:01 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.65 2003/05/17 20:51:34 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -63,6 +63,7 @@
 #include "cluster_helper.h"
 #include "common.h"
 #include "iso639.h"
+#include "r_aac.h"
 #include "r_ac3.h"
 #include "r_dts.h"
 #include "r_avi.h"
@@ -231,6 +232,7 @@ file_type_t file_types[] =
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"ac3", TYPEAC3, "A/52 (aka AC3)"},
    {"dts", TYPEDTS, "DTS (Digital Theater System)"},
+   {"aac", TYPEAAC, "AAC (Advanced Audio Coding)"},
    {"output modules:", -1, ""},
 #ifdef HAVE_OGGVORBIS
    {"   ", -1,      "Vorbis audio"},
@@ -242,6 +244,7 @@ file_type_t file_types[] =
    {"   ", -1,      "MP3 audio"},
    {"   ", -1,      "AC3 audio"},
    {"   ", -1,      "DTS audio"},
+   {"   ", -1,      "AAC audio"},
    {NULL,  -1,      NULL}};
 
 static void usage(void) {
@@ -337,6 +340,8 @@ static int get_type(char *filename) {
     type = TYPEAC3;
   else if (dts_reader_c::probe_file(f, size))
     type = TYPEDTS;
+  else if (aac_reader_c::probe_file(f, size))
+    type = TYPEAAC;
 //     else if (microdvd_reader_c::probe_file(f, size))
 //     type = TYPEMICRODVD;
 //   else if (vobsub_reader_c::probe_file(f, size)) 
@@ -912,6 +917,13 @@ static void parse_args(int argc, char **argv) {
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "DTS files.\n");
             file->reader = new dts_reader_c(&ti);
+            break;
+          case TYPEAAC:
+            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
+                (ti.stracks != NULL))
+              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                      "AAC files.\n");
+            file->reader = new aac_reader_c(&ti);
             break;
 //           case TYPECHAPTERS:
 //             if (chapters != NULL) {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.22 2003/05/15 08:58:52 mosu Exp $
+    \version \$Id: common.h,v 1.23 2003/05/17 20:51:34 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -64,6 +64,7 @@
 #define TYPEVOBSUB    9
 #define TYPEMATROSKA 10
 #define TYPEDTS      11
+#define TYPEAAC      12
 
 #define FOURCC(a, b, c, d) (unsigned long)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
@@ -103,6 +104,8 @@ unsigned char *_safestrdup(const unsigned char *s, const char *file, int line);
 void *_safememdup(const void *src, size_t size, const char *file, int line);
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
 void *_saferealloc(void *mem, size_t size, const char *file, int line);
+
+int64_t get_bits(unsigned char *buffer, int size, int &pos, int num);
 
 extern int verbose;
 
