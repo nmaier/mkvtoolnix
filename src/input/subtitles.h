@@ -36,14 +36,31 @@ typedef struct sub_t {
 class subtitles_c {
 private:
   deque<sub_t> entries;
+  deque<sub_t>::iterator current;
 
 public:
-  void add(int64_t start, int64_t end, const char *subs) {
+  subtitles_c() {
+    current = entries.end();
+  }
+  void add(int64_t start, int64_t end, const string &subs) {
     entries.push_back(sub_t(start, end, subs));
+  }
+  void reset() {
+    current = entries.begin();
+  }
+  int get_num_entries() {
+    return entries.size();
+  }
+  int get_num_processed() {
+    return std::distance(entries.begin(), current);
   }
   void process(textsubs_packetizer_c *);
   void sort() {
-    std::sort(entries.begin(), entries.end());
+    std::stable_sort(entries.begin(), entries.end());
+    reset();
+  }
+  bool empty() {
+    return current == entries.end();
   }
 };
 

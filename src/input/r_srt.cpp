@@ -76,6 +76,7 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
   }
   if (verbose)
     mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti->fname.c_str());
+  parse_file();
 }
 
 srt_reader_c::~srt_reader_c() {
@@ -101,12 +102,10 @@ srt_reader_c::create_packetizer(int64_t) {
 #define STATE_SUBS_OR_NUMBER  2
 #define STATE_TIME            3
 
-file_status_t
-srt_reader_c::read(generic_packetizer_c *,
-                   bool) {
+void
+srt_reader_c::parse_file() {
   int64_t start, end, previous_start;
   char *chunk;
-  subtitles_c subs;
   string s, subtitles;
   int state, i, line_number;
   bool non_number_found, timecode_warning_printed;
@@ -223,16 +222,27 @@ srt_reader_c::read(generic_packetizer_c *,
   }
 
   subs.sort();
+}
+
+file_status_t
+srt_reader_c::read(generic_packetizer_c *,
+                   bool) {
+  if (subs.empty())
+    return file_status_done;
+
   subs.process((textsubs_packetizer_c *)PTZR0);
 
-  PTZR0->flush();
-
-  return file_status_done;
+  return subs.empty() ? file_status_done : file_status_moredata;
 }
 
 int
 srt_reader_c::get_progress() {
-  return 100;
+  int num_entries;
+
+  num_entries = subs.get_num_entries();
+  if (num_entries == 0)
+    return 100;
+  return 100 * subs.get_num_processed() / num_entries;
 }
 
 void

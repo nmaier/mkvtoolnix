@@ -23,25 +23,9 @@
 
 #include "pr_generic.h"
 #include "r_ssa.h"
-#include "subtitles.h"
 #include "matroska.h"
 
 using namespace std;
-
-class ssa_line_c {
-public:
-  char *line;
-  int64_t start, end;
-  int num;
-
-  bool operator < (const ssa_line_c &cmp) const;
-};
-
-bool
-ssa_line_c::operator < (const ssa_line_c &cmp)
-  const {
-  return start < cmp.start;
-}
 
 int
 ssa_reader_c::probe_file(mm_text_io_c *mm_io,
@@ -132,6 +116,7 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
   }
   if (verbose)
     mxinfo(FMT_FN "Using the SSA/ASS subtitle reader.\n", ti->fname.c_str());
+  parse_file();
 }
 
 ssa_reader_c::~ssa_reader_c() {
@@ -209,15 +194,12 @@ ssa_reader_c::recode_text(vector<string> &fields) {
   return to_utf8(cc_utf8, get_element("Text", fields));
 }
 
-file_status_t
-ssa_reader_c::read(generic_packetizer_c *,
-                   bool) {
+void
+ssa_reader_c::parse_file() {
   string line, stime, orig_line, comma;
-  int i, num;
+  int num;
   int64_t start, end;
-  vector<ssa_line_c> clines;
   vector<string> fields;
-  ssa_line_c cline;
 
   num = 0;
 
@@ -258,7 +240,7 @@ ssa_reader_c::read(generic_packetizer_c *,
     // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
     comma = ",";
-    line = comma + get_element("Layer", fields) + comma +
+    line = to_string(num) + comma + get_element("Layer", fields) + comma +
       get_element("Style", fields) + comma +
       get_element("Name", fields) + comma + 
       get_element("MarginL", fields) + comma +
@@ -267,35 +249,32 @@ ssa_reader_c::read(generic_packetizer_c *,
       get_element("Effect", fields) + comma +
       recode_text(fields);
 
-    cline.line = safestrdup(line.c_str());
-    cline.start = start;
-    cline.end = end;
-    cline.num = num;
+    subs.add(start, end, line);
     num++;
-
-    clines.push_back(cline);
   } while (!mm_io->eof());
 
-  stable_sort(clines.begin(), clines.end());
+  subs.sort();
+}
 
-  for (i = 0; i < clines.size(); i++) {
-    char buffer[20];
-    // Let the packetizer handle this line.
-    mxprints(buffer, "%d", clines[i].num);
-    line = string(buffer) + string(clines[i].line);
-    memory_c mem((unsigned char *)line.c_str(), 0, false);
-    PTZR0->process(mem, clines[i].start, clines[i].end - clines[i].start);
-    safefree(clines[i].line);
-  }
+file_status_t
+ssa_reader_c::read(generic_packetizer_c *,
+                   bool) {
+  if (subs.empty())
+    return file_status_done;
 
-  PTZR0->flush();
+  subs.process((textsubs_packetizer_c *)PTZR0);
 
-  return file_status_done;
+  return subs.empty() ? file_status_done : file_status_moredata;
 }
 
 int
 ssa_reader_c::get_progress() {
-  return 100;
+  int num_entries;
+
+  num_entries = subs.get_num_entries();
+  if (num_entries == 0)
+    return 100;
+  return 100 * subs.get_num_processed() / num_entries;
 }
 
 void

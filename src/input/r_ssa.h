@@ -26,6 +26,7 @@
 #include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
+#include "subtitles.h"
 
 using namespace std;
 
@@ -36,11 +37,13 @@ private:
   int cc_utf8;
   bool is_ass;
   string global;
+  subtitles_c subs;
 
 public:
   ssa_reader_c(track_info_c *nti) throw (error_c);
   virtual ~ssa_reader_c();
 
+  virtual void parse_file();
   virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
