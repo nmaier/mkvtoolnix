@@ -193,10 +193,11 @@ tab_input::tab_input(wxWindow *parent):
     }
     popular_languages.Sort();
 
-    sorted_iso_codes.Insert(wxT("---common---"), 0);
+    sorted_iso_codes.Insert(wxT("und (Undetermined)"), 0);
+    sorted_iso_codes.Insert(wxT("---common---"), 1);
     for (i = 0; i < popular_languages.Count(); i++)
-      sorted_iso_codes.Insert(popular_languages[i], i + 1);
-    sorted_iso_codes.Insert(wxT("---all---"), i + 1);
+      sorted_iso_codes.Insert(popular_languages[i], i + 2);
+    sorted_iso_codes.Insert(wxT("---all---"), i + 2);
   }
 
   cob_language =
@@ -204,7 +205,6 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_language->SetToolTip(TIP("Language for this track. Select one of the "
                                "ISO639-2 language codes."));
-  cob_language->Append(wxT("none"));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
   cob_language->SetSizeHints(0, -1);
@@ -655,7 +655,7 @@ tab_input::on_add_file(wxCommandEvent &evt) {
                      "*.aac;*.ac3;*.ass;*.avi;*.dts;");
   if (capabilities[wxT("FLAC")] == wxT("true"))
     media_files += wxT("*.flac;");
-  media_files += wxT("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
+  media_files += wxT("*.idx;*.m1v;*.m2v;*.m4a;*.mp2;*.mp3;*.mka;"
                      "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
                      "*.srt;*.ssa;*.tta;*.wav|"
@@ -668,6 +668,7 @@ tab_input::on_add_file(wxCommandEvent &evt) {
     media_files += wxT("FLAC (Free Lossless Audio Codec) (*.flac;*.ogg)|"
                        "*.flac;*.ogg|");
   media_files += wxT("MPEG audio files (*.mp2;*.mp3)|*.mp2;*.mp3|"
+                     "MPEG video elementary streams (*.m1v;*.m2v)|*.m1v;*.m2v|"
                      "Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
                      "QuickTime/MP4 A/V (*.mov;*.mp4)|*.mov;*.mp4|"
                      "Audio/Video embedded in OGG (*.ogg;*.ogm)|*.ogg;*.ogm|"
@@ -772,7 +773,7 @@ tab_input::add_file(const wxString &file_name) {
       parse_int(wxMB(id), track.id);
       track.ctype = new wxString(exact);
       track.enabled = true;
-      track.language = new wxString(wxT("none"));
+      track.language = new wxString(wxT("und"));
       track.sub_charset = new wxString(wxT("default"));
       track.cues = new wxString(wxT("default"));
       track.track_name = new wxString(wxT(""));
@@ -1225,7 +1226,8 @@ tab_input::on_browse_timecodes_clicked(wxCommandEvent &evt) {
     return;
 
   wxFileDialog dlg(NULL, wxT("Choose a timecodes file"), last_open_dir,
-                   wxT(""), wxT("Tag files (*.txt)|*.txt|" ALLFILES), wxOPEN);
+                   wxT(""), wxT("Timecode files (*.tmc;*.txt)|*.tmc;*.txt|"
+                                ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     *tracks[selected_track]->timecodes = dlg.GetPath();
