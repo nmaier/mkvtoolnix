@@ -29,7 +29,7 @@
 #include "r_real.h"
 #include "p_video.h"
 
-#pragma pack(1)
+#pragma pack(push,2)
 
 typedef struct {
   uint32_t size;
@@ -42,9 +42,9 @@ typedef struct {
   uint32_t fps;
   uint32_t type1;
   uint32_t type2;
-} real_video_stream_props_t;
+} real_video_props_t;
 
-#pragma pack()
+#pragma pack(pop)
 
 int real_reader_c::probe_file(mm_io_c *io, int64_t size) {
   unsigned char data[4];
@@ -112,7 +112,7 @@ void real_reader_c::parse_headers() {
   uint32_t object_id, i, id, start_time, preroll, size;
   char *buffer;
   real_demuxer_t *dmx;
-  real_video_stream_props_t vsp, *vsp_be;
+  real_video_props_t *vsp;
 
   try {
     io->skip(4);                // object_id = ".RIF"
@@ -223,38 +223,26 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
 
-          vsp_be = (real_video_stream_props_t *)buffer;
+          vsp = (real_video_props_t *)buffer;
 
-          if ((size >= sizeof(real_video_stream_props_t)) &&
-              (get_fourcc(&vsp_be->fourcc1) == FOURCC('V', 'I', 'D', 'O')) &&
+          if ((size >= sizeof(real_video_props_t)) &&
+              (get_fourcc(&vsp->fourcc1) == FOURCC('V', 'I', 'D', 'O')) &&
               demuxing_requested('v', id)) {
-
-            put_uint32(&vsp.size, get_uint32_be(&vsp_be->size));
-            vsp.fourcc1 = vsp_be->fourcc1;
-            vsp.fourcc2 = vsp_be->fourcc2;
-            put_uint16(&vsp.width, get_uint16_be(&vsp_be->width));
-            put_uint16(&vsp.height, get_uint16_be(&vsp_be->height));
-            put_uint16(&vsp.bpp, get_uint16_be(&vsp_be->bpp));
-            put_uint32(&vsp.unknown1, get_uint32_be(&vsp_be->unknown1));
-            put_uint32(&vsp.fps, get_uint32_be(&vsp_be->fps));
-            put_uint32(&vsp.type1, get_uint32_be(&vsp_be->type1));
-            put_uint32(&vsp.type2, get_uint32_be(&vsp_be->type2));
 
             dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
             memset(dmx, 0, sizeof(real_demuxer_t));
             dmx->id = id;
             dmx->start_time = start_time;
             dmx->preroll = preroll;
-            memcpy(dmx->fourcc, &vsp.fourcc2, 4);
+            memcpy(dmx->fourcc, &vsp->fourcc2, 4);
             dmx->fourcc[4] = 0;
-            dmx->width = get_uint16(&vsp.width);
-            dmx->height = get_uint16(&vsp.height);
+            dmx->width = get_uint16_be(&vsp->width);
+            dmx->height = get_uint16_be(&vsp->height);
             dmx->type = 'v';
-            i = get_uint32(&vsp.fps);
+            i = get_uint32_be(&vsp->fps);
             dmx->fps = (float)((i & 0xffff0000) >> 16) +
               ((float)(i & 0x0000ffff)) / 65536.0;
             dmx->private_data = (unsigned char *)safememdup(buffer, size);
-            memcpy(dmx->private_data, &vsp, sizeof(vsp));
             dmx->private_size = size;
 
             demuxers.push_back(dmx);
