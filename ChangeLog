@@ -1,3 +1,13 @@
+2003-10-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Add all the mandatory elements when
+	extracting chapters so that the resulting XML can always be used
+	directly with mkvmerge again without having to manually add
+	e.g. ChapterLanguage.
+
+	* mkvmerge: bug fix; Handle audio tracks from Matroska files with
+	the CodecID A_MS/ACM correctly.
+
 2003-10-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: Changes to use libmatroska's new lacing code.

@@ -196,9 +196,6 @@ void write_chapters_simple(int &chapter_num, KaxChapters *chapters,
 
 // {{{ XML chapter output
 
-#define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-#define is_id2(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-
 static FILE *o;
 
 static void pt(int level, const char *tag) {
@@ -215,9 +212,12 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
   int i;
   EbmlElement *e;
   char *s;
+  bool string_found, language_found;
 
   pt(level, "<ChapterDisplay>\n");
 
+  language_found = false;
+  string_found = false;
   for (i = 0; i < display->ListSize(); i++) {
     e = (*display)[i];
     if (is_id(KaxChapterString)) {
@@ -226,11 +226,13 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
                                           <EbmlUnicodeString *>(e)).c_str());
       mxprint(o, "%s</ChapterString>\n", s);
       safefree(s);
+      string_found = true;
 
     } else if (is_id(KaxChapterLanguage)) {
       pt(level + 1, "<ChapterLanguage>");
       mxprint(o, "%s</ChapterLanguage>\n", string(*static_cast
                                                   <EbmlString *>(e)).c_str());
+      language_found = true;
 
 
     } else if (is_id(KaxChapterCountry)) {
@@ -243,6 +245,11 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
       write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
 
   }
+
+  if (!string_found)
+    pt(level + 1, "<ChapterString></ChapterString>\n");
+  if (!language_found)
+    pt(level + 1, "<ChapterLanguage>eng</ChapterLanguage>\n");
 
   pt(level, "</ChapterDisplay>\n");
 }
@@ -272,9 +279,11 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
   int i;
   EbmlElement *e;
   uint64_t v;
+  bool start_time_found;
 
   pt(level, "<ChapterAtom>\n");
 
+  start_time_found = false;
   for (i = 0; i < atom->ListSize(); i++) {
     e = (*atom)[i];
     if (is_id(KaxChapterUID)) {
@@ -288,6 +297,7 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
       mxprint(o, "%02llu:%02llu:%02llu.%03llu</ChapterTimeStart>\n",
               v / 1000 / 60 / 60, (v / 1000 / 60) % 60, (v / 1000) % 60,
               v % 1000);
+      start_time_found = true;
 
     } else if (is_id(KaxChapterTimeEnd)) {
       pt(level + 1, "<ChapterTimeEnd>");
@@ -306,6 +316,9 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
       write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
 
   }
+
+  if (!start_time_found)
+    pt(level + 1, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
 
   pt(level, "</ChapterAtom>\n");
 }
