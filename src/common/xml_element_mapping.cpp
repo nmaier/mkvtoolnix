@@ -24,7 +24,7 @@ namespace libmatroska {
   extern EbmlId MATROSKA_DLL_API KaxEditionUID_TheId;
   extern EbmlId MATROSKA_DLL_API KaxEditionFlagHidden_TheId;
   extern EbmlId MATROSKA_DLL_API KaxEditionFlagDefault_TheId;
-  extern EbmlId MATROSKA_DLL_API KaxEditionManaged_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionProcessed_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterAtom_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterUID_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterTimeStart_TheId;
@@ -38,6 +38,7 @@ namespace libmatroska {
   extern EbmlId MATROSKA_DLL_API KaxChapterString_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterLanguage_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterCountry_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterProcessedPrivate_TheId;
 
   extern EbmlId MATROSKA_DLL_API KaxTags_TheId;
   extern EbmlId MATROSKA_DLL_API KaxTag_TheId;
@@ -66,8 +67,8 @@ parser_element_t chapter_elements[] = {
    NULL},
   {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
    NULL, NULL},
-  {"EditionManaged", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionManaged_TheId,
-   NULL, NULL},
+  {"EditionProcessed", ebmlt_uint, 2, 0, NO_MAX_VALUE,
+   KaxEditionProcessed_TheId, NULL, NULL},
   {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
    NULL, NULL},
 
@@ -83,6 +84,8 @@ parser_element_t chapter_elements[] = {
    NULL, NULL},
   {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, KaxChapterFlagEnabled_TheId,
    NULL, NULL},
+  {"ChapterProcessedPrivate", ebmlt_binary, 3, 0, 0,
+   KaxChapterProcessedPrivate_TheId, NULL, NULL},
 
   {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
    NULL, NULL},
