@@ -25,6 +25,7 @@
 #include <vector>
 #include <stdint.h>
 
+#include "os.h"
 #include "wx/confbase.h"
 #include "wx/process.h"
 
@@ -33,9 +34,11 @@ using namespace std;
 #ifdef SYS_WINDOWS
 #define ALLFILES "All Files (*.*)|*.*"
 #define PSEP '\\'
+#define YOFF (-4)
 #else
 #define ALLFILES "All Files (*)|*"
 #define PSEP '/'
+#define YOFF 0
 #endif
 
 #define ID_DIALOG 10000

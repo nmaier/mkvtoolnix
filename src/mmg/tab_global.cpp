@@ -40,7 +40,7 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("File/segment title:"), wxPoint(15, 25),
                    wxDefaultSize);
   tc_title =
-    new wxTextCtrl(this, ID_TC_SEGMENTTITLE, _(""), wxPoint(160, 25),
+    new wxTextCtrl(this, ID_TC_SEGMENTTITLE, _(""), wxPoint(160, 25 + YOFF),
                    wxSize(318, -1), 0);
   tc_title->SetToolTip(_T("This is the title that players may show "
                           "as the 'main title' for this movie."));
@@ -48,8 +48,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticBox(this, -1, _("Split"), wxPoint(10, 60), wxSize(475, 75));
 
   cb_split =
-    new wxCheckBox(this, ID_CB_SPLIT, _("Enable splitting"), wxPoint(15, 80),
-                   wxDefaultSize, 0);
+    new wxCheckBox(this, ID_CB_SPLIT, _("Enable splitting"),
+                   wxPoint(15, 80), wxDefaultSize, 0);
   cb_split->SetToolTip(_T("Enables splitting of the output into more than "
                           "one file. You can split after a given size "
                           "or after a given amount of time has passed."));
@@ -59,8 +59,8 @@ tab_global::tab_global(wxWindow *parent):
                       wxPoint(130, 80), wxDefaultSize, wxRB_GROUP);
   rb_split_by_size->Enable(false);
   cob_split_by_size =
-    new wxComboBox(this, ID_CB_SPLITBYSIZE, _(""), wxPoint(200, 80),
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_SPLITBYSIZE, _(""), wxPoint(200, 80 + YOFF),
+                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_split_by_size->Append("");
   cob_split_by_size->Append("350M");
   cob_split_by_size->Append("650M");
@@ -81,8 +81,8 @@ tab_global::tab_global(wxWindow *parent):
                       wxPoint(310, 80), wxDefaultSize, 0);
   rb_split_by_time->Enable(false);
   cob_split_by_time =
-    new wxComboBox(this, ID_CB_SPLITBYTIME, _(""), wxPoint(380, 80),
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_SPLITBYTIME, _(""), wxPoint(380, 80 + YOFF),
+                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_split_by_time->Append("");
   cob_split_by_time->Append("01:00:00");
   cob_split_by_time->Append("1800s");
@@ -106,7 +106,7 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("max. number of files:"),
                    wxPoint(250, 105), wxDefaultSize, 0);
   tc_split_max_files =
-    new wxTextCtrl(this, ID_TC_SPLITMAXFILES, _(""), wxPoint(380, 105),
+    new wxTextCtrl(this, ID_TC_SPLITMAXFILES, _(""), wxPoint(380, 105 + YOFF),
                    wxSize(100, -1), 0);
   tc_split_max_files->SetToolTip(_T("The maximum number of files that will "
                                     "be created even if the last file might "
@@ -120,8 +120,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Aspect ratio:"), wxPoint(15, 160),
                    wxDefaultSize, 0);
   cob_aspect_ratio =
-    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(100, 160),
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(100, 160 + YOFF),
+                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_aspect_ratio->Append("");
   cob_aspect_ratio->Append("4/3");
   cob_aspect_ratio->Append("1.66");
@@ -138,8 +138,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("FourCC:"), wxPoint(230, 160),
                    wxDefaultSize, 0);
   cob_fourcc =
-    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(285, 160),
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(285, 160 + YOFF),
+                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_fourcc->Append("");
   cob_fourcc->Append("DIVX");
   cob_fourcc->Append("DIV3");
@@ -156,8 +156,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Previous segment UID:"), wxPoint(15, 215),
                    wxDefaultSize);
   tc_previous_segment_uid =
-    new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""), wxPoint(160, 215),
-                   wxSize(318, -1), 0);
+    new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""),
+                   wxPoint(160, 215 + YOFF), wxSize(318, -1), 0);
   tc_previous_segment_uid->SetToolTip(_T("For an in-depth explanantion of "
                                          "file/segment linking and this "
                                          "feature please read mkvmerge's "
@@ -165,8 +165,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Next segment UID:"), wxPoint(15, 240),
                    wxDefaultSize);
   tc_next_segment_uid =
-    new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""), wxPoint(160, 240),
-                   wxSize(318, -1), 0);
+    new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""),
+                   wxPoint(160, 240 + YOFF), wxSize(318, -1), 0);
   tc_next_segment_uid->SetToolTip(_T("For an in-depth explanantion of "
                                      "file/segment linking and this "
                                      "feature please read mkvmerge's "
@@ -176,14 +176,14 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Chapter file:"), wxPoint(15, 295),
                    wxDefaultSize, 0);
   tc_chapters =
-    new wxTextCtrl(this, ID_TC_CHAPTERS, _(""), wxPoint(100, 295),
+    new wxTextCtrl(this, ID_TC_CHAPTERS, _(""), wxPoint(100, 295 + YOFF),
                    wxSize(290, -1), wxTE_READONLY);
   tc_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: The "
                              "OGM like text format and the full featured "
                              "XML format."));
   wxButton *b_browse_chapters =
-    new wxButton(this, ID_B_BROWSECHAPTERS, _("Browse"), wxPoint(400, 295),
-                 wxDefaultSize, 0);
+    new wxButton(this, ID_B_BROWSECHAPTERS, _("Browse"),
+                 wxPoint(400, 295 + YOFF), wxDefaultSize, 0);
   b_browse_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: "
                                    "The OGM like text format and the full "
                                    "featured XML format."));
@@ -191,7 +191,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Language:"), wxPoint(15, 320),
                    wxDefaultSize, 0);
   cob_chap_language =
-    new wxComboBox(this, ID_CB_CHAPTERLANGUAGE, _(""), wxPoint(100, 320),
+    new wxComboBox(this, ID_CB_CHAPTERLANGUAGE, _(""),
+                   wxPoint(100, 320 + YOFF),
                    wxSize(160, -1), 0, NULL, wxCB_DROPDOWN);
   cob_chap_language->Append("");
   for (i = 0; i < sorted_iso_codes.Count(); i++)
@@ -206,7 +207,8 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Charset:"), wxPoint(270, 320),
                    wxDefaultSize, 0);
   cob_chap_charset =
-    new wxComboBox(this, ID_CB_CHAPTERCHARSET, _(""), wxPoint(330, 320),
+    new wxComboBox(this, ID_CB_CHAPTERCHARSET, _(""),
+                   wxPoint(330, 320 + YOFF),
                    wxSize(150, -1), 0, NULL, wxCB_DROPDOWN);
   cob_chap_charset->Append("");
   for (i = 0; i < sorted_charsets.Count(); i++)
@@ -224,7 +226,7 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Tag file:"), wxPoint(15, 375),
                    wxDefaultSize, 0);
   tc_global_tags =
-    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 375),
+    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 375 + YOFF),
                    wxSize(290, -1), wxTE_READONLY);
   tc_global_tags->SetToolTip(_T("The difference between tags associated with "
                                 "a track and global tags is explained in "
@@ -232,8 +234,8 @@ tab_global::tab_global(wxWindow *parent):
                                 "you probably want to use the tags associated "
                                 "with a track on the 'input' tab."));
   wxButton *b_browse_global_tags =
-    new wxButton(this, ID_B_BROWSEGLOBALTAGS, _("Browse"), wxPoint(400, 375),
-                 wxDefaultSize, 0);
+    new wxButton(this, ID_B_BROWSEGLOBALTAGS, _("Browse"),
+                 wxPoint(400, 375 + YOFF), wxDefaultSize, 0);
   b_browse_global_tags->SetToolTip(_T("The difference between tags associated "
                                       "with a track and global tags is "
                                       "explained in mkvmerge's documentation. "

@@ -86,11 +86,16 @@ wxString shell_escape(wxString source) {
   wxString escaped;
 
   for (i = 0; i < source.Length(); i++) {
+#ifdef SYS_UNIX
     if (source[i] == '"')
       escaped += "\\\"";
     else if (source[i] == '\\')
       escaped += "\\\\";
-    else if (source[i] == '\n')
+#else
+    if (source[i] == '"')
+      ;
+#endif
+    else if ((source[i] == '\n') || (source[i] == '\r'))
       escaped += " ";
     else
       escaped += source[i];
@@ -114,7 +119,12 @@ wxString no_cr(wxString source) {
 }
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
-                                  wxPoint(0, 0), wxSize(520, 718),
+                                  wxPoint(0, 0),
+#ifdef SYS_WINDOWS
+                                  wxSize(520, 740),
+#else
+                                  wxSize(520, 718),
+#endif
                                   wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
   wxMenu *file_menu = new wxMenu();
   file_menu->Append(ID_M_FILE_LOAD, _T("&Load settings\tCtrl-L"),
@@ -150,12 +160,14 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   SetStatusBar(status_bar);
   status_bar_timer.SetOwner(this, ID_T_STATUSBAR);
 
+  wxPanel *panel = new wxPanel(this, -1);
+
   wxBoxSizer *bs_main = new wxBoxSizer(wxVERTICAL);
-  this->SetSizer(bs_main);
-  this->SetAutoLayout(true);
+  panel->SetSizer(bs_main);
+  panel->SetAutoLayout(true);
 
   wxNotebook *notebook =
-    new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500),
+    new wxNotebook(panel, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500),
                    wxNB_TOP);
   input_page = new tab_input(notebook);
   attachments_page = new tab_attachments(notebook);
@@ -169,26 +181,26 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
 
   bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-  wxStaticBox *sb_low = new wxStaticBox(this, -1, _("Output filename"));
+  wxStaticBox *sb_low = new wxStaticBox(panel, -1, _("Output filename"));
   wxStaticBoxSizer *sbs_low = new wxStaticBoxSizer(sb_low, wxHORIZONTAL);
   bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
   tc_output =
-    new wxTextCtrl(this, ID_TC_OUTPUT, _(""), wxDefaultPosition,
+    new wxTextCtrl(panel, ID_TC_OUTPUT, _(""), wxDefaultPosition,
                    wxSize(400, -1), 0);
   sbs_low->Add(tc_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   b_browse_output =
-    new wxButton(this, ID_B_BROWSEOUTPUT, _("Browse"), wxDefaultPosition,
+    new wxButton(panel, ID_B_BROWSEOUTPUT, _("Browse"), wxDefaultPosition,
                  wxDefaultSize, 0);
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-  wxStaticBox *sb_low2 = new wxStaticBox(this, -1, _("Command line"));
+  wxStaticBox *sb_low2 = new wxStaticBox(panel, -1, _("Command line"));
   wxStaticBoxSizer *sbs_low2 = new wxStaticBoxSizer(sb_low2, wxHORIZONTAL);
   bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
   tc_cmdline =
-    new wxTextCtrl(this, ID_TC_CMDLINE, _(""), wxDefaultPosition,
+    new wxTextCtrl(panel, ID_TC_CMDLINE, _(""), wxDefaultPosition,
                    wxSize(490, 50), wxTE_READONLY | wxTE_LINEWRAP |
                    wxTE_MULTILINE);
   sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -318,6 +330,13 @@ void mmg_dialog::save(wxString file_name) {
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
   mux_dialog *mdlg;
+
+  if (tc_output->GetValue().Length() == 0) {
+    wxMessageBox(_("You have not yet selected an output file."),
+                 _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+
   update_command_line();
   mdlg = new mux_dialog(this);
   delete mdlg;
@@ -402,12 +421,15 @@ void mmg_dialog::update_command_line() {
     no_video = true;
     no_subs = true;
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+      string format;
+
       t = &(*f->tracks)[tidx];
       if (!t->enabled)
         continue;
 
       tracks_present_here = true;
-      sid.Printf("%lld", t->id);
+      fix_format("%lld", format);
+      sid.Printf(format.c_str(), t->id);
 
       if (t->type == 'a') {
         no_audio = false;
@@ -433,7 +455,7 @@ void mmg_dialog::update_command_line() {
         clargs.Add("-s");
         clargs.Add(sid);
 
-        if (t->sub_charset->Length() > 0) {
+        if ((t->sub_charset->Length() > 0) && (*t->sub_charset != "default")) {
           cmdline += "--sub-charset \"" + sid + ":" +
             shell_escape(*t->sub_charset) + "\" ";
           clargs.Add("--sub-charset");

@@ -34,6 +34,8 @@
 #include "extern_data.h"
 #include "iso639.h"
 
+using namespace std;
+
 wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
 
@@ -88,8 +90,8 @@ tab_input::tab_input(wxWindow *parent):
   }
 
   cob_language =
-    new wxComboBox(this, ID_CB_LANGUAGE, _(""), wxPoint(90, 285),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_LANGUAGE, _(""), wxPoint(90, 285 + YOFF),
+                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_language->SetToolTip(_("Language for this track. Select one of the "
                              "ISO639-2 language codes."));
   cob_language->Append(_("none"));
@@ -99,7 +101,7 @@ tab_input::tab_input(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Delay (in ms):"),
                    wxPoint(255, 285), wxDefaultSize, 0);
   tc_delay =
-    new wxTextCtrl(this, ID_TC_DELAY, _(""), wxPoint(355, 285),
+    new wxTextCtrl(this, ID_TC_DELAY, _(""), wxPoint(355, 285 + YOFF),
                    wxSize(130, -1), 0);
   tc_delay->SetToolTip(_("Delay this track by a couple of ms. Can be "
                          "negative. Only applies to audio and subtitle tracks."
@@ -108,14 +110,14 @@ tab_input::tab_input(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Track name:"), wxPoint(5, 310),
                    wxDefaultSize, 0);
   tc_track_name =
-    new wxTextCtrl(this, ID_TC_TRACKNAME, _(""), wxPoint(90, 310),
+    new wxTextCtrl(this, ID_TC_TRACKNAME, _(""), wxPoint(90, 310 + YOFF),
                    wxSize(130, -1), 0);
   tc_track_name->SetToolTip(_("Name for this track, e.g. \"director's "
                               "comments\"."));
   new wxStaticText(this, wxID_STATIC, _("Stretch by:"), wxPoint(255, 310),
                    wxDefaultSize, 0);
   tc_stretch =
-    new wxTextCtrl(this, ID_TC_STRETCH, _(""), wxPoint(355, 310),
+    new wxTextCtrl(this, ID_TC_STRETCH, _(""), wxPoint(355, 310 + YOFF),
                    wxSize(130, -1), 0);
   tc_stretch->SetToolTip(_("Stretch the audio or subtitle track by a factor. "
                            "This should be a positive floating point number. "
@@ -134,12 +136,11 @@ tab_input::tab_input(wxWindow *parent):
   cob_cues->Append(_("for all frames"));
   cob_cues->Append(_("none"));
   new wxStaticText(this, wxID_STATIC, _("Subtitle charset:"),
-                   wxPoint(255, 335), wxDefaultSize, 0);
-  wxString *cob_sub_charsetStrings = NULL;
+                   wxPoint(255, 335 + YOFF), wxDefaultSize, 0);
   cob_sub_charset =
-    new wxComboBox(this, ID_CB_SUBTITLECHARSET, _(""), wxPoint(355, 335),
-                   wxSize(130, -1), 0, cob_sub_charsetStrings,
-                   wxCB_DROPDOWN|wxCB_SORT);
+    new wxComboBox(this, ID_CB_SUBTITLECHARSET, _(""),
+                   wxPoint(355,335 + YOFF), wxSize(130, -1), 0, NULL,
+                   wxCB_DROPDOWN | wxCB_READONLY);
   cob_sub_charset->SetToolTip(_("Selects the character set a subtitle file "
                                 "was written with. Only needed for non-UTF "
                                 "files that mkvmerge does not detect "
@@ -175,10 +176,10 @@ tab_input::tab_input(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Tags:"), wxPoint(5, 385),
                    wxDefaultSize, 0);
   tc_tags =
-    new wxTextCtrl(this, ID_TC_TAGS, _(""), wxPoint(120, 385),
-                   wxSize(250, -1), wxTE_READONLY);
+    new wxTextCtrl(this, ID_TC_TAGS, _(""), wxPoint(90, 385 + YOFF),
+                   wxSize(280, -1), wxTE_READONLY);
   b_browse_tags =
-    new wxButton(this, ID_B_BROWSETAGS, _("Browse"), wxPoint(390, 385),
+    new wxButton(this, ID_B_BROWSETAGS, _("Browse"), wxPoint(390, 385 + YOFF),
                  wxDefaultSize, 0);
 
   no_track_mode();
@@ -245,7 +246,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
   int result;
   unsigned int i;
 
-  wxFileDialog dlg(NULL, "Choose an input file", "", last_open_dir,
+  wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
                    _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;*.mp3;*.mka;"
                       "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;"
                       "*.wav)|"
@@ -377,20 +378,25 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
 
 void tab_input::on_file_selected(wxCommandEvent &evt) {
   uint32_t i;
+  int new_sel;
   mmg_file_t *f;
   mmg_track_t *t;
   wxString label;
 
   b_remove_file->Enable(true);
   cb_no_chapters->Enable(true);
-  selected_file = lb_input_files->GetSelection();
-  f = &files[selected_file];
+  selected_file = -1;
+  new_sel = lb_input_files->GetSelection();
+  f = &files[new_sel];
   cb_no_chapters->SetValue(f->no_chapters);
 
   clb_tracks->Clear();
   for (i = 0; i < f->tracks->size(); i++) {
+    string format;
+
     t = &(*f->tracks)[i];
-    label.Printf("%s (ID %lld, type: %s)", t->ctype->c_str(), t->id,
+    fix_format("%s (ID %lld, type: %s)", format);
+    label.Printf(format.c_str(), t->ctype->c_str(), t->id,
                  t->type == 'a' ? "audio" :
                  t->type == 'v' ? "video" :
                  t->type == 's' ? "subtitles" : "unknown");
@@ -400,6 +406,7 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
 
   clb_tracks->Enable(true);
   selected_track = -1;
+  selected_file = new_sel;
   no_track_mode();
 }
 
@@ -411,13 +418,15 @@ void tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
 void tab_input::on_track_selected(wxCommandEvent &evt) {
   mmg_file_t *f;
   mmg_track_t *t;
+  int new_sel;
 
   if (selected_file == -1)
     return;
 
-  selected_track = clb_tracks->GetSelection();
+  selected_track = -1;
+  new_sel = clb_tracks->GetSelection();
   f = &files[selected_file];
-  t = &(*f->tracks)[selected_track];
+  t = &(*f->tracks)[new_sel];
 
   if (t->type == 'a')
     audio_track_mode();
@@ -435,6 +444,7 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   tc_tags->SetValue(*t->tags);
   cb_default->SetValue(t->default_track);
   cb_aac_is_sbr->SetValue(t->aac_is_sbr);
+  selected_track = new_sel;
 }
 
 void tab_input::on_track_enabled(wxCommandEvent &evt) {
@@ -470,7 +480,8 @@ void tab_input::on_language_selected(wxCommandEvent &evt) {
     return;
 
   *(*files[selected_file].tracks)[selected_track].language =
-    cob_language->GetValue();
+    cob_language->GetStringSelection();
+  mxinfo("new lang: %s\n", (*files[selected_file].tracks)[selected_track].language->c_str());
 }
 
 void tab_input::on_cues_selected(wxCommandEvent &evt) {
@@ -478,7 +489,7 @@ void tab_input::on_cues_selected(wxCommandEvent &evt) {
     return;
 
   *(*files[selected_file].tracks)[selected_track].cues =
-    cob_cues->GetValue();
+    cob_cues->GetStringSelection();
 }
 
 void tab_input::on_subcharset_selected(wxCommandEvent &evt) {
@@ -486,7 +497,7 @@ void tab_input::on_subcharset_selected(wxCommandEvent &evt) {
     return;
 
   *(*files[selected_file].tracks)[selected_track].sub_charset =
-    cob_sub_charset->GetValue();
+    cob_sub_charset->GetStringSelection();
 }
 
 void tab_input::on_browse_tags(wxCommandEvent &evt) {
@@ -544,12 +555,15 @@ void tab_input::save(wxConfigBase *cfg) {
 
     cfg->Write("number_of_tracks", (int)f->tracks->size());
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+      string format;
+
       t = &(*f->tracks)[tidx];
       s.Printf("track %u", tidx);
       cfg->SetPath(s);
       s.Printf("%c", t->type);
       cfg->Write("type", s);
-      s.Printf("%lld", t->id);
+      fix_format("%lld", format);
+      s.Printf(format.c_str(), t->id);
       cfg->Write("id", s);
       cfg->Write("enabled", t->enabled);
       cfg->Write("content_type", *t->ctype);

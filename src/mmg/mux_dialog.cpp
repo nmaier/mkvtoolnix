@@ -36,7 +36,11 @@
 
 mux_dialog::mux_dialog(wxWindow *parent):
   wxDialog(parent, -1, "mkvmerge is running", wxDefaultPosition,
+#ifdef SYS_WINDOWS
+           wxSize(500, 560), wxCAPTION) {
+#else
            wxSize(500, 520), wxCAPTION) {
+#endif
   int i;
   char c, **args;
   long value;
@@ -82,8 +86,10 @@ mux_dialog::mux_dialog(wxWindow *parent):
   wxArrayString &arg_list =
     static_cast<mmg_dialog *>(parent)->get_command_line_args();
   args = (char **)safemalloc((arg_list.Count() + 1) * sizeof(char *));
-  for (i = 0; i < arg_list.Count(); i++)
+  for (i = 0; i < arg_list.Count(); i++) {
     args[i] = safestrdup(arg_list[i].c_str());
+    printf("ARG %d: '%s'\n", i, args[i]);
+  }
   args[i] = NULL;
 
   process = new mux_process(this);
