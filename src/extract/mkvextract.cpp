@@ -184,55 +184,55 @@ static bool chapter_format_simple = false;
 static bool parse_fully = false;
 
 void
-parse_args(int argc,
-           char **argv,
-           char *&file_name,
+parse_args(vector<string> args,
+           string &file_name,
            int &mode) {
   int i, conv_handle;
-  char *colon, *copy, *sub_charset;
+  char *colon, *copy;
+  const char *sub_charset;
   int64_t tid;
   kax_track_t track;
   bool embed_in_ogg, extract_cuesheet;
   int extract_blockadd_level = -1;
 
-  file_name = NULL;
+  file_name = "";
   sub_charset = NULL;
   verbose = 0;
 
-  if (argc < 2) {
+  if (args.size() < 1) {
     usage();
     mxexit(0);
   }
 
-  if (!strcmp(argv[1], "-V") || !strcmp(argv[1], "--version")) {
+  if ((args[0] == "-V") || (args[0] == "--version")) {
     mxinfo("mkvextract v" VERSION " ('" VERSIONNAME "')\n");
     mxexit(0);
 
-  } else if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "-?") ||
-             !strcmp(argv[1], "--help")) {
+  } else if ((args[0] == "-h") || (args[0] == "-?") ||
+             (args[0] == "--help")) {
     usage();
     mxexit(0);
   }
 
-  if (!strcmp(argv[1], "tracks"))
+  if ((args[0] == "tracks"))
     mode = MODE_TRACKS;
-  else if (!strcmp(argv[1], "tags"))
+  else if ((args[0] == "tags"))
     mode = MODE_TAGS;
-  else if (!strcmp(argv[1], "attachments"))
+  else if ((args[0] == "attachments"))
     mode = MODE_ATTACHMENTS;
-  else if (!strcmp(argv[1], "chapters"))
+  else if ((args[0] == "chapters"))
     mode = MODE_CHAPTERS;
-  else if (!strcmp(argv[1], "cuesheet"))
+  else if ((args[0] == "cuesheet"))
     mode = MODE_CUESHEET;
   else
-    mxerror(_("Unknown mode '%s'.\n"), argv[1]);
+    mxerror(_("Unknown mode '%s'.\n"), args[0].c_str());
 
-  if (argc < 3) {
+  if (args.size() < 2) {
     usage();
     mxexit(0);
   }
 
-  file_name = argv[2];
+  file_name = args[1];
 
   conv_handle = conv_utf8;
   sub_charset = "UTF-8";
@@ -240,71 +240,73 @@ parse_args(int argc,
   extract_cuesheet = false;
 
   // Now process all the other options.
-  for (i = 3; i < argc; i++)
-    if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
+  for (i = 2; i < args.size(); i++)
+    if ((args[i] == "-v") || (args[i] == "--verbose"))
       verbose++;
 
-    else if (!strcmp(argv[i], "--no-variable-data"))
+    else if ((args[i] == "--no-variable-data"))
       no_variable_data = true;
 
-    else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--parse-fully"))
+    else if ((args[i] == "-f") || (args[i] == "--parse-fully"))
       parse_fully = true;
 
-    else if (!strcmp(argv[i], "-c")) {
+    else if ((args[i] == "-c")) {
       if (mode != MODE_TRACKS)
         mxerror(_("'-c' is only allowed when extracting tracks.\n"));
 
-      if ((i + 1) >= argc)
+      if ((i + 1) >= args.size())
         mxerror(_("'-c' lacks a charset.\n"));
 
-      conv_handle = utf8_init(argv[i + 1] == NULL ? "" : argv[i + 1]);
-      sub_charset = argv[i + 1];
+      conv_handle = utf8_init(args[i + 1]);
+      sub_charset = args[i + 1].c_str();
       i++;
 
-    } else if (!strcmp(argv[i], "--no-ogg")) {
+    } else if ((args[i] == "--no-ogg")) {
       if (mode != MODE_TRACKS)
         mxerror(_("'--no-ogg' is only allowed when extracting tracks.\n"));
       embed_in_ogg = false;
 
-    } else if (!strcmp(argv[i], "--cuesheet")) {
+    } else if ((args[i] == "--cuesheet")) {
       if (mode != MODE_TRACKS)
         mxerror(_("'--cuesheet' is only allowed when extracting tracks.\n"));
       extract_cuesheet = true;
  
-    } else if (!strcmp(argv[i], "--blockadd")) {
+    } else if ((args[i] == "--blockadd")) {
       if (mode != MODE_TRACKS)
         mxerror(_("'--blockadd' is only allowed when extracting tracks.\n"));
 
-      if ((i + 1) >= argc)
+      if ((i + 1) >= args.size())
         mxerror(_("'--blockadd' lacks a level.\n"));
 
-      if (!parse_int(argv[i + 1], extract_blockadd_level) ||
+      if (!parse_int(args[i + 1], extract_blockadd_level) ||
           (extract_blockadd_level < -1))
         mxerror("Invalid BlockAddition level in argument '%s'.\n",
-                argv[i + 1]);
+                args[i + 1].c_str());
       i++;
  
    } else if (mode == MODE_TAGS)
-      mxerror(_("No further options allowed when extracting %s.\n"), argv[1]);
+      mxerror(_("No further options allowed when extracting %s.\n"),
+              args[0].c_str());
 
     else if (mode == MODE_CUESHEET)
       mxerror(_("No further options allowed when regenerating the CUE "
                 "sheet.\n"));
 
-    else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
+    else if ((args[i] == "-s") || (args[i] == "--simple")) {
       if (mode != MODE_CHAPTERS)
-        mxerror(_("'%s' is only allowed for chapter extraction.\n"), argv[i]);
+        mxerror(_("'%s' is only allowed for chapter extraction.\n"),
+                args[i].c_str());
 
       chapter_format_simple = true;
 
     } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS)) {
-      copy = safestrdup(argv[i]);
+      copy = safestrdup(args[i].c_str());
       colon = strchr(copy, ':');
       if (colon == NULL)
         mxerror(mode == MODE_TRACKS ?
                 _("Missing track ID in argument '%s'.\n") :
                 _("Missing attachment ID in argument '%s'.\n"),
-                argv[i]);
+                args[i].c_str());
 
       *colon = 0;
       if (!parse_int(copy, tid) || (tid < 0))
@@ -312,11 +314,12 @@ parse_args(int argc,
                 mode == MODE_TRACKS ?
                 _("Invalid track ID in argument '%s'.\n") :
                 _("Invalid attachment ID in argument '%s'.\n"),
-                argv[i]);
+                args[i].c_str());
 
       colon++;
       if (*colon == 0)
-        mxerror(_("Missing output file name in argument '%s'.\n"), argv[i]);
+        mxerror(_("Missing output file name in argument '%s'.\n"),
+                args[i].c_str());
 
       memset(&track, 0, sizeof(kax_track_t));
       track.tid = tid;
@@ -336,7 +339,7 @@ parse_args(int argc,
     } else
       mxerror(_("Unrecognized command line option '%s'. Maybe you put a "
                 "mode specific option before the input file name?\n"),
-              argv[i]);
+              args[i].c_str());
 
   if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS) ||
       (mode == MODE_CUESHEET))
@@ -408,7 +411,7 @@ show_error(const char *fmt,
 int
 main(int argc,
      char **argv) {
-  char *input_file;
+  string input_file;
   int mode;
 
 #if defined(SYS_UNIX)
@@ -429,24 +432,24 @@ main(int argc,
 
   xml_element_map_init();
 
-  parse_args(argc, argv, input_file, mode);
+  parse_args(command_line_utf8(argc, argv), input_file, mode);
   if (mode == MODE_TRACKS) {
-    extract_tracks(input_file);
+    extract_tracks(input_file.c_str());
 
     if (verbose == 0)
       mxinfo(_("progress: 100%%\n"));
 
   } else if (mode == MODE_TAGS)
-    extract_tags(input_file, parse_fully);
+    extract_tags(input_file.c_str(), parse_fully);
 
   else if (mode == MODE_ATTACHMENTS)
-    extract_attachments(input_file, parse_fully);
+    extract_attachments(input_file.c_str(), parse_fully);
 
   else if (mode == MODE_CHAPTERS)
-    extract_chapters(input_file, chapter_format_simple, parse_fully);
+    extract_chapters(input_file.c_str(), chapter_format_simple, parse_fully);
 
   else if (mode == MODE_CUESHEET)
-    extract_cuesheet(input_file, parse_fully);
+    extract_cuesheet(input_file.c_str(), parse_fully);
 
   else
     die("mkvextract: Unknown mode!?");
