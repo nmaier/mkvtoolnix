@@ -34,7 +34,7 @@
 class srt_reader_c: public generic_reader_c {
 private:
   char chunk[2048];
-  mm_io_c *mm_io;
+  mm_text_io_c *mm_io;
   textsubs_packetizer_c *textsubs_packetizer;
   int act_wchar;
 

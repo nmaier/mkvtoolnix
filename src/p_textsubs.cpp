@@ -34,12 +34,17 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
                                              const char *ncodec_id,
                                              const void *nglobal_data,
                                              int nglobal_size, bool nrecode,
-                                             track_info_t *nti)
+                                             bool is_utf8, track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   recode = nrecode;
-  if (recode)
-    cc_utf8 = utf8_init(ti->sub_charset);
+  if (recode) {
+    if ((ti->sub_charset != NULL) || !is_utf8)
+      cc_utf8 = utf8_init(ti->sub_charset);
+    else
+      cc_utf8 = utf8_init("UTF-8");
+  }
+  
   global_size = nglobal_size;
   global_data = safememdup(nglobal_data, global_size);
   codec_id = safestrdup(ncodec_id);

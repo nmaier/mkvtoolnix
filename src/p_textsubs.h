@@ -38,7 +38,8 @@ private:
 public:
   textsubs_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
                         const void *nglobal_data, int nglobal_size,
-                        bool nrecode, track_info_t *nti) throw (error_c);
+                        bool nrecode, bool is_utf8, track_info_t *nti)
+    throw (error_c);
   virtual ~textsubs_packetizer_c();
 
   virtual int  process(unsigned char *_subs, int size, int64_t start = -1,

@@ -33,11 +33,8 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-
-#if __GNUC__ == 2
 #include <typeinfo>
-#endif
+#include <vector>
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>
@@ -285,6 +282,7 @@ static void sighandler(int signum) {
 
 static int get_type(char *filename) {
   mm_io_c *mm_io;
+  mm_text_io_c *mm_text_io;
   off_t size;
   int type;
 
@@ -298,6 +296,7 @@ static int get_type(char *filename) {
             "(%s).\n", filename);
     exit(1);
   }
+
   if (avi_reader_c::probe_file(mm_io, size))
     type = TYPEAVI;
   else if (mkv_reader_c::probe_file(mm_io, size))
@@ -315,8 +314,6 @@ static int get_type(char *filename) {
 #endif // HAVE_OGGVORBIS
   else if (real_reader_c::probe_file(mm_io, size))
     type = TYPEREAL;
-  else if (srt_reader_c::probe_file(mm_io, size))
-    type = TYPESRT;
   else if (mp3_reader_c::probe_file(mm_io, size))
     type = TYPEMP3;
   else if (ac3_reader_c::probe_file(mm_io, size))
@@ -325,10 +322,29 @@ static int get_type(char *filename) {
     type = TYPEDTS;
   else if (aac_reader_c::probe_file(mm_io, size))
     type = TYPEAAC;
-  else if (ssa_reader_c::probe_file(mm_io, size))
-    type = TYPESSA;
-  else
-    type = TYPEUNKNOWN;
+  else {
+    delete mm_io;
+
+    try {
+      mm_text_io = new mm_text_io_c(filename);
+      mm_text_io->setFilePointer(0, seek_end);
+      size = mm_text_io->getFilePointer();
+      mm_text_io->setFilePointer(0, seek_current);
+    } catch (exception &ex) {
+      mxprint(stderr, "Error: could not open source file or seek properly in "
+              "it (%s).\n", filename);
+      exit(1);
+    }
+
+    if (srt_reader_c::probe_file(mm_text_io, size))
+      type = TYPESRT;
+    else if (ssa_reader_c::probe_file(mm_text_io, size))
+      type = TYPESSA;
+    else
+      type = TYPEUNKNOWN;
+
+    mm_io = mm_text_io;
+  }
 
   delete mm_io;
 

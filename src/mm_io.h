@@ -77,4 +77,22 @@ public:
   virtual void close();
 };
 
+enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE,
+                   BO_NONE};
+
+class mm_text_io_c: public mm_io_c {
+protected:
+  byte_order_e byte_order;
+  int bom_len;
+
+public:
+  mm_text_io_c(const char *path);
+
+  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
+  virtual char *gets(char *buffer, size_t max_size);
+  virtual string getline();
+  virtual int read_next_char(char *buffer);
+  virtual byte_order_e get_byte_order();
+};
+
 #endif // __MM_IO_H

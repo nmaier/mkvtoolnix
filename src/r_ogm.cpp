@@ -341,7 +341,8 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_TEXT:
         try {
           dmx->packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8,
-                                                      NULL, 0, true, ti);
+                                                      NULL, 0, true, false,
+                                                      ti);
         } catch (error_c &error) {
           mxprint(stderr, "Error: ogm_reader: could not initialize the "
                   "text subtitles packetizer for stream id %d. Will try to "

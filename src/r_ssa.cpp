@@ -70,22 +70,29 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
   bool is_ass, sub_charset_found;
   int i;
 
-  sub_charset_found = false;
-  for (i = 0; i < ti->sub_charsets->size(); i++)
-    if ((*ti->sub_charsets)[i].id == 0) {
-      sub_charset_found = true;
-      cc_utf8 = utf8_init((*ti->sub_charsets)[i].language);
-      break;
-    }
-  if (!sub_charset_found)
-    cc_utf8 = utf8_init(ti->sub_charset);
-
   is_ass = false;
 
   try {
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_text_io_c(ti->fname);
+
     if (!ssa_reader_c::probe_file(mm_io, 0))
       throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
+
+    sub_charset_found = false;
+    for (i = 0; i < ti->sub_charsets->size(); i++)
+      if ((*ti->sub_charsets)[i].id == 0) {
+        sub_charset_found = true;
+        cc_utf8 = utf8_init((*ti->sub_charsets)[i].language);
+        break;
+      }
+
+    if (!sub_charset_found) {
+      if (mm_io->get_byte_order() != BO_NONE)
+        cc_utf8 = utf8_init("UTF-8");
+      else
+        cc_utf8 = utf8_init(ti->sub_charset);
+    }
+
     ti->id = 0;                 // ID for this track.
     global = mm_io->getline();  // [Script Info]
     while (!mm_io->eof()) {
@@ -129,7 +136,7 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
                                                     MKV_S_TEXTSSA,
                                                     global.c_str(),
                                                     global.length(), false,
-                                                    ti);
+                                                    false, ti);
   } catch (exception &ex) {
     throw error_c("ssa_reader: Could not open the source file.");
   }

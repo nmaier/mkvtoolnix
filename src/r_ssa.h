@@ -38,7 +38,7 @@ using namespace std;
 
 class ssa_reader_c: public generic_reader_c {
 private:
-  mm_io_c *mm_io;
+  mm_text_io_c *mm_io;
   textsubs_packetizer_c *textsubs_packetizer;
   int act_wchar;
   vector<string> format;

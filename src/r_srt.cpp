@@ -69,13 +69,16 @@ int srt_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
+  bool is_utf8;
+
   try {
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_text_io_c(ti->fname);
     if (!srt_reader_c::probe_file(mm_io, 0))
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti->id = 0;                 // ID for this track.
+    is_utf8 = mm_io->get_byte_order() != BO_NONE;
     textsubs_packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL,
-                                                    0, true, ti);
+                                                    0, true, is_utf8, ti);
   } catch (exception &ex) {
     throw error_c("srt_reader: Could not open the source file.");
   }

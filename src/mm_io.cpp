@@ -379,3 +379,163 @@ size_t mm_null_io_c::write(const void *buffer, size_t size) {
 
 void mm_null_io_c::close() {
 }
+
+/*
+ * Class for handling UTF-8/UTF-16/UTF-32 text files.
+ */
+
+mm_text_io_c::mm_text_io_c(const char *path): mm_io_c(path, MODE_READ) {
+  unsigned char buffer[4];
+
+  if (read(buffer, 4) != 4)
+    throw exception();
+
+  if ((buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
+    byte_order = BO_UTF8;
+    bom_len = 3;
+  } else if ((buffer[0] == 0xff) && (buffer[1] == 0xfe) &&
+             (buffer[2] == 0x00) && (buffer[3] == 0x00)) {
+    byte_order = BO_UTF32_LE;
+    bom_len = 4;
+  } else if ((buffer[0] == 0x00) && (buffer[1] == 0x00) &&
+             (buffer[2] == 0xfe) && (buffer[3] == 0xff)) {
+    byte_order = BO_UTF32_BE;
+    bom_len = 4;
+  } else if ((buffer[0] == 0xff) && (buffer[1] == 0xfe)) {
+    byte_order = BO_UTF16_LE;
+    bom_len = 2;
+  } else if ((buffer[0] == 0xfe) && (buffer[1] == 0xff)) {
+    byte_order = BO_UTF16_BE;
+    bom_len = 2;
+  } else {
+    byte_order = BO_NONE;
+    bom_len = 0;
+  }
+
+  setFilePointer(0, seek_beginning);
+}
+
+// 1 byte: 0xxxxxxx,
+// 2 bytes: 110xxxxx 10xxxxxx,
+// 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx
+
+
+int mm_text_io_c::read_next_char(char *buffer) {
+  unsigned char stream[4];
+  unsigned long data;
+  int size, i;
+
+  if (byte_order == BO_NONE)
+    return read(buffer, 1);
+
+  if (byte_order == BO_UTF8)
+    size = 1;
+  else if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF16_BE))
+    size = 2;
+  else
+    size = 4;
+
+  if (read(stream, size) != size)
+    return 0;
+
+  data = 0;
+  if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF32_LE))
+    for (i = 0; i < size; i++) {
+      data <<= 8;
+      data |= stream[size - i - 1];
+    }
+  else
+    for (i = 0; i < size; i++) {
+      data <<= 8;
+      data |= stream[i];
+    }
+
+
+  if (data < 0x80) {
+    buffer[0] = data;
+    return 1;
+  }
+
+  if (data < 0x800) {
+    buffer[0] = 0xc0 | (data >> 6);
+    buffer[1] = 0x80 | (data & 0x3f);
+    return 2;
+  }
+
+  if (data < 0x10000) {
+    buffer[0] = 0xe0 | (data >> 12);
+    buffer[1] = 0x80 | ((data >> 6) & 0x3f);
+    buffer[2] = 0x80 | (data & 0x3f);
+    return 3;
+  }
+
+  die("mm_text_io_c: UTF32_* is not supported at the moment.");
+
+  return 0;
+}
+
+char *mm_text_io_c::gets(char *buffer, size_t max_size) {
+  int idx, len;
+  char utf8char[8];
+
+  if (max_size < 8)
+    return NULL;
+
+  idx = 0;
+  while (1) {
+    len = read_next_char(utf8char);
+    if (len == 0) {
+      buffer[idx] = 0;
+      if (idx == 0)
+        return NULL;
+      return buffer;
+    }
+
+    if ((len == 1) && (utf8char[0] == '\r'))
+      continue;
+
+    if ((len == 1) && (utf8char[0] == '\n')) {
+      buffer[idx] = 0;
+      return buffer;
+    }
+
+    memcpy(&buffer[idx], utf8char, len);
+    idx += len;
+
+    if (idx >= (max_size - 8))
+      return buffer;
+  }
+}
+
+string mm_text_io_c::getline() {
+  string s;
+  int len;
+  char utf8char[8];
+
+  while (1) {
+    memset(utf8char, 0, 8);
+
+    len = read_next_char(utf8char);
+    if (len == 0)
+      return s;
+
+    if ((len == 1) && (utf8char[0] == '\r'))
+      continue;
+
+    if ((len == 1) && (utf8char[0] == '\n'))
+      return s;
+
+    s += utf8char;
+  }
+}
+
+byte_order_e mm_text_io_c::get_byte_order() {
+  return byte_order;
+}
+
+void mm_text_io_c::setFilePointer(int64_t offset, seek_mode mode) {
+  if ((offset == 0) && (mode == seek_beginning))
+    mm_io_c::setFilePointer(bom_len, seek_beginning);
+  else
+    mm_io_c::setFilePointer(offset, seek_beginning);
+}
