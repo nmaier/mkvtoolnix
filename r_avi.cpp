@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.17 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.18 2003/04/17 12:31:51 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -220,6 +220,8 @@ avi_reader_c::~avi_reader_c() {
 
   if (old_chunk != NULL)
     free(old_chunk);
+
+  ti->private_data = NULL;
 }
 
 int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {

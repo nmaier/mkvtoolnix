@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.12 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.13 2003/04/17 12:31:51 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -119,6 +119,7 @@ ogm_reader_c::~ogm_reader_c() {
   }
   if (sdemuxers != NULL)
     free(sdemuxers);
+  ti->private_data = NULL;
 }
 
 /*
