@@ -201,7 +201,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    catom = &GetEmptyChild<KaxChapterAtom>(*m);
+    catom = &AddEmptyChild<KaxChapterAtom>(*m);
     pdata->parents->push_back(catom);
 
     cuid = &GetChild<KaxChapterUID>(*catom);
@@ -272,7 +272,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    cd = &GetEmptyChild<KaxChapterDisplay>(*m);
+    cd = &AddEmptyChild<KaxChapterDisplay>(*m);
     pdata->parents->push_back(cd);
 
   } else if (!strcmp(name, "ChapterTrackNumber")) {

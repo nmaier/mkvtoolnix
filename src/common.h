@@ -360,4 +360,20 @@ template <typename type>type &GetNextEmptyChild(EbmlMaster &master,
 	return *(static_cast<type *>(e));
 }
 
+template <typename type>type &AddEmptyChild(EbmlMaster &master) {
+  EbmlElement *e;
+  EbmlMaster *m;
+
+  e = new type;
+  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+    while (m->ListSize() > 0) {
+      delete (*m)[0];
+      m->Remove(0);
+    }
+  }
+  master.PushElement(*e);
+
+	return *(static_cast<type *>(e));
+}
+
 #endif // __COMMON_H
