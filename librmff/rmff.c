@@ -363,7 +363,9 @@ open_file_for_writing(const char *path,
   file->internal = safecalloc(sizeof(rmff_file_internal_t));
 
   /* save allowed & perfect play */
-  rmff_put_uint16_be(&file->prop_header.flags, 1 | 2);
+  rmff_put_uint16_be(&file->prop_header.flags,
+                     RMFF_FILE_FLAG_SAVE_ENABLED |
+                     RMFF_FILE_FLAG_PERFECT_PLAY);
 
   clear_error();
   return file;
@@ -407,8 +409,10 @@ rmff_close_file(rmff_file_t *file) {
     return;
 
   safefree(file->name);
-  for (i = 0; i < file->num_tracks; i++)
-    rmff_free_track_data(&file->tracks[i]);
+  for (i = 0; i < file->num_tracks; i++) {
+    rmff_free_track_data(file->tracks[i]);
+    safefree(file->tracks[i]);
+  }
   safefree(file->tracks);
   safefree(file->cont_header.title);
   safefree(file->cont_header.author);
@@ -496,7 +500,7 @@ rmff_read_headers(rmff_file_t *file) {
   rmff_prop_t *prop;
   rmff_cont_t *cont;
   rmff_mdpr_t *mdpr;
-  rmff_track_t track;
+  rmff_track_t *track;
   real_video_props_t *rvp;
   real_audio_v4_props_t *ra4p;
   rmff_file_internal_t *fint;
@@ -576,11 +580,11 @@ rmff_read_headers(rmff_file_t *file) {
       file->cont_header_present = 1;
 
     } else if (object_id == rmffFOURCC('M', 'D', 'P', 'R')) {
-      memset(&track, 0, sizeof(rmff_track_t));
-      track.file = (struct rmff_file_t *)file;
-      mdpr = &track.mdpr_header;
+      track = (rmff_track_t *)safecalloc(sizeof(rmff_track_t));
+      track->file = (struct rmff_file_t *)file;
+      mdpr = &track->mdpr_header;
       read_uint16_be_to(&mdpr->id);
-      track.id = rmff_get_uint16_be(&mdpr->id);
+      track->id = rmff_get_uint16_be(&mdpr->id);
       read_uint32_be_to(&mdpr->max_bit_rate);
       read_uint32_be_to(&mdpr->avg_bit_rate);
       read_uint32_be_to(&mdpr->max_packet_size);
@@ -609,21 +613,21 @@ rmff_read_headers(rmff_file_t *file) {
       ra4p = (real_audio_v4_props_t *)mdpr->type_specific_data;
       if ((size >= sizeof(real_video_props_t)) &&
           (get_fourcc(&rvp->fourcc1) == rmffFOURCC('V', 'I', 'D', 'O')))
-        track.type = RMFF_TRACK_TYPE_VIDEO;
+        track->type = RMFF_TRACK_TYPE_VIDEO;
       else if ((size >= sizeof(real_audio_v4_props_t)) &&
                (get_fourcc(&ra4p->fourcc1) ==
                 rmffFOURCC('.', 'r', 'a', 0xfd))) {
-        track.type = RMFF_TRACK_TYPE_AUDIO;
+        track->type = RMFF_TRACK_TYPE_AUDIO;
         if ((rmff_get_uint16_be(&ra4p->version1) == 5) &&
             (size < sizeof(real_audio_v5_props_t)))
           return set_error(RMFF_ERR_DATA, "RealAudio v5 data indicated but "
                            "data too small", RMFF_ERR_DATA);
       }
 
-      track.internal = safecalloc(sizeof(rmff_track_internal_t));
+      track->internal = safecalloc(sizeof(rmff_track_internal_t));
       file->tracks =
-        (rmff_track_t *)saferealloc(file->tracks, (file->num_tracks + 1) *
-                                    sizeof(rmff_track_t));
+        (rmff_track_t **)saferealloc(file->tracks, (file->num_tracks + 1) *
+                                     sizeof(rmff_track_t *));
       file->tracks[file->num_tracks] = track;
       file->num_tracks++;
 
@@ -799,9 +803,9 @@ rmff_set_track_data(rmff_track_t *track,
 }
 
 void
-rmff_set_track_specific_data(rmff_track_t *track,
-                             const unsigned char *data,
-                             uint32_t size) {
+rmff_set_type_specific_data(rmff_track_t *track,
+                            const unsigned char *data,
+                            uint32_t size) {
   if (track == NULL)
     return;
   if (data != track->mdpr_header.type_specific_data) {
@@ -815,7 +819,7 @@ rmff_set_track_specific_data(rmff_track_t *track,
 rmff_track_t *
 rmff_add_track(rmff_file_t *file,
                int create_index) {
-  rmff_track_t track;
+  rmff_track_t *track;
   rmff_track_internal_t *tint;
   int i, id, found;
 
@@ -826,27 +830,27 @@ rmff_add_track(rmff_file_t *file,
   do {
     found = 0;
     for (i = 0; i < file->num_tracks; i++)
-      if (file->tracks[i].id == id) {
+      if (file->tracks[i]->id == id) {
         found = 1;
         id++;
         break;
       }
   } while (found);
 
-  memset(&track, 0, sizeof(rmff_track_t));
-  track.id = id;
-  track.file = file;
+  track = (rmff_track_t *)safecalloc(sizeof(rmff_track_t));
+  track->id = id;
+  track->file = file;
   tint = (rmff_track_internal_t *)safecalloc(sizeof(rmff_track_internal_t));
   tint->index_this = create_index;
-  track.internal = tint;
+  track->internal = tint;
 
   file->tracks =
-    (rmff_track_t *)saferealloc(file->tracks, (file->num_tracks + 1) *
-                                sizeof(rmff_track_t));
+    (rmff_track_t **)saferealloc(file->tracks, (file->num_tracks + 1) *
+                                 sizeof(rmff_track_t *));
   file->tracks[file->num_tracks] = track;
   file->num_tracks++;
 
-  return &file->tracks[file->num_tracks - 1];
+  return track;
 }
 
 void
@@ -1075,7 +1079,7 @@ rmff_write_headers(rmff_file_t *file) {
   }
 
   for (i = 0; i < file->num_tracks; i++) {
-    bw = write_mdpr_header(&file->tracks[i]);
+    bw = write_mdpr_header(file->tracks[i]);
     if (bw < RMFF_ERR_OK)
       return bw;
   }
@@ -1119,7 +1123,7 @@ rmff_fix_headers(rmff_file_t *file) {
   rmff_put_uint16_be(&prop->num_streams, file->num_tracks);
 
   for (i = 0; i < file->num_tracks; i++) {
-    track = &file->tracks[i];
+    track = file->tracks[i];
     mdpr = &track->mdpr_header;
     tint = (rmff_track_internal_t *)track->internal;
 
@@ -1238,8 +1242,8 @@ rmff_find_track_with_id(rmff_file_t *file,
   if (file == 0)
     return (rmff_track_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
   for (i = 0; i < file->num_tracks; i++)
-    if (file->tracks[i].id == id)
-      return &file->tracks[i];
+    if (file->tracks[i]->id == id)
+      return file->tracks[i];
   return NULL;
 }
 
@@ -1262,7 +1266,7 @@ rmff_write_index(rmff_file_t *file) {
 
   fint->num_index_chunks = 0;
   for (i = 0; i < file->num_tracks; i++)
-    if (file->tracks[i].num_index_entries > 0)
+    if (file->tracks[i]->num_index_entries > 0)
       fint->num_index_chunks++;
 
   if (fint->num_index_chunks == 0)
@@ -1271,7 +1275,7 @@ rmff_write_index(rmff_file_t *file) {
   io->seek(fh, 0, SEEK_END);
 
   for (i = 0; i < file->num_tracks; i++) {
-    track = &file->tracks[i];
+    track = file->tracks[i];
     tint = (rmff_track_internal_t *)track->internal;
     if (track->num_index_entries > 0) {
       pos = io->tell(fh);
