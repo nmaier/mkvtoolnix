@@ -361,11 +361,9 @@ main(int argc,
 #endif
 
 #if defined(HAVE_LIBINTL_H)
-  if ((setlocale(LC_CTYPE, "") == NULL) ||
-      (setlocale(LC_MESSAGES, "") == NULL))
+  if (setlocale(LC_MESSAGES, "") == NULL)
     mxerror("The locale could not be set properly. Check the "
-            "LANG, LC_ALL, LC_CTYPE and LC_MESSAGES environment "
-            "variables.\n");
+            "LANG, LC_ALL and LC_MESSAGES environment variables.\n");
   bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
   textdomain("mkvtoolnix");
 #endif

@@ -30,6 +30,24 @@
 
 #include "config.h"
 
+/* i18n stuff */
+#if defined(HAVE_LIBINTL_H)
+# include <libintl.h>
+# if !defined _
+#  define _(s) gettext(s)
+# endif
+# if !defined N_
+#  define N_(s) s
+# endif
+#else /* HAVE_LIBINTL_H */
+# if !defined _
+#  define _(s) (s)
+# endif
+# if !defined N_
+#  define N_(s) s
+# endif
+#endif
+
 #define VERSIONINFO "mkvmerge v" VERSION
 #define BUGMSG _("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \

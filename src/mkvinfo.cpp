@@ -2818,14 +2818,12 @@ console_main(int argc,
 
 void
 setup() {
-#if !defined(COMP_MSC)
+#if defined(HAVE_LIBINTL_H)
   if (setlocale(LC_MESSAGES, "") == NULL)
     mxerror("Could not set the locale properly. Check the "
             "LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-# if defined(HAVE_LIBINTL_H)
   bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
   textdomain("mkvtoolnix");
-# endif // HAVE_LIBINTL_H
 #endif
 
   cc_local_utf8 = utf8_init(NULL);

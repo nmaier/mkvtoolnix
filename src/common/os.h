@@ -77,22 +77,4 @@
 # define ARCH_LITTLEENDIAN
 #endif
 
-/* i18n stuff */
-#if defined(HAVE_LIBINTL_H)
-# include <libintl.h>
-# if !defined _
-#  define _(s) gettext(s)
-# endif
-# if !defined N_
-#  define N_(s) s
-# endif
-#else /* HAVE_LIBINTL_H */
-# if !defined _
-#  define _(s) (s)
-# endif
-# if !defined N_
-#  define N_(s) s
-# endif
-#endif
-
 #endif

@@ -63,27 +63,44 @@ LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
 CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 
+ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard librmff/*.c) \
+		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
+		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
+		$(wildcard src/mmg/*.cpp)
+
+ifeq ($(V),1)
+  Q =
+else
+  Q = @
+endif
+
 # Some general rules
 %.o: %.cpp
+	@echo '     CXX ' $<
 	@if echo $@ | grep src/common > /dev/null 2>&1; then \
-		echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
 		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
 	else \
-		echo $(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
 		$(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
 	fi
 
 %.o: %.c
-	$(CCOMPILE) -c -o $@ $<
+	@echo '      CC ' $<
+	$(Q)$(CCOMPILE) -c -o $@ $<
+
+%.mo: %.po
+	@echo '  MSGFMT ' $<
+	$(Q)msgfmt -o $@ $<
 
 clean:
-	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a */*/*.dll */*.exe
+	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a */*/*.dll src/*.exe src/mmg/*.exe
 
 depend:
 	@echo Calculating dependecies:
 	@rm -f .depend
 	@touch .depend
-	@for i in */*.c */*.cpp */*/*.cpp; do \
+	@for i in $(ALL_SOURCES); do \
 		o="`echo $$i | sed -e 's/\.c$$/.o/' -e 's/\.cpp$$/.o/'`" ; \
 		echo '  ' $$i: $$o ; \
 		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
@@ -94,6 +111,12 @@ config.h: configure.in
 	@echo configure.in is newer than config.h. Re-run autogen.sh.
 	@false
 
+Makefile: Makefile.mingw
+	@echo Makefile.mingw is newer than Makefile. Copying Makefile.mingw to
+	@echo Makefile. Re-run 'make' now.
+	@cp Makefile.mingw Makefile
+	@false
+
 #
 # avilib-0.6.10
 #
@@ -102,9 +125,11 @@ libavi_SOURCES = $(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp)
 libavi_OBJECTS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(libavi_SOURCES)))
 
 avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libavi_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libavi_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # librmff
@@ -113,9 +138,11 @@ librmff_SOURCES = $(wildcard librmff/*.c)
 librmff_OBJECTS := $(patsubst %.c,%.o,$(librmff_SOURCES))
 
 librmff/librmff.a: $(librmff_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(librmff_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(librmff_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src/common
@@ -125,13 +152,16 @@ libmtxcommon_SOURCES = $(wildcard src/common/*.cpp)
 libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
 
 src/common/libmtxcommon.dll: $(libmtxcommon_OBJECTS)
-	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
+	@echo '  LD/DLL ' $@
+	$(Q)$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
 		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml -lexpat
 
 src/common/libmtxcommon.a: $(libmtxcommon_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxcommon_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmtxcommon_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src/input
@@ -141,9 +171,11 @@ libmtxinput_SOURCES = $(wildcard src/input/*.cpp)
 libmtxinput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxinput_SOURCES))
 
 src/input/libmtxinput.a: $(libmtxinput_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxinput_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmtxinput_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src/output
@@ -153,9 +185,11 @@ libmtxoutput_SOURCES = $(wildcard src/output/*.cpp)
 libmtxoutput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxoutput_SOURCES))
 
 src/output/libmtxoutput.a: $(libmtxoutput_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxoutput_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmtxoutput_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src
@@ -198,19 +232,24 @@ mmg_LDADD = -lmtxcommon -lmatroska -lebml -liconv -lexpat \
 		-mwindows
 
 src/mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
-	$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
 
 src/mkvinfo: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
-	$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
 src/mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
-	$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
 
 src/base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
-	$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
 
 src/mmg/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
-	$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
 
 #
 # include dependency files if they exist
