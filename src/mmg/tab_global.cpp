@@ -500,9 +500,18 @@ tab_global::validate_settings() {
           return false;
         }
 
-      } else if ((s.length() != 8) || (s[2] != ':') || (s[5] != ':') ||
-                 !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
-                 !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7])) {
+      } else if (((s.length() == 8) &&
+                  ((s[2] != ':') || (s[5] != ':') ||
+                   !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
+                   !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7])))
+                 ||
+                 ((s.length() == 12) &&
+                  ((s[2] != ':') || (s[5] != ':') || (s[8] != '.') ||
+                   !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
+                   !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7]) ||
+                   !isdigit(s[9]) || !isdigit(s[10]) || !isdigit(s[11])))
+                 ||
+                 ((s.length() != 8) && (s.length() != 12))) {
         wxMessageBox(wxT("The format of the split time is invalid."),
                      wxT("mkvmerge GUI error"),
                      wxOK | wxCENTER | wxICON_ERROR);

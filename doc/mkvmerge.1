@@ -115,11 +115,12 @@ offer any additional value for players at the moment.
 .LP
 File splitting and linking (more global options):
 .TP
-\fB\-\-split\fR <\fId[k|m|g]\fR> or \fB\-\-split\fR <\fIHH:MM:SS\fR|\fIns\fR>
+\fB\-\-split\fR <\fId[k|m|g]\fR> or \fB\-\-split\fR <\fIHH:MM:SS.mmm\fR|\fIns\fR>
 Splits the output file after a given size or a given time. For splitting after
 a specific size the parameter \fId\fR may end with k, m or g to indicate
 that the size is in KB, MB or GB respectively. For time-based splitting use
-the form HH:MM:SS or add 's' to the number of seconds \fIn\fR after which the
+the form HH:MM:SS.mmm for specifying the duration in milliseconds, HH:MM:SS or
+a number \fIn\fR followed by 's' for the duration in seconds after which the
 file should be split.
 .br
 For this splitting mode the output filename is treated differently than for

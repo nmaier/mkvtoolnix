@@ -812,11 +812,18 @@ parse_split(const char *arg) {
   s = safestrdup(arg);
 
   // HH:MM:SS
-  if ((strlen(s) == 8) && (s[2] == ':') && (s[5] == ':') &&
+  if (((strlen(s) == 8) || (strlen(s) == 12)) &&
+      (s[2] == ':') && (s[5] == ':') &&
       isdigit(s[0]) && isdigit(s[1]) && isdigit(s[3]) &&
       isdigit(s[4]) && isdigit(s[6]) && isdigit(s[7])) {
-    int secs, mins, hours;
+    int secs, mins, hours, msecs;
 
+    if (strlen(s) == 12) {
+      if ((s[8] != '.') || !parse_int(&s[9], msecs))
+        mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
+      s[8] = 0;
+    } else
+      msecs = 0;
     s[2] = 0;
     s[5] = 0;
     parse_int(s, hours);
@@ -827,7 +834,7 @@ parse_split(const char *arg) {
         (secs < 0) || (secs > 59) || (split_after < 10))
       mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
 
-    split_after *= 1000;
+    split_after = split_after * 1000 + msecs;
     split_by_time = true;
     safefree(s);
     return;
