@@ -60,6 +60,8 @@ end_edition_entry(void *pdata) {
       create_unique_uint32(UNIQUE_EDITION_IDS);
     m->PushElement(*euid);
   }
+  GetChild<KaxEditionFlagDefault>(*m);
+  GetChild<KaxEditionFlagHidden>(*m);
 }
 
 static void
@@ -105,6 +107,9 @@ end_chapter_atom(void *pdata) {
       create_unique_uint32(UNIQUE_CHAPTER_IDS);
     m->PushElement(*cuid);
   }
+
+  GetChild<KaxChapterFlagHidden>(*m);
+  GetChild<KaxChapterFlagEnabled>(*m);
 }
 
 static void
@@ -298,7 +303,7 @@ parse_xml_chapters(mm_text_io_c *in,
 
   try {
     m = parse_xml_elements("Chapter", chapter_elements, in);
-    chapters = dynamic_cast<KaxChapters *>(m);
+    chapters = dynamic_cast<KaxChapters *>(sort_ebml_master(m));
     assert(chapters != NULL);
     chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc,
                                             offset);

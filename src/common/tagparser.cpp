@@ -75,7 +75,7 @@ parse_xml_tags(const char *name,
   try {
     m = parse_xml_elements("Tag", tag_elements, in);
     if (m != NULL) {
-      new_tags = dynamic_cast<KaxTags *>(m);
+      new_tags = dynamic_cast<KaxTags *>(sort_ebml_master(m));
       assert(new_tags != NULL);
       while (new_tags->ListSize() > 0) {
         tags->PushElement(*(*new_tags)[0]);
