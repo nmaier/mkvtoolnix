@@ -431,7 +431,7 @@ get_uint64_be(const void *buf) {
 
 void
 put_uint16_le(void *buf,
-           uint16_t value) {
+              uint16_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -442,7 +442,7 @@ put_uint16_le(void *buf,
 
 void
 put_uint32_le(void *buf,
-           uint32_t value) {
+              uint32_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -455,7 +455,7 @@ put_uint32_le(void *buf,
 
 void
 put_uint64_le(void *buf,
-           uint64_t value) {
+              uint64_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;

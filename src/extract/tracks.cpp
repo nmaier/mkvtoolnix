@@ -532,8 +532,8 @@ create_output_files() {
           put_uint16_le(&wh->common.wChannels, tracks[i].a_channels);
           put_uint32_le(&wh->common.dwSamplesPerSec, (int)tracks[i].a_sfreq);
           put_uint32_le(&wh->common.dwAvgBytesPerSec,
-                     tracks[i].a_channels * (int)tracks[i].a_sfreq *
-                     tracks[i].a_bps / 8);
+                        tracks[i].a_channels * (int)tracks[i].a_sfreq *
+                        tracks[i].a_bps / 8);
           put_uint16_le(&wh->common.wBlockAlign, 4);
           put_uint16_le(&wh->common.wBitsPerSample, tracks[i].a_bps);
           memcpy(&wh->data.id, "data", 4);
@@ -1079,14 +1079,14 @@ close_files() {
               1000000000ll;
           mxverb(2, "ladu: %lld\n", tracks[i].last_duration);
           put_uint32_le(&tta_header.data_length,
-                     (uint32_t)(tracks[i].a_sfreq *
-                                (TTA_FRAME_TIME *
-                                 (tracks[i].frame_sizes.size() - 1) +
-                                 (double)tracks[i].last_duration /
-                                 1000000000.0l)));
+                        (uint32_t)(tracks[i].a_sfreq *
+                                   (TTA_FRAME_TIME *
+                                    (tracks[i].frame_sizes.size() - 1) +
+                                    (double)tracks[i].last_duration /
+                                    1000000000.0l)));
           put_uint32_le(&tta_header.crc,
-                     calc_crc32((unsigned char *)&tta_header,
-                                sizeof(tta_file_header_t) - 4));
+                        calc_crc32((unsigned char *)&tta_header,
+                                   sizeof(tta_file_header_t) - 4));
           tracks[i].out->write(&tta_header, sizeof(tta_file_header_t));
           buffer = (unsigned char *)safemalloc(tracks[i].frame_sizes.size() *
                                                4);

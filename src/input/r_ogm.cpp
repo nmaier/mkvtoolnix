@@ -77,9 +77,9 @@ extract_vorbis_comments(unsigned char *buffer,
   comments = NULL;
   try {
     in.skip(7);                 // 0x03 "vorbis"
-    n = in.read_uint32_le();       // vendor_length
+    n = in.read_uint32_le();    // vendor_length
     in.skip(n);                 // vendor_string
-    n = in.read_uint32_le();       // user_comment_list_length
+    n = in.read_uint32_le();    // user_comment_list_length
     comments = (char **)safemalloc((n + 1) * sizeof(char *));
     memset(comments, 0, (n + 1) * sizeof(char *));
     for (i = 0; i < n; i++) {
