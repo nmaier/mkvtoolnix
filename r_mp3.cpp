@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.3 2003/02/25 13:25:51 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.4 2003/02/26 19:20:26 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,6 @@
 
 #include "common.h"
 #include "error.h"
-#include "mkvmerge.h"
 #include "queue.h"
 #include "r_mp3.h"
 #include "p_mp3.h"

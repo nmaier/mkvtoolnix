@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.3 2003/02/16 17:04:39 mosu Exp $
+    \version \$Id: queue.h,v 1.4 2003/02/26 19:20:26 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,21 +31,22 @@ typedef struct q_page {
 } q_page_t;
 
 class q_c: public generic_packetizer_c {
-  private:
-    struct q_page    *first;
-    struct q_page    *current;
+ private:
+  u_int64_t      id;
+  struct q_page *first;
+  struct q_page *current;
+  
+ public:
+  q_c() throw (error_c);
+  virtual ~q_c();
     
-  public:
-    q_c() throw (error_c);
-    virtual ~q_c();
+  virtual u_int64_t        add_packet(char *data, int lenth,
+                                      u_int64_t timestamp, u_int64_t ref = 0);
+  virtual packet_t        *get_packet();
+  virtual int              packet_available();
+  virtual stamp_t          get_smallest_timestamp();
     
-    virtual int              add_packet(char *data, int lenth,
-                                        u_int64_t timestamp, int is_key = 0);
-    virtual packet_t        *get_packet();
-    virtual int              packet_available();
-    virtual stamp_t          get_smallest_timestamp();
-    
-    virtual long             get_queued_bytes();
+  virtual long             get_queued_bytes();
 };
 
 #endif  // __QUEUE_H

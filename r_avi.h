@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.5 2003/02/16 17:04:39 mosu Exp $
+    \version \$Id: r_avi.h,v 1.6 2003/02/26 19:20:26 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -46,42 +46,41 @@ typedef struct avi_demuxer_t {
 } avi_demuxer_t;
 
 class avi_reader_c: public generic_reader_c {
-  private:
-    char               *chunk;
-    avi_t              *avi;
-    video_packetizer_c *vpacketizer;
-    avi_demuxer_t      *ademuxers;
-    double              fps;
-    int                 frames;
-    unsigned char      *astreams, *vstreams;
-    char              **comments;
-    int                 max_frame_size;
-    int                 act_wchar;
-    audio_sync_t        async;
-    range_t             range;
-    char               *old_chunk;
-    int                 old_key, old_nread;
-    int                 video_done, maxframes;
-    int                 is_divx, rederive_keyframes;
+ private:
+  char               *chunk;
+  avi_t              *avi;
+  video_packetizer_c *vpacketizer;
+  avi_demuxer_t      *ademuxers;
+  double              fps;
+  int                 frames;
+  unsigned char      *astreams, *vstreams;
+  char              **comments;
+  int                 max_frame_size;
+  int                 act_wchar;
+  audio_sync_t        async;
+  range_t             range;
+  char               *old_chunk;
+  int                 old_key, old_nread;
+  int                 video_done, maxframes;
+  int                 is_divx, rederive_keyframes;
      
-  public:
-    avi_reader_c(char *fname, unsigned char *astreams,
-                 unsigned char *vstreams, audio_sync_t *nasync,
-                 range_t *nrange, char *nfourcc) throw (error_c);
-    virtual ~avi_reader_c();
+ public:
+  avi_reader_c(char *fname, unsigned char *astreams,
+               unsigned char *vstreams, audio_sync_t *nasync,
+               range_t *nrange, char *nfourcc) throw (error_c);
+  virtual ~avi_reader_c();
 
-    virtual int       read();
-    virtual packet_t *get_packet();
-    virtual int       display_priority();
-    virtual void      display_progress();
+  virtual int       read();
+  virtual packet_t *get_packet();
+  virtual int       display_priority();
+  virtual void      display_progress();
 
-    static int        probe_file(FILE *file, u_int64_t size);
+  static int        probe_file(FILE *file, u_int64_t size);
     
-
-  private:
-    virtual int       add_audio_demuxer(avi_t *avi, int aid);
-    virtual int       is_keyframe(unsigned char *data, long size,
-                                  int suggestion);
+ private:
+  virtual int       add_audio_demuxer(avi_t *avi, int aid);
+  virtual int       is_keyframe(unsigned char *data, long size,
+                                int suggestion);
 };
 
 #endif  // __R_AVI_H

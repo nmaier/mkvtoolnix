@@ -14,8 +14,8 @@
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
-#ifndef __R_OGM_
-#define __R_OGM_
+#ifndef __R_OGM_H
+#define __R_OGM_H
 
 #include <stdio.h>
 
@@ -44,52 +44,52 @@ typedef struct ogm_demuxer_t {
 } ogm_demuxer_t;
 
 class ogm_reader_c: public generic_reader_c {
-  private:
-    ogg_sync_state    oy;
-    unsigned char    *astreams, *vstreams, *tstreams;
-    FILE             *file;
-    char             *filename;
-    int               act_wchar;
-    ogm_demuxer_t    *sdemuxers;
-    int               nastreams, nvstreams, ntstreams, numstreams;
-    audio_sync_t      async;
-    range_t           range;
-    char            **comments;
-    char             *fourcc;
-    int               o_eos;
+ private:
+  ogg_sync_state    oy;
+  unsigned char    *astreams, *vstreams, *tstreams;
+  FILE             *file;
+  char             *filename;
+  int               act_wchar;
+  ogm_demuxer_t    *sdemuxers;
+  int               nastreams, nvstreams, ntstreams, numstreams;
+  audio_sync_t      async;
+  range_t           range;
+  char            **comments;
+  char             *fourcc;
+  int               o_eos;
      
-  public:
-    ogm_reader_c(char *fname, unsigned char *astreams,
-                 unsigned char *vstreams, unsigned char *tstreams,
-                 audio_sync_t *nasync, range_t *nrange, char **ncomments,
-                 char *nfourcc) throw (error_c);
-    virtual ~ogm_reader_c();
+ public:
+  ogm_reader_c(char *fname, unsigned char *astreams,
+               unsigned char *vstreams, unsigned char *tstreams,
+               audio_sync_t *nasync, range_t *nrange, char **ncomments,
+               char *nfourcc) throw (error_c);
+  virtual ~ogm_reader_c();
 
-    virtual int                   read();
-    virtual int                   serial_in_use(int);
-    virtual ogmmerge_page_t      *get_page();
-    virtual ogmmerge_page_t      *get_header_page(int header_type =
-                                                  PACKET_TYPE_HEADER);
+  virtual int                   read();
+  virtual int                   serial_in_use(int);
+  virtual ogmmerge_page_t      *get_page();
+  virtual ogmmerge_page_t      *get_header_page(int header_type =
+                                                PACKET_TYPE_HEADER);
 
-    virtual void                  reset();
-    virtual int                   display_priority();
-    virtual void                  display_progress();
+  virtual void                  reset();
+  virtual int                   display_priority();
+  virtual void                  display_progress();
+  
+  virtual void                  overwrite_eos(int no_eos);
+  virtual generic_packetizer_c *set_packetizer(generic_packetizer_c *np);
+  
+  static int                    probe_file(FILE *file, u_int64_t size);
     
-    virtual void                  overwrite_eos(int no_eos);
-    virtual generic_packetizer_c *set_packetizer(generic_packetizer_c *np);
-    
-    static int                    probe_file(FILE *file, u_int64_t size);
-    
-  private:
-    virtual ogm_demuxer_t        *find_demuxer(int serialno);
-    virtual int                   demuxing_requested(unsigned char *, int);
-    virtual void                  flush_packetizers();
-    virtual int                   read_page(ogg_page *);
-    virtual void                  add_new_demuxer(ogm_demuxer_t *);
-    virtual int                   pages_available();
-    virtual void                  handle_new_stream(ogg_page *);
-    virtual void                  process_page(ogg_page *);
+ private:
+  virtual ogm_demuxer_t        *find_demuxer(int serialno);
+  virtual int                   demuxing_requested(unsigned char *, int);
+  virtual void                  flush_packetizers();
+  virtual int                   read_page(ogg_page *);
+  virtual void                  add_new_demuxer(ogm_demuxer_t *);
+  virtual int                   pages_available();
+  virtual void                  handle_new_stream(ogg_page *);
+  virtual void                  process_page(ogg_page *);
 };
 
 
-#endif  /* __R_OGM_*/
+#endif  // __R_OGM_H

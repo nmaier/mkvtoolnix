@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.3 2003/02/23 21:36:22 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.4 2003/02/26 19:20:26 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,43 +34,41 @@ extern int track_number;
 struct packet_t;
 
 typedef class generic_packetizer_c {
-  protected:
-    int serialno;
-    void *private_data;
-    int private_data_size;
-  public:
-    LIBMATROSKA_NAMESPACE::KaxTrackEntry *track_entry;
+ protected:
+  int serialno;
+  void *private_data;
+  int private_data_size;
+ public:
+  LIBMATROSKA_NAMESPACE::KaxTrackEntry *track_entry;
 
-    generic_packetizer_c();
-    virtual ~generic_packetizer_c();
-    virtual int       packet_available() = 0;
-    virtual packet_t *get_packet() = 0;
-    virtual void      set_header() = 0;
-    virtual stamp_t   get_smallest_timestamp() = 0;
-    virtual void      set_private_data(void *data, int size);
+  generic_packetizer_c();
+  virtual ~generic_packetizer_c();
+  virtual int       packet_available() = 0;
+  virtual packet_t *get_packet() = 0;
+  virtual void      set_header() = 0;
+  virtual stamp_t   get_smallest_timestamp() = 0;
+  virtual void      set_private_data(void *data, int size);
 } generic_packetizer_c;
  
 typedef class generic_reader_c {
-//  protected:
-//    vorbis_comment *chapter_info;
-  public:
-    generic_reader_c();
-    virtual ~generic_reader_c();
-    virtual int              read() = 0;
-    virtual packet_t        *get_packet() = 0;
-    virtual int              display_priority() = 0;
-    virtual void             display_progress() = 0;
-//    virtual void             set_chapter_info(vorbis_comment *info);
+ public:
+  generic_reader_c();
+  virtual ~generic_reader_c();
+  virtual int       read() = 0;
+  virtual packet_t *get_packet() = 0;
+  virtual int       display_priority() = 0;
+  virtual void      display_progress() = 0;
 } generic_reader_c;
 
 typedef struct packet_t {
   LIBMATROSKA_NAMESPACE::DataBuffer    *data_buffer;
   LIBMATROSKA_NAMESPACE::KaxBlockGroup *group;
   LIBMATROSKA_NAMESPACE::KaxBlock      *block;
+  LIBMATROSKA_NAMESPACE::KaxCluster    *cluster;
   char                                 *data;
   int                                   length;
   u_int64_t                             timestamp;
-  int                                   is_key;
+  u_int64_t                             id, ref;
   generic_packetizer_c                 *source;
 } packet_t;
 

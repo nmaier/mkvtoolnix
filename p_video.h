@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.2 2003/02/19 09:31:24 mosu Exp $
+    \version \$Id: p_video.h,v 1.3 2003/02/26 19:20:26 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,24 +25,24 @@
 #include "queue.h"
 
 class video_packetizer_c: public q_c {
-  private:
-    char    codec[5];
-    double  fps;
-    int     width, height;
-    int     bpp;
-    int     max_frame_size;
-    int     packetno, frames_output;
-    char   *tempbuf;
-    int     avi_compat_mode;
-    range_t range;
-  public:
-    video_packetizer_c(void *, int, char *, double, int, int, int, int,
-                       audio_sync_t *, range_t *nrange, int) throw (error_c);
-    virtual ~video_packetizer_c();
+ private:
+  char    codec[5];
+  double  fps;
+  int     width, height;
+  int     bpp;
+  int     max_frame_size;
+  int     packetno, frames_output;
+  char   *tempbuf;
+  int     avi_compat_mode;
+  range_t range;
+ public:
+  video_packetizer_c(void *, int, char *, double, int, int, int, int,
+                     audio_sync_t *, range_t *nrange, int) throw (error_c);
+  virtual ~video_packetizer_c();
     
-    virtual int  process(char *buf, int size, int num_frames, int key,
-                         int last_frame);
-    virtual void set_header();
+  virtual int  process(char *buf, int size, int num_frames, int key,
+                       int last_frame);
+  virtual void set_header();
 };
 
 #endif

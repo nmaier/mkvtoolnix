@@ -13,13 +13,13 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.3 2003/02/24 12:32:17 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.4 2003/02/26 19:20:26 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#ifndef __R_MP3_
-#define __R_MP3_
+#ifndef __R_MP3_H
+#define __R_MP3_H
 
 #include <stdio.h>
 
@@ -30,26 +30,25 @@
 #include "p_mp3.h"
 
 class mp3_reader_c: public generic_reader_c {
-  private:
-    unsigned char          *chunk;
-    FILE                   *file;
-    class mp3_packetizer_c *mp3packetizer;
-    u_int64_t               bytes_processed;
-    u_int64_t               size;
+ private:
+  unsigned char          *chunk;
+  FILE                   *file;
+  class mp3_packetizer_c *mp3packetizer;
+  u_int64_t               bytes_processed;
+  u_int64_t               size;
      
-  public:
-    mp3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
-      throw (error_c);
-    virtual ~mp3_reader_c();
+ public:
+  mp3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
+    throw (error_c);
+  virtual ~mp3_reader_c();
 
-    virtual int              read();
-    virtual packet_t        *get_packet();
+  virtual int       read();
+  virtual packet_t *get_packet();
 
-/*     virtual void             reset(); */
-    virtual int              display_priority();
-    virtual void             display_progress();
+  virtual int       display_priority();
+  virtual void      display_progress();
 
-    static int               probe_file(FILE *file, u_int64_t size);
+  static int        probe_file(FILE *file, u_int64_t size);
 };
 
-#endif  /* __R_MP3_*/
+#endif  // __R_MP3_H

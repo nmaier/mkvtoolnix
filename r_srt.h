@@ -14,8 +14,8 @@
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
-#ifndef __R_SRT_
-#define __R_SRT_
+#ifndef __R_SRT_H
+#define __R_SRT_H
 
 #include <stdio.h>
 
@@ -27,28 +27,28 @@
 #include "p_textsubs.h"
 
 class srt_reader_c: public generic_reader_c {
-  private:
-    char                   chunk[2048];
-    FILE                  *file;
-    textsubs_packetizer_c *textsubspacketizer;
-    int                    act_wchar;
+ private:
+  char                   chunk[2048];
+  FILE                  *file;
+  textsubs_packetizer_c *textsubspacketizer;
+  int                    act_wchar;
      
-  public:
-    srt_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
-                 char **ncomments) throw (error_c);
-    virtual ~srt_reader_c();
+ public:
+  srt_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
+               char **ncomments) throw (error_c);
+  virtual ~srt_reader_c();
 
-    virtual int              read();
-    virtual int              serial_in_use(int);
-    virtual ogmmerge_page_t *get_page();
-    virtual ogmmerge_page_t *get_header_page(int header_type =
-                                             PACKET_TYPE_HEADER);
+  virtual int              read();
+  virtual int              serial_in_use(int);
+  virtual ogmmerge_page_t *get_page();
+  virtual ogmmerge_page_t *get_header_page(int header_type =
+                                           PACKET_TYPE_HEADER);
     
-    virtual void             reset();
-    virtual int              display_priority();
-    virtual void             display_progress();
+  virtual void             reset();
+  virtual int              display_priority();
+  virtual void             display_progress();
 
-    static int               probe_file(FILE *file, u_int64_t size);
+  static int               probe_file(FILE *file, u_int64_t size);
 };
 
-#endif  /* __R_SRT_*/
+#endif  // __R_SRT_H

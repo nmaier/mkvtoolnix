@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.3 2003/02/16 17:04:39 mosu Exp $
+    \version \$Id: queue.cpp,v 1.4 2003/02/26 19:20:26 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,6 +34,7 @@
 q_c::q_c() throw (error_c) : generic_packetizer_c() {
   first = NULL;
   current = NULL;
+  id = 1;
 }
 
 q_c::~q_c() {
@@ -52,8 +53,8 @@ q_c::~q_c() {
   }
 }
 
-int q_c::add_packet(char *data, int length, u_int64_t timestamp,
-                    int is_key) {
+u_int64_t q_c::add_packet(char *data, int length, u_int64_t timestamp,
+                          u_int64_t ref) {
   q_page_t *qpage;
   
   if (data == NULL)
@@ -70,8 +71,10 @@ int q_c::add_packet(char *data, int length, u_int64_t timestamp,
   memcpy(qpage->pack->data, data, length);
   qpage->pack->length = length;
   qpage->pack->timestamp = timestamp;
-  qpage->pack->is_key = is_key;
+  qpage->pack->ref = ref;
   qpage->pack->source = this;
+  qpage->pack->id = id;
+  id++;
   qpage->next = NULL;
   if (current != NULL)
     current->next = qpage;
@@ -79,7 +82,7 @@ int q_c::add_packet(char *data, int length, u_int64_t timestamp,
     first = qpage;
   current = qpage;
 
-  return 0;
+  return id - 1;
 }
 
 packet_t *q_c::get_packet() {

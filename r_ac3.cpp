@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.4 2003/02/25 13:25:51 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.5 2003/02/26 19:20:26 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -29,7 +29,6 @@ extern "C" {
 
 #include "common.h"
 #include "error.h"
-#include "mkvmerge.h"
 #include "queue.h"
 #include "r_ac3.h"
 #include "p_ac3.h"

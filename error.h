@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: error.h,v 1.3 2003/02/16 17:04:38 mosu Exp $
+    \version \$Id: error.h,v 1.4 2003/02/26 19:20:26 mosu Exp $
     \brief class definitions for the error exception class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,13 +24,15 @@
 #include <malloc.h>
 #include <string.h>
 
+#include "common.h"
+
 class error_c {
-  private:
-    char *error;
-  public:
-    error_c(char *nerror) { error = strdup(nerror); };
-    ~error_c()            { free(error); };
-    char *get_error()     { return error; };
+ private:
+  char *error;
+ public:
+  error_c(char *nerror) { error = strdup(nerror); if (!error) die("strdup"); };
+  ~error_c()            { if (error) free(error); };
+  char *get_error()     { return error; };
 };
 
 #endif // __ERROR_H

@@ -14,8 +14,8 @@
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
-#ifndef __R_VOBSUB_
-#define __R_VOBSUB_
+#ifndef __R_VOBSUB_H
+#define __R_VOBSUB_H
 
 #include <stdio.h>
 
@@ -27,37 +27,37 @@
 #include "p_vobsub.h"
 
 class vobsub_reader_c: public generic_reader_c {
-  private:
-    char                  chunk[2048];
-    FILE                 *file, *subfile;
-    vobsub_packetizer_c  *vobsub_packetizer;
-    vobsub_packetizer_c **all_packetizers;
-    int                   num_packetizers;
-    int                   act_wchar;
-    audio_sync_t          async;
-    range_t               range;
-    char                **comments;
+ private:
+  char                  chunk[2048];
+  FILE                 *file, *subfile;
+  vobsub_packetizer_c  *vobsub_packetizer;
+  vobsub_packetizer_c **all_packetizers;
+  int                   num_packetizers;
+  int                   act_wchar;
+  audio_sync_t          async;
+  range_t               range;
+  char                **comments;
      
-  public:
-    vobsub_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
-                    char **ncomments) throw (error_c);
-    virtual ~vobsub_reader_c();
+ public:
+  vobsub_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange,
+                  char **ncomments) throw (error_c);
+  virtual ~vobsub_reader_c();
 
-    virtual int              read();
-    virtual int              serial_in_use(int);
-    virtual ogmmerge_page_t *get_page();
-    virtual ogmmerge_page_t *get_header_page(int header_type =
-                                             PACKET_TYPE_HEADER);
+  virtual int              read();
+  virtual int              serial_in_use(int);
+  virtual ogmmerge_page_t *get_page();
+  virtual ogmmerge_page_t *get_header_page(int header_type =
+                                           PACKET_TYPE_HEADER);
     
-    virtual void             reset();
-    virtual int              display_priority();
-    virtual void             display_progress();
+  virtual void             reset();
+  virtual int              display_priority();
+  virtual void             display_progress();
 
-    static int               probe_file(FILE *file, u_int64_t size);
-  private:
-    virtual void             add_vobsub_packetizer(int width, int height,
-                                                   char *palette, int langidx,
-                                                   char *id, int index);
+  static int               probe_file(FILE *file, u_int64_t size);
+ private:
+  virtual void             add_vobsub_packetizer(int width, int height,
+                                                 char *palette, int langidx,
+                                                 char *id, int index);
 };
 
-#endif  /* __R_VOBSUB_*/
+#endif  // __R_VOBSUB_H
