@@ -680,12 +680,12 @@ void
 kax_reader_c::handle_chapters(mm_io_c *io,
                               EbmlElement *l0,
                               int64_t pos) {
-  KaxChapters *chapters;
+  KaxChapters *tmp_chapters;
   EbmlElement *l1, *l2;
   int upper_lvl_el, i;
   bool found;
 
-  if (ti->no_chapters || (kax_chapters != NULL))
+  if (ti->no_chapters)
     return;
 
   found = false;
@@ -702,13 +702,18 @@ kax_reader_c::handle_chapters(mm_io_c *io,
   l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                            true);
 
-  if ((l1 != NULL) && (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId)) {
-    chapters = (KaxChapters *)l1;
+  if ((l1 != NULL) && is_id(l1, KaxChapters)) {
+    tmp_chapters = static_cast<KaxChapters *>(l1);
     l2 = NULL;
     upper_lvl_el = 0;
-    chapters->Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el,
+    tmp_chapters->Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el,
                    l2, true);
-    kax_chapters = copy_chapters(chapters);
+
+    if (chapters == NULL)
+      chapters = new KaxChapters;
+    for (i = 0; i < tmp_chapters->ListSize(); i++)
+      chapters->PushElement(*(*tmp_chapters)[i]);
+    tmp_chapters->RemoveAll();
 
     delete l1;
   } else if (l1 != NULL)

@@ -94,5 +94,7 @@ KaxEditionEntry *MTX_DLL_API find_edition_with_uid(KaxChapters &chapters,
 KaxChapterAtom *MTX_DLL_API find_chapter_with_uid(KaxChapters &chapters,
                                                   uint64_t uid);
 
+void MTX_DLL_API move_chapters_by_edition(KaxChapters &dst, KaxChapters &src);
+
 #endif // __CHAPTERS_H
 

@@ -147,6 +147,7 @@ static KaxAttachments *kax_as = NULL;
 
 static EbmlVoid *kax_sh_void = NULL;
 static EbmlVoid *kax_chapters_void = NULL;
+static int64_t max_chapter_size = 0;
 static EbmlVoid *void_after_track_headers = NULL;
 
 string chapter_file_name;
@@ -991,6 +992,57 @@ check_append_mapping() {
   }
 }
 
+/** \brief Add chapters from the readers and calculate the max size
+ *
+ * The reader do not add their chapters to the global chapter pool.
+ * This has to be done after creating the readers. Only the chapters
+ * of readers that aren't appended are put into the pool right away.
+ * The other chapters are added when a packetizer is appended because
+ * the chapter timecodes have to be adjusted by the length of the file
+ * the packetizer is appended to.
+ * This function also calculates the sum of all chapter sizes so that
+ * enough space can be allocated at the start of each output file.
+ */
+void
+calc_max_chapter_size() {
+  vector<filelist_t>::iterator file;
+  KaxChapters *chapters;
+
+  // Step 1: Add all chapters from files that are not being appended.
+  foreach(file, files) {
+    if (file->appending)
+      continue;
+    chapters = file->reader->chapters;
+    if (chapters == NULL)
+      continue;
+
+    if (kax_chapters == NULL)
+      kax_chapters = new KaxChapters;
+
+    move_chapters_by_edition(*kax_chapters, *chapters);
+    delete chapters;
+    file->reader->chapters = NULL;
+  }
+
+  // Step 2: Fix the mandatory elements and count the size of all chapters.
+  max_chapter_size = 0;
+  if (kax_chapters != NULL) {
+    fix_mandatory_chapter_elements(kax_chapters);
+    kax_chapters->UpdateSize(true);
+    max_chapter_size += kax_chapters->ElementSize();
+  }
+
+  foreach(file, files) {
+    chapters = file->reader->chapters;
+    if (chapters == NULL)
+      continue;
+
+    fix_mandatory_chapter_elements(chapters);
+    chapters->UpdateSize(true);
+    max_chapter_size += chapters->ElementSize();
+  }
+}
+
 /** \brief Creates the file readers
  *
  * For each file the appropriate file reader class is instantiated.
@@ -1084,6 +1136,8 @@ create_readers() {
       if (att->to_all_files)
         attachment_sizes_others += att->size;
     }
+
+    calc_max_chapter_size();
   }
 }
 
@@ -1232,29 +1286,11 @@ create_next_output_file() {
   cluster_helper->set_output(out);
   render_headers(out);
   render_attachments(out);
-  if (kax_chapters != NULL) {
-    fix_mandatory_chapter_elements(kax_chapters);
-    sort_ebml_master(kax_chapters);
-    if (splitting) {
-      kax_chapters_void = new EbmlVoid;
-      kax_chapters->UpdateSize(true);
-      kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
-      kax_chapters_void->Render(*out);
-      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
-        EbmlVoid evoid;
-        evoid.SetSize(100);
-        evoid.Render(*out);
-      }
-    } else {
-      chapters_in_this_file =
-        static_cast<KaxChapters *>(kax_chapters->Clone());
-      kax_chapters->Render(*out, true);
-      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
-        EbmlVoid evoid;
-        evoid.SetSize(100);
-        evoid.Render(*out);
-      }
-    }
+
+  if (max_chapter_size > 0) {
+    kax_chapters_void = new EbmlVoid;
+    kax_chapters_void->SetSize(max_chapter_size + 100);
+    kax_chapters_void->Render(*out);
   }
 
   add_tags_from_cue_chapters();
@@ -1346,9 +1382,9 @@ finish_file(bool last_file) {
   }
   out->restore_pos();
 
-  // If splitting is active: Select the chapters that lie in this file
-  // and render them in the space that was resesrved at the beginning.
-  if ((kax_chapters != NULL) && splitting) {
+  // Select the chapters that lie in this file and render them in the space
+  // that was resesrved at the beginning.
+  if (kax_chapters != NULL) {
     if (no_linking)
       offset = cluster_helper->get_timecode_offset();
     else
@@ -1357,10 +1393,12 @@ finish_file(bool last_file) {
     end = cluster_helper->get_max_timecode() + offset;
 
     chapters_here = copy_chapters(kax_chapters);
-    chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
-                                                 offset);
+    if (splitting)
+      chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
+                                                   offset);
     if (chapters_here != NULL) {
-      kax_chapters_void->ReplaceWith(*chapters_here, *out, true, false);
+      sort_ebml_master(chapters_here);
+      kax_chapters_void->ReplaceWith(*chapters_here, *out, true, true);
       chapters_in_this_file =
         static_cast<KaxChapters *>(chapters_here->Clone());
     }

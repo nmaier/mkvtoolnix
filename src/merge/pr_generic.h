@@ -23,6 +23,7 @@
 
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
+#include <matroska/KaxChapters.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTags.h>
@@ -249,6 +250,7 @@ public:
   vector<generic_packetizer_c *> reader_packetizers;
   vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
   int64_t max_timecode_seen;
+  KaxChapters *chapters;
   bool appending;
 
 public:

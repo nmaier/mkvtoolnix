@@ -1022,6 +1022,7 @@ generic_reader_c::generic_reader_c(track_info_c *nti) {
   ti = new track_info_c(*nti);
   max_timecode_seen = 0;
   appending = false;
+  chapters = NULL;
 
   add_all_requested_track_ids2(atracks);
   add_all_requested_track_ids2(vtracks);
@@ -1048,6 +1049,8 @@ generic_reader_c::~generic_reader_c() {
   for (i = 0; i < reader_packetizers.size(); i++)
     delete reader_packetizers[i];
   delete ti;
+  if (chapters != NULL)
+    delete chapters;
 }
 
 int

@@ -569,3 +569,55 @@ find_chapter_with_uid(KaxChapters &chapters,
 
   return NULL;
 }
+
+/** \brief Move all chapter atoms to another container keeping editions intact
+ *
+ * This function moves all chapter atoms from \a src to \a dst.
+ * If there's already an edition in \a dst with the same UID as the current
+ * one in \a src, then all atoms will be put into that edition. Otherwise
+ * the complete edition will simply be moved over.
+ *
+ * After processing \a src will be empty.
+ *
+ * \param dst The container the atoms and editions will be put into.
+ * \param src The container the atoms and editions will be taken from.
+ */
+void
+move_chapters_by_edition(KaxChapters &dst,
+                         KaxChapters &src) {
+  int i, k;
+
+  for (i = 0; i < src.ListSize(); i++) {
+    KaxEditionEntry *ee_dst;
+    KaxEditionUID *euid_src, *euid_dst;
+    EbmlMaster *m;
+
+    m = static_cast<EbmlMaster *>(src[i]);
+
+    // Find an edition to which these atoms will be added.
+    ee_dst = NULL;
+    euid_src = FINDFIRST(m, KaxEditionUID);
+    if (euid_src != NULL) {
+      for (k = 0; k < dst.ListSize(); k++) {
+        euid_dst = FINDFIRST(static_cast<EbmlMaster *>(dst[k]),
+                             KaxEditionUID);
+        if ((euid_dst != NULL) && (uint32(*euid_src) == uint32(*euid_dst))) {
+          ee_dst = static_cast<KaxEditionEntry *>(dst[k]);
+          break;
+        }
+      }
+    }
+    // No edition with the same UID found as the one we want to handle?
+    // Then simply move the complete edition over.
+    if (ee_dst == NULL)
+      dst.PushElement(*m);
+    else {
+      // Move all atoms from the old edition to the new one.
+      for (k = 0; k < m->ListSize(); k++)
+        ee_dst->PushElement(*(*m)[k]);
+      m->RemoveAll();
+      delete m;
+    }
+  }
+  src.RemoveAll();
+}
