@@ -48,6 +48,7 @@ DEP_INPUT = src/input/libmtxinput.a
 DEP_OUTPUT = src/output/libmtxoutput.a
 DEP_AVILIB = avilib-0.6.10/libavi.a
 DEP_AVI = $(DEP_AVILIB)  $(DEP_AVICLASSES)
+DEP_RMFF = librmff/librmff.a
 
 #
 # System settings. Don't change anything below here.
@@ -63,9 +64,9 @@ APPLICATIONS=src/mkvmerge src/mkvinfo src/mkvextract src/base64tool src/mmg
 all: config.h $(APPLICATIONS)
 
 SYSTEM_INCLUDES = -Iavilib-0.6.10 $(AVICLASSES_INCLUDES) \
-		-I. -Isrc -Isrc/common -Isrc/input -Isrc/output
+		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output
 SYSTEM_LIBDIRS = -Lavilib-0.6.10 $(AVICLASSES_LIBDIRS) \
-		-Lsrc/common -Lsrc/input -Lsrc/output
+		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output
 
 RUNAR = $(AR) rcu
 LINK = $(LD) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
@@ -130,6 +131,17 @@ aviclasses/libaviclasses.a: $(libaviclasses_OBJECTS)
 	$(RANLIB) $@
 
 #
+# librmff
+#
+librmff_SOURCES = $(wildcard librmff/*.c)
+librmff_OBJECTS := $(patsubst %.c,%.o,$(librmff_SOURCES))
+
+librmff/librmff.a: $(librmff_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(librmff_OBJECTS)
+	$(RANLIB) $@
+
+#
 # src/common
 #
 
@@ -178,12 +190,12 @@ mkvmerge_SOURCES = src/mkvmerge.cpp \
 			src/pr_generic.cpp
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
-		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI)
+		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
 		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) \
 		-lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
-		-lexpat -liconv
+		-lexpat -liconv -lrmff
 
 mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
@@ -194,8 +206,9 @@ mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 
 mkvextract_SOURCES = $(wildcard src/mkvextract*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
-mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB)
-mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -liconv
+mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
+mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -liconv \
+		-lrmff
 
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
