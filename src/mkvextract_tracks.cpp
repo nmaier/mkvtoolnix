@@ -17,8 +17,6 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
-// {{{ includes
-
 #include <errno.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -74,6 +72,7 @@ extern "C" {
 
 #include "chapters.h"
 #include "common.h"
+#include "librmff.h"
 #include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"
@@ -82,12 +81,47 @@ using namespace libmatroska;
 using namespace std;
 
 int conv_utf8;
+vector<rmff_file_t *> rmfiles;
 
-// }}}
+static rmff_file_t *
+open_rmff_file(const char *name) {
+  rmff_file_t *file;
+  int i;
 
-// {{{ FUNCTIONS flush_ogg_pages(), write_ogg_pages()
+  for (i = 0; i < rmfiles.size(); i++)
+    if (!strcmp(name, rmfiles[i]->name))
+      return rmfiles[i];
 
-static void flush_ogg_pages(kax_track_t &track) {
+  file = rmff_open_file(name, RMFF_OPEN_MODE_WRITING);
+  if (file == NULL)
+    mxerror("Could not create '%s'. Reason: %d (%s). Aborting.\n", name,
+            errno, strerror(errno));
+  rmfiles.push_back(file);
+
+  return file;
+}
+
+static void
+set_rmff_headers() {
+  int i;
+
+  for (i = 0; i < rmfiles.size(); i++)
+    rmff_write_headers(rmfiles[i]);
+}
+
+static void
+close_rmff_files() {
+  int i;
+
+  for (i = 0; i < rmfiles.size(); i++) {
+    rmff_write_index(rmfiles[i]);
+    rmff_fix_headers(rmfiles[i]);
+    rmff_close_file(rmfiles[i]);
+  }
+}
+
+static void
+flush_ogg_pages(kax_track_t &track) {
   ogg_page page;
 
   while (ogg_stream_flush(&track.osstate, &page)) {
@@ -96,7 +130,8 @@ static void flush_ogg_pages(kax_track_t &track) {
   }
 }
 
-static void write_ogg_pages(kax_track_t &track) {
+static void
+write_ogg_pages(kax_track_t &track) {
   ogg_page page;
 
   while (ogg_stream_pageout(&track.osstate, &page)) {
@@ -109,11 +144,11 @@ static void write_ogg_pages(kax_track_t &track) {
 
 // {{{ FUNCTION create_output_files()
 
-static void create_output_files() {
+static void
+check_output_files() {
   int i, k, offset;
   bool something_to_do, is_ok;
   unsigned char *c;
-  ogg_packet op;
 
   something_to_do = false;
 
@@ -129,19 +164,31 @@ static void create_output_files() {
 
       // Video tracks: 
       if (tracks[i].track_type == 'v') {
-        tracks[i].type = TYPEAVI;
-        if (strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
-          mxwarn("Extraction of video tracks with a CodecId "
-                 "other than " MKV_V_MSCOMP " is not supported at the "
-                 "moment. Skipping track %lld.\n", tracks[i].tid);
-          continue;
-        }
+        if (!strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
+          if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
+              (tracks[i].v_fps == 0.0) || (tracks[i].private_data == NULL) ||
+              (tracks[i].private_size < sizeof(alBITMAPINFOHEADER))) {
+            mxwarn("Track ID %lld is missing some critical "
+                   "information. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+          tracks[i].type = TYPEAVI;
 
-        if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
-            (tracks[i].v_fps == 0.0) || (tracks[i].private_data == NULL) ||
-            (tracks[i].private_size < sizeof(alBITMAPINFOHEADER))) {
-          mxwarn("Track ID %lld is missing some critical "
-                 "information. Skipping track.\n", tracks[i].tid);
+        } else if (!strncmp(tracks[i].codec_id, "V_REAL/", 7)) {
+          if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
+              (tracks[i].private_data == NULL) ||
+              (tracks[i].private_size < sizeof(real_video_props_t))) {
+            mxwarn("Track ID %lld is missing some critical "
+                   "information. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+          tracks[i].type = TYPEREAL;
+
+        } else {
+          mxwarn("The extraction of video tracks is only supported for "
+                 "RealVideo (CodecID: V_REAL/RVxx) and AVI compatibility "
+                 "tracks (CodecID: " MKV_V_MSCOMP "). Skipping track %lld.\n",
+                 tracks[i].tid);
           continue;
         }
 
@@ -284,6 +331,16 @@ static void create_output_files() {
 
           tracks[i].type = TYPEFLAC;
 
+        } else if (!strncmp(tracks[i].codec_id, "A_REAL/", 7)) {
+          if ((tracks[i].private_data == NULL) ||
+              (tracks[i].private_size < sizeof(real_audio_v4_props_t))) {
+            mxwarn("Track ID %lld is missing some critical "
+                   "information. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+
+          tracks[i].type = TYPEREAL;
+
         } else {
           mxwarn("Unsupported CodecID '%s' for ID %lld. "
                  "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
@@ -321,6 +378,13 @@ static void create_output_files() {
     mxinfo("Nothing to do. Exiting.\n");
     mxexit(0);
   }
+}
+
+static void
+create_output_files() {
+  int i;
+
+  check_output_files();
 
   // Now finally create some files. Hell, I *WANT* to create something now.
   // RIGHT NOW! Or I'll go insane...
@@ -344,6 +408,24 @@ static void create_output_files() {
         mxinfo("Extracting track ID %lld to an AVI file '%s'.\n",
                tracks[i].tid, tracks[i].out_name);
 
+      } else if (tracks[i].type == TYPEREAL) {
+        rmff_file_t *file;
+
+        file = open_rmff_file(tracks[i].out_name);
+        tracks[i].rmtrack = rmff_add_track(file, 1);
+        if (tracks[i].rmtrack == NULL)
+          mxerror("Memory allocation error: %d (%s).\n",
+                  rmff_last_error, rmff_last_error_msg);
+        rmff_set_type_specific_data(tracks[i].rmtrack,
+                                    (unsigned char *)tracks[i].private_data,
+                                    tracks[i].private_size);
+        if (tracks[i].track_type == 'v')
+          rmff_set_track_data(tracks[i].rmtrack, "Video",
+                              "video/x-pn-realvideo");
+        else
+          rmff_set_track_data(tracks[i].rmtrack, "Audio",
+                              "audio/x-pn-realvideo");
+
       } else {
 
         try {
@@ -358,6 +440,8 @@ static void create_output_files() {
                tracks[i].out_name);
 
         if (tracks[i].type == TYPEOGM) {
+          ogg_packet op;
+
           ogg_stream_init(&tracks[i].osstate, rand());
 
           // Handle the three header packets: Headers, comments, codec
@@ -452,6 +536,8 @@ static void create_output_files() {
                                  tracks[i].private_size);
           else {
             unsigned char *ptr;
+            ogg_packet op;
+
             ogg_stream_init(&tracks[i].osstate, rand());
 
             // Handle the three header packets: Headers, comments, codec
@@ -483,14 +569,118 @@ static void create_output_files() {
       }
     }
   }
+
+  set_rmff_headers();
 }
 
-// }}}
+static void
+unpack_real_video_frames(kax_track_t *track,
+                         unsigned char *src,
+                         uint32_t size,
+                         uint32_t timecode,
+                         bool is_key) {
+  unsigned char *src_ptr, *ptr, *dst;
+  int num_subpackets, i, offset, total_len;
+  vector<uint32_t> packet_offsets, packet_lengths;
+  rmff_frame_t *frame;
 
-// {{{ FUNCTION handle_data()
+  track->packetno++;
+  src_ptr = src;
+  num_subpackets = *src_ptr + 1;
+  src_ptr++;
+  if (size < (num_subpackets * 8 + 1)) {
+    mxwarn("RealVideo unpacking failed: frame size too small. Could not "
+           "extract sub packet offsets. Skipping a frame.\n");
+    return;
+  }
+  for (i = 0; i < num_subpackets; i++) {
+    src_ptr += 4;
+    packet_offsets.push_back(get_uint32(src_ptr));
+    src_ptr += 4;
+  }
+  if ((packet_offsets[packet_offsets.size() - 1] + (src_ptr - src)) >= size) {
+    mxwarn("RealVideo unpacking failed: frame size too small. Expected at "
+           "least %u bytes, but the frame contains only %u. Skipping this "
+           "frame.\n", packet_offsets[packet_offsets.size() - 1] +
+           (src_ptr - src), size);
+    return;
+  }
+  total_len = size - (src_ptr - src);
+  for (i = 0; i < (num_subpackets - 1); i++)
+    packet_lengths.push_back(packet_offsets[i + 1] - packet_offsets[i]);
+  packet_lengths.push_back(total_len -
+                           packet_offsets[packet_offsets.size() - 1]);
 
-static void handle_data(KaxBlock *block, int64_t block_duration,
-                        bool has_ref) {
+  dst = (unsigned char *)safemalloc(size * 2);
+  for (i = 0; i < num_subpackets; i++) {
+    ptr = dst;
+    if (num_subpackets == 1) {
+      *ptr = 0xc1;              // complete frame
+      ptr++;
+
+    } else {
+      *ptr = num_subpackets + 1;
+      if (i == (num_subpackets - 1)) // last fragment?
+        *ptr |= 0x80;
+      ptr++;
+
+      *ptr = i + 1;             // fragment number
+      if (is_key)               // key frame?
+        *ptr |= 0x80;
+      ptr++;
+    }
+
+    // total packet length:
+    if (total_len > 0x3fff) {
+      put_uint16_be(ptr, ((total_len & 0x3fff0000) >> 16));
+      ptr += 2;
+      put_uint16_be(ptr, total_len & 0x0000ffff);
+    } else
+      put_uint16_be(ptr, 0x4000 | total_len);
+    ptr += 2;
+
+    // fragment offset from beginning/end:
+    if (num_subpackets == 1)
+      offset = timecode;
+    else if (i < (num_subpackets - 1))
+      offset = packet_offsets[i];
+    else
+      // If it's the last packet then the 'offset' is the fragment's length.
+      offset = packet_lengths[i];
+
+    if (offset > 0x3fff) {
+      put_uint16_be(ptr, ((offset & 0x3fff0000) >> 16));
+      ptr += 2;
+      put_uint16_be(ptr, offset & 0x0000ffff);
+    } else
+      put_uint16_be(ptr, 0x4000 | offset);
+    ptr += 2;
+
+    // sequence number = frame number & 0xff
+    *ptr = track->packetno & 0xff;
+    ptr++;
+
+    memcpy(ptr, src_ptr, packet_lengths[i]);
+    src_ptr += packet_lengths[i];
+    ptr += packet_lengths[i];
+
+    frame = rmff_allocate_frame(ptr - dst, dst);
+    if (frame == NULL)
+      mxerror("Memory allocation error: Could not get a rmff_frame_t.\n");
+    frame->timecode = timecode;
+    if (is_key)
+      frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
+    if (rmff_write_frame(track->rmtrack, frame) != RMFF_ERR_OK)
+      mxwarn("Could not write a RealVideo fragment.\n");
+    rmff_release_frame(frame);
+  }
+  safefree(dst);
+}
+
+static void
+handle_data(KaxBlock *block,
+            int64_t block_duration,
+            bool has_ref) {
   kax_track_t *track;
   int i, k, len, num;
   int64_t start, end;
@@ -498,6 +688,7 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
   vector<string> fields;
   string line, comma = ",";
   ssa_line_c ssa_line;
+  rmff_frame_t *rmf_frame;
 
   track = find_track(block->TrackNum());
   if ((track == NULL) || !track->in_use){
@@ -752,6 +943,23 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
 
         break;
 
+      case TYPEREAL:
+        if (track->track_type == 'v') {
+          unpack_real_video_frames(track, data.Buffer(), data.Size(), start,
+                                   !has_ref);
+          break;
+        }
+
+        rmf_frame = rmff_allocate_frame(data.Size(), data.Buffer());
+        if (rmf_frame == NULL)
+          mxerror("Could not allocate memory for a RealAudio frame.\n");
+        rmf_frame->timecode = start;
+        if (!has_ref)
+          rmf_frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
+        rmff_write_frame(track->rmtrack, rmf_frame);
+        rmff_release_frame(rmf_frame);
+        break;
+
       default:
         track->out->write(data.Buffer(), data.Size());
         track->bytes_written += data.Size();
@@ -766,7 +974,8 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
 
 // {{{ FUNCTION close_files()
 
-static void close_files() {
+static void
+close_files() {
   int i, k;
   ogg_packet op;
 
@@ -844,13 +1053,16 @@ static void close_files() {
       }
     }
   }
+
+  close_rmff_files();
 }
 
 // }}}
 
 // {{{ FUNCTION extract_tracks()
 
-bool extract_tracks(const char *file_name) {
+bool
+extract_tracks(const char *file_name) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;

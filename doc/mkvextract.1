@@ -47,6 +47,12 @@ Causes extraction of the track with the ID \fITID\fR into the file
 \fIoutname\fR if such a track exists in the source file. This option can be
 given multiple times. The track IDs are the same as the ones output by
 \fBmkvmerge\fR's \fB--identify\fR option.
+.br
+Each output name should be used only once. The exception are RealAudio and
+RealVideo tracks. If you use the same name for different tracks then those
+tracks will be saved in the same file. Example:
+.br
+\fBmkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\fR
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 Be verbose and show all the important Matroska elements as they're read.
@@ -99,6 +105,9 @@ supported at the moment:
 V_MS/VFW/FOURCC
 Fixed FPS video tracks with this CodecID are written to AVI files.
 .TP
+V_REAL/*
+RealVideo tracks are written to RealMedia files.
+.TP
 A_MPEG/L3, A_AC3
 These will be extracted to raw MP3 and AC3 files.
 .TP
@@ -115,6 +124,9 @@ each packet. The ADTS headers will not contain the deprecated emphasis field.
 .TP
 A_VORBIS
 Vorbis audio will be written into an Ogg/Vorbis file.
+.TP
+A_REAL/*
+RealAudio tracks are written to RealMedia files.
 .TP
 S_TEXT/UTF8
 Simple text subtitles will be written as SRT files.
@@ -157,7 +169,27 @@ Track ID 5: subtitles (S_TEXT/UTF8)
 Now you can call \fBmkvmextract\fR like this:
 .LP
 $ \fBmkvextract tracks movie.mkv 3:audio.ogg 4:subtitles.srt\fR
-
+.LP
+Another example. Let's assume you have a Matroska file with one RealVideo v10
+track, one Vorbis audio track and one RealAudio (COOK) track. The
+identification output might look like this:
+.LP
+$ \fB mkvmerge -i movie2.mkv\fR
+.br
+File 'movie2.mkv': container: Matroska
+.br
+Track ID 1: video (V_REAL/RV40)
+.br
+Track ID 2: audio (A_VORBIS)
+.br
+Track ID 3: audio (A_REAL/COOK)
+.LP
+Let's further assume you want only need the video and the RealAudio track but
+both in the same output file. This is possible for RealMedia files by using
+the same output name for those tracks that you want to end up in the same
+file:
+.LP
+$ \fBmkvextract tracks movie2.mkv 1:extracted.rm 3:extracted.rm\fR
 
 .SH AUTHOR
 .I mkvextract

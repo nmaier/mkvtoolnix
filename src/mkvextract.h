@@ -30,6 +30,7 @@ extern "C" {
 
 #include <ebml/EbmlElement.h>
 
+#include "librmff.h"
 #include "mm_io.h"
 
 using namespace std;
@@ -50,6 +51,7 @@ typedef struct {
   mm_io_c *out;
   avi_t *avi;
   ogg_stream_state osstate;
+  rmff_track_t *rmtrack;
 
   int64_t tid;
   bool in_use, done;
