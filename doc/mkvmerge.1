@@ -304,6 +304,12 @@ normally calculates. Read the section about \fBEXTERNAL TIMECODE FILES\fR.
 This option changes the order in which the tracks for an input file are
 created. If some track IDs are omitted then those tracks are created after the
 ones given with this option have been created.
+.TP
+\fB\-\-append\-to\fR <\fISTID1:DTID1\fR,[\fISTID2:DTID2\fR...]>
+This option controls to which track a track of the current file is appended
+to. Each pair of track IDs maps the first ID from the following input file
+to the second ID from the previous input file. If this option has been omitted
+then a mapping of 0:0,1:1,2:2... is used.
 
 .LP
 Options that only apply to video tracks:

@@ -198,6 +198,7 @@ public:
   bool no_chapters, no_attachments, no_tags;
 
   vector<int64_t> *track_order;
+  vector<int64_t> *append_mapping;
 
 public:
   track_info_c();

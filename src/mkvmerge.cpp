@@ -315,6 +315,11 @@ usage() {
     "                           A comma separated list of track IDs that\n"
     "                           controls the order of the tracks in the\n"
     "                           output file.\n"
+    "  --append-to <STID1:DTID1,STID2:DTID2,...>\n"
+    "                           A comma separated list of pairs of track IDs\n"
+    "                           that controls which track of the current\n"
+    "                           file is appended to which track of the\n"
+    "                           previous file.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -1071,6 +1076,28 @@ parse_track_order(const char *s,
       mxerror("'%s' is not a valid track ID in '--track-order %s'.\n",
               parts[i].c_str(), s);
     ti.track_order->push_back(id);
+  }
+}
+
+static void
+parse_append_to(const char *s,
+                track_info_c &ti) {
+  vector<string> entries, parts;
+  uint32_t i;
+  int64_t from, to;
+
+  ti.append_mapping->clear();
+  entries = split(s, ",");
+  strip(entries);
+  for (i = 0; i < entries.size(); i++) {
+    parts = split(entries[i].c_str(), ":");
+    strip(parts);
+    if ((parts.size() != 2) ||
+        !parse_int(parts[0].c_str(), from) || !parse_int(parts[1].c_str(), to))
+      mxerror("'%s' is not a valid mapping of track IDs in '--append-to %s'.",
+              entries[i].c_str(), s);
+    ti.append_mapping->push_back(from);
+    ti.append_mapping->push_back(to);
   }
 }
 
@@ -2031,6 +2058,13 @@ parse_args(int argc,
         mxerror("'--track-order' lacks its argument.\n");
 
       parse_track_order(next_arg, *ti);
+      i++;
+
+    } else if (!strcmp(this_arg, "--append-to")) {
+      if (next_arg == NULL)
+        mxerror("'--append-to' lacks its argument.\n");
+
+      parse_append_to(next_arg, *ti);
       i++;
 
     }

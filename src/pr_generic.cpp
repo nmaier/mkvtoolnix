@@ -1044,6 +1044,7 @@ void
 generic_reader_c::connect(generic_reader_c *prior) {
   int i, j, result;
   generic_packetizer_c *pprior, *pcurrent;
+  int64_t conn_id;
 
   if (reader_packetizers.size() == 0)
     mxerror("Cannot append '%s' to '%s' as there are no tracks to be read.\n",
@@ -1054,28 +1055,32 @@ generic_reader_c::connect(generic_reader_c *prior) {
   for (i = 0; i < reader_packetizers.size(); i++) {
     pcurrent = reader_packetizers[i];
     pprior = NULL;
+    conn_id = pcurrent->get_source_track_num();
+    for (j = 0; j < ti->append_mapping->size(); j += 2)
+      if (conn_id == (*ti->append_mapping)[j]) {
+        conn_id = (*ti->append_mapping)[j + 1];
+        break;
+      }
     for (j = 0; j < prior->reader_packetizers.size(); j++)
-      if (pcurrent->get_source_track_num() ==
-          prior->reader_packetizers[j]->get_source_track_num()) {
+      if (conn_id == prior->reader_packetizers[j]->get_source_track_num()) {
         pprior = prior->reader_packetizers[j];
         break;
       }
     if (pprior == NULL)
       mxerror("Cannot append '%s' to '%s'. Could not find a track in '%s' "
               "with the ID %lld.\n", ti->fname, prior->ti->fname,
-              prior->ti->fname, pcurrent->get_source_track_num());
+              prior->ti->fname, conn_id);
     result = pcurrent->can_connect_to(pprior);
     if (result == CAN_CONNECT_NO_FORMAT)
       mxerror("Cannot append track ID %lld, type %s from '%s' to track ID "
               "%lld, type %s from '%s'.\n", pcurrent->get_source_track_num(),
-              pcurrent->get_format_name(), ti->fname,
-              pprior->get_source_track_num(), pprior->get_format_name(),
-              prior->ti->fname);
+              pcurrent->get_format_name(), ti->fname, conn_id,
+              pprior->get_format_name(), prior->ti->fname);
     if (result == CAN_CONNECT_NO_PARAMETERS)
       mxerror("Cannot append track ID %lld from '%s' to track ID %lld "
               "from '%s' because the track parameters do not match.\n",
               pcurrent->get_source_track_num(), ti->fname,
-              pprior->get_source_track_num(), prior->ti->fname);
+              conn_id, prior->ti->fname);
   }
   connected_to = prior;
 }
@@ -1114,6 +1119,7 @@ track_info_c::track_info_c():
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
   track_order = new vector<int64_t>;
+  append_mapping = new vector<int64_t>;
 }
 
 void track_info_c::free_contents() {
@@ -1156,6 +1162,7 @@ void track_info_c::free_contents() {
   delete all_fourccs;
   delete display_properties;
   delete track_order;
+  delete append_mapping;
 
   initialized = false;
 }
@@ -1239,6 +1246,8 @@ track_info_c &track_info_c::operator =(const track_info_c &src) {
   no_tags = src.no_tags;
 
   track_order = new vector<int64_t>(*src.track_order);
+
+  append_mapping = new vector<int64_t>(*src.append_mapping);
 
   initialized = true;
 
