@@ -246,7 +246,7 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
         idx--;
       }
     }
-    mxerror("Cound not write to the output file: %d (%s)\n", error,
+    mxerror("Cound not write to the output file: %d (%s)\n", (int)error,
             error_msg != NULL ? error_msg : "unknown");
     if (error_msg != NULL)
       LocalFree(error_msg);

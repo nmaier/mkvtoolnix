@@ -2074,7 +2074,7 @@ int avi_parse_index_from_file(avi_t *AVI, char *filename)
     fgets(data, 100, fd);
 
     if ( strncasecmp(data, "AVIIDX1", 7) != 0) {
-	fprintf(stderr, "%s: Not an AVI index file\n", filename);
+/* 	fprintf(stderr, "%s: Not an AVI index file\n", filename); */
 	return -1;
     }
 
@@ -2295,7 +2295,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	   ++AVI->anum;
 	   
 	   if(AVI->anum > AVI_MAX_TRACKS) {
-	     fprintf(stderr, "error - only %d audio tracks supported\n", AVI_MAX_TRACKS);
+/* 	     fprintf(stderr, "error - only %d audio tracks supported\n", AVI_MAX_TRACKS); */
 	     return(-1);
 	   }
 	   
@@ -2315,7 +2315,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	   
          }
          else if (strncasecmp (hdrl_data+i,"iavs",4) ==0 && ! auds_strh_seen) {
-	     fprintf(stderr, "AVILIB: error - DV AVI Type 1 no supported\n");
+/* 	     fprintf(stderr, "AVILIB: error - DV AVI Type 1 no supported\n"); */
 	     return (-1);
 	 }
          else
@@ -2420,7 +2420,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    // 3 * reserved
 	    a += 4; a += 4; a += 4;
 
-	    if (AVI->video_superindex->bIndexSubType != 0) {fprintf(stderr, "Invalid Header, bIndexSubType != 0\n"); }
+/* 	    if (AVI->video_superindex->bIndexSubType != 0) {fprintf(stderr, "Invalid Header, bIndexSubType != 0\n"); } */
 	    
 	    AVI->video_superindex->aIndex = 
 	       malloc (AVI->video_superindex->wLongsPerEntry * AVI->video_superindex->nEntriesInUse * sizeof (uint32_t));
@@ -2473,7 +2473,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    // 3 * reserved
 	    a += 4; a += 4; a += 4;
 
-	    if (AVI->track[AVI->aptr].audio_superindex->bIndexSubType != 0) {fprintf(stderr, "Invalid Header, bIndexSubType != 0\n"); }
+/* 	    if (AVI->track[AVI->aptr].audio_superindex->bIndexSubType != 0) {fprintf(stderr, "Invalid Header, bIndexSubType != 0\n"); } */
 	    
 	    AVI->track[AVI->aptr].audio_superindex->aIndex = 
 	       malloc (AVI->track[AVI->aptr].audio_superindex->wLongsPerEntry * 
@@ -2664,15 +2664,15 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 chunk_start = en = malloc (AVI->video_superindex->aIndex[j].dwSize+hdrl_len);
 
 	 if (lseek(AVI->fdes, AVI->video_superindex->aIndex[j].qwOffset, SEEK_SET) == (off_t)-1) {
-	    fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, 
-(unsigned long long)AVI->video_superindex->aIndex[j].qwOffset);
+/* 	    fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__,  */
+/* (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset); */
 	    return -1;
 	 }
 
 	 if (avi_read(AVI->fdes, en, AVI->video_superindex->aIndex[j].dwSize+hdrl_len) <= 0) {
-	    fprintf(stderr, "(%s) cannot read from offset 0x%llx %ld bytes; broken (incomplete) file?\n", 
-		  __FILE__, (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset,
-		  (unsigned long)AVI->video_superindex->aIndex[j].dwSize+hdrl_len);
+/* 	    fprintf(stderr, "(%s) cannot read from offset 0x%llx %ld bytes; broken (incomplete) file?\n",  */
+/* 		  __FILE__, (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset, */
+/* 		  (unsigned long)AVI->video_superindex->aIndex[j].dwSize+hdrl_len); */
 	    return -1;
 	 }
 
@@ -2732,13 +2732,13 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    chunk_start = en = malloc (AVI->track[audtr].audio_superindex->aIndex[j].dwSize+hdrl_len);
 
 	    if (lseek(AVI->fdes, AVI->track[audtr].audio_superindex->aIndex[j].qwOffset, SEEK_SET) == (off_t)-1) {
-	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
+/* 	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset); */
 	       return -1;
 	    }
 
 	    if (avi_read(AVI->fdes, en, AVI->track[audtr].audio_superindex->aIndex[j].dwSize+hdrl_len) <= 0) {
-	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n", 
-		     __FILE__,(unsigned long long) AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
+/* 	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n",  */
+/* 		     __FILE__,(unsigned long long) AVI->track[audtr].audio_superindex->aIndex[j].qwOffset); */
 	       return -1;
 	    }
 
@@ -2889,7 +2889,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
       for(j=0; j<AVI->anum; ++j) AVI->track[j].audio_bytes = tot[j];
       idx_type = 1;
-      fprintf(stderr, "done. nvi=%ld nai=%ld tot=%ld\n", nvi, nai[0], tot[0]);
+/*       fprintf(stderr, "done. nvi=%ld nai=%ld tot=%ld\n", nvi, nai[0], tot[0]); */
 
    } // total_frames but no indx chunk (xawtv does this)
 
@@ -3230,7 +3230,7 @@ long AVI_read_audio(avi_t *AVI, char *audbuf, long bytes)
       lseek(AVI->fdes, pos, SEEK_SET);
       if ( (ret = avi_read(AVI->fdes,audbuf+nr,todo)) != todo)
       {
-	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo);
+/* 	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo); */
          AVI_errno = AVI_ERR_READ;
          return -1;
       }
@@ -3373,8 +3373,8 @@ void AVI_print_error(char *str)
 
    aerrno = (AVI_errno>=0 && AVI_errno<num_avi_errors) ? AVI_errno : num_avi_errors-1;
 
-   if (aerrno != 0)
-       fprintf(stderr,"%s: %s\n",str,avi_errors[aerrno]);
+/*    if (aerrno != 0) */
+/*        fprintf(stderr,"%s: %s\n",str,avi_errors[aerrno]); */
 
    /* for the following errors, perror should report a more detailed reason: */
 
