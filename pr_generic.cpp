@@ -34,6 +34,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   cue_creation_t *cc;
   int64_t id;
   language_t *lang;
+  bool found;
 
 #ifdef DEBUG
   debug_c::add_packetizer(this);
@@ -47,14 +48,18 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   free_refs = -1;
 
   // Let's see if the user specified audio sync for this track.
-  ti->async.linear = 1.0;
-  ti->async.displacement = 0;
+  found = false;
   for (i = 0; i < ti->audio_syncs->size(); i++) {
     as = &(*ti->audio_syncs)[i];
     if ((as->id == ti->id) || (as->id == -1)) { // -1 == all tracks
+      found = true;
       ti->async = *as;
       break;
     }
+  }
+  if (found && (ti->async.linear == 0.0)) {
+    ti->async.linear = 1.0;
+    ti->async.displacement = 0;
   }
 
   // Let's see if the user has specified which cues he wants for this track.
@@ -68,7 +73,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Let's see if the user has given a default track flag for this track.
-  ti->default_track = false;
   for (i = 0; i < ti->default_track_flags->size(); i++) {
     id = (*ti->default_track_flags)[i];
     if ((id == ti->id) || (id == -1)) { // -1 == all tracks
@@ -78,11 +82,11 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Let's see if the user has specified a language for this track.
-  ti->language = NULL;
   for (i = 0; i < ti->languages->size(); i++) {
     lang = &(*ti->languages)[i];
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      ti->language = lang->language;
+      safefree(ti->language);
+      ti->language = safestrdup(lang->language);
       break;
     }
   }
@@ -515,6 +519,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->languages = new vector<language_t>(*src->languages);
   for (i = 0; i < src->languages->size(); i++)
     (*dst->languages)[i].language = safestrdup((*src->languages)[i].language);
+  dst->language = safestrdup(src->language);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->sub_charset = safestrdup(src->sub_charset);
@@ -538,6 +543,7 @@ void free_track_info(track_info_t *ti) {
   for (i = 0; i < ti->languages->size(); i++)
     safefree((*ti->languages)[i].language);
   delete ti->languages;
+  safefree(ti->language);
   safefree(ti->private_data);
   safefree(ti->sub_charset);
   safefree(ti);
