@@ -2432,6 +2432,8 @@ parse_args(int argc,
   }
 
   delete ti;
+  safefree(attachment->description);
+  safefree(attachment->mime_type);
   safefree(attachment);
 }
 
@@ -2614,6 +2616,8 @@ static void
 cleanup() {
   delete cluster_helper;
   filelist_t *file;
+  attachment_t *att;
+  int i;
 
   destroy_readers();
 
@@ -2623,6 +2627,14 @@ cleanup() {
     safefree(file->name);
     safefree(file);
     files.pop_back();
+  }
+
+  for (i = 0; i < attachments.size(); i++) {
+    att = attachments[i];
+    safefree(att->mime_type);
+    safefree(att->description);
+    safefree(att->name);
+    safefree(att);
   }
 
   safefree(outfile);
