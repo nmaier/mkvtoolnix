@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    Definitions for the various Codec IDs
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -69,7 +69,7 @@
 
 #define MKV_B_VOBBTN     "B_VOBBTN"
 
-// see http://www.matroska.org/technical/specs/tagging/index.html#targettypes 
+// see http://www.matroska.org/technical/specs/tagging/index.html#targettypes
 #define TAG_TARGETTYPE_COLLECTION     70
 
 #define TAG_TARGETTYPE_EDITION        60

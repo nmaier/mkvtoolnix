@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    main dialog declarations
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -77,7 +77,7 @@ class tab_input;
 class tab_settings;
 class job_dialog;
 
-class mmg_dialog: public wxFrame {    
+class mmg_dialog: public wxFrame {
   DECLARE_CLASS(mmg_dialog);
   DECLARE_EVENT_TABLE();
 public:

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    functions common for all readers/packetizers
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -405,7 +405,7 @@ generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
       htrack_default_duration;
 }
 
-void 
+void
 generic_packetizer_c::set_track_max_additionals(int max_add_block_ids) {
   htrack_max_add_block_ids = max_add_block_ids;
   if (track_entry != NULL)
@@ -646,7 +646,7 @@ generic_packetizer_c::set_headers() {
     *(static_cast<EbmlUnicodeString *>
       (&GetChild<KaxTrackName>(*track_entry))) =
       cstrutf8_to_UTFstring(ti->track_name);
-  
+
   if (htrack_type == track_video) {
     KaxTrackVideo &video =
       GetChild<KaxTrackVideo>(*track_entry);

@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    main stuff
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -1886,7 +1886,7 @@ mmg_app::OnInit() {
   xml_element_map_init();
 
   cfg = new wxConfig(wxT("mkvmergeGUI"));
-  wxConfigBase::Set(cfg); 
+  wxConfigBase::Set(cfg);
   cfg->SetPath(wxT("/GUI"));
   if (!cfg->Read(wxT("last_directory"), &last_open_dir))
     last_open_dir = wxT("");

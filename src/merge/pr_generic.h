@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    class definition for the generic reader and packetizer
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -150,7 +150,7 @@ struct packet_t {
   packet_t():
     group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
     ref_priority(0),
-    timecode(0), bref(0), fref(0), duration(0), 
+    timecode(0), bref(0), fref(0), duration(0),
     packet_num(0),
     assigned_timecode(0), unmodified_assigned_timecode(0),
     unmodified_duration(0),

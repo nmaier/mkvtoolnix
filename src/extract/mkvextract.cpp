@@ -1,14 +1,14 @@
 /*
    mkvextract -- extract tracks from Matroska files into other files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    command line parsing, setup
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -270,7 +270,7 @@ parse_args(vector<string> args,
       if (mode != MODE_TRACKS)
         mxerror(_("'--cuesheet' is only allowed when extracting tracks.\n"));
       extract_cuesheet = true;
- 
+
     } else if ((args[i] == "--blockadd")) {
       if (mode != MODE_TRACKS)
         mxerror(_("'--blockadd' is only allowed when extracting tracks.\n"));
@@ -283,7 +283,7 @@ parse_args(vector<string> args,
         mxerror("Invalid BlockAddition level in argument '%s'.\n",
                 args[i + 1].c_str());
       i++;
- 
+
    } else if (mode == MODE_TAGS)
       mxerror(_("No further options allowed when extracting %s.\n"),
               args[0].c_str());

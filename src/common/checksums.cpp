@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    checksum calculations
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    The crc32 code was written by Alexander Djourik <sasha@iszf.irk.ru> and
      Pavel Zhilin <pzh@iszf.irk.ru>.
@@ -59,7 +59,7 @@ calc_adler32(const unsigned char *buffer,
    Description:  CRC32 functions
    Developed by: Alexander Djourik <sasha@iszf.irk.ru>
                  Pavel Zhilin <pzh@iszf.irk.ru>
-  
+
    Copyright (c) 1999-2004 Alexander Djourik. All rights reserved.
 */
 
@@ -128,7 +128,7 @@ static const unsigned long crc32_table[256] = {
   0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf,
   0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
   0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
-}; 
+};
 
 #define UPDATE_CRC32(x, crc) crc = \
   (((crc>>8) & 0x00FFFFFF) ^ crc32_table[(crc^x) & 0xFF])

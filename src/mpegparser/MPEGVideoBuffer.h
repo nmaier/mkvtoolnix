@@ -1,23 +1,23 @@
 /*****************************************************************************
-  
-    MPEG Video Packetizing Buffer 
-  
+
+    MPEG Video Packetizing Buffer
+
     Copyright(C) 2004 John Cannon <spyder@matroska.org>
-  
+
     This program is free software ; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation ; either version 2 of the License, or
     (at your option) any later version.
-  
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY ; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-  
+
     You should have received a copy of the GNU General Public License
     along with this program ; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-  
+
  **/
 
 #ifndef __MPEGVIDEOBUFFER_H__
@@ -79,15 +79,15 @@ private:
 public:
   MPEGChunk(binary* data, uint32_t dataSize){
     assert(data);
-    this->data = data;      
+    this->data = data;
     assert(dataSize > 4);
-    this->size = dataSize;      
+    this->size = dataSize;
     type = data[3];
   }
 
   ~MPEGChunk(){
     if(data)
-      delete [] data;  
+      delete [] data;
   }
 
   uint8_t GetType(){
@@ -147,7 +147,7 @@ public:
 
   void ForceFinal();  //prepares the remaining data as a chunk
   MPEGChunk * ReadChunk();
-  int32_t Feed(binary* data, uint32_t numBytes);    
+  int32_t Feed(binary* data, uint32_t numBytes);
 };
 
 #endif //__MPEGVIDEOBUFFER_H__

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    IO callback class implementation
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -183,7 +183,7 @@ uint64
 mm_file_io_c::getFilePointer() {
   LONG high = 0;
   DWORD low;
-  
+
   low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
   if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
     return (uint64)-1;
@@ -246,8 +246,8 @@ mm_file_io_c::write(const void *buffer,
 
     error = GetLastError();
     error_msg = NULL;
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-                  FORMAT_MESSAGE_FROM_SYSTEM | 
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                  FORMAT_MESSAGE_FROM_SYSTEM |
                   FORMAT_MESSAGE_IGNORE_INSERTS, NULL,
                   error,
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),

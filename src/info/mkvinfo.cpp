@@ -1,14 +1,14 @@
 /*
    mkvinfo -- utility for gathering information about Matroska files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    retrieves and displays information about a Matroska file
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -1217,7 +1217,7 @@ def_handle(cues) {
 
         if (is_id(l3, KaxCueTime)) {
           KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
-          show_element(l3, 3, "Cue time: %.3fs", tc_scale * 
+          show_element(l3, 3, "Cue time: %.3fs", tc_scale *
                        ((float)uint64(cue_time)) / 1000000000.0);
 
         } else if (is_id(l3, KaxCueTrackPositions)) {
@@ -1453,11 +1453,11 @@ def_handle2(block_group,
       r = int64(reference) * tc_scale;
       if (r <= 0) {
         r *= -1;
-        show_element(l3, 3, "Reference block: -%lld.%06lldms", 
+        show_element(l3, 3, "Reference block: -%lld.%06lldms",
                      r / 1000000, r % 1000000);
         bref_found = true;
       } else if (int64(reference) > 0) {
-        show_element(l3, 3, "Reference block: %lld.%06lldms", 
+        show_element(l3, 3, "Reference block: %lld.%06lldms",
                      r / 1000000, r % 1000000);
         fref_found = true;
       }
@@ -1467,7 +1467,7 @@ def_handle2(block_group,
         *static_cast<KaxReferencePriority *>(l3);
       show_element(l3, 3, "Reference priority: %u",
                    uint32(priority));
-                
+
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockVirtual)) {
       string strc;
@@ -1511,7 +1511,7 @@ def_handle2(block_group,
               strc = format_binary(block);
               show_element(l5, 5, "Block additional: %s",
                            strc.c_str());
-                        
+
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
 
@@ -1633,7 +1633,7 @@ def_handle2(cluster,
       int64_t cluster_tc;
       KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
       cluster_tc = uint64(ctc);
-      show_element(l2, 2, "Cluster timecode: %.3fs", 
+      show_element(l2, 2, "Cluster timecode: %.3fs",
                    (float)cluster_tc * (float)tc_scale / 1000000000.0);
       cluster->InitTimecode(cluster_tc, tc_scale);
 
@@ -1796,7 +1796,7 @@ process_file(const string &file_name) {
       return false;
     }
     show_element(l0, 0, "EBML head");
-      
+
     // Don't verify its data for now.
     l0->SkipData(*es, l0->Generic().Context);
     delete l0;

@@ -1,14 +1,14 @@
 /*
    mkvtoolnix - programs for manipulating Matroska files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    base64 encoding and decoding functions
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    AAC demultiplexer module
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -146,7 +146,7 @@ aac_reader_c::guess_adts_version() {
     return;
 
   // Now make some sanity checks on the size field.
-  if (aacheader.bytes > 8192) { 
+  if (aacheader.bytes > 8192) {
     emphasis_present = true;    // Looks like it's borked.
     return;
   }

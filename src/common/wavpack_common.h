@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    definitions for the WAVPACK file format
-  
+
    Written by Steve Lhomme <steve.lhomme@free.fr>.
    Based on a software from David Bryant <dbryant@impulse.net>.
 */

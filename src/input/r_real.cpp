@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    RealMedia demultiplexer module
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -627,7 +627,7 @@ real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
       set_dimensions(dmx, assembled->data, assembled->size);
     PTZR(dmx->ptzr)->process(mem, (int64_t)assembled->timecode * 1000000, -1,
                              (assembled->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
-                             RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME : 
+                             RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME :
                              VFT_PFRAMEAUTOMATIC);
     assembled->allocated_by_rmff = 0;
     rmff_release_frame(assembled);
@@ -636,7 +636,7 @@ real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
 }
 
 bool
-real_reader_c::get_rv_dimensions(unsigned char *buf, 
+real_reader_c::get_rv_dimensions(unsigned char *buf,
                                  int size,
                                  uint32_t &width,
                                  uint32_t &height) {

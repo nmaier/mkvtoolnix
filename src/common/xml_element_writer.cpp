@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    XML chapter writer functions
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -152,7 +152,7 @@ write_xml_element_rec(int level,
       break;
 
     case EBMLT_TIME:
-      out->printf(FMT_TIMECODEN "</%s>\n", 
+      out->printf(FMT_TIMECODEN "</%s>\n",
                   ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))),
                   element_map[elt_idx].name);
       break;

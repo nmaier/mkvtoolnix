@@ -1,14 +1,14 @@
 /*
    mkvinfo -- utility for gathering information about Matroska files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    A GUI for mkvinfo
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -136,7 +136,7 @@ mi_frame::mi_frame(const wxString &title,
 
   tree = new wxTreeCtrl(this, 4254);
   dnd_load = new mi_dndfile();
-  tree->SetDropTarget(dnd_load);  
+  tree->SetDropTarget(dnd_load);
 
   CreateStatusBar(1);
   SetStatusText(wxT("ready"));
@@ -180,7 +180,7 @@ void
 mi_frame::show_progress(int percent,
                         wxString msg) {
   wxString s;
-  
+
   if ((percent / 5) != (last_percent / 5)) {
     s.Printf(wxT("%s: %d%%"), msg.c_str(), percent);
     SetStatusText(s);

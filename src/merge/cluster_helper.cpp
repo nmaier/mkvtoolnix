@@ -1,16 +1,16 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    The cluster helper groups frames into blocks groups and those
    into clusters, sets the durations, renders the clusters etc.
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -120,7 +120,7 @@ cluster_helper_c::add_packet(packet_t *packet) {
   if (clusters.size() == 0)
     add_cluster(new kax_cluster_c());
   else if ((packet->gap_following && (clusters.back()->packets.size() != 0))
-           || 
+           ||
            (((packet->assigned_timecode - timecode) > max_ns_per_cluster) &&
             all_references_resolved(clusters.back()))) {
     render();

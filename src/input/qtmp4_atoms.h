@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    structs for various Quicktime and MP4 atoms
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -138,25 +138,25 @@ typedef struct PACKED_STRUCTURE {
 } qt_image_description_t;
 
 // one byte tag identifiers
-#define MP4DT_O                 0x01 
-#define MP4DT_IO                0x02 
-#define MP4DT_ES                0x03 
-#define MP4DT_DEC_CONFIG        0x04 
-#define MP4DT_DEC_SPECIFIC      0x05 
-#define MP4DT_SL_CONFIG         0x06 
-#define MP4DT_CONTENT_ID        0x07 
-#define MP4DT_SUPPL_CONTENT_ID  0x08 
-#define MP4DT_IP_PTR            0x09 
-#define MP4DT_IPMP_PTR          0x0A 
-#define MP4DT_IPMP              0x0B 
-#define MP4DT_REGISTRATION      0x0D 
-#define MP4DT_ESID_INC          0x0E 
-#define MP4DT_ESID_REF          0x0F 
-#define MP4DT_FILE_IO           0x10 
-#define MP4DT_FILE_O            0x11 
-#define MP4DT_EXT_PROFILE_LEVEL 0x13 
-#define MP4DT_TAGS_START        0x80 
-#define MP4DT_TAGS_END          0xFE 
+#define MP4DT_O                 0x01
+#define MP4DT_IO                0x02
+#define MP4DT_ES                0x03
+#define MP4DT_DEC_CONFIG        0x04
+#define MP4DT_DEC_SPECIFIC      0x05
+#define MP4DT_SL_CONFIG         0x06
+#define MP4DT_CONTENT_ID        0x07
+#define MP4DT_SUPPL_CONTENT_ID  0x08
+#define MP4DT_IP_PTR            0x09
+#define MP4DT_IPMP_PTR          0x0A
+#define MP4DT_IPMP              0x0B
+#define MP4DT_REGISTRATION      0x0D
+#define MP4DT_ESID_INC          0x0E
+#define MP4DT_ESID_REF          0x0F
+#define MP4DT_FILE_IO           0x10
+#define MP4DT_FILE_O            0x11
+#define MP4DT_EXT_PROFILE_LEVEL 0x13
+#define MP4DT_TAGS_START        0x80
+#define MP4DT_TAGS_END          0xFE
 
 // MPEG4 esds structure
 typedef struct PACKED_STRUCTURE {

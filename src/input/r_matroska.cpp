@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    Matroska reader
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -334,7 +334,7 @@ kax_reader_c::verify_tracks() {
             t->ms_compat = 1;
 
             bih = (alBITMAPINFOHEADER *)t->private_data;
-            
+
             u = get_uint32_le(&bih->bi_width);
             if (t->v_width != u) {
               if (verbose)
@@ -894,12 +894,12 @@ kax_reader_c::read_headers() {
         // Let's try to parse the "writing application" string. This usually
         // contains the name and version number of the application used for
         // creating this Matroska file. Examples are:
-        // 
+        //
         // mkvmerge v0.6.6
         // mkvmerge v0.9.6 ('Every Little Kiss') built on Oct  7 2004 18:37:49
         // VirtualDubMod 1.5.4.1 (build 2178/release)
         // AVI-Mux GUI 1.16.8 MPEG test build 1, Aug 24 2004  12:42:57
-        // 
+        //
         // The idea is to first replace known application names that contain
         // spaces with one that doesn't. Then split the whole string up on
         // spaces into at most three parts. If the result is at least two parts
@@ -1023,7 +1023,7 @@ kax_reader_c::read_headers() {
           kdefdur = FINDFIRST(ktentry, KaxTrackDefaultDuration);
           if (kdefdur != NULL) {
             track->v_frate = 1000000000.0 / (float)uint64(*kdefdur);
-            if (verbose > 1) 
+            if (verbose > 1)
               mxinfo(PFX "|  + Default duration: %.3fms ( = %.3f fps)\n",
                      (float)uint64(*kdefdur) / 1000000.0, track->v_frate);
           }
@@ -1358,7 +1358,7 @@ kax_reader_c::read_headers() {
 
           ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
         } // while (ktentry != NULL)
-          
+
         l1->SkipData(*es, l1->Generic().Context);
 
       } else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)
@@ -1540,7 +1540,7 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
   if (appending)
     return;
   if (t->default_track)
-    PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : 
+    PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO :
                                         t->type == 'a' ? DEFTRACK_TYPE_AUDIO :
                                         DEFTRACK_TYPE_SUBS,
                                         DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
@@ -1613,7 +1613,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
             PTZR(t->ptzr)->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
                                                     t->v_pcright,
                                                     t->v_pcbottom);
-        } else 
+        } else
           init_passthrough_packetizer(t);
 
         break;
@@ -2184,7 +2184,7 @@ kax_reader_c::identify() {
              tracks[i]->type == 's' ? "subtitles" : "unknown",
              tracks[i]->codec_id.c_str(),
              tracks[i]->ms_compat ? ", " : "",
-             tracks[i]->ms_compat ? 
+             tracks[i]->ms_compat ?
              (tracks[i]->type == 'v' ? tracks[i]->v_fourcc :
               tracks[i]->a_formattag == 0x0001 ? "PCM" :
               tracks[i]->a_formattag == 0x0055 ? "MP3" :

@@ -1,15 +1,15 @@
 /** \brief output handling
-  
+
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    \file
    \version $Id$
-  
+
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
    \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -177,11 +177,11 @@ static bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
 /** \brief Fix the file after mkvmerge has been interrupted
-  
+
    On Unix like systems mkvmerge will install a signal handler. On \c SIGUSR1
    all debug information will be dumped to \c stdout if mkvmerge has been
    compiled with \c -DDEBUG.
-  
+
    On \c SIGINT mkvmerge will try to sanitize the current output file
    by writing the cues, the meta seek information and by updating the
    segment duration and the segment length.
@@ -244,7 +244,7 @@ sighandler(int signum) {
 #endif
 
 /** \brief Probe the file type
-  
+
    Opens the input file and calls the \c probe_file function for each known
    file reader class. Uses \c mm_text_io_c for subtitle probing.
 */
@@ -424,7 +424,7 @@ set_timecode_scale() {
   video_present = false;
   audio_present = false;
   highest_sample_rate = 0;
-    
+
   foreach(ptzr, packetizers)
     if ((*ptzr).packetizer->get_track_type() == track_video)
       video_present = true;
@@ -464,7 +464,7 @@ set_timecode_scale() {
 }
 
 /** \brief Render the basic EBML and Matroska headers
-  
+
    Renders the segment information and track headers. Also reserves
    some space with EBML Void elements so that the headers can be
    overwritten safely by the rerender_headers function.
@@ -599,7 +599,7 @@ render_headers(mm_io_c *rout) {
 }
 
 /** \brief Overwrites the track headers with current values
-  
+
    Can be used by packetizers that have to modify their headers
    depending on the track contents.
 */
@@ -659,7 +659,7 @@ kax_attachment_get_mime_type(const KaxAttached &a) {
   if (mime_type == NULL)
     throw false;
   return string(*static_cast<EbmlString *>(mime_type));
-  
+
 }
 
 static int64_t
@@ -694,7 +694,7 @@ operator ==(const KaxAttached &a1,
 }
 
 /** \brief Render all attachments into the output file at the current position
-  
+
    This function also makes sure that no duplicates are output. This might
    happen when appending files.
 */
@@ -814,7 +814,7 @@ render_attachments(IOCallback *rout) {
 }
 
 /** \brief Check the complete append mapping mechanism
-  
+
    Each entry given with '--append-to' has to be checked for validity.
    For files that aren't managed with '--append-to' default entries have
    to be created.
@@ -1018,7 +1018,7 @@ check_append_mapping() {
 }
 
 /** \brief Add chapters from the readers and calculate the max size
-  
+
    The reader do not add their chapters to the global chapter pool.
    This has to be done after creating the readers. Only the chapters
    of readers that aren't appended are put into the pool right away.
@@ -1069,7 +1069,7 @@ calc_max_chapter_size() {
 }
 
 /** \brief Creates the file readers
-  
+
    For each file the appropriate file reader class is instantiated.
    The newly created class must read all track information in its
    contrsuctor and throw an exception in case of an error. Otherwise
@@ -1183,7 +1183,7 @@ create_readers() {
 }
 
 /** \brief Transform the output filename and insert the current file number
-  
+
    Rules and search order:
    \arg %d
    \arg %[0-9]+d
@@ -1294,7 +1294,7 @@ add_tags_from_cue_chapters() {
 }
 
 /** \brief Creates the next output file
-  
+
    Creates a new file name depending on the split settings. Opens that
    file for writing and calls \c render_headers(). Also renders
    attachments if they exist and the chapters if no splitting is used.
@@ -1351,7 +1351,7 @@ create_next_output_file() {
 }
 
 /** \brief Finishes and closes the current file
-  
+
    Renders the data that is generated during the muxing run. The cues
    and meta seek information are rendered at the end. If splitting is
    active the chapters are stripped to those that actually lie in this
@@ -1525,12 +1525,12 @@ finish_file(bool last_file) {
 static void establish_deferred_connections(filelist_t &file);
 
 /** \brief Append a packetizer to another one
-  
+
    Appends a packetizer to another one. Finds the packetizer that is
    to replace the current one, informs the user about the action,
    connects the two packetizers and changes the structs to reflect
    the switch.
-  
+
    \param ptzr The packetizer that is to be replaced.
    \param amap The append specification the replacement is based upon.
 */
@@ -1620,7 +1620,7 @@ append_track(packetizer_t &ptzr,
   // packet in the appending file because its original timecode during the
   // split phase was the offset. If we have that we can find the corresponding
   // packetizer and use its max_timecode_seen.
-  // 
+  //
   // All this only applies to gapless tracks. Good luck with other files.
   // Some files types also allow access to arbitrary tracks and packets
   // (e.g. AVI and Quicktime). Those files will not work correctly for this.
@@ -1680,11 +1680,11 @@ append_track(packetizer_t &ptzr,
 }
 
 /** \brief Decide if packetizers have to be appended
-  
+
    Iterates over all current packetizers and decides if the next one
    should be appended now. This is the case if the current packetizer
    has finished and there is another packetizer waiting to be appended.
-  
+
    \return true if at least one track has been appended to another one.
 */
 bool
@@ -1717,16 +1717,16 @@ append_tracks_maybe() {
 }
 
 /** \brief Establish deferred packetizer connections
-  
+
    In some cases (e.g. subtitle only files being appended) establishing the
    connections is deferred until a file containing a video track has
    finished, too. This is necessary because the subtitle files themselves
    are usually "shorter" than the movie they belong to. This is not the
    case if the subs are already embedded with a movie in a single file.
-  
+
    This function iterates over all deferred connections and establishes
    them.
-  
+
    \param file All connections that have been deferred until this file has
      finished are established.
 */
@@ -1745,7 +1745,7 @@ establish_deferred_connections(filelist_t &file) {
 }
 
 /** \brief Request packets and handle the next one
-  
+
    Requests packets from each packetizer, selects the packet with the
    lowest timecode and hands it over to the cluster helper for
    rendering.  Also displays the progress.
@@ -1832,7 +1832,7 @@ main_loop() {
 }
 
 /** \brief Global program initialization
-  
+
    Both platform dependant and independant initialization is done here.
    For Unix like systems a signal handler is installed. The locale's
    \c LC_MESSAGES is set.
@@ -1873,7 +1873,7 @@ destroy_readers() {
 }
 
 /** \brief Uninitialization
-  
+
    Frees memory and shuts down the readers.
 */
 void

@@ -1,15 +1,15 @@
 /** \brief command line parsing
-  
+
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    \file
    \version $Id$
-  
+
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
    \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -317,7 +317,7 @@ create_track_number(generic_reader_c *reader,
 }
 
 /** \brief Identify a file type and its contents
-  
+
    This function called for \c --identify. It sets up dummy track info
    data for the reader, probes the input file, creates the file reader
    and calls its identify function.
@@ -330,7 +330,7 @@ identify(const string &filename) {
   file.name = filename;
   get_file_type(file);
   ti.fname = file.name;
-  
+
   if (file.type == FILE_TYPE_IS_UNKNOWN)
     mxerror(_("File %s has unknown type. Please have a look "
               "at the supported file types ('mkvmerge --list-types') and "
@@ -391,7 +391,7 @@ parse_number_with_unit(const string &s,
 }
 
 /** \brief Parse tags and add them to the list of all tags
-  
+
    Also tests the tags for missing mandatory elements.
 */
 void
@@ -428,7 +428,7 @@ parse_and_add_tags(const string &file_name) {
 }
 
 /** \brief Parse the \c --xtracks arguments
-  
+
    The argument is a comma separated list of track IDs.
 */
 static void
@@ -451,7 +451,7 @@ parse_tracks(string s,
 }
 
 /** \brief Parse the \c --sync argument
-  
+
    The argument must have the form <tt>TID:d</tt> or
    <tt>TID:d,l1/l2</tt>, e.g. <tt>0:200</tt>.  The part before the
    comma is the displacement in ms. The optional part after comma is
@@ -488,7 +488,7 @@ parse_sync(string s,
   if (idx >= 0) {
     linear = s.substr(idx + 1);
     s.erase(idx);
-    idx = linear.find('/'); 
+    idx = linear.find('/');
     if (idx < 0)
       async.linear = strtod(linear.c_str(), NULL) / 1000.0;
     else {
@@ -515,7 +515,7 @@ parse_sync(string s,
 }
 
 /** \brief Parse the \c --aspect-ratio argument
-  
+
    The argument must have the form \c TID:w/h or \c TID:float, e.g. \c 0:16/9
 */
 static void
@@ -576,7 +576,7 @@ parse_aspect_ratio(const string &s,
 }
 
 /** \brief Parse the \c --display-dimensions argument
-  
+
    The argument must have the form \c TID:wxh, e.g. \c 0:640x480.
 */
 static void
@@ -609,7 +609,7 @@ parse_display_dimensions(const string s,
 }
 
 /** \brief Parse the \c --cropping argument
-  
+
    The argument must have the form \c TID:left,top,right,bottom e.g.
    \c 0:10,5,10,5
 */
@@ -646,13 +646,13 @@ parse_cropping(const string &s,
 }
 
 /** \brief Parse the \c --split argument
-  
+
    The \c --split option takes several formats.
-  
+
    \arg size based: If only a number is given or the number is
    postfixed with '<tt>K</tt>', '<tt>M</tt>' or '<tt>G</tt>' this is
    interpreted as the size after which to split.
-  
+
    \arg time based: If a number postfixed with '<tt>s</tt>' or in a
    format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
    given then this is interpreted as the time after which to split.
@@ -733,7 +733,7 @@ parse_split(const string &arg) {
 }
 
 /** \brief Parse the \c --delay argument
-  
+
    time based: A number that must be postfixed with <tt>s</tt>,
    <tt>ms</tt>, <tt>us</tt> or <tt>ns</tt> to specify seconds,
    milliseconds, microseconds and nanoseconds respectively.
@@ -761,7 +761,7 @@ parse_delay(const string &s,
 }
 
 /** \brief Parse the \c --cues argument
-  
+
    The argument must have the form \c TID:cuestyle, e.g. \c 0:none.
 */
 static void
@@ -797,7 +797,7 @@ parse_cues(const string &s,
 }
 
 /** \brief Parse the \c --compression argument
-  
+
    The argument must have the form \c TID:compression, e.g. \c 0:bz2.
 */
 static void
@@ -843,7 +843,7 @@ parse_compression(const string &s,
 }
 
 /** \brief Parse the argument for a couple of options
-  
+
    Some options have similar parameter styles. The arguments must have
    the form \c TID:value, e.g. \c 0:XVID.
 */
@@ -888,7 +888,7 @@ parse_language(const string &s,
 }
 
 /** \brief Parse the \c --subtitle-charset argument
-  
+
    The argument must have the form \c TID:charset, e.g. \c 0:ISO8859-15.
 */
 static void
@@ -917,7 +917,7 @@ parse_sub_charset(const string &s,
 }
 
 /** \brief Parse the \c --tags argument
-  
+
    The argument must have the form \c TID:filename, e.g. \c 0:tags.xml.
 */
 static void
@@ -947,7 +947,7 @@ parse_tags(const string &s,
 }
 
 /** \brief Parse the \c --fourcc argument
-  
+
    The argument must have the form \c TID:fourcc, e.g. \c 0:XVID.
 */
 static void
@@ -975,7 +975,7 @@ parse_fourcc(const string &s,
 }
 
 /** \brief Parse the argument for \c --track-order
-  
+
    The argument must be a comma separated list of track IDs.
 */
 static void
@@ -1002,7 +1002,7 @@ parse_track_order(const string &s) {
 }
 
 /** \brief Parse the argument for \c --append-to
-  
+
    The argument must be a comma separated list. Each of the list's items
    consists of four numbers separated by colons. These numbers are:
    -# the source file ID,
@@ -1066,7 +1066,7 @@ parse_default_duration(const string &s,
 
 /** \brief Parse the argument for \c --blockadd
 
-   The argument must be a tupel consisting of a track ID and the max number 
+   The argument must be a tupel consisting of a track ID and the max number
    of BlockAdditional IDs.
 */
 static void
@@ -1090,7 +1090,7 @@ parse_max_blockadd_id(const string &s,
 }
 
 /** \brief Sets the priority mkvmerge runs with
-  
+
    Depending on the OS different functions are used. On Unix like systems
    the process is being nice'd if priority is negative ( = less important).
    Only the super user can increase the priority, but you shouldn't do
@@ -1176,10 +1176,10 @@ guess_mime_type(string file_name) {
 }
 
 /** \brief Parses and handles command line arguments
-  
+
    Also probes input files for their type and creates the appropriate
    file reader.
-  
+
    Options are parsed in several passes because some options must be
    handled/known before others. The first pass finds
    '<tt>--identify</tt>'. The second pass handles options that only
@@ -1919,7 +1919,7 @@ init_globals() {
 }
 
 /** \brief Setup and high level program control
-  
+
    Calls the functions for setup, handling the command line arguments,
    creating the readers, the main loop, finishing the current output
    file and cleaning up.

@@ -1,14 +1,14 @@
 /*
    mkvtoolnix - A set of programs for manipulating Matroska files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    Cross platform compatibility definitions
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -31,7 +31,7 @@
 #else
 # define COMP_GCC
 # define SYS_UNIX
-# if defined(__bsdi__) || defined(__FreeBSD__) 
+# if defined(__bsdi__) || defined(__FreeBSD__)
 #  define SYS_BSD
 # elif defined(__sun) && defined(__SVR4)
 #  define SYS_SOLARIS

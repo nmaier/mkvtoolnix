@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    Subripper subtitle reader
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -42,7 +42,7 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
     else
       cc_utf8 = utf8_init("UTF-8");
   }
-  
+
   global_size = nglobal_size;
   global_data = safememdup(nglobal_data, global_size);
   codec_id = safestrdup(ncodec_id);

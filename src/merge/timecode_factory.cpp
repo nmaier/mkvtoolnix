@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    the timecode factory
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -362,7 +362,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
            iit->is_gap ? " gap" : "", iit->duration, iit->fps);
 }
 
-bool 
+bool
 timecode_factory_v3_c::get_next(int64_t &timecode,
                                 int64_t &duration,
                                 bool peek_only) {

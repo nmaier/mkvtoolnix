@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    AVI demultiplexer module
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -539,7 +539,7 @@ avi_reader_c::identify() {
   const char *type;
   uint32_t par_num, par_den;
   bool extended_info_shown;
-  
+
   mxinfo("File '%s': container: AVI\n", ti->fname.c_str());
   extended_info_shown = false;
   type = AVI_video_compressor(avi);

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    AAC output module
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -29,7 +29,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
                                    int nid,
                                    int nprofile,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, 
+                                   int nchannels,
                                    track_info_c *nti,
                                    bool nemphasis_present,
                                    bool nheaderless)
@@ -202,7 +202,7 @@ aac_packetizer_c::process(memory_c &mem,
       add_packet(mem, my_timecode + ti->async.displacement, duration);
       displace(duration);
     }
-        
+
     my_timecode = (int64_t)((my_timecode + ti->async.displacement) *
                             ti->async.linear);
     mxverb(2, "aac: my_tc = %lld\n", my_timecode);

@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    job queue management dialog
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -630,7 +630,7 @@ job_dialog::on_up(wxCommandEvent &evt) {
       selected[i - 1] = true;
       selected[i] = false;
     }
-  
+
   mdlg->save_job_queue();
 }
 
@@ -778,7 +778,7 @@ BEGIN_EVENT_TABLE(job_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_UP, job_dialog::on_up)
   EVT_BUTTON(ID_JOBS_B_DOWN, job_dialog::on_down)
   EVT_BUTTON(ID_JOBS_B_DELETE, job_dialog::on_delete)
-  EVT_BUTTON(ID_JOBS_B_REENABLE, job_dialog::on_reenable) 
+  EVT_BUTTON(ID_JOBS_B_REENABLE, job_dialog::on_reenable)
   EVT_BUTTON(ID_JOBS_B_DISABLE, job_dialog::on_disable)
   EVT_BUTTON(ID_JOBS_B_VIEW_LOG, job_dialog::on_view_log)
   EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)

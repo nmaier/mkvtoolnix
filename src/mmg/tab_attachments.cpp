@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    "attachments" tab
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -48,7 +48,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) {
   uint32_t i;
   wxStaticBox *sb_top;
-  wxStaticBoxSizer *siz_box_top, *siz_box_bottom; 
+  wxStaticBoxSizer *siz_box_top, *siz_box_bottom;
  wxFlexGridSizer *siz_ddlists;
   wxBoxSizer *siz_buttons, *siz_all;
 

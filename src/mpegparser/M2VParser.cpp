@@ -1,23 +1,23 @@
 /*****************************************************************************
-  
-    MPEG Video Packetizer 
-  
+
+    MPEG Video Packetizer
+
     Copyright(C) 2004 John Cannon <spyder@matroska.org>
-  
+
     This program is free software ; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation ; either version 2 of the License, or
     (at your option) any later version.
-  
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY ; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-  
+
     You should have received a copy of the GNU General Public License
     along with this program ; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-  
+
  **/
 
 #include "M2VParser.h"
@@ -61,28 +61,28 @@ int32_t M2VParser::WriteData(binary* data, uint32_t dataSize){
   if(m_eos)
     return -1;
 
-  if(mpgBuf->Feed(data, dataSize)){    
+  if(mpgBuf->Feed(data, dataSize)){
     return -1;
-  }    
-    
+  }
+
   //Fill the chunks buffer
   while(mpgBuf->GetState() == MPEG2_BUFFER_STATE_CHUNK_READY){
     MPEGChunk * c = mpgBuf->ReadChunk();
-    if(c) chunks.push_back(c);        
+    if(c) chunks.push_back(c);
   }
-    
+
   if(needInit){
     if(InitParser() == 0)
       needInit = false;
-  }        
-    
+  }
+
   FillQueues();
   if(buffers.empty()){
     parserState = MPV_PARSER_STATE_NEED_DATA;
   }else{
     parserState = MPV_PARSER_STATE_FRAME;
   }
-    
+
   return 0;
 }
 
@@ -107,11 +107,11 @@ void M2VParser::DumpQueues(){
   }*/
 
 M2VParser::M2VParser(){
-    
+
   mpgBuf = new MPEGVideoBuffer(BUFF_SIZE);
-    
+
   notReachedFirstGOP = true;
-  currentStampingTime = 0;    
+  currentStampingTime = 0;
   position = 0;
   m_eos = false;
   mpegVersion = 1;
@@ -127,15 +127,15 @@ M2VParser::M2VParser(){
 int32_t M2VParser::InitParser(){
   //Gotta find a sequence header now
   MPEGChunk* chunk;
-  //MPEGChunk* seqHdrChunk;    
+  //MPEGChunk* seqHdrChunk;
   for(int i = 0; i < chunks.size(); i++){
-    chunk = chunks[i];        
+    chunk = chunks[i];
     if(chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE){
       //Copy the header for later, we must copy because the actual chunk will be deleted in a bit
       binary * hdrData = new binary[chunk->GetSize()];
-      memcpy(hdrData, chunk->GetPointer(), chunk->GetSize());      
+      memcpy(hdrData, chunk->GetPointer(), chunk->GetSize());
       seqHdrChunk = new MPEGChunk(hdrData, chunk->GetSize()); //Save this for adding as private data...
-      MPEG2SequenceHeader seqHdr = ParseSequenceHeader(chunk);            
+      MPEG2SequenceHeader seqHdr = ParseSequenceHeader(chunk);
       m_seqHdr = seqHdr;
 
       //Look for sequence extension to identify mpeg2
@@ -147,7 +147,7 @@ int32_t M2VParser::InitParser(){
         }
       }
       return 0;
-    }        
+    }
   }
   return -1;
 }
@@ -159,10 +159,10 @@ M2VParser::~M2VParser(){
 }
 
 const MediaTime M2VParser::GetPosition(){
-  return position;    
+  return position;
 }
 
-MediaTime M2VParser::GetFrameDuration(MPEG2PictureHeader picHdr){    
+MediaTime M2VParser::GetFrameDuration(MPEG2PictureHeader picHdr){
   if(m_seqHdr.progressiveSequence){
     if(!picHdr.topFieldFirst && picHdr.repeatFirstField)
       return 4;
@@ -210,14 +210,14 @@ int32_t M2VParser::CountBFrames(){
     }
   }
   return -1;
-}    
+}
 
 int32_t M2VParser::QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr){
   MPEGFrame* outBuf;
   bool bCopy = true;
   binary* pData = chunk->GetPointer();
-  uint32_t dataLen = chunk->GetSize();  
-  
+  uint32_t dataLen = chunk->GetSize();
+
   if(seqHdr){
     bCopy = false;
     dataLen += seqHdr->GetSize();
@@ -227,11 +227,11 @@ int32_t M2VParser::QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime tim
     delete seqHdr;
     seqHdr = NULL;
   }
-    
+
   MediaTime duration = GetFrameDuration(picHdr);
-    
+
   outBuf = new MPEGFrame(pData, dataLen, bCopy);
-    
+
   if(picHdr.frameType == MPEG2_I_FRAME){
     outBuf->frameType = 'I';
   }else if(picHdr.frameType == MPEG2_P_FRAME){
@@ -239,10 +239,10 @@ int32_t M2VParser::QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime tim
   }else{
     outBuf->frameType = 'B';
   }
-    
+
   outBuf->timecode = (MediaTime)(timecode * (1000000000/(m_seqHdr.frameRate*2)));
   outBuf->duration = (MediaTime)(duration * (1000000000/(m_seqHdr.frameRate*2)));
-    
+
   if(outBuf->frameType == 'P'){
     outBuf->firstRef = (MediaTime)(firstRef * (1000000000/(m_seqHdr.frameRate*2)));
   }else if(outBuf->frameType == 'B'){
@@ -265,7 +265,7 @@ void M2VParser::ShoveRef(MediaTime ref){
   }else{
     firstRef = secondRef;
     secondRef = ref;
-  }        
+  }
 }
 
 //Reads frames until it can timestamp them, usually reads until it has
@@ -276,7 +276,7 @@ int32_t M2VParser::FillQueues(){
   if(chunks.empty()){
     return -1;
   }
-  bool done = false;    
+  bool done = false;
   while(!done){
     MediaTime myTime = currentStampingTime;
     MPEGChunk* chunk = chunks.front();
@@ -298,17 +298,17 @@ int32_t M2VParser::FillQueues(){
       }
       chunk = chunks.front();
     }
-    MPEG2PictureHeader picHdr = ParsePictureHeader(chunk);        
+    MPEG2PictureHeader picHdr = ParsePictureHeader(chunk);
     int bcount;
     if(myTime == nextSkip){
       myTime+=nextSkipDuration;
       currentStampingTime=myTime;
     }
-    switch(picHdr.frameType){            
-      case MPEG2_I_FRAME:                
+    switch(picHdr.frameType){
+      case MPEG2_I_FRAME:
         bcount = CountBFrames();
         if(bcount > 0){ //..BBIBB..
-          myTime += bcount;          
+          myTime += bcount;
           nextSkip = myTime;
           nextSkipDuration = GetFrameDuration(picHdr);
         }else{ //IPBB..
@@ -320,7 +320,7 @@ int32_t M2VParser::FillQueues(){
         QueueFrame(seqHdr,chunk,myTime,picHdr);
         if(notReachedFirstGOP) notReachedFirstGOP = false;
         break;
-      case MPEG2_P_FRAME:                
+      case MPEG2_P_FRAME:
         bcount = CountBFrames();
         if(firstRef == -1) break;
         if(bcount > 0){ //..PBB..
@@ -332,13 +332,13 @@ int32_t M2VParser::FillQueues(){
           currentStampingTime+=GetFrameDuration(picHdr);
         }
         ShoveRef(myTime);
-        QueueFrame(seqHdr, chunk, myTime, picHdr);                
+        QueueFrame(seqHdr, chunk, myTime, picHdr);
         break;
-      default: //B-frames                
+      default: //B-frames
         if(firstRef == -1 || secondRef == -1) break;
         QueueFrame(seqHdr,chunk,myTime,picHdr);
         currentStampingTime+=GetFrameDuration(picHdr);
-    }        
+    }
     chunks.erase(chunks.begin());
     delete chunk;
     if(chunks.empty()) return -1;

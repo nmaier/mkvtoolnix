@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    WAVPACK output module
-  
+
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
@@ -117,7 +117,7 @@ wavpack_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   if (psrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
   if ((sample_rate != psrc->sample_rate) ||
-      (channels != psrc->channels) || 
+      (channels != psrc->channels) ||
       (bits_per_sample != psrc->bits_per_sample))
     return CAN_CONNECT_NO_PARAMETERS;
   return CAN_CONNECT_YES;

@@ -2,15 +2,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    helper functions, common variables
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -1526,10 +1526,10 @@ mxsprintf(const char *fmt,
 }
 
 /** \brief Platform independant version of sscanf
-  
+
    This is a platform independant version of sscanf. It first fixes the format
    string (\see fix_format) and then calls sscanf.
-  
+
    \param str The string to parse
    \param fmt The format string
    \returns The number of elements assigned
@@ -1638,7 +1638,7 @@ parse_timecode(const char *src,
 }
 
 /** \brief Reads command line arguments from a file
-  
+
    Each line contains exactly one command line argument or a
    comment. Arguments are converted to UTF-8 and appended to the array
    \c args.
@@ -1685,7 +1685,7 @@ read_args_from_file(vector<string> &args,
 }
 
 /** \brief Expand the command line parameters
-  
+
    Takes each command line paramter, converts it to UTF-8, and reads more
    commands from command files if the argument starts with '@'. Puts all
    arguments into a new array.

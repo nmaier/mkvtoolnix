@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    VobSub stream reader
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -93,7 +93,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
   string sub_name, line;
   int len;
-  
+
   try {
     idx_file = new mm_text_io_c(new mm_file_io_c(ti->fname));
   } catch (...) {

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    class definitions for the OGG media stream reader
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -117,7 +117,7 @@ private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);
   virtual int read_page(ogg_page *);
   virtual void handle_new_stream(ogg_page *);
-  virtual void handle_new_stream_and_packets(ogg_page *); 
+  virtual void handle_new_stream_and_packets(ogg_page *);
   virtual void process_page(ogg_page *);
   virtual int packet_available();
   virtual int read_headers();

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    chapter parser for CUE sheets
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Patches by Nicolas Le Guen <nleguen@pepper-prod.com> and
    Vegard Pettersen <vegard_p@broadpark.no>
@@ -374,7 +374,7 @@ parse_cue_chapters(mm_text_io_c *in,
                    KaxTags **tags) {
   cue_parser_args_t a;
   string line;
-  
+
   in->setFilePointer(0);
   a.chapters = new KaxChapters;
 
@@ -443,7 +443,7 @@ parse_cue_chapters(mm_text_io_c *in,
             int64_t timestamp = min * 60 * 1000000000ll + sec * 1000000000ll +
               frames * 1000000000ll / 75;
             a.start_indices.push_back(timestamp);
-            if ((index == 1) || (index == 0)) 
+            if ((index == 1) || (index == 0))
               a.start_of_track = timestamp;
             index_ok = true;
           }
@@ -452,7 +452,7 @@ parse_cue_chapters(mm_text_io_c *in,
         if (!index_ok)
           mxerror("Cue sheet parser: Invalid INDEX number (got %d, "
                   "expected %d) in line %d,\n",
-                  index, a.start_indices.size(), a.line_num); 
+                  index, a.start_indices.size(), a.line_num);
 
       } else if (starts_with_case(line, "track ")) {
         if ((line.length() < 5) ||

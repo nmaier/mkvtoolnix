@@ -1,13 +1,13 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    OS dependant helper functions
 */
 
@@ -164,7 +164,7 @@ CreateFileUtf8(LPCSTR lpFileName,
 #if !defined(HAVE_VSSCANF) || (HAVE_VSSCANF != 1)
 /*
    vsscanf for Win32
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html

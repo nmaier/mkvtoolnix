@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    "chapter editor" tab
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -678,7 +678,7 @@ tab_chapters::load(wxString name) {
   expand_subtree(*tc_chapters, tid_root);
 
   enable_inputs(false);
-    
+
   mdlg->set_last_chapters_in_menu(name);
   mdlg->set_status_bar(wxT("Chapters loaded."));
 
@@ -988,7 +988,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
       m->PushElement(*tmpvec[i]);
   } else {
     m = d->eentry;
-    tc_chapters->AppendItem(id, s, -1, -1, 
+    tc_chapters->AppendItem(id, s, -1, -1,
                             new chapter_node_data_c(chapter));
     m->PushElement(*chapter);
   }
@@ -1041,7 +1041,7 @@ tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
   }
   m->PushElement(*chapter);
   s = create_chapter_label(*chapter);
-  tc_chapters->AppendItem(id, s, -1, -1, 
+  tc_chapters->AppendItem(id, s, -1, -1,
                           new chapter_node_data_c(chapter));
   id = tc_chapters->GetSelection();
   expand_subtree(*tc_chapters, id, true);
@@ -1131,7 +1131,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
       tc_uid->Enable(true);
       tc_uid->SetValue(wxT(""));
       tc_uid->Enable(false);
-    }      
+    }
     no_update = false;
     return;
   }
@@ -1650,7 +1650,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
     label = create_chapter_label(*chapter);
     tc_chapters->SetItemText(id, label);
   }
-  
+
 
   return true;
 }

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    class definitions for the TTA demultiplexer module
-  
+
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 

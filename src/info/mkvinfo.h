@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    definition of global variables and functions
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -67,7 +67,7 @@ private:
   int last_percent;
   int64_t num_elements, elements_saved;
   wxString current_file, last_dir;
-  
+
   wxTreeCtrl *tree;
   wxTreeItemId item_ids[10];
 

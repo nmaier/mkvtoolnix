@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    helper function for DTS data
-  
+
    Written by Peter Niemayer <niemayer@isg.de>.
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
@@ -282,7 +282,7 @@ print_dts_header(const struct dts_header_s *h) {
   mxinfo("Audio Channels         : %d%s, arrangement: %s\n",
          h->audio_channels, (h->source_surround_in_es)? " ES" : "" ,
          h->audio_channel_arrangement);
-  
+
   mxinfo("Core sampling frequency: %u\n", h->core_sampling_frequency);
 
   mxinfo("Transmission_bitrate   : ");

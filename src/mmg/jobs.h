@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    declaration for the job queue
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -119,6 +119,6 @@ public:
   void swap_rows(int lower, int higher, bool up);
   void create_list_item(int i);
   void start_jobs(vector<int> &jobs_to_start);
-}; 
+};
 
 #endif // __JOBS_H

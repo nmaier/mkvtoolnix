@@ -2,20 +2,20 @@
  *  mb_file_io.c
  *
  *  Copyright (C) Moritz Bunkus - March 2004
- *      
+ *
  *  mb_file_io is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2.1, or (at your option)
  *  any later version.
- *   
+ *
  *  mb_file_io is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *   
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. 
+ *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  */
 
@@ -72,7 +72,7 @@ static int64_t
 mb_std_file_tell(void *file) {
   LONG high = 0;
   DWORD low;
-  
+
   if (file == NULL)
     return -1;
   low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);

@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    Matroska file analyzer
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -92,7 +92,7 @@ kax_analyzer_dlg_c::process() {
   l0 = es.FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
   if (l0 == NULL)
     throw error_c(PFX "(no EBML head found)");
-      
+
   // Don't verify its data for now.
   l0->SkipData(es, l0->Generic().Context);
   delete l0;
@@ -124,7 +124,7 @@ kax_analyzer_dlg_c::process() {
                                        l1->ElementSize()));
     while (app->Pending())
       app->Dispatch();
-    
+
     l1->SkipData(es, l1->Generic().Context);
     delete l1;
     l1 = NULL;
@@ -397,7 +397,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
       file->setFilePointer(0, seek_end);
       if (!new_segment->ForceSize(file->getFilePointer() -
                                   segment->HeadSize() -
-                                  segment->GetElementPosition())) { 
+                                  segment->GetElementPosition())) {
         segment->OverwriteHead(*file);
         wxMessageBox(_("Wrote the element at the end of the file but could "
                        "not update the segment size. Therefore the element "

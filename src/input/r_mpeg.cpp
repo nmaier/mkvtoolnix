@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    MPEG ES demultiplexer module
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -232,7 +232,7 @@ mpeg_es_reader_c::get_progress() {
 
 void
 mpeg_es_reader_c::identify() {
-  mxinfo("File '%s': container: MPEG elementary stream (ES)\n" 
+  mxinfo("File '%s': container: MPEG elementary stream (ES)\n"
          "Track ID 0: video (MPEG %d)\n", ti->fname.c_str(), version);
 }
 
@@ -671,7 +671,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     } else
       // Unsupported track type
       return;
- 
+
     track->id = id;
     id2idx[id] = tracks.size();
     tracks.push_back(track);
@@ -817,7 +817,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
                ti->fname.c_str(), id);
-      
+
     } else
       mxerror("mpeg_ps_reader: Should not have happened #2. %s", BUGMSG);
   }

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    Quicktime and MP4 reader
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    The second half of the parse_headers() function after the
      "// process chunkmap:" comment was taken from mplayer's
@@ -118,7 +118,7 @@ qtmp4_reader_c::read_atom() {
 
   a.pos = io->getFilePointer();
   a.size = io->read_uint32_be();
-  a.fourcc = io->read_uint32_be(); 
+  a.fourcc = io->read_uint32_be();
   a.hsize = 8;
   if (a.size == 1) {
     a.size = io->read_uint64_be();
@@ -225,7 +225,7 @@ qtmp4_reader_c::parse_headers() {
                dmx->id, dmx->esds.object_type_id);
         continue;
       }
- 
+
       if (((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
            (dmx->esds.object_type_id == MP4OTI_MPEG2AudioMain) ||
            (dmx->esds.object_type_id == MP4OTI_MPEG2AudioLowComplexity) ||
@@ -411,7 +411,7 @@ qtmp4_reader_c::parse_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
         if (add_atom == FOURCC('e', 's', 'd', 's')) {
           if (!dmx->esds_parsed)
             dmx->esds_parsed = parse_esds_atom(memio, dmx, level + 1);
-        } else {                    
+        } else {
           while (!memio.eof()) {
             patom_size = memio.read_uint32_be();
             if (patom_size <= 8)
@@ -681,7 +681,7 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
     skip_atom();
     parent.size -= atom.size;
   }
-}  
+}
 
 void
 qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,

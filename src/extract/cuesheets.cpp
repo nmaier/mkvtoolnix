@@ -1,14 +1,14 @@
 /*
    mkvextract -- extract tracks from Matroska files into other files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    extracts chapters and tags as CUE sheets from Matroska files
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -179,7 +179,7 @@ write_cuesheet(const char *file_name,
   string s;
   int i, j;
   int64_t temp_index;
-  
+
   if (chapters.ListSize() == 0)
     return;
 
@@ -192,7 +192,7 @@ write_cuesheet(const char *file_name,
   print_if_global("DATE", "REM DATE \"%s\"\n"); // until 0.9.6
   print_if_global("DATE_RELEASED", "REM DATE \"%s\"\n"); // 0.9.7 and newer
   print_if_global("DISCID", "REM DISCID %s\n");
-    
+
   tag = find_tag_for_track(-1, tuid, 0, tags);
   if (tag != NULL)
     print_comments("", *tag, out);
@@ -214,7 +214,7 @@ write_cuesheet(const char *file_name,
         temp_index = get_chapter_index(j, atom);
         if (temp_index == -1)
           continue;
-        out.printf("    INDEX %02d %02lld:%02lld:%02lld\n", 
+        out.printf("    INDEX %02d %02lld:%02lld:%02lld\n",
                    j,
                    temp_index / 1000000 / 1000 / 60,
                    (temp_index / 1000000 / 1000) % 60,
@@ -227,7 +227,7 @@ write_cuesheet(const char *file_name,
       print_if_available("DATE_RELEASED", "    REM DATE \"%s\"\n");
       print_if_available("GENRE", "    REM GENRE \"%s\"\n");
       print_comments("    ", *tag, out);
-    } 
+    }
   }
 }
 

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    SSA/ASS subtitle parser
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -242,7 +242,7 @@ ssa_reader_c::parse_file() {
     comma = ",";
     line = to_string(num) + comma + get_element("Layer", fields) + comma +
       get_element("Style", fields) + comma +
-      get_element("Name", fields) + comma + 
+      get_element("Name", fields) + comma +
       get_element("MarginL", fields) + comma +
       get_element("MarginR", fields) + comma +
       get_element("MarginV", fields) + comma +

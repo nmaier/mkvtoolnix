@@ -1,14 +1,14 @@
 /*
    mkvextract -- extract tracks from Matroska files into other files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    extracts tags from Matroska files into other files
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 

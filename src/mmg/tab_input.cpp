@@ -1,15 +1,15 @@
 /*
    mkvmerge GUI -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    "input" tab
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -1182,7 +1182,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   cb_default->SetValue(t->default_track);
   cb_aac_is_sbr->SetValue(t->aac_is_sbr);
   cob_aspect_ratio->SetValue(t->aspect_ratio);
-  tc_display_width->SetValue(t->dwidth); 
+  tc_display_width->SetValue(t->dwidth);
   tc_display_height->SetValue(t->dheight);
   selected_track = new_sel;
   cob_compression->SetValue(t->compression);
@@ -1765,7 +1765,7 @@ tab_input::validate_settings() {
 IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)
-  EVT_BUTTON(ID_B_REMOVEFILE, tab_input::on_remove_file) 
+  EVT_BUTTON(ID_B_REMOVEFILE, tab_input::on_remove_file)
   EVT_BUTTON(ID_B_APPENDFILE, tab_input::on_append_file)
   EVT_BUTTON(ID_B_TRACKUP, tab_input::on_move_track_up)
   EVT_BUTTON(ID_B_TRACKDOWN, tab_input::on_move_track_down)

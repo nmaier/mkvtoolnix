@@ -15,10 +15,10 @@
 
   You should have received a copy of the GNU Lesser General Public License
   along with this library; see the file COPYING.  If not, write to
-  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. 
+  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
   $Id$
- 
+
  */
 
 #include "os.h"
@@ -1629,7 +1629,7 @@ deliver_segments(rmff_track_t *track,
     rmff_put_uint32_le(ptr, 1);
     ptr += 4;
     rmff_put_uint32_le(ptr, 0);
-    ptr += 4; 
+    ptr += 4;
   } else {
     for (i = 0; i < tint->num_segments; i++) {
       rmff_put_uint32_le(ptr, 1);
@@ -1711,7 +1711,7 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
       if ((vpkg_header & 0x40) == 0) {
         if (data_len < 1)
           return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                           "data available", RMFF_ERR_DATA); 
+                           "data available", RMFF_ERR_DATA);
         // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
         vpkg_subseq = data_get_uint8(&data, &data_len) & 0x7f;
       }
@@ -1720,7 +1720,7 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
       // bit 14 is always one (same applies to the offset)
       if (data_len < 2)
         return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                         "data available", RMFF_ERR_DATA); 
+                         "data available", RMFF_ERR_DATA);
       vpkg_length = data_get_uint16_be(&data, &data_len);
 
       if ((vpkg_length & 0x8000) == 0x8000)
@@ -1729,7 +1729,7 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
       if ((vpkg_length & 0x4000) == 0) {
         if (data_len < 2)
           return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                           "data available", RMFF_ERR_DATA); 
+                           "data available", RMFF_ERR_DATA);
         vpkg_length <<= 16;
         vpkg_length |= data_get_uint16_be(&data, &data_len);
         vpkg_length &= 0x3fffffff;
@@ -1742,13 +1742,13 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
       // _end_ of the packet, so it's equal to fragment size!!!
       if (data_len < 2)
         return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                         "data available", RMFF_ERR_DATA); 
+                         "data available", RMFF_ERR_DATA);
       vpkg_offset = data_get_uint16_be(&data, &data_len);
 
       if ((vpkg_offset & 0x4000) == 0) {
         if (data_len < 2)
           return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                           "data available", RMFF_ERR_DATA); 
+                           "data available", RMFF_ERR_DATA);
         vpkg_offset <<= 16;
         vpkg_offset |= data_get_uint16_be(&data, &data_len);
         vpkg_offset &= 0x3fffffff;
@@ -1758,7 +1758,7 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
 
       if (data_len < 1)
         return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                         "data available", RMFF_ERR_DATA); 
+                         "data available", RMFF_ERR_DATA);
       vpkg_seqnum = data_get_uint8(&data, &data_len);
 
       if ((vpkg_header & 0xc0) == 0xc0) {

@@ -1,14 +1,14 @@
 /*
    mkvextract -- extract tracks from Matroska files into other files
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    extracts tracks from Matroska files into other files
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
@@ -167,7 +167,7 @@ check_output_files() {
         continue;
       }
 
-      // Video tracks: 
+      // Video tracks:
       if (tracks[i].track_type == 'v') {
         if (!strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
           if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
@@ -804,7 +804,7 @@ handle_data(KaxBlock *block,
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;
-        
+
         // Split the line into the fields.
         // Specs say that the following fields are to put into the block:
         // 0: ReadOrder, 1: Layer, 2: Style, 3: Name, 4: MarginL, 5: MarginR,
@@ -1332,7 +1332,7 @@ extract_tracks(const char *file_name) {
 
       return false;
     }
-      
+
     // Don't verify its data for now.
     l0->SkipData(*es, l0->Generic().Context);
     delete l0;

@@ -1,15 +1,15 @@
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
-  
+
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
-  
+
    $Id$
-  
+
    OGG media stream reader
-  
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -1146,7 +1146,7 @@ ogm_reader_c::handle_stream_comments() {
         chapters.push_back(comments[j]);
     }
 
-    if (((title != "") || (chapters.size() > 0)) && 
+    if (((title != "") || (chapters.size() > 0)) &&
         !charset_warning_printed && (ti->chapter_charset == "")) {
       mxwarn("The Ogg/OGM file '%s' contains chapter or title information. "
              "Unfortunately the charset used to store this information in "

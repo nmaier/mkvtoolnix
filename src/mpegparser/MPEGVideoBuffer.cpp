@@ -1,23 +1,23 @@
 /*****************************************************************************
-  
-    MPEG Video Packetizing Buffer 
-  
+
+    MPEG Video Packetizing Buffer
+
     Copyright(C) 2004 John Cannon <spyder@matroska.org>
-  
+
     This program is free software ; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation ; either version 2 of the License, or
     (at your option) any later version.
-  
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY ; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-  
+
     You should have received a copy of the GNU General Public License
     along with this program ; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-  
+
  **/
 
 #include "MPEGVideoBuffer.h"
@@ -25,11 +25,11 @@
 
 int32_t MPEGVideoBuffer::FindStartCode(uint32_t startPos){
   //How many bytes can we look through?
-  uint32_t window = myBuffer->GetLength() - startPos; 
+  uint32_t window = myBuffer->GetLength() - startPos;
 
   if(window < 4) //Make sure we have enough bytes to search.
     return -1;
-  
+
   for(unsigned int i = startPos; i < (window - 3); i++){
     CircBuffer& buf = *myBuffer;
     binary a,b,c,d;
@@ -100,8 +100,8 @@ MPEGChunk * MPEGVideoBuffer::ReadChunk(){
     chunkStart = 0; //we read up to the next start code
     chunkEnd = -1;
     UpdateState();
-    myChunk = new MPEGChunk(chunkData, chunkLength);  
-    return myChunk;    
+    myChunk = new MPEGChunk(chunkData, chunkLength);
+    return myChunk;
   }else{
     return NULL;
   }
@@ -186,11 +186,11 @@ MPEG2SequenceHeader ParseSequenceHeader(MPEGChunk* chunk){
     default:
       hdr.frameRate = 0.0f;
   }
-    
+
   //Seek to picturecoding extension
   while(pos < (chunk->GetPointer() + chunk->GetSize() - 4)){
     if((pos[0] == 0x00) && (pos[1] == 0x00) && (pos[2] == 0x01) && (pos[3] == MPEG_VIDEO_EXT_START_CODE)){
-      if((pos[4] & 0xF0) == 0x01){ //Picture coding extension        
+      if((pos[4] & 0xF0) == 0x01){ //Picture coding extension
         //printf("Found a picture_coding_extension\n");
         haveSeqExt = 1;
         pos+=4;
@@ -199,14 +199,14 @@ MPEG2SequenceHeader ParseSequenceHeader(MPEGChunk* chunk){
     }
     pos++;
   }
-    
+
   if(haveSeqExt){
     pos++;
     hdr.progressiveSequence = (pos[0] & 0x80);
   }else{
     hdr.progressiveSequence = 0;
   }
-    
+
   return hdr;
 }
 
@@ -253,11 +253,11 @@ MPEG2PictureHeader ParsePictureHeader(MPEGChunk* chunk){
   pos+=1;
   temp = ((uint32_t)(pos[0] & 0x38)) >> 3 ;
   hdr.frameType = (uint8_t) temp;
-  
+
   //Seek to picturecoding extension
   while(pos < (chunk->GetPointer() + chunk->GetSize() - 4)){
     if((pos[0] == 0x00) && (pos[1] == 0x00) && (pos[2] == 0x01) && (pos[3] == MPEG_VIDEO_EXT_START_CODE)){
-      if((pos[4] & 0xF0) == 0x80){ //Picture coding extension        
+      if((pos[4] & 0xF0) == 0x80){ //Picture coding extension
         //printf("Found a picture_coding_extension\n");
         havePicExt = 1;
         break;
@@ -265,7 +265,7 @@ MPEG2PictureHeader ParsePictureHeader(MPEGChunk* chunk){
     }
     pos++;
   }
-  if(!havePicExt){  
+  if(!havePicExt){
     hdr.pictureStructure = MPEG2_PICTURE_TYPE_FRAME;
     hdr.repeatFirstField = 0;
     hdr.topFieldFirst = 1;
@@ -277,12 +277,12 @@ MPEG2PictureHeader ParsePictureHeader(MPEGChunk* chunk){
     pos++;
     hdr.topFieldFirst = (pos[0] & 0x80);
     //pos++;
-    hdr.repeatFirstField = (pos[0] & 0x02);    
+    hdr.repeatFirstField = (pos[0] & 0x02);
     /*//let's play ;)
       hdr->repeatFirstField = (pos[0] = pos[0] & 0xFD) & 0x02;*/
     pos++;
     hdr.progressive = (pos[0] & 0x80);
   }
-  
+
   return hdr;
 }
