@@ -21,6 +21,8 @@
 #ifndef __PR_GENERIC_H
 #define __PR_GENERIC_H
 
+#include "os.h"
+
 #include <deque>
 #include <vector>
 

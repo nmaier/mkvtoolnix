@@ -21,6 +21,8 @@
 #ifndef __R_MATROSKA_H
 #define __R_MATROSKA_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include "mm_io.h"

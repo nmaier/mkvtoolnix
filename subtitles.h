@@ -21,6 +21,7 @@
 #ifndef __SUBTITLES_H
 #define __SUBTITLES_H
 
+#include "os.h"
 
 #include "p_textsubs.h"
 

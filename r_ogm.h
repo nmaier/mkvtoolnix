@@ -21,6 +21,8 @@
 #ifndef __R_OGM_H
 #define __R_OGM_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include <ogg/ogg.h>

@@ -17,6 +17,8 @@
 #ifndef __R_MICRODVD_H
 #define __R_MICRODVD_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include <ogg/ogg.h>

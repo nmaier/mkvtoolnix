@@ -524,46 +524,18 @@ int main ()
 ])
 
 dnl
-dnl g++ version test
+dnl Check for mingw
 dnl
-AC_DEFUN(PATH_CXXVERSION,
-[dnl 
-  AC_MSG_CHECKING($CXX version)
-  CXXVER=`$CXX -dumpversion`
-  CXXVER_CFLAGS=
-  case "$CXXVER" in
-    2.*)
-      CXXVER_CFLAGS="-DLIBEBML_GCC2 -DNO_WSTRING"
-      AC_MSG_RESULT(v2)
-      ;;
-    3*)
-      AC_MSG_RESULT(v3)
-      ;;
-    *)
-      AC_MSG_RESULT(unknown)
-      echo "*** Unknown C++ compiler or version. Please contact Moritz Bunkus"
-      echo "*** <moritz@bunkus.org> if compilation fails."
-      ;;
-  esac
-  AC_SUBST(CXXVER_CFLAGS)
-])
-
-dnl
-dnl Check for cygwin
-dnl
-AC_DEFUN(PATH_CYGWIN,
+AC_DEFUN(PATH_MINGW,
 [dnl
-  AC_MSG_CHECKING(if being compiled under cygwin)
-  CYGWIN="`uname -s`"
-  case "$CYGWIN" in
-    CYGWIN*)
-      AC_MSG_RESULT(yes)
-      CXXVER_CFLAGS="$CXXVER_CFLAGS -DNO_WSTRING"
-      ;;
-    *)
-      AC_MSG_RESULT(no)
-      ;;
-  esac
+  AC_MSG_CHECKING(if being compiled with mingw32)
+  if test "x`gcc --version | grep -i mingw`" = "x" ; then
+    AC_MSG_RESULT(no)
+  else
+    AC_MSG_RESULT(yes)
+dnl    MINGW_LIBS=-lcharset
+  fi
+  AC_SUBST(MINGW_LIBS)
 ])
 
 dnl This macros shamelessly stolen from

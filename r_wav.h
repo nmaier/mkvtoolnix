@@ -22,6 +22,8 @@
 #ifndef __R_WAV_H
 #define __R_WAV_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include "mm_io.h"

@@ -184,7 +184,7 @@ avi_reader_c::~avi_reader_c() {
 
 void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   avi_demuxer_t *demuxer;
-  WAVEFORMATEX *wfe;
+  alWAVEFORMATEX *wfe;
   int i;
 
   for (i = 0; i < ademuxers.size(); i++)
@@ -198,7 +198,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   wfe = avi->wave_format_ex[aid];
   ti->private_data = (unsigned char *)wfe;
   if (wfe != NULL)
-    ti->private_size = wfe->cb_size + sizeof(WAVEFORMATEX);
+    ti->private_size = wfe->cb_size + sizeof(alWAVEFORMATEX);
   else
     ti->private_size = 0;
   ti->id = aid + 1;             // ID for this audio track.

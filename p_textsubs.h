@@ -21,6 +21,8 @@
 #ifndef __P_TEXTSUBS_H
 #define __P_TEXTSUBS_H
 
+#include "os.h"
+
 #include "common.h"
 #include "pr_generic.h"
 #include "pr_generic.h"

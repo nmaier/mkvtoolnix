@@ -18,12 +18,14 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include "../os.h"
+
 #include <ctype.h>
 #include <errno.h>
 #include <iconv.h>
-#ifdef WIN32
+#if defined(COMP_MSC)
 #include <libcharset.h>
-#else
+#elif !defined(COMP_MINGW)
 #include <langinfo.h>
 #endif
 #include <locale.h>
@@ -257,10 +259,12 @@ int utf8_init(const char *charset) {
 
   if ((charset == NULL) || (*charset == 0)) {
     setlocale(LC_CTYPE, "");
-#ifdef WIN32
-    lc_charset = (char *)locale_charset();
-#else
+#if defined(COMP_MINGW)
+    lc_charset = "US-ASCII";
+#elif defined(SYS_UNIX)
     lc_charset = nl_langinfo(CODESET);
+#else
+    lc_charset = (char *)locale_charset();
 #endif
     if (!strcmp(lc_charset, "UTF8") || !strcmp(lc_charset, "UTF-8"))
       return -1;
@@ -322,7 +326,7 @@ static char *convert_charset(iconv_t ict, const char *src) {
   srccopy = safestrdup(src);
   psrc = srccopy;
   pdst = dst;
-#ifdef __CYGWIN__
+#if defined(COMP_CYGWIN) || defined(COMP_MINGW)
   iconv(ict, (const char **)&psrc, &lsrc, &pdst, &ldst);
 #else
   iconv(ict, &psrc, &lsrc, &pdst, &ldst);
@@ -474,6 +478,20 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line) {
  */
 
 UTFstring cstr_to_UTFstring(const char *c) {
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+  wchar_t *new_string;
+  int len;
+  UTFstring u;
+
+  len = strlen(c);
+  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
+  MultiByteToWideChar(CP_ACP, 0, c, -1, new_string, len + 1);
+
+  u = new_string;
+  safefree(new_string);
+
+  return u;
+#else
   wchar_t *new_string;
   char *old_locale;
   UTFstring u;
@@ -492,9 +510,21 @@ UTFstring cstr_to_UTFstring(const char *c) {
   safefree(new_string);
 
   return u;
+#endif
 }
 
 char *UTFstring_to_cstr(const UTFstring &u) {
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+  char *new_string;
+  int len;
+  BOOL dummy;
+
+  len = u.length();
+  new_string = (char *)safemalloc(len + 1);
+  WideCharToMultiByte(CP_ACP, 0, u.c_str(), -1, new_string, len + 1, " ", &dummy);
+
+  return new_string;
+#else
   const wchar_t *sptr;
   char *new_string, *old_locale;
   int len;
@@ -510,6 +540,7 @@ char *UTFstring_to_cstr(const UTFstring &u) {
   safefree(old_locale);
 
   return new_string;
+#endif
 }
 
 /*
@@ -568,7 +599,9 @@ debug_c::debug_c(const char *nlabel) {
 void debug_c::enter(const char *label) {
   int i;
   debug_c *entry;
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   struct timeval tv;
+#endif
 
   entry = NULL;
   for (i = 0; i < dbg_entries.size(); i++)
@@ -582,17 +615,28 @@ void debug_c::enter(const char *label) {
     dbg_entries.push_back(entry);
   }
 
+
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   gettimeofday(&tv, NULL);
   entry->entered_at = (uint64_t)tv.tv_sec * (uint64_t)1000000 +
     tv.tv_usec;
+#else
+  entry->entered_at = (uint64_t)time(NULL) * (uint64_t)1000000;
+#endif
 }
 
 void debug_c::leave(const char *label) {
   int i;
   debug_c *entry;
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   struct timeval tv;
 
   gettimeofday(&tv, NULL);
+#else
+  time_t now;
+
+  now = time(NULL);
+#endif
 
   entry = NULL;
   for (i = 0; i < dbg_entries.size(); i++)
@@ -605,8 +649,12 @@ void debug_c::leave(const char *label) {
     die("common.cpp/debug_c::leave() leave without enter: %s", label);
 
   entry->number_of_calls++;
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   entry->elapsed_time += (uint64_t)tv.tv_sec * (uint64_t)1000000 +
     tv.tv_usec - entry->entered_at;
+#else
+  entry->elapsed_time += (uint64_t)now * (uint64_t)1000000;
+#endif
   entry->entered_at = 0;
 }
 

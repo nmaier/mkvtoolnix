@@ -21,6 +21,8 @@
 #ifndef __R_SRT_H
 #define __R_SRT_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include "mm_io.h"

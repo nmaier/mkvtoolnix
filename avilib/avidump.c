@@ -25,13 +25,14 @@
  *
  */
 
+#include "../os.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-//SLM
-#ifdef WIN32
+#ifdef COMP_MSC
 #include <io.h>
 #define STDOUT_FILENO fileno(stdout)
 #else
@@ -44,8 +45,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-//SLM
-#if defined(__bsdi__) || defined(__FreeBSD__) || defined WIN32
+#if defined(SYS_BSD) || defined(COMP_MSC)
 typedef off_t off64_t;
 #define lseek64 lseek
 #endif
@@ -740,7 +740,7 @@ int AVI_scan(char *file_name)
 
     DWORD  chunksize;    /* size of the RIFF chunk data */
 
-#ifdef WIN32
+#if defined(SYS_WINDOWS)
     if (!(fd=open(file_name, O_RDONLY|O_BINARY))) {
 #else
     if (!(fd=open(file_name, O_RDONLY))) {
@@ -779,7 +779,7 @@ int AVI_dump(char *file_name, int mode)
 
     DWORD  chunksize;    /* size of the RIFF chunk data */
 
-#ifdef WIN32
+#if defined(SYS_WINDOWS)
     if (!(fd=open(file_name,O_RDONLY|O_BINARY))) return(1);
 #else
     if (!(fd=open(file_name,O_RDONLY))) return(1);

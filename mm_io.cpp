@@ -24,17 +24,17 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef __CYGWIN__
+#if defined(SYS_WINDOWS)
 #include <stdarg.h>
 #include <w32api/windef.h>
 #include <w32api/winbase.h>
-#endif
+#endif // SYS_WINDOWS
 
 #include "mm_io.h"
 
 using namespace std;
 
-#ifndef __CYGWIN__
+#if defined(SYS_UNIX)
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   char *cmode;
 
@@ -131,7 +131,7 @@ string mm_io_c::getline() {
   return s;
 }
 
-#else // __CYGWIN__
+#else // SYS_UNIX
 
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   DWORD access_mode, share_mode, disposition;

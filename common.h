@@ -21,27 +21,13 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
-#ifndef __CYGWIN__
+#include "os.h"
+
 #include <stdint.h>
-#elif defined WIN32
-#include <stdint.h>
-#define PACKAGE "mkvtoolnix"
-#define VERSION "0.4.4"
-#endif
-#include <sys/types.h>
 
 #include <vector>
 
-#ifdef WIN32
-#define strncasecmp _strnicmp
-#define strcasecmp _stricmp
-#define nice(a)
-#define vsnprintf _vsnprintf
-#define vfprintf _vfprintf
-#endif
-
 #include "EbmlUnicodeString.h"
-
 #include "config.h"
 
 #define VERSIONINFO "mkvmerge v" VERSION

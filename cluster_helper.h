@@ -21,6 +21,8 @@
 #ifndef __CLUSTER_HELPER_C
 #define __CLUSTER_HELPER_C
 
+#include "os.h"
+
 #include "KaxBlock.h"
 #include "KaxCluster.h"
 

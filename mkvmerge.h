@@ -21,6 +21,8 @@
 #ifndef __MKVMERGE_H
 #define __MKVMERGE_H
 
+#include "os.h"
+
 #include <string>
 
 #include "pr_generic.h"

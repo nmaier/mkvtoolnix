@@ -25,20 +25,20 @@
  *
  */
 
-//SLM
-#ifdef WIN32
+#include "../os.h"
+
+#if defined(COMP_MSC) || defined(COMP_MINGW)
 #include <io.h>
 #define ftruncate _chsize
 #define strncasecmp _strnicmp
 typedef int ssize_t;
-#endif
 
-#ifdef __CYGWIN__
+#elif defined(COMP_CYGWIN)
+
 #include <unistd.h>
 #endif
 
 #include "avilib.h"
-//#include <time.h>
 
 #define INFO_LIST
 
@@ -252,10 +252,12 @@ avi_t* AVI_open_output_file(char * filename)
    mask = umask (0);
    umask (mask);
 
-#ifdef WIN32
-   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) &~ mask);
-#else
+#if defined(SYS_UNIX)
    AVI->fdes = open(filename, O_RDWR|O_CREAT, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) &~ mask);
+#elif defined(COMP_MINGW)
+   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, (S_IRUSR | S_IWUSR) &~ mask);
+#else
+   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, (S_IRUSR | S_IWUSR | S_IGRP | S_IROTH) &~ mask);
 #endif
    if (AVI->fdes < 0)
    {
@@ -1110,7 +1112,7 @@ avi_t *AVI_open_input_file(char *filename, int getIndex)
   
   /* Open the file */
 
-#ifdef WIN32  
+#if defined(SYS_WINDOWS)  
   AVI->fdes = open(filename,O_RDONLY|O_BINARY);
 #else
   AVI->fdes = open(filename,O_RDONLY);
@@ -1296,10 +1298,10 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          i += 8;
          if(lasttag == 1)
          {
-            BITMAPINFOHEADER bih;
+            alBITMAPINFOHEADER bih;
             
-            memcpy(&bih, hdrl_data + i, sizeof(BITMAPINFOHEADER));
-            AVI->bitmap_info_header = (BITMAPINFOHEADER *)malloc(bih.bi_size);
+            memcpy(&bih, hdrl_data + i, sizeof(alBITMAPINFOHEADER));
+            AVI->bitmap_info_header = (alBITMAPINFOHEADER *)malloc(bih.bi_size);
             if (AVI->bitmap_info_header != NULL)
               memcpy(AVI->bitmap_info_header, hdrl_data + i, bih.bi_size);
             
@@ -1315,27 +1317,27 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          }
          else if(lasttag == 2)
          {
-            WAVEFORMATEX *wfe;
+            alWAVEFORMATEX *wfe;
 	    char *nwfe;
             int wfes;
             
-            if ((hdrl_len - i) < sizeof(WAVEFORMATEX))
+            if ((hdrl_len - i) < sizeof(alWAVEFORMATEX))
               wfes = hdrl_len - i;
             else
-              wfes = sizeof(WAVEFORMATEX);
-            wfe = (WAVEFORMATEX *)malloc(sizeof(WAVEFORMATEX));
+              wfes = sizeof(alWAVEFORMATEX);
+            wfe = (alWAVEFORMATEX *)malloc(sizeof(alWAVEFORMATEX));
             if (wfe != NULL) {
-              memset(wfe, 0, sizeof(WAVEFORMATEX));
+              memset(wfe, 0, sizeof(alWAVEFORMATEX));
 	      memcpy(wfe, hdrl_data + i, wfes);
 	      if (wfe->cb_size != 0) {
-		nwfe = (char *)realloc(wfe, sizeof(WAVEFORMATEX) +
+		nwfe = (char *)realloc(wfe, sizeof(alWAVEFORMATEX) +
 				       wfe->cb_size);
 		if (nwfe != 0) {
 		  off_t lpos = lseek(AVI->fdes, 0, SEEK_CUR);
-		  lseek(AVI->fdes, header_offset + i + sizeof(WAVEFORMATEX),
+		  lseek(AVI->fdes, header_offset + i + sizeof(alWAVEFORMATEX),
 			SEEK_SET);
-		  wfe = (WAVEFORMATEX *)nwfe;
-		  nwfe = &nwfe[sizeof(WAVEFORMATEX)];
+		  wfe = (alWAVEFORMATEX *)nwfe;
+		  nwfe = &nwfe[sizeof(alWAVEFORMATEX)];
 		  avi_read(AVI->fdes, nwfe, wfe->cb_size);
 		  lseek(AVI->fdes, lpos, SEEK_SET);
 		}

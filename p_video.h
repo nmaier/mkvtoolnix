@@ -21,6 +21,8 @@
 #ifndef __P_VIDEO_H
 #define __P_VIDEO_H
 
+#include "os.h"
+
 #include "common.h"
 #include "pr_generic.h"
 

@@ -22,6 +22,8 @@
 #ifndef __MKVINFO_H
 #define __MKVINFO_H
 
+#include "os.h"
+
 #include "config.h"
 
 #ifdef HAVE_WXWINDOWS

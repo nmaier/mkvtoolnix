@@ -20,13 +20,15 @@
 
 #include <errno.h>
 #include <ctype.h>
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
 #include <signal.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 
-#ifndef WIN32
+#if defined(COMP_MSC)
 #include <unistd.h>
 #endif
 
@@ -250,12 +252,14 @@ static void usage(void) {
   );
 }
 
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
 static void sighandler(int signum) {
 #ifdef DEBUG
   if (signum == SIGUSR1)
     debug_c::dump_info();
 #endif // DEBUG
 }
+#endif
 
 static int get_type(char *filename) {
   mm_io_c *mm_io;
@@ -1256,7 +1260,7 @@ static void handle_args(int argc, char **argv) {
 }
 
 static void setup() {
-#if ! defined WIN32
+#if ! defined(COMP_MSC)
   if (setlocale(LC_CTYPE, "") == NULL) {
     fprintf(stderr, "Error: Could not set the locale properly. Check the "
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
@@ -1264,9 +1268,11 @@ static void setup() {
   }
 #endif
 
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   signal(SIGUSR1, sighandler);
 
   nice(2);
+#endif
 
   srand(time(NULL));
   cc_local_utf8 = utf8_init(NULL);

@@ -21,6 +21,8 @@
 #ifndef __R_AVI_H
 #define __R_AVI_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include <vector>

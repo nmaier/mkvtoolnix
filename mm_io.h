@@ -21,9 +21,9 @@
 #ifndef __MM_IO_H
 #define __MM_IO_H
 
-#ifndef __CYGWIN__
+#include "os.h"
+
 #include <stdint.h>
-#endif // __CYGWIN__
 
 #include <string>
 

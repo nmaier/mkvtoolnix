@@ -21,6 +21,8 @@
 #ifndef __R_SSA_H
 #define __R_SSA_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include "mm_io.h"

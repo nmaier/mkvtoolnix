@@ -185,8 +185,8 @@ void mkv_reader_c::verify_tracks() {
   unsigned char *c;
   uint32_t u, offset, length;
   mkv_track_t *t;
-  BITMAPINFOHEADER *bih;
-  WAVEFORMATEX *wfe;
+  alBITMAPINFOHEADER *bih;
+  alWAVEFORMATEX *wfe;
 
   for (tnum = 0; tnum < num_tracks; tnum++) {
     t = tracks[tnum];
@@ -196,7 +196,7 @@ void mkv_reader_c::verify_tracks() {
           continue;
         if (!strcmp(t->codec_id, MKV_V_MSCOMP)) {
           if ((t->private_data == NULL) ||
-              (t->private_size < sizeof(BITMAPINFOHEADER))) {
+              (t->private_size < sizeof(alBITMAPINFOHEADER))) {
             if (verbose)
               printf("matroska_reader: WARNING: CodecID for track %u is '"
                      MKV_V_MSCOMP
@@ -207,7 +207,7 @@ void mkv_reader_c::verify_tracks() {
           } else {
             t->ms_compat = 1;
 
-            bih = (BITMAPINFOHEADER *)t->private_data;
+            bih = (alBITMAPINFOHEADER *)t->private_data;
             
             u = get_uint32(&bih->bi_width);
             if (t->v_width != u) {
@@ -268,7 +268,7 @@ void mkv_reader_c::verify_tracks() {
           continue;
         if (!strcmp(t->codec_id, MKV_A_ACM)) {
           if ((t->private_data == NULL) ||
-              (t->private_size < sizeof(WAVEFORMATEX))) {
+              (t->private_size < sizeof(alWAVEFORMATEX))) {
             if (verbose)
               printf("matroska_reader: WARNING: CodecID for track %u is '"
                      MKV_A_ACM "', but there was no WAVEFORMATEX struct "
@@ -278,7 +278,7 @@ void mkv_reader_c::verify_tracks() {
           } else {
             t->ms_compat = 1;
 
-            wfe = (WAVEFORMATEX *)t->private_data;
+            wfe = (alWAVEFORMATEX *)t->private_data;
             u = get_uint32(&wfe->n_samples_per_sec);
             if (((uint32_t)t->a_sfreq) != u) {
               if (verbose)

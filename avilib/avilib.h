@@ -25,21 +25,17 @@
  *
  */
 
+#include "../os.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
 #include <fcntl.h>
 
-//SLM
-#ifdef __CYGWIN__
-#include <sys/types.h>
-#elif defined WIN32
-#include <stdint.h>
-#else
+#if defined(COMP_MSC)
 #include <unistd.h>
 #include <inttypes.h>
 #endif
-
 
 #include <limits.h>
 #include <stdlib.h>
@@ -102,7 +98,7 @@ typedef struct
   uint32_t  bi_y_pels_per_meter;
   uint32_t  bi_clr_used;
   uint32_t  bi_clr_important;
-} BITMAPINFOHEADER;
+} alBITMAPINFOHEADER;
 
 typedef struct
 {
@@ -113,7 +109,7 @@ typedef struct
   uint16_t  n_block_align;
   uint16_t  w_bits_per_sample;
   uint16_t  cb_size;
-} WAVEFORMATEX;
+} alWAVEFORMATEX;
 
 typedef struct
 {
@@ -138,7 +134,7 @@ typedef struct
   uint32_t dw_edit_count;
   uint32_t dw_format_change_count;
   char     sz_name[64];
-} AVISTREAMINFO;
+} alAVISTREAMINFO;
 
 typedef struct
 {
@@ -179,8 +175,8 @@ typedef struct
   int anum;            // total number of audio tracks 
   int aptr;            // current audio working track 
   
-  BITMAPINFOHEADER *bitmap_info_header;
-  WAVEFORMATEX *wave_format_ex[AVI_MAX_TRACKS];
+  alBITMAPINFOHEADER *bitmap_info_header;
+  alWAVEFORMATEX *wave_format_ex[AVI_MAX_TRACKS];
 } avi_t;
 
 #define AVI_MODE_WRITE  0

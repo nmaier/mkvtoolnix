@@ -19,14 +19,16 @@
     \author Peter Niemayer <niemayer@isg.de>
 */
 
+#include "os.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 
-#ifdef __CYGWIN__
+#if defined(COMP_CYGWIN)
 #include <sys/unistd.h>         // Needed for swab()
-#elif defined LIBEBML_GCC2
+#elif __GNUC__ == 2
 #define __USE_XOPEN
 #include <unistd.h>
 #endif
@@ -145,7 +147,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
       memcpy(buf[cur_buf], obuf, rlen);
 
       if (dts_swap_bytes) {
-        swab(buf[cur_buf], buf[cur_buf^1], rlen);
+        swab((const char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
         cur_buf ^= 1;
       }
 
@@ -234,7 +236,7 @@ int wav_reader_c::read() {
       return 0;
 
     if (dts_swap_bytes) {
-      swab(buf[cur_buf], buf[cur_buf^1], rlen);
+      swab((const char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
       cur_buf ^= 1;
     }
 

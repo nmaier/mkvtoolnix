@@ -21,12 +21,12 @@
  *
  */
 
+#include "../os.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
-//SLM
-#ifdef WIN32
-#else
+#if !defined(COMP_MSC)
 #include <unistd.h>
 #endif
 

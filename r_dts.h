@@ -21,6 +21,8 @@
 #ifndef __R_DTS_H
 #define __R_DTS_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include "mm_io.h"

@@ -327,7 +327,7 @@ BEGIN_EVENT_TABLE(mi_frame, wxFrame)
   EVT_MENU(mi_help_about, mi_frame::on_help_about)
 END_EVENT_TABLE()
 
-#if defined(__CYGWIN__) || defined(WIN32)
+#if defined(SYS_WINDOWS)
 IMPLEMENT_APP(mi_app)
 #else
 IMPLEMENT_APP_NO_MAIN(mi_app)

@@ -198,12 +198,12 @@ void ogm_reader_c::create_packetizers() {
   vorbis_info vi;
   vorbis_comment vc;
   ogg_packet op;
-  BITMAPINFOHEADER bih;
+  alBITMAPINFOHEADER bih;
   stream_header *sth;
   int i;
   ogm_demuxer_t *dmx;
 
-  memset(&bih, 0, sizeof(BITMAPINFOHEADER));
+  memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
   i = 0;
   while (i < num_sdemuxers) {
     dmx = sdemuxers[i];
@@ -220,7 +220,7 @@ void ogm_reader_c::create_packetizers() {
         }
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
-        bih.bi_size = sizeof(BITMAPINFOHEADER);
+        bih.bi_size = sizeof(alBITMAPINFOHEADER);
         bih.bi_width = get_uint32(&sth->sh.video.width);
         bih.bi_height = get_uint32(&sth->sh.video.height);
         bih.bi_planes = 1;
@@ -228,7 +228,7 @@ void ogm_reader_c::create_packetizers() {
         memcpy(&bih.bi_compression, ti->fourcc, 4);
         bih.bi_size_image = bih.bi_width * bih.bi_height * 3;
         ti->private_data = (unsigned char *)&bih;
-        ti->private_size = sizeof(BITMAPINFOHEADER);
+        ti->private_size = sizeof(alBITMAPINFOHEADER);
 
         try {
           dmx->packetizer =

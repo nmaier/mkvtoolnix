@@ -21,6 +21,8 @@
 #ifndef __R_AC3_H
 #define __R_AC3_H
 
+#include "os.h"
+
 #include <stdio.h>
 
 #include "mm_io.h"

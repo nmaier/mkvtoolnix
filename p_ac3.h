@@ -21,6 +21,8 @@
 #ifndef __P_AC3_H
 #define __P_AC3_H
 
+#include "os.h"
+
 #include "common.h"
 #include "pr_generic.h"
 #include "ac3_common.h"

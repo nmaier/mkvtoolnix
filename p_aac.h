@@ -21,6 +21,8 @@
 #ifndef __P_AAC_H
 #define __P_AAC_H
 
+#include "os.h"
+
 #include "common.h"
 #include "pr_generic.h"
 #include "aac_common.h"

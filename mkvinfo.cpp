@@ -17,6 +17,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include "os.h"
+
 #include <errno.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -25,8 +27,7 @@
 #include <string.h>
 #include <time.h>
 
-//SLM
-#ifdef WIN32
+#if defined(COMP_MSC)
 #include <assert.h>
 #else
 #include <unistd.h>
@@ -34,7 +35,7 @@
 
 #include <iostream>
 
-#ifdef LIBEBML_GCC2
+#if __GNUC__ == 2
 #include <typeinfo>
 #endif
 
@@ -220,6 +221,26 @@ int is_ebmlvoid(EbmlElement *l, int level) {
 
   return 0;
 }
+
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+struct tm *gmtime_r(const time_t *timep, struct tm *result) {
+  struct tm *aresult;
+
+  aresult = gmtime(timep);
+  memcpy(result, aresult, sizeof(struct tm));
+
+  return result;
+}
+
+char *asctime_r(const struct tm *tm, char *buf) {
+  char *abuf;
+
+  abuf = asctime(tm);
+  strcpy(buf, abuf);
+
+  return abuf;
+}
+#endif
 
 bool process_file(const char *file_name) {
   int upper_lvl_el, i;
@@ -563,21 +584,22 @@ bool process_file(const char *file_name) {
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
                 c_priv.ReadData(es->I_O());
                 if (ms_compat && (mkv_track_type == 'v') &&
-                    (c_priv.GetSize() >= sizeof(BITMAPINFOHEADER))) {
-                  BITMAPINFOHEADER *bih = (BITMAPINFOHEADER *)&binary(c_priv);
+                    (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
+                  alBITMAPINFOHEADER *bih =
+                    (alBITMAPINFOHEADER *)&binary(c_priv);
                   unsigned char *fcc = (unsigned char *)&bih->bi_compression;
                   sprintf(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
                           fcc[0], fcc[1], fcc[2], fcc[3],
                           get_uint32(&bih->bi_compression));
                 } else if (ms_compat && (mkv_track_type == 'a') &&
-                           (c_priv.GetSize() >= sizeof(WAVEFORMATEX))) {
-                  WAVEFORMATEX *wfe = (WAVEFORMATEX *)&binary(c_priv);
+                           (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
+                  alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
                   sprintf(pbuffer, " (format tag: 0x%04x)",
                           get_uint16(&wfe->w_format_tag));
                 } else
                   pbuffer[0] = 0;
-                show_element(l3, 3, "CodecPrivate, length %llu%s",
-                             c_priv.GetSize(), pbuffer);
+                show_element(l3, 3, "CodecPrivate, length %d%s",
+                             (int)c_priv.GetSize(), pbuffer);
 
               } else if (EbmlId(*l3) ==
                          KaxTrackMinCache::ClassInfos.GlobalId) {
@@ -1060,7 +1082,9 @@ bool process_file(const char *file_name) {
 int console_main(int argc, char **argv) {
   char *file_name;
 
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   nice(2);
+#endif
 
   parse_args(argc, argv, file_name, use_gui);
   if (file_name == NULL) {
@@ -1074,7 +1098,7 @@ int console_main(int argc, char **argv) {
 }
 
 void setup() {
-#if !defined(WIN32) && !defined(__CYGWIN__)
+#if defined(SYS_UNIX)
   if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
     fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
             "that your system supports this locale.\n");
@@ -1108,7 +1132,7 @@ int main(int argc, char **argv) {
   return res;
 }
 
-#elif !defined(WIN32) && !defined(__CYGWIN__)
+#elif defined(SYS_UNIX)
 
 int main(int argc, char **argv) {
   char *initial_file;

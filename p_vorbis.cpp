@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef WIN32
+#if !defined(COMP_MSC)
 #include <unistd.h>
 #endif
 
