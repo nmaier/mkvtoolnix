@@ -236,12 +236,9 @@ parse_simple_chapters(mm_text_io_c *in,
       }
     }
   } catch (error_c e) {
-    delete in;
     delete chaps;
     throw error_c(e);
   }
-
-  delete in;
 
   if (num == 0) {
     delete chaps;

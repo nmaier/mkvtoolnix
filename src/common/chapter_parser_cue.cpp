@@ -513,12 +513,9 @@ parse_cue_chapters(mm_text_io_c *in,
       add_elements_for_cue_entry(a, tags);
 
   } catch(error_c e) {
-    delete in;
     delete a.chapters;
     throw error_c(e);
   }
-
-  delete in;
 
   if (a.num == 0) {
     delete a.chapters;
