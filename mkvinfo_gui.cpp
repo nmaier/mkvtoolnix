@@ -29,9 +29,13 @@ enum {
 
 bool mi_app::OnInit() {
   char *initial_file;
-  bool use_gui;
 
   parse_args(argc, argv, initial_file, use_gui);
+
+  if (!use_gui) {
+    console_main(argc, argv);
+    return false;
+  }
 
   frame = new mi_frame(_T("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
   frame->Show(true);
@@ -323,6 +327,10 @@ BEGIN_EVENT_TABLE(mi_frame, wxFrame)
   EVT_MENU(mi_help_about, mi_frame::on_help_about)
 END_EVENT_TABLE()
 
+#if defined(__CYGWIN__) || defined(WIN32)
+IMPLEMENT_APP(mi_app)
+#else
 IMPLEMENT_APP_NO_MAIN(mi_app)
+#endif
 
 #endif // HAVE_WXWINDOWS

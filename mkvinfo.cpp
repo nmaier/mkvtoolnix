@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.58 2003/06/08 18:59:43 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.59 2003/06/10 21:57:15 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -122,7 +122,7 @@ void usage() {
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
 #ifdef HAVE_WXWINDOWS
-    "  -g, --gui      Start the GUI. All other options are ignored.\n"
+    "  -g, --gui      Start the GUI (and open inname if it was given).\n"
 #endif
     "  inname         Use 'inname' as the source.\n"
     "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
@@ -1075,10 +1075,8 @@ int console_main(int argc, char **argv) {
     return 1;
 }
 
-int main(int argc, char **argv) {
-  char *initial_file;
-  int res;
-
+void setup() {
+#if !defined(WIN32) && !defined(__CYGWIN__)
   if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
     fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
             "that your system supports this locale.\n");
@@ -1089,22 +1087,46 @@ int main(int argc, char **argv) {
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
     exit(1);
   }
+#endif
 
   cc_local_utf8 = utf8_init(NULL);
+}
 
+void cleanup() {
+  utf8_done();
+}
+
+#if !defined HAVE_WXWINDOWS
+int main(int argc, char **argv) {
+  char *initial_file;
+  int res;
+
+  setup();
   parse_args(argc, argv, initial_file, use_gui);
 
-#ifdef HAVE_WXWINDOWS
+  res = console_main(argc, argv);
+  cleanup();
+
+  return res;
+}
+
+#elif !defined(WIN32) && !defined(__CYGWIN__)
+
+int main(int argc, char **argv) {
+  char *initial_file;
+  int res;
+
+  setup();
+  parse_args(argc, argv, initial_file, use_gui);
+
   if (use_gui) {
     wxEntry(argc, argv);
     return 0;
   } else
     res = console_main(argc, argv);
-#else
-  res = console_main(argc, argv);
-#endif
 
-  utf8_done();
+  cleanup();
 
   return res;
 }
+#endif // HAVE_WXWINDOWS

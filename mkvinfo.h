@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.h,v 1.4 2003/05/31 09:08:02 mosu Exp $
+    \version \$Id: mkvinfo.h,v 1.5 2003/06/10 21:57:15 mosu Exp $
     \brief definition of global variables and functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -35,6 +35,8 @@
 void parse_args(int argc, char **argv, char *&file_name, bool &use_gui);
 int console_main(int argc, char **argv);
 bool process_file(const char *file_name);
+void setup();
+void cleanup();
 
 extern bool use_gui;
 
