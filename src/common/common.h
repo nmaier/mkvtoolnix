@@ -133,6 +133,9 @@ uint64_t MTX_DLL_API get_uint64_be(const void *buf);
 void MTX_DLL_API put_uint16(void *buf, uint16_t value);
 void MTX_DLL_API put_uint32(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64(void *buf, uint64_t value);
+void MTX_DLL_API put_uint16_be(void *buf, uint16_t value);
+void MTX_DLL_API put_uint32_be(void *buf, uint32_t value);
+void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
 
 extern int MTX_DLL_API cc_local_utf8;
 

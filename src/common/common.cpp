@@ -426,6 +426,47 @@ void put_uint64(void *buf, uint64_t value) {
   tmp[7] = (value >>= 8) & 0xff;
 }
 
+void
+put_uint16_be(void *buf,
+              uint16_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[1] = value & 0xff;
+  tmp[0] = (value >>= 8) & 0xff;
+}
+
+void
+put_uint32_be(void *buf,
+              uint32_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[3] = value & 0xff;
+  tmp[2] = (value >>= 8) & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+  tmp[0] = (value >>= 8) & 0xff;
+}
+
+void
+put_uint64_be(void *buf,
+              uint64_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[7] = value & 0xff;
+  tmp[6] = (value >>= 8) & 0xff;
+  tmp[5] = (value >>= 8) & 0xff;
+  tmp[4] = (value >>= 8) & 0xff;
+  tmp[3] = (value >>= 8) & 0xff;
+  tmp[2] = (value >>= 8) & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+  tmp[0] = (value >>= 8) & 0xff;
+}
+
 /*
  * Character map conversion stuff
  */
