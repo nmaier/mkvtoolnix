@@ -35,15 +35,15 @@ infodir = ${prefix}/info
 mandir = ${prefix}/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
-pkgdatadir = $(datadir)/ogmtools
-pkglibdir = $(libdir)/ogmtools
-pkgincludedir = $(includedir)/ogmtools
+pkgdatadir = $(datadir)/mkvtoolnix
+pkglibdir = $(libdir)/mkvtoolnix
+pkgincludedir = $(includedir)/mkvtoolnix
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/mosu/prog/video/ogmtools/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/mosu/prog/video/ogmtools/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/mosu/prog/video/ogmtools/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/mosu/prog/video/ogmtools/missing --run autoheader
+ACLOCAL = ${SHELL} /home/mosu/prog/video/mkvtoolnix/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/mosu/prog/video/mkvtoolnix/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/mosu/prog/video/mkvtoolnix/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/mosu/prog/video/mkvtoolnix/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -65,11 +65,11 @@ POST_UNINSTALL = :
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/mosu/prog/video/ogmtools/missing --run tar
+AMTAR = ${SHELL} /home/mosu/prog/video/mkvtoolnix/missing --run tar
 AVILIB_CFLAGS = -Iavilib -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 AVILIB_CXXFLAGS = -Iavilib -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 AVILIB_LIBS = -Lavilib -lavi
-AWK = gawk
+AWK = mawk
 CC = gcc
 CPP = gcc -E
 CXX = g++
@@ -77,24 +77,24 @@ DEBUG_CFLAGS = -g -DDEBUG
 DEPDIR = .deps
 DMALLOC_CFLAGS = 
 DMALLOC_LIBS = 
-DVDREAD_CFLAGS = -I/usr/include -I/usr/local/include
-DVDREAD_LIBS = -L/usr/lib -ldvdread -lm
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
+MATROSKA_CFLAGS = -I/home/mosu/prog/video/libmatroska/include
+MATROSKA_LIBS = -L/home/mosu/prog/video/libmatroska/lib -lmatroska
 OGG_CFLAGS = 
 OGG_LIBS =  -logg
-PACKAGE = ogmtools
+PACKAGE = mkvtoolnix
 PROFILING_CFLAGS = 
 PROFILING_LIBS = 
 RANLIB = ranlib
 STRIP = 
-VERSION = 0.973
+VERSION = 0.0.1
 VORBISENC_LIBS = -lvorbisenc
 VORBISFILE_LIBS = -lvorbisfile
 VORBIS_CFLAGS = 
 VORBIS_LIBS =  -lvorbis -lm
 am__include = include
 am__quote = 
-install_sh = /home/mosu/prog/video/ogmtools/install-sh
+install_sh = /home/mosu/prog/video/mkvtoolnix/install-sh
 
 AUTOMAKE_OPTIONS = 1.3 foreign
 DEFAULT_INCLUDES = -I$(top_srcdir) -I$(srcdir) -I$(top_builddir) -I.
@@ -103,7 +103,7 @@ noinst_LIBRARIES = libavi.a
 
 INCLUDES = -I./
 
-CFLAGS = -O3 -funroll-loops -ffast-math -DLINUX -Wall -Wall -Wno-sign-compare   -Iavilib -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -g -DDEBUG  
+CFLAGS = -O3 -funroll-loops -ffast-math -DLINUX -Wall -Wall -Wno-sign-compare   -Iavilib -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -g -DDEBUG   -I/home/mosu/prog/video/libmatroska/include
 libavi_a_SOURCES = avilib.c avidump.c avimisc.c
 
 EXTRA_DIST = avilib.h README.avilib
@@ -118,7 +118,7 @@ am_libavi_a_OBJECTS = avilib.$(OBJEXT) avidump.$(OBJEXT) \
 	avimisc.$(OBJEXT)
 libavi_a_OBJECTS = $(am_libavi_a_OBJECTS)
 
-DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"ogmtools\" -DVERSION=\"0.973\" -DHAVE_LIBDVDREAD=1 -DHAVE_LIBDVDREAD_INC=1 -DSTDC_HEADERS=1 
+DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"mkvtoolnix\" -DVERSION=\"0.0.1\" -DSTDC_HEADERS=1 
 CPPFLAGS = 
 LDFLAGS = 
 LIBS = 
@@ -131,7 +131,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(libavi_a_SOURCES)
-DIST_COMMON = 
+DIST_COMMON = Makefile.am Makefile.in
 SOURCES = $(libavi_a_SOURCES)
 
 all: all-am
@@ -141,6 +141,8 @@ all: all-am
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --foreign  avilib/Makefile
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 
 AR = ar
 
@@ -241,7 +243,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: $(LIBRARIES)
+all-am: Makefile $(LIBRARIES)
 
 installdirs:
 
@@ -264,7 +266,7 @@ mostlyclean-generic:
 clean-generic:
 
 distclean-generic:
-	-rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
