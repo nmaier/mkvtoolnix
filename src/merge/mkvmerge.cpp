@@ -1577,6 +1577,8 @@ parse_args(vector<string> args) {
       sit++;
 
     } else if (this_arg == "--segmentinfo") {
+      KaxSegmentFamily *family;
+
       if (no_next_arg)
         mxerror(_("'--segmentinfo' lacks the file name.\n"));
 
@@ -1585,6 +1587,14 @@ parse_args(vector<string> args) {
                 this_arg.c_str(), next_arg.c_str());
 
       segmentinfo_file_name = next_arg;
+      kax_info_chap = parse_segmentinfo(segmentinfo_file_name, false);
+
+      // segment families
+      family = FINDFIRST(kax_info_chap, KaxSegmentFamily);
+      while (family != NULL) {
+        segfamily_uids.add_family_uid(*family);
+        family = FINDNEXT(kax_info_chap, KaxSegmentFamily, family);
+      }
 
       sit++;
 

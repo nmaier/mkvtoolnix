@@ -441,6 +441,39 @@ format_binary(EbmlBinary &bin,
 
 
 void
+def_handle(chapterlink) {
+  EbmlMaster *m2;
+  int i2;
+
+  show_element(l2, 2, "Chapter Link");
+
+  m2 = static_cast<EbmlMaster *>(l2);
+  for (i2 = 0; i2 < m2->ListSize(); i2++) {
+    l3 = (*m2)[i2];
+
+    if (is_id(l3, KaxChapterLinkEditionUID)) {
+      KaxChapterLinkEditionUID &link_edition_uid =
+        *static_cast<KaxChapterLinkEditionUID *>(l3);
+      show_element(l3, 3, "Chapter Link Edition UID: %llu",
+                   uint64(link_edition_uid));
+
+    } else if (is_id(l3, KaxChapterLinkCodec)) {
+      KaxChapterLinkCodec &link_codec =
+        *static_cast<KaxChapterLinkCodec *>(l3);
+      show_element(l3, 3, "Chapter Link Codec: %llu",
+                   uint64(link_codec));
+
+    } else if (is_id(l3, KaxChapterLinkID)) {
+      string strc;
+
+      KaxChapterLinkID &link_id = *static_cast<KaxChapterLinkID *>(l3);
+      strc = format_binary(*static_cast<EbmlBinary *>(&link_id));
+      show_element(l3, 3, "Chapter Link ID: %s", strc.c_str());
+    }
+  }
+}
+    
+void
 def_handle(info) {
   EbmlMaster *m1;
   int i1, i;
@@ -508,7 +541,10 @@ def_handle(info) {
       show_element(l2, 2, "Family UID:%s", buffer);
       delete [] buffer;
 
-    } else if (is_id(l2, KaxPrevUID)) {
+    } else if (is_id(l2, KaxChapterLink))
+       handle(chapterlink);
+
+    else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
       char* buffer = new char[uid.GetSize() * 5 + 1];
       const unsigned char *b = (const unsigned char *)&binary(uid);

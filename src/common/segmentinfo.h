@@ -21,8 +21,8 @@
 
 #include "ebml/EbmlElement.h"
 
+#include "matroska/KaxInfo.h"
 #include "matroska/KaxInfoData.h"
-#include "matroska/KaxSegment.h"
 
 #include "common.h"
 #include "mm_io.h"
@@ -30,12 +30,12 @@
 using namespace libebml;
 using namespace libmatroska;
 
-KaxSegment *MTX_DLL_API
-parse_infos(const string &file_name,
+KaxInfo *MTX_DLL_API
+parse_segmentinfo(const string &file_name,
             bool exception_on_error = false);
 
-KaxSegment *MTX_DLL_API parse_xml_segmentinfo(mm_text_io_c *in,
-                                              bool exception_on_error = false);
+KaxInfo *MTX_DLL_API parse_xml_segmentinfo(mm_text_io_c *in,
+                                           bool exception_on_error = false);
 
 void MTX_DLL_API fix_mandatory_segmentinfo_elements(EbmlElement *e);
 

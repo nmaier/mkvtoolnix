@@ -51,6 +51,12 @@
 # endif
 #endif
 
+namespace libebml {
+  class EbmlBinary;
+};
+
+using namespace libebml;
+
 #define VERSIONNAME "Cornflake Girl"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
 #define BUGMSG _("This should not have happened. Please contact the author " \
@@ -477,6 +483,7 @@ public:
   bitvalue_c(int nsize);
   bitvalue_c(const bitvalue_c &src);
   bitvalue_c(string s, int allowed_bitlength = -1);
+  bitvalue_c(const EbmlBinary &elt);
   virtual ~bitvalue_c();
 
   bitvalue_c &operator =(const bitvalue_c &src);

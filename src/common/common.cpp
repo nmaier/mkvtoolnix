@@ -48,7 +48,10 @@
 #include <string>
 #include <vector>
 
+#include "ebml/EbmlBinary.h"
+
 using namespace std;
+using namespace libebml;
 
 #include "base64.h"
 #include "common.h"
@@ -125,6 +128,11 @@ bitvalue_c::bitvalue_c(string s,
 
   for (i = 0; i < len; i += 2)
     value[i / 2] = hextodec(s2[i]) << 4 | hextodec(s2[i + 1]);
+}
+
+bitvalue_c::bitvalue_c(const EbmlBinary &elt) {
+  bitsize = elt.GetSize() << 3;
+  value = (unsigned char *)safememdup(elt.GetBuffer(), elt.GetSize());
 }
 
 bitvalue_c &

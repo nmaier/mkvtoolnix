@@ -110,8 +110,10 @@ vector<filelist_t> files;
 vector<attachment_t> attachments;
 vector<track_order_t> track_order;
 vector<append_spec_t> append_mapping;
-vector<bitvalue_c> segfamily_uids;
+family_uids_c segfamily_uids;
 int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
+
+KaxInfo *kax_info_chap = NULL;
 
 // Variables set by the command line parser.
 string outfile;
@@ -178,6 +180,26 @@ static mm_io_c *out = NULL;
 
 static bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
+
+/** \brief Add a segment family UID to the list if it doesn't exist already.
+
+  \param family This segment family element is converted to a 128 bit
+    element which is added to the list of segment family UIDs.
+*/
+bool
+family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
+  bitvalue_c new_uid(family);
+
+  // look for the same UID
+  family_uids_c::const_iterator it;
+  for (it = begin(); it != end(); it++)
+    if (new_uid == *it)
+      return false;
+
+  push_back(new_uid);
+
+  return true;
+}
 
 /** \brief Fix the file after mkvmerge has been interrupted
 
@@ -546,6 +568,16 @@ render_headers(mm_io_c *rout) {
         KaxSegmentFamily &kax_family =
           AddNewChild<KaxSegmentFamily>(*kax_infos);
         kax_family.CopyBuffer(segfamily_uids[i].data(), 128 / 8);
+      }
+    }
+
+    // Set the chapterlink elements
+    if (kax_info_chap != NULL) {
+      // copy the KaxChapterLink's in the current KaxInfo
+      KaxChapterLink *link = FINDFIRST(kax_info_chap, KaxChapterLink);
+      while (link != NULL) {
+        kax_infos->PushElement(*new KaxChapterLink(*link));
+        link = FINDNEXT(kax_info_chap, KaxChapterLink, link);
       }
     }
 
@@ -1905,15 +1937,11 @@ cleanup() {
 
   attachments.clear();
 
-  if (kax_tags != NULL)
-    delete kax_tags;
-  if (tags_from_cue_chapters != NULL)
-    delete tags_from_cue_chapters;
-  if (kax_chapters != NULL)
-    delete kax_chapters;
-  if (kax_as != NULL)
-    delete kax_as;
+  delete kax_tags;
+  delete tags_from_cue_chapters;
+  delete kax_chapters;
+  delete kax_as;
+  delete kax_info_chap;
 
   utf8_done();
 }
-

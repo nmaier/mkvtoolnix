@@ -41,7 +41,7 @@ using namespace libmatroska;
 #define CPDATA (parser_data_t *)pdata
 
 static void
-end_segmentinfo_data(void *pdata) {
+end_segmentinfo_data(void *) {
 /* TODO verify that the FamilyUID is set
   EbmlMaster *m;
 
@@ -60,37 +60,19 @@ end_segmentinfo_data(void *pdata) {
 }
 
 static void
-end_segmentinfo_family(void *pdata) {
+end_segmentinfo_family(void *) {
   /* TODO verify that the FamilyUID is 128 bits */
 }
 
 static void
-end_segmentinfo_links(void *pdata) {
+end_segmentinfo_links(void *) {
   /* TODO verify that the ChapterLinkCodec and ChapterLinkID are set */
 }
 
-bool
-probe_xml_segmentinfos(mm_text_io_c *in) {
-  string s;
-
-  in->setFilePointer(0);
-
-  while (in->getline2(s)) {
-    // I assume that if it looks like XML then it is a XML chapter file :)
-    strip(s);
-    if (!strncasecmp(s.c_str(), "<?xml", 5))
-      return true;
-    else if (s.length() > 0)
-      return false;
-  }
-
-  return false;
-}
-
-KaxSegment *
+KaxInfo *
 parse_xml_segmentinfo(mm_text_io_c *in,
                       bool exception_on_error) {
-  KaxSegment *segment;
+  KaxInfo *info;
   EbmlMaster *m;
   string error;
   int i;
@@ -108,24 +90,24 @@ parse_xml_segmentinfo(mm_text_io_c *in,
 
   try {
     m = parse_xml_elements("Info", segmentinfo_elements, in);
-    segment = dynamic_cast<KaxSegment *>(sort_ebml_master(m));
-    assert(segment != NULL);
+    info = dynamic_cast<KaxInfo *>(sort_ebml_master(m));
+    assert(info != NULL);
   } catch (error_c e) {
     if (!exception_on_error)
       mxerror("%s", e.get_error());
     error = (const char *)e;
-    segment = NULL;
+    info = NULL;
   }
 
-  if ((segment != NULL) && (verbose > 1))
-    debug_dump_elements(segment, 0);
+  if ((info != NULL) && (verbose > 1))
+    debug_dump_elements(info, 0);
 
   if (error.length() > 0)
     throw error_c(error);
 
-  fix_mandatory_segmentinfo_elements(segment);
+  fix_mandatory_segmentinfo_elements(m);
 
-  return segment;
+  return info;
 }
 
 // }}}

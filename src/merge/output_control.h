@@ -31,6 +31,8 @@ namespace libmatroska {
   class KaxTags;
   class KaxTrackEntry;
   class KaxTracks;
+  class KaxSegmentFamily;
+  class KaxInfo;
 };
 
 using namespace std;
@@ -111,6 +113,11 @@ enum timecode_scale_mode_e {
   TIMECODE_SCALE_MODE_AUTO
 };
 
+class MTX_DLL_API family_uids_c: public vector<bitvalue_c> {
+public:
+	bool add_family_uid(const KaxSegmentFamily &family);
+};
+
 extern vector<packetizer_t> packetizers;
 extern vector<filelist_t> files;
 extern vector<attachment_t> attachments;
@@ -123,7 +130,9 @@ extern double timecode_scale;
 extern timecode_scale_mode_e timecode_scale_mode;
 
 extern bitvalue_c *seguid_link_previous, *seguid_link_next;
-extern vector<bitvalue_c> segfamily_uids;
+extern family_uids_c segfamily_uids;
+
+extern KaxInfo *kax_info_chap;
 
 extern bool write_meta_seek_for_clusters;
 
