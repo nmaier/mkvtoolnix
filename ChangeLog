@@ -50,6 +50,11 @@
 	right at the beginning then the corresponding audio delay is
 	calculated and used instead of simply discarding the garbage.
 
+2004-06-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Enabled reading MPEG4 video from MP4
+	files (nope, they're not stored in Matroska's native mode yet).
+
 2004-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.9.0.
