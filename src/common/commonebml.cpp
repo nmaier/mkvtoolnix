@@ -62,7 +62,7 @@ cstr_to_UTFstring(const string &c) {
   len = c.length();
   new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
 #if defined(COMP_MSC) || defined(COMP_MINGW)
-  MultiByteToWideChar(CP_ACP, 0, c, -1, new_string, len + 1);
+  MultiByteToWideChar(CP_ACP, 0, c.c_str(), -1, new_string, len + 1);
   u = new_string;
 #else
   char *old_locale;
