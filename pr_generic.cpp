@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.49 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.50 2003/06/07 14:30:10 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -239,10 +239,9 @@ void generic_packetizer_c::set_headers() {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackType>(*track_entry))) = htrack_type;
 
-  if (hcodec_id != NULL) {
-    KaxCodecID &codec_id = GetChild<KaxCodecID>(*track_entry);
-    codec_id.CopyBuffer((binary *)hcodec_id, strlen(hcodec_id) + 1);
-  }
+  if (hcodec_id != NULL)
+    *(static_cast<EbmlString *>
+      (&GetChild<KaxCodecID>(*track_entry))) = hcodec_id;
 
   if (hcodec_private != NULL) {
     KaxCodecPrivate &codec_private = GetChild<KaxCodecPrivate>(*track_entry);

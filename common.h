@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.34 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: common.h,v 1.35 2003/06/07 14:30:10 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -36,6 +36,8 @@
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
 #define nice(a)
+#define vsnprintf _vsnprintf
+#define vfprintf _vfprintf
 #endif
 
 #include "EbmlUnicodeString.h"

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.56 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.57 2003/06/07 14:30:10 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -523,10 +523,10 @@ bool process_file(const char *file_name) {
               } else if (EbmlId(*l3) == KaxCodecID::ClassInfos.GlobalId) {
                 KaxCodecID &codec_id = *static_cast<KaxCodecID*>(l3);
                 codec_id.ReadData(es->I_O());
-                show_element(l3, 3, "Codec ID: %s", &binary(codec_id));
-                if ((!strcmp((char *)&binary(codec_id), MKV_V_MSCOMP) &&
+                show_element(l3, 3, "Codec ID: %s", string(codec_id).c_str());
+                if ((!strcmp(string(codec_id).c_str(), MKV_V_MSCOMP) &&
                      (mkv_track_type == 'v')) ||
-                    (!strcmp((char *)&binary(codec_id), MKV_A_ACM) &&
+                    (!strcmp(string(codec_id).c_str(), MKV_A_ACM) &&
                      (mkv_track_type == 'a')))
                   ms_compat = true;
 

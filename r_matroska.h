@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.15 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.16 2003/06/07 14:30:10 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -33,9 +33,6 @@
 #include "StdIOCallback.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
-
-// default values for Matroska elements
-#define MKVD_TIMECODESCALE 1000000 // 1000000 = 1ms
 
 typedef struct {
   uint32_t tnum, tuid;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.44 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.45 2003/06/07 14:30:10 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -446,7 +446,7 @@ int mkv_reader_c::read_headers() {
 
     upper_lvl_el = 0;
     exit_loop = 0;
-    tc_scale = MKVD_TIMECODESCALE;
+    tc_scale = TIMECODE_SCALE;
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
@@ -705,8 +705,8 @@ int mkv_reader_c::read_headers() {
                 KaxCodecID &codec_id = *static_cast<KaxCodecID*>(l3);
                 codec_id.ReadData(es->I_O());
                 fprintf(stdout, "matroska_reader: |  + Codec ID: %s\n",
-                        &binary(codec_id));
-                track->codec_id = safestrdup((char *)&binary(codec_id));
+                        string(codec_id).c_str());
+                track->codec_id = safestrdup(string(codec_id).c_str());
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
