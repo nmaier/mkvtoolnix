@@ -609,7 +609,7 @@ AC_DEFUN(PATH_ICONV,
     fi
   ])
   if test "$am_cv_func_iconv" = yes; then
-    AC_DEFINE(HAVE_ICONV, 1, [Define if you have the iconv() function.])
+dnl    AC_DEFINE(HAVE_ICONV, 1, [Define if you have the iconv() function.])
     AC_MSG_CHECKING([for iconv declaration])
     AC_CACHE_VAL(am_cv_proto_iconv, [
       AC_TRY_COMPILE([
@@ -629,8 +629,8 @@ size_t iconv();
     am_cv_proto_iconv=`echo "[$]am_cv_proto_iconv" | tr -s ' ' | sed -e 's/( /(/'`
     AC_MSG_RESULT([$]{ac_t:-
          }[$]am_cv_proto_iconv)
-    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
-      [Define as const if the declaration of iconv() needs const.])
+dnl    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
+dnl      [Define as const if the declaration of iconv() needs const.])
   fi
   ICONV_LIBS=
   if test "$am_cv_lib_iconv" = yes; then
