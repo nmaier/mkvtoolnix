@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.15 2003/03/06 23:38:37 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.16 2003/04/11 11:27:14 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -102,22 +102,26 @@ void video_packetizer_c::set_header() {
   *(static_cast<EbmlFloat *>(&frate)) = fps;
 }
 
-int video_packetizer_c::process(unsigned char *buf, int size, int num_frames,
-                                int key, int last_frame,
-                                int64_t old_timecode) {
+int video_packetizer_c::process(unsigned char *buf, int size,
+                                int64_t old_timecode, int64_t flags) {
   u_int64_t timecode;
+  int key, num_frames;
 
+  num_frames = flags & VNUMFRAMES;
   if (old_timecode == -1)
     timecode = (u_int64_t)(1000.0 * frames_output / fps);
   else
     timecode = old_timecode;
 
-  if (key)
+  if ((flags & VFT_IFRAME) != 0)
     // Add a key frame and save its ID so that we can reference it later.
     last_id = add_packet(buf, size, timecode);
   else
     // This is a P frame - let's reference the last frame.
     last_id = add_packet(buf, size, timecode, last_id);
+
+  if (num_frames > 1)
+    fprintf(stdout, "Warning: video_packetizer: num_frames > 1\n");
   frames_output += num_frames;
 
   packetno++;
