@@ -1498,7 +1498,8 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
                     wxYES_NO) != wxYES))
     return;
 
-  description = wxT("");
+  description = tc_output->GetValue().AfterLast(wxT('/')).AfterLast(wxT('\\'));
+  description = description.AfterLast(wxT('/')).BeforeLast(wxT('.'));
   ok = false;
   do {
     description = wxGetTextFromUser(wxT("Please enter a description for the "
