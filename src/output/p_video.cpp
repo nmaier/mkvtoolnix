@@ -80,12 +80,13 @@ void video_packetizer_c::set_headers() {
     set_codec_id(codec_id);
   else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_BFRAMES)) {
     if (bframes)
-      set_codec_id(MKV_V_MPEG4_AP);
-    else
       set_codec_id(MKV_V_MPEG4_ASP);
+    else
+      set_codec_id(MKV_V_MPEG4_SP);
   } else
     set_codec_id(MKV_V_MSCOMP);
-  if (!is_mpeg4 && !strcmp(hcodec_id, MKV_V_MSCOMP) &&
+  if ((!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES)) &&
+      !strcmp(hcodec_id, MKV_V_MSCOMP) &&
       (ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
       (ti->fourcc[0] != 0))
@@ -178,7 +179,7 @@ int video_packetizer_c::process(unsigned char *buf, int size,
 
       } else {
         if (!bframes) {
-          set_codec_id(MKV_V_MPEG4_AP);
+          set_codec_id(MKV_V_MPEG4_ASP);
           set_track_min_cache(2);
           set_track_max_cache(2);
           rerender_track_headers();
