@@ -59,6 +59,8 @@ public:
   }
 };
 
+#define LINESPACING 5
+
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
@@ -66,70 +68,87 @@ tab_input::tab_input(wxWindow *parent):
   bool found;
   wxString language;
   wxArrayString popular_languages;
+  wxFlexGridSizer *siz_fg;
+  wxBoxSizer *siz_line, *siz_column, *siz_all;
 
-  new wxStaticText(this, wxID_STATIC, wxT("Input files:"), wxPoint(5, 5),
-                   wxDefaultSize, 0);
-  lb_input_files =
-    new wxListBox(this, ID_LB_INPUTFILES, wxPoint(5, 24), wxSize(360, 60), 0);
+  siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Input files:")),
+               0, wxALIGN_LEFT | wxLEFT, 10);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  lb_input_files = new wxListBox(this, ID_LB_INPUTFILES);
+  siz_line->Add(lb_input_files, 1, wxGROW, 0);
 
-  b_add_file =
-    new wxButton(this, ID_B_ADDFILE, wxT("add"), wxPoint(375, 24),
-                 wxSize(50, -1));
-  b_remove_file =
-    new wxButton(this, ID_B_REMOVEFILE, wxT("remove"), wxPoint(375, 56),
-                 wxSize(50, -1));
+  siz_fg = new wxFlexGridSizer(2);
+  b_add_file = new wxButton(this, ID_B_ADDFILE, wxT("add"), wxDefaultPosition,
+                            wxSize(50, -1));
+  b_remove_file = new wxButton(this, ID_B_REMOVEFILE, wxT("remove"),
+                               wxDefaultPosition, wxSize(50, -1));
   b_remove_file->Enable(false);
-  b_file_up =
-    new wxButton(this, ID_B_INPUTUP, wxT("up"), wxPoint(435, 24),
-                 wxSize(50, -1));
+  b_file_up = new wxButton(this, ID_B_INPUTUP, wxT("up"), wxDefaultPosition,
+                           wxSize(50, -1));
   b_file_up->Enable(false);
-  b_file_down =
-    new wxButton(this, ID_B_INPUTDOWN, wxT("down"), wxPoint(435, 56),
-                 wxSize(50, -1));
+  b_file_down = new wxButton(this, ID_B_INPUTDOWN, wxT("down"),
+                             wxDefaultPosition, wxSize(50, -1));
   b_file_down->Enable(false);
 
-  new wxStaticText(this, wxID_STATIC, wxT("File options:"), wxPoint(5, 90),
-                   wxDefaultSize, 0);
-  cb_no_chapters =
-    new wxCheckBox(this, ID_CB_NOCHAPTERS, wxT("No chapters"),
-                   wxPoint(90, 90 + YOFF2), wxDefaultSize, 0);
+  siz_fg->Add(b_add_file, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_fg->Add(b_file_up, 0, 0, 0);
+  siz_fg->Add(b_remove_file, 0, wxLEFT | wxRIGHT, 10);
+  siz_fg->Add(b_file_down, 0, 0, 0);
+  siz_line->Add(siz_fg, 0, 0, 0);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("File options:")),
+                0, wxALIGN_CENTER_VERTICAL, 0);
+  cb_no_chapters = new wxCheckBox(this, ID_CB_NOCHAPTERS, wxT("No chapters"));
   cb_no_chapters->SetValue(false);
   cb_no_chapters->SetToolTip(wxT("Do not copy chapters from this file. Only "
                                  "applies to Matroska files."));
   cb_no_chapters->Enable(false);
-  cb_no_attachments =
-    new wxCheckBox(this, ID_CB_NOATTACHMENTS, wxT("No attachments"),
-                   wxPoint(195, 90 + YOFF2), wxDefaultSize, 0);
+  siz_line->Add(cb_no_chapters, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
+  cb_no_attachments = new wxCheckBox(this, ID_CB_NOATTACHMENTS,
+                                     wxT("No attachments"));
   cb_no_attachments->SetValue(false);
   cb_no_attachments->SetToolTip(wxT("Do not copy attachments from this file. "
                                     "Only applies to Matroska files."));
   cb_no_attachments->Enable(false);
-  cb_no_tags =
-    new wxCheckBox(this, ID_CB_NOTAGS, wxT("No tags"),
-                   wxPoint(315, 90 + YOFF2), wxDefaultSize, 0);
+  siz_line->Add(cb_no_attachments, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
+  cb_no_tags = new wxCheckBox(this, ID_CB_NOTAGS, wxT("No tags"));
   cb_no_tags->SetValue(false);
   cb_no_tags->SetToolTip(wxT("Do not copy tags from this file. Only "
                              "applies to Matroska files."));
   cb_no_tags->Enable(false);
+  siz_line->Add(cb_no_tags, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
+  siz_all->Add(siz_line, 0, wxLEFT, 10);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Tracks:"), wxPoint(5, 110),
-                   wxDefaultSize, 0);
-  clb_tracks =
-    new wxCheckListBox(this, ID_CLB_TRACKS, wxPoint(5, 130), wxSize(420, 100),
-                       0, NULL, 0);
+  siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Tracks:")),
+               0, wxALIGN_LEFT | wxLEFT, 10);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_column = new wxBoxSizer(wxVERTICAL);
+  clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
   clb_tracks->Enable(false);
-  b_track_up =
-    new wxButton(this, ID_B_TRACKUP, wxT("up"), wxPoint(435, 130),
-                 wxSize(50, -1));
+  siz_line->Add(clb_tracks, 1, wxALIGN_TOP, 0);
+  b_track_up = new wxButton(this, ID_B_TRACKUP, wxT("up"), wxDefaultPosition,
+                            wxSize(50, -1));
   b_track_up->Enable(false);
-  b_track_down =
-    new wxButton(this, ID_B_TRACKDOWN, wxT("down"), wxPoint(435, 162),
-                 wxSize(50, -1));
+  siz_column->Add(b_track_up, 0, wxBOTTOM, 10);
+  b_track_down = new wxButton(this, ID_B_TRACKDOWN, wxT("down"),
+                              wxDefaultPosition, wxSize(50, -1));
   b_track_down->Enable(false);
-  new wxStaticText(this, wxID_STATIC, wxT("Track options:"), wxPoint(5, 235),
-                   wxDefaultSize, 0);
-  new wxStaticText(this, wxID_STATIC, wxT("Language:"), wxPoint(5, 255),
-                   wxDefaultSize, 0);
+  siz_column->Add(b_track_down, 0, 0, 0);
+  siz_line->Add(siz_column, 0, wxALIGN_TOP | wxLEFT, 10);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Track options:")),
+               0, wxALIGN_LEFT | wxLEFT, 10);
+
+  siz_fg = new wxFlexGridSizer(4);
+  siz_fg->AddGrowableCol(1);
+  siz_fg->AddGrowableCol(3);
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   if (sorted_iso_codes.Count() == 0) {
     for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
@@ -168,45 +187,50 @@ tab_input::tab_input(wxWindow *parent):
   }
 
   cob_language =
-    new wxComboBox(this, ID_CB_LANGUAGE, wxT(""), wxPoint(90, 255 + YOFF),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    new wxComboBox(this, ID_CB_LANGUAGE, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_language->SetToolTip(wxT("Language for this track. Select one of the "
                                "ISO639-2 language codes."));
   cob_language->Append(wxT("none"));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
+  siz_fg->Add(cob_language, 1, wxGROW | wxRIGHT, 15);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):"),
-                   wxPoint(255, 255), wxDefaultSize, 0);
-  tc_delay =
-    new wxTextCtrl(this, ID_TC_DELAY, wxT(""), wxPoint(355, 255 + YOFF),
-                   wxSize(130, -1), 0);
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  tc_delay = new wxTextCtrl(this, ID_TC_DELAY, wxT(""));
   tc_delay->SetToolTip(wxT("Delay this track by a couple of ms. Can be "
                            "negative. Only applies to audio and subtitle "
                            "tracks. Some audio formats cannot be delayed at "
                            "the moment."));
-  new wxStaticText(this, wxID_STATIC, wxT("Track name:"), wxPoint(5, 280),
-                   wxDefaultSize, 0);
-  tc_track_name =
-    new wxTextCtrl(this, ID_TC_TRACKNAME, wxT(""), wxPoint(90, 280 + YOFF),
-                   wxSize(130, -1), 0);
+  siz_fg->Add(tc_delay, 1, wxGROW, 0);
+
+  for (i = 0; i < 4; i++)
+    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Track name:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  tc_track_name = new wxTextCtrl(this, ID_TC_TRACKNAME, wxT(""));
   tc_track_name->SetToolTip(wxT("Name for this track, e.g. \"director's "
                                 "comments\"."));
-  new wxStaticText(this, wxID_STATIC, wxT("Stretch by:"), wxPoint(255, 280),
-                   wxDefaultSize, 0);
-  tc_stretch =
-    new wxTextCtrl(this, ID_TC_STRETCH, wxT(""), wxPoint(355, 280 + YOFF),
-                   wxSize(130, -1), 0);
+  siz_fg->Add(tc_track_name, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Stretch by:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxT(""));
   tc_stretch->SetToolTip(wxT("Stretch the audio or subtitle track by a "
                              "factor. This should be a positive floating "
                              "point number. Not all formats can be stretched "
                              "at the moment."));
-  new wxStaticText(this, wxID_STATIC, wxT("Cues:"), wxPoint(5, 305),
-                   wxDefaultSize, 0);
+  siz_fg->Add(tc_stretch, 1, wxGROW, 0);
 
+  for (i = 0; i < 4; i++)
+    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Cues:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_cues =
-    new wxComboBox(this, ID_CB_CUES, wxT(""), wxPoint(90, 305 + YOFF),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    new wxComboBox(this, ID_CB_CUES, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_cues->SetToolTip(wxT("Selects for which blocks mkvmerge will produce "
                            "index entries ( = cue entries). \"default\" is a "
                            "good choice for almost all situations."));
@@ -214,11 +238,12 @@ tab_input::tab_input(wxWindow *parent):
   cob_cues->Append(wxT("only for I frames"));
   cob_cues->Append(wxT("for all frames"));
   cob_cues->Append(wxT("none"));
-  new wxStaticText(this, wxID_STATIC, wxT("Subtitle charset:"),
-                   wxPoint(255, 305 + YOFF), wxDefaultSize, 0);
+  siz_fg->Add(cob_cues, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Subtitle charset:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_sub_charset =
     new wxComboBox(this, ID_CB_SUBTITLECHARSET, wxT(""),
-                   wxPoint(355, 305 + YOFF), wxSize(130, -1), 0, NULL,
+                   wxDefaultPosition, wxDefaultSize, 0, NULL,
                    wxCB_DROPDOWN | wxCB_READONLY);
   cob_sub_charset->SetToolTip(wxT("Selects the character set a subtitle file "
                                   "was written with. Only needed for non-UTF "
@@ -234,12 +259,16 @@ tab_input::tab_input(wxWindow *parent):
 
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_sub_charset->Append(sorted_charsets[i]);
+  siz_fg->Add(cob_sub_charset, 1, wxGROW, 0);
 
-  new wxStaticText(this, -1, wxT("FourCC:"), wxPoint(5, 330),
-                   wxDefaultSize, 0);
+  for (i = 0; i < 4; i++)
+    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+
+  siz_fg->Add(new wxStaticText(this, -1, wxT("FourCC:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_fourcc =
-    new wxComboBox(this, ID_CB_FOURCC, wxT(""), wxPoint(90, 330 + YOFF),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_FOURCC, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_fourcc->Append(wxT(""));
   cob_fourcc->Append(wxT("DIVX"));
   cob_fourcc->Append(wxT("DIV3"));
@@ -250,12 +279,12 @@ tab_input::tab_input(wxWindow *parent):
                              "tracks that use the AVI compatibility mode "
                              "or for QuickTime video tracks. This option "
                              "CANNOT be used to change Matroska's CodecID."));
-
-  new wxStaticText(this, -1, wxT("Compression:"), wxPoint(255, 330),
-                   wxDefaultSize, 0);
+  siz_fg->Add(cob_fourcc, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(new wxStaticText(this, -1, wxT("Compression:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_compression =
-    new wxComboBox(this, ID_CB_COMPRESSION, wxT(""), wxPoint(355, 330 + YOFF),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    new wxComboBox(this, ID_CB_COMPRESSION, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_compression->Append(wxT(""));
   cob_compression->Append(wxT("none"));
   cob_compression->Append(wxT("zlib"));
@@ -268,14 +297,20 @@ tab_input::tab_input(wxWindow *parent):
                                   "VobSubs will be automatically compressed "
                                   "with zlib. 'none' results is files that "
                                   "are a lot larger."));
+  siz_fg->Add(cob_compression, 1, wxGROW, 0);
+  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
+  siz_all->Add(0, LINESPACING, 0, 0, 0);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
   rb_aspect_ratio =
     new wxRadioButton(this, ID_RB_ASPECTRATIO, wxT("Aspect ratio:"),
-                      wxPoint(5, 355), wxDefaultSize, wxRB_GROUP);
+                      wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
   rb_aspect_ratio->SetValue(true);
+  siz_line->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_aspect_ratio =
-    new wxComboBox(this, ID_CB_ASPECTRATIO, wxT(""), wxPoint(110, 355 + YOFF),
-                   wxSize(110, -1), 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_ASPECTRATIO, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_aspect_ratio->Append(wxT(""));
   cob_aspect_ratio->Append(wxT("4/3"));
   cob_aspect_ratio->Append(wxT("1.66"));
@@ -289,74 +324,85 @@ tab_input::tab_input(wxWindow *parent):
                                    "which case both numbers must be integer "
                                    "(e.g. 16/9) or just a single floting "
                                    "point number 'f' (e.g. 2.35)."));
+  siz_line->Add(cob_aspect_ratio, 2, wxGROW | wxRIGHT, 10);
 
-  new wxStaticText(this, wxID_STATIC, wxT("or"), wxPoint(220, 360),
-                   wxSize(35, -1), wxALIGN_CENTER);
+  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("or")),
+                0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   rb_display_dimensions =
     new wxRadioButton(this, ID_RB_DISPLAYDIMENSIONS,
-                      wxT("Display width/height:"), wxPoint(255, 355),
-                      wxDefaultSize);
+                      wxT("Display width/height:"));
   rb_display_dimensions->SetValue(false);
-  tc_display_width =
-    new wxTextCtrl(this, ID_TC_DISPLAYWIDTH, wxT(""), wxPoint(405, 355 + YOFF),
-                   wxSize(35, -1));
+  siz_line->Add(rb_display_dimensions, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT,
+                10);
+  tc_display_width = new wxTextCtrl(this, ID_TC_DISPLAYWIDTH, wxT(""));
   tc_display_width->SetToolTip(wxT("Sets the display width of the track."
                                    "The height must be set as well, or this "
                                    "field will be ignored."));
-  new wxStaticText(this, wxID_STATIC, wxT("x"), wxPoint(440, 360),
-                   wxSize(10, -1), wxALIGN_CENTER);
-  tc_display_height =
-    new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, wxT(""),
-                   wxPoint(450, 355 + YOFF), wxSize(35, -1));
+  siz_line->Add(tc_display_width, 1, wxGROW, 0);
+  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("x")),
+                0, wxALIGN_CENTER_VERTICAL, 0);
+  tc_display_height = new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, wxT(""));
   tc_display_height->SetToolTip(wxT("Sets the display height of the track."
                                     "The width must be set as well, or this "
                                     "field will be ignored."));
+  siz_line->Add(tc_display_height, 1, wxGROW, 0);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
+  siz_all->Add(0, LINESPACING, 0, 0, 0);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_default =
-    new wxCheckBox(this, ID_CB_MAKEDEFAULT, wxT("Make default track"),
-                   wxPoint(5, 380), wxSize(200, -1), 0);
+    new wxCheckBox(this, ID_CB_MAKEDEFAULT, wxT("Make default track"));
   cb_default->SetValue(false);
   cb_default->SetToolTip(wxT("Make this track the default track for its type "
                              "(audio, video, subtitles). Players should "
                              "prefer tracks with the default track flag "
                              "set."));
+  siz_line->Add(cb_default, 0, 0, 0);
   cb_aac_is_sbr =
-    new wxCheckBox(this, ID_CB_AACISSBR, wxT("AAC is SBR/HE-AAC/AAC+"),
-                   wxPoint(255, 380), wxSize(200, -1), 0);
+    new wxCheckBox(this, ID_CB_AACISSBR, wxT("AAC is SBR/HE-AAC/AAC+"));
   cb_aac_is_sbr->SetValue(false);
   cb_aac_is_sbr->SetToolTip(wxT("This track contains SBR AAC/HE-AAC/AAC+ data."
                                 " Only needed for AAC input files, because SBR"
                                 " AAC cannot be detected automatically for "
                                 "these files. Not needed for AAC tracks read "
                                 "from MP4 or Matroska files."));
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(cb_aac_is_sbr, 0, 0, 0);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Tags:"), wxPoint(5, 405),
-                   wxDefaultSize, 0);
-  tc_tags =
-    new wxTextCtrl(this, ID_TC_TAGS, wxT(""), wxPoint(90, 405 + YOFF),
-                   wxSize(280, -1));
-  b_browse_tags =
-    new wxButton(this, ID_B_BROWSETAGS, wxT("Browse"),
-                 wxPoint(390, 405 + YOFF), wxDefaultSize, 0);
+  siz_fg = new wxFlexGridSizer(3);
+  siz_fg->AddGrowableCol(1);
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Tags:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  tc_tags = new wxTextCtrl(this, ID_TC_TAGS, wxT(""));
+  siz_fg->Add(tc_tags, 1, wxGROW | wxRIGHT, 10);
+  b_browse_tags = new wxButton(this, ID_B_BROWSETAGS, wxT("Browse"));
+  siz_fg->Add(b_browse_tags, 0, wxALIGN_CENTER_VERTICAL, 10);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Timecodes:"), wxPoint(5, 430),
-                   wxDefaultSize, 0);
-  tc_timecodes =
-    new wxTextCtrl(this, ID_TC_TIMECODES, wxT(""), wxPoint(90, 430 + YOFF),
-                   wxSize(280, -1));
+  for (i = 0; i < 3; i++)
+    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Timecodes:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  tc_timecodes = new wxTextCtrl(this, ID_TC_TIMECODES, wxT(""));
   tc_timecodes->SetToolTip(wxT("mkvmerge can read and use timecodes from an "
                                "external text file. This feature is a very "
                                "advanced feature. Almost all users should "
                                "leave this entry empty."));
-  b_browse_timecodes =
-    new wxButton(this, ID_B_BROWSE_TIMECODES, wxT("Browse"),
-                 wxPoint(390, 430 + YOFF), wxDefaultSize, 0);
+  siz_fg->Add(tc_timecodes, 1, wxGROW | wxRIGHT, 10);
+  b_browse_timecodes = new wxButton(this, ID_B_BROWSE_TIMECODES,
+                                    wxT("Browse"));
   b_browse_timecodes->SetToolTip(wxT("mkvmerge can read and use timecodes "
                                      "from an external text file. This "
                                      "feature is a very advanced feature. "
                                      "Almost all users should leave this "
                                      "entry empty."));
+  siz_fg->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL);
+  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  SetSizer(siz_all);
 
   no_track_mode();
   selected_file = -1;
