@@ -281,7 +281,7 @@ probe_cue_chapters(mm_text_io_c *in) {
   if (!in->getline2(s))
     return false;
   if (starts_with_case(s, "performer ") || starts_with_case(s, "title ") ||
-      starts_with_case(s, "file "))
+      starts_with_case(s, "file ") || starts_with_case(s, "catalog "))
     return true;
   return false;
 }
