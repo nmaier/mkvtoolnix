@@ -148,6 +148,11 @@ typedef struct {
   int64_t id;
 } fourcc_t;
 
+typedef struct {
+  int left, top, right, bottom;
+  int64_t id;
+} pixel_crop_t;
+
 class track_info_c {
 protected:
   bool initialized;
@@ -200,6 +205,9 @@ public:
 
   vector<language_t> *all_ext_timecodes; // As given on the command line
   char *ext_timecodes;          // For this very track
+
+  vector<pixel_crop_t> *pixel_crop_list; // As given on the command line
+  pixel_crop_t pixel_cropping;  // For this very track
 
   bool no_chapters, no_attachments, no_tags;
 
@@ -427,6 +435,8 @@ public:
   virtual void set_video_aspect_ratio(float ar) {
     ti->aspect_ratio = ar;
   }
+  virtual void set_video_pixel_cropping(int left, int top, int right,
+                                        int bottom);
 
   virtual void set_as_default_track(int type, int priority);
 

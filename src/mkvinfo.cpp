@@ -658,6 +658,30 @@ def_handle2(video_track,
       show_element(l4, 4, "Display height: %u", uint16(height));
       summary.push_back(mxsprintf("display height: %u", uint32(height)));
 
+    } else if (is_id(l4, KaxVideoPixelCropLeft)) {
+      KaxVideoPixelCropLeft &left =
+        *static_cast<KaxVideoPixelCropLeft *>(l4);
+      show_element(l4, 4, "Pixel crop left: %u", uint16(left));
+      summary.push_back(mxsprintf("pixel crop left: %u", uint32(left)));
+
+    } else if (is_id(l4, KaxVideoPixelCropTop)) {
+      KaxVideoPixelCropTop &top =
+        *static_cast<KaxVideoPixelCropTop *>(l4);
+      show_element(l4, 4, "Pixel crop top: %u", uint16(top));
+      summary.push_back(mxsprintf("pixel crop top: %u", uint32(top)));
+
+    } else if (is_id(l4, KaxVideoPixelCropRight)) {
+      KaxVideoPixelCropRight &right =
+        *static_cast<KaxVideoPixelCropRight *>(l4);
+      show_element(l4, 4, "Pixel crop right: %u", uint16(right));
+      summary.push_back(mxsprintf("pixel crop right: %u", uint32(right)));
+
+    } else if (is_id(l4, KaxVideoPixelCropBottom)) {
+      KaxVideoPixelCropBottom &bottom =
+        *static_cast<KaxVideoPixelCropBottom *>(l4);
+      show_element(l4, 4, "Pixel crop bottom: %u", uint16(bottom));
+      summary.push_back(mxsprintf("pixel crop bottom: %u", uint32(bottom)));
+
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l4, KaxVideoDisplayUnit)) {
       KaxVideoDisplayUnit &unit =

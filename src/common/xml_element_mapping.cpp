@@ -37,8 +37,6 @@ namespace libmatroska {
   extern EbmlId KaxChapterString_TheId;
   extern EbmlId KaxChapterLanguage_TheId;
   extern EbmlId KaxChapterCountry_TheId;
-  extern EbmlId KaxChapterProcess_TheId;
-  extern EbmlId KaxChapterProcessTime_TheId;
 
   extern EbmlId KaxTags_TheId;
   extern EbmlId KaxTag_TheId;
