@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.35 2003/06/07 14:30:10 mosu Exp $
+    \version \$Id$
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -116,6 +116,9 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line);
 UTFstring cstr_to_UTFstring(const char *c);
 char *UTFstring_to_cstr(const UTFstring &u);
 
+bool parse_int(const char *s, int64_t &value);
+bool parse_int(const char *s, int &value);
+
 extern int verbose;
 
 class bit_cursor_c {
@@ -202,6 +205,25 @@ public:
   int get_bit_position() {
     return byte_position - start_of_data + 8 - bits_valid;
   }
+};
+
+class bitvalue_c {
+private:
+  unsigned char *value;
+  int bitsize;
+public:
+  bitvalue_c(int nsize);
+  bitvalue_c(const bitvalue_c &src);
+  bitvalue_c(const char *s, int allowed_bitlength = -1);
+  virtual ~bitvalue_c();
+
+  bitvalue_c &operator =(const bitvalue_c &src);
+  bool operator ==(const bitvalue_c &cmp) const;
+  unsigned char operator [](int index) const;
+
+  int size() const;
+  void generate_random();
+  unsigned char *data() const;
 };
 
 #ifdef DEBUG

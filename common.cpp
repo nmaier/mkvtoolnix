@@ -18,6 +18,7 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <ctype.h>
 #include <errno.h>
 #include <iconv.h>
 #ifdef WIN32
@@ -39,6 +40,117 @@
 #include "pr_generic.h"
 
 int verbose = 1;
+
+bitvalue_c::bitvalue_c(int nbitsize) {
+  assert(nbitsize > 0);
+  assert((nbitsize % 8) == 0);
+  bitsize = nbitsize;
+  value = (unsigned char *)safemalloc(bitsize / 8);
+  memset(value, 0, bitsize / 8);
+}
+
+bitvalue_c::bitvalue_c(const bitvalue_c &src) {
+  value = NULL;
+  *this = src;
+}
+
+#define ishexdigit(c) (isdigit(c) || (((c) >= 'a') && ((c) <= 'f')) || \
+                       (((c) >= 'A') && ((c) <= 'F')))
+#define upperchar(c) (((c) >= 'a') ? ((c) - 'a' + 'A') : (c))
+#define hextodec(c) (isdigit(c) ? ((c) - '0') : ((c) - 'A' + 10))
+
+bitvalue_c::bitvalue_c(const char *s, int allowed_bitlength) {
+  int len, i;
+  string s2;
+
+  len = strlen(s);
+  if (len < 2)
+    throw exception();
+
+  if ((s[0] == '0') && (s[1] == 'x')) {
+    i = 0;
+    while (i < len) {
+      if ((len - i) < 4)
+        throw exception();
+      if ((s[i] != '0') || (s[i + 1] != 'x'))
+        throw exception();
+      s2 += s[i + 2];
+      s2 += s[i + 3];
+      i += 4;
+      if (i < len) {
+        if (s[i] != ' ')
+          throw exception();
+        i++;
+      }
+    }
+    s = s2.c_str();
+    len = strlen(s);
+  }
+
+  if ((len % 2) == 1)
+    throw exception();
+
+  if ((allowed_bitlength != -1) && ((len * 4) != allowed_bitlength))
+    throw exception();
+
+  for (i = 0; i < len; i++)
+    if (!ishexdigit(s[i]))
+      throw exception();
+
+  value = (unsigned char *)safemalloc(len / 2);
+  bitsize = len * 4;
+
+  for (i = 0; i < len; i += 2)
+    value[i / 2] = hextodec(upperchar(s[i])) * 16 +
+      hextodec(upperchar(s[i + 1]));
+}
+
+bitvalue_c &bitvalue_c::operator =(const bitvalue_c &src) {
+  safefree(value);
+  bitsize = src.bitsize;
+  value = (unsigned char *)safememdup(src.value, bitsize / 8);
+
+  return *this;
+}
+
+bitvalue_c::~bitvalue_c() {
+  safefree(value);
+}
+
+bool bitvalue_c::operator ==(const bitvalue_c &cmp) const {
+  int i;
+
+  if (cmp.bitsize != bitsize)
+    return false;
+  for (i = 0; i < bitsize / 8; i++)
+    if (value[i] != cmp.value[i])
+      return false;
+  return true;
+}
+
+unsigned char bitvalue_c::operator [](int index) const {
+  assert((index >= 0) && (index < (bitsize / 8)));
+  return value[index];
+}
+
+int bitvalue_c::size() const {
+  return bitsize;
+}
+
+unsigned char *bitvalue_c::data() const {
+  return value;
+}
+
+void bitvalue_c::generate_random() {
+  int i;
+
+  for (i = 0; i < bitsize / 8; i++)
+    value[i] = (unsigned char)(255.0 * rand() / RAND_MAX);
+}
+
+/*
+ * Control functions
+ */
 
 void die(const char *fmt, ...) {
   va_list ap;
@@ -398,6 +510,43 @@ char *UTFstring_to_cstr(const UTFstring &u) {
   safefree(old_locale);
 
   return new_string;
+}
+
+/*
+ * Integer parsing
+ */
+
+bool parse_int(const char *s, int64_t &value) {
+  const char *p;
+  int sign;
+
+  sign = 1;
+  value = 0;
+  p = s;
+  if (*p == '-') {
+    sign = -1;
+    p++;
+  }
+  while (*p != 0) {
+    if (!isdigit(*p))
+      return false;
+    value *= 10;
+    value += *p - '0';
+    p++;
+  }
+  value *= sign;
+
+  return true;
+}
+
+bool parse_int(const char *s, int &value) {
+  int64_t tmp;
+  bool result;
+
+  result = parse_int(s, tmp);
+  value = tmp;
+
+  return result;
 }
 
 #ifdef DEBUG
