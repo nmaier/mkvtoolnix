@@ -92,7 +92,13 @@ tab_settings::tab_settings(wxWindow *parent):
 
   cb_ask_before_overwriting =
     new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
-                   wxT("Ask before overwriting existing files"));
+                   wxT("Ask before overwriting things (files, jobs)"));
+  cb_ask_before_overwriting->SetToolTip(wxT("If checked mmg will ask for "
+                                            "confirmation before overwriting "
+                                            "existing files, or before adding "
+                                            "a new job if there's an old job "
+                                            "whose description matches the "
+                                            "new one."));
   siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
   cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, wxT("Always on top"));
 #if defined(SYS_WINDOWS)

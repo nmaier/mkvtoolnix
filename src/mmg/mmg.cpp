@@ -260,14 +260,9 @@ break_line(wxString &line,
   uint32_t i, chars;
   wxString broken;
 
-  for (i = 0, chars = 0; i < line.Length(); i++) {
+  for (i = 0, chars = 0; i < line.length(); i++) {
     if (chars >= break_after) {
-      if ((line[i] == wxT(',')) || (line[i] == wxT('.')) ||
-          (line[i] == wxT('-'))) {
-        broken += line[i];
-        broken += wxT("\n");
-        chars = 0;
-      } else if (line[i] == wxT(' ')) {
+      if ((line[i] == wxT(' ')) || (line[i] == wxT('\t'))) {
         broken += wxT("\n");
         chars = 0;
       } else if (line[i] == wxT('(')) {
@@ -1476,8 +1471,10 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
 
 void
 mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
-  wxString description;
+  wxString description, line;
   job_t job;
+  int i, result;
+  bool ok;
 
   if (tc_output->GetValue().Length() == 0) {
     wxMessageBox(wxT("You have not yet selected an output file."),
@@ -1491,18 +1488,40 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
       !settings_page->validate_settings())
     return;
 
+  line = wxT("The output file '") + tc_output->GetValue() +
+    wxT("' does already exists. Do you want to overwrite it?");
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
-      (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
-                    wxT("' does already exists. Do you want to overwrite it?"),
-                    wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
+      (wxMessageBox(break_line(line, 60), wxT("Overwrite existing file?"),
+                    wxYES_NO) != wxYES))
     return;
 
-  description = wxGetTextFromUser(wxT("Please enter a description for the "
-                                      "new job:"), wxT("Job description"),
-                                  wxT(""));
-  if (description.length() == 0)
-    return;
+  description = wxT("");
+  ok = false;
+  do {
+    description = wxGetTextFromUser(wxT("Please enter a description for the "
+                                        "new job:"), wxT("Job description"),
+                                    description);
+    if (description.length() == 0)
+      return;
+
+    if (!settings_page->cb_ask_before_overwriting->IsChecked())
+      break;
+    line = wxT("A job with the description '") + description +
+      wxT("' does already exist. Do you really want to add another one "
+          "with the same description?");
+    break_line(line, 60);
+    for (i = 0; i < jobs.size(); i++)
+      if (description == *jobs[i].description) {
+        result = wxMessageBox(line, wxT("Description already exists"),
+                              wxYES_NO | wxCANCEL);
+        if (result == wxYES)
+          ok = true;
+        else if (result == wxCANCEL)
+          return;
+        break;
+      }
+  } while (!ok);
 
   if (!wxDirExists(wxT("jobs")))
     wxMkdir(wxT("jobs"));
