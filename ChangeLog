@@ -1,5 +1,12 @@
 2005-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: mkvmerge's output during muxing was not converted
+	from UTF-8.
+
+	* mmg: bug fix: The default extension added when the user doesn't
+	give one is different in wxWidgets 2.4.x and 2.5.x. It should
+	always be .mkv and not .mka.
+
 	* Released v1.4.0.
 
 2005-02-19  Moritz Bunkus  <moritz@bunkus.org>

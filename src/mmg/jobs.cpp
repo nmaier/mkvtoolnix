@@ -227,9 +227,9 @@ job_run_dialog::process_input() {
 
     if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
 #if WXUNICODE
-      wx_line = wxU(to_utf8(cc_local_utf8, line).c_str());
+      wx_line = wxU(line.c_str());
 #else
-      wx_line = line.c_str();
+      wx_line = from_utf8(cc_local_utf8, line).c_str();
 #endif
       if (wx_line.Find(wxT("progress")) == 0) {
         if (wx_line.Find(wxT("%")) != 0) {
