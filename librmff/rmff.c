@@ -29,6 +29,12 @@
 
 #include "librmff.h"
 
+typedef struct rmff_video_segment_t {
+  uint32_t size;
+  uint32_t offset;
+  unsigned char *data;
+} rmff_video_segment_t;
+
 typedef struct rmff_bitrate_t {
   uint32_t *timecodes;
   uint32_t *frame_sizes;
@@ -62,10 +68,20 @@ typedef struct rmff_track_internal_t {
   int index_this;
   uint32_t total_bytes;
   rmff_bitrate_t bitrate;
+
+  /* Used for video packet assembly. */
+  uint32_t c_timecode;
+  int f_merged;
+  int c_keyframe;
+  rmff_video_segment_t *segments;
+  int num_segments;
+  rmff_frame_t **assembled_frames;
+  int num_assembled_frames;
 } rmff_track_internal_t;
 
 int rmff_last_error = RMFF_ERR_OK;
 const char *rmff_last_error_msg = NULL;
+static char error_msg_buffer[1000];
 static const char *rmff_std_error_messages[] = {
   "No error",
   "File is not a RealMedia file",
@@ -431,11 +447,22 @@ rmff_open_file_with_io(const char *path,
 
 void
 rmff_free_track_data(rmff_track_t *track) {
+  rmff_track_internal_t *tint;
+  int i;
+
   if (track == NULL)
     return;
+  safefree(track->index);
   safefree(track->mdpr_header.name);
   safefree(track->mdpr_header.mime_type);
   safefree(track->mdpr_header.type_specific_data);
+  tint = (rmff_track_internal_t *)track->internal;
+  for (i = 0; i < tint->num_segments; i++)
+    safefree(tint->segments[i].data);
+  safefree(tint->segments);
+  for (i = 0; i < tint->num_assembled_frames; i++)
+    rmff_release_frame(tint->assembled_frames[i]);
+  safefree(tint->assembled_frames);
   safefree(track->internal);
 }
 
@@ -1528,4 +1555,268 @@ rmff_write_packed_video_frame(rmff_track_t *track,
   tint->num_packed_frames++;
 
   return set_error(RMFF_ERR_OK, NULL, RMFF_ERR_OK);
+}
+
+inline uint16_t
+data_get_uint16_be(unsigned char **data,
+                   int *len) {
+  (*data) += 2;
+  (*len) -= 2;
+  return rmff_get_uint16_be((*data) - 2);
+}
+
+inline unsigned char
+data_get_uint8(unsigned char **data,
+               int *len) {
+  (*data)++;
+  (*len)--;
+  return *((*data) - 1);
+}
+
+static int
+deliver_segments(rmff_track_t *track,
+                 uint32_t timecode) {
+  uint32_t len, total;
+  int i;
+  unsigned char *buffer, *ptr;
+  rmff_video_segment_t *segment;
+  rmff_track_internal_t *tint;
+  rmff_frame_t *frame;
+
+  tint = (rmff_track_internal_t *)track->internal;
+  if (tint->num_segments == 0)
+    return tint->num_assembled_frames;
+
+  len = 0;
+  total = 0;
+
+  for (i = 0; i < tint->num_segments; i++) {
+    segment = &tint->segments[i];
+    if (len < (segment->offset + segment->size))
+      len = segment->offset + segment->size;
+    total += segment->size;
+  }
+
+  if (len != total) {
+    sprintf(error_msg_buffer, "Packet assembly failed. "
+            "Expected packet length was %d but found only %d sub packets "
+            "containing %d bytes.", len, tint->num_segments, total);
+    return set_error(RMFF_ERR_DATA, error_msg_buffer, RMFF_ERR_DATA);
+    len = 0;
+    for (i = 0; i < tint->num_segments; i++) {
+      segment = &tint->segments[i];
+      segment->offset = len;
+      len += segment->size;
+    }
+  }
+
+  len += 1 + 2 * 4 * (tint->f_merged ? 1: tint->num_segments);
+  buffer = (unsigned char *)safemalloc(len);
+  ptr = buffer;
+
+  *ptr = tint->f_merged ? 0 : tint->num_segments - 1;
+  ptr++;
+
+  if (tint->f_merged) {
+    rmff_put_uint32_le(ptr, 1);
+    ptr += 4;
+    rmff_put_uint32_le(ptr, 0);
+    ptr += 4; 
+  } else {
+    for (i = 0; i < tint->num_segments; i++) {
+      rmff_put_uint32_le(ptr, 1);
+      ptr += 4;
+      rmff_put_uint32_le(ptr, tint->segments[i].offset);
+      ptr += 4;
+    }
+  }
+
+  for (i = 0; i < tint->num_segments; i++) {
+    segment = &tint->segments[i];
+    memcpy(ptr, segment->data, segment->size);
+    ptr += segment->size;
+  }
+
+  frame = rmff_allocate_frame(len, buffer);
+  frame->timecode = timecode;
+  frame->flags = tint->c_keyframe ? RMFF_FRAME_FLAG_KEYFRAME : 0;
+  tint->assembled_frames = (rmff_frame_t **)
+    saferealloc(tint->assembled_frames, (tint->num_assembled_frames + 1) *
+                sizeof(rmff_frame_t *));
+  tint->assembled_frames[tint->num_assembled_frames] = frame;
+  tint->num_assembled_frames++;
+
+  for (i = 0; i < tint->num_segments; i++)
+    safefree(tint->segments[i].data);
+  safefree(tint->segments);
+  tint->segments = NULL;
+  tint->num_segments = 0;
+
+  return tint->num_assembled_frames;
+}
+
+int
+rmff_assemble_packed_video_frame(rmff_track_t *track,
+                                 rmff_frame_t *frame) {
+  uint32_t vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum;
+  uint32_t len, this_timecode;
+  int data_len, result;
+  unsigned char *data;
+  rmff_track_internal_t *tint;
+  rmff_video_segment_t *segment;
+
+  if ((track == NULL) || (frame == NULL) || (frame->data == NULL) ||
+      (frame->size == 0))
+    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+
+  tint = (rmff_track_internal_t *)track->internal;
+  if (tint->num_segments == 0) {
+    tint->c_keyframe = (frame->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
+      RMFF_FRAME_FLAG_KEYFRAME ? 1 : 0;
+    tint->f_merged = 0;
+  }
+
+  if (frame->timecode != tint->c_timecode)
+    deliver_segments(track, tint->c_timecode);
+
+  data = frame->data;
+  data_len = frame->size;
+
+  while (data_len > 2) {
+    vpkg_subseq = 0;
+    vpkg_seqnum = 0;
+    vpkg_length = 0;
+    vpkg_offset = 0;
+    this_timecode = frame->timecode;
+
+    // bit 7: 1=last block in block chain
+    // bit 6: 1=short header (only one block?)
+    vpkg_header = data_get_uint8(&data, &data_len);
+
+    if ((vpkg_header & 0xc0) == 0x40) {
+      // seems to be a very short header
+      // 2 bytes, purpose of the second byte yet unknown
+      data_get_uint8(&data, &data_len);
+      vpkg_length = data_len;
+
+    } else {
+      if ((vpkg_header & 0x40) == 0) {
+        if (data_len < 1)
+          return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                           "data available", RMFF_ERR_DATA); 
+        // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
+        vpkg_subseq = data_get_uint8(&data, &data_len) & 0x7f;
+      }
+
+      // size of the complete packet
+      // bit 14 is always one (same applies to the offset)
+      if (data_len < 2)
+        return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                         "data available", RMFF_ERR_DATA); 
+      vpkg_length = data_get_uint16_be(&data, &data_len);
+
+      if ((vpkg_length & 0x8000) == 0x8000)
+        tint->f_merged = 1;
+
+      if ((vpkg_length & 0x4000) == 0) {
+        if (data_len < 2)
+          return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                           "data available", RMFF_ERR_DATA); 
+        vpkg_length <<= 16;
+        vpkg_length |= data_get_uint16_be(&data, &data_len);
+        vpkg_length &= 0x3fffffff;
+
+      } else
+        vpkg_length &= 0x3fff;
+
+      // offset of the following data inside the complete packet
+      // Note: if (hdr&0xC0)==0x80 then offset is relative to the
+      // _end_ of the packet, so it's equal to fragment size!!!
+      if (data_len < 2)
+        return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                         "data available", RMFF_ERR_DATA); 
+      vpkg_offset = data_get_uint16_be(&data, &data_len);
+
+      if ((vpkg_offset & 0x4000) == 0) {
+        if (data_len < 2)
+          return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                           "data available", RMFF_ERR_DATA); 
+        vpkg_offset <<= 16;
+        vpkg_offset |= data_get_uint16_be(&data, &data_len);
+        vpkg_offset &= 0x3fffffff;
+
+      } else
+        vpkg_offset &= 0x3fff;
+
+      if (data_len < 1)
+        return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                         "data available", RMFF_ERR_DATA); 
+      vpkg_seqnum = data_get_uint8(&data, &data_len);
+
+      if ((vpkg_header & 0xc0) == 0xc0) {
+        this_timecode = vpkg_offset;
+        vpkg_offset = 0;
+      } else if ((vpkg_header & 0xc0) == 0x80)
+        vpkg_offset = vpkg_length - vpkg_offset;
+    }
+
+    if (data_len < (int)(vpkg_length - vpkg_offset))
+      len = data_len;
+    else
+      len = (int)(vpkg_length - vpkg_offset);
+
+    tint->segments = (rmff_video_segment_t *)
+      saferealloc(tint->segments, (tint->num_segments + 1) *
+                  sizeof(rmff_video_segment_t));
+    segment = &tint->segments[tint->num_segments];
+    tint->num_segments++;
+
+    segment->offset = vpkg_offset;
+    segment->data = (unsigned char *)safemalloc(len);
+    segment->size = len;
+    memcpy(segment->data, data, len);
+    data += len;
+    data_len -= len;
+
+    tint->c_timecode = this_timecode;
+
+    if (((vpkg_header & 0x80) == 0x80) ||
+        ((vpkg_offset + len) >= vpkg_length)) {
+      result = deliver_segments(track, this_timecode);
+      tint->c_keyframe = 0;
+      if (result < 0)
+        return result;
+    }
+  }
+
+  return tint->num_assembled_frames;
+}
+
+rmff_frame_t *
+rmff_get_packed_video_frame(rmff_track_t *track) {
+  rmff_track_internal_t *tint;
+  rmff_frame_t *frame;
+
+  if (track == NULL)
+    return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+
+  tint = (rmff_track_internal_t *)track->internal;
+  if (tint->num_assembled_frames == 0)
+    return (rmff_frame_t *)set_error(RMFF_ERR_OK, NULL, 0);
+
+  frame = tint->assembled_frames[0];
+  tint->num_assembled_frames--;
+  if (tint->num_assembled_frames == 0) {
+    safefree(tint->assembled_frames);
+    tint->assembled_frames = NULL;
+  } else {
+    memmove(&tint->assembled_frames[0], &tint->assembled_frames[1],
+            tint->num_assembled_frames * sizeof(rmff_frame_t *));
+    tint->assembled_frames = (rmff_frame_t **)
+      saferealloc(tint->assembled_frames, tint->num_assembled_frames *
+                  sizeof(rmff_frame_t *));
+  }
+
+  set_error(RMFF_ERR_OK, NULL, 0);
+  return frame;
 }

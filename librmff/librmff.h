@@ -163,9 +163,11 @@
   packet in the complete frame.
 
   \a librmff can make the developper's life easier because it provides
-  a function ::rmff_write_packed_video_frame that will split up such
+  the function ::rmff_write_packed_video_frame that will split up such
   an assembled packet into all the sub packets and write those
-  automatically.
+  automatically, and two functions that assemble sub packets into such a
+  packed frame (::rmff_assemble_packed_video_frame and
+  ::rmff_get_packed_video_frame).
 
   \subsection packed_format Bitstream format
 
@@ -206,6 +208,33 @@
   Can be used for detecting frame boundaries if the sub packaging has failed
   or the stream is broken.
   - The rest is the video data.
+
+  \subsection packed_example Packed frame assembly example
+
+  Here's a short example how to use the packet assembly:
+  \code
+  rmff_frame_t *raw_frame, *packed_frame;
+  rmff_track_t *track;
+  int result;
+
+  // Open the file, check the tracks.
+  while ((raw_frame = rmff_read_next_frame(file, NULL)) != NULL) {
+    track = rmff_find_track_with_id(file, raw_frame->id);
+    if (track->type != RMFF_TRACK_TYPE_VIDEO) {
+      // Handle audio etc.
+    } else {
+      if ((result = rmff_assemble_packed_video_frame(track, raw_frame)) < 0) {
+        // Handle the error.
+      } else {
+        while ((packed_frame = rmff_get_packed_video_frame(track)) != NULL) {
+          // Do something with the assembled frame and release it afterwards.
+          rmff_release_frame(packed_frame);
+        }
+      }
+    }
+    rmff_release_frame(raw_frame);
+  }
+  \endcode
 */
 
 #ifndef __RMFF_H
@@ -795,6 +824,49 @@ int rmff_write_frame(rmff_track_t *track, rmff_frame_t *frame);
   constants on error.
 */
 int rmff_write_packed_video_frame(rmff_track_t *track, rmff_frame_t *frame);
+
+/** \brief Parses a sub packet and attempts to assemble a packed video frame.
+
+  Please see the section about packed video \ref packed_video_frames frames
+  for a description of this function.
+
+  This function takes a sub packet as they are stored in a RealMedia file
+  and attempts to assemble the complete packet. More than one call to
+  this function with consecutive frames read from a file are likely
+  necessary before a complete frame can be assembled. The function
+  ::rmff_get_packed_video_frame can be used to retrieve the assembled
+  frames.
+
+  These two functions, ::rmff_assemble_packed_video_frame and
+  ::rmff_get_packed_video_frame, are the counterparts to
+  ::rmff_write_packed_video_frame.
+
+  \param track The track this frame belongs to.
+  \param frame The sub packet that should be assembled.
+
+  \returns one of the other \c RMFF_ERR_* constants on error and the number
+  of available assembled frames on success.
+*/
+int rmff_assemble_packed_video_frame(rmff_track_t *track, rmff_frame_t *frame);
+
+/** \brief Retrieve an assembled video frame.
+
+  Please see the section about packed video \ref packed_video_frames frames
+  for a description of this function.
+
+  This function returns one assembled video frame after some calls to
+  ::rmff_assemble_packed_video_frame.
+
+  These two functions, ::rmff_assemble_packed_video_frame and
+  ::rmff_get_packed_video_frame, are the counterparts to
+  ::rmff_write_packed_video_frame.
+
+  \param track The track an assembled frame should be read from.
+
+  \returns an assembled frame on success or \c NULL if there's none
+  available.
+*/
+rmff_frame_t *rmff_get_packed_video_frame(rmff_track_t *track);
 
 /** \brief Creates an index at the end of the file.
 
