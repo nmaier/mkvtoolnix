@@ -491,10 +491,21 @@ mpeg4_l10_video_packetizer_c::extract_aspect_ratio() {
   if (ti->aspect_ratio_given || ti->display_dimensions_given)
     return;
 
-  if (mpeg4_l10_extract_par(ti->private_data, ti->private_size, num, den)) {
-    ti->aspect_ratio_given = true;
-    ti->aspect_ratio = (float)hvideo_pixel_width /
-      (float)hvideo_pixel_height * (float)num / (float)den;
+  if (mpeg4_l10_extract_par(ti->private_data, ti->private_size, num, den) &&
+      (0 != num) && (0 != den)) {
+    double par = (double)num / (double)den;
+
+    if (par >= 1) {
+      ti->display_width = irnd(width * par);
+      ti->display_height = height;
+
+    } else {
+      ti->display_width = width;
+      ti->display_height = irnd(height / par);
+
+    }
+
+    ti->display_dimensions_given = true;
     mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
            "from the MPEG-4 layer 10 (AVC) video data and set the display "
            "dimensions to %u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
