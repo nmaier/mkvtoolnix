@@ -143,6 +143,9 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   file_menu->Append(ID_M_FILE_SAVE, _T("&Save settings\tCtrl-S"),
                     _T("Save muxing settings to a file"));
   file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_SETOUTPUT, _T("Set &output file"),
+                    _T("Select the file you want to write to"));
+  file_menu->AppendSeparator();
   file_menu->Append(ID_M_FILE_EXIT, _T("&Quit\tCtrl-Q"),
                     _T("Quit the application"));
 
@@ -307,7 +310,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
 }
 
 void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir,
+                   tc_output->GetValue().AfterLast(PSEP),
                    _T("Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
                       ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
@@ -1029,6 +1033,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_FILE_NEW, mmg_dialog::on_file_new)
   EVT_MENU(ID_M_FILE_LOAD, mmg_dialog::on_file_load)
   EVT_MENU(ID_M_FILE_SAVE, mmg_dialog::on_file_save)
+  EVT_MENU(ID_M_FILE_SETOUTPUT, mmg_dialog::on_browse_output)
   EVT_MENU(ID_M_MUXING_START, mmg_dialog::on_run)
   EVT_MENU(ID_M_MUXING_COPY_CMDLINE, mmg_dialog::on_copy_to_clipboard)
   EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
