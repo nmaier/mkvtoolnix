@@ -1,5 +1,8 @@
 2003-05-11  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Fixed the huge memory need if reading from AVI files (introduced
+        on 2003-05-06 with the internal changes).
+
         * Proper handling of the 'default track' flag and the language for
         the Matroska reader.
 
