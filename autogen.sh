@@ -5,7 +5,7 @@
 # For MinGW I use my very own Makefile system. So just copy them over
 # to Makefile for convenience's sake.
 if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
-  echo Detected MinGW. Will copy the Makefile,mingw to Makefile and
+  echo Detected MinGW. Will copy the Makefile.mingw to Makefile and
   echo make some adjustments.
   echo ''
 
