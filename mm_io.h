@@ -33,6 +33,10 @@ using namespace std;
 using namespace LIBEBML_NAMESPACE;
 
 class mm_io_c: public IOCallback {
+protected:
+#if !defined(SYS_UNIX)
+  bool _eof;
+#endif
   void *file;
 
 public:

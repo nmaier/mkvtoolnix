@@ -1,5 +1,8 @@
 2003-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: Fixed some infinite-reading-from-a-file bug that
+        occured on Windows when reading SSA/ASS files.
+
         * mkvmerge: Fixed a bug which would mostly appear with subtitles
         that have very long ( > 60s) gaps between entries. Here the
         cluster would not been rendered properly leaving mkvmerge either

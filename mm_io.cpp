@@ -115,23 +115,6 @@ char *mm_io_c::gets(char *buffer, size_t max_size) {
   return fgets(buffer, max_size, (FILE *)file);
 }
 
-string mm_io_c::getline() {
-  char c;
-  string s;
-
-  while (!feof((FILE *)file)) {
-    if (fread(&c, 1, 1, (FILE *)file) == 1) {
-      if (c == '\r')
-        continue;
-      if (c == '\n')
-        return s;
-      s += c;
-    }
-  }
-
-  return s;
-}
-
 #else // SYS_UNIX
 
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
@@ -159,6 +142,7 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
 
   file = (void *)CreateFile(path, access_mode, share_mode, NULL, disposition,
                             0, NULL);
+  _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
     throw exception();
 }
@@ -205,8 +189,13 @@ void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
 uint32 mm_io_c::read(void *buffer, size_t size) {
   DWORD bytes_read;
 
-  if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL))
+  if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
+    _eof = true;
     return 0;
+  }
+
+  if (size != bytes_read)
+    _eof = true;
 
   return bytes_read;
 }
@@ -221,7 +210,7 @@ size_t mm_io_c::write(const void *buffer,size_t size) {
 }
 
 bool mm_io_c::eof() {
-  return false;
+  return _eof;
 }
 
 char *mm_io_c::gets(char *buffer, size_t max_size) {
@@ -233,6 +222,7 @@ char *mm_io_c::gets(char *buffer, size_t max_size) {
   idx = 0;
   do {
     if (!ReadFile((HANDLE)file, &buffer[idx], 1, &bytes_read, NULL)) {
+      _eof = true;
       if (idx == 0)
         return NULL;
       else {
@@ -252,26 +242,22 @@ char *mm_io_c::gets(char *buffer, size_t max_size) {
   return buffer;
 }
 
+#endif
+
 string mm_io_c::getline() {
   char c;
   string s;
-  DWORD bytes_read;
 
-  do {
-    ReadFile((HANDLE)file, &c, 1, &bytes_read, NULL);
-    if (bytes_read == 1) {
-      if (c == '\r')
-        continue;
-      if (c == '\n')
-        return s;
-      s += c;
-    }
-  } while (bytes_read == 1);
+  while (read(&c, 1) == 1) {
+    if (c == '\r')
+      continue;
+    if (c == '\n')
+      return s;
+    s += c;
+  }
 
   return s;
 }
-
-#endif
 
 size_t mm_io_c::puts_unl(const char *s) {
   int i;
