@@ -847,15 +847,22 @@ parse_language(const string &s,
                language_t &lang,
                const string &opt,
                const char *topic,
-               bool check) {
+               bool check,
+               bool empty_ok = false) {
   vector<string> parts;
 
   // Extract the track number.
   parts = split(s, ":", 2);
   strip(parts);
-  if (parts.size() != 2)
-    mxerror(_("No track ID specified in '--%s' %s'.\n"), opt.c_str(),
+  if (0 == parts.size())
+    mxerror(_("No track ID specified in '--%s %s'.\n"), opt.c_str(),
             s.c_str());
+  if (1 == parts.size()) {
+    if (!empty_ok)
+      mxerror("No %s specified in '--%s %s'.\n", topic, opt.c_str(),
+              s.c_str());
+    parts.push_back("");
+  }
 
   if (!parse_int(parts[0], lang.id))
     mxerror(_("Invalid track ID specified in '--%s %s'.\n"), opt.c_str(),
@@ -1808,7 +1815,7 @@ parse_args(vector<string> args) {
       if (no_next_arg)
         mxerror(_("'--track-name' lacks its argument.\n"));
 
-      parse_language(next_arg, lang, "track-name", "track name", false);
+      parse_language(next_arg, lang, "track-name", "track name", false, true);
       ti->track_names.push_back(track_name_t(lang.language, lang.id));
       sit++;
 
