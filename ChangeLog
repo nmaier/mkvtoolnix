@@ -1,0 +1,367 @@
+2003-03-04 00:21  mosu
+
+	* p_video.h: Small annoying bug - default value is -1 not 0 (-1
+	meaning that the packtizer will have to calculate the timecodes
+	itself).
+
+2003-03-04 00:20  mosu
+
+	* p_vorbis.cpp, p_vorbis.h, r_ogm.cpp, r_ogm.h: Working Vorbis
+	support including lacing for the headers and recalculation of the
+	timestamps.
+
+2003-03-03 21:35  mosu
+
+	* Makefile.am, acinclude.m4: Removed libvorbisenc as I will not
+	need it.
+
+2003-03-03 19:00  mosu
+
+	* Makefile.am, error.h, p_vorbis.cpp, p_vorbis.h, r_ogm.cpp: Added
+	a first Vorbis support including the packetizers.
+
+2003-03-03 18:08  mosu
+
+	* p_video.cpp, p_video.h: Changed "calculate timecode" from 0 to -1
+	for the packetizers.
+
+2003-03-03 15:39  mosu
+
+	* r_ogm.cpp: Ogg sync state is being reset after the headers have
+	been read.
+
+2003-03-03 14:47  mosu
+
+	* acinclude.m4, common.h, mkvmerge.cpp, r_ogm.cpp, r_ogm.h: Added
+	support for reading OGM files. DOES NOT WORK at the moment! Vorbis
+	not supported.
+
+2003-03-01 17:59  mosu
+
+	* p_video.cpp: Added suggested timecode to process.
+
+2003-03-01 17:55  mosu
+
+	* p_video.h: Added constructor parameter names. Added suggested
+	timecode to process.
+
+2003-03-01 17:52  mosu
+
+	* Makefile.am: Added Ogg and Vorbis libraries to mkvmerge.
+
+2003-03-01 17:51  mosu
+
+	* ogmstreams.h: Copied from ogmtools. OGG media header and type
+	definitions.h
+
+2003-03-01 17:49  mosu
+
+	* pr_generic.h: Renamed ch_contents to ch_contents_t. Adjusted
+	indentation.
+
+2003-03-01 17:24  mosu
+
+	* Makefile.am: Added OGM reader files.
+
+2003-03-01 17:19  mosu
+
+	* pr_generic.cpp: Removed debug output and other useless stuff.
+
+2003-03-01 17:18  mosu
+
+	* pr_generic.cpp: Removed the unused last_group.
+
+2003-02-28 22:57  mosu
+
+	* configure.in: New version number ;)
+
+2003-02-28 22:43  mosu
+
+	* .cvsignore: Added config.h
+
+2003-02-28 19:54  mosu
+
+	* p_video.cpp: P frames now reference the previous frame (still no
+	B frame support ;)).
+
+2003-02-28 15:50  mosu
+
+	* p_video.cpp, p_video.h, pr_generic.cpp, pr_generic.h: Finally
+	fixed the cluster cashing. No more needs for callback functions for
+	the packetizers. References implemented.
+
+2003-02-28 14:01  mosu
+
+	* p_pcm.h, p_video.cpp, p_video.h, pr_generic.cpp, pr_generic.h,
+	queue.cpp, r_avi.cpp: Even more improved cluster caching/freeing
+	system.
+
+2003-02-28 14:00  mosu
+
+	* p_pcm.cpp: Audio sync adjustment implemented.
+
+2003-02-27 20:51  mosu
+
+	* mkvmerge.cpp, p_video.cpp, p_video.h, pr_generic.cpp,
+	pr_generic.h, queue.cpp, queue.h: New cluster caching system.
+
+2003-02-27 10:52  mosu
+
+	* error.h, mp3_common.h, p_ac3.h, p_mp3.h, p_pcm.h, p_video.h,
+	pr_generic.h, queue.h, r_ac3.h, r_avi.h, r_microdvd.h, r_mp3.h,
+	r_ogm.h, r_srt.h, r_vobsub.h, r_wav.h: beautification
+
+2003-02-27 10:35  mosu
+
+	* mkvmerge.cpp, p_ac3.cpp, p_mp3.cpp, p_video.cpp, p_video.h,
+	pr_generic.cpp, pr_generic.h, queue.cpp: Implementing references.
+	First step. Not working.
+
+2003-02-26 20:20  mosu
+
+	* error.h, mkvmerge.h, p_ac3.h, p_mp3.h, p_pcm.h, p_video.h,
+	pr_generic.h, queue.cpp, queue.h, r_ac3.cpp, r_ac3.h, r_avi.cpp,
+	r_avi.h, r_microdvd.h, r_mp3.cpp, r_mp3.h, r_ogm.h, r_srt.h,
+	r_vobsub.h, r_wav.cpp, r_wav.h: Beautification. Added IDs and
+	reference values to the internal packets - prerequisites for
+	Matroska references
+
+2003-02-26 16:24  mosu
+
+	* TODO: added references
+
+2003-02-26 15:56  mosu
+
+	* avilib/avilib.c: More fixing of potential segfaults
+
+2003-02-26 09:59  mosu
+
+	* mkvmerge.cpp: New freeing code in libmatroska now takes care of
+	all children of a EbmlMaster itself - no need to free those
+	manually anymore.
+
+2003-02-25 18:05  mosu
+
+	* TODO: Wrote a short TODO list.
+
+2003-02-25 17:19  mosu
+
+	* avilib/avilib.c: Fixed a potential segfault when reading the
+	WAVEFORMATEX.
+
+2003-02-25 17:19  mosu
+
+	* r_avi.cpp: Activated PCM-in-AVI support.
+
+2003-02-25 15:24  mosu
+
+	* mkvmerge.cpp, p_video.cpp, avilib/avilib.c: Fixed some memory
+	leaks and ifs that depended on uninitialized variables.
+
+2003-02-25 14:25  mosu
+
+	* mkvmerge.cpp, p_pcm.cpp, r_ac3.cpp, r_avi.cpp, r_microdvd.cpp,
+	r_mp3.cpp, r_ogm.cpp, r_srt.cpp, r_vobsub.cpp, r_wav.cpp: Changed
+	stderr to stdout for all informational messages
+
+2003-02-25 14:17  mosu
+
+	* common.cpp, mkvinfo.cpp, mkvmerge.cpp: Chaned "WARNING" to
+	"Warning" and "ERROR" to "Error"
+
+2003-02-25 10:28  mosu
+
+	* mkvinfo.cpp: first version - works so far, no BlockAdditional at
+	the moment
+
+2003-02-24 19:40  mosu
+
+	* .cvsignore, Makefile.am: added mkvinfo
+
+2003-02-24 14:12  mosu
+
+	* p_pcm.cpp, p_pcm.h: added PCM support
+
+2003-02-24 13:32  mosu
+
+	* mkvmerge.h, r_microdvd.h, r_mp3.h, r_ogm.h, r_srt.h, r_vobsub.h:
+	include file definition syntax changed
+
+2003-02-24 13:31  mosu
+
+	* Makefile.am, mkvmerge.cpp, pr_generic.cpp, r_wav.cpp, r_wav.h:
+	added support for external WAV files. Still crashes the mplayer
+	playback, but I do not know which part to blame.
+
+2003-02-24 00:23  mosu
+
+	* Makefile.am, mkvmerge.cpp, p_ac3.cpp, p_ac3.h, r_ac3.cpp,
+	r_mp3.cpp, r_mp3.h: added support for external MP3 files
+
+2003-02-23 23:51  mosu
+
+	* Makefile.am, acinclude.m4, configure.in, mkvmerge.cpp, p_ac3.cpp,
+	p_ac3.h, r_ac3.cpp, r_ac3.h, r_avi.cpp: added AC3 support
+
+2003-02-23 22:36  mosu
+
+	* mkvmerge.cpp, pr_generic.h: support for multiple blocks per
+	cluster, defaults to max 5secs per cluster
+
+2003-02-23 16:27  mosu
+
+	* aclocal.m4: doh... gcc version check went into the wrong file
+
+2003-02-23 16:24  mosu
+
+	* aclocal.m4: re-added aclocal.m4 with a better check for the gcc
+	version
+
+2003-02-21 10:44  mosu
+
+	* avilib/avilib.c: fixed obvious bug in free()ing order
+
+2003-02-21 10:26  mosu
+
+	* pr_generic.cpp: some generic functions for the
+	readers/packetizers
+
+2003-02-19 12:08  mosu
+
+	* mkvmerge.cpp: added dummy KaxCues in order to make it compile
+	with the latest CVS
+
+2003-02-19 10:31  mosu
+
+	* Makefile.am, p_mp3.cpp, p_mp3.h, p_video.cpp, p_video.h,
+	pr_generic.h, r_avi.cpp: support for retrieving BITMAPINFOHEADER
+	and WAVEFORMATEX from the AVI and storing it in KaxCodecPrivate
+
+2003-02-19 10:29  mosu
+
+	* avilib/: avilib.c, avilib.h: switched support for
+	BITMAPINFOHEADER and WAVEFORMATEX from structures with a "void
+	*data" to newly allocated structs with the additional data coming
+	directly after the struct's contents
+
+2003-02-18 11:46  mosu
+
+	* r_avi.cpp: dump BITMAPINFOHEADER and WAVEFORMATEX if compiled
+	with DEBUG
+
+2003-02-18 11:43  mosu
+
+	* avilib/: avilib.c, avilib.h: provisionally suppot for exporting
+	BITMAPINFOHEADER and WAVEFORMATEX structures including the codec's
+	private data
+
+2003-02-17 12:36  mosu
+
+	* aclocal.m4: removed autogenerated file
+
+2003-02-17 12:33  mosu
+
+	* .cvsignore, Makefile.in, acinclude.m4, configure.in,
+	mkvmerge.cpp, avilib/.cvsignore, avilib/Makefile.in: added
+	--with-matroska-include, --with-matroska-lib, automatic g++ version
+	checking; removed several autogenerated files
+
+2003-02-17 12:32  mosu
+
+	* .cvsignore, configure: removed configure
+
+2003-02-17 12:30  mosu
+
+	* avilib/Makefile: removed Makefile because of the switch to auto*
+
+2003-02-17 11:09  mosu
+
+	* mkvmerge.cpp: re-ordered rendering of initial elements (head,
+	segment, tracks)
+
+2003-02-16 21:19  mosu
+
+	* p_mp3.cpp: removed duplicate header settings
+
+2003-02-16 18:04  mosu
+
+	* Makefile.am, Makefile.in, ac3_common.cpp, ac3_common.h,
+	common.cpp, common.h, error.h, mkvmerge.cpp, mp3_common.cpp,
+	mp3_common.h, p_generic.h, p_mp3.cpp, p_mp3.h, p_video.cpp,
+	p_video.h, pr_generic.h, queue.cpp, queue.h, r_avi.cpp, r_avi.h,
+	r_generic.h: first working version. yay!
+
+2003-02-16 13:17  mosu
+
+	* common.cpp, common.h, error.h, mkvmerge.cpp, p_generic.h,
+	queue.cpp, queue.h, r_avi.cpp, r_avi.h, r_generic.h: added doxygen
+	header
+
+2003-02-16 13:11  mosu
+
+	* .cvsignore: added Makefile, switch to auto*
+
+2003-02-16 13:11  mosu
+
+	* ac3_common.cpp, ac3_common.h, mp3_common.cpp, mp3_common.h:
+	initial addition
+
+2003-02-16 13:10  mosu
+
+	* avilib/: Makefile, Makefile.in, avidump.o, avilib.o, avimisc.o:
+	removed the object files
+
+2003-02-16 13:08  mosu
+
+	* Makefile.am, Makefile.in, aclocal.m4, autogen.sh, configure.in,
+	install-sh, missing, mkinstalldirs, acinclude.m4, configure:
+	switched to auto*
+
+2003-02-16 13:07  mosu
+
+	* Makefile: switch to auto*
+
+2003-02-16 12:44  mosu
+
+	* Makefile, common.h, error.h, mkvmerge.cpp, p_generic.h,
+	queue.cpp, queue.h, r_avi.h, r_generic.h: well stuff
+
+2003-02-16 01:47  mosu
+
+	* .cvsignore, Makefile, common.cpp, common.h, depcomp,
+	mkvmerge.cpp, mkvmerge.h, r_avi.cpp, r_avi.h, r_generic.h: initial
+	addition, compilation fixups
+
+2003-02-16 01:24  mosu
+
+	* avilib/: .cvsignore, libavi.a: removed libavi.a...
+
+2003-02-16 01:24  mosu
+
+	* avilib/: .cvsignore, Makefile, libavi.a: intial addition
+
+2003-02-16 01:05  mosu
+
+	* r_ac3.cpp, r_ac3.h, r_avi.cpp, r_avi.h, r_microdvd.cpp,
+	r_microdvd.h, r_mp3.cpp, r_mp3.h, r_ogm.cpp, r_ogm.h, r_srt.cpp,
+	r_srt.h, r_vobsub.cpp, r_vobsub.h, r_wav.cpp, r_wav.h: added all
+	known readers ;)
+
+2003-02-16 01:04  mosu
+
+	* avilib/: Makefile, Makefile.am, Makefile.in, README.avilib,
+	avidump.c, avidump.o, avilib.c, avilib.h, avilib.o, avimisc.c,
+	avimisc.o, libavi.a: added avilib
+
+2003-02-15 22:18  mosu
+
+	* matroskamerge.cpp, mkvmerge.cpp: files will be named mkv*
+
+2003-02-15 22:12  mosu
+
+	* .cvsignore, Makefile, matroskamerge.cpp: Initial revision
+
+2003-02-15 22:12  mosu
+
+	* .cvsignore, Makefile, matroskamerge.cpp: project start
+
