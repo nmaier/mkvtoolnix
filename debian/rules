@@ -71,16 +71,21 @@ install: build
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
-	dh_installdocs doc/mkvmerge-gui.html
 	dh_installexamples examples/*xml examples/*dtd
-	dh_installman
+	dh_installman doc/*.1
 	dh_installchangelogs ChangeLog
 
-	# Install the images belonging the GUI guide.
-	install -d $(INSTPREFIX)/share/doc/mkvtoolnix/images
+# Install the images belonging the GUI guide.
+	install -d $(INSTPREFIX)/share/doc/mkvtoolnix/doc/images
+	install -m 0644 doc/mkvmerge-gui.html \
+		$(INSTPREFIX)/share/doc/mkvtoolnix/doc/
 	for i in doc/images/*png; do \
 		install -m 0644 $$i \
-			$(INSTPREFIX)/share/doc/mkvtoolnix/images/; \
+			$(INSTPREFIX)/share/doc/mkvtoolnix/doc/images/; \
+	done
+# Create HTML files from the man page.
+	for i in doc/mkvmerge.1; do \
+		groff -man -Thtml $$i > $(INSTPREFIX)/share/doc/mkvtoolnix/doc/`basename $$i .1`.html; \
 	done
 
 # Build architecture-dependent files here.
