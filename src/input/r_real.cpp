@@ -33,6 +33,7 @@
 #include "p_aac.h"
 #include "p_ac3.h"
 #include "p_passthrough.h"
+#include "p_realaudio.h"
 #include "p_video.h"
 
 #define PFX "real_reader: "
@@ -277,8 +278,7 @@ real_reader_c::create_packetizer(int64_t tid) {
                "%s).\n", track->id, dmx->fourcc);
 
     } else {
-      char buffer[20];
-      passthrough_packetizer_c *ptzr;
+      ra_packetizer_c *ptzr;
 
       if (!strncmp(dmx->fourcc, "dnet", 4)) {
         dmx->packetizer =
@@ -355,23 +355,18 @@ real_reader_c::create_packetizer(int64_t tid) {
                  "read mkvmerge's documentation.\n", track->id);
 
       } else {
-        ptzr = new passthrough_packetizer_c(this, ti);
+        ptzr = new ra_packetizer_c(this, dmx->samples_per_second,
+                                   dmx->channels, dmx->bits_per_sample,
+                                   (dmx->fourcc[0] << 24) |
+                                   (dmx->fourcc[1] << 16) |
+                                   (dmx->fourcc[2] << 8) | dmx->fourcc[3],
+                                   dmx->private_data, dmx->private_size,
+                                   ti);
         dmx->packetizer = ptzr;
         dmx->segments = new vector<rv_segment_t>;
 
-        mxprints(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]),
-                 toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
-                 toupper(dmx->fourcc[3]));
-
-        ptzr->set_track_type(track_audio);
-        ptzr->set_codec_id(buffer);
-        ptzr->set_codec_private(dmx->private_data, dmx->private_size);
-        ptzr->set_audio_sampling_freq((float)dmx->samples_per_second);
-        ptzr->set_audio_channels(dmx->channels);
-        ptzr->set_audio_bit_depth(dmx->bits_per_sample);
-
         if (verbose)
-          mxinfo("+-> Using generic audio output module for stream "
+          mxinfo("+-> Using the RealAudio output module for stream "
                  "%u (FourCC: %s).\n", track->id, dmx->fourcc);
       }
     }
@@ -724,7 +719,7 @@ void
 real_reader_c::set_dimensions(real_demuxer_t *dmx,
                               unsigned char *buffer,
                               int size) {
-  uint32_t width, height, disp_width, disp_height, vpkg_header;
+  uint32_t width, height, disp_width, disp_height;
   unsigned char *ptr;
   KaxTrackEntry *track_entry;
 
