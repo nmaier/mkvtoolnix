@@ -85,6 +85,8 @@ typedef struct {
   unsigned char *headers[3];
 
   int aac_id, aac_profile, aac_srate_idx;
+
+  bool embed_in_ogg;
 } kax_track_t;
 
 extern vector<kax_track_t> tracks;

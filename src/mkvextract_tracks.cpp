@@ -275,6 +275,15 @@ static void create_output_files() {
                  "Skipping track.\n");
           continue;
 
+        } else if (!strcmp(tracks[i].codec_id, MKV_A_FLAC)) {
+          if (tracks[i].private_data == NULL) {
+            mxwarn("Track ID %lld is missing some critical "
+                   "information. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+
+          tracks[i].type = TYPEFLAC;
+
         } else {
           mxwarn("Unsupported CodecID '%s' for ID %lld. "
                  "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
@@ -436,6 +445,33 @@ static void create_output_files() {
             "Style, Name, MarginL, MarginR, MarginV, Effect, Text\n";
           from_utf8(tracks[i].conv_handle, sconv);
           tracks[i].out->puts_unl(sconv.c_str());
+
+        } else if (tracks[i].type == TYPEFLAC) {
+          if (!tracks[i].embed_in_ogg) {
+            tracks[i].out->write("fLaC", 4);
+            tracks[i].out->write(tracks[i].private_data,
+                                 tracks[i].private_size);
+          } else {
+            ogg_stream_init(&tracks[i].osstate, rand());
+
+            // Handle the three header packets: Headers, comments, codec
+            // setup data.
+            op.b_o_s = 1;
+            op.e_o_s = 0;
+            op.packetno = 0;
+            op.packet = (unsigned char *)"fLaC";
+            op.bytes = 4;
+            op.granulepos = 0;
+            ogg_stream_packetin(&tracks[i].osstate, &op);
+            flush_ogg_pages(tracks[i]);
+            op.b_o_s = 0;
+            op.packetno = 1;
+            op.packet = (unsigned char *)tracks[i].private_data;
+            op.bytes = tracks[i].private_size;
+            ogg_stream_packetin(&tracks[i].osstate, &op);
+            flush_ogg_pages(tracks[i]);
+            tracks[i].packetno = 2;
+          }
         }
       }
     }
@@ -682,6 +718,36 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
 
         break;
 
+      case TYPEFLAC:
+        if (track->embed_in_ogg) {
+          if (track->buffered_data != NULL) {
+            ogg_packet op;
+
+            op.b_o_s = 0;
+            op.e_o_s = 0;
+            op.packetno = track->packetno;
+            op.packet = track->buffered_data;
+            op.bytes = track->buffered_size;
+            op.granulepos = start * (int64_t)track->a_sfreq / 1000;
+            ogg_stream_packetin(&track->osstate, &op);
+            safefree(track->buffered_data);
+
+            write_ogg_pages(*track);
+            track->packetno++;
+          }
+
+          track->buffered_data = (unsigned char *)safememdup(data.Buffer(),
+                                                             data.Size());
+          track->buffered_size = data.Size();
+          track->last_end = end;
+
+        } else {
+          track->out->write(data.Buffer(), data.Size());
+          track->bytes_written += data.Size();
+        }
+
+        break;
+
       default:
         track->out->write(data.Buffer(), data.Size());
         track->bytes_written += data.Size();
@@ -721,6 +787,27 @@ static void close_files() {
           safefree(tracks[i].buffered_data);
 
           flush_ogg_pages(tracks[i]);
+
+          delete tracks[i].out;
+
+          break;
+
+        case TYPEFLAC:
+          if (tracks[i].embed_in_ogg) {
+            // Set the "end of stream" marker on the last packet, handle it
+            // and flush all remaining Ogg pages.
+            op.b_o_s = 0;
+            op.e_o_s = 1;
+            op.packetno = tracks[i].packetno;
+            op.packet = tracks[i].buffered_data;
+            op.bytes = tracks[i].buffered_size;
+            op.granulepos = tracks[i].last_end * (int64_t)tracks[i].a_sfreq /
+              1000;
+            ogg_stream_packetin(&tracks[i].osstate, &op);
+            safefree(tracks[i].buffered_data);
+
+            flush_ogg_pages(tracks[i]);
+          }
 
           delete tracks[i].out;
 

@@ -1,5 +1,8 @@
 2003-11-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: Added extraction of FLAC to raw FLAC or OggFLAC
+	files.
+
 	* mkvmerge: Added full support for FLAC (both raw FLAC and OggFLAC
 	are supported, even though raw FLAC is very slow).
 

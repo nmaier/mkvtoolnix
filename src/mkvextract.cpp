@@ -157,6 +157,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
   char *colon, *copy, *sub_charset;
   int64_t tid;
   kax_track_t track;
+  bool embed_in_ogg;
 
   file_name = NULL;
   sub_charset = NULL;
@@ -197,6 +198,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
 
   conv_handle = conv_utf8;
   sub_charset = "UTF-8";
+  embed_in_ogg = false;
 
   // Now process all the other options.
   for (i = 3; i < argc; i++)
@@ -204,14 +206,19 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       verbose++;
     else if (!strcmp(argv[i], "-c")) {
       if (mode != MODE_TRACKS)
-        mxerror("-c is only allowed when extracting tracks.\n");
+        mxerror("'-c' is only allowed when extracting tracks.\n");
 
       if ((i + 1) >= argc)
-        mxerror("-c lacks a charset.\n");
+        mxerror("'-c' lacks a charset.\n");
 
       conv_handle = utf8_init(argv[i + 1]);
       sub_charset = argv[i + 1];
       i++;
+
+    } else if (!strcmp(argv[i], "--ogg")) {
+      if (mode != MODE_TRACKS)
+        mxerror("'--ogg' is only allowed when extracting tracks.\n");
+      embed_in_ogg = true;
 
     } else if (mode == MODE_TAGS)
       mxerror("No further options allowed when extracting %s.\n", argv[1]);
@@ -243,6 +250,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       track.out_name = safestrdup(colon);
       track.conv_handle = conv_handle;
       track.sub_charset = safestrdup(sub_charset);
+      track.embed_in_ogg = embed_in_ogg;
       tracks.push_back(track);
       safefree(copy);
       conv_handle = conv_utf8;
