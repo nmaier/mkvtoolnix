@@ -211,13 +211,24 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
 
+  // Let's see if the user has specified a default duration for this track.
+  htrack_default_duration = -1;
+  default_duration_forced = false;
+  for (i = 0; i < ti->default_durations.size(); i++) {
+    default_duration_t &dd = ti->default_durations[i];
+    if ((dd.id == ti->id) || (dd.id == -1)) { // -1 == all tracks
+      htrack_default_duration = dd.default_duration;
+      default_duration_forced = true;
+      break;
+    }
+  }
+
   // Set default header values to 'unset'.
   hserialno = create_track_number(reader, ti->id);
   huid = 0;
   htrack_type = -1;
   htrack_min_cache = -1;
   htrack_max_cache = -1;
-  htrack_default_duration = -1;
 
   hcodec_id = "";
   hcodec_private = NULL;
@@ -374,6 +385,8 @@ generic_packetizer_c::set_track_max_cache(int max_cache) {
 
 void
 generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
+  if (default_duration_forced)
+    return;
   htrack_default_duration = def_dur;
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
@@ -1302,6 +1315,8 @@ track_info_c::operator =(const track_info_c &src) {
   avi_samples_per_chunk = src.avi_samples_per_chunk;
   avi_block_sizes.clear();
   avi_audio_sync_enabled = false;
+
+  default_durations = src.default_durations;
 
   initialized = true;
 

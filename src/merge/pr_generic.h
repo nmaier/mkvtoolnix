@@ -221,6 +221,13 @@ struct pixel_crop_t {
   pixel_crop_t(): left(0), top(0), right(0), bottom(0), id(0) {}
 };
 
+struct default_duration_t {
+  int64_t default_duration;
+  int64_t id;
+
+  default_duration_t(): default_duration(0), id(0) {}
+};
+
 class track_info_c {
 protected:
   bool initialized;
@@ -279,6 +286,8 @@ public:
 
   vector<pixel_crop_t> pixel_crop_list; // As given on the command line
   pixel_crop_t pixel_cropping;  // For this very track
+
+  vector<default_duration_t> default_durations; // As given on the command line
 
   bool no_chapters, no_attachments, no_tags;
 
@@ -376,6 +385,7 @@ protected:
   // by set_headers().
   int hserialno, htrack_type, htrack_min_cache, htrack_max_cache;
   int64_t htrack_default_duration;
+  bool default_duration_forced;
   bool default_track_warning_printed;
   uint32_t huid;
 

@@ -332,6 +332,17 @@ Read the timecodes to be used for the specific track ID from \fIfilename\fR.
 These timecodes forcefully override the timecodes that \fBmkvmerge\fR
 normally calculates. Read the section about \fBEXTERNAL TIMECODE FILES\fR.
 .TP
+\fB\-\-default\-duration\fR <\fITID\fR:\fIx\fR>
+Forces the default duration of a given track to the specified value.
+The argument \fIx\fR must be postfixed with \fBs\fR, \fBms\fR, \fBus\fR or
+\fBns\fR to specify the default duration in seconds, milliseconds,
+microseconds and nanoseconds respectively.
+.br
+This argument is mainly useful for debugging purposes and should normally
+not be used.
+If the default duration is not forced then mkvmerge will try to derive the
+track's default duration from the container and/or codec used.
+.TP
 \fB\-\-append\-to\fR <\fISFID1:STID1:DFID1:DTID1\fR[,...]>
 This option controls to which track another track is appended.
 Each spec contains four IDs: a file ID, a track ID, another file ID and

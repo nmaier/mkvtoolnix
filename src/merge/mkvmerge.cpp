@@ -184,7 +184,8 @@ usage() {
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
-    "  --delay <Xs|ms|us|ns>    Delay to apply to the packets of the track\n"
+    "  --delay <TID:Xs|ms|us|ns>\n"
+    "                           Delay to apply to the packets of the track\n"
     "                           by simply adjusting the timecodes.\n"
     "  --default-track <TID>    Sets the 'default' flag for this track.\n"
     "  --track-name <TID:name>  Sets the name for a track.\n"
@@ -196,6 +197,8 @@ usage() {
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
     "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
+    "  --default-duration <TID:Xms|us|ns>\n"
+    "                           Force the default duration of a track to X.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -341,6 +344,46 @@ identify(const string &filename) {
   create_readers();
 
   files[0].reader->identify();
+}
+
+/** \brief Parse a number postfixed with a time-based unit
+
+   This function parsers a number that is postfixed with one of the four
+   units 's', 'ms', 'us' or 'ns'. It returns a number of nanoseconds.
+*/
+int64_t
+parse_number_with_unit(const string &s,
+                       const string &subject,
+                       const string &argument) {
+  string unit;
+  int64_t value, multiplier, unit_length;
+
+  if (s.length() < 3)
+    mxerror(_("'%s' is not a valid %s in '%s %s'.\n"),
+            s.c_str(), subject.c_str(), argument.c_str(), s.c_str());
+
+  unit = s.substr(s.length() - 2, 2);
+
+  multiplier = 1000000000;
+  unit_length = 2;
+  if (unit == "ms")
+    multiplier = 1000000;
+  else if (unit == "us")
+    multiplier = 1000;
+  else if (unit == "ns")
+    multiplier = 1;
+  else if (unit.substr(1, 1) == "s")
+    unit_length = 1;
+  else
+    mxerror(_("'%s' does not contain a valid unit ('s', 'ms', 'us' or 'ns') "
+              "in '%s %s'.\n"), s.c_str(), argument.c_str(), s.c_str());
+
+  if (!parse_int(s.substr(0, s.length() - unit_length), value))
+    mxerror(_("'%s' does not contain a valid number in front of the unit in "
+              "'%s %s'.\n"), s.c_str(), argument.c_str(), s.c_str());
+  value *= multiplier;
+
+  return value;
 }
 
 /** \brief Parse tags and add them to the list of all tags
@@ -696,8 +739,6 @@ parse_delay(const string &s,
             track_info_c &ti) {
   string unit;
   vector<string> parts;
-  int unit_idx;
-  int64_t mult;
   packet_delay_t delay;
 
   // Extract the track number.
@@ -710,25 +751,7 @@ parse_delay(const string &s,
   if (!parse_int(parts[0], delay.id))
     mxerror(_("Invalid track ID specified in '--delay %s'.\n"), s.c_str());
 
-  for (unit_idx = 0; isdigit(parts[1][unit_idx]); unit_idx++)
-    ;
-  if (unit_idx == 0)
-    mxerror(_("Missing delay given in '--delay %s'.\n"), s.c_str());
-  unit = parts[1].substr(unit_idx);
-  parts[1].erase(unit_idx);
-  mult = 1;
-  if (unit == "s")
-    mult = 1000000000;
-  else if (unit == "ms")
-    mult = 1000000;
-  else if (unit == "us")
-    mult = 1000;
-  else if (unit == "ns")
-    mxerror(_("Invalid unit given in '--delay %s'.\n"), s.c_str());
-
-  if (!parse_int(parts[1], delay.delay))
-    mxerror(_("Invalid delay given in '--delay %s'.\n"), s.c_str());
-  delay.delay *= mult;
+  delay.delay = parse_number_with_unit(parts[1], "delay", "--delay");
 
   ti.packet_delays.push_back(delay);
 }
@@ -974,6 +997,23 @@ parse_track_order(const string &s) {
   }
 }
 
+/** \brief Parse the argument for \c --append-to
+  
+   The argument must be a comma separated list. Each of the list's items
+   consists of four numbers separated by colons. These numbers are:
+   -# the source file ID,
+   -# the source track ID,
+   -# the destination file ID and
+   -# the destination track ID.
+
+   File IDs are simply the file's position in the command line regarding
+   all input files starting at zero. The first input file has the file ID
+   0, the second one the ID 1 etc. The track IDs are just the usual track IDs
+   used everywhere.
+
+   The "destination" file and track ID identifies the track that is to be
+   appended to the one specified by the "source" file and track ID.
+*/
 static void
 parse_append_to(const string &s,
                 track_info_c &ti) {
@@ -994,6 +1034,30 @@ parse_append_to(const string &s,
                 "'--append-to %s'.\n"), (*entry).c_str(), s.c_str());
     append_mapping.push_back(mapping);
   }
+}
+
+/** \brief Parse the argument for \c --default-duration
+
+   The argument must be a tupel consisting of a track ID and the default
+   duration separated by a colon. The duration must be postfixed by 'ms',
+   'us' or 'ns'.
+*/
+static void
+parse_default_duration(const string &s,
+                       track_info_c &ti) {
+  vector<string> parts;
+  default_duration_t dd;
+
+  parts = split(s, ":");
+  if (parts.size() != 2)
+    mxerror(_("'%s' is not a valid parts of track ID and default duration in "
+              "'--default-duration %s'.\n"), s.c_str(), s.c_str());
+  if (!parse_int(parts[0], dd.id))
+    mxerror(_("'%s' is not a valid track ID in '--default-duration %s'.\n"),
+            parts[0].c_str(), s.c_str());
+  dd.default_duration = parse_number_with_unit(parts[1], "default duration",
+                                               "--default-duration");
+  ti.default_durations.push_back(dd);
 }
 
 /** \brief Sets the priority mkvmerge runs with
@@ -1695,9 +1759,14 @@ parse_args(vector<string> &args) {
       parse_append_to(next_arg, *ti);
       sit++;
 
-    }
+    } else if (this_arg == "--default-duration") {
+      if (no_next_arg)
+        mxerror(_("'--default-duration' lacks its argument.\n"));
 
-    else if (this_arg == "--print-malloc-report")
+      parse_default_duration(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--print-malloc-report")
       print_malloc_report = true;
 
     else if (this_arg.length() == 0)
