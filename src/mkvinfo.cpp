@@ -1587,6 +1587,7 @@ def_handle2(block_group,
   bool fref_found, bref_found;
   uint32_t lf_tnum;
   uint64_t lf_timecode;
+  float bduration;
 
   show_element(l2, 2, "Block group");
 
@@ -1611,6 +1612,7 @@ def_handle2(block_group,
                    ARG_TIMECODE_NS(block.GlobalTimecode()));
       lf_timecode = block.GlobalTimecode() / 1000000;
       lf_tnum = block.TrackNum();
+      bduration = -1.0;
       for (i = 0; i < (int)block.NumberFrames(); i++) {
         DataBuffer &data = block.GetBuffer(i);
         if (calc_checksums)
@@ -1628,8 +1630,8 @@ def_handle2(block_group,
     } else if (is_id(l3, KaxBlockDuration)) {
       KaxBlockDuration &duration =
         *static_cast<KaxBlockDuration *>(l3);
-      show_element(l3, 3, "Block duration: %.3fms",
-                   ((float)uint64(duration)) * tc_scale / 1000000.0);
+      bduration = ((float)uint64(duration)) * tc_scale / 1000000.0;
+      show_element(l3, 3, "Block duration: %.3fms", bduration);
 
     } else if (is_id(l3, KaxReferenceBlock)) {
       KaxReferenceBlock &reference =
@@ -1765,12 +1767,20 @@ def_handle2(block_group,
   if (show_summary) {
     int fidx;
 
-    for (fidx = 0; fidx < frame_sizes.size(); fidx++)
-      mxinfo(_("%c frame, track %u, timecode %lld, size %d, adler "
-               "0x%08x\n"), bref_found && fref_found ? 'B' :
-             bref_found ? 'P' : !fref_found ? 'I' : '?',
-             lf_tnum, lf_timecode, frame_sizes[fidx],
-             frame_adlers[fidx]);
+    for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
+      if (bduration != -1.0)
+        mxinfo(_("%c frame, track %u, timecode %lld, duration %.3f, size %d, "
+                 "adler 0x%08x\n"), bref_found && fref_found ? 'B' :
+               bref_found ? 'P' : !fref_found ? 'I' : '?',
+               lf_tnum, lf_timecode, bduration, frame_sizes[fidx],
+               frame_adlers[fidx]);
+      else
+        mxinfo(_("%c frame, track %u, timecode %lld, size %d, adler "
+                 "0x%08x\n"), bref_found && fref_found ? 'B' :
+               bref_found ? 'P' : !fref_found ? 'I' : '?',
+               lf_tnum, lf_timecode, frame_sizes[fidx],
+               frame_adlers[fidx]);
+    }
   } else if (verbose > 2)
     show_element(NULL, 2, _("[%c frame for track %u, timecode %lld]"),
                  bref_found && fref_found ? 'B' :
