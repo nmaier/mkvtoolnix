@@ -241,7 +241,7 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
 
   bc.get_bit(dts_header->surround_sum_difference);
 
-  bool out_of_data = bc.get_bits(4, t);
+  bool out_of_data = !bc.get_bits(4, t);
   if (dts_header->encoder_software_revision == 7) {
     dts_header->dialog_normalization_gain = -((int)t);
   } else if (dts_header->encoder_software_revision == 6) {

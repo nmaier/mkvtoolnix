@@ -45,7 +45,7 @@ int parse_aac_adif_header(unsigned char *buf, int size,
   bc.get_bit(b);                // copyright_id_present
   if (b) {
     for (i = 0; i < 3; i++)
-      eob = bc.get_bits(24, bits); // copyright_id
+      eob = !bc.get_bits(24, bits); // copyright_id
   }
   bc.get_bit(b);                // original_copy
   bc.get_bit(b);                // home
@@ -74,7 +74,7 @@ int parse_aac_adif_header(unsigned char *buf, int size,
     bc.get_bit(b);              // matrix_mixdown_idx_present
     if (b) {
       bc.get_bits(2, bits);     // matrix_mixdown_idx
-      eob = bc.get_bits(1, bits); // pseudo_surround_enable
+      eob = !bc.get_bits(1, bits); // pseudo_surround_enable
     }
     channels = nfront_c_e + nside_c_e + nback_c_e;
     for (k = 0; k < (nfront_c_e + nside_c_e + nback_c_e); k++) {
@@ -91,9 +91,9 @@ int parse_aac_adif_header(unsigned char *buf, int size,
       bc.get_bits(4, bits);     // valid_cc_e_tag_select
     }
     bc.byte_align();
-    eob = bc.get_bits(8, bits);
+    eob = !bc.get_bits(8, bits);
     for (k = 0; k < comment_field_bytes; k++)
-      eob = bc.get_bits(8, bits);
+      eob = !bc.get_bits(8, bits);
   }
 
   if (eob)
@@ -139,9 +139,9 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   bc.get_bit(b);                // copyright_id_start
   bc.get_bits(13, frame_length);
   bc.get_bits(11, bits);        // adts_buffer_fullness
-  eob = bc.get_bits(2, bits);   // no_raw_blocks_in_frame
+  eob = !bc.get_bits(2, bits);   // no_raw_blocks_in_frame
   if (!protection_absent)
-    eob = bc.get_bits(16, bits);
+    eob = !bc.get_bits(16, bits);
 
   if (eob)
     return 0;

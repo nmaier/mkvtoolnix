@@ -143,13 +143,13 @@ public:
   }
 
   bool get_bits(unsigned int n, unsigned long &r) {
-    // returns true if less bits are available than asked for
+    // returns false if less bits are available than asked for
     r = 0;
 
     while (n > 0) {
       if (byte_position >= end_of_data) {
         out_of_data = true;
-        return true;
+        return false;
       }
 
       unsigned int b = 8; // number of bits to extract from the current byte
@@ -172,7 +172,7 @@ public:
       n -= b;
     }
 
-    return false;
+    return true;
   }
 
   bool get_bits(unsigned int n, int &r) {
@@ -198,12 +198,12 @@ public:
 
   bool byte_align() {
     if (out_of_data)
-      return true;
-    if (bits_valid == 8)
       return false;
+    if (bits_valid == 8)
+      return true;
     bits_valid = 0;
     byte_position += 1;
-    return false;
+    return true;
   }
 
   bool set_bit_position(unsigned int pos) {
@@ -218,6 +218,10 @@ public:
 
   int get_bit_position() {
     return byte_position - start_of_data + 8 - bits_valid;
+  }
+
+  bool skip_bits(unsigned int num) {
+    return set_bit_position(get_bit_position() + num);
   }
 };
 
