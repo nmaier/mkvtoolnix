@@ -1102,7 +1102,7 @@ tab_input::on_track_enabled(wxCommandEvent &evt) {
 
 void
 tab_input::on_default_track_clicked(wxCommandEvent &evt) {
-  uint32_t i, k;
+  uint32_t i;
   mmg_track_t *t;
 
   if (selected_track == -1)
@@ -1111,12 +1111,9 @@ tab_input::on_default_track_clicked(wxCommandEvent &evt) {
   t = tracks[selected_track];
   t->default_track = cb_default->GetValue();
   if (cb_default->GetValue())
-    for (i = 0; i < files.size(); i++) {
-      if (i != selected_file)
-        for (k = 0; k < files[i].tracks->size(); k++)
-          if ((k != selected_track) &&
-              ((*files[i].tracks)[k].type == t->type))
-            (*files[i].tracks)[k].default_track = false;
+    for (i = 0; i < tracks.size(); i++) {
+      if ((i != selected_track) && (tracks[i]->type == t->type))
+        tracks[i]->default_track = false;
     }
 }
 
