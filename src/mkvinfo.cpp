@@ -59,7 +59,6 @@ extern "C" {
 #include <matroska/KaxSegment.h>
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>
-#include <matroska/KaxTagMulti.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackAudio.h>
@@ -71,7 +70,6 @@ extern "C" {
 #endif
 
 #include "mkvinfo.h"
-#include "mkvinfo_tag_types.h"
 
 #include "chapters.h"
 #include "checksums.h"
@@ -349,100 +347,6 @@ is_global(EbmlStream *es,
   return false;
 }
 
-bool
-parse_multicomment(EbmlStream *es,
-                   EbmlElement *l0,
-                   int level) {
-  EbmlMaster *m0;
-  EbmlElement *l1;
-  int i0;
-
-  if (is_id(l0, KaxTagMultiComment)) {
-    show_element(l0, level, "Multi comment");
-
-    m0 = static_cast<EbmlMaster *>(l0);
-    for (i0 = 0; i0 < m0->ListSize(); i0++) {
-      l1 = (*m0)[i0];
-
-      if (is_id(l1, KaxTagMultiCommentName)) {
-        KaxTagMultiCommentName &c_name =
-          *static_cast<KaxTagMultiCommentName *>(l1);
-        show_element(l1, level + 1, "Name: %s", string(c_name).c_str());
-
-      } else if (is_id(l1, KaxTagMultiCommentComments)) {
-        KaxTagMultiCommentComments &c_comments =
-          *static_cast<KaxTagMultiCommentComments *>(l1);
-        show_element(l1, level + 1, "Comments: %s", UTF2STR(c_comments));
-
-      } else if (is_id(l1, KaxTagMultiCommentLanguage)) {
-        KaxTagMultiCommentLanguage &c_language =
-          *static_cast<KaxTagMultiCommentLanguage *>(l1);
-        show_element(l1, level + 1, "Language: %s",
-                     string(c_language).c_str());
-
-      } else if (!is_global(es, l1, level + 1))
-        show_unknown_element(l1, level + 1);
-
-    } // while (l1 != NULL)
-
-    return true;
-
-  } 
-
-  return false;
-}
-
-string format_binary(EbmlBinary &bin, int max_len = 10);
-
-bool parse_simpletag(EbmlStream *es,
-                     EbmlElement *l0,
-                     int level) {
-  EbmlMaster *m0;
-  EbmlElement *l1;
-  int i0;
-  string s;
-
-  if (is_id(l0, KaxTagSimple)) {
-    show_element(l0, level, "Simple tag");
-
-    m0 = static_cast<EbmlMaster *>(l0);
-    for (i0 = 0; i0 < m0->ListSize(); i0++) {
-      l1 = (*m0)[i0];
-
-      if (is_id(l1, KaxTagName)) {
-        KaxTagName &c_name = *static_cast<KaxTagName *>(l1);
-        show_element(l1, level + 1, "Name: %s", UTF2STR(c_name));
-
-      } else if (is_id(l1, KaxTagString)) {
-        KaxTagString &c_string = *static_cast<KaxTagString *>(l1);
-        show_element(l1, level + 1, "String: %s", UTF2STR(c_string));
-
-      } else if (is_id(l1, KaxTagBinary)) {
-        KaxTagBinary &c_binary = *static_cast<KaxTagBinary *>(l1);
-        s = format_binary(c_binary);
-        show_element(l1, level + 1, "Binary: %s", s.c_str());
-
-      } else if (is_id(l1, KaxTagLangue)) {
-        KaxTagLangue &c_string = *static_cast<KaxTagLangue *>(l1);
-        show_element(l1, level + 1, "Language: %s", string(c_string).c_str());
-
-      } else if (is_id(l1, KaxTagDefault)) {
-        KaxTagDefault &c_int = *static_cast<KaxTagDefault *>(l1);
-        show_element(l1, level + 1, "Default: %d", uint8(c_int));
-
-      } else if (!is_global(es, l1, level + 1) &&
-                 !parse_simpletag(es, l1, level + 1))
-        show_unknown_element(l1, level + 1);
-
-    } // while (l1 != NULL)
-
-    return true;
-
-  } 
-
-  return false;
-}
-
 #if defined(COMP_MSC) || defined(COMP_MINGW)
 struct tm *
 gmtime_r(const time_t *timep,
@@ -513,7 +417,7 @@ read_master(EbmlMaster *m,
 
 string
 format_binary(EbmlBinary &bin,
-              int max_len) {
+              int max_len = 10) {
   int len, i;
   string result;
 
@@ -1718,19 +1622,20 @@ def_handle2(cluster,
 }
 
 void
-handle_chapter_rec(EbmlStream *es,
-                   int level,
-                   int parent_idx,
-                   EbmlElement *e) {
+handle_elements_rec(EbmlStream *es,
+                    int level,
+                    int parent_idx,
+                    EbmlElement *e,
+                    const parser_element_t *mapping) {
   EbmlMaster *m;
   int elt_idx, i;
   bool found;
-  string format;
+  string format, s2;
   char *s;
 
   found = false;
-  for (elt_idx = 0; chapter_elements[elt_idx].name != NULL; elt_idx++)
-    if (e->Generic().GlobalId == chapter_elements[elt_idx].id) {
+  for (elt_idx = 0; mapping[elt_idx].name != NULL; elt_idx++)
+    if (e->Generic().GlobalId == mapping[elt_idx].id) {
       found = true;
       break;
     }
@@ -1739,15 +1644,14 @@ handle_chapter_rec(EbmlStream *es,
     return;
   }
 
-  format = chapter_elements[elt_idx].name;
-  switch (chapter_elements[elt_idx].type) {
+  format = mapping[elt_idx].name;
+  switch (mapping[elt_idx].type) {
     case ebmlt_master:
       show_element(e, level, format.c_str());
       m = dynamic_cast<EbmlMaster *>(e);
       assert(m != NULL);
       for (i = 0; i < m->ListSize(); i++)
-        handle_chapter_rec(es, level + 1, elt_idx, (*m)[i]);
-
+        handle_elements_rec(es, level + 1, elt_idx, (*m)[i], mapping);
       break;
 
     case ebmlt_uint:
@@ -1777,6 +1681,12 @@ handle_chapter_rec(EbmlStream *es,
                    ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))));
       break;
 
+    case ebmlt_binary:
+      format += ": %s";
+      s2 = format_binary(*static_cast<EbmlBinary *>(e));
+      show_element(e, level, format.c_str(), s2.c_str());
+      break;
+
     default:
       assert(false);
   }
@@ -1794,47 +1704,13 @@ def_handle(chapters) {
   read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
 
   for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_chapter_rec(es, 2, 0, (*m1)[i1]);
-}
-
-void
-def_handle(tag_targets) {
-  EbmlMaster *m3;
-  int i3;
-
-  show_element(l3, 3, "Targets");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagTrackUID)) {
-      KaxTagTrackUID &trackuid = *static_cast<KaxTagTrackUID *>(l4);
-      show_element(l4, 4, "Track UID: %llu", uint64(trackuid));
-
-    } else if (is_id(l4, KaxTagChapterUID)) {
-      KaxTagChapterUID &chapteruid = *static_cast<KaxTagChapterUID *>(l4);
-      show_element(l4, 4, "Chapter UID: %llu", uint64(chapteruid));
-
-    } else if (is_id(l4, KaxTagEditionUID)) {
-      KaxTagEditionUID &editionuid = *static_cast<KaxTagEditionUID *>(l4);
-      show_element(l4, 4, "Edition UID: %llu", uint64(editionuid));
-
-    } else if (is_id(l4, KaxTagTargetType)) {
-      KaxTagTargetType &ttype = *static_cast<KaxTagTargetType *>(l4);
-      show_element(l4, 4, "Target type: %s", string(ttype).c_str());
-
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
+    handle_elements_rec(es, 2, 0, (*m1)[i1], chapter_elements);
 }
 
 void
 def_handle(tags) {
-  EbmlMaster *m1, *m2;
-  int i1, i2;
+  EbmlMaster *m1;
+  int i1;
 
   show_element(l1, 1, "Tags");
 
@@ -1842,29 +1718,8 @@ def_handle(tags) {
   m1 = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
 
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
-    if (is_id(l2, KaxTag)) {
-      show_element(l2, 2, "Tag");
-
-      m2 = static_cast<EbmlMaster *>(l2);
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
-
-        if (is_id(l3, KaxTagTargets))
-          handle(tag_targets);
-
-        else if (!is_global(es, l3, 3) &&
-                 !parse_simpletag(es, l3, 3))
-          show_unknown_element(l3, 3);
-
-      } // while (l3 != NULL)
-
-    } else if (!is_global(es, l2, 2))
-      show_unknown_element(l2, 2);
-
-  } // while (l2 != NULL)
+  for (i1 = 0; i1 < m1->ListSize(); i1++)
+    handle_elements_rec(es, 2, 0, (*m1)[i1], tag_elements);
 }
 
 bool
