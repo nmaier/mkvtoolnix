@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.28 2003/05/07 17:40:09 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.29 2003/05/09 10:05:26 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -990,7 +990,8 @@ int mkv_reader_c::read() {
 
               for (i = 0; i < (int)block->NumberFrames(); i++) {
                 DataBuffer &data = block->GetBuffer(i);
-                block_track->packetizer->process(data.Buffer(), data.Size(),
+                block_track->packetizer->process((unsigned char *)
+                                                 data.Buffer(), data.Size(),
                                                  (int64_t)last_timecode,
                                                  block_duration, bref, fref);
               }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.19 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.20 2003/05/09 10:05:26 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -60,7 +60,7 @@ ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
   int pos;
   ac3_header_t ac3header;
   
-  if ((file = fopen(ti->fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("ac3_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("ac3_reader: Could not seek to end of file.");

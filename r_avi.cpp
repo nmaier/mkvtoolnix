@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.28 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.29 2003/05/09 10:05:26 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -65,7 +65,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   avi_demuxer_t *demuxer;
   char *codec;
 
-  if ((f = fopen(ti->fname, "r")) == NULL)
+  if ((f = fopen(ti->fname, "rb")) == NULL)
     throw error_c("avi_reader: Could not open source file.");
   if (fseek(f, 0, SEEK_END) != 0)
     throw error_c("avi_reader: Could not seek to end of file.");

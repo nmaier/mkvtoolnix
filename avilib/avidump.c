@@ -740,7 +740,11 @@ int AVI_scan(char *file_name)
 
     DWORD  chunksize;    /* size of the RIFF chunk data */
 
+#ifdef WIN32
+    if (!(fd=open(file_name, O_RDONLY|O_BINARY))) {
+#else
     if (!(fd=open(file_name, O_RDONLY))) {
+#endif
 	printf("\n\n *** Error opening file %s. Program aborted!\n",
 	       file_name);
 	return(1);
@@ -775,7 +779,11 @@ int AVI_dump(char *file_name, int mode)
 
     DWORD  chunksize;    /* size of the RIFF chunk data */
 
+#ifdef WIN32
+    if (!(fd=open(file_name,O_RDONLY|O_BINARY))) return(1);
+#else
     if (!(fd=open(file_name,O_RDONLY))) return(1);
+#endif
 
     filesize = lseek64(fd, 0, SEEK_END);
     lseek64(fd, 0, SEEK_SET);

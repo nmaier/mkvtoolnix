@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.59 2003/05/06 09:59:37 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.60 2003/05/09 10:05:26 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -215,7 +215,7 @@ static void usage(void) {
 }
 
 static int get_type(char *filename) {
-  FILE *f = fopen(filename, "r");
+  FILE *f = fopen(filename, "rb");
   int64_t size;
   
   if (f == NULL) {

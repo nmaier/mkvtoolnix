@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.17 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.18 2003/05/09 10:05:26 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -55,7 +55,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int64_t size;
   
-  if ((file = fopen(ti->fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("wav_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("wav_reader: Could not seek to end of file.");

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.27 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.28 2003/05/09 10:05:26 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -72,7 +72,7 @@ ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int64_t size;
   
-  if ((file = fopen(ti->fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("ogm_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("ogm_reader: Could not seek to end of file.");

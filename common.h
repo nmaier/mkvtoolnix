@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.18 2003/05/09 05:26:02 mosu Exp $
+    \version \$Id: common.h,v 1.19 2003/05/09 10:05:25 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,16 +23,16 @@
 
 #ifndef __CYGWIN__
 #include <stdint.h>
+#elif defined WIN32
+#include <stdint.h>
+#define PACKAGE "mkvtoolnix"
+#define VERSION 0.3.1
 #endif
 #include <sys/types.h>
 
 #ifdef WIN32
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
-#define u_int16_t unsigned __int16
-#define u_int32_t unsigned __int32
-#define u_int64_t __int64
-#define int64_t __int64
 #define nice(a)
 #endif
 

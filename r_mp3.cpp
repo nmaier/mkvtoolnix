@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.17 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.18 2003/05/09 10:05:26 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -67,7 +67,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   unsigned long header;
   mp3_header_t mp3header;
 
-  if ((file = fopen(ti->fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("mp3_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("mp3_reader: Could not seek to end of file.");

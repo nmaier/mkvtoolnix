@@ -13,14 +13,18 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.18 2003/05/09 06:08:53 mosu Exp $
+    \version \$Id: common.cpp,v 1.19 2003/05/09 10:05:25 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <errno.h>
 #include <iconv.h>
+#ifdef WIN32
+#include <libcharset.h>
+#else
 #include <langinfo.h>
+#endif
 #include <locale.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -109,7 +113,11 @@ int utf8_init(char *charset) {
 
   if ((charset == NULL) || (*charset == 0)) {
     setlocale(LC_CTYPE, "");
+#ifdef WIN32
+    lc_charset = (char *)locale_charset();
+#else
     lc_charset = nl_langinfo(CODESET);
+#endif
     if (!strcmp(lc_charset, "UTF8") || !strcmp(lc_charset, "UTF-8"))
       return -1;
   } else

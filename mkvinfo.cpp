@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.36 2003/05/07 17:40:09 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.37 2003/05/09 10:05:26 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -1170,7 +1170,7 @@ void process_file() {
     } // while (l1 != NULL)
     
   } catch (std::exception &ex) {
-    fprintf(stdout, "(%s) caught exception\n", NAME);
+    fprintf(stdout, "(%s) caught exception: %s\n", NAME, ex.what());
   }
 }
 

@@ -253,7 +253,11 @@ avi_t* AVI_open_output_file(char * filename)
    mask = umask (0);
    umask (mask);
 
+#ifdef WIN32
+   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) &~ mask);
+#else
    AVI->fdes = open(filename, O_RDWR|O_CREAT, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) &~ mask);
+#endif
    if (AVI->fdes < 0)
    {
       AVI_errno = AVI_ERR_OPEN;
@@ -1106,8 +1110,12 @@ avi_t *AVI_open_input_file(char *filename, int getIndex)
   AVI->mode = AVI_MODE_READ; /* open for reading */
   
   /* Open the file */
-  
+
+#ifdef WIN32  
+  AVI->fdes = open(filename,O_RDONLY|O_BINARY);
+#else
   AVI->fdes = open(filename,O_RDONLY);
+#endif
   if(AVI->fdes < 0)
     {
       AVI_errno = AVI_ERR_OPEN;

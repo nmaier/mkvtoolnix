@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.21 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.22 2003/05/09 10:05:26 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
