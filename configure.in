@@ -789,6 +789,7 @@ dnl
         WXWINDOWS_LIBS=$(wx-config --libs)
       fi
       AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
+      MMG_SUBDIRS=mmg
       AC_MSG_RESULT($wxwversion ok)
       have_wxwindows=yes
     else
@@ -801,6 +802,7 @@ dnl
 AC_SUBST(WXWINDOWS_CFLAGS)
 AC_SUBST(WXWINDOWS_LDFLAGS)
 AC_SUBST(WXWINDOWS_LIBS)
+AC_SUBST(MMG_SUBDIRS)
 AM_CONDITIONAL(HAVE_WXWINDOWS, test x"$have_wxwindows" = "xyes")
 
 
@@ -873,4 +875,4 @@ CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFIL
 CPPFLAGS="@EXTRA_CFLAGS@"
 LDFLAGS="@EXTRA_LDFLAGS@"
 
-AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/mmg/Makefile doc/Makefile)
+AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile doc/Makefile)

@@ -2,7 +2,8 @@
 
 AUTOMAKE_OPTIONS = 1.3 foreign
 
-DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src -I.
+DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
+		-I$(top_srcdir)/src/common
 
 noinst_LIBRARIES = libavi.a
 

@@ -1,105 +1,80 @@
 AUTOMAKE_OPTIONS = dist-zip foreign
 
-if HAVE_AVILIB
-avilib_incdirs = -I$(top_srcdir)/avilib
-avilib_libdirs = -L$(top_srcdir)/avilib
-endif
 if HAVE_AVILIB0_6_10
 avilib0_6_10_incdirs = -I$(top_srcdir)/avilib-0.6.10
 avilib0_6_10_libdirs = -L$(top_srcdir)/avilib-0.6.10
+avilib0_6_10_deps = ../avilib-0.6.10/libavi.a
 endif
 if HAVE_AVICLASSES
 aviclasses_incdirs = -I$(top_srcdir)/aviclasses
 aviclasses_libdirs = -L$(top_srcdir)/aviclasses
+aviclasses_deps = ../aviclasses/libaviclasses.a
 endif
 
 DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
-	$(avilib0_6_10_incdirs) $(aviclasses_incdirs)
+	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) \
+	-Icommon -Iinput -Ioutput
 
-LDFLAGS = @LDFLAGS@ $(avilib0_6_10_libdirs) $(aviclasses_libdirs)
+LDFLAGS = @LDFLAGS@ $(avilib0_6_10_libdirs) $(aviclasses_libdirs) \
+	-Lcommon -Linput -Loutput
 
-SUBDIRS = . @MMG_SUBDIRS@
-
-noinst_LIBRARIES = libmtxcommon.a
-
-libmtxcommon_a_SOURCES = base64.cpp \
-			chapters.cpp chapters.h \
-			chapter_parser_xml.cpp \
-			compression.cpp compression.h \
-			common.cpp common.h \
-			iso639.cpp iso639.h \
-			mm_io.cpp mm_io.h \
-			tagparser_start.cpp tagparser.h \
-			tagparser_end.cpp
+SUBDIRS = common input output @MMG_SUBDIRS@
 
 bin_PROGRAMS = mkvmerge mkvinfo mkvextract base64tool
 
-mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
-			aac_common.cpp aac_common.h \
-			ac3_common.cpp ac3_common.h \
-			dts_common.cpp dts_common.h \
-			cluster_helper.cpp cluster_helper.h \
-			mp3_common.cpp mp3_common.h \
-			p_aac.cpp p_aac.h \
-			p_ac3.cpp p_ac3.h \
-			p_dts.cpp p_dts.h \
-			p_mp3.cpp p_mp3.h \
-			p_passthrough.cpp p_passthrough.h \
-			p_pcm.cpp p_pcm.h \
-			p_textsubs.cpp p_textsubs.h \
-			p_video.cpp p_video.h \
-			p_vobsub.cpp p_vobsub.h \
-			p_vorbis.cpp p_vorbis.h \
-			pr_generic.h pr_generic.cpp \
-			r_aac.cpp r_aac.h \
-			r_ac3.cpp r_ac3.h \
-			r_avi.cpp r_avi.h \
-			r_dts.cpp r_dts.h \
-			r_matroska.cpp r_matroska.h \
-			r_mp3.cpp r_mp3.h \
-			r_qtmp4.cpp r_qtmp4.h \
-			r_real.cpp r_real.h \
-			r_srt.cpp r_srt.h \
-			r_ssa.cpp r_ssa.h \
-			r_ogm.cpp r_ogm.h \
-			r_vobsub.cpp r_vobsub.h \
-			r_wav.cpp r_wav.h \
-			subtitles.cpp subtitles.h
+##
+## mkvmerge
+##
+mkvmerge_DEPENDENCIES = common/libmtxcommon.a input/libmtxinput.a \
+			output/libmtxoutput.a \
+			$(avilib0_6_10_deps) $(aviclasses_deps)
 
-mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
-			common.cpp common.h \
-			mkvinfo_gui.cpp \
-			mkvinfo_tag_types.cpp mkvinfo_tag_types.h \
-			mm_io.cpp mm_io.h \
-			iso639.cpp iso639.h
+mkvmerge_SOURCES = mkvmerge.cpp \
+			cluster_helper.cpp \
+			pr_generic.cpp
 
-mkvextract_SOURCES = mkvextract.cpp mkvextract.h \
-			base64.cpp base64.h \
-			chapter_writer.cpp chapters.h \
-			common.cpp common.h \
-			mkvextract_attachments.cpp \
-			mkvextract_chapters.cpp \
-			mkvextract_tags.cpp \
-			mkvextract_tracks.cpp \
-			mm_io.cpp mm_io.h \
-			tagwriter.cpp tagwriter.h
-
-base64tool_SOURCES = base64tool.cpp \
-			base64.cpp base64.h \
-			common.cpp common.h \
-			mm_io.cpp mm_io.h
-
-mkvmerge_LDADD = -L. -lmtxcommon @AVILIB_LIBS@ @AVICLASSES_LIBS@ \
+mkvmerge_LDADD = -lmtxinput -lmtxoutput -lmtxcommon \
+		@AVILIB_LIBS@ @AVICLASSES_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ \
 		@VORBIS_LIBS@ @OGG_LIBS@ \
 		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ \
 		@ZLIB_LIBS@ @LZO_LIBS@ @BZ2_LIBS@ \
 		@PROFILING_LIBS@
 
-mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
+
+##
+## mkvinfo
+##
+mkvinfo_DEPENDENCIES = common/libmtxcommon.a
+
+mkvinfo_SOURCES = mkvinfo.cpp \
+			mkvinfo_gui.cpp \
+			mkvinfo_tag_types.cpp
+
+mkvinfo_LDADD =  -lmtxcommon @PROFILING_LIBS@ \
+		@MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
 		@WXWINDOWS_LIBS@ @MINGW_LIBS@
 
-mkvextract_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
+##
+## mkvextract
+##
+mkvextract_DEPENDENCIES = common/libmtxcommon.a $(avilib0_6_10_deps)
+
+mkvextract_SOURCES = mkvextract.cpp \
+			mkvextract_attachments.cpp \
+			mkvextract_chapters.cpp \
+			mkvextract_tags.cpp \
+			mkvextract_tracks.cpp
+
+mkvextract_LDADD = -lmtxcommon @PROFILING_LIBS@ \
+		@AVILIB_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
 		@VORBIS_LIBS@ @OGG_LIBS@ @ICONV_LIBS@ @LZO_LIBS@ @BZ2_LIBS@
 
-base64tool_LDADD = @EBML_LIBS@ @ICONV_LIBS@
+##
+## base64tool
+##
+base64tool_DEPENDENCIES = common/libmtxcommon.a
+
+base64tool_SOURCES = base64tool.cpp
+
+base64tool_LDADD = -lmtxcommon @EBML_LIBS@ @ICONV_LIBS@

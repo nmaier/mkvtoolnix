@@ -2,17 +2,16 @@ AUTOMAKE_OPTIONS = dist-zip foreign
 
 bin_PROGRAMS = mmg
 
-DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src
+DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
+		-I$(top_srcdir)/src/common
 
-mmg_SOURCES = mmg.cpp mmg.h \
-			../chapters.cpp ../chapters.h \
-			../chapter_parser_xml.cpp \
-			../chapter_writer.cpp \
-			../common.cpp ../common.h \
-			extern_data.cpp extern_data.h \
-			../iso639.cpp ../iso639.h \
-			kax_analyzer.cpp kax_analyzer.h \
-			../mm_io.cpp ../mm_io.h \
+LDFLAGS = @LDFLAGS@ -L$(top_srcdir)/src/common
+
+mmg_DEPENDENCIES = ../common/libmtxcommon.a
+
+mmg_SOURCES = mmg.cpp \
+			extern_data.cpp \
+			kax_analyzer.cpp \
 			mux_dialog.cpp \
 			tab_attachments.cpp \
 			tab_chapters.cpp \
@@ -20,5 +19,6 @@ mmg_SOURCES = mmg.cpp mmg.h \
 			tab_global.cpp \
 			tab_settings.cpp
 
-mmg_LDADD = @MINGW_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
-		@WXWINDOWS_LIBS@ @EXPAT_LIBS@ @MINGW_GUIAPP@ @ICONV_LIBS@
+mmg_LDADD = -lmtxcommon @MATROSKA_LIBS@ @EBML_LIBS@ \
+		@WXWINDOWS_LIBS@ @EXPAT_LIBS@ \
+		@MINGW_GUIAPP@ @MINGW_LIBS@ @ICONV_LIBS@ @PROFILING_LIBS@
