@@ -624,7 +624,6 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   parser_data_t *pdata;
   XML_Parser parser;
   XML_Error xerror;
-  char *emsg;
   string buffer, error;
   KaxChapters *chapters;
 
@@ -652,15 +651,15 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
       buffer += "\n";
       if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
         xerror = XML_GetErrorCode(parser);
+        error = mxsprintf("XML parser error at line %d of '%s': %s. ",
+                          XML_GetCurrentLineNumber(parser), pdata->file_name,
+                          XML_ErrorString(xerror));
         if (xerror == XML_ERROR_INVALID_TOKEN)
-          emsg = " Remember that special characters like &, <, > and \" "
+          error += "Remember that special characters like &, <, > and \" "
             "must be escaped in the usual HTML way: &amp; for '&', "
-            "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
-        else
-          emsg = "";
-        mxerror("XML parser error at line %d of '%s': %s.%s Aborting.\n",
-                XML_GetCurrentLineNumber(parser), pdata->file_name,
-                XML_ErrorString(xerror), emsg);
+            "&lt; for '<', &gt; for '>' and &quot; for '\"'. ";
+        error += "Aborting.";
+        throw error_c(error.c_str());
       }
 
       done = !in->getline2(buffer);
