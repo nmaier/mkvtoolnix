@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.21 2003/04/25 17:23:29 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.22 2003/04/26 11:07:19 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -699,7 +699,7 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + block (track number %u, %d frame(s)"
                         ", timecode %.3fs)", NAME, block.TrackNum(),
                         block.NumberFrames(),
-                        (float)block.Timecod() / 1000000000.0);
+                        (float)block.GlobalTimecode() / 1000000000.0);
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");

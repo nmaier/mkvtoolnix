@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.10 2003/04/22 20:25:21 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.11 2003/04/26 11:07:19 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -944,7 +944,7 @@ int mkv_reader_c::read() {
 
                 block_track = find_track_by_num(block.TrackNum());
                 if ((block_track != NULL) && demuxing_requested(block_track)) {
-                  block_timecode = block.Timecod() / 1000000;
+                  block_timecode = block.GlobalTimecode() / 1000000;
                   for (i = 0; i < (int)block.NumberFrames(); i++) {
                     DataBuffer &data = block.GetBuffer(i);
                     add_buffer(data);
