@@ -53,7 +53,7 @@ typedef struct {
   ogg_stream_state osstate;
   rmff_track_t *rmtrack;
 
-  int64_t tid;
+  int64_t tid, tuid;
   bool in_use, done;
 
   char track_type;
@@ -89,6 +89,7 @@ typedef struct {
   int aac_id, aac_profile, aac_srate_idx;
 
   bool embed_in_ogg;
+  bool extract_cuesheet;
 } kax_track_t;
 
 extern vector<kax_track_t> tracks;
@@ -110,5 +111,7 @@ void extract_tags(const char *file_name);
 void extract_chapters(const char *file_name, bool chapter_format_simple);
 void extract_attachments(const char *file_name);
 void extract_cuesheets(const char *file_name);
+void write_cuesheet(const char *file_name, KaxChapters &chapters,
+                    KaxTags &tags, int64_t tuid, mm_io_c &out);
 
 #endif // __MKVEXTRACT_H

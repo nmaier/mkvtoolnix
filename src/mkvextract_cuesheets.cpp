@@ -113,19 +113,38 @@ get_simple_tag(const char *name,
   return "";
 }
 
+static int64_t
+get_tag_tuid(KaxTag &tag) {
+  KaxTagTargets *targets;
+  KaxTagTrackUID *tuid;
+
+  targets = FINDFIRST(&tag, KaxTagTargets);
+  if (targets == NULL)
+    return -1;
+  tuid = FINDFIRST(targets, KaxTagTrackUID);
+  if (tuid == NULL)
+    return -1;
+  return uint64(*static_cast<EbmlUInteger *>(tuid));
+}
+
 static KaxTag *
 find_tag_for_track(int idx,
+                   int64_t tuid,
                    EbmlMaster &m) {
   string sidx;
   int i;
+  int64_t tag_tuid;
 
   sidx = mxsprintf("%d", idx);
 
   for (i = 0; i < m.ListSize(); i++)
-    if ((EbmlId(*m[i]) == KaxTag::ClassInfos.GlobalId) &&
-        (get_simple_tag("TRACKNUMBER", *static_cast<EbmlMaster *>(m[i])) ==
-         sidx))
-      return static_cast<KaxTag *>(m[i]);
+    if (EbmlId(*m[i]) == KaxTag::ClassInfos.GlobalId) {
+      tag_tuid = get_tag_tuid(*static_cast<KaxTag *>(m[i]));
+      if (((tuid == -1) || (tag_tuid == -1) || (tuid == tag_tuid)) &&
+          (get_simple_tag("TRACKNUMBER",
+                          *static_cast<EbmlMaster *>(m[i])) == sidx))
+        return static_cast<KaxTag *>(m[i]);
+    }
 
   return NULL;
 }
@@ -133,18 +152,19 @@ find_tag_for_track(int idx,
 static string
 get_global_from_tags(int num_tracks,
                      const char *name,
+                     int64_t tuid,
                      KaxTags &tags) {
   KaxTag *tag;
   string global_value, value;
   int i;
 
-  tag = find_tag_for_track(1, tags);
+  tag = find_tag_for_track(1, tuid, tags);
   if (tag != NULL)
     global_value = get_simple_tag(name, *tag);
   if (global_value == "")
     return "";
   for (i = 2; i <= num_tracks; i++) {
-    tag = find_tag_for_track(i, tags);
+    tag = find_tag_for_track(i, tuid, tags);
     if (tag != NULL) {
       value = get_simple_tag(name, *tag);
       if ((value != "") && (value != global_value))
@@ -195,36 +215,41 @@ get_chapter_index(int idx,
 }
 
 #define print_if_global(name, format) \
-  _print_if_global(name, format, chapters.ListSize(), tags)
+  _print_if_global(out, name, format, chapters.ListSize(), tuid, tags)
 static void
-_print_if_global(const char *name,
+_print_if_global(mm_io_c &out,
+                 const char *name,
                  const char *format,
                  int num_entries,
+                 int64_t tuid,
                  KaxTags &tags) {
   string global;
 
-  global = get_global_from_tags(num_entries, name, tags);
+  global = get_global_from_tags(num_entries, name, tuid, tags);
   if (global != "")
-    mxinfo(format, global.c_str());
+    out.printf(format, global.c_str());
 }
 
 #define print_if_available(name, format) \
-  _print_if_available(name, format, *tag)
+  _print_if_available(out, name, format, *tag)
 static void
-_print_if_available(const char *name,
+_print_if_available(mm_io_c &out,
+                    const char *name,
                     const char *format,
                     KaxTag &tag) {
   string value;
 
   value = get_simple_tag(name, tag);
   if (value != "")
-    mxinfo(format, value.c_str());
+    out.printf(format, value.c_str());
 }
 
-static void
-print_cuesheet(const char *file_name,
+void
+write_cuesheet(const char *file_name,
                KaxChapters &chapters,
-               KaxTags &tags) {
+               KaxTags &tags,
+               int64_t tuid,
+               mm_io_c &out) {
   KaxTag *tag;
   string s;
   int i;
@@ -239,11 +264,11 @@ print_cuesheet(const char *file_name,
   print_if_global("ARTIST", "PERFORMER \"%s\"\n");
   print_if_global("ALBUM", "TITLE \"%s\"\n");
 
-  mxinfo("FILE \"%s.RENAMEME\" WAVE\n", file_name);
+  out.printf("FILE \"%s\" WAVE\n", file_name);
 
   for (i = 0; i < chapters.ListSize(); i++) {
-    mxinfo(" TRACK %02d AUDIO\n", i + 1);
-    tag = find_tag_for_track(i + 1, tags);
+    out.printf(" TRACK %02d AUDIO\n", i + 1);
+    tag = find_tag_for_track(i + 1, tuid, tags);
     if (tag != NULL) {
       KaxChapterAtom &atom = 
         *static_cast<KaxChapterAtom *>(chapters[i]);
@@ -258,14 +283,16 @@ print_cuesheet(const char *file_name,
           index_01 = 0;
       }
       if (index_00 != -1)
-        mxinfo("   INDEX 00 %02lld:%02lld:%02lld\n", 
-               index_00 / 1000000 / 1000 / 60,
-               (index_00 / 1000000 / 1000) % 60,
-               irnd((double)(index_00 % 1000000000ll) * 75.0 / 1000000000.0));
-      mxinfo("   INDEX 01 %02lld:%02lld:%02lld\n", 
-             index_01 / 1000000 / 1000 / 60,
-             (index_01 / 1000000 / 1000) % 60,
-             irnd((double)(index_01 % 1000000000ll) * 75.0 / 1000000000.0));
+        out.printf("   INDEX 00 %02lld:%02lld:%02lld\n", 
+                   index_00 / 1000000 / 1000 / 60,
+                   (index_00 / 1000000 / 1000) % 60,
+                   irnd((double)(index_00 % 1000000000ll) * 75.0 /
+                        1000000000.0));
+      out.printf("   INDEX 01 %02lld:%02lld:%02lld\n", 
+                 index_01 / 1000000 / 1000 / 60,
+                 (index_01 / 1000000 / 1000) % 60,
+                 irnd((double)(index_01 % 1000000000ll) * 75.0 /
+                      1000000000.0));
     }
   }
 }
@@ -277,8 +304,9 @@ extract_cuesheets(const char *file_name) {
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   EbmlStream *es;
   mm_io_c *in;
-  KaxChapters *all_chapters;
-  KaxTags *all_tags;
+  mm_stdio_c out;
+  KaxChapters all_chapters;
+  KaxTags all_tags;
 
   // open input file
   try {
@@ -288,9 +316,6 @@ extract_cuesheets(const char *file_name) {
                file_name, strerror(errno));
     return;
   }
-
-  all_chapters = new KaxChapters;
-  all_tags = new KaxTags;
 
   try {
     es = new EbmlStream(*in);
@@ -346,7 +371,7 @@ extract_cuesheets(const char *file_name) {
               *static_cast<KaxEditionEntry *>(chapters[0]);
             while (entry.ListSize() > 0) {
               if (EbmlId(*entry[0]) == KaxChapterAtom::ClassInfos.GlobalId)
-                all_chapters->PushElement(*entry[0]);
+                all_chapters.PushElement(*entry[0]);
               entry.Remove(0);
             }
           }
@@ -360,7 +385,7 @@ extract_cuesheets(const char *file_name) {
           debug_dump_elements(&tags, 0);
 
         while (tags.ListSize() > 0) {
-          all_tags->PushElement(*tags[0]);
+          all_tags.PushElement(*tags[0]);
           tags.Remove(0);
         }
 
@@ -394,10 +419,7 @@ extract_cuesheets(const char *file_name) {
 
     } // while (l1 != NULL)
 
-    print_cuesheet(file_name, *all_chapters, *all_tags);
-
-    delete all_chapters;
-    delete all_tags;
+    write_cuesheet(file_name, all_chapters, all_tags, -1, out);
 
     delete l0;
     delete es;

@@ -130,6 +130,8 @@ usage() {
 " First mode extracts some tracks to external files.\n"
 "  -c charset     Convert text subtitles to this charset (default: UTF-8).\n"
 "  --no-ogg       Write raw FLAC files (default: write OggFLAC files).\n"
+"  --cuesheet     Also try to extract the CUE sheet from the chapter\n"
+"                 information and tags for this track.\n"
 "  TID:out        Write track with the ID TID to the file 'out'.\n"
 "\n"
 " Example:\n"
@@ -188,7 +190,7 @@ parse_args(int argc,
   char *colon, *copy, *sub_charset;
   int64_t tid;
   kax_track_t track;
-  bool embed_in_ogg;
+  bool embed_in_ogg, extract_cuesheet;
 
   file_name = NULL;
   sub_charset = NULL;
@@ -232,6 +234,7 @@ parse_args(int argc,
   conv_handle = conv_utf8;
   sub_charset = "UTF-8";
   embed_in_ogg = true;
+  extract_cuesheet = false;
 
   // Now process all the other options.
   for (i = 3; i < argc; i++)
@@ -253,7 +256,12 @@ parse_args(int argc,
         mxerror(_("'--no-ogg' is only allowed when extracting tracks.\n"));
       embed_in_ogg = false;
 
-    } else if (mode == MODE_TAGS)
+    } else if (!strcmp(argv[i], "--cuesheet")) {
+      if (mode != MODE_TRACKS)
+        mxerror(_("'--cuesheet' is only allowed when extracting tracks.\n"));
+      extract_cuesheet = true;
+ 
+   } else if (mode == MODE_TAGS)
       mxerror(_("No further options allowed when extracting %s.\n"), argv[1]);
 
     else if (mode == MODE_CUESHEETS)
@@ -292,10 +300,13 @@ parse_args(int argc,
       track.conv_handle = conv_handle;
       track.sub_charset = safestrdup(sub_charset);
       track.embed_in_ogg = embed_in_ogg;
+      track.extract_cuesheet = extract_cuesheet;
       tracks.push_back(track);
       safefree(copy);
       conv_handle = conv_utf8;
       sub_charset = "UTF-8";
+      embed_in_ogg = true;
+      extract_cuesheet = false;
     }
 
   if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS) ||

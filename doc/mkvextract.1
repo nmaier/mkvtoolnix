@@ -45,6 +45,11 @@ Only valid for FLAC tracks. Normally FLAC tracks are embedded in an Ogg
 transport stream. With this switch they are extracted to raw FLAC files
 instead.
 .TP
+\fB\-\-cuesheet\fR
+Causes \fBmkvextract\fR to extract a CUE sheet from the chapter information
+and tag data for the following track into a file whose name is the track's
+output name with ".cue" appended to it.
+.TP
 \fITID\fR:\fIoutname\fR
 Causes extraction of the track with the ID \fITID\fR into the file
 \fIoutname\fR if such a track exists in the source file. This option can be

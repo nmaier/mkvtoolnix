@@ -967,6 +967,40 @@ close_files() {
 
 // {{{ FUNCTION extract_tracks()
 
+static void
+write_all_cuesheets(KaxChapters &chapters,
+                    KaxTags &tags) {
+  int i;
+  mm_io_c *out;
+
+  for (i = 0; i < tracks.size(); i++) {
+    if (tracks[i].extract_cuesheet) {
+      string file_name, cue_file_name;
+      int pos, pos2;
+
+      file_name = tracks[i].out_name;
+      pos = file_name.rfind('/');
+      pos2 = file_name.rfind('\\');
+      if (pos2 > pos)
+        pos = pos2;
+      if (pos >= 0)
+        file_name.erase(0, pos2);
+      cue_file_name = (string)tracks[i].out_name + ".cue";
+
+      try {
+        out = new mm_io_c(cue_file_name.c_str(), MODE_WRITE);
+      } catch(...) {
+        mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
+                cue_file_name.c_str(), strerror(errno));
+      }
+      mxinfo(_("The CUE sheet for track %lld will be written to '%s'.\n"),
+             tracks[i].tid, cue_file_name.c_str());
+      write_cuesheet(file_name.c_str(), chapters, tags, tracks[i].tuid, *out);
+      delete out;
+    }
+  }
+}
+
 bool
 extract_tracks(const char *file_name) {
   int upper_lvl_el;
@@ -981,6 +1015,8 @@ extract_tracks(const char *file_name) {
   bool ms_compat, delete_element, has_reference;
   int64_t block_duration;
   mm_io_c *in;
+  KaxChapters all_chapters;
+  KaxTags all_tags;
 
   block = NULL;
   // open input file
@@ -1110,6 +1146,12 @@ extract_tracks(const char *file_name) {
                 }
                 show_element(l3, 3, _("Track number: %u (%s)"), uint32(tnum),
                              msg);
+
+              } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
+                KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
+                tuid.ReadData(es->I_O());
+                track->tuid = uint64(tuid);
+                show_element(l3, 3, _("Track UID: %u"), uint64(tuid));
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
@@ -1267,11 +1309,7 @@ extract_tracks(const char *file_name) {
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 char pbuffer[100];
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
-#if LIBEBML_VERSION >= 000603
                 c_priv.ReadData(es->I_O(), SCOPE_ALL_DATA);
-#else
-                c_priv.ReadData(es->I_O());
-#endif
                 if (ms_compat && (kax_track_type == 'v') &&
                     (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
                   alBITMAPINFOHEADER *bih =
@@ -1491,6 +1529,32 @@ extract_tracks(const char *file_name) {
 
         } // while (l2 != NULL)
 
+      } else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId) {
+        KaxChapters &chapters = *static_cast<KaxChapters *>(l1);
+        chapters.Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2,
+                      true);
+        while (chapters.ListSize() > 0) {
+          if (EbmlId(*chapters[0]) == KaxEditionEntry::ClassInfos.GlobalId) {
+            KaxEditionEntry &entry =
+              *static_cast<KaxEditionEntry *>(chapters[0]);
+            while (entry.ListSize() > 0) {
+              if (EbmlId(*entry[0]) == KaxChapterAtom::ClassInfos.GlobalId)
+                all_chapters.PushElement(*entry[0]);
+              entry.Remove(0);
+            }
+          }
+          chapters.Remove(0);
+        }
+
+      } else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
+        KaxTags &tags = *static_cast<KaxTags *>(l1);
+        tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
+
+        while (tags.ListSize() > 0) {
+          all_tags.PushElement(*tags[0]);
+          tags.Remove(0);
+        }
+
       } else
         l1->SkipData(*es, l1->Generic().Context);
 
@@ -1524,6 +1588,8 @@ extract_tracks(const char *file_name) {
     delete l0;
     delete es;
     delete in;
+
+    write_all_cuesheets(all_chapters, all_tags);
 
     // Now just close the files and go to sleep. Mummy will sing you a
     // lullaby. Just close your eyes, listen to her sweet voice, singing,
