@@ -1850,6 +1850,7 @@ void finish_file() {
   int i;
   KaxChapters *chapters_here;
   int64_t start, end, offset;
+  KaxSeekHead *emerg_seek_head = NULL;
 
   // Render the cues.
   if (write_cues && cue_writing_requested) {
@@ -1893,39 +1894,44 @@ void finish_file() {
 
   // Write meta seek information if it is not disabled.
   if (write_meta_seek) {
-    if (write_cues && cue_writing_requested)
-      kax_seekhead->IndexThis(*kax_cues, *kax_segment);
+    emerg_seek_head = new KaxSeekHead();
 
-    if (kax_tags != NULL)
+    if (write_cues && cue_writing_requested) {
+      kax_seekhead->IndexThis(*kax_cues, *kax_segment);
+      emerg_seek_head->IndexThis(*kax_cues, *kax_segment);
+    }
+
+    if (kax_tags != NULL) {
       kax_seekhead->IndexThis(*kax_tags, *kax_segment);
+      emerg_seek_head->IndexThis(*kax_tags, *kax_segment);
+    }
 
     if (chapters_here != NULL) {
       kax_seekhead->IndexThis(*chapters_here, *kax_segment);
+      emerg_seek_head->IndexThis(*chapters_here, *kax_segment);
       delete chapters_here;
-    } else if ((pass == 0) && (kax_chapters != NULL))
+    } else if ((pass == 0) && (kax_chapters != NULL)) {
       kax_seekhead->IndexThis(*kax_chapters, *kax_segment);
+      emerg_seek_head->IndexThis(*kax_chapters, *kax_segment);
+    }
 
     if (kax_as != NULL) {
       kax_seekhead->IndexThis(*kax_as, *kax_segment);
+      emerg_seek_head->IndexThis(*kax_as, *kax_segment);
       delete kax_as;
       kax_as = NULL;
     }
 
     kax_seekhead->UpdateSize();
+    emerg_seek_head->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
       mxprint(stdout, "Warning: Could not update the meta seek information "
               "as the space reserved for them was too small. Re-run "
               "mkvmerge with the additional parameters '--meta-seek-size "
               "%lld'.\n", kax_seekhead->ElementSize() + 100);
 
-      if (write_cues && cue_writing_requested) {
-        delete kax_seekhead;
-
-        kax_seekhead = new KaxSeekHead();
-        kax_seekhead->IndexThis(*kax_cues, *kax_segment);
-        kax_seekhead->UpdateSize();
-        kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true);
-      }
+      if (write_cues && cue_writing_requested)
+        kax_seekhead_void->ReplaceWith(*emerg_seek_head, *out, true);
     }
   }
 
@@ -1942,6 +1948,8 @@ void finish_file() {
     delete kax_seekhead_void;
     delete kax_seekhead;
   }
+  if (emerg_seek_head != NULL)
+    delete emerg_seek_head;
 
   for (i = 0; i < packetizers.size(); i++)
     packetizers[i]->packetizer->reset();;
