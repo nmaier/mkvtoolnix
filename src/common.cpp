@@ -667,35 +667,104 @@ UTFstring cstr_to_UTFstring(const char *c) {
 #endif
 }
 
+static int utf8_byte_length(unsigned char c) {
+  if (c < 0x80)                 // 0xxxxxxx
+    return 1;
+  else if (c < 0xc0)            // 10xxxxxx
+    die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
+        "contact moritz@bunkus.org and request that he implements a better "
+        "UTF-8 parser.");
+  else if (c < 0xe0)            // 110xxxxx
+    return 2;
+  else if (c < 0xf0)            // 1110xxxx
+    return 3;
+  else if (c < 0xf8)            // 11110xxx
+    return 4;
+  else if (c < 0xfc)            // 111110xx
+    return 5;
+  else if (c < 0xfe)            // 1111110x
+    return 6;
+  else
+    die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
+        "contact moritz@bunkus.org and request that he implements a better "
+        "UTF-8 parser.");
+
+  return 0;
+}
+
+static int wchar_to_utf8_byte_length(uint32_t w) {
+  if (w < 0x00000080)
+    return 1;
+  else if (w < 0x00000800)
+    return 2;
+  else if (w < 0x00010000)
+    return 3;
+  else if (w < 0x00200000)
+    return 4;
+  else if (w < 0x04000000)
+    return 5;
+  else if (w < 0x80000000)
+    return 6;
+  else
+    die("UTFstring_to_cstrutf8: Invalid wide character. Please contact "
+        "moritz@bunkus.org if you think that this is not true.");
+
+  return 0;
+}
+
 UTFstring cstrutf8_to_UTFstring(const char *c) {
   wchar_t *new_string;
-  int slen, dlen, src, dst;
+  int slen, dlen, src, dst, clen;
   UTFstring u;
 
   slen = strlen(c);
   dlen = 0;
-  for (src = 0; src < slen; dlen++) {
-    if ((c[src] & 0x80) == 0)
-      src++;
-    else if ((c[src] & 0x20) == 0)
-      src += 2;
-    else if ((c[src] & 0x08) == 0)
-      src += 3;
-  }
+  for (src = 0; src < slen; dlen++)
+    src += utf8_byte_length(c[src]);
 
   new_string = (wchar_t *)safemalloc((dlen + 1) * sizeof(wchar_t));
   for (src = 0, dst = 0; src < slen; dst++) {
-    if ((c[src] & 0x80) == 0) {
+    clen = utf8_byte_length(c[src]);
+    if ((src + clen) > slen)
+      die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
+          "contact moritz@bunkus.org and request that he implements a better "
+          "UTF-8 parser.");
+
+    if (clen == 1)
       new_string[dst] = c[src];
-      src++;
-    } else if ((c[src] & 0x20) == 0) {
-      new_string[dst] = ((c[src] & 0x1f) << 6) + (c[src + 1] & 0x3f);
-      src += 2;
-    } else if ((c[src] & 0x08) == 0) {
-      new_string[dst] = ((c[src] & 0x0f) << 12) +
-        ((c[src + 1] & 0x3f) << 6) + (c[src + 2] & 0x3f);
-      src += 3;
-    }
+
+    else if (clen == 2)
+      new_string[dst] =
+        ((((uint32_t)c[src]) & 0x1f) << 6) |
+        (((uint32_t)c[src + 1]) & 0x3f);
+    else if (clen == 3)
+      new_string[dst] =
+        ((((uint32_t)c[src]) & 0x0f) << 12) |
+        ((((uint32_t)c[src + 1]) & 0x3f) << 6) |
+        (((uint32_t)c[src + 2]) & 0x3f);
+    else if (clen == 4)
+      new_string[dst] =
+        ((((uint32_t)c[src]) & 0x07) << 18) |
+        ((((uint32_t)c[src + 1]) & 0x3f) << 12) |
+        ((((uint32_t)c[src + 2]) & 0x3f) << 6) |
+        (((uint32_t)c[src + 3]) & 0x3f);
+    else if (clen == 5)
+      new_string[dst] =
+        ((((uint32_t)c[src]) & 0x07) << 24) |
+        ((((uint32_t)c[src + 1]) & 0x3f) << 18) |
+        ((((uint32_t)c[src + 2]) & 0x3f) << 12) |
+        ((((uint32_t)c[src + 3]) & 0x3f) << 6) |
+        (((uint32_t)c[src + 4]) & 0x3f);
+    else if (clen == 6)
+      new_string[dst] =
+        ((((uint32_t)c[src]) & 0x07) << 30) |
+        ((((uint32_t)c[src + 1]) & 0x3f) << 24) |
+        ((((uint32_t)c[src + 2]) & 0x3f) << 18) |
+        ((((uint32_t)c[src + 3]) & 0x3f) << 12) |
+        ((((uint32_t)c[src + 4]) & 0x3f) << 6) |
+        (((uint32_t)c[src + 5]) & 0x3f);
+
+    src += clen;
   }
   new_string[dst] = 0;
 
@@ -737,40 +806,63 @@ char *UTFstring_to_cstr(const UTFstring &u) {
 }
 
 char *UTFstring_to_cstrutf8(const UTFstring &u) {
-  int src, dst, dlen, slen;
-  char *new_string;
+  int src, dst, dlen, slen, clen;
+  unsigned char *new_string;
+  uint32_t uc;
 
   dlen = 0;
   slen = u.length();
 
   for (src = 0, dlen = 0; src < slen; src++)
-    if (u[src] < 0x80)
-      dlen++;
-    else if (u[src] < 0x800)
-      dlen += 2;
-    else if (u[src] < 0x10000)
-      dlen += 3;
+    dlen += wchar_to_utf8_byte_length((uint32_t)u[src]);
 
-  new_string = (char *)malloc(dlen + 1);
+  new_string = (unsigned char *)malloc(dlen + 1);
 
-  for (src = 0, dst = 0; src < slen; src++)
-    if (u[src] < 0x80) {
-      new_string[dst] = u[src];
-      dst++;
-    } else if (u[src] < 0x800) {
-      new_string[dst] = 0xc0 | (u[src] >> 6);
-      new_string[dst + 1] = 0x80 | (u[src] & 0x3f);
-      dst += 2;
-    } else if (u[src] < 0x10000) {
-      new_string[dst] = 0xe0 | (u[src] >> 12);
-      new_string[dst + 1] = 0x80 | ((u[src] >> 6) & 0x3f);
-      new_string[dst + 2] = 0x80 | (u[src] & 0x3f);
-      dst += 3;
+  for (src = 0, dst = 0; src < slen; src++) {
+    uc = (uint32_t)u[src];
+    clen = wchar_to_utf8_byte_length(uc);
+
+    if (clen == 1)
+      new_string[dst] = (unsigned char)uc;
+
+    else if (clen == 2) {
+      new_string[dst]     = 0xc0 | ((uc >> 6) & 0x0000001f);
+      new_string[dst + 1] = 0x80 | (uc & 0x0000003f);
+
+    } else if (clen == 3) {
+      new_string[dst]     = 0xe0 | ((uc >> 12) & 0x0000000f);
+      new_string[dst + 1] = 0x80 | ((uc >> 6) & 0x0000003f);
+      new_string[dst + 2] = 0x80 | (uc & 0x0000003f);
+
+    } else if (clen == 4) {
+      new_string[dst]     = 0xf0 | ((uc >> 18) & 0x00000007);
+      new_string[dst + 1] = 0x80 | ((uc >> 12) & 0x0000003f);
+      new_string[dst + 2] = 0x80 | ((uc >> 6) & 0x0000003f);
+      new_string[dst + 3] = 0x80 | (uc & 0x0000003f);
+
+    } else if (clen == 5) {
+      new_string[dst]     = 0xf8 | ((uc >> 24) & 0x00000003);
+      new_string[dst + 1] = 0x80 | ((uc >> 18) & 0x0000003f);
+      new_string[dst + 2] = 0x80 | ((uc >> 12) & 0x0000003f);
+      new_string[dst + 3] = 0x80 | ((uc >> 6) & 0x0000003f);
+      new_string[dst + 4] = 0x80 | (uc & 0x0000003f);
+
+    } else {
+      new_string[dst]     = 0xfc | ((uc >> 30) & 0x00000001);
+      new_string[dst + 1] = 0x80 | ((uc >> 24) & 0x0000003f);
+      new_string[dst + 2] = 0x80 | ((uc >> 18) & 0x0000003f);
+      new_string[dst + 3] = 0x80 | ((uc >> 12) & 0x0000003f);
+      new_string[dst + 4] = 0x80 | ((uc >> 6) & 0x0000003f);
+      new_string[dst + 5] = 0x80 | (uc & 0x0000003f);
+
     }
+
+    dst += clen;
+  }
 
   new_string[dst] = 0;
 
-  return new_string;
+  return (char *)new_string;
 }
 
 vector<string> split(const char *src, const char *pattern, int max_num) {

@@ -1,5 +1,8 @@
 2003-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Rewrote the UTF-8 conversion routines. They should now handle
+        U+8000 characters correctly.
+
         * mkvmerge: Real reader: For RV40 the actual dimensions were also
         used for the aspect ratio/display dimensions. This has been fixed:
         the actual dimensions are used for PixelWidth/PixelHeight, the
