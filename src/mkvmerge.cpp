@@ -144,7 +144,7 @@ int64_t max_ns_per_cluster = 2000000000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
 bool write_meta_seek_for_clusters = true;
-bool no_lacing = false, no_linking = false;
+bool no_lacing = false, no_linking = true;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
@@ -266,7 +266,7 @@ static void usage() {
     "                           or after a specific time.\n"
     "  --split-max-files <n>    Create at most n files.\n"
     "  --dump-splitpoints       Show all possible splitpoints.\n"
-    "  --dont-link              Don't link splitted files.\n"
+    "  --link                   Link splitted files.\n"
     "  --link-to-previous <UID> Link the first file to the given UID.\n"
     "  --link-to-next <UID>     Link the last file to the given UID.\n"
     "\n Attachment support (more global options):\n"
@@ -1413,8 +1413,8 @@ static void parse_args(int argc, char **argv) {
     } else if (!strcmp(this_arg, "--dump-splitpoints")) {
       dump_splitpoints = true;
 
-    } else if (!strcmp(this_arg, "--dont-link")) {
-      no_linking = true;
+    } else if (!strcmp(this_arg, "--link")) {
+      no_linking = false;
 
     } else if (!strcmp(this_arg, "--link-to-previous")) {
       if ((next_arg == NULL) || (next_arg[0] == 0))
@@ -2090,6 +2090,7 @@ void create_next_output_file() {
   if (kax_chapters != NULL) {
     if (splitting) {
       kax_chapters_void = new EbmlVoid;
+      kax_chapters->UpdateSize();
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
       if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {

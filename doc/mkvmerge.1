@@ -139,8 +139,8 @@ so on. If there's no extension then '-%03d' will be appended to the name.
 Create at most \fIn\fR files, even if the last file will be longer or larger
 than indicated by \fB\-\-split\fR.
 .TP
-\fB\-\-dont\-link\fR
-Do not link files to one another when splitting the output file. See the
+\fB\-\-link\fR
+Link files to one another when splitting the output file. See the
 section \fBFILE LINKING\fR below for details.
 .TP
 \fB\-\-link\-to\-previous\fR <\fIUID\fR>
@@ -595,9 +595,9 @@ If a file is split into several smaller ones and linking is used then the
 timecodes will not start at 0 again but will continue where the last file
 has left off. This way the absolute time is kept even if the previous files
 are not available (e.g. when streaming). If no linking is used then the
-timecodes should start at 0 for each file. By default \fBmkvmerge\fR uses
-file linking. If you don't want that you can turn it off with the
-\'\fB\-\-dont\-link\fR\' option. This option is only useful if splitting
+timecodes should start at 0 for each file. By default \fBmkvmerge\fR does not
+use file linking. If you want that you can turn it on with the
+\'\fB\-link\fR\' option. This option is only useful if splitting
 is activated as well.
 .LP
 Regardless of whether splitting is active or not the user can tell

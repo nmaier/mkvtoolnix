@@ -95,15 +95,14 @@ tab_global::tab_global(wxWindow *parent):
                                    "1800s (after 1800 seconds)."));
   cob_split_by_time->Enable(false);
 
-  cb_dontlink =
-    new wxCheckBox(this, ID_CB_DONTLINK, _("don't link files"),
+  cb_link =
+    new wxCheckBox(this, ID_CB_LINK, _("link files"),
                    wxPoint(15, 105), wxDefaultSize, 0);
-  cb_dontlink->SetToolTip(_T("Do not use 'segment linking' for the resulting "
-                             "files. For an in-depth explanation of this "
-                             "feature consult the mkvmerge documentation. "
-                             "If in doubt do NOT check this option."));
-  cb_dontlink->SetValue(true);
-  cb_dontlink->Enable(false);
+  cb_link->SetToolTip(_T("Use 'segment linking' for the resulting "
+                         "files. For an in-depth explanation of this "
+                         "feature consult the mkvmerge documentation."));
+  cb_link->SetValue(false);
+  cb_link->Enable(false);
 
   new wxStaticText(this, wxID_STATIC, _("max. number of files:"),
                    wxPoint(250, 105), wxDefaultSize, 0);
@@ -249,7 +248,7 @@ void tab_global::on_split_clicked(wxCommandEvent &evt) {
   cob_split_by_size->Enable(ec && er);
   rb_split_by_time->Enable(ec);
   cob_split_by_time->Enable(ec && !er);
-  cb_dontlink->Enable(ec);
+  cb_link->Enable(ec);
   tc_split_max_files->Enable(ec);
 }
 
@@ -285,16 +284,18 @@ void tab_global::load(wxConfigBase *cfg) {
   cfg->Read("split_max_files", &s);
   tc_split_max_files->SetValue(s);
   b = false;
-  if (cfg->Read("dont_link", &b))
-    cb_dontlink->SetValue(b);
+  if (cfg->Read("link", &b))
+    cb_link->SetValue(b);
+  else if (cfg->Read("dont_link", &b))
+    cb_link->SetValue(!b);
   else
-    cb_dontlink->SetValue(true);
+    cb_link->SetValue(true);
 
   rb_split_by_size->Enable(ec);
   cob_split_by_size->Enable(ec && er);
   rb_split_by_time->Enable(ec);
   cob_split_by_time->Enable(ec && !er);
-  cb_dontlink->Enable(ec);
+  cb_link->Enable(ec);
   tc_split_max_files->Enable(ec);
 
   cfg->Read("previous_segment_uid", &s);
@@ -324,7 +325,7 @@ void tab_global::save(wxConfigBase *cfg) {
   cfg->Write("split_after_bytes", cob_split_by_size->GetValue());
   cfg->Write("split_after_time", cob_split_by_time->GetValue());
   cfg->Write("split_max_files", tc_split_max_files->GetValue());
-  cfg->Write("dont_link", cb_dontlink->IsChecked());
+  cfg->Write("link", cb_link->IsChecked());
 
   cfg->Write("previous_segment_uid", tc_previous_segment_uid->GetValue());
   cfg->Write("next_segment_uid", tc_next_segment_uid->GetValue());

@@ -867,9 +867,9 @@ void mmg_dialog::update_command_line() {
       clargs.Add(global_page->tc_split_max_files->GetValue());
     }
 
-    if (global_page->cb_dontlink->IsChecked()) {
-      cmdline += "--dont-link ";
-      clargs.Add("--dont-link");
+    if (global_page->cb_link->IsChecked()) {
+      cmdline += "--link ";
+      clargs.Add("--link");
     }
   }
 
