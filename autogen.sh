@@ -14,8 +14,6 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
     echo "Creating $n from $i"
     sed -e "s/Makefile.mingw/Makefile/g" < $i > $n
   done
-  echo "Creating Makefile.common from Makefile.mingw.common"
-  sed -e "s!-f Makefile.mingw!!g" < Makefile.mingw.common > Makefile.common
 
   if test "x$1" = "x"; then
     if [ ! -f Makefile.options ]; then
