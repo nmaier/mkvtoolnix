@@ -533,14 +533,17 @@ wxdie(const wxString &errmsg) {
 }
 
 mmg_dialog::mmg_dialog():
-  wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION " ('" VERSIONNAME "')"),
-          wxPoint(0, 0),
-#ifdef SYS_WINDOWS
-          wxSize(520, 740),
-#else
-          wxSize(520, 718),
-#endif
-          wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
+  wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION " ('" VERSIONNAME "')")) {
+//           wxPoint(0, 0),
+// #ifdef SYS_WINDOWS
+//           wxSize(520, 740),
+// #else
+//           wxSize(520, 718),
+// #endif
+//           wxDEFAULT_FRAME_STYLE) {
+  wxBoxSizer *bs_main;
+  wxPanel *panel;
+
   mdlg = this;
 
   file_menu = new wxMenu();
@@ -636,9 +639,9 @@ mmg_dialog::mmg_dialog():
   SetStatusBar(status_bar);
   status_bar_timer.SetOwner(this, ID_T_STATUSBAR);
 
-  wxPanel *panel = new wxPanel(this, -1);
+  panel = new wxPanel(this, -1);
 
-  wxBoxSizer *bs_main = new wxBoxSizer(wxVERTICAL);
+  bs_main = new wxBoxSizer(wxVERTICAL);
   panel->SetSizer(bs_main);
   panel->SetAutoLayout(true);
 
@@ -657,33 +660,32 @@ mmg_dialog::mmg_dialog():
   notebook->AddPage(settings_page, wxT("Settings"));
   notebook->AddPage(chapter_editor_page, wxT("Chapter Editor"));
 
-  bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+  bs_main->Add(notebook, 1, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT |
+               wxGROW, 5);
 
   wxStaticBox *sb_low = new wxStaticBox(panel, -1, wxT("Output filename"));
   wxStaticBoxSizer *sbs_low = new wxStaticBoxSizer(sb_low, wxHORIZONTAL);
-  bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+  bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT |
+               wxGROW, 5);
 
-  tc_output =
-    new wxTextCtrl(panel, ID_TC_OUTPUT, wxT(""), wxDefaultPosition,
-                   wxSize(400, -1), 0);
-  sbs_low->Add(tc_output, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+  tc_output = new wxTextCtrl(panel, ID_TC_OUTPUT, wxT(""));
+  sbs_low->Add(tc_output, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT |
+               wxGROW, 5);
 
-  b_browse_output =
-    new wxButton(panel, ID_B_BROWSEOUTPUT, wxT("Browse"), wxDefaultPosition,
-                 wxDefaultSize, 0);
+  b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, wxT("Browse"));
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
 
-  sb_commandline =
-    new wxStaticBox(panel, -1, wxT("Command line"));
+  sb_commandline = new wxStaticBox(panel, -1, wxT("Command line"));
   wxStaticBoxSizer *sbs_low2 =
     new wxStaticBoxSizer(sb_commandline, wxHORIZONTAL);
-  bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+  bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT |
+               wxGROW, 5);
 
   tc_cmdline =
     new wxTextCtrl(panel, ID_TC_CMDLINE, wxT(""), wxDefaultPosition,
                    wxSize(490, 50), wxTE_READONLY | wxTE_LINEWRAP |
                    wxTE_MULTILINE);
-  sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
+  sbs_low2->Add(tc_cmdline, 1, wxALIGN_CENTER_VERTICAL | wxALL, 3);
 
   wxBoxSizer *bs_buttons = new wxBoxSizer(wxHORIZONTAL);
 
@@ -705,6 +707,12 @@ mmg_dialog::mmg_dialog():
   bs_buttons->Add(b_add_to_jobqueue, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
+
+#ifdef SYS_WINDOWS
+  SetSizeHints(520, 740);
+#else
+  SetSizeHints(520, 718);
+#endif
 
   last_open_dir = wxT("");
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
