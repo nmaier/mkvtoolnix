@@ -1,5 +1,9 @@
 2003-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: Command line arguments are put into an option file which is
+	then handed over to mkvmerge. This allows really long command
+	lines, even on Windows.
+
 	* mkvmerge: bug fix: Negative track IDs in Ogg files were reported
 	incorrectly for mkvmerge -i (which affected the GUI).
 

@@ -1844,7 +1844,6 @@ static char **add_string(int &num, char **values, const char *new_string) {
 static char **read_args_from_file(int &num_args, char **args, char *filename) {
   mm_text_io_c *mm_io;
   string buffer, opt1, opt2;
-  int space;
 
   mm_io = NULL;
   try {
@@ -1859,14 +1858,7 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
     if ((buffer[0] == '#') || (buffer[0] == 0))
       continue;
 
-    space = buffer.find(" ");
-    if (space >= 0) {
-      opt1 = buffer.substr(space + 1);
-      opt2 = buffer.substr(0, space);
-      args = add_string(num_args, args, opt1.c_str());
-      args = add_string(num_args, args, opt2.c_str());
-    } else
-      args = add_string(num_args, args, buffer.c_str());
+    args = add_string(num_args, args, buffer.c_str());
   }
 
   delete mm_io;
@@ -2318,6 +2310,9 @@ int main(int argc, char **argv) {
 
   setup();
 
+  int i;
+  for (i = 1; i < argc; i++)
+    printf("cmdline arg %d: %s\n", i, argv[i]);
   handle_args(argc, argv);
 
   if (split_after > 0) {

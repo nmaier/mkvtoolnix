@@ -406,20 +406,23 @@ Show version information.
 Reads additional command line arguments from the file \fIoptionsfile\fR.
 Lines whose first non-whitespace character is a hash mark (#) are treated
 as comments and ignored. White spaces at the start and end of a line will
-be stripped. If a space is encountered and the line starts with '\-' then
-the line will be split into exactly two arguments - the string before the
-space and the string after it. There is no meta character escaping.
+be stripped. Each line must contain exactly one option.
+There is no meta character escaping.
 .br
 The command line \fBmkvmerge \-o "my file.mkv" -A "a movie.avi" sound.ogg\fR
 could be converted into the following option file:
 .br
 # Write to the file "my file.mkv".
 .br
-\-o my file.mkv
+\-o
+.br
+my file.mkv
 .br
 # Only take the video from "a movie.avi".
 .br
-\-A a movie.avi
+\-A
+.br
+a movie.avi
 .br
 sound.ogg
 

@@ -442,7 +442,7 @@ protected:
   wxStaticText *st_label;
   wxGauge *g_progress;
   wxProcess *process;
-  wxString log;
+  wxString log, opt_file_name;
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
 public:

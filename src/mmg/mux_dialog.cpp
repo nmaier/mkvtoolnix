@@ -46,6 +46,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
   long value;
   wxString line, tmp;
   wxInputStream *out;
+  mm_io_c *opt_file;
+  uint32_t i;
+  wxArrayString *arg_list;
 
   c = 0;
   new wxStaticBox(this, -1, _("Status and progress"), wxPoint(10, 5),
@@ -86,23 +89,45 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
   process = new mux_process(this);
 
-#ifdef SYS_UNIX
-  int i;
-  wxArrayString &arg_list =
-    static_cast<mmg_dialog *>(parent)->get_command_line_args();
-  char **args = (char **)safemalloc((arg_list.Count() + 1) * sizeof(char *));
-  for (i = 0; i < arg_list.Count(); i++)
-    args[i] = safestrdup(arg_list[i].c_str());
-  args[i] = NULL;
+// #ifdef SYS_UNIX
+//   int i;
+//   wxArrayString &arg_list =
+//     static_cast<mmg_dialog *>(parent)->get_command_line_args();
+//   char **args = (char **)safemalloc((arg_list.Count() + 1) * sizeof(char *));
+//   for (i = 0; i < arg_list.Count(); i++)
+//     args[i] = safestrdup(arg_list[i].c_str());
+//   args[i] = NULL;
 
-  pid = wxExecute(args, wxEXEC_ASYNC, process);
-  for (i = 0; i < arg_list.Count(); i++)
-    safefree(args[i]);
-  safefree(args);
-#else
-  pid = wxExecute(static_cast<mmg_dialog *>(parent)->get_command_line(),
-                  wxEXEC_ASYNC, process);
-#endif
+//   pid = wxExecute(args, wxEXEC_ASYNC, process);
+//   for (i = 0; i < arg_list.Count(); i++)
+//     safefree(args[i]);
+//   safefree(args);
+// #else
+//   pid = wxExecute(static_cast<mmg_dialog *>(parent)->get_command_line(),
+//                   wxEXEC_ASYNC, process);
+// #endif
+  opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
+                       (int)time(NULL));
+  try {
+    opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
+  } catch (...) {
+    wxString error;
+    error.Printf("Could not create a temporary file for mkvmerge's command "
+                 "line option called '%s' (error code %d, %s).",
+                 opt_file_name.c_str(), errno, strerror(errno));
+    wxMessageBox(error, "File creation failed", wxOK | wxCENTER |
+                 wxICON_ERROR);
+    throw 0;
+  }
+  arg_list = &static_cast<mmg_dialog *>(parent)->get_command_line_args();
+  for (i = 1; i < arg_list->Count(); i++) {
+    opt_file->puts_unl((*arg_list)[i].c_str());
+    opt_file->puts_unl("\n");
+  }
+  delete opt_file;
+
+  pid = wxExecute((*arg_list)[0] + " @" + opt_file_name, wxEXEC_ASYNC,
+                  process);
   out = process->GetInputStream();
 
   line = "";
@@ -155,6 +180,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
 mux_dialog::~mux_dialog() {
   delete process;
+  unlink(opt_file_name.c_str());
 }
 
 void mux_dialog::update_window(wxString text) {
