@@ -712,9 +712,10 @@ tab_input::add_file(const wxString &file_name) {
     return;
   } else if (result > 0) {
     name.Printf(wxT("'mkvmerge -i' failed. Return code: %d. Errno: %d "
-                    "(%s).\nMake sure that you've selected a mkvmerge "
+                    "(%s). Make sure that you've selected a mkvmerge "
                     "executable on the 'settings' tab."), result, errno,
                 wxUCS(strerror(errno)));
+    break_line(name, 60);
     wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
                  wxICON_ERROR);
     return;
