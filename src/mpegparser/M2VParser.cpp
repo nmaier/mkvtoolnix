@@ -22,7 +22,7 @@
 
 #include "M2VParser.h"
 
-#define BUFF_SIZE 8*1024*1024
+#define BUFF_SIZE 2*1024*1024
 
 MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
   if(bCopy){
@@ -38,14 +38,14 @@ MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
 }
 
 MPEGFrame::~MPEGFrame(){
-  if (!bCopy)
+  if (bCopy)
     delete [] data;
 }
 
 void M2VParser::SetEOS(){
   MPEGChunk * c;
   while((c = mpgBuf->ReadChunk())){
-    if(c) chunks.push_back(c);
+    chunks.push_back(c);
   }
   mpgBuf->ForceFinal();  //Force the last frame out.
   c = mpgBuf->ReadChunk();
@@ -120,17 +120,20 @@ M2VParser::M2VParser(){
   secondRef = -1;
   nextSkip = -1;
   nextSkipDuration = -1;
-    
+  seqHdrChunk = NULL;
 }
 
 int32_t M2VParser::InitParser(){
   //Gotta find a sequence header now
   MPEGChunk* chunk;
-  MPEGChunk* seqHdrChunk;    
+  //MPEGChunk* seqHdrChunk;    
   for(int i = 0; i < chunks.size(); i++){
-    chunk = chunks[i];        
+    chunk = chunks.at(i);        
     if(chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE){
-      seqHdrChunk = chunk; //Save this for adding as private data...
+      //Copy the header for later, we must copy because the actual chunk will be deleted in a bit
+      binary * hdrData = new binary[chunk->GetSize()];
+      memcpy(hdrData, chunk->GetPointer(), chunk->GetSize());      
+      seqHdrChunk = new MPEGChunk(hdrData, chunk->GetSize()); //Save this for adding as private data...
       MPEG2SequenceHeader seqHdr = ParseSequenceHeader(chunk);            
       m_seqHdr = seqHdr;
 
@@ -150,6 +153,7 @@ int32_t M2VParser::InitParser(){
 
 M2VParser::~M2VParser(){
   DumpQueues();
+  delete seqHdrChunk;
   delete mpgBuf;
 }
 
@@ -194,7 +198,7 @@ int32_t M2VParser::CountBFrames(){
   if(m_eos) return 0;
   if(notReachedFirstGOP) return 0;
   for(int i = 1; i < chunks.size(); i++){
-    MPEGChunk* c = chunks[i];
+    MPEGChunk* c = chunks.at(i);
     if(c->GetType() == MPEG_VIDEO_PICTURE_START_CODE){
       MPEG2PictureHeader h = ParsePictureHeader(c);
       if(h.frameType == MPEG2_B_FRAME){

@@ -55,8 +55,9 @@ class M2VParser {
 private:        
   std::vector<MPEGChunk*> chunks; //Hold the chunks until we can stamp them
   std::queue<MPEGFrame*> buffers; //Holds stamped buffers until they are requested.
-  binary *temp;
   MediaTime position;
+  //Added to allow reading the header's raw data, contains first found seq hdr.
+  MPEGChunk* seqHdrChunk;
   MPEG2SequenceHeader m_seqHdr; //current sequence header
   MediaTime currentStampingTime;
   MediaTime firstRef;
@@ -86,6 +87,11 @@ public:
     
   MPEG2SequenceHeader GetSequenceHeader(){
     return m_seqHdr;
+  }
+  
+  //BE VERY CAREFUL WITH THIS CALL
+  MPEGChunk * GetRealSequenceHeader(){
+    return seqHdrChunk;
   }
         
   uint8_t GetMPEGVersion(){

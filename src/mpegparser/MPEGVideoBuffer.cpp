@@ -30,7 +30,7 @@ int32_t MPEGVideoBuffer::FindStartCode(uint32_t startPos){
   if(window < 4) //Make sure we have enough bytes to search.
     return -1;
   
-  for(unsigned int i = startPos; i < (myBuffer->GetLength() - 3); i++){
+  for(unsigned int i = startPos; i < (window - 3); i++){
     CircBuffer& buf = *myBuffer;
     binary a,b,c,d;
     a = buf[i];
@@ -88,6 +88,7 @@ uint32_t MPEGVideoBuffer::GetState(){
 }
 
 MPEGChunk * MPEGVideoBuffer::ReadChunk(){
+  MPEGChunk* myChunk = NULL;
   if(state == MPEG2_BUFFER_STATE_CHUNK_READY){
     assert(chunkStart < chunkEnd && chunkStart != -1 && chunkEnd != -1);
     if(chunkStart != 0){ //we have to skip some bytes
@@ -99,7 +100,8 @@ MPEGChunk * MPEGVideoBuffer::ReadChunk(){
     chunkStart = 0; //we read up to the next start code
     chunkEnd = -1;
     UpdateState();
-    return new MPEGChunk(chunkData, chunkLength);    
+    myChunk = new MPEGChunk(chunkData, chunkLength);	
+    return myChunk;    
   }else{
     return NULL;
   }

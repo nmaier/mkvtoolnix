@@ -77,6 +77,7 @@
 #include "r_flac.h"
 #include "r_matroska.h"
 #include "r_mp3.h"
+#include "r_mpeg.h"
 #include "r_ogm.h"
 #include "r_qtmp4.h"
 #include "r_real.h"
@@ -284,6 +285,8 @@ get_file_type(const string &filename) {
     type = TYPEQTMP4;
   else if (tta_reader_c::probe_file(mm_io, size))
     type = TYPETTA;
+  else if (mpeg_es_reader_c::probe_file(mm_io, size))
+    type = TYPEMPEG;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == TYPEUNKNOWN); i++)
       if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
@@ -1104,6 +1107,9 @@ create_readers() {
 #endif
         case TYPETTA:
           file->reader = new tta_reader_c(file->ti);
+          break;
+        case TYPEMPEG:
+          file->reader = new mpeg_es_reader_c(file->ti);
           break;
         default:
           mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);

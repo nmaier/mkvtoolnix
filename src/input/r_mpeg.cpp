@@ -61,6 +61,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
   try {
     MPEG2SequenceHeader seq_hdr;
     M2VParser parser;
+    MPEGChunk *raw_seq_hdr;
 
     mm_io = new mm_file_io_c(ti->fname);
     size = mm_io->get_size();
@@ -78,6 +79,12 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     height = seq_hdr.height;
     frame_rate = seq_hdr.frameRate;
     aspect_ratio = seq_hdr.aspectRatio;
+    raw_seq_hdr = parser.GetRealSequenceHeader();
+    if (raw_seq_hdr != NULL) {
+      ti->private_data = (unsigned char *)
+        safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+      ti->private_size = raw_seq_hdr->GetSize();
+    }
 
     mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %e AR %e\n",
            version, width, height, frame_rate, aspect_ratio);
@@ -124,8 +131,6 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
     return file_status_done;
   }
 
-  mxinfo("frame size %u tc %lld 1st %lld 2nd %lld\n", frame->size,
-         frame->timecode, frame->firstRef, frame->secondRef);
   memory_c mem(frame->data, frame->size, true);
   PTZR0->process(mem, frame->timecode, frame->duration,
                  frame->firstRef, frame->secondRef);
@@ -161,7 +166,6 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
         parser.GetBufferFreeSpace() : READ_SIZE;
       buffer = new unsigned char[bytes_to_read];
       bytes_read = in.read(buffer, bytes_to_read);
-      printf("btr %d br %d\n", bytes_to_read, bytes_read);
       if (bytes_read == 0)
         break;
       bytes_probed += bytes_read;

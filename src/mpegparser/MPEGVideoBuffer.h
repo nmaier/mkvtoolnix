@@ -102,6 +102,10 @@ public:
     return data[i];
   }
 
+  binary & at(unsigned int i) {
+    return data[i];
+  }
+
   binary * GetPointer(){
     return data;
   }
