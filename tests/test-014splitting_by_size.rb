@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_014splitting_by_size < Test
-  def initialize
-    @description = "mkvmerge / splitting by file size / in(AVI)"
+  def description
+    return "mkvmerge / splitting by file size / in(AVI)"
   end
 
   def run

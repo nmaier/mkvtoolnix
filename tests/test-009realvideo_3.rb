@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_009realvideo_3 < Test
-  def initialize
-    @description = "mkvmerge / audio and video / in(RealVideo 3 and RealAudio)"
+  def description
+    return "mkvmerge / audio and video / in(RealVideo 3 and RealAudio)"
   end
 
   def run

@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_005flac < Test
-  def initialize
-    @description = "mkvmerge / audio only / in(FLAC)"
+  def description
+    return "mkvmerge / audio only / in(FLAC)"
   end
 
   def run

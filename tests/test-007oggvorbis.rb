@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_007oggvorbis < Test
-  def initialize
-    @description = "mkvmerge / audio only / in(Vorbis in Ogg)"
+  def description
+    return "mkvmerge / audio only / in(Vorbis in Ogg)"
   end
 
   def run

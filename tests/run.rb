@@ -1,11 +1,15 @@
 #!/usr/bin/ruby
 
 class Test
-  attr_reader :description
+  attr_reader :commands
 
   def initialize
-    @description = "dummy test class"
     @tmp_num = 0
+    @commands = Array.new
+  end
+
+  def description
+    return "dummy test class"
   end
 
   def run
@@ -31,6 +35,7 @@ class Test
   end
 
   def sys(command, *arg)
+    @commands.push(command)
     if (!system(command + " &> /dev/null"))
       if ((arg.size == 0) || ((arg[0] << 8) != $?))
         error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
@@ -73,14 +78,19 @@ class Results
     return unless (FileTest.exist?("results.txt"))
     IO.readlines("results.txt").each do |line|
       parts = line.chomp.split(/:/)
-      @results[parts[0]] = {"hash" => parts[1], "status" => parts[2]}
+      parts[3] =~
+        /([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})/
+      @results[parts[0]] = {"hash" => parts[1], "status" => parts[2],
+        "date_added" => Time.local($1, $2, $3, $4, $5, $6) }
     end
   end
 
   def save
     f = File.new("results.txt", "w")
     @results.keys.sort.each do |key|
-      f.puts("#{key}:" + @results[key]['hash'] + ":" + @results[key]['status'])
+      f.puts("#{key}:" + @results[key]['hash'] + ":" +
+              @results[key]['status'] + ":" +
+              @results[key]['date_added'].strftime("%Y%m%d-%H%M%S"))
     end
     f.close
   end
@@ -99,9 +109,15 @@ class Results
     return @results[name]['status']
   end
 
+  def date_added?(name)
+    raise "No such result" unless (exist?(name))
+    return @results[name]['date_added']
+  end    
+
   def add(name, hash)
     raise "Test does already exist" if (exist?(name))
-    @results[name] = {"hash" => hash, "status" => "new"}
+    @results[name] = {"hash" => hash, "status" => "new",
+      "date_added" => Time.now }
     save
   end
 
@@ -139,11 +155,17 @@ def main
 
   test_failed = false
   test_new = false
+  test_date_after = nil
+  test_date_before = nil
   ARGV.each do |arg|
     if ((arg == "-f") or (arg == "--failed"))
       test_failed = true
     elsif ((arg == "-n") or (arg == "--new"))
       test_new = true
+    elsif (arg =~ /-d([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
+      test_date_after = Time.local($1, $2, $3, $4, $5, $6)
+    elsif (arg =~ /-D([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
+      test_date_before = Time.local($1, $2, $3, $4, $5, $6)
     else
       puts("Unknown argument '#{arg}'.")
       exit(2)
@@ -169,6 +191,15 @@ def main
       end
     elsif (test_new || test_failed)
       test_this = true
+    end
+    if (results.exist?(class_name))
+      if (test_date_after and
+         (results.date_added?(class_name) < test_date_after))
+        test_this = false
+      elsif (test_date_before and
+            (results.date_added?(class_name) > test_date_before))
+        test_this = false
+      end
     end
     next unless (test_this)
 
@@ -197,7 +228,8 @@ def main
         puts("  NEW test. Storing result '#{result}'.")
         results.add(class_name, result)
       elsif (results.hash?(class_name) != result)
-        puts("  FAILED: checksum is different")
+        puts("  FAILED: checksum is different. Commands:")
+        puts("    " + current_test.commands.join("\n    "))
         results.set(class_name, "failed")
         num_failed += 1
       else

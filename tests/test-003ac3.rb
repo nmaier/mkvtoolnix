@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_003ac3 < Test
-  def initialize
-    @description = "mkvmerge / audio only / in(AC3)"
+  def description
+    return "mkvmerge / audio only / in(AC3)"
   end
 
   def run

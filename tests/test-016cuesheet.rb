@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_016cuesheet < Test
-  def initialize
-    @description = "mkvmerge / CUE sheet to chapters & tags / in(CUE)"
+  def description
+    return "mkvmerge / CUE sheet to chapters & tags / in(CUE)"
   end
 
   def run

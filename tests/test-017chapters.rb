@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_017chapters < Test
-  def initialize
-    @description = "mkvmerge / chapters from XML and simple OGM style files " +
+  def description
+    return "mkvmerge / chapters from XML and simple OGM style files " +
       "/ in(txt, XML)"
   end
 
