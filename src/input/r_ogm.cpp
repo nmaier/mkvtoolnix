@@ -37,6 +37,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "aac_common.h"
 #include "chapters.h"
 #include "common.h"
+#include "commonebml.h"
 #include "iso639.h"
 #include "matroska.h"
 #include "mkvmerge.h"
@@ -1154,6 +1155,7 @@ ogm_reader_c::handle_stream_comments() {
   vector<string> comment;
   vector<char *> chapters;
   mm_io_c *out;
+  bool comments_in_utf8;
 
   for (i = 0; i < num_sdemuxers; i++) {
     dmx = sdemuxers[i];
@@ -1165,12 +1167,29 @@ ogm_reader_c::handle_stream_comments() {
     if (comments == NULL)
       continue;
     chapters.clear();
+
+    comments_in_utf8 = true;
+    for (j = 0; comments[j] != NULL; j++)
+      if (!is_valid_utf8_string(comments[j])) {
+        comments_in_utf8 = false;
+        break;
+      }
+
     for (j = 0; comments[j] != NULL; j++) {
       mxverb(2, "ogm_reader: commment for #%d for %d: %s\n", j, dmx->serial,
              comments[j]);
       comment = split(comments[j], "=", 2);
       if (comment.size() != 2)
         continue;
+
+      if (!comments_in_utf8) {
+        char *utf8_comment;
+
+        utf8_comment = to_utf8(cc_local_utf8, comment[1].c_str());
+        comment[1] = utf8_comment;
+        safefree(utf8_comment);
+      }
+
       if (comment[0] == "LANGUAGE") {
         iso639_2 = map_english_name_to_iso639_2(comment[1].c_str());
         if (iso639_2 == NULL)
@@ -1212,12 +1231,16 @@ ogm_reader_c::handle_stream_comments() {
       } else if (comment[0] == "TITLE") {
         if (!segment_title_set && (segment_title.length() == 0) &&
             (dmx->stype == OGM_STREAM_TYPE_VIDEO))
-          segment_title = comment[1];
+          segment_title = comment[1].c_str();
         safefree(dmx->title);
         dmx->title = safestrdup(comment[1].c_str());
 
-      } else if (starts_with(comment[0], "CHAPTER"))
-        chapters.push_back(comments[j]);
+      } else if (starts_with(comment[0], "CHAPTER")) {
+        if (comments_in_utf8)
+          chapters.push_back(safestrdup(comments[j]));
+        else
+          chapters.push_back(to_utf8(cc_local_utf8, comments[j]));
+      }
     }
     if ((chapters.size() > 0) && !ti->no_chapters && (kax_chapters == NULL)) {
 #if defined(SYS_WINDOWS)
@@ -1240,6 +1263,8 @@ ogm_reader_c::handle_stream_comments() {
       }
       unlink(name);
     }
+    for (j = 0; j < chapters.size(); j++)
+      safefree(chapters[j]);
     free_string_array(comments);
   }
 }

@@ -98,9 +98,7 @@ utf8_byte_length(unsigned char c) {
   if (c < 0x80)                 // 0xxxxxxx
     return 1;
   else if (c < 0xc0)            // 10xxxxxx
-    die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
-        "contact moritz@bunkus.org and request that he implements a better "
-        "UTF-8 parser.");
+    return -1;
   else if (c < 0xe0)            // 110xxxxx
     return 2;
   else if (c < 0xf0)            // 1110xxxx
@@ -112,11 +110,7 @@ utf8_byte_length(unsigned char c) {
   else if (c < 0xfe)            // 1111110x
     return 6;
   else
-    die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
-        "contact moritz@bunkus.org and request that he implements a better "
-        "UTF-8 parser.");
-
-  return 0;
+    return -1;
 }
 
 static int
@@ -148,8 +142,15 @@ cstrutf8_to_UTFstring(const char *c) {
 
   slen = strlen(c);
   dlen = 0;
-  for (src = 0; src < slen; dlen++)
-    src += utf8_byte_length(c[src]);
+  for (src = 0; src < slen; dlen++) {
+    clen = utf8_byte_length(c[src]);
+    if (clen < 0)
+      die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
+          "contact moritz@bunkus.org and request that he implements a better "
+          "UTF-8 parser.");
+    src += clen;
+  }
+
 
   new_string = (wchar_t *)safemalloc((dlen + 1) * sizeof(wchar_t));
   for (src = 0, dst = 0; src < slen; dst++) {
@@ -296,3 +297,21 @@ UTFstring_to_cstrutf8(const UTFstring &u) {
 
   return (char *)new_string;
 }
+
+bool
+is_valid_utf8_string(const char *c) {
+  int slen, dlen, src, clen;
+  UTFstring u;
+
+  slen = strlen(c);
+  dlen = 0;
+  for (src = 0; src < slen; dlen++) {
+    clen = utf8_byte_length(c[src]);
+    if ((clen < 0) || ((src + clen) > slen))
+      return false;
+    src += clen;
+  }
+
+  return true;
+}
+
