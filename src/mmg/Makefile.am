@@ -7,6 +7,7 @@ INCLUDES = -I.. -I../..
 mmg_SOURCES = mmg.cpp mmg.h \
 			../chapters.cpp ../chapters.h \
 			../chapter_parser_xml.cpp \
+			../chapter_writer.cpp \
 			../common.cpp ../common.h \
 			extern_data.cpp extern_data.h \
 			../iso639.cpp ../iso639.h \

@@ -326,13 +326,17 @@ public:
   void on_entry_selected(wxTreeEvent &evt);
   void on_language_code_selected(wxCommandEvent &evt);
   void on_country_code_selected(wxCommandEvent &evt);
+
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(string s);
-
+  bool verify_atom_recursively(EbmlElement *e, int64_t p_start = -1,
+                               int64_t p_end = -1);
+  bool verify();
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
-
   void enable_inputs(bool enable);
+  bool select_file_name();
+  void save();
 };
 
 class mux_dialog: public wxDialog {

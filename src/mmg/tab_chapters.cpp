@@ -19,6 +19,9 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <errno.h>
+#include <stdio.h>
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
@@ -310,12 +313,164 @@ void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
 }
 
 void tab_chapters::on_save_chapters(wxCommandEvent &evt) {
+  if (!verify())
+    return;
+
+  if (file_name.length() == 0)
+    if (!select_file_name())
+      return;
+  save();
 }
 
 void tab_chapters::on_save_chapters_as(wxCommandEvent &evt) {
+  if (!verify())
+    return;
+
+  if (!select_file_name())
+    return;
+  save();
+}
+
+bool tab_chapters::select_file_name() {
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+                   _T("Chapter files (*.xml)|*.xml|"
+                      ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
+    file_name = dlg.GetPath();
+    tc_chapters->SetItemText(tid_root, file_name);
+    return true;
+  }
+  return false;
+}
+
+void tab_chapters::save() {
+  FILE *fout;
+  wxString err;
+
+  fout = fopen(file_name.c_str(), "w");
+  if (fout == NULL) {
+    err.Printf(_("Could not open the destination file '%s' for writing. "
+                 "Error code: %d (%s)."), file_name.c_str(), errno,
+               strerror(errno));
+    wxMessageBox(err, _("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);
+    return;
+  }
+
+  fprintf(fout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Chapters>\n");
+  write_chapters_xml(chapters, fout);
+  fprintf(fout, "</Chapters>\n");
+  fclose(fout);
+
+  mdlg->set_status_bar(_("Chapters written."));
 }
 
 void tab_chapters::on_verify_chapters(wxCommandEvent &evt) {
+  verify();
+}
+
+bool tab_chapters::verify_atom_recursively(EbmlElement *e, int64_t p_start,
+                                           int64_t p_end) {
+  KaxChapterAtom *chapter;
+  KaxChapterTimeStart *start;
+  KaxChapterTimeEnd *end;
+  KaxChapterDisplay *display;
+  KaxChapterLanguage *language;
+  KaxChapterString *cs;
+  wxString label;
+  char *utf;
+  uint32_t i;
+  int64_t t_start, t_end;
+
+  chapter = static_cast<KaxChapterAtom *>(e);
+
+  cs = NULL;
+  display = FindChild<KaxChapterDisplay>(*chapter);
+  if (display != NULL)
+    cs = FindChild<KaxChapterString>(*display);
+
+  if ((display == NULL) || (cs == NULL)) {
+    wxMessageBox(_("One of the chapters does not have a name."),
+                 _("Chapter verification error"), wxCENTER | wxOK |
+                 wxICON_ERROR);
+    return false;
+  }
+  utf = UTFstring_to_cstr(UTFstring(*static_cast<EbmlUnicodeString *>(cs)));
+  label = utf;
+  safefree(utf);
+
+  start = FindChild<KaxChapterTimeStart>(*chapter);
+  if (start == NULL) {
+    wxMessageBox(_("The chapter '" + label + "' is missing the start time."),
+                 _("Chapter verification error"), wxCENTER | wxOK |
+                 wxICON_ERROR);
+    return false;
+  }
+  t_start = uint64(*static_cast<EbmlUInteger *>(start));
+  if ((p_start != -1) && (t_start < p_start)) {
+    wxMessageBox(_("The chapter '" + label + "' starts before its parent."),
+                 _("Chapter verification error"), wxCENTER | wxOK |
+                 wxICON_ERROR);
+    return false;
+  }
+
+  end = FindChild<KaxChapterTimeEnd>(*chapter);
+  if (end != NULL) {
+    t_end = uint64(*static_cast<EbmlUInteger *>(end));
+    if ((p_end != -1) && (t_end > p_end)) {
+      wxMessageBox(_("The chapter '" + label + "' ends after its parent."),
+                   _("Chapter verification error"), wxCENTER | wxOK |
+                   wxICON_ERROR);
+      return false;
+    }
+    if (t_end < t_start) {
+      wxMessageBox(_("The chapter '" + label + "' ends before it starts."),
+                   _("Chapter verification error"), wxCENTER | wxOK |
+                   wxICON_ERROR);
+      return false;
+    }
+  } else
+    t_end = -1;
+
+  language = FindChild<KaxChapterLanguage>(*display);
+  if (language == NULL) {
+    wxMessageBox(_("The chapter '" + label + "' is missing its language."),
+                 _("Chapter verification error"), wxCENTER | wxOK |
+                 wxICON_ERROR);
+    return false;
+  }
+
+  for (i = 0; i < chapter->ListSize(); i++)
+    if (dynamic_cast<KaxChapterAtom *>((*chapter)[i]) != NULL)
+      if (!verify_atom_recursively((*chapter)[i], t_start, t_end))
+        return false;
+
+  return true;
+}
+
+bool tab_chapters::verify() {
+  KaxEditionEntry *eentry;
+  wxTreeItemId id;
+  uint32_t eidx, cidx;
+
+  if (chapters == NULL)
+    return false;
+  if (chapters->ListSize() == 0)
+    return false;
+
+  id = tc_chapters->GetSelection();
+  if (id.IsOk())
+    copy_values(id);
+
+  for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
+    eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
+    for (cidx = 0; cidx < eentry->ListSize(); cidx++) {
+      if (!verify_atom_recursively((*eentry)[cidx]))
+        return false;
+    }
+  }
+
+  return true;
 }
 
 void tab_chapters::on_add_chapter(wxCommandEvent &evt) {
@@ -329,6 +484,7 @@ void tab_chapters::on_add_chapter(wxCommandEvent &evt) {
   id = tc_chapters->GetSelection();
   if (!id.IsOk())
     return;
+  copy_values(id);
 
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
   if (id == tid_root) {
