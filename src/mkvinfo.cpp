@@ -1894,26 +1894,6 @@ process_file(const char *file_name) {
   }
 }
 
-int
-console_main(int argc,
-             char **argv) {
-  char *file_name;
-
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
-  nice(2);
-#endif
-
-  parse_args(argc, argv, file_name);
-  if (file_name == NULL) {
-    usage();
-    mxexit(0);
-  }
-  if (process_file(file_name))
-    return 0;
-  else
-    return 1;
-}
-
 void
 setup() {
 #if defined(HAVE_LIBINTL_H)
@@ -1934,20 +1914,36 @@ cleanup() {
   utf8_done();
 }
 
+int
+console_main(int argc,
+             char **argv) {
+  char *file_name;
+  bool ok;
+
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+  nice(2);
+#endif
+
+  setup();
+  parse_args(argc, argv, file_name);
+  if (file_name == NULL) {
+    usage();
+    mxexit(0);
+  }
+  ok = process_file(file_name);
+  cleanup();
+
+  if (ok)
+    return 0;
+  else
+    return 1;
+}
+
 #if !defined HAVE_WXWINDOWS
 int
 main(int argc,
      char **argv) {
-  char *initial_file;
-  int res;
-
-  setup();
-  parse_args(argc, argv, initial_file);
-
-  res = console_main(argc, argv);
-  cleanup();
-
-  return res;
+  return console_main(argc, argv);
 }
 
 #elif defined(SYS_UNIX) || defined(SYS_APPLE)
@@ -1956,20 +1952,14 @@ int
 main(int argc,
      char **argv) {
   char *initial_file;
-  int res;
 
-  setup();
   parse_args(argc, argv, initial_file);
 
   if (use_gui) {
     wxEntry(argc, argv);
     return 0;
   } else
-    res = console_main(argc, argv);
-
-  cleanup();
-
-  return res;
+    return console_main(argc, argv);
 }
 
 #endif // HAVE_WXWINDOWS
