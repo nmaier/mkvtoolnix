@@ -185,10 +185,24 @@
   <code>README</code> files that are included in the <i>mkvtoolnix</i>
   package.</i>)</p>
 
-  <p>The only thing that <i>mmg</i> needs to know is the location of the
-  <i>mkvmerge</i> binary. Under normal circumstances it will be found
-  automatically. But if not then you can select the binary to use on the
-  <i>Settings</i> tab.</p>
+  <table width="100%" border="0">
+    <tr>
+      <td>
+        <p>The only thing that <i>mmg</i> needs to know is the location of the
+        <i>mkvmerge</i> binary. Under normal circumstances it will be
+        found automatically. But if not then you can select the binary
+        to use on the <i>Settings</i> tab.</p>
+      </td>
+      <td>&nbsp;</td>
+      <td>
+        <img src="images/selectmkvmergeexecutable.png"
+             alt="selecting the mkvmerge executable">
+        <br>
+        <font size="-1">Use this button to select the path to the
+          <i>mkvmerge</i> program.</font>
+      </td>
+    </tr>
+  </table>
 
   <hr>
 
@@ -214,223 +228,365 @@
   </ol>
   </p>
 
-  <p>When <i>mmg</i> starts up it shows the first and probably most
-  important tab: the <i>input tab</i>. Here you see four different
-  elements. The topmost input box lists all input <i>files</i>. Directly
-  under this box are options that apply to the currently selected input
-  <i>file</i>.</p>
+  <table width="100%" border="0">
+    <tr>
+      <td valign="top">
 
-  <p>The two buttons to the right of the upper list box can be used to
-  add files to the list box with the <i>+</i> button and to remove the
-  selected entry with the <i>-</i> button.</p>
+        <p>When <i>mmg</i> starts up it shows the first and probably
+        most important tab: the <i>input tab</i>. Here you see four
+        different elements. The topmost input box lists all input
+        <i>files</i>. Directly under this box are options that apply
+        to the currently selected input <i>file</i>.</p>
 
-  <p>Once the user selects an input <i>file</i> in the upper list box
-  the second list box will contains all <i>tracks</i> that can be read
-  from this <i>file</i>. Each track is ENabled by default and will be
-  muxed into the resulting file. However, you can change that by simply
-  clicking on the checkbox right in front of the track's name in the
-  second list box. For each of these tracks the user can select
-  track specific options with the input boxes and check boxes below the
-  track listing. These options will be described in the following
-  sections.</p>
+        <p>The two buttons to the right of the upper list box can be
+        used to add files to the list box with the <i>+</i> button and
+        to remove the selected entry with the <i>-</i> button.</p>
+
+      </td>
+      <td>&nbsp;</td>
+      <td valign="top">
+        <img src="images/addremovefiles.png"
+             alt="adding and removing files">
+        <br>
+        <font size="-1">Use these buttons to add and remove
+        files.</font>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p>Once the user selects an input <i>file</i> in the upper list
+        box the second list box will contains all <i>tracks</i> that can
+        be read from this <i>file</i>. Each track is ENabled by default
+        and will be muxed into the resulting file. However, you can
+        change that by simply clicking on the checkbox right in front of
+        the track's name in the second list box. For each of these
+        tracks the user can select track specific options with the input
+        boxes and check boxes below the track listing. These options
+        will be described in the following sections.</p>
+      </td>
+      <td>&nbsp;</td>
+      <td>
+        <img src="images/trackselection.png"
+             alt="selecting specific tracks">
+        <br>
+        Three enabled tracks and one disabled track. The fourth track will
+        not be copied into the output file.
+      </td>
+
+    </tr>
+  </table>
+
 
   <h3><a name="fileoptions">Options for input file</a></h3>
 
   <p>Once the user has added and selected an input file he can set
-  options that apply to this specific file. At the moment only one such
-  option has been implemented: <code>No chapters</code>. If this option
-  is checked then <i>mkvmerge</i> will not try to copy chapters from
-  this source file. More information about chapters can be found in the
-  section about the <a href="mkvmerge-gui.html#chaptereditor">chapter
-  editor</a> in this document and in <i>mkvmerge</i>'s own
-  documentation.</p>
+  options that apply to this specific file. At the moment only two such
+  options have been implemented: <code>No chapters</code> and <code>No
+  attachments</code>. These options tell <i>mkvmerge</i> not to copy any
+  chapters / attachments from the current source file.</p>
+
+  <p>More information about chapters can be found in the section about
+  the <a href="mkvmerge-gui.html#chaptereditor">chapter editor</a> in
+  this document and in <i>mkvmerge</i>'s own documentation.</p>
 
   <h3><a name="trackoptions">Options for each track</a></h3>
 
   <p>Depending on the type of the currently selected track (audio,
   video, subtitles) and even depending on the contents of the track only
   a subset of all the track specific options are availbale. The options
-  are:
-  <br>
-  <ul>
-    <li><code>Language:</code> The user can select the language for each
-    track regardless of its type. This language is coded in the ISO639-2
-    language code. The drop-down box contains all ISO639-2 codes so the
-    user does not have to worry about selecting the wrong language
-    code.</li>
-    <li><code>Track name:</code> The user can set a name for the current
-    track. This name is a free-form string. Practical examples could be
-    'director's comments' or 'aeriel view of Seattle'. Note that these
-    names are not meant to contain the movie title!</li>
-    <li><code>Cues:</code> The <i>cues</i> are for Matroska what the
-    index is for AVI files. They contain links to the key
-    frames. Usually this option should be left on the value
-    'default'. <i>mkvmerge</i> will automatically chose the best method
-    for any given track type. A full explanantion of tracks can be found
-    in <i>mkvmerge</i>'s documentation.</li>
-    <li><code>Aspect ratio:</code> With this option the user can set the
-    aspect ratio that should be used upon playback. It defaults to the
-    aspect ratio that the movie was encoded with but can be changed,
-    e.g. for anamorphic encodings. The GUI expects the format to be
-    either a floating point number (e.g. '2.33') or a fraction
-    (e.g. '16/9').
-    <br>
-    This option is only available for video tracks.</li>
-    <li><code>FourCC:</code> Matroska does not normally store the FourCC
-    which is used in other containers to identify the codec
-    used. Matroska has its own format, called <i>CodecID</i>, but it
-    also has an AVI compatibility mode. In thise mode the FourCC is also
-    stored. With this option the FourCC can be forced to a different
-    value. However, you cannot change the <i>CodecID</i> used by
-    <i>mkvmerge</i>.
-    <br>
-    This option is only available for video tracks.</li>
-    <li><code>Delay (in ms):</code> In some cases audio and video are
-    not synchronized properly. With this option the user can offset the
-    audio track by a given amount, either positive or
-    negative. <i>mkvmerge</i> will either remove samples at the
-    beginning or insert silence at the beginning to adjust the track.
-    <br>
-    This option is available for audio and text subtitle tracks.</li>
-    <li><code>Stretch by:</code> In some cases audio and video slowly
-    drift apart during playback. This can be fixed by supplying a factor
-    of how much the timecodes should be stretched by <i>mkvmerge</i>. If
-    nothing is given then '1.0' is assumed which does not alter the
-    timecodes. Please note that this option has not been implemented for
-    all audio track types yet.
-    <br>
-    This option is available for audio and text subtitle tracks.</li>
-    <li><code>Subtitle charset:</code> Some text subtitle formats do not
-    store the charset that they were creted with. This is important
-    because text subtitles are auomatically converted to the UTF-8
-    charset during muxing. <i>mkvmerge</i> will normally assume that the
-    system's current charset is the same that the subtitle file was
-    written in. But in case this is not true the user can select the
-    correct charset.
-    <br>
-    This option is only available for text subtitle tracks.</li>
-    <li><code>Make default track:</code> Matroska knows a flag which
-    tells the player that a specific track should be preferred upon
-    playback if the user does not chose another one. Of course each
-    track <i>type</i> has its own default track - e.g. the default audio
-    track is the English one, and the default subtitle track is the
-    French one. If no track is set to be the default track then
-    <i>mkvmerge</i> will promote the first track of each type that it
-    finds to be the default track. This is consistent with the behaviour
-    of various media players.</li>
-    <li><code>AAC is SBR/HE-AAC/AAC+:</code> The new technology called
-    'high efficiency AAC' has some drawbacks when it is being stored in
-    <code>.AAC</code> files: it is not possible to detect the HE-AAC
-    part for these files. Therefore the user has to check this option
-    manually if it applies. Please note that this problem does not exist
-    for HE-AAC stored in <code>.MP4</code> files.</li>
-  </ul>
-  </p>
+  are:</p>
+
+  <table width="100%" border="0">
+    <tr>
+      <td>
+        <ul>
+
+          <li><code>Language:</code> The user can select the language
+            for each track regardless of its type. This language is
+            coded in the ISO639-2 language code. The drop-down box
+            contains all ISO639-2 codes so the user does not have to
+            worry about selecting the wrong language code.</li>
+
+          <li><code>Track name:</code> The user can set a name for the
+            current track. This name is a free-form string. Practical
+            examples could be 'director's comments' or 'aeriel view of
+            Seattle'. Note that these names are not meant to contain the
+            movie title!</li>
+
+          <li><code>Cues:</code> The <i>cues</i> are for Matroska what
+            the index is for AVI files. They contain links to the key
+            frames. Usually this option should be left on the value
+            'default'. <i>mkvmerge</i> will automatically chose the best
+            method for any given track type. A full explanantion of
+            tracks can be found in <i>mkvmerge</i>'s documentation.</li>
+
+          <li><code>Aspect ratio:</code> With this option the user can
+            set the aspect ratio that should be used upon playback. It
+            defaults to the aspect ratio that the movie was encoded with
+            but can be changed, e.g. for anamorphic encodings. The GUI
+            expects the format to be either a floating point number
+            (e.g. '2.33') or a fraction (e.g. '16/9').
+            <br>
+            This option is only available for video tracks.</li>
+
+          <li><code>FourCC:</code> Matroska does not normally store the
+            FourCC which is used in other containers to identify the
+            codec used. Matroska has its own format, called
+            <i>CodecID</i>, but it also has an AVI compatibility
+            mode. In thise mode the FourCC is also stored. With this
+            option the FourCC can be forced to a different
+            value. However, you cannot change the <i>CodecID</i> used by
+            <i>mkvmerge</i>.
+            <br>
+            This option is only available for video tracks.</li>
+
+          <li><code>Delay (in ms):</code> In some cases audio and video
+            are not synchronized properly. With this option the user can
+            offset the audio track by a given amount, either positive or
+            negative. <i>mkvmerge</i> will either remove samples at the
+            beginning or insert silence at the beginning to adjust the
+            track.
+            <br>
+            This option is available for audio and text subtitle tracks.</li>
+
+          <li><code>Stretch by:</code> In some cases audio and video
+            slowly drift apart during playback. This can be fixed by
+            supplying a factor of how much the timecodes should be
+            stretched by <i>mkvmerge</i>. If nothing is given then '1.0'
+            is assumed which does not alter the timecodes. Please note
+            that this option has not been implemented for all audio
+            track types yet.
+            <br>
+            This option is available for audio and text subtitle
+            tracks.</li>
+
+          <li><code>Subtitle charset:</code> Some text subtitle formats
+            do not store the charset that they were creted with. This is
+            important because text subtitles are auomatically converted
+            to the UTF-8 charset during muxing. <i>mkvmerge</i> will
+            normally assume that the system's current charset is the
+            same that the subtitle file was written in. But in case this
+            is not true the user can select the correct charset.
+            <br>
+            This option is only available for text subtitle tracks.</li>
+
+          <li><code>Make default track:</code> Matroska knows a flag
+            which tells the player that a specific track should be
+            preferred upon playback if the user does not chose another
+            one. Of course each track <i>type</i> has its own default
+            track - e.g. the default audio track is the English one, and
+            the default subtitle track is the French one. If no track is
+            set to be the default track then <i>mkvmerge</i> will
+            promote the first track of each type that it finds to be the
+            default track. This is consistent with the behaviour of
+            various media players.</li>
+
+          <li><code>AAC is SBR/HE-AAC/AAC+:</code> The new technology
+            called 'high efficiency AAC' has some drawbacks when it is
+            being stored in <code>.AAC</code> files: it is not possible
+            to detect the HE-AAC part for these files. Therefore the
+            user has to check this option manually if it applies. Please
+            note that this problem does not exist for HE-AAC stored in
+            <code>.MP4</code> files.</li>
+        </ul>
+      </td>
+      <td>&nbsp;</td>
+      <td valign="top">
+        <p>
+          <img src="images/videotrackoptions.png"
+               alt="typical options for a video track">
+          <br>
+          <font size="-1">Typical options for a video track</font>
+        </p>
+        <p>
+          <img src="images/audiotrackoptions.png"
+               alt="typical options for an audio track">
+          <br>
+          <font size="-1">Typical options for an audio track</font>
+        </p>
+        <p>
+          <img src="images/textsubtitlestrackoptions.png"
+               alt="typical options for a text subtitle track">
+          <br>
+          <font size="-1">Typical options for a text subtitle track</font>
+        </p>
+      </td>
+    </tr>
+  </table>
 
   <h3><a name="attachments">Attachments</a></h3>
 
-  <p>Matroska files can also contain other files, called
-  attachments. This works basically just like with your favourite email
-  program. The idea is to provide additional information about the
-  file. Some examples could be cover photos for a CD rip, additional
-  background information in text form about the movie or even some
-  compressed fonts for the subtitles.</p>
+  <table width="100%" border="0">
+    <tr>
+      <td>
 
-  <p>Every attachment needs two things: the file name (obviously) and
-  the MIME type that should be associated with the file. The usage is
-  very easy and similar to adding files on the <i>input</i> tab.</p>
+        <p>Matroska files can also contain other files, called
+          attachments. This works basically just like with your
+          favourite email program. The idea is to provide additional
+          information about the file. Some examples could be cover
+          photos for a CD rip, additional background information in text
+          form about the movie or even some compressed fonts for the
+          subtitles.</p>
 
-  <p>On the second tab of the GUI, the <i>attachment</i> tab, you can
-  add a file with the <i>+</i> button and remove the selected attachment
-  with the <i>-</i> button. Once an attachment has been selected the
-  other controls on this tab will be available. You do have to select a
-  MIME type for each attachment, but the description is optional -
-  although it is a good idea to always provide a description. This makes
-  it easier for others to identify what you've attached to this Matroska
-  file.</p>
+        <p>Every attachment needs two things: the file name (obviously)
+          and the MIME type that should be associated with the file. The
+          usage is very easy and similar to adding files on the
+          <i>input</i> tab.</p>
 
-  <p>The last option, <code>attachment style</code>, is only evaluated
-  when you also split the output into several files. (Splitting in
-  general is explained in the following section.) If the option <code>To
-  all files</code> is selected then the current file will be attached to
-  all output files created. If the option <code>Only to the first</code>
-  is selected then the file is only attached to the very first output
-  file created.</p>
+        <p>On the second tab of the GUI, the <i>attachment</i> tab, you
+          can add a file with the <i>+</i> button and remove the
+          selected attachment with the <i>-</i> button. Once an
+          attachment has been selected the other controls on this tab
+          will be available. You do have to select a MIME type for each
+          attachment, but the description is optional - although it is a
+          good idea to always provide a description. This makes it
+          easier for others to identify what you've attached to this
+          Matroska file.</p>
+
+        <p>The last option, <code>attachment style</code>, is only
+          evaluated when you also split the output into several
+          files. (Splitting in general is explained in the following
+          section.) If the option <code>To all files</code> is selected
+          then the current file will be attached to all output files
+          created. If the option <code>Only to the first</code> is
+          selected then the file is only attached to the very first
+          output file created.</p>
+      </td>
+      <td>&nbsp;</td>
+      <td valign="top">
+        <p>
+          <img src="images/addingremovingattachments.png"
+               alt="adding and removing attachments">
+          <br>
+          <font size="-1">Add and remove attachments with these buttons.</font>
+        </p>
+        <p>
+          <img src="images/attachmentoptions.png"
+               alt="typical options for an attachment">
+          <br>
+          <font size="-1">Typical options for an attachment</font>
+        </p>
+      </td>
+    </tr>
+  </table>
 
   <h3><a name="globaloptions">Global options</a></h3>
 
   <p>The third tab, <i>Global</i>, is packed full of options that apply
-  to the complete file and not just to one or more tracks.</p>
+    to the complete file and not just to one or more tracks.</p>
 
-  <h4><a name="global_title">File/segment title</a></h4>
+  <table width="100%" border="0">
+    <tr>
+      <td>
 
-  <p><code>File/segment title:</code> This title is used for the
-  actual movie title, e.g. 'Vanilla Skies'.</p>
+        <h4><a name="global_title">File/segment title</a></h4>
 
-  <h4><a name="global_split">Automatic splitting and file linking</a></h4>
+        <p><code>File/segment title:</code> This title is used for the
+          actual movie title, e.g. 'Vanilla Skies'.</p>
 
-  <p>The <code>Split</code> section handles how the output file is split
-  into several smaller files. If no splitting is selected then only one
-  big file is generated. If splitting is activated then you can tell
-  <i>mkvmerge</i> to start a new output file after either a specific
-  amount of data has been written to the current file or after a
-  specific amount of time has accumulated. The formats accepted are:
-  <br>
-  <ul>
-    <li>For the size: A number optionally followed by the letter 'K',
-    'M' or 'G' indicating kilobytes (1024 bytes), megabytes (1024 * 1024
-    bytes) or gigabytes (1024 * 1024 * 1024 bytes). Examples: '700M' or
-    '100000K'.</li>
-    <li>For the time: The format is either <code>HH:MM:SS</code> or a
-    number followed by the letter 's' indicating a number of
-    seconds. Examples: '01:20:00' (split after 1 hour, 20 minutes) or
-    '1800s' (split after 1800 seconds = 30 minutes).</li>
-  </ul></p>
+      </td>
+      <td>&nbsp;</td>
+      <td valign="top">
+        <p>
+          <img src="images/movietitle.png"
+               alt="selecting a movie title">
+          <br>
+          <font size="-1">Selecting a title for the movie</font>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h4><a name="global_split">Automatic splitting and file linking
+        </a></h4>
 
-  <p><code>Don't link:</code> This option controls how <i>mkvmerge</i>
-  will handle splitting. A little explanation about this feature:</p>
+        <p>The <code>Split</code> section handles how the output file is
+          split into several smaller files. If no splitting is selected
+          then only one big file is generated. If splitting is activated
+          then you can tell <i>mkvmerge</i> to start a new output file
+          after either a specific amount of data has been written to the
+          current file or after a specific amount of time has
+          accumulated. The formats accepted are:
+          <br>
+          <ul>
 
-  <p>Matroska supports file linking which simply says that a specific
-  file is the predecessor or successor of the current file. To be
-  precise, it's not really the files that are linked but the Matroska
-  segments. As most files will probably only contain one Matroska
-  segment I simply say 'file linking' although 'segment linking' would
-  be more appropriate.</p>
+            <li>For the size: A number optionally followed by the letter
+              'K', 'M' or 'G' indicating kilobytes (1024 bytes),
+              megabytes (1024 * 1024 bytes) or gigabytes (1024 * 1024 *
+              1024 bytes). Examples: '700M' or '100000K'.</li>
 
-  <p>Each segment is identified by a unique 128 bit wide segment
-  UID. This UID is automatically generated by <i>mkvmerge</i>. The
-  linking is done primarily via putting the segment UIDs of the
-  previous/next file into the segment header information. <i>mkvinfo</i>
-  prints these UIDs if it finds them.</p>
+            <li>For the time: The format is either <code>HH:MM:SS</code>
+              or a number followed by the letter 's' indicating a number
+              of seconds. Examples: '01:20:00' (split after 1 hour, 20
+              minutes) or '1800s' (split after 1800 seconds = 30
+              minutes).</li>
+        </ul>
+        </p>
 
-  <p>If a file is split into several smaller ones and linking is used
-  then the timecodes will not start at 0 again but will continue where
-  the last file has left off. This way the absolute time is kept even if
-  the previous files are not available (e.g. when streaming). If no
-  linking is used then the timecodes should start at 0 for each file. By
-  default <i>mkvmerge</i> uses file linking. If you don't want that you
-  can turn it off by enabling this <code>Don't link</code> checkbox.</p>
+        <p><code>Don't link:</code> This option controls how
+          <i>mkvmerge</i> will handle splitting. A little explanation
+          about this feature:</p>
 
-  <h4><a name="global_link">Manual file/segment linking</a></h4>
+        <p>Matroska supports file linking which simply says that a
+          specific file is the predecessor or successor of the current
+          file. To be precise, it's not really the files that are linked
+          but the Matroska segments. As most files will probably only
+          contain one Matroska segment I simply say 'file linking'
+          although 'segment linking' would be more appropriate.</p>
 
-  <p>Regardless of whether splitting is active or not the user can tell
-  <i>mkvmerge</i> to link the produced files to specific UIDs. This is
-  done by entering a valid segment UID into the two input boxes,
-  <code>Previous segment UID</code> and <code>Next segment UID</code>.
-  These options accept a segment UID in the format that <i>mkvinfo</i>
-  outputs: 16 hexadecimal numbers between 0x00 and 0xff prefixed with
-  '0x' each and separated with spaces, e.g. <code>0x41 0xda 0x73 0x66
-  0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3
-  0x93</code>. Alternatively a shorter form can be used: 16 hexadecimal
-  numbers between 0x00 and 0xff without the '0x' prefixes and without
-  the spaces, e.g.  <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
+        <p>Each segment is identified by a unique 128 bit wide segment
+          UID. This UID is automatically generated by
+          <i>mkvmerge</i>. The linking is done primarily via putting the
+          segment UIDs of the previous/next file into the segment header
+          information. <i>mkvinfo</i> prints these UIDs if it finds
+          them.</p>
 
-  <p>If splitting is used then the first file is linked to the UID given
-  in the <code>Previous segment UID</code> input box, and the last file
-  is linked to the UID given in the <code>Next segment UID</code> input
-  box. If splitting is not used then the one output file will be linked
-  to both of the two UIDs.</p>
-   
+        <p>If a file is split into several smaller ones and linking is
+          used then the timecodes will not start at 0 again but will
+          continue where the last file has left off. This way the
+          absolute time is kept even if the previous files are not
+          available (e.g. when streaming). If no linking is used then
+          the timecodes should start at 0 for each file. By default
+          <i>mkvmerge</i> uses file linking. If you don't want that you
+          can turn it off by enabling this <code>Don't link</code>
+          checkbox.</p>
+
+        <h4><a name="global_link">Manual file/segment linking</a></h4>
+
+        <p>Regardless of whether splitting is active or not the user can tell
+          <i>mkvmerge</i> to link the produced files to specific
+          UIDs. This is done by entering a valid segment UID into the
+          two input boxes, <code>Previous segment UID</code> and
+          <code>Next segment UID</code>.  These options accept a segment
+          UID in the format that <i>mkvinfo</i> outputs: 16 hexadecimal
+          numbers between 0x00 and 0xff prefixed with '0x' each and
+          separated with spaces, e.g. <code>0x41 0xda 0x73 0x66 0xd9
+          0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3
+          0x93</code>. Alternatively a shorter form can be used: 16
+          hexadecimal numbers between 0x00 and 0xff without the '0x'
+          prefixes and without the spaces, e.g.
+          <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
+
+        <p>If splitting is used then the first file is linked to the UID
+          given in the <code>Previous segment UID</code> input box, and
+          the last file is linked to the UID given in the <code>Next
+          segment UID</code> input box. If splitting is not used then
+          the one output file will be linked to both of the two
+          UIDs.</p>
+
+      </td>
+      <td>&nbsp;</td>
+      <td valign="top">
+        <p>
+          <img src="images/splitting.png"
+               alt="typical options for splitting">
+          <br>
+          <font size="-1">Typical options for splitting. Create two
+          files which will be approx. 700megs big.</font>
+        </p>
+      </td>
+    </tr>
+  </table>
 
   <h3><a name="doit">Starting the merge process</a></h3>
 
