@@ -279,7 +279,7 @@ mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 
 mkvextract_SOURCES = $(wildcard src/mkvextract*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
-mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEB_RMFF)
+mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS)
 
