@@ -1001,6 +1001,8 @@ void tab_chapters::on_entry_selected(wxTreeEvent &evt) {
     tc_end_time->SetValue(label);
   } else
     tc_end_time->SetValue("");
+
+  tc_chapter_name->SetFocus();
 }
 
 void tab_chapters::on_language_code_selected(wxCommandEvent &evt) {

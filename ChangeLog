@@ -1,5 +1,8 @@
 2003-12-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: The chapter editor automatically focuses the chapter name
+	input box whenever a chapter entry is selected.
+
 	* mmg: bug fix: The chapter editor did not properly escape the
 	chapter names resulting in invalid XML files if the special
 	characters &, < or > were used.
