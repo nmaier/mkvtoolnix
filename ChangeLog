@@ -1,5 +1,9 @@
 2004-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The VobSub handling was broken if the .idx
+	file contains an entry for a track ("id: en") but no "timestamp:"
+	entries for such a track.
+
 	* mkvmerge: bug fix: The segment UID was not generated if
 	splitting was off.
 

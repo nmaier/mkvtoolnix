@@ -231,8 +231,13 @@ vobsub_reader_c::parse_headers() {
         language[2] = 0;
       } else
         language[0] = 0;
+      if (track != NULL) {
+        if (track->timecodes.size() == 0)
+          delete track;
+        else
+          tracks.push_back(track);
+      }
       track = new vobsub_track_c(language);
-      tracks.push_back(track);
       continue;
     }
 
@@ -266,6 +271,12 @@ vobsub_reader_c::parse_headers() {
 
     idx_data += line;
     idx_data += "\n";
+  }
+  if (track != NULL) {
+    if (track->timecodes.size() == 0)
+      delete track;
+    else
+      tracks.push_back(track);
   }
 
   if (!identifying) {
