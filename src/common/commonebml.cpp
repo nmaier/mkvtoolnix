@@ -30,6 +30,9 @@
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlUnicodeString.h>
 
+#include <matroska/KaxTrackAudio.h>
+#include <matroska/KaxTrackVideo.h>
+
 #include "common.h"
 #include "commonebml.h"
 
@@ -511,3 +514,162 @@ sort_ebml_master(EbmlMaster *m) {
 
   return m;
 }
+
+// ------------------------------------------------------------------------
+
+int64_t
+kt_get_default_duration(KaxTrackEntry &track) {
+  KaxTrackDefaultDuration *default_duration;
+
+  default_duration = FINDFIRST(&track, KaxTrackDefaultDuration);
+  if (NULL == default_duration)
+    return 0;
+  return uint64(*default_duration);
+}
+
+int64_t
+kt_get_number(KaxTrackEntry &track) {
+  KaxTrackNumber *number;
+
+  number = FINDFIRST(&track, KaxTrackNumber);
+  if (NULL == number)
+    return 0;
+  return uint64(*number);
+}
+
+int64_t
+kt_get_uid(KaxTrackEntry &track) {
+  KaxTrackUID *uid;
+
+  uid = FINDFIRST(&track, KaxTrackUID);
+  if (NULL == uid)
+    return 0;
+  return uint64(*uid);
+}
+
+string
+kt_get_codec_id(KaxTrackEntry &track) {
+  KaxCodecID *codec_id;
+
+  codec_id = FINDFIRST(&track, KaxCodecID);
+  if (NULL == codec_id)
+    return "";
+  return string(*codec_id);
+}
+
+string
+kt_get_language(KaxTrackEntry &track) {
+  KaxTrackLanguage *language;
+
+  language = FINDFIRST(&track, KaxTrackLanguage);
+  if (NULL == language)
+    return "";
+  return string(*language);
+}
+
+int
+kt_get_max_blockadd_id(KaxTrackEntry &track) {
+  KaxMaxBlockAdditionID *max_blockadd_id;
+
+  max_blockadd_id = FINDFIRST(&track, KaxMaxBlockAdditionID);
+  if (NULL == max_blockadd_id)
+    return 0;
+  return uint32(*max_blockadd_id);
+}
+
+int
+kt_get_a_channels(KaxTrackEntry &track) {
+  KaxTrackAudio *audio;
+  KaxAudioChannels *channels;
+
+  audio = FINDFIRST(&track, KaxTrackAudio);
+  if (NULL == audio)
+    return 1;
+
+  channels = FINDFIRST(audio, KaxAudioChannels);
+  if (NULL == channels)
+    return 1;
+
+  return uint32(*channels);
+}
+
+float
+kt_get_a_sfreq(KaxTrackEntry &track) {
+  KaxTrackAudio *audio;
+  KaxAudioSamplingFreq *sfreq;
+
+  audio = FINDFIRST(&track, KaxTrackAudio);
+  if (NULL == audio)
+    return 8000.0;
+
+  sfreq = FINDFIRST(audio, KaxAudioSamplingFreq);
+  if (NULL == sfreq)
+    return 8000.0;
+
+  return float(*sfreq);
+}
+
+float
+kt_get_a_osfreq(KaxTrackEntry &track) {
+  KaxTrackAudio *audio;
+  KaxAudioOutputSamplingFreq *osfreq;
+
+  audio = FINDFIRST(&track, KaxTrackAudio);
+  if (NULL == audio)
+    return 8000.0;
+
+  osfreq = FINDFIRST(audio, KaxAudioOutputSamplingFreq);
+  if (NULL == osfreq)
+    return 8000.0;
+
+  return float(*osfreq);
+}
+
+int
+kt_get_a_bps(KaxTrackEntry &track) {
+  KaxTrackAudio *audio;
+  KaxAudioBitDepth *bps;
+
+  audio = FINDFIRST(&track, KaxTrackAudio);
+  if (NULL == audio)
+    return -1;
+
+  bps = FINDFIRST(audio, KaxAudioBitDepth);
+  if (NULL == bps)
+    return -1;
+
+  return uint32(*bps);
+}
+
+int
+kt_get_v_pixel_width(KaxTrackEntry &track) {
+  KaxTrackVideo *video;
+  KaxVideoPixelWidth *width;
+
+  video = FINDFIRST(&track, KaxTrackVideo);
+  if (NULL == video)
+    return 0;
+
+  width = FINDFIRST(video, KaxVideoPixelWidth);
+  if (NULL == width)
+    return 0;
+
+  return uint32(*width);
+}
+
+int
+kt_get_v_pixel_height(KaxTrackEntry &track) {
+  KaxTrackVideo *video;
+  KaxVideoPixelHeight *height;
+
+  video = FINDFIRST(&track, KaxTrackVideo);
+  if (NULL == video)
+    return 0;
+
+  height = FINDFIRST(video, KaxVideoPixelHeight);
+  if (NULL == height)
+    return 0;
+
+  return uint32(*height);
+}
+

@@ -46,16 +46,6 @@ typedef struct {
   int64 size, id;
 } kax_attachment_t;
 
-typedef struct {
-  uint32_t order, type, scope;
-  uint32_t comp_algo;
-  unsigned char *comp_settings;
-  uint32_t comp_settings_len;
-  uint32_t enc_algo, sig_algo, sig_hash_algo;
-  unsigned char *enc_keyid, *sig_keyid, *signature;
-  uint32_t enc_keyid_len, sig_keyid_len, signature_len;
-} kax_content_encoding_t;
-
 struct kax_track_t {
   uint32_t tnum, tuid;
 
@@ -97,10 +87,7 @@ struct kax_track_t {
 
   int64_t previous_timecode;
 
-  KaxContentEncodings *kax_c_encodings;
-  vector<kax_content_encoding_t> *c_encodings;
-
-  compression_c *zlib_compressor, *bzlib_compressor, *lzo1x_compressor;
+  content_decoder_c content_decoder;
 
   KaxTags *tags;
 
@@ -126,11 +113,6 @@ struct kax_track_t {
                  units_processed(0),
                  ok(false),
                  previous_timecode(0),
-                 kax_c_encodings(NULL),
-                 c_encodings(NULL),
-                 zlib_compressor(NULL),
-                 bzlib_compressor(NULL),
-                 lzo1x_compressor(NULL),
                  tags(NULL),
                  ptzr(0),
                  headers_set(false),
@@ -140,26 +122,7 @@ struct kax_track_t {
     memset(header_sizes, 0, 3 * sizeof(uint32_t));
   }
   ~kax_track_t() {
-    int k;
-
     safefree(private_data);
-    if (c_encodings != NULL) {
-      for (k = 0; k < c_encodings->size(); k++) {
-        safefree((*c_encodings)[k].comp_settings);
-        safefree((*c_encodings)[k].enc_keyid);
-        safefree((*c_encodings)[k].sig_keyid);
-        safefree((*c_encodings)[k].signature);
-      }
-      delete c_encodings;
-    }
-    if (zlib_compressor != NULL)
-      delete zlib_compressor;
-    if (bzlib_compressor != NULL)
-      delete bzlib_compressor;
-    if (lzo1x_compressor != NULL)
-      delete lzo1x_compressor;
-    if (kax_c_encodings != NULL)
-      delete kax_c_encodings;
     if (tags != NULL)
       delete tags;
   }
@@ -219,8 +182,6 @@ protected:
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
-  virtual bool reverse_encodings(kax_track_t *track, unsigned char *&data,
-                                 uint32_t &size, uint32_t type);
   virtual void flush_packetizers();
 };
 

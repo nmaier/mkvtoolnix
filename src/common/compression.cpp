@@ -13,7 +13,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
+#include <matroska/KaxContentEncoding.h>
+#include <matroska/KaxTracks.h>
+
+#include "commonebml.h"
 #include "compression.h"
+
+using namespace libmatroska;
 
 const char *compression_methods[] = {
   "unspecified", "zlib", "bz2", "lzo", "none"
@@ -274,4 +282,234 @@ compression_c::create(const char *method) {
     return new compression_c(COMPRESSION_NONE);
 
   return NULL;
+}
+
+// ------------------------------------------------------------------------
+
+content_decoder_c::content_decoder_c():
+  ok(true) {
+}
+
+content_decoder_c::content_decoder_c(KaxTrackEntry &ktentry):
+  ok(true) {
+  initialize(ktentry);
+}
+
+content_decoder_c::~content_decoder_c() {
+  int i;
+
+  for (i = 0; i < encodings.size(); i++) {
+    safefree(encodings[i].comp_settings);
+    safefree(encodings[i].enc_keyid);
+    safefree(encodings[i].sig_keyid);
+    safefree(encodings[i].signature);
+  }
+}
+
+bool
+content_decoder_c::initialize(KaxTrackEntry &ktentry) {
+  KaxContentEncodings *kcencodings;
+  int kcenc_idx, tid;
+
+  encodings.clear();
+
+  kcencodings = FINDFIRST(&ktentry, KaxContentEncodings);
+  if (NULL == kcencodings)
+    return true;
+
+  tid = kt_get_number(ktentry);
+
+  for (kcenc_idx = 0; kcenc_idx < kcencodings->ListSize(); kcenc_idx++) {
+    KaxContentEncoding *kcenc;
+    KaxContentEncodingOrder *ce_order;
+    KaxContentEncodingType *ce_type;
+    KaxContentEncodingScope *ce_scope;
+    KaxContentCompression *ce_comp;
+    KaxContentEncryption *ce_enc;
+    kax_content_encoding_t enc;
+    vector<kax_content_encoding_t>::iterator ce_ins_it;
+
+    kcenc = dynamic_cast<KaxContentEncoding *>((*kcencodings)[kcenc_idx]);
+    if (NULL == kcenc)
+      continue;
+
+    memset(&enc, 0, sizeof(kax_content_encoding_t));
+
+    ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
+    if (ce_order != NULL)
+      enc.order = uint32(*ce_order);
+
+    ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
+    if (ce_type != NULL)
+      enc.type = uint32(*ce_type);
+
+    ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
+    if (ce_scope != NULL)
+      enc.scope = uint32(*ce_scope);
+    else
+      enc.scope = 1;
+
+    ce_comp = FINDFIRST(kcenc, KaxContentCompression);
+    if (ce_comp != NULL) {
+      KaxContentCompAlgo *cc_algo;
+      KaxContentCompSettings *cc_settings;
+
+      cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
+      if (cc_algo != NULL)
+        enc.comp_algo = uint32(*cc_algo);
+
+      cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
+      if (cc_settings != NULL) {
+        enc.comp_settings = (unsigned char *)
+          safememdup(&binary(*cc_settings), cc_settings->GetSize());
+        enc.comp_settings_len = cc_settings->GetSize();
+      }
+    }
+
+    ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
+    if (ce_enc != NULL) {
+      KaxContentEncAlgo *ce_ealgo;
+      KaxContentEncKeyID *ce_ekeyid;
+      KaxContentSigAlgo *ce_salgo;
+      KaxContentSigHashAlgo *ce_shalgo;
+      KaxContentSigKeyID *ce_skeyid;
+      KaxContentSignature *ce_signature;
+
+      ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
+      if (ce_ealgo != NULL)
+        enc.enc_algo = uint32(*ce_ealgo);
+
+      ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
+      if (ce_ekeyid != NULL) {
+        enc.enc_keyid = (unsigned char *)
+          safememdup(&binary(*ce_ekeyid), ce_ekeyid->GetSize());
+        enc.enc_keyid_len = ce_ekeyid->GetSize();
+      }
+
+      ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
+      if (ce_salgo != NULL)
+        enc.enc_algo = uint32(*ce_salgo);
+
+      ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
+      if (ce_shalgo != NULL)
+        enc.enc_algo = uint32(*ce_shalgo);
+
+      ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
+      if (ce_skeyid != NULL) {
+        enc.sig_keyid = (unsigned char *)
+          safememdup(&binary(*ce_skeyid), ce_skeyid->GetSize());
+        enc.sig_keyid_len = ce_skeyid->GetSize();
+      }
+
+      ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
+      if (ce_signature != NULL) {
+        enc.signature = (unsigned char *)
+          safememdup(&binary(*ce_signature), ce_signature->GetSize());
+        enc.signature_len = ce_signature->GetSize();
+      }
+
+    }
+
+    if (1 == enc.type) {
+      mxwarn("Track number %d has been encrypted and decryption has "
+             "not yet been implemented.\n", tid);
+      ok = false;
+      break;
+    }
+
+    if (0 != enc.type) {
+      mxerror("Unknown content encoding type %u for track %d.\n", enc.type,
+              tid);
+      ok = false;
+      break;
+    }
+
+    if (0 == enc.comp_algo) {
+#if !defined(HAVE_ZLIB_H)
+      mxwarn(PFX "Track %d was compressed with zlib but mkvmerge has not "
+             "been compiled with support for zlib compression.\n", tid);
+      ok = false;
+      break;
+#else
+      if (NULL == zlib_compressor.get())
+        zlib_compressor = auto_ptr<compression_c>(new zlib_compression_c());
+#endif
+    } else if (1 == enc.comp_algo) {
+#if !defined(HAVE_BZLIB_H)
+      mxwarn(PFX "Track %d was compressed with bzlib but mkvmerge has not "
+             "been compiled with support for bzlib compression.\n", tid);
+      ok = false;
+      break;
+#else
+      if (NULL == bzlib_compressor.get())
+        bzlib_compressor = auto_ptr<compression_c>(new bzlib_compression_c());
+#endif
+    } else if (enc.comp_algo == 2) {
+#if !defined(HAVE_LZO1X_H)
+      mxwarn(PFX "Track %d was compressed with lzo1x but mkvmerge has not "
+             "been compiled with support for lzo1x compression.\n", tid);
+      ok = false;
+      break;
+#else
+      if (NULL == lzo1x_compressor.get())
+        lzo1x_compressor = auto_ptr<compression_c>(new lzo_compression_c());
+#endif
+    } else {
+      mxwarn("Track %d has been compressed with an unknown/unsupported "
+             "compression algorithm (%d).\n", tid,
+             enc.comp_algo);
+      ok = false;
+      break;
+    }
+
+    ce_ins_it = encodings.begin();
+    while ((ce_ins_it != encodings.end()) && (enc.order <= (*ce_ins_it).order))
+      ce_ins_it++;
+    encodings.insert(ce_ins_it, enc);
+  }
+
+  return ok;
+}
+
+bool
+content_decoder_c::reverse(unsigned char *&data,
+                           uint32_t &size,
+                           content_encoding_scope_e scope) {
+  int new_size;
+  unsigned char *new_data, *old_data;
+  bool modified;
+  vector<kax_content_encoding_t>::const_iterator ce;
+  compression_c *compressor;
+
+  if (!ok)
+    return false;
+
+  if (0 == encodings.size())
+    return false;
+
+  new_data = data;
+  new_size = size;
+  modified = false;
+  foreach(ce, encodings) {
+    if (0 == (ce->scope & scope))
+      continue;
+
+    if (ce->comp_algo == 0)
+      compressor = zlib_compressor.get();
+    else if (ce->comp_algo == 1)
+      compressor = bzlib_compressor.get();
+    else
+      compressor = lzo1x_compressor.get();
+
+    old_data = new_data;
+    new_data = compressor->decompress(old_data, new_size);
+    if (modified)
+      safefree(old_data);
+    modified = true;
+  }
+
+  data = new_data;
+  size = new_size;
+
+  return modified;
 }

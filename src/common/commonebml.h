@@ -23,8 +23,11 @@
 #include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUnicodeString.h>
 
+#include <matroska/KaxTracks.h>
+
 using namespace std;
 using namespace libebml;
+using namespace libmatroska;
 
 #if defined(DEBUG)
 void MTX_DLL_API __debug_dump_elements(EbmlElement *e, int level);
@@ -40,6 +43,21 @@ UTFstring MTX_DLL_API cstr_to_UTFstring(const string &c);
 UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const string &c);
 string MTX_DLL_API UTFstring_to_cstr(const UTFstring &u);
 string MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
+
+int64_t MTX_DLL_API kt_get_default_duration(KaxTrackEntry &track);
+int64_t MTX_DLL_API kt_get_number(KaxTrackEntry &track);
+int64_t MTX_DLL_API kt_get_uid(KaxTrackEntry &track);
+string MTX_DLL_API kt_get_codec_id(KaxTrackEntry &track);
+int MTX_DLL_API kt_get_max_blockadd_id(KaxTrackEntry &track);
+string MTX_DLL_API kt_get_language(KaxTrackEntry &track);
+
+int MTX_DLL_API kt_get_a_channels(KaxTrackEntry &track);
+float MTX_DLL_API kt_get_a_sfreq(KaxTrackEntry &track);
+float MTX_DLL_API kt_get_a_osfreq(KaxTrackEntry &track);
+int MTX_DLL_API kt_get_a_bps(KaxTrackEntry &track);
+
+int MTX_DLL_API kt_get_v_pixel_width(KaxTrackEntry &track);
+int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 
 #define is_id(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
 

@@ -83,12 +83,10 @@ protected:
   X *ptr;
 
 public:
-  typedef X element_type;
-
   explicit autofree_ptr(X *p = NULL):
     ptr(p) {}
 
-  explicit autofree_ptr(void *p = NULL):
+  explicit autofree_ptr(void *p):
     ptr((X *)p) {}
 
   ~autofree_ptr() {
@@ -100,6 +98,15 @@ public:
   }
 
   operator const X *() {
+    return ptr;
+  }
+
+  void set(void *p) {
+    safefree(ptr);
+    ptr = (X *)p;
+  }
+
+  X *get() {
     return ptr;
   }
 };

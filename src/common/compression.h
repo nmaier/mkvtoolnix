@@ -16,7 +16,13 @@
 #ifndef __COMPRESSION_H
 #define __COMPRESSION_H
 
+#include "os.h"
+
+#include <matroska/KaxTracks.h>
+
 #include "common.h"
+
+using namespace libmatroska;
 
 /* compression types */
 enum compression_method_e {
@@ -99,5 +105,39 @@ public:
   virtual unsigned char *compress(unsigned char *buffer, int &size);
 };
 #endif // HAVE_BZLIB_H
+
+struct kax_content_encoding_t {
+  uint32_t order, type, scope;
+  uint32_t comp_algo;
+  unsigned char *comp_settings;
+  uint32_t comp_settings_len;
+  uint32_t enc_algo, sig_algo, sig_hash_algo;
+  unsigned char *enc_keyid, *sig_keyid, *signature;
+  uint32_t enc_keyid_len, sig_keyid_len, signature_len;
+};
+
+enum content_encoding_scope_e {
+  CONTENT_ENCODING_SCOPE_BLOCK = 1,
+  CONTENT_ENCODING_SCOPE_CODECPRIVATE = 2
+};
+
+class MTX_DLL_API content_decoder_c {
+protected:
+  vector<kax_content_encoding_t> encodings;
+  auto_ptr<compression_c> zlib_compressor, bzlib_compressor, lzo1x_compressor;
+  bool ok;
+
+public:
+  content_decoder_c();
+  content_decoder_c(KaxTrackEntry &ktentry);
+  ~content_decoder_c();
+
+  bool initialize(KaxTrackEntry &ktentry);
+  bool reverse(unsigned char *&data, uint32_t &size,
+               content_encoding_scope_e scope);
+  bool is_ok() {
+    return ok;
+  }
+};
 
 #endif // __COMPRESSION_H

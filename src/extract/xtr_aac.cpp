@@ -13,6 +13,7 @@
 */
 
 #include "common.h"
+#include "commonebml.h"
 
 #include "xtr_aac.h"
 
