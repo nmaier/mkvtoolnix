@@ -50,6 +50,7 @@ LICENCE:        Copyright (c) 2001 Bob Trower, Trantor Standard Systems Inc.
 #include <exception>
 #include <string>
 
+#include "os.h"
 #include "base64.h"
 
 using namespace std;
