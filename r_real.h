@@ -56,7 +56,6 @@ private:
   vector<real_demuxer_t *> demuxers;
   int act_wchar;
   int64_t file_size, last_timestamp;
-  uint32_t num_packets, packets_read;
 
 public:
   real_reader_c(track_info_t *nti) throw (error_c);

@@ -75,6 +75,7 @@ void die(const char *fmt, ...);
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);
 
+#define get_fourcc(b) get_uint32_be(b)
 uint16_t get_uint16(const void *buf);
 uint32_t get_uint32(const void *buf);
 uint64_t get_uint64(const void *buf);

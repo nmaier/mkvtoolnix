@@ -83,7 +83,6 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("real_reader: Could not read the source file.");
   }
 
-  packets_read = 0;
   last_timestamp = -1;
 
   if (verbose)
@@ -110,11 +109,10 @@ real_reader_c::~real_reader_c() {
 }
 
 void real_reader_c::parse_headers() {
-  uint32_t object_id, num_headers, num_streams, i;
-  uint32_t id, start_time, preroll, size;
-  char *buffer, type;
+  uint32_t object_id, i, id, start_time, preroll, size;
+  char *buffer;
   real_demuxer_t *dmx;
-  real_video_stream_props_t sp, *sp_be;
+  real_video_stream_props_t vsp, *vsp_be;
 
   try {
     io->skip(4);                // object_id = ".RIF"
@@ -122,9 +120,7 @@ void real_reader_c::parse_headers() {
     io->skip(2);                // object_version
 
     io->skip(4);                // file_version
-    num_headers = io->read_uint32_be();
-
-    printf("num headers: %u\n", num_headers);
+    io->skip(4);                // num_headers
 
     while (1) {
       object_id = io->read_uint32_be();
@@ -132,8 +128,6 @@ void real_reader_c::parse_headers() {
       io->skip(2);              // object_version
 
       if (object_id == FOURCC('P', 'R', 'O', 'P')) {
-        printf("PROP header at %lld\n", io->getFilePointer() - 10);
-
         io->skip(4);            // max_bit_rate
         io->skip(4);            // avg_bit_rate
         io->skip(4);            // max_packet_size
@@ -143,20 +137,18 @@ void real_reader_c::parse_headers() {
         io->skip(4);            // preroll
         io->skip(4);            // index_offset
         io->skip(4);            // data_offset
-        num_streams = io->read_uint16_be();
-        printf("num_streams: %u\n", num_streams);
+        io->skip(2);            // num_streams
         io->skip(2);            // flags
 
       } else if (object_id == FOURCC('C', 'O', 'N', 'T')) {
-        printf("CONT header at %lld\n", io->getFilePointer() - 10);
-
         size = io->read_uint16_be(); // title_len
         if (size > 0) {
           buffer = (char *)safemalloc(size + 1);
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("title: '%s'\n", buffer);
+          if (verbose > 1)
+            printf("title: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -166,7 +158,8 @@ void real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("author: '%s'\n", buffer);
+          if (verbose > 1)
+            printf("author: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -176,7 +169,8 @@ void real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("copyright: '%s'\n", buffer);
+          if (verbose > 1)
+            printf("copyright: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -186,13 +180,12 @@ void real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("comment: '%s'\n", buffer);
+          if (verbose > 1)
+            printf("comment: '%s'\n", buffer);
           safefree(buffer);
         }
 
       } else if (object_id == FOURCC('M', 'D', 'P', 'R')) {
-        printf("MDPR header at %lld\n", io->getFilePointer() - 10);
-
         id = io->read_uint16_be();
         io->skip(4);            // max_bit_rate
         io->skip(4);            // avg_bit_rate
@@ -201,7 +194,6 @@ void real_reader_c::parse_headers() {
         start_time = io->read_uint32_be();
         preroll = io->read_uint32_be();
         io->skip(4);            // duration
-        printf("start_time: %u, preroll: %u\n", start_time, preroll);
 
         size = io->read_uint8(); // stream_name_size
         if (size > 0) {
@@ -209,7 +201,8 @@ void real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("stream_name: '%s'\n", buffer);
+          if (verbose > 1)
+            printf("stream_name: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -219,7 +212,8 @@ void real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("mime_type: '%s'\n", buffer);
+          if (verbose > 1)
+            printf("mime_type: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -228,70 +222,49 @@ void real_reader_c::parse_headers() {
           buffer = (char *)safemalloc(size);
           if (io->read(buffer, size) != size)
             throw exception();
-          printf("type_specific: len: %d, data: ", size);
-          for (i = 0; i < size; i++)
-            printf("0x%02x ", (unsigned char)buffer[i]);
-          printf("\n");
-          printf("HONK: %d, pos: %lld\n", sizeof(real_video_stream_props_t),
-                 io->getFilePointer() - size);
-          if (size >= sizeof(real_video_stream_props_t)) {
-            sp_be = (real_video_stream_props_t *)buffer;
-            put_uint32(&sp.size, get_uint32_be(&sp_be->size));
-            sp.fourcc1 = sp_be->fourcc1;
-            sp.fourcc2 = sp_be->fourcc2;
-            put_uint16(&sp.width, get_uint16_be(&sp_be->width));
-            put_uint16(&sp.height, get_uint16_be(&sp_be->height));
-            put_uint16(&sp.bpp, get_uint16_be(&sp_be->bpp));
-            put_uint32(&sp.unknown1, get_uint32_be(&sp_be->unknown1));
-            put_uint32(&sp.fps, get_uint32_be(&sp_be->fps));
-            put_uint32(&sp.type1, get_uint32_be(&sp_be->type1));
-            put_uint32(&sp.type2, get_uint32_be(&sp_be->type2));
 
-            if (sp.size == FOURCC('.', 'r', 'a', 0xfd))
-              type = 'a';
-            else if (sp.fourcc1 == FOURCC('O', 'D', 'I', 'V'))
-              type = 'v';
-            else
-              type = '?';
-            
-            printf("type: %s\n", type == 'a' ? "audio" :
-                   type == 'v' ? "video" : "unknown");
+          vsp_be = (real_video_stream_props_t *)buffer;
 
-            if ((type != '?') && demuxing_requested(type, id) &&
-                (type != 'a')) {
-              dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
-              memset(dmx, 0, sizeof(real_demuxer_t));
-              dmx->id = id;
-              dmx->start_time = start_time;
-              dmx->preroll = preroll;
-              memcpy(dmx->fourcc, &sp.fourcc2, 4);
-              dmx->fourcc[4] = 0;
-              dmx->width = get_uint16(&sp.width);
-              dmx->height = get_uint16(&sp.height);
-              dmx->type = type;
-              i = get_uint32(&sp.fps);
-              dmx->fps = (float)((i & 0xffff0000) >> 16) +
-                ((float)(i & 0x0000ffff)) / 65536.0;
-              dmx->private_data = (unsigned char *)safememdup(&sp, sizeof(sp));
-              dmx->private_size = sizeof(sp);
+          if ((size >= sizeof(real_video_stream_props_t)) &&
+              (get_fourcc(&vsp_be->fourcc1) == FOURCC('V', 'I', 'D', 'O')) &&
+              demuxing_requested('v', id)) {
 
-              printf("id: %u, fourcc: %s, width: %d, height: %d, fps: %.3f "
-                     "type 1: 0x%08x, type2: 0x%08x\n",
-                     dmx->id, dmx->fourcc, dmx->width, dmx->height,
-                     dmx->fps, sp.type1, sp.type2);
+            put_uint32(&vsp.size, get_uint32_be(&vsp_be->size));
+            vsp.fourcc1 = vsp_be->fourcc1;
+            vsp.fourcc2 = vsp_be->fourcc2;
+            put_uint16(&vsp.width, get_uint16_be(&vsp_be->width));
+            put_uint16(&vsp.height, get_uint16_be(&vsp_be->height));
+            put_uint16(&vsp.bpp, get_uint16_be(&vsp_be->bpp));
+            put_uint32(&vsp.unknown1, get_uint32_be(&vsp_be->unknown1));
+            put_uint32(&vsp.fps, get_uint32_be(&vsp_be->fps));
+            put_uint32(&vsp.type1, get_uint32_be(&vsp_be->type1));
+            put_uint32(&vsp.type2, get_uint32_be(&vsp_be->type2));
 
-              demuxers.push_back(dmx);
-            }
+            dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
+            memset(dmx, 0, sizeof(real_demuxer_t));
+            dmx->id = id;
+            dmx->start_time = start_time;
+            dmx->preroll = preroll;
+            memcpy(dmx->fourcc, &vsp.fourcc2, 4);
+            dmx->fourcc[4] = 0;
+            dmx->width = get_uint16(&vsp.width);
+            dmx->height = get_uint16(&vsp.height);
+            dmx->type = 'v';
+            i = get_uint32(&vsp.fps);
+            dmx->fps = (float)((i & 0xffff0000) >> 16) +
+              ((float)(i & 0x0000ffff)) / 65536.0;
+            dmx->private_data = (unsigned char *)safememdup(buffer, size);
+            memcpy(dmx->private_data, &vsp, sizeof(vsp));
+            dmx->private_size = size;
+
+            demuxers.push_back(dmx);
           }
 
           safefree(buffer);
         }
 
       } else if (object_id == FOURCC('D', 'A', 'T', 'A')) {
-        printf("DATA header at %lld\n", io->getFilePointer() - 10);
-
-        num_packets = io->read_uint32_be();
-        printf("num_packets: %u\n", num_packets);
+        io->skip(4);            // num_packets
         io->skip(4);            // next_data_header
 
         break;                  // We're finished!
@@ -317,7 +290,6 @@ void real_reader_c::create_packetizers() {
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
-    printf("dmx type %c\n", dmx->type);
     ti->private_data = dmx->private_data;
     ti->private_size = dmx->private_size;
     if (dmx->type == 'v') {
@@ -330,7 +302,7 @@ void real_reader_c::create_packetizers() {
 
       if (verbose)
         fprintf(stdout, "+-> Using video output module for stream %u (FourCC: "
-                "%s).", dmx->id, dmx->fourcc);
+                "%s).\n", dmx->id, dmx->fourcc);
     }
     dmx->packetizer->duplicate_data_on_add(false);
   }
@@ -354,63 +326,55 @@ int real_reader_c::read() {
   real_demuxer_t *dmx;
   int64_t bref;
 
-  if (packets_read == num_packets)
-    return 0;
+  try {
+    object_version = io->read_uint16_be();
+    length = io->read_uint16_be();
 
-  object_version = io->read_uint16_be();
-  length = io->read_uint16_be();
+    object_id = object_version << 16 + length;
 
-  object_id = object_version << 16 + length;
+    if (object_id == FOURCC('I', 'N', 'D', 'X'))
+      return 0;
+    if (object_id == FOURCC('D', 'A', 'T', 'A')) {
+      io->skip(2);              // object_version
+      io->skip(4);              // num_packets
+      io->skip(4);              // next_data_header
 
-  if (object_id == FOURCC('I', 'N', 'D', 'X'))
-    return 0;
-  if (object_id == FOURCC('D', 'A', 'T', 'A')) {
-    io->skip(2);                // object_version
-    num_packets += io->read_uint32_be();
-    io->skip(4);                // next_data_header
+      return EMOREDATA;
+    }
 
-    return EMOREDATA;
-  }
+    id = io->read_uint16_be();
+    timestamp = io->read_uint32_be();
+    io->skip(1);                // reserved
+    flags = io->read_uint8();
 
-  id = io->read_uint16_be();
-  timestamp = io->read_uint32_be();
-  io->skip(1);                  // reserved
-  flags = io->read_uint8();
+    dmx = find_demuxer(id);
 
-//   printf("len: %u, id: %u, timestamp: %u, flags: 0x%02x\n", length, id,
-//          timestamp, flags);
-
-  packets_read++;
-
-  dmx = find_demuxer(id);
-  if (dmx == NULL) {
-    try {
+    if (dmx == NULL) {
       io->skip(length - 12);
-    } catch (exception &ex) {
+      return EMOREDATA;
+    }
+
+    length -= 12;
+
+    chunk = (unsigned char *)safemalloc(length);
+    if (io->read(chunk, length) != length) {
+      safefree(chunk);
       return 0;
     }
 
-    return EMOREDATA;
-  }
+    if (((flags & 2) == 2) && (last_timestamp != timestamp))
+      bref = VFT_IFRAME;
+    else if (last_timestamp == timestamp)
+      bref = timestamp;
+    else
+      bref = VFT_PFRAMEAUTOMATIC;
 
-  length -= 12;
+    dmx->packetizer->process(chunk, length, timestamp, -1, bref);
+    last_timestamp = timestamp;
 
-  chunk = (unsigned char *)safemalloc(length);
-  if (io->read(chunk, length) != length) {
-    safefree(chunk);
+  } catch (exception &ex) {
     return 0;
   }
-
-  if (((flags & 2) == 2) && (last_timestamp != timestamp))
-    bref = VFT_IFRAME;
-  else if (last_timestamp == timestamp)
-    bref = timestamp;
-  else
-    bref = VFT_PFRAMEAUTOMATIC;
-
-  dmx->packetizer->process(chunk, length, timestamp, -1, bref);
-  last_timestamp = timestamp;
-  
 
   return EMOREDATA;
 }
