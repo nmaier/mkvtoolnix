@@ -1,3 +1,10 @@
+2003-07-08  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Fixed a bug which would mostly appear with subtitles
+        that have very long ( > 60s) gaps between entries. Here the
+        cluster would not been rendered properly leaving mkvmerge either
+        comatose ( = endless loop) or just plain dead ( = crashing).
+
 2003-07-07  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvinfo: Added support for the rest of the tags:
