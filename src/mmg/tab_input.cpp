@@ -467,16 +467,16 @@ tab_input::on_add_file(wxCommandEvent &evt) {
 
   media_files = wxS("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;");
   if (capabilities[wxS("FLAC")] == wxS("true"))
-    media_files += wxS("*.flac;*.idx;");
-  media_files += wxS("*.m4a;*.mp2;*.mp3;*.mka;"
+    media_files += wxS("*.flac;");
+  media_files += wxS("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
                      "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
-                     "*.srt;*.ssa;"
-                     "*.wav)|"
-                     "*.aac;*.ac3;*.ass;*.avi;*.dts;*.flac;"
-                     "*.idx;*.mp2;*.mp3;*.mka;"
-                     "*.mkv;*.mov;"
-                     "*.mp4;*.ogm;*.ogg;"
+                     "*.srt;*.ssa;*.wav)|"
+                     "*.aac;*.ac3;*.ass;*.avi;*.dts;");
+  if (capabilities[wxS("FLAC")] == wxS("true"))
+    media_files += wxS("*.flac;");
+  media_files += wxS("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
+                     "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
                      "*.srt;*.ssa;*.wav|"
                      "AAC (Advanced Audio Coding) (*.aac;*.m4a;*.mp4)|"
