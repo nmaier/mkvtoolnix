@@ -81,9 +81,6 @@ public:
 #include <zlib.h>
 
 class zlib_compression_c: public compression_c {
-protected:
-  z_stream c_stream, d_stream;
-
 public:
   zlib_compression_c();
   virtual ~zlib_compression_c();
@@ -97,9 +94,6 @@ public:
 #include <bzlib.h>
 
 class bzlib_compression_c: public compression_c {
-protected:
-  bz_stream c_stream, d_stream;
-
 public:
   bzlib_compression_c();
   virtual ~bzlib_compression_c();

@@ -88,6 +88,7 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
                                              int &size) {
   unsigned char *dst;
   int result, dstsize;
+  z_stream d_stream;
 
   dst = (unsigned char *)safemalloc(size * 20);
 
@@ -122,10 +123,13 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
 unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
   unsigned char *dst;
   int result, dstsize;
+  z_stream c_stream;
 
   dst = (unsigned char *)safemalloc(size * 2);
 
-  memset(&c_stream, 0, sizeof(c_stream));
+  c_stream.zalloc = (alloc_func)0;
+  c_stream.zfree = (free_func)0;
+  c_stream.opaque = (voidpf)0;
   result = deflateInit(&c_stream, 9);
   if (result != Z_OK)
     mxerror("deflateInit() failed. Result: %d\n", result);
@@ -168,6 +172,7 @@ bzlib_compression_c::~bzlib_compression_c() {
 unsigned char *bzlib_compression_c::decompress(unsigned char *buffer,
                                              int &size) {
   int result;
+  bz_stream d_stream;
 
   die("bzlib_compression_c::decompress() not implemented\n");
 
@@ -187,6 +192,7 @@ unsigned char *bzlib_compression_c::compress(unsigned char *buffer,
                                              int &size) {
   unsigned char *dst;
   int result, dstsize;
+  bz_stream c_stream;
 
   dst = (unsigned char *)safemalloc(size * 2);
 
