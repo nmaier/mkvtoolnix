@@ -231,7 +231,7 @@ static void usage(void) {
     "                           Works only for video tracks.\n"
     "  --aspect-ratio <f|a/b>   Sets the aspect ratio.\n"
     "\n Options that only apply to text subtitle tracks:\n"
-    "  --sub-charset            Sets the charset the text subtitles are\n"
+    "  --sub-charset <charset>  Sets the charset the text subtitles are\n"
     "                           written in for the conversion to UTF-8.\n"
     "\n\n Other options:\n"
     "  -i, --identify <file>    Print information about the source file.\n"
