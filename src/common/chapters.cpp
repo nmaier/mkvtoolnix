@@ -356,7 +356,6 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     KaxEditionEntry &ee = *static_cast<KaxEditionEntry *>(e);
     GetChild<KaxEditionFlagDefault>(ee);
     GetChild<KaxEditionFlagHidden>(ee);
-    GetChild<KaxEditionProcessed>(ee);
     if (FINDFIRST(&ee, KaxEditionUID) == NULL)
       *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(ee)) =
         create_unique_uint32(UNIQUE_EDITION_IDS);
@@ -385,6 +384,17 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
       *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(d)) = L"";
     if (FINDFIRST(&d, KaxChapterLanguage) == NULL)
       *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(d)) = "und";
+
+  } else if (dynamic_cast<KaxChapterProcess *>(e) != NULL) {
+    KaxChapterProcess &p = *static_cast<KaxChapterProcess *>(e);
+
+    GetChild<KaxChapterProcessCodecID>(p);
+
+  } else if (dynamic_cast<KaxChapterProcessCommand *>(e) != NULL) {
+    KaxChapterProcessCommand &c = *static_cast<KaxChapterProcessCommand *>(e);
+
+    GetChild<KaxChapterProcessTime>(c);
+    GetChild<KaxChapterProcessData>(c);
 
   }
 

@@ -509,7 +509,7 @@ create_output_files() {
           ogg_stream_packetin(&tracks[i].osstate, &op);
           flush_ogg_pages(tracks[i]);
           tracks[i].packetno = 3;
-
+          mxinfo("\nHEAD: %d %d %d\n", tracks[i].header_sizes[0], tracks[i].header_sizes[1], tracks[i].header_sizes[2]);
         } else if (tracks[i].type == TYPEWAV) {
           wave_header *wh = &tracks[i].wh;
 
@@ -895,6 +895,8 @@ handle_data(KaxBlock *block,
             op.packet = track->buffered_data;
             op.bytes = track->buffered_size;
             op.granulepos = start * (int64_t)track->a_sfreq / 1000;
+            mxinfo("\ngranny: %lld for %lld\n", op.granulepos,
+                   (int64_t)op.bytes);
             ogg_stream_packetin(&track->osstate, &op);
             safefree(track->buffered_data);
 
@@ -991,6 +993,8 @@ close_files() {
             op.bytes = tracks[i].buffered_size;
             op.granulepos = tracks[i].last_end * (int64_t)tracks[i].a_sfreq /
               1000;
+            mxinfo("\nlast granny: %lld for %lld\n", op.granulepos,
+                   (int64_t)op.bytes);
             ogg_stream_packetin(&tracks[i].osstate, &op);
             safefree(tracks[i].buffered_data);
 
