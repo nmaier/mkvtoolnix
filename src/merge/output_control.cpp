@@ -285,8 +285,6 @@ get_file_type(const string &filename) {
     type = TYPEQTMP4;
   else if (tta_reader_c::probe_file(mm_io, size))
     type = TYPETTA;
-  else if (mpeg_es_reader_c::probe_file(mm_io, size))
-    type = TYPEMPEG;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == TYPEUNKNOWN); i++)
       if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
@@ -300,8 +298,10 @@ get_file_type(const string &filename) {
     type = TYPEMP3;
   else if (dts_reader_c::probe_file(mm_io, size))
     type = TYPEDTS;
-  else if (aac_reader_c::probe_file(mm_io, size))
+  else if (aac_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
     type = TYPEAAC;
+  else if (mpeg_es_reader_c::probe_file(mm_io, size))
+    type = TYPEMPEG;
   else {
     delete mm_io;
 
