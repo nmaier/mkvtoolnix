@@ -43,6 +43,7 @@ private:
   int width, height, bpp, frames_output;
   int64_t ref_timecode, duration_shift;
   bool avi_compat_mode, bframes, pass_through, is_mpeg4;
+  bool aspect_ratio_extracted;
   char *codec_id;
   vector<video_frame_t> queued_frames;
   video_frame_t bref_frame, fref_frame;
@@ -66,6 +67,7 @@ protected:
   virtual void find_mpeg4_frame_types(unsigned char *buf, int size,
                                       vector<video_frame_t> &frames);
   virtual void flush_frames(char next_frame = '?', bool flush_all = false);
+  virtual void extract_mpeg4_aspect_ratio(memory_c &mem);
 };
 
 #endif // __P_VIDEO_H

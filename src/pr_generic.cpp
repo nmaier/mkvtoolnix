@@ -586,11 +586,13 @@ void generic_packetizer_c::set_headers() {
         GetChild<KaxVideoDisplayWidth>(video);
       *(static_cast<EbmlUInteger *>(&dwidth)) = disp_width;
       dwidth.SetDefaultSize(4);
+      ti->display_width = disp_width;
 
       KaxVideoDisplayHeight &dheight =
         GetChild<KaxVideoDisplayHeight>(video);
       *(static_cast<EbmlUInteger *>(&dheight)) = disp_height;
       dheight.SetDefaultSize(4);
+      ti->display_height = disp_height;
     }
 
   } else if (htrack_type == track_audio) {

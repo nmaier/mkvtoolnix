@@ -60,6 +60,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   duration_shift = 0;
   bref_frame.type = '?';
   fref_frame.type = '?';
+  aspect_ratio_extracted = false;
 
   set_track_type(track_video);
 }
@@ -198,6 +199,9 @@ video_packetizer_c::process(memory_c &mem,
     return EMOREDATA;
   }
 
+  if (is_mpeg4 && !aspect_ratio_extracted)
+    extract_mpeg4_aspect_ratio(mem);
+
   if (old_timecode == -1)
     timecode = (int64_t)(1000000000.0 * frames_output / fps) + duration_shift;
   else
@@ -241,6 +245,76 @@ video_packetizer_c::dump_debug_info() {
 void
 video_packetizer_c::flush() {
   flush_frames(true);
+}
+
+void
+video_packetizer_c::extract_mpeg4_aspect_ratio(memory_c &mem) {
+  const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
+                                0, 0,  0,  0,  0,  0, 0, 0};
+  const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1,
+                                1, 1,  1,  1,  1,  1, 1, 1};
+  uint32_t marker, aspect_ratio_info, num, den;
+  bool b;
+  bit_cursor_c bits(mem.data, mem.size);
+
+  aspect_ratio_extracted = true;
+  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+    return;
+
+  while (!bits.eof()) {
+    if (!bits.peek_bits(32, marker))
+      break;
+
+    if ((marker & 0xffffff00) != 0x00000100) {
+      bits.skip_bits(8);
+      continue;
+    }
+
+    marker &= 0xff;
+    if ((marker < 0x20) || (marker > 0x2f)) {
+      bits.skip_bits(8);
+      continue;
+    }
+
+    mxverb(2, "mpeg4 AR: found VOL header at %u\n",
+           bits.get_bit_position() / 8);
+    bits.skip_bits(32);
+
+    // VOL header
+    bits.skip_bits(1);          // random access
+    bits.skip_bits(8);          // vo_type
+    bits.get_bit(b);
+    if (b != 0) {               // is_old_id
+      bits.skip_bits(4);        // vo_ver_id
+      bits.skip_bits(3);        // vo_priority
+    }
+
+    if (bits.get_bits(4, aspect_ratio_info)) {
+      mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
+      if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
+        bits.get_bits(8, num);
+        bits.get_bits(8, den);
+      } else {
+        num = ar_nums[aspect_ratio_info];
+        den = ar_dens[aspect_ratio_info];
+      }
+      mxverb(2, "mpeg4 AR: %u den: %u\n", num, den);
+
+      if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
+          (((float)num / (float)den) != 1.0)) {
+        ti->aspect_ratio_given = true;
+        ti->aspect_ratio = (float)hvideo_pixel_width /
+          (float)hvideo_pixel_height * (float)num / (float)den;
+        generic_packetizer_c::set_headers();
+        rerender_track_headers();
+        mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
+               "from the MPEG4 data and set the display dimensions to "
+               "%u/%u.\n", ti->id, ti->fname, ti->display_width,
+               ti->display_height);
+      }
+    }
+    return;
+  }
 }
 
 void

@@ -1,3 +1,10 @@
+2004-03-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: If using MPEG4 video and no aspect
+	ratio or display dimensions are given mkvmerge will extract the
+	aspect ratio information from the stream and automatically set the
+	display dimensions accordingly.
+
 2004-03-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Using audio sync on AC3 tracks read from
