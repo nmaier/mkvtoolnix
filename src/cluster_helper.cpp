@@ -159,14 +159,10 @@ bool cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
 
   for (i = 0; i < cluster->num_packets; i++) {
     pack = cluster->packets[i];
-    if ((pack->bref != -1) && (find_packet(pack->bref) == NULL)) {
-//       mxprint(stdout, "pack: %lld bref: %lld\n", pack->timecode, pack->bref);
+    if ((pack->bref != -1) && (find_packet(pack->bref, pack->source) == NULL))
       return false;
-    }
-    if ((pack->fref != -1) && (find_packet(pack->fref) == NULL)) {
-//       mxprint(stdout, "pack: %lld fref: %lld\n", pack->timecode, pack->fref);
+    if ((pack->fref != -1) && (find_packet(pack->fref, pack->source) == NULL))
       return false;
-    }
   }
 
   return true;
@@ -329,7 +325,7 @@ int cluster_helper_c::render() {
 
     // Now put the packet into the cluster.
     if (pack->bref != -1) { // P and B frames: add backward reference.
-      bref_packet = find_packet(pack->bref);
+      bref_packet = find_packet(pack->bref, pack->source);
       if (bref_packet == NULL) {
         string err = "bref_packet == NULL. Wanted bref: " +
           to_string(pack->bref) + ". Contents of the queue:\n";
@@ -343,7 +339,7 @@ int cluster_helper_c::render() {
       }
       assert(bref_packet->group != NULL);
       if (pack->fref != -1) { // It's even a B frame: add forward ref
-        fref_packet = find_packet(pack->fref);
+        fref_packet = find_packet(pack->fref, pack->source);
         if (fref_packet == NULL) {
           string err = "fref_packet == NULL. Wanted fref: " +
             to_string(pack->fref) + ". Contents of the queue:\n";
@@ -510,30 +506,57 @@ int cluster_helper_c::render() {
   return 1;
 }
 
-ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode) {
+#define iabs(a) ((a) < 0 ? (-1 * (a)) : (a))
+
+ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
+                                                     void *source) {
   int i, k;
+  packet_t *pack;
 
   if (clusters == NULL)
     return NULL;
 
   for (i = 0; i < num_clusters; i++)
-    for (k = 0; k < clusters[i]->num_packets; k++)
-      if (clusters[i]->packets[k]->timecode == ref_timecode)
+    for (k = 0; k < clusters[i]->num_packets; k++) {
+      pack = clusters[i]->packets[k];
+      if ((pack->source == source) && (pack->timecode == ref_timecode))
         return clusters[i];
+    }
+
+  // Be a bit fuzzy and allow timecodes that are 1ms off.
+  for (i = 0; i < num_clusters; i++)
+    for (k = 0; k < clusters[i]->num_packets; k++) {
+      pack = clusters[i]->packets[k];
+      if ((pack->source == source) &&
+          (iabs(pack->timecode - ref_timecode) <= 1))
+        return clusters[i];
+    }
 
   return NULL;
 }
 
-packet_t *cluster_helper_c::find_packet(int64_t ref_timecode) {
+packet_t *cluster_helper_c::find_packet(int64_t ref_timecode, void *source) {
   int i, k;
+  packet_t *pack;
 
   if (clusters == NULL)
     return NULL;
 
   for (i = 0; i < num_clusters; i++)
-    for (k = 0; k < clusters[i]->num_packets; k++)
-      if (clusters[i]->packets[k]->timecode == ref_timecode)
-        return clusters[i]->packets[k];
+    for (k = 0; k < clusters[i]->num_packets; k++) {
+      pack = clusters[i]->packets[k];
+      if ((pack->source == source) && (pack->timecode == ref_timecode))
+        return pack;
+    }
+
+  // Be a bit fuzzy and allow timecodes that are 1ms off.
+  for (i = 0; i < num_clusters; i++)
+    for (k = 0; k < clusters[i]->num_packets; k++) {
+      pack = clusters[i]->packets[k];
+      if ((pack->source == source) &&
+          (iabs(pack->timecode - ref_timecode) <= 1))
+        return pack;
+    }
 
   return NULL;
 }
@@ -550,7 +573,7 @@ void cluster_helper_c::check_clusters(int num) {
         continue;
       if (p->bref == -1)
         continue;
-      clstr = find_packet_cluster(p->bref);
+      clstr = find_packet_cluster(p->bref, p->source);
       if (clstr == NULL)
         die("cluster_helper.cpp/cluster_helper_c::check_clusters(): Error: "
             "backward refenrece could not be resolved (%lld -> %lld). Called "
@@ -593,7 +616,7 @@ int cluster_helper_c::free_clusters() {
         clusters[i]->is_referenced = 1;
         if (p->bref == -1)
           continue;
-        clstr = find_packet_cluster(p->bref);
+        clstr = find_packet_cluster(p->bref, p->source);
         if (clstr == NULL)
           die("cluster_helper.cpp/cluster_helper_c::free_clusters(): Error: "
               "backward refenrece could not be resolved (%lld).\n", p->bref);

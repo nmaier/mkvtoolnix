@@ -1,3 +1,8 @@
+2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Allow some slightly broken Matroska files to be
+        processed correctly if the reference blocks are off by at most 1ms.
+
 2003-08-09  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: MP3: Better support for other MPEG versions and layers

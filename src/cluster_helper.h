@@ -78,8 +78,8 @@ public:
 
 private:
   int find_cluster(KaxCluster *cluster);
-  ch_contents_t *find_packet_cluster(int64_t ref_timecode);
-  packet_t *find_packet(int64_t ref_timecode);
+  ch_contents_t *find_packet_cluster(int64_t ref_timecode, void *source);
+  packet_t *find_packet(int64_t ref_timecode, void *source);
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);
