@@ -1150,7 +1150,8 @@ avi_t *AVI_open_fd(int fd, int getIndex)
 
 int avi_parse_input_file(avi_t *AVI, int getIndex)
 {
-  long i, n, rate, scale, idx_type;
+  long i, rate, scale, idx_type;
+  off_t n;
   unsigned char *hdrl_data;
   long header_offset=0, hdrl_len=0;
   long nvi, nai[AVI_MAX_TRACKS], ioff;
@@ -1391,7 +1392,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
    if(AVI->idx)
    {
-      long pos, len;
+      off_t pos, len;
 
       /* Search the first videoframe in the idx1 and look where
          it is in the file */
@@ -1802,7 +1803,7 @@ int AVI_read_data(avi_t *AVI, char *vidbuf, long max_vidbuf,
  *   -2 = audio buffer too small
  */
 
-   int n;
+   off_t n;
    char data[8];
  
    if(AVI->mode==AVI_MODE_WRITE) return 0;

@@ -53,16 +53,16 @@
 
 typedef struct
 {
-  unsigned long key;
-  unsigned long pos;
-  unsigned long len;
+  off_t key;
+  off_t pos;
+  off_t len;
 } video_index_entry;
 
 typedef struct
 {
-   unsigned long pos;
-   unsigned long len;
-   unsigned long tot;
+   off_t pos;
+   off_t len;
+   off_t tot;
 } audio_index_entry;
 
 typedef struct track_s
@@ -75,15 +75,15 @@ typedef struct track_s
     long   mp3rate;           /* mp3 bitrate kbs*/
 
     long   audio_strn;        /* Audio stream number */
-    long   audio_bytes;       /* Total number of bytes of audio data */
+    off_t  audio_bytes;       /* Total number of bytes of audio data */
     long   audio_chunks;      /* Chunks of audio data in the file */
 
     char   audio_tag[4];      /* Tag of audio data */
     long   audio_posc;        /* Audio position: chunk */
     long   audio_posb;        /* Audio position: byte within chunk */
  
-    long  a_codech_off;       /* absolut offset of audio codec information */ 
-    long  a_codecf_off;       /* absolut offset of audio codec information */ 
+    off_t a_codech_off;       /* absolut offset of audio codec information */ 
+    off_t a_codecf_off;       /* absolut offset of audio codec information */ 
 
     audio_index_entry *audio_index;
 
@@ -161,20 +161,20 @@ typedef struct
   
   track_t track[AVI_MAX_TRACKS];  // up to AVI_MAX_TRACKS audio tracks supported
   
-  unsigned long pos;        /* position in file */
+  off_t pos;        /* position in file */
   long   n_idx;             /* number of index entries actually filled */
   long   max_idx;           /* number of index entries actually allocated */
   
-  long  v_codech_off;       /* absolut offset of video codec (strh) info */ 
-  long  v_codecf_off;       /* absolut offset of video codec (strf) info */ 
+  off_t v_codech_off;       /* absolut offset of video codec (strh) info */ 
+  off_t v_codecf_off;       /* absolut offset of video codec (strf) info */ 
   
   unsigned char (*idx)[16]; /* index entries (AVI idx1 tag) */
   video_index_entry *video_index;
   
-  unsigned long last_pos;          /* Position of last frame written */
+  off_t last_pos;          /* Position of last frame written */
   unsigned long last_len;          /* Length of last frame written */
   int must_use_index;              /* Flag if frames are duplicated */
-  unsigned long   movi_start;
+  off_t movi_start;
   
   int anum;            // total number of audio tracks 
   int aptr;            // current audio working track 
@@ -324,7 +324,7 @@ int AVI_audio_tracks(avi_t *AVI);
 struct riff_struct 
 {
   unsigned char id[4];   /* RIFF */
-  unsigned long len;
+  uint32_t len;
   unsigned char wave_id[4]; /* WAVE */
 };
 
@@ -332,17 +332,17 @@ struct riff_struct
 struct chunk_struct 
 {
 	unsigned char id[4];
-	unsigned long len;
+	uint32_t len;
 };
 
 struct common_struct 
 {
-	unsigned short wFormatTag;
-	unsigned short wChannels;
-	unsigned long dwSamplesPerSec;
-	unsigned long dwAvgBytesPerSec;
-	unsigned short wBlockAlign;
-	unsigned short wBitsPerSample;  /* Only for PCM */
+	uint16_t wFormatTag;
+	uint16_t wChannels;
+	uint32_t dwSamplesPerSec;
+	uint32_t dwAvgBytesPerSec;
+	uint16_t wBlockAlign;
+	uint16_t wBitsPerSample;  /* Only for PCM */
 };
 
 struct wave_header 
