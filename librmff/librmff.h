@@ -184,6 +184,25 @@ extern "C" {
     \link ::rmff_prop_t PROP header\endlink. */
 #define RMFF_FILE_FLAG_DOWNLOAD_ENABLED 0x0008
 
+/** \brief The common object handler. It precedes all the other headers.
+ */
+typedef struct rmff_object_t {
+  /** \brief The object's id, e.g. \c 'PROP'. */
+  uint32_t  id;
+  /** \brief The size of this header including this object header. */
+  uint32_t size;
+  /** \brief The version, usually 0. */
+  uint16_t version;
+} rmff_object_t;
+
+/** \brief The main file header. It is located at the very beginning of
+    the file. */
+typedef struct rmff_rmf_t {
+  rmff_object_t obj;
+  uint32_t format_version;
+  uint32_t num_headers;
+} rmff_rmf_t;
+
 /** \brief The global PROP file header.
 
   This header is mandatory for a RealMedia file. It contains statistical
@@ -193,6 +212,7 @@ extern "C" {
   ::rmff_put_uint32_be for accessing the members.
 */
 typedef struct rmff_prop_t {
+  rmff_object_t obj;
   uint32_t max_bit_rate;
   uint32_t avg_bit_rate;
   uint32_t max_packet_size;
@@ -213,6 +233,7 @@ typedef struct rmff_prop_t {
   ::rmff_set_cont_header must be used instead.
 */
 typedef struct rmff_cont_t {
+  rmff_object_t obj;
   char *title;
   char *author;
   char *copyright;
@@ -228,6 +249,7 @@ typedef struct rmff_cont_t {
   ::rmff_put_uint32_be for accessing the members.
 */
 typedef struct rmff_mdpr_t {
+  rmff_object_t obj;
   /** \brief The track number. It is unique regarding the file. */
   uint16_t id;
   /** \brief The maximum bitrate in bits/second.
@@ -406,6 +428,7 @@ typedef struct rmff_file_t {
 
   int headers_read;
 
+  rmff_rmf_t rmf_header;
   rmff_prop_t prop_header;
   rmff_cont_t cont_header;
   int cont_header_present;

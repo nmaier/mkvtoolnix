@@ -167,7 +167,8 @@ file_read_uint8(mb_file_io_t *io,
                 void *fh) {
   unsigned char tmp;
 
-  io->read(fh, &tmp, 1);
+  if (io->read(fh, &tmp, 1) != 1)
+    return set_error(RMFF_ERR_IO, NULL, 0);
   return tmp;
 }
 
@@ -176,7 +177,8 @@ file_read_uint16_be(mb_file_io_t *io,
                     void *fh) {
   unsigned char tmp[2];
 
-  io->read(fh, tmp, 2);
+  if (io->read(fh, tmp, 2) != 2)
+    return set_error(RMFF_ERR_IO, NULL, 0);
   return rmff_get_uint16_be(tmp);
 }
 
@@ -185,7 +187,8 @@ file_read_uint32_be(mb_file_io_t *io,
                     void *fh) {
   unsigned char tmp[4];
 
-  io->read(fh, tmp, 4);
+  if (io->read(fh, tmp, 4) != 4)
+    return set_error(RMFF_ERR_IO, NULL, 0);
   return rmff_get_uint32_be(tmp);
 }
 
@@ -503,6 +506,7 @@ rmff_read_headers(rmff_file_t *file) {
   void *fh;
   uint32_t object_id, object_size, size;
   uint16_t object_version;
+  rmff_rmf_t *rmf;
   rmff_prop_t *prop;
   rmff_cont_t *cont;
   rmff_mdpr_t *mdpr;
@@ -521,13 +525,19 @@ rmff_read_headers(rmff_file_t *file) {
   io = file->io;
   fh = file->handle;
   fint = (rmff_file_internal_t *)file->internal;
-  if (io->seek(fh, 4, SEEK_SET))
+  if (io->seek(fh, 0, SEEK_SET))
     return set_error(RMFF_ERR_IO, NULL, -1);
 
-  skip(4);                      /* header_size */
-  skip(2);                      /* object_version */
-  skip(4);                      /* file_version */
-  skip(4);                      /* num_headers */
+  rmf = &file->rmf_header;
+
+  rmff_last_error = RMFF_ERR_OK;
+  read_uint32_be_to(&rmf->obj.id);
+  read_uint32_be_to(&rmf->obj.size);
+  read_uint16_be_to(&rmf->obj.version);
+  read_uint32_be_to(&rmf->format_version);
+  read_uint32_be_to(&rmf->num_headers);
+  if (rmff_last_error != RMFF_ERR_OK)
+    return rmff_last_error;
 
   prop = &file->prop_header;
   prop_header_found = 0;
@@ -541,6 +551,9 @@ rmff_read_headers(rmff_file_t *file) {
       break;
 
     if (object_id == rmffFOURCC('P', 'R', 'O', 'P')) {
+      rmff_put_uint32_be(&prop->obj.id, object_id);
+      rmff_put_uint32_be(&prop->obj.size, object_size);
+      rmff_put_uint16_be(&prop->obj.version, object_version);
       read_uint32_be_to(&prop->max_bit_rate);
       read_uint32_be_to(&prop->avg_bit_rate);
       read_uint32_be_to(&prop->max_packet_size);
@@ -562,6 +575,9 @@ rmff_read_headers(rmff_file_t *file) {
         safefree(cont->comment);
       }
       memset(cont, 0, sizeof(rmff_cont_t));
+      rmff_put_uint32_be(&cont->obj.id, object_id);
+      rmff_put_uint32_be(&cont->obj.size, object_size);
+      rmff_put_uint16_be(&cont->obj.version, object_version);
 
       size = read_uint16_be(); /* title_len */
       if (size > 0) {
@@ -589,6 +605,9 @@ rmff_read_headers(rmff_file_t *file) {
       track = (rmff_track_t *)safecalloc(sizeof(rmff_track_t));
       track->file = (struct rmff_file_t *)file;
       mdpr = &track->mdpr_header;
+      rmff_put_uint32_be(&mdpr->obj.id, object_id);
+      rmff_put_uint32_be(&mdpr->obj.size, object_size);
+      rmff_put_uint16_be(&mdpr->obj.version, object_version);
       read_uint16_be_to(&mdpr->id);
       track->id = rmff_get_uint16_be(&mdpr->id);
       read_uint32_be_to(&mdpr->max_bit_rate);
