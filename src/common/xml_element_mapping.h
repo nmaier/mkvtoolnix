@@ -11,6 +11,7 @@
    XML to EBML element mapping definitions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #ifndef __XML_ELEMENT_MAPPING_H
@@ -44,11 +45,14 @@ typedef struct {
 
 extern parser_element_t MTX_DLL_API *chapter_elements;
 extern parser_element_t MTX_DLL_API *tag_elements;
+extern parser_element_t MTX_DLL_API *segmentinfo_elements;
 
 #define chapter_element_map_index(name) \
    xml_element_map_index(chapter_elements, name)
 #define tag_element_map_index(name) \
    xml_element_map_index(tag_elements, name)
+#define segmentinfo_element_map_index(name) \
+   xml_element_map_index(segmentinfo_elements, name)
 
 int MTX_DLL_API xml_element_map_index(const parser_element_t *element_map,
                                       const char *name);

@@ -51,6 +51,7 @@
 #include "mkvmerge.h"
 #include "mm_io.h"
 #include "output_control.h"
+#include "segmentinfo.h"
 #include "tagparser.h"
 #include "tag_common.h"
 
@@ -127,6 +128,8 @@ usage() {
     "                           entries to chapter names.\n"
     "  --default-language <lng> Use this language for all tracks unless\n"
     "                           overridden with the --language option.\n"
+    "\n Segment info handling:\n"
+    "  --segmentinfo <file>     Read segment information from the file.\n"
     "\n General output control (advanced global options):\n"
     "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
     "                           A comma separated list of both file IDs\n"
@@ -1571,6 +1574,18 @@ parse_args(vector<string> args) {
                                     chapter_language.c_str(),
                                     chapter_charset.c_str(), false,
                                     NULL, &tags_from_cue_chapters);
+      sit++;
+
+    } else if (this_arg == "--segmentinfo") {
+      if (no_next_arg)
+        mxerror(_("'--segmentinfo' lacks the file name.\n"));
+
+      if (segmentinfo_file_name != "")
+        mxerror(_("Only one segment info file allowed in '%s %s'.\n"),
+                this_arg.c_str(), next_arg.c_str());
+
+      segmentinfo_file_name = next_arg;
+
       sit++;
 
     } else if (this_arg == "--no-chapters") {

@@ -110,6 +110,7 @@ vector<filelist_t> files;
 vector<attachment_t> attachments;
 vector<track_order_t> track_order;
 vector<append_spec_t> append_mapping;
+vector<bitvalue_c> segfamily_uids;
 int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
 
 // Variables set by the command line parser.
@@ -159,6 +160,8 @@ static EbmlVoid *void_after_track_headers = NULL;
 string chapter_file_name;
 string chapter_language;
 string chapter_charset;
+
+string segmentinfo_file_name;
 
 string segment_title;
 bool segment_title_set = false;
@@ -536,6 +539,15 @@ render_headers(mm_io_c *rout) {
     // Set the segment UIDs.
     KaxSegmentUID &kax_seguid = GetChild<KaxSegmentUID>(*kax_infos);
     kax_seguid.CopyBuffer(seguid_current.data(), 128 / 8);
+
+    // Set the segment family
+    if (segfamily_uids.size() != 0) {
+      for (i = 0; i < segfamily_uids.size(); i++) {
+        KaxSegmentFamily &kax_family =
+          AddNewChild<KaxSegmentFamily>(*kax_infos);
+        kax_family.CopyBuffer(segfamily_uids[i].data(), 128 / 8);
+      }
+    }
 
     if (!no_linking) {
       if (!first_file) {

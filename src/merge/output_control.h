@@ -9,7 +9,9 @@
    $Id$
 
    output handling
+
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #ifndef __OUTPUT_CONTROL_H
@@ -121,12 +123,15 @@ extern double timecode_scale;
 extern timecode_scale_mode_e timecode_scale_mode;
 
 extern bitvalue_c *seguid_link_previous, *seguid_link_next;
+extern vector<bitvalue_c> segfamily_uids;
 
 extern bool write_meta_seek_for_clusters;
 
 extern string chapter_file_name;
 extern string chapter_language;
 extern string chapter_charset;
+
+extern string segmentinfo_file_name;
 
 extern KaxTags *tags_from_cue_chapters;
 

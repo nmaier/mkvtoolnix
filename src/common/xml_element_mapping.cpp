@@ -11,6 +11,7 @@
    Mapping from XML elements to EBML elements
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomm@free.fr>.
 */
 
 #include <ebml/EbmlElement.h>
@@ -27,6 +28,7 @@ static EbmlId no_id((uint32_t)0, 0);
 
 parser_element_t *chapter_elements = NULL;
 parser_element_t *tag_elements = NULL;
+parser_element_t *segmentinfo_elements = NULL;
 
 static void
 init_mapping_table(parser_element_t *table) {
@@ -40,8 +42,8 @@ init_mapping_table(parser_element_t *table) {
       table[i].id =
         find_ebml_callbacks(KaxSegment::ClassInfos, debug_name).GlobalId;
     } catch (...) {
-      mxerror("Error initializing the tables for the chapter and tag "
-              "elements: Could not find the element with the debug name "
+      mxerror("Error initializing the tables for the chapter, tag and segment "
+              "info elements: Could not find the element with the debug name "
               "'%s'. %s\n", debug_name, BUGMSG);
     }
   }
@@ -117,10 +119,27 @@ xml_element_map_init() {
     {NULL, EBMLT_MASTER, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
   };
 
+  static parser_element_t _segmentinfo_elements[] = {
+    {"Info", EBMLT_MASTER, 0, 0, 0, no_id, NULL, NULL, NULL},
+
+    {"SegmentFamily", EBMLT_BINARY, 1, 0, 0, no_id, NULL, NULL, NULL},
+
+    {"ChapterLink", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterLinkEditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL,
+     NULL, NULL},
+    {"ChapterLinkCodec", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+     NULL},
+    {"ChapterLinkID", EBMLT_BINARY, 2, 0, 0, no_id, NULL, NULL, NULL},
+
+    {NULL, EBMLT_MASTER, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
+  };
+
   chapter_elements = _chapter_elements;
   tag_elements = _tag_elements;
+  segmentinfo_elements = _segmentinfo_elements;
   init_mapping_table(chapter_elements);
   init_mapping_table(tag_elements);
+  init_mapping_table(segmentinfo_elements);
 }
 
 int

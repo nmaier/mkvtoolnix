@@ -54,7 +54,7 @@ xmlp_error(parser_data_t *pdata,
   int len;
 
   msg_fmt = string("Error: ") + pdata->parser_name +
-    string("parser failed for '%s', line %d, " "column %d: ");
+    string(" parser failed for '%s', line %d, " "column %d: ");
   len = get_arg_len(msg_fmt.c_str(), pdata->file_name,
                     XML_GetCurrentLineNumber(pdata->parser),
                     XML_GetCurrentColumnNumber(pdata->parser));

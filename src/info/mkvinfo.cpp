@@ -498,6 +498,16 @@ def_handle(info) {
       show_element(l2, 2, "Segment UID:%s", buffer);
       delete [] buffer;
 
+    } else if (is_id(l2, KaxSegmentFamily)) {
+      KaxSegmentFamily &uid = *static_cast<KaxSegmentFamily *>(l2);
+      char *buffer = new char[uid.GetSize() * 5 + 1];
+      const unsigned char *b = (const unsigned char *)&binary(uid);
+      buffer[0] = 0;
+      for (i = 0; i < uid.GetSize(); i++)
+        mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+      show_element(l2, 2, "Family UID:%s", buffer);
+      delete [] buffer;
+
     } else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
       char* buffer = new char[uid.GetSize() * 5 + 1];
