@@ -248,7 +248,13 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
 
 bool is_global(EbmlStream *es, EbmlElement *l, int level) {
   if (is_id(l, EbmlVoid)) {
-    show_element(l, level, "EbmlVoid");
+    EbmlVoid *v;
+    string s;
+
+    v = static_cast<EbmlVoid *>(l);
+    s = string("EbmlVoid (size: ") +
+      to_string(l->ElementSize() - l->HeadSize()) + string(")");
+    show_element(l, level, s.c_str());
 
     return true;
 
