@@ -1106,7 +1106,7 @@ mmg_dialog::update_command_line() {
 
   old_cmdline = cmdline;
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
-    tc_output->GetValue() + wxT("\" ") + wxT("--command-line-charset UTF-8 ");
+    tc_output->GetValue() + wxT("\" ");
 
   clargs.Clear();
   clargs.Add(mkvmerge_path);
@@ -1367,16 +1367,6 @@ mmg_dialog::update_command_line() {
       cmdline += wxT(" ") + shell_escape(clargs[i]);
   }
 
-#if WXUNICODE
-  string utf8;
-  char *tmp;
-  utf8 = to_utf8(cmdline);
-  tmp = to_utf8(utf8_init("ISO8859-1"), utf8.c_str());
-  cmdline = wxU(tmp);
-  safefree(tmp);
-#else
-  cmdline = to_utf8(cmdline).c_str();
-#endif
   if (old_cmdline != cmdline)
     tc_cmdline->SetValue(cmdline);
 }
