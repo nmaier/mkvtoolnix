@@ -77,6 +77,7 @@ WXWINDOWS_CFLAGS = @WXWINDOWS_CFLAGS@
 WXWINDOWS_LIBS = @WXWINDOWS_LIBS@
 ZLIB_LIBS = @ZLIB_LIBS@
 LIBINTL_LIBS = @LIBINTL_LIBS@
+MINGW_GUIAPP = @MINGW_GUIAPP@
 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
@@ -389,7 +390,7 @@ mmg_SOURCES = $(wildcard src/mmg/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
-		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS)
+		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP)
 
 mkvmerge: src/mkvmerge@EXEEXT@
 
