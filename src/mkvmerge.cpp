@@ -1016,7 +1016,7 @@ parse_tags(char *s,
     mxerror("Invalid tags file name specified in '%s %s'.\n", opt,
             orig.c_str());
 
-  tags.file_name = safestrdup(s);
+  tags.file_name = from_utf8(cc_local_utf8, s);
 }
 
 /** \brief Parse the \c --fourcc argument
@@ -1847,8 +1847,8 @@ parse_args(int argc,
       chapter_file_name = from_utf8(cc_local_utf8, next_arg);
       if (kax_chapters != NULL)
         delete kax_chapters;
-      kax_chapters = parse_chapters(next_arg, 0, -1, 0, chapter_language,
-                                    chapter_charset);
+      kax_chapters = parse_chapters(chapter_file_name, 0, -1, 0,
+                                    chapter_language, chapter_charset);
       i++;
 
     } else if (!strcmp(this_arg, "--no-chapters")) {
