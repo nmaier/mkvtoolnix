@@ -104,8 +104,9 @@ cue_entries_to_chapter_name(string &performer,
 
 typedef struct {
   int num;
-  int64_t start_00;
-  int64_t start_01;
+  int64_t start_of_track;
+  vector<int64_t> start_indices;
+  bool index00_missing;
   int64_t end;
   int64_t min_tc;
   int64_t max_tc;
@@ -245,28 +246,18 @@ static void
 add_subchapters_for_index_entries(cue_parser_args_t &a) {
   KaxChapterAtom *atom;
   KaxChapterDisplay *display;
+  int i, offset;
 
-  if ((a.start_00 == -1) && (a.start_01 == -1))
+  if (a.start_indices.empty())
     return;
 
+  if (a.index00_missing)
+    offset = 1;
+  else
+    offset = 0;
+
   atom = NULL;
-  if (a.start_00 != -1) {
-    atom = &GetChild<KaxChapterAtom>(*a.atom);
-    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
-      create_unique_uint32(UNIQUE_CHAPTER_IDS);
-    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
-      a.start_00 - a.offset;
-
-    display = &GetChild<KaxChapterDisplay>(*atom);
-    *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*display)) =
-      cstrutf8_to_UTFstring("INDEX 00");
-    *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
-      "eng";
-
-    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterFlagHidden>(*atom)) = 1;
-  }
-
-  if (a.start_01 != -1) {
+  for (i = 0; i < a.start_indices.size(); i++) {
     if (atom == NULL)
       atom = &GetChild<KaxChapterAtom>(*a.atom);
     else
@@ -275,11 +266,11 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
       create_unique_uint32(UNIQUE_CHAPTER_IDS);
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
-      a.start_01 - a.offset;
+      a.start_indices[i] - a.offset;
 
     display = &GetChild<KaxChapterDisplay>(*atom);
     *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*display)) =
-      cstrutf8_to_UTFstring("INDEX 01");
+      cstrutf8_to_UTFstring(mxsprintf("INDEX %02d", i + offset).c_str());
     *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
       "eng";
 
@@ -293,17 +284,12 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   KaxChapterDisplay *display;
   UTFstring wchar_string;
   uint32_t cuid;
-  int64_t start;
 
-  if ((a.start_00 == -1) && (a.start_01 == -1))
+  if (a.start_indices.empty())
     mxerror("Cue sheet parser: No INDEX entry found for the previous "
             "TRACK entry (current line: %d)\n", a.line_num);
-  if (a.start_01 != -1)
-    start = a.start_01;
-  else
-    start = a.start_00;
-
-  if (!((start >= a.min_tc) && ((start <= a.max_tc) || (a.max_tc == -1))))
+  if (!((a.start_indices[0] >= a.min_tc) &&
+        ((a.start_indices[0] <= a.max_tc) || (a.max_tc == -1))))
     return;
 
   if (a.edition == NULL) {
@@ -320,7 +306,7 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*a.atom)) = cuid;
 
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*a.atom)) =
-    start - a.offset;
+    a.start_of_track - a.offset;
 
   display = &GetChild<KaxChapterDisplay>(*a.atom);
 
@@ -378,7 +364,6 @@ parse_cue_chapters(mm_text_io_c *in,
                    const char *charset,
                    bool exception_on_error,
                    KaxTags **tags) {
-  int index, min, sec, frames;
   cue_parser_args_t a;
   string line;
   
@@ -407,8 +392,7 @@ parse_cue_chapters(mm_text_io_c *in,
   a.edition = NULL;
   a.num = 0;
   a.line_num = 0;
-  a.start_00 = -1;
-  a.start_01 = -1;
+  a.start_of_track = -1;
   a.edition_uid = create_unique_uint32(UNIQUE_EDITION_IDS);
   try {
     while (in->getline2(line)) {
@@ -433,22 +417,39 @@ parse_cue_chapters(mm_text_io_c *in,
           a.title = get_quoted(line, 6);
 
       } else if (starts_with_case(line, "index ")) {
+        int index, min, sec, frames;
+        bool index_ok;
+
         line.erase(0, 6);
         strip(line);
         if (sscanf(line.c_str(), "%d %d:%d:%d", &index, &min, &sec, &frames) <
             4)
           mxerror("Cue sheet parser: Invalid INDEX entry in line %d.\n",
                   a.line_num);
-        if ((a.start_00 == -1) && (index == 0))
-          a.start_00 = min * 60 * 1000000000ll + sec * 1000000000ll + frames *
-            1000000000ll / 75;
-        else if ((a.start_01 == -1) && (index == 1))
-          a.start_01 = min * 60 * 1000000000ll + sec * 1000000000ll + frames *
-            1000000000ll / 75;
+
+        index_ok = false;
+        if ((index >= 0) && (index <= 99)) {
+          if ((a.start_indices.size() == 0) && (index == 1))
+            a.index00_missing = true;
+          if ((a.start_indices.size() == index) ||
+              ((a.start_indices.size() == (index - 1)) && a.index00_missing)) {
+            int64_t timestamp = min * 60 * 1000000000ll + sec * 1000000000ll +
+              frames * 1000000000ll / 75;
+            a.start_indices.push_back(timestamp);
+            if ((index == 1) || (index == 0)) 
+              a.start_of_track = timestamp;
+            index_ok = true;
+          }
+        }
+
+        if (!index_ok)
+          mxerror("Cue sheet parser: Invalid INDEX number (got %d, "
+                  "expected %d) in line %d,\n",
+                  index, a.start_indices.size(), a.line_num); 
 
       } else if (starts_with_case(line, "track ")) {
-        if ((line.length() < 5) || strcasecmp(&line[line.length() - 5],
-                                              "audio"))
+        if ((line.length() < 5) ||
+            strcasecmp(&line[line.length() - 5], "audio"))
           continue;
 
         if (a.num >= 1)
@@ -457,9 +458,9 @@ parse_cue_chapters(mm_text_io_c *in,
           add_tag_for_global_cue_settings(a, tags);
 
         a.num++;
-
-        a.start_00 = -1;
-        a.start_01 = -1;
+        a.start_of_track = -1;
+        a.start_indices.clear();
+        a.index00_missing = false;
         a.performer = "";
         a.title = "";
         a.isrc = "";
