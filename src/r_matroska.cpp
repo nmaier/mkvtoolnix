@@ -1356,8 +1356,12 @@ int kax_reader_c::read(generic_packetizer_c *) {
             }
 
             last_timecode = block->GlobalTimecode() / 1000000;
-            if (bref_found)
-              block_bref += (int64_t)last_timecode;
+            if (bref_found) {
+              if (block_track->a_formattag == FOURCC('r', 'e', 'a', 'l'))
+                block_bref = block_track->previous_timecode;
+              else
+                block_bref += (int64_t)last_timecode;
+            }
             if (fref_found)
               block_fref += (int64_t)last_timecode;
 
@@ -1385,6 +1389,7 @@ int kax_reader_c::read(generic_packetizer_c *) {
                                                  block_fref);
             }
 
+            block_track->previous_timecode = (int64_t)last_timecode;
             block_track->units_processed += block->NumberFrames();
           }
 

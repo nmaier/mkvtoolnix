@@ -80,7 +80,9 @@ typedef struct {
 
   char *track_name;
 
-  int ok;
+  bool ok;
+
+  int64_t previous_timecode;
 
   generic_packetizer_c *packetizer;
 } kax_track_t;
