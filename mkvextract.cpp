@@ -35,6 +35,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <typeinfo>
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
