@@ -98,6 +98,7 @@ public:
   void set_values_recursively(wxTreeItemId id, string &language,
                               bool set_language);
   void set_display_values(KaxChapterDisplay *display);
+  void set_timecode_values(KaxChapterAtom *atom);
   void adjust_timecodes_recursively(wxTreeItemId id, int64_t adjust_by);
 
   bool copy_values(wxTreeItemId id);

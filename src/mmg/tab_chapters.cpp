@@ -982,10 +982,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   chapter_node_data_c *t;
   KaxChapterDisplay *display;
   KaxChapterString *cstring;
-  KaxChapterTimeStart *tstart;
-  KaxChapterTimeEnd *tend;
   wxString label, language;
-  int64_t timestamp;
   char *tmpstr;
   bool first;
   wxTreeItemId old_id;
@@ -1032,21 +1029,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
     display = FINDNEXT(t->chapter, KaxChapterDisplay, display);
   }
 
-  tstart = FindChild<KaxChapterTimeStart>(*t->chapter);
-  if (tstart != NULL) {
-    timestamp = uint64(*static_cast<EbmlUInteger *>(tstart)) / 1000000;
-    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
-    tc_start_time->SetValue(label);
-  } else
-    tc_start_time->SetValue("");
-
-  tend = FindChild<KaxChapterTimeEnd>(*t->chapter);
-  if (tend != NULL) {
-    timestamp = uint64(*static_cast<EbmlUInteger *>(tend)) / 1000000;
-    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
-    tc_end_time->SetValue(label);
-  } else
-    tc_end_time->SetValue("");
+  set_timecode_values(t->chapter);
 
   lb_chapter_names->SetSelection(0);
   b_remove_chapter_name->Enable(lb_chapter_names->GetCount() > 1);
@@ -1345,6 +1328,8 @@ tab_chapters::on_adjust_timecodes(wxCommandEvent &evt) {
   if ((t == NULL) || !t->is_atom)
     return;
 
+  set_timecode_values(t->chapter);
+
   cdisplay = NULL;
   n = 0;
   for (i = 0; i < t->chapter->ListSize(); i++)
@@ -1606,6 +1591,34 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
 
   set_display_values(cdisplay);
   tc_chapter_name->SetFocus();
+}
+
+void
+tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
+  KaxChapterTimeStart *tstart;
+  KaxChapterTimeEnd *tend;
+  wxString label;
+  int64_t timestamp;
+
+  no_update = true;
+
+  tstart = FINDFIRST(atom, KaxChapterTimeStart);
+  if (tstart != NULL) {
+    timestamp = uint64(*static_cast<EbmlUInteger *>(tstart)) / 1000000;
+    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
+    tc_start_time->SetValue(label);
+  } else
+    tc_start_time->SetValue("");
+
+  tend = FINDFIRST(atom, KaxChapterTimeEnd);
+  if (tend != NULL) {
+    timestamp = uint64(*static_cast<EbmlUInteger *>(tend)) / 1000000;
+    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
+    tc_end_time->SetValue(label);
+  } else
+    tc_end_time->SetValue("");
+
+  no_update = false;
 }
 
 void
