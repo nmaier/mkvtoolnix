@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.36 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.37 2003/06/12 23:09:00 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -770,7 +770,7 @@ void ogm_reader_c::identify() {
     sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
     memcpy(fourcc, sth->subtype, 4);
     fourcc[4] = 0;
-    fprintf(stdout, "Track ID %u: %s (%s)\n", sdemuxers[i]->sid,
+    fprintf(stdout, "Track ID %u: %s (%s)\n", sdemuxers[i]->serial,
             (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
              sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
              sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
