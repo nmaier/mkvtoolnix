@@ -1,3 +1,10 @@
+2005-04-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If chapters were present and splitting was
+	enabled then mkvmerge would not treat chapters correctly that
+	spanned across several files. Now the spanning chapters are kept
+	in all files, and their start timecodes are adjusted accordingly.
+
 2005-03-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: On Windows mkvinfo was linked without the

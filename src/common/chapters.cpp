@@ -607,62 +607,124 @@ remove_entries(int64_t min_tc,
                int64_t max_tc,
                int64_t offset,
                EbmlMaster &m) {
-  int i;
-  bool remove;
+  struct chapter_entry_t {
+    bool remove, spans, is_atom;
+    int64_t start, end;
+
+    chapter_entry_t():
+      remove(false), spans(false), is_atom(false), start(0), end(-1) {}
+  } *entries;
+
+  int i, last_atom_at;
   KaxChapterAtom *atom;
   KaxChapterTimeStart *cts;
   KaxChapterTimeEnd *cte;
   EbmlMaster *m2;
-  int64_t start_tc, end_tc;
 
-  i = 0;
-  while (i < m.ListSize()) {
+  if (0 == m.ListSize())
+    return;
+
+  entries = new chapter_entry_t[m.ListSize()];
+  last_atom_at = -1;
+
+  // Determine whether or not an entry has to be removed. Also retrieve
+  // the start and end timecodes.
+  for (i = 0; m.ListSize() > i; ++i) {
     atom = dynamic_cast<KaxChapterAtom *>(m[i]);
-    if (atom != NULL) {
-      cts = static_cast<KaxChapterTimeStart *>
-        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+    if (NULL == atom)
+      continue;
 
-      remove = false;
+    last_atom_at = i;
+    entries[i].is_atom = true;
 
-      start_tc = uint64(*static_cast<EbmlUInteger *>(cts));
-      if (start_tc < min_tc)
-        remove = true;
-      else if ((max_tc >= 0) && (start_tc > max_tc))
-        remove = true;
+    cts = static_cast<KaxChapterTimeStart *>
+      (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
 
-      if (remove) {
-        m.Remove(i);
-        delete atom;
-      } else
-        i++;
+    if (NULL != cts)
+      entries[i].start = uint64(*static_cast<EbmlUInteger *>(cts));
 
-    } else
-      i++;
+    cte = static_cast<KaxChapterTimeEnd *>
+      (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
+
+    if (NULL != cte)
+      entries[i].end = uint64(*static_cast<EbmlUInteger *>(cte));
   }
 
-  for (i = 0; i < m.ListSize(); i++) {
-    atom = dynamic_cast<KaxChapterAtom *>(m[i]);
-    if (atom != NULL) {
-      cts = static_cast<KaxChapterTimeStart *>
-        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
-      cte = static_cast<KaxChapterTimeEnd *>
-        (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
+  // We can return if we don't have a single atom to work with.
+  if (-1 == last_atom_at)
+    return;
 
-      *static_cast<EbmlUInteger *>(cts) =
-        uint64(*static_cast<EbmlUInteger *>(cts)) - offset;
-      if (cte != NULL) {
-        end_tc =  uint64(*static_cast<EbmlUInteger *>(cte));
-        if ((max_tc >= 0) && (end_tc > max_tc))
-          end_tc = max_tc;
-        end_tc -= offset;
-        *static_cast<EbmlUInteger *>(cte) = end_tc;
+  for (i = 0; m.ListSize() > i; ++i) {
+    atom = dynamic_cast<KaxChapterAtom *>(m[i]);
+    if (NULL == atom)
+      continue;
+
+    // Calculate the end timestamps and determine whether or not an entry spans
+    // several segments.
+    if (-1 == entries[i].end) {
+      if (i == last_atom_at)
+        entries[i].end = 1LL << 62;
+
+      else {
+        int next_atom = i + 1;
+
+        while (!entries[next_atom].is_atom)
+          ++next_atom;
+
+        entries[i].end = entries[next_atom].start;
       }
+    }
+
+    if ((entries[i].start < min_tc)
+        ||
+        ((max_tc >= 0) && (entries[i].start > max_tc)))
+      entries[i].remove = true;
+
+    if (entries[i].remove && (entries[i].start < min_tc) &&
+        (entries[i].end > min_tc))
+      entries[i].spans = true;
+
+    mxverb(3, "remove_chapters: entries[%d]: remove %d spans %d start %lld "
+           "end %lld\n", i, entries[i].remove, entries[i].spans,
+           entries[i].start, entries[i].end);
+
+    // Spanning entries must be kept, and their start timecode must be
+    // adjusted. Entries that are to be deleted will be deleted later and
+    // have to be skipped for now.
+    if (entries[i].remove && !entries[i].spans)
+      continue;
+
+    cts = static_cast<KaxChapterTimeStart *>
+      (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+    cte = static_cast<KaxChapterTimeEnd *>
+      (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
+
+    if (entries[i].spans)
+      *static_cast<EbmlUInteger *>(cts) = min_tc;
+
+    *static_cast<EbmlUInteger *>(cts) =
+      uint64(*static_cast<EbmlUInteger *>(cts)) - offset;
+    if (NULL != cte) {
+      int64_t end_tc =  uint64(*static_cast<EbmlUInteger *>(cte));
+      if ((max_tc >= 0) && (end_tc > max_tc))
+        end_tc = max_tc;
+      end_tc -= offset;
+      *static_cast<EbmlUInteger *>(cte) = end_tc;
     }
 
     m2 = dynamic_cast<EbmlMaster *>(m[i]);
     if (m2 != NULL)
       remove_entries(min_tc, max_tc, offset, *m2);
   }
+
+  // Now really delete those entries.
+  for (i = m.ListSize() - 1; 0 <= i; --i)
+    if (entries[i].remove && !entries[i].spans) {
+      delete m[i];
+      m.Remove(i);
+    }
+
+  delete []entries;
 }
 
 /** \brief Remove all chapter atoms that are outside of a time range
