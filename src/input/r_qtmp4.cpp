@@ -1383,7 +1383,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         dmx->ptzr =
           add_packetizer(new mpeg4_l2_video_packetizer_c(this, 0.0,
                                                          dmx->v_width,
-                                                         dmx->v_height, true,
+                                                         dmx->v_height, false,
                                                          ti));
         safefree(bih);
         ti->private_data = NULL;
