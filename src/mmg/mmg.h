@@ -32,6 +32,8 @@
 #include "wx/process.h"
 #include "wx/treectrl.h"
 
+#include "kax_analyzer.h"
+
 using namespace std;
 using namespace libmatroska;
 
@@ -315,8 +317,11 @@ public:
   wxTimer value_copy_timer;
 
   wxString file_name;
+  bool source_is_kax_file;
 
   KaxChapters *chapters;
+
+  kax_analyzer_c *analyzer;
 
 public:
   tab_chapters(wxWindow *parent, wxMenu *nm_chapters);

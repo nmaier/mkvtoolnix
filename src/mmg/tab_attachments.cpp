@@ -35,7 +35,6 @@ vector<mmg_attachment_t> attachments;
 tab_attachments::tab_attachments(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
-  wxArrayString sorted_mime_types;
   uint32_t i;
 
   new wxStaticText(this, wxID_STATIC, _("Attachments:"), wxPoint(5, 5),
@@ -64,18 +63,14 @@ tab_attachments::tab_attachments(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("MIME type:"), wxPoint(5, 365),
                    wxDefaultSize, 0);
 
-  for (i = 0; mime_types[i] != NULL; i++)
-    sorted_mime_types.Add(mime_types[i]);
-  sorted_mime_types.Sort();
-
   cob_mimetype =
     new wxComboBox(this, ID_CB_MIMETYPE, _(""), wxPoint(5, 385),
                    wxSize(250, -1), 0, NULL, wxCB_DROPDOWN);
   cob_mimetype->SetToolTip(_("MIME type for this track. Select one of the "
                              "pre-defined MIME types or enter one yourself."));
   cob_mimetype->Append(_(""));
-  for (i = 0; i < sorted_mime_types.Count(); i++)
-    cob_mimetype->Append(sorted_mime_types[i]);
+  for (i = 0; mime_types[i] != NULL; i++)
+    cob_mimetype->Append(mime_types[i]);
 
   new wxStaticText(this, wxID_STATIC, _("Attachment style:"),
                    wxPoint(275, 365), wxDefaultSize, 0);

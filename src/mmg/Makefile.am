@@ -11,6 +11,7 @@ mmg_SOURCES = mmg.cpp mmg.h \
 			../common.cpp ../common.h \
 			extern_data.cpp extern_data.h \
 			../iso639.cpp ../iso639.h \
+			kax_analyzer.cpp kax_analyzer.h \
 			../mm_io.cpp ../mm_io.h \
 			mux_dialog.cpp \
 			tab_attachments.cpp \

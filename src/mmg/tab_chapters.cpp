@@ -22,12 +22,12 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include "wx/wxprec.h"
-
 #include "wx/wx.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 #include "wx/statline.h"
+
+#include <ebml/EbmlStream.h>
 
 #include "mmg.h"
 #include "chapters.h"
@@ -35,6 +35,11 @@
 #include "error.h"
 #include "extern_data.h"
 #include "iso639.h"
+#include "kax_analyzer.h"
+
+using namespace std;
+using namespace libebml;
+using namespace libmatroska;
 
 class chapter_node_data_c: public wxTreeItemData {
 public:
@@ -145,6 +150,8 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
 
   file_name = "";
   chapters = NULL;
+  analyzer = NULL;
+  source_is_kax_file = false;
 
   value_copy_timer.SetOwner(this, ID_T_CHAPTERVALUES);
   value_copy_timer.Start(333);
@@ -153,6 +160,8 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
 tab_chapters::~tab_chapters() {
   if (chapters != NULL)
     delete chapters;
+  if (analyzer != NULL)
+    delete analyzer;
 }
 
 void tab_chapters::enable_inputs(bool enable) {
@@ -180,6 +189,11 @@ void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
   b_remove_chapter->Enable(true);
 
   enable_inputs(false);
+  source_is_kax_file = false;
+  if (analyzer != NULL) {
+    delete analyzer;
+    analyzer = NULL;
+  }
 
   mdlg->set_status_bar("New chapters created.");
 }
@@ -271,8 +285,8 @@ void tab_chapters::add_recursively(wxTreeItemId &parent, EbmlMaster &master) {
 
 void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose a chapter file", last_open_dir, "",
-                   _T("Chapter files (*.xml;*.txt)|*.xml;*.txt|" ALLFILES),
-                   wxOPEN);
+                   _T("Chapter files (*.xml;*.txt;*.mka;*.mkv)|*.xml;*.txt;"
+                      "*.mka;*.mkv|" ALLFILES), wxOPEN);
 
   if (dlg.ShowModal() == wxID_OK)
     if (load(dlg.GetPath()))
@@ -281,16 +295,42 @@ void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
 
 bool tab_chapters::load(wxString name) {
   KaxChapters *new_chapters;
+  EbmlElement *e;
   wxString s;
+  int pos;
 
   try {
-    new_chapters = parse_chapters(name.c_str(), 0, -1, 0, NULL, NULL, true);
+    if (kax_analyzer_c::probe(name.c_str())) {
+      if (analyzer != NULL)
+        delete analyzer;
+      analyzer = new kax_analyzer_c(this, name.c_str());
+      file_name = name;
+      analyzer->process();
+      pos = analyzer->find(KaxChapters::ClassInfos.GlobalId);
+      if (pos == -1) {
+        wxMessageBox(_("This file does not contain any chapters."),
+                     _("No chapters found"), wxOK | wxCENTER |
+                     wxICON_INFORMATION);
+        return false;
+      }
+
+      e = analyzer->read_element(pos, KaxChapters::ClassInfos);
+      if (e == NULL)
+        throw error_c(_("This file does not contain valid chapters."));
+      new_chapters = static_cast<KaxChapters *>(e);
+      source_is_kax_file = true;
+
+    } else {
+      new_chapters = parse_chapters(name.c_str(), 0, -1, 0, NULL, NULL, true);
+      source_is_kax_file = false;
+    }
   } catch (error_c e) {
+    analyzer = NULL;
     s = (const char *)e;
     break_line(s);
     while (s[s.Length() - 1] == '\n')
       s.Remove(s.Length() - 1);
-    wxMessageBox(s, _T("Error parsing the chapter file"),
+    wxMessageBox(s, _T("Error parsing the file"),
                  wxOK | wxCENTER | wxICON_ERROR);
     return false;
   }
@@ -321,6 +361,11 @@ bool tab_chapters::load(wxString name) {
 void tab_chapters::on_save_chapters(wxCommandEvent &evt) {
   if (!verify())
     return;
+
+  if (source_is_kax_file) {
+    analyzer->update_element(chapters);
+    return;
+  }
 
   if (file_name.length() == 0)
     if (!select_file_name())
@@ -367,6 +412,8 @@ void tab_chapters::save() {
   write_chapters_xml(chapters, fout);
   fprintf(fout, "</Chapters>\n");
   fclose(fout);
+
+  source_is_kax_file = false;
 
   mdlg->set_last_chapters_in_menu(file_name);
   mdlg->set_status_bar(_("Chapters written."));
@@ -476,6 +523,11 @@ bool tab_chapters::verify() {
         return false;
     }
   }
+
+  if (!chapters->CheckMandatory())
+    die("verify failed: chapters->CheckMandatory() is false. This should not "
+        "have happened. Please file a bug report.\n");
+  chapters->UpdateSize();
 
   return true;
 }
