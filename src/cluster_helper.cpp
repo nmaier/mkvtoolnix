@@ -397,6 +397,14 @@ int cluster_helper_c::render() {
   else
     lacing_type = LACING_AUTO;
 
+  mxverb(2, "cluster_helper: render(); header_overhead: %lld, lacing_type: "
+         "%d, num_clusters: %d, num_packets: %d; first timecode: %lld, "
+         "last timecode: %lld\n", header_overhead, lacing_type,
+         num_clusters, clstr->num_packets,
+         clstr->num_packets > 0 ? clstr->packets[0]->timecode : -1,
+         clstr->num_packets > 0 ?
+         clstr->packets[clstr->num_packets - 1]->timecode : -1);
+
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
     source = ((generic_packetizer_c *)pack->source);

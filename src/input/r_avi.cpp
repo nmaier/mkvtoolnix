@@ -697,6 +697,10 @@ void avi_reader_c::set_headers() {
   uint32_t i, k;
   avi_demuxer_t *d;
 
+  vheaders_set = false;
+  for (i = 0; i < ademuxers.size(); i++)
+    ademuxers[i]->headers_set = false;
+
   for (i = 0; i < ti->track_order->size(); i++) {
     if ((*ti->track_order)[i] == 0) {
       if ((vpacketizer != NULL) && !vheaders_set) {

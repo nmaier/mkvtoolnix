@@ -390,6 +390,9 @@ void vobsub_reader_c::set_headers() {
   uint32_t i, k;
   vobsub_track_c *t;
 
+  for (i = 0; i < tracks.size(); i++)
+    tracks[i]->headers_set = false;
+
   for (i = 0; i < ti->track_order->size(); i++) {
     t = NULL;
     for (k = 0; k < tracks.size(); k++)

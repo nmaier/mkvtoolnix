@@ -1719,6 +1719,9 @@ void kax_reader_c::set_headers() {
   uint32_t i, k;
   kax_track_t *t;
 
+  for (i = 0; i < tracks.size(); i++)
+    tracks[i]->headers_set = false;
+
   for (i = 0; i < ti->track_order->size(); i++) {
     t = NULL;
     for (k = 0; k < tracks.size(); k++)

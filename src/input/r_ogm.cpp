@@ -1002,6 +1002,9 @@ void ogm_reader_c::set_headers() {
   uint32_t i, k;
   ogm_demuxer_t *d;
 
+  for (i = 0; i < num_sdemuxers; i++)
+    sdemuxers[i]->headers_set = false;
+
   for (i = 0; i < ti->track_order->size(); i++) {
     d = NULL;
     for (k = 0; k < num_sdemuxers; k++)

@@ -1129,6 +1129,9 @@ void qtmp4_reader_c::set_headers() {
   uint32_t i, k;
   qtmp4_demuxer_t *d;
 
+  for (i = 0; i < demuxers.size(); i++)
+    demuxers[i]->headers_set = false;
+
   for (i = 0; i < ti->track_order->size(); i++) {
     d = NULL;
     for (k = 0; k < demuxers.size(); k++)
