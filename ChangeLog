@@ -1,3 +1,8 @@
+2004-04-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: mkvinfo was forcing libmatroska not to handle
+	unknown elements and crashed on those.
+
 2004-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: When adding Matroska files the video track's

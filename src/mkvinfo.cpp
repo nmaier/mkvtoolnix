@@ -577,7 +577,7 @@ void sort_master(EbmlMaster &m) {
 void read_master(EbmlMaster *m, EbmlStream *es, const EbmlSemanticContext &ctx,
                  int &upper_lvl_el, EbmlElement *&l2) {
 
-  m->Read(*es, ctx, upper_lvl_el, l2, false);
+  m->Read(*es, ctx, upper_lvl_el, l2, true);
   if (m->ListSize() == 0)
     return;
 
@@ -682,7 +682,6 @@ bool process_file(const char *file_name) {
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true);
     while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-
       if (is_id(l1, KaxInfo)) {
         // General info about this Matroska file
         show_element(l1, 1, "Segment information");
