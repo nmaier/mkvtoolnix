@@ -63,6 +63,7 @@ cluster_helper_c::cluster_helper_c() {
   timecode_offset = 0;
   last_packets = NULL;
   first_timecode = 0;
+  first_timecode_in_file = -1;
   bytes_in_file = 0;
 }
 
@@ -138,6 +139,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
         track_video) || !video_track_present)) {
     split = false;
     c = clusters[num_clusters - 1];
+    if (first_timecode_in_file == -1)
+      first_timecode_in_file = packet->assigned_timecode;
 
     // Maybe we want to start a new file now.
     if (!split_by_time) {
@@ -169,7 +172,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
       if ((header_overhead + additional_size + bytes_in_file) >= split_after)
         split = true;
 
-    } else if ((packet->assigned_timecode - first_timecode) >=
+    } else if ((packet->assigned_timecode - first_timecode_in_file) >=
                (split_after * 1000000ull))
       split = true;
 
@@ -187,6 +190,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
       add_cluster(new kax_cluster_c());
 
       bytes_in_file = 0;
+      first_timecode_in_file = -1;
       max_timecode = old_max_timecode;
 
       if (no_linking) {

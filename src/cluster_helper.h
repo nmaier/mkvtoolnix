@@ -52,7 +52,7 @@ private:
   int num_clusters, cluster_content_size;
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets, first_timecode;
-  int64_t bytes_in_file;
+  int64_t bytes_in_file, first_timecode_in_file;
   mm_io_c *out;
 
 public:
