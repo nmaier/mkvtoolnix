@@ -553,7 +553,7 @@ void generic_packetizer_c::dump_packet(const void *buffer, int size) {
   if (dump_packets == NULL)
     return;
 
-  path = (char *)safemalloc(strlen(dump_packets) + 1 + 15);
+  path = (char *)safemalloc(strlen(dump_packets) + 1 + 30);
   mxprints(path, "%s/%u-%010lld", dump_packets, hserialno,
            dumped_packet_number);
   dumped_packet_number++;
