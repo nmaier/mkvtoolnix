@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.63 2003/05/15 08:58:52 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.64 2003/05/15 09:38:01 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@
 #include <typeinfo>
 #endif
 
-#include "StdIOCallback.h"
+#include "IOCallback.h"
 
 #include "EbmlHead.h"
 #include "EbmlSubHead.h"
@@ -131,7 +131,90 @@ int meta_seek_size = 0;
 // Specs say that track numbers should start at 1.
 int track_number = 1;
 
-StdIOCallback *out;
+class mm_io_callback: public IOCallback {
+protected:
+  FILE *file;
+
+public:
+  mm_io_callback(const char *path, const open_mode mode);
+  virtual ~mm_io_callback();
+
+  virtual uint64 getFilePointer();
+  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
+  virtual uint32 read(void *buffer, size_t size);
+  virtual size_t write(const void *buffer, size_t size);
+  virtual void close();
+};
+
+mm_io_callback::mm_io_callback(const char *path, const open_mode mode) {
+	char *cmode;
+
+	switch (mode) {
+    case MODE_READ:
+      cmode = "rb";
+      break;
+    case MODE_WRITE:
+      cmode = "wb";
+      break;
+    case MODE_CREATE:
+      cmode = "wb+";
+      break;
+    default:
+      throw 0;
+	}
+
+	file = fopen(path, cmode);
+
+	if (file == NULL) {
+    fprintf(stderr, "Error: Could not open the file: %d (%s)\n", errno,
+            strerror(errno));
+    exit(1);
+  }
+}
+
+mm_io_callback::~mm_io_callback() {
+  close();
+}
+
+uint64 mm_io_callback::getFilePointer() {
+  return ftello(file);
+}
+
+void mm_io_callback::setFilePointer(int64 offset, seek_mode mode) {
+  int whence;
+
+  if (mode == seek_beginning)
+    whence = SEEK_SET;
+  else if (mode == seek_end)
+    whence = SEEK_END;
+  else
+    whence = SEEK_CUR;
+
+  fseeko(file, offset, whence);
+}
+
+size_t mm_io_callback::write(const void *buffer, size_t size) {
+  size_t bwritten;
+
+  bwritten = fwrite(buffer, 1, size, file);
+  if (ferror(file) != 0) {
+    fprintf(stderr, "Error writing to the output file: %d (%s)\n", errno,
+            strerror(errno));
+    exit(1);
+  }
+
+  return bwritten;
+}
+
+uint32 mm_io_callback::read(void *buffer, size_t size) {
+  return fread(buffer, 1, size, file);
+}
+
+void mm_io_callback::close() {
+  fclose(file);
+}
+
+mm_io_callback *out;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -466,7 +549,7 @@ static float parse_aspect_ratio(char *s) {
 //   return seconds;
 // }
 
-static void render_headers(StdIOCallback *out) {
+static void render_headers(mm_io_callback *out) {
   EbmlHead head;
   filelist_t *file;
 
@@ -479,7 +562,7 @@ static void render_headers(StdIOCallback *out) {
       GetChild<EDocTypeReadVersion>(head);
     *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
 
-    head.Render(static_cast<StdIOCallback &>(*out));
+    head.Render(static_cast<IOCallback &>(*out));
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
     KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
@@ -488,7 +571,7 @@ static void render_headers(StdIOCallback *out) {
     kax_duration = &GetChild<KaxDuration>(*kax_infos);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
 
-    kax_segment->Render(static_cast<StdIOCallback &>(*out));
+    kax_segment->Render(static_cast<IOCallback &>(*out));
 
     // Reserve some space for the meta seek stuff.
     if (write_cues && write_meta_seek) {
@@ -497,7 +580,7 @@ static void render_headers(StdIOCallback *out) {
       if (meta_seek_size == 0)
         meta_seek_size = (int)(file_sizes * 1.5 / 10240);
       kax_seekhead_void->SetSize(meta_seek_size);
-      kax_seekhead_void->Render(static_cast<StdIOCallback &>(*out));
+      kax_seekhead_void->Render(static_cast<IOCallback &>(*out));
     }
 
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
@@ -509,7 +592,7 @@ static void render_headers(StdIOCallback *out) {
       file = file->next;
     }
 
-    kax_tracks->Render(static_cast<StdIOCallback &>(*out));
+    kax_tracks->Render(static_cast<IOCallback &>(*out));
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Could not render the track headers.\n");
     exit(1);
@@ -1012,7 +1095,7 @@ int main(int argc, char **argv) {
 
   // Open the output file.
   try {
-    out = new StdIOCallback(outfile, MODE_CREATE);
+    out = new mm_io_callback(outfile, MODE_CREATE);
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
             strerror(errno));
@@ -1079,14 +1162,14 @@ int main(int argc, char **argv) {
   if (write_cues && cue_writing_requested) {
     if (verbose == 1)
       fprintf(stdout, "Writing cue entries (the index)...");
-    kax_cues->Render(*static_cast<StdIOCallback *>(out));
+    kax_cues->Render(*static_cast<mm_io_callback *>(out));
     if (verbose == 1)
       fprintf(stdout, "\n");
   }
 
   // Render a dummy KaxTags element for now.
   kax_tags = &GetChild<KaxTags>(*kax_segment);
-  kax_tags->Render(*static_cast<StdIOCallback *>(out));
+  kax_tags->Render(*static_cast<mm_io_callback *>(out));
 
   // Write meta seek information if it is not disabled.
   if (write_meta_seek) {
@@ -1096,7 +1179,7 @@ int main(int argc, char **argv) {
     kax_seekhead->IndexThis(*kax_tags, *kax_segment);
     kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
-                                       *static_cast<StdIOCallback *>(out),
+                                       *static_cast<mm_io_callback *>(out),
                                        true) == 0) {
       fprintf(stdout, "Warning: Could not update the meta seek information "
               "as the space reserved for them was too small. Re-run "
@@ -1112,7 +1195,8 @@ int main(int argc, char **argv) {
       kax_seekhead->IndexThis(*kax_tags, *kax_segment);
       kax_seekhead->UpdateSize();
       kax_seekhead_void->ReplaceWith(*kax_seekhead,
-                                     *static_cast<StdIOCallback *>(out), true);
+                                     *static_cast<mm_io_callback *>(out),
+                                     true);
     }
   }
 
