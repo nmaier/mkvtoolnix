@@ -88,7 +88,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
   try {
-    io = new mm_io_c(ti->fname, MODE_READ);
+    io = new mm_file_io_c(ti->fname);
     io->setFilePointer(0, seek_end);
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);

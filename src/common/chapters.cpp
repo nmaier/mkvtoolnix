@@ -267,7 +267,7 @@ parse_chapters(const string &file_name,
 
   in = NULL;
   try {
-    in = new mm_text_io_c(file_name);
+    in = new mm_text_io_c(new mm_file_io_c(file_name));
   } catch (...) {
     if (exception_on_error)
       throw error_c(mxsprintf("Could not open '%s' for reading.\n",

@@ -61,7 +61,7 @@ parse_xml_tags(const char *name,
 
   in = NULL;
   try {
-    in = new mm_text_io_c(name);
+    in = new mm_text_io_c(new mm_file_io_c(name));
   } catch(...) {
     mxerror("Could not open '%s' for reading.\n", name);
   }

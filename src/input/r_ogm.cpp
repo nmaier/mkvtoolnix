@@ -190,7 +190,7 @@ flac_header_extractor_c::flac_header_extractor_c(const char *file_name,
   num_packets(0),
   num_header_packets(0),
   done(false) {
-  file = new mm_io_c(file_name, MODE_READ);
+  file = new mm_file_io_c(file_name);
   decoder = FLAC__stream_decoder_new();
   if (decoder == NULL)
     mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
@@ -298,7 +298,7 @@ ogm_reader_c::ogm_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
 
   try {
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_file_io_c(ti->fname);
     mm_io->setFilePointer(0, seek_end);
     file_size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);
@@ -1184,7 +1184,7 @@ ogm_reader_c::handle_stream_comments() {
               (int)time(NULL));
 #endif
       try {
-        out = new mm_io_c(name, MODE_WRITE);
+        out = new mm_file_io_c(name, MODE_WRITE);
         out->write_bom("UTF-8");
         for (j = 0; j < chapters.size(); j++) {
           out->puts_unl(chapters[j]);

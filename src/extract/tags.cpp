@@ -82,7 +82,7 @@ extract_tags(const char *file_name,
 
   // open input file
   try {
-    in = new mm_io_c(file_name, MODE_READ);
+    in = new mm_file_io_c(file_name);
     qp = new kax_quickparser_c(*in, parse_fully);
   } catch (std::exception &ex) {
     show_error(_("The file '%s' could not be opened for reading (%s)."),

@@ -142,7 +142,7 @@ el_get_binary(parser_data_t *pdata,
     if (pdata->bin->length() == 1)
       xmlp_error(pdata, "No filename found after the '@'.");
     try {
-      io = new mm_io_c(&(pdata->bin->c_str())[1], MODE_READ);
+      io = new mm_file_io_c(&(pdata->bin->c_str())[1]);
       io->setFilePointer(0, seek_end);
       result = io->getFilePointer();
       io->setFilePointer(0, seek_beginning);

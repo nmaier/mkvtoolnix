@@ -255,7 +255,7 @@ get_file_type(const string &filename) {
   mm_text_io = NULL;
   size = 0;
   try {
-    mm_io = new mm_io_c(filename.c_str(), MODE_READ);
+    mm_io = new mm_file_io_c(filename);
     mm_io->setFilePointer(0, seek_end);
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_current);
@@ -301,7 +301,7 @@ get_file_type(const string &filename) {
     delete mm_io;
 
     try {
-      mm_text_io = new mm_text_io_c(filename);
+      mm_text_io = new mm_text_io_c(new mm_file_io_c(filename));
       mm_text_io->setFilePointer(0, seek_end);
       size = mm_text_io->getFilePointer();
       mm_text_io->setFilePointer(0, seek_current);
@@ -725,7 +725,7 @@ render_attachments(IOCallback *rout) {
       try {
         int64_t size;
 
-        io = new mm_io_c((*attch).name, MODE_READ);
+        io = new mm_file_io_c((*attch).name);
         size = io->get_size();
         buffer = new binary[size];
         io->read(buffer, size);
@@ -1191,7 +1191,7 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
+    out = new mm_file_io_c(this_outfile, MODE_CREATE);
   } catch (exception &ex) {
     mxerror(_("The output file '%s' could not be opened for writing (%s).\n"),
             this_outfile.c_str(), strerror(errno));

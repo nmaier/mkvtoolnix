@@ -72,7 +72,7 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   int64_t size;
 
   try {
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_file_io_c(ti->fname);
     mm_io->setFilePointer(0, seek_end);
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);

@@ -34,8 +34,8 @@
 using namespace std;
 
 #if !defined(SYS_WINDOWS)
-mm_io_c::mm_io_c(const string &path,
-                 const open_mode mode) {
+mm_file_io_c::mm_file_io_c(const string &path,
+                           const open_mode mode) {
   char *cmode;
 
   switch (mode) {
@@ -64,25 +64,14 @@ mm_io_c::mm_io_c(const string &path,
   dos_style_newlines = false;
 }
 
-mm_io_c::mm_io_c() {
-  file_name = "";
-  file = NULL;
-  dos_style_newlines = false;
-}
-
-mm_io_c::~mm_io_c() {
-  close();
-  file_name = "";
-}
-
 uint64
-mm_io_c::getFilePointer() {
+mm_file_io_c::getFilePointer() {
   return ftello((FILE *)file);
 }
 
 void
-mm_io_c::setFilePointer(int64 offset,
-                        seek_mode mode) {
+mm_file_io_c::setFilePointer(int64 offset,
+                             seek_mode mode) {
   int whence;
 
   if (mode == seek_beginning)
@@ -97,8 +86,8 @@ mm_io_c::setFilePointer(int64 offset,
 }
 
 size_t
-mm_io_c::write(const void *buffer,
-               size_t size) {
+mm_file_io_c::write(const void *buffer,
+                    size_t size) {
   size_t bwritten;
 
   bwritten = fwrite(buffer, 1, size, (FILE *)file);
@@ -110,31 +99,31 @@ mm_io_c::write(const void *buffer,
 }
 
 uint32
-mm_io_c::read(void *buffer,
-              size_t size) {
+mm_file_io_c::read(void *buffer,
+                   size_t size) {
   return fread(buffer, 1, size, (FILE *)file);
 }
 
 void
-mm_io_c::close() {
+mm_file_io_c::close() {
   if (file != NULL)
     fclose((FILE *)file);
 }
 
 bool
-mm_io_c::eof() {
+mm_file_io_c::eof() {
   return feof((FILE *)file) != 0 ? true : false;
 }
 
 int
-mm_io_c::truncate(int64_t pos) {
+mm_file_io_c::truncate(int64_t pos) {
   return ftruncate(fileno((FILE *)file), pos);
 }
 
 #else // SYS_UNIX
 
-mm_io_c::mm_io_c(const string &path,
-                 const open_mode mode) {
+mm_file_io_c::mm_file_io_c(const string &path,
+                           const open_mode mode) {
   DWORD access_mode, share_mode, disposition;
 
   switch (mode) {
@@ -172,25 +161,15 @@ mm_io_c::mm_io_c(const string &path,
   dos_style_newlines = true;
 }
 
-mm_io_c::mm_io_c() {
-  file_name = "";
-  file = NULL;
-  dos_style_newlines = true;
-}
-
-mm_io_c::~mm_io_c() {
-  close();
-}
-
 void
-mm_io_c::close() {
+mm_file_io_c::close() {
   if (file != NULL)
     CloseHandle((HANDLE)file);
   file_name = "";
 }
 
 uint64
-mm_io_c::getFilePointer() {
+mm_file_io_c::getFilePointer() {
   LONG high = 0;
   DWORD low;
   
@@ -202,8 +181,8 @@ mm_io_c::getFilePointer() {
 }
 
 void
-mm_io_c::setFilePointer(int64 offset,
-                        seek_mode mode) {
+mm_file_io_c::setFilePointer(int64 offset,
+                             seek_mode mode) {
   DWORD method;
   LONG high;
 
@@ -224,8 +203,8 @@ mm_io_c::setFilePointer(int64 offset,
 }
 
 uint32
-mm_io_c::read(void *buffer,
-              size_t size) {
+mm_file_io_c::read(void *buffer,
+                   size_t size) {
   DWORD bytes_read;
 
   if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
@@ -240,8 +219,8 @@ mm_io_c::read(void *buffer,
 }
 
 size_t
-mm_io_c::write(const void *buffer,
-               size_t size) {
+mm_file_io_c::write(const void *buffer,
+                    size_t size) {
   DWORD bytes_written;
 
   if (!WriteFile((HANDLE)file, buffer, size, &bytes_written, NULL))
@@ -279,12 +258,12 @@ mm_io_c::write(const void *buffer,
 }
 
 bool
-mm_io_c::eof() {
+mm_file_io_c::eof() {
   return _eof;
 }
 
 int
-mm_io_c::truncate(int64_t pos) {
+mm_file_io_c::truncate(int64_t pos) {
   bool result;
 
   save_pos();
@@ -299,7 +278,16 @@ mm_io_c::truncate(int64_t pos) {
   return -1;
 }
 
-#endif
+#endif // SYS_UNIX
+
+mm_file_io_c::~mm_file_io_c() {
+  close();
+  file_name = "";
+}
+
+/*
+ * Abstract base class.
+ */
 
 string
 mm_io_c::getline() {
@@ -632,6 +620,20 @@ mm_io_c::printf(const char *fmt,
 }
 
 /*
+ * Proxy class that does I/O on a mm_io_c handed over in the ctor.
+ * Useful for e.g. doing text I/O on other I/Os (file, mem).
+ */
+
+void
+mm_proxy_io_c::close() {
+  if (proxy_io == NULL)
+    return;
+  if (proxy_delete_io)
+    delete proxy_io;
+  proxy_io = NULL;
+}
+
+/*
  * Dummy class for output to /dev/null. Needed for two pass stuff.
  */
 
@@ -754,12 +756,18 @@ mm_mem_io_c::eof() {
  * Class for handling UTF-8/UTF-16/UTF-32 text files.
  */
 
-mm_text_io_c::mm_text_io_c(const string &path):
-  mm_io_c(path, MODE_READ) {
+mm_text_io_c::mm_text_io_c(mm_io_c *_in,
+                           bool _delete_in):
+  mm_proxy_io_c(_in, _delete_in) {
   unsigned char buffer[4];
 
-  if (read(buffer, 4) != 4)
+  _in->setFilePointer(0, seek_beginning);
+  if (_in->read(buffer, 4) != 4) {
+    _in->close();
+    if (_delete_in)
+      delete _in;
     throw exception();
+  }
 
   if ((buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
     byte_order = BO_UTF8;
@@ -783,13 +791,12 @@ mm_text_io_c::mm_text_io_c(const string &path):
     bom_len = 0;
   }
 
-  setFilePointer(0, seek_beginning);
+  _in->setFilePointer(bom_len, seek_beginning);
 }
 
 // 1 byte: 0xxxxxxx,
 // 2 bytes: 110xxxxx 10xxxxxx,
 // 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx
-
 
 int
 mm_text_io_c::read_next_char(char *buffer) {
@@ -905,9 +912,9 @@ void
 mm_text_io_c::setFilePointer(int64_t offset,
                              seek_mode mode) {
   if ((offset == 0) && (mode == seek_beginning))
-    mm_io_c::setFilePointer(bom_len, seek_beginning);
+    mm_proxy_io_c::setFilePointer(bom_len, seek_beginning);
   else
-    mm_io_c::setFilePointer(offset, seek_beginning);
+    mm_proxy_io_c::setFilePointer(offset, seek_beginning);
 }
 
 /*

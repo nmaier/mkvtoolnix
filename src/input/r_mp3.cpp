@@ -39,7 +39,7 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
   unsigned char buf[16384];
 
   try {
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_file_io_c(ti->fname);
     size = mm_io->get_size();
 
     pos = find_valid_headers(mm_io, 2 * 1024 * 1024, 5);

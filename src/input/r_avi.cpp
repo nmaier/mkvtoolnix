@@ -80,7 +80,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   int64_t size;
 
   try {
-    io = new mm_io_c(ti->fname, MODE_READ);
+    io = new mm_file_io_c(ti->fname);
     size = io->get_size();
     if (!avi_reader_c::probe_file(io, size))
       throw error_c(PFX "Source is not a valid AVI file.");

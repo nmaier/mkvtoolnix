@@ -1742,7 +1742,7 @@ process_file(const char *file_name) {
 
   // open input file
   try {
-    in = new mm_io_c(file_name, MODE_READ);
+    in = new mm_file_io_c(file_name);
   } catch (std::exception &ex) {
     show_error("Error: Couldn't open input file %s (%s).\n", file_name,
                strerror(errno));

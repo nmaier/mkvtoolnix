@@ -57,7 +57,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
   int tag_size;
 
   try {
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_file_io_c(ti->fname);
     size = mm_io->get_size();
 
     if (identifying)

@@ -1362,7 +1362,7 @@ parse_args(vector<string> &args) {
       if ((this_arg == "--attach-file"))
         attachment.to_all_files = true;
       try {
-        io = new mm_io_c(attachment.name, MODE_READ);
+        io = new mm_file_io_c(attachment.name);
         attachment.size = io->get_size();
         delete io;
         if (attachment.size == 0)
@@ -1778,7 +1778,7 @@ read_args_from_file(vector<string> &args,
 
   mm_io = NULL;
   try {
-    mm_io = new mm_text_io_c(filename);
+    mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (exception &ex) {
     mxerror(_("The file '%s' could not be opened for reading command line "
               "arguments."), filename);

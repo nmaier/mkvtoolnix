@@ -121,7 +121,7 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
 
   samples = 0;
   try {
-    file = new mm_io_c(ti->fname, MODE_READ);
+    file = new mm_file_io_c(ti->fname);
     file_size = file->get_size();
   } catch (exception &ex) {
     throw error_c(FPFX "Could not open the source file.");

@@ -62,7 +62,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     MPEG2SequenceHeader seq_hdr;
     M2VParser parser;
 
-    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io = new mm_file_io_c(ti->fname);
     size = mm_io->get_size();
 
     // Let's find the first frame. We need its information like

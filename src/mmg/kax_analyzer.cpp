@@ -166,7 +166,7 @@ kax_analyzer_c::kax_analyzer_c(wxWindow *_parent,
   file_name(_name),
   segment(NULL) {
   try {
-    file = new mm_io_c(file_name.c_str(), MODE_SAFE);
+    file = new mm_file_io_c(file_name.c_str(), MODE_SAFE);
   } catch (...) {
     throw error_c(string("Could not open the file " + file_name + "."));
   }
@@ -188,7 +188,7 @@ bool
 kax_analyzer_c::probe(string file_name) {
   try {
     unsigned char data[4];
-    mm_io_c in(file_name.c_str(), MODE_READ);
+    mm_file_io_c in(file_name.c_str());
 
     if (in.read(data, 4) != 4)
       return false;
