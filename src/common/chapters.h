@@ -23,10 +23,13 @@
 
 #include <stdio.h>
 
-#include <matroska/KaxChapters.h>
-
 #include "common.h"
 #include "mm_io.h"
+
+namespace libmatroska {
+  class KaxChapters;
+  class KaxTags;
+};
 
 using namespace libmatroska;
 
@@ -36,7 +39,8 @@ parse_chapters(const char *file_name, int64_t min_tc = 0,
                const char *language = NULL,
                const char *charset = NULL,
                bool exception_on_error = false,
-               bool *is_simple_format = NULL);
+               bool *is_simple_format = NULL,
+               KaxTags **tags = NULL);
 
 bool MTX_DLL_API probe_xml_chapters(mm_text_io_c *in);
 KaxChapters *MTX_DLL_API parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
@@ -56,7 +60,9 @@ KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
                                             int64_t max_tc, int64_t offset,
                                             const char *language,
                                             const char *charset,
-                                            bool exception_on_error = false);
+                                            bool exception_on_error = false,
+                                            KaxTags **tags = NULL);
+
 
 void MTX_DLL_API write_chapters_xml(KaxChapters *chapters, FILE *out);
 void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters,

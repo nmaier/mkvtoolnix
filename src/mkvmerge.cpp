@@ -175,6 +175,7 @@ EbmlVoid *kax_sh_void = NULL;
 KaxDuration *kax_duration;
 KaxSeekHead *kax_sh_main = NULL, *kax_sh_cues = NULL;
 KaxTags *kax_tags = NULL;
+KaxTags *tags_from_cue_chapters = NULL;
 KaxAttachments *kax_as = NULL;
 KaxChapters *kax_chapters = NULL;
 EbmlVoid *kax_chapters_void = NULL;
@@ -1918,7 +1919,8 @@ parse_args(int argc,
       if (kax_chapters != NULL)
         delete kax_chapters;
       kax_chapters = parse_chapters(chapter_file_name, 0, -1, 0,
-                                    chapter_language, chapter_charset);
+                                    chapter_language, chapter_charset, false,
+                                    false, &tags_from_cue_chapters);
       i++;
 
     } else if (!strcmp(this_arg, "--no-chapters")) {
@@ -2369,6 +2371,8 @@ cleanup() {
   safefree(outfile);
   if (kax_tags != NULL)
     delete kax_tags;
+  if (tags_from_cue_chapters != NULL)
+    delete tags_from_cue_chapters;
   if (kax_chapters != NULL)
     delete kax_chapters;
   if (kax_as != NULL)
@@ -2443,6 +2447,53 @@ create_output_name() {
   return s;
 }
 
+void
+add_tags_from_cue_chapters() {
+  int i;
+  uint32_t tuid;
+  bool found;
+
+  if (tags_from_cue_chapters == NULL)
+    return;
+
+  found = false;
+  for (i = 0; i < ptzrs_in_header_order.size(); i++)
+    if (ptzrs_in_header_order[i]->get_track_type() == 'v') {
+      found = true;
+      tuid = ptzrs_in_header_order[i]->get_uid();
+      break;
+    }
+  if (!found) {
+    for (i = 0; i < ptzrs_in_header_order.size(); i++)
+      if (ptzrs_in_header_order[i]->get_track_type() == 'a') {
+        found = true;
+        tuid = ptzrs_in_header_order[i]->get_uid();
+        break;
+      }
+  }
+  if (!found)
+    tuid = ptzrs_in_header_order[0]->get_uid();
+
+  for (i = 0; i < tags_from_cue_chapters->ListSize(); i++) {
+    KaxTagTargets *targets;
+
+    targets = &GetChild<KaxTagTargets>
+      (*static_cast<KaxTag *>((*tags_from_cue_chapters)[i]));
+    *static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets)) = tuid;
+  }
+
+  if (kax_tags == NULL)
+    kax_tags = tags_from_cue_chapters;
+  else {
+    while (tags_from_cue_chapters->ListSize() > 0) {
+      kax_tags->PushElement(*(*tags_from_cue_chapters)[0]);
+      tags_from_cue_chapters->Remove(0);
+    }
+    delete tags_from_cue_chapters;
+  }
+  tags_from_cue_chapters = NULL;
+}
+
 /** \brief Creates the next output file
  *
  * Creates a new file name depending on the split settings. Opens that
@@ -2496,6 +2547,8 @@ create_next_output_file() {
       }
     }
   }
+
+  add_tags_from_cue_chapters();
 
   if (kax_tags != NULL) {
     if (!kax_tags->CheckMandatory())

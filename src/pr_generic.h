@@ -475,4 +475,6 @@ protected:
   virtual void dump_packet(const void *buffer, int size);
 };
 
+extern vector<generic_packetizer_c *> ptzrs_in_header_order;
+
 #endif  // __PR_GENERIC_H

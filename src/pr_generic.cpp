@@ -37,6 +37,8 @@
 
 using namespace std;
 
+vector<generic_packetizer_c *> ptzrs_in_header_order;
+
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_c *nti)
   throw(error_c) {
@@ -483,6 +485,16 @@ void
 generic_packetizer_c::set_headers() {
   int idx, disp_width, disp_height;
   KaxTag *tag;
+  bool found;
+
+  found = false;
+  for (idx = 0; idx < ptzrs_in_header_order.size(); idx++)
+    if (ptzrs_in_header_order[idx] == this) {
+      found = true;
+      break;
+    }
+  if (!found)
+    ptzrs_in_header_order.push_back(this);
 
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
