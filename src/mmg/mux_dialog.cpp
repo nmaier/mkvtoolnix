@@ -185,15 +185,12 @@ mux_dialog::mux_dialog(wxWindow *parent):
       break;
   }
 
-  b_ok->Enable(true);
-  b_abort->Enable(false);
-  b_ok->SetFocus();
-
   MakeModal(false);
   ShowModal();
 }
 
 mux_dialog::~mux_dialog() {
+  process->dlg = NULL;
   delete process;
   wxRemoveFile(opt_file_name);
 }
@@ -236,6 +233,16 @@ mux_dialog::on_abort(wxCommandEvent &evt) {
 #else
   wxKill(pid, wxSIGTERM);
 #endif
+  b_abort->Enable(false);
+}
+
+void
+mux_dialog::done() {
+  SetTitle(wxT("mkvmerge has finished"));
+
+  b_ok->Enable(true);
+  b_abort->Enable(false);
+  b_ok->SetFocus();
 }
 
 mux_process::mux_process(mux_dialog *mux_dlg):
@@ -247,6 +254,9 @@ void
 mux_process::OnTerminate(int pid,
                          int status) {
   wxString s;
+
+  if (dlg == NULL)
+    return;
 
   s.Printf(wxT("mkvmerge %s with a return code of %d. %s\n"),
            (status != 0) && (status != 1) ? wxT("FAILED") : wxT("finished"),
@@ -260,7 +270,7 @@ mux_process::OnTerminate(int pid,
 #endif
            : status == 2 ? wxT("There were ERRORs.") : wxT(""));
   dlg->update_window(s);
-  dlg->SetTitle(wxT("mkvmerge has finished"));
+  dlg->done();
 }
 
 IMPLEMENT_CLASS(mux_dialog, wxDialog);
