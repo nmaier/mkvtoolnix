@@ -442,8 +442,8 @@ parse_chapters(mm_text_io_c *in,
       return parse_xml_chapters(in, min_tc, max_tc, offset,
                                 exception_on_error);
 
-    throw error_c(mxsprintf("Unknown file format for '%s'. It does not "
-                            "contain a support chapter format.\n",
+    throw error_c(mxsprintf("Unknown chapter file format in '%s'. It does not "
+                            "contain a supported chapter format.\n",
                             in->get_file_name().c_str()));
   } catch (error_c e) {
     if (exception_on_error)
