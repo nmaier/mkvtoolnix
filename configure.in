@@ -294,11 +294,15 @@ dnl
                [ flac_found=no ],
                "-lm")
   if test "$flac_found" = "yes"; then
-    AC_CHECK_HEADERS(FLAC/format.h, , flac_found=no)
+    AC_CHECK_MEMBER(FLAC__StreamMetadata_StreamInfo.sample_rate, ,
+                    [ flac_found=no ],
+                    [ #include <FLAC/format.h>
+                    ])
   fi
   if test x"$flac_found" = xyes ; then
     opt_features_yes="$opt_features_yes; FLAC audio"
   else
+    FLAC_LIBS=""
     opt_features_no="$opt_features_no; FLAC audio"
   fi
 
