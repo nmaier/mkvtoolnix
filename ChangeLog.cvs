@@ -1,3 +1,126 @@
+2003-05-11 17:48  mosu
+
+	* cluster_helper.cpp, mkvmerge.cpp, mkvmerge.h: Changes to the meta
+	seek handling.
+
+2003-05-11 14:41  mosu
+
+	* p_ac3.cpp, p_mp3.cpp, p_mp3.h, pr_generic.cpp, pr_generic.h:
+	Allowed add_packet() not to duplicate the data it receives if the
+	packetizer already did that.
+
+2003-05-11 14:31  mosu
+
+	* r_avi.cpp: Too many audio packets were read as each call to
+	read() resulted in audio packets being read from the AVI regardless
+	of the number of packets in the queue.
+
+2003-05-11 11:58  mosu
+
+	* .cvsignore: Ingore acinclude.m4 as it will be auto-copied by
+	autogen.sh
+
+2003-05-11 11:42  mosu
+
+	* mkvinfo.cpp: Preliminary support for KaxTags.
+
+2003-05-11 11:33  mosu
+
+	* mkvmerge.cpp: Support for writing a dummy KaxTags element and
+	including it in the meta seek block.
+
+2003-05-11 11:24  mosu
+
+	* r_matroska.cpp, r_matroska.h: Proper handling of
+	KaxTrackFlagDefault, KaxTrackLanguage and EbmlVoid.
+
+2003-05-11 11:05  mosu
+
+	* p_ac3.cpp, p_mp3.cpp, p_pcm.cpp, p_textsubs.cpp, p_video.cpp,
+	p_vorbis.cpp, pr_generic.cpp, pr_generic.h: Proper handling of the
+	"default track" flag.
+
+2003-05-11 11:04  mosu
+
+	* common.cpp, common.h, r_ogm.cpp: Improved handling of endian
+	matters.
+
+2003-05-10 11:44  mosu
+
+	* autogen.sh: Added a note about the file version being used.
+
+2003-05-10 11:41  mosu
+
+	* acinclude-2.1.m4, acinclude-2.5.m4, acinclude.m4, autogen.sh:
+	Different acinclude.m4 files based on the autoconf version.
+
+2003-05-09 15:14  mosu
+
+	* acinclude.m4: Change for improved backwards compatibility.
+
+2003-05-09 12:05  mosu
+
+	* common.cpp, common.h, mkvinfo.cpp, mkvmerge.cpp, p_vorbis.cpp,
+	r_ac3.cpp, r_avi.cpp, r_matroska.cpp, r_mp3.cpp, r_ogm.cpp,
+	r_wav.cpp, avilib/avidump.c, avilib/avilib.c, avilib/avilib.h:
+	Fixes that allow compilation with MS VC6.
+
+2003-05-09 12:05  mosu
+
+	* README.Windows.txt: Updated installation instructions.
+
+2003-05-09 11:15  mosu
+
+	* README.Windows, README.Windows.txt: Renamed README.Windows to
+	README.Windows.txt
+
+2003-05-09 08:27  mosu
+
+	* README.Windows: Added build instructions for cygwin.
+
+2003-05-09 08:08  mosu
+
+	* common.cpp: Fixed a segfault if iconv could not be initialized.
+
+2003-05-09 07:26  mosu
+
+	* Makefile.am, acinclude.m4, common.cpp, common.h, configure.in,
+	avilib/avilib.h: Fixes that allow compilation under cygwin.
+
+2003-05-08 20:46  mosu
+
+	* cluster_helper.cpp, pr_generic.cpp: Removed LL postfixes on
+	constants. gcc 3.2 does not need them, VC6 does not recognize them,
+	so just ditch them :)
+
+2003-05-08 20:42  mosu
+
+	* common.cpp: Changed UTF8 to UTF-8 which works well with both the
+	Windows and Linux version of the iconv lib.
+
+2003-05-07 19:40  mosu
+
+	* mkvinfo.cpp, r_matroska.cpp: Sync with the API changes in
+	libmatroska 0.4.2
+
+2003-05-07 17:19  mosu
+
+	* acinclude.m4: Better hint for the libmatroska version.
+
+2003-05-07 17:10  mosu
+
+	* acinclude.m4: Matroska version check >= 0.4.2
+
+2003-05-06 12:22  mosu
+
+	* pr_generic.cpp, pr_generic.h, r_matroska.cpp, r_matroska.h:
+	Proper aspect ratio support for the Matroska reader.
+
+2003-05-06 11:59  mosu
+
+	* mkvinfo.cpp, mkvmerge.1, mkvmerge.cpp, pr_generic.cpp,
+	pr_generic.h: Added support for aspect ratio.
+
 2003-05-06 10:15  mosu
 
 	* r_matroska.cpp: The Matroska reader calculated wrong header
