@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.3 2003/03/03 13:47:50 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.4 2003/03/03 14:39:03 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -104,7 +104,7 @@ ogm_reader_c::ogm_reader_c(char *fname, unsigned char *astreams,
     this->vstreams = (unsigned char *)strdup((char *)vstreams);
   else
     this->vstreams = NULL;
-
+ 
   if (tstreams != NULL)
     this->tstreams = (unsigned char *)strdup((char *)tstreams);
   else
@@ -738,6 +738,8 @@ int ogm_reader_c::read_headers() {
   }
   
   fseek(file, 0, SEEK_SET);
+  ogg_sync_clear(&oy);
+  ogg_sync_init(&oy);
 
   return 1;
 }
