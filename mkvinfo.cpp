@@ -839,6 +839,14 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "Reference block: %.3fms", 
                              ((float)int64(reference)) * tc_scale / 1000000.0);
 
+              } else if (EbmlId(*l3) ==
+                         KaxReferencePriority::ClassInfos.GlobalId) {
+                KaxReferencePriority &priority =
+                  *static_cast<KaxReferencePriority *>(l3);
+                priority.ReadData(es->I_O());
+                show_element(l3, 3, "Reference priority: %u",
+                             uint32(priority));
+
               } else if (!is_ebmlvoid(l3, 3))
                 show_unknown_element(l3, 3);
 
