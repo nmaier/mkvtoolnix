@@ -115,8 +115,9 @@ using namespace libmatroska;
 #define E_MultiComment                   77
 #define E_CommentName                    78
 #define E_Comments                       79
+#define E_CommentLanguage                81
 
-// MAX: 80
+// MAX: 81
 
 typedef struct {
   XML_Parser parser;
@@ -190,20 +191,7 @@ void perror(parser_data_t *pdata, const char *fmt, ...);
                                     "allowed under <%s>.", name, \
                                     parent_name.c_str());
 
-void start_element(void *user_data, const char *name,
-                   const char **atts);
-void start_level1(parser_data_t *pdata, const char *name);
-void start_level2(parser_data_t *pdata, const char *name);
-void start_level3(parser_data_t *pdata, const char *name);
-void start_level4(parser_data_t *pdata, const char *name);
-void start_level5(parser_data_t *pdata, const char *name);
-
 void end_element(void *user_data, const char *name);
-void end_level1(parser_data_t *pdata, const char *name);
-void end_level2(parser_data_t *pdata, const char *name);
-void end_level3(parser_data_t *pdata, const char *name);
-void end_level4(parser_data_t *pdata, const char *name);
-void end_level5(parser_data_t *pdata, const char *name);
 
 void parse_xml_tags(const char *name, KaxTags *tags);
 

@@ -19,7 +19,8 @@
     <General>
       <Subject>Subject</Subject>
       <Bibliography>Bibliography</Bibliography>
-      <Language>Language</Language>
+      <!-- All languages must be valid ISO639-2 codes. -->
+      <Language>ger</Language>
       <Rating>QUJDREVG</Rating>
       <Encoder>Encoder</Encoder>
       <EncodeSettings>EncodeSettings</EncodeSettings>
@@ -131,7 +132,7 @@
         <Address>Address</Address>
         <URL>URL</URL>
         <Email>Email</Email>
-        <Language>Language</Language>
+        <Language>eng</Language>
       </Title>
       <!-- Let's test whether a complete second Title entry works. -->
       <Title>
@@ -142,7 +143,7 @@
         <Address>Address2</Address>
         <URL>URL2</URL>
         <Email>Email2</Email>
-        <Language>Language2</Language>
+        <Language>fre</Language>
       </Title>
     </MultiTitle>
 
@@ -150,7 +151,7 @@
 <!--     <MultiComment> -->
 <!--       <Name>CommentName</Name> -->
 <!--       <Comments>Comments</Comments> -->
-<!--       <Language>Language</Language> -->
+<!--       <Language>ita</Language> -->
 <!--     </MultiComment> -->
 
   </Tag>

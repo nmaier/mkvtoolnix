@@ -27,8 +27,8 @@ typedef struct {
 
 extern iso639_language_t iso639_language_list[];
 
-int is_valid_iso639_2_code(char *iso639_2_code);
-char *get_iso639_english_name(char *iso639_2_code);
+int is_valid_iso639_2_code(const char *iso639_2_code);
+char *get_iso639_english_name(const char *iso639_2_code);
 void list_iso639_languages();
 
 #endif // __ISO639_H

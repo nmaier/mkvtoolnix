@@ -34,6 +34,7 @@
 
 #include "base64.h"
 #include "common.h"
+#include "iso639.h"
 #include "mm_io.h"
 #include "tagparser.h"
 
@@ -41,8 +42,8 @@ using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
-void el_get_uint(parser_data_t *pdata, EbmlElement *el,
-                 uint64_t min_value = 0) {
+static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
+                        uint64_t min_value = 0) {
   int64 value;
 
   strip(*pdata->bin);
@@ -56,8 +57,8 @@ void el_get_uint(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlUInteger *>(el)) = value;
 }
 
-void el_get_sint(parser_data_t *pdata, EbmlElement *el,
-                 int64_t min_value = -9223372036854775807LL-1) {
+static void el_get_sint(parser_data_t *pdata, EbmlElement *el,
+                        int64_t min_value = -9223372036854775807LL-1) {
   int64 value;
 
   strip(*pdata->bin);
@@ -71,8 +72,8 @@ void el_get_sint(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlSInteger *>(el)) = value;
 }
 
-void el_get_float(parser_data_t *pdata, EbmlElement *el,
-                  float min_value = (float)1.40129846432481707e-45) {
+static void el_get_float(parser_data_t *pdata, EbmlElement *el,
+                         float min_value = (float)1.40129846432481707e-45) {
   char *endptr;
   float value;
 
@@ -87,15 +88,21 @@ void el_get_float(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlFloat *>(el)) = value;
 }
 
-void el_get_string(parser_data_t *pdata, EbmlElement *el) {
+static void el_get_string(parser_data_t *pdata, EbmlElement *el,
+                          bool check_language = false) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     perror(pdata, "Expected a string but found only whitespaces.");
 
+  if (check_language && !is_valid_iso639_2_code(pdata->bin->c_str()))
+    perror(pdata, "'%s' is not a valid ISO639-2 language code. See the "
+           "output of 'mkvmerge --list-languages' for a list of all "
+           "valid language codes.", pdata->bin->c_str());
+
   *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
 }
 
-void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
+static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     perror(pdata, "Expected a string but found only whitespaces.");
@@ -104,7 +111,7 @@ void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
     cstrutf8_to_UTFstring(pdata->bin->c_str());
 }
 
-void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
+static void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
   int64_t result;
   binary *buffer;
   mm_io_c *io;
@@ -146,7 +153,7 @@ void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
 // ISO 8601 format: 2003-07-17T19:50:53+0200
 //                  012345678901234567890123
 //                            1         2
-void el_get_date(parser_data_t *pdata, EbmlElement *el) {
+static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   const char *errmsg = "Expected a date in ISO 8601 format but found '%s'. "
     "The ISO 8601 date format looks like this: YYYY-MM-DDTHH:MM:SS:-TZTZ, "
     "e.g. 2003-07-17T19:50:52+0200. The time zone (TZ) may also be negative.";
@@ -223,7 +230,27 @@ void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   (static_cast<EbmlDate *>(el))->SetEpochDate(tme);
 }
 
-void end_level1(parser_data_t *pdata, const char *) {
+static bool is_multicomment(parser_data_t *pdata, const char *name) {
+  int parent;
+
+  parent = (*pdata->parents)[pdata->parents->size() - 2];
+
+  if (parent != E_MultiComment)
+    return false;
+
+  if (!strcmp(name, "Name"))
+    el_get_string(pdata, &GetChild<KaxTagMultiCommentName>(*pdata->m_comment));
+  else if (!strcmp(name, "Comments"))
+    el_get_utf8string(pdata, &GetChild<KaxTagMultiCommentComments>
+                      (*pdata->m_comment));
+  else if (!strcmp(name, "Language"))
+    el_get_string(pdata, &GetChild<KaxTagMultiCommentLanguage>
+                  (*pdata->m_comment), true);
+
+  return true;
+}
+
+static void end_level1(parser_data_t *pdata, const char *) {
   // Can only be "Tag"
   pdata->targets = NULL;
   pdata->general = NULL;
@@ -239,7 +266,7 @@ void end_level1(parser_data_t *pdata, const char *) {
   pdata->m_comment = NULL;
 }
 
-void end_level2(parser_data_t *pdata, const char *name) {
+static void end_level2(parser_data_t *pdata, const char *name) {
   if (!strcmp(name, "Targets")) {
     pdata->track_uid = NULL;
     pdata->chapter_uid = NULL;
@@ -290,9 +317,12 @@ void end_level2(parser_data_t *pdata, const char *name) {
   }
 }
 
-void end_level3(parser_data_t *pdata, const char *name) {
+static void end_level3(parser_data_t *pdata, const char *name) {
   string parent_name;
   int parent;
+
+  if (is_multicomment(pdata, name))
+    return;
 
   parent_name = (*pdata->parent_names)[pdata->parent_names->size() - 2];
   parent = (*pdata->parents)[pdata->parents->size() - 2];
@@ -309,7 +339,7 @@ void end_level3(parser_data_t *pdata, const char *name) {
     else if (!strcmp(name, "Bibliography"))
       el_get_utf8string(pdata, &GetChild<KaxTagBibliography>(*pdata->general));
     else if (!strcmp(name, "Language"))
-      el_get_string(pdata, &GetChild<KaxTagLanguage>(*pdata->general));
+      el_get_string(pdata, &GetChild<KaxTagLanguage>(*pdata->general), true);
     else if (!strcmp(name, "Rating"))
       el_get_binary(pdata, &GetChild<KaxTagRating>(*pdata->general));
     else if (!strcmp(name, "Encoder"))
@@ -428,9 +458,12 @@ void end_level3(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 3, %d", parent);
 }
 
-void end_level4(parser_data_t *pdata, const char *name) {
+static void end_level4(parser_data_t *pdata, const char *name) {
   string parent_name;
   int parent;
+
+  if (is_multicomment(pdata, name))
+    return;
 
   parent_name = (*pdata->parent_names)[pdata->parent_names->size() - 2];
   parent = (*pdata->parents)[pdata->parents->size() - 2];
@@ -522,15 +555,18 @@ void end_level4(parser_data_t *pdata, const char *name) {
       el_get_string(pdata, pdata->t_email);
     else if (!strcmp(name, "Language"))
       el_get_string(pdata, &GetChild<KaxTagMultiTitleLanguage>
-                    (*pdata->title));
+                    (*pdata->title), true);
 
   } else
     die("Unknown parent: level 4, %d", parent);
 }
 
-void end_level5(parser_data_t *pdata, const char *name) {
+static void end_level5(parser_data_t *pdata, const char *name) {
   string parent_name;
   int parent;
+
+  if (is_multicomment(pdata, name))
+    return;
 
   parent_name = (*pdata->parent_names)[pdata->parent_names->size() - 2];
   parent = (*pdata->parents)[pdata->parents->size() - 2];
@@ -550,6 +586,13 @@ void end_level5(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 4, %d", parent);
 }
 
+static void end_level6(parser_data_t *pdata, const char *name) {
+  if (is_multicomment(pdata, name))
+    return;
+
+  die("tagparser_end: Unknown element. This should not have happened.");
+}
+
 void end_element(void *user_data, const char *name) {
   parser_data_t *pdata;
 
@@ -558,7 +601,9 @@ void end_element(void *user_data, const char *name) {
   if (pdata->data_allowed && (pdata->bin == NULL))
     perror(pdata, "Element <%s> does not contain any data.", name);
 
-  if (pdata->depth == 2)
+  if (pdata->depth == 1)
+    ;                           // Nothing to do here!
+  else if (pdata->depth == 2)
     end_level1(pdata, name);
   else if (pdata->depth == 3)
     end_level2(pdata, name);
@@ -568,6 +613,10 @@ void end_element(void *user_data, const char *name) {
     end_level4(pdata, name);
   else if (pdata->depth == 6)
     end_level5(pdata, name);
+  else if (pdata->depth == 7)
+    end_level6(pdata, name);
+  else
+    die("tagparser_end: depth > 7: %d", pdata->depth);
 
   if (pdata->bin != NULL) {
     delete pdata->bin;
