@@ -325,6 +325,8 @@ identify(const string &filename) {
 
   file.appending = false;
   file.pack = NULL;
+  file.num_unfinished_packetizers = 0;
+  file.old_num_unfinished_packetizers = 0;
   file.ti = new track_info_c(ti);
 
   files.push_back(file);

@@ -69,6 +69,7 @@ typedef struct {
   track_info_c *ti;
   bool appending, appended_to, done;
 
+  int num_unfinished_packetizers, old_num_unfinished_packetizers;
   vector<deferred_connection_t> deferred_connections;
 } filelist_t;
 
