@@ -50,7 +50,7 @@ cluster_helper_c::cluster_helper_c() {
   num_clusters = 0;
   clusters = NULL;
   cluster_content_size = 0;
-  max_timecode = 0;
+  max_timecode_and_duration = 0;
   last_cluster_tc = 0;
   num_cue_elements = 0;
   header_overhead = -1;
@@ -105,7 +105,7 @@ void
 cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
   packet_t *p;
-  int64_t timecode, old_max_timecode, additional_size;
+  int64_t timecode, additional_size;
   int i;
   bool split;
 
@@ -177,12 +177,6 @@ cluster_helper_c::add_packet(packet_t *packet) {
     if (split) {
       render();
 
-      old_max_timecode = max_timecode;
-      if ((packet->unmodified_assigned_timecode +
-           packet->unmodified_duration) >
-          max_timecode)
-        max_timecode = packet->unmodified_assigned_timecode +
-          packet->unmodified_duration;
       num_cue_elements = 0;
 
       mxinfo("\n");
@@ -194,15 +188,19 @@ cluster_helper_c::add_packet(packet_t *packet) {
 
       bytes_in_file = 0;
       first_timecode_in_file = -1;
-      max_timecode = old_max_timecode;
 
       if (no_linking) {
-        timecode_offset = -1;
+        timecode_offset = packet->assigned_timecode;
         first_timecode = 0;
       } else
         first_timecode = -1;
     }
   }
+
+  if ((packet->unmodified_assigned_timecode + packet->unmodified_duration) >
+      max_timecode_and_duration)
+    max_timecode_and_duration = packet->unmodified_assigned_timecode +
+      packet->unmodified_duration;
 
   packet->packet_num = packet_num;
   packet_num++;
@@ -214,11 +212,6 @@ cluster_helper_c::add_packet(packet_t *packet) {
   c->packets[c->num_packets] = packet;
   c->num_packets++;
   cluster_content_size += packet->length;
-
-  if ((packet->unmodified_assigned_timecode + packet->unmodified_duration) >
-      max_timecode)
-    max_timecode = packet->unmodified_assigned_timecode +
-      packet->unmodified_duration;
 
   walk_clusters();
 
@@ -429,8 +422,6 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
 
     if (first_timecode == -1)
       first_timecode = pack->assigned_timecode;
-    if (timecode_offset == -1)
-      timecode_offset = pack->assigned_timecode;
     if (i == 0)
       static_cast<kax_cluster_c *>
         (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
@@ -756,8 +747,8 @@ cluster_helper_c::free_ref(int64_t ref_timecode,
 }
 
 int64_t
-cluster_helper_c::get_max_timecode() {
-  return max_timecode - timecode_offset;
+cluster_helper_c::get_duration() {
+  return max_timecode_and_duration - timecode_offset;
 }
 
 int64_t

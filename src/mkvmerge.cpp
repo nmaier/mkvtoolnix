@@ -591,8 +591,7 @@ sighandler(int signum) {
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    irnd((double)(cluster_helper->get_max_timecode() -
-                  cluster_helper->get_first_timecode()) /
+    irnd((double)cluster_helper->get_duration() /
          (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
   out->restore_pos();
@@ -2975,14 +2974,12 @@ finish_file(bool last_file) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
-  mxverb(3, "mkvmerge: kax_duration: gmt %lld tcs %f du %lld\n",
-         cluster_helper->get_max_timecode(), timecode_scale,
-         irnd((double)(cluster_helper->get_max_timecode() -
-                       cluster_helper->get_first_timecode()) /
+  mxverb(3, "mkvmerge: kax_duration: gdur %lld tcs %f du %lld\n",
+         cluster_helper->get_duration(), timecode_scale,
+         irnd((double)cluster_helper->get_duration() /
               (double)((int64_t)timecode_scale)));
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    irnd((double)(cluster_helper->get_max_timecode() -
-                  cluster_helper->get_first_timecode()) /
+    irnd((double)cluster_helper->get_duration() /
          (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
 
@@ -3026,7 +3023,7 @@ finish_file(bool last_file) {
     else
       offset = 0;
     start = cluster_helper->get_first_timecode() + offset;
-    end = cluster_helper->get_max_timecode() + offset;
+    end = start + cluster_helper->get_duration();
 
     chapters_here = copy_chapters(kax_chapters);
     chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
