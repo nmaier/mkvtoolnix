@@ -409,7 +409,7 @@ format_binary(EbmlBinary &bin,
     len = max_len;
   else
     len = bin.GetSize();
-  char buffer[40 + len * 5 + 1 + 3 + 24];
+  char *buffer = new char[40 + len * 5 + 1 + 3 + 24];
   const unsigned char *b = (const unsigned char *)&binary(bin);
   buffer[0] = 0;
   mxprints(buffer, "length %lld, data:", bin.GetSize());
@@ -422,6 +422,7 @@ format_binary(EbmlBinary &bin,
              calc_adler32(&binary(bin), bin.GetSize()));
   result = buffer;
   strip(result);
+  delete [] buffer;
 
   return result;
 }
@@ -500,21 +501,23 @@ def_handle(info) {
 
     } else if (is_id(l2, KaxSegmentUID)) {
       KaxSegmentUID &uid = *static_cast<KaxSegmentUID *>(l2);
-      char buffer[uid.GetSize() * 5 + 1];
+      char *buffer = new char[uid.GetSize() * 5 + 1];
       const unsigned char *b = (const unsigned char *)&binary(uid);
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
       show_element(l2, 2, "Segment UID:%s", buffer);
+	  delete [] buffer;
 
     } else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
-      char buffer[uid.GetSize() * 5 + 1];
+      char* buffer = new char[uid.GetSize() * 5 + 1];
       const unsigned char *b = (const unsigned char *)&binary(uid);
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
       show_element(l2, 2, "Previous segment UID:%s", buffer);
+	  delete [] buffer;
 
     } else if (is_id(l2, KaxPrevFilename)) {
       KaxPrevFilename &filename = *static_cast<KaxPrevFilename *>(l2);
@@ -522,12 +525,13 @@ def_handle(info) {
 
     } else if (is_id(l2, KaxNextUID)) {
       KaxNextUID &uid = *static_cast<KaxNextUID *>(l2);
-      char buffer[uid.GetSize() * 5 + 1];
+      char *buffer = new char[uid.GetSize() * 5 + 1];
       const unsigned char *b = (const unsigned char *)&binary(uid);
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
       show_element(l2, 2, "Next segment UID:%s", buffer);
+      delete [] buffer;
 
     } else if (is_id(l2, KaxNextFilename)) {
       KaxNextFilename &filename = *static_cast<KaxNextFilename *>(l2);
@@ -1372,6 +1376,27 @@ def_handle(attachments) {
 }
 
 void
+def_handle2(silent_track,
+            KaxCluster *&cluster) {
+  EbmlMaster *m2;
+  int i2;
+
+  show_element(l2, 2, "Silent Tracks");
+  m2 = static_cast<EbmlMaster *>(l2);
+
+  for (i2 = 0; i2 < m2->ListSize(); i2++) {
+    l3 = (*m2)[i2];
+
+    if (is_id(l3, KaxClusterSilentTrackNumber)) {
+      KaxClusterSilentTrackNumber &c_silent =
+        *static_cast<KaxClusterSilentTrackNumber *>(l3);
+      show_element(l3, 3, "Silent Track Number: %llu", uint64(c_silent));
+    } else if (!is_global(es, l3, 3))
+      show_unknown_element(l3, 3);
+  }
+}
+
+void
 def_handle2(block_group,
             KaxCluster *&cluster) {
   EbmlMaster *m2, *m3, *m4;
@@ -1623,12 +1648,10 @@ def_handle2(cluster,
                    (float)cluster_tc * (float)tc_scale / 1000000000.0);
       cluster->InitTimecode(cluster_tc, tc_scale);
 
-#if MATROSKA_VERSION >= 2
     } else if (is_id(l2, KaxClusterPosition)) {
       KaxClusterPosition &c_pos =
         *static_cast<KaxClusterPosition *>(l2);
       show_element(l2, 2, "Cluster position: %llu", uint64(c_pos));
-#endif
 
     } else if (is_id(l2, KaxClusterPrevSize)) {
       KaxClusterPrevSize &c_psize =
@@ -1636,7 +1659,10 @@ def_handle2(cluster,
       show_element(l2, 2, "Cluster previous size: %llu",
                    uint64(c_psize));
 
-    } else if (is_id(l2, KaxBlockGroup))
+    } else if (is_id(l2, KaxClusterSilentTracks))
+      handle2(silent_track, cluster);
+
+    else if (is_id(l2, KaxBlockGroup))
       handle2(block_group, cluster);
 
     else if (!is_global(es, l2, 2))

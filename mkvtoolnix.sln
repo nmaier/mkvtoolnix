@@ -13,6 +13,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common.vcproj", "
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mkvinfo", "mkvinfo.vcproj", "{11651DFD-E21B-47C3-8733-E8FD7EDDAFA5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -31,6 +35,8 @@ Global
 		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Debug.Build.0 = Debug|Win32
 		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Release.ActiveCfg = Release|Win32
 		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Release.Build.0 = Release|Win32
+		{11651DFD-E21B-47C3-8733-E8FD7EDDAFA5}.Debug.ActiveCfg = Debug|Win32
+		{11651DFD-E21B-47C3-8733-E8FD7EDDAFA5}.Release.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
