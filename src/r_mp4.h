@@ -139,7 +139,8 @@ protected:
   virtual void read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
                          uint32_t &hsize);
   virtual void free_demuxer(qtmp4_demuxer_t *dmx);
-  virtual bool parse_esds_atom(mm_mem_io_c *memio, qtmp4_demuxer_t *dmx);
+  virtual bool parse_esds_atom(mm_mem_io_c *memio, qtmp4_demuxer_t *dmx,
+                               int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c *memio);
 };
 
