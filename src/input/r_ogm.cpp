@@ -1037,7 +1037,8 @@ void ogm_reader_c::identify() {
            (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3) ? "audio" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC) ? "audio" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? "video" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
            "unknown",
