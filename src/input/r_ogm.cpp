@@ -572,8 +572,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
           memcpy(&buf[size], dmx->packet_data[i], dmx->packet_sizes[i]);
           size += dmx->packet_sizes[i];
         }
-        ptzr = new flac_packetizer_c(this, dmx->vorbis_rate, dmx->channels,
-                                     dmx->bits_per_sample, buf, size, ti);
+        ptzr = new flac_packetizer_c(this, buf, size, ti);
         safefree(buf);
 
         mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname,

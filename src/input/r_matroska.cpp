@@ -1597,15 +1597,12 @@ kax_reader_c::create_packetizer(int64_t tid) {
           nti->private_size = 0;
           if (t->a_formattag == FOURCC('f', 'L', 'a', 'C'))
             t->ptzr =
-              add_packetizer(new flac_packetizer_c(this, (int)t->a_sfreq,
-                                                   t->a_channels, t->a_bps,
-                                                   (unsigned char *)
+              add_packetizer(new flac_packetizer_c(this, (unsigned char *)
                                                    t->private_data,
                                                    t->private_size, nti));
           else {
             flac_packetizer_c *p;
-            p = new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
-                                      t->a_bps,
+            p = new flac_packetizer_c(this,
                                       ((unsigned char *)t->private_data) +
                                       sizeof(alWAVEFORMATEX),
                                       t->private_size - sizeof(alWAVEFORMATEX),

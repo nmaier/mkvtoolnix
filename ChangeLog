@@ -1,5 +1,8 @@
 2004-07-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The FLAC packetizer gets the duration
+	from the FLAC packet itself.
+
 	* mkvmerge: bug fix: The word 'TAG' occuring in e.g. SRT subs
 	caused the ID3/MP3 frame detection to be stuck n an endless loop.
 

@@ -44,7 +44,7 @@ class flac_reader_c: public generic_reader_c {
 private:
   mm_io_c *file;
   unsigned char *read_buffer;
-  int pos, size, channels, sample_rate, bits_per_sample;
+  int pos, size, sample_rate;
   bool metadata_parsed, done;
   int64_t samples, packet_start, file_size, old_progress;
   unsigned char *header;

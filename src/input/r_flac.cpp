@@ -150,9 +150,7 @@ flac_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new flac_packetizer_c(this, sample_rate, channels,
-                                       bits_per_sample, header, header_size,
-                                       ti));
+  add_packetizer(new flac_packetizer_c(this, header, header_size, ti));
   mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname, (int64_t)0);
 }
 
@@ -221,8 +219,7 @@ flac_reader_c::read(generic_packetizer_c *,
     return 0;
   }
   memory_c mem(buf, current_block->len, true);
-  PTZR0->process(mem, samples * 1000000000 / sample_rate,
-                 current_block->samples * 1000000000 / sample_rate);
+  PTZR0->process(mem, samples * 1000000000 / sample_rate);
   samples += current_block->samples;
   current_block++;
 
@@ -306,10 +303,8 @@ flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
              metadata->data.stream_info.sample_rate);
       sample_rate = metadata->data.stream_info.sample_rate;
       mxverb(2, FPFX "  channels: %u\n", metadata->data.stream_info.channels);
-      channels = metadata->data.stream_info.channels;
       mxverb(2, FPFX "  bits_per_sample: %u\n",
              metadata->data.stream_info.bits_per_sample);
-      bits_per_sample = metadata->data.stream_info.bits_per_sample;
       metadata_parsed = true;
       break;
     default:

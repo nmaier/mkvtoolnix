@@ -27,20 +27,20 @@
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
+#include <FLAC/format.h>
+
 #include "common.h"
 #include "pr_generic.h"
 
 class flac_packetizer_c: public generic_packetizer_c {
 private:
   unsigned char *header;
-  int l_header, sample_rate, channels, bits_per_sample;
-  int64_t last_timecode;
-  memory_c *last_mem;
-  int64_t num_packets, avg_duration;
+  int l_header;
+  int64_t num_packets;
+  FLAC__StreamMetadata_StreamInfo stream_info;
 
 public:
   flac_packetizer_c(generic_reader_c *nreader,
-                    int nsample_rate, int nchannels, int nbits_per_sample,
                     unsigned char *nheader, int nl_header,
                     track_info_c *nti) throw (error_c);
   virtual ~flac_packetizer_c();
@@ -49,7 +49,6 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
-  virtual void flush();
 
   virtual void dump_debug_info();
 
