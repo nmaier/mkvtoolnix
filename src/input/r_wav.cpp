@@ -1,23 +1,21 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  r_mp3.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief MP3 reader module
-    \author Moritz Bunkus <moritz@bunkus.org>
-    \author Peter Niemayer <niemayer@isg.de>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * mkvtoolnix was written by Moritz Bunkus <moritz@bunkus.org>
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * WAV reader module
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ * Initial DTS support by Peter Niemayer <niemayer@isg.de> and
+ *   modified by Moritz Bunkus.
+ */
 
 #include "os.h"
 

@@ -1,21 +1,16 @@
 /*
-  mkvextract -- extract tracks from Matroska files into other files
-
-  mkvextract.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief extracts tracks and other items from Matroska files into other files
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvextract -- extract tracks from Matroska files into other files
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * command line parsing, setup
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 // {{{ includes
 

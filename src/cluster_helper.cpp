@@ -1,22 +1,22 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  cluster_helper.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief cluster helper
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * cluster_helper.cpp
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * The cluster helper groups frames into blocks groups and those
+ * into clusters, sets the durations, renders the clusters etc.
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <assert.h>
 

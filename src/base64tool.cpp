@@ -1,21 +1,16 @@
 /*
-  base64util - Utility for encoding and decoding Base64 files.
-
-  base64util.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief command line parameter parsing, looping, output handling
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * base64util - Utility for encoding and decoding Base64 files.
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * command line parameter parsing, looping, output handling
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <errno.h>
 #include <string.h>
