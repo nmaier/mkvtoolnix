@@ -722,7 +722,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
   KaxTagTrackUID *tuid;
   EbmlElement *l1, *l2;
   int upper_lvl_el, tid, i;
-  bool is_global, found;
+  bool is_global, found, contains_tag;
   kax_track_t *track;
 
   if (ti->no_tags)
@@ -768,9 +768,17 @@ kax_reader_c::handle_tags(mm_io_c *io,
           track = find_track_by_uid(uint32(*tuid));
           if (track != NULL) {
             found = true;
-            if (track->tags == NULL)
-              track->tags = new KaxTags;
-            track->tags->PushElement(*tag);
+            contains_tag = false;
+            for (i = 0; i < tag->ListSize(); i++)
+              if (dynamic_cast<KaxTagSimple *>((*tag)[i]) != NULL) {
+                contains_tag = true;
+                break;
+              }
+            if (contains_tag) {
+              if (track->tags == NULL)
+                track->tags = new KaxTags;
+              track->tags->PushElement(*tag);
+            }
           }
         }
       } else

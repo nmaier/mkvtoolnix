@@ -290,9 +290,11 @@ generic_packetizer_c::set_tag_track_uid() {
     *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
       huid;
 
+    fix_mandatory_tag_elements(tag);
     if (!tag->CheckMandatory())
       mxerror(_("The tags in '%s' could not be parsed: some mandatory "
-                "elements are missing.\n"), ti->tags_ptr->file_name);
+                "elements are missing.\n"),
+              ti->tags_ptr != NULL ? ti->tags_ptr->file_name : ti->fname);
   }
 }
 
