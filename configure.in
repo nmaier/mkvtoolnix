@@ -25,7 +25,7 @@ AC_CHECK_TOOL(LD, ld, :)
 
 dnl Check for headers
 AC_HEADER_STDC()
-
+AC_CHECK_HEADERS([inttypes.h stdint.h sys/types.h])
 AC_CHECK_FUNCS(vsscanf,,)
 
 dnl Optional features that are built and those that aren't
@@ -187,32 +187,38 @@ dnl
 AC_MSG_CHECKING(for int64_t)
 AC_LANG_PUSH(C++)
 AC_CACHE_VAL(has_int64_t,[
-  AC_TRY_RUN([
-#ifdef __BEOS__
-#include <inttypes.h>
+  AC_TRY_COMPILE([
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
 #endif
-#include <sys/types.h>
-int64_t foo;
-int main() {return 0;}
+#if HAVE_STDINT_H
+# include <stdint.h>
+#endif
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
     ],
+    [int64_t foo;],
     has_int64_t=yes,
-    has_int64_t=no,
     has_int64_t=no)
   ])
 AC_MSG_RESULT($has_int64_t)
 
 AC_MSG_CHECKING(for uint64_t)
 AC_CACHE_VAL(has_uint64_t,[
-  AC_TRY_RUN([
-#ifdef __BEOS__
-#include <inttypes.h>
+  AC_TRY_COMPILE([
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
 #endif
-#include <sys/types.h>
-int64_t foo;
-int main() {return 0;}
+#if HAVE_STDINT_H
+# include <stdint.h>
+#endif
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
     ],
+    [int64_t foo;],
     has_uint64_t=yes,
-    has_uint64_t=no,
     has_uint64_t=no)
   ])
 AC_MSG_RESULT($has_uint64_t)
