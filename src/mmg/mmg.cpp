@@ -942,8 +942,6 @@ mmg_dialog::set_last_chapters_in_menu(wxString name) {
 
 void
 mmg_dialog::on_run(wxCommandEvent &evt) {
-  mux_dialog *mux_dlg;
-
   update_command_line();
 
   if (tc_output->GetValue().Length() == 0) {
@@ -966,8 +964,13 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
     return;
 
   set_on_top(false);
-  mux_dlg = new mux_dialog(this);
-  delete mux_dlg;
+#ifdef SYS_WINDOWS
+  Show(false);
+#endif
+  delete new mux_dialog(this);
+#ifdef SYS_WINDOWS
+  Show(true);
+#endif
   restore_on_top();
 }
 
