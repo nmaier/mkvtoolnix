@@ -202,6 +202,7 @@ const char *mosu_hacks[] = {
   ENGAGE_NO_META_SEEK,
   ENGAGE_LACING_XIPH,
   ENGAGE_LACING_EBML,
+  ENGAGE_NATIVE_BFRAMES,
   NULL
 };
 vector<const char *> engaged_hacks;
@@ -212,7 +213,7 @@ bool hack_engaged(const char *hack) {
   if (hack == NULL)
     return false;
   for (i = 0; i < engaged_hacks.size(); i++)
-    if (engaged_hacks[i] == hack)
+    if (!strcmp(engaged_hacks[i], hack))
       return true;
 
   return false;

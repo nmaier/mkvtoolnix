@@ -28,6 +28,7 @@
 #define ENGAGE_NO_META_SEEK "no_meta_seek"
 #define ENGAGE_LACING_XIPH "lacing_xiph"
 #define ENGAGE_LACING_EBML "lacing_ebml"
+#define ENGAGE_NATIVE_BFRAMES "native_bframes"
 
 bool hack_engaged(const char *hack);
 
