@@ -87,7 +87,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
         aacheader.profile = AAC_PROFILE_SBR;
         break;
       }
-    if (aacheader.profile != AAC_PROFILE_SBR)
+    if ((aacheader.profile != AAC_PROFILE_SBR) && !identifying)
       mxwarn("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
              "This can NOT be detected automatically. Therefore you have to "
              "specifiy '--aac-is-sbr 0' manually for this input file if the "
