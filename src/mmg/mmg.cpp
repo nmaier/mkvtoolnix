@@ -510,6 +510,21 @@ format_tooltip(const wxString &s) {
 #endif
 
 wxString
+get_temp_dir() {
+  wxString temp_dir;
+
+  wxGetEnv(wxT("TMP"), &temp_dir);
+  if (temp_dir == wxT(""))
+    wxGetEnv(wxT("TEMP"), &temp_dir);
+  if ((temp_dir == wxT("")) && wxDirExists(wxT("/tmp")))
+    temp_dir = wxT("/tmp");
+  if (temp_dir != wxT(""))
+    temp_dir += wxT(PATHSEP);
+
+  return temp_dir;
+}
+
+wxString
 create_track_order(bool all) {
   int i;
   wxString s, format;
@@ -815,7 +830,8 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   wxFileConfig *cfg;
   wxString tmp_name;
 
-  tmp_name.Printf(wxT("tempsettings-%d.mmg"), (int)wxGetProcessId());
+  tmp_name.Printf(wxT("%stempsettings-%d.mmg"),
+                  get_temp_dir().c_str(), (int)wxGetProcessId());
   cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
   tc_output->SetValue(wxT(""));
 

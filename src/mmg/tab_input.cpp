@@ -741,7 +741,8 @@ tab_input::add_file(const wxString &file_name,
   wxFile *opt_file;
   string arg_utf8;
 
-  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"),
+  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"),
+                       get_temp_dir().c_str(),
                        (int)wxGetProcessId(), (int)time(NULL));
   try {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
