@@ -31,13 +31,15 @@ MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
   }else{
     this->data = data;
   }
+  this->bCopy = bCopy;
   this->size = size;    
   firstRef = -1;
   secondRef = -1;
 }
 
 MPEGFrame::~MPEGFrame(){
-  delete data;
+  if (!bCopy)
+    delete [] data;
 }
 
 void M2VParser::SetEOS(){

@@ -45,6 +45,7 @@ public:
   bool tff;
   bool progressive;
   uint8_t pictureStructure;
+  bool bCopy;
 
   MPEGFrame(binary* data, uint32_t size, bool bCopy);
   ~MPEGFrame();

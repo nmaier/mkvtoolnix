@@ -87,7 +87,7 @@ public:
 
   ~MPEGChunk(){
     if(data)
-      delete data;  
+      delete [] data;  
   }
 
   uint8_t GetType(){

@@ -26,6 +26,7 @@
 #include "p_video.h"
 
 #define PROBESIZE 4
+#define READ_SIZE 1024 * 1024
 
 int
 mpeg_es_reader_c::probe_file(mm_io_c *mm_io,
@@ -123,7 +124,7 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
     return 0;
   }
 
-  mxinfo("frame tc %lld 1st %lld 2nd %lld\n", frame->timecode,
+  mxinfo("frame size %u tc %lld 1st %lld 2nd %lld\n", frame->size, frame->timecode,
          frame->firstRef, frame->secondRef);
   memory_c mem(frame->data, frame->size, true);
   PTZR0->process(mem, frame->timecode, frame->duration,
@@ -150,20 +151,23 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
     state = parser.GetState();
 
     if (state == MPV_PARSER_STATE_NEED_DATA) {
-      unsigned char buffer[4096];
+      unsigned char *buffer;
       int bytes_read, bytes_to_read;
 
       if ((max_size != -1) && (bytes_probed > max_size))
         return false;
 
-      bytes_to_read = (parser.GetBufferFreeSpace() < 4096) ?
-        parser.GetBufferFreeSpace() : 4096;
+      bytes_to_read = (parser.GetBufferFreeSpace() < READ_SIZE) ?
+        parser.GetBufferFreeSpace() : READ_SIZE;
+      buffer = new unsigned char[bytes_to_read];
       bytes_read = in.read(buffer, bytes_to_read);
+      printf("btr %d br %d\n", bytes_to_read, bytes_read);
       if (bytes_read == 0)
         break;
       bytes_probed += bytes_read;
 
       parser.WriteData(buffer, bytes_read);
+      delete [] buffer;
 
     } else if (state == MPV_PARSER_STATE_FRAME)
       return true;

@@ -34,7 +34,7 @@ CircBuffer::CircBuffer(uint32_t size){
 
 CircBuffer::~CircBuffer(){
   if(m_buf)
-    delete m_buf;
+    delete [] m_buf;
 }
 
 int32_t CircBuffer::Skip(uint32_t numBytes){
