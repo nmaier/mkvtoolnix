@@ -23,6 +23,7 @@
 
 #include "cluster_helper.h"
 #include "common.h"
+#include "commonebml.h"
 #include "hacks.h"
 #include "output_control.h"
 #include "p_video.h"
@@ -502,18 +503,14 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
 
     // Handle BlockAdditions if needed
     if ((new_block_group != NULL) && (pack->data_adds.size() > 0)) {
-      KaxBlockAdditions *additions = static_cast<KaxBlockAdditions *>
-        (&GetChild<KaxBlockAdditions>(*new_block_group));
+      KaxBlockAdditions &additions =
+        AddEmptyChild<KaxBlockAdditions>(*new_block_group);
       for (k = 0; k < pack->data_adds.size(); k++) {
-        KaxBlockMore *block_more = static_cast<KaxBlockMore *>
-          (&GetChild<KaxBlockMore>(*additions));
-        *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(*block_more)) =
+        KaxBlockMore &block_more = AddEmptyChild<KaxBlockMore>(additions);
+        *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(block_more)) =
           k + 1;
-        KaxBlockAdditional *block_additional =
-          static_cast<KaxBlockAdditional *>
-          (&GetChild<KaxBlockAdditional>(*block_more));
-        block_additional->SetBuffer((binary *)pack->data_adds[k],
-                                    pack->data_adds_lengths[k]);
+        GetChild<KaxBlockAdditional>(block_more).
+          SetBuffer((binary *)pack->data_adds[k], pack->data_adds_lengths[k]);
         pack->data_adds[k] = NULL;
       }
     }
