@@ -1390,7 +1390,7 @@ bool process_file(const char *file_name) {
                   *static_cast<KaxReferenceBlock *>(l3);
                 show_element(l3, 3, "Reference block: %.3fms", 
                              ((float)int64(reference)) * tc_scale / 1000000.0);
-                if (int64(reference) < 0)
+                if (int64(reference) <= 0)
                   bref_found = true;
                 else if (int64(reference) > 0)
                   fref_found = true;

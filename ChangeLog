@@ -1,3 +1,10 @@
+2004-01-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If remuxing a file that contains frames with
+	a reference to the same timecode those references were lost
+	turning such P frames into I frames. This was the case for some
+	RealAudio stuff.
+
 2004-01-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Automatically pre-set the attachment's MIME

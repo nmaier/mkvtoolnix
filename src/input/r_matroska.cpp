@@ -1608,7 +1608,7 @@ int kax_reader_c::read(generic_packetizer_c *) {
           ref_block = static_cast<KaxReferenceBlock *>
             (block_group->FindFirstElt(KaxReferenceBlock::ClassInfos, false));
           while (ref_block != NULL) {
-            if (int64(*ref_block) < 0) {
+            if (int64(*ref_block) <= 0) {
               block_bref = int64(*ref_block) * tc_scale / 1000000;
               bref_found = true;
             } else {
