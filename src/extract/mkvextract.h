@@ -104,9 +104,10 @@ extern char typenames[FILE_TYPE_MAX + 1][20];
 extern bool no_variable_data;
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
-                           (p->GetElementPosition() + p->ElementSize()))
+                           (p->GetElementPosition() + p->HeadSize() + \
+                            p->GetSize()))
 #define in_parent(p) (in->getFilePointer() < \
-                      (p->GetElementPosition() + p->ElementSize()))
+                      (p->GetElementPosition() + p->HeadSize() + p->GetSize()))
 
 // Helper functions in mkvextract.cpp
 void show_element(EbmlElement *l, int level, const char *fmt, ...);
