@@ -36,14 +36,15 @@
 #define ID_B_REMOVECHAPTER                16002
 #define ID_T_CHAPTERVALUES                16003
 #define ID_TC_CHAPTERNAME                 16004
-#define ID_TC_CHAPTERLANGUAGES            16005
-#define ID_TC_CHAPTERCOUNTRYCODES         16006
 #define ID_TC_CHAPTERSTART                16007
 #define ID_TC_CHAPTEREND                  16008
 #define ID_CB_CHAPTERSELECTLANGUAGECODE   16009
 #define ID_CB_CHAPTERSELECTCOUNTRYCODE    16010
 #define ID_B_ADDSUBCHAPTER                16011
 #define ID_B_SETVALUES                    16012
+#define ID_LB_CHAPTERNAMES                16013
+#define ID_B_ADD_CHAPTERNAME              16014
+#define ID_B_REMOVE_CHAPTERNAME           16015
 
 using namespace libmatroska;
 
@@ -57,10 +58,11 @@ public:
   wxButton *b_set_values;
   wxMenu *m_chapters;
 
-  wxTextCtrl *tc_chapter_name, *tc_language_codes, *tc_country_codes;
-  wxTextCtrl *tc_start_time, *tc_end_time;
-  wxComboBox *cob_add_language_code, *cob_add_country_code;
-  bool inputs_enabled;
+  wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
+  wxComboBox *cob_language_code, *cob_country_code;
+  wxListBox *lb_chapter_names;
+  wxButton *b_add_chapter_name, *b_remove_chapter_name;
+  bool inputs_enabled, no_update;
 
   wxString file_name;
   bool source_is_kax_file, source_is_simple_format;
@@ -85,18 +87,21 @@ public:
   void on_entry_selected(wxTreeEvent &evt);
   void on_language_code_selected(wxCommandEvent &evt);
   void on_country_code_selected(wxCommandEvent &evt);
+  void on_chapter_name_selected(wxCommandEvent &evt);
+  void on_chapter_name_changed(wxCommandEvent &evt);
+  void on_add_chapter_name(wxCommandEvent &evt);
+  void on_remove_chapter_name(wxCommandEvent &evt);
   void on_set_default_values(wxCommandEvent &evt);
   void on_set_values(wxCommandEvent &evt);
   void set_values_recursively(wxTreeItemId id, string &language,
                               bool set_language);
+  void set_display_values(KaxChapterDisplay *display);
 
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(string s);
   bool verify_atom_recursively(EbmlElement *e, int64_t p_start = -1,
                                int64_t p_end = -1);
   bool verify();
-  void verify_language_codes(string s, vector<string> &parts);
-  void verify_country_codes(string s, vector<string> &parts);
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void fix_missing_languages(EbmlMaster &master);
