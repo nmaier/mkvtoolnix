@@ -156,7 +156,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     op.bytes = 2;
 
     // Calculate how many samples we have to create.
-    samples_needed = vi.rate * 1000 / ti->async.displacement;
+    samples_needed = vi.rate * ti->async.displacement / 1000;
 
     this_bs = vorbis_packet_blocksize(&vi, &op);
     samples_here = (this_bs + last_bs) / 4;

@@ -1,3 +1,8 @@
+2003-10-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The Vorbis packetizer was miscalculating the
+	number of samples to add/remove when using audio sync.
+
 2003-10-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added a new menu entry "File -> new" which
@@ -27,42 +32,42 @@
 2003-10-15  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: Made the SRT reader more tolerant regarding
-        empty lines.
+	empty lines.
 
 2003-10-14  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v0.7.2.
 
         * mkvmerge: bug fix: If 'no linking' and splitting was active
-        mkvmerge would abort on the start of the second output file due to
-        timecodes that were calculated incorrectly.
+	mkvmerge would abort on the start of the second output file due to
+	timecodes that were calculated incorrectly.
 
         * mkvmerge: Implemented some speedups for a couple of container
-        formats and track types (mainly AVI reader, MP3/AC3/AAC
-        packetizers). Especially noticeable when splitting is active as
-        well.
+	formats and track types (mainly AVI reader, MP3/AC3/AAC
+	packetizers). Especially noticeable when splitting is active as
+	well.
 
 2003-10-12  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvextract: bug fix: Support for extracting SBR AAC (previous
-        'fix' did not actually fix this).
+	'fix' did not actually fix this).
 
         * mkvextract: bug fix: All extracted subtitles where written to
-        the first output file given, not to the one they were supposed to
-        be written to.
+	the first output file given, not to the one they were supposed to
+	be written to.
 
 2003-10-11  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: The 'abort' button was doing nothing under
-        Windows.
+	Windows.
 
 2003-10-06  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: Audio, video and subtitle track selection was
-        translated into the wrong command line options.
+	translated into the wrong command line options.
 
         * mkvmerge: Replaced the avilib based AVI reading functions with
-        AVI classes from Cyrius.
+	AVI classes from Cyrius.
 
 2003-10-03  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -73,20 +78,20 @@
 2003-10-01  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Changed the lacing strategy again. New defaults are
-        NOT to write duration elements for all blocks, NOT to use time
-        slices and to USE lacing for most audio tracks. This will save
-        some space. The downside is that the laced frames 'lose' their
-        precise timecode information. Current demuxers don't care and will
-        work nevertheless. More sophisticated applications that make use
-        of these advanced information (duration elements, time slices) are
-        not available at the moment. All these options can be toggled by
-        the user with the new/modified options --disable-lacing,
-        --enable-durations and --enable-timeslices.
+	NOT to write duration elements for all blocks, NOT to use time
+	slices and to USE lacing for most audio tracks. This will save
+	some space. The downside is that the laced frames 'lose' their
+	precise timecode information. Current demuxers don't care and will
+	work nevertheless. More sophisticated applications that make use
+	of these advanced information (duration elements, time slices) are
+	not available at the moment. All these options can be toggled by
+	the user with the new/modified options --disable-lacing,
+	--enable-durations and --enable-timeslices.
 
 2003-09-29  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Attachments are kept when reading
-        Matroska files.
+	Matroska files.
 
 2003-09-28  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -99,90 +104,91 @@
 2003-09-24  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix/new feature: Rewrote the complete MP3
-        handling. Now files with ID3 tags (both v1 and v2) are handled
-        correctly. All MPEG-1 audio files (all layers) should be handled
-        correctly now.
+	handling. Now files with ID3 tags (both v1 and v2) are handled
+	correctly. All MPEG-1 audio files (all layers) should be handled
+	correctly now.
 
 2003-09-23  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvextract: new feature: Support for extract HE-AAC tracks to
-        .aac files. Bug fix: Missing elements (default values) are handled
-        correctly for audio tracks.
+	.aac files. Bug fix: Missing elements (default values) are handled
+	correctly for audio tracks.
 
 2003-09-19  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bugfix: If attachments were given with path components
-        then the path component wasn't discarded for the attachment's
-        description on Windows (normally only the file name should be used
-        as the attachment's name).
+	then the path component wasn't discarded for the attachment's
+	description on Windows (normally only the file name should be used
+	as the attachment's name).
 
         * mmg: Fixed wrong order of the options --chapters,
-        --chapter-language and --chapter-charset.
+	--chapter-language and --chapter-charset.
 
 2003-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: Added a lot of checks on the data given by the user so that
-        invalid data is reported by mmg and not by mkvmerge.
+	invalid data is reported by mmg and not by mkvmerge.
 
         * mmg: Made the app a GUI app which gets rid of the "DOS box" on
-        Windows.
+	Windows.
 
 2003-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bugfix: Moved the aspect ratio and FourCC input fields from
-        the global tab to the input tab where they belong to.
+	the global tab to the input tab where they belong to.
 
-        * mkvmerge: new feature: RealAudio can be read from Matroska files.
+        * mkvmerge: new feature: RealAudio can be read from Matroska
+	files.
 
         * mkvmerge: bugfix: RealVideo was not read correctly from Matroska
-        files.
+	files.
 
         * mkvmerge: bugfix: The SRT reader would abort if there was more
-        than one empty line between subtitle entries line.
+	than one empty line between subtitle entries line.
 
         * mkvextract: bugfix: Proper BOMs are written according to the
-        desired charset when extracting text subtitles.
+	desired charset when extracting text subtitles.
 
         * Released v0.7.0.
 
         * mkvextract: Add an UTF-8 BOM to extracted SSA/ASS and SRT
-        subtitle files. Print warnings for missing durations for text
-        subtitle tracks.
+	subtitle files. Print warnings for missing durations for text
+	subtitle tracks.
 
 2003-09-14  Moritz Bunkus  <moritz@bunkus.org>
 
         * Added a complete GUI for mkvmerge, mkvmergeGUI (mmg) based on
-        the work of Florian Wagner.
+	the work of Florian Wagner.
 
 2003-09-12  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Support for setting the track names.
 
         * mkvmerge: For Matroska source files: If the source contains
-        chapters then these are kept unless the user specified chapters
-        with --chapters.
+	chapters then these are kept unless the user specified chapters
+	with --chapters.
 
 2003-09-11  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Implemented an experimental VobSub reader and
-        packetizer. No specs exist for these yet, though.
+	packetizer. No specs exist for these yet, though.
 
         * mkvmerge: Improved the support for Matroska files with tracks
-        with big gaps between entries, e.g. subtitle tracks whose entries
-        are a minute or more apart.
+	with big gaps between entries, e.g. subtitle tracks whose entries
+	are a minute or more apart.
 
         * mkvmerge: When splitting is active and the source is a Matroska
-        file then splitpoints were borked, and the first pass was slow as
-        your average mole.
+	file then splitpoints were borked, and the first pass was slow as
+	your average mole.
 
         * mkvmerge: The track UIDs are kept when reading Matroska files
-        even when splitting is active.
+	even when splitting is active.
 
 2003-09-09  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Added a QuickTime/MP4 reader. Can handle several
-        QuickTime video and QuickTime audio formats as well as AAC (both
-        'normal' AAC and SBR AAC).
+	QuickTime video and QuickTime audio formats as well as AAC (both
+	'normal' AAC and SBR AAC).
 
 2003-09-08  Moritz Bunkus  <moritz@bunkus.org>
 
