@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.2 2003/02/19 09:31:24 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.3 2003/02/23 21:36:22 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include <stdio.h>
 
 #include "common.h"
+#include "KaxBlock.h"
 #include "KaxTracks.h"
 
 extern LIBMATROSKA_NAMESPACE::KaxTracks *kax_tracks;
@@ -63,11 +64,14 @@ typedef class generic_reader_c {
 } generic_reader_c;
 
 typedef struct packet_t {
-  char                 *data;
-  int                   length;
-  u_int64_t             timestamp;
-  int                   is_key;
-  generic_packetizer_c *source;
+  LIBMATROSKA_NAMESPACE::DataBuffer    *data_buffer;
+  LIBMATROSKA_NAMESPACE::KaxBlockGroup *group;
+  LIBMATROSKA_NAMESPACE::KaxBlock      *block;
+  char                                 *data;
+  int                                   length;
+  u_int64_t                             timestamp;
+  int                                   is_key;
+  generic_packetizer_c                 *source;
 } packet_t;
 
 #endif  // __PR_GENERIC_H

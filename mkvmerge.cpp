@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.8 2003/02/19 11:08:01 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.9 2003/02/23 21:36:22 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -81,22 +81,20 @@ typedef struct filelist_tag {
 
 char *outfile = NULL;
 filelist_t *input= NULL;
-int create_index = 0;
-int force_flushing = 0;
+int max_blocks_per_cluster = 65535;
+int max_ms_per_cluster = 5000;
 
 float video_fps = -1.0;
+
+packet_t **packet_queue = NULL;
+int num_packets_in_packetq = 0;
 
 KaxSegment     kax_segment;
 KaxTracks     *kax_tracks;
 KaxTrackEntry *kax_last_entry;
 int            track_number = 1;
-StdIOCallback *out;
 
-/*int                  idx_num = 0;
-int                 *idx_serials = NULL;
-int                 *idx_num_entries = NULL;
-idx_entry          **idx_entries = NULL;
-index_packetizer_c **idx_packetizers = NULL;*/
+StdIOCallback *out;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -126,7 +124,10 @@ static void usage(void) {
     "  -v, --verbose            verbose status\n"
     "  -q, --quiet              suppress status output\n"
     "  -o, --output out         Write to the file 'out'.\n"
-    "  -i, --index              Create index for the video streams.\n"
+    " --cluster-length <n[ms]>  Put at most n data blocks into each cluster.\n"
+    "                           If the number is postfixed with 'ms' then\n"
+    "                           put at most n milliseconds of data into each\n"
+    "                           cluster.\n"
     "\n Options for each input file:\n"
     "  -a, --astreams <n,m,...> Copy the n'th audio stream, NOT the stream with"
   "\n                           the serial number n. Default: copy all audio\n"
@@ -134,12 +135,12 @@ static void usage(void) {
     "  -d, --vstreams <n,m,...> Copy the n'th video stream, NOT the stream with"
   "\n                           the serial number n. Default: copy all video\n"
     "                           streams.\n"
-    "  -t, --tstreams <n,m,...> Copy the n'th text stream, NOT the stream with"
-  "\n                           the serial number n. Default: copy all text\n"
-    "                           streams.\n"
+//     "  -t, --tstreams <n,m,...> Copy the n'th text stream, NOT the stream with"
+//   "\n                           the serial number n. Default: copy all text\n"
+//     "                           streams.\n"
     "  -A, --noaudio            Don't copy any audio stream from this file.\n"
     "  -D, --novideo            Don't copy any video stream from this file.\n"
-    "  -T, --notext             Don't copy any text stream from this file.\n"
+//     "  -T, --notext             Don't copy any text stream from this file.\n"
     "  -s, --sync <d[,o[/p]]>   Ssynchronize, delay the audio stream by d ms.\n"
     "                           d > 0: Pad with silent samples.\n"
     "                           d < 0: Remove samples from the beginning.\n"
@@ -147,14 +148,11 @@ static void usage(void) {
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
-    "  -r, --range <s-e>        Only process from start to end. Both values\n"
-    "                           take the form 'HH:MM:SS.mmm' or 'SS.mmm',\n"
-    "                           e.g. '00:01:00.500' or '60.500'. If one of\n"
-    "                           s or e is omitted then it defaults to 0 or\n"
-    "                           to end of the file respectively.\n"
-    "  -c, --comment 'A=B#C=D'  Set additional comment fields for the\n"
-    "                           streams. Sesitive values would be\n"
-    "                           'LANGUAGE=English' or 'TITLE=Ally McBeal'.\n"
+//     "  -r, --range <s-e>        Only process from start to end. Both values\n"
+//     "                           take the form 'HH:MM:SS.mmm' or 'SS.mmm',\n"
+//     "                           e.g. '00:01:00.500' or '60.500'. If one of\n"
+//     "                           s or e is omitted then it defaults to 0 or\n"
+//     "                           to end of the file respectively.\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video streams.\n"
     "\n"
@@ -325,68 +323,68 @@ static void parse_sync(char *s, audio_sync_t *async) {
   async->displacement = atoi(s);
 }
 
-static double parse_time(char *s) {
-  char *c, *a, *dot;
-  int num_colons;
-  double seconds;
+// static double parse_time(char *s) {
+//   char *c, *a, *dot;
+//   int num_colons;
+//   double seconds;
   
-  dot = strchr(s, '.');
-  if (dot != NULL) {
-    *dot = 0;
-    dot++;
-  }
-  for (c = s, num_colons = 0; *c; c++) {
-    if (*c == ':')
-      num_colons++;
-    else if ((*c < '0') || (*c > '9')) {
-      fprintf(stderr, "ERROR: illegal character '%c' in time range.\n", *c);
-      exit(1);
-    }
-  }
-  if (num_colons > 2) {
-    fprintf(stderr, "ERROR: illegal time range: %s.\n", s);
-    exit(1);
-  }
-  if (num_colons == 0) {
-    seconds = strtod(s, NULL);
-    if (dot != NULL)
-      seconds += strtod(dot, NULL) / 1000.0;
-  }
-  for (a = s, c = s, seconds = 0; *c; c++) {
-    if (*c == ':') {
-      *c = 0;
-      seconds *= 60;
-      seconds += atoi(a);
-      a = c + 1;
-    }
-  }
-  seconds *= 60;
-  seconds += atoi(a);
+//   dot = strchr(s, '.');
+//   if (dot != NULL) {
+//     *dot = 0;
+//     dot++;
+//   }
+//   for (c = s, num_colons = 0; *c; c++) {
+//     if (*c == ':')
+//       num_colons++;
+//     else if ((*c < '0') || (*c > '9')) {
+//       fprintf(stderr, "ERROR: illegal character '%c' in time range.\n", *c);
+//       exit(1);
+//     }
+//   }
+//   if (num_colons > 2) {
+//     fprintf(stderr, "ERROR: illegal time range: %s.\n", s);
+//     exit(1);
+//   }
+//   if (num_colons == 0) {
+//     seconds = strtod(s, NULL);
+//     if (dot != NULL)
+//       seconds += strtod(dot, NULL) / 1000.0;
+//   }
+//   for (a = s, c = s, seconds = 0; *c; c++) {
+//     if (*c == ':') {
+//       *c = 0;
+//       seconds *= 60;
+//       seconds += atoi(a);
+//       a = c + 1;
+//     }
+//   }
+//   seconds *= 60;
+//   seconds += atoi(a);
   
-  if (dot != NULL)
-    seconds += strtod(dot, NULL) / 1000.0;
+//   if (dot != NULL)
+//     seconds += strtod(dot, NULL) / 1000.0;
   
-  return seconds;
-}
+//   return seconds;
+// }
 
-static void parse_range(char *s, range_t *range) {
-  char *end;
+// static void parse_range(char *s, range_t *range) {
+//   char *end;
   
-  end = strchr(s, '-');
-  if (end != NULL) {
-    *end = 0;
-    end++;
-    range->end = parse_time(end);
-  } else
-    range->end = 0;
-  range->start = parse_time(s);
-  if ((range->end != 0) && (range->end < range->start)) {
-    fprintf(stderr, "ERROR: end time is set before start time.\n");
-    exit(1);
-  }
-}
+//   end = strchr(s, '-');
+//   if (end != NULL) {
+//     *end = 0;
+//     end++;
+//     range->end = parse_time(end);
+//   } else
+//     range->end = 0;
+//   range->start = parse_time(s);
+//   if ((range->end != 0) && (range->end < range->start)) {
+//     fprintf(stderr, "ERROR: end time is set before start time.\n");
+//     exit(1);
+//   }
+// }
 
-void render_head(StdIOCallback *out) {
+static void render_head(StdIOCallback *out) {
   EbmlHead head;
 
   EDocType &doc_type = GetChild<EDocType>(head);
@@ -407,7 +405,7 @@ static void parse_args(int argc, char **argv) {
   filelist_t      *file;
   audio_sync_t     async;
   range_t          range;
-  char           **comments, *fourcc;
+  char            *fourcc, *s;
 //  vorbis_comment  *chapters;
 
   noaudio = 0;
@@ -419,9 +417,9 @@ static void parse_args(int argc, char **argv) {
   memset(&range, 0, sizeof(range_t));
   async.displacement = 0;
   async.linear = 1.0;
-  comments = NULL;
   fourcc = NULL;
 //  chapters = NULL;
+
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
       fprintf(stdout, "mkvmerge v" VERSION "\n");
@@ -451,6 +449,7 @@ static void parse_args(int argc, char **argv) {
             strerror(errno));
     exit(1);
   }
+
   try {
     render_head(out);
     kax_segment.Render(static_cast<StdIOCallback &>(*out));
@@ -475,7 +474,7 @@ static void parse_args(int argc, char **argv) {
       i++;
     else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
       fprintf(stdout, "Known file types:\n  ext  description\n" \
-                                         "  ---  --------------------------\n");
+              "  ---  --------------------------\n");
       for (j = 1; file_types[j].ext; j++)
         fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
       exit(0);
@@ -483,8 +482,8 @@ static void parse_args(int argc, char **argv) {
       noaudio = 1;
     else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
       novideo = 1;
-    else if (!strcmp(argv[i], "-T") || !strcmp(argv[i], "--notext"))
-      notext = 1;
+//     else if (!strcmp(argv[i], "-T") || !strcmp(argv[i], "--notext"))
+//       notext = 1;
     else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--astreams")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -a lacks the stream number(s).\n");
@@ -503,28 +502,15 @@ static void parse_args(int argc, char **argv) {
         free(vstreams);
       vstreams = parse_streams(argv[i + 1]);
       i++;
-    } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tstreams")) {
-      if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -t lacks the stream number(s).\n");
-        exit(1);
-      }
-      if (tstreams != NULL)
-        free(tstreams);
-      tstreams = parse_streams(argv[i + 1]);
-      i++;
-/*    } else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--comments")) {
-      if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -c lacks the comments.\n");
-        exit(1);
-      }
-      if (argv[i + 1][0] == '@')
-        comments = append_comments_from_file(argv[i + 1], comments);
-      else
-        comments = unpack_append_comments(argv[i + 1], comments);
-#ifdef DEBUG
-      dump_comments(comments);
-#endif // DEBUG
-      i++;*/
+//     } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tstreams")) {
+//       if ((i + 1) >= argc) {
+//         fprintf(stderr, "Error: -t lacks the stream number(s).\n");
+//         exit(1);
+//       }
+//       if (tstreams != NULL)
+//         free(tstreams);
+//       tstreams = parse_streams(argv[i + 1]);
+//       i++;
     } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -f lacks the FourCC.\n");
@@ -532,7 +518,8 @@ static void parse_args(int argc, char **argv) {
       }
       fourcc = argv[i + 1];
       if (strlen(fourcc) != 4) {
-        fprintf(stderr, "Error: The FourCC must be exactly four chars long.\n");
+        fprintf(stderr, "Error: The FourCC must be exactly four chars "
+                "long.\n");
         exit(1);
       }
       i++;
@@ -543,16 +530,39 @@ static void parse_args(int argc, char **argv) {
       }
       parse_sync(argv[i + 1], &async);
       i++;
-    } else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--range")) {
+//     } else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--range")) {
+//       if ((i + 1) >= argc) {
+//         fprintf(stderr, "Error: -r lacks the range.\n");
+//         exit(1);
+//       }
+//       parse_range(argv[i + 1], &range);
+//       i++;
+    } else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -r lacks the range.\n");
+        fprintf(stderr, "Error: --cluster-length lacks the length.\n");
         exit(1);
       }
-      parse_range(argv[i + 1], &range);
+      s = strstr("ms", argv[i + 1]);
+      if (s != NULL) {
+        *s = 0;
+        max_ms_per_cluster = strtol(argv[i + 1], NULL, 10);
+        if ((errno != 0) || (max_ms_per_cluster < 0) ||
+            (max_ms_per_cluster > 65535)) {
+          fprintf(stderr, "Error: Cluster length out of range (0..65535).\n");
+          exit(1);
+        }
+        max_blocks_per_cluster = 65535;
+      } else {
+        max_blocks_per_cluster = strtol(argv[i + 1], NULL, 10);
+        if ((errno != 0) || (max_blocks_per_cluster < 0) ||
+            (max_blocks_per_cluster > 65535)) {
+          fprintf(stderr, "Error: Cluster length out of range (0..65535).\n");
+          exit(1);
+        }
+        max_ms_per_cluster = 65535;
+      }
       i++;
-    } else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--index"))
-      create_index = 1;
-    else {
+    } else {
       if ((astreams != NULL) && noaudio) {
         fprintf(stderr, "Error: -A and -a used on the same source file.\n");
         exit(1);
@@ -686,8 +696,6 @@ static void parse_args(int argc, char **argv) {
       } else
         free(file);
 
-//      free_comments(comments);
-//      comments = NULL;      
       fourcc = NULL;
       noaudio = 0;
       novideo = 0;
@@ -728,102 +736,79 @@ static void parse_args(int argc, char **argv) {
   }*/
 }
 
-/*void add_index(int serial) {
-  int i, found = -1;
-  
-  if (!create_index)
-    return;
-
-  for (i = 0; i < idx_num; i++)
-    if (idx_serials[i] == serial) {
-      found = i;
-      break;
-    }
-
-  if (found == -1) {
-    idx_serials = (int *)realloc(idx_serials, (idx_num + 1) * sizeof(int));
-    if (idx_serials == NULL)
-      die("realloc");
-    idx_num_entries = (int *)realloc(idx_num_entries, (idx_num + 1) *
-                                     sizeof(int));
-    if (idx_num_entries == NULL)
-      die("realloc");
-    idx_packetizers = (index_packetizer_c **)
-      realloc(idx_packetizers, (idx_num + 1) * sizeof(index_packetizer_c));
-    if (idx_packetizers == NULL)
-      die("realloc");
-    idx_entries = (idx_entry **)realloc(idx_entries, (idx_num + 1) *
-                                        sizeof(idx_entry));
-    if (idx_entries == NULL)
-      die("realloc");
-    i = idx_num;
-    idx_serials[i] = serial;
-    idx_num_entries[i] = 0;
-    idx_entries[i] = NULL;
-    idx_num++;
-    try {
-      idx_packetizers[i] = new index_packetizer_c(serial);
-    } catch (error_c error) {
-      
-    }
-  }
+static void add_packet_to_packetq(packet_t *pack) {
+  packet_queue = (packet_t **)realloc(packet_queue, sizeof(packet_t *) *
+                                      (num_packets_in_packetq + 1));
+  if (packet_queue == NULL)
+    die("realloc");
+  packet_queue[num_packets_in_packetq] = pack;
+  num_packets_in_packetq++;
 }
 
-void add_to_index(int serial, ogg_int64_t granulepos, int64_t filepos) {
-  int i, found = -1;
-  
-  for (i = 0; i < idx_num; i++)
-    if (idx_serials[i] == serial) {
-      found = i;
-      break;
-    }
+static void clear_packetq() {
+  int i;
+  packet_t *p;
 
-  if (found == -1) {
-    fprintf(stderr, "Internal error: add_to_index for a serial without " \
-            "add_index for that serial.\n");
-    exit(1);
+  for (i = 0; i < num_packets_in_packetq; i++) {
+    p = packet_queue[i];
+    if (p != NULL) {
+      free(p->data);
+      delete p->data_buffer;
+      free(p);
+    }
   }
 
-  idx_entries[i] = (idx_entry *)realloc(idx_entries[i], sizeof(idx_entry) *
-                                        (idx_num_entries[i] + 1));
-  if (idx_entries[i] == NULL)
-    die("realloc");
+  num_packets_in_packetq = 0;
+  free(packet_queue);
+  packet_queue = NULL;
+}
 
-  idx_entries[i][idx_num_entries[i]].granulepos = granulepos;
-  idx_entries[i][idx_num_entries[i]].filepos = filepos;
-  idx_num_entries[i]++;
-}*/
-
-int write_packet(packet_t *pack, filelist_t *file, StdIOCallback *out) {
-  KaxCluster cluster;
+static void write_packetq() {
   KaxCues dummy_cues;
+  KaxCluster cluster;
+  KaxBlockGroup *last_group = NULL;
+  int i;
+
   KaxClusterTimecode &timecode = GetChild<KaxClusterTimecode>(cluster);
-  *(static_cast<EbmlUInteger *>(&timecode)) = 0;
-  
-  KaxBlockGroup &block_group = GetChild<KaxBlockGroup>(cluster);
-  KaxBlock &block = GetChild<KaxBlock>(block_group);
-  DataBuffer data = DataBuffer((binary *)pack->data, pack->length);
-  KaxTrackEntry &track_entry =
-    static_cast<KaxTrackEntry &>(*pack->source->track_entry);
-  block.AddFrame(track_entry, pack->timestamp, data);
+  *(static_cast<EbmlUInteger *>(&timecode)) = packet_queue[0]->timestamp;
+
+  for (i = 0; i < num_packets_in_packetq; i++) {
+    packet_t *pack;
+
+    pack = packet_queue[i];
+
+    if (last_group == NULL)
+      pack->group = &GetChild<KaxBlockGroup>(cluster);
+    else
+      pack->group = &GetNextChild<KaxBlockGroup>(cluster, *last_group);
+    last_group = pack->group;
+    pack->block = &GetChild<KaxBlock>(*pack->group);
+    pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
+    KaxTrackEntry &track_entry =
+      static_cast<KaxTrackEntry &>(*pack->source->track_entry);
+
+    pack->block->AddFrame(track_entry,
+                          pack->timestamp - packet_queue[0]->timestamp,
+                          *pack->data_buffer);
+  }
 
   cluster.Render(static_cast<StdIOCallback &>(*out), dummy_cues);
+  clear_packetq();
+}
 
-  if (verbose > 1)
-    fprintf(stdout, "timestamp %llu, size %d, written packet for %s (%s)\n",
-            pack->timestamp, pack->length, file->name,
-            typeid(*pack->source).name());
+static int write_packet(packet_t *pack) {
+  add_packet_to_packetq(pack);
 
-  free(pack->data);
-  free(pack);
-  
-  return 0;
+  if (((pack->timestamp - packet_queue[0]->timestamp) > max_ms_per_cluster) ||
+      (num_packets_in_packetq > max_blocks_per_cluster))
+    write_packetq();
+
+  return 1;
 }
 
 int main(int argc, char **argv) {
   filelist_t *file, *winner;
   packet_t *pack;
-  int result;
 
   nice(2);
 
@@ -870,12 +855,7 @@ int main(int argc, char **argv) {
       break;
 
     /* Step 3: Write out the winning packet */
-/*    if (create_index && (mpage->index_serial != -1))
-      add_to_index(mpage->index_serial, ogg_page_granulepos(page), ftell(out));
-    if ((result = write_ogg_page(mpage, "", file)) != 0)
-      exit(result);*/
-    if ((result = write_packet(pack, winner, out)) != 0)
-      exit(result);
+    write_packet(pack);
     
     winner->pack = NULL;
     
@@ -883,6 +863,9 @@ int main(int argc, char **argv) {
     if (verbose >= 1)
       display_progress(0);
   }
+
+  if (num_packets_in_packetq > 0)
+    write_packetq();
 
   if (verbose == 1) {
     display_progress(1);
@@ -898,18 +881,6 @@ int main(int argc, char **argv) {
     file = next;
   }
   
-/*  if (create_index) {
-    for (i = 0; i < idx_num; i++) {
-      fprintf(stdout, "serial %d num_entries %d size %d\n", idx_serials[i],
-              idx_num_entries[i], idx_num_entries[i] * sizeof(idx_entry));
-      idx_packetizers[i]->process(&idx_entries[i][0], idx_num_entries[i]);
-      while ((mpage = idx_packetizers[i]->get_page()) != NULL)
-        if ((result = write_ogg_page(mpage, "", NULL)) != 0)
-          exit(result);
-      delete idx_packetizers[i];
-    }
-  }*/
-
   delete out;
 
   return 0;
