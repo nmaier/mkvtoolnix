@@ -66,7 +66,7 @@ vector<job_t> jobs;
 #define ID_CLIOPTIONS_COB 2000
 #define ID_CLIOPTIONS_ADD 2001
 
-const wxString cli_options[][2] = {
+wxString cli_options[][2] = {
   { wxT("### Global output control ###"),
     wxT("Several options that control the overall output that mkvmerge "
         "creates.") },
