@@ -187,3 +187,68 @@ void ac3_packetizer_c::dump_debug_info() {
   mxprint(stderr, "DBG> ac3_packetizer_c: queue: %d; buffer size: %d\n",
           packet_queue.size(), buffer_size);
 }
+
+ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
+                                         unsigned long nsamples_per_sec,
+                                         int nchannels, track_info_t *nti)
+  throw (error_c): ac3_packetizer_c(nreader, nsamples_per_sec, nchannels,
+                                    nti) {
+  bsb_present = false;
+}
+
+static bool warning_printed = false;
+
+void ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
+  unsigned char *new_buffer, *dptr, *sendptr, *sptr;
+  int size_add;
+  bool new_bsb_present;
+
+  if (((size % 2) == 1) && !warning_printed) {
+    mxprint(stdout, "WARNING! Untested code. If mkvmerge crashes, "
+            "or if the resulting file does not contain the complete and "
+            "correct audio track, then please contact the author, Moritz "
+            "Bunkus, at moritz@bunkus.org.\n");
+    warning_printed = true;
+  }
+
+  if (bsb_present) {
+    size_add = 1;
+    sendptr = buf + size + 1;
+  } else {
+    size_add = 0;
+    sendptr = buf + size;
+  }
+  size_add += size;
+  if ((size_add % 2) == 1) {
+    size_add--;
+    sendptr--;
+    new_bsb_present = true;
+  } else
+    new_bsb_present = false;
+
+  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size +
+                                            size_add);
+  dptr = new_buffer + buffer_size;
+  sptr = buf;
+
+  if (bsb_present) {
+    dptr[1] = bsb;
+    dptr[0] = sptr[0];
+    sptr++;
+    dptr += 2;
+  }
+
+  while (sptr < sendptr) {
+    dptr[0] = sptr[1];
+    dptr[1] = sptr[0];
+    dptr += 2;
+    sptr += 2;
+  }
+
+  if (new_bsb_present)
+    bsb = *sptr;
+  bsb_present = new_bsb_present;
+  packet_buffer = new_buffer;
+  buffer_size += size_add;
+}
+

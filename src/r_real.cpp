@@ -28,6 +28,7 @@
 #include "common.h"
 #include "error.h"
 #include "r_real.h"
+#include "p_ac3.h"
 #include "p_passthrough.h"
 #include "p_video.h"
 
@@ -424,23 +425,33 @@ void real_reader_c::create_packetizers() {
       char buffer[20];
       passthrough_packetizer_c *ptzr;
 
-      ptzr = new passthrough_packetizer_c(this, ti);
-      dmx->packetizer = ptzr;
+      if (!strncmp(dmx->fourcc, "dnet", 4)) {
+        dmx->packetizer =
+          new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels,
+                                  ti);
+        if (verbose)
+          mxprint(stdout, "+-> Using AC3 output module for stream "
+                  "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
 
-      sprintf(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]), 
-              toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
-              toupper(dmx->fourcc[3]));
+      } else {
+        ptzr = new passthrough_packetizer_c(this, ti);
+        dmx->packetizer = ptzr;
 
-      ptzr->set_track_type(track_audio);
-      ptzr->set_codec_id(buffer);
-      ptzr->set_codec_private(dmx->private_data, dmx->private_size);
-      ptzr->set_audio_sampling_freq((float)dmx->samples_per_second);
-      ptzr->set_audio_channels(dmx->channels);
-      ptzr->set_audio_bit_depth(dmx->bits_per_sample);
+        sprintf(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]), 
+                toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
+                toupper(dmx->fourcc[3]));
 
-      if (verbose)
-        mxprint(stdout, "+-> Using generic audio output module for stream %u "
-                "(FourCC: %s).\n", dmx->id, dmx->fourcc);
+        ptzr->set_track_type(track_audio);
+        ptzr->set_codec_id(buffer);
+        ptzr->set_codec_private(dmx->private_data, dmx->private_size);
+        ptzr->set_audio_sampling_freq((float)dmx->samples_per_second);
+        ptzr->set_audio_channels(dmx->channels);
+        ptzr->set_audio_bit_depth(dmx->bits_per_sample);
+
+        if (verbose)
+          mxprint(stdout, "+-> Using generic audio output module for stream "
+                  "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+      }
     }
 
     dmx->packetizer->duplicate_data_on_add(false);
