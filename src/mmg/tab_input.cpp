@@ -1693,7 +1693,6 @@ tab_input::load(wxConfigBase *cfg) {
                   "Moritz Bunkus <moritz@bunkus.org>\n\n"
                   "(Problem occured in tab_input::load(), #3)"));
       mmg_track_ptr &t = files[fidx].tracks[tidx];
-      t->enabled = true;
       tracks.push_back(t.get());
 
       fix_format("%s%s (ID %lld, type: %s) from %s", format);
@@ -1707,7 +1706,7 @@ tab_input::load(wxConfigBase *cfg) {
                    t->type == 's' ? wxT("subtitles") : wxT("unknown"),
                    name.c_str());
       clb_tracks->Append(label);
-      clb_tracks->Check(i, true);
+      clb_tracks->Check(i, t->enabled);
     }
   }
   st_tracks->Enable(tracks.size() > 0);
