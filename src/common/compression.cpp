@@ -86,11 +86,9 @@ zlib_compression_c::~zlib_compression_c() {
 
 unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
                                              int &size) {
+  int result, dstsize, n;
   unsigned char *dst;
-  int result, dstsize;
   z_stream d_stream;
-
-  dst = (unsigned char *)safemalloc(size * 20);
 
   d_stream.zalloc = (alloc_func)0;
   d_stream.zfree = (free_func)0;
@@ -100,14 +98,22 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
     mxerror("inflateInit() failed. Result: %d\n", result);
 
   d_stream.next_in = (Bytef *)buffer;
-  d_stream.next_out = (Bytef *)dst;
   d_stream.avail_in = size;
-  d_stream.avail_out = 20 * size;
-  result = inflate(&d_stream, Z_FULL_FLUSH);
-  if (result != Z_OK)
-    mxerror("Zlib decompression failed. Result: %d\n", result);
+  n = 0;
+  dst = NULL;
+  do {
+    n++;
+    dst = (unsigned char *)saferealloc(dst, n * 4000);
+    d_stream.next_out = (Bytef *)&dst[(n - 1) * 4000];
+    d_stream.avail_out = 4000;
+    result = inflate(&d_stream, Z_NO_FLUSH);
+    if ((result != Z_OK) && (result != Z_STREAM_END))
+      mxerror("Zlib decompression failed. Result: %d\n", result);
+  } while ((d_stream.avail_out == 0) && (d_stream.avail_in != 0) &&
+           (result != Z_STREAM_END));
 
-  dstsize = 20 * size - d_stream.avail_out;
+  dstsize = d_stream.total_out;
+  inflateEnd(&d_stream);
 
   mxverb(3, "zlib_compression_c: Decompression from %d to %d, %d%%\n",
          size, dstsize, dstsize * 100 / size);
@@ -115,17 +121,13 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
   dst = (unsigned char *)saferealloc(dst, dstsize);
   size = dstsize;
 
-  inflateEnd(&d_stream);
-
   return dst;
 }
 
 unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
+  int result, dstsize, n;
   unsigned char *dst;
-  int result, dstsize;
   z_stream c_stream;
-
-  dst = (unsigned char *)safemalloc(size * 2);
 
   c_stream.zalloc = (alloc_func)0;
   c_stream.zfree = (free_func)0;
@@ -135,26 +137,26 @@ unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
     mxerror("deflateInit() failed. Result: %d\n", result);
 
   c_stream.next_in = (Bytef *)buffer;
-  c_stream.next_out = (Bytef *)dst;
   c_stream.avail_in = size;
-  c_stream.avail_out = 2 * size;
-  result = deflate(&c_stream, Z_FULL_FLUSH);
-  if (result != Z_OK)
-    mxerror("Zlib compression failed. Result: %d\n", result);
-
-  dstsize = 2 * size - c_stream.avail_out;
+  n = 0;
+  dst = NULL;
+  do {
+    n++;
+    dst = (unsigned char *)saferealloc(dst, n * 4000);
+    c_stream.next_out = (Bytef *)&dst[(n - 1) * 4000];
+    c_stream.avail_out = 4000;
+    result = deflate(&c_stream, Z_FINISH);
+    if ((result != Z_OK) && (result != Z_STREAM_END))
+      mxerror("Zlib decompression failed. Result: %d\n", result);
+  } while ((c_stream.avail_out == 0) && (result != Z_STREAM_END));
+  dstsize = c_stream.total_out;
+  deflateEnd(&c_stream);
 
   mxverb(3, "zlib_compression_c: Compression from %d to %d, %d%%\n",
          size, dstsize, dstsize * 100 / size);
 
-  raw_size += size;
-  compressed_size += dstsize;
-  items++;
-
   dst = (unsigned char *)saferealloc(dst, dstsize);
   size = dstsize;
-
-  deflateEnd(&c_stream);
 
   return dst;
 }
