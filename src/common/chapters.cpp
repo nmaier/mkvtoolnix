@@ -35,10 +35,8 @@ string default_chapter_country;
 
 /** Is the current char an equal sign? */
 #define isequal(s) (*(s) == '=')
-/** Is the current char a colon? */
-#define iscolon(s) (*(s) == ':')
-/** Is the current char a dot? */
-#define isdot(s) (*(s) == '.')
+/** Is the current char a colon, comman or a dot? */
+#define isseparator(s) ((':' == *(s)) || (',' == *(s)) || ('.' == *(s)))
 /** Do we have two consecutive digits? */
 #define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
 /** Do we have three consecutive digits? */
@@ -53,11 +51,11 @@ string default_chapter_country;
                           istwodigits(s + 7) && \
                           isequal(s + 9) && \
                           istwodigits(s + 10) && \
-                          iscolon(s + 12) && \
+                          isseparator(s + 12) && \
                           istwodigits(s + 13) && \
-                          iscolon(s + 15) && \
+                          isseparator(s + 15) && \
                           istwodigits(s + 16) && \
-                          isdot(s + 18) && \
+                          isseparator(s + 18) && \
                           isthreedigits(s + 19))
 /** Does \c s point to a valid OGM style chapter name entry? */
 #define ischapternameline(s) ((strlen(s) >= 15) && \
