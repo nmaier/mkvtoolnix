@@ -1596,7 +1596,10 @@ static int avi_close_output_file(avi_t *AVI)
    //OUTLONG(MAX_INFO_STRLEN);
    memset(id_str, 0, MAX_INFO_STRLEN);
 
-   sprintf(id_str, "%s-%s", PACKAGE, VERSION);
+   if (AVI->writing_app != NULL)
+     strncpy(id_str, AVI->writing_app, MAX_INFO_STRLEN - 1);
+   else
+     snprintf(id_str, MAX_INFO_STRLEN - 1, "%s-%s", PACKAGE, VERSION);
    real_id_len = id_len = strlen(id_str)+1;
    if (id_len&1) id_len++;
 
@@ -1623,6 +1626,11 @@ static int avi_close_output_file(avi_t *AVI)
 //   memcpy(AVI_header+nhb, id_str, 25);
 //   nhb += MAX_INFO_STRLEN;
 #endif
+
+   if (AVI->writing_app != NULL) {
+     free(AVI->writing_app);
+     AVI->writing_app = NULL;
+   }
 
    // ----------------------------
    

@@ -254,6 +254,10 @@ typedef struct
 
   void*		extradata;
   unsigned long	extradata_size;
+
+  /* This info is put into the AVI header. May be set by the application.
+     If set then avilib will free() it. */
+  char *writing_app;
 } avi_t;
 
 #define AVI_MODE_WRITE  0
