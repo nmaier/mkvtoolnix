@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.29 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.30 2003/05/11 12:31:01 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -382,6 +382,11 @@ int avi_reader_c::read() {
   
   demuxer = ademuxers;
   while (demuxer != NULL) {
+    if (demuxer->packetizer->packet_available() >= 2) {
+      demuxer = demuxer->next;
+      continue;
+    }
+
     AVI_set_audio_track(avi, demuxer->aid);
     if (AVI_audio_format(avi) == 0x0001)
       size = demuxer->channels * demuxer->bits_per_sample *
