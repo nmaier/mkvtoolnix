@@ -73,6 +73,14 @@ tab_input::tab_input(wxWindow *parent):
   cb_no_attachments->SetToolTip(_("Do not copy attachments from this file. "
                                   "Only applies to Matroska files."));
   cb_no_attachments->Enable(false);
+  cb_no_tags =
+    new wxCheckBox(this, ID_CB_NOTAGS, _("No tags"), wxPoint(230, 110),
+                   wxDefaultSize, 0);
+  cb_no_tags->SetValue(false);
+  cb_no_tags->SetToolTip(_("Do not copy tags from this file. Only "
+                           "applies to Matroska files."));
+  cb_no_tags->Enable(false);
+
   new wxStaticText(this, wxID_STATIC, _("Tracks:"), wxPoint(5, 140),
                    wxDefaultSize, 0);
   clb_tracks =
@@ -379,6 +387,39 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
         track.fourcc = new wxString("");
 
         file.tracks->push_back(track);
+
+      } else if (output[i].Find("container:") > 0) {
+        wxString container;
+
+        container = output[i].AfterLast(' ');
+        if (container == "AAC")
+          file.container = TYPEAAC;
+        else if (container == "AC3")
+          file.container = TYPEAC3;
+        else if (container == "AVI")
+          file.container = TYPEAVI;
+        else if (container == "DTS")
+          file.container = TYPEDTS;
+        else if (container == "Matroska")
+          file.container = TYPEMATROSKA;
+        else if (container == "MP2/MP3")
+          file.container = TYPEMP3;
+        else if (container == "Ogg/OGM")
+          file.container = TYPEOGM;
+        else if (container == "Quicktime/MP4")
+          file.container = TYPEQTMP4;
+        else if (container == "RealMedia")
+          file.container = TYPEREAL;
+        else if (container == "SRT")
+          file.container = TYPESRT;
+        else if (container == "SSA/ASS")
+          file.container = TYPESSA;
+        else if (container == "VobSub")
+          file.container = TYPEVOBSUB;
+        else if (container == "WAV")
+          file.container = TYPEWAV;
+        else
+          file.container = TYPEUNKNOWN;
       }
     }
 
@@ -432,6 +473,7 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
   selected_file = -1;
   cb_no_chapters->Enable(false);
   cb_no_attachments->Enable(false);
+  cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
   clb_tracks->Enable(false);
   no_track_mode();
@@ -445,13 +487,24 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
   wxString label;
 
   b_remove_file->Enable(true);
-  cb_no_chapters->Enable(true);
-  cb_no_attachments->Enable(true);
   selected_file = -1;
   new_sel = lb_input_files->GetSelection();
   f = &files[new_sel];
-  cb_no_chapters->SetValue(f->no_chapters);
-  cb_no_attachments->SetValue(f->no_attachments);
+  if (f->container == TYPEMATROSKA) {
+    cb_no_chapters->Enable(true);
+    cb_no_attachments->Enable(true);
+    cb_no_tags->Enable(true);
+    cb_no_chapters->SetValue(f->no_chapters);
+    cb_no_attachments->SetValue(f->no_attachments);
+    cb_no_tags->SetValue(f->no_tags);
+  } else {
+    cb_no_chapters->Enable(false);
+    cb_no_attachments->Enable(false);
+    cb_no_tags->Enable(false);
+    cb_no_chapters->SetValue(false);
+    cb_no_attachments->SetValue(false);
+    cb_no_tags->SetValue(false);
+  }
 
   clb_tracks->Clear();
   for (i = 0; i < f->tracks->size(); i++) {
@@ -474,13 +527,18 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
 }
 
 void tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
-  if (selected_file -1)
+  if (selected_file != -1)
     files[selected_file].no_chapters = cb_no_chapters->GetValue();
 }
 
 void tab_input::on_noattachments_clicked(wxCommandEvent &evt) {
-  if (selected_file -1)
+  if (selected_file != -1)
     files[selected_file].no_attachments = cb_no_attachments->GetValue();
+}
+
+void tab_input::on_notags_clicked(wxCommandEvent &evt) {
+  if (selected_file != -1)
+    files[selected_file].no_tags = cb_no_tags->GetValue();
 }
 
 void tab_input::on_track_selected(wxCommandEvent &evt) {
@@ -646,8 +704,10 @@ void tab_input::save(wxConfigBase *cfg) {
     s.Printf("file %u", fidx);
     cfg->SetPath(s);
     cfg->Write("file_name", *f->file_name);
+    cfg->Write("container", f->container);
     cfg->Write("no_chapters", f->no_chapters);
     cfg->Write("no_attachments", f->no_attachments);
+    cfg->Write("no_tags", f->no_tags);
 
     cfg->Write("number_of_tracks", (int)f->tracks->size());
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
@@ -734,8 +794,10 @@ void tab_input::load(wxConfigBase *cfg) {
       continue;
     }
     fi.file_name = new wxString(s);
+    cfg->Read("container", &fi.container);
     cfg->Read("no_chapters", &fi.no_chapters);
     cfg->Read("no_attachments", &fi.no_attachments);
+    cfg->Read("no_tags", &fi.no_tags);
     fi.tracks = new vector<mmg_track_t>;
 
     for (tidx = 0; tidx < (uint32_t)num_tracks; tidx++) {
@@ -924,6 +986,7 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
 
   EVT_CHECKBOX(ID_CB_NOCHAPTERS, tab_input::on_nochapters_clicked)
   EVT_CHECKBOX(ID_CB_NOATTACHMENTS, tab_input::on_noattachments_clicked)
+  EVT_CHECKBOX(ID_CB_NOTAGS, tab_input::on_notags_clicked)
   EVT_CHECKBOX(ID_CB_MAKEDEFAULT, tab_input::on_default_track_clicked)
   EVT_CHECKBOX(ID_CB_AACISSBR, tab_input::on_aac_is_sbr_clicked)
 

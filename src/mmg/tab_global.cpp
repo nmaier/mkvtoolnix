@@ -208,26 +208,41 @@ tab_global::tab_global(wxWindow *parent):
                                       "on the 'input' tab."));
 
   new wxStaticBox(this, -1, _("Advanced options (DO NOT CHANGE!)"),
-                  wxPoint(10, 415), wxSize(475, 50));
+                  wxPoint(10, 390), wxSize(475, 70));
   cb_no_cues =
-    new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 435),
+    new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 405),
                    wxDefaultSize, 0);
   cb_no_cues->SetToolTip(_T("Do not write the cues (the index). DO NOT "
                             "ENABLE this option unless you REALLY know "
                             "what you're doing!"));
   cb_no_clusters =
     new wxCheckBox(this, ID_CB_NOCLUSTERSINMETASEEK,
-                   _("No clusters in meta seek"), wxPoint(110, 435),
+                   _("No clusters in meta seek"), wxPoint(145, 405),
                    wxDefaultSize, 0);
   cb_no_clusters->SetToolTip(_T("Do not put all the clusters into the cues "
                                 "(the index). DO NOT ENABLE this option "
                                 "unless you REALLY know what you're doing!"));
-  cb_enable_lacing =
-    new wxCheckBox(this, ID_CB_ENABLELACING, _("Enable lacing"),
-                   wxPoint(300, 435), wxDefaultSize, 0);
-  cb_enable_lacing->SetToolTip(_T("Enable lacing for audio tracks. DO NOT "
-                                  "ENABLE this option unless you REALLY know "
-                                  "what you're doing!"));
+  cb_disable_lacing =
+    new wxCheckBox(this, ID_CB_DISABLELACING, _("Disable lacing"),
+                   wxPoint(325, 405), wxDefaultSize, 0);
+  cb_disable_lacing->SetToolTip(_T("Disable lacing for audio tracks. DO NOT "
+                                   "ENSABLE this option unless you REALLY "
+                                   "know what you're doing!"));
+  cb_enable_durations =
+    new wxCheckBox(this, ID_CB_ENABLEDURATIONS, _("Enable durations"),
+                   wxPoint(15, 430), wxDefaultSize, 0);
+  cb_enable_durations->SetToolTip(_T("Enable durations for all blocks and not "
+                                     "only for blocks that definitely need "
+                                     "them (subtitles). DO NOT "
+                                     "ENABLE this option unless you REALLY "
+                                     "know what you're doing!"));
+  cb_enable_timeslices =
+    new wxCheckBox(this, ID_CB_ENABLETIMESLICES, _("Enable timeslices"),
+                   wxPoint(145, 430), wxDefaultSize, 0);
+  cb_enable_durations->SetToolTip(_T("Enable timeslices for laced blocks. "
+                                     "DO NOT "
+                                     "ENSABLE this option unless you REALLY "
+                                     "know what you're doing!"));
 }
 
 void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
@@ -320,8 +335,12 @@ void tab_global::load(wxConfigBase *cfg) {
   cb_no_cues->SetValue(b);
   cfg->Read("no_clusters", &b);
   cb_no_clusters->SetValue(b);
-  cfg->Read("enable_lacing", &b);
-  cb_enable_lacing->SetValue(b);
+  cfg->Read("disable_lacing", &b);
+  cb_disable_lacing->SetValue(b);
+  cfg->Read("enable_durations", &b);
+  cb_enable_durations->SetValue(b);
+  cfg->Read("enable_timeslices", &b);
+  cb_enable_timeslices->SetValue(b);
 }
 
 void tab_global::save(wxConfigBase *cfg) {
@@ -346,7 +365,9 @@ void tab_global::save(wxConfigBase *cfg) {
 
   cfg->Write("no_cues", cb_no_cues->IsChecked());
   cfg->Write("no_clusters", cb_no_clusters->IsChecked());
-  cfg->Write("enable_lacing", cb_enable_lacing->IsChecked());
+  cfg->Write("disable_lacing", cb_disable_lacing->IsChecked());
+  cfg->Write("enable_durations", cb_enable_durations->IsChecked());
+  cfg->Write("enable_timeslices", cb_enable_timeslices->IsChecked());
 }
 
 bool tab_global::validate_settings() {

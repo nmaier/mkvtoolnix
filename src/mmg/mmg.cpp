@@ -131,6 +131,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                                   wxSize(520, 718),
 #endif
                                   wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
+  mdlg = this;
+
   file_menu = new wxMenu();
   file_menu->Append(ID_M_FILE_LOAD, _T("&Load settings\tCtrl-L"),
                     _T("Load muxing settings from a file"));
@@ -220,31 +222,49 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   notebook->AddPage(settings_page, _("Settings"));
   notebook->AddPage(chapter_editor_page, _("Chapter Editor"));
 
-  bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+  bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
 
   wxStaticBox *sb_low = new wxStaticBox(panel, -1, _("Output filename"));
   wxStaticBoxSizer *sbs_low = new wxStaticBoxSizer(sb_low, wxHORIZONTAL);
-  bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+  bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
 
   tc_output =
     new wxTextCtrl(panel, ID_TC_OUTPUT, _(""), wxDefaultPosition,
                    wxSize(400, -1), 0);
-  sbs_low->Add(tc_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+  sbs_low->Add(tc_output, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
 
   b_browse_output =
     new wxButton(panel, ID_B_BROWSEOUTPUT, _("Browse"), wxDefaultPosition,
                  wxDefaultSize, 0);
-  sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+  sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
 
-  wxStaticBox *sb_low2 = new wxStaticBox(panel, -1, _("Command line"));
-  wxStaticBoxSizer *sbs_low2 = new wxStaticBoxSizer(sb_low2, wxHORIZONTAL);
-  bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+  sb_commandline =
+    new wxStaticBox(panel, -1, _("Command line"));
+  wxStaticBoxSizer *sbs_low2 =
+    new wxStaticBoxSizer(sb_commandline, wxHORIZONTAL);
+  bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
 
   tc_cmdline =
     new wxTextCtrl(panel, ID_TC_CMDLINE, _(""), wxDefaultPosition,
                    wxSize(490, 50), wxTE_READONLY | wxTE_LINEWRAP |
                    wxTE_MULTILINE);
-  sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+  sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
+
+  wxBoxSizer *bs_buttons = new wxBoxSizer(wxHORIZONTAL);
+
+  b_start_muxing =
+    new wxButton(panel, ID_B_STARTMUXING, _("Sta&rt muxing"),
+                 wxDefaultPosition, wxSize(130, -1));
+  bs_buttons->Add(b_start_muxing, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
+
+  b_copy_to_clipboard =
+    new wxButton(panel, ID_B_COPYTOCLIPBOARD, _("&Copy to clipboard"),
+                 wxDefaultPosition, wxSize(130, -1));
+  bs_buttons->Add(10, 0);
+  bs_buttons->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL,
+                  8);
+
+  bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
   last_open_dir = "";
   cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" ";
@@ -661,6 +681,10 @@ void mmg_dialog::update_command_line() {
         cmdline += "--no-attachments ";
         clargs.Add("--no-attachments");
       }
+      if (f->no_tags) {
+        cmdline += "--no-tags ";
+        clargs.Add("--no-tags");
+      }
       if (no_video) {
         cmdline += "-D ";
         clargs.Add("-D");
@@ -790,9 +814,19 @@ void mmg_dialog::update_command_line() {
     clargs.Add("--no-clusters-in-meta-seek");
   }
 
-  if (global_page->cb_enable_lacing->IsChecked()) {
-    cmdline += "--enable-lacing ";
-    clargs.Add("--enable-lacing");
+  if (global_page->cb_disable_lacing->IsChecked()) {
+    cmdline += "--disable-lacing ";
+    clargs.Add("--disable-lacing");
+  }
+
+  if (global_page->cb_enable_durations->IsChecked()) {
+    cmdline += "--enable-durations ";
+    clargs.Add("--enable-durations");
+  }
+
+  if (global_page->cb_enable_timeslices->IsChecked()) {
+    cmdline += "--enable-timeslices ";
+    clargs.Add("--enable-timeslices");
   }
 
   if (old_cmdline != cmdline)
@@ -896,6 +930,8 @@ void mmg_dialog::on_window_selected(wxCommandEvent &evt) {
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
+  EVT_BUTTON(ID_B_STARTMUXING, mmg_dialog::on_run)
+  EVT_BUTTON(ID_B_COPYTOCLIPBOARD, mmg_dialog::on_copy_to_clipboard)
   EVT_TIMER(ID_T_UPDATECMDLINE, mmg_dialog::on_update_command_line)
   EVT_TIMER(ID_T_STATUSBAR, mmg_dialog::on_clear_status_bar)
   EVT_MENU(ID_M_FILE_EXIT, mmg_dialog::on_quit)

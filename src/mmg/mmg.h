@@ -98,7 +98,7 @@ using namespace libmatroska;
 #define ID_TC_SEGMENTTITLE 10051
 #define ID_CB_NOCUES 10052
 #define ID_CB_NOCLUSTERSINMETASEEK 10053
-#define ID_CB_ENABLELACING 10054
+#define ID_CB_DISABLELACING 10054
 #define ID_B_MUX_OK 10055
 #define ID_B_MUX_SAVELOG 10056
 #define ID_B_MUX_ABORT 10057
@@ -117,6 +117,11 @@ using namespace libmatroska;
 #define ID_CB_CHAPTERSELECTCOUNTRYCODE 10070
 #define ID_B_ADDSUBCHAPTER 10071
 #define ID_CB_NOATTACHMENTS 10072
+#define ID_CB_NOTAGS 10073
+#define ID_B_STARTMUXING 10074
+#define ID_B_COPYTOCLIPBOARD 10075
+#define ID_CB_ENABLEDURATIONS 10076
+#define ID_CB_ENABLETIMESLICES 10077
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -164,8 +169,9 @@ typedef struct {
 
 typedef struct {
   wxString *file_name;
+  int container;
   vector<mmg_track_t> *tracks;
-  bool no_chapters, no_attachments;
+  bool no_chapters, no_attachments, no_tags;
 } mmg_file_t;
 
 typedef struct {
@@ -192,7 +198,8 @@ class tab_input: public wxPanel {
 protected:
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_browse_tags;
-  wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_default, *cb_aac_is_sbr;
+  wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
+  wxCheckBox *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;
   wxComboBox *cob_language, *cob_cues, *cob_sub_charset;
   wxComboBox *cob_aspect_ratio, *cob_fourcc;
@@ -212,6 +219,7 @@ public:
   void on_track_enabled(wxCommandEvent &evt);
   void on_nochapters_clicked(wxCommandEvent &evt);
   void on_noattachments_clicked(wxCommandEvent &evt);
+  void on_notags_clicked(wxCommandEvent &evt);
   void on_default_track_clicked(wxCommandEvent &evt);
   void on_aac_is_sbr_clicked(wxCommandEvent &evt);
   void on_language_selected(wxCommandEvent &evt);
@@ -270,6 +278,7 @@ class tab_settings: public wxPanel {
   DECLARE_EVENT_TABLE();
 protected:
   wxTextCtrl *tc_mkvmerge;
+  wxCheckBox *cb_show_commandline;
 
 public:
   tab_settings(wxWindow *parent);
@@ -296,7 +305,8 @@ public:
   wxRadioButton *rb_split_by_size, *rb_split_by_time;
   wxComboBox *cob_split_by_size, *cob_split_by_time;
   wxComboBox *cob_chap_language, *cob_chap_charset;
-  wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_enable_lacing;
+  wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_disable_lacing;
+  wxCheckBox *cb_enable_durations, *cb_enable_timeslices;
 
 public:
   tab_global(wxWindow *parent);
@@ -401,6 +411,7 @@ class mmg_dialog: public wxFrame {
   DECLARE_EVENT_TABLE();
 protected:
   wxButton *b_browse_output;
+  wxStaticBox *sb_commandline;
   wxTextCtrl *tc_output, *tc_cmdline;
 
   wxString cmdline;
@@ -420,6 +431,8 @@ protected:
   tab_global *global_page;
   tab_settings *settings_page;
   tab_chapters *chapter_editor_page;
+
+  wxButton *b_start_muxing, *b_copy_to_clipboard;
 
 public:
   mmg_dialog();
