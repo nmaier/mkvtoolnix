@@ -661,12 +661,16 @@ AC_SUBST(ZLIB_LIBS)
 dnl
 dnl Check for liblzo
 dnl
-  AC_CHECK_LIB(lzo, lzo1x_1_compress,
-               [ LZO_LIBS="-llzo"
-                 lzo_found=yes ],
-               [ lzo_found=no ],)
-  if test "$lzo_found" = "yes"; then
-    AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
+  AC_ARG_ENABLE([lzo],
+    [  --enable-lzo            compile in support for LZO compression (auto)])
+  if test x"$enable_lzo" = x"yes" -o x"$enable_lzo" = "x"; then
+    AC_CHECK_LIB(lzo, lzo1x_1_compress,
+                 [ LZO_LIBS="-llzo"
+                   lzo_found=yes ],
+                 [ lzo_found=no ],)
+    if test "$lzo_found" = "yes"; then
+      AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
+    fi
   fi
   if test x"$lzo_found" = xyes ; then
     opt_features_yes="$opt_features_yes; LZO compression"
@@ -681,12 +685,16 @@ AC_SUBST(LZO_LIBS)
 dnl
 dnl Check for libbz2
 dnl
-  AC_CHECK_LIB(bz2, BZ2_bzCompress,
-               [ BZ2_LIBS="-lbz2"
-                 bz2_found=yes ],
-               [ bz2_found=no ],)
-  if test "$bz2_found" = "yes"; then
-    AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
+  AC_ARG_ENABLE([bz2],
+    [  --enable-bz2            compile in support for BZ2 compression (auto)])
+  if test x"$enable_bz2" = x"yes" -o x"$enable_bz2" = "x"; then
+    AC_CHECK_LIB(bz2, BZ2_bzCompress,
+                 [ BZ2_LIBS="-lbz2"
+                   bz2_found=yes ],
+                 [ bz2_found=no ],)
+    if test "$bz2_found" = "yes"; then
+      AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
+    fi
   fi
   if test x"$bz2_found" = xyes ; then
     opt_features_yes="$opt_features_yes; BZ2 compression"
