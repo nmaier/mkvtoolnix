@@ -205,16 +205,20 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   // 0: ReadOrder, 1: Layer, 2: Style, 3: Name, 4: MarginL, 5: MarginR,
   // 6: MarginV, 7: Effect, 8: Text
   fields = split(s, ",", 9);
-  if (9 != fields.size()) {
-    mxwarn("Invalid format for a SSA line ('%s'). This entry will be "
-           "skipped.\n", s);
+  if (9 < fields.size()) {
+    mxwarn("Invalid format for a SSA line ('%s') at timecode " FMT_TIMECODE
+           ": Too many fields found (%d instead of 9). This entry will be "
+           "skipped.\n", s, ARG_TIMECODE_NS(timecode), fields.size());
     return;
   }
+  while (9 != fields.size())
+    fields.push_back("");
 
   // Convert the ReadOrder entry so that we can re-order the entries later.
   if (!parse_int(fields[0], num)) {
-    mxwarn("Invalid format for a SSA line ('%s'). This entry will be "
-           "skipped.\n", s);
+    mxwarn("Invalid format for a SSA line ('%s') at timecode " FMT_TIMECODE
+           ": The first field is not an integer. This entry will be "
+           "skipped.\n", s, ARG_TIMECODE_NS(timecode));
     return;
   }
 
