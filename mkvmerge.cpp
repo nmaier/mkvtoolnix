@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.45 2003/04/24 20:36:45 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.46 2003/04/25 16:29:05 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -40,18 +40,21 @@
 
 #include "EbmlHead.h"
 #include "EbmlSubHead.h"
+#include "EbmlVoid.h"
+
 #include "FileKax.h"
+#include "KaxBlock.h"
+#include "KaxCluster.h"
+#include "KaxClusterData.h"
+#include "KaxCues.h"
+#include "KaxInfo.h"
+#include "KaxInfoData.h"
+#include "KaxSeekHead.h"
 #include "KaxSegment.h"
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
 #include "KaxTrackAudio.h"
 #include "KaxTrackVideo.h"
-#include "KaxCluster.h"
-#include "KaxClusterData.h"
-#include "KaxBlock.h"
-#include "KaxCues.h"
-#include "KaxInfo.h"
-#include "KaxInfoData.h"
 #include "KaxVersion.h"
 
 #include "mkvmerge.h"
@@ -74,6 +77,8 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
+
+#define METASEEK_SPACE 100
 
 typedef struct {
   char *ext;
@@ -105,16 +110,19 @@ int write_cues = 1, cue_writing_requested = 0;
 float video_fps = -1.0;
 
 cluster_helper_c *cluster_helper = NULL;
-KaxSegment       *kax_segment;
-KaxInfo          *kax_infos;
-KaxTracks        *kax_tracks;
-KaxTrackEntry    *kax_last_entry;
-KaxCues          *kax_cues;
+KaxSegment *kax_segment;
+KaxInfo *kax_infos;
+KaxTracks *kax_tracks;
+KaxTrackEntry *kax_last_entry;
+KaxCues *kax_cues;
+EbmlVoid *kax_seekhead_void = NULL;
+KaxDuration *kax_duration;
+KaxSeekHead *kax_seekhead;
+
+int meta_seek_size = METASEEK_SPACE;
 
 // Specs say that track numbers should start at 1.
-int               track_number = 1;
-
-KaxDuration      *kax_duration;
+int track_number = 1;
 
 StdIOCallback *out;
 
@@ -156,6 +164,7 @@ static void usage(void) {
     "                           put at most n milliseconds of data into each\n"
     "                           cluster.\n"
     "  --no-cues                Do not write the cue data (the index).\n"
+    "  --meta-seek-size <d>     Reserve d bytes for the meta seek entries.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -454,7 +463,8 @@ static void parse_args(int argc, char **argv) {
       for (j = 1; file_types[j].ext; j++)
         fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
       exit(0);
-    }
+    } else if (!strcmp(argv[i], "--no-cues"))
+      write_cues = 0;
 
   if (outfile == NULL) {
     fprintf(stderr, "Error: no output files given.\n");
@@ -481,6 +491,14 @@ static void parse_args(int argc, char **argv) {
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
 
     kax_segment->Render(static_cast<StdIOCallback &>(*out));
+
+    // Reserve some space for the meta seek stuff.
+    if (write_cues) {
+      kax_seekhead = new KaxSeekHead();
+      kax_seekhead_void = new EbmlVoid();
+      kax_seekhead_void->SetSize(meta_seek_size);
+      kax_seekhead_void->Render(static_cast<StdIOCallback &>(*out));
+    }
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Could not render the file header.\n");
     exit(1);
@@ -492,7 +510,8 @@ static void parse_args(int argc, char **argv) {
   for (i = 0; i < argc; i++) {
 
     // Ignore the options we took care of in the first step.
-    if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
+    if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output") ||
+        !strcmp(argv[i], "--no-cues")) {
       i++;
       continue;
     }
@@ -527,8 +546,18 @@ static void parse_args(int argc, char **argv) {
         max_ms_per_cluster = 65535;
       }
       i++;
-    } else if (!strcmp(argv[i], "--no-cues"))
-      write_cues = 0;
+    } else if (!strcmp(argv[i], "--meta-seek-size")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --meta-seek-size lacks the size argument.\n");
+        exit(1);
+      }
+      meta_seek_size = strtol(argv[i + 1], NULL, 10);
+      if (meta_seek_size < 1) {
+        fprintf(stderr, "Error: Invalid size given for --meta-seek-size.\n");
+        exit(1);
+      }
+      i++;
+    }
 
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
@@ -956,6 +985,15 @@ int main(int argc, char **argv) {
     kax_cues->Render(*static_cast<StdIOCallback *>(out));
     if (verbose == 1)
       fprintf(stdout, "\n");
+    kax_seekhead->IndexThis(*kax_cues, *kax_segment);
+    kax_seekhead->UpdateSize();
+    if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
+                                       *static_cast<StdIOCallback *>(out),
+                                       true) == 0)
+      fprintf(stdout, "Warning: Could not update the meta seek information "
+              "as the space reserved for them was too small. Re-run "
+              "mkvmerge with the additional parameters '--meta-seek-size "
+              "%lld'.\n", kax_seekhead->ElementSize());
   }
 
   // Now re-render the kax_infos and fill in the biggest timecode
@@ -977,6 +1015,10 @@ int main(int argc, char **argv) {
   }
   
   delete out;
+  delete kax_segment;
+  delete kax_cues;
+  delete kax_seekhead_void;
+  delete kax_seekhead;
 
   utf8_done();
 
