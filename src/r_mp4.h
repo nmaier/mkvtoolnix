@@ -31,12 +31,46 @@
 #include "mm_io.h"
 #include "p_video.h"
 
+typedef struct {
+  uint32_t number, duration;
+} qt_sample_duration_t;
+
+typedef struct {
+  uint32_t first_chunk, samples_per_chunk, description_id;
+} qt_sample_to_chunk_t;
+
+typedef struct {
+  char type;
+  uint32_t id;
+  char fourcc[4];
+
+  uint32_t timescale, duration, sample_size;
+
+  uint32_t *sync_table;
+  uint32_t sync_table_len;
+  qt_sample_duration_t *duration_table;
+  uint32_t duration_table_len;
+  qt_sample_to_chunk_t *sample_to_chunk_table;
+  uint32_t sample_to_chunk_table_len;
+  uint32_t *sample_size_table;
+  uint32_t sample_size_table_len;
+  uint64_t *chunk_offset_table;
+  uint32_t chunk_offset_table_len;
+
+  uint32_t v_width, v_height, v_bitdepth;
+  uint32_t a_channels, a_bitdepth;
+  float a_samplerate;
+
+  generic_packetizer_c *packetizer;
+} qtmp4_demuxer_t;
+
 class qtmp4_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
-//   vector<real_demuxer_t *> demuxers;
-  int64_t file_size;//, last_timecode, num_packets_in_chunk, num_packets;
+  vector<qtmp4_demuxer_t *> demuxers;
+  int64_t file_size;
   bool done;
+  qtmp4_demuxer_t *new_dmx;
 
 public:
   qtmp4_reader_c(track_info_t *nti) throw (error_c);
@@ -54,16 +88,13 @@ public:
 protected:
   virtual void parse_headers();
   virtual void create_packetizers();
+  virtual void handle_header_atoms(uint32_t parent, int64_t parent_size,
+                                   uint64_t parent_pos, int level);
+  virtual void read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
+                         uint32_t &hsize);
+  virtual void free_demuxer(qtmp4_demuxer_t *dmx);
 //   virtual real_demuxer_t *find_demuxer(int id);
-//   virtual void assemble_packet(real_demuxer_t *dmx, unsigned char *p, int size,
-//                                int64_t timecode, bool keyframe);
-//   virtual void deliver_segments(real_demuxer_t *dmx, int64_t timecode);
 //   virtual int finish();
-//   virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width,
-//                                  uint32_t &height);
-//   virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
-//                               int size);
-//   virtual void get_information_from_data();
 };
 
 #endif  // __R_MP4_H
