@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.30 2003/04/13 15:23:02 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.31 2003/04/17 12:22:15 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -48,8 +48,9 @@
 #include "KaxCluster.h"
 #include "KaxClusterData.h"
 #include "KaxBlock.h"
-#include "KaxBlockAdditional.h"
 #include "KaxCues.h"
+#include "KaxInfo.h"
+#include "KaxInfoData.h"
 
 #include "common.h"
 #include "queue.h"
@@ -450,6 +451,10 @@ static void parse_args(int argc, char **argv) {
   try {
     render_head(out);
     kax_segment.Render(static_cast<StdIOCallback &>(*out));
+
+    KaxInfo &infos = GetChild<KaxInfo>(kax_segment);
+    KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(infos);
+    *(static_cast<EbmlUInteger *>(&time_scale)) = TIMECODE_SCALE;
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Could not render the file header.\n");
     exit(1);
