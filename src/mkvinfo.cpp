@@ -75,11 +75,12 @@ extern "C" {
 #define MATROSKA_VERSION 2
 #endif
 
-#include "mkvinfo.h"
-#include "mkvinfo_tag_types.h"
+#include "checksums.h"
 #include "common.h"
 #include "commonebml.h"
 #include "matroska.h"
+#include "mkvinfo.h"
+#include "mkvinfo_tag_types.h"
 #include "mm_io.h"
 
 using namespace libmatroska;
@@ -560,46 +561,6 @@ asctime_r(const struct tm *tm,
   return abuf;
 }
 #endif
-
-// }}}
-
-// {{{ Adler32 checksum
-
-#define BASE 65521
-#define A0 check += *buffer++; sum2 += check;
-#define A1 A0 A0
-#define A2 A1 A1
-#define A3 A2 A2
-#define A4 A3 A3
-#define A5 A4 A4
-#define A6 A5 A5
-
-uint32_t
-calc_adler32(const unsigned char *buffer,
-             int size) {
-  register uint32_t sum2, check;
-  register int k;
-
-  check = 1;
-  k = size;
-
-  sum2 = (check >> 16) & 0xffffL;
-  check &= 0xffffL;
-  while (k >= 64) {
-    A6;
-    k -= 64;
-  }
-
-  if (k)
-    do {
-      A0;
-    } while (--k);
-
-  check %= BASE;
-  check |= (sum2 % BASE) << 16;
-
-  return check;
-}
 
 // }}}
 
