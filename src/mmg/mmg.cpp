@@ -35,6 +35,7 @@
 
 #include "chapters.h"
 #include "common.h"
+#include "jobs.h"
 #if defined(SYS_UNIX) || defined(SYS_APPLE)
 #include "matroskalogo_big.xpm"
 #endif
@@ -56,6 +57,7 @@ vector<wxString> last_settings;
 vector<wxString> last_chapters;
 vector<mmg_file_t> files;
 map<wxString, wxString, lt_wxString> capabilities;
+vector<job_t> jobs;
 
 wxString &
 break_line(wxString &line,
@@ -367,6 +369,14 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                       wxS("Create &option file"),
                       wxS("Save the command line to an option file "
                           "that can be read by mkvmerge"));
+  muxing_menu->AppendSeparator();
+  muxing_menu->Append(ID_M_MUXING_ADD_TO_JOBQUEUE,
+                      wxS("&Add to job queue"),
+                      wxS("Adds the current settings as a new job entry to "
+                          "the job queue"));
+  muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS,
+                      wxS("&Manage jobs"),
+                      wxS("Brings up the job queue editor"));
 
   chapter_menu = new wxMenu();
   chapter_menu->Append(ID_M_CHAPTERS_NEW, wxS("&New chapters"),
@@ -482,6 +492,11 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   bs_buttons->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL,
                   8);
 
+  b_add_to_jobqueue =
+    new wxButton(panel, ID_B_ADD_TO_JOBQUEUE, wxS("&Add to job queue"),
+                 wxDefaultPosition, wxSize(130, -1));
+  bs_buttons->Add(b_add_to_jobqueue, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
+
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
   last_open_dir = "";
@@ -489,6 +504,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   tc_cmdline->SetValue(cmdline);
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
+
+  load_job_queue();
 
   SetIcon(wxICON(matroskalogo_big));
 
@@ -623,10 +640,12 @@ mmg_dialog::on_file_save(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::save(wxString file_name) {
+mmg_dialog::save(wxString file_name,
+                 bool used_for_jobs) {
   wxFileConfig *cfg;
 
-  set_last_settings_in_menu(file_name);
+  if (!used_for_jobs)
+    set_last_settings_in_menu(file_name);
   cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
   cfg->SetPath("/mkvmergeGUI");
   cfg->Write("file_version", 1);
@@ -640,7 +659,8 @@ mmg_dialog::save(wxString file_name) {
 
   delete cfg;
 
-  set_status_bar("Configuration saved.");
+  if (!used_for_jobs)
+    set_status_bar("Configuration saved.");
 }
 
 void
@@ -1253,11 +1273,149 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   }
 }
 
+void
+mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
+  wxString description;
+  job_t job;
+
+  if (tc_output->GetValue().Length() == 0) {
+    wxMessageBox(wxS("You have not yet selected an output file."),
+                 wxS("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+
+  if (!input_page->validate_settings() ||
+      !attachments_page->validate_settings() ||
+      !global_page->validate_settings() ||
+      !settings_page->validate_settings())
+    return;
+
+  if ((verified_output_file != tc_output->GetValue()) &&
+      wxFile::Exists(tc_output->GetValue()) &&
+      (wxMessageBox(wxS("The output file '") + tc_output->GetValue() +
+                    wxS("' exists already. Do you want to overwrite it?"),
+                    wxS("Overwrite existing file?"), wxYES_NO) != wxYES))
+    return;
+  verified_output_file = tc_output->GetValue();
+
+  description = wxGetTextFromUser(wxS("Please enter a description for the "
+                                      "new job:"), wxS("Job description"),
+                                  wxS(""));
+  if (description.length() == 0)
+    return;
+
+  if (!wxDirExists(wxS("jobs")))
+    wxMkdir(wxS("jobs"));
+
+  last_job_id++;
+  if (last_job_id > 2000000000)
+    last_job_id = 0;
+  job.id = last_job_id;
+  job.status = jobs_pending;
+  job.added_at = wxGetLocalTime();
+  job.started_at = -1;
+  job.finished_at = -1;
+  job.description = new wxString(description);
+  jobs.push_back(job);
+
+  description.Printf(wxS("/jobs/%d.mmg"), job.id);
+  save(wxGetCwd() + description);
+
+  save_job_queue();
+
+  set_status_bar(wxS("Job added to job queue"));
+}
+
+void
+mmg_dialog::on_manage_jobs(wxCommandEvent &evt) {
+}
+
+void
+mmg_dialog::load_job_queue() {
+  int num, i, value;
+  wxString s;
+  wxConfigBase *cfg;
+  job_t job;
+
+  last_job_id = 0;
+
+  cfg = wxConfigBase::Get();
+  cfg->SetPath(wxS("/jobs"));
+  cfg->Read(wxS("last_job_id"), &last_job_id);
+  if (!cfg->Read(wxS("number_of_jobs"), &num))
+    return;
+
+  for (i = 0; i < jobs.size(); i++)
+    delete jobs[i].description;
+  jobs.clear();
+
+  for (i = 0; i < num; i++) {
+    s.Printf(wxS("/jobs/%u"), i);
+    if (!cfg->HasGroup(s))
+      continue;
+    cfg->SetPath(s);
+    cfg->Read(wxS("id"), &value);
+    job.id = value;
+    cfg->Read(wxS("status"), &s);
+    job.status =
+      s == wxS("pending") ? jobs_pending :
+      s == wxS("done") ? jobs_done :
+      s == wxS("aborted") ? jobs_aborted :
+      jobs_failed;
+    cfg->Read(wxS("added_at"), &value);
+    job.added_at = value;
+    cfg->Read(wxS("started_at"), &value);
+    job.started_at = value;
+    cfg->Read(wxS("finished_at"), &value);
+    job.finished_at = value;
+    cfg->Read(wxS("description"), &s);
+    job.description = new wxString(s);
+    jobs.push_back(job);
+  }
+}
+
+void
+mmg_dialog::save_job_queue() {
+  wxString s;
+  wxConfigBase *cfg;
+  uint32_t i;
+  vector<wxString> job_groups;
+  long cookie;
+
+  cfg = wxConfigBase::Get();
+  cfg->SetPath(wxS("/jobs"));
+  if (cfg->GetFirstGroup(s, cookie)) {
+    do {
+      job_groups.push_back(s);
+    } while (cfg->GetNextGroup(s, cookie));
+    for (i = 0; i < job_groups.size(); i++)
+      cfg->DeleteGroup(job_groups[i]);
+  }
+  cfg->Write(wxS("last_job_id"), last_job_id);
+  cfg->Write(wxS("number_of_jobs"), (int)jobs.size());
+  for (i = 0; i < jobs.size(); i++) {
+    s.Printf(wxS("/jobs/%u"), i);
+    cfg->SetPath(s);
+    cfg->Write(wxS("id"), jobs[i].id);
+    cfg->Write(wxS("status"),
+               jobs[i].status == jobs_pending ? wxS("pending") :
+               jobs[i].status == jobs_done ? wxS("done") :
+               jobs[i].status == jobs_aborted ? wxS("aborted") :
+               wxS("failed"));
+    cfg->Write(wxS("added_at"), jobs[i].added_at);
+    cfg->Write(wxS("started_at"), jobs[i].started_at);
+    cfg->Write(wxS("finished_at"), jobs[i].finished_at);
+    cfg->Write(wxS("description"), *jobs[i].description);
+  }
+  cfg->Flush();
+}
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
   EVT_BUTTON(ID_B_STARTMUXING, mmg_dialog::on_run)
   EVT_BUTTON(ID_B_COPYTOCLIPBOARD, mmg_dialog::on_copy_to_clipboard)
+  EVT_BUTTON(ID_B_ADD_TO_JOBQUEUE, mmg_dialog::on_add_to_jobqueue)
   EVT_TIMER(ID_T_UPDATECMDLINE, mmg_dialog::on_update_command_line)
   EVT_TIMER(ID_T_STATUSBAR, mmg_dialog::on_clear_status_bar)
   EVT_MENU(ID_M_FILE_EXIT, mmg_dialog::on_quit)
@@ -1269,6 +1427,8 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_COPY_CMDLINE, mmg_dialog::on_copy_to_clipboard)
   EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
   EVT_MENU(ID_M_MUXING_CREATE_OPTIONFILE, mmg_dialog::on_create_optionfile)
+  EVT_MENU(ID_M_MUXING_ADD_TO_JOBQUEUE, mmg_dialog::on_add_to_jobqueue)
+  EVT_MENU(ID_M_MUXING_MANAGE_JOBS, mmg_dialog::on_manage_jobs)
   EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
   EVT_MENU(ID_M_FILE_LOADLAST1, mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST2, mmg_dialog::on_file_load_last)

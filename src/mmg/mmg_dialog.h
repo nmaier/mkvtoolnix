@@ -30,6 +30,7 @@
 #define ID_T_STATUSBAR                    10005
 #define ID_B_STARTMUXING                  10006
 #define ID_B_COPYTOCLIPBOARD              10007
+#define ID_B_ADD_TO_JOBQUEUE              10008
 
 #define ID_M_FILE_NEW                     60000
 #define ID_M_FILE_LOAD                    60001
@@ -46,6 +47,8 @@
 #define ID_M_MUXING_COPY_CMDLINE          60101
 #define ID_M_MUXING_SAVE_CMDLINE          60102
 #define ID_M_MUXING_CREATE_OPTIONFILE     60103
+#define ID_M_MUXING_ADD_TO_JOBQUEUE       60104
+#define ID_M_MUXING_MANAGE_JOBS           60105
 
 #define ID_M_CHAPTERS_NEW                 60200
 #define ID_M_CHAPTERS_LOAD                60201
@@ -103,7 +106,9 @@ protected:
   tab_settings *settings_page;
   tab_chapters *chapter_editor_page;
 
-  wxButton *b_start_muxing, *b_copy_to_clipboard;
+  wxButton *b_start_muxing, *b_copy_to_clipboard, *b_add_to_jobqueue;
+
+  int32_t last_job_id;
 
 public:
   mmg_dialog();
@@ -126,7 +131,7 @@ public:
   wxArrayString &get_command_line_args();
 
   void load(wxString file_name);
-  void save(wxString file_name);
+  void save(wxString file_name, bool used_for_jobs = false);
 
   void on_clear_status_bar(wxTimerEvent &evt);
   void set_status_bar(wxString text);
@@ -151,6 +156,12 @@ public:
 
   void set_title_maybe(const wxString &new_title);
   void set_output_maybe(const wxString &new_output);
+
+  void on_add_to_jobqueue(wxCommandEvent &evt);
+  void on_manage_jobs(wxCommandEvent &evt);
+
+  void load_job_queue();
+  void save_job_queue();
 };
 
 extern mmg_dialog *mdlg;
