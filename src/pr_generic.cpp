@@ -727,8 +727,9 @@ generic_packetizer_c::add_packet(memory_c &mem,
   // I: 0, P: 120, B1: 40, B2: 80.
   if ((timecode < safety_last_timecode) && (fref < 0))
     mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-           "last_timecode (%lld < %lld) for %lld of '%s'. %s\n",
-           timecode, safety_last_timecode, ti->id, ti->fname, BUGMSG);
+           "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
+           "'%s'. %s\n", ARG_TIMECODE_NS(timecode),
+           ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname, BUGMSG);
   safety_last_timecode = timecode;
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
