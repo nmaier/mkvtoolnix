@@ -507,18 +507,18 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         break;
 
       case TYPESRT:
-        if ((end == start) && !tracks[i].warning_printed) {
+        if ((end == start) && !track->warning_printed) {
           mxwarn("Subtitle track %lld is missing some duration elements. "
                  "Please check the resulting SRT file for entries that "
-                 "have the same start and end time.\n");
-          tracks[i].warning_printed = true;
+                 "have the same start and end time.\n", track->tid);
+          track->warning_printed = true;
         }
 
         // Do the charset conversion.
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;
-        s2 = from_utf8(tracks[i].conv_handle, s);
+        s2 = from_utf8(track->conv_handle, s);
         safefree(s);
         len = strlen(s2);
         s = (char *)safemalloc(len + 3);
@@ -529,9 +529,9 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         s[len + 2] = 0;
 
         // Print the entry's number.
-        mxprints(buffer, "%d\n", tracks[i].srt_num);
-        tracks[i].srt_num++;
-        tracks[i].out->write(buffer, strlen(buffer));
+        mxprints(buffer, "%d\n", track->srt_num);
+        track->srt_num++;
+        track->out->write(buffer, strlen(buffer));
 
         // Print the timestamps.
         mxprints(buffer, "%02lld:%02lld:%02lld,%03lld --> %02lld:%02lld:"
@@ -540,19 +540,19 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
                  (start / 1000) % 60, start % 1000,
                  end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                  (end / 1000) % 60, end % 1000);
-        tracks[i].out->write(buffer, strlen(buffer));
+        track->out->write(buffer, strlen(buffer));
 
         // Print the text itself.
-        tracks[i].out->puts_unl(s);
+        track->out->puts_unl(s);
         safefree(s);
         break;
 
       case TYPESSA:
-        if ((end == start) && !tracks[i].warning_printed) {
+        if ((end == start) && !track->warning_printed) {
           mxwarn("Subtitle track %lld is missing some duration elements. "
                  "Please check the resulting SSA/ASS file for entries that "
-                 "have the same start and end time.\n");
-          tracks[i].warning_printed = true;
+                 "have the same start and end time.\n", track->tid);
+          track->warning_printed = true;
         }
 
         s = (char *)safemalloc(data.Size() + 1);
@@ -606,12 +606,12 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
 
         // Do the charset conversion.
         line += fields[8] + "\n";
-        from_utf8(tracks[i].conv_handle, line);
+        from_utf8(track->conv_handle, line);
 
         // Now store that entry.
         ssa_line.num = num;
         ssa_line.line = safestrdup(line.c_str());
-        tracks[i].ssa_lines.push_back(ssa_line);
+        track->ssa_lines.push_back(ssa_line);
 
         break;
 
