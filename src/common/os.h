@@ -77,12 +77,6 @@ typedef _fsize_t ssize_t;
 # define LLD "%I64d"
 # define LLU "%I64u"
 
-# if defined(COMP_MSC)
-#  include <stdio.h>
-int MTX_DLL_API vsscanf(const char *, const char *, va_list argPtr);
-# endif // COMP_MSC
-
-
 #else  // COMP_MINGW || COMP_MSC
 
 # define MTX_DLL_API
@@ -118,5 +112,11 @@ typedef UINT64_TYPE uint64_t;
 #else
 # define ARCH_LITTLEENDIAN
 #endif
+
+// MSVC doesn't provide vsscanf. So let's use our own frontend.
+#if !defined(HAVE_VSSCANF) || (HAVE_VSSCANF != 1)
+# include <stdio.h>
+int vsscanf(const char *, const char *, va_list);
+#endif // !HAVE_VSSCANF...
 
 #endif
