@@ -1157,25 +1157,34 @@ void kax_reader_c::create_packetizers() {
 
         case 's':
           if (!strncmp(t->codec_id, MKV_S_VOBSUB, strlen(MKV_S_VOBSUB))) {
-            int compression;
+            int compressed, compression, idx;
             char *cstr;
 
             if ((cstr = strchr(t->codec_id, '/')) != NULL) {
               cstr++;
               if (!strcmp(cstr, "LZO"))
-                compression = COMPRESSION_LZO;
+                compressed = COMPRESSION_LZO;
               else if (!strcmp(cstr, "Z") || !strcmp(cstr, "ZLIB"))
-                compression = COMPRESSION_ZLIB;
+                compressed = COMPRESSION_ZLIB;
               else if (!strcmp(cstr, "BZ2"))
-                compression = COMPRESSION_BZ2;
+                compressed = COMPRESSION_BZ2;
               else
-                mxerror(PFX "Unsupported compression method '%s'.\n", cstr);
+                mxerror(PFX "Unsupported compressed method '%s'.\n", cstr);
             } else
-              compression = COMPRESSION_NONE;
+              compressed = COMPRESSION_NONE;
+
+            compression = COMPRESSION_ZLIB;
+            for (idx = 0; idx < ti->compression_list->size(); idx++)
+              if (((*ti->compression_list)[idx].id == t->tnum) ||
+                  ((*ti->compression_list)[idx].id == -1)) {
+                compression = (*ti->compression_list)[idx].cues;
+                break;
+              }
+
             t->packetizer =
               new vobsub_packetizer_c(this, t->headers[0], t->header_sizes[0],
                                       t->headers[1], t->header_sizes[1],
-                                      compression, COMPRESSION_ZLIB, &nti);
+                                      compression, compressed, &nti);
             if (verbose)
               mxinfo("Matroska demultiplexer (%s): using the VobSub "
                      "output module for track ID %u.\n", ti->fname, t->tnum);
