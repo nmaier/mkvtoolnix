@@ -236,8 +236,20 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
                   error,
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (LPTSTR)&error_msg, 0, NULL);
+    if (error_msg != NULL) {
+      int idx;
+      idx = strlen(error_msg);
+      idx--;
+      while ((idx >= 0) &&
+             ((error_msg[idx] == '\n') || (error_msg[idx] == '\r'))) {
+        error_msg[idx] = 0;
+        idx--;
+      }
+    }
     mxerror("Cound not write to the output file: %d (%s)\n", error,
             error_msg != NULL ? error_msg : "unknown");
+    if (error_msg != NULL)
+      LocalFree(error_msg);
   }
 
   return bytes_written;

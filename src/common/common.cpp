@@ -1434,6 +1434,7 @@ void mxerror(const char *fmt, ...) {
   va_list ap;
 
   va_start(ap, fmt);
+  mxinfo("\n");
   mxmsg(MXMSG_ERROR, fmt, ap);
   va_end(ap);
 
