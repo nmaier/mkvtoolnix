@@ -6,7 +6,7 @@ class T_009realvideo_3 < Test
   end
 
   def run
-    merge("data/rv3.rm")
+    merge("data/rm/rv3.rm")
     return hash_tmp
   end
 end

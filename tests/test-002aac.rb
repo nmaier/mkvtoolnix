@@ -6,7 +6,7 @@ class T_002aac < Test
   end
 
   def run
-    merge("data/v.aac", 1)
+    merge("data/simple/v.aac", 1)
     return hash_tmp
   end
 end

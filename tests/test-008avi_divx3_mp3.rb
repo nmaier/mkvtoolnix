@@ -6,7 +6,7 @@ class T_008avi_divx3_mp3 < Test
   end
 
   def run
-    merge("data/v.avi")
+    merge("data/avi/v.avi")
     return hash_tmp
   end
 end

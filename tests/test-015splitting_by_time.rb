@@ -6,7 +6,7 @@ class T_015splitting_by_time < Test
   end
 
   def run
-    merge(tmp + "-%03d", "--split-max-files 2 --split 40s data/v.avi")
+    merge(tmp + "-%03d", "--split-max-files 2 --split 40s data/avi/v.avi")
     hash = hash_file(tmp + "-001") + "-" + hash_file(tmp + "-002")
     File.unlink(tmp + "-001")
     File.unlink(tmp + "-002")

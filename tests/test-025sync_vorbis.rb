@@ -6,9 +6,9 @@ class T_025sync_vorbis < Test
   end
 
   def run
-    merge("--sync -1:500 data/v.ogg")
+    merge("--sync -1:500 data/ogg/v.ogg")
     hash = hash_tmp
-    merge("--sync -1:-500 data/v.ogg")
+    merge("--sync -1:-500 data/ogg/v.ogg")
     return hash + "-" + hash_tmp
   end
 end

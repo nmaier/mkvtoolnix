@@ -6,7 +6,7 @@ class T_004aacmp4 < Test
   end
 
   def run
-    merge("data/v.mp4")
+    merge("data/mp4/v.mp4")
     return hash_tmp
   end
 end

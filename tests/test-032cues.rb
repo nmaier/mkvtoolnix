@@ -6,7 +6,7 @@ class T_032cues < Test
   end
 
   def run
-    merge("--cues 0:all --cues 1:iframes data/v.avi")
+    merge("--cues 0:all --cues 1:iframes data/avi/v.avi")
     return hash_tmp
   end
 end

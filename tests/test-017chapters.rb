@@ -7,9 +7,9 @@ class T_017chapters < Test
   end
 
   def run
-    merge("data/vde.srt --chapters data/shortchaps.txt")
+    merge("data/textsubs/vde.srt --chapters data/text/shortchaps.txt")
     hash = hash_tmp
-    merge("data/vde.srt --chapters data/vmap.chapters.xml")
+    merge("data/textsubs/vde.srt --chapters data/text/vmap.chapters.xml")
     return hash + "-" + hash_tmp
   end
 end
