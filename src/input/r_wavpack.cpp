@@ -56,7 +56,7 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
     mm_io = new mm_file_io_c(ti->fname);
     size = mm_io->get_size();
 
-    packet_size = wv_parse_frame(mm_io, header, meta);
+    packet_size = wv_parse_frame(mm_io, header, meta, true, true);
     if (packet_size < 0)
       mxerror(FMT_FN "The file header was not read correctly.\n",
               ti->fname.c_str());
@@ -73,11 +73,12 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
   try {
     if (header.flags & WV_HYBRID_FLAG) {
       mm_io_correc = new mm_file_io_c(ti->fname + "c");
-      packet_size = wv_parse_frame(mm_io_correc, header_correc, meta_correc);
+      packet_size = wv_parse_frame(mm_io_correc, header_correc, meta_correc,
+                                   true, true);
       if (packet_size < 0)
         mxerror(FMT_FN "The correction file header was not read correctly.\n",
                 ti->fname.c_str());
-      mm_io_correc->setFilePointer(mm_io->getFilePointer() -
+      mm_io_correc->setFilePointer(mm_io_correc->getFilePointer() -
                                    sizeof(wavpack_header_t), seek_beginning);
       meta.has_correction = true;
     }
@@ -112,13 +113,30 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
                        bool force) {
   wavpack_header_t dummy_header, dummy_header_correc;
   wavpack_meta_t dummy_meta;
-  int32_t data_size = wv_parse_frame(mm_io, dummy_header, dummy_meta);
+  uint64_t initial_position = mm_io->getFilePointer();
+  uint8_t *chunk, *databuffer;
+
+  // determine the final data size
+  int32_t data_size = 0, block_size;
+  int extra_frames_number = -1;
+
+  dummy_meta.channel_count = 0;
+  while (dummy_meta.channel_count < meta.channel_count) {
+    extra_frames_number++;
+    block_size = wv_parse_frame(mm_io, dummy_header, dummy_meta, false, false);
+    if (block_size == -1)
+      return FILE_STATUS_DONE;
+    data_size += block_size;
+    mm_io->skip(block_size);
+  }
 
   if (data_size < 0)
     return FILE_STATUS_DONE;
 
-  uint8_t *chunk = (uint8_t *)safemalloc(data_size + sizeof(wavpack_header_t) -
-                                         WV_KEEP_HEADER_POSITION);
+  data_size += sizeof(wavpack_header_t) - WV_KEEP_HEADER_POSITION;
+  if (extra_frames_number)
+    data_size += (extra_frames_number * 12) + 4;
+  chunk = (uint8_t *)safemalloc(data_size);
 
   // keep the header minus the ID & size (all found in Matroska)
   put_uint16_le(chunk, dummy_header.version);
@@ -127,15 +145,28 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
   put_uint32_le(&chunk[4], dummy_header.total_samples);
   put_uint32_le(&chunk[8], dummy_header.block_index);
   put_uint32_le(&chunk[12], dummy_header.block_samples);
-  put_uint32_le(&chunk[16], dummy_header.flags);
-  put_uint32_le(&chunk[20], dummy_header.crc);
 
-  if (mm_io->read(&chunk[sizeof(wavpack_header_t) - WV_KEEP_HEADER_POSITION],
-                  data_size) < 0)
-    return FILE_STATUS_DONE;
+  mm_io->setFilePointer(initial_position);
 
-  memory_c mem(chunk, data_size + sizeof(wavpack_header_t) -
-               WV_KEEP_HEADER_POSITION, true);
+  dummy_meta.channel_count = 0;
+  databuffer = &chunk[16];
+	while (dummy_meta.channel_count < meta.channel_count) {
+		block_size = wv_parse_frame(mm_io, dummy_header, dummy_meta, false, false);
+		put_uint32_le(databuffer, dummy_header.flags);
+		databuffer += 4;
+		put_uint32_le(databuffer, dummy_header.crc);
+		databuffer += 4;
+		if (meta.channel_count > 2) {
+			// not stored for the last block
+			put_uint32_le(databuffer, block_size);
+			databuffer += 4;
+		}
+		if (mm_io->read(databuffer, block_size) < 0)
+			return FILE_STATUS_DONE;
+		databuffer += block_size;
+	}
+
+  memory_c mem(chunk, data_size, true);
 
   // find the if there is a correction file data corresponding
   memories_c mems;
@@ -143,8 +174,21 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
 
   if (mm_io_correc) {
     do {
-      data_size = wv_parse_frame(mm_io_correc, dummy_header_correc,
-                                 dummy_meta);
+      initial_position = mm_io_correc->getFilePointer();
+      // determine the final data size
+      data_size = 0;
+      extra_frames_number = 0;
+      dummy_meta.channel_count = 0;
+      while (dummy_meta.channel_count < meta_correc.channel_count) {
+        extra_frames_number++;
+        block_size = wv_parse_frame(mm_io_correc, dummy_header_correc,
+                                    dummy_meta, false, false);
+        if (block_size == -1)
+          return FILE_STATUS_DONE;
+        data_size += block_size;
+        mm_io_correc->skip(block_size);
+      }
+
       // no more correction to be found
       if (data_size < 0) {
         delete mm_io_correc;
@@ -155,21 +199,39 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
     } while (dummy_header_correc.block_samples < dummy_header.block_samples);
 
     if (dummy_header_correc.block_samples == dummy_header.block_samples) {
+      uint8_t *chunk_correc;
 
-      uint8_t *chunk_correc = (uint8_t *)safemalloc(data_size + 4);
+      mm_io_correc->setFilePointer(initial_position);
+
+      if (meta.channel_count > 2)
+        data_size += extra_frames_number * 8;
+      else
+        data_size += 4;
+      chunk_correc = (uint8_t *)safemalloc(data_size);
 
       // only keep the CRC in the header
-      put_uint32_le(chunk_correc, dummy_header_correc.crc);
+      dummy_meta.channel_count = 0;
+      databuffer = chunk_correc;
+      while (dummy_meta.channel_count < meta_correc.channel_count) {
+        block_size = wv_parse_frame(mm_io_correc, dummy_header_correc,
+                                    dummy_meta, false, false);
+        put_uint32_le(databuffer, dummy_header_correc.crc);
+        databuffer += 4;
+        if (meta_correc.channel_count > 2) {
+          // not stored for the last block
+          put_uint32_le(databuffer, block_size);
+          databuffer += 4;
+        }
+        if (mm_io_correc->read(databuffer, block_size) < 0) {
+          delete mm_io_correc;
+          mm_io_correc = NULL;
+        }
+        databuffer += block_size;
+      }
 
-      if (mm_io_correc->read(&chunk_correc[4], data_size) < 0) {
-        delete mm_io_correc;
-        mm_io_correc = NULL;
-      }
-      else {
-        memory_c mem_correc(chunk_correc, data_size + 4, true);
-        mems.push_back(&mem_correc);
-        PTZR0->process(mems);
-      }
+      memory_c mem_correc(chunk_correc, data_size, true);
+      mems.push_back(&mem_correc);
+      PTZR0->process(mems);
     }
   }
 

@@ -83,6 +83,8 @@ typedef struct {
                                       //  encountered
 
 int32_t MTX_DLL_API wv_parse_frame(mm_io_c *mm_io, wavpack_header_t &header,
-                                   wavpack_meta_t &meta);
+                                   wavpack_meta_t &meta,
+                                   bool read_blocked_frames,
+                                   bool keep_initial_position);
 
 #endif // __WAVPACK_COMMON_H

@@ -93,52 +93,66 @@ read_next_header(mm_io_c *mm_io,
 int32_t
 wv_parse_frame(mm_io_c *mm_io,
                wavpack_header_t &wphdr,
-               wavpack_meta_t &meta) {
+               wavpack_meta_t &meta,
+               bool read_blocked_frames,
+               bool keep_initial_position) {
   uint32_t bcount;
+  uint64_t first_data_pos = mm_io->getFilePointer();
+  bool can_leave = !read_blocked_frames;
 
-  // read next WavPack header
-  bcount = read_next_header(mm_io, &wphdr);
+  do {
+    // read next WavPack header
+    bcount = read_next_header(mm_io, &wphdr);
 
-  if (bcount == (uint32_t) -1) {
-    return -1;
-  }
-
-  // if there's audio samples in there...
-  if (wphdr.block_samples) {
-    meta.sample_rate = (wphdr.flags & WV_SRATE_MASK) >> WV_SRATE_LSB;
-
-    if (meta.sample_rate == 15)
-      mxwarn("wavpack_reader: unknown sample rate!\n");
-    else
-      meta.sample_rate = sample_rates[meta.sample_rate];
-
-    if (wphdr.flags & WV_INT32_DATA || wphdr.flags & WV_FLOAT_DATA)
-      meta.bits_per_sample = 32;
-    else
-      meta.bits_per_sample = ((wphdr.flags & WV_BYTES_STORED) + 1) << 3;
-
-    meta.samples_per_block = wphdr.block_samples;
-
-    if (wphdr.flags & WV_INITIAL_BLOCK)  {
-      meta.channel_count = (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
-      if (wphdr.flags & WV_FINAL_BLOCK) {
-        mxverb(3, "wavpack_reader: %s block: %s, %d bytes\n",
-               (wphdr.flags & WV_MONO_FLAG) ? "mono" : "stereo",
-               (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
-               wphdr.ck_size + 8);
-      }
-    } else {
-      meta.channel_count += (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
-
-      if (wphdr.flags & WV_FINAL_BLOCK) {
-        mxverb(2, "wavpack_reader: %d chans: %s, %d bytes\n",
-               meta.channel_count, 
-               (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
-               wphdr.ck_size + 8);
-      }
+    if (bcount == (uint32_t) -1) {
+      return -1;
     }
-  } else
-    mxwarn("wavpack_reader: non-audio block found\n");
+
+    // if there's audio samples in there...
+    if (wphdr.block_samples) {
+      meta.channel_count += (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
+      if (wphdr.flags & WV_INITIAL_BLOCK)  {
+        meta.sample_rate = (wphdr.flags & WV_SRATE_MASK) >> WV_SRATE_LSB;
+
+        if (meta.sample_rate == 15)
+          mxwarn("wavpack_reader: unknown sample rate!\n");
+        else
+          meta.sample_rate = sample_rates[meta.sample_rate];
+
+        if (wphdr.flags & WV_INT32_DATA || wphdr.flags & WV_FLOAT_DATA)
+          meta.bits_per_sample = 32;
+        else
+          meta.bits_per_sample = ((wphdr.flags & WV_BYTES_STORED) + 1) << 3;
+
+        meta.samples_per_block = wphdr.block_samples;
+
+        first_data_pos = mm_io->getFilePointer();
+        meta.channel_count = (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
+        if (wphdr.flags & WV_FINAL_BLOCK) {
+          can_leave = true;
+          mxverb(3, "wavpack_reader: %s block: %s, %d bytes\n",
+                 (wphdr.flags & WV_MONO_FLAG) ? "mono" : "stereo",
+                 (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
+                 wphdr.ck_size + 8);
+        }
+      } else {
+        if (wphdr.flags & WV_FINAL_BLOCK) {
+          can_leave = true;
+          mxverb(2, "wavpack_reader: %d chans, mode: %s, %d bytes\n",
+                 meta.channel_count,
+                 (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
+                 wphdr.ck_size + 8);
+        }
+      }
+    } else
+      mxwarn("wavpack_reader: non-audio block found\n");
+    if (!can_leave) {
+      mm_io->skip(wphdr.ck_size - sizeof(wavpack_header_t) + 8);
+    }
+  } while (!can_leave);
+
+  if (keep_initial_position)
+    mm_io->setFilePointer(first_data_pos);
 
   return wphdr.ck_size - sizeof(wavpack_header_t) + 8;
 }
