@@ -631,6 +631,8 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   mmg_file_t *f;
   mmg_track_t *t;
   int new_sel;
+  uint32_t i;
+  wxString lang;
 
   if (selected_file == -1)
     return;
@@ -647,7 +649,13 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   else if (t->type == 's')
     subtitle_track_mode(*t->ctype);
 
-  cob_language->SetValue(*t->language);
+  lang = *t->language;
+  for (i = 0; i < sorted_iso_codes.Count(); i++)
+    if (extract_language_code(sorted_iso_codes[i]) == lang) {
+      lang = sorted_iso_codes[i];
+      break;
+    }
+  cob_language->SetValue(lang);
   tc_track_name->SetValue(*t->track_name);
   cob_cues->SetValue(*t->cues);
   tc_delay->SetValue(*t->delay);
