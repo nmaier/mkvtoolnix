@@ -1,3 +1,9 @@
+2003-09-16  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvextract: Add an UTF-8 BOM to extracted SSA/ASS and SRT
+        subtitle files. Print warnings for missing durations for text
+        subtitle tracks.
+
 2003-09-14  Moritz Bunkus  <moritz@bunkus.org>
 
         * Added a complete GUI for mkvmerge, mkvmergeGUI (mmg) based on

@@ -111,6 +111,7 @@ static void create_output_files() {
   bool something_to_do, is_ok;
   unsigned char *c;
   ogg_packet op;
+  const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
 
   something_to_do = false;
 
@@ -390,15 +391,20 @@ static void create_output_files() {
 
           tracks[i].out->write(wh, sizeof(wave_header));
 
-        }  else if (tracks[i].type == TYPESRT)
+        }  else if (tracks[i].type == TYPESRT) {
           tracks[i].srt_num = 1;
+          tracks[i].out->write(utf8_bom, 3);
 
-        else if (tracks[i].type == TYPESSA) {
+        } else if (tracks[i].type == TYPESSA) {
           char *s;
+          unsigned char *pd;
 
           s = (char *)safemalloc(tracks[i].private_size + 1);
           memcpy(s, tracks[i].private_data, tracks[i].private_size);
           s[tracks[i].private_size] = 0;
+          pd = (unsigned char *)tracks[i].private_data;
+          if ((pd[0] != 0x00) && (pd[0] != 0xef) && (pd[0] != 0xff))
+            tracks[i].out->write(utf8_bom, 3);
           tracks[i].out->puts_unl(s);
           tracks[i].out->puts_unl("\n[Events]\nFormat: Marked, Start, End, "
                                     "Style, Name, MarginL, MarginR, MarginV, "
@@ -479,6 +485,13 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         break;
 
       case TYPESRT:
+        if ((end == start) && !tracks[i].warning_printed) {
+          mxwarn("Subtitle track %lld is missing some duration elements. "
+                 "Please check the resulting SRT file for entries that "
+                 "have the same start and end time.\n");
+          tracks[i].warning_printed = true;
+        }
+
         // Do the charset conversion.
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
@@ -513,6 +526,13 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         break;
 
       case TYPESSA:
+        if ((end == start) && !tracks[i].warning_printed) {
+          mxwarn("Subtitle track %lld is missing some duration elements. "
+                 "Please check the resulting SSA/ASS file for entries that "
+                 "have the same start and end time.\n");
+          tracks[i].warning_printed = true;
+        }
+
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;

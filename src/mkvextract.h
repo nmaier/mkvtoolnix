@@ -72,6 +72,7 @@ typedef struct {
   int srt_num;
   int conv_handle;
   vector<ssa_line_c> ssa_lines;
+  bool warning_printed;
 
   wave_header wh;
   int64_t bytes_written;
