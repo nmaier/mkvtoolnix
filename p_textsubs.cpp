@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.1 2003/03/06 23:39:40 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.2 2003/04/11 11:23:40 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -72,11 +72,13 @@ void textsubs_packetizer_c::set_header() {
   codec_id.CopyBuffer((binary *)STEXTSIMPLE, countof(STEXTSIMPLE));
 }
 
-int textsubs_packetizer_c::process(int64_t start, int64_t end, char *_subs) {
+int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
+                                   int64_t length) {
   int num_newlines;
   char *subs, *idx1, *idx2, *tempbuf;
-  int64_t duration, dlen, tmp;
+  int64_t end, duration, dlen, tmp;
 
+  end = start + length;
   // Adjust the start and end values according to the audio adjustment.
   start += ti->async.displacement;
   start = (int64_t)(ti->async.linear * start);
@@ -102,7 +104,7 @@ int textsubs_packetizer_c::process(int64_t start, int64_t end, char *_subs) {
     dlen++;
   }
 
-  idx1 = _subs;
+  idx1 = (char *)_subs;
   subs = NULL;
   num_newlines = 0;
   while (*idx1 != 0) {
@@ -110,11 +112,11 @@ int textsubs_packetizer_c::process(int64_t start, int64_t end, char *_subs) {
       num_newlines++;
     idx1++;
   }
-  subs = (char *)malloc(strlen(_subs) + num_newlines * 2 + 1);
+  subs = (char *)malloc(strlen((char *)_subs) + num_newlines * 2 + 1);
   if (subs == NULL)
     die("malloc");
 
-  idx1 = _subs;
+  idx1 = (char *)_subs;
   idx2 = subs;
   while (*idx1 != 0) {
     if (*idx1 == '\n') {
