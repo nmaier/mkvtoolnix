@@ -797,16 +797,16 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
     kax_segment->WriteHead(*out, 5);
 
     // Reserve some space for the meta seek stuff.
-    if (write_cues && write_meta_seek) {
+    if (write_meta_seek) {
       kax_seekhead = new KaxSeekHead();
       kax_seekhead_void = new EbmlVoid();
       if (meta_seek_size == 0)
         if (video_track_present)
           meta_seek_size =
-            (int64_t)((float)file_sizes * 1.5 / 10240.0);
+            (int64_t)((float)file_sizes * 1.8 / 10240.0);
         else
           meta_seek_size =
-            (int64_t)((float)file_sizes * 3 / 4096.0);
+            (int64_t)((float)file_sizes * 5 / 4096.0);
       kax_seekhead_void->SetSize(meta_seek_size);
       kax_seekhead_void->Render(*out);
     }
