@@ -22,7 +22,9 @@
 
 #include <matroska/KaxChapters.h>
 
+#include "chapters.h"
 #include "commonebml.h"
+#include "ebml_ids.h"
 #include "error.h"
 #include "iso639.h"
 #include "mm_io.h"
@@ -49,59 +51,16 @@ typedef struct {
   string *parse_error_msg;
 } parser_data_t;
 
-typedef void (*chapter_element_callback_t)(parser_data_t *pdata);
+static void end_edition_entry(void *pdata);
+static void end_edition_uid(void *pdata);
+static void end_chapter_uid(void *pdata);
+static void end_chapter_atom(void *pdata);
+static void end_chapter_track(void *pdata);
+static void end_chapter_display(void *pdata);
+static void end_chapter_language(void *pdata);
+static void end_chapter_country(void *pdata);
 
-namespace libmatroska {
-  extern EbmlId KaxChapters_TheId;
-  extern EbmlId KaxEditionEntry_TheId;
-  extern EbmlId KaxEditionUID_TheId;
-  extern EbmlId KaxEditionFlagHidden_TheId;
-  extern EbmlId KaxEditionFlagDefault_TheId;
-  extern EbmlId KaxEditionManaged_TheId;
-  extern EbmlId KaxChapterAtom_TheId;
-  extern EbmlId KaxChapterUID_TheId;
-  extern EbmlId KaxChapterTimeStart_TheId;
-  extern EbmlId KaxChapterTimeEnd_TheId;
-  extern EbmlId KaxChapterFlagHidden_TheId;
-  extern EbmlId KaxChapterFlagEnabled_TheId;
-  extern EbmlId KaxChapterPhysicalEquiv_TheId;
-  extern EbmlId KaxChapterTrack_TheId;
-  extern EbmlId KaxChapterTrackNumber_TheId;
-  extern EbmlId KaxChapterDisplay_TheId;
-  extern EbmlId KaxChapterString_TheId;
-  extern EbmlId KaxChapterLanguage_TheId;
-  extern EbmlId KaxChapterCountry_TheId;
-  extern EbmlId KaxChapterProcess_TheId;
-  extern EbmlId KaxChapterProcessTime_TheId;
-}
-
-enum ebml_type_t {ebmlt_master, ebmlt_int, ebmlt_uint, ebmlt_bool,
-                  ebmlt_string, ebmlt_ustring, ebmlt_time};
-
-#define NO_MIN_VALUE -9223372036854775807ll-1
-#define NO_MAX_VALUE 9223372036854775807ll
-
-typedef struct {
-  const char *name;
-  ebml_type_t type;
-  int level;
-  int64_t min_value;
-  int64_t max_value;
-  const EbmlId id;
-  chapter_element_callback_t start_hook;
-  chapter_element_callback_t end_hook;
-} parser_element_t;
-
-static void end_edition_entry(parser_data_t *pdata);
-static void end_edition_uid(parser_data_t *pdata);
-static void end_chapter_uid(parser_data_t *pdata);
-static void end_chapter_atom(parser_data_t *pdata);
-static void end_chapter_track(parser_data_t *pdata);
-static void end_chapter_display(parser_data_t *pdata);
-static void end_chapter_language(parser_data_t *pdata);
-static void end_chapter_country(parser_data_t *pdata);
-
-const parser_element_t chapter_elements[] = {
+parser_element_t chapter_elements[] = {
   {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL},
 
   {"EditionEntry", ebmlt_master, 1, 0, 0, KaxEditionEntry_TheId, NULL,
@@ -147,16 +106,10 @@ const parser_element_t chapter_elements[] = {
 
 // {{{ XML chapters
 
-#define parent_elt (*pdata->parents)[pdata->parents->size() - 1]
+#define parent_elt (*((parser_data_t *)pdata)->parents) \
+                      [((parser_data_t *)pdata)->parents->size() - 1]
 #define parent_name parent_elt->Generic().DebugName
-#define cperror_unknown() \
-  cperror(pdata, "Unknown/unsupported element: %s", name)
-#define cperror_nochild() \
-  cperror(pdata, "<%s> is not a valid child element of <%s>.", name, \
-          parent_name)
-#define cperror_oneinstance() \
-  cperror(pdata, "Only one instance of <%s> is allowed under <%s>.", name, \
-          parent_name)
+#define CPDATA (parser_data_t *)pdata
 
 static void
 cperror(parser_data_t *pdata,
@@ -285,7 +238,8 @@ start_element(void *user_data,
     cperror(pdata, "Attributes are not allowed.");
 
   if (pdata->data_allowed)
-    cperror_unknown();
+    cperror(pdata, "<%s> is not a valid child element of <%s>.", name,
+            parent_name);
 
   pdata->data_allowed = false;
 
@@ -370,7 +324,7 @@ start_element(void *user_data,
 }
 
 static void
-end_edition_entry(parser_data_t *pdata) {
+end_edition_entry(void *pdata) {
   EbmlMaster *m;
   KaxEditionUID *euid;
   int i, num;
@@ -385,7 +339,7 @@ end_edition_entry(parser_data_t *pdata) {
       num++;
   }
   if (num == 0)
-    cperror(pdata, "At least one <ChapterAtom> element is needed.");
+    cperror(CPDATA, "At least one <ChapterAtom> element is needed.");
   if (euid == NULL) {
     euid = new KaxEditionUID;
     *static_cast<EbmlUInteger *>(euid) =
@@ -395,7 +349,7 @@ end_edition_entry(parser_data_t *pdata) {
 }
 
 static void
-end_edition_uid(parser_data_t *pdata) {
+end_edition_uid(void *pdata) {
   KaxEditionUID *euid;
 
   euid = static_cast<KaxEditionUID *>(parent_elt);
@@ -408,7 +362,7 @@ end_edition_uid(parser_data_t *pdata) {
 }
 
 static void
-end_chapter_uid(parser_data_t *pdata) {
+end_chapter_uid(void *pdata) {
   KaxChapterUID *cuid;
 
   cuid = static_cast<KaxChapterUID *>(parent_elt);
@@ -421,12 +375,12 @@ end_chapter_uid(parser_data_t *pdata) {
 }
 
 static void
-end_chapter_atom(parser_data_t *pdata) {
+end_chapter_atom(void *pdata) {
   EbmlMaster *m;
 
   m = static_cast<EbmlMaster *>(parent_elt);
   if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
-    cperror(pdata, "<ChapterAtom> is missing the <ChapterTimeStart> child.");
+    cperror(CPDATA, "<ChapterAtom> is missing the <ChapterTimeStart> child.");
 
   if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) == NULL) {
     KaxChapterUID *cuid;
@@ -439,22 +393,22 @@ end_chapter_atom(parser_data_t *pdata) {
 }
 
 static void
-end_chapter_track(parser_data_t *pdata) {
+end_chapter_track(void *pdata) {
   EbmlMaster *m;
 
   m = static_cast<EbmlMaster *>(parent_elt);
   if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) == NULL)
-    cperror(pdata, "<ChapterTrack> is missing the <ChapterTrackNumber> "
+    cperror(CPDATA, "<ChapterTrack> is missing the <ChapterTrackNumber> "
             "child.");
 }
 
 static void
-end_chapter_display(parser_data_t *pdata) {
+end_chapter_display(void *pdata) {
   EbmlMaster *m;
 
   m = static_cast<EbmlMaster *>(parent_elt);
   if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
-    cperror(pdata, "<ChapterDisplay> is missing the <ChapterString> "
+    cperror(CPDATA, "<ChapterDisplay> is missing the <ChapterString> "
             "child.");
   if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL) {
     KaxChapterLanguage *cl;
@@ -466,22 +420,22 @@ end_chapter_display(parser_data_t *pdata) {
 }
 
 static void
-end_chapter_language(parser_data_t *pdata) {
+end_chapter_language(void *pdata) {
   EbmlString *s;
 
   s = static_cast<EbmlString *>(parent_elt);
   if (!is_valid_iso639_2_code(string(*s).c_str()))
-    cperror(pdata, "'%s' is not a valid ISO639-2 language code.",
+    cperror(CPDATA, "'%s' is not a valid ISO639-2 language code.",
             string(*s).c_str());
 }
 
 static void
-end_chapter_country(parser_data_t *pdata) {
+end_chapter_country(void *pdata) {
   EbmlString *s;
 
   s = static_cast<EbmlString *>(parent_elt);
   if (!is_valid_iso639_1_code(string(*s).c_str()))
-    cperror(pdata, "'%s' is not a valid ISO639-1 country code.",
+    cperror(CPDATA, "'%s' is not a valid ISO639-1 country code.",
             string(*s).c_str());
 }
 
@@ -670,7 +624,7 @@ parse_xml_chapters(mm_text_io_c *in,
                    int64_t min_tc,
                    int64_t max_tc,
                    int64_t offset,
-                   bool exception_on_error = false) {
+                   bool exception_on_error) {
   bool done;
   parser_data_t *pdata;
   XML_Parser parser;

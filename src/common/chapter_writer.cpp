@@ -205,6 +205,13 @@ write_chapters_simple(int &chapter_num,
 
 static mm_io_c *o;
 
+typedef struct {
+  int level;
+  int parent_idx;
+  int elt_idx;
+  EbmlElement *e;
+} chapter_writer_cb_t;
+
 static void
 pt(int level,
    const char *tag) {
@@ -215,183 +222,138 @@ pt(int level,
   o->printf("%s", tag);
 }
 
-static void write_chapter_atom_xml(KaxChapterAtom *atom, int level);
-
 static void
-write_chapter_display_xml(KaxChapterDisplay *display,
-                          int level) {
-  int i;
-  EbmlElement *e;
-  char *s;
-  bool string_found, language_found;
-  string escaped;
+write_xml_element_rec(int level,
+                      int parent_idx,
+                      EbmlElement *e) {
+  EbmlMaster *m;
+  int elt_idx, i;
+  bool found;
 
-  pt(level, "<ChapterDisplay>\n");
-
-  language_found = false;
-  string_found = false;
-  for (i = 0; i < display->ListSize(); i++) {
-    e = (*display)[i];
-    if (is_id(e, KaxChapterString)) {
-      pt(level + 1, "<ChapterString>");
-      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
-                                          <EbmlUnicodeString *>(e)).c_str());
-      escaped = escape_xml(s);
-      o->printf("%s</ChapterString>\n", escaped.c_str());
-      safefree(s);
-      string_found = true;
-
-    } else if (is_id(e, KaxChapterLanguage)) {
-      pt(level + 1, "<ChapterLanguage>");
-      o->printf("%s</ChapterLanguage>\n",
-                string(*static_cast<EbmlString *>(e)).c_str());
-      language_found = true;
-
-
-    } else if (is_id(e, KaxChapterCountry)) {
-      pt(level + 1, "<ChapterCountry>");
-      o->printf("%s</ChapterCountry>\n",
-                string(*static_cast<EbmlString *>(e)).c_str());
-
-
-    } else if (is_id(e, KaxChapterAtom))
-      write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
-
+  elt_idx = parent_idx;
+  found = false;
+  while ((chapter_elements[elt_idx].name != NULL) &&
+         (chapter_elements[elt_idx].level >=
+          chapter_elements[parent_idx].level)) {
+    if (chapter_elements[elt_idx].id == e->Generic().GlobalId) {
+      found = true;
+      break;
+    }
+    elt_idx++;
   }
 
-  if (!string_found)
-    pt(level + 1, "<ChapterString></ChapterString>\n");
-  if (!language_found)
-    pt(level + 1, "<ChapterLanguage>eng</ChapterLanguage>\n");
+  for (i = 0; i < level; i++)
+    o->printf("  ");
 
-  pt(level, "</ChapterDisplay>\n");
+  if (!found) {
+    o->printf("<!-- Unknown element '%s' -->\n", e->Generic().DebugName);
+    return;
+  }
+
+  o->printf("<%s>", chapter_elements[elt_idx].name);
+  switch (chapter_elements[elt_idx].type) {
+    case ebmlt_master:
+      o->printf("\n");
+      m = dynamic_cast<EbmlMaster *>(e);
+      assert(m != NULL);
+      for (i = 0; i < m->ListSize(); i++)
+        write_xml_element_rec(level + 1, elt_idx, (*m)[i]);
+
+      if (chapter_elements[elt_idx].write_end_hook != NULL) {
+        chapter_writer_cb_t cb;
+
+        cb.level = level;
+        cb.parent_idx = parent_idx;
+        cb.elt_idx = elt_idx;
+        cb.e = e;
+
+        chapter_elements[elt_idx].write_end_hook(&cb);
+      }
+
+      for (i = 0; i < level; i++)
+        o->printf("  ");
+      o->printf("</%s>\n", chapter_elements[elt_idx].name);
+      break;
+
+    case ebmlt_uint:
+    case ebmlt_bool:
+      o->printf("%llu</%s>\n", uint64(*dynamic_cast<EbmlUInteger *>(e)),
+                chapter_elements[elt_idx].name);
+      break;
+
+    case ebmlt_string:
+      o->printf("%s</%s>\n", string(*dynamic_cast<EbmlString *>(e)).c_str(),
+                chapter_elements[elt_idx].name);
+      break;
+
+    case ebmlt_ustring:
+      o->printf("jadda</%s>\n",
+                chapter_elements[elt_idx].name);
+      break;
+
+    case ebmlt_time:
+      o->printf(FMT_TIMECODEN "</%s>\n", 
+                ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))),
+                chapter_elements[elt_idx].name);
+      break;
+
+    default:
+      assert(false);
+  }
+}
+
+static int
+cet_index(const char *name) {
+  int i;
+
+  for (i = 0; chapter_elements[i].name != NULL; i++)
+    if (!strcmp(name, chapter_elements[i].name))
+      return i;
+
+  assert(false);
+  return -1;
 }
 
 static void
-write_chapter_track_xml(KaxChapterTrack *track,
-                        int level) {
-  int i;
-  EbmlElement *e;
+end_write_chapter_atom(void *data) {
+  KaxChapterAtom *atom;
+  chapter_writer_cb_t *cb;
 
-  pt(level, "<ChapterTrack>\n");
-
-  for (i = 0; i < track->ListSize(); i++) {
-    e = (*track)[i];
-    if (is_id(e, KaxChapterTrackNumber)) {
-      pt(level + 1, "<ChapterTrackNumber>");
-      o->printf("%u</ChapterTrackNumber\n",
-                uint32(*static_cast<EbmlUInteger *>(e)));
-
-    } else if (is_id(e, KaxChapterAtom))
-      write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
-
-  }
-
-  pt(level, "</ChapterTrack>\n");
+  cb = (chapter_writer_cb_t *)data;
+  atom = dynamic_cast<KaxChapterAtom *>(cb->e);
+  assert(atom != NULL);
+  if (FINDFIRST(atom, KaxChapterTimeStart) == NULL)
+    pt(cb->level + 1, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
 }
 
 static void
-write_chapter_atom_xml(KaxChapterAtom *atom,
-                       int level) {
-  int i;
-  EbmlElement *e;
-  uint64_t v;
-  bool start_time_found;
+end_write_chapter_display(void *data) {
+  KaxChapterDisplay *display;
+  chapter_writer_cb_t *cb;
 
-  pt(level, "<ChapterAtom>\n");
-
-  start_time_found = false;
-  for (i = 0; i < atom->ListSize(); i++) {
-    e = (*atom)[i];
-    if (is_id(e, KaxChapterUID)) {
-      pt(level + 1, "<ChapterUID>");
-      o->printf("%u</ChapterUID>\n",
-                uint32(*static_cast<EbmlUInteger *>(e)));
-
-    } else if (is_id(e, KaxChapterTimeStart)) {
-      pt(level + 1, "<ChapterTimeStart>");
-      v = uint64(*static_cast<EbmlUInteger *>(e));
-      o->printf(FMT_TIMECODEN "</ChapterTimeStart>\n",
-                ARG_TIMECODEN(v));
-      start_time_found = true;
-
-    } else if (is_id(e, KaxChapterTimeEnd)) {
-      pt(level + 1, "<ChapterTimeEnd>");
-      v = uint64(*static_cast<EbmlUInteger *>(e));
-      o->printf(FMT_TIMECODEN "</ChapterTimeEnd>\n",
-                ARG_TIMECODEN(v));
-
-    } else if (is_id(e, KaxChapterFlagHidden)) {
-      pt(level + 1, "<ChapterFlagHidden>");
-      o->printf("%u</ChapterFlagHidden>\n",
-                uint8(*static_cast<EbmlUInteger *>(e)));
-
-    } else if (is_id(e, KaxChapterFlagEnabled)) {
-      pt(level + 1, "<ChapterFlagEnabled>");
-      o->printf("%u</ChapterFlagEnabled>\n",
-                uint8(*static_cast<EbmlUInteger *>(e)));
-
-    } else if (is_id(e, KaxChapterTrack))
-      write_chapter_track_xml((KaxChapterTrack *)e, level + 1);
-
-    else if (is_id(e, KaxChapterDisplay))
-      write_chapter_display_xml((KaxChapterDisplay *)e, level + 1);
-
-    else if (is_id(e, KaxChapterAtom))
-      write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
-
-  }
-
-  if (!start_time_found)
-    pt(level + 1, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
-
-  pt(level, "</ChapterAtom>\n");
+  cb = (chapter_writer_cb_t *)data;
+  display = dynamic_cast<KaxChapterDisplay *>(cb->e);
+  assert(display != NULL);
+  if (FINDFIRST(display, KaxChapterString) == NULL)
+    pt(cb->level + 1, "<ChapterString></ChapterString>\n");
+  if (FINDFIRST(display, KaxChapterLanguage) == NULL)
+    pt(cb->level + 1, "<ChapterLanguage>eng</ChapterLanguage>\n");
 }
 
 void
 write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
-  int i, j;
-  KaxEditionEntry *edition;
-  KaxEditionUID *edition_uid;
-  EbmlElement *e;
+  int i;
+
+  chapter_elements[cet_index("ChapterAtom")].write_end_hook =
+    end_write_chapter_atom;
+  chapter_elements[cet_index("ChapterDisplay")].write_end_hook =
+    end_write_chapter_display;
 
   o = out;
 
   for (i = 0; i < chapters->ListSize(); i++) {
-    if (is_id((*chapters)[i], KaxEditionEntry)) {
-      out->printf("  <EditionEntry>\n");
-      edition = (KaxEditionEntry *)(*chapters)[i];
-      edition_uid = FINDFIRST(edition, KaxEditionUID);
-      if (edition != NULL)
-        out->printf("    <EditionUID>%llu</EditionUID>\n",
-                    uint64(*static_cast<EbmlUInteger *>(edition_uid)));
-      for (j = 0; j < edition->ListSize(); j++) {
-        e = (*edition)[j];
-
-        if (is_id(e, KaxChapterAtom))
-          write_chapter_atom_xml(static_cast<KaxChapterAtom *>(e), 2);
-
-        else if (is_id(e, KaxEditionFlagHidden)) {
-          pt(2, "<EditionFlagHidden>");
-          o->printf("%u</EditionFlagHidden>\n",
-                    uint8(*static_cast<EbmlUInteger *>(e)));
-
-        } else if (is_id(e, KaxEditionManaged)) {
-          pt(2, "<EditionManaged>");
-          o->printf("%u</EditionManaged>\n",
-                    uint8(*static_cast<EbmlUInteger *>(e)));
-
-        } else if (is_id(e, KaxEditionFlagDefault)) {
-          pt(2, "<EditionFlagDefault>");
-          o->printf("%u</EditionFlagDefault>\n",
-                    uint8(*static_cast<EbmlUInteger *>(e)));
-
-        }
-      }
- 
-      out->printf("  </EditionEntry>\n");
-    }
+    write_xml_element_rec(1, 0, (*chapters)[i]);
   }
 }
 
