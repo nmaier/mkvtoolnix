@@ -44,6 +44,7 @@
 #define OGM_STREAM_TYPE_AC3     5
 #define OGM_STREAM_TYPE_TEXT    6
 #define OGM_STREAM_TYPE_FLAC    7
+#define OGM_STREAM_TYPE_AAC     8
 
 #if defined(HAVE_FLAC_FORMAT_H)
 class flac_header_extractor_c {

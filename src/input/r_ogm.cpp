@@ -33,21 +33,23 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
 }
 
-#include "mkvmerge.h"
+#include "aac_common.h"
 #include "common.h"
-#include "pr_generic.h"
-#include "ogmstreams.h"
 #include "matroska.h"
-#include "r_ogm.h"
-#include "p_vorbis.h"
-#include "p_video.h"
-#include "p_pcm.h"
-#include "p_textsubs.h"
-#include "p_mp3.h"
+#include "mkvmerge.h"
+#include "ogmstreams.h"
+#include "pr_generic.h"
+#include "p_aac.h"
 #include "p_ac3.h"
 #if defined(HAVE_FLAC_FORMAT_H)
 #include "p_flac.h"
 #endif
+#include "p_mp3.h"
+#include "p_pcm.h"
+#include "p_textsubs.h"
+#include "p_video.h"
+#include "p_vorbis.h"
+#include "r_ogm.h"
 
 #define BUFFER_SIZE 4096
 
@@ -370,7 +372,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   ogg_packet op;
   alBITMAPINFOHEADER bih;
   stream_header *sth;
-  int i;
+  int i, profile, channels, sample_rate, output_sample_rate;
+  bool sbr, aac_info_extracted;
   ogm_demuxer_t *dmx;
 
   dmx = NULL;
@@ -472,6 +475,48 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         if (verbose)
           mxinfo("OGG/OGM demultiplexer (%s): using AC3 output "
+                 "module for stream %d.\n", ti->fname, dmx->serial);
+
+        break;
+
+      case OGM_STREAM_TYPE_AAC:
+        aac_info_extracted = false;
+        if (dmx->packet_sizes[0] >= (sizeof(stream_header) + 5)) {
+          if (parse_aac_data(&dmx->packet_data[0][sizeof(stream_header) + 5],
+                             dmx->packet_sizes[0] - sizeof(stream_header) - 5,
+                             profile, channels, sample_rate,
+                             output_sample_rate, sbr)) {
+            aac_info_extracted = true;
+            if (sbr)
+              profile = AAC_PROFILE_SBR;
+          }
+        }
+        if (!aac_info_extracted) {
+          sbr = false;
+          channels = get_uint16(&sth->sh.audio.channels);
+          sample_rate = get_uint64(&sth->samples_per_unit);
+          profile = AAC_PROFILE_LC;
+        }
+        mxverb(2, "ogm_reader: %lld/%s: profile %d, channels %d, sample_rate "
+               "%d, sbr %d, output_sample_rate %d, ex %d\n", ti->id, ti->fname,
+               profile, channels, sample_rate, (int)sbr, output_sample_rate,
+               (int)aac_info_extracted);
+        try {
+          dmx->packetizer =
+            new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate,
+                                 channels, ti, false, true);
+          if (sbr)
+            dmx->packetizer->
+              set_audio_output_sampling_freq(output_sample_rate);
+        } catch (error_c &error) {
+          mxwarn("ogm_reader: could not initialize AAC "
+                 "packetizer for stream id %d. Will try to continue and "
+                 "ignore this stream.\n", dmx->serial);
+          break;
+        }
+
+        if (verbose)
+          mxinfo("OGG/OGM demultiplexer (%s): using AAC output "
                  "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
@@ -724,6 +769,8 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         dmx->stype = OGM_STREAM_TYPE_MP3;
       else if (codec_id == 0x2000)
         dmx->stype = OGM_STREAM_TYPE_AC3;
+      else if (codec_id == 0x00ff)
+        dmx->stype = OGM_STREAM_TYPE_AAC;
       else {
         mxwarn("ogm_reader: Unknown audio stream type %u. "
                "Ignoring stream id %d.\n", codec_id, numstreams);
@@ -1075,6 +1122,7 @@ ogm_reader_c::identify() {
             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_AAC ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC) ? "audio" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? "video" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
@@ -1083,6 +1131,7 @@ ogm_reader_c::identify() {
            sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ? "PCM" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ? "MP3" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_AAC ? "AAC" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC ? "FLAC" :

@@ -52,21 +52,18 @@
 
 //// OggDS headers
 // Header for the new header format
-typedef struct stream_header_video
-{
+typedef struct {
   ogg_int32_t  width;
   ogg_int32_t  height;
 } stream_header_video;
 
-typedef struct stream_header_audio
-{
+typedef struct {
   ogg_int16_t  channels;
   ogg_int16_t  blockalign;
   ogg_int32_t  avgbytespersec;
 } stream_header_audio;
 
-typedef struct stream_header
-{
+typedef struct __attribute__((__packed__)) {
   char        streamtype[8];
   char        subtype[4];
 
@@ -81,13 +78,13 @@ typedef struct stream_header
 
   ogg_int16_t padding;
 
-  union
-  {
+  union {
     // Video specific
     stream_header_video  video;
     // Audio specific
     stream_header_audio  audio;
   } sh;
+
 } stream_header;
 
 /// Some defines from OggDS
