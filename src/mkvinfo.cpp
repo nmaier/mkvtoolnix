@@ -905,6 +905,9 @@ bool process_file(const char *file_name) {
                            get_uint16(&wfe->w_format_tag));
                 } else
                   pbuffer[0] = 0;
+                if (calc_checksums)
+                  mxprints(&pbuffer[strlen(pbuffer)], " (adler: 0x%08x)",
+                           calc_adler32(&binary(c_priv), c_priv.GetSize()));
                 show_element(l3, 3, "CodecPrivate, length %d%s",
                              (int)c_priv.GetSize(), pbuffer);
 
