@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version $Id: chapters.cpp 920 2003-08-28 17:21:23Z mosu $
+    \version $Id$
     \brief XML chapter writer functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
