@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.9 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.10 2003/04/17 12:30:20 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -70,7 +70,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   int pos;
   unsigned long header;
   mp3_header_t mp3header;
-  
+
   if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("mp3_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
@@ -109,7 +109,7 @@ mp3_reader_c::~mp3_reader_c() {
 }
 
 int mp3_reader_c::read() {
-  int nread, last_frame;
+  int nread;
   
   do {
     if (mp3packetizer->packet_available())
@@ -119,12 +119,9 @@ int mp3_reader_c::read() {
     if (nread <= 0)
       return 0;
 
-    last_frame = (nread == 4096 ? 0 : 1);
-    mp3packetizer->process(chunk, nread, last_frame);
+    mp3packetizer->process(chunk, nread);
     bytes_processed += nread;
 
-    if (last_frame)
-      return 0;
   } while (1);
 }
 
