@@ -103,9 +103,10 @@ kax_track_t *find_track(int tid) {
   return NULL;
 }
 
-char typenames[14][20] = {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3",
+char typenames[17][20] = {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3",
                           "chapter", "MicroDVD", "VobSub", "Matroska", "DTS",
-                          "AAC", "SSA/ASS"};
+                          "AAC", "SSA/ASS", "RealMedia", "Quicktime/MP4",
+                          "FLAC"};
 
 void usage() {
   const char *usage_infos =
@@ -122,6 +123,7 @@ void usage() {
 "\n"
 " First mode extracts some tracks to external files.\n"
 "  -c charset     Convert text subtitles to this charset (default: UTF-8).\n"
+"  --no-ogg       Write raw FLAC files (default: write OggFLAC files).\n"
 "  TID:out        Write track with the ID TID to the file 'out'.\n"
 "\n"
 " Example:\n"

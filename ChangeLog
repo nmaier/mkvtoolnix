@@ -1,3 +1,8 @@
+2003-12-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Wrong display output and illegal memory
+	access when extracting FLAC files.
+
 2003-12-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: If one added a Matroska file and the track name or

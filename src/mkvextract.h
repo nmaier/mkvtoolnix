@@ -90,7 +90,7 @@ typedef struct {
 } kax_track_t;
 
 extern vector<kax_track_t> tracks;
-extern char typenames[14][20];
+extern char typenames[17][20];
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
