@@ -357,6 +357,7 @@ typedef struct {
   string date;
   string global_genre;
   string genre;
+  string global_disc_id;
   string disc_id;
   string isrc;
   string comment;
@@ -439,8 +440,11 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
     s = a.global_genre;
   if (s != "")
     tag->PushElement(*create_simple_tag(a, "GENRE", s));
-  if (a.disc_id != "")
-    tag->PushElement(*create_simple_tag(a, "DISCID", a.disc_id));
+  s = a.disc_id;
+  if (s == "")
+    s = a.global_disc_id;
+  if (s != "")
+    tag->PushElement(*create_simple_tag(a, "DISCID", s));
   if (a.isrc != "")
     tag->PushElement(*create_simple_tag(a, "ISRC", a.isrc));
   if (a.comment != "")
@@ -472,6 +476,8 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
     tag->PushElement(*create_simple_tag(a, "DATE", a.global_date));
   if (a.global_genre != "")
     tag->PushElement(*create_simple_tag(a, "GENRE", a.global_genre));
+  if (a.global_disc_id != "")
+    tag->PushElement(*create_simple_tag(a, "DISCID", a.global_disc_id));
 
   (*tags)->PushElement(*tag);
 }
@@ -685,10 +691,13 @@ parse_cue_chapters(mm_text_io_c *in,
         else
           a.genre = get_quoted(line, 10);
 
-      } else if (starts_with_case(line, "rem discid "))
-        a.disc_id = get_quoted(line, 11);
+      } else if (starts_with_case(line, "rem discid ")) {
+        if (a.num == 0)
+          a.global_disc_id = get_quoted(line, 11);
+        else
+          a.disc_id = get_quoted(line, 11);
 
-      else if (starts_with_case(line, "rem comment "))
+      } else if (starts_with_case(line, "rem comment "))
         a.comment = get_quoted(line, 12);
 
       else if (starts_with_case(line, "isrc "))
