@@ -18,6 +18,9 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+// A lot of code in this file is from the mplayer sources. The original
+// authors are to be thanked for their work.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +31,7 @@
 #include "mkvmerge.h"
 #include "p_aac.h"
 #include "p_passthrough.h"
+#include "p_pcm.h"
 #include "p_video.h"
 #include "r_mp4.h"
 
@@ -193,7 +197,9 @@ void qtmp4_reader_c::parse_headers() {
          strncasecmp(dmx->fourcc, "cvid", 4)) ||
         ((dmx->type == 'a') &&
          strncasecmp(dmx->fourcc, "QDM", 3) &&
-         strncasecmp(dmx->fourcc, "MP4A", 4))) {
+         strncasecmp(dmx->fourcc, "MP4A", 4) &&
+         strncasecmp(dmx->fourcc, "twos", 4) &&
+         strncasecmp(dmx->fourcc, "swot", 4))) {
       mxwarn(PFX "Unknown/unsupported FourCC '%.4s' for track %u.\n",
              &dmx->fourcc, dmx->id);
 
@@ -775,9 +781,6 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
 
       }
 
-//       mxverb(2, "\nfixed ssize: pos: %lld, timecode: %lld, frame_size: %u\n",
-//              io->getFilePointer(), timecode, frame_size);
-
       if (dmx->keyframe_table_len == 0)
         is_keyframe = true;
       else {
@@ -1018,14 +1021,24 @@ void qtmp4_reader_c::create_packetizers() {
                  "%d\n", profile, sample_rate_idx, channels);
 
           dmx->packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                                                (uint32_t)dmx->a_samplerate,
+                                                 (uint32_t)dmx->a_samplerate,
                                                  channels, ti, false, true);
           if (verbose)
-            mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id,
-                   dmx->fourcc);
+            mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id);
+
         } else
           mxerror(PFX "AAC found, but decoder config data has length %u.\n",
                   dmx->a_esds.decoder_config_len);
+
+      } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
+                 !strncasecmp(dmx->fourcc, "swot", 4)) {
+        dmx->packetizer =
+          new pcm_packetizer_c(this, (uint32_t)dmx->a_samplerate,
+                               dmx->a_channels, dmx->a_bitdepth, ti,
+                               (dmx->a_bitdepth > 8) &&
+                               (dmx->fourcc[0] == 't'));
+        if (verbose)
+          mxinfo("+-> Using PCM output module for stream %u.\n", dmx->id);
 
       } else
         die(PFX "Should not have happened #1.");
