@@ -67,9 +67,18 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
   string line, global;
   int64_t old_pos;
   char section;
-  bool is_ass;
+  bool is_ass, sub_charset_found;
+  int i;
 
-  cc_utf8 = utf8_init(ti->sub_charset);
+  sub_charset_found = false;
+  for (i = 0; i < ti->sub_charsets->size(); i++)
+    if ((*ti->sub_charsets)[i].id == 0) {
+      sub_charset_found = true;
+      cc_utf8 = utf8_init((*ti->sub_charsets)[i].language);
+      break;
+    }
+  if (!sub_charset_found)
+    cc_utf8 = utf8_init(ti->sub_charset);
 
   is_ass = false;
 
