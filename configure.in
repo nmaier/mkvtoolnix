@@ -291,7 +291,7 @@ dnl
     AC_CHECK_HEADERS(FLAC/format.h, , flac_found=no)
   else
     echo '*** WARNING:'
-    echo '*** libflac was not found. mkvmerge will be built'
+    echo '*** libFLAC was not found. mkvmerge will be built'
     echo '*** without support for FLAC tracks.'
   fi
 
