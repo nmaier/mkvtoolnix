@@ -337,17 +337,8 @@ mpeg4_p2_video_packetizer_c::process(memory_c &mem,
                                      int64_t duration,
                                      int64_t bref,
                                      int64_t fref) {
-  vector<video_frame_t> frames;
-  vector<video_frame_t>::const_iterator frame;
-
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(mem.data, mem.size);
-
-  mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
-  foreach(frame, frames) {
-    csum += frame->type + frame->size;
-    mxinfo("\nFRAME: type %c size %d\n", frame->type, frame->size);
-  }
 
   if (input_is_native == output_is_native)
     return
