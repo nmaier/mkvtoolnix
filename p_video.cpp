@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.6 2003/02/28 13:01:29 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.7 2003/02/28 14:50:04 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -142,11 +142,4 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
 video_packetizer_c::~video_packetizer_c() {
   if (tempbuf != NULL)
     free(tempbuf);
-}
-
-void video_packetizer_c::added_packet_to_cluster(packet_t *packet) {
-  if (packet->bref == 0) {      // this is a keyframe
-    // Free all previous frames up until this on.
-    cluster_helper->free_ref(packet->id - 1, this);
-  }
 }

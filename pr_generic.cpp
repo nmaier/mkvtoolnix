@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.5 2003/02/28 13:01:29 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.6 2003/02/28 14:50:04 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -48,10 +48,6 @@ void generic_packetizer_c::set_private_data(void *data, int size) {
     die("malloc");
   memcpy(private_data, data, size);
   private_data_size = size;
-}
-
-void generic_packetizer_c::added_packet_to_cluster(packet_t *packet) {
-  packet->superseeded = 1;
 }
 
 //--------------------------------------------------------------------
@@ -202,37 +198,57 @@ int cluster_helper_c::get_cluster_content_size() {
 int cluster_helper_c::render(IOCallback *out) {
   KaxCues dummy_cues;
   KaxBlockGroup *last_group = NULL;
+  KaxCluster *cluster;
   int i;
   u_int64_t cluster_timecode;
   ch_contents *clstr;
-  packet_t *pack;
+  packet_t *pack, *bref_packet, *fref_packet;
 
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
 
   walk_clusters();
   clstr = clusters[num_clusters - 1];
+  cluster = clstr->cluster;
   cluster_timecode = get_timecode();
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
 
-    if (last_group == NULL)
-      pack->group = &GetChild<KaxBlockGroup>(*clstr->cluster);
-    else
-      pack->group = &GetNextChild<KaxBlockGroup>(*clstr->cluster, *last_group);
-    last_group = pack->group;
-    pack->block = &GetChild<KaxBlock>(*pack->group);
+//     if (last_group == NULL)
+//       pack->group = &GetChild<KaxBlockGroup>(*cluster);
+//     else
+//       pack->group = &GetNextChild<KaxBlockGroup>(*cluster, *last_group);
+//     last_group = pack->group;
+    pack->group = &cluster->GetNewBlock();
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*pack->source->track_entry);
 
-    pack->block->AddFrame(track_entry, pack->timestamp - cluster_timecode,
-                          *pack->data_buffer);
-    pack->source->added_packet_to_cluster(pack);
+    if (pack->bref != 0) {      // P and B frames: add backward reference.
+      bref_packet = find_packet(pack->bref);
+      assert(bref_packet != NULL);
+      assert(bref_packet->group != NULL);
+      if (pack->fref != 0) {    // It's even a B frame: add forward reference.
+        fref_packet = find_packet(pack->fref);
+        assert(fref_packet != NULL);
+        assert(fref_packet->group != NULL);
+        pack->group->AddFrame(track_entry, pack->timestamp - cluster_timecode,
+                              *pack->data_buffer, *bref_packet->group,
+                              *fref_packet->group);
+      } else
+        pack->group->AddFrame(track_entry, pack->timestamp - cluster_timecode,
+                              *pack->data_buffer, *bref_packet->group);
+    } else {                    // This is a key frame. No references.
+      pack->group->AddFrame(track_entry, pack->timestamp - cluster_timecode,
+                            *pack->data_buffer);
+      // All packets with an ID smaller than this packet's ID are not
+      // needed anymore. Be happy!
+      free_ref(pack->id - 1, pack->source);
+    }
   }
 
-  clstr->cluster->Render(static_cast<StdIOCallback &>(*out), dummy_cues);
+  cluster->Render(static_cast<StdIOCallback &>(*out), dummy_cues);
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
@@ -241,6 +257,8 @@ int cluster_helper_c::render(IOCallback *out) {
   }
 
   clstr->rendered = 1;
+
+  free_clusters();
 
   return 1;
 }
@@ -295,12 +313,14 @@ void cluster_helper_c::check_clusters(int num) {
 }
 
 int cluster_helper_c::free_clusters() {
-  int i, k, idx;
+  int i, k, idx; //, prior;
   packet_t *p;
   ch_contents *clstr, **new_clusters;
 
   if (clusters == NULL)
     return 0;
+
+//   prior = num_clusters;
 
   for (i = 0; i < num_clusters; i++)
     clusters[i]->is_referenced = 0;
@@ -364,6 +384,9 @@ int cluster_helper_c::free_clusters() {
     num_clusters = k;
   }
 
+//   fprintf(stdout, "freed %d of %d clusters; new %d\n", prior - num_clusters,
+//           prior, num_clusters);
+
   return 1;
 }
 
@@ -378,9 +401,7 @@ int cluster_helper_c::free_ref(u_int64_t pid, void *source) {
         p->superseeded = 1;
     }
 
-  walk_clusters();
-  free_clusters();
-  walk_clusters();
+//   free_clusters();
 
   return 1;
 }
