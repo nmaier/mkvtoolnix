@@ -738,3 +738,39 @@ AC_DEFUN(PATH_ZLIB,
   AC_SUBST(ZLIB_CFLAGS)
   AC_SUBST(ZLIB_LIBS)
 ])
+
+AC_DEFUN(PATH_LZO,
+[ AC_ARG_WITH(lzo,
+	      [  --with-lzo=PREFIX             Path to where the lzo library is installed],
+	      , with_lzo_given=no)
+
+  LZO_CFLAGS=
+  LZO_LIBS=
+  if test "$with_lzo" != "yes" -a "$with_lzo" != ""; then
+    LZO_CFLAGS="-I$with_lzo/include"
+    LZO_LIBS="-L$with_lzo/lib"
+  fi
+
+	AC_CHECK_LIB(lzo, lzo1x_1_compress,
+		     [ LZO_LIBS="$LZO_LIBS -llzo"
+		       lzo_found=yes ],
+		     [ lzo_found=no ],
+		     "$LZO_LIBS")
+  if test "$lzo_found" = "no"; then
+    AC_MSG_ERROR([Could not find the lzo library])
+  fi
+	lzo_save_CFLAGS="$CFLAGS"
+	CFLAGS="$CFLAGS $LZO_CFLAGS"
+  AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
+  if test "$lzo_found" = "no"; then
+    AC_MSG_ERROR([Could not find lzo1x.h])
+  fi
+	CFLAGS="$lzo_save_CFLAGS"
+
+  if test "x$lzo_found" = "xno"; then
+    exit 1
+  fi
+
+  AC_SUBST(LZO_CFLAGS)
+  AC_SUBST(LZO_LIBS)
+])
