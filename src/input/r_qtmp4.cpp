@@ -1221,7 +1221,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       }
 
       memory_c mem(buffer, frame_size, true);
-      if ((dmx->type == 'v') && (dmx->pos < dmx->frame_offset_table.size()))
+      if ((dmx->type == 'v') && (dmx->pos < dmx->frame_offset_table.size()) &&
+          !strncasecmp(dmx->fourcc, "avc1", 4))
         handle_video_with_bframes(dmx, timecode, duration, is_keyframe, mem);
 
       else
