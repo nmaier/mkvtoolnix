@@ -34,6 +34,16 @@ Write to the file '\fIout\fR'.
 \fB\-\-title\fR <\fItitle\fR>
 Sets the general title for the output file, e.g. the movie name.
 .TP
+\fB\-\-chapter\-language\fR <\fBlanguage\fR>
+Sets the ISO639-2 language code that is written for each chapter entry. Applies
+only to simple chapter files. Defaults to "eng". See the section about chapters
+below for details.
+.TP
+\fB\-\-chapter\-charset\fR <\fBcharset\fR>
+Sets the charset that is used for the conversion to UTF-8 for simple chapter
+files. Defaults to the current system locale. See the section about chapters
+below for details.
+.TP
 \fB\-\-chapters <\fIfile\fR>
 Read chapter information from the \fIfile\fR. See the section about chapters
 below for details.
@@ -574,6 +584,14 @@ CHAPTER03NAME=Baby rocks the house
 into one Matroska \fIChapterAtom\fR. It does not set any
 \fIChapterTrackNumber\fR which means that the chapters all apply to all
 tracks in the file.
+.LP
+The charset used in the file is assumed to be the same charset that the
+current system's locale returns. If this is not the case then the swith
+\fI\-\-chapter\-charset\fR should be used. If the file contains a valid
+BOM (byte order marker) then all UTF styles are converted automatically.
+In this case \fI\-\-chapter\-charset\fR is simply ignored. You can use
+\fBmkvinfo\fR or \fBmkvextract\fR to verify that the chapter names have
+been converted properly.
 .LP
 When splitting files \fBmkvmerge\fR will correctly adjust the chapters as
 well. This means that each file only includes the chapter entries that

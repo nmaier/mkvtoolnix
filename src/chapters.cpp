@@ -127,14 +127,19 @@ static bool probe_simple_chapters(mm_text_io_c *in) {
 // CHAPTER01NAME=Hallo Welt
 
 static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
-                                          int64_t max_tc, int64_t offset) {
+                                          int64_t max_tc, int64_t offset,
+                                          const char *language,
+                                          const char *charset) {
   KaxChapters *chaps;
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
   KaxChapterDisplay *display;
   int64_t start, hour, minute, second, msecs;
   string name, line;
-  int mode, num;
+  int mode, num, cc_utf8;
+  bool do_convert;
+  char *recoded_string;
+  UTFstring wchar_string;
 
   in->setFilePointer(0);
   chaps = new KaxChapters;
@@ -143,6 +148,16 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   atom = NULL;
   edition = NULL;
   num = 0;
+
+  if (in->get_byte_order() == BO_NONE) {
+    do_convert = true;
+    cc_utf8 = utf8_init(charset);
+
+  } else
+    do_convert = false;
+
+  if (language == NULL)
+    language = "eng";
 
   while (in->getline2(line)) {
     strip(line);
@@ -182,14 +197,23 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
 
         *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
           create_unique_uint32();
+
         *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
           (start - offset) * 1000000;
+
         display = &GetChild<KaxChapterDisplay>(*atom);
+
+        if (do_convert) {
+          recoded_string = to_utf8(cc_utf8, name.c_str());
+          wchar_string = cstrutf8_to_UTFstring(recoded_string);
+          safefree(recoded_string);
+        } else
+          wchar_string = cstrutf8_to_UTFstring(name.c_str());
         *static_cast<EbmlUnicodeString *>
-          (&GetChild<KaxChapterString>(*display)) =
-          cstr_to_UTFstring(name.c_str());
+          (&GetChild<KaxChapterString>(*display)) = wchar_string;
+
         *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
-          "eng";
+          language;
 
         num++;
       }
@@ -221,7 +245,8 @@ static KaxChapters *parse_xml_chapters(mm_text_io_c *, int64_t, int64_t,
 // }}}
 
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
-                            int64_t max_tc, int64_t offset) {
+                            int64_t max_tc, int64_t offset,
+                            const char *language, const char *charset) {
   mm_text_io_c *in;
 
   try {
@@ -231,7 +256,8 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   }
 
   if (probe_simple_chapters(in))
-    return parse_simple_chapters(in, min_tc, max_tc, offset);
+    return parse_simple_chapters(in, min_tc, max_tc, offset, language,
+                                 charset);
 
   if (probe_xml_chapters(in))
     return parse_xml_chapters(in, min_tc, max_tc, offset);

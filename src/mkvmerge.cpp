@@ -164,6 +164,8 @@ KaxChapters *kax_chapters = NULL;
 EbmlVoid *kax_chapters_void = NULL;
 
 char *chapter_file_name = NULL;
+char *chapter_language = NULL;
+char *chapter_charset = NULL;
 
 string title;
 
@@ -226,6 +228,8 @@ static void usage() {
     "  -o, --output out         Write to the file 'out'.\n"
     "  --title <title>          Title for this output file.\n"
     "  --chapters <file>        Read chapter information from the file.\n"
+    "  --chapter-language <lng> Set the 'language' element in chapter entries."
+    "\n  --chapter-charset <cset> Charset for a simple chapter file.\n"
     "  --global-tags <file>     Read global tags from a XML file.\n"
     "\n General output control (still global, advanced options):\n"
     "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
@@ -1248,16 +1252,52 @@ static void parse_args(int argc, char **argv) {
       parse_and_add_tags(next_arg);
       i++;
 
+    } else if (!strcmp(this_arg, "--chapter-language")) {
+      if (next_arg == NULL)
+        mxerror("'--chapter-language' lacks the language.\n");
+
+      if (chapter_language != NULL)
+        mxerror("'--chapter-language' may only be given once in '"
+                "--chapter-language %s'.\n", next_arg);
+
+      if (chapter_file_name != NULL)
+        mxerror("'--chapter-language' must be given before '--chapters' in "
+                "'--chapter-language %s'.\n", next_arg);
+
+      if (!is_valid_iso639_2_code(next_arg))
+        mxerror("'%s' is not a valid ISO639-2 language code. Run "
+                "'mkvmerge --list-languages' for a complete list of language "
+                "codes.\n", next_arg);
+
+      chapter_language = safestrdup(next_arg);
+      i++;
+
+    } else if (!strcmp(this_arg, "--chapter-charset")) {
+      if (next_arg == NULL)
+        mxerror("'--chapter-charset' lacks the charset.\n");
+
+      if (chapter_charset != NULL)
+        mxerror("'--chapter-charset' may only be given once in '"
+                "--chapter-charset %s'.\n", next_arg);
+
+      if (chapter_file_name != NULL)
+        mxerror("'--chapter-charset' must be given before '--chapters' in "
+                "'--chapter-charset %s'.\n", next_arg);
+
+      chapter_charset = safestrdup(next_arg);
+      i++;
+
     } else if (!strcmp(this_arg, "--chapters")) {
       if (next_arg == NULL)
         mxerror("'--chapters' lacks the file name.\n");
 
-      if (kax_chapters != NULL)
+      if (chapter_file_name != NULL)
         mxerror("Only one chapter file allowed in '%s %s'.\n", this_arg,
                 next_arg);
 
       chapter_file_name = safestrdup(next_arg);
-      kax_chapters = parse_chapters(next_arg);
+      kax_chapters = parse_chapters(next_arg, 0, -1, 0, chapter_language,
+                                    chapter_charset);
       i++;
 
     } else if (!strcmp(this_arg, "--dump-packets")) {
@@ -1782,7 +1822,8 @@ void finish_file() {
     start = cluster_helper->get_first_timecode() + offset;
     end = cluster_helper->get_max_timecode() + offset;
 
-    chapters_here = parse_chapters(chapter_file_name, start, end, offset);
+    chapters_here = parse_chapters(chapter_file_name, start, end, offset,
+                                   chapter_language, chapter_charset);
     if (chapters_here != NULL)
       kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
     delete kax_chapters_void;
