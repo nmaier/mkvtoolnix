@@ -507,7 +507,7 @@ bool
 is_popular_language_code(const char *code) {
   return
     !strcmp(code, "zho") || // Chinese
-    !strcmp(code, "nld") || // Dutch
+    !strcmp(code, "dut") || // Dutch
     !strcmp(code, "eng") || // English
     !strcmp(code, "fin") || // Finnish
     !strcmp(code, "fre") || // French
