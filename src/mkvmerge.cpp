@@ -395,19 +395,22 @@ static void sighandler(int signum) {
 #endif
 
 static int display_counter = 1;
+static generic_reader_c *display_reader = NULL;
 
-static void display_progress(int force) {
-  filelist_t *winner;
+static void display_progress(bool force) {
+  generic_reader_c *winner;
   int i;
 
   if (((display_counter % 500) == 0) || force) {
     display_counter = 0;
-    winner = files[0];
-    for (i = 1; i < files.size(); i++)
-      if (files[i]->reader->display_priority() >
-          winner->reader->display_priority())
-        winner = files[i];
-    winner->reader->display_progress();
+    if (display_reader == NULL) {
+      winner = files[0]->reader;
+      for (i = 1; i < files.size(); i++)
+        if (files[i]->reader->display_priority() > winner->display_priority())
+          winner = files[i]->reader;
+      display_reader = winner;
+    }
+    display_reader->display_progress(force);
   }
   display_counter++;
 }
@@ -1958,7 +1961,7 @@ void main_loop() {
 
     // display some progress information
     if (verbose >= 1)
-      display_progress(0);
+      display_progress(false);
   }
 
   // Render all remaining packets (if there are any).
@@ -1966,7 +1969,7 @@ void main_loop() {
     cluster_helper->render();
 
   if (verbose >= 1)
-    display_progress(1);
+    display_progress(true);
 }
 
 // }}}

@@ -296,7 +296,7 @@ int ssa_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void ssa_reader_c::display_progress() {
+void ssa_reader_c::display_progress(bool) {
   mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))

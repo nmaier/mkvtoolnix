@@ -697,15 +697,16 @@ int ogm_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void ogm_reader_c::display_progress() {
+void ogm_reader_c::display_progress(bool final) {
   int i;
 
   for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
-      mxinfo("progress: %d frames (%d%%)\r",
-             sdemuxers[i]->units_processed, (int)(mm_io->getFilePointer() *
-                                                  100 / file_size));
-      fflush(stdout);
+      if (final)
+        mxinfo("progress: %d frames (100%%)\r", sdemuxers[i]->units_processed);
+      else
+        mxinfo("progress: %d frames (%d%%)\r", sdemuxers[i]->units_processed,
+               (int)(mm_io->getFilePointer() * 100 / file_size));
       return;
     }
 

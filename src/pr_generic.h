@@ -220,7 +220,7 @@ public:
   virtual ~generic_reader_c();
   virtual int read(generic_packetizer_c *ptzr) = 0;
   virtual int display_priority() = 0;
-  virtual void display_progress() = 0;
+  virtual void display_progress(bool final = false) = 0;
   virtual void set_headers() = 0;
   virtual void identify() = 0;
 

@@ -77,7 +77,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual int display_priority();
-  virtual void display_progress();
+  virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify();
 

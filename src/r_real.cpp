@@ -638,9 +638,13 @@ int real_reader_c::display_priority() {
   return DISPLAYPRIORITY_MEDIUM;
 }
 
-void real_reader_c::display_progress() {
-  mxinfo("progress: %lld/%lld packets (%lld%%)\r", num_packets,
-         num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
+void real_reader_c::display_progress(bool final) {
+  if (final)
+    mxinfo("progress: %lld/%lld packets (100%%)\r", num_packets_in_chunk,
+           num_packets_in_chunk);
+  else
+    mxinfo("progress: %lld/%lld packets (%lld%%)\r", num_packets,
+           num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
 }
 
 void real_reader_c::set_headers() {

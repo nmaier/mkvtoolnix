@@ -1441,13 +1441,17 @@ int kax_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void kax_reader_c::display_progress() {
+void kax_reader_c::display_progress(bool final) {
   int i;
 
   if (segment_duration != 0.0) {
-    mxinfo("progress: %.3fs/%.3fs (%d%%)\r",
-           (last_timecode - first_timecode) / 1000.0, segment_duration,
-           (int)((last_timecode - first_timecode) / 10 / segment_duration));
+    if (final)
+      mxinfo("progress: %.3fs/%.3fs (100%%)\r", segment_duration,
+             segment_duration);
+    else
+      mxinfo("progress: %.3fs/%.3fs (%d%%)\r",
+             (last_timecode - first_timecode) / 1000.0, segment_duration,
+             (int)((last_timecode - first_timecode) / 10 / segment_duration));
     return;
   }
 

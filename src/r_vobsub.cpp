@@ -331,10 +331,9 @@ void vobsub_reader_c::reset() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void vobsub_reader_c::display_progress() {
+void vobsub_reader_c::display_progress(bool final) {
   mxprint(stdout, "working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
-  fflush(stdout);
 }

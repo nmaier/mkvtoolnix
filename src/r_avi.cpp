@@ -439,21 +439,25 @@ int avi_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void avi_reader_c::display_progress() {
+void avi_reader_c::display_progress(bool final) {
+  int myframes;
+
   if (vpacketizer != NULL) {
-    int myframes = frames;
+    myframes = frames;
     if (frames == (maxframes + 1))
       myframes--;
-    mxinfo("progress: %d/%ld frames (%ld%%)\r",
-           myframes, AVI_video_frames(avi),
-           myframes * 100 / AVI_video_frames(avi));
+    if (final)
+      mxinfo("progress: %ld/%ld frames (100%%)\r", AVI_video_frames(avi),
+             AVI_video_frames(avi));
+    else
+      mxinfo("progress: %d/%ld frames (%ld%%)\r", myframes,
+             AVI_video_frames(avi), myframes * 100 / AVI_video_frames(avi));
   } else {
     mxinfo("Working... %c\r", wchar[act_wchar]);
     act_wchar++;
     if (act_wchar == strlen(wchar))
       act_wchar = 0;
   }
-  fflush(stdout);
 }
 
 // }}}

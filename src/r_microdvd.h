@@ -45,7 +45,7 @@ public:
                                            PACKET_TYPE_HEADER);
 
   virtual int display_priority();
-  virtual void display_progress();
+  virtual void display_progress(bool final = false);
   virtual void set_headers();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);

@@ -270,12 +270,15 @@ int wav_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void wav_reader_c::display_progress() {
+void wav_reader_c::display_progress(bool final) {
   int samples = (wheader.riff.len - sizeof(wheader) + 8) / bps;
-  mxinfo("progress: %d/%d seconds (%d%%)\r",
-         (int)(bytes_processed / bps), (int)samples,
-         (int)(bytes_processed * 100L / bps / samples));
-  fflush(stdout);
+
+  if (final)
+    mxinfo("progress: %d/%d seconds (100%%)\r", (int)samples, (int)samples);
+  else
+    mxinfo("progress: %d/%d seconds (%d%%)\r",
+           (int)(bytes_processed / bps), (int)samples,
+           (int)(bytes_processed * 100L / bps / samples));
 }
 
 void wav_reader_c::set_headers() {

@@ -154,7 +154,7 @@ int srt_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void srt_reader_c::display_progress() {
+void srt_reader_c::display_progress(bool) {
   mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
