@@ -49,9 +49,10 @@ extern "C" {
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>
 #include <ebml/EbmlStream.h>
+#include <ebml/EbmlVersion.h>
 #include <ebml/EbmlVoid.h>
-#include <matroska/FileKax.h>
 
+#include <matroska/FileKax.h>
 #include <matroska/KaxAttached.h>
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
@@ -1054,7 +1055,11 @@ bool extract_tracks(const char *file_name) {
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 char pbuffer[100];
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
+#if LIBEBML_VERSION >= 000603
+                c_priv.ReadData(es->I_O(), SCOPE_ALL_DATA);
+#else
                 c_priv.ReadData(es->I_O());
+#endif
                 if (ms_compat && (kax_track_type == 'v') &&
                     (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
                   alBITMAPINFOHEADER *bih =
