@@ -703,11 +703,11 @@ static void parse_compression(char *s, cue_creation_t &compression) {
     mxerror("Invalid compression option specified in '--compression %s'.\n",
             orig.c_str());
 
-  if (!strcasecmp(s, "lzo"))
+  if (!strcasecmp(s, "lzo") || !strcasecmp(s, "lzo1x"))
     compression.cues = COMPRESSION_LZO;
   else if (!strcasecmp(s, "zlib"))
     compression.cues = COMPRESSION_ZLIB;
-  else if (!strcasecmp(s, "bz2"))
+  else if (!strcasecmp(s, "bz2") || !strcasecmp(s, "bzlib"))
     compression.cues = COMPRESSION_BZ2;
   else if (!strcmp(s, "none"))
     compression.cues = COMPRESSION_NONE;
@@ -1069,7 +1069,7 @@ static void identify(const char *filename) {
 
   files.push_back(file);
 
-  verbose--;
+  verbose = 0;
   identifying = true;
   create_readers();
 
@@ -1213,7 +1213,7 @@ static void parse_args(int argc, char **argv) {
       verbose = 0;
 
     else if (!strcmp(this_arg, "-v") || !strcmp(this_arg, "--verbose"))
-      verbose = 2;
+      verbose++;
 
     else if (!strcmp(this_arg, "--title")) {
       char *tmp;
