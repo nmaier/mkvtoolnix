@@ -73,7 +73,7 @@ struct ogm_demuxer_t {
   bool headers_set;
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
-  bool headers_read;
+  bool headers_read, native_mode, skip_first_data_page;
   char *language, *title;
   vector<unsigned char *> packet_data, nh_packet_data;
   vector<int> packet_sizes, nh_packet_sizes;
@@ -85,7 +85,8 @@ struct ogm_demuxer_t {
 
   ogm_demuxer_t():
     ptzr(-1), sid(0), stype(0), serial(0), eos(0), units_processed(0),
-    vorbis_rate(0), headers_read(false), language(NULL), title(NULL) {
+    vorbis_rate(0), headers_read(false), native_mode(true),
+    skip_first_data_page(false), language(NULL), title(NULL) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
   ~ogm_demuxer_t() {
@@ -124,10 +125,12 @@ private:
   virtual int read_page(ogg_page *);
   virtual void add_new_demuxer(ogm_demuxer_t *);
   virtual void handle_new_stream(ogg_page *);
-  virtual void process_page(ogg_page *);
+  virtual void handle_new_stream_and_packets(ogg_page *); 
+ virtual void process_page(ogg_page *);
   virtual int packet_available();
   virtual int read_headers();
-  virtual void process_header_page(ogg_page *);
+  virtual void process_header_page(ogg_page *pg);
+  virtual void process_header_packets(ogm_demuxer_t *dmx);
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual void free_demuxer(int);

@@ -1,3 +1,8 @@
+2004-05-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Improved handling for OGM files. Streams that
+	are lacking the comment packet are handled better.
+
 2004-05-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Some MP3 streams are padded in the front with

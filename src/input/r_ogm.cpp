@@ -690,6 +690,16 @@ ogm_reader_c::packet_available() {
   return 1;
 }
 
+void
+ogm_reader_c::handle_new_stream_and_packets(ogg_page *og) {
+  ogm_demuxer_t *dmx;
+
+  handle_new_stream(og);
+  dmx = find_demuxer(ogg_page_serialno(og));
+  if (dmx != NULL)
+    process_header_packets(dmx);
+}
+
 /*
  * The page is the beginning of a new stream. Check the contents for known
  * stream headers. If it is a known stream and the user has requested that
@@ -794,6 +804,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       dmx->serial = ogg_page_serialno(og);
       memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
       dmx->sid = nvstreams;
+      dmx->native_mode = false;
       add_new_demuxer(dmx);
       if (video_fps < 0)
         video_fps = 10000000.0 / (float)get_uint64(&sth->time_unit);
@@ -832,6 +843,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       dmx->serial = ogg_page_serialno(og);
       memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
       dmx->sid = nastreams;
+      dmx->native_mode = false;
       add_new_demuxer(dmx);
 
       return;
@@ -850,6 +862,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       dmx->serial = ogg_page_serialno(og);
       memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
       dmx->sid = ntstreams;
+      dmx->native_mode = false;
       add_new_demuxer(dmx);
 
       return;
@@ -880,10 +893,10 @@ void
 ogm_reader_c::process_page(ogg_page *og) {
   ogm_demuxer_t *dmx;
   ogg_packet op;
-  int hdrlen, eos, i;
-  long lenbytes;
+  int duration_len, eos, i;
+  long duration;
 
-  lenbytes = 0;
+  duration = 0;
   dmx = find_demuxer(ogg_page_serialno(og));
   if (dmx == NULL)
     return;
@@ -891,6 +904,13 @@ ogm_reader_c::process_page(ogg_page *og) {
   debug_enter("ogm_reader_c::process_page");
 
   ogg_stream_pagein(&dmx->os, og);
+  if (dmx->skip_first_data_page) {
+    while (ogg_stream_packetout(&dmx->os, &op) == 1)
+      ;
+    dmx->skip_first_data_page = false;
+    return;
+  }
+
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     eos = op.e_o_s;
 
@@ -924,32 +944,35 @@ ogm_reader_c::process_page(ogg_page *og) {
     }
 #endif
 
-    hdrlen = (*op.packet & PACKET_LEN_BITS01) >> 6;
-    hdrlen |= (*op.packet & PACKET_LEN_BITS2) << 1;
-    if ((hdrlen > 0) && (op.bytes >= (hdrlen + 1)))
-      for (i = 0, lenbytes = 0; i < hdrlen; i++) {
-        lenbytes = lenbytes << 8;
-        lenbytes += *((unsigned char *)op.packet + hdrlen - i);
+    duration_len = (*op.packet & PACKET_LEN_BITS01) >> 6;
+    duration_len |= (*op.packet & PACKET_LEN_BITS2) << 1;
+    if ((duration_len > 0) && (op.bytes >= (duration_len + 1)))
+      for (i = 0, duration = 0; i < duration_len; i++) {
+        duration = duration << 8;
+        duration += *((unsigned char *)op.packet + duration_len - i);
       }
 
     if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
 
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
-        memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
+        memory_c mem(&op.packet[duration_len + 1], op.bytes - 1 -
+                     duration_len, false);
         PTZR(dmx->ptzr)->process(mem, -1, -1,
                                  (*op.packet & PACKET_IS_SYNCPOINT ?
                                   VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
-        dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
+        dmx->units_processed += (duration_len > 0 ? duration : 1);
 
       } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {
         dmx->units_processed++;
-        if (((op.bytes - 1 - hdrlen) > 2) ||
-            ((op.packet[hdrlen + 1] != ' ') &&
-             (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1]))) {
-          memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
+        if (((op.bytes - 1 - duration_len) > 2) ||
+            ((op.packet[duration_len + 1] != ' ') &&
+             (op.packet[duration_len + 1] != 0) &&
+             !iscr(op.packet[duration_len + 1]))) {
+          memory_c mem(&op.packet[duration_len + 1], op.bytes - 1 -
+                       duration_len, false);
           PTZR(dmx->ptzr)->process(mem, ogg_page_granulepos(og) * 1000000,
-                                   (int64_t)lenbytes * 1000000);
+                                   (int64_t)duration * 1000000);
         }
 
       } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
@@ -957,7 +980,8 @@ ogm_reader_c::process_page(ogg_page *og) {
         PTZR(dmx->ptzr)->process(mem);
 
       } else {
-        memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
+        memory_c mem(&op.packet[duration_len + 1], op.bytes - 1 -
+                     duration_len, false);
         PTZR(dmx->ptzr)->process(mem);
         dmx->units_processed += op.bytes - 1;
       }
@@ -973,26 +997,33 @@ ogm_reader_c::process_page(ogg_page *og) {
   debug_leave("ogm_reader_c::process_page");
 }
 
-/*
- * Search and store additional headers for the Vorbis streams.
- */
 void
 ogm_reader_c::process_header_page(ogg_page *og) {
   ogm_demuxer_t *dmx;
-  ogg_packet     op;
 
   dmx = find_demuxer(ogg_page_serialno(og));
   if (dmx == NULL)
     return;
   if (dmx->headers_read)
     return;
+  ogg_stream_pagein(&dmx->os, og);
+  process_header_packets(dmx);
+}
+
+/*
+ * Search and store additional headers for the Ogg streams.
+ */
+void
+ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
+  ogg_packet op;
+
+  if (dmx->headers_read)
+    return;
 
   if (dmx->stype == OGM_STREAM_TYPE_FLAC) {
 #if defined HAVE_FLAC_FORMAT_H
-    ogg_stream_pagein(&dmx->os, og);
     while ((dmx->packet_data.size() < dmx->flac_header_packets) &&
            (ogg_stream_packetout(&dmx->os, &op) == 1)) {
-//     while (ogg_stream_packetout(&dmx->os, &op) == 1) {
       dmx->packet_data.push_back((unsigned char *)
                                  safememdup(op.packet, op.bytes));
       dmx->packet_sizes.push_back(op.bytes);
@@ -1010,13 +1041,15 @@ ogm_reader_c::process_header_page(ogg_page *og) {
     return;
   }
 
-  ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
-    if ((dmx->stype != OGM_STREAM_TYPE_VORBIS) &&
+    if (((dmx->stype != OGM_STREAM_TYPE_VORBIS) || !dmx->native_mode) &&
         ((op.packet[0] & PACKET_TYPE_BITS) != 1)) {
-      mxverb(2, "ogm_reader: Missing header/comment packets for %d.\n",
-             dmx->serial);
+      mxwarn("ogm_reader: Missing header/comment packets for stream %d in "
+             "'%s'. This file is broken but should be muxed correctly. If "
+             "not please contact the author Moritz Bunkus "
+             "<moritz@bunkus.org>.\n", dmx->serial, ti->fname);
       dmx->headers_read = true;
+      dmx->skip_first_data_page = true;
       return;
     }
     dmx->packet_data.push_back((unsigned char *)
@@ -1049,7 +1082,7 @@ ogm_reader_c::read_headers() {
 
     // Is this the first page of a new stream?
     if (ogg_page_bos(&og))
-      handle_new_stream(&og);
+      handle_new_stream_and_packets(&og);
     else {                // No, so check if it's still a header page.
       bos_pages_read = 1;
       process_header_page(&og);
