@@ -67,7 +67,6 @@ mpeg_es_reader_c::probe_file(mm_io_c *mm_io,
       if (i < num_read) {
         value <<= 8;
         value |= buf[i];
-        i++;
       }
     }
     safefree(buf);
