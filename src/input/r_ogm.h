@@ -73,7 +73,7 @@ struct ogm_demuxer_t {
   bool headers_set;
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
-  bool headers_read, native_mode, skip_first_data_page;
+  bool headers_read, native_mode;
   char *language, *title;
   vector<unsigned char *> packet_data, nh_packet_data;
   vector<int> packet_sizes, nh_packet_sizes;
@@ -86,7 +86,7 @@ struct ogm_demuxer_t {
   ogm_demuxer_t():
     ptzr(-1), sid(0), stype(0), serial(0), eos(0), units_processed(0),
     vorbis_rate(0), headers_read(false), native_mode(true),
-    skip_first_data_page(false), language(NULL), title(NULL) {
+    language(NULL), title(NULL) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
   ~ogm_demuxer_t() {

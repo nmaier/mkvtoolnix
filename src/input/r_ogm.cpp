@@ -904,13 +904,6 @@ ogm_reader_c::process_page(ogg_page *og) {
   debug_enter("ogm_reader_c::process_page");
 
   ogg_stream_pagein(&dmx->os, og);
-  if (dmx->skip_first_data_page) {
-    while (ogg_stream_packetout(&dmx->os, &op) == 1)
-      ;
-    dmx->skip_first_data_page = false;
-    return;
-  }
-
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     eos = op.e_o_s;
 
@@ -1049,7 +1042,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
              "not please contact the author Moritz Bunkus "
              "<moritz@bunkus.org>.\n", dmx->serial, ti->fname);
       dmx->headers_read = true;
-      dmx->skip_first_data_page = true;
+      ogg_stream_reset(&dmx->os);
       return;
     }
     dmx->packet_data.push_back((unsigned char *)
