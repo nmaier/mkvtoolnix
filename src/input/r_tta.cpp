@@ -144,7 +144,7 @@ tta_reader_c::read(generic_packetizer_c *,
     samples_left = (double)get_uint32(&header.data_length) -
       (seek_points.size() - 1) * TTA_FRAME_TIME *
       get_uint32(&header.sample_rate);
-    mxverb(2, "tta: samples_left %lf\n", samples_left);
+    mxverb(2, "tta: samples_left %f\n", samples_left);
 
     PTZR0->process(mem, -1, irnd(samples_left * 1000000000.0l /
                                  get_uint32(&header.sample_rate)));

@@ -243,7 +243,6 @@ video_packetizer_c::flush() {
 void
 video_packetizer_c::extract_mpeg4_aspect_ratio(memory_c &mem) {
   uint32_t num, den;
-  bit_cursor_c bits(mem.data, mem.size);
 
   aspect_ratio_extracted = true;
   if (ti->aspect_ratio_given || ti->display_dimensions_given)
