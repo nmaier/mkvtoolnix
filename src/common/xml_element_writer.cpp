@@ -46,7 +46,7 @@ print_binary(int level,
 
   ascii_only = true;
   for (i = 0; i < size; i++)
-    if ((p[i] < ' ') || (p[i] > 127)) {
+    if ((p[i] != '\n') && (p[i] != '\r') && ((p[i] < ' ') || (p[i] >= 127))) {
       ascii_only = false;
       break;
     }
