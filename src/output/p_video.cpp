@@ -69,7 +69,8 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
              !strncmp(ncodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
     is_mpeg4 = true;
 
-  is_mpeg1_2 = !strcmp(ncodec_id, "V_MPEG1") || !strcmp(ncodec_id, "V_MPEG2");
+  is_mpeg1_2 = (ncodec_id != NULL) &&
+    (!strcmp(ncodec_id, "V_MPEG1") || !strcmp(ncodec_id, "V_MPEG2"));
 
   if (ncodec_id != NULL)
     set_codec_id(ncodec_id);
