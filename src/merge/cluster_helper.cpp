@@ -163,7 +163,8 @@ cluster_helper_c::add_packet(packet_t *packet) {
       if ((header_overhead + additional_size + bytes_in_file) >= split_after)
         split = true;
 
-    } else if ((packet->assigned_timecode - first_timecode_in_file) >=
+    } else if ((0 <= first_timecode_in_file) && 
+               (packet->assigned_timecode - first_timecode_in_file) >=
                (split_after * 1000000ull))
       split = true;
 

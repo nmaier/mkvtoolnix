@@ -1,5 +1,8 @@
 2005-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Splitting by time was broken for audio-only
+	files.
+
 	* mkvmerge: bug fix: The --fourcc switch was not working.
 
 2005-03-16  Moritz Bunkus  <moritz@bunkus.org>

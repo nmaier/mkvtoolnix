@@ -636,7 +636,8 @@ render_headers(mm_io_c *rout) {
       for (i = 0; i < packetizers.size(); i++)
         if (packetizers[i].packetizer != NULL)
           packetizers[i].packetizer->fix_headers();
-    }
+    } else
+      set_timecode_scale();
 
     kax_infos->Render(*rout, true);
     kax_sh_main->IndexThis(*kax_infos, *kax_segment);
