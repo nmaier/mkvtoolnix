@@ -148,10 +148,13 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
     throw exception();
+
+  file_name = safestrdup(path);
 }
 
 mm_io_c::mm_io_c() {
   file = NULL;
+  safefree(file_name);
 }
 
 mm_io_c::~mm_io_c() {
