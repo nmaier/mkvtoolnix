@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.15 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: common.cpp,v 1.16 2003/05/08 18:42:18 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -119,18 +119,18 @@ int utf8_init(char *charset) {
     if (!strcmp(mkv_convs[i].charset, lc_charset))
       return i;
 
-  ict_to_utf8 = iconv_open("UTF8", lc_charset);
+  ict_to_utf8 = iconv_open("UTF-8", lc_charset);
   if (ict_to_utf8 == (iconv_t)(-1))
     fprintf(stdout, "Warning: Could not initialize the iconv library for "
-            "the conversion from %s to UFT8. "
+            "the conversion from %s to UFT-8. "
             "Some strings will not be converted to UTF-8 and the resulting "
             "Matroska file might not comply with the Matroska specs ("
             "error: %d, %s).\n", lc_charset, errno, strerror(errno));
 
-  ict_from_utf8 = iconv_open(lc_charset, "UTF8");
+  ict_from_utf8 = iconv_open(lc_charset, "UTF-8");
   if (ict_from_utf8 == (iconv_t)(-1))
     fprintf(stdout, "Warning: Could not initialize the iconv library for "
-            "the conversion from UFT8 to %s. "
+            "the conversion from UFT-8 to %s. "
             "Some strings cannot be converted from UTF-8 and might be "
             "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
             strerror(errno));
