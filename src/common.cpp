@@ -667,26 +667,6 @@ UTFstring cstr_to_UTFstring(const char *c) {
 #endif
 }
 
-static string make_utf8_locale(const char *old_locale) {
-  string s = old_locale, at;
-  int pos;
-
-  pos = s.find('@');
-  if (pos >= 0) {
-    at = s.substr(pos);
-    s.erase(pos);
-  }
-
-  pos = s.find('.');
-  if (pos >= 0)
-    s.erase(pos);
-
-  s += ".UTF-8";
-  s += at;
-
-  return s;
-}
-
 UTFstring cstrutf8_to_UTFstring(const char *c) {
   wchar_t *new_string;
   int slen, dlen, src, dst;
