@@ -46,6 +46,7 @@
 #define MKV_A_REAL_COOK  "A_REAL/COOK"
 #define MKV_A_REAL_SIPR  "A_REAL/SIPR"
 #define MKV_A_REAL_ATRC  "A_REAL/ATRC"
+#define MKV_A_FLAC       "A_FLAC"
 
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 #define MKV_V_REALV1     "V_REAL/RV10"

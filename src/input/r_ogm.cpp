@@ -45,6 +45,11 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_textsubs.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
+#if defined(HAVE_FLAC_FORMAT_H)
+#include "p_flac.h"
+#endif
+
+#define BUFFER_SIZE 4096
 
 #if defined(HAVE_FLAC_FORMAT_H)
 #define FPFX "flac_header_extraction: "
@@ -52,38 +57,35 @@ extern "C" {                    // for BITMAPINFOHEADER
 static FLAC__StreamDecoderReadStatus
 fhe_read_cb(const FLAC__StreamDecoder *decoder, FLAC__byte buffer[],
             unsigned *bytes, void *client_data) {
-  unsigned int num, bytes_left;
   flac_header_extractor_c *fhe;
+  ogg_packet op;
 
   fhe = (flac_header_extractor_c *)client_data;
-
-  bytes_left = fhe->mem->get_size() - fhe->mem->getFilePointer();
-  mxverb(2, FPFX "read cb, left %u\n", bytes_left);
-  if (bytes_left == 0)
+  if (fhe->done)
     return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
-
-  if (fhe->first_packet) {
-    memcpy(buffer, "fLaC", 4);
-    *bytes = 4;
-    fhe->first_packet = false;
-    return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
+  if (ogg_stream_packetout(&fhe->os, &op) != 1) {
+    if (!fhe->read_page() || (ogg_stream_packetout(&fhe->os, &op) != 1))
+      return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
   }
 
-  num = *bytes;
-  if (num > bytes_left)
-    num = bytes_left;
-  fhe->mem->read((unsigned char *)buffer, num);
-  *bytes = num;
+  if (*bytes < op.bytes)
+    mxerror(FPFX "bytes (%u) < op.bytes (%u). Could not read the FLAC "
+            "headers.\n", *bytes, op.bytes);
+  memcpy(buffer, op.packet, op.bytes);
+  *bytes = op.bytes;
+  fhe->num_packets++;
+  mxverb(2, FPFX "read packet number %lld with %u bytes\n", fhe->num_packets,
+         op.bytes);
 
   return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
 
 static FLAC__StreamDecoderWriteStatus
 fhe_write_cb(const FLAC__StreamDecoder *, const FLAC__Frame *,
-             const FLAC__int32 * const [], void *) {
-
+             const FLAC__int32 * const [], void *client_data) {
   mxverb(2, FPFX "write cb\n");
 
+  ((flac_header_extractor_c *)client_data)->done = true;
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
@@ -93,7 +95,33 @@ static void fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
   flac_header_extractor_c *fhe;
 
   fhe = (flac_header_extractor_c *)client_data;
+  fhe->num_header_packets = fhe->num_packets;
   mxverb(2, FPFX "metadata cb\n");
+  switch (metadata->type) {
+    case FLAC__METADATA_TYPE_STREAMINFO:
+      mxverb(2, FPFX "STREAMINFO block (%u bytes):\n", metadata->length);
+      mxverb(2, FPFX "  sample_rate: %u Hz\n",
+             metadata->data.stream_info.sample_rate);
+      fhe->sample_rate = metadata->data.stream_info.sample_rate;
+      mxverb(2, FPFX "  channels: %u\n", metadata->data.stream_info.channels);
+      fhe->channels = metadata->data.stream_info.channels;
+      mxverb(2, FPFX "  bits_per_sample: %u\n",
+             metadata->data.stream_info.bits_per_sample);
+      fhe->bits_per_sample = metadata->data.stream_info.bits_per_sample;
+      fhe->metadata_parsed = true;
+      break;
+    default:
+      mxverb(2, "%s (%u) block (%u bytes)\n",
+             metadata->type == FLAC__METADATA_TYPE_PADDING ? "PADDING" :
+             metadata->type == FLAC__METADATA_TYPE_APPLICATION ?
+             "APPLICATION" :
+             metadata->type == FLAC__METADATA_TYPE_SEEKTABLE ? "SEEKTABLE" :
+             metadata->type == FLAC__METADATA_TYPE_VORBIS_COMMENT ?
+             "VORBIS COMMENT" :
+             metadata->type == FLAC__METADATA_TYPE_CUESHEET ? "CUESHEET" :
+             "UNDEFINED", metadata->type, metadata->length);
+      break;
+  }
 }
 
 static void fhe_error_cb(const FLAC__StreamDecoder *,
@@ -101,8 +129,11 @@ static void fhe_error_cb(const FLAC__StreamDecoder *,
   mxverb(2, FPFX "error (%d)\n", (int)status);
 }
 
-flac_header_extractor_c::flac_header_extractor_c():
-  metadata_parsed(false), first_packet(true), mem(NULL) {
+flac_header_extractor_c::flac_header_extractor_c(const char *file_name,
+                                                 int64_t nsid):
+  metadata_parsed(false), sid(nsid), num_packets(0), num_header_packets(0),
+  done(false) {
+  file = new mm_io_c(file_name, MODE_READ);
   decoder = FLAC__stream_decoder_new();
   if (decoder == NULL)
     mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
@@ -115,34 +146,66 @@ flac_header_extractor_c::flac_header_extractor_c():
     mxerror(FPFX "Could not set the metadata callback.\n");
   if (!FLAC__stream_decoder_set_error_callback(decoder, fhe_error_cb))
     mxerror(FPFX "Could not set the error callback.\n");
+  if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
+    mxerror(FPFX "Could not set metadata_respond_all.\n");
   if (FLAC__stream_decoder_init(decoder) !=
       FLAC__STREAM_DECODER_SEARCH_FOR_METADATA)
     mxerror(FPFX "Could not initialize the FLAC decoder.\n");
+  ogg_sync_init(&oy);
 }
 
 flac_header_extractor_c::~flac_header_extractor_c() {
   FLAC__stream_decoder_reset(decoder);
   FLAC__stream_decoder_delete(decoder);
-  if (mem != NULL)
-    delete mem;
+  ogg_sync_clear(&oy);
+  ogg_stream_clear(&os);
+  delete file;
 }
 
-bool flac_header_extractor_c::extract(unsigned char *new_mem, int size) {
-  if (mem != NULL)
-    delete mem;
-  mem = new mm_mem_io_c(new_mem, size);
+bool flac_header_extractor_c::extract() {
+  int result;
 
   mxverb(2, FPFX "extract\n");
-  while (!mem->eof()) {
-    int result =
-      (int)FLAC__stream_decoder_process_single(decoder);
-    mxverb(2, FPFX "extract, result: %d\n", result);
-           
+  if (!read_page()) {
+    mxverb(2, FPFX "read_page() failed.\n");
+    return false;
   }
-  delete mem;
-  mem = NULL;
+  while (!done) {
+    result = (int)FLAC__stream_decoder_process_single(decoder);
+    mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: %u\n",
+           result, metadata_parsed, num_header_packets);
+  }
 
   return metadata_parsed;
+}
+
+bool flac_header_extractor_c::read_page() {
+  int np, nread;
+  unsigned char *buf;
+
+  while (1) {
+    np = ogg_sync_pageseek(&oy, &og);
+
+    if (np <= 0) {
+      if (np < 0)
+        return false;
+      buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
+      if (!buf)
+        return false;
+
+      if ((nread = file->read(buf, BUFFER_SIZE)) <= 0)
+        return false;
+
+      ogg_sync_wrote(&oy, nread);
+    } else if (ogg_page_serialno(&og) == sid)
+      break;
+  }
+
+  if (ogg_page_bos(&og))
+    ogg_stream_init(&os, sid);
+  ogg_stream_pagein(&os, &og);
+
+  return true;
 }
 #endif // HAVE_FLAC_FORMAT_H
 
@@ -228,8 +291,6 @@ ogm_demuxer_t *ogm_reader_c::find_demuxer(int serialno) {
 
   return NULL;
 }
-
-#define BUFFER_SIZE 4096
 
 void ogm_reader_c::free_demuxer(int idx) {
   if (idx >= num_sdemuxers)
@@ -448,6 +509,45 @@ void ogm_reader_c::create_packetizers() {
 
         break;
 
+#if defined(HAVE_FLAC_FORMAT_H)
+      case OGM_STREAM_TYPE_FLAC:
+        try {
+          unsigned char *buf;
+          int size;
+
+          size = 0;
+          for (i = 1; i < (int)dmx->packet_sizes.size(); i++)
+            size += dmx->packet_sizes[i];
+          buf = (unsigned char *)safemalloc(size);
+          size = 0;
+          for (i = 1; i < (int)dmx->packet_sizes.size(); i++) {
+            memcpy(&buf[size], dmx->packet_data[i], dmx->packet_sizes[i]);
+            size += dmx->packet_sizes[i];
+          }
+          dmx->packetizer =
+            new flac_packetizer_c(this, dmx->vorbis_rate, dmx->channels,
+                                  dmx->bits_per_sample, buf, size, ti);
+          safefree(buf);
+
+        } catch (error_c &error) {
+          mxwarn("ogm_reader: could not initialize the "
+                 "FLAC packetizer for stream id %d. Will try to "
+                 "continue and ignore this stream.\n", dmx->serial);
+          free_demuxer(i);
+          continue;
+        }
+
+        if (verbose)
+          mxinfo("OGG/OGM demultiplexer (%s): using the FLAC "
+                 "output module for stream %d.\n", ti->fname, dmx->serial);
+
+        break;
+#endif
+      default:
+        die("ogm_reader: Don't know how to create a packetizer for stream "
+            "type %d.\n", (int)dmx->stype);
+        break;
+
     }
     i++;
   }
@@ -529,18 +629,28 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       delete dmx;
       return;
     }
-#if !defined(HAVE_FLAC_FORMAT_H)
-    mxerror("mkvmerge has not been compiled with FLAC support but handling "
-            "of this stream has been requested.\n");
-#endif
-    mxerror("mkvmerge does not yet support FLAC but handling "
-            "of this stream has been requested.\n");
-
     dmx->stype = OGM_STREAM_TYPE_FLAC;
     dmx->serial = ogg_page_serialno(og);
     memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
     dmx->sid = nastreams;
     add_new_demuxer(dmx);
+
+#if !defined(HAVE_FLAC_FORMAT_H)
+    mxerror("mkvmerge has not been compiled with FLAC support but handling "
+            "of this stream has been requested.\n");
+#else
+    dmx->fhe = new flac_header_extractor_c(ti->fname, dmx->serial);
+    if (!dmx->fhe->extract())
+      mxerror("ogm_reader: Could not read the FLAC header packets for "
+              "stream id %d.\n", dmx->sid);
+    dmx->flac_header_packets = dmx->fhe->num_header_packets;
+    dmx->vorbis_rate = dmx->fhe->sample_rate;
+    dmx->channels = dmx->fhe->channels;
+    dmx->bits_per_sample = dmx->fhe->bits_per_sample;
+    dmx->last_granulepos = 0;
+    dmx->units_processed = 1;
+    delete dmx->fhe;
+#endif
 
     return;
   }
@@ -656,6 +766,37 @@ void ogm_reader_c::process_page(ogg_page *og) {
 
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
+    eos = op.e_o_s;
+
+#if defined(HAVE_FLAC_FORMAT_H)
+    if (dmx->stype == OGM_STREAM_TYPE_FLAC) {
+      dmx->units_processed++;
+      if (dmx->units_processed <= dmx->flac_header_packets)
+        continue;
+      for (i = 0; i < (int)dmx->nh_packet_data.size(); i++) {
+        dmx->packetizer->process(dmx->nh_packet_data[i],
+                                 dmx->nh_packet_sizes[i], 0);
+        safefree(dmx->nh_packet_data[i]);
+      }
+      dmx->nh_packet_data.clear();
+      if (dmx->last_granulepos == -1)
+        dmx->packetizer->process(op.packet, op.bytes, -1);
+      else {
+        dmx->packetizer->process(op.packet, op.bytes, dmx->last_granulepos *
+                                 1000 / dmx->vorbis_rate);
+        dmx->last_granulepos = ogg_page_granulepos(og);
+      }
+
+      if (eos) {
+        dmx->eos = 1;
+        debug_leave("ogm_reader_c::process_page");
+        return;
+      }
+
+      continue;
+    }
+#endif
+
     hdrlen = (*op.packet & PACKET_LEN_BITS01) >> 6;
     hdrlen |= (*op.packet & PACKET_LEN_BITS2) << 1;
     if ((hdrlen > 0) && (op.bytes >= (hdrlen + 1)))
@@ -664,13 +805,10 @@ void ogm_reader_c::process_page(ogg_page *og) {
         lenbytes += *((unsigned char *)op.packet + hdrlen - i);
       }
 
-    eos = op.e_o_s;
-
     if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
 
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
-//         flags = hdrlen > 0 ? lenbytes : 1;
         dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                                  -1, -1,
                                  (*op.packet & PACKET_IS_SYNCPOINT ?
@@ -720,13 +858,27 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
     if (dmx->headers_read)
       return;
 #if defined HAVE_FLAC_FORMAT_H
-    if (dmx->fhe.extract(op.packet, op.bytes))
+    ogg_stream_pagein(&dmx->os, og);
+    while ((dmx->packet_data.size() < dmx->flac_header_packets) &&
+           (ogg_stream_packetout(&dmx->os, &op) == 1)) {
+//     while (ogg_stream_packetout(&dmx->os, &op) == 1) {
+      dmx->packet_data.push_back((unsigned char *)
+                                 safememdup(op.packet, op.bytes));
+      dmx->packet_sizes.push_back(op.bytes);
+    }
+    if (dmx->packet_data.size() >= dmx->flac_header_packets)
       dmx->headers_read = true;
+    while (ogg_stream_packetout(&dmx->os, &op) == 1) {
+      dmx->nh_packet_data.push_back((unsigned char *)
+                                    safememdup(op.packet, op.bytes));
+      dmx->nh_packet_sizes.push_back(op.bytes);
+    }
 #else
     dmx->headers_read = true;
-    return;
 #endif
+    return;
   }
+
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     dmx->packet_data.push_back((unsigned char *)

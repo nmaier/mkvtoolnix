@@ -66,6 +66,9 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_aac.h"
 #include "p_ac3.h"
 #include "p_dts.h"
+#if defined(HAVE_FLAC_FORMAT_H)
+#include "p_flac.h"
+#endif
 #include "p_mp3.h"
 #include "p_passthrough.h"
 #include "p_pcm.h"
@@ -498,7 +501,15 @@ void kax_reader_c::verify_tracks() {
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
           else if (!strncmp(t->codec_id, MKV_A_REAL_COOK, strlen("A_REAL/")))
             t->a_formattag = FOURCC('r', 'e', 'a', 'l');
-          else {
+          else if (!strcmp(t->codec_id, MKV_A_FLAC)) {
+#if defined(HAVE_FLAC_FORMAT_H)
+            t->a_formattag = FOURCC('f', 'L', 'a', 'C');
+#else
+            mxwarn(PFX "mkvmerge was not compiled with FLAC support. "
+                   "Ignoring track %u.\n", t->tnum);
+            continue;
+#endif
+          } else {
             if (verbose)
               mxwarn(PFX "Unknown/unsupported audio "
                      "codec ID '%s' for track %u.\n", t->codec_id, t->tnum);
@@ -1370,6 +1381,19 @@ void kax_reader_c::create_packetizers() {
             if (verbose)
               mxinfo("+-> Using the generic audio output module for stream "
                      "%u (CodecID: %s).\n", t->tnum, t->codec_id);
+#if defined(HAVE_FLAC_FORMAT_H)
+          } else if (t->a_formattag == FOURCC('f', 'L', 'a', 'C')) {
+            nti.private_data = NULL;
+            nti.private_size = 0;
+            t->packetizer =
+              new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
+                                    t->a_bps, (unsigned char *)t->private_data,
+                                    t->private_size, &nti);
+            if (verbose)
+              mxinfo("+-> Using the FLAC output module for track ID %u.\n",
+                     t->tnum);
+
+#endif
           } else
             mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
 

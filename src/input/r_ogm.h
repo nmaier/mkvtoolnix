@@ -49,14 +49,20 @@
 class flac_header_extractor_c {
 public:
   FLAC__StreamDecoder *decoder;
-  bool metadata_parsed, first_packet;
+  bool metadata_parsed;
   int channels, sample_rate, bits_per_sample;
-  mm_mem_io_c *mem;
+  mm_io_c *file;
+  ogg_stream_state os;
+  ogg_sync_state oy;
+  ogg_page og;
+  int64_t sid, num_packets, num_header_packets;
+  bool done;
 
 public:
-  flac_header_extractor_c();
+  flac_header_extractor_c(const char *file_name, int64_t nsid);
   ~flac_header_extractor_c();
-  bool extract(unsigned char *new_mem, int size);
+  bool extract();
+  bool read_page();
 };
 #endif
 
@@ -66,10 +72,12 @@ struct ogm_demuxer_t {
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
   bool headers_read;
-  vector<unsigned char *> packet_data;
-  vector<int> packet_sizes;
+  vector<unsigned char *> packet_data, nh_packet_data;
+  vector<int> packet_sizes, nh_packet_sizes;
 #if defined(HAVE_FLAC_FORMAT_H)
-  flac_header_extractor_c fhe;
+  flac_header_extractor_c *fhe;
+  int flac_header_packets, channels, bits_per_sample;
+  int64_t last_granulepos;
 #endif
 
   ogm_demuxer_t():

@@ -20,6 +20,7 @@ noinst_LIBRARIES = libmtxoutput.a
 libmtxoutput_a_SOURCES = p_aac.cpp \
 			p_ac3.cpp \
 			p_dts.cpp \
+			p_flac.cpp \
 			p_mp3.cpp \
 			p_passthrough.cpp \
 			p_pcm.cpp \
