@@ -19,7 +19,11 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
-#include <vector>
+// The Debian g++ 3.3.1 has problems in its standard C++ headers with min
+// being defined differently. So just include these files now when min
+// has not been defined yet.
+#include <limits>
+#include <iostream>
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlStream.h>
