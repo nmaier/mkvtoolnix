@@ -177,6 +177,7 @@ vorbis_packetizer_c::process(memory_c &mem,
       add_packet(mem, samples * 1000000000 / vi.rate,
                  samples_here * 1000000000 / vi.rate);
     }
+    last_samples_sum = samples;
   }
 
   // Update the number of samples we have processed so that we can
@@ -190,6 +191,7 @@ vorbis_packetizer_c::process(memory_c &mem,
 
   expected_timecode = last_timecode + last_samples_sum * 1000000000 / vi.rate +
     timecode_offset;
+  timecode += initial_displacement;
   if (initial_displacement < 0)
     expected_timecode += initial_displacement;
 
