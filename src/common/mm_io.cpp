@@ -124,6 +124,15 @@ mm_file_io_c::truncate(int64_t pos) {
 
 #else // SYS_UNIX
 
+HANDLE
+CreateFileUtf8(LPCSTR lpFileName,
+               DWORD dwDesiredAccess,
+               DWORD dwShareMode,
+               LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+               DWORD dwCreationDisposition,
+               DWORD dwFlagsAndAttributes,
+               HANDLE hTemplateFile);
+
 mm_file_io_c::mm_file_io_c(const string &path,
                            const open_mode mode) {
   DWORD access_mode, share_mode, disposition;
@@ -153,8 +162,8 @@ mm_file_io_c::mm_file_io_c(const string &path,
       throw exception();
   }
 
-  file = (void *)CreateFile(path.c_str(), access_mode, share_mode, NULL,
-                            disposition, 0, NULL);
+  file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL,
+                                disposition, 0, NULL);
   _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
     throw exception();
