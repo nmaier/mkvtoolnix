@@ -1,5 +1,8 @@
 2004-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: WAV files which contained a 'PAD ' chunk
+	before the 'data' chunk were not processed at all.
+
 	* mkvmerge: bug fix: Use 'setjmp' and 'longjmp' Instead of
 	throwing a C++ exception during the chapter parsing
 	stage. Otherwise libexpat will abort with a non-descriptive error
