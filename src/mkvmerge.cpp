@@ -43,7 +43,7 @@
 
 #include <matroska/FileKax.h>
 #include <matroska/KaxAttached.h>
-#include <matroska/KaxAttachements.h>
+#include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxClusterData.h>
@@ -741,7 +741,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
 }
 
 static void render_attachments(IOCallback *out) {
-  KaxAttachements *kax_as;
+  KaxAttachments *kax_as;
   KaxAttached *kax_a;
   KaxFileData *fdata;
   attachment_t *attch;
@@ -755,7 +755,7 @@ static void render_attachments(IOCallback *out) {
         (attachment_sizes_others > 0)))
     return;
 
-  kax_as = new KaxAttachements();
+  kax_as = new KaxAttachments();
   kax_a = NULL;
   for (i = 0; i < attachments.size(); i++) {
     attch = attachments[i];

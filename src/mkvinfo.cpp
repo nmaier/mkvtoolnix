@@ -50,7 +50,7 @@ extern "C" {
 #include <matroska/FileKax.h>
 
 #include <matroska/KaxAttached.h>
-#include <matroska/KaxAttachements.h>
+#include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
 #include <matroska/KaxChapters.h>
@@ -857,8 +857,8 @@ bool process_file(const char *file_name) {
                              "KaxTracks" :
                              (id == KaxCues::ClassInfos.GlobalId) ?
                              "KaxCues" :
-                             (id == KaxAttachements::ClassInfos.GlobalId) ?
-                             "KaxAttachements" :
+                             (id == KaxAttachments::ClassInfos.GlobalId) ?
+                             "KaxAttachments" :
                              (id == KaxChapters::ClassInfos.GlobalId) ?
                              "KaxChapters" :
                              (id == KaxTags::ClassInfos.GlobalId) ?
@@ -1360,8 +1360,8 @@ bool process_file(const char *file_name) {
         } // while (l2 != NULL)
 
         // Weee! Attachments!
-      } else if (EbmlId(*l1) == KaxAttachements::ClassInfos.GlobalId) {
-        show_element(l1, 1, "Attachements");
+      } else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId) {
+        show_element(l1, 1, "Attachments");
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,

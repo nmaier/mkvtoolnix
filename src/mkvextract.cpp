@@ -50,7 +50,7 @@ extern "C" {
 #include <ebml/EbmlVoid.h>
 #include <matroska/FileKax.h>
 
-#include <matroska/KaxAttachements.h>
+#include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
 #include <matroska/KaxChapters.h>
