@@ -127,22 +127,43 @@ get_tag_tuid(KaxTag &tag) {
   return uint64(*static_cast<EbmlUInteger *>(tuid));
 }
 
+static int64_t
+get_tag_cuid(KaxTag &tag) {
+  KaxTagTargets *targets;
+  KaxTagChapterUID *cuid;
+
+  targets = FINDFIRST(&tag, KaxTagTargets);
+  if (targets == NULL)
+    return -1;
+  cuid = FINDFIRST(targets, KaxTagChapterUID);
+  if (cuid == NULL)
+    return -1;
+  return uint64(*static_cast<EbmlUInteger *>(cuid));
+}
+
 static KaxTag *
 find_tag_for_track(int idx,
                    int64_t tuid,
+                   int64_t cuid,
                    EbmlMaster &m) {
   string sidx;
   int i;
-  int64_t tag_tuid;
+  int64_t tag_tuid, tag_cuid;
 
   sidx = mxsprintf("%d", idx);
 
   for (i = 0; i < m.ListSize(); i++)
     if (EbmlId(*m[i]) == KaxTag::ClassInfos.GlobalId) {
+      tag_cuid = get_tag_cuid(*static_cast<KaxTag *>(m[i]));
+      if ((cuid == 0) && (tag_cuid != -1) && (tag_cuid != 0))
+        continue;
+      if ((cuid > 0) && (tag_cuid != cuid))
+        continue;
       tag_tuid = get_tag_tuid(*static_cast<KaxTag *>(m[i]));
       if (((tuid == -1) || (tag_tuid == -1) || (tuid == tag_tuid)) &&
-          (get_simple_tag("TRACKNUMBER",
-                          *static_cast<EbmlMaster *>(m[i])) == sidx))
+          ((get_simple_tag("TRACKNUMBER",
+                           *static_cast<EbmlMaster *>(m[i])) == sidx) ||
+           (idx == -1)))
         return static_cast<KaxTag *>(m[i]);
     }
 
@@ -150,29 +171,16 @@ find_tag_for_track(int idx,
 }
 
 static string
-get_global_from_tags(int num_tracks,
-                     const char *name,
-                     int64_t tuid,
-                     KaxTags &tags) {
+get_global_tag(const char *name,
+               int64_t tuid,
+               KaxTags &tags) {
   KaxTag *tag;
-  string global_value, value;
-  int i;
 
-  tag = find_tag_for_track(1, tuid, tags);
-  if (tag != NULL)
-    global_value = get_simple_tag(name, *tag);
-  if (global_value == "")
+  tag = find_tag_for_track(-1, tuid, 0, tags);
+  if (tag == NULL)
     return "";
-  for (i = 2; i <= num_tracks; i++) {
-    tag = find_tag_for_track(i, tuid, tags);
-    if (tag != NULL) {
-      value = get_simple_tag(name, *tag);
-      if ((value != "") && (value != global_value))
-        return "";
-    }
-  }
 
-  return global_value;
+  return get_simple_tag(name, *tag);
 }
 
 static int64_t
@@ -197,6 +205,16 @@ get_chapter_name(KaxChapterAtom &atom) {
   if (name == NULL)
     return "";
   return UTFstring_to_cstrutf8(UTFstring(*name));
+}
+
+static int64_t
+get_chapter_uid(KaxChapterAtom &atom) {
+  KaxChapterUID *uid;
+
+  uid = FINDFIRST(&atom, KaxChapterUID);
+  if (uid == NULL)
+    return -1;
+  return uint64(*static_cast<EbmlUInteger *>(uid));
 }
 
 static int64_t
@@ -225,22 +243,25 @@ _print_if_global(mm_io_c &out,
                  KaxTags &tags) {
   string global;
 
-  global = get_global_from_tags(num_entries, name, tuid, tags);
+  global = get_global_tag(name, tuid, tags);
   if (global != "")
     out.printf(format, global.c_str());
 }
 
 #define print_if_available(name, format) \
-  _print_if_available(out, name, format, *tag)
+  _print_if_available(out, name, format, tuid, tags, *tag)
 static void
 _print_if_available(mm_io_c &out,
                     const char *name,
                     const char *format,
+                    int64_t tuid,
+                    KaxTags &tags,
                     KaxTag &tag) {
   string value;
 
   value = get_simple_tag(name, tag);
-  if (value != "")
+  if ((value != "") &&
+      (value != get_global_tag(name, tuid, tags)))
     out.printf(format, value.c_str());
 }
 
@@ -261,20 +282,20 @@ write_cuesheet(const char *file_name,
   print_if_global("DATE", "REM DATE %s\n");
   print_if_global("GENRE", "REM GENRE %s\n");
   print_if_global("DISCID", "REM DISCID %s\n");
-  print_if_global("ARTIST", "PERFORMER \"%s\"\n");
+  print_if_global("ALBUM_ARTIST", "PERFORMER \"%s\"\n");
   print_if_global("ALBUM", "TITLE \"%s\"\n");
 
   out.printf("FILE \"%s\" WAVE\n", file_name);
 
   for (i = 0; i < chapters.ListSize(); i++) {
-    out.printf(" TRACK %02d AUDIO\n", i + 1);
-    tag = find_tag_for_track(i + 1, tuid, tags);
+    KaxChapterAtom &atom =  *static_cast<KaxChapterAtom *>(chapters[i]);
+
+    out.printf("  TRACK %02d AUDIO\n", i + 1);
+    tag = find_tag_for_track(i + 1, tuid, get_chapter_uid(atom), tags);
     if (tag != NULL) {
-      KaxChapterAtom &atom = 
-        *static_cast<KaxChapterAtom *>(chapters[i]);
-      print_if_available("TITLE", "   TITLE \"%s\"\n");
-      print_if_available("ARTIST", "   PERFORMER \"%s\"\n");
-      print_if_available("ISRC", "   ISRC %s\n");
+      print_if_available("TITLE", "    TITLE \"%s\"\n");
+      print_if_available("ARTIST", "    PERFORMER \"%s\"\n");
+      print_if_available("ISRC", "    ISRC %s\n");
       index_00 = get_chapter_index(0, atom);
       index_01 = get_chapter_index(1, atom);
       if (index_01 == -1) {
@@ -283,16 +304,18 @@ write_cuesheet(const char *file_name,
           index_01 = 0;
       }
       if (index_00 != -1)
-        out.printf("   INDEX 00 %02lld:%02lld:%02lld\n", 
+        out.printf("    INDEX 00 %02lld:%02lld:%02lld\n", 
                    index_00 / 1000000 / 1000 / 60,
                    (index_00 / 1000000 / 1000) % 60,
                    irnd((double)(index_00 % 1000000000ll) * 75.0 /
                         1000000000.0));
-      out.printf("   INDEX 01 %02lld:%02lld:%02lld\n", 
+      out.printf("    INDEX 01 %02lld:%02lld:%02lld\n", 
                  index_01 / 1000000 / 1000 / 60,
                  (index_01 / 1000000 / 1000) % 60,
                  irnd((double)(index_01 % 1000000000ll) * 75.0 /
                       1000000000.0));
+      print_if_available("DATE", "    REM DATE %s\n");
+      print_if_available("GENRE", "    REM GENRE %s\n");
     }
   }
 }
