@@ -651,7 +651,7 @@ tab_input::on_add_file(wxCommandEvent &evt) {
   media_files += wxT("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
                      "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
-                     "*.srt;*.ssa;*.tta;*.wav;)|"
+                     "*.srt;*.ssa;*.tta;*.wav;*.wv)|"
                      "*.aac;*.ac3;*.ass;*.avi;*.dts;");
   if (capabilities[wxT("FLAC")] == wxT("true"))
     media_files += wxT("*.flac;");
@@ -678,7 +678,9 @@ tab_input::on_add_file(wxCommandEvent &evt) {
                      "SSA/ASS text subtitles (*.ssa;*.ass)|*.ssa;*.ass|"
                      "TTA (The lossless True Audio codec) (*.tta)|*.tta|"
                      "VobSub subtitles (*.idx)|*.idx|"
-                     "WAVE (uncompressed PCM) (*.wav)|*.wav|" ALLFILES);
+                     "WAVE (uncompressed PCM) (*.wav)|*.wav|"
+                     "WAVPACK v4 (*.wv)|*.wv|"
+                     ALLFILES);
   wxFileDialog dlg(NULL, wxT("Choose an input file"), last_open_dir, wxT(""),
                    media_files, wxOPEN);
 
