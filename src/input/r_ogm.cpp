@@ -441,7 +441,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
     ti->private_data = NULL;
     ti->private_size = 0;
     ti->id = dmx->serial;       // ID for this track.
-    ti->language = safestrdup(dmx->language);
+    ti->language = dmx->language; // safestrdup(dmx->language);
+    ti->track_name = dmx->title; // safestrdup(dmx->title);
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
@@ -661,6 +662,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
     }
     ti->language = NULL;
+    ti->track_name = NULL;
   }
 }
 
@@ -1235,6 +1237,13 @@ ogm_reader_c::handle_stream_comments() {
           safefree(dmx->language);
           dmx->language = safestrdup(iso639_2);
         }
+
+      } else if (comment[0] == "TITLE") {
+        if (!segment_title_set && (segment_title.length() == 0) &&
+            (dmx->stype == OGM_STREAM_TYPE_VIDEO))
+          segment_title = comment[1];
+        safefree(dmx->title);
+        dmx->title = safestrdup(comment[1].c_str());
 
       } else if (starts_with(comment[0], "CHAPTER"))
         chapters.push_back(comments[j]);
