@@ -31,6 +31,7 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
+                                             const char *ncodec_id,
                                              const void *nglobal_data,
                                              int nglobal_size,
                                              track_info_t *nti)
@@ -38,7 +39,8 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
   packetno = 0;
   cc_utf8 = utf8_init(ti->sub_charset);
   global_size = nglobal_size;
-  global_data = safememdup(global_data, global_size);
+  global_data = safememdup(nglobal_data, global_size);
+  codec_id = safestrdup(ncodec_id);
 
   set_track_type(track_subtitle);
 }
@@ -48,7 +50,7 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
 }
 
 void textsubs_packetizer_c::set_headers() {
-  set_codec_id(MKV_S_TEXTUTF8);
+  set_codec_id(codec_id);
   if (global_data != NULL)
     set_codec_private((unsigned char *)global_data, global_size);
 

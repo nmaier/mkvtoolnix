@@ -30,11 +30,12 @@ private:
   int packetno, cc_utf8;
   void *global_data;
   int global_size;
+  char *codec_id;
 
 public:
-  textsubs_packetizer_c(generic_reader_c *nreader, const void *nglobal_data,
-                        int nglobal_size, track_info_t *nti)
-    throw (error_c);
+  textsubs_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
+                        const void *nglobal_data, int nglobal_size,
+                        track_info_t *nti) throw (error_c);
   virtual ~textsubs_packetizer_c();
 
   virtual int  process(unsigned char *_subs, int size, int64_t start = -1,

@@ -36,6 +36,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "common.h"
 #include "pr_generic.h"
 #include "ogmstreams.h"
+#include "matroska.h"
 #include "r_ogm.h"
 #include "p_vorbis.h"
 #include "p_video.h"
@@ -341,7 +342,8 @@ void ogm_reader_c::create_packetizers() {
 
       case OGM_STREAM_TYPE_TEXT:
         try {
-          dmx->packetizer = new textsubs_packetizer_c(this, NULL, 0, ti);
+          dmx->packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8,
+                                                      NULL, 0, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize the "
                   "text subtitles packetizer for stream id %d. Will try to "

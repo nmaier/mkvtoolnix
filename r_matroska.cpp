@@ -1002,6 +1002,17 @@ void mkv_reader_c::create_packetizers() {
           }
           break;
 
+        case 's':
+          nti.sub_charset = "UTF-8";
+          t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
+                                                    t->private_data,
+                                                    t->private_size, &nti);
+          if (verbose)
+            fprintf(stdout, "Matroska demultiplexer (%s): using the text "
+                    "subtitle output module for track ID %u.\n", ti->fname,
+                    t->tnum);
+          break;
+
         default:
           fprintf(stderr, "Error: matroska_reader: Unsupported track type "
                   "for track %d.\n", t->tnum);
@@ -1136,7 +1147,7 @@ int mkv_reader_c::read() {
             } // while (l3 != NULL)
 
             if (block != NULL) {
-              if ((block_track->type == 't') && (block_duration == -1)) {
+              if ((block_track->type == 's') && (block_duration == -1)) {
                 fprintf(stdout, "Warning: Text subtitle block does not "
                         "contain a block duration element. This file is "
                         "broken.\n");
@@ -1157,10 +1168,21 @@ int mkv_reader_c::read() {
 
               for (i = 0; i < (int)block->NumberFrames(); i++) {
                 DataBuffer &data = block->GetBuffer(i);
-                block_track->packetizer->process((unsigned char *)
-                                                 data.Buffer(), data.Size(),
-                                                 (int64_t)last_timecode,
-                                                 block_duration, bref, fref);
+                if (block_track->type == 's') {
+                  char *lines;
+
+                  lines = (char *)safemalloc(data.Size() + 1);
+                  lines[data.Size()] = 0;
+                  memcpy(lines, data.Buffer(), data.Size());
+                  block_track->packetizer->process((unsigned char *)lines, 0,
+                                                   (int64_t)last_timecode,
+                                                   block_duration, bref, fref);
+                  safefree(lines);
+                } else
+                  block_track->packetizer->process((unsigned char *)
+                                                   data.Buffer(), data.Size(),
+                                                   (int64_t)last_timecode,
+                                                   block_duration, bref, fref);
               }
               block_track->units_processed += block->NumberFrames();
 
