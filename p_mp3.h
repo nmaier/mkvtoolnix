@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.h,v 1.14 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: p_mp3.h,v 1.15 2003/05/11 12:41:53 mosu Exp $
     \brief class definition for the MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,7 +30,7 @@ private:
   int64_t bytes_output, packetno;
   unsigned long  samples_per_sec;
   int channels, buffer_size;
-  unsigned char *tempbuf, *packet_buffer;
+  unsigned char *packet_buffer;
 
 public:
   mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.40 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.41 2003/05/11 12:41:53 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -79,6 +79,7 @@ class generic_packetizer_c {
 protected:
   deque<packet_t *> packet_queue;
   generic_reader_c *reader;
+  bool duplicate_data;
 
   track_info_t *ti;
   int64_t free_refs;
@@ -107,6 +108,7 @@ public:
 
   virtual int read();
 
+  virtual void duplicate_data_on_add(bool duplicate);
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
                           int64_t duration, int duration_mandatory = 0,
                           int64_t bref = -1, int64_t fref = -1);

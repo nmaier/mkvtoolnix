@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.40 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.41 2003/05/11 12:41:53 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,6 +33,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
   reader = nreader;
   add_packetizer(this);
+  duplicate_data = true;
 
   track_entry = NULL;
   ti = duplicate_track_info(nti);
@@ -333,6 +334,10 @@ void generic_packetizer_c::set_headers() {
   }
 }
 
+void generic_packetizer_c::duplicate_data_on_add(bool duplicate) {
+  duplicate_data = duplicate;
+}
+
 void generic_packetizer_c::add_packet(unsigned char  *data, int length,
                                       int64_t timecode,
                                       int64_t duration, int duration_mandatory,
@@ -346,7 +351,10 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
-  pack->data = (unsigned char *)safememdup(data, length);
+  if (duplicate_data)
+    pack->data = (unsigned char *)safememdup(data, length);
+  else
+    pack->data = data;
   pack->length = length;
   pack->timecode = timecode;
   pack->bref = bref;

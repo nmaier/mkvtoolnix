@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.24 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.25 2003/05/11 12:41:53 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -42,6 +42,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   packetno = 0;
 
   set_track_type(track_audio);
+  duplicate_data_on_add(false);
 }
 
 mp3_packetizer_c::~mp3_packetizer_c() {
@@ -166,6 +167,8 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 
   add_to_buffer(buf, size);
   while ((packet = get_mp3_packet(&header, &mp3header)) != NULL) {
+    packetno++;
+
     if ((4 - ((header >> 17) & 3)) != 3) {
       fprintf(stdout, "Warning: p_mp3: packet is not a valid MP3 packet (" \
               "packet number %lld)\n", packetno);
@@ -180,8 +183,6 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 
     add_packet(packet, mp3header.framesize + 4, my_timecode,
                (int64_t)(1000.0 * 1152 * ti->async.linear / samples_per_sec));
-    packetno++;
-    safefree(packet);
   }
 
   return EMOREDATA;

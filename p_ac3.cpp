@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.21 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.22 2003/05/11 12:41:53 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -42,6 +42,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   channels = nchannels;
 
   set_track_type(track_audio);
+  duplicate_data_on_add(false);
 }
 
 ac3_packetizer_c::~ac3_packetizer_c() {
@@ -171,7 +172,6 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
     add_packet(packet, ac3header.bytes, my_timecode,
                (int64_t)(1000.0 * 1536 * ti->async.linear / samples_per_sec));
     packetno++;
-    safefree(packet);
   }
 
   return EMOREDATA;
