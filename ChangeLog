@@ -1,5 +1,8 @@
 2003-08-12  Moritz Bunkus  <moritz@bunkus.org>
 
+        * all tools: Fixed a bug which would only allow Matroska files up
+        to 4GB to be read.
+
         * mkvinfo: Unknown elements are properly skipped now.
 
 2003-08-11  Moritz Bunkus  <moritz@bunkus.org>

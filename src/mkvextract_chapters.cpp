@@ -109,7 +109,7 @@ void extract_chapters(const char *file_name, bool chapter_format_simple) {
 
     while (1) {
       // Next element must be a segment
-      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
         show_error("No segment/level 0 element found.");
         return;

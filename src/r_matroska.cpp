@@ -549,7 +549,7 @@ int kax_reader_c::read_headers() {
     es = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
     if (l0 == NULL) {
       mxprint(stderr, "Error: matroska_reader: no EBML head found.\n");
       return 0;
@@ -562,7 +562,7 @@ int kax_reader_c::read_headers() {
       mxprint(stdout, "matroska_reader: Found the head...\n");
 
     // Next element must be a segment
-    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
     if (l0 == NULL) {
       if (verbose)
         mxprint(stdout, "matroska_reader: No segment found.\n");
