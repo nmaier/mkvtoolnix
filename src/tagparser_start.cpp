@@ -44,41 +44,6 @@ using namespace libmatroska;
   if (FindChild<c>(*p) != NULL) \
     tperror_oneinstance();
 
-template <typename Type>Type &GetEmptyChild(EbmlMaster &master) {
-  EbmlElement *e;
-
-  e = master.FindFirstElt(Type::ClassInfos, true);
-  try {
-    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
-    if (m != NULL)
-      while (m->ListSize() > 0) {
-        delete (*m)[0];
-        m->Remove(0);
-      }
-  } catch (...) {
-  }
-
-	return *(static_cast<Type *>(e));
-}
-
-template <typename Type>Type &GetNextEmptyChild(EbmlMaster &master,
-                                                const Type &past_elt) {
-  EbmlElement *e;
-
-  e = master.FindNextElt(past_elt, true);
-  try {
-    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
-    if (m != NULL)
-      while (m->ListSize() > 0) {
-        delete (*m)[0];
-        m->Remove(0);
-      }
-  } catch (...) {
-  }
-
-	return *(static_cast<Type *>(e));
-}
-
 static bool is_multicomment(parser_data_t *pdata, const char *name,
                             EbmlElement *parent_elt) {
   string parent_name;

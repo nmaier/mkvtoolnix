@@ -248,7 +248,7 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
 
 static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
   uint32_t i;
-  EbmlMaster *dst;
+  EbmlMaster *dst, *m;
 
   dst = static_cast<EbmlMaster *>(&src->Generic().Create());
   while (dst->ListSize() > 0) {
@@ -261,10 +261,9 @@ static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
     EbmlElement *e;
 
     e = (*src)[i];
-    try {
-      EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
+    if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL)
       dst->PushElement(*copy_chapters_recursive(m));
-    } catch (...) {
+    else {
       if (is_id(KaxChapterUID)) {
         KaxChapterUID *esrc, *edst;
         edst = new KaxChapterUID;
@@ -323,6 +322,7 @@ static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
 
 static void set_chapter_mandatory_elements(EbmlMaster *m) {
   uint32_t i;
+  EbmlMaster *new_m;
 
   if (EbmlId(*m) == KaxChapterTrack::ClassInfos.GlobalId) {
     KaxChapterTrackNumber *tnumber;
@@ -337,16 +337,9 @@ static void set_chapter_mandatory_elements(EbmlMaster *m) {
       *static_cast<EbmlString *>(lang) = "eng";
   }
 
-  for (i = 0; i < m->ListSize(); i++) {
-    EbmlElement *e;
-
-    e = (*m)[i];
-    try {
-      EbmlMaster *new_m = &dynamic_cast<EbmlMaster &>(*e);
+  for (i = 0; i < m->ListSize(); i++)
+    if ((new_m = dynamic_cast<EbmlMaster *>((*m)[i])) != NULL)
       set_chapter_mandatory_elements(new_m);
-    } catch (...) {
-    }
-  }
 }
 
 KaxChapters *copy_chapters(KaxChapters *source) {

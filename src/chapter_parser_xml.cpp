@@ -61,24 +61,6 @@ typedef struct {
   cperror(pdata, "Only one instance of <%s> is allowed under <%s>.", name, \
           parent_name)
 
-template <typename Type>Type &CreateEmptyChild(EbmlMaster &master) {
-  EbmlElement *e;
-
-  e = new Type;
-  try {
-    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
-    if (m != NULL)
-      while (m->ListSize() > 0) {
-        delete (*m)[0];
-        m->Remove(0);
-      }
-    master.PushElement(*m);
-  } catch (...) {
-  }
-
-	return *(static_cast<Type *>(e));
-}
-
 static void cperror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
   string new_fmt;
@@ -217,7 +199,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    catom = &CreateEmptyChild<KaxChapterAtom>(*m);
+    catom = &GetEmptyChild<KaxChapterAtom>(*m);
     pdata->parents->push_back(catom);
 
     cuid = &GetChild<KaxChapterUID>(*catom);
@@ -278,7 +260,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
     if (m->FindFirstElt(KaxChapterTrack::ClassInfos, false) != NULL)
       cperror_oneinstance();
 
-    ct = &CreateEmptyChild<KaxChapterTrack>(*m);
+    ct = &GetEmptyChild<KaxChapterTrack>(*m);
     pdata->parents->push_back(ct);
 
   } else if (!strcmp(name, "ChapterDisplay")) {
@@ -288,7 +270,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    cd = &CreateEmptyChild<KaxChapterDisplay>(*m);
+    cd = &GetEmptyChild<KaxChapterDisplay>(*m);
     pdata->parents->push_back(cd);
 
   } else if (!strcmp(name, "ChapterTrackNumber")) {

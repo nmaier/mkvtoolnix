@@ -465,6 +465,7 @@ void sort_master(EbmlMaster &m) {
   int i, sp_idx;
   vector<EbmlElement *> tmp;
   int64_t smallest_pos;
+  EbmlMaster *m2;
 
   while (m.ListSize() > 0) {
     sp_idx = 0;
@@ -482,11 +483,8 @@ void sort_master(EbmlMaster &m) {
 
   for (i = 0; i < tmp.size(); i++) {
     m.PushElement(*tmp[i]);
-    try {
-      EbmlMaster *m2 = &dynamic_cast<EbmlMaster &>(*tmp[i]);
+    if ((m2 = dynamic_cast<EbmlMaster *>(tmp[i])) != NULL)
       sort_master(*m2);
-    } catch(...) {
-    }
   }
 }
 
