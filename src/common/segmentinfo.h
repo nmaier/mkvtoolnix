@@ -14,23 +14,18 @@
    Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __INFOS_H
-#define __INFOS_H
+#ifndef __SEGMENTINFO_H
+#define __SEGMENTINFO_H
 
 #include <stdio.h>
 
 #include "ebml/EbmlElement.h"
 
+#include "matroska/KaxInfoData.h"
+#include "matroska/KaxSegment.h"
+
 #include "common.h"
 #include "mm_io.h"
-
-namespace libebml {
-  class EbmlMaster;
-};
-
-namespace libmatroska {
-  class KaxSegment;
-};
 
 using namespace libebml;
 using namespace libmatroska;
@@ -44,5 +39,5 @@ KaxSegment *MTX_DLL_API parse_xml_segmentinfo(mm_text_io_c *in,
 
 void MTX_DLL_API fix_mandatory_segmentinfo_elements(EbmlElement *e);
 
-#endif // __INFOS_H
+#endif // __SEGMENTINFO_H
 

@@ -88,8 +88,8 @@ probe_xml_segmentinfos(mm_text_io_c *in) {
 }
 
 KaxSegment *
-parse_xml_segmentinfos(mm_text_io_c *in,
-                       bool exception_on_error) {
+parse_xml_segmentinfo(mm_text_io_c *in,
+                      bool exception_on_error) {
   KaxSegment *segment;
   EbmlMaster *m;
   string error;
@@ -108,7 +108,7 @@ parse_xml_segmentinfos(mm_text_io_c *in,
 
   try {
     m = parse_xml_elements("Info", segmentinfo_elements, in);
-    //    segment = dynamic_cast<KaxSegment *>(sort_ebml_master(m));
+    segment = dynamic_cast<KaxSegment *>(sort_ebml_master(m));
     assert(segment != NULL);
   } catch (error_c e) {
     if (!exception_on_error)
@@ -123,7 +123,7 @@ parse_xml_segmentinfos(mm_text_io_c *in,
   if (error.length() > 0)
     throw error_c(error);
 
-  //  fix_mandatory_segmentsegmentinfo_elements(dynamic_cast<EbmlElement*>(segment));
+  fix_mandatory_segmentinfo_elements(segment);
 
   return segment;
 }
