@@ -21,6 +21,7 @@
 #include <matroska/KaxTracks.h>
 
 #include "common.h"
+#include "smart_pointers.h"
 
 using namespace libmatroska;
 
@@ -36,17 +37,20 @@ enum compression_method_e {
 
 extern const char *MTX_DLL_API xcompression_methods[];
 
-class MTX_DLL_API compression_c {
+class compressor_c;
+typedef counted_ptr<compressor_c> compressor_ptr;
+
+class MTX_DLL_API compressor_c {
 protected:
   compression_method_e method;
   int64_t raw_size, compressed_size, items;
 
 public:
-  compression_c(compression_method_e _method):
+  compressor_c(compression_method_e _method):
     method(_method), raw_size(0), compressed_size(0), items(0) {
   };
 
-  virtual ~compression_c();
+  virtual ~compressor_c();
 
   compression_method_e get_method() {
     return method;
@@ -60,20 +64,20 @@ public:
     return (unsigned char *)safememdup(buffer, size);
   };
 
-  static compression_c *create(compression_method_e method);
-  static compression_c *create(const char *method);
+  static compressor_ptr create(compression_method_e method);
+  static compressor_ptr create(const char *method);
 };
 
 #if defined(HAVE_LZO1X_H)
 #include <lzo1x.h>
 
-class MTX_DLL_API lzo_compression_c: public compression_c {
+class MTX_DLL_API lzo_compressor_c: public compressor_c {
 protected:
   lzo_byte *wrkmem;
 
 public:
-  lzo_compression_c();
-  virtual ~lzo_compression_c();
+  lzo_compressor_c();
+  virtual ~lzo_compressor_c();
 
   virtual unsigned char *decompress(unsigned char *buffer, int &size);
   virtual unsigned char *compress(unsigned char *buffer, int &size);
@@ -83,10 +87,10 @@ public:
 #if defined(HAVE_ZLIB_H)
 #include <zlib.h>
 
-class MTX_DLL_API zlib_compression_c: public compression_c {
+class MTX_DLL_API zlib_compressor_c: public compressor_c {
 public:
-  zlib_compression_c();
-  virtual ~zlib_compression_c();
+  zlib_compressor_c();
+  virtual ~zlib_compressor_c();
 
   virtual unsigned char *decompress(unsigned char *buffer, int &size);
   virtual unsigned char *compress(unsigned char *buffer, int &size);
@@ -96,10 +100,10 @@ public:
 #if defined(HAVE_BZLIB_H)
 #include <bzlib.h>
 
-class MTX_DLL_API bzlib_compression_c: public compression_c {
+class MTX_DLL_API bzlib_compressor_c: public compressor_c {
 public:
-  bzlib_compression_c();
-  virtual ~bzlib_compression_c();
+  bzlib_compressor_c();
+  virtual ~bzlib_compressor_c();
 
   virtual unsigned char *decompress(unsigned char *buffer, int &size);
   virtual unsigned char *compress(unsigned char *buffer, int &size);
@@ -124,7 +128,7 @@ enum content_encoding_scope_e {
 class MTX_DLL_API content_decoder_c {
 protected:
   vector<kax_content_encoding_t> encodings;
-  auto_ptr<compression_c> zlib_compressor, bzlib_compressor, lzo1x_compressor;
+  auto_ptr<compressor_c> zlib_compressor, bzlib_compressor, lzo1x_compressor;
   bool ok;
 
 public:

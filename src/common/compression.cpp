@@ -30,8 +30,8 @@ const char *compression_methods[] = {
 #if defined(HAVE_LZO1X_H)
 #include <lzoutil.h>
 
-lzo_compression_c::lzo_compression_c():
-  compression_c(COMPRESSION_LZO) {
+lzo_compressor_c::lzo_compressor_c():
+  compressor_c(COMPRESSION_LZO) {
   int result;
 
   if ((result = lzo_init()) != LZO_E_OK)
@@ -41,21 +41,21 @@ lzo_compression_c::lzo_compression_c():
     mxerror("lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n");
 }
 
-lzo_compression_c::~lzo_compression_c() {
+lzo_compressor_c::~lzo_compressor_c() {
   safefree(wrkmem);
 }
 
 unsigned char *
-lzo_compression_c::decompress(unsigned char *buffer,
-                              int &size) {
-  die("lzo_compression_c::decompress() not implemented\n");
+lzo_compressor_c::decompress(unsigned char *buffer,
+                             int &size) {
+  die("lzo_compressor_c::decompress() not implemented\n");
 
   return NULL;
 }
 
 unsigned char *
-lzo_compression_c::compress(unsigned char *buffer,
-                            int &size) {
+lzo_compressor_c::compress(unsigned char *buffer,
+                           int &size) {
   unsigned char *dst;
   int result, dstsize;
 
@@ -67,7 +67,7 @@ lzo_compression_c::compress(unsigned char *buffer,
     mxerror("LZO compression failed. Result: %d\n", result);
   dstsize = lzo_dstsize;
 
-  mxverb(3, "lzo_compression_c: Compression from %d to %d, %d%%\n",
+  mxverb(3, "lzo_compressor_c: Compression from %d to %d, %d%%\n",
          size, dstsize, dstsize * 100 / size);
 
   raw_size += size;
@@ -83,16 +83,16 @@ lzo_compression_c::compress(unsigned char *buffer,
 #endif // HAVE_LZO1X_H
 
 #if defined(HAVE_ZLIB_H)
-zlib_compression_c::zlib_compression_c():
-  compression_c(COMPRESSION_ZLIB) {
+zlib_compressor_c::zlib_compressor_c():
+  compressor_c(COMPRESSION_ZLIB) {
 }
 
-zlib_compression_c::~zlib_compression_c() {
+zlib_compressor_c::~zlib_compressor_c() {
 }
 
 unsigned char *
-zlib_compression_c::decompress(unsigned char *buffer,
-                               int &size) {
+zlib_compressor_c::decompress(unsigned char *buffer,
+                              int &size) {
   int result, dstsize, n;
   unsigned char *dst;
   z_stream d_stream;
@@ -122,7 +122,7 @@ zlib_compression_c::decompress(unsigned char *buffer,
   dstsize = d_stream.total_out;
   inflateEnd(&d_stream);
 
-  mxverb(3, "zlib_compression_c: Decompression from %d to %d, %d%%\n",
+  mxverb(3, "zlib_compressor_c: Decompression from %d to %d, %d%%\n",
          size, dstsize, dstsize * 100 / size);
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
@@ -132,8 +132,8 @@ zlib_compression_c::decompress(unsigned char *buffer,
 }
 
 unsigned char *
-zlib_compression_c::compress(unsigned char *buffer,
-                             int &size) {
+zlib_compressor_c::compress(unsigned char *buffer,
+                            int &size) {
   int result, dstsize, n;
   unsigned char *dst;
   z_stream c_stream;
@@ -161,7 +161,7 @@ zlib_compression_c::compress(unsigned char *buffer,
   dstsize = c_stream.total_out;
   deflateEnd(&c_stream);
 
-  mxverb(3, "zlib_compression_c: Compression from %d to %d, %d%%\n",
+  mxverb(3, "zlib_compressor_c: Compression from %d to %d, %d%%\n",
          size, dstsize, dstsize * 100 / size);
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
@@ -173,20 +173,20 @@ zlib_compression_c::compress(unsigned char *buffer,
 #endif // HAVE_ZLIB_H
 
 #if defined(HAVE_BZLIB_H)
-bzlib_compression_c::bzlib_compression_c():
-  compression_c(COMPRESSION_BZ2) {
+bzlib_compressor_c::bzlib_compressor_c():
+  compressor_c(COMPRESSION_BZ2) {
 }
 
-bzlib_compression_c::~bzlib_compression_c() {
+bzlib_compressor_c::~bzlib_compressor_c() {
 }
 
 unsigned char *
-bzlib_compression_c::decompress(unsigned char *buffer,
-                                int &size) {
+bzlib_compressor_c::decompress(unsigned char *buffer,
+                               int &size) {
   int result;
   bz_stream d_stream;
 
-  die("bzlib_compression_c::decompress() not implemented\n");
+  die("bzlib_compressor_c::decompress() not implemented\n");
 
   d_stream.bzalloc = NULL;
   d_stream.bzfree = NULL;
@@ -201,8 +201,8 @@ bzlib_compression_c::decompress(unsigned char *buffer,
 }
 
 unsigned char *
-bzlib_compression_c::compress(unsigned char *buffer,
-                              int &size) {
+bzlib_compressor_c::compress(unsigned char *buffer,
+                             int &size) {
   unsigned char *dst;
   int result, dstsize;
   bz_stream c_stream;
@@ -227,7 +227,7 @@ bzlib_compression_c::compress(unsigned char *buffer,
 
   dstsize = 2 * size - c_stream.avail_out;
 
-  mxverb(3, "bzlib_compression_c: Compression from %d to %d, %d%%\n",
+  mxverb(3, "bzlib_compressor_c: Compression from %d to %d, %d%%\n",
          size, dstsize, dstsize * 100 / size);
 
   raw_size += size;
@@ -244,7 +244,7 @@ bzlib_compression_c::compress(unsigned char *buffer,
 
 #endif // HAVE_BZLIB_H
 
-compression_c::~compression_c() {
+compressor_c::~compressor_c() {
   if (items != 0)
     mxverb(2, "compression: Overall stats: raw size: %lld, compressed "
            "size: %lld, items: %lld, ratio: %.2f%%, avg bytes per item: "
@@ -252,36 +252,36 @@ compression_c::~compression_c() {
            compressed_size * 100.0 / raw_size, compressed_size / items);
 }
 
-compression_c *
-compression_c::create(compression_method_e method) {
+compressor_ptr
+compressor_c::create(compression_method_e method) {
   if ((method <= COMPRESSION_UNSPECIFIED) ||
       (method > COMPRESSION_NUM))
-    return NULL;
+    return compressor_ptr();
 
   return create(compression_methods[method]);
 }
 
-compression_c *
-compression_c::create(const char *method) {
+compressor_ptr
+compressor_c::create(const char *method) {
 #if defined(HAVE_LZO1X_H)
   if (!strcasecmp(method, compression_methods[COMPRESSION_LZO]))
-    return new lzo_compression_c();
+    return compressor_ptr(new lzo_compressor_c());
 #endif // HAVE_LZO1X_H
 
 #if defined(HAVE_ZLIB_H)
   if (!strcasecmp(method, compression_methods[COMPRESSION_ZLIB]))
-    return new zlib_compression_c();
+    return compressor_ptr(new zlib_compressor_c());
 #endif // HAVE_ZLIB_H
 
 #if defined(HAVE_BZLIB_H)
   if (!strcasecmp(method, compression_methods[COMPRESSION_BZ2]))
-    return new bzlib_compression_c();
+    return compressor_ptr(new bzlib_compressor_c());
 #endif // HAVE_BZLIB_H
 
   if (!strcasecmp(method, "none"))
-    return new compression_c(COMPRESSION_NONE);
+    return compressor_ptr(new compressor_c(COMPRESSION_NONE));
 
-  return NULL;
+  return compressor_ptr();
 }
 
 // ------------------------------------------------------------------------
@@ -432,7 +432,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       break;
 #else
       if (NULL == zlib_compressor.get())
-        zlib_compressor = auto_ptr<compression_c>(new zlib_compression_c());
+        zlib_compressor = auto_ptr<compressor_c>(new zlib_compressor_c());
 #endif
     } else if (1 == enc.comp_algo) {
 #if !defined(HAVE_BZLIB_H)
@@ -442,7 +442,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       break;
 #else
       if (NULL == bzlib_compressor.get())
-        bzlib_compressor = auto_ptr<compression_c>(new bzlib_compression_c());
+        bzlib_compressor = auto_ptr<compressor_c>(new bzlib_compressor_c());
 #endif
     } else if (enc.comp_algo == 2) {
 #if !defined(HAVE_LZO1X_H)
@@ -452,7 +452,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       break;
 #else
       if (NULL == lzo1x_compressor.get())
-        lzo1x_compressor = auto_ptr<compression_c>(new lzo_compression_c());
+        lzo1x_compressor = auto_ptr<compressor_c>(new lzo_compressor_c());
 #endif
     } else {
       mxwarn("Track %d has been compressed with an unknown/unsupported "
@@ -479,7 +479,7 @@ content_decoder_c::reverse(unsigned char *&data,
   unsigned char *new_data, *old_data;
   bool modified;
   vector<kax_content_encoding_t>::const_iterator ce;
-  compression_c *compressor;
+  compressor_c *compressor;
 
   if (!ok)
     return false;

@@ -433,7 +433,7 @@ protected:
   int hvideo_display_width, hvideo_display_height;
 
   compression_method_e hcompression;
-  counted_ptr<compression_c> compressor;
+  compressor_ptr compressor;
 
   timecode_factory_c *timecode_factory;
 

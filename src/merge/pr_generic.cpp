@@ -266,7 +266,6 @@ generic_packetizer_c::~generic_packetizer_c() {
   delete ti;
 
   safefree(hcodec_private);
-  delete timecode_factory;
 }
 
 void
@@ -772,8 +771,7 @@ generic_packetizer_c::set_headers() {
     *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) =
       hcompression - 1;
 
-    compressor =
-      counted_ptr<compression_c>(compression_c::create(hcompression));
+    compressor = compressor_c::create(hcompression);
   }
 
   if (no_lacing)
@@ -1084,7 +1082,7 @@ generic_packetizer_c::connect(generic_packetizer_c *src,
   htrack_default_duration = src->htrack_default_duration;
   huid  = src->huid;
   hcompression = src->hcompression;
-  compressor = counted_ptr<compression_c>(compression_c::create(hcompression));
+  compressor = compressor_c::create(hcompression);
   last_cue_timecode = src->last_cue_timecode;
   correction_timecode_offset = 0;
   if (_append_timecode_offset == -1)
