@@ -55,8 +55,8 @@
                    ((x>>8)  & 0x0000ff00) |\
                    ((x<<8)  & 0x00ff0000) |\
                    ((x<<24) & 0xff000000))
-# define SWAP8(x) (( (SWAP4(x)<<32) & 0xffffffff00000000ULL) |\
-                   ( SWAP4(x))
+# define SWAP8(x) (((SWAP4(x)<<32) & 0xffffffff00000000ULL) |\
+                   (SWAP4(x)))
 #else
 # define SWAP2(a) (a)
 # define SWAP4(a) (a)
