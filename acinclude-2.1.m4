@@ -319,66 +319,79 @@ AC_ARG_ENABLE(ebmltest, [  --disable-ebmltest            Do not try to compile a
 
 
   if test "x$enable_ebmltest" = "xyes" ; then
-    ac_save_CFLAGS="$CFLAGS"
+    ac_save_CXXFLAGS="$CXXFLAGS"
     ac_save_LIBS="$LIBS"
-    CFLAGS="$CFLAGS $EBML_CFLAGS"
+    CXXFLAGS="$CXXFLAGS $EBML_CFLAGS"
     LIBS="$LIBS $EBML_LIBS"
 dnl
 dnl Now check if the installed EBML is sufficiently new.
 dnl
       rm -f conf.ebmltest
+      AC_LANG_CPLUSPLUS
       AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ebml/EbmlConfig.h>
+#include <ebml/EbmlVersion.h>
+
+using namespace libebml;
 
 int main ()
 {
-  system("touch conf.ebmltest");
+  FILE *f;
+  f = fopen("conf.ebmltest", "wb");
+  if (f == NULL)
+    return 1;
+  fprintf(f, "%s\n", EbmlCodeVersion.c_str());
+  fclose(f);
   return 0;
 }
 
 ],, no_ebml=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
-       CFLAGS="$ac_save_CFLAGS"
+       AC_LANG_C
+       CXXFLAGS="$ac_save_CXXFLAGS"
        LIBS="$ac_save_LIBS"
   fi
 
-  if test "x$no_ebml" = "x" ; then
+  if test "x$no_ebml" = "x" -a -f conf.ebmltest ; then
      AC_MSG_RESULT(yes)
      ifelse([$1], , :, [$1])     
   else
      AC_MSG_RESULT(no)
-     if test -f conf.ebmltest ; then
-       :
-     else
-       echo "*** Could not run Ebml test program, checking why..."
-       CFLAGS="$CFLAGS $EBML_CFLAGS"
-       LIBS="$LIBS $EBML_LIBS"
-       AC_TRY_LINK([
-#include <stdio.h>
-#include <ebml/EbmlConfig.h>
-],     [ return 0; ],
-       [ echo "*** The test program compiled, but did not run. This usually means"
-       echo "*** that the run-time linker is not finding EBML or finding the wrong"
-       echo "*** version of EBML. If it is not finding EBML, you'll need to set your"
-       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
-       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
-       echo "*** is required on your system"
-       echo "***"
-       echo "*** If you have an old version installed, it is best to remove it, although"
-       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
-       [ echo "*** The test program failed to compile or link. See the file config.log for the"
-       echo "*** exact error that occured. This usually means EBML was incorrectly installed"
-       echo "*** or that you have moved EBML since it was installed."
-       exit 1 ])
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-     fi
-     EBML_CFLAGS=""
-     EBML_LIBS=""
-     ifelse([$2], , :, [$2])
+     exit 1
   fi
+
+  AC_MSG_CHECKING(Ebml version)
+
+  ebml_version=`cat conf.ebmltest`
+  mver_ok=`sed 's;\.;\ ;g' < conf.ebmltest | (read -a mver
+  if test ${mver[[0]]} -gt 0 ; then
+    mver_ok=1
+  elif test ${mver[[0]]} -lt 0 ; then
+    mver_ok=0
+  else
+    if test ${mver[[1]]} -gt 5 ; then
+      mver_ok=1
+    elif test ${mver[[1]]} -lt 5 ; then
+      mver_ok=0
+    else
+      if test ${mver[[2]]} -ge 1 ; then
+        mver_ok=1
+      else
+        mver_ok=0
+      fi
+    fi
+  fi
+  echo $mver_ok )`
+  if test "$mver_ok" = "1" ; then
+    AC_MSG_RESULT($ebml_version ok)
+  else
+    AC_MSG_RESULT($ebml_version too old)
+    echo '*** Your Ebml version is too old. Upgrade to at least version'
+    echo '*** 0.5.1 and re-run configure.'
+    exit 1
+  fi
+
   AC_SUBST(EBML_CFLAGS)
   AC_SUBST(EBML_LIBS)
   rm -f conf.ebmltest
@@ -497,7 +510,7 @@ int main ()
     elif test ${mver[[1]]} -lt 5 ; then
       mver_ok=0
     else
-      if test ${mver[[2]]} -ge 0 ; then
+      if test ${mver[[2]]} -ge 1 ; then
         mver_ok=1
       else
         mver_ok=0
@@ -510,7 +523,7 @@ int main ()
   else
     AC_MSG_RESULT($matroska_version too old)
     echo '*** Your Matroska version is too old. Upgrade to at least version'
-    echo '*** 0.4.3 and re-run configure.'
+    echo '*** 0.5.1 and re-run configure.'
     exit 1
   fi
 
