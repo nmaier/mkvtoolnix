@@ -1,3 +1,8 @@
+2003-11-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Quotes were missing if the timecode file's name
+	contained spaces.
+
 2003-11-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: Rewrote the SPU packet parsing code. It should not

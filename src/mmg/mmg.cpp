@@ -706,7 +706,8 @@ void mmg_dialog::update_command_line() {
       }
 
       if (t->timecodes->Length() > 0) {
-        cmdline += "--timecodes " + sid + ":" + *t->timecodes + " ";
+        cmdline += "--timecodes \"" + sid + ":" +
+          shell_escape(*t->timecodes) + "\" ";
         clargs.Add("--timecodes");
         clargs.Add(sid + ":" + *t->timecodes);
       }
