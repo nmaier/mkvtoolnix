@@ -149,8 +149,10 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
         frame.size = (bits.get_bit_position() / 8) - 4 - frame.pos;
         frames.push_back(frame);
         frame.pos = (bits.get_bit_position() / 8) - 4;
-      } else
+      } else {
         first_frame = false;
+        frame.pos = bits.get_bit_position() / 8 - 4;
+      }
       frame.type = frame_type == 0 ? 'I' : frame_type == 1 ? 'P' :
         frame_type == 2 ? 'B' : 'S';
       bits.byte_align();
@@ -174,6 +176,68 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
     else
       fit++;
   }
+}
+
+/** Find MPEG-4 part 2 configuration data in a chunk of memory
+
+   This function searches a buffer for MPEG-4 part 2 configuration data.
+   AVI files usually store this in front of every key frame. MP4 however
+   contains this only in the ESDS' decoder_config.
+
+   \param buffer The buffer to be searched.
+   \param size The size of the buffer in bytes.
+   \param data_pos This is set to the start position of the configuration
+     data inside the \c buffer if such data was found.
+   \param data_pos This is set to the length of the configuration
+     data inside the \c buffer if such data was found.
+
+   \return \c true if such configuration data was found and \c false
+     otherwise.
+*/
+bool
+mpeg4_p2_find_config_data(const unsigned char *buffer,
+                          int size,
+                          uint32_t &data_pos,
+                          uint32_t &data_size) {
+  const unsigned char *p, *end;
+  uint32_t marker;
+  bool start_found;
+
+  if (size < 5)
+    return false;
+  start_found = false;
+  mxverb(3, "\nmpeg4_config_data: start search in %d bytes\n", size);
+  marker = get_uint32_be(buffer) >> 8;
+  p = buffer + 3;
+  end = buffer + size;
+  while (p < end) {
+    marker = (marker << 8) | *p;
+    ++p;
+    if (!mpeg_is_start_code(marker))
+      continue;
+
+    mxverb(3, "mpeg4_config_data:   found start code at %d: 0x%02x\n",
+           p - buffer, marker & 0xff);
+    if (MPEGVIDEO_VOS_START_CODE == marker) {
+      start_found = true;
+      data_pos = p - 4 - buffer;
+
+    } else if (start_found &&
+               (MPEGVIDEO_VISUAL_OBJECT_START_CODE != marker) &&
+               (0x00000140 < marker)) {
+      p -= 4;
+      break;
+    }
+  }
+
+  if (start_found) {
+    data_size = p - buffer - data_pos;
+    mxverb(3, "mpeg4_config_data:   found GOOD config at %u with size %u\n",
+           data_pos, data_size);
+    return true;
+  }
+
+  return false;
 }
 
 static int64_t

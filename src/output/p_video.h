@@ -81,7 +81,7 @@ class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
   vector<video_frame_t> queued_frames;
   video_frame_t bref_frame, fref_frame;
-  bool aspect_ratio_extracted, input_is_native;
+  bool aspect_ratio_extracted, input_is_native, output_is_native;
 
 public:
   mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,

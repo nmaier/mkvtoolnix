@@ -303,14 +303,19 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             bool _input_is_native,
                             track_info_c *_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
-  aspect_ratio_extracted(false), input_is_native(_input_is_native) {
+  aspect_ratio_extracted(false), input_is_native(_input_is_native),
+  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
 
-  assert(!input_is_native);
+  if (input_is_native && !output_is_native)
+    mxerror("mkvmerge does not support muxing from native MPEG-4 to "
+            "AVI compatibility mode at the moment.\n");
 
-  if (!hack_engaged(ENGAGE_NATIVE_MPEG4) || (_fps == 0.0)) {
+  if (!output_is_native) {
     set_codec_id(MKV_V_MSCOMP);
     check_fourcc();
-  }
+
+  } else
+    set_codec_id(MKV_V_MPEG4_ASP);
 }
 
 int
@@ -326,10 +331,9 @@ mpeg4_p2_video_packetizer_c::process(memory_c &mem,
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(mem.data, mem.size);
 
-  if (!hack_engaged(ENGAGE_NATIVE_MPEG4) || (fps == 0.0)) {
-    video_packetizer_c::process(mem, old_timecode, duration, bref, fref);
-    return FILE_STATUS_MOREDATA;
-  }
+  if (!output_is_native)
+    return
+      video_packetizer_c::process(mem, old_timecode, duration, bref, fref);
 
   mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
 

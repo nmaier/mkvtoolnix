@@ -25,6 +25,13 @@
 #define MPEGVIDEO_SYSTEM_HEADER_START_CODE        0x000001bb
 #define MPEGVIDEO_MPEG_PROGRAM_END_CODE           0x000001b9
 
+/** Start code for a MPEG-4 part 2 visual object sequence start marker */
+#define MPEGVIDEO_VOS_START_CODE                  0x000001b0
+/** Start code for a MPEG-4 part 2 visual object sequence end marker */
+#define MPEGVIDEO_VOS_END_CODE                    0x000001b1
+/** Start code for a MPEG-4 part 2 visual object marker */
+#define MPEGVIDEO_VISUAL_OBJECT_START_CODE        0x000001b5
+
 #define MPEGVIDEO_START_CODE_PREFIX               0x000001
 #define MPEGVIDEO_PROGRAM_STREAM_MAP              0xbc
 #define MPEGVIDEO_PRIVATE_STREAM_1                0xbd
@@ -124,6 +131,9 @@ bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer, int size,
 void MTX_DLL_API mpeg4_p2_find_frame_types(const unsigned char *buffer,
                                            int size,
                                            vector<video_frame_t> &frames);
+bool MTX_DLL_API mpeg4_p2_find_config_data(const unsigned char *buffer,
+                                           int size, uint32_t &data_pos,
+                                           uint32_t &data_size);
 
 bool MTX_DLL_API mpeg4_p10_extract_par(const uint8_t *buffer, int buf_size,
                                        uint32_t &par_num, uint32_t &par_den);
