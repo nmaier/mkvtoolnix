@@ -864,6 +864,90 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "Reference priority: %u",
                              uint32(priority));
 
+              } else if (EbmlId(*l3) == KaxSlices::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Slices");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, false, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el > 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTimeSlice::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Time slice");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, false,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el > 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxSliceLaceNumber::ClassInfos.GlobalId) {
+                        KaxSliceLaceNumber slace_number =
+                          *static_cast<KaxSliceLaceNumber *>(l5);
+                        slace_number.ReadData(es->I_O());
+                        show_element(l5, 5, "Lace number: %u",
+                                     uint32(slace_number));
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxSliceFrameNumber::ClassInfos.GlobalId) {
+                        KaxSliceFrameNumber sframe_number =
+                          *static_cast<KaxSliceFrameNumber *>(l5);
+                        sframe_number.ReadData(es->I_O());
+                        show_element(l5, 5, "Frame number: %u",
+                                     uint32(sframe_number));
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxSliceDelay::ClassInfos.GlobalId) {
+                        KaxSliceDelay sdelay =
+                          *static_cast<KaxSliceDelay *>(l5);
+                        sdelay.ReadData(es->I_O());
+                        show_element(l5, 5, "Delay: %.3fms",
+                                     ((float)uint64(sdelay)) * tc_scale /
+                                     1000000.0);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxSliceDuration::ClassInfos.GlobalId) {
+                        KaxSliceDuration sduration =
+                          *static_cast<KaxSliceDuration *>(l5);
+                        sduration.ReadData(es->I_O());
+                        show_element(l5, 5, "Duration: %.3fms",
+                                     ((float)uint64(sduration)) * tc_scale /
+                                     1000000.0);
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL, true,
+                                               1);
+
+                    } // while (l5 != NULL)
+
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
               } else if (!is_ebmlvoid(l3, 3))
                 show_unknown_element(l3, 3);
 

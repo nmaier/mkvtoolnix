@@ -1,6 +1,8 @@
 2003-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvinfo: Support for KaxSegmentFilename and KaxTitle.
+        * mkvinfo: Support for KaxSegmentFilename, KaxTitle, KaxSlices,
+        KaxTimeSlice, KaxSliceLaceNumber, KaxSliceFrameNumber,
+        KaxSliceDelay and KaxSliceDuration.
 
 2003-06-22  Moritz Bunkus  <moritz@bunkus.org>
 
