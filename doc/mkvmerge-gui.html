@@ -91,6 +91,9 @@
         muxing settings
        </a>
       </li>
+      <li>
+       <a href="mkvmerge-gui.html#jobqueue">Queueing several jobs</a>
+      </li>
      </ol>
     </li>
     <li>
@@ -320,7 +323,12 @@
 
   <p>Depending on the type of the currently selected track (audio, video,
    subtitles) and even depending on the contents of the track only a subset of
-   all the track specific options are available. The options are:</p>
+   all the track specific options are available. <b>Note:</b> Unless
+   overridden by the user <i>mkvmerge</i> will either copy track settings from
+   the input file if the source format supports such information, or it will
+   use sensitive default values.</p>
+
+  <p>The available options are:</p>
 
   <table width="100%" border="0">
    <tr>
@@ -345,20 +353,26 @@
        explanation of tracks can be found in <a
        href="mkvmerge.html"><i>mkvmerge</i>'s documentation</a>.</li>
 
-      <li><code>Aspect ratio:</code> With this option the user can set the
-       aspect ratio that should be used upon playback. It defaults to the
-       aspect ratio that the movie was encoded with but can be changed,
-       e.g. for anamorphic encodings. The GUI expects the format to be either
-       a floating point number (e.g. '2.33') or a fraction (e.g. '16/9').
-       <br>
-       This option is only available for video tracks.</li>
-
       <li><code>FourCC:</code> Matroska does not normally store the Four-CC
        which is used in other containers to identify the codec used. Matroska
        has its own format, called <i>CodecID</i>, but it also has an AVI
        compatibility mode. In this mode the FourCC is also stored. With this
        option the FourCC can be forced to a different value. However, you
        cannot change the <i>CodecID</i> used by <i>mkvmerge</i>.
+       <br>
+       This option is only available for video tracks.</li>
+
+      <li><code>Aspect ratio:</code> With this option the user can set the
+       aspect ratio that should be used upon playback. It defaults to the
+       aspect ratio that the movie was encoded with but can be changed,
+       e.g. for anamorphic encodings. The GUI expects the format to be either
+       a floating point number (e.g. '2.33') or a fraction (e.g. '16/9').
+       <br>
+       Another possibility is to set the values for the display width and
+       display height manually. This can come in handy if you want to adjust
+       the parameters to a specific resolution. If you specify the aspect
+       ratio then <i>mkvmerge</i> will calculate the display dimensions based
+       on the size of the video track.
        <br>
        This option is only available for video tracks.</li>
 
@@ -387,6 +401,17 @@
        in case this is not true the user can select the correct charset.
        <br>
        This option is only available for text subtitle tracks.</li>
+
+      <li><code>Compression:</code> Matroska features a powerful system for
+       compressing tracks with lossless compression algorithms. Those
+       compressions can be applied to any given track, but some players only
+       support this for VobSub tracks. This is where it's most useful. Other
+       tracks, especially audio and video tracks, are already compressed so
+       that additional compression will not yield any result. For VobSubs you
+       can achieve an additional gain of about 30% if you enable zlib
+       compression. That's why it is the default for VobSub tracks.
+       <br>
+       You should just leave this setting at <i>default</i>.</li>
 
       <li><code>Make default track:</code> Matroska knows a flag which tells
        the player that a specific track should be preferred upon playback if
@@ -559,9 +584,9 @@
       last file has left off. This way the absolute time is kept even if the
       previous files are not available (e.g. when streaming). If no linking is
       used then the time codes should start at 0 for each file. By default
-      <i>mkvmerge</i> uses file linking. If you don't want that you
-      can turn it off by enabling this <code>Don't link</code>
-      check box.</p>
+      <i>mkvmerge</i> does not use file linking because some players still
+      don't handle linked files properly. If you want linking that you can
+      turn it on by enabling this <code>link files</code> check box.</p>
 
      <h4><a name="global_link">3.5.3. Manual file/segment linking</a></h4>
 
@@ -629,8 +654,7 @@
 
      <p>If everything has been set up correctly <i>mmg</i> will show the
       muxing dialog. The progress is shown at the top, as is a general
-      description of what <i>mkvmerge</i> is doing at the moment (muxing, 1st
-      pass of splitting files or 2nd pass of splitting files).</p>
+      description of what <i>mkvmerge</i> is doing at the moment.</p>
 
      <p><i>mkvmerge</i> knows three different 'severity levels' for its
       messages: status reports, warnings and errors. All status report
@@ -676,6 +700,72 @@
    usually not used by other programs. You can also associate this extension
    with <i>mmg</i> so that it automatically loads the settings if it is called
    with the name of such a settings file.</p>
+
+  <h3><a name="jobqueue">3.8. Queueing several jobs</a></h3>
+
+  <p>For the case that you have several files that you want to mux you don't
+   have to prepare the first file, wait for it to finish muxing, prepare the
+   second, wait for it to finish muxing etc. <i>mkvmerge GUI</i> contains a
+   job manager which can queue complete jobs and run them one after another at
+   your conveniance. The basic steps when using the job manager are:</p>
+
+  <p>
+   <ol>
+    <li>Add all files, set all the options, set the output file name.</li>
+    <li>Hit the <code>Add to job queue</code> button and select a title that
+     this job will be referred under.</li>
+    <li>Repeat as often as wanted.</li>
+    <li>Bring up the job manager window by selecting <code>Manage jobs</code>
+     from the <code>Muxing</code> menu.</li>
+    <li>Hit the <code>Start</code> button.</li>
+    <li>Get something to drink, go shopping or talk to your significant other
+     ;)</li>
+   </ol>
+  </p>
+
+  <table width="100%" border="0">
+   <tr>
+    <td valign="top">
+     <p>Each job has six attributes: an ID which is automatically chosen my
+      <i>mkvmerge GUI</i>; its status (<code>pending</code> - it hasn't been
+      muxed yet, <code>done</code> - muxing has completed successfully,
+      <code>done with warnings</code> - muxing has completed successfully but
+      there were warnings, <code>failed</code> - the muxing process failed);
+      the name that you've entered before; the time and date on which the job
+      was added to the job queue; the time and date when the muxing process
+      was started for this job and the time and date when the muxing process
+      finished.</p>
+
+     <p>The general controls are located at the bottom. The <code>Start</code>
+      button will start the muxing process for all jobs whose status is
+      <code>pending</code>. The <code>Start selected</code> button will start
+      the muxing process for all jobs that are currently selected independent
+      of their status.</p>
+
+     <p>The buttons on the right manipulate all selected jobs. The
+      <code>Up</code> and <code>Down</code> move the selected jobs up and down
+      in the list. The <code>Re-enable</code> button sets the jobs' status to
+      <code>pending</code> so that they will be started the next time the
+      <code>Start</code> button is pressed. The <code>Disable</code> button
+      will set the status to <code>done</code>.</p>
+
+     <p>During the muxing process <i>mkvmerge</i>'s output will not be shown
+      but saved. If you want to see a job's output you can hit the <code>View
+      log</code> button. This is useful if a job completed with warnings or if
+      it failed completely.</p>
+      
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/jobmanager.png" alt="the job management dialog">
+      <br>
+      <font size="-1">The job management dialog</font>
+     </p>
+    </td>
+   </tr>
+  </table>
+
 
   <hr>
 
