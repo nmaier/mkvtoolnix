@@ -79,26 +79,9 @@ unsigned char *lzo_compression_c::compress(unsigned char *buffer, int &size) {
 #if defined(HAVE_ZLIB_H)
 zlib_compression_c::zlib_compression_c():
   compression_c(COMPRESSION_ZLIB) {
-  int result;
-
-  c_stream.zalloc = (alloc_func)0;
-  c_stream.zfree = (free_func)0;
-  c_stream.opaque = (voidpf)0;
-  result = deflateInit(&c_stream, 9);
-  if (result != Z_OK)
-    mxerror("deflateInit() failed. Result: %d\n", result);
-
-  d_stream.zalloc = (alloc_func)0;
-  d_stream.zfree = (free_func)0;
-  d_stream.opaque = (voidpf)0;
-  result = inflateInit(&d_stream);
-  if (result != Z_OK)
-    mxerror("inflateInit() failed. Result: %d\n", result);
 }
 
 zlib_compression_c::~zlib_compression_c() {
-  deflateEnd(&c_stream);
-  inflateEnd(&d_stream);
 }
 
 unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
@@ -107,6 +90,13 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
   int result, dstsize;
 
   dst = (unsigned char *)safemalloc(size * 20);
+
+  d_stream.zalloc = (alloc_func)0;
+  d_stream.zfree = (free_func)0;
+  d_stream.opaque = (voidpf)0;
+  result = inflateInit(&d_stream);
+  if (result != Z_OK)
+    mxerror("inflateInit() failed. Result: %d\n", result);
 
   d_stream.next_in = (Bytef *)buffer;
   d_stream.next_out = (Bytef *)dst;
@@ -124,6 +114,8 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
   dst = (unsigned char *)saferealloc(dst, dstsize);
   size = dstsize;
 
+  inflateEnd(&d_stream);
+
   return dst;
 }
 
@@ -132,6 +124,11 @@ unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
   int result, dstsize;
 
   dst = (unsigned char *)safemalloc(size * 2);
+
+  memset(&c_stream, 0, sizeof(c_stream));
+  result = deflateInit(&c_stream, 9);
+  if (result != Z_OK)
+    mxerror("deflateInit() failed. Result: %d\n", result);
 
   c_stream.next_in = (Bytef *)buffer;
   c_stream.next_out = (Bytef *)dst;
@@ -153,6 +150,8 @@ unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
   dst = (unsigned char *)saferealloc(dst, dstsize);
   size = dstsize;
 
+  deflateEnd(&c_stream);
+
   return dst;
 }
 
@@ -161,15 +160,16 @@ unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
 #if defined(HAVE_BZLIB_H)
 bzlib_compression_c::bzlib_compression_c():
   compression_c(COMPRESSION_BZ2) {
+}
+
+bzlib_compression_c::~bzlib_compression_c() {
+}
+
+unsigned char *bzlib_compression_c::decompress(unsigned char *buffer,
+                                             int &size) {
   int result;
 
-  c_stream.bzalloc = NULL;
-  c_stream.bzfree = NULL;
-  c_stream.opaque = NULL;
-
-  result = BZ2_bzCompressInit(&c_stream, 9, 0, 30);
-  if (result != BZ_OK)
-    mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
+  die("bzlib_compression_c::decompress() not implemented\n");
 
   d_stream.bzalloc = NULL;
   d_stream.bzfree = NULL;
@@ -178,16 +178,7 @@ bzlib_compression_c::bzlib_compression_c():
   result = BZ2_bzDecompressInit(&d_stream, 0, 0);
   if (result != BZ_OK)
     mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
-}
-
-bzlib_compression_c::~bzlib_compression_c() {
-  BZ2_bzCompressEnd(&c_stream);
   BZ2_bzDecompressEnd(&d_stream);
-}
-
-unsigned char *bzlib_compression_c::decompress(unsigned char *buffer,
-                                             int &size) {
-  die("bzlib_compression_c::decompress() not implemented\n");
 
   return NULL;
 }
@@ -198,6 +189,14 @@ unsigned char *bzlib_compression_c::compress(unsigned char *buffer,
   int result, dstsize;
 
   dst = (unsigned char *)safemalloc(size * 2);
+
+  c_stream.bzalloc = NULL;
+  c_stream.bzfree = NULL;
+  c_stream.opaque = NULL;
+
+  result = BZ2_bzCompressInit(&c_stream, 9, 0, 30);
+  if (result != BZ_OK)
+    mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
 
   c_stream.next_in = (char *)buffer;
   c_stream.next_out = (char *)dst;
@@ -218,6 +217,8 @@ unsigned char *bzlib_compression_c::compress(unsigned char *buffer,
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
   size = dstsize;
+
+  BZ2_bzCompressEnd(&c_stream);
 
   return dst;
 }
