@@ -562,7 +562,7 @@ default_track_checked(char type) {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->type == type)
+    if ((tracks[i]->type == type) && tracks[i]->default_track)
       return i;
   return -1;
 }
