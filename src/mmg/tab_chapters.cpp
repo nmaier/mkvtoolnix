@@ -1089,7 +1089,7 @@ tab_chapters::on_language_code_selected(wxCommandEvent &evt) {
 
   clanguage = &GetChild<KaxChapterLanguage>(*cdisplay);
   *static_cast<EbmlString *>(clanguage) =
-    wxMB(extract_language_code(cob_language_code->GetValue()));
+    wxMB(extract_language_code(cob_language_code->GetStringSelection()));
 
   label = create_chapter_label(*t->chapter);
   tc_chapters->SetItemText(id, label);
@@ -1123,7 +1123,7 @@ tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
   if (cdisplay == NULL)
     return;
 
-  if (cob_country_code->GetValue().Length() == 0) {
+  if (cob_country_code->GetStringSelection().Length() == 0) {
     i = 0;
     while (i < cdisplay->ListSize()) {
       if (EbmlId(*(*cdisplay)[i]) == KaxChapterCountry::ClassInfos.GlobalId) {
@@ -1136,7 +1136,7 @@ tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
   }
   ccountry = &GetChild<KaxChapterCountry>(*cdisplay);
   *static_cast<EbmlString *>(ccountry) =
-    wxMB(cob_country_code->GetValue());
+    wxMB(cob_country_code->GetStringSelection());
 }
 
 void
