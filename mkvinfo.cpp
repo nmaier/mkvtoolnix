@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.22 2003/04/26 11:07:19 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.23 2003/04/26 11:26:15 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -72,7 +72,7 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 typedef struct track_t {
-  int tnum;
+  unsigned int tnum, tuid;
   char type;
   int64_t size;
 } track_t;
@@ -94,6 +94,16 @@ track_t *find_track(int tnum) {
 
   for (i = 0; i < num_tracks; i++)
     if (tracks[i]->tnum == tnum)
+      return tracks[i];
+
+  return NULL;
+}
+
+track_t *find_track_by_uid(int tuid) {
+  int i;
+
+  for (i = 0; i < num_tracks; i++)
+    if (tracks[i]->tuid == tuid)
       return tracks[i];
 
   return NULL;
@@ -283,7 +293,7 @@ void process_file() {
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
                 KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
                 tnum.ReadData(es->I_O());
-                fprintf(stdout, "(%s) |  + Track number %d", NAME,
+                fprintf(stdout, "(%s) |  + Track number: %u", NAME,
                         uint8(tnum));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
@@ -292,6 +302,17 @@ void process_file() {
                   fprintf(stdout, "(%s) |  + Warning: There's more than one "
                           "track with the number %u.\n", NAME,
                           uint8(tnum));
+
+              } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
+                KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
+                tuid.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + Track UID: %u", NAME, uint8(tuid));
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+                if (find_track_by_uid(uint8(tuid)) != NULL)
+                  fprintf(stdout, "(%s) |  + Warning: There's more than one "
+                          "track with the UID %u.\n", NAME, uint8(tuid));
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
