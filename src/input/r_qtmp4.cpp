@@ -1398,6 +1398,12 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
         double fps;
 
+        if (dmx->frame_offset_table.size() == 0)
+          mxwarn(FMT_TID "The AVC video track is missing the 'CTTS' atom for "
+                 "frame timecode offsets. Therefore the timecodes for this "
+                 "track will be wrong IF and only IF the video contains "
+                 "B frames.\n", ti->fname.c_str(), (int64_t)dmx->id);
+
         fps = 0.0;
         if ((dmx->durmap_table.size() == 1) &&
             (dmx->durmap_table[0].duration != 0)) {
