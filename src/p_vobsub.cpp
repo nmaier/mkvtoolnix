@@ -43,10 +43,10 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
   idx_data = (unsigned char *)safememdup(nidx_data, nidx_data_size);
   idx_data_size = nidx_data_size;
 
-  if (nti->compression == COMPRESSION_UNSPECIFIED)
+  if (ti->compression == COMPRESSION_UNSPECIFIED)
     compression_type = ncompression_type;
   else
-    compression_type = nti->compression;
+    compression_type = ti->compression;
   compressed_type = ncompressed_type;
 
   raw_size = 0;
@@ -54,6 +54,9 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
   items = 0;
 
   set_track_type(track_subtitle);
+
+  compressor = NULL;
+  decompressor = NULL;
 
   compression = "no";
   if (compression_type != compressed_type) {
