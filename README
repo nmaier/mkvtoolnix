@@ -70,6 +70,11 @@ video frame numbers:
 
 mencoder -dvd 1 -ovc frameno -oac pcm -o frameno.avi
 
+If you're low on disk space and can invest a bit more time then you
+tell mencoder to encode to MP3 instead:
+
+mencoder -dvd 1 -ovc frameno -oac mp3lame -lameopts br=32 -o frameno.avi
+
 b) Extract the audio again, this time to a plain WAV file:
 
 mplayer -dvd 1 -vc dummy -vo null -hardframedrop -ao pcm -aofile audio.wav
@@ -87,12 +92,13 @@ oggenc -q3 -oaudio-q3.ogg audio.wav
 
 e) Somehow calculate the bitrate for your video. Use something like...
 
-video_size = (target_size - audio-size) / 1.0115
+video_size = (target_size - audio-size) / 1.005
 video_bitrate = video_size / length / 1024 * 8
 
 target_size, audio_size in bytes
 length in seconds
-1.0115 is the overhead caused by putting the streams into an Matroska file.
+1.005 is the overhead caused by putting the streams into an Matroska file
+  (about 0.5%, that's correct ;)).
 video_bitrate will be in kbit/s
 
 f) Use the two-pass encoding for the video:
@@ -111,4 +117,4 @@ g) Merge:
 
 mkvmerge -o movie.mkv -A movie.avi audio-q3.ogg
 
--A is necessary in order to avoid copying the raw PCM audio as well.
+-A is necessary in order to avoid copying the raw PCM (or MP3) audio as well.
