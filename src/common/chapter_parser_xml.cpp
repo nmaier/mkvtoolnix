@@ -484,50 +484,6 @@ end_element(void *user_data,
 }
 
 static void
-validate_chapters(int64_t parent_start_tc,
-                  int64_t parent_end_tc,
-                  EbmlMaster &m) {
-  int i;
-  KaxChapterAtom *atom;
-  KaxChapterTimeStart *cts;
-  KaxChapterTimeEnd *cte;
-  int64_t start_tc, end_tc;
-
-  for (i = 0; i < m.ListSize(); i++) {
-    if (EbmlId(*m[i]) == KaxChapterAtom::ClassInfos.GlobalId) {
-      atom = static_cast<KaxChapterAtom *>(m[i]);
-      cts = static_cast<KaxChapterTimeStart *>
-        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
-      cte = static_cast<KaxChapterTimeEnd *>
-        (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
-
-      start_tc = uint64(*static_cast<EbmlUInteger *>(cts));
-      if (start_tc < parent_start_tc)
-        mxerror("The sub-chapter starts before its parent starts: "
-                FMT_TIMECODE " < " FMT_TIMECODE "\n",
-                ARG_TIMECODE_NS(start_tc), ARG_TIMECODE_NS(parent_start_tc));
-
-      
-      if (cte != NULL) {
-        end_tc = uint64(*static_cast<EbmlUInteger *>(cte));
-        if (end_tc < start_tc)
-          mxerror("This chapter ends before it starts: "
-                  FMT_TIMECODE " < " FMT_TIMECODE "\n",
-                  ARG_TIMECODE_NS(end_tc), ARG_TIMECODE_NS(start_tc));
-
-        if ((parent_end_tc >= 0) && (end_tc > parent_end_tc))
-          mxerror("The sub-chapter ends after its parent ends: "
-                  FMT_TIMECODE " < " FMT_TIMECODE "\n",
-                  ARG_TIMECODE_NS(parent_end_tc), ARG_TIMECODE_NS(end_tc));
-      } else
-        end_tc = -1;
-
-      validate_chapters(start_tc, end_tc, *atom);
-    }
-  }    
-}
-
-static void
 remove_entries(int64_t min_tc,
                int64_t max_tc,
                int64_t offset,
@@ -609,14 +565,11 @@ KaxChapters *
 select_chapters_in_timeframe(KaxChapters *chapters,
                              int64_t min_tc,
                              int64_t max_tc,
-                             int64_t offset,
-                             bool validate) {
+                             int64_t offset) {
   uint32_t i;
   KaxEditionEntry *eentry;
 
   for (i = 0; i < chapters->ListSize(); i++) {
-    if (validate)
-      validate_chapters(0, -1, *static_cast<EbmlMaster *>((*chapters)[i]));
     remove_entries(min_tc, max_tc, offset,
                    *static_cast<EbmlMaster *>((*chapters)[i]));
   }
@@ -693,8 +646,8 @@ parse_xml_chapters(mm_text_io_c *in,
 
     chapters = pdata->chapters;
     if (chapters != NULL) {
-      chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc, offset,
-                                              true);
+      chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc,
+                                              offset);
       if ((chapters != NULL) && !chapters->CheckMandatory())
         die("chapters->CheckMandatory() failed. Should not have happened!");
     }

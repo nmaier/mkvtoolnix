@@ -338,7 +338,8 @@ cue_entries_to_chapter_name(string &performer,
 
 typedef struct {
   int num;
-  int64_t start;
+  int64_t start_00;
+  int64_t start_01;
   int64_t end;
   int64_t min_tc;
   int64_t max_tc;
@@ -441,16 +442,68 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
 }
 
 static void
+add_subchapters_for_index_entries(cue_parser_args_t &a) {
+  KaxChapterAtom *atom;
+  KaxChapterDisplay *display;
+
+  if ((a.start_00 == -1) && (a.start_01 == -1))
+    return;
+
+  atom = NULL;
+  if (a.start_00 != -1) {
+    atom = &GetChild<KaxChapterAtom>(*a.atom);
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
+      create_unique_uint32();
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
+      a.start_00 - a.offset;
+
+    display = &GetChild<KaxChapterDisplay>(*atom);
+    *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*display)) =
+      cstrutf8_to_UTFstring("INDEX 00");
+    *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
+      "eng";
+
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterFlagHidden>(*atom)) = 1;
+  }
+
+  if (a.start_01 != -1) {
+    if (atom == NULL)
+      atom = &GetChild<KaxChapterAtom>(*a.atom);
+    else
+      atom = &GetNextChild<KaxChapterAtom>(*a.atom, *atom);
+
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
+      create_unique_uint32();
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
+      a.start_01 - a.offset;
+
+    display = &GetChild<KaxChapterDisplay>(*atom);
+    *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*display)) =
+      cstrutf8_to_UTFstring("INDEX 01");
+    *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
+      "eng";
+
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterFlagHidden>(*atom)) = 1;
+  }
+}
+
+static void
 add_elements_for_cue_entry(cue_parser_args_t &a,
                            KaxTags **tags) {
   KaxChapterDisplay *display;
   UTFstring wchar_string;
   uint32_t cuid;
+  int64_t start;
 
-  if (a.start == -1)
+  if ((a.start_00 == -1) && (a.start_01 == -1))
     mxerror("Cue sheet parser: No INDEX entry found for the previous "
             "TRACK entry (current line: %d)\n", a.line_num);
-  if (!((a.start >= a.min_tc) && ((a.start <= a.max_tc) || (a.max_tc == -1))))
+  if (a.start_01 != -1)
+    start = a.start_01;
+  else
+    start = a.start_00;
+
+  if (!((start >= a.min_tc) && ((start <= a.max_tc) || (a.max_tc == -1))))
     return;
 
   if (a.edition == NULL)
@@ -464,7 +517,7 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*a.atom)) = cuid;
 
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*a.atom)) =
-    a.start - a.offset;
+    start - a.offset;
 
   display = &GetChild<KaxChapterDisplay>(*a.atom);
 
@@ -475,6 +528,8 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
 
   *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
     a.language;
+
+  add_subchapters_for_index_entries(a);
 
   add_tag_for_cue_entry(a, tags, cuid);
 }
@@ -530,7 +585,8 @@ parse_cue_chapters(mm_text_io_c *in,
   a.edition = NULL;
   a.num = 0;
   a.line_num = 0;
-  a.start = -1;
+  a.start_00 = -1;
+  a.start_01 = -1;
   try {
     while (in->getline2(line)) {
       a.line_num++;
@@ -557,8 +613,11 @@ parse_cue_chapters(mm_text_io_c *in,
             4)
           mxerror("Cue sheet parser: Invalid INDEX entry in line %d.\n",
                   a.line_num);
-        if ((a.start == -1) || (index == 1))
-          a.start = min * 60 * 1000000000ll + sec * 1000000000ll + frames *
+        if ((a.start_00 == -1) && (index == 0))
+          a.start_00 = min * 60 * 1000000000ll + sec * 1000000000ll + frames *
+            1000000000ll / 75;
+        else if ((a.start_01 == -1) && (index == 1))
+          a.start_01 = min * 60 * 1000000000ll + sec * 1000000000ll + frames *
             1000000000ll / 75;
 
       } else if (starts_with_case(line, "track ")) {
@@ -571,7 +630,8 @@ parse_cue_chapters(mm_text_io_c *in,
 
         a.num++;
 
-        a.start = -1;
+        a.start_00 = -1;
+        a.start_01 = -1;
         a.performer = "";
         a.title = "";
         a.isrc = "";

@@ -2624,7 +2624,7 @@ finish_file(bool last_file) {
   // Render the cues.
   if (write_cues && cue_writing_requested) {
     if (verbose >= 1)
-      mxinfo(_("The cue entries (the index) is being written..."));
+      mxinfo(_("The cue entries (the index) are being written..."));
     kax_cues->Render(*out);
     if (verbose >= 1)
       mxinfo("\n");
@@ -2682,7 +2682,7 @@ finish_file(bool last_file) {
 
     chapters_here = copy_chapters(kax_chapters);
     chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
-                                                 offset, false);
+                                                 offset);
     if (chapters_here != NULL)
       kax_chapters_void->ReplaceWith(*chapters_here, *out, true, false);
     delete kax_chapters_void;

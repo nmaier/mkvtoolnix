@@ -1,5 +1,9 @@
 2004-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: The pregap from a CUE sheet is converted
+	into two sub-chapters (one for "INDEX 00", one for "INDEX
+	01"). These sub-chapters have their 'hidden' flag set.
+
 	* mkvinfo: bug fix: Fixed compilation for MATROSKA_VERSION = 2.
 
 	* mkvinfo: bug fix: Fixed compilation with gcc 3.2.

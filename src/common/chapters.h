@@ -71,7 +71,7 @@ void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters,
 KaxChapters *MTX_DLL_API copy_chapters(KaxChapters *source);
 KaxChapters *MTX_DLL_API
 select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc,
-                             int64_t max_tc, int64_t offset, bool validate);
+                             int64_t max_tc, int64_t offset);
 
 extern string MTX_DLL_API default_chapter_language, default_chapter_country;
 
