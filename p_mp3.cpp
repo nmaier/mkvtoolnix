@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.18 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.19 2003/05/03 19:41:08 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -180,7 +180,9 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
   while ((packet = get_mp3_packet(&header, &mp3header)) != NULL) {
     if ((4 - ((header >> 17) & 3)) != 3) {
       fprintf(stdout, "Warning: p_mp3: packet is not a valid MP3 packet (" \
-              "packet number %lld)\n", packetno - 2);
+              "packet number %lld)\n", packetno);
+      free(packet);
+      packetno++;
       return EMOREDATA;
     }  
 
