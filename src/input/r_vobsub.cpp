@@ -558,7 +558,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
   return deliver();
 }
 
-int
+file_status_t
 vobsub_reader_c::read(generic_packetizer_c *ptzr,
                       bool force) {
   vobsub_track_c *track;
@@ -572,7 +572,7 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr,
     }
 
   if ((track == NULL) || (track->idx >= track->entries.size()))
-    return 0;
+    return file_status_done;
 
   id = i;
   sub_file->setFilePointer(track->entries[track->idx].position);
@@ -583,9 +583,9 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr,
 
   if (track->idx >= track->entries.size()) {
     flush_packetizers();
-    return 0;
+    return file_status_done;
   } else
-    return EMOREDATA;
+    return file_status_moredata;
 }
 
 int

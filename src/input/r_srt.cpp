@@ -101,7 +101,7 @@ srt_reader_c::create_packetizer(int64_t) {
 #define STATE_SUBS_OR_NUMBER  2
 #define STATE_TIME            3
 
-int
+file_status_t
 srt_reader_c::read(generic_packetizer_c *,
                    bool) {
   int64_t start, end, previous_start;
@@ -227,7 +227,7 @@ srt_reader_c::read(generic_packetizer_c *,
 
   PTZR0->flush();
 
-  return 0;
+  return file_status_done;
 }
 
 int

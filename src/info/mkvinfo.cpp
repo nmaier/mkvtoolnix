@@ -1072,6 +1072,11 @@ def_handle(tracks) {
             *static_cast<KaxTrackFlagDefault *>(l3);
           show_element(l3, 3, "Default flag: %d", uint32(f_default));
 
+        } else if (is_id(l3, KaxTrackFlagForced)) {
+          KaxTrackFlagForced &f_forced =
+            *static_cast<KaxTrackFlagForced *>(l3);
+          show_element(l3, 3, "Forced flag: %d", uint32(f_forced));
+
         } else if (is_id(l3, KaxTrackLanguage)) {
           KaxTrackLanguage &language =
             *static_cast<KaxTrackLanguage *>(l3);

@@ -47,6 +47,7 @@
 #include "extern_data.h"
 #include "hacks.h"
 #include "iso639.h"
+#include "mkvmerge.h"
 #include "mm_io.h"
 #include "output_control.h"
 #include "tagparser.h"

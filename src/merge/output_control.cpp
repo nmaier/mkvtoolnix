@@ -67,6 +67,7 @@
 #include "common.h"
 #include "commonebml.h"
 #include "hacks.h"
+#include "mkvmerge.h"
 #include "mm_io.h"
 #include "output_control.h"
 #include "r_aac.h"
@@ -377,7 +378,8 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   memset(&pack, 0, sizeof(packetizer_t));
   pack.packetizer = packetizer;
   pack.orig_packetizer = packetizer;
-  pack.status = EMOREDATA;
+  pack.status = file_status_moredata;
+  pack.old_status = pack.status;
   pack.file = -1;
   foreach(file, files)
     if ((*file).reader == packetizer->reader) {
@@ -1560,7 +1562,7 @@ append_track(packetizer_t &ptzr,
   (*gptzr)->connect(ptzr.packetizer);
   ptzr.packetizer = *gptzr;
   ptzr.file = amap.src_file_id;
-  ptzr.status = EMOREDATA;
+  ptzr.status = file_status_moredata;
 
   // If we're dealing with a subtitle track or if the appending file contains
   // chapters then we have to do some magic. During splitting timecodes are
@@ -1639,7 +1641,8 @@ append_tracks_maybe() {
       continue;
     if (!files[ptzr->orig_file].appended_to)
       continue;
-    if ((ptzr->status == EMOREDATA) || (ptzr->status == EHOLDING))
+    if ((ptzr->status == file_status_moredata) ||
+        (ptzr->status == file_status_holding))
       continue;
     foreach(amap, append_mapping)
       if ((amap->dst_file_id == ptzr->file) &&
@@ -1674,12 +1677,12 @@ main_loop() {
     // as long we haven't already processed the last one.
     for (i = 0; i < packetizers.size(); i++) {
       ptzr = &packetizers[i];
-      if (ptzr->status == EHOLDING)
-        ptzr->status = EMOREDATA;
-      while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
+      if (ptzr->status == file_status_holding)
+        ptzr->status = file_status_moredata;
+      while ((ptzr->pack == NULL) && (ptzr->status == file_status_moredata) &&
              (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
-      if (ptzr->status != EMOREDATA)
+      if (ptzr->status != file_status_moredata)
         ptzr->packetizer->force_duration_on_last_packet();
       if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();

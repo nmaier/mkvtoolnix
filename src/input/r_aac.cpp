@@ -159,7 +159,7 @@ aac_reader_c::guess_adts_version() {
   }
 }
 
-int
+file_status_t
 aac_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
@@ -167,14 +167,14 @@ aac_reader_c::read(generic_packetizer_c *,
   nread = mm_io->read(chunk, 4096);
   if (nread <= 0) {
     PTZR0->flush();
-    return 0;
+    return file_status_done;
   }
 
   memory_c mem(chunk, nread, false);
   PTZR0->process(mem);
   bytes_processed += nread;
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 int

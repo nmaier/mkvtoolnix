@@ -192,7 +192,7 @@ aac_packetizer_c::process(memory_c &mem,
 
     if (needs_negative_displacement(duration)) {
       displace(-duration);
-      return EMOREDATA;
+      return file_status_moredata;
     }
     while (needs_positive_displacement(duration)) {
       add_packet(mem, my_timecode + ti->async.displacement, duration);
@@ -206,7 +206,7 @@ aac_packetizer_c::process(memory_c &mem,
 
     debug_leave("aac_packetizer_c::process");
 
-    return EMOREDATA;
+    return file_status_moredata;
   }
 
   byte_buffer.add(mem.data, mem.size);
@@ -226,7 +226,7 @@ aac_packetizer_c::process(memory_c &mem,
 
   debug_leave("aac_packetizer_c::process");
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

@@ -57,6 +57,12 @@ using namespace std;
 class generic_packetizer_c;
 class generic_reader_c;
 
+enum file_status_t {
+  file_status_done = 0,
+  file_status_holding,
+  file_status_moredata
+};
+
 class memory_c {
 public:
   unsigned char *data;
@@ -259,8 +265,9 @@ public:
   generic_reader_c(track_info_c *nti);
   virtual ~generic_reader_c();
 
-  virtual int read(generic_packetizer_c *ptzr, bool force = false) = 0;
-  virtual int read_all();
+  virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false)
+    = 0;
+  virtual void read_all();
   virtual int get_progress() = 0;
   virtual void set_headers();
   virtual void set_headers_for_track(int64_t tid);
@@ -335,7 +342,7 @@ public:
     throw (error_c);
   virtual ~generic_packetizer_c();
 
-  virtual int read() {
+  virtual file_status_t read() {
     return reader->read(this);
   }
   virtual void reset() {

@@ -388,7 +388,7 @@ real_reader_c::find_demuxer(int id) {
   return NULL;
 }
 
-int
+file_status_t
 real_reader_c::finish() {
   int i;
   int64_t dur;
@@ -407,14 +407,14 @@ real_reader_c::finish() {
 
   flush_packetizers();
 
-  return 0;
+  return file_status_done;
 }
 
 // }}}
 
 // {{{ FUNCTION real_reader_c::read()
 
-int
+file_status_t
 real_reader_c::read(generic_packetizer_c *,
                     bool) {
   int size;
@@ -424,7 +424,7 @@ real_reader_c::read(generic_packetizer_c *,
   rmff_frame_t *frame;
 
   if (done)
-    return 0;
+    return file_status_done;
 
   size = rmff_get_next_frame_size(file);
   if (size <= 0) {
@@ -448,7 +448,7 @@ real_reader_c::read(generic_packetizer_c *,
   dmx = find_demuxer(frame->id);
   if (dmx == NULL) {
     rmff_release_frame(frame);
-    return EMOREDATA;
+    return file_status_moredata;
   }
 
   if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO)
@@ -462,7 +462,7 @@ real_reader_c::read(generic_packetizer_c *,
 
   rmff_release_frame(frame);
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

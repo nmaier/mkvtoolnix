@@ -103,7 +103,7 @@ pcm_packetizer_c::process(memory_c &mem,
   if (skip_bytes) {
     if (skip_bytes > mem.size) {
       skip_bytes -= mem.size;
-      return EMOREDATA;
+      return file_status_moredata;
     }
     mem.size -= skip_bytes;
     new_buf = &mem.data[skip_bytes];
@@ -123,7 +123,7 @@ pcm_packetizer_c::process(memory_c &mem,
 
   debug_leave("pcm_packetizer_c::process");
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

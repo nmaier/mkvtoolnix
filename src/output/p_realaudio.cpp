@@ -96,14 +96,14 @@ ra_packetizer_c::process(memory_c &mem,
 //       skip_to_keyframe = false;
 //     else {
 //       displace(-duration);
-//       return EMOREDATA;
+//       return file_status_moredata;
 //     }
 //   }
 
 //   if (needs_negative_displacement(duration)) {
 //     skip_to_keyframe = true;
 //     displace(-duration);
-//     return EMOREDATA;
+//     return file_status_moredata;
 //   } else if (needs_positive_displacement(duration)) {
 //     if (!buffer_until_keyframe) {
 //       buffer_until_keyframe = true;
@@ -134,7 +134,7 @@ ra_packetizer_c::process(memory_c &mem,
 //       buffered_packets.push_back(mem.grab());
 //       buffered_timecodes.push_back(timecode);
 //       buffered_durations.push_back(duration);
-//       return EMOREDATA;
+//       return file_status_moredata;
 //     }
 //   }
 
@@ -143,7 +143,7 @@ ra_packetizer_c::process(memory_c &mem,
 
   debug_leave("ra_packetizer_c::process");
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

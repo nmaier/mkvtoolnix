@@ -45,7 +45,7 @@ typedef struct {
 } append_spec_t;
 
 typedef struct packetizer_t {
-  int status;
+  file_status_t status, old_status;
   packet_t *pack;
   generic_packetizer_c *packetizer, *orig_packetizer;
   int64_t file, orig_file;

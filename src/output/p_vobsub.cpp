@@ -67,12 +67,12 @@ vobsub_packetizer_c::process(memory_c &mem,
                              int64_t) {
   timecode += initial_displacement;
   if (timecode < 0)
-    return EMOREDATA;
+    return file_status_moredata;
 
   timecode = (int64_t)((float)timecode * ti->async.linear);
   add_packet(mem, timecode, duration, true);
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

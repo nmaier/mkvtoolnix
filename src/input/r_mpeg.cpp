@@ -107,24 +107,24 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   mxinfo(FMT_TID "Using the video output module.\n", ti->fname, (int64_t)0);
 }
 
-int
+file_status_t
 mpeg_es_reader_c::read(generic_packetizer_c *,
                        bool) {
   MPEGFrame *frame;
 
   if (!read_frame(m2v_parser, *mm_io)) {
     PTZR0->flush();
-    return 0;
+    return file_status_done;
   }
 
   frame = m2v_parser.ReadFrame();
   if (!frame) {
     PTZR0->flush();
-    return 0;
+    return file_status_done;
   }
 
-  mxinfo("frame size %u tc %lld 1st %lld 2nd %lld\n", frame->size, frame->timecode,
-         frame->firstRef, frame->secondRef);
+  mxinfo("frame size %u tc %lld 1st %lld 2nd %lld\n", frame->size,
+         frame->timecode, frame->firstRef, frame->secondRef);
   memory_c mem(frame->data, frame->size, true);
   PTZR0->process(mem, frame->timecode, frame->duration,
                  frame->firstRef, frame->secondRef);
@@ -134,7 +134,7 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
 
   bytes_processed = mm_io->getFilePointer();
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 bool

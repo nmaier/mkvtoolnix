@@ -84,14 +84,14 @@ textsubs_packetizer_c::process(memory_c &mem,
   end = (int64_t)(ti->async.linear * end);
 
   if (end < 0)
-    return EMOREDATA;
+    return file_status_moredata;
   else if (start < 0)
     start = 0;
 
   if (length < 0) {
     mxwarn("textsubs_packetizer: Ignoring an entry which starts after it ends."
            "\n");
-    return EMOREDATA;
+    return file_status_moredata;
   }
 
   // Count the number of lines.
@@ -138,7 +138,7 @@ textsubs_packetizer_c::process(memory_c &mem,
     add_packet(mem, start, length, true);
   }
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

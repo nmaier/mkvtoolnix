@@ -120,20 +120,20 @@ tta_reader_c::create_packetizer(int64_t) {
   mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname, (int64_t)0);
 }
 
-int
+file_status_t
 tta_reader_c::read(generic_packetizer_c *,
                    bool) {
   unsigned char *buf;
   int nread;
 
   if (pos >= seek_points.size())
-    return 0;
+    return file_status_done;
 
   buf = (unsigned char *)safemalloc(seek_points[pos]);
   nread = mm_io->read(buf, seek_points[pos]);
   if (nread <= 0) {
     PTZR0->flush();
-    return 0;
+    return file_status_done;
   }
   pos++;
 
@@ -153,9 +153,9 @@ tta_reader_c::read(generic_packetizer_c *,
   bytes_processed += nread;
 
   if (pos >= seek_points.size())
-    return 0;
+    return file_status_done;
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 int

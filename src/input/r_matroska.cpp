@@ -1814,7 +1814,7 @@ kax_reader_c::create_packetizers() {
 
 // {{{ FUNCTION kax_reader_c::read()
 
-int
+file_status_t
 kax_reader_c::read(generic_packetizer_c *,
                    bool force) {
   int upper_lvl_el, i, bgidx;
@@ -1830,15 +1830,15 @@ kax_reader_c::read(generic_packetizer_c *,
   bool found_cluster, bref_found, fref_found;
 
   if (tracks.size() == 0)
-    return 0;
+    return file_status_done;
 
   l0 = segment;
 
   if (saved_l1 == NULL)         // We're done.
-    return 0;
+    return file_status_done;
 
   if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
-    return EHOLDING;
+    return file_status_holding;
 
   debug_enter("kax_reader_c::read");
 
@@ -2030,16 +2030,16 @@ kax_reader_c::read(generic_packetizer_c *,
   } catch (exception ex) {
     mxwarn(PFX "exception caught\n");
     flush_packetizers();
-    return 0;
+    return file_status_done;
   }
 
   debug_leave("kax_reader_c::read");
 
   if (found_cluster)
-    return EMOREDATA;
+    return file_status_moredata;
   else {
     flush_packetizers();
-    return 0;
+    return file_status_done;
   }
 }
 

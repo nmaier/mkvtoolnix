@@ -381,7 +381,7 @@ ogm_reader_c::read_page(ogg_page *og) {
   }
 
   // Here EMOREDATA actually indicates success - a page has been read.
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void
@@ -923,7 +923,7 @@ ogm_reader_c::read_headers() {
   done = false;
   while (!done) {
     // Make sure we have a page that we can work with.
-    if (read_page(&og) == 0)
+    if (read_page(&og) == file_status_done)
       return 0;
 
     // Is this the first page of a new stream?
@@ -955,7 +955,7 @@ ogm_reader_c::read_headers() {
 /*
  * General reader. Read a page and hand it over for processing.
  */
-int
+file_status_t
 ogm_reader_c::read(generic_packetizer_c *,
                    bool) {
   int i;
@@ -963,9 +963,9 @@ ogm_reader_c::read(generic_packetizer_c *,
 
   do {
     // Make sure we have a page that we can work with.
-    if (read_page(&og) == 0) {
+    if (read_page(&og) == file_status_done) {
       flush_packetizers();
-      return 0;
+      return file_status_done;
     }
 
     // Is this the first page of a new stream? No, so process it normally.
@@ -976,11 +976,11 @@ ogm_reader_c::read(generic_packetizer_c *,
   // Are there streams that have not finished yet?
   for (i = 0; i < sdemuxers.size(); i++)
     if (!sdemuxers[i]->eos && sdemuxers[i]->in_use)
-      return EMOREDATA;
+      return file_status_moredata;
 
   // No, we're done with this file.
   flush_packetizers();
-  return 0;
+  return file_status_done;
 }
 
 int

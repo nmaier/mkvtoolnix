@@ -28,6 +28,7 @@
 #include "common.h"
 #include "extern_data.h"
 #include "iso639.h"
+#include "mkvmerge.h"
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "tab_input.h"

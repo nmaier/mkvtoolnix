@@ -38,7 +38,7 @@ public:
   aac_reader_c(track_info_c *nti) throw (error_c);
   virtual ~aac_reader_c();
 
-  virtual int read(generic_packetizer_c *ptzr, bool force = false);
+  virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual int get_progress();
   virtual void create_packetizer(int64_t id);

@@ -91,7 +91,7 @@ dts_reader_c::create_packetizer(int64_t) {
   print_dts_header(&dtsheader);
 }
 
-int
+file_status_t
 dts_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
@@ -99,14 +99,14 @@ dts_reader_c::read(generic_packetizer_c *,
   nread = mm_io->read(chunk, max_dts_packet_size);
   if (nread <= 0) {
     PTZR0->flush();
-    return 0;
+    return file_status_done;
   }
 
   memory_c mem(chunk, nread, false);
   PTZR0->process(mem);
   bytes_processed += nread;
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 int

@@ -174,7 +174,7 @@ ac3_packetizer_c::process(memory_c &mem,
 
   debug_leave("ac3_packetizer_c::process");
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

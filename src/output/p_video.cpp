@@ -195,7 +195,7 @@ video_packetizer_c::process(memory_c &mem,
 
     debug_leave("video_packetizer_c::process");
 
-    return EMOREDATA;
+    return file_status_moredata;
   }
 
   if (is_mpeg4 && !aspect_ratio_extracted)
@@ -227,7 +227,7 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_leave("video_packetizer_c::process");
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 video_packetizer_c::~video_packetizer_c() {

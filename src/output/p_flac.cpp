@@ -103,14 +103,14 @@ flac_packetizer_c::process(memory_c &mem,
              "and is being skipped.\n"), ti->fname, (int64_t)ti->id,
            num_packets + 1);
     debug_leave("flac_packetizer_c::process");
-    return EMOREDATA;
+    return file_status_moredata;
   }
   duration = duration * 1000000000ll / stream_info.sample_rate;
   add_packet(mem, timecode, duration);
   num_packets++;
   debug_leave("flac_packetizer_c::process");
 
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

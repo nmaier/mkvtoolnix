@@ -1064,7 +1064,7 @@ generic_reader_c::~generic_reader_c() {
     delete chapters;
 }
 
-int
+void
 generic_reader_c::read_all() {
   int i;
 
@@ -1072,8 +1072,6 @@ generic_reader_c::read_all() {
     while (read(reader_packetizers[i], true) != 0)
       ;
   }
-
-  return 0;
 }
 
 bool

@@ -139,7 +139,7 @@ public:
   kax_reader_c(track_info_c *nti) throw (error_c);
   virtual ~kax_reader_c();
 
-  virtual int read(generic_packetizer_c *ptzr, bool force = false);
+  virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false);
 
   virtual int get_progress();
   virtual void set_headers();

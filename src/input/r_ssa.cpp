@@ -209,7 +209,7 @@ ssa_reader_c::recode_text(vector<string> &fields) {
   return to_utf8(cc_utf8, get_element("Text", fields));
 }
 
-int
+file_status_t
 ssa_reader_c::read(generic_packetizer_c *,
                    bool) {
   string line, stime, orig_line, comma;
@@ -290,7 +290,7 @@ ssa_reader_c::read(generic_packetizer_c *,
 
   PTZR0->flush();
 
-  return 0;
+  return file_status_done;
 }
 
 int

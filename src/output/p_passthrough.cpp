@@ -62,7 +62,7 @@ passthrough_packetizer_c::process(memory_c &mem,
   if ((duration > 0) && needs_negative_displacement(duration)) {
     displace(-duration);
     sync_to_keyframe = true;
-    return EMOREDATA;
+    return file_status_moredata;
   }
   if ((duration > 0) && needs_positive_displacement(duration) &&
       sync_complete_group) {
@@ -77,7 +77,7 @@ passthrough_packetizer_c::process(memory_c &mem,
   }
 
   if (sync_to_keyframe && (bref != -1))
-    return EMOREDATA;
+    return file_status_moredata;
   sync_to_keyframe = false;
   timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
   duration = (int64_t)(duration * ti->async.linear);
@@ -88,7 +88,7 @@ passthrough_packetizer_c::process(memory_c &mem,
   add_packet(mem, timecode, duration, duration_mandatory, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");
-  return EMOREDATA;
+  return file_status_moredata;
 }
 
 void

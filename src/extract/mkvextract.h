@@ -26,6 +26,7 @@ extern "C" {
 #include <ebml/EbmlElement.h>
 
 #include "librmff.h"
+#include "mkvmerge.h"
 #include "mm_io.h"
 
 using namespace std;
