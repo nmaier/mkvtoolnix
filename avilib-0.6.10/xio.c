@@ -21,15 +21,13 @@
  *
  */
 
-#include "../config.h"
+#include "os.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/errno.h>
 #include <stdarg.h>
 
 int
@@ -62,7 +60,11 @@ xio_write(int fd, const void *buf, size_t count)
 int
 xio_ftruncate(int fd, off_t length)
 {
+#if defined(SYS_WINDOWS)
+  _chsize(fd, length);
+#else
   return ftruncate(fd, length);
+#endif
 }
 
 off_t
@@ -86,7 +88,13 @@ xio_stat(const char *file_name, struct stat *buf)
 int
 xio_lstat(const char *file_name, struct stat *buf)
 {
+#if defined(SYS_WINDOWS)
+  fprintf(stderr, "xio_lstat not implemented on Windows.\n");
+  exit(1);
+  return -1;
+#else
   return lstat(file_name, buf);
+#endif
 }
 
 int
