@@ -18,8 +18,7 @@
 
 #include "common.h"
 #include "aac_common.h"
-
-#define AAC_SYNC_EXTENSION_TYPE 0x02b7
+#include "matroska.h"
 
 const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                    24000, 22050, 16000, 12000, 11025,  8000,
@@ -228,6 +227,36 @@ parse_aac_data(unsigned char *data,
     sbr = true;
   } else
     sbr = false;
+
+  return true;
+}
+
+bool
+parse_aac_codec_id(const string &codec_id,
+                   int &id,
+                   int &profile) {
+  if (codec_id.size() < strlen(MKV_A_AAC_2LC))
+    return false;
+
+  if (codec_id[10] == '2')
+    id = AAC_ID_MPEG2;
+  else if (codec_id[10] == '4')
+    id = AAC_ID_MPEG4;
+  else
+    return false;
+
+  if (!strcmp(&codec_id[12], "MAIN"))
+    profile = AAC_PROFILE_MAIN;
+  else if (!strcmp(&codec_id[12], "LC"))
+    profile = AAC_PROFILE_LC;
+  else if (!strcmp(&codec_id[12], "SSR"))
+    profile = AAC_PROFILE_SSR;
+  else if (!strcmp(&codec_id[12], "LTP"))
+    profile = AAC_PROFILE_LTP;
+  else if (!strcmp(&codec_id[12], "LC/SBR"))
+    profile = AAC_PROFILE_SBR;
+  else
+    return false;
 
   return true;
 }
