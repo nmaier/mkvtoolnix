@@ -161,9 +161,12 @@ void mm_io_c::close() {
 }
 
 uint64 mm_io_c::getFilePointer() {
-  LONG dummy = 0;
+  LONG high = 0;
+  DWORD low;
+  
+  low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
 
-  return SetFilePointer((HANDLE)file, 0, &dummy, FILE_CURRENT);
+  return ((uint64)high) << 32 + (uint64)low;
 }
 
 void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
