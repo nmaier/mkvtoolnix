@@ -36,21 +36,33 @@
 tab_settings::tab_settings(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
-  new wxStaticBox(this, -1, wxT("mkvmerge executable"), wxPoint(10, 5),
-                  wxSize(475, 50));
+  wxStaticBoxSizer *siz_mmg_exe, *siz_misc, *siz_about;
+  wxBoxSizer *siz_all, *siz_proc_prio;
+  wxButton *b_browse;
+
+  siz_mmg_exe =
+    new wxStaticBoxSizer(new wxStaticBox(this, -1,
+                                         wxT("mkvmerge executable")),
+                         wxHORIZONTAL);
+
   tc_mkvmerge =
-    new wxTextCtrl(this, ID_TC_MKVMERGE, wxT(""), wxPoint(15, 25),
-                   wxSize(370, -1), wxTE_READONLY);
+    new wxTextCtrl(this, ID_TC_MKVMERGE, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, wxTE_READONLY);
+  siz_mmg_exe->Add(tc_mkvmerge, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
+                   5);
+  b_browse = new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"));
+  siz_mmg_exe->Add(b_browse, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
 
-  new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"), wxPoint(395, 25),
-               wxDefaultSize, 0);
-
-  new wxStaticBox(this, -1, wxT("Miscellaneous options"), wxPoint(10, 65),
-                  wxSize(475, 75));
-  new wxStaticText(this, -1, wxT("Process priority:"), wxPoint(15, 85));
+  siz_misc =
+    new wxStaticBoxSizer(new wxStaticBox(this, -1,
+                                         wxT("Miscellaneous options")),
+                         wxVERTICAL);
+  siz_proc_prio = new wxBoxSizer(wxHORIZONTAL);
+  siz_proc_prio->Add(new wxStaticText(this, -1, wxT("Process priority:")),
+                     0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP | wxRIGHT, 5);
   cob_priority =
-    new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxPoint(120, 85 + YOFF),
-                   wxSize(90, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_priority->SetToolTip(wxT("Sets the priority that mkvmerge will run "
                                "with."));
 #if defined(SYS_WINDOWS)
@@ -60,34 +72,49 @@ tab_settings::tab_settings(wxWindow *parent):
   cob_priority->Append(wxT("normal"));
   cob_priority->Append(wxT("lower"));
   cob_priority->Append(wxT("lowest"));
+  siz_proc_prio->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP,
+                     5);
+  siz_misc->Add(siz_proc_prio);
 
   cb_autoset_output_filename =
     new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME,
-                   wxT("Auto-set output filename"), wxPoint(15, 115 + YOFF));
+                   wxT("Auto-set output filename"));
   cb_autoset_output_filename->
     SetToolTip(wxT("If checked mmg will automatically set the output filename "
                    "if it hasn't been set already. This happens when you add "
                    "a file. It will be set to the same name as the "
                    "input file but with the extension '.mkv'. If unset mmg "
                    "will not touch the output filename."));
+  siz_misc->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
 
   cb_ask_before_overwriting =
     new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
-                   wxT("Ask before overwriting existing files"),
-                   wxPoint(230, 115 + YOFF));
+                   wxT("Ask before overwriting existing files"));
+  siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
 
-  new wxStaticBox(this, -1, wxT("About"), wxPoint(10, 350),
-                  wxSize(475, 104));
-  new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm),
-                     wxPoint(20, 370), wxSize(64,64));
-  new wxStaticText(this, wxID_STATIC,
-                   wxT("mkvmerge GUI v" VERSION "\n"
-                       "This GUI was written by Moritz Bunkus <moritz@"
-                       "bunkus.org>\n"
-                       "Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
-                       "mkvmerge GUI is licensed under the GPL.\n"
-                       "http://www.bunkus.org/videotools/mkvtoolnix/"),
-                   wxPoint(95, 360), wxDefaultSize, 0);
+  siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
+                                   wxHORIZONTAL);
+  siz_about->Add(new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm)),
+                 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+  siz_about->Add(new wxStaticText(this, wxID_STATIC,
+                                  wxT("mkvmerge GUI v" VERSION " built on "
+                                      __DATE__ " " __TIME__ "\n"
+                                      "This GUI was written by Moritz Bunkus "
+                                      "<moritz@bunkus.org>\n"
+                                      "Based on mmg by Florian Wagner "
+                                      "<flo.wagner@gmx.de>\n"
+                                      "mkvmerge GUI is licensed under the "
+                                      "GPL.\n"
+                                      "http://www.bunkus.org/videotools/"
+                                      "mkvtoolnix/")),
+                 0, wxLEFT | wxRIGHT, 5);
+
+  siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->Add(siz_mmg_exe, 0, wxGROW | wxALL, 5);
+  siz_all->Add(siz_misc, 0, wxGROW | wxALL, 5);
+  siz_all->Add(0, 0, 1, wxGROW, 0);
+  siz_all->Add(siz_about, 0, wxGROW | wxALL, 5);
+  SetSizer(siz_all);
 
   load_preferences();
 }
