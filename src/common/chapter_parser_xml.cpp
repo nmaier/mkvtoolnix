@@ -15,6 +15,7 @@
 
 #include <expat.h>
 #include <ctype.h>
+#include <setjmp.h>
 #include <stdarg.h>
 
 #include <string>
@@ -42,6 +43,9 @@ typedef struct {
   vector<EbmlElement *> *parents;
 
   KaxChapters *chapters;
+
+  jmp_buf parse_error_jmp;
+  string *parse_error_msg;
 } parser_data_t;
 
 // {{{ XML chapters
@@ -81,7 +85,9 @@ cperror(parser_data_t *pdata,
   vsprintf(&new_string[strlen(new_string)], new_fmt.c_str(), ap);
   va_end(ap);
   strcat(new_string, "\n");
-  throw error_c(new_string, true);
+  *pdata->parse_error_msg = new_string;
+  safefree(new_string);
+  longjmp(pdata->parse_error_jmp, 1);
 }
 
 #define el_get_bool(pdata, el) el_get_uint(pdata, el, 0, true)
@@ -731,6 +737,7 @@ parse_xml_chapters(mm_text_io_c *in,
   pdata->parser = parser;
   pdata->file_name = in->get_file_name();
   pdata->parents = new vector<EbmlElement *>;
+  pdata->parse_error_msg = new string;
 
   XML_SetUserData(parser, pdata);
   XML_SetElementHandler(parser, start_element, end_element);
@@ -741,6 +748,8 @@ parse_xml_chapters(mm_text_io_c *in,
   error = "";
 
   try {
+    if (setjmp(pdata->parse_error_jmp) == 1)
+      throw error_c(*pdata->parse_error_msg);
     done = !in->getline2(buffer);
     while (!done) {
       buffer += "\n";
@@ -754,7 +763,7 @@ parse_xml_chapters(mm_text_io_c *in,
             "must be escaped in the usual HTML way: &amp; for '&', "
             "&lt; for '<', &gt; for '>' and &quot; for '\"'. ";
         error += "Aborting.";
-        throw error_c(error.c_str());
+        throw error_c(error);
       }
 
       done = !in->getline2(buffer);
@@ -776,6 +785,7 @@ parse_xml_chapters(mm_text_io_c *in,
 
   XML_ParserFree(parser);
   delete pdata->parents;
+  delete pdata->parse_error_msg;
   safefree(pdata);
 
   if ((chapters != NULL) && (verbose > 1))
