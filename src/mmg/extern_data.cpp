@@ -2128,6 +2128,7 @@ const mime_type_t mime_types[] = {
   {"application/x-troff-man", "man"},
   {"application/x-troff-me", "me"},
   {"application/x-troff-ms", "ms"},
+  {"application/x-truetype-font", "ttf"},
   {"application/x-ustar", "ustar"},
   {"application/x-wais-source", "src"},
   {"application/x-wingz", "wz"},
