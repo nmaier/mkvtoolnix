@@ -22,12 +22,6 @@
 
 using namespace std;
 
-struct lt_int64_t {
-  bool operator()(int64_t i1, int64_t i2) {
-    return i1 < i2;
-  }
-};
-
 timecode_factory_c *
 timecode_factory_c::create(const char *_file_name,
                            const char *_source_name,
@@ -78,6 +72,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   bool done;
   const char *name;
 
+  name = NULL;                  // compiler warning
   line_no = 1;
   do {
     if (!in.getline2(line))
@@ -209,8 +204,8 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
   int line_no;
   string line;
   double timecode;
-  map<int64_t, int64_t, lt_int64_t> dur_map;
-  map<int64_t, int64_t, lt_int64_t>::const_iterator it;
+  map<int64_t, int64_t> dur_map;
+  map<int64_t, int64_t>::const_iterator it;
   int64_t duration, dur_sum;
 
   dur_sum = 0;

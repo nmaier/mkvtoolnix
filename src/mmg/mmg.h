@@ -71,11 +71,6 @@ typedef struct {
   int style;
 } mmg_attachment_t;
 
-struct lt_wxString {
-  bool operator()(const wxString s1, const wxString s2) const {
-    return s1.Cmp(s2) < 0;
-  }
-};
 extern wxString last_open_dir;
 extern wxString mkvmerge_path;
 extern vector<wxString> last_settings;
@@ -86,7 +81,7 @@ extern vector<mmg_attachment_t> attachments;
 extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
 extern bool title_was_present;
-extern map<wxString, wxString, lt_wxString> capabilities;
+extern map<wxString, wxString> capabilities;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
