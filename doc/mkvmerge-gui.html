@@ -1,8 +1,8 @@
 <html>
-<head>
+ <head>
   <title>A guide to mkvmerge GUI</title>
-</head>
-<body>
+ </head>
+ <body>
   <h1>A guide to mkvmerge GUI (mmg)</h1>
 
   <i>Moritz Bunkus</i>
@@ -11,136 +11,136 @@
   <h2>Table of contents</h2>
 
   <p>
-    <ol>
+   <ol>
+    <li>
+     <a href="mkvmerge-gui.html#introduction">Introduction</a>
+     <br>
+     <ol>
       <li>
-        <a href="mkvmerge-gui.html#introduction">Introduction</a>
-        <br>
-        <ol>
-          <li>
-            <a href="mkvmerge-gui.html#whatismatroska">What is Matroska?</a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#whatismkvmerge">What is mkvmerge?
-              What is mkvmerge GUI?
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#latestversion">Obtaining the latest
-              version
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#scope">Scope of this guide</a>
-          </li>
-        </ol>
+       <a href="mkvmerge-gui.html#whatismatroska">What is Matroska?</a>
       </li>
       <li>
-        <a href="mkvmerge-gui.html#setup">Setting up mkvmerge GUI</a>
+       <a href="mkvmerge-gui.html#whatismkvmerge">What is mkvmerge?
+        What is mkvmerge GUI?
+       </a>
       </li>
       <li>
-        <a href="mkvmerge-gui.html#muxing">Creating Matroska files</a>
-        <br>
-        <ol>
-          <li>
-            <a href="mkvmerge-gui.html#basics">Basics</a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#fileoptions">Options for input
-              files
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#trackoptions">Options for each
-              track
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#attachments">Attachments</a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#globaloptions">Global options</a>
-            <br>
-            <ol>
-              <li>
-                <a href="mkvmerge-gui.html#global_title">File/segment
-                  title</a>
-              </li>
-              <li>
-                <a href="mkvmerge-gui.html#global_split">Automatic
-                  splitting and file linking</a>
-              </li>
-              <li>
-                <a href="mkvmerge-gui.html#global_link">Manual
-                  file/segment linking</a>
-              </li>
-              <li>
-                <a href="mkvmerge-gui.html#global_chapters">Chapters</a>
-              </li>
-              <li>
-                <a href="mkvmerge-gui.html#global_tags">Global tags</a>
-              </li>
-            </ol>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#doit">Starting the merge
-              process
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#saveload">Saving and loading
-              muxing settings
-            </a>
-          </li>
-        </ol>
+       <a href="mkvmerge-gui.html#latestversion">Obtaining the latest
+        version
+       </a>
       </li>
       <li>
-        <a href="mkvmerge-gui.html#chaptereditor">The chapter editor</a>
-        <br>
-        <ol>
-          <li>
-            <a href="mkvmerge-gui.html#chapterconcept">Matroska's
-              chapter concept
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#chapterexamples">Examples</a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#chapterformats">Chapter formats
-              supported by mkvmerge
-            </a>
-            <br>
-            <ol>
-              <li>
-                <a href="mkvmerge-gui.html#cfsimple">Simple/OGM style
-                  chapter files
-                </a>
-              </li>
-              <li>
-                <a href="mkvmerge-gui.html#cfxml">Full-featured XML
-                  style chapter files
-                </a>
-              </li>
-              <li>
-                <a href="mkvmerge-gui.html#cfkax">Chapters found in
-                  Matroska files
-                </a>
-              </li>
-            </ol>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#creatingchapters">Creating
-              chapter files
-            </a>
-          </li>
-          <li>
-            <a href="mkvmerge-gui.html#editingchapters">Editing existing
-              chapters
-            </a>
-          </li>
-        </ol>
+       <a href="mkvmerge-gui.html#scope">Scope of this guide</a>
       </li>
-    </ol>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#setup">Setting up mkvmerge GUI</a>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#muxing">Creating Matroska files</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#basics">Basics</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#fileoptions">Options for input
+        files
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#trackoptions">Options for each
+        track
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#attachments">Attachments</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#globaloptions">Global options</a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#global_title">File/segment
+          title</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_split">Automatic
+          splitting and file linking</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_link">Manual
+          file/segment linking</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_chapters">Chapters</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_tags">Global tags</a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#doit">Starting the merge
+        process
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#saveload">Saving and loading
+        muxing settings
+       </a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#chaptereditor">The chapter editor</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#chapterconcept">Matroska's
+        chapter concept
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterexamples">Examples</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterformats">Chapter formats
+        supported by mkvmerge
+       </a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#cfsimple">Simple/OGM style
+          chapter files
+         </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfxml">Full-featured XML
+          style chapter files
+         </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfkax">Chapters found in
+          Matroska files
+         </a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#creatingchapters">Creating
+        chapter files
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#editingchapters">Editing existing
+        chapters
+       </a>
+      </li>
+     </ol>
+    </li>
+   </ol>
   </p>
 
   <hr>
@@ -150,77 +150,76 @@
   <h3><a name="whatismatroska">1.1. What is Matroska?</a></h3>
 
   <p>(<i>Note: simply copied from <a href="http://www.matroska.org/">
-        www.matroska.org</a>.</i>)</p>
+     www.matroska.org</a>.</i>)</p>
 
   <p><b>Matroska</b> aims to become THE Standard of Multimedia Container
-    Formats. It was derived from a project called MCF, but
-    differentiates from it significantly because it is based on EBML
-    (Extensible Binary Meta Language), a binary derivative of XML. EBML
-    enables the Matroska Development Team to gain significant advantages
-    in terms of future format extensibility, without breaking file
-    support in old parsers.</p>
+   Formats. It was derived from a project called MCF, but
+   differentiates from it significantly because it is based on EBML
+   (Extensible Binary Meta Language), a binary derivative of XML. EBML
+   enables the Matroska Development Team to gain significant advantages
+   in terms of future format extensibility, without breaking file
+   support in old parsers.</p>
 
   <p>If you need any more info please head over to
-    <a href="http://www.matroska.org/">Matroska's homepage</a>.</p>
+   <a href="http://www.matroska.org/">Matroska's homepage</a>.</p>
 
   <h3><a name="whatismkvmerge">1.2. What is mkvmerge? What is mkvmerge
-      GUI?</a></h3>
+    GUI?</a></h3>
 
-  <p><i>mkvmerge</i> and <i>mkvmerge GUI</i> (or just <i>mmg</i>) are
-    two programs created by <a href="mailto:moritz@bunkus.org">Moritz
-    Bunkus</a>. They're part of the <i>mkvtoolnix</i>
-    package. <i>mkvmerge</i> can read a lot of different multimedia
-    files and put their contents into Matroska files. Unfortunately this
-    is a command line program, and not everyone is comfortable working
-    on the command line. This is where <i>mkvmerge GUI</i> comes into
-    play. It is a GUI that provides the user with an intuitive but
-    powerful interface to <i>mkvmerge</i>.</p>
+  <p><i>mkvmerge</i> and <i>mkvmerge GUI</i> (or just <i>mmg</i>) are two
+   programs created by <a href="mailto:moritz@bunkus.org">Moritz
+   Bunkus</a>. They're part of the <i>mkvtoolnix</i> package. <i>mkvmerge</i>
+   can read a lot of different multimedia files and put their contents into
+   Matroska files. Unfortunately this is a command line program, and not
+   everyone is comfortable working on the command line. This is where
+   <i>mkvmerge GUI</i> comes into play. It is a GUI that provides the user
+   with an intuitive but powerful interface to <i>mkvmerge</i>.</p>
 
-  <p>Both programs are available for both Windows and GNU/Linux and
-    other Unix derivatives. The program is licensed under the GPL, so
-    the source code is available to anyone interested.</p>
+    <p>Both programs are available for both Windows and GNU/Linux and
+     other Unix derivatives. The program is licensed under the GPL, so
+     the source code is available to anyone interested.</p>
 
-  <h3><a name="latestversion">1.3. Obtaining the latest version</a></h3>
+    <h3><a name="latestversion">1.3. Obtaining the latest version</a></h3>
 
-  <p>You can always find the latest version of <i>mkvtoolnix</i> on
-    <a href="http://www.bunkus.org/videotools/mkvtoolnix/">Moritz
-    Bunkus' website</a>. Windows users will have to download the runtime
-    DLLs as well as the <i>mkvtoolnix</i> binaries. Linux/Unix users
-    will probably download the sources and compile
-    <i>mkvtoolnix</i> themselves.</p>
+    <p>You can always find the latest version of <i>mkvtoolnix</i> on
+     <a href="http://www.bunkus.org/videotools/mkvtoolnix/">Moritz
+      Bunkus' website</a>. Windows users will have to download the runtime
+     DLLs as well as the <i>mkvtoolnix</i> binaries. Linux/Unix users
+     will probably download the sources and compile
+     <i>mkvtoolnix</i> themselves.</p>
 
-  <h3><a name="scope">1.4. Scope of this guide</a></h3>
+    <h3><a name="scope">1.4. Scope of this guide</a></h3>
 
-  <p>This guide only focuses on the GUI part of these tools. All
-    command line options are explained in detail in <a
-    href="mkvmerge.html"><i>mkvmerge</i>'s man page/HTML page</a>.</p>
+    <p>This guide only focuses on the GUI part of these tools. All
+     command line options are explained in detail in <a
+      href="mkvmerge.html"><i>mkvmerge</i>'s man page/HTML page</a>.</p>
 
-  <hr>
+    <hr>
 
-  <h2><a name="setup">2. Setting up mkvmerge GUI</a></h2>
+    <h2><a name="setup">2. Setting up mkvmerge GUI</a></h2>
 
   <p>(<i>Note: This section does not cover compilation and
-      installation. <i>mkvmerge</i>'s own documentation and the
-      <code>README</code> files that are included in the
-      <i>mkvtoolnix</i> package.</i>)</p>
+    installation. <i>mkvmerge</i>'s own documentation and the
+    <code>README</code> files that are included in the
+    <i>mkvtoolnix</i> package.</i>)</p>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
-        <p>The only thing that <i>mmg</i> needs to know is the location
-          of the <i>mkvmerge</i> binary. Under normal circumstances it
-          will be found automatically. But if not then you can select
-          the binary to use on the <i>Settings</i> tab.</p>
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <img src="images/selectmkvmergeexecutable.png"
-             alt="selecting the mkvmerge executable">
-        <br>
-        <font size="-1">Use this button to select the path to the
-          <i>mkvmerge</i> program.</font>
-      </td>
-    </tr>
+   <tr>
+    <td valign="top">
+     <p>The only thing that <i>mmg</i> needs to know is the location
+      of the <i>mkvmerge</i> binary. Under normal circumstances it
+      will be found automatically. But if not then you can select
+      the binary to use on the <i>Settings</i> tab.</p>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <img src="images/selectmkvmergeexecutable.png"
+          alt="selecting the mkvmerge executable">
+     <br>
+     <font size="-1">Use this button to select the path to the
+      <i>mkvmerge</i> program.</font>
+    </td>
+   </tr>
   </table>
 
   <hr>
@@ -230,697 +229,658 @@
   <h3><a name="basics">3.1. Basics</a></h3>
 
   <p><i>mkvmerge</i> strictly differentiates between <i>files</i> and
-    <i>tracks</i>. An input <i>file</i> usually contains one or more
-    <i>tracks</i>. <i>mkvmerge</i> needs at least one input file and the
-    file name of the Matroska file it should create before it can do any
-    work. Starting with this minimal set of options the user can add
-    more input files, select advanced options for each track, apply some
-    more global options etc.</p>
+   <i>tracks</i>. An input <i>file</i> usually contains one or more
+   <i>tracks</i>. <i>mkvmerge</i> needs at least one input file and the file
+   name of the Matroska file it should create before it can do any
+   work. Starting with this minimal set of options the user can add more input
+   files, select advanced options for each track, apply some more global
+   options etc.</p>
 
   <p>The typical basic steps are:<br>
-  <ol>
+   <ol>
     <li>Select some input <i>files</i>,</li>
     <li>set language options for the <i>tracks</i>,</li>
     <li>set the movie/file title,</li>
     <li>select the file to write to and</li>
     <li>start the muxing process.</li>
-  </ol>
+   </ol>
   </p>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
+   <tr>
+    <td valign="top">
 
-        <p>When <i>mmg</i> starts up it shows the first and probably
-          most important tab: the <i>input tab</i>. Here you see four
-          different elements. The topmost input box lists all input
-          <i>files</i>. Directly under this box are options that apply
-          to the currently selected input <i>file</i>.</p>
+     <p>When <i>mmg</i> starts up it shows the first and probably most
+      important tab: the <i>input tab</i>. Here you see four different
+      elements. The topmost input box lists all input
+      <i>files</i>. Directly under this box are options that apply
+      to the currently selected input <i>file</i>.</p>
 
-        <p>The two buttons to the right of the upper list box can be
-          used to add files to the list box with the <i>+</i> button and
-          to remove the selected entry with the <i>-</i> button.</p>
+     <p>The two buttons to the right of the upper list box can be used to add
+      files to the list box with the <i>add</i> button and to remove the
+      selected entry with the <i>remove</i> button.</p>
 
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <img src="images/addremovefiles.png"
-             alt="adding and removing files">
-        <br>
-        <font size="-1">Use these buttons to add and remove
-        files.</font>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top">
-        <p>Once the user selects an input <i>file</i> in the upper list
-          box the second list box will contains all <i>tracks</i> that
-          can be read from this <i>file</i>. Each track is ENabled by
-          default and will be muxed into the resulting file. However,
-          you can change that by simply clicking on the check box right
-          in front of the track's name in the second list box. For each
-          of these tracks the user can select track specific options
-          with the input boxes and check boxes below the track
-          listing. These options will be described in the following
-          sections.</p>
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <img src="images/trackselection.png"
-             alt="selecting specific tracks">
-        <br>
-        <font size="-1">Three enabled tracks and one disabled track. The
-        fourth track will not be copied into the output file.</font>
-      </td>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <img src="images/addremovefiles.png"
+          alt="adding and removing files">
+     <br>
+     <font size="-1">Use these buttons to add and remove
+      files.</font>
+    </td>
+   </tr>
+   <tr>
+    <td valign="top">
+     <p>Once the user has added at least one input <i>file</i> in the upper
+      list box the second list box will contains all available
+      <i>tracks</i>. Each track is ENabled by default and will be
+      muxed into the resulting file. However, you can change that by
+      simply clicking on the check box right in front of the track's
+      name in the second list box. For each of these tracks the user
+      can select track specific options with the input boxes and
+      check boxes below the track listing. These options will be
+      described in the following sections.</p>
 
-    </tr>
+     <p>To the right of the track list box there are two buttons with which
+      you can control the order of the tracks in the output file. By hitting
+      the <i>up</i> and <i>down</i> the currently selected track is moved in
+      the appropriate direction.</p>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <img src="images/trackselection.png" alt="selecting specific
+                                               tracks">
+     <br>
+     <font size="-1">One enabled and one disabled track. The second track will
+      not be copied into the output file.</font>
+    </td>
+
+   </tr>
   </table>
 
 
   <h3><a name="fileoptions">3.2. Options for input file</a></h3>
 
-  <p>Once the user has added and selected an input file he can set
-    options that apply to this specific file. At the moment three such
-    options have been implemented, and they all are only available for
-    Matroska files: <code>No chapters</code>, <code>No
-    attachments</code> and <code>No tags</code>. These options tell
-    <i>mkvmerge</i> not to copy any chapters / attachments / tags from
-    the current source file.
-    <br>
-    <b>Note:</b> At the time of writing <i>mkvmerge</i> cannot copy tags
-    from a source Matroska file. You have to extract them with
-    mkvextract first.</p>
+  <p>Once the user has added and selected an input file he can set options
+   that apply to this specific file. At the moment three such options have
+   been implemented, and they all are only available for Matroska files:
+   <code>No chapters</code>, <code>No attachments</code> and <code>No
+    tags</code>. These options tell <i>mkvmerge</i> not to copy any
+   chapters / attachments / tags from the current source file.
+   <br>
+   <b>Note:</b> At the time of writing <i>mkvmerge</i> cannot copy tags from a
+   source Matroska file. You have to extract them with mkvextract first.</p>
 
-  <p>More information about chapters can be found in the section about
-    the <a href="mkvmerge-gui.html#chaptereditor">chapter editor</a> in
-    this document and in <i>mkvmerge</i>'s own documentation.</p>
+  <p>More information about chapters can be found in the section about the
+   <a href="mkvmerge-gui.html#chaptereditor">chapter editor</a> in this
+   document and in <i>mkvmerge</i>'s own documentation.</p>
 
   <h3><a name="trackoptions">3.3. Options for each track</a></h3>
 
-  <p>Depending on the type of the currently selected track (audio,
-    video, subtitles) and even depending on the contents of the track
-    only a subset of all the track specific options are available. The
-    options are:</p>
+  <p>Depending on the type of the currently selected track (audio, video,
+   subtitles) and even depending on the contents of the track only a subset of
+   all the track specific options are available. The options are:</p>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
-        <ul>
+   <tr>
+    <td valign="top">
+     <ul>
 
-          <li><code>Language:</code> The user can select the language
-            for each track regardless of its type. This language is
-            coded in the ISO639-2 language code. The drop-down box
-            contains all ISO639-2 codes so the user does not have to
-            worry about selecting the wrong language code.</li>
+      <li><code>Language:</code> The user can select the language for each
+       track regardless of its type. This language is coded in the ISO639-2
+       language code. The drop-down box contains all ISO639-2 codes so the
+       user does not have to worry about selecting the wrong language
+       code.</li>
 
-          <li><code>Track name:</code> The user can set a name for the
-            current track. This name is a free-form string. Practical
-            examples could be 'director's comments' or 'great view of
-            Seattle'. Note that these names are not meant to contain the
-            movie title!</li>
+      <li><code>Track name:</code> The user can set a name for the current
+       track. This name is a free-form string. Practical examples could be
+       'director's comments' or 'great view of Seattle'. Note that these names
+       are not meant to contain the movie title!</li>
 
-          <li><code>Cues:</code> The <i>cues</i> are for Matroska what
-            the index is for AVI files. They contain links to the key
-            frames. Usually this option should be left on the value
-            'default'. <i>mkvmerge</i> will automatically chose the best
-            method for any given track type. A full explanation of
-            tracks can be found in <a
-            href="mkvmerge.html"><i>mkvmerge</i>'s
-            documentation</a>.</li>
+      <li><code>Cues:</code> The <i>cues</i> are for Matroska what the index
+       is for AVI files. They contain links to the key frames. Usually this
+       option should be left on the value 'default'. <i>mkvmerge</i> will
+       automatically chose the best method for any given track type. A full
+       explanation of tracks can be found in <a
+       href="mkvmerge.html"><i>mkvmerge</i>'s documentation</a>.</li>
 
-          <li><code>Aspect ratio:</code> With this option the user can
-            set the aspect ratio that should be used upon playback. It
-            defaults to the aspect ratio that the movie was encoded with
-            but can be changed, e.g. for anamorphic encodings. The GUI
-            expects the format to be either a floating point number
-            (e.g. '2.33') or a fraction (e.g. '16/9').
-            <br>
-            This option is only available for video tracks.</li>
+      <li><code>Aspect ratio:</code> With this option the user can set the
+       aspect ratio that should be used upon playback. It defaults to the
+       aspect ratio that the movie was encoded with but can be changed,
+       e.g. for anamorphic encodings. The GUI expects the format to be either
+       a floating point number (e.g. '2.33') or a fraction (e.g. '16/9').
+       <br>
+       This option is only available for video tracks.</li>
 
-          <li><code>FourCC:</code> Matroska does not normally store the
-            Four-CC which is used in other containers to identify the
-            codec used. Matroska has its own format, called
-            <i>CodecID</i>, but it also has an AVI compatibility
-            mode. In this mode the FourCC is also stored. With this
-            option the FourCC can be forced to a different
-            value. However, you cannot change the <i>CodecID</i> used by
-            <i>mkvmerge</i>.
-            <br>
-            This option is only available for video tracks.</li>
+      <li><code>FourCC:</code> Matroska does not normally store the Four-CC
+       which is used in other containers to identify the codec used. Matroska
+       has its own format, called <i>CodecID</i>, but it also has an AVI
+       compatibility mode. In this mode the FourCC is also stored. With this
+       option the FourCC can be forced to a different value. However, you
+       cannot change the <i>CodecID</i> used by <i>mkvmerge</i>.
+       <br>
+       This option is only available for video tracks.</li>
 
-          <li><code>Delay (in ms):</code> In some cases audio and video
-            are not synchronized properly. With this option the user can
-            offset the audio track by a given amount, either positive or
-            negative. <i>mkvmerge</i> will either remove samples at the
-            beginning or insert silence at the beginning to adjust the
-            track.
-            <br>
-            This option is available for audio and text subtitle tracks.</li>
+      <li><code>Delay (in ms):</code> In some cases audio and video are not
+       synchronized properly. With this option the user can offset the audio
+       track by a given amount, either positive or negative. <i>mkvmerge</i>
+       will either remove samples at the beginning or insert silence at the
+       beginning to adjust the track.
+       <br>
+       This option is available for audio and text subtitle tracks.</li>
 
-          <li><code>Stretch by:</code> In some cases audio and video
-            slowly drift apart during playback. This can be fixed by
-            supplying a factor of how much the time codes should be
-            stretched by <i>mkvmerge</i>. If nothing is given then '1.0'
-            is assumed which does not alter the time codes. Please note
-            that this option has not been implemented for all audio
-            track types yet.
-            <br>
-            This option is available for audio and text subtitle
-            tracks.</li>
+      <li><code>Stretch by:</code> In some cases audio and video slowly drift
+       apart during playback. This can be fixed by supplying a factor of how
+       much the time codes should be stretched by <i>mkvmerge</i>. If nothing
+       is given then '1.0' is assumed which does not alter the time
+       codes. Please note that this option has not been implemented for all
+       audio track types yet.
+       <br>
+       This option is available for audio and text subtitle tracks.</li>
 
-          <li><code>Subtitle charset:</code> Some text subtitle formats
-            do not store the charset that they were created with. This is
-            important because text subtitles are automatically converted
-            to the UTF-8 charset during muxing. <i>mkvmerge</i> will
-            normally assume that the system's current charset is the
-            same that the subtitle file was written in. But in case this
-            is not true the user can select the correct charset.
-            <br>
-            This option is only available for text subtitle tracks.</li>
+      <li><code>Subtitle charset:</code> Some text subtitle formats do not
+       store the charset that they were created with. This is important
+       because text subtitles are automatically converted to the UTF-8 charset
+       during muxing. <i>mkvmerge</i> will normally assume that the system's
+       current charset is the same that the subtitle file was written in. But
+       in case this is not true the user can select the correct charset.
+       <br>
+       This option is only available for text subtitle tracks.</li>
 
-          <li><code>Make default track:</code> Matroska knows a flag
-            which tells the player that a specific track should be
-            preferred upon playback if the user does not chose another
-            one. Of course each track <i>type</i> has its own default
-            track - e.g. the default audio track is the English one, and
-            the default subtitle track is the French one. If no track is
-            set to be the default track then <i>mkvmerge</i> will
-            promote the first track of each type that it finds to be the
-            default track. This is consistent with the behavior of
-            various media players.</li>
+      <li><code>Make default track:</code> Matroska knows a flag which tells
+       the player that a specific track should be preferred upon playback if
+       the user does not chose another one. Of course each track <i>type</i>
+       has its own default track - e.g. the default audio track is the English
+       one, and the default subtitle track is the French one. If no track is
+       set to be the default track then <i>mkvmerge</i> will promote the first
+       track of each type that it finds to be the default track. This is
+       consistent with the behavior of various media players.</li>
 
-          <li><code>AAC is SBR/HE-AAC/AAC+:</code> The new technology
-            called 'high efficiency AAC' has some drawbacks when it is
-            being stored in <code>.AAC</code> files: it is not possible
-            to detect the HE-AAC part for these files. Therefore the
-            user has to check this option manually if it applies. Please
-            note that this problem does not exist for HE-AAC stored in
-            <code>.MP4</code> files.</li>
+      <li><code>AAC is SBR/HE-AAC/AAC+:</code> The new technology called 'high
+       efficiency AAC' has some drawbacks when it is being stored in
+       <code>.AAC</code> files: it is not possible to detect the HE-AAC part
+       for these files. Therefore the user has to check this option manually
+       if it applies. Please note that this problem does not exist for HE-AAC
+       stored in <code>.MP4</code> files.</li>
 
-          <li><code>Tags:</code> For each track you can create a XML
-            tags file. For a full explanation of all tags please refer
-            to the example file and <a
-            href="mkvmerge.html"><i>mkvmerge</i>'s own
-            documentation</a>. In probably 99% of all cases you want to
-            use THIS option and associate tags with a specific
-            track. The tags option on the global tab is probably not
-            what you need.</li>
+      <li><code>Tags:</code> For each track you can create a XML tags
+       file. For a full explanation of all tags please refer to the example
+       file and <a href="mkvmerge.html"><i>mkvmerge</i>'s own
+       documentation</a>. In probably 99% of all cases you want to use THIS
+       option and associate tags with a specific track. The tags option on the
+       global tab is probably not what you need.</li>
 
-        </ul>
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <p>
-          <img src="images/videotrackoptions.png"
-               alt="typical options for a video track">
-          <br>
-          <font size="-1">Typical options for a video track</font>
-        </p>
-        <p>
-          <img src="images/audiotrackoptions.png"
-               alt="typical options for an audio track">
-          <br>
-          <font size="-1">Typical options for an audio track</font>
-        </p>
-        <p>
-          <img src="images/textsubtitlestrackoptions.png"
-               alt="typical options for a text subtitle track">
-          <br>
-          <font size="-1">Typical options for a text subtitle track</font>
-        </p>
-      </td>
-    </tr>
+     </ul>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/videotrackoptions.png"
+           alt="typical options for a video track">
+      <br>
+      <font size="-1">Typical options for a video track</font>
+     </p>
+     <p>
+      <img src="images/audiotrackoptions.png"
+           alt="typical options for an audio track">
+      <br>
+      <font size="-1">Typical options for an audio track</font>
+     </p>
+     <p>
+      <img src="images/textsubtitlestrackoptions.png"
+           alt="typical options for a text subtitle track">
+      <br>
+      <font size="-1">Typical options for a text subtitle track</font>
+     </p>
+    </td>
+   </tr>
   </table>
 
   <h3><a name="attachments">3.4. Attachments</a></h3>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
+   <tr>
+    <td valign="top">
 
-        <p>Matroska files can also contain other files, called
-          attachments. This works basically just like with your
-          favorite email program. The idea is to provide additional
-          information about the file. Some examples could be cover
-          photos for a CD rip, additional background information in text
-          form about the movie or even some compressed fonts for the
-          subtitles.</p>
+     <p>Matroska files can also contain other files, called attachments. This
+      works basically just like with your favorite email program. The idea is
+      to provide additional information about the file. Some examples could be
+      cover photos for a CD rip, additional background information in text
+      form about the movie or even some compressed fonts for the
+      subtitles.</p>
 
-        <p>Every attachment needs two things: the file name (obviously)
-          and the MIME type that should be associated with the file. The
-          usage is very easy and similar to adding files on the
-          <i>input</i> tab.</p>
+     <p>Every attachment needs two things: the file name (obviously) and the
+      MIME type that should be associated with the file. The usage is very
+      easy and similar to adding files on the
+      <i>input</i> tab.</p>
 
-        <p>On the second tab of the GUI, the <i>attachment</i> tab, you
-          can add a file with the <i>+</i> button and remove the
-          selected attachment with the <i>-</i> button. Once an
-          attachment has been selected the other controls on this tab
-          will be available. You do have to select a MIME type for each
-          attachment, but the description is optional - although it is a
-          good idea to always provide a description. This makes it
-          easier for others to identify what you've attached to this
-          Matroska file.</p>
+     <p>On the second tab of the GUI, the <i>attachment</i> tab, you can add a
+      file with the <i>+</i> button and remove the selected attachment with
+      the <i>-</i> button. Once an attachment has been selected the other
+      controls on this tab will be available. You do have to select a MIME
+      type for each attachment, but the description is optional - although it
+      is a good idea to always provide a description. This makes it easier for
+      others to identify what you've attached to this Matroska file.</p>
 
-        <p>The last option, <code>attachment style</code>, is only
-          evaluated when you also split the output into several
-          files. (Splitting in general is explained in the following
-          section.) If the option <code>To all files</code> is selected
-          then the current file will be attached to all output files
-          created. If the option <code>Only to the first</code> is
-          selected then the file is only attached to the very first
-          output file created.</p>
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <p>
-          <img src="images/addingremovingattachments.png"
-               alt="adding and removing attachments">
-          <br>
-          <font size="-1">Add and remove attachments with these buttons.</font>
-        </p>
-        <p>
-          <img src="images/attachmentoptions.png"
-               alt="typical options for an attachment">
-          <br>
-          <font size="-1">Typical options for an attachment</font>
-        </p>
-      </td>
-    </tr>
+     <p>The last option, <code>attachment style</code>, is only evaluated when
+      you also split the output into several files. (Splitting in general is
+      explained in the following section.) If the option <code>To all
+      files</code> is selected then the current file will be attached to all
+      output files created. If the option <code>Only to the first</code> is
+      selected then the file is only attached to the very first output file
+      created.</p>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/addingremovingattachments.png"
+           alt="adding and removing attachments">
+      <br>
+      <font size="-1">Add and remove attachments with these buttons.</font>
+     </p>
+     <p>
+      <img src="images/attachmentoptions.png"
+           alt="typical options for an attachment">
+      <br>
+      <font size="-1">Typical options for an attachment</font>
+     </p>
+    </td>
+   </tr>
   </table>
 
   <h3><a name="globaloptions">3.5. Global options</a></h3>
 
-  <p>The third tab, <i>Global</i>, is packed full of options that apply
-    to the complete file and not just to one or more tracks.</p>
+  <p>The third tab, <i>Global</i>, is packed full of options that apply to the
+   complete file and not just to one or more tracks.</p>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
+   <tr>
+    <td valign="top">
 
-        <h4><a name="global_title">3.5.1. File/segment title</a></h4>
+     <h4><a name="global_title">3.5.1. File/segment title</a></h4>
 
-        <p><code>File/segment title:</code> This title is used for the
-          actual movie title, e.g. 'Vanilla Skies'.</p>
+     <p><code>File/segment title:</code> This title is used for the actual
+      movie title, e.g. 'Vanilla Skies'.</p>
 
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <p>
-          <img src="images/movietitle.png"
-               alt="selecting a movie title">
-          <br>
-          <font size="-1">Selecting a title for the movie</font>
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top">
-        <h4><a name="global_split">3.5.2. Automatic splitting and file
-            linking </a></h4>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/movietitle.png"
+           alt="selecting a movie title">
+      <br>
+      <font size="-1">Selecting a title for the movie</font>
+     </p>
+    </td>
+   </tr>
+   <tr>
+    <td valign="top">
+     <h4><a name="global_split">3.5.2. Automatic splitting and file
+       linking </a></h4>
 
-        <p>The <code>Split</code> section handles how the output file is
-          split into several smaller files. If no splitting is selected
-          then only one big file is generated. If splitting is activated
-          then you can tell <i>mkvmerge</i> to start a new output file
-          after either a specific amount of data has been written to the
-          current file or after a specific amount of time has
-          accumulated. The formats accepted are:
-          <br>
-          <ul>
-            <li>For the size: A number optionally followed by the letter
-              'K', 'M' or 'G' indicating kilobytes (1024 bytes),
-              megabytes (1024 * 1024 bytes) or gigabytes (1024 * 1024 *
-              1024 bytes). Examples: '700M' or '100000K'.</li>
+     <p>The <code>Split</code> section handles how the output file is split
+      into several smaller files. If no splitting is selected then only one
+      big file is generated. If splitting is activated then you can tell
+      <i>mkvmerge</i> to start a new output file after either a specific
+      amount of data has been written to the current file or after a specific
+      amount of time has accumulated. The formats accepted are:
+      <br>
+      <ul>
+       <li>For the size: A number optionally followed by the letter 'K', 'M'
+        or 'G' indicating kilobytes (1024 bytes), megabytes (1024 * 1024
+        bytes) or gigabytes (1024 * 1024 * 1024 bytes). Examples: '700M' or
+        '100000K'.</li>
 
-            <li>For the time: The format is either <code>HH:MM:SS</code>
-              or a number followed by the letter 's' indicating a number
-              of seconds. Examples: '01:20:00' (split after 1 hour, 20
-              minutes) or '1800s' (split after 1800 seconds = 30
-              minutes).</li>
-        </ul>
-        </p>
+       <li>For the time: The format is either <code>HH:MM:SS</code> or a
+        number followed by the letter 's' indicating a number of
+        seconds. Examples: '01:20:00' (split after 1 hour, 20 minutes) or
+        '1800s' (split after 1800 seconds = 30 minutes).</li>
+      </ul>
+     </p>
 
-        <p><code>Don't link:</code> This option controls how
-          <i>mkvmerge</i> will handle splitting. A little explanation
-          about this feature:</p>
+     <p><code>Don't link:</code> This option controls how <i>mkvmerge</i> will
+      handle splitting. A little explanation about this feature:</p>
 
-        <p>Matroska supports file linking which simply says that a
-          specific file is the predecessor or successor of the current
-          file. To be precise, it's not really the files that are linked
-          but the Matroska segments. As most files will probably only
-          contain one Matroska segment I simply say 'file linking'
-          although 'segment linking' would be more appropriate.</p>
+     <p>Matroska supports file linking which simply says that a specific file
+      is the predecessor or successor of the current file. To be precise, it's
+      not really the files that are linked but the Matroska segments. As most
+      files will probably only contain one Matroska segment I simply say 'file
+      linking' although 'segment linking' would be more appropriate.</p>
 
-        <p>Each segment is identified by a unique 128 bit wide segment
-          UID. This UID is automatically generated by
-          <i>mkvmerge</i>. The linking is done primarily via putting the
-          segment UIDs of the previous/next file into the segment header
-          information. <i>mkvinfo</i> prints these UIDs if it finds
-          them.</p>
+     <p>Each segment is identified by a unique 128 bit wide segment UID. This
+      UID is automatically generated by <i>mkvmerge</i>. The linking is done
+      primarily via putting the segment UIDs of the previous/next file into
+      the segment header information. <i>mkvinfo</i> prints these UIDs if it
+      finds them.</p>
 
-        <p>If a file is split into several smaller ones and linking is
-          used then the time codes will not start at 0 again but will
-          continue where the last file has left off. This way the
-          absolute time is kept even if the previous files are not
-          available (e.g. when streaming). If no linking is used then
-          the time codes should start at 0 for each file. By default
-          <i>mkvmerge</i> uses file linking. If you don't want that you
-          can turn it off by enabling this <code>Don't link</code>
-          check box.</p>
+     <p>If a file is split into several smaller ones and linking is used then
+      the time codes will not start at 0 again but will continue where the
+      last file has left off. This way the absolute time is kept even if the
+      previous files are not available (e.g. when streaming). If no linking is
+      used then the time codes should start at 0 for each file. By default
+      <i>mkvmerge</i> uses file linking. If you don't want that you
+      can turn it off by enabling this <code>Don't link</code>
+      check box.</p>
 
-        <h4><a name="global_link">3.5.3. Manual file/segment linking</a></h4>
+     <h4><a name="global_link">3.5.3. Manual file/segment linking</a></h4>
 
-        <p>Regardless of whether splitting is active or not the user can tell
-          <i>mkvmerge</i> to link the produced files to specific
-          UIDs. This is done by entering a valid segment UID into the
-          two input boxes, <code>Previous segment UID</code> and
-          <code>Next segment UID</code>.  These options accept a segment
-          UID in the format that <i>mkvinfo</i> outputs: 16 hexadecimal
-          numbers between 0x00 and 0xff prefixed with '0x' each and
-          separated with spaces, e.g. <code>0x41 0xda 0x73 0x66 0xd9
-          0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3
-          0x93</code>. Alternatively a shorter form can be used: 16
-          hexadecimal numbers between 0x00 and 0xff without the '0x'
-          prefixes and without the spaces, e.g.
-          <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
+     <p>Regardless of whether splitting is active or not the user can tell
+      <i>mkvmerge</i> to link the produced files to specific
+      UIDs. This is done by entering a valid segment UID into the
+      two input boxes, <code>Previous segment UID</code> and
+      <code>Next segment UID</code>.  These options accept a segment
+      UID in the format that <i>mkvinfo</i> outputs: 16 hexadecimal
+      numbers between 0x00 and 0xff prefixed with '0x' each and
+      separated with spaces, e.g. <code>0x41 0xda 0x73 0x66 0xd9
+       0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3
+       0x93</code>. Alternatively a shorter form can be used: 16
+      hexadecimal numbers between 0x00 and 0xff without the '0x'
+      prefixes and without the spaces, e.g.
+      <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
 
-        <p>If splitting is used then the first file is linked to the UID
-          given in the <code>Previous segment UID</code> input box, and
-          the last file is linked to the UID given in the <code>Next
-          segment UID</code> input box. If splitting is not used then
-          the one output file will be linked to both of the two
-          UIDs.</p>
+     <p>If splitting is used then the first file is linked to the UID given in
+      the <code>Previous segment UID</code> input box, and the last file is
+      linked to the UID given in the <code>Next segment UID</code> input
+      box. If splitting is not used then the one output file will be linked to
+      both of the two UIDs.</p>
 
-        <h4><a name="global_chapters">3.5.4. Chapters</a></h4>
+     <h4><a name="global_chapters">3.5.4. Chapters</a></h4>
 
-        <p>With the browse button you can select the chapters to add to
-          the output file. A full explanation of all aspects around
-          chapters can be found in the <a
-          href="mkvmerge-gui.html#chaptereditor"> Chapter editor
-          section</a>.</p>
+     <p>With the browse button you can select the chapters to add to the
+      output file. A full explanation of all aspects around chapters can be
+      found in the <a href="mkvmerge-gui.html#chaptereditor"> Chapter editor
+      section</a>.</p>
 
-        <h4><a name="global_tags">3.5.5. Global tags</a></h4>
+     <h4><a name="global_tags">3.5.5. Global tags</a></h4>
 
-        <p>Unlike the tags you can select for each track on the input
-          tab the tags selected here have to contain the track
-          UIDs. These tags are not assigned to any track
-          automatically. In 99% of all cases this is NOT the option you
-          want to use!</p>
+     <p>Unlike the tags you can select for each track on the input tab the
+      tags selected here have to contain the track UIDs. These tags are not
+      assigned to any track automatically. In 99% of all cases this is NOT the
+      option you want to use!</p>
 
-        <p>The full explanation can be found in
-          <a href="mkvmerge.html">mkvmerge's documentation</a>.</p>
+     <p>The full explanation can be found in
+      <a href="mkvmerge.html">mkvmerge's documentation</a>.</p>
 
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <p>
-          <img src="images/splitting.png"
-               alt="typical options for splitting">
-          <br>
-          <font size="-1">Typical options for splitting. Create two
-          files which will be approx. 700megs big.</font>
-        </p>
-      </td>
-    </tr>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/splitting.png"
+           alt="typical options for splitting">
+      <br>
+      <font size="-1">Typical options for splitting. Create two files which
+       will be approx. 700megs big.</font>
+     </p>
+    </td>
+   </tr>
   </table>
 
   <h3><a name="doit">3.6. Starting the merge process</a></h3>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
-        <p>Once everything has been set up the muxing process can be
-          started. The last thing to do is to chose where to mux
-          to. With the <code>browse</code> button you can select the
-          output file. After this has been done hit the <code>Start
-          muxing</code> button or select the same entry from the
-          <code>Muxing</code> menu.</p>
+   <tr>
+    <td valign="top">
+     <p>Once everything has been set up the muxing process can be started. The
+      last thing to do is to chose where to mux to. With the
+      <code>browse</code> button you can select the output file. After this
+      has been done hit the <code>Start muxing</code> button or select the
+      same entry from the <code>Muxing</code> menu.</p>
 
-        <p>If everything has been set up correctly <i>mmg</i> will show
-          the muxing dialog. The progress is shown at the top, as is a
-          general description of what <i>mkvmerge</i> is doing at the
-          moment (muxing, 1st pass of splitting files or 2nd pass of
-          splitting files).</p>
+     <p>If everything has been set up correctly <i>mmg</i> will show the
+      muxing dialog. The progress is shown at the top, as is a general
+      description of what <i>mkvmerge</i> is doing at the moment (muxing, 1st
+      pass of splitting files or 2nd pass of splitting files).</p>
 
-        <p><i>mkvmerge</i> knows three different 'severity levels' for
-          its messages: status reports, warnings and errors. All status
-          report messages are shown in the upper window. These include
-          the track types encountered and other interesting things.</p>
+     <p><i>mkvmerge</i> knows three different 'severity levels' for its
+      messages: status reports, warnings and errors. All status report
+      messages are shown in the upper window. These include the track types
+      encountered and other interesting things.</p>
 
-        <p>Warnings are shown in the middle window. <i>mkvmerge</i> will
-          not abort when it issues a warning, but it might stop muxing
-          the track for which the warning was printed. You should pay
-          close attention to all warning messages.</p>
+     <p>Warnings are shown in the middle window. <i>mkvmerge</i> will not
+      abort when it issues a warning, but it might stop muxing the track for
+      which the warning was printed. You should pay close attention to all
+      warning messages.</p>
 
-        <p>Errors are show in the lower window. Errors are always fatal,
-          and <i>mkvmerge</i> will stop muxing right after it has printed
-          the error message. Such a message might be that the hard disc
-          is full or that the source file is damaged and cannot be
-          processed any further.</p>
+     <p>Errors are show in the lower window. Errors are always fatal, and
+      <i>mkvmerge</i> will stop muxing right after it has printed the error
+      message. Such a message might be that the hard disc is full or that the
+      source file is damaged and cannot be processed any further.</p>
 
-        <p>The button <code>Abort</code> sends <i>mkvmerge</i> the
-          signal to stop muxing. Unless <i>mkvmerge</i> is stuck in some
-          endless loop it will stop soon after you've pressed the
-          button. With <code>Save log</code> you can save the complete
-          output from <i>mkvmerge</i> into a text file for further study
-          or in case you've encountered a bug and want to send me some
-          additional information.</p>
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <p>
-          <img src="images/muxingwindow.png"
-               alt="the muxing window">
-          <br>
-          <font size="-1">The muxing window</font>
-        </p>
-      </td>
-    </tr>
+     <p>The button <code>Abort</code> sends <i>mkvmerge</i> the signal to stop
+      muxing. Unless <i>mkvmerge</i> is stuck in some endless loop it will
+      stop soon after you've pressed the button. With <code>Save log</code>
+      you can save the complete output from <i>mkvmerge</i> into a text file
+      for further study or in case you've encountered a bug and want to send
+      me some additional information.</p>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/muxingwindow.png"
+           alt="the muxing window">
+      <br>
+      <font size="-1">The muxing window</font>
+     </p>
+    </td>
+   </tr>
   </table>
 
   <h3><a name="saveload">3.7. Saving and loading muxing settings</a></h3>
 
-  <p>All your hard work of setting options does not have to be lost when
-    you exit the program. You can save all your muxing settings into
-    text based configuration files with the <code>Save settings</code>
-    option in the <code>File</code> menu and restore them later with the
-    <code>Load settings</code> option. The default extension is
-    <code>.mmg</code> and is usually not used by other programs. You can
-    also associate this extension with <i>mmg</i> so that it
-    automatically loads the settings if it is called with the name of
-    such a settings file.</p>
+  <p>All your hard work of setting options does not have to be lost when you
+   exit the program. You can save all your muxing settings into text based
+   configuration files with the <code>Save settings</code> option in the
+   <code>File</code> menu and restore them later with the <code>Load
+   settings</code> option. The default extension is <code>.mmg</code> and is
+   usually not used by other programs. You can also associate this extension
+   with <i>mmg</i> so that it automatically loads the settings if it is called
+   with the name of such a settings file.</p>
 
   <hr>
 
   <h2><a name="chaptereditor">4. The chapter editor</a></h2>
 
   <p>One of the new features of <i>mmg</i> is a full-featured chapter
-    editor. It can read text based chapter files, import chapters from
-    existing Matroska files, write text based chapter files that can be
-    selected on the global tab and write chapters directly to existing
-    Matroska files.</p>
+   editor. It can read text based chapter files, import chapters from existing
+   Matroska files, write text based chapter files that can be selected on the
+   global tab and write chapters directly to existing Matroska files.</p>
 
   <h3><a name="chapterconcept">4.1. Matroska's chapter concept</a></h3>
 
   <p>Unlike a lot of other systems Matroska supports <i>nested</i>
-    chapters. This basically means that you can define sub chapters for
-    chapters.</p>
+   chapters. This basically means that you can define sub chapters for
+   chapters.</p>
 
-  <p>A chapter entity in Matroska consists of at least four items: The
-    UID of the track(s) it applies to, the chapter title/name, it's
-    start time and the language code associated with it. Additional
-    elements are optional and include the end time, more language codes
-    and country codes. Usually the user will only need the mandatory
-    elements. Of these he can only specify the name, the start time and
-    the language code. <i>mkvmerge</i> will then automatically assign
-    all chapters to the complete file.</p>
+  <p>A chapter entity in Matroska consists of at least four items: The UID of
+   the track(s) it applies to, the chapter title/name, it's start time and the
+   language code associated with it. Additional elements are optional and
+   include the end time, more language codes and country codes. Usually the
+   user will only need the mandatory elements. Of these he can only specify
+   the name, the start time and the language code. <i>mkvmerge</i> will then
+   automatically assign all chapters to the complete file.</p>
 
   <h3><a name="chapterexamples">4.2. Examples</a></h3>
 
-  <p>The first example is a simple one. The movie in question contains
-    four parts: The intro starting at the beginning, the first act, the
-    second act, and the credits. Note that the end timestamps are
-    optional.</p>
+  <p>The first example is a simple one. The movie in question contains four
+   parts: The intro starting at the beginning, the first act, the second act,
+   and the credits. Note that the end timestamps are optional.</p>
 
-  <p><code>Intro (from 00:00:00, language English)<br>
-      Act 1 (from 00:01:00, language English)<br>
-      Act 2 (from 00:05:30, language English)<br>
-      Credits (from 00:12:20 until 00;12:55, language
-      English)</code></p>
+  <p><code>Intro (from 00:00:00, language English)
+    <br>
+    Act 1 (from 00:01:00, language English)
+    <br>
+    Act 2 (from 00:05:30, language English)
+    <br>
+    Credits (from 00:12:20 until 00;12:55, language English)</code></p>
 
-  <p>A more complex example including sub chapters. Let's take Ludwig
-    van Beethoven's opera Fidelio. For the sake of brevity I'm only
-    including the first three pieces of the two acts.</p>
+  <p>A more complex example including sub chapters. Let's take Ludwig van
+   Beethoven's opera Fidelio. For the sake of brevity I'm only including the
+   first three pieces of the two acts.</p>
 
   <p>The first act contains:
-    <ol>
-      <li>Overt&uuml;re (6:24 long),</li>
-      <li>Arie: 'Jetzt, Sch&auml;tzchen, jetzt sind wir allein' (4:46
-        long) and</li>
-      <li>Dialog: 'Armer Jaquino' (0:10 long).</li>
-    </ol>
-    The second act contains:
-    <ol>
-      <li>Ouvert&uuml;re und Arie: 'Gott! welch Dunkel hier!' (10:46
-        long),</li>
-      <li>Melodrama und Duett: 'Wie kalt ist es' (5:21 long) and</li>
-      <li>Dialog: 'Er erwacht!' (0:59 long).</li>
-    </ol>
+   <ol>
+    <li>Overt&uuml;re (6:24 long),</li>
+    <li>Arie: 'Jetzt, Sch&auml;tzchen, jetzt sind wir allein' (4:46
+     long) and</li>
+    <li>Dialog: 'Armer Jaquino' (0:10 long).</li>
+   </ol>
+   The second act contains:
+   <ol>
+    <li>Ouvert&uuml;re und Arie: 'Gott! welch Dunkel hier!' (10:46
+     long),</li>
+    <li>Melodrama und Duett: 'Wie kalt ist es' (5:21 long) and</li>
+    <li>Dialog: 'Er erwacht!' (0:59 long).</li>
+   </ol>
   </p>
 
-  <p>The first act, which will be our first chapter, has a combined
-    length of 11:20. Our second act has a length of 17:06. These
-    chapters would look like this:</p>
+  <p>The first act, which will be our first chapter, has a combined length of
+   11:20. Our second act has a length of 17:06. These chapters would look like
+   this:</p>
 
   <p><code>Erster Akt (from 00:00:00 until 00:11:20, language German,
-      country Germany)<br>
-      &nbsp;&nbsp;&nbsp;
-      Ouvert&uuml;re (from 00:00:00 until 00:06:24, language German,
-      country Germany)<br>
-      &nbsp;&nbsp;&nbsp;
-      Arie: 'Jetzt, Sch&auml;tzchen, jetzt sind wir allein' (from
-      00:06:24 until 00:11:10, language German, country Germany)<br>
-      &nbsp;&nbsp;&nbsp;
-      Dialog: 'Armer Jaquino' (from 00:11:10 until 00:11:20, language
-      German, country Germany)<br>
+    country Germany)
+    <br>
+    &nbsp;&nbsp;&nbsp; Ouvert&uuml;re (from 00:00:00 until 00:06:24, language
+    German, country Germany)
+    <br>
+    &nbsp;&nbsp;&nbsp; Arie: 'Jetzt, Sch&auml;tzchen, jetzt sind wir allein'
+    (from 00:06:24 until 00:11:10, language German, country Germany)<br>
+    &nbsp;&nbsp;&nbsp; Dialog: 'Armer Jaquino' (from 00:11:10 until 00:11:20,
+    language German, country Germany)
+    <br>
 
-      Zweiter Akt (from 00:11:20 until 00:28:26, language German,
-      country Germany)<br>
-      &nbsp;&nbsp;&nbsp;
-      Ouvert&uuml;re und Arie: 'Gott! welch Dunkel hier!' (from 00:11:20
-      until 00:22:06, language German, country Germany)<br>
-      &nbsp;&nbsp;&nbsp;
-      Melodrama und Duett: 'Wie kalt ist es' (from 00:22:06 until
-      00:27:27, language German, country Germany)<br>
-      &nbsp;&nbsp;&nbsp;
-      Dialog: 'Er erwacht!' (from 00:27:27 until 00:28:26, language
-      German, country Germany)
-    </code>
+    Zweiter Akt (from 00:11:20 until 00:28:26, language German,
+    country Germany)
+    <br>
+    &nbsp;&nbsp;&nbsp; Ouvert&uuml;re und Arie: 'Gott! welch Dunkel hier!'
+    (from 00:11:20 until 00:22:06, language German, country Germany)
+    <br>
+    &nbsp;&nbsp;&nbsp; Melodrama und Duett: 'Wie kalt ist es' (from 00:22:06
+    until 00:27:27, language German, country Germany)
+    <br>
+    &nbsp;&nbsp;&nbsp; Dialog: 'Er erwacht!' (from 00:27:27 until 00:28:26,
+    language German, country Germany)
+   </code>
   </p>
 
   <h3><a name="chapterformats">4.3. Chapter formats supported by mkvmerge
-    </a></h3>
+  </a></h3>
 
-  <p><i>mkvmerge</i> and <i>mmg</i>'s chapter editor both support
-    different formats for chapter files.</p>
+  <p><i>mkvmerge</i> and <i>mmg</i>'s chapter editor both support different
+   formats for chapter files.</p>
 
   <h4><a name="cfsimple">4.3.1. Simple/OGM style chapter files</a></h4>
 
-  <p>One of the most basic formats is the format used in OGM files. It
-    is a text based format. Each chapter entry contains of two lines,
-    the first containing the start time, the second the chapter's
-    title/name. All lines are numbered.</p>
+  <p>One of the most basic formats is the format used in OGM files. It is a
+   text based format. Each chapter entry contains of two lines, the first
+   containing the start time, the second the chapter's title/name. All lines
+   are numbered.</p>
 
   <p>The first example from above can be expressed in this format:<br>
-    <code>CHAPTER01=00:00:00.000<br>
-      CHAPTER01NAME=Intro<br>
-      CHAPTER02=00:01:00.000<br>
-      CHAPTER02NAME=Act 1<br>
-      CHAPTER03=00:05:30.000<br>
-      CHAPTER03NAME=Act 2<br>
-      CHAPTER04=00:12:20.000<br>
-      CHAPTER04NAME=Credits
-    </code>
+   <code>CHAPTER01=00:00:00.000<br>
+    CHAPTER01NAME=Intro<br>
+    CHAPTER02=00:01:00.000<br>
+    CHAPTER02NAME=Act 1<br>
+    CHAPTER03=00:05:30.000<br>
+    CHAPTER03NAME=Act 2<br>
+    CHAPTER04=00:12:20.000<br>
+    CHAPTER04NAME=Credits
+   </code>
   </p>
 
-  <p>The second example cannot be expressed in this format because it
-    supports neither language specifications nor end times or nested
-    chapters. The advantage is that such files are very easy to create,
-    and there are several tools available for both Windows and
-    Unix/Linux that create such files directly from DVDs.</p>
+  <p>The second example cannot be expressed in this format because it supports
+   neither language specifications nor end times or nested chapters. The
+   advantage is that such files are very easy to create, and there are several
+   tools available for both Windows and Unix/Linux that create such files
+   directly from DVDs.</p>
 
   <p>Due to its limitations <i>mmg</i> cannot output chapters in this
-    format.</p>
+   format.</p>
 
   <h4><a name="cfxml">4.3.2. Full-featured XML style chapter files</a></h4>
 
-  <p>I've created a XML based chapter format that closely matches the
-    system Matroska uses. With this format you have the full control
-    over all features. I won't describe this format here in
-    detail. Please have a look at the example XML chapter files that
-    came with <i>mkvtoolnix</i>.</p>
+  <p>I've created a XML based chapter format that closely matches the system
+   Matroska uses. With this format you have the full control over all
+   features. I won't describe this format here in detail. Please have a look
+   at the example XML chapter files that came with <i>mkvtoolnix</i>.</p>
 
   <h4><a name="cfkax">4.3.3. Chapters found in Matroska files</a></h4>
 
-  <p>The chapter editor can read chapters directly from Matroska
-    files. These can be written to XML chapter files or back to the same
-    Matroska file or another Matroska file. All features are
-    supported.</p>
+  <p>The chapter editor can read chapters directly from Matroska files. These
+   can be written to XML chapter files or back to the same Matroska file or
+   another Matroska file. All features are supported.</p>
 
   <h3><a name="creatingchapters">4.4. Creating chapter files</a></h3>
 
   <table width="100%" border="0">
-    <tr>
-      <td valign="top">
-        <p>The chapter editor consists of three parts: the tree view of
-          all chapters, the four buttons used for adding and removing
-          chapter entries, and the input boxes which are used for
-          setting the chapter entry's data.</p>
+   <tr>
+    <td valign="top">
+     <p>The chapter editor consists of three parts: the tree view of all
+      chapters, the four buttons used for adding and removing chapter entries,
+      and the input boxes which are used for setting the chapter entry's
+      data.</p>
 
-        <p>In Matroska files one chapter is defined by having a start
-          time, a name and a language that is associated with that
-          name. You can have several names for one chapter and each
-          associated with a different language. You may also add an end
-          time, but that is not mandatory.</p>
+     <p>In Matroska files one chapter is defined by having a start time, a
+      name and a language that is associated with that name. You can have
+      several names for one chapter and each associated with a different
+      language. You may also add an end time, but that is not mandatory.</p>
 
-        <p>A new chapter file is started with the <code>New</code>
-          option from the <code>Chapter editor</code> menu. You can add
-          a new chapter with the <code>Add chapter</code> or <code>Add
-          subchapter</code> buttons. The difference between these two
-          buttons is that when a chapter has been selected <code>Add
-          chapter</code> will append a new chapter directly after the
-          selected chapter on the same level, and <code>Add
-          subchapter</code> will add a new chapter as the last child of
-          the currently selected chapter.</p>
+     <p>A new chapter file is started with the <code>New</code> option from
+      the <code>Chapter editor</code> menu. You can add a new chapter with the
+      <code>Add chapter</code> or <code>Add subchapter</code> buttons. The
+      difference between these two buttons is that when a chapter has been
+      selected <code>Add chapter</code> will append a new chapter directly
+      after the selected chapter on the same level, and <code>Add
+      subchapter</code> will add a new chapter as the last child of the
+      currently selected chapter.</p>
 
-        <p>The <code>Remove chapter</code> has to be used with care. It
-          removes the complete subtree without asking for confirmation,
-          and there is no undo option available at the moment.</p>
+     <p>The <code>Remove chapter</code> has to be used with care. It removes
+      the complete subtree without asking for confirmation, and there is no
+      undo option available at the moment.</p>
 
-        <p>After selecting a chapter entry you can change its data. The
-          format for the start and end time are either
-          <code>HH:MM:SS.mmm</code> or simply <code>HH:MM:SS</code>. One
-          chapter name will already have been added. You can edit it and
-          select the language that this name is given in. This way you
-          could provide names in several languages, e.g. 'The hero
-          arrives' with 'eng' as the language and 'Der Held kommt an'
-          with 'ger' as the language. Just hit the <code>Add name</code>
-          button if you need more entries and <code>Remove name</code>
-          in order to get rid of one.</p>
+     <p>After selecting a chapter entry you can change its data. The format
+      for the start and end time are either <code>HH:MM:SS.mmm</code> or
+      simply <code>HH:MM:SS</code>. One chapter name will already have been
+      added. You can edit it and select the language that this name is given
+      in. This way you could provide names in several languages, e.g. 'The
+      hero arrives' with 'eng' as the language and 'Der Held kommt an' with
+      'ger' as the language. Just hit the <code>Add name</code> button if you
+      need more entries and <code>Remove name</code> in order to get rid of
+      one.</p>
 
-        <p>Creating many chapters and always changing the language can
-          be quite some work. Therefore you can select which language
-          and country tags <i>mmg</i> should add by default with the
-          <code>Set default values</code> menu entry in the
-          <code>Chapters</code> menu. The <code>Set values</code> button
-          does something similar. With it you can apply a language
-          and/or country to the currently selected entry and all its
-          children.</p>
+     <p>Creating many chapters and always changing the language can be quite
+      some work. Therefore you can select which language and country tags
+      <i>mmg</i> should add by default with the <code>Set default
+      values</code> menu entry in the <code>Chapters</code> menu. The
+      <code>Set values</code> button does something similar. With it you can
+      apply a language and/or country to the currently selected entry and all
+      its children.</p>
 
-        <p>Saving chapters to XML files can be done with <code>Save</code> or
-          <code>Save as</code>. <code>Save as</code> cannot be used to
-          write chapters to an existing Matroska file - you'll have to
-          use <code>Save to Matroska file</code> for that.</p>
-      </td>
-      <td>&nbsp;</td>
-      <td valign="top">
-        <p>
-          <img src="images/chaptereditor.png"
-               alt="the chapter editor">
-          <br>
-          <font size="-1">The chapter editor showing the example from
-            above</font>
-        </p>
-      </td>
-    </tr>
+     <p>Saving chapters to XML files can be done with <code>Save</code> or
+      <code>Save as</code>. <code>Save as</code> cannot be used to write
+      chapters to an existing Matroska file - you'll have to use <code>Save to
+      Matroska file</code> for that.</p>
+    </td>
+    <td>&nbsp;</td>
+    <td valign="top">
+     <p>
+      <img src="images/chaptereditor.png"
+           alt="the chapter editor">
+      <br>
+      <font size="-1">The chapter editor showing the example from
+       above</font>
+     </p>
+    </td>
+   </tr>
   </table>
 
   <h3><a name="editingchapters">4.5. Editing existing chapters</a></h3>
 
-  <p>You can load existing chapter files or chapters from Matroska files
-    by selecting the <code>Load</code> option from the <code>Chapter
-    editor</code> menu. <i>mmg</i> will automatically detect the file
-    type used and read the chapters.</p>
+  <p>You can load existing chapter files or chapters from Matroska files by
+   selecting the <code>Load</code> option from the <code>Chapter editor</code>
+   menu. <i>mmg</i> will automatically detect the file type used and read the
+   chapters.</p>
 
-</body>
+ </body>
 </html>
