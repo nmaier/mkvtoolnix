@@ -779,8 +779,8 @@ system.
 .LP
 \fBScope of the tags\fR
 
-Matroska tags do not automatically apply to the complete file. They
-may, however, apply to different parts of the file: to one or more
+Matroska tags do not automatically apply to the complete file. They can,
+but they also may apply to different parts of the file: to one or more
 tracks, to one or more chapters, or even to a combination of both. The
 aforementioned URL gives more details about this fact.
 
@@ -801,13 +801,11 @@ over to \fBmkvmerge\fR.
 \fBmkvmerge\fR knows two options with which you can add tags to
 Matroska files: The \fB\-\-global\-tags\fR and the \fB\-\-tags\fR
 options. The difference is that the former option,
-\fB\-\-global\-tags\fR, will not modify the tags read from the file in
-any way, while the latter option, \fB\-\-tags\fR, automatically
-inserts the UID that \fBmkvmerge\fR generates for the tag specified
-with the \fITID\fR part of the \fB\-\-tags\fR option.  Therefore the
-tag file used with \fB\-\-tags\fR does not need any \fITargets\fR
-element (in fact they are deleted if the tag file contained any),
-while the one used with \fB\-\-global\-tags\fR does need them.
+\fB\-\-global\-tags\fR, will make the tags apply to the complete file
+by removing any of those \fITargets\fR elements mentioned above.  The
+latter option, \fB\-\-tags\fR, automatically inserts the UID that
+\fBmkvmerge\fR generates for the tag specified with the \fITID\fR part
+of the \fB\-\-tags\fR option.
 
 .LP
 \fBExample\fR

@@ -215,9 +215,10 @@ tab_global::tab_global(wxWindow *parent):
   b_browse_global_tags->SetToolTip(_T("The difference between tags associated "
                                       "with a track and global tags is "
                                       "explained in mkvmerge's documentation. "
-                                      "Most of the time you probably want to "
-                                      "use the tags associated with a track "
-                                      "on the 'input' tab."));
+                                      "In short: global tags apply to the "
+                                      "complete file while the tags you can "
+                                      "add on the 'input' tab apply to only "
+                                      "one track."));
 }
 
 void tab_global::on_browse_global_tags(wxCommandEvent &evt) {

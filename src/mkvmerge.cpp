@@ -512,20 +512,30 @@ static void display_progress(bool force) {
 void parse_and_add_tags(const char *file_name) {
   KaxTags *tags;
   KaxTag *tag;
+  KaxTagTargets *targets;
+  uint32_t i;
 
   tags = new KaxTags;
 
   parse_xml_tags(file_name, tags);
 
-  if (!tags->CheckMandatory())
-    mxerror("Error parsing the tags in '%s': some mandatory "
-            "elements are missing.\n", file_name);
-
   while (tags->ListSize() > 0) {
     tag = (KaxTag *)(*tags)[0];
+    targets = &GetChild<KaxTagTargets>(*tag);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
+      1;
     if (!tag->CheckMandatory())
       mxerror("Error parsing the tags in '%s': some mandatory "
               "elements are missing.\n", file_name);
+    for (i = 0; i < tag->ListSize(); i++) {
+      if (EbmlId(*(*tag)[i]) == KaxTagTargets::ClassInfos.GlobalId) {
+        targets = static_cast<KaxTagTargets *>((*tag)[i]);
+        while (targets->ListSize() > 0) {
+          delete (*targets)[0];
+          targets->Remove(0);
+        }
+      }
+    }
     tags->Remove(0);
     add_tags(tag);
   }
