@@ -4,6 +4,11 @@ bin_PROGRAMS = mmg
 
 INCLUDES = -I.. -I../..
 
+CFLAGS=@CFLAGS@ @EXTRA_CFLAGS@
+CPPFLAGS=@CPPFLAGS@ @EXTRA_CFLAGS@
+CXXFLAGS=@CXXFLAGS@ @EXTRA_CFLAGS@
+LDFLAGS=@LDFLAGS@ @EXTRA_LDFLAGS@
+
 mmg_SOURCES = mmg.cpp mmg.h \
 			../chapters.cpp ../chapters.h \
 			../chapter_parser_xml.cpp \
@@ -20,5 +25,5 @@ mmg_SOURCES = mmg.cpp mmg.h \
 			tab_global.cpp \
 			tab_settings.cpp
 
-mmg_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @EXPAT_LIBS@ \
-		@WXWINDOWS_LIBS@ @MINGW_LIBS@ @MINGW_GUIAPP@ @ICONV_LIBS@
+mmg_LDADD = @MINGW_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
+		@WXWINDOWS_LIBS@ @EXPAT_LIBS@ @MINGW_GUIAPP@ @ICONV_LIBS@

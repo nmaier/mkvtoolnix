@@ -675,13 +675,25 @@ AC_DEFUN(PATH_EXPAT,
 [ AC_ARG_WITH(expat,
 	      [  --with-expat=PREFIX           Path to where the Expat library is installed],
 	      , with_expat_given=no)
+AC_ARG_WITH(expat-include,
+	      [  --with-expat-include=DIR      Path to the Expat include file],
+	      , with_expat_include_given=no)
+AC_ARG_WITH(expat-lib,
+	      [  --with-expat-lib=DIR          Path to where the Expat library is installed],
+	      , with_expat_lib_given=no)
 
   EXPAT_CFLAGS=
   EXPAT_LIBS=
-	if test "$with_expat" != "yes" -a "$with_expat" != ""; then
+  if test "$with_expat_include" != ""; then
+    EXPAT_CFLAGS="-I$with_expat_include"
+  elif test "$with_expat" != "yes" -a "$with_expat" != ""; then
 		EXPAT_CFLAGS="-I$with_expat/include"
-		EXPAT_LIBS="-L$with_expat/lib"
 	fi
+  if test "$with_expat_lib" != ""; then
+    EXPAT_LIBS="-L$with_expat_lib"
+  elif test "$with_expat" != "yes" -a "$with_expat" != ""; then
+		EXPAT_LIBS="-L$with_expat/lib"
+  fi
 	AC_CHECK_LIB(expat, XML_ParserCreate,
 		     [ EXPAT_LIBS="$EXPAT_LIBS -lexpat"
 		       expat_found=yes ],
@@ -793,3 +805,31 @@ AC_DEFUN(PATH_BZ2,
   AC_SUBST(BZ2_LIBS)
 ])
 
+
+AC_DEFUN(PATH_EXTRADIRS,
+[ AC_ARG_WITH(extra-includes,
+	      [  --with-extra-includes=DIR     Path to other include directories],
+	      , with_extra_include_given=no)
+AC_ARG_WITH(extra-libs,
+	      [  --with-extra-libs=DIR         Path to other library directories],
+	      , with_extra_libs_given=no)
+
+  EXTRA_CFLAGS=
+  if test "$with_extra_includes" != ""; then
+    DIRS=`echo $with_extra_includes | cut -d '=' -f 2 | sed 's,;, -I,g'`
+    EXTRA_CFLAGS="-I$DIRS"
+    CFLAGS="$CFLAGS -I$DIRS"
+    CXXFLAGS="$CXXFLAGS -I$DIRS"
+    CPPFLAGS="$CPPFLAGS -I$DIRS"
+  fi
+
+  EXTRA_LDFLAGS=
+  if test "$with_extra_libs" != ""; then
+    DIRS=`echo $with_extra_libs | cut -d '=' -f 2 | sed 's,;, -L,g'`
+    EXTRA_LDFLAGS="-L$DIRS"
+    LDFLAGS="$LDFLAGS -L$DIRS"
+  fi
+
+  AC_SUBST(EXTRA_CFLAGS)
+  AC_SUBST(EXTRA_LDFLAGS)
+])
