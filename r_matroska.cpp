@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.11 2003/04/26 11:07:19 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.12 2003/04/28 07:20:46 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -428,7 +428,7 @@ int mkv_reader_c::read_headers() {
       die("new");
     
     // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL, false);
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
       fprintf(stderr, "Error: matroska_reader: no EBML head found.\n");
       return 0;
@@ -440,7 +440,7 @@ int mkv_reader_c::read_headers() {
     fprintf(stdout, "matroska_reader: Found the head...\n");
     
     // Next element must be a segment
-    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL, false);
+    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
       fprintf(stdout, "matroska_reader: but no segment :(\n");
       return 0;
@@ -456,8 +456,8 @@ int mkv_reader_c::read_headers() {
     upper_lvl_el = 0;
     exit_loop = 0;
     // We've got our segment, so let's find the tracks
-    l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                        true);
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
     while (l1 != NULL) {
       if ((upper_lvl_el != 0) || exit_loop)
         break;
@@ -466,8 +466,8 @@ int mkv_reader_c::read_headers() {
         // General info about this Matroska file
         fprintf(stdout, "matroska_reader: |+ segment information...\n");
         
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if ((upper_lvl_el != 0) || exit_loop)
             break;
@@ -501,8 +501,8 @@ int mkv_reader_c::read_headers() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         }
 
@@ -511,8 +511,8 @@ int mkv_reader_c::read_headers() {
         // contained in this segment.
         fprintf(stdout, "matroska_reader: |+ segment tracks...\n");
         
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if ((upper_lvl_el != 0) || exit_loop)
             break;
@@ -525,8 +525,8 @@ int mkv_reader_c::read_headers() {
             if (track == NULL)
               return 0;
             
-            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
             while (l3 != NULL) {
               if (upper_lvl_el != 0)
                 break;
@@ -569,8 +569,8 @@ int mkv_reader_c::read_headers() {
 
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
                 fprintf(stdout, "matroska_reader: |  + Audio track\n");
-                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
                   if (upper_lvl_el != 0)
                     break;
@@ -612,15 +612,16 @@ int mkv_reader_c::read_headers() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
                   }
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) == KaxTrackVideo::ClassInfos.GlobalId) {
                 fprintf(stdout, "matroska_reader: |  + Video track\n");
-                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
                   if (upper_lvl_el != 0)
                     break;
@@ -661,8 +662,9 @@ int mkv_reader_c::read_headers() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
                   }
                 } // while (l4 != NULL)
 
@@ -716,8 +718,8 @@ int mkv_reader_c::read_headers() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
               }
             } // while (l3 != NULL)
 
@@ -734,8 +736,8 @@ int mkv_reader_c::read_headers() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
 
@@ -761,8 +763,8 @@ int mkv_reader_c::read_headers() {
       } else {
         l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
         delete l1;
-        l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
       }
     } // while (l1 != NULL)
     
@@ -904,8 +906,8 @@ int mkv_reader_c::read() {
           l2 = saved_l2;
           saved_l2 = NULL;
         } else
-          l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                              true);
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
@@ -931,8 +933,8 @@ int mkv_reader_c::read() {
             block_ref2 = -1;
             block_track = NULL;
 
-            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, false);
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
             while (l3 != NULL) {
               if (upper_lvl_el > 0)
                 break;
@@ -984,8 +986,8 @@ int mkv_reader_c::read() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
               }
             } // while (l3 != NULL)
 
@@ -1002,8 +1004,8 @@ int mkv_reader_c::read() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
 
           }
         } // while (l2 != NULL)
@@ -1022,8 +1024,8 @@ int mkv_reader_c::read() {
       } else {
         l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
         delete l1;
-        l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
       }
     } // while (l1 != NULL)
   } catch (exception ex) {
