@@ -73,6 +73,8 @@ typedef struct {
 
   int64_t units_processed;
 
+  char *track_name;
+
   int ok;
 
   generic_packetizer_c *packetizer;

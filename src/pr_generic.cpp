@@ -125,6 +125,16 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
 
+  // Let's see if the user has specified a name for this track.
+  for (i = 0; i < ti->track_names->size(); i++) {
+    lang = &(*ti->track_names)[i];
+    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
+      safefree(ti->track_name);
+      ti->track_name = safestrdup(lang->language);
+      break;
+    }
+  }
+
   // Set default header values to 'unset'.
   hserialno = track_number++;
   huid = 0;
@@ -244,6 +254,11 @@ int generic_packetizer_c::get_track_type() {
 
 int generic_packetizer_c::get_track_num() {
   return hserialno;
+}
+
+void generic_packetizer_c::set_track_name(const char *name) {
+  safefree(ti->track_name);
+  ti->track_name = safestrdup(name);
 }
 
 void generic_packetizer_c::set_codec_id(const char *id) {
@@ -426,11 +441,15 @@ void generic_packetizer_c::set_headers() {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 0;
 
-  if (ti->language != NULL) {
+  if (ti->language != NULL)
     *(static_cast<EbmlString *>
       (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
-  }
 
+  if (ti->track_name != NULL)
+    *(static_cast<EbmlUnicodeString *>
+      (&GetChild<KaxTrackName>(*track_entry))) =
+      cstrutf8_to_UTFstring(ti->track_name);
+  
   if (htrack_type == track_video) {
     KaxTrackVideo &video =
       GetChild<KaxTrackVideo>(*track_entry);
@@ -662,19 +681,24 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->languages = new vector<language_t>(*src->languages);
   for (i = 0; i < src->languages->size(); i++)
     (*dst->languages)[i].language = safestrdup((*src->languages)[i].language);
+  dst->language = safestrdup(src->language);
   dst->sub_charsets = new vector<language_t>(*src->sub_charsets);
   for (i = 0; i < src->sub_charsets->size(); i++)
     (*dst->sub_charsets)[i].language =
       safestrdup((*src->sub_charsets)[i].language);
+  dst->sub_charset = safestrdup(src->sub_charset);
   dst->all_tags = new vector<tags_t>(*src->all_tags);
   for (i = 0; i < src->all_tags->size(); i++)
     (*dst->all_tags)[i].file_name = safestrdup((*src->all_tags)[i].file_name);
   dst->aac_is_sbr = new vector<int64_t>(*src->aac_is_sbr);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
-  dst->language = safestrdup(src->language);
-  dst->sub_charset = safestrdup(src->sub_charset);
   dst->compression_list = new vector<cue_creation_t>(*src->compression_list);
+  dst->track_names = new vector<language_t>(*src->track_names);
+  for (i = 0; i < src->track_names->size(); i++)
+    (*dst->track_names)[i].language =
+      safestrdup((*src->track_names)[i].language);
+  dst->track_name = safestrdup(src->track_name);
   dst->tags = NULL;
 
   return dst;
@@ -696,17 +720,21 @@ void free_track_info(track_info_t *ti) {
   for (i = 0; i < ti->languages->size(); i++)
     safefree((*ti->languages)[i].language);
   delete ti->languages;
+  safefree(ti->language);
   for (i = 0; i < ti->sub_charsets->size(); i++)
     safefree((*ti->sub_charsets)[i].language);
   delete ti->sub_charsets;
+  safefree(ti->sub_charset);
   for (i = 0; i < ti->all_tags->size(); i++)
     safefree((*ti->all_tags)[i].file_name);
   delete ti->all_tags;
   delete ti->aac_is_sbr;
   delete ti->compression_list;
-  safefree(ti->language);
+  for (i = 0; i < ti->track_names->size(); i++)
+    safefree((*ti->track_names)[i].language);
+  delete ti->track_names;
+  safefree(ti->track_name);
   safefree(ti->private_data);
-  safefree(ti->sub_charset);
   if (ti->tags != NULL)
     delete ti->tags;
   safefree(ti);

@@ -46,6 +46,7 @@ extern KaxSeekHead *kax_sh_main, *kax_sh_cues;
 extern KaxChapters *kax_chapters;
 extern int track_number;
 extern int64_t tags_size;
+extern string segment_title;
 
 extern float video_fps;
 

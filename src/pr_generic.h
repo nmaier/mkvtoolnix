@@ -115,6 +115,9 @@ typedef struct {
   vector<cue_creation_t> *compression_list; // As given on the command line
   int compression;              // For this very track
 
+  vector<language_t> *track_names; // As given on the command line
+  char *track_name;             // For this very track
+
   bool no_chapters;
 } track_info_t;
 
@@ -212,6 +215,8 @@ public:
   virtual void force_default_track(int type);
 
   virtual void set_tag_track_uid();
+
+  virtual void set_track_name(const char *name);
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

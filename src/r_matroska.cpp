@@ -136,6 +136,8 @@ kax_reader_c::~kax_reader_c() {
         delete tracks[i]->packetizer;
       safefree(tracks[i]->private_data);
       safefree(tracks[i]->codec_id);
+      safefree(tracks[i]->language);
+      safefree(tracks[i]->track_name);
       safefree(tracks[i]);
     }
 
@@ -664,6 +666,7 @@ int kax_reader_c::read_headers() {
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         KaxTimecodeScale *ktc_scale;
         KaxDuration *kduration;
+        KaxTitle *ktitle;
 
         // General info about this Matroska file
         if (verbose > 1)
@@ -685,6 +688,20 @@ int kax_reader_c::read_headers() {
           segment_duration = float(*kduration) * tc_scale / 1000000000.0;
           if (verbose > 1)
             mxinfo(PFX "| + duration: %.3fs\n", segment_duration);
+        }
+
+        ktitle = FINDFIRST(l1, KaxTitle);
+        if (ktitle != NULL) {
+          char *tmp;
+          tmp = UTFstring_to_cstr(UTFstring(*ktitle));
+          if (verbose > 1)
+            mxinfo(PFX "| + title: %s\n", tmp);
+          safefree(tmp);
+          if (segment_title.length() == 0) {
+            tmp = UTFstring_to_cstrutf8(UTFstring(*ktitle));
+            segment_title = tmp;
+            safefree(tmp);
+          }
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
@@ -712,6 +729,7 @@ int kax_reader_c::read_headers() {
           KaxTrackFlagDefault *ktfdefault;
           KaxTrackLanguage *ktlanguage;
           KaxTrackMinCache *ktmincache;
+          KaxTrackName *ktname;
 
           if (verbose > 1)
             mxinfo(PFX "| + a track...\n");
@@ -909,6 +927,18 @@ int kax_reader_c::read_headers() {
             track->language = safestrdup(string(*ktlanguage).c_str());
           }
 
+          ktname = FINDFIRST(ktentry, KaxTrackName);
+          if (ktname != NULL) {
+            char *tmp;
+            safefree(track->track_name);
+            track->track_name =
+              UTFstring_to_cstrutf8(UTFstring(*ktname));
+            tmp = UTFstring_to_cstr(UTFstring(*ktname));
+            if (verbose > 1)
+              mxinfo(PFX "|  + Name: %s\n", tmp);
+            safefree(tmp);
+          }
+
           ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
         } // while (ktentry != NULL)
           
@@ -1029,8 +1059,10 @@ void kax_reader_c::create_packetizers() {
       memcpy(nti.fourcc, t->v_fourcc, 5);
     if (nti.default_track == 0)
       nti.default_track = t->default_track;
-    if (nti.language == 0)
+    if (nti.language == NULL)
       nti.language = t->language;
+    if (nti.track_name == NULL)
+      nti.track_name = t->track_name;
 
     if (t->ok && demuxing_requested(t->type, t->tnum)) {
       nti.id = t->tnum;         // ID for this track.

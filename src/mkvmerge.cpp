@@ -168,7 +168,7 @@ char *chapter_file_name = NULL;
 char *chapter_language = NULL;
 char *chapter_charset = NULL;
 
-string title;
+string segment_title;
 
 int64_t tags_size = 0;
 bool accept_tags = true;
@@ -283,6 +283,7 @@ static void usage() {
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
     "  --default-track <TID>    Sets the 'default' flag for this track.\n"
+    "  --track-name <TID:name>  Sets the name for a track.\n"
     "  --cues <TID:none|iframes|all>\n"
     "                           Create cue (index) entries for this track:\n"
     "                           None at all, only for I frames, for all.\n"
@@ -691,24 +692,24 @@ static void parse_compression(char *s, cue_creation_t &compression) {
             orig.c_str());
 }
 
-static void parse_language(char *s, language_t &lang) {
+static void parse_language(char *s, language_t &lang, const char *opt,
+                           const char *topic, bool check) {
   char *colon;
   string orig = s;
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid language option. No track ID specified in "
-            "'--language %s'.\n", orig.c_str());
+    mxerror("No track ID specified in '--%s' %s'.\n", opt, orig.c_str());
 
   *colon = 0;
   if (!parse_int(s, lang.id))
-    mxerror("Invalid track ID specified in '--language %s'.\n", orig.c_str());
+    mxerror("Invalid track ID specified in '--%s %s'.\n", opt, orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid language specified in '--language %s'.\n", orig.c_str());
+    mxerror("Invalid %s specified in '--%s %s'.\n", topic, opt, orig.c_str());
 
-  if (!is_valid_iso639_2_code(s))
+  if (check && !is_valid_iso639_2_code(s))
     mxerror("'%s' is not a valid ISO639-2 code. See "
             "'mkvmerge --list-languages'.\n", s);
   
@@ -791,9 +792,9 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       cstr_to_UTFstring(VERSIONINFO);
     GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
 
-    if (title.length() > 0)
+    if (segment_title.length() > 0)
       *((EbmlUnicodeString *)&GetChild<KaxTitle>(*kax_infos)) =
-        cstr_to_UTFstring(title.c_str());
+        cstrutf8_to_UTFstring(segment_title.c_str());
 
     // Generate the segment UIDs.
     if (first_file) {
@@ -1007,6 +1008,7 @@ static void identify(const char *filename) {
   ti.stracks = new vector<int64_t>;
   ti.aac_is_sbr = new vector<int64_t>;
   ti.compression_list = new vector<cue_creation_t>;
+  ti.track_names = new vector<language_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -1064,6 +1066,7 @@ static void parse_args(int argc, char **argv) {
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
   ti.compression_list = new vector<cue_creation_t>;
+  ti.track_names = new vector<language_t>;
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
@@ -1147,10 +1150,13 @@ static void parse_args(int argc, char **argv) {
       verbose = 2;
 
     else if (!strcmp(this_arg, "--title")) {
+      char *tmp;
       if ((next_arg == NULL) || (next_arg[0] == 0))
         mxerror("'--title' lacks the title.\n");
 
-      title = next_arg;
+      tmp = to_utf8(cc_local_utf8, next_arg);
+      segment_title = tmp;
+      safefree(tmp);
       i++;
 
     } else if (!strcmp(this_arg, "--split")) {
@@ -1452,7 +1458,7 @@ static void parse_args(int argc, char **argv) {
       if (next_arg == NULL)
         mxerror("'--language' lacks its argument.\n");
 
-      parse_language(next_arg, lang);
+      parse_language(next_arg, lang, "language", "language", true);
       ti.languages->push_back(lang);
       i++;
 
@@ -1489,6 +1495,15 @@ static void parse_args(int argc, char **argv) {
 
       parse_compression(next_arg, cues);
       ti.compression_list->push_back(cues);
+      i++;
+
+    } else if (!strcmp(this_arg, "--track-name")) {
+      if (next_arg == NULL)
+        mxerror("'--track-name' lacks its argument.\n");
+
+      parse_language(next_arg, lang, "track-name", "track name", false);
+      lang.language = to_utf8(cc_local_utf8, lang.language);
+      ti.track_names->push_back(lang);
       i++;
 
     }
@@ -1537,6 +1552,9 @@ static void parse_args(int argc, char **argv) {
       delete ti.all_tags;
       delete ti.aac_is_sbr;
       delete ti.compression_list;
+      for (j = 0; j < ti.track_names->size(); j++)
+        safefree((*ti.track_names)[j].language);
+      delete ti.track_names;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
@@ -1550,6 +1568,7 @@ static void parse_args(int argc, char **argv) {
       ti.vtracks = new vector<int64_t>;
       ti.stracks = new vector<int64_t>;
       ti.compression_list = new vector<cue_creation_t>;
+      ti.track_names = new vector<language_t>;
     }
   }
 
@@ -1584,6 +1603,9 @@ static void parse_args(int argc, char **argv) {
   delete ti.vtracks;
   delete ti.stracks;
   delete ti.compression_list;
+  for (j = 0; j < ti.track_names->size(); j++)
+    safefree((*ti.track_names)[j].language);
+  delete ti.track_names;
   safefree(attachment);
 }
 
