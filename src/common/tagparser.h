@@ -116,6 +116,7 @@ using namespace libmatroska;
 #define E_Binary                         84
 #define E_TagLanguage                    85
 #define E_DefaultLanguage                86
+#define E_EditionUID                     87
 
 // MAX: 81
 
@@ -139,6 +140,7 @@ typedef struct {
   KaxTagTargets *targets;
   KaxTagTrackUID *track_uid;
   KaxTagChapterUID *chapter_uid;
+  KaxTagEditionUID *edition_uid;
 
   KaxTagGeneral *general;
   KaxTagKeywords *keywords;

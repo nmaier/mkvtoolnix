@@ -302,6 +302,7 @@ end_level2(parser_data_t *pdata,
   if (!strcmp(name, "Targets")) {
     pdata->track_uid = NULL;
     pdata->chapter_uid = NULL;
+    pdata->edition_uid = NULL;
     pdata->m_comment = NULL;
 
   } else if (!strcmp(name, "General")) {
@@ -366,6 +367,8 @@ end_level3(parser_data_t *pdata,
       el_get_uint(pdata, pdata->track_uid);
     else if (!strcmp(name, "ChapterUID"))
       el_get_uint(pdata, pdata->chapter_uid);
+    else if (!strcmp(name, "EditionUID"))
+      el_get_uint(pdata, pdata->edition_uid);
 
   } else if (parent == E_General) {
     if (!strcmp(name, "Subject"))
