@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.7 2003/03/01 16:18:21 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.8 2003/03/01 16:19:36 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -94,7 +94,6 @@ void cluster_helper_c::free_contents(ch_contents_t *clstr) {
       free(p->data);
     if (p->data_buffer != NULL)
       delete p->data_buffer;
-//     fprintf(stdout, "* deleted %llu\n", p->id);
     free(p);
   }
   if (clstr->packets != NULL)
@@ -129,8 +128,6 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   c->num_packets++;
 
   cluster_content_size += packet->length;
-
-//   fprintf(stdout, "& new %llu\n", packet->id);
 
   walk_clusters();
 }
@@ -215,11 +212,6 @@ int cluster_helper_c::render(IOCallback *out) {
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
 
-//     if (last_group == NULL)
-//       pack->group = &GetChild<KaxBlockGroup>(*cluster);
-//     else
-//       pack->group = &GetNextChild<KaxBlockGroup>(*cluster, *last_group);
-//     last_group = pack->group;
     pack->group = &cluster->GetNewBlock();
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
@@ -313,14 +305,12 @@ void cluster_helper_c::check_clusters(int num) {
 }
 
 int cluster_helper_c::free_clusters() {
-  int i, k, idx; //, prior;
+  int i, k, idx;
   packet_t *p;
   ch_contents_t *clstr, **new_clusters;
 
   if (clusters == NULL)
     return 0;
-
-//   prior = num_clusters;
 
   for (i = 0; i < num_clusters; i++)
     clusters[i]->is_referenced = 0;
@@ -384,9 +374,6 @@ int cluster_helper_c::free_clusters() {
     num_clusters = k;
   }
 
-//   fprintf(stdout, "freed %d of %d clusters; new %d\n", prior - num_clusters,
-//           prior, num_clusters);
-
   return 1;
 }
 
@@ -400,8 +387,6 @@ int cluster_helper_c::free_ref(u_int64_t pid, void *source) {
       if ((source == p->source) && (p->id <= pid))
         p->superseeded = 1;
     }
-
-//   free_clusters();
 
   return 1;
 }
