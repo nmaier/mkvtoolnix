@@ -573,7 +573,7 @@ string format_binary(EbmlBinary &bin, int max_len) {
   char buffer[40 + len * 5 + 1 + 3 + 24];
   const unsigned char *b = (const unsigned char *)&binary(bin);
   buffer[0] = 0;
-  mxprints(buffer, "length %u, data:", bin.GetSize());
+  mxprints(buffer, "length %lld, data:", bin.GetSize());
   for (i = 0; i < len; i++)
     mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
   if (len < bin.GetSize())

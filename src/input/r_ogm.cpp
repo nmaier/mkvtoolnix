@@ -69,12 +69,12 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder, FLAC__byte buffer[],
   }
 
   if (*bytes < op.bytes)
-    mxerror(FPFX "bytes (%u) < op.bytes (%u). Could not read the FLAC "
+    mxerror(FPFX "bytes (%u) < op.bytes (%ld). Could not read the FLAC "
             "headers.\n", *bytes, op.bytes);
   memcpy(buffer, op.packet, op.bytes);
   *bytes = op.bytes;
   fhe->num_packets++;
-  mxverb(2, FPFX "read packet number %lld with %u bytes\n", fhe->num_packets,
+  mxverb(2, FPFX "read packet number %lld with %ld bytes\n", fhe->num_packets,
          op.bytes);
 
   return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
@@ -173,7 +173,7 @@ bool flac_header_extractor_c::extract() {
     return false;
   }
   result = (int)FLAC__stream_decoder_process_until_end_of_stream(decoder);
-  mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: %u\n",
+  mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: %lld\n",
          result, metadata_parsed, num_header_packets);
 
   return metadata_parsed;

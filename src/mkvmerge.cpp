@@ -2367,7 +2367,7 @@ int main(int argc, char **argv) {
     if (dump_splitpoints)
       cluster_helper->dump_splitpoints();
 
-    mxinfo("\nPass 1 took %u second%s.\nPass 2: merging the files. This will "
+    mxinfo("\nPass 1 took %ld second%s.\nPass 2: merging the files. This will "
            "take even longer.\n\n", end - start,
            (end - start) == 1 ? "" : "s");
 
@@ -2388,7 +2388,7 @@ int main(int argc, char **argv) {
     finish_file();
 
     end = time(NULL);
-    mxinfo("Pass 2 took %u second%s.\n", end - start,
+    mxinfo("Pass 2 took %ld second%s.\n", end - start,
            (end - start) == 1 ? "" : "s");
 
   } else {
@@ -2406,7 +2406,7 @@ int main(int argc, char **argv) {
     finish_file();
 
     end = time(NULL);
-    mxinfo("Muxing took %u second%s.\n", end - start,
+    mxinfo("Muxing took %ld second%s.\n", end - start,
            (end - start) == 1 ? "" : "s");
   }
 

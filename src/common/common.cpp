@@ -1488,3 +1488,21 @@ int get_varg_len(const char *fmt, va_list ap) {
 
   return -1;
 }
+
+string mxsprintf(const char *fmt, ...) {
+  va_list ap;
+  string new_fmt, dst;
+  char *new_string;
+  int len;
+
+  fix_format(fmt, new_fmt);
+  va_start(ap, fmt);
+  len = get_varg_len(new_fmt.c_str(), ap);
+  new_string = (char *)safemalloc(len + 1);
+  vsprintf(new_string, new_fmt.c_str(), ap);
+  va_end(ap);
+  dst = new_string;
+  safefree(new_string);
+
+  return dst;
+}

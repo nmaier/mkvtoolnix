@@ -113,7 +113,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
   if (s_video == NULL)
     throw error_c(PFX "No video stream found in file.");
 
-  mxverb(2, "1: 0x%08x\n", s_video);
+  mxverb(2, "1: 0x%08x\n", (unsigned int)s_video);
   if (s_video->Info(&stream_info, sizeof(stream_info)) != S_OK)
     throw error_c(PFX "Could not get the video stream information.");
   s_video->FormatSize(0, &format_size);
@@ -124,7 +124,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
 
   frames = s_video->Start();
   maxframes = s_video->End();
-  mxverb(2, "3: maxframes %ld\n", maxframes);
+  mxverb(2, "3: maxframes %d\n", maxframes);
   fps = (float)stream_info.dwRate / (float)stream_info.dwScale;
   mxverb(2, "4: fps %.3f\n", fps);
   max_frame_size = 0;
@@ -681,9 +681,9 @@ void avi_reader_c::display_progress(bool final) {
     if (frames == (maxframes + 1))
       myframes--;
     if (final)
-      mxinfo("progress: %ld/%ld frames (100%%)\r", maxframes, maxframes);
+      mxinfo("progress: %d/%d frames (100%%)\r", maxframes, maxframes);
     else
-      mxinfo("progress: %d/%ld frames (%ld%%)\r", myframes, maxframes,
+      mxinfo("progress: %d/%d frames (%d%%)\r", myframes, maxframes,
              myframes * 100 / maxframes);
   } else {
     mxinfo("Working... %c\r", wchar[act_wchar]);

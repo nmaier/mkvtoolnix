@@ -47,9 +47,13 @@ using namespace libmatroska;
 #if defined(ARCH_BIGENDIAN)
 #define BE2STR(a) ((char *)&a)[0], ((char *)&a)[1], ((char *)&a)[2], \
                   ((char *)&a)[3]
+#define LE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], \
+                  ((char *)&a)[0]
 #else
 #define BE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], \
                   ((char *)&a)[0]
+#define LE2STR(a) ((char *)&a)[0], ((char *)&a)[1], ((char *)&a)[2], \
+                  ((char *)&a)[3]
 #endif
 
 int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
@@ -178,8 +182,9 @@ void qtmp4_reader_c::parse_headers() {
       tmp = io->read_uint32_be();
       mxverb(2, PFX "  File type minor brand: 0x%08x\n", tmp);
       for (i = 0; i < ((atom_size - 16) / 4); i++) {
-        tmp = io->read_uint32();
-        mxverb(2, PFX "  File type compatible brands #%d: %.4s\n", i, &tmp);
+        tmp = io->read_uint32_be();
+        mxverb(2, PFX "  File type compatible brands #%d: %c%c%c%c\n", i,
+               BE2STR(tmp));
       }
 
     } else if (atom == FOURCC('m', 'o', 'o', 'v')) {
@@ -226,7 +231,7 @@ void qtmp4_reader_c::parse_headers() {
          strncasecmp(dmx->fourcc, "twos", 4) &&
          strncasecmp(dmx->fourcc, "swot", 4))) {
       mxwarn(PFX "Unknown/unsupported FourCC '%.4s' for track %u.\n",
-             &dmx->fourcc, dmx->id);
+             dmx->fourcc, dmx->id);
 
       continue;
     }
@@ -357,7 +362,8 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
 
         if ((atom_size - atom_hsize) < sizeof(mvhd_atom_t))
           mxerror(PFX "'mvhd' atom is too small. Expected size: >= %d. Actual "
-                  "size: %lld.\n", sizeof(mvhd_atom_t) + atom_hsize);
+                  "size: %lld.\n", sizeof(mvhd_atom_t),
+                  atom_size - atom_hsize);
         if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
           throw exception();
         mxverb(2, PFX "%*s Time scale: %u\n", (level + 1) * 2, "",
@@ -387,7 +393,8 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
 
         if ((atom_size - atom_hsize) < sizeof(tkhd_atom_t))
           mxerror(PFX "'tkhd' atom is too small. Expected size: >= %d. Actual "
-                  "size: %lld.\n", sizeof(tkhd_atom_t) + atom_hsize);
+                  "size: %lld.\n", sizeof(tkhd_atom_t),
+                  atom_size - atom_hsize);
         if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
           throw exception();
         mxverb(2, PFX "%*s Track ID: %u\n", (level + 1) * 2, "",
@@ -405,7 +412,8 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
 
         if ((atom_size - atom_hsize) < sizeof(mdhd_atom_t))
           mxerror(PFX "'mdhd' atom is too small. Expected size: >= %d. Actual "
-                  "size: %lld.\n", sizeof(mdhd_atom_t) + atom_hsize);
+                  "size: %lld.\n", sizeof(mdhd_atom_t),
+                  atom_size - atom_hsize);
         if (io->read(&mdhd, sizeof(mdhd_atom_t)) != sizeof(mdhd_atom_t))
           throw exception();
         mxverb(2, PFX "%*s Time scale: %u, duration: %u\n", (level + 1) * 2,
@@ -419,11 +427,12 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
 
         if ((atom_size - atom_hsize) < sizeof(hdlr_atom_t))
           mxerror(PFX "'hdlr' atom is too small. Expected size: >= %d. Actual "
-                  "size: %lld.\n", sizeof(hdlr_atom_t) + atom_hsize);
+                  "size: %lld.\n", sizeof(hdlr_atom_t),
+                  atom_size - atom_hsize);
         if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
           throw exception();
         mxverb(2, PFX "%*s Component type: %.4s subtype: %.4s\n",
-               (level + 1) * 2, "", &hdlr.type, &hdlr.subtype);
+               (level + 1) * 2, "", (char *)&hdlr.type, (char *)&hdlr.subtype);
         switch (get_uint32_be(&hdlr.subtype)) {
           case FOURCC('s', 'o', 'u', 'n'):
             new_dmx->type = 'a';
@@ -443,11 +452,12 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
 
         if ((atom_size - atom_hsize) < sizeof(hdlr_atom_t))
           mxerror(PFX "'hdlr' atom is too small. Expected size: >= %d. Actual "
-                  "size: %lld.\n", sizeof(hdlr_atom_t) + atom_hsize);
+                  "size: %lld.\n", sizeof(hdlr_atom_t),
+                  atom_size - atom_hsize);
         if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
           throw exception();
         mxverb(2, PFX "%*s Component type: %.4s subtype: %.4s\n",
-               (level + 1) * 2, "", &hdlr.type, &hdlr.subtype);
+               (level + 1) * 2, "", (char *)&hdlr.type, (char *)&hdlr.subtype);
 
       } else if (atom == FOURCC('s', 't', 'b', 'l'))
         handle_header_atoms(atom, atom_size - atom_hsize,
@@ -745,7 +755,7 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
         if (moov_size != zs.total_out)
           mxwarn(PFX "This file uses compressed headers, but the expected "
                  "uncompressed size (%u) was not what is available after "
-                 "uncompressing (%u).\n", moov_size, zs.total_out);
+                 "uncompressing (%lu).\n", moov_size, zs.total_out);
         zret = inflateEnd(&zs);
 
         io = new mm_mem_io_c(moov_buf, zs.total_out);
@@ -964,7 +974,7 @@ bool qtmp4_reader_c::parse_esds_atom(mm_mem_io_c *memio,
 
   tag = memio->read_uint8();
   if (tag != MP4DT_DEC_CONFIG) {
-    mxverb(2, PFX "%s*tag is not DEC_CONFIG (0x%02x) but 0x%02x.\n", lsp, "",
+    mxverb(2, PFX "%*stag is not DEC_CONFIG (0x%02x) but 0x%02x.\n", lsp, "",
            MP4DT_DEC_CONFIG, (uint32_t)tag);
     return false;
   }

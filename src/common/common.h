@@ -81,15 +81,31 @@ using namespace libebml;
 #define MXMSG_ERROR     4
 #define MXMSG_DEBUG     8
 
+void fix_format(const char *fmt, string &new_fmt);
+#if defined(__GNUC__)
+void die(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+void mxprint(void *stream, const char *fmt, ...)
+  __attribute__ ((format (printf, 2, 3)));
+void mxprints(char *dst, const char *fmt, ...)
+  __attribute__ ((format (printf, 2, 3)));
+string mxsprintf(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+void mxwarn(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+void mxerror(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+void mxinfo(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+void mxverb(int level, const char *fmt, ...)
+  __attribute__ ((format (printf, 2, 3)));
+void mxdebug(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+#else
 void die(const char *fmt, ...);
 void mxprint(void *stream, const char *fmt, ...);
 void mxprints(char *dst, const char *fmt, ...);
-void fix_format(const char *fmt, string &new_fmt);
+string mxsprintf(const char *fmt, ...);
 void mxwarn(const char *fmt, ...);
 void mxerror(const char *fmt, ...);
 void mxinfo(const char *fmt, ...);
 void mxverb(int level, const char *fmt, ...);
 void mxdebug(const char *fmt, ...);
+#endif
 void mxexit(int code = -1);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
