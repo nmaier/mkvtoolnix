@@ -681,11 +681,24 @@ mm_null_io_c::close() {
 /*
  * IO callback class working on memory
  */
-mm_mem_io_c::mm_mem_io_c(unsigned char *nmem,
-                         uint64_t nsize) {
-  mem = nmem;
-  mem_size = nsize;
-  pos = 0;
+mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
+                         uint64_t _mem_size,
+                         int _increase):
+  pos(0),
+  mem_size(_mem_size),
+  allocated(_mem_size),
+  increase(_increase),
+  mem(_mem) {
+
+  if ((mem == NULL) && (increase > 0)) {
+    mem = (unsigned char *)safemalloc(mem_size);
+    free_mem = true;
+  } else
+    free_mem = false;
+}
+
+mm_mem_io_c::~mm_mem_io_c() {
+  close();
 }
 
 uint64_t
@@ -733,7 +746,21 @@ mm_mem_io_c::write(const void *buffer,
                    size_t size) {
   int64_t wbytes;
 
-  wbytes = (pos + size) >= mem_size ? mem_size - pos : size;
+  if ((pos + size) >= allocated) {
+    if (increase) {
+      int64_t new_allocated;
+
+      new_allocated = pos + size - allocated;
+      new_allocated = ((new_allocated / increase) + 1 ) * increase;
+      allocated += new_allocated;
+      mem = (unsigned char *)saferealloc(mem, allocated);
+      wbytes = size;
+    } else
+      wbytes = allocated - pos;
+  } else
+    wbytes = size;
+  if ((pos + size) > mem_size)
+    mem_size = pos + size;
   memcpy(&mem[pos], buffer, wbytes);
   pos += wbytes;
 
@@ -742,8 +769,12 @@ mm_mem_io_c::write(const void *buffer,
 
 void
 mm_mem_io_c::close() {
+  if (free_mem)
+    safefree(mem);
   mem = NULL;
+  free_mem = false;
   mem_size = 0;
+  increase = 0;
   pos = 0;
 }
 

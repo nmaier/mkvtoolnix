@@ -161,11 +161,14 @@ public:
 
 class MTX_DLL_API mm_mem_io_c: public mm_io_c {
 protected:
-  int64_t pos, mem_size;
+  int64_t pos, mem_size, allocated, increase;
   unsigned char *mem;
+  bool free_mem;
+  string file_name;
 
 public:
-  mm_mem_io_c(unsigned char *nmem, uint64_t nsize);
+  mm_mem_io_c(unsigned char *_mem, uint64_t _mem_size, int _increase = 0);
+  ~mm_mem_io_c();
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
@@ -174,7 +177,10 @@ public:
   virtual void close();
   virtual bool eof();
   virtual string get_file_name() const {
-    return "";
+    return file_name;
+  }
+  virtual void set_file_name(const string &_file_name) {
+    file_name = _file_name;
   }
 };
 
