@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.9 2003/03/13 09:31:06 mosu Exp $
+    \version \$Id: common.h,v 1.10 2003/04/11 10:05:11 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -22,6 +22,16 @@
 #define __COMMON_H
 
 #include <sys/types.h>
+
+#ifdef WIN32
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
+#define u_int16_t unsigned __int16
+#define u_int32_t unsigned __int32
+#define u_int64_t __int64
+#define int64_t __int64
+#define nice(a)
+#endif
 
 #include "config.h"
 
@@ -63,7 +73,7 @@ typedef struct {
 typedef struct {
   // Options used by the readers.
   char *fname;
-  unsigned char *astreams, *vstreams, *tstreams;
+  unsigned char *atracks, *vtracks, *stracks;
 
   // Options used by the packetizers.
   unsigned char *private_data;

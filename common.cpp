@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.6 2003/03/13 09:31:36 mosu Exp $
+    \version \$Id: common.cpp,v 1.7 2003/04/11 10:05:11 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -177,19 +177,19 @@ track_info_t *duplicate_track_info(track_info_t *src) {
     if (dst->fname == NULL)
       die("strdup");
   }
-  if (src->astreams != NULL) {
-    dst->astreams = (unsigned char *)strdup((char *)src->astreams);
-    if (dst->astreams == NULL)
+  if (src->atracks != NULL) {
+    dst->atracks = (unsigned char *)strdup((char *)src->atracks);
+    if (dst->atracks == NULL)
       die("strdup");
   }
-  if (src->vstreams != NULL) {
-    dst->vstreams = (unsigned char *)strdup((char *)src->vstreams);
-    if (dst->vstreams == NULL)
+  if (src->vtracks != NULL) {
+    dst->vtracks = (unsigned char *)strdup((char *)src->vtracks);
+    if (dst->vtracks == NULL)
       die("strdup");
   }
-  if (src->tstreams != NULL) {
-    dst->tstreams = (unsigned char *)strdup((char *)src->tstreams);
-    if (dst->tstreams == NULL)
+  if (src->stracks != NULL) {
+    dst->stracks = (unsigned char *)strdup((char *)src->stracks);
+    if (dst->stracks == NULL)
       die("strdup");
   }
   if (src->private_data != NULL) {
@@ -208,12 +208,12 @@ void free_track_info(track_info_t *ti) {
 
   if (ti->fname != NULL)
     free(ti->fname);
-  if (ti->astreams != NULL)
-    free(ti->astreams);
-  if (ti->vstreams != NULL)
-    free(ti->vstreams);
-  if (ti->tstreams != NULL)
-    free(ti->tstreams);
+  if (ti->atracks != NULL)
+    free(ti->atracks);
+  if (ti->vtracks != NULL)
+    free(ti->vtracks);
+  if (ti->stracks != NULL)
+    free(ti->stracks);
   if (ti->private_data != NULL)
     free(ti->private_data);
 
