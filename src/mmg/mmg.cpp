@@ -190,7 +190,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   panel->SetSizer(bs_main);
   panel->SetAutoLayout(true);
 
-  wxNotebook *notebook =
+  notebook =
     new wxNotebook(panel, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500),
                    wxNB_TOP);
   input_page = new tab_input(notebook);
@@ -780,22 +780,27 @@ void mmg_dialog::update_file_menu() {
 }
 
 void mmg_dialog::on_new_chapters(wxCommandEvent &evt) {
+  notebook->SetSelection(4);
   chapter_editor_page->on_new_chapters(evt);
 }
 
 void mmg_dialog::on_load_chapters(wxCommandEvent &evt) {
+  notebook->SetSelection(4);
   chapter_editor_page->on_load_chapters(evt);
 }
 
 void mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
+  notebook->SetSelection(4);
   chapter_editor_page->on_save_chapters(evt);
 }
 
 void mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
+  notebook->SetSelection(4);
   chapter_editor_page->on_save_chapters_as(evt);
 }
 
 void mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
+  notebook->SetSelection(4);
   chapter_editor_page->on_verify_chapters(evt);
 }
 

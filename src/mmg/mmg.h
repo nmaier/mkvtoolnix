@@ -323,10 +323,11 @@ public:
   void on_verify_chapters(wxCommandEvent &evt);
   void on_add_chapter(wxCommandEvent &evt);
   void on_remove_chapter(wxCommandEvent &evt);
-  void on_copy_values(wxTimerEvent &evt);
   void on_entry_selected(wxTreeEvent &evt);
   void on_language_code_selected(wxCommandEvent &evt);
   void on_country_code_selected(wxCommandEvent &evt);
+  bool copy_values(wxTreeItemId id);
+  int64_t parse_time(string s);
 
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
@@ -381,6 +382,7 @@ protected:
 
   wxStatusBar *status_bar;
 
+  wxNotebook *notebook;
   wxMenu *file_menu;
   bool file_menu_sep;
 
