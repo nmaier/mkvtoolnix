@@ -512,6 +512,7 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   tc_tags->SetValue(*t->tags);
   cb_default->SetValue(t->default_track);
   cb_aac_is_sbr->SetValue(t->aac_is_sbr);
+  cob_aspect_ratio->SetValue(*t->aspect_ratio);
   selected_track = new_sel;
 }
 
