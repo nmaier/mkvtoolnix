@@ -228,6 +228,10 @@ def main
       next
     end
 
+    if (current_test.description == "INSERT DESCRIPTION")
+      puts("Skipping '#{class_name}': Not implemented yet")
+      next
+    end
     puts("Running '#{class_name}': #{current_test.description}")
     result = current_test.run_test
     if (result)
