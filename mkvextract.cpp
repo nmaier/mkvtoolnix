@@ -33,10 +33,6 @@
 
 #include <iostream>
 
-#if __GNUC__ == 2
-#include <typeinfo>
-#endif
-
 extern "C" {
 #include "avilib/avilib.h"
 }
@@ -425,9 +421,15 @@ void create_output_files() {
         }  else if (tracks[i].type == TYPESRT)
           tracks[i].srt_num = 1;
 
-        else if (tracks[i].type == TYPESSA)
-          tracks[i].mm_io->write(tracks[i].private_data,
-                                 tracks[i].private_size);
+        else if (tracks[i].type == TYPESSA) {
+          char *s;
+
+          s = (char *)safemalloc(tracks[i].private_size + 1);
+          memcpy(s, tracks[i].private_data, tracks[i].private_size);
+          s[tracks[i].private_size] = 0;
+          tracks[i].mm_io->writeline_unix_newlines(s);
+          safefree(s);
+        }
       }
     }
   }
@@ -448,6 +450,8 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
   start = block->GlobalTimecode() / 1000000; // in ms
   end = start + block_duration;
 
+  fprintf(stdout, "\nS: %lld, D: %lld\n", start, block_duration);
+
   for (i = 0; i < block->NumberFrames(); i++) {
     DataBuffer &data = block->GetBuffer(i);
     switch (track->type) {
@@ -461,6 +465,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         break;
 
       case TYPESRT:
+        // Do the charset conversion.
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;
@@ -473,9 +478,13 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         s[len] = '\n';
         s[len + 1] = '\n';
         s[len + 2] = 0;
+
+        // Print the entry's number.
         sprintf(buffer, "%d\n", tracks[i].srt_num);
         tracks[i].srt_num++;
         tracks[i].mm_io->write(buffer, strlen(buffer));
+
+        // Print the timestamps.
         sprintf(buffer, "%02lld:%02lld:%02lld,%03lld --> %02lld:%02lld:%02lld,"
                 "%03lld\n",
                 start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
@@ -483,14 +492,52 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                 (end / 1000) % 60, end % 1000);
         tracks[i].mm_io->write(buffer, strlen(buffer));
+
+        // Print the text itself.
         tracks[i].mm_io->writeline_unix_newlines(s);
         safefree(s);
-
-        // to be implemented
         break;
 
       case TYPESSA:
-        // to be implemented
+        // Do the charset conversion.
+        s = (char *)safemalloc(data.Size() + 1);
+        memcpy(s, data.Buffer(), data.Size());
+        s[data.Size()] = 0;
+        s2 = from_utf8(tracks[i].conv_handle, s);
+        safefree(s);
+        len = strlen(s2);
+        s = (char *)safemalloc(len + 2);
+        strcpy(s, s2);
+        safefree(s2);
+        s[len] = '\n';
+        s[len + 1] = 0;
+
+        s2 = strchr(s, ',');
+        if (s2 == NULL) {
+          fprintf(stdout, "Warning: Invalid format for a SSA line ('%s'). "
+                  "Ignoring this entry.\n", s);
+          safefree(s);
+          continue;
+        }
+
+        // Print "Dialogue: "
+        tracks[i].mm_io->writeline_unix_newlines("Dialogue: ");
+        *s2 = 0;
+        s2++;
+        tracks[i].mm_io->writeline_unix_newlines(s);
+        tracks[i].mm_io->writeline_unix_newlines(",");
+        sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
+                start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
+                (start / 1000) % 60, (start % 1000) / 10);
+        tracks[i].mm_io->writeline_unix_newlines(buffer);
+        tracks[i].mm_io->writeline_unix_newlines(",");
+        sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
+                end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
+                (end / 1000) % 60, (end % 1000) / 10);
+        tracks[i].mm_io->writeline_unix_newlines(buffer);
+        tracks[i].mm_io->writeline_unix_newlines(",");
+        tracks[i].mm_io->writeline_unix_newlines(s2);
+        safefree(s);
         break;
 
       default:
