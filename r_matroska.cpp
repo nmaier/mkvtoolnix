@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.36 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.37 2003/05/22 11:11:05 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -41,6 +41,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_mp3.h"
 #include "p_ac3.h"
 #include "p_dts.h"
+#include "p_aac.h"
 
 #include "EbmlContexts.h"
 #include "EbmlHead.h"
@@ -99,9 +100,6 @@ mkv_reader_c::mkv_reader_c(track_info_t *nti) throw (error_c):
   buffers = NULL;
 
   segment_duration = 0.0;
-
-  fprintf(stdout, "WARNING! Matroska files cannot be processed at the "
-          "moment.\n");
 
   if (!read_headers())
     throw error_c("matroska_reader: Failed to read the headers.");
@@ -197,7 +195,8 @@ void mkv_reader_c::verify_tracks() {
         if (!strcmp(t->codec_id, MKV_V_MSCOMP)) {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(BITMAPINFOHEADER))) {
-            printf("[mkv] WARNING: CodecID for track %u is '" MKV_V_MSCOMP
+            printf("matroska_reader: WARNING: CodecID for track %u is '"
+                   MKV_V_MSCOMP
                    "', but there was no BITMAPINFOHEADER struct present. "
                    "Therefore we don't have a FourCC to identify the video "
                    "codec used.\n", t->tnum);
@@ -209,8 +208,8 @@ void mkv_reader_c::verify_tracks() {
 
             u = get_uint32(&bih->bi_width);
             if (t->v_width != u) {
-              printf("[mkv] WARNING: (MS compatibility mode, track %u) "
-                     "Matrosa says video width is %u, but the "
+              printf("matroska_reader: WARNING: (MS compatibility mode, "
+                     "track %u) Matrosa says video width is %u, but the "
                      "BITMAPINFOHEADER says %u.\n", t->tnum, t->v_width, u);
               if (t->v_width == 0)
                 t->v_width = u;
@@ -218,9 +217,9 @@ void mkv_reader_c::verify_tracks() {
 
             u = get_uint32(&bih->bi_height);
             if (t->v_height != u) {
-              printf("[mkv] WARNING: (MS compatibility mode, track %u) "
-                     "Matrosa video height is %u, but the BITMAPINFOHEADER "
-                     "says %u.\n", t->tnum, t->v_height, u);
+              printf("matroska_reader: WARNING: (MS compatibility mode, "
+                     "track %u) Matrosa video height is %u, but the "
+                     "BITMAPINFOHEADER says %u.\n", t->tnum, t->v_height, u);
               if (t->v_height == 0)
                 t->v_height = u;
             }
@@ -228,23 +227,25 @@ void mkv_reader_c::verify_tracks() {
             memcpy(t->v_fourcc, &bih->bi_compression, 4);
 
             if (t->v_frate == 0.0) {
-              printf("[mkv] ERROR: (MS compatibility mode, track %u) "
-                     "No VideoFrameRate element was found.\n", t->tnum);
+              printf("matroska_reader: ERROR: (MS compatibility mode, track "
+                     "%u) No VideoFrameRate element was found.\n", t->tnum);
               continue;
             }
           }
         } else {
-          printf("[mkv] Native CodecIDs for video tracks are not supported "
-                 "yet (track %u).\n", t->tnum);
+          printf("matroska_reader: Native CodecIDs for video tracks are not "
+                 "supported yet (track %u).\n", t->tnum);
           continue;
         }
 
         if (t->v_width == 0) {
-          printf("[mkv] The width for track %u was not set.\n", t->tnum);
+          printf("matroska_reader: The width for track %u was not set.\n",
+                 t->tnum);
           continue;
         }
         if (t->v_height == 0) {
-          printf("[mkv] The height for track %u was not set.\n", t->tnum);
+          printf("matroska_reader: The height for track %u was not set.\n",
+                 t->tnum);
           continue;
         }
 
@@ -259,10 +260,10 @@ void mkv_reader_c::verify_tracks() {
         if (!strcmp(t->codec_id, MKV_A_ACM)) {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(WAVEFORMATEX))) {
-            printf("[mkv] WARNING: CodecID for track %u is '" MKV_A_ACM "', "
-                   "but there was no WAVEFORMATEX struct present. "
-                   "Therefore we don't have a format ID to identify the audio "
-                   "codec used.\n", t->tnum);
+            printf("matroska_reader: WARNING: CodecID for track %u is '"
+                   MKV_A_ACM "', but there was no WAVEFORMATEX struct present."
+                   " Therefore we don't have a format ID to identify the audio"
+                   " codec used.\n", t->tnum);
             continue;
           } else {
             t->ms_compat = 1;
@@ -270,19 +271,19 @@ void mkv_reader_c::verify_tracks() {
             wfe = (WAVEFORMATEX *)t->private_data;
             u = get_uint32(&wfe->n_samples_per_sec);
             if (((uint32_t)t->a_sfreq) != u) {
-              printf("[mkv] WARNING: (MS compatibility mode for track %u) "
-                     "Matroska says that there are %u samples per second, "
-                     "but WAVEFORMATEX says that there are %u.\n", t->tnum,
-                     (uint32_t)t->a_sfreq, u);
+              printf("matroska_reader: WARNING: (MS compatibility mode for "
+                     "track %u) Matroska says that there are %u samples per "
+                     "second, but WAVEFORMATEX says that there are %u.\n",
+                     t->tnum, (uint32_t)t->a_sfreq, u);
               if (t->a_sfreq == 0.0)
                 t->a_sfreq = (float)u;
             }
 
             u = get_uint16(&wfe->n_channels);
             if (t->a_channels != u) {
-              printf("[mkv] WARNING: (MS compatibility mode for track %u) "
-                     "Matroska says that there are %u channels, but the "
-                     "WAVEFORMATEX says that there are %u.\n", t->tnum,
+              printf("matroska_reader: WARNING: (MS compatibility mode for "
+                     "track %u) Matroska says that there are %u channels, but "
+                     "the WAVEFORMATEX says that there are %u.\n", t->tnum,
                      t->a_channels, u);
               if (t->a_channels == 0)
                 t->a_channels = u;
@@ -290,10 +291,10 @@ void mkv_reader_c::verify_tracks() {
 
             u = get_uint16(&wfe->w_bits_per_sample);
             if (t->a_bps != u) {
-              printf("[mkv] WARNING: (MS compatibility mode for track %u) "
-                     "Matroska says that there are %u bits per sample, "
-                     "but the WAVEFORMATEX says that there are %u.\n", t->tnum,
-                     t->a_bps, u);
+              printf("matroska_reader: WARNING: (MS compatibility mode for "
+                     "track %u) Matroska says that there are %u bits per "
+                     "sample, but the WAVEFORMATEX says that there are %u.\n",
+                     t->tnum, t->a_bps, u);
               if (t->a_bps == 0)
                 t->a_bps = u;
             }
@@ -311,14 +312,16 @@ void mkv_reader_c::verify_tracks() {
             t->a_formattag = 0x0001;
           else if (!strcmp(t->codec_id, MKV_A_VORBIS)) {
             if (t->private_data == NULL) {
-              printf("[mkv] WARNING: CodecID for track %u is 'A_VORBIS', "
-                     "but there are no header packets present.", t->tnum);
+              printf("matroska_reader: WARNING: CodecID for track %u is "
+                     "'A_VORBIS', but there are no header packets present.",
+                     t->tnum);
               continue;
             }
 
             c = (unsigned char *)t->private_data;
             if (c[0] != 2) {
-              printf("[mkv] Vorbis track does not contain valid headers.\n");
+              printf("matroska_reader: Vorbis track does not contain valid "
+                     "headers.\n");
               continue;
             }
 
@@ -331,7 +334,8 @@ void mkv_reader_c::verify_tracks() {
                 offset++;
               }
               if (offset >= (t->private_size - 1)) {
-                printf("[mkv] Vorbis track does not contain valid headers.\n");
+                printf("matroska_reader: Vorbis track does not contain valid "
+                       "headers.\n");
                 continue;
               }
               length += c[offset];
@@ -347,28 +351,37 @@ void mkv_reader_c::verify_tracks() {
               t->header_sizes[0] - t->header_sizes[1];
 
             t->a_formattag = 0xFFFE;
-          } else {
-            printf("[mkv] Unknown/unsupported audio codec ID '%s' for track "
-                   "%u.\n", t->codec_id, t->tnum);
+          } else if (!strcmp(t->codec_id, MKV_A_AAC_2MAIN) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_2LC) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_2SSR) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_4MAIN) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_4LC) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_4SSR) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_4LTP) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_4SBR))
+            t->a_formattag = FOURCC('M', 'P', '4', 'A');
+          else {
+            printf("matroska_reader: Unknown/unsupported audio codec ID '%s' "
+                   "for track %u.\n", t->codec_id, t->tnum);
             continue;
           }
         }
 
         if (t->a_sfreq == 0.0) {
-          printf("[mkv] The sampling frequency was not set for track %u.\n",
-                 t->tnum);
+          printf("matroska_reader: The sampling frequency was not set for "
+                 "track %u.\n", t->tnum);
           continue;
         }
 
         if (t->a_channels == 0) {
-          printf("[mkv] The number of channels was not set for track %u.\n",
-                 t->tnum);
+          printf("matroska_reader: The number of channels was not set for "
+                 "track %u.\n", t->tnum);
           continue;
         }
 
         if (t->a_formattag == 0) {
-          printf("[mkv] The audio format tag was not set for track %u.\n",
-                 t->tnum);
+          printf("matroska_reader: The audio format tag was not set for track "
+                 "%u.\n", t->tnum);
           continue;
         }
 
@@ -382,13 +395,13 @@ void mkv_reader_c::verify_tracks() {
         break;
 
       default:                  // unknown track type!? error in demuxer...
-        printf("[mkv] Error: matroska_reader: unknown demuxer type for track "
-               "%u: '%c'\n", t->tnum, t->type);
+        printf("matroska_reader: Error: matroska_reader: unknown demuxer "
+               "type for track %u: '%c'\n", t->tnum, t->type);
         continue;
     }
 
     if (t->ok)
-      printf("[mkv] Track %u seems to be ok.\n", t->tnum);
+      printf("matroska_reader: Track %u seems to be ok.\n", t->tnum);
   }
 }
 
@@ -470,7 +483,9 @@ int mkv_reader_c::read_headers() {
             fprintf(stdout, "matroska_reader: | + duration: %.3fs\n",
                     segment_duration);
 
-          } else if (!is_ebmlvoid(l2))
+          } else if (!is_ebmlvoid(l2) &&
+                     !(EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) &&
+                     !(EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId))
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
                     typeid(*l2).name());
 
@@ -864,8 +879,7 @@ void mkv_reader_c::create_packetizers() {
                                                    (unsigned long)t->a_sfreq,
                                                    &nti);
             */
-          }
-          else if (t->a_formattag == 0xFFFE)
+          } else if (t->a_formattag == 0xFFFE)
             t->packetizer = new vorbis_packetizer_c(this,
                                                     t->headers[0],
                                                     t->header_sizes[0],
@@ -873,7 +887,38 @@ void mkv_reader_c::create_packetizers() {
                                                     t->header_sizes[1],
                                                     t->headers[2],
                                                     t->header_sizes[2], &nti);
-          else {
+          else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
+            // A_AAC/MPEG2/MAIN
+            // 0123456789012345
+            int id, profile;
+
+            if (t->codec_id[10] == '2')
+              id = AAC_ID_MPEG2;
+            else if (t->codec_id[10] == '4')
+              id = AAC_ID_MPEG4;
+            else {
+              fprintf(stderr, "Error: matroska_reader: Malformed codec id "
+                      "%s for track %d.\n", t->codec_id, t->tnum);
+              exit(1);
+            }
+            if (!strcmp(&t->codec_id[12], "MAIN"))
+              profile = AAC_PROFILE_MAIN;
+            else if (!strcmp(&t->codec_id[12], "LC"))
+              profile = AAC_PROFILE_LC;
+            else if (!strcmp(&t->codec_id[12], "SSR"))
+              profile = AAC_PROFILE_SSR;
+            else if (!strcmp(&t->codec_id[12], "LTP"))
+              profile = AAC_PROFILE_LTP;
+            else {
+              fprintf(stderr, "Error: matroska_reader: Malformed codec id "
+                      "%s for track %d.\n", t->codec_id, t->tnum);
+              exit(1);
+            }
+
+            t->packetizer = new aac_packetizer_c(this, id, profile,
+                                                 (unsigned long)t->a_sfreq,
+                                                 t->a_channels, &nti, true);
+          } else {
             fprintf(stderr, "Error: matroska_reader: Unsupported track type "
                     "for track %d.\n", t->tnum);
             exit(1);
@@ -995,7 +1040,8 @@ int mkv_reader_c::read() {
 
               } else if (!(EbmlId(*l3) ==
                            KaxBlockVirtual::ClassInfos.GlobalId))
-                 printf("[mkv]   Uknown element@3: %s\n", typeid(*l3).name());
+                 printf("matroska_reader:   Uknown element@3: %s\n",
+                        typeid(*l3).name());
 
               l3->SkipData(*es, l3->Generic().Context);
               if (delete_element)
@@ -1055,7 +1101,8 @@ int mkv_reader_c::read() {
         } // while (l2 != NULL)
       } else if (!(EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) &&
                  !is_ebmlvoid(l1))
-         printf("[mkv] Unknown element@1: %s\n", typeid(*l1).name());
+         printf("matroska_reader: Unknown element@1: %s\n",
+                typeid(*l1).name());
 
       if (exit_loop)
         break;
@@ -1074,7 +1121,7 @@ int mkv_reader_c::read() {
       }
     } // while (l1 != NULL)
   } catch (exception ex) {
-    printf("[mkv] exception caught\n");
+    printf("matroska_reader: exception caught\n");
     return 0;
   }
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.5 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_aac.cpp,v 1.6 2003/05/22 11:11:05 mosu Exp $
     \brief AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -33,7 +33,8 @@ using namespace LIBMATROSKA_NAMESPACE;
 aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
                                    int nprofile,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti)
+                                   int nchannels, track_info_t *nti,
+                                   bool nheaderless)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
@@ -43,9 +44,10 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   channels = nchannels;
   id = nid;
   profile = nprofile;
+  headerless = nheaderless;
 
   set_track_type(track_audio);
-  duplicate_data_on_add(false);
+  duplicate_data_on_add(headerless);
 }
 
 aac_packetizer_c::~aac_packetizer_c() {
@@ -167,23 +169,23 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
 }
 
 void aac_packetizer_c::set_headers() {
-  if (id == 0) {
-    if (profile == 0)
+  if (id == AAC_ID_MPEG4) {
+    if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_4MAIN);
-    else if (profile == 1)
+    else if (profile == AAC_PROFILE_LC)
       set_codec_id(MKV_A_AAC_4LC);
-    else if (profile == 2)
+    else if (profile == AAC_PROFILE_SSR)
       set_codec_id(MKV_A_AAC_4SSR);
-    else if (profile == 3)
+    else if (profile == AAC_PROFILE_LTP)
       set_codec_id(MKV_A_AAC_4LTP);
     else
       die("aac_packetizer: Unknown AAC MPEG-4 object type...");
   } else {
-    if (profile == 0)
+    if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_2MAIN);
-    else if (profile == 1)
+    else if (profile == AAC_PROFILE_LC)
       set_codec_id(MKV_A_AAC_2LC);
-    else if (profile == 2)
+    else if (profile == AAC_PROFILE_SSR)
       set_codec_id(MKV_A_AAC_2SSR);
     else
       die("aac_packetizer: Unknown AAC MPEG-2 profile...");
@@ -200,6 +202,18 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
   unsigned long header;
   aac_header_t aacheader;
   int64_t my_timecode;
+
+  if (headerless) {
+    if (timecode != -1)
+      my_timecode = timecode;
+    else
+      my_timecode = (int64_t)(1000.0 * packetno * 1024 * ti->async.linear /
+                              samples_per_sec);
+    add_packet(buf, size, my_timecode,
+               (int64_t)(1000.0 * 1024 * ti->async.linear / samples_per_sec));
+
+    return EMOREDATA;
+  }
 
   if (timecode != -1)
     my_timecode = timecode;

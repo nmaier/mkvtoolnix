@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.13 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.14 2003/05/22 11:11:05 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -50,9 +50,8 @@ typedef struct {
   char v_fourcc[5];
 
   // Parameters for audio tracks
-  uint32_t a_channels, a_bps;
+  uint32_t a_channels, a_bps, a_formattag;
   float a_sfreq;
-  uint16_t a_formattag;
 
   void *private_data;
   unsigned int private_size;
