@@ -667,6 +667,26 @@ UTFstring cstr_to_UTFstring(const char *c) {
 #endif
 }
 
+static string make_utf8_locale(const char *old_locale) {
+  string s = old_locale, at;
+  int pos;
+
+  pos = s.find('@');
+  if (pos >= 0) {
+    at = s.substr(pos);
+    s.erase(pos);
+  }
+
+  pos = s.find('.');
+  if (pos >= 0)
+    s.erase(pos);
+
+  s += ".UTF-8";
+  s += at;
+
+  return s;
+}
+
 UTFstring cstrutf8_to_UTFstring(const char *c) {
 #if defined(COMP_MSC) || defined(COMP_MINGW)
   wchar_t *new_string;
@@ -686,7 +706,7 @@ UTFstring cstrutf8_to_UTFstring(const char *c) {
   char *old_locale;
   string new_locale;
   UTFstring u;
-  int len, pos;
+  int len;
 
   len = strlen(c);
   new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
@@ -694,10 +714,7 @@ UTFstring cstrutf8_to_UTFstring(const char *c) {
   new_string[len] = L'\0';
   old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
   setlocale(LC_CTYPE, "");
-  new_locale = setlocale(LC_CTYPE, NULL);
-  if ((pos = new_locale.rfind(".")) >= 0)
-    new_locale.erase(pos);
-  new_locale += ".UTF-8";
+  new_locale = make_utf8_locale(setlocale(LC_CTYPE, NULL));
   if (setlocale(LC_CTYPE, new_locale.c_str()) == NULL)
     die("Could not set the locale to %s. This is your normal locale with the "
         "UTF-8 charset. Please consider your system documentation how to "
@@ -759,7 +776,7 @@ char *UTFstring_to_cstrutf8(const UTFstring &u) {
 #else
   const wchar_t *sptr;
   char *new_string, *old_locale;
-  int len, pos;
+  int len;
   string new_locale;
 
   len = u.length();
@@ -768,10 +785,7 @@ char *UTFstring_to_cstrutf8(const UTFstring &u) {
   sptr = u.c_str();
   old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
   setlocale(LC_CTYPE, "");
-  new_locale = setlocale(LC_CTYPE, NULL);
-  if ((pos = new_locale.rfind(".")) >= 0)
-    new_locale.erase(pos);
-  new_locale += ".UTF-8";
+  new_locale = make_utf8_locale(setlocale(LC_CTYPE, NULL));
   if (setlocale(LC_CTYPE, new_locale.c_str()) == NULL)
     die("Could not set the locale to %s. This is your normal locale with the "
         "UTF-8 charset. Please consider your system documentation how to "
