@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.11 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.12 2003/04/13 15:44:27 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -221,15 +221,14 @@ int cluster_helper_c::render(IOCallback *out) {
         fref_packet = find_packet(pack->fref);
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
-        pack->group->AddFrame(track_entry, pack->timestamp - cluster_timecode,
+        pack->group->AddFrame(track_entry, pack->timestamp,
                               *pack->data_buffer, *bref_packet->group,
                               *fref_packet->group);
       } else
-        pack->group->AddFrame(track_entry, pack->timestamp - cluster_timecode,
+        pack->group->AddFrame(track_entry, pack->timestamp,
                               *pack->data_buffer, *bref_packet->group);
     } else {                    // This is a key frame. No references.
-      pack->group->AddFrame(track_entry, pack->timestamp - cluster_timecode,
-                            *pack->data_buffer);
+      pack->group->AddFrame(track_entry, pack->timestamp, *pack->data_buffer);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->id - 1, pack->source);
