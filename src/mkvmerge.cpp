@@ -1166,8 +1166,8 @@ set_timecode_scale() {
   if (audio_present && !video_present && (highest_sample_rate > 0)) {
     int64_t max_ns_with_timecode_scale;
 
-    timecode_scale = (double)1000000000.0 / (double)highest_sample_rate;
-    max_ns_with_timecode_scale = (int64_t)(32760 * timecode_scale);
+    timecode_scale = (double)1000000000.0 / (double)highest_sample_rate - 1.0;
+    max_ns_with_timecode_scale = (int64_t)(32700 * timecode_scale);
     if (max_ns_with_timecode_scale < max_ns_per_cluster)
       max_ns_per_cluster = max_ns_with_timecode_scale;
 
@@ -2674,6 +2674,11 @@ finish_file(bool last_file) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
+  mxverb(3, "mkvmerge: kax_duration: gmt %lld tcs %f du %lld\n",
+         cluster_helper->get_max_timecode(), timecode_scale,
+         irnd((double)(cluster_helper->get_max_timecode() -
+                       cluster_helper->get_first_timecode()) /
+              (double)((int64_t)timecode_scale)));
   *(static_cast<EbmlFloat *>(kax_duration)) =
     irnd((double)(cluster_helper->get_max_timecode() -
                   cluster_helper->get_first_timecode()) /

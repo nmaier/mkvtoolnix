@@ -509,7 +509,7 @@ cluster_helper_c::render() {
         !track_entry.LacingEnabled())
       render_group->more_data = false;
 
-    render_group->durations.push_back(pack->duration);
+    render_group->durations.push_back(pack->unmodified_duration);
     render_group->duration_mandatory |= pack->duration_mandatory;
 
     // Set the reference priority if it was wanted.
