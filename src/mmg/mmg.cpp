@@ -59,7 +59,7 @@ vector<wxString> last_settings;
 vector<wxString> last_chapters;
 vector<mmg_file_t> files;
 vector<mmg_track_t *> tracks;
-map<wxString, wxString, lt_wxString> capabilities;
+map<wxString, wxString> capabilities;
 vector<job_t> jobs;
 
 #define ID_CLIOPTIONS_COB 2000
