@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.17 2003/04/20 19:32:11 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.18 2003/04/22 13:39:44 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -178,14 +178,15 @@ int ogm_reader_c::read_page(ogg_page *og) {
   done = 0;
   while (!done) {
     np = ogg_sync_pageseek(&oy, og);
-    // np < 0 is the error case. Should not happen with local OGG files.
-    if (np < 0) {
-      fprintf(stderr, "Fatal: ogm_reader: ogg_sync_pageseek failed\n");
-      exit(1);
-    }
 
     // np == 0 means that there is not enough data for a complete page.
-    if (np == 0) {
+    if (np <= 0) {
+      // np < 0 is the error case. Should not happen with local OGG files.
+      if (np < 0)
+        fprintf(stdout, "Warning: ogm_reader: Could not find the next Ogg "
+                "page. This indicates a damaged Ogg/Ogm file. Will try to "
+                "continue.\n");
+
       buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
       if (!buf) {
         fprintf(stderr, "Fatal: ogm_reader: ogg_sync_buffer failed\n");
