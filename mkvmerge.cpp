@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.74 2003/05/22 11:10:40 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.75 2003/05/22 15:37:53 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -75,6 +75,7 @@
 #endif
 #include "r_srt.h"
 #include "r_matroska.h"
+#include "r_mp4.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
@@ -331,6 +332,11 @@ static int get_type(char *filename) {
     type = TYPEMATROSKA;
   else if (wav_reader_c::probe_file(f, size))
     type = TYPEWAV;
+  else if (mp4_reader_c::probe_file(f, size)) {
+    fprintf(stderr, "Error: MP4/Quicktime files are not supported (%s).\n",
+            filename);
+    exit(1);
+  }
 #ifdef HAVE_OGGVORBIS
   else if (ogm_reader_c::probe_file(f, size))
     type = TYPEOGM;

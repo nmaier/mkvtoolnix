@@ -29,6 +29,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_dts.cpp r_dts.h \
 			r_matroska.cpp r_matroska.h \
 			r_mp3.cpp r_mp3.h \
+			r_mp4.cpp r_mp4.h \
 			r_srt.cpp r_srt.h \
 			r_ogm.cpp r_ogm.h \
 			r_wav.cpp r_wav.h \
