@@ -78,7 +78,7 @@ find_ac3_header(unsigned char *buf,
       default:
         return -1;
     }
-    switch(header.flags & A52_CHANNEL_MASK) {
+    switch (header.flags & A52_CHANNEL_MASK) {
       case A52_MONO:
         header.channels=1;
         break;
