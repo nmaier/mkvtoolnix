@@ -348,12 +348,14 @@ typedef struct {
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
   bool do_convert;
-  string performer;
-  string title;
   string global_performer;
+  string performer;
   string global_title;
+  string title;
   string name;
+  string global_date;
   string date;
+  string global_genre;
   string genre;
   string disc_id;
   string isrc;
@@ -415,28 +417,61 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   tag->PushElement(*create_simple_tag(a, "TITLE", a.title));
   tag->PushElement(*create_simple_tag(a, "TRACKNUMBER",
                                       mxsprintf("%d", a.num)));
-  if (a.global_performer.length() > 0) {
-    if ((a.performer.length() == 0) || (a.performer == a.global_performer))
+  if (a.global_performer != "") {
+    if ((a.performer == "") || (a.performer == a.global_performer))
       tag->PushElement(*create_simple_tag(a, "ARTIST", a.global_performer));
     else {
       tag->PushElement(*create_simple_tag(a, "ALBUM_ARTIST",
                                           a.global_performer));
       tag->PushElement(*create_simple_tag(a, "ARTIST", a.performer));
     }
-  } else if (a.performer.length() > 0)
+  } else if (a.performer != "")
     tag->PushElement(*create_simple_tag(a, "ARTIST", a.performer));
-  if (a.global_title.length() > 0)
+  if (a.global_title != "")
     tag->PushElement(*create_simple_tag(a, "ALBUM", a.global_title));
-  if (a.date.length() > 0)
-    tag->PushElement(*create_simple_tag(a, "DATE", a.date));
-  if (a.genre.length() > 0)
-    tag->PushElement(*create_simple_tag(a, "GENRE", a.genre));
-  if (a.disc_id.length() > 0)
+  s = a.date;
+  if (s == "")
+    s = a.global_date;
+  if (s != "")
+    tag->PushElement(*create_simple_tag(a, "DATE", s));
+  s = a.genre;
+  if (s == "")
+    s = a.global_genre;
+  if (s != "")
+    tag->PushElement(*create_simple_tag(a, "GENRE", s));
+  if (a.disc_id != "")
     tag->PushElement(*create_simple_tag(a, "DISCID", a.disc_id));
-  if (a.isrc.length() > 0)
+  if (a.isrc != "")
     tag->PushElement(*create_simple_tag(a, "ISRC", a.isrc));
-  if (a.comment.length() > 0)
+  if (a.comment != "")
     tag->PushElement(*create_simple_tag(a, "COMMENTS", a.comment));
+
+  (*tags)->PushElement(*tag);
+}
+
+static void
+add_tag_for_global_cue_settings(cue_parser_args_t &a,
+                                KaxTags **tags) {
+  KaxTag *tag;
+  string s;
+
+  if (tags == NULL)
+    return;
+
+  if (*tags == NULL)
+    *tags = new KaxTags;
+
+  tag = new KaxTag;
+
+  if (a.global_performer != "")
+    tag->PushElement(*create_simple_tag(a, "ALBUM_ARTIST",
+                                        a.global_performer));
+  if (a.global_title != "")
+    tag->PushElement(*create_simple_tag(a, "ALBUM", a.global_title));
+  if (a.global_date != "")
+    tag->PushElement(*create_simple_tag(a, "DATE", a.global_date));
+  if (a.global_genre != "")
+    tag->PushElement(*create_simple_tag(a, "GENRE", a.global_genre));
 
   (*tags)->PushElement(*tag);
 }
@@ -627,6 +662,8 @@ parse_cue_chapters(mm_text_io_c *in,
 
         if (a.num >= 1)
           add_elements_for_cue_entry(a, tags);
+        else
+          add_tag_for_global_cue_settings(a, tags);
 
         a.num++;
 
@@ -636,13 +673,19 @@ parse_cue_chapters(mm_text_io_c *in,
         a.title = "";
         a.isrc = "";
 
-      } else if (starts_with_case(line, "rem date "))
-        a.date = get_quoted(line, 9);
+      } else if (starts_with_case(line, "rem date ")) {
+        if (a.num == 0)
+          a.global_date = get_quoted(line, 9);
+        else
+          a.date = get_quoted(line, 9);
 
-      else if (starts_with_case(line, "rem genre "))
-        a.genre = get_quoted(line, 10);
+      } else if (starts_with_case(line, "rem genre ")) {
+        if (a.num == 0)
+          a.global_genre = get_quoted(line, 10);
+        else
+          a.genre = get_quoted(line, 10);
 
-      else if (starts_with_case(line, "rem discid "))
+      } else if (starts_with_case(line, "rem discid "))
         a.disc_id = get_quoted(line, 11);
 
       else if (starts_with_case(line, "rem comment "))
