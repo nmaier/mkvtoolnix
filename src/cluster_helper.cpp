@@ -331,7 +331,7 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
   block_duration = 0;
   for (i = 0; i < rg->durations.size(); i++)
     block_duration += rg->durations[i];
-  def_duration = rg->source->get_track_default_duration();
+  def_duration = RND_TIMECODE_SCALE(rg->source->get_track_default_duration());
 
   if ((block_duration > 0) && (block_duration != def_duration) &&
       (use_durations || rg->duration_mandatory))
