@@ -1253,7 +1253,7 @@ void kax_reader_c::create_packetizers() {
 // {{{ FUNCTION kax_reader_c::read()
 
 int kax_reader_c::read(generic_packetizer_c *) {
-  int upper_lvl_el, i;
+  int upper_lvl_el, i, bgidx;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   KaxBlockGroup *block_group;
@@ -1303,9 +1303,11 @@ int kax_reader_c::read(generic_packetizer_c *) {
           first_timecode = (float)cluster_tc * (float)tc_scale /
             1000000.0;
 
-        block_group = static_cast<KaxBlockGroup *>
-          (cluster->FindFirstElt(KaxBlockGroup::ClassInfos, false));
-        while (block_group != NULL) {
+        for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
+          if (!(EbmlId(*(*cluster)[bgidx]) ==
+                KaxBlockGroup::ClassInfos.GlobalId))
+            continue;
+          block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
           block_duration = -1;
           block_bref = VFT_IFRAME;
           block_fref = VFT_NOBFRAME;
@@ -1377,9 +1379,6 @@ int kax_reader_c::read(generic_packetizer_c *) {
           }
 
           found_data = true;
-
-          block_group = static_cast<KaxBlockGroup *>
-            (cluster->FindNextElt(*block_group, false));
         }
 
       }
