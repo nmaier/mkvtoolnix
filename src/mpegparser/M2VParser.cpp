@@ -40,8 +40,7 @@ MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
 }
 
 MPEGFrame::~MPEGFrame(){
-  if (bCopy)
-    safefree(data);
+  safefree(data);
 }
 
 void M2VParser::SetEOS(){
