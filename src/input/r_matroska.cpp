@@ -1638,12 +1638,18 @@ kax_reader_c::create_packetizer(int64_t tid) {
           t->sub_type = 'v';
 
         } else if (!strncmp(t->codec_id, "S_TEXT", 6) ||
-                   !strcmp(t->codec_id, MKV_S_TEXTASS) ||
-                   !strcmp(t->codec_id, MKV_S_TEXTSSA) ||
                    !strcmp(t->codec_id, "S_SSA") ||
                    !strcmp(t->codec_id, "S_ASS")) {
+          string new_codec_id;
+
+          if (!strcmp(t->codec_id, "S_SSA") ||
+              !strcmp(t->codec_id, "S_ASS"))
+            new_codec_id = string("S_TEXT/") + string(&t->codec_id[2]);
+          else
+            new_codec_id = t->codec_id;
           t->ptzr =
-            add_packetizer(new textsubs_packetizer_c(this, t->codec_id,
+            add_packetizer(new textsubs_packetizer_c(this,
+                                                     new_codec_id.c_str(),
                                                      t->private_data,
                                                      t->private_size, false,
                                                      true, nti));
