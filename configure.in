@@ -26,6 +26,10 @@ AC_CHECK_TOOL(LD, ld, :)
 dnl Check for headers
 AC_HEADER_STDC()
 
+dnl Optional features that are built and those that aren't
+opt_features_yes=""
+opt_features_no=""
+
 dnl Stolen from VideoLAN Client, http://www.videolan.org/
 dnl
 dnl  Endianness check, AC_C_BIGENDIAN doesn't work if we are cross-compiling
@@ -289,11 +293,13 @@ dnl
                "-lm")
   if test "$flac_found" = "yes"; then
     AC_CHECK_HEADERS(FLAC/format.h, , flac_found=no)
-  else
-    echo '*** WARNING:'
-    echo '*** libFLAC was not found. mkvmerge will be built'
-    echo '*** without support for FLAC tracks.'
   fi
+  if test x"$flac_found" = xyes ; then
+    opt_features_yes="$opt_features_yes; FLAC audio"
+  else
+    opt_features_no="$opt_features_no; FLAC audio"
+  fi
+
 
 AC_SUBST(FLAC_LIBS)
 
@@ -301,7 +307,12 @@ AC_SUBST(FLAC_LIBS)
 dnl
 dnl Test for libebml, and define EBML_CFLAGS and EBML_LIBS
 dnl
-  AC_MSG_CHECKING(for EBML)
+  ebml_ver_req_major=0
+  ebml_ver_req_minor=7
+  ebml_ver_req_micro=0
+
+  AC_CACHE_CHECK([for libebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}],
+  [ac_cv_ebml_version],[
 
   EBML_LIBS="-lebml"
   ac_save_CXXFLAGS="$CXXFLAGS"
@@ -365,21 +376,19 @@ int main ()
   LIBS="$ac_save_LIBS"
 
   if test "$ebml_found" = "yes" -a -f conf.ebmltest ; then
-    AC_MSG_RESULT(yes)
+    ac_cv_ebml_version=`cat conf.ebmltest`
   else
-    rm -f conf.ebmltest
-    AC_MSG_RESULT(no)
+    ac_cv_ebml_version="not found"
+  fi
+  rm -f conf.ebmltest
+  ])
+
+  if test x"$ac_cv_ebml_version" = "xnot found" -o x"$ac_cv_ebml_version" = x; then
+    echo '*** The EBML library was not found.'
     exit 1
   fi
 
-  ebml_ver_req_major=0
-  ebml_ver_req_minor=7
-  ebml_ver_req_micro=0
-
-  AC_MSG_CHECKING(Ebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro})
-
-  ebml_version=`cat conf.ebmltest`
-  set - `sed 's/\./\ /g' < conf.ebmltest`
+  set - `echo $ac_cv_ebml_version | sed 's/\./\ /g'`
   if test "x$1" = "x" -o $1 -lt ${ebml_ver_req_major} ; then
     mver_ok=0
   elif test $1 -gt ${ebml_ver_req_major} ; then
@@ -397,11 +406,7 @@ int main ()
       fi
     fi
   fi
-  rm -f conf.ebmltest
-  if test "$mver_ok" = "1" ; then
-    AC_MSG_RESULT(ok ($ebml_version))
-  else
-    AC_MSG_RESULT(too old ($ebml_version))
+  if test $mver_ok -ne 1 ; then
     echo '*** Your Ebml version is too old. Upgrade to at least version'
     echo '*** '${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}' and re-run configure.'
     exit 1
@@ -415,8 +420,11 @@ AC_SUBST(EBML_LIBS)
 dnl
 dnl Test for libmatroska, and define MATROSKA_CFLAGS and MATROSKA_LIBS
 dnl
-  AC_MSG_CHECKING(for Matroska)
+  kax_ver_req_major=0
+  kax_ver_req_minor=7
+  kax_ver_req_micro=0
 
+  AC_CACHE_CHECK([for libmatroska version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}],[ac_cv_matroska_version],[
   MATROSKA_LIBS="-lmatroska"
   ac_save_CXXFLAGS="$CXXFLAGS"
   ac_save_LIBS="$LIBS"
@@ -479,20 +487,19 @@ int main ()
   LIBS="$ac_save_LIBS"
 
   if test "$matroska_found" = "yes" -a -f conf.matroskatest ; then
-    AC_MSG_RESULT(yes)
+    ac_cv_matroska_version=`cat conf.matroskatest`
   else
-    rm -f conf.matroskatest
-    AC_MSG_RESULT(no)
+    ac_cv_matroska_version="not found"
+  fi
+  rm -f conf.matroskatest
+  ])
+
+  if test x"$ac_cv_matroska_version" = "xnot found" -o x"$ac_cv_matroska_version" = x ; then
+    echo '*** The Matroska library was not found.'
     exit 1
   fi
 
-  kax_ver_req_major=0
-  kax_ver_req_minor=7
-  kax_ver_req_micro=0
-  AC_MSG_CHECKING(Matroska version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro})
-
-  matroska_version=`cat conf.matroskatest`
-  set - `sed 's/\./\ /g' < conf.matroskatest`
+  set - `echo $ac_cv_matroska_version | sed 's/\./\ /g'`
   if test "x$1" = "x" -o $1 -lt ${kax_ver_req_major} ; then
     mver_ok=0
   elif test $1 -gt ${kax_ver_req_major} ; then
@@ -510,11 +517,8 @@ int main ()
       fi
     fi
   fi
-  rm -f conf.matroskatest
-  if test "$mver_ok" = "1" ; then
-    AC_MSG_RESULT(ok ($matroska_version))
-  else
-    AC_MSG_RESULT(too old ($matroska_version))
+
+  if test $mver_ok -ne 1 ; then
     echo '*** Your Matroska version is too old. Upgrade to at least version'
     echo '*** '${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}' and re-run configure.'
     exit 1
@@ -571,6 +575,11 @@ dnl
   if test "$lzo_found" = "yes"; then
     AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
   fi
+  if test x"$lzo_found" = xyes ; then
+    opt_features_yes="$opt_features_yes; LZO compression"
+  else
+    opt_features_no="$opt_features_no; LZO compression"
+  fi
 
 AC_SUBST(LZO_LIBS)
 
@@ -585,6 +594,11 @@ dnl
                [ bz2_found=no ],)
   if test "$bz2_found" = "yes"; then
     AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
+  fi
+  if test x"$bz2_found" = xyes ; then
+    opt_features_yes="$opt_features_yes; BZ2 compression"
+  else
+    opt_features_no="$opt_features_no; BZ2 compression"
   fi
 
 AC_SUBST(BZ2_LIBS)
@@ -641,6 +655,41 @@ AC_SUBST(WXWINDOWS_LIBS)
 AC_SUBST(MMG_SUBDIRS)
 AC_SUBST(USE_WXWINDOWS)
 
+dnl
+dnl Which translations should be installed?
+dnl
+  AC_CHECK_FUNCS(gettext, gettext_found=yes, gettext_found=no)
+  if test x"$gettext_found" != xyes ; then
+    AC_CHECK_LIB(intl, gettext,
+                 [ LIBINTL_LIBS="-lintl";
+                   gettext_found=yes ], gettext_found=no)
+  fi
+  if test x"$gettext_found" = xyes ; then
+    AC_CHECK_HEADERS(libintl.h, libintl_h_found=yes, libintl_h_found=no)
+    if test x"$libintl_h_found" = xyes ; then
+      AC_MSG_CHECKING(the translations to install)
+      if test x"$LINGUAS" = x ; then
+        TRANSLATIONS_POS="`echo po/*.po`"
+      else
+        for i in $LINGUAS; do
+          if test -f "po/$i.po" ; then
+            TRANSLATIONS_POS="$TRANSLATIONS_POS po/$i.po"
+          fi
+        done
+      fi
+      TRANSLATIONS="`echo "$TRANSLATIONS_POS" | \
+        sed -e 's/po\///g' -e 's/\.po//g'`"
+      AC_MSG_RESULT($TRANSLATIONS)
+    fi
+    opt_features_yes="$opt_features_yes; translations (gettext)"
+  else
+    opt_features_no="$opt_features_yes; translations (gettext)"
+  fi
+
+AC_SUBST(LIBINTL_LIBS)
+AC_SUBST(TRANSLATIONS_POS)
+AC_SUBST(TRANSLATIONS)
+
 CFLAGS="$USER_CPPFLAGS @EXTRA_CFLAGS@ $USER_CFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
 CXXFLAGS="$USER_CPPFLAGS @EXTRA_CFLAGS@ $USER_CXXFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
 LDFLAGS="$USER_LDFLAGS @EXTRA_LDFLAGS@"
@@ -648,3 +697,10 @@ LDFLAGS="$USER_LDFLAGS @EXTRA_LDFLAGS@"
 AC_SUBST(LDFLAGS)
 
 AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile)
+
+opt_features_yes="`echo "$opt_features_yes" | sed 's/^\;//'`"
+opt_features_no="`echo "$opt_features_no" | sed 's/^\;//'`"
+echo ''
+echo '*** The mkvtoolnix configuration is complete.'
+echo '***   Optional features that are built: '"$opt_features_yes"
+echo '***   Optional features that are NOT built: '"$opt_features_no"

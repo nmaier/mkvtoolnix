@@ -144,12 +144,14 @@ handle_attachments(mm_io_c *in,
             }
 
           if (found && !tracks[k].done) {
-            mxinfo("Writing attachment #%lld, type %s, size %lld, "
-                   "to '%s'.\n", id, type.c_str(), size, tracks[k].out_name);
+            mxinfo(_("The attachment #%lld, MIME type %s, size %lld, "
+                     "is written to '%s'.\n"), id, type.c_str(), size,
+                   tracks[k].out_name);
             try {
               out = new mm_io_c(tracks[k].out_name, MODE_WRITE);
             } catch (...) {
-              mxerror("Could not create '%s' (%d, %s).\n",
+              mxerror(_("The file '%s' could not be opened for writing "
+                        "(%d, %s).\n"),
                       tracks[k].out_name, errno, strerror(errno));
             }
             out->write(fdata->GetBuffer(), fdata->GetSize());
@@ -179,8 +181,8 @@ extract_attachments(const char *file_name) {
   try {
     in = new mm_io_c(file_name, MODE_READ);
   } catch (std::exception &ex) {
-    show_error("Error: Couldn't open input file %s (%s).", file_name,
-               strerror(errno));
+    show_error(_("The file '%s' could not be opened for reading (%s)."),
+               file_name, strerror(errno));
     return;
   }
 
@@ -190,7 +192,7 @@ extract_attachments(const char *file_name) {
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
-      show_error("Error: No EBML head found.");
+      show_error(_("Error: No EBML head found."));
       delete es;
 
       return;
@@ -204,15 +206,15 @@ extract_attachments(const char *file_name) {
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
-        show_error("No segment/level 0 element found.");
+        show_error(_("No segment/level 0 element found."));
         return;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, "Segment");
+        show_element(l0, 0, _("Segment"));
         break;
       }
 
-      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+      show_element(l0, 0, _("Next level 0 element is not a segment but %s"),
                    l0->Generic().DebugName);
 
       l0->SkipData(*es, l0->Generic().Context);
@@ -320,11 +322,12 @@ extract_attachments(const char *file_name) {
     delete in;
 
   } catch (exception &ex) {
-    show_error("Caught exception: %s", ex.what());
+    show_error(_("Caught exception: %s"), ex.what());
     delete in;
   }
 
   for (i = 0; i < tracks.size(); i++)
     if (!tracks[i].done)
-      mxinfo("An attachment with the ID %lld was not found.\n", tracks[i].tid);
+      mxinfo(_("An attachment with the ID %lld was not found.\n"),
+             tracks[i].tid);
 }

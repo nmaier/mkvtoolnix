@@ -113,7 +113,7 @@ char typenames[17][20] = {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3",
 
 void
 usage() {
-  const char *usage_infos =
+  const char *usage_infos = N_(
 "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 "   or  mkvextract tags <inname> [options]\n"
 "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
@@ -159,9 +159,9 @@ usage() {
 " further information:\n"
 "  -v, --verbose  Increase verbosity.\n"
 "  -h, --help     Show this help.\n"
-"  -V, --version  Show version information.\n";
+"  -V, --version  Show version information.\n");
 
-  mxinfo(usage_infos);
+  mxinfo(_(usage_infos));
 }
 
 // }}}
@@ -209,7 +209,7 @@ parse_args(int argc,
   else if (!strcmp(argv[1], "chapters"))
     mode = MODE_CHAPTERS;
   else
-    mxerror("Unknown mode '%s'.\n", argv[1]);
+    mxerror(_("Unknown mode '%s'.\n"), argv[1]);
 
   if (argc < 3) {
     usage();
@@ -228,10 +228,10 @@ parse_args(int argc,
       verbose++;
     else if (!strcmp(argv[i], "-c")) {
       if (mode != MODE_TRACKS)
-        mxerror("'-c' is only allowed when extracting tracks.\n");
+        mxerror(_("'-c' is only allowed when extracting tracks.\n"));
 
       if ((i + 1) >= argc)
-        mxerror("'-c' lacks a charset.\n");
+        mxerror(_("'-c' lacks a charset.\n"));
 
       conv_handle = utf8_init(argv[i + 1]);
       sub_charset = argv[i + 1];
@@ -239,15 +239,15 @@ parse_args(int argc,
 
     } else if (!strcmp(argv[i], "--no-ogg")) {
       if (mode != MODE_TRACKS)
-        mxerror("'--no-ogg' is only allowed when extracting tracks.\n");
+        mxerror(_("'--no-ogg' is only allowed when extracting tracks.\n"));
       embed_in_ogg = false;
 
     } else if (mode == MODE_TAGS)
-      mxerror("No further options allowed when extracting %s.\n", argv[1]);
+      mxerror(_("No further options allowed when extracting %s.\n"), argv[1]);
 
     else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
       if (mode != MODE_CHAPTERS)
-        mxerror("%s is only allowed for chapter extraction.\n", argv[i]);
+        mxerror(_("'%s' is only allowed for chapter extraction.\n"), argv[i]);
 
       chapter_format_simple = true;
 
@@ -255,17 +255,22 @@ parse_args(int argc,
       copy = safestrdup(argv[i]);
       colon = strchr(copy, ':');
       if (colon == NULL)
-        mxerror("Missing %s ID in argument '%s'.\n",
-                mode == MODE_TRACKS ? "track" : "attachment", argv[i]);
+        mxerror(mode == MODE_TRACKS ?
+                _("Missing track ID in argument '%s'.\n") :
+                _("Missing attachment ID in argument '%s'.\n"),
+                argv[i]);
 
       *colon = 0;
       if (!parse_int(copy, tid) || (tid < 0))
         mxerror("Invalid %s ID in argument '%s'.\n",
-                mode == MODE_TRACKS ? "track" : "attachment", argv[i]);
+                mode == MODE_TRACKS ?
+                _("Invalid track ID in argument '%s'.\n") :
+                _("Invalid attachment ID in argument '%s'.\n"),
+                argv[i]);
 
       colon++;
       if (*colon == 0)
-        mxerror("Missing output file name in argument '%s'.\n", argv[i]);
+        mxerror(_("Missing output file name in argument '%s'.\n"), argv[i]);
 
       memset(&track, 0, sizeof(kax_track_t));
       track.tid = tid;
@@ -283,7 +288,7 @@ parse_args(int argc,
     return;
 
   if (tracks.size() == 0) {
-    mxinfo("Nothing to do.\n\n");
+    mxinfo(_("Nothing to do.\n\n"));
     usage();
     mxexit(0);
   }
@@ -322,7 +327,7 @@ show_element(EbmlElement *l,
   level_buffer[level] = 0;
   mxinfo("(%s) %s+ %s", NAME, level_buffer, args_buffer);
   if (l != NULL)
-    mxinfo(" at %llu", l->GetElementPosition());
+    mxinfo(_(" at %llu"), l->GetElementPosition());
   mxinfo("\n");
 }
 
@@ -355,6 +360,16 @@ main(int argc,
   nice(2);
 #endif
 
+#if defined(HAVE_LIBINTL_H)
+  if ((setlocale(LC_CTYPE, "") == NULL) ||
+      (setlocale(LC_MESSAGES, "") == NULL))
+    mxerror("The locale could not be set properly. Check the "
+            "LANG, LC_ALL, LC_CTYPE and LC_MESSAGES environment "
+            "variables.\n");
+  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
+  textdomain("mkvtoolnix");
+#endif
+
   utf8_init(NULL);
   conv_utf8 = utf8_init("UTF-8");
 
@@ -363,7 +378,7 @@ main(int argc,
     extract_tracks(input_file);
 
     if (verbose == 0)
-      mxinfo("progress: 100%%\n");
+      mxinfo(_("progress: 100%%\n"));
 
   } else if (mode == MODE_TAGS)
     extract_tags(input_file);

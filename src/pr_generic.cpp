@@ -182,8 +182,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
   if (ti->aspect_ratio_given && ti->display_dimensions_given)
-    mxerror("Both '--aspect-ratio' and '--display-dimensions' were given for "
-            "'%s'.\n", ti->fname);
+    mxerror(_("Both '--aspect-ratio' and '--display-dimensions' were given "
+              "for track %lld of '%s'.\n"), ti->id, ti->fname);
 
   memset(ti->fourcc, 0, 5);
   // Let's see if the user has specified a FourCC for this track.
@@ -274,8 +274,8 @@ generic_packetizer_c::set_tag_track_uid() {
       huid;
 
     if (!tag->CheckMandatory())
-      mxerror("Could not parse the tags in '%s': some mandatory "
-              "elements are missing.\n", ti->tags_ptr->file_name);
+      mxerror(_("The tags in '%s' could not be parsed: some mandatory "
+                "elements are missing.\n"), ti->tags_ptr->file_name);
   }
 }
 
@@ -464,9 +464,10 @@ generic_packetizer_c::set_as_default_track(int type,
   } else if ((priority == DEFAULT_TRACK_PRIORITY_CMDLINE) &&
              (default_tracks[type] != hserialno) &&
              !default_track_warning_printed) {
-    mxwarn("Another default track for %s tracks has already "
-           "been set. Not setting the 'default' flag for track %lld of "
-           "'%s'.\n", type == 0 ? "audio" : type == 'v' ? "video" : "subtitle",
+    mxwarn(_("Another default track for %s tracks has already "
+             "been set. The 'default' flag for track %lld of '%s' will not be "
+             "set.\n"),
+           type == 0 ? "audio" : type == 'v' ? "video" : "subtitle",
            ti->id, ti->fname);
     default_track_warning_printed = true;
   }
@@ -726,8 +727,8 @@ generic_packetizer_c::add_packet(memory_c &mem,
   // I: 0, P: 120, B1: 40, B2: 80.
   if ((timecode < safety_last_timecode) && (fref < 0))
     mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-           "last_timecode (%lld < %lld) for %lld of '%s'\n", timecode,
-           safety_last_timecode, ti->id, ti->fname);
+           "last_timecode (%lld < %lld) for %lld of '%s'. %s\n",
+           timecode, safety_last_timecode, ti->id, ti->fname, BUGMSG);
   safety_last_timecode = timecode;
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
@@ -807,22 +808,23 @@ generic_packetizer_c::parse_ext_timecode_file(const char *name) {
   try {
     in = new mm_text_io_c(name);
   } catch(...) {
-    mxerror("Could not open the timecode file '%s' for reading.\n", name);
+    mxerror(_("The timecode file '%s' could not be opened for reading.\n"),
+            name);
   }
 
   if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") ||
       !parse_int(&line.c_str()[strlen("# timecode format v")],
                  ext_timecodes_version))
-    mxerror("The timcode file '%s' contains an unsupported/unrecognized "
-            "format line. The very first line should be '# timecode format "
-            "v1'.\n", name);
+    mxerror(_("The timcode file '%s' contains an unsupported/unrecognized "
+              "format line. The very first line must look like "
+              "'# timecode format v1'.\n"), name);
   if (ext_timecodes_version == 1)
     parse_ext_timecode_file_v1(in, name);
   else if (ext_timecodes_version == 2)
     parse_ext_timecode_file_v2(in, name);
   else
-    mxerror("The timcode file '%s' contains an unsupported/unrecognized "
-            "format (version %d).\n", name, ext_timecodes_version);
+    mxerror(_("The timcode file '%s' contains an unsupported/unrecognized "
+              "format (version %d).\n"), name, ext_timecodes_version);
 
   delete in;
 }
@@ -841,21 +843,21 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
   line_no = 1;
   do {
     if (!in->getline2(line))
-      mxerror("The timcode file '%s' does not contain a valid 'Assume' line "
-              "with the default FPS.\n", name);
+      mxerror(_("The timcode file '%s' does not contain a valid 'Assume' line "
+                "with the default number of frames per second.\n"), name);
     line_no++;
     strip(line);
     if ((line.length() != 0) && (line[0] != '#'))
       break;
   } while (true);
   if (!starts_with_case(line, "assume "))
-    mxerror("The timcode file '%s' does not contain a valid 'Assume' line "
-            "with the default FPS.\n", name);
+    mxerror(_("The timcode file '%s' does not contain a valid 'Assume' line "
+              "with the default number of frames per second.\n"), name);
   line.erase(0, 6);
   strip(line);
   if (!parse_double(line.c_str(), default_fps))
-    mxerror("The timcode file '%s' does not contain a valid 'Assume' line "
-            "with the default FPS.\n", name);
+    mxerror(_("The timcode file '%s' does not contain a valid 'Assume' line "
+              "with the default number of frames per second.\n"), name);
   if (timecode_ranges != NULL)
     delete timecode_ranges;
   timecode_ranges = new vector<timecode_range_c>;
@@ -869,30 +871,33 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
     fields = split(line.c_str());
     strip(fields, true);
     if (fields.size() != 3) {
-      mxwarn("Line %d of the timecode file '%s' could not be parsed: number "
-             "of fields is not = 3.\n", line_no, name);
+      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: It "
+               "does not contain exactly three fields.\n"), line_no, name);
       continue;
     }
 
     if (!parse_int(fields[0].c_str(), t.start_frame)) {
-      mxwarn("Line %d of the timecode file '%s' could not be parsed (start "
-             "frame).\n", line_no, name);
+      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: The "
+               "start frame number is not a valid number.\n"), line_no, name);
       continue;
     }
     if (!parse_int(fields[1].c_str(), t.end_frame)) {
-      mxwarn("Line %d of the timecode file '%s' could not be parsed (end "
-             "frame).\n", line_no, name);
+      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: The "
+               "end frame number is not a valid number.\n"), line_no, name);
       continue;
     }
     if (!parse_double(fields[2].c_str(), t.fps)) {
-      mxwarn("Line %d of the timecode file '%s' could not be parsed (FPS).\n",
-             line_no, name);
+      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: The "
+               "number of frames per second is not a valid floating point "
+               "number.\n"), line_no, name);
       continue;
     }
 
     if ((t.fps <= 0) || (t.start_frame < 0) || (t.end_frame < 0) ||
         (t.end_frame < t.start_frame)) {
-      mxwarn("Line %d of the timecode file '%s' contains inconsistent data.\n",
+      mxwarn(_("Line %d of the timecode file '%s' contains inconsistent data "
+               "(e.g. the start frame number is bigger than the end frame "
+               "number, or some values are smaller than zero).\n"),
              line_no, name);
       continue;
     }
@@ -904,7 +909,7 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
          ext_timecodes_version, default_fps, timecode_ranges->size());
 
   if (timecode_ranges->size() == 0)
-    mxwarn("The timecode file '%s' does not contain any valid entry.\n",
+    mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),
            name);
 
   sort(timecode_ranges->begin(), timecode_ranges->end());
@@ -969,8 +974,8 @@ generic_packetizer_c::parse_ext_timecode_file_v2(mm_io_c *in,
     if ((line.length() == 0) || (line[0] == '#'))
       continue;
     if (!parse_double(line.c_str(), timecode))
-      mxerror("The line %d of the timcode file '%s' does not contain a valid "
-              "floating point number.\n", line_no, name);
+      mxerror(_("The line %d of the timcode file '%s' does not contain a "
+                "valid floating point number.\n"), line_no, name);
     ext_timecodes->push_back((int64_t)timecode * 1000000);
   }
 }
@@ -983,8 +988,7 @@ generic_packetizer_c::get_next_timecode(int64_t timecode) {
   if (ext_timecodes_version == 1) {
     if (timecode_ranges == NULL)
       die("generic_packetizer: ext_timecodes_version == 1 && "
-          "timecodes_range == NULL. Should not have happened. Please file "
-          "a bug report.\n");
+          "timecodes_range == NULL. %s\n", BUGMSG);
 
     t = &(*timecode_ranges)[current_tc_range];
     new_timecode = (int64_t)(t->base_timecode + 1000000000.0 *
@@ -1001,14 +1005,14 @@ generic_packetizer_c::get_next_timecode(int64_t timecode) {
   } else if (ext_timecodes_version == 2) {
     if (ext_timecodes == NULL)
       die("generic_packetizer: ext_timecodes_version == 2 && "
-          "ext_timecodes == NULL. Should not have happened. Please file "
-          "a bug report.\n");
+          "ext_timecodes == NULL. %s\n", BUGMSG);
 
     if ((frameno >= ext_timecodes->size()) && !ext_timecodes_warning_printed) {
-      mxwarn("generic_packetizer: The number of external timecodes %u is "
-             "smaller than the number of frames in track %lld of '%s'. "
-             "The remaining frames of this track might not be timestamped the "
-             "way you intended them to be. mkvmerge might even crash.\n",
+      mxwarn(_("generic_packetizer: The number of external timecodes %u is "
+               "smaller than the number of frames in track %lld of '%s'. "
+               "The remaining frames of this track might not be timestamped "
+               "the way you intended them to be. mkvmerge might even crash."
+               "\n"),
              ext_timecodes->size(), ti->id, ti->fname);
       ext_timecodes_warning_printed = true;
       return timecode;
@@ -1159,52 +1163,6 @@ generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
 }
 
 void
-generic_reader_c::connect(generic_reader_c *prior) {
-  int i, j, result;
-  generic_packetizer_c *pprior, *pcurrent;
-  int64_t conn_id;
-
-  if (reader_packetizers.size() == 0)
-    mxerror("Cannot append '%s' to '%s' as there are no tracks to be read.\n",
-            ti->fname, prior->ti->fname);
-  if (prior->reader_packetizers.size() == 0)
-    mxerror("Cannot append '%s' to '%s' as the latter file contains no tracks "
-            "to be read.\n", ti->fname, prior->ti->fname);
-  for (i = 0; i < reader_packetizers.size(); i++) {
-    pcurrent = reader_packetizers[i].orig;
-    pprior = NULL;
-    conn_id = pcurrent->get_source_track_num();
-    for (j = 0; j < ti->append_mapping->size(); j += 2)
-      if (conn_id == (*ti->append_mapping)[j]) {
-        conn_id = (*ti->append_mapping)[j + 1];
-        break;
-      }
-    for (j = 0; j < prior->reader_packetizers.size(); j++)
-      if (conn_id ==
-          prior->reader_packetizers[j].orig->get_source_track_num()) {
-        pprior = prior->reader_packetizers[j].orig;
-        break;
-      }
-    if (pprior == NULL)
-      mxerror("Cannot append '%s' to '%s'. Could not find a track in '%s' "
-              "with the ID %lld.\n", ti->fname, prior->ti->fname,
-              prior->ti->fname, conn_id);
-    result = pcurrent->can_connect_to(pprior);
-    if (result == CAN_CONNECT_NO_FORMAT)
-      mxerror("Cannot append track ID %lld, type %s from '%s' to track ID "
-              "%lld, type %s from '%s'.\n", pcurrent->get_source_track_num(),
-              pcurrent->get_format_name(), ti->fname, conn_id,
-              pprior->get_format_name(), prior->ti->fname);
-    if (result == CAN_CONNECT_NO_PARAMETERS)
-      mxerror("Cannot append track ID %lld from '%s' to track ID %lld "
-              "from '%s' because the track parameters do not match.\n",
-              pcurrent->get_source_track_num(), ti->fname,
-              conn_id, prior->ti->fname);
-  }
-  connected_to = prior;
-}
-
-void
 generic_reader_c::set_timecode_offset(int64_t offset) {
   vector<packetizer_container_t>::iterator it;
 
@@ -1242,7 +1200,7 @@ static const char wchar[] = "-\\|/-\\|/-";
 
 void
 generic_reader_c::display_progress(bool) {
-  mxinfo("working... %c\r", wchar[act_wchar]);
+  mxinfo("%s %c\r", _("working..."), wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
@@ -1296,7 +1254,6 @@ track_info_c::track_info_c():
   compression_list = new vector<cue_creation_t>;
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
-  append_mapping = new vector<int64_t>;
   avi_block_sizes = NULL;
 }
 
@@ -1340,7 +1297,6 @@ track_info_c::free_contents() {
     delete tags;
   delete all_fourccs;
   delete display_properties;
-  delete append_mapping;
   delete avi_block_sizes;
 
   initialized = false;
@@ -1424,8 +1380,6 @@ track_info_c::operator =(const track_info_c &src) {
   no_chapters = src.no_chapters;
   no_attachments = src.no_attachments;
   no_tags = src.no_tags;
-
-  append_mapping = new vector<int64_t>(*src.append_mapping);
 
   avi_block_align = src.avi_block_align;
   avi_samples_per_sec = src.avi_samples_per_sec;

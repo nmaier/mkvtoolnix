@@ -200,8 +200,6 @@ public:
 
   bool no_chapters, no_attachments, no_tags;
 
-  vector<int64_t> *append_mapping;
-
   // The following variables are needed for the broken way of
   // syncing audio in AVIs: by prepending it with trash. Thanks to
   // the nandub author for this really, really sucky implementation.
@@ -273,7 +271,6 @@ public:
   virtual void add_attachments(KaxAttachments *a) {
   }
   virtual int add_packetizer(generic_packetizer_c *ptzr);
-  virtual void connect(generic_reader_c *prior);
   virtual void set_timecode_offset(int64_t offset);
 
 protected:

@@ -87,8 +87,8 @@ extract_tags(const char *file_name) {
   try {
     in = new mm_io_c(file_name, MODE_READ);
   } catch (std::exception &ex) {
-    show_error("Error: Couldn't open input file %s (%s).", file_name,
-               strerror(errno));
+    show_error(_("The file '%s' could not be opened for reading (%s)."),
+               file_name, strerror(errno));
     return;
   }
 
@@ -98,7 +98,7 @@ extract_tags(const char *file_name) {
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
-      show_error("Error: No EBML head found.");
+      show_error(_("Error: No EBML head found."));
       delete es;
 
       return;
@@ -112,15 +112,15 @@ extract_tags(const char *file_name) {
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
-        show_error("No segment/level 0 element found.");
+        show_error(_("No segment/level 0 element found."));
         return;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, "Segment");
+        show_element(l0, 0, _("Segment"));
         break;
       }
 
-      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+      show_element(l0, 0, _("Next level 0 element is not a segment but %s"),
                    l0->Generic().DebugName);
 
       l0->SkipData(*es, l0->Generic().Context);
@@ -138,9 +138,9 @@ extract_tags(const char *file_name) {
         tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
 
         if (!tags_extracted) {
-          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-                  "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-                  "<Tags>\n");
+          mxinfo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+                 "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
+                 "<Tags>\n");
           tags_extracted = true;
         }
 
@@ -181,7 +181,7 @@ extract_tags(const char *file_name) {
     delete in;
 
   } catch (exception &ex) {
-    show_error("Caught exception: %s", ex.what());
+    show_error(_("Caught exception: %s"), ex.what());
     delete in;
 
     return;

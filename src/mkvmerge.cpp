@@ -118,7 +118,7 @@ typedef struct filelist_tag {
   generic_reader_c *reader;
 
   track_info_c *ti;
-  bool first, last;
+  bool appending;
 } filelist_t;
 
 typedef struct {
@@ -138,10 +138,18 @@ typedef struct {
   int64_t track_id;
 } track_order_t;
 
+typedef struct {
+  int64_t src_file_id;
+  int64_t src_track_id;
+  int64_t dst_file_id;
+  int64_t dst_track_id;
+} append_spec_t;
+
 vector<packetizer_t *> packetizers;
 vector<filelist_t *> files;
 vector<attachment_t *> attachments;
 vector<track_order_t> track_order;
+vector<append_spec_t> append_mapping;
 int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
 
 // Variables set by the command line parser.
@@ -243,7 +251,7 @@ file_type_t file_types[] =
  */
 static void
 usage() {
-  mxinfo(
+  mxinfo(_(
     "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
     "  -v, --verbose            verbose status\n"
@@ -275,6 +283,10 @@ usage() {
     "                           Do not write meta seek data for clusters.\n"
     "  --disable-lacing         Do not Use lacing.\n"
     "  --enable-durations       Enable block durations for all blocks.\n"
+    "  --append-to <SFID1:STID1=DFID1:DTID1,SFID1:STID2=DFID2:DTID2,...>\n"
+    "                           A comma separated list of file and track IDs\n"
+    "                           that controls which track of a file is\n"
+    "                           appended to another track of another file.\n"
     "\n File splitting and linking (more global options):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
@@ -325,11 +337,6 @@ usage() {
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
     "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
-    "  --append-to <STID1:DTID1,STID2:DTID2,...>\n"
-    "                           A comma separated list of pairs of track IDs\n"
-    "                           that controls which track of the current\n"
-    "                           file is appended to which track of the\n"
-    "                           previous file.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -358,7 +365,7 @@ usage() {
     "\n\nPlease read the man page/the HTML documentation to mkvmerge. It\n"
     "explains several details in great length which are not obvious from\n"
     "this listing.\n"
-  );
+  ));
 }
 
 /** \brief Prints information about what has been compiled into mkvmerge
@@ -403,8 +410,9 @@ get_type(char *filename) {
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_current);
   } catch (exception &ex) {
-    mxerror("Could not open source file or seek properly in it "
-            "(%s).\n", filename);
+    mxerror(_("The source file '%s' could not be opened successfully, or "
+              "retrieving its size by seeking to the end did not work.\n"),
+            filename);
   }
 
   if (avi_reader_c::probe_file(mm_io, size))
@@ -440,7 +448,8 @@ get_type(char *filename) {
       size = mm_text_io->getFilePointer();
       mm_text_io->setFilePointer(0, seek_current);
     } catch (exception &ex) {
-      mxerror("Could not open source file or seek properly in it (%s).\n",
+      mxerror(_("The source file '%s' could not be opened successfully, or "
+                "retrieving its size by seeking to the end did not work.\n"),
               filename);
     }
 
@@ -482,19 +491,19 @@ sighandler(int signum) {
 #endif // DEBUG
 
   if (out == NULL)
-    mxerror("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n");
+    mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 
-  mxwarn("\nmkvmerge received a SIGINT (probably because the user pressed "
-         "Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during "
-         "this process you'll have to kill it manually.\n");
+  mxwarn(_("\nmkvmerge received a SIGINT (probably because the user pressed "
+           "Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during "
+           "this process you'll have to kill it manually.\n"));
 
-  mxinfo("Sanitizing the file, part 1/4...");
+  mxinfo(_("The file is being fixed, part 1/4..."));
   // Render the cues.
   if (write_cues && cue_writing_requested)
     kax_cues->Render(*out);
-  mxinfo(" done\n");
+  mxinfo(_(" done\n"));
 
-  mxinfo("Sanitizing the file, part 2/4...");
+  mxinfo(_("The file is being fixed, part 2/4..."));
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
@@ -503,9 +512,9 @@ sighandler(int signum) {
      cluster_helper->get_first_timecode()) / TIMECODE_SCALE;
   kax_duration->Render(*out);
   out->restore_pos();
-  mxinfo(" done\n");
+  mxinfo(_(" done\n"));
 
-  mxinfo("Sanitizing the file, part 3/4...");
+  mxinfo(_("The file is being fixed, part 3/4..."));
   // Write meta seek information if it is not disabled.
   if (cue_writing_requested)
     kax_sh_main->IndexThis(*kax_cues, *kax_segment);
@@ -513,22 +522,20 @@ sighandler(int signum) {
   if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     kax_sh_main->UpdateSize();
     if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
-      mxwarn("This should REALLY not have happened. The space reserved for "
-             "the first meta seek element was too small. Size needed: %lld. "
-             "Please contact Moritz Bunkus at moritz@bunkus.org.\n",
-             kax_sh_main->ElementSize());
+      mxwarn(_("This should REALLY not have happened. The space reserved for "
+               "the first meta seek element was too small. %s\n"), BUGMSG);
   }
-  mxinfo(" done\n");
+  mxinfo(_(" done\n"));
 
-  mxinfo("Sanitizing the file, part 4/4...");
+  mxinfo(_("The file is being fixed, part 4/4..."));
   // Set the correct size for the segment.
   if (kax_segment->ForceSize(out->getFilePointer() -
                              kax_segment->GetElementPosition() -
                              kax_segment->HeadSize()))
     kax_segment->OverwriteHead(*out);
-  mxinfo(" done\n");
+  mxinfo(_(" done\n"));
 
-  mxerror("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n");
+  mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 }
 #endif
 
@@ -577,8 +584,8 @@ parse_and_add_tags(const char *file_name) {
     *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
       1;
     if (!tag->CheckMandatory())
-      mxerror("Error parsing the tags in '%s': some mandatory "
-              "elements are missing.\n", file_name);
+      mxerror(_("Error parsing the tags in '%s': some mandatory "
+                "elements are missing.\n"), file_name);
     for (i = 0; i < tag->ListSize(); i++) {
       if (EbmlId(*(*tag)[i]) == KaxTagTargets::ClassInfos.GlobalId) {
         targets = static_cast<KaxTagTargets *>((*tag)[i]);
@@ -629,30 +636,20 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
  * The argument is a comma separated list of track IDs.
  */
 static void
-parse_tracks(char *s,
+parse_tracks(const char *s,
              vector<int64_t> *tracks,
              const char *opt) {
-  char *comma;
+  int i;
   int64_t tid;
-  string orig = s;
+  vector<string> elements;
 
   tracks->clear();
 
-  comma = strchr(s, ',');
-  while ((comma != NULL) && (*s != 0)) {
-    *comma = 0;
-
-    if (!parse_int(s, tid))
-      mxerror("Invalid track ID in '%s %s'.\n", opt, orig.c_str());
-    tracks->push_back(tid);
-
-    s = &comma[1];
-    comma = strchr(s, ',');
-  }
-
-  if (*s != 0) {
-    if (!parse_int(s, tid))
-      mxerror("Invalid track ID in '%s %s'.\n", opt, orig.c_str());
+  elements = split(s, ",");
+  strip(elements);
+  for (i = 0; i < elements.size(); i++) {
+    if (!parse_int(elements[i].c_str(), tid))
+      mxerror(_("Invalid track ID in '%s %s'.\n"), opt, s);
     tracks->push_back(tid);
   }
 }
@@ -674,16 +671,17 @@ parse_sync(char *s,
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid sync option. No track ID specified in '%s %s'.\n", s,
+    mxerror(_("Invalid sync option. No track ID specified in '%s %s'.\n"), s,
             opt);
 
   *colon = 0;
   if (!parse_int(s, async.id))
-    mxerror("Invalid track ID specified in '%s %s'.\n", opt, s);
+    mxerror(_("Invalid track ID specified in '%s %s'.\n"), opt, s);
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid sync option specified in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Invalid sync option specified in '%s %s'.\n"), opt,
+            orig.c_str());
 
   // Now parse the actual sync values.
   if ((linear = strchr(s, ',')) != NULL) {
@@ -698,14 +696,14 @@ parse_sync(char *s,
       d1 = strtod(linear, NULL);
       d2 = strtod(div, NULL);
       if (d2 == 0.0)
-        mxerror("Linear sync: division by zero in '%s %s'.\n", opt,
-                orig.c_str());
+        mxerror(_("Invalid sync option specified in '%s %s'. The divisor is "
+                  "zero.\n"), opt, orig.c_str());
 
       async.linear = d1 / d2;
     }
     if (async.linear <= 0.0)
-      mxerror("Linear sync value may not be <= 0 in '%s %s'.\n", opt,
-              orig.c_str());
+      mxerror(_("Invalid sync option specified in '%s %s'. The linear sync "
+                "value may not be smaller than zero.\n"), opt, orig.c_str());
 
   } else
     async.linear = 1.0;
@@ -727,10 +725,12 @@ parse_aspect_ratio(char *s,
 
   c = strchr(s, ':');
   if (c == NULL)
-    mxerror("Aspect ratio: missing track ID in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Aspect ratio: missing track ID in '%s %s'.\n"), opt,
+            orig.c_str());
   *c = 0;
   if (!parse_int(s, dprop.id))
-    mxerror("Aspect ratio: invalid track ID in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Aspect ratio: invalid track ID in '%s %s'.\n"), opt,
+            orig.c_str());
   dprop.width = -1;
   dprop.height = -1;
 
@@ -747,15 +747,17 @@ parse_aspect_ratio(char *s,
   *div = 0;
   div++;
   if (*s == 0)
-    mxerror("Aspect ratio: missing dividend in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Aspect ratio: missing dividend in '%s %s'.\n"), opt,
+            orig.c_str());
 
   if (*div == 0)
-    mxerror("Aspect ratio: missing divisor in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Aspect ratio: missing divisor in '%s %s'.\n"), opt,
+            orig.c_str());
 
   w = strtod(s, NULL);
   h = strtod(div, NULL);
   if (h == 0.0)
-    mxerror("Aspect ratio: divisor is 0 in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Aspect ratio: divisor is 0 in '%s %s'.\n"), opt, orig.c_str());
 
   dprop.aspect_ratio = w / h;
   ti.display_properties->push_back(dprop);
@@ -775,26 +777,26 @@ parse_display_dimensions(char *s,
 
   c = strchr(s, ':');
   if (c == NULL)
-    mxerror("Display dimensions: not given in the form "
-            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+    mxerror(_("Display dimensions: not given in the form "
+              "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n"),
             orig.c_str());
   *c = 0;
   c++;
   x = strchr(c, 'x');
   if (x == NULL)
-    mxerror("Display dimensions: not given in the form "
-            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+    mxerror(_("Display dimensions: not given in the form "
+              "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n"),
             orig.c_str());
   *x = 0;
   x++;
   if (*x == 0)
-    mxerror("Display dimensions: not given in the form "
-            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+    mxerror(_("Display dimensions: not given in the form "
+              "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n"),
             orig.c_str());
   if (!parse_int(s, dprop.id) || !parse_int(c, w) || !parse_int(x, h) ||
       (w <= 0) || (h <= 0))
-    mxerror("Display dimensions: not given in the form "
-            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+    mxerror(_("Display dimensions: not given in the form "
+              "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n"),
             orig.c_str());
 
   dprop.aspect_ratio = -1.0;
@@ -822,7 +824,7 @@ parse_split(const char *arg) {
   string orig = arg;
 
   if ((arg == NULL) || (arg[0] == 0) || (arg[1] == 0))
-    mxerror("Invalid format for '--split' in '--split %s'.\n", arg);
+    mxerror(_("Invalid format for '--split' in '--split %s'.\n"), arg);
 
   s = safestrdup(arg);
 
@@ -835,7 +837,8 @@ parse_split(const char *arg) {
 
     if (strlen(s) == 12) {
       if ((s[8] != '.') || !parse_int(&s[9], msecs))
-        mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
+        mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
+                orig.c_str());
       s[8] = 0;
     } else
       msecs = 0;
@@ -847,7 +850,8 @@ parse_split(const char *arg) {
     split_after = secs + mins * 60 + hours * 3600;
     if ((hours < 0) || (mins < 0) || (mins > 59) ||
         (secs < 0) || (secs > 59) || (split_after < 10))
-      mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
+      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
+              orig.c_str());
 
     split_after = split_after * 1000 + msecs;
     split_by_time = true;
@@ -859,7 +863,8 @@ parse_split(const char *arg) {
   if ((s[strlen(s) - 1] == 's') || (s[strlen(s) - 1] == 'S')) {
     s[strlen(s) - 1] = 0;
     if (!parse_int(s, split_after))
-      mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
+      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
+              orig.c_str());
 
     split_after *= 1000;
     split_by_time = true;
@@ -880,11 +885,11 @@ parse_split(const char *arg) {
   if (modifier != 1)
     *p = 0;
   if (!parse_int(s, split_after))
-    mxerror("Invalid split size in '--split %s'.\n", orig.c_str());
+    mxerror(_("Invalid split size in '--split %s'.\n"), orig.c_str());
 
   split_after *= modifier;
   if (split_after <= (1024 * 1024))
-    mxerror("Invalid split size in '--split %s' (size too small).\n",
+    mxerror(_("Invalid split size in '--split %s': The size is too small.\n"),
             orig.c_str());
 
   safefree(s);
@@ -903,15 +908,17 @@ parse_cues(char *s,
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid cues option. No track ID specified in '--cues %s'.\n", s);
+    mxerror(_("Invalid cues option. No track ID specified in '--cues %s'.\n"),
+            s);
 
   *colon = 0;
   if (!parse_int(s, cues.id))
-    mxerror("Invalid track ID specified in '--cues %s'.\n", orig.c_str());
+    mxerror(_("Invalid track ID specified in '--cues %s'.\n"), orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid cues option specified in '--cues %s'.\n", orig.c_str());
+    mxerror(_("Invalid cues option specified in '--cues %s'.\n"),
+            orig.c_str());
 
   if (!strcmp(s, "all"))
     cues.cues = CUES_ALL;
@@ -920,7 +927,7 @@ parse_cues(char *s,
   else if (!strcmp(s, "none"))
     cues.cues = CUES_NONE;
   else
-    mxerror("'%s' is an unsupported argument for --cues.\n", orig.c_str());
+    mxerror(_("'%s' is an unsupported argument for --cues.\n"), orig.c_str());
 }
 
 /** \brief Parse the \c --compression argument
@@ -935,17 +942,17 @@ parse_compression(char *s,
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid compression option. No track ID specified in "
-            "'--compression %s'.\n", s);
+    mxerror(_("Invalid compression option. No track ID specified in "
+              "'--compression %s'.\n"), s);
 
   *colon = 0;
   if (!parse_int(s, compression.id))
-    mxerror("Invalid track ID specified in '--compression %s'.\n",
+    mxerror(_("Invalid track ID specified in '--compression %s'.\n"),
             orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid compression option specified in '--compression %s'.\n",
+    mxerror(_("Invalid compression option specified in '--compression %s'.\n"),
             orig.c_str());
 
   if (!strcasecmp(s, "lzo") || !strcasecmp(s, "lzo1x"))
@@ -957,8 +964,8 @@ parse_compression(char *s,
   else if (!strcmp(s, "none"))
     compression.cues = COMPRESSION_NONE;
   else
-    mxerror("'%s' is an unsupported argument for --compression. Available "
-            "compression methods are 'none', and 'zlib'.\n", orig.c_str());
+    mxerror(_("'%s' is an unsupported argument for --compression. Available "
+              "compression methods are 'none' and 'zlib'.\n"), orig.c_str());
 }
 
 /** \brief Parse the argument for a couple of options
@@ -977,19 +984,22 @@ parse_language(char *s,
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("No track ID specified in '--%s' %s'.\n", opt, orig.c_str());
+    mxerror(_("No track ID specified in '--%s' %s'.\n"), opt, orig.c_str());
 
   *colon = 0;
   if (!parse_int(s, lang.id))
-    mxerror("Invalid track ID specified in '--%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Invalid track ID specified in '--%s %s'.\n"), opt,
+            orig.c_str());
 
   s = &colon[1];
   if (check && (*s == 0))
-    mxerror("Invalid %s specified in '--%s %s'.\n", topic, opt, orig.c_str());
+    mxerror(_("Invalid %s specified in '--%s %s'.\n"), topic, opt,
+            orig.c_str());
 
   if (check && !is_valid_iso639_2_code(s))
-    mxerror("'%s' is not a valid ISO639-2 code. See "
-            "'mkvmerge --list-languages'.\n", s);
+    mxerror(_("'%s' is not a valid ISO639-2 code. See "
+              "'mkvmerge --list-languages' for a list of all languages "
+              "and their respective ISO639-2 codes.\n"), s);
   
   lang.language = safestrdup(s);
 }
@@ -1006,17 +1016,17 @@ parse_sub_charset(char *s,
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid sub charset option. No track ID specified in "
-            "'--sub-charset %s'.\n", orig.c_str());
+    mxerror(_("Invalid sub charset option. No track ID specified in "
+              "'--sub-charset %s'.\n"), orig.c_str());
 
   *colon = 0;
   if (!parse_int(s, sub_charset.id))
-    mxerror("Invalid track ID specified in '--sub-charset %s'.\n",
+    mxerror(_("Invalid track ID specified in '--sub-charset %s'.\n"),
             orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid sub charset specified in '--sub-charset %s'.\n",
+    mxerror(_("Invalid sub charset specified in '--sub-charset %s'.\n"),
             orig.c_str());
 
   sub_charset.language = safestrdup(s);
@@ -1035,15 +1045,15 @@ parse_tags(char *s,
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid tags option. No track ID specified in '%s %s'.\n", opt,
+    mxerror(_("Invalid tags option. No track ID specified in '%s %s'.\n"), opt,
             orig.c_str());
   *colon = 0;
   if (!parse_int(s, tags.id))
-    mxerror("Invalid track ID specified in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("Invalid track ID specified in '%s %s'.\n"), opt, orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid tags file name specified in '%s %s'.\n", opt,
+    mxerror(_("Invalid tags file name specified in '%s %s'.\n"), opt,
             orig.c_str());
 
   tags.file_name = from_utf8(cc_local_utf8, s);
@@ -1063,14 +1073,14 @@ parse_fourcc(char *s,
 
   c = strchr(s, ':');
   if (c == NULL)
-    mxerror("FourCC: Missing track ID in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("FourCC: Missing track ID in '%s %s'.\n"), opt, orig.c_str());
   *c = 0;
   c++;
   if (!parse_int(s, fourcc.id))
-    mxerror("FourCC: Invalid track ID in '%s %s'.\n", opt, orig.c_str());
+    mxerror(_("FourCC: Invalid track ID in '%s %s'.\n"), opt, orig.c_str());
   if (strlen(c) != 4)
-    mxerror("The FourCC must be exactly four characters long in '%s %s'."
-            "\n", opt, orig.c_str());
+    mxerror(_("The FourCC must be exactly four characters long in '%s %s'."
+              "\n"), opt, orig.c_str());
   memcpy(fourcc.fourcc, c, 4);
   fourcc.fourcc[4] = 0;
   ti.all_fourccs->push_back(fourcc);
@@ -1091,13 +1101,13 @@ parse_track_order(const char *s) {
   for (i = 0; i < parts.size(); i++) {
     pair = split(parts[i].c_str(), ":");
     if (pair.size() != 2)
-      mxerror("'%s' is not a valid pair of file ID and track ID in "
-              "'--track-order %s'.\n", parts[i].c_str(), s);
+      mxerror(_("'%s' is not a valid pair of file ID and track ID in "
+                "'--track-order %s'.\n"), parts[i].c_str(), s);
     if (!parse_int(pair[0].c_str(), to.file_id))
-      mxerror("'%s' is not a valid file ID in '--track-order %s'.\n",
+      mxerror(_("'%s' is not a valid file ID in '--track-order %s'.\n"),
               pair[0].c_str(), s);
     if (!parse_int(pair[1].c_str(), to.track_id))
-      mxerror("'%s' is not a valid file ID in '--track-order %s'.\n",
+      mxerror(_("'%s' is not a valid file ID in '--track-order %s'.\n"),
               pair[1].c_str(), s);
     track_order.push_back(to);
   }
@@ -1106,22 +1116,31 @@ parse_track_order(const char *s) {
 static void
 parse_append_to(const char *s,
                 track_info_c &ti) {
-  vector<string> entries, parts;
+  vector<string> entries, parts, sids, dids;
   uint32_t i;
-  int64_t from, to;
+  append_spec_t mapping;
 
-  ti.append_mapping->clear();
+  append_mapping.clear();
   entries = split(s, ",");
   strip(entries);
   for (i = 0; i < entries.size(); i++) {
-    parts = split(entries[i].c_str(), ":");
+    parts = split(entries[i].c_str(), "=");
     strip(parts);
-    if ((parts.size() != 2) ||
-        !parse_int(parts[0].c_str(), from) || !parse_int(parts[1].c_str(), to))
-      mxerror("'%s' is not a valid mapping of track IDs in '--append-to %s'.",
-              entries[i].c_str(), s);
-    ti.append_mapping->push_back(from);
-    ti.append_mapping->push_back(to);
+    if (parts.size() != 2)
+      mxerror(_("'%s' is not a valid mapping of track IDs in '--append-to "
+                "%s'.\n"), entries[i].c_str(), s);
+    sids = split(parts[0].c_str(), ":");
+    strip(sids);
+    dids = split(parts[1].c_str(), ":");
+    strip(dids);
+    if ((sids.size() != 2) || (dids.size() != 2) ||
+        !parse_int(sids[0].c_str(), mapping.src_file_id) ||
+        !parse_int(sids[1].c_str(), mapping.src_track_id) ||
+        !parse_int(dids[0].c_str(), mapping.dst_file_id) ||
+        !parse_int(dids[1].c_str(), mapping.dst_track_id))
+      mxerror(_("'%s' is not a valid mapping of track IDs in '--append-to "
+                "%s'.\n"), entries[i].c_str(), s);
+    append_mapping.push_back(mapping);
   }
 }
 
@@ -1232,11 +1251,11 @@ render_headers(mm_io_c *rout) {
     for (i = 0; i < track_order.size(); i++)
       if ((track_order[i].file_id >= 0) &&
           (track_order[i].file_id < files.size()) &&
-          files[track_order[i].file_id]->first)
+          !files[track_order[i].file_id]->appending)
         files[track_order[i].file_id]->reader->
           set_headers_for_track(track_order[i].track_id);
     for (i = 0; i < files.size(); i++)
-      if (files[i]->first)
+      if (!files[i]->appending)
         files[i]->reader->set_headers();
     for (i = 0; i < packetizers.size(); i++)
       if (packetizers[i]->packetizer != NULL)
@@ -1251,7 +1270,8 @@ render_headers(mm_io_c *rout) {
     void_after_track_headers->SetSize(1024);
     void_after_track_headers->Render(*rout);
   } catch (exception &ex) {
-    mxerror("Could not render the track headers.\n");
+    mxerror(_("The track headers could not be rendered correctly. %s.\n"),
+            BUGMSG);
   }
 }
 
@@ -1354,7 +1374,7 @@ render_attachments(IOCallback *rout) {
         fdata = &GetChild<KaxFileData>(*kax_a);
         fdata->SetBuffer(buffer, size);
       } catch (...) {
-        mxerror("Could not open the attachment '%s'.\n", attch->name);
+        mxerror(_("The attachment '%s' could not be read.\n"), attch->name);
       }
     }
   }
@@ -1382,7 +1402,7 @@ create_readers() {
 
   for (i = 0; i < files.size(); i++) {
     file = files[i];
-    accept_packetizer = file->first;
+    accept_packetizer = !file->appending;
     try {
       switch (file->type) {
         case TYPEMATROSKA:
@@ -1433,19 +1453,18 @@ create_readers() {
           file->reader = new tta_reader_c(file->ti);
           break;
         default:
-          mxerror("EVIL internal bug! (unknown file type)\n");
+          mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);
           break;
       }
     } catch (error_c error) {
-      mxerror("Demultiplexer failed to initialize:\n%s\n", error.get_error());
+      mxerror(_("The demultiplexer failed to initialize:\n%s\n)"),
+              error.get_error());
     }
   }
 
   if (!identifying) {
     for (i = 0; i < files.size(); i++) {
       files[i]->reader->create_packetizers();
-      if (!file->first)
-        file->reader->connect(files[i - 1]->reader);
     }
   }
 }
@@ -1468,13 +1487,13 @@ identify(const char *filename) {
   ti.fname = file->name;
   
   if (file->type == TYPEUNKNOWN)
-    mxerror("File %s has unknown type. Please have a look "
-            "at the supported file types ('mkvmerge --list-types') and "
-            "contact me at moritz@bunkus.org if your file type is "
-            "supported but not recognized properly.\n", file->name);
+    mxerror(_("File %s has unknown type. Please have a look "
+              "at the supported file types ('mkvmerge --list-types') and "
+              "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
+              "file type is supported but not recognized properly.\n"),
+            file->name);
 
-  file->first = true;
-  file->last = true;
+  file->appending = false;
   file->fp = NULL;
   file->status = EMOREDATA;
   file->pack = NULL;
@@ -1610,8 +1629,8 @@ parse_args(int argc,
       mxexit(0);
 
     } else if (!strcmp(this_arg, "-l") || !strcmp(this_arg, "--list-types")) {
-      mxinfo("Known file types:\n  ext  description\n"
-             "  ---  --------------------------\n");
+      mxinfo(_("Known file types:\n  ext  description\n"
+               "  ---  --------------------------\n"));
       for (j = 1; file_types[j].ext; j++)
         mxinfo("  %s  %s\n", file_types[j].ext, file_types[j].desc);
       mxexit(0);
@@ -1621,8 +1640,9 @@ parse_args(int argc,
       mxexit(0);
 
     } else if (!strcmp(this_arg, "-i") || !strcmp(this_arg, "--identify"))
-      mxerror("'%s' can only be used with a file name. "
-              "No other options are allowed.\n", this_arg);
+      mxerror(_("'%s' can only be used with a file name. "
+                "No other options are allowed if '%s' is used.\n"), this_arg,
+              this_arg);
 
     else if (!strcmp(this_arg, "--capabilities")) {
       print_capabilities();
@@ -1644,24 +1664,24 @@ parse_args(int argc,
 
     if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks a file name.\n", this_arg);
+        mxerror(_("'%s' lacks a file name.\n"), this_arg);
 
       if (outfile != NULL)
-        mxerror("Only one output file allowed.\n");
+        mxerror(_("Only one output file allowed.\n"));
 
       outfile = safestrdup(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--engage")) {
       if (next_arg == NULL)
-        mxerror("'--engage' lacks its argument.\n");
+        mxerror(_("'--engage' lacks its argument.\n"));
       engage_hacks(next_arg);
       i++;
     }
   }
 
   if (outfile == NULL) {
-    mxinfo("Error: no output file given.\n\n");
+    mxinfo(_("Error: no output file name was given.\n\n"));
     usage();
     mxexit(2);
   }
@@ -1686,7 +1706,7 @@ parse_args(int argc,
       bool found;
 
       if (next_arg == NULL)
-        mxerror("'--priority' lacks its argument.\n");
+        mxerror(_("'--priority' lacks its argument.\n"));
       found = false;
       for (j = 0; j < 5; j++)
         if (!strcmp(next_arg, process_priorities[j])) {
@@ -1695,7 +1715,7 @@ parse_args(int argc,
           break;
         }
       if (!found)
-        mxerror("'%s' is not a valid priority class.\n", next_arg);
+        mxerror(_("'%s' is not a valid priority class.\n"), next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-q"))
@@ -1706,7 +1726,7 @@ parse_args(int argc,
 
     else if (!strcmp(this_arg, "--title")) {
       if (next_arg == NULL)
-        mxerror("'--title' lacks the title.\n");
+        mxerror(_("'--title' lacks the title.\n"));
 
       segment_title = next_arg;
       segment_title_set = true;
@@ -1714,18 +1734,18 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--split")) {
       if ((next_arg == NULL) || (next_arg[0] == 0))
-        mxerror("'--split' lacks the size.\n");
+        mxerror(_("'--split' lacks the size.\n"));
 
       parse_split(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--split-max-files")) {
       if ((next_arg == NULL) || (next_arg[0] == 0))
-        mxerror("'--split-max-files' lacks the number of files.\n");
+        mxerror(_("'--split-max-files' lacks the number of files.\n"));
 
       if (!parse_int(next_arg, split_max_num_files) ||
           (split_max_num_files < 2))
-        mxerror("Wrong argument to '--split-max-files'.\n");
+        mxerror(_("Wrong argument to '--split-max-files'.\n"));
 
       i++;
 
@@ -1734,33 +1754,33 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--link-to-previous")) {
       if ((next_arg == NULL) || (next_arg[0] == 0))
-        mxerror("'--link-to-previous' lacks the previous UID.\n");
+        mxerror(_("'--link-to-previous' lacks the next UID.\n"));
 
       if (seguid_link_previous != NULL)
-        mxerror("Previous UID was already given in '%s %s'.\n", this_arg,
-                next_arg);
+        mxerror(_("The previous UID was already given in '%s %s'.\n"),
+                this_arg, next_arg);
 
       try {
         seguid_link_previous = new bitvalue_c(next_arg, 128);
       } catch (exception &ex) {
-        mxerror("Unknown format for the previous UID in '%s %s'.\n", this_arg,
-                next_arg);
+        mxerror(_("Unknown format for the previous UID in '%s %s'.\n"),
+                this_arg, next_arg);
       }
 
       i++;
 
     } else if (!strcmp(this_arg, "--link-to-next")) {
       if ((next_arg == NULL) || (next_arg[0] == 0))
-        mxerror("'--link-to-next' lacks the previous UID.\n");
+        mxerror(_("'--link-to-next' lacks the previous UID.\n"));
 
       if (seguid_link_next != NULL)
-        mxerror("Next UID was already given in '%s %s'.\n", this_arg,
+        mxerror(_("The next UID was already given in '%s %s'.\n"), this_arg,
                 next_arg);
 
       try {
         seguid_link_next = new bitvalue_c(next_arg, 128);
       } catch (exception &ex) {
-        mxerror("Unknown format for the next UID in '%s %s'.\n", this_arg,
+        mxerror(_("Unknown format for the next UID in '%s %s'.\n"), this_arg,
                 next_arg);
       }
 
@@ -1768,7 +1788,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--cluster-length")) {
       if (next_arg == NULL)
-        mxerror("'--cluster-length' lacks the length.\n");
+        mxerror(_("'--cluster-length' lacks the length.\n"));
 
       s = strstr("ms", next_arg);
       if (s != NULL) {
@@ -1776,7 +1796,7 @@ parse_args(int argc,
         if (!parse_int(next_arg, max_ns_per_cluster) ||
             (max_ns_per_cluster < 100) ||
             (max_ns_per_cluster > 32000))
-          mxerror("Cluster length '%s' out of range (100..32000).\n",
+          mxerror(_("Cluster length '%s' out of range (100..32000).\n"),
                   next_arg);
         max_ns_per_cluster *= 1000000;
 
@@ -1785,7 +1805,7 @@ parse_args(int argc,
         if (!parse_int(next_arg, max_blocks_per_cluster) ||
             (max_blocks_per_cluster < 0) ||
             (max_blocks_per_cluster > 60000))
-          mxerror("Cluster length '%s' out of range (0..60000).\n",
+          mxerror(_("Cluster length '%s' out of range (0..60000).\n"),
                   next_arg);
 
         max_ns_per_cluster = 32000000000ull;
@@ -1807,22 +1827,23 @@ parse_args(int argc,
 
     else if (!strcmp(this_arg, "--attachment-description")) {
       if (next_arg == NULL)
-        mxerror("'--attachment-description' lacks the description.\n");
+        mxerror(_("'--attachment-description' lacks the description.\n"));
 
       if (attachment->description != NULL)
-        mxwarn("More than one description given for a single attachment.\n");
+        mxwarn(_("More than one description was given for a single attachment."
+                 "\n"));
       safefree(attachment->description);
       attachment->description = safestrdup(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--attachment-mime-type")) {
       if (next_arg == NULL)
-        mxerror("'--attachment-mime-type' lacks the MIME type.\n");
+        mxerror(_("'--attachment-mime-type' lacks the MIME type.\n"));
 
       if (attachment->description != NULL)
-        mxwarn("More than one MIME type given for a single attachment. "
-               "Discarding '%s' and using '%s'.\n", attachment->mime_type,
-               next_arg);
+        mxwarn(_("More than one MIME type was given for a single attachment. "
+                 "'%s' will be discarded and '%s' used instead.\n"),
+               attachment->mime_type, next_arg);
       safefree(attachment->mime_type);
       attachment->mime_type = safestrdup(next_arg);
       i++;
@@ -1830,10 +1851,10 @@ parse_args(int argc,
     } else if (!strcmp(this_arg, "--attach-file") ||
                !strcmp(this_arg, "--attach-file-once")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the file name.\n", this_arg);
+        mxerror(_("'%s' lacks the file name.\n"), this_arg);
 
       if (attachment->mime_type == NULL)
-        mxerror("No MIME type was set for the attachment '%s'.\n",
+        mxerror(_("No MIME type was set for the attachment '%s'.\n"),
                 next_arg);
 
       attachment->name = from_utf8(cc_local_utf8, next_arg);
@@ -1846,8 +1867,8 @@ parse_args(int argc,
         if (attachment->size == 0)
           throw exception();
       } catch (...) {
-        mxerror("Could not open the attachment '%s', or its "
-                "size is 0.\n", attachment->name);
+        mxerror(_("The attachment '%s' could not be read, or its "
+                  "size is 0.\n"), attachment->name);
       }
 
       attachments.push_back(attachment);
@@ -1858,7 +1879,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--global-tags")) {
       if (next_arg == NULL)
-        mxerror("'--global-tags' lacks the file name.\n");
+        mxerror(_("'--global-tags' lacks the file name.\n"));
 
       s = from_utf8(cc_local_utf8, next_arg);
       parse_and_add_tags(s);
@@ -1867,45 +1888,46 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--chapter-language")) {
       if (next_arg == NULL)
-        mxerror("'--chapter-language' lacks the language.\n");
+        mxerror(_("'--chapter-language' lacks the language.\n"));
 
       if (chapter_language != NULL)
-        mxerror("'--chapter-language' may only be given once in '"
-                "--chapter-language %s'.\n", next_arg);
+        mxerror(_("'--chapter-language' may only be given once in '"
+                  "--chapter-language %s'.\n"), next_arg);
 
       if (chapter_file_name != NULL)
-        mxerror("'--chapter-language' must be given before '--chapters' in "
-                "'--chapter-language %s'.\n", next_arg);
+        mxerror(_("'--chapter-language' must be given before '--chapters' in "
+                  "'--chapter-language %s'.\n"), next_arg);
 
       if (!is_valid_iso639_2_code(next_arg))
-        mxerror("'%s' is not a valid ISO639-2 language code. Run "
-                "'mkvmerge --list-languages' for a complete list of language "
-                "codes.\n", next_arg);
+        mxerror(_("'%s' is not a valid ISO639-2 language code. Run "
+                  "'mkvmerge --list-languages' for a complete list of all "
+                  "languages and their respective ISO639-2 codes.\n"),
+                next_arg);
 
       chapter_language = safestrdup(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--chapter-charset")) {
       if (next_arg == NULL)
-        mxerror("'--chapter-charset' lacks the charset.\n");
+        mxerror(_("'--chapter-charset' lacks the charset.\n"));
 
       if (chapter_charset != NULL)
-        mxerror("'--chapter-charset' may only be given once in '"
-                "--chapter-charset %s'.\n", next_arg);
+        mxerror(_("'--chapter-charset' may only be given once in '"
+                  "--chapter-charset %s'.\n"), next_arg);
 
       if (chapter_file_name != NULL)
-        mxerror("'--chapter-charset' must be given before '--chapters' in "
-                "'--chapter-charset %s'.\n", next_arg);
+        mxerror(_("'--chapter-charset' must be given before '--chapters' in "
+                  "'--chapter-charset %s'.\n"), next_arg);
 
       chapter_charset = safestrdup(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--cue-chapter-name-format")) {
       if (next_arg == NULL)
-        mxerror("'--cue-chapter-name-format' lacks the format.\n");
+        mxerror(_("'--cue-chapter-name-format' lacks the format.\n"));
       if (chapter_file_name != NULL)
-        mxerror("'--cue-chapter-name-format' must be given before '--chapters'"
-                ".\n");
+        mxerror(_("'--cue-chapter-name-format' must be given before "
+                  "'--chapters'.\n"));
 
       safefree(cue_to_chapter_name_format);
       cue_to_chapter_name_format = safestrdup(next_arg);
@@ -1913,10 +1935,10 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--chapters")) {
       if (next_arg == NULL)
-        mxerror("'--chapters' lacks the file name.\n");
+        mxerror(_("'--chapters' lacks the file name.\n"));
 
       if (chapter_file_name != NULL)
-        mxerror("Only one chapter file allowed in '%s %s'.\n", this_arg,
+        mxerror(_("Only one chapter file allowed in '%s %s'.\n"), this_arg,
                 next_arg);
 
       chapter_file_name = from_utf8(cc_local_utf8, next_arg);
@@ -1938,16 +1960,16 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--dump-packets")) {
       if (next_arg == NULL)
-        mxerror("'--dump-packets' lacks the output path.\n");
+        mxerror(_("'--dump-packets' lacks the output path.\n"));
 
       safefree(dump_packets);
       dump_packets = from_utf8(cc_local_utf8, next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--meta-seek-size")) {
-      mxwarn("The option '--meta-seek-size' is no longer supported. Please "
-             "read mkvmerge's documentation, especially the section about "
-             "the MATROSKA FILE LAYOUT.");
+      mxwarn(_("The option '--meta-seek-size' is no longer supported. Please "
+               "read mkvmerge's documentation, especially the section about "
+               "the MATROSKA FILE LAYOUT."));
       i++;
 
     }
@@ -1964,49 +1986,49 @@ parse_args(int argc,
 
     else if (!strcmp(this_arg, "-a") || !strcmp(this_arg, "--atracks")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the stream number(s).\n", this_arg);
+        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg);
 
       parse_tracks(next_arg, ti->atracks, this_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-d") || !strcmp(this_arg, "--vtracks")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the stream number(s).\n", this_arg);
+        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg);
 
       parse_tracks(next_arg, ti->vtracks, this_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-s") || !strcmp(this_arg, "--stracks")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the stream number(s).\n", this_arg);
+        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg);
 
       parse_tracks(next_arg, ti->stracks, this_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-f") || !strcmp(this_arg, "--fourcc")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the FourCC.\n", this_arg);
+        mxerror(_("'%s' lacks the FourCC.\n"), this_arg);
 
       parse_fourcc(next_arg, this_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "--aspect-ratio")) {
       if (next_arg == NULL)
-        mxerror("'--aspect-ratio' lacks the aspect ratio.\n");
+        mxerror(_("'--aspect-ratio' lacks the aspect ratio.\n"));
 
       parse_aspect_ratio(next_arg, this_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "--display-dimensions")) {
       if (next_arg == NULL)
-        mxerror("'--display-dimensions' lacks the dimensions.\n");
+        mxerror(_("'--display-dimensions' lacks the dimensions.\n"));
 
       parse_display_dimensions(next_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "-y") || !strcmp(this_arg, "--sync")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the audio delay.\n", this_arg);
+        mxerror(_("'%s' lacks the audio delay.\n"), this_arg);
 
       parse_sync(next_arg, async, this_arg);
       ti->audio_syncs->push_back(async);
@@ -2014,7 +2036,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--cues")) {
       if (next_arg == NULL)
-        mxerror("'--cues' lacks its argument.\n");
+        mxerror(_("'--cues' lacks its argument.\n"));
 
       parse_cues(next_arg, cues);
       ti->cue_creations->push_back(cues);
@@ -2022,10 +2044,10 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--default-track")) {
       if (next_arg == NULL)
-        mxerror("'--default-track' lacks the track ID.\n");
+        mxerror(_("'--default-track' lacks the track ID.\n"));
 
       if (!parse_int(next_arg, id))
-        mxerror("Invalid track ID specified in '%s %s'.\n", this_arg,
+        mxerror(_("Invalid track ID specified in '%s %s'.\n"), this_arg,
                 next_arg);
 
       ti->default_track_flags->push_back(id);
@@ -2033,7 +2055,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--language")) {
       if (next_arg == NULL)
-        mxerror("'--language' lacks its argument.\n");
+        mxerror(_("'--language' lacks its argument.\n"));
 
       parse_language(next_arg, lang, "language", "language", true);
       ti->languages->push_back(lang);
@@ -2041,17 +2063,19 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--default-language")) {
       if (next_arg == NULL)
-        mxerror("'--default-language' lacks its argument.\n");
+        mxerror(_("'--default-language' lacks its argument.\n"));
 
       if (!is_valid_iso639_2_code(next_arg))
-        mxerror("'%s' is not a valid ISO639-2 language code in "
-                "'--default-language %s'.\n", next_arg, next_arg);
+        mxerror(_("'%s' is not a valid ISO639-2 language code in "
+                  "'--default-language %s'. Run 'mkvmerge --list-languages' "
+                  "for a list of all languages and their respective "
+                  "ISO639-2 codes.\n"), next_arg, next_arg);
       default_language = next_arg;
       i++;
 
     } else if (!strcmp(this_arg, "--sub-charset")) {
       if (next_arg == NULL)
-        mxerror("'--sub-charset' lacks its argument.\n");
+        mxerror(_("'--sub-charset' lacks its argument.\n"));
 
       parse_sub_charset(next_arg, lang);
       ti->sub_charsets->push_back(lang);
@@ -2059,7 +2083,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "-t") || !strcmp(this_arg, "--tags")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks its argument.\n", this_arg);
+        mxerror(_("'%s' lacks its argument.\n"), this_arg);
 
       parse_tags(next_arg, tags, this_arg);
       ti->all_tags->push_back(tags);
@@ -2067,10 +2091,10 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--aac-is-sbr")) {
       if (next_arg == NULL)
-        mxerror("'%s' lacks the track ID.\n", this_arg);
+        mxerror(_("'%s' lacks the track ID.\n"), this_arg);
 
       if (!parse_int(next_arg, id) || (id < 0))
-        mxerror("Invalid track ID specified in '%s %s'.\n", this_arg,
+        mxerror(_("Invalid track ID specified in '%s %s'.\n"), this_arg,
                 next_arg);
 
       ti->aac_is_sbr->push_back(id);
@@ -2078,7 +2102,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--compression")) {
       if (next_arg == NULL)
-        mxerror("'--compression' lacks its argument.\n");
+        mxerror(_("'--compression' lacks its argument.\n"));
 
       parse_compression(next_arg, cues);
       ti->compression_list->push_back(cues);
@@ -2086,7 +2110,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--track-name")) {
       if (next_arg == NULL)
-        mxerror("'--track-name' lacks its argument.\n");
+        mxerror(_("'--track-name' lacks its argument.\n"));
 
       parse_language(next_arg, lang, "track-name", "track name", false);
       ti->track_names->push_back(lang);
@@ -2094,7 +2118,7 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--timecodes")) {
       if (next_arg == NULL)
-        mxerror("'--timecodes' lacks its argument.\n");
+        mxerror(_("'--timecodes' lacks its argument.\n"));
 
       s = from_utf8(cc_local_utf8, next_arg);
       parse_language(s, lang, "timecodes", "timecodes", false);
@@ -2104,16 +2128,16 @@ parse_args(int argc,
 
     } else if (!strcmp(this_arg, "--track-order")) {
       if (next_arg == NULL)
-        mxerror("'--track-order' lacks its argument.\n");
+        mxerror(_("'--track-order' lacks its argument.\n"));
       if (track_order.size() > 0)
-        mxerror("'--track-order' may only be given once.\n");
+        mxerror(_("'--track-order' may only be given once.\n"));
 
       parse_track_order(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--append-to")) {
       if (next_arg == NULL)
-        mxerror("'--append-to' lacks its argument.\n");
+        mxerror(_("'--append-to' lacks its argument.\n"));
 
       parse_append_to(next_arg, *ti);
       i++;
@@ -2123,35 +2147,35 @@ parse_args(int argc,
     // The argument is an input file.
     else {
       if ((ti->atracks->size() != 0) && ti->no_audio)
-        mxerror("'-A' and '-a' used on the same source file.\n");
+        mxerror(_("'-A' and '-a' used on the same source file.\n"));
 
       if ((ti->vtracks->size() != 0) && ti->no_video)
-        mxerror("'-D' and '-d' used on the same source file.\n");
+        mxerror(_("'-D' and '-d' used on the same source file.\n"));
 
       if ((ti->stracks->size() != 0) && ti->no_subs)
-        mxerror("'-S' and '-s' used on the same source file.\n");
+        mxerror(_("'-S' and '-s' used on the same source file.\n"));
 
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
-      file->first = true;
-      file->last = true;
+      file->appending = false;
 
       if (this_arg[0] == '+') {
         this_arg++;
-        if (files.size() == 0)
-          mxerror("Cannot append '%s' because there has been no prior file.\n",
-                  this_arg);
-        file->first = false;
-        files[files.size() - 1]->last = false;
+        if (*this_arg == 0)
+          mxerror(_("A single '+' is not a valid command line option. If you "
+                    "want to append a file use '+' directly followed by the "
+                    "file name, e.g. '+movie_part_2.avi'."));
+        file->appending = true;
       }
       file->name = from_utf8(cc_local_utf8, this_arg);
       file->type = get_type(file->name);
       ti->fname = from_utf8(cc_local_utf8, this_arg);
 
       if (file->type == TYPEUNKNOWN)
-        mxerror("File '%s' has unknown type. Please have a look "
-                "at the supported file types ('mkvmerge --list-types') and "
-                "contact me at moritz@bunkus.org if your file type is "
-                "supported but not recognized properly.\n", file->name);
+        mxerror(_("The file '%s' has unknown type. Please have a look "
+                  "at the supported file types ('mkvmerge --list-types') and "
+                  "contact the author Moritz Bunkus <moritz@bunkus.org> if "
+                  "your file type is supported but not recognized "
+                  "properly.\n"), file->name);
 
       file->fp = NULL;
       if (file->type != TYPECHAPTERS) {
@@ -2177,13 +2201,14 @@ parse_args(int argc,
 
   if (no_linking &&
       ((seguid_link_previous != NULL) || (seguid_link_next != NULL))) {
-    mxwarn("'--link' must be used if '--link-to-previous' or "
-           "'--link-to-next' are used as well. Turning it on.\n");
+    mxwarn(_("'--link' must be used if '--link-to-previous' or "
+             "'--link-to-next' are used as well. File linking will be turned "
+             "on now.\n"));
     no_linking = false;
   }
   if ((split_after <= 0) && !no_linking)
-    mxwarn("'--link', '--link-to-previous' and '--link-to-next' are "
-           "only useful in combination with '--split'.\n");
+    mxwarn(_("'--link', '--link-to-previous' and '--link-to-next' are "
+             "only useful in combination with '--split'.\n"));
 
   for (i = 0; i < attachments.size(); i++) {
     attachment_sizes_first += attachments[i]->size;
@@ -2228,8 +2253,8 @@ read_args_from_file(int &num_args,
   try {
     mm_io = new mm_text_io_c(filename);
   } catch (exception &ex) {
-    mxerror("Could not open file '%s' for reading command line "
-            "arguments from.", filename);
+    mxerror(_("The file '%s' could not be opened for reading command line "
+              "arguments."), filename);
   }
 
   skip_next = false;
@@ -2282,7 +2307,7 @@ handle_args(int argc,
     else {
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
-          mxerror("'--command-line-charset' is missing its argument.\n");
+          mxerror(_("'--command-line-charset' is missing its argument.\n"));
         cc_command_line = utf8_init(argv[i + 1]);
         i++;
       } else {
@@ -2304,14 +2329,18 @@ handle_args(int argc,
  *
  * Both platform dependant and independant initialization is done here.
  * For Unix like systems a signal handler is installed. The locale's
- * \c LC_CTYPE is set.
+ * \c LC_MESSAGES is set.
  */
 static void
 setup() {
 #if ! defined(COMP_MSC)
-  if (setlocale(LC_CTYPE, "") == NULL)
-    mxerror("Could not set the locale properly. Check the "
-            "LANG, LC_ALL and LC_CTYPE environment variables.\n");
+  if (setlocale(LC_MESSAGES, "") == NULL)
+    mxerror("The locale could not be set properly. Check the "
+            "LANG, LC_ALL and LC_MESSAGES environment variables.\n");
+# if defined(HAVE_LIBINTL_H)
+  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
+  textdomain("mkvtoolnix");
+# endif // HAVE_LIBINTL_H
 #endif
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
@@ -2532,11 +2561,12 @@ create_next_output_file() {
   try {
     out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
   } catch (exception &ex) {
-    mxerror("Couldn't open output file '%s' (%s).\n", this_outfile.c_str(),
-            strerror(errno));
+    mxerror(_("The output file '%s' could not be opened for writing (%s).\n"),
+            this_outfile.c_str(), strerror(errno));
   }
   if (verbose)
-    mxinfo("Opened '%s\' for writing.\n", this_outfile.c_str());
+    mxinfo(_("The file '%s\' has been opened for writing.\n"),
+           this_outfile.c_str());
 
   cluster_helper->set_output(out);
   render_headers(out);
@@ -2566,9 +2596,9 @@ create_next_output_file() {
 
   if (kax_tags != NULL) {
     if (!kax_tags->CheckMandatory())
-      mxerror("Some tag elements are missing (this error "
-              "should not have occured - another similar error should have "
-              "occured earlier...).\n");
+      mxerror(_("Some tag elements are missing (this error "
+                "should not have occured - another similar error should have "
+                "occured earlier). %s\n"), BUGMSG);
 
     kax_tags->UpdateSize();
     tags_size = kax_tags->ElementSize();
@@ -2596,7 +2626,7 @@ finish_file(bool last_file) {
   // Render the cues.
   if (write_cues && cue_writing_requested) {
     if (verbose >= 1)
-      mxinfo("Writing cue entries (the index)...");
+      mxinfo(_("The cue entries (the index) is being written..."));
     kax_cues->Render(*out);
     if (verbose >= 1)
       mxinfo("\n");
@@ -2700,10 +2730,9 @@ finish_file(bool last_file) {
   if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     kax_sh_main->UpdateSize();
     if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
-      mxwarn("This should REALLY not have happened. The space reserved for "
-             "the first meta seek element was too small. Size needed: %lld. "
-             "Please contact Moritz Bunkus at moritz@bunkus.org.\n",
-             kax_sh_main->ElementSize());
+      mxwarn(_("This should REALLY not have happened. The space reserved for "
+               "the first meta seek element was too small. Size needed: %lld. "
+               "%s\n"), kax_sh_main->ElementSize(), BUGMSG);
   }
 
   // Set the correct size for the segment.
@@ -2817,14 +2846,14 @@ main(int argc,
   create_readers();
 
   if (packetizers.size() == 0)
-    mxerror("No streams to output found. Aborting.\n");
+    mxerror(_("No streams to output were found. Aborting.\n"));
 
   create_next_output_file();
   main_loop();
   finish_file(true);
 
   end = time(NULL);
-  mxinfo("Muxing took %ld second%s.\n", end - start,
+  mxinfo(_("Muxing took %ld second%s.\n"), end - start,
          (end - start) == 1 ? "" : "s");
 
   cleanup();

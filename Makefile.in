@@ -30,6 +30,7 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = .
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+localedir = $(datadir)/locale
 
 # Common programs
 EXEEXT = @EXEEXT@
@@ -75,6 +76,7 @@ WXWINDOWS_CFLAGS = @WXWINDOWS_CFLAGS@
 WXWINDOWS_LDFLAGS = @WXWINDOWS_LDFLAGS@
 WXWINDOWS_LIBS = @WXWINDOWS_LIBS@
 ZLIB_LIBS = @ZLIB_LIBS@
+LIBINTL_LIBS = @LIBINTL_LIBS@
 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
@@ -83,6 +85,7 @@ LDFLAGS = @LDFLAGS@
 
 CFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
 CXXFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
+CXXFLAGS += -DMTX_LOCALE_DIR=\"$(localedir)\"
 
 # Which additional stuff to compile
 USE_WXWINDOWS = @USE_WXWINDOWS@
@@ -107,9 +110,13 @@ APPLICATIONS += src/mmg/mmg
 MANPAGES += doc/mmg.1
 endif
 
-all: $(APPLICATIONS)
+TRANSLATIONS = @TRANSLATIONS@
+TRANSLATIONS_POS = @TRANSLATIONS_POS@
+TRANSLATIONS_MOS = $(patsubst %.po,%.mo,$(TRANSLATIONS_POS))
 
-install: install-programs install-mans
+all: $(APPLICATIONS) $(TRANSLATIONS_MOS)
+
+install: install-programs install-mans install-trans
 
 install-programs: $(APPLICATIONS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -131,6 +138,14 @@ install-mans:
 	  $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst; \
 	done
 
+install-trans:
+	for i in $(TRANSLATIONS); do \
+		echo "$(mkinstalldirs) $(DESTDIR)$(localedir)/$$i/LC_MESSAGES"; \
+		$(mkinstalldirs) $(DESTDIR)$(localedir)/$$i/LC_MESSAGES; \
+		echo "$(INSTALL_DATA) po/$$i.mo $(DESTDIR)$(localedir)/$$i/LC_MESSAGES/mkvtoolnix.mo"; \
+		$(INSTALL_DATA) po/$$i.mo $(DESTDIR)$(localedir)/$$i/LC_MESSAGES/mkvtoolnix.mo; \
+	done
+
 SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
 		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output
 SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
@@ -141,15 +156,32 @@ LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
 CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 
+ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard librmff/*.c) \
+		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
+		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
+		$(wildcard src/mmg/*.cpp)
+
+ifeq ($(V),1)
+  Q =
+else
+  Q = @
+endif
+
 # Some general rules
 %.o: %.cpp
-	$(CXXCOMPILE) -c -o $@ $<
+	@echo '     CXX ' $<
+	$(Q)$(CXXCOMPILE) -c -o $@ $<
 
 %.o: %.c
-	$(CCOMPILE) -c -o $@ $<
+	@echo '      CC ' $<
+	$(Q)$(CCOMPILE) -c -o $@ $<
+
+%.mo: %.po
+	@echo '  MSGFMT ' $<
+	$(Q)msgfmt -o $@ $<
 
 clean:
-	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a $(APPLICATIONS)
+	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS)
 
 distclean dist-clean: clean
 	rm -f configure config.h config.h.in config.log \
@@ -159,12 +191,22 @@ depend:
 	@echo Calculating dependecies:
 	@rm -f .depend
 	@touch .depend
-	@for i in */*.c */*.cpp */*/*.cpp; do \
+	@for i in $(ALL_SOURCES); do \
 		o="`echo $$i | sed -e 's/\.c$$/.o/' -e 's/\.cpp$$/.o/'`" ; \
 		echo '  ' $$i: $$o ; \
 		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
 		-MT $$o $$i >> .depend ; \
 	done
+
+update-po:
+	xgettext --keyword=_ --keyword=N_ --default-domain=mkvtoolnix \
+		-o po/mkvtoolnix.pot $(ALL_SOURCES)
+	@for i in po/*.po ; do \
+		echo msgmerge -s $$i po/mkvtoolnix.pot ; \
+		msgmerge -s $$i po/mkvtoolnix.pot > $$i.new ; \
+		mv $$i.new $$i ; \
+	done
+	@rm po/mkvtoolnix.pot
 
 #
 # avilib-0.6.10
@@ -174,9 +216,11 @@ libavi_SOURCES = $(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp)
 libavi_OBJECTS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(libavi_SOURCES)))
 
 avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libavi_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libavi_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # librmff
@@ -185,9 +229,11 @@ librmff_SOURCES = $(wildcard librmff/*.c)
 librmff_OBJECTS := $(patsubst %.c,%.o,$(librmff_SOURCES))
 
 librmff/librmff.a: $(librmff_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(librmff_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(librmff_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src/common
@@ -197,13 +243,16 @@ libmtxcommon_SOURCES = $(wildcard src/common/*.cpp)
 libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
 
 src/common/libmtxcommon.dll: $(libmtxcommon_OBJECTS)
-	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
+	@echo '  LD/DLL ' $@
+	$(Q)$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
 		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml -lexpat
 
 src/common/libmtxcommon.a: $(libmtxcommon_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxcommon_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmtxcommon_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src/input
@@ -213,9 +262,11 @@ libmtxinput_SOURCES = $(wildcard src/input/*.cpp)
 libmtxinput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxinput_SOURCES))
 
 src/input/libmtxinput.a: $(libmtxinput_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxinput_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmtxinput_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src/output
@@ -225,9 +276,11 @@ libmtxoutput_SOURCES = $(wildcard src/output/*.cpp)
 libmtxoutput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxoutput_SOURCES))
 
 src/output/libmtxoutput.a: $(libmtxoutput_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxoutput_OBJECTS)
-	$(RANLIB) $@
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmtxoutput_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
 
 #
 # src
@@ -243,46 +296,51 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
 		-lavi -lrmff \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
-		-lexpat $(ICONV_LIBS)
+		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS)
 
 mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
 mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
-		$(ICONV_LIBS)
+		$(ICONV_LIBS) $(LIBINTL_LIBS)
 
 mkvextract_SOURCES = $(wildcard src/mkvextract*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
-		$(ICONV_LIBS)
+		$(ICONV_LIBS) $(LIBINTL_LIBS)
 
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
-base64tool_LDADD = -lmtxcommon $(ICONV_LIBS)
+base64tool_LDADD = -lmtxcommon $(ICONV_LIBS) $(LIBINTL_LIBS)
 
 mmg_SOURCES = $(wildcard src/mmg/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
-		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS)
+		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) $(LIBINTL_LIBS)
 
 src/mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
-	$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
 
 src/mkvinfo: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
-	$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
 src/mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
-	$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
 
 src/base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
-	$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
 
 src/mmg/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
-	$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
 
 #
 # include dependency files if they exist

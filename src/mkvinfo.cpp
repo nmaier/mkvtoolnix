@@ -134,7 +134,7 @@ find_track_by_uid(int tuid) {
 
 void
 usage() {
-  mxinfo(
+  mxinfo(_(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
 #ifdef HAVE_WXWINDOWS
@@ -146,7 +146,7 @@ usage() {
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
     "  -h, --help     Show this help.\n"
-    "  -V, --version  Show version information.\n");
+    "  -V, --version  Show version information.\n"));
 }
 
 string
@@ -203,7 +203,8 @@ show_error(const char *fmt,
 #define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
                                                   ## args)
 #define show_unknown_element(e, l) \
-  _show_element(e, es, true, l, "Unknown element: %s", e->Generic().DebugName)
+  _show_element(e, es, true, l, _("Unknown element: %s"), \
+                e->Generic().DebugName)
 #define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
                                                      ## args)
 
@@ -278,7 +279,7 @@ parse_args(int argc,
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--gui")) {
 #ifndef HAVE_WXWINDOWS
-      mxerror("mkvinfo was compiled without GUI support.\n");
+      mxerror(_("mkvinfo was compiled without GUI support.\n"));
 #else // HAVE_WXWINDOWS
       use_gui = true;
 #endif // HAVE_WXWINDOWS
@@ -300,7 +301,7 @@ parse_args(int argc,
       calc_checksums = true;
       show_summary = true;
     } else if (file_name != NULL)
-      mxerror("Only one input file is allowed.\n");
+      mxerror(_("Only one input file is allowed.\n"));
     else
       file_name = argv[i];
 }
@@ -1301,10 +1302,10 @@ def_handle(tracks) {
       }
 
       if (show_summary)
-        mxinfo("Track %lld: %s, codec ID: %s%s%s%s\n", kax_track_number,
-               kax_track_type == 'a' ? "audio" :
-               kax_track_type == 'v' ? "video" :
-               kax_track_type == 's' ? "subtitles" : "unknown",
+        mxinfo(_("Track %lld: %s, codec ID: %s%s%s%s\n"), kax_track_number,
+               kax_track_type == 'a' ? _("audio") :
+               kax_track_type == 'v' ? _("video") :
+               kax_track_type == 's' ? _("subtitles") : _("unknown"),
                kax_codec_id.c_str(), fourcc_buffer.c_str(),
                summary.size() > 0 ? ", " : "",
                join(", ", summary).c_str());
@@ -1745,13 +1746,13 @@ def_handle2(block_group,
     int fidx;
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++)
-      mxinfo("%c frame, track %u, timecode %lld, size %d, adler "
-             "0x%08x\n", bref_found && fref_found ? 'B' :
+      mxinfo(_("%c frame, track %u, timecode %lld, size %d, adler "
+               "0x%08x\n"), bref_found && fref_found ? 'B' :
              bref_found ? 'P' : !fref_found ? 'I' : '?',
              lf_tnum, lf_timecode, frame_sizes[fidx],
              frame_adlers[fidx]);
   } else if (verbose > 2)
-    show_element(NULL, 2, "[%c frame for track %u, timecode %lld]",
+    show_element(NULL, 2, _("[%c frame for track %u, timecode %lld]"),
                  bref_found && fref_found ? 'B' :
                  bref_found ? 'P' : !fref_found ? 'I' : '?',
                  lf_tnum, lf_timecode);
@@ -2818,9 +2819,13 @@ console_main(int argc,
 void
 setup() {
 #if !defined(COMP_MSC)
-  if (setlocale(LC_CTYPE, "") == NULL)
+  if (setlocale(LC_MESSAGES, "") == NULL)
     mxerror("Could not set the locale properly. Check the "
-            "LANG, LC_ALL and LC_CTYPE environment variables.\n");
+            "LANG, LC_ALL and LC_MESSAGES environment variables.\n");
+# if defined(HAVE_LIBINTL_H)
+  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
+  textdomain("mkvtoolnix");
+# endif // HAVE_LIBINTL_H
 #endif
 
   cc_local_utf8 = utf8_init(NULL);

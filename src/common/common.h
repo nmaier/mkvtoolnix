@@ -31,6 +31,11 @@
 #include "config.h"
 
 #define VERSIONINFO "mkvmerge v" VERSION
+#define BUGMSG _("This should not have happened. Please contact the author " \
+                 "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
+                 "message, a description of what you were trying to do, " \
+                 "the command line used and which operating system you are " \
+                 "using. Thank you.")
 
 using namespace std;
 

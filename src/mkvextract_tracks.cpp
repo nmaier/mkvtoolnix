@@ -94,8 +94,8 @@ open_rmff_file(const char *name) {
 
   file = rmff_open_file(name, RMFF_OPEN_MODE_WRITING);
   if (file == NULL)
-    mxerror("Could not create '%s'. Reason: %d (%s). Aborting.\n", name,
-            errno, strerror(errno));
+    mxerror(_("The file '%s' could not be opened for writing (%d, %s).\n"),
+            name, errno, strerror(errno));
   rmfiles.push_back(file);
 
   return file;
@@ -159,8 +159,8 @@ check_output_files() {
       tracks[i].in_use = false;
 
       if (tracks[i].codec_id == NULL) {
-        mxwarn("Track ID %lld is missing the CodecID. Skipping track.\n",
-               tracks[i].tid);
+        mxwarn(_("Track ID %lld is missing the CodecID. The track will be "
+                 "skipped.\n"), tracks[i].tid);
         continue;
       }
 
@@ -170,8 +170,9 @@ check_output_files() {
           if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
               (tracks[i].v_fps == 0.0) || (tracks[i].private_data == NULL) ||
               (tracks[i].private_size < sizeof(alBITMAPINFOHEADER))) {
-            mxwarn("Track ID %lld is missing some critical "
-                   "information. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
           tracks[i].type = TYPEAVI;
@@ -180,17 +181,18 @@ check_output_files() {
           if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
               (tracks[i].private_data == NULL) ||
               (tracks[i].private_size < sizeof(real_video_props_t))) {
-            mxwarn("Track ID %lld is missing some critical "
-                   "information. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
           tracks[i].type = TYPEREAL;
 
         } else {
-          mxwarn("The extraction of video tracks is only supported for "
-                 "RealVideo (CodecID: V_REAL/RVxx) and AVI compatibility "
-                 "tracks (CodecID: " MKV_V_MSCOMP "). Skipping track %lld.\n",
-                 tracks[i].tid);
+          mxwarn(_("The extraction of video tracks is only supported for "
+                   "RealVideo (CodecID: V_REAL/RVxx) and AVI compatibility "
+                   "tracks (CodecID: " MKV_V_MSCOMP "). The track %lld will "
+                   "be skipped.\n"), tracks[i].tid);
           continue;
         }
 
@@ -203,15 +205,17 @@ check_output_files() {
         if (!strcmp(tracks[i].codec_id, MKV_A_VORBIS)) {
           tracks[i].type = TYPEOGM; // Yeah, I know, I know...
           if (tracks[i].private_data == NULL) {
-            mxwarn("Track ID %lld is missing some critical "
-                   "information. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
 
           c = (unsigned char *)tracks[i].private_data;
           if (c[0] != 2) {
-            mxwarn("Vorbis track ID %lld does not contain "
-                   "valid headers. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Vorbis track ID %lld does not contain "
+                     "valid headers. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
 
@@ -225,8 +229,9 @@ check_output_files() {
               offset++;
             }
             if (offset >= (tracks[i].private_size - 1)) {
-              mxwarn("Vorbis track ID %lld does not contain "
-                     "valid headers. Skipping track.\n", tracks[i].tid);
+              mxwarn(_("Vorbis track ID %lld does not contain "
+                       "valid headers. The track will be skipped.\n"),
+                     tracks[i].tid);
               is_ok = false;
               break;
             }
@@ -252,15 +257,16 @@ check_output_files() {
         else if (!strcmp(tracks[i].codec_id, MKV_A_PCM)) {
           tracks[i].type = TYPEWAV; // Yeah, I know, I know...
           if (tracks[i].a_bps == 0) {
-            mxwarn("Track ID %lld is missing some critical "
-                   "information. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
 
         } else if (!strncmp(tracks[i].codec_id, "A_AAC", 5)) {
           if (strlen(tracks[i].codec_id) < strlen("A_AAC/MPEG4/LC")) {
-            mxwarn("Track ID %lld has an unknown AAC "
-                   "type. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld has an unknown AAC "
+                     "type. The track will be skipped.\n"), tracks[i].tid);
             continue;
           }
 
@@ -271,8 +277,8 @@ check_output_files() {
           else if (tracks[i].codec_id[10] == '2')
             tracks[i].aac_id = 1;
           else {
-            mxwarn("Track ID %lld has an unknown AAC "
-                   "type. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld has an unknown AAC "
+                     "type. The track will be skipped.\n"), tracks[i].tid);
             continue;
           }
 
@@ -286,8 +292,8 @@ check_output_files() {
           else if (!strcmp(&tracks[i].codec_id[12], "LTP"))
             tracks[i].aac_profile = 3;
           else {
-            mxwarn("Track ID %lld has an unknown AAC "
-                   "type. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld has an unknown AAC "
+                     "type. The track will be skipped.\n"), tracks[i].tid);
             continue;
           }
 
@@ -319,15 +325,16 @@ check_output_files() {
           tracks[i].type = TYPEAAC;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_DTS)) {
-          mxwarn("Extraction of DTS is not supported - yet. "
-                 "I promise I'll implement it. Really Soon Now (tm)! "
-                 "Skipping track.\n");
+          mxwarn(_("Extraction of DTS is not supported - yet. "
+                   "I promise I'll implement it. Really Soon Now (tm)! "
+                   "The track will be skipped.\n"));
           continue;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_FLAC)) {
           if (tracks[i].private_data == NULL) {
-            mxwarn("Track ID %lld is missing some critical "
-                   "information. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
 
@@ -336,16 +343,18 @@ check_output_files() {
         } else if (!strncmp(tracks[i].codec_id, "A_REAL/", 7)) {
           if ((tracks[i].private_data == NULL) ||
               (tracks[i].private_size < sizeof(real_audio_v4_props_t))) {
-            mxwarn("Track ID %lld is missing some critical "
-                   "information. Skipping track.\n", tracks[i].tid);
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
             continue;
           }
 
           tracks[i].type = TYPEREAL;
 
         } else {
-          mxwarn("Unsupported CodecID '%s' for ID %lld. "
-                 "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
+          mxwarn(_("Unsupported CodecID '%s' for ID %lld. "
+                   "The track will be skipped.\n"), tracks[i].codec_id,
+                 tracks[i].tid);
           continue;
         }
 
@@ -358,26 +367,27 @@ check_output_files() {
                  !strcmp(tracks[i].codec_id, "S_ASS"))
           tracks[i].type = TYPESSA;
         else {
-          mxwarn("Unsupported CodecID '%s' for ID %lld. "
-                 "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
+          mxwarn(_("Unsupported CodecID '%s' for ID %lld. "
+                   "The track will be skipped.\n"), tracks[i].codec_id,
+                 tracks[i].tid);
           continue;
         }
 
       } else {
-        mxwarn("Unknown track type for ID %lld. Skipping "
-               "track.\n", tracks[i].tid);
+        mxwarn(_("Unknown track type for ID %lld. The track will be "
+                 "skipped.\n"), tracks[i].tid);
         continue;
       }
 
       tracks[i].in_use = true;
       something_to_do = true;
     } else
-      mxwarn("There is no track with the ID '%lld' in the "
-             "input file.\n", tracks[i].tid);
+      mxwarn(_("There is no track with the ID '%lld' in the "
+               "input file.\n"), tracks[i].tid);
   }
 
   if (!something_to_do) {
-    mxinfo("Nothing to do. Exiting.\n");
+    mxinfo(_("Nothing to do.\n"));
     mxexit(0);
   }
 }
@@ -398,7 +408,7 @@ create_output_files() {
 
         tracks[i].avi = AVI_open_output_file(tracks[i].out_name);
         if (tracks[i].avi == NULL)
-          mxerror("Could not create '%s'. Reason: %s.\n",
+          mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
                   tracks[i].out_name, AVI_strerror());
 
         bih = (alBITMAPINFOHEADER *)tracks[i].private_data;
@@ -407,7 +417,7 @@ create_output_files() {
         AVI_set_video(tracks[i].avi, tracks[i].v_width, tracks[i].v_height,
                       tracks[i].v_fps, ccodec);
 
-        mxinfo("Extracting track ID %lld to an AVI file '%s'.\n",
+        mxinfo(_("Track ID %lld is extracted to an AVI file '%s'.\n"),
                tracks[i].tid, tracks[i].out_name);
 
       } else if (tracks[i].type == TYPEREAL) {
@@ -416,7 +426,7 @@ create_output_files() {
         file = open_rmff_file(tracks[i].out_name);
         tracks[i].rmtrack = rmff_add_track(file, 1);
         if (tracks[i].rmtrack == NULL)
-          mxerror("Memory allocation error: %d (%s).\n",
+          mxerror(_("Memory allocation error: %d (%s).\n"),
                   rmff_last_error, rmff_last_error_msg);
         rmff_set_type_specific_data(tracks[i].rmtrack,
                                     (unsigned char *)tracks[i].private_data,
@@ -433,11 +443,11 @@ create_output_files() {
         try {
           tracks[i].out = new mm_io_c(tracks[i].out_name, MODE_CREATE);
         } catch (exception &ex) {
-          mxerror("Could not create '%s'. Reason: %d (%s). "
-                  "Aborting.\n", tracks[i].out_name, errno, strerror(errno));
+          mxerror(_(" The file '%s' could not be opened for writing (%s).\n"),
+                  tracks[i].out_name, strerror(errno));
         }
 
-        mxinfo("Extracting track ID %lld to a %s file '%s'.\n",
+        mxinfo(_("Track ID %lld is extracted to a %s file '%s'.\n"),
                tracks[i].tid, typenames[tracks[i].type],
                tracks[i].out_name);
 
@@ -640,9 +650,9 @@ handle_data(KaxBlock *block,
 
       case TYPESRT:
         if ((end == start) && !track->warning_printed) {
-          mxwarn("Subtitle track %lld is missing some duration elements. "
-                 "Please check the resulting SRT file for entries that "
-                 "have the same start and end time.\n", track->tid);
+          mxwarn(_("Subtitle track %lld is missing some duration elements. "
+                   "Please check the resulting SRT file for entries that "
+                   "have the same start and end time.\n"), track->tid);
           track->warning_printed = true;
         }
 
@@ -686,9 +696,9 @@ handle_data(KaxBlock *block,
 
       case TYPESSA:
         if ((end == start) && !track->warning_printed) {
-          mxwarn("Subtitle track %lld is missing some duration elements. "
-                 "Please check the resulting SSA/ASS file for entries that "
-                 "have the same start and end time.\n", track->tid);
+          mxwarn(_("Subtitle track %lld is missing some duration elements. "
+                   "Please check the resulting SSA/ASS file for entries that "
+                   "have the same start and end time.\n"), track->tid);
           track->warning_printed = true;
         }
 
@@ -703,16 +713,16 @@ handle_data(KaxBlock *block,
         fields = split(s, ",", 9);
         safefree(s);
         if (fields.size() != 9) {
-          mxwarn("Invalid format for a SSA line ('%s'). Ignoring this entry."
-                 "\n", s);
+          mxwarn(_("Invalid format for a SSA line ('%s'). This entry will be "
+                   "skipped.\n"), s);
           continue;
         }
 
         // Convert the ReadOrder entry so that we can re-order the entries
         // later.
         if (!parse_int(fields[0].c_str(), num)) {
-          mxwarn("Invalid format for a SSA line ('%s'). "
-                 "Ignoring this entry.\n", s);
+          mxwarn(_("Invalid format for a SSA line ('%s'). "
+                   "This entry will be skipped.\n"), s);
           continue;
         }
 
@@ -844,8 +854,8 @@ handle_data(KaxBlock *block,
       case TYPEREAL:
         rmf_frame = rmff_allocate_frame(data.Size(), data.Buffer());
         if (rmf_frame == NULL)
-          mxerror("Could not allocate memory for a RealAudio/RealVideo "
-                  "frame.\n");
+          mxerror(_("Memory for a RealAudio/RealVideo frame could not be "
+                    "allocated.\n"));
         rmf_frame->timecode = start;
         if (!has_ref)
           rmf_frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
@@ -977,8 +987,8 @@ extract_tracks(const char *file_name) {
   try {
     in = new mm_io_c(file_name, MODE_READ);
   } catch (std::exception &ex) {
-    show_error("Error: Couldn't open input file %s (%s).", file_name,
-               strerror(errno));
+    show_error(_("The file '%s' could not be opened for reading (%s).\n"),
+               file_name, strerror(errno));
     return false;
   }
 
@@ -992,7 +1002,7 @@ extract_tracks(const char *file_name) {
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
-      show_error("Error: No EBML head found.");
+      show_error(_("Error: No EBML head found."));
       delete es;
 
       return false;
@@ -1006,15 +1016,15 @@ extract_tracks(const char *file_name) {
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
-        show_error("No segment/level 0 element found.");
+        show_error(_("No segment/level 0 element found."));
         return false;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, "Segment");
+        show_element(l0, 0, _("Segment"));
         break;
       }
 
-      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+      show_element(l0, 0, _("Next level 0 element is not a segment but %s"),
                    typeid(*l0).name());
 
       l0->SkipData(*es, l0->Generic().Context);
@@ -1029,7 +1039,7 @@ extract_tracks(const char *file_name) {
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
-        show_element(l1, 1, "Segment information");
+        show_element(l1, 1, _("Segment information"));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1040,7 +1050,7 @@ extract_tracks(const char *file_name) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
-            show_element(l2, 2, "Timecode scale: %llu", tc_scale);
+            show_element(l2, 2, _("Timecode scale: %llu"), tc_scale);
           } else
             l2->SkipData(*es, l2->Generic().Context);
 
@@ -1066,7 +1076,7 @@ extract_tracks(const char *file_name) {
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
-        show_element(l1, 1, "Segment tracks");
+        show_element(l1, 1, _("Segment tracks"));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1075,7 +1085,7 @@ extract_tracks(const char *file_name) {
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             // We actually found a track entry :) We're happy now.
-            show_element(l2, 2, "A track");
+            show_element(l2, 2, _("A track"));
 
             track = NULL;
             kax_track_type = '?';
@@ -1098,7 +1108,7 @@ extract_tracks(const char *file_name) {
                   msg = "will extract this track";
                   track->in_use = true;
                 }
-                show_element(l3, 3, "Track number: %u (%s)", uint32(tnum),
+                show_element(l3, 3, _("Track number: %u (%s)"), uint32(tnum),
                              msg);
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
@@ -1119,16 +1129,17 @@ extract_tracks(const char *file_name) {
                     kax_track_type = '?';
                     break;
                 }
-                show_element(l3, 3, "Track type: %s",
-                             kax_track_type == 'a' ? "audio" :
-                             kax_track_type == 'v' ? "video" :
-                             kax_track_type == 's' ? "subtitles" :
-                             "unknown");
+                show_element(l3, 3,
+                             kax_track_type == 'a' ? _("Track type: audio") :
+                             kax_track_type == 'v' ? _("Track type: video") :
+                             kax_track_type == 's' ?
+                             _("Track type: subtitles") :
+                             _("Track type: unknown"));
                 if (track != NULL)
                   track->track_type = kax_track_type;
 
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
-                show_element(l3, 3, "Audio track");
+                show_element(l3, 3, _("Audio track"));
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
@@ -1140,7 +1151,7 @@ extract_tracks(const char *file_name) {
                     KaxAudioSamplingFreq &freq =
                       *static_cast<KaxAudioSamplingFreq*>(l4);
                     freq.ReadData(es->I_O());
-                    show_element(l4, 4, "Sampling frequency: %f",
+                    show_element(l4, 4, _("Sampling frequency: %f"),
                                  float(freq));
                     if (track != NULL)
                       track->a_sfreq = float(freq);
@@ -1150,7 +1161,7 @@ extract_tracks(const char *file_name) {
                     KaxAudioChannels &channels =
                       *static_cast<KaxAudioChannels*>(l4);
                     channels.ReadData(es->I_O());
-                    show_element(l4, 4, "Channels: %u", uint8(channels));
+                    show_element(l4, 4, _("Channels: %u"), uint8(channels));
                     if (track != NULL)
                       track->a_channels = uint8(channels);
 
@@ -1159,7 +1170,7 @@ extract_tracks(const char *file_name) {
                     KaxAudioBitDepth &bps =
                       *static_cast<KaxAudioBitDepth*>(l4);
                     bps.ReadData(es->I_O());
-                    show_element(l4, 4, "Bit depth: %u", uint8(bps));
+                    show_element(l4, 4, _("Bit depth: %u"), uint8(bps));
                     if (track != NULL)
                       track->a_bps = uint8(bps);
                   } else
@@ -1185,7 +1196,7 @@ extract_tracks(const char *file_name) {
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) == KaxTrackVideo::ClassInfos.GlobalId) {
-                show_element(l3, 3, "Video track");
+                show_element(l3, 3, _("Video track"));
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
@@ -1196,7 +1207,7 @@ extract_tracks(const char *file_name) {
                     KaxVideoPixelWidth &width =
                       *static_cast<KaxVideoPixelWidth *>(l4);
                     width.ReadData(es->I_O());
-                    show_element(l4, 4, "Pixel width: %u", uint16(width));
+                    show_element(l4, 4, _("Pixel width: %u"), uint16(width));
                     if (track != NULL)
                       track->v_width = uint16(width);
 
@@ -1205,7 +1216,7 @@ extract_tracks(const char *file_name) {
                     KaxVideoPixelHeight &height =
                       *static_cast<KaxVideoPixelHeight *>(l4);
                     height.ReadData(es->I_O());
-                    show_element(l4, 4, "Pixel height: %u", uint16(height));
+                    show_element(l4, 4, _("Pixel height: %u"), uint16(height));
                     if (track != NULL)
                       track->v_height = uint16(height);
 
@@ -1214,7 +1225,7 @@ extract_tracks(const char *file_name) {
                     KaxVideoFrameRate &framerate =
                       *static_cast<KaxVideoFrameRate *>(l4);
                     framerate.ReadData(es->I_O());
-                    show_element(l4, 4, "Frame rate: %f", float(framerate));
+                    show_element(l4, 4, _("Frame rate: %f"), float(framerate));
                     if (track != NULL)
                       track->v_fps = float(framerate);
 
@@ -1243,7 +1254,8 @@ extract_tracks(const char *file_name) {
               } else if (EbmlId(*l3) == KaxCodecID::ClassInfos.GlobalId) {
                 KaxCodecID &codec_id = *static_cast<KaxCodecID*>(l3);
                 codec_id.ReadData(es->I_O());
-                show_element(l3, 3, "Codec ID: %s", string(codec_id).c_str());
+                show_element(l3, 3, _("Codec ID: %s"),
+                             string(codec_id).c_str());
                 if ((!strcmp(string(codec_id).c_str(), MKV_V_MSCOMP) &&
                      (kax_track_type == 'v')) ||
                     (!strcmp(string(codec_id).c_str(), MKV_A_ACM) &&
@@ -1275,7 +1287,7 @@ extract_tracks(const char *file_name) {
                            get_uint16(&wfe->w_format_tag));
                 } else
                   pbuffer[0] = 0;
-                show_element(l3, 3, "CodecPrivate, length %llu%s",
+                show_element(l3, 3, _("CodecPrivate, length %llu%s"),
                              c_priv.GetSize(), pbuffer);
                 if (track != NULL) {
                   track->private_data = safememdup(&binary(c_priv),
@@ -1288,8 +1300,8 @@ extract_tracks(const char *file_name) {
                 KaxTrackDefaultDuration &def_duration =
                   *static_cast<KaxTrackDefaultDuration*>(l3);
                 def_duration.ReadData(es->I_O());
-                show_element(l3, 3, "Default duration: %.3fms (%.3f fps for "
-                             "a video track)",
+                show_element(l3, 3, _("Default duration: %.3fms (%.3f fps for "
+                                      "a video track)"),
                              (float)uint64(def_duration) / 1000000.0,
                              1000000000.0 / (float)uint64(def_duration));
                 if (track != NULL) {
@@ -1362,12 +1374,12 @@ extract_tracks(const char *file_name) {
         create_output_files();
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        show_element(l1, 1, "Cluster");
+        show_element(l1, 1, _("Cluster"));
         cluster = (KaxCluster *)l1;
 
         if (verbose == 0)
-          mxinfo("progress: %d%%\r", (int)(in->getFilePointer() * 100 /
-                                           file_size));
+          mxinfo("%s: %d%%\r", _("progress"),
+                 (int)(in->getFilePointer() * 100 / file_size));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1378,12 +1390,12 @@ extract_tracks(const char *file_name) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
             cluster_tc = uint64(ctc);
-            show_element(l2, 2, "Cluster timecode: %.3fs", 
+            show_element(l2, 2, _("Cluster timecode: %.3fs"),
                          (float)cluster_tc * (float)tc_scale / 1000000000.0);
             cluster->InitTimecode(cluster_tc, tc_scale);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
-            show_element(l2, 2, "Block group");
+            show_element(l2, 2, _("Block group"));
 
             block_duration = -1;
             has_reference = false;
@@ -1397,8 +1409,8 @@ extract_tracks(const char *file_name) {
                 block = (KaxBlock *)l3;
                 block->ReadData(es->I_O());
                 block->SetParent(*cluster);
-                show_element(l3, 3, "Block (track number %u, %d frame(s), "
-                             "timecode %.3fs)", block->TrackNum(),
+                show_element(l3, 3, _("Block (track number %u, %d frame(s), "
+                                      "timecode %.3fs)"), block->TrackNum(),
                              block->NumberFrames(),
                              (float)block->GlobalTimecode() / 1000000000.0);
                 delete_element = false;
@@ -1408,7 +1420,7 @@ extract_tracks(const char *file_name) {
                 KaxBlockDuration &duration =
                   *static_cast<KaxBlockDuration *>(l3);
                 duration.ReadData(es->I_O());
-                show_element(l3, 3, "Block duration: %.3fms",
+                show_element(l3, 3, _("Block duration: %.3fms"),
                              ((float)uint64(duration)) * tc_scale / 1000000.0);
                 block_duration = uint64(duration) * tc_scale / 1000000;
 
@@ -1417,7 +1429,7 @@ extract_tracks(const char *file_name) {
                 KaxReferenceBlock &reference =
                   *static_cast<KaxReferenceBlock *>(l3);
                 reference.ReadData(es->I_O());
-                show_element(l3, 3, "Reference block: %.3fms", 
+                show_element(l3, 3, _("Reference block: %.3fms"),
                              ((float)int64(reference)) * tc_scale / 1000000.0);
 
                 has_reference = true;
@@ -1520,7 +1532,7 @@ extract_tracks(const char *file_name) {
 
     return true;
   } catch (exception &ex) {
-    show_error("Caught exception: %s", ex.what());
+    show_error(_("Caught exception: %s"), ex.what());
     delete in;
 
     return false;

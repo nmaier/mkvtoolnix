@@ -1,0 +1,1627 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: mkvmerge 0.9.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-07-16 21:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
+"Language-Team: Moritz Bunkus <moritz@bunkus.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/mkvmerge.cpp:496
+msgid ""
+"\n"
+"mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). "
+"Trying to sanitize the file. If mkvmerge hangs during this process you'll "
+"have to kill it manually.\n"
+msgstr ""
+"\n"
+"mkvmerge wurde durch ein SIGINT unterbrochen (wahrscheinlich, weil der "
+"Benutzer Strg+C gedrückt hat). Es wird versucht, die Datei zu retten. Falls "
+"mkvmerge während dieses Prozesses hängt, so muss es manuell abgebrochen "
+"werden.\n"
+
+#: src/mkvextract_tracks.cpp:446
+#, c-format
+msgid " The file '%s' could not be opened for writing (%s).\n"
+msgstr "Die Datei '%s' konnte nicht zum Schreiben geöffnet werden (%s).\n"
+
+#: src/mkvextract.cpp:330
+#, c-format
+msgid " at %llu"
+msgstr " an Position %llu"
+
+#: src/mkvmerge.cpp:504 src/mkvmerge.cpp:515 src/mkvmerge.cpp:528
+#: src/mkvmerge.cpp:536
+msgid " done\n"
+msgstr " fertig\n"
+
+#: src/mkvinfo.cpp:1749
+#, c-format
+msgid "%c frame, track %u, timecode %lld, size %d, adler 0x%08x\n"
+msgstr "%c-Datenpaket, Spur %u, Zeitstempel %lld, Größe %d, Adler 0x%08x\n"
+
+#: src/mkvmerge.cpp:1643
+#, c-format
+msgid ""
+"'%s' can only be used with a file name. No other options are allowed if '%s' "
+"is used.\n"
+msgstr "'%s' kann nur mit einem Dateinamen verwendet werden. Es sind keine "
+"weiteren Optionen erlaubt, wenn '%s' angegeben wurde.\n"
+
+#: src/mkvmerge.cpp:967
+#, c-format
+msgid ""
+"'%s' is an unsupported argument for --compression. Available compression "
+"methods are 'none' and 'zlib'.\n"
+msgstr "'%s' ist eine nicht unterstütze Option für '--compression'. "
+"Verfügbare Kompressionsalgorithmen sind 'none' und 'zlib'.\n"
+
+#: src/mkvmerge.cpp:930
+#, c-format
+msgid "'%s' is an unsupported argument for --cues.\n"
+msgstr "'%s' ist eine nicht unterstützte Option bei '--cues'.\n"
+
+#: src/mkvmerge.cpp:1000
+#, c-format
+msgid ""
+"'%s' is not a valid ISO639-2 code. See 'mkvmerge --list-languages' for a "
+"list of all languages and their respective ISO639-2 codes.\n"
+msgstr "'%s' ist kein gültiger ISO639-2-Code. Mit 'mkvmerge --list-languages' "
+"erhalten Sie eine Liste aller Sprachen und der dazugehörigen ISO639-2-"
+"Codes.\n"
+
+#: src/mkvmerge.cpp:2069
+#, c-format
+msgid ""
+"'%s' is not a valid ISO639-2 language code in '--default-language %s'. Run "
+"'mkvmerge --list-languages' for a list of all languages and their respective "
+"ISO639-2 codes.\n"
+msgstr "'%s' ist kein gültiger ISO639-2-Code. Mit 'mkvmerge --list-languages' "
+"erhalten Sie eine Liste aller Sprachen und der dazugehörigen ISO639-2-"
+"Codes.\n"
+
+#: src/mkvmerge.cpp:1902
+#, c-format
+msgid ""
+"'%s' is not a valid ISO639-2 language code. Run 'mkvmerge --list-languages' "
+"for a complete list of all languages and their respective ISO639-2 codes.\n"
+msgstr "'%s' ist kein gültiger ISO639-2-Code. Mit 'mkvmerge --list-languages' "
+"erhalten Sie eine Liste aller Sprachen und der dazugehörigen ISO639-2-"
+"Codes.\n"
+
+#: src/mkvmerge.cpp:1107 src/mkvmerge.cpp:1110
+#, c-format
+msgid "'%s' is not a valid file ID in '--track-order %s'.\n"
+msgstr "'%s' ist keine gültige ID in '--track-order %s'.\n"
+
+#: src/mkvmerge.cpp:1130 src/mkvmerge.cpp:1141
+#, c-format
+msgid "'%s' is not a valid mapping of track IDs in '--append-to %s'.\n"
+msgstr "'%s' ist keine gültige Spur-ID-Zuordnung in '--apend-to %s'.\n"
+
+#: src/mkvmerge.cpp:1104
+#, c-format
+msgid ""
+"'%s' is not a valid pair of file ID and track ID in '--track-order %s'.\n"
+msgstr "'%s' ist kein gültiges Paar von Datei- und Spur-ID in '--track-order "
+"%s'.\n"
+
+#: src/mkvmerge.cpp:1718
+#, c-format
+msgid "'%s' is not a valid priority class.\n"
+msgstr "'%s' ist keine gültige Prioritätsklasse.\n"
+
+#: src/mkvextract.cpp:250
+#, c-format
+msgid "'%s' is only allowed for chapter extraction.\n"
+msgstr "'%s' ist nur beim Extrahieren von Kapitelinformationen erlaubt.\n"
+
+#: src/mkvmerge.cpp:1667
+#, c-format
+msgid "'%s' lacks a file name.\n"
+msgstr "'%s' fehlt der Dateiname.\n"
+
+#: src/mkvmerge.cpp:2086
+#, c-format
+msgid "'%s' lacks its argument.\n"
+msgstr "'%s' fehlt eine Option.\n"
+
+#: src/mkvmerge.cpp:2010
+#, c-format
+msgid "'%s' lacks the FourCC.\n"
+msgstr "'%s' fehlt der FourCC-Code.\n"
+
+#: src/mkvmerge.cpp:2031
+#, c-format
+msgid "'%s' lacks the audio delay.\n"
+msgstr "'%s' fehlt die Audioverzögerung.\n"
+
+#: src/mkvmerge.cpp:1854
+#, c-format
+msgid "'%s' lacks the file name.\n"
+msgstr "'%s' fehlt der Dateiname.\n"
+
+#: src/mkvmerge.cpp:1989 src/mkvmerge.cpp:1996 src/mkvmerge.cpp:2003
+#, c-format
+msgid "'%s' lacks the stream number(s).\n"
+msgstr "'%s' fehlt die Spurnummer(n).\n"
+
+#: src/mkvmerge.cpp:2094
+#, c-format
+msgid "'%s' lacks the track ID.\n"
+msgstr "'%s' fehlt die Spurnummer.\n"
+
+#: src/mkvmerge.cpp:2140
+msgid "'--append-to' lacks its argument.\n"
+msgstr "'--append-to' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:2017
+msgid "'--aspect-ratio' lacks the aspect ratio.\n"
+msgstr "'--aspect-ratio' fehlt das Seitenverhältnis.\n"
+
+#: src/mkvmerge.cpp:1830
+msgid "'--attachment-description' lacks the description.\n"
+msgstr "'--attachment-description' fehlt die Beschreibung.\n"
+
+#: src/mkvmerge.cpp:1841
+msgid "'--attachment-mime-type' lacks the MIME type.\n"
+msgstr "'--attachment-mime-type' fehler der MIME-Typ.\n"
+
+#: src/mkvmerge.cpp:1912
+msgid "'--chapter-charset' lacks the charset.\n"
+msgstr "'--chapter-charset' fehlt der Zeichensatz.\n"
+
+#: src/mkvmerge.cpp:1915
+#, c-format
+msgid "'--chapter-charset' may only be given once in '--chapter-charset %s'.\n"
+msgstr "'--chapter-charset' darf nur einmal angegeben werden in "
+"'--chapter-charset %s'.\n"
+
+#: src/mkvmerge.cpp:1919
+#, c-format
+msgid ""
+"'--chapter-charset' must be given before '--chapters' in '--chapter-charset %"
+"s'.\n"
+msgstr "'--chapter-charset' muss angegeben werden, bevor '--chapters' "
+"benutzt wird in '--chapter-charset %s'.\n"
+
+#: src/mkvmerge.cpp:1891
+msgid "'--chapter-language' lacks the language.\n"
+msgstr "'--chapter-language' fehlt die Sprache.\n"
+
+#: src/mkvmerge.cpp:1894
+#, c-format
+msgid ""
+"'--chapter-language' may only be given once in '--chapter-language %s'.\n"
+msgstr "'--chapter-language' darf nur einmal angegeben werden in "
+"'--chapter-language %s'.\n"
+
+#: src/mkvmerge.cpp:1898
+#, c-format
+msgid ""
+"'--chapter-language' must be given before '--chapters' in '--chapter-"
+"language %s'.\n"
+msgstr "'--chapter-language' muss angegeben werden, bevor '--chapters' "
+"benutzt wird in '--chapter-language %s'.\n"
+
+#: src/mkvmerge.cpp:1938
+msgid "'--chapters' lacks the file name.\n"
+msgstr "'--chapters' fehlt der Dateiname.\n"
+
+#: src/mkvmerge.cpp:1791
+msgid "'--cluster-length' lacks the length.\n"
+msgstr "'--cluster-length' fehlt die Länge.\n"
+
+#: src/mkvmerge.cpp:2310
+msgid "'--command-line-charset' is missing its argument.\n"
+msgstr "'--command-line-charset' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:2105
+msgid "'--compression' lacks its argument.\n"
+msgstr "'--compression' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:1927
+msgid "'--cue-chapter-name-format' lacks the format.\n"
+msgstr "'--cue-chapter-name-format' fehlt das Format.\n"
+
+#: src/mkvmerge.cpp:1929
+msgid "'--cue-chapter-name-format' must be given before '--chapters'.\n"
+msgstr "'--cue-chapter-name-format' muss vor '--chapters' angegeben werden.\n"
+
+#: src/mkvmerge.cpp:2039
+msgid "'--cues' lacks its argument.\n"
+msgstr "'--cues' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:2066
+msgid "'--default-language' lacks its argument.\n"
+msgstr "'--default-language' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:2047
+msgid "'--default-track' lacks the track ID.\n"
+msgstr "'--default-track' fehlt die Spur-ID.\n"
+
+#: src/mkvmerge.cpp:2024
+msgid "'--display-dimensions' lacks the dimensions.\n"
+msgstr "'--display-dimensions' fehlen die Dimensionen.\n"
+
+#: src/mkvmerge.cpp:1963
+msgid "'--dump-packets' lacks the output path.\n"
+msgstr "'--dump-packets' fehlt der Ausgabepfadname.\n"
+
+#: src/mkvmerge.cpp:1677
+msgid "'--engage' lacks its argument.\n"
+msgstr "'--engage' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:1882
+msgid "'--global-tags' lacks the file name.\n"
+msgstr "'--global-tags' fehlt der Dateiname.\n"
+
+#: src/mkvmerge.cpp:2058
+msgid "'--language' lacks its argument.\n"
+msgstr "'--language' fehlt die Sprache.\n"
+
+#: src/mkvmerge.cpp:2204
+msgid ""
+"'--link' must be used if '--link-to-previous' or '--link-to-next' are used "
+"as well. File linking will be turned on now.\n"
+msgstr "'--link' muss angegeben werden, wenn '--link-to-previous' oder "
+"'--link-to-next' benutzt werden. Die Dateiverknüpfung wird jetzt automatisch "
+"angeschaltet.\n"
+
+#: src/mkvmerge.cpp:2210
+msgid ""
+"'--link', '--link-to-previous' and '--link-to-next' are only useful in "
+"combination with '--split'.\n"
+msgstr "'--link', '--link-to-previous' und '--link-to-next' machen nur in "
+"Verbindung mit '--split' Sinn.\n"
+
+#: src/mkvmerge.cpp:1774
+msgid "'--link-to-next' lacks the next UID.\n"
+msgstr "'--link-to-next' fehlt die nächste UID.\n"
+
+#: src/mkvmerge.cpp:1757
+msgid "'--link-to-previous' lacks the previous UID.\n"
+msgstr "'--link-to-previous' fehlt die vorherige UID.\n"
+
+#: src/mkvextract.cpp:242
+msgid "'--no-ogg' is only allowed when extracting tracks.\n"
+msgstr "'--no-ogg' ist nur erlaubt, wenn Spuren extrahiert werden.\n"
+
+#: src/mkvmerge.cpp:1709
+msgid "'--priority' lacks its argument.\n"
+msgstr "'--priority' fehlt die Option.\n"
+
+#: src/mkvmerge.cpp:1737
+msgid "'--split' lacks the size.\n"
+msgstr "'--split' fehlt die Größe."
+
+#: src/mkvmerge.cpp:1744
+msgid "'--split-max-files' lacks the number of files.\n"
+msgstr "'--split-max-files' fehlt die maximale Dateianzahl.\n"
+
+#: src/mkvmerge.cpp:2078
+msgid "'--sub-charset' lacks its argument.\n"
+msgstr "'--sub-charset' fehlt seine Option.\n"
+
+#: src/mkvmerge.cpp:2121
+msgid "'--timecodes' lacks its argument.\n"
+msgstr "'--timecodes' fehlt die Option.\n"
+
+#: src/mkvmerge.cpp:1729
+msgid "'--title' lacks the title.\n"
+msgstr "'--title' fehlt der Titel.\n"
+
+#: src/mkvmerge.cpp:2113
+msgid "'--track-name' lacks its argument.\n"
+msgstr "'--track-name' fehlt die Option.\n"
+
+#: src/mkvmerge.cpp:2131
+msgid "'--track-order' lacks its argument.\n"
+msgstr "'--track-order' fehlt die Option.\n"
+
+#: src/mkvmerge.cpp:2133
+msgid "'--track-order' may only be given once.\n"
+msgstr "'--track-order' darf nur einmal angegeben werden.\n"
+
+#: src/mkvmerge.cpp:2150
+msgid "'-A' and '-a' used on the same source file.\n"
+msgstr "'-A' und '-a' wurden bei der selben Datei verwendet.\n"
+
+#: src/mkvmerge.cpp:2153
+msgid "'-D' and '-d' used on the same source file.\n"
+msgstr "'-D' und '-d' wurden bei der selben Datei verwendet.\n"
+
+#: src/mkvmerge.cpp:2156
+msgid "'-S' and '-s' used on the same source file.\n"
+msgstr "'-S' und '-s' wurden bei der selben Datei verwendet.\n"
+
+#: src/mkvextract.cpp:231
+msgid "'-c' is only allowed when extracting tracks.\n"
+msgstr "'-c' ist nur beim Extrahieren von Spuren erlaubt.\n"
+
+#: src/mkvextract.cpp:234
+msgid "'-c' lacks a charset.\n"
+msgstr "'-c' fehlt der Zeichensatz.\n"
+
+#: src/mkvextract_tracks.cpp:194
+#, c-format
+msgid "). The track %lld will be skipped.\n"
+msgstr "). Die Spur %lld wird ausgelassen.\n"
+
+#: src/mkvmerge.cpp:2164
+msgid ""
+"A single '+' is not a valid command line option. If you want to append a "
+"file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
+msgstr "Ein einfaches '+' ist keine gültige Kommandozeilenoption. Wenn Sie "
+"eine Datei anhängen möchten, dann verwenden Sie ein '+' direkt gefolgt von "
+"dem Dateinamen, z.B. '+film_teil_2.avi'."
+
+#: src/mkvextract_tracks.cpp:1088
+msgid "A track"
+msgstr "Eine Spur"
+
+#: src/mmg/kax_analyzer.cpp:71
+msgid "Abort"
+msgstr "Abbrechen"
+
+#: src/mkvextract_attachments.cpp:331
+#, c-format
+msgid "An attachment with the ID %lld was not found.\n"
+msgstr "Ein Anhang mit der ID %lld wurde nicht gefunden.\n"
+
+#: src/mmg/kax_analyzer.cpp:66
+msgid "Analyzing Matroska file"
+msgstr "Analysiere Matroska-Datei"
+
+#: src/pr_generic.cpp:467
+#, c-format
+msgid ""
+"Another default track for %s tracks has already been set. The 'default' flag "
+"for track %lld of '%s' will not be set.\n"
+msgstr "Eine andere %s-Spur wurde bereits als Standardspur für diesen Typ "
+"gesetzt. Das 'default'-Flag wird für Spur %lld von '%s' nicht gesetzt.\n"
+
+#: src/mkvmerge.cpp:760
+#, c-format
+msgid "Aspect ratio: divisor is 0 in '%s %s'.\n"
+msgstr "Seitenverhältnis: Teiler ist 0 in '%s %s'.\n"
+
+#: src/mkvmerge.cpp:732
+#, c-format
+msgid "Aspect ratio: invalid track ID in '%s %s'.\n"
+msgstr "Seitenverhältnis: ungültige Spur-ID in '%s %s'.\n"
+
+#: src/mkvmerge.cpp:750
+#, c-format
+msgid "Aspect ratio: missing dividend in '%s %s'.\n"
+msgstr "Seitenverhältnis: Zähler fehlt in '%s %s'.\n"
+
+#: src/mkvmerge.cpp:754
+#, c-format
+msgid "Aspect ratio: missing divisor in '%s %s'.\n"
+msgstr "Seitenverhältnis: Nenner fehlt in '%s %s'.\n"
+
+#: src/mkvmerge.cpp:728
+#, c-format
+msgid "Aspect ratio: missing track ID in '%s %s'.\n"
+msgstr "Seitenverhältnis: Spur-ID fehlt in '%s %s'.\n"
+
+#: src/mkvextract_tracks.cpp:1142
+msgid "Audio track"
+msgstr "Audiospur"
+
+#: src/mkvextract_tracks.cpp:1173
+#, c-format
+msgid "Bit depth: %u"
+msgstr "Bittiefe: %u"
+
+#: src/mkvextract_tracks.cpp:1412
+#, c-format
+msgid "Block (track number %u, %d frame(s), timecode %.3fs)"
+msgstr "Datenblock (Spurnummer %u, %d Pakete, Zeitstempel %.3fs)"
+
+#: src/mkvextract_tracks.cpp:1423
+#, c-format
+msgid "Block duration: %.3fms"
+msgstr "Blockdauer: %.3fms"
+
+#: src/mkvextract_tracks.cpp:1398
+msgid "Block group"
+msgstr "Datenblockgruppe"
+
+#: src/pr_generic.cpp:185
+#, c-format
+msgid ""
+"Both '--aspect-ratio' and '--display-dimensions' were given for track %lld "
+"of '%s'.\n"
+msgstr "Sowohl '--aspect-ratio' als auch '--display-dimensions' wurden für "
+"Spur %lld aus '%s' angegeben.\n"
+
+#: src/mkvextract_attachments.cpp:325 src/mkvextract_chapters.cpp:190
+#: src/mkvextract_tags.cpp:184 src/mkvextract_tracks.cpp:1535
+#, c-format
+msgid "Caught exception: %s"
+msgstr "Ausnahmebedingung ist aufgetreten: %s"
+
+#: src/mkvextract_tracks.cpp:1164
+#, c-format
+msgid "Channels: %u"
+msgstr "Kanäle: %u"
+
+#: src/mkvextract_tracks.cpp:1377
+msgid "Cluster"
+msgstr "Cluster"
+
+#: src/mkvmerge.cpp:1808
+#, c-format
+msgid "Cluster length '%s' out of range (0..60000).\n"
+msgstr "Clusterlänge '%s' liegt außerhalb des zulässigen Bereiches "
+"(0..60000).\n"
+
+#: src/mkvmerge.cpp:1799
+#, c-format
+msgid "Cluster length '%s' out of range (100..32000).\n"
+msgstr "Clusterlänge '%s' liegt außerhalb des zulässigen Bereiches "
+"(100..32000).\n"
+
+#: src/mkvextract_tracks.cpp:1393
+#, c-format
+msgid "Cluster timecode: %.3fs"
+msgstr "Clusterzeitstempel: %.3fs"
+
+#: src/mkvextract_tracks.cpp:1257
+#, c-format
+msgid "Codec ID: %s"
+msgstr "Codec-ID: %s"
+
+#: src/mkvextract_tracks.cpp:1290
+#, c-format
+msgid "CodecPrivate, length %llu%s"
+msgstr "CodecPrivate, Länge %llu%s"
+
+#: src/pr_generic.cpp:811
+#, c-format
+msgid "Could not open the timecode file '%s' for reading.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:277
+#, c-format
+msgid ""
+"Could not parse the tags in '%s': some mandatory elements are missing.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1303
+#, c-format
+msgid "Default duration: %.3fms (%.3f fps for a video track)"
+msgstr "Standarddauer: %.3fms (%.3f Bilder pro Sekunde bei einer Videospur)"
+
+#: src/mkvmerge.cpp:780 src/mkvmerge.cpp:787 src/mkvmerge.cpp:793
+#: src/mkvmerge.cpp:798
+#, c-format
+msgid ""
+"Display dimensions: not given in the form <TID>:<width>x<height>, e.g. "
+"1:640x480 (argument was '%s').\n"
+msgstr "Anzeigedimensionen: Nicht in der Form <TID>:<Breite>x<Höhe> "
+"angegeben, z.B. 1:640x480 (Option war '%s').\n"
+
+#: src/base64tool.cpp:137
+msgid "Done.\n"
+msgstr "Fertig.\n"
+
+#: src/mkvmerge.cpp:1456
+#, c-format
+msgid "EVIL internal bug! (unknown file type). %s\n"
+msgstr "BÖSER interner Fehler! (unbekannter Dateityp). %s\n"
+
+#: src/mkvmerge.cpp:587
+#, c-format
+msgid "Error parsing the tags in '%s': some mandatory elements are missing.\n"
+msgstr "Fehler beim Lesen der Tags in '%s': einige benötigte Elemente "
+"fehlen.\n"
+
+#: src/mmg/kax_analyzer.cpp:382 src/mmg/kax_analyzer.cpp:525
+msgid "Error writing Matroska file"
+msgstr "Fehler beim Schreiben der Matroska-Datei"
+
+#: src/mkvextract_attachments.cpp:195 src/mkvextract_chapters.cpp:103
+#: src/mkvextract_tags.cpp:101 src/mkvextract_tracks.cpp:1005
+msgid "Error: No EBML head found."
+msgstr "Fehler: Kein EBML-Dateikopf gefunden."
+
+#: src/mkvmerge.cpp:1684
+msgid ""
+"Error: no output file name was given.\n"
+"\n"
+msgstr "Fehler: Kein Name für eine Ausgabedatei angegeben.\n\n"
+
+#: src/mkvextract_tracks.cpp:328
+msgid ""
+"Extraction of DTS is not supported - yet. I promise I'll implement it. "
+"Really Soon Now (tm)! The track will be skipped.\n"
+msgstr "Extrahieren von DTS wird nicht unterstützt - noch nicht. Ich "
+"verspreche, dass ich es implementieren werde. Wirklich bald (tm)! Diese "
+"Spur wird übergangen.\n"
+
+#: src/mkvmerge.cpp:1490
+#, c-format
+msgid ""
+"File %s has unknown type. Please have a look at the supported file types "
+"('mkvmerge --list-types') and contact the author Moritz Bunkus "
+"<moritz@bunkus.org> if your file type is supported but not recognized "
+"properly.\n"
+msgstr "Die Datei %s hat einen unbekannten Inhalt. Bitte schauen Sie sich die "
+"Liste der unterstützen Dateiformate an ('mkvmerge --list-types') und "
+"nehmen Sie Kontakt mit dem Autor Moritz Bunkus <moritz@bunkus.org> auf, "
+"falls Ihr Dateityp unterstützt aber nicht korrekt erkannt wird.\n"
+
+#: src/mmg/kax_analyzer.cpp:592
+msgid "File structure warning"
+msgstr "Dateistrukturwarnung"
+
+#: src/mkvmerge.cpp:1080
+#, c-format
+msgid "FourCC: Invalid track ID in '%s %s'.\n"
+msgstr "FourCC: Ungültige Spur-ID in '%s %s'.\n"
+
+#: src/mkvmerge.cpp:1076
+#, c-format
+msgid "FourCC: Missing track ID in '%s %s'.\n"
+msgstr "FourCC: Spur-ID fehlt in '%s %s'.\n"
+
+#: src/mkvextract_tracks.cpp:1228
+#, c-format
+msgid "Frame rate: %f"
+msgstr "Anzahl Bilder pro Sekunde: %f"
+
+#: src/mkvmerge.cpp:996
+#, c-format
+msgid "Invalid %s specified in '--%s %s'.\n"
+msgstr "%s ungültig in '--%s %s'.\n"
+
+#: src/mkvextract.cpp:268
+#, c-format
+msgid "Invalid attachment ID in argument '%s'.\n"
+msgstr "Ungültige Anhangs-ID in Option '%s'.\n"
+
+#: src/mkvmerge.cpp:955
+#, c-format
+msgid "Invalid compression option specified in '--compression %s'.\n"
+msgstr "Ungültige Kompressionsmethode in '--compression %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:945
+#, c-format
+msgid ""
+"Invalid compression option. No track ID specified in '--compression %s'.\n"
+msgstr "Ungültige Kompressionsoption. Keine Spur-ID in '--compression %s' "
+"angegeben.\n"
+
+#: src/mkvmerge.cpp:920
+#, c-format
+msgid "Invalid cues option specified in '--cues %s'.\n"
+msgstr "Ungültige cue-Option in '--cues %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:911
+#, c-format
+msgid "Invalid cues option. No track ID specified in '--cues %s'.\n"
+msgstr "Ungültige cue-Option. Keine Spur-ID in '--cues %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:827
+#, c-format
+msgid "Invalid format for '--split' in '--split %s'.\n"
+msgstr "Ungültiges Format für '--split' in '--split %s'.\n"
+
+#: src/mkvextract_tracks.cpp:716 src/mkvextract_tracks.cpp:724
+#, c-format
+msgid "Invalid format for a SSA line ('%s'). This entry will be skipped.\n"
+msgstr "Ungültiges Format für eine SSA-Zeile ('%s') gefunden. Dieser "
+"Eintrag wird übersprungen."
+
+#: src/base64tool.cpp:69
+#, c-format
+msgid "Invalid mode '%s'.\n"
+msgstr "Ungültiger Modus '%s'.\n"
+
+#: src/mkvmerge.cpp:888
+#, c-format
+msgid "Invalid split size in '--split %s'.\n"
+msgstr "Ungültige Teilgröße in '--split %s'.\n"
+
+#: src/mkvmerge.cpp:892
+#, c-format
+msgid "Invalid split size in '--split %s': The size is too small.\n"
+msgstr "Ungültige Teilgröße in '--split %s': Die Größe ist zu klein.\n"
+
+#: src/mkvmerge.cpp:1019
+#, c-format
+msgid ""
+"Invalid sub charset option. No track ID specified in '--sub-charset %s'.\n"
+msgstr "Ungültiger Untertitelzeichensatz. Keine Spur-ID in '--sub-charset "
+"%s' angegeben.\n"
+
+#: src/mkvmerge.cpp:1029
+#, c-format
+msgid "Invalid sub charset specified in '--sub-charset %s'.\n"
+msgstr "Ungültiger Untertitelzeichensatz in '--sub-charset %s' agegeben.\n"
+
+#: src/mkvmerge.cpp:683
+#, c-format
+msgid "Invalid sync option specified in '%s %s'.\n"
+msgstr "Ungültige Synchronisationsoption in '%s %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:699
+#, c-format
+msgid "Invalid sync option specified in '%s %s'. The divisor is zero.\n"
+msgstr "Ungültige Synchronisationsoption in '%s %s' angegeben. Der Nenner ist "
+"Null.\n"
+
+#: src/mkvmerge.cpp:705
+#, c-format
+msgid ""
+"Invalid sync option specified in '%s %s'. The linear sync value may not be "
+"smaller than zero.\n"
+msgstr "Ungültige Synchronisationsoption in '%s %s' angegeben. Der lineare "
+"Anteil ist kleiner als Null.\n"
+
+#: src/mkvmerge.cpp:674
+#, c-format
+msgid "Invalid sync option. No track ID specified in '%s %s'.\n"
+msgstr "Ungültige Synchronisationsoption in '%s %s' angegeben. Keine Spur-ID "
+"angegeben.\n"
+
+#: src/mkvmerge.cpp:1056
+#, c-format
+msgid "Invalid tags file name specified in '%s %s'.\n"
+msgstr "Ungültiger Tag-Dateiname in '%s %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:1048
+#, c-format
+msgid "Invalid tags option. No track ID specified in '%s %s'.\n"
+msgstr "Ungültige Tag-Option. Keine Spur-ID in '%s %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:840 src/mkvmerge.cpp:853 src/mkvmerge.cpp:866
+#, c-format
+msgid "Invalid time for '--split' in '--split %s'.\n"
+msgstr "Ungültige Zeitangabe für '--split' in '--split %s'.\n"
+
+#: src/mkvmerge.cpp:652
+#, c-format
+msgid "Invalid track ID in '%s %s'.\n"
+msgstr "Ungültige Spur-ID in '%s %s'.\n"
+
+#: src/mkvextract.cpp:267
+#, c-format
+msgid "Invalid track ID in argument '%s'.\n"
+msgstr "Ungültige Spur-ID in Option '%s'.\n"
+
+#: src/mkvmerge.cpp:679 src/mkvmerge.cpp:1052 src/mkvmerge.cpp:2050
+#: src/mkvmerge.cpp:2097
+#, c-format
+msgid "Invalid track ID specified in '%s %s'.\n"
+msgstr "Ungültige Spur-ID in '%s %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:991
+#, c-format
+msgid "Invalid track ID specified in '--%s %s'.\n"
+msgstr "Ungültige Spur-ID in '--%s %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:950
+#, c-format
+msgid "Invalid track ID specified in '--compression %s'.\n"
+msgstr "Ungültige Spur-ID in '--compression %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:916
+#, c-format
+msgid "Invalid track ID specified in '--cues %s'.\n"
+msgstr "Ungültige Spur-ID in '--cues %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:1024
+#, c-format
+msgid "Invalid track ID specified in '--sub-charset %s'.\n"
+msgstr "Ungültige Spur-ID in '--sub-charset %s' angegeben.\n"
+
+#: src/mkvmerge.cpp:1632
+msgid ""
+"Known file types:\n"
+"  ext  description\n"
+"  ---  --------------------------\n"
+msgstr ""
+
+#: src/pr_generic.cpp:897
+#, c-format
+msgid ""
+"Line %d of the timecode file '%s' contains inconsistent data (e.g. the start "
+"frame number is bigger than the end frame number, or some values are smaller "
+"than zero).\n"
+msgstr ""
+
+#: src/pr_generic.cpp:873
+#, c-format
+msgid ""
+"Line %d of the timecode file '%s' could not be parsed: It does not contain "
+"exactly three fields.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:884
+#, c-format
+msgid ""
+"Line %d of the timecode file '%s' could not be parsed: The end frame number "
+"is not a valid number.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:889
+#, c-format
+msgid ""
+"Line %d of the timecode file '%s' could not be parsed: The number of frames "
+"per second is not a valid floating point number.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:879
+#, c-format
+msgid ""
+"Line %d of the timecode file '%s' could not be parsed: The start frame "
+"number is not a valid number.\n"
+msgstr ""
+
+#: src/base64tool.cpp:74
+msgid ""
+"Max line length must be >= 4.\n"
+"\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:429
+#, c-format
+msgid "Memory allocation error: %d (%s).\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:857
+msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:260
+#, c-format
+msgid "Missing attachment ID in argument '%s'.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:273
+#, c-format
+msgid "Missing output file name in argument '%s'.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:259
+#, c-format
+msgid "Missing track ID in argument '%s'.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1844
+#, c-format
+msgid ""
+"More than one MIME type was given for a single attachment. '%s' will be "
+"discarded and '%s' used instead.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1833
+msgid "More than one description was given for a single attachment.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:2856
+#, c-format
+msgid "Muxing took %ld second%s.\n"
+msgstr ""
+
+#: src/mkvextract_attachments.cpp:217 src/mkvextract_chapters.cpp:125
+#: src/mkvextract_tags.cpp:123 src/mkvextract_tracks.cpp:1027
+#, c-format
+msgid "Next level 0 element is not a segment but %s"
+msgstr ""
+
+#: src/mkvmerge.cpp:1857
+#, c-format
+msgid "No MIME type was set for the attachment '%s'.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:246
+#, c-format
+msgid "No further options allowed when extracting %s.\n"
+msgstr ""
+
+#: src/mkvextract_attachments.cpp:209 src/mkvextract_chapters.cpp:117
+#: src/mkvextract_tags.cpp:115 src/mkvextract_tracks.cpp:1019
+msgid "No segment/level 0 element found."
+msgstr ""
+
+#: src/mkvmerge.cpp:2849
+msgid "No streams to output were found. Aborting.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:987
+#, c-format
+msgid "No track ID specified in '--%s' %s'.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:390
+msgid "Nothing to do.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:291
+msgid ""
+"Nothing to do.\n"
+"\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1941
+#, c-format
+msgid "Only one chapter file allowed in '%s %s'.\n"
+msgstr ""
+
+#: src/mkvinfo.cpp:304
+msgid "Only one input file is allowed.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1670
+msgid "Only one output file allowed.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1219
+#, c-format
+msgid "Pixel height: %u"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1210
+#, c-format
+msgid "Pixel width: %u"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1432
+#, c-format
+msgid "Reference block: %.3fms"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1154
+#, c-format
+msgid "Sampling frequency: %f"
+msgstr ""
+
+#: src/mkvextract_attachments.cpp:213 src/mkvextract_chapters.cpp:121
+#: src/mkvextract_tags.cpp:119 src/mkvextract_tracks.cpp:1023
+msgid "Segment"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1042
+msgid "Segment information"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1079
+msgid "Segment tracks"
+msgstr ""
+
+#: src/mkvmerge.cpp:2599
+#, c-format
+msgid ""
+"Some tag elements are missing (this error should not have occured - another "
+"similar error should have occured earlier). %s\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:653
+#, c-format
+msgid ""
+"Subtitle track %lld is missing some duration elements. Please check the "
+"resulting SRT file for entries that have the same start and end time.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:699
+#, c-format
+msgid ""
+"Subtitle track %lld is missing some duration elements. Please check the "
+"resulting SSA/ASS file for entries that have the same start and end time.\n"
+msgstr ""
+
+#: src/base64tool.cpp:129
+msgid "The Base64 encoded data could not be decoded.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1082
+#, c-format
+msgid "The FourCC must be exactly four characters long in '%s %s'.\n"
+msgstr ""
+
+#: src/mkvextract_attachments.cpp:147
+#, c-format
+msgid "The attachment #%lld, MIME type %s, size %lld, is written to '%s'.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1870
+#, c-format
+msgid "The attachment '%s' could not be read, or its size is 0.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1377
+#, c-format
+msgid "The attachment '%s' could not be read.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:2629
+msgid "The cue entries (the index) is being written..."
+msgstr ""
+
+#: src/mkvmerge.cpp:1460
+#, c-format
+msgid ""
+"The demultiplexer failed to initialize:\n"
+"%s\n"
+")"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:192
+msgid ""
+"The extraction of video tracks is only supported for RealVideo (CodecID: "
+"V_REAL/RVxx) and AVI compatibility tracks (CodecID: "
+msgstr ""
+
+#: src/base64tool.cpp:88
+#, c-format
+msgid "The file '%s' could not be opened for reading (%d, %s).\n"
+msgstr ""
+
+#: src/mkvextract_attachments.cpp:184 src/mkvextract_chapters.cpp:92
+#: src/mkvextract_tags.cpp:90
+#, c-format
+msgid "The file '%s' could not be opened for reading (%s)."
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:990
+#, c-format
+msgid "The file '%s' could not be opened for reading (%s).\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:2256
+#, c-format
+msgid "The file '%s' could not be opened for reading command line arguments."
+msgstr ""
+
+#: src/base64tool.cpp:95 src/mkvextract_attachments.cpp:153
+#: src/mkvextract_tracks.cpp:97
+#, c-format
+msgid "The file '%s' could not be opened for writing (%d, %s).\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:411
+#, c-format
+msgid "The file '%s' could not be opened for writing (%s).\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:2568
+#, c-format
+msgid "The file '%s' has been opened for writing.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:2174
+#, c-format
+msgid ""
+"The file '%s' has unknown type. Please have a look at the supported file "
+"types ('mkvmerge --list-types') and contact the author Moritz Bunkus "
+"<moritz@bunkus.org> if your file type is supported but not recognized "
+"properly.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:500
+msgid "The file is being fixed, part 1/4..."
+msgstr ""
+
+#: src/mkvmerge.cpp:506
+msgid "The file is being fixed, part 2/4..."
+msgstr ""
+
+#: src/mkvmerge.cpp:517
+msgid "The file is being fixed, part 3/4..."
+msgstr ""
+
+#: src/mkvmerge.cpp:530
+msgid "The file is being fixed, part 4/4..."
+msgstr ""
+
+#: src/pr_generic.cpp:976
+#, c-format
+msgid ""
+"The line %d of the timcode file '%s' does not contain a valid floating point "
+"number.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1777
+#, c-format
+msgid "The next UID was already given in '%s %s'.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1970
+msgid ""
+"The option '--meta-seek-size' is no longer supported. Please read mkvmerge's "
+"documentation, especially the section about the MATROSKA FILE LAYOUT."
+msgstr ""
+
+#: src/mkvmerge.cpp:2564
+#, c-format
+msgid "The output file '%s' could not be opened for writing (%s).\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1760
+#, c-format
+msgid "The previous UID was already given in '%s %s'.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:413 src/mkvmerge.cpp:451
+#, c-format
+msgid ""
+"The source file '%s' could not be opened successfully, or retrieving its "
+"size by seeking to the end did not work.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:825
+#, c-format
+msgid ""
+"The timcode file '%s' contains an unsupported/unrecognized format (version %"
+"d).\n"
+msgstr ""
+
+#: src/pr_generic.cpp:817
+#, c-format
+msgid ""
+"The timcode file '%s' contains an unsupported/unrecognized format line. The "
+"very first line must look like '# timecode format v1'.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:845 src/pr_generic.cpp:853 src/pr_generic.cpp:858
+#, c-format
+msgid ""
+"The timcode file '%s' does not contain a valid 'Assume' line with the "
+"default number of frames per second.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:911
+#, c-format
+msgid "The timecode file '%s' does not contain any valid entry.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1273
+#, c-format
+msgid "The track headers could not be rendered correctly. %s.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:385
+#, c-format
+msgid "There is no track with the ID '%lld' in the input file.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:525
+#, c-format
+msgid ""
+"This should REALLY not have happened. The space reserved for the first meta "
+"seek element was too small. %s\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:2733
+#, c-format
+msgid ""
+"This should REALLY not have happened. The space reserved for the first meta "
+"seek element was too small. Size needed: %lld. %s\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1053
+#, c-format
+msgid "Timecode scale: %llu"
+msgstr ""
+
+#: src/mkvinfo.cpp:1305
+#, c-format
+msgid "Track %lld: %s, codec ID: %s%s%s%s\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:268 src/mkvextract_tracks.cpp:280
+#: src/mkvextract_tracks.cpp:295
+#, c-format
+msgid "Track ID %lld has an unknown AAC type. The track will be skipped.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:450
+#, c-format
+msgid "Track ID %lld is extracted to a %s file '%s'.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:420
+#, c-format
+msgid "Track ID %lld is extracted to an AVI file '%s'.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:173 src/mkvextract_tracks.cpp:184
+#: src/mkvextract_tracks.cpp:208 src/mkvextract_tracks.cpp:260
+#: src/mkvextract_tracks.cpp:335 src/mkvextract_tracks.cpp:346
+#, c-format
+msgid ""
+"Track ID %lld is missing some critical information. The track will be "
+"skipped.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:162
+#, c-format
+msgid "Track ID %lld is missing the CodecID. The track will be skipped.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1111
+#, c-format
+msgid "Track number: %u (%s)"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1133
+msgid "Track type: audio"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1136
+msgid "Track type: subtitles"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1137
+msgid "Track type: unknown"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1134
+msgid "Track type: video"
+msgstr ""
+
+#: src/mkvinfo.cpp:206
+#, c-format
+msgid "Unknown element: %s"
+msgstr ""
+
+#: src/mkvmerge.cpp:1783
+#, c-format
+msgid "Unknown format for the next UID in '%s %s'.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1766
+#, c-format
+msgid "Unknown format for the previous UID in '%s %s'.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:212
+#, c-format
+msgid "Unknown mode '%s'.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:377
+#, c-format
+msgid "Unknown track type for ID %lld. The track will be skipped.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:355 src/mkvextract_tracks.cpp:370
+#, c-format
+msgid "Unsupported CodecID '%s' for ID %lld. The track will be skipped.\n"
+msgstr ""
+
+#: src/mkvextract.cpp:117
+msgid ""
+"Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
+"   or  mkvextract tags <inname> [options]\n"
+"   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:"
+"out2 ...]]\n"
+"   or  mkvextract chapters <inname> [options]\n"
+"   or  mkvextract <-h|-V>\n"
+"\n"
+" The first word tells mkvextract what to extract. The second must be the\n"
+" source file. The only 'global' option that can be used with all modes is\n"
+" '-v' or '--verbose' to increase the verbosity. All other options depend\n"
+" on the mode.\n"
+"\n"
+" First mode extracts some tracks to external files.\n"
+"  -c charset     Convert text subtitles to this charset (default: UTF-8).\n"
+"  --no-ogg       Write raw FLAC files (default: write OggFLAC files).\n"
+"  TID:out        Write track with the ID TID to the file 'out'.\n"
+"\n"
+" Example:\n"
+" mkvextract tracks \"a movie.mkv\" 2:audio.ogg 3:subs.srt\n"
+"\n"
+" Second mode extracts the tags and converts them to XML. The output is\n"
+" written to the standard output. The output can be used as a source\n"
+" for mkvmerge.\n"
+"\n"
+" Example:\n"
+" mkvextract tags \"a movie.mkv\" > movie_tags.xml\n"
+"\n"
+" Third mode extracts attachments from inname.\n"
+"  AID:outname    Write the attachment with the ID AID to 'outname'.\n"
+"\n"
+" Example:\n"
+" mkvextract attachments \"a movie.mkv\" 4:cover.jpg\n"
+"\n"
+" Fourth mode extracts the chapters and converts them to XML. The output is\n"
+" written to the standard output. The output can be used as a source\n"
+" for mkvmerge.\n"
+"  -s, --simple   Exports the chapter infomartion in the simple format\n"
+"                 used in OGM tools (CHAPTER01=... CHAPTER01NAME=...).\n"
+"\n"
+" Example:\n"
+" mkvextract chapters \"a movie.mkv\" > movie_chapters.xml\n"
+"\n"
+" These options can be used instead of the mode keyword to obtain\n"
+" further information:\n"
+"  -v, --verbose  Increase verbosity.\n"
+"  -h, --help     Show this help.\n"
+"  -V, --version  Show version information.\n"
+msgstr ""
+
+#: src/mkvinfo.cpp:138
+msgid ""
+"Usage: mkvinfo [options] inname\n"
+"\n"
+" options:\n"
+"  -g, --gui      Start the GUI (and open inname if it was given).\n"
+"  inname         Use 'inname' as the source.\n"
+"  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
+"                 description of what mkvinfo outputs.\n"
+"  -c, --checksum Calculate and display checksums of frame contents.\n"
+"  -s, --summary  Only show summaries of the contents, not each element.\n"
+"  -h, --help     Show this help.\n"
+"  -V, --version  Show version information.\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1199
+msgid "Video track"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:216 src/mkvextract_tracks.cpp:232
+#, c-format
+msgid ""
+"Vorbis track ID %lld does not contain valid headers. The track will be "
+"skipped.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:1748
+msgid "Wrong argument to '--split-max-files'.\n"
+msgstr ""
+
+#: src/mmg/kax_analyzer.cpp:379
+msgid ""
+"Wrote the element at the end of the file but could not update the segment "
+"size. Therefore the element will not be visible. Aborting the process. The "
+"file has been changed!"
+msgstr ""
+
+#: src/mmg/kax_analyzer.cpp:521
+msgid ""
+"Wrote the meta seek element at the end of the file but could not update the "
+"segment size. Therefore the element will not be visible. Aborting the "
+"process. The file has been changed!"
+msgstr ""
+
+#: src/mmg/kax_analyzer.cpp:586
+msgid ""
+"Wrote to the Matroska file, but the meta seek entry could not be updated. "
+"This might mean that players will have a hard time finding this element. "
+"Please use your favorite player to check this file.\n"
+"\n"
+"The proper solution is to save these chapters into a XML file and then to "
+"remux the file with the chapters included."
+msgstr ""
+
+#: src/mkvinfo.cpp:1755
+#, c-format
+msgid "[%c frame for track %u, timecode %lld]"
+msgstr ""
+
+#: src/mkvinfo.cpp:1306
+msgid "audio"
+msgstr ""
+
+#: src/base64tool.cpp:36
+msgid ""
+"base64util <encode|decode> <input> <output> [maxlen]\n"
+"\n"
+"  encode - Read from <input>, encode to Base64 and write to <output>.\n"
+"           Max line length can be specified and is 72 if left out.\n"
+"  decode - Read from <input>, decode to binary and write to <output>.\n"
+msgstr ""
+
+#: src/pr_generic.cpp:1010
+#, c-format
+msgid ""
+"generic_packetizer: The number of external timecodes %u is smaller than the "
+"number of frames in track %lld of '%s'. The remaining frames of this track "
+"might not be timestamped the way you intended them to be. mkvmerge might "
+"even crash.\n"
+msgstr ""
+
+#: src/mkvinfo.cpp:282
+msgid "mkvinfo was compiled without GUI support.\n"
+msgstr ""
+
+#: src/mkvmerge.cpp:255
+msgid ""
+"mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
+"\n"
+" Global options:\n"
+"  -v, --verbose            verbose status\n"
+"  -q, --quiet              suppress status output\n"
+"  -o, --output out         Write to the file 'out'.\n"
+"  --title <title>          Title for this output file.\n"
+"  --global-tags <file>     Read global tags from a XML file.\n"
+"  --command-line-charset   Charset for strings on the command line\n"
+"\n"
+" Chapter handling:\n"
+"  --chapters <file>        Read chapter information from the file.\n"
+"  --chapter-language <lng> Set the 'language' element in chapter entries.\n"
+"  --chapter-charset <cset> Charset for a simple chapter file.\n"
+"  --cue-chapter-name-format\n"
+"                           Pattern for the conversion from CUE sheet\n"
+"                           entries to chapter names.\n"
+"  --default-language <lng> Use this language for all tracks unless\n"
+"                           overridden with the --language option.\n"
+"\n"
+" General output control (advanced global options):\n"
+"  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
+"                           A comma separated list of both file IDs\n"
+"                           and track IDs that controls the order of "
+"the                            tracks in the output file.\n"
+"  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
+"                           If the number is postfixed with 'ms' then\n"
+"                           put at most n milliseconds of data into each\n"
+"                           cluster.\n"
+"  --no-cues                Do not write the cue data (the index).\n"
+"  --no-clusters-in-meta-seek\n"
+"                           Do not write meta seek data for clusters.\n"
+"  --disable-lacing         Do not Use lacing.\n"
+"  --enable-durations       Enable block durations for all blocks.\n"
+"  --append-to <SFID1:STID1=DFID1:DTID1,SFID1:STID2=DFID2:DTID2,...>\n"
+"                           A comma separated list of file and track IDs\n"
+"                           that controls which track of a file is\n"
+"                           appended to another track of another file.\n"
+"\n"
+" File splitting and linking (more global options):\n"
+"  --split <d[K,M,G]|HH:MM:SS|ns>\n"
+"                           Create a new file after d bytes (KB, MB, GB)\n"
+"                           or after a specific time.\n"
+"  --split-max-files <n>    Create at most n files.\n"
+"  --link                   Link splitted files.\n"
+"  --link-to-previous <UID> Link the first file to the given UID.\n"
+"  --link-to-next <UID>     Link the last file to the given UID.\n"
+"\n"
+" Attachment support (more global options):\n"
+"  --attachment-description <desc>\n"
+"                           Description for the following attachment.\n"
+"  --attachment-mime-type <mime type>\n"
+"                           Mime type for the following attachment.\n"
+"  --attach-file <file>     Creates a file attachment inside the\n"
+"                           Matroska file.\n"
+"  --attach-file-once <file>\n"
+"                           Creates a file attachment inside the\n"
+"                           firsts Matroska file written.\n"
+"\n"
+" Options for each input file:\n"
+"  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
+"                           audio tracks.\n"
+"  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
+"                           video tracks.\n"
+"  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
+"                           all subtitle tracks.\n"
+"  -A, --noaudio            Don't copy any audio track from this file.\n"
+"  -D, --novideo            Don't copy any video track from this file.\n"
+"  -S, --nosubs             Don't copy any text track from this file.\n"
+"  --no-chapters            Don't keep chapters from a Matroska file.\n"
+"  --no-attachments         Don't keep attachments from a Matroska file.\n"
+"  --no-tags                Don't keep tags from a Matroska file.\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
+"                           Synchronize, delay the audio track with the\n"
+"                           id TID by d ms. \n"
+"                           d > 0: Pad with silent samples.\n"
+"                           d < 0: Remove samples from the beginning.\n"
+"                           o/p: Adjust the timecodes by o/p to fix\n"
+"                           linear drifts. p defaults to 1000 if\n"
+"                           omitted. Both o and p can be floating point\n"
+"                           numbers.\n"
+"  --default-track <TID>    Sets the 'default' flag for this track.\n"
+"  --track-name <TID:name>  Sets the name for a track.\n"
+"  --cues <TID:none|iframes|all>\n"
+"                           Create cue (index) entries for this track:\n"
+"                           None at all, only for I frames, for all.\n"
+"  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
+"                           code, see --list-languages).\n"
+"  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
+"  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
+"  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
+"\n"
+" Options that only apply to video tracks:\n"
+"  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
+"                           Works only for video tracks.\n"
+"  --aspect-ratio <f|a/b>   Sets the display dimensions by calculating\n"
+"                           width and height for this aspect ratio.\n"
+"  --display-dimensions <width>x<height>\n"
+"                           Explicitely set the display dimensions.\n"
+"\n"
+" Options that only apply to text subtitle tracks:\n"
+"  --sub-charset <TID:charset>\n"
+"                           Sets the charset the text subtitles are\n"
+"                           written in for the conversion to UTF-8.\n"
+"\n"
+" Options that only apply to VobSub subtitle tracks:\n"
+"  --compression <TID:method>\n"
+"                           Sets the compression method used for the\n"
+"                           specified track ('none' or 'zlib').\n"
+"\n"
+"\n"
+" Other options:\n"
+"  -i, --identify <file>    Print information about the source file.\n"
+"  -l, --list-types         Lists supported input file types.\n"
+"  --list-languages         Lists all ISO639 languages and their\n"
+"                           ISO639-2 codes.\n"
+"  --priority <priority>    Set the priority mkvmerge runs with.\n"
+"  -h, --help               Show this help.\n"
+"  -V, --version            Show version information.\n"
+"  @optionsfile             Reads additional command line options from\n"
+"                           the specified file (see man page).\n"
+"\n"
+"\n"
+"Please read the man page/the HTML documentation to mkvmerge. It\n"
+"explains several details in great length which are not obvious from\n"
+"this listing.\n"
+msgstr ""
+"mkvmerge -o Ausgabe [globale Optionen] [Option1] <Datei1> "
+"[@Optionsdatei ...]\n"
+"\n"
+" Globale optionen:\n"
+"  -v, --verbose            erweiterte Ausgabe\n"
+"  -q, --quiet              Statusausgaben unterdücken\n"
+"  -o, --output out         Schreibe in die Datei 'out'.\n"
+"  --title <Titel>          Der Titel/Name der Ausgabedatei..\n"
+"  --global-tags <Datei>    Lies globale Tags aus einer Datei.\n"
+"  --command-line-charset   Zeichensatz für die Kommandozeilenargumente\n"
+"\n"
+" Kapitelbehandlung:\n"
+"  --chapters <Datei>       Lies Kapitelinformationen aus der 'Datei'.\n"
+"  --chapter-language <spr> Setzt 'language'-Element in Kapiteleinträgen.\n"
+"  --chapter-charset <zstz> Zeichensatz für nicht-XML-Kapiteldateien\n"
+"  --cue-chapter-name-format <Format>\n"
+"                           Pattern for the conversion from CUE sheet\n"
+"                           entries to chapter names.\n"
+"  --default-language <lng> Use this language for all tracks unless\n"
+"                           overridden with the --language option.\n"
+"\n"
+" General output control (advanced global options):\n"
+"  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
+"                           A comma separated list of both file IDs\n"
+"                           and track IDs that controls the order of "
+"the                            tracks in the output file.\n"
+"  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
+"                           If the number is postfixed with 'ms' then\n"
+"                           put at most n milliseconds of data into each\n"
+"                           cluster.\n"
+"  --no-cues                Do not write the cue data (the index).\n"
+"  --no-clusters-in-meta-seek\n"
+"                           Do not write meta seek data for clusters.\n"
+"  --disable-lacing         Do not Use lacing.\n"
+"  --enable-durations       Enable block durations for all blocks.\n"
+"  --append-to <SFID1:STID1=DFID1:DTID1,SFID1:STID2=DFID2:DTID2,...>\n"
+"                           A comma separated list of file and track IDs\n"
+"                           that controls which track of a file is\n"
+"                           appended to another track of another file.\n"
+"\n"
+" File splitting and linking (more global options):\n"
+"  --split <d[K,M,G]|HH:MM:SS|ns>\n"
+"                           Create a new file after d bytes (KB, MB, GB)\n"
+"                           or after a specific time.\n"
+"  --split-max-files <n>    Create at most n files.\n"
+"  --link                   Link splitted files.\n"
+"  --link-to-previous <UID> Link the first file to the given UID.\n"
+"  --link-to-next <UID>     Link the last file to the given UID.\n"
+"\n"
+" Attachment support (more global options):\n"
+"  --attachment-description <desc>\n"
+"                           Description for the following attachment.\n"
+"  --attachment-mime-type <mime type>\n"
+"                           Mime type for the following attachment.\n"
+"  --attach-file <file>     Creates a file attachment inside the\n"
+"                           Matroska file.\n"
+"  --attach-file-once <file>\n"
+"                           Creates a file attachment inside the\n"
+"                           firsts Matroska file written.\n"
+"\n"
+" Options for each input file:\n"
+"  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
+"                           audio tracks.\n"
+"  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
+"                           video tracks.\n"
+"  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
+"                           all subtitle tracks.\n"
+"  -A, --noaudio            Don't copy any audio track from this file.\n"
+"  -D, --novideo            Don't copy any video track from this file.\n"
+"  -S, --nosubs             Don't copy any text track from this file.\n"
+"  --no-chapters            Don't keep chapters from a Matroska file.\n"
+"  --no-attachments         Don't keep attachments from a Matroska file.\n"
+"  --no-tags                Don't keep tags from a Matroska file.\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
+"                           Synchronize, delay the audio track with the\n"
+"                           id TID by d ms. \n"
+"                           d > 0: Pad with silent samples.\n"
+"                           d < 0: Remove samples from the beginning.\n"
+"                           o/p: Adjust the timecodes by o/p to fix\n"
+"                           linear drifts. p defaults to 1000 if\n"
+"                           omitted. Both o and p can be floating point\n"
+"                           numbers.\n"
+"  --default-track <TID>    Sets the 'default' flag for this track.\n"
+"  --track-name <TID:name>  Sets the name for a track.\n"
+"  --cues <TID:none|iframes|all>\n"
+"                           Create cue (index) entries for this track:\n"
+"                           None at all, only for I frames, for all.\n"
+"  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
+"                           code, see --list-languages).\n"
+"  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
+"  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
+"  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
+"\n"
+" Options that only apply to video tracks:\n"
+"  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
+"                           Works only for video tracks.\n"
+"  --aspect-ratio <f|a/b>   Sets the display dimensions by calculating\n"
+"                           width and height for this aspect ratio.\n"
+"  --display-dimensions <width>x<height>\n"
+"                           Explicitely set the display dimensions.\n"
+"\n"
+" Options that only apply to text subtitle tracks:\n"
+"  --sub-charset <TID:charset>\n"
+"                           Sets the charset the text subtitles are\n"
+"                           written in for the conversion to UTF-8.\n"
+"\n"
+" Options that only apply to VobSub subtitle tracks:\n"
+"  --compression <TID:method>\n"
+"                           Sets the compression method used for the\n"
+"                           specified track ('none' or 'zlib').\n"
+"\n"
+"\n"
+" Other options:\n"
+"  -i, --identify <file>    Print information about the source file.\n"
+"  -l, --list-types         Lists supported input file types.\n"
+"  --list-languages         Lists all ISO639 languages and their\n"
+"                           ISO639-2 codes.\n"
+"  --priority <priority>    Set the priority mkvmerge runs with.\n"
+"  -h, --help               Show this help.\n"
+"  -V, --version            Show version information.\n"
+"  @optionsfile             Reads additional command line options from\n"
+"                           the specified file (see man page).\n"
+"\n"
+"\n"
+"Please read the man page/the HTML documentation to mkvmerge. It\n"
+"explains several details in great length which are not obvious from\n"
+"this listing.\n"
+
+#: src/mkvmerge.cpp:494 src/mkvmerge.cpp:538
+msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
+msgstr ""
+
+#: src/mkvextract_tracks.cpp:1381
+msgid "progress"
+msgstr ""
+
+#: src/mkvextract.cpp:381
+#, c-format
+msgid "progress: 100%%\n"
+msgstr ""
+
+#: src/mkvinfo.cpp:1308
+msgid "subtitles"
+msgstr ""
+
+#: src/mkvinfo.cpp:1308
+msgid "unknown"
+msgstr ""
+
+#: src/mkvinfo.cpp:1307
+msgid "video"
+msgstr ""
+
+#: src/pr_generic.cpp:1202
+msgid "working..."
+msgstr ""
