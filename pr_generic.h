@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.4 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.5 2003/02/27 09:35:55 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,21 +25,44 @@
 
 #include "common.h"
 #include "KaxBlock.h"
+#include "KaxCluster.h"
 #include "KaxTracks.h"
 
-extern LIBMATROSKA_NAMESPACE::KaxTracks *kax_tracks;
-extern LIBMATROSKA_NAMESPACE::KaxTrackEntry *kax_last_entry;
+using namespace LIBMATROSKA_NAMESPACE;
+
+extern KaxTracks *kax_tracks;
+extern KaxTrackEntry *kax_last_entry;
 extern int track_number;
 
 struct packet_t;
 
+typedef class cluster_helper_c {
+private:
+  int          refcount;
+  KaxCluster  *cluster;
+  packet_t   **packet_q;
+  int          num_packets;
+public:
+  cluster_helper_c(KaxCluster *ncluster = NULL);
+  virtual ~cluster_helper_c();
+
+  KaxCluster *get_cluster();
+  int         add_ref();
+  void        add_packet(packet_t *packet);
+  u_int64_t   get_timecode();
+  packet_t   *get_packet(int num);
+  int         get_packet_count();
+  int         release();
+  KaxCluster &operator *();
+} cluster_helper_c;
+
 typedef class generic_packetizer_c {
- protected:
+protected:
   int serialno;
   void *private_data;
   int private_data_size;
- public:
-  LIBMATROSKA_NAMESPACE::KaxTrackEntry *track_entry;
+public:
+  KaxTrackEntry *track_entry;
 
   generic_packetizer_c();
   virtual ~generic_packetizer_c();
@@ -48,10 +71,12 @@ typedef class generic_packetizer_c {
   virtual void      set_header() = 0;
   virtual stamp_t   get_smallest_timestamp() = 0;
   virtual void      set_private_data(void *data, int size);
+  virtual void      added_packet_to_cluster(packet_t *packet,
+                                            cluster_helper_c *helper);
 } generic_packetizer_c;
  
 typedef class generic_reader_c {
- public:
+public:
   generic_reader_c();
   virtual ~generic_reader_c();
   virtual int       read() = 0;
@@ -61,15 +86,14 @@ typedef class generic_reader_c {
 } generic_reader_c;
 
 typedef struct packet_t {
-  LIBMATROSKA_NAMESPACE::DataBuffer    *data_buffer;
-  LIBMATROSKA_NAMESPACE::KaxBlockGroup *group;
-  LIBMATROSKA_NAMESPACE::KaxBlock      *block;
-  LIBMATROSKA_NAMESPACE::KaxCluster    *cluster;
-  char                                 *data;
-  int                                   length;
-  u_int64_t                             timestamp;
-  u_int64_t                             id, ref;
-  generic_packetizer_c                 *source;
+  DataBuffer          *data_buffer;
+  KaxBlockGroup       *group;
+  KaxBlock            *block;
+  KaxCluster          *cluster;
+  char                *data;
+  int                  length;
+  u_int64_t            timestamp, id, ref;
+  generic_packetizer_c *source;
 } packet_t;
 
 #endif  // __PR_GENERIC_H

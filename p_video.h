@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.3 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: p_video.h,v 1.4 2003/02/27 09:35:55 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,17 +25,18 @@
 #include "queue.h"
 
 class video_packetizer_c: public q_c {
- private:
-  char    codec[5];
-  double  fps;
-  int     width, height;
-  int     bpp;
-  int     max_frame_size;
-  int     packetno, frames_output;
-  char   *tempbuf;
-  int     avi_compat_mode;
-  range_t range;
- public:
+private:
+  char              codec[5];
+  double            fps;
+  int               width, height, bpp, max_frame_size, packetno;
+  int               frames_output;
+  char             *tempbuf;
+  int               avi_compat_mode;
+  range_t           range;
+  u_int64_t         last_id;
+  packet_t         *last_keyframe;
+  cluster_helper_c *last_helper;
+public:
   video_packetizer_c(void *, int, char *, double, int, int, int, int,
                      audio_sync_t *, range_t *nrange, int) throw (error_c);
   virtual ~video_packetizer_c();
@@ -43,6 +44,8 @@ class video_packetizer_c: public q_c {
   virtual int  process(char *buf, int size, int num_frames, int key,
                        int last_frame);
   virtual void set_header();
+  virtual void added_packet_to_cluster(packet_t *packet,
+                                       cluster_helper_c *helper);
 };
 
 #endif

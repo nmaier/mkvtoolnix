@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.16 2003/02/26 08:59:54 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.17 2003/02/27 09:35:55 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -85,17 +85,18 @@ typedef struct filelist_tag {
 char *outfile = NULL;
 filelist_t *input= NULL;
 int max_blocks_per_cluster = 65535;
-int max_ms_per_cluster = 5000;
+int max_ms_per_cluster = 1000;
 
 float video_fps = -1.0;
 
 packet_t **packet_queue = NULL;
 int num_packets_in_packetq = 0;
 
-KaxSegment     kax_segment;
-KaxTracks     *kax_tracks;
-KaxTrackEntry *kax_last_entry;
-int            track_number = 1;
+cluster_helper_c *cluster_helper = NULL;
+KaxSegment        kax_segment;
+KaxTracks        *kax_tracks;
+KaxTrackEntry    *kax_last_entry;
+int               track_number = 1;
 
 StdIOCallback *out;
 
@@ -409,7 +410,6 @@ static void parse_args(int argc, char **argv) {
   audio_sync_t     async;
   range_t          range;
   char            *fourcc, *s;
-//  vorbis_comment  *chapters;
 
   noaudio = 0;
   novideo = 0;
@@ -421,7 +421,6 @@ static void parse_args(int argc, char **argv) {
   async.displacement = 0;
   async.linear = 1.0;
   fourcc = NULL;
-//  chapters = NULL;
 
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
@@ -736,70 +735,52 @@ static void parse_args(int argc, char **argv) {
   }*/
 }
 
-static void add_packet_to_packetq(packet_t *pack) {
-  packet_queue = (packet_t **)realloc(packet_queue, sizeof(packet_t *) *
-                                      (num_packets_in_packetq + 1));
-  if (packet_queue == NULL)
-    die("realloc");
-  packet_queue[num_packets_in_packetq] = pack;
-  num_packets_in_packetq++;
-}
-
-static void clear_packetq() {
-  int i;
-  packet_t *p;
-
-  for (i = 0; i < num_packets_in_packetq; i++) {
-    p = packet_queue[i];
-    if (p != NULL) {
-      free(p->data);
-       delete p->data_buffer;
-      free(p);
-    }
-  }
-
-  num_packets_in_packetq = 0;
-  free(packet_queue);
-  packet_queue = NULL;
-}
-
 static void write_packetq() {
   KaxCues dummy_cues;
-  KaxCluster cluster;
   KaxBlockGroup *last_group = NULL;
-  int i;
+  KaxCluster *cluster;
+  int i, num_packets;
+  u_int64_t cluster_timecode;
 
-  KaxClusterTimecode &timecode = GetChild<KaxClusterTimecode>(cluster);
-  *(static_cast<EbmlUInteger *>(&timecode)) = packet_queue[0]->timestamp;
+  cluster = cluster_helper->get_cluster();
+  cluster_timecode = cluster_helper->get_timecode();
+  num_packets = cluster_helper->get_packet_count();
 
-  for (i = 0; i < num_packets_in_packetq; i++) {
+  for (i = 0; i < num_packets; i++) {
     packet_t *pack;
 
-    pack = packet_queue[i];
+    pack = cluster_helper->get_packet(i);
 
     if (last_group == NULL)
-      pack->group = &GetChild<KaxBlockGroup>(cluster);
+      pack->group = &GetChild<KaxBlockGroup>(*cluster);
     else
-      pack->group = &GetNextChild<KaxBlockGroup>(cluster, *last_group);
+      pack->group = &GetNextChild<KaxBlockGroup>(*cluster, *last_group);
     last_group = pack->group;
     pack->block = &GetChild<KaxBlock>(*pack->group);
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*pack->source->track_entry);
 
-    pack->block->AddFrame(track_entry,
-                          pack->timestamp - packet_queue[0]->timestamp,
+    pack->block->AddFrame(track_entry, pack->timestamp - cluster_timecode,
                           *pack->data_buffer);
+    pack->source->added_packet_to_cluster(pack, cluster_helper);
   }
 
-  cluster.Render(static_cast<StdIOCallback &>(*out), dummy_cues);
-  clear_packetq();
+  cluster->Render(static_cast<StdIOCallback &>(*out), dummy_cues);
+
+  cluster_helper->release();
 }
 
 static int write_packet(packet_t *pack) {
-  add_packet_to_packetq(pack);
+  u_int64_t timecode;
 
-  if (((pack->timestamp - packet_queue[0]->timestamp) > max_ms_per_cluster) ||
+  if (cluster_helper == NULL)
+    cluster_helper = new cluster_helper_c();
+
+  cluster_helper->add_packet(pack);
+  timecode = cluster_helper->get_timecode();
+
+  if (((pack->timestamp - timecode) > max_ms_per_cluster) ||
       (num_packets_in_packetq > max_blocks_per_cluster))
     write_packetq();
 

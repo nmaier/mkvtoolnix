@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.3 2003/02/25 14:24:43 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.4 2003/02/27 09:35:55 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -58,9 +58,10 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
   avi_compat_mode = 1;
+  last_id = 1;
+  last_keyframe = NULL;
   set_private_data(pr_data, pd_size);
   set_header();
-//  add_index(serialno);
 }
 
 void video_packetizer_c::set_header() {
@@ -77,7 +78,8 @@ void video_packetizer_c::set_header() {
         static_cast<KaxTrackEntry &>(*kax_last_entry));
   kax_last_entry = track_entry;
   
-  serialno = track_number++;
+  if (serialno == -1)
+    serialno = track_number++;
   KaxTrackNumber &tnumber =
     GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
   *(static_cast<EbmlUInteger *>(&tnumber)) = serialno;
@@ -123,7 +125,12 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
 
   if ((packetno >= range.start) &&
       ((range.end == 0) || (packetno < range.end))) {
-    add_packet(buf, size, (u_int64_t)(1000.0 * frames_output / fps), key);
+    if (key)
+      last_id = add_packet(buf, size,
+                           (u_int64_t)(1000.0 * frames_output / fps));
+    else
+      add_packet(buf, size, (u_int64_t)(1000.0 * frames_output / fps),
+                 last_id);
     frames_output += num_frames;
   }
   packetno++;
@@ -134,4 +141,15 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
 video_packetizer_c::~video_packetizer_c() {
   if (tempbuf != NULL)
     free(tempbuf);
+}
+
+void video_packetizer_c::added_packet_to_cluster(packet_t *packet,
+                                                 cluster_helper_c *helper) {
+  if (packet->ref == 0) {       // this is a keyframe
+    if (last_helper)
+      last_helper->release();
+    last_helper = helper;
+    last_keyframe = packet;
+    last_helper->add_ref();
+  }
 }
