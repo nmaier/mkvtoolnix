@@ -1,5 +1,4 @@
 # Add paths here for your other include files.
-TOP=c:/cygwin/usr/local/src/mkvtoolnix
 INCLUDES = -Ic:/cygwin/usr/local/src/libebml \
 	-Ic:/cygwin/usr/local/src/libmatroska \
 	-Ic:/cygwin/usr/local/include
@@ -38,51 +37,3 @@ CC = gcc.exe
 LD = g++.exe
 AR = ar.exe
 RANLIB = ranlib.exe
-
-#
-# Don't chagen anything below this line.
-#
-ifneq (,$(DEBUG))
-CFLAGS += -g -DDEBUG
-CXXFLAGS += -g -DDEBUG
-endif
-
-ifneq (,$(findstring aviclasses,$(AVILIB)))
-CXXFLAGS += -DHAVE_AVICLASSES=1
-AVICLASSES_INCLUDES = -I$(TOP)/aviclasses
-AVICLASSES_LIBDIRS = -L$(TOP)/aviclasses
-AVICLASSES_LIBRARIES = -laviclasses
-DEP_AVICLASSES = $(TOP)/aviclasses/libaviclasses.a
-endif
-
-ifneq (,$(findstring bzlib,$(COMPRESSION_LIBS)))
-CXXFLAGS += -DHAVE_BZLIB_H=1
-COMPRESSION_LIBRARIES = -lbz2
-endif
-
-ifneq (,$(findstring lzo,$(COMPRESSION_LIBS)))
-CXXFLAGS += -DHAVE_LZO1X_H=1
-COMPRESSION_LIBRARIES += -llzo1x
-endif
-
-ifneq (,$(WXWINDOWS))
-CXXFLAGS += -DHAVE_WXWINDOWS=1
-WXWINDOWS_LIBS = $(shell wx-config --libs)
-WXWINDOWS_CFLAGS = $(shell wx-config --cflags)
-WXWINDOWS_LDFLAGS = $(shell wx-config --ldflags)
-endif
-
-ifneq (,$(findstring yes,$(MTX_DLLS)))
-DEP_COMMON = $(TOP)/src/common/libmtxcommon.dll
-DEP_EBMLCOMMON = $(TOP)/src/common/libmtxebmlcommon.dll
-DEP_KAXCOMMON = $(TOP)/src/common/libmtxkaxcommon.dll
-CXXFLAGS += -DMTX_DLL
-else
-DEP_COMMON = $(TOP)/src/common/libmtxcommon.a
-DEP_EBMLCOMMON = $(TOP)/src/common/libmtxebmlcommon.a
-DEP_KAXCOMMON = $(TOP)/src/common/libmtxkaxcommon.a
-endif
-DEP_INPUT = $(TOP)/src/input/libmtxinput.a
-DEP_OUTPUT = $(TOP)/src/output/libmtxoutput.a
-DEP_AVILIB = $(TOP)/avilib-0.6.10/libavi.a
-DEP_AVI = $(DEP_AVILIB)  $(DEP_AVICLASSES)

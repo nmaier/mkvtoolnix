@@ -2,7 +2,52 @@
 # because I was fed up fighting against libtool
 
 # Put all the user changeable options into one file
-include Makefile.mingw.options
+include Makefile.options
+
+ifneq (,$(DEBUG))
+CFLAGS += -g -DDEBUG
+CXXFLAGS += -g -DDEBUG
+endif
+
+ifneq (,$(findstring aviclasses,$(AVILIB)))
+CXXFLAGS += -DHAVE_AVICLASSES=1
+AVICLASSES_INCLUDES = -Iaviclasses
+AVICLASSES_LIBDIRS = -Laviclasses
+AVICLASSES_LIBRARIES = -laviclasses
+DEP_AVICLASSES = aviclasses/libaviclasses.a
+endif
+
+ifneq (,$(findstring bzlib,$(COMPRESSION_LIBS)))
+CXXFLAGS += -DHAVE_BZLIB_H=1
+COMPRESSION_LIBRARIES = -lbz2
+endif
+
+ifneq (,$(findstring lzo,$(COMPRESSION_LIBS)))
+CXXFLAGS += -DHAVE_LZO1X_H=1
+COMPRESSION_LIBRARIES += -llzo1x
+endif
+
+ifneq (,$(WXWINDOWS))
+WXWINDOWS_LIBS = $(shell wx-config --libs)
+WXWINDOWS_LDFLAGS = $(shell wx-config --ldflags)
+CXXFLAGS += -DHAVE_WXWINDOWS=1 $(shell wx-config --cflags)
+endif
+
+ifneq (,$(findstring yes,$(MTX_DLLS)))
+DEP_COMMON = src/common/libmtxcommon.dll
+DEP_EBMLCOMMON = src/common/libmtxebmlcommon.dll
+DEP_KAXCOMMON = src/common/libmtxkaxcommon.dll
+CXXFLAGS_SRC_COMMON += -DMTX_DLL_EXPORT
+CXXFLAGS_NO_SRC_COMMON += -DMTX_DLL
+else
+DEP_COMMON = src/common/libmtxcommon.a
+DEP_EBMLCOMMON = src/common/libmtxebmlcommon.a
+DEP_KAXCOMMON = src/common/libmtxkaxcommon.a
+endif
+DEP_INPUT = src/input/libmtxinput.a
+DEP_OUTPUT = src/output/libmtxoutput.a
+DEP_AVILIB = avilib-0.6.10/libavi.a
+DEP_AVI = $(DEP_AVILIB)  $(DEP_AVICLASSES)
 
 #
 # System settings. Don't change anything below here.
@@ -13,6 +58,175 @@ else
 SUBDIRS = avilib-0.6.10 src
 endif
 
-all: subdirs
+APPLICATIONS=src/mkvmerge src/mkvinfo src/mkvextract src/base64tool src/mmg
 
-include Makefile.mingw.common
+all: config.h $(APPLICATIONS)
+
+SYSTEM_INCLUDES = -Iavilib-0.6.10 $(AVICLASSES_INCLUDES) \
+		-I. -Isrc -Isrc/common -Isrc/input -Isrc/output
+SYSTEM_LIBDIRS = -Lavilib-0.6.10 $(AVICLASSES_LIBDIRS) \
+		-Lsrc/common -Lsrc/input -Lsrc/output
+
+RUNAR = $(AR) rcu
+LINK = $(LD) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
+LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
+		-shared -Wl,--export-all
+CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+
+# Some general rules
+%.o: %.cpp
+	@if echo $@ | grep src/common > /dev/null 2>&1; then \
+		echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+	else \
+		echo $(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+	fi
+
+%.o: %.c
+	$(CCOMPILE) -c -o $@ $<
+
+clean:
+	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a */*/*.dll */*.exe
+
+depend:
+	@echo Calculating dependecies:
+	@rm -f .depend
+	@touch .depend
+	@for i in */*.c */*.cpp */*/*.cpp; do \
+		o="`echo $$i | sed -e 's/\.c$$/.o/' -e 's/\.cpp$$/.o/'`" ; \
+		echo '  ' $$i: $$o ; \
+		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
+		$$i | sed "s;^.*o: ;$${o}: ;" >> .depend ; \
+	done
+
+config.h: configure.in
+	@echo configure.in is newer than config.h. Re-run autogen.sh.
+	@false
+
+#
+# avilib-0.6.10
+#
+
+libavi_SOURCES = $(wildcard avilib-0.6.10/*.c)
+libavi_OBJECTS := $(patsubst %.c,%.o,$(libavi_SOURCES))
+
+avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libavi_OBJECTS)
+	$(RANLIB) $@
+
+#
+# aviclasses
+#
+
+libaviclasses_SOURCES = $(wildcard aviclasses/*.cpp)
+libaviclasses_OBJECTS := $(patsubst %.cpp,%.o,$(libaviclasses_SOURCES))
+
+aviclasses/libaviclasses.a: $(libaviclasses_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libaviclasses_OBJECTS)
+	$(RANLIB) $@
+
+#
+# src/common
+#
+
+libmtxcommon_SOURCES = $(wildcard src/common/*.cpp)
+libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
+
+src/common/libmtxcommon.dll: $(libmtxcommon_OBJECTS)
+	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
+		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml -lexpat
+
+src/common/libmtxcommon.a: $(libmtxcommon_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxcommon_OBJECTS)
+	$(RANLIB) $@
+
+#
+# src/input
+#
+
+libmtxinput_SOURCES = $(wildcard src/input/*.cpp)
+libmtxinput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxinput_SOURCES))
+
+src/input/libmtxinput.a: $(libmtxinput_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxinput_OBJECTS)
+	$(RANLIB) $@
+
+#
+# src/output
+#
+
+libmtxoutput_SOURCES = $(wildcard src/output/*.cpp)
+libmtxoutput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxoutput_SOURCES))
+
+src/output/libmtxoutput.a: $(libmtxoutput_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxoutput_OBJECTS)
+	$(RANLIB) $@
+
+#
+# src
+#
+
+mkvmerge_SOURCES = src/mkvmerge.cpp \
+			src/cluster_helper.cpp \
+			src/pr_generic.cpp
+mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
+mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
+		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI)
+mkvmerge_LDADD = -lmtxinput -lmtxoutput \
+		-lmtxcommon -lmatroska -lebml \
+		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) \
+		-lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
+		-lexpat -liconv
+
+mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
+mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
+mkvinfo_DEPENDENCIES += $(DEP_COMMON)
+mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
+		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
+		-liconv
+
+mkvextract_SOURCES = $(wildcard src/mkvextract*.cpp)
+mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
+mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB)
+mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -liconv
+
+base64tool_SOURCES = src/base64tool.cpp
+base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
+base64tool_DEPENDENCIES += $(DEP_COMMON)
+base64tool_LDADD = -lmtxcommon -liconv
+
+mmg_SOURCES = $(wildcard src/mmg/*.cpp)
+mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
+mmg_DEPENDENCIES += $(DEP_COMMON)
+mmg_LDADD = -lmtxcommon -lmatroska -lebml -liconv -lexpat \
+		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
+		-mwindows
+
+src/mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
+	$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
+
+src/mkvinfo: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
+	$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
+
+src/mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
+	$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
+
+src/base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
+	$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
+
+src/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
+	$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif

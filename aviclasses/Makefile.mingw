@@ -1,27 +1,5 @@
 # mkvtoolnix - Makefile for MinGW
 # because I was fed up fighting against libtool
 
-# Put all the user changeable options into one file
-include ../Makefile.mingw.options
-
-ifneq (,$(findstring aviclasses,$(AVILIB)))
-LIBRARIES = libaviclasses.a
-endif
-
-SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/aviclasses -I$(TOP)/src/common
-
-libaviclasses_SOURCES = AVIReadHandler.cpp \
-			AVIIndex.cpp \
-			list.cpp
-libaviclasses_OBJECTS := $(patsubst %.cpp,%.o,$(libaviclasses_SOURCES))
-
-ALL_SOURCES = $(libaviclasses_SOURCES)
-
-all: $(LIBRARIES)
-
-include ../Makefile.mingw.common
-
-libaviclasses.a: $(libaviclasses_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libaviclasses_OBJECTS)
-	$(RANLIB) $@
+all clean:
+	make -C .. $@

@@ -38,24 +38,6 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
   fi
   echo ''
 
-  if gcc -o ___getcwd contrib/getcwd.c ; then
-    REALCWD=`./___getcwd`
-    echo Automatically patching Makefile.options with the
-    echo real top dir: $REALCWD
-    if grep ^TOP Makefile.options > /dev/null 2> /dev/null; then
-      sed "s/^TOP.=/TOP = $REALCWD/" < Makefile.options > mf-tmp
-    else
-      echo "# TOP dir set automatically by autogen.sh" > mf-tmp
-      echo "TOP = $REALCWD" >> mf-tmp
-    fi
-    mv mf-tmp Makefile.options
-  else
-    echo Could not compile a test program for getting the
-    echo top level directory. Set it yourself in Makefile.options
-  fi
-  rm -f ___getcwd.*
-  echo ''
-
   echo 'Done with the preparations. Please review and edit the'
   echo 'settings in Makefile.options. Then run "make".'
 
