@@ -169,50 +169,78 @@ static bool firstframe = true;
 
 void video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf, int size,
                                                 vector<frame_t> &frames) {
-  DECODER *dec;
-  Bitstream bs;
-  int vop_type, frame_length, code;
+  bit_cursor_c bits(buf, size);
+  uint32_t marker, frame_type;
 
-  FILE *f;
-  if (firstframe) {
-    f = fopen("firstframe", "w");
-    fwrite(buf, size, 1, f);
-    fclose(f);
-    firstframe = false;
-  }
-  mxverb(2, "\nmpeg4_frames: begin search at 0x%08x with %d\n", buf, size);
-  frames.clear();
+  mxverb(2, "\nmpeg4_frames: start search in %d bytes\n", size);
+  while (!bits.eof()) {
+    if (!bits.peek_bits(32, marker))
+      return;
 
-  dec = (DECODER *)safemalloc(sizeof(DECODER));
-  memset(dec, 0, sizeof(DECODER));
-  dec->time_inc_resolution = 1;
-
-  BitstreamInit(&bs, buf, size);
-  vop_type = -1;
-
-  while (((BitstreamPos(&bs) >> 3) < bs.length) && (vop_type < 0)) {
-    code = BitstreamShowBits(&bs, 24);
-    if (code == 1) {            //it's a startcode
-      mxverb(2, "mpeg4_frames:   pos before BitstreamReadHeaders(): %d\n",
-             BitstreamPos(&bs));
-      vop_type = BitstreamReadHeaders(&bs, dec);
-      mxverb(2, "mpeg4_frames:   pos after BitstreamReadHeaders(): %d\n",
-             BitstreamPos(&bs));
+    if ((marker & 0xffffff00) != 0x00000100) {
+      bits.skip_bits(8);
       continue;
     }
-    BitstreamSkip(&bs, 8);
+
+    mxverb(2, "mpeg4_frames:   found start code at %d\n",
+           bits.get_bit_position() / 8);
+    bits.skip_bits(32);
+    if (marker == VOP_START_CODE) {
+      if (!bits.get_bits(2, frame_type))
+        return;
+      mxverb(2, "mpeg4_frames:   found '%c' frame here\n",
+             frame_type == 0 ? 'I' : frame_type == 1 ? 'P' :
+             frame_type == 2 ? 'B' : frame_type == 3 ? 'S' : '?');
+      bits.byte_align();
+    }
   }
 
-  if (vop_type < 0) {
-    // no frame found
-    mxverb(2, "mpeg4_frames:   no frame found\n");
-    return;
-  }
+//   DECODER *dec;
+//   Bitstream bs;
+//   int vop_type, frame_length, code;
 
-  mxverb(2, "mpeg4_frames:   vop_type %d (%c)\n", vop_type,
-         vop_type == 0 ? 'I' : vop_type == 1 ? 'P' :
-         vop_type == 2 ? 'B' : vop_type == 3 ? 'S' :
-         vop_type == 4 ? 'N' : '?');
+//   FILE *f;
+//   if (firstframe) {
+//     f = fopen("firstframe", "w");
+//     fwrite(buf, size, 1, f);
+//     fclose(f);
+//     firstframe = false;
+//   }
+//   mxverb(2, "\nmpeg4_frames: begin search at 0x%08x with %d\n", buf, size);
+//   frames.clear();
+
+//   dec = (DECODER *)safemalloc(sizeof(DECODER));
+//   memset(dec, 0, sizeof(DECODER));
+//   dec->time_inc_resolution = 1;
+
+//   BitstreamInit(&bs, buf, size);
+//   vop_type = -1;
+
+//   while (((BitstreamPos(&bs) >> 3) < bs.length) && (vop_type < 0)) {
+//     code = BitstreamShowBits(&bs, 24);
+//     if (code == 1) {            //it's a startcode
+//       mxverb(2, "mpeg4_frames:   pos before BitstreamReadHeaders(): %d\n",
+//              BitstreamPos(&bs));
+//       vop_type = BitstreamReadHeaders(&bs, dec);
+//       mxverb(2, "mpeg4_frames:   pos after BitstreamReadHeaders(): %d\n",
+//              BitstreamPos(&bs));
+//       continue;
+//     }
+//     BitstreamSkip(&bs, 8);
+//   }
+
+//   if (vop_type < 0) {
+//     // no frame found
+//     mxverb(2, "mpeg4_frames:   no frame found\n");
+//     return;
+//   }
+
+//   mxverb(2, "mpeg4_frames:   vop_type %d (%c)\n", vop_type,
+//          vop_type == 0 ? 'I' : vop_type == 1 ? 'P' :
+//          vop_type == 2 ? 'B' : vop_type == 3 ? 'S' :
+//          vop_type == 4 ? 'N' : '?');
+
+
 
 //   dec->frames++;
 
@@ -245,32 +273,32 @@ void video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf, int size,
 //   }
 
   // Let's look for next startcode, to find frame's length.
-  frame_length = bs.length;     // By default
+//   frame_length = bs.length;     // By default
 
-  BitstreamByteAlign(&bs);
-  while ((BitstreamPos(&bs) >> 3) < bs.length) {	
-    code = BitstreamShowBits(&bs, 24);
-    if (code == 1) {            // It's a startcode.
-      // Found the next frame.
-      BitstreamSkip(&bs, 24);
-      code <<= 8;
-      code |= BitstreamGetBits(&bs, 8);
-      if (code == VISOBJSEQ_STOP_CODE) {
-        // It's an endcode, let's include it in this frame.
-        frame_length = bs.length - (BitstreamPos(&bs) >> 3);
-      } else
-        frame_length = bs.length - (BitstreamPos(&bs) >> 3) - 4;
-      vop_type = BitstreamReadHeaders(&bs, dec);
-      mxverb(2, "mpeg4_parser:   found next frame at %d, frame_length: %d, "
-             "code: 0x%08x, vop_type: %d (%c)\n", BitstreamPos(&bs) >> 3,
-             frame_length, code, vop_type,
-             vop_type == 0 ? 'I' : vop_type == 1 ? 'P' :
-             vop_type == 2 ? 'B' : vop_type == 3 ? 'S' :
-             vop_type == 4 ? 'N' : '?');
-      break;
-    }
-    BitstreamSkip(&bs, 8);
-  }
+//   BitstreamByteAlign(&bs);
+//   while ((BitstreamPos(&bs) >> 3) < bs.length) {	
+//     code = BitstreamShowBits(&bs, 24);
+//     if (code == 1) {            // It's a startcode.
+//       // Found the next frame.
+//       BitstreamSkip(&bs, 24);
+//       code <<= 8;
+//       code |= BitstreamGetBits(&bs, 8);
+//       if (code == VISOBJSEQ_STOP_CODE) {
+//         // It's an endcode, let's include it in this frame.
+//         frame_length = bs.length - (BitstreamPos(&bs) >> 3);
+//       } else
+//         frame_length = bs.length - (BitstreamPos(&bs) >> 3) - 4;
+//       vop_type = BitstreamReadHeaders(&bs, dec);
+//       mxverb(2, "mpeg4_parser:   found next frame at %d, frame_length: %d, "
+//              "code: 0x%08x, vop_type: %d (%c)\n", BitstreamPos(&bs) >> 3,
+//              frame_length, code, vop_type,
+//              vop_type == 0 ? 'I' : vop_type == 1 ? 'P' :
+//              vop_type == 2 ? 'B' : vop_type == 3 ? 'S' :
+//              vop_type == 4 ? 'N' : '?');
+//       break;
+//     }
+//     BitstreamSkip(&bs, 8);
+//   }
 
-  safefree(dec);
+//   safefree(dec);
 }
