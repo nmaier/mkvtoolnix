@@ -164,8 +164,8 @@ kax_reader_c::~kax_reader_c() {
         delete tracks[i]->lzo1x_compressor;
       if (tracks[i]->kax_c_encodings != NULL)
         delete tracks[i]->kax_c_encodings;
-      if (tracks[i]->tag != NULL)
-        delete tracks[i]->tag;
+      if (tracks[i]->tags != NULL)
+        delete tracks[i]->tags;
       safefree(tracks[i]);
     }
 
@@ -768,9 +768,9 @@ kax_reader_c::handle_tags(mm_io_c *io,
           track = find_track_by_uid(uint32(*tuid));
           if (track != NULL) {
             found = true;
-            if (track->tag != NULL)
-              delete track->tag;
-            track->tag = tag;
+            if (track->tags == NULL)
+              track->tags = new KaxTags;
+            track->tags->PushElement(*tag);
           }
         }
       } else
@@ -1493,10 +1493,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
     if (nti->track_name == NULL)
       nti->track_name = safestrdup(t->track_name);
     nti->id = t->tnum;          // ID for this track.
-    if (t->tag != NULL) {
-      nti->tags = new KaxTags;
-      nti->tags->PushElement(*t->tag);
-    }
+    if (t->tags != NULL)
+      nti->tags = dynamic_cast<KaxTags *>(t->tags->Clone());
 
     if (hack_engaged(ENGAGE_FORCE_PASSTHROUGH_PACKETIZER)) {
       init_passthrough_packetizer(t);
@@ -1712,8 +1710,6 @@ kax_reader_c::create_packetizer(int64_t tid) {
         break;
     }
     set_packetizer_headers(t);
-    if (t->tag != NULL)
-      nti->tags->Remove(0);
     delete nti;
   }
 }
