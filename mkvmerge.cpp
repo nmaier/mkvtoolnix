@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.26 2003/04/11 10:19:39 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.27 2003/04/11 12:50:19 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -136,7 +136,7 @@ static void usage(void) {
     "  -v, --verbose            verbose status\n"
     "  -q, --quiet              suppress status output\n"
     "  -o, --output out         Write to the file 'out'.\n"
-    " --cluster-length <n[ms]>  Put at most n data blocks into each cluster.\n"
+    "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
     "                           If the number is postfixed with 'ms' then\n"
     "                           put at most n milliseconds of data into each\n"
     "                           cluster.\n"
