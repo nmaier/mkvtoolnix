@@ -123,6 +123,7 @@ job_run_dialog::start_next_job() {
   wxString tmp;
   wxArrayString *arg_list;
   wxFile *opt_file;
+  string arg_utf8;
   uint32_t i, ndx;
   const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
 
@@ -189,8 +190,10 @@ job_run_dialog::start_next_job() {
   for (i = 1; i < arg_list->Count(); i++) {
     if ((*arg_list)[i].Length() == 0)
       opt_file->Write(wxT("#EMPTY#"));
-    else
-      opt_file->Write((*arg_list)[i], wxConvUTF8);
+    else {
+      arg_utf8 = to_utf8((*arg_list)[i]);
+      opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
+    }
     opt_file->Write(wxT("\n"));
   }
   delete opt_file;

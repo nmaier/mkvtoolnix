@@ -1,5 +1,8 @@
 2004-06-13  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The job manager did not handle the conversion
+	of non-ASCII characters correctly.
+
 	* mmg: new feature: The action 'delete job' in the job manager
 	will also delete the file in the 'jobs' subdirectory.
 
