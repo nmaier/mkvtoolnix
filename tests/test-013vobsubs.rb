@@ -6,8 +6,7 @@ class T_013vobsubs < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp +
-         " data/ally1-short.idx")
+    merge("data/ally1-short.idx")
     return hash_tmp
   end
 end

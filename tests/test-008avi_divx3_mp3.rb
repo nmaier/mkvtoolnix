@@ -6,7 +6,7 @@ class T_008avi_divx3_mp3 < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/v.avi")
+    merge("data/v.avi")
     return hash_tmp
   end
 end

@@ -6,7 +6,7 @@ class T_007oggvorbis < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/v.ogg")
+    merge("data/v.ogg")
     return hash_tmp
   end
 end

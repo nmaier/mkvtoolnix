@@ -6,7 +6,7 @@ class T_011srt < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/vde.srt")
+    merge("data/vde.srt")
     return hash_tmp
   end
 end
