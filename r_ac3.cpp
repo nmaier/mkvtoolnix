@@ -2,7 +2,7 @@
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  r_avi.h
+  r_ac3.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
@@ -13,8 +13,8 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.2 2003/02/23 22:51:49 mosu Exp $
-    \brief AVI demultiplexer module
+    \version \$Id: r_ac3.cpp,v 1.3 2003/02/23 23:23:10 mosu Exp $
+    \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 

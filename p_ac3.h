@@ -2,7 +2,7 @@
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  p_mp3.h
+  p_ac3.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
@@ -13,8 +13,8 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.1 2003/02/23 22:51:49 mosu Exp $
-    \brief class definition for the MP3 output module
+    \version \$Id: p_ac3.h,v 1.2 2003/02/23 23:23:10 mosu Exp $
+    \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
  

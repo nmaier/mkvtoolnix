@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.10 2003/02/23 22:51:49 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.11 2003/02/23 23:23:10 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -50,8 +50,9 @@
 
 #include "common.h"
 #include "queue.h"
-#include "r_avi.h"
 #include "r_ac3.h"
+#include "r_avi.h"
+#include "r_mp3.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -100,20 +101,20 @@ StdIOCallback *out;
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
-   {"ogg", TYPEOGM, "general OGG media stream, Vorbis audio embedded in OGG"},
+//    {"ogg", TYPEOGM, "general OGG media stream, Vorbis audio embedded in OGG"},
    {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
-   {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
-   {"srt", TYPEWAV, "SRT text subtitles"},
-   {"   ", TYPEMICRODVD, "MicroDVD text subtitles"},
-   {"idx", TYPEVOBSUB, "VobSub subtitles"},
+//    {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
+//    {"srt", TYPEWAV, "SRT text subtitles"},
+//    {"   ", TYPEMICRODVD, "MicroDVD text subtitles"},
+//    {"idx", TYPEVOBSUB, "VobSub subtitles"},
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"ac3", TYPEAC3, "A/52 (aka AC3)"},
    {"output modules:", -1, ""},
-   {"   ", -1,      "Vorbis audio"},
+//    {"   ", -1,      "Vorbis audio"},
    {"   ", -1,      "Video (not MPEG1/2)"},
-   {"   ", -1,      "uncompressed PCM audio"},
-   {"   ", -1,      "text subtitles"},
-   {"   ", -1,      "VobSub subtitles"},
+//    {"   ", -1,      "uncompressed PCM audio"},
+//    {"   ", -1,      "text subtitles"},
+//    {"   ", -1,      "VobSub subtitles"},
    {"   ", -1,      "MP3 audio"},
    {"   ", -1,      "AC3 audio"},
    {NULL,  -1,      NULL}};
@@ -190,8 +191,8 @@ static int get_type(char *filename) {
 //     return TYPEOGM;
 //   else if (srt_reader_c::probe_file(f, size))
 //     return TYPESRT;
-//   else if (mp3_reader_c::probe_file(f, size))
-//     return TYPEMP3;
+  else if (mp3_reader_c::probe_file(f, size))
+    return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
     return TYPEAC3;
 //     else if (microdvd_reader_c::probe_file(f, size))
@@ -639,14 +640,13 @@ static void parse_args(int argc, char **argv) {
 //             file->reader = new srt_reader_c(file->name, &async, &range,
 //                                             comments);
 //             break;
-//           case TYPEMP3:
-//             if ((astreams != NULL) || (vstreams != NULL) ||
-//                 (tstreams != NULL))
-//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-//                       "MP3 files.\n");
-//             file->reader = new mp3_reader_c(file->name, &async, &range,
-//                                             comments);
-//             break;
+          case TYPEMP3:
+            if ((astreams != NULL) || (vstreams != NULL) ||
+                (tstreams != NULL))
+              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                      "MP3 files.\n");
+            file->reader = new mp3_reader_c(file->name, &async, &range);
+            break;
           case TYPEAC3:
             if ((astreams != NULL) || (vstreams != NULL) ||
                 (tstreams != NULL))

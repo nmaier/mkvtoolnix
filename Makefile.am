@@ -16,7 +16,8 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			pr_generic.h pr_generic.cpp \
 			queue.cpp queue.h \
 			r_ac3.cpp r_ac3.h \
-			r_avi.cpp r_avi.h
+			r_avi.cpp r_avi.h \
+			r_mp3.cpp r_mp3.h
 
 #mkvmerge_LDADD = @OGG_LIBS@ @VORBIS_LIBS@ @VORBISENC_LIBS@ @AVILIB_LIBS@ \
 #		@DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@
