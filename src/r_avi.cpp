@@ -444,7 +444,7 @@ void avi_reader_c::display_progress() {
     int myframes = frames;
     if (frames == (maxframes + 1))
       myframes--;
-    mxinfo("Progress: %d/%ld frames (%ld%%)\r",
+    mxinfo("progress: %d/%ld frames (%ld%%)\r",
            myframes, AVI_video_frames(avi),
            myframes * 100 / AVI_video_frames(avi));
   } else {

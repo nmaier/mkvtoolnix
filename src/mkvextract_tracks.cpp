@@ -1113,7 +1113,7 @@ bool extract_tracks(const char *file_name) {
         cluster = (KaxCluster *)l1;
 
         if (verbose == 0)
-          mxinfo("Progress: %d%%\r", (int)(in->getFilePointer() * 100 /
+          mxinfo("progress: %d%%\r", (int)(in->getFilePointer() * 100 /
                                            file_size));
 
         upper_lvl_el = 0;

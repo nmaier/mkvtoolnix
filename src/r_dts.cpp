@@ -113,7 +113,7 @@ int dts_reader_c::display_priority() {
 }
 
 void dts_reader_c::display_progress() {
-  mxinfo("Progress: %lld/%lld bytes (%d%%)\r",
+  mxinfo("progress: %lld/%lld bytes (%d%%)\r",
          bytes_processed, size,
          (int)(bytes_processed * 100L / size));
   fflush(stdout);

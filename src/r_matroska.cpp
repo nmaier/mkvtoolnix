@@ -1445,7 +1445,7 @@ void kax_reader_c::display_progress() {
   int i;
 
   if (segment_duration != 0.0) {
-    mxinfo("Progress: %.3fs/%.3fs (%d%%)\r",
+    mxinfo("progress: %.3fs/%.3fs (%d%%)\r",
            (last_timecode - first_timecode) / 1000.0, segment_duration,
            (int)((last_timecode - first_timecode) / 10 / segment_duration));
     return;

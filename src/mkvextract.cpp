@@ -318,7 +318,7 @@ int main(int argc, char **argv) {
     extract_tracks(input_file);
 
     if (verbose == 0)
-      mxinfo("Progress: 100%%\n");
+      mxinfo("progress: 100%%\n");
 
   } else if (mode == MODE_TAGS)
     extract_tags(input_file);
