@@ -20,23 +20,23 @@
 
 #include "common.h"
 #include "pr_generic.h"
+#include "smart_pointers.h"
 
 class ra_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
-  unsigned long samples_per_sec;
-  int channels, bits_per_sample;
+  int samples_per_sec, channels, bits_per_sample;
   uint32_t fourcc;
-  unsigned char *private_data;
+  autofree_ptr<unsigned char> private_data;
   int private_size;
   bool skip_to_keyframe, buffer_until_keyframe;
   vector<memory_c *> buffered_packets;
   vector<int64_t> buffered_timecodes, buffered_durations;
 
 public:
-  ra_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                  int nchannels, int nbits_per_sample, uint32_t nfourcc,
-                  unsigned char *nprivate_data, int nprivate_size,
+  ra_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
+                  int _channels, int _bits_per_sample, uint32_t _fourcc,
+                  unsigned char *_private_data, int _private_size,
                   track_info_c &_ti)
     throw (error_c);
   virtual ~ra_packetizer_c();

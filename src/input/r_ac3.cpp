@@ -28,11 +28,11 @@ extern "C" {
 #include "p_ac3.h"
 
 int
-ac3_reader_c::probe_file(mm_io_c *mm_io,
+ac3_reader_c::probe_file(mm_io_c *io,
                          int64_t size,
                          int64_t probe_size,
                          int num_headers) {
-  return (find_valid_headers(mm_io, probe_size, num_headers) != -1) ? 1 : 0;
+  return (find_valid_headers(io, probe_size, num_headers) != -1) ? 1 : 0;
 }
 
 ac3_reader_c::ac3_reader_c(track_info_c &_ti)
@@ -41,12 +41,12 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
   int pos;
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    size = mm_io->get_size();
+    io = new mm_file_io_c(ti.fname);
+    size = io->get_size();
     chunk = (unsigned char *)safemalloc(4096);
-    if (mm_io->read(chunk, 4096) != 4096)
+    if (io->read(chunk, 4096) != 4096)
       throw error_c("ac3_reader: Could not read 4096 bytes.");
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     throw error_c("ac3_reader: Could not open the source file.");
   }
@@ -61,7 +61,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
 }
 
 ac3_reader_c::~ac3_reader_c() {
-  delete mm_io;
+  delete io;
   safefree(chunk);
 }
 
@@ -80,7 +80,7 @@ ac3_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
 
-  nread = mm_io->read(chunk, 4096);
+  nread = io->read(chunk, 4096);
   if (nread <= 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
@@ -105,19 +105,19 @@ ac3_reader_c::identify() {
 }
 
 int
-ac3_reader_c::find_valid_headers(mm_io_c *mm_io,
+ac3_reader_c::find_valid_headers(mm_io_c *io,
                                  int64_t probe_range,
                                  int num_headers) {
   unsigned char *buf;
   int pos, nread;
 
   try {
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
     buf = (unsigned char *)safemalloc(probe_range);
-    nread = mm_io->read(buf, probe_range);
+    nread = io->read(buf, probe_range);
     pos = find_consecutive_ac3_headers(buf, nread, num_headers);
     safefree(buf);
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
     return pos;
   } catch (...) {
     return -1;

@@ -34,22 +34,23 @@
 
 using namespace libmatroska;
 
-flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
-                                     unsigned char *nheader,
-                                     int nl_header,
+flac_packetizer_c::flac_packetizer_c(generic_reader_c *_reader,
+                                     unsigned char *_header,
+                                     int _l_header,
                                      track_info_c &_ti)
-  throw (error_c): generic_packetizer_c(nreader, _ti) {
+  throw (error_c): generic_packetizer_c(_reader, _ti),
+  num_packets(0) {
   int result;
 
-  if ((nl_header < 4) || (nheader[0] != 'f') || (nheader [1] != 'L') ||
-      (nheader[2] != 'a') || (nheader[3] != 'C')) {
-    header = (unsigned char *)safemalloc(nl_header + 4);
-    memcpy(header, "fLaC", 4);
-    memcpy(&header[4], nheader, nl_header);
-    l_header = nl_header + 4;
+  if ((_l_header < 4) || (_header[0] != 'f') || (_header [1] != 'L') ||
+      (_header[2] != 'a') || (_header[3] != 'C')) {
+    header.set(safemalloc(_l_header + 4));
+    memcpy(header.get(), "fLaC", 4);
+    memcpy(header.get() + 4, _header, _l_header);
+    l_header = _l_header + 4;
   } else {
-    header = (unsigned char *)safememdup(nheader, nl_header);
-    l_header = nl_header;
+    header.set(safememdup(_header, _l_header));
+    l_header = _l_header;
   }
 
   result = flac_decode_headers(header, l_header, 1,
@@ -58,7 +59,6 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
     mxerror(_(FMT_TID "The FLAC headers could not be parsed: the stream info "
               "structure was not found.\n"),
             ti.fname.c_str(), (int64_t)ti.id);
-  num_packets = 0;
 
   set_track_type(track_audio);
   if (stream_info.min_blocksize == stream_info.max_blocksize)
@@ -73,7 +73,6 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
 }
 
 flac_packetizer_c::~flac_packetizer_c() {
-  safefree(header);
 }
 
 void
@@ -129,8 +128,8 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src) {
       (stream_info.channels != fsrc->stream_info.channels) ||
       (stream_info.bits_per_sample != fsrc->stream_info.bits_per_sample) ||
       (l_header != fsrc->l_header) ||
-      (header == NULL) || (fsrc->header == NULL) ||
-      memcmp(header, fsrc->header, l_header))
+      (NULL == header.get()) || (NULL == fsrc->header.get()) ||
+      memcmp(header.get(), fsrc->header.get(), l_header))
     return CAN_CONNECT_NO_PARAMETERS;
   return CAN_CONNECT_YES;
 }

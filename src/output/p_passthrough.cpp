@@ -25,13 +25,11 @@
 
 using namespace libmatroska;
 
-passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *nreader,
+passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *_reader,
                                                    track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  packets_processed = 0;
-  bytes_processed = 0;
-  sync_to_keyframe = false;
+  generic_packetizer_c(_reader, _ti),
+  packets_processed(0), bytes_processed(0), sync_to_keyframe(false) {
 }
 
 void

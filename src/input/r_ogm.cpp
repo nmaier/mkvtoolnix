@@ -184,9 +184,9 @@ fhe_error_cb(const FLAC__StreamDecoder *,
 }
 
 flac_header_extractor_c::flac_header_extractor_c(const string &file_name,
-                                                 int64_t nsid):
+                                                 int64_t _sid):
   metadata_parsed(false),
-  sid(nsid),
+  sid(_sid),
   num_packets(0),
   num_header_packets(0),
   done(false) {
@@ -270,17 +270,17 @@ flac_header_extractor_c::read_page() {
    Probes a file by simply comparing the first four bytes to 'OggS'.
 */
 int
-ogm_reader_c::probe_file(mm_io_c *mm_io,
+ogm_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(data, 4) != 4)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(data, 4) != 4)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -298,14 +298,14 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    mm_io->setFilePointer(0, seek_end);
-    file_size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_beginning);
+    io = new mm_file_io_c(ti.fname);
+    io->setFilePointer(0, seek_end);
+    file_size = io->getFilePointer();
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     throw error_c("ogm_reader: Could not open the source file.");
   }
-  if (!ogm_reader_c::probe_file(mm_io, file_size))
+  if (!ogm_reader_c::probe_file(io, file_size))
     throw error_c("ogm_reader: Source is not a valid OGG media file.");
 
   ogg_sync_init(&oy);
@@ -329,7 +329,7 @@ ogm_reader_c::~ogm_reader_c() {
     ogg_stream_clear(&dmx->os);
     delete dmx;
   }
-  delete mm_io;
+  delete io;
 }
 
 ogm_demuxer_t *
@@ -371,7 +371,7 @@ ogm_reader_c::read_page(ogg_page *og) {
       if (!buf)
         mxerror("ogm_reader: ogg_sync_buffer failed\n");
 
-      if ((nread = mm_io->read(buf, BUFFER_SIZE)) <= 0)
+      if ((nread = io->read(buf, BUFFER_SIZE)) <= 0)
         return 0;
 
       ogg_sync_wrote(&oy, nread);
@@ -949,7 +949,7 @@ ogm_reader_c::read_headers() {
     }
   }
 
-  mm_io->setFilePointer(0, seek_beginning);
+  io->setFilePointer(0, seek_beginning);
   ogg_sync_clear(&oy);
   ogg_sync_init(&oy);
 
@@ -994,7 +994,7 @@ ogm_reader_c::read(generic_packetizer_c *,
 
 int
 ogm_reader_c::get_progress() {
-  return (int)(mm_io->getFilePointer() * 100 / file_size);
+  return (int)(io->getFilePointer() * 100 / file_size);
 }
 
 void

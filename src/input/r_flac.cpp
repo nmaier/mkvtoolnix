@@ -94,17 +94,17 @@ flac_eof_cb(const FLAC__SeekableStreamDecoder *,
 }
 
 int
-flac_reader_c::probe_file(mm_io_c *mm_io,
+flac_reader_c::probe_file(mm_io_c *io,
                           int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(data, 4) != 4)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(data, 4) != 4)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -411,17 +411,17 @@ flac_reader_c::identify() {
 #else  // HAVE_FLAC_FORMAT_H
 
 int
-flac_reader_c::probe_file(mm_io_c *mm_io,
+flac_reader_c::probe_file(mm_io_c *io,
                           int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(data, 4) != 4)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(data, 4) != 4)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }

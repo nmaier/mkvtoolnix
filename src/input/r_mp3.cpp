@@ -25,11 +25,11 @@
 #include "p_mp3.h"
 
 int
-mp3_reader_c::probe_file(mm_io_c *mm_io,
+mp3_reader_c::probe_file(mm_io_c *io,
                          int64_t,
                          int64_t probe_range,
                          int num_headers) {
-  return (find_valid_headers(mm_io, probe_range, num_headers) != -1) ? 1 : 0;
+  return (find_valid_headers(io, probe_range, num_headers) != -1) ? 1 : 0;
 }
 
 mp3_reader_c::mp3_reader_c(track_info_c &_ti)
@@ -39,16 +39,16 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
   unsigned char buf[16384];
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    size = mm_io->get_size();
+    io = new mm_file_io_c(ti.fname);
+    size = io->get_size();
 
-    pos = find_valid_headers(mm_io, 2 * 1024 * 1024, 5);
+    pos = find_valid_headers(io, 2 * 1024 * 1024, 5);
     if (pos < 0)
       throw error_c("Could not find a valid MP3 packet.");
-    mm_io->setFilePointer(pos, seek_beginning);
-    mm_io->read(buf, 4);
+    io->setFilePointer(pos, seek_beginning);
+    io->read(buf, 4);
     decode_mp3_header(buf, &mp3header);
-    mm_io->setFilePointer(pos, seek_beginning);
+    io->setFilePointer(pos, seek_beginning);
     if (verbose)
       mxinfo(FMT_FN "Using the MP2/MP3 demultiplexer.\n", ti.fname.c_str());
     if ((pos > 0) && verbose)
@@ -63,7 +63,7 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
 }
 
 mp3_reader_c::~mp3_reader_c() {
-  delete mm_io;
+  delete io;
 }
 
 void
@@ -81,7 +81,7 @@ mp3_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
 
-  nread = mm_io->read(chunk, 16384);
+  nread = io->read(chunk, 16384);
   if (nread <= 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
@@ -108,19 +108,19 @@ mp3_reader_c::identify() {
 }
 
 int
-mp3_reader_c::find_valid_headers(mm_io_c *mm_io,
+mp3_reader_c::find_valid_headers(mm_io_c *io,
                                  int64_t probe_range,
                                  int num_headers) {
   unsigned char *buf;
   int pos, nread;
 
   try {
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
     buf = (unsigned char *)safemalloc(probe_range);
-    nread = mm_io->read(buf, probe_range);
+    nread = io->read(buf, probe_range);
     pos = find_consecutive_mp3_headers(buf, nread, num_headers);
     safefree(buf);
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
     return pos;
   } catch (...) {
     return -1;

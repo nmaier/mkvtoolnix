@@ -24,17 +24,17 @@
 
 using namespace libmatroska;
 
-wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *nreader,
+wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *_reader,
                                            wavpack_meta_t &meta,
                                            track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  sample_rate = meta.sample_rate;
-  channels = meta.channel_count;
-  bits_per_sample = meta.bits_per_sample;
-  samples_per_block = meta.samples_per_block;
+  generic_packetizer_c(_reader, _ti),
+  channels(meta.channel_count), sample_rate(meta.sample_rate),
+  bits_per_sample(meta.bits_per_sample),
+  samples_per_block(meta.samples_per_block),
+  samples_output(0) {
+
   has_correction = meta.has_correction && (htrack_max_add_block_ids != 0);
-  samples_output = 0;
 
   set_track_type(track_audio);
 }

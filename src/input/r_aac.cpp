@@ -26,7 +26,7 @@
 #define PROBESIZE 8192
 
 int
-aac_reader_c::probe_file(mm_io_c *mm_io,
+aac_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   unsigned char buf[PROBESIZE];
   aac_header_t aacheader;
@@ -35,10 +35,10 @@ aac_reader_c::probe_file(mm_io_c *mm_io,
   if (size < PROBESIZE)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, PROBESIZE) != PROBESIZE)
-      mm_io->setFilePointer(0, seek_beginning);
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(buf, PROBESIZE) != PROBESIZE)
+      io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -71,12 +71,12 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
   int adif, i;
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    size = mm_io->get_size();
+    io = new mm_file_io_c(ti.fname);
+    size = io->get_size();
     chunk = (unsigned char *)safemalloc(INITCHUNKSIZE);
-    if (mm_io->read(chunk, INITCHUNKSIZE) != INITCHUNKSIZE)
+    if (io->read(chunk, INITCHUNKSIZE) != INITCHUNKSIZE)
       throw error_c("aac_reader: Could not read " SINITCHUNKSIZE " bytes.");
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
     if (parse_aac_adif_header(chunk, INITCHUNKSIZE, &aacheader)) {
       throw error_c("aac_reader: ADIF header files are not supported.");
       adif = 1;
@@ -104,7 +104,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
 }
 
 aac_reader_c::~aac_reader_c() {
-  delete mm_io;
+  delete io;
   safefree(chunk);
 }
 
@@ -165,7 +165,7 @@ aac_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
 
-  nread = mm_io->read(chunk, 4096);
+  nread = io->read(chunk, 4096);
   if (nread <= 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;

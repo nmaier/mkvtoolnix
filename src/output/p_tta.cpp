@@ -25,17 +25,15 @@
 
 using namespace libmatroska;
 
-tta_packetizer_c::tta_packetizer_c(generic_reader_c *nreader,
-                                   int nchannels,
-                                   int nbits_per_sample,
-                                   int nsample_rate,
+tta_packetizer_c::tta_packetizer_c(generic_reader_c *_reader,
+                                   int _channels,
+                                   int _bits_per_sample,
+                                   int _sample_rate,
                                    track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  sample_rate = nsample_rate;
-  channels = nchannels;
-  bits_per_sample = nbits_per_sample;
-  samples_output = 0;
+  generic_packetizer_c(_reader, _ti),
+  channels(_channels), bits_per_sample(_bits_per_sample),
+  sample_rate(_sample_rate), samples_output(0) {
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1000000000.0 * ti.async.linear *

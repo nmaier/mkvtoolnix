@@ -21,19 +21,20 @@
 #include "common.h"
 #include "pr_generic.h"
 #include "pr_generic.h"
+#include "smart_pointers.h"
 
 class textsubs_packetizer_c: public generic_packetizer_c {
 private:
   int packetno, cc_utf8;
-  void *global_data;
+  autofree_ptr<unsigned char> global_data;
   int global_size;
-  char *codec_id;
+  string codec_id;
   bool recode;
 
 public:
-  textsubs_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
-                        const void *nglobal_data, int nglobal_size,
-                        bool nrecode, bool is_utf8, track_info_c &_ti)
+  textsubs_packetizer_c(generic_reader_c *_reader, const char *_codec_id,
+                        const void *_global_data, int _global_size,
+                        bool _recode, bool is_utf8, track_info_c &_ti)
     throw (error_c);
   virtual ~textsubs_packetizer_c();
 

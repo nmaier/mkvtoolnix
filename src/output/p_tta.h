@@ -27,8 +27,8 @@ private:
   int64_t samples_output;
 
 public:
-  tta_packetizer_c(generic_reader_c *nreader, int nchannels,
-                   int nbits_per_sample, int nsample_rate, track_info_c &_ti)
+  tta_packetizer_c(generic_reader_c *_reader, int _channels,
+                   int _bits_per_sample, int _sample_rate, track_info_c &_ti)
     throw (error_c);
   virtual ~tta_packetizer_c();
 

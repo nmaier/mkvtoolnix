@@ -28,7 +28,7 @@
 
 class wavpack_reader_c: public generic_reader_c {
 private:
-  mm_io_c *mm_io,*mm_io_correc;
+  mm_io_c *io,*io_correc;
   int64_t size;
   wavpack_header_t header, header_correc;
   wavpack_meta_t meta, meta_correc;
@@ -42,7 +42,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 };
 
 #endif // __R_WAVPACK_H

@@ -24,16 +24,15 @@
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:
-  int packetno, bps, channels, bits_per_sample, packet_size;
+  int packetno, bps, samples_per_sec, channels, bits_per_sample, packet_size;
   int64_t bytes_output, skip_bytes;
-  unsigned long samples_per_sec;
   bool big_endian;
   byte_buffer_c buffer;
 
 public:
-  pcm_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, int nbits_per_sample, track_info_c &_ti,
-                   bool nbig_endian = false)
+  pcm_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
+                   int _channels, int _bits_per_sample, track_info_c &_ti,
+                   bool _big_endian = false)
     throw (error_c);
   virtual ~pcm_packetizer_c();
 

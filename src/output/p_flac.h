@@ -26,17 +26,18 @@
 
 #include "common.h"
 #include "pr_generic.h"
+#include "smart_pointers.h"
 
 class flac_packetizer_c: public generic_packetizer_c {
 private:
-  unsigned char *header;
+  autofree_ptr<unsigned char> header;
   int l_header;
   int64_t num_packets;
   FLAC__StreamMetadata_StreamInfo stream_info;
 
 public:
-  flac_packetizer_c(generic_reader_c *nreader,
-                    unsigned char *nheader, int nl_header,
+  flac_packetizer_c(generic_reader_c *_reader,
+                    unsigned char *_header, int _l_header,
                     track_info_c &_ti) throw (error_c);
   virtual ~flac_packetizer_c();
 

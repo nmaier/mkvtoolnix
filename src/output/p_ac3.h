@@ -26,13 +26,12 @@
 class ac3_packetizer_c: public generic_packetizer_c {
 protected:
   int64_t bytes_output, packetno;
-  unsigned long samples_per_sec;
-  int channels, bsid;
+  int samples_per_sec, channels, bsid;
   byte_buffer_c byte_buffer;
 
 public:
-  ac3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, int nbsid, track_info_c &_ti)
+  ac3_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
+                   int _channels, int _bsid, track_info_c &_ti)
     throw (error_c);
   virtual ~ac3_packetizer_c();
 

@@ -80,7 +80,7 @@ public:
   virtual void add_available_track_ids();
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 
 protected:
   virtual void parse_headers();

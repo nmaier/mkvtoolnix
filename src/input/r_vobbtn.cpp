@@ -31,13 +31,13 @@ using namespace std;
 #define PFX "vobbtn_reader: "
 
 int
-vobbtn_reader_c::probe_file(mm_io_c *mm_io,
+vobbtn_reader_c::probe_file(mm_io_c *io,
                             int64_t size) {
   unsigned char chunk[23];
 
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(chunk, 23) != 23)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(chunk, 23) != 23)
       return 0;
     if (strncasecmp((char*)chunk, "butonDVD", 8))
       return 0;
@@ -47,7 +47,7 @@ vobbtn_reader_c::probe_file(mm_io_c *mm_io,
     if ((chunk[0x14] != 0x03) || (chunk[0x15] != 0xD4) ||
         (chunk[0x16] != 0x00))
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }

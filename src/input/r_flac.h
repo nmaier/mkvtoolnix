@@ -57,7 +57,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 
   virtual FLAC__SeekableStreamDecoderReadStatus
   read_cb(FLAC__byte buffer[], unsigned *bytes);

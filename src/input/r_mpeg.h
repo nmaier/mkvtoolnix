@@ -30,7 +30,7 @@ class track_info_c;
 
 class mpeg_es_reader_c: public generic_reader_c {
 private:
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int64_t bytes_processed, size;
 
   int version, width, height, dwidth, dheight;
@@ -48,7 +48,7 @@ public:
   static bool read_frame(M2VParser &parser, mm_io_c &in,
                          int64_t max_size = -1);
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 };
 
 struct mpeg_ps_track_t {
@@ -84,7 +84,7 @@ typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int64_t bytes_processed, size, duration;
 
   int id2idx[512];
@@ -113,7 +113,7 @@ public:
 
   virtual void flush_packetizers();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 };
 
 #endif // __R_MPEG_H

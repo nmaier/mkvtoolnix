@@ -30,7 +30,7 @@
 class dts_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int64_t bytes_processed, size;
   dts_header_t dtsheader;
 
@@ -43,7 +43,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 };
 
 #endif // __R_DTS_H

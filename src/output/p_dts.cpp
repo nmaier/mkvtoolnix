@@ -27,23 +27,15 @@
 
 using namespace libmatroska;
 
-dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
+dts_packetizer_c::dts_packetizer_c(generic_reader_c *_reader,
                                    const dts_header_t &dtsheader,
                                    track_info_c &_ti,
                                    bool _get_first_header_later)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  //packetno = 0;
-  samples_written = 0;
-  bytes_written = 0;
-
-  packet_buffer = NULL;
-  buffer_size = 0;
-  skipping_is_normal = false;
-
-  first_header = dtsheader;
-  last_header = dtsheader;
-  get_first_header_later = _get_first_header_later;
+  generic_packetizer_c(_reader, _ti),
+  samples_written(0), bytes_written(0), packet_buffer(NULL), buffer_size(0),
+  get_first_header_later(_get_first_header_later),
+  first_header(dtsheader), last_header(dtsheader), skipping_is_normal(false) {
 
   set_track_type(track_audio);
 }

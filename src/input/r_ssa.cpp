@@ -28,16 +28,16 @@
 using namespace std;
 
 int
-ssa_reader_c::probe_file(mm_text_io_c *mm_io,
+ssa_reader_c::probe_file(mm_text_io_c *io,
                          int64_t size) {
   string line;
 
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    line = mm_io->getline();
+    io->setFilePointer(0, seek_beginning);
+    line = io->getline();
     if (strcasecmp(line.c_str(), "[script info]"))
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -57,9 +57,9 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   section = 0;
 
   try {
-    mm_io = new mm_text_io_c(new mm_file_io_c(ti.fname));
+    io = new mm_text_io_c(new mm_file_io_c(ti.fname));
 
-    if (!ssa_reader_c::probe_file(mm_io, 0))
+    if (!ssa_reader_c::probe_file(io, 0))
       throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
 
     sub_charset_found = false;
@@ -71,22 +71,22 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
       }
 
     if (!sub_charset_found) {
-      if (mm_io->get_byte_order() != BO_NONE)
+      if (io->get_byte_order() != BO_NONE)
         cc_utf8 = utf8_init("UTF-8");
       else
         cc_utf8 = utf8_init(ti.sub_charset);
     }
 
     ti.id = 0;                 // ID for this track.
-    global = mm_io->getline();  // [Script Info]
-    while (!mm_io->eof()) {
-      old_pos = mm_io->getFilePointer();
-      line = mm_io->getline();
+    global = io->getline();  // [Script Info]
+    while (!io->eof()) {
+      old_pos = io->getFilePointer();
+      line = io->getline();
 
       if (!strncasecmp(line.c_str(), "Dialogue: ", strlen("Dialogue: "))) {
         // End of global data - restore file position to just before this
         // line end bail out.
-        mm_io->setFilePointer(old_pos);
+        io->setFilePointer(old_pos);
         break;
       }
 
@@ -120,7 +120,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
 }
 
 ssa_reader_c::~ssa_reader_c() {
-  delete mm_io;
+  delete io;
 }
 
 void
@@ -204,7 +204,7 @@ ssa_reader_c::parse_file() {
   num = 0;
 
   do {
-    line = mm_io->getline();
+    line = io->getline();
     orig_line = line;
     if (strncasecmp(line.c_str(), "Dialogue: ", strlen("Dialogue: ")))
       continue;
@@ -251,7 +251,7 @@ ssa_reader_c::parse_file() {
 
     subs.add(start, end, line);
     num++;
-  } while (!mm_io->eof());
+  } while (!io->eof());
 
   subs.sort();
 }

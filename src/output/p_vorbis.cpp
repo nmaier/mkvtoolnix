@@ -32,7 +32,7 @@
 
 using namespace libmatroska;
 
-vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
+vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *_reader,
                                          unsigned char *d_header,
                                          int l_header,
                                          unsigned char *d_comments,
@@ -41,14 +41,12 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
                                          int l_codecsetup,
                                          track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
+  generic_packetizer_c(_reader, _ti),
+  last_bs(0), samples(0), last_samples_sum(0), last_timecode(0),
+  timecode_offset(0) {
+
   int i;
 
-  last_bs = 0;
-  samples = 0;
-  timecode_offset = 0;
-  last_samples_sum = 0;
-  last_timecode = 0;
   memset(headers, 0, 3 * sizeof(ogg_packet));
   headers[0].packet = (unsigned char *)safememdup(d_header, l_header);
   headers[1].packet = (unsigned char *)safememdup(d_comments, l_comments);

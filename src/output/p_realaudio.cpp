@@ -24,24 +24,23 @@
 
 using namespace libmatroska;
 
-ra_packetizer_c::ra_packetizer_c(generic_reader_c *nreader,
-                                 unsigned long nsamples_per_sec,
-                                 int nchannels,
-                                 int nbits_per_sample,
-                                 uint32_t nfourcc,
-                                 unsigned char *nprivate_data,
-                                 int nprivate_size,
+ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
+                                 int _samples_per_sec,
+                                 int _channels,
+                                 int _bits_per_sample,
+                                 uint32_t _fourcc,
+                                 unsigned char *_private_data,
+                                 int _private_size,
                                  track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-  bits_per_sample = nbits_per_sample;
-  fourcc = nfourcc;
-  private_data = (unsigned char *)safememdup(nprivate_data, nprivate_size);
-  private_size = nprivate_size;
-  skip_to_keyframe = false;
-  buffer_until_keyframe = false;
+  generic_packetizer_c(_reader, _ti),
+  bytes_output(0), packetno(0),
+  samples_per_sec(_samples_per_sec), channels(_channels),
+  bits_per_sample(_bits_per_sample), fourcc(_fourcc),
+  private_data(safememdup(_private_data, _private_size)),
+  private_size(_private_size), skip_to_keyframe(false),
+  buffer_until_keyframe(false) {
+
   if (initial_displacement < 0) {
     mxwarn("Track %lld/'%s': Negative '--sync' is not supported for "
            "RealAudio tracks.\n", ti.id, ti.fname.c_str());

@@ -25,17 +25,18 @@
 
 using namespace libmatroska;
 
-textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
-                                             const char *ncodec_id,
-                                             const void *nglobal_data,
-                                             int nglobal_size,
-                                             bool nrecode,
+textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *_reader,
+                                             const char *_codec_id,
+                                             const void *_global_data,
+                                             int _global_size,
+                                             bool _recode,
                                              bool is_utf8,
                                              track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  packetno = 0;
-  recode = nrecode;
+  generic_packetizer_c(_reader, _ti),
+  packetno(0), cc_utf8(0), global_data(safememdup(_global_data, _global_size)),
+  global_size(_global_size), codec_id(_codec_id), recode(_recode) {
+
   if (recode) {
     if ((ti.sub_charset != "") || !is_utf8)
       cc_utf8 = utf8_init(ti.sub_charset);
@@ -43,22 +44,16 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
       cc_utf8 = utf8_init("UTF-8");
   }
 
-  global_size = nglobal_size;
-  global_data = safememdup(nglobal_data, global_size);
-  codec_id = safestrdup(ncodec_id);
-
   set_track_type(track_subtitle);
 }
 
 textsubs_packetizer_c::~textsubs_packetizer_c() {
-  safefree(global_data);
-  safefree(codec_id);
 }
 
 void
 textsubs_packetizer_c::set_headers() {
   set_codec_id(codec_id);
-  if (global_data != NULL)
+  if (NULL != global_data.get())
     set_codec_private((unsigned char *)global_data, global_size);
 
   generic_packetizer_c::set_headers();

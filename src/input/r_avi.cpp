@@ -49,17 +49,17 @@ extern "C" {
 // {{{ FUNCTION avi_reader_c::probe_file
 
 int
-avi_reader_c::probe_file(mm_io_c *mm_io,
+avi_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   unsigned char data[12];
 
   if (size < 12)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(data, 12) != 12)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(data, 12) != 12)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }

@@ -27,8 +27,9 @@ class vobbtn_packetizer_c: public generic_packetizer_c {
 protected:
   int64_t previous_timecode;
   int width, height;
+
 public:
-  vobbtn_packetizer_c(generic_reader_c *nreader, int nwidth, int nheight,
+  vobbtn_packetizer_c(generic_reader_c *_reader, int _width, int _height,
                       track_info_c &_ti) throw (error_c);
   virtual ~vobbtn_packetizer_c();
 

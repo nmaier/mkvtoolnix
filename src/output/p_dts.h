@@ -27,9 +27,8 @@ class dts_packetizer_c: public generic_packetizer_c {
 private:
   int64_t samples_written, bytes_written;
 
-  int buffer_size;
-
   unsigned char *packet_buffer;
+  int buffer_size;
 
   bool get_first_header_later;
   dts_header_t first_header;
@@ -38,7 +37,7 @@ private:
 public:
   bool skipping_is_normal;
 
-  dts_packetizer_c(generic_reader_c *nreader, const dts_header_t &dts_header,
+  dts_packetizer_c(generic_reader_c *_reader, const dts_header_t &dts_header,
                    track_info_c &_ti, bool _get_first_header_later = false)
     throw (error_c);
   virtual ~dts_packetizer_c();

@@ -29,7 +29,7 @@
 class ac3_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int64_t bytes_processed, size;
   ac3_header_t ac3header;
 
@@ -42,11 +42,11 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *mm_io, int64_t size, int64_t probe_size,
+  static int probe_file(mm_io_c *io, int64_t size, int64_t probe_size,
                         int num_headers);
 
 protected:
-  static int find_valid_headers(mm_io_c *mm_io, int64_t probe_range,
+  static int find_valid_headers(mm_io_c *io, int64_t probe_range,
                                 int num_headers);
 };
 

@@ -43,17 +43,17 @@ extern "C" {
 }
 
 int
-wav_reader_c::probe_file(mm_io_c *mm_io,
+wav_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   wave_header wheader;
 
   if (size < sizeof(wave_header))
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read((char *)&wheader, sizeof(wheader)) != sizeof(wheader))
+    io->setFilePointer(0, seek_beginning);
+    if (io->read((char *)&wheader, sizeof(wheader)) != sizeof(wheader))
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -72,16 +72,16 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
   int64_t size;
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_beginning);
+    io = new mm_file_io_c(ti.fname);
+    io->setFilePointer(0, seek_end);
+    size = io->getFilePointer();
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     throw error_c("wav_reader: Could not open the source file.");
   }
-  if (!wav_reader_c::probe_file(mm_io, size))
+  if (!wav_reader_c::probe_file(io, size))
     throw error_c("wav_reader: Source is not a valid WAVE file.");
-  if (mm_io->read(&wheader, sizeof(wheader)) != sizeof(wheader))
+  if (io->read(&wheader, sizeof(wheader)) != sizeof(wheader))
     throw error_c("wav_reader: could not read WAVE header.");
   bps = get_uint16_le(&wheader.common.wChannels) *
     get_uint16_le(&wheader.common.wBitsPerSample) *
@@ -94,11 +94,11 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
   while (1) {
     if (!strncmp((char *)wheader.data.id, "data", 4))
       break;
-    if ((mm_io->getFilePointer() + get_uint32_le(&wheader.data.len) +
+    if ((io->getFilePointer() + get_uint32_le(&wheader.data.len) +
          sizeof(struct chunk_struct)) > size)
       throw error_c("wav_reader: No 'data' chunk found.");
-    mm_io->setFilePointer(get_uint32_le(&wheader.data.len), seek_current);
-    if (mm_io->read(&wheader.data, sizeof(struct chunk_struct)) !=
+    io->setFilePointer(get_uint32_le(&wheader.data.len), seek_current);
+    if (io->read(&wheader.data, sizeof(struct chunk_struct)) !=
         sizeof(struct chunk_struct))
       throw error_c("wav_reader: No 'data' chunk found.");
   }
@@ -112,9 +112,9 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
     unsigned short buf[2][max_dts_packet_size/2];
     int cur_buf = 0;
 
-    mm_io->save_pos();
-    long rlen = mm_io->read(obuf, max_dts_packet_size);
-    mm_io->restore_pos();
+    io->save_pos();
+    long rlen = io->read(obuf, max_dts_packet_size);
+    io->restore_pos();
 
     for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
       memcpy(buf[cur_buf], obuf, rlen);
@@ -144,7 +144,7 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
 }
 
 wav_reader_c::~wav_reader_c() {
-  delete mm_io;
+  delete io;
   safefree(chunk);
 }
 
@@ -183,7 +183,7 @@ wav_reader_c::read(generic_packetizer_c *,
   if (!is_dts) {
     int nread;
 
-    nread = mm_io->read(chunk, bps);
+    nread = io->read(chunk, bps);
     if (nread <= 0) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
@@ -197,7 +197,7 @@ wav_reader_c::read(generic_packetizer_c *,
     if (nread != bps) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
-    } else if (mm_io->eof())
+    } else if (io->eof())
       return FILE_STATUS_DONE;
     else
       return FILE_STATUS_MOREDATA;
@@ -206,7 +206,7 @@ wav_reader_c::read(generic_packetizer_c *,
   if (is_dts) {
     unsigned short buf[2][max_dts_packet_size/2];
     int cur_buf = 0;
-    long rlen = mm_io->read(buf[cur_buf], max_dts_packet_size);
+    long rlen = io->read(buf[cur_buf], max_dts_packet_size);
 
     if (rlen <= 0) {
       PTZR0->flush();

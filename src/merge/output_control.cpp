@@ -277,22 +277,22 @@ sighandler(int signum) {
 */
 void
 get_file_type(filelist_t &file) {
-  mm_io_c *mm_io;
-  mm_text_io_c *mm_text_io;
+  mm_io_c *io;
+  mm_text_io_c *text_io;
   file_type_e type;
   int64_t size;
   int i;
   const int probe_sizes[] = {16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024,
                              256 * 1024, 0};
 
-  mm_io = NULL;
-  mm_text_io = NULL;
+  io = NULL;
+  text_io = NULL;
   size = 0;
   try {
-    mm_io = new mm_file_io_c(file.name);
-    mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_current);
+    io = new mm_file_io_c(file.name);
+    io->setFilePointer(0, seek_end);
+    size = io->getFilePointer();
+    io->setFilePointer(0, seek_current);
   } catch (...) {
     mxerror(_("The source file '%s' could not be opened successfully, or "
               "retrieving its size by seeking to the end did not work.\n"),
@@ -300,72 +300,72 @@ get_file_type(filelist_t &file) {
   }
 
   type = FILE_TYPE_IS_UNKNOWN;
-  if (avi_reader_c::probe_file(mm_io, size))
+  if (avi_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVI;
-  else if (kax_reader_c::probe_file(mm_io, size))
+  else if (kax_reader_c::probe_file(io, size))
     type = FILE_TYPE_MATROSKA;
-  else if (wav_reader_c::probe_file(mm_io, size))
+  else if (wav_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAV;
-  else if (ogm_reader_c::probe_file(mm_io, size))
+  else if (ogm_reader_c::probe_file(io, size))
     type = FILE_TYPE_OGM;
-  else if (flac_reader_c::probe_file(mm_io, size))
+  else if (flac_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLAC;
-  else if (real_reader_c::probe_file(mm_io, size))
+  else if (real_reader_c::probe_file(io, size))
     type = FILE_TYPE_REAL;
-  else if (qtmp4_reader_c::probe_file(mm_io, size))
+  else if (qtmp4_reader_c::probe_file(io, size))
     type = FILE_TYPE_QTMP4;
-  else if (tta_reader_c::probe_file(mm_io, size))
+  else if (tta_reader_c::probe_file(io, size))
     type = FILE_TYPE_TTA;
-  else if (wavpack_reader_c::probe_file(mm_io, size))
+  else if (wavpack_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAVPACK4;
-  else if (mpeg_ps_reader_c::probe_file(mm_io, size))
+  else if (mpeg_ps_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_PS;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
-      if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
+      if (mp3_reader_c::probe_file(io, size, probe_sizes[i], 5))
         type = FILE_TYPE_MP3;
-      else if (ac3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
+      else if (ac3_reader_c::probe_file(io, size, probe_sizes[i], 5))
         type = FILE_TYPE_AC3;
   }
   if (type != FILE_TYPE_IS_UNKNOWN)
     ;
-  else if (mp3_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
+  else if (mp3_reader_c::probe_file(io, size, 2 * 1024 * 1024, 10))
     type = FILE_TYPE_MP3;
-  else if (dts_reader_c::probe_file(mm_io, size))
+  else if (dts_reader_c::probe_file(io, size))
     type = FILE_TYPE_DTS;
-  else if (aac_reader_c::probe_file(mm_io, size))
+  else if (aac_reader_c::probe_file(io, size))
     type = FILE_TYPE_AAC;
-  else if (vobbtn_reader_c::probe_file(mm_io, size))
+  else if (vobbtn_reader_c::probe_file(io, size))
     type = FILE_TYPE_VOBBTN;
-  else if (mpeg_es_reader_c::probe_file(mm_io, size))
+  else if (mpeg_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_ES;
   else {
-    delete mm_io;
+    delete io;
 
     try {
-      mm_text_io = new mm_text_io_c(new mm_file_io_c(file.name));
-      mm_text_io->setFilePointer(0, seek_end);
-      size = mm_text_io->getFilePointer();
-      mm_text_io->setFilePointer(0, seek_current);
+      text_io = new mm_text_io_c(new mm_file_io_c(file.name));
+      text_io->setFilePointer(0, seek_end);
+      size = text_io->getFilePointer();
+      text_io->setFilePointer(0, seek_current);
     } catch (...) {
       mxerror(_("The source file '%s' could not be opened successfully, or "
                 "retrieving its size by seeking to the end did not work.\n"),
               file.name.c_str());
     }
 
-    if (srt_reader_c::probe_file(mm_text_io, size))
+    if (srt_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_SRT;
-    else if (ssa_reader_c::probe_file(mm_text_io, size))
+    else if (ssa_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_SSA;
-    else if (vobsub_reader_c::probe_file(mm_text_io, size))
+    else if (vobsub_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_VOBSUB;
     else
       type = FILE_TYPE_IS_UNKNOWN;
 
-    mm_io = mm_text_io;
+    io = text_io;
   }
 
-  delete mm_io;
+  delete io;
 
   file_sizes += size;
 

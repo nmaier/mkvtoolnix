@@ -30,23 +30,19 @@
 
 using namespace libmatroska;
 
-vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
-                                         const void *nidx_data,
-                                         int nidx_data_size,
+vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *_reader,
+                                         const void *_idx_data,
+                                         int _idx_data_size,
                                          track_info_c &_ti) throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-
-  idx_data = (unsigned char *)safememdup(nidx_data, nidx_data_size);
-  idx_data_size = nidx_data_size;
+  generic_packetizer_c(_reader, _ti),
+  idx_data(safememdup(_idx_data, _idx_data_size)),
+  idx_data_size(_idx_data_size) {
 
   set_track_type(track_subtitle);
-#ifdef HAVE_ZLIB_H
   set_default_compression_method(COMPRESSION_ZLIB);
-#endif
 }
 
 vobsub_packetizer_c::~vobsub_packetizer_c() {
-  safefree(idx_data);
 }
 
 void

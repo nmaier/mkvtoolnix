@@ -21,15 +21,16 @@
 #include "common.h"
 #include "compression.h"
 #include "pr_generic.h"
+#include "smart_pointers.h"
 
 class vobsub_packetizer_c: public generic_packetizer_c {
 private:
-  unsigned char *idx_data;
+  autofree_ptr<unsigned char> idx_data;
   int idx_data_size;
 
 public:
-  vobsub_packetizer_c(generic_reader_c *nreader,
-                      const void *nidx_data, int nidx_data_size,
+  vobsub_packetizer_c(generic_reader_c *_reader,
+                      const void *_idx_data, int _idx_data_size,
                       track_info_c &_ti)
     throw (error_c);
   virtual ~vobsub_packetizer_c();

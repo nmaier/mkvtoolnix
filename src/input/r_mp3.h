@@ -29,7 +29,7 @@
 class mp3_reader_c: public generic_reader_c {
 private:
   unsigned char chunk[16384];
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int64_t bytes_processed, size;
   mp3_header_t mp3header;
 
@@ -43,11 +43,11 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size, int64_t probe_range,
+  static int probe_file(mm_io_c *io, int64_t size, int64_t probe_range,
                         int num_headers = 5);
 
 protected:
-  static int find_valid_headers(mm_io_c *mm_io, int64_t probe_range,
+  static int find_valid_headers(mm_io_c *io, int64_t probe_range,
                                 int num_headers);
 };
 

@@ -40,22 +40,22 @@ using namespace std;
                            istimecode(s + 17))
 
 int
-srt_reader_c::probe_file(mm_text_io_c *mm_io,
+srt_reader_c::probe_file(mm_text_io_c *io,
                          int64_t) {
   string s;
   int64_t dummy;
 
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    s = mm_io->getline();
+    io->setFilePointer(0, seek_beginning);
+    s = io->getline();
     strip(s);
     if (!parse_int(s, dummy))
       return 0;
-    s = mm_io->getline();
+    s = io->getline();
     if ((s.length() < 29) || !issrttimecode(s.c_str()))
       return 0;
-    s = mm_io->getline();
-    mm_io->setFilePointer(0, seek_beginning);
+    s = io->getline();
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -67,8 +67,8 @@ srt_reader_c::srt_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    mm_io = new mm_text_io_c(new mm_file_io_c(ti.fname));
-    if (!srt_reader_c::probe_file(mm_io, 0))
+    io = new mm_text_io_c(new mm_file_io_c(ti.fname));
+    if (!srt_reader_c::probe_file(io, 0))
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti.id = 0;                 // ID for this track.
   } catch (...) {
@@ -80,7 +80,7 @@ srt_reader_c::srt_reader_c(track_info_c &_ti)
 }
 
 srt_reader_c::~srt_reader_c() {
-  delete mm_io;
+  delete io;
 }
 
 void
@@ -90,7 +90,7 @@ srt_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  is_utf8 = mm_io->get_byte_order() != BO_NONE;
+  is_utf8 = io->get_byte_order() != BO_NONE;
   add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
                                            true, is_utf8, ti));
   mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
@@ -118,7 +118,7 @@ srt_reader_c::parse_file() {
   line_number = 0;
   subtitles = "";
   while (1) {
-    if (!mm_io->getline2(s))
+    if (!io->getline2(s))
       break;
     line_number++;
     strip(s);

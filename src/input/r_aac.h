@@ -29,7 +29,7 @@
 class aac_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int64_t bytes_processed, size;
   bool emphasis_present;
   aac_header_t aacheader;
@@ -43,7 +43,7 @@ public:
   virtual int get_progress();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 
 protected:
   virtual void guess_adts_version();

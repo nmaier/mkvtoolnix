@@ -26,7 +26,7 @@
 #include "r_tta.h"
 
 int
-tta_reader_c::probe_file(mm_io_c *mm_io,
+tta_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   int tag_size;
   unsigned char buf[4];
@@ -34,13 +34,13 @@ tta_reader_c::probe_file(mm_io_c *mm_io,
   if (size < 26)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    tag_size = skip_id3v2_tag(*mm_io);
+    io->setFilePointer(0, seek_beginning);
+    tag_size = skip_id3v2_tag(*io);
     if (tag_size == -1)
       return 0;
-    if (mm_io->read(buf, 4) != 4)
+    if (io->read(buf, 4) != 4)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -57,26 +57,26 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
   int tag_size;
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    size = mm_io->get_size();
+    io = new mm_file_io_c(ti.fname);
+    size = io->get_size();
 
     if (identifying)
       return;
 
-    tag_size = skip_id3v2_tag(*mm_io);
+    tag_size = skip_id3v2_tag(*io);
     if (tag_size < 0)
       mxerror(_("tta_reader: tag_size < 0 in the c'tor. %s\n"), BUGMSG);
     size -= tag_size;
 
-    if (mm_io->read(&header, sizeof(tta_file_header_t)) !=
+    if (io->read(&header, sizeof(tta_file_header_t)) !=
         sizeof(tta_file_header_t))
       mxerror(FMT_FN "The file header is too short.\n", ti.fname.c_str());
-    seek_sum = mm_io->getFilePointer() + 4 - tag_size;
+    seek_sum = io->getFilePointer() + 4 - tag_size;
 
-    size -= id3_tag_present_at_end(*mm_io);
+    size -= id3_tag_present_at_end(*io);
 
     do {
-      seek_point = mm_io->read_uint32_le();
+      seek_point = io->read_uint32_le();
       seek_sum += seek_point + 4;
       seek_points.push_back(seek_point);
     } while (seek_sum < size);
@@ -92,7 +92,7 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
       mxerror(FMT_FN "The seek table in this TTA file seems to be broken.\n",
               ti.fname.c_str());
 
-    mm_io->skip(4);
+    io->skip(4);
 
     bytes_processed = 0;
     pos = 0;
@@ -106,7 +106,7 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
 }
 
 tta_reader_c::~tta_reader_c() {
-  delete mm_io;
+  delete io;
 }
 
 void
@@ -133,7 +133,7 @@ tta_reader_c::read(generic_packetizer_c *,
     return FILE_STATUS_DONE;
 
   buf = (unsigned char *)safemalloc(seek_points[pos]);
-  nread = mm_io->read(buf, seek_points[pos]);
+  nread = io->read(buf, seek_points[pos]);
   if (nread <= 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;

@@ -34,7 +34,7 @@ extern "C" {
 class wav_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  mm_io_c *mm_io;
+  mm_io_c *io;
   int dts_swap_bytes, dts_14_16;
   int bps;
   struct wave_header wheader;
@@ -52,7 +52,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 };
 
 #endif // __R_WAV_H

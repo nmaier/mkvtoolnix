@@ -30,15 +30,15 @@
 
 using namespace libmatroska;
 
-vobbtn_packetizer_c::vobbtn_packetizer_c(generic_reader_c *nreader,
-                                         int nwidth,
-                                         int nheight,
+vobbtn_packetizer_c::vobbtn_packetizer_c(generic_reader_c *_reader,
+                                         int _width,
+                                         int _height,
                                          track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti),
+  generic_packetizer_c(_reader, _ti),
   previous_timecode(0),
-  width(nwidth),
-  height(nheight) {
+  width(_width),
+  height(_height) {
 
   set_track_type(track_buttons);
   set_default_compression_method(COMPRESSION_ZLIB);

@@ -25,24 +25,20 @@
 
 using namespace libmatroska;
 
-mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
-                                   unsigned long nsamples_per_sec,
-                                   int nchannels,
+mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *_reader,
+                                   int _samples_per_sec,
+                                   int _channels,
                                    bool source_is_good,
                                    track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti), byte_buffer(128 * 1024) {
-  samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-  bytes_output = 0;
-  packetno = 0;
-  spf = 1152;
-  codec_id_set = false;
-  valid_headers_found = source_is_good;
+  generic_packetizer_c(_reader, _ti), bytes_output(0), packetno(0),
+  samples_per_sec(_samples_per_sec), channels(_channels), spf(1152),
+  byte_buffer(128 * 1024),
+  codec_id_set(false), valid_headers_found(source_is_good) {
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1152000000000.0 * ti.async.linear /
-                                          samples_per_sec));
+                                       samples_per_sec));
   enable_avi_audio_sync(true);
 }
 

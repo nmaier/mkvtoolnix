@@ -25,26 +25,20 @@
 
 using namespace libmatroska;
 
-aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
-                                   int nid,
-                                   int nprofile,
-                                   unsigned long nsamples_per_sec,
-                                   int nchannels,
+aac_packetizer_c::aac_packetizer_c(generic_reader_c *_reader,
+                                   int _id,
+                                   int _profile,
+                                   int _samples_per_sec,
+                                   int _channels,
                                    track_info_c &_ti,
-                                   bool nemphasis_present,
-                                   bool nheaderless)
+                                   bool _emphasis_present,
+                                   bool _headerless)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  packetno = 0;
-  bytes_output = 0;
-  samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-  id = nid;
-  profile = nprofile;
-  headerless = nheaderless;
-  emphasis_present = nemphasis_present;
-  num_packets_same_tc = 0;
-  last_timecode = -1;
+  generic_packetizer_c(_reader, _ti),
+  bytes_output(0), packetno(0), last_timecode(-1), num_packets_same_tc(0), 
+  samples_per_sec(_samples_per_sec), channels(_channels), id(_id),
+  profile(_profile), headerless(_headerless),
+  emphasis_present(_emphasis_present) {
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1024 * 1000000000.0 * ti.async.linear /

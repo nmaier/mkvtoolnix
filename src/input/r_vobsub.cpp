@@ -70,18 +70,18 @@ vobsub_entry_c::operator < (const vobsub_entry_c &cmp) const {
 }
 
 int
-vobsub_reader_c::probe_file(mm_io_c *mm_io,
+vobsub_reader_c::probe_file(mm_io_c *io,
                             int64_t size) {
   char chunk[80];
 
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(chunk, 80) != 80)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(chunk, 80) != 80)
       return 0;
     if (strncasecmp(chunk, "# VobSub index file, v",
                     strlen("# VobSub index file, v")))
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }

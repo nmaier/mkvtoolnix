@@ -25,18 +25,15 @@
 
 using namespace libmatroska;
 
-ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
-                                   unsigned long nsamples_per_sec,
-                                   int nchannels,
-                                   int nbsid,
+ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *_reader,
+                                   int _samples_per_sec,
+                                   int _channels,
+                                   int _bsid,
                                    track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
-  packetno = 0;
-  bytes_output = 0;
-  samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-  bsid = nbsid;
+  generic_packetizer_c(_reader, _ti),
+  bytes_output(0), packetno(0),
+  samples_per_sec(_samples_per_sec), channels(_channels), bsid(_bsid) {
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1536000000000.0 *ti.async.linear /

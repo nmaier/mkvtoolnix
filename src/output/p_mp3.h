@@ -26,14 +26,13 @@
 class mp3_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
-  unsigned long samples_per_sec;
-  int channels, spf;
+  int samples_per_sec, channels, spf;
   byte_buffer_c byte_buffer;
   bool codec_id_set, valid_headers_found;
 
 public:
-  mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, bool source_is_good, track_info_c &_ti)
+  mp3_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
+                   int _channels, bool source_is_good, track_info_c &_ti)
     throw (error_c);
   virtual ~mp3_packetizer_c();
 

@@ -25,24 +25,21 @@
 
 using namespace libmatroska;
 
-pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
-                                   unsigned long nsamples_per_sec,
-                                   int nchannels,
-                                   int nbits_per_sample,
+pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *_reader,
+                                   int _samples_per_sec,
+                                   int _channels,
+                                   int _bits_per_sample,
                                    track_info_c &_ti,
-                                   bool nbig_endian)
+                                   bool _big_endian)
   throw (error_c):
-  generic_packetizer_c(nreader, _ti) {
+  generic_packetizer_c(_reader, _ti),
+  packetno(0), bps(_channels * _bits_per_sample * _samples_per_sec / 8),
+  samples_per_sec(_samples_per_sec), channels(_channels),
+  bits_per_sample(_bits_per_sample), packet_size(0),
+  bytes_output(0), skip_bytes(0), big_endian(_big_endian) {
+
   int i;
 
-  packetno = 0;
-  bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
-  samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-  bits_per_sample = nbits_per_sample;
-  bytes_output = 0;
-  skip_bytes = 0;
-  big_endian = nbig_endian;
   for (i = 32; i > 2; i >>= 2)
     if ((samples_per_sec % i) == 0)
       break;

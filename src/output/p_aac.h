@@ -26,16 +26,15 @@
 class aac_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno, last_timecode, num_packets_same_tc;
-  unsigned long samples_per_sec;
-  int channels, id, profile;
+  int samples_per_sec, channels, id, profile;
   bool headerless, emphasis_present;
   byte_buffer_c byte_buffer;
 
 public:
-  aac_packetizer_c(generic_reader_c *nreader, int nid, int nprofile,
-                   unsigned long nsamples_per_sec, int nchannels,
+  aac_packetizer_c(generic_reader_c *_reader, int _id, int _profile,
+                   int _samples_per_sec, int _channels,
                    track_info_c &_ti, bool emphasis_present,
-                   bool nheaderless = false) throw (error_c);
+                   bool _headerless = false) throw (error_c);
   virtual ~aac_packetizer_c();
 
   virtual int process(memory_c &mem, int64_t timecode = -1,

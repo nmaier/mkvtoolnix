@@ -55,7 +55,7 @@ public:
   bool done;
 
 public:
-  flac_header_extractor_c(const string &file_name, int64_t nsid);
+  flac_header_extractor_c(const string &file_name, int64_t _sid);
   ~flac_header_extractor_c();
   bool extract();
   bool read_page();
@@ -94,7 +94,7 @@ struct ogm_demuxer_t {
 class ogm_reader_c: public generic_reader_c {
 private:
   ogg_sync_state oy;
-  mm_io_c *mm_io;
+  mm_io_c *io;
   vector<ogm_demuxer_t *> sdemuxers;
   int bos_pages_read;
   int64_t file_size;
@@ -111,7 +111,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *mm_io, int64_t size);
+  static int probe_file(mm_io_c *io, int64_t size);
 
 private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);

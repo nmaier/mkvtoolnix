@@ -25,7 +25,7 @@
 #include "p_dts.h"
 
 int
-dts_reader_c::probe_file(mm_io_c *mm_io,
+dts_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   char buf[max_dts_packet_size];
   int pos;
@@ -34,10 +34,10 @@ dts_reader_c::probe_file(mm_io_c *mm_io,
   if (size < max_dts_packet_size)
     return 0;
   try {
-    mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, max_dts_packet_size) != max_dts_packet_size)
+    io->setFilePointer(0, seek_beginning);
+    if (io->read(buf, max_dts_packet_size) != max_dts_packet_size)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -55,12 +55,12 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   int pos;
 
   try {
-    mm_io = new mm_file_io_c(ti.fname);
-    size = mm_io->get_size();
+    io = new mm_file_io_c(ti.fname);
+    size = io->get_size();
     chunk = (unsigned char *)safemalloc(max_dts_packet_size);
-    if (mm_io->read(chunk, max_dts_packet_size) != max_dts_packet_size)
+    if (io->read(chunk, max_dts_packet_size) != max_dts_packet_size)
       throw error_c("dts_reader: Could not read max_dts_packet_size bytes.");
-    mm_io->setFilePointer(0, seek_beginning);
+    io->setFilePointer(0, seek_beginning);
   } catch (...) {
     throw error_c("dts_reader: Could not open the source file.");
   }
@@ -78,7 +78,7 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
 }
 
 dts_reader_c::~dts_reader_c() {
-  delete mm_io;
+  delete io;
   safefree(chunk);
 }
 
@@ -97,7 +97,7 @@ dts_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
 
-  nread = mm_io->read(chunk, max_dts_packet_size);
+  nread = io->read(chunk, max_dts_packet_size);
   if (nread <= 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;

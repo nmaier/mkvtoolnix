@@ -30,7 +30,7 @@ private:
   bool has_correction;
 
 public:
-  wavpack_packetizer_c(generic_reader_c *nreader, wavpack_meta_t & meta,
+  wavpack_packetizer_c(generic_reader_c *_reader, wavpack_meta_t & meta,
                        track_info_c &_ti)
     throw (error_c);
 

@@ -27,7 +27,7 @@
 
 class srt_reader_c: public generic_reader_c {
 private:
-  mm_text_io_c *mm_io;
+  mm_text_io_c *io;
   subtitles_c subs;
 
 public:
@@ -40,7 +40,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual int get_progress();
 
-  static int probe_file(mm_text_io_c *mm_io, int64_t size);
+  static int probe_file(mm_text_io_c *io, int64_t size);
 };
 
 #endif  // __R_SRT_H
