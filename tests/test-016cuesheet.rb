@@ -6,7 +6,8 @@ class T_016cuesheet < Test
   end
 
   def run
-    merge("data/textsubs/vde.srt --chapters data/text/cuewithtags2.cue")
+    merge("--sub-charset 0:ISO-8859-1 data/textsubs/vde.srt " +
+           "--chapters data/text/cuewithtags2.cue")
     return hash_tmp
   end
 end
