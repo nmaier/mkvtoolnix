@@ -24,18 +24,12 @@
 #include "os.h"
 
 #include "common.h"
+#include "mpeg4_common.h"
 #include "pr_generic.h"
 
 #define VFT_IFRAME -1
 #define VFT_PFRAMEAUTOMATIC -2
 #define VFT_NOBFRAME -1
-
-typedef struct {
-  unsigned char *data;
-  int size, pos;
-  char type;
-  int64_t timecode, duration, bref, fref;
-} video_frame_t;
 
 class video_packetizer_c: public generic_packetizer_c {
 private:
@@ -68,8 +62,6 @@ public:
   virtual int can_connect_to(generic_packetizer_c *src);
 
 protected:
-  virtual void find_mpeg4_frame_types(unsigned char *buf, int size,
-                                      vector<video_frame_t> &frames);
   virtual void flush_frames(char next_frame = '?', bool flush_all = false);
   virtual void extract_mpeg4_aspect_ratio(memory_c &mem);
 };

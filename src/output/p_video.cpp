@@ -36,8 +36,6 @@ extern "C" {
 #include <avilib.h>
 }
 
-#define VOP_START_CODE 0x000001b6
-
 using namespace libmatroska;
 
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
@@ -138,8 +136,9 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_enter("video_packetizer_c::process");
 
+  if (is_mpeg4)
+    mpeg4_find_frame_types(mem.data, mem.size, frames);
   if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4 && (fps != 0.0)) {
-    find_mpeg4_frame_types(mem.data, mem.size, frames);
     for (i = 0; i < frames.size(); i++) {
       if ((frames[i].type == 'I') ||
           ((frames[i].type != 'B') && (fref_frame.type != '?')))
@@ -265,65 +264,6 @@ video_packetizer_c::extract_mpeg4_aspect_ratio(memory_c &mem) {
            "from the MPEG4 data and set the display dimensions to "
            "%u/%u.\n", ti->id, ti->fname, ti->display_width,
            ti->display_height);
-  }
-}
-
-void
-video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf,
-                                           int size,
-                                           vector<video_frame_t> &frames) {
-  bit_cursor_c bits(buf, size);
-  uint32_t marker, frame_type;
-  bool first_frame;
-  video_frame_t frame;
-  vector<video_frame_t>::iterator fit;
-
-  frame.pos = 0;
-  frames.clear();
-  first_frame = true;
-  mxverb(2, "\nmpeg4_frames: start search in %d bytes\n", size);
-  while (!bits.eof()) {
-    if (!bits.peek_bits(32, marker))
-      break;
-
-    if ((marker & 0xffffff00) != 0x00000100) {
-      bits.skip_bits(8);
-      continue;
-    }
-
-    mxverb(2, "mpeg4_frames:   found start code at %d\n",
-           bits.get_bit_position() / 8);
-    bits.skip_bits(32);
-    if (marker == VOP_START_CODE) {
-      if (!bits.get_bits(2, frame_type))
-        break;
-      if (!first_frame) {
-        frame.size = (bits.get_bit_position() / 8) - 4 - frame.pos;
-        frames.push_back(frame);
-        frame.pos = (bits.get_bit_position() / 8) - 4;
-      } else
-        first_frame = false;
-      frame.type = frame_type == 0 ? 'I' : frame_type == 1 ? 'P' :
-        frame_type == 2 ? 'B' : 'S';
-      bits.byte_align();
-    }
-  }
-
-  if (!first_frame) {
-    frame.size = size - frame.pos;
-    frames.push_back(frame);
-  }
-  mxverb(2, "mpeg4_frames:   found %d frames\n", frames.size());
-  for (fit = frames.begin(); fit < frames.end(); fit++)
-    mxverb(2, "mpeg4_frames:   '%c' frame with size %d at %d\n",
-           fit->type, fit->size, fit->pos);
-
-  fit = frames.begin();
-  while (fit < frames.end()) {
-    if (fit->size < 10)      // dummy frame
-      frames.erase(fit);
-    else
-      fit++;
   }
 }
 
