@@ -1,3 +1,196 @@
+2003-04-20 23:25  mosu
+
+	* matroska.h: Sync with the specs.
+
+2003-04-20 23:22  mosu
+
+	* p_textsubs.cpp: Changed to the new S_TEXT/ASCII format (and
+	changed the CodecID while I was at it): the duration is now stored
+	in a KaxBlockDuration element and not in the block's contents.
+
+2003-04-20 23:18  mosu
+
+	* cluster_helper.cpp, queue.cpp, queue.h: Support for packet
+	durations which end up in a KaxBlockDuration element.
+
+2003-04-20 23:17  mosu
+
+	* mkvinfo.cpp: Fixed duration scaling bug.
+
+2003-04-20 23:09  mosu
+
+	* matroska.h: Changed the URL to the new corecodec.org home.
+
+2003-04-20 23:05  mosu
+
+	* matroska.h: The specs changed A_DOL_AC3 to A_AC3.
+
+2003-04-20 23:03  mosu
+
+	* mkvinfo.cpp: Support for KaxTrackFlagDefault and
+	KaxTrackFlagLacing.
+
+2003-04-20 22:38  mosu
+
+	* mkvinfo.cpp: mkvinfo now uses element->GetFilePosition() instead
+	of the last_pos retrieved via GetFilePosition() which is
+	susceptible to faults.
+
+2003-04-20 22:08  mosu
+
+	* matroska.h, r_matroska.cpp, r_matroska.h: Moved the #defines for
+	the CodecIDs to matroska.h. Variables for the first working
+	Matroska reader.
+
+2003-04-20 21:58  mosu
+
+	* r_matroska.cpp: First really working version. Pays attention to
+	frame types and block durations by buffering the frames. Known
+	issue with the subtitle format which is still subject to changes.
+
+2003-04-20 21:32  mosu
+
+	* p_video.cpp, p_video.h, r_avi.cpp, r_ogm.cpp: Changed the way
+	frame types are propagated to the video packetizer: now the bref is
+	evaluated. If it is set to != -1 then it is a P frame, otherwise it
+	is an I frame.
+
+2003-04-20 19:22  mosu
+
+	* r_ogm.cpp: Fixed output of the serial numbers reported for ogm
+	files.
+
+2003-04-20 18:39  mosu
+
+	* cluster_helper.cpp, mkvmerge.cpp, mkvmerge.h: The Matroska cue
+	element is only written if at least one cue entry was created.
+	Track numbers now start at 1 which conforms to the specs.
+
+2003-04-20 17:15  mosu
+
+	* Makefile.am: Added man pages to the Makefile.
+
+2003-04-20 17:12  mosu
+
+	* mkvinfo.1: Initial man page based on ogminfo's man page.
+
+2003-04-20 17:07  mosu
+
+	* mkvmerge.1, mkvmerge.cpp: Documentation for reading command line
+	arguments from a file.
+
+2003-04-20 16:59  mosu
+
+	* cluster_helper.cpp, mkvmerge.1, mkvmerge.cpp, p_video.cpp,
+	pr_generic.cpp, pr_generic.h: Options for cue entry creation for
+	each individual file.
+
+2003-04-19 19:00  mosu
+
+	* mkvmerge.cpp: Enhanced the command line parsing code which can
+	now also read arguments from a file given with '@filename' on the
+	command line.
+
+2003-04-19 01:17  mosu
+
+	* mkvinfo.cpp: Fixed cue data reading. Fixed cue data indenting.
+
+2003-04-18 16:27  mosu
+
+	* cluster_helper.cpp, p_video.cpp, pr_generic.cpp, pr_generic.h,
+	queue.h: Cue data is only generated for I-frames of video tracks.
+	Fixes for the switch from IDs for packets to their timecodes: 0 is
+	a valid timecode/reference, so -1 must be used for "not set".
+
+2003-04-18 15:55  mosu
+
+	* mkvmerge.1: Added a flag "--no-cues" which inhibits that mkvmerge
+	creates and writes the cue data.
+
+2003-04-18 15:51  mosu
+
+	* cluster_helper.cpp, mkvmerge.cpp, mkvmerge.h: Added a flag
+	"--no-cues" which inhibits that mkvmerge creates and writes the cue
+	data.
+
+2003-04-18 15:21  mosu
+
+	* p_ac3.cpp, p_ac3.h, p_mp3.cpp, p_mp3.h, p_pcm.cpp, p_pcm.h,
+	p_textsubs.cpp, p_textsubs.h, p_video.cpp, p_video.h, p_vorbis.cpp,
+	p_vorbis.h, pr_generic.h: Extended the general process function to
+	include both a backward and a forward reference.
+
+2003-04-18 15:12  mosu
+
+	* cluster_helper.cpp: Disabled the cluster checking again. Added
+	(deactivated) debug code.
+
+2003-04-18 15:08  mosu
+
+	* cluster_helper.cpp, cluster_helper.h, p_video.cpp, p_video.h,
+	queue.cpp, queue.h: Removed the IDs associated with the packet_ts
+	and used the timecodes for bref and fref instead.
+
+2003-04-18 15:06  mosu
+
+	* mkvinfo.cpp: Fixed output indenting.
+
+2003-04-18 14:00  mosu
+
+	* cluster_helper.cpp, matroska.h, p_ac3.cpp, p_mp3.cpp, p_pcm.cpp,
+	p_textsubs.cpp, p_video.cpp, p_vorbis.cpp, pr_generic.cpp,
+	pr_generic.h: Introduced common header helper functions that
+	simplify header settings for the packetizers.
+
+2003-04-18 12:28  mosu
+
+	* cluster_helper.cpp, p_ac3.cpp, p_ac3.h, p_mp3.cpp, p_mp3.h,
+	p_pcm.cpp, p_pcm.h, p_textsubs.cpp, p_textsubs.h, p_video.cpp,
+	p_video.h, p_vorbis.cpp, p_vorbis.h, pr_generic.cpp, pr_generic.h,
+	queue.cpp, queue.h: Reversed the relationship between q_c and
+	generic_packetizer_c: q_c is now the father of
+	generic_packetizer_c.
+
+2003-04-18 12:08  mosu
+
+	* Makefile.am, cluster_helper.cpp, cluster_helper.h, common.cpp,
+	common.h, mkvmerge.cpp, mkvmerge.h, p_ac3.cpp, p_mp3.cpp,
+	p_pcm.cpp, p_textsubs.cpp, p_video.cpp, p_vorbis.cpp,
+	pr_generic.cpp, pr_generic.h, queue.cpp, queue.h, r_ac3.cpp,
+	r_avi.cpp, r_matroska.cpp, r_matroska.h, r_mp3.cpp, r_ogm.cpp,
+	r_srt.cpp, r_wav.cpp, subtitles.cpp: Moved the cluster helper to
+	its own files. Moved a lot of other stuff into the appropriate
+	header files.
+
+2003-04-18 10:47  mosu
+
+	* r_matroska.cpp: Fixed CodecPrivate for A_VORBIS streams. The
+	lacing byte is 1 less than the number of packets.
+
+2003-04-18 10:42  mosu
+
+	* mkvmerge.cpp, pr_generic.cpp, pr_generic.h, queue.cpp, queue.h,
+	r_avi.cpp, r_matroska.cpp, r_ogm.cpp, r_srt.cpp, r_vobsub.cpp:
+	Renamed all timestamps to timecodes.
+
+2003-04-17 21:54  mosu
+
+	* mkvinfo.cpp: Added a not really needed call to read the
+	KaxTimecodeScale.
+
+2003-04-17 21:33  mosu
+
+	* mkvmerge.cpp, pr_generic.cpp: Fixed cueue creation/updates.
+
+2003-04-17 21:23  mosu
+
+	* mkvinfo.cpp: Support for alle Cue elements.
+
+2003-04-17 20:15  mosu
+
+	* mkvmerge.cpp, pr_generic.cpp, pr_generic.h: Support for writing
+	the correct KaxCues.
+
 2003-04-17 19:23  mosu
 
 	* mkvinfo.cpp: Support for KaxReferenceBlock and KaxBlockDuration.
