@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.32 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.33 2003/05/22 16:14:29 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -52,13 +52,13 @@ int ogm_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 4)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread(data, 1, 4, file) != 4) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   if (strncmp((char *)data, "OggS", 4))
     return 0;
   return 1;
@@ -74,10 +74,10 @@ ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
 
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("ogm_reader: Could not open source file.");
-  if (fseek(file, 0, SEEK_END) != 0)
+  if (fseeko(file, 0, SEEK_END) != 0)
     throw error_c("ogm_reader: Could not seek to end of file.");
-  size = ftell(file);
-  if (fseek(file, 0, SEEK_SET) != 0)
+  size = ftello(file);
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("ogm_reader: Could not seek to beginning of file.");
   if (!ogm_reader_c::probe_file(file, size))
     throw error_c("ogm_reader: Source is not a valid OGG media file.");
@@ -659,7 +659,7 @@ int ogm_reader_c::read_headers() {
     }
   }
 
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   ogg_sync_clear(&oy);
   ogg_sync_init(&oy);
 

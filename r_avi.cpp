@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.32 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.33 2003/05/22 16:14:29 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -41,12 +41,12 @@ int avi_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 12)
     return 0;
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   if (fread(data, 1, 12, file) != 12) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   if(strncasecmp((char *)data, "RIFF", 4) ||
      strncasecmp((char *)data+8, "AVI ", 4))
     return 0;
@@ -67,10 +67,10 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
 
   if ((f = fopen(ti->fname, "rb")) == NULL)
     throw error_c("avi_reader: Could not open source file.");
-  if (fseek(f, 0, SEEK_END) != 0)
+  if (fseeko(f, 0, SEEK_END) != 0)
     throw error_c("avi_reader: Could not seek to end of file.");
-  size = ftell(f);
-  if (fseek(f, 0, SEEK_SET) != 0)
+  size = ftello(f);
+  if (fseeko(f, 0, SEEK_SET) != 0)
     throw error_c("avi_reader: Could not seek to beginning of file.");
   if (!avi_reader_c::probe_file(f, size))
     throw error_c("avi_reader: Source is not a valid AVI file.");

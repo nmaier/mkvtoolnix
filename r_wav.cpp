@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.25 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.26 2003/05/22 16:14:29 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
@@ -91,13 +91,13 @@ int wav_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < sizeof(wave_header))
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread((char *)&wheader, 1, sizeof(wheader), file) != sizeof(wheader)) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   if (strncmp((char *)wheader.riff.id, "RIFF", 4) ||
       strncmp((char *)wheader.riff.wave_id, "WAVE", 4) ||
       strncmp((char *)wheader.data.id, "data", 4))
@@ -115,10 +115,10 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
 
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("wav_reader: Could not open source file.");
-  if (fseek(file, 0, SEEK_END) != 0)
+  if (fseeko(file, 0, SEEK_END) != 0)
     throw error_c("wav_reader: Could not seek to end of file.");
-  size = ftell(file);
-  if (fseek(file, 0, SEEK_SET) != 0)
+  size = ftello(file);
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("wav_reader: Could not seek to beginning of file.");
   if (!wav_reader_c::probe_file(file, size))
     throw error_c("wav_reader: Source is not a valid WAVE file.");
@@ -136,7 +136,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
     int cur_buf = 0;
 
     long rlen = fread(obuf, 1, max_dts_packet_size, file);
-    fseek(file, sizeof(wheader), SEEK_SET);
+    fseeko(file, sizeof(wheader), SEEK_SET);
 
     for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
       memcpy(buf[cur_buf], obuf, rlen);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.5 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_aac.cpp,v 1.6 2003/05/22 16:14:29 mosu Exp $
     \brief AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -35,13 +35,13 @@ int aac_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 4096)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread(buf, 1, 4096, file) != 4096) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
 
   if (parse_aac_adif_header((unsigned char *)buf, 4096, &aacheader))
     return 1;
@@ -58,15 +58,15 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
 
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("aac_reader: Could not open source file.");
-  if (fseek(file, 0, SEEK_END) != 0)
+  if (fseeko(file, 0, SEEK_END) != 0)
     throw error_c("aac_reader: Could not seek to end of file.");
-  size = ftell(file);
-  if (fseek(file, 0, SEEK_SET) != 0)
+  size = ftello(file);
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("aac_reader: Could not seek to beginning of file.");
   chunk = (unsigned char *)safemalloc(4096);
   if (fread(chunk, 1, 4096, file) != 4096)
     throw error_c("aac_reader: Could not read 4096 bytes.");
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("aac_reader: Could not seek to beginning of file.");
   if (parse_aac_adif_header(chunk, 4096, &aacheader)) {
     throw error_c("aac_reader: ADIF header files are not supported.");

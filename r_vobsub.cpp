@@ -55,14 +55,14 @@
 int vobsub_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
 
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
     return 0;
   if (strncmp(chunk, "# VobSub index file, v7",
               strlen("# VobSub index file, v7")))
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   return 1;
 }
@@ -249,7 +249,7 @@ int vobsub_reader_c::read() {
       filepos = strtoll(&chunk[34], NULL, 16);
 
       if ((last_start != -1) && (last_filepos != -1)) {
-        if (fseek(subfile, last_filepos, SEEK_SET) != 0)
+        if (fseeko(subfile, last_filepos, SEEK_SET) != 0)
           fprintf(stderr, "Warning: vobsub_reader: Could not seek to position "
                   "%lld. Ignoring this entry.\n", last_filepos);
         else if (last_filepos == filepos)
@@ -276,14 +276,14 @@ int vobsub_reader_c::read() {
   }
   if ((last_start != -1) && (last_filepos != -1) &&
       (vobsub_packetizer != NULL)) {
-    if (fseek(subfile, 0, SEEK_END) != 0) {
+    if (fseeko(subfile, 0, SEEK_END) != 0) {
       fprintf(stderr, "Warning: vobsub_reader: Could not seek to end of "
               "the sub file. Ignoring last entry.\n");
       vobsub_packetizer->produce_eos_packet();
       return 0;
     }
-    filepos = ftell(subfile);
-    if (fseek(subfile, last_filepos, SEEK_SET) != 0)
+    filepos = ftello(subfile);
+    if (fseeko(subfile, last_filepos, SEEK_SET) != 0)
       fprintf(stderr, "Warning: vobsub_reader: Could not seek to position "
               "%lld. Ignoring this entry.\n", last_filepos);
     else if (last_filepos == filepos)

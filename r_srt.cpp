@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.13 2003/05/20 06:30:25 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.14 2003/05/22 16:14:29 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -45,7 +45,7 @@
 int srt_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
 
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
     return 0;
@@ -57,7 +57,7 @@ int srt_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   return 1;
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_dts.cpp,v 1.4 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_dts.cpp,v 1.5 2003/05/22 16:14:29 mosu Exp $
     \brief DTS demultiplexer module
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>
@@ -37,13 +37,13 @@ int dts_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < max_dts_packet_size)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread(buf, 1, max_dts_packet_size, file) != max_dts_packet_size) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
 
   pos = find_dts_header((unsigned char *)buf, max_dts_packet_size, &dtsheader);
   if (pos < 0)
@@ -59,15 +59,15 @@ dts_reader_c::dts_reader_c(track_info_t *nti) throw (error_c):
 
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("dts_reader: Could not open source file.");
-  if (fseek(file, 0, SEEK_END) != 0)
+  if (fseeko(file, 0, SEEK_END) != 0)
     throw error_c("dts_reader: Could not seek to end of file.");
-  size = ftell(file);
-  if (fseek(file, 0, SEEK_SET) != 0)
+  size = ftello(file);
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("dts_reader: Could not seek to beginning of file.");
   chunk = (unsigned char *)safemalloc(max_dts_packet_size);
   if (fread(chunk, 1, max_dts_packet_size, file) != max_dts_packet_size)
     throw error_c("dts_reader: Could not read max_dts_packet_size bytes.");
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("dts_reader: Could not seek to beginning of file.");
 
   pos = find_dts_header(chunk, max_dts_packet_size, &dtsheader);

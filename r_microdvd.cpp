@@ -31,7 +31,7 @@ int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
   int i;
 
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
     return 0;
@@ -48,7 +48,7 @@ int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   if ((chunk[i] != '}') || (chunk[i + 1] == 0) || (chunk[i + 1] == '\n') ||
       (chunk[i + 1] == '\r'))
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   return 1;
 }

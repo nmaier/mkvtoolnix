@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.22 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.23 2003/05/22 16:14:29 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -40,13 +40,13 @@ int ac3_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 4096)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread(buf, 1, 4096, file) != 4096) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
 
   pos = find_ac3_header((unsigned char *)buf, 4096, &ac3header);
   if (pos < 0)
@@ -62,15 +62,15 @@ ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
 
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("ac3_reader: Could not open source file.");
-  if (fseek(file, 0, SEEK_END) != 0)
+  if (fseeko(file, 0, SEEK_END) != 0)
     throw error_c("ac3_reader: Could not seek to end of file.");
-  size = ftell(file);
-  if (fseek(file, 0, SEEK_SET) != 0)
+  size = ftello(file);
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("ac3_reader: Could not seek to beginning of file.");
   chunk = (unsigned char *)safemalloc(4096);
   if (fread(chunk, 1, 4096, file) != 4096)
     throw error_c("ac3_reader: Could not read 4096 bytes.");
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     throw error_c("ac3_reader: Could not seek to beginning of file.");
   pos = find_ac3_header(chunk, 4096, &ac3header);
   if (pos < 0)

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp4.cpp,v 1.1 2003/05/22 15:37:53 mosu Exp $
+    \version \$Id: r_mp4.cpp,v 1.2 2003/05/22 16:14:29 mosu Exp $
     \brief MP4 identification class
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,13 +29,13 @@ int mp4_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 20)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread(data, 1, 20, file) != 20) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   if ((data[4] != 'f') || (data[5] != 't') ||
       (data[6] != 'y') || (data[7] != 'p'))
     return 0;

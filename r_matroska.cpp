@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.37 2003/05/22 11:11:05 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.38 2003/05/22 16:14:29 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -79,13 +79,13 @@ int mkv_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 4)
     return 0;
-  if (fseek(file, 0, SEEK_SET) != 0)
+  if (fseeko(file, 0, SEEK_SET) != 0)
     return 0;
   if (fread(data, 1, 4, file) != 4) {
-    fseek(file, 0, SEEK_SET);
+    fseeko(file, 0, SEEK_SET);
     return 0;
   }
-  fseek(file, 0, SEEK_SET);
+  fseeko(file, 0, SEEK_SET);
   if ((data[0] != 0x1A) || (data[1] != 0x45) ||
       (data[2] != 0xDF) || (data[3] != 0xA3))
     return 0;

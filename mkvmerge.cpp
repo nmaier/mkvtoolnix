@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.75 2003/05/22 15:37:53 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.76 2003/05/22 16:14:29 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -316,12 +316,12 @@ static int get_type(char *filename) {
     fprintf(stderr, "Error: could not open source file (%s).\n", filename);
     exit(1);
   }
-  if (fseek(f, 0, SEEK_END) != 0) {
+  if (fseeko(f, 0, SEEK_END) != 0) {
     fprintf(stderr, "Error: could not seek to end of file (%s).\n", filename);
     exit(1);
   }
-  size = ftell(f);
-  if (fseek(f, 0, SEEK_SET) != 0) {
+  size = ftello(f);
+  if (fseeko(f, 0, SEEK_SET) != 0) {
     fprintf(stderr, "Error: could not seek to beginning of file (%s).\n",
             filename);
     exit(1);
