@@ -496,6 +496,9 @@ void end_level4(parser_data_t *pdata, const char *name) {
     else if (!strcmp(name, "Address"))
       el_get_utf8string(pdata, &GetChild<KaxTagMultiLegalAddress>
                         (*pdata->legal));
+    else if (!strcmp(name, "Content"))
+      el_get_utf8string(pdata, &GetChild<KaxTagMultiLegalContent>
+                        (*pdata->legal));
 
   } else if (parent == E_Title) {
     if (!strcmp(name, "Type"))

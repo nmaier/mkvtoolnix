@@ -2660,6 +2660,16 @@ bool process_file(const char *file_name) {
                         l_URL.ReadData(es->I_O());
                         show_element(l5, 5, "URL: %s", string(l_URL).c_str());
 
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiLegalContent::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiLegalContent &l_content =
+                          *static_cast<KaxTagMultiLegalContent *>(l5);
+                        l_content.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(l_content));
+                        show_element(l5, 5, "Content: %s", str);
+                        safefree(str);
+
                       } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
                                                      l6))

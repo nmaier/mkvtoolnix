@@ -203,6 +203,9 @@ static void handle_level4(EbmlElement *e) {
 
   else if (is_id(KaxTagMultiLegalAddress))
     pr_us("Address");
+ 
+  else if (is_id(KaxTagMultiLegalContent))
+    pr_us("Content");
 
   else if (is_id(KaxTagMultiTitleType))
     pr_ui("Type");

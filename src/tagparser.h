@@ -106,6 +106,7 @@ using namespace libmatroska;
 #define E_MultiLegal                     69
 #define E_Legal                          70
 #define E_LegalType                      71
+#define E_LegalContent                   80
 #define E_MultiTitle                     72
 #define E_Title                          73
 #define E_TitleType                      74
@@ -114,6 +115,8 @@ using namespace libmatroska;
 #define E_MultiComment                   77
 #define E_CommentName                    78
 #define E_Comments                       79
+
+// MAX: 80
 
 typedef struct {
   XML_Parser parser;

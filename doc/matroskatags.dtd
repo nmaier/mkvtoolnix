@@ -159,8 +159,9 @@
           Type,
           URL*,
           Address?,
+          Content?,
           MultiComment*)>
-<!element LegalType (#PCDATA)>
+<!element Content (#PCDATA)>
 
 <!element MultiTitle (Title+)>
 <!element Title (
