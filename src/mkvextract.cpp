@@ -50,6 +50,7 @@ extern "C" {
 #include <ebml/EbmlVoid.h>
 #include <matroska/FileKax.h>
 
+#include <matroska/KaxAttached.h>
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
@@ -78,8 +79,9 @@ using namespace std;
 
 #define NAME "mkvextract"
 
-#define MODE_TRACKS 0
-#define MODE_TAGS   1
+#define MODE_TRACKS      0
+#define MODE_TAGS        1
+#define MODE_ATTACHMENTS 2
 
 class ssa_line_c {
 public:
@@ -96,12 +98,12 @@ bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
 typedef struct {
   char *out_name;
 
-  mm_io_c *mm_io;
+  mm_io_c *out;
   avi_t *avi;
   ogg_stream_state osstate;
 
   int64_t tid;
-  bool in_use;
+  bool in_use, done;
 
   char track_type;
   int type;
@@ -134,8 +136,6 @@ typedef struct {
 
 vector<mkv_track_t> tracks;
 
-bool tags_extracted = false;
-
 mkv_track_t *find_track(int tid) {
   int i;
 
@@ -151,21 +151,35 @@ char typenames[14][20] = {"unknown", "Ogg" "AVI", "WAV", "SRT", "MP3", "AC3",
                           "AAC", "SSA/ASS"};
 
 void usage() {
-  mxprint(stdout,
-    "Usage: mkvextract -i inname [TID1:outname1 [TID2:outname2 ...]]\n"
-    "   or  mkvextract -i inname -t\n\n"
-    " First operation mode extracts some tracks to external files.\n"
-    "  -i inname      Use 'inname' as the source.\n"
-    "  -c charset     Convert text subtitles to this charset.\n"
-    "  TID:outname    Write track with the ID TID to 'outname'.\n"
-    "\n"
-    " Second operation mode extracts the tags from inname.\n"
-    "  -t, --tags     Only extract the tags and display them in XML\n"
-    "                 format suited for mkvmerge.\n"
-    "\n"
-    "  -v, --verbose  Increase verbosity.\n"
-    "  -h, --help     Show this help.\n"
-    "  -V, --version  Show version information.\n");
+  const char *usage_infos =
+"Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
+"   or  mkvextract tags <inname> [options]\n"
+"   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
+"\n   or  mkvextract <-h|-V>\n"
+"\n"
+" The first word tells mkvextract what to extract. The second must be the\n"
+" source file. The only 'global' option that can be used with all modes is\n"
+" '-v' or '--verbose' to increase the verbosity. All other options depend\n"
+" on the mode.\n"
+"\n"
+" First mode extracts some tracks to external files.\n"
+"  -c charset     Convert text subtitles to this charset.\n"
+"  TID:out        Write track with the ID TID to the file 'out'.\n"
+"\n"
+" Second mode extracts the tags and converts them to XML. The output is\n"
+" written to the standard output. The output can be used as a source\n"
+" for mkvmerge.\n"
+"\n"
+" Third mode extracts attachments from inname.\n"
+"  AID:outname    Write the attachment with the ID AID to 'outname'.\n"
+"\n"
+" These options can be used instead of the mode keyword to obtain\n"
+" further information:\n"
+"  -v, --verbose  Increase verbosity.\n"
+"  -h, --help     Show this help.\n"
+"  -V, --version  Show version information.\n";
+
+  mxprint(stdout, usage_infos);
 }
 
 void parse_args(int argc, char **argv, char *&file_name, int &mode) {
@@ -177,56 +191,50 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
   file_name = NULL;
   verbose = 0;
 
-  mode = MODE_TRACKS;
-
-  // Find options that directly end the program.
-  for (i = 1; i < argc; i++)
-    if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      mxprint(stdout, "mkvextract v" VERSION "\n");
-      exit(0);
-
-    } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
-               !strcmp(argv[i], "--help")) {
-      usage();
-      exit(0);
-    }
-
-  for (i = 1; i < argc; i++)
-    if (!strcmp(argv[i], "-i")) {
-      if ((i + 1) >= argc) {
-        mxprint(stderr, "Error: -i lacks a file name.\n");
-        exit(1);
-
-      } else if (file_name != NULL) {
-        mxprint(stderr, "Error: Only one input file is allowed.\n");
-        exit(1);
-
-      }
-      file_name = argv[i + 1];
-      i++;
-
-    } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tags"))
-      mode = MODE_TAGS;
-
-  if (file_name == NULL) {
-    mxprint(stderr, "Error: No input file given.\n\n");
+  if (argc < 2) {
     usage();
     exit(0);
   }
 
-  if (mode == MODE_TAGS)
-    return;
+  if (!strcmp(argv[1], "-V") || !strcmp(argv[1], "--version")) {
+    mxprint(stdout, "mkvextract v" VERSION "\n");
+    exit(0);
+
+  } else if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "-?") ||
+             !strcmp(argv[1], "--help")) {
+    usage();
+    exit(0);
+  }
+
+  if (!strcmp(argv[1], "tracks"))
+    mode = MODE_TRACKS;
+  else if (!strcmp(argv[1], "tags"))
+    mode = MODE_TAGS;
+  else if (!strcmp(argv[1], "attachments"))
+    mode = MODE_ATTACHMENTS;
+  else {
+    mxprint(stderr, "Unknown mode '%s'.\n", argv[1]);
+    exit(1);
+  }
+
+  if (argc < 3) {
+    usage();
+    exit(0);
+  }
+
+  file_name = argv[2];
 
   conv_handle = 0;
 
   // Now process all the other options.
-  for (i = 1; i < argc; i++)
+  for (i = 3; i < argc; i++)
     if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose++;
-    else if (!strcmp(argv[i], "-i"))
-      i++;
-
     else if (!strcmp(argv[i], "-c")) {
+      if (mode != MODE_TRACKS) {
+        mxprint(stderr, "Error: -c is only allowed when extracting tracks.\n");
+        exit(1);
+      }
       if ((i + 1) >= argc) {
         mxprint(stderr, "Error: -c lacks a charset.\n");
         exit(1);
@@ -234,23 +242,28 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       conv_handle = utf8_init(argv[i + 1]);
       i++;
 
+    } else if (mode == MODE_TAGS) {
+      mxprint(stderr, "Error: No further options allowed when extracting "
+              "tags.\n");
+      exit(1);
+
     } else {
       copy = safestrdup(argv[i]);
       colon = strchr(copy, ':');
       if (colon == NULL) {
-        mxprint(stderr, "Error: Missing track ID in argument '%s'.\n",
-                argv[i]);
+        mxprint(stderr, "Error: Missing %s ID in argument '%s'.\n",
+                mode == MODE_TRACKS ? "track" : "attachment", argv[i]);
         exit(1);
       }
       *colon = 0;
       if (!parse_int(copy, tid) || (tid < 0)) {
-        mxprint(stderr, "Error: Invalid track ID in argument '%s'.\n",
-                argv[i]);
+        mxprint(stderr, "Error: Invalid %s ID in argument '%s'.\n",
+                mode == MODE_TRACKS ? "track" : "attachment", argv[i]);
         exit(1);
       }
       colon++;
       if (*colon == 0) {
-        mxprint(stderr, "Error: Missing output filename in argument '%s'.\n",
+        mxprint(stderr, "Error: Missing output file name in argument '%s'.\n",
                 argv[i]);
         exit(1);
       }
@@ -261,6 +274,9 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       tracks.push_back(track);
       safefree(copy);
     }
+
+  if (mode == MODE_TAGS)
+    return;
 
   if (tracks.size() == 0) {
     mxprint(stdout, "Nothing to do.\n\n");
@@ -311,8 +327,8 @@ void flush_ogg_pages(mkv_track_t &track) {
   ogg_page page;
 
   while (ogg_stream_flush(&track.osstate, &page)) {
-    track.mm_io->write(page.header, page.header_len);
-    track.mm_io->write(page.body, page.body_len);
+    track.out->write(page.header, page.header_len);
+    track.out->write(page.body, page.body_len);
   }
 }
 
@@ -320,8 +336,8 @@ void write_ogg_pages(mkv_track_t &track) {
   ogg_page page;
 
   while (ogg_stream_pageout(&track.osstate, &page)) {
-    track.mm_io->write(page.header, page.header_len);
-    track.mm_io->write(page.body, page.body_len);
+    track.out->write(page.header, page.header_len);
+    track.out->write(page.body, page.body_len);
   }
 }
 
@@ -554,7 +570,7 @@ void create_output_files() {
       } else {
 
         try {
-          tracks[i].mm_io = new mm_io_c(tracks[i].out_name, MODE_CREATE);
+          tracks[i].out = new mm_io_c(tracks[i].out_name, MODE_CREATE);
         } catch (exception &ex) {
           mxprint(stderr, "Error: Could not create '%s'. Reason: %d (%s). "
                   "Aborting.\n", tracks[i].out_name, errno, strerror(errno));
@@ -608,7 +624,7 @@ void create_output_files() {
           put_uint16(&wh->common.wBitsPerSample, tracks[i].a_bps);
           memcpy(&wh->data.id, "data", 4);
 
-          tracks[i].mm_io->write(wh, sizeof(wave_header));
+          tracks[i].out->write(wh, sizeof(wave_header));
 
         }  else if (tracks[i].type == TYPESRT)
           tracks[i].srt_num = 1;
@@ -619,8 +635,8 @@ void create_output_files() {
           s = (char *)safemalloc(tracks[i].private_size + 1);
           memcpy(s, tracks[i].private_data, tracks[i].private_size);
           s[tracks[i].private_size] = 0;
-          tracks[i].mm_io->puts_unl(s);
-          tracks[i].mm_io->puts_unl("\n[Events]\nFormat: Marked, Start, End, "
+          tracks[i].out->puts_unl(s);
+          tracks[i].out->puts_unl("\n[Events]\nFormat: Marked, Start, End, "
                                     "Style, Name, MarginL, MarginR, MarginV, "
                                     "Effect, Text\n");
 
@@ -700,7 +716,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         // Print the entry's number.
         sprintf(buffer, "%d\n", tracks[i].srt_num);
         tracks[i].srt_num++;
-        tracks[i].mm_io->write(buffer, strlen(buffer));
+        tracks[i].out->write(buffer, strlen(buffer));
 
         // Print the timestamps.
         sprintf(buffer, "%02lld:%02lld:%02lld,%03lld --> %02lld:%02lld:%02lld,"
@@ -709,10 +725,10 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
                 (start / 1000) % 60, start % 1000,
                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                 (end / 1000) % 60, end % 1000);
-        tracks[i].mm_io->write(buffer, strlen(buffer));
+        tracks[i].out->write(buffer, strlen(buffer));
 
         // Print the text itself.
-        tracks[i].mm_io->puts_unl(s);
+        tracks[i].out->puts_unl(s);
         safefree(s);
         break;
 
@@ -832,13 +848,13 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         // number of raw frames, 2 bits, 0 (meaning 1 frame) (ASSUMPTION!)
 
         // Write the ADTS header and the data itself.
-        track->mm_io->write(adts, 56 / 8);
-        track->mm_io->write(data.Buffer(), data.Size());
+        track->out->write(adts, 56 / 8);
+        track->out->write(data.Buffer(), data.Size());
 
         break;
 
       default:
-        track->mm_io->write(data.Buffer(), data.Size());
+        track->out->write(data.Buffer(), data.Size());
         track->bytes_written += data.Size();
 
     }
@@ -873,17 +889,17 @@ void close_files() {
 
           flush_ogg_pages(tracks[i]);
 
-          delete tracks[i].mm_io;
+          delete tracks[i].out;
 
           break;
 
         case TYPEWAV:
           // Fix the header with the real number of bytes written.
-          tracks[i].mm_io->setFilePointer(0);
+          tracks[i].out->setFilePointer(0);
           tracks[i].wh.riff.len = tracks[i].bytes_written + 36;
           tracks[i].wh.data.len = tracks[i].bytes_written;
-          tracks[i].mm_io->write(&tracks[i].wh, sizeof(wave_header));
-          delete tracks[i].mm_io;
+          tracks[i].out->write(&tracks[i].wh, sizeof(wave_header));
+          delete tracks[i].out;
 
           break;
 
@@ -892,15 +908,15 @@ void close_files() {
           // write them.
           sort(tracks[i].ssa_lines.begin(), tracks[i].ssa_lines.end());
           for (k = 0; k < tracks[i].ssa_lines.size(); k++) {
-            tracks[i].mm_io->puts_unl(tracks[i].ssa_lines[k].line);
+            tracks[i].out->puts_unl(tracks[i].ssa_lines[k].line);
             safefree(tracks[i].ssa_lines[k].line);
           }
-          delete tracks[i].mm_io;
+          delete tracks[i].out;
 
           break;
 
         default:
-          delete tracks[i].mm_io;
+          delete tracks[i].out;
       }
     }
   }
@@ -909,7 +925,7 @@ void close_files() {
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
 
-bool process_file(const char *file_name) {
+bool extract_tracks(const char *file_name) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
@@ -1441,6 +1457,7 @@ void extract_tags(const char *file_name) {
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   EbmlStream *es;
   mm_io_c *in;
+  bool tags_extracted = false;
 
   // open input file
   try {
@@ -1547,6 +1564,256 @@ void extract_tags(const char *file_name) {
     mxprint(stdout, "</Tags>\n");
 }
 
+void handle_attachments(mm_io_c *in, EbmlStream *es, EbmlElement *l0,
+                        int64_t pos) {
+  KaxAttachments *atts;
+  KaxAttached *att;
+  KaxFileData *fdata;
+  EbmlElement *l1, *l2;
+  int upper_lvl_el, i, k;
+  string name, type;
+  int64_t size, id;
+  char *str;
+  bool found;
+  mm_io_c *out;
+
+  in->save_pos(pos);
+  l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                           true);
+
+  if ((l1 != NULL) && (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)) {
+    atts = (KaxAttachments *)l1;
+    l2 = NULL;
+    upper_lvl_el = 0;
+    atts->Read(*es, KaxAttachments::ClassInfos.Context, upper_lvl_el, l2,
+               true);
+    for (i = 0; i < atts->ListSize(); i++) {
+      att = (KaxAttached *)(*atts)[i];
+      if (EbmlId(*att) == KaxAttached::ClassInfos.GlobalId) {
+        name = "";
+        type = "";
+        size = -1;
+        id = -1;
+        fdata = NULL;
+
+        for (k = 0; k < att->ListSize(); k++) {
+          l2 = (*att)[k];
+
+          if (EbmlId(*l2) == KaxFileName::ClassInfos.GlobalId) {
+            KaxFileName &fname = *static_cast<KaxFileName *>(l2);
+            str = UTFstring_to_cstr(UTFstring(fname));
+            name = str;
+            safefree(str);
+
+          } else if (EbmlId(*l2) == KaxMimeType::ClassInfos.GlobalId) {
+            KaxMimeType &mtype = *static_cast<KaxMimeType *>(l2);
+            type = string(mtype);
+
+          } else if (EbmlId(*l2) == KaxFileUID::ClassInfos.GlobalId) {
+            KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
+            id = uint32(fuid);
+
+          } else if (EbmlId(*l2) == KaxFileData::ClassInfos.GlobalId) {
+            fdata = (KaxFileData *)l2;
+            size = fdata->GetSize();
+
+          }
+        }
+
+        if ((id != -1) && (size != -1) && (type.length() != 0)) {
+          found = false;
+
+          for (k = 0; k < tracks.size(); k++)
+            if (tracks[k].tid == id) {
+              found = true;
+              break;
+            }
+
+          if (found && !tracks[k].done) {
+            mxprint(stdout, "Writing attachment #%lld, type %s, size %lld, "
+                    "to '%s'.\n", id, type.c_str(), size, tracks[k].out_name);
+            try {
+              out = new mm_io_c(tracks[k].out_name, MODE_WRITE);
+            } catch (...) {
+              mxprint(stderr, "Error: Could not create '%s' (%d, %s).\n",
+                      tracks[k].out_name, errno, strerror(errno));
+              exit(1);
+            }
+            out->write(fdata->GetBuffer(), fdata->GetSize());
+            delete out;
+            tracks[k].done = true;
+          }
+        }
+      }
+    }
+
+    delete l1;
+  }
+
+  in->restore_pos();
+}
+
+void extract_attachments(const char *file_name) {
+  int upper_lvl_el, i;
+  // Elements for different levels
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
+  EbmlStream *es;
+  mm_io_c *in;
+  bool done;
+
+  // open input file
+  try {
+    in = new mm_io_c(file_name, MODE_READ);
+  } catch (std::exception &ex) {
+    show_error("Error: Couldn't open input file %s (%s).", file_name,
+               strerror(errno));
+    return;
+  }
+
+  try {
+    es = new EbmlStream(*in);
+
+    // Find the EbmlHead element. Must be the first one.
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    if (l0 == NULL) {
+      show_error("Error: No EBML head found.");
+      delete es;
+
+      return;
+    }
+      
+    // Don't verify its data for now.
+    l0->SkipData(*es, l0->Generic().Context);
+    delete l0;
+
+    while (1) {
+      // Next element must be a segment
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+      if (l0 == NULL) {
+        show_error("No segment/level 0 element found.");
+        return;
+      }
+      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
+        show_element(l0, 0, "Segment");
+        break;
+      }
+
+      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+                   typeid(*l0).name());
+
+      l0->SkipData(*es, l0->Generic().Context);
+      delete l0;
+    }
+
+    upper_lvl_el = 0;
+    done = false;
+
+    // We've got our segment, so let's find the attachments
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
+    while (l1 != NULL) {
+      if (upper_lvl_el > 0)
+        break;
+      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
+        break;
+
+      if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId) {
+        handle_attachments(in, es, l0, l1->GetElementPosition());
+
+        done = true;
+        for (i = 0; i < tracks.size(); i++)
+          if (!tracks[i].done) {
+            done = false;
+            break;
+          }
+
+        if (done)
+          break;
+
+      } else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
+        int i, k;
+        EbmlElement *el;
+        KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
+        int64_t pos;
+        bool is_attachments;
+
+        i = 0;
+        seek_head.Read(*es, KaxSeekHead::ClassInfos.Context, i, el, true);
+        for (i = 0; i < seek_head.ListSize(); i++)
+          if (EbmlId(*seek_head[i]) == KaxSeek::ClassInfos.GlobalId) {
+            KaxSeek &seek = *static_cast<KaxSeek *>(seek_head[i]);
+            pos = -1;
+            is_attachments = false;
+
+            for (k = 0; k < seek.ListSize(); k++)
+              if (EbmlId(*seek[k]) == KaxSeekID::ClassInfos.GlobalId) {
+                KaxSeekID &sid = *static_cast<KaxSeekID *>(seek[k]);
+                EbmlId id(sid.GetBuffer(), sid.GetSize());
+                if (id == KaxAttachments::ClassInfos.GlobalId)
+                  is_attachments = true;
+
+              } else if (EbmlId(*seek[k]) ==
+                         KaxSeekPosition::ClassInfos.GlobalId)
+                pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
+
+            if ((pos != -1) && is_attachments) {
+              handle_attachments(in, es, l0,
+                                 ((KaxSegment *)l0)->GetGlobalPosition(pos));
+              done = true;
+              for (k = 0; k < tracks.size(); k++)
+                if (!tracks[k].done) {
+                  done = false;
+                  break;
+                }
+
+              if (done)
+                break;
+            }
+          }
+
+
+      } else
+        upper_lvl_el = 0;
+
+      if (done)
+        break;
+
+      if (upper_lvl_el > 0) {    // we're coming from l2
+        upper_lvl_el--;
+        delete l1;
+        l1 = l2;
+        if (upper_lvl_el > 0)
+          break;
+
+      } else if (upper_lvl_el == 0) {
+        l1->SkipData(*es, l1->Generic().Context);
+        delete l1;
+        upper_lvl_el = 0;
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
+
+      } else {
+        delete l1;
+        l1 = l2;
+      }
+
+    } // while (l1 != NULL)
+
+    delete l0;
+    delete es;
+    delete in;
+
+  } catch (exception &ex) {
+    show_error("Caught exception: %s", ex.what());
+    delete in;
+  }
+
+  for (i = 0; i < tracks.size(); i++)
+    if (!tracks[i].done)
+      mxprint(stdout, "An attachment with the ID %lld was not found.\n",
+              tracks[i].tid);
+}
+
 int main(int argc, char **argv) {
   char *input_file;
   int mode;
@@ -1559,13 +1826,16 @@ int main(int argc, char **argv) {
 
   parse_args(argc, argv, input_file, mode);
   if (mode == MODE_TRACKS) {
-    process_file(input_file);
+    extract_tracks(input_file);
 
     if (verbose == 0)
       mxprint(stderr, "Progress: 100%%\n");
 
   } else if (mode == MODE_TAGS)
     extract_tags(input_file);
+
+  else if (mode == MODE_ATTACHMENTS)
+    extract_attachments(input_file);
 
   else
     die("mkvextract: Unknown mode!?");
