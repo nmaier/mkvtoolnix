@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.5 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: common.cpp,v 1.6 2003/03/13 09:31:36 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -219,3 +219,30 @@ void free_track_info(track_info_t *ti) {
 
   free(ti);
 }
+
+u_int16_t get_uint16(const void *buf) {
+  u_int16_t      ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[1] & 0xff;
+  ret = (ret << 8) + (tmp[0] & 0xff);
+
+  return ret;
+}
+
+u_int32_t get_uint32(const void *buf) {
+  u_int32_t      ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[3] & 0xff;
+  ret = (ret << 8) + (tmp[2] & 0xff);
+  ret = (ret << 8) + (tmp[1] & 0xff);
+  ret = (ret << 8) + (tmp[0] & 0xff);
+
+  return ret;
+}
+
