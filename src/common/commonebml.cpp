@@ -24,7 +24,7 @@
 using namespace libebml;
 
 #if defined(DEBUG)
-void __debug_debug_dump_elements(EbmlElement *e, int level) {
+void __debug_dump_elements(EbmlElement *e, int level) {
   int i;
   EbmlMaster *m;
 
