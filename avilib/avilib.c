@@ -28,7 +28,8 @@
 //SLM
 #ifdef WIN32
 #include <io.h>
-#define strncasecmp(a,b,c) _strnicmp(a,b,c)
+#define ftruncate _chsize
+#define strncasecmp _strnicmp
 #endif
 
 #include "avilib.h"
