@@ -158,7 +158,7 @@ find_tag_for_track(int idx,
         continue;
       tag_tuid = get_tag_tuid(*static_cast<KaxTag *>(m[i]));
       if (((tuid == -1) || (tag_tuid == -1) || (tuid == tag_tuid)) &&
-          ((get_simple_tag("TRACKNUMBER",
+          ((get_simple_tag("SET_PART",
                            *static_cast<EbmlMaster *>(m[i])) == sidx) ||
            (idx == -1)))
         return static_cast<KaxTag *>(m[i]);
@@ -195,6 +195,38 @@ get_chapter_index(int idx,
   return -1;
 }
 
+static string
+get_simple_tag_name(KaxTagSimple &tag) {
+  KaxTagName *tname;
+  string result;
+  char *name;
+
+  tname = FINDFIRST(&tag, KaxTagName);
+  if (tname == NULL)
+    return "";
+  name = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
+                                         (tname)));
+  result = name;
+  safefree(name);
+  return result;
+}
+
+static string
+get_simple_tag_value(KaxTagSimple &tag) {
+  KaxTagString *tstring;
+  string result;
+  char *value;
+
+  tstring = FINDFIRST(&tag, KaxTagString);
+  if (tstring == NULL)
+    return "";
+  value = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
+                                          (tstring)));
+  result = value;
+  safefree(value);
+  return result;
+}
+
 #define print_if_global(name, format) \
   _print_if_global(out, name, format, chapters.ListSize(), tuid, tags)
 static void
@@ -228,6 +260,21 @@ _print_if_available(mm_io_c &out,
     out.printf(format, value.c_str());
 }
 
+static void
+print_comments(const char *prefix,
+               KaxTag &tag,
+               mm_io_c &out) {
+  int i;
+
+  for (i = 0; i < tag.ListSize(); i++)
+    if (is_id(tag[i], KaxTagSimple) &&
+        (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) ==
+         "COMMENTS"))
+      out.printf("%sREM COMMENT \"%s\"\n", prefix,
+                 get_simple_tag_value(*static_cast<KaxTagSimple *>(tag[i])).
+                 c_str());
+}
+
 void
 write_cuesheet(const char *file_name,
                KaxChapters &chapters,
@@ -243,10 +290,13 @@ write_cuesheet(const char *file_name,
     return;
 
   print_if_global("DATE", "REM DATE %s\n");
-  print_if_global("GENRE", "REM GENRE %s\n");
   print_if_global("DISCID", "REM DISCID %s\n");
-  print_if_global("ALBUM_ARTIST", "PERFORMER \"%s\"\n");
+  print_if_global("ARTIST", "PERFORMER \"%s\"\n");
   print_if_global("ALBUM", "TITLE \"%s\"\n");
+  print_if_global("CATALOG", "CATALOG %s\n");
+  tag = find_tag_for_track(-1, tuid, 0, tags);
+  if (tag != NULL)
+    print_comments("", *tag, out);
 
   out.printf("FILE \"%s\" WAVE\n", file_name);
 
@@ -279,6 +329,7 @@ write_cuesheet(const char *file_name,
                       1000000000.0));
       print_if_available("DATE", "    REM DATE %s\n");
       print_if_available("GENRE", "    REM GENRE %s\n");
+      print_comments("    ", *tag, out);
     }
   }
 }
