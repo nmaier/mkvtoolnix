@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.30 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.31 2003/05/04 10:26:51 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -63,6 +63,21 @@
 #include "KaxTrackVideo.h"
 
 #include "common.h"
+#include "matroska.h"
+
+typedef struct {
+  uint32_t  bi_size;
+  uint32_t  bi_width;
+  uint32_t  bi_height;
+  uint16_t  bi_planes;
+  uint16_t  bi_bit_count;
+  uint32_t  bi_compression;
+  uint32_t  bi_size_image;
+  uint32_t  bi_x_pels_per_meter;
+  uint32_t  bi_y_pels_per_meter;
+  uint32_t  bi_clr_used;
+  uint32_t  bi_clr_important;
+} BITMAPINFOHEADER;
 
 #define NAME "MKVInfo"
 
@@ -173,7 +188,7 @@ int is_ebmlvoid(EbmlElement *l, int level) {
 }
 
 void process_file() {
-  int upper_lvl_el, exit_loop, i, delete_object;
+  int upper_lvl_el, exit_loop, i, delete_object, ms_compat;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   EbmlElement *l5 = NULL;
@@ -421,6 +436,9 @@ void process_file() {
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
+
+                ms_compat = 0;
+
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
@@ -487,12 +505,22 @@ void process_file() {
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
+                if (!strcmp((char *)&binary(codec_id), MKV_V_MSCOMP))
+                  ms_compat = 1;
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
                 c_priv.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + CodecPrivate, length %llu",
                         NAME, c_priv.GetSize());
+                if (ms_compat &&
+                    (c_priv.GetSize() >= sizeof(BITMAPINFOHEADER))) {
+                  BITMAPINFOHEADER *bih = (BITMAPINFOHEADER *)&binary(c_priv);
+                  unsigned char *fcc = (unsigned char *)&bih->bi_compression;
+                  fprintf(stdout, " (FourCC: %c%c%c%c, 0x%u)",
+                          fcc[0], fcc[1], fcc[2], fcc[3],
+                          bih->bi_compression);
+                }
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
