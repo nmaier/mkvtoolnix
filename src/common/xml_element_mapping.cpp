@@ -67,6 +67,8 @@ xml_element_map_init() {
     {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterProcessedPrivate", ebmlt_binary, 3, 0, 0, no_id, NULL, NULL,
      NULL},
+    {"ChapterPhysicalEquiv", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL,
+     NULL, NULL},
 
     {"ChapterProcess", ebmlt_master, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterProcessTime", ebmlt_uint, 4, 0, 0, no_id, NULL, NULL, NULL},

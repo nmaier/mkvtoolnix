@@ -116,7 +116,6 @@ typedef struct {
   int64_t offset;
   KaxChapters *chapters;
   KaxEditionEntry *edition;
-  uint32_t edition_uid;
   KaxChapterAtom *atom;
   bool do_convert;
   string global_catalog;
@@ -233,8 +232,6 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   tag = new KaxTag;
 
   targets = &GetChild<KaxTagTargets>(*tag);
-  *static_cast<EbmlUInteger *>(&GetChild<KaxTagEditionUID>(*targets)) =
-    a.edition_uid;
   *static_cast<EbmlUInteger *>(&GetChild<KaxTagTargetTypeValue>(*targets)) =
     TAG_TARGETTYPE_ALBUM;
   *static_cast<EbmlString *>(&GetChild<KaxTagTargetType>(*targets)) = "album";
@@ -283,6 +280,8 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
       "eng";
 
     *static_cast<EbmlUInteger *>(&GetChild<KaxChapterFlagHidden>(*atom)) = 1;
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterPhysicalEquiv>(*atom)) =
+      CHAPTER_PHYSEQUIV_INDEX;
   }
 }
 
@@ -303,12 +302,14 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   if (a.edition == NULL) {
     a.edition = &GetChild<KaxEditionEntry>(*a.chapters);
     *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(*a.edition)) =
-      a.edition_uid;
+      create_unique_uint32(UNIQUE_EDITION_IDS);
   }
   if (a.atom == NULL)
     a.atom = &GetChild<KaxChapterAtom>(*a.edition);
   else
     a.atom = &GetNextChild<KaxChapterAtom>(*a.edition, *a.atom);
+  *static_cast<EbmlUInteger *>(&GetChild<KaxChapterPhysicalEquiv>(*a.atom)) =
+    CHAPTER_PHYSEQUIV_TRACK;
 
   cuid = create_unique_uint32(UNIQUE_CHAPTER_IDS);
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*a.atom)) = cuid;
@@ -401,7 +402,6 @@ parse_cue_chapters(mm_text_io_c *in,
   a.num = 0;
   a.line_num = 0;
   a.start_of_track = -1;
-  a.edition_uid = create_unique_uint32(UNIQUE_EDITION_IDS);
   try {
     while (in->getline2(line)) {
       a.line_num++;
