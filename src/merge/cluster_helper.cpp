@@ -185,8 +185,11 @@ cluster_helper_c::add_packet(packet_t *packet) {
       bytes_in_file = 0;
       first_timecode_in_file = -1;
 
-      timecode_offset = packet->assigned_timecode;
-      first_timecode = no_linking ? 0 : -1;
+      if (no_linking) {
+        timecode_offset = packet->assigned_timecode;
+        first_timecode = 0;
+      } else
+        first_timecode = -1;
     }
   }
 
@@ -738,7 +741,7 @@ cluster_helper_c::free_ref(int64_t ref_timecode,
 
 int64_t
 cluster_helper_c::get_duration() {
-  return max_timecode_and_duration - timecode_offset;
+  return max_timecode_and_duration - first_timecode_in_file;
 }
 
 int64_t
