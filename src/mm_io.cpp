@@ -428,9 +428,32 @@ int mm_text_io_c::read_next_char(char *buffer) {
   if (byte_order == BO_NONE)
     return read(buffer, 1);
 
-  if (byte_order == BO_UTF8)
-    size = 1;
-  else if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF16_BE))
+  if (byte_order == BO_UTF8) {
+    if (read(stream, 1) != 1)
+      return 0;
+    if ((stream[0] & 0x80) == 0)
+      size = 1;
+    else if ((stream[0] & 0xe0) == 0xc0)
+      size = 2;
+    else if ((stream[0] & 0xf0) == 0xe0)
+      size = 3;
+    else if ((stream[0] & 0xf8) == 0xf0)
+      size = 4;
+    else if ((stream[0] & 0xfc) == 0xf8)
+      size = 5;
+    else if ((stream[0] & 0xfe) == 0xfc)
+      size = 6;
+    else
+      die("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: "
+          "0x%02x", stream[0]);
+
+    if ((size > 1) && (read(&stream[1], size - 1) != (size - 1)))
+      return 0;
+
+    memcpy(buffer, stream, size);
+
+    return size;
+  } else if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF16_BE))
     size = 2;
   else
     size = 4;
