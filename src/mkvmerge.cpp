@@ -1121,7 +1121,7 @@ render_headers(mm_io_c *rout) {
 
     // Generate the segment UIDs.
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      if (first_file) {
+      if (file_num == 1) {
         seguid_current.generate_random();
         seguid_next.generate_random();
       } else {

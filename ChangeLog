@@ -1,5 +1,8 @@
 2004-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The segment UID was not generated if
+	splitting was off.
+
 	* mmg: new feature: Automatically set the output file name when
 	the first file is added to the same name but with a '.mkv'
 	extension if it hasn't been set yet. Can be disabled on the
