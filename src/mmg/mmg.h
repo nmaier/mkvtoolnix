@@ -25,7 +25,17 @@
 #include <vector>
 #include <stdint.h>
 
+#include "wx/confbase.h"
+
 using namespace std;
+
+#ifdef SYS_WINDOWS
+#define ALLFILES "All Files (*.*)|*.*"
+#define PSEP '\\'
+#else
+#define ALLFILES "All Files (*)|*"
+#define PSEP '/'
+#endif
 
 #define ID_DIALOG 10000
 #define ID_TC_OUTPUT 10001
@@ -47,9 +57,6 @@ using namespace std;
 #define ID_CB_AACISSBR 10017
 #define ID_TC_TAGS 10018
 #define ID_B_BROWSETAGS 10019
-#define ID_B_RUN 10020
-#define ID_B_SAVECMDLINE 10021
-#define ID_B_COPYTOCLIPBOARD 10022
 #define ID_TC_CMDLINE 10023
 #define ID_T_UPDATECMDLINE 10024
 #define ID_B_ADDATTACHMENT 10025
@@ -103,43 +110,6 @@ wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString &source);
 wxString shell_escape(wxString &source);
 
-class mmg_dialog: public wxFrame {    
-  DECLARE_CLASS(mmg_dialog);
-  DECLARE_EVENT_TABLE();
-protected:
-  wxButton *b_browse_output, *b_run, *b_save_cmdline, *b_copy_to_clipboard;
-  wxTextCtrl *tc_output, *tc_cmdline;
-
-  wxString cmdline;
-
-  wxTimer cmdline_timer;
-  wxTimer status_bar_timer;
-
-  wxStatusBar *status_bar;
-
-public:
-  mmg_dialog();
-
-  void on_browse_output(wxCommandEvent &evt);
-  void on_run(wxCommandEvent &evt);
-  void on_save_cmdline(wxCommandEvent &evt);
-  void on_copy_to_clipboard(wxCommandEvent &evt);
-
-  void on_quit(wxCommandEvent &evt);
-  void on_file_load(wxCommandEvent &evt);
-  void on_file_save(wxCommandEvent &evt);
-  void on_about(wxCommandEvent &evt);
-
-  void on_update_command_line(wxTimerEvent &evt);
-  void update_command_line();
-  wxString &get_command_line();
-
-  void on_clear_status_bar(wxTimerEvent &evt);
-  void set_status_bar(wxString text);
-};
-
-extern mmg_dialog *mdlg;
-
 class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);
   DECLARE_EVENT_TABLE();
@@ -176,6 +146,9 @@ public:
   void audio_track_mode();
   void video_track_mode();
   void subtitle_track_mode();
+
+  void save(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg);
 };
 
 class tab_attachments: public wxPanel {
@@ -200,6 +173,9 @@ public:
   void on_style_changed(wxCommandEvent &evt);
 
   void enable(bool e);
+
+  void save(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg);
 };
 
 class tab_settings: public wxPanel {
@@ -210,11 +186,59 @@ protected:
 
 public:
   tab_settings(wxWindow *parent);
+  virtual ~tab_settings();
 
   void on_browse(wxCommandEvent &evt);
 
-  void load();
-  void save();
+  void load_preferences();
+  void save_preferences();
+
+  void save(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg);
 };
+
+class mmg_dialog: public wxFrame {    
+  DECLARE_CLASS(mmg_dialog);
+  DECLARE_EVENT_TABLE();
+protected:
+  wxButton *b_browse_output;
+  wxTextCtrl *tc_output, *tc_cmdline;
+
+  wxString cmdline;
+
+  wxTimer cmdline_timer;
+  wxTimer status_bar_timer;
+
+  wxStatusBar *status_bar;
+
+  tab_input *input_page;
+  tab_attachments *attachments_page;
+  tab_settings *settings_page;
+
+public:
+  mmg_dialog();
+
+  void on_browse_output(wxCommandEvent &evt);
+  void on_run(wxCommandEvent &evt);
+  void on_save_cmdline(wxCommandEvent &evt);
+  void on_copy_to_clipboard(wxCommandEvent &evt);
+
+  void on_quit(wxCommandEvent &evt);
+  void on_file_load(wxCommandEvent &evt);
+  void on_file_save(wxCommandEvent &evt);
+  void on_about(wxCommandEvent &evt);
+
+  void on_update_command_line(wxTimerEvent &evt);
+  void update_command_line();
+  wxString &get_command_line();
+
+  void load(wxString file_name);
+  void save(wxString file_name);
+
+  void on_clear_status_bar(wxTimerEvent &evt);
+  void set_status_bar(wxString text);
+};
+
+extern mmg_dialog *mdlg;
 
 #endif // __MMG_DIALOG_H

@@ -24,6 +24,8 @@
 #include "wx/wx.h"
 #include "wx/clipbrd.h"
 #include "wx/file.h"
+#include "wx/confbase.h"
+#include "wx/fileconf.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 #include "wx/statusbr.h"
@@ -32,6 +34,7 @@
 #include "mmg.h"
 #include "common.h"
 
+wxApp *app;
 wxString last_open_dir;
 wxString mkvmerge_path;
 vector<mmg_file_t> files;
@@ -139,9 +142,9 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   wxNotebook *notebook =
     new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500),
                    wxNB_TOP);
-  tab_input *input_page = new tab_input(notebook);
-  tab_attachments *attachments_page = new tab_attachments(notebook);
-  tab_settings *settings_page = new tab_settings(notebook);
+  input_page = new tab_input(notebook);
+  attachments_page = new tab_attachments(notebook);
+  settings_page = new tab_settings(notebook);
 
   notebook->AddPage(input_page, _("Input"));
   notebook->AddPage(attachments_page, _("Attachments"));
@@ -173,24 +176,6 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                    wxTE_MULTILINE);
   sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-//   wxBoxSizer *bs_low3 = new wxBoxSizer(wxHORIZONTAL);
-//   bs_main->Add(bs_low3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-
-//   b_run = new wxButton(this, ID_B_RUN, _("Run"), wxDefaultPosition,
-//                        wxDefaultSize, 0);
-//   bs_low3->Add(b_run, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-//   bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-
-//   b_save_cmdline = new wxButton(this, ID_B_SAVECMDLINE, _("Save command line"),
-//                                 wxDefaultPosition, wxDefaultSize, 0);
-//   bs_low3->Add(b_save_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-//   bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-
-//   b_copy_to_clipboard = new wxButton(this, ID_B_COPYTOCLIPBOARD,
-//                                      _("Copy to clipboard"), wxDefaultPosition,
-//                                      wxDefaultSize, 0);
-//   bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-
   last_open_dir = "";
   cmdline = mkvmerge_path + " -o \"" + tc_output->GetValue() + "\" ";
   tc_cmdline->SetValue(cmdline);
@@ -198,6 +183,26 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   cmdline_timer.Start(1000);
 
   set_status_bar("mkvmerge GUI ready");
+
+  if (app->argc > 1) {
+    wxString file;
+
+    file = app->argv[1];
+    if (!wxFileExists(file) || wxDirExists(file))
+      wxMessageBox("The file does exist.", "Error loading settings",
+                   wxOK | wxCENTER | wxICON_ERROR);
+    else {
+#ifdef SYS_WINDOWS
+      if ((file.Length() > 3) && (file.c_str()[1] != ':') &&
+          (file.c_str()[0] != '\\'))
+        file = wxGetCwd() + "\\" + file;
+#else
+      if ((file.Length() > 0) && (file.c_str()[0] != '/'))
+        file = wxGetCwd() + "/" + file;
+#endif
+      load(file);
+    }
+  }
 }
 
 void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
@@ -225,9 +230,71 @@ void mmg_dialog::on_quit(wxCommandEvent &evt) {
 }
 
 void mmg_dialog::on_file_load(wxCommandEvent &evt) {
+  wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
+                   _T("mkvmerge GUI settings (*.mmg)|*.mmg|" ALLFILES),
+                   wxOPEN);
+  if(dlg.ShowModal() == wxID_OK) {
+    if (!wxFileExists(dlg.GetPath()) || wxDirExists(dlg.GetPath())) {
+      wxMessageBox("The file does exist.", "Error loading settings",
+                   wxOK | wxCENTER | wxICON_ERROR);
+      return;
+    }
+    last_open_dir = dlg.GetDirectory();
+    load(dlg.GetPath());
+  }
+}
+
+void mmg_dialog::load(wxString file_name) {
+  wxFileConfig *cfg;
+  wxString s;
+  int version;
+
+  cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
+  cfg->SetPath("/mkvmergeGUI");
+  if (!cfg->Read("file_version", &version) || (version != 1)) {
+    wxMessageBox("The file does not seem to be a valid mkvmerge GUI "
+                 "settings file.", "Error loading settings",
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+  cfg->Read("output_file_name", &s);
+  tc_output->SetValue(s);
+
+  input_page->load(cfg);
+  attachments_page->load(cfg);
+  settings_page->load(cfg);
+
+  delete cfg;
+
+  set_status_bar("Configuration loaded.");
 }
 
 void mmg_dialog::on_file_save(wxCommandEvent &evt) {
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+                   _T("mkvmerge GUI settings (*.mmg)|*.mmg|" ALLFILES),
+                   wxSAVE | wxOVERWRITE_PROMPT);
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
+    save(dlg.GetPath());
+  }
+}
+
+void mmg_dialog::save(wxString file_name) {
+  wxFileConfig *cfg;
+
+  cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
+  cfg->SetPath("/mkvmergeGUI");
+  cfg->Write("file_version", 1);
+  cfg->Write("gui_version", VERSION);
+  cfg->Write("output_file_name", tc_output->GetValue());
+
+  input_page->save(cfg);
+  attachments_page->save(cfg);
+  settings_page->save(cfg);
+
+  delete cfg;
+
+  set_status_bar("Configuration saved.");
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
@@ -254,12 +321,7 @@ void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
-#ifdef SYS_WINDOWS
-                   _T("All Files (*.*)|*.*"),
-#else
-                   _T("All Files (*)|*"),
-#endif
-                   wxSAVE | wxOVERWRITE_PROMPT);
+                   _T(ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     file = new wxFile(dlg.GetPath(), wxFile::write);
@@ -407,9 +469,6 @@ void mmg_dialog::update_command_line() {
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
-  EVT_BUTTON(ID_B_RUN, mmg_dialog::on_run)
-  EVT_BUTTON(ID_B_SAVECMDLINE, mmg_dialog::on_save_cmdline)
-  EVT_BUTTON(ID_B_COPYTOCLIPBOARD, mmg_dialog::on_copy_to_clipboard)
   EVT_TIMER(ID_T_UPDATECMDLINE, mmg_dialog::on_update_command_line)
   EVT_TIMER(ID_T_STATUSBAR, mmg_dialog::on_clear_status_bar)
   EVT_MENU(ID_M_FILE_EXIT, mmg_dialog::on_quit)
@@ -430,6 +489,7 @@ public:
 };
 
 bool mmg_app::OnInit() {
+  app = this;
   mdlg = new mmg_dialog();
   mdlg->Show(true);
 

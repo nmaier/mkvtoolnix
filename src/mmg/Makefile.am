@@ -10,6 +10,7 @@ mmg_SOURCES = mmg.cpp mmg.h \
 			../iso639.cpp ../iso639.h \
 			tab_attachments.cpp \
 			tab_input.cpp \
+			tab_global.cpp \
 			tab_settings.cpp
 
 mmg_LDADD = @PROFILING_LIBS@ @EBML_LIBS@ @WXWINDOWS_LIBS@ @MINGW_LIBS@

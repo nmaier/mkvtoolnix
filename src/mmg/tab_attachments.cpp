@@ -180,6 +180,84 @@ void tab_attachments::on_style_changed(wxCommandEvent &evt) {
     cob_style->GetValue().Find("Only") >= 0 ? 1 : 0;
 }
 
+void tab_attachments::save(wxConfigBase *cfg) {
+  mmg_attachment_t *a;
+  uint32_t i, j;
+  wxString s;
+
+  cfg->SetPath("/attachments");
+  cfg->Write("number_of_attachments", (int)attachments.size());
+  for (i = 0; i < attachments.size(); i++) {
+    a = &attachments[i];
+    s.Printf("attachment %u", i);
+    cfg->SetPath(s);
+    cfg->Write("file_name", *a->file_name);
+    s = "";
+    for (j = 0; j < a->description->Length(); j++)
+      if ((*a->description)[j] == '\n')
+        s += "!\\N!";
+      else
+        s += (*a->description)[j];
+    cfg->Write("description", s);
+    cfg->Write("mime_type", *a->mime_type);
+    cfg->Write("style", a->style);
+
+    cfg->SetPath("..");
+  }
+}
+
+void tab_attachments::load(wxConfigBase *cfg) {
+  mmg_attachment_t *ap, a;
+  uint32_t i;
+  int num, pos;
+  wxString s, c;
+
+  enable(false);
+  selected_attachment = -1;
+  lb_attachments->Clear();
+  b_remove_attachment->Enable(false);
+  for (i = 0; i < attachments.size(); i++) {
+    ap = &attachments[i];
+    delete ap->file_name;
+    delete ap->description;
+    delete ap->mime_type;
+  }
+  attachments.clear();
+
+  cfg->SetPath("/attachments");
+  if (!cfg->Read("number_of_attachments", &num) || (num < 0))
+    return;
+
+  for (i = 0; i < (uint32_t)num; i++) {
+    s.Printf("attachment %d", i);
+    cfg->SetPath(s);
+    a.file_name = new wxString;
+    a.description = new wxString;
+    a.mime_type = new wxString;
+    cfg->Read("file_name", a.file_name);
+    cfg->Read("description", &s);
+    cfg->Read("mime_type", a.mime_type);
+    cfg->Read("style", &a.style);
+    if ((a.style != 0) && (a.style != 1))
+      a.style = 0;
+    pos = s.Find("!\\N!");
+    while (pos >= 0) {
+      c = s.Mid(0, pos);
+      s.Remove(0, pos + 4);
+      *a.description += c + "\n";
+      pos = s.Find("!\\N!");
+    }
+    *a.description += s;
+
+    s = a.file_name->BeforeLast(PSEP);
+    c = a.file_name->AfterLast(PSEP);
+    lb_attachments->Append(c + " (" + s + ")");
+    attachments.push_back(a);
+
+    cfg->SetPath("..");
+  }
+}
+
 IMPLEMENT_CLASS(tab_attachments, wxPanel);
 BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
   EVT_BUTTON(ID_B_ADDATTACHMENT, tab_attachments::on_add_attachment)

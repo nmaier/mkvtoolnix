@@ -527,6 +527,153 @@ void tab_input::on_track_name_changed(wxCommandEvent &evt) {
     tc_track_name->GetValue();
 }
 
+void tab_input::save(wxConfigBase *cfg) {
+  uint32_t fidx, tidx;
+  mmg_file_t *f;
+  mmg_track_t *t;
+  wxString s;
+
+  cfg->SetPath("/input");
+  cfg->Write("number_of_files", (int)files.size());
+  for (fidx = 0; fidx < files.size(); fidx++) {
+    f = &files[fidx];
+    s.Printf("file %u", fidx);
+    cfg->SetPath(s);
+    cfg->Write("file_name", *f->file_name);
+    cfg->Write("no_chapters", f->no_chapters);
+
+    cfg->Write("number_of_tracks", (int)f->tracks->size());
+    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+      t = &(*f->tracks)[tidx];
+      s.Printf("track %u", tidx);
+      cfg->SetPath(s);
+      s.Printf("%c", t->type);
+      cfg->Write("type", s);
+      s.Printf("%lld", t->id);
+      cfg->Write("id", s);
+      cfg->Write("enabled", t->enabled);
+      cfg->Write("content_type", *t->ctype);
+      cfg->Write("default_track", t->default_track);
+      cfg->Write("aac_is_sbr", t->aac_is_sbr);
+      cfg->Write("language", *t->language);
+      cfg->Write("track_name", *t->track_name);
+      cfg->Write("cues", *t->cues);
+      cfg->Write("delay", *t->delay);
+      cfg->Write("stretch", *t->stretch);
+      cfg->Write("sub_charset", *t->sub_charset);
+      cfg->Write("tags", *t->tags);
+      cfg->SetPath("..");
+    }
+
+    cfg->SetPath("..");
+  }
+}
+
+void tab_input::load(wxConfigBase *cfg) {
+  uint32_t fidx, tidx;
+  mmg_file_t *f, fi;
+  mmg_track_t *t, tr;
+  wxString s, c, id;
+  int num_files, num_tracks;
+
+  clb_tracks->Clear();
+  lb_input_files->Clear();
+  no_track_mode();
+  selected_file = -1;
+  selected_track = -1;
+  b_remove_file->Enable(false);
+
+  for (fidx = 0; fidx < files.size(); fidx++) {
+    f = &files[fidx];
+
+    delete f->file_name;
+    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+      t = &(*f->tracks)[tidx];
+
+      delete t->ctype;
+      delete t->language;
+      delete t->track_name;
+      delete t->cues;
+      delete t->delay;
+      delete t->sub_charset;
+      delete t->tags;
+      delete t->stretch;
+    }
+    delete f->tracks;
+  }
+  files.clear();
+
+  cfg->SetPath("/input");
+  if (!cfg->Read("number_of_files", &num_files) || (num_files < 0))
+    return;
+
+  for (fidx = 0; fidx < (uint32_t)num_files; fidx++) {
+    s.Printf("file %u", fidx);
+    cfg->SetPath(s);
+    if (!cfg->Read("number_of_tracks", &num_tracks) || (num_tracks < 0)) {
+      cfg->SetPath("..");
+      continue;
+    }
+    if (!cfg->Read("file_name", &s)) {
+      cfg->SetPath("..");
+      continue;
+    }
+    fi.file_name = new wxString(s);
+    cfg->Read("no_chapters", &fi.no_chapters);
+    fi.tracks = new vector<mmg_track_t>;
+
+    for (tidx = 0; tidx < (uint32_t)num_tracks; tidx++) {
+      s.Printf("track %u", tidx);
+      cfg->SetPath(s);
+      if (!cfg->Read("type", &c) || (c.Length() != 1) ||
+          !cfg->Read("id", &id)) {
+        cfg->SetPath("..");
+        continue;
+      }
+      tr.type = c.c_str()[0];
+      if (((tr.type != 'a') && (tr.type != 'v') && (tr.type != 's')) ||
+          !parse_int(id.c_str(), tr.id)) {
+        cfg->SetPath("..");
+        continue;
+      }
+      cfg->Read("enabled", &tr.enabled);
+      cfg->Read("content_type", &s);
+      tr.ctype = new wxString(s);
+      cfg->Read("default_track", &tr.default_track);
+      cfg->Read("aac_is_sbr", &tr.aac_is_sbr);
+      cfg->Read("language", &s);
+      tr.language = new wxString(s);
+      cfg->Read("track_name", &s);
+      tr.track_name = new wxString(s);
+      cfg->Read("cues", &s);
+      tr.cues = new wxString(s);
+      cfg->Read("delay", &s);
+      tr.delay = new wxString(s);
+      cfg->Read("stretch", &s);
+      tr.stretch = new wxString(s);
+      cfg->Read("sub_charset", &s);
+      tr.sub_charset = new wxString(s);
+      cfg->Read("tags", &s);
+      tr.tags = new wxString(s);
+
+      fi.tracks->push_back(tr);
+      cfg->SetPath("..");
+    }
+
+    if (fi.tracks->size() == 0) {
+      delete fi.tracks;
+      delete fi.file_name;
+    } else {
+      s = fi.file_name->BeforeLast(PSEP);
+      c = fi.file_name->AfterLast(PSEP);
+      lb_input_files->Append(c + " (" + s + ")");
+      files.push_back(fi);
+    }
+
+    cfg->SetPath("..");
+  }
+}
+
 IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)

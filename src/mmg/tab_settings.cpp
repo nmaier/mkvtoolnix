@@ -55,40 +55,46 @@ tab_settings::tab_settings(wxWindow *parent):
                      "mkvmerge GUI is licensed under the GPL.\n"
                      "http://www.bunkus.org/videotools/mkvtoolnix/"),
                    wxPoint(95, 360), wxDefaultSize, 0);
-  load();
+
+  wxConfigBase::Set(new wxConfig("mkvmergeGUI"));
+  load_preferences();
+}
+
+tab_settings::~tab_settings() {
+//   delete wxConfigBase::Get();
 }
 
 void tab_settings::on_browse(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose the mkvmerge executable",
-#ifdef SYS_WINDOWS
-                   tc_mkvmerge->GetValue().BeforeLast('\\'), "",
-                   _T("Executable files (*.exe)|*.exe|All files (*.*)|*.*"),
-#else
-                   tc_mkvmerge->GetValue().BeforeLast('/'), "",
-                   _T("All files (*)|*"),
-#endif
-                   wxOPEN);
+                   tc_mkvmerge->GetValue().BeforeLast(PSEP), "",
+                   _T("Executable files (*.exe)|*.exe|" ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     tc_mkvmerge->SetValue(dlg.GetPath());
     mkvmerge_path = "\"" + dlg.GetPath() + "\"";
-    save();
+    save_preferences();
   }
 }
 
-void tab_settings::load() {
+void tab_settings::load_preferences() {
   wxString s;
-  wxConfig cfg("mkvmergeGUI");
+  wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
 
-  if (!cfg.Read("/mkvmerge/executable", &s))
+  if (!cfg->Read("/mkvmerge/executable", &s))
     s = "mkvmerge";
   mkvmerge_path = "\"" + s + "\"";
   tc_mkvmerge->SetValue(s);
 }
 
-void tab_settings::save() {
-  wxConfig cfg("mkvmergeGUI");
+void tab_settings::save_preferences() {
+  wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
+  cfg->Write("/mkvmerge/executable", tc_mkvmerge->GetValue());
+  cfg->Flush();
+}
 
-  cfg.Write("/mkvmerge/executable", tc_mkvmerge->GetValue());
+void tab_settings::save(wxConfigBase *cfg) {
+}
+
+void tab_settings::load(wxConfigBase *cfg) {
 }
 
 IMPLEMENT_CLASS(tab_settings, wxPanel);
