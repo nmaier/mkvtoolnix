@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.4 2003/03/03 14:39:03 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.5 2003/03/03 18:00:30 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -29,12 +29,16 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
+extern "C" {                    // for BITMAPINFOHEADER
+#include "avilib.h"
+}
+
 #include "common.h"
 #include "pr_generic.h"
 #include "ogmstreams.h"
 #include "queue.h"
 #include "r_ogm.h"
-//#include "p_vorbis.h"
+#include "p_vorbis.h"
 #include "p_video.h"
 #include "p_pcm.h"
 //#include "p_textsubs.h"
@@ -195,7 +199,7 @@ void ogm_reader_c::free_demuxer(int idx) {
   int i;
   ogm_demuxer_t *dmx;
 
-  if (idx < num_sdemuxers)
+  if (idx >= num_sdemuxers)
     return;
   dmx = sdemuxers[idx];
   for (i = 0; i < 3; i++)
@@ -255,11 +259,13 @@ void ogm_reader_c::add_new_demuxer(ogm_demuxer_t *dmx) {
 }
 
 void ogm_reader_c::create_packetizers() {
+  BITMAPINFOHEADER bih;
   char *codec;
   stream_header *sth;
   int i;
   ogm_demuxer_t *dmx;
 
+  memset(&bih, 0, sizeof(BITMAPINFOHEADER));
   i = 0;
   while (i < num_sdemuxers) {
     dmx = sdemuxers[i];
@@ -271,23 +277,32 @@ void ogm_reader_c::create_packetizers() {
           codec = sth->subtype;
         else
           codec = fourcc;
+        // AVI compatibility mode. Fill in the values we've got and guess
+        // the others.
+        bih.bi_size = sizeof(BITMAPINFOHEADER);
+        bih.bi_width = sth->sh.video.width;
+        bih.bi_height = sth->sh.video.height;
+        bih.bi_planes = 1;
+        bih.bi_bit_count = 24;
+        memcpy(&bih.bi_compression, codec, 4);
+        bih.bi_size_image = sth->sh.video.width * sth->sh.video.height * 3;
         try {
           dmx->packetizer =
-            new video_packetizer_c(NULL, 0, codec,
+            new video_packetizer_c(&bih, sizeof(BITMAPINFOHEADER), codec,
                                    (double)10000000 / (double)sth->time_unit, 
                                    sth->sh.video.width, sth->sh.video.height,
                                    sth->bits_per_sample, sth->buffersize, NULL,
                                    &range, 1);
-        } catch (error_c error) {
-          fprintf(stderr, "Fatal: ogm_reader: could not initialize video " \
-                  "packetizer for stream id %d. Will try to continue and " \
+        } catch (error_c &error) {
+          fprintf(stderr, "Fatal: ogm_reader: could not initialize video "
+                  "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free(dmx);
           continue;
         }
 
         if (verbose)
-          fprintf(stdout, "OGG/OGM demultiplexer (%s): using video output " \
+          fprintf(stdout, "OGG/OGM demultiplexer (%s): using video output "
                     "module for stream %d.\n", filename, numstreams);
 
         break;
@@ -298,16 +313,16 @@ void ogm_reader_c::create_packetizers() {
             new pcm_packetizer_c(NULL, 0, sth->samples_per_unit,
                                  sth->sh.audio.channels, 
                                  sth->bits_per_sample, &async, &range);
-        } catch (error_c error) {
-          fprintf(stderr, "Fatal: ogm_reader: could not initialize PCM " \
-                  "packetizer for stream id %d. Will try to continue and " \
+        } catch (error_c &error) {
+          fprintf(stderr, "Fatal: ogm_reader: could not initialize PCM "
+                  "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          fprintf(stdout, "OGG/OGM demultiplexer (%s): using PCM output " \
+          fprintf(stdout, "OGG/OGM demultiplexer (%s): using PCM output "
                     "module for stream %d.\n", filename, numstreams);
         break;
 
@@ -318,16 +333,16 @@ void ogm_reader_c::create_packetizers() {
                                  sth->sh.audio.channels,
                                  sth->sh.audio.avgbytespersec * 8 / 1000,
                                  &async, &range);
-        } catch (error_c error) {
-          fprintf(stderr, "Fatal: ogm_reader: could not initialize MP3 " \
-                  "packetizer for stream id %d. Will try to continue and " \
+        } catch (error_c &error) {
+          fprintf(stderr, "Fatal: ogm_reader: could not initialize MP3 "
+                  "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          fprintf(stdout, "OGG/OGM demultiplexer (%s): using MP3 output " \
+          fprintf(stdout, "OGG/OGM demultiplexer (%s): using MP3 output "
                     "module for stream %d.\n", filename, numstreams);
         break;
 
@@ -338,21 +353,39 @@ void ogm_reader_c::create_packetizers() {
                                  sth->sh.audio.channels,
                                  sth->sh.audio.avgbytespersec * 8 / 1000,
                                  &async, &range);
-        } catch (error_c error) {
-          fprintf(stderr, "FATAL: ogm_reader: could not initialize AC3 " \
-                  "packetizer for stream id %d. Will try to continue and " \
+        } catch (error_c &error) {
+          fprintf(stderr, "FATAL: ogm_reader: could not initialize AC3 "
+                  "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          fprintf(stdout, "OGG/OGM demultiplexer (%s): using AC3 output " \
+          fprintf(stdout, "OGG/OGM demultiplexer (%s): using AC3 output "
                     "module for stream %d.\n", filename, numstreams);
 
         break;
 
       case OGM_STREAM_TYPE_VORBIS:
+        try {
+          dmx->packetizer = 
+            new vorbis_packetizer_c(&async, &range,
+                                    dmx->packet_data[0], dmx->packet_sizes[0],
+                                    dmx->packet_data[1], dmx->packet_sizes[1],
+                                    dmx->packet_data[2], dmx->packet_sizes[2]);
+        } catch (error_c &error) {
+          fprintf(stderr, "FATAL: ogm_reader: could not initialize Vorbis "
+                  "packetizer for stream id %d. Will try to continue and "
+                  "ignore this stream.\n", numstreams);
+          free_demuxer(i);
+          continue;
+        }
+
+        if (verbose)
+          fprintf(stdout, "OGG/OGM demultiplexer (%s): using Vorbis output "
+                    "module for stream %d.\n", filename, numstreams);
+
         break;
     }
     i++;
@@ -390,7 +423,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   u_int32_t         codec_id;
 
   if (ogg_stream_init(&new_oss, ogg_page_serialno(og))) {
-    fprintf(stderr, "Fatal: ogm_reader: ogg_stream_init for stream number " \
+    fprintf(stderr, "Fatal: ogm_reader: ogg_stream_init for stream number "
             "%d failed. Will try to continue and ignore this stream.",
             numstreams + 1);
     return;
@@ -422,36 +455,22 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       ogg_stream_clear(&new_oss);
       return;
     }
-    fprintf(stderr, "Warning: ogm_reader: No Vorbis support at the moment. "
-            "Ignoring stream id %d.\n", numstreams);
-//     try {
-//       dmx->packetizer = new vorbis_packetizer_c(&async, &range, comments);
-//     } catch (error_c error) {
-//       fprintf(stderr, "Fatal: ogm_reader: could not initialize Vorbis " \
-//               "packetizer for stream id %d. Will try to continue and " \
-//               "ignore this stream.\n", numstreams);
-//       free(dmx);
-//       ogg_stream_clear(&new_oss);
-//       return;
-//     }
-//     dmx->stype = OGM_STREAM_TYPE_VORBIS;
-//     dmx->serial = ogg_page_serialno(og);
-//     memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
-//     dmx->sid = nastreams;
-//     add_new_demuxer(dmx);
-//     if (verbose)
-//       fprintf(stdout, "OGG/OGM demultiplexer (%s): using Vorbis audio " \
-//               "output module for stream %d.\n", filename, numstreams);
-//     do {
-//       ((vorbis_packetizer_c *)dmx->packetizer)->
-//         process(&op, ogg_page_granulepos(og));
-//       if (op.e_o_s) {
-//         dmx->packetizer->flush_pages();
-//         dmx->eos = 1;
-//         return;
-//       }
-//     } while (ogg_stream_packetout(&dmx->os, &op));
-    
+
+    nastreams++;
+    numstreams++;
+    if (!demuxing_requested(vstreams, nvstreams)) {
+      ogg_stream_clear(&new_oss);
+      free(dmx->packet_data[0]);
+      free(dmx);
+      return;
+    }
+      
+    dmx->stype = OGM_STREAM_TYPE_VORBIS;
+    dmx->serial = ogg_page_serialno(og);
+    memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
+    dmx->sid = nastreams;
+    add_new_demuxer(dmx);
+      
     return;
   }
 
@@ -536,8 +555,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 //         dmx->packetizer =
 //           new textsubs_packetizer_c(&async, &range, comments);
 //       } catch (error_c error) {
-//         fprintf(stderr, "FATAL: ogm_reader: could not initialize text " \
-//                 "subtitle packetizer for stream id %d. Will try to " \
+//         fprintf(stderr, "FATAL: ogm_reader: could not initialize text "
+//                 "subtitle packetizer for stream id %d. Will try to "
 //                 "continue and ignore this stream.\n", numstreams);
 //         free(dmx);
 //         ogg_stream_clear(&new_oss);
@@ -550,7 +569,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 //       dmx->sid = ntstreams;
 //       add_new_demuxer(dmx);
 //       if (verbose)
-//         fprintf(stdout, "OGG/OGM demultiplexer (%s): using text subtitle " \
+//         fprintf(stdout, "OGG/OGM demultiplexer (%s): using text subtitle "
 //                 "output module for stream %d.\n", filename, numstreams);
       
       return;
@@ -602,66 +621,57 @@ void ogm_reader_c::process_page(ogg_page *og) {
     if (o_eos)
       op.e_o_s = 0;
 
-    switch (dmx->stype) {
-//       case OGM_STREAM_TYPE_VORBIS:
-//         ((vorbis_packetizer_c *)dmx->packetizer)->
-//           process(&op, ogg_page_granulepos(og));
-//         break;
+    if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
+        ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
+      switch (dmx->stype) {
+        case OGM_STREAM_TYPE_VORBIS:
+          ((vorbis_packetizer_c *)dmx->packetizer)->
+            process((char *)op.packet, op.bytes, ogg_page_granulepos(og));
+          break;
 
-      case OGM_STREAM_TYPE_VIDEO:
-        if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
-            ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
+        case OGM_STREAM_TYPE_VIDEO:
           ((video_packetizer_c *)dmx->packetizer)->
             process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     hdrlen > 0 ? lenbytes : 1,
                     *op.packet & PACKET_IS_SYNCPOINT, op.e_o_s);
           dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
-        }
-        break;
+          break;
 
-      case OGM_STREAM_TYPE_PCM:
-        if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
-            ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
+        case OGM_STREAM_TYPE_PCM:
           ((pcm_packetizer_c *)dmx->packetizer)->
             process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     op.e_o_s);
           dmx->units_processed += op.bytes - 1;
-        }
-        break;
+          break;
 
-      case OGM_STREAM_TYPE_MP3: // MP3
-        if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
-            ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
+        case OGM_STREAM_TYPE_MP3: // MP3
           ((mp3_packetizer_c *)dmx->packetizer)->
             process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     op.e_o_s);
           dmx->units_processed += op.bytes - 1;
-        }
-        break;
+          break;
 
-      case OGM_STREAM_TYPE_AC3: // AC3
-        if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
-            ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
+        case OGM_STREAM_TYPE_AC3: // AC3
           ((ac3_packetizer_c *)dmx->packetizer)->
             process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     op.e_o_s);
           dmx->units_processed += op.bytes - 1;
-        }
-        break;
+          break;
 
-//       case OGM_STREAM_TYPE_TEXT: // text subtitles
-//         if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
-//             ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
-//           char *subs = (char *)&op.packet[1 + hdrlen];
-//           if ((*subs != 0) && (*subs != '\n') && (*subs != '\r') &&
-//               strcmp(subs, " ")) {
-//             ((textsubs_packetizer_c *)dmx->packetizer)->
-//               process(op.granulepos, op.granulepos + lenbytes, subs,
-//                       op.e_o_s);
-//             dmx->units_processed++;
+//         case OGM_STREAM_TYPE_TEXT: // text subtitles
+//           if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
+//               ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
+//             char *subs = (char *)&op.packet[1 + hdrlen];
+//             if ((*subs != 0) && (*subs != '\n') && (*subs != '\r') &&
+//                 strcmp(subs, " ")) {
+//               ((textsubs_packetizer_c *)dmx->packetizer)->
+//                 process(op.granulepos, op.granulepos + lenbytes, subs,
+//                         op.e_o_s);
+//               dmx->units_processed++;
+//             }
 //           }
-//         }
-//         break;
+//           break;
+      }
     }
 
     if (eos) {
