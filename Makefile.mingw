@@ -53,7 +53,8 @@ APPLICATIONS=src/mkvmerge$(EXT) src/mkvinfo$(EXT) src/mkvextract$(EXT) \
 all: config.h $(APPLICATIONS)
 
 SYSTEM_INCLUDES = -Iavilib-0.6.10 \
-		-I. -Ilibrmff -Isrc/merge -Isrc/common -Isrc/input -Isrc/output
+		-I. -Ilibrmff -Isrc/merge -Isrc/common -Isrc/input \
+		-Isrc/output -Isrc/mpegparser
 SYSTEM_LIBDIRS = -Lavilib-0.6.10 \
 		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output
 
@@ -68,7 +69,7 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard librmff/*.c) \
 		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
 		$(wildcard src/mmg/*.cpp) $(wildcard src/merge/*.cpp) \
-		$(wildcard src/info/*.cpp)
+		$(wildcard src/info/*.cpp) $(wildcard src/mpegparser/*.cpp)
 
 ifeq ($(V),1)
   Q =
