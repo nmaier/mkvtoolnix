@@ -1,5 +1,8 @@
 2004-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Large values for --sync (over 2100) would
+	cause an integer overflow resulting in no sync being done at all.
+
 	* mkvmerge: bug fix: The VobSub handling was broken if the .idx
 	file contains an entry for a track ("id: en") but no "timestamp:"
 	entries for such a track.

@@ -54,7 +54,7 @@ using namespace std;
 #define CUES_SPARSE       3
 
 typedef struct {
-  int displacement;
+  int64_t displacement;
   double linear;
   int64_t id;
 } audio_sync_t;
