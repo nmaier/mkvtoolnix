@@ -761,7 +761,7 @@ tab_input::add_file(const wxString &file_name,
                  wxICON_ERROR);
     throw 0;
   }
-  opt_file->Write(wxT("--identify-verbose\n"));
+  opt_file->Write(wxT("--output-charset\nUTF-8\n--identify-verbose\n"));
   arg_utf8 = to_utf8(file_name);
   opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
   opt_file->Write(wxT("\n"));

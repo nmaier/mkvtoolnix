@@ -1226,6 +1226,8 @@ mmg_dialog::update_command_line() {
 
   clargs.Clear();
   clargs.Add(mkvmerge_path);
+  clargs.Add(wxT("--output-charset"));
+  clargs.Add(wxT("UTF-8"));
   clargs.Add(wxT("-o"));
   clargs.Add(tc_output->GetValue());
   args_start = clargs.Count();
