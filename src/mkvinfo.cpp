@@ -654,7 +654,8 @@ bool process_file(const char *file_name) {
         return false;
       }
       if (is_id(l0, KaxSegment)) {
-        show_element(l0, 0, "Segment");
+        show_element(l0, 0, "Segment, size %lld", l0->GetSize() -
+                     l0->HeadSize());
         break;
       }
 
@@ -1077,9 +1078,9 @@ bool process_file(const char *file_name) {
 
 #if LIBMATROSKA_VERSION >= 000503
               } else if (is_id(l3, KaxTrackTimecodeScale)) {
-                KaxTrackTimecodeScale &tc_scale =
+                KaxTrackTimecodeScale &ttc_scale =
                   *static_cast<KaxTrackTimecodeScale *>(l3);
-                show_element(l3, 3, "Timecode scale: %f", float(tc_scale));
+                show_element(l3, 3, "Timecode scale: %f", float(ttc_scale));
 
               } else if (is_id(l3, KaxContentEncodings)) {
                 show_element(l3, 3, "Content encodings");
