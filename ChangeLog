@@ -1,3 +1,8 @@
+2004-02-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Splitting by size would sometimes abort
+	directly after opening the second file.
+
 2004-02-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Splitting by time was broken.

@@ -181,6 +181,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
 
       old_max_timecode = max_timecode;
       max_timecode = packet->assigned_timecode;
+      num_cue_elements = 0;
 
       mxinfo("\n");
       finish_file();
