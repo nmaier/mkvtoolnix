@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.61 2003/05/11 09:33:50 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.62 2003/05/11 15:48:57 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -76,8 +76,6 @@
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
 
-#define METASEEK_SPACE 100
-
 typedef struct {
   char *ext;
   int   type;
@@ -109,6 +107,7 @@ vector<packetizer_t *>packetizers;
 
 char *outfile = NULL;
 filelist_t *input= NULL;
+off_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
 int write_cues = 1, cue_writing_requested = 0;
@@ -123,10 +122,10 @@ KaxTrackEntry *kax_last_entry;
 KaxCues *kax_cues;
 EbmlVoid *kax_seekhead_void = NULL;
 KaxDuration *kax_duration;
-KaxSeekHead *kax_seekhead;
+KaxSeekHead *kax_seekhead = NULL;
 
 int write_meta_seek = 1;
-int meta_seek_size = METASEEK_SPACE;
+int meta_seek_size = 0;
 
 // Specs say that track numbers should start at 1.
 int track_number = 1;
@@ -217,7 +216,8 @@ static void usage(void) {
 
 static int get_type(char *filename) {
   FILE *f = fopen(filename, "rb");
-  int64_t size;
+  off_t size;
+  int type;
   
   if (f == NULL) {
     fprintf(stderr, "Error: could not open source file (%s).\n", filename);
@@ -234,29 +234,35 @@ static int get_type(char *filename) {
     exit(1);
   }
   if (avi_reader_c::probe_file(f, size))
-    return TYPEAVI;
+    type = TYPEAVI;
   else if (mkv_reader_c::probe_file(f, size))
-    return TYPEMATROSKA;
+    type = TYPEMATROSKA;
   else if (wav_reader_c::probe_file(f, size))
-    return TYPEWAV;
+    type = TYPEWAV;
 #ifdef HAVE_OGGVORBIS
   else if (ogm_reader_c::probe_file(f, size))
-    return TYPEOGM;
+    type = TYPEOGM;
 #endif // HAVE_OGGVORBIS
   else if (srt_reader_c::probe_file(f, size))
-    return TYPESRT;
+    type = TYPESRT;
   else if (mp3_reader_c::probe_file(f, size))
-    return TYPEMP3;
+    type = TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
-    return TYPEAC3;
+    type = TYPEAC3;
 //     else if (microdvd_reader_c::probe_file(f, size))
-//     return TYPEMICRODVD;
+//     type = TYPEMICRODVD;
 //   else if (vobsub_reader_c::probe_file(f, size)) 
-//     return TYPEVOBSUB;
+//     type = TYPEVOBSUB;
 //   else if (chapter_information_probe(f, size))
-//     return TYPECHAPTERS;
+//     type = TYPECHAPTERS;
   else
-    return TYPEUNKNOWN;
+    type = TYPEUNKNOWN;
+
+  fclose(f);
+
+  file_sizes += size;
+
+  return type;
 }
 
 static void add_file(filelist_t *file) {
@@ -483,6 +489,8 @@ static void render_headers(StdIOCallback *out) {
     if (write_cues && write_meta_seek) {
       kax_seekhead = new KaxSeekHead();
       kax_seekhead_void = new EbmlVoid();
+      if (meta_seek_size == 0)
+        meta_seek_size = (int)(file_sizes * 1.5 / 10240);
       kax_seekhead_void->SetSize(meta_seek_size);
       kax_seekhead_void->Render(static_cast<StdIOCallback &>(*out));
     }
@@ -871,16 +879,6 @@ static void parse_args(int argc, char **argv) {
     usage();
     exit(1);
   }
-/*  if (chapters != NULL) {
-    file = input;
-    while (file != NULL) {
-      file->reader->set_chapter_info(chapters);
-      file = file->next;
-    }
-    vorbis_comment_clear(chapters);
-    safefree(chapters);
-    chapters = NULL;
-  }*/
 }
 
 static char **add_string(int &num, char **values, char *new_string) {
@@ -1087,11 +1085,23 @@ int main(int argc, char **argv) {
     kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
                                        *static_cast<StdIOCallback *>(out),
-                                       true) == 0)
+                                       true) == 0) {
       fprintf(stdout, "Warning: Could not update the meta seek information "
               "as the space reserved for them was too small. Re-run "
               "mkvmerge with the additional parameters '--meta-seek-size "
-              "%lld'.\n", kax_seekhead->ElementSize());
+              "%lld'.\n", kax_seekhead->ElementSize() + 100);
+
+      delete kax_seekhead;
+      kax_seekhead = new KaxSeekHead();
+
+      if (write_cues && cue_writing_requested)
+        kax_seekhead->IndexThis(*kax_cues, *kax_segment);
+
+      kax_seekhead->IndexThis(*kax_tags, *kax_segment);
+      kax_seekhead->UpdateSize();
+      kax_seekhead_void->ReplaceWith(*kax_seekhead,
+                                     *static_cast<StdIOCallback *>(out), true);
+    }
   }
 
   // Now re-render the kax_infos and fill in the biggest timecode

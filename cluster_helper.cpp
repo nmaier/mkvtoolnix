@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.15 2003/05/08 18:46:25 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.16 2003/05/11 15:48:57 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -226,6 +226,9 @@ int cluster_helper_c::render(IOCallback *out) {
 
   cluster->Render(static_cast<StdIOCallback &>(*out), *kax_cues);
 
+  if (kax_seekhead != NULL)
+    kax_seekhead->IndexThis(*cluster, *kax_segment);
+
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
     safefree(pack->data);
@@ -290,10 +293,15 @@ void cluster_helper_c::check_clusters(int num) {
   }
 }
 
+//#define PRINT_CLUSTERS
+
 int cluster_helper_c::free_clusters() {
   int i, k, idx;
   packet_t *p;
   ch_contents_t *clstr, **new_clusters;
+#ifdef PRINT_CLUSTERS
+  int num_freed = 0;
+#endif
 
   if (clusters == NULL)
     return 0;
@@ -343,6 +351,9 @@ int cluster_helper_c::free_clusters() {
     if (!clusters[i]->is_referenced) {
       free_contents(clusters[i]);
       clusters[i] = NULL;
+#ifdef PRINT_CLUSTERS
+      num_freed++;
+#endif
     } else
       k++;
   }
@@ -368,8 +379,8 @@ int cluster_helper_c::free_clusters() {
     num_clusters = k;
   }
 
-#if 0
-  fprintf(stdout, "numcl: %8d ", num_clusters);
+#ifdef PRINT_CLUSTERS
+  fprintf(stdout, "numcl: %8d freed: %3d ", num_clusters, num_freed);
   for (i = 0; i < num_clusters; i++)
     fprintf(stdout, "#");
   fprintf(stdout, "\n");

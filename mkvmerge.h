@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.7 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.8 2003/05/11 15:48:57 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include "pr_generic.h"
 
 #include "KaxCues.h"
+#include "KaxSeekHead.h"
 #include "KaxSegment.h"
 #include "KaxTracks.h"
 
@@ -33,6 +34,7 @@ extern KaxSegment *kax_segment;
 extern KaxTracks *kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
 extern KaxCues *kax_cues;
+extern KaxSeekHead *kax_seekhead;
 extern int track_number;
 
 extern float video_fps;
