@@ -301,6 +301,7 @@ dnl
   fi
   if test x"$flac_found" = xyes ; then
     opt_features_yes="$opt_features_yes; FLAC audio"
+    AC_DEFINE(HAVE_FLAC_FORMAT_H, [1], [Define if the FLAC headers are present])
   else
     FLAC_LIBS=""
     opt_features_no="$opt_features_no; FLAC audio"
