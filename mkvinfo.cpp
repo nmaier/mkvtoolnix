@@ -196,7 +196,7 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
       use_gui = true;
 #endif // HAVE_WXWINDOWS
     } else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      fprintf(stdout, VERSIONINFO "\n");
+      fprintf(stdout, "mkvinfo v" VERSION "\n");
       exit(0);
     } else if (!strcmp(argv[i], "-v") || ! strcmp(argv[i], "--verbose"))
       verbose++;
