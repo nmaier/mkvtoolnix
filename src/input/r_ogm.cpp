@@ -1080,10 +1080,7 @@ ogm_reader_c::handle_stream_comments() {
     return;
 
   charset_warning_printed = false;
-  if (ti.chapter_charset != "")
-    cch = utf8_init(ti.chapter_charset);
-  else
-    cch = utf8_init("");
+  cch = utf8_init(ti.chapter_charset);
 
   for (i = 0; i < sdemuxers.size(); i++) {
     dmx = sdemuxers[i];
