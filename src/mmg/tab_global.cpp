@@ -101,6 +101,7 @@ tab_global::tab_global(wxWindow *parent):
                              "files. For an in-depth explanation of this "
                              "feature consult the mkvmerge documentation. "
                              "If in doubt do NOT check this option."));
+  cb_dontlink->SetValue(true);
   cb_dontlink->Enable(false);
 
   new wxStaticText(this, wxID_STATIC, _("max. number of files:"),
@@ -283,8 +284,10 @@ void tab_global::load(wxConfigBase *cfg) {
   cfg->Read("split_max_files", &s);
   tc_split_max_files->SetValue(s);
   b = false;
-  cfg->Read("dont_link", &b);
-  cb_dontlink->SetValue(b);
+  if (cfg->Read("dont_link", &b))
+    cb_dontlink->SetValue(b);
+  else
+    cb_dontlink->SetValue(true);
 
   rb_split_by_size->Enable(ec);
   cob_split_by_size->Enable(ec && er);
