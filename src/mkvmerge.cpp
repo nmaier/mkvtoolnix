@@ -1499,7 +1499,7 @@ static void parse_args(int argc, char **argv) {
       if (attachment->description != NULL)
         mxwarn("More than one description given for a single attachment.\n");
       safefree(attachment->description);
-      attachment->description = next_arg;
+      attachment->description = safestrdup(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--attachment-mime-type")) {
@@ -1523,13 +1523,12 @@ static void parse_args(int argc, char **argv) {
         mxerror("No MIME type was set for the attachment '%s'.\n",
                 next_arg);
 
-      attachment->name = safestrdup(next_arg);
+      attachment->name = from_utf8(cc_local_utf8, next_arg);
       if (!strcmp(this_arg, "--attach-file"))
         attachment->to_all_files = true;
       try {
         io = new mm_io_c(attachment->name, MODE_READ);
-        io->setFilePointer(0, seek_end);
-        attachment->size = io->getFilePointer();
+        attachment->size = io->get_size();
         delete io;
         if (attachment->size == 0)
           throw exception();
@@ -1548,7 +1547,9 @@ static void parse_args(int argc, char **argv) {
       if (next_arg == NULL)
         mxerror("'--global-tags' lacks the file name.\n");
 
-      parse_and_add_tags(next_arg);
+      s = from_utf8(cc_local_utf8, next_arg);
+      parse_and_add_tags(s);
+      safefree(s);
       i++;
 
     } else if (!strcmp(this_arg, "--chapter-language")) {
@@ -1605,7 +1606,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("Only one chapter file allowed in '%s %s'.\n", this_arg,
                 next_arg);
 
-      chapter_file_name = safestrdup(next_arg);
+      chapter_file_name = from_utf8(cc_local_utf8, next_arg);
       if (kax_chapters != NULL)
         delete kax_chapters;
       kax_chapters = parse_chapters(next_arg, 0, -1, 0, chapter_language,
@@ -1626,7 +1627,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--dump-packets' lacks the output path.\n");
 
       safefree(dump_packets);
-      dump_packets = safestrdup(next_arg);
+      dump_packets = from_utf8(cc_local_utf8, next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--meta-seek-size")) {
@@ -1771,8 +1772,10 @@ static void parse_args(int argc, char **argv) {
       if (next_arg == NULL)
         mxerror("'--timecodes' lacks its argument.\n");
 
-      parse_language(next_arg, lang, "timecodes", "timecodes", false);
+      s = from_utf8(cc_local_utf8, next_arg);
+      parse_language(s, lang, "timecodes", "timecodes", false);
       ti->all_ext_timecodes->push_back(lang);
+      safefree(s);
       i++;
 
     } else if (!strcmp(this_arg, "--track-order")) {
