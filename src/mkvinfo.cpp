@@ -1012,132 +1012,145 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "Language: %s", string(language).c_str());
 
 #if LIBMATROSKA_VERSION >= 000503
-              } else if (is_id(l3, KaxContentEncoding)) {
-                show_element(l3, 3, "Content encoding");
+              } else if (is_id(l3, KaxContentEncodings)) {
+                show_element(l3, 3, "Content encodings");
 
                 m3 = static_cast<EbmlMaster *>(l3);
                 for (i3 = 0; i3 < m3->ListSize(); i3++) {
                   l4 = (*m3)[i3];
 
-                  if (is_id(l4, KaxContentEncodingOrder)) {
-                    KaxContentEncodingOrder &ce_order =
-                      *static_cast<KaxContentEncodingOrder *>(l4);
-                    show_element(l4, 4, "Order: %u", uint32(ce_order));
-
-                  } else if (is_id(l4,  KaxContentEncodingScope)) {
-                    string scope;
-                    KaxContentEncodingScope &ce_scope =
-                      *static_cast<KaxContentEncodingScope *>(l4);
-                    if ((uint32(ce_scope) & 0x01) == 0x01)
-                      scope = "1: all frames";
-                    if ((uint32(ce_scope) & 0x02) == 0x02) {
-                      if (scope.length() > 0)
-                        scope += ", ";
-                      scope += "2: codec private data";
-                    }
-                    if ((uint32(ce_scope) & 0xfc) != 0x00) {
-                      if (scope.length() > 0)
-                        scope += ", ";
-                      scope += "rest: unknown";
-                    }
-                    if (scope.length() == 0)
-                      scope = "unknown";
-                    show_element(l4, 4, "Scope: %u (%s)", uint32(ce_scope),
-                                 scope.c_str());
-
-                  } else if (is_id(l4,  KaxContentEncodingType)) {
-                    uint32_t ce_type;
-                    ce_type =
-                      uint32(*static_cast<KaxContentEncodingType *>(l4));
-                    show_element(l4, 4, "Type: %u (%s)", ce_type,
-                                 ce_type == 0 ? "compression" :
-                                 ce_type == 1 ? "encryption" :
-                                 "unknown");
-
-                  } else if (is_id(l4, KaxContentCompression)) {
-                    show_element(l4, 4, "Content compression");
+                  if (is_id(l4, KaxContentEncoding)) {
+                    show_element(l4, 4, "Content encoding");
 
                     m4 = static_cast<EbmlMaster *>(l4);
                     for (i4 = 0; i4 < m4->ListSize(); i4++) {
                       l5 = (*m4)[i4];
 
-                      if (is_id(l5, KaxContentCompAlgo)) {
-                        uint32_t c_algo =
-                          uint32(*static_cast<KaxContentCompAlgo *>(l5));
-                        show_element(l5, 5, "Algorithm: %u (%s)", c_algo,
-                                     c_algo == 0 ? "ZLIB" :
-                                     c_algo == 1 ? "bzLib" :
+                      if (is_id(l5, KaxContentEncodingOrder)) {
+                        KaxContentEncodingOrder &ce_order =
+                          *static_cast<KaxContentEncodingOrder *>(l5);
+                        show_element(l5, 5, "Order: %u", uint32(ce_order));
+
+                      } else if (is_id(l5,  KaxContentEncodingScope)) {
+                        string scope;
+                        KaxContentEncodingScope &ce_scope =
+                          *static_cast<KaxContentEncodingScope *>(l5);
+                        if ((uint32(ce_scope) & 0x01) == 0x01)
+                          scope = "1: all frames";
+                        if ((uint32(ce_scope) & 0x02) == 0x02) {
+                          if (scope.length() > 0)
+                            scope += ", ";
+                          scope += "2: codec private data";
+                        }
+                        if ((uint32(ce_scope) & 0xfc) != 0x00) {
+                          if (scope.length() > 0)
+                            scope += ", ";
+                          scope += "rest: unknown";
+                        }
+                        if (scope.length() == 0)
+                          scope = "unknown";
+                        show_element(l5, 5, "Scope: %u (%s)", uint32(ce_scope),
+                                     scope.c_str());
+
+                      } else if (is_id(l5,  KaxContentEncodingType)) {
+                        uint32_t ce_type;
+                        ce_type =
+                          uint32(*static_cast<KaxContentEncodingType *>(l5));
+                        show_element(l5, 5, "Type: %u (%s)", ce_type,
+                                     ce_type == 0 ? "compression" :
+                                     ce_type == 1 ? "encryption" :
                                      "unknown");
 
-                      } else if (is_id(l5, KaxContentCompSettings)) {
-                        KaxContentCompSettings &c_settings =
-                          *static_cast<KaxContentCompSettings *>(l5);
-                        strc = format_binary(c_settings);
-                        show_element(l5, 5, "Settings: %s", strc.c_str());
+                      } else if (is_id(l5, KaxContentCompression)) {
+                        show_element(l5, 5, "Content compression");
 
-                      } else if (!is_global(es, l5, 5))
-                        show_unknown_element(l5, 5);
+                        m5 = static_cast<EbmlMaster *>(l5);
+                        for (i5 = 0; i5 < m5->ListSize(); i5++) {
+                          l6 = (*m5)[i5];
 
-                    }
+                          if (is_id(l6, KaxContentCompAlgo)) {
+                            uint32_t c_algo =
+                              uint32(*static_cast<KaxContentCompAlgo *>(l6));
+                            show_element(l6, 6, "Algorithm: %u (%s)", c_algo,
+                                         c_algo == 0 ? "ZLIB" :
+                                         c_algo == 1 ? "bzLib" :
+                                         "unknown");
 
-                  } else if (is_id(l4, KaxContentEncryption)) {
-                    show_element(l4, 4, "Content encryption");
+                          } else if (is_id(l6, KaxContentCompSettings)) {
+                            KaxContentCompSettings &c_settings =
+                              *static_cast<KaxContentCompSettings *>(l6);
+                            strc = format_binary(c_settings);
+                            show_element(l6, 6, "Settings: %s", strc.c_str());
 
-                    m4 = static_cast<EbmlMaster *>(l4);
-                    for (i4 = 0; i4 < m4->ListSize(); i4++) {
-                      l5 = (*m4)[i4];
+                          } else if (!is_global(es, l6, 6))
+                            show_unknown_element(l6, 6);
 
-                      if (is_id(l5, KaxContentEncAlgo)) {
-                        uint32_t e_algo =
-                          uint32(*static_cast<KaxContentEncAlgo *>(l5));
-                        show_element(l5, 5, "Encryption algorithm: %u (%s)",
-                                     e_algo,
-                                     e_algo == 0 ? "none" :
-                                     e_algo == 1 ? "DES" :
-                                     e_algo == 2 ? "3DES" :
-                                     e_algo == 3 ? "Twofish" :
-                                     e_algo == 4 ? "Blowfish" :
-                                     e_algo == 5 ? "AES" :
-                                     "unknown");
+                        }
 
-                      } else if (is_id(l5, KaxContentEncKeyID)) {
-                        KaxContentEncKeyID &e_keyid =
-                          *static_cast<KaxContentEncKeyID *>(l5);
-                        strc = format_binary(e_keyid);
-                        show_element(l5, 5, "Encryption key ID: %s",
-                                     strc.c_str());
+                      } else if (is_id(l5, KaxContentEncryption)) {
+                        show_element(l5, 5, "Content encryption");
 
-                      } else if (is_id(l5, KaxContentSigAlgo)) {
-                        uint32_t s_algo =
-                          uint32(*static_cast<KaxContentSigAlgo *>(l5));
-                        show_element(l5, 5, "Signature algorithm: %u (%s)",
-                                     s_algo,
-                                     s_algo == 0 ? "none" :
-                                     s_algo == 1 ? "RSA" :
-                                     "unknown");
+                        m5 = static_cast<EbmlMaster *>(l5);
+                        for (i5 = 0; i5 < m5->ListSize(); i5++) {
+                          l6 = (*m5)[i5];
 
-                      } else if (is_id(l5, KaxContentSigHashAlgo)) {
-                        uint32_t s_halgo =
-                          uint32(*static_cast<KaxContentSigHashAlgo *>(l5));
-                        show_element(l5, 5, "Signature hash algorithm: %u "
-                                     "(%s)", s_halgo,
-                                     s_halgo == 0 ? "none" :
-                                     s_halgo == 1 ? "SHA1-160" :
-                                     s_halgo == 2 ? "MD5" :
-                                     "unknown");
+                          if (is_id(l6, KaxContentEncAlgo)) {
+                            uint32_t e_algo =
+                              uint32(*static_cast<KaxContentEncAlgo *>(l6));
+                            show_element(l6, 6, "Encryption algorithm: %u "
+                                         "(%s)", e_algo,
+                                         e_algo == 0 ? "none" :
+                                         e_algo == 1 ? "DES" :
+                                         e_algo == 2 ? "3DES" :
+                                         e_algo == 3 ? "Twofish" :
+                                         e_algo == 4 ? "Blowfish" :
+                                         e_algo == 5 ? "AES" :
+                                         "unknown");
 
-                      } else if (is_id(l5, KaxContentSigKeyID)) {
-                        KaxContentSigKeyID &s_keyid =
-                          *static_cast<KaxContentSigKeyID *>(l5);
-                        strc = format_binary(s_keyid);
-                        show_element(l5, 5, "Signature key ID: %s",
-                                     strc.c_str());
+                          } else if (is_id(l6, KaxContentEncKeyID)) {
+                            KaxContentEncKeyID &e_keyid =
+                              *static_cast<KaxContentEncKeyID *>(l6);
+                            strc = format_binary(e_keyid);
+                            show_element(l6, 6, "Encryption key ID: %s",
+                                         strc.c_str());
 
-                      } else if (is_id(l5, KaxContentSignature)) {
-                        KaxContentSignature &sig =
-                          *static_cast<KaxContentSignature *>(l5);
-                        strc = format_binary(sig);
-                        show_element(l5, 5, "Signature: %s", strc.c_str());
+                          } else if (is_id(l6, KaxContentSigAlgo)) {
+                            uint32_t s_algo =
+                              uint32(*static_cast<KaxContentSigAlgo *>(l6));
+                            show_element(l6, 6, "Signature algorithm: %u (%s)",
+                                         s_algo,
+                                         s_algo == 0 ? "none" :
+                                         s_algo == 1 ? "RSA" :
+                                         "unknown");
+
+                          } else if (is_id(l6, KaxContentSigHashAlgo)) {
+                            uint32_t s_halgo =
+                              uint32(*static_cast<KaxContentSigHashAlgo *>
+                                     (l6));
+                            show_element(l6, 6, "Signature hash algorithm: %u "
+                                         "(%s)", s_halgo,
+                                         s_halgo == 0 ? "none" :
+                                         s_halgo == 1 ? "SHA1-160" :
+                                         s_halgo == 2 ? "MD5" :
+                                         "unknown");
+
+                          } else if (is_id(l6, KaxContentSigKeyID)) {
+                            KaxContentSigKeyID &s_keyid =
+                              *static_cast<KaxContentSigKeyID *>(l6);
+                            strc = format_binary(s_keyid);
+                            show_element(l6, 6, "Signature key ID: %s",
+                                         strc.c_str());
+
+                          } else if (is_id(l6, KaxContentSignature)) {
+                            KaxContentSignature &sig =
+                              *static_cast<KaxContentSignature *>(l6);
+                            strc = format_binary(sig);
+                            show_element(l6, 6, "Signature: %s", strc.c_str());
+
+                          } else if (!is_global(es, l6, 6))
+                            show_unknown_element(l6, 6);
+
+                        }
 
                       } else if (!is_global(es, l5, 5))
                         show_unknown_element(l5, 5);
