@@ -382,6 +382,8 @@ public:
 
   kax_analyzer_c *analyzer;
 
+  static wxString default_language, default_country;
+
 public:
   tab_chapters(wxWindow *parent, wxMenu *nm_chapters);
   ~tab_chapters();
@@ -405,6 +407,8 @@ public:
   bool verify_atom_recursively(EbmlElement *e, int64_t p_start = -1,
                                int64_t p_end = -1);
   bool verify();
+  void verify_language_codes(string s, vector<string> &parts);
+  void verify_country_codes(string s, vector<string> &parts);
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void fix_missing_languages(EbmlMaster &master);

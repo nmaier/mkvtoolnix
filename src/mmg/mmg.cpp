@@ -1075,6 +1075,11 @@ bool mmg_app::OnInit() {
     if (cfg->Read(k, &v))
       last_chapters.push_back(v);
   }
+  cfg->SetPath("/chapter_editor");
+  if (cfg->Read("default_language", &k))
+    tab_chapters::default_language = k;
+  if (cfg->Read("default_country", &k))
+    tab_chapters::default_country = k;
 
   app = this;
   mdlg = new mmg_dialog();
@@ -1090,6 +1095,9 @@ int mmg_app::OnExit() {
   cfg = wxConfigBase::Get();
   cfg->SetPath("/GUI");
   cfg->Write("last_directory", last_open_dir);
+  cfg->SetPath("/chapter_editor");
+  cfg->Write("default_language", tab_chapters::default_language);
+  cfg->Write("default_country", tab_chapters::default_country);
   cfg->Flush();
 
   delete cfg;

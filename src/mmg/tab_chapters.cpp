@@ -41,6 +41,9 @@ using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
+wxString tab_chapters::default_language = "";
+wxString tab_chapters::default_country = "";
+
 class chapter_node_data_c: public wxTreeItemData {
 public:
   bool is_atom;
@@ -60,21 +63,61 @@ public:
 
 class chapter_values_dlg: public wxDialog {
 public:
-  wxTextCtrl tc_language, tc_country;
+  wxTextCtrl *tc_language, *tc_country;
 
 public:
-  chapter_values_dlg(wxWindow *parent, bool set_defaults);
+  chapter_values_dlg(wxWindow *parent, bool set_defaults,
+                     wxString old_def_language = "",
+                     wxString old_def_country = "");
 };
 
-chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults):
+chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
+                                       wxString old_def_language,
+                                       wxString old_def_country):
   wxDialog(parent, 0, "") {
-  SetSize(400, 200);
+  wxButton *b_ok, *b_cancel;
+  wxPanel *panel;
+
+  SetSize(350, 200);
+  panel = new wxPanel(this, -1);
   if (set_defaults) {
-    new wxStaticText(this, wxID_STATIC,
-                     "Chapters:",
-                     wxPoint(10, 5),
-                     wxDefaultSize, 0);
+    SetTitle("Change the default values");
+    new wxStaticText(panel, wxID_STATIC,
+                     "Here you can set the default values that mmg will use\n"
+                     "for each chapter that you create. These values can\n"
+                     "then be changed if needed. The default values will be\n"
+                     "saved when you exit mmg.",
+                     wxPoint(10, 10), wxSize(380, 100), 0);
+  } else {
+    SetTitle("Select values to be applied");
+    new wxStaticText(panel, wxID_STATIC,
+                     "Please enter the values for the language and the\n"
+                     "country that you want to apply to all the chapters\n"
+                     "below and including the currently selected entry.",
+                     wxPoint(10, 10), wxSize(380, 100), 0);
   }
+
+  new wxStaticText(panel, wxID_STATIC, "Language:", wxPoint(10, 90));
+  tc_language =
+    new wxTextCtrl(panel, wxID_STATIC, old_def_language, wxPoint(90, 90),
+                   wxSize(220, -1));
+  new wxStaticText(panel, wxID_STATIC, "Country:", wxPoint(10, 125));
+  tc_country =
+    new wxTextCtrl(panel, wxID_STATIC, old_def_country, wxPoint(90, 125),
+                   wxSize(220, -1));
+
+  b_ok = new wxButton(panel, wxID_OK, "Ok", wxPoint(0, 0));
+  b_ok->SetDefault();
+  b_cancel = new wxButton(panel, wxID_CANCEL, "Cancel", wxPoint(0, 0));
+  b_ok->SetSize(b_cancel->GetSize());
+  b_ok->Move(wxPoint(GetSize().GetWidth() / 2 - b_ok->GetSize().GetWidth() -
+                     b_cancel->GetSize().GetWidth() / 2,
+                     GetSize().GetHeight() -
+                     b_ok->GetSize().GetHeight() * 3 / 2));
+  b_cancel->Move(wxPoint(GetSize().GetWidth() / 2 +
+                         b_cancel->GetSize().GetWidth() / 2,
+                         GetSize().GetHeight() -
+                         b_ok->GetSize().GetHeight() * 3 / 2));
 }
 
 void expand_subtree(wxTreeCtrl &tree, wxTreeItemId &root, bool expand = true) {
@@ -687,6 +730,15 @@ void tab_chapters::on_add_chapter(wxCommandEvent &evt) {
     delete (*chapter)[0];
     chapter->Remove(0);
   }
+  if ((default_language.Length() > 0) || (default_country.Length() > 0)) {
+    KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
+    if (default_language.Length() > 0)
+      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
+        default_language.c_str();
+    if (default_country.Length() > 0)
+      *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
+        default_country.c_str();
+  }
   s = create_chapter_label(*chapter);
 
   if (d->is_atom) {
@@ -754,6 +806,15 @@ void tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
   while (chapter->ListSize() > 0) {
     delete (*chapter)[0];
     chapter->Remove(0);
+  }
+  if ((default_language.Length() > 0) || (default_country.Length() > 0)) {
+    KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
+    if (default_language.Length() > 0)
+      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
+        default_language.c_str();
+    if (default_country.Length() > 0)
+      *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
+        default_country.c_str();
   }
   m->PushElement(*chapter);
   s = create_chapter_label(*chapter);
@@ -905,7 +966,60 @@ void tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
   tc_country_codes->AppendText(cob_add_country_code->GetStringSelection());
 }
 
+void tab_chapters::verify_language_codes(string s, vector<string> &parts) {
+  uint32_t i;
+  vector<string>::iterator eit;
+
+  strip(s);
+  parts = split(s.c_str(), " ");
+  i = 0;
+  while (i < parts.size())
+    if (!is_valid_iso639_2_code(parts[i].c_str())) {
+      wxMessageBox(wxString("'") + parts[i].c_str() +
+                   wxString("' is not a valid ISO639-2 language code. "
+                            "Removing this entry."),
+                   _("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
+      eit = parts.begin();
+      eit += i;
+      parts.erase(eit);
+    } else
+      i++;
+}
+
+void tab_chapters::verify_country_codes(string s, vector<string> &parts) {
+  uint32_t i;
+  vector<string>::iterator eit;
+
+  strip(s);
+  parts = split(s.c_str(), " ");
+  i = 0;
+  while (i < parts.size())
+    if ((parts[i].length() != 2) ||
+        (parts[i][0] < 'a') || (parts[i][0] > 'z') ||
+        (parts[i][1] < 'a') || (parts[i][1] > 'z')) {
+      wxMessageBox(wxString("'") + parts[i].c_str() +
+                   wxString("' is not a valid two-letter country "
+                            "code. Removing this entry."),
+                   _("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
+      eit = parts.begin();
+      eit += i;
+      parts.erase(eit);
+    } else
+      i++;
+}
+
 void tab_chapters::on_set_default_values(wxCommandEvent &evt) {
+  vector<string> parts;
+  chapter_values_dlg dlg(this, true, default_language, default_country);
+
+  if (dlg.ShowModal() != wxID_OK)
+    return;
+
+  verify_language_codes(dlg.tc_language->GetValue().c_str(), parts);
+  default_language = join(" ", parts).c_str();
+
+  verify_country_codes(dlg.tc_country->GetValue().c_str(), parts);
+  default_country = join(" ", parts).c_str();
 }
 
 bool tab_chapters::copy_values(wxTreeItemId id) {
