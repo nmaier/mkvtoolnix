@@ -345,7 +345,7 @@ get_file_type(const string &filename) {
   return type;
 }
 
-static int display_counter = 1;
+static int display_counter = 0;
 static int display_files_done = 0;
 static int display_path_length = 1;
 static generic_reader_c *display_reader = NULL;
