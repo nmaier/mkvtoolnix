@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.11 2003/02/23 23:23:10 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.12 2003/02/24 12:31:17 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -53,6 +53,7 @@
 #include "r_ac3.h"
 #include "r_avi.h"
 #include "r_mp3.h"
+#include "r_wav.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -103,8 +104,8 @@ file_type_t file_types[] =
    {"demultiplexers:", -1, ""},
 //    {"ogg", TYPEOGM, "general OGG media stream, Vorbis audio embedded in OGG"},
    {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
-//    {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
-//    {"srt", TYPEWAV, "SRT text subtitles"},
+   {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
+//    {"srt", TYPESRT, "SRT text subtitles"},
 //    {"   ", TYPEMICRODVD, "MicroDVD text subtitles"},
 //    {"idx", TYPEVOBSUB, "VobSub subtitles"},
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
@@ -185,8 +186,8 @@ static int get_type(char *filename) {
   }
   if (avi_reader_c::probe_file(f, size))
     return TYPEAVI;
-//   else if (wav_reader_c::probe_file(f, size))
-//     return TYPEWAV;
+  else if (wav_reader_c::probe_file(f, size))
+    return TYPEWAV;
 //   else if (ogm_reader_c::probe_file(f, size))
 //     return TYPEOGM;
 //   else if (srt_reader_c::probe_file(f, size))
@@ -624,14 +625,13 @@ static void parse_args(int argc, char **argv) {
             file->reader = new avi_reader_c(file->name, astreams, vstreams,
                                             &async, &range, fourcc);
             break;
-//           case TYPEWAV:
-//             if ((astreams != NULL) || (vstreams != NULL) ||
-//                 (tstreams != NULL))
-//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-//                       "WAVE files.\n");
-//             file->reader = new wav_reader_c(file->name, &async, &range,
-//                                             comments);
-//             break;
+          case TYPEWAV:
+            if ((astreams != NULL) || (vstreams != NULL) ||
+                (tstreams != NULL))
+              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                      "WAVE files.\n");
+            file->reader = new wav_reader_c(file->name, &async, &range);
+            break;
 //           case TYPESRT:
 //             if ((astreams != NULL) || (vstreams != NULL) ||
 //                 (tstreams != NULL))

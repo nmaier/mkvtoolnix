@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.1 2003/02/21 09:26:40 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.2 2003/02/24 12:31:17 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,6 +23,7 @@
 #include "pr_generic.h"
 
 generic_packetizer_c::generic_packetizer_c() {
+  serialno = -1;
   track_entry = NULL;
   private_data = NULL;
   private_data_size = 0;

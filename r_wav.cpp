@@ -1,18 +1,21 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
+  mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  r_wav.cpp
-  WAVE demultiplexer module (supports raw / uncompressed PCM audio only,
-  type 0x0001)
+  r_mp3.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: r_wav.cpp,v 1.2 2003/02/24 12:31:17 mosu Exp $
+    \brief MP3 reader module
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <stdlib.h>
@@ -20,16 +23,16 @@
 #include <string.h>
 #include <errno.h>
 
-#include <ogg/ogg.h>
+#include "common.h"
+#include "error.h"
+#include "mkvmerge.h"
+#include "queue.h"
+#include "r_wav.h"
+#include "p_pcm.h"
 
 extern "C" {
 #include <avilib.h> // for wave_header
 }
-
-#include "ogmmerge.h"
-#include "ogmstreams.h"
-#include "queue.h"
-#include "r_wav.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -54,7 +57,7 @@ int wav_reader_c::probe_file(FILE *file, u_int64_t size) {
 }
 
 wav_reader_c::wav_reader_c(char *fname, audio_sync_t *nasync,
-                           range_t *nrange, char **ncomments) throw (error_c) {
+                           range_t *nrange) throw (error_c) {
   u_int64_t size;
   
   if ((file = fopen(fname, "r")) == NULL)
@@ -74,10 +77,11 @@ wav_reader_c::wav_reader_c(char *fname, audio_sync_t *nasync,
   if (chunk == NULL)
     die("malloc");
   bytes_processed = 0;
-  pcmpacketizer = new pcm_packetizer_c(wheader.common.dwSamplesPerSec,
+  pcmpacketizer = new pcm_packetizer_c(NULL, 0,
+                                       wheader.common.dwSamplesPerSec,
                                        wheader.common.wChannels,
                                        wheader.common.wBitsPerSample, nasync,
-                                       nrange, ncomments);
+                                       nrange);
   if (verbose)
     fprintf(stderr, "Using WAV demultiplexer for %s.\n+-> Using " \
             "PCM output module for audio stream.\n", fname);
@@ -95,23 +99,16 @@ wav_reader_c::~wav_reader_c() {
 int wav_reader_c::read() {
   int nread, last_frame;
     
-  if (pcmpacketizer->page_available())
+  if (pcmpacketizer->packet_available())
     return EMOREDATA;
   
   nread = fread(chunk, 1, bps, file);
-  if (nread <= 0) {
-/*
- * In case that the WAVE header is not set correctly or any other error
- * occurs. The 'normal' end-of-stream should be handled by comparing the
- * number of bytes read to the WAVE header fields.
- */
-    *chunk = 0;
-    pcmpacketizer->process((char *)chunk, 1, 1);
-    pcmpacketizer->flush_pages();
+  if (nread <= 0)
     return 0;
-  }
+
   last_frame = 0;
-  if ((bytes_processed + nread) >= (wheader.riff.len - sizeof(wave_header) + 8))
+  if ((bytes_processed + nread) >=
+      (wheader.riff.len - sizeof(wave_header) + 8))
     last_frame = 1;
   pcmpacketizer->process((char *)chunk, nread, last_frame);
   bytes_processed += nread;
@@ -122,26 +119,18 @@ int wav_reader_c::read() {
     return EMOREDATA;
 }
 
-int wav_reader_c::serial_in_use(int serial) {
-  return pcmpacketizer->serial_in_use(serial);
-}
-
-ogmmerge_page_t *wav_reader_c::get_header_page(int header_type) {
-  return pcmpacketizer->get_header_page(header_type);
-}
-
-ogmmerge_page_t *wav_reader_c::get_page() {
-  return pcmpacketizer->get_page();
+packet_t *wav_reader_c::get_packet() {
+  return pcmpacketizer->get_packet();
 }
 
 int wav_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void wav_reader_c::reset() {
-  if (pcmpacketizer != NULL)
-    pcmpacketizer->reset();
-}
+// void wav_reader_c::reset() {
+//   if (pcmpacketizer != NULL)
+//     pcmpacketizer->reset();
+// }
 
 void wav_reader_c::display_progress() {
   int samples = (wheader.riff.len - sizeof(wheader) + 8) / bps;
@@ -150,4 +139,3 @@ void wav_reader_c::display_progress() {
           (int)(bytes_processed * 100L / bps / samples));
   fflush(stdout);
 }
-
