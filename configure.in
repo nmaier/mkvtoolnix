@@ -438,34 +438,37 @@ int main ()
     exit 1
   fi
 
-  AC_MSG_CHECKING(Ebml version)
+  ebml_ver_req_major=0
+  ebml_ver_req_minor=5
+  ebml_ver_req_micro=1
+
+  AC_MSG_CHECKING(Ebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro})
 
   ebml_version=`cat conf.ebmltest`
-  mver_ok=`sed 's;\.;\ ;g' < conf.ebmltest | (read -a mver
-  if test ${mver[[0]]} -gt 0 ; then
-    mver_ok=1
-  elif test ${mver[[0]]} -lt 0 ; then
+  set - `sed 's/\./\ /g' < conf.ebmltest`
+  if test "x$1" = "x" -o $1 -lt ${ebml_ver_req_major} ; then
     mver_ok=0
+  elif test $1 -gt ${ebml_ver_req_major} ; then
+    mver_ok=1
   else
-    if test ${mver[[1]]} -gt 5 ; then
-      mver_ok=1
-    elif test ${mver[[1]]} -lt 5 ; then
+    if test "x$2" = "x" -o $2 -lt ${ebml_ver_req_minor} ; then
       mver_ok=0
+    elif test $2 -gt ${ebml_ver_req_minor} ; then
+      mver_ok=1
     else
-      if test ${mver[[2]]} -ge 1 ; then
-        mver_ok=1
-      else
+      if test "x$3" = "x" -o $3 -lt ${ebml_ver_req_micro} ; then
         mver_ok=0
+      else
+        mver_ok=1
       fi
     fi
   fi
-  echo $mver_ok )`
   if test "$mver_ok" = "1" ; then
-    AC_MSG_RESULT($ebml_version ok)
+    AC_MSG_RESULT(ok ($ebml_version))
   else
-    AC_MSG_RESULT($ebml_version too old)
+    AC_MSG_RESULT(too old ($ebml_version))
     echo '*** Your Ebml version is too old. Upgrade to at least version'
-    echo '*** 0.5.1 and re-run configure.'
+    echo '*** '${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}' and re-run configure.'
     exit 1
   fi
   rm -f conf.ebmltest
@@ -572,34 +575,36 @@ int main ()
     exit 1
   fi
 
-  AC_MSG_CHECKING(Matroska version)
+  kax_ver_req_major=0
+  kax_ver_req_minor=5
+  kax_ver_req_micro=3
+  AC_MSG_CHECKING(Matroska version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro})
 
   matroska_version=`cat conf.matroskatest`
-  mver_ok=`sed 's;\.;\ ;g' < conf.matroskatest | (read -a mver
-  if test ${mver[[0]]} -gt 0 ; then
-    mver_ok=1
-  elif test ${mver[[0]]} -lt 0 ; then
+  set - `sed 's/\./\ /g' < conf.matroskatest`
+  if test "x$1" = "x" -o $1 -lt ${kax_ver_req_major} ; then
     mver_ok=0
+  elif test $1 -gt ${kax_ver_req_major} ; then
+    mver_ok=1
   else
-    if test ${mver[[1]]} -gt 5 ; then
-      mver_ok=1
-    elif test ${mver[[1]]} -lt 5 ; then
+    if test "x$2" = "x" -o $2 -lt ${kax_ver_req_minor} ; then
       mver_ok=0
+    elif test $2 -gt ${kax_ver_req_minor} ; then
+      mver_ok=1
     else
-      if test ${mver[[2]]} -ge 1 ; then
-        mver_ok=1
-      else
+      if test "x$3" = "x" -o $3 -lt ${kax_ver_req_micro} ; then
         mver_ok=0
+      else
+        mver_ok=1
       fi
     fi
   fi
-  echo $mver_ok )`
   if test "$mver_ok" = "1" ; then
-    AC_MSG_RESULT($matroska_version ok)
+    AC_MSG_RESULT(ok ($matroska_version))
   else
-    AC_MSG_RESULT($matroska_version too old)
+    AC_MSG_RESULT(too old ($matroska_version))
     echo '*** Your Matroska version is too old. Upgrade to at least version'
-    echo '*** 0.5.1 and re-run configure.'
+    echo '*** '${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}' and re-run configure.'
     exit 1
   fi
   rm -f conf.matroskatest
