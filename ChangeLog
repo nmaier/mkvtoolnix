@@ -1,3 +1,9 @@
+2004-07-10  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: If the user does not specify a --language for a track
+	'und' ('undefined') will now be used instead of 'eng'. The
+	user can use the new option '--default-language' to change that.
+
 2004-07-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: When using a CUE sheet as a chapter file

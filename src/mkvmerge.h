@@ -48,6 +48,7 @@ extern int track_number;
 extern int64_t tags_size;
 extern string segment_title;
 extern bool segment_title_set;
+extern string default_language;
 
 extern float video_fps;
 

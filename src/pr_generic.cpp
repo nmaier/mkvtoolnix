@@ -558,7 +558,7 @@ generic_packetizer_c::set_headers() {
       (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
   else
     *(static_cast<EbmlString *>
-      (&GetChild<KaxTrackLanguage>(*track_entry))) = "eng";
+      (&GetChild<KaxTrackLanguage>(*track_entry))) = default_language.c_str();
 
   if ((ti->track_name != NULL) && (ti->track_name[0] != 0))
     *(static_cast<EbmlUnicodeString *>

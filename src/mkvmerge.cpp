@@ -197,6 +197,8 @@ bool splitting = false;
 // Specs say that track numbers should start at 1.
 int track_number = 1;
 
+string default_language = "und";
+
 mm_io_c *out = NULL;
 
 bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
@@ -257,6 +259,8 @@ usage() {
     "  --cue-chapter-name-format\n"
     "                           Pattern for the conversion from CUE sheet\n"
     "                           entries to chapter names.\n"
+    "  --default-language <lng> Use this language for all tracks unless\n"
+    "                           overridden with the --language option.\n"
     "\n General output control (advanced global options):\n"
     "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
     "                           A comma separated list of both file IDs\n"
@@ -2033,6 +2037,16 @@ parse_args(int argc,
 
       parse_language(next_arg, lang, "language", "language", true);
       ti->languages->push_back(lang);
+      i++;
+
+    } else if (!strcmp(this_arg, "--default-language")) {
+      if (next_arg == NULL)
+        mxerror("'--default-language' lacks its argument.\n");
+
+      if (!is_valid_iso639_2_code(next_arg))
+        mxerror("'%s' is not a valid ISO639-2 language code in "
+                "'--default-language %s'.\n", next_arg, next_arg);
+      default_language = next_arg;
       i++;
 
     } else if (!strcmp(this_arg, "--sub-charset")) {

@@ -43,6 +43,11 @@ Sets the charset to convert strings given on the command line from. It defaults
 to the charset given by system's current locale. This settings applies to
 arguments of the following options: \fB\-\-title\fR, \fB\-\-track\-name\fR and
 \fB\-\-attachment\-description\fR.
+.TP
+\fB\-\-default\-language\fR <\fIlng\fR>
+Sets the default language code. Unless overridden with the \fB\-\-language\fR
+option this language code will be used. The default language code is 'und'
+for 'undefined'.
 
 .LP
 Chapter handling: (global options)
@@ -1002,7 +1007,7 @@ text streams (subtitles).
 WAV as the audio source
 .TP
 *
-AAC audio files (only those with ADTS headers before each packet)
+AAC audio files (ADTS AAC files and AAC from MP4)
 .TP
 *
 AC3 audio files
@@ -1015,6 +1020,9 @@ MP3 audio files
 .TP
 *
 RealVideo and RealAudio from RealMedia files
+.TP
+*
+FLAC audio files (both raw FLAC and OggFLAC)
 .TP
 *
 Track selection
