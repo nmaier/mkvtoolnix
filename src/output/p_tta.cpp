@@ -64,13 +64,15 @@ tta_packetizer_c::process(memory_c &mem,
                           int64_t) {
   debug_enter("tta_packetizer_c::process");
 
-  if (duration == -1)
+  if (duration == -1) {
     add_packet(mem, samples_output * 1000000000 / sample_rate,
                (int64_t)(1000000000.0 * ti->async.linear * TTA_FRAME_TIME));
-  else
+    samples_output += (int64_t)(TTA_FRAME_TIME * sample_rate);
+  } else {
     add_packet(mem, samples_output * 1000000000 / sample_rate,
                duration);
-  samples_output += (int64_t)(TTA_FRAME_TIME * sample_rate);
+    samples_output += (int64_t)(duration * sample_rate / 1000000000ll);
+  }
 
   debug_leave("tta_packetizer_c::process");
 
