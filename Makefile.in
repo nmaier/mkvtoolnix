@@ -380,21 +380,31 @@ mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS)
 
+mkvmerge: src/mkvmerge@EXEEXT@
+
 src/mkvmerge@EXEEXT@: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
+
+mkvinfo: src/mkvinfo@EXEEXT@
 
 src/mkvinfo@EXEEXT@: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
+mkvextract: src/mkvextract@EXEEXT@
+
 src/mkvextract@EXEEXT@: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
 
+base64tool: src/base64tool@EXEEXT@
+
 src/base64tool@EXEEXT@: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
+
+mmg: src/mmg/mmg@EXEEXT@
 
 src/mmg/mmg@EXEEXT@: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 	@echo '    LINK ' $@
