@@ -256,6 +256,9 @@ static void usage() {
     "  --chapters <file>        Read chapter information from the file.\n"
     "  --chapter-language <lng> Set the 'language' element in chapter entries."
     "\n  --chapter-charset <cset> Charset for a simple chapter file.\n"
+    "  --cue-chapter-name-format\n"
+    "                           Pattern for the conversion from CUE sheet\n"
+    "                           entries to chapter names.\n"
     "\n General output control (advanced global options):\n"
     "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
     "                           If the number is postfixed with 'ms' then\n"
@@ -1430,6 +1433,17 @@ static void parse_args(int argc, char **argv) {
       chapter_charset = safestrdup(next_arg);
       i++;
 
+    } else if (!strcmp(this_arg, "--cue-chapter-name-format")) {
+      if (next_arg == NULL)
+        mxerror("'--cue-chapter-name-format' lacks the format.\n");
+      if (chapter_file_name != NULL)
+        mxerror("'--cue-chapter-name-format' must be given before '--chapters'"
+                ".\n");
+
+      safefree(cue_to_chapter_name_format);
+      cue_to_chapter_name_format = safestrdup(next_arg);
+      i++;
+
     } else if (!strcmp(this_arg, "--chapters")) {
       if (next_arg == NULL)
         mxerror("'--chapters' lacks the file name.\n");
@@ -1853,6 +1867,11 @@ static void cleanup() {
     delete kax_chapters;
   if (kax_as != NULL)
     delete kax_as;
+
+  safefree(chapter_file_name);
+  safefree(chapter_language);
+  safefree(chapter_charset);
+  safefree(cue_to_chapter_name_format);
 
   utf8_done();
 }

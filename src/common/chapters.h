@@ -49,6 +49,13 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
                                    const char *charset,
                                    bool exception_on_error = false);
 
+extern char *cue_to_chapter_name_format;
+bool probe_cue_chapters(mm_text_io_c *in);
+KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
+                                int64_t max_tc, int64_t offset,
+                                const char *language,
+                                const char *charset,
+                                bool exception_on_error = false);
 
 void write_chapters_xml(KaxChapters *chapters, FILE *out);
 void write_chapters_simple(int &chapter_num, KaxChapters *chapters, FILE *out);

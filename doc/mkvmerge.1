@@ -38,7 +38,7 @@ Sets the general title for the output file, e.g. the movie name.
 Read global tags from the XML \fIfile\fR. See the section about tags
 below for details.
 .TP
-\fB\-\-command\-line\-charset\fR <\fBcharset\fR>
+\fB\-\-command\-line\-charset\fR <\fIcharset\fR>
 Sets the charset to convert strings given on the command line from. It defaults
 to the charset given by system's current locale. This settings applies to
 arguments of the following options: \fB\-\-title\fR, \fB\-\-track\-name\fR and
@@ -47,15 +47,34 @@ arguments of the following options: \fB\-\-title\fR, \fB\-\-track\-name\fR and
 .LP
 Chapter handling: (global options)
 .TP
-\fB\-\-chapter\-language\fR <\fBlanguage\fR>
+\fB\-\-chapter\-language\fR <\fIlanguage\fR>
 Sets the ISO639-2 language code that is written for each chapter entry. Applies
 only to simple chapter files. Defaults to "eng". See the section about chapters
 below for details.
 .TP
-\fB\-\-chapter\-charset\fR <\fBcharset\fR>
+\fB\-\-chapter\-charset\fR <\fIcharset\fR>
 Sets the charset that is used for the conversion to UTF-8 for simple chapter
 files. Defaults to the current system locale. See the section about chapters
 below for details.
+.TP
+\fB\-\-cue\-chapter\-name\-format\fR <\fIformat\fR>
+\fBmkvmerge\fR supports reading CUE sheets for audio files as the input for
+chapters. CUE sheets usually contain the entries \fIPERFORMER\fR and
+\fITITLE\fR for each index entry. \fBmkvmerge\fR uses these two strings
+in order to construct the chapter name. With this option the format used
+for this name can be set. The following meta characters are supported:
+.br
+\fB%p\fR is replaced by the current entry's \fIPERFORMER\fR string,
+.br
+\fB%t\fR is replaced by the current entry's \fITITLE\fR string and
+.br
+\fB%n\fR is replaced by the current track number.
+.br
+Everything else is copied as-is.
+.br
+If this option is not given then \fBmkvmerge\fR defaults to the
+format '\fI%p - %t\fR' (the performer, followed by a space, a dash,
+another space and the title).
 .TP
 \fB\-\-chapters <\fIfile\fR>
 Read chapter information from the \fIfile\fR. See the section about chapters

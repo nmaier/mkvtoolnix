@@ -27,6 +27,7 @@
 
 #include "chapters.h"
 #include "error.h"
+#include "mkvmerge.h"
 
 using namespace std;
 using namespace libmatroska;
@@ -231,6 +232,245 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
 
 // }}}
 
+// PERFORMER "Blackmore's Night"
+// TITLE "Fires At Midnight"
+// FILE "Range.wav" WAVE
+//   TRACK 01 AUDIO
+//     TITLE "Written In The Stars"
+//     PERFORMER "Blackmore's Night"
+//     INDEX 01 00:00:00
+//   TRACK 02 AUDIO
+//     TITLE "The Times They Are A Changin'"
+//     PERFORMER "Blackmore's Night"
+//     INDEX 00 04:46:62
+//     INDEX 01 04:49:64
+
+bool probe_cue_chapters(mm_text_io_c *in) {
+  string s;
+
+  in->setFilePointer(0);
+  if (!in->getline2(s))
+    return false;
+  if (starts_with_case(s, "performer ") || starts_with_case(s, "title ") ||
+      starts_with_case(s, "file "))
+    return true;
+  return false;
+}
+
+char *cue_to_chapter_name_format = NULL;
+static void cue_entries_to_chapter_name(string &performer, string &title,
+                                        string &global_performer,
+                                        string &global_title, string &name,
+                                        int num) {
+  const char *this_char, *next_char;
+
+  name = "";
+  if (title.length() == 0)
+    title = global_title;
+  if (performer.length() == 0)
+    performer = global_performer;
+
+  if (cue_to_chapter_name_format == NULL)
+    this_char = "%p - %t";
+  else
+    this_char = cue_to_chapter_name_format;
+  next_char = this_char + 1;
+  while (*this_char != 0) {
+    if (*this_char == '%') {
+      if (*next_char == 'p')
+        name += performer;
+      else if (*next_char == 't')
+        name += title;
+      else if (*next_char == 'n')
+        name += to_string(num);
+      else {
+        name += *this_char;
+        this_char--;
+      }
+      this_char++;
+    } else
+      name += *this_char;
+    this_char++;
+    next_char = this_char + 1;
+  }
+}
+
+KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
+                                int64_t max_tc, int64_t offset,
+                                const char *language, const char *charset,
+                                bool exception_on_error) {
+  KaxChapters *chapters;
+  KaxEditionEntry *edition;
+  KaxChapterAtom *atom;
+  KaxChapterDisplay *display;
+  int line_num, num, index, min, sec, csec, cc_utf8;
+  int64_t start;
+  string global_title, global_performer, title, performer, line, name;
+  UTFstring wchar_string;
+  bool do_convert;
+  char *recoded_string;
+  
+  in->setFilePointer(0);
+  chapters = new KaxChapters;
+
+  if (in->get_byte_order() == BO_NONE) {
+    do_convert = true;
+    cc_utf8 = utf8_init(charset);
+
+  } else
+    do_convert = false;
+
+  if (language == NULL)
+    language = "eng";
+
+  atom = NULL;
+  edition = NULL;
+  num = 0;
+  line_num = 0;
+  start = -1;
+  try {
+    while (in->getline2(line)) {
+      line_num++;
+      strip(line);
+      if ((line.length() == 0) || starts_with_case(line, "file "))
+        continue;
+
+      if (starts_with_case(line, "performer ")) {
+        line.erase(0, 10);
+        strip(line);
+        if (line.length() < 3)
+          continue;
+        if (line[0] == '"')
+          line.erase(0, 1);
+        if (line[line.length() - 1] == '"')
+          line.erase(line.length() - 1);
+        if (num == 0)
+          global_performer = line;
+        else
+          performer = line;
+
+      } else if (starts_with_case(line, "title ")) {
+        line.erase(0, 6);
+        strip(line);
+        if (line.length() < 3)
+          continue;
+        if (line[0] == '"')
+          line.erase(0, 1);
+        if (line[line.length() - 1] == '"')
+          line.erase(line.length() - 1);
+        if (num == 0)
+          global_title = line;
+        else
+          title = line;
+
+      } else if (starts_with_case(line, "index ")) {
+        line.erase(0, 6);
+        strip(line);
+        if (sscanf(line.c_str(), "%d %d:%d:%d", &index, &min, &sec, &csec) < 4)
+          mxerror("Cue sheet parser: Invalid INDEX entry in line %d.\n",
+                  line_num);
+        if ((start == -1) || (index == 1))
+          start = (min * 60 * 100 + sec * 100 + csec) * 10;
+
+      } else if (starts_with_case(line, "track ")) {
+        if ((line.length() < 5) || strcasecmp(&line[line.length() - 5],
+                                              "audio"))
+          continue;
+        if (num >= 1) {
+          if (start == -1)
+            mxerror("Cue sheet parser: No INDEX entry found for the previous "
+                    "TRACK entry (current line: %d)\n", line_num);
+          if (!((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))))
+            continue;
+
+          if (edition == NULL)
+            edition = &GetChild<KaxEditionEntry>(*chapters);
+          if (atom == NULL)
+            atom = &GetChild<KaxChapterAtom>(*edition);
+          else
+            atom = &GetNextChild<KaxChapterAtom>(*edition, *atom);
+
+          *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
+            create_unique_uint32();
+
+          *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
+            (start - offset) * 1000000;
+
+          display = &GetChild<KaxChapterDisplay>(*atom);
+
+          cue_entries_to_chapter_name(performer, title, global_performer,
+                                      global_title, name, num);
+          if (do_convert) {
+            recoded_string = to_utf8(cc_utf8, name.c_str());
+            wchar_string = cstrutf8_to_UTFstring(recoded_string);
+            safefree(recoded_string);
+          } else
+            wchar_string = cstrutf8_to_UTFstring(name.c_str());
+          *static_cast<EbmlUnicodeString *>
+            (&GetChild<KaxChapterString>(*display)) = wchar_string;
+
+          *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
+            language;
+        }
+        num++;
+
+        start = -1;
+        performer = "";
+        title = "";
+      }
+    }
+
+    if (num >= 1) {
+      if (start == -1)
+        mxerror("Cue sheet parser: No INDEX entry found for the previous "
+                "TRACK entry (current line: %d)\n", line_num);
+      if ((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))) {
+        if (edition == NULL)
+          edition = &GetChild<KaxEditionEntry>(*chapters);
+        if (atom == NULL)
+          atom = &GetChild<KaxChapterAtom>(*edition);
+        else
+          atom = &GetNextChild<KaxChapterAtom>(*edition, *atom);
+
+        *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
+          create_unique_uint32();
+
+        *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
+          (start - offset) * 1000000;
+
+        display = &GetChild<KaxChapterDisplay>(*atom);
+
+        cue_entries_to_chapter_name(performer, title, global_performer,
+                                    global_title, name, num);
+        if (do_convert) {
+          recoded_string = to_utf8(cc_utf8, name.c_str());
+          wchar_string = cstrutf8_to_UTFstring(recoded_string);
+          safefree(recoded_string);
+        } else
+          wchar_string = cstrutf8_to_UTFstring(name.c_str());
+        *static_cast<EbmlUnicodeString *>
+          (&GetChild<KaxChapterString>(*display)) = wchar_string;
+
+        *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
+          language;
+      }
+    }
+  } catch(error_c e) {
+    delete in;
+    delete chapters;
+    throw error_c(e);
+  }
+
+  delete in;
+
+  if (num == 0) {
+    delete chapters;
+    return NULL;
+  }
+
+  return chapters;
+}
+
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
                             int64_t max_tc, int64_t offset,
                             const char *language, const char *charset,
@@ -253,6 +493,11 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
         *is_simple_format = true;
       return parse_simple_chapters(in, min_tc, max_tc, offset, language,
                                    charset, exception_on_error);
+    } else if (probe_cue_chapters(in)) {
+      if (is_simple_format != NULL)
+        *is_simple_format = true;
+      return parse_cue_chapters(in, min_tc, max_tc, offset, language,
+                                charset, exception_on_error);
     } else if (is_simple_format != NULL)
       *is_simple_format = false;
 
