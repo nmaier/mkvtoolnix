@@ -59,10 +59,11 @@ public:
   }
   virtual bool get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false) {
-    return true;
+    // No gap is following!
+    return false;
   }
-  virtual void peek_next(int64_t &timecode, int64_t &duration) {
-    get_next(timecode, duration, true);
+  virtual bool peek_next(int64_t &timecode, int64_t &duration) {
+    return get_next(timecode, duration, true);
   }
   virtual double get_default_duration(double proposal) {
     return proposal;
