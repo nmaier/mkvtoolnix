@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: dts_common.cpp,v 1.2 2003/05/18 20:40:11 mosu Exp $
+    \version \$Id: dts_common.cpp,v 1.3 2003/05/18 20:53:33 mosu Exp $
     \brief helper function for DTS data
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz @ bunkus.org>
@@ -27,35 +27,35 @@
 // ---------------------------------------------------------------------------
 
 struct channel_arrangement {
-	int num_channels;
-	const char * description;
+  int num_channels;
+  const char * description;
 };
 
 static const channel_arrangement channel_arrangements[16] = {
-	{ 1, "A (mono)" },
-	{ 2, "A, B (dual mono)" },
-	{ 2, "L, R (left, right)" },
-	{ 2, "L+R, L-R (sum, difference)" },
-	{ 2, "LT, RT (left and right total)" },
-	{ 3, "C, L, R (center, left, right)" },
-	{ 3, "L, R, S (left, right, surround)" },
-	{ 4, "C, L, R, S (center, left, right, surround)" }, 
-	{ 4, "L, R, SL, SR (left, right, surround-left, surround-right)"}, 
-	{ 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)"},
-	{ 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, "
+  { 1, "A (mono)" },
+  { 2, "A, B (dual mono)" },
+  { 2, "L, R (left, right)" },
+  { 2, "L+R, L-R (sum, difference)" },
+  { 2, "LT, RT (left and right total)" },
+  { 3, "C, L, R (center, left, right)" },
+  { 3, "L, R, S (left, right, surround)" },
+  { 4, "C, L, R, S (center, left, right, surround)" }, 
+  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)"}, 
+  { 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)"},
+  { 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, "
     "surround-left, surround-right)"}, 
-	{ 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, "
+  { 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, "
     "overhead)"},
-	{ 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, "
+  { 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, "
     "right-front, left-rear, right-rear)"},
-	{ 7, "CL, C, CR, L, R, SL, SR  (center-left, center, center-right, left, "
+  { 7, "CL, C, CR, L, R, SL, SR  (center-left, center, center-right, left, "
     "right, surround-left, surround-right)"},
-	{ 8, "CL, CR, L, R, SL1, SL2, SR1, SR2 (center-left, center-right, left, "
+  { 8, "CL, CR, L, R, SL1, SL2, SR1, SR2 (center-left, center-right, left, "
     "right, surround-left1, surround-left2, surround-right1, "
     "surround-right2)"},
-	{ 8, "CL, C, CR, L, R, SL, S, SR (center-left, center, center-right, left, "
+  { 8, "CL, C, CR, L, R, SL, S, SR (center-left, center, center-right, left, "
     "right, surround-left, surround, surround-right)"}
-	// other modes are not defined as of yet
+  // other modes are not defined as of yet
 };
 
 static const int core_samplefreqs[16] = {
@@ -78,373 +78,373 @@ static const int transmission_bitrates[32] = {
 };
 
 enum source_pcm_resolution {
-	spr_16 = 0,
-	spr_16_ES,  //_ES means: surround channels mastered in DTS-ES 
-	spr_20,
-	spr_20_ES,
-	spr_invalid4,
-	spr_24_ES,
-	spr_24,
-	spr_invalid7
+  spr_16 = 0,
+  spr_16_ES,  //_ES means: surround channels mastered in DTS-ES 
+  spr_20,
+  spr_20_ES,
+  spr_invalid4,
+  spr_24_ES,
+  spr_24,
+  spr_invalid7
 };
 
 class BitCursor {
 public:
-	const unsigned char * end_of_data;
-	const unsigned char * byte_position;
-	unsigned int bits_valid;
-	
-	bool out_of_data;
-	
-	BitCursor(const unsigned char * data, unsigned int len) :
+  const unsigned char * end_of_data;
+  const unsigned char * byte_position;
+  unsigned int bits_valid;
+  
+  bool out_of_data;
+  
+  BitCursor(const unsigned char * data, unsigned int len) :
     end_of_data(data+len), byte_position(data), bits_valid(8),
     out_of_data(false) {
-		
-		if (byte_position >= end_of_data) {
-			out_of_data = true;
-		}
-	}
-	
-	
-	bool get_bits(unsigned int n, unsigned long & r) {
-		// returns true if less bits are available than asked for
-		
-		r = 0;
-		
-		while (n > 0) {
+    
+    if (byte_position >= end_of_data) {
+      out_of_data = true;
+    }
+  }
+  
+  
+  bool get_bits(unsigned int n, unsigned long & r) {
+    // returns true if less bits are available than asked for
+    
+    r = 0;
+    
+    while (n > 0) {
 
-			if (byte_position >= end_of_data) {
-				out_of_data = true;
-				return true;
-			}
-			
-			unsigned int b = 8; // number of bits to extract from the current byte
-			if (b > n) b = n;
-			if (b > bits_valid) b = bits_valid;
-			
-			unsigned int rshift = bits_valid-b;
-			
-			r <<= b;
-			r |= ((*byte_position) >> rshift) & (0xff >> (8-b));
-			
-			bits_valid -= b;
-			if (bits_valid == 0) {
-				bits_valid = 8;
-				byte_position += 1;
-			}
-			
-			n -= b;
-		}
-		
-		return false;
-	}
-	
-	bool get_bits(unsigned int n, int & r) {
-		unsigned long t;
-		bool b = get_bits(n, t);
-		r = (int)t;
-		return b;
-	}
+      if (byte_position >= end_of_data) {
+        out_of_data = true;
+        return true;
+      }
+      
+      unsigned int b = 8; // number of bits to extract from the current byte
+      if (b > n) b = n;
+      if (b > bits_valid) b = bits_valid;
+      
+      unsigned int rshift = bits_valid-b;
+      
+      r <<= b;
+      r |= ((*byte_position) >> rshift) & (0xff >> (8-b));
+      
+      bits_valid -= b;
+      if (bits_valid == 0) {
+        bits_valid = 8;
+        byte_position += 1;
+      }
+      
+      n -= b;
+    }
+    
+    return false;
+  }
+  
+  bool get_bits(unsigned int n, int & r) {
+    unsigned long t;
+    bool b = get_bits(n, t);
+    r = (int)t;
+    return b;
+  }
 
-	bool get_bits(unsigned int n, unsigned int & r) {
-		unsigned long t;
-		bool b = get_bits(n, t);
-		r = (unsigned int)t;
-		return b;
-	}
+  bool get_bits(unsigned int n, unsigned int & r) {
+    unsigned long t;
+    bool b = get_bits(n, t);
+    r = (unsigned int)t;
+    return b;
+  }
 
-	bool get_bit(bool & r) {
-		unsigned long t;
-		bool b = get_bits(1, t);
-		r = (bool)t;
-		return b;
-	}
-	
+  bool get_bit(bool & r) {
+    unsigned long t;
+    bool b = get_bits(1, t);
+    r = (bool)t;
+    return b;
+  }
+  
 };
 
 int find_dts_header(const unsigned char *buf, unsigned int size,
                     struct dts_header_s *dts_header) {
-	
-	unsigned int size_to_search = size-15;
-	if (size_to_search > size) {
-		// not enough data for one header
-		return -1;
-	}
-	
-	unsigned int offset;
-	for (offset = 0; offset < size_to_search; offset++) {
-   	// sync words appear aligned in the bit stream
-		if (buf[offset]     == 0x7f &&
+  
+  unsigned int size_to_search = size-15;
+  if (size_to_search > size) {
+    // not enough data for one header
+    return -1;
+  }
+  
+  unsigned int offset;
+  for (offset = 0; offset < size_to_search; offset++) {
+     // sync words appear aligned in the bit stream
+    if (buf[offset]     == 0x7f &&
         buf[offset + 1] == 0xfe &&
         buf[offset + 2] == 0x80 &&
         buf[offset + 3] == 0x01) {
-			break;
-		}
-	}
-	if (offset >= size_to_search) {
-		// no header found
-		return -1;
-	}
-	
-	BitCursor bc(buf+offset+4, size-offset-4);
-	
-	unsigned int t;
-	
-	bc.get_bits(1, t);
-	dts_header->frametype = (t)? dts_header_s::frametype_normal :
+      break;
+    }
+  }
+  if (offset >= size_to_search) {
+    // no header found
+    return -1;
+  }
+  
+  BitCursor bc(buf+offset+4, size-offset-4);
+  
+  unsigned int t;
+  
+  bc.get_bits(1, t);
+  dts_header->frametype = (t)? dts_header_s::frametype_normal :
     dts_header_s::frametype_termination;
-	
-	bc.get_bits(5, t);
-	dts_header->deficit_sample_count = (t+1) % 32;
-	
-	bc.get_bits(1, t);
-	dts_header->crc_present = (t)? true : false;
+  
+  bc.get_bits(5, t);
+  dts_header->deficit_sample_count = (t+1) % 32;
+  
+  bc.get_bits(1, t);
+  dts_header->crc_present = (t)? true : false;
    
-	bc.get_bits(7, t);
-	if (t < 5)  {
-		fprintf(stderr,"DTS_Header problem: invalid number of blocks in frame\n");
-		//return -1;
-	}
-	dts_header->num_pcm_sample_blocks = t + 1;
-	
-	bc.get_bits(14, t);
-	if (t < 95) {
-		fprintf(stderr,"DTS_Header problem: invalid frame bytes size\n");
-		return -1;
-	}
-	dts_header->frame_byte_size = t+1;
-	
-	bc.get_bits(6, t);
-	if (t >= 16) {
-		dts_header->audio_channels = -1;
-		dts_header->audio_channel_arrangement = "unknown (user defined)";
-	} else {
-		dts_header->audio_channels = channel_arrangements[t].num_channels;
-		dts_header->audio_channel_arrangement =
+  bc.get_bits(7, t);
+  if (t < 5)  {
+    fprintf(stderr,"DTS_Header problem: invalid number of blocks in frame\n");
+    //return -1;
+  }
+  dts_header->num_pcm_sample_blocks = t + 1;
+  
+  bc.get_bits(14, t);
+  if (t < 95) {
+    fprintf(stderr,"DTS_Header problem: invalid frame bytes size\n");
+    return -1;
+  }
+  dts_header->frame_byte_size = t+1;
+  
+  bc.get_bits(6, t);
+  if (t >= 16) {
+    dts_header->audio_channels = -1;
+    dts_header->audio_channel_arrangement = "unknown (user defined)";
+  } else {
+    dts_header->audio_channels = channel_arrangements[t].num_channels;
+    dts_header->audio_channel_arrangement =
       channel_arrangements[t].description;
-	}
+  }
 
-	bc.get_bits(4, t);
-	dts_header->core_sampling_frequency = core_samplefreqs[t];
-	if (dts_header->core_sampling_frequency < 0) {
-		fprintf(stderr,"DTS_Header problem: invalid core sampling frequency\n");
-		return -1;
-	}
-		
-	bc.get_bits(5, t);
-	dts_header->transmission_bitrate = transmission_bitrates[t];
-	
-	bc.get_bit(dts_header->embedded_down_mix);
-	bc.get_bit(dts_header->embedded_dynamic_range);
-	bc.get_bit(dts_header->embedded_time_stamp);
-	bc.get_bit(dts_header->auxiliary_data);
-	bc.get_bit(dts_header->hdcd_master);
-	
-	bc.get_bits(3, t);
-	dts_header->extension_audio_descriptor = 
+  bc.get_bits(4, t);
+  dts_header->core_sampling_frequency = core_samplefreqs[t];
+  if (dts_header->core_sampling_frequency < 0) {
+    fprintf(stderr,"DTS_Header problem: invalid core sampling frequency\n");
+    return -1;
+  }
+    
+  bc.get_bits(5, t);
+  dts_header->transmission_bitrate = transmission_bitrates[t];
+  
+  bc.get_bit(dts_header->embedded_down_mix);
+  bc.get_bit(dts_header->embedded_dynamic_range);
+  bc.get_bit(dts_header->embedded_time_stamp);
+  bc.get_bit(dts_header->auxiliary_data);
+  bc.get_bit(dts_header->hdcd_master);
+  
+  bc.get_bits(3, t);
+  dts_header->extension_audio_descriptor = 
     (dts_header_s::extension_audio_descriptor_enum)t;
-	
-	bc.get_bit(dts_header->extended_coding);
-	
-	bc.get_bit(dts_header->audio_sync_word_in_sub_sub);
-	
-	bc.get_bits(2, t);
-	dts_header->lfe_type = (dts_header_s::lfe_type_enum)t;
-	
-	bc.get_bit(dts_header->predictor_history_flag);
-	
-	if (dts_header->crc_present) {
-		bc.get_bits(16, t);
-		// unsigned short header_CRC_sum = t; // not used yet
-	}
-	
-	bc.get_bits(1, t);
-	dts_header->multirate_interpolator =
+  
+  bc.get_bit(dts_header->extended_coding);
+  
+  bc.get_bit(dts_header->audio_sync_word_in_sub_sub);
+  
+  bc.get_bits(2, t);
+  dts_header->lfe_type = (dts_header_s::lfe_type_enum)t;
+  
+  bc.get_bit(dts_header->predictor_history_flag);
+  
+  if (dts_header->crc_present) {
+    bc.get_bits(16, t);
+    // unsigned short header_CRC_sum = t; // not used yet
+  }
+  
+  bc.get_bits(1, t);
+  dts_header->multirate_interpolator =
     (dts_header_s::multirate_interpolator_enum)t;
-	
-	bc.get_bits(4, t);
-	dts_header->encoder_software_revision = t;
-	if (t > 7) {
-		fprintf(stderr,"DTS_Header problem: encoded with an incompatible new "
+  
+  bc.get_bits(4, t);
+  dts_header->encoder_software_revision = t;
+  if (t > 7) {
+    fprintf(stderr,"DTS_Header problem: encoded with an incompatible new "
             "encoder version\n");
-		return -1;
-	}
-	
-	bc.get_bits(2, t);
-	dts_header->copy_history = t;
-	
-	bc.get_bits(3, t);
-	switch (t) {
-		case spr_16:
-			dts_header->source_pcm_resolution = 16;
-			dts_header->source_surround_in_es = false;
-			break;
+    return -1;
+  }
+  
+  bc.get_bits(2, t);
+  dts_header->copy_history = t;
+  
+  bc.get_bits(3, t);
+  switch (t) {
+    case spr_16:
+      dts_header->source_pcm_resolution = 16;
+      dts_header->source_surround_in_es = false;
+      break;
 
-		case spr_16_ES:
-			dts_header->source_pcm_resolution = 16;
-			dts_header->source_surround_in_es = true;
-			break;
+    case spr_16_ES:
+      dts_header->source_pcm_resolution = 16;
+      dts_header->source_surround_in_es = true;
+      break;
 
-		case spr_20:
-			dts_header->source_pcm_resolution = 20;
-			dts_header->source_surround_in_es = false;
-			break;
+    case spr_20:
+      dts_header->source_pcm_resolution = 20;
+      dts_header->source_surround_in_es = false;
+      break;
 
-		case spr_20_ES:
-			dts_header->source_pcm_resolution = 20;
-			dts_header->source_surround_in_es = true;
-			break;
+    case spr_20_ES:
+      dts_header->source_pcm_resolution = 20;
+      dts_header->source_surround_in_es = true;
+      break;
 
-		case spr_24:
-			dts_header->source_pcm_resolution = 24;
-			dts_header->source_surround_in_es = false;
-			break;
+    case spr_24:
+      dts_header->source_pcm_resolution = 24;
+      dts_header->source_surround_in_es = false;
+      break;
 
-		case spr_24_ES:
-			dts_header->source_pcm_resolution = 24;
-			dts_header->source_surround_in_es = true;
-			break;
-		
-		default:
-			fprintf(stderr,"DTS_Header problem: invalid source PCM resolution\n");
-			return -1;
-	}
-	
-	bc.get_bit(dts_header->front_sum_difference);
+    case spr_24_ES:
+      dts_header->source_pcm_resolution = 24;
+      dts_header->source_surround_in_es = true;
+      break;
+    
+    default:
+      fprintf(stderr,"DTS_Header problem: invalid source PCM resolution\n");
+      return -1;
+  }
+  
+  bc.get_bit(dts_header->front_sum_difference);
 
-	bc.get_bit(dts_header->surround_sum_difference);
-	
-	bool out_of_data = bc.get_bits(4, t);
-	if (dts_header->encoder_software_revision == 7) {
-		dts_header->dialog_normalization_gain = -((int)t);
-	} else if (dts_header->encoder_software_revision == 6) {
-		dts_header->dialog_normalization_gain = -16-((int)t);
-	} else {
-		dts_header->dialog_normalization_gain = 0;
-	}
-	
-	if (out_of_data) {
-		fprintf(stderr,"DTS_Header problem: not enough data to read header\n");
-		return -1;
-	}
-	
-	return offset;
-	
+  bc.get_bit(dts_header->surround_sum_difference);
+  
+  bool out_of_data = bc.get_bits(4, t);
+  if (dts_header->encoder_software_revision == 7) {
+    dts_header->dialog_normalization_gain = -((int)t);
+  } else if (dts_header->encoder_software_revision == 6) {
+    dts_header->dialog_normalization_gain = -16-((int)t);
+  } else {
+    dts_header->dialog_normalization_gain = 0;
+  }
+  
+  if (out_of_data) {
+    fprintf(stderr,"DTS_Header problem: not enough data to read header\n");
+    return -1;
+  }
+  
+  return offset;
+  
 }
 
 // ============================================================================
 
 void print_dts_header(const struct dts_header_s *h) {
-	
-	fprintf(stderr,"DTS Frame Header Information:\n");
+  
+  fprintf(stderr,"DTS Frame Header Information:\n");
 
-	fprintf(stderr,"Frame Type             : ");
-	if (h->frametype == dts_header_s::frametype_normal) {
-		fprintf(stderr,"normal");
-	} else {
-		fprintf(stderr,"termination, deficit sample count = %u",
+  fprintf(stderr,"Frame Type             : ");
+  if (h->frametype == dts_header_s::frametype_normal) {
+    fprintf(stderr,"normal");
+  } else {
+    fprintf(stderr,"termination, deficit sample count = %u",
             h->deficit_sample_count);
-	}
-	fprintf(stderr,"\n");
-	
-	fprintf(stderr,"CRC available          : %s\n", (h->crc_present)? "yes" :
+  }
+  fprintf(stderr,"\n");
+  
+  fprintf(stderr,"CRC available          : %s\n", (h->crc_present)? "yes" :
           "no");
 
-	fprintf(stderr,"Frame Size             : PCM core samples=32*%u=%u, %f "
+  fprintf(stderr,"Frame Size             : PCM core samples=32*%u=%u, %f "
           "milliseconds, %u byte\n",
-	        h->num_pcm_sample_blocks, h->num_pcm_sample_blocks * 32,
+          h->num_pcm_sample_blocks, h->num_pcm_sample_blocks * 32,
           (h->num_pcm_sample_blocks * 32000.0) / h->core_sampling_frequency,
           h->frame_byte_size);
-	
-	fprintf(stderr,"Audio Channels         : %d%s, arrangement: %s\n",
-	        h->audio_channels, (h->source_surround_in_es)? " ES" : "" ,
+  
+  fprintf(stderr,"Audio Channels         : %d%s, arrangement: %s\n",
+          h->audio_channels, (h->source_surround_in_es)? " ES" : "" ,
           h->audio_channel_arrangement);
-	
-	fprintf(stderr,"Core sampling frequency: %u\n", h->core_sampling_frequency);
-	
-	fprintf(stderr,"Transmission_bitrate   : ");
-	if (h->transmission_bitrate == -1) {
-		fprintf(stderr,"open");
-	} else if (h->transmission_bitrate == -2) {
-		fprintf(stderr,"variable");
-	} else if (h->transmission_bitrate == -3) {
-		fprintf(stderr,"lossless");
-	} else {
-		fprintf(stderr,"%d", h->transmission_bitrate);
-	}
-	fprintf(stderr,"\n");
+  
+  fprintf(stderr,"Core sampling frequency: %u\n", h->core_sampling_frequency);
+  
+  fprintf(stderr,"Transmission_bitrate   : ");
+  if (h->transmission_bitrate == -1) {
+    fprintf(stderr,"open");
+  } else if (h->transmission_bitrate == -2) {
+    fprintf(stderr,"variable");
+  } else if (h->transmission_bitrate == -3) {
+    fprintf(stderr,"lossless");
+  } else {
+    fprintf(stderr,"%d", h->transmission_bitrate);
+  }
+  fprintf(stderr,"\n");
 
-	
-	fprintf(stderr,"Embedded Down Mix      : %s\n",
+  
+  fprintf(stderr,"Embedded Down Mix      : %s\n",
           (h->embedded_down_mix)? "yes" : "no");
-	fprintf(stderr,"Embedded Dynamic Range : %s\n",
+  fprintf(stderr,"Embedded Dynamic Range : %s\n",
           (h->embedded_dynamic_range)? "yes" : "no");
-	fprintf(stderr,"Embedded Time Stamp    : %s\n",
+  fprintf(stderr,"Embedded Time Stamp    : %s\n",
           (h->embedded_time_stamp)? "yes" : "no");
-	fprintf(stderr,"Embedded Auxiliary Data: %s\n",
+  fprintf(stderr,"Embedded Auxiliary Data: %s\n",
           (h->auxiliary_data)? "yes" : "no");
-	fprintf(stderr,"HDCD Master            : %s\n",
+  fprintf(stderr,"HDCD Master            : %s\n",
           (h->hdcd_master)? "yes" : "no");
-	
-	fprintf(stderr,"Extended Coding        : ");
-	if (h->extended_coding) {
-		switch (h->extension_audio_descriptor) {
-			case dts_header_s::extension_xch:
+  
+  fprintf(stderr,"Extended Coding        : ");
+  if (h->extended_coding) {
+    switch (h->extension_audio_descriptor) {
+      case dts_header_s::extension_xch:
         fprintf(stderr,"Extra Channels");
         break; 
-			case dts_header_s::extension_x96k:
+      case dts_header_s::extension_x96k:
         fprintf(stderr,"Extended frequency (x96k)");
         break; 
-			case dts_header_s::extension_xch_x96k:
+      case dts_header_s::extension_xch_x96k:
         fprintf(stderr,"Extra Channels and Extended frequency (x96k)");
         break; 
-			default:
+      default:
         fprintf(stderr,"yes, but unknown");
         break; 
-		}
-	} else {
-		fprintf(stderr,"no");
-	}
-	fprintf(stderr,"\n");
-	
-	fprintf(stderr,"Audio Sync in sub-subs : %s\n",
+    }
+  } else {
+    fprintf(stderr,"no");
+  }
+  fprintf(stderr,"\n");
+  
+  fprintf(stderr,"Audio Sync in sub-subs : %s\n",
           (h->audio_sync_word_in_sub_sub)? "yes" : "no");
-	
-	fprintf(stderr,"Low Frequency Effects  : ");
-	switch (h->lfe_type) {
-		case dts_header_s::lfe_none:
+  
+  fprintf(stderr,"Low Frequency Effects  : ");
+  switch (h->lfe_type) {
+    case dts_header_s::lfe_none:
       fprintf(stderr,"none");
       break; 
-		case dts_header_s::lfe_128:
+    case dts_header_s::lfe_128:
       fprintf(stderr,"yes, interpolation factor 128");
       break; 
-		case dts_header_s::lfe_64:
+    case dts_header_s::lfe_64:
       fprintf(stderr,"yes, interpolation factor 64");
       break; 
-		case dts_header_s::lfe_invalid:
+    case dts_header_s::lfe_invalid:
       fprintf(stderr,"Invalid");
       break; 
-	}
-	fprintf(stderr,"\n");
-	
-	fprintf(stderr,"Predictor History used : %s\n",
+  }
+  fprintf(stderr,"\n");
+  
+  fprintf(stderr,"Predictor History used : %s\n",
           (h->predictor_history_flag)? "yes" : "no");
 
-	fprintf(stderr,"Multirate Interpolator : %s\n",
+  fprintf(stderr,"Multirate Interpolator : %s\n",
           (h->multirate_interpolator == dts_header_s::mi_non_perfect)?
           "non perfect" : "perfect");
-	
-	fprintf(stderr,"Encoder Software Vers. : %u\n",
+  
+  fprintf(stderr,"Encoder Software Vers. : %u\n",
           h->encoder_software_revision);
-	fprintf(stderr,"Copy History Bits      : %u\n", h->copy_history);
-	fprintf(stderr,"Source PCM Resolution  : %d\n", h->source_pcm_resolution);
+  fprintf(stderr,"Copy History Bits      : %u\n", h->copy_history);
+  fprintf(stderr,"Source PCM Resolution  : %d\n", h->source_pcm_resolution);
 
-	fprintf(stderr,"Front Encoded as Diff. : %s\n",
+  fprintf(stderr,"Front Encoded as Diff. : %s\n",
           (h->front_sum_difference)? "yes" : "no");
-	fprintf(stderr,"Surr. Encoded as Diff. : %s\n",
+  fprintf(stderr,"Surr. Encoded as Diff. : %s\n",
           (h->surround_sum_difference)? "yes" : "no");
-	
-	fprintf(stderr,"Dialog Normaliz. Gain  : %d\n",
+  
+  fprintf(stderr,"Dialog Normaliz. Gain  : %d\n",
           h->dialog_normalization_gain);
 }
 

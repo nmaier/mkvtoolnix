@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.32 2003/05/18 20:40:11 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.33 2003/05/18 20:53:33 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -474,7 +474,7 @@ int mkv_reader_c::read_headers() {
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
                     typeid(*l2).name());
 
-          if (upper_lvl_el > 0) {	// we're coming from l3
+          if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -601,7 +601,7 @@ int mkv_reader_c::read_headers() {
                             "element@4: %s\n", typeid(*l4).name());
 
                   if (upper_lvl_el > 0) {
-									  assert(1 == 0);	// this should never happen
+                    assert(1 == 0);  // this should never happen
                   } else {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
@@ -669,7 +669,7 @@ int mkv_reader_c::read_headers() {
                             "element@4: %s\n", typeid(*l4).name());
 
                   if (upper_lvl_el > 0) {
-									  assert(1 == 0);	// this should never happen
+                    assert(1 == 0);  // this should never happen
                   } else {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
@@ -734,7 +734,7 @@ int mkv_reader_c::read_headers() {
               } else if (!is_ebmlvoid(l4))
                 fprintf(stdout, "matroska_reader: |  + unknown element@3: "
                         "%s\n", typeid(*l3).name());
-              if (upper_lvl_el > 0) {	// we're coming from l4
+              if (upper_lvl_el > 0) {  // we're coming from l4
                 upper_lvl_el--;
                 delete l3;
                 l3 = l4;
@@ -752,7 +752,7 @@ int mkv_reader_c::read_headers() {
           } else if (!is_ebmlvoid(l4))
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s, "
                     "ule %d\n", typeid(*l2).name(), upper_lvl_el);
-          if (upper_lvl_el > 0) {	// we're coming from l3
+          if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -781,7 +781,7 @@ int mkv_reader_c::read_headers() {
       if (exit_loop)      // we've found the first cluster, so get out
         break;
 
-      if (upper_lvl_el > 0) {		// we're coming from l2
+      if (upper_lvl_el > 0) {    // we're coming from l2
         upper_lvl_el--;
         delete l1;
         l1 = l2;
@@ -1045,7 +1045,7 @@ int mkv_reader_c::read() {
             }
           }
 
-          if (upper_lvl_el > 0) {		// we're coming from l3
+          if (upper_lvl_el > 0) {    // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -1067,7 +1067,7 @@ int mkv_reader_c::read() {
       if (exit_loop)
         break;
 
-      if (upper_lvl_el > 0) {		// we're coming from l2
+      if (upper_lvl_el > 0) {    // we're coming from l2
         upper_lvl_el--;
         delete l1;
         l1 = l2;

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.38 2003/05/11 09:42:59 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.39 2003/05/18 20:53:33 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -290,7 +290,7 @@ void process_file() {
             fprintf(stdout, "\n");
           }
 
-          if (upper_lvl_el > 0) {	// we're coming from l3
+          if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -438,7 +438,7 @@ void process_file() {
                   }
 
                   if (upper_lvl_el > 0) {
-									  assert(1 == 0);	// this should never happen
+                    assert(1 == 0);  // this should never happen
                   } else {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
@@ -526,7 +526,7 @@ void process_file() {
                   }
 
                   if (upper_lvl_el > 0) {
-									  assert(1 == 0);	// this should never happen
+                    assert(1 == 0);  // this should never happen
                   } else {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
@@ -636,7 +636,7 @@ void process_file() {
                 fprintf(stdout, "\n");
               }
 
-              if (upper_lvl_el > 0) {	// we're coming from l4
+              if (upper_lvl_el > 0) {  // we're coming from l4
                 upper_lvl_el--;
                 delete l3;
                 l3 = l4;
@@ -659,7 +659,7 @@ void process_file() {
             fprintf(stdout, "\n");
           }
 
-          if (upper_lvl_el > 0) {	// we're coming from l3
+          if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -764,7 +764,7 @@ void process_file() {
             fprintf(stdout, "\n");
           }
 
-          if (upper_lvl_el > 0) {		// we're coming from l3
+          if (upper_lvl_el > 0) {    // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -867,7 +867,7 @@ void process_file() {
                  fprintf(stdout, "\n");
               }
 
-              if (upper_lvl_el > 0) {		// we're coming from l4
+              if (upper_lvl_el > 0) {    // we're coming from l4
                 upper_lvl_el--;
                 delete l3;
                 l3 = l4;
@@ -891,7 +891,7 @@ void process_file() {
             fprintf(stdout, "\n");
           }
 
-          if (upper_lvl_el > 0) {		// we're coming from l3
+          if (upper_lvl_el > 0) {    // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -1083,7 +1083,7 @@ void process_file() {
                     fprintf(stdout, "\n");
                   }
 
-                  if (upper_lvl_el > 0) {		// we're coming from l5
+                  if (upper_lvl_el > 0) {    // we're coming from l5
                     upper_lvl_el--;
                     delete l4;
                     l4 = l5;
@@ -1108,7 +1108,7 @@ void process_file() {
                 fprintf(stdout, "\n");
               }
 
-              if (upper_lvl_el > 0) {		// we're coming from l4
+              if (upper_lvl_el > 0) {    // we're coming from l4
                 upper_lvl_el--;
                 delete l3;
                 l3 = l4;
@@ -1132,7 +1132,7 @@ void process_file() {
             fprintf(stdout, "\n");
           }
 
-          if (upper_lvl_el > 0) {		// we're coming from l3
+          if (upper_lvl_el > 0) {    // we're coming from l3
             upper_lvl_el--;
             delete l2;
             l2 = l3;
@@ -1164,7 +1164,7 @@ void process_file() {
       if (exit_loop)      // we've found the first cluster, so get out
         break;
 
-      if (upper_lvl_el > 0) {		// we're coming from l2
+      if (upper_lvl_el > 0) {    // we're coming from l2
         upper_lvl_el--;
         delete l1;
         l1 = l2;

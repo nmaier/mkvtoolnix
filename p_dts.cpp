@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.cpp,v 1.2 2003/05/18 20:40:11 mosu Exp $
+    \version \$Id: p_dts.cpp,v 1.3 2003/05/18 20:53:33 mosu Exp $
     \brief DTS output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,57 +31,57 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 bool operator!=(const dts_header_t &l, const dts_header_t &r) {
-	//if (l.frametype != r.frametype) return true;
-	//if (l.deficit_sample_count != r.deficit_sample_count) return true;
-	if (l.crc_present != r.crc_present)
+  //if (l.frametype != r.frametype) return true;
+  //if (l.deficit_sample_count != r.deficit_sample_count) return true;
+  if (l.crc_present != r.crc_present)
     return true;
-	if (l.num_pcm_sample_blocks != r.num_pcm_sample_blocks)
+  if (l.num_pcm_sample_blocks != r.num_pcm_sample_blocks)
     return true;
-	if (l.frame_byte_size != r.frame_byte_size)
+  if (l.frame_byte_size != r.frame_byte_size)
     return true;
-	if (l.audio_channels != r.audio_channels)
+  if (l.audio_channels != r.audio_channels)
     return true;
-	if (l.core_sampling_frequency != r.core_sampling_frequency)
+  if (l.core_sampling_frequency != r.core_sampling_frequency)
     return true;
-	if (l.transmission_bitrate != r.transmission_bitrate)
+  if (l.transmission_bitrate != r.transmission_bitrate)
     return true;
-	if (l.embedded_down_mix != r.embedded_down_mix)
+  if (l.embedded_down_mix != r.embedded_down_mix)
     return true;
-	if (l.embedded_dynamic_range != r.embedded_dynamic_range)
+  if (l.embedded_dynamic_range != r.embedded_dynamic_range)
     return true;
-	if (l.embedded_time_stamp != r.embedded_time_stamp)
+  if (l.embedded_time_stamp != r.embedded_time_stamp)
     return true;
-	if (l.auxiliary_data != r.auxiliary_data)
+  if (l.auxiliary_data != r.auxiliary_data)
     return true;
-	if (l.hdcd_master != r.hdcd_master)
+  if (l.hdcd_master != r.hdcd_master)
     return true;
-	if (l.extension_audio_descriptor != r.extension_audio_descriptor)
+  if (l.extension_audio_descriptor != r.extension_audio_descriptor)
     return true;
-	if (l.extended_coding != r.extended_coding)
+  if (l.extended_coding != r.extended_coding)
     return true;
-	if (l.audio_sync_word_in_sub_sub != r.audio_sync_word_in_sub_sub)
+  if (l.audio_sync_word_in_sub_sub != r.audio_sync_word_in_sub_sub)
     return true;
-	if (l.lfe_type != r.lfe_type)
+  if (l.lfe_type != r.lfe_type)
     return true;
-	if (l.predictor_history_flag != r.predictor_history_flag)
+  if (l.predictor_history_flag != r.predictor_history_flag)
     return true;
-	if (l.multirate_interpolator != r.multirate_interpolator)
+  if (l.multirate_interpolator != r.multirate_interpolator)
     return true;
-	if (l.encoder_software_revision != r.encoder_software_revision)
+  if (l.encoder_software_revision != r.encoder_software_revision)
     return true;
-	if (l.copy_history != r.copy_history)
+  if (l.copy_history != r.copy_history)
     return true;
-	if (l.source_pcm_resolution != r.source_pcm_resolution)
+  if (l.source_pcm_resolution != r.source_pcm_resolution)
     return true;
-	if (l.source_surround_in_es != r.source_surround_in_es)
+  if (l.source_surround_in_es != r.source_surround_in_es)
     return true;
-	if (l.front_sum_difference != r.front_sum_difference)
+  if (l.front_sum_difference != r.front_sum_difference)
     return true;
-	if (l.surround_sum_difference != r.surround_sum_difference)
+  if (l.surround_sum_difference != r.surround_sum_difference)
     return true;
-	if (l.dialog_normalization_gain != r.dialog_normalization_gain)
+  if (l.dialog_normalization_gain != r.dialog_normalization_gain)
     return true;
-	return false;
+  return false;
 }
 
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
@@ -238,11 +238,11 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
     
     if (timecode == -1)
       my_timecode = (int64_t)(((double)samples_written*1000.0) /
-		                          ((double)dtsheader.core_sampling_frequency));
-	 
+                              ((double)dtsheader.core_sampling_frequency));
+   
 //     fprintf(stderr,"DTS packet timecode %lld  len %lld\n", my_timecode,
 //             packet_len_in_ms);
-	 
+   
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
                packet_len_in_ms);
     

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.66 2003/05/17 23:25:08 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.67 2003/05/18 20:53:33 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -148,9 +148,9 @@ public:
 };
 
 mm_io_callback::mm_io_callback(const char *path, const open_mode mode) {
-	char *cmode;
+  char *cmode;
 
-	switch (mode) {
+  switch (mode) {
     case MODE_READ:
       cmode = "rb";
       break;
@@ -162,11 +162,11 @@ mm_io_callback::mm_io_callback(const char *path, const open_mode mode) {
       break;
     default:
       throw 0;
-	}
+  }
 
-	file = fopen(path, cmode);
+  file = fopen(path, cmode);
 
-	if (file == NULL) {
+  if (file == NULL) {
     fprintf(stderr, "Error: Could not open the file: %d (%s)\n", errno,
             strerror(errno));
     exit(1);
