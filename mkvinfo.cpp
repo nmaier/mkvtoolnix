@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.49 2003/05/28 07:39:45 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.50 2003/05/28 11:31:55 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -82,6 +82,7 @@ typedef struct {
 
 mkv_track_t **tracks = NULL;
 int num_tracks = 0;
+bool use_gui = false;
 
 void add_track(mkv_track_t *s) {
   tracks = (mkv_track_t **)saferealloc(tracks, sizeof(mkv_track_t *) *
@@ -152,9 +153,7 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
   va_end(ap);
 
-  // Now this is where the future GUI code will add this entry to the
-  // tree view or whatever. For now just dump the stuff to stdout.
-  if (level >= 0) {
+  if (!use_gui) {
     memset(&level_buffer[1], ' ', 9);
     level_buffer[0] = '|';
     level_buffer[level] = 0;
@@ -162,11 +161,17 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
     if ((verbose > 1) && (l != NULL))
       fprintf(stdout, " at %llu", l->GetElementPosition());
     fprintf(stdout, "\n");
-  } else
-    fprintf(stdout, "(%s) + %s\n", NAME, args_buffer);
+  }
+#ifdef HAVE_WXWINDOWS
+  else {
+    if (l != NULL)
+      sprintf(&args_buffer[strlen(args_buffer)], " at %llu",
+              l->GetElementPosition());
+    frame->add_item(level, args_buffer);
+  }
+#endif // HAVE_WXWINDOWS
 }
 
-#define show_info(f, args...) show_element(NULL, -1, f, ## args)
 #define show_warning(l, f, args...) show_element(NULL, l, f, ## args)
 #define show_unknown_element(e, l) \
   show_element(e, l, "Unknown element: %s", typeid(*e).name())
@@ -220,7 +225,7 @@ bool process_file(const char *file_name) {
   EbmlElement *l5 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
-  uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
+  uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
   char mkv_track_type;
   bool ms_compat;
   mm_io_c *in;
@@ -233,6 +238,10 @@ bool process_file(const char *file_name) {
                strerror(errno));
     return false;
   }
+
+  in->setFilePointer(0, seek_end);
+  file_size = in->getFilePointer();
+  in->setFilePointer(0, seek_beginning);
 
   try {
     es = new EbmlStream(*in);
@@ -259,7 +268,7 @@ bool process_file(const char *file_name) {
         return false;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, "segment");
+        show_element(l0, 0, "Segment");
         break;
       }
 
@@ -376,13 +385,10 @@ bool process_file(const char *file_name) {
               } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
                 KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
                 tuid.ReadData(es->I_O());
-                fprintf(stdout, "(%s) |  + Track UID: %u", NAME, uint32(tuid));
-                if (verbose > 1)
-                  fprintf(stdout, " at %llu", l3->GetElementPosition());
-                fprintf(stdout, "\n");
+                show_element(l3, 3, "Track UID: %u", uint32(tuid));
                 if (find_track_by_uid(uint32(tuid)) != NULL)
-                  fprintf(stdout, "(%s) |  + Warning: There's more than one "
-                          "track with the UID %u.\n", NAME, uint32(tuid));
+                  show_warning(3, "Warning: There's more than one "
+                               "track with the UID %u.", uint32(tuid));
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
@@ -699,6 +705,11 @@ bool process_file(const char *file_name) {
         }
         cluster = (KaxCluster *)l1;
 
+#ifdef HAVE_WXWINDOWS
+        frame->show_progress(100 * cluster->GetElementPosition() /
+                             file_size);
+#endif // HAVE_WXWINDOWS
+
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
@@ -996,11 +1007,10 @@ bool process_file(const char *file_name) {
 
 int console_main(int argc, char **argv) {
   char *file_name;
-  bool dummy;
 
   nice(2);
 
-  parse_args(argc, argv, file_name, dummy);
+  parse_args(argc, argv, file_name, use_gui);
   if (file_name == NULL) {
     usage();
     exit(1);
