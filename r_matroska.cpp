@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.26 2003/05/06 08:15:36 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.27 2003/05/06 10:22:55 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -629,6 +629,24 @@ int mkv_reader_c::read_headers() {
                             "%u\n", track->v_height);
 
                   } else if (EbmlId(*l4) ==
+                             KaxVideoDisplayWidth::ClassInfos.GlobalId) {
+                    KaxVideoDisplayWidth &width =
+                      *static_cast<KaxVideoDisplayWidth *>(l4);
+                    width.ReadData(es->I_O());
+                    track->v_dwidth = uint16(width);
+                    fprintf(stdout, "matroska_reader: |   + Display width: "
+                            "%u\n", track->v_dwidth);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxVideoDisplayHeight::ClassInfos.GlobalId) {
+                    KaxVideoDisplayHeight &height =
+                      *static_cast<KaxVideoDisplayHeight *>(l4);
+                    height.ReadData(es->I_O());
+                    track->v_dheight = uint16(height);
+                    fprintf(stdout, "matroska_reader: |   + Display height: "
+                            "%u\n", track->v_dheight);
+
+                  } else if (EbmlId(*l4) ==
                              KaxVideoFrameRate::ClassInfos.GlobalId) {
                     KaxVideoFrameRate &framerate =
                       *static_cast<KaxVideoFrameRate *>(l4);
@@ -782,6 +800,15 @@ void mkv_reader_c::create_packetizers() {
             memcpy(ti->fourcc, t->v_fourcc, 5);
           t->packetizer = new video_packetizer_c(this, t->v_frate, t->v_width,
                                                  t->v_height, 24, 1, ti);
+          if (ti->aspect_ratio == 1.0) { // The user didn't set it.
+            if (t->v_dwidth == 0)
+              t->v_dwidth = t->v_width;
+            if (t->v_dheight == 0)
+              t->v_dheight = t->v_height;
+            if ((t->v_dwidth != t->v_width) || (t->v_dheight != t->v_height))
+              t->packetizer->set_video_aspect_ratio((float)t->v_dwidth /
+                                                    (float)t->v_dheight);
+          }
           memcpy(ti->fourcc, old_fourcc, 5);
           break;
 

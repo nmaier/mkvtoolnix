@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.9 2003/05/03 20:22:18 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.10 2003/05/06 10:22:55 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -45,7 +45,7 @@ typedef struct {
   char type; // 'v' = video, 'a' = audio, 't' = text subs
   
   // Parameters for video tracks
-  uint32_t v_width, v_height;
+  uint32_t v_width, v_height, v_dwidth, v_dheight;
   float v_frate;
   char v_fourcc[5];
 

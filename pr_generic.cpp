@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.37 2003/05/06 09:59:37 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.38 2003/05/06 10:22:55 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -159,6 +159,10 @@ void generic_packetizer_c::set_video_pixel_height(int height) {
   hvideo_pixel_height = height;
 }
 
+void generic_packetizer_c::set_video_aspect_ratio(float ar) {
+  ti->aspect_ratio = ar;
+}
+
 void generic_packetizer_c::set_video_frame_rate(float frame_rate) {
   hvideo_frame_rate = frame_rate;
 }
@@ -277,7 +281,7 @@ void generic_packetizer_c::set_headers() {
           ((hvideo_pixel_width / hvideo_pixel_height) != ti->aspect_ratio))
         *(static_cast<EbmlUInteger *>
           (&GetChild<KaxVideoDisplayWidth>(video))) =
-          hvideo_pixel_height * ti->aspect_ratio;
+          (uint64_t)(hvideo_pixel_height * ti->aspect_ratio);
     }
 
     if (hvideo_frame_rate != -1.0)

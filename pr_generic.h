@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.38 2003/05/06 09:59:37 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.39 2003/05/06 10:22:55 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -146,6 +146,7 @@ public:
 
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);
+  virtual void set_video_aspect_ratio(float ar);
   virtual void set_video_frame_rate(float frame_rate);
 
   virtual void set_as_default_track(char type);
