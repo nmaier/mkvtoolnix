@@ -54,30 +54,33 @@
 #include "KaxSeekHead.h"
 #include "KaxSegment.h"
 #include "KaxTags.h"
+#include "KaxTag.h"
+#include "KaxTagMulti.h"
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
 #include "KaxTrackAudio.h"
 #include "KaxTrackVideo.h"
 #include "KaxVersion.h"
 
-#include "mkvmerge.h"
-#include "mm_io.h"
 #include "cluster_helper.h"
 #include "common.h"
 #include "iso639.h"
+#include "mkvmerge.h"
+#include "mm_io.h"
 #include "r_aac.h"
 #include "r_ac3.h"
-#include "r_dts.h"
 #include "r_avi.h"
+#include "r_dts.h"
+#include "r_matroska.h"
 #include "r_mp3.h"
-#include "r_wav.h"
+#include "r_mp4.h"
 #ifdef HAVE_OGGVORBIS
 #include "r_ogm.h"
 #endif
+#include "r_real.h"
 #include "r_srt.h"
 #include "r_ssa.h"
-#include "r_matroska.h"
-#include "r_mp4.h"
+#include "r_wav.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
@@ -154,32 +157,30 @@ bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
+   {"aac", TYPEAAC, "AAC (Advanced Audio Coding)"},
+   {"ac3", TYPEAC3, "A/52 (aka AC3)"},
+   {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
+   {"dts", TYPEDTS, "DTS (Digital Theater System)"},
+   {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"mkv", TYPEMATROSKA, "general Matroska files"},
 #ifdef HAVE_OGGVORBIS
    {"ogg", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
 #endif // HAVE_OGGVORBIS
-   {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
-   {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
+   {"rm ", TYPEREAL, "RealMedia audio and video"},
    {"srt", TYPESRT, "SRT text subtitles"},
    {"ssa", TYPESSA, "SSA/ASS text subtitles"},
-//    {"   ", TYPEMICRODVD, "MicroDVD text subtitles"},
-//    {"idx", TYPEVOBSUB, "VobSub subtitles"},
-   {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
-   {"ac3", TYPEAC3, "A/52 (aka AC3)"},
-   {"dts", TYPEDTS, "DTS (Digital Theater System)"},
-   {"aac", TYPEAAC, "AAC (Advanced Audio Coding)"},
+   {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
    {"output modules:", -1, ""},
+   {"   ", -1,      "AAC audio"},
+   {"   ", -1,      "AC3 audio"},
+   {"   ", -1,      "DTS audio"},
+   {"   ", -1,      "MP3 audio"},
+   {"   ", -1,      "simple text subtitles"},
+   {"   ", -1,      "uncompressed PCM audio"},
+   {"   ", -1,      "Video (not MPEG1/2)"},
 #ifdef HAVE_OGGVORBIS
    {"   ", -1,      "Vorbis audio"},
 #endif // HAVE_OGGVORBIS
-   {"   ", -1,      "Video (not MPEG1/2)"},
-   {"   ", -1,      "uncompressed PCM audio"},
-   {"   ", -1,      "simple text subtitles"},
-//    {"   ", -1,      "VobSub subtitles"},
-   {"   ", -1,      "MP3 audio"},
-   {"   ", -1,      "AC3 audio"},
-   {"   ", -1,      "DTS audio"},
-   {"   ", -1,      "AAC audio"},
    {NULL,  -1,      NULL}};
 
 static void usage(void) {
@@ -291,6 +292,8 @@ static int get_type(char *filename) {
   else if (ogm_reader_c::probe_file(mm_io, size))
     type = TYPEOGM;
 #endif // HAVE_OGGVORBIS
+  else if (real_reader_c::probe_file(mm_io, size))
+    type = TYPEREAL;
   else if (srt_reader_c::probe_file(mm_io, size))
     type = TYPESRT;
   else if (mp3_reader_c::probe_file(mm_io, size))
@@ -718,6 +721,12 @@ static void create_readers() {
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs)
             fprintf(stderr, "Warning: -s/-S are ignored for AVI files.\n");
           file->reader = new avi_reader_c(file->ti);
+          break;
+        case TYPEREAL:
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs)
+            fprintf(stderr, "Warning: -s/-S are ignored for RealMedia "
+                    "files.\n");
+          file->reader = new real_reader_c(file->ti);
           break;
         case TYPEWAV:
           if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||

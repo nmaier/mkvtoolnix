@@ -235,8 +235,7 @@ void ogm_reader_c::create_packetizers() {
                                    (double)get_uint64(&sth->time_unit),
                                    get_uint32(&sth->sh.video.width),
                                    get_uint32(&sth->sh.video.height),
-                                   get_uint16(&sth->bits_per_sample),
-                                   1, false, ti);
+                                   false, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "

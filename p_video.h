@@ -40,8 +40,8 @@ private:
 
 public:
   video_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
-                     double nfps, int nwidth, int nheight, int nbpp,
-                     bool navi_compat_mode, bool nbframes, track_info_t *nti)
+                     double nfps, int nwidth, int nheight, bool nbframes,
+                     track_info_t *nti)
     throw (error_c);
   virtual ~video_packetizer_c();
 

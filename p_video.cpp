@@ -35,17 +35,13 @@ using namespace LIBMATROSKA_NAMESPACE;
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
                                        const char *ncodec_id,
                                        double nfps, int nwidth,
-                                       int nheight, int nbpp,
-                                       bool navi_compat_mode, bool nbframes,
+                                       int nheight, bool nbframes,
                                        track_info_t *nti)
   throw (error_c) : generic_packetizer_c(nreader, nti) {
   fps = nfps;
   width = nwidth;
   height = nheight;
-  bpp = nbpp;
-  avi_compat_mode = navi_compat_mode;
   frames_output = 0;
-  avi_compat_mode = 1;
   bframes = nbframes;
   ref_timecode = -1;
   if (get_cue_creation() == CUES_UNSPECIFIED)
@@ -80,6 +76,8 @@ void video_packetizer_c::set_headers() {
   set_video_pixel_height(height);
 
   generic_packetizer_c::set_headers();
+
+  track_entry->EnableLacing(false);
 }
 
 // Semantics:

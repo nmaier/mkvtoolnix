@@ -126,9 +126,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     ti->id = 0;                 // ID for the video track.
     vpacketizer = new video_packetizer_c(this, NULL, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
-                                         AVI_video_height(avi),
-                                         24, // fixme!
-                                         1, false, ti);
+                                         AVI_video_height(avi), false, ti);
     if (verbose)
       fprintf(stdout, "+-> Using video output module for video track ID 0.\n");
   } else
