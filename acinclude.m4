@@ -254,7 +254,7 @@ AC_ARG_ENABLE([profiling],
 if test x"$enable_profiling" = x"yes"; then
     dnl profiling information
     PROFILING_CFLAGS="-pg"
-    PROFILING_LIBS="-lc_p"
+    PROFILING_LIBS=""
 else
     PROFILING_CFLAGS=""
     PROFILING_LIBS=""
