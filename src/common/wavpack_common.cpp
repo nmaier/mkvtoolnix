@@ -131,7 +131,7 @@ wv_parse_frame(mm_io_c *mm_io,
       }
     } else  {
       meta.channel_count += (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
-      total_bytes += wphdr.ck_size + 8;
+      total_bytes = wphdr.ck_size + 8;
 
       if (wphdr.flags & WV_FINAL_BLOCK) {
         mxverb(2, "wavpack_reader: %d chans: %s, %d bytes\n",
