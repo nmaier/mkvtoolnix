@@ -782,7 +782,7 @@ bool tab_input::validate_settings() {
   mmg_track_t *t;
   bool tracks_selected, dot_present, ok;
   int64_t dummy_i;
-  string s;
+  string s, format;
   wxString sid;
 
   tracks_selected = false;
@@ -795,7 +795,8 @@ bool tab_input::validate_settings() {
         continue;
 
       tracks_selected = true;
-      sid.Printf("%lld", t->id);
+      fix_format("%lld", format);
+      sid.Printf(format.c_str(), t->id);
 
       s = t->delay->c_str();
       strip(s);
