@@ -127,7 +127,7 @@ char typenames[14][20] = {"unknown", "Ogg" "AVI", "WAV", "SRT", "MP3", "AC3",
 
 void usage() {
   fprintf(stdout,
-    "Usage: mkvextract -i inname [TID1:outname1 [TID2:outname2]]\n\n"
+    "Usage: mkvextract -i inname [TID1:outname1 [TID2:outname2 ...]]\n\n"
     "  -i inname      Use 'inname' as the source.\n"
     "  -c charset     Convert text subtitles to this charset.\n"
     "  TID:outname    Write track with the ID TID to 'outname'.\n"
@@ -209,8 +209,9 @@ void parse_args(int argc, char **argv, char *&file_name) {
     }
 
   if (file_name == NULL) {
-    fprintf(stderr, "Error: No input file given.\n");
-    exit(1);
+    fprintf(stderr, "Error: No input file given.\n\n");
+    usage();
+    exit(0);
   }
 
   if (tracks.size() == 0) {
