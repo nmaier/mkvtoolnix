@@ -14,45 +14,46 @@
  */
 
 #include "ebml/EbmlElement.h"
+#include "matroska/KaxConfig.h"
 
 #include "xml_element_mapping.h"
 
 namespace libmatroska {
-  extern EbmlId KaxChapters_TheId;
-  extern EbmlId KaxEditionEntry_TheId;
-  extern EbmlId KaxEditionUID_TheId;
-  extern EbmlId KaxEditionFlagHidden_TheId;
-  extern EbmlId KaxEditionFlagDefault_TheId;
-  extern EbmlId KaxEditionManaged_TheId;
-  extern EbmlId KaxChapterAtom_TheId;
-  extern EbmlId KaxChapterUID_TheId;
-  extern EbmlId KaxChapterTimeStart_TheId;
-  extern EbmlId KaxChapterTimeEnd_TheId;
-  extern EbmlId KaxChapterFlagHidden_TheId;
-  extern EbmlId KaxChapterFlagEnabled_TheId;
-  extern EbmlId KaxChapterPhysicalEquiv_TheId;
-  extern EbmlId KaxChapterTrack_TheId;
-  extern EbmlId KaxChapterTrackNumber_TheId;
-  extern EbmlId KaxChapterDisplay_TheId;
-  extern EbmlId KaxChapterString_TheId;
-  extern EbmlId KaxChapterLanguage_TheId;
-  extern EbmlId KaxChapterCountry_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapters_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionEntry_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionUID_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionFlagHidden_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionFlagDefault_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionManaged_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterAtom_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterUID_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterTimeStart_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterTimeEnd_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterFlagHidden_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterFlagEnabled_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterPhysicalEquiv_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterTrack_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterTrackNumber_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterDisplay_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterString_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterLanguage_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterCountry_TheId;
 
-  extern EbmlId KaxTags_TheId;
-  extern EbmlId KaxTag_TheId;
-  extern EbmlId KaxTagTargets_TheId;
-  extern EbmlId KaxTagSimple_TheId;
-  extern EbmlId KaxTagName_TheId;
-  extern EbmlId KaxTagLangue_TheId;
-  extern EbmlId KaxTagDefault_TheId;
-  extern EbmlId KaxTagString_TheId;
-  extern EbmlId KaxTagBinary_TheId;
-  extern EbmlId KaxTagTrackUID_TheId;
-  extern EbmlId KaxTagEditionUID_TheId;
-  extern EbmlId KaxTagChapterUID_TheId;
-  extern EbmlId KaxTagAttachmentUID_TheId;
-  extern EbmlId KaxTagTargetType_TheId;
-  extern EbmlId KaxTagTargetTypeValue_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTags_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTag_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagTargets_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagSimple_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagName_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagLangue_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagDefault_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagString_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagBinary_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagTrackUID_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagEditionUID_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagChapterUID_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagAttachmentUID_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagTargetType_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxTagTargetTypeValue_TheId;
 };
 
 using namespace libmatroska;

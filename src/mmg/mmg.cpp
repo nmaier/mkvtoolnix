@@ -13,6 +13,8 @@
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
+#include "os.h"
+
 #include <stdarg.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

@@ -41,8 +41,8 @@ typedef struct {
   parser_element_callback_t end_hook;
 } parser_element_t;
 
-extern parser_element_t chapter_elements[];
-extern parser_element_t tag_elements[];
+extern parser_element_t MTX_DLL_API chapter_elements[];
+extern parser_element_t MTX_DLL_API tag_elements[];
 
 #define chapter_element_map_index(name) \
    xml_element_map_index(chapter_elements, name)
