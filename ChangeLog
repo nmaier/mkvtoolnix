@@ -1,5 +1,9 @@
 2003-11-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: Fixed the timecode reader code and made it a bit more
+	flexible. Added more documentation for this feature along with an
+	example file (examples/example-timecodes.txt).
+
 	* mmg: bug fix: When 'default track' is selected then all other
 	tracks of the same type will have their 'default track' flag
 	cleared.
