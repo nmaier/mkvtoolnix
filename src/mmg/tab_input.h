@@ -73,6 +73,7 @@ protected:
   wxStaticBox *sb_track_options;
 
   wxTimer value_copy_timer;
+  bool dont_copy_values_now;
 
   int selected_file, selected_track;
 

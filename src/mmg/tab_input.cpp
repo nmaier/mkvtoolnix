@@ -447,6 +447,7 @@ tab_input::tab_input(wxWindow *parent):
   selected_file = -1;
   selected_track = -1;
 
+  dont_copy_values_now = false;
   value_copy_timer.SetOwner(this, ID_T_INPUTVALUES);
   value_copy_timer.Start(333);
 
@@ -911,6 +912,8 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   if (selected_file == -1)
     return;
 
+  dont_copy_values_now = true;
+
   f = &files[selected_file];
 
   i = 0;
@@ -972,6 +975,8 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
     clb_tracks->Enable(false);
     selected_track = -1;
   }
+
+  dont_copy_values_now = false;
 }
 
 void
@@ -981,6 +986,8 @@ tab_input::on_move_track_up(wxCommandEvent &evt) {
 
   if (selected_track < 1)
     return;
+
+  dont_copy_values_now = true;
 
   t = tracks[selected_track - 1];
   tracks[selected_track - 1] = tracks[selected_track];
@@ -996,6 +1003,8 @@ tab_input::on_move_track_up(wxCommandEvent &evt) {
   selected_track--;
   b_track_up->Enable(selected_track > 0);
   b_track_down->Enable(true);
+
+  dont_copy_values_now = false;
 }
 
 void
@@ -1005,6 +1014,8 @@ tab_input::on_move_track_down(wxCommandEvent &evt) {
 
   if ((selected_track < 0) || (selected_track >= tracks.size() - 1))
     return;
+
+  dont_copy_values_now = true;
 
   t = tracks[selected_track + 1];
   tracks[selected_track + 1] = tracks[selected_track];
@@ -1020,6 +1031,8 @@ tab_input::on_move_track_down(wxCommandEvent &evt) {
   selected_track++;
   b_track_up->Enable(true);
   b_track_down->Enable(selected_track < (tracks.size() - 1));
+
+  dont_copy_values_now = false;
 }
 
 void
@@ -1081,6 +1094,8 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   uint32_t i;
   wxString lang;
 
+  dont_copy_values_now = true;
+
   selected_track = -1;
   new_sel = clb_tracks->GetSelection();
   t = tracks[new_sel];
@@ -1120,6 +1135,8 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   tc_timecodes->SetValue(*t->timecodes);
   cob_fourcc->SetValue(*t->fourcc);
   tc_track_name->SetFocus();
+
+  dont_copy_values_now = false;
 }
 
 void
@@ -1318,7 +1335,7 @@ void
 tab_input::on_value_copy_timer(wxTimerEvent &evt) {
   mmg_track_t *t;
 
-  if (selected_track == -1)
+  if (dont_copy_values_now || (selected_track == -1))
     return;
 
   t = tracks[selected_track];

@@ -270,6 +270,7 @@ tab_settings::query_mkvmerge_capabilities() {
     return;
   out = process->GetInputStream();
   tmps = "";
+  c = 0;
   while (1) {
     if (!out->Eof()) {
       c = out->GetC();
