@@ -1071,6 +1071,7 @@ void qtmp4_reader_c::create_packetizer(int64_t tid) {
         ptzr->set_audio_sampling_freq(dmx->a_samplerate);
         ptzr->set_audio_channels(dmx->a_channels);
         ptzr->set_audio_bit_depth(dmx->a_bitdepth);
+        ptzr->duplicate_data_on_add(false);
 
         if (verbose)
           mxinfo("+-> Using generic audio output module for stream "
@@ -1093,6 +1094,7 @@ void qtmp4_reader_c::create_packetizer(int64_t tid) {
           dmx->packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                                  sample_rate, channels, ti,
                                                  false, true);
+          dmx->packetizer->duplicate_data_on_add(false);
           if (sbraac)
             dmx->packetizer->
               set_audio_output_sampling_freq(output_sample_rate);
@@ -1110,6 +1112,7 @@ void qtmp4_reader_c::create_packetizer(int64_t tid) {
                                dmx->a_channels, dmx->a_bitdepth, ti,
                                (dmx->a_bitdepth > 8) &&
                                (dmx->fourcc[0] == 't'));
+        dmx->packetizer->duplicate_data_on_add(false);
         if (verbose)
           mxinfo("+-> Using PCM output module for stream %u.\n", dmx->id);
 

@@ -96,7 +96,7 @@ pcm_packetizer_c::process(unsigned char *buf,
       int pad_size;
 
       pad_size = bps * initial_displacement / 1000;
-      new_buf = (unsigned char *)safemalloc(size + pad_size);
+      new_buf = (unsigned char *)safemalloc(pad_size);
       memset(new_buf, 0, pad_size);
       buffer.add(new_buf, pad_size);
       safefree(new_buf);
@@ -116,11 +116,14 @@ pcm_packetizer_c::process(unsigned char *buf,
     skip_bytes = 0;
   } else
     new_buf = buf;
+
   buffer.add(new_buf, size);
+  if (!duplicate_data)
+    safefree(buf);
 
   while (buffer.get_size() >= packet_size) {
     add_packet(buffer.get_buffer(), packet_size, bytes_output * 1000 / bps,
-               packet_size * 1000 / bps);
+               packet_size * 1000 / bps, false, -1, -1, -1, cp_yes);
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }

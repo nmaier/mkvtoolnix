@@ -1,3 +1,8 @@
+2004-01-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a couple of memory leaks, especially in
+	the QuickTime/MP4 parser.
+
 2004-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: Added some more extensions for RealMedia files.
