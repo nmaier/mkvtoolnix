@@ -99,6 +99,7 @@ kax_track_t **tracks = NULL;
 int num_tracks = 0;
 bool use_gui = false;
 bool calc_checksums = false;
+bool show_summary = false;
 
 void add_track(kax_track_t *s) {
   tracks = (kax_track_t **)saferealloc(tracks, sizeof(kax_track_t *) *
@@ -138,6 +139,7 @@ void usage() {
     "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
     "                 description of what mkvinfo outputs.\n"
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
+    "  -s, --summary  Only show summaries of the contents, not each element.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n");
 }
@@ -177,6 +179,9 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
   string new_fmt;
   EbmlMaster *m;
   int i;
+
+  if (show_summary)
+    return;
 
   if (level > 9)
     die("mkvinfo.cpp/show_element(): level > 9: %d", level);
@@ -248,6 +253,9 @@ void parse_args(int argc, char **argv, char *&file_name) {
     else if (!strcmp(argv[i], "-C") || !strcmp(argv[i], "--check-mode")) {
       calc_checksums = true;
       verbose = 4;
+    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--summary")) {
+      calc_checksums = true;
+      show_summary = true;
     } else if (file_name != NULL)
       mxerror("Only one input file is allowed.\n");
     else
@@ -791,10 +799,17 @@ bool process_file(const char *file_name) {
           l2 = (*m1)[i1];
 
           if (is_id(l2, KaxTrackEntry)) {
+            int64_t kax_track_number;
+            vector<string> summary;
+            string fourcc_buffer, kax_codec_id;
+
             // We actually found a track entry :) We're happy now.
             show_element(l2, 2, "A track");
 
             kax_track_type = '?';
+            kax_track_number = -1;
+            kax_codec_id = "";
+            fourcc_buffer = "";
             ms_compat = false;
 
             m2 = static_cast<EbmlMaster *>(l2);
@@ -814,17 +829,23 @@ bool process_file(const char *file_name) {
                       *static_cast<KaxAudioSamplingFreq *>(l4);
                     show_element(l4, 4, "Sampling frequency: %f",
                                  float(freq));
+                    summary.push_back(mxsprintf("sampling freq: %f",
+                                                float(freq)));
 
                   } else if (is_id(l4, KaxAudioOutputSamplingFreq)) {
                     KaxAudioOutputSamplingFreq &ofreq =
                       *static_cast<KaxAudioOutputSamplingFreq *>(l4);
                     show_element(l4, 4, "Output sampling frequency: %f",
                                  float(ofreq));
+                    summary.push_back(mxsprintf("output sampling freq: %f",
+                                                float(ofreq)));
 
                   } else if (is_id(l4, KaxAudioChannels)) {
                     KaxAudioChannels &channels =
                       *static_cast<KaxAudioChannels *>(l4);
-                    show_element(l4, 4, "Channels: %u", uint8(channels));
+                    show_element(l4, 4, "Channels: %u", uint32(channels));
+                    summary.push_back(mxsprintf("channels: %u",
+                                                uint32(channels)));
 
 #if MATROSKA_VERSION >= 2
                   } else if (is_id(l4, KaxAudioPosition)) {
@@ -838,7 +859,9 @@ bool process_file(const char *file_name) {
                   } else if (is_id(l4, KaxAudioBitDepth)) {
                     KaxAudioBitDepth &bps =
                       *static_cast<KaxAudioBitDepth *>(l4);
-                    show_element(l4, 4, "Bit depth: %u", uint8(bps));
+                    show_element(l4, 4, "Bit depth: %u", uint32(bps));
+                    summary.push_back(mxsprintf("bits per sample: %u",
+                                                uint32(bps)));
 
                   } else if (!is_global(es, l4, 4))
                     show_unknown_element(l4, 4);
@@ -856,21 +879,30 @@ bool process_file(const char *file_name) {
                     KaxVideoPixelWidth &width =
                       *static_cast<KaxVideoPixelWidth *>(l4);
                     show_element(l4, 4, "Pixel width: %u", uint16(width));
+                    summary.push_back(mxsprintf("pixel width: %u",
+                                                uint32(width)));
+
 
                   } else if (is_id(l4, KaxVideoPixelHeight)) {
                     KaxVideoPixelHeight &height =
                       *static_cast<KaxVideoPixelHeight *>(l4);
                     show_element(l4, 4, "Pixel height: %u", uint16(height));
+                    summary.push_back(mxsprintf("pixel height: %u",
+                                                uint32(height)));
 
                   } else if (is_id(l4, KaxVideoDisplayWidth)) {
                     KaxVideoDisplayWidth &width =
                       *static_cast<KaxVideoDisplayWidth *>(l4);
                     show_element(l4, 4, "Display width: %u", uint16(width));
+                    summary.push_back(mxsprintf("display width: %u",
+                                                uint32(width)));
 
                   } else if (is_id(l4, KaxVideoDisplayHeight)) {
                     KaxVideoDisplayHeight &height =
                       *static_cast<KaxVideoDisplayHeight *>(l4);
                     show_element(l4, 4, "Display height: %u", uint16(height));
+                    summary.push_back(mxsprintf("display height: %u",
+                                                uint32(height)));
 
 #if MATROSKA_VERSION >= 2
                   } else if (is_id(l4, KaxVideoDisplayUnit)) {
@@ -933,6 +965,7 @@ bool process_file(const char *file_name) {
                 if (find_track(uint32(tnum)) != NULL)
                   show_warning(3, "Warning: There's more than one "
                                "track with the number %u.", uint32(tnum));
+                kax_track_number = uint32(tnum);
 
               } else if (is_id(l3, KaxTrackUID)) {
                 KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
@@ -985,30 +1018,33 @@ bool process_file(const char *file_name) {
                     (!strcmp(string(codec_id).c_str(), MKV_A_ACM) &&
                      (kax_track_type == 'a')))
                   ms_compat = true;
+                kax_codec_id = string(codec_id);
 
               } else if (is_id(l3, KaxCodecPrivate)) {
-                char pbuffer[100];
+                fourcc_buffer = "";
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);
                 if (ms_compat && (kax_track_type == 'v') &&
                     (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
                   alBITMAPINFOHEADER *bih =
                     (alBITMAPINFOHEADER *)&binary(c_priv);
                   unsigned char *fcc = (unsigned char *)&bih->bi_compression;
-                  mxprints(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
-                           fcc[0], fcc[1], fcc[2], fcc[3],
-                           get_uint32(&bih->bi_compression));
+                  fourcc_buffer =
+                    mxsprintf(" (FourCC: %c%c%c%c, 0x%08x)",
+                              fcc[0], fcc[1], fcc[2], fcc[3],
+                              get_uint32(&bih->bi_compression));
                 } else if (ms_compat && (kax_track_type == 'a') &&
                            (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
                   alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
-                  mxprints(pbuffer, " (format tag: 0x%04x)",
-                           get_uint16(&wfe->w_format_tag));
-                } else
-                  pbuffer[0] = 0;
-                if (calc_checksums)
-                  mxprints(&pbuffer[strlen(pbuffer)], " (adler: 0x%08x)",
-                           calc_adler32(&binary(c_priv), c_priv.GetSize()));
+                  fourcc_buffer =
+                    mxsprintf(" (format tag: 0x%04x)",
+                              get_uint16(&wfe->w_format_tag));
+                }
+                if (calc_checksums && !show_summary)
+                  fourcc_buffer +=
+                  mxsprintf(" (adler: 0x%08x)",
+                            calc_adler32(&binary(c_priv), c_priv.GetSize()));
                 show_element(l3, 3, "CodecPrivate, length %d%s",
-                             (int)c_priv.GetSize(), pbuffer);
+                             (int)c_priv.GetSize(), fourcc_buffer.c_str());
 
               } else if (is_id(l3, KaxCodecName)) {
                 KaxCodecName &c_name = *static_cast<KaxCodecName *>(l3);
@@ -1064,6 +1100,11 @@ bool process_file(const char *file_name) {
                              "a video track)",
                              (float)uint64(def_duration) / 1000000.0,
                              1000000000.0 / (float)uint64(def_duration));
+                summary.push_back(mxsprintf("default duration: %.3fms (%.3f "
+                                            "fps for a video track)",
+                                            (float)uint64(def_duration) /
+                                            1000000.0, 1000000000.0 /
+                                            (float)uint64(def_duration)));
 
               } else if (is_id(l3, KaxTrackFlagLacing)) {
                 KaxTrackFlagLacing &f_lacing =
@@ -1079,6 +1120,8 @@ bool process_file(const char *file_name) {
                 KaxTrackLanguage &language =
                   *static_cast<KaxTrackLanguage *>(l3);
                 show_element(l3, 3, "Language: %s", string(language).c_str());
+                summary.push_back(mxsprintf("language: %s",
+                                            string(language).c_str()));
 
 #if LIBMATROSKA_VERSION >= 000503
               } else if (is_id(l3, KaxTrackTimecodeScale)) {
@@ -1241,6 +1284,15 @@ bool process_file(const char *file_name) {
 
             }
 
+            if (show_summary)
+              mxinfo("Track %lld: %s, codec ID: %s%s%s%s\n", kax_track_number,
+                     kax_track_type == 'a' ? "audio" :
+                     kax_track_type == 'v' ? "video" :
+                     kax_track_type == 's' ? "subtitles" : "unknown",
+                     kax_codec_id.c_str(), fourcc_buffer.c_str(),
+                     summary.size() > 0 ? ", " : "",
+                     join(", ", summary).c_str());
+
           } else if (!is_global(es, l2, 2))
             show_unknown_element(l2, 2);
 
@@ -1315,7 +1367,7 @@ bool process_file(const char *file_name) {
 
       } else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, "Cluster");
-        if (verbose == 0) {
+        if ((verbose == 0) && !show_summary) {
           delete l1;
           delete l0;
           delete es;
@@ -1359,6 +1411,8 @@ bool process_file(const char *file_name) {
                          uint64(c_psize));
 
           } else if (is_id(l2, KaxBlockGroup)) {
+            vector<int> frame_sizes;
+
             show_element(l2, 2, "Block group");
 
             bref_found = false;
@@ -1388,6 +1442,7 @@ bool process_file(const char *file_name) {
                     adler[0] = 0;
                   show_element(NULL, 4, "Frame with size %u%s", data.Size(),
                                adler);
+                  frame_sizes.push_back(data.Size());
                 }
 
               } else if (is_id(l3, KaxBlockDuration)) {
@@ -1523,8 +1578,16 @@ bool process_file(const char *file_name) {
 
             } // while (l3 != NULL)
 
-            if (verbose > 2)
-              show_element(NULL, 2, "[%c frame for track %u, timecode %u]",
+            if (show_summary) {
+              int fidx;
+
+              for (fidx = 0; fidx < frame_sizes.size(); fidx++)
+                mxinfo("%c frame, track %u, timecode %lld, size %d\n",
+                       bref_found && fref_found ? 'B' :
+                       bref_found ? 'P' : !fref_found ? 'I' : '?',
+                       lf_tnum, lf_timecode, frame_sizes[fidx]);
+            } else if (verbose > 2)
+              show_element(NULL, 2, "[%c frame for track %u, timecode %lld]",
                            bref_found && fref_found ? 'B' :
                            bref_found ? 'P' : !fref_found ? 'I' : '?',
                            lf_tnum, lf_timecode);
