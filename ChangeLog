@@ -1,3 +1,9 @@
+2004-07-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: new feature: Implemented the extraction of chapter
+	information and tags as a CUE sheet which is the reverse operation
+	to using a CUE sheet with mkvmerge's '--chapters' parameter.
+
 2004-07-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Broken VobSub .idx files which contain

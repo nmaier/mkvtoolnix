@@ -82,6 +82,7 @@ using namespace std;
 #define MODE_TAGS        1
 #define MODE_ATTACHMENTS 2
 #define MODE_CHAPTERS    3
+#define MODE_CUESHEETS   4
 
 vector<kax_track_t> tracks;
 
@@ -106,10 +107,10 @@ find_track(int tid) {
   return NULL;
 }
 
-char typenames[17][20] = {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3",
-                          "chapter", "MicroDVD", "VobSub", "Matroska", "DTS",
-                          "AAC", "SSA/ASS", "RealMedia", "Quicktime/MP4",
-                          "FLAC"};
+char typenames[TYPEMAX + 1][20] =
+  {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3", "chapter", "MicroDVD",
+   "VobSub", "Matroska", "DTS", "AAC", "SSA/ASS", "RealMedia", "Quicktime/MP4",
+   "FLAC", "TTA"};
 
 void
 usage() {
@@ -118,6 +119,7 @@ usage() {
 "   or  mkvextract tags <inname> [options]\n"
 "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 "\n   or  mkvextract chapters <inname> [options]\n"
+"   or  mkvextract cuesheets <inname> [options]\n"
 "   or  mkvextract <-h|-V>\n"
 "\n"
 " The first word tells mkvextract what to extract. The second must be the\n"
@@ -154,6 +156,13 @@ usage() {
 "\n"
 " Example:\n"
 " mkvextract chapters \"a movie.mkv\" > movie_chapters.xml\n"
+"\n"
+" The fifith mode tries to extract chapter information and tags and outputs\n"
+" them as a CUE sheet. This is the reverse of using a CUE sheet with\n"
+" mkvmerge's '--chapters' option.\n"
+"\n"
+" Example:\n"
+" mkvextract cuehseets \"audiofile.mka\" > audiofile.cue\n"
 "\n"
 " These options can be used instead of the mode keyword to obtain\n"
 " further information:\n"
@@ -208,6 +217,8 @@ parse_args(int argc,
     mode = MODE_ATTACHMENTS;
   else if (!strcmp(argv[1], "chapters"))
     mode = MODE_CHAPTERS;
+  else if (!strcmp(argv[1], "cuesheets"))
+    mode = MODE_CUESHEETS;
   else
     mxerror(_("Unknown mode '%s'.\n"), argv[1]);
 
@@ -244,6 +255,9 @@ parse_args(int argc,
 
     } else if (mode == MODE_TAGS)
       mxerror(_("No further options allowed when extracting %s.\n"), argv[1]);
+
+    else if (mode == MODE_CUESHEETS)
+      mxerror(_("No further options allowed when regenerating CUE sheets.\n"));
 
     else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
       if (mode != MODE_CHAPTERS)
@@ -284,7 +298,8 @@ parse_args(int argc,
       sub_charset = "UTF-8";
     }
 
-  if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS))
+  if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS) ||
+      (mode == MODE_CUESHEETS))
     return;
 
   if (tracks.size() == 0) {
@@ -386,6 +401,9 @@ main(int argc,
 
   else if (mode == MODE_CHAPTERS)
     extract_chapters(input_file, chapter_format_simple);
+
+  else if (mode == MODE_CUESHEETS)
+    extract_cuesheets(input_file);
 
   else
     die("mkvextract: Unknown mode!?");

@@ -19,6 +19,9 @@ attachments <\fIinname\fR> [\fIoptions\fR] [\fIAID1\fR:\fIout1\fR [\fIAID2\fR:\f
 chapters <\fIinname\fR> [\fIoptions\fR]
 .br
 .B mkvextract
+cuesheets <\fIinname\fR> [\fIoptions\fR]
+.br
+.B mkvextract
 <\-h|\-V>
 
 
@@ -26,8 +29,8 @@ chapters <\fIinname\fR> [\fIoptions\fR]
 .LP
 This program extracts specific parts from a Matroska file to other useful
 formats. The first argument tells \fBmkvextract\fR what to extract. Currently
-supported is the extraction of \fBtracks\fR, \fBtags\fR, \fBattachments\fR and
-\fBchapters\fR.
+supported is the extraction of \fBtracks\fR, \fBtags\fR, \fBattachments\fR,
+\fBchapters\fR and \fBCUE sheets\fR.
 The second argument is the name of the source file. It must be a Matroska file.
 
 .LP
@@ -82,6 +85,12 @@ Command line syntax for the \fBchapters\fR extraction mode:
 Exports the chapter information in the simple format used in the OGM tools
 (CHAPTER01=..., CHAPTER01NAME=...). In this mode some information has to be
 discarded. Default is to output the chapters in XML format.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
+Command line syntax for the \fBcuesheets\fR extraction mode:
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 Be verbose and show all the important Matroska elements as they're read.

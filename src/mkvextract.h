@@ -92,7 +92,7 @@ typedef struct {
 } kax_track_t;
 
 extern vector<kax_track_t> tracks;
-extern char typenames[17][20];
+extern char typenames[TYPEMAX + 1][20];
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
@@ -109,5 +109,6 @@ extern int conv_utf8;
 void extract_tags(const char *file_name);
 void extract_chapters(const char *file_name, bool chapter_format_simple);
 void extract_attachments(const char *file_name);
+void extract_cuesheets(const char *file_name);
 
 #endif // __MKVEXTRACT_H

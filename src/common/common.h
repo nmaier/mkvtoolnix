@@ -85,6 +85,7 @@ using namespace std;
 #define TYPEQTMP4    15
 #define TYPEFLAC     16
 #define TYPETTA      17
+#define TYPEMAX      17
 
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
