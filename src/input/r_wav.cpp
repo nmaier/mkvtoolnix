@@ -121,7 +121,7 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
       memcpy(buf[cur_buf], obuf, rlen);
 
       if (dts_swap_bytes) {
-        swab((const char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
+        swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
         cur_buf ^= 1;
       }
 
@@ -213,7 +213,7 @@ wav_reader_c::read(generic_packetizer_c *,
     }
 
     if (dts_swap_bytes) {
-      swab((const char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
+      swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
       cur_buf ^= 1;
     }
 

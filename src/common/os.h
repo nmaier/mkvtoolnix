@@ -39,14 +39,23 @@
 #endif
 
 #if defined(COMP_MSC)
-# define PACKAGE "mkvtoolnix"
-# define VERSION "1.2.0"
-
 # define strncasecmp _strnicmp
 # define strcasecmp _stricmp
 # define nice(a)
 # define vsnprintf _vsnprintf
-# define vfprintf _vfprintf
+typedef __int64 int64_t;
+typedef __int32 int32_t;
+typedef __int16 int16_t;
+typedef __int8  int8_t;
+typedef unsigned __int64 uint64_t;
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int16 uint16_t;
+typedef unsigned __int8 uint8_t;
+typedef _fsize_t ssize_t;
+
+#define PACKED_STRUCTURE
+#else
+#define PACKED_STRUCTURE   __attribute__((__packed__))
 #endif // COMP_MSC
 
 #if defined(COMP_MINGW) || defined(COMP_MSC)

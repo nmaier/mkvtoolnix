@@ -25,9 +25,8 @@
 #include <FLAC/stream_decoder.h>
 #endif
 #if defined(SYS_WINDOWS)
-#include <stdarg.h>
-#include <windef.h>
-#include <winbase.h>
+#include <windows.h>
+#include <time.h>
 #endif
 
 extern "C" {                    // for BITMAPINFOHEADER

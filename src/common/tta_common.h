@@ -22,7 +22,10 @@
 
 #define TTA_FRAME_TIME (double)1.04489795918367346939l
 
-typedef struct __attribute__((__packed__)) {
+#if defined(COMP_MSC)
+#pragma pack(push,1)
+#endif
+typedef struct PACKED_STRUCTURE {
   char signature[4];            /* TTA1 */
   uint16_t audio_format;        /* 1 for 32 bits per sample, 3 otherwise? */
   uint16_t channels;
@@ -31,5 +34,8 @@ typedef struct __attribute__((__packed__)) {
   uint32_t data_length;
   uint32_t crc;
 } tta_file_header_t;
+#if defined(COMP_MSC)
+#pragma pack(pop)
+#endif
 
 #endif // __TTA_COMMON_H

@@ -25,7 +25,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <stdarg.h>

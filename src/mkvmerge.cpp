@@ -29,9 +29,7 @@
 #include <unistd.h>
 #endif
 #if defined(SYS_WINDOWS)
-#include <stdarg.h>
-#include <windef.h>
-#include <winbase.h>
+#include <windows.h>
 #endif
 
 #include <iostream>
@@ -2686,9 +2684,10 @@ create_output_name() {
     format.erase(p2 - p + 1);
     len.erase(0, 1);
     len.erase(p2 - p - 1);
-    char buffer2[strtol(len.c_str(), NULL, 10) + 1];
+    char *buffer2 = new char[strtol(len.c_str(), NULL, 10) + 1];
     mxprints(buffer2, format.c_str(), file_num);
     s.replace(p, format.size(), buffer2);
+    delete [] buffer2;
 
     return s;
   }

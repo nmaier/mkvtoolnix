@@ -78,7 +78,10 @@ typedef struct {
   ogg_int32_t  avgbytespersec;
 } stream_header_audio;
 
-typedef struct __attribute__((__packed__)) {
+#if defined(COMP_MSC)
+#pragma pack(push,1)
+#endif
+typedef struct PACKED_STRUCTURE {
   char        streamtype[8];
   char        subtype[4];
 
@@ -101,6 +104,9 @@ typedef struct __attribute__((__packed__)) {
   } sh;
 
 } stream_header;
+#if defined(COMP_MSC)
+#pragma pack(pop)
+#endif
 
 /// Some defines from OggDS
 #define PACKET_TYPE_HEADER       0x01

@@ -30,11 +30,7 @@
 #include "mb_file_io.h"
 
 #if defined(SYS_WINDOWS)
-#include <stdarg.h>
-#include <windef.h>
-#include <winbase.h>
-#include <wingdi.h>
-#include <winuser.h>
+#include <windows.h>
 
 static void *
 mb_std_file_open(const char *path,
