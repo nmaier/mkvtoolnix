@@ -61,6 +61,7 @@ using namespace LIBEBML_NAMESPACE;
 #define TYPEDTS      11
 #define TYPEAAC      12
 #define TYPESSA      13
+#define TYPEREAL     14
 
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
@@ -77,6 +78,9 @@ void _trace(const char *func, const char *file, int line);
 uint16_t get_uint16(const void *buf);
 uint32_t get_uint32(const void *buf);
 uint64_t get_uint64(const void *buf);
+uint16_t get_uint16_be(const void *buf);
+uint32_t get_uint32_be(const void *buf);
+uint64_t get_uint64_be(const void *buf);
 void put_uint16(void *buf, uint16_t value);
 void put_uint32(void *buf, uint32_t value);
 void put_uint64(void *buf, uint64_t value);

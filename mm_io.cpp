@@ -31,6 +31,7 @@
 #endif // SYS_WINDOWS
 
 #include "mm_io.h"
+#include "common.h"
 
 using namespace std;
 
@@ -282,6 +283,78 @@ size_t mm_io_c::puts_unl(const char *s) {
       bytes_written += write(&s[i], 1);
 
   return bytes_written;
+}
+
+unsigned char mm_io_c::read_uint8() {
+  unsigned char value;
+
+  if (read(&value, 1) != 1)
+    throw exception();
+
+  return value;
+}
+
+uint16_t mm_io_c::read_uint16() {
+  unsigned char buffer[2];
+
+  if (read(buffer, 2) != 2)
+    throw exception();
+
+  return get_uint16(buffer);
+}
+
+uint32_t mm_io_c::read_uint32() {
+  unsigned char buffer[4];
+
+  if (read(buffer, 4) != 4)
+    throw exception();
+
+  return get_uint32(buffer);
+}
+
+uint64_t mm_io_c::read_uint64() {
+  unsigned char buffer[8];
+
+  if (read(buffer, 8) != 8)
+    throw exception();
+
+  return get_uint64(buffer);
+}
+
+uint16_t mm_io_c::read_uint16_be() {
+  unsigned char buffer[2];
+
+  if (read(buffer, 2) != 2)
+    throw exception();
+
+  return get_uint16_be(buffer);
+}
+
+uint32_t mm_io_c::read_uint32_be() {
+  unsigned char buffer[4];
+
+  if (read(buffer, 4) != 4)
+    throw exception();
+
+  return get_uint32_be(buffer);
+}
+
+uint64_t mm_io_c::read_uint64_be() {
+  unsigned char buffer[8];
+
+  if (read(buffer, 8) != 8)
+    throw exception();
+
+  return get_uint64_be(buffer);
+}
+
+void mm_io_c::skip(int64 num_bytes) {
+  int64_t pos;
+
+  pos = getFilePointer();
+  setFilePointer(pos + num_bytes);
+  if ((pos + num_bytes) != getFilePointer())
+    throw exception();
 }
 
 /*

@@ -225,6 +225,50 @@ uint64_t get_uint64(const void *buf) {
   return ret;
 }
 
+uint16_t get_uint16_be(const void *buf) {
+  uint16_t ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[0] & 0xff;
+  ret = (ret << 8) + (tmp[1] & 0xff);
+
+  return ret;
+}
+
+uint32_t get_uint32_be(const void *buf) {
+  uint32_t ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[0] & 0xff;
+  ret = (ret << 8) + (tmp[1] & 0xff);
+  ret = (ret << 8) + (tmp[2] & 0xff);
+  ret = (ret << 8) + (tmp[3] & 0xff);
+
+  return ret;
+}
+
+uint64_t get_uint64_be(const void *buf) {
+  uint64_t ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[0] & 0xff;
+  ret = (ret << 8) + (tmp[1] & 0xff);
+  ret = (ret << 8) + (tmp[2] & 0xff);
+  ret = (ret << 8) + (tmp[3] & 0xff);
+  ret = (ret << 8) + (tmp[4] & 0xff);
+  ret = (ret << 8) + (tmp[5] & 0xff);
+  ret = (ret << 8) + (tmp[6] & 0xff);
+  ret = (ret << 8) + (tmp[7] & 0xff);
+
+  return ret;
+}
+
 void put_uint16(void *buf, uint16_t value) {
   unsigned char *tmp;
 
