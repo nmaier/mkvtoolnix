@@ -21,11 +21,6 @@
 
 #include "os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
 #if defined(COMP_CYGWIN)
 #include <sys/unistd.h>         // Needed for swab()
 #elif __GNUC__ == 2
@@ -34,6 +29,11 @@
 #else
 #include <unistd.h>
 #endif
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 #include "mkvmerge.h"
 #include "common.h"
