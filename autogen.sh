@@ -12,7 +12,7 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
   for i in `find -name Makefile.mingw`; do
     n=`echo $i | sed 's/\.mingw//'`
     echo "Creating $n from $i"
-    sed -e "s/Makefile.mingw/Makefile/g" < $i > $n
+    cp $i $n
   done
 
   if test "x$1" = "x"; then
