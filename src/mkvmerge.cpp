@@ -309,7 +309,7 @@ static void usage() {
 static int get_type(char *filename) {
   mm_io_c *mm_io;
   mm_text_io_c *mm_text_io;
-  off_t size;
+  uint64_t size;
   int type;
 
   try {

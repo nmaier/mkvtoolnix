@@ -166,8 +166,10 @@ uint64 mm_io_c::getFilePointer() {
   DWORD low;
   
   low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
-  if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
+  if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR)) {
+    printf("nonono\n");
     return (uint64)-1;
+  }
 
   return (((uint64)high) << 32) | (uint64)low;
 }
@@ -188,8 +190,8 @@ void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
       break;
   }
 
-  high = offset >> 32;
-  SetFilePointer((HANDLE)file, offset & 0xffffffff, &high, method);
+  high = (LONG)(offset >> 32);
+  SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high, method);
 }
 
 uint32 mm_io_c::read(void *buffer, size_t size) {

@@ -43,7 +43,7 @@ void usage(int retval) {
 
 int main(int argc, char *argv[]) {
   int maxlen;
-  int64_t size;
+  uint64_t size;
   unsigned char *buffer;
   char mode;
   string s, line;

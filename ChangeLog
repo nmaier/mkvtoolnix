@@ -1,5 +1,10 @@
 2003-08-12  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Windows versions: Fixed a bug with files bigger than 2GB not
+        being recognized. The accompanying error message was "File NAME
+        has unknown type. Please have a look at the supported file
+        types..."
+
         * all tools: Fixed a bug which would only allow Matroska files up
         to 4GB to be read. The accompanying error message was "No segment
         found" or something similar.
