@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.6 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.7 2003/04/20 21:22:19 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -46,16 +46,18 @@ void textsubs_packetizer_c::set_header() {
 
   set_serial(-1);
   set_track_type(track_subtitle);
-  set_codec_id(MKV_S_TEXTSIMPLE);
+  set_codec_id(MKV_S_TEXTASCII);
 
   generic_packetizer_c::set_header();
+
+  track_entry->EnableLacing(false);
 }
 
 int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
                                    int64_t length, int64_t, int64_t) {
   int num_newlines;
-  char *subs, *idx1, *idx2, *tempbuf;
-  int64_t end, duration, dlen, tmp;
+  char *subs, *idx1, *idx2;
+  int64_t end;
 
   end = start + length;
   // Adjust the start and end values according to the audio adjustment.
@@ -69,20 +71,13 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   else if (start < 0)
     start = 0;
 
-  duration = end - start;
-  if (duration < 0) {
+  if (length < 0) {
     fprintf(stderr, "Warning: textsubs_packetizer: Ignoring an entry which "
             "starts after it ends.\n");
     return EMOREDATA;
   }
 
-  tmp = duration;
-  dlen = 1;
-  while (tmp >= 10) {
-    tmp /= 10;
-    dlen++;
-  }
-
+  // Count the number of lines.
   idx1 = (char *)_subs;
   subs = NULL;
   num_newlines = 0;
@@ -95,6 +90,7 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   if (subs == NULL)
     die("malloc");
 
+  // Unify the new lines into DOS style newlines.
   idx1 = (char *)_subs;
   idx2 = subs;
   while (*idx1 != 0) {
@@ -118,15 +114,8 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   }
   *idx2 = 0;
 
-  tempbuf = (char *)malloc(strlen(subs) + dlen + 2 + 1);
-  if (tempbuf == NULL)
-    die("malloc");
-  sprintf(tempbuf, "%lld\r\n", duration);
-  strcat(tempbuf, subs);
+  add_packet((unsigned char *)subs, strlen(subs), start, -1, -1, length);
 
-  add_packet((unsigned char *)tempbuf, strlen(tempbuf), start);
-
-  free(tempbuf);
   free(subs);
 
   return EMOREDATA;
