@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.94 2003/06/09 16:33:07 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.95 2003/06/10 22:04:42 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1319,9 +1319,6 @@ void create_next_output_file(bool last_file, bool first_file) {
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
   kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
-
-  fprintf(stdout, "createnext: last: %s, first: %s\n", last_file ? "true" :
-          "false", first_file ? "true" : "false");
 
   if (pass == 1) {
     // Open the a dummy file.
