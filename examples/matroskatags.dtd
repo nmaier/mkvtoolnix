@@ -192,4 +192,8 @@
           Name,
           String?,
           Binary?,
+          TagLanguage?,
+          DefaultLanguage?,
           Simple*)>
+<!ELEMENT TagLanguage (#PCDATA)>
+<!ELEMENT DefaultLanguage (#PCDATA)>
