@@ -151,6 +151,8 @@ KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
 KaxTags *kax_tags = NULL;
 
+string title;
+
 int64_t tags_size = 0;
 bool accept_tags = true;
 
@@ -204,6 +206,8 @@ static void usage(void) {
     "  -v, --verbose            verbose status\n"
     "  -q, --quiet              suppress status output\n"
     "  -o, --output out         Write to the file 'out'.\n"
+    "  --title <title>          Title for this output file.\n"
+    "\n General output control (still global, advanced options):\n"
     "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
     "                           If the number is postfixed with 'ms' then\n"
     "                           put at most n milliseconds of data into each\n"
@@ -212,6 +216,7 @@ static void usage(void) {
     "  --no-meta-seek           Do not write any meta seek information.\n"
     "  --meta-seek-size <d>     Reserve d bytes for the meta seek entries.\n"
     "  --no-lacing              Do not use lacing.\n"
+    "\n File splitting and linking (still global):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
@@ -219,6 +224,7 @@ static void usage(void) {
     "  --dont-link              Don't link splitted files.\n"
     "  --link-to-previous <UID> Link the first file to the given UID.\n"
     "  --link-to-next <UID>     Link the last file to the given UID.\n"
+    "\n Attachment support (still global):\n"
     "  --attachment-description <desc>\n"
     "                           Description for the following attachment.\n"
     "  --attachment-mime-type <mime type>\n"
@@ -704,6 +710,10 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       cstr_to_UTFstring(VERSIONINFO);
     GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
 
+    if (title.length() > 0)
+      *((EbmlUnicodeString *)&GetChild<KaxTitle>(*kax_infos)) =
+        cstr_to_UTFstring(title.c_str());
+
     // Generate the segment UIDs.
     if (first_file) {
       seguid_current.generate_random();
@@ -1071,7 +1081,15 @@ static void parse_args(int argc, char **argv) {
     else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose = 2;
 
-    else if (!strcmp(argv[i], "--split")) {
+    else if (!strcmp(argv[i], "--title")) {
+      if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
+        mxprint(stderr, "Error: --title lacks the title.\n");
+        exit(1);
+      }
+      title = argv[i + 1];
+      i++;
+
+    } else if (!strcmp(argv[i], "--split")) {
       if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
         mxprint(stderr, "Error: --split lacks the size.\n");
         exit(1);

@@ -30,6 +30,12 @@ Suppress status output.
 \fB\-o\fR, \fB\-\-output\fR \fIout\fR
 Write to the file '\fIout\fR'.
 .TP
+\fB\-\-title\fR <\fItitle\fR>
+Sets the general title for the output file, e.g. the movie name.
+
+.LP
+General output control (still global, advanced options):
+.TP
 \fB\-\-cluster\-length \fR \fIn[ms]\fR
 Put at most \fIn\fR data blocks into each cluster. If the number is
 postfixed with 'ms' then put at most \fIn\fR milliseconds of data into
@@ -61,6 +67,9 @@ This option is normally not needed.
 \fB\-\-no\-lacing\fR
 Disable lacing for all tracks. This will increase the file's size, especially
 if there are many audio tracks. This option is not intended for everyday use.
+
+.LP
+File splitting and linking (still global):
 .TP
 \fB\-\-split\fR <\fId[k|m|g]\fR> or \fB\-\-split\fR <\fIHH:MM:SS\fR|\fIns\fR>
 Splits the output file after a given size or a given time. For splitting after
@@ -92,6 +101,9 @@ section \fBFILE LINKING\fR below for details.
 \fB\-\-link\-to\-next\fR <\fIUID\fR>
 Links the last output file to the segment with the given \fIUID\fR. See the
 section \fBFILE LINKING\fR below for details.
+
+.LP
+Attachment support (still global):
 .TP
 \fB\-\-attachment\-description\fR <\fIdescription\fR>
 Plain text description of the following attachment. Applies to the next
