@@ -607,4 +607,13 @@ avi_reader_c::identify() {
   }
 }
 
+void
+avi_reader_c::add_available_track_ids() {
+  int i;
+
+  // Yes, this is correct. Don't forget the video track!
+  for (i = 0; i <= AVI_audio_tracks(avi); i++)
+    available_track_ids.push_back(i);
+}
+
 // }}}

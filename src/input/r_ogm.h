@@ -110,6 +110,7 @@ public:
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
+  virtual void add_available_track_ids();
 
   virtual int display_priority();
   virtual void display_progress(bool final = false);

@@ -612,3 +612,11 @@ vobsub_reader_c::flush_packetizers() {
     if (tracks[i]->ptzr != -1)
       PTZR(tracks[i]->ptzr)->flush();
 }
+
+void
+vobsub_reader_c::add_available_track_ids() {
+  int i;
+
+  for (i = 0; i < tracks.size(); i++)
+    available_track_ids.push_back(i);
+}

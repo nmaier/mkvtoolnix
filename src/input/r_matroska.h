@@ -142,6 +142,7 @@ public:
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual void add_attachments(KaxAttachments *a);
+  virtual void add_available_track_ids();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 

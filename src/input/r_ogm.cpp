@@ -1247,3 +1247,12 @@ ogm_reader_c::handle_stream_comments() {
     free_string_array(comments);
   }
 }
+
+void
+ogm_reader_c::add_available_track_ids() {
+  int i;
+
+  for (i = 0; i < sdemuxers.size(); i++)
+    available_track_ids.push_back(i);
+}
+

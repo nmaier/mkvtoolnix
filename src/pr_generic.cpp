@@ -951,8 +951,8 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
   line_no = 1;
   do {
     if (!in->getline2(line))
-      mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
-                "with the default number of frames per second.\n"), name);
+      mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line"
+                " with the default number of frames per second.\n"), name);
     line_no++;
     strip(line);
     if ((line.length() != 0) && (line[0] != '#'))
@@ -1205,10 +1205,37 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
 
 //--------------------------------------------------------------------
 
+#define add_all_requested_track_ids(container) \
+  for (i = 0; i < ti->container->size(); i++) \
+    add_requested_track_id((*ti->container)[i].id);
+#define add_all_requested_track_ids2(container) \
+  for (i = 0; i < ti->container->size(); i++) \
+    add_requested_track_id((*ti->container)[i]);
+
 generic_reader_c::generic_reader_c(track_info_c *nti) {
+  int i;
+
   ti = new track_info_c(*nti);
   connected_to = NULL;
   max_timecode_seen = 0;
+
+  add_all_requested_track_ids2(atracks);
+  add_all_requested_track_ids2(vtracks);
+  add_all_requested_track_ids2(stracks);
+  add_all_requested_track_ids(all_fourccs);
+  add_all_requested_track_ids(display_properties);
+  add_all_requested_track_ids(audio_syncs);
+  add_all_requested_track_ids(cue_creations);
+  add_all_requested_track_ids2(default_track_flags);
+  add_all_requested_track_ids(languages);
+  add_all_requested_track_ids(sub_charsets);
+  add_all_requested_track_ids(all_tags);
+  add_all_requested_track_ids2(aac_is_sbr);
+  add_all_requested_track_ids(packet_delays);
+  add_all_requested_track_ids(compression_list);
+  add_all_requested_track_ids(track_names);
+  add_all_requested_track_ids(all_ext_timecodes);
+  add_all_requested_track_ids(pixel_crop_list);
 }
 
 generic_reader_c::~generic_reader_c() {
@@ -1316,9 +1343,45 @@ generic_reader_c::display_progress(bool) {
 
 void
 generic_reader_c::check_track_ids_and_packetizers() {
+  int r, a;
+  bool found;
+
+  add_available_track_ids();
   if (reader_packetizers.size() == 0)
     mxwarn(FMT_FN "No tracks will be copied from this file. This usually "
            "indicates a mistake in the command line.\n", ti->fname);
+
+  for (r = 0; r < requested_track_ids.size(); r++) {
+    found = false;
+    for (a = 0; a < available_track_ids.size(); a++)
+      if (requested_track_ids[r] == available_track_ids[a]) {
+        found = true;
+        break;
+      }
+
+    if (!found)
+      mxwarn(FMT_FN "A track with the ID %lld was requested but not found "
+             "in the file. The corresponding option will be ignored.\n",
+             ti->fname, requested_track_ids[r]);
+  }
+}
+
+void
+generic_reader_c::add_requested_track_id(int64_t id) {
+  int i;
+  bool found;
+
+  if (id == -1)
+    return;
+
+  found = false;
+  for (i = 0; i < requested_track_ids.size(); i++)
+    if (requested_track_ids[i] == id) {
+      found = true;
+      break;
+    }
+  if (!found)
+    requested_track_ids.push_back(id);
 }
 
 //
