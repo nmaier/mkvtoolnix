@@ -146,7 +146,7 @@ real_reader_c::parse_headers() {
 
   if (rmff_read_headers(file) == RMFF_ERR_OK) {
     for (ndx = 0; ndx < file->num_tracks; ndx++) {
-      track = &file->tracks[ndx];
+      track = file->tracks[ndx];
       if ((track->type == RMFF_TRACK_TYPE_UNKNOWN) ||
           (get_uint32_be(&track->mdpr_header.type_specific_size) == 0))
         continue;
