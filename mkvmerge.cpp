@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.24 2003/03/13 09:27:36 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.25 2003/03/23 20:27:53 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -58,7 +58,7 @@
 #include "r_ogm.h"
 #endif
 #include "r_srt.h"
-#include "r_matroska.h"
+//#include "r_matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -201,8 +201,8 @@ static int get_type(char *filename) {
     return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
     return TYPEAC3;
-  else if (mkv_reader_c::probe_file(f, size))
-    return TYPEMATROSKA;
+//  else if (mkv_reader_c::probe_file(f, size))
+//    return TYPEMATROSKA;
 //     else if (microdvd_reader_c::probe_file(f, size))
 //     return TYPEMICRODVD;
 //   else if (vobsub_reader_c::probe_file(f, size)) 
@@ -605,9 +605,9 @@ static void parse_args(int argc, char **argv) {
       file->fp = NULL;
       try {
         switch (file->type) {
-          case TYPEMATROSKA:
-            file->reader = new mkv_reader_c(&ti);
-            break;
+//          case TYPEMATROSKA:
+//            file->reader = new mkv_reader_c(&ti);
+//            break;
 #ifdef HAVE_OGGVORBIS
           case TYPEOGM:
             file->reader = new ogm_reader_c(&ti);
