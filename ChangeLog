@@ -1,3 +1,9 @@
+2005-02-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: new feature: Added a warning right before the muxing starts
+	if the chapter editor contains entries but no chapter file has
+	been selected (can be turned off).
+
 2005-02-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: new feature: Added VobSub extraction based on Mike

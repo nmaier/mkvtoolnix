@@ -2027,6 +2027,13 @@ tab_chapters::parse_time(wxString s) {
   return nsecs * 1000000000;
 }
 
+bool
+tab_chapters::is_empty() {
+  if (!tid_root.IsOk())
+    return true;
+  return tc_chapters->GetCount() < 2;
+}
+
 IMPLEMENT_CLASS(chapter_values_dlg, wxDialog);
 BEGIN_EVENT_TABLE(chapter_values_dlg, wxDialog)
   EVT_CHECKBOX(ID_CVD_CB_LANGUAGE, chapter_values_dlg::on_language_clicked)

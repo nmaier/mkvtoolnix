@@ -371,6 +371,9 @@ tab_global::load(wxConfigBase *cfg) {
   cob_split_by_time->SetValue(s);
   cfg->Read(wxT("split_max_files"), &s);
   tc_split_max_files->SetValue(s);
+
+  // Compatibility with older mmg versions. Those contained a checkbox
+  // labeled "don't link" and the corresponding option.
   b = false;
   if (cfg->Read(wxT("link"), &b))
     cb_link->SetValue(b);
@@ -403,9 +406,7 @@ tab_global::load(wxConfigBase *cfg) {
   cfg->Read(wxT("global_tags"), &s);
   tc_global_tags->SetValue(s);
 
-  if (!cfg->Read(wxT("title_was_present"), &b))
-    b = false;
-  title_was_present = b;
+  cfg->Read(wxT("title_was_present"), &title_was_present, false);
 }
 
 void

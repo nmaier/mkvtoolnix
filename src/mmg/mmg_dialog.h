@@ -112,6 +112,8 @@ public:
 
   wxHtmlHelpController *help;
 
+  bool warned_chapter_editor_not_empty;
+
 public:
   mmg_dialog();
   virtual ~mmg_dialog();

@@ -754,6 +754,8 @@ mmg_dialog::mmg_dialog():
   if (cfg->Read(wxT("window_position_x"), &window_pos_x) &&
       cfg->Read(wxT("window_position_y"), &window_pos_y))
     Move(window_pos_x, window_pos_y);
+  cfg->Read(wxT("warned_chapterditor_not_empty"),
+            &warned_chapter_editor_not_empty, false);
 
   last_open_dir = wxT("");
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
@@ -882,8 +884,7 @@ mmg_dialog::load(wxString file_name,
   }
   cfg->Read(wxT("output_file_name"), &s);
   tc_output->SetValue(s);
-  if (!cfg->Read(wxT("cli_options"), &cli_options))
-    cli_options = wxT("");
+  cfg->Read(wxT("cli_options"), &cli_options, wxT(""));
 
   input_page->load(cfg);
   attachments_page->load(cfg);
@@ -1022,6 +1023,28 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
       !global_page->validate_settings() ||
       !settings_page->validate_settings())
     return;
+
+  if (!chapter_editor_page->is_empty() &&
+      (global_page->tc_chapters->GetValue() == wxT("")) &&
+      (!warned_chapter_editor_not_empty ||
+       settings_page->cb_warn_usage->GetValue())) {
+    warned_chapter_editor_not_empty = true;
+    if (wxMessageBox(wxT("The chapter editor has been used and contains "
+                         "data. However, no chapter file has been selected "
+                         "on the global page. In mmg, the chapter editor "
+                         "is independant of the muxing process. The chapters "
+                         "present in the editor will NOT be muxed into the "
+                         "output file. Only the various 'save' functions from "
+                         "the chapter editor menu will cause the chapters "
+                         "to be written to the hard disk.\n\n"
+                         "Do you really want to continue muxing?\n\n"
+                         "Note: This warning can be deactivated on the "
+                         "'settings' page. Turn off the 'Warn about usage...' "
+                         "option."),
+                     wxT("Chapter editor is not empty"),
+                     wxYES_NO | wxICON_QUESTION) != wxYES)
+      return;
+  }
 
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
@@ -1792,6 +1815,8 @@ mmg_dialog::on_close(wxCloseEvent &evt) {
   cfg->SetPath(wxT("/GUI"));
   cfg->Write(wxT("window_position_x"), x);
   cfg->Write(wxT("window_position_y"), y);
+  cfg->Write(wxT("warned_chapter_editor_not_empty"),
+             warned_chapter_editor_not_empty);
   cfg->Flush();
 
   Destroy();
@@ -1879,8 +1904,7 @@ mmg_app::OnInit() {
   cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg);
   cfg->SetPath(wxT("/GUI"));
-  if (!cfg->Read(wxT("last_directory"), &last_open_dir))
-    last_open_dir = wxT("");
+  cfg->Read(wxT("last_directory"), &last_open_dir, wxT(""));
   for (i = 0; i < 4; i++) {
     k.Printf(wxT("last_settings %u"), i);
     if (cfg->Read(k, &v))
@@ -1890,13 +1914,9 @@ mmg_app::OnInit() {
       last_chapters.push_back(v);
   }
   cfg->SetPath(wxT("/chapter_editor"));
-  if (cfg->Read(wxT("default_language"), &k)) {
-    if (k.length() == 0)
-      k = wxT("und");
-    default_chapter_language = to_utf8(k).c_str();
-    if (!is_valid_iso639_2_code(default_chapter_language.c_str()))
-      default_chapter_language = "und";
-  } else
+  cfg->Read(wxT("default_language"), &k, wxT("und"));
+  default_chapter_language = to_utf8(k).c_str();
+  if (!is_valid_iso639_2_code(default_chapter_language.c_str()))
     default_chapter_language = "und";
   if (cfg->Read(wxT("default_country"), &k) && (0 < k.length()))
     default_chapter_country = to_utf8(k).c_str();

@@ -23,6 +23,7 @@
 #define ID_CB_ASK_BEFORE_OVERWRITING       15004
 #define ID_CB_ON_TOP                       15005
 #define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE    15006
+#define ID_CB_WARN_USAGE                   15007
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
@@ -32,6 +33,7 @@ public:
   wxCheckBox *cb_show_commandline, *cb_autoset_output_filename;
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
+  wxCheckBox *cb_warn_usage;
   wxComboBox *cob_priority;
 
 public:

@@ -119,6 +119,7 @@ public:
   bool select_file_name();
   bool load(wxString name);
   void save();
+  bool is_empty();
 };
 
 #endif // __TAB_CHAPTERS_H

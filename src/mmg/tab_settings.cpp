@@ -99,7 +99,7 @@ tab_settings::tab_settings(wxWindow *parent):
   cb_filenew_after_add_to_jobqueue =
     new wxCheckBox(this, ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE,
                    wxT("Clear inputs after adding a job to the job queue"));
-  siz_misc->Add(cb_filenew_after_add_to_jobqueue,0, wxLEFT, 5);
+  siz_misc->Add(cb_filenew_after_add_to_jobqueue, 0, wxLEFT, 5);
 
   cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, wxT("Always on top"));
 #if defined(SYS_WINDOWS)
@@ -108,6 +108,16 @@ tab_settings::tab_settings(wxWindow *parent):
 #else
   cb_on_top->Show(false);
 #endif
+  siz_misc->Add(0, 5, 0, 0, 0);
+
+  cb_warn_usage =
+    new wxCheckBox(this, ID_CB_WARN_USAGE,
+                   wxT("Warn about possible incorrect usage of mmg"));
+  cb_warn_usage->SetToolTip(TIP("If checked mmg will warn if it thinks that "
+                                "you're using it incorrectly. Such warnings "
+                                "are shown at least once even if you turn "
+                                "this feature off."));
+  siz_misc->Add(cb_warn_usage, 0, wxLEFT, 5);
   siz_misc->Add(0, 5, 0, 0, 0);
 
   siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
@@ -188,13 +198,11 @@ tab_settings::load_preferences() {
   int i;
 
   cfg->SetPath(wxT("/GUI"));
-  if (!cfg->Read(wxT("mkvmerge_executable"), &mkvmerge_path))
-    mkvmerge_path = wxT("mkvmerge");
+  cfg->Read(wxT("mkvmerge_executable"), &mkvmerge_path, wxT("mkvmerge"));
   tc_mkvmerge->SetValue(mkvmerge_path);
   query_mkvmerge_capabilities();
 
-  if (!cfg->Read(wxT("process_priority"), &priority))
-    priority = wxT("normal");
+  cfg->Read(wxT("process_priority"), &priority, wxT("normal"));
   cob_priority->SetSelection(0);
   for (i = 0; i < cob_priority->GetCount(); i++)
     if (priority == cob_priority->GetString(i)) {
@@ -202,19 +210,17 @@ tab_settings::load_preferences() {
       break;
     }
 
-  if (!cfg->Read(wxT("autoset_output_filename"), &b))
-    b = true;
+  cfg->Read(wxT("autoset_output_filename"), &b, true);
   cb_autoset_output_filename->SetValue(b);
-  if (!cfg->Read(wxT("ask_before_overwriting"), &b))
-    b = true;
+  cfg->Read(wxT("ask_before_overwriting"), &b, true);
   cb_ask_before_overwriting->SetValue(b);
-  if (!cfg->Read(wxT("filenew_after_add_to_jobqueue"), &b))
-    b = false;
+  cfg->Read(wxT("filenew_after_add_to_jobqueue"), &b, false);
   cb_filenew_after_add_to_jobqueue->SetValue(b);
-  if (!cfg->Read(wxT("on_top"), &b))
-    b = false;
+  cfg->Read(wxT("on_top"), &b, false);
   cb_on_top->SetValue(b);
   mdlg->set_on_top(b);
+  cfg->Read(wxT("warn_usage"), &b, true);
+  cb_warn_usage->SetValue(b);
 }
 
 void
@@ -230,6 +236,7 @@ tab_settings::save_preferences() {
   cfg->Write(wxT("filenew_after_add_to_jobqueue"),
              cb_filenew_after_add_to_jobqueue->IsChecked());
   cfg->Write(wxT("on_top"), cb_on_top->IsChecked());
+  cfg->Write(wxT("warn_usage"), cb_warn_usage->IsChecked());
   cfg->Flush();
 }
 
@@ -310,4 +317,5 @@ BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_ON_TOP, tab_settings::on_on_top_selected)
+  EVT_CHECKBOX(ID_CB_WARN_USAGE, tab_settings::on_xyz_selected)
 END_EVENT_TABLE();
