@@ -865,7 +865,7 @@ static void parse_language(char *s, language_t &lang, const char *opt,
     mxerror("'%s' is not a valid ISO639-2 code. See "
             "'mkvmerge --list-languages'.\n", s);
   
-  lang.language = s;
+  lang.language = safestrdup(s);
 }
 
 static void parse_sub_charset(char *s, language_t &sub_charset) {
@@ -887,7 +887,7 @@ static void parse_sub_charset(char *s, language_t &sub_charset) {
     mxerror("Invalid sub charset specified in '--sub-charset %s'.\n",
             orig.c_str());
 
-  sub_charset.language = s;
+  sub_charset.language = safestrdup(s);
 }
 
 static void parse_tags(char *s, tags_t &tags, const char *opt) {
@@ -907,7 +907,7 @@ static void parse_tags(char *s, tags_t &tags, const char *opt) {
     mxerror("Invalid tags file name specified in '%s %s'.\n", opt,
             orig.c_str());
 
-  tags.file_name = s;
+  tags.file_name = safestrdup(s);
 }
 
 static void parse_fourcc(char *s, const char *opt, track_info_c &ti) {
@@ -1740,11 +1740,14 @@ static void parse_args(int argc, char **argv) {
       i++;
 
     } else if (!strcmp(this_arg, "--track-name")) {
+      char *utf8;
       if (next_arg == NULL)
         mxerror("'--track-name' lacks its argument.\n");
 
       parse_language(next_arg, lang, "track-name", "track name", false);
-      lang.language = to_utf8(cc_command_line, lang.language);
+      utf8 = to_utf8(cc_command_line, lang.language);
+      safefree(lang.language);
+      lang.language = utf8;
       ti->track_names->push_back(lang);
       i++;
 
