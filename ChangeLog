@@ -1,3 +1,11 @@
+2003-11-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Increased the size of the space reserved for
+	the first meta seek element (see mkvmerge.1 for an
+	explanation). In some situations (with tags, chapters,
+	attachements and very big file) it might not have been enough in
+	order to contain all elements.
+
 2003-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: Added an input field for the 'timecodes' file to the track

@@ -429,6 +429,52 @@ static void sighandler(int signum) {
   if (signum == SIGUSR1)
     debug_facility.dump_info();
 #endif // DEBUG
+
+  mxwarn("\nmkvmerge received a SIGINT (probably because the user pressed "
+         "Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during "
+         "this process you'll have to kill it manually.\n");
+
+  mxinfo("Sanitizing the file, part 1/4...");
+  // Render the cues.
+  if (write_cues && cue_writing_requested)
+    kax_cues->Render(*out);
+  mxinfo(" done\n");
+
+  mxinfo("Sanitizing the file, part 2/4...");
+  // Now re-render the kax_duration and fill in the biggest timecode
+  // as the file's duration.
+  out->save_pos(kax_duration->GetElementPosition());
+  *(static_cast<EbmlFloat *>(kax_duration)) =
+    (cluster_helper->get_max_timecode() -
+     cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
+  kax_duration->Render(*out);
+  out->restore_pos();
+  mxinfo(" done\n");
+
+  mxinfo("Sanitizing the file, part 3/4...");
+  // Write meta seek information if it is not disabled.
+  if (cue_writing_requested)
+    kax_sh_main->IndexThis(*kax_cues, *kax_segment);
+
+  if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
+    kax_sh_main->UpdateSize();
+    if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
+      mxwarn("This should REALLY not have happened. The space reserved for "
+             "the first meta seek element was too small. Size needed: %lld. "
+             "Please contact Moritz Bunkus at moritz@bunkus.org.\n",
+             kax_sh_main->ElementSize());
+  }
+  mxinfo(" done\n");
+
+  mxinfo("Sanitizing the file, part 4/4...");
+  // Set the correct size for the segment.
+  if (kax_segment->ForceSize(out->getFilePointer() -
+                             kax_segment->GetElementPosition() -
+                             kax_segment->HeadSize()))
+    kax_segment->OverwriteHead(*out);
+  mxinfo(" done\n");
+
+  mxerror("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n");
 }
 #endif
 
@@ -865,7 +911,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
     // Reserve some space for the meta seek stuff.
     kax_sh_main = new KaxSeekHead();
     kax_sh_void = new EbmlVoid();
-    kax_sh_void->SetSize(100);
+    kax_sh_void->SetSize(4096);
     kax_sh_void->Render(*out);
     if (write_meta_seek_for_clusters)
       kax_sh_cues = new KaxSeekHead();
@@ -1804,6 +1850,7 @@ static void setup() {
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   signal(SIGUSR1, sighandler);
+  signal(SIGINT, sighandler);
 
   nice(2);
 #endif
@@ -2234,7 +2281,6 @@ int main(int argc, char **argv) {
     mxinfo("\nPass 1 took %u second%s.\nPass 2: merging the files. This will "
            "take even longer.\n\n", end - start,
            (end - start) == 1 ? "" : "s");
-//     mxexit(0);
 
     start = time(NULL);
 
