@@ -1284,7 +1284,7 @@ mmg_dialog::update_command_line() {
         else
           arg += wxT("0");
         if (t->stretch.Length() > 0)
-          arg += t->stretch;
+          arg += wxT(",") + t->stretch + wxT("/1");
         clargs.Add(wxT("--sync"));
         clargs.Add(arg);
       }
