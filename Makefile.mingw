@@ -110,8 +110,8 @@ config.h: configure.in
 # avilib-0.6.10
 #
 
-libavi_SOURCES = $(wildcard avilib-0.6.10/*.c)
-libavi_OBJECTS := $(patsubst %.c,%.o,$(libavi_SOURCES))
+libavi_SOURCES = $(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp)
+libavi_OBJECTS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(libavi_SOURCES)))
 
 avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
 	rm -f $@

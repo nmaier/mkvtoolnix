@@ -266,7 +266,18 @@ bool mm_io_c::eof() {
 
 int
 mm_io_c::truncate(int64_t pos) {
-  _chsize((HANDLE)file, pos);
+  bool result;
+
+  save_pos();
+  if (setFilePointer2(pos)) {
+    result = SetEndOfFile((HANDLE)file);
+    restore_pos();
+    if (result)
+      return 0;
+    return -1;
+  }
+  restore_pos();
+  return -1;
 }
 
 #endif
