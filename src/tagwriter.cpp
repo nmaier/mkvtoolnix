@@ -17,6 +17,7 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <stdarg.h>
 #include <stdio.h>
 
 #include <typeinfo>
@@ -34,34 +35,23 @@ using namespace std;
 
 static FILE *o;
 
-#define UINT uint64(*static_cast<EbmlUInteger *>(e))
-#define SINT int64(*static_cast<EbmlSInteger *>(e))
-#define FLOAT float(*static_cast<EbmlFloat *>(e))
-#define U8STR UTFstring_to_cstrutf8(UTFstring( \
-  *static_cast<EbmlUnicodeString *>(e)))
-#define STR string(*static_cast<EbmlString *>(e)).c_str()
+static void print_tag(int level, const char *name, const char *fmt, ...) {
+  int idx;
+  va_list ap;
 
-
-#define pr(l, n, f, a) \
-{ \
-  int __idx; \
-  for (__idx = 0; __idx < l; __idx++) \
-    fprintf(o, " "); \
-  fprintf(o, "<%s>", n); \
-  fprintf(o, f, a); \
-  mxprint(o, "</%s>\n", n); \
+  for (idx = 0; idx < level; idx++)
+    fprintf(o, "  ");
+  fprintf(o, "<%s>", name);
+  va_start(ap, fmt);
+  vfprintf(o, fmt, ap);
+  va_end(ap);
+  mxprint(o, "</%s>\n", name);
 }
 
-#define prUI(l, n) pr(l, n, "%llu", UINT)
-#define prSI(l, n) pr(l, n, "%lld", SINT)
-#define prF(l, n) pr(l, n, "%f", FLOAT)
-#define prU8S(l, n) \
-{ \
-  s = U8STR; \
-  pr(l, n, "%s", s); \
-  safefree(s); \
+static void print_tag_and_free(int level, const char *name, char *str) {
+  print_tag(level, name, "%s", str);
+  safefree(str);
 }
-#define prS(l, n) pr(l, n, "%s", STR)
 
 static void print_binary(int level, const char *name, EbmlElement *e) {
   EbmlBinary *b;
@@ -72,18 +62,18 @@ static void print_binary(int level, const char *name, EbmlElement *e) {
   s = base64_encode((const unsigned char *)b->GetBuffer(), b->GetSize(), true,
                     72 - level - 2);
   for (i = 0; i < level; i++)
-    mxprint(o, " ");
+    mxprint(o, "  ");
   mxprint(o, "<%s>\n", name);
 
   for (i = 0; i < (level + 2); i++)
-    mxprint(o, " ");
+    mxprint(o, "  ");
 
   old_idx = 0;
   for (idx = 0; idx < s.length(); idx++)
     if (s[idx] == '\n') {
       mxprint(o, "%s\n", s.substr(old_idx, idx - old_idx).c_str());
       for (i = 0; i < (level + 2); i++)
-        mxprint(o, " ");
+        mxprint(o, "  ");
       old_idx = idx + 1;
     }
 
@@ -91,244 +81,397 @@ static void print_binary(int level, const char *name, EbmlElement *e) {
     mxprint(o, "\n");
 
   for (i = 0; i < level; i++)
-    mxprint(o, " ");
+    mxprint(o, "  ");
   mxprint(o, "</%s>\n", name);
 }
 
-static void handle_level4(EbmlElement *e) {
-  int i;
-  char *s;
+static void print_date(int level, const char *name, EbmlElement *e) {
+  int idx;
+  time_t tme;
+  struct tm *tm;
+  char buffer[100];
 
-  if (e->Generic().GlobalId == KaxTagTrackUID::ClassInfos.GlobalId)
-    prUI(3, "TrackUID");
+  for (idx = 0; idx < level; idx++)
+    fprintf(o, "  ");
+  fprintf(o, "<%s>", name);
 
-  else if (e->Generic().GlobalId == KaxTagChapterUID::ClassInfos.GlobalId)
-    prUI(3, "ChapterUID");
-
-  else if (e->Generic().GlobalId == KaxTagSubject::ClassInfos.GlobalId)
-    prU8S(3, "Subject");
-
-  else if (e->Generic().GlobalId == KaxTagBibliography::ClassInfos.GlobalId)
-    prU8S(3, "Bibliography");
-
-  else if (e->Generic().GlobalId == KaxTagLanguage::ClassInfos.GlobalId)
-    prS(3, "Language");
-
-  else if (e->Generic().GlobalId == KaxTagRating::ClassInfos.GlobalId)
-    print_binary(3, "Rating", e);
-
-  else if (e->Generic().GlobalId == KaxTagEncoder::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <Encoder>%s</Encoder>\n", s);
-    safefree(s);
+  tme = ((EbmlDate *)e)->GetEpochDate();
+  tm = gmtime(&tme);
+  if (tm == NULL)
+    fprintf(o, "INVALID: %llu", (uint64_t)tme);
+  else {
+    buffer[99] = 0;
+    strftime(buffer, 99, "%Y-%m-%dT%H:%M:%S+0000", tm);
+    fprintf(o, buffer);
   }
-
-  else if (e->Generic().GlobalId ==
-           KaxTagEncodeSettings::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <EncodeSettings>%s</EncodeSettings>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId == KaxTagFile::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <File>%s</File>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId ==
-           KaxTagArchivalLocation::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <ArchivalLocation>%s</ArchivalLocation>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId == KaxTagKeywords::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <Keywords>%s</Keywords>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId == KaxTagMood::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <Mood>%s</Mood>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId ==
-           KaxTagRecordLocation::ClassInfos.GlobalId)
-    mxprint(o, "   <RecordLocation>%s</RecordLocation>\n", STR);
-
-  else if (e->Generic().GlobalId == KaxTagSource::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <Source>%s</Source>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId == KaxTagSourceForm::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <SourceForm>%s</SourceForm>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId == KaxTagProduct::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <Product>%s</Product>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId ==
-           KaxTagOriginalMediaType::ClassInfos.GlobalId) {
-    s = U8STR;
-    mxprint(o, "   <OriginalMediaType>%s</OriginalMediaType>\n", s);
-    safefree(s);
-  }
-
-  else if (e->Generic().GlobalId == KaxTagPlayCounter::ClassInfos.GlobalId)
-    mxprint(o, "   <PlayCounter>%llu</PlayCounter>\n", UINT);
-
-  else if (e->Generic().GlobalId == KaxTagPopularimeter::ClassInfos.GlobalId)
-    mxprint(o, "   <Popularimeter>%lld</Popularimeter>\n", SINT);
-
-  else if (e->Generic().GlobalId == KaxTagAudioGenre::ClassInfos.GlobalId)
-    mxprint(o, "   <AudioGenre>%s</AudioGenre>\n", STR);
-
-  else if (e->Generic().GlobalId == KaxTagVideoGenre::ClassInfos.GlobalId)
-    print_binary(3, "VideoGenre", e);
-
-  else if (e->Generic().GlobalId == KaxTagSubGenre::ClassInfos.GlobalId)
-    mxprint(o, "   <SubGenre>%s</SubGenre>\n", STR);
-
-  else if (e->Generic().GlobalId == KaxTagAudioEncryption::ClassInfos.GlobalId)
-    print_binary(3, "AudioEncryption", e);
-
-  else if (e->Generic().GlobalId == KaxTagAudioGain::ClassInfos.GlobalId)
-    mxprint(o, "   <AudioGain>%f</AudioGain>\n", FLOAT);
-
-  else if (e->Generic().GlobalId == KaxTagAudioPeak::ClassInfos.GlobalId)
-    mxprint(o, "   <AudioPeak>%f</AudioPeak>\n", FLOAT);
-
-  else if (e->Generic().GlobalId == KaxTagBPM::ClassInfos.GlobalId)
-    mxprint(o, "   <BPM>%f</BPM>\n", FLOAT);
-
-  else if (e->Generic().GlobalId == KaxTagEqualisation::ClassInfos.GlobalId)
-    print_binary(3, "Equalisation", e);
-
-  else if (e->Generic().GlobalId == KaxTagDiscTrack::ClassInfos.GlobalId)
-    mxprint(o, "   <DiscTrack>%llu</DiscTrack>\n", UINT);
-
-  else if (e->Generic().GlobalId == KaxTagSetPart::ClassInfos.GlobalId)
-    mxprint(o, "   <SetPart>%llu</SetPart>\n", UINT);
-
-  else if (e->Generic().GlobalId == KaxTagInitialKey::ClassInfos.GlobalId)
-    mxprint(o, "   <InitialKey>%s</InitialKey>\n", STR);
-
-  else if (e->Generic().GlobalId ==
-           KaxTagOfficialAudioFileURL::ClassInfos.GlobalId)
-    mxprint(o, "   <OfficialFileURL>%s</OfficialFileURL>\n", STR);
-
-  else if (e->Generic().GlobalId ==
-           KaxTagOfficialAudioSourceURL::ClassInfos.GlobalId)
-    mxprint(o, "   <OfficialSourceURL>%s</OfficialSourceURL>\n", STR);
-
-
   
+  mxprint(o, "</%s>\n", name);
+}
+
+#define pr_ui(n) print_tag(level, n, "%llu", \
+                           uint64(*static_cast<EbmlUInteger *>(e)))
+#define pr_si(n) print_tag(level, n, "%lld", \
+                           int64(*static_cast<EbmlSInteger *>(e)))
+#define pr_f(n) print_tag(level, n, "%f", \
+                          float(*static_cast<EbmlFloat *>(e)))
+#define pr_s(n) print_tag(level, n, "%s", \
+                          string(*static_cast<EbmlString *>(e)).c_str())
+#define pr_us(n) print_tag_and_free(level, n, \
+                                    UTFstring_to_cstrutf8(UTFstring( \
+                                      *static_cast<EbmlUnicodeString *>(e))))
+#define pr_d(n) print_date(level, n, e)
+
+#define pr_b(n) print_binary(level, n, e)
+
+#define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
+
+static void handle_level5(EbmlElement *e) {
+  int level = 5;
+
+  if (is_id(KaxTagMultiPriceCurrency))
+    pr_s("Currency");
+
+  else if (is_id(KaxTagMultiPriceAmount))
+    pr_f("Amount");
+
+  else if (is_id(KaxTagMultiPricePriceDate))
+    pr_d("PriceDate");
 
   else
-    mxprint(stderr, "   Unknown element: %s\n", typeid(*e).name());
+    mxprint(stderr, "          Unknown element: %s\n", typeid(*e).name());
+}
+
+static void handle_level4(EbmlElement *e) {
+  int i, level = 4;
+
+  if (is_id(KaxTagMultiCommercialType))
+    pr_ui("Type");
+
+  else if (is_id(KaxTagMultiCommercialAddress))
+    pr_us("Address");
+
+  else if (is_id(KaxTagMultiCommercialURL))
+    pr_s("URL");
+
+  else if (is_id(KaxTagMultiCommercialEmail))
+    pr_s("Email");
+
+  else if (is_id(KaxTagMultiPrice)) {
+    mxprint(o, "        <MultiPrice>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level5((*(EbmlMaster *)e)[i]);
+    mxprint(o, "        </MultiPrice>\n");
+
+  } else if (is_id(KaxTagMultiDateType))
+    pr_ui("Type");
+
+  else if (is_id(KaxTagMultiDateDateBegin))
+    pr_d("Begin");
+
+  else if (is_id(KaxTagMultiDateDateEnd))
+    pr_d("End");
+
+  else if (is_id(KaxTagMultiEntityType))
+    pr_ui("Type");
+
+  else if (is_id(KaxTagMultiEntityName))
+    pr_us("Name");
+
+  else if (is_id(KaxTagMultiEntityURL))
+    pr_s("URL");
+
+  else if (is_id(KaxTagMultiEntityEmail))
+    pr_s("Email");
+  
+  else if (is_id(KaxTagMultiEntityAddress))
+    pr_us("Address");
+
+  else if (is_id(KaxTagMultiIdentifierType))
+    pr_ui("IdentifierType");
+
+  else if (is_id(KaxTagMultiIdentifierBinary))
+    pr_b("Binary");
+
+  else if (is_id(KaxTagMultiIdentifierString))
+    pr_us("String");
+
+  else if (is_id(KaxTagMultiLegalType))
+    pr_ui("Type");
+
+  else if (is_id(KaxTagMultiLegalURL))
+    pr_s("URL");
+
+  else if (is_id(KaxTagMultiLegalAddress))
+    pr_us("Address");
+
+  else if (is_id(KaxTagMultiTitleType))
+    pr_ui("Type");
+
+  else if (is_id(KaxTagMultiTitleName))
+    pr_us("Name");
+
+  else if (is_id(KaxTagMultiTitleSubTitle))
+    pr_us("SubTitle");
+
+  else if (is_id(KaxTagMultiTitleEdition))
+    pr_us("Edition");
+
+  else if (is_id(KaxTagMultiTitleAddress))
+    pr_us("Address");
+
+  else if (is_id(KaxTagMultiTitleURL))
+    pr_s("URL");
+
+  else if (is_id(KaxTagMultiTitleEmail))
+    pr_s("Email");
+
+  else if (is_id(KaxTagMultiTitleLanguage))
+    pr_s("Language");
+
+  else
+    mxprint(stderr, "        Unknown element: %s\n", typeid(*e).name());
 }
 
 static void handle_level3(EbmlElement *e) {
-  int i;
+  int i, level = 3;
 
-  if (e->Generic().GlobalId == KaxTagTargets::ClassInfos.GlobalId) {
-    mxprint(o, "  <Targets>\n");
+  if (is_id(KaxTagTrackUID))
+    pr_ui("TrackUID");
+
+  else if (is_id(KaxTagChapterUID))
+    pr_ui("ChapterUID");
+
+  else if (is_id(KaxTagSubject))
+    pr_us("Subject");
+
+  else if (is_id(KaxTagBibliography))
+    pr_us("Bibliography");
+
+  else if (is_id(KaxTagLanguage))
+    pr_s("Language");
+
+  else if (is_id(KaxTagRating))
+    pr_b("Rating");
+
+  else if (is_id(KaxTagEncoder))
+    pr_us("Encoder");
+
+  else if (is_id(KaxTagEncodeSettings))
+    pr_us("EncodeSettings");
+
+  else if (is_id(KaxTagFile))
+    pr_us("File");
+
+  else if (is_id(KaxTagArchivalLocation))
+    pr_us("ArchivalLocation");
+
+  else if (is_id(KaxTagKeywords))
+    pr_us("Keywords");
+
+  else if (is_id(KaxTagMood))
+    pr_us("Mood");
+
+  else if (is_id(KaxTagRecordLocation))
+    pr_s("RecordLocation");
+
+  else if (is_id(KaxTagSource))
+    pr_us("Source");
+
+  else if (is_id(KaxTagSourceForm))
+    pr_us("SourceForm");
+
+  else if (is_id(KaxTagProduct))
+    pr_us("Product");
+
+  else if (is_id(KaxTagOriginalMediaType))
+    pr_us("OriginalMediaType");
+
+  else if (is_id(KaxTagPlayCounter))
+    pr_ui("PlayCounter");
+
+  else if (is_id(KaxTagPopularimeter))
+    pr_ui("Popularimeter");
+
+  else if (is_id(KaxTagAudioGenre))
+    pr_s("AudioGenre");
+
+  else if (is_id(KaxTagVideoGenre))
+    pr_b("VideoGenre");
+
+  else if (is_id(KaxTagSubGenre))
+    pr_s("SubGenre");
+
+  else if (is_id(KaxTagAudioEncryption))
+    pr_b("AudioEncryption");
+
+  else if (is_id(KaxTagAudioGain))
+    pr_f("AudioGain");
+
+  else if (is_id(KaxTagAudioPeak))
+    pr_f("AudioPeak");
+
+  else if (is_id(KaxTagBPM))
+    pr_f("BPM");
+
+  else if (is_id(KaxTagEqualisation))
+    pr_b("Equalisation");
+
+  else if (is_id(KaxTagDiscTrack))
+    pr_ui("DiscTrack");
+
+  else if (is_id(KaxTagSetPart))
+    pr_ui("SetPart");
+
+  else if (is_id(KaxTagInitialKey))
+    pr_s("InitialKey");
+
+  else if (is_id(KaxTagOfficialAudioFileURL))
+    pr_s("OfficialAudioFileURL");
+
+  else if (is_id(KaxTagOfficialAudioSourceURL))
+    pr_s("OfficialAudioSourceURL");
+
+  else if (is_id(KaxTagCaptureDPI))
+    pr_ui("CaptureDPI");
+
+  else if (is_id(KaxTagCaptureLightness))
+    pr_b("CaptureLightness");
+
+  else if (is_id(KaxTagCapturePaletteSetting))
+    pr_ui("CapturePaletteSetting");
+
+  else if (is_id(KaxTagCaptureSharpness))
+    pr_b("CaptureSharpness");
+
+  else if (is_id(KaxTagCropped))
+    pr_us("Cropped");
+
+  else if (is_id(KaxTagOriginalDimensions))
+    pr_s("OriginalDimensions");
+
+  else if (is_id(KaxTagCommercial)) {
+    mxprint(o, "      <Commercial>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </Targets>\n");
+    mxprint(o, "      </Commercial>\n");
 
-  } else if (e->Generic().GlobalId == KaxTagGeneral::ClassInfos.GlobalId) {
-    mxprint(o, "  <General>\n");
+  } else if (is_id(KaxTagDate)) {
+    mxprint(o, "      <Date>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </General>\n");
+    mxprint(o, "      </Date>\n");
 
-  } else if (e->Generic().GlobalId == KaxTagGenres::ClassInfos.GlobalId) {
-    mxprint(o, "  <Genres>\n");
+  } else if (is_id(KaxTagEntity)) {
+    mxprint(o, "      <Entity>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </Genres>\n");
+    mxprint(o, "      </Enetity>\n");
 
-  } else if (e->Generic().GlobalId ==
-             KaxTagAudioSpecific::ClassInfos.GlobalId) {
-    mxprint(o, "  <AudioSpecific>\n");
+  } else if (is_id(KaxTagIdentifier)) {
+    mxprint(o, "      <Identifier>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </AudioSpecific>\n");
+    mxprint(o, "      </Identifier>\n");
 
-  } else if (e->Generic().GlobalId ==
-             KaxTagImageSpecific::ClassInfos.GlobalId) {
-    mxprint(o, "  <ImageSpecific>\n");
+  } else if (is_id(KaxTagLegal)) {
+    mxprint(o, "      <Legal>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </ImageSpecific>\n");
+    mxprint(o, "      </Legal>\n");
 
-  } else if (e->Generic().GlobalId ==
-             KaxTagMultiCommercial::ClassInfos.GlobalId) {
-    mxprint(o, "  <MultiCommercial>\n");
+  } else if (is_id(KaxTagTitle)) {
+    mxprint(o, "      <Title>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </MultiCommercial>\n");
-
-  } else if (e->Generic().GlobalId ==
-             KaxTagMultiDate::ClassInfos.GlobalId) {
-    mxprint(o, "  <MultiDate>\n");
-    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
-      handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </MultiDate>\n");
-
-  } else if (e->Generic().GlobalId ==
-             KaxTagMultiEntity::ClassInfos.GlobalId) {
-    mxprint(o, "  <MultiEntity>\n");
-    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
-      handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </MultiEntity>\n");
-
-  } else if (e->Generic().GlobalId ==
-             KaxTagMultiIdentifier::ClassInfos.GlobalId) {
-    mxprint(o, "  <MultiIdentifier>\n");
-    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
-      handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </MultiIdentifier>\n");
-
-  } else if (e->Generic().GlobalId ==
-             KaxTagMultiLegal::ClassInfos.GlobalId) {
-    mxprint(o, "  <MultiLegal>\n");
-    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
-      handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </MultiLegal>\n");
-
-  } else if (e->Generic().GlobalId ==
-             KaxTagMultiTitle::ClassInfos.GlobalId) {
-    mxprint(o, "  <MultiTitle>\n");
-    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
-      handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "  </MultiTitle>\n");
+    mxprint(o, "      </Title>\n");
 
   } else
-    mxprint(stderr, "  Unknown element: %s\n", typeid(*e).name());
+    mxprint(stderr, "      Unknown element: %s\n", typeid(*e).name());
 }
 
 static void handle_level2(EbmlElement *e) {
   int i;
 
-  if (e->Generic().GlobalId == KaxTag::ClassInfos.GlobalId) {
-    mxprint(o, " <Tag>\n");
+  if (is_id(KaxTagTargets)) {
+    mxprint(o, "    <Targets>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
-    mxprint(o, " </Tag>\n");
+    mxprint(o, "    </Targets>\n");
+
+  } else if (is_id(KaxTagGeneral)) {
+    mxprint(o, "    <General>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </General>\n");
+
+  } else if (is_id(KaxTagGenres)) {
+    mxprint(o, "    <Genres>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </Genres>\n");
+
+  } else if (is_id(KaxTagAudioSpecific)) {
+    mxprint(o, "    <AudioSpecific>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </AudioSpecific>\n");
+
+  } else if (is_id(KaxTagImageSpecific)) {
+    mxprint(o, "    <ImageSpecific>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </ImageSpecific>\n");
+
+  } else if (is_id(KaxTagMultiCommercial)) {
+    mxprint(o, "    <MultiCommercial>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </MultiCommercial>\n");
+
+  } else if (is_id(KaxTagMultiDate)) {
+    mxprint(o, "    <MultiDate>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </MultiDate>\n");
+
+  } else if (is_id(KaxTagMultiEntity)) {
+    mxprint(o, "    <MultiEntity>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </MultiEntity>\n");
+
+  } else if (is_id(KaxTagMultiIdentifier)) {
+    mxprint(o, "    <MultiIdentifier>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </MultiIdentifier>\n");
+
+  } else if (is_id(KaxTagMultiLegal)) {
+    mxprint(o, "    <MultiLegal>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </MultiLegal>\n");
+
+  } else if (is_id(KaxTagMultiTitle)) {
+    mxprint(o, "    <MultiTitle>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level3((*(EbmlMaster *)e)[i]);
+    mxprint(o, "    </MultiTitle>\n");
+
   } else
-    mxprint(stderr, " Unknown element: %s\n", typeid(*e).name());
+    mxprint(stderr, "    Unknown element: %s\n", typeid(*e).name());
+}
+
+static void handle_level1(EbmlElement *e) {
+  int i;
+
+  if (is_id(KaxTag)) {
+    mxprint(o, "  <Tag>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_level2((*(EbmlMaster *)e)[i]);
+    mxprint(o, "  </Tag>\n");
+  } else
+    mxprint(stderr, "  Unknown element: %s\n", typeid(*e).name());
 
 }
 
@@ -357,8 +500,8 @@ void write_tags_xml(KaxTags &tags, FILE *out) {
 
   o = out;
 
-//   dumpsizes(&tags, 0);
+   dumpsizes(&tags, 0);
 
   for (i = 0; i < tags.ListSize(); i++)
-    handle_level2(tags[i]);
+    handle_level1(tags[i]);
 }
