@@ -39,8 +39,8 @@
 #define MKV_A_PCM_BE     "A_PCM/INT/BIG"
 #define MKV_A_VORBIS     "A_VORBIS"
 #define MKV_A_ACM        "A_MS/ACM"
-#define MKV_A_QDMC       "A_QDESIGNMUSIC"
-#define MKV_A_QDMC2      "A_QDESIGNMUSIC/V2"
+#define MKV_A_QDMC       "A_QUICKTIME/QDMC"
+#define MKV_A_QDMC2      "A_QUICKTIME/QDM2"
 
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 #define MKV_V_REALV1     "V_REAL/RV10"
