@@ -264,7 +264,7 @@ void avi_reader_c::create_packetizer(int64_t tid) {
   if (tid == 0)
     return;
 
-  if ((avi->GetStream(streamtypeAUDIO, tid) != NULL) &&
+  if ((avi->GetStream(streamtypeAUDIO, tid - 1) != NULL) &&
       demuxing_requested('a', tid))
     add_audio_demuxer(tid - 1);
 
