@@ -31,6 +31,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
   int i;
   audio_sync_t *as;
+  cue_creation_t *cc;
 
 #ifdef DEBUG
   debug_c::add_packetizer(this);
@@ -50,6 +51,16 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     as = &(*ti->audio_syncs)[i];
     if ((as->id == ti->id) || (as->id == -1)) { // -1 == all tracks
       ti->async = *as;
+      break;
+    }
+  }
+
+  // Let's see if the user has given a default track flag for this track.
+  ti->cues = CUES_UNSPECIFIED;
+  for (i = 0; i < ti->cue_creations->size(); i++) {
+    cc = &(*ti->cue_creations)[i];
+    if ((cc->id == ti->id) || (cc->id == -1)) { // -1 == all tracks
+      ti->cues = cc->cues;
       break;
     }
   }
@@ -476,6 +487,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->vtracks = new vector<int64_t>(*src->vtracks);
   dst->stracks = new vector<int64_t>(*src->stracks);
   dst->audio_syncs = new vector<audio_sync_t>(*src->audio_syncs);
+  dst->cue_creations = new vector<cue_creation_t>(*src->cue_creations);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->language = safestrdup(src->language);
@@ -493,6 +505,7 @@ void free_track_info(track_info_t *ti) {
   delete ti->vtracks;
   delete ti->stracks;
   delete ti->audio_syncs;
+  delete ti->cue_creations;
   safefree(ti->private_data);
   safefree(ti->language);
   safefree(ti->sub_charset);

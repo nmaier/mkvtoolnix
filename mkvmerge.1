@@ -130,10 +130,10 @@ linear drifts. \fIp\fR defaults to 1000 if omitted. Both \fIo\fR and
 Defaults: no manual synch correction (which is the same as \fId\fR = 0 and
 \fIo\fR/\fIp\fR = 1.0).
 .TP
-\fB\-\-cues\fR <\fInone\fR|\fIiframes\fR|\fIall\fR>
-Controls for which tracks cue (index) entries are created. \fInone\fR inhibits
-the creation of cue entries for all tracks contained in the following
-source files. For \fIiframes\fR only blocks with no backward or forward
+\fB\-\-cues\fR <\fITID\fR:\fInone\fR|\fIiframes\fR|\fIall\fR>
+Controls for which tracks cue (index) entries are created for the given track
+(see section \fBTRACK IDS\fR). \fInone\fR inhibits the creation of cue entries.
+For \fIiframes\fR only blocks with no backward or forward
 references ( = I frames in video tracks) are put into the cue sheet. \fIall\fR
 causes \fBmkvmerge\fR to create cue entries for all blocks which will make
 the file very big.
@@ -142,16 +142,16 @@ The default is \fIiframes\fR for video tracks and \fInone\fR for all others.
 See also option \fB\-\-no\-cues\fR which inhibits the creation of cue
 entries regardless of the \fB\-\-cues\fR options used.
 .TP
-\fB\-\-default\-track\fR
-Sets the 'default' flag for all tracks read from this file. If the user does
-not explicitly select a track himself then the player should prefer the
-track that has his 'default' flag set. Only one track of each kind (audio,
-video, subttiles) can have his 'default' flag set.
+\fB\-\-default\-track\fR <\fITID\fR>
+Sets the 'default' flag for the given track (see section \fBTRACK IDS\fR).
+If the user does not explicitly select a track himself then the player should
+prefer the track that has his 'default' flag set. Only one track of each kind
+(audio, video, subttiles) can have his 'default' flag set.
 .TP
-\fB\-\-language\fR <\fIlanguage\fR>
-Sets the language for all tracks read from this file. Only ISO639-2 codes
-are allowed. All languages including their ISO639-2 codes can be listed
-with the \fB\-\-list\-languages\fR option.
+\fB\-\-language\fR <\fITID\fR:\fIlanguage\fR>
+Sets the language for the given track (see section \fBTRACK IDS\fR). Only
+ISO639-2 codes are allowed. All languages including their ISO639-2 codes can be
+listed with the \fB\-\-list\-languages\fR option.
 .LP
 Options that only apply to video tracks:
 .TP
@@ -253,14 +253,17 @@ video tracks) then you can tell mplayer which track to play with the
 \&'\fB-vid\fP' and '\fB-aid\fP' parameters. These are 0-based and do not
 distinguish between video and audio.
 .LP
-If you need an audio track synchronized you can do that easily with
+If you need an audio track synchronized you can do that easily. First find
+out which track ID the Vorbis track has with
 .LP
-$ \fBmkvmerge -o goodsync.mkv -A source.avi -s 200 outofsync.ogg\fP
+$ \fBmkvmerge --identify outofsync.ogg\fP
 .LP
-This would add 200ms of silence at the beginning of the audio tracks taken from
-\fIoutofsync.ogg\fP. And \fB-s\fP always applies to all audio tracks in a
-source file. If you want to apply \fB-s\fP only to a specific track then take
-the same source file more than once and add \fB-a\fP and \fB-s\fP accordingly.
+Now you can use that ID in the following command line:
+.LP
+$ \fBmkvmerge -o goodsync.mkv -A source.avi -s 12345:200 outofsync.ogg\fP
+.LP
+This would add 200ms of silence at the beginning of the audio track with the
+ID 12345 taken from \fIoutofsync.ogg\fP.
 .LP
 Some movies start synced correctly but slowly drift out of sync. For these
 kind of movies you can specify a delay factor that is applied to all
@@ -270,7 +273,7 @@ I transcoded was 0.2 seconds out of sync at the end of the movie which
 was 77340 frames long. At 29.97fps 0.2 seconds correspond to approx. 6
 frames. So I did
 .LP
-$ \fBmkvmerge -o goodsync.mkv -s 0,77346/77340 outofsync.mkv\fP
+$ \fBmkvmerge -o goodsync.mkv -s 23456:0,77346/77340 outofsync.mkv\fP
 .LP
 The result was fine.
 .LP
@@ -385,6 +388,10 @@ or \fBmkvmerge \-\-identify\fR. It is \fBnot\fR the track UID.
 The special track ID '-1' is a wildcard and applies the given switch to all
 tracks that are read from an input file. This was the bahviour of these
 switches prior to version 0.4.4.
+.LP
+The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
+\fB\-\-stracks\fR, \fB\-\-sync\fR, \fB\-\-default-track\fR, \fB\-\-cues\fR
+and \fB\-\-language\fR.
 
 .SH NOTES
 .LP

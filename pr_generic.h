@@ -55,6 +55,11 @@ typedef struct {
 } packet_t;
 
 typedef struct {
+  int cues;
+  int64_t id;
+} cue_creation_t;
+
+typedef struct {
   // The track ID.
   int64_t id;
 
@@ -62,7 +67,6 @@ typedef struct {
   char *fname;
   bool no_audio, no_video, no_subs;
   vector<int64_t> *atracks, *vtracks, *stracks;
-  int cues;
 
   // Options used by the packetizers.
   unsigned char *private_data;
@@ -73,6 +77,9 @@ typedef struct {
 
   vector<audio_sync_t> *audio_syncs;
   audio_sync_t async;
+
+  vector<cue_creation_t> *cue_creations;
+  int cues;
 
   int default_track;
 

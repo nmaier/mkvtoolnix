@@ -346,10 +346,11 @@ static void usage(void) {
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
-    "  --default-track          Sets the 'default' flag for this track.\n"
-    "  --cues <none|iframes|    Create cue (index) entries for this track:\n"
-    "          all>             None at all, only for I frames, for all.\n"
-    "  --language <lang>        Sets the language for the track (ISO639-2\n"
+    "  --default-track <TID>    Sets the 'default' flag for this track.\n"
+    "  --cues <TID:none|iframes|all>\n"
+    "                           Create cue (index) entries for this track:\n"
+    "                           None at all, only for I frames, for all.\n"
+    "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
     "                           code, see --list-languages).\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
@@ -420,12 +421,6 @@ static int get_type(char *filename) {
     type = TYPEDTS;
   else if (aac_reader_c::probe_file(mm_io, size))
     type = TYPEAAC;
-//     else if (microdvd_reader_c::probe_file(mm_io, size))
-//     type = TYPEMICRODVD;
-//   else if (vobsub_reader_c::probe_file(mm_io, size))
-//     type = TYPEVOBSUB;
-//   else if (chapter_information_probe(mm_io, size))
-//     type = TYPECHAPTERS;
   else
     type = TYPEUNKNOWN;
 
@@ -637,6 +632,35 @@ static void parse_split(const char *arg) {
 
   safefree(s);
   split_by_time = false;
+}
+
+static void parse_cues(char *s, cue_creation_t *cues) {
+  char *colon;
+
+  // Extract the track number.
+  if ((colon = strchr(s, ':')) == NULL) {
+    fprintf(stderr, "Error: Invalid cues option. No track ID specified (%s)."
+            "\n", s);
+    exit(1);
+  }
+  *colon = 0;
+  cues->id = strtol(s, NULL, 10);
+  s = &colon[1];
+  if (*s == 0) {
+    fprintf(stderr, "Error: Invalid cues option specified.\n");
+    exit(1);
+  }
+
+  if (!strcmp(s, "all"))
+    cues->cues = CUES_ALL;
+  else if (!strcmp(s, "iframes"))
+    cues->cues = CUES_IFRAMES;
+  else if (!strcmp(s, "none"))
+    cues->cues = CUES_NONE;
+  else {
+    fprintf(stderr, "Error: '%s' is an unsupported argument for --cues.\n", s);
+    exit(1);
+  }
 }
 
 static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
@@ -861,10 +885,11 @@ static void parse_args(int argc, char **argv) {
   filelist_t *file;
   char *s;
   audio_sync_t async;
+  cue_creation_t cues;
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.audio_syncs = new vector<audio_sync_t>;
-  ti.cues = CUES_UNSPECIFIED;
+  ti.cue_creations = new vector<cue_creation_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -1111,17 +1136,8 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: --cues lacks its argument.\n");
         exit(1);
       }
-      if (!strcmp(argv[i + 1], "all"))
-        ti.cues = CUES_ALL;
-      else if (!strcmp(argv[i + 1], "iframes"))
-        ti.cues = CUES_IFRAMES;
-      else if (!strcmp(argv[i + 1], "none"))
-        ti.cues = CUES_NONE;
-      else {
-        fprintf(stderr, "Error: '%s' is an unsupported argument for --cues.\n",
-                argv[i + 1]);
-        exit(1);
-      }
+      parse_cues(argv[i + 1], &cues);
+      ti.cue_creations->push_back(cues);
       i++;
 
     } else if (!strcmp(argv[i], "--default-track"))
@@ -1193,9 +1209,10 @@ static void parse_args(int argc, char **argv) {
       delete ti.vtracks;
       delete ti.stracks;
       delete ti.audio_syncs;
+      delete ti.cue_creations;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
-      ti.cues = CUES_UNSPECIFIED;
+      ti.cue_creations = new vector<cue_creation_t>;
       ti.aspect_ratio = 1.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;
