@@ -11,6 +11,7 @@
    OS dependant helper functions
 */
 
+#include "common.h"
 #include "config.h"
 #include "os.h"
 
@@ -22,7 +23,15 @@
 #if defined(SYS_WINDOWS)
 
 /*
-  The following two functions were written by Mike Matsnev <mike@po.cs.msu.su>
+   Utf8ToUtf16 and CreateFileUtf8
+
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   Written by Mike Matsnev <mike@po.cs.msu.su>
+   Modifications by Moritz Bunkus <moritz@bunkus.org>
+   Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
 */
 
 #include <windows.h>
@@ -108,14 +117,6 @@ Utf8ToUtf16(const char *utf8,
   return (unsigned)(d - utf16);
 }
 
-typedef HANDLE (WINAPI *CFW)(LPCWSTR lpFileName,
-                             DWORD dwDesiredAccess,
-                             DWORD dwShareMode,
-                             LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                             DWORD dwCreationDisposition,
-                             DWORD dwFlagsAndAttributes,
-                             HANDLE hTemplateFile);
-
 HANDLE
 CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwDesiredAccess,
@@ -124,27 +125,27 @@ CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwCreationDisposition,
                DWORD dwFlagsAndAttributes,
                HANDLE hTemplateFile) {
+  OSVERSIONINFOEX ovi;
+  bool unicode_possible;
+  HANDLE ret;
   // convert the name to wide chars
   int wreqbuf = Utf8ToUtf16(lpFileName, -1, NULL, 0);
   wchar_t *wbuffer = new wchar_t[wreqbuf];
   Utf8ToUtf16(lpFileName, -1, wbuffer, wreqbuf);
 
-  // check if CreateFileW is available
-  CFW cfw = NULL;
-  HMODULE hDll = GetModuleHandle("kernel32.dll");
-  if (hDll)
-    cfw = (CFW)GetProcAddress(hDll,"CreateFileW");
+  ovi.dwOSVersionInfoSize = sizeof(ovi);
+  GetVersionEx((OSVERSIONINFO *)&ovi);
+  unicode_possible = ovi.dwPlatformId == VER_PLATFORM_WIN32_NT;
 
-  HANDLE ret;
-  if (cfw)
-    ret = cfw(wbuffer, dwDesiredAccess, dwShareMode, lpSecurityAttributes,
-              dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
+  if (unicode_possible)
+    ret = CreateFileW(wbuffer, dwDesiredAccess, dwShareMode,
+                      lpSecurityAttributes, dwCreationDisposition,
+                      dwFlagsAndAttributes, hTemplateFile);
   else {
     int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, NULL, 0, NULL,
                                      NULL);
     char *buffer = new char[reqbuf];
     WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
-
     ret = CreateFileA(buffer, dwDesiredAccess, dwShareMode,
                       lpSecurityAttributes, dwCreationDisposition,
                       dwFlagsAndAttributes, hTemplateFile);
@@ -164,13 +165,11 @@ CreateFileUtf8(LPCSTR lpFileName,
 /*
    vsscanf for Win32
   
-   Written 5/2003 by <mgix@mgix.com>
-  
-   This code is in the Public Domain
-  
-   Read http://www.flipcode.org/cgi-bin/fcarticles.cgi?show=4&id=64176 for
-   an explanation.
-  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   Written by Mike Matsnev <mike@po.cs.msu.su>
 */
 
 int __declspec(naked)
