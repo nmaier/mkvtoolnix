@@ -149,13 +149,6 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                               vsrc->ti.private_size);
     return CAN_CONNECT_NO_PARAMETERS;
   }
-  if ((ti.private_data != NULL) &&
-      memcmp(ti.private_data, vsrc->ti.private_data, ti.private_size)) {
-    error_message = mxsprintf("The codec's private data does not match "
-                              "(lengths: %d and %d).", ti.private_size,
-                              vsrc->ti.private_size);
-    return CAN_CONNECT_NO_PARAMETERS;
-  }
   return CAN_CONNECT_YES;
 }
 
