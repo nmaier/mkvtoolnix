@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.60 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.61 2003/05/11 09:33:50 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -52,6 +52,7 @@
 #include "KaxInfoData.h"
 #include "KaxSeekHead.h"
 #include "KaxSegment.h"
+#include "KaxTags.h"
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
 #include "KaxTrackAudio.h"
@@ -984,6 +985,7 @@ int main(int argc, char **argv) {
   int i;
   packetizer_t *ptzr, *winner;
   filelist_t *file;
+  KaxTags *kax_tags;
 
   nice(2);
 
@@ -1070,17 +1072,26 @@ int main(int argc, char **argv) {
     kax_cues->Render(*static_cast<StdIOCallback *>(out));
     if (verbose == 1)
       fprintf(stdout, "\n");
-    if (write_meta_seek) {
+  }
+
+  // Render a dummy KaxTags element for now.
+  kax_tags = &GetChild<KaxTags>(*kax_segment);
+  kax_tags->Render(*static_cast<StdIOCallback *>(out));
+
+  // Write meta seek information if it is not disabled.
+  if (write_meta_seek) {
+    if (write_cues && cue_writing_requested)
       kax_seekhead->IndexThis(*kax_cues, *kax_segment);
-      kax_seekhead->UpdateSize();
-      if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
-                                         *static_cast<StdIOCallback *>(out),
-                                         true) == 0)
-        fprintf(stdout, "Warning: Could not update the meta seek information "
-                "as the space reserved for them was too small. Re-run "
-                "mkvmerge with the additional parameters '--meta-seek-size "
-                "%lld'.\n", kax_seekhead->ElementSize());
-    }
+
+    kax_seekhead->IndexThis(*kax_tags, *kax_segment);
+    kax_seekhead->UpdateSize();
+    if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
+                                       *static_cast<StdIOCallback *>(out),
+                                       true) == 0)
+      fprintf(stdout, "Warning: Could not update the meta seek information "
+              "as the space reserved for them was too small. Re-run "
+              "mkvmerge with the additional parameters '--meta-seek-size "
+              "%lld'.\n", kax_seekhead->ElementSize());
   }
 
   // Now re-render the kax_infos and fill in the biggest timecode
