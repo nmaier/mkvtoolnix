@@ -1,5 +1,8 @@
 2004-04-11  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The Flac packetizer was accessing
+	uninitialized memory resulting in a crash on Windows.
+
 	* avilib: bug fix: Fixed compilation on big endian systems.
 
 	* mkvmerge: bug fix: Fixed the handling of RealMedia files with
