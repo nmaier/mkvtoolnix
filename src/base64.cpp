@@ -66,13 +66,18 @@ static void encode_block(const unsigned char in[3], int len, string &out) {
   out += (unsigned char)(len > 2 ? base64_encoding[in[2] & 0x3f] : '=');
 }
 
-string base64_encode(const unsigned char *src, int src_len, bool line_breaks) {
+string base64_encode(const unsigned char *src, int src_len, bool line_breaks,
+                     int max_line_len) {
   unsigned char in[3];
-  int pos, i, len, blocks_out;
+  int pos, i, len, blocks_out, len_mod;
   string out;
 
   pos = 0;
   blocks_out = 0;
+
+  if (max_line_len < 4)
+    max_line_len = 4;
+  len_mod = max_line_len / 4;
 
   while (pos < src_len) {
     len = 0;
@@ -86,7 +91,7 @@ string base64_encode(const unsigned char *src, int src_len, bool line_breaks) {
     }
     encode_block(in, len, out);
     blocks_out++;
-    if (line_breaks && ((blocks_out % 18) == 0))
+    if (line_breaks && ((blocks_out % len_mod) == 0))
       out += "\n";
   }
 

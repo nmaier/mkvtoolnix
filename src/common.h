@@ -117,6 +117,7 @@ void strip(vector<string> &v, bool newlines = false);
 UTFstring cstr_to_UTFstring(const char *c);
 UTFstring cstrutf8_to_UTFstring(const char *c);
 char *UTFstring_to_cstr(const UTFstring &u);
+char *UTFstring_to_cstrutf8(const UTFstring &u);
 
 bool parse_int(const char *s, int64_t &value);
 bool parse_int(const char *s, int &value);

@@ -71,11 +71,15 @@ extern "C" {
 #include "common.h"
 #include "matroska.h"
 #include "mm_io.h"
+#include "tagwriter.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
 
 #define NAME "mkvextract"
+
+#define MODE_TRACKS 0
+#define MODE_TAGS   1
 
 class ssa_line_c {
 public:
@@ -130,6 +134,8 @@ typedef struct {
 
 vector<mkv_track_t> tracks;
 
+bool tags_extracted = false;
+
 mkv_track_t *find_track(int tid) {
   int i;
 
@@ -146,17 +152,23 @@ char typenames[14][20] = {"unknown", "Ogg" "AVI", "WAV", "SRT", "MP3", "AC3",
 
 void usage() {
   mxprint(stdout,
-    "Usage: mkvextract -i inname [TID1:outname1 [TID2:outname2 ...]]\n\n"
+    "Usage: mkvextract -i inname [TID1:outname1 [TID2:outname2 ...]]\n"
+    "   or  mkvextract -i inname -t\n\n"
+    " First operation mode extracts some tracks to external files.\n"
     "  -i inname      Use 'inname' as the source.\n"
     "  -c charset     Convert text subtitles to this charset.\n"
     "  TID:outname    Write track with the ID TID to 'outname'.\n"
+    "\n"
+    " Second operation mode extracts the tags from inname.\n"
+    "  -t, --tags     Only extract the tags and display them in XML\n"
+    "                 format suited for mkvmerge.\n"
     "\n"
     "  -v, --verbose  Increase verbosity.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n");
 }
 
-void parse_args(int argc, char **argv, char *&file_name) {
+void parse_args(int argc, char **argv, char *&file_name, int &mode) {
   int i, conv_handle;
   char *colon, *copy;
   int64_t tid;
@@ -165,16 +177,45 @@ void parse_args(int argc, char **argv, char *&file_name) {
   file_name = NULL;
   verbose = 0;
 
+  mode = MODE_TRACKS;
+
   // Find options that directly end the program.
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
       mxprint(stdout, "mkvextract v" VERSION "\n");
       exit(0);
+
     } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
                !strcmp(argv[i], "--help")) {
       usage();
       exit(0);
     }
+
+  for (i = 1; i < argc; i++)
+    if (!strcmp(argv[i], "-i")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: -i lacks a file name.\n");
+        exit(1);
+
+      } else if (file_name != NULL) {
+        mxprint(stderr, "Error: Only one input file is allowed.\n");
+        exit(1);
+
+      }
+      file_name = argv[i + 1];
+      i++;
+
+    } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tags"))
+      mode = MODE_TAGS;
+
+  if (file_name == NULL) {
+    mxprint(stderr, "Error: No input file given.\n\n");
+    usage();
+    exit(0);
+  }
+
+  if (mode == MODE_TAGS)
+    return;
 
   conv_handle = 0;
 
@@ -182,23 +223,17 @@ void parse_args(int argc, char **argv, char *&file_name) {
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose++;
-    else if (!strcmp(argv[i], "-i")) {
-      if ((i + 1) >= argc) {
-        mxprint(stderr, "Error: -i lacks a file name.\n");
-        exit(1);
-      } else if (file_name != NULL) {
-        mxprint(stderr, "Error: Only one input file is allowed.\n");
-        exit(1);
-      }
-      file_name = argv[i + 1];
+    else if (!strcmp(argv[i], "-i"))
       i++;
-    } else if (!strcmp(argv[i], "-c")) {
+
+    else if (!strcmp(argv[i], "-c")) {
       if ((i + 1) >= argc) {
         mxprint(stderr, "Error: -c lacks a charset.\n");
         exit(1);
       }
       conv_handle = utf8_init(argv[i + 1]);
       i++;
+
     } else {
       copy = safestrdup(argv[i]);
       colon = strchr(copy, ':');
@@ -226,12 +261,6 @@ void parse_args(int argc, char **argv, char *&file_name) {
       tracks.push_back(track);
       safefree(copy);
     }
-
-  if (file_name == NULL) {
-    mxprint(stdout, "Error: No input file given.\n\n");
-    usage();
-    exit(0);
-  }
 
   if (tracks.size() == 0) {
     mxprint(stdout, "Nothing to do.\n\n");
@@ -261,10 +290,10 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   memset(&level_buffer[1], ' ', 9);
   level_buffer[0] = '|';
   level_buffer[level] = 0;
-  mxprint(stdout, "(%s) %s+ %s", NAME, level_buffer, args_buffer);
+  mxprint(stderr, "(%s) %s+ %s", NAME, level_buffer, args_buffer);
   if (l != NULL)
-    mxprint(stdout, " at %llu", l->GetElementPosition());
-  mxprint(stdout, "\n");
+    mxprint(stderr, " at %llu", l->GetElementPosition());
+  mxprint(stderr, "\n");
 }
 
 void show_error(const char *fmt, ...) {
@@ -275,7 +304,7 @@ void show_error(const char *fmt, ...) {
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
   va_end(ap);
 
-  mxprint(stdout, "(%s) %s\n", NAME, args_buffer);
+  mxprint(stderr, "(%s) %s\n", NAME, args_buffer);
 }
 
 void flush_ogg_pages(mkv_track_t &track) {
@@ -309,7 +338,7 @@ void create_output_files() {
       tracks[i].in_use = false;
 
       if (tracks[i].codec_id == NULL) {
-        mxprint(stdout, "Warning: Track ID %lld is missing the CodecID. "
+        mxprint(stderr, "Warning: Track ID %lld is missing the CodecID. "
                 "Skipping track.\n", tracks[i].tid);
         continue;
       }
@@ -320,13 +349,13 @@ void create_output_files() {
         if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
             (tracks[i].v_fps == 0.0) || (tracks[i].private_data == NULL) ||
             (tracks[i].private_size < sizeof(alBITMAPINFOHEADER))) {
-          mxprint(stdout, "Warning: Track ID %lld is missing some critical "
+          mxprint(stderr, "Warning: Track ID %lld is missing some critical "
                   "information. Skipping track.\n", tracks[i].tid);
           continue;
         }
 
         if (strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
-          mxprint(stdout, "Warning: Extraction of video tracks with a CodecId "
+          mxprint(stderr, "Warning: Extraction of video tracks with a CodecId "
                   "other than " MKV_V_MSCOMP " is not supported at the "
                   "moment. Skipping track %lld.\n", tracks[i].tid);
           continue;
@@ -334,7 +363,7 @@ void create_output_files() {
 
       } else if (tracks[i].track_type == 'a') {
         if ((tracks[i].a_sfreq == 0.0) || (tracks[i].a_channels == 0)) {
-          mxprint(stdout, "Warning: Track ID %lld is missing some critical "
+          mxprint(stderr, "Warning: Track ID %lld is missing some critical "
                   "information. Skipping track.\n", tracks[i].tid);
           continue;
         }
@@ -342,7 +371,7 @@ void create_output_files() {
         if (!strcmp(tracks[i].codec_id, MKV_A_VORBIS)) {
           tracks[i].type = TYPEOGM; // Yeah, I know, I know...
           if (tracks[i].private_data == NULL) {
-            mxprint(stdout, "Warning: Track ID %lld is missing some critical "
+            mxprint(stderr, "Warning: Track ID %lld is missing some critical "
                     "information. Skipping track.\n", tracks[i].tid);
             continue;
           }
@@ -391,14 +420,14 @@ void create_output_files() {
         else if (!strcmp(tracks[i].codec_id, MKV_A_PCM)) {
           tracks[i].type = TYPEWAV; // Yeah, I know, I know...
           if (tracks[i].a_bps == 0) {
-            mxprint(stdout, "Warning: Track ID %lld is missing some critical "
+            mxprint(stderr, "Warning: Track ID %lld is missing some critical "
                     "information. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
         } else if (!strncmp(tracks[i].codec_id, "A_AAC", 5)) {
           if (strlen(tracks[i].codec_id) < strlen("A_AAC/MPEG4/LC")) {
-            mxprint(stdout, "Warning: Track ID %lld has an unknown AAC "
+            mxprint(stderr, "Warning: Track ID %lld has an unknown AAC "
                     "type. Skipping track.\n", tracks[i].tid);
             continue;
           }
@@ -410,7 +439,7 @@ void create_output_files() {
           else if (tracks[i].codec_id[10] == '2')
             tracks[i].aac_id = 1;
           else {
-            mxprint(stdout, "Warning: Track ID %lld has an unknown AAC "
+            mxprint(stderr, "Warning: Track ID %lld has an unknown AAC "
                     "type. Skipping track.\n", tracks[i].tid);
             continue;
           }
@@ -424,7 +453,7 @@ void create_output_files() {
           else if (!strcmp(&tracks[i].codec_id[12], "LTP"))
             tracks[i].aac_profile = 3;
           else {
-            mxprint(stdout, "Warning: Track ID %lld has an unknown AAC "
+            mxprint(stderr, "Warning: Track ID %lld has an unknown AAC "
                     "type. Skipping track.\n", tracks[i].tid);
             continue;
           }
@@ -457,13 +486,13 @@ void create_output_files() {
           tracks[i].type = TYPEAAC;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_DTS)) {
-          mxprint(stdout, "Warning: Extraction of DTS is not supported - yet. "
+          mxprint(stderr, "Warning: Extraction of DTS is not supported - yet. "
                   "I promise I'll implement it. Really Soon Now (tm)! "
                   "Skipping track.\n");
           continue;
 
         } else {
-          mxprint(stdout, "Warning: Unsupported CodecID '%s' for ID %lld. "
+          mxprint(stderr, "Warning: Unsupported CodecID '%s' for ID %lld. "
                   "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
           continue;
         }
@@ -475,13 +504,13 @@ void create_output_files() {
                  !strcmp(tracks[i].codec_id, MKV_S_TEXTASS))
           tracks[i].type = TYPESSA;
         else {
-          mxprint(stdout, "Warning: Unsupported CodecID '%s' for ID %lld. "
+          mxprint(stderr, "Warning: Unsupported CodecID '%s' for ID %lld. "
                   "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
           continue;
         }
 
       } else {
-        mxprint(stdout, "Warning: Unknown track type for ID %lld. Skipping "
+        mxprint(stderr, "Warning: Unknown track type for ID %lld. Skipping "
                 "track.\n", tracks[i].tid);
         continue;
       }
@@ -489,12 +518,12 @@ void create_output_files() {
       tracks[i].in_use = true;
       something_to_do = true;
     } else
-      mxprint(stdout, "Warning: There is no track with the ID '%lld' in the "
+      mxprint(stderr, "Warning: There is no track with the ID '%lld' in the "
               "input file.\n", tracks[i].tid);
   }
 
   if (!something_to_do) {
-    mxprint(stdout, "Nothing to do. Exiting.\n");
+    mxprint(stderr, "Nothing to do. Exiting.\n");
     exit(0);
   }
 
@@ -519,7 +548,7 @@ void create_output_files() {
         AVI_set_video(tracks[i].avi, tracks[i].v_width, tracks[i].v_height,
                       tracks[i].v_fps, ccodec);
 
-        mxprint(stdout, "Extracting track ID %lld to an AVI file '%s'.\n",
+        mxprint(stderr, "Extracting track ID %lld to an AVI file '%s'.\n",
                 tracks[i].tid, tracks[i].out_name);
 
       } else {
@@ -532,7 +561,7 @@ void create_output_files() {
           exit(1);
         }
 
-        mxprint(stdout, "Extracting track ID %lld to a %s file '%s'.\n",
+        mxprint(stderr, "Extracting track ID %lld to a %s file '%s'.\n",
                 tracks[i].tid, typenames[tracks[i].type - 1],
                 tracks[i].out_name);
 
@@ -699,7 +728,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         fields = split(s, ",", 9);
         safefree(s);
         if (fields.size() != 9) {
-          mxprint(stdout, "Warning: Invalid format for a SSA line ('%s'). "
+          mxprint(stderr, "Warning: Invalid format for a SSA line ('%s'). "
                   "Ignoring this entry.\n", s);
           continue;
         }
@@ -707,7 +736,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         // Convert the ReadOrder entry so that we can re-order the entries
         // later.
         if (!parse_int(fields[0].c_str(), num)) {
-          mxprint(stdout, "Warning: Invalid format for a SSA line ('%s'). "
+          mxprint(stderr, "Warning: Invalid format for a SSA line ('%s'). "
                   "Ignoring this entry.\n", s);
           continue;
         }
@@ -1259,11 +1288,9 @@ bool process_file(const char *file_name) {
         show_element(l1, 1, "Cluster");
         cluster = (KaxCluster *)l1;
 
-        if (verbose == 0) {
-          mxprint(stdout, "Progress: %d%%\r", (int)(in->getFilePointer() *
+        if (verbose == 0)
+          mxprint(stderr, "Progress: %d%%\r", (int)(in->getFilePointer() *
                                                     100 / file_size));
-          fflush(stdout);
-        }
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1408,8 +1435,121 @@ bool process_file(const char *file_name) {
   }
 }
 
+void extract_tags(const char *file_name) {
+  int upper_lvl_el;
+  // Elements for different levels
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
+  EbmlStream *es;
+  mm_io_c *in;
+
+  // open input file
+  try {
+    in = new mm_io_c(file_name, MODE_READ);
+  } catch (std::exception &ex) {
+    show_error("Error: Couldn't open input file %s (%s).", file_name,
+               strerror(errno));
+    return;
+  }
+
+  try {
+    es = new EbmlStream(*in);
+
+    // Find the EbmlHead element. Must be the first one.
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    if (l0 == NULL) {
+      show_error("Error: No EBML head found.");
+      delete es;
+
+      return;
+    }
+      
+    // Don't verify its data for now.
+    l0->SkipData(*es, l0->Generic().Context);
+    delete l0;
+
+    while (1) {
+      // Next element must be a segment
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+      if (l0 == NULL) {
+        show_error("No segment/level 0 element found.");
+        return;
+      }
+      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
+        show_element(l0, 0, "Segment");
+        break;
+      }
+
+      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+                   typeid(*l0).name());
+
+      l0->SkipData(*es, l0->Generic().Context);
+      delete l0;
+    }
+
+    upper_lvl_el = 0;
+    // We've got our segment, so let's find the tags
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
+    while (l1 != NULL) {
+      if (upper_lvl_el > 0)
+        break;
+      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
+        break;
+
+      if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
+        KaxTags &tags = *static_cast<KaxTags *>(l1);
+        tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
+
+        if (!tags_extracted) {
+          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n"
+                  "<Tags>\n");
+          tags_extracted = true;
+        }
+
+        write_tags_xml(tags, stdout);
+
+      } else
+        upper_lvl_el = 0;
+
+      if (upper_lvl_el > 0) {    // we're coming from l2
+        upper_lvl_el--;
+        delete l1;
+        l1 = l2;
+        if (upper_lvl_el > 0)
+          break;
+
+      } else if (upper_lvl_el == 0) {
+        l1->SkipData(*es, l1->Generic().Context);
+        delete l1;
+        upper_lvl_el = 0;
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
+
+      } else {
+        delete l1;
+        l1 = l2;
+      }
+
+    } // while (l1 != NULL)
+
+    delete l0;
+    delete es;
+    delete in;
+
+  } catch (exception &ex) {
+    show_error("Caught exception: %s", ex.what());
+    delete in;
+
+    return;
+  }
+
+  if (tags_extracted)
+    mxprint(stdout, "</Tags>\n");
+}
+
 int main(int argc, char **argv) {
   char *input_file;
+  int mode;
 
 #if defined(SYS_UNIX)
   nice(2);
@@ -1417,11 +1557,18 @@ int main(int argc, char **argv) {
 
   utf8_init(NULL);
 
-  parse_args(argc, argv, input_file);
-  process_file(input_file);
+  parse_args(argc, argv, input_file, mode);
+  if (mode == MODE_TRACKS) {
+    process_file(input_file);
 
-  if (verbose == 0)
-    mxprint(stdout, "Progress: 100%%\n");
+    if (verbose == 0)
+      mxprint(stderr, "Progress: 100%%\n");
+
+  } else if (mode == MODE_TAGS)
+    extract_tags(input_file);
+
+  else
+    die("mkvextract: Unknown mode!?");
 
   utf8_done();
 

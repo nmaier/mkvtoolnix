@@ -721,7 +721,8 @@ char *UTFstring_to_cstr(const UTFstring &u) {
 
   len = u.length();
   new_string = (char *)safemalloc(len + 1);
-  WideCharToMultiByte(CP_ACP, 0, u.c_str(), -1, new_string, len + 1, " ", &dummy);
+  WideCharToMultiByte(CP_ACP, 0, u.c_str(), -1, new_string, len + 1, " ",
+                      &dummy);
 
   return new_string;
 #else
@@ -735,6 +736,47 @@ char *UTFstring_to_cstr(const UTFstring &u) {
   sptr = u.c_str();
   old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
   setlocale(LC_CTYPE, "");
+  wcsrtombs(new_string, &sptr, len, NULL);
+  setlocale(LC_CTYPE, old_locale);
+  safefree(old_locale);
+
+  return new_string;
+#endif
+}
+
+char *UTFstring_to_cstrutf8(const UTFstring &u) {
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+  char *new_string;
+  int len;
+  BOOL dummy;
+
+  len = u.length();
+  new_string = (char *)safemalloc(len + 1);
+  WideCharToMultiByte(CP_ACP, 0, u.c_str(), -1, new_string, len + 1, " ",
+                      &dummy);
+
+  return new_string;
+#else
+  const wchar_t *sptr;
+  char *new_string, *old_locale;
+  int len, pos;
+  string new_locale;
+
+  len = u.length();
+  new_string = (char *)safemalloc(len * 4 + 1);
+  memset(new_string, 0, len * 4 + 1);
+  sptr = u.c_str();
+  old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
+  setlocale(LC_CTYPE, "");
+  new_locale = setlocale(LC_CTYPE, NULL);
+  if ((pos = new_locale.rfind(".")) >= 0)
+    new_locale.erase(pos);
+  new_locale += ".UTF-8";
+  if (setlocale(LC_CTYPE, new_locale.c_str()) == NULL)
+    die("Could not set the locale to %s. This is your normal locale with the "
+        "UTF-8 charset. Please consider your system documentation how to "
+        "generate this locale manually. For Debian you can use 'dpkg-reconfi"
+        "gure locales' and select the appropriate ones.", new_locale.c_str());
   wcsrtombs(new_string, &sptr, len, NULL);
   setlocale(LC_CTYPE, old_locale);
   safefree(old_locale);

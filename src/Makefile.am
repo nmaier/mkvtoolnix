@@ -46,8 +46,10 @@ mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			iso639.cpp iso639.h
 
 mkvextract_SOURCES = mkvextract.cpp \
+			base64.cpp base64.h \
 			common.cpp common.h \
-			mm_io.cpp mm_io.h
+			mm_io.cpp mm_io.h \
+			tagwriter.cpp tagwriter.h
 
 mkvmerge_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \

@@ -1802,8 +1802,10 @@ void finish_file() {
   out->setFilePointer(old_pos);
 
   // Render the tags if we have some.
-  if (kax_tags != NULL)
+  if (kax_tags != NULL) {
+    kax_tags->UpdateSize();
     kax_tags->Render(*out);
+  }
 
   // Write meta seek information if it is not disabled.
   if (write_meta_seek) {
