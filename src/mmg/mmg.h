@@ -113,6 +113,7 @@ vector<wxString> & strip(vector<wxString> &v, bool newlines = false);
 wxString to_utf8(const wxString &src);
 wxString from_utf8(const wxString &src);
 wxString unescape(const wxString &src);
+wxString format_date_time(time_t date_time);
 
 class mmg_app: public wxApp {
 public:

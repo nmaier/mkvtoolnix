@@ -25,11 +25,12 @@
 
 #include "wx/wx.h"
 #include "wx/clipbrd.h"
-#include "wx/file.h"
 #include "wx/config.h"
+#include "wx/datetime.h"
+#include "wx/file.h"
 #include "wx/fileconf.h"
-#include "wx/notebook.h"
 #include "wx/listctrl.h"
+#include "wx/notebook.h"
 #include "wx/statusbr.h"
 #include "wx/statline.h"
 
@@ -290,6 +291,17 @@ unescape(const wxString &src) {
   }
 
   return dst;
+}
+
+wxString
+format_date_time(time_t date_time) {
+  wxString s;
+  wxDateTime dt(date_time);
+
+  s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
+           dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
+           dt.GetSecond());
+  return s;
 }
 
 bool
@@ -1316,6 +1328,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   job.started_on = -1;
   job.finished_on = -1;
   job.description = new wxString(description);
+  job.log = new wxString();
   jobs.push_back(job);
 
   description.Printf(wxS("/jobs/%d.mmg"), job.id);
@@ -1361,6 +1374,7 @@ mmg_dialog::load_job_queue() {
     job.status =
       s == wxS("pending") ? jobs_pending :
       s == wxS("done") ? jobs_done :
+      s == wxS("done_warnings") ? jobs_done_warnings :
       s == wxS("aborted") ? jobs_aborted :
       jobs_failed;
     cfg->Read(wxS("added_on"), &value);
@@ -1371,6 +1385,9 @@ mmg_dialog::load_job_queue() {
     job.finished_on = value;
     cfg->Read(wxS("description"), &s);
     job.description = new wxString(s);
+    cfg->Read(wxS("log"), &s);
+    s.Replace(":::", "\n");
+    job.log = new wxString(s);
     jobs.push_back(job);
   }
 }
@@ -1401,12 +1418,16 @@ mmg_dialog::save_job_queue() {
     cfg->Write(wxS("status"),
                jobs[i].status == jobs_pending ? wxS("pending") :
                jobs[i].status == jobs_done ? wxS("done") :
+               jobs[i].status == jobs_done_warnings ? wxS("done_warnings") :
                jobs[i].status == jobs_aborted ? wxS("aborted") :
                wxS("failed"));
     cfg->Write(wxS("added_on"), jobs[i].added_on);
     cfg->Write(wxS("started_on"), jobs[i].started_on);
     cfg->Write(wxS("finished_on"), jobs[i].finished_on);
     cfg->Write(wxS("description"), *jobs[i].description);
+    s = *jobs[i].log;
+    s.Replace("\n", ":::");
+    cfg->Write(wxS("log"), s);
   }
   cfg->Flush();
 }

@@ -29,7 +29,6 @@
 #include "wx/wx.h"
 #include "wx/clipbrd.h"
 #include "wx/confbase.h"
-#include "wx/datetime.h"
 #include "wx/file.h"
 #include "wx/fileconf.h"
 #include "wx/listctrl.h"
@@ -48,6 +47,42 @@
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "jobs.h"
+
+#define JOB_LOG_DLG_WIDTH 600
+
+job_log_display_dlg::job_log_display_dlg(wxWindow *parent, wxString &log):
+  wxDialog(parent, -1, "Job output", wxDefaultPosition,
+           wxSize(JOB_LOG_DLG_WIDTH, 400), wxCAPTION) {
+  wxButton *b_ok;
+
+  new wxStaticText(this, -1, wxS("Output of the selected jobs:"),
+                   wxPoint(20, 20));
+  new wxTextCtrl(this, -1, log, wxPoint(20, 40),
+                 wxSize(JOB_LOG_DLG_WIDTH - 40, 300),
+                 wxTE_MULTILINE | wxTE_READONLY);
+  b_ok = new wxButton(this, wxID_OK, wxS("&Ok"),
+                      wxPoint(JOB_LOG_DLG_WIDTH / 2 - 40 - 80, 360),
+                      wxSize(80, -1));
+  b_ok->SetDefault();
+  new wxButton(this, ID_JOBS_B_SAVE_LOG, wxS("&Save"),
+               wxPoint(JOB_LOG_DLG_WIDTH / 2 + 40, 360),
+               wxSize(80, -1));
+  text = log;
+
+  ShowModal();
+}
+
+void
+job_log_display_dlg::on_save(wxCommandEvent &evt) {
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+                   wxS("Text files (*.txt)|*.txt|" ALLFILES),
+                   wxSAVE | wxOVERWRITE_PROMPT);
+  if(dlg.ShowModal() == wxID_OK) {
+    wxFile file(dlg.GetPath(), wxFile::write);
+    file.Write(text);
+    last_open_dir = dlg.GetDirectory();
+  }
+}
 
 job_dialog::job_dialog(wxWindow *parent):
   wxDialog(parent, -1, "Job queue management", wxDefaultPosition,
@@ -107,6 +142,8 @@ job_dialog::job_dialog(wxWindow *parent):
                             wxPoint(700, 115), wxSize(80, -1));
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, wxS("D&elete"),
                           wxPoint(700, 150), wxSize(80, -1));
+  b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, wxS("&View log"),
+                            wxPoint(700, 195), wxSize(80, -1));
 
   b_ok = new wxButton(this, ID_JOBS_B_OK, wxS("&Ok"), wxPoint(20, 355),
                       wxSize(100, -1));
@@ -127,7 +164,6 @@ job_dialog::job_dialog(wxWindow *parent):
 void
 job_dialog::create_list_item(int i) {
   wxString s;
-  wxDateTime dt;
   long dummy;
 
   s.Printf(wxS("%d"), jobs[i].id);
@@ -136,31 +172,22 @@ job_dialog::create_list_item(int i) {
   s.Printf(wxS("%s"),
            jobs[i].status == jobs_pending ? wxS("pending") :
            jobs[i].status == jobs_done ? wxS("done") :
+           jobs[i].status == jobs_done_warnings ? wxS("done_warnings") :
            jobs[i].status == jobs_aborted ? wxS("aborted") :
            wxS("failed"));
   lv_jobs->SetItem(dummy, 1, s);
 
-  dt.Set((time_t)jobs[i].added_on);
-  s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-           dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-           dt.GetSecond());
-  lv_jobs->SetItem(dummy, 2, s);
+  lv_jobs->SetItem(dummy, 2, format_date_time(jobs[i].added_on));
 
-  if (jobs[i].started_on != -1) {
-    dt.Set((time_t)jobs[i].started_on);
-    s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-             dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-             dt.GetSecond());
-  } else
+  if (jobs[i].started_on != -1)
+    s = format_date_time(jobs[i].started_on);
+  else
     s = wxS("                   ");
   lv_jobs->SetItem(dummy, 3, s);
 
-  if (jobs[i].finished_on != -1) {
-    dt.Set((time_t)jobs[i].finished_on);
-    s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-             dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-             dt.GetSecond());
-  } else
+  if (jobs[i].finished_on != -1)
+    s = format_date_time(jobs[i].finished_on);
+  else
     s = wxS("                   ");
   lv_jobs->SetItem(dummy, 4, s);
 
@@ -177,6 +204,7 @@ job_dialog::enable_buttons(bool enable) {
   b_reenable->Enable(enable);
   b_delete->Enable(enable);
   b_start_selected->Enable(enable);
+  b_view_log->Enable(enable);
 }
 
 void
@@ -284,9 +312,42 @@ job_dialog::on_reenable(wxCommandEvent &evt) {
 }
 
 void
+job_dialog::on_view_log(wxCommandEvent &evt) {
+  job_log_display_dlg *dlg;
+  wxString log;
+  int i;
+
+  for (i = 0; i < jobs.size(); i++) {
+    if (!lv_jobs->IsSelected(i))
+      continue;
+    log += wxS("--- BEGIN job ") + wxString::Format(wxS("%d"), jobs[i].id) +
+      wxS(" (") + *jobs[i].description + wxS("), added on ") +
+      format_date_time(jobs[i].added_on) + wxS("\n");
+    if (jobs[i].log->size() == 0)
+      log += wxS("--- No job output found.\n");
+    else
+      log += *jobs[i].log;
+    if (log.Last() != wxC('\n'))
+      log += wxS("\n");
+    log += wxS("--- END job ") + wxString::Format(wxS("%d"), jobs[i].id) +
+      wxS("\n\n");
+  }
+
+  if (log.length() == 0)
+    return;
+  dlg = new job_log_display_dlg(this, log);
+  delete dlg;
+}
+
+void
 job_dialog::on_item_selected(wxCommandEvent &evt) {
   enable_buttons(lv_jobs->GetSelectedItemCount() > 0);
 }
+
+IMPLEMENT_CLASS(job_log_display_dlg, wxDialog);
+BEGIN_EVENT_TABLE(job_log_display_dlg, wxDialog)
+  EVT_BUTTON(ID_JOBS_B_SAVE_LOG, job_log_display_dlg::on_save)
+END_EVENT_TABLE();
 
 IMPLEMENT_CLASS(job_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_dialog, wxDialog)
@@ -297,6 +358,7 @@ BEGIN_EVENT_TABLE(job_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_DOWN, job_dialog::on_down)
   EVT_BUTTON(ID_JOBS_B_DELETE, job_dialog::on_delete)
   EVT_BUTTON(ID_JOBS_B_REENABLE, job_dialog::on_reenable)
+  EVT_BUTTON(ID_JOBS_B_VIEW_LOG, job_dialog::on_view_log)
   EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
   EVT_LIST_ITEM_DESELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
 END_EVENT_TABLE();

@@ -35,10 +35,13 @@
 #define ID_JOBS_B_REENABLE                17007
 #define ID_JOBS_LV_JOBS                   17008
 #define ID_JOBS_B_START_SELECTED          17009
+#define ID_JOBS_B_VIEW_LOG                17010
+#define ID_JOBS_B_SAVE_LOG                17011
 
 enum job_status_t {
   jobs_pending,
   jobs_done,
+  jobs_done_warnings,
   jobs_aborted,
   jobs_failed
 };
@@ -47,10 +50,22 @@ typedef struct {
   int32_t id;
   job_status_t status;
   int32_t added_on, started_on, finished_on;
-  wxString *description;
+  wxString *description, *log;
 } job_t;
 
 extern vector<job_t> jobs;
+
+class job_log_display_dlg: public wxDialog {
+  DECLARE_CLASS(job_log_display_dlg);
+  DECLARE_EVENT_TABLE();
+protected:
+  wxString text;
+
+public:
+  job_log_display_dlg(wxWindow *parent, wxString &log);
+
+  void on_save(wxCommandEvent &evt);
+};
 
 class job_dialog: public wxDialog {
   DECLARE_CLASS(job_dialog);
@@ -58,7 +73,7 @@ class job_dialog: public wxDialog {
 protected:
   wxListView *lv_jobs;
   wxButton *b_ok, *b_up, *b_down, *b_abort, *b_abort_after_current, *b_delete;
-  wxButton *b_start, *b_start_selected, *b_reenable;
+  wxButton *b_start, *b_start_selected, *b_reenable, *b_view_log;
 
 public:
   job_dialog(wxWindow *parent);
@@ -70,6 +85,7 @@ public:
   void on_up(wxCommandEvent &evt);
   void on_down(wxCommandEvent &evt);
   void on_delete(wxCommandEvent &evt);
+  void on_view_log(wxCommandEvent &evt);
   void on_item_selected(wxCommandEvent &evt);
 
   void enable_buttons(bool enable);
