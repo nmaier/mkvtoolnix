@@ -173,12 +173,14 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
       } else {
         ti->aspect_ratio = dprop->aspect_ratio;
         ti->aspect_ratio_given = true;
+        ti->aspect_ratio_is_factor = dprop->ar_factor;
       }
     }
   }
   if (ti->aspect_ratio_given && ti->display_dimensions_given)
-    mxerror(_("Both '--aspect-ratio' and '--display-dimensions' were given "
-              "for track %lld of '%s'.\n"), ti->id, ti->fname);
+    mxerror(_("Both '%s' and '--display-dimensions' were given "
+              "for track %lld of '%s'.\n"), ti->aspect_ratio_is_factor ?
+            _("Aspect ratio factor") : _("Aspect ratio"), ti->id, ti->fname);
 
   memset(ti->fourcc, 0, 5);
   // Let's see if the user has specified a FourCC for this track.
@@ -623,6 +625,9 @@ generic_packetizer_c::set_headers() {
         } else {
           if (!ti->aspect_ratio_given)
             ti->aspect_ratio = (float)hvideo_pixel_width /
+              (float)hvideo_pixel_height;
+          else if (ti->aspect_ratio_is_factor)
+            ti->aspect_ratio = (float)hvideo_pixel_width * ti->aspect_ratio /
               (float)hvideo_pixel_height;
           if (ti->aspect_ratio >
               ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {

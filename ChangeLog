@@ -1,5 +1,12 @@
 2004-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added a new parameter
+	--aspect-ratio-factor.
+
+	* mkvinfo: bug fix: Strings from chapters and tags were shown in
+	UTF-8 instead of the local charset. This bug was introduced around
+	2004-08-28.
+
 	* mkvmerge: bug fix: Not all chapter elements were copied
 	correctly from a source Matroska file.
 

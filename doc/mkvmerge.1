@@ -342,8 +342,9 @@ player should scale the image on playback to: display width and display height.
 These values can be set with this option, e.g. '1:640x480'.
 .br
 Another way to specify the values is to use the
-\fB\-\-aspect\-ratio\fR option (see below). These options are mutually
-exclusive.
+\fB\-\-aspect\-ratio\fR or the \fB\-\-aspect\-ratio\-factor\fR
+option (see below).
+These options are mutually exclusive.
 .TP
 \fB\-\-aspect\-ratio\fR <\fITID\fR:\fIar\fR|\fIw\fR/\fIh\fR>
 Matroska files contain two values that set the display properties that
@@ -353,6 +354,11 @@ calculate the display width and display height based on the image's
 original width and height and the aspect ratio given with this option.
 The ratio can be given either as a floating point number or as
 \'width/height', e.g. 16/9.
+.TP
+\fB\-\-aspect\-ratio\-factor\fR <\fITID\fR:\fIar\fR|\fIw\fR/\fIh\fR>
+Another way to set the aspect ratio is to specify a factor. The original
+aspect ratio is first multiplied with this factor and used as the target
+aspect ratio afterwards.
 .br
 Another way to specify the values is to use the
 \fB\-\-aspect\-ratio\fR option (see above). These options are mutually
