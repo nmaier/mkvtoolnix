@@ -681,8 +681,7 @@ parse_split(const string &arg) {
 
     mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
     split_after = secs + mins * 60 + hours * 3600;
-    if ((hours < 0) || (mins < 0) || (mins > 59) ||
-        (secs < 0) || (secs > 59) || (split_after < 10))
+    if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
       mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
               arg.c_str());
 
@@ -721,10 +720,6 @@ parse_split(const string &arg) {
     mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
 
   split_after *= modifier;
-  if (split_after <= (1024 * 1024))
-    mxerror(_("Invalid split size in '--split %s': The size is too small.\n"),
-            arg.c_str());
-
   split_by_time = false;
 }
 
