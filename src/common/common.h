@@ -205,7 +205,7 @@ bool MTX_DLL_API hack_engaged(const char *hack);
 
 extern int MTX_DLL_API verbose;
 
-#define foreach(it, vec) for (it = vec.begin(); it < vec.end(); it++)
+#define foreach(it, vec) for (it = (vec).begin(); it < (vec).end(); it++)
 
 class MTX_DLL_API bit_cursor_c {
 private:
