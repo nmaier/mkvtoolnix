@@ -13,9 +13,10 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.18 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.19 2003/05/18 20:40:11 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Peter Niemayer <niemayer@isg.de>
 */
 
 #include <stdlib.h>
@@ -28,13 +29,59 @@
 #include "error.h"
 #include "r_wav.h"
 #include "p_pcm.h"
+#include "p_dts.h"
+#include "dts_common.h"
 
 extern "C" {
 #include <avilib.h> // for wave_header
 }
 
+void dts_14_to_dts_16(unsigned short * src, const unsigned long srcwords,
+                      unsigned short * dst) {
+	// srcwords has to be a multiple of 8!
+	// you will get (srcbytes >> 3)*7 destination bytes!
+	
+	const unsigned long l = srcwords >> 3;
+	
+	for (unsigned long b = 0; b < l; b++) {
+		unsigned short src_0 = (src[0]>>8) | (src[0]<<8);
+		unsigned short src_1 = (src[1]>>8) | (src[1]<<8);
+		// 14 + 2
+		unsigned short dst_0 = (src_0 << 2)   | ((src_1 & 0x3fff) >> 12);
+		dst[0] = (dst_0>>8) | (dst_0<<8);
+		// 12 + 4
+		unsigned short src_2 = (src[2]>>8) | (src[2]<<8);
+		unsigned short dst_1 = (src_1 << 4)  | ((src_2 & 0x3fff) >> 10);
+		dst[1] = (dst_1>>8) | (dst_1<<8);
+		// 10 + 6
+		unsigned short src_3 = (src[3]>>8) | (src[3]<<8);
+		unsigned short dst_2 = (src_2 << 6)  | ((src_3 & 0x3fff) >> 8);
+		dst[2] = (dst_2>>8) | (dst_2<<8);
+		// 8  + 8
+		unsigned short src_4 = (src[4]>>8) | (src[4]<<8);
+		unsigned short dst_3 = (src_3 << 8)  | ((src_4 & 0x3fff) >> 6);
+		dst[3] = (dst_3>>8) | (dst_3<<8);
+		// 6  + 10
+		unsigned short src_5 = (src[5]>>8) | (src[5]<<8);
+		unsigned short dst_4 = (src_4 << 10) | ((src_5 & 0x3fff) >> 4);
+		dst[4] = (dst_4>>8) | (dst_4<<8);
+		// 4  + 12
+		unsigned short src_6 = (src[6]>>8) | (src[6]<<8);
+		unsigned short dst_5 = (src_5 << 12) | ((src_6 & 0x3fff) >> 2);
+		dst[5] = (dst_5>>8) | (dst_5<<8);
+		// 2  + 14
+		unsigned short src_7 = (src[7]>>8) | (src[7]<<8);
+		unsigned short dst_6 = (src_6 << 14) | ((src_7 & 0x3fff) >> 2);
+		dst[6] = (dst_6>>8) | (dst_6<<8);
+		
+		dst += 7;
+		src += 8;
+	}
+}
+
 int wav_reader_c::probe_file(FILE *file, int64_t size) {
   wave_header wheader;
+
   if (size < sizeof(wave_header))
     return 0;
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -48,12 +95,16 @@ int wav_reader_c::probe_file(FILE *file, int64_t size) {
       strncmp((char *)wheader.riff.wave_id, "WAVE", 4) ||
       strncmp((char *)wheader.data.id, "data", 4))
     return 0;
+
   return 1;    
 }
 
 wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int64_t size;
+
+  pcmpacketizer = 0;
+  dtspacketizer = 0;
   
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("wav_reader: Could not open source file.");
@@ -67,15 +118,69 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
   if (fread(&wheader, 1, sizeof(wheader), file) != sizeof(wheader))
     throw error_c("wav_reader: could not read WAVE header.");
   bps = wheader.common.wChannels * wheader.common.wBitsPerSample *
-        wheader.common.dwSamplesPerSec / 8;
+    wheader.common.dwSamplesPerSec / 8;
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
-  pcmpacketizer = new pcm_packetizer_c(this, wheader.common.dwSamplesPerSec,
-                                       wheader.common.wChannels,
-                                       wheader.common.wBitsPerSample, ti);
-  if (verbose)
-    fprintf(stdout, "Using WAV demultiplexer for %s.\n+-> Using " \
-            "PCM output module for audio stream.\n", ti->fname);
+  
+	{
+		// check wether .wav file contains DTS data...
+		unsigned short obuf[max_dts_packet_size/2];		
+		unsigned short buf[2][max_dts_packet_size/2];		
+		int cur_buf = 0;
+		
+		long rlen = fread(obuf, 1, max_dts_packet_size, file);
+		fseek(file, sizeof(wheader), SEEK_SET);
+		
+		for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
+			memcpy(buf[cur_buf], obuf, rlen);
+			
+			if (dts_swap_bytes) {
+				swab(buf[cur_buf], buf[cur_buf^1], rlen);
+				cur_buf ^= 1;
+			}
+			
+			for (dts_14_16 = 0; dts_14_16 < 2; dts_14_16++) {
+				if (dts_14_16) {
+					unsigned long words = rlen / (8*sizeof(short));
+					dts_14_to_dts_16(buf[cur_buf], words*8, buf[cur_buf^1]);
+					cur_buf ^= 1;
+				}
+				
+				dts_header_t dtsheader;
+				int pos = find_dts_header((const unsigned char *)buf[cur_buf], rlen,
+                                  &dtsheader);
+				
+				if (pos >= 0) {
+					fprintf(stderr,"Using WAV demultiplexer for %s.\n"
+                  "+-> Using DTS output module for audio stream. %s %s\n",
+                  ti->fname, (dts_swap_bytes)? "(bytes swapped)" : "",
+                  (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
+					print_dts_header(&dtsheader);
+					
+					dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
+					// .wav's with DTS are always filled up with other stuff to match
+          // the bitrate...
+					dtspacketizer->skipping_is_normal = true;
+					break;
+				}
+
+			}
+			
+			if (dtspacketizer)
+        break;
+		}
+	}
+  
+  if (!dtspacketizer) {
+	  pcmpacketizer = new pcm_packetizer_c(this, wheader.common.dwSamplesPerSec,
+                                         wheader.common.wChannels,
+                                         wheader.common.wBitsPerSample, ti);
+	  
+	  if (verbose)
+      fprintf(stdout, "Using WAV demultiplexer for %s.\n+-> Using "
+            	"PCM output module for audio stream.\n", ti->fname);
+  }
+
 }
 
 wav_reader_c::~wav_reader_c() {
@@ -85,26 +190,68 @@ wav_reader_c::~wav_reader_c() {
     safefree(chunk);
   if (pcmpacketizer != NULL)
     delete pcmpacketizer;
+  if (dtspacketizer != NULL)
+    delete dtspacketizer;
 }
 
 int wav_reader_c::read() {
-  int nread;
+  if (pcmpacketizer) {
+    int nread;
     
-  nread = fread(chunk, 1, bps, file);
-  if (nread <= 0)
-    return 0;
+    nread = fread(chunk, 1, bps, file);
+    if (nread <= 0)
+      return 0;
+  
+    pcmpacketizer->process(chunk, nread);
 
-  pcmpacketizer->process(chunk, nread);
-  bytes_processed += nread;
+    bytes_processed += nread;
 
-  if (nread != bps)
-    return 0;
-  else
-    return EMOREDATA;
+    if (nread != bps)
+      return 0;
+    else
+      return EMOREDATA;
+  }
+  
+  if (dtspacketizer) {
+    unsigned short buf[2][max_dts_packet_size/2];		
+    int cur_buf = 0;
+    long rlen = fread(buf[cur_buf], 1, max_dts_packet_size, file); 
+
+    if (rlen <= 0)
+      return 0;
+	 
+    if (dts_swap_bytes) {
+      swab(buf[cur_buf], buf[cur_buf^1], rlen);
+      cur_buf ^= 1;
+    }
+    
+    if (dts_14_16) {
+      unsigned long words = rlen / (8*sizeof(short));
+      //if (words*8*sizeof(short) != rlen) {
+			// unaligned problem, should not happen...
+      //}
+      dts_14_to_dts_16(buf[cur_buf], words*8, buf[cur_buf^1]);
+      cur_buf ^= 1;
+    }
+    
+    dtspacketizer->process((unsigned char *) (buf[cur_buf]), rlen);
+	 
+    if (rlen != max_dts_packet_size)
+      return 0;
+    else
+      return EMOREDATA;
+  }
+  
+  return 0;
 }
 
 packet_t *wav_reader_c::get_packet() {
-  return pcmpacketizer->get_packet();
+  if (pcmpacketizer)
+    return pcmpacketizer->get_packet();
+  else if (dtspacketizer)
+    return dtspacketizer->get_packet();
+
+  return NULL;
 }
 
 int wav_reader_c::display_priority() {
@@ -120,5 +267,8 @@ void wav_reader_c::display_progress() {
 }
 
 void wav_reader_c::set_headers() {
-  pcmpacketizer->set_headers();
+  if (pcmpacketizer)
+    pcmpacketizer->set_headers();
+  if (dtspacketizer)
+    dtspacketizer->set_headers();
 }

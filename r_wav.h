@@ -14,7 +14,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.h,v 1.10 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_wav.h,v 1.11 2003/05/18 20:40:11 mosu Exp $
     \brief class definitions for the WAV reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,6 +27,7 @@
 #include "common.h"
 #include "error.h"
 
+#include "p_dts.h"
 #include "p_pcm.h"
 
 extern "C" {
@@ -38,6 +39,8 @@ private:
   unsigned char *chunk;
   FILE *file;
   class pcm_packetizer_c *pcmpacketizer;
+  class dts_packetizer_c *dtspacketizer;
+  int dts_swap_bytes, dts_14_16;
   int bps;
   struct wave_header wheader;
   int64_t bytes_processed;
