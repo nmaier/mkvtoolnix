@@ -118,6 +118,7 @@ struct qtmp4_demuxer_t {
   uint32_t v_width, v_height, v_bitdepth;
   int64_t v_dts_offset;
   deque<int64_t> references;
+  bool avc_use_bframes;
   int64_t max_timecode;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
@@ -137,6 +138,7 @@ struct qtmp4_demuxer_t {
     esds_parsed(false),
     v_stsd(NULL), v_stsd_size(0),
     v_width(0), v_height(0), v_bitdepth(0), v_dts_offset(0),
+    avc_use_bframes(false),
     max_timecode(0),
     a_channels(0), a_bitdepth(0), a_samplerate(0.0),
     priv(NULL), priv_size(0),

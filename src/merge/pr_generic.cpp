@@ -55,6 +55,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   enqueued_bytes = 0;
   safety_last_timecode = 0;
   safety_last_duration = 0;
+  relaxed_timecode_checking = false;
   last_cue_timecode = -1;
   correction_timecode_offset = 0;
   append_timecode_offset = 0;
@@ -943,7 +944,8 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
   // 'timecode < safety_last_timecode' may only occur for B frames. In this
   // case we have the coding order, e.g. IPB1B2 and the timecodes
   // I: 0, P: 120, B1: 40, B2: 80.
-  if ((pack->timecode < safety_last_timecode) && (pack->fref < 0)) {
+  if (!relaxed_timecode_checking &&
+      (pack->timecode < safety_last_timecode) && (pack->fref < 0)) {
     if (htrack_type == track_audio) {
       int64_t needed_timecode_offset;
 

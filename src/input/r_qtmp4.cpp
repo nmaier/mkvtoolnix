@@ -29,6 +29,7 @@
 #include "aac_common.h"
 #include "avilib.h"
 #include "common.h"
+#include "hacks.h"
 #include "matroska.h"
 #include "p_aac.h"
 #include "p_mp3.h"
@@ -1037,7 +1038,8 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
         mxerror(FMT_FN "The video track does not start with a key "
                 "frame and a P frame but contains B frames. This is not "
                 "supported.\n", ti->fname.c_str());
-      fref = dmx->references[1];
+      if (dmx->avc_use_bframes)
+        fref = dmx->references[1];
 
     } else {
       // This is a P frame. At the moment it references the second stored frame
@@ -1452,6 +1454,10 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                                 false, ti));
         ti->private_data = NULL;
 
+        if (hack_engaged(ENGAGE_AVC_USE_BFRAMES))
+          dmx->avc_use_bframes = true;
+        else
+          PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
 
       } else {
         ti->private_size = dmx->v_stsd_size;

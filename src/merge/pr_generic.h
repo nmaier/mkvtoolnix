@@ -446,6 +446,7 @@ public:
   int connected_to;
   int64_t correction_timecode_offset;
   int64_t append_timecode_offset, max_timecode_seen;
+  bool relaxed_timecode_checking;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
