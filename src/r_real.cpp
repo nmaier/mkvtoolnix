@@ -608,11 +608,11 @@ int real_reader_c::read(generic_packetizer_c *) {
                                    dmx->c_keyframe ? -1 : dmx->c_reftimecode);
         dmx->c_data = chunk;
         dmx->c_len = length;
+        dmx->c_reftimecode = dmx->c_timecode;
         dmx->c_timecode = timecode;
-        if ((flags & 2) == 2) {
+        if ((flags & 2) == 2)
           dmx->c_keyframe = true;
-          dmx->c_reftimecode = timecode;
-        } else
+        else
           dmx->c_keyframe = false;
         dmx->c_numpackets++;
       } else {
