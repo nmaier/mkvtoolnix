@@ -130,8 +130,8 @@ extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
 
 wxString &break_line(wxString &line, int break_after = 80);
-wxString extract_language_code(wxString &source);
-wxString shell_escape(wxString &source);
+wxString extract_language_code(wxString source);
+wxString shell_escape(wxString source);
 
 class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);

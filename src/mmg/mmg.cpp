@@ -69,7 +69,7 @@ wxString &break_line(wxString &line, int break_after) {
   return line;
 }
 
-wxString extract_language_code(wxString &source) {
+wxString extract_language_code(wxString source) {
   wxString copy;
   int pos;
 
@@ -80,7 +80,7 @@ wxString extract_language_code(wxString &source) {
   return copy;
 }
 
-wxString shell_escape(wxString &source) {
+wxString shell_escape(wxString source) {
   uint32_t i;
   wxString escaped;
 
@@ -465,6 +465,68 @@ void mmg_dialog::update_command_line() {
       cmdline += "--attach-file-once \"";
     cmdline += shell_escape(*a->file_name) + "\" ";
   }
+
+  if (global_page->tc_title->GetValue().Length() > 0)
+    cmdline += "--title \"" +
+      shell_escape(global_page->tc_title->GetValue()) + "\" ";
+
+  if (global_page->cb_split->IsChecked()) {
+    if (global_page->rb_split_by_size->GetValue())
+      cmdline += "--split \"" +
+        shell_escape(global_page->cob_split_by_size->GetValue()) + "\" ";
+    else
+      cmdline += "--split \"" +
+        shell_escape(global_page->cob_split_by_time->GetValue()) + "\" ";
+
+    if (global_page->tc_split_max_files->GetValue().Length() > 0)
+      cmdline += "--split-max-files \"" +
+        shell_escape(global_page->tc_split_max_files->GetValue()) + "\" ";
+
+    if (global_page->cb_dontlink->IsChecked())
+      cmdline += "--dont-link ";
+  }
+
+  if (global_page->cob_aspect_ratio->GetValue().Length() > 0)
+    cmdline += "--aspect-ratio \"" +
+      shell_escape(global_page->cob_aspect_ratio->GetValue()) + "\" ";
+
+  if (global_page->cob_fourcc->GetValue().Length() > 0)
+    cmdline += "--fourcc \"" +
+      shell_escape(global_page->cob_fourcc->GetValue()) + "\" ";
+
+  if (global_page->tc_previous_segment_uid->GetValue().Length() > 0)
+    cmdline += "--link-to-previous \"" +
+      shell_escape(global_page->tc_previous_segment_uid->GetValue()) + "\" ";
+
+  if (global_page->tc_next_segment_uid->GetValue().Length() > 0)
+    cmdline += "--link-to-next \"" +
+      shell_escape(global_page->tc_next_segment_uid->GetValue()) + "\" ";
+
+  if (global_page->tc_chapters->GetValue().Length() > 0) {
+    cmdline += "--chapters \"" +
+      shell_escape(global_page->tc_chapters->GetValue()) + "\" ";
+    if (global_page->cob_chap_language->GetValue().Length() > 0)
+      cmdline += "--chapter-language \"" +
+        shell_escape(extract_language_code(global_page->
+                                           cob_chap_language->GetValue())) +
+        "\" ";
+    if (global_page->cob_chap_charset->GetValue().Length() > 0)
+      cmdline += "--chapter-charset \"" +
+        shell_escape(global_page->cob_chap_charset->GetValue()) + "\" ";
+  }
+
+  if (global_page->tc_global_tags->GetValue().Length() > 0)
+    cmdline += "--global-tags \"" +
+      shell_escape(global_page->tc_global_tags->GetValue()) + "\" ";
+
+  if (global_page->cb_no_cues->IsChecked())
+    cmdline += "--no-cues ";
+
+  if (global_page->cb_no_clusters->IsChecked())
+    cmdline += "--no-clusters-in-meta-seek ";
+
+  if (global_page->cb_enable_lacing->IsChecked())
+    cmdline += "--enable-lacing ";
 
   if (old_cmdline != cmdline)
     tc_cmdline->SetValue(cmdline);
