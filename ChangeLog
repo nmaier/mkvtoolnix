@@ -1,9 +1,14 @@
+2003-08-29  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Released v0.6.5.
+
 2003-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: On Windows the 'isspace()' function used to trim
         leading and trailing white spaces from tags considered some parts
         of valid UTF-8 character sequences to be white spaces as
-        well. Fixed by replacing 'isspace()' with 'isblank()'.
+        well. Fixed by replacing 'isspace()' with 'isblank()'. Reported
+        by Liisachan.
 
         * mkvmerge: Support for chosing the charset and language used in
         simple chapter files. Suggestion by Liisachan.
@@ -26,9 +31,10 @@
         in the source file are multiples of the frame rate, of course.
 
         * mkvmerge: The MP3 packetizer did not start at 0 with its
-        timecodes. It does now.
+        timecodes. It does now. Reported by alexnoe.
 
-        * mkvmerge: Proper support for dropped frames when reading AVI files.
+        * mkvmerge: Proper support for dropped frames when reading AVI
+        files. Reported by alley_cat, Horváth István.
 
         * mkvmerge: Fixed some missing default values in the Matroska
         reader (e.g. mono audio files). Reported by Liisachan.
