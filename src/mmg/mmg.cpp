@@ -1095,10 +1095,8 @@ mmg_dialog::on_about(wxCommandEvent &evt) {
                    "mkvmerge GUI is licensed under the GPL.\n"
                    "http://www.bunkus.org/videotools/mkvtoolnix/\n"
                    "\n"
-                   "Help is available in form of tool tips and the HTML "
-                   "documentation\n"
-                   "at\n"
-                   "http://www.bunkus.org/videotools/mkvtoolnix/doc/"),
+                   "Help is available in form of tool tips, from the\n"
+                   "'Help' menu or by pressing the 'F1' key."),
                wxT("About mkvmerge's GUI"),
                wxOK | wxCENTER | wxICON_INFORMATION);
 }
