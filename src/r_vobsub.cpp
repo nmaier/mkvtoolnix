@@ -188,15 +188,13 @@ void vobsub_reader_c::parse_headers() {
   string line;
   const char *sline;
   char language[3];
-  vobsub_track_c *track, *last_track;
-  int64_t filepos, last_pos, timestamp;
+  vobsub_track_c *track;
+  int64_t filepos, timestamp, next_pos;
   int hour, minute, second, msecond, idx;
-  uint32_t i;
+  uint32_t i, k, l, m;
 
   language[0] = 0;
   track = NULL;
-  last_track = NULL;
-  last_pos = -1;
 
   while (1) {
     if (!idx_file->getline2(line))
@@ -217,7 +215,6 @@ void vobsub_reader_c::parse_headers() {
         language[2] = 0;
       } else
         language[0] = 0;
-      last_track = track;
       track = new vobsub_track_c(language);
       tracks.push_back(track);
       continue;
@@ -239,15 +236,6 @@ void vobsub_reader_c::parse_headers() {
         filepos = filepos * 16 + hexvalue(sline[idx]);
         idx++;
       }
-
-      if (last_pos != -1) {
-        if (last_track != NULL) {
-          last_track->sizes.push_back(filepos - last_pos);
-          last_track = NULL;
-        } else
-          track->sizes.push_back(filepos - last_pos);
-      }
-      last_pos = filepos;
       track->positions.push_back(filepos);
 
       sscanf(&sline[11], "%02d:%02d:%02d:%03d", &hour, &minute, &second,
@@ -264,10 +252,19 @@ void vobsub_reader_c::parse_headers() {
     idx_data += "\n";
   }
 
-  if ((last_pos != -1) && (track != NULL)) {
-    sub_file->setFilePointer(0, seek_end);
-    track->sizes.push_back(sub_file->getFilePointer() - last_pos);
-    sub_file->setFilePointer(0);
+  filepos = sub_file->get_size();
+  for (i = 0; i < tracks.size(); i++) {
+    for (k = 0; k < tracks[i]->positions.size(); k++) {
+      next_pos = filepos;
+      for (l = 0; l < tracks.size(); l++) {
+        for (m = 0; m < tracks[l]->positions.size(); m++) {
+          if ((tracks[l]->positions[m] < next_pos) &&
+              (tracks[l]->positions[m] > tracks[i]->positions[k]))
+            next_pos = tracks[l]->positions[m];
+        }
+      }
+      tracks[i]->sizes.push_back(next_pos - tracks[i]->positions[k]);
+    }
   }
 
   for (i = 0; i < tracks.size(); i++)
@@ -277,6 +274,16 @@ void vobsub_reader_c::parse_headers() {
               "not have happened. Please file a bug report.\n",
               tracks[i]->positions.size(), tracks[i]->sizes.size(),
               tracks[i]->timecodes.size());
+
+  if (verbose > 1) {
+    for (i = 0; i < tracks.size(); i++) {
+      mxinfo("vobsub_reader: Track number %u\n", i);
+      for (k = 0; k < tracks[i]->positions.size(); k++)
+        mxinfo("vobsub_reader:  %04u position: %12lld, size: %12lld, "
+               "timecode: " "%12lld\n", k, tracks[i]->positions[k],
+               tracks[i]->sizes[k], tracks[i]->timecodes[k]);
+    }
+  }
 }
 
 int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
