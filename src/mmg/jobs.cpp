@@ -556,13 +556,17 @@ job_dialog::on_start_selected(wxCommandEvent &evt) {
 
 void
 job_dialog::on_delete(wxCommandEvent &evt) {
-  int i;
+  int i, j;
   vector<job_t>::iterator dit;
+  vector<bool> selected;
 
+  for (i = 0; i < lv_jobs->GetItemCount(); i++)
+    selected.push_back(lv_jobs->IsSelected(i));
   dit = jobs.begin();
   i = 0;
+  j =0;
   while (i < jobs.size()) {
-    if (lv_jobs->IsSelected(i)) {
+    if (selected[j]) {
       wxRemoveFile(wxString::Format(wxT("jobs/%d.mmg"), dit->id));
       jobs.erase(dit);
       lv_jobs->DeleteItem(i);
@@ -570,13 +574,16 @@ job_dialog::on_delete(wxCommandEvent &evt) {
       dit++;
       i++;
     }
+    j++;
   }
 
   mdlg->save_job_queue();
 }
 
 void
-job_dialog::swap_rows(int lower, int higher) {
+job_dialog::swap_rows(int lower,
+                      int higher,
+                      bool up) {
   job_t tmp_job;
   int tmp_i;
 
@@ -592,8 +599,13 @@ job_dialog::swap_rows(int lower, int higher) {
   jobs[lower] = jobs[higher];
   jobs[higher] = tmp_job;
 
-  lv_jobs->DeleteItem(higher);
-  create_list_item(lower);
+  if (up) {
+    lv_jobs->DeleteItem(lower);
+    create_list_item(higher);
+  } else {
+    lv_jobs->DeleteItem(higher);
+    create_list_item(lower);
+  }
 }
 
 void
@@ -611,15 +623,14 @@ job_dialog::on_up(wxCommandEvent &evt) {
     else
       first = false;
   }
+
   for (; i < jobs.size(); i++)
     if (selected[i]) {
-      swap_rows(i - 1, i);
+      swap_rows(i - 1, i, true);
       selected[i - 1] = true;
       selected[i] = false;
     }
-  for (i = 0; i < selected.size(); i++)
-    lv_jobs->Select(i, selected[i]);
-
+  
   mdlg->save_job_queue();
 }
 
@@ -640,13 +651,11 @@ job_dialog::on_down(wxCommandEvent &evt) {
   }
 
   for (; i >= 0; i--)
-    if (lv_jobs->IsSelected(i)) {
-      swap_rows(i + 1, i);
+    if (selected[i]) {
+      swap_rows(i + 1, i, false);
       selected[i + 1] =  true;
       selected[i] = false;
     }
-  for (i = 0; i < selected.size(); i++)
-    lv_jobs->Select(i, selected[i]);
 
   mdlg->save_job_queue();
 }

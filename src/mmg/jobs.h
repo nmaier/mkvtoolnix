@@ -122,7 +122,7 @@ public:
   void on_item_selected(wxListEvent &evt);
 
   void enable_buttons(bool enable);
-  void swap_rows(int lower, int higher);
+  void swap_rows(int lower, int higher, bool up);
   void create_list_item(int i);
   void start_jobs(vector<int> &jobs_to_start);
 }; 
