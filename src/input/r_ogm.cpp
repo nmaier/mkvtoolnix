@@ -1086,9 +1086,13 @@ ogm_reader_c::identify() {
       if (sdemuxers[i]->language != NULL)
         info += string("language:") + escape(sdemuxers[i]->language) +
           string(" ");
-      if (sdemuxers[i]->title != NULL)
-        info += string("track_name:") + escape(sdemuxers[i]->title) +
-          string(" ");
+      if (sdemuxers[i]->title != NULL) {
+        if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO)
+          info += string("title:");
+        else
+          info += string("track_name:");
+        info += escape(sdemuxers[i]->title) + string(" ");
+      }
       info += "]";
     } else
       info = "";
@@ -1137,8 +1141,7 @@ ogm_reader_c::handle_stream_comments() {
 
   for (i = 0; i < sdemuxers.size(); i++) {
     dmx = sdemuxers[i];
-    if (!dmx->in_use ||
-        (dmx->stype == OGM_STREAM_TYPE_FLAC) ||
+    if ((dmx->stype == OGM_STREAM_TYPE_FLAC) ||
         (dmx->packet_data.size() < 2))
       continue;
     comments = extract_vorbis_comments(dmx->packet_data[1],
