@@ -1,5 +1,8 @@
 2005-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: mkvmerge was wrongly outputting large numbers
+	of warnings when Remuxing AVC/h.264 video from a Matroska file.
+
 	* mmg: bug fix: The job queue was not loaded on startup on Windows
 	Unicode builds (another wxWidgets 2.5.3 problem).
 
