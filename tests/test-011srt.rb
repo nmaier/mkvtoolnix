@@ -6,7 +6,7 @@ class T_011srt < Test
   end
 
   def run
-    merge("data/textsubs/vde.srt")
+    merge("--sub-charset 0:ISO8859-1 data/textsubs/vde.srt")
     return hash_tmp
   end
 end
