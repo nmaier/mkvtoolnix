@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.23 2003/03/06 23:39:40 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.24 2003/03/13 09:27:36 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -58,6 +58,7 @@
 #include "r_ogm.h"
 #endif
 #include "r_srt.h"
+#include "r_matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -97,13 +98,14 @@ cluster_helper_c *cluster_helper = NULL;
 KaxSegment        kax_segment;
 KaxTracks        *kax_tracks;
 KaxTrackEntry    *kax_last_entry;
-int               track_number = 1;
+int               track_number = 0;
 
 StdIOCallback *out;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
+   {"mkv", TYPEMATROSKA, "general Matroska files"},
 #ifdef HAVE_OGGVORBIS
    {"ogg", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
 #endif // HAVE_OGGVORBIS
@@ -119,8 +121,8 @@ file_type_t file_types[] =
    {"   ", -1,      "Vorbis audio"},
 #endif // HAVE_OGGVORBIS
    {"   ", -1,      "Video (not MPEG1/2)"},
-//    {"   ", -1,      "uncompressed PCM audio"},
-//    {"   ", -1,      "text subtitles"},
+   {"   ", -1,      "uncompressed PCM audio"},
+   {"   ", -1,      "simple text subtitles"},
 //    {"   ", -1,      "VobSub subtitles"},
    {"   ", -1,      "MP3 audio"},
    {"   ", -1,      "AC3 audio"},
@@ -199,6 +201,8 @@ static int get_type(char *filename) {
     return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
     return TYPEAC3;
+  else if (mkv_reader_c::probe_file(f, size))
+    return TYPEMATROSKA;
 //     else if (microdvd_reader_c::probe_file(f, size))
 //     return TYPEMICRODVD;
 //   else if (vobsub_reader_c::probe_file(f, size)) 
@@ -601,6 +605,9 @@ static void parse_args(int argc, char **argv) {
       file->fp = NULL;
       try {
         switch (file->type) {
+          case TYPEMATROSKA:
+            file->reader = new mkv_reader_c(&ti);
+            break;
 #ifdef HAVE_OGGVORBIS
           case TYPEOGM:
             file->reader = new ogm_reader_c(&ti);
