@@ -853,9 +853,15 @@
     <tr>
       <td valign="top">
         <p>The chapter editor consists of three parts: the tree view of
-          all chapters, the three buttons used for adding and removing
+          all chapters, the four buttons used for adding and removing
           chapter entries, and the input boxes which are used for
           setting the chapter entry's data.</p>
+
+        <p>In Matroska files one chapter is defined by having a start
+          time, a name and a language that is associated with that
+          name. You can have several names for one chapter and each
+          associated with a different language. You may also add an end
+          time, but that is not mandatory.</p>
 
         <p>A new chapter file is started with the <code>New</code>
           option from the <code>Chapter editor</code> menu. You can add
@@ -873,14 +879,23 @@
 
         <p>After selecting a chapter entry you can change its data. The
           format for the start and end time are either
-          <code>HH:MM:SS.mmm</code> or simply <code>HH:MM:SS</code>. The
-          language codes are the same ISO639-2 language codes used
-          everywhere else. Please note that you can use more than one
-          language codes by separating them with spaces. You can add a
-          language code to the already entered codes by selecting it
-          from the drop down box. The same is true for the country codes
-          which are ISO639-1 codes. You can have more than country code
-          by separating them with spaces.</p>
+          <code>HH:MM:SS.mmm</code> or simply <code>HH:MM:SS</code>. One
+          chapter name will already have been added. You can edit it and
+          select the language that this name is given in. This way you
+          could provide names in several languages, e.g. 'The hero
+          arrives' with 'eng' as the language and 'Der Held kommt an'
+          with 'ger' as the language. Just hit the <code>Add name</code>
+          button if you need more entries and <code>Remove name</code>
+          in order to get rid of one.</p>
+
+        <p>Creating many chapters and always changing the language can
+          be quite some work. Therefore you can select which language
+          and country tags <i>mmg</i> should add by default with the
+          <code>Set default values</code> menu entry in the
+          <code>Chapters</code> menu. The <code>Set values</code> button
+          does something similar. With it you can apply a language
+          and/or country to the currently selected entry and all its
+          children.</p>
 
         <p>Saving chapters to XML files can be done with <code>Save</code> or
           <code>Save as</code>. <code>Save as</code> cannot be used to
