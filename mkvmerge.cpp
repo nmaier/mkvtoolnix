@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.6 2003/02/17 10:09:11 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.7 2003/02/17 11:33:50 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,6 +27,10 @@
 #include <unistd.h>
 
 #include <iostream>
+
+#ifdef GCC2
+#include <typeinfo>
+#endif
 
 #include "StdIOCallback.h"
 

@@ -27,8 +27,8 @@ AC_DEFUN(XIPH_PATH_OGG,
 [dnl 
 dnl Get the cflags and libraries
 dnl
-AC_ARG_WITH(ogg-prefix,[  --with-ogg-prefix=PFX      Prefix where libogg is installed (optional)], ogg_prefix="$withval", ogg_prefix="")
-AC_ARG_ENABLE(oggtest, [  --disable-oggtest          Do not try to compile and run a test Ogg program],, enable_oggtest=yes)
+AC_ARG_WITH(ogg-prefix,[  --with-ogg-prefix=PFX         Prefix where libogg is installed (optional)], ogg_prefix="$withval", ogg_prefix="")
+AC_ARG_ENABLE(oggtest, [  --disable-oggtest             Do not try to compile and run a test Ogg program],, enable_oggtest=yes)
 
   if test "x$ogg_prefix" != "x"; then
     ogg_args="$ogg_args --prefix=$ogg_prefix"
@@ -122,8 +122,8 @@ AC_DEFUN(XIPH_PATH_VORBIS,
 [dnl 
 dnl Get the cflags and libraries
 dnl
-AC_ARG_WITH(vorbis-prefix,[  --with-vorbis-prefix=PFX   Prefix where libvorbis is installed (optional)], vorbis_prefix="$withval", vorbis_prefix="")
-AC_ARG_ENABLE(vorbistest, [  --disable-vorbistest       Do not try to compile and run a test Vorbis program],, enable_vorbistest=yes)
+AC_ARG_WITH(vorbis-prefix,[  --with-vorbis-prefix=PFX      Prefix where libvorbis is installed (optional)], vorbis_prefix="$withval", vorbis_prefix="")
+AC_ARG_ENABLE(vorbistest, [  --disable-vorbistest          Do not try to compile and run a test Vorbis program],, enable_vorbistest=yes)
 
   if test "x$vorbis_prefix" != "x" ; then
     vorbis_args="$vorbis_args --prefix=$vorbis_prefix"
@@ -229,7 +229,7 @@ AC_DEFUN([AC_TRY_CFLAGS],
 
 AC_DEFUN(PATH_DEBUG,[
 AC_ARG_ENABLE([debug],
-    [  --enable-debug             compile with debug information])
+    [  --enable-debug                compile with debug information])
 if test x"$enable_debug" = x"yes"; then
     dnl debug information
     DEBUG_CFLAGS="-g -DDEBUG"
@@ -241,7 +241,7 @@ fi
 
 AC_DEFUN(PATH_PROFILING,[
 AC_ARG_ENABLE([profiling],
-    [  --enable-profiling         compile with profiling information])
+    [  --enable-profiling            compile with profiling information])
 if test x"$enable_profiling" = x"yes"; then
     dnl profiling information
     PROFILING_CFLAGS="-pg"
@@ -256,7 +256,7 @@ fi
 
 AC_DEFUN(PATH_DMALLOC,[
 AC_ARG_ENABLE([dmalloc],
-    [  --enable-dmalloc           link against dmalloc])
+    [  --enable-dmalloc              link against dmalloc])
 if test x"$enable_dmalloc" = x"yes"; then
     dnl debug information
     DMALLOC_CFLAGS="-DDMALLOC"
@@ -278,17 +278,42 @@ AC_DEFUN(PATH_MATROSKA,
 [dnl 
 dnl Get the cflags and libraries
 dnl
-AC_ARG_WITH(matroska-prefix,[  --with-matroska-prefix=PFX      Prefix where libmatroska is installed (optional)], matroska_prefix="$withval", matroska_prefix="")
-AC_ARG_ENABLE(matroskatest, [  --disable-matroskatest          Do not try to compile and run a test Matroska program],, enable_matroskatest=yes)
+AC_ARG_WITH(matroska-prefix,[  --with-matroska-prefix=PFX    Prefix where libmatroska is installed (optional)], matroska_prefix="$withval", matroska_prefix="")
+AC_ARG_WITH(matroska-include,[  --with-matroska-include=DIR   Path to where the libmatroska include files installed (optional)], matroska_include="$withval", matroska_include="")
+AC_ARG_WITH(matroska-lib,[  --with-matroska-lib=DIR       Path to where the libmatroska library installed (optional)], matroska_lib="$withval", matroska_lib="")
+AC_ARG_ENABLE(matroskatest, [  --disable-matroskatest        Do not try to compile and run a test Matroska program],, enable_matroskatest=yes)
 
   if test "x$matroska_prefix" != "x"; then
     matroska_args="$matroska_args --prefix=$matroska_prefix"
-    MATROSKA_CFLAGS="-I$matroska_prefix/include"
-    MATROSKA_LIBS="-L$matroska_prefix/lib"
+    if test "x$matroska_include" != "x"; then
+      MATROSKA_CFLAGS="-I$matroska_include"
+    else
+      MATROSKA_CFLAGS="-I$matroska_prefix/include"
+    fi
+    if test "x$matroska_lib" != "x"; then
+      MATROSKA_LIBS="-L$matroska_lib"
+    else
+      MATROSKA_LIBS="-L$matroska_prefix/lib"
+    fi
   elif test "x$prefix" != "xNONE"; then
     matroska_args="$matroska_args --prefix=$prefix"
-    MATROSKA_CFLAGS="-I$prefix/include"
-    MATROSKA_LIBS="-L$prefix/lib"
+    if test "x$matroska_include" != "x"; then
+      MATROSKA_CFLAGS="-I$matroska_include"
+    else
+      MATROSKA_CFLAGS="-I$prefix/include"
+    fi
+    if test "x$matroska_lib" != "x"; then
+      MATROSKA_LIBS="-L$matroska_lib"
+    else
+      MATROSKA_LIBS="-L$prefix/lib"
+    fi
+  else
+    if test "x$matroska_include" != "x"; then
+      MATROSKA_CFLAGS="-I$matroska_include"
+    fi
+    if test "x$matroska_lib" != "x"; then
+      MATROSKA_LIBS="-L$matroska_lib"
+    fi
   fi
 
   MATROSKA_LIBS="$MATROSKA_LIBS -lmatroska"
@@ -349,8 +374,8 @@ int main ()
        echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
        [ echo "*** The test program failed to compile or link. See the file config.log for the"
        echo "*** exact error that occured. This usually means Matroska was incorrectly installed"
-       echo "*** or that you have moved Matroska since it was installed. In the latter case, you"
-       echo "*** may want to edit the matroska-config script: $MATROSKA_CONFIG" ])
+       echo "*** or that you have moved Matroska since it was installed."
+       exit 1 ])
        CFLAGS="$ac_save_CFLAGS"
        LIBS="$ac_save_LIBS"
      fi
@@ -361,4 +386,24 @@ int main ()
   AC_SUBST(MATROSKA_CFLAGS)
   AC_SUBST(MATROSKA_LIBS)
   rm -f conf.matroskatest
+])
+dnl
+dnl g++ version test
+dnl
+AC_DEFUN(PATH_CXXVERSION,
+[dnl 
+  AC_MSG_CHECKING($CXX version)
+  CXXVER="`$CXX -v 2>&1 | grep version | sed 's;.*version \([[0-9]]*\)\..*;\1;'`"
+  CXXVER_CFLAGS=
+  if test "x$CXXVER" == "x2"; then
+    CXXVER_CFLAGS=-DGCC2
+    AC_MSG_RESULT(v2)
+  elif test "x$CXXVER" != "x3"; then
+    AC_MSG_RESULT(unknown)
+    echo "*** Unknown C++ compiler or version. Please contact Moritz Bunkus"
+    echo "*** <moritz@bunkus.org> if compilation fails."
+  else
+    AC_MSG_RESULT(v$CXXVER)
+  fi
+  AC_SUBST(CXXVER_CFLAGS)
 ])
