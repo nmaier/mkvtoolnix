@@ -141,7 +141,7 @@ tab_global::tab_global(wxWindow *parent):
                    wxDefaultSize, 0);
   tc_chapters =
     new wxTextCtrl(this, ID_TC_CHAPTERS, _(""), wxPoint(100, 240 + YOFF),
-                   wxSize(290, -1), wxTE_READONLY);
+                   wxSize(290, -1));
   tc_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: The "
                              "OGM like text format and the full featured "
                              "XML format."));
@@ -191,7 +191,7 @@ tab_global::tab_global(wxWindow *parent):
                    wxDefaultSize, 0);
   tc_global_tags =
     new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 320 + YOFF),
-                   wxSize(290, -1), wxTE_READONLY);
+                   wxSize(290, -1));
   tc_global_tags->SetToolTip(_T("The difference between tags associated with "
                                 "a track and global tags is explained in "
                                 "mkvmerge's documentation. Most of the time "

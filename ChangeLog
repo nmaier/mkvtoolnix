@@ -1,5 +1,12 @@
 2003-10-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: Added support for VobSub subtitles including their
+	compression options. Added the .m4a extension to the 'add file'
+	dialog.
+
+	* mmg: bug fix: Made the input boxes for file names (tags and
+	chapters) editable so that their contents can be deleted.
+
 	* mkvmerge: Adjusted the compression handling to the final content
 	encoding specs.
 

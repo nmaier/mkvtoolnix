@@ -122,6 +122,7 @@ using namespace libmatroska;
 #define ID_B_COPYTOCLIPBOARD 10075
 #define ID_CB_ENABLEDURATIONS 10076
 #define ID_CB_ENABLETIMESLICES 10077
+#define ID_CB_COMPRESSION 10078
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -164,7 +165,7 @@ typedef struct {
 
   bool default_track, aac_is_sbr;
   wxString *language, *track_name, *cues, *delay, *stretch, *sub_charset;
-  wxString *tags, *fourcc, *aspect_ratio;
+  wxString *tags, *fourcc, *aspect_ratio, *compression;
 } mmg_track_t;
 
 typedef struct {
@@ -204,6 +205,7 @@ protected:
   wxComboBox *cob_language, *cob_cues, *cob_sub_charset;
   wxComboBox *cob_aspect_ratio, *cob_fourcc;
   wxTextCtrl *tc_delay, *tc_track_name, *tc_stretch, *tc_tags;
+  wxComboBox *cob_compression;
 
   wxTimer value_copy_timer;
 
@@ -226,11 +228,13 @@ public:
   void on_cues_selected(wxCommandEvent &evt);
   void on_subcharset_selected(wxCommandEvent &evt);
   void on_browse_tags(wxCommandEvent &evt);
+  void on_tags_changed(wxCommandEvent &evt);
   void on_delay_changed(wxCommandEvent &evt);
   void on_stretch_changed(wxCommandEvent &evt);
   void on_track_name_changed(wxCommandEvent &evt);
   void on_aspect_ratio_changed(wxCommandEvent &evt);
   void on_fourcc_changed(wxCommandEvent &evt);
+  void on_compression_selected(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
 
   void no_track_mode();

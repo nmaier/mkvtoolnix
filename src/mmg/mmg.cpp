@@ -673,6 +673,11 @@ void mmg_dialog::update_command_line() {
         clargs.Add(*t->fourcc);
       }
 
+      if (t->compression->Length() > 0) {
+        cmdline += "--compression " + sid + ":" + *t->compression + " ";
+        clargs.Add("--compression");
+        clargs.Add(sid + ":" + *t->compression);
+      }
     }
 
     if (aids.length() > 0) {
