@@ -61,47 +61,47 @@ static void end_chapter_language(void *pdata);
 static void end_chapter_country(void *pdata);
 
 parser_element_t chapter_elements[] = {
-  {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL},
+  {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL, NULL},
 
   {"EditionEntry", ebmlt_master, 1, 0, 0, KaxEditionEntry_TheId, NULL,
-   end_edition_entry},
+   end_edition_entry, NULL},
   {"EditionUID", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionUID_TheId, NULL,
-   end_edition_uid},
+   end_edition_uid, NULL},
   {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
-   NULL, NULL},
+   NULL, NULL, NULL},
   {"EditionManaged", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionManaged_TheId,
-   NULL, NULL},
+   NULL, NULL, NULL},
   {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
-   NULL, NULL},
+   NULL, NULL, NULL},
 
   {"ChapterAtom", ebmlt_master, 2, 0, 0, KaxChapterAtom_TheId, NULL,
-   end_chapter_atom},
+   end_chapter_atom, NULL},
   {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxChapterUID_TheId, NULL,
-   end_chapter_uid},
+   end_chapter_uid, NULL},
   {"ChapterTimeStart", ebmlt_time, 3, 0, 0, KaxChapterTimeStart_TheId, NULL,
-   NULL},
+   NULL, NULL},
   {"ChapterTimeEnd", ebmlt_time, 3, 0, 0, KaxChapterTimeEnd_TheId, NULL,
-   NULL},
+   NULL, NULL},
   {"ChapterFlagHidden", ebmlt_bool, 3, 0, 0, KaxChapterFlagHidden_TheId,
-   NULL, NULL},
+   NULL, NULL, NULL},
   {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, KaxChapterFlagEnabled_TheId,
-   NULL, NULL},
+   NULL, NULL, NULL},
 
   {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
-   NULL, end_chapter_track},
+   NULL, end_chapter_track, NULL},
   {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE,
-   KaxChapterTrackNumber_TheId, NULL, NULL},
+   KaxChapterTrackNumber_TheId, NULL, NULL, NULL},
 
   {"ChapterDisplay", ebmlt_master, 3, 0, 0, KaxChapterDisplay_TheId,
-   NULL, end_chapter_display},
+   NULL, end_chapter_display, NULL},
   {"ChapterString", ebmlt_ustring, 4, 0, 0, KaxChapterString_TheId,
-   NULL, NULL},
+   NULL, NULL, NULL},
   {"ChapterLanguage", ebmlt_string, 4, 0, 0, KaxChapterLanguage_TheId,
-   NULL, end_chapter_language},
+   NULL, end_chapter_language, NULL},
   {"ChapterCountry", ebmlt_string, 4, 0, 0, KaxChapterCountry_TheId,
-   NULL, end_chapter_country},
+   NULL, end_chapter_country, NULL},
 
-  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
+  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
 };
 
 // {{{ XML chapters
