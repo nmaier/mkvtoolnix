@@ -71,7 +71,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
     new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Status and progress")),
                          wxVERTICAL);
   st_label = new wxStaticText(this, -1, wxT(""));
-  siz_status->Add(st_label, 0, wxALIGN_LEFT | wxALL, 5);
+  siz_status->Add(st_label, 0, wxGROW | wxALIGN_LEFT | wxALL, 5);
   g_progress = new wxGauge(this, -1, 100, wxDefaultPosition, wxSize(250, 15));
   siz_progress = new wxBoxSizer(wxHORIZONTAL);
   siz_progress->Add(0, 0, 1, wxGROW, 0);
