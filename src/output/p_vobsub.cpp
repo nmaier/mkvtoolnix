@@ -49,6 +49,7 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
   packet_num = 0;
   spu_size = 0;
   overhead = 0;
+  mpeg_version_warning_printed = false;
 
   set_track_type(track_subtitle);
 #ifdef HAVE_ZLIB_H
@@ -228,9 +229,14 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
           else if ((c & 0xf0) == 0x20)
             version = 2;
           else {
-            mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet %lld\n", c,
-                   packet_num);
-            return deliver();
+            if (!mpeg_version_warning_printed) {
+              mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet %lld for "
+                     "track %lld for timecode " FMT_TIMECODE ", assuming "
+                     "MPEG2. No further warnings will be printed for this "
+                     "track.\n", c, packet_num, ti->id, TIMECODE);
+              mpeg_version_warning_printed = true;
+            }
+            version = 2;
           }
 
           if (version == 4) {
