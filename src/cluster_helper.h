@@ -28,6 +28,10 @@
 
 using namespace std;
 
+#define RND_TIMECODE_SCALE(a) (irnd((double)(a) / \
+                                    (double)((int64_t)timecode_scale)) * \
+                               (int64_t)timecode_scale)
+
 typedef struct {
   KaxCluster *cluster;
   packet_t **packets;
@@ -62,7 +66,7 @@ public:
   packet_t *get_packet(int num);
   int get_packet_count();
   int render();
-  int free_ref(int64_t ref_timecode, void *source);
+  int free_ref(int64_t ref_timecode, generic_packetizer_c *source);
   int free_clusters();
   int get_cluster_content_size();
   int64_t get_max_timecode();
@@ -71,8 +75,10 @@ public:
 
 private:
   int find_cluster(KaxCluster *cluster);
-  ch_contents_t *find_packet_cluster(int64_t ref_timecode, void *source);
-  packet_t *find_packet(int64_t ref_timecode, void *source);
+  ch_contents_t *find_packet_cluster(int64_t ref_timecode,
+                                     generic_packetizer_c *source);
+  packet_t *find_packet(int64_t ref_timecode,
+                        generic_packetizer_c *source);
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);

@@ -52,6 +52,9 @@ using namespace std;
 #define DEFTRACK_TYPE_VIDEO 1
 #define DEFTRACK_TYPE_SUBS  2
 
+class generic_packetizer_c;
+class generic_reader_c;
+
 class memory_c {
 public:
   unsigned char *data;
@@ -114,8 +117,9 @@ typedef struct {
   unsigned char *data;
   int length, superseeded, ref_priority;
   int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
+  int64_t unmodified_assigned_timecode, unmodified_duration;
   bool duration_mandatory;
-  void *source;
+  generic_packetizer_c *source;
 } packet_t;
 
 typedef struct {
@@ -231,8 +235,6 @@ public:
     return start_frame < cmp.start_frame;
   }
 };
-
-class generic_packetizer_c;
 
 typedef struct packetizer_container_t {
   generic_packetizer_c *orig;

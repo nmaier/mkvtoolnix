@@ -101,9 +101,6 @@ cluster_helper_c::get_cluster() {
   return NULL;
 }
 
-#define RND_TIMECODE_SCALE(a) (a / irnd(timecode_scale) * \
-                               irnd(timecode_scale))
-
 void
 cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
@@ -113,6 +110,8 @@ cluster_helper_c::add_packet(packet_t *packet) {
   bool split;
 
   // Normalize the timecodes according to the timecode scale.
+  packet->unmodified_assigned_timecode = packet->assigned_timecode;
+  packet->unmodified_duration = packet->duration;
   packet->timecode = RND_TIMECODE_SCALE(packet->timecode);
   if (packet->duration > 0)
     packet->duration = RND_TIMECODE_SCALE(packet->duration);
@@ -134,8 +133,8 @@ cluster_helper_c::add_packet(packet_t *packet) {
 
   if (splitting && (file_num <= split_max_num_files) &&
       (packet->bref == -1) &&
-      ((((generic_packetizer_c *)packet->source)->get_track_type() ==
-        track_video) || !video_track_present)) {
+      ((packet->source->get_track_type() == track_video) ||
+       !video_track_present)) {
     split = false;
     c = clusters[num_clusters - 1];
     if (first_timecode_in_file == -1)
@@ -179,7 +178,11 @@ cluster_helper_c::add_packet(packet_t *packet) {
       render();
 
       old_max_timecode = max_timecode;
-      max_timecode = packet->assigned_timecode;
+      if ((packet->unmodified_assigned_timecode +
+           packet->unmodified_duration) >
+          max_timecode)
+        max_timecode = packet->unmodified_assigned_timecode +
+          packet->unmodified_duration;
       num_cue_elements = 0;
 
       mxinfo("\n");
@@ -212,8 +215,10 @@ cluster_helper_c::add_packet(packet_t *packet) {
   c->num_packets++;
   cluster_content_size += packet->length;
 
-  if ((packet->assigned_timecode + packet->duration) > max_timecode)
-    max_timecode = (packet->assigned_timecode + packet->duration);
+  if ((packet->unmodified_assigned_timecode + packet->unmodified_duration) >
+      max_timecode)
+    max_timecode = packet->unmodified_assigned_timecode +
+      packet->unmodified_duration;
 
   walk_clusters();
 
@@ -301,7 +306,7 @@ cluster_helper_c::add_cluster(KaxCluster *cluster) {
   c->cluster = cluster;
   cluster_content_size = 0;
   cluster->SetParent(*kax_segment);
-  cluster->SetPreviousTimecode(last_cluster_tc, irnd(timecode_scale));
+  cluster->SetPreviousTimecode(last_cluster_tc, (int64_t)timecode_scale);
 }
 
 int
@@ -397,7 +402,7 @@ cluster_helper_c::render() {
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
-    source = ((generic_packetizer_c *)pack->source);
+    source = pack->source;
 
     render_group = NULL;
     for (k = 0; k < render_groups.size(); k++)
@@ -576,7 +581,7 @@ cluster_helper_c::render() {
 
 ch_contents_t *
 cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
-                                      void *source) {
+                                      generic_packetizer_c *source) {
   int i, k;
   packet_t *pack;
 
@@ -597,7 +602,7 @@ cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
 
 packet_t *
 cluster_helper_c::find_packet(int64_t ref_timecode,
-                              void *source) {
+                              generic_packetizer_c *source) {
   int i, k;
   packet_t *pack;
 
@@ -660,7 +665,7 @@ cluster_helper_c::free_clusters() {
   for (i = 0; i < num_clusters; i++) {
     for (k = 0; k < clusters[i]->num_packets; k++) {
       p = clusters[i]->packets[k];
-      if (((generic_packetizer_c *)p->source)->get_free_refs() > p->timecode)
+      if (p->source->get_free_refs() > p->timecode)
         p->superseeded = 1;
     }
   }
@@ -735,8 +740,8 @@ cluster_helper_c::free_clusters() {
 
 int
 cluster_helper_c::free_ref(int64_t ref_timecode,
-                           void *source) {
-  ((generic_packetizer_c *)source)->set_free_refs(ref_timecode);
+                           generic_packetizer_c *source) {
+  source->set_free_refs(ref_timecode);
 
   return 1;
 }

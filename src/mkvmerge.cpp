@@ -504,8 +504,9 @@ sighandler(int signum) {
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) / timecode_scale;
+    irnd((double)(cluster_helper->get_max_timecode() -
+                  cluster_helper->get_first_timecode()) /
+         (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
   out->restore_pos();
   mxinfo(_(" done\n"));
@@ -1177,9 +1178,9 @@ set_timecode_scale() {
   }
 
   KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
-  *(static_cast<EbmlUInteger *>(&time_scale)) = irnd(timecode_scale);
+  *(static_cast<EbmlUInteger *>(&time_scale)) = (int64_t)timecode_scale;
 
-  kax_cues->SetGlobalTimecodeScale(irnd(timecode_scale));
+  kax_cues->SetGlobalTimecodeScale((int64_t)timecode_scale);
 }
 
 /** \brief Render the basic EBML and Matroska headers
@@ -2587,7 +2588,7 @@ create_next_output_file() {
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
-  kax_cues->SetGlobalTimecodeScale(irnd(timecode_scale));
+  kax_cues->SetGlobalTimecodeScale((int64_t)timecode_scale);
 
   if (splitting)
     this_outfile = create_output_name();
@@ -2674,8 +2675,9 @@ finish_file(bool last_file) {
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) / timecode_scale;
+    irnd((double)(cluster_helper->get_max_timecode() -
+                  cluster_helper->get_first_timecode()) /
+         (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
 
   // If splitting is active and this is the last part then remove the

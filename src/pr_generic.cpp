@@ -499,7 +499,7 @@ generic_packetizer_c::set_headers() {
       track_entry =
         &GetNextChild<KaxTrackEntry>(*kax_tracks, *kax_last_entry);
     kax_last_entry = track_entry;
-    track_entry->SetGlobalTimecodeScale(irnd(timecode_scale));
+    track_entry->SetGlobalTimecodeScale((int64_t)timecode_scale);
   }
 
   KaxTrackNumber &tnumber = GetChild<KaxTrackNumber>(*track_entry);
@@ -694,7 +694,7 @@ generic_packetizer_c::fix_headers() {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 0;
 
-  track_entry->SetGlobalTimecodeScale(irnd(timecode_scale));
+  track_entry->SetGlobalTimecodeScale((int64_t)timecode_scale);
 }
 
 void
