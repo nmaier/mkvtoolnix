@@ -25,7 +25,7 @@
  *
  */
 
-#include "../os.h"
+#include "os.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

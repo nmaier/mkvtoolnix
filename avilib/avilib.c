@@ -25,7 +25,7 @@
  *
  */
 
-#include "../os.h"
+#include "os.h"
 
 #if defined(COMP_MSC) || defined(COMP_MINGW)
 #include <io.h>

@@ -1,6 +1,6 @@
 dnl process this file with autoconf to generate the configure script
 
-AC_INIT(mkvmerge.cpp)
+AC_INIT(src/mkvmerge.cpp)
 AM_INIT_AUTOMAKE(mkvtoolnix,0.5.0)
 
 AC_PROG_CC
@@ -23,7 +23,8 @@ PATH_WXWINDOWS()
 dnl Check for headers
 AC_HEADER_STDC()
 
-CFLAGS="-Wall -Wno-sign-compare -Wno-comment @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
-CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
+CFLAGS="-Wall -Wno-sign-compare -Wno-comment -I../src @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
+CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -I../avilib -I.. @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
+LDFLAGS=-L../avilib
 
-AC_OUTPUT(Makefile avilib/Makefile)
+AC_OUTPUT(Makefile avilib/Makefile src/Makefile doc/Makefile)

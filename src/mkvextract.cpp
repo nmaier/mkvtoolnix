@@ -41,7 +41,7 @@
 #include <vorbis/codec.h>
 
 extern "C" {
-#include "avilib/avilib.h"
+#include <avilib.h>
 }
 
 #include <ebml/EbmlHead.h>
