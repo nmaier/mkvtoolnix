@@ -104,6 +104,7 @@ void qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
   safefree(dmx->keyframe_table);
   safefree(dmx->editlist_table);
   safefree(dmx->v_desc);
+  safefree(dmx->a_priv);
 }
 
 void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
@@ -476,6 +477,19 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
             new_dmx->a_samplerate = (float)((tmp & 0xffff0000) >> 16) +
               (float)(tmp & 0x0000ffff) / 65536.0;
 
+            if ((get_uint16_be(&sv1_stsd.v0.version) == 1) &&
+                (size > sizeof(sound_v1_stsd_atom_t))) {
+              io->setFilePointer(pos + sizeof(sound_v1_stsd_atom_t) + 4);
+              new_dmx->a_priv_size = io->read_uint32_be();
+              io->skip(4);
+              new_dmx->a_priv =
+                (unsigned char *)safemalloc(new_dmx->a_priv_size);
+              if (io->read(new_dmx->a_priv, new_dmx->a_priv_size) !=
+                  new_dmx->a_priv_size)
+                throw exception();
+              mxverb(2, PFX "%*sAudio private data size %u\n", (level + 1) * 2,
+                     "", new_dmx->a_priv_size);
+            }
             memcpy(&new_dmx->a_stsd, &sv1_stsd, sizeof(sound_v1_stsd_atom_t));
 
           } else if (new_dmx->type == 'v') {
@@ -715,8 +729,8 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
 
       }
 
-      mxverb(2, "\nfixed ssize: pos: %lld, timecode: %lld, frame_size: %u\n",
-             io->getFilePointer(), timecode, frame_size);
+//       mxverb(2, "\nfixed ssize: pos: %lld, timecode: %lld, frame_size: %u\n",
+//              io->getFilePointer(), timecode, frame_size);
 
       if (dmx->keyframe_table_len == 0)
         is_keyframe = true;
