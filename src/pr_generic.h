@@ -32,6 +32,7 @@
 #include <matroska/KaxTags.h>
 
 #include "error.h"
+#include "mm_io.h"
 
 using namespace libmatroska;
 using namespace std;
@@ -159,6 +160,7 @@ public:
   virtual void set_free_refs(int64_t nfree_refs);
   virtual int64_t get_free_refs();
   virtual void set_headers();
+  virtual void rerender_headers(mm_io_c *out);
   virtual int process(unsigned char *data, int size,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;

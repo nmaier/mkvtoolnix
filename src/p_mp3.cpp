@@ -23,10 +23,11 @@
 #include <string.h>
 #include <errno.h>
 
-#include "pr_generic.h"
-#include "mp3_common.h"
-#include "p_mp3.h"
 #include "matroska.h"
+#include "mkvmerge.h"
+#include "mp3_common.h"
+#include "pr_generic.h"
+#include "p_mp3.h"
 
 using namespace libmatroska;
 
@@ -40,6 +41,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   packet_buffer = NULL;
   buffer_size = 0;
   packetno = 0;
+  spf = 1152;
 
   set_track_type(track_audio);
   set_track_default_duration_ns((int64_t)(1152000000000.0 * ti->async.linear /
@@ -104,10 +106,26 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
   if (pos < 0)
     return 0;
   decode_mp3_header(*header, mp3header);
+  if (packetno == 0) {
+    if (mp3header->layer == 3)
+      spf = 384;
+    else if (mp3header->version != 3)
+      spf = 576;
+    if (spf != 1152) {
+      set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
+                                              ti->async.linear /
+                                              samples_per_sec));
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
+        (int64_t)(1000000000.0 * spf * ti->async.linear / samples_per_sec);
+      rerender_headers(out);
+    }
+  }
+
   if ((pos + mp3header->framesize + 4) > buffer_size)
     return 0;
 
-  pims = 1000.0 * 1152.0 / mp3_freqs[mp3header->sampling_frequency];
+  pims = 1000.0 * (float)spf / mp3_freqs[mp3header->sampling_frequency];
 
   if (ti->async.displacement < 0) {
     /*
@@ -183,11 +201,11 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     }
 
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1152 * ti->async.linear /
+      my_timecode = (int64_t)(1000.0 * packetno * spf * ti->async.linear /
                               samples_per_sec);
 
     add_packet(packet, mp3header.framesize + 4, my_timecode,
-               (int64_t)(1000.0 * 1152 * ti->async.linear / samples_per_sec));
+               (int64_t)(1000.0 * spf * ti->async.linear / samples_per_sec));
   }
 
   debug_leave("mp3_packetizer_c::process");

@@ -74,6 +74,8 @@ void decode_mp3_header(unsigned long header, mp3_header_t *h) {
     h->lsf = 1;
     h->mpeg25 = 1;
   }
+  h->layer = (header >> 17) & 3;
+  h->version = (header >> 19) & 3;
   h->mode = (header >> 6) & 3;
   h->error_protection = ((header >> 16) & 1) ^ 1;
   h->stereo = (h->mode == 3 ? 0 : 1);

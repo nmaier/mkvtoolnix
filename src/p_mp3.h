@@ -30,8 +30,8 @@
 class mp3_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
-  unsigned long  samples_per_sec;
-  int channels, buffer_size;
+  unsigned long samples_per_sec;
+  int channels, buffer_size, spf;
   unsigned char *packet_buffer;
 
 public:

@@ -530,6 +530,12 @@ int64_t generic_packetizer_c::get_queued_bytes() {
   return bytes;
 }
 
+void generic_packetizer_c::rerender_headers(mm_io_c *out) {
+  out->save_pos(track_entry->GetElementPosition());
+  track_entry->Render(*out);
+  out->restore_pos();
+}
+
 //--------------------------------------------------------------------
 
 generic_reader_c::generic_reader_c(track_info_t *nti) {

@@ -28,6 +28,8 @@ typedef struct {
   int lsf;
   int mpeg25;
   int mode;
+  int layer;
+  int version;
   int error_protection;
   int stereo;
   int ssize;

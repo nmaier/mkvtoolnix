@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "mm_io.h"
 #include "pr_generic.h"
 
 #include <matroska/KaxCues.h>
@@ -63,5 +64,7 @@ extern int default_tracks[3];
 extern int64_t split_after;
 extern int split_max_num_files;
 extern bool split_by_time;
+
+extern mm_io_c *out;
 
 #endif // __MKVMERGE_H
