@@ -11,7 +11,7 @@
    MPEG ES demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <stdlib.h>
 #include <stdio.h>

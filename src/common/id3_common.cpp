@@ -11,7 +11,7 @@
    helper functions for ID3 tags
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 

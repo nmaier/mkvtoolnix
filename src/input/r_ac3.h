@@ -11,7 +11,7 @@
    class definitions for the AC3 demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_AC3_H
 #define __R_AC3_H

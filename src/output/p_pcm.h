@@ -11,7 +11,7 @@
    class definition for the PCM output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_PCM_H
 #define __P_PCM_H

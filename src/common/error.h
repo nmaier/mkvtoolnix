@@ -11,7 +11,7 @@
    class definitions for the error exception class
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __ERROR_H
 #define __ERROR_H

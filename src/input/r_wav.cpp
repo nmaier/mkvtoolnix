@@ -13,7 +13,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Initial DTS support by Peter Niemayer <niemayer@isg.de> and
      modified by Moritz Bunkus.
- */
+*/
 
 #include "os.h"
 

@@ -11,7 +11,7 @@
    definition of global variables and functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 
 #ifndef __MKVINFO_H

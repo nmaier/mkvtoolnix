@@ -11,7 +11,7 @@
    declarations for the input tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAB_INPUT_H
 #define __TAB_INPUT_H

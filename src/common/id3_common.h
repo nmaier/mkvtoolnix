@@ -11,7 +11,7 @@
    helper functions for ID3 tags
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __ID3_COMMON_H
 #define __ID3_COMMON_H

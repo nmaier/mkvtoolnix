@@ -11,7 +11,7 @@
    declarations for the attachments tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAB_ATTACHMENTS_H
 #define __TAB_ATTACHMENTS_H

@@ -11,7 +11,7 @@
    class definitions for the AAC demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_AAC_H
 #define __R_AAC_H

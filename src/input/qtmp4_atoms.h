@@ -11,7 +11,7 @@
    structs for various Quicktime and MP4 atoms
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __QTMP4_ATOMS_H
 #define __QTMP4_ATOMS_H

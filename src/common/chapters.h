@@ -11,7 +11,7 @@
    chapter parser/writer functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __CHAPTERS_H
 #define __CHAPTERS_H

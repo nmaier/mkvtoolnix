@@ -11,7 +11,7 @@
    FLAC helper functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __FLAC_COMMON_H
 #define __FLAC_COMMON_H

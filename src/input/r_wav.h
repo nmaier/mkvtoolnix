@@ -12,7 +12,7 @@
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Modified by Peter Niemayer <niemayer@isg.de>.
- */
+*/
 
 #ifndef __R_WAV_H
 #define __R_WAV_H

@@ -11,7 +11,7 @@
    class definition for the pass through output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_PASSTHROUGH_H
 #define __P_PASSTHROUGH_H

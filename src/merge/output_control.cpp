@@ -11,7 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 
@@ -182,7 +182,7 @@ bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
    On \c SIGINT mkvmerge will try to sanitize the current output file
    by writing the cues, the meta seek information and by updating the
    segment duration and the segment length.
- */
+*/
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 void
 sighandler(int signum) {
@@ -244,7 +244,7 @@ sighandler(int signum) {
   
    Opens the input file and calls the \c probe_file function for each known
    file reader class. Uses \c mm_text_io_c for subtitle probing.
- */
+*/
 file_type_e
 get_file_type(const string &filename) {
   mm_io_c *mm_io;
@@ -342,7 +342,7 @@ static int display_path_length = 1;
 static generic_reader_c *display_reader = NULL;
 
 /** \brief Selects a reader for displaying its progress information
- */
+*/
 static void
 display_progress() {
   if (display_reader == NULL)
@@ -357,7 +357,7 @@ display_progress() {
 }
 
 /** \brief Add some tags to the list of all tags
- */
+*/
 void
 add_tags(KaxTag *tags) {
   if (!accept_tags)
@@ -373,7 +373,7 @@ add_tags(KaxTag *tags) {
 }
 
 /** \brief Add a packetizer to the list of packetizers
- */
+*/
 void
 add_packetizer_globally(generic_packetizer_c *packetizer) {
   vector<filelist_t>::iterator file;
@@ -449,7 +449,7 @@ set_timecode_scale() {
    Renders the segment information and track headers. Also reserves
    some space with EBML Void elements so that the headers can be
    overwritten safely by the rerender_headers function.
- */
+*/
 static void
 render_headers(mm_io_c *rout) {
   EbmlHead head;
@@ -583,7 +583,7 @@ render_headers(mm_io_c *rout) {
   
    Can be used by packetizers that have to modify their headers
    depending on the track contents.
- */
+*/
 void
 rerender_track_headers() {
   int64_t new_void_size;
@@ -678,7 +678,7 @@ operator ==(const KaxAttached &a1,
   
    This function also makes sure that no duplicates are output. This might
    happen when appending files.
- */
+*/
 static void
 render_attachments(IOCallback *rout) {
   KaxAttachments *other_as, *other_as_test;
@@ -799,7 +799,7 @@ render_attachments(IOCallback *rout) {
    Each entry given with '--append-to' has to be checked for validity.
    For files that aren't managed with '--append-to' default entries have
    to be created.
- */
+*/
 static void
 check_append_mapping() {
   vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
@@ -1007,7 +1007,7 @@ check_append_mapping() {
    the packetizer is appended to.
    This function also calculates the sum of all chapter sizes so that
    enough space can be allocated at the start of each output file.
- */
+*/
 void
 calc_max_chapter_size() {
   vector<filelist_t>::iterator file;
@@ -1054,7 +1054,7 @@ calc_max_chapter_size() {
    The newly created class must read all track information in its
    contrsuctor and throw an exception in case of an error. Otherwise
    it is assumed that the file can be hanlded.
- */
+*/
 void
 create_readers() {
   vector<filelist_t>::iterator file;
@@ -1160,7 +1160,7 @@ create_readers() {
    \arg %[0-9]+d
    \arg . ("-%03d" will be inserted before the .)
    \arg "-%03d" will be appended
- */
+*/
 string
 create_output_name() {
   int p, p2, i;
@@ -1269,7 +1269,7 @@ add_tags_from_cue_chapters() {
    Creates a new file name depending on the split settings. Opens that
    file for writing and calls \c render_headers(). Also renders
    attachments if they exist and the chapters if no splitting is used.
- */
+*/
 void
 create_next_output_file() {
   string this_outfile;
@@ -1329,7 +1329,7 @@ create_next_output_file() {
    active the chapters are stripped to those that actually lie in this
    file and rendered at the front.  The segment duration and the
    segment size are set to their actual values.
- */
+*/
 void
 finish_file(bool last_file) {
   int i;
@@ -1505,7 +1505,7 @@ static void establish_deferred_connections(filelist_t &file);
   
    \param ptzr The packetizer that is to be replaced.
    \param amap The append specification the replacement is based upon.
- */
+*/
 void
 append_track(packetizer_t &ptzr,
              const append_spec_t &amap,
@@ -1658,7 +1658,7 @@ append_track(packetizer_t &ptzr,
    has finished and there is another packetizer waiting to be appended.
   
    \return true if at least one track has been appended to another one.
- */
+*/
 bool
 append_tracks_maybe() {
   vector<packetizer_t>::iterator ptzr;
@@ -1701,7 +1701,7 @@ append_tracks_maybe() {
   
    \param file All connections that have been deferred until this file has
      finished are established.
- */
+*/
 static void
 establish_deferred_connections(filelist_t &file) {
   vector<deferred_connection_t> def_cons;
@@ -1721,7 +1721,7 @@ establish_deferred_connections(filelist_t &file) {
    Requests packets from each packetizer, selects the packet with the
    lowest timecode and hands it over to the cluster helper for
    rendering.  Also displays the progress.
- */
+*/
 void
 main_loop() {
   // Let's go!
@@ -1808,7 +1808,7 @@ main_loop() {
    Both platform dependant and independant initialization is done here.
    For Unix like systems a signal handler is installed. The locale's
    \c LC_MESSAGES is set.
- */
+*/
 void
 setup() {
 #if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
@@ -1831,7 +1831,7 @@ setup() {
 }
 
 /** \brief Deletes the file readers
- */
+*/
 static void
 destroy_readers() {
   vector<filelist_t>::const_iterator file;
@@ -1846,7 +1846,7 @@ destroy_readers() {
 /** \brief Uninitialization
   
    Frees memory and shuts down the readers.
- */
+*/
 void
 cleanup() {
   delete cluster_helper;

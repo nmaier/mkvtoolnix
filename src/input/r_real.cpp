@@ -11,7 +11,7 @@
    RealMedia demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -36,7 +36,7 @@
 /*
    Description of the RealMedia file format:
    http://www.pcisys.net/~melanson/codecs/rmff.htm
- */
+*/
 
 int
 real_reader_c::probe_file(mm_io_c *io,

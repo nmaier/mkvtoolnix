@@ -11,7 +11,7 @@
    muxing dialog
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MUX_DIALOG_H
 #define __MUX_DIALOG_H

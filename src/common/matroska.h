@@ -11,7 +11,7 @@
    Definitions for the various Codec IDs
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MATROSKA_H
 #define __MATROSKA_H

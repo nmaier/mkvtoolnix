@@ -11,7 +11,7 @@
    helper functions for MP3 data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MP3_COMMON_H
 #define __MP3_COMMON_H

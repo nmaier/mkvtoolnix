@@ -11,7 +11,7 @@
    class definitions for the MP3 reader module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_MP3_H
 #define __R_MP3_H

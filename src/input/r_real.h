@@ -11,7 +11,7 @@
    class definitions for the RealMedia demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_REAL_H
 #define __R_REAL_H

@@ -11,7 +11,7 @@
    class definitions for the raw FLAC stream reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_FLAC_H
 #define __R_FLAC_H

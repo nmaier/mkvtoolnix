@@ -11,7 +11,7 @@
    general XML element parser, definitions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __XML_ELEMENT_PARSER_H
 #define __XML_ELEMENT_PARSER_H

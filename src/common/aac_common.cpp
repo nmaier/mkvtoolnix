@@ -11,7 +11,7 @@
    helper function for AAC data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <stdio.h>
 #include <string.h>

@@ -11,7 +11,7 @@
    class definition for the simple text subtitle packetizer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_TEXTSUBS_H
 #define __P_TEXTSUBS_H

@@ -11,7 +11,7 @@
    checksum calculations
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __CHECKSUMS_H
 #define __CHECKSUMS_H

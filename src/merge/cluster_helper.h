@@ -11,7 +11,7 @@
    class definition for the cluster helper
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __CLUSTER_HELPER_C
 #define __CLUSTER_HELPER_C

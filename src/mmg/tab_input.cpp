@@ -11,7 +11,7 @@
    "input" tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <errno.h>
 #include <string.h>

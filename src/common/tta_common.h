@@ -11,7 +11,7 @@
    definitions for the TTA file format
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TTA_COMMON_H
 #define __TTA_COMMON_H

@@ -11,7 +11,7 @@
    helper functions that need libebml/libmatroska
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __COMMONEBML_H
 #define __COMMONEBML_H

@@ -11,7 +11,7 @@
    class definition for the Subripper subtitle reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_SRT_H
 #define __R_SRT_H

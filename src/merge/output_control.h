@@ -10,7 +10,7 @@
   
    output handling
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __OUTPUT_CONTROL_H
 #define __OUTPUT_CONTROL_H

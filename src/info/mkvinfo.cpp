@@ -10,7 +10,7 @@
    retrieves and displays information about a Matroska file
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 // {{{ includes
 

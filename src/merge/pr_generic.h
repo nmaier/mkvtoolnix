@@ -11,7 +11,7 @@
    class definition for the generic reader and packetizer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __PR_GENERIC_H
 #define __PR_GENERIC_H

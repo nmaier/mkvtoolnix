@@ -11,7 +11,7 @@
    main stuff - declarations
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MMG_H
 #define __MMG_H

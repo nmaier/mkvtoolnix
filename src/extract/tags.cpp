@@ -10,7 +10,7 @@
    extracts tags from Matroska files into other files
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <errno.h>
 #include <ctype.h>

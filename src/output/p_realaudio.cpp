@@ -11,7 +11,7 @@
    RealAudio output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 #include <stdio.h>

@@ -11,7 +11,7 @@
    XML element parser
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUInteger.h>

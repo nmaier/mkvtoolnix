@@ -11,7 +11,7 @@
    class definition for the subtitle helper
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __SUBTITLES_H
 #define __SUBTITLES_H

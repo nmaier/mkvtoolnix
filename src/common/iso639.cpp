@@ -11,7 +11,7 @@
    ISO639 language definitions, lookup functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <stdio.h>
 #include <string.h>

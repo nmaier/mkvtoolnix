@@ -11,7 +11,7 @@
    "settings" tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "wx/wxprec.h"
 

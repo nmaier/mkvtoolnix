@@ -11,7 +11,7 @@
    FLAC packetizer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "config.h"
 

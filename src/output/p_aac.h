@@ -11,7 +11,7 @@
    class definition for the AAC output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_AAC_H
 #define __P_AAC_H

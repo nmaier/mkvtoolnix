@@ -11,7 +11,7 @@
    declarations for ComboBox data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __EXTERN_DATA_H
 #define __EXTERN_DATA_H

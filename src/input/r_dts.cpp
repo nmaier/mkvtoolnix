@@ -12,7 +12,7 @@
   
    Written by Peter Niemayer <niemayer@isg.de>.
    Modified by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <stdlib.h>
 #include <stdio.h>

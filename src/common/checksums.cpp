@@ -13,7 +13,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
    The crc32 code was written by Alexander Djourik <sasha@iszf.irk.ru> and
      Pavel Zhilin <pzh@iszf.irk.ru>.
- */
+*/
 
 #include "checksums.h"
 
@@ -61,7 +61,7 @@ calc_adler32(const unsigned char *buffer,
                  Pavel Zhilin <pzh@iszf.irk.ru>
   
    Copyright (c) 1999-2004 Alexander Djourik. All rights reserved.
- */
+*/
 
 static const unsigned long crc32_table[256] = {
 	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,

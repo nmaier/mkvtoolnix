@@ -11,7 +11,7 @@
    functions common for all readers/packetizers
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <map>
 #include <string>

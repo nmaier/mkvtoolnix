@@ -11,7 +11,7 @@
    class definition for the video output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_VIDEO_H
 #define __P_VIDEO_H

@@ -11,7 +11,7 @@
    the timecode factory
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <map>
 

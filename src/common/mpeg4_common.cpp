@@ -11,7 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 
@@ -31,7 +31,7 @@
   
    \return \c true if the pixel aspect ratio was found and \c false
      otherwise.
- */
+*/
 bool
 mpeg4_extract_par(const unsigned char *buffer,
                   int size,
@@ -109,7 +109,7 @@ mpeg4_extract_par(const unsigned char *buffer,
   
    \return Nothing. If no frames were found (e.g. only the dummy header for
      a dummy frame) then \a frames will contain no elements.
- */
+*/
 void
 mpeg4_find_frame_types(const unsigned char *buffer,
                        int size,
@@ -183,7 +183,7 @@ mpeg4_find_frame_types(const unsigned char *buffer,
   
    \return The index or \c -1 if no MPEG sequence header was found or
      if the buffer was too small.
- */
+*/
 int
 mpeg1_2_extract_fps_idx(const unsigned char *buffer,
                         int size) {
@@ -225,7 +225,7 @@ mpeg1_2_extract_fps_idx(const unsigned char *buffer,
   
    \return The number of frames per second or \c -1.0 if the index was
      invalid.
- */
+*/
 double
 mpeg1_2_get_fps(int idx) {
   static const int fps[8] = {0, 24, 25, 0, 30, 50, 0, 60};

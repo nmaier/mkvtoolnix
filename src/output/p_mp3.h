@@ -11,7 +11,7 @@
    class definition for the MP3 output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_MP3_H
 #define __P_MP3_H

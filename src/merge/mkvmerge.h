@@ -11,7 +11,7 @@
    definition of global variables found in mkvmerge.cpp
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MKVMERGE_H
 #define __MKVMERGE_H

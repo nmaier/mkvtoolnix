@@ -11,7 +11,7 @@
    class definition for the RealAudio output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_REALAUDIO_H
 #define __P_REALAUDIO_H

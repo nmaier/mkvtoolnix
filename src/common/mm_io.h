@@ -11,7 +11,7 @@
    IO callback class definitions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MM_IO_H
 #define __MM_IO_H

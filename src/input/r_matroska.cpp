@@ -11,7 +11,7 @@
    Matroska reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 // {{{ includes
 
@@ -98,7 +98,7 @@ using namespace libmatroska;
 /*
    Probes a file by simply comparing the first four bytes to the EBML
    head signature.
- */
+*/
 int
 kax_reader_c::probe_file(mm_io_c *mm_io,
                          int64_t size) {

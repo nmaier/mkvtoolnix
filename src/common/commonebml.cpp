@@ -11,7 +11,7 @@
    helper functions that need libebml/libmatroska
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 
@@ -55,7 +55,7 @@ __debug_dump_elements(EbmlElement *e,
 
 /*
    UTFstring <-> C string conversion
- */
+*/
 
 UTFstring
 cstr_to_UTFstring(const string &c) {

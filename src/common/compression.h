@@ -11,7 +11,7 @@
    Helper routines for various compression libs
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __COMPRESSION_H
 #define __COMPRESSION_H

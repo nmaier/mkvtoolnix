@@ -11,7 +11,7 @@
    class definition for the SSA/ASS subtitle parser
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_SSA_H
 #define __R_SSA_H

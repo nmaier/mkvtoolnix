@@ -12,7 +12,7 @@
    into clusters, sets the durations, renders the clusters etc.
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <assert.h>
 

@@ -11,7 +11,7 @@
    definitions and helper functions for AC3 data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __AC3COMMON_H
 #define __AC3COMMON_H

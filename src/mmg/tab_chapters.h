@@ -11,7 +11,7 @@
    declarations for the chapter tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAB_CHAPTERS_H
 #define __TAB_CHAPTERS_H

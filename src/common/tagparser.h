@@ -11,7 +11,7 @@
    definition of global variables and functions for the XML tag parser
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAGPARSER_H
 #define __TAGPARSER_H

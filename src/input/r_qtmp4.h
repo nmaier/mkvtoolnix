@@ -11,7 +11,7 @@
    class definitions for the Quicktime & MP4 reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_QTMP4_H
 #define __R_QTMP4_H

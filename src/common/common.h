@@ -13,7 +13,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
    The bit_cursor_c class was originally written by Peter Niemayer
      <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __COMMON_H
 #define __COMMON_H

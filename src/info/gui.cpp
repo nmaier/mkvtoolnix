@@ -10,7 +10,7 @@
    A GUI for mkvinfo
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "config.h"
 

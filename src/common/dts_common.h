@@ -12,7 +12,7 @@
   
    Written by Peter Niemayer <niemayer@isg.de>.
    Modified by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __DTSCOMMON_H
 #define __DTSCOMMON_H

@@ -11,7 +11,7 @@
    main dialog declarations
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MMG_DIALOG_H
 #define __MMG_DIALOG_H

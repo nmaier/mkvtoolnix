@@ -11,7 +11,7 @@
    declaration for the job queue
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __JOBS_H
 #define __JOBS_H

@@ -11,7 +11,7 @@
    Mapping from XML elements to EBML elements
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ebml/EbmlElement.h>
 #include <matroska/KaxConfig.h>

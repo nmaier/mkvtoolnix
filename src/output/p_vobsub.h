@@ -11,7 +11,7 @@
    class definition for the VobSub output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_VOBSUB_H
 #define __P_VOBSUB_H

@@ -15,7 +15,7 @@
      "// process chunkmap:" comment was taken from mplayer's
      demux_mov.c file which is distributed under the GPL as well. Thanks to
      the original authors.
- */
+*/
 
 #include "os.h"
 

@@ -11,7 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -76,7 +76,7 @@ string default_chapter_country;
   
    \param fmt The \c printf like format.
    \param ... Optional arguments for the format.
- */
+*/
 static void
 chapter_error(const char *fmt,
               ...) {
@@ -111,7 +111,7 @@ chapter_error(const char *fmt,
   
    \return \c true if the file contains OGM style comments and \c false
      otherwise.
- */
+*/
 bool
 probe_simple_chapters(mm_text_io_c *in) {
   string line;
@@ -173,7 +173,7 @@ probe_simple_chapters(mm_text_io_c *in) {
      if an error occurs. Otherwise \c NULL will be returned.
   
    \return The chapters parsed from the file or \c NULL if an error occured.
- */
+*/
 KaxChapters *
 parse_simple_chapters(mm_text_io_c *in,
                       int64_t min_tc,
@@ -337,7 +337,7 @@ parse_simple_chapters(mm_text_io_c *in,
    \return The chapters parsed from the file or \c NULL if an error occured.
   
    \see ::parse_chapters(mm_text_io_c *in,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
- */
+*/
 KaxChapters *
 parse_chapters(const string &file_name,
                int64_t min_tc,
@@ -404,7 +404,7 @@ parse_chapters(const string &file_name,
    \return The chapters parsed from the file or \c NULL if an error occured.
   
    \see ::parse_chapters(const string &file_name,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
- */
+*/
 KaxChapters *
 parse_chapters(mm_text_io_c *in,
                int64_t min_tc,
@@ -455,7 +455,7 @@ parse_chapters(mm_text_io_c *in,
   
    \return The start timecode or \c -1 if the atom doesn't contain such a
      child element.
- */
+*/
 int64_t
 get_chapter_start(KaxChapterAtom &atom) {
   KaxChapterTimeStart *start;
@@ -474,7 +474,7 @@ get_chapter_start(KaxChapterAtom &atom) {
   
    \return The atom's name UTF-8 coded or \c "" if the atom doesn't contain
      such a child element.
- */
+*/
 string
 get_chapter_name(KaxChapterAtom &atom) {
   KaxChapterDisplay *display;
@@ -497,7 +497,7 @@ get_chapter_name(KaxChapterAtom &atom) {
   
    \return The ID or \c -1 if the atom doesn't contain such a
      child element.
- */
+*/
 int64_t
 get_chapter_uid(KaxChapterAtom &atom) {
   KaxChapterUID *uid;
@@ -520,7 +520,7 @@ get_chapter_uid(KaxChapterAtom &atom) {
   
    \param e An element that really is an \c EbmlMaster. \a e's children
      should be checked.
- */
+*/
 void
 fix_mandatory_chapter_elements(EbmlElement *e) {
   if (e == NULL)
@@ -586,7 +586,7 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
      for each chapter after the decision whether or not to keep it has been
      made.
    \param m The master containing the elements to check.
- */
+*/
 static void
 remove_entries(int64_t min_tc,
                int64_t max_tc,
@@ -665,7 +665,7 @@ remove_entries(int64_t min_tc,
      made.
   
    \return \a chapters if there are entries left and \c NULL otherwise.
- */
+*/
 KaxChapters *
 select_chapters_in_timeframe(KaxChapters *chapters,
                              int64_t min_tc,
@@ -726,7 +726,7 @@ select_chapters_in_timeframe(KaxChapters *chapters,
      results in the first edition being returned.
   
    \return A pointer to the edition or \c NULL if none has been found.
- */
+*/
 KaxEditionEntry *
 find_edition_with_uid(KaxChapters &chapters,
                       uint64_t uid) {
@@ -758,7 +758,7 @@ find_edition_with_uid(KaxChapters &chapters,
      the first atom in the first edition being returned.
   
    \return A pointer to the atom or \c NULL if none has been found.
- */
+*/
 KaxChapterAtom *
 find_chapter_with_uid(KaxChapters &chapters,
                       uint64_t uid) {
@@ -804,7 +804,7 @@ find_chapter_with_uid(KaxChapters &chapters,
   
    \param dst The container the atoms and editions will be put into.
    \param src The container the atoms and editions will be taken from.
- */
+*/
 void
 move_chapters_by_edition(KaxChapters &dst,
                          KaxChapters &src) {
@@ -853,7 +853,7 @@ move_chapters_by_edition(KaxChapters &dst,
    \param offset The offset to add to each timecode. Can be negative. If
      the resulting timecode would be smaller than zero then it will be set
      to zero.
- */
+*/
 void
 adjust_chapter_timecodes(EbmlMaster &master,
                          int64_t offset) {

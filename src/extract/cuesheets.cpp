@@ -10,7 +10,7 @@
    extracts chapters and tags as CUE sheets from Matroska files
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <errno.h>
 #include <ctype.h>

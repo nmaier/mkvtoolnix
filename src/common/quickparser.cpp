@@ -11,7 +11,7 @@
    quick Matroska file parsing
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlStream.h>

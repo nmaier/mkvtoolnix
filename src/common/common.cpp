@@ -12,7 +12,7 @@
    helper functions, common variables
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 
@@ -278,7 +278,7 @@ byte_cursor_c::get_len() {
 
 /*
    Control functions
- */
+*/
 
 void
 die(const char *fmt,
@@ -305,7 +305,7 @@ _trace(const char *func,
 
 /*
    Endianess stuff
- */
+*/
 
 uint16_t
 get_uint16(const void *buf) {
@@ -513,7 +513,7 @@ put_uint64_be(void *buf,
 
 /*
    Character map conversion stuff
- */
+*/
 
 typedef struct {
   iconv_t ict_from_utf8, ict_to_utf8;
@@ -690,7 +690,7 @@ from_utf8(int handle,
 
 /*
    Random unique uint32_t numbers
- */
+*/
 
 static vector<uint32_t> ru_numbers[4];
 static bool random_seeded = false;
@@ -785,7 +785,7 @@ create_unique_uint32(unique_id_category_e category) {
 
 /*
    Miscellaneous stuff
- */
+*/
 
 static uint64_t _safedupped = 0;
 static uint64_t _safemalloced = 0;
@@ -854,7 +854,7 @@ dump_malloc_report() {
 
 /*
    standard string processing
- */
+*/
 
 vector<string>
 split(const char *src,
@@ -1068,7 +1068,7 @@ downcase(const string &s) {
 
 /*
    Integer parsing
- */
+*/
 
 uint32_t
 round_to_nearest_pow2(uint32_t value) {
@@ -1162,7 +1162,7 @@ to_string(int64_t i) {
 #ifdef DEBUG
 /*
    debugging stuff
- */
+*/
 
 debug_c debug_facility;
 
@@ -1287,7 +1287,7 @@ debug_c::dump_info() {
 
 /*
    Other related news
- */
+*/
 
 void
 fix_format(const char *fmt,
@@ -1531,7 +1531,7 @@ mxsprintf(const char *fmt,
    \param str The string to parse
    \param fmt The format string
    \returns The number of elements assigned
- */
+*/
 int
 mxsscanf(const string &str,
          const char *fmt,

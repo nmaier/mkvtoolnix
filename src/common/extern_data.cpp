@@ -11,7 +11,7 @@
    Data for ComboBoxes in mmg and other occurences
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 #include "extern_data.h"

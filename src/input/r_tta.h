@@ -11,7 +11,7 @@
    class definitions for the TTA demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_TTA_H
 #define __R_TTA_H

@@ -11,7 +11,7 @@
    class definition for the timecode factory
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TIMECODE_FACTORY_H
 #define __TIMECODE_FACTORY_H

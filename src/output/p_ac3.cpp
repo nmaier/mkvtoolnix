@@ -11,7 +11,7 @@
    AC3 output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -11,7 +11,7 @@
    helper function for AC3 data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <string.h>
 

@@ -11,7 +11,7 @@
    some hacks that the author might want to use
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __HACKS_H
 #define __HACKS_H

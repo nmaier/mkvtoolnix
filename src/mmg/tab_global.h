@@ -11,7 +11,7 @@
    declarations for the global tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAB_GLOBAL_H
 #define __TAB_GLOBAL_H

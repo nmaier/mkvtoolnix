@@ -11,7 +11,7 @@
    main stuff
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 

@@ -11,7 +11,7 @@
    definitions for the OGM file format
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __OGGSTREAMS_H
 #define __OGGSTREAMS_H
@@ -63,7 +63,7 @@
 
   
   
- */
+*/
 
 //// OggDS headers
 // Header for the new header format

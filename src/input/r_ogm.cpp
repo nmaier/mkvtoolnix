@@ -11,7 +11,7 @@
    OGG media stream reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 #include "config.h"
@@ -268,7 +268,7 @@ flac_header_extractor_c::read_page() {
 
 /*
    Probes a file by simply comparing the first four bytes to 'OggS'.
- */
+*/
 int
 ogm_reader_c::probe_file(mm_io_c *mm_io,
                          int64_t size) {
@@ -292,7 +292,7 @@ ogm_reader_c::probe_file(mm_io_c *mm_io,
 /*
    Opens the file for processing, initializes an ogg_sync_state used for
    reading from an OGG stream.
- */
+*/
 ogm_reader_c::ogm_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
@@ -349,7 +349,7 @@ ogm_reader_c::find_demuxer(int serialno) {
 /*
    Reads an OGG page from the stream. Returns 0 if there are no more pages
    left, EMOREDATA otherwise.
- */
+*/
 int
 ogm_reader_c::read_page(ogg_page *og) {
   int np, done, nread;
@@ -572,7 +572,7 @@ ogm_reader_c::create_packetizers() {
 
 /*
    Checks every demuxer if it has a page available.
- */
+*/
 int
 ogm_reader_c::packet_available() {
   int i;
@@ -602,7 +602,7 @@ ogm_reader_c::handle_new_stream_and_packets(ogg_page *og) {
    stream headers. If it is a known stream and the user has requested that
    it should be extracted then allocate a new packetizer based on the
    stream type and store the needed data in a new ogm_demuxer_t.
- */
+*/
 void
 ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_packet op;
@@ -741,7 +741,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
    that the user didn't want extracted.
    If the demuxer is found then hand over all packets in this page to the
    associated packetizer.
- */
+*/
 void
 ogm_reader_c::process_page(ogg_page *og) {
   ogm_demuxer_t *dmx;
@@ -858,7 +858,7 @@ ogm_reader_c::process_header_page(ogg_page *og) {
 
 /*
    Search and store additional headers for the Ogg streams.
- */
+*/
 void
 ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
   ogg_packet op;
@@ -913,7 +913,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
 /*
    Read all header packets and - for Vorbis streams - the comment and
    codec data packets.
- */
+*/
 int
 ogm_reader_c::read_headers() {
   int i;
@@ -955,7 +955,7 @@ ogm_reader_c::read_headers() {
 
 /*
    General reader. Read a page and hand it over for processing.
- */
+*/
 file_status_e
 ogm_reader_c::read(generic_packetizer_c *,
                    bool) {

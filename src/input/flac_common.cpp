@@ -11,7 +11,7 @@
    FLAC helper functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "config.h"
 

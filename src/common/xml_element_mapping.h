@@ -11,7 +11,7 @@
    XML to EBML element mapping definitions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __XML_ELEMENT_MAPPING_H
 #define __XML_ELEMENT_MAPPING_H

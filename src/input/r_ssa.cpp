@@ -11,7 +11,7 @@
    SSA/ASS subtitle parser
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 #include <stdlib.h>

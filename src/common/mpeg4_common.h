@@ -11,7 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MPEG4_COMMON_H
 #define __MPEG4_COMMON_H
@@ -56,7 +56,7 @@ enum mpeg_video_type_e {
    Windows' media frameworks work. With ::mpeg4_find_frame_types
    such packed frames can be analyzed. The results are stored in these
    structures: one structure for one frame in the analyzed chunk.
- */
+*/
 typedef struct {
   /** The beginning of the frame data. This is a pointer into an existing
       buffer handed over to ::mpeg4_find_frame_types. */

@@ -11,7 +11,7 @@
    AVI demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 // {{{ includes
 

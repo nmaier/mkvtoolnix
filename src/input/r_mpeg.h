@@ -11,7 +11,7 @@
    class definitions for the MPEG ES demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_MPEG_H
 #define __R_MPEG_H

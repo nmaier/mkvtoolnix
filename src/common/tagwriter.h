@@ -10,7 +10,7 @@
    writes tags in XML format
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAGWRITER_H
 #define __TAGWRITER_H

@@ -10,7 +10,7 @@
    extracts tracks and other items from Matroska files into other files
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __MKVEXTRACT_H
 #define __MKVEXTRACT_H

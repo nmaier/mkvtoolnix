@@ -11,7 +11,7 @@
    tag helper functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 #include <errno.h>
@@ -225,7 +225,7 @@ get_tag_cuid(const KaxTag &tag) {
 }
 
 /** \brief Convert older tags to current specs
- */
+*/
 void
 convert_old_tags(KaxTags &tags) {
   string name, value;

@@ -13,7 +13,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
    Patches by Nicolas Le Guen <nleguen@pepper-prod.com> and
    Vegard Pettersen <vegard_p@broadpark.no>
- */
+*/
 
 #include <ctype.h>
 #include <stdarg.h>

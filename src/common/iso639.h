@@ -11,7 +11,7 @@
    ISO639 language definitions, lookup functions
    
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __ISO639_H
 #define __ISO639_H

@@ -10,7 +10,7 @@
    Cross platform compatibility definitions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __OS_H
 #define __OS_H

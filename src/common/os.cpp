@@ -8,7 +8,7 @@
    Read http://www.flipcode.org/cgi-bin/fcarticles.cgi?show=4&id=64176 for
    an explanation.
   
- */
+*/
 
 #include "config.h"
 

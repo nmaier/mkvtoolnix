@@ -10,7 +10,7 @@
    definitions for wxWindows
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __WXCOMMON_H
 #define __WXCOMMON_H

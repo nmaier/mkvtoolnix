@@ -11,7 +11,7 @@
    subtitle helper
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <stdio.h>
 #include <stdlib.h>

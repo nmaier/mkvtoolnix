@@ -11,7 +11,7 @@
    XML chapter parser functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <expat.h>
 #include <ctype.h>

@@ -11,7 +11,7 @@
    class definition for the AC3 output module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __P_AC3_H
 #define __P_AC3_H

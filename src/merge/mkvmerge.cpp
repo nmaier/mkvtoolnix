@@ -11,7 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 
@@ -103,7 +103,7 @@ file_type_t file_types[] =
    {NULL,  -1,      NULL}};
 
 /** \brief Outputs usage information
- */
+*/
 static void
 usage() {
   mxinfo(_(
@@ -238,7 +238,7 @@ usage() {
 static bool print_malloc_report = false;
 
 /** \brief Prints information about what has been compiled into mkvmerge
- */
+*/
 static void
 print_capabilities() {
 #if defined(HAVE_AVICLASSES)
@@ -308,7 +308,7 @@ create_track_number(generic_reader_c *reader,
    This function called for \c --identify. It sets up dummy track info
    data for the reader, probes the input file, creates the file reader
    and calls its identify function.
- */
+*/
 static void
 identify(const string &filename) {
   track_info_c ti;
@@ -346,7 +346,7 @@ identify(const string &filename) {
 /** \brief Parse tags and add them to the list of all tags
   
    Also tests the tags for missing mandatory elements.
- */
+*/
 void
 parse_and_add_tags(const string &file_name) {
   KaxTags *tags;
@@ -383,7 +383,7 @@ parse_and_add_tags(const string &file_name) {
 /** \brief Parse the \c --atracks / \c --vtracks / \c --stracks argument
   
    The argument is a comma separated list of track IDs.
- */
+*/
 static void
 parse_tracks(string s,
              vector<int64_t> &tracks,
@@ -409,7 +409,7 @@ parse_tracks(string s,
    <tt>TID:d,l1/l2</tt>, e.g. <tt>0:200</tt>.  The part before the
    comma is the displacement in ms. The optional part after comma is
    the linear factor which defaults to 1 if not given.
- */
+*/
 static void
 parse_sync(string s,
            const string &opt,
@@ -470,7 +470,7 @@ parse_sync(string s,
 /** \brief Parse the \c --aspect-ratio argument
   
    The argument must have the form \c TID:w/h or \c TID:float, e.g. \c 0:16/9
- */
+*/
 static void
 parse_aspect_ratio(const string &s,
                    const string &opt,
@@ -531,7 +531,7 @@ parse_aspect_ratio(const string &s,
 /** \brief Parse the \c --display-dimensions argument
   
    The argument must have the form \c TID:wxh, e.g. \c 0:640x480.
- */
+*/
 static void
 parse_display_dimensions(const string s,
                          track_info_c &ti) {
@@ -565,7 +565,7 @@ parse_display_dimensions(const string s,
   
    The argument must have the form \c TID:left,top,right,bottom e.g.
    \c 0:10,5,10,5
- */
+*/
 static void
 parse_cropping(const string &s,
                track_info_c &ti) {
@@ -609,7 +609,7 @@ parse_cropping(const string &s,
    \arg time based: If a number postfixed with '<tt>s</tt>' or in a
    format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
    given then this is interpreted as the time after which to split.
- */
+*/
 static void
 parse_split(const string &arg) {
   int64_t modifier;
@@ -690,7 +690,7 @@ parse_split(const string &arg) {
    time based: A number that must be postfixed with <tt>s</tt>,
    <tt>ms</tt>, <tt>us</tt> or <tt>ns</tt> to specify seconds,
    milliseconds, microseconds and nanoseconds respectively.
- */
+*/
 static void
 parse_delay(const string &s,
             track_info_c &ti) {
@@ -736,7 +736,7 @@ parse_delay(const string &s,
 /** \brief Parse the \c --cues argument
   
    The argument must have the form \c TID:cuestyle, e.g. \c 0:none.
- */
+*/
 static void
 parse_cues(const string &s,
            track_info_c &ti) {
@@ -772,7 +772,7 @@ parse_cues(const string &s,
 /** \brief Parse the \c --compression argument
   
    The argument must have the form \c TID:compression, e.g. \c 0:bz2.
- */
+*/
 static void
 parse_compression(const string &s,
                   track_info_c &ti) {
@@ -819,7 +819,7 @@ parse_compression(const string &s,
   
    Some options have similar parameter styles. The arguments must have
    the form \c TID:value, e.g. \c 0:XVID.
- */
+*/
 static void
 parse_language(const string &s,
                language_t &lang,
@@ -863,7 +863,7 @@ parse_language(const string &s,
 /** \brief Parse the \c --subtitle-charset argument
   
    The argument must have the form \c TID:charset, e.g. \c 0:ISO8859-15.
- */
+*/
 static void
 parse_sub_charset(const string &s,
                   track_info_c &ti) {
@@ -892,7 +892,7 @@ parse_sub_charset(const string &s,
 /** \brief Parse the \c --tags argument
   
    The argument must have the form \c TID:filename, e.g. \c 0:tags.xml.
- */
+*/
 static void
 parse_tags(const string &s,
            const string &opt,
@@ -922,7 +922,7 @@ parse_tags(const string &s,
 /** \brief Parse the \c --fourcc argument
   
    The argument must have the form \c TID:fourcc, e.g. \c 0:XVID.
- */
+*/
 static void
 parse_fourcc(const string &s,
              const string &opt,
@@ -950,7 +950,7 @@ parse_fourcc(const string &s,
 /** \brief Parse the argument for \c --track-order
   
    The argument must be a comma separated list of track IDs.
- */
+*/
 static void
 parse_track_order(const string &s) {
   vector<string> parts, pair;
@@ -1003,7 +1003,7 @@ parse_append_to(const string &s,
    Only the super user can increase the priority, but you shouldn't do
    such work as root anyway.
    On Windows SetPriorityClass is used.
- */
+*/
 static void
 set_process_priority(int priority) {
 #if defined(SYS_WINDOWS)
@@ -1094,7 +1094,7 @@ guess_mime_type(string file_name) {
    (e.g. '<tt>--version</tt>' or '<tt>--list-types</tt>'). The third
    pass looks for '<tt>--output-file</tt>'. The fourth pass handles
    everything else.
- */
+*/
 static void
 parse_args(vector<string> &args) {
   const char *process_priorities[5] = {"lowest", "lower", "normal", "higher",
@@ -1784,7 +1784,7 @@ parse_args(vector<string> &args) {
    Each line contains exactly one command line argument or a
    comment. Arguments are converted to UTF-8 and appended to the array
    \c args.
- */
+*/
 static void
 read_args_from_file(vector<string> &args,
                     const string &filename) {
@@ -1831,7 +1831,7 @@ read_args_from_file(vector<string> &args,
    Takes each command line paramter, converts it to UTF-8, and reads more
    commands from command files if the argument starts with '@'. Puts all
    arguments into a new array.
- */
+*/
 static void
 handle_args(int argc,
             char **argv) {
@@ -1857,7 +1857,7 @@ handle_args(int argc,
 }
 
 /** \brief Initialize global variables
- */
+*/
 static void
 init_globals() {
   memset(default_tracks, 0, sizeof(default_tracks));
@@ -1870,7 +1870,7 @@ init_globals() {
    Calls the functions for setup, handling the command line arguments,
    creating the readers, the main loop, finishing the current output
    file and cleaning up.
- */
+*/
 int
 main(int argc,
      char **argv) {

@@ -11,7 +11,7 @@
    Vorbis packetizer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "os.h"
 
@@ -136,7 +136,7 @@ vorbis_packetizer_c::set_headers() {
    negative displacement packets are simply discarded if their timecode
    is set before the displacement. For positive displacements the packetizer
    has to generate silence packets and put them into the Matroska file first.
- */
+*/
 int
 vorbis_packetizer_c::process(memory_c &mem,
                              int64_t timecode,

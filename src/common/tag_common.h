@@ -11,7 +11,7 @@
    definition of functions helping dealing with tags
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAG_COMMON_H
 #define __TAG_COMMON_H

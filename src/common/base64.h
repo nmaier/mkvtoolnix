@@ -10,7 +10,7 @@
    base64 encoding and decoding functions
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 
 #ifndef __BASE64_H

@@ -11,7 +11,7 @@
    helper functions for MP3 data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "mp3_common.h"
 #include "common.h"

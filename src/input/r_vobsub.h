@@ -11,7 +11,7 @@
    class definitions for the VobSub stream reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_VOBSUB_H
 #define __R_VOBSUB_H

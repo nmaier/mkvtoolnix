@@ -11,7 +11,7 @@
    quick Matroska file parsing
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __QUICKPARSER_H
 #define __QUICKPARSER_H

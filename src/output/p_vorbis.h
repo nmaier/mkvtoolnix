@@ -11,7 +11,7 @@
    class definition for the Vorbis packetizer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include "config.h"
 

@@ -10,7 +10,7 @@
    command line parameter parsing, looping, output handling
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <errno.h>
 #include <string.h>

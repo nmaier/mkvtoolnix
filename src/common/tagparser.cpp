@@ -11,7 +11,7 @@
    XML tag parser
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 #include <errno.h>

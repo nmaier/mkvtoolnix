@@ -11,7 +11,7 @@
    "global" tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 

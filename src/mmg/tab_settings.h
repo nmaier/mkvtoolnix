@@ -11,7 +11,7 @@
    declarations for the settings tab
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __TAB_SETTINGS_H
 #define __TAB_SETTINGS_H

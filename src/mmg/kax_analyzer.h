@@ -11,7 +11,7 @@
    Matroska file analyzer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __KAX_ANALYZER_H
 #define __KAX_ANALYZER_H

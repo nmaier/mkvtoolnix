@@ -10,7 +10,7 @@
    command line parsing, setup
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 // {{{ includes
 

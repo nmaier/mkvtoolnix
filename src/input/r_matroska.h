@@ -11,7 +11,7 @@
    class definitions for the Matroska reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_MATROSKA_H
 #define __R_MATROSKA_H

@@ -11,7 +11,7 @@
    class definitions for the AVI demultiplexer module
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_AVI_H
 #define __R_AVI_H

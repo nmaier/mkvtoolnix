@@ -11,7 +11,7 @@
    definitions and helper functions for AAC data
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __AACCOMMON_H
 #define __AACCOMMON_H

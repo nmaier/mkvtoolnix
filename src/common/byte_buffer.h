@@ -11,7 +11,7 @@
    Byte buffer class
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __BYTE_BUFFER_H
 #define __BYTE_BUFFER_H

@@ -40,7 +40,7 @@
   
    See the above URLs for the original authors.
    Modified by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #include <ctype.h>
 

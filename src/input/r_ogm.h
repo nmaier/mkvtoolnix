@@ -11,7 +11,7 @@
    class definitions for the OGG media stream reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
- */
+*/
 
 #ifndef __R_OGM_H
 #define __R_OGM_H
