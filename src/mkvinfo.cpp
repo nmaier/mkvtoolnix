@@ -154,7 +154,8 @@ void show_error(const char *fmt, ...) {
     mxprint(stdout, "(%s) %s\n", NAME, args_buffer);
 }
 
-void show_element(EbmlElement *l, int level, const char *fmt, ...) {
+void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
+                   const char *fmt, ...) {
   va_list ap;
   char level_buffer[10];
 
@@ -183,11 +184,17 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
     frame->add_item(level, args_buffer);
   }
 #endif // HAVE_WXWINDOWS
+
+  if ((l != NULL) && skip)
+    l->SkipData(*es, l->Generic().Context);
 }
 
-#define show_warning(l, f, args...) show_element(NULL, l, f, ## args)
+#define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
+                                                  ## args)
 #define show_unknown_element(e, l) \
-  show_element(e, l, "Unknown element: %s", e->Generic().DebugName)
+  _show_element(e, es, true, l, "Unknown element: %s", e->Generic().DebugName)
+#define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
+                                                     ## args)
 
 // }}}
 
@@ -236,7 +243,8 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
 #define in_parent(p) (in->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
 
-bool is_global(EbmlElement *l, int level, int &upper_lvl_el) {
+#define is_global(l, lvl, ule) _is_global(l, es, lvl, ule)
+bool _is_global(EbmlElement *l, EbmlStream *es, int level, int &upper_lvl_el) {
   if (upper_lvl_el < 0)
     upper_lvl_el = 0;
 
