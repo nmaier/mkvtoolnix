@@ -121,12 +121,14 @@ floating point number or as 'widht/height', e.g. 16/9.
 .LP
 Options that only apply to text subtitle tracks:
 .TP
-\fB\-\-no\-utf8\-subs\fR
-With this option text subtitles will not be recoded, and the track's
-CodecId will be set to S_TEXT/ASCII. Without this option the text subtitles
-will be converted to UTF\-8, and the track's CodecId will be set to
-S_TEXT/UTF8. \fBmkvmerge\fR uses the current locale to determine the charset
-from which to convert which can be overridden with \fB\-\-sub\-charset\fR.
+\fB\-\-sub\-format\fR <\fIutf8\fR|\fIascii\fR>
+If the format chosen is \fIutf8\fR then text subtitles will be recoded to
+UTF-8, and the track's codec ID will be set to S_TEXT/UTF8. \fIascii\fR does
+no conversion, and S_TEXT/ASCII will be used instead. \fBmkvmerge\fR uses the
+current locale to determine the charset from which to convert which can be
+overridden with \fB\-\-sub\-charset\fR.
+.br
+The default is utf8.
 .TP
 \fB\-\-sub\-charset\fR
 Sets the charset for the conversion to UTF-8 for UTF-8 subtitles. If not
@@ -167,11 +169,15 @@ could be converted into the following option file:
 \-A a movie.avi
 .br
 sound.ogg
+
+
 .SH USAGE
 .LP
 For each file the user can select which tracks \fBmkvmerge\fR should take.
 They are all put into the file specified with '-o'. A list of known
 (and supported) source formats can be obtained with the '-l' option.
+
+
 .SH EXAMPLES
 .LP
 Let's assume you have a file called \fIMyMovie.avi\fP and the audio track in a
@@ -262,6 +268,25 @@ $ \fBsrttool -s -w -i mymovie.srtx -o mymovie.srt\fP
 The resulting file can be used as another input file for \fBmkvmerge\fR:
 .LP
 $ \fBmkvmerge -o mymovie.mkv mymovie.avi mymovie.srt\fP
+
+
+.SH SUBTITLES
+.LP
+There are several text subtitle formats that can be embedded into Matroska.
+At the moment \fBmkvmerge\fR supports only one simple text subtitle formats:
+SRT (Subtitle Ripper). These subtitles should normally be recoded to UTF-8
+so that they can be displayed correctly by a player. For recoded subtitles
+Matroska specifies S_TEXT/UTF8 as the codec ID. There's also S_TEXT/ASCII
+which assumes that no conversion is necessary.
+.LP
+\fBmkvmerge\fR does this conversion automatically based on the system's current
+locale. If the user does not want that conversion then he has to use the
+\fB\-\-sub\-type ascii\fR switch. If the subtitle charset is not the same as
+the system's current charset then the user can use \fB\-\-sub\-charset\fR
+switch. If the subtitles are already encoded in UTF-8 then you can use
+\fB\-\-sub\-charset UTF\-8\fR.
+
+
 .SH NOTES
 .LP
 What works:

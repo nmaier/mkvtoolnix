@@ -1,5 +1,8 @@
 2003-05-17  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Renamed '--no-utf8-subs' to '--sub-type utf8'. Polished the man
+        page regarding subtitle handling.
+
         * Fixed a bug with mono MP3 files.
 
         * Added support for AAC files (only those with ADTS headers at the

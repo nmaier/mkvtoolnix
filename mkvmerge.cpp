@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.65 2003/05/17 20:51:34 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.66 2003/05/17 23:25:08 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -288,8 +288,9 @@ static void usage(void) {
     "                           Works only for video tracks.\n"
     "  --aspect-ratio <f|a/b>   Sets the aspect ratio.\n"
     "\n Options that only apply to text subtitle tracks:\n"
-    "  --no-utf8-subs           Outputs text subtitles unmodified and do not\n"
-    "                           convert the text to UTF-8.\n"
+    "  --sub-format <utf8|      Converts text subtitles to UTF-8 or not.\n"
+    "                ascii>     keeps them as they are and assumes ASCII\n"
+    "                           encoding.\n"
     "  --sub-charset            Sets the charset the text subtitles are\n"
     "                           written in for the conversion to UTF-8.\n"
     "\n\n Other options:\n"
@@ -806,8 +807,21 @@ static void parse_args(int argc, char **argv) {
     } else if (!strcmp(argv[i], "--default-track"))
       ti.default_track = 1;
 
-    else if (!strcmp(argv[i], "--no-utf8-subs"))
-      ti.no_utf8_subs = 1;
+    else if (!strcmp(argv[i], "--sub-type")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --sub-type lacks its argument.\n");
+        exit(1);
+      }
+      if (!strcmp(argv[i + 1], "utf8"))
+        ti.no_utf8_subs = 0;
+      else if (!strcmp(argv[i + 1], "ascii"))
+        ti.no_utf8_subs = 1;
+      else {
+        fprintf(stderr, "Error: '%s' is an unsupported subtitle type.\n",
+                argv[i + 1]);
+        exit(1);
+      }
+    }
 
     else if (!strcmp(argv[i], "--language")) {
       if ((i + 1) >= argc) {
