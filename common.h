@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.25 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: common.h,v 1.26 2003/05/19 18:24:52 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -105,8 +105,92 @@ void *_safememdup(const void *src, size_t size, const char *file, int line);
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
 void *_saferealloc(void *mem, size_t size, const char *file, int line);
 
-int64_t get_bits(unsigned char *buffer, int size, int &pos, int num);
-
 extern int verbose;
+
+class bit_cursor_c {
+private:
+  const unsigned char *end_of_data;
+  const unsigned char *byte_position;
+  const unsigned char *start_of_data;
+  unsigned int bits_valid;
+  
+  bool out_of_data;
+
+public:  
+  bit_cursor_c(const unsigned char *data, unsigned int len):
+    end_of_data(data+len), byte_position(data), start_of_data(data),
+    bits_valid(8), out_of_data(false) {
+    if (byte_position >= end_of_data)
+      out_of_data = true;
+  }
+  
+  bool get_bits(unsigned int n, unsigned long &r) {
+    // returns true if less bits are available than asked for
+    r = 0;
+    
+    while (n > 0) {
+      if (byte_position >= end_of_data) {
+        out_of_data = true;
+        return true;
+      }
+      
+      unsigned int b = 8; // number of bits to extract from the current byte
+      if (b > n)
+        b = n;
+      if (b > bits_valid)
+        b = bits_valid;
+      
+      unsigned int rshift = bits_valid-b;
+      
+      r <<= b;
+      r |= ((*byte_position) >> rshift) & (0xff >> (8-b));
+      
+      bits_valid -= b;
+      if (bits_valid == 0) {
+        bits_valid = 8;
+        byte_position += 1;
+      }
+      
+      n -= b;
+    }
+    
+    return false;
+  }
+
+  bool get_bits(unsigned int n, int &r) {
+    unsigned long t;
+    bool b = get_bits(n, t);
+    r = (int)t;
+    return b;
+  }
+
+  bool get_bits(unsigned int n, unsigned int &r) {
+    unsigned long t;
+    bool b = get_bits(n, t);
+    r = (unsigned int)t;
+    return b;
+  }
+
+  bool get_bit(bool &r) {
+    unsigned long t;
+    bool b = get_bits(1, t);
+    r = (bool)t;
+    return b;
+  }
+
+  bool byte_align() {
+    if (out_of_data)
+      return true;
+    if (bits_valid == 8)
+      return false;
+    bits_valid = 0;
+    byte_position += 1;
+    return false;
+  }
+
+  int get_bit_position() {
+    return byte_position - start_of_data + 8 - bits_valid;
+  }  
+};
 
 #endif // __COMMON_H

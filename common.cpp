@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.22 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: common.cpp,v 1.23 2003/05/19 18:24:52 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -342,48 +342,4 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line) {
   }
 
   return mem;
-}
-
-/* 
- * bitstream helper function
- */
-
-
-int64_t get_bits(unsigned char *buffer, int size, int &pos, int num) {
-  int64_t value;
-  int bits, bit_mask, shift;
-
-  if (((pos + num + 7) / 8) > size)
-    return -1;                  // Not enough bytes available.
-  if ((num < 1) || (pos < 0))
-    die("num < 1 || pos < 0");  // Would be really, really stupid...
-
-  bits = 8 - (pos % 8);
-  bit_mask = (1 << bits) - 1;
-  if (num < bits) {
-    shift = bits - num;
-    bits = num;
-  } else
-    shift = 0;
-  value = (buffer[pos / 8] & bit_mask) >> shift;
-  pos += bits;
-  num -= bits;
-
-  while (num > 8) {
-    value <<= 8;
-    value |= buffer[pos / 8];
-    pos += 8;
-    num -= 8;
-  }
-  
-  if (num == 0)
-    return value;
-
-  shift = 8 - num;
-  value <<= num;
-  bit_mask = ((1 << num) - 1) << shift;
-  value |= (buffer[pos / 8] & bit_mask) >> shift;
-  pos += num;
-
-  return value;
 }

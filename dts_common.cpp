@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: dts_common.cpp,v 1.4 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: dts_common.cpp,v 1.5 2003/05/19 18:24:52 mosu Exp $
     \brief helper function for DTS data
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>
@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "common.h"
 #include "dts_common.h"
 
 // ---------------------------------------------------------------------------
@@ -88,80 +89,6 @@ enum source_pcm_resolution {
   spr_invalid7
 };
 
-class BitCursor {
-public:
-  const unsigned char * end_of_data;
-  const unsigned char * byte_position;
-  unsigned int bits_valid;
-  
-  bool out_of_data;
-  
-  BitCursor(const unsigned char * data, unsigned int len) :
-    end_of_data(data+len), byte_position(data), bits_valid(8),
-    out_of_data(false) {
-    
-    if (byte_position >= end_of_data) {
-      out_of_data = true;
-    }
-  }
-  
-  
-  bool get_bits(unsigned int n, unsigned long & r) {
-    // returns true if less bits are available than asked for
-    
-    r = 0;
-    
-    while (n > 0) {
-
-      if (byte_position >= end_of_data) {
-        out_of_data = true;
-        return true;
-      }
-      
-      unsigned int b = 8; // number of bits to extract from the current byte
-      if (b > n) b = n;
-      if (b > bits_valid) b = bits_valid;
-      
-      unsigned int rshift = bits_valid-b;
-      
-      r <<= b;
-      r |= ((*byte_position) >> rshift) & (0xff >> (8-b));
-      
-      bits_valid -= b;
-      if (bits_valid == 0) {
-        bits_valid = 8;
-        byte_position += 1;
-      }
-      
-      n -= b;
-    }
-    
-    return false;
-  }
-  
-  bool get_bits(unsigned int n, int & r) {
-    unsigned long t;
-    bool b = get_bits(n, t);
-    r = (int)t;
-    return b;
-  }
-
-  bool get_bits(unsigned int n, unsigned int & r) {
-    unsigned long t;
-    bool b = get_bits(n, t);
-    r = (unsigned int)t;
-    return b;
-  }
-
-  bool get_bit(bool & r) {
-    unsigned long t;
-    bool b = get_bits(1, t);
-    r = (bool)t;
-    return b;
-  }
-  
-};
-
 int find_dts_header(const unsigned char *buf, unsigned int size,
                     struct dts_header_s *dts_header) {
   
@@ -186,7 +113,7 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
     return -1;
   }
   
-  BitCursor bc(buf+offset+4, size-offset-4);
+  bit_cursor_c bc(buf+offset+4, size-offset-4);
   
   unsigned int t;
   
