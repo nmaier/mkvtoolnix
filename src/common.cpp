@@ -552,6 +552,10 @@ char *from_utf8(int handle, const char *utf8) {
 
 static vector<uint32_t> ru_numbers;
 
+void clear_list_of_unique_uint32() {
+  ru_numbers.clear();
+}
+
 bool is_unique_uint32(uint32_t number) {
   int i;
 

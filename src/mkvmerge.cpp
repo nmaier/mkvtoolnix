@@ -1635,6 +1635,7 @@ static void init_globals() {
   default_tracks[2] = 0;
   display_counter = 1;
   display_reader = NULL;
+  clear_list_of_unique_uint32();
 }
 
 static void destroy_readers() {
@@ -1986,6 +1987,8 @@ void main_loop() {
 // {{{ FUNCTION main(int argc, char **argv)
 
 int main(int argc, char **argv) {
+  time_t start, end;
+
   init_globals();
 
   setup();
@@ -1994,6 +1997,8 @@ int main(int argc, char **argv) {
 
   if (split_after > 0) {
     mxinfo("Pass 1: finding split points. This may take a while.\n\n");
+
+    start = time(NULL);
 
     create_readers();
 
@@ -2005,7 +2010,12 @@ int main(int argc, char **argv) {
     main_loop();
     finish_file();
 
-    mxinfo("\nPass 2: merging the files. This will take even longer.\n\n");
+    end = time(NULL);
+
+    mxinfo("\nPass 1 took %u seconds.\nPass 2: merging the files. This will "
+           "take even longer.\n\n", end - start);
+
+    start = time(NULL);
 
     delete cluster_helper;
     destroy_readers();
@@ -2021,7 +2031,12 @@ int main(int argc, char **argv) {
     main_loop();
     finish_file();
 
+    end = time(NULL);
+    mxinfo("Pass 2 took %u seconds.\n", end - start);
+
   } else {
+
+    start = time(NULL);
 
     create_readers();
 
@@ -2032,6 +2047,9 @@ int main(int argc, char **argv) {
     create_next_output_file(true, true);
     main_loop();
     finish_file();
+
+    end = time(NULL);
+    mxinfo("Muxing took %u seconds.\n", end - start);
   }
 
   cleanup();

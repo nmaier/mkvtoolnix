@@ -448,7 +448,7 @@ int cluster_helper_c::render() {
     // The next stuff is for splitting files.
     if (pass == 1) {            // first pass: find splitpoints
       if ((pack->bref == -1) && // this is a keyframe
-          ((video_fps == -1) || // either no video track present...
+          (!video_track_present || // either no video track present...
            // ...or this is the video track
            (source->get_track_type() == track_video))) { 
         sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
