@@ -166,15 +166,6 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     }
   }
 
-  // Update the number of samples we have processed so that we can
-  // calculate the timecode on the next call.
-  op.packet = data;
-  op.bytes = size;
-  this_bs = vorbis_packet_blocksize(&vi, &op);
-  samples_here = (this_bs + last_bs) / 4;
-  samples += samples_here;
-  last_bs = this_bs;
-
   // Recalculate the timecode if needed.
   if (timecode == -1) {
     if (initial_displacement > 0)
@@ -186,6 +177,15 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
 
   // Handle the linear sync - simply multiply with the given factor.
   timecode = (int64_t)((double)timecode * ti->async.linear);
+
+  // Update the number of samples we have processed so that we can
+  // calculate the timecode on the next call.
+  op.packet = data;
+  op.bytes = size;
+  this_bs = vorbis_packet_blocksize(&vi, &op);
+  samples_here = (this_bs + last_bs) / 4;
+  samples += samples_here;
+  last_bs = this_bs;
 
   // If a negative sync value was used we may have to skip this packet.
   if (timecode < 0) {
