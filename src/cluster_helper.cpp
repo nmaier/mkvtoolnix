@@ -90,7 +90,7 @@ KaxCluster *cluster_helper_c::get_cluster() {
 
 void cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
-  int64_t timecode;
+  int64_t timecode, old_max_timecode;
 
   timecode = get_timecode();
 
@@ -116,6 +116,30 @@ void cluster_helper_c::add_packet(packet_t *packet) {
     max_timecode = (packet->timecode + packet->duration);
 
   walk_clusters();
+
+  if ((pass == 2) &&   // second pass: process and split
+      (next_splitpoint < splitpoints.size()) && // splitpoint's avail
+      ((splitpoints[next_splitpoint]->packet_num - 1) == packet->packet_num)) {
+    render();
+    add_cluster(new KaxCluster());
+
+    find_next_splitpoint();
+
+    old_max_timecode = max_timecode;
+    max_timecode = packet->timecode;
+
+    mxprint(stdout, "\n");
+    finish_file();
+    create_next_output_file(next_splitpoint >= splitpoints.size());
+
+    max_timecode = old_max_timecode;
+
+    if (no_linking) {
+      timecode_offset = -1;
+      first_timecode = 0;
+    } else
+      first_timecode = -1;
+  } else
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
@@ -246,7 +270,7 @@ int cluster_helper_c::render() {
   int i, k, elements_in_cluster, num_cue_elements_here;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
-  int64_t block_duration, old_max_timecode, def_duration;
+  int64_t block_duration, def_duration;
   splitpoint_t *sp;
   generic_packetizer_c *source, *last_source;
   bool first_lace;
@@ -431,39 +455,6 @@ int cluster_helper_c::render() {
         last_packets[source->get_track_num()] = pack->packet_num;
       }
 
-    } else if ((pass == 2) &&   // second pass: process and split
-               (next_splitpoint < splitpoints.size()) && // splitpoint's avail
-               ((splitpoints[next_splitpoint]->packet_num - 1) ==
-                pack->packet_num)) {
-      if (elements_in_cluster > 0) {
-        cluster->Render(*out, *kax_cues);
-        if (kax_seekhead != NULL)
-          kax_seekhead->IndexThis(*cluster, *kax_segment);
-      }
-      find_next_splitpoint();
-
-      old_max_timecode = max_timecode;
-      max_timecode = pack->timecode;
-
-      mxprint(stdout, "\n");
-      finish_file();
-      create_next_output_file(next_splitpoint >= splitpoints.size());
-
-      max_timecode = old_max_timecode;
-
-      delete cluster;
-      cluster = new KaxCluster();
-      clstr->cluster = cluster;
-
-      cluster->SetParent(*kax_segment);
-      cluster->SetPreviousTimecode(0, TIMECODE_SCALE);
-
-      elements_in_cluster = 0;
-      if (no_linking) {
-        timecode_offset = -1;
-        first_timecode = 0;
-      } else
-        first_timecode = -1;
     }
 
     last_source = source;
