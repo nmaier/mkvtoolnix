@@ -125,7 +125,9 @@ static void fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
 }
 
 static void fhe_error_cb(const FLAC__StreamDecoder *,
-                         FLAC__StreamDecoderErrorStatus status, void *) {
+                         FLAC__StreamDecoderErrorStatus status,
+                         void *client_data) {
+  ((flac_header_extractor_c *)client_data)->done = true;
   mxverb(2, FPFX "error (%d)\n", (int)status);
 }
 
@@ -170,11 +172,9 @@ bool flac_header_extractor_c::extract() {
     mxverb(2, FPFX "read_page() failed.\n");
     return false;
   }
-  while (!done) {
-    result = (int)FLAC__stream_decoder_process_single(decoder);
-    mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: %u\n",
-           result, metadata_parsed, num_header_packets);
-  }
+  result = (int)FLAC__stream_decoder_process_until_end_of_stream(decoder);
+  mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: %u\n",
+         result, metadata_parsed, num_header_packets);
 
   return metadata_parsed;
 }

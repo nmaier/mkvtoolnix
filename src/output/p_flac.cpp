@@ -49,8 +49,16 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
   sample_rate = nsample_rate;
   channels = nchannels;
   bits_per_sample = nbits_per_sample;
-  header = (unsigned char *)safememdup(nheader, nl_header);
-  l_header = nl_header;
+  if ((nl_header < 4) || (nheader[0] != 'f') || (nheader [1] != 'L') ||
+      (nheader[2] != 'a') || (nheader[3] != 'C')) {
+    header = (unsigned char *)safemalloc(nl_header + 4);
+    memcpy(header, "fLaC", 4);
+    memcpy(&header[4], nheader, nl_header);
+    l_header = nl_header + 4;
+  } else {
+    header = (unsigned char *)safememdup(nheader, nl_header);
+    l_header = nl_header;
+  }
 
   set_track_type(track_audio);
   if (use_durations)

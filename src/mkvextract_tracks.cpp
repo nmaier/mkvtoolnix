@@ -447,11 +447,11 @@ static void create_output_files() {
           tracks[i].out->puts_unl(sconv.c_str());
 
         } else if (tracks[i].type == TYPEFLAC) {
-          if (!tracks[i].embed_in_ogg) {
-            tracks[i].out->write("fLaC", 4);
+          if (!tracks[i].embed_in_ogg)
             tracks[i].out->write(tracks[i].private_data,
                                  tracks[i].private_size);
-          } else {
+          else {
+            unsigned char *ptr;
             ogg_stream_init(&tracks[i].osstate, rand());
 
             // Handle the three header packets: Headers, comments, codec
@@ -466,8 +466,15 @@ static void create_output_files() {
             flush_ogg_pages(tracks[i]);
             op.b_o_s = 0;
             op.packetno = 1;
-            op.packet = (unsigned char *)tracks[i].private_data;
-            op.bytes = tracks[i].private_size;
+            ptr = (unsigned char *)tracks[i].private_data;
+            if ((tracks[i].private_size >= 4) && (ptr[0] == 'f') &&
+                (ptr[1] == 'L') && (ptr[2] == 'a') && (ptr[3] == 'C')) {
+              op.packet = ptr + 4;
+              op.bytes = tracks[i].private_size - 4;
+            } else {
+              op.packet = (unsigned char *)tracks[i].private_data;
+              op.bytes = tracks[i].private_size;
+            }
             ogg_stream_packetin(&tracks[i].osstate, &op);
             flush_ogg_pages(tracks[i]);
             tracks[i].packetno = 2;

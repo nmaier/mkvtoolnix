@@ -37,9 +37,10 @@ Command line syntax for the \fBtracks\fR extraction mode:
 Sets the charset to convert the next text subtitle track to. Only valid if the
 next track ID targets a text subtitle track. It defaults to UTF-8.
 .TP
-\fB\-\-ogg\fR
-Only valid for FLAC tracks. Normally FLAC tracks are extracted to raw FLAC
-files. With this switch they are embedded in an Ogg transport stream.
+\fB\-\-no\-ogg\fR
+Only valid for FLAC tracks. Normally FLAC tracks are embedded in an Ogg
+transport stream. With this switch they are extracted to raw FLAC files
+instead.
 .TP
 \fITID\fR:\fIoutname\fR
 Causes extraction of the track with the ID \fITID\fR into the file

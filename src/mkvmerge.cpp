@@ -184,7 +184,7 @@ bool fast_mode = false;
 // Specs say that track numbers should start at 1.
 int track_number = 1;
 
-mm_io_c *out;
+mm_io_c *out = NULL;
 
 bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
@@ -438,6 +438,9 @@ static void sighandler(int signum) {
   if (signum == SIGUSR1)
     debug_facility.dump_info();
 #endif // DEBUG
+
+  if (out == NULL)
+    mxerror("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n");
 
   mxwarn("\nmkvmerge received a SIGINT (probably because the user pressed "
          "Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during "

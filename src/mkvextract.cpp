@@ -198,7 +198,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
 
   conv_handle = conv_utf8;
   sub_charset = "UTF-8";
-  embed_in_ogg = false;
+  embed_in_ogg = true;
 
   // Now process all the other options.
   for (i = 3; i < argc; i++)
@@ -215,10 +215,10 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       sub_charset = argv[i + 1];
       i++;
 
-    } else if (!strcmp(argv[i], "--ogg")) {
+    } else if (!strcmp(argv[i], "--no-ogg")) {
       if (mode != MODE_TRACKS)
-        mxerror("'--ogg' is only allowed when extracting tracks.\n");
-      embed_in_ogg = true;
+        mxerror("'--no-ogg' is only allowed when extracting tracks.\n");
+      embed_in_ogg = false;
 
     } else if (mode == MODE_TAGS)
       mxerror("No further options allowed when extracting %s.\n", argv[1]);
