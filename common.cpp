@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.3 2003/02/16 17:04:38 mosu Exp $
+    \version \$Id: common.cpp,v 1.4 2003/02/25 13:17:33 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -126,7 +126,7 @@ char *map_video_codec_fourcc(char *fourcc, int *set_codec_private) {
            !strcasecmp(fourcc, "MP43"))
     return "V_MSMPEG4";
   else {
-    fprintf(stderr, "WARNING: Unknonw FourCC '%s'. Please contact "
+    fprintf(stderr, "Warning: Unknonw FourCC '%s'. Please contact "
             "Moritz Bunkus <moritz@bunkus.org>\n", fourcc);
     *set_codec_private = 1;
     return "V_MS/VFW/FOURCC";
@@ -142,7 +142,7 @@ char *map_audio_codec_id(int id, int bps, int *set_codec_private) {
     else if (bps == 24)
       return "A_PCM24IN";
     else {
-      fprintf(stderr, "WARNING: Unknown codec ID '%d' (0x%04x), %d bps. Please "
+      fprintf(stderr, "Warning: Unknown codec ID '%d' (0x%04x), %d bps. Please "
               "contact Moritz Bunkus <moritz@bunkus.org>\n", id, id, bps);
       *set_codec_private = 1;
       return "A_MS/ACM";
@@ -152,7 +152,7 @@ char *map_audio_codec_id(int id, int bps, int *set_codec_private) {
   else if (id == 0x2000) // AC3
     return "A_DOL_AC3";
   else {
-    fprintf(stderr, "WARNING: Unknown codec ID '%d' (0x%04x), %d bps. Please "
+    fprintf(stderr, "Warning: Unknown codec ID '%d' (0x%04x), %d bps. Please "
             "contact Moritz Bunkus <moritz@bunkus.org>\n", id, id, bps);
     *set_codec_private = 1;
     return "A_MS/ACM";

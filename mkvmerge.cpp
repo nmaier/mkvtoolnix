@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.12 2003/02/24 12:31:17 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.13 2003/02/25 13:17:33 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -340,12 +340,12 @@ static void parse_sync(char *s, audio_sync_t *async) {
 //     if (*c == ':')
 //       num_colons++;
 //     else if ((*c < '0') || (*c > '9')) {
-//       fprintf(stderr, "ERROR: illegal character '%c' in time range.\n", *c);
+//       fprintf(stderr, "Error: illegal character '%c' in time range.\n", *c);
 //       exit(1);
 //     }
 //   }
 //   if (num_colons > 2) {
-//     fprintf(stderr, "ERROR: illegal time range: %s.\n", s);
+//     fprintf(stderr, "Error: illegal time range: %s.\n", s);
 //     exit(1);
 //   }
 //   if (num_colons == 0) {
@@ -382,7 +382,7 @@ static void parse_sync(char *s, audio_sync_t *async) {
 //     range->end = 0;
 //   range->start = parse_time(s);
 //   if ((range->end != 0) && (range->end < range->start)) {
-//     fprintf(stderr, "ERROR: end time is set before start time.\n");
+//     fprintf(stderr, "Error: end time is set before start time.\n");
 //     exit(1);
 //   }
 // }
@@ -435,7 +435,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: only one output file allowed.\n");
         exit(1);
       }
-      outfile = (char *)strdup(argv[i + 1]);
+      outfile = argv[i + 1];
       i++;
     }
 

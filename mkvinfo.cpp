@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.1 2003/02/25 09:28:55 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.2 2003/02/25 13:17:33 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -272,7 +272,7 @@ void process_file() {
                   fprintf(stdout, " at %llu", last_pos);
                 fprintf(stdout, "\n");
                 if (find_track(uint8(tnum)) != NULL)
-                  fprintf(stdout, "(%s) |  + WARNING: There's more than one "
+                  fprintf(stdout, "(%s) |  + Warning: There's more than one "
                           "track with the number %u.\n", NAME,
                           uint8(tnum));
 
