@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.1 2003/02/16 17:04:38 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.2 2003/02/16 20:19:48 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -169,7 +169,7 @@ void mp3_packetizer_c::set_header() {
       &GetNextChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks),
         static_cast<KaxTrackEntry &>(*kax_last_entry));
   kax_last_entry = track_entry;
-  
+
   serialno = track_number++;
   KaxTrackNumber &tnumber =
     GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
@@ -197,9 +197,6 @@ int mp3_packetizer_c::process(char *buf, int size, int last_frame) {
   char          *packet;
   unsigned long  header;
   mp3_header_t   mp3header;
-
-  if (packetno == 0)
-    set_header();
 
   add_to_buffer(buf, size);
   while ((packet = get_mp3_packet(&header, &mp3header)) != NULL) {
