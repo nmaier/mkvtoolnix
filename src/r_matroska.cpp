@@ -1700,7 +1700,11 @@ void kax_reader_c::identify() {
              tracks[i]->type == 's' ? "subtitles" : "unknown",
              tracks[i]->codec_id,
              tracks[i]->ms_compat ? ", " : "",
-             tracks[i]->ms_compat ? tracks[i]->v_fourcc : "",
+             tracks[i]->ms_compat ? 
+             (tracks[i]->type == 'v' ? tracks[i]->v_fourcc :
+              tracks[i]->a_formattag == 0x0001 ? "PCM" :
+              tracks[i]->a_formattag == 0x0055 ? "MP3" :
+              tracks[i]->a_formattag == 0x2000 ? "AC3" : "unknown") : "",
              info.c_str());
     }
 
