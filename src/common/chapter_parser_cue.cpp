@@ -112,6 +112,7 @@ typedef struct {
   int64_t offset;
   KaxChapters *chapters;
   KaxEditionEntry *edition;
+  uint32_t edition_uid;
   KaxChapterAtom *atom;
   bool do_convert;
   string global_catalog;
@@ -199,11 +200,11 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   create_tag2(a.date, a.global_date, "DATE");
   create_tag2(a.genre, a.global_genre, "GENRE");
   create_tag1(a.isrc, "ISRC");
-  create_tag1(a.flags, "CUE_FLAGS");
+  create_tag1(a.flags, "CD_TRACK_FLAGS");
   for (i = 0; i < a.global_comment.size(); i++)
-    create_tag1(a.global_comment[i], "COMMENTS");
+    create_tag1(a.global_comment[i], "COMMENT");
   for (i = 0; i < a.comment.size(); i++)
-    create_tag1(a.comment[i], "COMMENTS");
+    create_tag1(a.comment[i], "COMMENT");
 
   (*tags)->PushElement(*tag);
 }
@@ -212,6 +213,7 @@ static void
 add_tag_for_global_cue_settings(cue_parser_args_t &a,
                                 KaxTags **tags) {
   KaxTag *tag;
+  KaxTagTargets *targets;
   string s;
   int i;
 
@@ -223,13 +225,17 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
 
   tag = new KaxTag;
 
+  targets = &GetChild<KaxTagTargets>(*tag);
+  *static_cast<EbmlUInteger *>(&GetChild<KaxTagEditionUID>(*targets)) =
+    a.edition_uid;
+
   create_tag1(a.global_performer, "ARTIST");
   create_tag1(a.global_title, "TITLE");
   create_tag1(a.global_date, "DATE");
   create_tag1(a.global_disc_id, "DISCID");
   create_tag1(a.global_catalog, "CATALOG");
   for (i = 0; i < a.global_rem.size(); i++)
-    create_tag1(a.global_rem[i], "COMMENTS");
+    create_tag1(a.global_rem[i], "COMMENT");
 
   (*tags)->PushElement(*tag);
 }
@@ -299,8 +305,12 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   if (!((start >= a.min_tc) && ((start <= a.max_tc) || (a.max_tc == -1))))
     return;
 
-  if (a.edition == NULL)
+  if (a.edition == NULL) {
     a.edition = &GetChild<KaxEditionEntry>(*a.chapters);
+    a.edition_uid = create_unique_uint32();
+    *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(*a.edition)) =
+      a.edition_uid;
+  }
   if (a.atom == NULL)
     a.atom = &GetChild<KaxChapterAtom>(*a.edition);
   else

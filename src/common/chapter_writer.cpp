@@ -353,6 +353,7 @@ write_chapters_xml(KaxChapters *chapters,
                    FILE *out) {
   int i, j;
   KaxEditionEntry *edition;
+  KaxEditionUID *edition_uid;
 
   o = out;
 
@@ -360,6 +361,10 @@ write_chapters_xml(KaxChapters *chapters,
     if (is_id((*chapters)[i], KaxEditionEntry)) {
       mxprint(out, "  <EditionEntry>\n");
       edition = (KaxEditionEntry *)(*chapters)[i];
+      edition_uid = FINDFIRST(edition, KaxEditionUID);
+      if (edition != NULL)
+        mxprint(out, "    <!-- <EditionUID>%llu</EditionUID> -->\n",
+                uint64(*static_cast<EbmlUInteger *>(edition_uid)));
       for (j = 0; j < edition->ListSize(); j++)
         if (is_id((*edition)[j], KaxChapterAtom))
           write_chapter_atom_xml((KaxChapterAtom *)(*edition)[j], 2);

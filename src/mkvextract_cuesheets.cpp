@@ -263,8 +263,10 @@ print_comments(const char *prefix,
 
   for (i = 0; i < tag.ListSize(); i++)
     if (is_id(tag[i], KaxTagSimple) &&
-        (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) ==
-         "COMMENTS"))
+        ((get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) ==
+          "COMMENT") ||
+         (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) ==
+          "COMMENTS")))
       out.printf("%sREM \"%s\"\n", prefix,
                  get_simple_tag_value(*static_cast<KaxTagSimple *>(tag[i])).
                  c_str());
@@ -308,6 +310,7 @@ write_cuesheet(const char *file_name,
       print_if_available("ARTIST", "    PERFORMER \"%s\"\n");
       print_if_available("ISRC", "    ISRC %s\n");
       print_if_available("CUE_FLAGS", "    FLAGS %s\n");
+      print_if_available("CD_TRACK_FLAGS", "    FLAGS %s\n");
       index_00 = get_chapter_index(0, atom);
       index_01 = get_chapter_index(1, atom);
       if (index_01 == -1) {

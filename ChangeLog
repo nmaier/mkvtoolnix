@@ -1,3 +1,13 @@
+2004-08-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge/mkvextract: new feature: Use the new EditionUID entries
+	when convert CUE sheets to chapters and tracks. This is in
+	preparation for 'multiple CDs to single Matroska file'
+	conversions.
+
+	* mkvmerge: new feature: Abort muxing if the output file name is
+	the same as the name of one of the input files.
+
 2004-08-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Implemented sample-precision for
