@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.4 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.5 2003/03/04 10:16:28 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,14 +34,15 @@
 #include <dmalloc.h>
 #endif
 
-pcm_packetizer_c::pcm_packetizer_c(void *nprivate_data, int nprivate_size,
+pcm_packetizer_c::pcm_packetizer_c(unsigned char *nprivate_data,
+                                   int nprivate_size,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
                                    audio_sync_t *nasync)
                                    throw (error_c) : q_c() {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
-  tempbuf = (char *)malloc(bps + 128);
+  tempbuf = (unsigned char *)malloc(bps + 128);
   if (tempbuf == NULL)
     die("malloc");
   samples_per_sec = nsamples_per_sec;
@@ -105,9 +106,9 @@ void pcm_packetizer_c::set_header() {
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 
-int pcm_packetizer_c::process(char *buf, int size, int last_frame) {
+int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
   int i, bytes_per_packet, remaining_bytes, complete_packets;
-  char *new_buf;
+  unsigned char *new_buf;
 
   if (size > bps) { 
     fprintf(stderr, "FATAL: pcm_packetizer: size (%d) > bps (%d)\n", size,
@@ -123,7 +124,7 @@ int pcm_packetizer_c::process(char *buf, int size, int last_frame) {
       int pad_size;
 
       pad_size = bps * async.displacement / 1000;
-      new_buf = (char *)malloc(size + pad_size);
+      new_buf = (unsigned char *)malloc(size + pad_size);
       if (new_buf == NULL)
         die("malloc");
       memset(new_buf, 0, pad_size);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.10 2003/03/01 16:49:28 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.11 2003/03/04 10:16:28 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -76,7 +76,7 @@ extern cluster_helper_c *cluster_helper;
 class generic_packetizer_c {
 protected:
   int serialno;
-  void *private_data;
+  unsigned char *private_data;
   int private_data_size;
 public:
   KaxTrackEntry *track_entry;
@@ -87,7 +87,7 @@ public:
   virtual packet_t *get_packet() = 0;
   virtual void      set_header() = 0;
   virtual stamp_t   get_smallest_timestamp() = 0;
-  virtual void      set_private_data(void *data, int size);
+  virtual void      set_private_data(unsigned char *data, int size);
 };
  
 class generic_reader_c {
@@ -105,7 +105,7 @@ typedef struct packet_t {
   KaxBlockGroup       *group;
   KaxBlock            *block;
   KaxCluster          *cluster;
-  char                *data;
+  unsigned char       *data;
   int                  length, superseeded;
   u_int64_t            timestamp, id, bref, fref;
   generic_packetizer_c *source;

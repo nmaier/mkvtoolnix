@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.5 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.6 2003/03/04 10:16:28 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,10 +34,10 @@
 #endif
 
 int mp3_reader_c::probe_file(FILE *file, u_int64_t size) { 
-  char          buf[4096];
-  int           pos;
+  unsigned char buf[4096];
+  int pos;
   unsigned long header;
-  mp3_header_t  mp3header;
+  mp3_header_t mp3header;
   
   if (size < 4096)
     return 0;
@@ -66,9 +66,9 @@ int mp3_reader_c::probe_file(FILE *file, u_int64_t size) {
 }
 
 mp3_reader_c::mp3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
-  int           pos;
+  int pos;
   unsigned long header;
-  mp3_header_t  mp3header;
+  mp3_header_t mp3header;
   
   
   if ((file = fopen(fname, "r")) == NULL)
@@ -85,7 +85,7 @@ mp3_reader_c::mp3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
     throw error_c("mp3_reader: Could not read 4096 bytes.");
   if (fseek(file, 0, SEEK_SET) != 0)
     throw error_c("mp3_reader: Could not seek to beginning of file.");
-  pos = find_mp3_header((char *)chunk, 4096, &header);
+  pos = find_mp3_header(chunk, 4096, &header);
   if (pos < 0)
     throw error_c("mp3_reader: No valid MP3 packet found in the first " \
                   "4096 bytes.\n");
@@ -124,7 +124,7 @@ int mp3_reader_c::read() {
       return 0;
 
     last_frame = (nread == 4096 ? 0 : 1);
-    mp3packetizer->process((char *)chunk, nread, last_frame);
+    mp3packetizer->process(chunk, nread, last_frame);
     bytes_processed += nread;
 
     if (last_frame)

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.11 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.12 2003/03/04 10:16:28 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,7 +35,7 @@
 #include <dmalloc.h>
 #endif
 
-video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
+video_packetizer_c::video_packetizer_c(unsigned char *pr_data, int pd_size,
                                        char *ncodec, double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int nmax_frame_size, audio_sync_t *as,
@@ -49,7 +49,7 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
   height = nheight;
   bpp = nbpp;
   max_frame_size = nmax_frame_size;
-  tempbuf = (char *)malloc(max_frame_size + 1);
+  tempbuf = (unsigned char *)malloc(max_frame_size + 1);
   if (tempbuf == NULL)
     die("malloc");
   avi_compat_mode = navi_compat_mode;
@@ -111,7 +111,7 @@ void video_packetizer_c::set_header() {
   *(static_cast<EbmlFloat *>(&frate)) = fps;
 }
 
-int video_packetizer_c::process(char *buf, int size, int num_frames,
+int video_packetizer_c::process(unsigned char *buf, int size, int num_frames,
                                 int key, int last_frame,
                                 int64_t old_timecode) {
   u_int64_t timecode;

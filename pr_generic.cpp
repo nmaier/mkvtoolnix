@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.8 2003/03/01 16:19:36 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.9 2003/03/04 10:16:28 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -40,10 +40,10 @@ generic_packetizer_c::~generic_packetizer_c() {
     free(private_data);
 }
 
-void generic_packetizer_c::set_private_data(void *data, int size) {
+void generic_packetizer_c::set_private_data(unsigned char *data, int size) {
   if (private_data != NULL)
     free(private_data);
-  private_data = malloc(size);
+  private_data = (unsigned char *)malloc(size);
   if (private_data == NULL)
     die("malloc");
   memcpy(private_data, data, size);

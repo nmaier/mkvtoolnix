@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.4 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.5 2003/03/04 10:16:28 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,7 +36,8 @@
 
 
 
-ac3_packetizer_c::ac3_packetizer_c(void *nprivate_data, int nprivate_size,
+ac3_packetizer_c::ac3_packetizer_c(unsigned char *nprivate_data,
+                                   int nprivate_size,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nbitrate,
                                    audio_sync_t *nasync)
@@ -63,10 +64,10 @@ void ac3_packetizer_c::set_params(unsigned long nsamples_per_sec,
   bitrate = nbitrate;
 }
 
-void ac3_packetizer_c::add_to_buffer(char *buf, int size) {
-  char *new_buffer;
+void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
+  unsigned char *new_buffer;
   
-  new_buffer = (char *)realloc(packet_buffer, buffer_size + size);
+  new_buffer = (unsigned char *)realloc(packet_buffer, buffer_size + size);
   if (new_buffer == NULL)
     die("realloc");
   
@@ -81,8 +82,7 @@ int ac3_packetizer_c::ac3_packet_available() {
   
   if (packet_buffer == NULL)
     return 0;
-  pos = find_ac3_header((unsigned char *)packet_buffer, buffer_size,
-                        &ac3header);
+  pos = find_ac3_header(packet_buffer, buffer_size, &ac3header);
   if (pos < 0)
     return 0;
   
@@ -90,12 +90,12 @@ int ac3_packetizer_c::ac3_packet_available() {
 }
 
 void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
-  int   new_size;
-  char *temp_buf;
+  int new_size;
+  unsigned char *temp_buf;
   
   new_size = buffer_size - (pos + framesize);
   if (new_size != 0) {
-    temp_buf = (char *)malloc(new_size);
+    temp_buf = (unsigned char *)malloc(new_size);
     if (temp_buf == NULL)
       die("malloc");
     memcpy(temp_buf, &packet_buffer[pos + framesize],
@@ -107,16 +107,15 @@ void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
   buffer_size = new_size;
 }
 
-char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
-                                       ac3_header_t *ac3header) {
-  int     pos;
-  char   *buf;
-  double  pims;
+unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
+                                                ac3_header_t *ac3header) {
+  int pos;
+  unsigned char *buf;
+  double pims;
   
   if (packet_buffer == NULL)
     return 0;
-  pos = find_ac3_header((unsigned char *)packet_buffer, buffer_size,
-                        ac3header);
+  pos = find_ac3_header(packet_buffer, buffer_size, ac3header);
   if (pos < 0)
     return 0;
   if ((pos + ac3header->bytes) > buffer_size)
@@ -143,7 +142,7 @@ char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     fprintf(stdout, "ac3_packetizer: skipping %d bytes (no valid AC3 header "
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
-  buf = (char *)malloc(ac3header->bytes);
+  buf = (unsigned char *)malloc(ac3header->bytes);
   if (buf == NULL)
     die("malloc");
   memcpy(buf, packet_buffer + pos, ac3header->bytes);
@@ -206,10 +205,10 @@ void ac3_packetizer_c::set_header() {
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 
-int ac3_packetizer_c::process(char *buf, int size, int last_frame) {
-  char          *packet;
-  unsigned long  header;
-  ac3_header_t   ac3header;
+int ac3_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
+  unsigned char *packet;
+  unsigned long header;
+  ac3_header_t ac3header;
 
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
@@ -225,6 +224,3 @@ int ac3_packetizer_c::process(char *buf, int size, int last_frame) {
   else
     return EMOREDATA;
 }
-
-// void ac3_packetizer_c::reset() {
-// }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mp3_common.h,v 1.3 2003/02/27 09:52:37 mosu Exp $
+    \version \$Id: mp3_common.h,v 1.4 2003/03/04 10:16:28 mosu Exp $
     \brief helper functions for MP3 data
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@ typedef struct {
   int framesize;
 } mp3_header_t;
 
-int find_mp3_header(char *buf, int size, unsigned long *_header);
+int find_mp3_header(unsigned char *buf, int size, unsigned long *_header);
 void decode_mp3_header(unsigned long header, mp3_header_t *h);
 
 #endif // __MP3_COMMON_H

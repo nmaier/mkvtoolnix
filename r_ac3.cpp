@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.6 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.7 2003/03/04 10:16:28 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -118,7 +118,7 @@ int ac3_reader_c::read() {
     else
       last_frame = 0;
 
-    ac3packetizer->process((char *)chunk, nread, last_frame);
+    ac3packetizer->process(chunk, nread, last_frame);
     bytes_processed += nread;
 
     if (last_frame)

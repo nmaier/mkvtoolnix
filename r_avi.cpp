@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.12 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.13 2003/03/04 10:16:28 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -93,7 +93,7 @@ static void dump_wfe(WAVEFORMATEX *w) {
 #endif // DEBUG
 
 int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
-  char data[12];
+  unsigned char data[12];
   
   if (size < 12)
     return 0;
@@ -103,7 +103,8 @@ int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
     return 0;
   }
   fseek(file, 0, SEEK_SET);
-  if(strncasecmp(data, "RIFF", 4) || strncasecmp(data+8, "AVI ", 4))
+  if(strncasecmp((char *)data, "RIFF", 4) ||
+     strncasecmp((char *)data+8, "AVI ", 4))
     return 0;
   return 1;
 }
@@ -204,7 +205,8 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
 
     if (nfourcc != NULL)
       codec = nfourcc;
-    vpacketizer = new video_packetizer_c(avi->bitmap_info_header,
+    vpacketizer = new video_packetizer_c((unsigned char *)
+                                         avi->bitmap_info_header,
                                          avi->bitmap_info_header == NULL ? 0 : 
                                            sizeof(BITMAPINFOHEADER),
                                          codec, AVI_frame_rate(avi),
@@ -260,7 +262,7 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
     demuxer = demuxer->next;
   }
   max_frame_size = fsize;
-  chunk = (char *)malloc(fsize < 16384 ? 16384 : fsize);
+  chunk = (unsigned char *)malloc(fsize < 16384 ? 16384 : fsize);
   if (chunk == NULL)
     die("malloc");
   act_wchar = 0;
@@ -316,7 +318,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_bits(avi);
-      demuxer->packetizer = new pcm_packetizer_c(wfe, wfe ? wfe->cb_size +
+      demuxer->packetizer = new pcm_packetizer_c((unsigned char *)wfe,
+                                                 wfe ? wfe->cb_size +
                                                  sizeof(WAVEFORMATEX) : 0,
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
@@ -330,7 +333,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new mp3_packetizer_c(wfe, wfe ? wfe->cb_size +
+      demuxer->packetizer = new mp3_packetizer_c((unsigned char *)wfe,
+                                                 wfe ? wfe->cb_size +
                                                  sizeof(WAVEFORMATEX) : 0,
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
@@ -344,7 +348,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new ac3_packetizer_c(wfe, wfe ? wfe->cb_size +
+      demuxer->packetizer = new ac3_packetizer_c((unsigned char *)wfe,
+                                                 wfe ? wfe->cb_size +
                                                  sizeof(WAVEFORMATEX) : 0,
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
@@ -381,8 +386,8 @@ int avi_reader_c::is_keyframe(unsigned char *data, long size, int suggestion) {
       return ((i & 0x40000000) ? 0 : 1);
     case RAVI_MPEG4:
       for (i = 0; i < size - 5; i++) {
-        if ((data[i] == 0x00) && (data[i + 1] == 0x00) && (data[i + 2] == 0x01) &&
-            (data[i + 3] == 0xb6)) {
+        if ((data[i] == 0x00) && (data[i + 1] == 0x00) &&
+            (data[i + 2] == 0x01) && (data[i + 3] == 0xb6)) {
           if ((data[i + 4] & 0xc0) == 0x00)
             return 1;
           else
@@ -422,8 +427,8 @@ int avi_reader_c::read() {
           frames = maxframes + 1;
           break;
         }
-        key = is_keyframe((unsigned char *)chunk, nread, key);
-        old_chunk = (char *)malloc(nread);
+        key = is_keyframe(chunk, nread, key);
+        old_chunk = (unsigned char *)malloc(nread);
         if (old_chunk == NULL)
           die("malloc");
         memcpy(old_chunk, chunk, nread);
@@ -446,7 +451,7 @@ int avi_reader_c::read() {
           frames = maxframes + 1;
           break;
         }
-        key = is_keyframe((unsigned char *)chunk, nread, key);
+        key = is_keyframe(chunk, nread, key);
         if (frames == (maxframes - 1)) {
           last_frame = 1;
           done = 1;
@@ -464,7 +469,7 @@ int avi_reader_c::read() {
             free(old_chunk);
           if (nread == 0) 
             fprintf(stdout, "hmm\n");
-          old_chunk = (char *)malloc(nread);
+          old_chunk = (unsigned char *)malloc(nread);
           if (old_chunk == NULL)
             die("malloc");
           memcpy(old_chunk, chunk, nread);
@@ -487,9 +492,9 @@ int avi_reader_c::read() {
       AVI_set_audio_track(avi, demuxer->aid);
       switch (AVI_audio_format(avi)) {
         case 0x0001: // raw PCM
-          nread = AVI_read_audio(avi, chunk, demuxer->samples_per_second *
-                                 demuxer->channels * demuxer->bits_per_sample /
-                                 8);
+          nread = AVI_read_audio(avi, (char *)chunk,
+                                 demuxer->channels * demuxer->bits_per_sample *
+                                 demuxer->samples_per_second / 8);
           if (nread > 0) {
             if (nread < (demuxer->samples_per_second * demuxer->channels *
                          demuxer->bits_per_sample / 8))
@@ -501,7 +506,7 @@ int avi_reader_c::read() {
           }
           break;
         case 0x0055: // MP3
-          nread = AVI_read_audio(avi, chunk, 16384);
+          nread = AVI_read_audio(avi, (char *)chunk, 16384);
           if (nread <= 0)
             demuxer->eos = 1;
           else
@@ -510,7 +515,7 @@ int avi_reader_c::read() {
           
           break;
         case 0x2000: // AC3
-          nread = AVI_read_audio(avi, chunk, 16384);
+          nread = AVI_read_audio(avi, (char *)chunk, 16384);
           if (nread <= 0)
             demuxer->eos = 1;
           else

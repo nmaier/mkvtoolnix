@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.7 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.8 2003/03/04 10:16:28 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -53,7 +53,7 @@ extern "C" {                    // for BITMAPINFOHEADER
  * Probes a file by simply comparing the first four bytes to 'OggS'.
  */
 int ogm_reader_c::probe_file(FILE *file, u_int64_t size) {
-  char data[4];
+  unsigned char data[4];
   
   if (size < 4)
     return 0;
@@ -64,7 +64,7 @@ int ogm_reader_c::probe_file(FILE *file, u_int64_t size) {
     return 0;
   }
   fseek(file, 0, SEEK_SET);
-  if (strncmp(data, "OggS", 4))
+  if (strncmp((char *)data, "OggS", 4))
     return 0;
   return 1;
 }
@@ -214,7 +214,7 @@ void ogm_reader_c::free_demuxer(int idx) {
  */
 int ogm_reader_c::read_page(ogg_page *og) {
   int np, done, nread;
-  char *buf;
+  unsigned char *buf;
   
   done = 0;
   while (!done) {
@@ -227,7 +227,7 @@ int ogm_reader_c::read_page(ogg_page *og) {
 
     // np == 0 means that there is not enough data for a complete page.
     if (np == 0) {
-      buf = ogg_sync_buffer(&oy, BUFFER_SIZE);
+      buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
       if (!buf) {
         fprintf(stderr, "FATAL: ogm_reader: ogg_sync_buffer failed\n");
         exit(1);
@@ -269,7 +269,7 @@ void ogm_reader_c::create_packetizers() {
   i = 0;
   while (i < num_sdemuxers) {
     dmx = sdemuxers[i];
-    sth = (stream_header *)&((char *)dmx->packet_data[0])[1];
+    sth = (stream_header *)&dmx->packet_data[0][1];
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
@@ -288,7 +288,8 @@ void ogm_reader_c::create_packetizers() {
         bih.bi_size_image = sth->sh.video.width * sth->sh.video.height * 3;
         try {
           dmx->packetizer =
-            new video_packetizer_c(&bih, sizeof(BITMAPINFOHEADER), codec,
+            new video_packetizer_c((unsigned char *)&bih,
+                                   sizeof(BITMAPINFOHEADER), codec,
                                    (double)10000000 / (double)sth->time_unit, 
                                    sth->sh.video.width, sth->sh.video.height,
                                    sth->bits_per_sample, sth->buffersize, NULL,
@@ -371,7 +372,7 @@ void ogm_reader_c::create_packetizers() {
         vorbis_info_init(&vi);
         vorbis_comment_init(&vc);
         memset(&op, 0, sizeof(ogg_packet));
-        op.packet = (unsigned char *)dmx->packet_data[0];
+        op.packet = dmx->packet_data[0];
         op.bytes = dmx->packet_sizes[0];
         op.b_o_s = 1;
         vorbis_synthesis_headerin(&vi, &vc, &op);
@@ -448,7 +449,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     die("malloc");
   memset(dmx, 0, sizeof(ogm_demuxer_t));
   dmx->num_packets = 1;
-  dmx->packet_data[0] = malloc(op.bytes);
+  dmx->packet_data[0] = (unsigned char *)malloc(op.bytes);
   if (dmx->packet_data[0] == NULL)
     die("malloc");
   memcpy(dmx->packet_data[0], op.packet, op.bytes);
@@ -634,12 +635,12 @@ void ogm_reader_c::process_page(ogg_page *og) {
       switch (dmx->stype) {
         case OGM_STREAM_TYPE_VORBIS:
           ((vorbis_packetizer_c *)dmx->packetizer)->
-            process((char *)op.packet, op.bytes, -1);
+            process(op.packet, op.bytes, -1);
           break;
 
         case OGM_STREAM_TYPE_VIDEO:
           ((video_packetizer_c *)dmx->packetizer)->
-            process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
+            process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     hdrlen > 0 ? lenbytes : 1,
                     *op.packet & PACKET_IS_SYNCPOINT, op.e_o_s);
           dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
@@ -647,21 +648,21 @@ void ogm_reader_c::process_page(ogg_page *og) {
 
         case OGM_STREAM_TYPE_PCM:
           ((pcm_packetizer_c *)dmx->packetizer)->
-            process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
+            process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     op.e_o_s);
           dmx->units_processed += op.bytes - 1;
           break;
 
         case OGM_STREAM_TYPE_MP3: // MP3
           ((mp3_packetizer_c *)dmx->packetizer)->
-            process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
+            process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     op.e_o_s);
           dmx->units_processed += op.bytes - 1;
           break;
 
         case OGM_STREAM_TYPE_AC3: // AC3
           ((ac3_packetizer_c *)dmx->packetizer)->
-            process((char *)&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
+            process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
                     op.e_o_s);
           dmx->units_processed += op.bytes - 1;
           break;
@@ -704,14 +705,14 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     if ((*op.packet & 3) == PACKET_TYPE_HEADER) {
       dmx->num_packets++;
-      dmx->packet_data[2] = malloc(op.bytes);
+      dmx->packet_data[2] = (unsigned char *)malloc(op.bytes);
       if (dmx->packet_data[2] == NULL)
         die("malloc");
       memcpy(dmx->packet_data[2], op.packet, op.bytes);
       dmx->packet_sizes[2] = op.bytes;
     } else if ((*op.packet & 3) == PACKET_TYPE_COMMENT) {
       dmx->num_packets++;
-      dmx->packet_data[1] = malloc(op.bytes);
+      dmx->packet_data[1] = (unsigned char *)malloc(op.bytes);
       if (dmx->packet_data[1] == NULL)
         die("malloc");
       memcpy(dmx->packet_data[1], op.packet, op.bytes);

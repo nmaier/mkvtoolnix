@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.5 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.6 2003/03/04 10:16:28 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,26 +32,26 @@ private:
   int            channels;
   int            bitrate;
   audio_sync_t   async;
-  char          *packet_buffer;
+  unsigned char *packet_buffer;
   int            buffer_size;
 
 public:
-  ac3_packetizer_c(void *nprivate_data, int nprivate_size,
+  ac3_packetizer_c(unsigned char *nprivate_data, int nprivate_size,
                    unsigned long nsamples_per_sec, int nchannels,
                    int nbitrate, audio_sync_t *nasync) throw (error_c);
   virtual ~ac3_packetizer_c();
     
-  virtual int     process(char *buf, int size, int last_frame);
-  virtual void    set_header();
+  virtual int            process(unsigned char *buf, int size, int last_frame);
+  virtual void           set_header();
     
-  virtual void    set_params(unsigned long nsamples_per_sec, int nchannels,
-                             int nbitrate);
+  virtual void           set_params(unsigned long nsamples_per_sec,
+                                    int nchannels, int nbitrate);
 private:
-  virtual void    add_to_buffer(char *buf, int size);
-  virtual char   *get_ac3_packet(unsigned long *header,
-                                 ac3_header_t *ac3header);
-  virtual int     ac3_packet_available();
-  virtual void    remove_ac3_packet(int pos, int framesize);
+  virtual void           add_to_buffer(unsigned char *buf, int size);
+  virtual unsigned char *get_ac3_packet(unsigned long *header,
+                                        ac3_header_t *ac3header);
+  virtual int            ac3_packet_available();
+  virtual void           remove_ac3_packet(int pos, int framesize);
 };
 
 #endif // __P_AC3_H
