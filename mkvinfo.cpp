@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.27 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.28 2003/05/03 09:46:29 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -42,6 +42,7 @@
 #include "EbmlHead.h"
 #include "EbmlSubHead.h"
 #include "EbmlStream.h"
+#include "EbmlVoid.h"
 #include "FileKax.h"
 
 #include "KaxAttachements.h"
@@ -157,6 +158,24 @@ static void parse_args(int argc, char **argv) {
   }
 }
 
+int is_ebmlvoid(EbmlElement *l, int level) {
+  char buffer[10];
+
+  if (EbmlId(*l) == EbmlVoid::ClassInfos.GlobalId) {
+    memset(buffer, ' ', 10);
+    buffer[0] = '|';
+    buffer[level] = 0;
+    fprintf(stdout, "(%s) %s+ EbmlVoid", NAME, buffer);
+    if (verbose > 1)
+      fprintf(stdout, " at %llu", l->GetElementPosition());
+    fprintf(stdout, "\n");
+
+    return 1;
+  }
+
+  return 0;
+}
+
 void process_file() {
   int upper_lvl_el, exit_loop, i, delete_object;
   // Elements for different levels
@@ -191,7 +210,8 @@ void process_file() {
       exit(0);
     }
     if (!(EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)) {
-      fprintf(stdout, "(%s) Next level 0 element is not a segment.\n", NAME);
+      fprintf(stdout, "(%s) Next level 0 element is not a segment but %s\n",
+              NAME, typeid(*l0).name());
       exit(0);
     }
     fprintf(stdout, "(%s) + segment", NAME);
@@ -239,7 +259,7 @@ void process_file() {
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-          } else {
+          } else if (!is_ebmlvoid(l2, 2)) {
             fprintf(stdout, "(%s) | + unknown element, level2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
@@ -380,7 +400,7 @@ void process_file() {
                       fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
-                  } else {
+                  } else if (!is_ebmlvoid(l4, 4)) {
                     fprintf(stdout, "(%s) |   + unknown element, level 4: %s",
                             NAME, typeid(*l4).name());
                     if (verbose > 1)
@@ -443,7 +463,7 @@ void process_file() {
                       fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
-                  } else {
+                  } else if (!is_ebmlvoid(l4, 4)) {
                     fprintf(stdout, "(%s) |   + unknown element, level 4: %s",
                             NAME, typeid(*l4).name());
                     if (verbose > 1)
@@ -536,7 +556,7 @@ void process_file() {
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
-              } else {
+              } else if (!is_ebmlvoid(l3, 3)) {
                 fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
                         NAME, typeid(*l3).name());
                 if (verbose > 1)
@@ -559,7 +579,7 @@ void process_file() {
               }
             } // while (l3 != NULL)
 
-          } else {
+          } else if (!is_ebmlvoid(l2, 2)) {
             fprintf(stdout, "(%s) | + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
@@ -595,7 +615,7 @@ void process_file() {
             break;
 
           if (EbmlId(*l2) == KaxSeek::ClassInfos.GlobalId) {
-            fprintf(stdout, "(%s) |  + seek entry", NAME);
+            fprintf(stdout, "(%s) | + seek entry", NAME);
             if (verbose > 1)
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
@@ -614,7 +634,7 @@ void process_file() {
                 b = seek_id.GetBuffer();
                 s = seek_id.GetSize();
                 EbmlId id(b, s);
-                fprintf(stdout, "(%s) |   + seek ID: ", NAME);
+                fprintf(stdout, "(%s) |  + seek ID: ", NAME);
                 for (i = 0; i < s; i++)
                   fprintf(stdout, "0x%02x ", ((unsigned char *)b)[i]);
                 fprintf(stdout, "(%s)",
@@ -639,13 +659,13 @@ void process_file() {
                 KaxSeekPosition &seek_pos =
                   static_cast<KaxSeekPosition &>(*l3);
                 seek_pos.ReadData(es->I_O());
-                fprintf(stdout, "(%s) |   + seek position: %llu", NAME,
+                fprintf(stdout, "(%s) |  + seek position: %llu", NAME,
                         uint64(seek_pos));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
-              } else {
+              } else if (!is_ebmlvoid(l3, 3)) {
                 fprintf(stdout, "(%s) |  + unknown element, level 3: %s", NAME,
                         typeid(*l3).name());
                 if (verbose > 1)
@@ -662,7 +682,7 @@ void process_file() {
             } // while (l3 != NULL)
 
 
-          } else {
+          } else if (!is_ebmlvoid(l2, 2)) {
             fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
@@ -765,7 +785,7 @@ void process_file() {
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
-              } else {
+              } else if (!is_ebmlvoid(l3, 3)) {
                  fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
                          NAME, typeid(*l3).name());
                  if (verbose > 1)
@@ -789,7 +809,7 @@ void process_file() {
               }
             } // while (l3 != NULL)
 
-          } else {
+          } else if (!is_ebmlvoid(l2, 2)) {
             fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
@@ -964,7 +984,7 @@ void process_file() {
                                   l5->GetElementPosition());
                         fprintf(stdout, "\n");
 
-                      } else {
+                      } else if (!is_ebmlvoid(l5, 5)) {
                         fprintf(stdout, "(%s) |    + unknown element, "
                                 "level 5: %s", NAME, typeid(*l5).name());
                         if (verbose > 1)
@@ -986,7 +1006,7 @@ void process_file() {
                       }
                     } // while (l5 != NULL)
 
-                  } else {
+                  } else if (!is_ebmlvoid(l4, 4)) {
                     fprintf(stdout, "(%s) |  + unknown element, level 4: %s",
                             NAME, typeid(*l4).name());
                     if (verbose > 1)
@@ -1011,7 +1031,7 @@ void process_file() {
                   }
                 } // while (l4 != NULL)
 
-              } else {
+              } else if (!is_ebmlvoid(l3, 3)) {
                 fprintf(stdout, "(%s) |  + unknown element, level 3: %s", NAME,
                         typeid(*l3).name());
                 if (verbose > 1)
@@ -1035,7 +1055,7 @@ void process_file() {
               }
             } // while (l3 != NULL)
 
-          } else {
+          } else if (!is_ebmlvoid(l2, 2)) {
             fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
@@ -1058,7 +1078,7 @@ void process_file() {
                                      0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
-      } else {
+      } else if (!is_ebmlvoid(l1, 1)) {
         fprintf(stdout, "(%s) |+ unknown element, level 1: %s", NAME,
                 typeid(*l1).name());
         if (verbose > 1)
