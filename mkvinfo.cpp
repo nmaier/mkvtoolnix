@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.23 2003/04/26 11:26:15 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.24 2003/04/27 09:15:05 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -294,25 +294,24 @@ void process_file() {
                 KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
                 tnum.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + Track number: %u", NAME,
-                        uint8(tnum));
+                        uint32(tnum));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
-                if (find_track(uint8(tnum)) != NULL)
+                if (find_track(uint32(tnum)) != NULL)
                   fprintf(stdout, "(%s) |  + Warning: There's more than one "
-                          "track with the number %u.\n", NAME,
-                          uint8(tnum));
+                          "track with the number %u.\n", NAME, uint32(tnum));
 
               } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
                 KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
                 tuid.ReadData(es->I_O());
-                fprintf(stdout, "(%s) |  + Track UID: %u", NAME, uint8(tuid));
+                fprintf(stdout, "(%s) |  + Track UID: %u", NAME, uint32(tuid));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
-                if (find_track_by_uid(uint8(tuid)) != NULL)
+                if (find_track_by_uid(uint32(tuid)) != NULL)
                   fprintf(stdout, "(%s) |  + Warning: There's more than one "
-                          "track with the UID %u.\n", NAME, uint8(tuid));
+                          "track with the UID %u.\n", NAME, uint32(tuid));
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
