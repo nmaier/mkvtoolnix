@@ -100,7 +100,7 @@ MPEGChunk * MPEGVideoBuffer::ReadChunk(){
     chunkStart = 0; //we read up to the next start code
     chunkEnd = -1;
     UpdateState();
-    myChunk = new MPEGChunk(chunkData, chunkLength);	
+    myChunk = new MPEGChunk(chunkData, chunkLength);  
     return myChunk;    
   }else{
     return NULL;

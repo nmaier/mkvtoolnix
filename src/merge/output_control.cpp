@@ -98,8 +98,8 @@ using namespace std;
 namespace libmatroska {
 
   class KaxMyDuration: public KaxDuration {
-	public:
-		KaxMyDuration(const EbmlFloat::Precision prec): KaxDuration() {
+  public:
+    KaxMyDuration(const EbmlFloat::Precision prec): KaxDuration() {
       SetPrecision(prec);
     }
   };

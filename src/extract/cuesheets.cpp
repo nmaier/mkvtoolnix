@@ -209,7 +209,7 @@ write_cuesheet(const char *file_name,
       print_if_available("ARTIST", "    PERFORMER \"%s\"\n");
       print_if_available("ISRC", "    ISRC %s\n");
       print_if_available("CDAUDIO_TRACK_FLAGS", "    FLAGS %s\n");
-	  
+
       for (j = 0; j < 100; j++) {
         temp_index = get_chapter_index(j, atom);
         if (temp_index == -1)

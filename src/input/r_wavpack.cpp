@@ -89,7 +89,7 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
   }
 
   if (verbose)
-	  mxinfo(FMT_FN "Using the WAVPACK demultiplexer%s.\n", ti->fname.c_str(),
+    mxinfo(FMT_FN "Using the WAVPACK demultiplexer%s.\n", ti->fname.c_str(),
            meta.has_correction ? " with a correction file" : "");
 }
 

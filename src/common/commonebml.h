@@ -60,7 +60,7 @@ template <typename type>type &GetEmptyChild(EbmlMaster &master) {
     }
   }
 
-	return *(static_cast<type *>(e));
+  return *(static_cast<type *>(e));
 }
 
 template <typename type>type &GetNextEmptyChild(EbmlMaster &master,
@@ -76,7 +76,7 @@ template <typename type>type &GetNextEmptyChild(EbmlMaster &master,
     }
   }
 
-	return *(static_cast<type *>(e));
+  return *(static_cast<type *>(e));
 }
 
 template <typename type>type &AddEmptyChild(EbmlMaster &master) {
@@ -92,7 +92,7 @@ template <typename type>type &AddEmptyChild(EbmlMaster &master) {
   }
   master.PushElement(*e);
 
-	return *(static_cast<type *>(e));
+  return *(static_cast<type *>(e));
 }
 
 EbmlElement *MTX_DLL_API empty_ebml_master(EbmlElement *e);

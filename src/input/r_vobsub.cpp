@@ -404,11 +404,11 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
       buf[3] = c;
     }
     switch (buf[3]) {
-      case 0xb9:			/* System End Code */
+      case 0xb9:                // System End Code
         return deliver();
         break;
 
-      case 0xba:			/* Packet start code */
+      case 0xba:                // Packet start code
         c = sub_file->getch();
         if (c < 0)
           return deliver();
@@ -438,7 +438,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
           abort();
         break;
 
-      case 0xbd:			/* packet */
+      case 0xbd:                // packet
         if (sub_file->read(buf, 2) != 2)
           return deliver();
         len = buf[0] << 8 | buf[1];
@@ -446,20 +446,18 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
         c = sub_file->getch();
         if (c < 0)
           return deliver();
-        if ((c & 0xC0) == 0x40) { /* skip STD scale & size */
+        if ((c & 0xC0) == 0x40) { // skip STD scale & size
           if (sub_file->getch() < 0)
             return deliver();
           c = sub_file->getch();
           if (c < 0)
             return deliver();
         }
-        if ((c & 0xf0) == 0x20) { /* System-1 stream timestamp */
-          /* Do we need this? */
+        if ((c & 0xf0) == 0x20) { // System-1 stream timestamp
           abort();
         } else if ((c & 0xf0) == 0x30) {
-          /* Do we need this? */
           abort();
-        } else if ((c & 0xc0) == 0x80) { /* System-2 (.VOB) stream */
+        } else if ((c & 0xc0) == 0x80) { // System-2 (.VOB) stream
           uint32_t pts_flags, hdrlen, dataidx;
           c = sub_file->getch();
           if (c < 0)
@@ -486,9 +484,6 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
             } else
               pts = ((buf[0] & 0x0e) << 29 | buf[1] << 22 |
                      (buf[2] & 0xfe) << 14 | buf[3] << 7 | (buf[4] >> 1));
-          } else /* if ((pts_flags & 0xc0) == 0xc0) */ {
-            /* what's this? */
-            /* abort(); */
           }
           sub_file->setFilePointer2(dataidx + extraction_start_pos,
                                     seek_beginning);
@@ -530,7 +525,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
         }
         break;
 
-      case 0xbe:			/* Padding */
+      case 0xbe:                // Padding
         if (sub_file->read(buf, 2) != 2)
           return deliver();
         len = buf[0] << 8 | buf[1];
@@ -540,7 +535,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
 
       default:
         if ((0xc0 <= buf[3]) && (buf[3] < 0xf0)) {
-          /* MPEG audio or video */
+          // MPEG audio or video
           if (sub_file->read(buf, 2) != 2)
             return deliver();
           len = (buf[0] << 8) | buf[1];

@@ -33,17 +33,17 @@ flac_skip_utf8(bit_cursor_c &bits,
   if (!bits.get_bits(8, value))
     return false;
 
-	if (!(value & 0x80))          /* 0xxxxxxx */
-		num = 0;
-	else if ((value & 0xC0) && !(value & 0x20)) /* 110xxxxx */
-		num = 1;
-	else if ((value & 0xE0) && !(value & 0x10)) /* 1110xxxx */
-		num = 2;
-	else if ((value & 0xF0) && !(value & 0x08)) /* 11110xxx */
-		num = 3;
-	else if ((value & 0xF8) && !(value & 0x04)) /* 111110xx */
-		num = 4;
-	else if ((value & 0xFC) && !(value & 0x02)) /* 1111110x */
+  if (!(value & 0x80))          /* 0xxxxxxx */
+    num = 0;
+  else if ((value & 0xC0) && !(value & 0x20)) /* 110xxxxx */
+    num = 1;
+  else if ((value & 0xE0) && !(value & 0x10)) /* 1110xxxx */
+    num = 2;
+  else if ((value & 0xF0) && !(value & 0x08)) /* 11110xxx */
+    num = 3;
+  else if ((value & 0xF8) && !(value & 0x04)) /* 111110xx */
+    num = 4;
+  else if ((value & 0xFC) && !(value & 0x02)) /* 1111110x */
     num = 5;
   else if ((size == 64) && (value & 0xFE) && !(value & 0x01)) /* 11111110 */
     num = 6;

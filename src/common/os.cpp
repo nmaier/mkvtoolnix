@@ -180,22 +180,22 @@ vsscanf_impl(const char *,
              void *) {
   __asm {
     push    ebx
-    mov	    ebx,esp
-    mov	    ecx,[ebx+16]
-    mov	    edx,[ebx+20]
-    lea	    edx,[ecx+edx*4-4]
-    jmp	    l3
+    mov     ebx,esp
+    mov     ecx,[ebx+16]
+    mov     edx,[ebx+20]
+    lea     edx,[ecx+edx*4-4]
+    jmp     l3
 l2:
     push    dword ptr [edx]
-    sub	    edx,4
+    sub     edx,4
 l3:
-    cmp	    edx,ecx
-    jae	    l2
+    cmp     edx,ecx
+    jae     l2
     push    dword ptr [ebx+12]
     push    dword ptr [ebx+8]
     call    dword ptr [ebx+24]
-    mov	    esp,ebx
-    pop	    ebx
+    mov     esp,ebx
+    pop     ebx
     ret
   };
 }

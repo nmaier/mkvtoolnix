@@ -496,7 +496,7 @@ def_handle(info) {
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
       show_element(l2, 2, "Segment UID:%s", buffer);
-	  delete [] buffer;
+      delete [] buffer;
 
     } else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
@@ -506,7 +506,7 @@ def_handle(info) {
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
       show_element(l2, 2, "Previous segment UID:%s", buffer);
-	  delete [] buffer;
+      delete [] buffer;
 
     } else if (is_id(l2, KaxPrevFilename)) {
       KaxPrevFilename &filename = *static_cast<KaxPrevFilename *>(l2);
