@@ -139,6 +139,7 @@ typedef struct {
 
 typedef struct {
   float aspect_ratio;
+  bool ar_factor;
   int width, height;
   int64_t id;
 } display_properties_t;
@@ -174,7 +175,7 @@ public:
   vector<display_properties_t> *display_properties;
   float aspect_ratio;
   int display_width, display_height;
-  bool aspect_ratio_given, display_dimensions_given;
+  bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
 
   vector<audio_sync_t> *audio_syncs; // As given on the command line
   audio_sync_t async;           // For this very track

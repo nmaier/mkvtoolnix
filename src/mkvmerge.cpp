@@ -346,6 +346,11 @@ usage() {
     "  --aspect-ratio <TID:f|a/b>\n"
     "                           Sets the display dimensions by calculating\n"
     "                           width and height for this aspect ratio.\n"
+    "  --aspect-ratio-factor <TID:f|a/b>\n"
+    "                           First calculates the aspect ratio by multi-\n"
+    "                           plying the video's original aspect ratio\n"
+    "                           with this factor and calculates the display\n"
+    "                           dimensions from this factor.\n"
     "  --display-dimensions <TID:width>x<height>\n"
     "                           Explicitely set the display dimensions.\n"
     "  --cropping <TID:left,top,right,bottom>\n"
@@ -767,20 +772,26 @@ parse_sync(char *s,
 static void
 parse_aspect_ratio(char *s,
                    const char *opt,
-                   track_info_c &ti) {
+                   track_info_c &ti,
+                   bool is_factor) {
   char *div, *c;
   float w, h;
   string orig = s;
   display_properties_t dprop;
+  const char *msg;
+
+  if (is_factor)
+    msg = _("Aspect ratio factor");
+  else
+    msg = _("Aspect ratio");
+  dprop.ar_factor = is_factor;
 
   c = strchr(s, ':');
   if (c == NULL)
-    mxerror(_("Aspect ratio: missing track ID in '%s %s'.\n"), opt,
-            orig.c_str());
+    mxerror(_("%s: missing track ID in '%s %s'.\n"), msg, opt, orig.c_str());
   *c = 0;
   if (!parse_int(s, dprop.id))
-    mxerror(_("Aspect ratio: invalid track ID in '%s %s'.\n"), opt,
-            orig.c_str());
+    mxerror(_("%s: invalid track ID in '%s %s'.\n"), msg, opt, orig.c_str());
   dprop.width = -1;
   dprop.height = -1;
 
@@ -797,17 +808,15 @@ parse_aspect_ratio(char *s,
   *div = 0;
   div++;
   if (*s == 0)
-    mxerror(_("Aspect ratio: missing dividend in '%s %s'.\n"), opt,
-            orig.c_str());
+    mxerror(_("%s: missing dividend in '%s %s'.\n"), msg, opt, orig.c_str());
 
   if (*div == 0)
-    mxerror(_("Aspect ratio: missing divisor in '%s %s'.\n"), opt,
-            orig.c_str());
+    mxerror(_("%s: missing divisor in '%s %s'.\n"), msg, opt, orig.c_str());
 
   w = strtod(s, NULL);
   h = strtod(div, NULL);
   if (h == 0.0)
-    mxerror(_("Aspect ratio: divisor is 0 in '%s %s'.\n"), opt, orig.c_str());
+    mxerror(_("%s: divisor is 0 in '%s %s'.\n"), msg, opt, orig.c_str());
 
   dprop.aspect_ratio = w / h;
   ti.display_properties->push_back(dprop);
@@ -2218,7 +2227,14 @@ parse_args(int argc,
       if (next_arg == NULL)
         mxerror(_("'--aspect-ratio' lacks the aspect ratio.\n"));
 
-      parse_aspect_ratio(next_arg, this_arg, *ti);
+      parse_aspect_ratio(next_arg, this_arg, *ti, false);
+      i++;
+
+    } else if (!strcmp(this_arg, "--aspect-ratio-factor")) {
+      if (next_arg == NULL)
+        mxerror(_("'--aspect-ratio-factor' lacks the aspect ratio factor.\n"));
+
+      parse_aspect_ratio(next_arg, this_arg, *ti, true);
       i++;
 
     } else if (!strcmp(this_arg, "--display-dimensions")) {
