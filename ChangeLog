@@ -14,6 +14,9 @@
 	* mkvmerge: bug fix: Negative track IDs in Ogg files were reported
 	incorrectly for mkvmerge -i (which affected the GUI).
 
+	* mkvmerge: bug fix: Internal changes had messed up the --language
+	and --track-name functionality.
+
 2003-12-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added "up" and "down" buttons for the tracks,
