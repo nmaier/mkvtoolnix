@@ -453,9 +453,10 @@ void add_packetizer(generic_packetizer_c *packetizer) {
   packetizers.push_back(pack);
 }
 
-static void parse_tracks(char *s, vector<int64_t> *tracks) {
+static void parse_tracks(char *s, vector<int64_t> *tracks, const char *opt) {
   char *comma;
   int64_t tid;
+  string orig = s;
 
   tracks->clear();
 
@@ -464,7 +465,7 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
     *comma = 0;
 
     if (!parse_int(s, tid))
-      mxerror("Invalid track ID '%s'.\n", s);
+      mxerror("Invalid track ID in '%s %s'.\n", opt, orig.c_str());
     tracks->push_back(tid);
 
     s = &comma[1];
@@ -473,26 +474,28 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
 
   if (*s != 0) {
     if (!parse_int(s, tid))
-      mxerror("Invalid track ID '%s'.\n", s);
+      mxerror("Invalid track ID in '%s %s'.\n", opt, orig.c_str());
     tracks->push_back(tid);
   }
 }
 
-static void parse_sync(char *s, audio_sync_t &async) {
+static void parse_sync(char *s, audio_sync_t &async, const char *opt) {
   char *linear, *div, *colon;
   double d1, d2;
+  string orig = s;
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid sync option. No track ID specified (%s).\n", s);
+    mxerror("Invalid sync option. No track ID specified in '%s %s'.\n", s,
+            opt);
 
   *colon = 0;
   if (!parse_int(s, async.id))
-    mxerror("Invalid track ID specified.\n");
+    mxerror("Invalid track ID specified in '%s %s'.\n", opt, s);
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid sync option specified.\n");
+    mxerror("Invalid sync option specified in '%s %s'.\n", opt, orig.c_str());
 
   // Now parse the actual sync values.
   if ((linear = strchr(s, ',')) != NULL) {
@@ -507,21 +510,24 @@ static void parse_sync(char *s, audio_sync_t &async) {
       d1 = strtod(linear, NULL);
       d2 = strtod(div, NULL);
       if (d2 == 0.0)
-        mxerror("Linear sync: division by zero?\n");
+        mxerror("Linear sync: division by zero in '%s %s'.\n", opt,
+                orig.c_str());
 
       async.linear = d1 / d2;
     }
     if (async.linear <= 0.0)
-      mxerror("Linear sync value may not be <= 0.\n");
+      mxerror("Linear sync value may not be <= 0 in '%s %s'.\n", opt,
+              orig.c_str());
 
   } else
     async.linear = 1.0;
   async.displacement = atoi(s);
 }
 
-static float parse_aspect_ratio(char *s) {
+static float parse_aspect_ratio(char *s, const char *opt) {
   char *div;
   float w, h;
+  string orig = s;
 
   div = strchr(s, '/');
   if (div == NULL)
@@ -532,15 +538,15 @@ static float parse_aspect_ratio(char *s) {
   *div = 0;
   div++;
   if (*s == 0)
-    mxerror("Aspect ratio: missing dividend.\n");
+    mxerror("Aspect ratio: missing dividend in '%s %s'.\n", opt, orig.c_str());
 
   if (*div == 0)
-    mxerror("Aspect ratio: missing divisor.\n");
+    mxerror("Aspect ratio: missing divisor in '%s %s'.\n", opt, orig.c_str());
 
   w = strtod(s, NULL);
   h = strtod(div, NULL);
   if (h == 0.0)
-    mxerror("Aspect ratio: divisor is 0.\n");
+    mxerror("Aspect ratio: divisor is 0 in '%s %s'.\n", opt, orig.c_str());
 
   return w/h;
 }
@@ -548,9 +554,10 @@ static float parse_aspect_ratio(char *s) {
 static void parse_split(const char *arg) {
   int64_t modifier;
   char *s, *p;
+  string orig = arg;
 
   if ((arg == NULL) || (arg[0] == 0) || (arg[1] == 0))
-    mxerror("Invalid format for --split.\n");
+    mxerror("Invalid format for '--split' in '--split %s'.\n", arg);
 
   s = safestrdup(arg);
 
@@ -568,7 +575,7 @@ static void parse_split(const char *arg) {
     split_after = secs + mins * 60 + hours * 3600;
     if ((hours < 0) || (mins < 0) || (mins > 59) ||
         (secs < 0) || (secs > 59) || (split_after < 10))
-      mxerror("Invalid time for --split.\n");
+      mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
 
     split_after *= 1000;
     split_by_time = true;
@@ -580,7 +587,7 @@ static void parse_split(const char *arg) {
   if ((s[strlen(s) - 1] == 's') || (s[strlen(s) - 1] == 'S')) {
     s[strlen(s) - 1] = 0;
     if (!parse_int(s, split_after))
-      mxerror("Invalid time for --split.\n");
+      mxerror("Invalid time for '--split' in '--split %s'.\n", orig.c_str());
 
     split_after *= 1000;
     split_by_time = true;
@@ -601,11 +608,11 @@ static void parse_split(const char *arg) {
   if (modifier != 1)
     *p = 0;
   if (!parse_int(s, split_after))
-    mxerror("Invalid split size.\n");
+    mxerror("Invalid split size in '--split %s'.\n", orig.c_str());
 
   split_after *= modifier;
   if (split_after <= (1024 * 1024))
-    mxerror("Invalid split size.\n");
+    mxerror("Invalid split size in '--split %s'.\n", orig.c_str());
 
   safefree(s);
   split_by_time = false;
@@ -613,18 +620,19 @@ static void parse_split(const char *arg) {
 
 static void parse_cues(char *s, cue_creation_t &cues) {
   char *colon;
+  string orig = s;
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid cues option. No track ID specified (%s).\n", s);
+    mxerror("Invalid cues option. No track ID specified in '--cues %s'.\n", s);
 
   *colon = 0;
   if (!parse_int(s, cues.id))
-    mxerror("Invalid track ID specified.\n");
+    mxerror("Invalid track ID specified in '--cues %s'.\n", orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid cues option specified.\n");
+    mxerror("Invalid cues option specified in '--cues %s'.\n", orig.c_str());
 
   if (!strcmp(s, "all"))
     cues.cues = CUES_ALL;
@@ -633,23 +641,25 @@ static void parse_cues(char *s, cue_creation_t &cues) {
   else if (!strcmp(s, "none"))
     cues.cues = CUES_NONE;
   else
-    mxerror("'%s' is an unsupported argument for --cues.\n", s);
+    mxerror("'%s' is an unsupported argument for --cues.\n", orig.c_str());
 }
 
 static void parse_language(char *s, language_t &lang) {
   char *colon;
+  string orig = s;
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid language option. No track ID specified (%s).\n", s);
+    mxerror("Invalid language option. No track ID specified in "
+            "'--language %s'.\n", orig.c_str());
 
   *colon = 0;
   if (!parse_int(s, lang.id))
-    mxerror("Invalid track ID specified.\n");
+    mxerror("Invalid track ID specified in '--language %s'.\n", orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid language specified.\n");
+    mxerror("Invalid language specified in '--language %s'.\n", orig.c_str());
 
   if (!is_valid_iso639_2_code(s))
     mxerror("'%s' is not a valid ISO639-2 code. See "
@@ -660,37 +670,42 @@ static void parse_language(char *s, language_t &lang) {
 
 static void parse_sub_charset(char *s, language_t &sub_charset) {
   char *colon;
+  string orig = s;
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid sub charset option. No track ID specified "
-            "(%s).\n", s);
+    mxerror("Invalid sub charset option. No track ID specified in "
+            "'--sub-charset %s'.\n", orig.c_str());
 
   *colon = 0;
   if (!parse_int(s, sub_charset.id))
-    mxerror("Invalid track ID specified.\n");
+    mxerror("Invalid track ID specified in '--sub-charset %s'.\n",
+            orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid sub charset specified.\n");
+    mxerror("Invalid sub charset specified in '--sub-charset %s'.\n",
+            orig.c_str());
 
   sub_charset.language = s;
 }
 
-static void parse_tags(char *s, tags_t &tags) {
+static void parse_tags(char *s, tags_t &tags, const char *opt) {
   char *colon;
+  string orig = s;
 
   // Extract the track number.
   if ((colon = strchr(s, ':')) == NULL)
-    mxerror("Invalid tags option. No track ID specified "
-            "(%s).\n", s);
+    mxerror("Invalid tags option. No track ID specified in '%s %s'.\n", opt,
+            orig.c_str());
   *colon = 0;
   if (!parse_int(s, tags.id))
-    mxerror("Invalid track ID specified.\n");
+    mxerror("Invalid track ID specified in '%s %s'.\n", opt, orig.c_str());
 
   s = &colon[1];
   if (*s == 0)
-    mxerror("Invalid tags file name specified.\n");
+    mxerror("Invalid tags file name specified in '%s %s'.\n", opt,
+            orig.c_str());
 
   tags.file_name = s;
 }
@@ -973,7 +988,7 @@ static void parse_args(int argc, char **argv) {
   track_info_t ti;
   int i, j;
   filelist_t *file;
-  char *s;
+  char *s, *this_arg, *next_arg;
   audio_sync_t async;
   cue_creation_t cues;
   int64_t id;
@@ -1008,40 +1023,47 @@ static void parse_args(int argc, char **argv) {
 
   // First parse options that either just print some infos and then exit
   // or that are needed right at the beginning.
-  for (i = 0; i < argc; i++)
-    if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
+  for (i = 0; i < argc; i++) {
+    this_arg = argv[i];
+    if ((i + 1) >= argc)
+      next_arg = NULL;
+    else
+      next_arg = argv[i + 1];
+
+    if (!strcmp(this_arg, "-V") || !strcmp(this_arg, "--version")) {
       mxinfo(VERSIONINFO "\n");
       mxexit(0);
 
-    } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
-               !strcmp(argv[i], "--help")) {
+    } else if (!strcmp(this_arg, "-h") || !strcmp(this_arg, "-?") ||
+               !strcmp(this_arg, "--help")) {
       usage();
       mxexit(0);
 
-    } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
-      if ((i + 1) >= argc)
-        mxerror("-o lacks a file name.\n");
+    } else if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks a file name.\n", this_arg);
 
       if (outfile != NULL)
         mxerror("Only one output file allowed.\n");
 
-      outfile = safestrdup(argv[i + 1]);
+      outfile = safestrdup(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
+    } else if (!strcmp(this_arg, "-l") || !strcmp(this_arg, "--list-types")) {
       mxinfo("Known file types:\n  ext  description\n"
              "  ---  --------------------------\n");
       for (j = 1; file_types[j].ext; j++)
         mxinfo("  %s  %s\n", file_types[j].ext, file_types[j].desc);
       mxexit(0);
 
-    } else if (!strcmp(argv[i], "--list-languages")) {
+    } else if (!strcmp(this_arg, "--list-languages")) {
       list_iso639_languages();
       mxexit(0);
 
-    } else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--identify"))
-      mxerror("--identify can only be used with a file name. "
-              "No other options are allowed.\n");
+    } else if (!strcmp(this_arg, "-i") || !strcmp(this_arg, "--identify"))
+      mxerror("'%s' can only be used with a file name. "
+              "No other options are allowed.\n", this_arg);
+  }
 
   if (outfile == NULL) {
     mxinfo("Error: no output file given.\n\n");
@@ -1050,137 +1072,156 @@ static void parse_args(int argc, char **argv) {
   }
 
   for (i = 0; i < argc; i++) {
+    this_arg = argv[i];
+    if ((i + 1) >= argc)
+      next_arg = NULL;
+    else
+      next_arg = argv[i + 1];
 
     // Ignore the options we took care of in the first step.
-    if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
+    if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output")) {
       i++;
       continue;
     }
 
     // Global options
-    if (!strcmp(argv[i], "-q"))
+    if (!strcmp(this_arg, "-q"))
       verbose = 0;
 
-    else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
+    else if (!strcmp(this_arg, "-v") || !strcmp(this_arg, "--verbose"))
       verbose = 2;
 
-    else if (!strcmp(argv[i], "--title")) {
-      if (((i + 1) >= argc) || (argv[i + 1][0] == 0))
-        mxerror("--title lacks the title.\n");
+    else if (!strcmp(this_arg, "--title")) {
+      if ((next_arg == NULL) || (next_arg[0] == 0))
+        mxerror("'--title' lacks the title.\n");
 
-      title = argv[i + 1];
+      title = next_arg;
       i++;
 
-    } else if (!strcmp(argv[i], "--split")) {
-      if (((i + 1) >= argc) || (argv[i + 1][0] == 0))
-        mxerror("--split lacks the size.\n");
+    } else if (!strcmp(this_arg, "--split")) {
+      if ((next_arg == NULL) || (next_arg[0] == 0))
+        mxerror("'--split' lacks the size.\n");
 
-      parse_split(argv[i + 1]);
+      parse_split(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "--split-max-files")) {
-      if (((i + 1) >= argc) || (argv[i + 1][0] == 0))
-        mxerror("--split-max-files lacks the number of files.\n");
+    } else if (!strcmp(this_arg, "--split-max-files")) {
+      if ((next_arg == NULL) || (next_arg[0] == 0))
+        mxerror("'--split-max-files' lacks the number of files.\n");
 
-      if (!parse_int(argv[i + 1], split_max_num_files) ||
+      if (!parse_int(next_arg, split_max_num_files) ||
           (split_max_num_files < 2))
-        mxerror("Wrong argument to --split-max-files.\n");
+        mxerror("Wrong argument to '--split-max-files'.\n");
 
       i++;
 
-    } else if (!strcmp(argv[i], "--dont-link")) {
+    } else if (!strcmp(this_arg, "--dont-link")) {
       no_linking = true;
 
-    } else if (!strcmp(argv[i], "--link-to-previous")) {
-      if (((i + 1) >= argc) || (argv[i + 1][0] == 0))
-        mxerror("--link-to-previous lacks the previous UID.\n");
+    } else if (!strcmp(this_arg, "--link-to-previous")) {
+      if ((next_arg == NULL) || (next_arg[0] == 0))
+        mxerror("'--link-to-previous' lacks the previous UID.\n");
 
       if (seguid_link_previous != NULL)
-        mxerror("Previous UID was already given.\n");
+        mxerror("Previous UID was already given in '%s %s'.\n", this_arg,
+                next_arg);
 
       try {
-        seguid_link_previous = new bitvalue_c(argv[i + 1], 128);
+        seguid_link_previous = new bitvalue_c(next_arg, 128);
       } catch (exception &ex) {
-        mxerror("Unknown format for the previous UID.\n");
+        mxerror("Unknown format for the previous UID in '%s %s'.\n", this_arg,
+                next_arg);
       }
 
       i++;
 
-    } else if (!strcmp(argv[i], "--link-to-next")) {
-      if (((i + 1) >= argc) || (argv[i + 1][0] == 0))
-        mxerror("--link-to-next lacks the previous UID.\n");
+    } else if (!strcmp(this_arg, "--link-to-next")) {
+      if ((next_arg == NULL) || (next_arg[0] == 0))
+        mxerror("'--link-to-next' lacks the previous UID.\n");
 
       if (seguid_link_next != NULL)
-        mxerror("Next UID was already given.\n");
+        mxerror("Next UID was already given in '%s %s'.\n", this_arg,
+                next_arg);
 
       try {
-        seguid_link_next = new bitvalue_c(argv[i + 1], 128);
+        seguid_link_next = new bitvalue_c(next_arg, 128);
       } catch (exception &ex) {
-        mxerror("Unknown format for the next UID.\n");
+        mxerror("Unknown format for the next UID in '%s %s'.\n", this_arg,
+                next_arg);
       }
 
       i++;
 
-    } else if (!strcmp(argv[i], "--cluster-length")) {
-      if ((i + 1) >= argc)
-        mxerror("--cluster-length lacks the length.\n");
+    } else if (!strcmp(this_arg, "--cluster-length")) {
+      if (next_arg == NULL)
+        mxerror("'--cluster-length' lacks the length.\n");
 
-      s = strstr("ms", argv[i + 1]);
+      s = strstr("ms", next_arg);
       if (s != NULL) {
         *s = 0;
-        if (!parse_int(argv[i + 1], max_ms_per_cluster) ||
+        if (!parse_int(next_arg, max_ms_per_cluster) ||
             (max_ms_per_cluster < 100) ||
             (max_ms_per_cluster > 32000))
-          mxerror("Cluster length out of range (100..32000).\n");
+          mxerror("Cluster length '%s' out of range (100..32000).\n",
+                  next_arg);
 
         max_blocks_per_cluster = 65535;
       } else {
-        if (!parse_int(argv[i + 1], max_blocks_per_cluster) ||
+        if (!parse_int(next_arg, max_blocks_per_cluster) ||
             (max_blocks_per_cluster < 0) ||
             (max_blocks_per_cluster > 60000))
-          mxerror("Cluster length out of range (0..60000).\n");
+          mxerror("Cluster length '%s' out of range (0..60000).\n",
+                  next_arg);
 
         max_ms_per_cluster = 32000;
       }
 
       i++;
 
-    } else if (!strcmp(argv[i], "--no-cues"))
+    } else if (!strcmp(this_arg, "--no-cues"))
       write_cues = false;
 
-    else if (!strcmp(argv[i], "--no-clusters-in-meta-seek"))
+    else if (!strcmp(this_arg, "--no-clusters-in-meta-seek"))
       write_meta_seek_for_clusters = false;
 
-    else if (!strcmp(argv[i], "--enable-lacing"))
+    else if (!strcmp(this_arg, "--enable-lacing"))
       no_lacing = false;
 
-    else if (!strcmp(argv[i], "--attachment-description")) {
-      if ((i + 1) >= argc)
-        mxerror("--attachment-description lacks the description.\n");
+    else if (!strcmp(this_arg, "--attachment-description")) {
+      if (next_arg == NULL)
+        mxerror("'--attachment-description' lacks the description.\n");
 
+      if (attachment->description != NULL)
+        mxwarn("More than one description given for a single attachment. "
+               "Discarding '%s' and using '%s'.\n", attachment->description,
+               next_arg);
       safefree(attachment->description);
-      attachment->description = safestrdup(argv[i + 1]);
+      attachment->description = safestrdup(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "--attachment-mime-type")) {
-      if ((i + 1) >= argc)
-        mxerror("--attachment-mime-type lacks the MIME type.\n");
+    } else if (!strcmp(this_arg, "--attachment-mime-type")) {
+      if (next_arg == NULL)
+        mxerror("'--attachment-mime-type' lacks the MIME type.\n");
 
+      if (attachment->description != NULL)
+        mxwarn("More than one MIME type given for a single attachment. "
+               "Discarding '%s' and using '%s'.\n", attachment->mime_type,
+               next_arg);
       safefree(attachment->mime_type);
-      attachment->mime_type = safestrdup(argv[i + 1]);
+      attachment->mime_type = safestrdup(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "--attach-file") ||
-               !strcmp(argv[i], "--attach-file-once")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the file name.\n", argv[i]);
+    } else if (!strcmp(this_arg, "--attach-file") ||
+               !strcmp(this_arg, "--attach-file-once")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the file name.\n", this_arg);
 
       if (attachment->mime_type == NULL)
         mxerror("No MIME type was set for the attachment '%s'.\n",
-                argv[i + 1]);
+                next_arg);
 
-      attachment->name = safestrdup(argv[i + 1]);
-      if (!strcmp(argv[i], "--attach-file"))
+      attachment->name = safestrdup(next_arg);
+      if (!strcmp(this_arg, "--attach-file"))
         attachment->to_all_files = true;
       try {
         io = new mm_io_c(attachment->name, MODE_READ);
@@ -1200,33 +1241,34 @@ static void parse_args(int argc, char **argv) {
 
       i++;
 
-    } else if (!strcmp(argv[i], "--global-tags")) {
-      if ((i + 1) >= argc)
-        mxerror("--global-tags lacks the file name.\n");
+    } else if (!strcmp(this_arg, "--global-tags")) {
+      if (next_arg == NULL)
+        mxerror("'--global-tags' lacks the file name.\n");
 
-      parse_and_add_tags(argv[i + 1]);
+      parse_and_add_tags(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "--chapters")) {
-      if ((i + 1) >= argc)
-        mxerror("--chapters lacks the file name.\n");
+    } else if (!strcmp(this_arg, "--chapters")) {
+      if (next_arg == NULL)
+        mxerror("'--chapters' lacks the file name.\n");
 
       if (kax_chapters != NULL)
-        mxerror("Only one chapter file allowed.\n");
+        mxerror("Only one chapter file allowed in '%s %s'.\n", this_arg,
+                next_arg);
 
-      chapter_file_name = safestrdup(argv[i + 1]);
-      kax_chapters = parse_chapters(argv[i + 1]);
+      chapter_file_name = safestrdup(next_arg);
+      kax_chapters = parse_chapters(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "--dump-packets")) {
-      if ((i + 1) >= argc)
-        mxerror("--dump-packets lacks the output path.\n");
+    } else if (!strcmp(this_arg, "--dump-packets")) {
+      if (next_arg == NULL)
+        mxerror("'--dump-packets' lacks the output path.\n");
 
       safefree(dump_packets);
-      dump_packets = safestrdup(argv[i + 1]);
+      dump_packets = safestrdup(next_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "--meta-seek-size")) {
+    } else if (!strcmp(this_arg, "--meta-seek-size")) {
       mxwarn("The option '--meta-seek-size' is no longer supported. Please "
              "read mkvmerge's documentation, especially the section about "
              "the MATROSKA FILE LAYOUT.");
@@ -1235,111 +1277,114 @@ static void parse_args(int argc, char **argv) {
     }
 
     // Options that apply to the next input file only.
-    else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
+    else if (!strcmp(this_arg, "-A") || !strcmp(this_arg, "--noaudio"))
       ti.no_audio = true;
 
-    else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
+    else if (!strcmp(this_arg, "-D") || !strcmp(this_arg, "--novideo"))
       ti.no_video = true;
 
-    else if (!strcmp(argv[i], "-S") || !strcmp(argv[i], "--nosubs"))
+    else if (!strcmp(this_arg, "-S") || !strcmp(this_arg, "--nosubs"))
       ti.no_subs = true;
 
-    else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--atracks")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the stream number(s).\n", argv[i]);
+    else if (!strcmp(this_arg, "-a") || !strcmp(this_arg, "--atracks")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the stream number(s).\n", this_arg);
 
-      parse_tracks(argv[i + 1], ti.atracks);
+      parse_tracks(next_arg, ti.atracks, this_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vtracks")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the stream number(s).\n", argv[i]);
+    } else if (!strcmp(this_arg, "-d") || !strcmp(this_arg, "--vtracks")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the stream number(s).\n", this_arg);
 
-      parse_tracks(argv[i + 1], ti.vtracks);
+      parse_tracks(next_arg, ti.vtracks, this_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stracks")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the stream number(s).\n", argv[i]);
+    } else if (!strcmp(this_arg, "-s") || !strcmp(this_arg, "--stracks")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the stream number(s).\n", this_arg);
 
-      parse_tracks(argv[i + 1], ti.stracks);
+      parse_tracks(next_arg, ti.stracks, this_arg);
       i++;
 
-    } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the FourCC.\n", argv[i]);
+    } else if (!strcmp(this_arg, "-f") || !strcmp(this_arg, "--fourcc")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the FourCC.\n", this_arg);
 
-      if (strlen(argv[i + 1]) != 4)
-        mxerror("The FourCC must be exactly four characters long.\n");
+      if (strlen(next_arg) != 4)
+        mxerror("The FourCC must be exactly four characters long in '%s %s'."
+                "\n", this_arg, next_arg);
 
-      memcpy(ti.fourcc, argv[i + 1], 4);
+      memcpy(ti.fourcc, next_arg, 4);
       ti.fourcc[4] = 0;
       i++;
 
-    } else if (!strcmp(argv[i], "--aspect-ratio")) {
-      if ((i + 1) >= argc)
-        mxerror("--aspect-ratio lacks the aspect ratio.\n");
+    } else if (!strcmp(this_arg, "--aspect-ratio")) {
+      if (next_arg == NULL)
+        mxerror("'--aspect-ratio' lacks the aspect ratio.\n");
 
-      ti.aspect_ratio = parse_aspect_ratio(argv[i + 1]);
+      ti.aspect_ratio = parse_aspect_ratio(next_arg, this_arg);
       ti.aspect_ratio_given = true;
       i++;
 
-    } else if (!strcmp(argv[i], "-y") || !strcmp(argv[i], "--sync")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the audio delay.\n", argv[i]);
+    } else if (!strcmp(this_arg, "-y") || !strcmp(this_arg, "--sync")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the audio delay.\n", this_arg);
 
-      parse_sync(argv[i + 1], async);
+      parse_sync(next_arg, async, this_arg);
       ti.audio_syncs->push_back(async);
       i++;
 
-    } else if (!strcmp(argv[i], "--cues")) {
-      if ((i + 1) >= argc)
-        mxerror("--cues lacks its argument.\n");
+    } else if (!strcmp(this_arg, "--cues")) {
+      if (next_arg == NULL)
+        mxerror("'--cues' lacks its argument.\n");
 
-      parse_cues(argv[i + 1], cues);
+      parse_cues(next_arg, cues);
       ti.cue_creations->push_back(cues);
       i++;
 
-    } else if (!strcmp(argv[i], "--default-track")) {
-      if ((i + 1) >= argc)
-        mxerror("--default-track lacks the track ID.\n");
+    } else if (!strcmp(this_arg, "--default-track")) {
+      if (next_arg == NULL)
+        mxerror("'--default-track' lacks the track ID.\n");
 
-      if (!parse_int(argv[i + 1], id))
-        mxerror("Invalid track ID specified.\n");
+      if (!parse_int(next_arg, id))
+        mxerror("Invalid track ID specified in '%s %s'.\n", this_arg,
+                next_arg);
 
       ti.default_track_flags->push_back(id);
       i++;
 
-    } else if (!strcmp(argv[i], "--language")) {
-      if ((i + 1) >= argc)
-        mxerror("--language lacks its argument.\n");
+    } else if (!strcmp(this_arg, "--language")) {
+      if (next_arg == NULL)
+        mxerror("'--language' lacks its argument.\n");
 
-      parse_language(argv[i + 1], lang);
+      parse_language(next_arg, lang);
       ti.languages->push_back(lang);
       i++;
 
-    } else if (!strcmp(argv[i], "--sub-charset")) {
-      if ((i + 1) >= argc)
-        mxerror("--sub-charset lacks its argument.\n");
+    } else if (!strcmp(this_arg, "--sub-charset")) {
+      if (next_arg == NULL)
+        mxerror("'--sub-charset' lacks its argument.\n");
 
-      parse_sub_charset(argv[i + 1], lang);
+      parse_sub_charset(next_arg, lang);
       ti.sub_charsets->push_back(lang);
       i++;
 
-    } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tags")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks its argument.\n", argv[i]);
+    } else if (!strcmp(this_arg, "-t") || !strcmp(this_arg, "--tags")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks its argument.\n", this_arg);
 
-      parse_tags(argv[i + 1], tags);
+      parse_tags(next_arg, tags, this_arg);
       ti.all_tags->push_back(tags);
       i++;
 
-    } else if (!strcmp(argv[i], "--aac-is-sbr")) {
-      if ((i + 1) >= argc)
-        mxerror("%s lacks the track ID.\n", argv[i]);
+    } else if (!strcmp(this_arg, "--aac-is-sbr")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks the track ID.\n", this_arg);
 
-      if (!parse_int(argv[i + 1], id) || (id < 0))
-        mxerror("'%s' is not a valid track ID.\n", argv[i + 1]);
+      if (!parse_int(next_arg, id) || (id < 0))
+        mxerror("Invalid track ID specified in '%s %s'.\n", this_arg,
+                next_arg);
 
       ti.aac_is_sbr->push_back(id);
       i++;
@@ -1348,19 +1393,19 @@ static void parse_args(int argc, char **argv) {
     // The argument is an input file.
     else {
       if ((ti.atracks->size() != 0) && ti.no_audio)
-        mxerror("-A and -a used on the same source file.\n");
+        mxerror("'-A' and '-a' used on the same source file.\n");
 
       if ((ti.vtracks->size() != 0) && ti.no_video)
-        mxerror("-D and -d used on the same source file.\n");
+        mxerror("'-D' and '-d' used on the same source file.\n");
 
       if ((ti.stracks->size() != 0) && ti.no_subs)
-        mxerror("-S and -s used on the same source file.\n");
+        mxerror("'-S' and '-s' used on the same source file.\n");
 
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
-      file->name = argv[i];
+      file->name = this_arg;
       file->type = get_type(file->name);
-      ti.fname = argv[i];
+      ti.fname = this_arg;
 
       if (file->type == TYPEUNKNOWN)
         mxerror("File '%s' has unknown type. Please have a look "
