@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.17 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.18 2003/04/17 16:19:38 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,6 +30,7 @@
 
 #include "KaxTracks.h"
 #include "KaxTrackVideo.h"
+#include "KaxTrackEntryData.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -89,6 +90,17 @@ void video_packetizer_c::set_header() {
     codec_private.CopyBuffer((binary *)ti->private_data, ti->private_size);
   }
 
+  // Set MinCache and MaxCache to 1 for I- and P-frames. If you only
+  // have I-frames then both can be set to 0 (e.g. MJPEG). 2 is needed
+  // if there are B-frames as well.
+  KaxTrackMinCache &min_cache =
+    GetChild<KaxTrackMinCache>(static_cast<KaxTrackEntry &>(*track_entry));
+  *(static_cast<EbmlUInteger *>(&min_cache)) = 1;
+
+  KaxTrackMaxCache &max_cache =
+    GetChild<KaxTrackMaxCache>(static_cast<KaxTrackEntry &>(*track_entry));
+  *(static_cast<EbmlUInteger *>(&max_cache)) = 1;
+
   KaxTrackVideo &video =
     GetChild<KaxTrackVideo>(static_cast<KaxTrackEntry &>(*track_entry));
 
@@ -105,7 +117,7 @@ void video_packetizer_c::set_header() {
 int video_packetizer_c::process(unsigned char *buf, int size,
                                 int64_t old_timecode, int64_t flags) {
   int64_t timecode;
-  int key, num_frames;
+  int num_frames;
 
   num_frames = flags & VNUMFRAMES;
   if (old_timecode == -1)
