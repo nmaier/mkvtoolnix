@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.16 2003/04/20 20:38:56 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.17 2003/04/20 21:03:41 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -472,6 +472,28 @@ void process_file() {
                 max_cache.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + MaxCache: %u", NAME,
                         uint32(max_cache));
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackFlagLacing::ClassInfos.GlobalId) {
+                KaxTrackFlagLacing &f_lacing =
+                  *static_cast<KaxTrackFlagLacing *>(l3);
+                f_lacing.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + Lacing flag: %d", NAME,
+                        uint32(f_lacing)); 
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackFlagDefault::ClassInfos.GlobalId) {
+                KaxTrackFlagDefault &f_default =
+                  *static_cast<KaxTrackFlagDefault *>(l3);
+                f_default.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + Default flag: %d", NAME,
+                        uint32(f_default)); 
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
