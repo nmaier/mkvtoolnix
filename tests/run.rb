@@ -66,7 +66,7 @@ class Test
   def hash_tmp(erase = true)
     output = hash_file(@tmp)
     if (erase)
-      File.unlink(@tmp)
+      File.unlink(@tmp) if (File.exists?(@tmp))
       @debug_commands.push("rm #{@tmp}")
       @tmp = nil
     end
