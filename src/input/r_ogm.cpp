@@ -391,7 +391,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   ogg_packet op;
   alBITMAPINFOHEADER bih;
   stream_header *sth;
-  int i, profile, channels, sample_rate, output_sample_rate;
+  int profile, channels, sample_rate, output_sample_rate;
   bool sbr, aac_info_extracted;
   ogm_demuxer_t *dmx;
   generic_packetizer_c *ptzr;
@@ -529,7 +529,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 #if defined(HAVE_FLAC_FORMAT_H)
       case OGM_STREAM_TYPE_FLAC:
         unsigned char *buf;
-        int size;
+        int size, i;
 
         size = 0;
         for (i = 1; i < (int)dmx->packet_sizes.size(); i++)
