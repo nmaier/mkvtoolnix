@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.13 2003/04/18 13:08:04 mosu Exp $
+    \version \$Id: queue.h,v 1.14 2003/04/18 14:27:07 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -54,7 +54,7 @@ public:
   virtual ~q_c();
     
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
-                          int64_t bref = 0, int64_t fref = 0);
+                          int64_t bref = -1, int64_t fref = -1);
   virtual packet_t *get_packet();
   virtual int packet_available();
   virtual int64_t get_smallest_timecode();

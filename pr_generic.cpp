@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.21 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.22 2003/04/18 14:27:07 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,6 +34,8 @@ generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
   track_entry = NULL;
   ti = duplicate_track_info(nti);
   free_refs = -1;
+
+  create_cue_data = 0;
 
   // Set default header values to 'unset'.
   hserialno = -2;
@@ -60,6 +62,14 @@ generic_packetizer_c::~generic_packetizer_c() {
     free(hcodec_id);
   if (hcodec_private != NULL)
     free(hcodec_private);
+}
+
+void generic_packetizer_c::set_cue_creation(int ncreate_cue_data) {
+  create_cue_data = ncreate_cue_data;
+}
+
+int generic_packetizer_c::get_cue_creation() {
+  return create_cue_data;
 }
 
 void generic_packetizer_c::set_free_refs(int64_t nfree_refs) {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.6 2003/04/18 13:51:32 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.7 2003/04/18 14:27:07 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -183,11 +183,11 @@ int cluster_helper_c::render(IOCallback *out) {
       static_cast<KaxTrackEntry &>
       (*((generic_packetizer_c *)pack->source)->get_track_entry());
 
-    if (pack->bref != 0) {      // P and B frames: add backward reference.
+    if (pack->bref != -1) {      // P and B frames: add backward reference.
       bref_packet = find_packet(pack->bref);
       assert(bref_packet != NULL);
       assert(bref_packet->group != NULL);
-      if (pack->fref != 0) {    // It's even a B frame: add forward reference.
+      if (pack->fref != -1) {    // It's even a B frame: add forward reference.
         fref_packet = find_packet(pack->fref);
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
@@ -207,7 +207,9 @@ int cluster_helper_c::render(IOCallback *out) {
     }
     if (new_group == NULL)
       new_group = last_block_group;
-    else if (write_cues)
+    else if (write_cues &&
+             ((generic_packetizer_c *)pack->source)->get_cue_creation() &&
+             (pack->bref == -1))
       kax_cues->AddBlockGroup(*new_group);
     pack->group = new_group;
     last_block_group = new_group;
@@ -266,7 +268,7 @@ void cluster_helper_c::check_clusters(int num) {
       p = clusters[i]->packets[k];
       if (clusters[i]->rendered && p->superseeded)
         continue;
-      if (p->bref == 0)
+      if (p->bref == -1)
         continue;
       clstr = find_packet_cluster(p->bref);
       if (clstr == NULL) {
@@ -306,7 +308,7 @@ int cluster_helper_c::free_clusters() {
       p = clusters[i]->packets[k];
       if (!p->superseeded) {
         clusters[i]->is_referenced = 1;
-        if (p->bref == 0)
+        if (p->bref == -1)
           continue;
         clstr = find_packet_cluster(p->bref);
         if (clstr == NULL) {

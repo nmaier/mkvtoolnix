@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.23 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.24 2003/04/18 14:27:07 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -54,6 +54,8 @@ protected:
   track_info_t *ti;
   int64_t free_refs;
 
+  int create_cue_data;
+
   KaxTrackEntry *track_entry;
 
   // Header entries. Can be set via set_XXX and will be 'rendered'
@@ -80,6 +82,9 @@ public:
   virtual int process(unsigned char *data, int size,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;
+
+  virtual void set_cue_creation(int create_cue_data);
+  virtual int  get_cue_creation();
 
   virtual KaxTrackEntry *get_track_entry();
 
