@@ -631,9 +631,9 @@ avi_t* AVI_open_output_file(char * filename)
    AVI->fdes = xio_open(filename, O_RDWR|O_CREAT,
 		    S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 #elif defined(COMP_MINGW) || defined(COMP_CYGWIN)
-   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, S_IRUSR | S_IWUSR);
+   AVI->fdes = xio_open(filename, O_RDWR|O_CREAT|O_BINARY, S_IRUSR | S_IWUSR);
 #else
-   AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY,
+   AVI->fdes = xio_open(filename, O_RDWR|O_CREAT|O_BINARY,
                     S_IRUSR | S_IWUSR | S_IGRP | S_IROTH);
 #endif
 
