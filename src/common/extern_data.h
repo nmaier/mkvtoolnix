@@ -20,8 +20,8 @@ typedef struct {
   const char *name, *extensions;
 } mime_type_t;
 
-extern const char *sub_charsets[];
-extern const mime_type_t mime_types[];          
-extern const char *cctlds[];
+extern MTX_DLL_API const char *sub_charsets[];
+extern MTX_DLL_API const mime_type_t mime_types[];          
+extern MTX_DLL_API const char *cctlds[];
 
 #endif // __EXTERN_DATA_H
