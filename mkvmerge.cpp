@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.37 2003/04/18 13:51:32 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.38 2003/04/19 17:00:01 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -416,7 +416,7 @@ static void parse_args(int argc, char **argv) {
 
   // First parse options that either just print some infos and then exit
   // or that are needed right at the beginning.
-  for (i = 1; i < argc; i++)
+  for (i = 0; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
       fprintf(stdout, "mkvmerge v" VERSION "\n");
       exit(0);
@@ -475,7 +475,7 @@ static void parse_args(int argc, char **argv) {
   kax_tracks = &GetChild<KaxTracks>(*kax_segment);
   kax_last_entry = NULL;
   
-  for (i = 1; i < argc; i++) {
+  for (i = 0; i < argc; i++) {
 
     // Ignore the options we took care of in the first step.
     if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
@@ -740,6 +740,90 @@ static void parse_args(int argc, char **argv) {
   }*/
 }
 
+static char **add_string(int &num, char **values, char *new_string) {
+  values = (char **)realloc(values, (num + 1) * sizeof(char *));
+  if (values == NULL)
+    die("realloc");
+  values[num] = strdup(new_string);
+  if (values[num] == NULL)
+    die("strdup");
+  num++;
+
+  return values;
+}
+
+static char *strip(char *s) {
+  char *p;
+
+  if (s[0] == 0)
+    return s;
+
+  p = &s[strlen(s) - 1];
+  while ((p != s) && ((*p == '\n') || (*p == '\r') || isspace(*p))) {
+    *p = 0;
+    p--;
+  }
+
+  p = s;
+  while ((*p != 0) && isspace(*p))
+    p++;
+
+  memmove(s, p, strlen(p) + 1);
+
+  return s;
+}
+
+static char **read_args_from_file(int &num_args, char **args, char *filename) {
+  FILE *f;
+  char buffer[8192], *space;
+
+  f = fopen(filename, "r");
+  if (f == NULL) {
+    fprintf(stderr, "Error: Could not open file '%s' for reading command line "
+            "arguments from.", filename);
+    exit(1);
+  }
+
+  while (!feof(f) && (fgets(buffer, 8191, f) != NULL)) {
+    buffer[8191] = 0;
+    strip(buffer);
+    if ((buffer[0] == '#') || (buffer[0] == 0))
+      continue;
+
+    space = strchr(buffer, ' ');
+    if (space != NULL) {
+      *space = 0;
+      space++;
+    }
+    args = add_string(num_args, args, buffer);
+    if (space != NULL)
+      args = add_string(num_args, args, space);
+  }
+
+  return args;
+}
+
+static void handle_args(int argc, char **argv) {
+  int i, num_args;
+  char **args;
+
+  args = NULL;
+  num_args = 0;
+
+  for (i = 1; i < argc; i++)
+    if (argv[i][0] == '@')
+      args = read_args_from_file(num_args, args, &argv[i][1]);
+    else
+      args = add_string(num_args, args, argv[i]);
+
+  parse_args(num_args, args);
+
+  for (i = 0; i < num_args; i++)
+    free(args[i]);
+  if (args != NULL)
+    free(args);
+}
+
 static int write_packet(packet_t *pack) {
   int64_t timecode;
 
@@ -768,7 +852,7 @@ int main(int argc, char **argv) {
   cluster_helper = new cluster_helper_c();
   cluster_helper->add_cluster(new KaxCluster());
 
-  parse_args(argc, argv);
+  handle_args(argc, argv);
   
   /* let her rip! */
   while (1) {
