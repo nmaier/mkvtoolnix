@@ -737,6 +737,16 @@ generic_packetizer_c::set_headers() {
       *(static_cast<EbmlUInteger *>(&GetChild<KaxAudioBitDepth>(audio))) =
         haudio_bit_depth;
 
+  } else if (htrack_type == track_buttons) {
+    if ((hvideo_pixel_height != -1) && (hvideo_pixel_width != -1)) {
+      KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoPixelWidth>(video))) = hvideo_pixel_width;
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoPixelHeight>(video))) = hvideo_pixel_height;
+    }
+
   }
 
   if (ti->compression != COMPRESSION_UNSPECIFIED)

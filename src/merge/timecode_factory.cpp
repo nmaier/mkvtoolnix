@@ -186,7 +186,7 @@ timecode_factory_v1_c::get_next(int64_t &timecode,
 
   mxverb(4, "ext_timecodes v1: tc %lld dur %lld for %lld\n", timecode,
          duration, frameno - 1);
-  return true;
+  return false;
 }
 
 int64_t
@@ -260,14 +260,14 @@ timecode_factory_v2_c::get_next(int64_t &timecode,
            "the way you intended them to be. mkvmerge might even crash.\n",
            source_name.c_str(), tid, timecodes.size());
     warning_printed = true;
-    return true;
+    return false;
   }
 
   timecode = timecodes[frameno];
   duration = durations[frameno];
   if (!peek_only)
     frameno++;
-  return true;
+  return false;
 }
 
 void
@@ -366,7 +366,7 @@ bool
 timecode_factory_v3_c::get_next(int64_t &timecode,
                                 int64_t &duration,
                                 bool peek_only) {
-  bool result = (current_timecode == 0);
+  bool result = false;
 
   if (durations[current_duration].is_gap) {
     size_t duration_index = current_duration;
