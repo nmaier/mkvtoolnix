@@ -1,3 +1,8 @@
+2004-03-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Using audio sync on AC3 tracks read from
+	Matroska files did not work.
+
 2004-03-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: new feature: Added extraction of RealAudio and

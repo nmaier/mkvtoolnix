@@ -248,7 +248,7 @@ dts_packetizer_c::process(unsigned char *buf,
       my_timecode = (int64_t)(((double)samples_written * 1000000000.0) /
                               ((double)dtsheader.core_sampling_frequency));
     else
-      my_timecode = timecode + initial_displacement;
+      my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
                (int64_t)(packet_len_in_ns * ti->async.linear));

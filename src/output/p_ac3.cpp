@@ -149,7 +149,7 @@ ac3_packetizer_c::process(unsigned char *buf,
       my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /
                               samples_per_sec);
     else
-      my_timecode = timecode + initial_displacement;
+      my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, ac3header.bytes, my_timecode,
                (int64_t)(1000000000.0 * 1536 * ti->async.linear /
