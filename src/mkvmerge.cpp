@@ -161,6 +161,7 @@ int split_max_num_files = 65535;
 bool use_durations = false;
 
 double timecode_scale = TIMECODE_SCALE;
+static bool timecode_scale_forced = false;
 
 float video_fps = -1.0;
 int default_tracks[3], default_tracks_priority[3];
@@ -1218,8 +1219,7 @@ render_headers(mm_io_c *rout) {
       *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
         cstr_to_UTFstring(version.c_str());
       *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
-        cstr_to_UTFstring(VERSIONINFO " ('The Na-Na Song') "
-                          "built on " __DATE__ " " __TIME__);
+        cstr_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
       GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
     } else {
       *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
@@ -1659,7 +1659,7 @@ parse_args(int argc,
       next_arg = argv[i + 1];
 
     if (!strcmp(this_arg, "-V") || !strcmp(this_arg, "--version")) {
-      mxinfo("mkvmerge v" VERSION ", built on " __DATE__ " " __TIME__ "\n");
+      mxinfo(VERSIONINFO " built on " __DATE__ " " __TIME__ "\n");
       mxexit(0);
 
     } else if (!strcmp(this_arg, "-h") || !strcmp(this_arg, "-?") ||
@@ -1691,7 +1691,7 @@ parse_args(int argc,
 
   }
 
-  mxinfo("mkvmerge v" VERSION ", built on " __DATE__ " " __TIME__ "\n");
+  mxinfo(VERSIONINFO " built on " __DATE__ " " __TIME__ "\n");
 
   // Now parse options that are needed right at the beginning.
   for (i = 0; i < argc; i++) {

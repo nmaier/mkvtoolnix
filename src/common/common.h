@@ -45,7 +45,8 @@
 # endif
 #endif
 
-#define VERSIONINFO "mkvmerge v" VERSION
+#define VERSIONNAME "The Na Na Song"
+#define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
 #define BUGMSG _("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
                  "message, a description of what you were trying to do, " \

@@ -552,7 +552,7 @@ wxdie(const wxString &errmsg) {
 }
 
 mmg_dialog::mmg_dialog():
-  wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
+  wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION " ('" VERSIONNAME "')"),
           wxPoint(0, 0),
 #ifdef SYS_WINDOWS
           wxSize(520, 740),
@@ -992,8 +992,8 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_about(wxCommandEvent &evt) {
-  wxMessageBox(wxT("mkvmerge GUI v" VERSION " built on " __DATE__ " "
-                   __TIME__ "\n"
+  wxMessageBox(wxT("mkvmerge GUI v" VERSION " ('" VERSIONNAME "')\n"
+                   "built on " __DATE__ " " __TIME__ "\n\n"
                    "This GUI was written by Moritz Bunkus <moritz@bunkus.org>"
                    "\nBased on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
                    "mkvmerge GUI is licensed under the GPL.\n"

@@ -197,7 +197,7 @@ parse_args(int argc,
   }
 
   if (!strcmp(argv[1], "-V") || !strcmp(argv[1], "--version")) {
-    mxinfo("mkvextract v" VERSION "\n");
+    mxinfo("mkvextract v" VERSION " ('" VERSIONNAME "')\n");
     mxexit(0);
 
   } else if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "-?") ||

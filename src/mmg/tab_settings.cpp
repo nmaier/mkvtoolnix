@@ -115,8 +115,9 @@ tab_settings::tab_settings(wxWindow *parent):
   siz_about->Add(new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm)),
                  0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
   siz_about->Add(new wxStaticText(this, wxID_STATIC,
-                                  wxT("mkvmerge GUI v" VERSION " built on "
-                                      __DATE__ " " __TIME__ "\n"
+                                  wxT("mkvmerge GUI v" VERSION " ('"
+                                      VERSIONNAME "')\n"
+                                      "built on " __DATE__ " " __TIME__ "\n\n"
                                       "This GUI was written by Moritz Bunkus "
                                       "<moritz@bunkus.org>\n"
                                       "Based on mmg by Florian Wagner "

@@ -1,5 +1,8 @@
 2004-08-01  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Implemented sample-precision for
+	timestamps and durations on audio only files.
+
 	* mkvextract: bug fix: The CUE extraction wrote UTF-8 characters
 	but no UTF-8 BOM (byte order marker) at the beginning.
 
