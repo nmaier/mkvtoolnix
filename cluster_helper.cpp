@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.4 2003/04/18 13:08:04 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.5 2003/04/18 13:12:51 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,8 +27,8 @@
 
 #include "StdIOCallback.h"
 
-#define walk_clusters() check_clusters(__LINE__)
-//#define walk_clusters()
+//#define walk_clusters() check_clusters(__LINE__)
+#define walk_clusters()
 
 cluster_helper_c::cluster_helper_c() {
   num_clusters = 0;
@@ -358,6 +358,13 @@ int cluster_helper_c::free_clusters() {
     clusters = new_clusters;
     num_clusters = k;
   }
+
+#if 0
+  fprintf(stdout, "numcl: %8d ", num_clusters);
+  for (i = 0; i < num_clusters; i++)
+    fprintf(stdout, "#");
+  fprintf(stdout, "\n");
+#endif
 
   return 1;
 }
