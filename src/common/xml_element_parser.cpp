@@ -172,7 +172,7 @@ el_get_binary(parser_data_t *pdata,
     while (*p != 0) {
       if (isdigit(*p) || ((tolower(*p) >= 'a') && (tolower(*p) <= 'f')))
         ++length;
-      else if (!isblanktab(*p))
+      else if (!isblanktab(*p) && !iscr(*p))
         xmlp_error(pdata, "Invalid hexadecimal data encountered: '%c' is "
                    "neither white space nor a hexadecimal number.", *p);
       ++p;
@@ -188,7 +188,7 @@ el_get_binary(parser_data_t *pdata,
     while (*p != 0) {
       uint8_t value;
 
-      if (isblanktab(*p)) {
+      if (isblanktab(*p) || iscr(*p)) {
         ++p;
         continue;
       }
