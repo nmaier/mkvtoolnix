@@ -111,10 +111,6 @@ bool mm_io_c::eof() {
   return feof((FILE *)file) != 0 ? true : false;
 }
 
-char *mm_io_c::gets(char *buffer, size_t max_size) {
-  return fgets(buffer, max_size, (FILE *)file);
-}
-
 #else // SYS_UNIX
 
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
@@ -216,40 +212,14 @@ bool mm_io_c::eof() {
   return _eof;
 }
 
-char *mm_io_c::gets(char *buffer, size_t max_size) {
-  // This will not be fast... But it shouldn't matter. gets is only
-  // used by the text subtitle readers.
-  DWORD bytes_read;
-  int idx;
-
-  idx = 0;
-  do {
-    if (!ReadFile((HANDLE)file, &buffer[idx], 1, &bytes_read, NULL)) {
-      _eof = true;
-      if (idx == 0)
-        return NULL;
-      else {
-        if (idx <= max_size)
-          buffer[idx] = 0;
-        return buffer;
-      }
-    }
-    if (buffer[idx] == '\n') {
-      if ((idx + 1) < max_size)
-        buffer[idx + 1] = 0;
-      return buffer;
-    }
-    idx++;
-  } while (idx < max_size);
-
-  return buffer;
-}
-
 #endif
 
 string mm_io_c::getline() {
   char c;
   string s;
+
+  if (eof())
+    throw exception();
 
   while (read(&c, 1) == 1) {
     if (c == '\r')
@@ -260,6 +230,16 @@ string mm_io_c::getline() {
   }
 
   return s;
+}
+
+bool mm_io_c::getline2(string &s) {
+  try {
+    s = getline();
+  } catch(...) {
+    return false;
+  }
+
+  return true;
 }
 
 size_t mm_io_c::puts_unl(const char *s) {
@@ -517,43 +497,13 @@ int mm_text_io_c::read_next_char(char *buffer) {
   return 0;
 }
 
-char *mm_text_io_c::gets(char *buffer, size_t max_size) {
-  int idx, len;
-  char utf8char[8];
-
-  if (max_size < 8)
-    return NULL;
-
-  idx = 0;
-  while (1) {
-    len = read_next_char(utf8char);
-    if (len == 0) {
-      buffer[idx] = 0;
-      if (idx == 0)
-        return NULL;
-      return buffer;
-    }
-
-    if ((len == 1) && (utf8char[0] == '\r'))
-      continue;
-
-    if ((len == 1) && (utf8char[0] == '\n')) {
-      buffer[idx] = 0;
-      return buffer;
-    }
-
-    memcpy(&buffer[idx], utf8char, len);
-    idx += len;
-
-    if (idx >= (max_size - 8))
-      return buffer;
-  }
-}
-
 string mm_text_io_c::getline() {
   string s;
   int len;
   char utf8char[8];
+
+  if (eof())
+    throw exception();
 
   while (1) {
     memset(utf8char, 0, 8);

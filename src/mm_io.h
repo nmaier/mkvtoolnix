@@ -60,8 +60,8 @@ public:
   virtual size_t write(const void *buffer, size_t size);
   virtual void close();
   virtual bool eof();
-  virtual char *gets(char *buffer, size_t max_size);
   virtual string getline();
+  virtual bool getline2(string &s);
   virtual size_t puts_unl(const char *s);
 
   virtual void save_pos(int64_t new_pos = -1);
@@ -94,7 +94,6 @@ public:
   mm_text_io_c(const char *path);
 
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
-  virtual char *gets(char *buffer, size_t max_size);
   virtual string getline();
   virtual int read_next_char(char *buffer);
   virtual byte_order_e get_byte_order();
