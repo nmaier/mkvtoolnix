@@ -528,10 +528,12 @@ void generic_packetizer_c::set_headers() {
     hcompression = ti->compression;
   if ((hcompression != COMPRESSION_UNSPECIFIED) &&
       (hcompression != COMPRESSION_NONE)) {
+    KaxContentEncodings *c_encodings;
     KaxContentEncoding *c_encoding;
     KaxContentCompression *c_comp;
 
-    c_encoding = &GetChild<KaxContentEncoding>(*track_entry);
+    c_encodings = &GetChild<KaxContentEncodings>(*track_entry);
+    c_encoding = &GetChild<KaxContentEncoding>(*c_encodings);
     // First modification
     *static_cast<EbmlUInteger *>
       (&GetChild<KaxContentEncodingOrder>(*c_encoding)) = 0;

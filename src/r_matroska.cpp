@@ -798,6 +798,7 @@ int kax_reader_c::read_headers() {
           KaxTrackLanguage *ktlanguage;
           KaxTrackMinCache *ktmincache;
           KaxTrackName *ktname;
+          KaxContentEncodings *kcencodings;
           int kcenc_idx;
           vector<kax_content_encoding_t>::iterator ce_ins_it;
 
@@ -1009,104 +1010,108 @@ int kax_reader_c::read_headers() {
             safefree(tmp);
           }
 
-          for (kcenc_idx = 0; kcenc_idx < ktentry->ListSize(); kcenc_idx++) {
-            l3 = (*ktentry)[kcenc_idx];
-            if (EbmlId(*l3) == KaxContentEncoding::ClassInfos.GlobalId) {
-              KaxContentEncoding *kcenc;
-              KaxContentEncodingOrder *ce_order;
-              KaxContentEncodingType *ce_type;
-              KaxContentEncodingScope *ce_scope;
-              KaxContentCompression *ce_comp;
-              KaxContentEncryption *ce_enc;
-              kax_content_encoding_t enc;
+          kcencodings = FINDFIRST(ktentry, KaxContentEncodings);
+          if (kcencodings != NULL) {
+            for (kcenc_idx = 0; kcenc_idx < kcencodings->ListSize();
+                 kcenc_idx++) {
+              l3 = (*kcencodings)[kcenc_idx];
+              if (EbmlId(*l3) == KaxContentEncoding::ClassInfos.GlobalId) {
+                KaxContentEncoding *kcenc;
+                KaxContentEncodingOrder *ce_order;
+                KaxContentEncodingType *ce_type;
+                KaxContentEncodingScope *ce_scope;
+                KaxContentCompression *ce_comp;
+                KaxContentEncryption *ce_enc;
+                kax_content_encoding_t enc;
 
-              memset(&enc, 0, sizeof(kax_content_encoding_t));
-              kcenc = static_cast<KaxContentEncoding *>(l3);
+                memset(&enc, 0, sizeof(kax_content_encoding_t));
+                kcenc = static_cast<KaxContentEncoding *>(l3);
 
-              ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
-              if (ce_order != NULL)
-                enc.order = uint32(*ce_order);
+                ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
+                if (ce_order != NULL)
+                  enc.order = uint32(*ce_order);
 
-              ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
-              if (ce_type != NULL)
-                enc.type = uint32(*ce_type);
+                ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
+                if (ce_type != NULL)
+                  enc.type = uint32(*ce_type);
 
-              ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
-              if (ce_scope != NULL)
-                enc.scope = uint32(*ce_scope);
-              else
-                enc.scope = 1;
+                ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
+                if (ce_scope != NULL)
+                  enc.scope = uint32(*ce_scope);
+                else
+                  enc.scope = 1;
 
-              ce_comp = FINDFIRST(kcenc, KaxContentCompression);
-              if (ce_comp != NULL) {
-                KaxContentCompAlgo *cc_algo;
-                KaxContentCompSettings *cc_settings;
+                ce_comp = FINDFIRST(kcenc, KaxContentCompression);
+                if (ce_comp != NULL) {
+                  KaxContentCompAlgo *cc_algo;
+                  KaxContentCompSettings *cc_settings;
 
-                cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
-                if (cc_algo != NULL)
-                  enc.comp_algo = uint32(*cc_algo);
+                  cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
+                  if (cc_algo != NULL)
+                    enc.comp_algo = uint32(*cc_algo);
 
-                cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
-                if (cc_settings != NULL) {
-                  enc.comp_settings =
-                    (unsigned char *)safememdup(&binary(*cc_settings),
-                                                cc_settings->GetSize());
-                  enc.comp_settings_len = cc_settings->GetSize();
+                  cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
+                  if (cc_settings != NULL) {
+                    enc.comp_settings =
+                      (unsigned char *)safememdup(&binary(*cc_settings),
+                                                  cc_settings->GetSize());
+                    enc.comp_settings_len = cc_settings->GetSize();
+                  }
                 }
+
+                ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
+                if (ce_enc != NULL) {
+                  KaxContentEncAlgo *ce_ealgo;
+                  KaxContentEncKeyID *ce_ekeyid;
+                  KaxContentSigAlgo *ce_salgo;
+                  KaxContentSigHashAlgo *ce_shalgo;
+                  KaxContentSigKeyID *ce_skeyid;
+                  KaxContentSignature *ce_signature;
+
+                  ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
+                  if (ce_ealgo != NULL)
+                    enc.enc_algo = uint32(*ce_ealgo);
+
+                  ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
+                  if (ce_ekeyid != NULL) {
+                    enc.enc_keyid =
+                      (unsigned char *)safememdup(&binary(*ce_ekeyid),
+                                                  ce_ekeyid->GetSize());
+                    enc.enc_keyid_len = ce_ekeyid->GetSize();
+                  }
+
+                  ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
+                  if (ce_salgo != NULL)
+                    enc.enc_algo = uint32(*ce_salgo);
+
+                  ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
+                  if (ce_shalgo != NULL)
+                    enc.enc_algo = uint32(*ce_shalgo);
+
+                  ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
+                  if (ce_skeyid != NULL) {
+                    enc.sig_keyid =
+                      (unsigned char *)safememdup(&binary(*ce_skeyid),
+                                                  ce_skeyid->GetSize());
+                    enc.sig_keyid_len = ce_skeyid->GetSize();
+                  }
+
+                  ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
+                  if (ce_signature != NULL) {
+                    enc.signature =
+                      (unsigned char *)safememdup(&binary(*ce_signature),
+                                                  ce_signature->GetSize());
+                    enc.signature_len = ce_signature->GetSize();
+                  }
+
+                }
+
+                ce_ins_it = track->c_encodings->begin();
+                while ((ce_ins_it != track->c_encodings->end()) &&
+                       (enc.order <= (*ce_ins_it).order))
+                  ce_ins_it++;
+                track->c_encodings->insert(ce_ins_it, enc);
               }
-
-              ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
-              if (ce_enc != NULL) {
-                KaxContentEncAlgo *ce_ealgo;
-                KaxContentEncKeyID *ce_ekeyid;
-                KaxContentSigAlgo *ce_salgo;
-                KaxContentSigHashAlgo *ce_shalgo;
-                KaxContentSigKeyID *ce_skeyid;
-                KaxContentSignature *ce_signature;
-
-                ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
-                if (ce_ealgo != NULL)
-                  enc.enc_algo = uint32(*ce_ealgo);
-
-                ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
-                if (ce_ekeyid != NULL) {
-                  enc.enc_keyid =
-                    (unsigned char *)safememdup(&binary(*ce_ekeyid),
-                                                ce_ekeyid->GetSize());
-                  enc.enc_keyid_len = ce_ekeyid->GetSize();
-                }
-
-                ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
-                if (ce_salgo != NULL)
-                  enc.enc_algo = uint32(*ce_salgo);
-
-                ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
-                if (ce_shalgo != NULL)
-                  enc.enc_algo = uint32(*ce_shalgo);
-
-                ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
-                if (ce_skeyid != NULL) {
-                  enc.sig_keyid =
-                    (unsigned char *)safememdup(&binary(*ce_skeyid),
-                                                ce_skeyid->GetSize());
-                  enc.sig_keyid_len = ce_skeyid->GetSize();
-                }
-
-                ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
-                if (ce_signature != NULL) {
-                  enc.signature =
-                    (unsigned char *)safememdup(&binary(*ce_signature),
-                                                ce_signature->GetSize());
-                  enc.signature_len = ce_signature->GetSize();
-                }
-
-              }
-
-              ce_ins_it = track->c_encodings->begin();
-              while ((ce_ins_it != track->c_encodings->end()) &&
-                     (enc.order <= (*ce_ins_it).order))
-                ce_ins_it++;
-              track->c_encodings->insert(ce_ins_it, enc);
             }
           }
 
