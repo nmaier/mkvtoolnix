@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.23 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.24 2003/05/18 20:57:07 mosu Exp $
     \brief Vorbis packetizer
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include "config.h"

@@ -13,10 +13,10 @@
 
 /*!
     \file
-    \version \$Id: r_dts.cpp,v 1.2 2003/05/18 20:40:11 mosu Exp $
+    \version \$Id: r_dts.cpp,v 1.3 2003/05/18 20:57:07 mosu Exp $
     \brief DTS demultiplexer module
     \author Peter Niemayer <niemayer@isg.de>
-    \author Moritz Bunkus <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdlib.h>

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.20 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.21 2003/05/18 20:57:07 mosu Exp $
     \brief AC3 demultiplexer module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdlib.h>

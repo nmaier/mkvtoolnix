@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.16 2003/05/11 15:48:57 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.17 2003/05/18 20:57:07 mosu Exp $
     \brief cluster helper
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <assert.h>

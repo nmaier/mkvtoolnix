@@ -13,10 +13,10 @@
 
 /*!
   \file
-  \version \$Id: dts_common.h,v 1.3 2003/05/18 20:53:33 mosu Exp $
+  \version \$Id: dts_common.h,v 1.4 2003/05/18 20:57:07 mosu Exp $
   \brief definitions and helper functions for DTS data
   \author Peter Niemayer <niemayer@isg.de>
-  \author Moritz Bunkus <moritz @ bunkus.org>
+  \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __DTSCOMMON_H

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.11 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.12 2003/05/18 20:57:08 mosu Exp $
     \brief class definitions for the MP3 reader module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __R_MP3_H

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.18 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.19 2003/05/18 20:57:07 mosu Exp $
     \brief Subripper subtitle reader
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdlib.h>

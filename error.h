@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: error.h,v 1.7 2003/05/05 20:18:32 mosu Exp $
+    \version \$Id: error.h,v 1.8 2003/05/18 20:57:07 mosu Exp $
     \brief class definitions for the error exception class
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __ERROR_H

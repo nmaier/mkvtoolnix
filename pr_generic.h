@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.41 2003/05/11 12:41:53 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.42 2003/05/18 20:57:07 mosu Exp $
     \brief class definition for the generic reader and packetizer
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __PR_GENERIC_H

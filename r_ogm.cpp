@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.30 2003/05/15 09:10:17 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.31 2003/05/18 20:57:08 mosu Exp $
     \brief OGG media stream reader
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include "config.h"

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: matroska.h,v 1.11 2003/05/17 20:51:34 mosu Exp $
+    \version \$Id: matroska.h,v 1.12 2003/05/18 20:57:07 mosu Exp $
     \brief Definitions for the various Codec IDs
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __MATROSKA_H

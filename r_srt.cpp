@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.11 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.12 2003/05/18 20:57:08 mosu Exp $
     \brief Subripper subtitle reader
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <ctype.h>

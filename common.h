@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.24 2003/05/18 19:56:31 mosu Exp $
+    \version \$Id: common.h,v 1.25 2003/05/18 20:57:07 mosu Exp $
     \brief definitions used in all programs, helper functions
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __COMMON_H

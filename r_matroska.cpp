@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.33 2003/05/18 20:53:33 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.34 2003/05/18 20:57:07 mosu Exp $
     \brief Matroska reader
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdio.h>

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.18 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.19 2003/05/18 20:57:08 mosu Exp $
     \brief MP3 reader module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdlib.h>

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.33 2003/05/11 09:05:55 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.34 2003/05/18 20:57:07 mosu Exp $
     \brief video output module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <ctype.h>

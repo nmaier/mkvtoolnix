@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.21 2003/05/17 20:51:34 mosu Exp $
+    \version \$Id: common.cpp,v 1.22 2003/05/18 20:57:07 mosu Exp $
     \brief helper functions, common variables
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <errno.h>

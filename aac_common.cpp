@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: aac_common.cpp,v 1.2 2003/05/18 19:56:31 mosu Exp $
+    \version \$Id: aac_common.cpp,v 1.3 2003/05/18 20:57:07 mosu Exp $
     \brief helper function for AAC data
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdio.h>

@@ -13,9 +13,9 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_dts.h,v 1.1 2003/05/15 08:58:52 mosu Exp $
+    \version \$Id: r_dts.h,v 1.2 2003/05/18 20:57:07 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __R_DTS_H

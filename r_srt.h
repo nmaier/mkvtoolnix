@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_srt.h,v 1.9 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_srt.h,v 1.10 2003/05/18 20:57:08 mosu Exp $
     \brief class definition for the Subripper subtitle reader
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __R_SRT_H

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.6 2003/05/05 20:18:32 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.7 2003/05/18 20:57:08 mosu Exp $
     \brief subtitle helper
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdio.h>

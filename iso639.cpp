@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: iso639.cpp,v 1.1 2003/05/01 22:38:54 mosu Exp $
+    \version \$Id: iso639.cpp,v 1.2 2003/05/18 20:57:07 mosu Exp $
     \brief ISO639 language definitions, lookup functions
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdio.h>

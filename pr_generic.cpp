@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.41 2003/05/11 12:41:53 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.42 2003/05/18 20:57:07 mosu Exp $
     \brief functions common for all readers/packetizers
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include "KaxTracks.h"

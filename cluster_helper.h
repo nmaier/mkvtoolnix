@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.2 2003/04/18 13:08:04 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.3 2003/05/18 20:57:07 mosu Exp $
     \brief class definition for the cluster helper
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __CLUSTER_HELPER_C

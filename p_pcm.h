@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.15 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.16 2003/05/18 20:57:07 mosu Exp $
     \brief class definition for the PCM output module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
  
 #ifndef __P_PCM_H

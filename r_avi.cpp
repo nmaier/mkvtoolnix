@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.30 2003/05/11 12:31:01 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.31 2003/05/18 20:57:07 mosu Exp $
     \brief AVI demultiplexer module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdlib.h>

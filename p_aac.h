@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_aac.h,v 1.2 2003/05/18 19:56:31 mosu Exp $
+    \version \$Id: p_aac.h,v 1.3 2003/05/18 20:57:07 mosu Exp $
     \brief class definition for the AAC output module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
  
 #ifndef __P_AAC_H

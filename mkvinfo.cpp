@@ -12,9 +12,9 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.39 2003/05/18 20:53:33 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.40 2003/05/18 20:57:07 mosu Exp $
     \brief retrieves and displays information about a Matroska file
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <errno.h>

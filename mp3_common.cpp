@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: mp3_common.cpp,v 1.6 2003/05/17 20:59:21 mosu Exp $
+    \version \$Id: mp3_common.cpp,v 1.7 2003/05/18 20:57:07 mosu Exp $
     \brief helper functions for MP3 data
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include "mp3_common.h"

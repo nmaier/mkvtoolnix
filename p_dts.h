@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_dts.h,v 1.2 2003/05/18 20:40:11 mosu Exp $
+    \version \$Id: p_dts.h,v 1.3 2003/05/18 20:57:07 mosu Exp $
     \brief class definition for the DTS output module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
  
 #ifndef __P_DTS_H

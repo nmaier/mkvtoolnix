@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: subtitles.h,v 1.2 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: subtitles.h,v 1.3 2003/05/18 20:57:08 mosu Exp $
     \brief class definition for the subtitle helper
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __SUBTITLES_H

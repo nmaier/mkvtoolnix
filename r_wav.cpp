@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.20 2003/05/18 20:53:33 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.21 2003/05/18 20:57:08 mosu Exp $
     \brief MP3 reader module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
 */
 

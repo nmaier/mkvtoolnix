@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.14 2003/05/05 21:55:02 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.15 2003/05/18 20:57:07 mosu Exp $
     \brief class definition for the AC3 output module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
  
 #ifndef __P_AC3_H

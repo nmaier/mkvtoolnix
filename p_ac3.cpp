@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.23 2003/05/15 08:58:52 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.24 2003/05/18 20:57:07 mosu Exp $
     \brief AC3 output module
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <stdlib.h>

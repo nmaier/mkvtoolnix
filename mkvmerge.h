@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.8 2003/05/11 15:48:57 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.9 2003/05/18 20:57:07 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __MKVMERGE_H

@@ -13,9 +13,9 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.67 2003/05/18 20:53:33 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.68 2003/05/18 20:57:07 mosu Exp $
     \brief command line parameter parsing, looping, output handling
-    \author Moritz Bunkus         <moritz @ bunkus.org>
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <errno.h>
