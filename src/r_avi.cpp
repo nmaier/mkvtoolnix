@@ -602,7 +602,7 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
     debug_leave("AVI_read_audio");
 
     if (nread > 0) {
-      if (nread > size)
+      if (nread >= size)
         need_more_data = true;
       demuxer->packetizer->process(chunk, nread);
     }
