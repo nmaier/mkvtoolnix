@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.9 2003/04/11 11:21:10 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.10 2003/04/17 12:23:41 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -151,13 +151,13 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
 
   for (i = 0; i < complete_packets; i++) {
     add_packet(new_buf + i * bytes_per_packet, bytes_per_packet,
-               (bytes_output * 1000 / bps) * ti->async.linear);
+               (int64_t)((bytes_output * 1000 / bps) * ti->async.linear));
     bytes_output += bytes_per_packet;
     packetno++;
   }
   if (remaining_bytes != 0) {
     add_packet(new_buf + complete_packets * bytes_per_packet, remaining_bytes,
-               (bytes_output * 1000 / bps) * ti->async.linear);
+               (int64_t)((bytes_output * 1000 / bps) * ti->async.linear));
     bytes_output += remaining_bytes;
     packetno++;
   }
