@@ -549,6 +549,10 @@ utf8_init(const char *charset) {
     setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW) || defined(COMP_MSC)
     lc_charset = "CP" + to_string(GetACP());
+#elif defined(SYS_SOLARIS)
+    lc_charset = nl_langinfo(CODESET);
+    if (parse_int(lc_charset.c_str(), i))
+      lc_charset = string("ISO") + lc_charset + string("-US");
 #else
     lc_charset = nl_langinfo(CODESET);
 #endif

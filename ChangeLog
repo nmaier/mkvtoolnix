@@ -1,5 +1,7 @@
 2004-09-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The charset was not set correctly on Solaris.
+
 	* mkvmerge: bug fix: mkvmerge crashed when reading Matroska files
 	that contain an empty tag list.
 
