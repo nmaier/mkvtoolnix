@@ -298,7 +298,7 @@ get_file_type(const string &filename) {
     type = TYPEMP3;
   else if (dts_reader_c::probe_file(mm_io, size))
     type = TYPEDTS;
-  else if (aac_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
+  else if (aac_reader_c::probe_file(mm_io, size))
     type = TYPEAAC;
   else if (mpeg_es_reader_c::probe_file(mm_io, size))
     type = TYPEMPEG;
