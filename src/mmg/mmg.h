@@ -58,10 +58,13 @@ struct mmg_track_t {
   wxString tags, fourcc, aspect_ratio, compression, timecodes;
   wxString dwidth, dheight;
 
+  bool appending;
+
   mmg_track_t():
     type(0), id(0), source(0),
     enabled(false), display_dimensions_selected(false),
-    default_track(false), aac_is_sbr(false), track_name_was_present(false) {};
+    default_track(false), aac_is_sbr(false), track_name_was_present(false),
+    appending(false) {};
 };
 typedef counted_ptr<mmg_track_t> mmg_track_ptr;
 
@@ -71,10 +74,12 @@ struct mmg_file_t {
   int container;
   vector<mmg_track_ptr> tracks;
   bool no_chapters, no_attachments, no_tags;
+  bool appending;
 
   mmg_file_t():
     title_was_present(false), container(0),
-    no_chapters(false), no_attachments(false), no_tags(false) {};
+    no_chapters(false), no_attachments(false), no_tags(false),
+    appending(false) {};
 };
 typedef counted_ptr<mmg_file_t> mmg_file_ptr;
 
@@ -113,7 +118,7 @@ wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);
 wxString format_date_time(time_t date_time);
 
-wxString create_track_order();
+wxString create_track_order(bool all);
 
 void wxdie(const wxString &errmsg);
 

@@ -510,7 +510,7 @@ format_tooltip(const wxString &s) {
 #endif
 
 wxString
-create_track_order() {
+create_track_order(bool all) {
   int i;
   wxString s, wformat;
   string format;
@@ -518,12 +518,32 @@ create_track_order() {
   fix_format("%lld", format);
   wformat = wxU(format.c_str());
   for (i = 0; i < tracks.size(); i++) {
-    if (!tracks[i]->enabled)
+    if (!all && (!tracks[i]->enabled || tracks[i]->appending))
       continue;
     if (s.length() > 0)
       s += wxT(",");
     s += wxString::Format(wxT("%d:") + wformat, tracks[i]->source,
                           tracks[i]->id);
+  }
+
+  return s;
+}
+
+wxString
+create_append_mapping() {
+  int i;
+  wxString s, wformat;
+  string format;
+
+  fix_format("%d:%lld:%d:%lld", format);
+  wformat = wxU(format.c_str());
+  for (i = 1; i < tracks.size(); i++) {
+    if (!tracks[i]->enabled || !tracks[i]->appending)
+      continue;
+    if (s.length() > 0)
+      s += wxT(",");
+    s += wxString::Format(wformat, tracks[i]->source, tracks[i]->id,
+                          tracks[i - 1]->source, tracks[i - 1]->id);
   }
 
   return s;
@@ -874,6 +894,8 @@ mmg_dialog::on_file_save(wxCommandEvent &evt) {
                    wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
+    if (wxFileExists(dlg.GetPath()))
+      wxRemoveFile(dlg.GetPath());
     save(dlg.GetPath());
   }
 }
@@ -1109,6 +1131,7 @@ mmg_dialog::update_command_line() {
   mmg_file_t *f;
   mmg_attachment_t *a;
   wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
+  wxString append_mapping;
 
   old_cmdline = cmdline;
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
@@ -1175,7 +1198,7 @@ mmg_dialog::update_command_line() {
         }
       }
 
-      if (t->language != wxT("none")) {
+      if (t->language != wxT("und")) {
         clargs.Add(wxT("--language"));
         clargs.Add(sid + wxT(":") + extract_language_code(t->language));
       }
@@ -1270,14 +1293,23 @@ mmg_dialog::update_command_line() {
       if (no_subs)
         clargs.Add(wxT("-S"));
 
-      clargs.Add(f->file_name);
+      if (f->appending)
+        clargs.Add(wxString(wxT("+")) + f->file_name);
+      else
+        clargs.Add(f->file_name);
     }
   }
 
-  track_order = create_track_order();
+  track_order = create_track_order(false);
   if (track_order.length() > 0) {
     clargs.Add(wxT("--track-order"));
     clargs.Add(track_order);
+  }
+
+  append_mapping = create_append_mapping();
+  if (append_mapping.length() > 0) {
+    clargs.Add(wxT("--append-to"));
+    clargs.Add(append_mapping);
   }
 
   for (fidx = 0; fidx < attachments.size(); fidx++) {

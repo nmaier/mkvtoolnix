@@ -82,8 +82,10 @@ public:
   tab_input(wxWindow *parent);
 
   void on_add_file(wxCommandEvent &evt);
-  void add_file(const wxString &file_name);
+  void add_file(const wxString &file_name, bool append);
+  void select_file(bool append);
   void on_remove_file(wxCommandEvent &evt);
+  void on_append_file(wxCommandEvent &evt);
   void on_file_selected(wxCommandEvent &evt);
   void on_move_track_up(wxCommandEvent &evt);
   void on_move_track_down(wxCommandEvent &evt);
@@ -114,9 +116,9 @@ public:
   void on_browse_timecodes_clicked(wxCommandEvent &evt);
 
   void no_track_mode();
-  void audio_track_mode(wxString ctype);
-  void video_track_mode(wxString ctype);
-  void subtitle_track_mode(wxString ctype);
+  void audio_track_mode(wxString ctype, bool appending);
+  void video_track_mode(wxString ctype, bool appending);
+  void subtitle_track_mode(wxString ctype, bool appending);
   void enable_ar_controls(mmg_track_t *track);
 
   void save(wxConfigBase *cfg);
