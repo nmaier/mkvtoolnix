@@ -39,6 +39,9 @@ namespace libmatroska {
   extern EbmlId MATROSKA_DLL_API KaxChapterLanguage_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterCountry_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterProcessedPrivate_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterProcess_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterProcessTime_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxChapterProcessCommand_TheId;
 
   extern EbmlId MATROSKA_DLL_API KaxTags_TheId;
   extern EbmlId MATROSKA_DLL_API KaxTag_TheId;
@@ -86,6 +89,13 @@ parser_element_t chapter_elements[] = {
    NULL, NULL},
   {"ChapterProcessedPrivate", ebmlt_binary, 3, 0, 0,
    KaxChapterProcessedPrivate_TheId, NULL, NULL},
+
+  {"ChapterProcess", ebmlt_master, 3, 0, 0, KaxChapterProcess_TheId,
+   NULL, NULL},
+  {"ChapterProcessTime", ebmlt_uint, 4, 0, 0, KaxChapterProcessTime_TheId,
+   NULL, NULL},
+  {"ChapterProcessCommand", ebmlt_binary, 4, 0, 0,
+   KaxChapterProcessCommand_TheId, NULL, NULL},
 
   {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
    NULL, NULL},
