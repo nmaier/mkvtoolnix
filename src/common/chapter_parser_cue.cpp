@@ -205,7 +205,10 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   for (i = 0; i < a.comment.size(); i++)
     create_tag1(a.comment[i], "COMMENT");
 
-  (*tags)->PushElement(*tag);
+  if (FINDFIRST(tag, KaxTagSimple) != NULL)
+    (*tags)->PushElement(*tag);
+  else
+    delete tag;
 }
 
 static void
@@ -237,7 +240,10 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
-  (*tags)->PushElement(*tag);
+  if (FINDFIRST(tag, KaxTagSimple) != NULL)
+    (*tags)->PushElement(*tag);
+  else
+    delete tag;
 }
 
 static void
