@@ -134,7 +134,7 @@ static int mp3_samples_per_channel[3][3] = {
 
 int find_mp3_header(unsigned char *buf, int size) {
   int i, pos;
-  unsigned long header, id3_size;
+  unsigned long header;
 
   if (size < 4)
     return -1;
@@ -144,21 +144,10 @@ int find_mp3_header(unsigned char *buf, int size) {
       if ((pos + 10) >= size)
         return -1;
 
-      for (i = 6, id3_size = 0; i < 10; i++) {
-        id3_size <<= 8;
-        id3_size |= buf[i + pos];
-      }
-      if ((pos + id3_size) >= size)
-        return -1;
-
       return pos;
     }
-    if ((buf[pos] == 'T') && (buf[pos + 1] == 'A') && (buf[pos + 2] == 'G')) {
-      if ((pos + 128) >= size)
-        return -1;
-
+    if ((buf[pos] == 'T') && (buf[pos + 1] == 'A') && (buf[pos + 2] == 'G'))
       return pos;
-    }
 
     for (i = 0, header = 0; i < 4; i++) {
       header <<= 8;
@@ -194,12 +183,19 @@ void decode_mp3_header(unsigned char *buf, mp3_header_t *h) {
 
   if ((buf[0] == 'I') && (buf[1] == 'D') && (buf[2] == '3')) {
     h->is_tag = true;
-    h->framesize = (((uint32_t)buf[6]) << 24) | (((uint32_t)buf[7]) << 16) |
-      (((uint32_t)buf[8]) << 8) | ((uint32_t)buf[9]);
+    h->framesize = 0;
+    for (i = 6; i < 10; i++) {
+      h->framesize <<= 7;
+      h->framesize |= ((uint32_t)buf[i]) & 0x7f;
+    }
+    h->framesize += 10;
+    if ((buf[3] >= 4) && ((buf[5] & 0x10) == 0x10))
+      h->framesize += 10;
+
     return;
   }
 
-  if ((buf[0] == 'T') && (buf[1] == 'A') && (buf[3] == 'G')) {
+  if ((buf[0] == 'T') && (buf[1] == 'A') && (buf[2] == 'G')) {
     h->is_tag = true;
     h->framesize = 128;
     return;
@@ -254,19 +250,16 @@ void decode_mp3_header(unsigned char *buf, mp3_header_t *h) {
 
   if (h->layer == 3) {
     if (h->version == 1)
-      h->framesize = 144000 * h->bitrate / h->sampling_frequency +
-        h->padding - 4;
+      h->framesize = 144000 * h->bitrate / h->sampling_frequency + h->padding;
     else
-      h->framesize = 72000 * h->bitrate / h->sampling_frequency +
-        h->padding - 4;
+      h->framesize = 72000 * h->bitrate / h->sampling_frequency + h->padding;
 
   } else if (h->layer == 2)
-    h->framesize = 144000 * h->bitrate / h->sampling_frequency +
-      h->padding - 4;
+    h->framesize = 144000 * h->bitrate / h->sampling_frequency + h->padding;
 
   else
     h->framesize = (12000 * h->bitrate / h->sampling_frequency +
-      h->padding) * 4 - 4;
+                    h->padding) * 4;
 
   h->samples_per_channel =
     mp3_samples_per_channel[h->version - 1][h->layer - 1];

@@ -66,30 +66,14 @@ void mp3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   buffer_size += size;
 }
 
-int mp3_packetizer_c::mp3_packet_available() {
-  int pos;
-  mp3_header_t mp3header;
-
-  if (packet_buffer == NULL)
-    return 0;
-  pos = find_mp3_header(packet_buffer, buffer_size);
-  if (pos < 0)
-    return 0;
-  decode_mp3_header(&packet_buffer[pos], &mp3header);
-  if ((pos + mp3header.framesize + 4) > buffer_size)
-    return 0;
-
-  return 1;
-}
-
 void mp3_packetizer_c::remove_mp3_packet(int pos, int framesize) {
   int new_size;
   unsigned char *temp_buf;
 
-  new_size = buffer_size - (pos + framesize + 4) + 1;
+  new_size = buffer_size - (pos + framesize) + 1;
   temp_buf = (unsigned char *)safemalloc(new_size);
   if (new_size != 0)
-    memcpy(temp_buf, &packet_buffer[pos + framesize + 4 - 1], new_size);
+    memcpy(temp_buf, &packet_buffer[pos + framesize - 1], new_size);
   safefree(packet_buffer);
   packet_buffer = temp_buf;
   buffer_size = new_size;
@@ -102,10 +86,21 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 
   if (packet_buffer == NULL)
     return 0;
-  pos = find_mp3_header(packet_buffer, buffer_size);
-  if (pos < 0)
-    return 0;
-  decode_mp3_header(&packet_buffer[pos], mp3header);
+  while (1) {
+    pos = find_mp3_header(packet_buffer, buffer_size);
+    if (pos < 0)
+      return NULL;
+    decode_mp3_header(&packet_buffer[pos], mp3header);
+    if ((pos + mp3header->framesize) > buffer_size)
+      return NULL;
+    if (!mp3header->is_tag)
+      break;
+
+    mxverb(2, "mp3_packetizer: Removing TAG packet with size %d\n",
+           mp3header->framesize);
+    remove_mp3_packet(pos, mp3header->framesize);
+  }
+
   if (packetno == 0) {
     spf = mp3header->samples_per_channel;
     if (spf != 1152) {
@@ -119,8 +114,8 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     }
   }
 
-  if ((pos + mp3header->framesize + 4) > buffer_size)
-    return 0;
+  if ((pos + mp3header->framesize) > buffer_size)
+    return NULL;
 
   pims = 1000.0 * (float)spf / mp3header->sampling_frequency;
 
@@ -141,8 +136,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   if ((verbose > 1) && (pos > 1))
     mxwarn("mp3_packetizer: skipping %d bytes (no valid MP3 header found).\n",
            pos);
-  buf = (unsigned char *)safememdup(packet_buffer + pos, mp3header->framesize
-                                    + 4);
+  buf = (unsigned char *)safememdup(packet_buffer + pos, mp3header->framesize);
 
   if (ti->async.displacement > 0) {
     /*
@@ -154,7 +148,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     ti->async.displacement -= (int)pims;
     if (ti->async.displacement < (pims / 2))
       ti->async.displacement = 0;
-    memset(buf + 4, 0, mp3header->framesize);
+    memset(buf + 4, 0, mp3header->framesize - 4);
 
     return buf;
   }
@@ -193,14 +187,14 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     packetno++;
 
 #ifdef DEBUG
-    dump_packet(packet, mp3header.framesize + 4);
+    dump_packet(packet, mp3header.framesize);
 #endif    
 
     if (timecode == -1)
       my_timecode = (int64_t)(1000.0 * old_packetno * spf * ti->async.linear /
                               samples_per_sec);
 
-    add_packet(packet, mp3header.framesize + 4, my_timecode,
+    add_packet(packet, mp3header.framesize, my_timecode,
                (int64_t)(1000.0 * spf * ti->async.linear / samples_per_sec));
   }
 

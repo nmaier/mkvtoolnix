@@ -32,91 +32,84 @@
 int mp3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char buf[16384];
   int pos, pos2, ptr;
-  unsigned long header;
   mp3_header_t mp3header;
 
-  if (size > 16384)
-    size = 16384;
   try {
     mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, size) != size)
+
+    ptr = 0;
+    while (1) {
+      mm_io->setFilePointer(ptr, seek_beginning);
+      size = mm_io->read(buf, 16384);
+      pos = find_mp3_header(buf, size);
+      if (pos < 0)
+        return 0;
+      decode_mp3_header(&buf[pos], &mp3header);
+      if (!mp3header.is_tag)
+        break;
+      mxverb(2, "mp3_reader: Found tag at %d size %d\n", ptr + pos,
+             mp3header.framesize);
+      ptr += pos + mp3header.framesize;
+    }
+
+    pos2 = find_mp3_header(&buf[pos + mp3header.framesize],
+                           size - pos - mp3header.framesize);
+    mxverb(2, "mp3_reader: Found first at %d, length %d, version %d, "
+           "layer %d, second at %d\n", ptr + pos, mp3header.framesize,
+           mp3header.version, mp3header.layer, pos2);
+         
+    if (pos2 != 0)
       return 0;
-    mm_io->setFilePointer(0, seek_beginning);
+
   } catch (exception &ex) {
     return 0;
   }
-
-  ptr = 0;
-  while (1) {
-    pos = find_mp3_header(&buf[ptr], size - ptr);
-    if (pos < 0)
-      return 0;
-    decode_mp3_header(&buf[ptr + pos], &mp3header);
-    if (!mp3header.is_tag)
-      break;
-    mxverb(2, "mp3_reader: Found tag at %d size %d\n", ptr + pos,
-           mp3header.framesize);
-    ptr += pos + mp3header.framesize;
-  }
-
-  pos2 = find_mp3_header(&buf[ptr + pos + mp3header.framesize + 4],
-                         size - ptr - pos - 4 - mp3header.framesize);
-  mxverb(2, "mp3_reader: Found first at %d, length %d, version %d, layer %d, "
-         "second at %d\n", pos, mp3header.framesize + 4, mp3header.version,
-         mp3header.layer, pos2);
-         
-  if (pos2 != 0)
-    return 0;
 
   return 1;
 }
 
 mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  int pos, this_size, ptr;
+  int pos, ptr, buf_size;
+  unsigned char buf[16384];
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
-    mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_beginning);
-    if (size > 16384)
-      this_size = 16384;
-    else
-      this_size = size;
-    chunk = (unsigned char *)safemalloc(this_size);
-    if (mm_io->read(chunk, this_size) != this_size)
-      throw error_c("mp3_reader: Could not read 4096 bytes.");
-    mm_io->setFilePointer(0, seek_beginning);
+    size = mm_io->get_size();
+
+    ptr = 0;
+    while (1) {
+      mm_io->setFilePointer(ptr, seek_beginning);
+      buf_size = mm_io->read(buf, 16384);
+      pos = find_mp3_header(buf, buf_size);
+      if (pos < 0)
+        throw error_c("Could not find a valid MP3 packet.");
+      decode_mp3_header(&buf[pos], &mp3header);
+      if (!mp3header.is_tag)
+        break;
+      mxverb(2, "mp3_reader: Found tag at %d size %d\n", ptr + pos,
+             mp3header.framesize);
+      ptr += pos + mp3header.framesize;
+    }
+
+    mm_io->setFilePointer(ptr + pos, seek_beginning);
+    mxverb(2, "mp3_reader: Found header at %d\n", ptr + pos);
+
+    bytes_processed = 0;
+    ti->id = 0;                 // ID for this track.
+    mp3packetizer = new mp3_packetizer_c(this, mp3header.sampling_frequency,
+                                         mp3header.channels, mp3header.layer,
+                                         ti);
+    if (verbose)
+      mxinfo("Using MP2/MP3 demultiplexer for %s.\n+-> Using "
+             "MPEG audio output module for audio stream.\n", ti->fname);
   } catch (exception &ex) {
     throw error_c("mp3_reader: Could not open the source file.");
   }
-  ptr = 0;
-  while (1) {
-    pos = find_mp3_header(&chunk[ptr], this_size - ptr);
-    if (pos < 0)
-      throw error_c("mp3_reader: No valid MP3 packet found in the first "
-                    "4096 bytes.\n");
-    decode_mp3_header(&chunk[ptr + pos], &mp3header);
-    if (!mp3header.is_tag)
-      break;
-    ptr += pos + mp3header.framesize;
-  }
-
-  bytes_processed = 0;
-  ti->id = 0;                   // ID for this track.
-  mp3packetizer = new mp3_packetizer_c(this, mp3header.sampling_frequency,
-                                       mp3header.channels, mp3header.layer,
-                                       ti);
-  if (verbose)
-    mxinfo("Using MP2/MP3 demultiplexer for %s.\n+-> Using "
-           "MPEG audio output module for audio stream.\n", ti->fname);
 }
 
 mp3_reader_c::~mp3_reader_c() {
   delete mm_io;
-  if (chunk != NULL)
-    safefree(chunk);
   if (mp3packetizer != NULL)
     delete mp3packetizer;
 }
@@ -124,7 +117,7 @@ mp3_reader_c::~mp3_reader_c() {
 int mp3_reader_c::read(generic_packetizer_c *) {
   int nread;
 
-  nread = mm_io->read(chunk, 4096);
+  nread = mm_io->read(chunk, 16384);
   if (nread <= 0)
     return 0;
 

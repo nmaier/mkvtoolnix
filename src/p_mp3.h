@@ -48,7 +48,6 @@ public:
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_mp3_packet(mp3_header_t *mp3header);
-  virtual int mp3_packet_available();
   virtual void remove_mp3_packet(int pos, int framesize);
 
   virtual void dump_debug_info();

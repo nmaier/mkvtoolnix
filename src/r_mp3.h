@@ -33,7 +33,7 @@
 
 class mp3_reader_c: public generic_reader_c {
 private:
-  unsigned char *chunk;
+  unsigned char chunk[16384];
   mm_io_c *mm_io;
   class mp3_packetizer_c *mp3packetizer;
   int64_t bytes_processed, size;

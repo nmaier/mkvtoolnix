@@ -293,18 +293,18 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
   unsigned int i;
 
   wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
-                   _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp3;"
-                      "*.mka;"
+                   _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp2;"
+                      "*.mp3;*.mka;"
                       "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;"
                       "*.wav)|"
-                      "*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp3;*.mka;*.mkv;"
-                      "*.mov;"
+                      "*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp2;*.mp3;*.mka;"
+                      "*.mkv;*.mov;"
                       "*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;*.wav|"
                       "AAC (Advanced Audio Coding) (*.aac;*.mp4)|*.aac;*.mp4|"
                       "A/52 (aka AC3) (*.ac3)|*.ac3|"
                       "AVI (Audio/Video Interleaved) (*.avi)|*.avi|"
                       "DTS (Digital Theater System) (*.dts)|*.dts|"
-                      "MPEG1 layer III audio (*.mp3)|*.mp3|"
+                      "MPEG audio files (*.mp2;*.mp3)|*.mp2;*.mp3|"
                       "Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
                       "QuickTime/MP4 A/V (*.mov;*.mp4)|*.mov;*.mp4|"
                       "Audio/Video embedded in OGG (*.ogg;*.ogm)|*.ogg;*.ogm|"

@@ -1,3 +1,10 @@
+2003-09-24  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix/new feature: Rewrote the complete MP3
+        handling. Now files with ID3 tags (both v1 and v2) are handled
+        correctly. All MPEG-1 audio files (all layers) should be handled
+        correctly now.
+
 2003-09-23  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvextract: new feature: Support for extract HE-AAC tracks to

@@ -194,6 +194,7 @@ file_type_t file_types[] =
    {"ac3", TYPEAC3, "A/52 (aka AC3)"},
    {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
    {"dts", TYPEDTS, "DTS (Digital Theater System)"},
+   {"mp2", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"mkv", TYPEMATROSKA, "general Matroska files"},
 #ifdef HAVE_OGGVORBIS
@@ -1033,7 +1034,7 @@ static void identify(const char *filename) {
 
   files.push_back(file);
 
-  verbose = 0;
+  verbose--;
   identifying = true;
   create_readers();
 
@@ -1077,11 +1078,13 @@ static void parse_args(int argc, char **argv) {
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
-  if ((argc == 2) &&
+  if (((argc == 2) || (argc == 3)) &&
       (!strcmp(argv[0], "-i") || !strcmp(argv[0], "--identify") ||
        !strcmp(argv[0], "--identify-verbose"))) {
     if (!strcmp(argv[0], "--identify-verbose"))
       identify_verbose = true;
+    if (argc == 3)
+      verbose = 3;
     identify(argv[1]);
     mxexit();
   }
