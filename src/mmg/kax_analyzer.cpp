@@ -361,12 +361,12 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
       // 2. Ajust the segment size.
       new_segment = new KaxSegment;
       file->setFilePointer(segment->GetElementPosition());
-      new_segment->WriteHead(*file, 5);
+      new_segment->WriteHead(*file, segment->HeadSize() - 4);
       file->setFilePointer(0, seek_end);
       if (!new_segment->ForceSize(file->getFilePointer() -
-                                  new_segment->HeadSize() -
-                                  new_segment->GetElementPosition()) ||
-          (new_segment->HeadSize() != segment->HeadSize())) {
+                                  segment->HeadSize() -
+                                  segment->GetElementPosition())) { 
+        segment->OverwriteHead(*file);
         wxMessageBox(_("Wrote the element at the end of the file but could "
                        "not update the segment size. Therefore the element "
                        "will not be visible. Aborting the process. The file "
@@ -375,6 +375,7 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
         delete new_segment;
         return false;
       }
+      new_segment->OverwriteHead(*file);
       delete segment;
       segment = new_segment;
 
@@ -489,7 +490,6 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
       info += "Appending new seek head.\n";
       // Append the new seek head to the end of the file.
       pos = all_heads[0]->GetElementPosition();
-      printf("POS: %lld\n", pos);
       new_head = new KaxSeekHead;
       file->setFilePointer(0, seek_end);
       all_heads[0]->IndexThis(*e, *segment);
@@ -503,12 +503,12 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
       info += "Adjusting segment size.\n";
       new_segment = new KaxSegment;
       file->setFilePointer(segment->GetElementPosition());
-      new_segment->WriteHead(*file, 5);
+      new_segment->WriteHead(*file, segment->HeadSize() - 4);
       file->setFilePointer(0, seek_end);
       if (!new_segment->ForceSize(file->getFilePointer() -
-                                  new_segment->HeadSize() -
-                                  new_segment->GetElementPosition()) ||
-          (new_segment->HeadSize() != segment->HeadSize())) {
+                                  segment->HeadSize() -
+                                  segment->GetElementPosition())) {
+        segment->OverwriteHead(*file);
         wxMessageBox(_("Wrote the meta seek element at the end of the file "
                        "but could not update the segment size. Therefore the "
                        "element will not be visible. Aborting the process. "
@@ -518,6 +518,7 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
         delete new_segment;
         throw false;
       }
+      new_segment->OverwriteHead(*file);
       delete segment;
       segment = new_segment;
 

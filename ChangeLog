@@ -1,7 +1,10 @@
 2003-12-29  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mmg: Made mmg not abort but only display an error message when
-	malformed XML chapter files should be loaded.
+	* mmg: bug fix: Fixed the "write chapters to Matroska file"
+	feature.
+
+	* mmg: bug fix: Made mmg not abort but only display an error
+	message when malformed XML chapter files should be loaded.
 
 2003-12-28  Moritz Bunkus  <moritz@bunkus.org>
 
