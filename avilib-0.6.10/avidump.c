@@ -623,7 +623,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	    duration = SWAP4(duration);
 	    if (size!=0)
 	    printf("\t\t [%6ld] 0x%016llx 0x%08lx %8d\n", u++, offset, size,
-		    duration);
+		    (int)duration);
 	    datapos += 16;
 	}
 	break;
@@ -647,7 +647,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	    key  = key&0x80000000?0:1;
 	    size &= 0x7fffffff;
 	    if (size!=0)
-	    printf("\t\t [%6ld] 0x%08lx 0x%08lx key=%s\n", u++, offset, size,
+	    printf("\t\t [%6ld] 0x%08x 0x%08x key=%s\n", u++, offset, size,
 		    key?"yes":"no");
 	    datapos += 8;
 	}
