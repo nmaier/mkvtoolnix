@@ -1,3 +1,8 @@
+2004-03-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: OGMs created by Cyrius OGMuxer are missing
+	comment packets for some streams which mkvmerge choked on.
+
 2004-03-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge/mmg: bug fix: The LANGUAGE and TITLE comments from OGM

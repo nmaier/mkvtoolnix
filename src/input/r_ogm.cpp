@@ -984,10 +984,10 @@ ogm_reader_c::process_header_page(ogg_page *og) {
   dmx = find_demuxer(ogg_page_serialno(og));
   if (dmx == NULL)
     return;
+  if (dmx->headers_read)
+    return;
 
   if (dmx->stype == OGM_STREAM_TYPE_FLAC) {
-    if (dmx->headers_read)
-      return;
 #if defined HAVE_FLAC_FORMAT_H
     ogg_stream_pagein(&dmx->os, og);
     while ((dmx->packet_data.size() < dmx->flac_header_packets) &&
@@ -1012,6 +1012,13 @@ ogm_reader_c::process_header_page(ogg_page *og) {
 
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
+    if ((dmx->stype != OGM_STREAM_TYPE_VORBIS) &&
+        ((op.packet[0] & PACKET_TYPE_BITS) != 1)) {
+      mxverb(2, "ogm_reader: Missing header/comment packets for %d.\n",
+             dmx->serial);
+      dmx->headers_read = true;
+      return;
+    }
     dmx->packet_data.push_back((unsigned char *)
                                safememdup(op.packet, op.bytes));
     dmx->packet_sizes.push_back(op.bytes);
@@ -1227,7 +1234,8 @@ ogm_reader_c::handle_stream_comments() {
 
   for (i = 0; i < num_sdemuxers; i++) {
     dmx = sdemuxers[i];
-    if (dmx->stype == OGM_STREAM_TYPE_FLAC)
+    if ((dmx->stype == OGM_STREAM_TYPE_FLAC) ||
+        (dmx->packet_data.size() < 2))
       continue;
     comments = extract_vorbis_comments(dmx->packet_data[1],
                                        dmx->packet_sizes[1]);
