@@ -34,6 +34,7 @@
 #include <string.h>
 
 #include "avilib.h"
+#include "xio.h"
 
 void AVI_info(avi_t *avifile)
 {
@@ -92,7 +93,7 @@ int AVI_file_check(char *import_file)
     // check for sane video file
     struct stat fbuf;
 
-    if(stat(import_file, &fbuf) || import_file==NULL){
+    if(xio_stat(import_file, &fbuf) || import_file==NULL){
         fprintf(stderr, "(%s) invalid input file \"%s\"\n", __FILE__, 
                 import_file);
         return(1);

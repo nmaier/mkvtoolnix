@@ -246,6 +246,9 @@ typedef struct
   
   alBITMAPINFOHEADER *bitmap_info_header;
   alWAVEFORMATEX *wave_format_ex[AVI_MAX_TRACKS];
+
+  void*		extradata;
+  unsigned long	extradata_size;
 } avi_t;
 
 #define AVI_MODE_WRITE  0

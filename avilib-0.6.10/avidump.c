@@ -37,6 +37,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include "xio.h"
 
 #if defined(SYS_UNIX) || defined(COMP_MSC) || defined(SYS_APPLE)
 #define lseek64 lseek
@@ -233,7 +234,7 @@ static size_t avi_read(int fd, char *buf, size_t len)
    size_t r = 0;
 
    while (r < len) {
-      n = read (fd, buf + r, len - r);
+      n = xio_read (fd, buf + r, len - r);
 
       if (n <= 0)
 	  return r;
@@ -249,7 +250,7 @@ static size_t avi_write (int fd, char *buf, size_t len)
    size_t r = 0;
 
    while (r < len) {
-      n = write (fd, buf + r, len - r);
+      n = xio_write (fd, buf + r, len - r);
       if (n < 0)
          return n;
       
@@ -292,12 +293,12 @@ static void dump_vals(int fd, int count, struct VAL *names)
     for (i = 0; names[i].type != EoLST; i++) {
 	switch (names[i].type) {
 	case INT32:
-	    read(fd, &val32, 4);
+	    xio_read(fd, &val32, 4);
 	    val32 = SWAP4(val32);
 	    printf("\t%-12s = %ld\n",names[i].name,val32);
 	    break;
 	case CCODE:
-	    read(fd, &val32,4);
+	    xio_read(fd, &val32,4);
 	    val32 = SWAP4(val32);
 	    if (val32) {
 		printf("\t%-12s = %c%c%c%c (0x%lx)\n",names[i].name,
@@ -311,7 +312,7 @@ static void dump_vals(int fd, int count, struct VAL *names)
 	    }
 	    break;
 	case _TAG:
-	    read(fd, &val32,4);
+	    xio_read(fd, &val32,4);
 	    val32 = SWAP4(val32);
 	    if (val32) {
 		printf("\t%-12s = %c%c%c%c\n",names[i].name,
@@ -324,7 +325,7 @@ static void dump_vals(int fd, int count, struct VAL *names)
 	    }
 	    break;
 	case FLAGS:
-	    read(fd, &val32,4);
+	    xio_read(fd, &val32,4);
 	    val32 = SWAP4(val32);
 	    printf("\t%-12s = 0x%lx\n",names[i].name,val32);
 	    if (names[i].flags) {
@@ -335,13 +336,13 @@ static void dump_vals(int fd, int count, struct VAL *names)
 	    }
 	    break;
 	case INT16:
-	    read(fd, &val16,2);
+	    xio_read(fd, &val16,2);
 	    val16 = SWAP2(val16);
 	    printf("\t%-12s = %ld\n",names[i].name,(long)val16);
 	    break;
 
 	case HEX16:
-	    read(fd, &val16,2);
+	    xio_read(fd, &val16,2);
 	    val16 = SWAP2(val16);
 	    printf("\t%-12s = 0x%lx\n",names[i].name,(long)val16);
 	    break;
@@ -393,8 +394,8 @@ off_t_to_char(off_t val, int base, int len)
 
 static boolean ReadChunkHead(int fd, FOURCC* ID, DWORD* size)
 {
-    if (!read(fd, ID, sizeof(FOURCC))) return(FALSE);
-    if (!read(fd, size, sizeof(DWORD))) return(FALSE);
+    if (!xio_read(fd, ID, sizeof(FOURCC))) return(FALSE);
+    if (!xio_read(fd, size, sizeof(DWORD))) return(FALSE);
 
     *size = SWAP4(*size);
 
@@ -433,7 +434,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	printf("  *****  Error: Data would be behind end of file!\n");
     }
     
-    tt=lseek64(fd, filepos, SEEK_SET); /* Go to desired file position!     */
+    tt=xio_lseek(fd, filepos, SEEK_SET); /* Go to desired file position!     */
 
 #ifdef AVI_DEBUG
     printf("lseek64=%Lu/%Lu (%Lu)\n", tt, filepos, filesize); 
@@ -535,7 +536,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
     case strhtag:
     {
 	char   typestr[5];
-	read(fd, &fcc_type,sizeof(FOURCC));
+	xio_read(fd, &fcc_type,sizeof(FOURCC));
 	FOURCC2Str(fcc_type,typestr);
 	printf("\tfcc_type     = %s\n",typestr);
 	dump_vals(fd,sizeof(names_strh)/sizeof(struct VAL),names_strh);
@@ -568,7 +569,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	    static long u=0;
 
 	    //tag:
-	    read(fd, &val32,4);
+	    xio_read(fd, &val32,4);
 	    val32 = SWAP4(val32);
 	    if(val32==Tag00db) {
 		printf("\t\t [%6ld] %s=%c%c%c%c ", u++, "tag",
@@ -584,17 +585,17 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	    
 	    
 	    //flag
-	    read(fd, &val32, 4);
+	    xio_read(fd, &val32, 4);
 	    val32 = SWAP4(val32);
 	    printf("flags=%02ld ",val32);
 
 	    //pos
-	    read(fd, &val32, 4);
+	    xio_read(fd, &val32, 4);
 	    val32 = SWAP4(val32);
 	    printf("0x%08lx",val32);
 
 	    //size
-	    read(fd, &val32, 4);
+	    xio_read(fd, &val32, 4);
 	    val32 = SWAP4(val32);
 	    printf("%8ld\n",val32);
 
@@ -624,7 +625,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
     if (filepos>filesize-1)  /* Oops. Must be something wrong!      */
 	return(FALSE);
     
-    lseek64(fd, filepos, SEEK_SET);
+    xio_lseek(fd, filepos, SEEK_SET);
 
     if (!ReadChunkHead(fd, &chunkid,chunksize)) {  /* read chunk header */
       return(FALSE);
@@ -665,7 +666,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
       char   formstr[5];     /* format of chunk converted to string */
       DWORD  subchunksize;   /* size of a read subchunk             */
       
-      read(fd, &formtype,sizeof(FOURCC));    /* read the form type */
+      xio_read(fd, &formtype,sizeof(FOURCC));    /* read the form type */
       FOURCC2Str(formtype,formstr);           /* make it printable  */
       
       datashowed=sizeof(FOURCC);    /* we showed the form type      */
@@ -693,7 +694,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
     case Tag01wb:
 
       if(mode==1) {
-	lseek(fd, datapos, SEEK_SET);
+	xio_lseek(fd, datapos, SEEK_SET);
 	if(avi_read_write(fd, STDOUT_FILENO, size)!=size) return(FALSE);
       }
       if(eos) return(FALSE);
@@ -705,7 +706,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
     case Tag00__:
 
       if(mode==0) {
-	lseek(fd, datapos, SEEK_SET);
+	xio_lseek(fd, datapos, SEEK_SET);
 	if(avi_read_write(fd, STDOUT_FILENO, size)!=size) return(FALSE);
       }
     
@@ -717,7 +718,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
     case TagDATA:
       
       if(mode==2) {
-	lseek(fd, datapos, SEEK_SET);
+	xio_lseek(fd, datapos, SEEK_SET);
 	if(avi_read_write(fd, STDOUT_FILENO, size)!=size) return(FALSE);
       }
       
@@ -742,15 +743,15 @@ int AVI_scan(char *file_name)
 #if defined(SYS_WINDOWS)
     if (!(fd=open(file_name, O_RDONLY|O_BINARY))) {
 #else
-    if (!(fd=open(file_name, O_RDONLY))) {
+    if (!(fd=xio_open(file_name, O_RDONLY))) {
 #endif
 	printf("\n\n *** Error opening file %s. Program aborted!\n",
 	       file_name);
 	return(1);
     }
 
-    filesize = lseek64(fd, 0, SEEK_END);
-    lseek64(fd, 0, SEEK_SET);
+    filesize = xio_lseek(fd, 0, SEEK_END);
+    xio_lseek(fd, 0, SEEK_SET);
 
     printf("Contents of file %s (%s/", file_name,
 	   off_t_to_char(filesize,10,1));
@@ -764,7 +765,7 @@ int AVI_scan(char *file_name)
 	printf("\n");
     }
 
-    close(fd);
+    xio_close(fd);
 
     return(0);
 }
@@ -781,11 +782,11 @@ int AVI_dump(char *file_name, int mode)
 #if defined(SYS_WINDOWS)
     if (!(fd=open(file_name,O_RDONLY|O_BINARY))) return(1);
 #else
-    if (!(fd=open(file_name,O_RDONLY))) return(1);
+    if (!(fd=xio_open(file_name,O_RDONLY))) return(1);
 #endif
 
-    filesize = lseek64(fd, 0, SEEK_END);
-    lseek64(fd, 0, SEEK_SET);
+    filesize = xio_lseek(fd, 0, SEEK_END);
+    xio_lseek(fd, 0, SEEK_SET);
 
     for (filepos = 0; filepos < filesize;) {
 	chunksize = 0;
@@ -794,7 +795,7 @@ int AVI_dump(char *file_name, int mode)
 	filepos += chunksize + 8;
     }
 
-    close(fd);
+    xio_close(fd);
 
     return(0);
 }
