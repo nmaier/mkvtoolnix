@@ -55,8 +55,7 @@ xml_element_map_init() {
     {"EditionEntry", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
     {"EditionFlagHidden", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
-    {"EditionProcessed", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL,
-     NULL},
+    {"EditionFlagOrdered", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionFlagDefault", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
 
     {"ChapterAtom", EBMLT_MASTER, 2, 0, 0, no_id, NULL, NULL, NULL},
@@ -65,14 +64,18 @@ xml_element_map_init() {
     {"ChapterTimeEnd", EBMLT_TIME, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterFlagHidden", EBMLT_BOOL, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterFlagEnabled", EBMLT_BOOL, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterProcessedPrivate", EBMLT_BINARY, 3, 0, 0, no_id, NULL, NULL,
-     NULL},
     {"ChapterPhysicalEquiv", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL,
      NULL, NULL},
 
     {"ChapterProcess", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterProcessTime", EBMLT_UINT, 4, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterProcessCommand", EBMLT_BINARY, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessCodecID", EBMLT_UINT, 4, 0, NO_MAX_VALUE, no_id, NULL,
+     NULL, NULL},
+    {"ChapterProcessPrivate", EBMLT_BINARY, 4, 0, 0, no_id, NULL, NULL,
+     NULL},
+
+    {"ChapterProcessCommand", EBMLT_MASTER, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessTime", EBMLT_UINT, 5, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessData", EBMLT_BINARY, 5, 0, 0, no_id, NULL, NULL, NULL},
 
     {"ChapterTrack", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterTrackNumber", EBMLT_UINT, 4, 0, NO_MAX_VALUE, no_id, NULL, NULL,
