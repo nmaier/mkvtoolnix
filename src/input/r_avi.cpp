@@ -405,20 +405,23 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
     done = false;
 
     // Make sure we have a frame to work with.
-    if (old_chunk == NULL) {
+    while (NULL == old_chunk) {
       debug_enter("AVI_read_frame");
       nread = AVI_read_frame(avi, (char *)chunk, &key);
       debug_leave("AVI_read_frame");
       if (nread < 0) {
         frames = maxframes + 1;
         done = true;
-      } else {
-//         key = is_keyframe(chunk, nread, key);
+        break;
+      } else if (nread > 0) {
         old_chunk = chunk;
         chunk = (unsigned char *)safemalloc(chunk_size);
         old_key = key;
         old_nread = nread;
         frames++;
+      } else {
+        ++frames;
+        ++dropped_frames;
       }
     }
     if (!done) {
@@ -439,7 +442,6 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
           frames = maxframes + 1;
           break;
         }
-//         key = is_keyframe(chunk, nread, key);
         if (frames == (maxframes - 1)) {
           last_frame = 1;
           done = true;
