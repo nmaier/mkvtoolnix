@@ -371,7 +371,7 @@ open_file_for_writing(const char *path,
   /* save allowed & perfect play */
   rmff_put_uint16_be(&file->prop_header.flags,
                      RMFF_FILE_FLAG_SAVE_ENABLED |
-                     RMFF_FILE_FLAG_PERFECT_PLAY);
+                     RMFF_FILE_FLAG_DOWNLOAD_ENABLED);
 
   clear_error();
   return file;
@@ -1065,7 +1065,7 @@ rmff_write_headers(rmff_file_t *file) {
   /* Write the file header. */
   bw = io->write(fh, signature, 4);
   bw += write_uint32_be(0x12);  /* header_size */
-  bw += write_uint16_be(1);     /* object_version */
+  bw += write_uint16_be(0);     /* object_version */
   bw += write_uint32_be(0);     /* file_version */
   bw += write_uint32_be(num_headers);
 
