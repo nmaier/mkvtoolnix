@@ -66,7 +66,6 @@ protected:
   virtual void find_mpeg4_frame_types(unsigned char *buf, int size,
                                       vector<video_frame_t> &frames);
   virtual void flush_frames(char next_frame = '?', bool flush_all = false);
-  virtual void deliver(video_frame_t &frame);
 };
 
 #endif // __P_VIDEO_H

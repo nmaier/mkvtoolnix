@@ -25,6 +25,7 @@
 #include <errno.h>
 
 #include "common.h"
+#include "hacks.h"
 #include "matroska.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"
@@ -77,7 +78,7 @@ void video_packetizer_c::set_headers() {
 
   if (codec_id != NULL)
     set_codec_id(codec_id);
-  else if (is_mpeg4) {
+  else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_BFRAMES)) {
     if (bframes)
       set_codec_id(MKV_V_MPEG4_AP);
     else
@@ -90,7 +91,7 @@ void video_packetizer_c::set_headers() {
       (ti->fourcc[0] != 0))
     memcpy(&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression,
            ti->fourcc, 4);
-  if (!is_mpeg4)
+  if (!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES))
     set_codec_private(ti->private_data, ti->private_size);
 
   // Set MinCache and MaxCache to 1 for I- and P-frames. If you only
@@ -131,9 +132,14 @@ int video_packetizer_c::process(unsigned char *buf, int size,
 
   debug_enter("video_packetizer_c::process");
 
-  if (0 && is_mpeg4 && (pass != 1) && (fps != 0.0)) {
+  if (hack_engaged(ENGAGE_NATIVE_BFRAMES) && is_mpeg4 && (pass != 1) &&
+      (fps != 0.0)) {
     find_mpeg4_frame_types(buf, size, frames);
     for (i = 0; i < frames.size(); i++) {
+      if ((frames[i].type == 'I') ||
+          ((frames[i].type != 'B') && (fref_frame.type != '?')))
+        flush_frames(frames[i].type);
+
       if (old_timecode == -1)
         timecode = (int64_t)(1000.0 * frames_output / fps) + duration_shift;
       else
@@ -151,16 +157,21 @@ int video_packetizer_c::process(unsigned char *buf, int size,
                                                    frames[i].size);
 
       if (frames[i].type == 'I') {
-        flush_frames('I');
         frames[i].bref = -1;
         frames[i].fref = -1;
-        if (bref_frame.type == '?')
+        if (bref_frame.type == '?') {
           bref_frame = frames[i];
-        else
+          add_packet(frames[i].data, frames[i].size, frames[i].timecode,
+                     frames[i].duration, false, -1, -1, -1, cp_no);
+        } else
           fref_frame = frames[i];
 
       } else if (frames[i].type != 'B') {
-        flush_frames('P');
+        frames_output--;
+        if (bref_frame.type == '?')
+          mxerror("video_packetizer: Found a P frame but no I frame. This "
+                  "should not have happened. Either this is a bug in mkvmerge "
+                  "or the video stream is damaged.\n");
         frames[i].bref = bref_frame.timecode;
         frames[i].fref = -1;
         fref_frame = frames[i];
@@ -287,16 +298,8 @@ void video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf, int size,
   }
 }
 
-void video_packetizer_c::deliver(video_frame_t &frame) {
-  add_packet(frame.data, frame.size, frame.timecode, frame.duration, false,
-             frame.bref, frame.fref);
-  safefree(frame.data);
-  frame.type = '?';
-}
-
 void video_packetizer_c::flush_frames(char next_frame, bool flush_all) {
   uint32_t i;
-  int64_t p_timecode;
 
   if (bref_frame.type == '?') {
     if (fref_frame.type != '?')
@@ -314,33 +317,41 @@ void video_packetizer_c::flush_frames(char next_frame, bool flush_all) {
 
   if (fref_frame.type == '?') {
     if (queued_frames.size() != 0) {
-      mxwarn("video_packetizer: No P frame found but B frames queued. This "
-             "indicates a broken video stream, or the frames are placed "
-             "in display order which is not supported.\n");
+      mxwarn("video_packetizer: B frames queued but only one reference frame "
+             "found. This indicates a broken video stream, or the frames are "
+             "placed in display order which is not supported.\n");
       for (i = 0; i < queued_frames.size(); i++)
         safefree(queued_frames[i].data);
       queued_frames.clear();
     }
-    if (flush_all)
-      deliver(bref_frame);
+    if (flush_all) {
+      add_packet(bref_frame.data, bref_frame.size, bref_frame.duration,
+                 false, bref_frame.bref, bref_frame.fref, -1, cp_no);
+      bref_frame.type = '?';
+    }
     return;
   }
 
-//   if (
-  p_timecode = (int64_t)(fref_frame.timecode + queued_frames.size() *
-                         1000 / fps);
-  add_packet(fref_frame.data, fref_frame.size, p_timecode,
-             fref_frame.duration, false, ref_timecode);
-  fref_frame.type = '?';
-  frames_output++;
+  if (fref_frame.type != '?') {
+    if ((fref_frame.type == 'P') || (fref_frame.type == 'S'))
+      frames_output++;
+    fref_frame.timecode = (int64_t)(fref_frame.timecode +
+                                    queued_frames.size() * 1000 / fps);
+    add_packet(fref_frame.data, fref_frame.size, fref_frame.timecode,
+               fref_frame.duration, false, fref_frame.bref, fref_frame.fref,
+               -1, cp_no);
 
-  for (i = 0; i < queued_frames.size(); i++) {
-    add_packet(queued_frames[i].data, queued_frames[i].size,
-               queued_frames[i].timecode, queued_frames[i].duration, false,
-               ref_timecode, p_timecode);
-    safefree(queued_frames[i].data);
+    for (i = 0; i < queued_frames.size(); i++)
+      add_packet(queued_frames[i].data, queued_frames[i].size,
+                 queued_frames[i].timecode, queued_frames[i].duration, false,
+                 bref_frame.timecode, fref_frame.timecode, -1, cp_no);
+    queued_frames.clear();
+
+    bref_frame = fref_frame;
+    fref_frame.type = '?';
   }
-  queued_frames.clear();
 
-  ref_timecode = p_timecode;
+  if (flush_all ||
+      ((next_frame == 'I') && (bref_frame.type == 'P')))
+    bref_frame.type = '?';
 }
