@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.6 2003/02/28 14:50:04 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.7 2003/03/01 16:18:21 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -79,7 +79,7 @@ cluster_helper_c::~cluster_helper_c() {
     free(clusters);
 }
 
-void cluster_helper_c::free_contents(ch_contents *clstr) {
+void cluster_helper_c::free_contents(ch_contents_t *clstr) {
   packet_t *p;
   int i;
 
@@ -109,7 +109,7 @@ KaxCluster *cluster_helper_c::get_cluster() {
 }
 
 void cluster_helper_c::add_packet(packet_t *packet) {
-  ch_contents *c;
+  ch_contents_t *c;
 
   if (clusters == NULL)
     return;
@@ -144,7 +144,8 @@ u_int64_t cluster_helper_c::get_timecode() {
 }
 
 packet_t *cluster_helper_c::get_packet(int num) {
-  ch_contents *c;
+  ch_contents_t *c;
+
   if (clusters == NULL)
     return NULL;
   c = clusters[num_clusters - 1];
@@ -173,18 +174,18 @@ int cluster_helper_c::find_cluster(KaxCluster *cluster) {
 }
 
 void cluster_helper_c::add_cluster(KaxCluster *cluster) {
-  ch_contents *c;
+  ch_contents_t *c;
 
   if (find_cluster(cluster) != -1)
     return;
-  c = (ch_contents *)malloc(sizeof(ch_contents));
+  c = (ch_contents_t *)malloc(sizeof(ch_contents_t));
   if (c == NULL)
     die("malloc");
-  clusters = (ch_contents **)realloc(clusters, sizeof(ch_contents *) *
-                                     (num_clusters + 1));
+  clusters = (ch_contents_t **)realloc(clusters, sizeof(ch_contents_t *) *
+                                       (num_clusters + 1));
   if (clusters == NULL)
     die("realloc");
-  memset(c, 0, sizeof(ch_contents));
+  memset(c, 0, sizeof(ch_contents_t));
   clusters[num_clusters] = c;
   num_clusters++;
   c->cluster = cluster;
@@ -197,11 +198,10 @@ int cluster_helper_c::get_cluster_content_size() {
 
 int cluster_helper_c::render(IOCallback *out) {
   KaxCues dummy_cues;
-  KaxBlockGroup *last_group = NULL;
   KaxCluster *cluster;
   int i;
   u_int64_t cluster_timecode;
-  ch_contents *clstr;
+  ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
 
   if ((clusters == NULL) || (num_clusters == 0))
@@ -263,7 +263,7 @@ int cluster_helper_c::render(IOCallback *out) {
   return 1;
 }
 
-ch_contents *cluster_helper_c::find_packet_cluster(u_int64_t pid) {
+ch_contents_t *cluster_helper_c::find_packet_cluster(u_int64_t pid) {
   int i, k;
 
   if (clusters == NULL)
@@ -294,7 +294,7 @@ packet_t *cluster_helper_c::find_packet(u_int64_t pid) {
 void cluster_helper_c::check_clusters(int num) {
   int i, k;
   packet_t *p;
-  ch_contents *clstr;
+  ch_contents_t *clstr;
 
   for (i = 0; i < num_clusters; i++) {
     for (k = 0; k < clusters[i]->num_packets; k++) {
@@ -315,7 +315,7 @@ void cluster_helper_c::check_clusters(int num) {
 int cluster_helper_c::free_clusters() {
   int i, k, idx; //, prior;
   packet_t *p;
-  ch_contents *clstr, **new_clusters;
+  ch_contents_t *clstr, **new_clusters;
 
   if (clusters == NULL)
     return 0;
@@ -368,7 +368,7 @@ int cluster_helper_c::free_clusters() {
     num_clusters = 0;
     add_cluster(new KaxCluster());
   } else if (k != num_clusters) {
-    new_clusters = (ch_contents **)malloc(sizeof(ch_contents *) * k);
+    new_clusters = (ch_contents_t **)malloc(sizeof(ch_contents_t *) * k);
     if (new_clusters == NULL)
       die("malloc");
 
