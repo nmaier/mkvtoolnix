@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.5 2003/02/16 17:04:38 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.6 2003/02/17 10:09:11 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -81,9 +81,11 @@ int force_flushing = 0;
 
 float video_fps = -1.0;
 
+KaxSegment     kax_segment;
 KaxTracks     *kax_tracks;
 KaxTrackEntry *kax_last_entry;
 int            track_number = 1;
+StdIOCallback *out;
 
 /*int                  idx_num = 0;
 int                 *idx_serials = NULL;
@@ -379,6 +381,20 @@ static void parse_range(char *s, range_t *range) {
   }
 }
 
+void render_head(StdIOCallback *out) {
+  EbmlHead head;
+
+  EDocType &doc_type = GetChild<EDocType>(head);
+  *static_cast<EbmlString *>(&doc_type) = "matroska";
+  EDocTypeVersion &doc_type_ver = GetChild<EDocTypeVersion>(head);
+  *(static_cast<EbmlUInteger *>(&doc_type_ver)) = 1;
+  EDocTypeReadVersion &doc_type_read_ver =
+    GetChild<EDocTypeReadVersion>(head);
+  *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
+
+  head.Render(static_cast<StdIOCallback &>(*out));
+}
+
 static void parse_args(int argc, char **argv) {
   int              i, j;
   int              noaudio, novideo, notext;
@@ -405,17 +421,6 @@ static void parse_args(int argc, char **argv) {
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
       fprintf(stdout, "mkvmerge v" VERSION "\n");
       exit(0);
-    } else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--index"))
-      create_index = 1;
-  for (i = 1; i < argc; i++) {
-    if (!strcmp(argv[i], "-q"))
-      verbose = 0;
-    else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
-      verbose = 2;
-    else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
-             !strcmp(argv[i], "--help")) {
-      usage();
-      exit(0);
     } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -o lacks a file name.\n");
@@ -426,7 +431,44 @@ static void parse_args(int argc, char **argv) {
       }
       outfile = (char *)strdup(argv[i + 1]);
       i++;
-    } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
+    }
+
+  if (outfile == NULL) {
+    fprintf(stderr, "Error: no output files given.\n");
+    exit(1);
+  }
+
+  /* open output file */
+  try {
+    out = new StdIOCallback(outfile, MODE_CREATE);
+  } catch (std::exception &ex) {
+    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
+            strerror(errno));
+    exit(1);
+  }
+  try {
+    render_head(out);
+    kax_segment.Render(static_cast<StdIOCallback &>(*out));
+  } catch (std::exception &ex) {
+    fprintf(stderr, "Error: Could not render the file header.\n");
+    exit(1);
+  }
+
+  kax_tracks = &GetChild<KaxTracks>(kax_segment);
+  kax_last_entry = NULL;
+  
+  for (i = 1; i < argc; i++) {
+    if (!strcmp(argv[i], "-q"))
+      verbose = 0;
+    else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
+      verbose = 2;
+    else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
+             !strcmp(argv[i], "--help")) {
+      usage();
+      exit(0);
+    } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output"))
+      i++;
+    else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
       fprintf(stdout, "Known file types:\n  ext  description\n" \
                                          "  ---  --------------------------\n");
       for (j = 1; file_types[j].ext; j++)
@@ -663,8 +705,10 @@ static void parse_args(int argc, char **argv) {
     usage();
     exit(1);
   }
-  if (outfile == NULL) {
-    fprintf(stderr, "Error: no output files given.\n");
+  try {
+    kax_tracks->Render(static_cast<StdIOCallback &>(*out));
+  } catch (std::exception &ex) {
+    fprintf(stderr, "Error: Could not render the track headers.\n");
     exit(1);
   }
 /*  if (chapters != NULL) {
@@ -770,52 +814,15 @@ int write_packet(packet_t *pack, filelist_t *file, StdIOCallback *out) {
   return 0;
 }
 
-void render_head(StdIOCallback *out) {
-  EbmlHead head;
-
-  EDocType &doc_type = GetChild<EDocType>(head);
-  *static_cast<EbmlString *>(&doc_type) = "matroska";
-  EDocTypeVersion &doc_type_ver = GetChild<EDocTypeVersion>(head);
-  *(static_cast<EbmlUInteger *>(&doc_type_ver)) = 1;
-  EDocTypeReadVersion &doc_type_read_ver =
-    GetChild<EDocTypeReadVersion>(head);
-  *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
-
-  head.Render(static_cast<StdIOCallback &>(*out));
-}
-
 int main(int argc, char **argv) {
-  KaxSegment kax_segment;
-//  KaxTracks &kax_tracks;
   filelist_t *file, *winner;
   packet_t *pack;
   int result;
-  StdIOCallback *out;
 
   nice(2);
 
-  kax_tracks = &GetChild<KaxTracks>(kax_segment);
-  kax_last_entry = NULL;
-  
   parse_args(argc, argv);
   
-  /* open output file */
-  try {
-    out = new StdIOCallback(outfile, MODE_CREATE);
-  } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
-            strerror(errno));
-    exit(1);
-  }
-  try {
-    render_head(out);
-    kax_segment.Render(static_cast<StdIOCallback &>(*out));
-    kax_tracks->Render(static_cast<StdIOCallback &>(*out));
-  } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Could not render the file header.\n");
-    exit(1);
-  }
-
   /* let her rip! */
   while (1) {
     /* Step 1: make sure an ogg page is available for each input 
