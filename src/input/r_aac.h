@@ -12,7 +12,7 @@
 */
 
 /*!
-    \file r_avi.h
+    \file r_aac.h
     \version $Id$
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
