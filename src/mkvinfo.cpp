@@ -1819,8 +1819,12 @@ def_handle(chapters) {
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
 
-        if (!parse_chapter_atom(es, l3, 3) &&
-            !is_global(es, l3, 3))
+        if (is_id(l3, KaxEditionUID)) {
+          KaxEditionUID &edition_uid = *static_cast<KaxEditionUID *>(l3);
+          show_element(l3, 3, "Edition UID: %llu", uint64(edition_uid));
+
+        } else if (!parse_chapter_atom(es, l3, 3) &&
+                   !is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
       } // while (l3 != NULL)
@@ -1843,15 +1847,16 @@ def_handle(tag_targets) {
     l4 = (*m3)[i3];
 
     if (is_id(l4, KaxTagTrackUID)) {
-      KaxTagTrackUID &trackuid =
-        *static_cast<KaxTagTrackUID *>(l4);
+      KaxTagTrackUID &trackuid = *static_cast<KaxTagTrackUID *>(l4);
       show_element(l4, 4, "Track UID: %llu", uint64(trackuid));
 
     } else if (is_id(l4, KaxTagChapterUID)) {
-      KaxTagChapterUID &chapteruid =
-        *static_cast<KaxTagChapterUID *>(l4);
-      show_element(l4, 4, "Chapter UID: %llu",
-                   uint64(chapteruid));
+      KaxTagChapterUID &chapteruid = *static_cast<KaxTagChapterUID *>(l4);
+      show_element(l4, 4, "Chapter UID: %llu", uint64(chapteruid));
+
+    } else if (is_id(l4, KaxTagEditionUID)) {
+      KaxTagEditionUID &editionuid = *static_cast<KaxTagEditionUID *>(l4);
+      show_element(l4, 4, "Edition UID: %llu", uint64(editionuid));
 
     } else if (!is_global(es, l4, 4) &&
                !parse_multicomment(es, l4, 4))
