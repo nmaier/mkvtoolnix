@@ -32,7 +32,6 @@
 class srt_reader_c: public generic_reader_c {
 private:
   mm_text_io_c *mm_io;
-  int act_wchar;
 
 public:
   srt_reader_c(track_info_c *nti) throw (error_c);
@@ -40,9 +39,6 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual void identify();
-
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
 
   static int probe_file(mm_text_io_c *mm_io, int64_t size);
 };

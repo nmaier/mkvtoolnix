@@ -54,7 +54,7 @@ class vobsub_reader_c: public generic_reader_c {
 private:
   mm_io_c *sub_file;
   mm_text_io_c *idx_file;
-  int act_wchar, version, ifo_data_size;
+  int version, ifo_data_size;
   string idx_data;
 
   vector<vobsub_track_c *> tracks;
@@ -66,9 +66,6 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual void set_headers();
   virtual void identify();
-
-  virtual int display_priority();
-  virtual void display_progress(bool final = false);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 

@@ -1157,6 +1157,23 @@ generic_reader_c::set_headers() {
     it->orig->set_headers();
 }
 
+int
+generic_reader_c::display_priority() {
+  return DISPLAYPRIORITY_LOW;
+}
+
+static int act_wchar = 0;
+static const char wchar[] = "-\\|/-\\|/-";
+
+void
+generic_reader_c::display_progress(bool) {
+  mxinfo("working... %c\r", wchar[act_wchar]);
+  act_wchar++;
+  if (act_wchar == strlen(wchar))
+    act_wchar = 0;
+}
+
+//
 //--------------------------------------------------------------------
 
 track_info_c::track_info_c():

@@ -116,7 +116,6 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
   }
 
   idx_data = "";
-  act_wchar = 0;
 
   len = strlen("# VobSub index file, v");
   if (!idx_file->getline2(line) ||
@@ -390,21 +389,6 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr) {
     return 0;
   } else
     return EMOREDATA;
-}
-
-int
-vobsub_reader_c::display_priority() {
-  return DISPLAYPRIORITY_LOW;
-}
-
-static char wchar[] = "-\\|/-\\|/-";
-
-void
-vobsub_reader_c::display_progress(bool final) {
-  mxinfo("working... %c\r", wchar[act_wchar]);
-  act_wchar++;
-  if (act_wchar == strlen(wchar))
-    act_wchar = 0;
 }
 
 void

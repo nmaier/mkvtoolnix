@@ -72,7 +72,6 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
   bool is_utf8;
 
-  act_wchar = 0;
   try {
     mm_io = new mm_text_io_c(ti->fname);
     if (!srt_reader_c::probe_file(mm_io, 0))
@@ -216,21 +215,6 @@ srt_reader_c::read(generic_packetizer_c *) {
   PTZR0->flush();
 
   return 0;
-}
-
-int
-srt_reader_c::display_priority() {
-  return DISPLAYPRIORITY_LOW;
-}
-
-static char wchar[] = "-\\|/-\\|/-";
-
-void
-srt_reader_c::display_progress(bool) {
-  mxinfo("working... %c\r", wchar[act_wchar]);
-  act_wchar++;
-  if (act_wchar == strlen(wchar))
-    act_wchar = 0;
 }
 
 void
