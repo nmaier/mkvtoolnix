@@ -5,7 +5,7 @@
   mmg.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
+  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
 
   Distributed under the GPL
   see the file COPYING for details
@@ -178,6 +178,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   chapter_menu->Append(ID_M_CHAPTERS_VERIFY, _T("&Verify"),
                        _T("Verify the current chapter entries to see if there "
                           "are any errors"));
+  chapter_menu->AppendSeparator();
+  chapter_menu->Append(ID_M_CHAPTERS_SETDEFAULTS, _T("Set &default values"));
   chapter_menu_sep = false;
   update_chapter_menu();
 
@@ -503,7 +505,7 @@ void mmg_dialog::on_run(wxCommandEvent &evt) {
 void mmg_dialog::on_about(wxCommandEvent &evt) {
   wxMessageBox(_("mkvmerge GUI v" VERSION "\n"
                  "This GUI was written by Moritz Bunkus <moritz@bunkus.org>\n"
-                 "Based on mmg by Florian Wagner <root@sirelvis.de>\n"
+                 "Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
                  "mkvmerge GUI is licensed under the GPL.\n"
                  "http://www.bunkus.org/videotools/mkvtoolnix/\n"
                  "\n"
@@ -686,17 +688,24 @@ void mmg_dialog::update_command_line() {
         clargs.Add(sid + ":" + *t->tags);
       }
 
-      if (t->aspect_ratio->Length() > 0) {
-        cmdline += "--aspect-ratio \"" +
+      if (!t->display_dimensions_selected && (t->aspect_ratio->Length() > 0)) {
+        cmdline += "--aspect-ratio \"" + sid + ":" +
           shell_escape(*t->aspect_ratio) + "\" ";
         clargs.Add("--aspect-ratio");
-        clargs.Add(*t->aspect_ratio);
+        clargs.Add(sid + ":" + *t->aspect_ratio);
+      } else if (t->display_dimensions_selected &&
+                 (t->dwidth->Length() > 0) && (t->dheight->Length() > 0)) {
+        cmdline += "--display-dimensions \"" + sid + ":" +
+          shell_escape(*t->dwidth + "x" + *t->dheight) + "\" ";
+        clargs.Add("--display-dimensions");
+        clargs.Add(sid + ":" + *t->dwidth + "x" + *t->dheight);
       }
 
       if (t->fourcc->Length() > 0) {
-        cmdline += "--fourcc \"" + shell_escape(*t->fourcc) + "\" ";
+        cmdline += "--fourcc \"" + sid + ":" + shell_escape(*t->fourcc) +
+          "\" ";
         clargs.Add("--fourcc");
-        clargs.Add(*t->fourcc);
+        clargs.Add(sid + ":" + *t->fourcc);
       }
 
       if (t->compression->Length() > 0) {
@@ -994,6 +1003,11 @@ void mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
   chapter_editor_page->on_verify_chapters(evt);
 }
 
+void mmg_dialog::on_set_default_chapter_values(wxCommandEvent &evt) {
+  notebook->SetSelection(5);
+  chapter_editor_page->on_set_default_values(evt);
+}
+
 void mmg_dialog::on_window_selected(wxCommandEvent &evt) {
   notebook->SetSelection(evt.GetId() - ID_M_WINDOW_INPUT);
 }
@@ -1029,6 +1043,8 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_CHAPTERS_SAVEAS, mmg_dialog::on_save_chapters_as)
   EVT_MENU(ID_M_CHAPTERS_SAVETOKAX, mmg_dialog::on_save_chapters_to_kax_file)
   EVT_MENU(ID_M_CHAPTERS_VERIFY, mmg_dialog::on_verify_chapters)
+  EVT_MENU(ID_M_CHAPTERS_SETDEFAULTS,
+           mmg_dialog::on_set_default_chapter_values)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST1, mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST2, mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST3, mmg_dialog::on_chapters_load_last)

@@ -5,7 +5,7 @@
   tab_input.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
+  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
 
   Distributed under the GPL
   see the file COPYING for details
@@ -51,7 +51,7 @@ tab_settings::tab_settings(wxWindow *parent):
                    _("mkvmerge GUI v" VERSION "\n"
                      "This GUI was written by Moritz Bunkus <moritz@"
                      "bunkus.org>\n"
-                     "Based on mmg by Florian Wagner <root@sirelvis.de>\n"
+                     "Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
                      "mkvmerge GUI is licensed under the GPL.\n"
                      "http://www.bunkus.org/videotools/mkvtoolnix/"),
                    wxPoint(95, 360), wxDefaultSize, 0);

@@ -128,6 +128,10 @@ using namespace libmatroska;
 #define ID_TC_CUENAMEFORMAT 10080
 #define ID_TC_TIMECODES 10081
 #define ID_B_BROWSE_TIMECODES 10082
+#define ID_RB_ASPECTRATIO 10083
+#define ID_RB_DISPLAYDIMENSIONS 10084
+#define ID_TC_DISPLAYWIDTH 10085
+#define ID_TC_DISPLAYHEIGHT 10086
 
 #define ID_M_FILE_NEW 20000
 #define ID_M_FILE_LOAD 20001
@@ -149,6 +153,7 @@ using namespace libmatroska;
 #define ID_M_CHAPTERS_SAVEAS 20203
 #define ID_M_CHAPTERS_SAVETOKAX 20204
 #define ID_M_CHAPTERS_VERIFY 20205
+#define ID_M_CHAPTERS_SETDEFAULTS 20210
 #define ID_M_CHAPTERS_LOADSEPARATOR 20290
 #define ID_M_CHAPTERS_LOADLAST1 20291
 #define ID_M_CHAPTERS_LOADLAST2 20292
@@ -168,11 +173,12 @@ typedef struct {
   char type;
   int64_t id;
   wxString *ctype;
-  bool enabled;
+  bool enabled, display_dimensions_selected;
 
   bool default_track, aac_is_sbr;
   wxString *language, *track_name, *cues, *delay, *stretch, *sub_charset;
   wxString *tags, *fourcc, *aspect_ratio, *compression, *timecodes;
+  wxString *dwidth, *dheight;
 } mmg_track_t;
 
 typedef struct {
@@ -213,6 +219,8 @@ protected:
   wxComboBox *cob_aspect_ratio, *cob_fourcc;
   wxTextCtrl *tc_delay, *tc_track_name, *tc_stretch, *tc_tags, *tc_timecodes;
   wxComboBox *cob_compression;
+  wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
+  wxTextCtrl *tc_display_width, *tc_display_height;
 
   wxTimer value_copy_timer;
 
@@ -239,7 +247,11 @@ public:
   void on_delay_changed(wxCommandEvent &evt);
   void on_stretch_changed(wxCommandEvent &evt);
   void on_track_name_changed(wxCommandEvent &evt);
+  void on_aspect_ratio_selected(wxCommandEvent &evt);
   void on_aspect_ratio_changed(wxCommandEvent &evt);
+  void on_display_dimensions_selected(wxCommandEvent &evt);
+  void on_display_width_changed(wxCommandEvent &evt);
+  void on_display_height_changed(wxCommandEvent &evt);
   void on_fourcc_changed(wxCommandEvent &evt);
   void on_compression_selected(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
@@ -250,6 +262,7 @@ public:
   void audio_track_mode(wxString ctype);
   void video_track_mode(wxString ctype);
   void subtitle_track_mode(wxString ctype);
+  void enable_ar_controls(mmg_track_t *track);
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
@@ -385,6 +398,7 @@ public:
   void on_entry_selected(wxTreeEvent &evt);
   void on_language_code_selected(wxCommandEvent &evt);
   void on_country_code_selected(wxCommandEvent &evt);
+  void on_set_default_values(wxCommandEvent &evt);
 
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(string s);
@@ -501,6 +515,7 @@ public:
   void on_save_chapters_as(wxCommandEvent &evt);
   void on_save_chapters_to_kax_file(wxCommandEvent &evt);
   void on_verify_chapters(wxCommandEvent &evt);
+  void on_set_default_chapter_values(wxCommandEvent &evt);
 
   void on_window_selected(wxCommandEvent &evt);
 

@@ -5,7 +5,7 @@
   tab_chapters.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
+  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
 
   Distributed under the GPL
   see the file COPYING for details
@@ -57,6 +57,25 @@ public:
     eentry(neentry) {
   };
 };
+
+class chapter_values_dlg: public wxDialog {
+public:
+  wxTextCtrl tc_language, tc_country;
+
+public:
+  chapter_values_dlg(wxWindow *parent, bool set_defaults);
+};
+
+chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults):
+  wxDialog(parent, 0, "") {
+  SetSize(400, 200);
+  if (set_defaults) {
+    new wxStaticText(this, wxID_STATIC,
+                     "Chapters:",
+                     wxPoint(10, 5),
+                     wxDefaultSize, 0);
+  }
+}
 
 void expand_subtree(wxTreeCtrl &tree, wxTreeItemId &root, bool expand = true) {
   wxTreeItemId child;
@@ -884,6 +903,9 @@ void tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
   if (tc_country_codes->GetValue().length() > 0)
     tc_country_codes->AppendText(" ");
   tc_country_codes->AppendText(cob_add_country_code->GetStringSelection());
+}
+
+void tab_chapters::on_set_default_values(wxCommandEvent &evt) {
 }
 
 bool tab_chapters::copy_values(wxTreeItemId id) {

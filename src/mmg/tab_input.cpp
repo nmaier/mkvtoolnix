@@ -5,7 +5,7 @@
   tab_input.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
+  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
 
   Distributed under the GPL
   see the file COPYING for details
@@ -171,11 +171,43 @@ tab_input::tab_input(wxWindow *parent):
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_sub_charset->Append(sorted_charsets[i]);
 
-  new wxStaticText(this, -1, _("Aspect ratio:"), wxPoint(5, 330),
+  new wxStaticText(this, -1, _("FourCC:"), wxPoint(5, 330),
                    wxDefaultSize, 0);
-  cob_aspect_ratio =
-    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(90, 330 + YOFF),
+  cob_fourcc =
+    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(90, 330 + YOFF),
                    wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_fourcc->Append("");
+  cob_fourcc->Append("DIVX");
+  cob_fourcc->Append("DIV3");
+  cob_fourcc->Append("DX50");
+  cob_fourcc->Append("XVID");
+  cob_fourcc->SetToolTip(_T("Forces the FourCC of the video track to this "
+                            "value. Note that this only works for video "
+                            "tracks that use the AVI compatibility mode "
+                            "or for QuickTime video tracks. This option "
+                            "CANNOT be used to change Matroska's CodecID."));
+
+  new wxStaticText(this, -1, _("Compression:"), wxPoint(255, 330),
+                   wxDefaultSize, 0);
+  cob_compression =
+    new wxComboBox(this, ID_CB_COMPRESSION, _(""), wxPoint(355, 330 + YOFF),
+                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_compression->Append("");
+  cob_compression->Append("none");
+  cob_compression->Append("zlib");
+  cob_compression->SetToolTip(_T("Sets the compression used for VobSub "
+                                 "subtitles. If nothing is chosen then the "
+                                 "VobSubs will be automatically compressed "
+                                 "with zlib. 'none' results is files that "
+                                 "are a lot larger."));
+
+  rb_aspect_ratio =
+    new wxRadioButton(this, ID_RB_ASPECTRATIO, _("Aspect ratio:"),
+                      wxPoint(5, 355), wxDefaultSize, wxRB_GROUP);
+  rb_aspect_ratio->SetValue(true);
+  cob_aspect_ratio =
+    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(110, 355 + YOFF),
+                   wxSize(110, -1), 0, NULL, wxCB_DROPDOWN);
   cob_aspect_ratio->Append("");
   cob_aspect_ratio->Append("4/3");
   cob_aspect_ratio->Append("1.66");
@@ -190,35 +222,28 @@ tab_input::tab_input(wxWindow *parent):
                                   "16/9) or just a single floting point "
                                   "number 'f' (e.g. 2.35)."));
 
-  new wxStaticText(this, -1, _("FourCC:"), wxPoint(255, 330),
-                   wxDefaultSize, 0);
-  cob_fourcc =
-    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(355, 330 + YOFF),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
-  cob_fourcc->Append("");
-  cob_fourcc->Append("DIVX");
-  cob_fourcc->Append("DIV3");
-  cob_fourcc->Append("DX50");
-  cob_fourcc->Append("XVID");
-  cob_fourcc->SetToolTip(_T("Forces the FourCC of the video track to this "
-                            "value. Note that this only works for video "
-                            "tracks that use the AVI compatibility mode "
-                            "or for QuickTime video tracks. This option "
-                            "CANNOT be used to change Matroska's CodecID."));
+  new wxStaticText(this, wxID_STATIC, _("or"), wxPoint(220, 360),
+                   wxSize(35, -1), wxALIGN_CENTER);
 
-  new wxStaticText(this, -1, _("Compression:"), wxPoint(5, 355),
-                   wxDefaultSize, 0);
-  cob_compression =
-    new wxComboBox(this, ID_CB_COMPRESSION, _(""), wxPoint(90, 355 + YOFF),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_compression->Append("");
-  cob_compression->Append("none");
-  cob_compression->Append("zlib");
-  cob_compression->SetToolTip(_T("Sets the compression used for VobSub "
-                                 "subtitles. If nothing is chosen then the "
-                                 "VobSubs will be automatically compressed "
-                                 "with zlib. 'none' results is files that "
-                                 "are a lot larger."));
+  rb_display_dimensions =
+    new wxRadioButton(this, ID_RB_DISPLAYDIMENSIONS,
+                      _("Display width/height:"), wxPoint(255, 355),
+                      wxDefaultSize);
+  rb_display_dimensions->SetValue(false);
+  tc_display_width =
+    new wxTextCtrl(this, ID_TC_DISPLAYWIDTH, "", wxPoint(405, 355 + YOFF),
+                   wxSize(35, -1));
+  tc_display_width->SetToolTip(_T("Sets the display width of the track."
+                                  "The height must be set as well, or this "
+                                  "field will be ignored."));
+  new wxStaticText(this, wxID_STATIC, "x", wxPoint(440, 360),
+                   wxSize(10, -1), wxALIGN_CENTER);
+  tc_display_height =
+    new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, "", wxPoint(450, 355 + YOFF),
+                   wxSize(35, -1));
+  tc_display_height->SetToolTip(_T("Sets the display height of the track."
+                                   "The width must be set as well, or this "
+                                   "field will be ignored."));
 
   cb_default =
     new wxCheckBox(this, ID_CB_MAKEDEFAULT, _("Make default track"),
@@ -283,6 +308,10 @@ void tab_input::no_track_mode() {
   tc_tags->Enable(false);
   b_browse_tags->Enable(false);
   cob_aspect_ratio->Enable(false);
+  tc_display_width->Enable(false);
+  tc_display_height->Enable(false);
+  rb_aspect_ratio->Enable(false);
+  rb_display_dimensions->Enable(false);
   cob_fourcc->Enable(false);
   cob_compression->Enable(false);
   tc_timecodes->Enable(false);
@@ -304,6 +333,10 @@ void tab_input::audio_track_mode(wxString ctype) {
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
   cob_aspect_ratio->Enable(false);
+  tc_display_width->Enable(false);
+  tc_display_height->Enable(false);
+  rb_aspect_ratio->Enable(false);
+  rb_display_dimensions->Enable(false);
   cob_fourcc->Enable(false);
   cob_compression->Enable(false);
   tc_timecodes->Enable(true);
@@ -321,7 +354,8 @@ void tab_input::video_track_mode(wxString) {
   cb_aac_is_sbr->Enable(false);
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
-  cob_aspect_ratio->Enable(true);
+  rb_aspect_ratio->Enable(true);
+  rb_display_dimensions->Enable(true);
   cob_fourcc->Enable(true);
   cob_compression->Enable(false);
   tc_timecodes->Enable(true);
@@ -343,10 +377,25 @@ void tab_input::subtitle_track_mode(wxString ctype) {
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
   cob_aspect_ratio->Enable(false);
+  tc_display_width->Enable(false);
+  tc_display_height->Enable(false);
+  rb_aspect_ratio->Enable(false);
+  rb_display_dimensions->Enable(false);
   cob_fourcc->Enable(false);
   cob_compression->Enable(lctype.Find("vobsub") >= 0);
   tc_timecodes->Enable(true);
   b_browse_timecodes->Enable(true);
+}
+
+void tab_input::enable_ar_controls(mmg_track_t *track) {
+  bool ar_enabled;
+
+  ar_enabled = !track->display_dimensions_selected;
+  cob_aspect_ratio->Enable(ar_enabled);
+  tc_display_width->Enable(!ar_enabled);
+  tc_display_height->Enable(!ar_enabled);
+  rb_aspect_ratio->SetValue(ar_enabled);
+  rb_display_dimensions->SetValue(!ar_enabled);
 }
 
 void tab_input::on_add_file(wxCommandEvent &evt) {
@@ -443,6 +492,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
         track.stretch = new wxString("");
         track.tags = new wxString("");
         track.aspect_ratio = new wxString("");
+        track.dwidth = new wxString("");
+        track.dheight = new wxString("");
         track.fourcc = new wxString("");
         track.compression = new wxString("");
         track.timecodes = new wxString("");
@@ -545,6 +596,8 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
     delete t->stretch;
     delete t->tags;
     delete t->aspect_ratio;
+    delete t->dwidth;
+    delete t->dheight;
     delete t->fourcc;
     delete t->compression;
     delete t->timecodes;
@@ -644,9 +697,10 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
 
   if (t->type == 'a')
     audio_track_mode(*t->ctype);
-  else if (t->type == 'v')
+  else if (t->type == 'v') {
     video_track_mode(*t->ctype);
-  else if (t->type == 's')
+    enable_ar_controls(t);
+  } else if (t->type == 's')
     subtitle_track_mode(*t->ctype);
 
   lang = *t->language;
@@ -665,7 +719,9 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
   cb_default->SetValue(t->default_track);
   cb_aac_is_sbr->SetValue(t->aac_is_sbr);
   cob_aspect_ratio->SetValue(*t->aspect_ratio);
-  selected_track = new_sel;
+  tc_display_width->SetValue(*t->dwidth); 
+  tc_display_height->SetValue(*t->dheight);
+ selected_track = new_sel;
   cob_compression->SetValue(*t->compression);
   tc_timecodes->SetValue(*t->timecodes);
 }
@@ -824,6 +880,44 @@ void tab_input::on_compression_selected(wxCommandEvent &evt) {
     cob_compression->GetStringSelection();
 }
 
+void tab_input::on_display_width_changed(wxCommandEvent &evt) {
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  *(*files[selected_file].tracks)[selected_track].dwidth =
+    tc_display_width->GetValue();
+}
+
+void tab_input::on_display_height_changed(wxCommandEvent &evt) {
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  *(*files[selected_file].tracks)[selected_track].dheight =
+    tc_display_height->GetValue();
+}
+
+void tab_input::on_aspect_ratio_selected(wxCommandEvent &evt) {
+  mmg_track_t *track;
+
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  track = &(*files[selected_file].tracks)[selected_track];
+  track->display_dimensions_selected = false;
+  enable_ar_controls(track);
+}
+
+void tab_input::on_display_dimensions_selected(wxCommandEvent &evt) {
+  mmg_track_t *track;
+
+  if ((selected_file == -1) || (selected_track == -1))
+    return;
+
+  track = &(*files[selected_file].tracks)[selected_track];
+  track->display_dimensions_selected = true;
+  enable_ar_controls(track);
+}
+
 void tab_input::on_value_copy_timer(wxTimerEvent &evt) {
   mmg_track_t *t;
 
@@ -877,7 +971,11 @@ void tab_input::save(wxConfigBase *cfg) {
       cfg->Write("sub_charset", *t->sub_charset);
       cfg->Write("tags", *t->tags);
       cfg->Write("timecodes", *t->timecodes);
+      cfg->Write("display_dimensions_selected",
+                 t->display_dimensions_selected);
       cfg->Write("aspect_ratio", *t->aspect_ratio);
+      cfg->Write("display_width", *t->dwidth);
+      cfg->Write("display_height", *t->dheight);
       cfg->Write("fourcc", *t->fourcc);
       cfg->Write("compression", *t->compression);
 
@@ -918,6 +1016,8 @@ void tab_input::load(wxConfigBase *cfg) {
       delete t->tags;
       delete t->stretch;
       delete t->aspect_ratio;
+      delete t->dwidth;
+      delete t->dheight;
       delete t->fourcc;
       delete t->compression;
       delete t->timecodes;
@@ -986,8 +1086,14 @@ void tab_input::load(wxConfigBase *cfg) {
       tr.sub_charset = new wxString(s);
       cfg->Read("tags", &s);
       tr.tags = new wxString(s);
+      cfg->Read("display_dimensions_selected",
+                &tr.display_dimensions_selected);
       cfg->Read("aspect_ratio", &s);
       tr.aspect_ratio = new wxString(s);
+      cfg->Read("display_width", &s);
+      tr.dwidth = new wxString(s);
+      cfg->Read("display_height", &s);
+      tr.dheight = new wxString(s);
       cfg->Read("fourcc", &s);
       tr.fourcc = new wxString(s);
       cfg->Read("compression", &s);
@@ -1159,6 +1265,11 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_TEXT(ID_TC_DELAY, tab_input::on_delay_changed)
   EVT_TEXT(ID_TC_STRETCH, tab_input::on_stretch_changed)
   EVT_TEXT(ID_TC_TRACKNAME, tab_input::on_track_name_changed)
+  EVT_RADIOBUTTON(ID_RB_ASPECTRATIO, tab_input::on_aspect_ratio_selected)
+  EVT_RADIOBUTTON(ID_RB_DISPLAYDIMENSIONS,
+                  tab_input::on_display_dimensions_selected)
+  EVT_TEXT(ID_TC_DISPLAYWIDTH, tab_input::on_display_width_changed)
+  EVT_TEXT(ID_TC_DISPLAYHEIGHT, tab_input::on_display_height_changed)
   EVT_COMBOBOX(ID_CB_COMPRESSION, tab_input::on_compression_selected)
 
   EVT_TIMER(ID_T_INPUTVALUES, tab_input::on_value_copy_timer)

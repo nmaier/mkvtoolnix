@@ -5,7 +5,7 @@
   tab_attachments.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
+  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
 
   Distributed under the GPL
   see the file COPYING for details
