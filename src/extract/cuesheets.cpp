@@ -55,78 +55,10 @@ extern "C" {
 #include "mkvextract.h"
 #include "mm_io.h"
 #include "quickparser.h"
+#include "tag_common.h"
 
 using namespace libmatroska;
 using namespace std;
-
-static string
-get_simple_tag(const char *name,
-               EbmlMaster &m) {
-  int i;
-  UTFstring uname;
-  string rvalue;
-
-  uname = cstrutf8_to_UTFstring(name);
-
-  for (i = 0; i < m.ListSize(); i++)
-    if (EbmlId(*m[i]) == KaxTagSimple::ClassInfos.GlobalId) {
-      KaxTagName *tname;
-      UTFstring utname;
-
-      tname = FINDFIRST(m[i], KaxTagName);
-      if (tname == NULL)
-        continue;
-      utname = UTFstring(*static_cast<EbmlUnicodeString *>(tname));
-      if (utname == uname) {
-        KaxTagString *tvalue;
-        tvalue = FINDFIRST(m[i], KaxTagString);
-        if (tvalue != NULL)
-          return
-            UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
-                                            (tvalue)));
-        else
-          return "";
-      }
-    }
-
-  for (i = 0; i < m.ListSize(); i++)
-    if ((EbmlId(*m[i]) == KaxTag::ClassInfos.GlobalId) ||
-        (EbmlId(*m[i]) == KaxTagSimple::ClassInfos.GlobalId)) {
-      rvalue = get_simple_tag(name, *static_cast<EbmlMaster *>(m[i]));
-      if (rvalue != "")
-        return rvalue;
-    }
-
-  return "";
-}
-
-static int64_t
-get_tag_tuid(KaxTag &tag) {
-  KaxTagTargets *targets;
-  KaxTagTrackUID *tuid;
-
-  targets = FINDFIRST(&tag, KaxTagTargets);
-  if (targets == NULL)
-    return -1;
-  tuid = FINDFIRST(targets, KaxTagTrackUID);
-  if (tuid == NULL)
-    return -1;
-  return uint64(*static_cast<EbmlUInteger *>(tuid));
-}
-
-static int64_t
-get_tag_cuid(KaxTag &tag) {
-  KaxTagTargets *targets;
-  KaxTagChapterUID *cuid;
-
-  targets = FINDFIRST(&tag, KaxTagTargets);
-  if (targets == NULL)
-    return -1;
-  cuid = FINDFIRST(targets, KaxTagChapterUID);
-  if (cuid == NULL)
-    return -1;
-  return uint64(*static_cast<EbmlUInteger *>(cuid));
-}
 
 static KaxTag *
 find_tag_for_track(int idx,
@@ -148,8 +80,8 @@ find_tag_for_track(int idx,
         continue;
       tag_tuid = get_tag_tuid(*static_cast<KaxTag *>(m[i]));
       if (((tuid == -1) || (tag_tuid == -1) || (tuid == tag_tuid)) &&
-          ((get_simple_tag("PART_NUMBER",
-                           *static_cast<EbmlMaster *>(m[i])) == sidx) ||
+          ((get_simple_tag_value("PART_NUMBER",
+                                 *static_cast<EbmlMaster *>(m[i])) == sidx) ||
            (idx == -1)))
         return static_cast<KaxTag *>(m[i]);
     }
@@ -167,7 +99,7 @@ get_global_tag(const char *name,
   if (tag == NULL)
     return "";
 
-  return get_simple_tag(name, *tag);
+  return get_simple_tag_value(name, *tag);
 }
 
 static int64_t
@@ -183,28 +115,6 @@ get_chapter_index(int idx,
       return get_chapter_start(*static_cast<KaxChapterAtom *>(atom[i]));
 
   return -1;
-}
-
-static string
-get_simple_tag_name(KaxTagSimple &tag) {
-  KaxTagName *tname;
-
-  tname = FINDFIRST(&tag, KaxTagName);
-  if (tname == NULL)
-    return "";
-  return UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
-                                         (tname)));
-}
-
-static string
-get_simple_tag_value(KaxTagSimple &tag) {
-  KaxTagString *tstring;
-
-  tstring = FINDFIRST(&tag, KaxTagString);
-  if (tstring == NULL)
-    return "";
-  return UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
-                                         (tstring)));
 }
 
 #define print_if_global(name, format) \
@@ -234,7 +144,7 @@ _print_if_available(mm_io_c &out,
                     KaxTag &tag) {
   string value;
 
-  value = get_simple_tag(name, tag);
+  value = get_simple_tag_value(name, tag);
   if ((value != "") &&
       (value != get_global_tag(name, tuid, tags)))
     out.printf(format, value.c_str());

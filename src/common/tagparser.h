@@ -18,21 +18,10 @@
 
 namespace libmatroska {
   class KaxTags;
-  class KaxChapters;
 };
 
-namespace libebml {
-  class EbmlElement;
-};
-
-using namespace libebml;
 using namespace libmatroska;
 
 void MTX_DLL_API parse_xml_tags(const char *name, KaxTags *tags);
-
-void MTX_DLL_API fix_mandatory_tag_elements(EbmlElement *e);
-
-KaxTags *MTX_DLL_API select_tags_for_chapters(KaxTags &tags,
-                                              KaxChapters &chapters);
 
 #endif // __TAGPARSER_H
