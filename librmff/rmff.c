@@ -242,35 +242,20 @@ _saferealloc(void *mem,
   return mem;
 }
 
-rmff_file_t *
-rmff_open_file(const char *path,
-               int mode) {
-  return rmff_open_file_with_io(path, mode, &std_mb_file_io);
-}
-
-rmff_file_t *
-rmff_open_file_with_io(const char *path,
-                       int mode,
-                       mb_file_io_t *io) {
+static rmff_file_t *
+open_file_for_reading(const char *path,
+                      mb_file_io_t *io) {
   rmff_file_t *file;
   void *file_h;
-  char buf[5];
+  char signature[5];
 
-  if ((path == NULL) || (io == NULL) ||
-      ((mode != RMFF_OPEN_MODE_READING) && (mode != RMFF_OPEN_MODE_WRITING)))
-    return (rmff_file_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
-
-  if (mode == RMFF_OPEN_MODE_READING)
-    mode = MB_OPEN_MODE_READING;
-  else
-    mode = MB_OPEN_MODE_WRITING;
-  file_h = io->open(path, mode);
+  file_h = io->open(path, MB_OPEN_MODE_READING);
   if (file_h == NULL)
     return NULL;
 
-  buf[4] = 0;
-  if ((io->read(file_h, buf, 4) != 4) ||
-      strcmp(buf, ".RMF")) {
+  signature[4] = 0;
+  if ((io->read(file_h, signature, 4) != 4) ||
+      strcmp(signature, ".RMF")) {
     io->close(file_h);
     return (rmff_file_t *)set_error(RMFF_ERR_NOT_RMFF, NULL, 0);
   }
@@ -282,8 +267,55 @@ rmff_open_file_with_io(const char *path,
   io->seek(file_h, 0, SEEK_END);
   file->size = io->tell(file_h);
   io->seek(file_h, 4, SEEK_SET);
+  file->open_mode = RMFF_OPEN_MODE_READING;
 
   return file;
+}
+
+static rmff_file_t *
+open_file_for_writing(const char *path,
+                      mb_file_io_t *io) {
+  rmff_file_t *file;
+  void *file_h;
+  const char *signature = ".RMF";
+
+  file_h = io->open(path, MB_OPEN_MODE_WRITING);
+  if (file_h == NULL)
+    return NULL;
+
+  if (io->write(file_h, signature, 4) != 4) {
+    io->close(file_h);
+    return (rmff_file_t *)set_error(RMFF_ERR_IO, NULL, 0);
+  }
+
+  file = (rmff_file_t *)safecalloc(sizeof(rmff_file_t));
+  file->handle = file_h;
+  file->name = safestrdup(path);
+  file->io = io;
+  file->size = -1;
+  file->open_mode = RMFF_OPEN_MODE_WRITING;
+
+  return file;
+}
+
+rmff_file_t *
+rmff_open_file(const char *path,
+               int mode) {
+  return rmff_open_file_with_io(path, mode, &std_mb_file_io);
+}
+
+rmff_file_t *
+rmff_open_file_with_io(const char *path,
+                       int mode,
+                       mb_file_io_t *io) {
+  if ((path == NULL) || (io == NULL) ||
+      ((mode != RMFF_OPEN_MODE_READING) && (mode != RMFF_OPEN_MODE_WRITING)))
+    return (rmff_file_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+
+  if (mode == RMFF_OPEN_MODE_READING)
+    return open_file_for_reading(path, io);
+  else
+    return open_file_for_writing(path, io);
 }
 
 void
@@ -330,8 +362,9 @@ rmff_read_headers(rmff_file_t *file) {
   rmff_track_t track;
   real_video_props_t *rvp;
   real_audio_v4_props_t *ra4p;
+  int prop_header_found;
 
-  if (file == NULL)
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
     return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
   if (file->headers_read)
     return 0;
@@ -347,6 +380,7 @@ rmff_read_headers(rmff_file_t *file) {
   skip(4);                      /* num_headers */
 
   prop = &file->prop_header;
+  prop_header_found = 0;
   cont = &file->cont_header;
   while (1) {
     rmff_last_error = RMFF_ERR_OK;
@@ -368,10 +402,10 @@ rmff_read_headers(rmff_file_t *file) {
       read_uint32_be_to(&prop->data_offset);
       read_uint16_be_to(&prop->num_streams);
       read_uint16_be_to(&prop->flags);
-      file->prop_header_found = 1;
+      prop_header_found = 1;
 
     } else if (object_id == rmffFOURCC('C', 'O', 'N', 'T')) {
-      if (file->cont_header_found) {
+      if (file->cont_header_present) {
         safefree(cont->title);
         safefree(cont->author);
         safefree(cont->copyright);
@@ -399,7 +433,7 @@ rmff_read_headers(rmff_file_t *file) {
         cont->comment = (char *)safemalloc(size + 1);
         io->read(fh, cont->comment, size);
       }
-      file->cont_header_found = 1;
+      file->cont_header_present = 1;
 
     } else if (object_id == rmffFOURCC('M', 'D', 'P', 'R')) {
       memset(&track, 0, sizeof(rmff_track_t));
@@ -464,7 +498,7 @@ rmff_read_headers(rmff_file_t *file) {
     }
   }
 
-  if (file->prop_header_found && (file->first_data_header_offset > 0)) {
+  if (prop_header_found && (file->first_data_header_offset > 0)) {
     file->headers_read = 1;
     return 0;
   }
@@ -481,7 +515,7 @@ rmff_get_next_frame_size(rmff_file_t *file) {
   int64_t old_pos;
 
   if ((file == NULL) || (!file->headers_read) || (file->io == NULL) ||
-      (file->handle == NULL))
+      (file->handle == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
     return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
   io = file->io;
   fh = file->handle;
@@ -514,7 +548,7 @@ rmff_read_next_frame(rmff_file_t *file,
   void *fh;
 
   if ((file == NULL) || (!file->headers_read) || (file->io == NULL) ||
-      (file->handle == NULL))
+      (file->handle == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
     return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
   io = file->io;
   fh = file->handle;
@@ -561,4 +595,23 @@ rmff_release_frame(rmff_frame_t *frame) {
   if (frame->allocated_by_rmff)
     safefree(frame->data);
   safefree(frame);
+}
+
+void
+rmff_set_cont_header(rmff_file_t *file,
+                     const char *title,
+                     const char *author,
+                     const char *copyright,
+                     const char *comment) {
+  if (file == NULL)
+    return;
+
+  safefree(file->cont_header.title);
+  safefree(file->cont_header.author);
+  safefree(file->cont_header.copyright);
+  safefree(file->cont_header.comment);
+  file->cont_header.title = safestrdup(title);
+  file->cont_header.author = safestrdup(author);
+  file->cont_header.copyright = safestrdup(copyright);
+  file->cont_header.comment = safestrdup(comment);
 }

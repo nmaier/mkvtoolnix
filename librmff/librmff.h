@@ -177,14 +177,14 @@ typedef struct rmff_file_t {
   mb_file_io_t *io;
   void *handle;
   char *name;
+  int open_mode;
   int64_t size;
 
   int headers_read;
 
   rmff_prop_t prop_header;
-  int prop_header_found;
   rmff_cont_t cont_header;
-  int cont_header_found;
+  int cont_header_present;
   int64_t first_data_header_offset;
   int64_t next_data_header_offset;
   uint32_t num_packets_in_chunk;
@@ -269,6 +269,7 @@ void rmff_close_file(rmff_file_t *file);
 int rmff_read_headers(rmff_file_t *file);
 
 /** \brief Retrieves the size of the next frame.
+ *
  * \param file The file to read from.
  * \returns the size of the following frame or one of the \c RMFF_ERR_*
  *   constants on error.
@@ -277,6 +278,7 @@ int rmff_get_next_frame_size(rmff_file_t *file);
 
 /** \brief Reads the next frame from the file.
  * The frame must be released by rmff_release_frame(rmff_frame_t*).
+ *
  * \param file The file to read from.
  * \param buffer A buffer to read the frame into. This parameter may be
  *   \c NULL in which case the buffer will be allocated by the library.
@@ -290,11 +292,26 @@ rmff_frame_t *rmff_read_next_frame(rmff_file_t *file, void *buffer);
 
 /** \brief Frees all resources associated with a frame.
  * If the frame buffer was allocated by the library it will be freed as well.
+ *
  * \param frame The frame to free.
  */
 void rmff_release_frame(rmff_frame_t *frame);
 
-
+/** \brief Sets the contents of the CONT file header.
+ * Frees the old contents if any and allocates copies of the given
+ * strings. If the CONT header should be written to the file
+ * in rmff_write_headers(rmff_file_t*) then the \c cont_header_found
+ * member must be set to 1.
+ *
+ * \param file The file whose CONT header should be set.
+ * \param title The file's title, e.g. "Muriel's Wedding"
+ * \param author The file's author, e.g. "P.J. Hogan"
+ * \param copyright The copyright assigned to the file.
+ * \param comment A free-style comment.
+ */
+void rmff_set_cont_header(rmff_file_t *file, const char *title,
+                          const char *author, const char *copyright,
+                          const char *comment);
 
 /** \brief The error code of the last function call.
  * Contains the last error code for a function that failed. If a function
