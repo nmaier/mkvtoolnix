@@ -1408,9 +1408,15 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
         if (dmx->frame_offset_table.size() == 0)
           mxwarn(FMT_TID "The AVC video track is missing the 'CTTS' atom for "
-                 "frame timecode offsets. Therefore the timecodes for this "
-                 "track will be wrong IF and only IF the video contains "
-                 "B frames.\n", ti->fname.c_str(), (int64_t)dmx->id);
+                 "frame timecode offsets. However, AVC/h.264 allows frames "
+                 "to have more than the traditional one (for P frames) or "
+                 "two (for B frames) references to other frames. The "
+                 "timecodes for such frames will be out-of-order, and the "
+                 "'CTTS' atom is needed for getting the timecodes right. "
+                 "As it is missing the timecodes for this track might be "
+                 "wrong. You should watch the resulting file and make sure "
+                 "that it looks like you expected it to.\n",
+                 ti->fname.c_str(), (int64_t)dmx->id);
 
         fps = 0.0;
         if ((dmx->durmap_table.size() == 1) &&
