@@ -148,7 +148,7 @@ real_reader_c::parse_headers() {
     for (ndx = 0; ndx < file->num_tracks; ndx++) {
       track = &file->tracks[ndx];
       if ((track->type == RMFF_TRACK_TYPE_UNKNOWN) ||
-          (track->mdpr_header.type_specific_size == 0))
+          (get_uint32_be(&track->mdpr_header.type_specific_size) == 0))
         continue;
       if ((track->type == RMFF_TRACK_TYPE_VIDEO) &&
           !demuxing_requested('v', track->id))
@@ -162,7 +162,7 @@ real_reader_c::parse_headers() {
         continue;
 
       ts_data = track->mdpr_header.type_specific_data;
-      ts_size = track->mdpr_header.type_specific_size;
+      ts_size = get_uint32_be(&track->mdpr_header.type_specific_size);
 
       dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
       memset(dmx, 0, sizeof(real_demuxer_t));
@@ -192,13 +192,14 @@ real_reader_c::parse_headers() {
           track->mdpr_header.type_specific_data;
         dmx->ra5p = (real_audio_v5_props_t *)
           track->mdpr_header.type_specific_data;
-        dmx->samples_per_second = get_uint16_be(&dmx->ra4p->sample_rate);
-        dmx->channels = get_uint16_be(&dmx->ra4p->channels);
-        dmx->bits_per_sample = get_uint16_be(&dmx->ra4p->sample_size);
 
         if (get_uint16_be(&dmx->ra4p->version1) == 4) {
           int slen;
           unsigned char *p;
+
+          dmx->samples_per_second = get_uint16_be(&dmx->ra4p->sample_rate);
+          dmx->channels = get_uint16_be(&dmx->ra4p->channels);
+          dmx->bits_per_sample = get_uint16_be(&dmx->ra4p->sample_size);
 
           p = (unsigned char *)(dmx->ra4p + 1);
           slen = p[0];
@@ -222,6 +223,10 @@ real_reader_c::parse_headers() {
           }
 
         } else {
+
+          dmx->samples_per_second = get_uint16_be(&dmx->ra5p->sample_rate);
+          dmx->channels = get_uint16_be(&dmx->ra5p->channels);
+          dmx->bits_per_sample = get_uint16_be(&dmx->ra5p->sample_size);
 
           memcpy(dmx->fourcc, &dmx->ra5p->fourcc3, 4);
           dmx->fourcc[4] = 0;
