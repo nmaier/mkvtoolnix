@@ -1382,20 +1382,32 @@ void kax_reader_c::create_packetizers() {
               mxinfo("+-> Using the generic audio output module for stream "
                      "%u (CodecID: %s).\n", t->tnum, t->codec_id);
 #if defined(HAVE_FLAC_FORMAT_H)
-          } else if (t->a_formattag == FOURCC('f', 'L', 'a', 'C')) {
+          } else if ((t->a_formattag == FOURCC('f', 'L', 'a', 'C')) ||
+                     (t->a_formattag == 0xf1ac)) {
             nti.private_data = NULL;
             nti.private_size = 0;
-            t->packetizer =
-              new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
-                                    t->a_bps, (unsigned char *)t->private_data,
-                                    t->private_size, &nti);
+            if (t->a_formattag == FOURCC('f', 'L', 'a', 'C'))
+              t->packetizer =
+                new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
+                                      t->a_bps,
+                                      (unsigned char *)t->private_data,
+                                      t->private_size, &nti);
+            else
+              t->packetizer =
+                new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
+                                      t->a_bps,
+                                      ((unsigned char *)t->private_data) +
+                                      sizeof(alWAVEFORMATEX),
+                                      t->private_size - sizeof(alWAVEFORMATEX),
+                                      &nti);
             if (verbose)
               mxinfo("+-> Using the FLAC output module for track ID %u.\n",
                      t->tnum);
 
 #endif
           } else
-            mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
+            mxerror(PFX "Unsupported audio track %s for track %d.\n",
+                    t->codec_id, t->tnum);
 
           if ((t->packetizer != NULL) && (t->a_osfreq != 0.0))
             t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
@@ -1427,8 +1439,7 @@ void kax_reader_c::create_packetizers() {
           break;
 
         default:
-          mxerror(PFX "Unsupported track type "
-                  "for track %d.\n", t->tnum);
+          mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
           break;
       }
       if (t->tuid != 0)
