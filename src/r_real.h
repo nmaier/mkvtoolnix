@@ -55,7 +55,8 @@ typedef struct {
 
   unsigned char *c_data;
   int c_len, c_numpackets;
-  int64_t c_timecode;
+  int64_t c_timecode, c_reftimecode;
+  bool c_keyframe;
 } real_demuxer_t;
 
 class real_reader_c: public generic_reader_c {
@@ -63,7 +64,7 @@ private:
   mm_io_c *io;
   vector<real_demuxer_t *> demuxers;
   int act_wchar;
-  int64_t file_size, last_timestamp;
+  int64_t file_size, last_timecode;
   bool done;
 
 public:

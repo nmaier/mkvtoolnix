@@ -99,7 +99,7 @@ typedef struct {
 
 typedef struct {
   uint32_t chunks;              // number of chunks
-  uint32_t timestamp;           // timestamp from packet header
+  uint32_t timecode;            // timecode from packet header
   uint32_t len;                 // length of actual data
   uint32_t chunktab;            // offset to chunk offset array
 } dp_hdr_t;
@@ -141,7 +141,9 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("real_reader: Could not read the source file.");
   }
 
-  last_timestamp = -1;
+  last_timecode = -1;
+  act_wchar = 0;
+  done = false;
 
   if (verbose)
     mxprint(stdout, "Using RealMedia demultiplexer for %s.\n", ti->fname);
@@ -458,7 +460,7 @@ int real_reader_c::finish() {
     if ((dmx->type == 'a') && (dmx->c_data != NULL)) {
       int64_t dur = dmx->c_timecode / dmx->c_numpackets;
       dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode + dur,
-                               dur);
+                               dur, dmx->c_keyframe ? -1 : dmx->c_reftimecode);
     }
   }
 
@@ -468,7 +470,7 @@ int real_reader_c::finish() {
 }
 
 int real_reader_c::read() {
-  uint32_t object_version, length, id, timestamp, flags, object_id;
+  uint32_t object_version, length, id, timecode, flags, object_id;
   unsigned char *chunk;
   real_demuxer_t *dmx;
   int64_t fpos;
@@ -495,15 +497,15 @@ int real_reader_c::read() {
     }
 
     id = io->read_uint16_be();
-    timestamp = io->read_uint32_be();
+    timecode = io->read_uint32_be();
     io->skip(1);                // reserved
     flags = io->read_uint8();
 
     if (length < 12) {
       mxprint(stdout, "real_reader: %s: Data packet length is too small: %u. "
               "Other values: object_version: 0x%04x, id: 0x%04x, "
-              "timestamp: %u, flags: 0x%02x. File position: %lld. Aborting.\n",
-              ti->fname, length, object_version, id, timestamp, flags, fpos);
+              "timecode: %u, flags: 0x%02x. File position: %lld. Aborting.\n",
+              ti->fname, length, object_version, id, timecode, flags, fpos);
       return finish();
     }
 
@@ -522,24 +524,31 @@ int real_reader_c::read() {
       return finish();
     }
 
-    if (dmx->type == 'v')
-      assemble_packet(dmx, chunk, length, timestamp, (flags & 2) == 2);
-    else {
-      if ((timestamp - last_timestamp) <= (5 * 60 * 1000)) {
+    if (dmx->type == 'v') {
+      assemble_packet(dmx, chunk, length, timecode, (flags & 2) == 2);
+      safefree(chunk);
+    } else {
+      if ((timecode - last_timecode) <= (5 * 60 * 1000)) {
         if (dmx->c_data != NULL)
-          dmx->packetizer->process(dmx->c_data, dmx->c_len, timestamp,
-                                   timestamp - dmx->c_timecode);
+          dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode,
+                                   timecode - dmx->c_timecode,
+                                   dmx->c_keyframe ? -1 : dmx->c_reftimecode);
         dmx->c_data = chunk;
         dmx->c_len = length;
-        dmx->c_timecode = timestamp;
+        dmx->c_timecode = timecode;
+        if ((flags & 2) == 2) {
+          dmx->c_keyframe = true;
+          dmx->c_reftimecode = timecode;
+        } else
+          dmx->c_keyframe = false;
         dmx->c_numpackets++;
       } else {
-        timestamp = last_timestamp;
+        timecode = last_timecode;
         safefree(chunk);
       }
     }
 
-    last_timestamp = timestamp;
+    last_timecode = timecode;
 
   } catch (exception &ex) {
     return finish();
@@ -723,7 +732,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
           if (verbose > 1)
             mxprint(stdout, "PROCESS\n");
           dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                                   8 * (dp_hdr->chunks + 1), dp_hdr->timestamp,
+                                   8 * (dp_hdr->chunks + 1), dp_hdr->timecode,
                                    -1, dmx->keyframe ? VFT_IFRAME :
                                    VFT_PFRAMEAUTOMATIC);
           safefree(dmx->last_packet);
@@ -782,7 +791,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
               mxprint(stdout, "PROCESS\n");
             dmx->packetizer->process(buffer, 1 + dp_hdr->len +
                                      8 * (dp_hdr->chunks + 1),
-                                     dp_hdr->timestamp, -1, dmx->keyframe ?
+                                     dp_hdr->timecode, -1, dmx->keyframe ?
                                      VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
             safefree(dmx->last_packet);
             dmx->last_packet = NULL;
@@ -813,14 +822,14 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         8 * (1 + 2 * (vpkg_header & 0x3f));
       dmx->last_packet = (unsigned char *)malloc(dmx->ctb_len);
       dmx->keyframe = keyframe;
-      // the timestamp seems to be in milliseconds
+      // the timecode seems to be in milliseconds
       dmx->last_seq = vpkg_seqnum;
       dp_hdr = (dp_hdr_t *)dmx->last_packet;
       dp_hdr->chunks = 0;
       if ((vpkg_header & 0xc0) == 0xc0)
-        dp_hdr->timestamp = vpkg_offset;
+        dp_hdr->timecode = vpkg_offset;
       else
-        dp_hdr->timestamp = timecode;
+        dp_hdr->timecode = timecode;
       dp_hdr->chunktab = sizeof(dp_hdr_t) + vpkg_length;
       dp_data = dmx->last_packet + sizeof(dp_hdr_t);
       extra = (uint32_t *)(dmx->last_packet + dp_hdr->chunktab);
@@ -845,7 +854,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       if (verbose > 1)
         mxprint(stdout, "PROCESS\n");
       dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                               8 * (dp_hdr->chunks + 1), dp_hdr->timestamp, -1,
+                               8 * (dp_hdr->chunks + 1), dp_hdr->timecode, -1,
                                dmx->keyframe ? VFT_IFRAME :
                                VFT_PFRAMEAUTOMATIC);
       safefree(dmx->last_packet);
