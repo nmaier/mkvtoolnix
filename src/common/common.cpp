@@ -1023,26 +1023,32 @@ escape_xml(const string &source) {
 
 bool
 starts_with(const string &s,
-            const char *start) {
-  return strncmp(s.c_str(), start, strlen(start)) == 0;
-}
+            const char *start,
+            int maxlen) {
+  int len, slen;
 
-bool
-starts_with(const string &s,
-            const string &start) {
-  return strncmp(s.c_str(), start.c_str(), start.length()) == 0;
+  slen = strlen(start);
+  if (maxlen == -1)
+    len = slen;
+  else
+    len = maxlen < slen ? maxlen : slen;
+
+  return strncmp(s.c_str(), start, slen) == 0;
 }
 
 bool
 starts_with_case(const string &s,
-                 const char *start) {
-  return strncasecmp(s.c_str(), start, strlen(start)) == 0;
-}
+                 const char *start,
+                 int maxlen) {
+  int len, slen;
 
-bool
-starts_with_case(const string &s,
-                 const string &start) {
-  return strncasecmp(s.c_str(), start.c_str(), start.length()) == 0;
+  slen = strlen(start);
+  if (maxlen == -1)
+    len = slen;
+  else
+    len = maxlen < slen ? maxlen : slen;
+
+  return strncasecmp(s.c_str(), start, slen) == 0;
 }
 
 string

@@ -342,7 +342,7 @@ identify(const string &filename) {
  * Also tests the tags for missing mandatory elements.
  */
 void
-parse_and_add_tags(const char *file_name) {
+parse_and_add_tags(const string &file_name) {
   KaxTags *tags;
   KaxTag *tag;
   KaxTagTargets *targets;
@@ -364,7 +364,7 @@ parse_and_add_tags(const char *file_name) {
     fix_mandatory_tag_elements(tag);
     if (!tag->CheckMandatory())
       mxerror(_("Error parsing the tags in '%s': some mandatory "
-                "elements are missing.\n"), file_name);
+                "elements are missing.\n"), file_name.c_str());
     if (!found)
       targets->Remove(targets->ListSize() - 1);
     tags->Remove(0);
@@ -1091,8 +1091,6 @@ parse_args(vector<string> &args) {
   mm_io_c *io;
 
   ti = new track_info_c;
-  memset(&attachment, 0, sizeof(attachment_t));
-  memset(&tags, 0, sizeof(tags_t));
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -1330,23 +1328,21 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--attachment-description' lacks the description.\n"));
 
-      if (attachment.description != NULL)
+      if (attachment.description != "")
         mxwarn(_("More than one description was given for a single attachment."
                  "\n"));
-      safefree(attachment.description);
-      attachment.description = safestrdup(next_arg);
+      attachment.description = next_arg;
       sit++;
 
     } else if ((this_arg == "--attachment-mime-type")) {
       if (no_next_arg)
         mxerror(_("'--attachment-mime-type' lacks the MIME type.\n"));
 
-      if (attachment.mime_type != NULL)
+      if (attachment.mime_type != "")
         mxwarn(_("More than one MIME type was given for a single attachment. "
                  "'%s' will be discarded and '%s' used instead.\n"),
-               attachment.mime_type, next_arg.c_str());
-      safefree(attachment.mime_type);
-      attachment.mime_type = safestrdup(next_arg);
+               attachment.mime_type.c_str(), next_arg.c_str());
+      attachment.mime_type = next_arg;
       sit++;
 
     } else if ((this_arg == "--attach-file") ||
@@ -1354,9 +1350,9 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'%s' lacks the file name.\n"), this_arg.c_str());
 
-      attachment.name = from_utf8_c(cc_local_utf8, next_arg);
-      if (attachment.mime_type == NULL)
-        attachment.mime_type = safestrdup(guess_mime_type(next_arg));
+      attachment.name = from_utf8(cc_local_utf8, next_arg);
+      if (attachment.mime_type == "")
+        attachment.mime_type = guess_mime_type(next_arg);
 
       if ((this_arg == "--attach-file"))
         attachment.to_all_files = true;
@@ -1368,11 +1364,11 @@ parse_args(vector<string> &args) {
           throw exception();
       } catch (...) {
         mxerror(_("The attachment '%s' could not be read, or its "
-                  "size is 0.\n"), attachment.name);
+                  "size is 0.\n"), attachment.name.c_str());
       }
 
       attachments.push_back(attachment);
-      memset(&attachment, 0, sizeof(attachment_t));
+      attachment.clear();
 
       sit++;
 
@@ -1716,7 +1712,7 @@ parse_args(vector<string> &args) {
       }
       file.name = from_utf8_c(cc_local_utf8, this_arg);
       file.type = get_file_type(file.name);
-      ti->fname = from_utf8_c(cc_local_utf8, this_arg);
+      ti->fname = from_utf8(cc_local_utf8, this_arg);
 
       if (file.type == TYPEUNKNOWN)
         mxerror(_("The file '%s' has unknown type. Please have a look "
@@ -1758,8 +1754,6 @@ parse_args(vector<string> &args) {
              "only useful in combination with '--split'.\n"));
 
   delete ti;
-  safefree(attachment.description);
-  safefree(attachment.mime_type);
 }
 
 /** \brief Reads command line arguments from a file
@@ -1770,7 +1764,7 @@ parse_args(vector<string> &args) {
  */
 static void
 read_args_from_file(vector<string> &args,
-                    char *filename) {
+                    const string &filename) {
   mm_text_io_c *mm_io;
   string buffer;
   bool skip_next;
@@ -1780,7 +1774,7 @@ read_args_from_file(vector<string> &args,
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (exception &ex) {
     mxerror(_("The file '%s' could not be opened for reading command line "
-              "arguments."), filename);
+              "arguments."), filename.c_str());
   }
 
   skip_next = false;

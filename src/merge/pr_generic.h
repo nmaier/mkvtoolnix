@@ -130,37 +130,52 @@ typedef struct {
   generic_packetizer_c *source;
 } packet_t;
 
-typedef struct {
+struct cue_creation_t {
   int cues;
   int64_t id;
-} cue_creation_t;
 
-typedef struct {
-  char *language;
+  cue_creation_t(): cues(0), id(0) {}
+};
+
+struct language_t {
+  string language;
   int64_t id;
-} language_t;
 
-typedef struct {
-  char *file_name;
+  language_t(): id(0) {}
+};
+
+struct tags_t {
+  string file_name;
   int64_t id;
-} tags_t;
 
-typedef struct {
+  tags_t(): id(0) {}
+};
+
+struct display_properties_t {
   float aspect_ratio;
   bool ar_factor;
   int width, height;
   int64_t id;
-} display_properties_t;
 
-typedef struct {
+  display_properties_t(): aspect_ratio(0), ar_factor(false), width(0),
+                          height(0), id(0) {}
+};
+
+typedef struct fourcc_t {
   char fourcc[5];
   int64_t id;
-} fourcc_t;
 
-typedef struct {
+  fourcc_t(): id(0) {
+    memset(fourcc, 0, 5);
+  }
+};
+
+struct pixel_crop_t {
   int left, top, right, bottom;
   int64_t id;
-} pixel_crop_t;
+
+  pixel_crop_t(): left(0), top(0), right(0), bottom(0), id(0) {}
+};
 
 class track_info_c {
 protected:
@@ -170,7 +185,7 @@ public:
   int64_t id;
 
   // Options used by the readers.
-  char *fname;
+  string fname;
   bool no_audio, no_video, no_subs;
   vector<int64_t> *atracks, *vtracks, *stracks;
 
@@ -195,10 +210,10 @@ public:
   bool default_track;           // For this very track
 
   vector<language_t> *languages; // As given on the command line
-  char *language;               // For this very track
+  string language;              // For this very track
 
   vector<language_t> *sub_charsets; // As given on the command line
-  char *sub_charset;            // For this very track
+  string sub_charset;           // For this very track
 
   vector<tags_t> *all_tags;     // As given on the command line
   tags_t *tags_ptr;             // For this very track
@@ -213,10 +228,10 @@ public:
   int compression;              // For this very track
 
   vector<language_t> *track_names; // As given on the command line
-  char *track_name;             // For this very track
+  string track_name;            // For this very track
 
   vector<language_t> *all_ext_timecodes; // As given on the command line
-  char *ext_timecodes;          // For this very track
+  string ext_timecodes;         // For this very track
 
   vector<pixel_crop_t> *pixel_crop_list; // As given on the command line
   pixel_crop_t pixel_cropping;  // For this very track
@@ -317,7 +332,7 @@ protected:
   bool default_track_warning_printed;
   uint32_t huid;
 
-  char *hcodec_id;
+  string hcodec_id;
   unsigned char *hcodec_private;
   int hcodec_private_length;
 
@@ -419,9 +434,9 @@ public:
   virtual int get_track_type() {
     return htrack_type;
   }
-  virtual void set_language(const char *language);
+  virtual void set_language(const string &language);
 
-  virtual void set_codec_id(const char *id);
+  virtual void set_codec_id(const string &id);
   virtual void set_codec_private(const unsigned char *cp, int length);
 
   virtual void set_track_min_cache(int min_cache);
@@ -451,7 +466,7 @@ public:
 
   virtual void set_tag_track_uid();
 
-  virtual void set_track_name(const char *name);
+  virtual void set_track_name(const string &name);
 
   virtual void set_default_compression_method(int method) {
     hcompression = method;

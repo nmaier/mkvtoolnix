@@ -74,7 +74,7 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
   ti->id = 0;                   // ID for this track.
 
   if (verbose)
-    mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti->fname);
+    mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti->fname.c_str());
 }
 
 dts_reader_c::~dts_reader_c() {
@@ -87,7 +87,8 @@ dts_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
   add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
-  mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname, (int64_t)0);
+  mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname.c_str(),
+         (int64_t)0);
   print_dts_header(&dtsheader);
 }
 
@@ -116,5 +117,6 @@ dts_reader_c::get_progress() {
 
 void
 dts_reader_c::identify() {
-  mxinfo("File '%s': container: DTS\nTrack ID 0: audio (DTS)\n", ti->fname);
+  mxinfo("File '%s': container: DTS\nTrack ID 0: audio (DTS)\n",
+         ti->fname.c_str());
 }

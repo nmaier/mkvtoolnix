@@ -123,7 +123,7 @@ cluster_helper_c::add_packet(packet_t *packet) {
   mxverb(4, "cluster_helper_c::add_packet(): new packet { source %lld/%s "
          "timecode: %lld duration: %lld bref: %lld fref: %lld "
          "assigned_timecode: %lld }\n",
-         packet->source->ti->id, packet->source->ti->fname,
+         packet->source->ti->id, packet->source->ti->fname.c_str(),
          packet->timecode, packet->duration, packet->bref, packet->fref,
          packet->assigned_timecode);
 

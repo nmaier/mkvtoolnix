@@ -23,15 +23,15 @@
 using namespace std;
 
 timecode_factory_c *
-timecode_factory_c::create(const char *_file_name,
-                           const char *_source_name,
+timecode_factory_c::create(const string &_file_name,
+                           const string &_source_name,
                            int64_t _tid) {
   mm_io_c *in;
   string line;
   int version;
   timecode_factory_c *factory;
 
-  if (_file_name == NULL)
+  if (_file_name == "")
     return new timecode_factory_c("", _source_name, _tid);
 
   in = NULL;                    // avoid gcc warning
@@ -39,14 +39,14 @@ timecode_factory_c::create(const char *_file_name,
     in = new mm_text_io_c(new mm_file_io_c(_file_name));
   } catch(...) {
     mxerror(_("The timecode file '%s' could not be opened for reading.\n"),
-            _file_name);
+            _file_name.c_str());
   }
 
   if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") ||
       !parse_int(&line[strlen("# timecode format v")], version))
     mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
               "format line. The very first line must look like "
-              "'# timecode format v1'.\n"), _file_name);
+              "'# timecode format v1'.\n"), _file_name.c_str());
   factory = NULL;               // avoid gcc warning
   if (version == 1)
     factory = new timecode_factory_v1_c(_file_name, _source_name, _tid);
@@ -54,7 +54,7 @@ timecode_factory_c::create(const char *_file_name,
     factory = new timecode_factory_v2_c(_file_name, _source_name, _tid);
   else
     mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
-              "format (version %d).\n"), _file_name, version);
+              "format (version %d).\n"), _file_name.c_str(), version);
 
   factory->parse(*in);
   delete in;
@@ -71,9 +71,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   vector<timecode_range_c>::const_iterator pit;
   uint32_t i, line_no;
   bool done;
-  const char *name;
 
-  name = NULL;                  // compiler warning
   line_no = 1;
   do {
     if (!in.getline2(line))
@@ -127,7 +125,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 
   if (ranges.size() == 0) {
     mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),
-           name);
+           file_name.c_str());
     t.start_frame = 0;
   } else {
     sort(ranges.begin(), ranges.end());

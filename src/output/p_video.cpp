@@ -82,7 +82,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   } else
     set_codec_id(MKV_V_MSCOMP);
   if ((!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_MPEG4)) &&
-      (hcodec_id != NULL) && !strcmp(hcodec_id, MKV_V_MSCOMP) &&
+      (hcodec_id != "") && (hcodec_id == MKV_V_MSCOMP) &&
       (ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
       (ti->fourcc[0] != 0))
@@ -262,7 +262,7 @@ video_packetizer_c::extract_mpeg4_aspect_ratio(const unsigned char *buffer,
     rerender_track_headers();
     mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
            "from the MPEG4 data and set the display dimensions to "
-           "%u/%u.\n", (int64_t)ti->id, ti->fname,
+           "%u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
            (uint32_t)ti->display_width, (uint32_t)ti->display_height);
   }
 }
@@ -352,7 +352,7 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   if (vsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
   if ((width != vsrc->width) || (height != vsrc->height) ||
-      (fps != vsrc->fps) || strcmp(hcodec_id, vsrc->hcodec_id))
+      (fps != vsrc->fps) || (hcodec_id != vsrc->hcodec_id))
     return CAN_CONNECT_NO_PARAMETERS;
   if (((ti->private_data == NULL) && (vsrc->ti->private_data != NULL)) ||
       ((ti->private_data != NULL) && (vsrc->ti->private_data == NULL)) ||

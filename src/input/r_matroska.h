@@ -55,11 +55,11 @@ typedef struct {
   uint32_t enc_keyid_len, sig_keyid_len, signature_len;
 } kax_content_encoding_t;
 
-typedef struct {
+struct kax_track_t {
   uint32_t tnum, tuid;
 
-  char *codec_id;
-  int ms_compat;
+  string codec_id;
+  bool ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs
   char sub_type; // 't' = text, 'v' = VobSub
@@ -85,12 +85,12 @@ typedef struct {
   unsigned char *headers[3];
   uint32_t header_sizes[3];
 
-  int default_track;
-  char *language;
+  bool default_track;
+  string language;
 
   int64_t units_processed;
 
-  char *track_name;
+  string track_name;
 
   bool ok;
 
@@ -107,7 +107,62 @@ typedef struct {
   bool headers_set;
 
   bool ignore_duration_hack;
-} kax_track_t;
+
+  kax_track_t(): tnum(0), tuid(0),
+                 ms_compat(false),
+                 type(' '), sub_type(' '),
+                 passthrough(false),
+                 min_cache(0), max_cache(0),
+                 lacing_flag(false),
+                 v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
+                 v_pcleft(0), v_pctop(0), v_pcright(0), v_pcbottom(0),
+                 v_frate(0.0),
+                 v_bframes(false),
+                 a_channels(0), a_bps(0), a_formattag(0),
+                 a_sfreq(0.0), a_osfreq(0.0),
+                 private_data(NULL), private_size(0),
+                 default_track(false),
+                 units_processed(0),
+                 ok(false),
+                 previous_timecode(0),
+                 kax_c_encodings(NULL),
+                 c_encodings(NULL),
+                 zlib_compressor(NULL),
+                 bzlib_compressor(NULL),
+                 lzo1x_compressor(NULL),
+                 tags(NULL),
+                 ptzr(0),
+                 headers_set(false),
+                 ignore_duration_hack(false) {
+    memset(v_fourcc, 0, 5);
+    memset(headers, 0, 3 * sizeof(unsigned char *));
+    memset(header_sizes, 0, 3 * sizeof(uint32_t));
+  }
+  ~kax_track_t() {
+    int k;
+
+    safefree(private_data);
+    if (c_encodings != NULL) {
+      for (k = 0; k < c_encodings->size(); k++) {
+        safefree((*c_encodings)[k].comp_settings);
+        safefree((*c_encodings)[k].enc_keyid);
+        safefree((*c_encodings)[k].sig_keyid);
+        safefree((*c_encodings)[k].signature);
+      }
+      delete c_encodings;
+    }
+    if (zlib_compressor != NULL)
+      delete zlib_compressor;
+    if (bzlib_compressor != NULL)
+      delete bzlib_compressor;
+    if (lzo1x_compressor != NULL)
+      delete lzo1x_compressor;
+    if (kax_c_encodings != NULL)
+      delete kax_c_encodings;
+    if (tags != NULL)
+      delete tags;
+  }
+};
 
 class kax_reader_c: public generic_reader_c {
 private:

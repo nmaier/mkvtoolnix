@@ -128,7 +128,7 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
   }
   if (identifying)
     return;
-  mxverb(1, FMT_FN "Using the FLAC demultiplexer.\n", ti->fname);
+  mxverb(1, FMT_FN "Using the FLAC demultiplexer.\n", ti->fname.c_str());
 
   if (!parse_file())
     throw error_c(FPFX "Could not read all header packets.");
@@ -169,7 +169,8 @@ flac_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new flac_packetizer_c(this, header, header_size, ti));
-  mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname, (int64_t)0);
+  mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname.c_str(),
+         (int64_t)0);
 }
 
 bool
@@ -225,7 +226,7 @@ flac_reader_c::parse_file() {
 
   if (!metadata_parsed)
     mxerror(FMT_FN "No metadata block found. This file is broken.\n",
-            ti->fname);
+            ti->fname.c_str());
 
   block.type = FLAC_BLOCK_TYPE_HEADERS;
   FLAC__seekable_stream_decoder_get_decode_position(decoder, &u);
@@ -403,7 +404,8 @@ flac_reader_c::get_progress() {
 
 void
 flac_reader_c::identify() {
-  mxinfo("File '%s': container: FLAC\nTrack ID 0: audio (FLAC)\n", ti->fname);
+  mxinfo("File '%s': container: FLAC\nTrack ID 0: audio (FLAC)\n",
+         ti->fname.c_str());
 }
 
 #else  // HAVE_FLAC_FORMAT_H

@@ -37,8 +37,8 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
   packetno = 0;
   recode = nrecode;
   if (recode) {
-    if ((ti->sub_charset != NULL) || !is_utf8)
-      cc_utf8 = utf8_init(ti->sub_charset == NULL ? "" : ti->sub_charset);
+    if ((ti->sub_charset != "") || !is_utf8)
+      cc_utf8 = utf8_init(ti->sub_charset);
     else
       cc_utf8 = utf8_init("UTF-8");
   }

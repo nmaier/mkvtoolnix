@@ -57,7 +57,7 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
   if (verbose)
-    mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti->fname);
+    mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti->fname.c_str());
 }
 
 ac3_reader_c::~ac3_reader_c() {
@@ -71,7 +71,8 @@ ac3_reader_c::create_packetizer(int64_t) {
     return;
   add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
                                       ac3header.channels, ac3header.bsid, ti));
-  mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname, (int64_t)0);
+  mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname.c_str(),
+         (int64_t)0);
 }
 
 file_status_t
@@ -99,7 +100,8 @@ ac3_reader_c::get_progress() {
 
 void
 ac3_reader_c::identify() {
-  mxinfo("File '%s': container: AC3\nTrack ID 0: audio (AC3)\n", ti->fname);
+  mxinfo("File '%s': container: AC3\nTrack ID 0: audio (AC3)\n",
+         ti->fname.c_str());
 }
 
 int

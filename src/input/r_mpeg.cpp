@@ -88,7 +88,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     throw error_c("mpeg_es_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the MPEG ES demultiplexer.\n", ti->fname);
+    mxinfo(FMT_FN "Using the MPEG ES demultiplexer.\n", ti->fname.c_str());
 }
 
 mpeg_es_reader_c::~mpeg_es_reader_c() {
@@ -104,7 +104,8 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
                                         mxsprintf("V_MPEG%d", version).c_str(),
                                         frame_rate, width, height, false, ti));
 
-  mxinfo(FMT_TID "Using the video output module.\n", ti->fname, (int64_t)0);
+  mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
+         (int64_t)0);
 }
 
 file_status_t
@@ -187,5 +188,5 @@ mpeg_es_reader_c::get_progress() {
 void
 mpeg_es_reader_c::identify() {
   mxinfo("File '%s': container: MPEG elementary stream (ES)\n" 
-         "Track ID 0: video (MPEG %d)\n", ti->fname, version);
+         "Track ID 0: video (MPEG %d)\n", ti->fname.c_str(), version);
 }

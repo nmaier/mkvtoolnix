@@ -682,7 +682,7 @@ render_attachments(IOCallback *rout) {
   KaxFileData *fdata;
   vector<attachment_t>::const_iterator attch;
   int i, k;
-  char *name;
+  int name;
   binary *buffer;
   mm_io_c *io;
 
@@ -697,25 +697,24 @@ render_attachments(IOCallback *rout) {
       else
         kax_a = &GetNextChild<KaxAttached>(*kax_as, *kax_a);
 
-      if ((*attch).description != NULL)
+      if ((*attch).description != "")
         *static_cast<EbmlUnicodeString *>
           (&GetChild<KaxFileDescription>(*kax_a)) =
           cstrutf8_to_UTFstring((*attch).description);
 
-      if ((*attch).mime_type != NULL)
+      if ((*attch).mime_type != "")
         *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*kax_a)) =
           (*attch).mime_type;
 
-      name = &(*attch).name[strlen((*attch).name) - 1];
-      while ((name != (*attch).name) && (*name != PATHSEP))
+      name = (*attch).name.length() - 1;
+      while ((name > 0) && ((*attch).name[name] != PATHSEP))
         name--;
-      if (*name == PATHSEP)
+      if ((*attch).name[name] == PATHSEP)
         name++;
-      if (*name == 0)
-        die("Internal error: *name == 0 on %d.", __LINE__);
 
       *static_cast<EbmlUnicodeString *>
-        (&GetChild<KaxFileName>(*kax_a)) = cstr_to_UTFstring(name);
+        (&GetChild<KaxFileName>(*kax_a)) =
+        cstr_to_UTFstring((*attch).name.substr(name));
 
       *static_cast<EbmlUInteger *>
         (&GetChild<KaxFileUID>(*kax_a)) =
@@ -733,7 +732,8 @@ render_attachments(IOCallback *rout) {
         fdata = &GetChild<KaxFileData>(*kax_a);
         fdata->SetBuffer(buffer, size);
       } catch (...) {
-        mxerror(_("The attachment '%s' could not be read.\n"), (*attch).name);
+        mxerror(_("The attachment '%s' could not be read.\n"),
+                (*attch).name.c_str());
       }
     }
   }
@@ -1554,9 +1554,9 @@ append_track(packetizer_t &ptzr,
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
-         (*gptzr)->ti->id, amap.src_file_id, (*gptzr)->ti->fname,
+         (*gptzr)->ti->id, amap.src_file_id, (*gptzr)->ti->fname.c_str(),
          ptzr.packetizer->ti->id, amap.dst_file_id,
-         ptzr.packetizer->ti->fname);
+         ptzr.packetizer->ti->fname.c_str());
 
   // Is the current file currently used for displaying the progress? If yes
   // then replace it with the next one.
@@ -1804,11 +1804,6 @@ cleanup() {
   }
   files.clear();
 
-  foreach(att, attachments) {
-    safefree((*att).mime_type);
-    safefree((*att).description);
-    safefree((*att).name);
-  }
   attachments.clear();
 
   if (kax_tags != NULL)

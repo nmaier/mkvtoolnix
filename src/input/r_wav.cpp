@@ -104,7 +104,7 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti->fname);
+    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti->fname.c_str());
 
   {
     // check wether .wav file contains DTS data...
@@ -160,7 +160,8 @@ wav_reader_c::create_packetizer(int64_t) {
                            get_uint16(&wheader.common.wChannels),
                            get_uint16(&wheader.common.wBitsPerSample), ti);
     add_packetizer(ptzr);
-    mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname, (int64_t)0);
+    mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
+           (int64_t)0);
 
   } else {
     add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
@@ -168,8 +169,8 @@ wav_reader_c::create_packetizer(int64_t) {
     // the bitrate...
     ((dts_packetizer_c *)PTZR0)->skipping_is_normal = true;
     mxinfo(FMT_TID "Using the DTS output module. %s %s\n",
-           ti->fname, (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" : "",
-           (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
+           ti->fname.c_str(), (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" :
+           "", (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
     if (verbose > 1)
       print_dts_header(&dtsheader);
   }
@@ -251,5 +252,5 @@ wav_reader_c::get_progress() {
 void
 wav_reader_c::identify() {
   mxinfo("File '%s': container: WAV\nTrack ID 0: audio (%s)\n",
-         ti->fname, is_dts ? "DTS" : "PCM");
+         ti->fname.c_str(), is_dts ? "DTS" : "PCM");
 }

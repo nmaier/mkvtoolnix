@@ -75,7 +75,7 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
     throw error_c("srt_reader: Could not open the source file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti->fname);
+    mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti->fname.c_str());
 }
 
 srt_reader_c::~srt_reader_c() {
@@ -92,7 +92,7 @@ srt_reader_c::create_packetizer(int64_t) {
   is_utf8 = mm_io->get_byte_order() != BO_NONE;
   add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
                                            true, is_utf8, ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname,
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname.c_str(),
          (int64_t)0);
 }
 
@@ -139,7 +139,7 @@ srt_reader_c::read(generic_packetizer_c *,
       for (i = 0; i < s.length(); i++)
         if (!isdigit(s[i])) {
           mxwarn(FMT_FN "Error in line %d: expected subtitle number "
-                 "and found some text.\n", ti->fname, line_number);
+                 "and found some text.\n", ti->fname.c_str(), line_number);
           non_number_found = true;
           break;
         }
@@ -151,7 +151,7 @@ srt_reader_c::read(generic_packetizer_c *,
       if ((s.length() < 29) || !issrttimecode(s.c_str())) {
         mxwarn(FMT_FN "Error in line %d: expected a SRT timecode "
                "line but found something else. Aborting this file.\n",
-               ti->fname, line_number);
+               ti->fname.c_str(), line_number);
         break;
       }
 
@@ -183,7 +183,7 @@ srt_reader_c::read(generic_packetizer_c *,
       if (!timecode_warning_printed && (start < previous_start)) {
         mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller "
                "than that of the previous entry. All entries from this file "
-               "will be sorted by their start time.\n", ti->fname,
+               "will be sorted by their start time.\n", ti->fname.c_str(),
                line_number);
         timecode_warning_printed = true;
       }
@@ -238,5 +238,5 @@ srt_reader_c::get_progress() {
 void
 srt_reader_c::identify() {
   mxinfo("File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
-         ti->fname);
+         ti->fname.c_str());
 }

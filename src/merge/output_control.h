@@ -72,11 +72,22 @@ typedef struct {
   vector<deferred_connection_t> deferred_connections;
 } filelist_t;
 
-typedef struct {
-  char *name, *mime_type, *description;
+struct attachment_t {
+  string name, mime_type, description;
   int64_t size;
   bool to_all_files;
-} attachment_t;
+
+  attachment_t() {
+    clear();
+  }
+  void clear() {
+    name = "";
+    mime_type = "";
+    description = "";
+    size = 0;
+    to_all_files = false;
+  }
+};
 
 typedef struct {
   int64_t file_id;

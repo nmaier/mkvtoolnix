@@ -96,7 +96,8 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
       throw error_c(PFX "Source is not a valid Quicktime/MP4 file.");
 
     if (verbose)
-      mxinfo(FMT_FN "Using the Quicktime/MP4 demultiplexer.\n", ti->fname);
+      mxinfo(FMT_FN "Using the Quicktime/MP4 demultiplexer.\n",
+             ti->fname.c_str());
 
     parse_headers();
 
@@ -1179,7 +1180,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ti->private_data = NULL;
       }
       mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
-             ti->fname, (int64_t)dmx->id, dmx->fourcc);
+             ti->fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
 
     } else {
       if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
@@ -1195,7 +1196,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ptzr->set_audio_bit_depth(dmx->a_bitdepth);
 
         mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s)."
-               "\n", ti->fname, (int64_t)dmx->id, dmx->fourcc);
+               "\n", ti->fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
                  ((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
@@ -1224,12 +1225,12 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           if (sbraac)
             PTZR(dmx->ptzr)->
               set_audio_output_sampling_freq(output_sample_rate);
-          mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname,
+          mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname.c_str(),
                  (int64_t)dmx->id);
 
         } else
           mxerror(FMT_TID "AAC found, but decoder config data has length %u."
-                  "\n", ti->fname, (int64_t)dmx->id,
+                  "\n", ti->fname.c_str(), (int64_t)dmx->id,
                   dmx->esds.decoder_config_len);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
@@ -1238,8 +1239,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         dmx->ptzr =
           add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate,
                                               dmx->a_channels, true, ti));
-        mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
-               (int64_t)dmx->id);
+        mxinfo(FMT_TID "Using the MPEG audio output module.\n",
+               ti->fname.c_str(), (int64_t)dmx->id);
 
       } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
                  !strncasecmp(dmx->fourcc, "swot", 4)) {
@@ -1248,7 +1249,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                               dmx->a_channels, dmx->a_bitdepth,
                                               ti, (dmx->a_bitdepth > 8) &&
                                               (dmx->fourcc[0] == 't')));
-        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname,
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
                (int64_t)dmx->id);
 
       } else
@@ -1288,7 +1289,7 @@ qtmp4_reader_c::identify() {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
 
-  mxinfo("File '%s': container: Quicktime/MP4\n", ti->fname);
+  mxinfo("File '%s': container: Quicktime/MP4\n", ti->fname.c_str());
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
     mxinfo("Track ID %u: %s (%.4s)\n", dmx->id,

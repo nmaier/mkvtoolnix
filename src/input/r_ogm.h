@@ -55,7 +55,7 @@ public:
   bool done;
 
 public:
-  flac_header_extractor_c(const char *file_name, int64_t nsid);
+  flac_header_extractor_c(const string &file_name, int64_t nsid);
   ~flac_header_extractor_c();
   bool extract();
   bool read_page();
@@ -68,7 +68,7 @@ struct ogm_demuxer_t {
   int stype, serialno, eos;
   int units_processed, vorbis_rate;
   bool headers_read, native_mode;
-  char *language, *title;
+  string language, title;
   vector<unsigned char *> packet_data, nh_packet_data;
   vector<int> packet_sizes, nh_packet_sizes;
 #if defined(HAVE_FLAC_FORMAT_H)
@@ -81,15 +81,13 @@ struct ogm_demuxer_t {
   ogm_demuxer_t():
     ptzr(-1), stype(0), serialno(0), eos(0), units_processed(0),
     vorbis_rate(0), headers_read(false), native_mode(true),
-    language(NULL), title(NULL), in_use(false) {
+    in_use(false) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
   ~ogm_demuxer_t() {
     uint32_t i;
     for (i = 0; i < packet_data.size(); i++)
       safefree(packet_data[i]);
-    safefree(language);
-    safefree(title);
   }
 };
 

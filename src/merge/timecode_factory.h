@@ -60,8 +60,8 @@ public:
     return proposal;
   }
 
-  static timecode_factory_c *create(const char *_file_name,
-                                    const char *_source_name,
+  static timecode_factory_c *create(const string &_file_name,
+                                    const string &_source_name,
                                     int64_t _tid);
 };
 

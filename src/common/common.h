@@ -214,10 +214,22 @@ void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
 string MTX_DLL_API escape(const string &src);
 string MTX_DLL_API escape_xml(const string &src);
 string MTX_DLL_API unescape(const string &src);
-bool MTX_DLL_API starts_with(const string &s, const char *start);
-bool MTX_DLL_API starts_with(const string &s, const string &start);
-bool MTX_DLL_API starts_with_case(const string &s, const char *start);
-bool MTX_DLL_API starts_with_case(const string &s, const string &start);
+bool MTX_DLL_API starts_with(const string &s, const char *start,
+                             int maxlen = -1);
+inline bool
+starts_with(const string &s,
+            const string &start,
+            int maxlen = -1) {
+  return starts_with(s, start.c_str(), maxlen);
+}
+bool MTX_DLL_API starts_with_case(const string &s, const char *start,
+                                  int maxlen = -1);
+inline bool
+starts_with_case(const string &s,
+                 const string &start,
+                 int maxlen = -1) {
+  return starts_with_case(s, start.c_str(), maxlen);
+}
 string MTX_DLL_API upcase(const string &s);
 string MTX_DLL_API downcase(const string &s);
 

@@ -52,7 +52,7 @@ end_simple_tag(void *pdata) {
 }
 
 void
-parse_xml_tags(const char *name,
+parse_xml_tags(const string &name,
                KaxTags *tags) {
   KaxTags *new_tags;
   EbmlMaster *m;
@@ -63,7 +63,7 @@ parse_xml_tags(const char *name,
   try {
     in = new mm_text_io_c(new mm_file_io_c(name));
   } catch(...) {
-    mxerror("Could not open '%s' for reading.\n", name);
+    mxerror("Could not open '%s' for reading.\n", name.c_str());
   }
 
   for (i = 0; tag_elements[i].name != NULL; i++) {

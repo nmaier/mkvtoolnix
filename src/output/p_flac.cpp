@@ -57,7 +57,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
   if (!(result & FLAC_HEADER_STREAM_INFO))
     mxerror(_(FMT_TID "The FLAC headers could not be parsed: the stream info "
               "structure was not found.\n"),
-            ti->fname, (int64_t)ti->id);
+            ti->fname.c_str(), (int64_t)ti->id);
   num_packets = 0;
 
   set_track_type(track_audio);
@@ -100,7 +100,7 @@ flac_packetizer_c::process(memory_c &mem,
   duration = flac_get_num_samples(mem.data, mem.size, stream_info);
   if (duration == -1) {
     mxwarn(_(FMT_TID "Packet number %lld contained an invalid FLAC header "
-             "and is being skipped.\n"), ti->fname, (int64_t)ti->id,
+             "and is being skipped.\n"), ti->fname.c_str(), (int64_t)ti->id,
            num_packets + 1);
     debug_leave("flac_packetizer_c::process");
     return file_status_moredata;

@@ -90,7 +90,8 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
 
   if (verbose)
     mxinfo(FMT_FN "Using the AVI demultiplexer. Opening file. This "
-           "may take some time depending on the file's size.\n", ti->fname);
+           "may take some time depending on the file's size.\n",
+           ti->fname.c_str());
 
   fsize = 0;
   rederive_keyframes = 0;
@@ -98,7 +99,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
 
   frames = 0;
   delete io;
-  if ((avi = AVI_open_input_file(ti->fname, 1)) == NULL) {
+  if ((avi = AVI_open_input_file(ti->fname.c_str(), 1)) == NULL) {
     const char *msg = PFX "Could not initialize AVI source. Reason: ";
     char *s, *error;
     error = AVI_strerror();
@@ -182,7 +183,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
                                                   false, ti));
     if (verbose)
       mxinfo(FMT_TID "Using the video output module for the video track.\n",
-             ti->fname, (int64_t)0);
+             ti->fname.c_str(), (int64_t)0);
   }
   if (tid == 0)
     return;
@@ -259,7 +260,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   switch(audio_format) {
     case 0x0001: // raw PCM audio
       if (verbose)
-        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname,
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
                (int64_t)aid + 1);
       packetizer = new pcm_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels,
@@ -268,14 +269,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
     case 0x0050: // MP2
     case 0x0055: // MP3
       if (verbose)
-        mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
-               (int64_t)aid + 1);
+        mxinfo(FMT_TID "Using the MPEG audio output module.\n",
+               ti->fname.c_str(), (int64_t)aid + 1);
       packetizer = new mp3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, false, ti);
       break;
     case 0x2000: // AC3
       if (verbose)
-        mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname,
+        mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname.c_str(),
                (int64_t)aid + 1);
       packetizer = new ac3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, 0, ti);
@@ -286,7 +287,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       dtsheader.core_sampling_frequency = demuxer.samples_per_second;
       dtsheader.audio_channels = demuxer.channels;
       if (verbose)
-        mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname,
+        mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname.c_str(),
                (int64_t)aid + 1);
       packetizer = new dts_packetizer_c(this, dtsheader, ti, true);
       break;
@@ -298,20 +299,20 @@ avi_reader_c::add_audio_demuxer(int aid) {
       if ((ti->private_size != 2) && (ti->private_size != 5))
         mxerror(FMT_TID "This AAC track does not contain valid headers. The "
                 "extra header size is %d bytes, expected were 2 or 5 bytes.\n",
-                ti->fname, (int64_t)aid + 1, ti->private_size);
+                ti->fname.c_str(), (int64_t)aid + 1, ti->private_size);
       if (!parse_aac_data(ti->private_data, ti->private_size, profile,
                           channels, sample_rate, output_sample_rate,
                           is_sbr))
         mxerror(FMT_TID "This AAC track does not contain valid headers. Could "
-                "not parse the AAC information.\n", ti->fname, (int64_t)aid +
-                1);
+                "not parse the AAC information.\n", ti->fname.c_str(),
+                (int64_t)aid + 1);
       if (is_sbr)
         profile = AAC_PROFILE_SBR;
       demuxer.samples_per_second = sample_rate;
       demuxer.channels = channels;
       if (verbose)
-        mxinfo(FMT_TID "Using the AAC audio output module.\n", ti->fname,
-               (int64_t)aid + 1);
+        mxinfo(FMT_TID "Using the AAC audio output module.\n",
+               ti->fname.c_str(), (int64_t)aid + 1);
       packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                         demuxer.samples_per_second,
                                         demuxer.channels, ti, false, true);
@@ -321,7 +322,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
     }
     default:
       mxerror(FMT_TID "Unknown/unsupported audio format 0x%04x for this audio "
-              "track.\n", ti->fname, (int64_t)aid + 1, audio_format);
+              "track.\n", ti->fname.c_str(), (int64_t)aid + 1, audio_format);
   }
   demuxer.ptzr = add_packetizer(packetizer);
 
@@ -542,7 +543,7 @@ avi_reader_c::identify() {
   uint32_t par_num, par_den;
   bool extended_info_shown;
   
-  mxinfo("File '%s': container: AVI\n", ti->fname);
+  mxinfo("File '%s': container: AVI\n", ti->fname.c_str());
   extended_info_shown = false;
   type = AVI_video_compressor(avi);
   if (!strncasecmp(type, "MP42", 4) ||

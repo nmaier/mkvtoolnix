@@ -119,8 +119,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   for (i = 0; i < ti->languages->size(); i++) {
     lang = &(*ti->languages)[i];
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      safefree(ti->language);
-      ti->language = safestrdup(lang->language);
+      ti->language = lang->language;
       break;
     }
   }
@@ -129,8 +128,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   for (i = 0; i < ti->sub_charsets->size(); i++) {
     lang = &(*ti->sub_charsets)[i];
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      safefree(ti->sub_charset);
-      ti->sub_charset = safestrdup(lang->language);
+      ti->sub_charset = lang->language;
       break;
     }
   }
@@ -162,8 +160,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   for (i = 0; i < ti->track_names->size(); i++) {
     lang = &(*ti->track_names)[i];
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      safefree(ti->track_name);
-      ti->track_name = safestrdup(lang->language);
+      ti->track_name = lang->language;
       break;
     }
   }
@@ -172,8 +169,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   for (i = 0; i < ti->all_ext_timecodes->size(); i++) {
     lang = &(*ti->all_ext_timecodes)[i];
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      safefree(ti->ext_timecodes);
-      ti->ext_timecodes = safestrdup(lang->language);
+      ti->ext_timecodes = lang->language;
       break;
     }
   }
@@ -197,7 +193,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   if (ti->aspect_ratio_given && ti->display_dimensions_given)
     mxerror(_("Both '%s' and '--display-dimensions' were given "
               "for track %lld of '%s'.\n"), ti->aspect_ratio_is_factor ?
-            _("Aspect ratio factor") : _("Aspect ratio"), ti->id, ti->fname);
+            _("Aspect ratio factor") : _("Aspect ratio"), ti->id,
+            ti->fname.c_str());
 
   memset(ti->fourcc, 0, 5);
   // Let's see if the user has specified a FourCC for this track.
@@ -231,7 +228,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   htrack_max_cache = -1;
   htrack_default_duration = -1;
 
-  hcodec_id = NULL;
+  hcodec_id = "";
   hcodec_private = NULL;
   hcodec_private_length = 0;
 
@@ -255,7 +252,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 generic_packetizer_c::~generic_packetizer_c() {
   delete ti;
 
-  safefree(hcodec_id);
   safefree(hcodec_private);
   if (compressor != NULL)
     delete compressor;
@@ -300,7 +296,8 @@ generic_packetizer_c::set_tag_track_uid() {
     if (!tag->CheckMandatory())
       mxerror(_("The tags in '%s' could not be parsed: some mandatory "
                 "elements are missing.\n"),
-              ti->tags_ptr != NULL ? ti->tags_ptr->file_name : ti->fname);
+              ti->tags_ptr != NULL ? ti->tags_ptr->file_name.c_str() :
+              ti->fname.c_str());
   }
 }
 
@@ -335,35 +332,25 @@ generic_packetizer_c::set_track_type(int type) {
 }
 
 void
-generic_packetizer_c::set_track_name(const char *name) {
-  safefree(ti->track_name);
-  if (name == NULL) {
-    ti->track_name = NULL;
-    return;
-  }
-  ti->track_name = safestrdup(name);
-  if (track_entry != NULL)
+generic_packetizer_c::set_track_name(const string &name) {
+  ti->track_name = name;
+  if ((track_entry != NULL) && (name != ""))
     *(static_cast<EbmlUnicodeString *>
       (&GetChild<KaxTrackName>(*track_entry))) =
       cstrutf8_to_UTFstring(ti->track_name);
 }
 
 void
-generic_packetizer_c::set_codec_id(const char *id) {
-  safefree(hcodec_id);
-  if (id == NULL) {
-    hcodec_id = NULL;
-    return;
-  }
-  hcodec_id = safestrdup(id);
-  if (track_entry != NULL)
+generic_packetizer_c::set_codec_id(const string &id) {
+  hcodec_id = id;
+  if ((track_entry != NULL) && (id != ""))
     *(static_cast<EbmlString *>
       (&GetChild<KaxCodecID>(*track_entry))) = hcodec_id;
 }
 
 void
 generic_packetizer_c::set_codec_private(const unsigned char *cp,
-                                             int length) {
+                                        int length) {
   safefree(hcodec_private);
   if (cp == NULL) {
     hcodec_private = NULL;
@@ -501,15 +488,14 @@ generic_packetizer_c::set_as_default_track(int type,
              "been set. The 'default' flag for track %lld of '%s' will not be "
              "set.\n"),
            type == 0 ? "audio" : type == 'v' ? "video" : "subtitle",
-           ti->id, ti->fname);
+           ti->id, ti->fname.c_str());
     default_track_warning_printed = true;
   }
 }
 
 void
-generic_packetizer_c::set_language(const char *language) {
-  safefree(ti->language);
-  ti->language = safestrdup(language);
+generic_packetizer_c::set_language(const string &language) {
+  ti->language = language;
   if (track_entry != NULL)
     *(static_cast<EbmlString *>
       (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
@@ -585,7 +571,7 @@ generic_packetizer_c::set_headers() {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackType>(*track_entry))) = htrack_type;
 
-  if (hcodec_id != NULL)
+  if (hcodec_id != "")
     *(static_cast<EbmlString *>
       (&GetChild<KaxCodecID>(*track_entry))) = hcodec_id;
 
@@ -621,14 +607,14 @@ generic_packetizer_c::set_headers() {
   else
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
 
-  if (ti->language != NULL)
+  if (ti->language != "")
     *(static_cast<EbmlString *>
       (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
   else
     *(static_cast<EbmlString *>
       (&GetChild<KaxTrackLanguage>(*track_entry))) = default_language.c_str();
 
-  if ((ti->track_name != NULL) && (ti->track_name[0] != 0))
+  if (ti->track_name != "")
     *(static_cast<EbmlUnicodeString *>
       (&GetChild<KaxTrackName>(*track_entry))) =
       cstrutf8_to_UTFstring(ti->track_name);
@@ -875,13 +861,14 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
              "more than once for a particular track then "
              "either is the source file badly mastered, or mkvmerge "
              "contains a bug. In this case you should contact the author "
-             "Moritz Bunkus <moritz@bunkus.org>.\n", ti->fname, ti->id,
+             "Moritz Bunkus <moritz@bunkus.org>.\n", ti->fname.c_str(), ti->id,
              (needed_timecode_offset + 500000) / 1000000);
     } else
       mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
              "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
              "'%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
-             ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname, BUGMSG);
+             ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname.c_str(),
+             BUGMSG);
   }
   safety_last_timecode = pack->timecode;
   safety_last_duration = pack->duration;
@@ -945,14 +932,14 @@ generic_packetizer_c::force_duration_on_last_packet() {
 
   if (packet_queue.empty()) {
     mxverb(2, "force_duration_on_last_packet: packet queue is empty for "
-           "'%s'/%lld\n", ti->fname, ti->id);
+           "'%s'/%lld\n", ti->fname.c_str(), ti->id);
     return;
   }
   packet = packet_queue.back();
   packet->duration_mandatory = true;
   mxverb(2, "force_duration_on_last_packet: forcing at " FMT_TIMECODE " with "
          "%.3fms for '%s'/%lld\n", ARG_TIMECODE_NS(packet->timecode),
-         packet->duration / 1000.0, ti->fname, ti->id);
+         packet->duration / 1000.0, ti->fname.c_str(), ti->id);
 }
 
 int64_t
@@ -1153,7 +1140,7 @@ generic_reader_c::check_track_ids_and_packetizers() {
   add_available_track_ids();
   if (reader_packetizers.size() == 0)
     mxwarn(FMT_FN "No tracks will be copied from this file. This usually "
-           "indicates a mistake in the command line.\n", ti->fname);
+           "indicates a mistake in the command line.\n", ti->fname.c_str());
 
   for (r = 0; r < requested_track_ids.size(); r++) {
     found = false;
@@ -1166,7 +1153,7 @@ generic_reader_c::check_track_ids_and_packetizers() {
     if (!found)
       mxwarn(FMT_FN "A track with the ID %lld was requested but not found "
              "in the file. The corresponding option will be ignored.\n",
-             ti->fname, requested_track_ids[r]);
+             ti->fname.c_str(), requested_track_ids[r]);
   }
 }
 
@@ -1194,7 +1181,6 @@ generic_reader_c::add_requested_track_id(int64_t id) {
 track_info_c::track_info_c():
   initialized(true),
   id(0),
-  fname(NULL),
   no_audio(false),
   no_video(false),
   no_subs(false),
@@ -1208,14 +1194,10 @@ track_info_c::track_info_c():
   display_dimensions_given(false),
   cues(0),
   default_track(false),
-  language(NULL),
-  sub_charset(NULL),
   tags_ptr(NULL),
   tags(NULL),
   packet_delay(0),
   compression(COMPRESSION_NONE),
-  track_name(NULL),
-  ext_timecodes(NULL),
   no_chapters(false),
   no_attachments(false),
   no_tags(false) {
@@ -1247,40 +1229,23 @@ track_info_c::track_info_c():
 
 void
 track_info_c::free_contents() {
-  uint32_t i;
-
   if (!initialized)
     return;
 
-  safefree(fname);
   delete atracks;
   delete vtracks;
   delete stracks;
   delete audio_syncs;
   delete cue_creations;
   delete default_track_flags;
-  for (i = 0; i < languages->size(); i++)
-    safefree((*languages)[i].language);
   delete languages;
-  safefree(language);
-  for (i = 0; i < sub_charsets->size(); i++)
-    safefree((*sub_charsets)[i].language);
   delete sub_charsets;
-  safefree(sub_charset);
-  for (i = 0; i < all_tags->size(); i++)
-    safefree((*all_tags)[i].file_name);
   delete all_tags;
   delete aac_is_sbr;
   delete packet_delays;
   delete compression_list;
-  for (i = 0; i < track_names->size(); i++)
-    safefree((*track_names)[i].language);
   delete track_names;
-  safefree(track_name);
-  for (i = 0; i < all_ext_timecodes->size(); i++)
-    safefree((*all_ext_timecodes)[i].language);
   delete all_ext_timecodes;
-  safefree(ext_timecodes);
   safefree(private_data);
   if (tags != NULL)
     delete tags;
@@ -1294,12 +1259,10 @@ track_info_c::free_contents() {
 
 track_info_c &
 track_info_c::operator =(const track_info_c &src) {
-  uint32_t i;
-
   free_contents();
 
   id = src.id;
-  fname = safestrdup(src.fname);
+  fname = src.fname;
 
   no_audio = src.no_audio;
   no_video = src.no_video;
@@ -1332,19 +1295,12 @@ track_info_c::operator =(const track_info_c &src) {
   default_track = src.default_track;
 
   languages = new vector<language_t>(*src.languages);
-  for (i = 0; i < src.languages->size(); i++)
-    (*languages)[i].language = safestrdup((*src.languages)[i].language);
-  language = safestrdup(src.language);
+  language = src.language;
 
   sub_charsets = new vector<language_t>(*src.sub_charsets);
-  for (i = 0; i < src.sub_charsets->size(); i++)
-    (*sub_charsets)[i].language =
-      safestrdup((*src.sub_charsets)[i].language);
-  sub_charset = safestrdup(src.sub_charset);
+  sub_charset = src.sub_charset;
 
   all_tags = new vector<tags_t>(*src.all_tags);
-  for (i = 0; i < src.all_tags->size(); i++)
-    (*all_tags)[i].file_name = safestrdup((*src.all_tags)[i].file_name);
   tags_ptr = src.tags_ptr;
   if (src.tags != NULL)
     tags = static_cast<KaxTags *>(src.tags->Clone());
@@ -1360,16 +1316,10 @@ track_info_c::operator =(const track_info_c &src) {
   compression = src.compression;
 
   track_names = new vector<language_t>(*src.track_names);
-  for (i = 0; i < src.track_names->size(); i++)
-    (*track_names)[i].language =
-      safestrdup((*src.track_names)[i].language);
-  track_name = safestrdup(src.track_name);
+  track_name = src.track_name;
 
   all_ext_timecodes = new vector<language_t>(*src.all_ext_timecodes);
-  for (i = 0; i < src.all_ext_timecodes->size(); i++)
-    (*all_ext_timecodes)[i].language =
-      safestrdup((*src.all_ext_timecodes)[i].language);
-  ext_timecodes = safestrdup(src.ext_timecodes);
+  ext_timecodes = src.ext_timecodes;
 
   pixel_crop_list = new vector<pixel_crop_t>(*src.pixel_crop_list);
   pixel_cropping = src.pixel_cropping;

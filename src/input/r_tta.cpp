@@ -70,7 +70,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
 
     if (mm_io->read(&header, sizeof(tta_file_header_t)) !=
         sizeof(tta_file_header_t))
-      mxerror(FMT_FN "The file header is too short.\n", ti->fname);
+      mxerror(FMT_FN "The file header is too short.\n", ti->fname.c_str());
     seek_sum = mm_io->getFilePointer() + 4 - tag_size;
 
     size -= id3_tag_present_at_end(*mm_io);
@@ -88,7 +88,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
 
     if (seek_sum != size)
       mxerror(FMT_FN "The seek table in this TTA file seems to be broken.\n",
-              ti->fname);
+              ti->fname.c_str());
 
     mm_io->skip(4);
 
@@ -100,7 +100,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
     throw error_c("tta_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the TTA demultiplexer.\n", ti->fname);
+    mxinfo(FMT_FN "Using the TTA demultiplexer.\n", ti->fname.c_str());
 }
 
 tta_reader_c::~tta_reader_c() {
@@ -117,7 +117,8 @@ tta_reader_c::create_packetizer(int64_t) {
                                        get_uint16(&header.bits_per_sample),
                                        get_uint32(&header.sample_rate), ti);
   add_packetizer(ttapacketizer);
-  mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname, (int64_t)0);
+  mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname.c_str(),
+         (int64_t)0);
 }
 
 file_status_t
@@ -165,5 +166,6 @@ tta_reader_c::get_progress() {
 
 void
 tta_reader_c::identify() {
-  mxinfo("File '%s': container: TTA\nTrack ID 0: audio (TTA)\n", ti->fname);
+  mxinfo("File '%s': container: TTA\nTrack ID 0: audio (TTA)\n",
+         ti->fname.c_str());
 }
