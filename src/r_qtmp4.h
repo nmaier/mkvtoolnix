@@ -114,7 +114,7 @@ class qtmp4_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
   vector<qtmp4_demuxer_t *> demuxers;
-  int64_t file_size;
+  int64_t file_size, mdat_pos, mdat_size;
   bool done;
   qtmp4_demuxer_t *new_dmx;
   uint32_t compression_algorithm;

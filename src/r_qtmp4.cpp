@@ -142,7 +142,6 @@ void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
 void qtmp4_reader_c::parse_headers() {
   uint32_t atom, atom_hsize, tmp, j, s, pts, last, idx;
   uint64_t atom_size, atom_pos;
-  int64_t mdat_pos;
   bool headers_parsed;
   int i;
   qtmp4_demuxer_t *dmx;
@@ -178,6 +177,7 @@ void qtmp4_reader_c::parse_headers() {
 
     } else if (atom == FOURCC('m', 'd', 'a', 't')) {
       mdat_pos = io->getFilePointer();
+      mdat_size = atom_size;
       skip_atom();
 
     } else if ((atom == FOURCC('f', 'r', 'e', 'e')) ||
@@ -1037,20 +1037,33 @@ void qtmp4_reader_c::create_packetizers() {
                  "%u (FourCC: %.4s).\n", dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4)) {
-        int profile, sample_rate_idx, channels;
+        int profile, srate_idx, channels, osrate_idx;
+        bool sbraac;
 
-        if (dmx->a_esds.decoder_config_len == 2) {
+        if ((dmx->a_esds.decoder_config_len == 2) ||
+            (dmx->a_esds.decoder_config_len == 5)) {
           profile = (dmx->a_esds.decoder_config[0] >> 3) - 1;
-          sample_rate_idx = ((dmx->a_esds.decoder_config[0] & 0x07) << 1) |
+          srate_idx = ((dmx->a_esds.decoder_config[0] & 0x07) << 1) |
             (dmx->a_esds.decoder_config[1] >> 7);
           channels = (dmx->a_esds.decoder_config[1] & 0x7f) >> 3;
-
           mxverb(2, PFX "AAC: profile: %d, sample_rate_idx: %d, channels: "
-                 "%d\n", profile, sample_rate_idx, channels);
+                 "%d", profile, srate_idx, channels);
+          if (dmx->a_esds.decoder_config_len == 5) {
+            osrate_idx = (dmx->a_esds.decoder_config[4] & 0x7f) >> 3;
+            sbraac = true;
+            mxverb(2, ", SBR sample_rate_idx: %d", osrate_idx);
+            profile = AAC_PROFILE_SBR;
+          } else
+            sbraac = false;
+          mxverb(2, "\n");
 
+          srate_idx = aac_sampling_freq[srate_idx];
           dmx->packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                                                 (uint32_t)dmx->a_samplerate,
-                                                 channels, ti, false, true);
+                                                 srate_idx, channels, ti,
+                                                 false, true);
+          if (sbraac)
+            dmx->packetizer->
+              set_audio_output_sampling_freq(aac_sampling_freq[osrate_idx]);
           if (verbose)
             mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id);
 
@@ -1087,8 +1100,8 @@ int qtmp4_reader_c::display_priority() {
 }
 
 void qtmp4_reader_c::display_progress() {
-  mxinfo("progress: %lld bytes (%lld%%)\r", io->getFilePointer(),
-         io->getFilePointer() * 100 / file_size);
+  mxinfo("progress: %lld bytes (%lld%%)\r", io->getFilePointer() - mdat_pos,
+         (io->getFilePointer() - mdat_pos) * 100 / mdat_size);
 }
 
 void qtmp4_reader_c::identify() {
