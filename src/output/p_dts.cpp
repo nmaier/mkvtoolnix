@@ -26,62 +26,6 @@
 
 using namespace libmatroska;
 
-bool
-operator!=(const dts_header_t &l,
-           const dts_header_t &r) {
-  //if (l.frametype != r.frametype) return true;
-  //if (l.deficit_sample_count != r.deficit_sample_count) return true;
-  if (l.crc_present != r.crc_present)
-    return true;
-  if (l.num_pcm_sample_blocks != r.num_pcm_sample_blocks)
-    return true;
-  if (l.frame_byte_size != r.frame_byte_size)
-    return true;
-  if (l.audio_channels != r.audio_channels)
-    return true;
-  if (l.core_sampling_frequency != r.core_sampling_frequency)
-    return true;
-  if (l.transmission_bitrate != r.transmission_bitrate)
-    return true;
-  if (l.embedded_down_mix != r.embedded_down_mix)
-    return true;
-  if (l.embedded_dynamic_range != r.embedded_dynamic_range)
-    return true;
-  if (l.embedded_time_stamp != r.embedded_time_stamp)
-    return true;
-  if (l.auxiliary_data != r.auxiliary_data)
-    return true;
-  if (l.hdcd_master != r.hdcd_master)
-    return true;
-  if (l.extension_audio_descriptor != r.extension_audio_descriptor)
-    return true;
-  if (l.extended_coding != r.extended_coding)
-    return true;
-  if (l.audio_sync_word_in_sub_sub != r.audio_sync_word_in_sub_sub)
-    return true;
-  if (l.lfe_type != r.lfe_type)
-    return true;
-  if (l.predictor_history_flag != r.predictor_history_flag)
-    return true;
-  if (l.multirate_interpolator != r.multirate_interpolator)
-    return true;
-  if (l.encoder_software_revision != r.encoder_software_revision)
-    return true;
-  if (l.copy_history != r.copy_history)
-    return true;
-  if (l.source_pcm_resolution != r.source_pcm_resolution)
-    return true;
-  if (l.source_surround_in_es != r.source_surround_in_es)
-    return true;
-  if (l.front_sum_difference != r.front_sum_difference)
-    return true;
-  if (l.surround_sum_difference != r.surround_sum_difference)
-    return true;
-  if (l.dialog_normalization_gain != r.dialog_normalization_gain)
-    return true;
-  return false;
-}
-
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
                                    const dts_header_t &dtsheader,
                                    track_info_c *nti)
@@ -212,7 +156,11 @@ void
 dts_packetizer_c::set_headers() {
   set_codec_id(MKV_A_DTS);
   set_audio_sampling_freq((float)first_header.core_sampling_frequency);
-  set_audio_channels(first_header.audio_channels);
+  if ((first_header.lfe_type == dts_header_t::lfe_64) ||
+      (first_header.lfe_type == dts_header_t::lfe_128))
+    set_audio_channels(first_header.audio_channels + 1);
+  else
+    set_audio_channels(first_header.audio_channels);
 
   generic_packetizer_c::set_headers();
 }
