@@ -326,7 +326,6 @@ int cluster_helper_c::render() {
     }
 
 
-    printf("NBG: %p, rp: %d\n", new_block_group, pack->ref_priority);
     // Set the reference priority if it was wanted.
     if ((new_block_group != NULL) && (pack->ref_priority > 0))
       *static_cast<EbmlUInteger *>

@@ -436,7 +436,6 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   pack->bref = bref;
   pack->fref = fref;
   pack->ref_priority = ref_priority;
-  printf("added ref: %d\n", pack->ref_priority);
   pack->duration = duration;
   pack->duration_mandatory = duration_mandatory;
   pack->source = this;
