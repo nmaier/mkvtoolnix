@@ -675,7 +675,7 @@ AC_DEFUN(PATH_EXPAT,
 
   EXPAT_CFLAGS=
   EXPAT_LIBS=
-	if test "$with_expat" != "yes"; then
+	if test "$with_expat" != "yes" -a "$with_expat" != ""; then
 		EXPAT_CFLAGS="-I$with_expat/include"
 		EXPAT_LIBS="-L$with_expat/lib"
 	fi
@@ -710,7 +710,7 @@ AC_DEFUN(PATH_ZLIB,
 
   ZLIB_CFLAGS=
   ZLIB_LIBS=
-  if test "$with_zlib" != "yes"; then
+  if test "$with_zlib" != "yes" -a "$with_zlib" != ""; then
     ZLIB_CFLAGS="-I$with_zlib/include"
     ZLIB_LIBS="-L$with_zlib/lib"
   fi
