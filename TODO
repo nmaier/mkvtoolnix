@@ -1,10 +1,28 @@
-* mkvmerge (muxer):
-
-- splitting after a specific size
+In no particular order:
 
 
-* mkvdemux:
+* mvkmerge:
 
-- write it ;)
-- support for video (to AVI), AC3, MP3, PCM (to WAV), Vorbis (to Ogg)
-- man page
+- Read tags from external files.
+
+- Keep tags when reading from Matroska files.
+
+- Implement charset support for SSA/ASS files.
+
+- Split packed video stuff into proper B frames.
+
+- Add RealAudio/RealVideo reader.
+
+* mkvtags:
+
+- Write it.
+
+- Support extraction, replacement, adding tags.
+
+- Add a GUI.
+
+* mencoder Matroska output module
+
+* Implement auto* stuff for libebml, libmatroska.
+
+
