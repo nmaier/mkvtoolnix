@@ -84,7 +84,7 @@ using namespace libmatroska;
 #define MAP_TRACK_TYPE(c) ((c) == 'a' ? track_audio : \
                            (c) == 'v' ? track_video : track_subtitle)
 #define MAP_TRACK_TYPE_STRING(c) ((c) == 'a' ? "audio" : \
-                                  (c) == 'v' ? "video" : "subtite")
+                                  (c) == 'v' ? "video" : "subtitle")
 
 #define in_parent(p) (in->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
