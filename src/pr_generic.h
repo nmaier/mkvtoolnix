@@ -296,7 +296,8 @@ protected:
   deque<packet_t *> packet_queue;
 
   int64_t initial_displacement;
-  int64_t free_refs, enqueued_bytes, safety_last_timecode;
+  int64_t free_refs, enqueued_bytes;
+  int64_t safety_last_timecode, safety_last_duration;
 
   KaxTrackEntry *track_entry;
 
