@@ -1,3 +1,8 @@
+2003-05-15  Moritz Bunkus  <moritz@bunkus.org>
+
+        * The OGM reader reported I frames as P frames and vice versa
+        round making seeking not really nice ;)
+
 2003-05-11  Moritz Bunkus  <moritz@bunkus.org>
 
         * Fixed a bug with the AC3 timecode calculation (patch by Peter
