@@ -299,36 +299,10 @@ If the source file is a Matroska file then the CodecID should be enough to
 detect SBR AAC. However, if the CodecID is wrong then this switch can be used
 to correct that.
 .TP
-\fB\-\-timecodes\fR <\fITID\fR:\fIfilename\fR> Read the timecodes to
-be used for the specific track ID from \fIfilename\fR.  These
-timecodes forcefully override the timecodes that \fBmkvmerge\fR
-normally calculates. A frame in this case is the unit that
-\fBmkvmerge\fR creates separately per Matroska block. For video this
-is exactly one frame, for audio this is one packet of the specific
-audio type. E.g. for AC3 this would be a packet containing 1536
-samples. However, it should only be used for video tracks.
-.br
- The format recognized looks like this: First line is the version
-string:
-.br
-\fB# timecode format v1\fR
-.br
-Second line gives the default number of frames per second:
-.br
-\fBassume 27.930\fR
-.br
-All following lines contain three numbers separated by commas: the
-start frame (0 is the first frame), the end frame and the number of
-frames in this range. The FPS is a floating point number with the dot
-'.' as the decimal point. The ranges can contain gaps for which the
-default FPS is used. Example:
-.br
-\fB800,1000,25\fR
-.br
-\fB1500,1700,30\fR
-.br
-Empty lines, lines containing only whitespace and lines beginning with '#'
-are ignored.
+\fB\-\-timecodes\fR <\fITID\fR:\fIfilename\fR>
+Read the timecodes to be used for the specific track ID from \fIfilename\fR.
+These timecodes forcefully override the timecodes that \fBmkvmerge\fR
+normally calculates. Read the section about \fBEXTERNAL TIMECODE FILES\fR.
 .TP
 \fB\-\-track\-order\fR <\fITID1\fR[,\fITID2\fR,...]>
 This option changes the order in which the tracks for an input file are
@@ -952,6 +926,59 @@ The shortest possible Matroska file would look like this:
 [EBML head] [segment [segment information] [track information] [cluster 1]]
 .LP
 This might be the case for audio-only files.
+
+
+.SH EXTERNAL TIMECODE FILES
+.LP
+\fBmkvmerge\fR allows the user to chose the timecodes for a specific track
+himself. This can be used in order to create files with variable frame rate
+video. A frame in this case is the unit that
+\fBmkvmerge\fR creates separately per Matroska block. For video this
+is exactly one frame, for audio this is one packet of the specific
+audio type. E.g. for AC3 this would be a packet containing 1536
+samples. However, it should only be used for video tracks.
+.LP
+There are two formats that are recognized by \fBmkvmerge\fR. The first
+line always contains the version number. Empty lines, lines containing only
+whitespace and lines beginning with '#' are ignored.
+.LP
+\fBTimecode file format v1\fR
+.LP
+This format starts with this line:
+.br
+\fB# timecode format v1\fR
+.br
+The second line gives the default number of frames per second:
+.br
+\fBassume 27.930\fR
+.br
+All following lines contain three numbers separated by commas: the
+start frame (0 is the first frame), the end frame and the number of
+frames in this range. The FPS is a floating point number with the dot
+'.' as the decimal point. The ranges can contain gaps for which the
+default FPS is used. Example:
+.br
+\fB800,1000,25\fR
+.br
+\fB1500,1700,30\fR
+.LP
+\fBTimecode file format v2\fR
+.LP
+In this format each line contains a timecode for the next frame. This
+timecode must be given in ms precision. It can be a floating point number,
+but it doesn't have to be. You \fBmust\fR give at least as many timecode
+lines as there are frames in the track. Example for 25fps:
+.br
+\fB# timecode format v2\fR
+.br
+\fB0\fR
+.br
+\fB40\fR
+.br
+\fB80\fR
+.br
+etc.
+
 
 .SH NOTES
 .LP

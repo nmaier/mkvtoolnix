@@ -204,10 +204,12 @@ protected:
   int hcompression;
   compression_c *compressor;
 
-  vector<timecode_range_c> *ext_timecodes;
+  vector<timecode_range_c> *timecode_ranges;
+  vector<int64_t> *ext_timecodes;
   uint32_t current_tc_range;
   int64_t frameno;
   int ext_timecodes_version;
+  bool ext_timecodes_warning_printed;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
@@ -282,6 +284,8 @@ public:
 
   virtual int64_t get_next_timecode(int64_t timecode);
   virtual void parse_ext_timecode_file(const char *name);
+  virtual void parse_ext_timecode_file_v1(mm_io_c *in, const char *name);
+  virtual void parse_ext_timecode_file_v2(mm_io_c *in, const char *name);
 
   virtual bool needs_negative_displacement(float duration);
   virtual bool needs_positive_displacement(float duration);
