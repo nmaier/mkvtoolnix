@@ -1307,29 +1307,33 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          }
          else if(lasttag == 2)
          {
-            WAVEFORMATEX wfe;
+            WAVEFORMATEX *wfe;
+	    char *nwfe;
             int wfes;
             
             if ((hdrl_len - i) < sizeof(WAVEFORMATEX))
               wfes = hdrl_len - i;
             else
               wfes = sizeof(WAVEFORMATEX);
-            memset(&wfe, 0, sizeof(WAVEFORMATEX));
-            memcpy(&wfe, hdrl_data + i, wfes);
-            AVI->wave_format_ex[AVI->aptr] =
-              (WAVEFORMATEX *)malloc(sizeof(WAVEFORMATEX) + wfe.cb_size);
-            if (AVI->wave_format_ex[AVI->aptr] != NULL) {
-              memcpy(AVI->wave_format_ex[AVI->aptr], &wfe,
-                     sizeof(WAVEFORMATEX));
-              if (wfe.cb_size > 0) {
-                off_t lpos = lseek(AVI->fdes, 0, SEEK_CUR);
-                lseek(AVI->fdes, header_offset + i + sizeof(WAVEFORMATEX),
-                      SEEK_SET);
-                read(AVI->fdes, AVI->wave_format_ex[AVI->aptr] +
-                     sizeof(WAVEFORMATEX), wfe.cb_size);
-                lseek(AVI->fdes, lpos, SEEK_SET);
-              }
-            }
+            wfe = (WAVEFORMATEX *)malloc(sizeof(WAVEFORMATEX));
+            if (wfe != NULL) {
+              memset(wfe, 0, sizeof(WAVEFORMATEX));
+	      memcpy(wfe, hdrl_data + i, wfes);
+	      if (wfe->cb_size != 0) {
+		nwfe = (char *)realloc(wfe, sizeof(WAVEFORMATEX) +
+				       wfe->cb_size);
+		if (nwfe != 0) {
+		  off_t lpos = lseek(AVI->fdes, 0, SEEK_CUR);
+		  lseek(AVI->fdes, header_offset + i + sizeof(WAVEFORMATEX),
+			SEEK_SET);
+		  wfe = (WAVEFORMATEX *)nwfe;
+		  nwfe = &nwfe[sizeof(WAVEFORMATEX)];
+		  avi_read(AVI->fdes, nwfe, wfe->cb_size);
+		  lseek(AVI->fdes, lpos, SEEK_SET);
+		}
+	      }
+	      AVI->wave_format_ex[AVI->aptr] = wfe;
+	    }
 
             AVI->track[AVI->aptr].a_fmt   = str2ushort(hdrl_data+i  );
 
