@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.29 2003/05/01 22:38:54 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.30 2003/05/02 20:11:34 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -95,7 +95,7 @@ public:
                       int64_t bref = -1, int64_t fref = -1) = 0;
 
   virtual void set_cue_creation(int create_cue_data);
-  virtual int  get_cue_creation();
+  virtual int get_cue_creation();
 
   virtual KaxTrackEntry *get_track_entry();
 
@@ -125,10 +125,10 @@ protected:
 public:
   generic_reader_c(track_info_t *nti);
   virtual ~generic_reader_c();
-  virtual int       read() = 0;
+  virtual int read() = 0;
   virtual packet_t *get_packet() = 0;
-  virtual int       display_priority() = 0;
-  virtual void      display_progress() = 0;
+  virtual int display_priority() = 0;
+  virtual void display_progress() = 0;
 };
 
 track_info_t *duplicate_track_info(track_info_t *src);

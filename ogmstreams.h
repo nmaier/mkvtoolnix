@@ -79,6 +79,8 @@ typedef struct stream_header
   ogg_int32_t buffersize;
   ogg_int16_t bits_per_sample;
 
+  ogg_int16_t padding;
+
   union
   {
     // Video specific
@@ -86,8 +88,6 @@ typedef struct stream_header
     // Audio specific
     stream_header_audio  audio;
   } sh;
-
-  int unknown;
 } stream_header;
 
 /// Some defines from OggDS

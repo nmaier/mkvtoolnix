@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.14 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.15 2003/05/02 20:11:34 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,6 +31,8 @@
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
+
+using namespace LIBMATROSKA_NAMESPACE;
 
 ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)
@@ -62,7 +64,7 @@ void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 }
 
 int ac3_packetizer_c::ac3_packet_available() {
-  int           pos;
+  int pos;
   ac3_header_t  ac3header;
   
   if (packet_buffer == NULL)
@@ -153,8 +155,6 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
 }
 
 void ac3_packetizer_c::set_header() {
-  using namespace LIBMATROSKA_NAMESPACE;
-
   set_serial(-1);
   set_track_type(track_audio);
   set_codec_id(MKV_A_AC3);

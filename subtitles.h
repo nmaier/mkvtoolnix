@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.h,v 1.1 2003/03/06 23:39:40 mosu Exp $
+    \version \$Id: subtitles.h,v 1.2 2003/05/02 20:11:34 mosu Exp $
     \brief class definition for the subtitle helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,9 +25,9 @@
 #include "p_textsubs.h"
 
 typedef struct sub_t {
-  int64_t  start, end;
-  char    *subs;
-  sub_t   *next;
+  int64_t start, end;
+  char *subs;
+  sub_t *next;
 } sub_t;
 
 class subtitles_c {
@@ -37,9 +37,9 @@ public:
   subtitles_c();
   ~subtitles_c();
   
-  void   add(int64_t, int64_t, char *);
-  int    check();
-  void   process(textsubs_packetizer_c *);
+  void add(int64_t, int64_t, char *);
+  int check();
+  void process(textsubs_packetizer_c *);
   sub_t *get_next();
 };
 

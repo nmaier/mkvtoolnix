@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.9 2003/04/24 20:36:45 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.10 2003/05/02 20:11:34 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,6 +32,8 @@
 #include <dmalloc.h>
 #endif
 
+using namespace LIBMATROSKA_NAMESPACE;
+
 textsubs_packetizer_c::textsubs_packetizer_c(track_info_t *nti)
   throw (error_c): generic_packetizer_c(nti) {
   packetno = 0;
@@ -42,8 +44,6 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
 }
 
 void textsubs_packetizer_c::set_header() {
-  using namespace LIBMATROSKA_NAMESPACE;
-
   set_serial(-1);
   set_track_type(track_subtitle);
   if (ti->no_utf8_subs)

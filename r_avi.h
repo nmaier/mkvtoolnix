@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.11 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_avi.h,v 1.12 2003/05/02 20:11:34 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -38,42 +38,37 @@ extern "C" {
 
 typedef struct avi_demuxer_t {
   generic_packetizer_c *packetizer;
-  int                   channels, bits_per_sample, samples_per_second;
-  int                   aid;
-  int                   eos;
-  int64_t               bytes_processed;
-  avi_demuxer_t        *next;
+  int channels, bits_per_sample, samples_per_second;
+  int aid;
+  int eos;
+  int64_t bytes_processed;
+  avi_demuxer_t *next;
 } avi_demuxer_t;
 
 class avi_reader_c: public generic_reader_c {
 private:
-  unsigned char      *chunk, *old_chunk;
-  avi_t              *avi;
+  unsigned char *chunk, *old_chunk;
+  avi_t *avi;
   video_packetizer_c *vpacketizer;
-  avi_demuxer_t      *ademuxers;
-  double              fps;
-  int                 frames;
-  int                 max_frame_size;
-  int                 act_wchar;
-  int                 old_key, old_nread;
-  int                 video_done, maxframes;
-  int                 is_divx, rederive_keyframes;
+  avi_demuxer_t *ademuxers;
+  double fps;
+  int frames, max_frame_size, act_wchar, old_key, old_nread;
+  int video_done, maxframes, is_divx, rederive_keyframes;
      
 public:
   avi_reader_c(track_info_t *nti) throw (error_c);
   virtual ~avi_reader_c();
 
-  virtual int       read();
+  virtual int read();
   virtual packet_t *get_packet();
-  virtual int       display_priority();
-  virtual void      display_progress();
+  virtual int display_priority();
+  virtual void display_progress();
 
-  static int        probe_file(FILE *file, int64_t size);
+  static int probe_file(FILE *file, int64_t size);
     
 private:
-  virtual int       add_audio_demuxer(avi_t *avi, int aid);
-  virtual int       is_keyframe(unsigned char *data, long size,
-                                int suggestion);
+  virtual int add_audio_demuxer(avi_t *avi, int aid);
+  virtual int is_keyframe(unsigned char *data, long size, int suggestion);
 };
 
 #endif  // __R_AVI_H

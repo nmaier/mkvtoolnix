@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.10 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.11 2003/05/02 20:11:34 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -120,11 +120,6 @@ packet_t *wav_reader_c::get_packet() {
 int wav_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
-
-// void wav_reader_c::reset() {
-//   if (pcmpacketizer != NULL)
-//     pcmpacketizer->reset();
-// }
 
 void wav_reader_c::display_progress() {
   int samples = (wheader.riff.len - sizeof(wheader) + 8) / bps;

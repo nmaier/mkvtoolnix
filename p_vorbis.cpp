@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.14 2003/04/22 20:25:21 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.15 2003/05/02 20:11:34 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,6 +39,8 @@
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
+
+using namespace LIBMATROSKA_NAMESPACE;
 
 vorbis_packetizer_c::vorbis_packetizer_c(unsigned char *d_header, int l_header,
                                          unsigned char *d_comments,
@@ -84,10 +86,7 @@ vorbis_packetizer_c::~vorbis_packetizer_c() {
       free(headers[i].packet);
 }
 
-#define AVORBIS "A_VORBIS"
-
 void vorbis_packetizer_c::set_header() {
-  using namespace LIBMATROSKA_NAMESPACE;
   unsigned char *buffer;
   int n, offset, i, lsize;
   

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.16 2003/04/20 21:18:51 mosu Exp $
+    \version \$Id: queue.cpp,v 1.17 2003/05/02 20:11:34 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -117,7 +117,7 @@ int64_t q_c::get_smallest_timecode() {
 }
 
 long q_c::get_queued_bytes() {
-  long      bytes;
+  long bytes;
   q_page_t *cur;
   
   bytes = 0;

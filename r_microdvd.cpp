@@ -34,7 +34,7 @@
 
 int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
-  int  i;
+  int i;
   
   if (fseek(file, 0, SEEK_SET) != 0)
     return 0;

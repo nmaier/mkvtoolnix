@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.49 2003/05/01 22:38:54 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.50 2003/05/02 20:11:34 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -430,11 +430,10 @@ static void render_head(StdIOCallback *out) {
 }
 
 static void parse_args(int argc, char **argv) {
-  track_info_t     ti;
-  int              i, j;
-  int              noaudio, novideo, nosubs;
-  filelist_t      *file;
-  char            *s;
+  track_info_t ti;
+  int i, j, noaudio, novideo, nosubs;
+  filelist_t *file;
+  char *s;
 
   noaudio = 0;
   novideo = 0;

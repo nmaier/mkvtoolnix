@@ -29,34 +29,32 @@
 
 class vobsub_reader_c: public generic_reader_c {
 private:
-  char                  chunk[2048];
-  FILE                 *file, *subfile;
-  vobsub_packetizer_c  *vobsub_packetizer;
-  vobsub_packetizer_c **all_packetizers;
-  int                   num_packetizers;
-  int                   act_wchar;
-  char                **comments;
+  char chunk[2048];
+  FILE *file, *subfile;
+  vobsub_packetizer_c  *vobsub_packetizer, **all_packetizers;
+  int num_packetizers, act_wchar;
+  char **comments;
      
 public:
   vobsub_reader_c(char *fname, track_info_t *nti) throw (error_c);
   virtual ~vobsub_reader_c();
 
-  virtual int              read();
-  virtual int              serial_in_use(int);
+  virtual int read();
+  virtual int serial_in_use(int);
   virtual ogmmerge_page_t *get_page();
   virtual ogmmerge_page_t *get_header_page(int header_type =
                                            PACKET_TYPE_HEADER);
     
-  virtual void             reset();
-  virtual int              display_priority();
-  virtual void             display_progress();
+  virtual void reset();
+  virtual int display_priority();
+  virtual void display_progress();
 
-  static int               probe_file(FILE *file, int64_t size);
+  static int probe_file(FILE *file, int64_t size);
 
 private:
-  virtual void             add_vobsub_packetizer(int width, int height,
-                                                 char *palette, int langidx,
-                                                 char *id, int index);
+  virtual void add_vobsub_packetizer(int width, int height,
+                                     char *palette, int langidx,
+                                     char *id, int index);
 };
 
 #endif  // __R_VOBSUB_H

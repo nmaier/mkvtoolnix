@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.12 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.13 2003/05/02 20:11:34 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,8 +39,8 @@ extern "C" {
 #endif
 
 int ac3_reader_c::probe_file(FILE *file, int64_t size) { 
-  char         buf[4096];
-  int          pos;
+  char buf[4096];
+  int pos;
   ac3_header_t ac3header;
   
   if (size < 4096)
@@ -62,7 +62,7 @@ int ac3_reader_c::probe_file(FILE *file, int64_t size) {
 
 ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  int          pos;
+  int pos;
   ac3_header_t ac3header;
   
   if ((file = fopen(ti->fname, "r")) == NULL)

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.10 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_ogm.h,v 1.11 2003/05/02 20:11:34 mosu Exp $
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,54 +37,46 @@
 #define OGM_STREAM_TYPE_TEXT    6
 
 typedef struct {
-  ogg_stream_state      os;
+  ogg_stream_state os;
   generic_packetizer_c *packetizer;
-  int                   sid;
-  int                   stype;
-  int                   eos;
-  int                   serial;
-  int                   units_processed;
-  int                   num_packets;
-  int                   packet_sizes[3];
-  unsigned char        *packet_data[3];
-  int                   vorbis_rate;
+  int sid, stype, serial, eos;
+  int units_processed, num_packets, vorbis_rate, packet_sizes[3];
+  unsigned char *packet_data[3];
 } ogm_demuxer_t;
 
 class ogm_reader_c: public generic_reader_c {
 private:
-  ogg_sync_state    oy;
-  FILE             *file;
-  int               act_wchar;
+  ogg_sync_state oy;
+  FILE *file;
+  int act_wchar, num_sdemuxers, nastreams, nvstreams, ntstreams, numstreams;
   ogm_demuxer_t   **sdemuxers;
-  int               num_sdemuxers;
-  int               nastreams, nvstreams, ntstreams, numstreams;
-  char            **comments;
-  int               bos_pages_read;
+  char **comments;
+  int bos_pages_read;
      
 public:
   ogm_reader_c(track_info_t *nti) throw (error_c);
   virtual ~ogm_reader_c();
 
-  virtual int            read();
-  virtual packet_t      *get_packet();
+  virtual int read();
+  virtual packet_t *get_packet();
 
-  virtual int            display_priority();
-  virtual void           display_progress();
+  virtual int display_priority();
+  virtual void display_progress();
   
-  static int             probe_file(FILE *file, int64_t size);
+  static int probe_file(FILE *file, int64_t size);
     
 private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);
-  virtual int            demuxing_requested(unsigned char *, int);
-  virtual int            read_page(ogg_page *);
-  virtual void           add_new_demuxer(ogm_demuxer_t *);
-  virtual void           handle_new_stream(ogg_page *);
-  virtual void           process_page(ogg_page *);
-  virtual int            packet_available();
-  virtual int            read_headers();
-  virtual void           process_header_page(ogg_page *);
-  virtual void           create_packetizers();
-  virtual void           free_demuxer(int);
+  virtual int demuxing_requested(unsigned char *, int);
+  virtual int read_page(ogg_page *);
+  virtual void add_new_demuxer(ogm_demuxer_t *);
+  virtual void handle_new_stream(ogg_page *);
+  virtual void process_page(ogg_page *);
+  virtual int packet_available();
+  virtual int read_headers();
+  virtual void process_header_page(ogg_page *);
+  virtual void create_packetizers();
+  virtual void free_demuxer(int);
 };
 
 

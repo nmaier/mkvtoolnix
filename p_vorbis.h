@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.h,v 1.9 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_vorbis.h,v 1.10 2003/05/02 20:11:34 mosu Exp $
     \brief class definition for the Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,12 +34,12 @@
 
 class vorbis_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t         last_bs, samples;
-  int             packetno;
-  audio_sync_t    async;
-  vorbis_info     vi;
-  vorbis_comment  vc;
-  ogg_packet      headers[3];
+  int64_t last_bs, samples;
+  int packetno;
+  audio_sync_t async;
+  vorbis_info vi;
+  vorbis_comment vc;
+  ogg_packet headers[3];
 public:
   vorbis_packetizer_c(unsigned char *d_header, int l_header,
                       unsigned char *d_comments, int l_comments,
@@ -47,9 +47,9 @@ public:
                       track_info_t *nti) throw (error_c);
   virtual ~vorbis_packetizer_c();
     
-  virtual int  process(unsigned char *data, int size, int64_t timecode = -1,
-                       int64_t length = -1, int64_t bref = -1,
-                       int64_t fref = -1);
+  virtual int process(unsigned char *data, int size, int64_t timecode = -1,
+                      int64_t length = -1, int64_t bref = -1,
+                      int64_t fref = -1);
   virtual void set_header();
 };
 

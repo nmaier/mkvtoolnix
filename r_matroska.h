@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.5 2003/04/21 10:06:48 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.6 2003/05/02 20:11:34 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@ using namespace LIBMATROSKA_NAMESPACE;
 #define MKVD_TIMECODESCALE 1000000 // 1000000 = 1ms
 
 typedef struct {
-  u_int32_t tnum;
+  uint32_t tnum;
   
   char *codec_id;
   int ms_compat;
@@ -45,20 +45,20 @@ typedef struct {
   char type; // 'v' = video, 'a' = audio, 't' = text subs
   
   // Parameters for video tracks
-  u_int32_t v_width, v_height;
+  uint32_t v_width, v_height;
   float v_frate;
   char v_fourcc[5];
 
   // Parameters for audio tracks
-  u_int32_t a_channels, a_bps;
+  uint32_t a_channels, a_bps;
   float a_sfreq;
-  u_int16_t a_formattag;
+  uint16_t a_formattag;
 
   void *private_data;
   unsigned int private_size;
 
   unsigned char *headers[3];
-  u_int32_t header_sizes[3];
+  uint32_t header_sizes[3];
 
   int64_t units_processed;
 
@@ -80,7 +80,7 @@ private:
   int num_tracks;
 
   int64_t tc_scale;
-  u_int32_t cluster_tc;
+  uint32_t cluster_tc;
 
   StdIOCallback *in;
 
@@ -101,25 +101,25 @@ public:
   mkv_reader_c(track_info_t *nti) throw (error_c);
   virtual ~mkv_reader_c();
 
-  virtual int          read();
-  virtual packet_t    *get_packet();
+  virtual int read();
+  virtual packet_t *get_packet();
 
-  virtual int          display_priority();
-  virtual void         display_progress();
+  virtual int display_priority();
+  virtual void display_progress();
   
-  static int           probe_file(FILE *file, int64_t size);
+  static int probe_file(FILE *file, int64_t size);
     
 private:
-  virtual int          demuxing_requested(mkv_track_t *t);
-  virtual int          read_headers();
-  virtual void         create_packetizers();
+  virtual int demuxing_requested(mkv_track_t *t);
+  virtual int read_headers();
+  virtual void create_packetizers();
   virtual mkv_track_t *new_mkv_track();
-  virtual mkv_track_t *find_track_by_num(u_int32_t num, mkv_track_t *c = NULL);
-  virtual void         verify_tracks();
-  virtual int          packets_available();
-  virtual void         add_buffer(DataBuffer &dbuffer);
-  virtual void         free_buffers();
-  virtual void         handle_blocks();
+  virtual mkv_track_t *find_track_by_num(uint32_t num, mkv_track_t *c = NULL);
+  virtual void verify_tracks();
+  virtual int packets_available();
+  virtual void add_buffer(DataBuffer &dbuffer);
+  virtual void free_buffers();
+  virtual void handle_blocks();
 };
 
 

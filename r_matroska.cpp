@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.15 2003/04/30 18:55:22 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.16 2003/05/02 20:11:34 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -190,7 +190,7 @@ mkv_track_t *mkv_reader_c::new_mkv_track() {
   return t;
 }
 
-mkv_track_t *mkv_reader_c::find_track_by_num(u_int32_t n, mkv_track_t *c) {
+mkv_track_t *mkv_reader_c::find_track_by_num(uint32_t n, mkv_track_t *c) {
   int i;
   
   for (i = 0; i < num_tracks; i++)
@@ -204,7 +204,7 @@ mkv_track_t *mkv_reader_c::find_track_by_num(u_int32_t n, mkv_track_t *c) {
 void mkv_reader_c::verify_tracks() {
   int tnum, i;
   unsigned char *c;
-  u_int32_t u, offset, length;
+  uint32_t u, offset, length;
   mkv_track_t *t;
   BITMAPINFOHEADER *bih;
   WAVEFORMATEX *wfe;
@@ -290,11 +290,11 @@ void mkv_reader_c::verify_tracks() {
 
             wfe = (WAVEFORMATEX *)t->private_data;
             u = get_uint32(&wfe->n_samples_per_sec);
-            if (((u_int32_t)t->a_sfreq) != u) {
+            if (((uint32_t)t->a_sfreq) != u) {
               printf("[mkv] WARNING: (MS compatibility mode for track %u) "
                      "Matroska says that there are %u samples per second, "
                      "but WAVEFORMATEX says that there are %u.\n", t->tnum,
-                     (u_int32_t)t->a_sfreq, u);
+                     (uint32_t)t->a_sfreq, u);
               if (t->a_sfreq == 0.0)
                 t->a_sfreq = (float)u;
             }

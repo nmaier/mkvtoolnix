@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.16 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.17 2003/05/02 20:11:34 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,6 +31,8 @@
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
+
+using namespace LIBMATROSKA_NAMESPACE;
 
 mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)
@@ -63,8 +65,8 @@ void mp3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 
 int mp3_packetizer_c::mp3_packet_available() {
   unsigned long header;
-  int           pos;
-  mp3_header_t  mp3header;
+  int pos;
+  mp3_header_t mp3header;
   
   if (packet_buffer == NULL)
     return 0;
@@ -153,8 +155,6 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
 }
 
 void mp3_packetizer_c::set_header() {
-  using namespace LIBMATROSKA_NAMESPACE;
-
   set_serial(-1);
   set_track_type(track_audio);
   set_codec_id(MKV_A_MP3);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.16 2003/04/29 16:23:12 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.17 2003/05/02 20:11:34 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,6 +32,8 @@
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
+
+using namespace LIBMATROSKA_NAMESPACE;
 
 pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
@@ -58,8 +60,6 @@ pcm_packetizer_c::~pcm_packetizer_c() {
 }
 
 void pcm_packetizer_c::set_header() {
-  using namespace LIBMATROSKA_NAMESPACE;
-
   set_serial(-1);
   set_track_type(track_audio);
   set_codec_id(MKV_A_PCM);

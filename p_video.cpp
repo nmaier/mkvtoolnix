@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.27 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.28 2003/05/02 20:11:34 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,6 +33,8 @@
 #include <dmalloc.h>
 #endif
 
+using namespace LIBMATROSKA_NAMESPACE;
+
 video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int navi_compat_mode, track_info_t *nti)
@@ -51,8 +53,6 @@ video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
 }
 
 void video_packetizer_c::set_header() {
-  using namespace LIBMATROSKA_NAMESPACE;
-
   set_serial(-1);
   set_track_type(track_video);
   set_codec_id(MKV_V_MSCOMP);

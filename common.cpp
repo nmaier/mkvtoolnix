@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.12 2003/04/27 09:14:47 mosu Exp $
+    \version \$Id: common.cpp,v 1.13 2003/05/02 20:11:34 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -41,8 +41,8 @@ void _trace(const char *func, const char *file, int line) {
  * Endianess stuff
  */
 
-u_int16_t get_uint16(const void *buf) {
-  u_int16_t      ret;
+uint16_t get_uint16(const void *buf) {
+  uint16_t ret;
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -53,8 +53,8 @@ u_int16_t get_uint16(const void *buf) {
   return ret;
 }
 
-u_int32_t get_uint32(const void *buf) {
-  u_int32_t      ret;
+uint32_t get_uint32(const void *buf) {
+  uint32_t ret;
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;

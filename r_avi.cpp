@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.21 2003/04/20 19:32:11 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.22 2003/05/02 20:11:34 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -64,12 +64,11 @@ int avi_reader_c::probe_file(FILE *file, int64_t size) {
  */
 avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  int            fsize, i;
-  int64_t        size;
-  FILE          *f;
-  int            extract_video = 1;
+  int fsize, i, extract_video = 1;
+  int64_t size;
+  FILE *f;
   avi_demuxer_t *demuxer;
-  char          *codec;
+  char *codec;
 
   if ((f = fopen(ti->fname, "r")) == NULL)
     throw error_c("avi_reader: Could not open source file.");
@@ -325,8 +324,6 @@ int avi_reader_c::read() {
   
   need_more_data = 0;
   if ((vpacketizer != NULL) && !video_done) {
-/*    if (frames == 0)
-      vpacketizer->set_chapter_info(chapter_info);*/
     last_frame = 0;
     while (!vpacketizer->packet_available() && !last_frame) {
       done = 0;
@@ -427,7 +424,7 @@ int avi_reader_c::read() {
 
 packet_t *avi_reader_c::get_packet() {
   generic_packetizer_c *winner;
-  avi_demuxer_t        *demuxer;
+  avi_demuxer_t *demuxer;
   
   winner = NULL;
   

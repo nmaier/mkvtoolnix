@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.15 2003/04/20 21:18:51 mosu Exp $
+    \version \$Id: queue.h,v 1.16 2003/05/02 20:11:34 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -40,14 +40,14 @@ typedef struct packet_t {
 
 // q_page_t is used internally only
 typedef struct q_page {
-  packet_t      *pack;
+  packet_t *pack;
   struct q_page *next;
 } q_page_t;
 
 class q_c {
 private:
-  static int64_t  id;
-  struct q_page  *first, *current;
+  static int64_t id;
+  struct q_page *first, *current;
   
 public:
   q_c();

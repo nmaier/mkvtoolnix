@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.21 2003/04/20 19:32:11 mosu Exp $
+    \version \$Id: p_video.h,v 1.22 2003/05/02 20:11:34 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,19 +31,18 @@
 
 class video_packetizer_c: public generic_packetizer_c {
 private:
-  double         fps;
-  int            width, height, bpp;
-  int            frames_output, avi_compat_mode;
-  int64_t        ref_timecode;
+  double fps;
+  int width, height, bpp, frames_output, avi_compat_mode;
+  int64_t ref_timecode;
 
 public:
   video_packetizer_c(double nfps, int nwidth, int nheight, int nbpp,
                      int navi_compat_mode, track_info_t *nti) throw (error_c);
   virtual ~video_packetizer_c();
     
-  virtual int  process(unsigned char *buf, int size, int64_t old_timecode = -1,
-                       int64_t flags = VFT_IFRAME, int64_t bref = -1,
-                       int64_t fref = -1);
+  virtual int process(unsigned char *buf, int size, int64_t old_timecode = -1,
+                      int64_t flags = VFT_IFRAME, int64_t bref = -1,
+                      int64_t fref = -1);
   virtual void set_header();
 };
 

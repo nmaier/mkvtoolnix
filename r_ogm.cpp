@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.18 2003/04/22 13:39:44 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.19 2003/05/02 20:11:34 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -383,12 +383,12 @@ int ogm_reader_c::packet_available() {
  * stream type and store the needed data in a new ogm_demuxer_t.
  */
 void ogm_reader_c::handle_new_stream(ogg_page *og) {
-  ogg_stream_state  new_oss;
-  ogg_packet        op;
-  ogm_demuxer_t    *dmx;
-  stream_header    *sth;
-  char              buf[5];
-  u_int32_t         codec_id;
+  ogg_stream_state new_oss;
+  ogg_packet op;
+  ogm_demuxer_t *dmx;
+  stream_header *sth;
+  char buf[5];
+  uint32_t codec_id;
 
   if (ogg_stream_init(&new_oss, ogg_page_serialno(og))) {
     fprintf(stderr, "Error: ogm_reader: ogg_stream_init for stream number "
@@ -649,9 +649,9 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
  * codec data packets.
  */
 int ogm_reader_c::read_headers() {
-  int            done, i;
+  int done, i;
   ogm_demuxer_t *dmx;
-  ogg_page       og;
+  ogg_page og;
   
   done = 0;
   while (!done) {
@@ -691,9 +691,9 @@ int ogm_reader_c::read_headers() {
  * a page available OR that the corresponding stream is finished.
  */
 int ogm_reader_c::read() {
-  int            done, i;
+  int done, i;
   ogm_demuxer_t *dmx;
-  ogg_page       og;
+  ogg_page og;
   
   if (packet_available())
     return EMOREDATA;
@@ -738,8 +738,8 @@ int ogm_reader_c::read() {
 
 packet_t *ogm_reader_c::get_packet() {
   generic_packetizer_c *winner;
-  ogm_demuxer_t        *demuxer;
-  int                   i;
+  ogm_demuxer_t *demuxer;
+  int i;
   
   winner = NULL;
   

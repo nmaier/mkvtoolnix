@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.12 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.13 2003/05/02 20:11:34 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -26,21 +26,19 @@
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:
-  int            packetno;
-  int            bps, channels, bits_per_sample;
-  int64_t        bytes_output, remaining_sync;
-  unsigned long  samples_per_sec;
+  int packetno, bps, channels, bits_per_sample, tempbuf_size;
+  int64_t bytes_output, remaining_sync;
+  unsigned long samples_per_sec;
   unsigned char *tempbuf;
-  int            tempbuf_size;
   
 public:
   pcm_packetizer_c(unsigned long nsamples_per_sec, int nchannels,
                    int nbits_per_sample, track_info_t *nti) throw (error_c);
   virtual ~pcm_packetizer_c();
     
-  virtual int  process(unsigned char *buf, int size, int64_t timecode = -1,
-                       int64_t length = -1, int64_t bref = -1,
-                       int64_t fref = -1);
+  virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
+                      int64_t length = -1, int64_t bref = -1,
+                      int64_t fref = -1);
   virtual void set_header();
 };
 

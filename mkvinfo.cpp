@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.26 2003/05/01 22:38:54 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.27 2003/05/02 20:11:34 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -164,7 +164,7 @@ void process_file() {
   EbmlElement *l5 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
-  u_int64_t cluster_tc, tc_scale = TIMECODE_SCALE;
+  uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
 
   try {
     delete_object = 1;
