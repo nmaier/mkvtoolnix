@@ -52,6 +52,12 @@ using namespace std;
 #define ID_B_COPYTOCLIPBOARD 10022
 #define ID_TC_CMDLINE 10023
 #define ID_T_UPDATECMDLINE 10024
+#define ID_B_ADDATTACHMENT 10025
+#define ID_B_REMOVEATTACHMENT 10026
+#define ID_CB_MIMETYPE 10027
+#define ID_TC_DESCRIPTION 10028
+#define ID_CB_ATTACHMENTSTYLE 10029
+#define ID_LB_ATTACHMENTS 10030
 
 typedef struct {
   char type;
@@ -70,8 +76,14 @@ typedef struct {
   bool no_chapters;
 } mmg_file_t;
 
+typedef struct {
+  wxString *file_name, *description, *mime_type;
+  int style;
+} mmg_attachment_t;
+
 extern wxString last_open_dir;
-extern vector<mmg_file_t> *files;
+extern vector<mmg_file_t> files;
+extern vector<mmg_attachment_t> attachments;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString &source);
@@ -139,6 +151,30 @@ public:
   void audio_track_mode();
   void video_track_mode();
   void subtitle_track_mode();
+};
+
+class tab_attachments: public wxPanel {
+  DECLARE_CLASS(tab_attachments);
+  DECLARE_EVENT_TABLE();
+protected:
+  wxListBox *lb_attachments;
+  wxButton *b_add_attachment, *b_remove_attachment;
+  wxComboBox *cob_mimetype, *cob_style;
+  wxTextCtrl *tc_description;
+
+  int selected_attachment;
+
+  void on_add_attachment(wxCommandEvent &evt);
+  void on_remove_attachment(wxCommandEvent &evt);
+  void on_attachment_selected(wxCommandEvent &evt);
+  void on_description_changed(wxCommandEvent &evt);
+  void on_mimetype_changed(wxCommandEvent &evt);
+  void on_style_changed(wxCommandEvent &evt);
+
+  void enable(bool e);
+
+public:
+  tab_attachments(wxWindow *parent);
 };
 
 #endif // __MMG_DIALOG_H

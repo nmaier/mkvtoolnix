@@ -325,7 +325,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
     lb_input_files->Append(name);
 
     file.file_name = new wxString(dlg.GetPath());
-    files->push_back(file);
+    files.push_back(file);
   }
 }
 
@@ -338,7 +338,7 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
   if (selected_file == -1)
     return;
 
-  f = &(*files)[selected_file];
+  f = &files[selected_file];
   for (i = 0; i < f->tracks->size(); i++) {
     t = &(*f->tracks)[i];
     delete t->ctype;
@@ -352,9 +352,9 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
   }
   delete f->tracks;
   delete f->file_name;
-  eit = files->begin();
+  eit = files.begin();
   eit += selected_file;
-  files->erase(eit);
+  files.erase(eit);
   lb_input_files->Delete(selected_file);
   selected_file = -1;
   cb_no_chapters->Enable(false);
@@ -372,7 +372,7 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
   b_remove_file->Enable(true);
   cb_no_chapters->Enable(true);
   selected_file = lb_input_files->GetSelection();
-  f = &(*files)[selected_file];
+  f = &files[selected_file];
   cb_no_chapters->SetValue(f->no_chapters);
 
   clb_tracks->Clear();
@@ -393,7 +393,7 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
 
 void tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
   if (selected_file -1)
-    (*files)[selected_file].no_chapters = cb_no_chapters->GetValue();
+    files[selected_file].no_chapters = cb_no_chapters->GetValue();
 }
 
 void tab_input::on_track_selected(wxCommandEvent &evt) {
@@ -404,7 +404,7 @@ void tab_input::on_track_selected(wxCommandEvent &evt) {
     return;
 
   selected_track = clb_tracks->GetSelection();
-  f = &(*files)[selected_file];
+  f = &files[selected_file];
   t = &(*f->tracks)[selected_track];
 
   if (t->type == 'a')
@@ -432,7 +432,7 @@ void tab_input::on_track_enabled(wxCommandEvent &evt) {
   if (selected_file == -1)
     return;
 
-  f = &(*files)[selected_file];
+  f = &files[selected_file];
   for (i = 0; i < f->tracks->size(); i++)
     (*f->tracks)[i].enabled = clb_tracks->IsChecked(i);
 }
@@ -441,7 +441,7 @@ void tab_input::on_default_track_clicked(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  (*(*files)[selected_file].tracks)[selected_track].default_track =
+  (*files[selected_file].tracks)[selected_track].default_track =
     cb_default->GetValue();
 }
 
@@ -449,7 +449,7 @@ void tab_input::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  (*(*files)[selected_file].tracks)[selected_track].aac_is_sbr =
+  (*files[selected_file].tracks)[selected_track].aac_is_sbr =
     cb_aac_is_sbr->GetValue();
 }
 
@@ -457,7 +457,7 @@ void tab_input::on_language_selected(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  *(*(*files)[selected_file].tracks)[selected_track].language =
+  *(*files[selected_file].tracks)[selected_track].language =
     cob_language->GetValue();
 }
 
@@ -465,7 +465,7 @@ void tab_input::on_cues_selected(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  *(*(*files)[selected_file].tracks)[selected_track].cues =
+  *(*files[selected_file].tracks)[selected_track].cues =
     cob_cues->GetValue();
 }
 
@@ -473,7 +473,7 @@ void tab_input::on_subcharset_selected(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  *(*(*files)[selected_file].tracks)[selected_track].sub_charset =
+  *(*files[selected_file].tracks)[selected_track].sub_charset =
     cob_sub_charset->GetValue();
 }
 
@@ -486,7 +486,7 @@ void tab_input::on_browse_tags(wxCommandEvent &evt) {
                       "All Files (*.*)|*.*"), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    *(*(*files)[selected_file].tracks)[selected_track].tags = dlg.GetPath();
+    *(*files[selected_file].tracks)[selected_track].tags = dlg.GetPath();
     tc_tags->SetValue(dlg.GetPath());
   }
 }
@@ -495,7 +495,7 @@ void tab_input::on_delay_changed(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  *(*(*files)[selected_file].tracks)[selected_track].delay =
+  *(*files[selected_file].tracks)[selected_track].delay =
     tc_delay->GetValue();
 }
 
@@ -503,7 +503,7 @@ void tab_input::on_stretch_changed(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  *(*(*files)[selected_file].tracks)[selected_track].stretch =
+  *(*files[selected_file].tracks)[selected_track].stretch =
     tc_stretch->GetValue();
 }
 
@@ -511,7 +511,7 @@ void tab_input::on_track_name_changed(wxCommandEvent &evt) {
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  *(*(*files)[selected_file].tracks)[selected_track].track_name =
+  *(*files[selected_file].tracks)[selected_track].track_name =
     tc_track_name->GetValue();
 }
 

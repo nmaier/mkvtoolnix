@@ -30,7 +30,7 @@
 #include "common.h"
 
 wxString last_open_dir;
-vector<mmg_file_t> *files;
+vector<mmg_file_t> files;
 
 wxString &break_line(wxString &line, int break_after) {
   uint32_t i, chars;
@@ -80,6 +80,8 @@ wxString shell_escape(wxString &source) {
   for (i = 0; i < source.Length(); i++) {
     if (source[i] == '"')
       escaped += "\\\"";
+    else if (source[i] == '\\')
+      escaped += "\\\\";
     else
       escaped += source[i];
   }
@@ -87,8 +89,8 @@ wxString shell_escape(wxString &source) {
   return escaped;
 }
 
-mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI", wxPoint(0, 0),
-                                  wxSize(520, 700),
+mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
+                                  wxPoint(0, 0), wxSize(520, 700),
                                   wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
   wxBoxSizer *bs_main = new wxBoxSizer(wxVERTICAL);
   this->SetSizer(bs_main);
@@ -98,8 +100,10 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI", wxPoint(0, 0),
     new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500),
                    wxNB_TOP);
   tab_input *input_page = new tab_input(notebook);
+  tab_attachments *attachments_page = new tab_attachments(notebook);
 
   notebook->AddPage(input_page, _("Input"));
+  notebook->AddPage(attachments_page, _("Attachments"));
 
   bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
@@ -145,7 +149,6 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI", wxPoint(0, 0),
                                      wxDefaultSize, 0);
   bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-  files = new vector<mmg_file_t>;
   last_open_dir = "";
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
@@ -183,14 +186,15 @@ void mmg_dialog::update_command_line() {
   bool no_audio, no_video, no_subs;
   mmg_file_t *f;
   mmg_track_t *t;
+  mmg_attachment_t *a;
   wxString sid, old_cmdline;
 
   old_cmdline = cmdline;
   cmdline = "mkvmerge -o \"" + tc_output->GetValue() + "\" ";
 
   tracks_present = false;
-  for (fidx = 0; fidx < files->size(); fidx++) {
-    f = &(*files)[fidx];
+  for (fidx = 0; fidx < files.size(); fidx++) {
+    f = &files[fidx];
     tracks_present_here = false;
     no_audio = true;
     no_video = true;
@@ -270,6 +274,21 @@ void mmg_dialog::update_command_line() {
         cmdline += "--no-chapters ";
       cmdline += "\"" + *f->file_name + "\" ";
     }
+  }
+
+  for (fidx = 0; fidx < attachments.size(); fidx++) {
+    a = &attachments[fidx];
+
+    cmdline += "--attachment-mime-type \"" +
+      shell_escape(*a->mime_type) + "\" ";
+    if (a->description->Length() > 0)
+      cmdline += "--attachment-description \"" +
+        shell_escape(*a->description) + "\" ";
+    if (a->style == 0)
+      cmdline += "--attach-file \"";
+    else
+      cmdline += "--attach-file-once \"";
+    cmdline += shell_escape(*a->file_name) + "\" ";
   }
 
   if (old_cmdline != cmdline)
