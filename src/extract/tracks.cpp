@@ -249,7 +249,7 @@ check_output_files() {
           tracks[i].header_sizes[2] = tracks[i].private_size -
             offset - tracks[i].header_sizes[0] - tracks[i].header_sizes[1];
 
-        } else if (!strcmp(tracks[i].codec_id, MKV_A_MP3))
+        } else if (!strncmp(tracks[i].codec_id, MKV_A_MP3, 8))
           tracks[i].type = TYPEMP3;
         else if (!strcmp(tracks[i].codec_id, MKV_A_AC3))
           tracks[i].type = TYPEAC3;
