@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.15 2003/04/18 23:17:42 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.16 2003/04/20 20:38:56 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -144,20 +144,17 @@ static void parse_args(int argc, char **argv) {
 }
 
 void process_file() {
-//   track_t *t;
   int upper_lvl_el, exit_loop, i, delete_object;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   EbmlElement *l5 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
-  int64_t last_pos;
   u_int64_t cluster_tc, tc_scale = TIMECODE_SCALE;
 
   try {
     delete_object = 1;
 
-    last_pos = 0;
     es = new EbmlStream(static_cast<StdIOCallback &>(*in));
     if (es == NULL)
       die("new EbmlStream");
@@ -174,7 +171,6 @@ void process_file() {
     fprintf(stdout, "(%s) + EBML head\n", NAME);
     
     // Next element must be a segment
-    last_pos = in->getFilePointer();
     l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL, false);
     if (l0 == NULL) {
       fprintf(stdout, "(%s) No segment/level 0 element found.\n", NAME);
@@ -186,13 +182,12 @@ void process_file() {
     }
     fprintf(stdout, "(%s) + segment", NAME);
     if (verbose > 1)
-      fprintf(stdout, " at %llu", last_pos);
+      fprintf(stdout, " at %llu", l0->GetElementPosition());
     fprintf(stdout, "\n");
     
     upper_lvl_el = 0;
     exit_loop = 0;
     // We've got our segment, so let's find the tracks
-    last_pos = in->getFilePointer();
     l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                         true);
     while (l1 != NULL) {
@@ -203,10 +198,9 @@ void process_file() {
         // General info about this Matroska file
         fprintf(stdout, "(%s) |+ segment information", NAME);
         if (verbose > 1)
-          fprintf(stdout, " at %llu", last_pos);
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
 
-        last_pos = in->getFilePointer();
         l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                             true);
         while (l2 != NULL) {
@@ -219,7 +213,7 @@ void process_file() {
             tc_scale = uint64(ktc_scale);
             fprintf(stdout, "(%s) | + timecode scale: %llu", NAME, tc_scale);
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
           } else if (EbmlId(*l2) == KaxDuration::ClassInfos.GlobalId) {
@@ -228,14 +222,14 @@ void process_file() {
             fprintf(stdout, "(%s) | + Duration: %.3fs", NAME,
                     float(duration) * tc_scale / 1000000000.0);
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
           } else {
             fprintf(stdout, "(%s) | + unknown element, level2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
           }
 
@@ -249,7 +243,6 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            last_pos = in->getFilePointer();
             l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, true);
           }
@@ -260,10 +253,9 @@ void process_file() {
         // contained in this segment.
         fprintf(stdout, "(%s) |+ segment tracks", NAME);
         if (verbose > 1)
-          fprintf(stdout, " at %llu", last_pos);
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
         
-        last_pos = in->getFilePointer();
         l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                             true);
         while (l2 != NULL) {
@@ -274,10 +266,9 @@ void process_file() {
             // We actually found a track entry :) We're happy now.
             fprintf(stdout, "(%s) | + a track", NAME);
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            last_pos = in->getFilePointer();
             l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, true);
             while (l3 != NULL) {
@@ -291,7 +282,7 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + Track number %d", NAME,
                         uint8(tnum));
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
                 if (find_track(uint8(tnum)) != NULL)
                   fprintf(stdout, "(%s) |  + Warning: There's more than one "
@@ -317,15 +308,14 @@ void process_file() {
                     break;
                 }
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
                 fprintf(stdout, "(%s) |  + Audio track", NAME);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
-                last_pos = in->getFilePointer();
                 l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
                                     0xFFFFFFFFL, true);
                 while (l4 != NULL) {
@@ -340,7 +330,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + Sampling frequency: %f",
                             NAME, float(freq));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -351,7 +341,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + Channels: %u", NAME,
                             uint8(channels));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -362,14 +352,14 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + Bit depth: %u", NAME,
                             uint8(bps));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else {
                     fprintf(stdout, "(%s) |   + unknown element, level 4: %s",
                             NAME, typeid(*l4).name());
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
                   }
 
@@ -379,7 +369,6 @@ void process_file() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    last_pos = in->getFilePointer();
                     l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
                                         0xFFFFFFFFL, true);
                   }
@@ -388,9 +377,8 @@ void process_file() {
               } else if (EbmlId(*l3) == KaxTrackVideo::ClassInfos.GlobalId) {
                 fprintf(stdout, "(%s) |  + Video track", NAME);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
-                last_pos = in->getFilePointer();
                 l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
                                     0xFFFFFFFFL, true);
                 while (l4 != NULL) {
@@ -404,7 +392,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + Pixel width: %u", NAME,
                             uint16(width));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -415,7 +403,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + Pixel height: %u", NAME,
                             uint16(height));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -426,14 +414,14 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + Frame rate: %f", NAME,
                             float(framerate));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else {
                     fprintf(stdout, "(%s) |   + unknown element, level 4: %s",
                             NAME, typeid(*l4).name());
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
                   }
 
@@ -443,7 +431,6 @@ void process_file() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    last_pos = in->getFilePointer();
                     l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
                                         0xFFFFFFFFL, true);
                   }
@@ -455,7 +442,7 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + Codec ID: %s", NAME,
                         &binary(codec_id));
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
@@ -464,7 +451,7 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + CodecPrivate, length %llu",
                         NAME, c_priv.GetSize());
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else if (EbmlId(*l3) ==
@@ -475,7 +462,7 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + MinCache: %u", NAME,
                         uint32(min_cache));
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else if (EbmlId(*l3) ==
@@ -486,14 +473,14 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + MaxCache: %u", NAME,
                         uint32(max_cache));
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else {
                 fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
                         NAME, typeid(*l3).name());
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
               }
 
@@ -507,7 +494,6 @@ void process_file() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                last_pos = in->getFilePointer();
                 l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
                                     0xFFFFFFFFL, true);
               }
@@ -517,7 +503,7 @@ void process_file() {
             fprintf(stdout, "(%s) | + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
           }
 
@@ -531,7 +517,6 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            last_pos = in->getFilePointer();
             l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, true);
           }
@@ -540,13 +525,12 @@ void process_file() {
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         fprintf(stdout, "(%s) |+ found cluster", NAME);
         if (verbose > 1)
-          fprintf(stdout, " at %llu", last_pos);
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
         if (verbose == 0)
           exit(0);
         cluster = (KaxCluster *)l1;
 
-        last_pos = in->getFilePointer();
         l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                             true);
         while (l2 != NULL) {
@@ -561,17 +545,16 @@ void process_file() {
             fprintf(stdout, "(%s) | + cluster timecode: %.3fs", NAME,
                     (float)cluster_tc * (float)tc_scale / 1000000000.0);
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
             cluster->InitTimecode(cluster_tc);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             fprintf(stdout, "(%s) | + block group", NAME);
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            last_pos = in->getFilePointer();
             l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, false);
             while (l3 != NULL) {
@@ -587,7 +570,7 @@ void process_file() {
                         block.NumberFrames(),
                         (float)block.Timecod() / 1000000000.0);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
                 for (i = 0; i < (int)block.NumberFrames(); i++) {
                   DataBuffer &data = block.GetBuffer(i);
@@ -604,7 +587,7 @@ void process_file() {
                         ((float)uint64(duration)) * tc_scale /
                         1000000000000.0);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else if (EbmlId(*l3) ==
@@ -616,14 +599,14 @@ void process_file() {
                         ((float)int64(reference)) * tc_scale /
                         1000000000000.0);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else {
                  fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
                          NAME, typeid(*l3).name());
                  if (verbose > 1)
-                   fprintf(stdout, " at %llu", last_pos);
+                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                  fprintf(stdout, "\n");
               }
 
@@ -638,7 +621,6 @@ void process_file() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                last_pos = in->getFilePointer();
                 l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
                                     0xFFFFFFFFL, true);
               }
@@ -648,7 +630,7 @@ void process_file() {
             fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
           }
 
@@ -663,20 +645,17 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            last_pos = in->getFilePointer();
             l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, true);
-//             if (l2) printf("[mkv] [fb]? 2 : %s\n", typeid(*l2).name());
           }
         } // while (l2 != NULL)
 
       } else if (EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) {
         fprintf(stdout, "(%s) |+ found cues", NAME);
         if (verbose > 1)
-          fprintf(stdout, " at %llu", last_pos);
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
 
-        last_pos = in->getFilePointer();
         l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                             true);
         while (l2 != NULL) {
@@ -686,10 +665,9 @@ void process_file() {
           if (EbmlId(*l2) == KaxCuePoint::ClassInfos.GlobalId) {
             fprintf(stdout, "(%s) | + found cue point", NAME);
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            last_pos = in->getFilePointer();
             l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, true);
             while (l3 != NULL) {
@@ -701,19 +679,17 @@ void process_file() {
                 cue_time.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + found cue time: %llu", NAME,
                         uint64(cue_time));
-//                         ((float)uint64(cue_time)) * tc_scale / 1000000000.0);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
               } else if (EbmlId(*l3) ==
                          KaxCueTrackPositions::ClassInfos.GlobalId) {
                 fprintf(stdout, "(%s) |  + found cue track positions", NAME);
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
-                last_pos = in->getFilePointer();
                 l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
                                     0xFFFFFFFFL, true);
                 while (l4 != NULL) {
@@ -726,7 +702,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + found cue track: %u", NAME,
                             uint32(cue_track));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -737,7 +713,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + found cue cluster position: "
                             "%llu", NAME, uint64(cue_cp));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -748,7 +724,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + found cue block number: %llu",
                             NAME, uint64(cue_bn));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
@@ -759,18 +735,17 @@ void process_file() {
                     fprintf(stdout, "(%s) |   + found cue codec state: %llu",
                             NAME, uint64(cue_cs));
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
                   } else if (EbmlId(*l4) ==
                              KaxCueReference::ClassInfos.GlobalId) {
                     fprintf(stdout, "(%s) |  + found cue reference", NAME);
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
 
 
-                    last_pos = in->getFilePointer();
                     l5 = es->FindNextID(l4->Generic().Context, upper_lvl_el,
                                         0xFFFFFFFFL, true);
                     while (l5 != NULL) {
@@ -780,11 +755,13 @@ void process_file() {
                       if (EbmlId(*l5) == KaxCueRefTime::ClassInfos.GlobalId) {
                         KaxCueRefTime &cue_rt =
                           *static_cast<KaxCueRefTime *>(l5);
-                        fprintf(stdout, "(%s) |    + found cue ref time: %.3fs",
-                                NAME, ((float)uint64(cue_rt)) * tc_scale /
+                        fprintf(stdout, "(%s) |    + found cue ref time: "
+                                "%.3fs", NAME,
+                                ((float)uint64(cue_rt)) * tc_scale /
                                 1000000000.0);
                         if (verbose > 1)
-                          fprintf(stdout, " at %llu", last_pos);
+                          fprintf(stdout, " at %llu",
+                                  l5->GetElementPosition());
                         fprintf(stdout, "\n");
 
                       } else if (EbmlId(*l5) ==
@@ -795,7 +772,8 @@ void process_file() {
                         fprintf(stdout, "(%s) |    + found cue ref cluster: "
                                 "%llu", NAME, uint64(cue_rc));
                         if (verbose > 1)
-                          fprintf(stdout, " at %llu", last_pos);
+                          fprintf(stdout, " at %llu",
+                                  l5->GetElementPosition());
                         fprintf(stdout, "\n");
 
                       } else if (EbmlId(*l5) ==
@@ -806,7 +784,8 @@ void process_file() {
                         fprintf(stdout, "(%s) |    + found cue ref number: "
                                 "%llu", NAME, uint64(cue_rn));
                         if (verbose > 1)
-                          fprintf(stdout, " at %llu", last_pos);
+                          fprintf(stdout, " at %llu",
+                                  l5->GetElementPosition());
                         fprintf(stdout, "\n");
 
                       } else if (EbmlId(*l5) ==
@@ -817,14 +796,16 @@ void process_file() {
                         fprintf(stdout, "(%s) |    + found cue ref codec state"
                                 ": %llu", NAME, uint64(cue_rcs));
                         if (verbose > 1)
-                          fprintf(stdout, " at %llu", last_pos);
+                          fprintf(stdout, " at %llu",
+                                  l5->GetElementPosition());
                         fprintf(stdout, "\n");
 
                       } else {
                         fprintf(stdout, "(%s) |    + unknown element, "
                                 "level 5: %s", NAME, typeid(*l5).name());
                         if (verbose > 1)
-                          fprintf(stdout, " at %llu", last_pos);
+                          fprintf(stdout, " at %llu",
+                                  l5->GetElementPosition());
                         fprintf(stdout, "\n");
                       }
 
@@ -835,7 +816,6 @@ void process_file() {
                         l5->SkipData(static_cast<EbmlStream &>(*es),
                                      l5->Generic().Context);
                         delete l5;
-                        last_pos = in->getFilePointer();
                         l5 = es->FindNextID(l4->Generic().Context,
                                             upper_lvl_el, 0xFFFFFFFFL, true);
                       }
@@ -845,7 +825,7 @@ void process_file() {
                     fprintf(stdout, "(%s) |  + unknown element, level 4: %s",
                             NAME, typeid(*l4).name());
                     if (verbose > 1)
-                      fprintf(stdout, " at %llu", last_pos);
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
                     fprintf(stdout, "\n");
                   }
 
@@ -860,7 +840,6 @@ void process_file() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    last_pos = in->getFilePointer();
                     l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
                                         0xFFFFFFFFL, true);
                   }
@@ -870,7 +849,7 @@ void process_file() {
                 fprintf(stdout, "(%s) |  + unknown element, level 3: %s", NAME,
                         typeid(*l3).name());
                 if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
               }
 
@@ -885,7 +864,6 @@ void process_file() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                last_pos = in->getFilePointer();
                 l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
                                     0xFFFFFFFFL, true);
               }
@@ -895,7 +873,7 @@ void process_file() {
             fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
             if (verbose > 1)
-              fprintf(stdout, " at %llu", last_pos);
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
           }
 
@@ -910,17 +888,15 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            last_pos = in->getFilePointer();
             l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
                                 0xFFFFFFFFL, true);
-//             if (l2) printf("[mkv] [fb]? 2 : %s\n", typeid(*l2).name());
           }
         } // while (l2 != NULL)
       } else {
         fprintf(stdout, "(%s) |+ unknown element, level 1: %s", NAME,
                 typeid(*l1).name());
         if (verbose > 1)
-          fprintf(stdout, " at %llu", last_pos);
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
       }
 
@@ -936,7 +912,6 @@ void process_file() {
       } else {
         l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
         delete l1;
-        last_pos = in->getFilePointer();
         l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                             true);
       }
