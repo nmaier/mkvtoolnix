@@ -82,7 +82,7 @@ typedef struct {
 
   unsigned char *buffered_data;
   int buffered_size;
-  int64_t packetno, last_end;
+  int64_t packetno, last_end, subpacketno;
   int header_sizes[3];
   unsigned char *headers[3];
 
