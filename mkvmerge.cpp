@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.76 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.77 2003/05/22 17:11:29 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -111,7 +111,7 @@ vector<packetizer_t *>packetizers;
 
 char *outfile = NULL;
 filelist_t *input= NULL;
-off_t file_sizes = 0;
+int64_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
 bool write_cues = true, cue_writing_requested = false;
@@ -130,7 +130,7 @@ KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
 
 bool write_meta_seek = true;
-int meta_seek_size = 0;
+int64_t meta_seek_size = 0;
 
 // Specs say that track numbers should start at 1.
 int track_number = 1;
@@ -591,6 +591,7 @@ static void render_headers(mm_io_callback *out) {
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
       cstr_to_UTFstring(VERSIONINFO);
 
+
     kax_segment->WriteHead(*out, 5);
 
     // Reserve some space for the meta seek stuff.
@@ -599,9 +600,11 @@ static void render_headers(mm_io_callback *out) {
       kax_seekhead_void = new EbmlVoid();
       if (meta_seek_size == 0)
         if (video_track_present)
-          meta_seek_size = (int)(file_sizes * 1.5 / 10240);
+          meta_seek_size =
+            (int64_t)((float)file_sizes * 1.5 / 10240.0);
         else
-          meta_seek_size = (int)(file_sizes * 3 / 4096);
+          meta_seek_size =
+            (int64_t)((float)file_sizes * 3 / 4096.0);
       kax_seekhead_void->SetSize(meta_seek_size);
       kax_seekhead_void->Render(*out);
     }
