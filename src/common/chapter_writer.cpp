@@ -231,6 +231,7 @@ write_xml_element_rec(int level,
   int elt_idx, i;
   bool found;
   char *s;
+  string x;
 
   elt_idx = parent_idx;
   found = false;
@@ -284,14 +285,15 @@ write_xml_element_rec(int level,
       break;
 
     case ebmlt_string:
-      o->printf("%s</%s>\n", string(*dynamic_cast<EbmlString *>(e)).c_str(),
-                chapter_elements[elt_idx].name);
+      x = escape_xml(string(*dynamic_cast<EbmlString *>(e)).c_str());
+      o->printf("%s</%s>\n", x.c_str(), chapter_elements[elt_idx].name);
       break;
 
     case ebmlt_ustring:
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
-      o->printf("%s</%s>\n", s, chapter_elements[elt_idx].name);
+      x = escape_xml(s);
+      o->printf("%s</%s>\n", x.c_str(), chapter_elements[elt_idx].name);
       safefree(s);
       break;
 

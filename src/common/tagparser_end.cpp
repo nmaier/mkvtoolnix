@@ -300,6 +300,7 @@ static void
 end_level2(parser_data_t *pdata,
            const char *name) {
   if (!strcmp(name, "Targets")) {
+    GetChild<KaxTagTargetTypeValue>(*pdata->targets);
     pdata->track_uid = NULL;
     pdata->chapter_uid = NULL;
     pdata->edition_uid = NULL;

@@ -33,25 +33,6 @@ using namespace std;
 static mm_io_c *o;
 
 // static void
-// print_tag(int level,
-//           const char *name,
-//           const char *fmt,
-//           ...) {
-//   int idx;
-//   va_list ap;
-//   string new_fmt;
-
-//   fix_format(fmt, new_fmt);
-//   for (idx = 0; idx < level; idx++)
-//     mxprint(o, "  ");
-//   mxprint(o, "<%s>", name);
-//   va_start(ap, fmt);
-//   vfprintf(o, fmt, ap);
-//   va_end(ap);
-//   mxprint(o, "</%s>\n", name);
-// }
-
-// static void
 // print_binary(int level,
 //              const char *name,
 //              EbmlElement *e) {
@@ -657,6 +638,7 @@ write_xml_element_rec(int level,
   int elt_idx, i;
   bool found;
   char *s;
+  string x;
 
   elt_idx = parent_idx;
   found = false;
@@ -710,14 +692,15 @@ write_xml_element_rec(int level,
       break;
 
     case ebmlt_string:
-      o->printf("%s</%s>\n", string(*dynamic_cast<EbmlString *>(e)).c_str(),
-                tag_elements[elt_idx].name);
+      x = escape_xml(string(*dynamic_cast<EbmlString *>(e)).c_str());
+      o->printf("%s</%s>\n", x.c_str(), tag_elements[elt_idx].name);
       break;
 
     case ebmlt_ustring:
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
-      o->printf("%s</%s>\n", s, tag_elements[elt_idx].name);
+      x = escape_xml(s);
+      o->printf("%s</%s>\n", x.c_str(), tag_elements[elt_idx].name);
       safefree(s);
       break;
 
