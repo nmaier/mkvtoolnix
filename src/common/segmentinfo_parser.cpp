@@ -105,7 +105,7 @@ parse_xml_segmentinfo(mm_text_io_c *in,
   if (error.length() > 0)
     throw error_c(error);
 
-  fix_mandatory_segmentinfo_elements(m);
+  fix_mandatory_segmentinfo_elements(info);
 
   return info;
 }
