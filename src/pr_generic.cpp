@@ -706,7 +706,8 @@ void generic_packetizer_c::parse_ext_timecode_file(const char *name) {
       !parse_int(&line.c_str()[strlen("# timecode format v")],
                  ext_timecodes_version))
     mxerror("The timcode file '%s' contains an unsupported/unrecognized "
-            "format.\n", name);
+            "format line. The very first line should be '# timecode format "
+            "v1'.\n", name);
   if (ext_timecodes_version != 1)
     mxerror("The timcode file '%s' contains an unsupported/unrecognized "
             "format (version %d).\n", name, ext_timecodes_version);
@@ -717,7 +718,7 @@ void generic_packetizer_c::parse_ext_timecode_file(const char *name) {
               "with the default FPS.\n", name);
     line_no++;
     strip(line);
-    if (line.length() != 0)
+    if ((line.length() != 0) && (line[0] != '#'))
       break;
   } while (true);
   if (!starts_with_case(line, "assume "))
