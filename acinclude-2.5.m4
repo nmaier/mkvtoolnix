@@ -533,6 +533,7 @@ AC_DEFUN(PATH_MINGW,
     AC_MSG_RESULT(no)
   else
     AC_MSG_RESULT(yes)
+    export MINGW=1
 dnl    MINGW_LIBS=-lcharset
   fi
   AC_SUBST(MINGW_LIBS)
@@ -634,9 +635,15 @@ AC_DEFUN(PATH_WXWINDOWS,
     echo $wxwver_ok )`
 
     if test "$wxwver_ok" = "1" ; then
-      WXWINDOWS_CFLAGS=$(wx-config --cxxflags)
-      WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
-      WXWINDOWS_LIBS=$(wx-config --libs)
+      if test "$MINGW" = "1" ; then
+        WXWINDOWS_CFLAGS=$(wx-config --cxxflags | sed 's;-I;-Ic:/cygwin;g')
+        WXWINDOWS_LDFLAGS=$(wx-config --ldflags | sed 's;-L;-Lc:/cygwin;g')
+        WXWINDOWS_LIBS=$(wx-config --libs | sed -e 's;-L;-Lc:/cygwin;g' -e 's; /usr/local/lib/libwx; c:/cygwin/usr/local/lib/libwx;g')
+      else
+        WXWINDOWS_CFLAGS=$(wx-config --cxxflags | sed 's;-I;-Ic:/cygwin;g')
+        WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
+        WXWINDOWS_LIBS=$(wx-config --libs)
+      fi
       echo '#define HAVE_WXWINDOWS 1' >> config.h
       AC_MSG_RESULT($wxwversion ok)
     else
