@@ -35,6 +35,8 @@ private:
   unsigned char *header;
   int l_header, sample_rate, channels, bits_per_sample;
   int64_t last_timecode;
+  memory_c *last_mem;
+  int64_t num_packets, avg_duration;
 
 public:
   flac_packetizer_c(generic_reader_c *nreader,
@@ -47,6 +49,7 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
+  virtual void flush();
 
   virtual void dump_debug_info();
 };

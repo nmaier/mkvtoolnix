@@ -970,7 +970,8 @@ generic_packetizer_c::get_next_timecode(int64_t timecode) {
   return timecode;
 }
 
-void generic_packetizer_c::displace(float by_ns) {
+void
+generic_packetizer_c::displace(float by_ns) {
   ti->async.displacement += (int64_t)by_ns;
   if (initial_displacement < 0) {
     if (ti->async.displacement < initial_displacement)
@@ -980,9 +981,27 @@ void generic_packetizer_c::displace(float by_ns) {
     initial_displacement = 0;
 }
 
+void
+generic_packetizer_c::force_duration_on_last_packet() {
+  packet_t *packet;
+
+  if (packet_queue.empty()) {
+    mxverb(2, "force_duration_on_last_packet: packet queue is empty for "
+           "'%s'/%lld\n", ti->fname, ti->id);
+    return;
+  }
+  packet = packet_queue.back();
+  packet->duration_mandatory = true;
+  mxverb(2, "force_duration_on_last_packet: forcing at " FMT_TIMECODE " with "
+         "%.3fms for '%s'/%lld\n", ARG_TIMECODE_NS(packet->timecode),
+         packet->duration / 1000.0, ti->fname, ti->id);
+}
+
 //--------------------------------------------------------------------
 
-bool generic_reader_c::demuxing_requested(char type, int64_t id) {
+bool
+generic_reader_c::demuxing_requested(char type,
+                                     int64_t id) {
   vector<int64_t> *tracks;
   int i;
 

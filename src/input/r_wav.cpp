@@ -192,7 +192,9 @@ wav_reader_c::read(generic_packetizer_c *) {
     if (nread != bps) {
       pcmpacketizer->flush();
       return 0;
-    } else
+    } else if (mm_io->eof())
+      return 0;
+    else
       return EMOREDATA;
   }
 

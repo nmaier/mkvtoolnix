@@ -62,6 +62,9 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
     l_header = nl_header;
   }
 
+  num_packets = 0;
+  avg_duration = 0;
+
   set_track_type(track_audio);
   if (use_durations)
     die("flac_packetizer: use_durations() not supported yet.\n");
@@ -91,14 +94,37 @@ flac_packetizer_c::process(memory_c &mem,
                            int64_t,
                            int64_t,
                            int64_t) {
+  int64_t duration, this_timecode;
+
   debug_enter("flac_packetizer_c::process");
   if (timecode == -1)
     timecode = last_timecode;
+  duration = timecode - last_timecode;
+  if (num_packets > 0)
+    avg_duration = (avg_duration * (num_packets - 1) + duration) /
+      num_packets;
+  num_packets++;
+  this_timecode = last_timecode;
   last_timecode = timecode;
-  add_packet(mem, timecode, 0);
+  if (last_mem == NULL) {
+    last_mem = mem.grab();
+    return EMOREDATA;
+  }
+  add_packet(*last_mem, this_timecode, duration);
+  delete last_mem;
+  last_mem = mem.grab();
   debug_leave("flac_packetizer_c::process");
 
   return EMOREDATA;
+}
+
+void
+flac_packetizer_c::flush() {
+  if (last_mem == NULL) 
+    return;
+  add_packet(*last_mem, last_timecode, avg_duration);
+  delete last_mem;
+  last_mem = NULL;
 }
 
 void

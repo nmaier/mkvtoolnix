@@ -2592,6 +2592,8 @@ main_loop() {
       while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
              (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
+      if (ptzr->status != EMOREDATA)
+        ptzr->packetizer->force_duration_on_last_packet();
       if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
     }

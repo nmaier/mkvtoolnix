@@ -410,6 +410,8 @@ public:
   }
   virtual void displace(float by_ns);
 
+  virtual void force_duration_on_last_packet();
+
 protected:
   virtual void dump_packet(const void *buffer, int size);
 };
