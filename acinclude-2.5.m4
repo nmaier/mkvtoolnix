@@ -557,16 +557,13 @@ AC_DEFUN(PATH_CYGWIN,
   CYGWIN="`uname -s`"
   case "$CYGWIN" in
     CYGWIN*)
-dnl      ICONV_LIBS="-liconv"
       AC_MSG_RESULT(yes)
       CXXVER_CFLAGS="$CXXVER_CFLAGS -DNO_WSTRING"
       ;;
     *)
-dnl      ICONV_LIBS=""
       AC_MSG_RESULT(no)
       ;;
   esac
-dnl  AC_SUBST(ICONV_LIBS)
 ])
 
 dnl This macros shamelessly stolen from
@@ -609,7 +606,6 @@ AC_DEFUN(PATH_ICONV,
     fi
   ])
   if test "$am_cv_func_iconv" = yes; then
-dnl    AC_DEFINE(HAVE_ICONV, 1, [Define if you have the iconv() function.])
     AC_MSG_CHECKING([for iconv declaration])
     AC_CACHE_VAL(am_cv_proto_iconv, [
       AC_TRY_COMPILE([
@@ -631,6 +627,10 @@ size_t iconv();
          }[$]am_cv_proto_iconv)
 dnl    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
 dnl      [Define as const if the declaration of iconv() needs const.])
+  else
+    echo '*** The iconv library is needed but could not be found.'
+    echo '*** Please install it and re-run configure.'
+    exit 1
   fi
   ICONV_LIBS=
   if test "$am_cv_lib_iconv" = yes; then

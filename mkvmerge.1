@@ -123,16 +123,7 @@ Forces the FourCC to the specified value. Works only for video tracks.
 Sets the aspect ratio for the track. The ratio can be given either as a
 floating point number or as 'widht/height', e.g. 16/9.
 .LP
-Options that only apply to text subtitle tracks:
-.TP
-\fB\-\-sub\-format\fR <\fIutf8\fR|\fIascii\fR>
-If the format chosen is \fIutf8\fR then text subtitles will be recoded to
-UTF-8, and the track's codec ID will be set to S_TEXT/UTF8. \fIascii\fR does
-no conversion, and S_TEXT/ASCII will be used instead. \fBmkvmerge\fR uses the
-current locale to determine the charset from which to convert which can be
-overridden with \fB\-\-sub\-charset\fR.
-.br
-The default is utf8.
+Options that only apply to subtitle tracks:
 .TP
 \fB\-\-sub\-charset\fR
 Sets the charset for the conversion to UTF-8 for UTF-8 subtitles. If not

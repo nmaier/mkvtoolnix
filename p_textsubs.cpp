@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.20 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.21 2003/05/29 18:50:03 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -43,10 +43,7 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
 }
 
 void textsubs_packetizer_c::set_headers() {
-  if (ti->no_utf8_subs)
-    set_codec_id(MKV_S_TEXTASCII);
-  else
-    set_codec_id(MKV_S_TEXTUTF8);
+  set_codec_id(MKV_S_TEXTUTF8);
 
   generic_packetizer_c::set_headers();
 
@@ -56,7 +53,7 @@ void textsubs_packetizer_c::set_headers() {
 int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
                                    int64_t length, int64_t, int64_t) {
   int num_newlines;
-  char *subs, *idx1, *idx2;
+  char *subs, *idx1, *idx2, *utf8_subs;
   int64_t end;
 
   end = start + length;
@@ -112,13 +109,10 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   }
   *idx2 = 0;
 
-  if (!ti->no_utf8_subs) {
-    char *utf8_subs = to_utf8(cc_utf8, subs);
-    add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, length,
-               1, -1, -1);
-    safefree(utf8_subs);
-  } else
-    add_packet((unsigned char *)subs, strlen(subs), start, length, 1, -1, -1);
+  utf8_subs = to_utf8(cc_utf8, subs);
+  add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, length,
+             1, -1, -1);
+  safefree(utf8_subs);
 
   safefree(subs);
 
