@@ -2470,6 +2470,11 @@ long AVI_read_frame(avi_t *AVI, char *vidbuf, int *keyframe)
 
    *keyframe = (AVI->video_index[AVI->video_pos].key==0x10) ? 1:0;
 
+   if (vidbuf == NULL) {
+     AVI->video_pos++;
+     return n;
+   }
+
    lseek(AVI->fdes, AVI->video_index[AVI->video_pos].pos, SEEK_SET);
 
    if (avi_read(AVI->fdes,vidbuf,n) != n)
