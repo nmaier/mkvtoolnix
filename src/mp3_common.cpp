@@ -159,16 +159,15 @@ int find_mp3_header(unsigned char *buf, int size) {
 
     if ((header & 0xffe00000) != 0xffe00000)
       continue;
-    if (!((header >> 17) & 3))
+    if (((header >> 17) & 3) == 0)
       continue;
     if (((header >> 12) & 0xf) == 0xf)
       continue;
-    if (!((header >> 12) & 0xf))
+    if (((header >> 12) & 0xf) == 0)
       continue;
     if (((header >> 10) & 0x3) == 0x3)
       continue;
-    if ((((header >> 19) & 1) == 1) && (((header >> 17) & 3) == 3) &&
-        (((header >> 16) & 1) == 1))
+    if (((header >> 19) & 3) == 0x1)
       continue;
     if ((header & 0xffff0000) == 0xfffe0000)
       continue;
