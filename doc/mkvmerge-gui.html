@@ -1,0 +1,355 @@
+<html>
+<head>
+  <title>A guide to mkvmerge GUI</title>
+</head>
+<body>
+  <h1>A guide to mkvmerge GUI (mmg)</h1>
+
+  <i>Moritz Bunkus</i>
+  <hr>
+
+  <h2>Table of contents</h2>
+
+  <p>
+    <ol>
+      <li>
+        <a href="mkvmerge-gui.html#introduction">Introduction</a>
+        <br>
+        <ul>
+          <li>
+            <a href="mkvmerge-gui.html#whatismatroska">What is Matroska?</a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#whatismkvmerge">What is mkvmerge?
+              What is mkvmerge GUI?
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#latestversion">Obtaining the latest
+              version
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#scope">Scope of this guide</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="mkvmerge-gui.html#setup">Setting up mkvmerge GUI</a>
+      </li>
+      <li>
+        <a href="mkvmerge-gui.html#muxing">Creating Matroska files</a>
+        <br>
+        <ul>
+          <li>
+            <a href="mkvmerge-gui.html#basics">Basics</a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#fileoptions">Options for input
+              files
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#trackoptions">Options for each
+              track
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#globaloptions">Global options</a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#doit">Starting the merge
+              process
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#saveload">Saving and loading
+              muxing settings
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="mkvmerge-gui.html#chaptereditor">The chapter editor</a>
+        <br>
+        <ul>
+          <li>
+            <a href="mkvmerge-gui.html#chapterconcept">Matroska's
+              chapter concept
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#chapterexamples">Examples</a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#chapterformats">Chapter formats
+              supported by mkvmerge
+            </a>
+            <br>
+            <ul>
+              <li>
+                <a href="mkvmerge-gui.html#cfsimple">Simple/OGM style
+                  chapter files
+                </a>
+              </li>
+              <li>
+                <a href="mkvmerge-gui.html#cfxml">Full-featured XML
+                  style chapter files
+                </a>
+              </li>
+              <li>
+                <a href="mkvmerge-gui.html#cfkax">Chapters found in
+                  Matroska files
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#creatingchapters">Creating
+              chapter files
+            </a>
+          </li>
+          <li>
+            <a href="mkvmerge-gui.html#editingchapters">Editing existing
+              chapters
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ol>
+  </p>
+
+  <hr>
+
+  <h2><a name="introduction">Introduction</a></h2>
+
+  <h3><a name="whatismatroska">What is Matroska?</a></h3>
+
+  <p>(<i>Note: simply copied from <a href="http://www.matroska.org/">
+  www.matroska.org</a>.</i>)</p>
+
+  <p><b>Matroska</b> aims to become THE Standard of Multimedia Container
+  Formats. It was derived from a project called MCF, but differentiates
+  from it significantly because it is based on EBML (Extensible Binary
+  Meta Language), a binary derivative of XML. EBML enables the Matroska
+  Development Team to gain significant advantages in terms of future
+  format extensibility, without breaking file support in old
+  parsers.</p>
+
+  <p>If you need any more info please head over to <a
+  href="http://www.matroska.org/">Matroska's homepage</a>.</p>
+
+  <h3>
+    <a name="whatismkvmerge">What is mkvmerge? What is mkvmerge
+      GUI?
+    </a>
+  </h3>
+
+  <p><i>mkvmerge</i> and <i>mkvmerge GUI</i> (or just <i>mmg</i>) are
+  two programs created by <a href="mailto:moritz@bunkus.org">Moritz
+  Bunkus</a>. They're part of the <i>mkvtoolnix</i>
+  package. <i>mkvmerge</i> can read a lot of different multimedia files
+  and put their contents into Matroska files. Unfortunately this is a
+  command line program, and not everyone is comfortable working on the
+  command line. This is where <i>mkvmerge GUI</i> comes into play. It is
+  a GUI that provides the user with an intuitive but powerful interface
+  to <i>mkvmerge</i>.</p>
+
+  <p>Both programs are available for both Windows and GNU/Linux and
+  other Unix derivatives. The program is licensed under the GPL, so the
+  source code is available to anyone interested.</p>
+
+  <h3><a name="latestversion">Obtaining the latest version</a></h3>
+
+  <p>You can always find the latest version of <i>mkvtoolnix</i> on
+  <a href="http://www.bunkus.org/videotools/mkvtoolnix/">Moritz Bunkus'
+  website</a>. Windows users will have to download the runtime DLLs as
+  well as the <i>mkvtoolnix</i> binaries. Linux/Unix users will probably
+  download the sources and compile <i>mkvtoolnix</i> themselves.</p>
+
+  <h3><a name="scope">Scope of this guide</a></h3>
+
+  <p>This guide only focusses on the GUI part of these tools. All
+  command line options are explained in detail in <i>mkvmerge</i>'s man
+  page/HTML page.</p>
+
+  <hr>
+
+  <h2><a name="setup">Setting up mkvmerge GUI</a></h2>
+
+  <p>(<i>Note: This section does not cover compilation and
+  installation. mkvmerge's own documentation and the
+  <code>README</code> files that are included in the <i>mkvtoolnix</i>
+  package.</i>)</p>
+
+  <p>The only thing that <i>mmg</i> needs to know is the location of the
+  <i>mkvmerge</i> binary. Under normal circumstances it will be found
+  automatically. But if not then you can select the binary to use on the
+  <i>Settings</i> tab.</p>
+
+  <hr>
+
+  <h2><a name="muxing">Creating Matroska files</a></h2>
+
+  <h3><a name="basics">Basics</a></h3>
+
+  <p><i>mkvmerge</i> strictly differentiates between <i>files</i> and
+  <i>tracks</i>. An input <i>file</i> usually contains one or more
+  <i>tracks</i>. <i>mkvmerge</i> needs at least one input file and the
+  file name of the Matroska file it should create before it can do any
+  work. Starting with this minimal set of options the user can add more
+  input files, select advanced options for each track, apply some more
+  global options etc.</p>
+
+  <p>The typical basic steps are:<br>
+  <ol>
+    <li>Select some input <i>files</i>,</li>
+    <li>set language options for the <i>tracks</i>,</li>
+    <li>set the movie/file title,</li>
+    <li>select the file to write to and</li>
+    <li>start the muxing process.</li>
+  </ol>
+  </p>
+
+  <p>When <i>mmg</i> starts up it shows the first and probably most
+  important tab: the <i>input tab</i>. Here you see four different
+  elements. The topmost input box lists all input <i>files</i>. Directly
+  under this box are options that apply to the currently selected input
+  <i>file</i>.</p>
+
+  <p>The two buttons to the right of the upper list box can be used to
+  add files to the list box with the <i>+</i> button and to remove the
+  selected entry with the <i>-</i> button.</p>
+
+  <p>Once the user selects an input <i>file</i> in the upper list box
+  the second list box will contains all <i>tracks</i> that can be read
+  from this <i>file</i>. For each of these tracks the user can select
+  track specific options with the input boxes and check boxes below the
+  track listing. These options will be described in the following
+  sections.</p>
+
+  <h3><a name="fileoptions">Options for input file</a></h3>
+
+  <p>Once the user has added and selected an input file he can set
+  options that apply to this specific file. At the moment only one such
+  option has been implemented: <code>No chapters</code>. If this option
+  is checked then <i>mkvmerge</i> will not try to copy chapters from
+  this source file. More information about chapters can be found in the
+  section about the <a href="mkvmerge-gui.html#chaptereditor">chapter
+  editor</a> in this document and in <i>mkvmerge</i>'s own
+  documentation.</p>
+
+  <h3><a name="trackoptions">Options for each track</a></h3>
+
+  <p>Depending on the type of the currently selected track (audio,
+  video, subtitles) and even depending on the contents of the track only
+  a subset of all the track specific options are availbale. The options
+  are:
+  <br>
+  <ul>
+    <li><code>Language:</code> The user can select the language for each
+    track regardless of its type. This language is coded in the ISO639-2
+    language code. The drop-down box contains all ISO639-2 codes so the
+    user does not have to worry about selecting the wrong language
+    code.</li>
+    <li><code>Track name:</code> The user can set a name for the current
+    track. This name is a free-form string. Practical examples could be
+    'director's comments' or 'aeriel view of Seattle'. Note that these
+    names are not meant to contain the movie title!</li>
+    <li><code>Cues:</code> The <i>cues</i> are for Matroska what the
+    index is for AVI files. They contain links to the key
+    frames. Usually this option should be left on the value
+    'default'. <i>mkvmerge</i> will automatically chose the best method
+    for any given track type. A full explanantion of tracks can be found
+    in <i>mkvmerge</i>'s documentation.</li>
+    <li><code>Aspect ratio:</code> With this option the user can set the
+    aspect ratio that should be used upon playback. It defaults to the
+    aspect ratio that the movie was encoded with but can be changed,
+    e.g. for anamorphic encodings. The GUI expects the format to be
+    either a floating point number (e.g. '2.33') or a fraction
+    (e.g. '16/9').
+    <br>
+    This option is only available for video tracks.</li>
+    <li><code>FourCC:</code> Matroska does not normally store the FourCC
+    which is used in other containers to identify the codec
+    used. Matroska has its own format, called <i>CodecID</i>, but it
+    also has an AVI compatibility mode. In thise mode the FourCC is also
+    stored. With this option the FourCC can be forced to a different
+    value. However, you cannot change the <i>CodecID</i> used by
+    <i>mkvmerge</i>.
+    <br>
+    This option is only available for video tracks.</li>
+    <li><code>Delay (in ms):</code> In some cases audio and video are
+    not synchronized properly. With this option the user can offset the
+    audio track by a given amount, either positive or
+    negative. <i>mkvmerge</i> will either remove samples at the
+    beginning or insert silence at the beginning to adjust the track.
+    <br>
+    This option is available for audio and text subtitle tracks.</li>
+    <li><code>Stretch by:</code> In some cases audio and video slowly
+    drift apart during playback. This can be fixed by supplying a factor
+    of how much the timecodes should be stretched by <i>mkvmerge</i>. If
+    nothing is given then '1.0' is assumed which does not alter the
+    timecodes. Please note that this option has not been implemented for
+    all audio track types yet.
+    <br>
+    This option is available for audio and text subtitle tracks.</li>
+    <li><code>Subtitle charset:</code> Some text subtitle formats do not
+    store the charset that they were creted with. This is important
+    because text subtitles are auomatically converted to the UTF-8
+    charset during muxing. <i>mkvmerge</i> will normally assume that the
+    system's current charset is the same that the subtitle file was
+    written in. But in case this is not true the user can select the
+    correct charset.
+    <br>
+    This option is only available for text subtitle tracks.</li>
+    <li><code>Make default track:</code> Matroska knows a flag which
+    tells the player that a specific track should be preferred upon
+    playback if the user does not chose another one. Of course each
+    track <i>type</i> has its own default track - e.g. the default audio
+    track is the English one, and the default subtitle track is the
+    French one. If no track is set to be the default track then
+    <i>mkvmerge</i> will promote the first track of each type that it
+    finds to be the default track. This is consistent with the behaviour
+    of various media players.</li>
+    <li><code>AAC is SBR/HE-AAC/AAC+:</code> The new technology called
+    'high efficiency AAC' has some drawbacks when it is being stored in
+    <code>.AAC</code> files: it is not possible to detect the HE-AAC
+    part for these files. Therefore the user has to check this option
+    manually if it applies. Please note that this problem does not exist
+    for HE-AAC stored in <code>.MP4</code> files.</li>
+  </ul>
+  </p>
+
+  <h3><a name="globaloptions">Global options</a></h3>
+
+  <h3><a name="doit">Starting the merge process</a></h3>
+
+  <h3><a name="saveload">Saving and loading muxing settings</a></h3>
+
+  <hr>
+
+  <h2><a name="chaptereditor">The chpater editor</a></h2>
+
+  <h3><a name="chapterconcept">Matroska's chapter concept</a></h3>
+
+  <h3><a name="chapterexamples">Examples</a></h3>
+
+  <h3>
+    <a name="chapterformats">Chapter formats supported by
+      mkvmerge
+    </a>
+  </h3>
+
+  <h4><a name="cfsimple">Simple/OGM style chapter files</a></h4>
+
+  <h4><a name="cfxml">Full-featured XML style chapter files</a></h4>
+
+  <h4><a name="cfkax">Chapters found in Matroska files</a></h4>
+
+  <h3><a name="creatingchapters">Creating chapter files</a></h3>
+
+  <h3><a name="editingchapters">Editing existing chapters</a></h3>
+
+</body>
+</html>
