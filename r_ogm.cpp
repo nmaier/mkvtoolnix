@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.20 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.21 2003/05/03 10:03:52 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -42,7 +42,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_vorbis.h"
 #include "p_video.h"
 #include "p_pcm.h"
-//#include "p_textsubs.h"
+#include "p_textsubs.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
 
@@ -265,7 +265,7 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using video output "
-                    "module for stream %d.\n", ti->fname, dmx->serial);
+                  "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -285,7 +285,7 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using PCM output "
-                    "module for stream %d.\n", ti->fname, dmx->serial);
+                  "module for stream %d.\n", ti->fname, dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_MP3:
@@ -303,7 +303,7 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using MP3 output "
-                    "module for stream %d.\n", ti->fname, dmx->serial);
+                  "module for stream %d.\n", ti->fname, dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_AC3:
@@ -321,7 +321,7 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using AC3 output "
-                    "module for stream %d.\n", ti->fname, dmx->serial);
+                  "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -352,9 +352,27 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using Vorbis output "
-                    "module for stream %d.\n", ti->fname, dmx->serial);
+                  "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
+
+      case OGM_STREAM_TYPE_TEXT:
+        try {
+          dmx->packetizer = new textsubs_packetizer_c(ti);
+        } catch (error_c &error) {
+          fprintf(stderr, "Error: ogm_reader: could not initialize the "
+                  "text subtitles packetizer for stream id %d. Will try to "
+                  "continue and ignore this stream.\n", dmx->serial);
+          free_demuxer(i);
+          continue;
+        }
+
+        if (verbose)
+          fprintf(stdout, "OGG/OGM demultiplexer (%s): using text subtitle "
+                  "output module for stream %d.\n", ti->fname, dmx->serial);
+
+        break;
+
     }
     i++;
   }
@@ -499,40 +517,17 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
       ntstreams++;
       numstreams++;
-      fprintf(stderr, "Warning: ogm_reader: No support for subtitles at "
-              "the moment. Ignoring stream id %d.\n", numstreams);
-
-//       if (!demuxing_requested(ti->stracks, ntstreams)) {
-//         ogg_stream_clear(&new_oss);
-//         return;
-//       }
+      if (!demuxing_requested(ti->stracks, ogg_page_serialno(og))) {
+        ogg_stream_clear(&new_oss);
+        return;
+      }
       
-//       dmx = (ogm_demuxer_t *)malloc(sizeof(ogm_demuxer_t));
-//       if (dmx == NULL)
-//         die("malloc");
-//       memset(dmx, 0, sizeof(ogm_demuxer_t));
+      dmx->stype = OGM_STREAM_TYPE_TEXT;
+      dmx->serial = ogg_page_serialno(og);
+      memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
+      dmx->sid = ntstreams;
+      add_new_demuxer(dmx);
 
-//       try {
-//         dmx->packetizer =
-//           new textsubs_packetizer_c(&async);
-//       } catch (error_c error) {
-//         fprintf(stderr, "Error: ogm_reader: could not initialize text "
-//                 "subtitle packetizer for stream id %d. Will try to "
-//                 "continue and ignore this stream.\n", numstreams);
-//         free(dmx);
-//         ogg_stream_clear(&new_oss);
-//         return;
-//       }
-//       dmx->stype = OGM_STREAM_TYPE_TEXT;
-
-//       dmx->serial = ogg_page_serialno(og);
-//       memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
-//       dmx->sid = ntstreams;
-//       add_new_demuxer(dmx);
-//       if (verbose)
-//         fprintf(stdout, "OGG/OGM demultiplexer (%s): using text subtitle "
-//                 "output module for stream %d.\n", filename, numstreams);
-      
       return;
     }
   }
@@ -596,9 +591,13 @@ void ogm_reader_c::process_page(ogg_page *og) {
 
       } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {
         dmx->units_processed++;
+        if ((op.bytes - 1 - hdrlen) > 1)
+          dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 -
+                                   hdrlen, ogg_page_granulepos(og), lenbytes);
 
       } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
         dmx->packetizer->process(op.packet, op.bytes);
+
       } else {
         dmx->packetizer->process(&op.packet[hdrlen + 1],
                                  op.bytes - 1 - hdrlen);
