@@ -161,7 +161,7 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
     memset(&level_buffer[1], ' ', 9);
     level_buffer[0] = '|';
     level_buffer[level] = 0;
-    fprintf(stdout, "(%s) %s+ %s", NAME, level_buffer, args_buffer);
+    fprintf(stdout, "%s+ %s", level_buffer, args_buffer);
     if ((verbose > 1) && (l != NULL))
       fprintf(stdout, " at %llu", l->GetElementPosition());
     fprintf(stdout, "\n");

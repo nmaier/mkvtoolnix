@@ -1,5 +1,8 @@
 2003-06-22  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Removed "(mkvinfo) " from mkvinfo's output in order to improve
+        readability and save space.
+
         * --sub-charset now also needs a track ID.
 
         * Modified the verbosity levels for mkvinfo: The seek head subentries

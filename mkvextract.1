@@ -62,11 +62,35 @@ Simple text subtitles will be written as SRT files.
 S_TEXT/SSA, S_TEXT/ASS
 SSA and ASS text subtitles will be written as SSA/ASS files respectively.
 
+.SH EXAMPLES
+Let's assume you've made a Matroska file with one video track, two audio tracks
+and two subtitle tracks, and you need the second audio track and the first
+subtitle track. So first fire up \fBmkvmerge\fR with the \fB--identify\fR
+option:
+.LP
+$ \fBmkvmerge -i movie.mkv\fR
+.br
+File 'movie.mkv': container: Matroska
+.br
+Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
+.br
+Track ID 2: audio (A_MPEG/L3)
+.br
+Track ID 3: audio (A_VORBIS)
+.br
+Track ID 4: subtitles (S_TEXT/UTF8)
+.br
+Track ID 5: subtitles (S_TEXT/UTF8)
+.LP
+Now you can call \fBmkvmextract\fR like this:
+.LP
+$ \fBmkvextract -i movie.mkv 3:audio.ogg 4:subtitles.srt\fR
+
 .SH AUTHOR
 .I mkvextract
 was written by Moritz Bunkus <moritz@bunkus.org>.
 .SH SEE ALSO
-.BR mkvmerge (1)
+.BR mkvmerge (1),
 .BR mkvinfo (1)
 .SH WWW
 The newest version can always be found at
