@@ -63,40 +63,62 @@ mux_dialog::mux_dialog(wxWindow *parent):
   wxFile *opt_file;
   uint32_t i;
   wxArrayString *arg_list;
+  wxBoxSizer *siz_all, *siz_buttons, *siz_progress;
+  wxStaticBoxSizer *siz_status, *siz_output;
 
   c = 0;
-  new wxStaticBox(this, -1, wxT("Status and progress"), wxPoint(10, 5),
-                  wxSize(480, 70));
-  st_label = new wxStaticText(this, -1, wxT(""), wxPoint(15, 25),
-                              wxSize(450, -1));
-  g_progress = new wxGauge(this, -1, 100, wxPoint(120, 50), wxSize(250, 15));
+  siz_status =
+    new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Status and progress")),
+                         wxVERTICAL);
+  st_label = new wxStaticText(this, -1, wxT(""));
+  siz_status->Add(st_label, 0, wxALIGN_LEFT | wxALL, 5);
+  g_progress = new wxGauge(this, -1, 100, wxDefaultPosition, wxSize(250, 15));
+  siz_progress = new wxBoxSizer(wxHORIZONTAL);
+  siz_progress->Add(0, 0, 1, wxGROW, 0);
+  siz_progress->Add(g_progress, 0, wxALL, 5);
+  siz_progress->Add(0, 0, 1, wxGROW, 0);
+  siz_status->Add(siz_progress, 0, wxGROW);
 
-  new wxStaticBox(this, -1, wxT("Output"), wxPoint(10, 80), wxSize(480, 400));
-  new wxStaticText(this, -1, wxT("mkvmerge output:"), wxPoint(15, 100));
+  siz_output =
+    new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Output")),
+                         wxVERTICAL);
+  siz_output->Add(new wxStaticText(this, -1, wxT("mkvmerge output:")),
+                  0, wxALIGN_LEFT | wxALL, 5);
   tc_output =
-    new wxTextCtrl(this, -1, wxT(""), wxPoint(15, 120), wxSize(455, 140),
+    new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize,
                    wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
-  new wxStaticText(this, -1, wxT("Warnings:"), wxPoint(15, 270));
+  siz_output->Add(tc_output, 2, wxGROW | wxALL, 5);
+  siz_output->Add(new wxStaticText(this, -1, wxT("Warnings:")),
+                  0, wxALIGN_LEFT | wxALL, 5);
   tc_warnings =
-    new wxTextCtrl(this, -1, wxT(""), wxPoint(15, 290), wxSize(455, 80),
+    new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize,
                    wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
-  new wxStaticText(this, -1, wxT("Errors:"), wxPoint(15, 380));
+  siz_output->Add(tc_warnings, 1, wxGROW | wxALL, 5);
+  siz_output->Add(new wxStaticText(this, -1, wxT("Errors:")),
+                  0, wxALIGN_LEFT | wxALL, 5);
   tc_errors =
-    new wxTextCtrl(this, -1, wxT(""), wxPoint(15, 400), wxSize(455, 70),
+    new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize,
                    wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
+  siz_output->Add(tc_errors, 1, wxGROW | wxALL, 5);
 
-  b_ok = new wxButton(this, ID_B_MUX_OK, wxT("Ok"), wxPoint(1, 500));
-  b_save_log =
-    new wxButton(this, ID_B_MUX_SAVELOG, wxT("Save log"), wxPoint(1, 500));
-  b_abort =
-    new wxButton(this, ID_B_MUX_ABORT, wxT("Abort"), wxPoint(1, 500));
-  b_ok->Move(wxPoint((int)(250 - 2 * b_save_log->GetSize().GetWidth()),
-                     500 - b_ok->GetSize().GetHeight() / 2));
-  b_abort->Move(wxPoint((int)(250 - 0.5 * b_save_log->GetSize().GetWidth()),
-                        500 - b_ok->GetSize().GetHeight() / 2));
-  b_save_log->Move(wxPoint((int)(250 + b_save_log->GetSize().GetWidth()),
-                           500 - b_ok->GetSize().GetHeight() / 2));
+  siz_buttons = new wxBoxSizer(wxHORIZONTAL);
+  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  b_ok = new wxButton(this, ID_B_MUX_OK, wxT("Ok"));
   b_ok->Enable(false);
+  siz_buttons->Add(b_ok);
+  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  b_save_log = new wxButton(this, ID_B_MUX_SAVELOG, wxT("Save log"));
+  siz_buttons->Add(b_save_log);
+  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  b_abort = new wxButton(this, ID_B_MUX_ABORT, wxT("Abort"));
+  siz_buttons->Add(b_abort);
+  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+
+  siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->Add(siz_status, 0, wxGROW | wxALL, 5);
+  siz_all->Add(siz_output, 1, wxGROW | wxALL, 5);
+  siz_all->Add(siz_buttons, 0, wxGROW | wxALL, 10);
+  SetSizer(siz_all);
 
   update_window(wxT("Muxing in progress."));
   Show(true);
