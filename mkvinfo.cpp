@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.18 2003/04/20 21:17:29 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.19 2003/04/21 16:20:35 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -619,7 +619,7 @@ void process_file() {
                 reference.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + reference block: %.3fms", NAME,
                         ((float)int64(reference)) * tc_scale /
-                        1000000000000.0);
+                        1000000.0);
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
