@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.48 2003/04/27 09:14:47 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.49 2003/05/01 22:38:54 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -60,6 +60,7 @@
 #include "mkvmerge.h"
 #include "cluster_helper.h"
 #include "common.h"
+#include "iso639.h"
 #include "queue.h"
 #include "r_ac3.h"
 #include "r_avi.h"
@@ -187,6 +188,8 @@ static void usage(void) {
     "  --default-track          Sets the 'default' flag for this track.\n"
     "  --cues <none|iframes|    Create cue (index) entries for this track:\n"
     "          all>             None at all, only for I frames, for all.\n"
+    "  --language <lang>        Sets the language for the track (ISO639-2\n"
+    "                           code, see --list-languages).\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -195,6 +198,8 @@ static void usage(void) {
     "                           convert the text to UTF-8.\n"
     "\n\n Other options:\n"
     "  -l, --list-types         Lists supported input file types.\n"
+    "  --list-languages         Lists all ISO639 languages and their\n"
+    "                           ISO639-2 codes.\n"
     "  -h, --help               Show this help.\n"
     "  -V, --version            Show version information.\n"
     "  @optionsfile             Reads additional command line options from\n"
@@ -465,6 +470,9 @@ static void parse_args(int argc, char **argv) {
       for (j = 1; file_types[j].ext; j++)
         fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
       exit(0);
+    } else if (!strcmp(argv[i], "--list-languages")) {
+      list_iso639_languages();
+      exit(0);
     } else if (!strcmp(argv[i], "--no-cues"))
       write_cues = 0;
     else if (!strcmp(argv[i], "--no-meta-seek"))
@@ -639,6 +647,20 @@ static void parse_args(int argc, char **argv) {
       ti.default_track = 1;
     else if (!strcmp(argv[i], "--no-utf8-subs"))
       ti.no_utf8_subs = 1;
+    else if (!strcmp(argv[i], "--language")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --language lacks its argument.\n");
+        exit(1);
+      }
+      if (!is_valid_iso639_2_code(argv[i + 1])) {
+        fprintf(stderr, "Error: '%s' is not a valid ISO639-2 code. See "
+                "'mkvmerge --list-languages'.\n", argv[i + 1]);
+        exit(1);
+      }
+
+      ti.language = argv[i + 1];
+      i++;
+    }
 
     // The argument is an input file.
     else {

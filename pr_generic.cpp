@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.28 2003/04/30 18:55:22 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.29 2003/05/01 22:38:54 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -232,6 +232,13 @@ void generic_packetizer_c::set_header() {
       (&GetChild<KaxTrackFlagDefault>(static_cast<KaxTrackEntry &>
                                       (*track_entry))))
       = hdefault_track;
+
+  if (ti->language != NULL) {
+    *(static_cast<EbmlString *>
+      (&GetChild<KaxTrackLanguage>(static_cast<KaxTrackEntry &>
+                                   (*track_entry))))
+      = ti->language;
+  }
 
   if (htrack_type == track_video) {
     KaxTrackVideo &video =

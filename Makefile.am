@@ -10,6 +10,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			ac3_common.cpp ac3_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \
+			iso639.cpp iso639.h \
 			mp3_common.cpp mp3_common.h \
 			p_ac3.cpp p_ac3.h \
 			p_mp3.cpp p_mp3.h \
@@ -29,7 +30,8 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			subtitles.cpp subtitles.h
 
 mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
-			common.cpp common.h
+			common.cpp common.h \
+			iso639.cpp iso639.h
 
 mkvmerge_LDADD = @AVILIB_LIBS@ @DMALLOC_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @OGG_LIBS@ @VORBIS_LIBS@

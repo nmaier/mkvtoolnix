@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.25 2003/04/28 07:12:53 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.26 2003/05/01 22:38:54 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -521,6 +521,17 @@ void process_file() {
                 f_default.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + Default flag: %d", NAME,
                         uint32(f_default)); 
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackLanguage::ClassInfos.GlobalId) {
+                KaxTrackLanguage &language =
+                  *static_cast<KaxTrackLanguage *>(l3);
+                language.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + Language: %s", NAME,
+                        string(language).c_str());
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
