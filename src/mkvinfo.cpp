@@ -156,11 +156,20 @@ void show_error(const char *fmt, ...) {
     mxinfo("(%s) %s\n", NAME, args_buffer);
 }
 
+#define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
+                                                  ## args)
+#define show_unknown_element(e, l) \
+  _show_element(e, es, true, l, "Unknown element: %s", e->Generic().DebugName)
+#define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
+                                                     ## args)
+
 void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
                    const char *fmt, ...) {
   va_list ap;
   char level_buffer[10];
   string new_fmt;
+  EbmlMaster *m;
+  int i;
 
   if (level > 9)
     die("mkvinfo.cpp/show_element(): level > 9: %d", level);
@@ -189,16 +198,15 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
   }
 #endif // HAVE_WXWINDOWS
 
-  if ((l != NULL) && skip)
+  if ((l != NULL) && skip) {
+    // Dump unknown elements recursively.
+    m = dynamic_cast<EbmlMaster *>(l);
+    if (m != NULL)
+      for (i = 0; i < m->ListSize(); i++)
+        show_unknown_element((*m)[i], level + 1);
     l->SkipData(*es, l->Generic().Context);
+  }
 }
-
-#define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
-                                                  ## args)
-#define show_unknown_element(e, l) \
-  _show_element(e, es, true, l, "Unknown element: %s", e->Generic().DebugName)
-#define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
-                                                     ## args)
 
 // }}}
 
