@@ -37,6 +37,8 @@
 using namespace std;
 using namespace libmatroska;
 
+#define ID_B_ANALYZER_ABORT 11000
+
 class analyzer_data_c {
 public:
   EbmlId id;
@@ -48,19 +50,23 @@ public:
   };
 };
 
-class kax_analyzer_c {
+class kax_analyzer_c: public wxDialog {
+  DECLARE_CLASS(kax_analyzer_c);
+  DECLARE_EVENT_TABLE();
 public:
   vector<analyzer_data_c *> data;
   string file_name;
   mm_io_c *file;
   KaxSegment *segment;
-  wxWindow *parent;
+
+  wxGauge *g_progress;
+  bool abort;
 
 public:
   kax_analyzer_c(wxWindow *nparent, string nname);
   virtual ~kax_analyzer_c();
 
-  virtual void process();
+  virtual bool process();
   virtual bool update_element(EbmlElement *e);
   virtual EbmlElement *read_element(uint32_t pos,
                                     const EbmlCallbacks &callbacks);
@@ -74,8 +80,9 @@ public:
     return -1;
   };
 
+  void on_abort(wxCommandEvent &evt);
+
   static bool probe(string file_name);
 };
-
 
 #endif // __KAX_ANALYZER_H

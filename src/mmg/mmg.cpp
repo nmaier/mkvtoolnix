@@ -172,6 +172,14 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   chapter_menu_sep = false;
   update_chapter_menu();
 
+  wxMenu *window_menu = new wxMenu();
+  window_menu->Append(ID_M_WINDOW_INPUT, _("&Input\tAlt-1"));
+  window_menu->Append(ID_M_WINDOW_ATTACHMENTS, _("&Attachments\tAlt-2"));
+  window_menu->Append(ID_M_WINDOW_GLOBAL, _("&Global options\tAlt-3"));
+  window_menu->Append(ID_M_WINDOW_SETTINGS, _("&Settings\tAlt-4"));
+  window_menu->AppendSeparator();
+  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR, _("&Chapter editor\tAlt-5"));
+
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_ABOUT, _T("&About\tF1"),
                     _T("Show program information"));
@@ -180,6 +188,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   menu_bar->Append(file_menu, _T("&File"));
   menu_bar->Append(muxing_menu, _T("&Muxing"));
   menu_bar->Append(chapter_menu, _T("&Chapter Editor"));
+  menu_bar->Append(window_menu, _("&Window"));
   menu_bar->Append(help_menu, _T("&Help"));
   SetMenuBar(menu_bar);
 
@@ -868,6 +877,10 @@ void mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
   chapter_editor_page->on_verify_chapters(evt);
 }
 
+void mmg_dialog::on_window_selected(wxCommandEvent &evt) {
+  notebook->SetSelection(evt.GetId() - ID_M_WINDOW_INPUT);
+}
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
@@ -893,6 +906,11 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST2, mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST3, mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST4, mmg_dialog::on_chapters_load_last)
+  EVT_MENU(ID_M_WINDOW_INPUT, mmg_dialog::on_window_selected)
+  EVT_MENU(ID_M_WINDOW_ATTACHMENTS, mmg_dialog::on_window_selected)
+  EVT_MENU(ID_M_WINDOW_GLOBAL, mmg_dialog::on_window_selected)
+  EVT_MENU(ID_M_WINDOW_SETTINGS, mmg_dialog::on_window_selected)
+  EVT_MENU(ID_M_WINDOW_CHAPTEREDITOR, mmg_dialog::on_window_selected)
 END_EVENT_TABLE();
 
 bool mmg_app::OnInit() {

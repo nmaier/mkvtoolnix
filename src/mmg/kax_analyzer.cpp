@@ -27,17 +27,33 @@
 #include <matroska/KaxSeekHead.h>
 
 #include "kax_analyzer.h"
+#include "mmg.h"
 
 using namespace std;
 using namespace libebml;
 
 kax_analyzer_c::kax_analyzer_c(wxWindow *nparent, string nname):
-  file_name(nname), segment(NULL), parent(nparent) {
+  wxDialog(nparent, -1, "Analysis running", wxDefaultPosition,
+#ifdef SYS_WINDOWS
+           wxSize(300, 100),
+#else
+           wxSize(300, 100),
+#endif
+           wxCAPTION), file_name(nname), segment(NULL) {
   try {
     file = new mm_io_c(file_name.c_str(), MODE_READ);
   } catch (...) {
     throw error_c(string("Could not open the file " + file_name + "."));
   }
+
+  new wxStaticText(this, -1, _("Analyzing Matroska file"), wxPoint(10, 10));
+  g_progress =
+    new wxGauge(this, -1, 100, wxPoint(10, 30), wxSize(280, -1));
+
+  wxButton *b_abort =
+    new wxButton(this, ID_B_ANALYZER_ABORT, _("Abort"), wxPoint(0, 0),
+                 wxDefaultSize);
+  b_abort->Move(wxPoint(150 - b_abort->GetSize().GetWidth() / 2, 60));
 }
 
 kax_analyzer_c::~kax_analyzer_c() {
@@ -70,8 +86,10 @@ bool kax_analyzer_c::probe(string file_name) {
 #define in_parent(p) (file->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
 
-void kax_analyzer_c::process() {
+bool kax_analyzer_c::process() {
   int upper_lvl_el;
+  uint32_t i;
+  int64_t file_size;
   EbmlElement *l0, *l1;
   EbmlStream es(*file);
 
@@ -95,25 +113,54 @@ void kax_analyzer_c::process() {
     delete l0;
   }
 
+  file_size = file->get_size();
+  g_progress->SetValue(0);
+  Show(true);
+
+  abort = false;
   segment = static_cast<KaxSegment *>(l0);
   upper_lvl_el = 0;
   // We've got our segment, so let's find all level 1 elements.
   l1 = es.FindNextElement(segment->Generic().Context, upper_lvl_el,
                           0xFFFFFFFFL, true, 1);
   while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-
     data.push_back(new analyzer_data_c(l1->Generic().GlobalId,
                                        l1->GetElementPosition(),
                                        l1->ElementSize()));
+    while (app->Pending())
+      app->Dispatch();
+    
     l1->SkipData(es, l1->Generic().Context);
     delete l1;
+    l1 = NULL;
 
-    if (!in_parent(segment))
+    g_progress->SetValue((int)(file->getFilePointer() * 100 / file_size));
+
+    if (!in_parent(segment) || abort)
       break;
+
+    while (app->Pending())
+      app->Dispatch();
 
     l1 = es.FindNextElement(segment->Generic().Context, upper_lvl_el,
                             0xFFFFFFFFL, true);
   } // while (l1 != NULL)
+
+  Show(false);
+
+  if (l1 != NULL)
+    delete l1;
+
+  if (abort) {
+    delete segment;
+    segment = NULL;
+    for (i = 0; i < data.size(); i++)
+      delete data[i];
+    data.clear();
+    return false;
+  }
+
+  return true;
 }
 
 EbmlElement *kax_analyzer_c::read_element(uint32_t num,
@@ -255,3 +302,12 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
 
   return false;
 }
+
+void kax_analyzer_c::on_abort(wxCommandEvent &evt) {
+  abort = true;
+}
+
+IMPLEMENT_CLASS(kax_analyzer_c, wxDialog);
+BEGIN_EVENT_TABLE(kax_analyzer_c, wxDialog)
+  EVT_BUTTON(ID_B_ANALYZER_ABORT, kax_analyzer_c::on_abort)
+END_EVENT_TABLE();

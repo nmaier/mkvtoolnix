@@ -86,8 +86,14 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
 
   new wxStaticText(this, wxID_STATIC, _("Chapters:"), wxPoint(10, 5),
                    wxDefaultSize, 0);
+#ifdef SYS_WINDOWS
   tc_chapters =
     new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxPoint(10, 24), wxSize(350, 250));
+#else
+  tc_chapters =
+    new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxPoint(10, 24), wxSize(350, 250),
+                   wxSUNKEN_BORDER | wxTR_HAS_BUTTONS);
+#endif
 
   b_add_chapter =
     new wxButton(this, ID_B_ADDCHAPTER, _("Add chapter"), wxPoint(370, 24),
@@ -304,12 +310,18 @@ bool tab_chapters::load(wxString name) {
         delete analyzer;
       analyzer = new kax_analyzer_c(this, name.c_str());
       file_name = name;
-      analyzer->process();
+      if (!analyzer->process()) {
+        delete analyzer;
+        analyzer = NULL;
+        return false;
+      }
       pos = analyzer->find(KaxChapters::ClassInfos.GlobalId);
       if (pos == -1) {
         wxMessageBox(_("This file does not contain any chapters."),
                      _("No chapters found"), wxOK | wxCENTER |
                      wxICON_INFORMATION);
+        delete analyzer;
+        analyzer = NULL;
         return false;
       }
 

@@ -140,6 +140,12 @@ using namespace libmatroska;
 #define ID_M_CHAPTERS_LOADLAST3 20293
 #define ID_M_CHAPTERS_LOADLAST4 20294
 
+#define ID_M_WINDOW_INPUT 20300
+#define ID_M_WINDOW_ATTACHMENTS 20301
+#define ID_M_WINDOW_GLOBAL 20302
+#define ID_M_WINDOW_SETTINGS 20303
+#define ID_M_WINDOW_CHAPTEREDITOR 20304
+
 #define ID_M_HELP_ABOUT 29900
 
 typedef struct {
@@ -445,6 +451,8 @@ public:
   void on_save_chapters(wxCommandEvent &evt);
   void on_save_chapters_as(wxCommandEvent &evt);
   void on_verify_chapters(wxCommandEvent &evt);
+
+  void on_window_selected(wxCommandEvent &evt);
 };
 
 class mmg_app: public wxApp {
