@@ -89,7 +89,7 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
   wxDialog *panel = this;
 #else
 #define CVD_YOFF1 0
-  wxPanel *panel = new wxPanel;
+  wxPanel *panel = new wxPanel(this, -1);
 #endif
 
   SetSize(350, 200);
