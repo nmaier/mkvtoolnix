@@ -1,4 +1,4 @@
-MKVToolNix 0.7.1
+MKVToolNix 0.7.2
 ================
 
 With these tools one can get information about (mkvinfo) Matroska
@@ -37,7 +37,16 @@ deb-src http://www.bunkus.org/debian/unstable/ ./
 Run 'apt-get update' and 'apt-get install libebml-dev
 libmatroska-dev mkvtoolnix'.
 
-If you want to compile from source then get the two libraries via CVS:
+If you want to compile from source then get the newest versions of
+libebml and libmatroska. Normally the 'latest official release' will
+work with the latest release of mkvtoolnix. At the time of writing
+these versions where:
+- libebml 0.6.0:
+http://matroska.free.fr/downloads/libebml/libebml-0.6.0.tar.gz
+- libmatroska 0.5.2:
+http://matroska.free.fr/downloads/libmatroska/libmatroska-0.5.2.tar.gz
+
+Alternatively you can get the two libraries via CVS:
 
 cvs -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska login
 
