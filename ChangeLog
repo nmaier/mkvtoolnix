@@ -1,5 +1,7 @@
 2003-05-29  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Fixed a segfault in the Matroska reader.
+
         * Removed the '--sub-type' switch as all text subtitles will be
         stored in UTF-8 format. Made iconv mandatory in the configure
         checks for this very reason.

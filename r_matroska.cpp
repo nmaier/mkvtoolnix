@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.41 2003/05/26 21:49:11 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.42 2003/05/29 19:39:46 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -739,7 +739,7 @@ int mkv_reader_c::read_headers() {
                         string(lang).c_str());
                 track->language = safestrdup(string(lang).c_str());
 
-              } else if (!is_ebmlvoid(l4))
+              } else if (!is_ebmlvoid(l3))
                 fprintf(stdout, "matroska_reader: |  + unknown element@3: "
                         "%s\n", typeid(*l3).name());
               if (upper_lvl_el > 0) {  // we're coming from l4
@@ -756,7 +756,7 @@ int mkv_reader_c::read_headers() {
               }
             } // while (l3 != NULL)
 
-          } else if (!is_ebmlvoid(l4))
+          } else if (!is_ebmlvoid(l2))
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s, "
                     "ule %d\n", typeid(*l2).name(), upper_lvl_el);
           if (upper_lvl_el > 0) {  // we're coming from l3
