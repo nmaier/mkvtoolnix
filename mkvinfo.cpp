@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.5 2003/04/09 13:30:23 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.6 2003/04/13 14:00:54 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,7 +33,7 @@
 
 #include <iostream>
 
-#ifdef GCC2
+#ifdef LIBEBML_GCC2
 #include <typeinfo>
 #endif
 

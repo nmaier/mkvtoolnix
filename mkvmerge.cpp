@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.28 2003/04/11 15:28:45 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.29 2003/04/13 14:00:54 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,7 +31,7 @@
 
 #include <iostream>
 
-#ifdef GCC2
+#ifdef LIBEBML_GCC2
 #include <typeinfo>
 #endif
 
