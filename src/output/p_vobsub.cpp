@@ -89,6 +89,7 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
   control_start = get_uint16_be(data + 2);
   next_off = control_start;
   duration = -1;
+  start_off = 0;
 
   while ((start_off != next_off) && (next_off < buf_size)) {
     start_off = next_off;

@@ -160,7 +160,7 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
     "The ISO 8601 date format looks like this: YYYY-MM-DDTHH:MM:SS:-TZTZ, "
     "e.g. 2003-07-17T19:50:52+0200. The time zone (TZ) may also be negative.";
   char *p;
-  int year, month, day, hour, minute, second, timezone, offset;
+  int year, month, day, hour, minute, second, time_zone, offset;
   char tz_sign;
   struct tm t;
   time_t tme;
@@ -191,7 +191,7 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   if (!parse_int(p, year) || !parse_int(&p[5], month) ||
       !parse_int(&p[8], day) || !parse_int(&p[11], hour) ||
       !parse_int(&p[14], minute) || !parse_int(&p[17], second) ||
-      !parse_int(&p[20], timezone))
+      !parse_int(&p[20], time_zone))
     tperror(pdata, errmsg, pdata->bin->c_str());
 
   if (year < 1900)
@@ -208,7 +208,7 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
     tperror(pdata, "Invalid second given (%d).", second);
   if ((tz_sign != '+') && (tz_sign != '-'))
     tperror(pdata, "Invalid time zone given (%c%s).", tz_sign, &p[20]);
-  if ((timezone < 0) || (timezone > 1200))
+  if ((time_zone < 0) || (time_zone > 1200))
     tperror(pdata, "Invalid time zone given (%c%s).", tz_sign, &p[20]);
 
   memset(&t, 0, sizeof(struct tm));
@@ -222,7 +222,7 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   tme = mktime(&t);
   if (tme == (time_t)-1)
     tperror(pdata, "Invalid date specified (%s).", pdata->bin->c_str());
-  offset = (((timezone / 100) * 60) + (timezone % 100)) * 60;
+  offset = (((time_zone / 100) * 60) + (time_zone % 100)) * 60;
   if (tz_sign == '+')
     offset *= -1;
   tme += offset;

@@ -1706,7 +1706,7 @@ terminate_scan:
 
       const int badstream = nStream;
       const double newrate = pasn->hdr.dwRate / (double)pasn->hdr.dwScale;
-      mxverb(3, "AVI: Stream %d has an invalid sample rate. Substituting %lu samples/sec as placeholder.\n", badstream, newrate);
+      mxverb(3, "AVI: Stream %d has an invalid sample rate. Substituting %f samples/sec as placeholder.\n", badstream, newrate);
     }
 
     // Verify sample size == nBlockAlign for audio.  If we find runt samples,

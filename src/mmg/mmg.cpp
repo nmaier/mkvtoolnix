@@ -491,7 +491,7 @@ void mmg_dialog::set_last_chapters_in_menu(wxString name) {
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
-  mux_dialog *mdlg;
+  mux_dialog *mux_dlg;
 
   update_command_line();
 
@@ -507,8 +507,8 @@ void mmg_dialog::on_run(wxCommandEvent &evt) {
       !settings_page->validate_settings())
     return;
 
-  mdlg = new mux_dialog(this);
-  delete mdlg;
+  mux_dlg = new mux_dialog(this);
+  delete mux_dlg;
 }
 
 void mmg_dialog::on_about(wxCommandEvent &evt) {

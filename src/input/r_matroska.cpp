@@ -162,8 +162,6 @@ kax_reader_c::~kax_reader_c() {
   for (i = 0; i < attachments.size(); i++)
     safefree(attachments[i].data);
 
-  if (es != NULL)
-    delete es;
   if (saved_l1 != NULL)
     delete saved_l1;
   if (in != NULL)
@@ -563,8 +561,8 @@ void kax_reader_c::verify_tracks() {
 
 // {{{ FUNCTION kax_reader_c::handle_attachments()
 
-void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
-                                      EbmlElement *l0, int64_t pos) {
+void kax_reader_c::handle_attachments(mm_io_c *io, EbmlElement *l0,
+                                      int64_t pos) {
   KaxAttachments *atts;
   KaxAttached *att;
   EbmlElement *l1, *l2;
@@ -652,8 +650,8 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
   io->restore_pos();
 }
 
-void kax_reader_c::handle_chapters(mm_io_c *io, EbmlStream *es,
-                                   EbmlElement *l0, int64_t pos) {
+void kax_reader_c::handle_chapters(mm_io_c *io, EbmlElement *l0,
+                                   int64_t pos) {
   KaxChapters *chapters;
   EbmlElement *l1, *l2;
   int upper_lvl_el;
@@ -1129,10 +1127,10 @@ int kax_reader_c::read_headers() {
         l1->SkipData(*es, l1->Generic().Context);
 
       } else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)
-        handle_attachments(in, es, l0, l1->GetElementPosition());
+        handle_attachments(in, l0, l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId)
-        handle_chapters(in, es, l0, l1->GetElementPosition());
+        handle_chapters(in, l0, l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
         int i, k;
@@ -1164,10 +1162,10 @@ int kax_reader_c::read_headers() {
 
             if (pos != -1) {
               if (is_attachments)
-                handle_attachments(in, es, l0,
+                handle_attachments(in, l0,
                                    ((KaxSegment *)l0)->GetGlobalPosition(pos));
               else if (is_chapters)
-                handle_chapters(in, es, l0,
+                handle_chapters(in, l0,
                                 ((KaxSegment *)l0)->GetGlobalPosition(pos));
             }
           }

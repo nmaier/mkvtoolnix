@@ -986,21 +986,21 @@ void real_reader_c::get_information_from_data() {
   int i;
   unsigned char *chunk;
   real_demuxer_t *dmx;
-  bool done;
+  bool information_found;
 
   io->save_pos();
 
-  done = true;
+  information_found = true;
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
     if (!strcasecmp(dmx->fourcc, "DNET")) {
       dmx->bsid = -1;
-      done = false;
+      information_found = false;
     }
   }
 
   try {
-    while (!done) {
+    while (!information_found) {
       io->skip(2);
       length = io->read_uint16_be();
       id = io->read_uint16_be();
@@ -1029,11 +1029,11 @@ void real_reader_c::get_information_from_data() {
 
       safefree(chunk);
 
-      done = true;
+      information_found = true;
       for (i = 0; i < demuxers.size(); i++) {
         dmx = demuxers[i];
         if (!strcasecmp(dmx->fourcc, "DNET") && (dmx->bsid == -1))
-          done = false;
+          information_found = false;
 
       }
     }

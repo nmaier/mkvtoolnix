@@ -85,7 +85,7 @@ int flac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 flac_reader_c::flac_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   unsigned char *buf;
-  uint32_t size;
+  uint32_t block_size;
 
   samples = 0;
   try {
@@ -107,23 +107,24 @@ flac_reader_c::flac_reader_c(track_info_c *nti) throw (error_c):
     throw error_c(FPFX "Could not read all header packets.");
 
   try {
-    size = 0;
+    block_size = 0;
     for (current_block = blocks.begin();
          (current_block != blocks.end()) &&
            (current_block->type == FLAC_BLOCK_TYPE_HEADERS); current_block++)
-      size += current_block->len;
-    buf = (unsigned char *)safemalloc(size);
-    size = 0;
+      block_size += current_block->len;
+    buf = (unsigned char *)safemalloc(block_size);
+    block_size = 0;
     for (current_block = blocks.begin();
          (current_block != blocks.end()) &&
            (current_block->type == FLAC_BLOCK_TYPE_HEADERS); current_block++) {
       file->setFilePointer(current_block->filepos);
-      if (file->read(&buf[size], current_block->len) != current_block->len)
+      if (file->read(&buf[block_size], current_block->len) !=
+          current_block->len)
         mxerror(FPFX "Could not read a header packet.\n");
-      size += current_block->len;
+      block_size += current_block->len;
     }
     packetizer = new flac_packetizer_c(this, sample_rate, channels,
-                                       bits_per_sample, buf, size, ti);
+                                       bits_per_sample, buf, block_size, ti);
     packetizer->duplicate_data_on_add(false);
     safefree(buf);
   } catch (error_c &error) {

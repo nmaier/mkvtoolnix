@@ -746,7 +746,6 @@ void avi_reader_c::identify() {
   const char *type;
 #ifdef HAVE_AVICLASSES
   w32AVISTREAMINFO stream_info;
-  w32BITMAPINFOHEADER *bih;
   w32WAVEFORMATEX *wfe;
   IAVIReadStream *stream;
   long format_size;
