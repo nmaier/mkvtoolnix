@@ -134,12 +134,11 @@ find_track_by_uid(int tuid) {
 
 void
 usage() {
+#ifdef HAVE_WXWINDOWS
   mxinfo(_(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
-#ifdef HAVE_WXWINDOWS
     "  -g, --gui      Start the GUI (and open inname if it was given).\n"
-#endif
     "  inname         Use 'inname' as the source.\n"
     "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
     "                 description of what mkvinfo outputs.\n"
@@ -147,6 +146,18 @@ usage() {
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n"));
+#else
+  mxinfo(_(
+    "Usage: mkvinfo [options] inname\n\n"
+    " options:\n"
+    "  inname         Use 'inname' as the source.\n"
+    "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
+    "                 description of what mkvinfo outputs.\n"
+    "  -c, --checksum Calculate and display checksums of frame contents.\n"
+    "  -s, --summary  Only show summaries of the contents, not each element.\n"
+    "  -h, --help     Show this help.\n"
+    "  -V, --version  Show version information.\n"));
+#endif
 }
 
 string
