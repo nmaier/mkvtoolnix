@@ -2186,12 +2186,6 @@ void main_loop() {
 
 // {{{ FUNCTION main(int argc, char **argv)
 
-#ifdef DEBUG
-namespace libmatroska {
-extern int64_t numLacingFixed, numLacingXiph, numLacingEbml;
-}
-#endif
-
 int main(int argc, char **argv) {
   time_t start, end;
 
@@ -2264,10 +2258,6 @@ int main(int argc, char **argv) {
 
   cleanup();
 
-#ifdef DEBUG
-  mxverb(2, "lacing: fixed: %lld, xiph: %lld, ebml: %lld\n", numLacingFixed,
-         numLacingXiph, numLacingEbml);
-#endif
   mxexit();
 }
 
