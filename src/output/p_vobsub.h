@@ -49,7 +49,8 @@ public:
   virtual void dump_debug_info();
 
 protected:
-  virtual int extract_duration(unsigned char *data, int buf_size);
+  virtual int extract_duration(unsigned char *data, int buf_size,
+                               int64_t timecode);
   virtual int deliver_packet(unsigned char *buf, int size, int64_t timecode,
                              int64_t default_duration);
 };

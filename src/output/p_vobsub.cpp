@@ -72,7 +72,12 @@ void vobsub_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size) {
+#define TIMECODE timecode / 60 / 60 / 1000, (timecode / 60 / 1000) % 60, \
+                 (timecode / 1000) % 60, timecode % 1000
+#define FMT_TIMECODE "%02lld:%02lld:%02lld.%03lld"
+
+int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
+                                          int64_t timecode) {
   const int lengths[7] = {0, 0, 0, 2, 2, 6, 4};
   int i, next_ctrlblk, packet_size, data_size, t, len;
 
@@ -89,8 +94,8 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size) {
 
     if((next_ctrlblk > packet_size) || (next_ctrlblk < data_size))
       mxerror(PFX "Inconsistent data in the SPU packets (next_ctrlblk: %d, "
-              "packet_size: %d, data_size: %d)\n", next_ctrlblk, packet_size,
-              data_size);
+              "packet_size: %d, data_size: %d, timecode: " FMT_TIMECODE ")\n",
+              next_ctrlblk, packet_size, data_size, TIMECODE);
 
     if (data[i] <= 0x06)
       len = lengths[data[i]];
@@ -99,14 +104,14 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size) {
 
     if ((i + len) > packet_size) {
       mxwarn(PFX "Warning: Wrong subpicture parameter blockending (i: %d, "
-             "len: %d, packet_size: %d)\n", i, len, packet_size);
+             "len: %d, packet_size: %d, timecode: " FMT_TIMECODE ")n", i, len,
+             packet_size, TIMECODE);
       break;
     }
     if (data[i] == 0x02)
       return 1024 * t / 90;
     i++;
-  }
-  while ((i <= next_ctrlblk) && (i < packet_size));
+  } while ((i <= next_ctrlblk) && (i < packet_size));
 
   return -1;
 }
@@ -122,9 +127,10 @@ int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
     return -1;
   }
 
-  duration = extract_duration(buf, size);
+  duration = extract_duration(buf, size, timecode);
   if (duration == -1) {
-    mxwarn(PFX "Could not extract the duration for a SPU packet.\n");
+    mxverb(3, PFX "Could not extract the duration for a SPU packet (timecode: "
+           FMT_TIMECODE ").\n", TIMECODE);
     duration = default_duration;
   }
   add_packet(buf, size, timecode, duration, true);
@@ -253,6 +259,8 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
             packet_size = len - ((unsigned int)in.getFilePointer() - idx);
             dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size +
                                                    packet_size);
+            mxverb(3, PFX "sub packet data: aid: %d, pts: %.3fs, packet_size: "
+                   "%u\n", aid, pts, packet_size);
             if (in.read(&dst_buf[dst_size], packet_size) != packet_size) {
               mxwarn(PFX "in.read failure");
               return deliver();
