@@ -25,6 +25,8 @@
 
 #include <stdio.h>
 
+#include <vector>
+
 #include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
@@ -34,6 +36,7 @@
 #include <matroska/KaxCluster.h>
 
 using namespace libmatroska;
+using namespace std;
 
 typedef struct {
   string name, type;
@@ -83,8 +86,7 @@ class kax_reader_c: public generic_reader_c {
 private:
   int act_wchar;
 
-  kax_track_t **tracks;
-  int num_tracks;
+  vector<kax_track_t *> tracks;
 
   int64_t tc_scale;
   uint32_t cluster_tc;

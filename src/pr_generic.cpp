@@ -39,7 +39,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   bool found;
 
 #ifdef DEBUG
-  debug_c::add_packetizer(this);
+  debug_facility.add_packetizer(this);
 #endif
   reader = nreader;
   add_packetizer(this);
@@ -626,7 +626,6 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->languages = new vector<language_t>(*src->languages);
   for (i = 0; i < src->languages->size(); i++)
     (*dst->languages)[i].language = safestrdup((*src->languages)[i].language);
-  dst->language = safestrdup(src->language);
   dst->sub_charsets = new vector<language_t>(*src->sub_charsets);
   for (i = 0; i < src->sub_charsets->size(); i++)
     (*dst->sub_charsets)[i].language =
@@ -637,7 +636,9 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->aac_is_sbr = new vector<int64_t>(*src->aac_is_sbr);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
+  dst->language = safestrdup(src->language);
   dst->sub_charset = safestrdup(src->sub_charset);
+  dst->tags = NULL;
 
   return dst;
 }
@@ -668,5 +669,7 @@ void free_track_info(track_info_t *ti) {
   safefree(ti->language);
   safefree(ti->private_data);
   safefree(ti->sub_charset);
+  if (ti->tags != NULL)
+    delete ti->tags;
   safefree(ti);
 }

@@ -107,7 +107,7 @@ void utf8_done();
 char *to_utf8(int handle, const char *local);
 char *from_utf8(int handle, const char *utf8);
 
-int is_unique_uint32(uint32_t number);
+bool is_unique_uint32(uint32_t number);
 void add_unique_uint32(uint32_t number);
 uint32_t create_unique_uint32();
 
@@ -278,23 +278,34 @@ public:
 
 #ifdef DEBUG
 
-class debug_c {
-private:
+class generic_packetizer_c;
+
+typedef struct {
   uint64_t entered_at, elapsed_time, number_of_calls;
   uint64_t last_elapsed_time, last_number_of_calls;
 
   const char *label;
-public:
-  debug_c(const char *nlabel);
+} debug_data_t;
 
-  static void enter(const char *label);
-  static void leave(const char *label);
-  static void add_packetizer(void *ptzr);
-  static void dump_info();
+class debug_c {
+private:
+  vector<generic_packetizer_c *> packetizers;
+  vector<debug_data_t *> entries;
+
+public:
+  debug_c();
+  ~debug_c();
+
+  void enter(const char *label);
+  void leave(const char *label);
+  void add_packetizer(void *ptzr);
+  void dump_info();
 };
 
-#define debug_enter(func) debug_c::enter(func)
-#define debug_leave(func) debug_c::leave(func)
+extern debug_c debug_facility;
+
+#define debug_enter(func) debug_facility.enter(func)
+#define debug_leave(func) debug_facility.leave(func)
 
 #else // DEBUG
 

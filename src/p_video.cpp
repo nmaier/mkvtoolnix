@@ -127,6 +127,7 @@ int video_packetizer_c::process(unsigned char *buf, int size,
 }
 
 video_packetizer_c::~video_packetizer_c() {
+  safefree(codec_id);
 }
 
 void video_packetizer_c::dump_debug_info() {

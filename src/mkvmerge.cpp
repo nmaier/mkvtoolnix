@@ -388,7 +388,7 @@ static int get_type(char *filename) {
 static void sighandler(int signum) {
 #ifdef DEBUG
   if (signum == SIGUSR1)
-    debug_c::dump_info();
+    debug_facility.dump_info();
 #endif // DEBUG
 }
 #endif
@@ -1507,6 +1507,18 @@ static void parse_args(int argc, char **argv) {
     if (attachments[i]->to_all_files)
       attachment_sizes_others += attachments[i]->size;
   }
+
+  delete ti.audio_syncs;
+  delete ti.cue_creations;
+  delete ti.default_track_flags;
+  delete ti.languages;
+  delete ti.sub_charsets;
+  delete ti.all_tags;
+  delete ti.aac_is_sbr;
+  delete ti.atracks;
+  delete ti.vtracks;
+  delete ti.stracks;
+  safefree(attachment);
 }
 
 // }}}

@@ -106,8 +106,6 @@ int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  tracks = NULL;
-  num_tracks = 0;
   num_buffers = 0;
   buffers = NULL;
 
@@ -127,10 +125,12 @@ kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
 kax_reader_c::~kax_reader_c() {
   int i;
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if (tracks[i] != NULL) {
-      if (tracks[i]->private_data != NULL)
-        safefree(tracks[i]->private_data);
+      if (tracks[i]->packetizer != NULL)
+        delete tracks[i]->packetizer;
+      safefree(tracks[i]->private_data);
+      safefree(tracks[i]->codec_id);
       safefree(tracks[i]);
     }
 
@@ -151,11 +151,11 @@ kax_reader_c::~kax_reader_c() {
 int kax_reader_c::packets_available() {
   int i;
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->ok && (!tracks[i]->packetizer->packet_available()))
       return 0;
 
-  if (num_tracks == 0)
+  if (tracks.size() == 0)
     return 0;
 
   return 1;
@@ -166,10 +166,7 @@ kax_track_t *kax_reader_c::new_kax_track() {
 
   t = (kax_track_t *)safemalloc(sizeof(kax_track_t));
   memset(t, 0, sizeof(kax_track_t));
-  tracks = (kax_track_t **)saferealloc(tracks, (num_tracks + 1) *
-                                       sizeof(kax_track_t *));
-  tracks[num_tracks] = t;
-  num_tracks++;
+  tracks.push_back(t);
 
   // Set some default values.
   t->default_track = 1;
@@ -180,7 +177,7 @@ kax_track_t *kax_reader_c::new_kax_track() {
 kax_track_t *kax_reader_c::find_track_by_num(uint32_t n, kax_track_t *c) {
   int i;
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if ((tracks[i] != NULL) && (tracks[i]->tnum == n) &&
         (tracks[i] != c))
       return tracks[i];
@@ -191,7 +188,7 @@ kax_track_t *kax_reader_c::find_track_by_num(uint32_t n, kax_track_t *c) {
 kax_track_t *kax_reader_c::find_track_by_uid(uint32_t uid, kax_track_t *c) {
   int i;
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if ((tracks[i] != NULL) && (tracks[i]->tuid == uid) &&
         (tracks[i] != c))
       return tracks[i];
@@ -211,7 +208,7 @@ void kax_reader_c::verify_tracks() {
   alBITMAPINFOHEADER *bih;
   alWAVEFORMATEX *wfe;
 
-  for (tnum = 0; tnum < num_tracks; tnum++) {
+  for (tnum = 0; tnum < tracks.size(); tnum++) {
     t = tracks[tnum];
     switch (t->type) {
       case 'v':                 // video track
@@ -922,6 +919,7 @@ int kax_reader_c::read_headers() {
                 if (verbose > 1)
                   mxinfo("matroska_reader: |  + Language: %s\n",
                          string(lang).c_str());
+                safefree(track->language);
                 track->language = safestrdup(string(lang).c_str());
 
               } else
@@ -1079,7 +1077,7 @@ void kax_reader_c::create_packetizers() {
   kax_track_t *t;
   track_info_t nti;
 
-  for (i = 0; i < num_tracks; i++) {
+  for (i = 0; i < tracks.size(); i++) {
     t = tracks[i];
 
     memcpy(&nti, ti, sizeof(track_info_t));
@@ -1257,7 +1255,7 @@ int kax_reader_c::read() {
   kax_track_t *block_track;
   bool found_data;
 
-  if (num_tracks == 0)
+  if (tracks.size() == 0)
     return 0;
 
   l0 = segment;
@@ -1325,7 +1323,7 @@ int kax_reader_c::read() {
             block_track = find_track_by_num(block->TrackNum());
           }
 
-          if (block_track != NULL) {
+          if ((block_track != NULL) && (block_track->packetizer != NULL)) {
             if ((block_track->type == 's') && (block_duration == -1)) {
               mxwarn("Text subtitle block does not "
                      "contain a block duration element. This file is "
@@ -1426,7 +1424,7 @@ packet_t *kax_reader_c::get_packet() {
 
   winner = NULL;
 
-  for (i = 0; i < num_tracks; i++) {
+  for (i = 0; i < tracks.size(); i++) {
     t = tracks[i];
     if (winner == NULL) {
       if (t->packetizer->packet_available())
@@ -1449,7 +1447,7 @@ int kax_reader_c::display_priority() {
   if (segment_duration != 0.0)
     return DISPLAYPRIORITY_HIGH;
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->type == 'v')
       return DISPLAYPRIORITY_MEDIUM;
 
@@ -1468,7 +1466,7 @@ void kax_reader_c::display_progress() {
     return;
   }
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->type == 'v') {
       mxinfo("progress: %llu frames\r", tracks[i]->units_processed);
       return;
@@ -1484,7 +1482,7 @@ void kax_reader_c::display_progress() {
 void kax_reader_c::set_headers() {
   int i;
 
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if (demuxing_requested(tracks[i]->type, tracks[i]->tnum) &&
         tracks[i]->ok)
       tracks[i]->packetizer->set_headers();
@@ -1498,7 +1496,7 @@ void kax_reader_c::identify() {
   int i;
 
   mxinfo("File '%s': container: Matroska\n", ti->fname);
-  for (i = 0; i < num_tracks; i++)
+  for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->ok)
       mxinfo("Track ID %d: %s (%s%s%s)\n", tracks[i]->tnum,
              tracks[i]->type == 'v' ? "video" :

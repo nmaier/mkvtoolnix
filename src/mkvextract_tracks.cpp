@@ -418,8 +418,6 @@ static void create_output_files() {
 #define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
 #define myabs(a) ((a) < 0 ? (a) * -1 : (a))
 
-static int dropped = 0;
-
 static void handle_data(KaxBlock *block, int64_t block_duration,
                         bool has_ref) {
   kax_track_t *track;
@@ -706,8 +704,6 @@ static void close_files() {
       }
     }
   }
-
-  mxinfo("\nDROPPED: %u\n", dropped);
 }
 
 // }}}

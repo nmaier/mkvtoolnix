@@ -911,4 +911,7 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
 
   delete io;
   XML_ParserFree(parser);
+  delete pdata->parent_names;
+  delete pdata->parents;
+  safefree(pdata);
 }

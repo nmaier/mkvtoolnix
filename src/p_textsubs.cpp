@@ -54,6 +54,7 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
 
 textsubs_packetizer_c::~textsubs_packetizer_c() {
   safefree(global_data);
+  safefree(codec_id);
 }
 
 void textsubs_packetizer_c::set_headers() {

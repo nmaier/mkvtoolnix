@@ -238,7 +238,7 @@ void die(const char *fmt, ...) {
   va_end(ap);
   mxprint(stderr, "\n");
 #ifdef DEBUG
-  debug_c::dump_info();
+  debug_facility.dump_info();
 #endif
   exit(1);
 }
@@ -524,25 +524,20 @@ char *from_utf8(int handle, const char *utf8) {
  * Random unique uint32_t numbers
  */
 
-static uint32_t *ru_numbers = NULL;
-static int num_ru_numbers = 0;
+static vector<uint32_t> ru_numbers;
 
-int is_unique_uint32(uint32_t number) {
+bool is_unique_uint32(uint32_t number) {
   int i;
 
-  for (i = 0; i < num_ru_numbers; i++)
+  for (i = 0; i < ru_numbers.size(); i++)
     if (ru_numbers[i] == number)
-      return 0;
+      return false;
 
-  return 1;
+  return true;
 }
 
 void add_unique_uint32(uint32_t number) {
-  ru_numbers = (uint32_t *)saferealloc(ru_numbers, (num_ru_numbers + 1) *
-                                       sizeof(uint32_t));
-
-  ru_numbers[num_ru_numbers] = number;
-  num_ru_numbers++;
+  ru_numbers.push_back(number);
 }
 
 uint32_t create_unique_uint32() {
@@ -982,34 +977,36 @@ string to_string(int64_t i) {
  * debugging stuff
  */
 
-static vector<debug_c *> dbg_entries;
-static vector<generic_packetizer_c *>dbg_packetizers;
+debug_c debug_facility;
 
-debug_c::debug_c(const char *nlabel) {
-  elapsed_time = 0;
-  number_of_calls = 0;
-  last_elapsed_time = 0;
-  last_number_of_calls = 0;
-  label = nlabel;
+debug_c::debug_c() {
+}
+
+debug_c::~debug_c() {
+  while (entries.size() > 0) {
+    safefree(entries[entries.size() - 1]);
+    entries.pop_back();
+  }
 }
 
 void debug_c::enter(const char *label) {
   int i;
-  debug_c *entry;
+  debug_data_t *entry;
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   struct timeval tv;
 #endif
 
   entry = NULL;
-  for (i = 0; i < dbg_entries.size(); i++)
-    if (!strcmp(dbg_entries[i]->label, label)) {
-      entry = dbg_entries[i];
+  for (i = 0; i < entries.size(); i++)
+    if (!strcmp(entries[i]->label, label)) {
+      entry = entries[i];
       break;
     }
 
   if (entry == NULL) {
-    entry = new debug_c(label);
-    dbg_entries.push_back(entry);
+    entry = (debug_data_t *)safemalloc(sizeof(debug_data_t));
+    entry->label = label;
+    entries.push_back(entry);
   }
 
 
@@ -1024,7 +1021,7 @@ void debug_c::enter(const char *label) {
 
 void debug_c::leave(const char *label) {
   int i;
-  debug_c *entry;
+  debug_data_t *entry;
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN)
   struct timeval tv;
 
@@ -1036,9 +1033,9 @@ void debug_c::leave(const char *label) {
 #endif
 
   entry = NULL;
-  for (i = 0; i < dbg_entries.size(); i++)
-    if (!strcmp(dbg_entries[i]->label, label)) {
-      entry = dbg_entries[i];
+  for (i = 0; i < entries.size(); i++)
+    if (!strcmp(entries[i]->label, label)) {
+      entry = entries[i];
       break;
     }
 
@@ -1058,21 +1055,21 @@ void debug_c::leave(const char *label) {
 void debug_c::add_packetizer(void *ptzr) {
   int i;
 
-  for (i = 0; i < dbg_packetizers.size(); i++)
-    if (dbg_packetizers[i] == ptzr)
+  for (i = 0; i < packetizers.size(); i++)
+    if (packetizers[i] == ptzr)
       return;
 
-  dbg_packetizers.push_back((generic_packetizer_c *)ptzr);
+  packetizers.push_back((generic_packetizer_c *)ptzr);
 }
 
 void debug_c::dump_info() {
   int i;
-  debug_c *entry;
+  debug_data_t *entry;
   uint64_t diff_calls, diff_time;
 
   mxprint(stderr, "\nDBG> dumping time info:\n");
-  for (i = 0; i < dbg_entries.size(); i++) {
-    entry = dbg_entries[i];
+  for (i = 0; i < entries.size(); i++) {
+    entry = entries[i];
     mxprint(stderr, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
             "time/call: %.3fms", entry->label, entry->number_of_calls,
             entry->elapsed_time / 1000000.0,
@@ -1092,8 +1089,8 @@ void debug_c::dump_info() {
   }
 
   mxprint(stderr, "DBG> dumping packetzer info:\n");
-  for (i = 0; i < dbg_packetizers.size(); i++)
-    dbg_packetizers[i]->dump_debug_info();
+  for (i = 0; i < packetizers.size(); i++)
+    packetizers[i]->dump_debug_info();
 }
 
 #endif // DEBUG
