@@ -45,8 +45,10 @@ bool title_was_present = false;
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
-  uint32_t i, insert_idx;
+  uint32_t i, j;
+  bool found;
   wxString language;
+  wxArrayString popular_languages;
 
   new wxStaticText(this, wxID_STATIC, _("Input files:"), wxPoint(5, 5),
                    wxDefaultSize, 0);
@@ -122,17 +124,28 @@ tab_input::tab_input(wxWindow *parent):
       sorted_iso_codes.Add(language);
     }
     sorted_iso_codes.Sort();
-    sorted_iso_codes.Insert("---common---", 0);
-    insert_idx = 1;
+
     for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
-      if (!is_popular_language(iso639_languages[i].english_name))
+      if (!is_popular_language_code(iso639_languages[i].iso639_2_code))
         continue;
-      language.Printf("%s (%s)", iso639_languages[i].iso639_2_code,
-                      iso639_languages[i].english_name);
-      sorted_iso_codes.Insert(language, insert_idx);
-      insert_idx++;
+      for (j = 0, found = false; j < popular_languages.Count(); j++)
+        if (extract_language_code(popular_languages[j]) ==
+            iso639_languages[i].iso639_2_code) {
+          found = true;
+          break;
+        }
+      if (!found) {
+        language.Printf("%s (%s)", iso639_languages[i].iso639_2_code,
+                        iso639_languages[i].english_name);
+        popular_languages.Add(language);
+      }
     }
-    sorted_iso_codes.Insert("---all---", insert_idx);
+    popular_languages.Sort();
+
+    sorted_iso_codes.Insert("---common---", 0);
+    for (i = 0; i < popular_languages.Count(); i++)
+      sorted_iso_codes.Insert(popular_languages[i], i + 1);
+    sorted_iso_codes.Insert("---all---", i + 1);
   }
 
   cob_language =

@@ -263,6 +263,24 @@ is_popular_language(const char *lang) {
     !strcmp(lang, "Swedish");
 }
 
+bool
+is_popular_language_code(const char *code) {
+  return
+    !strcmp(code, "zho") ||     // Chinese
+    !strcmp(code, "nld") ||     // Dutch
+    !strcmp(code, "eng") ||     // English
+    !strcmp(code, "fin") ||     // Finnish
+    !strcmp(code, "fre") ||     // French
+    !strcmp(code, "ger") ||     // German
+    !strcmp(code, "ita") ||     // Italian
+    !strcmp(code, "jpn") ||     // Japanese
+    !strcmp(code, "nor") ||     // Norwegian
+    !strcmp(code, "por") ||     // Portuguese
+    !strcmp(code, "rus") ||     // Russian
+    !strcmp(code, "spa") ||     // Spanish
+    !strcmp(code, "swe");       // Swedish
+}
+
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                                   wxPoint(0, 0),
 #ifdef SYS_WINDOWS
