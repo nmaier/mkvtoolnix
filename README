@@ -1,20 +1,13 @@
 MKVToolNix 0.6.9
 ================
 
-These tools allow information about (mkvinfo) or extraction
-from (mkvdemux) or creation of (mkvmerge) or the splitting of
-(mkvsplit) Matroska files. Matroska is a new multimedia file
-format aiming to become THE new container format for the future. You
-can find more information about it and its underlying technology, the
-Extensible Binary Meta Language (EBML), at
+These tools allow information about (mkvinfo) or extraction from
+(mkvextract) or creation of (mkvmerge) Matroska files. Matroska is a
+new multimedia file format aiming to become THE new container format
+for the future. You can find more information about it and its
+underlying technology, the Extensible Binary Meta Language (EBML), at
 
 http://www.matroska.org/
-
-At the moment only mkvinfo and mkvmerge are available, but the others
-will be as well.
-
-MkvToolNix aims to become for Matroska what the OGMTools are for
-OGM.
 
 The full documentation for each command is now maintained in its
 man page only. Type 'mkvmerge -h' to get you started.
@@ -77,9 +70,9 @@ The last step must be run as root and is optional.
 If the configure script cannot find the EBML and Matroska headers,
 then you'll have to manually point it to their locations:
 
-./configure --with-matroska-include=/where/i/put/libmatroska/src \
+./configure --with-matroska-include=/where/i/put/libmatroska \
   --with-matroska-lib=/where/i/put/libmatroska/make/linux \
-  --with-ebml-include=/where/i/put/libebml/src \
+  --with-ebml-include=/where/i/put/libebml \
   --with-ebml-lib=/where/i/put/libebml/make/linux
 
 Now run 'make' and 'make install'.
