@@ -359,11 +359,12 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
 
   wxFileDialog dlg(NULL, "Choose an input file", last_open_dir, "",
                    _T("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;"
-                      "*.idx;"
+                      "*.flac;*.idx;"
                       "*.m4a;*.mp2;*.mp3;*.mka;"
                       "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;"
                       "*.wav)|"
-                      "*.aac;*.ac3;*.ass;*.avi;*.dts;*.idx;*.mp2;*.mp3;*.mka;"
+                      "*.aac;*.ac3;*.ass;*.avi;*.dts;*.flac;"
+                      "*.idx;*.mp2;*.mp3;*.mka;"
                       "*.mkv;*.mov;"
                       "*.mp4;*.ogm;*.ogg;*.rm;*.rmvb;*.srt;*.ssa;*.wav|"
                       "AAC (Advanced Audio Coding) (*.aac;*.m4a;*.mp4)|"
@@ -371,6 +372,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
                       "A/52 (aka AC3) (*.ac3)|*.ac3|"
                       "AVI (Audio/Video Interleaved) (*.avi)|*.avi|"
                       "DTS (Digital Theater System) (*.dts)|*.dts|"
+                      "FLAC (Free Lossless Audio Codec) (*.flac;*.ogg)|*.flac;"
+                      "*.ogg|"
                       "MPEG audio files (*.mp2;*.mp3)|*.mp2;*.mp3|"
                       "Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
                       "QuickTime/MP4 A/V (*.mov;*.mp4)|*.mov;*.mp4|"
