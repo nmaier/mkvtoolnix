@@ -159,6 +159,7 @@ void MTX_DLL_API utf8_done();
 string MTX_DLL_API to_utf8(int handle, const string &local);
 string MTX_DLL_API from_utf8(int handle, const string &utf8);
 
+vector<string> MTX_DLL_API command_line_utf8(int argc, char **argv);
 
 enum unique_id_category_e {
   UNIQUE_ALL_IDS = -1,

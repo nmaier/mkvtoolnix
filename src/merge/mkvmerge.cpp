@@ -1195,7 +1195,7 @@ guess_mime_type(string file_name) {
    everything else.
 */
 static void
-parse_args(vector<string> &args) {
+parse_args(vector<string> args) {
   const char *process_priorities[5] = {"lowest", "lower", "normal", "higher",
                                        "highest"};
   track_info_c *ti;
@@ -1921,142 +1921,6 @@ parse_args(vector<string> &args) {
   delete ti;
 }
 
-/** \brief Reads command line arguments from a file
-  
-   Each line contains exactly one command line argument or a
-   comment. Arguments are converted to UTF-8 and appended to the array
-   \c args.
-*/
-static void
-read_args_from_file(vector<string> &args,
-                    const string &filename) {
-  mm_text_io_c *mm_io;
-  string buffer;
-  bool skip_next;
-
-  mm_io = NULL;
-  try {
-    mm_io = new mm_text_io_c(new mm_file_io_c(filename));
-  } catch (exception &ex) {
-    mxerror(_("The file '%s' could not be opened for reading command line "
-              "arguments."), filename.c_str());
-  }
-
-  skip_next = false;
-  while (!mm_io->eof() && mm_io->getline2(buffer)) {
-    if (skip_next) {
-      skip_next = false;
-      continue;
-    }
-    strip(buffer);
-
-    if (buffer == "#EMPTY#") {
-      args.push_back("");
-      continue;
-    }
-
-    if ((buffer[0] == '#') || (buffer[0] == 0))
-      continue;
-
-    if (buffer == "--command-line-charset") {
-      skip_next = true;
-      continue;
-    }
-    args.push_back(buffer);
-  }
-
-  delete mm_io;
-}
-
-/** \brief Expand the command line parameters
-  
-   Takes each command line paramter, converts it to UTF-8, and reads more
-   commands from command files if the argument starts with '@'. Puts all
-   arguments into a new array.
-*/
-#if !defined(SYS_WINDOWS)
-static void
-handle_args(int argc,
-            char **argv) {
-  int i, cc_command_line;
-  vector<string> args;
-
-  cc_command_line = cc_local_utf8;
-
-  for (i = 1; i < argc; i++)
-    if (argv[i][0] == '@')
-      read_args_from_file(args, &argv[i][1]);
-    else {
-      if (!strcmp(argv[i], "--command-line-charset")) {
-        if ((i + 1) == argc)
-          mxerror(_("'--command-line-charset' is missing its argument.\n"));
-        cc_command_line = utf8_init(argv[i + 1] == NULL ? "" : argv[i + 1]);
-        i++;
-      } else
-        args.push_back(to_utf8(cc_command_line, argv[i]));
-    }
-
-  parse_args(args);
-}
-
-#else  // !defined(SYS_WINDOWS)
-
-static void
-handle_args(int argc,
-            char **argv) {
-  vector<string> args;
-  wchar_t *p;
-  string utf8;
-  bool quoted, ignore_me, skip_first;
-
-  p = GetCommandLineW();
-  quoted = false;
-  ignore_me = true;
-  skip_first = true;
-  while (*p != 0) {
-    if (*p == L'"')
-      quoted = !quoted;
-    else if (*p == L' ') {
-      if (quoted)
-        utf8 += ' ';
-      else if (!ignore_me) {
-        if (!skip_first) {
-          if (utf8[0] == '@')
-            read_args_from_file(args, utf8.substr(1).c_str());
-          else
-            args.push_back(utf8);
-        }
-        skip_first = false;
-        ignore_me = true;
-        utf8.clear();
-      }
-    } else {
-      ignore_me = false;
-      if (*p < 0x80)
-        utf8 += (char)*p;
-      else if (*p < 0x800) {
-        utf8 += (char)(0xc0 | (*p >> 6));
-        utf8 += (char)(0x80 | (*p & 0x3f));
-      } else {
-        utf8 += (char)(0xe0 | (*p >> 12));
-        utf8 += (char)(0x80 | ((*p >> 6) & 0x3f));
-        utf8 += (char)(0x80 | (*p & 0x3f));
-      }
-    }
-
-    ++p;
-  }
-  if (!ignore_me && !skip_first) {
-    if (utf8[0] == '@')
-      read_args_from_file(args, utf8.substr(1));
-    else
-      args.push_back(utf8);
-  }
-
-  parse_args(args);
-}
-#endif // !defined(SYS_WINDOWS)
-
 /** \brief Initialize global variables
 */
 static void
@@ -2081,7 +1945,7 @@ main(int argc,
 
   setup();
 
-  handle_args(argc, argv);
+  parse_args(command_line_utf8(argc, argv));
 
   if (split_after > 0)
     splitting = true;
