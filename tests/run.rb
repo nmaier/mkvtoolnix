@@ -15,11 +15,12 @@ class Test
   def run_test
     begin
       return run
-    rescue
+    rescue Class => ex
       n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
       Dir.entries("/tmp").each do |e|
         File.unlink("/tmp/#{e}") if (e =~ /^#{n}/)
       end
+      p(ex)
       return nil
     end
   end
@@ -109,6 +110,28 @@ class Results
     @results[name]["status"] = status
     save
   end
+end
+
+def merge(*args)
+  command = "../src/mkvmerge --engage no_variable_data "
+  string_args = Array.new
+  retcode = 0
+  args.each do |a|
+    if (a.class == String)
+      string_args.push(a)
+    else
+      retcode = a
+    end
+  end
+
+  if ((string_args.size == 0) or (string_args.size > 2))
+    raise "Wrong use of the 'merge' function."
+  elsif (string_args.size == 1)
+    command += "-o " + tmp + " " + string_args[0]
+  else
+    command += "-o " + string_args[0] + " " + string_args[1]
+  end
+  sys(command, retcode)
 end
 
 def main

@@ -6,7 +6,7 @@ class T_010realvideo_4 < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/rv4.rm")
+    merge("data/rv4.rm")
     return hash_tmp
   end
 end

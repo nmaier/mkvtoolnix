@@ -6,7 +6,7 @@ class T_005flac < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/v.flac")
+    merge("data/v.flac")
     return hash_tmp
   end
 end

@@ -6,7 +6,7 @@ class T_012ssa < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/fe.ssa")
+    merge("data/fe.ssa")
     return hash_tmp
   end
 end

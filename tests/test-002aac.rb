@@ -6,7 +6,7 @@ class T_002aac < Test
   end
 
   def run
-    sys("mkvmerge --engage no_variable_data -o " + tmp + " data/v.aac", 1)
+    merge("data/v.aac", 1)
     return hash_tmp
   end
 end
