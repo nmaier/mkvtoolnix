@@ -592,7 +592,7 @@ void mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
 }
 
 void mmg_dialog::update_command_line() {
-  uint32_t fidx, tidx;
+  uint32_t fidx, tidx, i, args_start;
   bool tracks_selected_here;
   bool no_audio, no_video, no_subs;
   mmg_file_t *f;
@@ -607,6 +607,7 @@ void mmg_dialog::update_command_line() {
   clargs.Add(mkvmerge_path);
   clargs.Add("-o");
   clargs.Add(tc_output->GetValue());
+  args_start = clargs.Count();
 
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
@@ -639,7 +640,6 @@ void mmg_dialog::update_command_line() {
         aids += sid;
 
         if (t->aac_is_sbr) {
-          cmdline += "--aac-is-sbr " + sid + " ";
           clargs.Add("--aac-is-sbr");
           clargs.Add(sid);
         }
@@ -657,158 +657,112 @@ void mmg_dialog::update_command_line() {
         sids += sid;
 
         if ((t->sub_charset->Length() > 0) && (*t->sub_charset != "default")) {
-          cmdline += "--sub-charset \"" + sid + ":" +
-            shell_escape(*t->sub_charset) + "\" ";
           clargs.Add("--sub-charset");
           clargs.Add(sid + ":" + shell_escape(*t->sub_charset));
         }
       }
 
       if (*t->language != "none") {
-        cmdline += "--language " + sid + ":" +
-          extract_language_code(*t->language) + " ";
         clargs.Add("--language");
         clargs.Add(sid + ":" + extract_language_code(*t->language));
       }
 
       if (*t->cues != "default") {
-        cmdline += "--cues " + sid + ":";
         clargs.Add("--cues");
-        if (*t->cues == "only for I frames") {
-          cmdline += "iframes ";
+        if (*t->cues == "only for I frames")
           clargs.Add(sid + ":iframes");
-        } else if (*t->cues == "for all frames") {
-          cmdline += "all ";
+        else if (*t->cues == "for all frames")
           clargs.Add(sid + ":all");
-        } else if (*t->cues == "none") {
-          cmdline += "none ";
+        else if (*t->cues == "none")
           clargs.Add(sid + ":none");
-        } else
+        else
           mxerror("Unknown cues option '%s'. Should not have happened.\n",
                   t->cues->c_str());
       }
 
       if ((t->delay->Length() > 0) || (t->stretch->Length() > 0)) {
-        cmdline += "--sync " + sid + ":";
         arg = sid + ":";
-        if (t->delay->Length() > 0) {
-          cmdline += *t->delay;
+        if (t->delay->Length() > 0)
           arg += *t->delay;
-        } else {
-          cmdline += "0";
+        else
           arg += "0";
-        }
-        if (t->stretch->Length() > 0) {
-          cmdline += "," + *t->stretch;
+        if (t->stretch->Length() > 0)
           arg += *t->stretch;
-        }
-        cmdline += " ";
         clargs.Add("--sync");
         clargs.Add(arg);
       }
 
       if ((t->track_name->Length() > 0) || t->track_name_was_present) {
-        cmdline += "--track-name \"" + sid + ":" +
-          shell_escape(*t->track_name) + "\" ";
         clargs.Add("--track-name");
         clargs.Add(sid + ":" + *t->track_name);
       }
 
       if (t->default_track) {
-        cmdline += "--default-track " + sid + " ";
         clargs.Add("--default-track");
         clargs.Add(sid);
       }
 
       if (t->tags->Length() > 0) {
-        cmdline += "--tags \"" + sid + ":" +
-          shell_escape(*t->tags) + "\" ";
         clargs.Add("--tags");
         clargs.Add(sid + ":" + *t->tags);
       }
 
       if (!t->display_dimensions_selected && (t->aspect_ratio->Length() > 0)) {
-        cmdline += "--aspect-ratio \"" + sid + ":" +
-          shell_escape(*t->aspect_ratio) + "\" ";
         clargs.Add("--aspect-ratio");
         clargs.Add(sid + ":" + *t->aspect_ratio);
       } else if (t->display_dimensions_selected &&
                  (t->dwidth->Length() > 0) && (t->dheight->Length() > 0)) {
-        cmdline += "--display-dimensions \"" + sid + ":" +
-          shell_escape(*t->dwidth + "x" + *t->dheight) + "\" ";
         clargs.Add("--display-dimensions");
         clargs.Add(sid + ":" + *t->dwidth + "x" + *t->dheight);
       }
 
       if (t->fourcc->Length() > 0) {
-        cmdline += "--fourcc \"" + sid + ":" + shell_escape(*t->fourcc) +
-          "\" ";
         clargs.Add("--fourcc");
         clargs.Add(sid + ":" + *t->fourcc);
       }
 
       if (t->compression->Length() > 0) {
-        cmdline += "--compression " + sid + ":" + *t->compression + " ";
         clargs.Add("--compression");
         clargs.Add(sid + ":" + *t->compression);
       }
 
       if (t->timecodes->Length() > 0) {
-        cmdline += "--timecodes \"" + sid + ":" +
-          shell_escape(*t->timecodes) + "\" ";
         clargs.Add("--timecodes");
         clargs.Add(sid + ":" + *t->timecodes);
       }
     }
 
     if (aids.length() > 0) {
-      cmdline += "-a " + aids + " ";
       clargs.Add("-a");
       clargs.Add(aids);
     }
     if (dids.length() > 0) {
-      cmdline += "-d " + dids + " ";
       clargs.Add("-d");
       clargs.Add(dids);
     }
     if (sids.length() > 0) {
-      cmdline += "-s " + sids + " ";
       clargs.Add("-s");
       clargs.Add(sids);
     }
 
     if (tracks_selected_here) {
-      if (f->no_chapters) {
-        cmdline += "--no-chapters ";
+      if (f->no_chapters)
         clargs.Add("--no-chapters");
-      }
-      if (f->no_attachments) {
-        cmdline += "--no-attachments ";
+      if (f->no_attachments)
         clargs.Add("--no-attachments");
-      }
-      if (f->no_tags) {
-        cmdline += "--no-tags ";
+      if (f->no_tags)
         clargs.Add("--no-tags");
-      }
-      if (no_video) {
-        cmdline += "-D ";
+
+      if (no_video)
         clargs.Add("-D");
-      }
-
-      if (no_audio) {
-        cmdline += "-A ";
+      if (no_audio)
         clargs.Add("-A");
-      }
-      if (no_subs) {
-        cmdline += "-S ";
+      if (no_subs)
         clargs.Add("-S");
-      }
 
-      cmdline += "--track-order " + track_order + " ";
       clargs.Add("--track-order");
       clargs.Add(track_order);
 
-      cmdline += "\"" + *f->file_name + "\" ";
       clargs.Add(*f->file_name);
     }
   }
@@ -816,145 +770,104 @@ void mmg_dialog::update_command_line() {
   for (fidx = 0; fidx < attachments.size(); fidx++) {
     a = &attachments[fidx];
 
-    cmdline += "--attachment-mime-type \"" +
-      shell_escape(*a->mime_type) + "\" ";
     clargs.Add("--attachment-mime-type");
     clargs.Add(*a->mime_type);
     if (a->description->Length() > 0) {
-      cmdline += "--attachment-description \"" +
-        shell_escape(*a->description) + "\" ";
       clargs.Add("--attachment-description");
       clargs.Add(no_cr(*a->description));
     }
-    if (a->style == 0) {
-      cmdline += "--attach-file \"";
+    if (a->style == 0)
       clargs.Add("--attach-file");
-    } else {
-      cmdline += "--attach-file-once \"";
+    else
       clargs.Add("--attach-file-once");
-    }
-    cmdline += shell_escape(*a->file_name) + "\" ";
     clargs.Add(*a->file_name);
   }
 
   if (global_page->tc_title->GetValue().Length() > 0) {
-    cmdline += "--title \"" +
-      shell_escape(global_page->tc_title->GetValue()) + "\" ";
     clargs.Add("--title");
     clargs.Add(global_page->tc_title->GetValue());
   } else if (title_was_present) {
-    cmdline += "--title \"\"";
     clargs.Add("--title");
     clargs.Add("");
   }
 
   if (global_page->cb_split->IsChecked()) {
     clargs.Add("--split");
-    if (global_page->rb_split_by_size->GetValue()) {
-      cmdline += "--split \"" +
-        shell_escape(global_page->cob_split_by_size->GetValue()) + "\" ";
+    if (global_page->rb_split_by_size->GetValue())
       clargs.Add(global_page->cob_split_by_size->GetValue());
-    } else {
-      cmdline += "--split \"" +
-        shell_escape(global_page->cob_split_by_time->GetValue()) + "\" ";
+    else
       clargs.Add(global_page->cob_split_by_time->GetValue());
-    }
 
     if (global_page->tc_split_max_files->GetValue().Length() > 0) {
-      cmdline += "--split-max-files \"" +
-        shell_escape(global_page->tc_split_max_files->GetValue()) + "\" ";
       clargs.Add("--split-max-files");
       clargs.Add(global_page->tc_split_max_files->GetValue());
     }
 
-    if (global_page->cb_link->IsChecked()) {
-      cmdline += "--link ";
+    if (global_page->cb_link->IsChecked())
       clargs.Add("--link");
-    }
   }
 
   if (global_page->tc_previous_segment_uid->GetValue().Length() > 0) {
-    cmdline += "--link-to-previous \"" +
-      shell_escape(global_page->tc_previous_segment_uid->GetValue()) + "\" ";
     clargs.Add("--link-to-previous");
     clargs.Add(global_page->tc_previous_segment_uid->GetValue());
   }
 
   if (global_page->tc_next_segment_uid->GetValue().Length() > 0) {
-    cmdline += "--link-to-next \"" +
-      shell_escape(global_page->tc_next_segment_uid->GetValue()) + "\" ";
     clargs.Add("--link-to-next");
     clargs.Add(global_page->tc_next_segment_uid->GetValue());
   }
 
   if (global_page->tc_chapters->GetValue().Length() > 0) {
     if (global_page->cob_chap_language->GetValue().Length() > 0) {
-      cmdline += "--chapter-language \"" +
-        shell_escape(extract_language_code(global_page->
-                                           cob_chap_language->GetValue())) +
-        "\" ";
       clargs.Add("--chapter-language");
       clargs.Add(extract_language_code(global_page->
                                    cob_chap_language->GetValue()));
     }
 
     if (global_page->cob_chap_charset->GetValue().Length() > 0) {
-      cmdline += "--chapter-charset \"" +
-        shell_escape(global_page->cob_chap_charset->GetValue()) + "\" ";
       clargs.Add("--chapter-charset");
       clargs.Add(global_page->cob_chap_charset->GetValue());
     }
 
     if (global_page->tc_cue_name_format->GetValue().Length() > 0) {
-      cmdline += "--cue-chapter-name-format \"" +
-        shell_escape(global_page->tc_cue_name_format->GetValue()) + "\" ";
       clargs.Add("--cue-chapter-name-format");
       clargs.Add(global_page->tc_cue_name_format->GetValue());
     }
 
-    cmdline += "--chapters \"" +
-      shell_escape(global_page->tc_chapters->GetValue()) + "\" ";
     clargs.Add("--chapters");
     clargs.Add(global_page->tc_chapters->GetValue());
   }
 
   if (global_page->tc_global_tags->GetValue().Length() > 0) {
-    cmdline += "--global-tags \"" +
-      shell_escape(global_page->tc_global_tags->GetValue()) + "\" ";
     clargs.Add("--global-tags");
     clargs.Add(global_page->tc_global_tags->GetValue());
   }
 
   if (advanced_page->cob_cl_charset->GetValue().Length() > 0) {
-    cmdline += "--command-line-charset \"" +
-      shell_escape(advanced_page->cob_cl_charset->GetValue()) + "\" ";
     clargs.Add("--command-line-charset");
     clargs.Add(advanced_page->cob_cl_charset->GetValue());
   }
 
-  if (advanced_page->cb_no_cues->IsChecked()) {
-    cmdline += "--no-cues ";
+  if (advanced_page->cb_no_cues->IsChecked())
     clargs.Add("--no-cues");
-  }
 
-  if (advanced_page->cb_no_clusters->IsChecked()) {
-    cmdline += "--no-clusters-in-meta-seek ";
+  if (advanced_page->cb_no_clusters->IsChecked())
     clargs.Add("--no-clusters-in-meta-seek");
-  }
 
-  if (advanced_page->cb_disable_lacing->IsChecked()) {
-    cmdline += "--disable-lacing ";
+  if (advanced_page->cb_disable_lacing->IsChecked())
     clargs.Add("--disable-lacing");
-  }
 
-  if (advanced_page->cb_enable_durations->IsChecked()) {
-    cmdline += "--enable-durations ";
+  if (advanced_page->cb_enable_durations->IsChecked())
     clargs.Add("--enable-durations");
-  }
 
-  if (advanced_page->cb_enable_timeslices->IsChecked()) {
-    cmdline += "--enable-timeslices ";
+  if (advanced_page->cb_enable_timeslices->IsChecked())
     clargs.Add("--enable-timeslices");
+
+  for (i = args_start; i < clargs.Count(); i++) {
+    if (clargs[i].Find(" ") >= 0)
+      cmdline += " \"" + shell_escape(clargs[i]) + "\"";
+    else
+      cmdline += " " + shell_escape(clargs[i]);
   }
 
   if (old_cmdline != cmdline)
