@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.7 2003/03/06 23:38:37 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.8 2003/04/11 10:32:31 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,27 +37,21 @@
 
 
 ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
-                                   int nchannels, int nbitrate,
-                                   track_info_t *nti) throw (error_c):
+                                   int nchannels, track_info_t *nti)
+  throw (error_c):
   q_c(nti) {
   packetno = 0;
   bytes_output = 0;
   packet_buffer = NULL;
   buffer_size = 0;
-  set_params(nsamples_per_sec, nchannels, nbitrate);
+  samples_per_sec = nsamples_per_sec;
+  channels = nchannels;
   set_header();
 }
 
 ac3_packetizer_c::~ac3_packetizer_c() {
   if (packet_buffer != NULL)
     free(packet_buffer);
-}
-
-void ac3_packetizer_c::set_params(unsigned long nsamples_per_sec,
-                                  int nchannels, int nbitrate) {
-  samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-  bitrate = nbitrate;
 }
 
 void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
@@ -201,22 +195,26 @@ void ac3_packetizer_c::set_header() {
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 
-int ac3_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
+int ac3_packetizer_c::process(unsigned char *buf, int size,
+                              int64_t timecode, int64_t) {
   unsigned char *packet;
   unsigned long header;
   ac3_header_t ac3header;
+  u_int64_t my_timecode;
+
+  if (timecode != -1)
+    my_timecode = timecode;
 
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
-    add_packet(packet, ac3header.bytes,
-               (u_int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
-               samples_per_sec));
+    if (timecode != -1)
+      my_timecode = (u_int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
+                                samples_per_sec);
+
+    add_packet(packet, ac3header.bytes, my_timecode);
     packetno++;
     free(packet);
   }
 
-  if (last_frame)
-    return 0;
-  else
-    return EMOREDATA;
+  return EMOREDATA;
 }
