@@ -143,6 +143,40 @@ generic_packetizer_c::~generic_packetizer_c() {
     safefree(hcodec_private);
 }
 
+void generic_packetizer_c::set_tag_track_uid() {
+  int is, it;
+  bool skip;
+  KaxTag *tag;
+  KaxTagTargets *targets;
+
+  if (ti->tags == NULL)
+    return;
+
+  for (is = 0; is < ti->tags->ListSize(); is++) {
+    tag = (KaxTag *)(*ti->tags)[is];
+    skip = false;
+
+    for (it = 0; it < tag->ListSize(); it++)
+      if ((*tag)[it]->Generic().GlobalId ==
+          KaxTagTargets::ClassInfos.GlobalId) {
+        skip = true;
+        break;
+      }
+
+    if (!skip) {
+      targets = &GetChild<KaxTagTargets>(*tag);
+      *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
+        huid;
+    }
+
+    if (!tag->CheckMandatory()) {
+      mxprint(stderr, "Error parsing the tags in '%s': some mandatory "
+              "elements are missing.\n", ti->tags_ptr->file_name);
+      exit(1);
+    }
+  }
+}
+
 int generic_packetizer_c::read() {
   return reader->read();
 }
@@ -552,6 +586,8 @@ track_info_t *duplicate_track_info(track_info_t *src) {
     (*dst->sub_charsets)[i].language =
       safestrdup((*src->sub_charsets)[i].language);
   dst->all_tags = new vector<tags_t>(*src->all_tags);
+  for (i = 0; i < src->all_tags->size(); i++)
+    (*dst->all_tags)[i].file_name = safestrdup((*src->all_tags)[i].file_name);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->sub_charset = safestrdup(src->sub_charset);
@@ -578,6 +614,8 @@ void free_track_info(track_info_t *ti) {
   for (i = 0; i < ti->sub_charsets->size(); i++)
     safefree((*ti->sub_charsets)[i].language);
   delete ti->sub_charsets;
+  for (i = 0; i < ti->all_tags->size(); i++)
+    safefree((*ti->all_tags)[i].file_name);
   delete ti->all_tags;
   safefree(ti->language);
   safefree(ti->private_data);

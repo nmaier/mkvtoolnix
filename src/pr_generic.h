@@ -69,7 +69,7 @@ typedef struct {
 } language_t;
 
 typedef struct {
-  const char *file_name;
+  char *file_name;
   int64_t id;
 } tags_t;
 
@@ -194,6 +194,8 @@ public:
 
   virtual void set_as_default_track(int type);
   virtual void force_default_track(int type);
+
+  virtual void set_tag_track_uid();
 };
 
 class generic_reader_c {
@@ -208,6 +210,8 @@ public:
   virtual void display_progress() = 0;
   virtual void set_headers() = 0;
   virtual void identify() = 0;
+
+//   virtual void set_tag_track_uids() = 0;
 
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
