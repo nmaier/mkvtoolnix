@@ -73,6 +73,8 @@ public:
   void on_item_selected(wxCommandEvent &evt);
 
   void enable_buttons(bool enable);
+  void swap_rows(int lower, int higher);
+  void create_list_item(int i);
 }; 
 
 #endif // __JOBS_H

@@ -58,8 +58,6 @@ job_dialog::job_dialog(wxWindow *parent):
 #endif
            wxCAPTION) {
   wxListItem item;
-  wxString s;
-  wxDateTime dt;
   int i;
   long dummy;
 
@@ -91,48 +89,9 @@ job_dialog::job_dialog(wxWindow *parent):
     lv_jobs->SetItem(dummy, 4, wxS("2004-05-06 07:08:09"));
     lv_jobs->SetItem(dummy, 5, wxS("2004-05-06 07:08:09"));
 
-  } else {
-    for (i = 0; i < jobs.size(); i++) {
-      s.Printf(wxS("%d"), jobs[i].id);
-      dummy = lv_jobs->InsertItem(i, s);
-
-      s.Printf(wxS("%s"),
-               jobs[i].status == jobs_pending ? wxS("pending") :
-               jobs[i].status == jobs_done ? wxS("done") :
-               jobs[i].status == jobs_aborted ? wxS("aborted") :
-               wxS("failed"));
-      lv_jobs->SetItem(dummy, 1, s);
-
-      dt.Set((time_t)jobs[i].added_on);
-      s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-               dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-               dt.GetSecond());
-      lv_jobs->SetItem(dummy, 2, s);
-
-      if (jobs[i].started_on != -1) {
-        dt.Set((time_t)jobs[i].started_on);
-        s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-                 dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-                 dt.GetSecond());
-      } else
-        s = wxS("                   ");
-      lv_jobs->SetItem(dummy, 3, s);
-
-      if (jobs[i].finished_on != -1) {
-        dt.Set((time_t)jobs[i].finished_on);
-        s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-                 dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-                 dt.GetSecond());
-      } else
-        s = wxS("                   ");
-      lv_jobs->SetItem(dummy, 4, s);
-
-      s = *jobs[i].description;
-      while (s.length() < 15)
-        s += wxS(" ");
-      lv_jobs->SetItem(dummy, 5, s);
-    }
-  }
+  } else
+    for (i = 0; i < jobs.size(); i++)
+      create_list_item(i);
 
   for (i = 0; i < 6; i++)
     lv_jobs->SetColumnWidth(i, wxLIST_AUTOSIZE);
@@ -166,6 +125,52 @@ job_dialog::job_dialog(wxWindow *parent):
 }
 
 void
+job_dialog::create_list_item(int i) {
+  wxString s;
+  wxDateTime dt;
+  long dummy;
+
+  s.Printf(wxS("%d"), jobs[i].id);
+  dummy = lv_jobs->InsertItem(i, s);
+
+  s.Printf(wxS("%s"),
+           jobs[i].status == jobs_pending ? wxS("pending") :
+           jobs[i].status == jobs_done ? wxS("done") :
+           jobs[i].status == jobs_aborted ? wxS("aborted") :
+           wxS("failed"));
+  lv_jobs->SetItem(dummy, 1, s);
+
+  dt.Set((time_t)jobs[i].added_on);
+  s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
+           dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
+           dt.GetSecond());
+  lv_jobs->SetItem(dummy, 2, s);
+
+  if (jobs[i].started_on != -1) {
+    dt.Set((time_t)jobs[i].started_on);
+    s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
+             dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
+             dt.GetSecond());
+  } else
+    s = wxS("                   ");
+  lv_jobs->SetItem(dummy, 3, s);
+
+  if (jobs[i].finished_on != -1) {
+    dt.Set((time_t)jobs[i].finished_on);
+    s.Printf(wxS("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
+             dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
+             dt.GetSecond());
+  } else
+    s = wxS("                   ");
+  lv_jobs->SetItem(dummy, 4, s);
+
+  s = *jobs[i].description;
+  while (s.length() < 15)
+    s += wxS(" ");
+  lv_jobs->SetItem(dummy, 5, s);
+}
+
+void
 job_dialog::enable_buttons(bool enable) {
   b_up->Enable(enable);
   b_down->Enable(enable);
@@ -189,48 +194,77 @@ job_dialog::on_start_selected(wxCommandEvent &evt) {
 
 void
 job_dialog::on_delete(wxCommandEvent &evt) {
-  long item, i, n;
+  int i;
   vector<job_t>::iterator dit;
-  vector<long> selected;
 
-  item = -1;
-  while (true) {
-    item = lv_jobs->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    if (item == -1)
-      break;
-    selected.push_back(item);
-    delete jobs[item].description;
-  }
-
-  if (selected.size() == 0)
-    return;
-
-  sort(selected.begin(), selected.end());
   dit = jobs.begin();
-  n = 0;
-  for (i = 0; i < jobs.size(); i++) {
-    if (selected[0] == i) {
+  i = 0;
+  while (i < jobs.size()) {
+    if (lv_jobs->IsSelected(i)) {
       jobs.erase(dit);
-      selected.erase(selected.begin());
-      lv_jobs->DeleteItem(n);
+      lv_jobs->DeleteItem(i);
     } else {
       dit++;
-      n++;
+      i++;
     }
-
-    if (selected.size() == 0)
-      break;
   }
 
   mdlg->save_job_queue();
 }
 
 void
+job_dialog::swap_rows(int lower, int higher) {
+  job_t tmp_job;
+  int tmp_i;
+
+  if ((lower == higher) || (lower < 0) || (higher < 0) ||
+      (lower >= jobs.size()) || (higher >= jobs.size()))
+    return;
+  if (lower > higher) {
+    tmp_i = lower;
+    lower = higher;
+    higher = tmp_i;
+  }
+  tmp_job = jobs[lower];
+  jobs[lower] = jobs[higher];
+  jobs[higher] = tmp_job;
+
+  lv_jobs->DeleteItem(higher);
+  create_list_item(lower);
+}
+
+void
 job_dialog::on_up(wxCommandEvent &evt) {
+  int i;
+
+  i = 0;
+  while ((i < jobs.size()) && lv_jobs->IsSelected(i))
+    i++;
+  for (; i < jobs.size(); i++)
+    if (lv_jobs->IsSelected(i)) {
+      swap_rows(i - 1, i);
+      lv_jobs->Select(i - 1, true);
+      lv_jobs->Select(i, false);
+    }
+
+  mdlg->save_job_queue();
 }
 
 void
 job_dialog::on_down(wxCommandEvent &evt) {
+  int i;
+
+  i = jobs.size() - 1;
+  while ((i >= 0) && lv_jobs->IsSelected(i))
+    i--;
+  for (; i >= 0; i--)
+    if (lv_jobs->IsSelected(i)) {
+      swap_rows(i + 1, i);
+      lv_jobs->Select(i + 1, true);
+      lv_jobs->Select(i, false);
+    }
+
+  mdlg->save_job_queue();
 }
 
 void
