@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.36 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.37 2003/05/06 09:59:37 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -261,13 +261,24 @@ void generic_packetizer_c::set_headers() {
     KaxTrackVideo &video =
       GetChild<KaxTrackVideo>(static_cast<KaxTrackEntry &>(*track_entry));
 
-    if (hvideo_pixel_height != -1)
+    if (hvideo_pixel_height != -1) {
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxVideoPixelHeight>(video))) = hvideo_pixel_height;
+      if ((ti->aspect_ratio != 1.0) &&
+          ((hvideo_pixel_width / hvideo_pixel_height) != ti->aspect_ratio))
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoDisplayHeight>(video))) = hvideo_pixel_height;
+    }
 
-    if (hvideo_pixel_width != -1)
+    if (hvideo_pixel_width != -1) {
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxVideoPixelWidth>(video))) = hvideo_pixel_width;
+      if ((ti->aspect_ratio != 1.0) &&
+          ((hvideo_pixel_width / hvideo_pixel_height) != ti->aspect_ratio))
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoDisplayWidth>(video))) =
+          hvideo_pixel_height * ti->aspect_ratio;
+    }
 
     if (hvideo_frame_rate != -1.0)
       *(static_cast<EbmlFloat *>

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.58 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.59 2003/05/06 09:59:37 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -197,6 +197,7 @@ static void usage(void) {
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
+    "  --aspect-ratio <f|a/b>   Sets the aspect ratio.\n"
     "\n Options that only apply to text subtitle tracks:\n"
     "  --no-utf8-subs           Outputs text subtitles unmodified and do not\n"
     "                           convert the text to UTF-8.\n"
@@ -381,6 +382,34 @@ static void parse_sync(char *s, audio_sync_t *async) {
   async->displacement = atoi(s);
 }
 
+static float parse_aspect_ratio(char *s) {
+  char *div;
+  float w, h;
+
+  div = strchr(s, '/');
+  if (div == NULL)
+    return strtod(s, NULL);
+
+  *div = 0;
+  div++;
+  if (*s == 0) {
+    fprintf(stderr, "Error: aspect ratio: missing dividend.\n");
+    exit(1);
+  }
+  if (*div == 0) {
+    fprintf(stderr, "Error: aspect ratio: missing divisor.\n");
+    exit(1);
+  }
+  w = strtod(s, NULL);
+  h = strtod(div, NULL);
+  if (h == 0.0) {
+    fprintf(stderr, "Error: aspect ratio: divisor is 0.\n");
+    exit(1);
+  }
+
+  return w/h;
+}
+
 // static double parse_time(char *s) {
 //   char *c, *a, *dot;
 //   int num_colons;
@@ -486,6 +515,7 @@ static void parse_args(int argc, char **argv) {
   memset(&ti, 0, sizeof(track_info_t));
   ti.async.linear = 1.0;
   ti.cues = CUES_UNSPECIFIED;
+  ti.aspect_ratio = 1.0;
 
   // First parse options that either just print some infos and then exit
   // or that are needed right at the beginning.
@@ -534,8 +564,10 @@ static void parse_args(int argc, char **argv) {
     // Global options
     if (!strcmp(argv[i], "-q"))
       verbose = 0;
+
     else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose = 2;
+
     else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --cluster-length lacks the length.\n");
@@ -561,6 +593,7 @@ static void parse_args(int argc, char **argv) {
         max_ms_per_cluster = 65535;
       }
       i++;
+
     } else if (!strcmp(argv[i], "--meta-seek-size")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --meta-seek-size lacks the size argument.\n");
@@ -572,8 +605,10 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       i++;
+
     } else if (!strcmp(argv[i], "--no-cues"))
       write_cues = 0;
+
     else if (!strcmp(argv[i], "--no-meta-seek"))
       write_meta_seek = 0;
 
@@ -581,10 +616,13 @@ static void parse_args(int argc, char **argv) {
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
       noaudio = 1;
+
     else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
       novideo = 1;
+
     else if (!strcmp(argv[i], "-S") || !strcmp(argv[i], "--nosubs"))
       nosubs = 1;
+
     else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--atracks")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -a lacks the stream number(s).\n");
@@ -594,6 +632,7 @@ static void parse_args(int argc, char **argv) {
         safefree(ti.atracks);
       ti.atracks = parse_tracks(argv[i + 1]);
       i++;
+
     } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vtracks")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -d lacks the stream number(s).\n");
@@ -603,6 +642,7 @@ static void parse_args(int argc, char **argv) {
         safefree(ti.vtracks);
       ti.vtracks = parse_tracks(argv[i + 1]);
       i++;
+
     } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stracks")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -s lacks the stream number(s).\n");
@@ -612,6 +652,7 @@ static void parse_args(int argc, char **argv) {
         safefree(ti.stracks);
       ti.stracks = parse_tracks(argv[i + 1]);
       i++;
+
     } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -f lacks the FourCC.\n");
@@ -625,6 +666,15 @@ static void parse_args(int argc, char **argv) {
       memcpy(ti.fourcc, argv[i + 1], 4);
       ti.fourcc[4] = 0;
       i++;
+
+    } else if (!strcmp(argv[i], "--aspect-ratio")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --aspect-ratio lacks the aspect ratio.\n");
+        exit(1);
+      }
+      ti.aspect_ratio = parse_aspect_ratio(argv[i + 1]);
+      i++;
+
     } else if (!strcmp(argv[i], "-y") || !strcmp(argv[i], "--sync")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -y lacks the audio delay.\n");
@@ -632,6 +682,7 @@ static void parse_args(int argc, char **argv) {
       }
       parse_sync(argv[i + 1], &ti.async);
       i++;
+
     } else if (!strcmp(argv[i], "--cues")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --cues lacks its argument.\n");
@@ -649,10 +700,13 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       i++;
+
     } else if (!strcmp(argv[i], "--default-track"))
       ti.default_track = 1;
+
     else if (!strcmp(argv[i], "--no-utf8-subs"))
       ti.no_utf8_subs = 1;
+
     else if (!strcmp(argv[i], "--language")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --language lacks its argument.\n");
@@ -666,6 +720,7 @@ static void parse_args(int argc, char **argv) {
 
       ti.language = argv[i + 1];
       i++;
+
     } else if (!strcmp(argv[i], "--sub-charset")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --sub-charset lacks its argument.\n");
@@ -803,9 +858,11 @@ static void parse_args(int argc, char **argv) {
         safefree(ti.vtracks);
       if (ti.stracks != NULL)
         safefree(ti.stracks);
+
       memset(&ti, 0, sizeof(track_info_t));
       ti.async.linear = 1.0;
       ti.cues = CUES_UNSPECIFIED;
+      ti.aspect_ratio = 1.0;
     }
   }
   

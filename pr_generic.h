@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.37 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.38 2003/05/06 09:59:37 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -64,6 +64,7 @@ typedef struct {
   int no_utf8_subs;
 
   char fourcc[5];
+  float aspect_ratio;
 
   audio_sync_t async;
 

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.34 2003/05/05 20:48:49 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.35 2003/05/06 09:59:37 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -478,6 +478,28 @@ void process_file() {
                       *static_cast<KaxVideoPixelHeight *>(l4);
                     height.ReadData(es->I_O());
                     fprintf(stdout, "(%s) |   + Pixel height: %u", NAME,
+                            uint16(height));
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
+                    fprintf(stdout, "\n");
+
+                  } else if (EbmlId(*l4) ==
+                      KaxVideoDisplayWidth::ClassInfos.GlobalId) {
+                    KaxVideoDisplayWidth &width =
+                      *static_cast<KaxVideoDisplayWidth *>(l4);
+                    width.ReadData(es->I_O());
+                    fprintf(stdout, "(%s) |   + Display width: %u", NAME,
+                            uint16(width));
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", l4->GetElementPosition());
+                    fprintf(stdout, "\n");
+
+                  } else if (EbmlId(*l4) ==
+                             KaxVideoDisplayHeight::ClassInfos.GlobalId) {
+                    KaxVideoDisplayHeight &height =
+                      *static_cast<KaxVideoDisplayHeight *>(l4);
+                    height.ReadData(es->I_O());
+                    fprintf(stdout, "(%s) |   + Display height: %u", NAME,
                             uint16(height));
                     if (verbose > 1)
                       fprintf(stdout, " at %llu", l4->GetElementPosition());
