@@ -32,30 +32,62 @@
 #include "p_video.h"
 
 typedef struct {
-  uint32_t number, duration;
-} qt_sample_duration_t;
+  uint32_t number;
+  uint32_t duration;
+} qt_durmap_t;
 
 typedef struct {
-  uint32_t first_chunk, samples_per_chunk, description_id;
-} qt_sample_to_chunk_t;
+  uint32_t samples;
+  uint32_t size;
+  uint32_t desc;
+  uint64_t pos;
+} qt_chunk_t;
+
+typedef struct {
+  uint32_t first_chunk;
+  uint32_t samples_per_chunk;
+  uint32_t sample_description_id;
+} qt_chunkmap_t;
+
+typedef struct {
+  uint32_t duration;
+  uint32_t pos;
+  uint32_t speed;
+  uint32_t frames;
+  uint32_t start_sample;
+  uint32_t start_frame;
+  uint32_t pts_offset;
+} qt_editlist_t;
+
+typedef struct {
+  uint32_t pts;
+  uint32_t size;
+  uint64_t pos;
+} qt_sample_t;
 
 typedef struct {
   char type;
   uint32_t id;
   char fourcc[4];
+  uint32_t pos;
 
-  uint32_t timescale, duration, sample_size;
+  uint32_t timescale;
+  uint32_t duration;
+  uint32_t avg_duration;
+  uint32_t sample_size;
 
-  uint32_t *sync_table;
-  uint32_t sync_table_len;
-  qt_sample_duration_t *duration_table;
-  uint32_t duration_table_len;
-  qt_sample_to_chunk_t *sample_to_chunk_table;
-  uint32_t sample_to_chunk_table_len;
-  uint32_t *sample_size_table;
-  uint32_t sample_size_table_len;
-  uint64_t *chunk_offset_table;
-  uint32_t chunk_offset_table_len;
+  qt_sample_t *sample_table;
+  uint32_t sample_table_len;
+  qt_chunk_t *chunk_table;
+  uint32_t chunk_table_len;
+  qt_chunkmap_t *chunkmap_table;
+  uint32_t chunkmap_table_len;
+  qt_durmap_t *durmap_table;
+  uint32_t durmap_table_len;
+  uint32_t *keyframe_table;
+  uint32_t keyframe_table_len;
+  qt_editlist_t *editlist_table;
+  uint32_t editlist_table_len;
 
   uint32_t v_width, v_height, v_bitdepth;
   uint32_t a_channels, a_bitdepth;
