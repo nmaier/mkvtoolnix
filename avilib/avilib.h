@@ -100,6 +100,8 @@ typedef struct
   uint32_t  bi_clr_important;
 } alBITMAPINFOHEADER;
 
+#pragma pack(2)
+
 typedef struct
 {
   uint16_t  w_format_tag;
@@ -110,6 +112,8 @@ typedef struct
   uint16_t  w_bits_per_sample;
   uint16_t  cb_size;
 } alWAVEFORMATEX;
+
+#pragma pack(4)
 
 typedef struct
 {
