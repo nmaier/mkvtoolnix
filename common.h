@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.17 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: common.h,v 1.18 2003/05/09 05:26:02 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -21,7 +21,9 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#ifndef __CYGWIN__
 #include <stdint.h>
+#endif
 #include <sys/types.h>
 
 #ifdef WIN32

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.16 2003/05/08 18:42:18 mosu Exp $
+    \version \$Id: common.cpp,v 1.17 2003/05/09 05:26:02 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -161,7 +161,11 @@ static char *convert_charset(iconv_t ict, char *src) {
   ldst = len;
   psrc = src;
   pdst = dst;
+#ifdef __CYGWIN__
+  iconv(ict, (const char **)&psrc, &lsrc, &pdst, &ldst);
+#else
   iconv(ict, &psrc, &lsrc, &pdst, &ldst);
+#endif
 
   return dst;
 }

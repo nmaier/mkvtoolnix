@@ -31,7 +31,9 @@
 #include <fcntl.h>
 
 //SLM
-#ifdef WIN32
+#ifdef __CYGWIN__
+#include <sys/types.h>
+#elif defined WIN32
 #define uint16_t unsigned __int16
 #define uint32_t unsigned __int32
 #define uint64_t unsigned __int64

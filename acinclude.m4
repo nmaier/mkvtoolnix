@@ -309,6 +309,8 @@ AC_ARG_ENABLE(ebmltest, [  --disable-ebmltest            Do not try to compile a
     fi
     if test "x$ebml_lib" != "x"; then
       EBML_LIBS="-L$ebml_lib"
+    else
+      EBML_LIBS="-L/usr/local/lib"
     fi
   fi
 
@@ -430,6 +432,8 @@ AC_ARG_ENABLE(matroskatest, [  --disable-matroskatest        Do not try to compi
     fi
     if test "x$matroska_lib" != "x"; then
       MATROSKA_LIBS="-L$matroska_lib"
+    else
+      MATROSKA_LIBS="-L/usr/local/lib"
     fi
   fi
 
@@ -542,4 +546,24 @@ AC_DEFUN(PATH_CXXVERSION,
       ;;
   esac
   AC_SUBST(CXXVER_CFLAGS)
+])
+
+dnl
+dnl Check for cygwin
+dnl
+AC_DEFUN(PATH_CYGWIN,
+[dnl
+  AC_MSG_CHECKING(if being compiled under cygwin)
+  CYGWIN="`uname -s`"
+  case "$CYGWIN" in
+    CYGWIN*)
+      ICONV_LIBS="-liconv"
+      AC_MSG_RESULT(yes)
+      ;;
+    *)
+      ICONV_LIBS=""
+      AC_MSG_RESULT(no)
+      ;;
+  esac
+  AC_SUBST(ICONV_LIBS)
 ])
