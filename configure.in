@@ -402,7 +402,7 @@ dnl Test for libebml, and define EBML_CFLAGS and EBML_LIBS
 dnl
   ebml_ver_req_major=0
   ebml_ver_req_minor=7
-  ebml_ver_req_micro=2
+  ebml_ver_req_micro=3
 
   AC_CACHE_CHECK([for libebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}],
   [ac_cv_ebml_version],[
@@ -515,7 +515,7 @@ dnl Test for libmatroska, and define MATROSKA_CFLAGS and MATROSKA_LIBS
 dnl
   kax_ver_req_major=0
   kax_ver_req_minor=7
-  kax_ver_req_micro=4
+  kax_ver_req_micro=5
 
   AC_CACHE_CHECK([for libmatroska version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}],[ac_cv_matroska_version],[
   MATROSKA_LIBS="-lmatroska"
