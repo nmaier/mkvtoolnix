@@ -419,10 +419,12 @@ void mm_mem_io_c::setFilePointer(int64 offset, seek_mode mode) {
   else
     npos = pos + offset;
 
-  if ((npos < 0) || (npos >= mem_size))
-    throw exception();
-
-  pos = npos;
+  if (npos < 0)
+    pos = 0;
+  else if (npos >= mem_size)
+    pos = mem_size;
+  else
+    pos = npos;
 }
 
 uint32 mm_mem_io_c::read(void *buffer, size_t size) {
