@@ -110,45 +110,20 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   // Screw the guys who program apps that use _random_ _trash_ for filling
   // gaps. Screw those who try to use AVI no matter the 'cost'!
   if (!valid_headers_found) {
-    int pos2, offset;
-
-    // Try to find a second header.
-    if ((pos + mp3header->framesize + 4) >= size)
-      return NULL;
-    pos2 = find_mp3_header(&buf[pos + mp3header->framesize], size - pos -
-                           mp3header->framesize);
-    if (pos2 < 0)               // Found something?
-      return NULL;
-    // Two consecutive headers? If yes, then we have something valid here.
-    if (pos2 == 0)
+    pos = find_consecutive_mp3_headers(byte_buffer.get_buffer(),
+                                       byte_buffer.get_size(), 5);
+    if (pos >= 0) {
+      // Great, we have found five consecutive identical headers. Be happy
+      // with those!
       valid_headers_found = true;
-    else {
-      // Nope... The second header is not where it's supposed to be.
-      // Try to find another MP3 header behind the first one.
-      offset = pos + 1;
-      pos = find_mp3_header(&buf[offset], size - offset);
-      if (pos < 0)              // Found something?
-        return NULL;            // This should not happen, you know...
-      if ((offset + pos + mp3header->framesize + 4) > size)
-        return NULL;            // Not the whole frame is present.
-      decode_mp3_header(&buf[offset + pos], mp3header);
-      pos2 = find_mp3_header(&buf[offset + pos + mp3header->framesize],
-                             size - offset - pos - mp3header->framesize);
-      if (pos2 < 0)             // Second header found?
-        return NULL;
-      if (pos2 == 0) {
-        // Yay, two consecutive headers. Throw away the trash at the
-        // beginning.
-        handle_garbage(offset + pos);
-        byte_buffer.remove(offset + pos);
-        pos = 0;
-        valid_headers_found = true;
-      } else {
-        // Not consecutive... Oh well, I cannot do anything about this.
-        // The stream will likely come out wrong.
-        valid_headers_found = true;
+      if (pos > 0) {
+        handle_garbage(pos);
+        byte_buffer.remove(pos);
       }
-    }
+      pos = 0;
+      decode_mp3_header(byte_buffer.get_buffer(), mp3header);
+    } else
+      return NULL;
   }
 
   if (pos > 0) {

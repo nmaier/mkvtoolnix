@@ -263,3 +263,60 @@ decode_mp3_header(const unsigned char *buf,
   h->samples_per_channel =
     mp3_samples_per_channel[h->version - 1][h->layer - 1];
 }
+
+int
+find_consecutive_mp3_headers(const unsigned char *buf,
+                             int size,
+                             int num) {
+  int i, pos, base, offset;
+  mp3_header_t mp3header, new_header;
+
+  base = 0;
+  do {
+    // Let's find the first non-tag header.
+    pos = find_mp3_header(&buf[base], size - base);
+    if (pos < 0)
+      return -1;
+    decode_mp3_header(&buf[base + pos], &mp3header);
+    if (!mp3header.is_tag)
+      break;
+    mxverb(2, "mp3_reader: Found tag at %d size %d\n", base + pos,
+           mp3header.framesize);
+    base = pos + 1;
+  } while (true);
+
+  if (num == 1)
+    return pos;
+  base += pos;
+
+  do {
+    mxverb(2, "find_cons_mp3_h: starting with base at %d\n", base);
+    offset = mp3header.framesize;
+    for (i = 0; i < (num - 1); i++) {
+      if ((size - base - offset) < 4)
+        break;
+      pos = find_mp3_header(&buf[base + offset], size - base - offset);
+      if (pos == 0) {
+        decode_mp3_header(&buf[base + offset], &new_header);
+        if ((new_header.channels == mp3header.channels) &&
+            (new_header.sampling_frequency == mp3header.sampling_frequency)) {
+          mxverb(2, "find_cons_mp3_h: found good header %d\n", i);
+          offset += new_header.framesize;
+          continue;
+        }
+      } else
+        break;
+    }
+    if (i == (num - 1))
+      return base;
+    base++;
+    offset = 0;
+    pos = find_mp3_header(&buf[base], size - base);
+    if (pos == -1)
+      return -1;
+    decode_mp3_header(&buf[base + pos], &mp3header);
+    base += pos;
+  } while (base < (size - 5));
+
+  return -1;
+}
