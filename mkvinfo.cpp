@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.12 2003/04/17 19:23:49 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.13 2003/04/17 19:54:42 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -215,6 +215,7 @@ void process_file() {
 
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
+            ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
             fprintf(stdout, "(%s) | + timecode scale: %llu", NAME, tc_scale);
             if (verbose > 1)
