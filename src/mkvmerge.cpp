@@ -150,6 +150,7 @@ EbmlVoid *kax_seekhead_void = NULL;
 KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
 KaxTags *kax_tags = NULL;
+KaxAttachments *kax_as = NULL;
 
 string title;
 
@@ -819,7 +820,6 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
 }
 
 static void render_attachments(IOCallback *out) {
-  KaxAttachments *kax_as;
   KaxAttached *kax_a;
   KaxFileData *fdata;
   attachment_t *attch;
@@ -833,6 +833,8 @@ static void render_attachments(IOCallback *out) {
         (attachment_sizes_others > 0)))
     return;
 
+  if (kax_as != NULL)
+    delete kax_as;
   kax_as = new KaxAttachments();
   kax_a = NULL;
   for (i = 0; i < attachments.size(); i++) {
@@ -887,7 +889,6 @@ static void render_attachments(IOCallback *out) {
   }
 
   kax_as->Render(*out);
-  delete kax_as;
 }
 
 static void create_readers() {
@@ -1814,6 +1815,12 @@ void finish_file() {
 
     if (kax_tags != NULL)
       kax_seekhead->IndexThis(*kax_tags, *kax_segment);
+
+    if (kax_as != NULL) {
+      kax_seekhead->IndexThis(*kax_as, *kax_segment);
+      delete kax_as;
+      kax_as = NULL;
+    }
 
     kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
