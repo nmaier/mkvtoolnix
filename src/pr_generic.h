@@ -30,6 +30,7 @@
 #include "compression.h"
 #include "error.h"
 #include "mm_io.h"
+#include "timecode_factory.h"
 
 using namespace libmatroska;
 using namespace std;
@@ -238,16 +239,6 @@ public:
   virtual void free_contents();
 };
 
-class timecode_range_c {
-public:
-  int64_t start_frame, end_frame;
-  double fps, base_timecode;
-
-  bool operator <(const timecode_range_c &cmp) const {
-    return start_frame < cmp.start_frame;
-  }
-};
-
 typedef struct packetizer_container_t {
   generic_packetizer_c *orig;
   generic_packetizer_c *current;
@@ -333,12 +324,7 @@ protected:
   int hcompression;
   compression_c *compressor;
 
-  vector<timecode_range_c> *timecode_ranges;
-  vector<int64_t> *ext_timecodes;
-  uint32_t current_tc_range;
-  int64_t frameno;
-  int ext_timecodes_version;
-  bool ext_timecodes_warning_printed;
+  timecode_factory_c *timecode_factory;
 
   int64_t last_cue_timecode;
 
@@ -459,11 +445,6 @@ public:
   virtual void set_default_compression_method(int method) {
     hcompression = method;
   }
-
-  virtual int64_t get_next_timecode(int64_t timecode);
-  virtual void parse_ext_timecode_file(const char *name);
-  virtual void parse_ext_timecode_file_v1(mm_io_c *in, const char *name);
-  virtual void parse_ext_timecode_file_v2(mm_io_c *in, const char *name);
 
   inline bool needs_negative_displacement(float) {
     return ((initial_displacement < 0) &&

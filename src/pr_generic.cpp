@@ -244,14 +244,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   dumped_packet_number = 0;
 
-  frameno = 0;
-  ext_timecodes_version = -1;
-  timecode_ranges = NULL;
-  ext_timecodes = NULL;
-  ext_timecodes_warning_printed = false;
-  current_tc_range = 0;
-  if (ti->ext_timecodes != NULL)
-    parse_ext_timecode_file(ti->ext_timecodes);
+  timecode_factory = timecode_factory_c::create(ti->ext_timecodes,
+                                                ti->fname, ti->id);
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
@@ -261,10 +255,7 @@ generic_packetizer_c::~generic_packetizer_c() {
   safefree(hcodec_private);
   if (compressor != NULL)
     delete compressor;
-  if (timecode_ranges != NULL)
-    delete timecode_ranges;
-  if (ext_timecodes != NULL)
-    delete ext_timecodes;
+  delete timecode_factory;
 }
 
 void
@@ -595,6 +586,8 @@ generic_packetizer_c::set_headers() {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackMaxCache>(*track_entry))) = htrack_max_cache;
 
+  htrack_default_duration =
+    (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
   if (htrack_default_duration != -1.0)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
@@ -860,7 +853,8 @@ generic_packetizer_c::add_packet(memory_c &mem,
   pack->duration = duration;
   pack->duration_mandatory = duration_mandatory;
   pack->source = this;
-  pack->assigned_timecode = get_next_timecode(timecode) + ti->packet_delay;
+  timecode_factory->get_next(timecode, pack->duration);
+  pack->assigned_timecode = timecode + ti->packet_delay;
 
   if (reader->max_timecode_seen < (pack->assigned_timecode + pack->duration))
     reader->max_timecode_seen = pack->assigned_timecode + pack->duration;
@@ -905,236 +899,6 @@ generic_packetizer_c::dump_packet(const void *buffer,
   } catch(...) {
   }
   safefree(path);
-}
-
-void
-generic_packetizer_c::parse_ext_timecode_file(const char *name) {
-  mm_io_c *in;
-  string line;
-
-  in = NULL;
-  try {
-    in = new mm_text_io_c(name);
-  } catch(...) {
-    mxerror(_("The timecode file '%s' could not be opened for reading.\n"),
-            name);
-  }
-
-  if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") ||
-      !parse_int(&line.c_str()[strlen("# timecode format v")],
-                 ext_timecodes_version))
-    mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
-              "format line. The very first line must look like "
-              "'# timecode format v1'.\n"), name);
-  if (ext_timecodes_version == 1)
-    parse_ext_timecode_file_v1(in, name);
-  else if (ext_timecodes_version == 2)
-    parse_ext_timecode_file_v2(in, name);
-  else
-    mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
-              "format (version %d).\n"), name, ext_timecodes_version);
-
-  delete in;
-}
-
-void
-generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
-                                                 const char *name) {
-  string line;
-  timecode_range_c t;
-  vector<string> fields;
-  vector<timecode_range_c>::iterator iit, pit;
-  uint32_t i, line_no;
-  bool done;
-  double default_fps;
-
-  line_no = 1;
-  do {
-    if (!in->getline2(line))
-      mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line"
-                " with the default number of frames per second.\n"), name);
-    line_no++;
-    strip(line);
-    if ((line.length() != 0) && (line[0] != '#'))
-      break;
-  } while (true);
-  if (!starts_with_case(line, "assume "))
-    mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
-              "with the default number of frames per second.\n"), name);
-  line.erase(0, 6);
-  strip(line);
-  if (!parse_double(line.c_str(), default_fps))
-    mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
-              "with the default number of frames per second.\n"), name);
-  if (timecode_ranges != NULL)
-    delete timecode_ranges;
-  timecode_ranges = new vector<timecode_range_c>;
-
-  while (in->getline2(line)) {
-    line_no++;
-    strip(line, true);
-    if ((line.length() == 0) || (line[0] == '#'))
-      continue;
-
-    fields = split(line.c_str());
-    strip(fields, true);
-    if (fields.size() != 3) {
-      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: It "
-               "does not contain exactly three fields.\n"), line_no, name);
-      continue;
-    }
-
-    if (!parse_int(fields[0].c_str(), t.start_frame)) {
-      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: The "
-               "start frame number is not a valid number.\n"), line_no, name);
-      continue;
-    }
-    if (!parse_int(fields[1].c_str(), t.end_frame)) {
-      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: The "
-               "end frame number is not a valid number.\n"), line_no, name);
-      continue;
-    }
-    if (!parse_double(fields[2].c_str(), t.fps)) {
-      mxwarn(_("Line %d of the timecode file '%s' could not be parsed: The "
-               "number of frames per second is not a valid floating point "
-               "number.\n"), line_no, name);
-      continue;
-    }
-
-    if ((t.fps <= 0) || (t.start_frame < 0) || (t.end_frame < 0) ||
-        (t.end_frame < t.start_frame)) {
-      mxwarn(_("Line %d of the timecode file '%s' contains inconsistent data "
-               "(e.g. the start frame number is bigger than the end frame "
-               "number, or some values are smaller than zero).\n"),
-             line_no, name);
-      continue;
-    }
-
-    timecode_ranges->push_back(t);
-  }
-
-  mxverb(3, "ext_timecodes: Version %d, default fps %f, %u entries.\n",
-         ext_timecodes_version, default_fps, timecode_ranges->size());
-
-  if (timecode_ranges->size() == 0)
-    mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),
-           name);
-
-  sort(timecode_ranges->begin(), timecode_ranges->end());
-  if (timecode_ranges->size() > 0) {
-    do {
-      done = true;
-      iit = timecode_ranges->begin();
-      for (i = 0; i < (timecode_ranges->size() - 1); i++) {
-        iit++;
-        if ((*timecode_ranges)[i].end_frame <
-            ((*timecode_ranges)[i + 1].start_frame - 1)) {
-          t.start_frame = (*timecode_ranges)[i].end_frame + 1;
-          t.end_frame = (*timecode_ranges)[i + 1].start_frame - 1;
-          t.fps = default_fps;
-          timecode_ranges->insert(iit, t);
-          done = false;
-          break;
-        }
-      }
-    } while (!done);
-    if ((*timecode_ranges)[0].start_frame != 0) {
-      t.start_frame = 0;
-      t.end_frame = (*timecode_ranges)[0].start_frame - 1;
-      t.fps = default_fps;
-      timecode_ranges->insert(timecode_ranges->begin(), t);
-    }
-    t.start_frame = (*timecode_ranges)
-      [timecode_ranges->size() - 1].end_frame + 1;
-  } else
-    t.start_frame = 0;
-  t.end_frame = 0xfffffffffffffffll;
-  t.fps = default_fps;
-  timecode_ranges->push_back(t);
-
-  (*timecode_ranges)[0].base_timecode = 0.0;
-  pit = timecode_ranges->begin();
-  for (iit = pit + 1; iit < timecode_ranges->end(); iit++, pit++)
-    iit->base_timecode = pit->base_timecode +
-      ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000000000.0 /
-      pit->fps;
-
-  for (iit = timecode_ranges->begin(); iit < timecode_ranges->end(); iit++)
-    mxverb(3, "timecode_ranges: entry %lld -> %lld at %f with %f\n",
-           iit->start_frame, iit->end_frame, iit->fps, iit->base_timecode);
-}
-
-void
-generic_packetizer_c::parse_ext_timecode_file_v2(mm_io_c *in,
-                                                 const char *name) {
-  int line_no;
-  string line;
-  double timecode;
-
-  if (ext_timecodes != NULL)
-    delete ext_timecodes;
-  ext_timecodes = new vector<int64_t>;
-
-  line_no = 0;
-  while (in->getline2(line)) {
-    line_no++;
-    strip(line);
-    if ((line.length() == 0) || (line[0] == '#'))
-      continue;
-    if (!parse_double(line.c_str(), timecode))
-      mxerror(_("The line %d of the timecode file '%s' does not contain a "
-                "valid floating point number.\n"), line_no, name);
-    ext_timecodes->push_back((int64_t)timecode * 1000000);
-  }
-}
-
-int64_t
-generic_packetizer_c::get_next_timecode(int64_t timecode) {
-  int64_t new_timecode;
-  timecode_range_c *t;
-
-  if (ext_timecodes_version == 1) {
-    if (timecode_ranges == NULL)
-      die("generic_packetizer: ext_timecodes_version == 1 && "
-          "timecodes_range == NULL. %s\n", BUGMSG);
-
-    t = &(*timecode_ranges)[current_tc_range];
-    new_timecode = (int64_t)(t->base_timecode + 1000000000.0 *
-                             (frameno - t->start_frame) / t->fps);
-    frameno++;
-    if ((frameno > t->end_frame) &&
-        (current_tc_range < (timecode_ranges->size() - 1)))
-      current_tc_range++;
-
-    mxverb(4, "ext_timecodes v1: %lld for %lld\n", new_timecode, frameno - 1);
-
-    return new_timecode;
-
-  } else if (ext_timecodes_version == 2) {
-    if (ext_timecodes == NULL)
-      die("generic_packetizer: ext_timecodes_version == 2 && "
-          "ext_timecodes == NULL. %s\n", BUGMSG);
-
-    if ((frameno >= ext_timecodes->size()) && !ext_timecodes_warning_printed) {
-      mxwarn(_("generic_packetizer: The number of external timecodes %u is "
-               "smaller than the number of frames in track %lld of '%s'. "
-               "The remaining frames of this track might not be timestamped "
-               "the way you intended them to be. mkvmerge might even crash."
-               "\n"),
-             ext_timecodes->size(), ti->id, ti->fname);
-      ext_timecodes_warning_printed = true;
-      return timecode;
-    }
-
-    new_timecode = (*ext_timecodes)[frameno];
-    frameno++;
-
-    mxverb(4, "ext_timecodes v2: %lld for %lld\n", new_timecode, frameno - 1);
-
-    return new_timecode;
-  }
-
-  return timecode;
 }
 
 void

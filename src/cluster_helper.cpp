@@ -341,10 +341,13 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
 
   if (rg->duration_mandatory) {
     if ((block_duration == 0) ||
-        ((block_duration > 0) && (block_duration != def_duration)))
+        ((block_duration > 0) &&
+         (block_duration != (rg->durations.size() * def_duration))))
       group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
-  } else if (use_durations && (block_duration > 0) &&
-             (block_duration != def_duration))
+  } else if ((use_durations || (def_duration > 0)) &&
+             (block_duration > 0) &&
+             (RND_TIMECODE_SCALE(block_duration) !=
+              RND_TIMECODE_SCALE(rg->durations.size() * def_duration)))
     group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
 }
 

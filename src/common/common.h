@@ -143,6 +143,8 @@ void MTX_DLL_API mxverb(int level, const char *fmt, ...)
   __attribute__ ((format (printf, 2, 3)));
 void MTX_DLL_API mxdebug(const char *fmt, ...)
   __attribute__ ((format (printf, 1, 2)));
+int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...)
+  __attribute__ ((format (scanf, 2, 3)));
 #else
 void MTX_DLL_API die(const char *fmt, ...);
 void MTX_DLL_API mxprint(void *stream, const char *fmt, ...);
@@ -153,6 +155,7 @@ void MTX_DLL_API mxerror(const char *fmt, ...);
 void MTX_DLL_API mxinfo(const char *fmt, ...);
 void MTX_DLL_API mxverb(int level, const char *fmt, ...);
 void MTX_DLL_API mxdebug(const char *fmt, ...);
+int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...);
 #endif
 void MTX_DLL_API mxexit(int code = -1);
 
@@ -238,7 +241,7 @@ int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
 
 extern int MTX_DLL_API verbose;
 
-#define foreach(it, vec) for (it = (vec).begin(); it < (vec).end(); it++)
+#define foreach(it, vec) for (it = (vec).begin(); it != (vec).end(); it++)
 
 class MTX_DLL_API bit_cursor_c {
 private:

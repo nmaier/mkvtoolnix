@@ -1,3 +1,9 @@
+2004-10-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Rewrote the code for the external timecode files. This
+	also fixes bug 99: The durations for the individual tracks were
+	not correct for those tracks for which --timecodes was used.
+
 2004-10-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Crash when saving chapters from the chapter
