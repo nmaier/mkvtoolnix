@@ -53,6 +53,8 @@ namespace libmatroska {
   extern EbmlId KaxTagEditionUID_TheId;
   extern EbmlId KaxTagChapterUID_TheId;
   extern EbmlId KaxTagAttachmentUID_TheId;
+  extern EbmlId KaxTagTargetType_TheId;
+  extern EbmlId KaxTagTargetTypeValue_TheId;
 };
 
 using namespace libmatroska;
@@ -114,6 +116,9 @@ parser_element_t tag_elements[] = {
    NULL, NULL},
   {"AttachmentUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagAttachmentUID_TheId,
    NULL, NULL},
+  {"TargetType", ebmlt_string, 3, 0, 0, KaxTagTargetType_TheId, NULL, NULL},
+  {"TargetTypeValue", ebmlt_uint, 3, 0, NO_MAX_VALUE,
+   KaxTagTargetTypeValue_TheId, NULL, NULL},
 
   {"Simple", ebmlt_master, 2, 0, 0, KaxTagSimple_TheId, NULL, NULL},
   {"Name", ebmlt_ustring, 3, 0, 0,  KaxTagName_TheId, NULL, NULL},

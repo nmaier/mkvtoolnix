@@ -1,3 +1,16 @@
+2004-08-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvextract, mkvinfo: new feature: Added
+	'TargetTypeValue' as a supported tagging element.
+
+	* mkvmerge, mkvextract, mkvinfo: Complete rewrite of the chapter
+	and tag parsing and output functions. Additions will be much
+	easier now.
+
+	* mkvmerge, mkvextract, mkvinfo: feature removed: Dropped support
+	for the very old and deprecated tagging system. No one used it
+	anyway.
+
 2004-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Allow the use of two-letter ISO639-1
