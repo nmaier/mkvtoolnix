@@ -582,7 +582,6 @@ unpack_real_video_frames(kax_track_t *track,
                          uint32_t timecode,
                          bool is_key) {
   unsigned char *src_ptr, *ptr, *dst;
-  uint32_t merged;
   int num_subpackets, i, offset, total_len;
   vector<uint32_t> packet_offsets, packet_lengths;
   rmff_frame_t *frame;
@@ -618,32 +617,27 @@ unpack_real_video_frames(kax_track_t *track,
   for (i = 0; i < num_subpackets; i++) {
     ptr = dst;
     if (num_subpackets == 1) {
-      *ptr = 0xc1;              // complete frame
+      *ptr = 0xc0;              // complete frame
       ptr++;
-//       merged = 0x8000;
-      merged = 0x0000;
 
     } else {
-//       *ptr = num_subpackets;
-      *ptr = 1;
+      *ptr = (num_subpackets >> 1) & 0x7f; // number of subpackets
       if (i == (num_subpackets - 1)) // last fragment?
         *ptr |= 0x80;
       ptr++;
 
       *ptr = i + 1;             // fragment number
-//       if (is_key)               // key frame?
-//         *ptr |= 0x80;
+      *ptr |= ((num_subpackets & 0x01) << 7); // number of subpackets
       ptr++;
-      merged = 0;
     }
 
     // total packet length:
     if (total_len > 0x3fff) {
-      put_uint16_be(ptr, merged | ((total_len & 0x3fff0000) >> 16));
+      put_uint16_be(ptr, ((total_len & 0x3fff0000) >> 16));
       ptr += 2;
       put_uint16_be(ptr, total_len & 0x0000ffff);
     } else
-      put_uint16_be(ptr, merged | 0x4000 | total_len);
+      put_uint16_be(ptr, 0x4000 | total_len);
     ptr += 2;
 
     // fragment offset from beginning/end:
@@ -680,6 +674,7 @@ unpack_real_video_frames(kax_track_t *track,
     if (rmff_write_frame(track->rmtrack, frame) != RMFF_ERR_OK)
       mxwarn("Could not write a RealVideo fragment.\n");
     rmff_release_frame(frame);
+    track->subpacketno++;
   }
   safefree(dst);
 }
