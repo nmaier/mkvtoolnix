@@ -54,6 +54,7 @@ extern "C" {
 #include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"
+#include "quickparser.h"
 
 using namespace libmatroska;
 using namespace std;
@@ -345,137 +346,52 @@ write_cuesheet(const char *file_name,
 }
 
 void
-extract_cuesheet(const char *file_name) {
-  int upper_lvl_el;
-  // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
-  EbmlStream *es;
+extract_cuesheet(const char *file_name,
+                 bool parse_fully) {
   mm_io_c *in;
   mm_stdio_c out;
-  KaxChapters all_chapters;
-  KaxTags all_tags;
+  kax_quickparser_c *qp;
+  KaxChapters all_chapters, *chapters;
+  KaxEditionEntry *eentry;
+  KaxTags *all_tags;
+  int i, k;
 
   // open input file
   try {
     in = new mm_io_c(file_name, MODE_READ);
+    qp = new kax_quickparser_c(*in, parse_fully);
   } catch (std::exception &ex) {
     show_error(_("The file '%s' could not be opened for reading (%s)."),
                file_name, strerror(errno));
     return;
   }
 
-  try {
-    es = new EbmlStream(*in);
-
-    // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
-    if (l0 == NULL) {
-      show_error(_("Error: No EBML head found."));
-      delete es;
-
-      return;
-    }
-      
-    // Don't verify its data for now.
-    l0->SkipData(*es, l0->Generic().Context);
-    delete l0;
-
-    while (1) {
-      // Next element must be a segment
-      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
-      if (l0 == NULL) {
-        show_error(_("No segment/level 0 element found."));
-        return;
-      }
-      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, _("Segment"));
-        break;
-      }
-
-      show_element(l0, 0, _("Next level 0 element is not a segment but %s"),
-                   l0->Generic().DebugName);
-
-      l0->SkipData(*es, l0->Generic().Context);
-      delete l0;
-    }
-
-    upper_lvl_el = 0;
-    // We've got our segment, so let's find the chapters
-    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                             true, 1);
-    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-
-      if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId) {
-        KaxChapters &chapters = *static_cast<KaxChapters *>(l1);
-        chapters.Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2,
-                      true);
-        if (verbose > 0)
-          debug_dump_elements(&chapters, 0);
-
-        while (chapters.ListSize() > 0) {
-          if (EbmlId(*chapters[0]) == KaxEditionEntry::ClassInfos.GlobalId) {
-            KaxEditionEntry &entry =
-              *static_cast<KaxEditionEntry *>(chapters[0]);
-            while (entry.ListSize() > 0) {
-              if (EbmlId(*entry[0]) == KaxChapterAtom::ClassInfos.GlobalId)
-                all_chapters.PushElement(*entry[0]);
-              entry.Remove(0);
-            }
-          }
-          chapters.Remove(0);
-        }
-
-      } else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
-        KaxTags &tags = *static_cast<KaxTags *>(l1);
-        tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
-        if (verbose > 0)
-          debug_dump_elements(&tags, 0);
-
-        while (tags.ListSize() > 0) {
-          all_tags.PushElement(*tags[0]);
-          tags.Remove(0);
-        }
-
-      } else
-        l1->SkipData(*es, l1->Generic().Context);
-
-      if (!in_parent(l0)) {
-        delete l1;
-        break;
-      }
-
-      if (upper_lvl_el > 0) {
-        upper_lvl_el--;
-        if (upper_lvl_el > 0)
-          break;
-        delete l1;
-        l1 = l2;
+  chapters =
+    dynamic_cast<KaxChapters *>(qp->read_all(KaxChapters::ClassInfos));
+  all_tags = dynamic_cast<KaxTags *>(qp->read_all(KaxTags::ClassInfos));
+  if ((chapters != NULL) && (all_tags != NULL)) {
+    for (i = 0; i < chapters->ListSize(); i++) {
+      if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == NULL)
         continue;
+      eentry = dynamic_cast<KaxEditionEntry *>((*chapters)[i]);
+      for (k = 0; k < eentry->ListSize(); k++)
+        if (dynamic_cast<KaxChapterAtom *>((*eentry)[k]) != NULL)
+          all_chapters.PushElement(*(*eentry)[k]);
+    }
+    if (verbose > 0) {
+      debug_dump_elements(&all_chapters, 0);
+      debug_dump_elements(all_tags, 0);
+    }
 
-      } else if (upper_lvl_el < 0) {
-        upper_lvl_el++;
-        if (upper_lvl_el < 0)
-          break;
+    write_cuesheet(file_name, all_chapters, *all_tags, -1, out);
 
-      }
-
-      l1->SkipData(*es, l1->Generic().Context);
-      delete l1;
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                               0xFFFFFFFFL, true);
-
-    } // while (l1 != NULL)
-
-    write_cuesheet(file_name, all_chapters, all_tags, -1, out);
-
-    delete l0;
-    delete es;
-    delete in;
-
-  } catch (exception &ex) {
-    show_error(_("Caught exception: %s"), ex.what());
-    delete in;
-
-    return;
+    while (all_chapters.ListSize() > 0)
+      all_chapters.Remove(0);
   }
+
+  delete all_tags;
+  delete chapters;
+
+  delete in;
+  delete qp;
 }
