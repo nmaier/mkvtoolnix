@@ -1513,13 +1513,35 @@ tab_input::load(wxConfigBase *cfg) {
     for (i = 0; i < entries.size(); i++) {
       wxString label, name;
       mmg_track_t *t;
+      bool found;
+      int j;
 
       pair = split(entries[i], (wxString)wxT(":"));
       if (pair.size() != 2)
-        die("No, this should not have happened.");
+        wxdie(wxT("The job file could not have been parsed correctly.\n"
+                  "Either it is invalid / damaged, or you've just found\n"
+                  "a bug in mmg. Please report this to the author\n"
+                  "Moritz Bunkus <moritz@bunkus.org>\n\n"
+                  "(Problematic occured in tab_input::load(), #1)"));
       if (!pair[0].ToLong(&fidx) || !pair[1].ToLong(&tidx) ||
-          (fidx >= files.size()) || (tidx >= files[fidx].tracks->size()))
-        die("No, this should not have happened #2.");
+          (fidx >= files.size()))
+        wxdie(wxT("The job file could not have been parsed correctly.\n"
+                  "Either it is invalid / damaged, or you've just found\n"
+                  "a bug in mmg. Please report this to the author\n"
+                  "Moritz Bunkus <moritz@bunkus.org>\n\n"
+                  "(Problematic occured in tab_input::load(), #2)"));
+      found = false;
+      for (j = 0; j < files[fidx].tracks->size(); j++)
+        if ((*files[fidx].tracks)[j].id == tidx) {
+          found = true;
+          tidx = j;
+        }
+      if (!found)
+        wxdie(wxT("The job file could not have been parsed correctly.\n"
+                  "Either it is invalid / damaged, or you've just found\n"
+                  "a bug in mmg. Please report this to the author\n"
+                  "Moritz Bunkus <moritz@bunkus.org>\n\n"
+                  "(Problematic occured in tab_input::load(), #3)"));
       t = &(*files[fidx].tracks)[tidx];
       t->enabled = true;
       tracks.push_back(t);

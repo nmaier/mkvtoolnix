@@ -840,8 +840,8 @@ bool tab_chapters::verify() {
   }
 
   if (!chapters->CheckMandatory())
-    die("verify failed: chapters->CheckMandatory() is false. This should not "
-        "have happened. Please file a bug report.\n");
+    wxdie(wxT("verify failed: chapters->CheckMandatory() is false. This "
+              "should not have happened. Please file a bug report.\n"));
   chapters->UpdateSize();
 
   return true;
@@ -908,8 +908,8 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
         break;
       }
     if (start >= m->ListSize())
-      die("start >= m->ListSize(). This should not have happened. Please "
-          "file a bug report. Thanks.\n");
+      wxdie(wxT("start >= m->ListSize(). This should not have happened. "
+                "Please file a bug report. Thanks."));
     while ((start + 1) < m->ListSize()) {
       tmpvec.push_back((*m)[start + 1]);
       m->Remove(start + 1);
@@ -1053,7 +1053,8 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
 
   display = FINDFIRST(t->chapter, KaxChapterDisplay);
   if (display == NULL)
-    die("on_entry_selected: display == NULL. Should not have happened.\n");
+    wxdie(wxT("on_entry_selected: display == NULL. Should not have "
+              "happened."));
   first = true;
   while (display != NULL) {
     cstring = FindChild<KaxChapterString>(*display);

@@ -19,6 +19,7 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <stdarg.h>
 #include <unistd.h>
 
 #include "wx/wxprec.h"
@@ -547,6 +548,19 @@ create_track_order() {
   }
 
   return s;
+}
+
+void
+wxdie(const wxString &errmsg,
+      ...) {
+  wxString buffer;
+  va_list ap;
+
+  va_start(ap, errmsg);
+  buffer.PrintfV(errmsg, ap);
+  va_end(ap);
+  wxMessageBox(buffer, wxT("A serious error occured"), wxOK | wxICON_ERROR);
+  exit(1);
 }
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
