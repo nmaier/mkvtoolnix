@@ -19,6 +19,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_ac3.cpp r_ac3.h \
 			r_avi.cpp r_avi.h \
 			r_mp3.cpp r_mp3.h \
+			r_ogm.cpp r_ogm.h \
 			r_wav.cpp r_wav.h
 
 mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
