@@ -67,7 +67,7 @@ void MTX_DLL_API write_chapters_xml(KaxChapters *chapters, mm_io_c *out);
 void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters,
                                        mm_io_c *out);
 
-KaxChapters *MTX_DLL_API copy_chapters(KaxChapters *source);
+#define copy_chapters(source) dynamic_cast<KaxChapters *>(source->Clone())
 KaxChapters *MTX_DLL_API
 select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc,
                              int64_t max_tc, int64_t offset);
