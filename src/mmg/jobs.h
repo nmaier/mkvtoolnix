@@ -38,7 +38,6 @@
 #define ID_JOBS_B_VIEW_LOG                17010
 #define ID_JOBS_B_SAVE_LOG                17011
 #define ID_JOBS_B_DISABLE                 17012
-#define ID_JOBS_B_MINIMIZE                17013
 
 enum job_status_t {
   jobs_pending,
@@ -92,7 +91,6 @@ public:
   job_run_dialog(wxWindow *parent, vector<int> &njobs_to_start);
 
   void on_abort(wxCommandEvent &evt);
-  void on_minimize(wxCommandEvent &evt);
   void on_end_process(wxProcessEvent &evt);
   void on_timer(wxTimerEvent &evt);
   void on_idle(wxIdleEvent &evt);

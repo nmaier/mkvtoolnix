@@ -54,11 +54,10 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #else
            wxSize(500, 520),
 #endif
-           wxCAPTION) {
+           wxDEFAULT_FRAME_STYLE) {
   char c;
   string arg_utf8;
   long value;
-  wxButton *b_minimize;
   wxString line, tmp;
   wxInputStream *out;
   wxFile *opt_file;
@@ -113,9 +112,6 @@ mux_dialog::mux_dialog(wxWindow *parent):
   siz_buttons->Add(0, 0, 1, wxGROW, 0);
   b_save_log = new wxButton(this, ID_B_MUX_SAVELOG, wxT("Save log"));
   siz_buttons->Add(b_save_log);
-  siz_buttons->Add(0, 0, 1, wxGROW, 0);
-  b_minimize = new wxButton(this, ID_B_MUX_MINIMIZE, wxT("Minimize"));
-  siz_buttons->Add(b_minimize);
   siz_buttons->Add(0, 0, 1, wxGROW, 0);
 
   siz_all = new wxBoxSizer(wxVERTICAL);
@@ -254,11 +250,6 @@ mux_dialog::on_abort(wxCommandEvent &evt) {
 #endif
 }
 
-void
-mux_dialog::on_minimize(wxCommandEvent &evt) {
-  mdlg->Iconize(true);
-}
-
 mux_process::mux_process(mux_dialog *mux_dlg):
   wxProcess(wxPROCESS_REDIRECT), 
   dlg(mux_dlg) {
@@ -289,5 +280,4 @@ BEGIN_EVENT_TABLE(mux_dialog, wxDialog)
   EVT_BUTTON(ID_B_MUX_OK, mux_dialog::on_ok)
   EVT_BUTTON(ID_B_MUX_SAVELOG, mux_dialog::on_save_log)
   EVT_BUTTON(ID_B_MUX_ABORT, mux_dialog::on_abort)
-  EVT_BUTTON(ID_B_MUX_MINIMIZE, mux_dialog::on_minimize)
 END_EVENT_TABLE();

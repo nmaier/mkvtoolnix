@@ -54,11 +54,11 @@
 job_run_dialog::job_run_dialog(wxWindow *parent,
                                vector<int> &njobs_to_start):
   wxDialog(parent, -1, wxT("mkvmerge is running"), wxDefaultPosition,
-           wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
+           wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER |
+           wxMINIMIZE_BOX | wxMAXIMIZE_BOX) {
   wxStaticBoxSizer *siz_sb;
   wxBoxSizer *siz_line, *siz_all;
   wxFlexGridSizer *siz_fg;
-  wxButton *b_minimize;
   jobs_to_start = njobs_to_start;
   abort = false;
   current_job = -1;
@@ -102,15 +102,12 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   b_ok->Enable(false);
   b_abort = new wxButton(this, ID_JOBS_B_ABORT, wxT("&Abort"));
   b_abort->SetToolTip(TIP("Abort the muxing process right now"));
-  b_minimize = new wxButton(this, ID_JOBS_B_MINIMIZE, wxT("Minimize"));
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_line->Add(b_ok, 0, 0, 0);
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_line->Add(b_abort, 0, 0, 0);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
-  siz_line->Add(b_minimize, 0, 0, 0);
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_all->Add(siz_line, 0, wxGROW | wxTOP | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
@@ -328,11 +325,6 @@ job_run_dialog::add_to_log(wxString text) {
   tc_log->ShowPosition(tc_log->GetValue().length());
 }
 
-void
-job_run_dialog::on_minimize(wxCommandEvent &evt) {
-  mdlg->Iconize(true);
-}
-
 // ---------------------------------------------------
 
 job_log_dialog::job_log_dialog(wxWindow *parent,
@@ -384,7 +376,8 @@ job_log_dialog::on_save(wxCommandEvent &evt) {
 
 job_dialog::job_dialog(wxWindow *parent):
   wxDialog(parent, -1, wxT("Job queue management"), wxDefaultPosition,
-           wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
+           wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER |
+           wxMINIMIZE_BOX | wxMAXIMIZE_BOX) {
   wxBoxSizer *siz_b_right, *siz_b_bottom, *siz_all, *siz_line;
   wxListItem item;
   int i;
@@ -769,7 +762,6 @@ job_dialog::start_jobs(vector<int> &jobs_to_start) {
 IMPLEMENT_CLASS(job_run_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_run_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_ABORT, job_run_dialog::on_abort)
-  EVT_BUTTON(ID_JOBS_B_MINIMIZE, job_run_dialog::on_minimize)
   EVT_END_PROCESS(1, job_run_dialog::on_end_process)
   EVT_IDLE(job_run_dialog::on_idle)
   EVT_TIMER(1, job_run_dialog::on_timer)
