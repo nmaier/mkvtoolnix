@@ -31,7 +31,26 @@ cd libvorbis-1.0
 make
 make install
 
-4) Get the mkvtoolnix sources either from CVS or a release (note that
+4) Get current versions of libebml and libmatroska (either from CVS or
+   a proper release). For the CVS version do the following:
+
+cd /usr/local/src
+cvs -d :ext:anonymous@matroska.corecodec.org:/cvsroot/matroska \
+  co libebml
+cd libebml/make/linux
+make lib install
+
+cd /usr/local/src
+cvs -d :ext:anonymous@matroska.corecodec.org:/cvsroot/matroska \
+  co libmatroska
+cd libmatroska/make/linux
+make LIBEBML_INCLUDE_DIR=/usr/local/include/ebml lib install
+
+  The same applies to the releases. Of course here you have to replace
+  the 'cvs -d ...' with 'tar xvzf libebml-...', and you have to
+  include the proper version number in the cd commands.
+
+5) Get the mkvtoolnix sources either from CVS or a release (note that
    0.3.2 is the first version that can be compiled under cygwin). For
    the CVS version do the following:
 
@@ -54,4 +73,4 @@ cd mkvtoolnix-x.y.z
 make
 make install
 
-5) Be happy and drink some milk. Moooo!
+6) Be happy and drink some milk. Moooo!
