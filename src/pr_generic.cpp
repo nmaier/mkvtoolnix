@@ -1466,6 +1466,7 @@ track_info_c::free_contents() {
     safefree((*all_tags)[i].file_name);
   delete all_tags;
   delete aac_is_sbr;
+  delete packet_delays;
   delete compression_list;
   for (i = 0; i < track_names->size(); i++)
     safefree((*track_names)[i].language);
