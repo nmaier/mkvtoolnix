@@ -60,7 +60,7 @@ avi_reader_c::probe_file(mm_io_c *mm_io,
     if (mm_io->read(data, 12) != 12)
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   if (strncasecmp((char *)data, "RIFF", 4) ||
@@ -84,7 +84,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
     size = io->get_size();
     if (!avi_reader_c::probe_file(io, size))
       throw error_c(PFX "Source is not a valid AVI file.");
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c(PFX "Could not read the source file.");
   }
 

@@ -78,8 +78,7 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
         (atom == FOURCC('m', 'd', 'a', 't')))
         return 1;
 
-  } catch (exception &ex) {
-    return 0;
+  } catch (...) {
   }
 
   return 0;
@@ -102,7 +101,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
 
     parse_headers();
 
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c(PFX "Could not read the source file.");
   }
 }
@@ -405,7 +404,7 @@ qtmp4_reader_c::parse_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
         dmx->priv_size = add_atom_size;
         dmx->priv = (unsigned char *)safemalloc(dmx->priv_size);
         if (mio.read(dmx->priv, dmx->priv_size) != dmx->priv_size)
-          throw exception();
+          throw error_c("end-of-file");
 
         mm_mem_io_c memio(dmx->priv, dmx->priv_size);
 
@@ -481,7 +480,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   moov_buf = (unsigned char *)safemalloc(moov_size + 16);
 
   if (io->read(cmov_buf, cmov_size) != cmov_size)
-    throw exception();
+    throw error_c("end-of-file");
 
   zs.zalloc = (alloc_func)NULL;
   zs.zfree = (free_func)NULL;
@@ -574,7 +573,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_ptr &new_dmx,
     mxerror(PFX "'hdlr' atom is too small. Expected size: >= %d. Actual "
             "size: %lld.\n", sizeof(hdlr_atom_t), atom.size);
   if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
-    throw exception();
+    throw error_c("end-of-file");
   mxverb(2, PFX "%*s Component type: %.4s subtype: %.4s\n",
          level * 2, "", (char *)&hdlr.type, (char *)&hdlr.subtype);
   switch (get_uint32_be(&hdlr.subtype)) {
@@ -597,7 +596,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_ptr &new_dmx,
     mxerror(PFX "'mdhd' atom is too small. Expected size: >= %d. Actual "
             "size: %lld.\n", sizeof(mdhd_atom_t), atom.size);
   if (io->read(&mdhd, sizeof(mdhd_atom_t)) != sizeof(mdhd_atom_t))
-    throw exception();
+    throw error_c("end-of-file");
   mxverb(2, PFX "%*s Time scale: %u, duration: %u\n", level * 2, "",
          get_uint32_be(&mdhd.time_scale),
          get_uint32_be(&mdhd.duration));
@@ -693,7 +692,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
     mxerror(PFX "'mvhd' atom is too small. Expected size: >= %d. Actual "
             "size: %lld.\n", sizeof(mvhd_atom_t), atom.size - atom.hsize);
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
-    throw exception();
+    throw error_c("end-of-file");
   mxverb(2, PFX "%*s Time scale: %u\n", level * 2, "",
          get_uint32_be(&mvhd.time_scale));
 }
@@ -971,7 +970,7 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_ptr &new_dmx,
     mxerror(PFX "'tkhd' atom is too small. Expected size: >= %d. Actual "
             "size: %lld.\n", sizeof(tkhd_atom_t), atom.size);
   if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
-    throw exception();
+    throw error_c("end-of-file");
   mxverb(2, PFX "%*s Track ID: %u\n", level * 2, "",
          get_uint32_be(&tkhd.track_id));
   new_dmx->id = get_uint32_be(&tkhd.track_id);
@@ -1320,7 +1319,7 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     e->decoder_config_len = len;
     e->decoder_config = (uint8_t *)safemalloc(len);
     if (memio.read(e->decoder_config, len) != len)
-      throw exception();
+      throw error_c("end-of-file");
     mxverb(2, PFX "%*sesds: decoder specific descriptor, len: %u\n", lsp, "",
            len);
     mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n", lsp + 2,
@@ -1337,7 +1336,7 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     e->sl_config_len = len;
     e->sl_config = (uint8_t *)safemalloc(len);
     if (memio.read(e->sl_config, len) != len)
-      throw exception();
+      throw error_c("end-of-file");
     mxverb(2, PFX "%*sesds: sync layer config descriptor, len: %u\n", lsp, "",
            len);
   } else

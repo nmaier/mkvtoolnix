@@ -16,8 +16,6 @@
 
 #include "os.h"
 
-#include <exception>
-
 #include <errno.h>
 #if HAVE_POSIX_FADVISE
 # include <fcntl.h>
@@ -32,6 +30,7 @@
 #include <unistd.h>
 #endif // SYS_WINDOWS
 
+#include "error.h"
 #include "mm_io.h"
 #include "common.h"
 
@@ -84,14 +83,14 @@ mm_file_io_c::mm_file_io_c(const string &path,
 # endif
       break;
     default:
-      throw 0;
+      throw error_c("Unknown open mode");
   }
 
   local_path = from_utf8(cc_local_utf8, path);
   file = (FILE *)fopen(local_path.c_str(), cmode);
 
   if (file == NULL)
-    throw exception();
+    throw error_c(mxsprintf("Error opening file %s", path.c_str()));
 
 # if HAVE_POSIX_FADVISE
   if (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
@@ -119,7 +118,7 @@ mm_file_io_c::setFilePointer(int64 offset,
     whence = SEEK_CUR;
 
   if (fseeko((FILE *)file, offset, whence) != 0)
-    throw exception();
+    throw error_c("seeking failed");
 }
 
 size_t
@@ -227,14 +226,14 @@ mm_file_io_c::mm_file_io_c(const string &path,
       disposition = CREATE_ALWAYS;
       break;
     default:
-      throw exception();
+      throw error_c("Unknown open mode");
   }
 
   file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL,
                                 disposition, 0, NULL);
   _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
-    throw exception();
+    throw error_c(mxsprintf("Error opening file %s", path.c_str()));
 
   file_name = path;
   dos_style_newlines = true;
@@ -377,7 +376,7 @@ mm_io_c::getline() {
   string s;
 
   if (eof())
-    throw exception();
+    throw error_c("end-of-file");
 
   while (read(&c, 1) == 1) {
     if (c == '\r')
@@ -449,7 +448,7 @@ mm_io_c::read_uint8() {
   unsigned char value;
 
   if (read(&value, 1) != 1)
-    throw exception();
+    throw error_c("end-of-file");
 
   return value;
 }
@@ -459,7 +458,7 @@ mm_io_c::read_uint16_le() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint16_le(buffer);
 }
@@ -469,7 +468,7 @@ mm_io_c::read_uint24_le() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint24_le(buffer);
 }
@@ -479,7 +478,7 @@ mm_io_c::read_uint32_le() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint32_le(buffer);
 }
@@ -489,7 +488,7 @@ mm_io_c::read_uint64_le() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint64_le(buffer);
 }
@@ -499,7 +498,7 @@ mm_io_c::read_uint16_be() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint16_be(buffer);
 }
@@ -509,7 +508,7 @@ mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint24_be(buffer);
 }
@@ -519,7 +518,7 @@ mm_io_c::read_uint32_be() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint32_be(buffer);
 }
@@ -529,7 +528,7 @@ mm_io_c::read_uint64_be() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw exception();
+    throw error_c("end-of-file");
 
   return get_uint64_be(buffer);
 }
@@ -594,7 +593,7 @@ mm_io_c::skip(int64 num_bytes) {
   pos = getFilePointer();
   setFilePointer(pos + num_bytes);
   if ((pos + num_bytes) != getFilePointer())
-    throw exception();
+    throw error_c("end-of-file");
 }
 
 void
@@ -775,7 +774,7 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
   read_only(false) {
 
   if (increase <= 0)
-    throw exception();
+    throw error_c("wrong usage: increate < 0");
 
   if ((mem == NULL) && (increase > 0)) {
     mem = (unsigned char *)safemalloc(mem_size);
@@ -796,7 +795,7 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *_mem,
   read_only(true) {
 
   if (ro_mem == NULL)
-    throw exception();
+    throw error_c("wrong usage: read-only with NULL memory");
 }
 
 mm_mem_io_c::~mm_mem_io_c() {
@@ -814,7 +813,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
   int64_t npos;
 
   if (((mem == NULL) && (ro_mem == NULL)) || (mem_size == 0))
-    throw exception();
+    throw error_c("wrong usage: read-only with NULL memory");
 
   if (mode == seek_beginning)
     npos = offset;
@@ -852,7 +851,7 @@ mm_mem_io_c::write(const void *buffer,
   int64_t wbytes;
 
   if (read_only)
-    throw exception();
+    throw error_c("wrong usage: writing to read-only memory");
 
   if ((pos + size) >= allocated) {
     if (increase) {
@@ -907,7 +906,7 @@ mm_text_io_c::mm_text_io_c(mm_io_c *_in,
     _in->close();
     if (_delete_in)
       delete _in;
-    throw exception();
+    throw error_c("end-of-file reading the BOM");
   }
 
   if ((buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
@@ -1025,7 +1024,7 @@ mm_text_io_c::getline() {
   char utf8char[8];
 
   if (eof())
-    throw exception();
+    throw error_c("end-of-file");
 
   while (1) {
     memset(utf8char, 0, 8);

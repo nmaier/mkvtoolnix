@@ -41,7 +41,7 @@ tta_reader_c::probe_file(mm_io_c *mm_io,
     if (mm_io->read(buf, 4) != 4)
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   if (!strncmp((char *)buf, "TTA1", 4))
@@ -98,7 +98,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
     pos = 0;
     ti->id = 0;                 // ID for this track.
 
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("tta_reader: Could not open the file.");
   }
   if (verbose)

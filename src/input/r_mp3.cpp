@@ -57,7 +57,7 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
 
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("mp3_reader: Could not open the source file.");
   }
 }

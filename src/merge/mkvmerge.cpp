@@ -1177,6 +1177,31 @@ guess_mime_type(string file_name) {
   return "";
 }
 
+static void
+handle_segmentinfo(KaxInfo *kax_info_chap) {
+  KaxSegmentFamily *family;
+  EbmlBinary *uid;
+
+  // segment families
+  family = FINDFIRST(kax_info_chap, KaxSegmentFamily);
+  while (NULL != family) {
+    segfamily_uids.add_family_uid(*family);
+    family = FINDNEXT(kax_info_chap, KaxSegmentFamily, family);
+  }
+
+  uid = FINDFIRST(kax_info_chap, KaxSegmentUID);
+  if (NULL != uid)
+    seguid_forced = new bitvalue_c(*uid);
+
+  uid = FINDFIRST(kax_info_chap, KaxNextUID);
+  if (NULL != uid)
+    seguid_link_next = new bitvalue_c(*uid);
+  
+  uid = FINDFIRST(kax_info_chap, KaxPrevUID);
+  if (NULL != uid)
+    seguid_link_previous = new bitvalue_c(*uid);
+}
+
 /** \brief Parses and handles command line arguments
 
    Also probes input files for their type and creates the appropriate
@@ -1391,7 +1416,7 @@ parse_args(vector<string> args) {
 
       try {
         seguid_link_previous = new bitvalue_c(next_arg, 128);
-      } catch (exception &ex) {
+      } catch (...) {
         mxerror(_("Unknown format for the previous UID in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
       }
@@ -1408,7 +1433,7 @@ parse_args(vector<string> args) {
 
       try {
         seguid_link_next = new bitvalue_c(next_arg, 128);
-      } catch (exception &ex) {
+      } catch (...) {
         mxerror(_("Unknown format for the next UID in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
       }
@@ -1493,7 +1518,7 @@ parse_args(vector<string> args) {
         attachment.size = io->get_size();
         delete io;
         if (attachment.size == 0)
-          throw exception();
+          throw error_c("Empty attachment");
       } catch (...) {
         mxerror(_("The attachment '%s' could not be read, or its "
                   "size is 0.\n"), attachment.name.c_str());
@@ -1576,8 +1601,6 @@ parse_args(vector<string> args) {
       sit++;
 
     } else if (this_arg == "--segmentinfo") {
-      KaxSegmentFamily *family;
-
       if (no_next_arg)
         mxerror(_("'--segmentinfo' lacks the file name.\n"));
 
@@ -1587,13 +1610,7 @@ parse_args(vector<string> args) {
 
       segmentinfo_file_name = next_arg;
       kax_info_chap = parse_segmentinfo(segmentinfo_file_name, false);
-
-      // segment families
-      family = FINDFIRST(kax_info_chap, KaxSegmentFamily);
-      while (family != NULL) {
-        segfamily_uids.add_family_uid(*family);
-        family = FINDNEXT(kax_info_chap, KaxSegmentFamily, family);
-      }
+      handle_segmentinfo(kax_info_chap);
 
       sit++;
 

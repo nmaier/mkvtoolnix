@@ -56,7 +56,7 @@ srt_reader_c::probe_file(mm_text_io_c *mm_io,
       return 0;
     s = mm_io->getline();
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   return 1;
@@ -71,7 +71,7 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
     if (!srt_reader_c::probe_file(mm_io, 0))
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti->id = 0;                 // ID for this track.
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("srt_reader: Could not open the source file.");
   }
   if (verbose)

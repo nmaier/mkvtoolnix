@@ -179,7 +179,9 @@ string default_language = "und";
 static mm_io_c *out = NULL;
 
 static bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
-bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
+bitvalue_c *seguid_link_previous = NULL;
+bitvalue_c *seguid_link_next = NULL;
+bitvalue_c *seguid_forced = NULL;
 
 /** \brief Add a segment family UID to the list if it doesn't exist already.
 
@@ -291,7 +293,7 @@ get_file_type(filelist_t &file) {
     mm_io->setFilePointer(0, seek_end);
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_current);
-  } catch (exception &ex) {
+  } catch (...) {
     mxerror(_("The source file '%s' could not be opened successfully, or "
               "retrieving its size by seeking to the end did not work.\n"),
             file.name.c_str());
@@ -345,7 +347,7 @@ get_file_type(filelist_t &file) {
       mm_text_io->setFilePointer(0, seek_end);
       size = mm_text_io->getFilePointer();
       mm_text_io->setFilePointer(0, seek_current);
-    } catch (exception &ex) {
+    } catch (...) {
       mxerror(_("The source file '%s' could not be opened successfully, or "
                 "retrieving its size by seeking to the end did not work.\n"),
               file.name.c_str());
@@ -545,11 +547,17 @@ render_headers(mm_io_c *rout) {
     // Generate the segment UIDs.
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
       if (file_num == 1) {
-        seguid_current.generate_random();
+        if (NULL == seguid_forced)
+          seguid_current.generate_random();
+        else
+          seguid_current = *seguid_forced;
         seguid_next.generate_random();
       } else {
         seguid_prev = seguid_current;
-        seguid_current = seguid_next;
+        if (NULL == seguid_forced)
+          seguid_current = seguid_next;
+        else
+          seguid_current = *seguid_forced;
         seguid_next.generate_random();
       }
     } else {
@@ -645,7 +653,7 @@ render_headers(mm_io_c *rout) {
       void_after_track_headers->Render(*rout);
     }
 
-  } catch (exception &ex) {
+  } catch (...) {
     mxerror(_("The track headers could not be rendered correctly. %s.\n"),
             BUGMSG);
   }
@@ -1368,7 +1376,7 @@ create_next_output_file() {
   // Open the output file.
   try {
     out = new mm_file_io_c(this_outfile, MODE_CREATE);
-  } catch (exception &ex) {
+  } catch (...) {
     mxerror(_("The output file '%s' could not be opened for writing (%s).\n"),
             this_outfile.c_str(), strerror(errno));
   }
@@ -1957,6 +1965,10 @@ cleanup() {
   delete kax_chapters;
   delete kax_as;
   delete kax_info_chap;
+
+  delete seguid_link_previous;
+  delete seguid_link_next;
+  delete seguid_forced;
 
   utf8_done();
 }

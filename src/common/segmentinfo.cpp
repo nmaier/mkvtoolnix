@@ -51,10 +51,10 @@ parse_segmentinfo(const string &file_name,
   try {
     in = new mm_text_io_c(new mm_file_io_c(file_name));
     return parse_xml_segmentinfo(in, exception_on_error);
-  } catch (error_c e) {
+  } catch (error_c &e) {
     if (exception_on_error)
       throw e;
-    mxerror("%s", e.get_error());
+    mxerror("%s\n", e.get_error());
   }
 
   return NULL;

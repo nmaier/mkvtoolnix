@@ -133,7 +133,7 @@ real_reader_c::probe_file(mm_io_c *io,
       return 0;
     io->setFilePointer(0, seek_beginning);
 
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
 

@@ -126,7 +126,9 @@ el_get_time(parser_data_t *pdata,
 
 static void
 el_get_binary(parser_data_t *pdata,
-              EbmlElement *el) {
+              EbmlElement *el,
+              int min_length,
+              int max_length) {
   int64_t length;
   binary *buffer;
   mm_io_c *io;
@@ -170,6 +172,10 @@ el_get_binary(parser_data_t *pdata,
     p = pdata->bin->c_str();
     length = 0;
     while (*p != 0) {
+      if ((0 != p[1]) && ('0' == *p) && (('x' == p[1]) || ('X' == p[1]))) {
+        p += 2;
+        continue;
+      }
       if (isdigit(*p) || ((tolower(*p) >= 'a') && (tolower(*p) <= 'f')))
         ++length;
       else if (!isblanktab(*p) && !iscr(*p) && (*p != '-') && (*p != '{') &&
@@ -189,6 +195,10 @@ el_get_binary(parser_data_t *pdata,
     while (*p != 0) {
       uint8_t value;
 
+      if ((0 != p[1]) && ('0' == *p) && (('x' == p[1]) || ('X' == p[1]))) {
+        p += 2;
+        continue;
+      }
       if (isblanktab(*p) || iscr(*p) || (*p == '-') || (*p == '{') ||
           (*p == '}')) {
         ++p;
@@ -213,6 +223,16 @@ el_get_binary(parser_data_t *pdata,
   } else
     xmlp_error(pdata, "Invalid binary data format '%s' specified. Supported "
                "are 'Base64', 'ASCII' and 'hex'.");
+
+  if ((0 < min_length) && (min_length == max_length) && (length != min_length))
+    xmlp_error(pdata, "The binary data must be exactly %d bytes long.",
+               min_length);
+  else if ((0 < min_length) && (length < min_length))
+    xmlp_error(pdata, "The binary data must be at least %d bytes long.",
+               min_length);
+  else if ((0 < max_length) && (length > max_length))
+    xmlp_error(pdata, "The binary data must be at most %d bytes long.",
+               max_length);
 
   (static_cast<EbmlBinary *>(el))->SetBuffer(buffer, length);
 }
@@ -432,7 +452,8 @@ end_element(void *user_data,
         el_get_time(pdata, xmlp_pelt);
         break;
       case EBMLT_BINARY:
-        el_get_binary(pdata, xmlp_pelt);
+        el_get_binary(pdata, xmlp_pelt, pdata->mapping[elt_idx].min_value,
+                      pdata->mapping[elt_idx].max_value);
         break;
       default:
         assert(0);

@@ -38,7 +38,7 @@ ssa_reader_c::probe_file(mm_text_io_c *mm_io,
     if (strcasecmp(line.c_str(), "[script info]"))
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   return 1;
@@ -111,7 +111,7 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
       throw error_c("ssa_reader: Invalid format. Could not find the "
                     "\"Format\" line in the \"[Events]\" section.");
 
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("ssa_reader: Could not open the source file.");
   }
   if (verbose)

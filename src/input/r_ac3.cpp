@@ -47,7 +47,7 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
     if (mm_io->read(chunk, 4096) != 4096)
       throw error_c("ac3_reader: Could not read 4096 bytes.");
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("ac3_reader: Could not open the source file.");
   }
   pos = find_ac3_header(chunk, 4096, &ac3header);

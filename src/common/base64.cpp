@@ -44,12 +44,12 @@
 
 #include <ctype.h>
 
-#include <exception>
 #include <string>
 
 #include "os.h"
 #include "base64.h"
 #include "common.h"
+#include "error.h"
 
 using namespace std;
 
@@ -143,7 +143,7 @@ base64_decode(const string &src,
       else if (in[k] == '/')
         values[k] = 63;
       else
-        throw exception();
+        throw error_c("invalid Base64 character");
     }
 
     mid[0] = values[0] << 2;

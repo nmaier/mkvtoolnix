@@ -82,14 +82,14 @@ xtr_tta_c::finish_file() {
   in = NULL;
   try {
     in = new mm_file_io_c(temp_file_name);
-  } catch (exception &ex) {
+  } catch (...) {
     mxerror(" The temporary file '%s' could not be opened for reading (%s)."
             "\n", temp_file_name.c_str(), strerror(errno));
   }
 
   try {
     out = new mm_file_io_c(file_name, MODE_CREATE);
-  } catch (exception &ex) {
+  } catch (...) {
     delete in;
     mxerror(" The file '%s' could not be opened for writing (%s).\n",
             file_name.c_str(), strerror(errno));

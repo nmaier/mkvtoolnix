@@ -39,7 +39,7 @@ aac_reader_c::probe_file(mm_io_c *mm_io,
     if (mm_io->read(buf, PROBESIZE) != PROBESIZE)
       mm_io->setFilePointer(0, seek_beginning);
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   if (parse_aac_adif_header(buf, PROBESIZE, &aacheader))
@@ -96,7 +96,7 @@ aac_reader_c::aac_reader_c(track_info_c *nti)
         aacheader.profile = AAC_PROFILE_SBR;
         break;
       }
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("aac_reader: Could not open the file.");
   }
   if (verbose)

@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <exception>
 #include <typeinfo>
 
 extern "C" {                    // for BITMAPINFOHEADER
@@ -115,7 +114,7 @@ kax_reader_c::probe_file(mm_io_c *mm_io,
     if (mm_io->read(data, 4) != 4)
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   if ((data[0] != 0x1A) || (data[1] != 0x45) ||
@@ -1291,7 +1290,7 @@ kax_reader_c::read_headers() {
     for (i = 0; i < deferred_tags.size(); i++)
       handle_tags(in, l0, deferred_tags[i]);
 
-  } catch (exception &ex) {
+  } catch (...) {
     mxerror(PFX "caught exception\n");
   }
 
@@ -1994,8 +1993,8 @@ kax_reader_c::read(generic_packetizer_c *,
     } // while (l1 != NULL)
 
 
-  } catch (exception ex) {
-    mxwarn(PFX "exception caught\n");
+  } catch (...) {
+    mxwarn(PFX "caught exception\n");
     flush_packetizers();
     return FILE_STATUS_DONE;
   }

@@ -300,7 +300,7 @@ extract_tracks(const char *file_name,
   // open input file
   try {
     in = new mm_file_io_c(file_name);
-  } catch (std::exception &ex) {
+  } catch (...) {
     show_error(_("The file '%s' could not be opened for reading (%s).\n"),
                file_name, strerror(errno));
     return false;
@@ -525,8 +525,8 @@ extract_tracks(const char *file_name,
     close_extractors();
 
     return true;
-  } catch (exception &ex) {
-    show_error(_("Caught exception: %s"), ex.what());
+  } catch (...) {
+    show_error("Caught exception");
     delete in;
 
     return false;

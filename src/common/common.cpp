@@ -55,6 +55,7 @@ using namespace libebml;
 
 #include "base64.h"
 #include "common.h"
+#include "error.h"
 #include "hacks.h"
 #include "mm_io.h"
 
@@ -84,7 +85,7 @@ bitvalue_c::bitvalue_c(string s,
   string s2;
 
   if ((allowed_bitlength != -1) && ((allowed_bitlength % 8) != 0))
-    throw exception();
+    throw error_c("wrong usage: invalid allowed_bitlength");
 
   len = s.size();
   previous_was_space = true;
@@ -110,11 +111,12 @@ bitvalue_c::bitvalue_c(string s,
 
     // Invalid character?
     if (!ishexdigit(s[i]))
-      throw exception();
+      throw error_c(mxsprintf("not a hex digit at position %d", i));
 
     // Input too long?
     if ((allowed_bitlength > 0) && ((s2.length() * 4) >= allowed_bitlength))
-      throw exception();
+      throw error_c(mxsprintf("input too long: %d > %d", s2.length() * 4,
+                              allowed_bitlength));
 
     // Store the value.
     s2 += s[i];
@@ -125,7 +127,7 @@ bitvalue_c::bitvalue_c(string s,
   if (((len % 2) != 0)
       ||
       ((allowed_bitlength != -1) && ((len * 4) < allowed_bitlength)))
-    throw exception();
+    throw error_c("missing one hex digit");
 
   value = (unsigned char *)safemalloc(len / 2);
   bitsize = len * 4;
@@ -195,13 +197,13 @@ byte_cursor_c::byte_cursor_c(const unsigned char *ndata,
   data(ndata) {
   pos = 0;
   if (nsize < 0)
-    throw exception();
+    throw error_c("wrong usage: nsize < 0");
 }
 
 unsigned char
 byte_cursor_c::get_uint8() {
   if ((pos + 1) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   pos++;
 
@@ -213,7 +215,7 @@ byte_cursor_c::get_uint16_be() {
   unsigned short v;
 
   if ((pos + 2) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   v = ::get_uint16_be(&data[pos]);
   pos += 2;
@@ -226,7 +228,7 @@ byte_cursor_c::get_uint32_be() {
   unsigned int v;
 
   if ((pos + 4) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   v = ::get_uint32_be(&data[pos]);
   pos += 4;
@@ -239,7 +241,7 @@ byte_cursor_c::get_uint16_le() {
   unsigned short v;
 
   if ((pos + 2) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   v = ::get_uint16_le(&data[pos]);
   pos += 2;
@@ -252,7 +254,7 @@ byte_cursor_c::get_uint32_le() {
   unsigned int v;
 
   if ((pos + 4) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   v = ::get_uint32_le(&data[pos]);
   pos += 4;
@@ -263,7 +265,7 @@ byte_cursor_c::get_uint32_le() {
 void
 byte_cursor_c::skip(int n) {
   if ((pos + n) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   pos += n;
 }
@@ -272,7 +274,7 @@ void
 byte_cursor_c::get_bytes(unsigned char *dst,
                          int n) {
   if ((pos + n) > size)
-    throw exception();
+    throw error_c("end-of-data");
 
   memcpy(dst, &data[pos], n);
   pos += n;
@@ -1664,7 +1666,7 @@ read_args_from_file(vector<string> &args,
   mm_io = NULL;
   try {
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
-  } catch (exception &ex) {
+  } catch (...) {
     mxerror(_("The file '%s' could not be opened for reading command line "
               "arguments."), filename.c_str());
   }

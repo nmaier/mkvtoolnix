@@ -38,7 +38,7 @@ dts_reader_c::probe_file(mm_io_c *mm_io,
     if (mm_io->read(buf, max_dts_packet_size) != max_dts_packet_size)
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
 
@@ -61,7 +61,7 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
     if (mm_io->read(chunk, max_dts_packet_size) != max_dts_packet_size)
       throw error_c("dts_reader: Could not read max_dts_packet_size bytes.");
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("dts_reader: Could not open the source file.");
   }
 

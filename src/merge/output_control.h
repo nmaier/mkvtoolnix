@@ -129,7 +129,7 @@ extern string outfile;
 extern double timecode_scale;
 extern timecode_scale_mode_e timecode_scale_mode;
 
-extern bitvalue_c *seguid_link_previous, *seguid_link_next;
+extern bitvalue_c *seguid_link_previous, *seguid_link_next, *seguid_forced;
 extern family_uids_c segfamily_uids;
 
 extern KaxInfo *kax_info_chap;

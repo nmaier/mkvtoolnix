@@ -281,7 +281,7 @@ ogm_reader_c::probe_file(mm_io_c *mm_io,
     if (mm_io->read(data, 4) != 4)
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   if (strncmp((char *)data, "OggS", 4))
@@ -302,7 +302,7 @@ ogm_reader_c::ogm_reader_c(track_info_c *nti)
     mm_io->setFilePointer(0, seek_end);
     file_size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("ogm_reader: Could not open the source file.");
   }
   if (!ogm_reader_c::probe_file(mm_io, file_size))

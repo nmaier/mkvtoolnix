@@ -1821,7 +1821,7 @@ process_file(const string &file_name) {
   // open input file
   try {
     in = new mm_file_io_c(file_name);
-  } catch (std::exception &ex) {
+  } catch (...) {
     show_error("Error: Couldn't open input file %s (%s).\n", file_name.c_str(),
                strerror(errno));
     return false;
@@ -1946,8 +1946,8 @@ process_file(const string &file_name) {
     delete in;
 
     return true;
-  } catch (std::exception &ex) {
-    show_error("Caught exception: %s", ex.what());
+  } catch (...) {
+    show_error("Caught exception");
     delete in;
 
     return false;

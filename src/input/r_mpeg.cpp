@@ -85,7 +85,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *mm_io,
     if (!read_frame(parser, *mm_io, READ_SIZE))
       return 0;
 
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
 
@@ -133,7 +133,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %e AR %e\n",
            version, width, height, frame_rate, aspect_ratio);
 
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("mpeg_es_reader: Could not open the file.");
   }
   if (verbose)
@@ -259,7 +259,7 @@ mpeg_ps_reader_c::probe_file(mm_io_c *mm_io,
 
     return 1;
 
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
 }
@@ -388,7 +388,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
 
     mm_io->setFilePointer(0, seek_beginning);
 
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("mpeg_ps_reader: Could not open the file.");
   }
   if (verbose)

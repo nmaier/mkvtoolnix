@@ -125,6 +125,11 @@ xml_element_map_init() {
   static parser_element_t _segmentinfo_elements[] = {
     {"Info", EBMLT_MASTER, 0, 0, 0, no_id, NULL, NULL, NULL},
 
+    {"SegmentUID", EBMLT_BINARY, 1, 16, 16, no_id, NULL, NULL, NULL},
+    {"NextSegmentUID", EBMLT_BINARY, 1, 16, 16, no_id, NULL, NULL, "NextUID"},
+    {"PreviousSegmentUID", EBMLT_BINARY, 1, 16, 16, no_id, NULL, NULL,
+     "PrevUID"},
+
     {"SegmentFamily", EBMLT_BINARY, 1, 0, 0, no_id, NULL, NULL, NULL},
 
     {"ChapterTranslate", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},

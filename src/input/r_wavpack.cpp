@@ -36,7 +36,7 @@ wavpack_reader_c::probe_file(mm_io_c *mm_io,
         sizeof(wavpack_header_t))
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
-  } catch (exception &ex) {
+  } catch (...) {
     return 0;
   }
   if (!strncmp(header.ck_id, "wvpk", 4)) {
@@ -60,7 +60,7 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
     if (packet_size < 0)
       mxerror(FMT_FN "The file header was not read correctly.\n",
               ti->fname.c_str());
-  } catch (exception &ex) {
+  } catch (...) {
     throw error_c("wavpack_reader: Could not open the file.");
   }
 
@@ -82,7 +82,7 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
                                    sizeof(wavpack_header_t), seek_beginning);
       meta.has_correction = true;
     }
-  } catch (exception &ex) {
+  } catch (...) {
     if (verbose)
       mxinfo(FMT_FN "Could not open the corresponding correction file '%s'.\n",
              ti->fname.c_str(), (ti->fname + "c").c_str());
