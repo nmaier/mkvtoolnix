@@ -1627,6 +1627,10 @@ append_track(packetizer_t &ptzr,
   generic_packetizer_c *old_packetizer;
   int64_t timecode_adjustment;
 
+  if (NULL != deferred_file)
+    src_file.deferred_max_timecode_seen =
+      deferred_file->reader->max_timecode_seen;      
+
   // Find the generic_packetizer_c that we will be appending to the one
   // stored in ptzr.
   foreach(gptzr, src_file.reader->reader_packetizers)
@@ -1648,9 +1652,11 @@ append_track(packetizer_t &ptzr,
     establish_deferred_connections(dst_file);
   }
 
-  if (((*gptzr)->get_track_type() == track_subtitle) &&
-      (dst_file.reader->num_video_tracks == 0) &&
-      (video_packetizer != NULL) && !ptzr.deferred) {
+  if ((track_subtitle == (*gptzr)->get_track_type()) &&
+      (0 == dst_file.reader->num_video_tracks) &&
+      (NULL != video_packetizer) &&
+      !ptzr.deferred &&
+      (-1 == src_file.deferred_max_timecode_seen)) {
     vector<filelist_t>::iterator file;
 
     foreach(file, files) {
@@ -1711,9 +1717,14 @@ append_track(packetizer_t &ptzr,
   // files if they've been split before.
   timecode_adjustment = dst_file.reader->max_timecode_seen;
   if (ptzr.deferred && (deferred_file != NULL))
-    timecode_adjustment = deferred_file->reader->max_timecode_seen;
+    timecode_adjustment = src_file.deferred_max_timecode_seen;
+
+  else if ((track_subtitle == ptzr.packetizer->get_track_type()) &&
+           (-1 < src_file.deferred_max_timecode_seen))
+    timecode_adjustment = src_file.deferred_max_timecode_seen;
+
   else if ((ptzr.packetizer->get_track_type() == track_subtitle) ||
-             (src_file.reader->chapters != NULL)) {
+           (src_file.reader->chapters != NULL)) {
     vector<append_spec_t>::const_iterator cmp_amap;
 
     if (src_file.reader->ptzr_first_packet == NULL)

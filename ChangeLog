@@ -1,3 +1,10 @@
+2005-03-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Appending VobSubs with more than one track in
+	a .idx file and video files at the same time was broken resulting
+	in parts of some of the VobSub tracks not ending up in the
+	resulting Matroska file.
+
 2005-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The track numbers were assigned wrongly when

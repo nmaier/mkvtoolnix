@@ -77,12 +77,14 @@ struct filelist_t {
 
   int num_unfinished_packetizers, old_num_unfinished_packetizers;
   vector<deferred_connection_t> deferred_connections;
+  int64_t deferred_max_timecode_seen;
 
   filelist_t():
     size(0), type(FILE_TYPE_IS_UNKNOWN),
     pack(NULL), reader(NULL),
     ti(NULL), appending(false), appended_to(false), done(false),
-    num_unfinished_packetizers(0), old_num_unfinished_packetizers(0) {}
+    num_unfinished_packetizers(0), old_num_unfinished_packetizers(0),
+    deferred_max_timecode_seen(-1) {}
 };
 
 struct attachment_t {
