@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.7 2003/04/11 10:05:11 mosu Exp $
+    \version \$Id: common.cpp,v 1.8 2003/04/17 12:21:04 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -29,6 +29,10 @@ int verbose = 1;
 void _die(const char *s, const char *file, int line) {
   fprintf(stderr, "die @ %s/%d : %s\n", file, line, s);
   exit(1);
+}
+
+void _trace(const char *func, const char *file, int line) {
+  fprintf(stdout, "trace: %s:%s (%d)\n", file, func, line);
 }
 
 /*
