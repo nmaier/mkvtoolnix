@@ -7,6 +7,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			ac3_common.cpp ac3_common.h \
 			base64.cpp base64.h \
 			chapters.cpp chapters.h \
+			chapter_parser_xml.cpp \
 			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \
@@ -48,7 +49,7 @@ mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 
 mkvextract_SOURCES = mkvextract.cpp mkvextract.h \
 			base64.cpp base64.h \
-			chapters.cpp chapters.h \
+			chapter_writer.cpp chapters.h \
 			common.cpp common.h \
 			mkvextract_attachments.cpp \
 			mkvextract_chapters.cpp \

@@ -34,13 +34,15 @@
 #include "mm_io.h"
 #include "tagparser.h"
 
+#include <ebml/EbmlMaster.h>
+
 using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
 #define check_instances(p, c) \
   if (FindChild<c>(*p) != NULL) \
-    perror_oneinstance();
+    tperror_oneinstance();
 
 template <typename Type>Type &GetEmptyChild(EbmlMaster &master) {
   EbmlElement *e;
@@ -88,7 +90,7 @@ static bool is_multicomment(parser_data_t *pdata, const char *name,
   if (((parent == E_MultiComment) || (parent == E_CommentName) ||
        (parent == E_Comments) || (parent == E_CommentLanguage)) &&
       !strcmp(name, "MultiComment"))
-    perror_nochild();
+    tperror_nochild();
 
   if ((parent != E_MultiComment) && !strcmp(name, "MultiComment")) {
     if (pdata->m_comment == NULL)
@@ -115,7 +117,7 @@ static bool is_multicomment(parser_data_t *pdata, const char *name,
       check_instances(pdata->m_comment, KaxTagMultiCommentLanguage);
       pdata->parents->push_back(E_CommentLanguage);
     } else
-      perror_nochild();
+      tperror_nochild();
 
     return true;
   }
@@ -135,7 +137,7 @@ static void start_level1(parser_data_t *pdata, const char *name) {
       pdata->tag = &GetNextEmptyChild<KaxTag>(*pdata->tags, *pdata->tag);
 
   } else
-    perror_nochild();
+    tperror_nochild();
 
   pdata->parents->push_back(E_Tag);
 }
@@ -152,77 +154,77 @@ static void start_level2(parser_data_t *pdata, const char *name) {
     if (pdata->targets == NULL)
       pdata->targets = &GetEmptyChild<KaxTagTargets>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_Targets);
 
   } else if (!strcmp(name, "General")) {
     if (pdata->general == NULL)
       pdata->general = &GetEmptyChild<KaxTagGeneral>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_General);
 
   } else if (!strcmp(name, "Genres")) {
     if (pdata->genres == NULL)
       pdata->genres = &GetEmptyChild<KaxTagGenres>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_Genres);
 
   } else if (!strcmp(name, "AudioSpecific")) {
     if (pdata->audio_specific == NULL)
       pdata->audio_specific = &GetEmptyChild<KaxTagAudioSpecific>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_AudioSpecific);
 
   } else if (!strcmp(name, "ImageSpecific")) {
     if (pdata->image_specific == NULL)
       pdata->image_specific = &GetEmptyChild<KaxTagImageSpecific>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_ImageSpecific);
 
   } else if (!strcmp(name, "MultiCommercial")) {
     if (pdata->m_commercial == NULL)
       pdata->m_commercial = &GetEmptyChild<KaxTagMultiCommercial>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_MultiCommercial);
 
   } else if (!strcmp(name, "MultiDate")) {
     if (pdata->m_date == NULL)
       pdata->m_date = &GetEmptyChild<KaxTagMultiDate>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_MultiDate);
 
   } else if (!strcmp(name, "MultiEntity")) {
     if (pdata->m_entity == NULL)
       pdata->m_entity = &GetEmptyChild<KaxTagMultiEntity>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_MultiEntity);
 
   } else if (!strcmp(name, "MultiIdentifier")) {
     if (pdata->m_identifier == NULL)
       pdata->m_identifier = &GetEmptyChild<KaxTagMultiIdentifier>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_MultiIdentifier);
 
   } else if (!strcmp(name, "MultiLegal")) {
     if (pdata->m_legal == NULL)
       pdata->m_legal = &GetEmptyChild<KaxTagMultiLegal>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_MultiLegal);
 
   } else if (!strcmp(name, "MultiTitle")) {
     if (pdata->m_title == NULL)
       pdata->m_title = &GetEmptyChild<KaxTagMultiTitle>(*pdata->tag);
     else
-      perror_oneinstance();
+      tperror_oneinstance();
     pdata->parents->push_back(E_MultiTitle);
 
   } else if (!strcmp(name, "MultiComment")) {
@@ -234,7 +236,7 @@ static void start_level2(parser_data_t *pdata, const char *name) {
     pdata->parents->push_back(E_MultiComment);
 
   } else
-    perror_nochild();
+    tperror_nochild();
 }
 
 static void start_level3(parser_data_t *pdata, const char *name) {
@@ -268,7 +270,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
       pdata->parents->push_back(E_ChapterUID);
 
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_General) {
     if (is_multicomment(pdata, name, pdata->general))
@@ -339,7 +341,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
       check_instances(pdata->general, KaxTagPopularimeter);
       pdata->parents->push_back(E_Popularimeter);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_Genres) {
     if (is_multicomment(pdata, name, pdata->genres))
@@ -367,7 +369,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
       check_instances(pdata->genres, KaxTagSubGenre);
       pdata->parents->push_back(E_SubGenre);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_AudioSpecific) {
     if (is_multicomment(pdata, name, pdata->audio_specific))
@@ -406,7 +408,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
       check_instances(pdata->audio_specific, KaxTagOfficialAudioSourceURL);
       pdata->parents->push_back(E_OfficialAudioSourceURL);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_ImageSpecific) {
     if (is_multicomment(pdata, name, pdata->image_specific))
@@ -433,7 +435,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
       check_instances(pdata->image_specific, KaxTagOriginalDimensions);
       pdata->parents->push_back(E_OriginalDimensions);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_MultiCommercial) {
     if (is_multicomment(pdata, name, pdata->m_commercial))
@@ -449,7 +451,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
                                           *pdata->commercial);
      pdata->parents->push_back(E_Commercial);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_MultiDate) {
     if (is_multicomment(pdata, name, pdata->m_date))
@@ -463,7 +465,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
           &GetNextEmptyChild<KaxTagDate>(*pdata->m_date, *pdata->date);
       pdata->parents->push_back(E_Date);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_MultiEntity) {
     if (is_multicomment(pdata, name, pdata->m_entity))
@@ -477,7 +479,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
           &GetNextEmptyChild<KaxTagEntity>(*pdata->m_entity, *pdata->entity);
       pdata->parents->push_back(E_Entity);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_MultiIdentifier) {
     if (is_multicomment(pdata, name, pdata->m_identifier))
@@ -493,7 +495,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
                                           *pdata->identifier);
       pdata->parents->push_back(E_Identifier);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_MultiLegal) {
     if (is_multicomment(pdata, name, pdata->m_legal))
@@ -507,7 +509,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
           &GetNextEmptyChild<KaxTagLegal>(*pdata->m_legal, *pdata->legal);
       pdata->parents->push_back(E_Legal);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_MultiTitle) {
     if (is_multicomment(pdata, name, pdata->m_title))
@@ -521,7 +523,7 @@ static void start_level3(parser_data_t *pdata, const char *name) {
           &GetNextEmptyChild<KaxTagTitle>(*pdata->m_title, *pdata->title);
       pdata->parents->push_back(E_Title);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if ((parent == E_MultiComment) &&
              is_multicomment(pdata, name, pdata->m_comment))
@@ -578,7 +580,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
                                                *pdata->m_price);
       pdata->parents->push_back(E_MultiPrice);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_Date) {
     if (is_multicomment(pdata, name, pdata->date))
@@ -596,7 +598,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
       check_instances(pdata->date, KaxTagMultiDateDateEnd);
       pdata->parents->push_back(E_DateEnd);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_Entity) {
     if (is_multicomment(pdata, name, pdata->entity))
@@ -631,7 +633,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
       check_instances(pdata->entity, KaxTagMultiEntityAddress);
       pdata->parents->push_back(E_Address);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_Identifier) {
     if (is_multicomment(pdata, name, pdata->identifier))
@@ -649,7 +651,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
       check_instances(pdata->identifier, KaxTagMultiIdentifierString);
       pdata->parents->push_back(E_IdentifierString);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_Legal) {
     if (is_multicomment(pdata, name, pdata->legal))
@@ -675,7 +677,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
       check_instances(pdata->legal, KaxTagMultiLegalContent);
       pdata->parents->push_back(E_LegalContent);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if (parent == E_Title) {
     if (is_multicomment(pdata, name, pdata->title))
@@ -718,7 +720,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
       check_instances(pdata->title, KaxTagMultiTitleLanguage);
       pdata->parents->push_back(E_Language);
     } else
-      perror_nochild();
+      tperror_nochild();
 
   } else if ((parent == E_MultiComment) &&
              is_multicomment(pdata, name, pdata->m_comment))
@@ -765,17 +767,17 @@ static void start_level6(parser_data_t *pdata, const char *name) {
     die("tagparser_start: Unknown element - should not have happened.");
 }
 
-void start_element(void *user_data, const char *name,
-                   const char **atts) {
+static void start_element(void *user_data, const char *name,
+                          const char **atts) {
   parser_data_t *pdata;
 
   pdata = (parser_data_t *)user_data;
 
   if (atts[0] != NULL)
-    perror(pdata, "Attributes are not allowed.");
+    tperror(pdata, "Attributes are not allowed.");
 
   if (pdata->data_allowed)
-    perror_unknown();
+    tperror_unknown();
 
   pdata->parent_names->push_back(string(name));
   pdata->data_allowed = false;
@@ -785,9 +787,9 @@ void start_element(void *user_data, const char *name,
 
   if (pdata->depth == 0) {
     if (pdata->done_reading)
-      perror(pdata, "More than one root element found.");
+      tperror(pdata, "More than one root element found.");
     if (strcmp(name, "Tags"))
-      perror(pdata, "Root element must be <Tags>.");
+      tperror(pdata, "Root element must be <Tags>.");
 
     pdata->parents->push_back(E_Tags);
   } else if (pdata->depth == 1)
@@ -806,12 +808,12 @@ void start_element(void *user_data, const char *name,
     die("Depth > 6: %d", pdata->depth);
 
   if (pdata->parent_names->size() != pdata->parents->size())
-    perror_unknown();
+    tperror_unknown();
 
   (pdata->depth)++;
 }
 
-void perror(parser_data_t *pdata, const char *fmt, ...) {
+void tperror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
   string new_fmt;
 
@@ -846,9 +848,9 @@ static void add_data(void *user_data, const XML_Char *s, int len) {
   if (!pdata->data_allowed) {
     for (i = 0; i < len; i++)
       if (!isblank(s[i]) && (s[i] != '\r') && (s[i] != '\n'))
-        perror(pdata, "Data is not allowed inside <%s>.",
-               (*pdata->parent_names)
-               [pdata->parent_names->size() - 1].c_str());
+        tperror(pdata, "Data is not allowed inside <%s>.",
+                (*pdata->parent_names)
+                [pdata->parent_names->size() - 1].c_str());
     return;
   }
 
@@ -887,7 +889,7 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   pdata->file_name = name;
 
   XML_SetUserData(parser, pdata);
-  XML_SetElementHandler(parser, start_element, end_element);
+  XML_SetElementHandler(parser, start_element, end_xml_tag_element);
   XML_SetCharacterDataHandler(parser, add_data);
 
   do {

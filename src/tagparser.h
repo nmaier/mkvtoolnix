@@ -181,17 +181,17 @@ typedef struct {
   KaxTagMultiComment *m_comment;
 } parser_data_t;
 
-void perror(parser_data_t *pdata, const char *fmt, ...);
+void tperror(parser_data_t *pdata, const char *fmt, ...);
 
-#define perror_unknown() perror(pdata, "Unknown/unsupported element: %s", \
-                                name)
-#define perror_nochild() perror(pdata, "<%s> is not a valid child element " \
-                                "of <%s>.", name, parent_name.c_str())
-#define perror_oneinstance() perror(pdata, "Only one instance of <%s> is " \
-                                    "allowed under <%s>.", name, \
-                                    parent_name.c_str());
-
-void end_element(void *user_data, const char *name);
+#define tperror_unknown() tperror(pdata, "Unknown/unsupported element: %s", \
+                                  name)
+#define tperror_nochild() tperror(pdata, "<%s> is not a valid child element " \
+                                  "of <%s>.", name, parent_name.c_str())
+#define tperror_oneinstance() tperror(pdata, "Only one instance of <%s> is " \
+                                      "allowed under <%s>.", name, \
+                                      parent_name.c_str());
+ 
+void end_xml_tag_element(void *user_data, const char *name);
 
 void parse_xml_tags(const char *name, KaxTags *tags);
 

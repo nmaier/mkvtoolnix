@@ -38,6 +38,7 @@ protected:
 #if !defined(SYS_UNIX)
   bool _eof;
 #endif
+  char *file_name;
   void *file;
   stack<int64_t> positions;
 
@@ -66,6 +67,8 @@ public:
 
   virtual void save_pos(int64_t new_pos = -1);
   virtual bool restore_pos();
+
+  virtual const char *get_file_name();
 };
 
 class mm_null_io_c: public mm_io_c {

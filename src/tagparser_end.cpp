@@ -48,11 +48,11 @@ static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
 
   strip(*pdata->bin);
   if (!parse_int(pdata->bin->c_str(), value))
-    perror(pdata, "Expected an unsigned integer but found '%s'.",
-           pdata->bin->c_str());
+    tperror(pdata, "Expected an unsigned integer but found '%s'.",
+            pdata->bin->c_str());
   if (value < min_value)
-    perror(pdata, "Unsigned integer (%lld) is too small. Mininum value is "
-           "%lld.", value, min_value);
+    tperror(pdata, "Unsigned integer (%lld) is too small. Mininum value is "
+            "%lld.", value, min_value);
 
   *(static_cast<EbmlUInteger *>(el)) = value;
 }
@@ -63,11 +63,11 @@ static void el_get_sint(parser_data_t *pdata, EbmlElement *el,
 
   strip(*pdata->bin);
   if (!parse_int(pdata->bin->c_str(), value))
-    perror(pdata, "Expected a signed integer but found '%s'.",
-           pdata->bin->c_str());
+    tperror(pdata, "Expected a signed integer but found '%s'.",
+            pdata->bin->c_str());
   if (value < min_value)
-    perror(pdata, "Signed integer (%lld) is too small. Mininum value is "
-           "%lld.\n", value, min_value);
+    tperror(pdata, "Signed integer (%lld) is too small. Mininum value is "
+            "%lld.\n", value, min_value);
 
   *(static_cast<EbmlSInteger *>(el)) = value;
 }
@@ -82,8 +82,8 @@ static void el_get_float(parser_data_t *pdata, EbmlElement *el,
 
   if (((value == 0.0) && (endptr == pdata->bin->c_str())) ||
       (errno == ERANGE))
-    perror(pdata, "Expected a floating point number but found '%s'.",
-           pdata->bin->c_str());
+    tperror(pdata, "Expected a floating point number but found '%s'.",
+            pdata->bin->c_str());
 
   *(static_cast<EbmlFloat *>(el)) = value;
 }
@@ -92,12 +92,12 @@ static void el_get_string(parser_data_t *pdata, EbmlElement *el,
                           bool check_language = false) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
-    perror(pdata, "Expected a string but found only whitespaces.");
+    tperror(pdata, "Expected a string but found only whitespaces.");
 
   if (check_language && !is_valid_iso639_2_code(pdata->bin->c_str()))
-    perror(pdata, "'%s' is not a valid ISO639-2 language code. See the "
-           "output of 'mkvmerge --list-languages' for a list of all "
-           "valid language codes.", pdata->bin->c_str());
+    tperror(pdata, "'%s' is not a valid ISO639-2 language code. See the "
+            "output of 'mkvmerge --list-languages' for a list of all "
+            "valid language codes.", pdata->bin->c_str());
 
   *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
 }
@@ -105,7 +105,7 @@ static void el_get_string(parser_data_t *pdata, EbmlElement *el,
 static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
-    perror(pdata, "Expected a string but found only whitespaces.");
+    tperror(pdata, "Expected a string but found only whitespaces.");
 
   *(static_cast<EbmlUnicodeString *>(el)) =
     cstrutf8_to_UTFstring(pdata->bin->c_str());
@@ -118,33 +118,33 @@ static void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
 
   strip(*pdata->bin, true);
   if (pdata->bin->length() == 0)
-    perror(pdata, "Found neither Base64 encoded data nor '@file' to read "
-           "binary data from.");
+    tperror(pdata, "Found neither Base64 encoded data nor '@file' to read "
+            "binary data from.");
 
   if ((*pdata->bin)[0] == '@') {
     if (pdata->bin->length() == 1)
-      perror(pdata, "No filename found after the '@'.");
+      tperror(pdata, "No filename found after the '@'.");
     try {
       io = new mm_io_c(&(pdata->bin->c_str())[1], MODE_READ);
       io->setFilePointer(0, seek_end);
       result = io->getFilePointer();
       io->setFilePointer(0, seek_beginning);
       if (result <= 0)
-        perror(pdata, "The file '%s' is empty.", &(pdata->bin->c_str())[1]);
+        tperror(pdata, "The file '%s' is empty.", &(pdata->bin->c_str())[1]);
       buffer = new binary[result];
       io->read(buffer, result);
       delete io;
     } catch(...) {
-      perror(pdata, "Could not open/read the file '%s'.",
-             &(pdata->bin->c_str())[1]);
+      tperror(pdata, "Could not open/read the file '%s'.",
+              &(pdata->bin->c_str())[1]);
     }
 
   } else {
     buffer = new binary[pdata->bin->length() / 4 * 3 + 1];
     result = base64_decode(*pdata->bin, (unsigned char *)buffer);
     if (result < 0)
-      perror(pdata, "Could not decode the Base64 encoded data - it seems to "
-             "be broken.");
+      tperror(pdata, "Could not decode the Base64 encoded data - it seems to "
+              "be broken.");
   }
 
   (static_cast<EbmlBinary *>(el))->SetBuffer(buffer, result);
@@ -172,11 +172,11 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   p = safestrdup(pdata->bin->c_str());
 
   if (pdata->bin->length() != 24)
-    perror(pdata, errmsg, pdata->bin->c_str());
+    tperror(pdata, errmsg, pdata->bin->c_str());
 
   if ((p[4] != '-') || (p[7] != '-') || (p[10] != 'T') ||
       (p[13] != ':') || (p[16] != ':') || (p[19] != '+'))
-    perror(pdata, errmsg, pdata->bin->c_str());
+    tperror(pdata, errmsg, pdata->bin->c_str());
 
   p[4] = 0;
   p[7] = 0;
@@ -190,24 +190,24 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
       !parse_int(&p[8], day) || !parse_int(&p[11], hour) ||
       !parse_int(&p[14], minute) || !parse_int(&p[17], second) ||
       !parse_int(&p[20], timezone))
-    perror(pdata, errmsg, pdata->bin->c_str());
+    tperror(pdata, errmsg, pdata->bin->c_str());
 
   if (year < 1900)
-    perror(pdata, "Invalid year given (%d).", year);
+    tperror(pdata, "Invalid year given (%d).", year);
   if ((month < 1) || (month > 12))
-    perror(pdata, "Invalid month given (%d).", month);
+    tperror(pdata, "Invalid month given (%d).", month);
   if ((day < 1) || (day > 31))
-    perror(pdata, "Invalid day given (%d).", day);
+    tperror(pdata, "Invalid day given (%d).", day);
   if ((hour < 0) || (hour > 23))
-    perror(pdata, "Invalid hour given (%d).", hour);
+    tperror(pdata, "Invalid hour given (%d).", hour);
   if ((minute < 0) || (minute > 59))
-    perror(pdata, "Invalid minute given (%d).", minute);
+    tperror(pdata, "Invalid minute given (%d).", minute);
   if ((second < 0) || (second > 59))
-    perror(pdata, "Invalid second given (%d).", second);
+    tperror(pdata, "Invalid second given (%d).", second);
   if ((tz_sign != '+') && (tz_sign != '-'))
-    perror(pdata, "Invalid time zone given (%c%s).", tz_sign, &p[20]);
+    tperror(pdata, "Invalid time zone given (%c%s).", tz_sign, &p[20]);
   if ((timezone < 0) || (timezone > 1200))
-    perror(pdata, "Invalid time zone given (%c%s).", tz_sign, &p[20]);
+    tperror(pdata, "Invalid time zone given (%c%s).", tz_sign, &p[20]);
 
   memset(&t, 0, sizeof(struct tm));
   t.tm_year = year - 1900;
@@ -219,7 +219,7 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   t.tm_isdst = -1;
   tme = mktime(&t);
   if (tme == (time_t)-1)
-    perror(pdata, "Invalid date specified (%s).", pdata->bin->c_str());
+    tperror(pdata, "Invalid date specified (%s).", pdata->bin->c_str());
   offset = (((timezone / 100) * 60) + (timezone % 100)) * 60;
   if (tz_sign == '+')
     offset *= -1;
@@ -233,7 +233,7 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   tme -= (tme_gm - tme_local);
 #endif
   if (tme < 0)
-    perror(pdata, "Invalid date specified (%s).", pdata->bin->c_str());
+    tperror(pdata, "Invalid date specified (%s).", pdata->bin->c_str());
 
   safefree(p);
 
@@ -603,13 +603,13 @@ static void end_level6(parser_data_t *pdata, const char *name) {
   die("tagparser_end: Unknown element. This should not have happened.");
 }
 
-void end_element(void *user_data, const char *name) {
+void end_xml_tag_element(void *user_data, const char *name) {
   parser_data_t *pdata;
 
   pdata = (parser_data_t *)user_data;
 
   if (pdata->data_allowed && (pdata->bin == NULL))
-    perror(pdata, "Element <%s> does not contain any data.", name);
+    tperror(pdata, "Element <%s> does not contain any data.", name);
 
   if (pdata->depth == 1)
     ;                           // Nothing to do here!

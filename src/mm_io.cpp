@@ -57,14 +57,22 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
 
   if (file == NULL)
     throw exception();
+
+  file_name = safestrdup(path);
 }
 
 mm_io_c::mm_io_c() {
+  file_name = NULL;
   file = NULL;
 }
 
 mm_io_c::~mm_io_c() {
   close();
+  safefree(file_name);
+}
+
+const char *mm_io_c::get_file_name() {
+  return file_name;
 }
 
 uint64 mm_io_c::getFilePointer() {
