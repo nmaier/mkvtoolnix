@@ -168,7 +168,7 @@ void parse_args(int argc, char **argv, char *&file_name) {
   // Find options that directly end the program.
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      mxprint(stdout, VERSIONINFO "\n");
+      mxprint(stdout, "mkvextract v" VERSION "\n");
       exit(0);
     } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
                !strcmp(argv[i], "--help")) {
