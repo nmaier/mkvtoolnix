@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.8 2003/03/06 23:38:37 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.9 2003/04/11 11:21:10 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -103,7 +103,8 @@ void pcm_packetizer_c::set_header() {
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 
-int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
+int pcm_packetizer_c::process(unsigned char *buf, int size,
+                              int64_t, int64_t) {
   int i, bytes_per_packet, remaining_bytes, complete_packets;
   unsigned char *new_buf;
 
@@ -164,8 +165,5 @@ int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
   if (new_buf != buf)
     free(new_buf);
 
-  if (last_frame)
-    return 0;
-  else  
-    return EMOREDATA;
+  return EMOREDATA;
 }

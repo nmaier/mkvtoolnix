@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.8 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.9 2003/04/11 11:21:10 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -38,7 +38,8 @@ public:
                    int nbits_per_sample, track_info_t *nti) throw (error_c);
   virtual ~pcm_packetizer_c();
     
-  virtual int  process(unsigned char *buf, int size, int last_frame);
+  virtual int  process(unsigned char *buf, int size, int64_t timecode = -1,
+                       int64_t length = -1);
   virtual void set_header();
 };
 
