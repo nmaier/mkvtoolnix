@@ -307,11 +307,14 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
                                wxString &log):
   wxDialog(parent, -1, wxT("Job output"), wxDefaultPosition,
            wxSize(JOB_LOG_DIALOG_WIDTH, 400), wxCAPTION) {
+  wxFlexGridSizer *siz_all;
   wxButton *b_ok;
 
-  new wxStaticText(this, -1, wxT("Output of the selected jobs:"),
-                   wxPoint(20, 20));
-  new wxTextCtrl(this, -1, log, wxPoint(20, 40),
+  siz_all = new wxFlexGridSizer(2);
+  siz_all->AddGrowableCol(0);
+  siz_all->Add(new wxStaticText(this, -1, wxT("Output of the selected jobs:")),
+               0, wxALIGN_LEFT | wxALL, 5);
+  siz_all->Add(0, 0, 0, 0, 0);new wxTextCtrl(this, -1, log, wxPoint(20, 40),
                  wxSize(JOB_LOG_DIALOG_WIDTH - 40, 300),
                  wxTE_MULTILINE | wxTE_READONLY);
   b_ok = new wxButton(this, wxID_OK, wxT("&Ok"),
@@ -348,11 +351,17 @@ job_dialog::job_dialog(wxWindow *parent):
            wxSize(800, 395),
 #endif
            wxCAPTION) {
+  wxFlexGridSizer *siz_all;
+  wxBoxSizer *siz_b_right, *siz_b_bottom;
   wxListItem item;
   int i;
   long dummy;
 
-  new wxStaticText(this, -1, wxT("Current and past jobs:"), wxPoint(20, 20));
+  siz_all = new wxFlexGridSizer(2);
+  siz_all->AddGrowableCol(0);
+  siz_all->Add(new wxStaticText(this, -1, wxT("Current and past jobs:")),
+               0, wxALIGN_LEFT | wxALL, 10);
+  siz_all->Add(0, 0, 0, 0, 0);
   lv_jobs =
     new wxListView(this, ID_JOBS_LV_JOBS, wxPoint(20, 40), wxSize(660, 300),
                    wxLC_REPORT | wxSUNKEN_BORDER);
@@ -389,39 +398,54 @@ job_dialog::job_dialog(wxWindow *parent):
 
   if (jobs.size() == 0)
     lv_jobs->DeleteItem(0);
+  siz_all->Add(lv_jobs, 1, wxGROW | wxLEFT, 10);
 
-  b_up = new wxButton(this, ID_JOBS_B_UP, wxT("&Up"), wxPoint(700, 40),
-                      wxSize(80, -1));
+  siz_b_right = new wxBoxSizer(wxVERTICAL);
+  b_up = new wxButton(this, ID_JOBS_B_UP, wxT("&Up"));
   b_up->SetToolTip(wxT("Move the selected job(s) up"));
-  b_down = new wxButton(this, ID_JOBS_B_DOWN, wxT("&Down"), wxPoint(700, 70),
-                        wxSize(80, -1));
+  siz_b_right->Add(b_up, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  b_down = new wxButton(this, ID_JOBS_B_DOWN, wxT("&Down"));
   b_down->SetToolTip(wxT("Move the selected job(s) down"));
-  b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, wxT("&Re-enable"),
-                            wxPoint(700, 115), wxSize(80, -1));
+  siz_b_right->Add(b_down, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_b_right->Add(0, 15, 0, 0, 0);
+
+  b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, wxT("&Re-enable"));
   b_reenable->SetToolTip(wxT("Re-enable the selected job(s)"));
-  b_disable = new wxButton(this, ID_JOBS_B_DISABLE, wxT("&Disable"),
-                            wxPoint(700, 145), wxSize(80, -1));
+  siz_b_right->Add(b_reenable, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  b_disable = new wxButton(this, ID_JOBS_B_DISABLE, wxT("&Disable"));
   b_disable->SetToolTip(wxT("Disable the selected job(s) and sets their "
                             "status to 'done'"));
-  b_delete = new wxButton(this, ID_JOBS_B_DELETE, wxT("D&elete"),
-                          wxPoint(700, 190), wxSize(80, -1));
+  siz_b_right->Add(b_disable, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_b_right->Add(0, 15, 0, 0, 0);
+
+  b_delete = new wxButton(this, ID_JOBS_B_DELETE, wxT("D&elete"));
   b_delete->SetToolTip(wxT("Delete the selected job(s) from the job queue"));
-  b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, wxT("&View log"),
-                            wxPoint(700, 235), wxSize(80, -1));
+  siz_b_right->Add(b_delete, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_b_right->Add(0, 15, 0, 0, 0);
+
+  b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, wxT("&View log"));
   b_view_log->SetToolTip(wxT("View the output that mkvmerge generated during "
                              "the muxing process for the selected job(s)"));
+  siz_b_right->Add(b_view_log, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_all->Add(siz_b_right, 0, 0, 0);
 
-  b_ok = new wxButton(this, wxID_OK, wxT("&Ok"), wxPoint(20, 355),
-                      wxSize(100, -1));
+  siz_b_bottom = new wxBoxSizer(wxHORIZONTAL);
+  b_ok = new wxButton(this, wxID_OK, wxT("&Ok"));
   b_ok->SetDefault();
-  b_start = new wxButton(this, ID_JOBS_B_START, wxT("&Start"),
-                         wxPoint(460, 355), wxSize(100, -1));
+  siz_b_bottom->Add(b_ok, 0, wxALL, 10);
+  siz_b_bottom->Add(1, 0, 1, wxGROW, 0);
+
+  b_start = new wxButton(this, ID_JOBS_B_START, wxT("&Start"));
   b_start->SetToolTip(wxT("Start the jobs whose status is 'pending'"));
+  siz_b_bottom->Add(b_start, 0, wxALL, 10);
+  siz_b_bottom->Add(10, 0, 0, 0, 0);
   b_start_selected = new wxButton(this, ID_JOBS_B_START_SELECTED,
-                                  wxT("S&tart selected"),
-                                  wxPoint(580, 355), wxSize(100, -1));
+                                  wxT("S&tart selected"));
   b_start_selected->SetToolTip(wxT("Start the selected job(s) regardless of "
                                    "their status"));
+  siz_b_bottom->Add(b_start_selected, 0, wxLEFT | wxTOP | wxBOTTOM, 10);
+  siz_all->Add(siz_b_bottom, 1, wxGROW, 0);
+  SetSizer(siz_all);
 
   enable_buttons(false);
 
