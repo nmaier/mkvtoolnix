@@ -1444,6 +1444,7 @@ process_file(const char *file_name) {
 
           } else if (is_id(l2, KaxBlockGroup)) {
             vector<int> frame_sizes;
+            vector<uint32_t> frame_adlers;
 
             show_element(l2, 2, "Block group");
 
@@ -1475,6 +1476,8 @@ process_file(const char *file_name) {
                   show_element(NULL, 4, "Frame with size %u%s", data.Size(),
                                adler);
                   frame_sizes.push_back(data.Size());
+                  frame_adlers.push_back(calc_adler32(data.Buffer(),
+                                                      data.Size()));
                 }
 
               } else if (is_id(l3, KaxBlockDuration)) {
@@ -1614,10 +1617,11 @@ process_file(const char *file_name) {
               int fidx;
 
               for (fidx = 0; fidx < frame_sizes.size(); fidx++)
-                mxinfo("%c frame, track %u, timecode %lld, size %d\n",
-                       bref_found && fref_found ? 'B' :
+                mxinfo("%c frame, track %u, timecode %lld, size %d, adler "
+                       "0x%08x\n", bref_found && fref_found ? 'B' :
                        bref_found ? 'P' : !fref_found ? 'I' : '?',
-                       lf_tnum, lf_timecode, frame_sizes[fidx]);
+                       lf_tnum, lf_timecode, frame_sizes[fidx],
+                       frame_adlers[fidx]);
             } else if (verbose > 2)
               show_element(NULL, 2, "[%c frame for track %u, timecode %lld]",
                            bref_found && fref_found ? 'B' :
