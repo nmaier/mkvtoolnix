@@ -29,7 +29,6 @@
 #include <langinfo.h>
 #endif
 #include <locale.h>
-#include <malloc.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -863,7 +862,8 @@ char *UTFstring_to_cstr(const UTFstring &u) {
   sptr = u.c_str();
   old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
   setlocale(LC_CTYPE, "");
-  wcsrtombs(new_string, &sptr, len, NULL);
+  wcstombs(new_string, sptr, len * 4 + 1);
+  new_string[len * 4] = 0;
   setlocale(LC_CTYPE, old_locale);
   safefree(old_locale);
 
