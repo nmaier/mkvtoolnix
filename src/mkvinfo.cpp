@@ -1413,6 +1413,12 @@ bool process_file(const char *file_name) {
                 f_data.ReadData(es->I_O());
                 show_element(l3, 3, "File data, size: %u", f_data.GetSize());
 
+              } else if (EbmlId(*l3) == KaxFileUID::ClassInfos.GlobalId) {
+                KaxFileUID &f_uid =
+                  *static_cast<KaxFileUID *>(l3);
+                f_uid.ReadData(es->I_O());
+                show_element(l3, 3, "File UID: %u", uint32(f_uid));
+
               } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
                 show_unknown_element(l3, 3);
 

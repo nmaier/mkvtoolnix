@@ -857,8 +857,10 @@ static void render_attachments(IOCallback *out) {
         die("Internal error: *name == 0 on %d.", __LINE__);
 
       *static_cast<EbmlUnicodeString *>
-        (&GetChild<KaxFileName>(*kax_a)) =
-        cstr_to_UTFstring(name);
+        (&GetChild<KaxFileName>(*kax_a)) = cstr_to_UTFstring(name);
+
+      *static_cast<EbmlUInteger *>
+        (&GetChild<KaxFileUID>(*kax_a)) = create_unique_uint32();
 
       try {
         io = new mm_io_c(attch->name, MODE_READ);
