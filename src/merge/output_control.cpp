@@ -113,7 +113,7 @@ int64_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
 int64_t max_ns_per_cluster = 2000000000;
 bool write_cues = true, cue_writing_requested = false;
-bool video_track_present = false;
+generic_packetizer_c *video_packetizer = NULL;
 bool write_meta_seek_for_clusters = true;
 bool no_lacing = false, no_linking = true;
 int64_t split_after = -1;
@@ -464,7 +464,7 @@ render_headers(mm_io_c *rout) {
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
 
-    if (!video_track_present ||
+    if ((video_packetizer == NULL) ||
         (timecode_scale_mode == timecode_scale_mode_auto))
       kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_64);
     else
@@ -1511,9 +1511,36 @@ append_track(packetizer_t &ptzr,
   // If we're dealing with a subtitle track or if the appending file contains
   // chapters then we have to suck the previous file dry. See below for the
   // reason (short version: we need all max_timecode_seen values).
-  if (((*gptzr)->get_track_type() == track_subtitle) ||
-      (src_file.reader->chapters != NULL))
+  if ((((*gptzr)->get_track_type() == track_subtitle) ||
+       (src_file.reader->chapters != NULL)) &&
+      !dst_file.done) {
+    vector<deferred_connection_t>::const_iterator def_con;
+    
     dst_file.reader->read_all();
+    dst_file.done = true;
+    foreach(def_con, dst_file.deferred_connections)
+      append_track(*def_con->ptzr, def_con->amap);
+    dst_file.deferred_connections.clear();
+  }
+
+  if (((*gptzr)->get_track_type() == track_subtitle) &&
+      (dst_file.reader->num_video_tracks == 0) &&
+      (video_packetizer != NULL) && !ptzr.deferred) {
+    vector<filelist_t>::iterator file;
+
+    foreach(file, files) {
+      if (mxfind(video_packetizer, file->reader->reader_packetizers) !=
+          file->reader->reader_packetizers.end()) {
+        deferred_connection_t new_def_con;
+
+        ptzr.deferred = true;
+        new_def_con.amap = amap;
+        new_def_con.ptzr = &ptzr;
+        file->deferred_connections.push_back(new_def_con);
+        return;
+      }
+    }
+  }
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
@@ -1550,8 +1577,9 @@ append_track(packetizer_t &ptzr,
   // But then again I don't expect that people will try to concatenate such
   // files if they've been split before.
   timecode_adjustment = dst_file.reader->max_timecode_seen;
-  if ((ptzr.packetizer->get_track_type() == track_subtitle) ||
-      (src_file.reader->chapters != NULL)) {
+  if (((ptzr.packetizer->get_track_type() == track_subtitle) ||
+       (src_file.reader->chapters != NULL)) &&
+      !ptzr.deferred) {
     vector<append_spec_t>::const_iterator cmp_amap;
 
     if (src_file.reader->ptzr_first_packet == NULL)
@@ -1587,6 +1615,8 @@ append_track(packetizer_t &ptzr,
     delete src_file.reader->chapters;
     src_file.reader->chapters = NULL;
   }
+
+  ptzr.deferred = false;
 }
 
 /** \brief Decide if packetizers have to be appended
@@ -1605,6 +1635,8 @@ append_tracks_maybe() {
 
   appended_a_track = false;
   foreach(ptzr, packetizers) {
+    if (ptzr->deferred)
+      continue;
     if (!files[ptzr->orig_file].appended_to)
       continue;
     if ((ptzr->status == EMOREDATA) || (ptzr->status == EHOLDING))

@@ -50,7 +50,6 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   ref_timecode = -1;
   if (get_cue_creation() == CUES_UNSPECIFIED)
     set_cue_creation(CUES_IFRAMES);
-  video_track_present = true;
   duration_shift = 0;
   bref_frame.type = '?';
   fref_frame.type = '?';

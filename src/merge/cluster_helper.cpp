@@ -138,7 +138,7 @@ cluster_helper_c::add_packet(packet_t *packet) {
   if (splitting && (file_num <= split_max_num_files) &&
       (packet->bref == -1) &&
       ((packet->source->get_track_type() == track_video) ||
-       !video_track_present)) {
+       (video_packetizer == NULL))) {
     split = false;
     c = clusters[num_clusters - 1];
     if (first_timecode_in_file == -1)
@@ -536,7 +536,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
           // ... or if this is an audio track, there is no video track and the
           // last cue entry was created more than 2s ago.
           ((source->get_cue_creation() == CUES_SPARSE) &&
-           (source->get_track_type() == track_audio) && !video_track_present &&
+           (source->get_track_type() == track_audio) &&
+           (video_packetizer == NULL) &&
            ((source->get_last_cue_timecode() < 0) ||
             ((pack->assigned_timecode - source->get_last_cue_timecode()) >=
              2000000000)))) {

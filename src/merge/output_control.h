@@ -38,25 +38,39 @@ class generic_packetizer_c;
 class generic_reader_c;
 
 typedef struct {
-  char *name;
-  mm_io_c *fp;
-
-  int type, status;
-
-  packet_t *pack;
-
-  generic_reader_c *reader;
-
-  track_info_c *ti;
-  bool appending, appended_to;
-} filelist_t;
+  int64_t src_file_id;
+  int64_t src_track_id;
+  int64_t dst_file_id;
+  int64_t dst_track_id;
+} append_spec_t;
 
 typedef struct packetizer_t {
   int status;
   packet_t *pack;
   generic_packetizer_c *packetizer, *orig_packetizer;
   int64_t file, orig_file;
+  bool deferred;
 } packetizer_t;
+
+typedef struct {
+  append_spec_t amap;
+  packetizer_t *ptzr;
+} deferred_connection_t;
+
+typedef struct {
+  char *name;
+
+  int type;
+
+  packet_t *pack;
+
+  generic_reader_c *reader;
+
+  track_info_c *ti;
+  bool appending, appended_to, done;
+
+  vector<deferred_connection_t> deferred_connections;
+} filelist_t;
 
 typedef struct {
   char *name, *mime_type, *description;
@@ -68,13 +82,6 @@ typedef struct {
   int64_t file_id;
   int64_t track_id;
 } track_order_t;
-
-typedef struct {
-  int64_t src_file_id;
-  int64_t src_track_id;
-  int64_t dst_file_id;
-  int64_t dst_track_id;
-} append_spec_t;
 
 enum timecode_scale_mode_t {
   timecode_scale_mode_normal = 0,
@@ -116,7 +123,8 @@ extern string default_language;
 
 extern float video_fps;
 
-extern bool write_cues, cue_writing_requested, video_track_present;
+extern generic_packetizer_c *video_packetizer;
+extern bool write_cues, cue_writing_requested;
 extern bool no_lacing, no_linking, use_durations;
 
 extern bool identifying, identify_verbose;

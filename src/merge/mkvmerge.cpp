@@ -323,8 +323,6 @@ identify(const string &filename) {
             file.name);
 
   file.appending = false;
-  file.fp = NULL;
-  file.status = EMOREDATA;
   file.pack = NULL;
   file.ti = new track_info_c(ti);
 
@@ -1725,11 +1723,10 @@ parse_args(vector<string> &args) {
                   "your file type is supported but not recognized "
                   "properly.\n"), file.name);
 
-      file.fp = NULL;
       if (file.type != TYPECHAPTERS) {
-        file.status = EMOREDATA;
         file.pack = NULL;
         file.ti = ti;
+        file.done = false;
 
         files.push_back(file);
       } else {

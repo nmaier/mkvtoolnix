@@ -253,6 +253,7 @@ public:
   int64_t max_timecode_seen;
   KaxChapters *chapters;
   bool appending;
+  int num_video_tracks, num_audio_tracks, num_subtitle_tracks;
 
 public:
   generic_reader_c(track_info_c *nti);

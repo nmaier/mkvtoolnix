@@ -324,6 +324,14 @@ generic_packetizer_c::set_track_type(int type) {
 
   if ((type == track_audio) && (ti->cues == CUES_UNSPECIFIED))
     ti->cues = CUES_SPARSE;
+  if (type == track_audio)
+    reader->num_audio_tracks++;
+  else if (type == track_video) {
+    reader->num_video_tracks++;
+    if (video_packetizer == NULL)
+      video_packetizer = this;
+  } else
+    reader->num_subtitle_tracks++;
 }
 
 void
@@ -1023,6 +1031,9 @@ generic_reader_c::generic_reader_c(track_info_c *nti) {
   appending = false;
   chapters = NULL;
   ptzr_first_packet = NULL;
+  num_video_tracks = 0;
+  num_audio_tracks = 0;
+  num_subtitle_tracks = 0;
 
   add_all_requested_track_ids2(atracks);
   add_all_requested_track_ids2(vtracks);
