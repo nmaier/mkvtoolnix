@@ -16,6 +16,8 @@
 #ifndef __MMG_DIALOG_H
 #define __MMG_DIALOG_H
 
+#include "wx/html/helpctrl.h"
+
 #define ID_TC_OUTPUT                      10000
 #define ID_B_BROWSEOUTPUT                 10001
 #define ID_NOTEBOOK                       10002
@@ -65,6 +67,7 @@
 #define ID_M_WINDOW_CHAPTEREDITOR         60304
 
 #define ID_M_HELP_ABOUT                   65000
+#define ID_M_HELP_HELP                    65001
 
 /* class tab_advanced; */
 class tab_attachments;
@@ -107,8 +110,11 @@ public:
   bool muxing_in_progress;
   job_dialog *jdlg;
 
+  wxHtmlHelpController *help;
+
 public:
   mmg_dialog();
+  virtual ~mmg_dialog();
 
   void on_browse_output(wxCommandEvent &evt);
   void on_run(wxCommandEvent &evt);
@@ -120,6 +126,7 @@ public:
   void on_file_new(wxCommandEvent &evt);
   void on_file_load(wxCommandEvent &evt);
   void on_file_save(wxCommandEvent &evt);
+  void on_help(wxCommandEvent &evt);
   void on_about(wxCommandEvent &evt);
 
   void on_update_command_line(wxTimerEvent &evt);

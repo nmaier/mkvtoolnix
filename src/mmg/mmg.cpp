@@ -653,7 +653,9 @@ mmg_dialog::mmg_dialog():
                       wxT("&Chapter editor\tAlt-5"));
 
   wxMenu *help_menu = new wxMenu();
-  help_menu->Append(ID_M_HELP_ABOUT, wxT("&About\tF1"),
+  help_menu->Append(ID_M_HELP_HELP, wxT("&Help\tF1"),
+                    wxT("Show the guide to mkvmerge GUI"));
+  help_menu->Append(ID_M_HELP_ABOUT, wxT("&About"),
                     wxT("Show program information"));
 
   wxMenuBar *menu_bar = new wxMenuBar();
@@ -772,6 +774,8 @@ mmg_dialog::mmg_dialog():
   SetIcon(wxICON(matroskalogo_big));
 #endif
 
+  help = NULL;
+
   set_status_bar(wxT("mkvmerge GUI ready"));
 
   if (app->argc > 1) {
@@ -794,6 +798,10 @@ mmg_dialog::mmg_dialog():
       load(file);
     }
   }
+}
+
+mmg_dialog::~mmg_dialog() {
+  delete help;
 }
 
 void
@@ -1039,6 +1047,51 @@ void
 mmg_dialog::muxing_has_finished() {
   muxing_in_progress = false;
   restore_on_top();
+}
+
+void
+mmg_dialog::on_help(wxCommandEvent &evt) {
+  if (help == NULL) {
+    wxDirDialog dlg(this, wxT("Chose the location of the mkvmerge GUI "
+                              "help files"));
+    wxString help_path;
+    wxConfigBase *cfg;
+    bool first;
+
+    help_path = wxGetCwd();
+    cfg = wxConfigBase::Get();
+    cfg->SetPath(wxT("/GUI"));
+    if (!cfg->Read(wxT("help_path"), &help_path))
+      if (cfg->Read(wxT("installation_path"), &help_path))
+        help_path += wxT("/doc");
+    first = true;
+    while (!wxFileExists(help_path + wxT("/mkvmerge-gui.hhp"))) {
+      if (first) {
+        wxMessageBox(wxT("The mkvmerge GUI help file was not found. This "
+                         "indicates that it has never before been opened, "
+                         "or that the installation path has been changed "
+                         "since.\n\nPlease select the location of the "
+                         "'mkvmerge-gui.hhp' file."),
+                     wxT("Help file not found"),
+                     wxOK | wxICON_INFORMATION);
+        first = false;
+      } else
+        wxMessageBox(wxT("The mkvmerge GUI help file was not found in the "
+                         "path you've selected. Please try again, or abort "
+                         "by pressing the 'abort' button."),
+                     wxT("Help file not found"),
+                     wxOK | wxICON_INFORMATION);
+
+      dlg.SetPath(help_path);
+      if (dlg.ShowModal() == wxID_CANCEL)
+        return;
+      help_path = dlg.GetPath();
+    }
+    cfg->Write(wxT("help_path"), help_path);
+    help = new wxHtmlHelpController;
+    help->AddBook(wxFileName(help_path + wxT("/mkvmerge-gui.hhp")), false);
+  }
+  help->Display(1);
 }
 
 void
@@ -1797,6 +1850,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_ADD_TO_JOBQUEUE, mmg_dialog::on_add_to_jobqueue)
   EVT_MENU(ID_M_MUXING_MANAGE_JOBS, mmg_dialog::on_manage_jobs)
   EVT_MENU(ID_M_MUXING_ADD_CLI_OPTIONS, mmg_dialog::on_add_cli_options)
+  EVT_MENU(ID_M_HELP_HELP, mmg_dialog::on_help)
   EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
   EVT_MENU(ID_M_FILE_LOADLAST1, mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST2, mmg_dialog::on_file_load_last)

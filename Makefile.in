@@ -126,7 +126,9 @@ TRANSLATIONS = @TRANSLATIONS@
 TRANSLATIONS_POS = @TRANSLATIONS_POS@
 TRANSLATIONS_MOS = $(patsubst %.po,%.mo,$(TRANSLATIONS_POS))
 
-all: $(APPLICATIONS) $(TRANSLATIONS_MOS)
+HTMLHELPBOOKS = mkvmerge-gui-book
+
+all: $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
 install: install-programs install-mans install-trans
 
@@ -211,9 +213,14 @@ endif
 	@echo '  MSGFMT ' $<
 	$(Q)msgfmt -o $@ $<
 
+# HTML help book stuff
+%.hhk: %.hhc
+	@echo '    GREP ' $<
+	$(Q)grep -v 'name="ID"' $< > $@
+
 clean:
 	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS) \
-		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a
+		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk
 
 distclean dist-clean: clean
 	rm -f configure config.h config.h.in config.log config.cache \
@@ -249,6 +256,8 @@ update-po:
 		mv $$i.new $$i ; \
 	done
 	@rm po/mkvtoolnix.pot
+
+mkvmerge-gui-book:	doc/mkvmerge-gui.hhk
 
 #
 # avilib-0.6.10
