@@ -706,4 +706,4 @@ LDFLAGS="$USER_LDFLAGS @EXTRA_LDFLAGS@"
 
 AC_SUBST(LDFLAGS)
 
-AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile)
+AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile)

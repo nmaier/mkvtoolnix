@@ -27,11 +27,11 @@
 
 #include <vector>
 
-#include "mm_io.h"
-#include "pr_generic.h"
 #include "common.h"
 #include "error.h"
+#include "librmff.h"
 #include "p_video.h"
+#include "pr_generic.h"
 
 typedef struct {
   unsigned char *data;
@@ -41,18 +41,18 @@ typedef struct {
 typedef struct {
   generic_packetizer_c *packetizer;
   bool headers_set;
-  int id;
+  rmff_track_t *track;
 
-  uint32_t start_time, preroll;
-
-  int channels, bits_per_sample, samples_per_second, bsid;
-
+  int bsid, channels, samples_per_second, bits_per_sample;
   int width, height;
-  float fps;
-
-  char fourcc[5], type;
+  char fourcc[5];
   bool is_aac;
   bool rv_dimensions;
+  float fps;
+
+  real_video_props_t *rvp;
+  real_audio_v4_props_t *ra4p;
+  real_audio_v5_props_t *ra5p;
 
   unsigned char *private_data, *extra_data;
   int private_size, extra_data_size;
@@ -68,9 +68,9 @@ typedef struct {
 
 class real_reader_c: public generic_reader_c {
 private:
-  mm_io_c *io;
+  rmff_file_t *file;
   vector<real_demuxer_t *> demuxers;
-  int64_t file_size, num_packets_in_chunk, num_packets;
+  int64_t file_size;
   bool done;
 
 public:

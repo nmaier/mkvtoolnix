@@ -42,70 +42,6 @@
  * http://www.pcisys.net/~melanson/codecs/rmff.htm
  */
 
-// {{{ structs
-
-typedef struct __attribute__((__packed__)) {
-  uint32_t size;
-  uint32_t fourcc1;
-  uint32_t fourcc2;
-  uint16_t width;
-  uint16_t height;
-  uint16_t bpp;
-  uint32_t unknown1;
-  uint32_t fps;
-  uint32_t type1;
-  uint32_t type2;
-} real_video_props_t;
-
-typedef struct __attribute__((__packed__)) {
-  uint32_t fourcc1;             // '.', 'r', 'a', 0xfd
-  uint16_t version1;            // 4 or 5
-  uint16_t unknown1;            // 00 000
-  uint32_t fourcc2;             // .ra4 or .ra5
-  uint32_t unknown2;            // ???
-  uint16_t version2;            // 4 or 5
-  uint32_t header_size;         // == 0x4e
-  uint16_t flavor;              // codec flavor id
-  uint32_t coded_frame_size;    // coded frame size
-  uint32_t unknown3;            // big number
-  uint32_t unknown4;            // bigger number
-  uint32_t unknown5;            // yet another number
-  uint16_t sub_packet_h;
-  uint16_t frame_size;
-  uint16_t sub_packet_size;
-  uint16_t unknown6;            // 00 00
-  uint16_t sample_rate;
-  uint16_t unknown8;            // 0
-  uint16_t sample_size;
-  uint16_t channels;
-} real_audio_v4_props_t;
-
-typedef struct __attribute__((__packed__)) {
-  uint32_t fourcc1;             // '.', 'r', 'a', 0xfd
-  uint16_t version1;            // 4 or 5
-  uint16_t unknown1;            // 00 000
-  uint32_t fourcc2;             // .ra4 or .ra5
-  uint32_t unknown2;            // ???
-  uint16_t version2;            // 4 or 5
-  uint32_t header_size;         // == 0x4e
-  uint16_t flavor;              // codec flavor id
-  uint32_t coded_frame_size;    // coded frame size
-  uint32_t unknown3;            // big number
-  uint32_t unknown4;            // bigger number
-  uint32_t unknown5;            // yet another number
-  uint16_t sub_packet_h;
-  uint16_t frame_size;
-  uint16_t sub_packet_size;
-  uint16_t unknown6;            // 00 00
-  uint8_t unknown7[6];          // 0, srate, 0
-  uint16_t sample_rate;
-  uint16_t unknown8;            // 0
-  uint16_t sample_size;
-  uint16_t channels;
-  uint32_t genr;                // "genr"
-  uint32_t fourcc3;             // fourcc
-} real_audio_v5_props_t;
-
 typedef struct {
   uint32_t chunks;              // number of chunks
   uint32_t timecode;            // timecode from packet header
@@ -149,17 +85,16 @@ real_reader_c::real_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
 
-  try {
-    io = new mm_io_c(ti->fname, MODE_READ);
-    io->setFilePointer(0, seek_end);
-    file_size = io->getFilePointer();
-    io->setFilePointer(0, seek_beginning);
-    if (!real_reader_c::probe_file(io, file_size))
+  file = rmff_open_file(ti->fname, RMFF_OPEN_MODE_READING);
+  if (file == NULL) {
+    if (rmff_last_error == RMFF_ERR_NOT_RMFF)
       throw error_c(PFX "Source is not a valid RealMedia file.");
-
-  } catch (exception &ex) {
-    throw error_c(PFX "Could not read the source file.");
+    else
+      throw error_c(PFX "Could not read the source file.");
   }
+  file->io->seek(file->handle, 0, SEEK_END);
+  file_size = file->io->tell(file->handle);
+  file->io->seek(file->handle, 0, SEEK_SET);
 
   done = false;
 
@@ -180,8 +115,6 @@ real_reader_c::~real_reader_c() {
   real_demuxer_t *demuxer;
   int i, j;
 
-  delete io;
-
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
     if (demuxer->packetizer != NULL)
@@ -197,6 +130,7 @@ real_reader_c::~real_reader_c() {
   }
   demuxers.clear();
   ti->private_data = NULL;
+  rmff_close_file(file);
 }
 
 // }}}
@@ -205,250 +139,111 @@ real_reader_c::~real_reader_c() {
 
 void
 real_reader_c::parse_headers() {
-  uint32_t object_id, i, id, start_time, preroll, size;
-  char *buffer;
+  uint32_t ts_size, ndx, i;
+  unsigned char *ts_data;
   real_demuxer_t *dmx;
-  real_video_props_t *rvp;
-  real_audio_v4_props_t *ra4p;
-  real_audio_v5_props_t *ra5p;
-  bool mime_type_ok;
+  rmff_track_t *track;
 
-  try {
-    io->skip(4);                // object_id = ".RIF"
-    io->skip(4);                // header size
-    io->skip(2);                // object_version
+  if (rmff_read_headers(file) == RMFF_ERR_OK) {
+    for (ndx = 0; ndx < file->num_tracks; ndx++) {
+      track = &file->tracks[ndx];
+      if ((track->type == RMFF_TRACK_TYPE_UNKNOWN) ||
+          (track->mdpr_header.type_specific_size == 0))
+        continue;
+      if ((track->type == RMFF_TRACK_TYPE_VIDEO) &&
+          !demuxing_requested('v', track->id))
+        continue;
+      if ((track->type == RMFF_TRACK_TYPE_AUDIO) &&
+          !demuxing_requested('a', track->id))
+        continue;
+      if ((track->mdpr_header.mime_type == NULL) ||
+          (!strcmp(track->mdpr_header.mime_type, "audio/x-pn-realaudio") &&
+           !strcmp(track->mdpr_header.mime_type, "video/x-pn-realvideo")))
+        continue;
 
-    io->skip(4);                // file_version
-    io->skip(4);                // num_headers
+      ts_data = track->mdpr_header.type_specific_data;
+      ts_size = track->mdpr_header.type_specific_size;
 
-    while (1) {
-      object_id = io->read_uint32_be();
-      io->skip(4);              // size
-      io->skip(2);              // object_version
+      dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
+      memset(dmx, 0, sizeof(real_demuxer_t));
+      dmx->track = track;
 
-      if (object_id == FOURCC('P', 'R', 'O', 'P')) {
-        io->skip(4);            // max_bit_rate
-        io->skip(4);            // avg_bit_rate
-        io->skip(4);            // max_packet_size
-        io->skip(4);            // avg_packet_size
-        io->skip(4);            // num_packets
-        io->skip(4);            // duration
-        io->skip(4);            // preroll
-        io->skip(4);            // index_offset
-        io->skip(4);            // data_offset
-        io->skip(2);            // num_streams
-        io->skip(2);            // flags
+      if (track->type == RMFF_TRACK_TYPE_VIDEO) {
+        dmx->rvp = (real_video_props_t *)track->mdpr_header.type_specific_data;
 
-      } else if (object_id == FOURCC('C', 'O', 'N', 'T')) {
-        size = io->read_uint16_be(); // title_len
-        if (size > 0) {
-          buffer = (char *)safemalloc(size + 1);
-          memset(buffer, 0, size + 1);
-          if (io->read(buffer, size) != size)
-            throw exception();
-          if (verbose > 1)
-            mxinfo("title: '%s'\n", buffer);
-          safefree(buffer);
-        }
+        memcpy(dmx->fourcc, &dmx->rvp->fourcc2, 4);
+        dmx->fourcc[4] = 0;
+        dmx->width = get_uint16_be(&dmx->rvp->width);
+        dmx->height = get_uint16_be(&dmx->rvp->height);
+        i = get_uint32_be(&dmx->rvp->fps);
+        dmx->fps = (float)((i & 0xffff0000) >> 16) +
+          ((float)(i & 0x0000ffff)) / 65536.0;
+        dmx->private_data = (unsigned char *)safememdup(ts_data, ts_size);
+        dmx->private_size = ts_size;
 
-        size = io->read_uint16_be(); // author_len
-        if (size > 0) {
-          buffer = (char *)safemalloc(size + 1);
-          memset(buffer, 0, size + 1);
-          if (io->read(buffer, size) != size)
-            throw exception();
-          if (verbose > 1)
-            mxinfo("author: '%s'\n", buffer);
-          safefree(buffer);
-        }
+        demuxers.push_back(dmx);
 
-        size = io->read_uint16_be(); // copyright_len
-        if (size > 0) {
-          buffer = (char *)safemalloc(size + 1);
-          memset(buffer, 0, size + 1);
-          if (io->read(buffer, size) != size)
-            throw exception();
-          if (verbose > 1)
-            mxinfo("copyright: '%s'\n", buffer);
-          safefree(buffer);
-        }
+      } else if (track->type == RMFF_TRACK_TYPE_AUDIO) {
+        bool ok;
 
-        size = io->read_uint16_be(); // comment_len
-        if (size > 0) {
-          buffer = (char *)safemalloc(size + 1);
-          memset(buffer, 0, size + 1);
-          if (io->read(buffer, size) != size)
-            throw exception();
-          if (verbose > 1)
-            mxinfo("comment: '%s'\n", buffer);
-          safefree(buffer);
-        }
+        ok = true;
 
-      } else if (object_id == FOURCC('M', 'D', 'P', 'R')) {
-        id = io->read_uint16_be();
-        mxverb(2, PFX "MDPR: id %u\n", id);
-        mxverb(2, PFX "MDPR: max_bit_rate %u\n", io->read_uint32_be());
-        mxverb(2, PFX "MDPR: avg_bit_rate %u\n", io->read_uint32_be());
-        mxverb(2, PFX "MDPR: max_packet_size %u\n",
-               io->read_uint32_be());
-        mxverb(2, PFX "MDPR: avg_packet_size %u\n",
-               io->read_uint32_be());
-        start_time = io->read_uint32_be();
-        preroll = io->read_uint32_be();
-        mxverb(2, PFX "MDPR: start_time %u\nreal_reader MDPR: "
-               "preroll %u\nreal_reader MDPR: duration %u\n", start_time,
-               preroll, io->read_uint32_be());
+        dmx->ra4p = (real_audio_v4_props_t *)
+          track->mdpr_header.type_specific_data;
+        dmx->ra5p = (real_audio_v5_props_t *)
+          track->mdpr_header.type_specific_data;
+        dmx->samples_per_second = get_uint16_be(&dmx->ra4p->sample_rate);
+        dmx->channels = get_uint16_be(&dmx->ra4p->channels);
+        dmx->bits_per_sample = get_uint16_be(&dmx->ra4p->sample_size);
 
-        size = io->read_uint8(); // stream_name_size
-        if (size > 0) {
-          buffer = (char *)safemalloc(size + 1);
-          memset(buffer, 0, size + 1);
-          if (io->read(buffer, size) != size)
-            throw exception();
-          mxverb(2, PFX "MDPR stream_name: '%s'\n", buffer);
-          safefree(buffer);
-        }
+        if (get_uint16_be(&dmx->ra4p->version1) == 4) {
+          int slen;
+          unsigned char *p;
 
-        mime_type_ok = false;
-        size = io->read_uint8(); // mime_type_size
-        if (size > 0) {
-          buffer = (char *)safemalloc(size + 1);
-          memset(buffer, 0, size + 1);
-          if (io->read(buffer, size) != size)
-            throw exception();
-          mxverb(2, PFX "MDPR mime_type: '%s'\n", buffer);
-          if (!strcmp(buffer, "audio/x-pn-realaudio") ||
-              !strcmp(buffer, "video/x-pn-realvideo"))
-            mime_type_ok = true;
-          safefree(buffer);
-        }
-
-        size = io->read_uint32_be(); // type_specific_size
-        if (!mime_type_ok)
-          io->skip(size);
-        else if (size > 0) {
-          buffer = (char *)safemalloc(size);
-          if (io->read(buffer, size) != size)
-            throw exception();
-
-          rvp = (real_video_props_t *)buffer;
-          ra4p = (real_audio_v4_props_t *)buffer;
-          ra5p = (real_audio_v5_props_t *)buffer;
-
-          if ((size >= sizeof(real_video_props_t)) &&
-              (get_fourcc(&rvp->fourcc1) == FOURCC('V', 'I', 'D', 'O')) &&
-              demuxing_requested('v', id)) {
-
-            dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
-            memset(dmx, 0, sizeof(real_demuxer_t));
-            dmx->id = id;
-            dmx->start_time = start_time;
-            dmx->preroll = preroll;
-            memcpy(dmx->fourcc, &rvp->fourcc2, 4);
+          p = (unsigned char *)(dmx->ra4p + 1);
+          slen = p[0];
+          p += (slen + 1);
+          slen = p[0];
+          p++;
+          if (slen != 4) {
+            mxwarn(PFX "Couldn't find RealAudio"
+                   " FourCC for id %u (description length: %d) Skipping "
+                   "track.\n", track->id, slen);
+            ok = false;
+          } else {
+            memcpy(dmx->fourcc, p, 4);
             dmx->fourcc[4] = 0;
-            dmx->width = get_uint16_be(&rvp->width);
-            dmx->height = get_uint16_be(&rvp->height);
-            dmx->type = 'v';
-            i = get_uint32_be(&rvp->fps);
-            dmx->fps = (float)((i & 0xffff0000) >> 16) +
-              ((float)(i & 0x0000ffff)) / 65536.0;
-            dmx->private_data = (unsigned char *)safememdup(buffer, size);
-            dmx->private_size = size;
-
-            demuxers.push_back(dmx);
-
-          } else if ((size >= sizeof(real_audio_v4_props_t)) &&
-                     (get_fourcc(&ra4p->fourcc1) ==
-                      FOURCC('.', 'r', 'a', 0xfd)) &&
-                     demuxing_requested('a', id)) {
-            bool ok;
-
-            ok = true;
-
-            dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
-            memset(dmx, 0, sizeof(real_demuxer_t));
-            dmx->id = id;
-            dmx->start_time = start_time;
-            dmx->preroll = preroll;
-            dmx->type = 'a';
-            if (get_uint16_be(&ra4p->version1) == 4) {
-              int slen;
-              char *p;
-
-              dmx->channels = get_uint16_be(&ra4p->channels);
-              dmx->samples_per_second = get_uint16_be(&ra4p->sample_rate);
-              dmx->bits_per_sample = get_uint16_be(&ra4p->sample_size);
-              p = (char *)(ra4p + 1);
-              slen = (unsigned char)p[0];
-              p += (slen + 1);
-              slen = (unsigned char)p[0];
-              p++;
-              if (slen != 4) {
-                mxwarn(PFX "Couldn't find RealAudio"
-                       " FourCC for id %u (description length: %d) Skipping "
-                       "track.\n", id, slen);
-                ok = false;
-              } else {
-                memcpy(dmx->fourcc, p, 4);
-                dmx->fourcc[4] = 0;
-                p += 4;
-                if (size > (p - buffer)) {
-                  dmx->extra_data_size = size - (p - buffer);
-                  dmx->extra_data =
-                    (unsigned char *)safememdup(p, dmx->extra_data_size);
-                }
-              }
-
-            } else {
-
-              memcpy(dmx->fourcc, &ra5p->fourcc3, 4);
-              dmx->fourcc[4] = 0;
-              dmx->channels = get_uint16_be(&ra5p->channels);
-              dmx->samples_per_second = get_uint16_be(&ra5p->sample_rate);
-              dmx->bits_per_sample = get_uint16_be(&ra5p->sample_size);
-              if (size > (sizeof(real_audio_v5_props_t) + 4)) {
-                dmx->extra_data_size = size - 4 -
-                  sizeof(real_audio_v5_props_t);
-                dmx->extra_data =
-                  (unsigned char *)safememdup((unsigned char *)ra5p + 4 +
-                                              sizeof(real_audio_v5_props_t),
-                                              dmx->extra_data_size);
-              }
+            p += 4;
+            if (ts_size > (p - ts_data)) {
+              dmx->extra_data_size = ts_size - (p - ts_data);
+              dmx->extra_data =
+                (unsigned char *)safememdup(p, dmx->extra_data_size);
             }
-            mxverb(2, PFX "extra_data_size: %d\n",
-                   dmx->extra_data_size);
-
-            if (ok) {
-              dmx->private_data = (unsigned char *)safememdup(buffer, size);
-              dmx->private_size = size;
-
-              demuxers.push_back(dmx);
-            } else
-              free(dmx);
           }
 
-          safefree(buffer);
+        } else {
+
+          memcpy(dmx->fourcc, &dmx->ra5p->fourcc3, 4);
+          dmx->fourcc[4] = 0;
+          if (ts_size > (sizeof(real_audio_v5_props_t) + 4)) {
+            dmx->extra_data_size = ts_size - 4 - sizeof(real_audio_v5_props_t);
+            dmx->extra_data =
+              (unsigned char *)safememdup((unsigned char *)dmx->ra5p + 4 +
+                                          sizeof(real_audio_v5_props_t),
+                                          dmx->extra_data_size);
+          }
         }
+        mxverb(2, PFX "extra_data_size: %d\n", dmx->extra_data_size);
 
-      } else if (object_id == FOURCC('D', 'A', 'T', 'A')) {
-        num_packets_in_chunk = io->read_uint32_be();
-        num_packets = 0;
-        io->skip(4);            // next_data_header
+        if (ok) {
+          dmx->private_data = (unsigned char *)safememdup(ts_data, ts_size);
+          dmx->private_size = ts_size;
 
-        break;                  // We're finished!
-
-      } else {
-        mxwarn(PFX "Unknown header type (0x%08x, "
-               "%c%c%c%c).\n", object_id, (char)(object_id >> 24),
-               (char)((object_id & 0x00ff0000) >> 16),
-               (char)((object_id & 0x0000ff00) >> 8),
-               (char)(object_id & 0x000000ff));
-        throw exception();
+          demuxers.push_back(dmx);
+        } else
+          free(dmx);
       }
     }
-
-  } catch (exception &ex) {
-    throw error_c(PFX "Could not parse the RealMedia headers.");
   }
 }
 
@@ -460,37 +255,34 @@ void
 real_reader_c::create_packetizer(int64_t tid) {
   int i;
   real_demuxer_t *dmx;
+  rmff_track_t *track;
   bool duplicate_data;
 
-  dmx = NULL;
-  for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->id == tid) {
-      dmx = demuxers[i];
-      break;
-    }
+  dmx = find_demuxer(tid);
   if (dmx == NULL)
     return;
 
   if (dmx->packetizer == NULL) {
-    ti->id = dmx->id;
+    track = dmx->track;
+    ti->id = track->id;
     ti->private_data = dmx->private_data;
     ti->private_size = dmx->private_size;
     duplicate_data = false;
 
-    if (dmx->type == 'v') {
+    if (track->type == RMFF_TRACK_TYPE_VIDEO) {
       char buffer[20];
 
       mxprints(buffer, "V_REAL/%s", dmx->fourcc);
-      dmx->packetizer = new video_packetizer_c(this, buffer, dmx->fps,
-                                               dmx->width, dmx->height,
-                                               false, ti);
+      dmx->packetizer =
+        new video_packetizer_c(this, buffer, dmx->fps, dmx->width, dmx->height,
+                               false, ti);
       if ((dmx->fourcc[0] != 'R') || (dmx->fourcc[1] != 'V') ||
           (dmx->fourcc[2] != '4') || (dmx->fourcc[3] != '0'))
         dmx->rv_dimensions = true;
 
       if (verbose)
         mxinfo("+-> Using video output module for stream %u (FourCC: "
-               "%s).\n", dmx->id, dmx->fourcc);
+               "%s).\n", track->id, dmx->fourcc);
 
       dmx->f_merged = false;
       dmx->segments = new vector<rv_segment_t>;
@@ -504,7 +296,7 @@ real_reader_c::create_packetizer(int64_t tid) {
           new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels,
                                   dmx->bsid, ti);
         mxverb(1, "+-> Using the AC3 output module for stream "
-               "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+               "%u (FourCC: %s).\n", track->id, dmx->fourcc);
 
       } else if (!strcasecmp(dmx->fourcc, "raac") ||
                  !strcasecmp(dmx->fourcc, "racp")) {
@@ -535,8 +327,7 @@ real_reader_c::create_packetizer(int64_t tid) {
         if (profile == -1) {
           channels = dmx->channels;
           sample_rate = dmx->samples_per_second;
-          if (!strcasecmp(dmx->fourcc, "racp") ||
-              (dmx->samples_per_second < 44100)) {
+          if (!strcasecmp(dmx->fourcc, "racp") || (sample_rate < 44100)) {
             output_sample_rate = 2 * sample_rate;
             sbr = true;
           }
@@ -548,7 +339,7 @@ real_reader_c::create_packetizer(int64_t tid) {
           profile = AAC_PROFILE_SBR;
         for (i = 0; i < (int)ti->aac_is_sbr->size(); i++)
           if (((*ti->aac_is_sbr)[i] == -1) ||
-              ((*ti->aac_is_sbr)[i] == dmx->id)) {
+              ((*ti->aac_is_sbr)[i] == track->id)) {
             profile = AAC_PROFILE_SBR;
             break;
           }
@@ -562,7 +353,7 @@ real_reader_c::create_packetizer(int64_t tid) {
           new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                sample_rate, channels, ti, false, true);
         mxverb(1, "+-> Using the AAC output module for stream "
-               "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+               "%u (FourCC: %s).\n", track->id, dmx->fourcc);
         if (profile == AAC_PROFILE_SBR)
           dmx->packetizer->
             set_audio_output_sampling_freq(output_sample_rate);
@@ -572,7 +363,7 @@ real_reader_c::create_packetizer(int64_t tid) {
                  "Therefore you have to specifiy '--aac-is-sbr %u' manually "
                  "for this input file if the file actually contains SBR AAC. "
                  "The file will be muxed in the WRONG way otherwise. Also "
-                 "read mkvmerge's documentation.\n", dmx->id);
+                 "read mkvmerge's documentation.\n", track->id);
         duplicate_data = true;
 
       } else {
@@ -593,7 +384,7 @@ real_reader_c::create_packetizer(int64_t tid) {
 
         if (verbose)
           mxinfo("+-> Using generic audio output module for stream "
-                 "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+                 "%u (FourCC: %s).\n", track->id, dmx->fourcc);
       }
     }
 
@@ -608,7 +399,7 @@ real_reader_c::create_packetizers() {
   for (i = 0; i < ti->track_order->size(); i++)
     create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < demuxers.size(); i++)
-    create_packetizer(demuxers[i]->id);
+    create_packetizer(demuxers[i]->track->id);
 }
 
 // }}}
@@ -620,7 +411,7 @@ real_reader_c::find_demuxer(int id) {
   int i;
 
   for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->id == id)
+    if (demuxers[i]->track->id == id)
       return demuxers[i];
 
   return NULL;
@@ -634,7 +425,8 @@ real_reader_c::finish() {
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
-    if ((dmx->type == 'a') && (dmx->segments != NULL)) {
+    if ((dmx->track->type == RMFF_TRACK_TYPE_AUDIO) &&
+        (dmx->segments != NULL)) {
       dur = dmx->c_timecode / dmx->c_numpackets;
       deliver_audio_frames(dmx, dur);
     }
@@ -653,81 +445,51 @@ real_reader_c::finish() {
 
 int
 real_reader_c::read(generic_packetizer_c *) {
-  uint32_t object_version, length, id, flags, object_id;
+  int size;
   unsigned char *chunk;
   real_demuxer_t *dmx;
-  int64_t fpos, timecode;
+  int64_t timecode;
+  rmff_frame_t *frame;
 
   if (done)
     return 0;
 
-  try {
-    fpos = io->getFilePointer();
-    if ((file_size - fpos) < 12)
-      return finish();
-
-    if (num_packets >= num_packets_in_chunk) {
-      object_id = io->read_uint32_be();
-      if (object_id == FOURCC('I', 'N', 'D', 'X'))
-        return finish();
-
-      if (object_id == FOURCC('D', 'A', 'T', 'A')) {
-        num_packets_in_chunk = io->read_uint32_be();
-        num_packets = 0;
-        io->skip(4);            // next_data_header
-
-      } else
-        return finish();
-    }
-
-    object_version = io->read_uint16_be();
-    length = io->read_uint16_be();
-    id = io->read_uint16_be();
-    timecode = (int64_t)io->read_uint32_be() * 1000000ll;
-    io->skip(1);                // reserved
-    flags = io->read_uint8();
-
-    if (length < 12) {
-      mxwarn(PFX "%s: Data packet length is too "
-             "small: %u. Other values: object_version: 0x%04x, id: 0x%04x, "
-             "timecode: %lld, flags: 0x%02x. File position: %lld. Aborting "
-             "this file.\n", ti->fname, length, object_version, id, timecode,
-             flags, fpos);
-      return finish();
-    }
-
-    dmx = find_demuxer(id);
-    if (dmx == NULL) {
-      io->skip(length - 12);
-      return EMOREDATA;
-    }
-
-    mxverb(4, PFX "%u/'%s': timecode = %lldms\n", dmx->id, ti->fname,
-           timecode / 1000000);
-
-    length -= 12;
-
-    chunk = (unsigned char *)safemalloc(length);
-    if (io->read(chunk, length) != length) {
-      safefree(chunk);
-      return finish();
-    }
-
-    num_packets++;
-
-    if (dmx->type == 'v') {
-      assemble_packet(dmx, chunk, length, timecode, (flags & 2) == 2);
-      safefree(chunk);
-
-    } else if (dmx->is_aac)
-      deliver_aac_frames(dmx, chunk, length);
-
-    else
-      queue_audio_frames(dmx, chunk, length, timecode, flags);
-
-  } catch (exception &ex) {
+  size = rmff_get_next_frame_size(file);
+  if (size <= 0) {
+    if (file->num_packets_read < file->num_packets_in_chunk)
+      mxwarn(PFX "%s: File contains fewer frames than expected or is "
+             "corrupt after frame %u.\n", ti->fname, file->num_packets_read);
     return finish();
   }
+
+  chunk = (unsigned char *)safemalloc(size);
+  frame = rmff_read_next_frame(file, chunk);
+  if (frame == NULL) {
+    if (file->num_packets_read < file->num_packets_in_chunk)
+      mxwarn(PFX "%s: File contains fewer frames than expected or is "
+             "corrupt after frame %u.\n", ti->fname, file->num_packets_read);
+    safefree(chunk);
+    return finish();
+  }
+
+  timecode = (int64_t)frame->timecode * 1000000ll;
+  dmx = find_demuxer(frame->id);
+  if (dmx == NULL) {
+    rmff_release_frame(frame);
+    return EMOREDATA;
+  }
+
+  if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO) {
+    assemble_packet(dmx, chunk, size, timecode, (frame->flags & 2) == 2);
+    safefree(chunk);
+
+  } else if (dmx->is_aac)
+    deliver_aac_frames(dmx, chunk, size);
+
+  else
+    queue_audio_frames(dmx, chunk, size, timecode, frame->flags);
+
+  rmff_release_frame(frame);
 
   return EMOREDATA;
 }
@@ -746,7 +508,7 @@ real_reader_c::queue_one_audio_frame(real_demuxer_t *dmx,
   dmx->segments->push_back(segment);
   dmx->c_timecode = timecode;
   mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
-         "0x%08x\n", dmx->id, ti->fname, length, timecode, flags);
+         "0x%08x\n", dmx->track->id, ti->fname, length, timecode, flags);
 }
 
 void
@@ -781,7 +543,7 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration) {
   for (i = 0; i < dmx->segments->size(); i++) {
     segment = (*dmx->segments)[i];
     mxverb(2, "delivering audio for %u/'%s' length %llu timecode %llu flags "
-           "0x%08x duration %llu\n", dmx->id, ti->fname, segment.size,
+           "0x%08x duration %llu\n", dmx->track->id, ti->fname, segment.size,
            dmx->c_timecode, (uint32_t)segment.offset, duration);
     dmx->packetizer->process(segment.data, segment.size,
                              dmx->c_timecode, duration,
@@ -802,7 +564,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
 
   if (length < 2) {
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
-           "'%s' (length: %u < 2)\n", dmx->id, ti->fname, length);
+           "'%s' (length: %u < 2)\n", dmx->track->id, ti->fname, length);
     safefree(chunk);
     return;
   }
@@ -810,7 +572,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   mxverb(2, PFX "num_sub_packets = %u\n", num_sub_packets);
   if (length < (2 + num_sub_packets * 2)) {
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
-           "'%s' (length: %u < %u)\n", dmx->id, ti->fname, length,
+           "'%s' (length: %u < %u)\n", dmx->track->id, ti->fname, length,
            2 + num_sub_packets * 2);
     safefree(chunk);
     return;
@@ -823,7 +585,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   }
   if (len_check != length) {
     mxwarn(PFX "Inconsistent AAC audio packet for track ID %u of "
-           "'%s' (length: %u != len_check %u)\n", dmx->id, ti->fname,
+           "'%s' (length: %u != len_check %u)\n", dmx->track->id, ti->fname,
            length, len_check);
     safefree(chunk);
     return;
@@ -849,11 +611,12 @@ real_reader_c::display_priority() {
 void
 real_reader_c::display_progress(bool final) {
   if (final)
-    mxinfo("progress: %lld/%lld packets (100%%)\r", num_packets_in_chunk,
-           num_packets_in_chunk);
+    mxinfo("progress: %u/%u packets (100%%)\r", file->num_packets_in_chunk,
+           file->num_packets_in_chunk);
   else
-    mxinfo("progress: %lld/%lld packets (%lld%%)\r", num_packets,
-           num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
+    mxinfo("progress: %u/%u packets (%u%%)\r", file->num_packets_read,
+           file->num_packets_in_chunk, file->num_packets_read * 100 /
+           file->num_packets_in_chunk);
 }
 
 void
@@ -867,7 +630,7 @@ real_reader_c::set_headers() {
   for (i = 0; i < ti->track_order->size(); i++) {
     d = NULL;
     for (k = 0; k < demuxers.size(); k++)
-      if (demuxers[k]->id == (*ti->track_order)[i]) {
+      if (demuxers[k]->track->id == (*ti->track_order)[i]) {
         d = demuxers[k];
         break;
       }
@@ -893,10 +656,11 @@ real_reader_c::identify() {
     demuxer = demuxers[i];
     if (!strcasecmp(demuxer->fourcc, "raac") ||
         !strcasecmp(demuxer->fourcc, "racp"))
-      mxinfo("Track ID %d: audio (AAC)\n", demuxer->id);
+      mxinfo("Track ID %d: audio (AAC)\n", demuxer->track->id);
     else
-      mxinfo("Track ID %d: %s (%s)\n", demuxer->id,
-             demuxer->type == 'a' ? "audio" : "video", demuxer->fourcc);
+      mxinfo("Track ID %d: %s (%s)\n", demuxer->track->id,
+             demuxer->track->type == RMFF_TRACK_TYPE_AUDIO ? "audio" : "video",
+             demuxer->fourcc);
   }
 }
 
@@ -928,8 +692,9 @@ real_reader_c::deliver_segments(real_demuxer_t *dmx,
   if (len != total) {
     mxwarn("\nreal_reader: packet assembly failed. "
            "Expected packet length was %d but found only %d sub packets "
-           "containing %d bytes. Sub packet number: %lld. Trying to "
-           "continue.\n", len, dmx->segments->size(), total, num_packets);
+           "containing %d bytes. Sub packet number: %u. Trying to "
+           "continue.\n", len, dmx->segments->size(), total,
+           file->num_packets_read);
     len = 0;
     for (i = 0; i < dmx->segments->size(); i++) {
       segment = &(*dmx->segments)[i];
@@ -1197,13 +962,10 @@ real_reader_c::set_dimensions(real_demuxer_t *dmx,
 
 void
 real_reader_c::get_information_from_data() {
-  uint32_t length, id;
   int i;
-  unsigned char *chunk;
   real_demuxer_t *dmx;
   bool information_found;
-
-  io->save_pos();
+  rmff_frame_t *frame;
 
   information_found = true;
   for (i = 0; i < demuxers.size(); i++) {
@@ -1214,50 +976,32 @@ real_reader_c::get_information_from_data() {
     }
   }
 
-  try {
-    while (!information_found) {
-      io->skip(2);
-      length = io->read_uint16_be();
-      id = io->read_uint16_be();
-      io->skip(4 + 1 + 1);
+  while (!information_found) {
+    frame = rmff_read_next_frame(file, NULL);
+    dmx = find_demuxer(frame->id);
 
-      if (length < 12)
-        die(PFX "Data packet too small.");
-
-      dmx = find_demuxer(id);
-
-      if (dmx == NULL) {
-        io->skip(length - 12);
-        continue;
-      }
-
-      length -= 12;
-
-      chunk = (unsigned char *)safemalloc(length);
-      if (io->read(chunk, length) != length)
-        break;
-
-      num_packets++;
-
-      if (!strcasecmp(dmx->fourcc, "DNET"))
-        dmx->bsid = chunk[4] >> 3;
-
-      safefree(chunk);
-
-      information_found = true;
-      for (i = 0; i < demuxers.size(); i++) {
-        dmx = demuxers[i];
-        if (!strcasecmp(dmx->fourcc, "DNET") && (dmx->bsid == -1))
-          information_found = false;
-
-      }
+    if (dmx == NULL) {
+      rmff_release_frame(frame);
+      continue;
     }
 
-    io->restore_pos();
-    num_packets = 0;
+    if (!strcasecmp(dmx->fourcc, "DNET"))
+      dmx->bsid = frame->data[4] >> 3;
 
-  } catch (exception &ex) {
+    rmff_release_frame(frame);
+
+    information_found = true;
+    for (i = 0; i < demuxers.size(); i++) {
+      dmx = demuxers[i];
+      if (!strcasecmp(dmx->fourcc, "DNET") && (dmx->bsid == -1))
+        information_found = false;
+
+    }
   }
+
+  file->io->seek(file->handle, file->first_data_header_offset + 10,
+                 SEEK_SET);
+  file->num_packets_read = 0;
 }
 
 // }}}

@@ -110,6 +110,7 @@ DEP_KAXCOMMON = src/common/libmtxkaxcommon.a
 DEP_INPUT = src/input/libmtxinput.a
 DEP_OUTPUT = src/output/libmtxoutput.a
 DEP_AVI = $(DEP_AVILIB) $(DEP_AVICLASSES)
+DEP_RMFF = librmff/librmff.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
 APPLICATIONS = src/mkvmerge src/mkvinfo src/mkvextract src/base64tool
@@ -144,9 +145,9 @@ install-mans:
 	done
 
 SYSTEM_INCLUDES = $(AVILIB_INCLUDES) $(AVICLASSES_INCLUDES) \
-		-I. -Isrc -Isrc/common -Isrc/input -Isrc/output
+		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output
 SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) $(AVICLASSES_LIBDIRS) \
-		-Lsrc/common -Lsrc/input -Lsrc/output
+		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output
 
 RUNAR = $(AR) rcu
 LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
@@ -203,6 +204,17 @@ aviclasses/libaviclasses.a: $(libaviclasses_OBJECTS)
 	$(RANLIB) $@
 
 #
+# librmff
+#
+librmff_SOURCES = $(wildcard librmff/*.c)
+librmff_OBJECTS := $(patsubst %.c,%.o,$(librmff_SOURCES))
+
+librmff/librmff.a: $(librmff_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(librmff_OBJECTS)
+	$(RANLIB) $@
+
+#
 # src/common
 #
 
@@ -251,11 +263,11 @@ mkvmerge_SOURCES = src/mkvmerge.cpp \
 			src/pr_generic.cpp
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
-		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI)
+		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
-		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) \
-		 $(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
+		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) -lrmff \
+		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat $(ICONV_LIBS)
 
 mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
