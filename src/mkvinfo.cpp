@@ -1693,8 +1693,8 @@ handle_elements_rec(EbmlStream *es,
 
     case ebmlt_ustring:
       format += ": %s";
-      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
-                                          <EbmlUnicodeString *>(e)).c_str());
+      s = UTFstring_to_cstr(UTFstring(*static_cast
+                                      <EbmlUnicodeString *>(e)).c_str());
       show_element(e, level, format.c_str(), s);
       safefree(s);
       break;
