@@ -48,7 +48,7 @@ static char id_str[MAX_INFO_STRLEN];
 
 //SLM
 /* ssize_t not defined in vc6 */
-#if !defined(ssize_t)
+#ifdef WIN32
 typedef int ssize_t;
 #endif
 
