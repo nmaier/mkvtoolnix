@@ -1,3 +1,9 @@
+2004-04-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: On non-Windows systems some combinations of
+	wxWindows and GTK caused continuous 100% CPU usage after a special
+	call to wxExecute.
+
 2004-04-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.8.7.
