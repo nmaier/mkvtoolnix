@@ -68,9 +68,9 @@ class real_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
   vector<real_demuxer_t *> demuxers;
-  int act_wchar;
   int64_t file_size, last_timecode;
   bool done;
+  int64_t num_packets_in_chunk, num_packets;
 
 public:
   real_reader_c(track_info_t *nti) throw (error_c);

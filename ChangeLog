@@ -1,3 +1,8 @@
+2003-08-14  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: The RealMedia reader takes the number of packets into
+        account when reading which results in better end-of-file detection.
+
 2003-08-12  Moritz Bunkus  <moritz@bunkus.org>
 
         * Windows versions: Fixed a bug with files bigger than 2GB not

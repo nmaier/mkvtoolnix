@@ -34,6 +34,11 @@
 #include "p_passthrough.h"
 #include "p_video.h"
 
+/*
+ * Description of the RealMedia file format:
+ * http://www.pcisys.net/~melanson/codecs/rmff.htm
+ */
+
 // {{{ structs
 
 #if __GNUC__ == 2
@@ -163,7 +168,6 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
   }
 
   last_timecode = -1;
-  act_wchar = 0;
   done = false;
 
   if (verbose)
@@ -404,8 +408,10 @@ void real_reader_c::parse_headers() {
         }
 
       } else if (object_id == FOURCC('D', 'A', 'T', 'A')) {
-        io->skip(4);            // num_packets
+        num_packets_in_chunk = io->read_uint32_be();
+        num_packets = 0;
         io->skip(4);            // next_data_header
+        printf("HEAD#: %lld\n", num_packets_in_chunk);
 
         break;                  // We're finished!
 
@@ -541,22 +547,23 @@ int real_reader_c::read() {
 
   try {
     fpos = io->getFilePointer();
-    object_version = io->read_uint16_be();
-    length = io->read_uint16_be();
 
-    object_id = object_version << 16 + length;
+    if (num_packets >= num_packets_in_chunk) {
+      object_id = io->read_uint32_be();
+      if (object_id == FOURCC('I', 'N', 'D', 'X'))
+        return finish();
 
-    if (object_id == FOURCC('I', 'N', 'D', 'X'))
-      return finish();
+      if (object_id == FOURCC('D', 'A', 'T', 'A')) {
+        num_packets_in_chunk = io->read_uint32_be();
+        num_packets = 0;
+        io->skip(4);            // next_data_header
 
-    if (object_id == FOURCC('D', 'A', 'T', 'A')) {
-      io->skip(2);              // object_version
-      io->skip(4);              // num_packets
-      io->skip(4);              // next_data_header
-
-      return EMOREDATA;
+      } else
+        return finish();
     }
 
+    object_version = io->read_uint16_be();
+    length = io->read_uint16_be();
     id = io->read_uint16_be();
     timecode = io->read_uint32_be();
     io->skip(1);                // reserved
@@ -584,6 +591,8 @@ int real_reader_c::read() {
       safefree(chunk);
       return finish();
     }
+
+    num_packets++;
 
     if (dmx->type == 'v') {
       assemble_packet(dmx, chunk, length, timecode, (flags & 2) == 2);
@@ -650,15 +659,9 @@ int real_reader_c::display_priority() {
   return DISPLAYPRIORITY_MEDIUM;
 }
 
-static char wchar[] = "-\\|/-\\|/-";
-
 void real_reader_c::display_progress() {
-  mxprint(stdout, "working... %c (%d%%)\r", wchar[act_wchar],
-          (int)(io->getFilePointer() * 100 / file_size));
-  act_wchar++;
-  if (act_wchar == strlen(wchar))
-    act_wchar = 0;
-  fflush(stdout);
+  mxprint(stdout, "progress: %lld/%lld packets (%lld%%)\r", num_packets,
+          num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
 }
 
 void real_reader_c::set_headers() {
