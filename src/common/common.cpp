@@ -1000,7 +1000,9 @@ string escape(const char *src) {
     if (*src == '\\')
       dst += "\\\\";
     else if (*src == '"')
-      dst += '2';               // Yes, this IS a trick ;)
+      dst += "\\2";               // Yes, this IS a trick ;)
+    else if (*src == ' ')
+      dst += "\\s";
     else
       dst += *src;
     src++;
@@ -1018,11 +1020,13 @@ string unescape(const char *src) {
     if (*src == '\\') {
       if (*next_char == 0)      // This is an error...
         dst += '\\';
-      else if (*next_char == '2') {
-        dst += '"';
-        src++;
-      } else {
-        dst += *next_char;
+      else {
+        if (*next_char == '2')
+          dst += '"';
+        else if (*next_char == 's')
+          dst += ' ';
+        else
+          dst += *next_char;
         src++;
       }
     } else
