@@ -274,7 +274,7 @@ usage() {
     "\n General output control (advanced global options):\n"
     "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
     "                           A comma separated list of both file IDs\n"
-    "                           and track IDs that controls the order of the "
+    "                           and track IDs that controls the order of the\n"
     "                           tracks in the output file.\n"
     "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
     "                           If the number is postfixed with 'ms' then\n"
