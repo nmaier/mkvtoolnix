@@ -4,6 +4,12 @@
 	systems. This results in a considerable speed up for the whole
 	muxing process.
 
+2005-02-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Empty video frames in AVIs right at the
+	beginning were breaking the MPEG-4 aspect ratio extraction and
+	caused problems in other parts, too.
+
 2005-01-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: It was possible to create chapter entries with
@@ -14,10 +20,36 @@
 	previous file. So if the previous file was bigger than the current
 	chapters then garbage remained at the end of the file.
 
+2005-01-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge did not accept XML chapter files
+	created with older mkvtoolnix versions due to deprecated chapter
+	elements. Such elements are now skipped.
+
+	* mkvmerge: new feature: Added some more possible formats for
+	binary data in XML files besides Base64 encoded data: hex encoded
+	and ASCII "encoded".
+
 2005-01-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The "stretch" input box tooltip was wrong. The
 	resulting command line was broken, too.
+
+2005-01-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Hex values accept more formats (like
+	optional white space between numbers or the "0x" prefix).
+
+2005-01-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Changed the AVC/h.264 timecode handling to include the
+	timecode offsets from the CTTS atom.
+
+2005-01-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: Reformatted the HTML guide and updated the screenshots. It
+	should be more readable for those whose desktop is not 1200 pixels
+	wide.
 
 2005-01-08  Moritz Bunkus  <moritz@bunkus.org>
 
