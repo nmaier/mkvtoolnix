@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.9 2003/03/01 16:59:59 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.10 2003/03/03 17:08:16 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -116,7 +116,7 @@ void video_packetizer_c::set_header() {
 
 int video_packetizer_c::process(char *buf, int size, int num_frames,
                                 int key, int last_frame,
-                                u_int64_t old_timecode) {
+                                int64_t old_timecode) {
   u_int64_t timecode;
 
   if (size > max_frame_size) {
@@ -125,7 +125,7 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
     exit(1);
   }
 
-  if (old_timecode == 0)
+  if (old_timecode == -1)
     timecode = (u_int64_t)(1000.0 * frames_output / fps);
   else
     timecode = old_timecode;
