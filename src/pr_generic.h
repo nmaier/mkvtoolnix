@@ -122,7 +122,7 @@ protected:
   bool duplicate_data;
 
   track_info_t *ti;
-  int64_t free_refs;
+  int64_t free_refs, enqueued_bytes;
 
   KaxTrackEntry *track_entry;
 

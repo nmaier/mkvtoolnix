@@ -48,6 +48,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   track_entry = NULL;
   ti = duplicate_track_info(nti);
   free_refs = -1;
+  enqueued_bytes = 0;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -532,6 +533,8 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   pack->source = this;
 
   packet_queue.push_back(pack);
+
+  enqueued_bytes += pack->length;
 }
 
 packet_t *generic_packetizer_c::get_packet() {
@@ -542,6 +545,8 @@ packet_t *generic_packetizer_c::get_packet() {
 
   pack = packet_queue.front();
   packet_queue.pop_front();
+
+  enqueued_bytes -= pack->length;
 
   return pack;
 }
@@ -558,13 +563,7 @@ int64_t generic_packetizer_c::get_smallest_timecode() {
 }
 
 int64_t generic_packetizer_c::get_queued_bytes() {
-  int64_t bytes;
-  int i;
-
-  for (i = 0, bytes = 0; i < packet_queue.size(); i++)
-    bytes += packet_queue[i]->length;
-
-  return bytes;
+  return enqueued_bytes;
 }
 
 void generic_packetizer_c::rerender_headers(mm_io_c *out) {

@@ -1273,6 +1273,9 @@ int kax_reader_c::read(generic_packetizer_c *) {
   if (saved_l1 == NULL)         // We're done.
     return 0;
 
+  if (get_queued_bytes() > 20 * 1024 * 1024)
+    return EHOLDING;
+
   debug_enter("kax_reader_c::read");
 
   found_data = false;
@@ -1507,3 +1510,15 @@ void kax_reader_c::identify() {
 }
 
 // }}}
+
+int64_t kax_reader_c::get_queued_bytes() {
+  int64_t bytes;
+  uint32_t i;
+
+  bytes = 0;
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->packetizer != NULL)
+      bytes += tracks[i]->packetizer->get_queued_bytes();
+
+  return bytes;
+}

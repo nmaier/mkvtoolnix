@@ -1093,6 +1093,7 @@ void debug_c::dump_info() {
   debug_data_t *entry;
   uint64_t diff_calls, diff_time;
 
+#if defined SYS_UNIX
   mxprint(stderr, "\nDBG> dumping time info:\n");
   for (i = 0; i < entries.size(); i++) {
     entry = entries[i];
@@ -1113,6 +1114,7 @@ void debug_c::dump_info() {
     entry->last_elapsed_time = entry->elapsed_time;
     entry->last_number_of_calls = entry->number_of_calls;
   }
+#endif // defined SYS_UNIX
 
   mxprint(stderr, "DBG> dumping packetzer info:\n");
   for (i = 0; i < packetizers.size(); i++)

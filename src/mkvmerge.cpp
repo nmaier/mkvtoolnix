@@ -1926,13 +1926,13 @@ void main_loop() {
     // as long we havne't already processed the last one.
     for (i = 0; i < packetizers.size(); i++) {
       ptzr = packetizers[i];
+      if (ptzr->status == EHOLDING)
+        ptzr->status = EMOREDATA;
       while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
-             (ptzr->packetizer->packet_available() < 2))
+             (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
       if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
-      if ((ptzr->pack != NULL) && !ptzr->packetizer->packet_available())
-        ptzr->pack->duration_mandatory = 1;
     }
 
     // Step 2: Pick the packet with the lowest timecode and

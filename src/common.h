@@ -41,11 +41,9 @@ using namespace libebml;
 #define DISPLAYPRIORITY_LOW     1
 
 /* errors */
+#define EDONE         0
 #define EMOREDATA    -1
-#define EMALLOC      -2
-#define EBADHEADER   -3
-#define EBADEVENT    -4
-#define EOTHER       -5
+#define EHOLDING     -2
 
 /* types */
 #define TYPEUNKNOWN   0
