@@ -144,10 +144,12 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                    wxNB_TOP);
   input_page = new tab_input(notebook);
   attachments_page = new tab_attachments(notebook);
+  global_page = new tab_global(notebook);
   settings_page = new tab_settings(notebook);
 
   notebook->AddPage(input_page, _("Input"));
   notebook->AddPage(attachments_page, _("Attachments"));
+  notebook->AddPage(global_page, _("Global"));
   notebook->AddPage(settings_page, _("Settings"));
 
   bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
@@ -262,6 +264,7 @@ void mmg_dialog::load(wxString file_name) {
 
   input_page->load(cfg);
   attachments_page->load(cfg);
+  global_page->load(cfg);
   settings_page->load(cfg);
 
   delete cfg;
@@ -290,6 +293,7 @@ void mmg_dialog::save(wxString file_name) {
 
   input_page->save(cfg);
   attachments_page->save(cfg);
+  global_page->save(cfg);
   settings_page->save(cfg);
 
   delete cfg;

@@ -34,8 +34,8 @@
 #include "extern_data.h"
 #include "iso639.h"
 
-static wxArrayString sorted_iso_codes;
-static wxArrayString sorted_charsets;
+wxArrayString sorted_iso_codes;
+wxArrayString sorted_charsets;
 
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |

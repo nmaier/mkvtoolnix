@@ -1,0 +1,322 @@
+/*
+  mkvmerge GUI -- utility for splicing together matroska files
+      from component media subtypes
+
+  tab_global.cpp
+
+  Written by Moritz Bunkus <moritz@bunkus.org>
+  Parts of this code were written by Florian Wager <root@sirelvis.de>
+
+  Distributed under the GPL
+  see the file COPYING for details
+  or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version $Id$
+    \brief "global" tab
+    \author Moritz Bunkus <moritz@bunkus.org>
+*/
+
+#include "wx/wxprec.h"
+
+#include "wx/wx.h"
+#include "wx/notebook.h"
+#include "wx/listctrl.h"
+#include "wx/statline.h"
+#include "wx/config.h"
+
+#include "mmg.h"
+#include "common.h"
+
+tab_global::tab_global(wxWindow *parent):
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
+          wxTAB_TRAVERSAL) {
+  uint32_t i;
+
+  new wxStaticBox(this, -1, _("File/segment title"), wxPoint(10, 5),
+                  wxSize(475, 50));
+  new wxStaticText(this, -1, _("File/segment title:"), wxPoint(15, 25),
+                   wxDefaultSize);
+  tc_title =
+    new wxTextCtrl(this, ID_TC_SEGMENTTITLE, _(""), wxPoint(160, 25),
+                   wxSize(318, -1), 0);
+  tc_title->SetToolTip(_T("This is the title that players may show "
+                          "as the 'main title' for this movie."));
+
+  new wxStaticBox(this, -1, _("Split"), wxPoint(10, 60), wxSize(475, 75));
+
+  cb_split =
+    new wxCheckBox(this, ID_CB_SPLIT, _("Enable splitting"), wxPoint(15, 80),
+                   wxDefaultSize, 0);
+  cb_split->SetToolTip(_T("Enables splitting of the output into more than "
+                          "one file. You can split after a given size "
+                          "or after a given amount of time has passed."));
+
+  rb_split_by_size =
+    new wxRadioButton(this, ID_RB_SPLITBYSIZE, _("by size:"),
+                      wxPoint(130, 80), wxDefaultSize, wxRB_GROUP);
+  rb_split_by_size->Enable(false);
+  cob_split_by_size =
+    new wxComboBox(this, ID_CB_SPLITBYSIZE, _(""), wxPoint(200, 80),
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_split_by_size->Append("");
+  cob_split_by_size->Append("350M");
+  cob_split_by_size->Append("650M");
+  cob_split_by_size->Append("700M");
+  cob_split_by_size->Append("703M");
+  cob_split_by_size->Append("800M");
+  cob_split_by_size->Append("1000M");
+  cob_split_by_size->SetToolTip(_T("The size after which a new output file "
+                                   "is being started. The letters 'G', 'M' "
+                                   "and 'K' can be used to indicate giga/"
+                                   "mega/kilo bytes respectively. All units "
+                                   "are based on 1024 (G = 1024^3, M = 1024^2,"
+                                   " K = 1024)."));
+  cob_split_by_size->Enable(false);
+
+  rb_split_by_time =
+    new wxRadioButton(this, ID_RB_SPLITBYTIME, _("by time:"),
+                      wxPoint(310, 80), wxDefaultSize, 0);
+  rb_split_by_time->Enable(false);
+  cob_split_by_time =
+    new wxComboBox(this, ID_CB_SPLITBYTIME, _(""), wxPoint(380, 80),
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_split_by_time->Append("");
+  cob_split_by_time->Append("01:00:00");
+  cob_split_by_time->Append("1800s");
+  cob_split_by_time->SetToolTip(_T("The time after which a new output file "
+                                   "is being started. The time can be given "
+                                   "either in the form HH:MM:SS or as the "
+                                   "number of seconds followed by 's'. "
+                                   "Examples: 01:00:00 (after one hour) or "
+                                   "1800s (after 1800 seconds)."));
+  cob_split_by_time->Enable(false);
+
+  cb_dontlink =
+    new wxCheckBox(this, ID_CB_DONTLINK, _("don't link files"),
+                   wxPoint(15, 105), wxDefaultSize, 0);
+  cb_dontlink->SetToolTip(_T("Do not use 'segment linking' for the resulting "
+                             "files. For an in-depth explanation of this "
+                             "feature consult the mkvmerge documentation. "
+                             "If in doubt do NOT check this option."));
+  cb_dontlink->Enable(false);
+
+  new wxStaticText(this, wxID_STATIC, _("max. number of files:"),
+                   wxPoint(250, 105), wxDefaultSize, 0);
+  tc_split_max_files =
+    new wxTextCtrl(this, ID_TC_SPLITMAXFILES, _(""), wxPoint(380, 105),
+                   wxSize(100, -1), 0);
+  tc_split_max_files->SetToolTip(_T("The maximum number of files that will "
+                                    "be created even if the last file might "
+                                    "contain more bytes/time than wanted. "
+                                    "Useful e.g. when you want exactly two "
+                                    "files."));
+  tc_split_max_files->Enable(false);
+
+  new wxStaticBox(this, -1, _("Misc options"), wxPoint(10, 140),
+                  wxSize(475, 50));
+  new wxStaticText(this, -1, _("Aspect ratio:"), wxPoint(15, 160),
+                   wxDefaultSize, 0);
+  cob_aspect_ratio =
+    new wxComboBox(this, ID_CB_ASPECTRATIO, _(""), wxPoint(100, 160),
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_aspect_ratio->Append("");
+  cob_aspect_ratio->Append("4/3");
+  cob_aspect_ratio->Append("1.66");
+  cob_aspect_ratio->Append("16/9");
+  cob_aspect_ratio->Append("1.85");
+  cob_aspect_ratio->Append("2.00");
+  cob_aspect_ratio->Append("2.21");
+  cob_aspect_ratio->Append("2.35");
+  cob_aspect_ratio->SetToolTip(_T("Sets the display aspect ratio of the movie."
+                                  " The format can be either 'a/b' in which "
+                                  "case both numbers must be integer (e.g. "
+                                  "16/9) or just a single floting point "
+                                  "number 'f' (e.g. 2.35)."));
+  new wxStaticText(this, -1, _("FourCC:"), wxPoint(230, 160),
+                   wxDefaultSize, 0);
+  cob_fourcc =
+    new wxComboBox(this, ID_CB_FOURCC, _(""), wxPoint(285, 160),
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fourcc->Append("");
+  cob_fourcc->Append("DIVX");
+  cob_fourcc->Append("DIV3");
+  cob_fourcc->Append("DX50");
+  cob_fourcc->Append("XVID");
+  cob_fourcc->SetToolTip(_T("Forces the FourCC of the video track to this "
+                            "value. Note that this only works for video "
+                            "tracks that use the AVI compatibility mode "
+                            "or for QuickTime video tracks. This option "
+                            "CANNOT be used to change Matroska's CodecID."));
+
+  new wxStaticBox(this, -1, _("File/segment linking"), wxPoint(10, 195),
+                  wxSize(475, 75));
+  new wxStaticText(this, -1, _("Previous segment UID:"), wxPoint(15, 215),
+                   wxDefaultSize);
+  tc_previous_segment_uid =
+    new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""), wxPoint(160, 215),
+                   wxSize(318, -1), 0);
+  tc_previous_segment_uid->SetToolTip(_T("For an in-depth explanantion of "
+                                         "file/segment linking and this "
+                                         "feature please read mkvmerge's "
+                                         "documentation."));
+  new wxStaticText(this, -1, _("Next segment UID:"), wxPoint(15, 240),
+                   wxDefaultSize);
+  tc_next_segment_uid =
+    new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, _(""), wxPoint(160, 240),
+                   wxSize(318, -1), 0);
+  tc_next_segment_uid->SetToolTip(_T("For an in-depth explanantion of "
+                                     "file/segment linking and this "
+                                     "feature please read mkvmerge's "
+                                     "documentation."));
+
+  new wxStaticBox(this, -1, _("Chapters"), wxPoint(10, 275), wxSize(475, 75));
+  new wxStaticText(this, -1, _("Chapter file:"), wxPoint(15, 295),
+                   wxDefaultSize, 0);
+  tc_chapters =
+    new wxTextCtrl(this, ID_TC_CHAPTERS, _(""), wxPoint(100, 295),
+                   wxSize(290, -1), wxTE_READONLY);
+  tc_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: The "
+                             "OGM like text format and the full featured "
+                             "XML format."));
+  wxButton *b_browse_chapters =
+    new wxButton(this, ID_B_BROWSECHAPTERS, _("Browse"), wxPoint(400, 295),
+                 wxDefaultSize, 0);
+  b_browse_chapters->SetToolTip(_T("mkvmerge supports two chapter formats: "
+                                   "The OGM like text format and the full "
+                                   "featured XML format."));
+
+  new wxStaticText(this, -1, _("Language:"), wxPoint(15, 320),
+                   wxDefaultSize, 0);
+  cob_chap_language =
+    new wxComboBox(this, ID_CB_CHAPTERLANGUAGE, _(""), wxPoint(100, 320),
+                   wxSize(160, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_chap_language->Append("");
+  for (i = 0; i < sorted_iso_codes.Count(); i++)
+    cob_chap_language->Append(sorted_iso_codes[i]);
+  cob_chap_language->SetToolTip(_T("mkvmerge supports two chapter formats: "
+                                   "The OGM like text format and the full "
+                                   "featured XML format. This option "
+                                   "specifies the language to be associated "
+                                   "with chapters if the OGM chapter format "
+                                   "is used. It is ignored for XML chapter "
+                                   "files."));
+  new wxStaticText(this, -1, _("Charset:"), wxPoint(270, 320),
+                   wxDefaultSize, 0);
+  cob_chap_charset =
+    new wxComboBox(this, ID_CB_CHAPTERCHARSET, _(""), wxPoint(330, 320),
+                   wxSize(150, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_chap_charset->Append("");
+  for (i = 0; i < sorted_charsets.Count(); i++)
+    cob_chap_charset->Append(sorted_charsets[i]);
+  cob_chap_charset->SetToolTip(_T("mkvmerge supports two chapter formats: "
+                                  "The OGM like text format and the full "
+                                  "featured XML format. If the OGM format "
+                                  "is used and the file's charset is not "
+                                  "recognized correctly then this option "
+                                  "can be used to correct that. This option "
+                                  "is ignored for XML chapter files."));
+
+  new wxStaticBox(this, -1, _("Global tags"), wxPoint(10, 355),
+                  wxSize(475, 50));
+  new wxStaticText(this, -1, _("Tag file:"), wxPoint(15, 375),
+                   wxDefaultSize, 0);
+  tc_global_tags =
+    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 375),
+                   wxSize(290, -1), wxTE_READONLY);
+  tc_global_tags->SetToolTip(_T("The difference between tags associated with "
+                                "a track and global tags is explained in "
+                                "mkvmerge's documentation. Most of the time "
+                                "you probably want to use the tags associated "
+                                "with a track on the 'input' tab."));
+  wxButton *b_browse_global_tags =
+    new wxButton(this, ID_B_BROWSECHAPTERS, _("Browse"), wxPoint(400, 375),
+                 wxDefaultSize, 0);
+  b_browse_global_tags->SetToolTip(_T("The difference between tags associated "
+                                      "with a track and global tags is "
+                                      "explained in mkvmerge's documentation. "
+                                      "Most of the time you probably want to "
+                                      "use the tags associated with a track "
+                                      "on the 'input' tab."));
+
+  new wxStaticBox(this, -1, _("Advanced options (DO NOT CHANGE!)"),
+                  wxPoint(10, 410), wxSize(475, 50));
+  cb_no_cues =
+    new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 430),
+                   wxDefaultSize, 0);
+  cb_no_cues->SetToolTip(_T("Do not write the cues (the index). DO NOT "
+                            "ENABLE this option unless you REALLY know "
+                            "what you're doing!"));
+  cb_no_clusters =
+    new wxCheckBox(this, ID_CB_NOCLUSTERSINMETASEEK,
+                   _("No clusters in meta seek"), wxPoint(110, 430),
+                   wxDefaultSize, 0);
+  cb_no_clusters->SetToolTip(_T("Do not put all the clusters into the cues "
+                                "(the index). DO NOT ENABLE this option "
+                                "unless you REALLY know what you're doing!"));
+  cb_enable_lacing =
+    new wxCheckBox(this, ID_CB_ENABLELACING, _("Enable lacing"),
+                   wxPoint(300, 430), wxDefaultSize, 0);
+  cb_enable_lacing->SetToolTip(_T("Enable lacing for audio tracks. DO NOT "
+                                  "ENABLE this option unless you REALLY know "
+                                  "what you're doing!"));
+}
+
+void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
+//   wxFileDialog dlg(NULL, "Choose the mkvmerge executable",
+// #ifdef SYS_WINDOWS
+//                    tc_mkvmerge->GetValue().BeforeLast('\\'), "",
+//                    _T("Executable files (*.exe)|*.exe|All files (*.*)|*.*"),
+// #else
+//                    tc_mkvmerge->GetValue().BeforeLast('/'), "",
+//                    _T("All files (*)|*"),
+// #endif
+//                    wxOPEN);
+//   if(dlg.ShowModal() == wxID_OK) {
+//     tc_mkvmerge->SetValue(dlg.GetPath());
+//     mkvmerge_path = "\"" + dlg.GetPath() + "\"";
+//     save();
+//   }
+}
+
+void tab_global::on_browse_chapters(wxCommandEvent &evt) {
+}
+
+void tab_global::on_split_clicked(wxCommandEvent &evt) {
+  bool ec, er;
+
+  ec = cb_split->IsChecked();
+  er = rb_split_by_size->GetValue();
+  rb_split_by_size->Enable(ec);
+  cob_split_by_size->Enable(ec && er);
+  rb_split_by_time->Enable(ec);
+  cob_split_by_time->Enable(ec && !er);
+  cb_dontlink->Enable(ec);
+  tc_split_max_files->Enable(ec);
+}
+
+void tab_global::on_splitby_clicked(wxCommandEvent &evt) {
+  bool er;
+
+  er = rb_split_by_size->GetValue();
+  cob_split_by_size->Enable(er);
+  cob_split_by_time->Enable(!er);
+}
+
+void tab_global::load(wxConfigBase *cfg) {
+}
+
+void tab_global::save(wxConfigBase *cfg) {
+
+}
+
+IMPLEMENT_CLASS(tab_global, wxPanel);
+BEGIN_EVENT_TABLE(tab_global, wxPanel)
+  EVT_BUTTON(ID_B_BROWSEGLOBALTAGS, tab_global::on_browse_global_tags)
+  EVT_BUTTON(ID_B_BROWSECHAPTERS, tab_global::on_browse_chapters)
+  EVT_CHECKBOX(ID_CB_SPLIT, tab_global::on_split_clicked)
+  EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE, tab_global::on_splitby_clicked)
+  EVT_RADIOBUTTON(ID_RB_SPLITBYTIME, tab_global::on_splitby_clicked)
+END_EVENT_TABLE();

@@ -68,6 +68,27 @@ using namespace std;
 #define ID_TC_MKVMERGE 10031
 #define ID_B_BROWSEMKVMERGE 10032
 #define ID_T_STATUSBAR 10033
+#define ID_B_BROWSEGLOBALTAGS 10034
+#define ID_B_BROWSECHAPTERS 10035
+#define ID_CB_SPLIT 10036
+#define ID_RB_SPLITBYSIZE 10037
+#define ID_RB_SPLITBYTIME 10038
+#define ID_CB_SPLITBYSIZE 10039
+#define ID_CB_SPLITBYTIME 10040
+#define ID_CB_DONTLINK 10041
+#define ID_TC_SPLITMAXFILES 10042
+#define ID_CB_ASPECTRATIO 10043
+#define ID_CB_FOURCC 10044
+#define ID_TC_PREVIOUSSEGMENTUID 10045
+#define ID_TC_NEXTSEGMENTUID 10046
+#define ID_TC_CHAPTERS 10047
+#define ID_CB_CHAPTERLANGUAGE 10048
+#define ID_CB_CHAPTERCHARSET 10049
+#define ID_TC_GLOBALTAGS 10050
+#define ID_TC_SEGMENTTITLE 10051
+#define ID_CB_NOCUES 10052
+#define ID_CB_NOCLUSTERSINMETASEEK 10053
+#define ID_CB_ENABLELACING 10054
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -105,6 +126,8 @@ extern wxString last_open_dir;
 extern wxString mkvmerge_path;
 extern vector<mmg_file_t> files;
 extern vector<mmg_attachment_t> attachments;
+extern wxArrayString sorted_charsets;
+extern wxArrayString sorted_iso_codes;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString &source);
@@ -197,6 +220,32 @@ public:
   void load(wxConfigBase *cfg);
 };
 
+class tab_global: public wxPanel {
+  DECLARE_CLASS(tab_global);
+  DECLARE_EVENT_TABLE();
+public:
+  wxTextCtrl *tc_chapters, *tc_global_tags, *tc_split_max_files, *tc_title;
+  wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid;
+  wxTextCtrl *tc_split_bytes, *tc_split_time;
+  wxCheckBox *cb_split, *cb_dontlink;
+  wxRadioButton *rb_split_by_size, *rb_split_by_time;
+  wxComboBox *cob_split_by_size, *cob_split_by_time;
+  wxComboBox *cob_fourcc, *cob_aspect_ratio;
+  wxComboBox *cob_chap_language, *cob_chap_charset;
+  wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_enable_lacing;
+
+public:
+  tab_global(wxWindow *parent);
+
+  void on_browse_chapters(wxCommandEvent &evt);
+  void on_browse_global_tags(wxCommandEvent &evt);
+  void on_split_clicked(wxCommandEvent &evt);
+  void on_splitby_clicked(wxCommandEvent &evt);
+
+  void save(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg);
+};
+
 class mmg_dialog: public wxFrame {    
   DECLARE_CLASS(mmg_dialog);
   DECLARE_EVENT_TABLE();
@@ -213,6 +262,7 @@ protected:
 
   tab_input *input_page;
   tab_attachments *attachments_page;
+  tab_global *global_page;
   tab_settings *settings_page;
 
 public:
