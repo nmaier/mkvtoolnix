@@ -1253,6 +1253,104 @@ bool process_file(const char *file_name) {
                 priority.ReadData(es->I_O());
                 show_element(l3, 3, "Reference priority: %u",
                              uint32(priority));
+                
+              } else if (is_id(l3, KaxReferenceVirtual)) {
+                KaxReferenceVirtual &ref_virt =
+                  *static_cast<KaxReferenceVirtual *>(l3);
+                ref_virt.ReadData(es->I_O());
+                show_element(l3, 3, "Reference virtual: %lld",
+                             int64(ref_virt));
+
+              } else if (is_id(l3, KaxBlockAdditions)) {
+                show_element(l3, 3, "Additions");
+
+                upper_lvl_el = 0;
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, false);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
+
+                  if (is_id(l4, KaxBlockMore)) {
+                    show_element(l4, 4, "More");
+
+                    upper_lvl_el = 0;
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, false);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
+
+                      if (is_id(l5, KaxBlockAddID)) {
+                        KaxBlockAddID &add_id =
+                          *static_cast<KaxBlockAddID *>(l5);
+                        add_id.ReadData(es->I_O());
+                        show_element(l5, 5, "AdditionalID: %llu",
+                                     uint64(add_id));
+
+                      } else if (is_id(l5, KaxBlockAdditional)) {
+                        char adler[100];
+                        KaxBlockAdditional &block =
+                          *static_cast<KaxBlockAdditional *>(l5);
+                        block.ReadData(es->I_O());
+                        if (calc_checksums)
+                          mxprints(adler, " (adler: 0x%08x)",
+                                   calc_adler32(&binary(block),
+                                                block.GetSize()));
+                        else
+                          adler[0] = 0;
+
+                        show_element(l5, 5, "Block additional, size: %u%s",
+                                     block.GetSize(), adler);
+                        
+                      } else if (!is_global(l5, 5, upper_lvl_el))
+                        show_unknown_element(l5, 5);
+
+                      if (!in_parent(l4)) {
+                        delete l5;
+                        break;
+                      }
+
+                      if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
+                      }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
+
+                    } // while (l5 != NULL)
+
+                  } else if (!is_global(l4, 4, upper_lvl_el))
+                    show_unknown_element(l4, 4);
+
+                  if (!in_parent(l3)) {
+                    delete l4;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
+                    if (upper_lvl_el > 0)
+                      break;
+                    delete l4;
+                    l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
+
+                } // while (l4 != NULL)
 
               } else if (is_id(l3, KaxSlices)) {
                 show_element(l3, 3, "Slices");
@@ -1271,21 +1369,21 @@ bool process_file(const char *file_name) {
                     while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (is_id(l5, KaxSliceLaceNumber)) {
-                        KaxSliceLaceNumber slace_number =
+                        KaxSliceLaceNumber &slace_number =
                           *static_cast<KaxSliceLaceNumber *>(l5);
                         slace_number.ReadData(es->I_O());
                         show_element(l5, 5, "Lace number: %u",
                                      uint32(slace_number));
 
                       } else if (is_id(l5, KaxSliceFrameNumber)) {
-                        KaxSliceFrameNumber sframe_number =
+                        KaxSliceFrameNumber &sframe_number =
                           *static_cast<KaxSliceFrameNumber *>(l5);
                         sframe_number.ReadData(es->I_O());
                         show_element(l5, 5, "Frame number: %u",
                                      uint32(sframe_number));
 
                       } else if (is_id(l5, KaxSliceDelay)) {
-                        KaxSliceDelay sdelay =
+                        KaxSliceDelay &sdelay =
                           *static_cast<KaxSliceDelay *>(l5);
                         sdelay.ReadData(es->I_O());
                         show_element(l5, 5, "Delay: %.3fms",
@@ -1293,12 +1391,19 @@ bool process_file(const char *file_name) {
                                      1000000.0);
 
                       } else if (is_id(l5, KaxSliceDuration)) {
-                        KaxSliceDuration sduration =
+                        KaxSliceDuration &sduration =
                           *static_cast<KaxSliceDuration *>(l5);
                         sduration.ReadData(es->I_O());
                         show_element(l5, 5, "Duration: %.3fms",
                                      ((float)uint64(sduration)) * tc_scale /
                                      1000000.0);
+
+                      } else if (is_id(l5, KaxSliceBlockAddID)) {
+                        KaxSliceBlockAddID &sbaid =
+                          *static_cast<KaxSliceBlockAddID *>(l5);
+                        sbaid.ReadData(es->I_O());
+                        show_element(l5, 5, "Block additional ID: %u",
+                                     uint64(sbaid));
 
                       } else if (!is_global(l5, 5, upper_lvl_el))
                         show_unknown_element(l5, 5);
