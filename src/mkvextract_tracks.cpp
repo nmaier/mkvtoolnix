@@ -1047,6 +1047,10 @@ close_files() {
           tracks[i].out->write_uint32(crc);
           safefree(buffer);
 
+          mxinfo(_("\nThe temporary TTA file for track ID %lld is being "
+                   "copied into the final TTA file. This may take some "
+                   "time.\n"), tracks[i].tid);
+
           buffer = (unsigned char *)safemalloc(128000);
           do {
             nread = temp_file->read(buffer, 128000);
