@@ -546,7 +546,11 @@ int real_reader_c::read() {
     return 0;
 
   try {
+    if (num_packets == 2962)
+      printf("yugga\n");
     fpos = io->getFilePointer();
+    if ((file_size - fpos) < 12)
+      return finish();
 
     if (num_packets >= num_packets_in_chunk) {
       object_id = io->read_uint32_be();
@@ -570,8 +574,8 @@ int real_reader_c::read() {
     flags = io->read_uint8();
 
     if (length < 12) {
-      mxprint(stdout, "real_reader: %s: Data packet length is too small: %u. "
-              "Other values: object_version: 0x%04x, id: 0x%04x, "
+      mxprint(stdout, "Warning: real_reader: %s: Data packet length is too "
+              "small: %u. Other values: object_version: 0x%04x, id: 0x%04x, "
               "timecode: %u, flags: 0x%02x. File position: %lld. Aborting.\n",
               ti->fname, length, object_version, id, timecode, flags, fpos);
       return finish();
@@ -707,9 +711,18 @@ void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
     total += segment->size;
   }
 
-  if (len != total)
-    die("real_reader_c: deliver_segments() failed: len %d, total %d.", len,
-        total);
+  if (len != total) {
+    mxprint(stdout, "\nWarning: real_reader_c: packet assembly failed. "
+            "Expected packet length was %d but found only %d sub packets "
+            "containing %d bytes. Sub packet number: %lld. Trying to "
+            "continue.\n", len, dmx->segments->size(), total, num_packets);
+    len = 0;
+    for (i = 0; i < dmx->segments->size(); i++) {
+      segment = &(*dmx->segments)[i];
+      segment->offset = len;
+      len += segment->size;
+    }
+  }
 
   len += 1 + 2 * 4 * (dmx->f_merged ? 1: dmx->segments->size());
   buffer = (unsigned char *)safemalloc(len);
@@ -946,6 +959,8 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
 
 // }}}
 
+// {{{ FUNCTION real_reader_c::get_information_from_data()
+
 void real_reader_c::get_information_from_data() {
   uint32_t length, id;
   int i;
@@ -1010,3 +1025,4 @@ void real_reader_c::get_information_from_data() {
   }
 }
 
+// }}}
