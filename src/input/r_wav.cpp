@@ -60,7 +60,8 @@ wav_reader_c::probe_file(mm_io_c *mm_io,
   }
   if (strncmp((char *)wheader.riff.id, "RIFF", 4) ||
       strncmp((char *)wheader.riff.wave_id, "WAVE", 4) ||
-      strncmp((char *)wheader.data.id, "data", 4))
+      (strncmp((char *)wheader.data.id, "data", 4) &&
+       strncmp((char *)wheader.data.id, "PAD ", 4)))
     return 0;
 
   return 1;
@@ -91,6 +92,18 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   ti->id = 0;                   // ID for this track.
   is_dts = false;
 
+  while (1) {
+    if (!strncmp((char *)wheader.data.id, "data", 4))
+      break;
+    if ((mm_io->getFilePointer() + get_uint32(&wheader.data.len) +
+         sizeof(struct chunk_struct)) > size)
+      throw error_c("wav_reader: No 'data' chunk found.");
+    mm_io->setFilePointer(get_uint32(&wheader.data.len), seek_current);
+    if (mm_io->read(&wheader.data, sizeof(struct chunk_struct)) !=
+        sizeof(struct chunk_struct))
+      throw error_c("wav_reader: No 'data' chunk found.");
+  }
+
   if (verbose)
     mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti->fname);
 
@@ -100,8 +113,9 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
     unsigned short buf[2][max_dts_packet_size/2];
     int cur_buf = 0;
 
+    mm_io->save_pos();
     long rlen = mm_io->read(obuf, max_dts_packet_size);
-    mm_io->setFilePointer(sizeof(wheader), seek_beginning);
+    mm_io->restore_pos();
 
     for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
       memcpy(buf[cur_buf], obuf, rlen);
