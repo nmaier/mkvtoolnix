@@ -26,7 +26,7 @@ AC_CHECK_TOOL(LD, ld, :)
 dnl Check for headers
 AC_HEADER_STDC()
 AC_CHECK_HEADERS([inttypes.h stdint.h sys/types.h])
-AC_CHECK_FUNCS(vsscanf posix_fadvise,,)
+AC_CHECK_FUNCS(vsscanf,,)
 
 dnl Optional features that are built and those that aren't
 opt_features_yes=""
@@ -290,6 +290,25 @@ fi
 
 
 dnl
+dnl Check for posix_fadvise and its definitions
+dnl
+  AC_CACHE_CHECK([for posix_fadvise], [ac_cv_posix_fadvise],[
+    ac_cv_posix_fadvise="no"
+    AC_LANG_PUSH(C++)
+    AC_TRY_COMPILE([
+#include <fcntl.h>
+      ],[
+        posix_fadvise(0, 0, 0, POSIX_FADV_WILLNEED);
+        posix_fadvise(0, 0, 0, POSIX_FADV_DONTNEED);
+      ],[ac_cv_posix_fadvise="yes"])
+    AC_LANG_POP
+  ])
+  if test x"$ac_cv_posix_fadvise" = "xyes" ; then
+    AC_DEFINE([HAVE_POSIX_FADVISE], 1, [define if posix_advise and its definitions are available])
+  fi
+
+
+dnl
 dnl Test for libiconv
 dnl
 dnl This macros shamelessly stolen from
@@ -529,7 +548,7 @@ using namespace libebml;
     ])
 
   if test x"${ac_cv_ebml_dll}" != "xyes" -a x"${ac_cv_ebml_dll}" != "xno" ; then
-    echo *** libebml was not found.
+    echo '*** libebml was not found.'
     exit 1
   fi
 
@@ -641,7 +660,7 @@ using namespace libmatroska;
     ])
 
   if test x"${ac_cv_matroska_dll}" != "xyes" -a x"${ac_cv_matroska_dll}" != "xno" ; then
-    echo *** libmatroska was not found.
+    echo '*** libmatroska was not found.'
     exit 1
   fi
 
