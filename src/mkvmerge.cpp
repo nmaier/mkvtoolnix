@@ -234,6 +234,7 @@ static void usage(void) {
     "  --attach-file-once <file>\n"
     "                           Creates a file attachment inside the\n"
     "                           firsts Matroska file written.\n"
+    "  --global-tags <file>     Read global tags from a XML file.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -381,6 +382,39 @@ static void display_progress(int force) {
     winner->reader->display_progress();
   }
   display_counter++;
+}
+
+void parse_and_add_tags(const char *file_name) {
+  KaxTags *tags;
+  KaxTag *tag;
+
+  tags = new KaxTags;
+
+  parse_xml_tags(file_name, tags);
+
+  if (!tags->CheckMandatory()) {
+    mxprint(stderr, "Error parsing the tags in '%s': some mandatory "
+            "elements are missing.\n", file_name);
+    exit(1);
+  }
+
+  while (tags->ListSize() > 0) {
+    tag = (KaxTag *)(*tags)[0];
+    tags->Remove(0);
+    add_tags(tag);
+  }
+
+  delete tags;
+}
+
+void add_tags(KaxTag *tags) {
+  if (!accept_tags)
+    return;
+
+  if (kax_tags == NULL)
+    kax_tags = new KaxTags;
+
+  kax_tags->PushElement(*tags);
 }
 
 void add_packetizer(generic_packetizer_c *packetizer) {
@@ -1250,6 +1284,14 @@ static void parse_args(int argc, char **argv) {
       memset(attachment, 0, sizeof(attachment_t));
 
       i++;
+
+    } else if (!strcmp(argv[i], "--global-tags")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: --global-tags lacks the file name.\n");
+        exit(1);
+      }
+      parse_and_add_tags(argv[i + 1]);
+      i++;
     }
 
     // Options that apply to the next input file only.
@@ -1857,16 +1899,6 @@ void main_loop() {
     display_progress(1);
     mxprint(stdout, "\n");
   }
-}
-
-void add_tags(KaxTag *tags) {
-  if (!accept_tags)
-    return;
-
-  if (kax_tags == NULL)
-    kax_tags = new KaxTags;
-
-  kax_tags->PushElement(*tags);
 }
 
 int main(int argc, char **argv) {
