@@ -33,7 +33,7 @@ using namespace libebml;
 
 class MTX_DLL_API mm_io_c: public IOCallback {
 protected:
-#if !defined(SYS_UNIX)
+#if defined(SYS_WINDOWS)
   bool _eof;
 #endif
   char *file_name;

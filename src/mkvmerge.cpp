@@ -24,7 +24,7 @@
 
 #include <errno.h>
 #include <ctype.h>
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 #include <signal.h>
 #endif
 #include <stdlib.h>
@@ -426,7 +426,7 @@ static int get_type(char *filename) {
 
 // {{{ helper functions (sighandler, display_progress)
 
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 static void sighandler(int signum) {
 #ifdef DEBUG
   if (signum == SIGUSR1)
@@ -1935,7 +1935,7 @@ static void setup() {
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
 #endif
 
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   signal(SIGUSR1, sighandler);
   signal(SIGINT, sighandler);
 

@@ -35,7 +35,7 @@
 
 #include "chapters.h"
 #include "common.h"
-#ifdef SYS_UNIX
+#if defined(SYS_UNIX) || defined(SYS_APPLE)
 #include "matroskalogo_big.xpm"
 #endif
 #include "mmg.h"
@@ -102,7 +102,7 @@ wxString shell_escape(wxString source) {
   wxString escaped;
 
   for (i = 0; i < source.Length(); i++) {
-#ifdef SYS_UNIX
+#if defined(SYS_UNIX) || defined(SYS_APPLE)
     if (source[i] == '"')
       escaped += "\\\"";
     else if (source[i] == '\\')

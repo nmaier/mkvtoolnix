@@ -2538,7 +2538,7 @@ int console_main(int argc, char **argv) {
 }
 
 void setup() {
-#if defined(SYS_UNIX)
+#if !defined(COMP_MSC)
   if (setlocale(LC_CTYPE, "") == NULL)
     mxerror("Could not set the locale properly. Check the "
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
@@ -2565,7 +2565,7 @@ int main(int argc, char **argv) {
   return res;
 }
 
-#elif defined(SYS_UNIX)
+#elif defined(SYS_UNIX) || defined(SYS_APPLE)
 
 int main(int argc, char **argv) {
   char *initial_file;
