@@ -239,7 +239,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   hserialno = create_track_number(reader, ti->id);
   huid = 0;
   htrack_type = -1;
-  htrack_min_cache = -1;
+  htrack_min_cache = 0;
   htrack_max_cache = -1;
 
   hcodec_id = "";
@@ -935,6 +935,14 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
     pack->bref += correction_timecode_offset + append_timecode_offset;
   if (pack->fref >= 0)
     pack->fref += correction_timecode_offset + append_timecode_offset;
+
+  if ((htrack_min_cache < 2) && (pack->fref >= 0)) {
+    set_track_min_cache(2);
+    rerender_track_headers();
+  } else if ((htrack_min_cache < 1) && (pack->bref >= 0)) {
+    set_track_min_cache(1);
+    rerender_track_headers();
+  }
 
   if (pack->timecode < 0) {
     delete pack;
