@@ -71,56 +71,60 @@ bitvalue_c::bitvalue_c(const bitvalue_c &src) {
   *this = src;
 }
 
-#define ishexdigit(c) (isdigit(c) || (((c) >= 'a') && ((c) <= 'f')) || \
-                       (((c) >= 'A') && ((c) <= 'F')))
-#define upperchar(c) (((c) >= 'a') ? ((c) - 'a' + 'A') : (c))
-#define hextodec(c) (isdigit(c) ? ((c) - '0') : ((c) - 'A' + 10))
+#define ishexdigit(c) (isdigit(c) || (((c) >= 'a') && ((c) <= 'f')))
+#define hextodec(c) (isdigit(c) ? ((c) - '0') : ((c) - 'a' + 10))
 
 bitvalue_c::bitvalue_c(string s,
                        int allowed_bitlength) {
   int len, i;
+  bool previous_was_space;
   string s2;
 
+  if ((allowed_bitlength != -1) && ((allowed_bitlength % 8) != 0))
+    throw exception();
+
   len = s.size();
-  if (len < 2)
-    throw exception();
+  previous_was_space = true;
+  s = downcase(s);
 
-  if ((s[0] == '0') && (s[1] == 'x')) {
-    i = 0;
-    while (i < len) {
-      if ((len - i) < 4)
-        throw exception();
-      if ((s[i] != '0') || (s[i + 1] != 'x'))
-        throw exception();
-      s2 += s[i + 2];
-      s2 += s[i + 3];
-      i += 4;
-      if (i < len) {
-        if (s[i] != ' ')
-          throw exception();
-        i++;
-      }
+  for (i = 0; i < len; i++) {
+    // Space or tab?
+    if (isblank(s[i])) {
+      previous_was_space = true;
+      continue;
     }
-    s = s2;
-    len = s.size();
-  }
+    previous_was_space = false;
 
-  if ((len % 2) == 1)
-    throw exception();
+    // Space or tab followed by "0x"? Then skip it.
+    if (s.substr(i, 2) == "0x") {
+      i++;
+      continue;
+    }
 
-  if ((allowed_bitlength != -1) && ((len * 4) != allowed_bitlength))
-    throw exception();
-
-  for (i = 0; i < len; i++)
+    // Invalid character?
     if (!ishexdigit(s[i]))
       throw exception();
+
+    // Input too long?
+    if ((allowed_bitlength > 0) && ((s2.length() * 4) >= allowed_bitlength))
+      throw exception();
+
+    // Store the value.
+    s2 += s[i];
+  }
+
+  // Is half a byte or more missing?
+  len = s2.length();
+  if (((len % 2) != 0)
+      ||
+      ((allowed_bitlength != -1) && ((len * 4) < allowed_bitlength)))
+    throw exception();
 
   value = (unsigned char *)safemalloc(len / 2);
   bitsize = len * 4;
 
   for (i = 0; i < len; i += 2)
-    value[i / 2] = hextodec(upperchar(s[i])) * 16 +
-      hextodec(upperchar(s[i + 1]));
+    value[i / 2] = hextodec(s2[i]) << 4 | hextodec(s2[i + 1]);
 }
 
 bitvalue_c &
@@ -139,14 +143,9 @@ bitvalue_c::~bitvalue_c() {
 bool
 bitvalue_c::operator ==(const bitvalue_c &cmp)
   const {
-  int i;
-
   if (cmp.bitsize != bitsize)
     return false;
-  for (i = 0; i < bitsize / 8; i++)
-    if (value[i] != cmp.value[i])
-      return false;
-  return true;
+  return memcmp(value, cmp.value, bitsize / 8) == 0;
 }
 
 unsigned char
