@@ -635,7 +635,7 @@ handle_data(KaxBlock *block,
     block_duration = track->default_duration;
 
   start = block->GlobalTimecode() / 1000000; // in ms
-  end = start + block_duration;
+  end = start + block_duration / 1000000;
 
   for (i = 0; i < block->NumberFrames(); i++) {
     DataBuffer &data = block->GetBuffer(i);
