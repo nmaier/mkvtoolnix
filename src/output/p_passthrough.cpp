@@ -66,16 +66,20 @@ passthrough_packetizer_c::process(unsigned char *buf,
 
   packets_processed++;
   bytes_processed += size;
-  if (needs_negative_displacement(duration)) {
+  if ((duration > 0) && needs_negative_displacement(duration)) {
     displace(-duration);
     sync_to_keyframe = true;
     return EMOREDATA;
   }
-  while (needs_positive_displacement(duration)) {
+  if ((duration > 0) && needs_positive_displacement(duration) &&
+      sync_complete_group) {
+    // Not implemented yet.
+  }
+  while ((duration > 0) && needs_positive_displacement(duration)) {
     add_packet(buf, size,
                (int64_t)((timecode + ti->async.displacement) *
                          ti->async.linear),
-               duration, duration_mandatory, bref, fref);
+               duration, duration_mandatory, bref, fref, -1, cp_yes);
     displace(duration);
   }
 
@@ -87,10 +91,19 @@ passthrough_packetizer_c::process(unsigned char *buf,
   sync_to_keyframe = false;
   timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
   duration = (int64_t)(duration * ti->async.linear);
+  if (bref >= 0)
+    bref = (int64_t)((bref + ti->async.displacement) * ti->async.linear);
+  if (fref >= 0)
+    fref = (int64_t)((fref + ti->async.displacement) * ti->async.linear);
   add_packet(buf, size, timecode, duration, duration_mandatory, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");
   return EMOREDATA;
+}
+
+void
+passthrough_packetizer_c::always_sync_complete_group(bool sync) {
+  sync_complete_group = sync;
 }
 
 void
