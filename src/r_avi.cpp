@@ -18,6 +18,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+// {{{ includes
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -35,6 +37,10 @@ extern "C" {
 #include "p_pcm.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
+
+// }}}
+
+// {{{ FUNCTION avi_reader_c::probe_file
 
 int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char data[12];
@@ -54,6 +60,10 @@ int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
     return 0;
   return 1;
 }
+
+// }}}
+
+// {{{ C'TOR
 
 avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
@@ -149,7 +159,12 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   old_key = 0;
   old_chunk = NULL;
   video_done = 0;
+  dropped_frames = 0;
 }
+
+// }}}
+
+// {{{ D'TOR
 
 avi_reader_c::~avi_reader_c() {
   avi_demuxer_t *demuxer;
@@ -174,7 +189,14 @@ avi_reader_c::~avi_reader_c() {
     safefree(old_chunk);
 
   ti->private_data = NULL;
+
+  if (verbose > 1)
+    mxinfo("avi_reader_c: Dropped video frames: %d\n", dropped_frames);
 }
+
+// }}}
+
+// {{{ FUNCTION avi_reader_c::add_audio_demuxer
 
 void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   avi_demuxer_t *demuxer;
@@ -240,6 +262,10 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   ademuxers.push_back(demuxer);
 }
 
+// }}}
+
+// {{{ FUNCTION avi_reader_c::is_keyframe
+
 int avi_reader_c::is_keyframe(unsigned char *data, long size, int suggestion) {
   int i;
 
@@ -267,11 +293,16 @@ int avi_reader_c::is_keyframe(unsigned char *data, long size, int suggestion) {
   }
 }
 
+// }}}
+
+// {{{ FUNCTION avi_reader_c::read
+
 int avi_reader_c::read() {
   int nread, key, last_frame, i;
   avi_demuxer_t *demuxer;
   bool need_more_data, done;
   int frames_read, size;
+  int64_t duration;
 
   debug_enter("avi_reader_c::read (video)");
 
@@ -306,6 +337,8 @@ int avi_reader_c::read() {
         if (nread < 0) {
           vpacketizer->process(old_chunk, old_nread, -1, -1,
                                old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+          mxwarn("avi_reader: Reading frame number %d resulted in an error. "
+                 "Aborting this track.\n", frames);
           frames = maxframes + 1;
           break;
         }
@@ -314,14 +347,17 @@ int avi_reader_c::read() {
           last_frame = 1;
           done = true;
         }
-        if (nread == 0)
+        if (nread == 0) {
           frames_read++;
+          dropped_frames++;
+        }
         else if (nread > 0)
           done = true;
         frames++;
       }
+      duration = (int64_t)(1000.0 * frames_read / fps);
       if (nread > 0) {
-        vpacketizer->process(old_chunk, old_nread, -1, -1,
+        vpacketizer->process(old_chunk, old_nread, -1, duration,
                              old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
         if (! last_frame) {
           if (old_chunk != NULL)
@@ -329,9 +365,10 @@ int avi_reader_c::read() {
           old_chunk = (unsigned char *)safememdup(chunk, nread);
           old_key = key;
           old_nread = nread;
-        } else if (nread > 0)
-          vpacketizer->process(chunk, nread, -1, -1,
+        } else if (nread > 0) {
+          vpacketizer->process(chunk, nread, -1, duration,
                                key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+        }
       }
     }
 
@@ -379,6 +416,10 @@ int avi_reader_c::read() {
     return 0;
 }
 
+// }}}
+
+// {{{ FUNCTION avi_reader_c::get_packet
+
 packet_t *avi_reader_c::get_packet() {
   generic_packetizer_c *winner;
   avi_demuxer_t *demuxer;
@@ -406,6 +447,10 @@ packet_t *avi_reader_c::get_packet() {
     return NULL;
 }
 
+// }}}
+
+// {{{ FUNCTIONS avi_reader_c::display_priority/_progess
+
 int avi_reader_c::display_priority() {
   if (vpacketizer != NULL)
     return DISPLAYPRIORITY_HIGH;
@@ -432,6 +477,10 @@ void avi_reader_c::display_progress() {
   fflush(stdout);
 }
 
+// }}}
+
+// {{{ FUNCTION avi_reader_c::set_headers
+
 void avi_reader_c::set_headers() {
   int i;
 
@@ -441,6 +490,10 @@ void avi_reader_c::set_headers() {
   for (i = 0; i < ademuxers.size(); i++)
     ademuxers[i]->packetizer->set_headers();
 }
+
+// }}}
+
+// {{{ FUNCTION avi_reader_c::identify
 
 void avi_reader_c::identify() {
   int i;
@@ -466,3 +519,5 @@ void avi_reader_c::identify() {
     mxinfo("Track ID %d: audio (%s)\n", i + 1, type);
   }
 }
+
+// }}}

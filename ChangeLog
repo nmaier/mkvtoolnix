@@ -1,5 +1,7 @@
 2003-08-27  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: Proper support for dropped frames when reading AVI files.
+
         * mkvmerge: Fixed some missing default values in the Matroska
         reader (e.g. mono audio files). Reported by Liisachan.
 

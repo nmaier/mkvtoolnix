@@ -48,6 +48,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
     set_cue_creation(CUES_IFRAMES);
   video_track_present = true;
   codec_id = safestrdup(ncodec_id);
+  duration_shift = 0;
 
   set_track_type(track_video);
 }
@@ -89,33 +90,36 @@ void video_packetizer_c::set_headers() {
 // fref > 0: B frame with given forward reference (absolute reference,
 //           not relative!)
 int video_packetizer_c::process(unsigned char *buf, int size,
-                                int64_t old_timecode, int64_t flags,
+                                int64_t old_timecode, int64_t duration,
                                 int64_t bref, int64_t fref) {
   int64_t timecode;
 
   debug_enter("video_packetizer_c::process");
 
   if (old_timecode == -1)
-    timecode = (int64_t)(1000.0 * frames_output / fps);
+    timecode = (int64_t)(1000.0 * frames_output / fps) + duration_shift;
   else
     timecode = old_timecode;
 
+  if ((duration == -1) || (duration == (int64_t)(1000.0 / fps)))
+    duration = (int64_t)(1000.0 / fps);
+  else
+    duration_shift += duration - (int64_t)(1000.0 / fps);
+  frames_output++;
+
   if (bref == VFT_IFRAME) {
     // Add a key frame and save its timecode so that we can reference it later.
-    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps), false, -1, -1,
-               bframes ? 2 : 0);
+    add_packet(buf, size, timecode, duration, false, -1, -1, bframes ? 2 : 0);
     ref_timecode = timecode;
   } else {
     // P or B frame. Use our last timecode if the bref is -2, or the provided
     // one otherwise. The forward ref is always taken from the reader.
-    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps), false,
+    add_packet(buf, size, timecode, duration, false,
                bref == VFT_PFRAMEAUTOMATIC ? ref_timecode : bref, fref, 
                fref != VFT_NOBFRAME ? 0 : bframes ? 2 : 0);
     if (fref == VFT_NOBFRAME)
       ref_timecode = timecode;
   }
-
-  frames_output++;
 
   debug_leave("video_packetizer_c::process");
 

@@ -34,7 +34,7 @@ class video_packetizer_c: public generic_packetizer_c {
 private:
   double fps;
   int width, height, bpp, frames_output;
-  int64_t ref_timecode;
+  int64_t ref_timecode, duration_shift;
   bool avi_compat_mode, bframes, pass_through;
   char *codec_id;
 

@@ -56,7 +56,7 @@ private:
   video_packetizer_c *vpacketizer;
   vector<avi_demuxer_t *> ademuxers;
   double fps;
-  int frames, max_frame_size, act_wchar, old_key, old_nread;
+  int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
   int video_done, maxframes, is_divx, rederive_keyframes;
 
 public:
