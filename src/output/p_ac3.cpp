@@ -48,7 +48,6 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   if (use_durations)
     set_track_default_duration((int64_t)(1536000000000.0 *ti->async.linear /
                                             samples_per_sec));
-  duplicate_data_on_add(false);
 }
 
 ac3_packetizer_c::~ac3_packetizer_c() {
@@ -130,8 +129,7 @@ ac3_packetizer_c::set_headers() {
 }
 
 int
-ac3_packetizer_c::process(unsigned char *buf,
-                          int size,
+ac3_packetizer_c::process(memory_c &mem,
                           int64_t timecode,
                           int64_t,
                           int64_t,
@@ -143,7 +141,7 @@ ac3_packetizer_c::process(unsigned char *buf,
 
   debug_enter("ac3_packetizer_c::process");
 
-  add_to_buffer(buf, size);
+  add_to_buffer(mem.data, mem.size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /
@@ -151,7 +149,8 @@ ac3_packetizer_c::process(unsigned char *buf,
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
-    add_packet(packet, ac3header.bytes, my_timecode,
+    memory_c mem(packet, ac3header.bytes, true);
+    add_packet(mem, my_timecode,
                (int64_t)(1000000000.0 * 1536 * ti->async.linear /
                          samples_per_sec));
     packetno++;

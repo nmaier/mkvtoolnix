@@ -186,6 +186,8 @@ kax_reader_c::~kax_reader_c() {
     delete saved_l1;
   if (in != NULL)
     delete in;
+  if (es != NULL)
+    delete es;
   if (segment != NULL)
     delete segment;
 }
@@ -1790,9 +1792,10 @@ kax_reader_c::read(generic_packetizer_c *) {
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {
               DataBuffer &data = block->GetBuffer(i);
+              memory_c mem((unsigned char *)data.Buffer(), data.Size(),
+                           false);
               ((passthrough_packetizer_c *)block_track->packetizer)->
-                process((unsigned char *)data.Buffer(), data.Size(),
-                        last_timecode, block_duration,
+                process(mem, last_timecode, block_duration,
                         block_bref, block_fref, duration != NULL);
             }
 
@@ -1844,21 +1847,19 @@ kax_reader_c::read(generic_packetizer_c *) {
                   lines = (char *)safemalloc(re_size + 1);
                   lines[re_size] = 0;
                   memcpy(lines, re_buffer, re_size);
-                  block_track->packetizer->process((unsigned char *)lines, 0,
-                                                   (int64_t)last_timecode,
-                                                   block_duration,
-                                                   block_bref,
-                                                   block_fref);
-                  safefree(lines);
+                  memory_c mem((unsigned char *)lines, 0, true);
+                  block_track->packetizer->
+                    process(mem, (int64_t)last_timecode, block_duration,
+                            block_bref, block_fref);
+                  if (re_modified)
+                    safefree(re_buffer);
                 }
-              } else
-                block_track->packetizer->process(re_buffer, re_size,
-                                                 (int64_t)last_timecode,
-                                                 block_duration,
-                                                 block_bref,
-                                                 block_fref);
-              if (re_modified)
-                safefree(re_buffer);
+              } else {
+                memory_c mem(re_buffer, re_size, re_modified);
+                block_track->packetizer->
+                  process(mem, (int64_t)last_timecode, block_duration,
+                          block_bref, block_fref);
+              }
             }
 
             block_track->previous_timecode = (int64_t)last_timecode;

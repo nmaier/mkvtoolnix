@@ -134,7 +134,6 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
     }
     packetizer = new flac_packetizer_c(this, sample_rate, channels,
                                        bits_per_sample, buf, block_size, ti);
-    packetizer->duplicate_data_on_add(false);
     safefree(buf);
   } catch (error_c &error) {
     mxerror(FPFX "could not initialize the FLAC packetizer.\n");
@@ -253,9 +252,9 @@ flac_reader_c::read(generic_packetizer_c *) {
     packetizer->flush();
     return 0;
   }
-  packetizer->process(buf, current_block->len, samples * 1000000000 /
-                      sample_rate, current_block->samples * 1000000000 /
-                      sample_rate);
+  memory_c mem(buf, current_block->len, true);
+  packetizer->process(mem, samples * 1000000000 / sample_rate,
+                      current_block->samples * 1000000000 / sample_rate);
   samples += current_block->samples;
   current_block++;
 

@@ -47,7 +47,6 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1152000000000.0 * ti->async.linear /
                                           samples_per_sec));
-  duplicate_data_on_add(false);
 }
 
 mp3_packetizer_c::~mp3_packetizer_c() {
@@ -148,8 +147,7 @@ mp3_packetizer_c::set_headers() {
 }
 
 int
-mp3_packetizer_c::process(unsigned char *buf,
-                          int size,
+mp3_packetizer_c::process(memory_c &mem,
                           int64_t timecode,
                           int64_t,
                           int64_t,
@@ -160,7 +158,7 @@ mp3_packetizer_c::process(unsigned char *buf,
 
   debug_enter("mp3_packetizer_c::process");
 
-  byte_buffer.add(buf, size);
+  byte_buffer.add(mem.data, mem.size);
   while ((packet = get_mp3_packet(&mp3header)) != NULL) {
 #ifdef DEBUG
     dump_packet(packet, mp3header.framesize);
@@ -171,7 +169,8 @@ mp3_packetizer_c::process(unsigned char *buf,
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
-    add_packet(packet, mp3header.framesize, my_timecode,
+    memory_c mem(packet, mp3header.framesize, true);
+    add_packet(mem, my_timecode,
                (int64_t)(1000000000.0 * spf * ti->async.linear /
                          samples_per_sec));
     packetno++;

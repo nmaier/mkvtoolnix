@@ -42,7 +42,7 @@ public:
     throw (error_c);
   virtual ~textsubs_packetizer_c();
 
-  virtual int  process(unsigned char *_subs, int size, int64_t start = -1,
+  virtual int  process(memory_c &mem, int64_t start = -1,
                        int64_t length = -1, int64_t bref = -1,
                        int64_t fref = -1);
   virtual void set_headers();

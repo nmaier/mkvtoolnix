@@ -2055,8 +2055,11 @@ parse_args(int argc,
         file->ti = ti;
 
         files.push_back(file);
-      } else
+      } else {
+        delete ti;
+        safefree(file->name);
         safefree(file);
+      }
 
       ti = new track_info_c;
     }
@@ -2269,6 +2272,7 @@ cleanup() {
   while (files.size()) {
     file = files[files.size() - 1];
     delete file->ti;
+    safefree(file->name);
     safefree(file);
     files.pop_back();
   }

@@ -72,8 +72,7 @@ textsubs_packetizer_c::set_headers() {
 }
 
 int
-textsubs_packetizer_c::process(unsigned char *_subs,
-                               int,
+textsubs_packetizer_c::process(memory_c &mem,
                                int64_t start,
                                int64_t length,
                                int64_t,
@@ -101,7 +100,7 @@ textsubs_packetizer_c::process(unsigned char *_subs,
   }
 
   // Count the number of lines.
-  idx1 = (char *)_subs;
+  idx1 = (char *)mem.data;
   subs = NULL;
   num_newlines = 0;
   while (*idx1 != 0) {
@@ -109,10 +108,10 @@ textsubs_packetizer_c::process(unsigned char *_subs,
       num_newlines++;
     idx1++;
   }
-  subs = (char *)safemalloc(strlen((char *)_subs) + num_newlines * 2 + 1);
+  subs = (char *)safemalloc(strlen((char *)mem.data) + num_newlines * 2 + 1);
 
   // Unify the new lines into DOS style newlines.
-  idx1 = (char *)_subs;
+  idx1 = (char *)mem.data;
   idx2 = subs;
   while (*idx1 != 0) {
     if (*idx1 == '\n') {
@@ -136,13 +135,13 @@ textsubs_packetizer_c::process(unsigned char *_subs,
 
   if (recode) {
     utf8_subs = to_utf8(cc_utf8, subs);
-    add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, length,
-               true);
-    safefree(utf8_subs);
-  } else
-    add_packet((unsigned char *)subs, strlen(subs), start, length, true);
-
-  safefree(subs);
+    safefree(subs);
+    memory_c mem((unsigned char *)utf8_subs, strlen(utf8_subs), true);
+    add_packet(mem, start, length, true);
+  } else {
+    memory_c mem((unsigned char *)subs, strlen(subs), true);
+    add_packet(mem, start, length, true);
+  }
 
   return EMOREDATA;
 }

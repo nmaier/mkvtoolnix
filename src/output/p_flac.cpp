@@ -86,8 +86,7 @@ flac_packetizer_c::set_headers() {
 }
 
 int
-flac_packetizer_c::process(unsigned char *data,
-                           int size,
+flac_packetizer_c::process(memory_c &mem,
                            int64_t timecode,
                            int64_t,
                            int64_t,
@@ -96,7 +95,7 @@ flac_packetizer_c::process(unsigned char *data,
   if (timecode == -1)
     timecode = last_timecode;
   last_timecode = timecode;
-  add_packet(data, size, timecode, 0);
+  add_packet(mem, timecode, 0);
   debug_leave("flac_packetizer_c::process");
 
   return EMOREDATA;

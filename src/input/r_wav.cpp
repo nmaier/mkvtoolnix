@@ -184,7 +184,8 @@ wav_reader_c::read(generic_packetizer_c *) {
       return 0;
     }
 
-    pcmpacketizer->process(chunk, nread);
+    memory_c mem(chunk, nread, false);
+    pcmpacketizer->process(mem);
 
     bytes_processed += nread;
 
@@ -221,7 +222,8 @@ wav_reader_c::read(generic_packetizer_c *) {
       erlen = words * 7 * sizeof(short);
     }
 
-    dtspacketizer->process((unsigned char *) (buf[cur_buf]), erlen);
+    memory_c mem((unsigned char *)buf[cur_buf], erlen, false);
+    dtspacketizer->process(mem);
 
     bytes_processed += rlen;
 

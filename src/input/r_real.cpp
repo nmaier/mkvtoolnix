@@ -261,7 +261,6 @@ real_reader_c::create_packetizer(int64_t tid) {
   int i;
   real_demuxer_t *dmx;
   rmff_track_t *track;
-  bool duplicate_data;
 
   dmx = find_demuxer(tid);
   if (dmx == NULL)
@@ -272,7 +271,6 @@ real_reader_c::create_packetizer(int64_t tid) {
     ti->id = track->id;
     ti->private_data = dmx->private_data;
     ti->private_size = dmx->private_size;
-    duplicate_data = false;
 
     if (track->type == RMFF_TRACK_TYPE_VIDEO) {
       char buffer[20];
@@ -369,7 +367,6 @@ real_reader_c::create_packetizer(int64_t tid) {
                  "for this input file if the file actually contains SBR AAC. "
                  "The file will be muxed in the WRONG way otherwise. Also "
                  "read mkvmerge's documentation.\n", track->id);
-        duplicate_data = true;
 
       } else {
         ptzr = new passthrough_packetizer_c(this, ti);
@@ -392,8 +389,6 @@ real_reader_c::create_packetizer(int64_t tid) {
                  "%u (FourCC: %s).\n", track->id, dmx->fourcc);
       }
     }
-
-    dmx->packetizer->duplicate_data_on_add(duplicate_data);
   }
 }
 
@@ -468,12 +463,12 @@ real_reader_c::read(generic_packetizer_c *) {
   }
 
   chunk = (unsigned char *)safemalloc(size);
+  memory_c mem(chunk, size, true);
   frame = rmff_read_next_frame(file, chunk);
   if (frame == NULL) {
     if (file->num_packets_read < file->num_packets_in_chunk)
       mxwarn(PFX "%s: File contains fewer frames than expected or is "
              "corrupt after frame %u.\n", ti->fname, file->num_packets_read);
-    safefree(chunk);
     return finish();
   }
 
@@ -484,15 +479,14 @@ real_reader_c::read(generic_packetizer_c *) {
     return EMOREDATA;
   }
 
-  if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO) {
-    assemble_packet(dmx, chunk, size, timecode, (frame->flags & 2) == 2);
-    safefree(chunk);
+  if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO)
+    assemble_video_packet(dmx, mem, timecode, (frame->flags & 2) == 2);
 
-  } else if (dmx->is_aac)
-    deliver_aac_frames(dmx, chunk, size);
+  else if (dmx->is_aac)
+    deliver_aac_frames(dmx, mem);
 
   else
-    queue_audio_frames(dmx, chunk, size, timecode, frame->flags);
+    queue_audio_frames(dmx, mem, timecode, frame->flags);
 
   rmff_release_frame(frame);
 
@@ -501,32 +495,31 @@ real_reader_c::read(generic_packetizer_c *) {
 
 void
 real_reader_c::queue_one_audio_frame(real_demuxer_t *dmx,
-                                     unsigned char *chunk,
-                                     uint32_t length,
+                                     memory_c &mem,
                                      uint64_t timecode,
                                      uint32_t flags) {
   rv_segment_t segment;
 
-  segment.data = chunk;
-  segment.size = length;
+  segment.data = mem.data;
+  segment.size = mem.size;
+  mem.lock();
   segment.offset = flags;
   dmx->segments->push_back(segment);
   dmx->c_timecode = timecode;
   mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
-         "0x%08x\n", dmx->track->id, ti->fname, length, timecode, flags);
+         "0x%08x\n", dmx->track->id, ti->fname, mem.size, timecode, flags);
 }
 
 void
 real_reader_c::queue_audio_frames(real_demuxer_t *dmx,
-                                  unsigned char *chunk,
-                                  uint32_t length,
+                                  memory_c &mem,
                                   uint64_t timecode,
                                   uint32_t flags) {
   // Enqueue the packets if no packets are in the queue or if the current
   // packet's timecode is the same as the timecode of those before.
   if ((dmx->segments->size() == 0) ||
       (dmx->c_timecode == timecode)) {
-    queue_one_audio_frame(dmx, chunk, length, timecode, flags);
+    queue_one_audio_frame(dmx, mem, timecode, flags);
     return;
   }
 
@@ -534,11 +527,12 @@ real_reader_c::queue_audio_frames(real_demuxer_t *dmx,
   deliver_audio_frames(dmx, (timecode - dmx->c_timecode) /
                        dmx->segments->size());
   // Enqueue this packet.
-  queue_one_audio_frame(dmx, chunk, length, timecode, flags);
+  queue_one_audio_frame(dmx, mem, timecode, flags);
 }
 
 void
-real_reader_c::deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration) {
+real_reader_c::deliver_audio_frames(real_demuxer_t *dmx,
+                                    uint64_t duration) {
   uint32_t i;
   rv_segment_t segment;
 
@@ -550,8 +544,8 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration) {
     mxverb(2, "delivering audio for %u/'%s' length %llu timecode %llu flags "
            "0x%08x duration %llu\n", dmx->track->id, ti->fname, segment.size,
            dmx->c_timecode, (uint32_t)segment.offset, duration);
-    dmx->packetizer->process(segment.data, segment.size,
-                             dmx->c_timecode, duration,
+    memory_c mem(segment.data, segment.size, true);
+    dmx->packetizer->process(mem, dmx->c_timecode, duration,
                              (segment.offset & 2) == 2 ? -1 :
                              dmx->c_reftimecode);
     if ((segment.offset & 2) == 2)
@@ -563,14 +557,16 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration) {
 
 void
 real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
-                                  unsigned char *chunk,
-                                  uint32_t length) {
+                                  memory_c &mem) {
   uint32_t num_sub_packets, data_idx, i, sub_length, len_check;
+  uint32_t length;
+  unsigned char *chunk;
 
+  chunk = mem.data;
+  length = mem.size;
   if (length < 2) {
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
            "'%s' (length: %u < 2)\n", dmx->track->id, ti->fname, length);
-    safefree(chunk);
     return;
   }
   num_sub_packets = chunk[1] >> 4;
@@ -579,7 +575,6 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
            "'%s' (length: %u < %u)\n", dmx->track->id, ti->fname, length,
            2 + num_sub_packets * 2);
-    safefree(chunk);
     return;
   }
   len_check = 2 + num_sub_packets * 2;
@@ -592,16 +587,15 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
     mxwarn(PFX "Inconsistent AAC audio packet for track ID %u of "
            "'%s' (length: %u != len_check %u)\n", dmx->track->id, ti->fname,
            length, len_check);
-    safefree(chunk);
     return;
   }
   data_idx = 2 + num_sub_packets * 2;
   for (i = 0; i < num_sub_packets; i++) {
     sub_length = get_uint16_be(&chunk[2 + i * 2]);
-    dmx->packetizer->process(&chunk[data_idx], sub_length);
+    memory_c mem(&chunk[data_idx], sub_length, false);
+    dmx->packetizer->process(mem);
     data_idx += sub_length;
   }
-  safefree(chunk);
 }
 
 // }}}
@@ -735,7 +729,8 @@ real_reader_c::deliver_segments(real_demuxer_t *dmx,
     ptr += segment->size;
   }
 
-  dmx->packetizer->process(buffer, len, timecode, -1,
+  memory_c mem(buffer, len, true);
+  dmx->packetizer->process(mem, timecode, -1,
                            dmx->c_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
 
   for (i = 0; i < dmx->segments->size(); i++)
@@ -748,14 +743,13 @@ real_reader_c::deliver_segments(real_demuxer_t *dmx,
 // {{{ FUNCTSION real_reader_c::assemble_packet()
 
 void
-real_reader_c::assemble_packet(real_demuxer_t *dmx,
-                               unsigned char *p,
-                               int size,
-                               int64_t timecode,
-                               bool keyframe) {
+real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
+                                     memory_c &mem,
+                                     int64_t timecode,
+                                     bool keyframe) {
   uint32_t vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum;
   uint32_t len;
-  byte_cursor_c bc(p, size);
+  byte_cursor_c bc(mem.data, mem.size);
   rv_segment_t segment;
   int64_t this_timecode;
 

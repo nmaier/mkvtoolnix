@@ -345,7 +345,7 @@ ogm_reader_c::~ogm_reader_c() {
     delete dmx;
   }
   safefree(sdemuxers);
-  ti->private_data = NULL;
+  delete mm_io;
 }
 
 ogm_demuxer_t *
@@ -903,16 +903,17 @@ ogm_reader_c::process_page(ogg_page *og) {
       if (dmx->units_processed <= dmx->flac_header_packets)
         continue;
       for (i = 0; i < (int)dmx->nh_packet_data.size(); i++) {
-        dmx->packetizer->process(dmx->nh_packet_data[i],
-                                 dmx->nh_packet_sizes[i], 0);
-        safefree(dmx->nh_packet_data[i]);
+        memory_c mem(dmx->nh_packet_data[i], dmx->nh_packet_sizes[i], true);
+        dmx->packetizer->process(mem, 0);
       }
       dmx->nh_packet_data.clear();
-      if (dmx->last_granulepos == -1)
-        dmx->packetizer->process(op.packet, op.bytes, -1);
-      else {
-        dmx->packetizer->process(op.packet, op.bytes, dmx->last_granulepos *
-                                 1000000000 / dmx->vorbis_rate);
+      if (dmx->last_granulepos == -1) {
+        memory_c mem(op.packet, op.bytes, false);
+        dmx->packetizer->process(mem, -1);
+      } else {
+        memory_c mem(op.packet, op.bytes, false);
+        dmx->packetizer->process(mem, dmx->last_granulepos * 1000000000 /
+                                 dmx->vorbis_rate);
         dmx->last_granulepos = ogg_page_granulepos(og);
       }
 
@@ -938,8 +939,8 @@ ogm_reader_c::process_page(ogg_page *og) {
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
 
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
-        dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
-                                 -1, -1,
+        memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
+        dmx->packetizer->process(mem, -1, -1,
                                  (*op.packet & PACKET_IS_SYNCPOINT ?
                                   VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
         dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
@@ -948,17 +949,19 @@ ogm_reader_c::process_page(ogg_page *og) {
         dmx->units_processed++;
         if (((op.bytes - 1 - hdrlen) > 2) ||
             ((op.packet[hdrlen + 1] != ' ') &&
-             (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1])))
-          dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 -
-                                   hdrlen, ogg_page_granulepos(og) * 1000000,
+             (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1]))) {
+          memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
+          dmx->packetizer->process(mem, ogg_page_granulepos(og) * 1000000,
                                    (int64_t)lenbytes * 1000000);
+        }
 
       } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
-        dmx->packetizer->process(op.packet, op.bytes);
+        memory_c mem(op.packet, op.bytes, false);
+        dmx->packetizer->process(mem);
 
       } else {
-        dmx->packetizer->process(&op.packet[hdrlen + 1],
-                                 op.bytes - 1 - hdrlen);
+        memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
+        dmx->packetizer->process(mem);
         dmx->units_processed += op.bytes - 1;
       }
     }

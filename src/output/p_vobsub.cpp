@@ -176,17 +176,17 @@ vobsub_packetizer_c::deliver_packet(unsigned char *buf,
   }
   if (duration != -2) {
     timecode = (int64_t)((float)timecode * ti->async.linear);
-    add_packet(buf, size, timecode, duration, true);
-  }
-  safefree(buf);
+    memory_c mem(buf, size, true);
+    add_packet(mem, timecode, duration, true);
+  } else
+    safefree(buf);
 
   return -1;
 }
 
 // Adopted from mplayer's vobsub.c
 int
-vobsub_packetizer_c::process(unsigned char *srcbuf,
-                             int size,
+vobsub_packetizer_c::process(memory_c &mem,
                              int64_t timecode,
                              int64_t duration,
                              int64_t,
@@ -207,7 +207,7 @@ vobsub_packetizer_c::process(unsigned char *srcbuf,
     return EMOREDATA;
 
   if (extract_from_mpeg) {
-    mm_mem_io_c in(srcbuf, size);
+    mm_mem_io_c in(mem.data, mem.size);
 
     dst_buf = NULL;
     dst_size = 0;
@@ -337,7 +337,7 @@ vobsub_packetizer_c::process(unsigned char *srcbuf,
             }
             dst_size += packet_size;
             spu_size += packet_size;
-            overhead += size - packet_size;
+            overhead += mem.size - packet_size;
           
             idx = len;
           }
@@ -371,9 +371,9 @@ vobsub_packetizer_c::process(unsigned char *srcbuf,
     return deliver();
   }
 
-  spu_size += size;
+  spu_size += mem.size;
   timecode = (int64_t)((float)timecode * ti->async.linear);
-  add_packet(srcbuf, size, timecode, duration, true);
+  add_packet(mem, timecode, duration, true);
 
   return EMOREDATA;
 }

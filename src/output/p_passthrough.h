@@ -35,10 +35,10 @@ public:
   passthrough_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
     throw (error_c);
 
-  virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
+  virtual int process(memory_c &mem, int64_t timecode = -1,
                       int64_t duration = -1, int64_t bref = -1,
                       int64_t fref = -1);
-  virtual int process(unsigned char *buf, int size, int64_t timecode,
+  virtual int process(memory_c &mem, int64_t timecode,
                       int64_t duration, int64_t bref, int64_t fref,
                       bool duration_mandatory);
   virtual void set_headers();

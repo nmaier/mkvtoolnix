@@ -53,17 +53,52 @@ using namespace std;
 #define CUES_ALL          2
 #define CUES_SPARSE       3
 
+class memory_c {
+public:
+  unsigned char *data;
+  uint32_t size;
+  bool is_free;
+
+public:
+  memory_c(unsigned char *ndata, uint32_t nsize, bool nis_free):
+    data(ndata), size(nsize), is_free(nis_free) {
+    if (data == NULL)
+      die("memory_c::memory_c: data = %p, size = %u\n", data, size);
+  }
+  memory_c(const memory_c &src) {
+    die("memory_c::memory_c(const memory_c &) called\n");
+  }
+  ~memory_c() {
+    release();
+  }
+  int lock() {
+    is_free = false;
+    return 0;
+  }
+  memory_c *grab() {
+    if (size == 0)
+      die("memory_c::grab(): size == 0\n");
+    if (is_free) {
+      is_free = false;
+      return new memory_c(data, size, true);
+    }
+    return new memory_c((unsigned char *)safememdup(data, size), size, true);
+  }
+  int release() {
+    if (is_free) {
+      safefree(data);
+      data = NULL;
+      is_free = false;
+    }
+    return 0;
+  }
+};
+
 typedef struct {
   int64_t displacement;
   double linear;
   int64_t id;
 } audio_sync_t;
-
-enum copy_packet_mode_t {
-  cp_default,
-  cp_yes,
-  cp_no
-};
 
 #define DEFAULT_TRACK_PRIOIRTY_NONE          0
 #define DEFAULT_TRACK_PRIORITY_FROM_TYPE    10
@@ -218,7 +253,6 @@ class generic_packetizer_c {
 protected:
   deque<packet_t *> packet_queue;
   generic_reader_c *reader;
-  bool duplicate_data;
 
   track_info_c *ti;
   int64_t initial_displacement;
@@ -268,15 +302,10 @@ public:
     track_entry = NULL;
   }
 
-  virtual void duplicate_data_on_add(bool duplicate) {
-    duplicate_data = duplicate;
-  }
-  virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
+  virtual void add_packet(memory_c &mem, int64_t timecode,
                           int64_t duration, bool duration_mandatory = false,
                           int64_t bref = -1, int64_t fref = -1,
-                          int ref_priority = -1,
-                          copy_packet_mode_t copy_this = cp_default);
-  virtual void drop_packet(unsigned char *data, copy_packet_mode_t copy_this);
+                          int ref_priority = -1);
   virtual packet_t *get_packet();
   virtual int packet_available() {
     return packet_queue.size();
@@ -298,7 +327,7 @@ public:
     return free_refs;
   }
   virtual void set_headers();
-  virtual int process(unsigned char *data, int size,
+  virtual int process(memory_c &mem,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;
 

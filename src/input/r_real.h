@@ -90,8 +90,8 @@ protected:
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual real_demuxer_t *find_demuxer(int id);
-  virtual void assemble_packet(real_demuxer_t *dmx, unsigned char *p, int size,
-                               int64_t timecode, bool keyframe);
+  virtual void assemble_video_packet(real_demuxer_t *dmx, memory_c &mem,
+                                     int64_t timecode, bool keyframe);
   virtual void deliver_segments(real_demuxer_t *dmx, int64_t timecode);
   virtual int finish();
   virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width,
@@ -100,14 +100,11 @@ protected:
                               int size);
   virtual void get_information_from_data();
   virtual void flush_packetizers();
-  virtual void deliver_aac_frames(real_demuxer_t *dmx, unsigned char *chunk,
-                                  uint32_t length);
-  virtual void queue_audio_frames(real_demuxer_t *dmx, unsigned char *chunk,
-                                  uint32_t length, uint64_t timecode,
-                                  uint32_t flags);
-  virtual void queue_one_audio_frame(real_demuxer_t *dmx, unsigned char *chunk,
-                                     uint32_t length, uint64_t timecode,
-                                     uint32_t flags);
+  virtual void deliver_aac_frames(real_demuxer_t *dmx, memory_c &mem);
+  virtual void queue_audio_frames(real_demuxer_t *dmx, memory_c &mem,
+                                  uint64_t timecode, uint32_t flags);
+  virtual void queue_one_audio_frame(real_demuxer_t *dmx, memory_c &mem,
+                                     uint64_t timecode, uint32_t flags);
   virtual void deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration);
 };
 

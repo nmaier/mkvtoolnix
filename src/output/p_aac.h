@@ -52,7 +52,7 @@ public:
                    bool nheaderless = false) throw (error_c);
   virtual ~aac_packetizer_c();
 
-  virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
+  virtual int process(memory_c &mem, int64_t timecode = -1,
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();

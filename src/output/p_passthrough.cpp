@@ -37,6 +37,7 @@ passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *nreader,
   generic_packetizer_c(nreader, nti) {
   packets_processed = 0;
   bytes_processed = 0;
+  sync_to_keyframe = false;
 }
 
 void
@@ -45,18 +46,16 @@ passthrough_packetizer_c::set_headers() {
 }
 
 int
-passthrough_packetizer_c::process(unsigned char *buf,
-                                  int size,
+passthrough_packetizer_c::process(memory_c &mem,
                                   int64_t timecode,
                                   int64_t duration,
                                   int64_t bref,
                                   int64_t fref) {
-  return process(buf, size, timecode, duration, bref, fref, false);
+  return process(mem, timecode, duration, bref, fref, false);
 }
 
 int
-passthrough_packetizer_c::process(unsigned char *buf,
-                                  int size,
+passthrough_packetizer_c::process(memory_c &mem,
                                   int64_t timecode,
                                   int64_t duration,
                                   int64_t bref,
@@ -65,7 +64,7 @@ passthrough_packetizer_c::process(unsigned char *buf,
   debug_enter("passthrough_packetizer_c::process");
 
   packets_processed++;
-  bytes_processed += size;
+  bytes_processed += mem.size;
   if ((duration > 0) && needs_negative_displacement(duration)) {
     displace(-duration);
     sync_to_keyframe = true;
@@ -76,18 +75,15 @@ passthrough_packetizer_c::process(unsigned char *buf,
     // Not implemented yet.
   }
   while ((duration > 0) && needs_positive_displacement(duration)) {
-    add_packet(buf, size,
+    add_packet(mem,
                (int64_t)((timecode + ti->async.displacement) *
                          ti->async.linear),
-               duration, duration_mandatory, bref, fref, -1, cp_yes);
+               duration, duration_mandatory, bref, fref);
     displace(duration);
   }
 
-  if (sync_to_keyframe && (bref != -1)) {
-    if (!duplicate_data)
-      safefree(buf);
+  if (sync_to_keyframe && (bref != -1))
     return EMOREDATA;
-  }
   sync_to_keyframe = false;
   timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
   duration = (int64_t)(duration * ti->async.linear);
@@ -95,7 +91,7 @@ passthrough_packetizer_c::process(unsigned char *buf,
     bref = (int64_t)((bref + ti->async.displacement) * ti->async.linear);
   if (fref >= 0)
     fref = (int64_t)((fref + ti->async.displacement) * ti->async.linear);
-  add_packet(buf, size, timecode, duration, duration_mandatory, bref, fref);
+  add_packet(mem, timecode, duration, duration_mandatory, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");
   return EMOREDATA;

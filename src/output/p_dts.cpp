@@ -102,7 +102,6 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
   last_header = dtsheader;
 
   set_track_type(track_audio);
-  duplicate_data_on_add(false);
 }
 
 dts_packetizer_c::~dts_packetizer_c() {
@@ -222,8 +221,7 @@ dts_packetizer_c::set_headers() {
 }
 
 int
-dts_packetizer_c::process(unsigned char *buf,
-                          int size,
+dts_packetizer_c::process(memory_c &mem,
                           int64_t timecode,
                           int64_t,
                           int64_t,
@@ -236,7 +234,7 @@ dts_packetizer_c::process(unsigned char *buf,
   if (timecode != -1)
     my_timecode = timecode;
 
-  add_to_buffer(buf, size);
+  add_to_buffer(mem.data, mem.size);
 
   dts_header_t dtsheader;
   unsigned char *packet;
@@ -250,8 +248,9 @@ dts_packetizer_c::process(unsigned char *buf,
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
-    add_packet(packet, dtsheader.frame_byte_size, my_timecode,
-               (int64_t)(packet_len_in_ns * ti->async.linear));
+    memory_c mem(packet, dtsheader.frame_byte_size, true);
+    add_packet(mem, my_timecode, (int64_t)(packet_len_in_ns *
+                                           ti->async.linear));
 
     bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);

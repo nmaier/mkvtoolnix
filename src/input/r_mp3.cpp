@@ -126,7 +126,8 @@ mp3_reader_c::read(generic_packetizer_c *) {
     return 0;
   }
 
-  mp3packetizer->process(chunk, nread);
+  memory_c mem(chunk, nread, false);
+  mp3packetizer->process(mem);
   bytes_processed += nread;
 
   return EMOREDATA;

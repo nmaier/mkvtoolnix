@@ -381,9 +381,8 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr) {
          (uint32_t)(track->positions[i] & 0xffffffff),
          track->timecodes[i], ARG_TIMECODE_NS(track->timecodes[i]),
          track->durations[i]);
-  track->packetizer->process(data, track->sizes[i], track->timecodes[i],
-                             track->durations[i]);
-  safefree(data);
+  memory_c mem(data, track->sizes[i], true);
+  track->packetizer->process(mem, track->timecodes[i], track->durations[i]);
   track->idx++;
 
   if (track->idx >= track->sizes.size()) {

@@ -83,6 +83,8 @@ vorbis_packetizer_c::~vorbis_packetizer_c() {
   for (i = 0; i < 3; i++)
     if (headers[i].packet != NULL)
       safefree(headers[i].packet);
+  vorbis_info_clear(&vi);
+  vorbis_comment_clear(&vc);
 }
 
 void
@@ -140,8 +142,7 @@ vorbis_packetizer_c::set_headers() {
  * has to generate silence packets and put them into the Matroska file first.
  */
 int
-vorbis_packetizer_c::process(unsigned char *data,
-                             int size,
+vorbis_packetizer_c::process(memory_c &mem,
                              int64_t timecode,
                              int64_t,
                              int64_t,
@@ -170,7 +171,8 @@ vorbis_packetizer_c::process(unsigned char *data,
       samples += samples_here;
       last_bs = this_bs;
       samples_here = (this_bs + last_bs) / 4;
-      add_packet(zero, 2, samples * 1000 / vi.rate,
+      memory_c mem(zero, 2, false);
+      add_packet(mem, samples * 1000 / vi.rate,
                  samples_here * 1000000000 / vi.rate);
     }
   }
@@ -189,8 +191,8 @@ vorbis_packetizer_c::process(unsigned char *data,
 
   // Update the number of samples we have processed so that we can
   // calculate the timecode on the next call.
-  op.packet = data;
-  op.bytes = size;
+  op.packet = mem.data;
+  op.bytes = mem.size;
   this_bs = vorbis_packet_blocksize(&vi, &op);
   samples_here = (this_bs + last_bs) / 4;
   samples += samples_here;
@@ -203,7 +205,7 @@ vorbis_packetizer_c::process(unsigned char *data,
   }
 
   mxverb(2, "Vorbis: samples_here: %lld\n", samples_here);
-  add_packet(data, size, (int64_t)timecode,
+  add_packet(mem, (int64_t)timecode,
              (int64_t)(samples_here * 1000000000 * ti->async.linear /
                        vi.rate));
 

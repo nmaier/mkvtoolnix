@@ -76,6 +76,7 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
 
   is_ass = false;
   section = 0;
+  act_wchar = 0;
 
   try {
     mm_io = new mm_text_io_c(ti->fname);
@@ -153,6 +154,7 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
 ssa_reader_c::~ssa_reader_c() {
   if (textsubs_packetizer != NULL)
     delete textsubs_packetizer;
+  delete mm_io;
 }
 
 string
@@ -292,8 +294,8 @@ ssa_reader_c::read(generic_packetizer_c *) {
     // Let the packetizer handle this line.
     mxprints(buffer, "%d", clines[i].num);
     line = string(buffer) + string(clines[i].line);
-    textsubs_packetizer->process((unsigned char *)line.c_str(), 0,
-                                 clines[i].start,
+    memory_c mem((unsigned char *)line.c_str(), 0, false);
+    textsubs_packetizer->process(mem, clines[i].start,
                                  clines[i].end - clines[i].start);
     safefree(clines[i].line);
   }

@@ -80,8 +80,7 @@ pcm_packetizer_c::set_headers() {
 }
 
 int
-pcm_packetizer_c::process(unsigned char *buf,
-                          int size,
+pcm_packetizer_c::process(memory_c &mem,
                           int64_t,
                           int64_t,
                           int64_t,
@@ -107,24 +106,22 @@ pcm_packetizer_c::process(unsigned char *buf,
   }
 
   if (skip_bytes) {
-    if (skip_bytes > size) {
-      skip_bytes -= size;
+    if (skip_bytes > mem.size) {
+      skip_bytes -= mem.size;
       return EMOREDATA;
     }
-    size -= skip_bytes;
-    new_buf = &buf[skip_bytes];
+    mem.size -= skip_bytes;
+    new_buf = &mem.data[skip_bytes];
     skip_bytes = 0;
   } else
-    new_buf = buf;
+    new_buf = mem.data;
 
-  buffer.add(new_buf, size);
-  if (!duplicate_data)
-    safefree(buf);
+  buffer.add(new_buf, mem.size);
 
   while (buffer.get_size() >= packet_size) {
-    add_packet(buffer.get_buffer(), packet_size, bytes_output * 1000000000 /
-               bps, packet_size * 1000000000 / bps, false, -1, -1, -1,
-               cp_yes);
+    memory_c mem(buffer.get_buffer(), packet_size, false);
+    add_packet(mem, bytes_output * 1000000000 / bps, packet_size * 1000000000 /
+               bps);
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }
@@ -140,8 +137,9 @@ pcm_packetizer_c::flush() {
 
   size = buffer.get_size();
   if (size > 0) {
-    add_packet(buffer.get_buffer(), size, bytes_output * 1000000000 /
-               bps, size * 1000000000 / bps, false, -1, -1, -1, cp_yes);
+    memory_c mem(buffer.get_buffer(), size, false);
+    add_packet(mem, bytes_output * 1000000000 / bps,
+               size * 1000000000 / bps);
     bytes_output += size;
     buffer.remove(size);
   }

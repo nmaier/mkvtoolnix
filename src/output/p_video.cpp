@@ -126,8 +126,7 @@ video_packetizer_c::set_headers() {
 // fref > 0: B frame with given forward reference (absolute reference,
 //           not relative!)
 int
-video_packetizer_c::process(unsigned char *buf,
-                            int size,
+video_packetizer_c::process(memory_c &mem,
                             int64_t old_timecode,
                             int64_t duration,
                             int64_t bref,
@@ -139,7 +138,7 @@ video_packetizer_c::process(unsigned char *buf,
   debug_enter("video_packetizer_c::process");
 
   if (hack_engaged(ENGAGE_NATIVE_BFRAMES) && is_mpeg4 && (fps != 0.0)) {
-    find_mpeg4_frame_types(buf, size, frames);
+    find_mpeg4_frame_types(mem.data, mem.size, frames);
     for (i = 0; i < frames.size(); i++) {
       if ((frames[i].type == 'I') ||
           ((frames[i].type != 'B') && (fref_frame.type != '?')))
@@ -159,7 +158,7 @@ video_packetizer_c::process(unsigned char *buf,
       frames_output++;
       frames[i].timecode = timecode;
       frames[i].duration = duration;
-      frames[i].data = (unsigned char *)safememdup(&buf[frames[i].pos],
+      frames[i].data = (unsigned char *)safememdup(&mem.data[frames[i].pos],
                                                    frames[i].size);
 
       if (frames[i].type == 'I') {
@@ -167,8 +166,8 @@ video_packetizer_c::process(unsigned char *buf,
         frames[i].fref = -1;
         if (bref_frame.type == '?') {
           bref_frame = frames[i];
-          add_packet(frames[i].data, frames[i].size, frames[i].timecode,
-                     frames[i].duration, false, -1, -1, -1, cp_no);
+          memory_c mem(frames[i].data, frames[i].size, false);
+          add_packet(mem, frames[i].timecode, frames[i].duration);
         } else
           fref_frame = frames[i];
 
@@ -196,9 +195,6 @@ video_packetizer_c::process(unsigned char *buf,
 
     debug_leave("video_packetizer_c::process");
 
-    if (!duplicate_data)
-      safefree(buf);
-
     return EMOREDATA;
   }
 
@@ -215,12 +211,12 @@ video_packetizer_c::process(unsigned char *buf,
 
   if (bref == VFT_IFRAME) {
     // Add a key frame and save its timecode so that we can reference it later.
-    add_packet(buf, size, timecode, duration);
+    add_packet(mem, timecode, duration);
     ref_timecode = timecode;
   } else {
     // P or B frame. Use our last timecode if the bref is -2, or the provided
     // one otherwise. The forward ref is always taken from the reader.
-    add_packet(buf, size, timecode, duration, false,
+    add_packet(mem, timecode, duration, false,
                bref == VFT_PFRAMEAUTOMATIC ? ref_timecode : bref, fref);
     if (fref == VFT_NOBFRAME)
       ref_timecode = timecode;
@@ -335,8 +331,9 @@ video_packetizer_c::flush_frames(char next_frame,
       queued_frames.clear();
     }
     if (flush_all) {
-      add_packet(bref_frame.data, bref_frame.size, bref_frame.duration,
-                 false, bref_frame.bref, bref_frame.fref, -1, cp_no);
+      memory_c mem(bref_frame.data, bref_frame.size, false);
+      add_packet(mem, bref_frame.duration, false, bref_frame.bref,
+                 bref_frame.fref);
       bref_frame.type = '?';
     }
     return;
@@ -347,15 +344,15 @@ video_packetizer_c::flush_frames(char next_frame,
       frames_output++;
     fref_frame.timecode = (int64_t)(fref_frame.timecode +
                                     queued_frames.size() * 1000000000 / fps);
-    add_packet(fref_frame.data, fref_frame.size, fref_frame.timecode,
-               fref_frame.duration, false, fref_frame.bref, fref_frame.fref,
-               -1, cp_no);
+    memory_c fref_mem(fref_frame.data, fref_frame.size, false);
+    add_packet(fref_mem, fref_frame.timecode,
+               fref_frame.duration, false, fref_frame.bref, fref_frame.fref);
 
-    for (i = 0; i < queued_frames.size(); i++)
-      add_packet(queued_frames[i].data, queued_frames[i].size,
-                 queued_frames[i].timecode, queued_frames[i].duration,
-                 false, bref_frame.timecode, fref_frame.timecode, -1,
-                 cp_no);
+    for (i = 0; i < queued_frames.size(); i++) {
+      memory_c mem(queued_frames[i].data, queued_frames[i].size, false);
+      add_packet(mem, queued_frames[i].timecode, queued_frames[i].duration,
+                 false, bref_frame.timecode, fref_frame.timecode);
+    }
     queued_frames.clear();
 
     bref_frame = fref_frame;

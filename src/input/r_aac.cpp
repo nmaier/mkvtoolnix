@@ -172,7 +172,8 @@ aac_reader_c::read(generic_packetizer_c *) {
     return 0;
   }
 
-  aacpacketizer->process(chunk, nread);
+  memory_c mem(chunk, nread, false);
+  aacpacketizer->process(mem);
   bytes_processed += nread;
 
   return EMOREDATA;

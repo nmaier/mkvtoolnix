@@ -547,8 +547,10 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
         debug_leave("AVI_read_frame");
 #endif
         if (nread < 0) {
-          vpacketizer->process(old_chunk, old_nread, -1, -1,
+          memory_c mem(old_chunk, old_nread, true);
+          vpacketizer->process(mem, -1, -1,
                                old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+          old_chunk = NULL;
           mxwarn(PFX "Reading frame number %d resulted in an error. "
                  "Aborting this track.\n", frames);
           frames = maxframes + 1;
@@ -569,8 +571,10 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
       }
       duration = (int64_t)(1000000000.0 * frames_read / fps);
       if (nread > 0) {
-        vpacketizer->process(old_chunk, old_nread, -1, duration,
+        memory_c mem(old_chunk, old_nread, true);
+        vpacketizer->process(mem, -1, duration,
                              old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+        old_chunk = NULL;
         if (! last_frame) {
           if (old_chunk != NULL)
             safefree(old_chunk);
@@ -578,7 +582,8 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
           old_key = key;
           old_nread = nread;
         } else if (nread > 0) {
-          vpacketizer->process(chunk, nread, -1, duration,
+          memory_c mem(chunk, nread, false);
+          vpacketizer->process(mem, -1, duration,
                                key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
         }
       }
@@ -617,7 +622,8 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
       debug_leave("aviclasses->Read() audio");
       demuxer->frame += blread;
       if (result == S_OK) {
-        demuxer->packetizer->process(chunk, nread);
+        memory_c mem(chunk, nread, false);
+        demuxer->packetizer->process(mem);
         need_more_data = demuxer->frame < demuxer->maxframes;
       } else
         demuxer->frame = demuxer->maxframes;
@@ -639,7 +645,8 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
     if (nread > 0) {
       if (nread >= size)
         need_more_data = true;
-      demuxer->packetizer->process(chunk, nread);
+      memory_c mem(chunk, nread, false);
+      demuxer->packetizer->process(mem);
     }
 #endif
 

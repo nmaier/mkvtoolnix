@@ -92,6 +92,7 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
 srt_reader_c::~srt_reader_c() {
   if (textsubs_packetizer != NULL)
     delete textsubs_packetizer;
+  delete mm_io;
 }
 
 #define STATE_INITIAL         0

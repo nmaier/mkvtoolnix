@@ -53,7 +53,6 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1024 * 1000000000.0 * ti->async.linear /
                                        samples_per_sec));
-  duplicate_data_on_add(headerless);
 }
 
 aac_packetizer_c::~aac_packetizer_c() {
@@ -129,7 +128,8 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
   return buf;
 }
 
-void aac_packetizer_c::set_headers() {
+void
+aac_packetizer_c::set_headers() {
   if (id == AAC_ID_MPEG4) {
     if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_4MAIN);
@@ -162,8 +162,7 @@ void aac_packetizer_c::set_headers() {
 }
 
 int
-aac_packetizer_c::process(unsigned char *buf,
-                          int size,
+aac_packetizer_c::process(memory_c &mem,
                           int64_t timecode,
                           int64_t,
                           int64_t,
@@ -191,20 +190,20 @@ aac_packetizer_c::process(unsigned char *buf,
       return EMOREDATA;
     }
     while (needs_positive_displacement(duration)) {
-      add_packet(buf, size, my_timecode + ti->async.displacement, duration);
+      add_packet(mem, my_timecode + ti->async.displacement, duration);
       displace(duration);
     }
         
     my_timecode = (int64_t)((my_timecode + ti->async.displacement) *
                             ti->async.linear);
-    add_packet(buf, size, my_timecode, duration);
+    add_packet(mem, my_timecode, duration);
 
     debug_leave("aac_packetizer_c::process");
 
     return EMOREDATA;
   }
 
-  byte_buffer.add(buf, size);
+  byte_buffer.add(mem.data, mem.size);
   while ((packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1024 * 1000000000.0 * packetno /
@@ -212,7 +211,8 @@ aac_packetizer_c::process(unsigned char *buf,
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
-    add_packet(packet, aacheader.data_byte_size, my_timecode,
+    memory_c mem(packet, aacheader.data_byte_size, true);
+    add_packet(mem, my_timecode,
                (int64_t)(1024 * 1000000000.0 *
                          ti->async.linear / samples_per_sec));
     packetno++;

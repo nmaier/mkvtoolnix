@@ -133,9 +133,8 @@ void subtitles_c::process(textsubs_packetizer_c *p) {
   sub_t *current;
 
   while ((current = get_next()) != NULL) {
-    p->process((unsigned char *)current->subs, 0, current->start,
-               current->end - current->start);
-    safefree(current->subs);
+    memory_c mem((unsigned char *)current->subs, 0, true);
+    p->process(mem, current->start, current->end - current->start);
     safefree(current);
   }
 }

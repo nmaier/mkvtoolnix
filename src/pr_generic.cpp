@@ -54,7 +54,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 #endif
   reader = nreader;
   add_packetizer(this);
-  duplicate_data = true;
 
   track_entry = NULL;
   ti = new track_info_c(*nti);
@@ -659,23 +658,21 @@ void generic_packetizer_c::set_headers() {
 }
 
 void
-generic_packetizer_c::add_packet(unsigned char *data,
-                                 int length,
+generic_packetizer_c::add_packet(memory_c &mem,
                                  int64_t timecode,
                                  int64_t duration,
                                  bool duration_mandatory,
                                  int64_t bref,
                                  int64_t fref,
-                                 int ref_priority,
-                                 copy_packet_mode_t copy_this) {
+                                 int ref_priority) {
+  int length;
   packet_t *pack;
 
-  if (data == NULL)
-    return;
   if (timecode < 0) {
-    drop_packet(data, copy_this);
+    mem.release();
     return;
   }
+
   // 'timecode < safety_last_timecode' may only occur for B frames. In this
   // case we have the coding order, e.g. IPB1B2 and the timecodes
   // I: 0, P: 120, B1: 40, B2: 80.
@@ -688,16 +685,16 @@ generic_packetizer_c::add_packet(unsigned char *data,
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
 
+  length = mem.size;
   if (compressor != NULL) {
-    pack->data = compressor->compress(data, length);
-    if ((copy_this == cp_no) ||
-        ((copy_this == cp_default) && !duplicate_data))
-      safefree(data);
-  } else if ((copy_this == cp_yes) ||
-             ((copy_this == cp_default) && duplicate_data))
-    pack->data = (unsigned char *)safememdup(data, length);
-  else
-    pack->data = data;
+    pack->data = compressor->compress(mem.data, length);
+    mem.release();
+  } else if (!mem.is_free)
+    pack->data = (unsigned char *)safememdup(mem.data, mem.size);
+  else {
+    pack->data = mem.data;
+    mem.lock();
+  }
   pack->length = length;
   pack->timecode = timecode;
   pack->bref = bref;
@@ -711,13 +708,6 @@ generic_packetizer_c::add_packet(unsigned char *data,
   packet_queue.push_back(pack);
 
   enqueued_bytes += pack->length;
-}
-
-void generic_packetizer_c::drop_packet(unsigned char *data,
-                                       copy_packet_mode_t copy_this) {
-  if ((copy_this == cp_no) ||
-      ((copy_this == cp_default) && !duplicate_data))
-    safefree(data);
 }
 
 packet_t *generic_packetizer_c::get_packet() {
