@@ -1,3 +1,9 @@
+2004-01-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The VobSub handling was on occasion putting
+	SPU packets for the wrong MPEG stream into the current stream
+	resulting in that particular entity not being displayed.
+
 2004-01-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.8.1.

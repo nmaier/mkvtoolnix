@@ -350,21 +350,13 @@ wxString tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
   tstart = FindChild<KaxChapterTimeStart>(chapter);
   if (tstart != NULL) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tstart)) / 1000000;
-    s.Printf("%02d:%02d:%02d.%03d",
-             (int)(timestamp / 1000 / 60 / 60),
-             (int)((timestamp / 1000 / 60) % 60),
-             (int)((timestamp / 1000) % 60),
-             (int)(timestamp % 1000));
+    s.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
     label += s;
 
     tend = FindChild<KaxChapterTimeEnd>(chapter);
     if (tend != NULL) {
       timestamp = uint64(*static_cast<EbmlUInteger *>(tend)) / 1000000;
-      s.Printf("%02d:%02d:%02d.%03d",
-               (int)(timestamp / 1000 / 60 / 60),
-               (int)((timestamp / 1000 / 60) % 60),
-               (int)((timestamp / 1000) % 60),
-               (int)(timestamp % 1000));
+      s.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
       label += " - " + s;
     }
 
@@ -981,11 +973,7 @@ void tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   tstart = FindChild<KaxChapterTimeStart>(*t->chapter);
   if (tstart != NULL) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tstart)) / 1000000;
-    label.Printf("%02d:%02d:%02d.%03d",
-                 (int)(timestamp / 1000 / 60 / 60),
-                 (int)((timestamp / 1000 / 60) % 60),
-                 (int)((timestamp / 1000) % 60),
-                 (int)(timestamp % 1000));
+    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
     tc_start_time->SetValue(label);
   } else
     tc_start_time->SetValue("");
@@ -993,11 +981,7 @@ void tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   tend = FindChild<KaxChapterTimeEnd>(*t->chapter);
   if (tend != NULL) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tend)) / 1000000;
-    label.Printf("%02d:%02d:%02d.%03d",
-                 (int)(timestamp / 1000 / 60 / 60),
-                 (int)((timestamp / 1000 / 60) % 60),
-                 (int)((timestamp / 1000) % 60),
-                 (int)(timestamp % 1000));
+    label.Printf(FMT_TIMECODE, ARG_TIMECODE(timestamp));
     tc_end_time->SetValue(label);
   } else
     tc_end_time->SetValue("");
@@ -1282,7 +1266,7 @@ int64_t tab_chapters::parse_time(string s) {
   c = s.c_str();
 
   if (istimestamp(c)) {
-    sscanf(c, "%02d:%02d:%02d.%03d", &hour, &minutes, &seconds, &msecs);
+    sscanf(c, FMT_TIMECODE, &hour, &minutes, &seconds, &msecs);
     return ((int64_t)hour * 60 * 60 * 1000 +
             (int64_t)minutes * 60 * 1000 +
             (int64_t)seconds * 1000 + msecs) * 1000000;

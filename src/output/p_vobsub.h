@@ -30,7 +30,7 @@
 class vobsub_packetizer_c: public generic_packetizer_c {
 private:
   unsigned char *idx_data;
-  int idx_data_size;
+  int idx_data_size, aid;
   bool extract_from_mpeg, mpeg_version_warning_printed;
   int64_t packet_num, spu_size, overhead;
 

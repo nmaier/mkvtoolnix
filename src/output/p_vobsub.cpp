@@ -49,6 +49,7 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
   packet_num = 0;
   spu_size = 0;
   overhead = 0;
+  aid = -1;
   mpeg_version_warning_printed = false;
 
   set_track_type(track_subtitle);
@@ -73,12 +74,6 @@ void vobsub_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-#define TIMECODE (timecode - initial_displacement) / 60 / 60 / 1000, \
-                 ((timecode - initial_displacement) / 60 / 1000) % 60, \
-                 ((timecode - initial_displacement) / 1000) % 60, \
-                 (timecode - initial_displacement) % 1000
-#define FMT_TIMECODE "%02lld:%02lld:%02lld.%03lld"
-
 int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
                                           int64_t timecode) {
   uint32_t date, control_start, next_off, start_off, off;
@@ -98,7 +93,8 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
     if (next_off < start_off) {
       mxwarn(PFX "Encountered broken SPU packet (next_off < start_off) at "
              "timecode " FMT_TIMECODE ". This packet might be displayed "
-             "incorrectly or not at all.\n", TIMECODE);
+             "incorrectly or not at all.\n",
+             ARG_TIMECODE(timecode - initial_displacement));
       return -1;
     }
     mxverb(4, PFX "date = %u\n", date);
@@ -169,7 +165,7 @@ int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
   duration = extract_duration(buf, size, timecode);
   if (duration == -1) {
     mxverb(3, PFX "Could not extract the duration for a SPU packet (timecode: "
-           FMT_TIMECODE ").\n", TIMECODE);
+           FMT_TIMECODE ").\n", ARG_TIMECODE(timecode - initial_displacement));
     duration = default_duration;
   }
   if (duration != -2) {
@@ -187,7 +183,7 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
                                 int64_t, int64_t) {
   unsigned char *dst_buf;
   uint32_t len, idx, version, packet_size, dst_size;
-  int c, aid;
+  int c, packet_aid;
   float pts;
   /* Goto start of a packet, it starts with 0x000001?? */
   const unsigned char wanted[] = { 0, 0, 1 };
@@ -234,7 +230,8 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
               mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet %lld for "
                      "track %lld for timecode " FMT_TIMECODE ", assuming "
                      "MPEG2. No further warnings will be printed for this "
-                     "track.\n", c, packet_num, ti->id, TIMECODE);
+                     "track.\n", c, packet_num, ti->id,
+                     ARG_TIMECODE(timecode - initial_displacement));
               mpeg_version_warning_printed = true;
             }
             version = 2;
@@ -303,12 +300,23 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
               /* abort(); */
             }
             in.setFilePointer2(dataidx, seek_beginning);
-            aid = in.getch();
-            if (aid < 0) {
-              mxwarn(PFX "Bogus aid %d\n", aid);
+            packet_aid = in.getch();
+            if (packet_aid < 0) {
+              mxwarn(PFX "Bogus aid %d\n", packet_aid);
               return deliver();
             }
             packet_size = len - ((unsigned int)in.getFilePointer() - idx);
+            if (aid == -1)
+              aid = packet_aid;
+            else if (aid != packet_aid) {
+              // The packet does not belong to the current subtitle stream.
+              mxverb(3, PFX "skipping sub packet with aid %d (wanted aid: %d) "
+                     "with size %d at %lld\n", packet_aid, aid, packet_size,
+                     in.getFilePointer());
+              in.skip(packet_size);
+              idx = len;
+              break;
+            }
             dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size +
                                                    packet_size);
             mxverb(3, PFX "sub packet data: aid: %d, pts: %.3fs, packet_size: "

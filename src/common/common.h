@@ -78,6 +78,12 @@ using namespace std;
 #define MXMSG_ERROR     4
 #define MXMSG_DEBUG     8
 
+#define FMT_TIMECODE "%02d:%02d:%02d.%03d"
+#define ARG_TIMECODE(t) (int32_t)(t) / 60 / 60 / 1000, \
+                        (int32_t)((t) / 60 / 1000) % 60, \
+                        (int32_t)((t) / 1000) % 60, \
+                        (int32_t)(t) % 1000
+
 void fix_format(const char *fmt, string &new_fmt);
 #if defined(__GNUC__)
 void die(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));

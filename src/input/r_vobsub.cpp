@@ -301,9 +301,14 @@ void vobsub_reader_c::parse_headers() {
       for (i = 0; i < tracks.size(); i++) {
         mxinfo("vobsub_reader: Track number %u\n", i);
         for (k = 0; k < tracks[i]->positions.size(); k++)
-          mxinfo("vobsub_reader:  %04u position: %12lld, size: %12lld, "
-                 "timecode: " "%12lld\n", k, tracks[i]->positions[k],
-                 tracks[i]->sizes[k], tracks[i]->timecodes[k]);
+          mxinfo("vobsub_reader:  %04u position: %12lld (0x%04x%08x), "
+                 "size: %12lld (0x%06x), timecode: %12lld (" FMT_TIMECODE
+                 ")\n", k, tracks[i]->positions[k],
+                 (uint32_t)(tracks[i]->positions[k] >> 32),
+                 (uint32_t)(tracks[i]->positions[k] & 0xffffffff),
+                 tracks[i]->sizes[k], (uint32_t)tracks[i]->sizes[k],
+                 tracks[i]->timecodes[k],
+                 ARG_TIMECODE(tracks[i]->timecodes[k]));
       }
     }
   }
@@ -341,9 +346,13 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
     flush_packetizers();
     return 0;
   }
-  mxverb(2, PFX "track: %u, size: %lld, at: %lld, timecode: %lld, duration: "
-         "%lld\n", id, track->sizes[i], track->positions[i],
-         track->timecodes[i], track->durations[i]);
+  mxverb(2, PFX "track: %u, size: %lld (0x%06x), at: %lld (0x%04x%08x), "
+         "timecode: %lld (" FMT_TIMECODE "), duration: %lld\n", id,
+         track->sizes[i], (uint32_t)track->sizes[i], track->positions[i],
+         (uint32_t)(track->positions[i] >> 32),
+         (uint32_t)(track->positions[i] & 0xffffffff),
+         track->timecodes[i], ARG_TIMECODE(track->timecodes[i]),
+         track->durations[i]);
   track->packetizer->process(data, track->sizes[i], track->timecodes[i],
                              track->durations[i]);
   safefree(data);
