@@ -69,6 +69,7 @@ extern "C" {
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
+#include "chapters.h"
 #include "common.h"
 #include "matroska.h"
 #include "mm_io.h"
@@ -82,6 +83,7 @@ using namespace std;
 #define MODE_TRACKS      0
 #define MODE_TAGS        1
 #define MODE_ATTACHMENTS 2
+#define MODE_CHAPTERS    3
 
 class ssa_line_c {
 public:
@@ -155,7 +157,8 @@ void usage() {
 "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 "   or  mkvextract tags <inname> [options]\n"
 "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
-"\n   or  mkvextract <-h|-V>\n"
+"\n   or  mkvextract chapters <inname> [options]\n"
+"   or  mkvextract <-h|-V>\n"
 "\n"
 " The first word tells mkvextract what to extract. The second must be the\n"
 " source file. The only 'global' option that can be used with all modes is\n"
@@ -172,6 +175,10 @@ void usage() {
 "\n"
 " Third mode extracts attachments from inname.\n"
 "  AID:outname    Write the attachment with the ID AID to 'outname'.\n"
+"\n"
+" Second mode extracts the chapters and converts them to XML. The output is\n"
+" written to the standard output. The output can be used as a source\n"
+" for mkvmerge.\n"
 "\n"
 " These options can be used instead of the mode keyword to obtain\n"
 " further information:\n"
@@ -212,6 +219,8 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
     mode = MODE_TAGS;
   else if (!strcmp(argv[1], "attachments"))
     mode = MODE_ATTACHMENTS;
+  else if (!strcmp(argv[1], "chapters"))
+    mode = MODE_CHAPTERS;
   else {
     mxprint(stderr, "Unknown mode '%s'.\n", argv[1]);
     exit(1);
@@ -242,9 +251,9 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       conv_handle = utf8_init(argv[i + 1]);
       i++;
 
-    } else if (mode == MODE_TAGS) {
+    } else if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS)) {
       mxprint(stderr, "Error: No further options allowed when extracting "
-              "tags.\n");
+              "%s.\n", argv[1]);
       exit(1);
 
     } else {
@@ -275,7 +284,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       safefree(copy);
     }
 
-  if (mode == MODE_TAGS)
+  if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS))
     return;
 
   if (tracks.size() == 0) {
@@ -1518,7 +1527,7 @@ void extract_tags(const char *file_name) {
         tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
 
         if (!tags_extracted) {
-          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n"
+          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
                   "<Tags>\n");
           tags_extracted = true;
         }
@@ -1562,6 +1571,120 @@ void extract_tags(const char *file_name) {
 
   if (tags_extracted)
     mxprint(stdout, "</Tags>\n");
+}
+
+void extract_chapters(const char *file_name) {
+  int upper_lvl_el;
+  // Elements for different levels
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
+  EbmlStream *es;
+  mm_io_c *in;
+  bool chapters_extracted = false;
+
+  // open input file
+  try {
+    in = new mm_io_c(file_name, MODE_READ);
+  } catch (std::exception &ex) {
+    show_error("Error: Couldn't open input file %s (%s).", file_name,
+               strerror(errno));
+    return;
+  }
+
+  try {
+    es = new EbmlStream(*in);
+
+    // Find the EbmlHead element. Must be the first one.
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    if (l0 == NULL) {
+      show_error("Error: No EBML head found.");
+      delete es;
+
+      return;
+    }
+      
+    // Don't verify its data for now.
+    l0->SkipData(*es, l0->Generic().Context);
+    delete l0;
+
+    while (1) {
+      // Next element must be a segment
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+      if (l0 == NULL) {
+        show_error("No segment/level 0 element found.");
+        return;
+      }
+      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
+        show_element(l0, 0, "Segment");
+        break;
+      }
+
+      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+                   typeid(*l0).name());
+
+      l0->SkipData(*es, l0->Generic().Context);
+      delete l0;
+    }
+
+    upper_lvl_el = 0;
+    // We've got our segment, so let's find the chapters
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
+    while (l1 != NULL) {
+      if (upper_lvl_el > 0)
+        break;
+      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
+        break;
+
+      if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId) {
+        KaxChapters &chapters = *static_cast<KaxChapters *>(l1);
+        chapters.Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2,
+                      true);
+
+        if (!chapters_extracted) {
+          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+                  "<Chapters>\n");
+          chapters_extracted = true;
+        }
+
+        write_chapters_xml(&chapters, stdout);
+
+      } else
+        upper_lvl_el = 0;
+
+      if (upper_lvl_el > 0) {    // we're coming from l2
+        upper_lvl_el--;
+        delete l1;
+        l1 = l2;
+        if (upper_lvl_el > 0)
+          break;
+
+      } else if (upper_lvl_el == 0) {
+        l1->SkipData(*es, l1->Generic().Context);
+        delete l1;
+        upper_lvl_el = 0;
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
+
+      } else {
+        delete l1;
+        l1 = l2;
+      }
+
+    } // while (l1 != NULL)
+
+    delete l0;
+    delete es;
+    delete in;
+
+  } catch (exception &ex) {
+    show_error("Caught exception: %s", ex.what());
+    delete in;
+
+    return;
+  }
+
+  if (chapters_extracted)
+    mxprint(stdout, "</Chapters>\n");
 }
 
 void handle_attachments(mm_io_c *in, EbmlStream *es, EbmlElement *l0,
@@ -1836,6 +1959,9 @@ int main(int argc, char **argv) {
 
   else if (mode == MODE_ATTACHMENTS)
     extract_attachments(input_file);
+
+  else if (mode == MODE_CHAPTERS)
+    extract_chapters(input_file);
 
   else
     die("mkvextract: Unknown mode!?");
