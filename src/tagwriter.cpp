@@ -146,8 +146,22 @@ static void print_unknown(int level, EbmlElement *e) {
 
 #define pr_unk() print_unknown(level, e)
 
+static void handle_multicomments(EbmlElement *e, int level) {
+  if (is_id(KaxTagMultiCommentName))
+    pr_s("Name");
+
+  else if (is_id(KaxTagMultiCommentComments))
+    pr_us("Comments");
+
+  else if (is_id(KaxTagMultiCommentLanguage))
+    pr_s("Language");
+
+  else
+    pr_unk();
+}
+
 static void handle_level5(EbmlElement *e) {
-  int level = 5;
+  int i, level = 5;
 
   if (is_id(KaxTagMultiPriceCurrency))
     pr_s("Currency");
@@ -157,6 +171,13 @@ static void handle_level5(EbmlElement *e) {
 
   else if (is_id(KaxTagMultiPricePriceDate))
     pr_d("PriceDate");
+
+  else if (is_id(KaxTagMultiComment)) {
+    mxprint(o, "          <MultiComment>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_multicomments((*(EbmlMaster *)e)[i], 6);
+    mxprint(o, "          </MultiComment>\n");
+  }
 
   else
     pr_unk();
@@ -251,6 +272,13 @@ static void handle_level4(EbmlElement *e) {
 
   else if (is_id(KaxTagMultiTitleLanguage))
     pr_s("Language");
+
+  else if (is_id(KaxTagMultiComment)) {
+    mxprint(o, "        <MultiComment>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_multicomments((*(EbmlMaster *)e)[i], 5);
+    mxprint(o, "        </MultiComment>\n");
+  }
 
   else
     pr_unk();
@@ -409,6 +437,12 @@ static void handle_level3(EbmlElement *e) {
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Title>\n");
 
+  } else if (is_id(KaxTagMultiComment)) {
+    mxprint(o, "      <MultiComment>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_multicomments((*(EbmlMaster *)e)[i], 4);
+    mxprint(o, "      </MultiComment>\n");
+
   } else
     pr_unk();
 }
@@ -481,6 +515,12 @@ static void handle_level2(EbmlElement *e) {
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiTitle>\n");
+
+  } else if (is_id(KaxTagMultiComment)) {
+    mxprint(o, "    <MultiComment>\n");
+    for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
+      handle_multicomments((*(EbmlMaster *)e)[i], 3);
+    mxprint(o, "    </MultiComment>\n");
 
   } else
     pr_unk();
