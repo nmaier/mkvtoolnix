@@ -180,7 +180,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
   unsigned char *packet;
   unsigned long header;
   mp3_header_t mp3header;
-  int64_t my_timecode;
+  int64_t my_timecode, old_packetno;
 
   debug_enter("mp3_packetizer_c::process");
 
@@ -189,6 +189,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 
   add_to_buffer(buf, size);
   while ((packet = get_mp3_packet(&header, &mp3header)) != NULL) {
+    old_packetno = packetno;
     packetno++;
 
     if ((4 - ((header >> 17) & 3)) != 3) {
@@ -205,7 +206,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 #endif    
 
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * spf * ti->async.linear /
+      my_timecode = (int64_t)(1000.0 * old_packetno * spf * ti->async.linear /
                               samples_per_sec);
 
     add_packet(packet, mp3header.framesize + 4, my_timecode,

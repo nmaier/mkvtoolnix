@@ -1,5 +1,8 @@
 2003-08-27  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: The MP3 packetizer did not start at 0 with its
+        timecodes. It does now.
+
         * mkvmerge: Proper support for dropped frames when reading AVI files.
 
         * mkvmerge: Fixed some missing default values in the Matroska
