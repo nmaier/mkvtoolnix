@@ -1011,7 +1011,6 @@ extract_tracks(const char *file_name) {
   KaxBlock *block;
   kax_track_t *track;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
-  char kax_track_type;
   bool ms_compat, delete_element, has_reference;
   int64_t block_duration;
   mm_io_c *in;
@@ -1120,12 +1119,30 @@ extract_tracks(const char *file_name) {
         while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
+            int64_t tuid, default_duration;
+            float a_sfreq, v_fps;
+            int a_channels, a_bps, v_width, v_height;
+            char kax_track_type, *codec_id;
+            unsigned char *private_data;
+            int private_size;
+
             // We actually found a track entry :) We're happy now.
             show_element(l2, 2, _("A track"));
 
             track = NULL;
             kax_track_type = '?';
             ms_compat = false;
+            tuid = -1;
+            a_sfreq = 0.0;
+            a_channels = 0;
+            a_bps = 0;
+            v_width = 0;
+            v_height = 0;
+            v_fps = 0.0;
+            codec_id = NULL;
+            private_data = NULL;
+            private_size = 0;
+            default_duration = 0;
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -1148,10 +1165,10 @@ extract_tracks(const char *file_name) {
                              msg);
 
               } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
-                KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
-                tuid.ReadData(es->I_O());
-                track->tuid = uint64(tuid);
-                show_element(l3, 3, _("Track UID: %u"), uint64(tuid));
+                KaxTrackUID &el_tuid = *static_cast<KaxTrackUID *>(l3);
+                el_tuid.ReadData(es->I_O());
+                tuid = uint64(el_tuid);
+                show_element(l3, 3, _("Track UID: %u"), uint64(el_tuid));
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
@@ -1177,8 +1194,6 @@ extract_tracks(const char *file_name) {
                              kax_track_type == 's' ?
                              _("Track type: subtitles") :
                              _("Track type: unknown"));
-                if (track != NULL)
-                  track->track_type = kax_track_type;
 
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
                 show_element(l3, 3, _("Audio track"));
@@ -1195,8 +1210,7 @@ extract_tracks(const char *file_name) {
                     freq.ReadData(es->I_O());
                     show_element(l4, 4, _("Sampling frequency: %f"),
                                  float(freq));
-                    if (track != NULL)
-                      track->a_sfreq = float(freq);
+                    a_sfreq = float(freq);
 
                   } else if (EbmlId(*l4) ==
                              KaxAudioChannels::ClassInfos.GlobalId) {
@@ -1204,8 +1218,7 @@ extract_tracks(const char *file_name) {
                       *static_cast<KaxAudioChannels*>(l4);
                     channels.ReadData(es->I_O());
                     show_element(l4, 4, _("Channels: %u"), uint8(channels));
-                    if (track != NULL)
-                      track->a_channels = uint8(channels);
+                    a_channels = uint8(channels);
 
                   } else if (EbmlId(*l4) ==
                              KaxAudioBitDepth::ClassInfos.GlobalId) {
@@ -1213,8 +1226,8 @@ extract_tracks(const char *file_name) {
                       *static_cast<KaxAudioBitDepth*>(l4);
                     bps.ReadData(es->I_O());
                     show_element(l4, 4, _("Bit depth: %u"), uint8(bps));
-                    if (track != NULL)
-                      track->a_bps = uint8(bps);
+                    a_bps = uint8(bps);
+
                   } else
                     l4->SkipData(*es, l4->Generic().Context);
 
@@ -1250,8 +1263,7 @@ extract_tracks(const char *file_name) {
                       *static_cast<KaxVideoPixelWidth *>(l4);
                     width.ReadData(es->I_O());
                     show_element(l4, 4, _("Pixel width: %u"), uint16(width));
-                    if (track != NULL)
-                      track->v_width = uint16(width);
+                    v_width = uint16(width);
 
                   } else if (EbmlId(*l4) ==
                              KaxVideoPixelHeight::ClassInfos.GlobalId) {
@@ -1259,8 +1271,7 @@ extract_tracks(const char *file_name) {
                       *static_cast<KaxVideoPixelHeight *>(l4);
                     height.ReadData(es->I_O());
                     show_element(l4, 4, _("Pixel height: %u"), uint16(height));
-                    if (track != NULL)
-                      track->v_height = uint16(height);
+                    v_height = uint16(height);
 
                   } else if (EbmlId(*l4) ==
                              KaxVideoFrameRate::ClassInfos.GlobalId) {
@@ -1268,8 +1279,7 @@ extract_tracks(const char *file_name) {
                       *static_cast<KaxVideoFrameRate *>(l4);
                     framerate.ReadData(es->I_O());
                     show_element(l4, 4, _("Frame rate: %f"), float(framerate));
-                    if (track != NULL)
-                      track->v_fps = float(framerate);
+                    v_fps = float(framerate);
 
                   } else
                     l4->SkipData(*es, l4->Generic().Context);
@@ -1294,17 +1304,16 @@ extract_tracks(const char *file_name) {
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) == KaxCodecID::ClassInfos.GlobalId) {
-                KaxCodecID &codec_id = *static_cast<KaxCodecID*>(l3);
-                codec_id.ReadData(es->I_O());
+                KaxCodecID &el_codec_id = *static_cast<KaxCodecID*>(l3);
+                el_codec_id.ReadData(es->I_O());
                 show_element(l3, 3, _("Codec ID: %s"),
-                             string(codec_id).c_str());
-                if ((!strcmp(string(codec_id).c_str(), MKV_V_MSCOMP) &&
+                             string(el_codec_id).c_str());
+                if ((!strcmp(string(el_codec_id).c_str(), MKV_V_MSCOMP) &&
                      (kax_track_type == 'v')) ||
-                    (!strcmp(string(codec_id).c_str(), MKV_A_ACM) &&
+                    (!strcmp(string(el_codec_id).c_str(), MKV_A_ACM) &&
                      (kax_track_type == 'a')))
                   ms_compat = true;
-                if (track != NULL)
-                  track->codec_id = safestrdup(string(codec_id).c_str());
+                codec_id = safestrdup(string(el_codec_id).c_str());
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 char pbuffer[100];
@@ -1327,11 +1336,9 @@ extract_tracks(const char *file_name) {
                   pbuffer[0] = 0;
                 show_element(l3, 3, _("CodecPrivate, length %llu%s"),
                              c_priv.GetSize(), pbuffer);
-                if (track != NULL) {
-                  track->private_data = safememdup(&binary(c_priv),
-                                                   c_priv.GetSize());
-                  track->private_size = c_priv.GetSize();
-                }
+                private_data = (unsigned char *)safememdup(&binary(c_priv),
+                                                           c_priv.GetSize());
+                private_size = c_priv.GetSize();
 
               } else if (EbmlId(*l3) ==
                          KaxTrackDefaultDuration::ClassInfos.GlobalId) {
@@ -1342,10 +1349,8 @@ extract_tracks(const char *file_name) {
                                       "a video track)"),
                              (float)uint64(def_duration) / 1000000.0,
                              1000000000.0 / (float)uint64(def_duration));
-                if (track != NULL) {
-                  track->v_fps = 1000000000.0 / (float)uint64(def_duration);
-                  track->default_duration = uint64(def_duration) / 1000000;
-                }
+                v_fps = 1000000000.0 / (float)uint64(def_duration);
+                default_duration = uint64(def_duration) / 1000000;
 
               } else
                 l3->SkipData(*es, l3->Generic().Context);
@@ -1375,6 +1380,24 @@ extract_tracks(const char *file_name) {
               l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                        0xFFFFFFFFL, true);
 
+            }
+            if (track != NULL) {
+              track->tuid = tuid;
+              track->track_type = kax_track_type;
+              track->a_sfreq = a_sfreq;
+              track->a_channels = a_channels;
+              track->a_bps = a_bps;
+              track->v_width = v_width;
+              track->v_height = v_height;
+              track->v_fps = v_fps;
+              track->codec_id = codec_id;
+              track->private_data = private_data;
+              track->private_size = private_size;
+              track->default_duration = default_duration;
+
+            } else {
+              safefree(codec_id);
+              safefree(private_data);
             }
 
           } else
