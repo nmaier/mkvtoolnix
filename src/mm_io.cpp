@@ -119,12 +119,17 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   switch (mode) {
     case MODE_READ:
       access_mode = GENERIC_READ;
-      share_mode = FILE_SHARE_READ;
+      share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
       disposition = OPEN_EXISTING;
       break;
     case MODE_WRITE:
       access_mode = GENERIC_WRITE;
       share_mode = 0;
+      disposition = OPEN_ALWAYS;
+      break;
+    case MODE_SAFE:
+      access_mode = GENERIC_WRITE | GENERIC_READ;
+      share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
       disposition = OPEN_ALWAYS;
       break;
     case MODE_CREATE:
@@ -161,8 +166,10 @@ uint64 mm_io_c::getFilePointer() {
   DWORD low;
   
   low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
+  if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
+    return (uint64)-1;
 
-  return ((uint64)high) << 32 + (uint64)low;
+  return (((uint64)high) << 32) | (uint64)low;
 }
 
 void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
