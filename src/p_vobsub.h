@@ -31,16 +31,19 @@ class vobsub_packetizer_c: public generic_packetizer_c {
 private:
   unsigned char *idx_data;
   int idx_data_size;
+  bool extract_from_mpeg;
+  int64_t packet_num, spu_size, overhead;
 
 public:
   vobsub_packetizer_c(generic_reader_c *nreader,
                       const void *nidx_data, int nidx_data_size,
-                      track_info_t *nti) throw (error_c);
+                      bool nextract_from_mpeg, track_info_t *nti)
+    throw (error_c);
   virtual ~vobsub_packetizer_c();
 
-  virtual int process(unsigned char *buf, int size, int64_t old_timecode = -1,
-                      int64_t duration = -1, int64_t bref = -1,
-                      int64_t fref = -1);
+  virtual int process(unsigned char *srcbuf, int size,
+                      int64_t old_timecode = -1, int64_t duration = -1,
+                      int64_t bref = -1, int64_t fref = -1);
   virtual void set_headers();
 
   virtual void dump_debug_info();

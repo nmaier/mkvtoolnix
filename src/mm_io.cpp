@@ -265,12 +265,12 @@ bool mm_io_c::getline2(string &s) {
   return true;
 }
 
-int64_t mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
+bool mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
   try {
     setFilePointer(offset, mode);
-    return getFilePointer();
+    return true;
   } catch(...) {
-    return -1;
+    return false;
   }
 }
 
@@ -437,6 +437,15 @@ int64_t mm_io_c::get_size() {
   restore_pos();
 
   return size;
+}
+
+int mm_io_c::getch() {
+  unsigned char c;
+
+  if (read(&c, 1) != 1)
+    return -1;
+
+  return c;
 }
 
 /*

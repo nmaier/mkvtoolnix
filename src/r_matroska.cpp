@@ -1388,7 +1388,7 @@ void kax_reader_c::create_packetizers() {
           if (!strcmp(t->codec_id, MKV_S_VOBSUB)) {
             t->packetizer =
               new vobsub_packetizer_c(this, t->private_data, t->private_size,
-                                      &nti);
+                                      false, &nti);
             if (verbose)
               mxinfo("+-> Using the VobSub output module for track ID %u.\n",
                      t->tnum);

@@ -49,8 +49,7 @@ public:
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
-  virtual int64_t setFilePointer2(int64 offset,
-                                  seek_mode mode = seek_beginning);
+  virtual bool setFilePointer2(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size);
   virtual unsigned char read_uint8();
   virtual uint16_t read_uint16();
@@ -69,6 +68,7 @@ public:
   virtual bool getline2(string &s);
   virtual size_t puts_unl(const char *s);
   virtual bool write_bom(const char *charset);
+  virtual int getch();
 
   virtual void save_pos(int64_t new_pos = -1);
   virtual bool restore_pos();
