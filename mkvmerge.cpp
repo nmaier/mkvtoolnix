@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.97 2003/06/11 18:20:28 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.98 2003/06/11 18:25:24 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1619,17 +1619,6 @@ int main(int argc, char **argv) {
 
     fprintf(stdout, "\nPass 2: merging the files. This will take even longer."
             "\n\n");
-
-    for (i = 0; i < cluster_helper_c::splitpoints.size(); i++) {
-      splitpoint_t *sp = cluster_helper_c::splitpoints[i];
-      fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, pn: %lld",
-              i, sp->timecode, sp->filepos, sp->cues_size,
-              sp->filepos + sp->cues_size, sp->packet_num);
-      if (sp->last_packets != NULL)
-        for (k = 1; k < track_number; k++)
-          fprintf(stdout, " %lld", sp->last_packets[k]);
-      fprintf(stdout, "\n");
-    }
 
     delete cluster_helper;
     destroy_readers();

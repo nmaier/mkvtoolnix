@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.27 2003/06/11 17:06:48 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.28 2003/06/11 18:25:24 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -217,17 +217,6 @@ void cluster_helper_c::find_next_splitpoint() {
 
   if (i == next_splitpoint)
     i++;
-
-  if (i < splitpoints.size()) {
-    if (split_by_time)
-      now = splitpoints[i]->timecode;
-    else
-      now = splitpoints[i]->filepos + splitpoints[i]->cues_size;
-    fprintf(stdout, "Found a splitpoint: last: %d, next: %d, last_size: %lld,"
-            " size now: %lld, diff: %lld\n", next_splitpoint, i, last,
-            now, now - last);
-  } else
-    fprintf(stdout, "No more splitpoints found.\n");
 
   next_splitpoint = i;
 }
