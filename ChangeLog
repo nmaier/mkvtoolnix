@@ -1,3 +1,8 @@
+2004-08-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo, mmg: bug fix: Fixed compilation with Unicode enabled
+	versions of wxWidgets.
+
 2004-08-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Try to guess whether tags read from OGM

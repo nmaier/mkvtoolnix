@@ -36,12 +36,18 @@
 # if !defined N_
 #  define N_(s) s
 # endif
+# if !defined Y
+#  define Y(s) gettext(s)
+# endif
 #else /* HAVE_LIBINTL_H */
 # if !defined _
 #  define _(s) (s)
 # endif
 # if !defined N_
 #  define N_(s) s
+# endif
+# if !defined Y
+#  define Y(s) s
 # endif
 #endif
 
