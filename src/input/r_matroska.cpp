@@ -1777,7 +1777,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
 
           t->sub_type = 'v';
 
-        } else if (!starts_with(t->codec_id, "S_TEXT", 6) ||
+        } else if (starts_with(t->codec_id, "S_TEXT", 6) ||
                    (t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) {
           string new_codec_id;
 
