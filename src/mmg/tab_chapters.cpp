@@ -247,35 +247,42 @@ expand_subtree(wxTreeCtrl &tree,
 tab_chapters::tab_chapters(wxWindow *parent,
                            wxMenu *nm_chapters):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {
+  wxBoxSizer *siz_all, *siz_line, *siz_column;
+  wxStaticBoxSizer *siz_sb;
+  wxFlexGridSizer *siz_fg;
   uint32_t i;
 
   m_chapters = nm_chapters;
 
-  new wxStaticText(this, wxID_STATIC, wxT("Chapters:"), wxPoint(10, 5),
-                   wxDefaultSize, 0);
+  siz_all = new wxBoxSizer(wxVERTICAL);
+
+  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Chapters:")),
+               0, wxLEFT, 10);
+  siz_all->Add(0, 5, 0, 0, 0);
+
 #ifdef SYS_WINDOWS
-  tc_chapters =
-    new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxPoint(10, 24), wxSize(350, 200));
+  tc_chapters = new wxTreeCtrl(this, ID_TRC_CHAPTERS);
 #else
   tc_chapters =
-    new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxPoint(10, 24), wxSize(350, 200),
+    new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxDefaultPosition, wxDefaultSize,
                    wxSUNKEN_BORDER | wxTR_HAS_BUTTONS);
 #endif
 
   b_add_chapter =
-    new wxButton(this, ID_B_ADDCHAPTER, wxT("Add chapter"), wxPoint(370, 24),
+    new wxButton(this, ID_B_ADDCHAPTER, wxT("Add chapter"), wxDefaultPosition,
                  wxSize(120, -1));
 
   b_add_subchapter =
     new wxButton(this, ID_B_ADDSUBCHAPTER, wxT("Add subchapter"),
-                 wxPoint(370, 50), wxSize(120, -1));
+                 wxDefaultPosition, wxSize(120, -1));
 
   b_remove_chapter =
     new wxButton(this, ID_B_REMOVECHAPTER, wxT("Remove chapter"),
-                 wxPoint(370, 76), wxSize(120, -1));
+                 wxDefaultPosition, wxSize(120, -1));
 
   b_set_values =
-    new wxButton(this, ID_B_SETVALUES, wxT("Set values"), wxPoint(370, 128),
+    new wxButton(this, ID_B_SETVALUES, wxT("Set values"), wxDefaultPosition,
                  wxSize(120, -1));
   b_set_values->SetToolTip(TIP("Here you can set the values for the language "
                                "and "
@@ -285,7 +292,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   b_adjust_timecodes =
     new wxButton(this, ID_B_ADJUSTTIMECODES, wxT("Adjust timecodes"),
-                 wxPoint(370, 154), wxSize(120, -1));
+                 wxDefaultPosition, wxSize(120, -1));
   b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcdoes "
                                      "of the "
                                      "selected chapter and all its childrend "
@@ -293,53 +300,90 @@ tab_chapters::tab_chapters(wxWindow *parent,
                                      "a specific amount either increasing or "
                                      "decreasing it."));
 
-  new wxStaticText(this, wxID_STATIC, wxT("Start:"), wxPoint(10, 235));
-  tc_start_time =
-    new wxTextCtrl(this, ID_TC_CHAPTERSTART, wxT(""),
-                   wxPoint(50, 235 + YOFF), wxSize(125, -1));
+  siz_fg = new wxFlexGridSizer(2);
+  siz_fg->AddGrowableCol(0);
+  siz_fg->AddGrowableRow(0);
 
-  new wxStaticText(this, wxID_STATIC, wxT("End:"), wxPoint(190, 235));
-  tc_end_time =
-    new wxTextCtrl(this, ID_TC_CHAPTEREND, wxT(""),
-                   wxPoint(235, 235 + YOFF), wxSize(125, -1));
+  siz_fg->Add(tc_chapters, 1, wxGROW | wxRIGHT | wxBOTTOM, 5);
 
-  new wxStaticBox(this, wxID_STATIC, wxT("Chapter names and languages"),
-                  wxPoint(10, 270), wxSize(480, 180));
+  siz_column = new wxBoxSizer(wxVERTICAL);
+  siz_column->Add(b_add_chapter, 0, wxBOTTOM, 3);
+  siz_column->Add(b_add_subchapter, 0, wxBOTTOM, 3);
+  siz_column->Add(b_remove_chapter, 0, wxBOTTOM, 15);
+  siz_column->Add(b_set_values, 0, wxBOTTOM, 3);
+  siz_column->Add(b_adjust_timecodes, 0, wxBOTTOM, 3);
+  siz_fg->Add(siz_column, 0, wxLEFT | wxBOTTOM, 5);
 
-  lb_chapter_names =
-    new wxListBox(this, ID_LB_CHAPTERNAMES, wxPoint(25, 300), wxSize(335, 64),
-                  0);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("Start:")),
+                0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  tc_start_time = new wxTextCtrl(this, ID_TC_CHAPTERSTART, wxT(""));
+  siz_line->Add(tc_start_time, 1, wxGROW | wxRIGHT, 10);
+
+  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("End:")),
+                0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  tc_end_time = new wxTextCtrl(this, ID_TC_CHAPTEREND, wxT(""));
+  siz_line->Add(tc_end_time, 1, wxGROW, 0);
+
+  siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
+
+  siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+
+
+
+  siz_sb =
+    new wxStaticBoxSizer(new wxStaticBox(this, wxID_STATIC,
+                                         wxT("Chapter names and languages")),
+                         wxVERTICAL);
+
+  lb_chapter_names = new wxListBox(this, ID_LB_CHAPTERNAMES);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(lb_chapter_names, 1, wxGROW | wxRIGHT, 10);
+
   b_add_chapter_name =
     new wxButton(this, ID_B_ADD_CHAPTERNAME, wxT("Add name"),
-                 wxPoint(370, 300), wxSize(100, -1));
+                 wxDefaultPosition, wxSize(100, -1));
   b_remove_chapter_name =
     new wxButton(this, ID_B_REMOVE_CHAPTERNAME, wxT("Remove name"),
-                 wxPoint(370, 326), wxSize(100, -1));
+                 wxDefaultPosition, wxSize(100, -1));
+  siz_column = new wxBoxSizer(wxVERTICAL);
+  siz_column->Add(b_add_chapter_name, 0, wxBOTTOM, 3);
+  siz_column->Add(b_remove_chapter_name, 0, 0, 0);
+  siz_line->Add(siz_column, 0, 0, 0);
+  siz_sb->Add(siz_line, 1, wxGROW | wxALL, 10);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Name:"), wxPoint(25, 375));
-  tc_chapter_name =
-    new wxTextCtrl(this, ID_TC_CHAPTERNAME, wxT(""), wxPoint(X1, 375 + YOFF),
-                   wxSize(470 - X1, -1));
+  siz_fg = new wxFlexGridSizer(2);
+  siz_fg->AddGrowableCol(1);
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Name:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 10);
+  tc_chapter_name = new wxTextCtrl(this, ID_TC_CHAPTERNAME, wxT(""));
+  siz_fg->Add(tc_chapter_name, 1, wxGROW | wxBOTTOM, 10);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Language:"),
-                   wxPoint(25, 380 + Y1));
+  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
+              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+
   cob_language_code =
-    new wxComboBox(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxT(""),
-                   wxPoint(X1, 380 + Y1 + YOFF), wxSize(120, -1), 0, NULL);
+    new wxComboBox(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxT(""));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language_code->Append(sorted_iso_codes[i]);
   cob_language_code->SetValue(wxT(""));
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(cob_language_code, 1, wxGROW, 0);
+  siz_line->Add(10, 0, 0, 0, 0);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Country:"),
-                   wxPoint(470 - 120 - (X1 -25), 380  + Y1));
+  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("Country:")),
+                0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_country_code =
-    new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxT(""),
-                   wxPoint(470 - 120, 380 + Y1 + YOFF),
-                   wxSize(120, -1), 0, NULL);
+    new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxT(""));
   cob_country_code->Append(wxT(""));
   for (i = 0; cctlds[i] != NULL; i++)
     cob_country_code->Append(wxU(cctlds[i]));
   cob_country_code->SetValue(wxT(""));
+  siz_line->Add(cob_country_code, 1, wxGROW, 0);
+  siz_fg->Add(siz_line, 0, wxGROW, 0);
+
+  siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_all->Add(siz_sb, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
   enable_inputs(false);
 
@@ -358,6 +402,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
   no_update = false;
 
   SetDropTarget(new chapters_drop_target_c(this));
+  SetSizer(siz_all);
 }
 
 tab_chapters::~tab_chapters() {
