@@ -1310,6 +1310,13 @@ void engage_hacks(const char *hacks) {
   bool valid_hack;
 
   engage_args = split(hacks, ",");
+  for (aidx = 0; aidx < engage_args.size(); aidx++)
+    if (engage_args[aidx] == "list") {
+      mxinfo("Valid hacks are:\n");
+      for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
+        mxinfo("%s\n", mosu_hacks[hidx]);
+      mxexit(0);
+    }
   for (aidx = 0; aidx < engage_args.size(); aidx++) {
     valid_hack = false;
     for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
