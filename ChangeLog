@@ -1,5 +1,8 @@
 2003-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: Set the thread priority to BELOW_NORMAL on Windows
+	(mkvmerge was already nice(2)'d on Unix systems).
+
 	* mmg: bug fix: Removed the Ctrl-v and Ctrl-c accelerators that I
 	used for mmg functions which overrode the usual 'paste' and 'copy'
 	functionality.

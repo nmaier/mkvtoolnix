@@ -32,6 +32,11 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#if defined(SYS_WINDOWS)
+#include <stdarg.h>
+#include <windef.h>
+#include <winbase.h>
+#endif
 
 #include <iostream>
 #include <string>
@@ -1903,6 +1908,11 @@ static void setup() {
   signal(SIGINT, sighandler);
 
   nice(2);
+#endif
+#if defined(SYS_WINDOWS)
+  SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
+  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
+  printf("jo!\n");
 #endif
 
   srand(time(NULL));
