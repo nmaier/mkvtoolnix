@@ -272,6 +272,18 @@ string mm_io_c::getline() {
 
 #endif
 
+size_t mm_io_c::writeline_unix_newlines(const char *s) {
+  int i;
+  size_t bytes_written;
+
+  bytes_written = 0;
+  for (i = 0; i < strlen(s); i++)
+    if (s[i] != '\r')
+      bytes_written += write(&s[i], 1);
+
+  return bytes_written;
+}
+
 /*
  * Dummy class for output to /dev/null. Needed for two pass stuff.
  */

@@ -48,6 +48,7 @@ public:
   virtual bool eof();
   virtual char *gets(char *buffer, size_t max_size);
   virtual string getline();
+  virtual size_t writeline_unix_newlines(const char *s);
 };
 
 class mm_null_io_c: public mm_io_c {
