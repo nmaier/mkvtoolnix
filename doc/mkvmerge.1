@@ -620,9 +620,20 @@ VALUES\fR.
 .SH TRACK IDS
 .LP
 Some of the options for \fBmkvmerge\fR need a track ID to specify which track
-they should be applied to. Those track IDs are printed by the readers when
-demuxing the current input file, or if \fBmkvmerge\fR is called with the
-\fB\-\-identify\fR option. Track IDs are assigned like this:
+they should be applied to.
+Those track IDs are printed by the readers when demuxing the current input
+file, or if \fBmkvmerge\fR is called with the \fB\-\-identify\fR option.
+An example for such output:
+.LP
+$ \fBmkvmerge -i v.mkv\fR
+.br
+File 'v.mkv': container: Matroska
+.br
+Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
+.br
+Track ID 2: audio (A_MPEG/L3)
+.LP
+Track IDs are assigned like this:
 .TP
 *
 AVI files: The video track has the ID 0. All audio tracks get the ID 1, 2...
@@ -631,8 +642,8 @@ AVI files: The video track has the ID 0. All audio tracks get the ID 1, 2...
 AAC, AC3, MP3, SRT and WAV files: The one 'track' in that file gets the ID 0.
 .TP
 *
-Ogg/OGM files: The track's ID is its serial number as given in the Ogg stream
-header page.
+Ogg/OGM files: The track's ID is its position in the Ogg stream.
+The first stream encountered has the ID 0, the second one the ID 1 etc.
 .TP
 *
 Matroska files: The track's ID is the track number as reported by \fBmkvinfo\fR
@@ -642,9 +653,10 @@ The special track ID '-1' is a wild card and applies the given switch to all
 tracks that are read from an input file. This was the behavior of these
 switches prior to version 0.4.4.
 .LP
-The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
-\fB\-\-stracks\fR, \fB\-\-btracks\fR, \fB\-\-sync\fR, \fB\-\-default-track\fR,
-\fB\-\-cues\fR and \fB\-\-language\fR.
+The options that use the track IDs are the ones whose description contains
+\'TID\'.
+The following options use track IDs as well: \fB\-\-atracks\fR,
+\fB\-\-vtracks\fR, \fB\-\-stracks\fR and \fB\-\-btracks\fR.
 
 
 .SH SUBTITLES
@@ -1091,9 +1103,30 @@ Example for an audio file:
 etc.
 
 
+.SH EXIT CODES
+.LP
+\fBmkvmerge\fR exits with one of three exit codes:
+.TP
+0
+This exit codes means that muxing has completed successfully.
+.TP
+1
+In this case \fBmkvmerge\fR has output at least one warning, but muxing did
+continue.
+A warning is prefixed with the text \'Warning:\'.
+Depending on the issues involved the resulting file might be ok or not.
+The user is urged to check both the warning and the resulting file.
+.TP
+2
+This exit code is used after an error occured.
+\fBmkvmerge\fR aborts right after outputting the error message.
+Error messages range from wrong command line arguments over read/write errors
+to broken files.
+
+
 .SH NOTES
 .LP
-What works:
+What works (this list is probably outdated):
 .TP
 *
 AVI as the video and audio source (only raw PCM, MP3 and AC3 audio tracks at
