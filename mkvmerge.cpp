@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief MP4 identification class
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief helper function for DTS data
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>

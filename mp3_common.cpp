@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief helper functions for MP3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

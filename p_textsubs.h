@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definition for the simple text subtitle packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */

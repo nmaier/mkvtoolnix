@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */

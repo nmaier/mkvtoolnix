@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definition for the subtitle helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */

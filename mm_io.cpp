@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief IO callback class implementation
     \author Moritz Bunkus <moritz@bunkus.org>
 */

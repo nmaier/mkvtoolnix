@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus <moritz@bunkus.org>
 */

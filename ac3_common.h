@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief definitions and helper functions for AC3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

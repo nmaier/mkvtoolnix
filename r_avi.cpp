@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

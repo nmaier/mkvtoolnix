@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definition for the PCM output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

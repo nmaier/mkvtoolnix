@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definition for the MP3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

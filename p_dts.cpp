@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */

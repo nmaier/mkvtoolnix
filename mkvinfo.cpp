@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */

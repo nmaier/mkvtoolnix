@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

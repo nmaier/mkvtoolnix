@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

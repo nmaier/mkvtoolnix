@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief AC3 demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

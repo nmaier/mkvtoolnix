@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief PCM output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief helper function for AAC data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

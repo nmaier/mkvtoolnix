@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief Definitions for the various Codec IDs
     \author Moritz Bunkus <moritz@bunkus.org>
 */

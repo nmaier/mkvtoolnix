@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief Vorbis packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */

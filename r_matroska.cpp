@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

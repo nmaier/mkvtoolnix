@@ -14,7 +14,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the WAV reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

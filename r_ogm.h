@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

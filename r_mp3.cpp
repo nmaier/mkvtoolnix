@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

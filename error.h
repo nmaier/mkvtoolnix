@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the error exception class
     \author Moritz Bunkus <moritz@bunkus.org>
 */

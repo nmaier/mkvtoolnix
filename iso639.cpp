@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief ISO639 language definitions, lookup functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */

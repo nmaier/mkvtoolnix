@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief DTS demultiplexer module
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>

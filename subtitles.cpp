@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief subtitle helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */

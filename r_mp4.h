@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definitions for the dummy MP4 reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief class definition for the Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id$
+    \version $Id$
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
