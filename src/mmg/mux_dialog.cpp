@@ -115,6 +115,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   SetSizer(siz_all);
 
   update_window(wxT("Muxing in progress."));
+  MakeModal(true);
   Show(true);
 
   process = new mux_process(this);
@@ -187,9 +188,12 @@ mux_dialog::mux_dialog(wxWindow *parent):
     if (out->Eof())
       break;
   }
+
   b_ok->Enable(true);
   b_abort->Enable(false);
   b_ok->SetFocus();
+
+  MakeModal(false);
   ShowModal();
 }
 
