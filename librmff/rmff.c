@@ -1,22 +1,24 @@
 /*
- *  rmff.c
- *
- *  Copyright (C) Moritz Bunkus - March 2004
- *      
- *  librmff is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1, or (at your option)
- *  any later version.
- *   
- *  librmff is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *   
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this library; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. 
- *
+  rmff.c
+
+  Copyright (C) Moritz Bunkus - March 2004
+
+  librmff is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation; either version 2.1, or (at your option)
+  any later version.
+
+  librmff is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library; see the file COPYING.  If not, write to
+  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. 
+
+  $Id$
+ 
  */
 
 #include <errno.h>
@@ -35,7 +37,10 @@ typedef struct rmff_file_internal_t {
   uint32_t highest_timecode;
   uint32_t num_packets;
   uint32_t data_offset;
+  uint32_t next_data_offset;
+  uint32_t data_contents_size;
   uint32_t index_offset;
+  int num_index_chunks;
 } rmff_file_internal_t;
 
 typedef struct rmff_track_internal_t {
@@ -45,6 +50,7 @@ typedef struct rmff_track_internal_t {
   uint32_t avg_packet_size;
   uint32_t highest_timecode;
   uint32_t num_packets;
+  int index_this;
 } rmff_track_internal_t;
 
 int rmff_last_error = RMFF_ERR_OK;
@@ -79,6 +85,8 @@ set_error(int error_number,
 
   return return_value;
 }
+
+#define clear_error() set_error(RMFF_ERR_OK, NULL, RMFF_ERR_OK)
 
 uint16_t
 rmff_get_uint16_be(const void *buf) {
@@ -322,6 +330,7 @@ open_file_for_reading(const char *path,
   file->open_mode = RMFF_OPEN_MODE_READING;
   file->internal = safecalloc(sizeof(rmff_file_internal_t));
 
+  clear_error();
   return file;
 }
 
@@ -349,6 +358,7 @@ open_file_for_writing(const char *path,
   file->open_mode = RMFF_OPEN_MODE_WRITING;
   file->internal = safecalloc(sizeof(rmff_file_internal_t));
 
+  clear_error();
   return file;
 }
 
@@ -406,6 +416,70 @@ rmff_close_file(rmff_file_t *file) {
 #define skip(num) { if (io->seek(fh, num, SEEK_CUR) != 0) \
                       return set_error(RMFF_ERR_IO, NULL, -1); }
 
+static void
+add_to_index(rmff_track_t *track,
+             int64_t pos,
+             uint32_t timecode,
+             uint32_t packet_number) {
+  if ((track->index != NULL) &&
+      (track->index[track->num_index_entries - 1].timecode == timecode))
+    return;
+  track->index = (rmff_index_entry_t *)
+    saferealloc(track->index, (track->num_index_entries + 1) *
+                sizeof(rmff_index_entry_t));
+  track->index[track->num_index_entries].pos = pos;
+  track->index[track->num_index_entries].timecode = timecode;
+  track->index[track->num_index_entries].packet_number = packet_number;
+  track->num_index_entries++;
+}
+
+static void
+read_index(rmff_file_t *file,
+           int64_t pos) {
+  void *fh;
+  mb_file_io_t *io;
+  rmff_track_t *track;
+  uint32_t object_id, object_size, object_version, num_entries;
+  uint32_t next_header_offset, i, timecode, offset, packet_number;
+  uint16_t id;
+
+  fh = file->handle;
+  io = file->io;
+
+  rmff_last_error = RMFF_ERR_OK;
+  io->seek(fh, pos, SEEK_SET);
+  object_id = read_uint32_be();
+  object_size = read_uint32_be();
+  object_version = read_uint16_be();
+  if (rmff_last_error != RMFF_ERR_OK)
+    return;
+
+  if (object_id != rmffFOURCC('I', 'N', 'D', 'X'))
+    return;
+
+  num_entries = read_uint32_be();
+  id = read_uint16_be();
+  track = rmff_find_track_with_id(file, id);
+  if (track == NULL)
+    return;
+  next_header_offset = read_uint32_be();
+  track->num_index_entries = 0;
+  safefree(track->index);
+  track->index = NULL;
+
+  for (i = 0; i < num_entries; i++) {
+    if (read_uint16_be() != 0)  /* version */
+      return;
+    timecode = read_uint32_be();
+    offset = read_uint32_be();
+    packet_number = read_uint32_be();
+    add_to_index(track, timecode, offset, packet_number);
+  }
+
+  if (next_header_offset > 0)
+    read_index(file, next_header_offset);
+}
+
 int
 rmff_read_headers(rmff_file_t *file) {
   mb_file_io_t *io;
@@ -418,7 +492,9 @@ rmff_read_headers(rmff_file_t *file) {
   rmff_track_t track;
   real_video_props_t *rvp;
   real_audio_v4_props_t *ra4p;
+  rmff_file_internal_t *fint;
   int prop_header_found;
+  int64_t old_pos;
 
   if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
     return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
@@ -427,6 +503,7 @@ rmff_read_headers(rmff_file_t *file) {
 
   io = file->io;
   fh = file->handle;
+  fint = (rmff_file_internal_t *)file->internal;
   if (io->seek(fh, 4, SEEK_SET))
     return set_error(RMFF_ERR_IO, NULL, -1);
 
@@ -544,9 +621,9 @@ rmff_read_headers(rmff_file_t *file) {
       file->num_tracks++;
 
     } else if (object_id == rmffFOURCC('D', 'A', 'T', 'A')) {
+      fint->data_offset = io->tell(fh) - (4 + 4 + 2);
       file->num_packets_in_chunk = read_uint32_be();
-      file->next_data_header_offset = read_uint32_be();
-      file->first_data_header_offset = io->tell(fh) - (4 + 4 + 2);
+      fint->next_data_offset = read_uint32_be();
       break;
 
     } else {
@@ -555,7 +632,12 @@ rmff_read_headers(rmff_file_t *file) {
     }
   }
 
-  if (prop_header_found && (file->first_data_header_offset > 0)) {
+  if (prop_header_found && (fint->data_offset > 0)) {
+    if (rmff_get_uint32_be(&file->prop_header.index_offset) > 0) {
+      old_pos = io->tell(fh);
+      read_index(file, rmff_get_uint32_be(&file->prop_header.index_offset));
+      io->seek(fh, old_pos, SEEK_SET);
+    }
     file->headers_read = 1;
     return 0;
   }
@@ -599,6 +681,7 @@ rmff_frame_t *
 rmff_read_next_frame(rmff_file_t *file,
                      void *buffer) {
   rmff_frame_t *frame;
+  rmff_file_internal_t *fint;
   uint16_t object_version, length;
   uint32_t object_id;
   mb_file_io_t *io;
@@ -609,6 +692,7 @@ rmff_read_next_frame(rmff_file_t *file,
     return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
   io = file->io;
   fh = file->handle;
+  fint = (rmff_file_internal_t *)file->internal;
   if ((file->size - io->tell(fh)) < 12)
     return (rmff_frame_t *)set_error(RMFF_ERR_EOF, NULL, 0);
 
@@ -617,7 +701,7 @@ rmff_read_next_frame(rmff_file_t *file,
   object_id = ((uint32_t)object_version) << 16 | length;
   if (object_id == rmffFOURCC('D', 'A', 'T', 'A')) {
     file->num_packets_in_chunk = read_uint32_be();
-    file->next_data_header_offset = read_uint32_be();
+    fint->next_data_offset = read_uint32_be();
     file->num_packets_read = 0;
     return rmff_read_next_frame(file, buffer);
   }
@@ -722,8 +806,10 @@ rmff_set_track_specific_data(rmff_track_t *track,
 }
 
 rmff_track_t *
-rmff_add_track(rmff_file_t *file) {
+rmff_add_track(rmff_file_t *file,
+               int create_index) {
   rmff_track_t track;
+  rmff_track_internal_t *tint;
   int i, id, found;
 
   if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
@@ -743,6 +829,9 @@ rmff_add_track(rmff_file_t *file) {
   memset(&track, 0, sizeof(rmff_track_t));
   track.id = id;
   track.file = file;
+  tint = (rmff_track_internal_t *)safecalloc(sizeof(rmff_track_internal_t));
+  tint->index_this = create_index;
+  track.internal = tint;
 
   file->tracks =
     (rmff_track_t *)saferealloc(file->tracks, (file->num_tracks + 1) *
@@ -896,14 +985,37 @@ write_mdpr_header(rmff_track_t *track) {
   if (wanted_len != bw)
     return set_error(RMFF_ERR_IO, "Could not write the MDPR header",
                      RMFF_ERR_IO);
-  return RMFF_ERR_OK;
+  return clear_error();
+}
+
+static int
+write_data_header(rmff_file_t *file) {
+  void *fh;
+  mb_file_io_t *io;
+  rmff_file_internal_t *fint;
+  int bw;
+
+  io = file->io;
+  fh = file->handle;
+  fint = (rmff_file_internal_t *)file->internal;
+
+  bw = write_uint32_be(rmffFOURCC('D', 'A', 'T', 'A'));
+  bw += write_uint32_be(fint->data_contents_size + 4 + 4 + 2 + 4 + 4 + 4);
+  bw += write_uint16_be(0);     /* object_version */
+  bw += write_uint32_be(fint->num_packets); /* num_packets_in_chunk */
+  bw += write_uint32_be(0);     /* next_data_header_offset */
+
+  if (bw != 18)
+    return set_error(RMFF_ERR_IO, "Could not write the DATA header",
+                     RMFF_ERR_IO);
+  return clear_error();
 }
 
 int
 rmff_write_headers(rmff_file_t *file) {
   void *fh;
   mb_file_io_t *io;
-  int i, bw;
+  int i, bw, num_headers;
   rmff_file_internal_t *fint;
   const char *signature = ".RMF";
 
@@ -913,19 +1025,26 @@ rmff_write_headers(rmff_file_t *file) {
   io = file->io;
   fh = file->handle;
   io->seek(fh, 0, SEEK_SET);
+  fint = (rmff_file_internal_t *)file->internal;
+
+  num_headers = 1 +             /* PROP */
+    1 +                         /* DATA */
+    file->num_tracks +          /* MDPR */
+    fint->num_index_chunks;     /* INDX */
+  if (file->cont_header_present)
+    num_headers++;
 
   /* Write the file header. */
   bw = io->write(fh, signature, 4);
   bw += write_uint32_be(0x12);  /* header_size */
   bw += write_uint16_be(1);     /* object_version */
   bw += write_uint32_be(0);     /* file_version */
-  bw += write_uint32_be(0);     /* temporary: num_headers */
+  bw += write_uint32_be(num_headers);
 
   if (bw != 18)
     return set_error(RMFF_ERR_IO, "Could not write the file header",
                      RMFF_ERR_IO);
 
-  rmff_put_uint16_be(&file->prop_header.num_streams, file->num_tracks);
   bw = write_prop_header(file);
   if (bw != 0x32)
     return set_error(RMFF_ERR_IO, "Could not write the PROP header",
@@ -943,15 +1062,54 @@ rmff_write_headers(rmff_file_t *file) {
       return bw;
   }
 
-  fint = (rmff_file_internal_t *)file->internal;
   fint->data_offset = io->tell(fh);
 
-  return RMFF_ERR_OK;
+  bw = write_data_header(file);
+  if (bw < RMFF_ERR_OK)
+    return bw;
+
+  return clear_error();
 }
 
 int
 rmff_fix_headers(rmff_file_t *file) {
-  return -1;
+  rmff_prop_t *prop;
+  rmff_mdpr_t *mdpr;
+  rmff_track_t *track;
+  rmff_file_internal_t *fint;
+  rmff_track_internal_t *tint;
+  int i;
+
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
+    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+
+  fint = (rmff_file_internal_t *)file->internal;
+
+  prop = &file->prop_header;
+  rmff_put_uint32_be(&prop->max_bit_rate, fint->max_bit_rate);
+  rmff_put_uint32_be(&prop->avg_bit_rate, fint->avg_bit_rate);
+  rmff_put_uint32_be(&prop->max_packet_size, fint->max_packet_size);
+  rmff_put_uint32_be(&prop->avg_packet_size, fint->avg_packet_size);
+  rmff_put_uint32_be(&prop->num_packets, fint->num_packets);
+  rmff_put_uint32_be(&prop->duration, fint->highest_timecode);
+  rmff_put_uint32_be(&prop->index_offset, fint->index_offset);
+  rmff_put_uint32_be(&prop->data_offset, fint->data_offset);
+  rmff_put_uint16_be(&prop->num_streams, file->num_tracks);
+
+  for (i = 0; i < file->num_tracks; i++) {
+    track = &file->tracks[i];
+    mdpr = &track->mdpr_header;
+    tint = (rmff_track_internal_t *)track->internal;
+
+    rmff_put_uint16_be(&mdpr->id, track->id);
+    rmff_put_uint32_be(&mdpr->max_bit_rate, tint->max_bit_rate);
+    rmff_put_uint32_be(&mdpr->avg_bit_rate, tint->avg_bit_rate);
+    rmff_put_uint32_be(&mdpr->max_packet_size, tint->max_packet_size);
+    rmff_put_uint32_be(&mdpr->avg_packet_size, tint->avg_packet_size);
+    rmff_put_uint32_be(&mdpr->duration, tint->highest_timecode);
+  }
+
+  return rmff_write_headers(file);
 }
 
 void
@@ -960,14 +1118,151 @@ rmff_copy_track_headers(rmff_track_t *dst,
   if ((dst == NULL) || (src == NULL))
     return;
 
-  rmff_free_track_data(dst);
+  safefree(dst->mdpr_header.name);
+  safefree(dst->mdpr_header.mime_type);
+  safefree(dst->mdpr_header.type_specific_data);
   memcpy(&dst->mdpr_header, &src->mdpr_header, sizeof(rmff_mdpr_t));
   dst->mdpr_header.name = safestrdup(src->mdpr_header.name);
   dst->mdpr_header.mime_type = safestrdup(src->mdpr_header.mime_type);
   dst->mdpr_header.type_specific_data = (unsigned char *)
     safememdup(src->mdpr_header.type_specific_data,
                rmff_get_uint32_be(&src->mdpr_header.type_specific_size));
-  dst->internal = (unsigned char *)safememdup(src->internal,
-                                              sizeof(rmff_track_internal_t));
   dst->type = src->type;
+}
+
+int
+rmff_write_frame(rmff_track_t *track,
+                 rmff_frame_t *frame) {
+  void *fh;
+  mb_file_io_t *io;
+  rmff_file_internal_t *fint;
+  rmff_track_internal_t *tint;
+  int bw, wanted_len;
+  int64_t pos;
+
+  if ((track == NULL) || (frame == NULL) || (frame->data == NULL) ||
+      (track->file->open_mode != RMFF_OPEN_MODE_WRITING))
+    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+
+  io = track->file->io;
+  fh = track->file->handle;
+  fint = (rmff_file_internal_t *)track->file->internal;
+  tint = (rmff_track_internal_t *)track->internal;
+
+  pos = io->tell(fh);
+  if (tint->index_this && ((frame->flags & 2) == 2))
+    add_to_index(track, pos, frame->timecode, fint->num_packets);
+  wanted_len = 2 + 2 + 2 + 4 + 1 + 1 + frame->size;
+
+  bw = write_uint16_be(0);      /* object_version */
+  bw += write_uint16_be(wanted_len);
+  bw += write_uint16_be(track->id);
+  bw += write_uint32_be(frame->timecode);
+  bw += write_uint8(0);         /* reserved */
+  bw += write_uint8(frame->flags);
+  bw += io->write(fh, frame->data, frame->size);
+
+  if (bw != wanted_len)
+    return set_error(RMFF_ERR_IO, "Could not write the frame", RMFF_ERR_IO);
+
+  /* TODO: Update the max_bit_rate and avg_bit_rate. */
+  if (wanted_len > fint->max_packet_size)
+    fint->max_packet_size = wanted_len;
+  fint->avg_packet_size = (fint->avg_packet_size * fint->num_packets +
+                           wanted_len) / (fint->num_packets + 1);
+  fint->num_packets++;
+  if (frame->timecode > fint->highest_timecode)
+    fint->highest_timecode = frame->timecode;
+  fint->data_contents_size += wanted_len;
+
+  if (wanted_len > tint->max_packet_size)
+    tint->max_packet_size = wanted_len;
+  tint->avg_packet_size = (tint->avg_packet_size * tint->num_packets +
+                           wanted_len) / (tint->num_packets + 1);
+  tint->num_packets++;
+  if (frame->timecode > tint->highest_timecode)
+    tint->highest_timecode = frame->timecode;
+
+  return clear_error();
+}
+
+rmff_track_t *
+rmff_find_track_with_id(rmff_file_t *file,
+                        uint16_t id) {
+  int i;
+
+  clear_error();
+  if (file == 0)
+    return (rmff_track_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+  for (i = 0; i < file->num_tracks; i++)
+    if (file->tracks[i].id == id)
+      return &file->tracks[i];
+  return NULL;
+}
+
+int
+rmff_write_index(rmff_file_t *file) {
+  void *fh;
+  mb_file_io_t *io;
+  rmff_file_internal_t *fint;
+  rmff_track_internal_t *tint;
+  rmff_track_t *track;
+  int i, j, bw, wanted_len;
+  int64_t pos;
+
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
+    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+
+  fh = file->handle;
+  io = file->io;
+  fint = (rmff_file_internal_t *)file->internal;
+
+  fint->num_index_chunks = 0;
+  for (i = 0; i < file->num_tracks; i++)
+    if (file->tracks[i].num_index_entries > 0)
+      fint->num_index_chunks++;
+
+  if (fint->num_index_chunks == 0)
+    return clear_error();
+
+  io->seek(fh, 0, SEEK_END);
+
+  for (i = 0; i < file->num_tracks; i++) {
+    track = &file->tracks[i];
+    tint = (rmff_track_internal_t *)track->internal;
+    if (track->num_index_entries > 0) {
+      pos = io->tell(fh);
+      if (fint->index_offset == 0)
+        fint->index_offset = pos;
+      wanted_len = 4 + 4 + 2 +  /* normal chunk header */
+        4 +                     /* num_entries */
+        2 +                     /* track_id */
+        4 +                     /* next_header_pos */
+        (2 +                    /* version */
+         4 +                    /* timecode */
+         4 +                    /* offset */
+         4) *                   /* packet_number */
+        track->num_index_entries;
+      bw = write_uint32_be(rmffFOURCC('I', 'N', 'D', 'X'));
+      bw += write_uint32_be(wanted_len);
+      bw += write_uint16_be(0);     /* object_version */
+      bw += write_uint32_be(track->num_index_entries);
+      bw += write_uint16_be(track->id);
+      if ((i + 1) < fint->num_index_chunks)
+        bw += write_uint32_be(pos + wanted_len); /* next_indx_offset */
+      else
+        bw += write_uint32_be(0); /* no next_indx_chunk */
+      for (j = 0; j < track->num_index_entries; j++) {
+        bw += write_uint16_be(0); /* version */
+        bw += write_uint32_be(track->index[j].timecode);
+        bw += write_uint32_be(track->index[j].pos);
+        bw += write_uint32_be(track->index[j].packet_number);
+      }
+      if (bw != wanted_len)
+        return set_error(RMFF_ERR_IO, "Could not write the INDX chunk",
+                         RMFF_ERR_IO);
+    }
+  }
+
+  return clear_error();
 }

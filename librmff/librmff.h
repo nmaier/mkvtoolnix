@@ -1,56 +1,58 @@
 /*
- *  librmff.h
- *
- *  Copyright (C) Moritz Bunkus - March 2004
- *      
- *  librmff is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1, or (at your option)
- *  any later version.
- *   
- *  librmff is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *   
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this library; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. 
- *
- */
+  librmff.h
+
+  Copyright (C) Moritz Bunkus - March 2004
+
+  librmff is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation; either version 2.1, or (at your option)
+  any later version.
+
+  librmff is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library; see the file COPYING.  If not, write to
+  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
 
 /** \file librmff.h
- * \brief The RealMedia file format library
- * \author Moritz Bunkus <moritz@bunkus.org>
- */
+  \brief The RealMedia file format library
+  \author Moritz Bunkus <moritz@bunkus.org>
+
+  \version $Id$
+*/
 
 /** \mainpage
- *
- * \section Introduction
- *
- * \a librmff is short for 'RealMedia file format access library'. It aims
- * at providing the programmer an easy way to read and write RealMedia
- * files. It does not contain any codecs for audio/video handling.
- *
- * You can find a description of the RealMedia file format at
- * http://www.pcisys.net/~melanson/codecs/rmff.htm
- *
- * \section License
- *
- * The library was written by Moritz Bunkus <moritz@bunkus.org>. It is
- * licensed under the terms of the GNU Lesser General Public License (GNU
- * LGPL) which can be found in the file COPYING.
- *
- * \section Usage
- *
- * Here are very short samples of how to use the library.
- *
- * \subsection reading_existing Reading an existing file
- *
- * Reading an existing file requires four steps: Opening the file, reading
- * the headers, reading all the frames and closing the file.
- *
- * \code
+
+  \section Introduction
+
+  \a librmff is short for 'RealMedia file format access library'. It aims
+  at providing the programmer an easy way to read and write RealMedia
+  files. It does not contain any codecs for audio/video handling.
+
+  You can find a description of the RealMedia file format at
+  http://www.pcisys.net/~melanson/codecs/rmff.htm
+
+  \section License
+
+  The library was written by Moritz Bunkus <moritz@bunkus.org>. It is
+  licensed under the terms of the GNU Lesser General Public License (GNU
+  LGPL) which can be found in the file COPYING.
+
+  \section Usage
+
+  Here are very short samples of how to use the library.
+
+  \subsection reading_existing Reading an existing file
+
+  Reading an existing file requires four steps: Opening the file, reading
+  the headers, reading all the frames and closing the file.
+
+  Example: \code
   rmff_file_t *file;
   rmff_frame_t *frame;
 
@@ -69,22 +71,21 @@
   }
   rmff_close_file(file);
   \endcode
- *
- * \section memory_handling Memory handling
- *
- * Generally \a librmff allocates and frees memory itself. You should
- * \b never mess with pointers inside the structures directly but use
- * the provided functions for manipulating it. There's one exception to
- * this rule: the frame handling.
- * 
- * The functions rmff_read_next_frame(rmff_file_t*,void*),
- * rmff_release_frame(rmff_frame_t*) and
- * rmff_allocate_frame(uint32_t,void*) allow the application to provide its
- * own buffers for storing the frame contents. \a librmff will not copy
- * this memory further. It will read directly into the buffer or write directly
- * from the buffer into the file.
- *
- * Example: \code
+
+  \section memory_handling Memory handling
+
+  Generally \a librmff allocates and frees memory itself. You should
+  \b never mess with pointers inside the structures directly but use
+  the provided functions for manipulating it. There's one exception to
+  this rule: the frame handling.
+
+  The functions ::rmff_read_next_frame, ::rmff_release_frame and
+  ::rmff_allocate_frame allow the application to provide its
+  own buffers for storing the frame contents. \a librmff will not copy
+  this memory further. It will read directly into the buffer or write directly
+  from the buffer into the file.
+
+  Example: \code
   rmff_frame_t *frame;
   unsigned char *buffer,
   int size;
@@ -105,7 +106,7 @@
     free(buffer);
   }
   \endcode
- */
+*/
 
 #ifndef __RMFF_H
 #define __RMFF_H
@@ -120,14 +121,13 @@ extern "C" {
 #include "mb_file_io.h"
 
 /** \brief The global PROP file header.
- *
- * This header is mandatory for a RealMedia file. It contains statistical
- * and global data. The values are stored in big endian byte order.
- * The application should use the functions
- * rmff_get_uint16_be(const void*), rmff_get_uint32_be(const void*),
- * rmff_put_uint16_be(void*,uint16_t) and
- * rmff_put_uint32_be(void*,uint32_t) for accessing the members.
- */
+
+  This header is mandatory for a RealMedia file. It contains statistical
+  and global data. The values are stored in big endian byte order.
+  The application should use the functions ::rmff_get_uint16_be,
+  ::rmff_get_uint32_be, ::rmff_put_uint16_be and
+  ::rmff_put_uint32_be for accessing the members.
+*/
 typedef struct {
   uint32_t max_bit_rate;
   uint32_t avg_bit_rate;
@@ -143,12 +143,11 @@ typedef struct {
 } rmff_prop_t;
 
 /** \brief Comments about the file in question.
- *
- * This structure contains the parsed values of the CONT header. These
- * strings must not be modified by the application. The function
- * rmff_set_cont_header(rmff_file_t*,const char*,const char*,const char*,const char*)
- * must be used instead.
- */
+
+  This structure contains the parsed values of the CONT header. These
+  strings must not be modified by the application. The function
+  ::rmff_set_cont_header must be used instead.
+*/
 typedef struct {
   char *title;
   char *author;
@@ -157,58 +156,52 @@ typedef struct {
 } rmff_cont_t;
 
 /** \brief The MDPR track headers.
- *
- * Each track in a RealMedia file contains the MDPR header. The values
- * are stored in big endian byte order.
- * The application should use the functions
- * rmff_get_uint16_be(const void*), rmff_get_uint32_be(const void*),
- * rmff_put_uint16_be(void*,uint16_t) and
- * rmff_put_uint32_be(void*,uint32_t) for accessing the members.
- */
+
+  Each track in a RealMedia file contains the MDPR header. The values
+  are stored in big endian byte order.
+  The application should use the functions ::rmff_get_uint16_be,
+  ::rmff_get_uint32_be, ::rmff_put_uint16_be and
+  ::rmff_put_uint32_be for accessing the members.
+*/
 typedef struct {
   /** \brief The track number. It is unique regarding the file. */
   uint16_t id;
-  /** \brief The maximum bitrate in bit/second.
-   *
-   * When creating a file this value will
-   * be updated automatically by the library. */
+  /** \brief The maximum bitrate in bits/second.
+
+    When creating a file this value will
+    be updated automatically by the library. */
   uint32_t max_bit_rate;
-  /** \brief The average bitrate in bit/second.
-   *
-   * When creating a file this value will
-   * be updated automatically by the library. */
+  /** \brief The average bitrate in bits/second.
+    When creating a file this value will
+    be updated automatically by the library. */
   uint32_t avg_bit_rate;
   /** \brief The maximum packet size in bytes.
-   *
-   * When creating a file this value will
-   * be updated automatically by the library. */
+
+    When creating a file this value will
+    be updated automatically by the library. */
   uint32_t max_packet_size;
   /** \brief The average packet size in bytes.
-   *
-   * When creating a file this value will
-   * be updated automatically by the library. */
+
+    When creating a file this value will
+    be updated automatically by the library. */
   uint32_t avg_packet_size;
   uint32_t start_time;
   uint32_t preroll;
   uint32_t duration;
   /** \brief The track's name.
-   *
-   * Use the rmff_set_track_data(rmff_track_t*,const char*,const char*)
-   * function for setting it. */
+
+    Use the ::rmff_set_track_data function for setting it. */
   char *name;
   /** \brief The track's MIME type.
-   *
-   * Use the rmff_set_track_data(rmff_track_t*,const char*,const char*)
-   * function for setting it. */
+
+    Use the ::rmff_set_track_data function for setting it. */
   char *mime_type;
   /** \brief The size of the track specific data in bytes. */
   uint32_t type_specific_size;
   /** \brief Track type specific data.
-   *
-   * Use the
-   * rmff_set_track_specific_data(rmff_track_t*,const unsigned char*,uint32_t)
-   * function for setting it. It usually contains a ::real_video_props_t or
-   * ::real_audio_v4_props_t structure. */
+
+    Use the ::rmff_set_type_specific_data function for setting it. It usually
+    contains a ::real_video_props_t or ::real_audio_v4_props_t structure. */
   unsigned char *type_specific_data;
 } rmff_mdpr_t;
 
@@ -274,14 +267,39 @@ typedef struct __attribute__((__packed__)) real_audio_v5_props_t {
   uint32_t fourcc3;             /* fourcc */
 } real_audio_v5_props_t;
 
+typedef struct rmff_index_entry_t {
+  uint32_t pos;
+  uint32_t timecode;
+  uint32_t packet_number;
+} rmff_index_entry_t;
+
+/** A frame or packet of media data.
+
+  A new frame can be obtained with ::rmff_allocate_frame or read from a file
+  with ::rmff_read_next_frame. In both cases the application can either
+  have \a librmff allocate a buffer for the frame contents or provide the
+  buffer itself. In the latter case ::rmff_release_frame will not free the
+  buffer either.
+
+  \note The fields in this structure are stored in the machine's byte order
+  which is little endian on x86 systems.
+*/
 typedef struct rmff_frame_t {
+  /** \brief The frame/packet contents. */
   unsigned char *data;
+  /** \brief The number of bytes in this frame. */
   uint32_t size;
+  /** \brief Set by \a librmff if \a librmff has allocated the buffer and
+      should free it in ::rmff_release_frame. */
   int allocated_by_rmff;
 
+  /** \brief The track ID this frame belongs to. This will be overwritten
+      in ::rmff_write_frame. */
   uint16_t id;
+  /** \brief The presentation timestamp in ms. */
   uint32_t timecode;
   uint8_t reserved;
+  /** \brief Flags, e.g. bit 1 = key frame */
   uint8_t flags;
 } rmff_frame_t;
 
@@ -299,8 +317,12 @@ typedef struct rmff_track_t {
   int type;
   rmff_mdpr_t mdpr_header;
 
+  rmff_index_entry_t *index;
+  int num_index_entries;
+
   struct rmff_file_t *file;
 
+  void *app_data;
   void *internal;
 } rmff_track_t;
 
@@ -316,15 +338,13 @@ typedef struct rmff_file_t {
   rmff_prop_t prop_header;
   rmff_cont_t cont_header;
   int cont_header_present;
-  int64_t first_data_header_offset;
-  int64_t next_data_header_offset;
   uint32_t num_packets_in_chunk;
   uint32_t num_packets_read;
-  int is_big_endian;
 
   rmff_track_t *tracks;
   int num_tracks;
 
+  void *app_data;
   void *internal;
 } rmff_file_t;
 
@@ -350,262 +370,362 @@ typedef struct rmff_file_t {
   (((unsigned char)c) << 8) + \
   ((unsigned char)d))
 
+/** \brief Open the file for reading. */
 #define RMFF_OPEN_MODE_READING                         0
+/** \brief Create a new file. */
 #define RMFF_OPEN_MODE_WRITING                         1
 
 /** \brief Opens a RealMedia file for reading or writing.
- *
- * Can be used to open an existing file for reading or for creating a new
- * file. The file headers will neither be read nor written automatically.
- * This function uses the standard file I/O functions provided by the
- * current operating system.
- *
- * \param path the name of the file that should be opened
- * \param mode either ::RMFF_OPEN_MODE_READING or ::RMFF_OPEN_MODE_WRITING
- * \returns a pointer to ::rmff_file_t structure or \c NULL if an error
- *   occured. In the latter case ::rmff_last_error will be set.
- * \see rmff_open_file_with_io
- */
+
+  Can be used to open an existing file for reading or for creating a new
+  file. The file headers will neither be read nor written automatically.
+  This function uses the standard file I/O functions provided by the
+  current operating system.
+
+  \param path the name of the file that should be opened
+  \param mode either ::RMFF_OPEN_MODE_READING or ::RMFF_OPEN_MODE_WRITING
+
+  \returns a pointer to ::rmff_file_t structure or \c NULL if an error
+  occured. In the latter case ::rmff_last_error will be set.
+
+  \see rmff_open_file_with_io
+*/
 rmff_file_t *rmff_open_file(const char *path, int mode);
 
 /** \brief Opens a RealMedia file for reading or writing.
- *
- * Can be used to open an existing file for reading or for creating a new
- * file. The file headers will neither be read nor written automatically.
- * This function uses I/O functions provided by the \a io parameter.
- *
- * \param path the name of the file that should be opened
- * \param mode either ::RMFF_OPEN_MODE_READING or ::RMFF_OPEN_MODE_WRITING
- * \param io a set of I/O functions
- * \returns a pointer to a rmff_file_t structure or \c NULL if an error
- *   occured. In the latter case ::rmff_last_error will be set.
- * \see rmff_open_file
- */
+
+  Can be used to open an existing file for reading or for creating a new
+  file. The file headers will neither be read nor written automatically.
+  This function uses I/O functions provided by the \a io parameter.
+
+  \param path the name of the file that should be opened
+  \param mode either ::RMFF_OPEN_MODE_READING or ::RMFF_OPEN_MODE_WRITING
+  \param io a set of I/O functions
+
+  \returns a pointer to a rmff_file_t structure or \c NULL if an error
+  occured. In the latter case ::rmff_last_error will be set.
+
+  \see rmff_open_file
+*/
 rmff_file_t *rmff_open_file_with_io(const char *path, int mode,
                                     mb_file_io_t *io);
 
 /** \brief Close the file and release all resources.
- *
- * Closes the file and releases all resources associated with it, including
- * the ::rmff_file_t structure. If the file was open for writing then
- * rmff_write_headers() should be called prior to closing the file as
- * \c rmff_close_file does not fix the headers itself.
- *
- * \param file The file to close.
- */
+
+  Closes the file and releases all resources associated with it, including
+  the ::rmff_file_t structure. If the file was open for writing then
+  ::rmff_fix_headers should be called prior to closing the file as
+  \c rmff_close_file does not fix the headers itself.
+
+  \param file The file to close.
+*/
 void rmff_close_file(rmff_file_t *file);
 
 /** \brief Reads the file and track headers.
- *
- * This function should be called after directly after opening it for reading.
- * It will try to read the file and track headers and position the file pointer
- * right before the first data packet.
- *
- * \param file The file to read the headers from.
- * \returns ::RMFF_ERR_OK on success and one of the other \c RMFF_ERR_*
- *   constants on error.
- */
+
+  This function should be called after directly after opening it for reading.
+  It will try to read the file and track headers and position the file pointer
+  right before the first data packet.
+
+  \param file The file to read the headers from.
+
+  \returns ::RMFF_ERR_OK on success and one of the other \c RMFF_ERR_*
+  constants on error.
+*/
 int rmff_read_headers(rmff_file_t *file);
 
 /** \brief Retrieves the size of the next frame.
- *
- * \param file The file to read from.
- * \returns the size of the following frame or one of the \c RMFF_ERR_*
- *   constants on error.
- */
+
+  \param file The file to read from.
+
+  \returns the size of the following frame or one of the \c RMFF_ERR_*
+  constants on error.
+*/
 int rmff_get_next_frame_size(rmff_file_t *file);
 
 /** \brief Reads the next frame from the file.
- *
- * The frame must be released by rmff_release_frame(rmff_frame_t*).
- *
- * \param file The file to read from.
- * \param buffer A buffer to read the frame into. This parameter may be
- *   \c NULL in which case the buffer will be allocated by the library.
- *   If the application provides the buffer it must be large enough.
- *   The function rmff_get_next_frame_size(rmff_file_t*) can be used in this
- *   case.
- * \returns a pointer to a ::rmff_frame_t structure containing the frame
- *   and its metadata on success or \c NULL if the call failed. This frame
- *   must be freed with rmff_release_frame(rmff_frame_t*).
- */
+
+  The frame must be released by rmff_release_frame(rmff_frame_t*).
+
+  \param file The file to read from.
+  \param buffer A buffer to read the frame into. This parameter may be
+  \c NULL in which case the buffer will be allocated by the library.
+  If the application provides the buffer it must be large enough.
+  The function ::rmff_get_next_frame_size can be used in this
+  case.
+
+  \returns a pointer to a ::rmff_frame_t structure containing the frame
+  and its metadata on success or \c NULL if the call failed. This frame
+  must be freed with ::rmff_release_frame.
+*/
 rmff_frame_t *rmff_read_next_frame(rmff_file_t *file, void *buffer);
 
 /** \brief Allocates a frame and possibly a buffer for its contents.
- *
- * \param size The size of this frame.
- * \param buffer A buffer that holds the frame. This parameter may be
- *   \c NULL in which case the buffer will be allocated by the library.
- *   If the application provides the buffer it must be large enough.
- * \returns a pointer to an empty ::rmff_frame_t structure which can be filled
- *   with the frame contents and its metadata. This frame
- *   must be freed with rmff_release_frame(rmff_frame_t*).
- */
+
+  \param size The size of this frame.
+  \param buffer A buffer that holds the frame. This parameter may be
+  \c NULL in which case the buffer will be allocated by the library.
+  If the application provides the buffer it must be large enough.
+
+  \returns a pointer to an empty ::rmff_frame_t structure which can be filled
+  with the frame contents and its metadata. This frame
+  must be freed with ::rmff_release_frame.
+*/
 rmff_frame_t *rmff_allocate_frame(uint32_t size, void *buffer);
 
 /** \brief Frees all resources associated with a frame.
-*
- * If the frame buffer was allocated by the library it will be freed as well.
- *
- * \param frame The frame to free.
- */
+
+  If the frame buffer was allocated by the library it will be freed as well.
+
+  \param frame The frame to free.
+*/
 void rmff_release_frame(rmff_frame_t *frame);
 
 /** \brief Creates a new track for a file.
- *
- * The track will be added to the list of tracks in this file.
- * \a librmff will allocate a track ID that is unique in this file.
- *
- * \param file The file the track will be added to.
- * \returns A pointer to a newly allocated ::rmff_track_t structure or
- *   \c NULL in case of an error.
- */
-rmff_track_t *rmff_add_track(rmff_file_t *file);
+
+  The track will be added to the list of tracks in this file.
+  \a librmff will allocate a track ID that is unique in this file.
+
+  \param file The file the track will be added to.
+  \param create_index Indicates if \a librmff should create an index
+  for this track that'll be written to the file when ::rmff_write_index is
+  invoked.
+
+  \returns A pointer to a newly allocated ::rmff_track_t structure or
+  \c NULL in case of an error.
+*/
+rmff_track_t *rmff_add_track(rmff_file_t *file, int create_index);
 
 /** \brief Set some default values for RealAudio streams.
- *
- * Some of the fields in the \a props structure will be set to pre-defined
- * values, especially the \c uknown fields. Should be used after
- * rmff_add_track(rmff_file_t*).
- *
- * \param props A pointer to the structure whose values should be set.
- * \see rmff_set_std_audio_v5_values(real_audio_v5_props_t*),
- *   rmff_set_std_video_values(real_video_props_t*)
- */
+
+  Some of the fields in the \a props structure will be set to pre-defined
+  values, especially the \c uknown fields. Should be used after
+  ::rmff_add_track.
+
+  \param props A pointer to the structure whose values should be set.
+
+  \see rmff_set_std_audio_v5_values(real_audio_v5_props_t*),
+  rmff_set_std_video_values(real_video_props_t*)
+*/
 void rmff_set_std_audio_v4_values(real_audio_v4_props_t *props);
 
 /** \brief Set some default values for RealAudio streams.
- *
- * Some of the fields in the \a props structure will be set to pre-defined
- * values, especially the \c uknown fields. Should be used after
- * rmff_add_track(rmff_file_t*).
- *
- * \param props A pointer to the structure whose values should be set.
- * \see rmff_set_std_audio_v4_values(real_audio_v5_props_t*),
- *   rmff_set_std_video_values(real_video_props_t*)
- */
+
+  Some of the fields in the \a props structure will be set to pre-defined
+  values, especially the \c uknown fields. Should be used after
+  ::rmff_add_track.
+
+  \param props A pointer to the structure whose values should be set.
+
+  \see rmff_set_std_audio_v4_values(real_audio_v5_props_t*),
+  rmff_set_std_video_values(real_video_props_t*)
+*/
 void rmff_set_std_audio_v5_values(real_audio_v5_props_t *props);
 
 /** \brief Set some default values for RealVideo streams.
- *
- * Some of the fields in the \a props structure will be set to pre-defined
- * values, especially the \c uknown fields. Should be used after
- * rmff_add_track(rmff_file_t*).
- *
- * \param props A pointer to the structure whose values should be set.
- * \see rmff_set_std_audio_v4_values(real_audio_v4_props_t*),
- *   rmff_set_std_audio_v5_values(real_audio_v5_props_t*)
- */
+
+  Some of the fields in the \a props structure will be set to pre-defined
+  values, especially the \c uknown fields. Should be used after
+  ::rmff_add_track.
+
+  \param props A pointer to the structure whose values should be set.
+  
+  \see rmff_set_std_audio_v4_values(real_audio_v4_props_t*),
+  rmff_set_std_audio_v5_values(real_audio_v5_props_t*)
+*/
 void rmff_set_std_video_values(real_video_props_t *props);
 
 /** \brief Sets the contents of the \link ::rmff_cont_t CONT file header
- * \endlink.
- *
- * Frees the old contents if any and allocates copies of the given
- * strings. If the CONT header should be written to the file
- * in rmff_write_headers(rmff_file_t*) then the \a cont_header_present
- * member must be set to 1.
- *
- * \param file The file whose CONT header should be set.
- * \param title The file's title, e.g. "Muriel's Wedding"
- * \param author The file's author, e.g. "P.J. Hogan"
- * \param copyright The copyright assigned to the file.
- * \param comment A free-style comment.
- */
+  \endlink.
+
+  Frees the old contents if any and allocates copies of the given
+  strings. If the CONT header should be written to the file
+  in ""rmff_write_headers then the \a cont_header_present
+  member must be set to 1.
+
+  \param file The file whose CONT header should be set.
+  \param title The file's title, e.g. "Muriel's Wedding"
+  \param author The file's author, e.g. "P.J. Hogan"
+  \param copyright The copyright assigned to the file.
+  \param comment A free-style comment.
+*/
 void rmff_set_cont_header(rmff_file_t *file, const char *title,
                           const char *author, const char *copyright,
                           const char *comment);
 
 /** \brief Sets the strings in the \link ::rmff_mdpr_t MDPR track header
- * \endlink structure.
- *
- * Frees the old contents and allocates copies of the given strings.
- *
- * \param track The track whose MDPR header should be set.
- * \param name The track's name.
- * \param mime_type The MIME type. A video track should have the MIME type
- *   \c video/x-pn-realvideo, and an audio track should have the MIMT type
- *   \c audio/x-pn-realaudio.
- */
+  \endlink structure.
+
+  Frees the old contents and allocates copies of the given strings.
+
+  \param track The track whose MDPR header should be set.
+  \param name The track's name.
+  \param mime_type The MIME type. A video track should have the MIME type
+  \c video/x-pn-realvideo, and an audio track should have the MIMT type
+  \c audio/x-pn-realaudio.
+*/
 void rmff_set_track_data(rmff_track_t *track, const char *name,
                          const char *mime_type);
 
 /** \brief Sets the \a track_specific_data member of the \link ::rmff_mdpr_t
- * MDPR header\endlink structure.
- *
- * The \a track_specific_data usually contains a
- * ::real_video_props_t structure or a ::real_audio_props_t structure.
- * The existing data, if any, will be freed, and a copy of the memory
- * \a data points to will be made.
- *
- * \param track The track whose MDPR header should be set.
- * \param data A pointer to the track specific data.
- * \param size The track specific data's size in bytes.
- */
-void rmff_set_track_specific_data(rmff_track_t *track,
-                                  const unsigned char *data, uint32_t size);
+  MDPR header\endlink structure.
 
+  The \a track_specific_data usually contains a
+  ::real_video_props_t structure or a ::real_audio_props_t structure.
+  The existing data, if any, will be freed, and a copy of the memory
+  \a data points to will be made.
+
+  \param track The track whose MDPR header should be set.
+  \param data A pointer to the track specific data.
+  \param size The track specific data's size in bytes.
+*/
+void rmff_set_type_specific_data(rmff_track_t *track,
+                                 const unsigned char *data, uint32_t size);
+
+/** \brief Writes the file and track headers.
+
+  This function should be called after adding all tracks and before the
+  first call to ::rmff_write_frame. Before closing the file the application
+  should call ::rmff_fix_headers in order to write the corrected header
+  values.
+
+  \param file The file whose headers should be written.
+
+  \returns \c RMFF_ERR_OK on success or one of the other \c RMFF_ERR_*
+  constants on error.
+*/
 int rmff_write_headers(rmff_file_t *file);
 
+/** \brief Fixes some values in the headers and re-writes them.
+
+  \a librmff automatically calculates some header values, e.g. the
+  \c max_packet_size fields and the offsets in the file headers. This function
+  updates these values and writes them to the file. It should be called
+  before ::rmff_close_file.
+
+  \param file The file whose headers should be fixed and written.
+
+  \returns \c RMFF_ERR_OK on success or one of the other \c RMFF_ERR_*
+  constants on error.
+*/
 int rmff_fix_headers(rmff_file_t *file);
 
+/** \brief Writes the frame contents to the file.
+
+  Should be called after ::rmff_write_headers. The track ID stored in the
+  \a track parameter will overwrite the track ID in the \a frame structure.
+
+  \param track The track this frame belongs to.
+  \param frame The frame data to write.
+
+  \returns \c RMFF_ERR_OK on success or one of the other \c RMFF_ERR_*
+  constants on error.
+*/
+int rmff_write_frame(rmff_track_t *track, rmff_frame_t *frame);
+
+/** \brief Creates an index at the end of the file.
+
+  The application can request that an index is created For each track
+  with the ::rmff_add_track call. For each of these tracks an index
+  is created in which each key frame is listed. Consecutive key frames with
+  the same timecode only get one index entry.
+
+  This function should be called after all calls to ::rmff_write_frame
+  but before ::rmff_fix_headers.
+
+  \param file The file for which the index should be written.
+
+  \returns \c RMFF_ERR_OK on success or one of the other \c RMFF_ERR_*
+  constants on error.
+*/
+int rmff_write_index(rmff_file_t *file);
+
+/** \brief Duplicated the track headers.
+
+  Takes a ::rmff_track_t structure and duplicates its members into
+  another one. The destination must have been created first with
+  ::rmff_add_track. Everything but the track ID will be copied.
+
+  \param dst The destination to write the copies to.
+  \param src The structure that should be duplicated.
+*/
 void rmff_copy_track_headers(rmff_track_t *dst, rmff_track_t *src);
 
+/** \brief Finds the track the track ID belongs to.
+
+  \param file The file whose tracks are to be searched.
+  \param id The track ID.
+
+  \returns A pointer to a ::rmff_track_t structure or \c NULL on error.
+*/
+rmff_track_t *rmff_find_track_with_id(rmff_file_t *file, uint16_t id);
+
 /** \brief The error code of the last function call.
- * Contains the last error code for a function that failed. If a function
- * succeeded it usually does not reset \a rmff_last_error to \c RMFF_ERR_OK.
- * This variable can contain one of the \c RMFF_ERR_* constants.
- */
+
+ Contains the last error code for a function that failed. If a function
+ succeeded it usually does not reset \a rmff_last_error to \c RMFF_ERR_OK.
+ This variable can contain one of the \c RMFF_ERR_* constants.
+*/
 extern int rmff_last_error;
 
 /** \brief The error message of the last function call.
- * Contains the last error message for a function that failed. If a function
- * succeeded it usually does not reset \c rmff_last_error_msg to \c NULL.
- */
+
+  Contains the last error message for a function that failed. If a function
+  succeeded it usually does not reset \c rmff_last_error_msg to \c NULL.
+*/
 extern const char *rmff_last_error_msg;
 
 /** \brief Map an error code to an error message.
- * Returns the error message that corresponds to the error code.
- * \param code the error code which must be one of the \c RMFF_ERR_* macros.
- * \returns the error message or "Unknown error" for unknown error codes,
- *   but never \c NULL.
- */
+
+  Returns the error message that corresponds to the error code.
+
+  \param code the error code which must be one of the \c RMFF_ERR_* macros.
+
+  \returns the error message or "Unknown error" for unknown error codes,
+  but never \c NULL.
+*/
 const char *rmff_get_error_str(int code);
 
 /** \brief Reads a 16bit uint from an address.
- * The uint is converted from big endian byte order to the machine's byte
- * order.
- *
- * \param buf The address to read from.
- * \returns The 16bit uint converted to the machine's byte order.
- */
+
+  The uint is converted from big endian byte order to the machine's byte
+  order.
+
+  \param buf The address to read from.
+
+  \returns The 16bit uint converted to the machine's byte order.
+*/
 uint16_t rmff_get_uint16_be(const void *buf);
 
 /** \brief Reads a 32bit uint from an address.
- * The uint is converted from big endian byte order to the machine's byte
- * order.
- *
- * \param buf The address to read from.
- * \returns The 32bit uint converted to the machine's byte order.
- */
+
+  The uint is converted from big endian byte order to the machine's byte
+  order.
+
+  \param buf The address to read from.
+
+  \returns The 32bit uint converted to the machine's byte order.
+*/
 uint32_t rmff_get_uint32_be(const void *buf);
 
 /** \brief Write a 16bit uint at an address.
- * The value is converted from the machine's byte order to big endian byte
- * order.
- *
- * \param buf The address to write to.
- * \param value The value to write.
- */
+
+  The value is converted from the machine's byte order to big endian byte
+  order.
+
+  \param buf The address to write to.
+  \param value The value to write.
+*/
 void rmff_put_uint16_be(void *buf, uint16_t value);
 
 /** \brief Write a 32bit uint at an address.
- * The value is converted from the machine's byte order to big endian byte
- * order.
- *
- * \param buf The address to write to.
- * \param value The value to write.
- */
+
+  The value is converted from the machine's byte order to big endian byte
+  order.
+
+  \param buf The address to write to.
+  \param value The value to write.
+*/
 void rmff_put_uint32_be(void *buf, uint32_t value);
 
 #if defined(__cplusplus)
