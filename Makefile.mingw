@@ -155,7 +155,8 @@ libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
 src/common/libmtxcommon.dll: $(libmtxcommon_OBJECTS)
 	@echo '  LD/DLL ' $@
 	$(Q)$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
-		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml -lexpat
+		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml \
+		-lexpat -lFLAC
 
 src/common/libmtxcommon.a: $(libmtxcommon_OBJECTS)
 	@rm -f $@
