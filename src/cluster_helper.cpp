@@ -357,6 +357,7 @@ cluster_helper_c::render() {
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
   render_groups_t *render_group;
+  bool added_to_cues;
   LacingType lacing_type;
 
   if ((clusters == NULL) || (num_clusters == 0))
@@ -373,6 +374,7 @@ cluster_helper_c::render() {
 
   elements_in_cluster = 0;
   last_block_group = NULL;
+  added_to_cues = false;
 
   if (hack_engaged(ENGAGE_LACING_XIPH))
     lacing_type = LACING_XIPH;
@@ -434,6 +436,7 @@ cluster_helper_c::render() {
       render_group->groups.push_back(new_block_group);
       render_group->durations.clear();
       render_group->duration_mandatory = false;
+      added_to_cues = false;
     } else
       new_block_group = last_block_group;
 
@@ -510,15 +513,15 @@ cluster_helper_c::render() {
 
     if (new_block_group == NULL)
       new_block_group = last_block_group;
-    else if (write_cues) {
+    else if (write_cues && !added_to_cues) {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
       if (((source->get_cue_creation() == CUES_IFRAMES) && (pack->bref == -1))
           ||
-      // ... or if the user requested entries for all frames...
+          // ... or if the user requested entries for all frames ...
           (source->get_cue_creation() == CUES_ALL) ||
-      // ... or if this is an audio track, there is no video track and the
-      // last cue entry was created more than 2s ago.
+          // ... or if this is an audio track, there is no video track and the
+          // last cue entry was created more than 2s ago.
           ((source->get_cue_creation() == CUES_SPARSE) &&
            (source->get_track_type() == track_audio) && !video_track_present &&
            ((source->get_last_cue_timecode() < 0) ||
@@ -528,6 +531,7 @@ cluster_helper_c::render() {
         num_cue_elements++;
         cue_writing_requested = 1;
         source->set_last_cue_timecode(pack->assigned_timecode);
+        added_to_cues = true;
       }
     }
 
