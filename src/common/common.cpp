@@ -467,10 +467,8 @@ int utf8_init(const char *charset) {
     setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW)
     lc_charset = "CP" + to_string(GetACP());
-#elif defined(SYS_UNIX)
-    lc_charset = nl_langinfo(CODESET);
 #else
-    lc_charset = locale_charset();
+    lc_charset = nl_langinfo(CODESET);
 #endif
     if ((lc_charset == "UTF8") || (lc_charset == "UTF-8"))
       return -1;
@@ -970,7 +968,7 @@ debug_c::~debug_c() {
 void debug_c::enter(const char *label) {
   int i;
   debug_data_t *entry;
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   struct timeval tv;
 #endif
 
@@ -989,7 +987,7 @@ void debug_c::enter(const char *label) {
   }
 
 
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   gettimeofday(&tv, NULL);
   entry->entered_at = (uint64_t)tv.tv_sec * (uint64_t)1000000 +
     tv.tv_usec;
@@ -1001,7 +999,7 @@ void debug_c::enter(const char *label) {
 void debug_c::leave(const char *label) {
   int i;
   debug_data_t *entry;
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   struct timeval tv;
 
   gettimeofday(&tv, NULL);
@@ -1022,7 +1020,7 @@ void debug_c::leave(const char *label) {
     die("common.cpp/debug_c::leave() leave without enter: %s", label);
 
   entry->number_of_calls++;
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   entry->elapsed_time += (uint64_t)tv.tv_sec * (uint64_t)1000000 +
     tv.tv_usec - entry->entered_at;
 #else
@@ -1043,7 +1041,7 @@ void debug_c::add_packetizer(void *ptzr) {
 
 void debug_c::dump_info() {
   int i;
-#if defined SYS_UNIX
+#if defined(SYS_UNIX) || defined(SYS_APPLE)
   debug_data_t *entry;
   uint64_t diff_calls, diff_time;
 

@@ -39,7 +39,7 @@
 
 using namespace std;
 
-#if defined(SYS_UNIX)
+#if !defined(SYS_WINDOWS)
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   char *cmode;
 
