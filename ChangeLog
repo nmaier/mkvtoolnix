@@ -1,3 +1,19 @@
+2003-09-11  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Implemented an experimental VobSub reader and
+        packetizer. No specs exist for these yet, though.
+
+        * mkvmerge: Improved the support for Matroska files with tracks
+        with big gaps between entries, e.g. subtitle tracks whose entries
+        are a minute or more apart.
+
+        * mkvmerge: When splitting is active and the source is a Matroska
+        file then splitpoints were borked, and the first pass was slow as
+        your average mole.
+
+        * mkvmerge: The track UIDs are kept when reading Matroska files
+        even when splitting is active.
+
 2003-09-09  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Added a QuickTime/MP4 reader. Can handle several

@@ -656,6 +656,39 @@ static void parse_cues(char *s, cue_creation_t &cues) {
     mxerror("'%s' is an unsupported argument for --cues.\n", orig.c_str());
 }
 
+static void parse_compression(char *s, cue_creation_t &compression) {
+  char *colon;
+  string orig = s;
+
+  // Extract the track number.
+  if ((colon = strchr(s, ':')) == NULL)
+    mxerror("Invalid compression option. No track ID specified in "
+            "'--compression %s'.\n", s);
+
+  *colon = 0;
+  if (!parse_int(s, compression.id))
+    mxerror("Invalid track ID specified in '--compression %s'.\n",
+            orig.c_str());
+
+  s = &colon[1];
+  if (*s == 0)
+    mxerror("Invalid compression option specified in '--compression %s'.\n",
+            orig.c_str());
+
+  if (!strcasecmp(s, "lzo"))
+    compression.cues = COMPRESSION_LZO;
+  else if (!strcasecmp(s, "zlib"))
+    compression.cues = COMPRESSION_ZLIB;
+  else if (!strcasecmp(s, "bz2"))
+    compression.cues = COMPRESSION_BZ2;
+  else if (!strcmp(s, "none"))
+    compression.cues = COMPRESSION_NONE;
+  else
+    mxerror("'%s' is an unsupported argument for --compression. Available "
+            "compression methods are 'none', 'lzo', 'zlib' and 'bz2'.\n",
+            orig.c_str());
+}
+
 static void parse_language(char *s, language_t &lang) {
   char *colon;
   string orig = s;
@@ -971,6 +1004,7 @@ static void identify(const char *filename) {
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
   ti.aac_is_sbr = new vector<int64_t>;
+  ti.compression_list = new vector<cue_creation_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -1027,6 +1061,7 @@ static void parse_args(int argc, char **argv) {
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
+  ti.compression_list = new vector<cue_creation_t>;
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
@@ -1442,6 +1477,15 @@ static void parse_args(int argc, char **argv) {
 
       ti.aac_is_sbr->push_back(id);
       i++;
+
+    } else if (!strcmp(this_arg, "--compression")) {
+      if (next_arg == NULL)
+        mxerror("'--compression' lacks its argument.\n");
+
+      parse_compression(next_arg, cues);
+      ti.compression_list->push_back(cues);
+      i++;
+
     }
 
     // The argument is an input file.
@@ -1487,6 +1531,7 @@ static void parse_args(int argc, char **argv) {
       delete ti.sub_charsets;
       delete ti.all_tags;
       delete ti.aac_is_sbr;
+      delete ti.compression_list;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
@@ -1499,6 +1544,7 @@ static void parse_args(int argc, char **argv) {
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;
       ti.stracks = new vector<int64_t>;
+      ti.compression_list = new vector<cue_creation_t>;
     }
   }
 
@@ -1532,6 +1578,7 @@ static void parse_args(int argc, char **argv) {
   delete ti.atracks;
   delete ti.vtracks;
   delete ti.stracks;
+  delete ti.compression_list;
   safefree(attachment);
 }
 

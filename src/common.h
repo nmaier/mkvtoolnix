@@ -64,6 +64,7 @@ using namespace libebml;
 #define TYPEQTMP4    15
 
 /* compression types */
+#define COMPRESSION_UNSPECIFIED  -1
 #define COMPRESSION_NONE          0
 #define COMPRESSION_LZO           1
 #define COMPRESSION_ZLIB          2

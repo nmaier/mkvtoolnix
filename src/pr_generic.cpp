@@ -115,6 +115,16 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
 
+  // Let's see if the user has specified how this track should be compressed.
+  ti->compression = COMPRESSION_UNSPECIFIED;
+  for (i = 0; i < ti->compression_list->size(); i++) {
+    cc = &(*ti->compression_list)[i];
+    if ((cc->id == ti->id) || (cc->id == -1)) { // -1 == all tracks
+      ti->compression = cc->cues;
+      break;
+    }
+  }
+
   // Set default header values to 'unset'.
   hserialno = track_number++;
   huid = 0;
@@ -664,6 +674,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
                                                   src->private_size);
   dst->language = safestrdup(src->language);
   dst->sub_charset = safestrdup(src->sub_charset);
+  dst->compression_list = new vector<cue_creation_t>(*src->compression_list);
   dst->tags = NULL;
 
   return dst;
@@ -692,6 +703,7 @@ void free_track_info(track_info_t *ti) {
     safefree((*ti->all_tags)[i].file_name);
   delete ti->all_tags;
   delete ti->aac_is_sbr;
+  delete ti->compression_list;
   safefree(ti->language);
   safefree(ti->private_data);
   safefree(ti->sub_charset);

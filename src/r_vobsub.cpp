@@ -141,6 +141,8 @@ vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
   idx_data = "";
   last_filepos = -1;
   last_timestamp = -1;
+  act_wchar = 0;
+  done = false;
 
   len = strlen("# VobSub index file, v");
   if (!idx_file->getline2(line) ||
@@ -219,12 +221,22 @@ int vobsub_reader_c::read(generic_packetizer_c *) {
   const char *s;
   int64_t filepos, timestamp;
   int hour, minute, second, msecond, timestamp_offset, filepos_offset, idx;
+  unsigned char *buffer;
+  int size;
 
   if (done)
     return 0;
 
   if (!idx_file->getline2(line)) {
     if (last_filepos != -1) {
+      sub_file->setFilePointer(0, seek_end);
+      size = sub_file->getFilePointer() - last_filepos;
+      sub_file->setFilePointer(last_filepos);
+      buffer = (unsigned char *)safemalloc(size);
+      if (sub_file->read(buffer, size) != size)
+        mxerror(PFX "Could not read %u bytes from the VobSub file.\n", size);
+      packetizer->process(buffer, size, last_timestamp, 1000);
+      safefree(buffer);
     }
 
     done = true;
@@ -260,7 +272,7 @@ int vobsub_reader_c::read(generic_packetizer_c *) {
     idx++;
   }
 
-  mxverb(2, PFX "Timestamp: %lld, file pos: %lld\n", timestamp, filepos);
+  mxverb(3, PFX "Timestamp: %lld, file pos: %lld\n", timestamp, filepos);
 
   if (last_filepos == -1) {
     last_filepos = filepos;
@@ -269,6 +281,16 @@ int vobsub_reader_c::read(generic_packetizer_c *) {
   }
 
   // Now process the stuff...
+  sub_file->setFilePointer(last_filepos);
+  size = filepos - last_filepos;
+  buffer = (unsigned char *)safemalloc(size);
+  if (sub_file->read(buffer, size) != size)
+    mxerror(PFX "Could not read %u bytes from the VobSub file.\n", size);
+  packetizer->process(buffer, size, last_timestamp,
+                      timestamp - last_timestamp);
+  safefree(buffer);
+  last_timestamp = timestamp;
+  last_filepos = filepos;
 
   return EMOREDATA;
 }
@@ -292,4 +314,5 @@ void vobsub_reader_c::identify() {
 }
 
 void vobsub_reader_c::set_headers() {
+  packetizer->set_headers();
 }
