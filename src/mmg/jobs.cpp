@@ -560,6 +560,7 @@ job_dialog::on_delete(wxCommandEvent &evt) {
   i = 0;
   while (i < jobs.size()) {
     if (lv_jobs->IsSelected(i)) {
+      wxRemoveFile(wxString::Format(wxT("jobs/%d.mmg"), dit->id));
       jobs.erase(dit);
       lv_jobs->DeleteItem(i);
     } else {
