@@ -65,21 +65,15 @@ static void cperror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
   string new_fmt;
 
-  mxprint(stderr, "Chapter parsing error in '%s', line %d, column %d: ",
-          pdata->file_name, XML_GetCurrentLineNumber(pdata->parser),
+  mxprint(stdout, "Error: Chapter parser failed for '%s', line %d, "
+          "column %d: ", pdata->file_name,
+          XML_GetCurrentLineNumber(pdata->parser),
           XML_GetCurrentColumnNumber(pdata->parser));
   fix_format(fmt, new_fmt);
   va_start(ap, fmt);
-  vfprintf(stderr, new_fmt.c_str(), ap);
+  vfprintf(stdout, new_fmt.c_str(), ap);
   va_end(ap);
-  mxprint(stderr, "\n");
-
-#ifdef DEBUG
-  int i;
-  mxprint(stderr, "Parent types:\n");
-  for (i = 0; i < pdata->parents->size(); i++)
-    mxprint(stderr, "  %s\n", (*pdata->parents)[i]->Generic().DebugName);
-#endif
+  mxprint(stdout, "\n");
 
   mxexit(2);
 }
