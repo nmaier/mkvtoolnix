@@ -1,5 +1,7 @@
 2004-04-11  Moritz Bunkus  <moritz@bunkus.org>
 
+	* avilib: bug fix: Fixed compilation on big endian systems.
+
 	* mkvmerge: bug fix: Fixed the handling of RealMedia files with
 	'multirate' tracks (again).
 
