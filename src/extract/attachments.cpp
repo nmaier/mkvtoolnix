@@ -73,7 +73,8 @@ using namespace libmatroska;
 using namespace std;
 
 static void
-handle_attachments(KaxAttachments *atts) {
+handle_attachments(KaxAttachments *atts,
+                   vector<track_spec_t> &tracks) {
   KaxAttached *att;
   KaxFileData *fdata;
   EbmlElement *e;
@@ -146,6 +147,7 @@ handle_attachments(KaxAttachments *atts) {
 
 void
 extract_attachments(const char *file_name,
+                    vector<track_spec_t> &tracks,
                     bool parse_fully) {
   mm_io_c *in;
   mm_stdio_c out;
@@ -169,7 +171,7 @@ extract_attachments(const char *file_name,
     if (verbose > 0)
       debug_dump_elements(attachments, 0);
 
-    handle_attachments(attachments);
+    handle_attachments(attachments, tracks);
 
     delete attachments;
   }

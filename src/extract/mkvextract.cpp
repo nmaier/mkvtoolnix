@@ -76,7 +76,6 @@ using namespace std;
 #define MODE_CHAPTERS    3
 #define MODE_CUESHEET    4
 
-vector<track_spec_t> tracks;
 bool no_variable_data = false;
 
 void
@@ -150,7 +149,8 @@ static bool parse_fully = false;
 void
 parse_args(vector<string> args,
            string &file_name,
-           int &mode) {
+           int &mode,
+           vector<track_spec_t> &tracks) {
   int i;
   char *colon, *copy;
   const char *sub_charset;
@@ -365,6 +365,7 @@ main(int argc,
      char **argv) {
   string input_file;
   int mode;
+  vector<track_spec_t> tracks;
 
 #if defined(SYS_UNIX)
   nice(2);
@@ -383,9 +384,9 @@ main(int argc,
 
   xml_element_map_init();
 
-  parse_args(command_line_utf8(argc, argv), input_file, mode);
+  parse_args(command_line_utf8(argc, argv), input_file, mode, tracks);
   if (mode == MODE_TRACKS) {
-    extract_tracks(input_file.c_str());
+    extract_tracks(input_file.c_str(), tracks);
 
     if (verbose == 0)
       mxinfo(_("progress: 100%%\n"));
@@ -394,7 +395,7 @@ main(int argc,
     extract_tags(input_file.c_str(), parse_fully);
 
   else if (mode == MODE_ATTACHMENTS)
-    extract_attachments(input_file.c_str(), parse_fully);
+    extract_attachments(input_file.c_str(), tracks, parse_fully);
 
   else if (mode == MODE_CHAPTERS)
     extract_chapters(input_file.c_str(), chapter_format_simple, parse_fully);

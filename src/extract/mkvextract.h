@@ -46,7 +46,6 @@ struct track_spec_t {
   bool done;
 };
 
-extern vector<track_spec_t> tracks;
 extern bool no_variable_data;
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
@@ -59,11 +58,12 @@ extern bool no_variable_data;
 void show_element(EbmlElement *l, int level, const char *fmt, ...);
 void show_error(const char *fmt, ...);
 
-bool extract_tracks(const char *file_name);
+bool extract_tracks(const char *file_name, vector<track_spec_t> &tracks);
 void extract_tags(const char *file_name, bool parse_fully);
 void extract_chapters(const char *file_name, bool chapter_format_simple,
                       bool parse_fully);
-void extract_attachments(const char *file_name, bool parse_fully);
+void extract_attachments(const char *file_name,
+                         vector<track_spec_t> &tracks, bool parse_fully);
 void extract_cuesheet(const char *file_name, bool parse_fully);
 void write_cuesheet(const char *file_name, KaxChapters &chapters,
                     KaxTags &tags, int64_t tuid, mm_io_c &out);

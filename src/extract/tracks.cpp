@@ -66,7 +66,8 @@ static vector<xtr_base_c *> extractors;
 // ------------------------------------------------------------------------
 
 static void
-create_extractors(KaxTracks &kax_tracks) {
+create_extractors(KaxTracks &kax_tracks,
+                  vector<track_spec_t> &tracks) {
   int i;
 
   for (i = 0; i < kax_tracks.ListSize(); i++) {
@@ -219,7 +220,8 @@ close_extractors() {
 
 static void
 write_all_cuesheets(KaxChapters &chapters,
-                    KaxTags &tags) {
+                    KaxTags &tags,
+                    vector<track_spec_t> &tracks) {
   int i;
   mm_io_c *out;
 
@@ -261,7 +263,8 @@ write_all_cuesheets(KaxChapters &chapters,
 }
 
 bool
-extract_tracks(const char *file_name) {
+extract_tracks(const char *file_name,
+               vector<track_spec_t> &tracks) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
@@ -373,7 +376,7 @@ extract_tracks(const char *file_name) {
 
         tracks_found = true;
         l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
-        create_extractors(*dynamic_cast<KaxTracks *>(l1));
+        create_extractors(*dynamic_cast<KaxTracks *>(l1), tracks);
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         show_element(l1, 1, _("Cluster"));
@@ -494,7 +497,7 @@ extract_tracks(const char *file_name) {
     delete es;
     delete in;
 
-    write_all_cuesheets(all_chapters, all_tags);
+    write_all_cuesheets(all_chapters, all_tags, tracks);
 
     // Now just close the files and go to sleep. Mummy will sing you a
     // lullaby. Just close your eyes, listen to her sweet voice, singing,
