@@ -23,6 +23,10 @@
 #include "common.h"
 #include "mm_io.h"
 
+namespace libebml {
+  class EbmlMaster;
+};
+
 namespace libmatroska {
   class KaxChapters;
   class KaxTags;
@@ -95,6 +99,6 @@ KaxChapterAtom *MTX_DLL_API find_chapter_with_uid(KaxChapters &chapters,
                                                   uint64_t uid);
 
 void MTX_DLL_API move_chapters_by_edition(KaxChapters &dst, KaxChapters &src);
-
+void MTX_DLL_API adjust_chapter_timecodes(EbmlMaster &master, int64_t offset);
 #endif // __CHAPTERS_H
 

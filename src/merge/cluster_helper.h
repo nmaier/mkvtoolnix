@@ -49,7 +49,8 @@ class cluster_helper_c {
 private:
   ch_contents_t **clusters;
   int num_clusters, cluster_content_size;
-  int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
+  int64_t max_timecode_and_duration;
+  int64_t last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets, first_timecode;
   int64_t bytes_in_file, first_timecode_in_file;
   mm_io_c *out;
@@ -69,7 +70,7 @@ public:
   int free_ref(int64_t ref_timecode, generic_packetizer_c *source);
   int free_clusters();
   int get_cluster_content_size();
-  int64_t get_max_timecode();
+  int64_t get_duration();
   int64_t get_first_timecode();
   int64_t get_timecode_offset();
 

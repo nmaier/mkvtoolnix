@@ -206,8 +206,7 @@ sighandler(int signum) {
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    irnd((double)(cluster_helper->get_max_timecode() -
-                  cluster_helper->get_first_timecode()) /
+    irnd((double)cluster_helper->get_duration() /
          (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
   out->restore_pos();
@@ -1339,14 +1338,12 @@ finish_file(bool last_file) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
-  mxverb(3, "mkvmerge: kax_duration: gmt %lld tcs %f du %lld\n",
-         cluster_helper->get_max_timecode(), timecode_scale,
-         irnd((double)(cluster_helper->get_max_timecode() -
-                       cluster_helper->get_first_timecode()) /
+  mxverb(3, "mkvmerge: kax_duration: gdur %lld tcs %f du %lld\n",
+         cluster_helper->get_duration(), timecode_scale,
+         irnd((double)cluster_helper->get_duration() /
               (double)((int64_t)timecode_scale)));
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    irnd((double)(cluster_helper->get_max_timecode() -
-                  cluster_helper->get_first_timecode()) /
+    irnd((double)cluster_helper->get_duration() /
          (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
 
@@ -1390,7 +1387,7 @@ finish_file(bool last_file) {
     else
       offset = 0;
     start = cluster_helper->get_first_timecode() + offset;
-    end = cluster_helper->get_max_timecode() + offset;
+    end = start + cluster_helper->get_duration();
 
     chapters_here = copy_chapters(kax_chapters);
     if (splitting)
@@ -1498,15 +1495,30 @@ void
 append_track(packetizer_t &ptzr,
              const append_spec_t &amap) {
   vector<generic_packetizer_c *>::const_iterator gptzr;
+  filelist_t &src_file = files[amap.src_file_id];
+  filelist_t &dst_file = files[amap.dst_file_id];
 
-  foreach(gptzr, files[amap.src_file_id].reader->reader_packetizers)
+  foreach(gptzr, src_file.reader->reader_packetizers)
     if (amap.src_track_id == (*gptzr)->ti->id)
       break;
-  if (gptzr == files[amap.src_file_id].reader->reader_packetizers.end())
+  if (gptzr == src_file.reader->reader_packetizers.end())
     die("Could not find gptzr when appending. %s\n", BUGMSG);
 
-  if ((*gptzr)->get_track_type() == track_subtitle)
-    files[ptzr.file].reader->read_all();
+  if (((*gptzr)->get_track_type() == track_subtitle) ||
+      (src_file.reader->chapters != NULL))
+    dst_file.reader->read_all();
+
+  // Append some more chapters and adjust their timecodes by the highest
+  // timecode seen in the previous file.
+  if (src_file.reader->chapters != NULL) {
+    if (kax_chapters == NULL)
+      kax_chapters = new KaxChapters;
+    adjust_chapter_timecodes(*src_file.reader->chapters,
+                             dst_file.reader->max_timecode_seen);
+    move_chapters_by_edition(*kax_chapters, *src_file.reader->chapters);
+    delete src_file.reader->chapters;
+    src_file.reader->chapters = NULL;
+  }
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
@@ -1514,9 +1526,9 @@ append_track(packetizer_t &ptzr,
          ptzr.packetizer->ti->id, amap.dst_file_id,
          ptzr.packetizer->ti->fname);
 
-  if (display_reader == files[amap.dst_file_id].reader) {
+  if (display_reader == dst_file.reader) {
     display_files_done++;
-    display_reader = files[amap.src_file_id].reader;
+    display_reader = src_file.reader;
   }
 
   (*gptzr)->connect(ptzr.packetizer);

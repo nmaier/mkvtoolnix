@@ -589,7 +589,7 @@ move_chapters_by_edition(KaxChapters &dst,
 
   for (i = 0; i < src.ListSize(); i++) {
     KaxEditionEntry *ee_dst;
-    KaxEditionUID *euid_src, *euid_dst;
+    KaxEditionUID *euid_src;
     EbmlMaster *m;
 
     m = static_cast<EbmlMaster *>(src[i]);
@@ -597,16 +597,9 @@ move_chapters_by_edition(KaxChapters &dst,
     // Find an edition to which these atoms will be added.
     ee_dst = NULL;
     euid_src = FINDFIRST(m, KaxEditionUID);
-    if (euid_src != NULL) {
-      for (k = 0; k < dst.ListSize(); k++) {
-        euid_dst = FINDFIRST(static_cast<EbmlMaster *>(dst[k]),
-                             KaxEditionUID);
-        if ((euid_dst != NULL) && (uint32(*euid_src) == uint32(*euid_dst))) {
-          ee_dst = static_cast<KaxEditionEntry *>(dst[k]);
-          break;
-        }
-      }
-    }
+    if (euid_src != NULL)
+      ee_dst = find_edition_with_uid(dst, uint32(*euid_src));
+
     // No edition with the same UID found as the one we want to handle?
     // Then simply move the complete edition over.
     if (ee_dst == NULL)
@@ -614,10 +607,68 @@ move_chapters_by_edition(KaxChapters &dst,
     else {
       // Move all atoms from the old edition to the new one.
       for (k = 0; k < m->ListSize(); k++)
-        ee_dst->PushElement(*(*m)[k]);
+        if (is_id((*m)[k], KaxChapterAtom))
+          ee_dst->PushElement(*(*m)[k]);
+        else
+          delete (*m)[k];
       m->RemoveAll();
       delete m;
     }
   }
   src.RemoveAll();
+}
+
+/** \brief Adjust all start and end timecodes by an offset
+ *
+ * All start and end timecodes are adjusted by an offset. This is done
+ * recursively. 
+ *
+ * \param master A master containint the elements to adjust. This can be
+ * a KaxChapters, KaxEditionEntry or KaxChapterAtom object.
+ * \param offset The offset to add to each timecode. Can be negative. If
+ * the resulting timecode would be smaller than zero then it will be set
+ * to zero.
+ */
+void
+adjust_chapter_timecodes(EbmlMaster &master,
+                         int64_t offset) {
+  int i;
+
+  
+  for (i = 0; i < master.ListSize(); i++) {
+    KaxChapterAtom *atom;
+    KaxChapterTimeStart *start;
+    KaxChapterTimeEnd *end;
+    int64_t new_value;
+
+    if (!is_id(master[i], KaxChapterAtom))
+      continue;
+
+    atom = static_cast<KaxChapterAtom *>(master[i]);
+    start = FINDFIRST(atom, KaxChapterTimeStart);
+    if (start != NULL) {
+      new_value = uint64(*start);
+      new_value += offset;
+      if (new_value < 0)
+        new_value = 0;
+      *static_cast<EbmlUInteger *>(start) = new_value;
+    }
+
+    end = FINDFIRST(atom, KaxChapterTimeEnd);
+    if (end != NULL) {
+      new_value = uint64(*end);
+      new_value += offset;
+      if (new_value < 0)
+        new_value = 0;
+      *static_cast<EbmlUInteger *>(end) = new_value;
+    }
+  }
+
+  for (i = 0; i < master.ListSize(); i++) {
+    EbmlMaster *m;
+
+    m = dynamic_cast<EbmlMaster *>(master[i]);
+    if (m != NULL)
+      adjust_chapter_timecodes(*m, offset);
+  }
 }

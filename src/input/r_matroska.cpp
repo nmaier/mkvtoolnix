@@ -1864,8 +1864,11 @@ kax_reader_c::read(generic_packetizer_c *,
 
         cluster_tc = uint64(*ctc);
         cluster->InitTimecode(cluster_tc, tc_scale);
-        if (first_timecode == -1)
+        if (first_timecode == -1) {
           first_timecode = cluster_tc * tc_scale;
+          if ((chapters != NULL) && (first_timecode > 0))
+            adjust_chapter_timecodes(*chapters, -first_timecode);
+        }
 
         for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
           if (!(EbmlId(*(*cluster)[bgidx]) ==
