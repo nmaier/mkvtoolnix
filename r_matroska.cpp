@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.13 2003/04/28 07:27:27 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.14 2003/04/29 16:23:12 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -326,7 +326,7 @@ void mkv_reader_c::verify_tracks() {
             t->a_formattag = 0x0055;
           else if (!strcmp(t->codec_id, MKV_A_AC3))
             t->a_formattag = 0x2000;
-          else if (!strcmp(t->codec_id, MKV_A_PCM16))
+          else if (!strcmp(t->codec_id, MKV_A_PCM))
             t->a_formattag = 0x0001;
           else if (!strcmp(t->codec_id, MKV_A_VORBIS)) {
             if (t->private_data == NULL) {

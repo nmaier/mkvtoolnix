@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.27 2003/04/24 20:36:45 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.28 2003/04/29 16:23:12 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -74,7 +74,7 @@ protected:
   int hcodec_private_length;
 
   float haudio_sampling_freq;
-  int haudio_channels;
+  int haudio_channels, haudio_bit_depth;
 
   int hvideo_pixel_width, hvideo_pixel_height;
   float hvideo_frame_rate;
@@ -108,6 +108,7 @@ public:
 
   virtual void set_audio_sampling_freq(float freq);
   virtual void set_audio_channels(int channels);
+  virtual void set_audio_bit_depth(int bit_depth);
 
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);

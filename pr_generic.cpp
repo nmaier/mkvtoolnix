@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.26 2003/04/27 09:14:47 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.27 2003/04/29 16:23:12 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -49,6 +49,7 @@ generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
 
   haudio_sampling_freq = -1.0;
   haudio_channels = -1;
+  haudio_bit_depth = -1;
 
   hvideo_pixel_width = -1;
   hvideo_pixel_height = -1;
@@ -135,6 +136,10 @@ void generic_packetizer_c::set_audio_sampling_freq(float freq) {
 
 void generic_packetizer_c::set_audio_channels(int channels) {
   haudio_channels = channels;
+}
+
+void generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
+  haudio_bit_depth = bit_depth;
 }
 
 void generic_packetizer_c::set_video_pixel_width(int width) {
@@ -255,6 +260,10 @@ void generic_packetizer_c::set_header() {
     if (haudio_channels != -1)
       *(static_cast<EbmlUInteger *> (&GetChild<KaxAudioChannels>(audio))) =
         haudio_channels;
+
+    if (haudio_bit_depth != -1)
+      *(static_cast<EbmlUInteger *> (&GetChild<KaxAudioBitDepth>(audio))) =
+        haudio_bit_depth;
 
   }
 }

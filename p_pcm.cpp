@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.15 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.16 2003/04/29 16:23:12 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -49,10 +49,6 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
   bytes_output = 0;
   remaining_sync = 0;
 
-  if (bits_per_sample != 16)
-    throw error_c("Error: pcm_packetizer: Only files with 16bits per sample "
-                  "are supported at the moment.\n");
-
   set_header();
 }
 
@@ -66,9 +62,10 @@ void pcm_packetizer_c::set_header() {
 
   set_serial(-1);
   set_track_type(track_audio);
-  set_codec_id(MKV_A_PCM16);
+  set_codec_id(MKV_A_PCM);
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
+  set_audio_bit_depth(bits_per_sample);
 
   if (ti->default_track)
     set_as_default_track('a');
