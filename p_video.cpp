@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.25 2003/04/20 14:59:33 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.26 2003/04/20 19:32:11 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,6 @@ video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int navi_compat_mode, track_info_t *nti)
   throw (error_c) : generic_packetizer_c(nti) {
-  packetno = 0;
   fps = nfps;
   width = nwidth;
   height = nheight;
@@ -73,18 +72,16 @@ void video_packetizer_c::set_header() {
 }
 
 int video_packetizer_c::process(unsigned char *buf, int size,
-                                int64_t old_timecode, int64_t flags, int64_t,
+                                int64_t old_timecode, int64_t, int64_t bref,
                                 int64_t) {
   int64_t timecode;
-  int num_frames;
 
-  num_frames = flags & VNUMFRAMES;
   if (old_timecode == -1)
     timecode = (int64_t)(1000.0 * frames_output / fps);
   else
     timecode = old_timecode;
 
-  if ((flags & VFT_IFRAME) != 0) {
+  if (bref == -1) {
     // Add a key frame and save its timecode so that we can reference it later.
     add_packet(buf, size, timecode);
     ref_timecode = timecode;
@@ -94,11 +91,7 @@ int video_packetizer_c::process(unsigned char *buf, int size,
     ref_timecode = timecode;
   }
 
-  if (num_frames > 1)
-    fprintf(stdout, "Warning: video_packetizer: num_frames > 1\n");
-  frames_output += num_frames;
-
-  packetno++;
+  frames_output++;
     
   return EMOREDATA;
 }

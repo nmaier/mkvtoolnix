@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.16 2003/04/20 17:22:04 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.17 2003/04/20 19:32:11 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -584,11 +584,13 @@ void ogm_reader_c::process_page(ogg_page *og) {
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
 
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
-        flags = hdrlen > 0 ? lenbytes : 1;
+//         flags = hdrlen > 0 ? lenbytes : 1;
         if (*op.packet & PACKET_IS_SYNCPOINT)
-          flags |= VFT_IFRAME;
+          flags = VFT_IFRAME;
+        else
+          flags = -1;
         dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
-                                 -1, flags);
+                                 -1, -1, flags);
         dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
 
       } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {

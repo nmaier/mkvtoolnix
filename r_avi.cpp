@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.20 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.21 2003/04/20 19:32:11 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -353,8 +353,8 @@ int avi_reader_c::read() {
       while (!done && (frames <= (maxframes - 1))) {
         nread = AVI_read_frame(avi, (char *)chunk, &key);
         if (nread < 0) {
-          vpacketizer->process(old_chunk, old_nread, -1,
-                               frames_read | (old_key ? VFT_IFRAME : 0));
+          vpacketizer->process(old_chunk, old_nread, -1, -1,
+                               old_key ? -1 : 0);
           frames = maxframes + 1;
           break;
         }
@@ -370,8 +370,8 @@ int avi_reader_c::read() {
         frames++;
       }
       if (nread > 0) {
-          vpacketizer->process(old_chunk, old_nread, -1,
-                               frames_read | (old_key ? VFT_IFRAME : 0));
+        vpacketizer->process(old_chunk, old_nread, -1, -1,
+                             old_key ? -1 : 0);
         if (! last_frame) {
           if (old_chunk != NULL)
             free(old_chunk);
@@ -384,7 +384,8 @@ int avi_reader_c::read() {
           old_key = key;
           old_nread = nread;
         } else if (nread > 0)
-          vpacketizer->process(chunk, nread, -1, 1 | (key ? VFT_IFRAME : 0));
+          vpacketizer->process(chunk, nread, -1, -1,
+                               key ? -1 : 0);
       }
     }
     if (last_frame) {
