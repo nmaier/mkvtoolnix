@@ -290,6 +290,15 @@ int cluster_helper_c::get_next_splitpoint() {
   return next_splitpoint;
 }
 
+void cluster_helper_c::dump_splitpoints() {
+  uint32_t i;
+
+  for (i = 0; i < splitpoints.size(); i++)
+    mxinfo("[splitpoint] size %lld, timecode %.3fs, packet_num %lld\n",
+           splitpoints[i]->filepos + splitpoints[i]->cues_size,
+           splitpoints[i]->timecode / 1000.0, splitpoints[i]->packet_num);
+}
+
 void cluster_helper_c::set_output(mm_io_c *nout) {
   out = nout;
 }

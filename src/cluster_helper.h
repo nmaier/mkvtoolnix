@@ -81,6 +81,7 @@ public:
   int64_t get_timecode_offset();
   void find_next_splitpoint();
   int get_next_splitpoint();
+  void dump_splitpoints();
 
 private:
   int find_cluster(KaxCluster *cluster);

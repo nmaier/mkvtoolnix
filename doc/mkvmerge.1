@@ -139,6 +139,10 @@ so on. If there's no extension then '-%03d' will be appended to the name.
 Create at most \fIn\fR files, even if the last file will be longer or larger
 than indicated by \fB\-\-split\fR.
 .TP
+\fB\-\-dump\-splitpoints
+Dump all the possible positions (both file size and timestamp) on which mkvmerge
+could split after the first splitting pass.
+.TP
 \fB\-\-dont\-link\fR
 Do not link files to one another when splitting the output file. See the
 section \fBFILE LINKING\fR below for details.
