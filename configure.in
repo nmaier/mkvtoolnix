@@ -27,8 +27,11 @@ PATH_BZ2()
 dnl Check for headers
 AC_HEADER_STDC()
 
+AM_CONDITIONAL(HAVE_WXWINDOWS, test x"$have_wxwindows" = "xyes")
+
 CFLAGS="-Wall -Wno-sign-compare -Wno-comment -I../src @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
 CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -I../avilib -I.. @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@ @EXPAT_CFLAGS@ @ZLIB_CFLAGS@ @LZO_CFLAGS@ @BZ2_CFLAGS@"
 LDFLAGS=-L../avilib
 
-AC_OUTPUT(Makefile avilib/Makefile src/Makefile doc/Makefile)
+AC_OUTPUT(Makefile avilib/Makefile src/Makefile src/mmg/Makefile doc/Makefile)
+

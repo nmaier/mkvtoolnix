@@ -655,6 +655,7 @@ AC_DEFUN(PATH_WXWINDOWS,
       fi
       echo '#define HAVE_WXWINDOWS 1' >> config.h
       AC_MSG_RESULT($wxwversion ok)
+      have_wxwindows=yes
     else
       AC_MSG_RESULT(no: version $wxwversion is too old)
     fi

@@ -1,5 +1,9 @@
 AUTOMAKE_OPTIONS = dist-zip foreign
 
+if HAVE_WXWINDOWS
+SUBDIRS = mmg
+endif
+
 bin_PROGRAMS = mkvmerge mkvinfo mkvextract base64tool
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
