@@ -408,16 +408,19 @@ int cluster_helper_c::render() {
         first_lace = true;
 
         for (k = 0; k < durations.size(); k++) {
-          if (first_lace) {
-            slice = &GetChild<KaxTimeSlice>(*slices);
-            first_lace = false;
-          } else
-            slice = &GetNextChild<KaxTimeSlice>(*slices, *slice);
-          *static_cast<EbmlUInteger *>
-            (&GetChild<KaxSliceFrameNumber>(*slice)) = k;
-          if (durations[k] != def_duration)
-            *static_cast<EbmlUInteger *>(&GetChild<KaxSliceDuration>(*slice)) =
-              (int64_t)(durations[k] * TIMECODE_SCALE / 1000000);
+          if ((durations[k] != def_duration) || (k > 0)) {
+            if (first_lace) {
+              slice = &GetChild<KaxTimeSlice>(*slices);
+              first_lace = false;
+            } else
+              slice = &GetNextChild<KaxTimeSlice>(*slices, *slice);
+            *static_cast<EbmlUInteger *>
+              (&GetChild<KaxSliceFrameNumber>(*slice)) = k;
+            if (durations[k] != def_duration)
+              *static_cast<EbmlUInteger *>
+                (&GetChild<KaxSliceDuration>(*slice)) =
+                (int64_t)(durations[k] * TIMECODE_SCALE / 1000000);
+          }
         }
       }
 
