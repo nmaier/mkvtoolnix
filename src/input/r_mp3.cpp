@@ -70,7 +70,7 @@ mp3_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
   add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency,
-                                      mp3header.channels, ti));
+                                      mp3header.channels, false, ti));
   mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
          (int64_t)0);
 }
