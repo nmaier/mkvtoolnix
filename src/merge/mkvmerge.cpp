@@ -1955,6 +1955,7 @@ read_args_from_file(vector<string> &args,
    commands from command files if the argument starts with '@'. Puts all
    arguments into a new array.
 */
+#if !defined(SYS_WINDOWS)
 static void
 handle_args(int argc,
             char **argv) {
@@ -1978,6 +1979,64 @@ handle_args(int argc,
 
   parse_args(args);
 }
+
+#else  // !defined(SYS_WINDOWS)
+
+static void
+handle_args(int argc,
+            char **argv) {
+  vector<string> args;
+  wchar_t *p;
+  string utf8;
+  bool quoted, ignore_me, skip_first;
+
+  p = GetCommandLineW();
+  quoted = false;
+  ignore_me = true;
+  skip_first = true;
+  while (*p != 0) {
+    if (*p == L'"')
+      quoted = !quoted;
+    else if (*p == L' ') {
+      if (quoted)
+        utf8 += ' ';
+      else if (!ignore_me) {
+        if (!skip_first) {
+          if (utf8[0] == '@')
+            read_args_from_file(args, utf8.substr(1).c_str());
+          else
+            args.push_back(utf8);
+        }
+        skip_first = false;
+        ignore_me = true;
+        utf8.clear();
+      }
+    } else {
+      ignore_me = false;
+      if (*p < 0x80)
+        utf8 += (char)*p;
+      else if (*p < 0x800) {
+        utf8 += (char)(0xc0 | (*p >> 6));
+        utf8 += (char)(0x80 | (*p & 0x3f));
+      } else {
+        utf8 += (char)(0xe0 | (*p >> 12));
+        utf8 += (char)(0x80 | ((*p >> 6) & 0x3f));
+        utf8 += (char)(0x80 | (*p & 0x3f));
+      }
+    }
+
+    ++p;
+  }
+  if (!ignore_me && !skip_first) {
+    if (utf8[0] == '@')
+      read_args_from_file(args, utf8.substr(1));
+    else
+      args.push_back(utf8);
+  }
+
+  parse_args(args);
+}
+#endif // !defined(SYS_WINDOWS)
 
 /** \brief Initialize global variables
 */
