@@ -663,7 +663,7 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
       }
 
       done = !in->getline2(buffer);
-    } while (!done);
+    }
 
     chapters = pdata->chapters;
     if (chapters != NULL) {
