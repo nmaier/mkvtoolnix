@@ -164,7 +164,8 @@ void vobsub_reader_c::create_packetizers() {
     } else
       ti->language = NULL;
     tracks[i]->packetizer =
-      new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(), ti);
+      new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(), true,
+                              ti);
     avg_duration = 0;
     for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
       tracks[i]->durations.push_back(tracks[i]->timecodes[k + 1] -
@@ -303,6 +304,12 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
 
   id = i;
   i = track->idx;
+  if (track->sizes[i] > 64 * 1024) {
+    mxwarn(PFX "Skipping entry at timecode %llds because it is too big "
+           "(%lld bytes).\n", track->timecodes[i] / 1000, track->sizes[i]);
+    track->idx++;
+    return EMOREDATA;
+  }
   sub_file->setFilePointer(track->positions[i]);
   data = (unsigned char *)safemalloc(track->sizes[i]);
   if (sub_file->read(data, track->sizes[i]) != track->sizes[i]) {
