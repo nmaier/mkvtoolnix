@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.8 2003/04/20 20:08:02 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.9 2003/04/21 10:06:48 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -171,44 +171,6 @@ int mkv_reader_c::packets_available() {
     return 0;
 
   return 1;
-}
-
-void mkv_reader_c::handle_subtitles(mkv_track_t *t, KaxBlock &block) {
-  int len;
-  u_int32_t block_nr;
-  char *s1, *buffer;
-  long duration;
-  int64_t start;
-
-  for (block_nr = 0; block_nr < block.NumberFrames(); block_nr++) {
-    DataBuffer &data = block.GetBuffer(block_nr);
-    len = data.Size();
-    buffer = (char *)malloc(len + 1);
-    if (buffer == NULL) {
-      printf("[mkv] Could not allocate memory for subtitles.\n");
-      return;
-    }
-    memcpy(buffer, data.Buffer(), len);
-    buffer[len] = 0;
-
-    // Extract the duration (which is the first line).
-    s1 = buffer;
-    while ((*s1 != 0) && (*s1 != '\n') && (*s1 != '\r'))
-      s1++;
-    if (*s1 == 0)
-      return;
-
-    *s1 = 0;
-    s1++;
-    duration = strtol(buffer, NULL, 10); // in ms
-    while ((*s1 == '\n') || (*s1 == '\r'))
-      s1++;
-
-    start = cluster_tc + block.Timecod();
-    t->packetizer->process((unsigned char *)s1, 0, start, duration);
-
-    free(buffer);
-  }
 }
 
 mkv_track_t *mkv_reader_c::new_mkv_track() {
@@ -883,6 +845,12 @@ void mkv_reader_c::handle_blocks() {
 
   if (num_buffers == 0)
     return;
+
+  if ((block_track->type == 't') && (block_duration == -1)) {
+    fprintf(stdout, "Warning: Text subtitle block does not contain a "
+            "block duration element. This file is broken.\n");
+    return;
+  }
 
   last_timecode = block_timecode;
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.4 2003/04/20 20:08:02 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.5 2003/04/21 10:06:48 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -117,7 +117,6 @@ private:
   virtual mkv_track_t *find_track_by_num(u_int32_t num, mkv_track_t *c = NULL);
   virtual void         verify_tracks();
   virtual int          packets_available();
-  virtual void         handle_subtitles(mkv_track_t *t, KaxBlock &block);
   virtual void         add_buffer(DataBuffer &dbuffer);
   virtual void         free_buffers();
   virtual void         handle_blocks();
