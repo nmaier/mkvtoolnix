@@ -599,35 +599,93 @@ rerender_track_headers() {
   out->restore_pos();
 }
 
+static uint32_t
+kax_attachment_get_uid(const KaxAttached &a) {
+  KaxFileUID *uid;
+
+  uid = FINDFIRST(&a, KaxFileUID);
+  if (uid == NULL)
+    throw false;
+  return uint32(*static_cast<EbmlUInteger *>(uid));
+}
+
+static UTFstring
+kax_attachment_get_name(const KaxAttached &a) {
+  KaxFileName *name;
+
+  name = FINDFIRST(&a, KaxFileName);
+  if (name == NULL)
+    throw false;
+  return UTFstring(*static_cast<EbmlUnicodeString *>(name));
+}
+
+static UTFstring
+kax_attachment_get_description(const KaxAttached &a) {
+  KaxFileDescription *description;
+
+  description = FINDFIRST(&a, KaxFileDescription);
+  if (description == NULL)
+    return L"";
+  return UTFstring(*static_cast<EbmlUnicodeString *>(description));
+}
+
+static string
+kax_attachment_get_mime_type(const KaxAttached &a) {
+  KaxMimeType *mime_type;
+
+  mime_type = FINDFIRST(&a, KaxMimeType);
+  if (mime_type == NULL)
+    throw false;
+  return string(*static_cast<EbmlString *>(mime_type));
+  
+}
+
+static int64_t
+kax_attachment_get_size(const KaxAttached &a) {
+  KaxFileData *data;
+
+  data = FINDFIRST(&a, KaxFileData);
+  if (data == NULL)
+    throw false;
+  return data->GetSize();
+}
+
+static bool
+operator ==(const KaxAttached &a1,
+            const KaxAttached &a2) {
+  try {
+    if (kax_attachment_get_uid(a1) == kax_attachment_get_uid(a2))
+      return true;
+    if (kax_attachment_get_name(a1) != kax_attachment_get_name(a2))
+      return false;
+    if (kax_attachment_get_description(a1) !=
+        kax_attachment_get_description(a2))
+      return false;
+    if (kax_attachment_get_size(a1) != kax_attachment_get_size(a2))
+      return false;
+    if (kax_attachment_get_mime_type(a1) != kax_attachment_get_mime_type(a2))
+      return false;
+    return true;
+  } catch(...) {
+    return false;
+  }
+}
+
 /** \brief Render all attachments into the output file at the current position
+ *
+ * This function also makes sure that no duplicates are output. This might
+ * happen when appending files.
  */
 static void
 render_attachments(IOCallback *rout) {
-  KaxAttachments *other_as;
+  KaxAttachments *other_as, *other_as_test;
   KaxAttached *kax_a;
   KaxFileData *fdata;
   vector<attachment_t>::const_iterator attch;
-  int i;
+  int i, k;
   char *name;
   binary *buffer;
-  int64_t size;
   mm_io_c *io;
-
-  other_as = new KaxAttachments;
-  for (i = 0; i < files.size(); i++)
-    files[i].reader->add_attachments(other_as);
-  for (i = 0, size = 0; i < other_as->ListSize(); i++) {
-    kax_a = static_cast<KaxAttached *>((*other_as)[i]);
-    fdata = FindChild<KaxFileData>(*kax_a);
-    if (fdata != NULL)
-      size += fdata->GetSize();
-  }
-
-  if (!(((file_num == 1) && ((attachment_sizes_first + size) > 0)) ||
-        ((attachment_sizes_others + size) > 0))) {
-    delete other_as;
-    return;
-  }
 
   if (kax_as != NULL)
     delete kax_as;
@@ -665,6 +723,8 @@ render_attachments(IOCallback *rout) {
         create_unique_uint32(UNIQUE_ATTACHMENT_IDS);
 
       try {
+        int64_t size;
+
         io = new mm_io_c((*attch).name, MODE_READ);
         size = io->get_size();
         buffer = new binary[size];
@@ -679,13 +739,56 @@ render_attachments(IOCallback *rout) {
     }
   }
 
+  other_as = new KaxAttachments;
+  other_as_test = new KaxAttachments;
+  for (i = 0; i < files.size(); i++)
+    files[i].reader->add_attachments(other_as_test);
+
+  // Test if such an attachment already exists. This may be the case if
+  // mkvmerge is concatenating files.
+  i = 0;
+  while (i < other_as_test->ListSize()) {
+    bool found;
+
+    kax_a = static_cast<KaxAttached *>((*other_as_test)[i]);
+    found = false;
+    for (k = 0; k < kax_as->ListSize(); k++)
+      if (*static_cast<KaxAttached *>((*kax_as)[k]) == *kax_a) {
+        found = true;
+        break;
+      }
+    if (found) {
+      i++;
+      continue;
+    }
+
+    for (k = 0; k < other_as->ListSize(); k++)
+      if (*static_cast<KaxAttached *>((*other_as)[k]) == *kax_a) {
+        found = true;
+        break;
+      }
+    if (found) {
+      i++;
+      continue;
+    }
+
+    other_as->PushElement(*kax_a);
+    other_as_test->Remove(i);
+  }
+  delete other_as_test;
+
   while (other_as->ListSize() > 0) {
     kax_as->PushElement(*(*other_as)[0]);
     other_as->Remove(0);
   }
   delete other_as;
 
-  kax_as->Render(*rout);
+  if (kax_as->ListSize() != 0)
+    kax_as->Render(*rout);
+  else {
+    delete kax_as;
+    kax_as = NULL;
+  }
 }
 
 /** \brief Check the complete append mapping mechanism
