@@ -136,7 +136,7 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_enter("video_packetizer_c::process");
 
-  if (is_mpeg4)
+  if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4)
     mpeg4_find_frame_types(mem.data, mem.size, frames);
   if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4 && (fps != 0.0)) {
     for (i = 0; i < frames.size(); i++) {
