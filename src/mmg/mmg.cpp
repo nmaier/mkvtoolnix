@@ -49,6 +49,7 @@
 #include "tab_input.h"
 #include "tab_global.h"
 #include "tab_settings.h"
+#include "xml_element_mapping.h"
 
 mmg_app *app;
 mmg_dialog *mdlg;
@@ -1745,6 +1746,7 @@ mmg_app::OnInit() {
   wxString k, v;
 
   cc_local_utf8 = utf8_init(NULL);
+  xml_element_map_init();
 
   cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg); 

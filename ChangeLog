@@ -1,5 +1,8 @@
 2004-10-08  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Crash when saving chapters from the chapter
+	editor. Same as the mkvinfo issue below but on all OS.
+
 	* mkvinfo: bug fix: The chapter and tag element tables were not
 	initialized on Windows resulting in a crash when one of those
 	elements was encountered.
