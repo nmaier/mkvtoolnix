@@ -106,65 +106,83 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
                                        bool set_defaults,
                                        wxString old_def_language,
                                        wxString old_def_country):
-  wxDialog(parent, 0, wxT(""), wxDefaultPosition) {
+  wxDialog(parent, 0, wxT(""), wxDefaultPosition, wxSize(350, 200)) {
+  wxBoxSizer *siz_all, *siz_buttons, *siz_line;
+  wxFlexGridSizer *siz_input;
   wxButton *b_ok, *b_cancel;
-#if defined(SYS_WINDOWS)
-#define CVD_YOFF1 (-23)
-  wxDialog *panel = this;
-#else
-#define CVD_YOFF1 0
-  wxPanel *panel = new wxPanel(this, -1);
-#endif
   uint32_t i;
 
-  SetSize(350, 200);
+  siz_all = new wxBoxSizer(wxVERTICAL);
   if (set_defaults) {
     SetTitle(wxT("Change the default values"));
-    new wxStaticText(panel, wxID_STATIC,
-                     wxT("Here you can set the default values that mmg will "
-                         "use\nfor each chapter that you create. These values "
-                         "can\nthen be changed if needed. The default values "
-                         "will be\nsaved when you exit mmg."),
-                     wxPoint(10, 10), wxSize(380, 100), 0);
+    siz_all->Add(new wxStaticText(this, wxID_STATIC,
+                                  wxT("Here you can set the default values "
+                                      "that mmg will use\nfor each chapter "
+                                      "that you create. These values can\n"
+                                      "then be changed if needed. The default "
+                                      "values will be\nsaved when you exit "
+                                      "mmg.")),
+                 0, wxLEFT | wxRIGHT | wxTOP, 10);
 
-    new wxStaticText(panel, wxID_STATIC, wxT("Language:"),
-                     wxPoint(10, 92 + CVD_YOFF1));
-    cob_language =
-      new wxComboBox(panel, wxID_STATIC, wxT(""),
-                     wxPoint(90, 90 + CVD_YOFF1), wxSize(220, -1));
+    siz_input = new wxFlexGridSizer(2);
+    siz_input->AddGrowableCol(1);
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->AddGrowableRow(0);
 
-    new wxStaticText(panel, wxID_STATIC, wxT("Country:"),
-                     wxPoint(10, 127 + CVD_YOFF1));
-    cob_country =
-      new wxComboBox(panel, wxID_STATIC, wxT(""),
-                     wxPoint(90, 125 + CVD_YOFF1), wxSize(220, -1));
+    siz_input->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
+                   0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    cob_language = new wxComboBox(this, wxID_STATIC, wxT(""));
+    siz_input->Add(cob_language, 0, wxGROW, 0);
+
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->AddGrowableRow(2);
+
+    siz_input->Add(new wxStaticText(this, wxID_STATIC, wxT("Country:")),
+                   0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    cob_country = new wxComboBox(this, wxID_STATIC, wxT(""));
+    siz_input->Add(cob_country, 0, wxGROW, 0);
 
   } else {
     SetTitle(wxT("Select values to be applied"));
-    new wxStaticText(panel, wxID_STATIC,
-                     wxT("Please enter the values for the language and the\n"
-                         "country that you want to apply to all the chapters\n"
-                         "below and including the currently selected entry."),
-                     wxPoint(10, 10), wxSize(380, 100), 0);
+    siz_all->Add(new wxStaticText(this, wxID_STATIC,
+                                  wxT("Please enter the values for the "
+                                      "language and the\ncountry that you "
+                                      "want to apply to all the chapters\n"
+                                      "below and including the currently "
+                                      "selected entry.")),
+                 0, wxLEFT | wxRIGHT | wxTOP, 10);
+
+    siz_input = new wxFlexGridSizer(2);
+    siz_input->AddGrowableCol(1);
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->AddGrowableRow(0);
 
     cb_language =
-      new wxCheckBox(panel, ID_CVD_CB_LANGUAGE, wxT("Set language to:"),
-                     wxPoint(10, 92 + CVD_YOFF1));
+      new wxCheckBox(this, ID_CVD_CB_LANGUAGE, wxT("Set language to:"));
     cb_language->SetValue(false);
-    cob_language =
-      new wxComboBox(panel, wxID_STATIC, wxT(""),
-                     wxPoint(135, 90 + CVD_YOFF1), wxSize(175, -1));
+    siz_input->Add(cb_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    cob_language = new wxComboBox(this, wxID_STATIC, wxT(""));
     cob_language->Enable(false);
+    siz_input->Add(cob_language, 0, wxGROW, 0);
+
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->Add(0, 1, 1, wxGROW, 0);
+    siz_input->AddGrowableRow(2);
+
     cb_country =
-      new wxCheckBox(panel, ID_CVD_CB_COUNTRY, wxT("Set country to:"),
-                     wxPoint(10, 127 + CVD_YOFF1));
+      new wxCheckBox(this, ID_CVD_CB_COUNTRY, wxT("Set country to:"));
     cb_country->SetValue(false);
-    cob_country =
-      new wxComboBox(panel, wxID_STATIC, wxT(""),
-                     wxPoint(135, 125 + CVD_YOFF1), wxSize(175, -1));
+    siz_input->Add(cb_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    cob_country = new wxComboBox(this, wxID_STATIC, wxT(""));
     cob_country->Enable(false);
+    siz_input->Add(cob_country, 0, wxGROW, 0);
 
   }
+
+  siz_all->Add(siz_input, 3, wxGROW | wxLEFT | wxRIGHT, 25);
 
   cob_language->Append(wxT(""));
   for (i = 0; i < sorted_iso_codes.Count(); i++) {
@@ -178,20 +196,22 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
     cob_country->Append(wxU(cctlds[i]));
   cob_country->SetValue(old_def_country);
 
-  b_ok = new wxButton(panel, wxID_OK, wxT("Ok"), wxPoint(0, 0));
+  siz_buttons = new wxBoxSizer(wxVERTICAL);
+  siz_buttons->Add(0, 1, 1, wxGROW, 0);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  b_ok = new wxButton(this, wxID_OK, wxT("Ok"));
   b_ok->SetDefault();
-  b_cancel = new wxButton(panel, wxID_CANCEL, wxT("Cancel"), wxPoint(0, 0));
+  b_cancel = new wxButton(this, wxID_CANCEL, wxT("Cancel"));
   b_ok->SetSize(b_cancel->GetSize());
-  b_ok->Move(wxPoint(GetSize().GetWidth() / 2 - b_ok->GetSize().GetWidth() -
-                     b_cancel->GetSize().GetWidth() / 2,
-                     GetSize().GetHeight() -
-                     b_ok->GetSize().GetHeight() * 3 / 2 + CVD_YOFF1));
-  b_cancel->Move(wxPoint(GetSize().GetWidth() / 2 +
-                         b_cancel->GetSize().GetWidth() / 2,
-                         GetSize().GetHeight() -
-                         b_ok->GetSize().GetHeight() * 3 / 2 + CVD_YOFF1));
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(b_ok, 0, 0, 0);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(b_cancel, 0, 0, 0);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_buttons->Add(siz_line, 0, wxGROW, 0);
+  siz_all->Add(siz_buttons, 2, wxGROW | wxBOTTOM, 10);
+  SetSizer(siz_all);
 }
-
 
 void
 chapter_values_dlg::on_language_clicked(wxCommandEvent &evt) {
