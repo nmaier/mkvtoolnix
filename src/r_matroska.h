@@ -36,6 +36,11 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 typedef struct {
+  string name, type;
+  int64 size, id;
+} mkv_attachment_t;
+
+typedef struct {
   uint32_t tnum, tuid;
 
   char *codec_id;
@@ -96,6 +101,8 @@ private:
 
   float segment_duration, last_timecode, first_timecode;
 
+  vector<mkv_attachment_t> attachments;
+
 public:
   mkv_reader_c(track_info_t *nti) throw (error_c);
   virtual ~mkv_reader_c();
@@ -118,6 +125,8 @@ private:
   virtual mkv_track_t *find_track_by_uid(uint32_t uid, mkv_track_t *c = NULL);
   virtual void verify_tracks();
   virtual int packets_available();
+  virtual void handle_attachments(mm_io_c *io, EbmlStream *es,
+                                  EbmlElement *l0, int64_t pos);
 };
 
 

@@ -51,6 +51,8 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <ebml/EbmlVoid.h>
 #include <matroska/FileKax.h>
 
+#include <matroska/KaxAttached.h>
+#include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
 #include <matroska/KaxCluster.h>
@@ -418,6 +420,86 @@ void mkv_reader_c::verify_tracks() {
     if (t->ok && (verbose > 1))
       printf("matroska_reader: Track %u seems to be ok.\n", t->tnum);
   }
+}
+
+void mkv_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
+                                      EbmlElement *l0, int64_t pos) {
+  KaxAttachments *atts;
+  KaxAttached *att;
+  EbmlElement *l1, *l2;
+  int upper_lvl_el, i, k;
+  string name, type;
+  int64_t size, id;
+  char *str;
+  bool found;
+  mkv_attachment_t matt;
+
+  io->save_pos(pos);
+  l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                           true);
+
+  if ((l1 != NULL) && (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)) {
+    atts = (KaxAttachments *)l1;
+    l2 = NULL;
+    upper_lvl_el = 0;
+    atts->Read(*es, KaxAttachments::ClassInfos.Context, upper_lvl_el, l2,
+               true);
+    for (i = 0; i < atts->ListSize(); i++) {
+      att = (KaxAttached *)(*atts)[i];
+      if (EbmlId(*att) == KaxAttached::ClassInfos.GlobalId) {
+        name = "";
+        type = "";
+        size = -1;
+        id = -1;
+
+        for (k = 0; k < att->ListSize(); k++) {
+          l2 = (*att)[k];
+
+          if (EbmlId(*l2) == KaxFileName::ClassInfos.GlobalId) {
+            KaxFileName &fname = *static_cast<KaxFileName *>(l2);
+            str = UTFstring_to_cstr(UTFstring(fname));
+            name = str;
+            safefree(str);
+
+          } else if (EbmlId(*l2) == KaxMimeType::ClassInfos.GlobalId) {
+            KaxMimeType &mtype = *static_cast<KaxMimeType *>(l2);
+            type = string(mtype);
+
+          } else if (EbmlId(*l2) == KaxFileUID::ClassInfos.GlobalId) {
+            KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
+            id = uint32(fuid);
+
+          } else if (EbmlId(*l2) == KaxFileData::ClassInfos.GlobalId) {
+            KaxFileData &fdata = *static_cast<KaxFileData *>(l2);
+            size = fdata.GetSize();
+
+          }
+        }
+
+        if ((id != -1) && (size != -1) && (type.length() != 0)) {
+          found = false;
+
+          for (k = 0; k < attachments.size(); k++)
+            if (attachments[k].id == id) {
+              found = true;
+              break;
+            }
+
+          if (!found) {
+            matt.name = name;
+            matt.type = type;
+            matt.size = size;
+            matt.id = id;
+            attachments.push_back(matt);
+          }
+        }
+      }
+    }
+
+    delete l1;
+  }
+
+  io->restore_pos();
 }
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
@@ -864,6 +946,39 @@ int mkv_reader_c::read_headers() {
           }
 
         } // while (l2 != NULL)
+
+      } else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)
+        handle_attachments(in, es, l0, l1->GetElementPosition());
+
+      else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
+        int i, k;
+        EbmlElement *el;
+        KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
+        int64_t pos;
+        bool is_attachments;
+
+        seek_head.Read(*es, KaxSeekHead::ClassInfos.Context, i, el, true);
+        for (i = 0; i < seek_head.ListSize(); i++)
+          if (EbmlId(*seek_head[i]) == KaxSeek::ClassInfos.GlobalId) {
+            KaxSeek &seek = *static_cast<KaxSeek *>(seek_head[i]);
+            pos = -1;
+            is_attachments = false;
+
+            for (k = 0; k < seek.ListSize(); k++)
+              if (EbmlId(*seek[k]) == KaxSeekID::ClassInfos.GlobalId) {
+                KaxSeekID &sid = *static_cast<KaxSeekID *>(seek[k]);
+                EbmlId id(sid.GetBuffer(), sid.GetSize());
+                if (id == KaxAttachments::ClassInfos.GlobalId)
+                  is_attachments = true;
+
+              } else if (EbmlId(*seek[k]) ==
+                         KaxSeekPosition::ClassInfos.GlobalId)
+                pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
+
+            if ((pos != -1) && is_attachments)
+              handle_attachments(in, es, l0,
+                                 ((KaxSegment *)l0)->GetGlobalPosition(pos));
+          }
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         if (verbose > 1)
@@ -1381,4 +1496,14 @@ void mkv_reader_c::identify() {
               tracks[i]->codec_id,
               tracks[i]->ms_compat ? ", " : "",
               tracks[i]->ms_compat ? tracks[i]->v_fourcc : "");
+
+  for (i = 0; i < attachments.size(); i++) {
+    mxprint(stdout, "Attachment ID %lld: type '%s', size %lld bytes, ",
+            attachments[i].id, attachments[i].type.c_str(),
+            attachments[i].size);
+    if (attachments[i].name.length() == 0)
+      mxprint(stdout, "no file name given\n");
+    else
+      mxprint(stdout, "file name '%s'\n", attachments[i].name.c_str());
+  }
 }
