@@ -61,9 +61,11 @@ video_packetizer_c::check_fourcc() {
   if ((hcodec_id == MKV_V_MSCOMP) &&
       (ti.private_data != NULL) &&
       (ti.private_size >= sizeof(alBITMAPINFOHEADER)) &&
-      (ti.fourcc[0] != 0))
+      (ti.fourcc[0] != 0)) {
     memcpy(&((alBITMAPINFOHEADER *)ti.private_data)->bi_compression,
            ti.fourcc, 4);
+    set_codec_private(ti.private_data, ti.private_size);
+  }
 }
 
 void
