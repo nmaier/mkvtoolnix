@@ -1,3 +1,12 @@
+2004-06-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for the audio/video
+	synchronization method used by NanDub (garbage at the beginning of
+	audio tracks inside an AVI) for AC3 and MPEG audio tracks. In
+	other words: If an AVI is read and an audio track contains garbage
+	right at the beginning then the corresponding audio delay is
+	calculated and used instead of simply discarding the garbage.
+
 2004-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.9.0.

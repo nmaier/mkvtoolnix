@@ -200,6 +200,15 @@ public:
   vector<int64_t> *track_order;
   vector<int64_t> *append_mapping;
 
+  // The following variables are needed for the broken way of
+  // syncing audio in AVIs: by prepending it with trash. Thanks to
+  // the nandub author for this really, really sucky implementation.
+  uint16_t avi_block_align;
+  uint32_t avi_samples_per_sec;
+  uint32_t avi_avg_bytes_per_sec;
+  uint32_t avi_samples_per_chunk;
+  vector<int64_t> *avi_block_sizes;
+
 public:
   track_info_c();
   track_info_c(const track_info_c &src):
@@ -438,6 +447,20 @@ public:
 
   virtual const char *get_format_name() = 0;
   virtual int can_connect_to(generic_packetizer_c *src) = 0;
+
+  virtual void enable_avi_audio_sync(bool enable) {
+    if (enable && (ti->avi_block_sizes == NULL))
+      ti->avi_block_sizes = new vector<int64_t>;
+    else if (!enable && (ti->avi_block_sizes != NULL)) {
+      delete ti->avi_block_sizes;
+      ti->avi_block_sizes = NULL;
+    }
+  }
+  virtual int64_t handle_avi_audio_sync(int64_t num_bytes, bool vbr);
+  virtual void add_avi_block_size(int64_t block_size) {
+    if (ti->avi_block_sizes != NULL)
+      ti->avi_block_sizes->push_back(block_size);
+  }
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

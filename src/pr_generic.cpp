@@ -1011,11 +1011,17 @@ void
 generic_packetizer_c::displace(float by_ns) {
   ti->async.displacement += (int64_t)by_ns;
   if (initial_displacement < 0) {
-    if (ti->async.displacement < initial_displacement)
+    if (ti->async.displacement < initial_displacement) {
+      mxverb(3, "EODIS 1 by %f dis is now %lld with idis %lld\n",
+             by_ns, ti->async.displacement, initial_displacement);
       initial_displacement = 0;
+    }
   } else if (iabs(initial_displacement - ti->async.displacement) <
-             (by_ns / 2))
+             (by_ns / 2)) {
+    mxverb(3, "EODIS 2 by %f dis is now %lld with idis %lld\n",
+           by_ns, ti->async.displacement, initial_displacement);
     initial_displacement = 0;
+  }
 }
 
 void
@@ -1032,6 +1038,39 @@ generic_packetizer_c::force_duration_on_last_packet() {
   mxverb(2, "force_duration_on_last_packet: forcing at " FMT_TIMECODE " with "
          "%.3fms for '%s'/%lld\n", ARG_TIMECODE_NS(packet->timecode),
          packet->duration / 1000.0, ti->fname, ti->id);
+}
+
+int64_t
+generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
+                                            bool vbr) {
+  double samples;
+  int64_t block_size, duration;
+  int i, cur_bytes;
+
+  if ((ti->avi_samples_per_sec == 0) || (ti->avi_block_align == 0) ||
+      (ti->avi_avg_bytes_per_sec == 0) || (ti->avi_block_sizes == NULL)) {
+    enable_avi_audio_sync(false);
+    return -1;
+  }
+
+  if (!vbr)
+     duration = num_bytes * 1000000000 / ti->avi_avg_bytes_per_sec;
+  else {
+    samples = 0.0;
+    for (i = 0; (i < ti->avi_block_sizes->size()) && (num_bytes > 0); i++) {
+      block_size = (*ti->avi_block_sizes)[i];
+      cur_bytes = num_bytes < block_size ? num_bytes : block_size;
+      samples += (double)ti->avi_samples_per_chunk * cur_bytes / block_size;
+      num_bytes -= cur_bytes;
+    }
+    samples += ti->avi_samples_per_chunk;
+    duration = (int64_t)(samples * 1000000000 / ti->avi_samples_per_sec);
+  }
+
+  enable_avi_audio_sync(false);
+  initial_displacement += duration;
+
+  return duration;
 }
 
 //--------------------------------------------------------------------
@@ -1209,6 +1248,7 @@ track_info_c::track_info_c():
   all_ext_timecodes = new vector<language_t>;
   track_order = new vector<int64_t>;
   append_mapping = new vector<int64_t>;
+  avi_block_sizes = NULL;
 }
 
 void
@@ -1253,6 +1293,7 @@ track_info_c::free_contents() {
   delete display_properties;
   delete track_order;
   delete append_mapping;
+  delete avi_block_sizes;
 
   initialized = false;
 }
@@ -1339,6 +1380,12 @@ track_info_c::operator =(const track_info_c &src) {
   track_order = new vector<int64_t>(*src.track_order);
 
   append_mapping = new vector<int64_t>(*src.append_mapping);
+
+  avi_block_align = src.avi_block_align;
+  avi_samples_per_sec = src.avi_samples_per_sec;
+  avi_avg_bytes_per_sec = src.avi_avg_bytes_per_sec;
+  avi_samples_per_chunk = src.avi_samples_per_chunk;
+  avi_block_sizes = NULL;
 
   initialized = true;
 

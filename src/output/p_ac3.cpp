@@ -47,6 +47,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1536000000000.0 *ti->async.linear /
                                        samples_per_sec));
+  enable_avi_audio_sync(true);
 }
 
 ac3_packetizer_c::~ac3_packetizer_c() {
@@ -76,6 +77,32 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   if ((pos + ac3header->bytes) > size)
     return NULL;
 
+  if (pos > 0) {
+    bool warning_printed;
+
+    warning_printed = false;
+    if (packetno == 0) {
+      int64_t offset;
+
+      offset = handle_avi_audio_sync(pos, false);
+      if (offset != -1) {
+        mxinfo("The AC3 track %lld from '%s' contained %d bytes of non-AC3 "
+               "data at the beginning. This corresponds to a delay of %lldms. "
+               "This delay will be used instead of the non-AC3 data.\n",
+               ti->id, ti->fname, pos, offset / 1000000);
+        warning_printed = true;
+      }
+    }
+    if (!warning_printed)
+      mxwarn("The AC3 track %lld from '%s' contained %d bytes of non-AC3 data "
+             "at the beginning which were skipped. The audio/video "
+             "synchronization may have been lost.\n", ti->id, ti->fname, pos);
+    byte_buffer.remove(pos);
+    packet_buffer = byte_buffer.get_buffer();
+    size = byte_buffer.get_size();
+    pos = 0;
+  }
+
   pins = 1536000000000.0 / samples_per_sec;
 
   if (needs_negative_displacement(pins)) {
@@ -84,16 +111,12 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
      * appropriate number of packets at the beginning.
      */
     displace(-pins);
-    byte_buffer.remove(pos + ac3header->bytes);
+    byte_buffer.remove(ac3header->bytes);
 
     return NULL;
   }
 
-  if (verbose && (pos > 1))
-    mxwarn("ac3_packetizer: skipping %d bytes (no valid AC3 header "
-           "found). This might make audio/video go out of sync, but this "
-           "stream is damaged.\n", pos);
-  buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
+  buf = (unsigned char *)safememdup(packet_buffer, ac3header->bytes);
 
   if (needs_positive_displacement(pins)) {
     /*
@@ -107,7 +130,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     return buf;
   }
 
-  byte_buffer.remove(pos + ac3header->bytes);
+  byte_buffer.remove(ac3header->bytes);
 
   return buf;
 }

@@ -48,9 +48,34 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1152000000000.0 * ti->async.linear /
                                           samples_per_sec));
+  enable_avi_audio_sync(true);
 }
 
 mp3_packetizer_c::~mp3_packetizer_c() {
+}
+
+void
+mp3_packetizer_c::handle_garbage(int64_t bytes) {
+  bool warning_printed;
+
+  warning_printed = false;
+  if (packetno == 0) {
+    int64_t offset;
+
+    offset = handle_avi_audio_sync(bytes, !(ti->avi_block_align % 384) ||
+                                   !(ti->avi_block_align % 576));
+    if (offset != -1) {
+      mxinfo("The MPEG audio track %lld from '%s' contained %lld bytes of "
+             "garbage at the beginning. This corresponds to a delay of "
+             "%lldms. This delay will be used instead of the garbage data."
+             "\n", ti->id, ti->fname, bytes, offset / 1000000);
+      warning_printed = true;
+    }
+  }
+  if (!warning_printed)
+    mxwarn("The MPEG audio track %lld from '%s' contained %lld bytes of "
+           "garbage at the beginning which were skipped. The audio/video "
+           "synchronization may have been lost.\n", ti->id, ti->fname, bytes);
 }
 
 unsigned char *
@@ -114,12 +139,8 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
       if (pos2 == 0) {
         // Yay, two consecutive headers. Throw away the trash at the
         // beginning.
-        if (verbose)
-          mxwarn("mp3_packetizer: skipping %d bytes at the beginning (no "
-                 "valid MP3 header found).\n", offset + pos);
+        handle_garbage(offset + pos);
         byte_buffer.remove(offset + pos);
-        buf = byte_buffer.get_buffer();
-        size = byte_buffer.get_size();
         pos = 0;
         valid_headers_found = true;
       } else {
@@ -130,6 +151,12 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     }
   }
 
+  if (pos > 0) {
+    handle_garbage(pos);
+    byte_buffer.remove(pos);
+    pos = 0;
+  }
+
   if (packetno == 0) {
     spf = mp3header->samples_per_channel;
     codec_id = MKV_A_MP3;
@@ -137,12 +164,12 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     set_codec_id(codec_id.c_str());
     if (spf != 1152)
       set_track_default_duration((int64_t)(1000000000.0 * spf *
-                                              ti->async.linear /
-                                              samples_per_sec));
+                                           ti->async.linear /
+                                           samples_per_sec));
     rerender_track_headers();
   }
 
-  if ((pos + mp3header->framesize) > byte_buffer.get_size())
+  if (mp3header->framesize > byte_buffer.get_size())
     return NULL;
 
   pins = 1000000000.0 * (double)spf / mp3header->sampling_frequency;
@@ -153,18 +180,11 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
      * appropriate number of packets at the beginning.
      */
     displace(-pins);
-    byte_buffer.remove(mp3header->framesize + pos);
+    byte_buffer.remove(mp3header->framesize);
 
     return NULL;
   }
 
-  if (pos > 0) {
-    if (verbose)
-      mxwarn("mp3_packetizer: skipping %d bytes (no valid MP3 header found)."
-             "\n", pos);
-    byte_buffer.remove(pos);
-    pos = 0;
-  }
   buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
                                     mp3header->framesize);
 

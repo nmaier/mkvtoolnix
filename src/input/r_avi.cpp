@@ -1,3 +1,4 @@
+
 /*
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
@@ -366,6 +367,8 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.bits_per_sample = wfe->wBitsPerSample;
   demuxer.frame = stream->Start();
   demuxer.maxframes = stream->End();
+  ti->avi_block_align = wfe->nBlockAlign;
+  ti->avi_avg_bytes_per_sec = wfe->nAvgBytesPerSec;
   mxverb(2, "7: sizeof(w32WAVE...) %d, sps %d, c %d, bps %d, mf %d\n",
          sizeof(w32WAVEFORMATEX), demuxer.samples_per_second,
          demuxer.channels, demuxer.bits_per_sample, demuxer.maxframes);
@@ -388,15 +391,19 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.samples_per_second = AVI_audio_rate(avi);
   demuxer.channels = AVI_audio_channels(avi);
   demuxer.bits_per_sample = AVI_audio_bits(avi);
+  ti->avi_block_align = get_uint16(&wfe->n_block_align);
+  ti->avi_avg_bytes_per_sec = get_uint32(&wfe->n_avg_bytes_per_sec);
+  ti->avi_samples_per_chunk = get_uint32(&avi->stream_headers[aid].dw_scale);
 
-  if (wfe->cb_size > 0) {
+  if (get_uint16(&wfe->cb_size) > 0) {
     ti->private_data = (unsigned char *)(wfe + 1);
-    ti->private_size = wfe->cb_size;
+    ti->private_size = get_uint16(&wfe->cb_size);
   } else {
     ti->private_data = NULL;
     ti->private_size = 0;
   }
 #endif
+  ti->avi_samples_per_sec = demuxer.samples_per_second;
 
   switch(audio_format) {
     case 0x0001: // raw PCM audio
@@ -643,6 +650,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
       demuxer->frame += blread;
       if (result == S_OK) {
         memory_c mem(chunk, nread, false);
+        PTZR(demuxer->ptzr)->add_avi_block_size(nread);
         PTZR(demuxer->ptzr)->process(mem);
         need_more_data = demuxer->frame < demuxer->maxframes;
       } else
@@ -664,6 +672,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
         if (nread >= size)
           need_more_data = true;
         memory_c mem(audio_chunk, nread, true);
+        PTZR(demuxer->ptzr)->add_avi_block_size(nread);
         PTZR(demuxer->ptzr)->process(mem);
       } else
         safefree(audio_chunk);
