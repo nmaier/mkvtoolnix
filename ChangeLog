@@ -1,3 +1,13 @@
+2003-07-26  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Added support tags based on XML files.
+
+        * mkvextract: Rewrote the command line syntax. Added extracting
+        attachments and tags as new options.
+
+        * mkvmerge: Fixed a bug in the SRT reader which would not always
+        handle Unix/DOS style new line cases correctly.
+
 2003-07-23  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Added support for the "SegmentTitle" (general title of
