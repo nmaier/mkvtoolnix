@@ -21,14 +21,19 @@
 #ifndef __ERROR_H
 #define __ERROR_H
 
+#include <string>
+
 #include "common.h"
+
+using namespace std;
 
 class error_c {
 private:
-  char *error;
+  string error;
 public:
-  error_c(char *nerror) { error = nerror; };
-  char *get_error()     { return error; };
+  error_c(const char *nerror) { error = nerror; };
+  error_c(const string &nerror) { error = nerror; };
+  const char *get_error() { return error.c_str(); };
 };
 
 #endif // __ERROR_H

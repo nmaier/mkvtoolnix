@@ -136,7 +136,7 @@ private:
 
 public:
   bit_cursor_c(const unsigned char *data, unsigned int len):
-    end_of_data(data+len), byte_position(data), start_of_data(data),
+    end_of_data(data + len), byte_position(data), start_of_data(data),
     bits_valid(8), out_of_data(false) {
     if (byte_position >= end_of_data)
       out_of_data = true;
@@ -161,7 +161,7 @@ public:
       unsigned int rshift = bits_valid-b;
 
       r <<= b;
-      r |= ((*byte_position) >> rshift) & (0xff >> (8-b));
+      r |= ((*byte_position) >> rshift) & (0xff >> (8 - b));
 
       bits_valid -= b;
       if (bits_valid == 0) {
@@ -204,6 +204,16 @@ public:
     bits_valid = 0;
     byte_position += 1;
     return false;
+  }
+
+  bool set_bit_position(unsigned int pos) {
+    if (pos >= ((end_of_data - start_of_data) * 8))
+      return false;
+
+    byte_position = start_of_data + (pos / 8);
+    bits_valid = 8 - (pos % 8);
+
+    return true;
   }
 
   int get_bit_position() {
