@@ -64,9 +64,8 @@ read_next_header(mm_io_c *mm_io,
   while (1) {
     if (sp < ep) {
       bleft = ep - sp;
-      memcpy(buffer, sp, bleft);
-    }
-    else
+      memmove(buffer, sp, bleft);
+    } else
       bleft = 0;
 
     if (mm_io->read(buffer + bleft, sizeof(*wphdr) - bleft) !=
