@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.1 2003/03/06 23:39:40 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.2 2003/04/11 11:54:36 mosu Exp $
     \brief subtitle helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -139,7 +139,8 @@ void subtitles_c::process(textsubs_packetizer_c *p) {
   sub_t *current;
   
   while ((current = get_next()) != NULL) {
-    p->process(current->start, current->end, current->subs);
+    p->process((unsigned char *)current->subs, 0, current->start,
+               current->end - current->start);
     free(current->subs);
     free(current);
   }
