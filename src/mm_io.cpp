@@ -261,6 +261,15 @@ bool mm_io_c::getline2(string &s) {
   return true;
 }
 
+int64_t mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
+  try {
+    setFilePointer(offset, mode);
+    return getFilePointer();
+  } catch(...) {
+    return -1;
+  }
+}
+
 size_t mm_io_c::puts_unl(const char *s) {
   int i;
   size_t bytes_written;

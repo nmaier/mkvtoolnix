@@ -31,6 +31,9 @@ class error_c {
 private:
   string error;
 public:
+  error_c() {
+    error = "unknown error";
+  };
   error_c(char *nerror, bool freeit = false) {
     error = nerror;
     if (freeit)
