@@ -634,7 +634,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
     lb_input_files->Append(name);
 
     file.file_name = new wxString(dlg.GetPath());
-    mdlg->set_title_maybe(file.title->c_str());
+    mdlg->set_title_maybe(*file.title);
+    mdlg->set_output_maybe(*file.file_name);
     files.push_back(file);
   }
 }

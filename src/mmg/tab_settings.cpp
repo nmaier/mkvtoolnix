@@ -45,7 +45,7 @@ tab_settings::tab_settings(wxWindow *parent):
                wxDefaultSize, 0);
 
   new wxStaticBox(this, -1, wxS("Miscellaneous options"), wxPoint(10, 65),
-                  wxSize(475, 50));
+                  wxSize(475, 75));
   new wxStaticText(this, -1, wxS("Process priority:"), wxPoint(15, 85));
   cob_priority =
     new wxComboBox(this, ID_COB_PRIORITY, wxS(""), wxPoint(120, 85 + YOFF),
@@ -59,6 +59,16 @@ tab_settings::tab_settings(wxWindow *parent):
   cob_priority->Append(wxS("normal"));
   cob_priority->Append(wxS("lower"));
   cob_priority->Append(wxS("lowest"));
+
+  cb_autoset_output_filename =
+    new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME,
+                   wxS("Auto-set output filename"), wxPoint(15, 115 + YOFF));
+  cb_autoset_output_filename->
+    SetToolTip(wxS("If checked mmg will automatically set the output filename "
+                   "if it hasn't been set already. This happens when you add "
+                   "a file. It will be set to the same name as the "
+                   "input file but with the extension '.mkv'. If unset mmg "
+                   "will not touch the output filename."));
 
 
   new wxStaticBox(this, -1, wxS("About"), wxPoint(10, 350),
@@ -100,7 +110,7 @@ tab_settings::on_browse(wxCommandEvent &evt) {
 }
 
 void
-tab_settings::on_priority_selected(wxCommandEvent &evt) {
+tab_settings::on_xyz_selected(wxCommandEvent &evt) {
   save_preferences();
 }
 
@@ -108,6 +118,7 @@ void
 tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
   wxString priority;
+  bool b;
   int i;
 
   cfg->SetPath(wxS("/GUI"));
@@ -124,6 +135,10 @@ tab_settings::load_preferences() {
       cob_priority->SetSelection(i);
       break;
     }
+
+  if (!cfg->Read(wxS("autoset_output_filename"), &b))
+    b = true;
+  cb_autoset_output_filename->SetValue(b);
 }
 
 void
@@ -132,6 +147,8 @@ tab_settings::save_preferences() {
   cfg->SetPath(wxS("/GUI"));
   cfg->Write(wxS("mkvmerge_executable"), tc_mkvmerge->GetValue());
   cfg->Write(wxS("process_priority"), cob_priority->GetValue());
+  cfg->Write(wxS("autoset_output_filename"),
+             cb_autoset_output_filename->IsChecked());
   cfg->Flush();
 }
 
@@ -174,5 +191,6 @@ tab_settings::query_mkvmerge_capabilities() {
 IMPLEMENT_CLASS(tab_settings, wxPanel);
 BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
-  EVT_COMBOBOX(ID_COB_PRIORITY, tab_settings::on_priority_selected)
+  EVT_COMBOBOX(ID_COB_PRIORITY, tab_settings::on_xyz_selected)
+  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, tab_settings::on_xyz_selected)
 END_EVENT_TABLE();

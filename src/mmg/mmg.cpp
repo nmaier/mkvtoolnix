@@ -1234,10 +1234,23 @@ mmg_dialog::on_window_selected(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::set_title_maybe(const char *new_title) {
-  if ((strlen(new_title) > 0) &&
+mmg_dialog::set_title_maybe(const wxString &new_title) {
+  if ((new_title.length() > 0) &&
       (global_page->tc_title->GetValue().length() == 0))
     global_page->tc_title->SetValue(new_title);
+}
+
+void
+mmg_dialog::set_output_maybe(const wxString &new_output) {
+  wxString output;
+
+  if (settings_page->cb_autoset_output_filename->IsChecked() &&
+      (new_output.length() > 0) &&
+      (tc_output->GetValue().length() == 0)) {
+    output = new_output.BeforeLast('.');
+    output += ".mkv";
+    tc_output->SetValue(output);
+  }
 }
 
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);

@@ -149,7 +149,8 @@ public:
 
   void on_window_selected(wxCommandEvent &evt);
 
-  void set_title_maybe(const char *new_title);
+  void set_title_maybe(const wxString &new_title);
+  void set_output_maybe(const wxString &new_output);
 };
 
 extern mmg_dialog *mdlg;
