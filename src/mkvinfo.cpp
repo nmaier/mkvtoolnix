@@ -229,14 +229,24 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
 
 // }}}
 
-// {{{ parsing helper functions
+// {{{ is_global, parse_multicomment, asctime_r, gmtime_r
 
-bool is_ebmlvoid(EbmlElement *l, int level, int &upper_lvl_el) {
+#define fits_parent(l, p) (l->GetElementPosition() < \
+                           (p->GetElementPosition() + p->ElementSize()))
+#define in_parent(p) (in->getFilePointer() < \
+                      (p->GetElementPosition() + p->ElementSize()))
+
+bool is_global(EbmlElement *l, int level, int &upper_lvl_el) {
   if (upper_lvl_el < 0)
     upper_lvl_el = 0;
 
   if (EbmlId(*l) == EbmlVoid::ClassInfos.GlobalId) {
     show_element(l, level, "EbmlVoid");
+
+    return true;
+
+  } else if (EbmlId(*l) == EbmlCrc32::ClassInfos.GlobalId) {
+    show_element(l, level, "EbmlCrc32");
 
     return true;
   }
@@ -245,21 +255,17 @@ bool is_ebmlvoid(EbmlElement *l, int level, int &upper_lvl_el) {
 }
 
 bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level,
-                        int &upper_lvl_el, EbmlElement *&l_upper) {
+                        int &upper_lvl_el, EbmlElement *&l_upper,
+                        mm_io_c *in) {
   EbmlElement *l1;
 
   if (EbmlId(*l0) == KaxTagMultiComment::ClassInfos.GlobalId) {
-    show_element(l0, level, "MultiComment");
+    show_element(l0, level, "Multi comment");
 
     upper_lvl_el = 0;
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                             0xFFFFFFFFL, true, 1);
-    while (l1 != NULL) {
-      if (upper_lvl_el > 0) {
-        upper_lvl_el = level - 3 + upper_lvl_el;
-        l_upper = l1;
-        return true;
-      }
+                             0xFFFFFFFFL, true);
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxTagMultiCommentName::ClassInfos.GlobalId) {
         KaxTagMultiCommentName &c_name =
@@ -286,14 +292,26 @@ bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level,
         show_element(l1, level + 1, "Language: %s",
                      string(c_language).c_str());
 
-      } else if (!is_ebmlvoid(l1, level + 1, upper_lvl_el))
+      } else if (!is_global(l1, level + 1, upper_lvl_el))
         show_unknown_element(l1, level + 1);
+
+      if (!in_parent(l0)) {
+        delete l1;
+        break;
+      }
+
+      if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
+      }
 
       l1->SkipData(*es, l1->Generic().Context);
       delete l1;
-      upper_lvl_el = 0;
       l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                               0xFFFFFFFFL, true, 1);
+                               0xFFFFFFFFL, true);
+
     } // while (l1 != NULL)
 
     return true;
@@ -322,9 +340,6 @@ char *asctime_r(const struct tm *tm, char *buf) {
   return abuf;
 }
 #endif
-
-#define fits_parent(l, p) (l->GetElementPosition() < \
-                           (p->GetElementPosition() + p->ElementSize()))
 
 // }}}
 
@@ -433,12 +448,8 @@ bool process_file(const char *file_name) {
     upper_lvl_el = 0;
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                             true, 1);
-    while (l1 != NULL) {
-      if (upper_lvl_el > 0)
-        break;
-      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
-        break;
+                             true);
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
@@ -446,12 +457,8 @@ bool process_file(const char *file_name) {
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
@@ -540,27 +547,33 @@ bool process_file(const char *file_name) {
             show_element(l2, 2, "Title: %s", str);
             safefree(str);
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {  // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
-            if (upper_lvl_el > 0)
-              break;
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
-            delete l2;
-            l2 = l3;
+            break;
           }
 
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
+            if (upper_lvl_el > 0)
+              break;
+            delete l2;
+            l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
@@ -570,12 +583,8 @@ bool process_file(const char *file_name) {
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             // We actually found a track entry :) We're happy now.
@@ -586,12 +595,8 @@ bool process_file(const char *file_name) {
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+                                     0xFFFFFFFFL, true);
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               // Now evaluate the data belonging to this track
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
@@ -639,12 +644,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) ==
                       KaxAudioSamplingFreq::ClassInfos.GlobalId) {
@@ -668,16 +669,25 @@ bool process_file(const char *file_name) {
                     bps.ReadData(es->I_O());
                     show_element(l4, 4, "Bit depth: %u", uint8(bps));
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el))
+                  } else if (!is_global(l4, 4, upper_lvl_el))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
+                  if (!in_parent(l3)) {
                     delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    break;
                   }
+
+                  if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context,
+                                           upper_lvl_el, 0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -686,12 +696,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxVideoPixelWidth::ClassInfos.GlobalId) {
                     KaxVideoPixelWidth &width =
@@ -727,16 +733,25 @@ bool process_file(const char *file_name) {
                     framerate.ReadData(es->I_O());
                     show_element(l4, 4, "Frame rate: %f", float(framerate));
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el))
+                  } else if (!is_global(l4, 4, upper_lvl_el))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
+                  if (!in_parent(l3)) {
                     delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    break;
                   }
+
+                  if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context,
+                                           upper_lvl_el, 0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -817,49 +832,63 @@ bool process_file(const char *file_name) {
                 language.ReadData(es->I_O());
                 show_element(l3, 3, "Language: %s", string(language).c_str());
 
-              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
+              } else if (!is_global(l3, 3, upper_lvl_el))
                 show_unknown_element(l3, 3);
 
-              if (upper_lvl_el > 0) {  // we're coming from l4
-                upper_lvl_el--;
+              if (!in_parent(l2)) {
                 delete l3;
-                l3 = l4;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
                 if (upper_lvl_el > 0)
                   break;
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es,
-                             l3->Generic().Context);
-                delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              } else {
                 delete l3;
                 l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
               }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {  // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
-            if (upper_lvl_el > 0)
-              break;
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es, l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
-            delete l2;
-            l2 = l3;
+            break;
           }
 
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
+            if (upper_lvl_el > 0)
+              break;
+            delete l2;
+            l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -871,24 +900,16 @@ bool process_file(const char *file_name) {
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxSeek::ClassInfos.GlobalId) {
             show_element(l2, 2, "Seek entry");
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+                                     0xFFFFFFFFL, true);
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               if (EbmlId(*l3) == KaxSeekID::ClassInfos.GlobalId) {
                 binary *b;
@@ -919,6 +940,8 @@ bool process_file(const char *file_name) {
                              (id == KaxTags::ClassInfos.GlobalId) ?
                              "KaxTags" :
                              "unknown");
+                if (id == KaxCues::ClassInfos.GlobalId)
+                  printf("yugga\n");
 
               } else if (EbmlId(*l3) == KaxSeekPosition::ClassInfos.GlobalId) {
                 KaxSeekPosition &seek_pos =
@@ -926,42 +949,57 @@ bool process_file(const char *file_name) {
                 seek_pos.ReadData(es->I_O());
                 show_element(l3, 3, "Seek position: %llu", uint64(seek_pos));
 
-              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
+              } else if (!is_global(l3, 3, upper_lvl_el))
                 show_unknown_element(l3, 3);
 
-              if (upper_lvl_el == 0) {
-                l3->SkipData(*es, l3->Generic().Context);
+              if (!in_parent(l2)) {
                 delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true);
+                break;
               }
+
+              if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
+              }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
+
 
             } // while (l3 != NULL)
 
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -985,12 +1023,8 @@ bool process_file(const char *file_name) {
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxClusterTimecode::ClassInfos.GlobalId) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
@@ -1008,12 +1042,8 @@ bool process_file(const char *file_name) {
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, false, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+                                     0xFFFFFFFFL, false);
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
                 char adler[100];
@@ -1070,25 +1100,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, false, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, false);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTimeSlice::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Time slice");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, false,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, false);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxSliceLaceNumber::ClassInfos.GlobalId) {
@@ -1124,64 +1145,87 @@ bool process_file(const char *file_name) {
                                      ((float)uint64(sduration)) * tc_scale /
                                      1000000.0);
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el))
+                      } else if (!is_global(l5, 5, upper_lvl_el))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
+                      if (!in_parent(l4)) {
                         delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true);
+                        break;
                       }
+
+                      if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
+                      }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el))
+                  } else if (!is_global(l4, 4, upper_lvl_el))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
                     delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
-                  } else {
-                    delete l3;
-                    l3 = l4;
+                    l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
+
 
                 } // while (l4 != NULL)
 
-              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
+              } else if (!is_global(l3, 3, upper_lvl_el))
                 show_unknown_element(l3, 3);
 
-              if (upper_lvl_el > 0) {    // we're coming from l4
-                upper_lvl_el--;
+              if (!in_parent(l2)) {
                 delete l3;
-                l3 = l4;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
                 if (upper_lvl_el > 0)
                   break;
-
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es,
-                             l3->Generic().Context);
-                delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true);
-              } else {
                 delete l3;
                 l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
               }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
@@ -1191,27 +1235,33 @@ bool process_file(const char *file_name) {
                            bref_found ? 'P' : !fref_found ? 'I' : '?',
                            lf_tnum, lf_timecode);
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -1223,24 +1273,16 @@ bool process_file(const char *file_name) {
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxCuePoint::ClassInfos.GlobalId) {
             show_element(l2, 2, "Cue point");
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+                                     0xFFFFFFFFL, true);
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               if (EbmlId(*l3) == KaxCueTime::ClassInfos.GlobalId) {
                 KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
@@ -1254,12 +1296,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxCueTrack::ClassInfos.GlobalId) {
                     KaxCueTrack &cue_track = *static_cast<KaxCueTrack *>(l4);
@@ -1296,13 +1334,8 @@ bool process_file(const char *file_name) {
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) == KaxCueRefTime::ClassInfos.GlobalId) {
                         KaxCueRefTime &cue_rt =
@@ -1334,90 +1367,116 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "Cue ref codec state: %llu",
                                      uint64(cue_rcs));
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el))
+                      } else if (!is_global(l5, 5, upper_lvl_el))
                         show_unknown_element(l5, 5);
                       
-                      if (upper_lvl_el == 0) {
-                        l5->SkipData(*es,l5->Generic().Context);
+                      if (!in_parent(l4)) {
                         delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true);
+                        break;
                       }
+
+                      if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
+                      }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el))
+                  } else if (!is_global(l4, 4, upper_lvl_el))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es,
-                                 l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
-              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
+              } else if (!is_global(l3, 3, upper_lvl_el))
                 show_unknown_element(l3, 3);
 
-              if (upper_lvl_el > 0) {    // we're coming from l4
-                upper_lvl_el--;
+              if (!in_parent(l2)) {
                 delete l3;
-                l3 = l4;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
                 if (upper_lvl_el > 0)
                   break;
-
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es,
-                             l3->Generic().Context);
-                delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              } else {
                 delete l3;
                 l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
               }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -1428,11 +1487,7 @@ bool process_file(const char *file_name) {
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxAttached::ClassInfos.GlobalId) {
             show_element(l2, 2, "Attached");
@@ -1440,11 +1495,7 @@ bool process_file(const char *file_name) {
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               if (EbmlId(*l3) == KaxFileDescription::ClassInfos.GlobalId) {
                 KaxFileDescription &f_desc =
@@ -1481,46 +1532,55 @@ bool process_file(const char *file_name) {
                 f_uid.ReadData(es->I_O());
                 show_element(l3, 3, "File UID: %u", uint32(f_uid));
 
-              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
+              } else if (!is_global(l3, 3, upper_lvl_el))
                 show_unknown_element(l3, 3);
 
-              if (upper_lvl_el > 0) { // we're coming from l4
-                assert(1 == 0);
-
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es, l3->Generic().Context);
+              if (!in_parent(l2)) {
                 delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true);
-              } else {
-                delete l3;
-                l3 = l4;
+                break;
               }
+
+              if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
+              }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true);
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -1530,36 +1590,24 @@ bool process_file(const char *file_name) {
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTag::ClassInfos.GlobalId) {
             show_element(l2, 2, "Tag");
 
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+                                     0xFFFFFFFFL, true);
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               if (EbmlId(*l3) == KaxTagTargets::ClassInfos.GlobalId) {
                 show_element(l3, 3, "Targets");
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagTrackUID::ClassInfos.GlobalId) {
                     KaxTagTrackUID &trackuid =
@@ -1575,27 +1623,35 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Chapter UID: %llu",
                                  uint64(chapteruid));
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -1604,12 +1660,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagSubject::ClassInfos.GlobalId) {
                     KaxTagSubject &subject =
@@ -1776,27 +1828,35 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Popularimeter: %lld", 
                                  int64(popularimeter));
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -1805,12 +1865,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagAudioGenre::ClassInfos.GlobalId) {
                     KaxTagAudioGenre &audio_genre =
@@ -1844,28 +1900,35 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Sub genre: %s",
                                  string(sub_genre).c_str());
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -1875,12 +1938,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) ==
                       KaxTagAudioEncryption::ClassInfos.GlobalId) {
@@ -1974,28 +2033,35 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Official audio source URL: %s",
                                  string(official_source_url).c_str());
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2005,12 +2071,8 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagCaptureDPI::ClassInfos.GlobalId) {
                     KaxTagCaptureDPI &capture_dpi =
@@ -2078,28 +2140,35 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Original dimensions: %s",
                                  string(original_dimensions).c_str());
 
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2109,25 +2178,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagCommercial::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Commercial");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxTagMultiCommercialType::ClassInfos.GlobalId) {
@@ -2178,13 +2238,8 @@ bool process_file(const char *file_name) {
                         upper_lvl_el = 0;
                         l6 = es->FindNextElement(l5->Generic().Context,
                                                  upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                        while (l6 != NULL) {
-
-                          if (upper_lvl_el > 0)
-                            break;
-                          if ((upper_lvl_el < 0) && !fits_parent(l6, l5))
-                            break;
+                                                 true);
+                        while ((l6 != NULL) && (upper_lvl_el <= 0)) {
 
                           if (EbmlId(*l6) ==
                               KaxTagMultiPriceCurrency::ClassInfos.GlobalId) {
@@ -2223,80 +2278,101 @@ bool process_file(const char *file_name) {
                               show_element(l6, 6, "Price date (invalid, "
                                            "value: %d)", temptime);
 
-                          } else if (!is_ebmlvoid(l6, 6, upper_lvl_el) &&
+                          } else if (!is_global(l6, 6, upper_lvl_el) &&
                                      !parse_multicomment(es, l6, 6,
-                                                         upper_lvl_el, l7))
+                                                         upper_lvl_el, l7, in))
                             show_unknown_element(l6, 6);
 
-                          if (upper_lvl_el > 0) { // we're coming from l7
-                            upper_lvl_el--;
+                          if (!in_parent(l5)) {
                             delete l6;
-                            l6 = l7;
+                            break;
+                          }
+
+                          if (upper_lvl_el > 0) {
+                            upper_lvl_el--;
                             if (upper_lvl_el > 0)
                               break;
-
-                          } else if (upper_lvl_el == 0) {
-                            l6->SkipData(*es, l6->Generic().Context);
-                            delete l6;
-                            upper_lvl_el = 0;
-                            l6 = es->FindNextElement(l5->Generic().Context,
-                                                     upper_lvl_el, 0xFFFFFFFFL,
-                                                     true, 1);
-                          } else {
                             delete l6;
                             l6 = l7;
+                            continue;
+
+                          } else if (upper_lvl_el < 0) {
+                            upper_lvl_el++;
+                            if (upper_lvl_el < 0)
+                              break;
+
                           }
+
+                          l6->SkipData(*es, l6->Generic().Context);
+                          delete l6;
+                          l6 = es->FindNextElement(l5->Generic().Context,
+                                                   upper_lvl_el,
+                                                   0xFFFFFFFFL, true);
 
                         } // while (l6 != NULL)
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
+                      } else if (!is_global(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
-                                                     l6))
+                                                     l6, in))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el > 0) {    // we're coming from l6
-                        upper_lvl_el--;
+                      if (!in_parent(l4)) {
                         delete l5;
-                        l5 = l6;
+                        break;
+                      }
+
+                      if (upper_lvl_el > 0) {
+                        upper_lvl_el--;
                         if (upper_lvl_el > 0)
                           break;
-
-                      } else if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
-                        delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      } else {
                         delete l5;
                         l5 = l6;
+                        continue;
+
+                      } else if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
                       }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2306,25 +2382,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagDate::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Date");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxTagMultiDateType::ClassInfos.GlobalId) {
@@ -2375,54 +2442,68 @@ bool process_file(const char *file_name) {
                           show_element(l5, 5, "End (invalid, value: %d)",
                                        temptime);
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
+                      } else if (!is_global(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
-                                                     l6))
+                                                     l6, in))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el > 0) {    // we're coming from l6
-                        upper_lvl_el--;
+                      if (!in_parent(l4)) {
                         delete l5;
-                        l5 = l6;
+                        break;
+                      }
+
+                      if (upper_lvl_el > 0) {
+                        upper_lvl_el--;
                         if (upper_lvl_el > 0)
                           break;
-
-                      } else if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
-                        delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      } else {
                         delete l5;
                         l5 = l6;
+                        continue;
+
+                      } else if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
                       }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2432,25 +2513,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagEntity::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Entity");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxTagMultiEntityType::ClassInfos.GlobalId) {
@@ -2498,54 +2570,68 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "Email: %s",
                                      string(e_email).c_str());
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
+                      } else if (!is_global(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
-                                                     l6))
+                                                     l6, in))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el > 0) {    // we're coming from l6
-                        upper_lvl_el--;
+                      if (!in_parent(l4)) {
                         delete l5;
-                        l5 = l6;
+                        break;
+                      }
+
+                      if (upper_lvl_el > 0) {
+                        upper_lvl_el--;
                         if (upper_lvl_el > 0)
                           break;
-
-                      } else if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
-                        delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      } else {
                         delete l5;
                         l5 = l6;
+                        continue;
+
+                      } else if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
                       }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
                     delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
-                    delete l5;
-                    l5 = l6;
+                    l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2555,25 +2641,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagIdentifier::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Identifier");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxTagMultiIdentifierType::ClassInfos.GlobalId) {
@@ -2615,55 +2692,68 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "String: %s", str);
                         safefree(str);
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
+                      } else if (!is_global(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
-                                                     l6))
+                                                     l6, in))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el > 0) {    // we're coming from l6
-                        upper_lvl_el--;
+                      if (!in_parent(l4)) {
                         delete l5;
-                        l5 = l6;
+                        break;
+                      }
+
+                      if (upper_lvl_el > 0) {
+                        upper_lvl_el--;
                         if (upper_lvl_el > 0)
                           break;
-
-                      } else if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
-                        delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      } else {
                         delete l5;
                         l5 = l6;
+                        continue;
+
+                      } else if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
                       }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
 
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2673,25 +2763,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagLegal::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Legal");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxTagMultiLegalType::ClassInfos.GlobalId) {
@@ -2732,54 +2813,68 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "Content: %s", str);
                         safefree(str);
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
+                      } else if (!is_global(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
-                                                     l6))
+                                                     l6, in))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el > 0) {    // we're coming from l6
-                        upper_lvl_el--;
+                      if (!in_parent(l4)) {
                         delete l5;
-                        l5 = l6;
+                        break;
+                      }
+
+                      if (upper_lvl_el > 0) {
+                        upper_lvl_el--;
                         if (upper_lvl_el > 0)
                           break;
-
-                      } else if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
-                        delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      } else {
                         delete l5;
                         l5 = l6;
+                        continue;
+
+                      } else if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
                       }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -2789,25 +2884,16 @@ bool process_file(const char *file_name) {
 
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                                         0xFFFFFFFFL, true);
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxTagTitle::ClassInfos.GlobalId) {
                     show_element(l4, 4, "Title");
 
                     upper_lvl_el = 0;
                     l5 = es->FindNextElement(l4->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                    while (l5 != NULL) {
-                      if (upper_lvl_el > 0)
-                        break;
-                      if ((upper_lvl_el < 0) && !fits_parent(l5, l4))
-                        break;
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    while ((l5 != NULL) && (upper_lvl_el <= 0)) {
 
                       if (EbmlId(*l5) ==
                           KaxTagMultiTitleType::ClassInfos.GlobalId) {
@@ -2884,126 +2970,159 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "Language: %s",
                                      string(t_language).c_str());
 
-                      } else if (!is_ebmlvoid(l5, 5, upper_lvl_el) &&
+                      } else if (!is_global(l5, 5, upper_lvl_el) &&
                                  !parse_multicomment(es, l5, 5, upper_lvl_el,
-                                                     l6))
+                                                     l6, in))
                         show_unknown_element(l5, 5);
 
-                      if (upper_lvl_el > 0) {    // we're coming from l6
-                        upper_lvl_el--;
+                      if (!in_parent(l4)) {
                         delete l5;
-                        l5 = l6;
+                        break;
+                      }
+
+                      if (upper_lvl_el > 0) {
+                        upper_lvl_el--;
                         if (upper_lvl_el > 0)
                           break;
-
-                      } else if (upper_lvl_el == 0) {
-                        l5->SkipData(*es, l5->Generic().Context);
-                        delete l5;
-                        upper_lvl_el = 0;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      } else {
                         delete l5;
                         l5 = l6;
+                        continue;
+
+                      } else if (upper_lvl_el < 0) {
+                        upper_lvl_el++;
+                        if (upper_lvl_el < 0)
+                          break;
+
                       }
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true);
 
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4, upper_lvl_el) &&
-                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
+                  } else if (!is_global(l4, 4, upper_lvl_el) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5,
+                                                 in))
                     show_unknown_element(l4, 4);
 
-                  if (upper_lvl_el > 0) {    // we're coming from l5
-                    upper_lvl_el--;
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = l5;
+                    break;
+                  }
+
+                  if (upper_lvl_el > 0) {
+                    upper_lvl_el--;
                     if (upper_lvl_el > 0)
                       break;
-
-                  } else if (upper_lvl_el == 0) {
-                    l4->SkipData(*es, l4->Generic().Context);
-                    delete l4;
-                    upper_lvl_el = 0;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true,
-                                             1);
-                  } else {
                     delete l4;
                     l4 = l5;
+                    continue;
+
+                  } else if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
                   }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
-              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el) &&
-                         !parse_multicomment(es, l3, 3, upper_lvl_el, l4))
+              } else if (!is_global(l3, 3, upper_lvl_el) &&
+                         !parse_multicomment(es, l3, 3, upper_lvl_el, l4, in))
                 show_unknown_element(l3, 3);
 
-              if (upper_lvl_el > 0) { // we're coming from l4
-                upper_lvl_el--;
+              if (!in_parent(l2)) {
                 delete l3;
-                l3 = l4;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
                 if (upper_lvl_el > 0)
                   break;
-
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es, l3->Generic().Context);
-                delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              } else {
                 delete l3;
                 l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
               }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
-          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+          } else if (!is_global(l2, 2, upper_lvl_el))
             show_unknown_element(l2, 2);
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
-      } else if (!is_ebmlvoid(l1, 1, upper_lvl_el))
+      } else if (!is_global(l1, 1, upper_lvl_el))
         show_unknown_element(l1, 1);
 
-      if (upper_lvl_el > 0) {    // we're coming from l2
-        upper_lvl_el--;
+      if (!in_parent(l0)) {
         delete l1;
-        l1 = l2;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
         if (upper_lvl_el > 0)
           break;
-
-      } else if (upper_lvl_el == 0) {
-        l1->SkipData(*es, l1->Generic().Context);
-        delete l1;
-        upper_lvl_el = 0;
-        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-
-      } else {
         delete l1;
         l1 = l2;
+        continue;
+
+      } else if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
       }
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 
@@ -3087,4 +3206,5 @@ int main(int argc, char **argv) {
 
   return res;
 }
+
 #endif // HAVE_WXWINDOWS

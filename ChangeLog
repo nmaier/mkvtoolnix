@@ -1,5 +1,8 @@
 2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvinfo: Changed how mkvinfo handles global elements by taking
+        the parent's size into account. Hopefully this is now correct.
+
         * mkvextract: Support for MultiComment tags.
 
         * mkvmerge: Fixed support for reading MultiComment tags from
