@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.8 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.9 2003/04/17 12:36:20 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -94,7 +94,7 @@ wav_reader_c::~wav_reader_c() {
 }
 
 int wav_reader_c::read() {
-  int nread, last_frame;
+  int nread;
     
   if (pcmpacketizer->packet_available())
     return EMOREDATA;
@@ -103,14 +103,10 @@ int wav_reader_c::read() {
   if (nread <= 0)
     return 0;
 
-  last_frame = 0;
-  if ((bytes_processed + nread) >=
-      (wheader.riff.len - sizeof(wave_header) + 8))
-    last_frame = 1;
-  pcmpacketizer->process(chunk, nread, last_frame);
+  pcmpacketizer->process(chunk, nread);
   bytes_processed += nread;
 
-  if (last_frame)
+  if (nread != bps)
     return 0;
   else
     return EMOREDATA;
