@@ -13,7 +13,7 @@ AVILIB = aviclasses
 
 # Which compression libraries should be supported?
 # zlib is always used, possible other values are bzlib and lzo.
-COMPRESSION_LIBS = bzlib lzo
+#COMPRESSION_LIBS = bzlib lzo
 
 # Anything you'd like to have added to the CFLAGS?
 #CFLAGS =
@@ -60,7 +60,7 @@ CXXFLAGS += -DHAVE_BZLIB_H=1
 COMPRESSION_LIBRARIES = -lbz2
 endif
 
-ifneq (,$(findstring lzo,$(LZO_LIBS)))
+ifneq (,$(findstring lzo,$(COMPRESSION_LIBS)))
 CXXFLAGS += -DHAVE_LZO1X_H=1
 COMPRESSION_LIBRARIES += -llzo1x
 endif
