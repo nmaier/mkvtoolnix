@@ -2,7 +2,7 @@
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  r_mp4.h
+  r_qtmp4.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
@@ -18,8 +18,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
-#ifndef __R_MP4_H
-#define __R_MP4_H
+#ifndef __R_QTMP4_H
+#define __R_QTMP4_H
 
 #include "os.h"
 
@@ -144,4 +144,4 @@ protected:
   virtual uint32_t read_esds_descr_len(mm_mem_io_c *memio);
 };
 
-#endif  // __R_MP4_H
+#endif  // __R_QTMP4_H

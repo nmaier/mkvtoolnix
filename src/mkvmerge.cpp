@@ -76,10 +76,10 @@
 #include "r_dts.h"
 #include "r_matroska.h"
 #include "r_mp3.h"
-#include "r_mp4.h"
 #ifdef HAVE_OGGVORBIS
 #include "r_ogm.h"
 #endif
+#include "r_qtmp4.h"
 #include "r_real.h"
 #include "r_srt.h"
 #include "r_ssa.h"

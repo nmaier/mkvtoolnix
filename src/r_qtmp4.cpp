@@ -2,7 +2,7 @@
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  r_mp4.cpp
+  r_qtmp4.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
@@ -33,7 +33,7 @@
 #include "p_passthrough.h"
 #include "p_pcm.h"
 #include "p_video.h"
-#include "r_mp4.h"
+#include "r_qtmp4.h"
 
 using namespace std;
 using namespace libmatroska;
