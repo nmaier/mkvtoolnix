@@ -380,7 +380,7 @@ void tab_global::load(wxConfigBase *cfg) {
   else if (cfg->Read(wxT("dont_link"), &b))
     cb_link->SetValue(!b);
   else
-    cb_link->SetValue(true);
+    cb_link->SetValue(false);
 
   rb_split_by_size->Enable(ec);
   cob_split_by_size->Enable(ec && er);
