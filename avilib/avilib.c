@@ -48,7 +48,7 @@ static char id_str[MAX_INFO_STRLEN];
 
 //SLM
 /* ssize_t not defined in vc6 */
-#ifdef WIN32
+#if defined WIN32
 typedef int ssize_t;
 #endif
 
@@ -1489,7 +1489,8 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    
    for(j=0; j<AVI->anum; ++j) {
        if(AVI->track[j].audio_chunks) {
-	   AVI->track[j].audio_index = (audio_index_entry *) malloc(nai[j]*sizeof(audio_index_entry));
+	   AVI->track[j].audio_index = (audio_index_entry *) malloc((nai[j]+1)*sizeof(audio_index_entry));
+	   memset(AVI->track[j].audio_index, 0, (nai[j]+1)*(sizeof(audio_index_entry)));
 	   if(AVI->track[j].audio_index==0) ERR_EXIT(AVI_ERR_NO_MEM);
        }
    }   
@@ -1774,6 +1775,7 @@ long AVI_read_audio_chunk(avi_t *AVI, char *audbuf)
    if(AVI->mode==AVI_MODE_WRITE) { AVI_errno = AVI_ERR_NOT_PERM; return -1; }
    if(!AVI->track[AVI->aptr].audio_index)         { AVI_errno = AVI_ERR_NO_IDX;   return -1; }
 
+   if (AVI->track[AVI->aptr].audio_index[AVI->track[AVI->aptr].audio_posc].len == 0) return 0;
    left = AVI->track[AVI->aptr].audio_index[AVI->track[AVI->aptr].audio_posc].len - AVI->track[AVI->aptr].audio_posb;
    
    if (audbuf == NULL) return left;
