@@ -1,3 +1,10 @@
+2003-05-23  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Released v0.4.1.
+
+        * A lot of changes regarding file I/O. Files bigger than 2GB
+        should now be handled correctly on both Linux and Windows.
+
 2003-05-22  Moritz Bunkus  <moritz@bunkus.org>
 
         * Added checks for MP4/Quicktime files which will abort mkvmerge.

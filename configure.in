@@ -1,7 +1,7 @@
 dnl process this file with autoconf to generate the configure script
 
 AC_INIT(mkvmerge.cpp)
-AM_INIT_AUTOMAKE(mkvtoolnix,0.4.0)
+AM_INIT_AUTOMAKE(mkvtoolnix,0.4.1)
 
 AC_PROG_CC
 AC_PROG_CXX

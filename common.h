@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.29 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: common.h,v 1.30 2003/05/23 10:23:45 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -26,7 +26,7 @@
 #elif defined WIN32
 #include <stdint.h>
 #define PACKAGE "mkvtoolnix"
-#define VERSION 0.4.0
+#define VERSION 0.4.1
 #endif
 #include <sys/types.h>
 
