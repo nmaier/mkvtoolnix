@@ -69,8 +69,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
   cob_mimetype->SetToolTip(_("MIME type for this track. Select one of the "
                              "pre-defined MIME types or enter one yourself."));
   cob_mimetype->Append(_(""));
-  for (i = 0; mime_types[i] != NULL; i++)
-    cob_mimetype->Append(mime_types[i]);
+  for (i = 0; mime_types[i].name != NULL; i++)
+    cob_mimetype->Append(mime_types[i].name);
 
   new wxStaticText(this, wxID_STATIC, _("Attachment style:"),
                    wxPoint(275, 365), wxDefaultSize, 0);

@@ -22,8 +22,12 @@
 #ifndef __EXTERN_DATA_H
 #define __EXTERN_DATA_H
 
+typedef struct {
+  const char *name, *extensions;
+} mime_type_t;
+
 extern const char *sub_charsets[];
-extern const char *mime_types[];          
+extern const mime_type_t mime_types[];          
 extern const char *cctlds[];
 
 #endif // __EXTERN_DATA_H
