@@ -42,17 +42,6 @@
  * http://www.pcisys.net/~melanson/codecs/rmff.htm
  */
 
-typedef struct {
-  uint32_t chunks;              // number of chunks
-  uint32_t timecode;            // timecode from packet header
-  uint32_t len;                 // length of actual data
-  uint32_t chunktab;            // offset to chunk offset array
-} dp_hdr_t;
-
-// }}}
-
-// {{{ FUNCTION real_reader_c::probe_file(mm_io_c *io, int64_t size)
-
 int
 real_reader_c::probe_file(mm_io_c *io,
                           int64_t size) {
@@ -287,9 +276,6 @@ real_reader_c::create_packetizer(int64_t tid) {
         mxinfo("+-> Using video output module for stream %u (FourCC: "
                "%s).\n", track->id, dmx->fourcc);
 
-      dmx->f_merged = false;
-      dmx->segments = new vector<rv_segment_t>;
-
     } else {
       char buffer[20];
       passthrough_packetizer_c *ptzr;
@@ -427,7 +413,7 @@ real_reader_c::finish() {
     dmx = demuxers[i];
     if ((dmx->track->type == RMFF_TRACK_TYPE_AUDIO) &&
         (dmx->segments != NULL)) {
-      dur = dmx->c_timecode / dmx->c_numpackets;
+      dur = dmx->last_timecode / dmx->num_packets;
       deliver_audio_frames(dmx, dur);
     }
   }
@@ -480,7 +466,7 @@ real_reader_c::read(generic_packetizer_c *) {
   }
 
   if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO)
-    assemble_video_packet(dmx, mem, timecode, (frame->flags & 2) == 2);
+    assemble_video_packet(dmx, frame); // mem, timecode, (frame->flags & 2) == 2);
 
   else if (dmx->is_aac)
     deliver_aac_frames(dmx, mem);
@@ -503,9 +489,9 @@ real_reader_c::queue_one_audio_frame(real_demuxer_t *dmx,
   segment.data = mem.data;
   segment.size = mem.size;
   mem.lock();
-  segment.offset = flags;
+  segment.flags = flags;
   dmx->segments->push_back(segment);
-  dmx->c_timecode = timecode;
+  dmx->last_timecode = timecode;
   mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
          "0x%08x\n", dmx->track->id, ti->fname, mem.size, timecode, flags);
 }
@@ -518,13 +504,13 @@ real_reader_c::queue_audio_frames(real_demuxer_t *dmx,
   // Enqueue the packets if no packets are in the queue or if the current
   // packet's timecode is the same as the timecode of those before.
   if ((dmx->segments->size() == 0) ||
-      (dmx->c_timecode == timecode)) {
+      (dmx->last_timecode == timecode)) {
     queue_one_audio_frame(dmx, mem, timecode, flags);
     return;
   }
 
   // This timecode is different. So let's push the packets out.
-  deliver_audio_frames(dmx, (timecode - dmx->c_timecode) /
+  deliver_audio_frames(dmx, (timecode - dmx->last_timecode) /
                        dmx->segments->size());
   // Enqueue this packet.
   queue_one_audio_frame(dmx, mem, timecode, flags);
@@ -543,15 +529,15 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx,
     segment = (*dmx->segments)[i];
     mxverb(2, "delivering audio for %u/'%s' length %llu timecode %llu flags "
            "0x%08x duration %llu\n", dmx->track->id, ti->fname, segment.size,
-           dmx->c_timecode, (uint32_t)segment.offset, duration);
+           dmx->last_timecode, (uint32_t)segment.flags, duration);
     memory_c mem(segment.data, segment.size, true);
-    dmx->packetizer->process(mem, dmx->c_timecode, duration,
-                             (segment.offset & 2) == 2 ? -1 :
-                             dmx->c_reftimecode);
-    if ((segment.offset & 2) == 2)
-      dmx->c_reftimecode = dmx->c_timecode;
+    dmx->packetizer->process(mem, dmx->last_timecode, duration,
+                             (segment.flags & 2) == 2 ? -1 :
+                             dmx->ref_timecode);
+    if ((segment.flags & 2) == 2)
+      dmx->ref_timecode = dmx->last_timecode;
   }
-  dmx->c_numpackets += dmx->segments->size();
+  dmx->num_packets += dmx->segments->size();
   dmx->segments->clear();
 }
 
@@ -597,10 +583,6 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
     data_idx += sub_length;
   }
 }
-
-// }}}
-
-// {{{ FUNCTIONS display_*(), set_headers(), identify()
 
 int
 real_reader_c::display_priority() {
@@ -663,191 +645,32 @@ real_reader_c::identify() {
   }
 }
 
-// }}}
-
-// {{{ FUNCTION real_reader_c::deliver_segments()
-
-void
-real_reader_c::deliver_segments(real_demuxer_t *dmx,
-                                int64_t timecode) {
-  uint32_t len, total;
-  rv_segment_t *segment;
-  int i;
-  unsigned char *buffer, *ptr;
-
-  if (dmx->segments->size() == 0)
-    return;
-
-  len = 0;
-  total = 0;
-
-  for (i = 0; i < dmx->segments->size(); i++) {
-    segment = &(*dmx->segments)[i];
-    if (len < (segment->offset + segment->size))
-      len = segment->offset + segment->size;
-    total += segment->size;
-  }
-
-  if (len != total) {
-    mxwarn("\nreal_reader: packet assembly failed. "
-           "Expected packet length was %d but found only %d sub packets "
-           "containing %d bytes. Sub packet number: %u. Trying to "
-           "continue.\n", len, dmx->segments->size(), total,
-           file->num_packets_read);
-    len = 0;
-    for (i = 0; i < dmx->segments->size(); i++) {
-      segment = &(*dmx->segments)[i];
-      segment->offset = len;
-      len += segment->size;
-    }
-  }
-
-  len += 1 + 2 * 4 * (dmx->f_merged ? 1: dmx->segments->size());
-  buffer = (unsigned char *)safemalloc(len);
-  ptr = buffer;
-
-  *ptr = dmx->f_merged ? 0 : dmx->segments->size() - 1;
-  ptr++;
-
-  if (dmx->f_merged) {
-    put_uint32(ptr, 1);
-    ptr += 4;
-    put_uint32(ptr, 0);
-    ptr += 4; 
-  } else {
-    for (i = 0; i < dmx->segments->size(); i++) {
-      put_uint32(ptr, 1);
-      ptr += 4;
-      put_uint32(ptr, (*dmx->segments)[i].offset);
-      ptr += 4;
-    }
-  }
-
-  for (i = 0; i < dmx->segments->size(); i++) {
-    segment = &(*dmx->segments)[i];
-    memcpy(ptr, segment->data, segment->size);
-    ptr += segment->size;
-  }
-
-  memory_c mem(buffer, len, true);
-  dmx->packetizer->process(mem, timecode, -1,
-                           dmx->c_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
-
-  for (i = 0; i < dmx->segments->size(); i++)
-    safefree((*dmx->segments)[i].data);
-  dmx->segments->clear();
-}
-
-// }}}
-
-// {{{ FUNCTSION real_reader_c::assemble_packet()
-
 void
 real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
-                                     memory_c &mem,
-                                     int64_t timecode,
-                                     bool keyframe) {
-  uint32_t vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum;
-  uint32_t len;
-  byte_cursor_c bc(mem.data, mem.size);
-  rv_segment_t segment;
-  int64_t this_timecode;
+                                     rmff_frame_t *frame) {
+  int result;
+  rmff_frame_t *assembled;
 
-  if (dmx->segments->size() == 0) {
-    dmx->c_keyframe = keyframe;
-    dmx->f_merged = false;
+  result = rmff_assemble_packed_video_frame(dmx->track, frame);
+  if (result < 0) {
+    mxwarn(PFX "Video packet assembly failed. Error code: %d (%s)\n",
+           rmff_last_error, rmff_last_error_msg);
+    return;
   }
-
-  if (timecode != dmx->c_timecode)
-    deliver_segments(dmx, dmx->c_timecode);
-
-  try {
-    while (bc.get_len() > 2) {
-      vpkg_subseq = 0;
-      vpkg_seqnum = 0;
-      vpkg_length = 0;
-      vpkg_offset = 0;
-      this_timecode = timecode;
-
-      // bit 7: 1=last block in block chain
-      // bit 6: 1=short header (only one block?)
-      vpkg_header = bc.get_uint8();
-
-      if ((vpkg_header & 0xc0) == 0x40) {
-        // seems to be a very short header
-        // 2 bytes, purpose of the second byte yet unknown
-        bc.skip(1);
-        vpkg_length = bc.get_len();
-
-      } else {
-        if ((vpkg_header & 0x40) == 0)
-          // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
-          vpkg_subseq = bc.get_uint8() & 0x7f;
-
-        // size of the complete packet
-        // bit 14 is always one (same applies to the offset)
-        vpkg_length = bc.get_uint16_be();
-
-        if ((vpkg_length & 0x8000) == 0x8000)
-          dmx->f_merged = true;
-
-        if ((vpkg_length & 0x4000) == 0) {
-          vpkg_length <<= 16;
-          vpkg_length |= bc.get_uint16_be();
-          vpkg_length &= 0x3fffffff;
-
-        } else
-          vpkg_length &= 0x3fff;
-
-        // offset of the following data inside the complete packet
-        // Note: if (hdr&0xC0)==0x80 then offset is relative to the
-        // _end_ of the packet, so it's equal to fragment size!!!
-        vpkg_offset = bc.get_uint16_be();
-
-        if ((vpkg_offset & 0x4000) == 0) {
-          vpkg_offset <<= 16;
-          vpkg_offset |= bc.get_uint16_be();
-          vpkg_offset &= 0x3fffffff;
-
-        } else
-          vpkg_offset &= 0x3fff;
-
-        vpkg_seqnum = bc.get_uint8();
-
-        if ((vpkg_header & 0xc0) == 0xc0) {
-          this_timecode = (int64_t)vpkg_offset * 1000000ll;
-          vpkg_offset = 0;
-        } else if ((vpkg_header & 0xc0) == 0x80)
-          vpkg_offset = vpkg_length - vpkg_offset;
-      }
-
-      len = min(bc.get_len(), (int)(vpkg_length - vpkg_offset));
-      segment.offset = vpkg_offset;
-      segment.data = (unsigned char *)safemalloc(len);
-      segment.size = len;
-      bc.get_bytes(segment.data, len);
-      dmx->segments->push_back(segment);
-      dmx->c_timecode = this_timecode;
-
-      if (!dmx->rv_dimensions)
-        set_dimensions(dmx, segment.data, segment.size);
-
-      if (((vpkg_header & 0x80) == 0x80) ||
-          ((vpkg_offset + len) >= vpkg_length)) {
-        deliver_segments(dmx, this_timecode);
-        dmx->c_keyframe = false;
-      }
-    }
-
-  } catch(...) {
-    die(PFX "Caught exception during parsing of a video "
-        "packet. Aborting.\n");
+  assembled = rmff_get_packed_video_frame(dmx->track);
+  while (assembled != NULL) {
+    memory_c mem(assembled->data, assembled->size, true);
+    if (!dmx->rv_dimensions)
+      set_dimensions(dmx, assembled->data, assembled->size);
+    dmx->packetizer->process(mem, (int64_t)assembled->timecode * 1000000, -1,
+                             (assembled->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
+                             RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME : 
+                             VFT_PFRAMEAUTOMATIC);
+    assembled->allocated_by_rmff = 0;
+    rmff_release_frame(assembled);
+    assembled = rmff_get_packed_video_frame(dmx->track);
   }
 }
-
-// }}}
-
-// {{{ FUNCTIONS real_reader_c::get_rv_dimensions(), set_dimensions()
 
 bool
 real_reader_c::get_rv_dimensions(unsigned char *buf, 
@@ -901,8 +724,15 @@ void
 real_reader_c::set_dimensions(real_demuxer_t *dmx,
                               unsigned char *buffer,
                               int size) {
-  uint32_t width, height, disp_width, disp_height;
+  uint32_t width, height, disp_width, disp_height, vpkg_header;
+  unsigned char *ptr;
   KaxTrackEntry *track_entry;
+
+  ptr = buffer;
+  ptr += 1 + 2 * 4 * (*ptr + 1);
+  if ((ptr + 10) >= (buffer + size))
+    return;
+  buffer = ptr;
 
   if (get_rv_dimensions(buffer, size, width, height)) {
     if ((dmx->width != width) || (dmx->height != height)) {

@@ -35,7 +35,7 @@
 
 typedef struct {
   unsigned char *data;
-  uint64_t size, offset;
+  uint64_t size, flags;
 } rv_segment_t;
 
 typedef struct {
@@ -57,13 +57,10 @@ typedef struct {
   unsigned char *private_data, *extra_data;
   int private_size, extra_data_size;
 
-  unsigned char *c_data;
-  int c_len, c_numpackets;
-  int64_t c_timecode, c_reftimecode;
-  bool c_keyframe;
+  int num_packets;
+  int64_t last_timecode, ref_timecode;
 
   vector<rv_segment_t> *segments;
-  bool f_merged;
 } real_demuxer_t;
 
 class real_reader_c: public generic_reader_c {
@@ -90,9 +87,7 @@ protected:
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual real_demuxer_t *find_demuxer(int id);
-  virtual void assemble_video_packet(real_demuxer_t *dmx, memory_c &mem,
-                                     int64_t timecode, bool keyframe);
-  virtual void deliver_segments(real_demuxer_t *dmx, int64_t timecode);
+  virtual void assemble_video_packet(real_demuxer_t *dmx, rmff_frame_t *frame);
   virtual int finish();
   virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width,
                                  uint32_t &height);
