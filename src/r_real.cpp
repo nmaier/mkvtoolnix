@@ -38,6 +38,8 @@
 #pragma pack(push,2)
 #endif
 
+// {{{ structs
+
 typedef struct {
   uint32_t size;
   uint32_t fourcc1;
@@ -100,6 +102,8 @@ typedef struct {
   uint32_t fourcc3;             // fourcc
 } real_audio_v5_props_t;
 
+// }}}
+
 #if __GNUC__ == 2
 #pragma pack()
 #else
@@ -112,6 +116,8 @@ typedef struct {
   uint32_t len;                 // length of actual data
   uint32_t chunktab;            // offset to chunk offset array
 } dp_hdr_t;
+
+// {{{ FUNCTION real_reader_c::probe_file(mm_io_c *io, int64_t size)
 
 int real_reader_c::probe_file(mm_io_c *io, int64_t size) {
   unsigned char data[4];
@@ -134,6 +140,10 @@ int real_reader_c::probe_file(mm_io_c *io, int64_t size) {
 
   return 1;
 }
+
+// }}}
+
+// {{{ FUNCTION real_reader_c::real_reader_c(track_info_t *nti)
 
 real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
@@ -162,6 +172,10 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
     create_packetizers();
 }
 
+// }}}
+
+// {{{ FUNCTION real_reader_c::~real_reader_c()
+
 real_reader_c::~real_reader_c() {
   real_demuxer_t *demuxer;
   int i;
@@ -177,6 +191,10 @@ real_reader_c::~real_reader_c() {
   }
   demuxers.clear();
 }
+
+// }}}
+
+// {{{ FUNCTION real_reader_c::parse_headers()
 
 void real_reader_c::parse_headers() {
   uint32_t object_id, i, id, start_time, preroll, size;
@@ -400,6 +418,10 @@ void real_reader_c::parse_headers() {
   }
 }
 
+// }}}
+
+// {{{ FUNCTION real_reader_c::create_packetizers()
+
 void real_reader_c::create_packetizers() {
   int i;
   real_demuxer_t *dmx;
@@ -460,6 +482,10 @@ void real_reader_c::create_packetizers() {
   ti->private_data = NULL;
 }
 
+// }}}
+
+// {{{ FUNCTION real_reader_c::find_demuxer(int id)
+
 real_demuxer_t *real_reader_c::find_demuxer(int id) {
   int i;
 
@@ -487,6 +513,10 @@ int real_reader_c::finish() {
 
   return 0;
 }
+
+// }}}
+
+// {{{ FUNCTION real_reader_c::read()
 
 int real_reader_c::read() {
   uint32_t object_version, length, id, timecode, flags, object_id;
@@ -576,6 +606,10 @@ int real_reader_c::read() {
   return EMOREDATA;
 }
 
+// }}}
+
+// {{{ get_packet(), display_*(), set_headers(), identify()
+
 packet_t *real_reader_c::get_packet() {
   generic_packetizer_c *winner;
   real_demuxer_t *demuxer;
@@ -635,6 +669,8 @@ void real_reader_c::identify() {
   }
 }
 
+// }}}
+
 
 // A lot of stuff here (well... almost all the stuff) comes from mplayer's
 // demux_real.c. Credit's due to all the guys contributing to it.
@@ -646,6 +682,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
   unsigned char *dp_data, *buffer;
   dp_hdr_t *dp_hdr;
   uint32_t *extra;
+  bool merged;
 
   if (verbose > 1)
     mxprint(stdout, "KEY: %s\n", keyframe ? "true" : "false");
@@ -659,6 +696,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
   try {
     vpkg_subseq = 0;
     vpkg_seqnum = -1;
+    merged = false;
 
     while (bc.get_len() > 2) {
       // bit 7: 1=last block in block chain
@@ -690,6 +728,9 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         if (verbose > 1)
           mxprint(stdout, "l: %02x %02x ", vpkg_length >> 8,
                   vpkg_length & 0xff);
+
+        if ((vpkg_length & 0x8000) == 0x8000)
+          merged = true;
 
         if ((vpkg_length & 0xc000) == 0) {
           vpkg_length <<= 16;
@@ -742,18 +783,33 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
             mxprint(stdout, "closing probably incomplete packet, "
                     "len: %d\n", dmx->ctb_len);
 
-          buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
-                                               8 * (dp_hdr->chunks + 1));
-          buffer[0] = dp_hdr->chunks;
-          memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
-          memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
-                 dp_hdr->len);
-          if (verbose > 1)
-            mxprint(stdout, "PROCESS\n");
-          dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                                   8 * (dp_hdr->chunks + 1), dp_hdr->timecode,
-                                   -1, dmx->keyframe ? VFT_IFRAME :
-                                   VFT_PFRAMEAUTOMATIC);
+          if (!merged) {
+            buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
+                                                 8 * (dp_hdr->chunks + 1));
+            buffer[0] = dp_hdr->chunks;
+            memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
+            memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
+                   dp_hdr->len);
+            if (verbose > 1)
+              mxprint(stdout, "PROCESS\n");
+            dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                                     8 * (dp_hdr->chunks + 1),
+                                     dp_hdr->timecode,
+                                     -1, dmx->keyframe ? VFT_IFRAME :
+                                     VFT_PFRAMEAUTOMATIC);
+          } else {
+            buffer = (unsigned char *)safemalloc(1 + dp_hdr->len + 8);
+            buffer[0] = 0;
+            *((unsigned long *)&buffer[1]) = 1;
+            *((unsigned long *)&buffer[5]) = 0;
+            memcpy(&buffer[1 + 8], dp_data, dp_hdr->len);
+            if (verbose > 1)
+              mxprint(stdout, "PROCESS\n");
+            dmx->packetizer->process(buffer, 1 + dp_hdr->len + 8,
+                                     dp_hdr->timecode,
+                                     -1, dmx->keyframe ? VFT_IFRAME :
+                                     VFT_PFRAMEAUTOMATIC);
+          }
           safefree(dmx->last_packet);
           dmx->last_packet = NULL;
 
@@ -800,18 +856,31 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
                       "bytes left\n", vpkg_offset, bc.get_len());
 
             // we know that this is the last fragment. we can close the packet!
-            buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
-                                                 8 * (dp_hdr->chunks + 1));
-            buffer[0] = dp_hdr->chunks;
-            memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
-            memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
-                   dp_hdr->len);
-            if (verbose > 1)
-              mxprint(stdout, "PROCESS\n");
-            dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                                     8 * (dp_hdr->chunks + 1),
-                                     dp_hdr->timecode, -1, dmx->keyframe ?
-                                     VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+            if (!merged) {
+              buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
+                                                   8 * (dp_hdr->chunks + 1));
+              buffer[0] = dp_hdr->chunks;
+              memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
+              memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
+                     dp_hdr->len);
+              if (verbose > 1)
+                mxprint(stdout, "PROCESS\n");
+              dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                                       8 * (dp_hdr->chunks + 1),
+                                       dp_hdr->timecode, -1, dmx->keyframe ?
+                                       VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+            } else {
+              buffer = (unsigned char *)safemalloc(1 + dp_hdr->len + 8);
+              buffer[0] = 0;
+              *((unsigned long *)&buffer[1]) = 1;
+              *((unsigned long *)&buffer[5]) = 0;
+              memcpy(&buffer[1 + 8], dp_data, dp_hdr->len);
+              if (verbose > 1)
+                mxprint(stdout, "PROCESS\n");
+              dmx->packetizer->process(buffer, 1 + dp_hdr->len + 8,
+                                       dp_hdr->timecode, -1, dmx->keyframe ?
+                                       VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+            }
             safefree(dmx->last_packet);
             dmx->last_packet = NULL;
             // continue parsing
