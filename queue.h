@@ -3,13 +3,19 @@
       from component media subtypes
 
   queue.cpp
-  class definitions for the queueing class used by every packetizer
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: queue.h,v 1.2 2003/02/16 12:17:11 mosu Exp $
+    \brief class definition for the queueing class
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __QUEUE_H__

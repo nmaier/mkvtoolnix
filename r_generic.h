@@ -3,13 +3,19 @@
       from component media subtypes
 
   r_generic.h
-  class definitions for the generic reader
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: r_generic.h,v 1.3 2003/02/16 12:17:11 mosu Exp $
+    \brief class definition for the generic reader
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __R_GENERIC_H__

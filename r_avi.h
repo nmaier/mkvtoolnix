@@ -3,13 +3,19 @@
       from component media subtypes
 
   r_avi.h
-  class definitions for the AVI demultiplexer module
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file r_avi.h
+    \version \$Id: r_avi.h,v 1.4 2003/02/16 12:17:11 mosu Exp $
+    \brief class definitions for the AVI demultiplexer module
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __R_AVI_H__
@@ -24,6 +30,7 @@ extern "C" {
 #include "r_generic.h"
 #include "p_generic.h"
 #include "common.h"
+#include "error.h"
 
 #define RAVI_UNKNOWN 0
 #define RAVI_DIVX3   1
@@ -43,6 +50,7 @@ class avi_reader_c: public generic_reader_c {
     char               *chunk;
     avi_t              *avi;
 //    video_packetizer_c *vpacketizer;
+    generic_packetizer_c *vpacketizer;
     avi_demuxer_t      *ademuxers;
     double              fps;
     int                 frames;

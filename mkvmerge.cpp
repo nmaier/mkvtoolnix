@@ -3,12 +3,8 @@
       from component media subtypes
 
   mkvmerge.cpp
-  main program, command line parameter checking, looping, output handling
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on test6.cpp from the libmatroska, written by Steve Lhomme
-  <robux4@users.sf.net> for the Matroska project
-  http://www.matroska.org/
 
   Distributed under the GPL
   see the file COPYING for details
@@ -17,8 +13,8 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.3 2003/02/16 11:44:19 mosu Exp $
-    \brief create matroska files from other media files, main file
+    \version \$Id: mkvmerge.cpp,v 1.4 2003/02/16 12:17:10 mosu Exp $
+    \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 

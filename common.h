@@ -3,13 +3,19 @@
       from component media subtypes
 
   common.h
-  helper functions
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: common.h,v 1.3 2003/02/16 12:17:10 mosu Exp $
+    \brief definitions used in all programs, helper functions
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __COMMON_H__

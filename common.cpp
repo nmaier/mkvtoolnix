@@ -3,13 +3,19 @@
       from component media subtypes
 
   common.cpp
-  helper functions
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: common.cpp,v 1.2 2003/02/16 12:17:10 mosu Exp $
+    \brief helper functions, common variables
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <stdio.h>

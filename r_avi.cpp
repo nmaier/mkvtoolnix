@@ -3,13 +3,19 @@
       from component media subtypes
 
   r_avi.h
-  AVI demultiplexer module
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: r_avi.cpp,v 1.3 2003/02/16 12:17:11 mosu Exp $
+    \brief AVI demultiplexer module
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <stdlib.h>
@@ -22,8 +28,9 @@ extern "C" {
 }
 
 #include "common.h"
+#include "error.h"
 #include "mkvmerge.h"
-//#include "queue.h"
+#include "queue.h"
 #include "r_avi.h"
 //#include "p_video.h"
 //#include "p_pcm.h"
@@ -508,23 +515,23 @@ ogmmerge_page_t *avi_reader_c::get_header_page(int header_type) {
   }
   
   return NULL;
-}
+}*/
 
-ogmmerge_page_t *avi_reader_c::get_page() {
+packet_t *avi_reader_c::get_packet() {
   generic_packetizer_c *winner;
   avi_demuxer_t        *demuxer;
   
   winner = NULL;
   
-  if ((vpacketizer != NULL) && (vpacketizer->page_available()))
+  if ((vpacketizer != NULL) && (vpacketizer->packet_available()))
     winner = vpacketizer;
   
   demuxer = ademuxers;
   while (demuxer != NULL) {
     if (winner == NULL) {
-      if (demuxer->packetizer->page_available())
+      if (demuxer->packetizer->packet_available())
         winner = demuxer->packetizer;
-    } else if (winner->page_available() &&
+    } else if (winner->packet_available() &&
                (winner->get_smallest_timestamp() >
                 demuxer->packetizer->get_smallest_timestamp()))
       winner = demuxer->packetizer;
@@ -532,10 +539,10 @@ ogmmerge_page_t *avi_reader_c::get_page() {
   }
   
   if (winner != NULL)
-    return winner->get_page();
+    return winner->get_packet();
   else
     return NULL;
-}*/
+}
 
 int avi_reader_c::display_priority() {
 //  if (vpacketizer != NULL)
@@ -543,18 +550,6 @@ int avi_reader_c::display_priority() {
 //  else
 //    return DISPLAYPRIORITY_LOW;
 }
-
-/*void avi_reader_c::reset() {
-  avi_demuxer_t *demuxer;
-  
-  if (vpacketizer != NULL)
-    vpacketizer->reset();
-  demuxer = ademuxers;
-  while (demuxer != NULL) {
-    demuxer->packetizer->reset();
-    demuxer = demuxer->next;
-  } 
-}*/
 
 static char wchar[] = "-\\|/-\\|/-";
 
