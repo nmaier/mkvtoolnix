@@ -415,11 +415,16 @@ create_output_files() {
       if (tracks[i].type == TYPEAVI) {
         alBITMAPINFOHEADER *bih;
         char ccodec[5];
+        string writing_app;
 
         tracks[i].avi = AVI_open_output_file(tracks[i].out_name);
         if (tracks[i].avi == NULL)
           mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
                   tracks[i].out_name, AVI_strerror());
+        writing_app = "mkvextract";
+        if (!no_variable_data)
+          writing_app += mxsprintf(" %s", VERSION);
+        tracks[i].avi->writing_app = safestrdup(writing_app.c_str());
 
         bih = (alBITMAPINFOHEADER *)tracks[i].private_data;
         memcpy(ccodec, &bih->bi_compression, 4);

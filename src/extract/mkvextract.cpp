@@ -80,6 +80,7 @@ using namespace std;
 #define MODE_CUESHEET    4
 
 vector<kax_track_t> tracks;
+bool no_variable_data = false;
 
 bool
 ssa_line_c::operator < (const ssa_line_c &cmp)
@@ -236,6 +237,9 @@ parse_args(int argc,
   for (i = 3; i < argc; i++)
     if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose++;
+
+    else if (!strcmp(argv[i], "--no-variable-data"))
+      no_variable_data = true;
 
     else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--parse-fully"))
       parse_fully = true;
