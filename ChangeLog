@@ -1,5 +1,9 @@
 2003-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: Disabled lacing by default and renamed --no-lacing to
+        --enable-lacing. With all the proper info about the laced frames
+        lacing is actually producing larger files than without lacing.
+
         * mkvmerge: Meta seek element is split into two elements. The
         first's located at the start of the file containing only a small
         number of level 1 elements. The clusters are referenced in a

@@ -137,7 +137,7 @@ int max_ms_per_cluster = 2000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
 bool write_meta_seek_for_clusters = true;
-bool no_lacing = false, no_linking = false;
+bool no_lacing = true, no_linking = false;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
@@ -235,7 +235,7 @@ static void usage() {
     "  --no-cues                Do not write the cue data (the index).\n"
     "  --no-clusters-in-meta-seek\n"
     "                           Do not write meta seek data for clusters.\n"
-    "  --no-lacing              Do not use lacing.\n"
+    "  --enable-lacing          Use lacing.\n"
     "\n File splitting and linking (still global):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
@@ -1151,8 +1151,8 @@ static void parse_args(int argc, char **argv) {
     else if (!strcmp(argv[i], "--no-clusters-in-meta-seek"))
       write_meta_seek_for_clusters = false;
 
-    else if (!strcmp(argv[i], "--no-lacing"))
-      no_lacing = true;
+    else if (!strcmp(argv[i], "--enable-lacing"))
+      no_lacing = false;
 
     else if (!strcmp(argv[i], "--attachment-description")) {
       if ((i + 1) >= argc)
