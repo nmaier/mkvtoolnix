@@ -45,9 +45,11 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
   generic_packetizer_c(nreader, nti) {
   int i;
 
-  packetno = 0;
   last_bs = 0;
   samples = 0;
+  timecode_offset = 0;
+  last_samples_sum = 0;
+  last_timecode = 0;
   memset(headers, 0, 3 * sizeof(ogg_packet));
   headers[0].packet = (unsigned char *)safememdup(d_header, l_header);
   headers[1].packet = (unsigned char *)safememdup(d_comments, l_comments);
@@ -144,12 +146,17 @@ vorbis_packetizer_c::process(memory_c &mem,
                              int64_t) {
   unsigned char zero[2];
   ogg_packet op;
-  int64_t this_bs, samples_here, samples_needed;
+  int64_t this_bs, samples_here, samples_needed, expected_timecode, duration;
+  int64_t chosen_timecode;
 
   debug_enter("vorbis_packetizer_c::process");
 
+  // Remember the very first timecode we received.
+  if ((samples == 0) && (timecode > 0))
+    timecode_offset = timecode;
+
   // Positive displacement, first packet? Well then lets create silence.
-  if ((packetno == 0) && (initial_displacement > 0)) {
+  if ((samples == 0) && (initial_displacement > 0)) {
     // Create a fake packet so we can use vorbis_packet_blocksize().
     zero[0] = 0;
     zero[1] = 0;
@@ -172,37 +179,47 @@ vorbis_packetizer_c::process(memory_c &mem,
     }
   }
 
-  // Recalculate the timecode if needed.
-  if (timecode == -1) {
-    if (initial_displacement > 0)
-      timecode = samples * 1000000000 / vi.rate;
-    else
-      timecode = samples * 1000000000 / vi.rate + initial_displacement;
-  } else
-    timecode += initial_displacement;
-
-  // Handle the linear sync - simply multiply with the given factor.
-  timecode = (int64_t)((double)timecode * ti->async.linear);
-
   // Update the number of samples we have processed so that we can
   // calculate the timecode on the next call.
   op.packet = mem.data;
   op.bytes = mem.size;
   this_bs = vorbis_packet_blocksize(&vi, &op);
   samples_here = (this_bs + last_bs) / 4;
-  samples += samples_here;
   last_bs = this_bs;
+  samples += samples_here;
+
+  expected_timecode = last_timecode + last_samples_sum * 1000000000 / vi.rate +
+    timecode_offset;
+  if (initial_displacement < 0)
+    expected_timecode += initial_displacement;
+
+  if (timecode > (expected_timecode + 100000000)) {
+    chosen_timecode = timecode;
+    duration = timecode - last_timecode;
+    last_timecode = timecode;
+    last_samples_sum = 0;
+  } else {
+    chosen_timecode = expected_timecode;
+    duration = (int64_t)(samples_here * 1000000000 * ti->async.linear /
+                         vi.rate);
+  }
+
+  last_samples_sum += samples_here;
+
+  // Handle the linear sync - simply multiply with the given factor.
+  chosen_timecode = (int64_t)((double)chosen_timecode * ti->async.linear);
 
   // If a negative sync value was used we may have to skip this packet.
-  if (timecode < 0) {
+  if (chosen_timecode < 0) {
     debug_leave("vorbis_packetizer_c::process");
     return EMOREDATA;
   }
 
-  mxverb(2, "Vorbis: samples_here: %lld\n", samples_here);
-  add_packet(mem, (int64_t)timecode,
-             (int64_t)(samples_here * 1000000000 * ti->async.linear /
-                       vi.rate));
+  mxverb(2, "Vorbis: samples_here at %lld (orig %lld expected %lld): %lld "
+         "(last_samples_sum: %lld)\n",
+         chosen_timecode, timecode, expected_timecode,
+         samples_here, last_samples_sum);
+  add_packet(mem, expected_timecode, duration);
 
   debug_leave("vorbis_packetizer_c::process");
 
