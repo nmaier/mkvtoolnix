@@ -523,11 +523,13 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
                                                   int size) {
   uint32_t num, den;
 
-  aspect_ratio_extracted = true;
-  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+  if (ti->aspect_ratio_given || ti->display_dimensions_given) {
+    aspect_ratio_extracted = true;
     return;
+  }
 
   if (mpeg4_p2_extract_par(buffer, size, num, den)) {
+    aspect_ratio_extracted = true;
     ti->aspect_ratio_given = true;
     ti->aspect_ratio = (float)hvideo_pixel_width /
       (float)hvideo_pixel_height * (float)num / (float)den;
@@ -537,7 +539,8 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
            "from the MPEG4 layer 2 video data and set the display dimensions "
            "to %u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
            (uint32_t)ti->display_width, (uint32_t)ti->display_height);
-  }
+  } else if (50 <= frames_output)
+    aspect_ratio_extracted = true;
 }
 
 // ----------------------------------------------------------------
