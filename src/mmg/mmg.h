@@ -115,6 +115,7 @@ using namespace libmatroska;
 #define ID_TC_CHAPTEREND 10068
 #define ID_CB_CHAPTERSELECTLANGUAGECODE 10069
 #define ID_CB_CHAPTERSELECTCOUNTRYCODE 10070
+#define ID_B_ADDSUBCHAPTER 10071
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -313,17 +314,16 @@ class tab_chapters: public wxPanel {
 public:
   wxTreeCtrl *tc_chapters;
   wxTreeItemId tid_root;
-  wxButton *b_add_chapter, *b_remove_chapter;
+  wxButton *b_add_chapter, *b_add_subchapter, *b_remove_chapter;
   wxMenu *m_chapters;
 
   wxTextCtrl *tc_chapter_name, *tc_language_codes, *tc_country_codes;
   wxTextCtrl *tc_start_time, *tc_end_time;
   wxComboBox *cob_add_language_code, *cob_add_country_code;
-
-  wxTimer value_copy_timer;
+  bool inputs_enabled;
 
   wxString file_name;
-  bool source_is_kax_file;
+  bool source_is_kax_file, source_is_simple_format;
 
   KaxChapters *chapters;
 
@@ -339,6 +339,7 @@ public:
   void on_save_chapters_as(wxCommandEvent &evt);
   void on_verify_chapters(wxCommandEvent &evt);
   void on_add_chapter(wxCommandEvent &evt);
+  void on_add_subchapter(wxCommandEvent &evt);
   void on_remove_chapter(wxCommandEvent &evt);
   void on_entry_selected(wxTreeEvent &evt);
   void on_language_code_selected(wxCommandEvent &evt);
@@ -351,7 +352,9 @@ public:
   bool verify();
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
+  void fix_missing_languages(EbmlMaster &master);
   void enable_inputs(bool enable);
+  void enable_buttons(bool enable);
   bool select_file_name();
   bool load(wxString name);
   void save();

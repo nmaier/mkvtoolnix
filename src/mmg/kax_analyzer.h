@@ -43,10 +43,11 @@ class analyzer_data_c {
 public:
   EbmlId id;
   int64_t pos, size;
+  bool delete_this;
 
 public:
   analyzer_data_c(const EbmlId nid, int64_t npos, int64_t nsize):
-  id(nid), pos(npos), size(nsize) {
+  id(nid), pos(npos), size(nsize), delete_this(false) {
   };
 };
 
@@ -68,6 +69,7 @@ public:
 
   virtual bool process();
   virtual bool update_element(EbmlElement *e);
+  virtual void overwrite_elements(EbmlElement *e, int found_where);
   virtual EbmlElement *read_element(uint32_t pos,
                                     const EbmlCallbacks &callbacks);
   virtual int find(const EbmlId &id) {

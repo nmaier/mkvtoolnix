@@ -98,9 +98,14 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
   b_add_chapter =
     new wxButton(this, ID_B_ADDCHAPTER, _("Add chapter"), wxPoint(370, 24),
                  wxSize(120, -1));
+
+  b_add_subchapter =
+    new wxButton(this, ID_B_ADDSUBCHAPTER, _("Add subchapter"),
+                 wxPoint(370, 50), wxSize(120, -1));
+
   b_remove_chapter =
     new wxButton(this, ID_B_REMOVECHAPTER, _("Remove chapter"),
-                 wxPoint(370, 50), wxSize(120, -1));
+                 wxPoint(370, 76), wxSize(120, -1));
 
   new wxStaticText(this, wxID_STATIC, _("Chapter name:"), wxPoint(10, 285));
   tc_chapter_name =
@@ -150,16 +155,13 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, false);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, false);
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, false);
-  b_add_chapter->Enable(false);
-  b_remove_chapter->Enable(false);
+  enable_buttons(false);
 
   file_name = "";
   chapters = NULL;
   analyzer = NULL;
   source_is_kax_file = false;
-
-  value_copy_timer.SetOwner(this, ID_T_CHAPTERVALUES);
-  value_copy_timer.Start(333);
+  source_is_simple_format = false;
 }
 
 tab_chapters::~tab_chapters() {
@@ -177,6 +179,13 @@ void tab_chapters::enable_inputs(bool enable) {
   tc_country_codes->Enable(enable);
   cob_add_language_code->Enable(enable);
   cob_add_country_code->Enable(enable);
+  inputs_enabled = enable;
+}
+
+void tab_chapters::enable_buttons(bool enable) {
+  b_add_chapter->Enable(enable);
+  b_add_subchapter->Enable(enable);
+  b_remove_chapter->Enable(enable);
 }
 
 void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
@@ -190,8 +199,7 @@ void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
-  b_add_chapter->Enable(true);
-  b_remove_chapter->Enable(true);
+  enable_buttons(true);
 
   enable_inputs(false);
   source_is_kax_file = false;
@@ -288,6 +296,37 @@ void tab_chapters::add_recursively(wxTreeItemId &parent, EbmlMaster &master) {
   }
 }
 
+void tab_chapters::fix_missing_languages(EbmlMaster &master) {
+  uint32_t i;
+  EbmlElement *e;
+  KaxChapterDisplay *d;
+  KaxChapterLanguage *l;
+  KaxChapterUID *u;
+  EbmlMaster *m;
+
+  for (i = 0; i < master.ListSize(); i++) {
+    e = master[i];
+
+    if (dynamic_cast<EbmlMaster *>(e) != NULL)
+      fix_missing_languages(*dynamic_cast<EbmlMaster *>(e));
+
+    if (EbmlId(*e) == KaxChapterAtom::ClassInfos.GlobalId) {
+      m = static_cast<EbmlMaster *>(e);
+      d = FindChild<KaxChapterDisplay>(*m);
+      if (d == NULL)
+        d = &GetChild<KaxChapterDisplay>(*m);
+      l = FindChild<KaxChapterLanguage>(*d);
+      if (l == NULL) {
+        l = &GetChild<KaxChapterLanguage>(*d);
+        *static_cast<EbmlString *>(l) = "eng";
+      }
+      u = FindChild<KaxChapterUID>(*m);
+      if (u != NULL)
+        add_unique_uint32(uint32(*static_cast<EbmlUInteger *>(u)));
+    }
+  }
+}
+
 void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose a chapter file", last_open_dir, "",
                    _T("Chapter files (*.xml;*.txt;*.mka;*.mkv)|*.xml;*.txt;"
@@ -330,9 +369,11 @@ bool tab_chapters::load(wxString name) {
         throw error_c(_("This file does not contain valid chapters."));
       new_chapters = static_cast<KaxChapters *>(e);
       source_is_kax_file = true;
+      source_is_simple_format = false;
 
     } else {
-      new_chapters = parse_chapters(name.c_str(), 0, -1, 0, NULL, NULL, true);
+      new_chapters = parse_chapters(name.c_str(), 0, -1, 0, NULL, NULL, true,
+                                    &source_is_simple_format);
       source_is_kax_file = false;
     }
   } catch (error_c e) {
@@ -353,10 +394,11 @@ bool tab_chapters::load(wxString name) {
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
-  b_add_chapter->Enable(true);
-  b_remove_chapter->Enable(true);
+  enable_buttons(true);
 
   file_name = name;
+  clear_list_of_unique_uint32();
+  fix_missing_languages(*chapters);
   tid_root = tc_chapters->AddRoot(file_name);
   add_recursively(tid_root, *chapters);
   expand_subtree(*tc_chapters, tid_root);
@@ -378,7 +420,7 @@ void tab_chapters::on_save_chapters(wxCommandEvent &evt) {
     return;
   }
 
-  if (file_name.length() == 0)
+  if ((file_name.length() == 0) || source_is_simple_format)
     if (!select_file_name())
       return;
   save();
@@ -425,6 +467,7 @@ void tab_chapters::save() {
   fclose(fout);
 
   source_is_kax_file = false;
+  source_is_simple_format = false;
 
   mdlg->set_last_chapters_in_menu(file_name);
   mdlg->set_status_bar(_("Chapters written."));
@@ -436,6 +479,7 @@ void tab_chapters::on_verify_chapters(wxCommandEvent &evt) {
 
 bool tab_chapters::verify_atom_recursively(EbmlElement *e, int64_t p_start,
                                            int64_t p_end) {
+  KaxChapterUID *uid;
   KaxChapterAtom *chapter;
   KaxChapterTimeStart *start;
   KaxChapterTimeEnd *end;
@@ -448,6 +492,11 @@ bool tab_chapters::verify_atom_recursively(EbmlElement *e, int64_t p_start,
   int64_t t_start, t_end;
 
   chapter = static_cast<KaxChapterAtom *>(e);
+
+  if (FindChild<KaxChapterUID>(*chapter) == NULL) {
+    uid = &GetChild<KaxChapterUID>(*chapter);
+    *static_cast<EbmlUInteger *>(uid) = create_unique_uint32();
+  }
 
   cs = NULL;
   display = FindChild<KaxChapterDisplay>(*chapter);
@@ -544,6 +593,73 @@ bool tab_chapters::verify() {
 }
 
 void tab_chapters::on_add_chapter(wxCommandEvent &evt) {
+  wxTreeItemId id, pid;
+  KaxEditionEntry *eentry;
+  KaxChapterAtom *chapter;
+  EbmlMaster *m;
+  chapter_node_data_c *d, *pd;
+  wxString s;
+  vector<EbmlElement *> tmpvec;
+  uint32_t start, i;
+
+  id = tc_chapters->GetSelection();
+  if (!id.IsOk())
+    return;
+  copy_values(id);
+
+  d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
+  if (id == tid_root) {
+    eentry = new KaxEditionEntry;
+    chapters->PushElement(*eentry);
+    d = new chapter_node_data_c(eentry);
+    s.Printf("EditionEntry %u", chapters->ListSize());
+    id = tc_chapters->AppendItem(tid_root, s, -1, -1, d);
+  }
+
+  chapter = new KaxChapterAtom;
+  while (chapter->ListSize() > 0) {
+    delete (*chapter)[0];
+    chapter->Remove(0);
+  }
+  s = create_chapter_label(*chapter);
+
+  if (d->is_atom) {
+    pid = tc_chapters->GetParent(id);
+    pd = (chapter_node_data_c *)tc_chapters->GetItemData(pid);
+    if (pd->is_atom)
+      m = pd->chapter;
+    else
+      m = pd->eentry;
+    tc_chapters->InsertItem(pid, id, s, -1, -1,
+                            new chapter_node_data_c(chapter));
+
+    start = m->ListSize() + 1;
+    for (i = 0; i < m->ListSize(); i++)
+      if ((*m)[i] == d->chapter) {
+        start = i;
+        break;
+      }
+    if (start >= m->ListSize())
+      mxerror("start >= m->ListSize(). This should not have happened. Please "
+              "file a bug report. Thanks.\n");
+    while ((start + 1) < m->ListSize()) {
+      tmpvec.push_back((*m)[start + 1]);
+      m->Remove(start + 1);
+    }
+    m->PushElement(*chapter);
+    for (i = 0; i < tmpvec.size(); i++)
+      m->PushElement(*tmpvec[i]);
+  } else {
+    m = d->eentry;
+    tc_chapters->AppendItem(id, s, -1, -1, 
+                            new chapter_node_data_c(chapter));
+    m->PushElement(*chapter);
+  }
+  id = tc_chapters->GetSelection();
+  expand_subtree(*tc_chapters, id, true);
+}
+
+void tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
   wxTreeItemId id;
   KaxEditionEntry *eentry;
   KaxChapterAtom *chapter;
@@ -610,6 +726,8 @@ void tab_chapters::on_remove_chapter(wxCommandEvent &evt) {
     del = d->chapter;
   else
     del = d->eentry;
+  enable_buttons(false);
+  enable_inputs(false);
   for (i = 0; i < m->ListSize(); i++) {
     if ((*m)[i] == (EbmlElement *)del) {
       delete del;
@@ -634,8 +752,10 @@ void tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   char *tmpstr;
   wxTreeItemId old_id;
 
+  enable_buttons(true);
+
   old_id = evt.GetOldItem();
-  if (old_id.IsOk())
+  if (old_id.IsOk() && inputs_enabled)
     copy_values(old_id);
 
   t = (chapter_node_data_c *)tc_chapters->GetItemData(evt.GetItem());
@@ -888,6 +1008,7 @@ int64_t tab_chapters::parse_time(string s) {
 IMPLEMENT_CLASS(tab_chapters, wxPanel);
 BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_BUTTON(ID_B_ADDCHAPTER, tab_chapters::on_add_chapter)
+  EVT_BUTTON(ID_B_ADDSUBCHAPTER, tab_chapters::on_add_subchapter)
   EVT_BUTTON(ID_B_REMOVECHAPTER, tab_chapters::on_remove_chapter)
   EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS, tab_chapters::on_entry_selected)
   EVT_COMBOBOX(ID_CB_CHAPTERSELECTLANGUAGECODE,
