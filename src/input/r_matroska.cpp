@@ -825,10 +825,9 @@ kax_reader_c::read_headers() {
 
         ktitle = FINDFIRST(l1, KaxTitle);
         if (ktitle != NULL) {
-          title = UTFstring_to_cstr(UTFstring(*ktitle));
+          title = UTFstring_to_cstrutf8(UTFstring(*ktitle));
           if (verbose > 1)
             mxinfo(PFX "| + title: %s\n", title.c_str());
-          title = UTFstring_to_cstrutf8(UTFstring(*ktitle));
         }
 
         // Let's try to parse the "writing application" string. This usually
@@ -1183,8 +1182,7 @@ kax_reader_c::read_headers() {
           if (ktname != NULL) {
             track->track_name = UTFstring_to_cstrutf8(UTFstring(*ktname));
             if (verbose > 1)
-              mxinfo(PFX "|  + Name: %s\n",
-                     UTFstring_to_cstr(UTFstring(*ktname)).c_str());
+              mxinfo(PFX "|  + Name: %s\n", track->track_name.c_str());
           }
 
           track->content_decoder.initialize(*ktentry);
@@ -2096,12 +2094,12 @@ kax_reader_c::identify() {
            attachments[i].size);
     if (attachments[i].description.length() > 0)
       mxinfo("description '%s', ",
-             UTFstring_to_cstr(attachments[i].description).c_str());
+             UTFstring_to_cstrutf8(attachments[i].description).c_str());
     if (attachments[i].name.length() == 0)
       mxinfo("no file name given\n");
     else
       mxinfo("file name '%s'\n",
-             UTFstring_to_cstr(attachments[i].name).c_str());
+             UTFstring_to_cstrutf8(attachments[i].name).c_str());
   }
 }
 
