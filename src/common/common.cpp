@@ -940,6 +940,21 @@ vector<string> split(const char *src, const char *pattern, int max_num) {
   return v;
 }
 
+string join(const char *pattern, vector<string> &strings) {
+  string dst;
+  uint32_t i;
+
+  if (strings.size() == 0)
+    return "";
+  dst = strings[0];
+  for (i = 1; i < strings.size(); i++) {
+    dst += pattern;
+    dst += strings[i];
+  }
+
+  return dst;
+}
+
 void strip(string &s, bool newlines) {
   int i, len;
   const char *c;
@@ -976,6 +991,47 @@ void strip(vector<string> &v, bool newlines) {
 
   for (i = 0; i < v.size(); i++)
     strip(v[i], newlines);
+}
+
+string escape(const char *src) {
+  string dst;
+
+  while (*src != 0) {
+    if (*src == '\\')
+      dst += "\\\\";
+    else if (*src == '"')
+      dst += '2';               // Yes, this IS a trick ;)
+    else
+      dst += *src;
+    src++;
+  }
+
+  return dst;
+}
+
+string unescape(const char *src) {
+  string dst;
+  const char *next_char;
+
+  next_char = src + 1;
+  while (*src != 0) {
+    if (*src == '\\') {
+      if (*next_char == 0)      // This is an error...
+        dst += '\\';
+      else if (*next_char == '2') {
+        dst += '"';
+        src++;
+      } else {
+        dst += *next_char;
+        src++;
+      }
+    } else
+      dst += *src;
+    src++;
+    next_char = src + 1;
+  }
+
+  return dst;
 }
 
 bool starts_with(const string &s, const char *start) {

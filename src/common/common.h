@@ -133,8 +133,11 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line);
 
 vector<string> split(const char *src, const char *pattern = ",",
                      int max_num = -1);
+string join(const char *pattern, vector<string> &strings);
 void strip(string &s, bool newlines = false);
 void strip(vector<string> &v, bool newlines = false);
+string escape(const char *src);
+string unescape(const char *src);
 bool starts_with(const string &s, const char *start);
 bool starts_with(const string &s, const string &start);
 bool starts_with_case(const string &s, const char *start);
