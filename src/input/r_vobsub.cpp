@@ -209,7 +209,7 @@ vobsub_reader_c::parse_headers() {
   vobsub_track_c *track;
   int64_t filepos, timestamp;
   int hour, minute, second, msecond, idx;
-  vector<int64_t> *positions;
+  vector<int64_t> *positions, all_positions;
   uint32_t i, k, tsize, psize;
 
   language[0] = 0;
@@ -276,6 +276,7 @@ vobsub_reader_c::parse_headers() {
       positions = &tracks[i]->positions;
       psize = positions->size();
       for (k = 0; k < psize; k++) {
+        all_positions.push_back((*positions)[k]);
         if (k < (psize - 1))
           tracks[i]->sizes.push_back((*positions)[k + 1] - (*positions)[k]);
         else
@@ -283,7 +284,20 @@ vobsub_reader_c::parse_headers() {
       }
     }
 
-    for (i = 0; i < tracks.size(); i++)
+    sort(all_positions.begin(), all_positions.end());
+    for (i = 0; i < tsize; i++) {
+      psize = tracks[i]->positions.size();
+      if (tracks[i]->sizes[psize - 1] <= 64000)
+        continue;
+      for (k = 0; k < all_positions.size(); k++)
+        if (tracks[i]->positions[psize - 1] < all_positions[k]) {
+          tracks[i]->sizes[psize - 1] = all_positions[k] -
+            tracks[i]->positions[psize - 1];
+          break;
+        }
+    }
+
+    for (i = 0; i < tsize; i++)
       if ((tracks[i]->positions.size() != tracks[i]->timecodes.size()) ||
           (tracks[i]->positions.size() != tracks[i]->sizes.size()))
         mxerror(PFX "Have %u positions, %u sizes and %u timecodes. This "
@@ -292,7 +306,7 @@ vobsub_reader_c::parse_headers() {
                 tracks[i]->timecodes.size());
 
     if (verbose > 1) {
-      for (i = 0; i < tracks.size(); i++) {
+      for (i = 0; i < tsize; i++) {
         mxinfo("vobsub_reader: Track number %u\n", i);
         for (k = 0; k < tracks[i]->positions.size(); k++)
           mxinfo("vobsub_reader:  %04u position: %12lld (0x%04x%08x), "
