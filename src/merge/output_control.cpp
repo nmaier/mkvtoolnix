@@ -1497,28 +1497,22 @@ append_track(packetizer_t &ptzr,
   vector<generic_packetizer_c *>::const_iterator gptzr;
   filelist_t &src_file = files[amap.src_file_id];
   filelist_t &dst_file = files[amap.dst_file_id];
+  int64_t timecode_adjustment;
 
+  // Find the generic_packetizer_c that we will be appending to the one
+  // stored in ptzr.
   foreach(gptzr, src_file.reader->reader_packetizers)
     if (amap.src_track_id == (*gptzr)->ti->id)
       break;
   if (gptzr == src_file.reader->reader_packetizers.end())
     die("Could not find gptzr when appending. %s\n", BUGMSG);
 
+  // If we're dealing with a subtitle track or if the appending file contains
+  // chapters then we have to suck the previous file dry. See below for the
+  // reason (short version: we need all max_timecode_seen values).
   if (((*gptzr)->get_track_type() == track_subtitle) ||
       (src_file.reader->chapters != NULL))
     dst_file.reader->read_all();
-
-  // Append some more chapters and adjust their timecodes by the highest
-  // timecode seen in the previous file.
-  if (src_file.reader->chapters != NULL) {
-    if (kax_chapters == NULL)
-      kax_chapters = new KaxChapters;
-    adjust_chapter_timecodes(*src_file.reader->chapters,
-                             dst_file.reader->max_timecode_seen);
-    move_chapters_by_edition(*kax_chapters, *src_file.reader->chapters);
-    delete src_file.reader->chapters;
-    src_file.reader->chapters = NULL;
-  }
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
@@ -1526,15 +1520,72 @@ append_track(packetizer_t &ptzr,
          ptzr.packetizer->ti->id, amap.dst_file_id,
          ptzr.packetizer->ti->fname);
 
+  // Is the current file currently used for displaying the progress? If yes
+  // then replace it with the next one.
   if (display_reader == dst_file.reader) {
     display_files_done++;
     display_reader = src_file.reader;
   }
 
+  // The actual connection. Also fix the ptzr structure and reset the
+  // ptzr's state to "I want more".
   (*gptzr)->connect(ptzr.packetizer);
   ptzr.packetizer = *gptzr;
   ptzr.file = amap.src_file_id;
   ptzr.status = EMOREDATA;
+
+  // If we're dealing with a subtitle track or if the appending file contains
+  // chapters then we have to do some magic. During splitting timecodes are
+  // offset by a certain amount. This amount is NOT the duration of the
+  // previous file! That's why we cannot use
+  // dst_file.reader->max_timecode_seen. Instead we have to find the first
+  // packet in the appending file because its original timecode during the
+  // split phase was the offset. If we have that we can find the corresponding
+  // packetizer and use its max_timecode_seen.
+  // 
+  // All this only applies to gapless tracks. Good luck with other files.
+  // Some files types also allow access to arbitrary tracks and packets
+  // (e.g. AVI and Quicktime). Those files will not work correctly for this.
+  // But then again I don't expect that people will try to concatenate such
+  // files if they've been split before.
+  timecode_adjustment = dst_file.reader->max_timecode_seen;
+  if ((ptzr.packetizer->get_track_type() == track_subtitle) ||
+      (src_file.reader->chapters != NULL)) {
+    vector<append_spec_t>::const_iterator cmp_amap;
+
+    if (src_file.reader->ptzr_first_packet == NULL)
+      ptzr.status = ptzr.packetizer->read();
+    if (src_file.reader->ptzr_first_packet != NULL) {
+      foreach(cmp_amap, append_mapping)
+        if ((cmp_amap->src_file_id == amap.src_file_id) &&
+            (cmp_amap->src_track_id ==
+             src_file.reader->ptzr_first_packet->ti->id) &&
+            (cmp_amap->dst_file_id == amap.dst_file_id))
+          break;
+      if (cmp_amap != append_mapping.end()) {
+        foreach(gptzr, dst_file.reader->reader_packetizers)
+          if ((*gptzr)->ti->id == cmp_amap->dst_track_id) {
+            timecode_adjustment = (*gptzr)->max_timecode_seen;
+            break;
+          }
+      }
+    }
+  }
+
+  if (ptzr.packetizer->get_track_type() == track_subtitle)
+    ptzr.packetizer->append_timecode_offset = timecode_adjustment;
+
+  // Append some more chapters and adjust their timecodes by the highest
+  // timecode seen in the previous file/the track that we've been searching
+  // for above.
+  if (src_file.reader->chapters != NULL) {
+    if (kax_chapters == NULL)
+      kax_chapters = new KaxChapters;
+    adjust_chapter_timecodes(*src_file.reader->chapters, timecode_adjustment);
+    move_chapters_by_edition(*kax_chapters, *src_file.reader->chapters);
+    delete src_file.reader->chapters;
+    src_file.reader->chapters = NULL;
+  }
 }
 
 /** \brief Decide if packetizers have to be appended

@@ -790,6 +790,9 @@ generic_packetizer_c::add_packet(memory_c &mem,
   int length;
   packet_t *pack;
 
+  if (reader->ptzr_first_packet == NULL)
+    reader->ptzr_first_packet = this;
+
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
 
@@ -1023,6 +1026,7 @@ generic_reader_c::generic_reader_c(track_info_c *nti) {
   max_timecode_seen = 0;
   appending = false;
   chapters = NULL;
+  ptzr_first_packet = NULL;
 
   add_all_requested_track_ids2(atracks);
   add_all_requested_track_ids2(vtracks);

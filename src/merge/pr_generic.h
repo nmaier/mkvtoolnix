@@ -248,6 +248,7 @@ class generic_reader_c {
 public:
   track_info_c *ti;
   vector<generic_packetizer_c *> reader_packetizers;
+  generic_packetizer_c *ptzr_first_packet;
   vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
   int64_t max_timecode_seen;
   KaxChapters *chapters;
