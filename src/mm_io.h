@@ -52,9 +52,11 @@ public:
   virtual uint32 read(void *buffer, size_t size);
   virtual unsigned char read_uint8();
   virtual uint16_t read_uint16();
+  virtual uint32_t read_uint24();
   virtual uint32_t read_uint32();
   virtual uint64_t read_uint64();
   virtual uint16_t read_uint16_be();
+  virtual uint32_t read_uint24_be();
   virtual uint32_t read_uint32_be();
   virtual uint64_t read_uint64_be();
   virtual void skip(int64 numbytes);

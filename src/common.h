@@ -93,9 +93,11 @@ void _trace(const char *func, const char *file, int line);
 
 #define get_fourcc(b) get_uint32_be(b)
 uint16_t get_uint16(const void *buf);
+uint32_t get_uint24(const void *buf);
 uint32_t get_uint32(const void *buf);
 uint64_t get_uint64(const void *buf);
 uint16_t get_uint16_be(const void *buf);
+uint32_t get_uint24_be(const void *buf);
 uint32_t get_uint32_be(const void *buf);
 uint64_t get_uint64_be(const void *buf);
 void put_uint16(void *buf, uint16_t value);

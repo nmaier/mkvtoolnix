@@ -285,6 +285,15 @@ uint16_t mm_io_c::read_uint16() {
   return get_uint16(buffer);
 }
 
+uint32_t mm_io_c::read_uint24() {
+  unsigned char buffer[3];
+
+  if (read(buffer, 3) != 3)
+    throw exception();
+
+  return get_uint24(buffer);
+}
+
 uint32_t mm_io_c::read_uint32() {
   unsigned char buffer[4];
 
@@ -310,6 +319,15 @@ uint16_t mm_io_c::read_uint16_be() {
     throw exception();
 
   return get_uint16_be(buffer);
+}
+
+uint32_t mm_io_c::read_uint24_be() {
+  unsigned char buffer[3];
+
+  if (read(buffer, 3) != 3)
+    throw exception();
+
+  return get_uint24_be(buffer);
 }
 
 uint32_t mm_io_c::read_uint32_be() {
