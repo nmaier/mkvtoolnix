@@ -24,7 +24,7 @@
 
 #if defined(COMP_MSC)
 # define PACKAGE "mkvtoolnix"
-# define VERSION "0.7.6"
+# define VERSION "0.7.7"
 
 # define strncasecmp _strnicmp
 # define strcasecmp _stricmp
