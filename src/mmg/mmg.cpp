@@ -23,8 +23,10 @@
 
 #include "wx/wx.h"
 #include "wx/clipbrd.h"
+#include "wx/file.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
+#include "wx/statusbr.h"
 #include "wx/statline.h"
 
 #include "mmg.h"
@@ -94,8 +96,42 @@ wxString shell_escape(wxString &source) {
 }
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
-                                  wxPoint(0, 0), wxSize(520, 700),
+                                  wxPoint(0, 0), wxSize(520, 718),
                                   wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
+  wxMenu *file_menu = new wxMenu();
+  file_menu->Append(ID_M_FILE_LOAD, _T("&Load settings\tCtrl-L"),
+                    _T("Load muxing settings from a file"));
+  file_menu->Append(ID_M_FILE_SAVE, _T("&Save settings\tCtrl-S"),
+                    _T("Save muxing settings to a file"));
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_EXIT, _T("E&xit\tCtrl-X"),
+                    _T("Quit the application"));
+
+  wxMenu *muxing_menu = new wxMenu();
+  muxing_menu->Append(ID_M_MUXING_START,
+                      _T("Sta&rt muxing (run mkvmerge)\tCtrl-R"),
+                      _T("Run mkvmerge and start the muxing process"));
+  muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE,
+                      _T("&Copy to clipboard\tCtrl-C"),
+                      _T("Copy the command line to the clipboard"));
+  muxing_menu->Append(ID_M_MUXING_SAVE_CMDLINE,
+                      _T("Sa&ve command line\tCtrl-V"),
+                      _T("Save the command line to a file"));
+
+  wxMenu *help_menu = new wxMenu();
+  help_menu->Append(ID_M_HELP_ABOUT, _T("&About\tF1"),
+                    _T("Show program information"));
+
+  wxMenuBar *menu_bar = new wxMenuBar();
+  menu_bar->Append(file_menu, _T("&File"));
+  menu_bar->Append(muxing_menu, _T("&Muxing"));
+  menu_bar->Append(help_menu, _T("&Help"));
+  SetMenuBar(menu_bar);
+
+  status_bar = new wxStatusBar(this, -1);
+  SetStatusBar(status_bar);
+  status_bar_timer.SetOwner(this, ID_T_STATUSBAR);
+
   wxBoxSizer *bs_main = new wxBoxSizer(wxVERTICAL);
   this->SetSizer(bs_main);
   this->SetAutoLayout(true);
@@ -137,44 +173,102 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                    wxTE_MULTILINE);
   sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-  wxBoxSizer *bs_low3 = new wxBoxSizer(wxHORIZONTAL);
-  bs_main->Add(bs_low3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+//   wxBoxSizer *bs_low3 = new wxBoxSizer(wxHORIZONTAL);
+//   bs_main->Add(bs_low3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
-  b_run = new wxButton(this, ID_B_RUN, _("Run"), wxDefaultPosition,
-                       wxDefaultSize, 0);
-  bs_low3->Add(b_run, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-  bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+//   b_run = new wxButton(this, ID_B_RUN, _("Run"), wxDefaultPosition,
+//                        wxDefaultSize, 0);
+//   bs_low3->Add(b_run, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+//   bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-  b_save_cmdline = new wxButton(this, ID_B_SAVECMDLINE, _("Save command line"),
-                                wxDefaultPosition, wxDefaultSize, 0);
-  bs_low3->Add(b_save_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-  bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+//   b_save_cmdline = new wxButton(this, ID_B_SAVECMDLINE, _("Save command line"),
+//                                 wxDefaultPosition, wxDefaultSize, 0);
+//   bs_low3->Add(b_save_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+//   bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-  b_copy_to_clipboard = new wxButton(this, ID_B_COPYTOCLIPBOARD,
-                                     _("Copy to clipboard"), wxDefaultPosition,
-                                     wxDefaultSize, 0);
-  bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+//   b_copy_to_clipboard = new wxButton(this, ID_B_COPYTOCLIPBOARD,
+//                                      _("Copy to clipboard"), wxDefaultPosition,
+//                                      wxDefaultSize, 0);
+//   bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   last_open_dir = "";
   cmdline = mkvmerge_path + " -o \"" + tc_output->GetValue() + "\" ";
   tc_cmdline->SetValue(cmdline);
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
+
+  set_status_bar("mkvmerge GUI ready");
 }
 
 void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, "Choose an output file", "", "",
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
                    _T("Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
                       "All Files (*.*)|*.*"), wxSAVE | wxOVERWRITE_PROMPT);
-  if(dlg.ShowModal() == wxID_OK)
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
     tc_output->SetValue(dlg.GetPath());
+  }
+}
+
+void mmg_dialog::set_status_bar(wxString text) {
+  status_bar_timer.Stop();
+  status_bar->SetStatusText(text);
+  status_bar_timer.Start(4000, true);
+}
+
+void mmg_dialog::on_clear_status_bar(wxTimerEvent &evt) {
+  status_bar->SetStatusText("");
+}
+
+void mmg_dialog::on_quit(wxCommandEvent &evt) {
+  Close(true);
+}
+
+void mmg_dialog::on_file_load(wxCommandEvent &evt) {
+}
+
+void mmg_dialog::on_file_save(wxCommandEvent &evt) {
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
   update_command_line();
 }
 
+void mmg_dialog::on_about(wxCommandEvent &evt) {
+  wxMessageBox(_("mkvmerge GUI v" VERSION "\n"
+                 "This GUI was written by Moritz Bunkus <moritz@bunkus.org>\n"
+                 "Based on mmg by Florian Wagner <root@sirelvis.de>\n"
+                 "mkvmerge GUI is licensed under the GPL.\n"
+                 "http://www.bunkus.org/videotools/mkvtoolnix/\n"
+                 "\n"
+                 "Help is available in form of tool tips and the HTML "
+                 "documentation\n"
+                 "for mkvmerge, mkvmerge.html. It can also be viewed online "
+                 "at\n"
+                 "http://www.bunkus.org/videotools/mkvtoolnix/doc/"
+                 "mkvmerge.html"),
+               "About mkvmerge's GUI", wxOK | wxCENTER | wxICON_INFORMATION);
+}
+
 void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
+  wxFile *file;
+  wxString s;
+  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+#ifdef SYS_WINDOWS
+                   _T("All Files (*.*)|*.*"),
+#else
+                   _T("All Files (*)|*"),
+#endif
+                   wxSAVE | wxOVERWRITE_PROMPT);
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
+    file = new wxFile(dlg.GetPath(), wxFile::write);
+    s = cmdline + "\n";
+    file->Write(s);
+    delete file;
+
+    set_status_bar("Command line saved.");
+  }
 }
 
 void mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
@@ -182,7 +276,9 @@ void mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
   if (wxTheClipboard->Open()) {
     wxTheClipboard->SetData(new wxTextDataObject(cmdline));
     wxTheClipboard->Close();
-  }
+    set_status_bar("Command line copied to clipboard.");
+  } else
+    set_status_bar("Could not open the clipboard.");
 }
 
 wxString &mmg_dialog::get_command_line() {
@@ -315,6 +411,14 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_SAVECMDLINE, mmg_dialog::on_save_cmdline)
   EVT_BUTTON(ID_B_COPYTOCLIPBOARD, mmg_dialog::on_copy_to_clipboard)
   EVT_TIMER(ID_T_UPDATECMDLINE, mmg_dialog::on_update_command_line)
+  EVT_TIMER(ID_T_STATUSBAR, mmg_dialog::on_clear_status_bar)
+  EVT_MENU(ID_M_FILE_EXIT, mmg_dialog::on_quit)
+  EVT_MENU(ID_M_FILE_LOAD, mmg_dialog::on_file_load)
+  EVT_MENU(ID_M_FILE_SAVE, mmg_dialog::on_file_save)
+  EVT_MENU(ID_M_MUXING_START, mmg_dialog::on_run)
+  EVT_MENU(ID_M_MUXING_COPY_CMDLINE, mmg_dialog::on_copy_to_clipboard)
+  EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
+  EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
 END_EVENT_TABLE();
 
 class mmg_app: public wxApp {

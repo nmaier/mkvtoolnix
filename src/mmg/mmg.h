@@ -60,6 +60,17 @@ using namespace std;
 #define ID_LB_ATTACHMENTS 10030
 #define ID_TC_MKVMERGE 10031
 #define ID_B_BROWSEMKVMERGE 10032
+#define ID_T_STATUSBAR 10033
+
+#define ID_M_FILE_LOAD 20000
+#define ID_M_FILE_SAVE 20001
+#define ID_M_FILE_EXIT 20002
+
+#define ID_M_MUXING_START 20100
+#define ID_M_MUXING_COPY_CMDLINE 20101
+#define ID_M_MUXING_SAVE_CMDLINE 20102
+
+#define ID_M_HELP_ABOUT 20200
 
 typedef struct {
   char type;
@@ -102,6 +113,9 @@ protected:
   wxString cmdline;
 
   wxTimer cmdline_timer;
+  wxTimer status_bar_timer;
+
+  wxStatusBar *status_bar;
 
 public:
   mmg_dialog();
@@ -111,9 +125,17 @@ public:
   void on_save_cmdline(wxCommandEvent &evt);
   void on_copy_to_clipboard(wxCommandEvent &evt);
 
+  void on_quit(wxCommandEvent &evt);
+  void on_file_load(wxCommandEvent &evt);
+  void on_file_save(wxCommandEvent &evt);
+  void on_about(wxCommandEvent &evt);
+
   void on_update_command_line(wxTimerEvent &evt);
   void update_command_line();
   wxString &get_command_line();
+
+  void on_clear_status_bar(wxTimerEvent &evt);
+  void set_status_bar(wxString text);
 };
 
 extern mmg_dialog *mdlg;
