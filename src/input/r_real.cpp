@@ -209,6 +209,7 @@ real_reader_c::parse_headers() {
   real_video_props_t *rvp;
   real_audio_v4_props_t *ra4p;
   real_audio_v5_props_t *ra5p;
+  bool mime_type_ok;
 
   try {
     io->skip(4);                // object_id = ".RIF"
@@ -283,13 +284,18 @@ real_reader_c::parse_headers() {
 
       } else if (object_id == FOURCC('M', 'D', 'P', 'R')) {
         id = io->read_uint16_be();
-        io->skip(4);            // max_bit_rate
-        io->skip(4);            // avg_bit_rate
-        io->skip(4);            // max_packet_size
-        io->skip(4);            // avg_packet_size
+        mxverb(2, "real_reader MDPR: id %u\n", id);
+        mxverb(2, "real_reader MDPR: max_bit_rate %u\n", io->read_uint32_be());
+        mxverb(2, "real_reader MDPR: avg_bit_rate %u\n", io->read_uint32_be());
+        mxverb(2, "real_reader MDPR: max_packet_size %u\n",
+               io->read_uint32_be());
+        mxverb(2, "real_reader MDPR: avg_packet_size %u\n",
+               io->read_uint32_be());
         start_time = io->read_uint32_be();
         preroll = io->read_uint32_be();
-        io->skip(4);            // duration
+        mxverb(2, "real_reader MDPR: start_time %u\nreal_reader MDPR: "
+               "preroll %u\nreal_reader MDPR: duration %u\n", start_time,
+               preroll, io->read_uint32_be());
 
         size = io->read_uint8(); // stream_name_size
         if (size > 0) {
@@ -297,24 +303,28 @@ real_reader_c::parse_headers() {
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          if (verbose > 1)
-            mxinfo("stream_name: '%s'\n", buffer);
+          mxverb(2, "real_reader MDPR stream_name: '%s'\n", buffer);
           safefree(buffer);
         }
 
+        mime_type_ok = false;
         size = io->read_uint8(); // mime_type_size
         if (size > 0) {
           buffer = (char *)safemalloc(size + 1);
           memset(buffer, 0, size + 1);
           if (io->read(buffer, size) != size)
             throw exception();
-          if (verbose > 1)
-            mxinfo("mime_type: '%s'\n", buffer);
+          mxverb(2, "real_reader MDPR mime_type: '%s'\n", buffer);
+          if (!strcmp(buffer, "audio/x-pn-realaudio") ||
+              !strcmp(buffer, "video/x-pn-realvideo"))
+            mime_type_ok = true;
           safefree(buffer);
         }
 
         size = io->read_uint32_be(); // type_specific_size
-        if (size > 0) {
+        if (!mime_type_ok)
+          io->skip(size);
+        else if (size > 0) {
           buffer = (char *)safemalloc(size);
           if (io->read(buffer, size) != size)
             throw exception();

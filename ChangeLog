@@ -1,3 +1,10 @@
+2004-02-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Some RealMedia files contain several tracks
+	for multirate stuff which are now ignored. Only tracks with known
+	MIME types (audio/x-pn-realaudio and video/x-pn-realvideo) are
+	used.
+
 2004-02-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: Added a list of 'popular' languages on top of all language
