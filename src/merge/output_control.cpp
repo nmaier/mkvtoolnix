@@ -382,7 +382,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   pack.old_status = pack.status;
   pack.file = -1;
   foreach(file, files)
-    if ((*file).reader == packetizer->reader) {
+    if (file->reader == packetizer->reader) {
       pack.file = distance(files.begin(), file);
       pack.orig_file = pack.file;
       break;
@@ -1126,8 +1126,12 @@ create_readers() {
     }
     // Check if all track IDs given on the command line are actually
     // present.
-    foreach(file, files)
+    foreach(file, files) {
       file->reader->check_track_ids_and_packetizers();
+      file->num_unfinished_packetizers =
+        file->reader->reader_packetizers.size();
+      file->old_num_unfinished_packetizers = file->num_unfinished_packetizers;
+    }
 
     // Check if the append mappings are ok.
     check_append_mapping();
@@ -1484,6 +1488,8 @@ finish_file(bool last_file) {
     packetizers[i].packetizer->reset();
 }
 
+static void establish_deferred_connections(filelist_t &file);
+
 /** \brief Append a packetizer to another one
  *
  * Appends a packetizer to another one. Finds the packetizer that is
@@ -1515,42 +1521,43 @@ append_track(packetizer_t &ptzr,
   // chapters then we have to suck the previous file dry. See below for the
   // reason (short version: we need all max_timecode_seen values).
 
-//   start TEMPORARILY DISABLED
-//   if ((((*gptzr)->get_track_type() == track_subtitle) ||
-//        (src_file.reader->chapters != NULL)) &&
-//       !dst_file.done) {
-//     vector<deferred_connection_t>::const_iterator def_con;
-    
-//     dst_file.reader->read_all();
-//     dst_file.done = true;
-//     foreach(def_con, dst_file.deferred_connections)
-//       append_track(*def_con->ptzr, def_con->amap);
-//     dst_file.deferred_connections.clear();
-//   }
-
-//   if (((*gptzr)->get_track_type() == track_subtitle) &&
-//       (dst_file.reader->num_video_tracks == 0) &&
-//       (video_packetizer != NULL) && !ptzr.deferred) {
-//     vector<filelist_t>::iterator file;
-
-//     foreach(file, files) {
-//       if (mxfind(video_packetizer, file->reader->reader_packetizers) !=
-//           file->reader->reader_packetizers.end()) {
-//         deferred_connection_t new_def_con;
-
-//         ptzr.deferred = true;
-//         new_def_con.amap = amap;
-//         new_def_con.ptzr = &ptzr;
-//         file->deferred_connections.push_back(new_def_con);
-//         return;
-//       }
-//     }
-//   }
-//   middle TEMPORARILY DISABLED
-  if (((*gptzr)->get_track_type() == track_subtitle) ||
-      (src_file.reader->chapters != NULL))
+  if ((((*gptzr)->get_track_type() == track_subtitle) ||
+       (src_file.reader->chapters != NULL)) &&
+      !dst_file.done) {
     dst_file.reader->read_all();
-//   end TEMPORARILY DISABLED
+    dst_file.num_unfinished_packetizers = 0;
+    dst_file.old_num_unfinished_packetizers = 0;
+    dst_file.done = true;
+    establish_deferred_connections(dst_file);
+  }
+
+  if (((*gptzr)->get_track_type() == track_subtitle) &&
+      (dst_file.reader->num_video_tracks == 0) &&
+      (video_packetizer != NULL) && !ptzr.deferred) {
+    vector<filelist_t>::iterator file;
+
+    foreach(file, files) {
+      vector<generic_packetizer_c *>::const_iterator vptzr;
+
+      if (file->done)
+        continue;
+
+      foreach(vptzr, file->reader->reader_packetizers) {
+        if ((*vptzr)->get_track_type() == track_video)
+          break;
+      }
+
+      if (vptzr != file->reader->reader_packetizers.end()) {
+        deferred_connection_t new_def_con;
+
+        ptzr.deferred = true;
+        new_def_con.amap = amap;
+        new_def_con.ptzr = &ptzr;
+        file->deferred_connections.push_back(new_def_con);
+        return;
+      }
+    }
+  }
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
@@ -1674,6 +1681,34 @@ append_tracks_maybe() {
   return appended_a_track;
 }
 
+/** \brief Establish deferred packetizer connections
+ *
+ * In some cases (e.g. subtitle only files being appended) establishing the
+ * connections is deferred until a file containing a video track has
+ * finished, too. This is necessary because the subtitle files themselves
+ * are usually "shorter" than the movie they belong to. This is not the
+ * case if the subs are already embedded with a movie in a single file.
+ *
+ * This function iterates over all deferred connections and establishes
+ * them.
+ *
+ * \param file All connections that have been deferred until this file has
+ *   finished are established.
+ */
+static void
+establish_deferred_connections(filelist_t &file) {
+  vector<deferred_connection_t> def_cons;
+  vector<deferred_connection_t>::iterator def_con;
+
+  def_cons = file.deferred_connections;
+  file.deferred_connections.clear();
+
+  foreach(def_con, def_cons)
+    append_track(*def_con->ptzr, def_con->amap);
+
+  // \todo Select a new file that the subs will defer to.
+}
+
 /** \brief Request packets and handle the next one
  *
  * Requests packets from each packetizer, selects the packet with the
@@ -1682,19 +1717,18 @@ append_tracks_maybe() {
  */
 void
 main_loop() {
-  packet_t *pack;
-  int i;
-  packetizer_t *ptzr, *winner;
-  bool appended_a_track;
-
   // Let's go!
   while (1) {
+    vector<packetizer_t>::iterator ptzr, winner;
+    packet_t *pack;
+    bool appended_a_track;
+
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
-    for (i = 0; i < packetizers.size(); i++) {
-      ptzr = &packetizers[i];
+    foreach(ptzr, packetizers) {
       if (ptzr->status == file_status_holding)
         ptzr->status = file_status_moredata;
+      ptzr->old_status = ptzr->status;
       while ((ptzr->pack == NULL) && (ptzr->status == file_status_moredata) &&
              (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
@@ -1702,15 +1736,30 @@ main_loop() {
         ptzr->packetizer->force_duration_on_last_packet();
       if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
+
+      // Has this packetizer changed its status from "data available" to
+      // "file done" during this loop? If so then decrease the number of
+      // unfinished packetizers in the corresponding file structure.
+      if ((ptzr->status == file_status_done) &&
+          (ptzr->old_status != ptzr->status)) {
+        filelist_t &file = files[ptzr->file];
+
+        file.num_unfinished_packetizers--;
+        // If all packetizers for a file have finished then establish the
+        // deferred connections.
+        if ((file.num_unfinished_packetizers <= 0) &&
+            (file.old_num_unfinished_packetizers > 0))
+          establish_deferred_connections(file);
+        file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
+      }
     }
 
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
-    winner = NULL;
-    for (i = 0; i < packetizers.size(); i++) {
-      ptzr = &packetizers[i];
+    winner = packetizers.end();
+    foreach(ptzr, packetizers) {
       if (ptzr->pack != NULL) {
-        if ((winner == NULL) || (winner->pack == NULL))
+        if ((winner == packetizers.end()) || (winner->pack == NULL))
           winner = ptzr;
         else if (ptzr->pack &&
                  (ptzr->pack->assigned_timecode <
@@ -1722,7 +1771,7 @@ main_loop() {
     // Append the next track if appending is wanted.
     appended_a_track = append_tracks_maybe();
 
-    if ((winner != NULL) && (winner->pack != NULL)) {
+    if ((winner != packetizers.end()) && (winner->pack != NULL)) {
       pack = winner->pack;
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be
