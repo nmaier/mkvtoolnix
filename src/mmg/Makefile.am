@@ -2,8 +2,7 @@ AUTOMAKE_OPTIONS = dist-zip foreign
 
 bin_PROGRAMS = mmg
 
-DEFAULT_INCLUDES = -I$(top_srcdir) \
-			-I$(top_srcdir)/src
+DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src
 
 mmg_SOURCES = mmg.cpp mmg.h \
 			../chapters.cpp ../chapters.h \
