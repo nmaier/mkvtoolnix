@@ -21,6 +21,8 @@
 
 #include "os.h"
 
+#include <errno.h>
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
