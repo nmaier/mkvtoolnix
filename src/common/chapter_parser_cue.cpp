@@ -307,7 +307,6 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
 
   if (a.edition == NULL) {
     a.edition = &GetChild<KaxEditionEntry>(*a.chapters);
-    a.edition_uid = create_unique_uint32();
     *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(*a.edition)) =
       a.edition_uid;
   }
@@ -409,6 +408,7 @@ parse_cue_chapters(mm_text_io_c *in,
   a.line_num = 0;
   a.start_00 = -1;
   a.start_01 = -1;
+  a.edition_uid = create_unique_uint32();
   try {
     while (in->getline2(line)) {
       a.line_num++;
