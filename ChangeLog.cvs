@@ -1,3 +1,54 @@
+2003-05-18 01:28  mosu
+
+	* README, README.Windows.txt, configure.in, mkvinfo.1, mkvmerge.1,
+	debian/changelog: New version number 0.3.4.
+
+2003-05-18 01:25  mosu
+
+	* mkvmerge.1, mkvmerge.cpp: Renamed --no-utf8-subs to "--sub-type
+	utf8". Polished the man page regarding subtitle handling.
+
+2003-05-17 23:01  mosu
+
+	* aac_common.cpp, aac_common.h, p_aac.cpp, p_aac.h, r_aac.cpp,
+	r_aac.h: Added support for AAC files (ADTS headers only).
+
+2003-05-17 22:59  mosu
+
+	* mp3_common.cpp: Fixed a bug with mono MP3 files.
+
+2003-05-17 22:51  mosu
+
+	* Makefile.am, common.cpp, common.h, matroska.h, mkvmerge.cpp:
+	Added support for AAC files (ADTS headers only).
+
+2003-05-15 11:43  mosu
+
+	* README, README.Windows.txt, configure.in, mkvinfo.1, mkvmerge.1,
+	debian/changelog: Released new version 0.3.3.
+
+2003-05-15 11:38  mosu
+
+	* mkvmerge.cpp: If an error occurs while writing to the destination
+	file the error is reported and mkvmerge aborts with a non-zero exit
+	code.
+
+2003-05-15 11:10  mosu
+
+	* r_ogm.cpp: I frames were handled like P frames and vice versa.
+	Fixed.
+
+2003-05-15 10:58  mosu
+
+	* Makefile.am, common.h, dts_common.cpp, dts_common.h, matroska.h,
+	mkvmerge.cpp, p_ac3.cpp, p_dts.cpp, p_dts.h, r_dts.cpp, r_dts.h,
+	r_matroska.cpp: Preliminary support for DTS files/tracks.
+
+2003-05-11 17:52  mosu
+
+	* README, common.h, configure.in, mkvinfo.1, mkvmerge.1,
+	debian/changelog: New version 0.3.2
+
 2003-05-11 17:48  mosu
 
 	* cluster_helper.cpp, mkvmerge.cpp, mkvmerge.h: Changes to the meta
