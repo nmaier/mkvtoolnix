@@ -51,56 +51,74 @@ public:
 };
 
 tab_attachments::tab_attachments(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
-          wxTAB_TRAVERSAL) {
+  wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) {
   uint32_t i;
+  wxStaticBox *sb_top, *sb_bottom;
+  wxStaticBoxSizer *siz_box_top, *siz_box_bottom;
+  wxGridSizer *siz_ddlists;
+  wxBoxSizer *siz_buttons, *siz_all;
 
-  new wxStaticText(this, wxID_STATIC, wxT("Attachments:"), wxPoint(5, 5),
-                   wxDefaultSize, 0);
-  lb_attachments =
-    new wxListBox(this, ID_LB_ATTACHMENTS, wxPoint(5, 24), wxSize(420, 120),
-                  0);
+  sb_top = new wxStaticBox(this, wxID_STATIC, wxT("Attachments:"));
+  siz_box_top = new wxStaticBoxSizer(sb_top,  wxHORIZONTAL);
 
-  b_add_attachment =
-    new wxButton(this, ID_B_ADDATTACHMENT, wxT("add"), wxPoint(435, 24),
-                 wxSize(50, -1), 0);
-  b_remove_attachment =
-    new wxButton(this, ID_B_REMOVEATTACHMENT, wxT("remove"), wxPoint(435, 56),
-                 wxSize(50, -1), 0);
+  lb_attachments = new wxListBox(this, ID_LB_ATTACHMENTS);
+  siz_box_top->Add(lb_attachments, 1, wxGROW | wxALL, 5);
+
+  siz_buttons = new wxBoxSizer(wxVERTICAL);
+  b_add_attachment = new wxButton(this, ID_B_ADDATTACHMENT, wxT("add"));
+  siz_buttons->Add(b_add_attachment, 0, wxALL, 5);
+  b_remove_attachment = new wxButton(this, ID_B_REMOVEATTACHMENT,
+                                     wxT("remove"));
   b_remove_attachment->Enable(false);
-  new wxStaticText(this, wxID_STATIC, wxT("Attachment options:"),
-                   wxPoint(5, 150), wxDefaultSize, 0);
+  siz_buttons->Add(b_remove_attachment, 0, wxALL, 5);
+  siz_buttons->Add(5, 5, 0, wxGROW | wxALL, 5);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Description:"), wxPoint(10, 175),
-                   wxDefaultSize, 0);
+  siz_box_top->Add(siz_buttons);
+
+  sb_bottom = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options:"));
+  siz_box_bottom = new wxStaticBoxSizer(sb_bottom, wxVERTICAL);
+
+  siz_box_bottom->Add(new wxStaticText(this, wxID_STATIC, wxT("Description:")),
+                      0, wxALIGN_LEFT | wxALL, 5);
   tc_description =
-    new wxTextCtrl(this, ID_TC_DESCRIPTION, wxT(""), wxPoint(5, 195),
-                   wxSize(480, 160), wxTE_MULTILINE | wxTE_WORDWRAP);
+    new wxTextCtrl(this, ID_TC_DESCRIPTION, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, wxTE_MULTILINE | wxTE_WORDWRAP);
+  siz_box_bottom->Add(tc_description, 1, wxGROW | wxALL, 5);
 
-
-  new wxStaticText(this, wxID_STATIC, wxT("MIME type:"), wxPoint(5, 365),
-                   wxDefaultSize, 0);
+  siz_ddlists = new wxGridSizer(2, 2);
+  siz_ddlists->Add(new wxStaticText(this, wxID_STATIC, wxT("MIME type:")),
+                   0, wxALIGN_LEFT | wxLEFT | wxRIGHT, 5);
+  siz_ddlists->Add(new wxStaticText(this, wxID_STATIC,
+                                    wxT("Attachment style:")),
+                   0, wxALIGN_LEFT | wxRIGHT, 5);
 
   cob_mimetype =
-    new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxPoint(5, 385),
-                   wxSize(250, -1), 0, NULL, wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_mimetype->SetToolTip(wxT("MIME type for this track. Select one of the "
                                "pre-defined MIME types or enter one "
                                "yourself."));
   cob_mimetype->Append(wxT(""));
   for (i = 0; mime_types[i].name != NULL; i++)
     cob_mimetype->Append(wxU(mime_types[i].name));
+  siz_ddlists->Add(cob_mimetype, 1, wxGROW | wxLEFT | wxRIGHT, 5);
 
-  new wxStaticText(this, wxID_STATIC, wxT("Attachment style:"),
-                   wxPoint(275, 365), wxDefaultSize, 0);
   cob_style =
-    new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxT(""), wxPoint(275, 385),
-                   wxSize(205, -1), 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
+    new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
   cob_style->Append(wxT("To all files"));
   cob_style->Append(wxT("Only to the first"));
   cob_style->SetToolTip(wxT("If splitting is a file can be attached either to "
                             "all files created or only to the first file. Has "
                             "no effect if no splitting is used."));
+  siz_ddlists->Add(cob_style, 1, wxGROW | wxRIGHT, 5);
+
+  siz_box_bottom->Add(siz_ddlists, 0, wxBOTTOM | wxGROW, 5);
+
+  siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->Add(siz_box_top, 1, wxGROW | wxALL, 5);
+  siz_all->Add(siz_box_bottom, 1, wxGROW | wxALL, 5);
+  SetSizer(siz_all);
 
   enable(false);
   selected_attachment = -1;
