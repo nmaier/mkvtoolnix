@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.4 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.5 2003/06/07 21:59:24 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -31,6 +31,10 @@ typedef struct {
   packet_t   **packets;
   int          num_packets, is_referenced, rendered;
 } ch_contents_t;
+
+typedef struct {
+  int64_t timecode, filepos, cues_size, packet_num;
+} splitpoint_t;
 
 class cluster_helper_c {
 private:

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.29 2003/06/07 12:26:08 mosu Exp $
+    \version \$Id: common.cpp,v 1.30 2003/06/07 21:59:24 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -181,8 +181,13 @@ int utf8_init(const char *charset) {
 void utf8_done() {
   int i;
 
-  for (i = 0; i < num_mkv_convs; i++)
+  for (i = 0; i < num_mkv_convs; i++) {
+    if (mkv_convs[i].ict_from_utf8 != (iconv_t)(-1))
+      iconv_close(mkv_convs[i].ict_from_utf8);
+    if (mkv_convs[i].ict_to_utf8 != (iconv_t)(-1))
+      iconv_close(mkv_convs[i].ict_to_utf8);
     safefree(mkv_convs[i].charset);
+  }
   if (mkv_convs != NULL)
     safefree(mkv_convs);
 }
@@ -369,10 +374,11 @@ UTFstring cstr_to_UTFstring(const char *c) {
   new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
   memset(new_string, 0, (len + 1) * sizeof(wchar_t));
   new_string[len] = L'\0';
-  old_locale = setlocale(LC_CTYPE, NULL);
+  old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
   setlocale(LC_CTYPE, "");
   mbstowcs(new_string, c, len);
   setlocale(LC_CTYPE, old_locale);
+  safefree(old_locale);
   u = UTFstring(new_string);
   safefree(new_string);
 

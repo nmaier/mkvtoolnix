@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.50 2003/06/07 14:30:10 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.51 2003/06/07 21:59:24 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -26,8 +26,6 @@
 #include "common.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"
-
-static int default_tracks[3] = {0, 0, 0};
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
@@ -73,6 +71,10 @@ generic_packetizer_c::~generic_packetizer_c() {
 
 int generic_packetizer_c::read() {
   return reader->read();
+}
+
+void generic_packetizer_c::reset() {
+  track_entry = NULL;
 }
 
 void generic_packetizer_c::set_cue_creation(int ncreate_cue_data) {

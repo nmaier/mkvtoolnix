@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mm_io.h,v 1.3 2003/05/23 09:51:22 mosu Exp $
+    \version \$Id: mm_io.h,v 1.4 2003/06/07 21:59:24 mosu Exp $
     \brief IO callback class definitions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -33,6 +33,7 @@ class mm_io_c: public IOCallback {
   void *file;
 
 public:
+  mm_io_c();
   mm_io_c(const char *path, const open_mode mode);
   virtual ~mm_io_c();
 
@@ -45,7 +46,7 @@ public:
   virtual char *gets(char *buffer, size_t max_size);
 };
 
-class mm_null_io_c: public IOCallback {
+class mm_null_io_c: public mm_io_c {
 protected:
   int64_t pos;
 

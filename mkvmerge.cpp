@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.87 2003/06/07 14:30:10 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.88 2003/06/07 21:59:24 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -90,15 +90,13 @@ typedef struct filelist_tag {
   char *name;
   mm_io_c *fp;
 
-  int type;
-
-  int status;
+  int type, status;
 
   packet_t *pack;
 
   generic_reader_c *reader;
 
-  struct filelist_tag *next;
+  track_info_t *ti;
 } filelist_t;
 
 typedef struct {
@@ -107,17 +105,23 @@ typedef struct {
   generic_packetizer_c *packetizer;
 } packetizer_t;
 
-vector<packetizer_t *>packetizers;
+vector<packetizer_t *> packetizers;
+vector<filelist_t *> files;
 
+// Variables set by the command line parser.
 char *outfile = NULL;
-filelist_t *input= NULL;
 int64_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
+bool write_meta_seek = true;
+int64_t meta_seek_size = 0;
+bool no_lacing = false;
+int64_t split_after = -1;
 
 float video_fps = -1.0;
+int default_tracks[3];
 
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment *kax_segment;
@@ -129,10 +133,11 @@ EbmlVoid *kax_seekhead_void = NULL;
 KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
 
-bool write_meta_seek = true;
-int64_t meta_seek_size = 0;
-
-bool no_lacing = false;
+// Actual pass. 0 for normal operation. 1 for first pass of splitting
+// (only find split points, output goes to /dev/null). 2 for the second
+// pass of the splitting run.
+int pass = 0;
+int file_num = 1;
 
 // Specs say that track numbers should start at 1.
 int track_number = 1;
@@ -184,6 +189,7 @@ static void usage(void) {
     "  --no-meta-seek           Do not write any meta seek information.\n"
     "  --meta-seek-size <d>     Reserve d bytes for the meta seek entries.\n"
     "  --no-lacing              Do not use lacing.\n"
+    "  --split <d[K,M,G]>       Create a new file after d bytes (KB, MB, GB)\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -287,33 +293,19 @@ static int get_type(char *filename) {
   return type;
 }
 
-static void add_file(filelist_t *file) {
-  filelist_t *temp;
-
-  if (input == NULL) {
-    input = file;
-  } else {
-    temp = input;
-    while (temp->next) temp = temp->next;
-    temp->next = file;
-  }
-}
-
 static int display_counter = 1;
 
 static void display_progress(int force) {
-  filelist_t *winner, *current;
+  filelist_t *winner;
+  int i;
 
   if (((display_counter % 500) == 0) || force) {
     display_counter = 0;
-    winner = input;
-    current = winner->next;
-    while (current) {
-      if (current->reader->display_priority() >
+    winner = files[0];
+    for (i = 1; i < files.size(); i++)
+      if (files[i]->reader->display_priority() >
           winner->reader->display_priority())
-        winner = current;
-      current = current->next;
-    }
+        winner = files[i];
     winner->reader->display_progress();
   }
   display_counter++;
@@ -485,7 +477,7 @@ static float parse_aspect_ratio(char *s) {
 
 static void render_headers(mm_io_c *out) {
   EbmlHead head;
-  filelist_t *file;
+  int i;
 
   try {
     EDocType &doc_type = GetChild<EDocType>(head);
@@ -535,11 +527,8 @@ static void render_headers(mm_io_c *out) {
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
 
-    file = input;
-    while (file) {
-      file->reader->set_headers();
-      file = file->next;
-    }
+    for (i = 0; i < files.size(); i++)
+      files[i]->reader->set_headers();
 
     kax_tracks->Render(*out);
   } catch (std::exception &ex) {
@@ -551,6 +540,7 @@ static void render_headers(mm_io_c *out) {
 static void parse_args(int argc, char **argv) {
   track_info_t ti;
   int i, j, noaudio, novideo, nosubs;
+  int64_t modifier;
   filelist_t *file;
   char *s;
 
@@ -614,7 +604,37 @@ static void parse_args(int argc, char **argv) {
     else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose = 2;
 
-    else if (!strcmp(argv[i], "--cluster-length")) {
+    else if (!strcmp(argv[i], "--split")) {
+      if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
+        fprintf(stderr, "Error: --split lacks the size.\n");
+        exit(1);
+      }
+      s = &argv[i + 1][strlen(argv[i + 1]) - 1];
+      if ((*s == 'k') || (*s == 'K')) {
+        modifier = 1024;
+        *s = 0;
+      } else if ((*s == 'm') || (*s == 'M')) {
+        modifier = 1024 * 1024;
+        *s = 0;
+      } else if ((*s == 'g') || (*s == 'G')) {
+        modifier = 1024 * 1024 * 1024;
+        *s = 0;
+      } else
+        modifier = 1;
+
+      split_after = strtoll(argv[i + 1], NULL, 10);
+      if (split_after <= 0) {
+        fprintf(stderr, "Error: invalid split size.\n");
+        exit(1);
+      }
+      split_after *= modifier;
+      if (split_after <= (1024 * 1024)) {
+        fprintf(stderr, "Error: invalid split size.\n");
+        exit(1);
+      }
+      i++;
+
+    } else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --cluster-length lacks the length.\n");
         exit(1);
@@ -811,100 +831,12 @@ static void parse_args(int argc, char **argv) {
       }
 
       file->fp = NULL;
-      try {
-        switch (file->type) {
-          case TYPEMATROSKA:
-            file->reader = new mkv_reader_c(&ti);
-            break;
-#ifdef HAVE_OGGVORBIS
-          case TYPEOGM:
-            file->reader = new ogm_reader_c(&ti);
-            break;
-#endif // HAVE_OGGVORBIS
-          case TYPEAVI:
-            if (ti.stracks != NULL)
-              fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
-            file->reader = new avi_reader_c(&ti);
-            break;
-          case TYPEWAV:
-            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
-                (ti.stracks != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "WAVE files.\n");
-            file->reader = new wav_reader_c(&ti);
-            break;
-          case TYPESRT:
-            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
-                (ti.stracks != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "SRT files.\n");
-            file->reader = new srt_reader_c(&ti);
-            break;
-          case TYPEMP3:
-            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
-                (ti.stracks != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "MP3 files.\n");
-            file->reader = new mp3_reader_c(&ti);
-            break;
-          case TYPEAC3:
-            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
-                (ti.stracks != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "AC3 files.\n");
-            file->reader = new ac3_reader_c(&ti);
-            break;
-          case TYPEDTS:
-            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
-                (ti.stracks != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "DTS files.\n");
-            file->reader = new dts_reader_c(&ti);
-            break;
-          case TYPEAAC:
-            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
-                (ti.stracks != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "AAC files.\n");
-            file->reader = new aac_reader_c(&ti);
-            break;
-//           case TYPECHAPTERS:
-//             if (chapters != NULL) {
-//               fprintf(stderr, "Error: only one chapter file allowed.\n");
-//               exit(1);
-//             }
-//             chapters = chapter_information_read(file->name);
-//             break;
-//           case TYPEMICRODVD:
-//             if ((atracks != NULL) || (vtracks != NULL) ||
-//                 (stracks != NULL))
-//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-//                       "MicroDVD files.\n");
-//             file->reader = new microdvd_reader_c(file->name, &async);
-//             break;
-//           case TYPEVOBSUB:
-//             if ((atracks != NULL) || (vtracks != NULL) ||
-//                 (stracks != NULL))
-//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-//                       "VobSub files.\n");
-//             file->reader = new vobsub_reader_c(file->name, &async);
-//             break;
-          default:
-            fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
-            exit(1);
-            break;
-        }
-      } catch (error_c error) {
-        fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
-                error.get_error());
-        exit(1);
-      }
       if (file->type != TYPECHAPTERS) {
         file->status = EMOREDATA;
-        file->next = NULL;
         file->pack = NULL;
+        file->ti = duplicate_track_info(&ti);
 
-        add_file(file);
+        files.push_back(file);
       } else
         safefree(file);
 
@@ -925,9 +857,106 @@ static void parse_args(int argc, char **argv) {
     }
   }
 
-  if (input == NULL) {
+  if (files.size() == 0) {
     usage();
     exit(1);
+  }
+}
+
+static void create_readers() {
+  filelist_t *file;
+  int i;
+
+  for (i = 0; i < files.size(); i++) {
+    file = files[i];
+    try {
+      switch (file->type) {
+        case TYPEMATROSKA:
+          file->reader = new mkv_reader_c(file->ti);
+          break;
+#ifdef HAVE_OGGVORBIS
+        case TYPEOGM:
+          file->reader = new ogm_reader_c(file->ti);
+          break;
+#endif // HAVE_OGGVORBIS
+        case TYPEAVI:
+          if (file->ti->stracks != NULL)
+            fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
+          file->reader = new avi_reader_c(file->ti);
+          break;
+        case TYPEWAV:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "WAVE files.\n");
+          file->reader = new wav_reader_c(file->ti);
+          break;
+        case TYPESRT:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "SRT files.\n");
+          file->reader = new srt_reader_c(file->ti);
+          break;
+        case TYPEMP3:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "MP3 files.\n");
+          file->reader = new mp3_reader_c(file->ti);
+          break;
+        case TYPEAC3:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "AC3 files.\n");
+          file->reader = new ac3_reader_c(file->ti);
+          break;
+        case TYPEDTS:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "DTS files.\n");
+          file->reader = new dts_reader_c(file->ti);
+          break;
+        case TYPEAAC:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "AAC files.\n");
+          file->reader = new aac_reader_c(file->ti);
+          break;
+          //           case TYPECHAPTERS:
+          //             if (chapters != NULL) {
+          //               fprintf(stderr, "Error: only one chapter file allowed.\n");
+          //               exit(1);
+          //             }
+          //             chapters = chapter_information_read(file->name);
+          //             break;
+          //           case TYPEMICRODVD:
+          //             if ((atracks != NULL) || (vtracks != NULL) ||
+          //                 (stracks != NULL))
+          //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+            //                       "MicroDVD files.\n");
+            //             file->reader = new microdvd_reader_c(file->name, &async);
+            //             break;
+            //           case TYPEVOBSUB:
+            //             if ((atracks != NULL) || (vtracks != NULL) ||
+            //                 (stracks != NULL))
+            //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+            //                       "VobSub files.\n");
+            //             file->reader = new vobsub_reader_c(file->name, &async);
+            //             break;
+            default:
+              fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
+              exit(1);
+              break;
+      }
+    } catch (error_c error) {
+      fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
+              error.get_error());
+      exit(1);
+    }
   }
 }
 
@@ -1031,13 +1060,7 @@ static int write_packet(packet_t *pack) {
   return 1;
 }
 
-int main(int argc, char **argv) {
-  packet_t *pack;
-  int i;
-  packetizer_t *ptzr, *winner;
-  filelist_t *file;
-  int64_t old_pos;
-
+static void setup() {
   if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
     fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
             "that your system supports this locale.\n");
@@ -1056,78 +1079,108 @@ int main(int argc, char **argv) {
   srand(time(NULL));
   cc_local_utf8 = utf8_init(NULL);
 
+  cluster_helper = new cluster_helper_c();
+}
+
+static void init_globals() {
+  track_number = 1;
+  cluster_helper = NULL;
+  kax_seekhead = NULL;
+  kax_seekhead_void = NULL;
+  video_fps = -1.0;
+  default_tracks[0] = 0;
+  default_tracks[1] = 0;
+  default_tracks[2] = 0;
+}
+
+static void destroy_readers() {
+  int i;
+  filelist_t *file;
+
+  for (i = 0; i < files.size(); i++) {
+    file = files[i];
+    if (file->reader != NULL) {
+      delete file->reader;
+      file->reader = NULL;
+    }
+  }
+
+  while (packetizers.size()) {
+    safefree(packetizers[packetizers.size() - 1]);
+    packetizers.pop_back();
+  }
+}
+
+static void cleanup() {
+  delete cluster_helper;
+  filelist_t *file;
+
+  destroy_readers();
+
+  while (files.size()) {
+    file = files[files.size() - 1];
+    free_track_info(file->ti);
+    safefree(file);
+    files.pop_back();
+  }
+
+  safefree(outfile);
+
+  utf8_done();
+}
+
+void open_new_output_file() {
+  char *this_outfile, *s;
+
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
   kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
 
-  cluster_helper = new cluster_helper_c();
+  if (pass == 0)
+    this_outfile = safestrdup(outfile);
+  else if (pass == 2) {
+    s = &outfile[strlen(outfile) - 1];
+    while ((s != outfile) && (*s != '.'))
+      s--;
+    if ((s != outfile) && (*s == '.')) {
+      this_outfile = (char *)safemalloc(strlen(outfile) + 1 + 1 + 3);
+      *s = 0;
+      sprintf(this_outfile, "%s-%03d.%s", outfile, file_num, &s[1]);
+      *s = 0;
+    } else {
+      this_outfile = (char *)safemalloc(strlen(outfile) + 1 + 1 + 3);
+      sprintf(this_outfile, "%s-%03d", outfile, file_num);
+    }
+  } else {
+    // Open the a dummy file.
+    try {
+      out = new mm_null_io_c();
+    } catch (std::exception &ex) {
+      die("mkvmerge.cpp/open_new_output_file(): Could not create a dummy "
+          "output class.");
+    }
 
-  handle_args(argc, argv);
+    render_headers(out);
+
+    return;
+  }
 
   // Open the output file.
   try {
-    out = new mm_io_c(outfile, MODE_CREATE);
+    out = new mm_io_c(this_outfile, MODE_CREATE);
   } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
-            strerror(errno));
+    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n",
+            this_outfile, strerror(errno));
     exit(1);
   }
+  safefree(this_outfile);
 
   render_headers(out);
+}
 
-  /* let her rip! */
-  while (1) {
-    /* Step 1: make sure a packet is available for each output
-    ** as long we havne't already processed the last one.
-    */
-    for (i = 0; i < packetizers.size(); i++) {
-      ptzr = packetizers[i];
-      while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
-             (ptzr->packetizer->packet_available() < 2))
-        ptzr->status = ptzr->packetizer->read();
-      if (ptzr->pack == NULL)
-        ptzr->pack = ptzr->packetizer->get_packet();
-      if ((ptzr->pack != NULL) && !ptzr->packetizer->packet_available())
-        ptzr->pack->duration_mandatory = 1;
-    }
-
-    /* Step 2: Pick the packet with the lowest timecode and
-    ** stuff it into the Matroska file.
-    */
-    winner = NULL;
-    for (i = 0; i < packetizers.size(); i++) {
-      ptzr = packetizers[i];
-      if (ptzr->pack != NULL) {
-        if ((winner == NULL) || (winner->pack == NULL))
-          winner = ptzr;
-        else if (ptzr->pack &&
-                 (ptzr->pack->timecode < winner->pack->timecode))
-          winner = ptzr;
-      }
-    }
-    if ((winner != NULL) && (winner->pack != NULL))
-      pack = winner->pack;
-    else /* exit if there are no more packets */
-      break;
-
-    /* Step 3: Write out the winning packet */
-    write_packet(pack);
-
-    winner->pack = NULL;
-
-    /* display some progress information */
-    if (verbose >= 1)
-      display_progress(0);
-  }
-
-  // Render all remaining packets (if there are any).
-  if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
-    cluster_helper->render(out);
-
-  if (verbose == 1) {
-    display_progress(1);
-    fprintf(stdout, "\n");
-  }
+void finish_file() {
+  int64_t old_pos;
+  int i;
 
   // Render the cues.
   if (write_cues && cue_writing_requested) {
@@ -1175,22 +1228,6 @@ int main(int argc, char **argv) {
                              kax_segment->GetElementPosition() -
                              kax_segment->HeadSize()))
     kax_segment->OverwriteHead(*out);
-  
-  delete cluster_helper;
-
-  file = input;
-  while (file) {
-    filelist_t *next = file->next;
-    if (file->reader)
-      delete file->reader;
-    safefree(file);
-    file = next;
-  }
-
-  while (packetizers.size()) {
-    safefree(packetizers[packetizers.size() - 1]);
-    packetizers.pop_back();
-  }
 
   delete out;
   delete kax_segment;
@@ -1200,7 +1237,109 @@ int main(int argc, char **argv) {
     delete kax_seekhead;
   }
 
-  utf8_done();
+  for (i = 0; i < packetizers.size(); i++)
+    packetizers[i]->packetizer->reset();;
+}
+
+void main_loop() {
+  packet_t *pack;
+  int i;
+  packetizer_t *ptzr, *winner;
+
+  // Let's go!
+  while (1) {
+    // Step 1: Make sure a packet is available for each output
+    // as long we havne't already processed the last one.
+    for (i = 0; i < packetizers.size(); i++) {
+      ptzr = packetizers[i];
+      while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
+             (ptzr->packetizer->packet_available() < 2))
+        ptzr->status = ptzr->packetizer->read();
+      if (ptzr->pack == NULL)
+        ptzr->pack = ptzr->packetizer->get_packet();
+      if ((ptzr->pack != NULL) && !ptzr->packetizer->packet_available())
+        ptzr->pack->duration_mandatory = 1;
+    }
+
+    // Step 2: Pick the packet with the lowest timecode and
+    // stuff it into the Matroska file.
+    winner = NULL;
+    for (i = 0; i < packetizers.size(); i++) {
+      ptzr = packetizers[i];
+      if (ptzr->pack != NULL) {
+        if ((winner == NULL) || (winner->pack == NULL))
+          winner = ptzr;
+        else if (ptzr->pack &&
+                 (ptzr->pack->timecode < winner->pack->timecode))
+          winner = ptzr;
+      }
+    }
+    if ((winner != NULL) && (winner->pack != NULL))
+      pack = winner->pack;
+    else                        // exit if there are no more packets
+      break;
+
+    // Step 3: Write out the winning packet
+    write_packet(pack);
+
+    winner->pack = NULL;
+
+    // display some progress information
+    if (verbose >= 1)
+      display_progress(0);
+  }
+
+  // Render all remaining packets (if there are any).
+  if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
+    cluster_helper->render(out);
+
+  if (verbose == 1) {
+    display_progress(1);
+    fprintf(stdout, "\n");
+  }
+}
+
+int main(int argc, char **argv) {
+  init_globals();
+
+  setup();
+
+  handle_args(argc, argv);
+
+  create_readers();
+
+  if (split_after > 0) {
+    fprintf(stdout, "Pass 1: finding split points. This may take a while.\n");
+
+    pass = 1;
+    open_new_output_file();
+    main_loop();
+    finish_file();
+
+    fprintf(stdout, "Pass 2: merging the files. This will take even longer."
+            "\n");
+
+    delete cluster_helper;
+    destroy_readers();
+
+    init_globals();
+    cluster_helper = new cluster_helper_c();
+    create_readers();
+
+    pass = 2;
+    open_new_output_file();
+    main_loop();
+    finish_file();
+
+  } else {
+
+    pass = 0;
+    open_new_output_file();
+    main_loop();
+    finish_file();
+  }
+
+  cleanup();
 
   return 0;
 }
