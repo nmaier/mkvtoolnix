@@ -970,9 +970,7 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxVideoDisplayHeight>(video))) = disp_height;
 
-      out->save_pos(video.GetElementPosition());
-      video.Render(*out);
-      out->restore_pos();
+      rerender_track_headers();
     }
 
     dmx->rv_dimensions = true;

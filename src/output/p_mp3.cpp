@@ -86,7 +86,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
       set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
                                               samples_per_sec));
-    rerender_headers(out);
+    rerender_track_headers();
   }
 
   if ((pos + mp3header->framesize) > byte_buffer.get_size())

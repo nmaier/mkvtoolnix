@@ -64,6 +64,7 @@ void add_tags(KaxTag *tags);
 
 void create_next_output_file(bool last_file = false, bool first_file = false);
 void finish_file();
+void rerender_track_headers();
 string create_output_name();
 
 extern int pass, file_num;
@@ -74,7 +75,5 @@ extern int default_tracks[3];
 extern int64_t split_after;
 extern int split_max_num_files;
 extern bool split_by_time;
-
-extern mm_io_c *out;
 
 #endif // __MKVMERGE_H

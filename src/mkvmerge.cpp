@@ -170,6 +170,7 @@ KaxTags *kax_tags = NULL;
 KaxAttachments *kax_as = NULL;
 KaxChapters *kax_chapters = NULL;
 EbmlVoid *kax_chapters_void = NULL;
+EbmlVoid *void_after_track_headers = NULL;
 
 char *chapter_file_name = NULL;
 char *chapter_language = NULL;
@@ -1043,9 +1044,30 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
 
     kax_tracks->Render(*out);
     kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
+
+    // Reserve some small amount of space for header changes by the
+    // packetizers.
+    void_after_track_headers = new EbmlVoid;
+    void_after_track_headers->SetSize(1024);
+    void_after_track_headers->Render(*out);
   } catch (exception &ex) {
     mxerror("Could not render the track headers.\n");
   }
+}
+
+void rerender_track_headers() {
+  int64_t new_void_size;
+
+  kax_tracks->UpdateSize();
+  new_void_size = kax_tracks->GetElementPosition() + kax_tracks->GetSize() -
+    void_after_track_headers->GetElementPosition() + 1024;
+  out->save_pos(kax_tracks->GetElementPosition());
+  kax_tracks->Render(*out);
+  delete void_after_track_headers;
+  void_after_track_headers = new EbmlVoid;
+  void_after_track_headers->SetSize(new_void_size);
+  void_after_track_headers->Render(*out);
+  out->restore_pos();
 }
 
 static void render_attachments(IOCallback *out) {
@@ -2240,6 +2262,7 @@ void finish_file() {
   delete kax_cues;
   delete kax_sh_void;
   delete kax_sh_main;
+  delete void_after_track_headers;
   if (kax_sh_cues != NULL)
     delete kax_sh_cues;
 

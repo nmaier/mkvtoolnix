@@ -714,16 +714,20 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
                                       int64_t duration,
                                       bool duration_mandatory,
                                       int64_t bref, int64_t fref,
-                                      int ref_priority) {
+                                      int ref_priority,
+                                      copy_packet_mode_t copy_this) {
   packet_t *pack;
 
   if (data == NULL)
     return;
   if (timecode < 0) {
-    drop_packet(data);
+    drop_packet(data, copy_this);
     return;
   }
-  if (timecode < safety_last_timecode)
+  // 'timecode < safety_last_timecode' may only occur for B frames. In this
+  // case we have the coding order, e.g. IPB1B2 and the timecodes
+  // I: 0, P: 120, B1: 40, B2: 80.
+  if ((timecode < safety_last_timecode) && (fref < 0))
     die("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
         "last_timecode (%lld < %lld)", timecode, safety_last_timecode);
   safety_last_timecode = timecode;
@@ -733,9 +737,11 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
 
   if (compressor != NULL) {
     pack->data = compressor->compress(data, length);
-    if (!duplicate_data)
+    if ((copy_this == cp_no) ||
+        ((copy_this == cp_default) && !duplicate_data))
       safefree(data);
-  } else if (duplicate_data) {
+  } else if ((copy_this == cp_yes) ||
+             ((copy_this == cp_default) && duplicate_data)) {
     if (!fast_mode)
       pack->data = (unsigned char *)safememdup(data, length);
     else
@@ -757,8 +763,10 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   enqueued_bytes += pack->length;
 }
 
-void generic_packetizer_c::drop_packet(unsigned char *data) {
-  if (!duplicate_data)
+void generic_packetizer_c::drop_packet(unsigned char *data,
+                                       copy_packet_mode_t copy_this) {
+  if ((copy_this == cp_no) ||
+      ((copy_this == cp_default) && !duplicate_data))
     safefree(data);
 }
 
@@ -789,12 +797,6 @@ int64_t generic_packetizer_c::get_smallest_timecode() {
 
 int64_t generic_packetizer_c::get_queued_bytes() {
   return enqueued_bytes;
-}
-
-void generic_packetizer_c::rerender_headers(mm_io_c *out) {
-  out->save_pos(track_entry->GetElementPosition());
-  track_entry->Render(*out);
-  out->restore_pos();
 }
 
 void generic_packetizer_c::dump_packet(const void *buffer, int size) {

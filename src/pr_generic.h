@@ -50,6 +50,12 @@ typedef struct {
   int64_t id;
 } audio_sync_t;
 
+enum copy_packet_mode_t {
+  cp_default,
+  cp_yes,
+  cp_no
+};
+
 typedef struct {
   KaxBlockGroup *group;
   KaxBlock *block;
@@ -216,8 +222,9 @@ public:
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
                           int64_t duration, bool duration_mandatory = false,
                           int64_t bref = -1, int64_t fref = -1,
-                          int ref_priority = -1);
-  virtual void drop_packet(unsigned char *data);
+                          int ref_priority = -1,
+                          copy_packet_mode_t copy_this = cp_default);
+  virtual void drop_packet(unsigned char *data, copy_packet_mode_t copy_this);
   virtual packet_t *get_packet();
   virtual int packet_available();
   virtual void flush() {
@@ -228,7 +235,6 @@ public:
   virtual void set_free_refs(int64_t nfree_refs);
   virtual int64_t get_free_refs();
   virtual void set_headers();
-  virtual void rerender_headers(mm_io_c *out);
   virtual int process(unsigned char *data, int size,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;
