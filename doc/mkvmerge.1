@@ -126,13 +126,16 @@ Write durations for all blocks. This will increase file size and does not
 offer any additional value for players at the moment.
 .TP
 \fB\-\-timecode\-scale\fR <\fIn\fR>
-Forces the timecode scale factor to \fIn\fR. Valid values are in the range
-1000..10000000. Normally \fBmkvmerge\fR will use a value of 1000000 which
-means that timecodes and durations will have a precision of 1ms. For files
-that will not contain a video track but at least one audio track \fBmkvmerge\fR
-will automatically chose a timecode scale factor so that all timecodes and
-durations have a precision of one sample. This causes bigger overhead but
-allows precise seeking and extraction.
+Forces the timecode scale factor to \fIn\fR.
+Valid values are in the range 1000..10000000 or the value -1.
+Normally \fBmkvmerge\fR will use a value of 1000000 which
+means that timecodes and durations will have a precision of 1ms.
+For files that will not contain a video track but at least one audio
+track \fBmkvmerge\fR will automatically chose a timecode scale factor so
+that all timecodes and durations have a precision of one sample.
+This causes bigger overhead but allows precise seeking and extraction.
+If the magical value -1 is used then \fBmkvmerge\fR will use sample precision
+even if a video track is present.
 
 .LP
 File splitting and linking (more global options):

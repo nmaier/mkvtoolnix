@@ -160,8 +160,12 @@ bool split_by_time = false;
 int split_max_num_files = 65535;
 bool use_durations = false;
 
+#define TIMECODE_SCALE_MODE_NORMAL      0
+#define TIMECODE_SCALE_MODE_FIXED       1
+#define TIMECODE_SCALE_MODE_AUTO        2
+
 double timecode_scale = TIMECODE_SCALE;
-static bool timecode_scale_forced = false;
+static int timecode_scale_mode = TIMECODE_SCALE_MODE_NORMAL;
 
 float video_fps = -1.0;
 int default_tracks[3], default_tracks_priority[3];
@@ -1149,24 +1153,26 @@ set_timecode_scale() {
   bool video_present, audio_present;
   int64_t highest_sample_rate;
 
-  if (!timecode_scale_forced) {
-    video_present = false;
-    audio_present = false;
-    highest_sample_rate = 0;
+  video_present = false;
+  audio_present = false;
+  highest_sample_rate = 0;
+    
+  foreach(ptzr, packetizers)
+    if ((*ptzr)->packetizer->get_track_type() == track_video)
+      video_present = true;
+    else if ((*ptzr)->packetizer->get_track_type() == track_audio) {
+      int64_t sample_rate;
 
-    foreach(ptzr, packetizers)
-      if ((*ptzr)->packetizer->get_track_type() == track_video)
-        video_present = true;
-      else if ((*ptzr)->packetizer->get_track_type() == track_audio) {
-        int64_t sample_rate;
+      audio_present = true;
+      sample_rate = (int64_t)(*ptzr)->packetizer->get_audio_sampling_freq();
+      if (sample_rate > highest_sample_rate)
+        highest_sample_rate = sample_rate;
+    }
 
-        audio_present = true;
-        sample_rate = (int64_t)(*ptzr)->packetizer->get_audio_sampling_freq();
-        if (sample_rate > highest_sample_rate)
-          highest_sample_rate = sample_rate;
-      }
-
-    if (audio_present && !video_present && (highest_sample_rate > 0)) {
+  if (timecode_scale_mode != TIMECODE_SCALE_MODE_FIXED) {
+    if (audio_present && (highest_sample_rate > 0) &&
+        (!video_present ||
+         (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))) {
       int64_t max_ns_with_timecode_scale;
 
       timecode_scale = (double)1000000000.0 / (double)highest_sample_rate -
@@ -1175,10 +1181,11 @@ set_timecode_scale() {
       if (max_ns_with_timecode_scale < max_ns_per_cluster)
         max_ns_per_cluster = max_ns_with_timecode_scale;
 
-      mxverb(2, "mkvmerge: audio only file detected. highest sample rate: "
-             "%lld, new timecode_scale: %lf, max_ns_with_timecode_scale: "
-             "%lld, max_ns_per_cluster: %lld\n", highest_sample_rate,
-             timecode_scale, max_ns_with_timecode_scale, max_ns_per_cluster);
+      mxverb(2, "mkvmerge: using sample precision timestamps. highest sample "
+             "rate: %lld, new timecode_scale: %lf, "
+             "max_ns_with_timecode_scale: %lld, max_ns_per_cluster: %lld\n",
+             highest_sample_rate, timecode_scale, max_ns_with_timecode_scale,
+             max_ns_per_cluster);
     }
   }
 
@@ -2020,18 +2027,23 @@ parse_args(int argc,
 
       if (next_arg == NULL)
         mxerror(_("'--timecode-scale' lacks its argument.\n"));
-      if (timecode_scale_forced)
+      if (timecode_scale_mode != TIMECODE_SCALE_MODE_NORMAL)
         mxerror(_("'--timecode-scale' was used more than once.\n"));
 
       if (!parse_int(next_arg, temp))
         mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
 
-      if ((temp > 10000000) || (temp < 1000))
-        mxerror(_("The given timecode scale factor is outside the valid "
-                  "range (1000...10000000).\n"));
+      if (temp == -1)
+        timecode_scale_mode = TIMECODE_SCALE_MODE_AUTO;
+      else {
+        if ((temp > 10000000) || (temp < 1000))
+          mxerror(_("The given timecode scale factor is outside the valid "
+                    "range (1000...10000000 or -1 for 'sample precision "
+                    "even if a video track is present').\n"));
 
-      timecode_scale = temp;
-      timecode_scale_forced = true;
+        timecode_scale = temp;
+        timecode_scale_mode = TIMECODE_SCALE_MODE_FIXED;
+      }
       i++;
     }
 

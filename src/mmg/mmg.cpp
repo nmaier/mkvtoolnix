@@ -87,13 +87,16 @@ wxString cli_options[][2] = {
         "does not offer any additional value for players at the moment.") },
   { wxT("--timecode-scale REPLACEME"),
     wxT("Forces the timecode scale factor to REPLACEME. You have to replace "
-        "REPLACEME with a value between 1000 and 10000000. Normally mkvmerge "
+        "REPLACEME with a value between 1000 and 10000000 or with -1. "
+        "Normally mkvmerge "
         "will use a value of 1000000 which means that timecodes and "
         "durations will have a precision of 1ms. For files that will not "
         "contain a video track but at least one audio track mkvmerge "
         "will automatically chose a timecode scale factor so that all "
         "timecodes and durations have a precision of one sample. This "
-        "causes bigger overhead but allows precise seeking and extraction.") },
+        "causes bigger overhead but allows precise seeking and extraction. "
+        "If the magical value -1 is used then mkvmerge will use sample "
+        "precision even if a video track is present.") },
   { wxT("### Development hacks ###"),
     wxT("Options meant ONLY for developpers. Do not use them. If something "
         "is considered to be an officially supported option then it's NOT "
