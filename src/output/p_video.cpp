@@ -295,8 +295,6 @@ mpeg1_2_video_packetizer_c::create_private_data() {
 
 // ----------------------------------------------------------------
 
-
-
 mpeg4_p2_video_packetizer_c::
 mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             double _fps,
@@ -307,7 +305,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
   timecodes_generated(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
-  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)), csum(0) {
+  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
 
   if (input_is_native && !output_is_native)
     mxerror("mkvmerge does not support muxing from native MPEG-4 to "
@@ -325,10 +323,6 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
       ti->private_size = 0;
     }
   }
-}
-
-mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
-  mxinfo("\nCSUM: %lld\n", csum);
 }
 
 int
@@ -357,7 +351,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
                                                 int64_t bref,
                                                 int64_t fref) {
   vector<video_frame_t> frames;
-  vector<video_frame_t>::iterator new_frame;
+  vector<video_frame_t>::iterator frame;
 
   if (NULL == ti->private_data) {
     uint32_t pos, size;
@@ -372,77 +366,40 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
 
   mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
 
-  foreach(new_frame, frames) {
-    if ((1 == frames.size()) && (new_frame->size == mem.size) &&
-        (0 == new_frame->pos))
-      new_frame->data = mem.grab();
-    else
-      new_frame->data = (unsigned char *)safememdup(&mem.data[new_frame->pos],
-                                                    new_frame->size);
-    available_frames.push_back(*new_frame);
-  }
-
+  // Add a timecode and a duration if they've been given.
   if (-1 != old_timecode)
     available_timecodes.push_back(old_timecode);
+  else if (0.0 == fps)
+    mxerror("Cannot convert non-native MPEG4 video frames into native ones "
+            "if the source container provides neither timecodes nor a "
+            "number of frames per second.\n");
   if (-1 != old_duration)
     available_durations.push_back(old_duration);
 
-  while (!available_frames.empty()) {
-    int64_t timecode;
+  foreach(frame, frames) {
+    // Maybe we can flush queued frames now. But only if we don't have
+    // a B frame.
+    if (FRAME_TYPE_B != frame->type)
+      flush_frames_maybe(frame->type);
 
-    if ((-1 == old_timecode) && (0 == available_timecodes.size())) {
+    // Add a timecode and a duration for each frame if none have been
+    // given and we have a fixed number of FPS.
+    if (-1 == old_timecode) {
       available_timecodes.push_back((int64_t)(timecodes_generated *
                                               1000000000.0 / fps));
       ++timecodes_generated;
     }
-
-    if (0 == available_timecodes.size())
-      break;
-
-    timecode = available_timecodes[0];
-    available_timecodes.pop_front();
-    video_frame_t &frame = available_frames[0];
-
-    if ((-1 == old_duration) && (0 == available_durations.size()))
+    if (-1 == old_duration)
       available_durations.push_back((int64_t)(1000000000.0 / fps));
-    if (0 == available_durations.size())
-      frame.duration = -1;
-    else {
-      frame.duration = available_durations[0];
-      available_durations.pop_front();
-    }
-    
-    if (('I' == frame.type) ||
-        (('B' != frame.type) && ('?' != fref_frame.type)))
-      flush_frames(frame.type);
 
-    frames_output++;
-    frame.timecode = timecode;
-
-    if (frame.type == 'I') {
-      frame.bref = -1;
-      frame.fref = -1;
-      if (bref_frame.type == '?') {
-        bref_frame = frame;
-        memory_c mem(frame.data, frame.size, true);
-        add_packet(mem, frame.timecode, frame.duration);
-      } else
-        fref_frame = frame;
-
-    } else if (frame.type != 'B') {
-      frames_output--;
-      if (bref_frame.type == '?')
-        mxerror("video_packetizer: Found a P frame but no I frame. This "
-                "should not have happened. Either this is a bug in mkvmerge "
-                "or the video stream is damaged.\n");
-      frame.bref = bref_frame.timecode;
-      frame.fref = -1;
-      fref_frame = frame;
-
-    } else
-      queued_frames.push_back(frame);
-
-    available_frames.pop_front();
+    // Copy the data. If there's only one frame in this packet then
+    // we might save a memcpy.
+    if ((1 == frames.size()) && (frame->size == mem.size))
+      frame->data = mem.grab();
+    else
+      frame->data = (unsigned char *)safememdup(&mem.data[frame->pos],
+                                                frame->size);
+    queued_frames.push_back(*frame);
   }
 
   return FILE_STATUS_MOREDATA;
@@ -459,69 +416,100 @@ mpeg4_p2_video_packetizer_c::process_native(memory_c &mem,
 }
 
 void
-mpeg4_p2_video_packetizer_c::flush_frames(char next_frame,
-                                          bool flush_all) {
-  uint32_t i;
+mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
+  int i, num_bframes;
 
-  if (bref_frame.type == '?') {
-    if (fref_frame.type != '?')
-      die("video_packetizer: bref_frame.type == '?' but fref_frame.type != "
-          "'?'. This should not have happened.\n");
-    if (queued_frames.size() > 0) {
-      mxwarn("video_packetizer: No I frame found but B frames queued. This "
-             "indicates a broken video stream.\n");
-      for (i = 0; i < queued_frames.size(); i++)
-        safefree(queued_frames[i].data);
-      queued_frames.clear();
-    }
+  if (0 == queued_frames.size())
     return;
+
+  num_bframes = 0;
+  for (i = 0; i < queued_frames.size(); ++i)
+    if (FRAME_TYPE_B == queued_frames[i].type)
+      ++num_bframes;
+
+  if ((FRAME_TYPE_I == next_frame) ||
+      (num_bframes > 0) || (FRAME_TYPE_P == queued_frames[0].type))
+    flush_frames();
+}
+
+
+void
+mpeg4_p2_video_packetizer_c::flush_frames() {
+  int i, num_bframes, b_offset;
+  int64_t b_bref, b_fref;
+
+  if ((available_timecodes.size() < queued_frames.size()) ||
+      (available_durations.size() < queued_frames.size())) {
+    int64_t timecode;
+
+    if (available_timecodes.empty())
+      timecode = 0;
+    else
+      timecode = available_timecodes[0];
+
+    mxerror("Invalid/unsupported sequence of MPEG4 video frames regarding "
+            "B frames. If your video plays normally around timecode "
+            FMT_TIMECODE " then this is a bug in mkvmerge and you should "
+            "contact the author Moritz Bunkus <moritz@bunkus.org>.\n",
+            ARG_TIMECODE_NS(timecode));
   }
 
-  if (fref_frame.type == '?') {
-    if (queued_frames.size() != 0) {
-      mxwarn("video_packetizer: B frames queued but only one reference frame "
-             "found. This indicates a broken video stream, or the frames are "
-             "placed in display order which is not supported.\n");
-      for (i = 0; i < queued_frames.size(); i++)
-        safefree(queued_frames[i].data);
-      queued_frames.clear();
-    }
-    if (flush_all) {
-      memory_c mem(bref_frame.data, bref_frame.size, false);
-      add_packet(mem, bref_frame.duration, false, bref_frame.bref,
-                 bref_frame.fref);
-      bref_frame.type = '?';
-    }
-    return;
+  if ((2 <= queued_frames.size()) && (FRAME_TYPE_B != queued_frames[1].type))
+    b_offset = 1;
+  else
+    b_offset = 0;
+
+  num_bframes = 0;
+  b_bref = last_i_p_frame;
+  for (i = 0; i < queued_frames.size(); ++i) {
+    if (FRAME_TYPE_I == queued_frames[i].type) {
+      queued_frames[i].timecode = available_timecodes[0];
+      queued_frames[i].duration = available_durations[0];
+      queued_frames[i].bref = -1;
+      queued_frames[i].fref = -1;
+      if (-1 == last_i_p_frame) {
+        last_i_p_frame = queued_frames[i].timecode;
+        b_bref = queued_frames[i].timecode;
+      }
+      b_fref = queued_frames[i].timecode;
+
+    } else if (FRAME_TYPE_P == queued_frames[i].type) {
+      queued_frames[i].timecode =
+        available_timecodes[queued_frames.size() - 1];
+      queued_frames[i].duration =
+        available_durations[queued_frames.size() - 1];
+      queued_frames[i].bref = last_i_p_frame;
+      last_i_p_frame = queued_frames[i].timecode;
+      b_fref = last_i_p_frame;
+      queued_frames[i].fref = -1;
+
+    } else {
+      queued_frames[i].timecode = available_timecodes[num_bframes + b_offset];
+      queued_frames[i].duration = available_durations[num_bframes + b_offset];
+      queued_frames[i].bref = b_bref;
+      queued_frames[i].fref = b_fref;
+      ++num_bframes;
+    }      
   }
 
-  if (fref_frame.type != '?') {
-    if ((fref_frame.type == 'P') || (fref_frame.type == 'S'))
-      frames_output++;
-    fref_frame.timecode = (int64_t)(fref_frame.timecode +
-                                    queued_frames.size() * 1000000000 / fps);
-    memory_c fref_mem(fref_frame.data, fref_frame.size, false);
-    add_packet(fref_mem, fref_frame.timecode,
-               fref_frame.duration, false, fref_frame.bref, fref_frame.fref);
-
-    for (i = 0; i < queued_frames.size(); i++) {
-      memory_c mem(queued_frames[i].data, queued_frames[i].size, false);
-      add_packet(mem, queued_frames[i].timecode, queued_frames[i].duration,
-                 false, bref_frame.timecode, fref_frame.timecode);
-    }
-    queued_frames.clear();
-
-    bref_frame = fref_frame;
-    fref_frame.type = '?';
+  for (i = 0; i < queued_frames.size(); ++i) {
+    memory_c mem(queued_frames[i].data, queued_frames[i].size, true);
+    add_packet(mem, queued_frames[i].timecode, queued_frames[i].duration,
+               false, queued_frames[i].bref, queued_frames[i].fref);
   }
 
-  if (flush_all || ((next_frame == 'I') && (bref_frame.type == 'P')))
-    bref_frame.type = '?';
+  available_timecodes.erase(available_timecodes.begin(),
+                            available_timecodes.begin() +
+                            queued_frames.size());
+  available_durations.erase(available_durations.begin(),
+                            available_durations.begin() +
+                            queued_frames.size());
+  queued_frames.clear();
 }
 
 void
 mpeg4_p2_video_packetizer_c::flush() {
-  flush_frames(true);
+  flush_frames();
 }
 
 void

@@ -162,8 +162,8 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
           first_frame = false;
           frame.pos = first_frame_start;
         }
-        frame.type = frame_type == 0 ? 'I' : frame_type == 1 ? 'P' :
-          frame_type == 2 ? 'B' : 'S';
+        frame.type = 0 == frame_type ? FRAME_TYPE_I :
+          2 == frame_type ? FRAME_TYPE_B : FRAME_TYPE_P;
 
       } else if (first_frame &&
                  ((MPEGVIDEO_VOS_START_CODE == marker) ||
@@ -187,7 +187,8 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
   if (2 <= verbose) {
     mxverb(2, "mpeg4_frames:   summary: found %d frames ", frames.size());
     for (fit = frames.begin(); fit < frames.end(); fit++)
-      mxverb(2, "'%c' (%d at %d) ", fit->type, fit->size, fit->pos);
+      mxverb(2, "'%c' (%d at %d) ", FRAME_TYPE_TO_CHAR(fit->type), fit->size,
+             fit->pos);
     mxverb(2, "\n");
   }
 

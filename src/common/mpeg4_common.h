@@ -87,6 +87,14 @@ enum mpeg_video_type_e {
   MPEG_VIDEO_V4_LAYER_10
 };
 
+enum frame_type_e {
+  FRAME_TYPE_I,
+  FRAME_TYPE_P,
+  FRAME_TYPE_B
+};
+#define FRAME_TYPE_TO_CHAR(t) \
+  (FRAME_TYPE_I == (t) ? 'I' : FRAME_TYPE_P == (t) ? 'P' : 'B')
+
 /** Pointers to MPEG4 video frames and their data
 
    MPEG4 video can be stored in a "packed" format, e.g. in AVI. This means
@@ -105,7 +113,7 @@ struct video_frame_t {
   /** The position of the frame in the original buffer. */
   int pos;
   /** The frame type: \c 'I', \c 'P' or \c 'B'. */
-  char type;
+  frame_type_e type;
   /** Private data. */
   unsigned char *priv;
   /** The timecode of the frame in \c ns. */
@@ -122,7 +130,7 @@ struct video_frame_t {
   int64_t fref;
 
   video_frame_t():
-    data(NULL), size(0), pos(0), type('?'), priv(NULL),
+    data(NULL), size(0), pos(0), type(FRAME_TYPE_I), priv(NULL),
     timecode(0), duration(0), bref(0), fref(0) {};
 };
 

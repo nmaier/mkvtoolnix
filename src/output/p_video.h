@@ -79,18 +79,15 @@ protected:
 
 class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
-  deque<video_frame_t> available_frames, queued_frames;
+  deque<video_frame_t> queued_frames;
   deque<int64_t> available_timecodes, available_durations;
-  int64_t timecodes_generated;
-  video_frame_t bref_frame, fref_frame;
+  int64_t timecodes_generated, last_i_p_frame;
   bool aspect_ratio_extracted, input_is_native, output_is_native;
-  int64_t csum;
 
 public:
   mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                               double _fps, int _width, int _height,
                               bool _input_is_native, track_info_c *_ti);
-  virtual ~mpeg4_p2_video_packetizer_c();
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
@@ -104,7 +101,8 @@ protected:
   virtual int process_non_native(memory_c &mem, int64_t old_timecode,
                                  int64_t old_duration, int64_t bref,
                                  int64_t fref);
-  virtual void flush_frames(char next_frame = '?', bool flush_all = false);
+  virtual void flush_frames_maybe(frame_type_e next_frame);
+  virtual void flush_frames();
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
 };
 
