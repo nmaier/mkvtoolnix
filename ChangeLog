@@ -1,3 +1,201 @@
+2003-04-11 13:54  mosu
+
+	* subtitles.cpp: New style process support.
+
+2003-04-11 13:52  mosu
+
+	* r_ogm.cpp: Stream selection based on the serial number, not the
+	stream number. Removed deprecated parameters from various
+	packetizers. Renamed "stream" to "track" where appropriate. Unified
+	and simplified demuxing and handling of the different stream types.
+
+2003-04-11 13:37  mosu
+
+	* r_mp3.cpp: Removed deprecated parameters from MP3 packetizers.
+
+2003-04-11 13:36  mosu
+
+	* r_avi.cpp: Renamed "stream" to "track". Removed the bitrate
+	argument from the AC3 packetizer. Introduced frame type flags (I,
+	P). New style process support. Unified audio reading and processing
+	(PCM, MP3, AC3).
+
+2003-04-11 13:30  mosu
+
+	* r_ac3.cpp: Removed the bitrate from the AC3 packetizer arguments.
+
+2003-04-11 13:29  mosu
+
+	* p_vorbis.h, pr_generic.h: New style "process" function support.
+
+2003-04-11 13:29  mosu
+
+	* p_vorbis.cpp: New style "process" function support. Lacing now
+	reports two packets laced, the third one is stored implicitly.
+
+2003-04-11 13:27  mosu
+
+	* p_video.h: New style "process" function support. New frame type
+	flags (I, P, B) introduced.
+
+2003-04-11 13:27  mosu
+
+	* p_video.cpp: New style "process" function support. New frame type
+	flags (I, P, B) introduced, although only I and P frames are
+	handled at the moment.
+
+2003-04-11 13:23  mosu
+
+	* p_textsubs.cpp: New style "process" function support. Some
+	explicit char* typecasts.
+
+2003-04-11 13:21  mosu
+
+	* p_pcm.cpp, p_pcm.h, p_textsubs.h: New style "process" function
+	support.
+
+2003-04-11 13:19  mosu
+
+	* p_mp3.h: Renamed "stream" to "track".
+
+2003-04-11 13:19  mosu
+
+	* p_mp3.cpp: Renamed "stream" to "track". process can either use
+	the supplied timecode or calculate the timecode itself.
+
+2003-04-11 12:36  mosu
+
+	* p_ac3.h: Renamed 'stream' to 'track'. Removed the useless
+	'set_parameters' function.
+
+2003-04-11 12:32  mosu
+
+	* p_ac3.cpp: Renamed 'stream' to 'track'. Removed the useless
+	function 'set_parameters'. process now either uses the supplied
+	timecode or calculates it on its own if timecode == -1.
+
+2003-04-11 12:19  mosu
+
+	* mkvmerge.cpp: Very, very early support for Matroska files.
+	General looping is implemented, the packetizers are created, but
+	the data is not being read and processed. Just a commit to make the
+	whole thing compile.
+
+2003-04-11 12:05  mosu
+
+	* common.cpp, common.h: Renamed all variables with "streams" to
+	"*tracks" as "track" is the correct Matroska term.
+
+2003-04-11 12:03  mosu
+
+	* r_matroska.cpp, r_matroska.h: Very, very early support for
+	Matroska files. General looping is implemented, the packetizers are
+	created, but the data is not being read and processed. Just a
+	commit to make the whole thing compile.
+
+2003-04-11 11:56  mosu
+
+	* Makefile.am, acinclude.m4, configure.in: New parameters
+	--with-ebml-* that reflect the separation of libebml from
+	libmatroska.
+
+2003-04-09 15:34  mosu
+
+	* mkvmerge.mak: Makefile for mkvmerge for Microsoft Developer
+	Studio by Shelly
+
+2003-04-09 15:30  mosu
+
+	* mkvinfo.cpp: #include fixes for compilation under Win32.
+	Preliminary support for KaxBlockAdditional.
+
+2003-04-09 15:27  mosu
+
+	* avilib/Makefile.mak: Makefile for Microsoft Developer Studio by
+	Shelly
+
+2003-04-09 15:25  mosu
+
+	* avilib/avilib.c: Fixes for compilation under Win32 by Shelly.
+
+2003-03-23 21:27  mosu
+
+	* mkvmerge.cpp: Disabled Matroska reader support because it still
+	only exists in my checked out copy.
+
+2003-03-13 10:31  mosu
+
+	* common.cpp: Moved the support functions get_uint16 and get_uint32
+	to common.cpp.
+
+2003-03-13 10:31  mosu
+
+	* common.h: Added a TYPE for Matroska sources. Moved the support
+	functions get_uint16 and get_uint32 to common.cpp.
+
+2003-03-13 10:28  mosu
+
+	* mkvinfo.cpp: Necessary fixes to make mkvinfo.cpp compile with gcc
+	3.2
+
+2003-03-13 10:27  mosu
+
+	* mkvmerge.cpp: Track numbers start with 0, not 1. Added "Matroska"
+	to the list of supported file formats. Re-enabled "uncompressed
+	PCM" and "text subs" as supported output types for --list-types.
+	Added support for a Matroska reader.
+
+2003-03-13 10:25  mosu
+
+	* TODO: Removed two tasks that I have already done or at least a
+	preliminary working version for.
+
+2003-03-11 14:01  mosu
+
+	* avilib/: avidump.c, avilib.c, avilib.h, avimisc.c: Fixes that
+	make avilib compile on cygwin by Shailesh L Mistry
+	<shailesh.mistry@milan.eclipse.co.uk>
+
+2003-03-10 23:08  mosu
+
+	* avilib/: avilib.c, avidump.c: Explicit type conversions in order
+	to satisfy gcc 3.2
+
+2003-03-07 00:39  mosu
+
+	* Makefile.am, mkvinfo.cpp, mkvmerge.cpp, p_textsubs.cpp,
+	p_textsubs.h, r_srt.cpp, r_srt.h, subtitles.cpp, subtitles.h: Added
+	support for SRT reading. Added support for outputting the
+	preliminary simple text subtitle format.
+
+2003-03-07 00:38  mosu
+
+	* p_ac3.cpp, p_mp3.cpp, p_pcm.cpp, p_video.cpp, p_vorbis.cpp:
+	Renamed the variables track_video and track_audio to simply
+	video/audio as track_video and track_audio are already used as
+	track type enumerations by libmatroska.
+
+2003-03-05 18:44  mosu
+
+	* common.h, mkvmerge.cpp, p_pcm.cpp, p_pcm.h, p_video.cpp,
+	p_video.h, r_avi.cpp, r_ogm.cpp: Moved fourcc into track_info_t.
+	Remapped some error messages from Fatal to Error - Fatal should be
+	reserved for stuff that will definitely stop mkvmerge afterwards.
+
+2003-03-05 14:51  mosu
+
+	* common.cpp, common.h, mkvmerge.cpp, p_ac3.cpp, p_ac3.h,
+	p_mp3.cpp, p_mp3.h, p_pcm.cpp, p_pcm.h, p_video.cpp, p_video.h,
+	p_vorbis.cpp, p_vorbis.h, pr_generic.cpp, pr_generic.h, queue.cpp,
+	queue.h, r_ac3.cpp, r_ac3.h, r_avi.cpp, r_avi.h, r_mp3.cpp,
+	r_mp3.h, r_ogm.cpp, r_ogm.h, r_vobsub.h, r_wav.cpp, r_wav.h: Put
+	all track relevant variables into a struct that is passed down from
+	mkvmerge to the readers and from them to the packetizers.
+
+2003-03-04 20:09  mosu
+
+	* README: First version based on ogmtool's README.
+
 2003-03-04 11:19  mosu
 
 	* TODO: Removed some items I've implemented.
