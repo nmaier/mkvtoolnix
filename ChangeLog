@@ -1,11 +1,25 @@
+2003-05-06  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Subtitle charsets can be specified with --sub-charset and do not
+        rely on the current locale anymore.
+
+        * For the last packet of each track its duration is now stored.
+
+        * A lot of internal changes - I hope nothing has broken... (See
+        ChangeLog.cvs for details.)
+
+        * The matroska reader calculated wrong header lengths for Vorbis
+        tracks.
+
 2003-05-04  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvinfo reports the FourCC for video tracks with a 
-        CodecID of V_MS/VFW/FOURCC.
+        CodecID of V_MS/VFW/FOURCC and the format tag for audio tracks
+        with a CodecID of A_MS/ACM.
 
 2003-05-03  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Released v0.3.1
+        * Released v0.3.1.
 
         * Tracks read from a Matroska file will keep their UID if it
         hasn't been used yet.
