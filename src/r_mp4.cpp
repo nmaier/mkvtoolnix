@@ -193,8 +193,9 @@ void qtmp4_reader_c::parse_headers() {
     dmx = demuxers[idx];
 
     if (((dmx->type == 'v') &&
-         strncasecmp(dmx->fourcc, "svq", 3) &&
-         strncasecmp(dmx->fourcc, "cvid", 4)) ||
+         strncasecmp(dmx->fourcc, "SVQ", 3) &&
+         strncasecmp(dmx->fourcc, "cvid", 4) &&
+         strncasecmp(dmx->fourcc, "rle ", 4)) ||
         ((dmx->type == 'a') &&
          strncasecmp(dmx->fourcc, "QDM", 3) &&
          strncasecmp(dmx->fourcc, "MP4A", 4) &&
@@ -526,6 +527,8 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
                                           new_dmx->a_priv_size);
                   while (!memio->eof()) {
                     patom_size = memio->read_uint32_be();
+                    if (patom_size <= 8)
+                      break;
                     patom = memio->read_uint32_be();
                     mxverb(2, PFX "%*sAtom size: %u, atom: '%c%c%c%c'\n",
                            (level + 2) * 2, "", patom_size, BE2STR(patom));
