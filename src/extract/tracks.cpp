@@ -465,8 +465,8 @@ create_output_files() {
         string dummy_out_name;
 
         try {
-          dummy_out_name = mxsprintf("%s.temp-tta-extraction-%u",
-                                     tracks[i].out_name,
+          dummy_out_name = mxsprintf("mkvextract-%lld-%lld-temp-tta-%u",
+                                     tracks[i].tid, tracks[i].tuid,
                                      (uint32_t)time(NULL));
           tracks[i].out = new mm_file_io_c(dummy_out_name.c_str(),
                                            MODE_CREATE);
