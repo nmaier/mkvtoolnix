@@ -78,5 +78,7 @@ int64_t MTX_DLL_API get_chapter_uid(KaxChapterAtom &atom);
 int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom);
 string MTX_DLL_API get_chapter_name(KaxChapterAtom &atom);
 
+void MTX_DLL_API fix_mandatory_chapter_elements(EbmlElement *e);
+
 #endif // __CHAPTERS_H
 
