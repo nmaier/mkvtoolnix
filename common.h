@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.21 2003/05/11 15:52:54 mosu Exp $
+    \version \$Id: common.h,v 1.22 2003/05/15 08:58:52 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -63,6 +63,7 @@
 #define TYPEMICRODVD  8
 #define TYPEVOBSUB    9
 #define TYPEMATROSKA 10
+#define TYPEDTS      11
 
 #define FOURCC(a, b, c, d) (unsigned long)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \

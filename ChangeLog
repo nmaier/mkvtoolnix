@@ -1,5 +1,12 @@
 2003-05-11  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Fixed a bug with the AC3 timecode calculation (patch by Peter
+        Niemayer <niemayer AT isg.de>).
+
+        * Support for reading DTS files & putting them into Matroska
+        (main patch by Peter Niemayer <niemayer AT isg.de>, a few things
+        by me).
+
         * Released v0.3.2.
 
         * Fixed the huge memory need if reading from AVI files (introduced

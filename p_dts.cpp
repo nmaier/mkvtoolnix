@@ -2,7 +2,7 @@
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  p_ac3.h
+  p_dts.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
@@ -13,8 +13,8 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.23 2003/05/15 08:58:52 mosu Exp $
-    \brief AC3 output module
+    \version \$Id: p_dts.cpp,v 1.1 2003/05/15 08:58:52 mosu Exp $
+    \brief DTS output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
@@ -24,33 +24,31 @@
 #include <errno.h>
 
 #include "pr_generic.h"
-#include "ac3_common.h"
-#include "p_ac3.h"
+#include "dts_common.h"
+#include "p_dts.h"
 #include "matroska.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 
-ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
+dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti)
+                                   track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
   packet_buffer = NULL;
   buffer_size = 0;
   samples_per_sec = nsamples_per_sec;
-  channels = nchannels;
-
+  
   set_track_type(track_audio);
   duplicate_data_on_add(false);
 }
 
-ac3_packetizer_c::~ac3_packetizer_c() {
-  if (packet_buffer != NULL)
-    safefree(packet_buffer);
+dts_packetizer_c::~dts_packetizer_c() {
+  safefree(packet_buffer);
 }
 
-void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
+void dts_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
   
   new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
@@ -60,20 +58,20 @@ void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   buffer_size += size;
 }
 
-int ac3_packetizer_c::ac3_packet_available() {
+int dts_packetizer_c::dts_packet_available() {
   int pos;
-  ac3_header_t  ac3header;
+  dts_header_t  dtsheader;
   
   if (packet_buffer == NULL)
     return 0;
-  pos = find_ac3_header(packet_buffer, buffer_size, &ac3header);
+  pos = find_dts_header(packet_buffer, buffer_size, &dtsheader);
   if (pos < 0)
     return 0;
   
   return 1;
 }
 
-void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
+void dts_packetizer_c::remove_dts_packet(int pos, int framesize) {
   int new_size;
   unsigned char *temp_buf;
   
@@ -88,49 +86,49 @@ void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
   buffer_size = new_size;
 }
 
-unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
-                                                ac3_header_t *ac3header) {
+unsigned char *dts_packetizer_c::get_dts_packet(unsigned long *header,
+                                                dts_header_t *dtsheader) {
   int pos;
   unsigned char *buf;
   double pims;
   
   if (packet_buffer == NULL)
     return 0;
-  pos = find_ac3_header(packet_buffer, buffer_size, ac3header);
+  pos = find_dts_header(packet_buffer, buffer_size, dtsheader);
   if (pos < 0)
     return 0;
-  if ((pos + ac3header->bytes) > buffer_size)
+  if ((pos + dtsheader->bytes) > buffer_size)
     return 0;
 
-  pims = ((double)ac3header->bytes) * 1000.0 /
-         ((double)ac3header->bit_rate / 8.0);
+  pims = ((double)((dtsheader->bytes + 511) & (~511))) * 1000.0 /
+    ((double)dtsheader->bit_rate / 8.0);
 
   if (ti->async.displacement < 0) {
     /*
-     * AC3 audio synchronization. displacement < 0 means skipping an
+     * DTS audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
     ti->async.displacement += (int)pims;
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
     
-    remove_ac3_packet(pos, ac3header->bytes);
+    remove_dts_packet(pos, dtsheader->bytes);
     
     return 0;
   }
 
   if (verbose && (pos > 1))
-    fprintf(stdout, "ac3_packetizer: skipping %d bytes (no valid AC3 header "
+    fprintf(stdout, "dts_packetizer: skipping %d bytes (no valid DTS header "
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
-  buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
+  buf = (unsigned char *)safememdup(packet_buffer + pos, dtsheader->bytes);
   
   if (ti->async.displacement > 0) {
     /*
-     * AC3 audio synchronization. displacement > 0 is solved by duplicating
-     * the very first AC3 packet as often as necessary. I cannot create
+     * DTS audio synchronization. displacement > 0 is solved by duplicating
+     * the very first DTS packet as often as necessary. I cannot create
      * a packet with total silence because I don't know how, and simply
-     * settings the packet's values to 0 does not work as the AC3 header
+     * settings the packet's values to 0 does not work as the DTS header
      * contains a CRC of its data.
      */
     ti->async.displacement -= (int)pims;
@@ -140,39 +138,43 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     return buf;
   }
 
-  remove_ac3_packet(pos, ac3header->bytes);
+  remove_dts_packet(pos, dtsheader->bytes);
   
   return buf;
 }
 
-void ac3_packetizer_c::set_headers() {
-  set_codec_id(MKV_A_AC3);
+void dts_packetizer_c::set_headers() {
+  set_codec_id(MKV_A_DTS);
   set_audio_sampling_freq((float)samples_per_sec);
-  set_audio_channels(channels);
+  set_audio_channels(6);
 
   generic_packetizer_c::set_headers();
 }
 
-int ac3_packetizer_c::process(unsigned char *buf, int size,
+int dts_packetizer_c::process(unsigned char *buf, int size,
                               int64_t timecode, int64_t, int64_t, int64_t) {
   unsigned char *packet;
   unsigned long header;
-  ac3_header_t ac3header;
+  dts_header_t dtsheader;
   int64_t my_timecode;
-
+  double pims;
+  
   if (timecode != -1)
     my_timecode = timecode;
 
   add_to_buffer(buf, size);
-  while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
-    if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
-                              samples_per_sec);
+  while ((packet = get_dts_packet(&header, &dtsheader)) != NULL) {
 
-    add_packet(packet, ac3header.bytes, my_timecode,
-               (int64_t)(1000.0 * 1536 * ti->async.linear / samples_per_sec));
+    if (timecode == -1) {
+      pims = ((double)((dtsheader.bytes + 511) & (~511))) * 1000.0 /
+        ((double)dtsheader.bit_rate / 8.0);
+      my_timecode = (int64_t)(pims * (double)packetno);
+    }
+	 
+    add_packet(packet, dtsheader.bytes, my_timecode, (int64_t)pims);
     packetno++;
   }
 
   return EMOREDATA;
 }
+

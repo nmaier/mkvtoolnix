@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.30 2003/05/11 09:24:02 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.31 2003/05/15 08:58:52 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -40,6 +40,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_textsubs.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
+#include "p_dts.h"
 
 #include "EbmlContexts.h"
 #include "EbmlHead.h"
@@ -304,6 +305,8 @@ void mkv_reader_c::verify_tracks() {
             t->a_formattag = 0x0055;
           else if (!strcmp(t->codec_id, MKV_A_AC3))
             t->a_formattag = 0x2000;
+          else if (!strcmp(t->codec_id, MKV_A_DTS))
+            t->a_formattag = 0x2001;
           else if (!strcmp(t->codec_id, MKV_A_PCM))
             t->a_formattag = 0x0001;
           else if (!strcmp(t->codec_id, MKV_A_VORBIS)) {
@@ -856,6 +859,10 @@ void mkv_reader_c::create_packetizers() {
             t->packetizer = new ac3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, &nti);
+          else if (t->a_formattag == 0x2001)
+            t->packetizer = new dts_packetizer_c(this,
+                                                 (unsigned long)t->a_sfreq,
+                                                 &nti);
           else if (t->a_formattag == 0xFFFE)
             t->packetizer = new vorbis_packetizer_c(this,
                                                     t->headers[0],

@@ -8,11 +8,13 @@ bin_PROGRAMS = mkvmerge mkvinfo
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			ac3_common.cpp ac3_common.h \
+			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \
 			iso639.cpp iso639.h \
 			mp3_common.cpp mp3_common.h \
 			p_ac3.cpp p_ac3.h \
+			p_dts.cpp p_dts.h \
 			p_mp3.cpp p_mp3.h \
 			p_pcm.cpp p_pcm.h \
 			p_textsubs.cpp p_textsubs.h \
@@ -21,6 +23,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			pr_generic.h pr_generic.cpp \
 			r_ac3.cpp r_ac3.h \
 			r_avi.cpp r_avi.h \
+			r_dts.cpp r_dts.h \
 			r_matroska.cpp r_matroska.h \
 			r_mp3.cpp r_mp3.h \
 			r_srt.cpp r_srt.h \
