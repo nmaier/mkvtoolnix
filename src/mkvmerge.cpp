@@ -2130,7 +2130,7 @@ void create_next_output_file(bool last_file, bool first_file) {
         evoid.Render(*out);
       }
     } else {
-      kax_chapters->Render(*out);
+      kax_chapters->Render(*out, true);
       if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
         EbmlVoid evoid;
         evoid.SetSize(100);
@@ -2189,7 +2189,7 @@ void finish_file() {
     chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
                                                  offset, false);
     if (chapters_here != NULL)
-      kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
+      kax_chapters_void->ReplaceWith(*chapters_here, *out, true, true);
     delete kax_chapters_void;
     kax_chapters_void = NULL;
   } else
