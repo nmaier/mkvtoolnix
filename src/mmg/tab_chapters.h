@@ -95,7 +95,7 @@ public:
   void on_set_default_values(wxCommandEvent &evt);
   void on_set_values(wxCommandEvent &evt);
   void on_adjust_timecodes(wxCommandEvent &evt);
-  void set_values_recursively(wxTreeItemId id, string &language,
+  void set_values_recursively(wxTreeItemId id, const wxString &language,
                               bool set_language);
   void set_display_values(KaxChapterDisplay *display);
   void set_timecode_values(KaxChapterAtom *atom);

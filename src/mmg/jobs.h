@@ -119,7 +119,7 @@ public:
   void on_down(wxCommandEvent &evt);
   void on_delete(wxCommandEvent &evt);
   void on_view_log(wxCommandEvent &evt);
-  void on_item_selected(wxCommandEvent &evt);
+  void on_item_selected(wxListEvent &evt);
 
   void enable_buttons(bool enable);
   void swap_rows(int lower, int higher);

@@ -47,7 +47,7 @@ using namespace libebml;
 // }
 
 kax_analyzer_c::kax_analyzer_c(wxWindow *nparent, string nname):
-  wxDialog(nparent, -1, "Analysis running", wxDefaultPosition,
+  wxDialog(nparent, -1, wxT("Analysis running"), wxDefaultPosition,
 #ifdef SYS_WINDOWS
            wxSize(300, 130),
 #else

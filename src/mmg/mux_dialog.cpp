@@ -43,53 +43,53 @@
 #endif
 
 #include "common.h"
-#include "mm_io.h"
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "mux_dialog.h"
 
 mux_dialog::mux_dialog(wxWindow *parent):
-  wxDialog(parent, -1, "mkvmerge is running", wxDefaultPosition,
+  wxDialog(parent, -1, wxT("mkvmerge is running"), wxDefaultPosition,
 #ifdef SYS_WINDOWS
            wxSize(500, 560),
 #else
            wxSize(500, 520),
 #endif
            wxCAPTION) {
-  char c, *arg_utf8;
+  wxChar c;
+  string arg_utf8;
   long value;
   wxString line, tmp;
   wxInputStream *out;
-  mm_io_c *opt_file;
+  wxFile *opt_file;
   uint32_t i;
   wxArrayString *arg_list;
 
   c = 0;
-  new wxStaticBox(this, -1, _("Status and progress"), wxPoint(10, 5),
+  new wxStaticBox(this, -1, wxT("Status and progress"), wxPoint(10, 5),
                   wxSize(480, 70));
-  st_label = new wxStaticText(this, -1, _(""), wxPoint(15, 25),
+  st_label = new wxStaticText(this, -1, wxT(""), wxPoint(15, 25),
                               wxSize(450, -1));
   g_progress = new wxGauge(this, -1, 100, wxPoint(120, 50), wxSize(250, 15));
 
-  new wxStaticBox(this, -1, _("Output"), wxPoint(10, 80), wxSize(480, 400));
-  new wxStaticText(this, -1, _("mkvmerge output:"), wxPoint(15, 100));
+  new wxStaticBox(this, -1, wxT("Output"), wxPoint(10, 80), wxSize(480, 400));
+  new wxStaticText(this, -1, wxT("mkvmerge output:"), wxPoint(15, 100));
   tc_output =
-    new wxTextCtrl(this, -1, _(""), wxPoint(15, 120), wxSize(455, 140),
+    new wxTextCtrl(this, -1, wxT(""), wxPoint(15, 120), wxSize(455, 140),
                    wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
-  new wxStaticText(this, -1, _("Warnings:"), wxPoint(15, 270));
+  new wxStaticText(this, -1, wxT("Warnings:"), wxPoint(15, 270));
   tc_warnings =
-    new wxTextCtrl(this, -1, _(""), wxPoint(15, 290), wxSize(455, 80),
+    new wxTextCtrl(this, -1, wxT(""), wxPoint(15, 290), wxSize(455, 80),
                    wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
-  new wxStaticText(this, -1, _("Errors:"), wxPoint(15, 380));
+  new wxStaticText(this, -1, wxT("Errors:"), wxPoint(15, 380));
   tc_errors =
-    new wxTextCtrl(this, -1, _(""), wxPoint(15, 400), wxSize(455, 70),
+    new wxTextCtrl(this, -1, wxT(""), wxPoint(15, 400), wxSize(455, 70),
                    wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
 
-  b_ok = new wxButton(this, ID_B_MUX_OK, _("Ok"), wxPoint(1, 500));
+  b_ok = new wxButton(this, ID_B_MUX_OK, wxT("Ok"), wxPoint(1, 500));
   b_save_log =
-    new wxButton(this, ID_B_MUX_SAVELOG, _("Save log"), wxPoint(1, 500));
+    new wxButton(this, ID_B_MUX_SAVELOG, wxT("Save log"), wxPoint(1, 500));
   b_abort =
-    new wxButton(this, ID_B_MUX_ABORT, _("Abort"), wxPoint(1, 500));
+    new wxButton(this, ID_B_MUX_ABORT, wxT("Abort"), wxPoint(1, 500));
   b_ok->Move(wxPoint((int)(250 - 2 * b_save_log->GetSize().GetWidth()),
                      500 - b_ok->GetSize().GetHeight() / 2));
   b_abort->Move(wxPoint((int)(250 - 0.5 * b_save_log->GetSize().GetWidth()),
@@ -98,49 +98,50 @@ mux_dialog::mux_dialog(wxWindow *parent):
                            500 - b_ok->GetSize().GetHeight() / 2));
   b_ok->Enable(false);
 
-  update_window("Muxing in progress.");
+  update_window(wxT("Muxing in progress."));
   Show(true);
 
   process = new mux_process(this);
 
 #if defined(SYS_WINDOWS)
-  opt_file_name.Printf("mmg-mkvmerge-options-%d-%d",
+  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"),
                        (int)GetCurrentProcessId(), (int)time(NULL));
 #else
-  opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
+  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"), getpid(),
                        (int)time(NULL));
 #endif
   try {
-    opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
-    opt_file->write_bom("UTF-8");
+    const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
+    opt_file = new wxFile(opt_file_name, wxFile::write);
+    opt_file->Write(utf8_bom, 3);
   } catch (...) {
     wxString error;
-    error.Printf("Could not create a temporary file for mkvmerge's command "
-                 "line option called '%s' (error code %d, %s).",
-                 opt_file_name.c_str(), errno, strerror(errno));
-    wxMessageBox(error, "File creation failed", wxOK | wxCENTER |
+    error.Printf(wxT("Could not create a temporary file for mkvmerge's "
+                     "command line option called '%s' (error code %d, "
+                     "%s)."), opt_file_name.c_str(), errno,
+                 wxUCS(strerror(errno)));
+    wxMessageBox(error, wxT("File creation failed"), wxOK | wxCENTER |
                  wxICON_ERROR);
     throw 0;
   }
   arg_list = &static_cast<mmg_dialog *>(parent)->get_command_line_args();
   for (i = 1; i < arg_list->Count(); i++) {
     if ((*arg_list)[i].Length() == 0)
-      opt_file->puts_unl("#EMPTY#");
+      opt_file->Write(wxT("#EMPTY#"));
     else {
-      arg_utf8 = to_utf8(cc_local_utf8, (*arg_list)[i].c_str());
-      opt_file->puts_unl(arg_utf8);
-      safefree(arg_utf8);
+      arg_utf8 = to_utf8((*arg_list)[i]);
+      opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
     }
-    opt_file->puts_unl("\n");
+    opt_file->Write(wxT("\n"));
   }
   delete opt_file;
 
-  pid = wxExecute((*arg_list)[0] + " @" + opt_file_name, wxEXEC_ASYNC,
+  pid = wxExecute((*arg_list)[0] + wxT(" @") + opt_file_name, wxEXEC_ASYNC,
                   process);
   out = process->GetInputStream();
 
-  line = "";
-  log = "";
+  line = wxT("");
+  log = wxT("");
   while (1) {
     if (!out->Eof()) {
       c = out->GetC();
@@ -150,22 +151,22 @@ mux_dialog::mux_dialog(wxWindow *parent):
     while (app->Pending())
       app->Dispatch();
 
-    if ((c == '\n') || (c == '\r') || out->Eof()) {
-      if (line.Find("Warning:") == 0)
-        tc_warnings->AppendText(line + "\n");
-      else if (line.Find("Error:") == 0)
-        tc_errors->AppendText(line + "\n");
-      else if (line.Find("progress") == 0) {
-        if (line.Find("%)") != 0) {
-          line.Remove(line.Find("%)"));
-          tmp = line.AfterLast('(');
+    if ((c == wxT('\n')) || (c == wxT('\r')) || out->Eof()) {
+      if (line.Find(wxT("Warning:")) == 0)
+        tc_warnings->AppendText(line + wxT("\n"));
+      else if (line.Find(wxT("Error:")) == 0)
+        tc_errors->AppendText(line + wxT("\n"));
+      else if (line.Find(wxT("progress")) == 0) {
+        if (line.Find(wxT("%)")) != 0) {
+          line.Remove(line.Find(wxT("%)")));
+          tmp = line.AfterLast(wxT('('));
           tmp.ToLong(&value);
           if ((value >= 0) && (value <= 100))
             update_gauge(value);
         }
       } else if (line.Length() > 0)
-        tc_output->AppendText(line + "\n");
-      line = "";
+        tc_output->AppendText(line + wxT("\n"));
+      line = wxT("");
     } else if ((unsigned char)c != 0xff)
       line.Append(c);
 
@@ -180,7 +181,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
 mux_dialog::~mux_dialog() {
   delete process;
-  unlink(opt_file_name.c_str());
+  wxRemoveFile(opt_file_name);
 }
 
 void mux_dialog::update_window(wxString text) {
@@ -198,13 +199,13 @@ void mux_dialog::on_ok(wxCommandEvent &evt) {
 void mux_dialog::on_save_log(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
-  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
-                   _T("Log files (*.txt)|*.txt|" ALLFILES),
+  wxFileDialog dlg(NULL, wxT("Choose an output file"), last_open_dir, wxT(""),
+                   wxT("Log files (*.txt)|*.txt|" ALLFILES),
                    wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     file = new wxFile(dlg.GetPath(), wxFile::write);
-    s = log + "\n";
+    s = log + wxT("\n");
     file->Write(s);
     delete file;
   }
@@ -226,17 +227,17 @@ mux_process::mux_process(mux_dialog *mux_dlg):
 void mux_process::OnTerminate(int pid, int status) {
   wxString s;
 
-  mxinfo("000\n");
-  s.Printf("mkvmerge %s with a return code of %d. %s\n",
-           (status != 0) && (status != 1) ? "FAILED" : "finished", status,
-           status == 0 ? "Everything went fine." :
-           status == 1 ? "There were warnings"
+  s.Printf(wxT("mkvmerge %s with a return code of %d. %s\n"),
+           (status != 0) && (status != 1) ? wxT("FAILED") : wxT("finished"),
+           status,
+           status == 0 ? wxT("Everything went fine.") :
+           status == 1 ?
 #if defined(SYS_WINDOWS)
-           ", or the process was terminated."
+           wxT("There were warnings, or the process was terminated.")
 #else
-           "."
+           wxT("There were warnings")
 #endif
-           : status == 2 ? "There were ERRORs." : "");
+           : status == 2 ? wxT("There were ERRORs.") : wxT(""));
   dlg->update_window(s);
 }
 

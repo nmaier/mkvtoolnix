@@ -36,48 +36,48 @@
 tab_settings::tab_settings(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
-  new wxStaticBox(this, -1, wxS("mkvmerge executable"), wxPoint(10, 5),
+  new wxStaticBox(this, -1, wxT("mkvmerge executable"), wxPoint(10, 5),
                   wxSize(475, 50));
   tc_mkvmerge =
-    new wxTextCtrl(this, ID_TC_MKVMERGE, wxS(""), wxPoint(15, 25),
+    new wxTextCtrl(this, ID_TC_MKVMERGE, wxT(""), wxPoint(15, 25),
                    wxSize(370, -1), wxTE_READONLY);
 
-  new wxButton(this, ID_B_BROWSEMKVMERGE, wxS("Browse"), wxPoint(395, 25),
+  new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"), wxPoint(395, 25),
                wxDefaultSize, 0);
 
-  new wxStaticBox(this, -1, wxS("Miscellaneous options"), wxPoint(10, 65),
+  new wxStaticBox(this, -1, wxT("Miscellaneous options"), wxPoint(10, 65),
                   wxSize(475, 75));
-  new wxStaticText(this, -1, wxS("Process priority:"), wxPoint(15, 85));
+  new wxStaticText(this, -1, wxT("Process priority:"), wxPoint(15, 85));
   cob_priority =
-    new wxComboBox(this, ID_COB_PRIORITY, wxS(""), wxPoint(120, 85 + YOFF),
+    new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxPoint(120, 85 + YOFF),
                    wxSize(90, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_priority->SetToolTip(wxS("Sets the priority that mkvmerge will run "
+  cob_priority->SetToolTip(wxT("Sets the priority that mkvmerge will run "
                                "with."));
 #if defined(SYS_WINDOWS)
-  cob_priority->Append(wxS("highest"));
-  cob_priority->Append(wxS("higher"));
+  cob_priority->Append(wxT("highest"));
+  cob_priority->Append(wxT("higher"));
 #endif
-  cob_priority->Append(wxS("normal"));
-  cob_priority->Append(wxS("lower"));
-  cob_priority->Append(wxS("lowest"));
+  cob_priority->Append(wxT("normal"));
+  cob_priority->Append(wxT("lower"));
+  cob_priority->Append(wxT("lowest"));
 
   cb_autoset_output_filename =
     new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME,
-                   wxS("Auto-set output filename"), wxPoint(15, 115 + YOFF));
+                   wxT("Auto-set output filename"), wxPoint(15, 115 + YOFF));
   cb_autoset_output_filename->
-    SetToolTip(wxS("If checked mmg will automatically set the output filename "
+    SetToolTip(wxT("If checked mmg will automatically set the output filename "
                    "if it hasn't been set already. This happens when you add "
                    "a file. It will be set to the same name as the "
                    "input file but with the extension '.mkv'. If unset mmg "
                    "will not touch the output filename."));
 
 
-  new wxStaticBox(this, -1, wxS("About"), wxPoint(10, 350),
+  new wxStaticBox(this, -1, wxT("About"), wxPoint(10, 350),
                   wxSize(475, 104));
   new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm),
                      wxPoint(20, 370), wxSize(64,64));
   new wxStaticText(this, wxID_STATIC,
-                   wxS("mkvmerge GUI v" VERSION "\n"
+                   wxT("mkvmerge GUI v" VERSION "\n"
                        "This GUI was written by Moritz Bunkus <moritz@"
                        "bunkus.org>\n"
                        "Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
@@ -94,12 +94,12 @@ tab_settings::~tab_settings() {
 
 void
 tab_settings::on_browse(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, wxS("Choose the mkvmerge executable"),
-                   tc_mkvmerge->GetValue().BeforeLast(PSEP), wxS(""),
+  wxFileDialog dlg(NULL, wxT("Choose the mkvmerge executable"),
+                   tc_mkvmerge->GetValue().BeforeLast(PSEP), wxT(""),
 #ifdef SYS_WINDOWS
-                   wxS("Executable files (*.exe)|*.exe|" ALLFILES),
+                   wxT("Executable files (*.exe)|*.exe|" ALLFILES),
 #else
-                   wxS("All files (*)|*"),
+                   wxT("All files (*)|*"),
 #endif
                    wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
@@ -122,14 +122,14 @@ tab_settings::load_preferences() {
   bool b;
   int i;
 
-  cfg->SetPath(wxS("/GUI"));
-  if (!cfg->Read(wxS("mkvmerge_executable"), &mkvmerge_path))
-    mkvmerge_path = wxS("mkvmerge");
+  cfg->SetPath(wxT("/GUI"));
+  if (!cfg->Read(wxT("mkvmerge_executable"), &mkvmerge_path))
+    mkvmerge_path = wxT("mkvmerge");
   tc_mkvmerge->SetValue(mkvmerge_path);
   query_mkvmerge_capabilities();
 
-  if (!cfg->Read(wxS("process_priority"), &priority))
-    priority = wxS("normal");
+  if (!cfg->Read(wxT("process_priority"), &priority))
+    priority = wxT("normal");
   cob_priority->SetSelection(0);
   for (i = 0; i < cob_priority->GetCount(); i++)
     if (priority == cob_priority->GetString(i)) {
@@ -137,7 +137,7 @@ tab_settings::load_preferences() {
       break;
     }
 
-  if (!cfg->Read(wxS("autoset_output_filename"), &b))
+  if (!cfg->Read(wxT("autoset_output_filename"), &b))
     b = true;
   cb_autoset_output_filename->SetValue(b);
 }
@@ -145,10 +145,10 @@ tab_settings::load_preferences() {
 void
 tab_settings::save_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
-  cfg->SetPath(wxS("/GUI"));
-  cfg->Write(wxS("mkvmerge_executable"), tc_mkvmerge->GetValue());
-  cfg->Write(wxS("process_priority"), cob_priority->GetValue());
-  cfg->Write(wxS("autoset_output_filename"),
+  cfg->SetPath(wxT("/GUI"));
+  cfg->Write(wxT("mkvmerge_executable"), tc_mkvmerge->GetValue());
+  cfg->Write(wxT("process_priority"), cob_priority->GetValue());
+  cfg->Write(wxT("autoset_output_filename"),
              cb_autoset_output_filename->IsChecked());
   cfg->Flush();
 }
@@ -173,7 +173,7 @@ tab_settings::query_mkvmerge_capabilities() {
   vector<wxString> parts;
   int result, i;
 
-  tmp = wxS("\"") + mkvmerge_path + wxS("\" --capabilities");
+  tmp = wxT("\"") + mkvmerge_path + wxT("\" --capabilities");
 #if defined(SYS_WINDOWS)
   result = wxExecute(tmp, output);
 #else
@@ -181,6 +181,7 @@ tab_settings::query_mkvmerge_capabilities() {
   wxProcess *process;
   wxInputStream *out;
   int c;
+  string tmps;
 
   process = new wxProcess(this, 1);
   process->Redirect();
@@ -188,22 +189,22 @@ tab_settings::query_mkvmerge_capabilities() {
   if (result == 0)
     return;
   out = process->GetInputStream();
-  tmp = wxS("");
+  tmps = "";
   while (1) {
     if (!out->Eof()) {
       c = out->GetC();
-      if (c == wxC('\n')) {
-        output.Add(tmp);
-        tmp = wxS("");
+      if (c == '\n') {
+        output.Add(wxU(tmps.c_str()));
+        tmps = "";
       } else if (c < 0)
         break;
-      else if (c != wxC('\r'))
-        tmp += (wxChar)c;
+      else if (c != '\r')
+        tmps += c;
     } else
       break;
   }
-  if (tmp.length() > 0)
-    output.Add(tmp);
+  if (tmps.length() > 0)
+    output.Add(wxU(tmps.c_str()));
   result = 0;
 #endif
 
@@ -212,9 +213,9 @@ tab_settings::query_mkvmerge_capabilities() {
     for (i = 0; i < output.Count(); i++) {
       tmp = output[i];
       strip(tmp);
-      parts = split(tmp, "=", 2);
+      parts = split(tmp, wxT("="), 2);
       if (parts.size() == 1)
-        capabilities[parts[0]] = "true";
+        capabilities[parts[0]] = wxT("true");
       else
         capabilities[parts[0]] = parts[1];
     }

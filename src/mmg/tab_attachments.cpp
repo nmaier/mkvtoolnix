@@ -38,51 +38,52 @@ tab_attachments::tab_attachments(wxWindow *parent):
           wxTAB_TRAVERSAL) {
   uint32_t i;
 
-  new wxStaticText(this, wxID_STATIC, _("Attachments:"), wxPoint(5, 5),
+  new wxStaticText(this, wxID_STATIC, wxT("Attachments:"), wxPoint(5, 5),
                    wxDefaultSize, 0);
   lb_attachments =
     new wxListBox(this, ID_LB_ATTACHMENTS, wxPoint(5, 24), wxSize(420, 120),
                   0);
 
   b_add_attachment =
-    new wxButton(this, ID_B_ADDATTACHMENT, _("add"), wxPoint(435, 24),
+    new wxButton(this, ID_B_ADDATTACHMENT, wxT("add"), wxPoint(435, 24),
                  wxSize(50, -1), 0);
   b_remove_attachment =
-    new wxButton(this, ID_B_REMOVEATTACHMENT, _("remove"), wxPoint(435, 56),
+    new wxButton(this, ID_B_REMOVEATTACHMENT, wxT("remove"), wxPoint(435, 56),
                  wxSize(50, -1), 0);
   b_remove_attachment->Enable(false);
-  new wxStaticText(this, wxID_STATIC, _("Attachment options:"),
+  new wxStaticText(this, wxID_STATIC, wxT("Attachment options:"),
                    wxPoint(5, 150), wxDefaultSize, 0);
 
-  new wxStaticText(this, wxID_STATIC, _("Description:"), wxPoint(10, 175),
+  new wxStaticText(this, wxID_STATIC, wxT("Description:"), wxPoint(10, 175),
                    wxDefaultSize, 0);
   tc_description =
-    new wxTextCtrl(this, ID_TC_DESCRIPTION, _(""), wxPoint(5, 195),
+    new wxTextCtrl(this, ID_TC_DESCRIPTION, wxT(""), wxPoint(5, 195),
                    wxSize(480, 160), wxTE_MULTILINE | wxTE_WORDWRAP);
 
 
-  new wxStaticText(this, wxID_STATIC, _("MIME type:"), wxPoint(5, 365),
+  new wxStaticText(this, wxID_STATIC, wxT("MIME type:"), wxPoint(5, 365),
                    wxDefaultSize, 0);
 
   cob_mimetype =
-    new wxComboBox(this, ID_CB_MIMETYPE, _(""), wxPoint(5, 385),
+    new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxPoint(5, 385),
                    wxSize(250, -1), 0, NULL, wxCB_DROPDOWN);
-  cob_mimetype->SetToolTip(_("MIME type for this track. Select one of the "
-                             "pre-defined MIME types or enter one yourself."));
-  cob_mimetype->Append(_(""));
+  cob_mimetype->SetToolTip(wxT("MIME type for this track. Select one of the "
+                               "pre-defined MIME types or enter one "
+                               "yourself."));
+  cob_mimetype->Append(wxT(""));
   for (i = 0; mime_types[i].name != NULL; i++)
-    cob_mimetype->Append(mime_types[i].name);
+    cob_mimetype->Append(wxU(mime_types[i].name));
 
-  new wxStaticText(this, wxID_STATIC, _("Attachment style:"),
+  new wxStaticText(this, wxID_STATIC, wxT("Attachment style:"),
                    wxPoint(275, 365), wxDefaultSize, 0);
   cob_style =
-    new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, _(""), wxPoint(275, 385),
+    new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxT(""), wxPoint(275, 385),
                    wxSize(205, -1), 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
-  cob_style->Append(_("To all files"));
-  cob_style->Append(_("Only to the first"));
-  cob_style->SetToolTip(_("If splitting is a file can be attached either to "
-                          "all files created or only to the first file. Has "
-                          "no effect if no splitting is used."));
+  cob_style->Append(wxT("To all files"));
+  cob_style->Append(wxT("Only to the first"));
+  cob_style->SetToolTip(wxT("If splitting is a file can be attached either to "
+                            "all files created or only to the first file. Has "
+                            "no effect if no splitting is used."));
 
   enable(false);
   selected_attachment = -1;
@@ -91,29 +92,29 @@ tab_attachments::tab_attachments(wxWindow *parent):
   t_get_entries.Start(333);
 }
 
-void tab_attachments::enable(bool e) {
+void
+tab_attachments::enable(bool e) {
   tc_description->Enable(e);
   cob_mimetype->Enable(e);
   cob_style->Enable(e);
 }
 
-void tab_attachments::on_add_attachment(wxCommandEvent &evt) {
+void
+tab_attachments::on_add_attachment(wxCommandEvent &evt) {
   mmg_attachment_t attch;
   wxString name, ext;
   uint32_t i, j;
-  vector<string> extensions;
+  vector<wxString> extensions;
 
-  wxFileDialog dlg(NULL, "Choose an attachment file", last_open_dir, "",
-                   _T(ALLFILES), wxOPEN);
+  wxFileDialog dlg(NULL, wxT("Choose an attachment file"), last_open_dir,
+                   wxT(""), wxT(ALLFILES), wxOPEN);
 
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     attch.file_name = new wxString(dlg.GetPath());
     name = dlg.GetFilename();
-    ext = name.AfterLast('.');
-    name += " (";
-    name += last_open_dir;
-    name += ")";
+    ext = name.AfterLast(wxT('.'));
+    name += wxString(wxT(" (")) + last_open_dir + wxT(")");
     lb_attachments->Append(name);
     attch.mime_type = NULL;
     if (ext.Length() > 0) {
@@ -121,24 +122,25 @@ void tab_attachments::on_add_attachment(wxCommandEvent &evt) {
            i++) {
         if (mime_types[i].extensions[0] == 0)
           continue;
-        extensions = split(mime_types[i].extensions, " ");
+        extensions = split(wxU(mime_types[i].extensions), wxT(" "));
         for (j = 0; j < extensions.size(); j++)
-          if (!strcasecmp(extensions[j].c_str(), ext.c_str())) {
-            attch.mime_type = new wxString(mime_types[i].name);
+          if (!wxStricmp(extensions[j], ext)) {
+            attch.mime_type = new wxString(wxU(mime_types[i].name));
             break;
           }
       }
     }
     if (attch.mime_type == NULL)
-      attch.mime_type = new wxString("");
-    attch.description = new wxString("");
+      attch.mime_type = new wxString(wxT(""));
+    attch.description = new wxString(wxT(""));
     attch.style = 0;
 
     attachments.push_back(attch);
   }
 }
 
-void tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
+void
+tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
   mmg_attachment_t *a;
   vector<mmg_attachment_t>::iterator eit;
 
@@ -158,7 +160,8 @@ void tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
   selected_attachment = -1;
 }
 
-void tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
+void
+tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
   mmg_attachment_t *a;
   int new_sel;
 
@@ -173,7 +176,8 @@ void tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
   b_remove_attachment->Enable(true);
 }
 
-void tab_attachments::on_description_changed(wxCommandEvent &evt) {
+void
+tab_attachments::on_description_changed(wxCommandEvent &evt) {
   if (selected_attachment == -1)
     return;
 
@@ -181,7 +185,8 @@ void tab_attachments::on_description_changed(wxCommandEvent &evt) {
     tc_description->GetValue();
 }
 
-void tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
+void
+tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
   if (selected_attachment == -1)
     return;
 
@@ -189,37 +194,39 @@ void tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
     cob_mimetype->GetValue();
 }
 
-void tab_attachments::on_style_changed(wxCommandEvent &evt) {
+void
+tab_attachments::on_style_changed(wxCommandEvent &evt) {
   if (selected_attachment == -1)
     return;
 
   attachments[selected_attachment].style =
-    cob_style->GetStringSelection().Find("Only") >= 0 ? 1 : 0;
+    cob_style->GetStringSelection().Find(wxT("Only")) >= 0 ? 1 : 0;
 }
 
-void tab_attachments::save(wxConfigBase *cfg) {
+void
+tab_attachments::save(wxConfigBase *cfg) {
   mmg_attachment_t *a;
   uint32_t i, j;
   wxString s;
 
-  cfg->SetPath("/attachments");
-  cfg->Write("number_of_attachments", (int)attachments.size());
+  cfg->SetPath(wxT("/attachments"));
+  cfg->Write(wxT("number_of_attachments"), (int)attachments.size());
   for (i = 0; i < attachments.size(); i++) {
     a = &attachments[i];
-    s.Printf("attachment %u", i);
+    s.Printf(wxT("attachment %u"), i);
     cfg->SetPath(s);
-    cfg->Write("file_name", *a->file_name);
-    s = "";
+    cfg->Write(wxT("file_name"), *a->file_name);
+    s = wxT("");
     for (j = 0; j < a->description->Length(); j++)
-      if ((*a->description)[j] == '\n')
-        s += "!\\N!";
+      if ((*a->description)[j] == wxT('\n'))
+        s += wxT("!\\N!");
       else
         s += (*a->description)[j];
-    cfg->Write("description", s);
-    cfg->Write("mime_type", *a->mime_type);
-    cfg->Write("style", a->style);
+    cfg->Write(wxT("description"), s);
+    cfg->Write(wxT("mime_type"), *a->mime_type);
+    cfg->Write(wxT("style"), a->style);
 
-    cfg->SetPath("..");
+    cfg->SetPath(wxT(".."));
   }
 }
 
@@ -241,49 +248,50 @@ void tab_attachments::load(wxConfigBase *cfg) {
   }
   attachments.clear();
 
-  cfg->SetPath("/attachments");
-  if (!cfg->Read("number_of_attachments", &num) || (num < 0))
+  cfg->SetPath(wxT("/attachments"));
+  if (!cfg->Read(wxT("number_of_attachments"), &num) || (num < 0))
     return;
 
   for (i = 0; i < (uint32_t)num; i++) {
-    s.Printf("attachment %d", i);
+    s.Printf(wxT("attachment %d"), i);
     cfg->SetPath(s);
     a.file_name = new wxString;
     a.description = new wxString;
     a.mime_type = new wxString;
-    cfg->Read("file_name", a.file_name);
-    cfg->Read("description", &s);
-    cfg->Read("mime_type", a.mime_type);
-    cfg->Read("style", &a.style);
+    cfg->Read(wxT("file_name"), a.file_name);
+    cfg->Read(wxT("description"), &s);
+    cfg->Read(wxT("mime_type"), a.mime_type);
+    cfg->Read(wxT("style"), &a.style);
     if ((a.style != 0) && (a.style != 1))
       a.style = 0;
-    pos = s.Find("!\\N!");
+    pos = s.Find(wxT("!\\N!"));
     while (pos >= 0) {
       c = s.Mid(0, pos);
       s.Remove(0, pos + 4);
-      *a.description += c + "\n";
-      pos = s.Find("!\\N!");
+      *a.description += c + wxT("\n");
+      pos = s.Find(wxT("!\\N!"));
     }
     *a.description += s;
 
     s = a.file_name->BeforeLast(PSEP);
     c = a.file_name->AfterLast(PSEP);
-    lb_attachments->Append(c + " (" + s + ")");
+    lb_attachments->Append(c + wxT(" (") + s + wxT(")"));
     attachments.push_back(a);
 
-    cfg->SetPath("..");
+    cfg->SetPath(wxT(".."));
   }
 }
 
-bool tab_attachments::validate_settings() {
+bool
+tab_attachments::validate_settings() {
   uint32_t i;
   mmg_attachment_t *a;
 
   for (i = 0; i < attachments.size(); i++) {
     a = &attachments[i];
     if (a->mime_type->Length() == 0) {
-      wxMessageBox(_T("No MIME type has been selected for the attachment '" +
-                      *a->file_name + "'."), _T("Missing input"),
+      wxMessageBox(wxT("No MIME type has been selected for the attachment '") +
+                       *a->file_name + wxT("'."), wxT("Missing input"),
                    wxOK | wxCENTER | wxICON_ERROR);
       return false;
     }

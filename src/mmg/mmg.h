@@ -30,6 +30,10 @@
 #include "wx/string.h"
 #include "wx/app.h"
 
+#include "ebml/EbmlUnicodeString.h"
+
+#include "wxcommon.h"
+
 #ifdef SYS_WINDOWS
 #define ALLFILES "All Files (*.*)|*.*"
 #define PSEP '\\'
@@ -43,20 +47,7 @@
 #endif
 
 using namespace std;
-
-#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-# error Sorry, mkvmerge cannot be compiled if wxWindows has been built with Unicode support.
-# if defined(SYS_WINDOWS)
-#  define wxS(s)                /* not implemented yet */
-#  define wxC(c)
-# else
-#  define wxS(s)                /* not implemented yet */
-#  define wxC(c)
-# endif
-#else
-# define wxS(s) s
-# define wxC(c) c
-#endif
+using namespace libebml;
 
 typedef struct {
   char type;
@@ -105,13 +96,13 @@ wxString extract_language_code(wxString source);
 bool is_popular_language(const char *lang);
 bool is_popular_language_code(const char *code);
 wxString shell_escape(wxString source);
-vector<wxString> split(const wxString &src, const char *pattern = ",",
+vector<wxString> split(const wxString &src, const wxString &pattern,
                        int max_num = -1);
-wxString join(const char *pattern, vector<wxString> &strings);
+wxString join(const wxString &pattern, vector<wxString> &strings);
 wxString &strip(wxString &s, bool newlines = false);
 vector<wxString> & strip(vector<wxString> &v, bool newlines = false);
-wxString to_utf8(const wxString &src);
-wxString from_utf8(const wxString &src);
+string to_utf8(const wxString &src);
+wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);
 wxString format_date_time(time_t date_time);
 
