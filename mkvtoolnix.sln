@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mkvmerge", "mkvmerge.vcproj", "{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmtxcommon", "libmtxcommon.vcproj", "{2DF9A3BE-DC42-4074-83DE-98491AE03410}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Debug.ActiveCfg = Debug|Win32
+		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Debug.Build.0 = Debug|Win32
+		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Release.ActiveCfg = Release|Win32
+		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Release.Build.0 = Release|Win32
+		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Debug.ActiveCfg = Debug|Win32
+		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Debug.Build.0 = Debug|Win32
+		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Release.ActiveCfg = Release|Win32
+		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
