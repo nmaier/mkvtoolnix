@@ -93,6 +93,18 @@
 using namespace libmatroska;
 using namespace std;
 
+namespace libmatroska {
+
+  class KaxMyDuration: public KaxDuration {
+	public:
+		KaxMyDuration(const EbmlFloat::Precision prec): KaxDuration() {
+      SetPrecision(prec);
+    }
+  };
+}
+
+
+
 // }}}
 
 // {{{ global structs and variables
@@ -185,7 +197,7 @@ KaxSeekHead *kax_sh_main = NULL, *kax_sh_cues = NULL;
 KaxChapters *kax_chapters = NULL;
 
 static KaxInfo *kax_infos;
-static KaxDuration *kax_duration;
+static KaxMyDuration *kax_duration;
 
 static KaxTags *kax_tags = NULL;
 static KaxTags *tags_from_cue_chapters = NULL;
@@ -1386,8 +1398,11 @@ render_headers(mm_io_c *rout) {
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
 
-    kax_duration = &GetChild<KaxDuration>(*kax_infos);
+    kax_duration = new KaxMyDuration(video_track_present ?
+                                     EbmlFloat::FLOAT_32 :
+                                     EbmlFloat::FLOAT_64);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
+    kax_infos->PushElement(*kax_duration);
 
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
       string version = string("libebml v") + EbmlCodeVersion +

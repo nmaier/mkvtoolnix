@@ -1,5 +1,10 @@
 2004-10-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: Only write the segment duration as a 64bit float if
+	there is no video track present. This way users won't have to
+	update their DirectShow filter/apps for most files. Only
+	audio-only files need this precision anyway.
+
 	* mkvmerge: Changed the Ogg/OGM reader to use the stream number
 	and not its serial number as the track ID (meaning the track IDs
 	will be 0, 1, 2... etc. instead of the random numbers oggenc uses
