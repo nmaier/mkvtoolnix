@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.10 2003/05/06 10:22:55 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.11 2003/05/11 09:24:02 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -59,6 +59,9 @@ typedef struct {
 
   unsigned char *headers[3];
   uint32_t header_sizes[3];
+
+  int default_track;
+  char *language;
 
   int64_t units_processed;
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.29 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.30 2003/05/11 09:24:02 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -41,10 +41,11 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_mp3.h"
 #include "p_ac3.h"
 
-#include "EbmlHead.h"
-#include "EbmlSubHead.h"
-#include "EbmlStream.h"
 #include "EbmlContexts.h"
+#include "EbmlHead.h"
+#include "EbmlStream.h"
+#include "EbmlSubHead.h"
+#include "EbmlVoid.h"
 #include "FileKax.h"
 
 #include "KaxBlock.h"
@@ -64,6 +65,8 @@ extern "C" {                    // for BITMAPINFOHEADER
 
 using namespace std;
 using namespace LIBMATROSKA_NAMESPACE;
+
+#define is_ebmlvoid(e) (EbmlId(*e) == EbmlVoid::ClassInfos.GlobalId)
 
 /*
  * Probes a file by simply comparing the first four bytes to the EBML
@@ -147,6 +150,9 @@ mkv_track_t *mkv_reader_c::new_mkv_track() {
                                        sizeof(mkv_track_t *));
   tracks[num_tracks] = t;
   num_tracks++;
+
+  // Set some default values.
+  t->default_track = 1;
   
   return t;
 }
@@ -282,7 +288,7 @@ void mkv_reader_c::verify_tracks() {
             }
 
             u = get_uint16(&wfe->w_bits_per_sample);
-            if (t->a_channels != u) {
+            if (t->a_bps != u) {
               printf("[mkv] WARNING: (MS compatibility mode for track %u) "
                      "Matroska says that there are %u bits per sample, "
                      "but the WAVEFORMATEX says that there are %u.\n", t->tnum,
@@ -461,7 +467,7 @@ int mkv_reader_c::read_headers() {
             fprintf(stdout, "matroska_reader: | + duration: %.3fs\n",
                     segment_duration);
 
-          } else
+          } else if (!is_ebmlvoid(l2))
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
                     typeid(*l2).name());
 
@@ -587,7 +593,7 @@ int mkv_reader_c::read_headers() {
                     fprintf(stdout, "matroska_reader: |   + Bit depth: %u\n",
                            track->a_bps);
 
-                  } else
+                  } else if (!is_ebmlvoid(l4))
                     fprintf(stdout, "matroska_reader: |   + unknown "
                             "element@4: %s\n", typeid(*l4).name());
 
@@ -655,7 +661,7 @@ int mkv_reader_c::read_headers() {
                     fprintf(stdout, "matroska_reader: |   + Frame rate: "
                             "%f\n", float(framerate));
 
-                  } else
+                  } else if (!is_ebmlvoid(l4))
                     fprintf(stdout, "matroska_reader: |   + unknown "
                             "element@4: %s\n", typeid(*l4).name());
 
@@ -704,7 +710,25 @@ int mkv_reader_c::read_headers() {
                 fprintf(stdout, "matroska_reader: |  + MaxCache: %u\n",
                         uint32(max_cache));
 
-              } else
+              } else if (EbmlId(*l3) ==
+                         KaxTrackFlagDefault::ClassInfos.GlobalId) {
+                KaxTrackFlagDefault &f_default =
+                  *static_cast<KaxTrackFlagDefault *>(l3);
+                f_default.ReadData(es->I_O());
+                fprintf(stdout, "matroska_reader: |  + Default flag: %d\n",
+                        uint32(f_default)); 
+                track->default_track = uint32(f_default);
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackLanguage::ClassInfos.GlobalId) {
+                KaxTrackLanguage &lang =
+                  *static_cast<KaxTrackLanguage *>(l3);
+                lang.ReadData(es->I_O());
+                fprintf(stdout, "matroska_reader: |  + Language: %s\n",
+                        string(lang).c_str());
+                track->language = safestrdup(string(lang).c_str());
+
+              } else if (!is_ebmlvoid(l4))
                 fprintf(stdout, "matroska_reader: |  + unknown element@3: "
                         "%s\n", typeid(*l3).name());
               if (upper_lvl_el > 0) {	// we're coming from l4
@@ -722,7 +746,7 @@ int mkv_reader_c::read_headers() {
               }
             } // while (l3 != NULL)
 
-          } else
+          } else if (!is_ebmlvoid(l4))
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s, "
                     "ule %d\n", typeid(*l2).name(), upper_lvl_el);
           if (upper_lvl_el > 0) {	// we're coming from l3
@@ -746,7 +770,8 @@ int mkv_reader_c::read_headers() {
         saved_l1 = l1;
         exit_loop = 1;
 
-      } else if (!(EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId))
+      } else if (!(EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) &&
+                 !is_ebmlvoid(l1))
         fprintf(stdout, "matroska_reader: |+ unknown element@1: %s\n",
                 typeid(*l1).name());
       
@@ -783,24 +808,30 @@ int mkv_reader_c::read_headers() {
 void mkv_reader_c::create_packetizers() {
   int i;
   mkv_track_t *t;
-  char old_fourcc[5];
+  track_info_t nti;
 
   for (i = 0; i < num_tracks; i++) {
     t = tracks[i];
 
-    ti->private_data = (unsigned char *)t->private_data;
-    ti->private_size = t->private_size;
+    memcpy(&nti, ti, sizeof(track_info_t));
+    nti.private_data = (unsigned char *)t->private_data;
+    nti.private_size = t->private_size;
+    if (nti.fourcc[0] == 0)
+      memcpy(nti.fourcc, t->v_fourcc, 5);
+    if (nti.default_track == 0)
+      nti.default_track = t->default_track;
+    if (nti.language == 0)
+      nti.language = t->language;
 
     if (t->ok && demuxing_requested(t)) {
       switch (t->type) {
 
         case 'v':
-          memcpy(old_fourcc, ti->fourcc, 5);
-          if (ti->fourcc[0] == 0)
-            memcpy(ti->fourcc, t->v_fourcc, 5);
+          if (nti.fourcc[0] == 0)
+            memcpy(nti.fourcc, t->v_fourcc, 5);
           t->packetizer = new video_packetizer_c(this, t->v_frate, t->v_width,
-                                                 t->v_height, 24, 1, ti);
-          if (ti->aspect_ratio == 1.0) { // The user didn't set it.
+                                                 t->v_height, 24, 1, &nti);
+          if (nti.aspect_ratio == 1.0) { // The user didn't set it.
             if (t->v_dwidth == 0)
               t->v_dwidth = t->v_width;
             if (t->v_dheight == 0)
@@ -809,23 +840,22 @@ void mkv_reader_c::create_packetizers() {
               t->packetizer->set_video_aspect_ratio((float)t->v_dwidth /
                                                     (float)t->v_dheight);
           }
-          memcpy(ti->fourcc, old_fourcc, 5);
           break;
 
         case 'a':
-          
           if (t->a_formattag == 0x0001)
             t->packetizer = new pcm_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, t->a_bps, ti);
+                                                 t->a_channels, t->a_bps,
+                                                 &nti);
           else if (t->a_formattag == 0x0055)
             t->packetizer = new mp3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, ti);
+                                                 t->a_channels, &nti);
           else if (t->a_formattag == 0x2000)
             t->packetizer = new ac3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, ti);
+                                                 t->a_channels, &nti);
           else if (t->a_formattag == 0xFFFE)
             t->packetizer = new vorbis_packetizer_c(this,
                                                     t->headers[0],
@@ -833,7 +863,7 @@ void mkv_reader_c::create_packetizers() {
                                                     t->headers[1],
                                                     t->header_sizes[1],
                                                     t->headers[2],
-                                                    t->header_sizes[2], ti);
+                                                    t->header_sizes[2], &nti);
           else {
             fprintf(stderr, "Error: matroska_reader: Unsupported track type "
                     "for track %d.\n", t->tnum);
@@ -1016,7 +1046,8 @@ int mkv_reader_c::read() {
 
           }
         } // while (l2 != NULL)
-      } else if (!(EbmlId(*l1) == KaxCues::ClassInfos.GlobalId))
+      } else if (!(EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) &&
+                 !is_ebmlvoid(l1))
          printf("[mkv] Unknown element@1: %s\n", typeid(*l1).name());
 
       if (exit_loop)
