@@ -282,7 +282,9 @@ static void create_output_files() {
         if (!strcmp(tracks[i].codec_id, MKV_S_TEXTUTF8))
           tracks[i].type = TYPESRT;
         else if (!strcmp(tracks[i].codec_id, MKV_S_TEXTSSA) ||
-                 !strcmp(tracks[i].codec_id, MKV_S_TEXTASS))
+                 !strcmp(tracks[i].codec_id, MKV_S_TEXTASS) ||
+                 !strcmp(tracks[i].codec_id, "S_SSA") ||
+                 !strcmp(tracks[i].codec_id, "S_ASS"))
           tracks[i].type = TYPESSA;
         else {
           mxwarn("Unsupported CodecID '%s' for ID %lld. "

@@ -1,5 +1,8 @@
 2003-08-22  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvextract: Backwards compatibility: Accepts S_SSA and S_ASS as
+        valid CodecIDs (new CodecIDs are S_TEXT/SSA and S_TEXT/ASS).
+
         * mkvmerge: Bugfix: If a subtitle packet was the last packet in a
         cluster then its duration was not written resulting in a broken file.
 
