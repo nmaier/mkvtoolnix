@@ -1,3 +1,13 @@
+2003-08-24  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Meta seek element is split into two elements. The
+        first's located at the start of the file containing only a small
+        number of level 1 elements. The clusters are referenced in a
+        second meta seek element located at the end of the file. Removed
+        the options "--meta-seek-size" and "--no-meta-seek". Added the
+        option to disable that second meta seek entry,
+        "--no-clusters-in-meta-seek".
+
 2003-08-22  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvextract: Backwards compatibility: Accepts S_SSA and S_ASS as

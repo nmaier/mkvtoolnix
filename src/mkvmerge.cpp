@@ -136,8 +136,7 @@ int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 2000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
-bool write_meta_seek = true;
-int64_t meta_seek_size = 0;
+bool write_meta_seek_for_clusters = true;
 bool no_lacing = false, no_linking = false;
 int64_t split_after = -1;
 bool split_by_time = false;
@@ -156,9 +155,9 @@ KaxInfo *kax_infos;
 KaxTracks *kax_tracks;
 KaxTrackEntry *kax_last_entry;
 KaxCues *kax_cues;
-EbmlVoid *kax_seekhead_void = NULL;
+EbmlVoid *kax_sh_void = NULL;
 KaxDuration *kax_duration;
-KaxSeekHead *kax_seekhead = NULL;
+KaxSeekHead *kax_sh_main = NULL, *kax_sh_cues = NULL;
 KaxTags *kax_tags = NULL;
 KaxAttachments *kax_as = NULL;
 KaxChapters *kax_chapters = NULL;
@@ -234,8 +233,8 @@ static void usage() {
     "                           put at most n milliseconds of data into each\n"
     "                           cluster.\n"
     "  --no-cues                Do not write the cue data (the index).\n"
-    "  --no-meta-seek           Do not write any meta seek information.\n"
-    "  --meta-seek-size <d>     Reserve d bytes for the meta seek entries.\n"
+    "  --no-clusters-in-meta-seek\n"
+    "                           Do not write meta seek data for clusters.\n"
     "  --no-lacing              Do not use lacing.\n"
     "\n File splitting and linking (still global):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
@@ -770,19 +769,12 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
     kax_segment->WriteHead(*out, 5);
 
     // Reserve some space for the meta seek stuff.
-    if (write_meta_seek) {
-      kax_seekhead = new KaxSeekHead();
-      kax_seekhead_void = new EbmlVoid();
-      if (meta_seek_size == 0)
-        if (video_track_present)
-          meta_seek_size =
-            (int64_t)((float)file_sizes * 1.8 / 10240.0);
-        else
-          meta_seek_size =
-            (int64_t)((float)file_sizes * 5 / 4096.0);
-      kax_seekhead_void->SetSize(meta_seek_size);
-      kax_seekhead_void->Render(*out);
-    }
+    kax_sh_main = new KaxSeekHead();
+    kax_sh_void = new EbmlVoid();
+    kax_sh_void->SetSize(100);
+    kax_sh_void->Render(*out);
+    if (write_meta_seek_for_clusters)
+      kax_sh_cues = new KaxSeekHead();
 
     kax_infos->Render(*out);
 
@@ -1153,20 +1145,11 @@ static void parse_args(int argc, char **argv) {
 
       i++;
 
-    } else if (!strcmp(argv[i], "--meta-seek-size")) {
-      if ((i + 1) >= argc)
-        mxerror("--meta-seek-size lacks the size argument.\n");
-
-      if (!parse_int(argv[i + 1], meta_seek_size) || (meta_seek_size < 1))
-        mxerror("Invalid size given for --meta-seek-size.\n");
-
-      i++;
-
     } else if (!strcmp(argv[i], "--no-cues"))
       write_cues = false;
 
-    else if (!strcmp(argv[i], "--no-meta-seek"))
-      write_meta_seek = false;
+    else if (!strcmp(argv[i], "--no-clusters-in-meta-seek"))
+      write_meta_seek_for_clusters = false;
 
     else if (!strcmp(argv[i], "--no-lacing"))
       no_lacing = true;
@@ -1241,6 +1224,12 @@ static void parse_args(int argc, char **argv) {
 
       safefree(dump_packets);
       dump_packets = safestrdup(argv[i + 1]);
+      i++;
+
+    } else if (!strcmp(argv[i], "--meta-seek-size")) {
+      mxwarn("The option '--meta-seek-size' is no longer supported. Please "
+             "read mkvmerge's documentation, especially the section about "
+             "the MATROSKA FILE LAYOUT.");
       i++;
 
     }
@@ -1526,8 +1515,9 @@ static void setup() {
 static void init_globals() {
   track_number = 1;
   cluster_helper = NULL;
-  kax_seekhead = NULL;
-  kax_seekhead_void = NULL;
+  kax_sh_main = NULL;
+  kax_sh_cues = NULL;
+  kax_sh_void = NULL;
   video_fps = -1.0;
   default_tracks[0] = 0;
   default_tracks[1] = 0;
@@ -1578,7 +1568,7 @@ static void cleanup() {
 
 // }}}
 
-// {{{ output file creation and finishing
+// {{{ FUNCTIONs create_output_name()/file(), finish_file()
 
 // Transform the output filename and insert the current file number.
 // Rules and search order:
@@ -1720,7 +1710,6 @@ void finish_file() {
   int i;
   KaxChapters *chapters_here;
   int64_t start, end, offset;
-  KaxSeekHead *emerg_seek_head = NULL;
 
   // Render the cues.
   if (write_cues && cue_writing_requested) {
@@ -1756,6 +1745,13 @@ void finish_file() {
   } else
     chapters_here = NULL;
 
+  // Render the meta seek information with the cues
+  if (write_meta_seek_for_clusters && (kax_sh_cues->ListSize() > 0)) {
+    kax_sh_cues->UpdateSize();
+    kax_sh_cues->Render(*out);
+    kax_sh_main->IndexThis(*kax_sh_cues, *kax_segment);
+  }
+
   // Render the tags if we have some.
   if (kax_tags != NULL) {
     kax_tags->UpdateSize();
@@ -1763,53 +1759,31 @@ void finish_file() {
   }
 
   // Write meta seek information if it is not disabled.
-  if (write_meta_seek) {
-    emerg_seek_head = new KaxSeekHead();
+  if (cue_writing_requested)
+    kax_sh_main->IndexThis(*kax_cues, *kax_segment);
 
-    if (write_cues && cue_writing_requested) {
-      kax_seekhead->IndexThis(*kax_cues, *kax_segment);
-      emerg_seek_head->IndexThis(*kax_cues, *kax_segment);
-    }
+  if (kax_tags != NULL)
+    kax_sh_main->IndexThis(*kax_tags, *kax_segment);
 
-    if (kax_tags != NULL) {
-      kax_seekhead->IndexThis(*kax_tags, *kax_segment);
-      emerg_seek_head->IndexThis(*kax_tags, *kax_segment);
-    }
+  if (chapters_here != NULL) {
+    kax_sh_main->IndexThis(*chapters_here, *kax_segment);
+    delete chapters_here;
+  } else if ((pass == 0) && (kax_chapters != NULL))
+    kax_sh_main->IndexThis(*kax_chapters, *kax_segment);
 
-    if (chapters_here != NULL) {
-      kax_seekhead->IndexThis(*chapters_here, *kax_segment);
-      emerg_seek_head->IndexThis(*chapters_here, *kax_segment);
-      delete chapters_here;
-    } else if ((pass == 0) && (kax_chapters != NULL)) {
-      kax_seekhead->IndexThis(*kax_chapters, *kax_segment);
-      emerg_seek_head->IndexThis(*kax_chapters, *kax_segment);
-    }
+  if (kax_as != NULL) {
+    kax_sh_main->IndexThis(*kax_as, *kax_segment);
+    delete kax_as;
+    kax_as = NULL;
+  }
 
-    if (kax_as != NULL) {
-      kax_seekhead->IndexThis(*kax_as, *kax_segment);
-      emerg_seek_head->IndexThis(*kax_as, *kax_segment);
-      delete kax_as;
-      kax_as = NULL;
-    }
-
-    if (kax_seekhead->ListSize() > 0)
-      kax_seekhead->UpdateSize();
-    if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
-      mxwarn("Could not update the meta seek information "
-             "with all cluster entries as the space reserved for them was "
-             "too small. This is NOT fatal! The resulting file will be "
-             "fine. All important elements (attachments, chapters, cues, "
-             "tags) are still indexed in the meta seek. If you really want "
-             "to have all clusters indexed in the meta seek, then re-run "
-             "mkvmerge with the additional parameters '--meta-seek-size "
-             "%lld'.\n", kax_seekhead->ElementSize() + 100);
-
-      if (write_cues && cue_writing_requested)
-        if (emerg_seek_head->ListSize() > 0) {
-          emerg_seek_head->UpdateSize();
-          kax_seekhead_void->ReplaceWith(*emerg_seek_head, *out, true);
-        }
-    }
+  if (kax_sh_main->ListSize() > 0) {
+    kax_sh_main->UpdateSize();
+    if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
+      mxwarn("This should REALLY not have happened. The space reserved for "
+             "the first meta seek element was too small. Size needed: %lld. "
+             "Please contact Moritz Bunkus at moritz@bunkus.org.\n",
+             kax_sh_main->ElementSize());
   }
 
   // Set the correct size for the segment.
@@ -1821,12 +1795,10 @@ void finish_file() {
   delete out;
   delete kax_segment;
   delete kax_cues;
-  if (write_meta_seek) {
-    delete kax_seekhead_void;
-    delete kax_seekhead;
-  }
-  if (emerg_seek_head != NULL)
-    delete emerg_seek_head;
+  delete kax_sh_void;
+  delete kax_sh_main;
+  if (kax_sh_cues != NULL)
+    delete kax_sh_cues;
 
   for (i = 0; i < packetizers.size(); i++)
     packetizers[i]->packetizer->reset();;

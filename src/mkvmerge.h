@@ -41,7 +41,7 @@ extern KaxSegment *kax_segment;
 extern KaxTracks *kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
 extern KaxCues *kax_cues;
-extern KaxSeekHead *kax_seekhead;
+extern KaxSeekHead *kax_sh_main, *kax_sh_cues;
 extern int track_number;
 extern int64_t tags_size;
 

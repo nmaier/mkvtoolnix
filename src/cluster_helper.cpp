@@ -488,8 +488,8 @@ int cluster_helper_c::render() {
 
     cluster->Render(*out, *kax_cues);
 
-    if (kax_seekhead != NULL)
-      kax_seekhead->IndexThis(*cluster, *kax_segment);
+    if (kax_sh_cues != NULL)
+      kax_sh_cues->IndexThis(*cluster, *kax_segment);
 
     last_cluster_tc = cluster->GlobalTimecode();
   } else
