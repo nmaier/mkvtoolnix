@@ -136,9 +136,6 @@ MPEG2SequenceHeader ParseSequenceHeader(MPEGChunk* chunk){
   hdr.height = (((unsigned int)pos[0] & 0x0F) << 8) | (((unsigned int) pos[1]));  //00 0x xx
   pos+=2;
   switch(pos[0] & 0xF0){
-    case 0x00:
-      hdr.aspectRatio = 1.0f;
-      break;
     case 0x10:
       hdr.aspectRatio = 1.0f;
       break;
