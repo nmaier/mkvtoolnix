@@ -593,6 +593,9 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
    given with <tt>[min_tc..max_tc]</tt> are deleted. This is the workhorse
    for ::select_chapters_in_timeframe
 
+   Chapters which start before the window but end inside or after the window
+   are kept as well, and their start timecode is adjusted.
+
    Its parameters don't have to be checked for validity.
 
    \param min_tc The minimum timecode to accept.
