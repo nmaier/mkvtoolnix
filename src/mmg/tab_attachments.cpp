@@ -98,7 +98,9 @@ void tab_attachments::enable(bool e) {
 
 void tab_attachments::on_add_attachment(wxCommandEvent &evt) {
   mmg_attachment_t attch;
-  wxString name;
+  wxString name, ext;
+  uint32_t i, j;
+  vector<string> extensions;
 
   wxFileDialog dlg(NULL, "Choose an attachment file", "", last_open_dir,
                    _T(ALLFILES), wxOPEN);
@@ -107,11 +109,27 @@ void tab_attachments::on_add_attachment(wxCommandEvent &evt) {
     last_open_dir = dlg.GetDirectory();
     attch.file_name = new wxString(dlg.GetPath());
     name = dlg.GetFilename();
+    ext = name.AfterLast('.');
     name += " (";
     name += last_open_dir;
     name += ")";
     lb_attachments->Append(name);
-    attch.mime_type = new wxString("");
+    attch.mime_type = NULL;
+    if (ext.Length() > 0) {
+      for (i = 0; (mime_types[i].name != NULL) && (attch.mime_type == NULL);
+           i++) {
+        if (mime_types[i].extensions[0] == 0)
+          continue;
+        extensions = split(mime_types[i].extensions, " ");
+        for (j = 0; j < extensions.size(); j++)
+          if (!strcasecmp(extensions[j].c_str(), ext.c_str())) {
+            attch.mime_type = new wxString(mime_types[i].name);
+            break;
+          }
+      }
+    }
+    if (attch.mime_type == NULL)
+      attch.mime_type = new wxString("");
     attch.description = new wxString("");
     attch.style = 0;
 

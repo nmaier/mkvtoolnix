@@ -1,5 +1,9 @@
 2004-01-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: new feature: Automatically pre-set the attachment's MIME
+	type if the file has a known extension (e.g. 'text/plain' for
+	'.txt').
+
 	* mkvmerge: new feature: Unknown/unsupported track types can be
 	copied 1:1 from Matroska input files.
 
