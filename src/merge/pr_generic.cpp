@@ -849,10 +849,9 @@ generic_packetizer_c::add_packet(memories_c &mems,
   if (reader->ptzr_first_packet == NULL)
     reader->ptzr_first_packet = this;
 
-  pack = (packet_t *)safemalloc(sizeof(packet_t));
-  memset(pack, 0, sizeof(packet_t));
-  pack->data_adds.clear();
+  pack = new packet_t;
   pack->data_adds.resize(mems.size() - 1);
+  pack->data_adds_lengths.resize(mems.size() - 1);
 
   length = mems[0]->size;
   if (compressor != NULL) {
