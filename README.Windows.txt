@@ -1,5 +1,5 @@
-mkvtoolnix and Windows
-----------------------
+mkvtoolnix 0.3.3 and Windows
+----------------------------
 
 Since 2003-05-09 it is possible to compile mkvtoolnix under the cygwin
 environment under Windows. These are some very short build and
