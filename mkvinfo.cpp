@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.13 2003/04/17 19:54:42 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.14 2003/04/18 13:06:57 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -600,7 +600,7 @@ void process_file() {
                 KaxBlockDuration &duration =
                   *static_cast<KaxBlockDuration *>(l3);
                 duration.ReadData(es->I_O());
-                fprintf(stdout, "(%s) | + block duration: %.3fms", NAME,
+                fprintf(stdout, "(%s) |  + block duration: %.3fms", NAME,
                         ((float)uint64(duration)) * tc_scale /
                         1000000000000.0);
                 if (verbose > 1)
@@ -612,7 +612,7 @@ void process_file() {
                 KaxReferenceBlock &reference =
                   *static_cast<KaxReferenceBlock *>(l3);
                 reference.ReadData(es->I_O());
-                fprintf(stdout, "(%s) | + reference block: %.3fms", NAME,
+                fprintf(stdout, "(%s) |  + reference block: %.3fms", NAME,
                         ((float)int64(reference)) * tc_scale /
                         1000000000000.0);
                 if (verbose > 1)
