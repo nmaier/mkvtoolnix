@@ -12,8 +12,6 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-// {{{ includes
-
 #include "os.h"
 
 #include <errno.h>
@@ -70,10 +68,6 @@
 using namespace libmatroska;
 using namespace std;
 
-// }}}
-
-// {{{ #defines, structs, global variables
-
 #define NAME "mkvextract"
 
 #define MODE_TRACKS      0
@@ -82,34 +76,8 @@ using namespace std;
 #define MODE_CHAPTERS    3
 #define MODE_CUESHEET    4
 
-vector<kax_track_t> tracks;
+vector<track_spec_t> tracks;
 bool no_variable_data = false;
-
-bool
-ssa_line_c::operator < (const ssa_line_c &cmp)
-  const {
-  return num < cmp.num;
-}
-
-// }}}
-
-// {{{ FUNCTIONS find_track(), usage()
-
-kax_track_t *
-find_track(int tid) {
-  int i;
-
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i].tid == tid)
-      return &tracks[i];
-
-  return NULL;
-}
-
-char typenames[FILE_TYPE_MAX + 1][20] =
-  {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3", "chapter", "MicroDVD",
-   "VobSub", "Matroska", "DTS", "AAC", "SSA/ASS", "RealMedia", "Quicktime/MP4",
-   "FLAC", "TTA", "MPEG ES", "VobButton", "WAVPACK4", "MPEG PS"};
 
 void
 usage() {
@@ -176,10 +144,6 @@ usage() {
   mxinfo(_(usage_infos));
 }
 
-// }}}
-
-// {{{ FUNCTION parse_args
-
 static bool chapter_format_simple = false;
 static bool parse_fully = false;
 
@@ -187,11 +151,11 @@ void
 parse_args(vector<string> args,
            string &file_name,
            int &mode) {
-  int i, conv_handle;
+  int i;
   char *colon, *copy;
   const char *sub_charset;
   int64_t tid;
-  kax_track_t track;
+  track_spec_t track;
   bool embed_in_ogg, extract_cuesheet;
   int extract_blockadd_level = -1;
 
@@ -234,7 +198,6 @@ parse_args(vector<string> args,
 
   file_name = args[1];
 
-  conv_handle = conv_utf8;
   sub_charset = "UTF-8";
   embed_in_ogg = true;
   extract_cuesheet = false;
@@ -257,7 +220,6 @@ parse_args(vector<string> args,
       if ((i + 1) >= args.size())
         mxerror(_("'-c' lacks a charset.\n"));
 
-      conv_handle = utf8_init(args[i + 1]);
       sub_charset = args[i + 1].c_str();
       i++;
 
@@ -321,17 +283,15 @@ parse_args(vector<string> args,
         mxerror(_("Missing output file name in argument '%s'.\n"),
                 args[i].c_str());
 
-      memset(&track, 0, sizeof(kax_track_t));
+      memset(&track, 0, sizeof(track_spec_t));
       track.tid = tid;
       track.out_name = safestrdup(colon);
-      track.conv_handle = conv_handle;
       track.sub_charset = safestrdup(sub_charset);
       track.embed_in_ogg = embed_in_ogg;
       track.extract_cuesheet = extract_cuesheet;
       track.extract_blockadd_level = extract_blockadd_level;
       tracks.push_back(track);
       safefree(copy);
-      conv_handle = conv_utf8;
       sub_charset = "UTF-8";
       embed_in_ogg = true;
       extract_cuesheet = false;
@@ -351,10 +311,6 @@ parse_args(vector<string> args,
     mxexit(0);
   }
 }
-
-// }}}
-
-// {{{ FUNCTIONS show_element(), show_error()
 
 #define ARGS_BUFFER_LEN (200 * 1024) // Ok let's be ridiculous here :)
 static char args_buffer[ARGS_BUFFER_LEN];
@@ -404,10 +360,6 @@ show_error(const char *fmt,
   mxinfo("(%s) %s\n", NAME, args_buffer);
 }
 
-// }}}
-
-// {{{ FUNCTION main()
-
 int
 main(int argc,
      char **argv) {
@@ -428,7 +380,6 @@ main(int argc,
 
   srand(time(NULL));
   utf8_init("");
-  conv_utf8 = utf8_init("UTF-8");
 
   xml_element_map_init();
 
@@ -459,5 +410,3 @@ main(int argc,
   return 0;
 
 }
-
-// }}}
