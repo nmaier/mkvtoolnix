@@ -19,6 +19,7 @@
 #include "common.h"
 #include "commonebml.h"
 #include "matroska.h"
+#include "smart_pointers.h"
 
 #include "xtr_textsubs.h"
 
@@ -195,7 +196,7 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   end = start + duration / 1000000;
 
   DataBuffer &data = block.GetBuffer(0);
-  s = new char[data.Size() + 1];
+  autofree_ptr<char> af_s(s = (char *)safemalloc(data.Size() + 1));
   memcpy(s, data.Buffer(), data.Size());
   s[data.Size()] = 0;
 
@@ -204,7 +205,6 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   // 0: ReadOrder, 1: Layer, 2: Style, 3: Name, 4: MarginL, 5: MarginR,
   // 6: MarginV, 7: Effect, 8: Text
   fields = split(s, ",", 9);
-  delete []s;
   if (9 != fields.size()) {
     mxwarn("Invalid format for a SSA line ('%s'). This entry will be "
            "skipped.\n", s);
