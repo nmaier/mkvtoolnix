@@ -192,7 +192,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Set default header values to 'unset'.
-  hserialno = track_number++;
+  hserialno = create_track_number(reader, ti->id);
   huid = 0;
   htrack_type = -1;
   htrack_min_cache = -1;
