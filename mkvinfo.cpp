@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.7 2003/04/13 15:23:02 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.8 2003/04/16 20:10:08 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -53,7 +53,6 @@
 #include "KaxCluster.h"
 #include "KaxClusterData.h"
 #include "KaxBlock.h"
-#include "KaxBlockAdditional.h"
 #include "KaxCues.h"
 
 #include "common.h"
@@ -144,14 +143,17 @@ static void parse_args(int argc, char **argv) {
 
 void process_file() {
 //   track_t *t;
-  int upper_lvl_el, exit_loop, i;
+  int upper_lvl_el, exit_loop, i, delete_object;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   EbmlStream *es;
+  KaxCluster *cluster;
   int64_t last_pos;
-  u_int32_t cluster_tc;
+  u_int64_t cluster_tc, tc_scale = TIMECODE_SCALE;
 
   try {
+    delete_object = 1;
+
     last_pos = 0;
     es = new EbmlStream(static_cast<StdIOCallback &>(*in));
     if (es == NULL)
@@ -209,9 +211,9 @@ void process_file() {
             break;
 
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
-            KaxTimecodeScale &tc_scale = *static_cast<KaxTimecodeScale *>(l2);
-            fprintf(stdout, "(%s) | + timecode scale: %llu", NAME,
-                    uint64(tc_scale));
+            KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
+            tc_scale = uint64(ktc_scale);
+            fprintf(stdout, "(%s) | + timecode scale: %llu", NAME, tc_scale);
             if (verbose > 1)
               fprintf(stdout, " at %llu", last_pos);
             fprintf(stdout, "\n");
@@ -506,6 +508,7 @@ void process_file() {
         fprintf(stdout, "\n");
         if (verbose == 0)
           exit(0);
+        cluster = (KaxCluster *)l1;
 
         last_pos = in->getFilePointer();
         l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
@@ -517,12 +520,14 @@ void process_file() {
           if (EbmlId(*l2) == KaxClusterTimecode::ClassInfos.GlobalId) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
-            cluster_tc = uint32(ctc);
-            fprintf(stdout, "(%s) | + cluster timecode: %u", NAME,
-                    cluster_tc);
+            cluster_tc = uint64(ctc);
+            
+            fprintf(stdout, "(%s) | + cluster timecode: %.3fs", NAME,
+                    (float)cluster_tc * (float)tc_scale / 1000000000.0);
             if (verbose > 1)
               fprintf(stdout, " at %llu", last_pos);
             fprintf(stdout, "\n");
+            cluster->InitTimecode(cluster_tc);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             fprintf(stdout, "(%s) | + block group", NAME);
@@ -539,10 +544,12 @@ void process_file() {
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
                 KaxBlock &block = *static_cast<KaxBlock *>(l3);
+                block.SetParent(*cluster);
                 block.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + block (track number %u, %d frame(s)"
-                        ", timecode %u)", NAME, block.TrackNum(),
-                        block.NumberFrames(), block.Timecod() + cluster_tc);
+                        ", timecode %.3fs)", NAME, block.TrackNum(),
+                        block.NumberFrames(),
+                        (float)block.Timecod() / 1000000000.0);
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", last_pos);
                 fprintf(stdout, "\n");
@@ -551,41 +558,6 @@ void process_file() {
                   fprintf(stdout, "(%s) |   + frame with size %u\n", NAME,
                           data.Size());
                 }
-
-              } else if (EbmlId(*l3) ==
-                         KaxBlockAdditional::ClassInfos.GlobalId) {
-                KaxBlockAdditional &add =
-                  *static_cast<KaxBlockAdditional *>(l3);
-                add.ReadData(es->I_O());
-                fprintf(stdout, "(%s) |  + block additional", NAME);
-                if (verbose > 1)
-                  fprintf(stdout, " at %llu", last_pos);
-                fprintf(stdout, "\n");
-
-                last_pos = in->getFilePointer();
-                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
-                while (l4 != NULL) {
-                  if (upper_lvl_el != 0)
-                    break;
-
-                  fprintf(stdout, "(%s) |   + unknown element, level 4: %s",
-                          NAME, typeid(*l4).name());
-                  if (verbose > 1)
-                    fprintf(stdout, " at %llu", last_pos);
-                  fprintf(stdout, "\n");
-
-                  if (upper_lvl_el > 0) {
-									  assert(1 == 0);	// this should never happen
-                  } else {
-                    l4->SkipData(static_cast<EbmlStream &>(*es),
-                                 l4->Generic().Context);
-                    delete l4;
-                    last_pos = in->getFilePointer();
-                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
-                  }
-                } // while (l4 != NULL)
 
               } else {
                  fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
