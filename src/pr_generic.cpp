@@ -549,9 +549,12 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
-  if (duplicate_data)
-    pack->data = (unsigned char *)safememdup(data, length);
-  else
+  if (duplicate_data) {
+    if (!fast_mode)
+      pack->data = (unsigned char *)safememdup(data, length);
+    else
+      pack->data = (unsigned char *)safemalloc(length);
+  } else
     pack->data = data;
   pack->length = length;
   pack->timecode = timecode;

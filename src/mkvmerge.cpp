@@ -178,6 +178,7 @@ bool accept_tags = true;
 // pass of the splitting run.
 int pass = 0;
 int file_num = 1;
+bool fast_mode = false;
 
 // Specs say that track numbers should start at 1.
 int track_number = 1;
@@ -1905,6 +1906,7 @@ void create_next_output_file(bool last_file, bool first_file) {
       die("mkvmerge.cpp/create_next_output_file(): Could not create a dummy "
           "output class.");
     }
+    fast_mode = true;
 
     cluster_helper->set_output(out);
     render_headers(out, last_file, first_file);
@@ -1949,6 +1951,7 @@ void create_next_output_file(bool last_file, bool first_file) {
   if (verbose)
     mxinfo("Opened '%s\' for writing.\n", this_outfile.c_str());
 
+  fast_mode = false;
   cluster_helper->set_output(out);
   render_headers(out, last_file, first_file);
   render_attachments(out);
@@ -2184,6 +2187,7 @@ int main(int argc, char **argv) {
     mxinfo("\nPass 1 took %u second%s.\nPass 2: merging the files. This will "
            "take even longer.\n\n", end - start,
            (end - start) == 1 ? "" : "s");
+//     mxexit(0);
 
     start = time(NULL);
 

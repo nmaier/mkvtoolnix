@@ -23,6 +23,7 @@
 
 #include "os.h"
 
+#include "byte_buffer.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "mp3_common.h"
@@ -31,8 +32,8 @@ class mp3_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, buffer_size, spf, layer;
-  unsigned char *packet_buffer;
+  int channels, spf, layer;
+  byte_buffer_c byte_buffer;
 
 public:
   mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
@@ -46,9 +47,7 @@ public:
   virtual void set_headers();
 
 private:
-  virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_mp3_packet(mp3_header_t *mp3header);
-  virtual void remove_mp3_packet(int pos, int framesize);
 
   virtual void dump_debug_info();
 };

@@ -725,7 +725,8 @@ void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
 
   for (i = 0; i < dmx->segments->size(); i++) {
     segment = &(*dmx->segments)[i];
-    memcpy(ptr, segment->data, segment->size);
+    if (!fast_mode)
+      memcpy(ptr, segment->data, segment->size);
     ptr += segment->size;
   }
 
@@ -822,7 +823,10 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       segment.offset = vpkg_offset;
       segment.data = (unsigned char *)safemalloc(len);
       segment.size = len;
-      bc.get_bytes(segment.data, len);
+      if (!fast_mode || !dmx->rv_dimensions)
+        bc.get_bytes(segment.data, len);
+      else
+        bc.skip(len);
       dmx->segments->push_back(segment);
       dmx->c_timecode = this_timecode;
 

@@ -37,8 +37,6 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
-  packet_buffer = NULL;
-  buffer_size = 0;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bsid = nbsid;
@@ -51,61 +49,28 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
 }
 
 ac3_packetizer_c::~ac3_packetizer_c() {
-  if (packet_buffer != NULL)
-    safefree(packet_buffer);
 }
 
 void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
-  unsigned char *new_buffer;
-
-  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-
-  memcpy(new_buffer + buffer_size, buf, size);
-  packet_buffer = new_buffer;
-  buffer_size += size;
-}
-
-int ac3_packetizer_c::ac3_packet_available() {
-  int pos;
-  ac3_header_t  ac3header;
-
-  if (packet_buffer == NULL)
-    return 0;
-  pos = find_ac3_header(packet_buffer, buffer_size, &ac3header);
-  if (pos < 0)
-    return 0;
-
-  return 1;
-}
-
-void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
-  int new_size;
-  unsigned char *temp_buf;
-
-  new_size = buffer_size - (pos + framesize);
-  if (new_size != 0)
-    temp_buf = (unsigned char *)safememdup(&packet_buffer[pos + framesize],
-                                           new_size);
-  else
-    temp_buf = NULL;
-  safefree(packet_buffer);
-  packet_buffer = temp_buf;
-  buffer_size = new_size;
+  byte_buffer.add(buf, size);
 }
 
 unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
                                                 ac3_header_t *ac3header) {
-  int pos;
-  unsigned char *buf;
+  int pos, size;
+  unsigned char *buf, *packet_buffer;
   double pims;
 
+  packet_buffer = byte_buffer.get_buffer();
+  size = byte_buffer.get_size();
+
   if (packet_buffer == NULL)
-    return 0;
-  pos = find_ac3_header(packet_buffer, buffer_size, ac3header);
+    return NULL;
+  pos = find_ac3_header(packet_buffer, size, ac3header);
   if (pos < 0)
-    return 0;
-  if ((pos + ac3header->bytes) > buffer_size)
-    return 0;
+    return NULL;
+  if ((pos + ac3header->bytes) > size)
+    return NULL;
 
   pims = ((double)ac3header->bytes) * 1000.0 /
          ((double)ac3header->bit_rate / 8.0);
@@ -119,16 +84,19 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
 
-    remove_ac3_packet(pos, ac3header->bytes);
+    byte_buffer.remove(pos + ac3header->bytes);
 
-    return 0;
+    return NULL;
   }
 
   if (verbose && (pos > 1))
     mxwarn("ac3_packetizer: skipping %d bytes (no valid AC3 header "
            "found). This might make audio/video go out of sync, but this "
            "stream is damaged.\n", pos);
-  buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
+  if (fast_mode)
+    buf = (unsigned char *)safemalloc(ac3header->bytes);
+  else
+    buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
 
   if (ti->async.displacement > 0) {
     /*
@@ -145,7 +113,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     return buf;
   }
 
-  remove_ac3_packet(pos, ac3header->bytes);
+  byte_buffer.remove(pos + ac3header->bytes);
 
   return buf;
 }
@@ -194,7 +162,7 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
 
 void ac3_packetizer_c::dump_debug_info() {
   mxdebug("ac3_packetizer_c: queue: %d; buffer size: %d\n",
-          packet_queue.size(), buffer_size);
+          packet_queue.size(), byte_buffer.get_size());
 }
 
 ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
@@ -236,9 +204,8 @@ void ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   } else
     new_bsb_present = false;
 
-  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size +
-                                            size_add);
-  dptr = new_buffer + buffer_size;
+  new_buffer = (unsigned char *)safemalloc(size_add);
+  dptr = new_buffer;
   sptr = buf;
 
   if (bsb_present) {
@@ -258,7 +225,7 @@ void ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   if (new_bsb_present)
     bsb = *sptr;
   bsb_present = new_bsb_present;
-  packet_buffer = new_buffer;
-  buffer_size += size_add;
+  byte_buffer.add(new_buffer, size_add);
+  safefree(new_buffer);
 }
 

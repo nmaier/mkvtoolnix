@@ -23,6 +23,7 @@
 
 #include "os.h"
 
+#include "byte_buffer.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "ac3_common.h"
@@ -31,8 +32,8 @@ class ac3_packetizer_c: public generic_packetizer_c {
 protected:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, buffer_size, bsid;
-  unsigned char *packet_buffer;
+  int channels, bsid;
+  byte_buffer_c byte_buffer;
 
 public:
   ac3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
@@ -46,11 +47,9 @@ public:
   virtual void set_headers();
 
 protected:
-  virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_ac3_packet(unsigned long *header,
                                         ac3_header_t *ac3header);
-  virtual int ac3_packet_available();
-  virtual void remove_ac3_packet(int pos, int framesize);
+  virtual void add_to_buffer(unsigned char *buf, int size);
 
   virtual void dump_debug_info();
 };

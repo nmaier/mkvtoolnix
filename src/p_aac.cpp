@@ -40,8 +40,6 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
-  packet_buffer = NULL;
-  buffer_size = 0;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   id = nid;
@@ -58,63 +56,23 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
 }
 
 aac_packetizer_c::~aac_packetizer_c() {
-  if (packet_buffer != NULL)
-    safefree(packet_buffer);
-}
-
-void aac_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
-  unsigned char *new_buffer;
-
-  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-
-  memcpy(new_buffer + buffer_size, buf, size);
-  packet_buffer = new_buffer;
-  buffer_size += size;
-}
-
-int aac_packetizer_c::aac_packet_available() {
-  int pos;
-  aac_header_t aacheader;
-
-  if (packet_buffer == NULL)
-    return 0;
-  pos = find_aac_header(packet_buffer, buffer_size, &aacheader,
-                        emphasis_present);
-  if (pos < 0)
-    return 0;
-
-  return 1;
-}
-
-void aac_packetizer_c::remove_aac_packet(int pos, int framesize) {
-  int new_size;
-  unsigned char *temp_buf;
-
-  new_size = buffer_size - (pos + framesize);
-  if (new_size != 0)
-    temp_buf = (unsigned char *)safememdup(&packet_buffer[pos + framesize],
-                                           new_size);
-  else
-    temp_buf = NULL;
-  safefree(packet_buffer);
-  packet_buffer = temp_buf;
-  buffer_size = new_size;
 }
 
 unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
                                                 aac_header_t *aacheader) {
-  int pos, i, up_shift, down_shift;
-  unsigned char *buf, *src;
+  int pos, i, up_shift, down_shift, size;
+  unsigned char *buf, *src, *packet_buffer;
   double pims;
 
-  if (packet_buffer == NULL)
-    return 0;
-  pos = find_aac_header(packet_buffer, buffer_size, aacheader,
-                        emphasis_present);
+  packet_buffer = byte_buffer.get_buffer();
+  size = byte_buffer.get_size();
+  if (buf == NULL)
+    return NULL;
+  pos = find_aac_header(packet_buffer, size, aacheader, emphasis_present);
   if (pos < 0)
-    return 0;
-  if ((pos + aacheader->bytes) > buffer_size)
-    return 0;
+    return NULL;
+  if ((pos + aacheader->bytes) > size)
+    return NULL;
 
   pims = ((double)aacheader->bytes) * 1000.0 /
          ((double)aacheader->bit_rate / 8.0);
@@ -128,7 +86,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
 
-    remove_aac_packet(pos, aacheader->bytes);
+    byte_buffer.remove(pos + aacheader->bytes);
 
     return 0;
   }
@@ -137,18 +95,23 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     mxwarn("aac_packetizer: skipping %d bytes (no valid AAC header "
            "found). This might make audio/video go out of sync, but this "
            "stream is damaged.\n", pos);
-  if ((aacheader->header_bit_size % 8) == 0)
-    buf = (unsigned char *)safememdup(packet_buffer + pos +
-                                      aacheader->header_byte_size,
-                                      aacheader->data_byte_size);
+  if ((aacheader->header_bit_size % 8) == 0) {
+    if (fast_mode)
+      buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
+    else
+      buf = (unsigned char *)safememdup(packet_buffer + pos +
+                                        aacheader->header_byte_size,
+                                        aacheader->data_byte_size);
+  } else if (!fast_mode)
+    buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
   else {
     // Header is not byte aligned, i.e. MPEG-4 ADTS
     // This code is from mpeg4ip/server/mp4creator/aac.cpp
+    buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
+
     up_shift = aacheader->header_bit_size % 8;
     down_shift = 8 - up_shift;
     src = packet_buffer + pos + aacheader->header_bit_size / 8;
-
-    buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
 
     buf[0] = src[0] << up_shift;
     for (i = 1; i < aacheader->data_byte_size; i++) {
@@ -172,7 +135,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     return buf;
   }
 
-  remove_aac_packet(pos, aacheader->bytes);
+  byte_buffer.remove(pos + aacheader->bytes);
 
   return buf;
 }
@@ -235,7 +198,7 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
   if (timecode != -1)
     my_timecode = timecode;
 
-  add_to_buffer(buf, size);
+  byte_buffer.add(buf, size);
   while ((packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1000.0 * packetno * 1024 * ti->async.linear /
@@ -253,5 +216,5 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
 
 void aac_packetizer_c::dump_debug_info() {
   mxdebug("aac_packetizer_c: queue: %d; buffer size: %d\n",
-          packet_queue.size(), buffer_size);
+          packet_queue.size(), byte_buffer.get_size());
 }

@@ -479,21 +479,30 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
 #ifdef HAVE_AVICLASSES
       debug_enter("aviclasses->Read() video");
       key = s_video->IsKeyFrame(frames);
-      if (s_video->Read(frames, 1, chunk, 0x7FFFFFFF, &nread, &blread) !=
-          AVIERR_OK)
+      if (fast_mode) {
+        if (s_video->Read(frames, 1, NULL, 0, &nread, &blread) != S_OK)
+          nread = -1;
+      } else if (s_video->Read(frames, 1, chunk, 0x7FFFFFFF, &nread,
+                               &blread) != S_OK)
         nread = -1;
       debug_leave("aviclasses->Read() video");
 #else
       debug_enter("AVI_read_frame");
-      nread = AVI_read_frame(avi, (char *)chunk, &key);
+      if (fast_mode)
+        nread = AVI_read_frame(avi, NULL, &key);
+      else
+        nread = AVI_read_frame(avi, (char *)chunk, &key);
       debug_leave("AVI_read_frame");
 #endif
       if (nread < 0) {
         frames = maxframes + 1;
         done = true;
       } else {
-        key = is_keyframe(chunk, nread, key);
-        old_chunk = (unsigned char *)safememdup(chunk, nread);
+//         key = is_keyframe(chunk, nread, key);
+        if (fast_mode)
+          old_chunk = (unsigned char *)safemalloc(nread);
+        else
+          old_chunk = (unsigned char *)safememdup(chunk, nread);
         old_key = key;
         old_nread = nread;
         frames++;
@@ -506,13 +515,19 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
 #ifdef HAVE_AVICLASSES
         debug_enter("aviclasses->Read() video");
         key = s_video->IsKeyFrame(frames);
-        if (s_video->Read(frames, 1, chunk, 0x7FFFFFFF, &nread, &blread) !=
-            AVIERR_OK)
+        if (fast_mode) {
+          if (s_video->Read(frames, 1, NULL, 0, &nread, &blread) != S_OK)
+            nread = -1;
+        } else if (s_video->Read(frames, 1, chunk, 0x7FFFFFFF, &nread,
+                                 &blread) != S_OK)
           nread = -1;
         debug_leave("aviclasses->Read() video");
 #else
         debug_enter("AVI_read_frame");
-        nread = AVI_read_frame(avi, (char *)chunk, &key);
+        if (fast_mode)
+          nread = AVI_read_frame(avi, NULL, &key);
+        else
+          nread = AVI_read_frame(avi, (char *)chunk, &key);
         debug_leave("AVI_read_frame");
 #endif
         if (nread < 0) {
@@ -523,7 +538,7 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
           frames = maxframes + 1;
           break;
         }
-        key = is_keyframe(chunk, nread, key);
+//         key = is_keyframe(chunk, nread, key);
         if (frames == (maxframes - 1)) {
           last_frame = 1;
           done = true;
@@ -543,7 +558,10 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
         if (! last_frame) {
           if (old_chunk != NULL)
             safefree(old_chunk);
-          old_chunk = (unsigned char *)safememdup(chunk, nread);
+          if (fast_mode)
+            old_chunk = (unsigned char *)safemalloc(nread);
+          else
+            old_chunk = (unsigned char *)safememdup(chunk, nread);
           old_key = key;
           old_nread = nread;
         } else if (nread > 0) {

@@ -34,14 +34,13 @@ using namespace libmatroska;
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nlayer,
-                                   track_info_t *nti)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+                                   track_info_t *nti) throw (error_c):
+  generic_packetizer_c(nreader, nti),
+  byte_buffer(128 * 1024) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   layer = nlayer;
   bytes_output = 0;
-  packet_buffer = NULL;
-  buffer_size = 0;
   packetno = 0;
   spf = 1152;
 
@@ -54,53 +53,30 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
 }
 
 mp3_packetizer_c::~mp3_packetizer_c() {
-  if (packet_buffer != NULL)
-    safefree(packet_buffer);
-}
-
-void mp3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
-  unsigned char *new_buffer;
-
-  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-
-  memcpy(new_buffer + buffer_size, buf, size);
-  packet_buffer = new_buffer;
-  buffer_size += size;
-}
-
-void mp3_packetizer_c::remove_mp3_packet(int pos, int framesize) {
-  int new_size;
-  unsigned char *temp_buf;
-
-  new_size = buffer_size - (pos + framesize) + 1;
-  temp_buf = (unsigned char *)safemalloc(new_size);
-  if (new_size != 0)
-    memcpy(temp_buf, &packet_buffer[pos + framesize - 1], new_size);
-  safefree(packet_buffer);
-  packet_buffer = temp_buf;
-  buffer_size = new_size;
 }
 
 unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
-  int pos;
+  int pos, size;
   unsigned char *buf;
   double pims;
 
-  if (packet_buffer == NULL)
+  if (byte_buffer.get_size() == 0)
     return 0;
   while (1) {
-    pos = find_mp3_header(packet_buffer, buffer_size);
+    buf = byte_buffer.get_buffer();
+    size = byte_buffer.get_size();
+    pos = find_mp3_header(buf, size);
     if (pos < 0)
       return NULL;
-    decode_mp3_header(&packet_buffer[pos], mp3header);
-    if ((pos + mp3header->framesize) > buffer_size)
+    decode_mp3_header(&buf[pos], mp3header);
+    if ((pos + mp3header->framesize) > size)
       return NULL;
     if (!mp3header->is_tag)
       break;
 
     mxverb(2, "mp3_packetizer: Removing TAG packet with size %d\n",
            mp3header->framesize);
-    remove_mp3_packet(pos, mp3header->framesize);
+    byte_buffer.remove(mp3header->framesize + pos);
   }
 
   if (packetno == 0) {
@@ -116,7 +92,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     }
   }
 
-  if ((pos + mp3header->framesize) > buffer_size)
+  if ((pos + mp3header->framesize) > byte_buffer.get_size())
     return NULL;
 
   pims = 1000.0 * (float)spf / mp3header->sampling_frequency;
@@ -130,15 +106,19 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
 
-    remove_mp3_packet(pos, mp3header->framesize);
+    byte_buffer.remove(mp3header->framesize + pos);
 
-    return 0;
+    return NULL;
   }
 
   if ((verbose > 1) && (pos > 1))
     mxwarn("mp3_packetizer: skipping %d bytes (no valid MP3 header found).\n",
            pos);
-  buf = (unsigned char *)safememdup(packet_buffer + pos, mp3header->framesize);
+  if (fast_mode)
+    buf = (unsigned char *)safemalloc(mp3header->framesize);
+  else
+    buf = (unsigned char *)safememdup(byte_buffer.get_buffer() + pos,
+                                      mp3header->framesize);
 
   if (ti->async.displacement > 0) {
     /*
@@ -155,7 +135,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     return buf;
   }
 
-  remove_mp3_packet(pos, mp3header->framesize);
+  byte_buffer.remove(mp3header->framesize + pos);
 
   return buf;
 }
@@ -183,7 +163,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
   if (timecode != -1)
     my_timecode = timecode;
 
-  add_to_buffer(buf, size);
+  byte_buffer.add(buf, size);
   while ((packet = get_mp3_packet(&mp3header)) != NULL) {
     old_packetno = packetno;
     packetno++;
@@ -207,5 +187,5 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 
 void mp3_packetizer_c::dump_debug_info() {
   mxdebug("mp3_packetizer_c: queue: %d; buffer_size: %d\n",
-          packet_queue.size(), buffer_size);
+          packet_queue.size(), byte_buffer.get_size());
 }

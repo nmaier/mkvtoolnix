@@ -23,6 +23,7 @@
 
 #include "os.h"
 
+#include "byte_buffer.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "aac_common.h"
@@ -40,9 +41,9 @@ class aac_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, buffer_size, id, profile;
-  unsigned char *packet_buffer;
+  int channels, id, profile;
   bool headerless, emphasis_present;
+  byte_buffer_c byte_buffer;
 
 public:
   aac_packetizer_c(generic_reader_c *nreader, int nid, int nprofile,
@@ -57,11 +58,8 @@ public:
   virtual void set_headers();
 
 private:
-  virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_aac_packet(unsigned long *header,
                                         aac_header_t *aacheader);
-  virtual int aac_packet_available();
-  virtual void remove_aac_packet(int pos, int framesize);
 
   virtual void dump_debug_info();
 };
