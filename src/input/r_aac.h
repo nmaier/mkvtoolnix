@@ -14,7 +14,7 @@
 /*!
     \file r_aac.h
     \version $Id$
-    \brief class definitions for the AVI demultiplexer module
+    \brief class definitions for the AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
