@@ -257,9 +257,13 @@ rmff_open_file_with_io(const char *path,
   char buf[5];
 
   if ((path == NULL) || (io == NULL) ||
-      ((mode != MB_OPEN_MODE_READING) && (mode != MB_OPEN_MODE_WRITING)))
+      ((mode != RMFF_OPEN_MODE_READING) && (mode != RMFF_OPEN_MODE_WRITING)))
     return (rmff_file_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
 
+  if (mode == RMFF_OPEN_MODE_READING)
+    mode = MB_OPEN_MODE_READING;
+  else
+    mode = MB_OPEN_MODE_WRITING;
   file_h = io->open(path, mode);
   if (file_h == NULL)
     return NULL;
@@ -402,6 +406,7 @@ rmff_read_headers(rmff_file_t *file) {
       track.file = (struct rmff_file_t *)file;
       mdpr = &track.mdpr_header;
       read_uint16_be_to(&mdpr->id);
+      track.id = get_uint16_be(&mdpr->id);
       read_uint32_be_to(&mdpr->max_bit_rate);
       read_uint32_be_to(&mdpr->avg_bit_rate);
       read_uint32_be_to(&mdpr->max_packet_size);

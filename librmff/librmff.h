@@ -145,7 +145,7 @@ typedef struct __attribute__((__packed__)) real_audio_v5_props_t {
 } real_audio_v5_props_t;
 
 typedef struct rmff_frame_t {
-  void *data;
+  unsigned char *data;
   uint32_t size;
   int allocated_by_rmff;
 
@@ -162,9 +162,9 @@ typedef struct rmff_frame_t {
 /** \brief The track contains video data. */
 #define RMFF_TRACK_TYPE_VIDEO                          2
 
-struct rmff_file_t;
+struct rmff_file_t ;
 
-typedef struct {
+typedef struct rmff_track_t {
   uint32_t id;
   int type;
   rmff_mdpr_t mdpr_header;
@@ -173,7 +173,7 @@ typedef struct {
   struct rmff_file_t *file;
 } rmff_track_t;
 
-typedef struct {
+typedef struct rmff_file_t {
   mb_file_io_t *io;
   void *handle;
   char *name;
@@ -214,6 +214,9 @@ typedef struct {
                                (((unsigned char)b) << 16) + \
                                (((unsigned char)c) << 8) + \
                                ((unsigned char)d))
+
+#define RMFF_OPEN_MODE_READING                         0
+#define RMFF_OPEN_MODE_WRITING                         1
 
 /** \brief Opens a RealMedia file for reading or writing.
  * Can be used to open an existing file for reading or for creating a new
