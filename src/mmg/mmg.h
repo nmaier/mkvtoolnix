@@ -26,6 +26,7 @@
 
 #include "ebml/EbmlUnicodeString.h"
 
+#include "iso639.h"
 #include "wxcommon.h"
 
 #ifdef SYS_WINDOWS
@@ -89,8 +90,6 @@ extern map<wxString, wxString, lt_wxString> capabilities;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
-bool is_popular_language(const char *lang);
-bool is_popular_language_code(const char *code);
 wxString shell_escape(wxString source);
 vector<wxString> split(const wxString &src, const wxString &pattern,
                        int max_num = -1);

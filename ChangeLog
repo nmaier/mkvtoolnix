@@ -1,3 +1,10 @@
+2004-08-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Allow the use of two-letter ISO639-1
+	country codes in for the '--language' parameter. Those will be
+	converted to the corresponding ISO639-2 language code
+	automatically.
+
 2004-08-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvinfo, mkvextract: new feature: Added support for
