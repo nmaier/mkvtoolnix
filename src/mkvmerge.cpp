@@ -593,7 +593,7 @@ add_tags(KaxTag *tags) {
 /** \brief Add a packetizer to the list of packetizers
  */
 void
-add_packetizer(generic_packetizer_c *packetizer) {
+add_packetizer_globally(generic_packetizer_c *packetizer) {
   packetizer_t *pack = (packetizer_t *)safemalloc(sizeof(packetizer_t));
   pack->packetizer = packetizer;
   pack->status = EMOREDATA;

@@ -181,7 +181,21 @@ mp3_packetizer_c::process(memory_c &mem,
   return EMOREDATA;
 }
 
-void mp3_packetizer_c::dump_debug_info() {
+void
+mp3_packetizer_c::dump_debug_info() {
   mxdebug("mp3_packetizer_c: queue: %d; buffer_size: %d\n",
           packet_queue.size(), byte_buffer.get_size());
+}
+
+int
+mp3_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  mp3_packetizer_c *msrc;
+
+  msrc = dynamic_cast<mp3_packetizer_c *>(src);
+  if (msrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((samples_per_sec != msrc->samples_per_sec) ||
+      (channels != msrc->channels))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
 }

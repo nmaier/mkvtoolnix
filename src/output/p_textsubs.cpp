@@ -150,3 +150,13 @@ void
 textsubs_packetizer_c::dump_debug_info() {
   mxdebug("textsubs_packetizer_c: queue: %d\n", packet_queue.size());
 }
+
+int
+textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  textsubs_packetizer_c *psrc;
+
+  psrc = dynamic_cast<textsubs_packetizer_c *>(src);
+  if (psrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  return CAN_CONNECT_YES;
+}

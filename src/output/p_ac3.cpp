@@ -166,6 +166,19 @@ ac3_packetizer_c::dump_debug_info() {
           packet_queue.size(), byte_buffer.get_size());
 }
 
+int
+ac3_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  ac3_packetizer_c *asrc;
+
+  asrc = dynamic_cast<ac3_packetizer_c *>(src);
+  if (asrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((samples_per_sec != asrc->samples_per_sec) ||
+      (channels != asrc->channels) || (bsid != asrc->bsid))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
+}
+
 ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
                                          unsigned long nsamples_per_sec,
                                          int nchannels,

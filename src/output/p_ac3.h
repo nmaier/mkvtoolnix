@@ -46,6 +46,11 @@ public:
                       int64_t fref = -1);
   virtual void set_headers();
 
+  virtual const char *get_format_name() {
+    return "AC3";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
+
 protected:
   virtual unsigned char *get_ac3_packet(unsigned long *header,
                                         ac3_header_t *ac3header);

@@ -131,4 +131,21 @@ void
 flac_packetizer_c::dump_debug_info() {
   mxdebug("flac_packetizer_c: queue: %d\n", packet_queue.size());
 }
+
+int
+flac_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  flac_packetizer_c *fsrc;
+
+  fsrc = dynamic_cast<flac_packetizer_c *>(src);
+  if (fsrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((sample_rate != fsrc->sample_rate) ||
+      (channels != fsrc->channels) ||
+      (bits_per_sample != fsrc->bits_per_sample) ||
+      (l_header != fsrc->l_header) ||
+      (header == NULL) || (fsrc->header == NULL) ||
+      memcmp(header, fsrc->header, l_header))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
+}
 #endif

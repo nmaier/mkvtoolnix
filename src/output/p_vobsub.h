@@ -48,6 +48,11 @@ public:
 
   virtual void dump_debug_info();
 
+  virtual const char *get_format_name() {
+    return "VobSub";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
+
 protected:
   virtual int64_t extract_duration(unsigned char *data, int buf_size,
                                    int64_t timecode);

@@ -57,6 +57,11 @@ public:
                       int64_t fref = -1);
   virtual void set_headers();
 
+  virtual const char *get_format_name() {
+    return "AAC";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
+
 private:
   virtual unsigned char *get_aac_packet(unsigned long *header,
                                         aac_header_t *aacheader);

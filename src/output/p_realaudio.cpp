@@ -48,6 +48,11 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *nreader,
   private_size = nprivate_size;
   skip_to_keyframe = false;
   buffer_until_keyframe = false;
+  if (initial_displacement < 0) {
+    mxwarn("Track %lld/'%s': Negative '--sync' is not supported for "
+           "RealAudio tracks.\n", ti->id, ti->fname);
+    initial_displacement = 0;
+  }
 
   set_track_type(track_audio);
 }
@@ -139,7 +144,8 @@ ra_packetizer_c::process(memory_c &mem,
 //     }
 //   }
 
-  add_packet(mem, timecode, duration, false, bref);
+  add_packet(mem, timecode + initial_displacement, duration, false,
+             bref == -1 ? bref : bref + initial_displacement);
 
   debug_leave("ra_packetizer_c::process");
 
@@ -148,4 +154,18 @@ ra_packetizer_c::process(memory_c &mem,
 
 void
 ra_packetizer_c::dump_debug_info() {
+}
+
+int
+ra_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  ra_packetizer_c *psrc;
+
+  psrc = dynamic_cast<ra_packetizer_c *>(src);
+  if (psrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((samples_per_sec != psrc->samples_per_sec) ||
+      (channels != psrc->channels) ||
+      (bits_per_sample != psrc->bits_per_sample))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
 }

@@ -228,6 +228,7 @@ class generic_packetizer_c;
 class generic_reader_c {
 protected:
   track_info_c *ti;
+  vector<generic_packetizer_c *> reader_packetizers;
 public:
   generic_reader_c(track_info_c *nti) {
     ti = new track_info_c(*nti);
@@ -242,12 +243,16 @@ public:
   virtual void identify() = 0;
 
   virtual void add_attachments(KaxAttachments *a) {
-  };
-//   virtual void set_tag_track_uids() = 0;
+  }
+  virtual void add_packetizer(generic_packetizer_c *ptzr);
 
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
 };
+
+#define CAN_CONNECT_YES            0
+#define CAN_CONNECT_NO_FORMAT     -1
+#define CAN_CONNECT_NO_PARAMETERS -2
 
 class generic_packetizer_c {
 protected:
@@ -411,6 +416,9 @@ public:
   virtual void displace(float by_ns);
 
   virtual void force_duration_on_last_packet();
+
+  virtual const char *get_format_name() = 0;
+  virtual int can_connect_to(generic_packetizer_c *src) = 0;
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

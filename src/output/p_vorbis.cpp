@@ -218,3 +218,27 @@ void
 vorbis_packetizer_c::dump_debug_info() {
   mxdebug("vorbis_packetizer_c: queue: %d\n", packet_queue.size());
 }
+
+int
+vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  vorbis_packetizer_c *vsrc;
+
+  vsrc = dynamic_cast<vorbis_packetizer_c *>(src);
+  if (vsrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((vi.rate != vsrc->vi.rate) || (vi.channels != vsrc->vi.channels) ||
+      (headers[0].bytes != vsrc->headers[0].bytes) ||
+      (headers[1].bytes != vsrc->headers[1].bytes) ||
+      (headers[2].bytes != vsrc->headers[2].bytes) ||
+      (headers[0].packet == NULL) ||
+      (headers[1].packet == NULL) ||
+      (headers[2].packet == NULL) ||
+      (vsrc->headers[0].packet == NULL) ||
+      (vsrc->headers[1].packet == NULL) ||
+      (vsrc->headers[2].packet == NULL) ||
+      memcmp(headers[0].packet, vsrc->headers[0].packet, headers[0].bytes) ||
+      memcmp(headers[1].packet, vsrc->headers[1].packet, headers[1].bytes) ||
+      memcmp(headers[2].packet, vsrc->headers[2].packet, headers[2].bytes))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
+}

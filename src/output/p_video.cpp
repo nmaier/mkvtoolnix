@@ -436,3 +436,23 @@ video_packetizer_c::flush_frames(char next_frame,
   if (flush_all || ((next_frame == 'I') && (bref_frame.type == 'P')))
     bref_frame.type = '?';
 }
+
+int
+video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  video_packetizer_c *vsrc;
+
+  vsrc = dynamic_cast<video_packetizer_c *>(src);
+  if (vsrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((width != vsrc->width) || (height != vsrc->height) ||
+      (fps != vsrc->fps) || strcmp(codec_id, vsrc->codec_id))
+    return CAN_CONNECT_NO_PARAMETERS;
+  if (((ti->private_data == NULL) && (vsrc->ti->private_data != NULL)) ||
+      ((ti->private_data != NULL) && (vsrc->ti->private_data == NULL)) ||
+      (ti->private_size != vsrc->ti->private_size))
+    return CAN_CONNECT_NO_PARAMETERS;
+  if ((ti->private_data != NULL) &&
+      memcmp(ti->private_data, vsrc->ti->private_data, ti->private_size))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
+}

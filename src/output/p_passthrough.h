@@ -45,6 +45,11 @@ public:
   virtual void always_sync_complete_group(bool sync);
 
   virtual void dump_debug_info();
+
+  virtual const char *get_format_name() {
+    return "passthrough";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
 };
 
 #endif // __P_PASSTHROUGH_H

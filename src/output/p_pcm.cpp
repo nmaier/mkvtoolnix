@@ -149,3 +149,17 @@ void
 pcm_packetizer_c::dump_debug_info() {
   mxdebug("pcm_packetizer_c: queue: %d\n", packet_queue.size());
 }
+
+int
+pcm_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  pcm_packetizer_c *psrc;
+
+  psrc = dynamic_cast<pcm_packetizer_c *>(src);
+  if (psrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((samples_per_sec != psrc->samples_per_sec) ||
+      (channels != psrc->channels) ||
+      (bits_per_sample != psrc->bits_per_sample))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
+}

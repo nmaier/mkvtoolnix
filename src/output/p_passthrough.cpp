@@ -108,3 +108,14 @@ passthrough_packetizer_c::dump_debug_info() {
           "bytes processed: %lld, packets in queue: %d\n",
           packets_processed, bytes_processed, packet_queue.size());
 }
+
+int
+passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  passthrough_packetizer_c *psrc;
+
+  psrc = dynamic_cast<passthrough_packetizer_c *>(src);
+  if (psrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  // For now...
+  return CAN_CONNECT_NO_PARAMETERS;
+}

@@ -60,7 +60,7 @@ extern char *dump_packets;
 
 bool hack_engaged(const char *hack);
 
-void add_packetizer(generic_packetizer_c *packetizer);
+void add_packetizer_globally(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 
 void create_next_output_file();

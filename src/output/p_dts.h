@@ -49,6 +49,10 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
+  virtual const char *get_format_name() {
+    return "DTS";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
 
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);

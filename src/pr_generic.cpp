@@ -53,7 +53,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   debug_facility.add_packetizer(this);
 #endif
   reader = nreader;
-  add_packetizer(this);
+  reader->add_packetizer(this);
 
   track_entry = NULL;
   ti = new track_info_c(*nti);
@@ -1032,6 +1032,12 @@ generic_reader_c::demuxing_requested(char type,
       return true;
 
   return false;
+}
+
+void
+generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
+  reader_packetizers.push_back(ptzr);
+  add_packetizer_globally(ptzr);
 }
 
 //--------------------------------------------------------------------

@@ -265,3 +265,14 @@ void
 dts_packetizer_c::dump_debug_info() {
   mxdebug("dts_packetizer_c: queue: %d\n", packet_queue.size());
 }
+
+int
+dts_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  dts_packetizer_c *dsrc;
+
+  dsrc = dynamic_cast<dts_packetizer_c *>(src);
+  if (dsrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  // Hmm...
+  return CAN_CONNECT_YES;
+}

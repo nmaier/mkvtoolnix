@@ -52,6 +52,11 @@ public:
   virtual void flush();
 
   virtual void dump_debug_info();
+
+  virtual const char *get_format_name() {
+    return "Flac";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
 };
 
 #endif  // HAVE_FLAC_STREAM_DECODER_H

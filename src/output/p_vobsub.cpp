@@ -382,3 +382,13 @@ void
 vobsub_packetizer_c::dump_debug_info() {
   mxdebug("vobsub_packetizer_c: queue: %d\n", packet_queue.size());
 }
+
+int
+vobsub_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  vobsub_packetizer_c *vsrc;
+
+  vsrc = dynamic_cast<vobsub_packetizer_c *>(src);
+  if (vsrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  return CAN_CONNECT_YES;
+}

@@ -63,6 +63,11 @@ public:
 
   virtual void dump_debug_info();
 
+  virtual const char *get_format_name() {
+    return "video";
+  }
+  virtual int can_connect_to(generic_packetizer_c *src);
+
 protected:
   virtual void find_mpeg4_frame_types(unsigned char *buf, int size,
                                       vector<video_frame_t> &frames);
