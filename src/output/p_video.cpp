@@ -30,6 +30,10 @@
 #include "p_video.h"
 #include "matroska.h"
 
+extern "C" {
+#include <avilib.h>
+}
+
 using namespace libmatroska;
 
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
@@ -54,10 +58,18 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
 }
 
 void video_packetizer_c::set_headers() {
+  alBITMAPINFOHEADER *bih;
+
   if (codec_id != NULL)
     set_codec_id(codec_id);
   else
     set_codec_id(MKV_V_MSCOMP);
+  if (!strcmp(hcodec_id, MKV_V_MSCOMP) &&
+      (ti->private_data != NULL) &&
+      (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
+      (ti->fourcc[0] != 0))
+    memcpy(&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression,
+           ti->fourcc, 4);
   set_codec_private(ti->private_data, ti->private_size);
 
   // Set MinCache and MaxCache to 1 for I- and P-frames. If you only

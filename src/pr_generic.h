@@ -101,7 +101,7 @@ typedef struct {
   int private_size;
 
   vector<fourcc_t> *all_fourccs;
-  char _fourcc[5];
+  char fourcc[5];
   vector<display_properties_t> *display_properties;
   float aspect_ratio;
   int display_width, display_height;

@@ -157,11 +157,6 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     ti->private_data = (unsigned char *)bih;
     if (ti->private_data != NULL)
       ti->private_size = get_uint32(&bih->biSize);
-    if (ti->_fourcc[0] == 0) {
-      memcpy(ti->_fourcc, codec, 4);
-      ti->_fourcc[4] = 0;
-    } else
-      memcpy(&bih->biCompression, ti->_fourcc, 4);
     ti->id = 0;                 // ID for the video track.
     vpacketizer = new video_packetizer_c(this, NULL, fps,
                                          get_uint32(&bih->biWidth),
@@ -231,11 +226,6 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     ti->private_data = (unsigned char *)avi->bitmap_info_header;
     if (ti->private_data != NULL)
       ti->private_size = get_uint32(&avi->bitmap_info_header->bi_size);
-    if (ti->fourcc[0] == 0) {
-      memcpy(ti->fourcc, codec, 4);
-      ti->fourcc[4] = 0;
-    } else
-      memcpy(&avi->bitmap_info_header->bi_compression, ti->fourcc, 4);
     ti->id = 0;                 // ID for the video track.
     vpacketizer = new video_packetizer_c(this, NULL, AVI_frame_rate(avi),
                                          AVI_video_width(avi),

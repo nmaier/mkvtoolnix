@@ -177,12 +177,13 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     mxerror("Both '--aspect-ratio' and '--display-dimensions' were given for "
             "'%s'.\n", ti->fname);
 
+  memset(ti->fourcc, 0, 5);
   // Let's see if the user has specified a FourCC for this track.
   for (i = 0; i < ti->all_fourccs->size(); i++) {
     fourcc = &(*ti->all_fourccs)[i];
     if ((fourcc->id == ti->id) || (fourcc->id == -1)) { // -1 == all tracks
-      memcpy(ti->_fourcc, fourcc->fourcc, 4);
-      ti->_fourcc[4] = 0;
+      memcpy(ti->fourcc, fourcc->fourcc, 4);
+      ti->fourcc[4] = 0;
       break;
     }
   }
@@ -1009,7 +1010,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->ext_timecodes = safestrdup(src->ext_timecodes);
   dst->tags = NULL;
   dst->all_fourccs = new vector<fourcc_t>(*src->all_fourccs);
-  dst->_fourcc[0] = 0;
+  dst->fourcc[0] = 0;
   dst->display_properties =
     new vector<display_properties_t>(*src->display_properties);
   dst->aspect_ratio_given = false;

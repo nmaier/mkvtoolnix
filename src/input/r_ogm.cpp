@@ -365,10 +365,6 @@ void ogm_reader_c::create_packetizers() {
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
-        if (ti->_fourcc[0] == 0) {
-          memcpy(ti->_fourcc, sth->subtype, 4);
-          ti->_fourcc[4] = 0;
-        }
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
         bih.bi_size = sizeof(alBITMAPINFOHEADER);
@@ -376,7 +372,7 @@ void ogm_reader_c::create_packetizers() {
         bih.bi_height = get_uint32(&sth->sh.video.height);
         bih.bi_planes = 1;
         bih.bi_bit_count = 24;
-        memcpy(&bih.bi_compression, ti->_fourcc, 4);
+        memcpy(&bih.bi_compression, sth->subtype, 4);
         bih.bi_size_image = bih.bi_width * bih.bi_height * 3;
         ti->private_data = (unsigned char *)&bih;
         ti->private_size = sizeof(alBITMAPINFOHEADER);
