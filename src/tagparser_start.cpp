@@ -865,6 +865,8 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   parser_data_t *pdata;
   mm_io_c *io;
   XML_Parser parser;
+  XML_Error xerror;
+  char *emsg;
 
   try {
     io = new mm_io_c(name, MODE_READ);
@@ -892,10 +894,18 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
     len = io->read(buffer, 5000);
     if (len != 5000)
       done = 1;
-    if (XML_Parse(parser, buffer, len, done) == 0)
-      mxerror("XML parser error at  line %d of '%s': %s. Aborting.\n",
+    if (XML_Parse(parser, buffer, len, done) == 0) {
+      xerror = XML_GetErrorCode(parser);
+      if (xerror == XML_ERROR_INVALID_TOKEN)
+        emsg = " Remember that special characters like &, <, > and \" "
+          "must be escaped in the usual HTML way: &amp; for '&', "
+          "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
+      else
+        emsg = "";
+      mxerror("XML parser error at  line %d of '%s': %s.%s Aborting.\n",
               XML_GetCurrentLineNumber(parser), name,
-              XML_ErrorString(XML_GetErrorCode(parser)));
+              XML_ErrorString(xerror), emsg);
+    }
 
   } while (!done);
 
