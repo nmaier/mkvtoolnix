@@ -1,3 +1,10 @@
+2004-08-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Try to guess whether tags read from OGM
+	files (for automatic language tag setting and for copying chapter
+	information) are already in UTF-8 or not. If not try to convert
+	them from the current system's charset.
+
 2004-08-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: use the same UID for the EditionUID in the
