@@ -178,6 +178,8 @@ public:
   void restore_on_top();
 
   void muxing_has_finished();
+
+  bool check_before_overwriting();
 };
 
 extern mmg_dialog *mdlg;

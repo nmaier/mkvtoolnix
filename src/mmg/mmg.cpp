@@ -26,6 +26,7 @@
 #include "wx/clipbrd.h"
 #include "wx/config.h"
 #include "wx/datetime.h"
+#include "wx/dir.h"
 #include "wx/file.h"
 #include "wx/fileconf.h"
 #include "wx/listctrl.h"
@@ -1032,6 +1033,55 @@ mmg_dialog::set_last_chapters_in_menu(wxString name) {
   update_chapter_menu();
 }
 
+bool
+mmg_dialog::check_before_overwriting() {
+  wxFileName file_name(tc_output->GetValue());
+  wxString dir, name, ext;
+  wxArrayString files;
+  int i;
+
+  dir = file_name.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
+
+  if (!wxDir::Exists(dir)) {
+    wxMessageBox(wxT("The output directory '") + dir +
+                 wxT("' does not exist."),
+                 wxT("Directory does not exist"), wxOK | wxICON_ERROR);
+    return false;
+  }
+
+  if (!global_page->cb_split->GetValue()) {
+    if (wxFile::Exists(tc_output->GetValue()) &&
+        (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
+                      wxT("' already exists. Do you want to overwrite it?"),
+                      wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
+      return false;
+    return true;
+  }
+
+  name = file_name.GetName() + wxT("-");
+  ext = file_name.GetExt();
+
+  wxDir::GetAllFiles(dir, &files, wxEmptyString, wxDIR_FILES);
+  for (i = 0; i < files.Count(); i++) {
+    wxFileName test_name(files[i]);
+
+    if (test_name.GetName().StartsWith(name) &&
+        (test_name.HasExt() == file_name.HasExt()) &&
+        (test_name.GetExt() == ext)) {
+      if (wxMessageBox(wxT("Splitting is active, and at least one of the "
+                           "potential output files '") +
+                       dir + name + wxT("*") +
+                       (file_name.HasExt() ? wxT("") : wxEmptyString) + ext +
+                       wxT("' already exists. Do you want to overwrite them?"),
+                       wxT("Overwrite existing file(s)?"), wxYES_NO) != wxYES)
+        return false;
+      return true;
+    }
+  }
+
+  return true;
+}
+
 void
 mmg_dialog::on_run(wxCommandEvent &evt) {
   if (muxing_in_progress) {
@@ -1080,10 +1130,7 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
   }
 
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
-      wxFile::Exists(tc_output->GetValue()) &&
-      (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
-                    wxT("' already exists. Do you want to overwrite it?"),
-                    wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
+      !check_before_overwriting())
     return;
 
   set_on_top(false);
