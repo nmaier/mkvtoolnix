@@ -348,10 +348,8 @@ mi_frame::on_right_click(wxTreeEvent &event) {
   wxTreeItemId item;
 
   item = event.GetItem();
-  if (tree->GetChildrenCount(item) == 0) {
-    printf("no mama\n");
+  if (tree->GetChildrenCount(item) == 0)
     return;
-  }
   expand_all_elements(item, !tree->IsExpanded(item));
 }
 
