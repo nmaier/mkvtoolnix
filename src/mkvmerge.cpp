@@ -2220,6 +2220,12 @@ parse_args(int argc,
 
     // The argument is an input file.
     else {
+      if (!strcmp(outfile, this_arg))
+        mxerror(_("The name of the output file '%s' and of one of the input "
+                  "files is the same. This would cause mkvmerge to overwrite "
+                  "one of your input files. This is most likely not what you "
+                  "want.\n"), outfile);
+
       if ((ti->atracks->size() != 0) && ti->no_audio)
         mxerror(_("'-A' and '-a' used on the same source file.\n"));
 
