@@ -535,7 +535,7 @@ void mmg_dialog::update_command_line() {
   mmg_file_t *f;
   mmg_track_t *t;
   mmg_attachment_t *a;
-  wxString sid, old_cmdline, arg;
+  wxString sid, old_cmdline, arg, aids, sids, dids;
 
   old_cmdline = cmdline;
   cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" ";
@@ -551,6 +551,9 @@ void mmg_dialog::update_command_line() {
     no_audio = true;
     no_video = true;
     no_subs = true;
+    aids = "";
+    sids = "";
+    dids = "";
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
       string format;
 
@@ -564,9 +567,9 @@ void mmg_dialog::update_command_line() {
 
       if (t->type == 'a') {
         no_audio = false;
-        cmdline += "-a " + sid + " ";
-        clargs.Add("-a");
-        clargs.Add(sid);
+        if (aids.length() > 0)
+          aids += ",";
+        aids += sid;
 
         if (t->aac_is_sbr) {
           cmdline += "--aac-is-sbr " + sid + " ";
@@ -576,15 +579,15 @@ void mmg_dialog::update_command_line() {
 
       } else if (t->type == 'v') {
         no_video = false;
-        cmdline += "-d " + sid + " ";
-        clargs.Add("-d");
-        clargs.Add(sid);
+        if (dids.length() > 0)
+          dids += ",";
+        dids += sid;
 
       } else if (t->type == 's') {
         no_subs = false;
-        cmdline += "-s " + sid + " ";
-        clargs.Add("-s");
-        clargs.Add(sid);
+        if (sids.length() > 0)
+          sids += ",";
+        sids += sid;
 
         if ((t->sub_charset->Length() > 0) && (*t->sub_charset != "default")) {
           cmdline += "--sub-charset \"" + sid + ":" +
@@ -670,6 +673,22 @@ void mmg_dialog::update_command_line() {
         clargs.Add(*t->fourcc);
       }
 
+    }
+
+    if (aids.length() > 0) {
+      cmdline += "-a " + aids + " ";
+      clargs.Add("-a");
+      clargs.Add(aids);
+    }
+    if (dids.length() > 0) {
+      cmdline += "-d " + dids + " ";
+      clargs.Add("-d");
+      clargs.Add(dids);
+    }
+    if (sids.length() > 0) {
+      cmdline += "-s " + sids + " ";
+      clargs.Add("-s");
+      clargs.Add(sids);
     }
 
     if (tracks_selected_here) {

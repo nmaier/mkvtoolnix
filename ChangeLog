@@ -1,3 +1,11 @@
+2003-10-06  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: Audio, video and subtitle track selection was
+        translated into the wrong command line options.
+
+        * mkvmerge: Replaced the avilib based AVI reading functions with
+        AVI classes from Cyrius.
+
 2003-10-03  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v0.7.1.
