@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.41 2003/04/20 16:39:03 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.42 2003/04/21 08:29:50 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -172,6 +172,7 @@ static void usage(void) {
     "                           numbers.\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
+    "  --default-track          Sets the 'default' flag for this track.\n"
     "  --cues <none|iframes|    Create cue (index) entries for this track:\n"
     "          all>             None at all, only for I frames, for all.\n"
     "\n"
@@ -594,7 +595,8 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       i++;
-    }
+    } else if (!strcmp(argv[i], "--default-track"))
+      ti.default_track = 1;
 
     // The argument is an input file.
     else {

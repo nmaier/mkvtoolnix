@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.13 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.14 2003/04/21 08:29:50 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -160,6 +160,9 @@ void ac3_packetizer_c::set_header() {
   set_codec_id(MKV_A_AC3);
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
+
+  if (ti->default_track)
+    set_as_default_track('a');
 
   generic_packetizer_c::set_header();
 }

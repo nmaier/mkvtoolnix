@@ -87,6 +87,12 @@ the file very big.
 The default is \fIiframes\fR for video tracks and \fInone\fR for all others.
 See also option \fB\-\-no\-cues\fR which inhibits the creation of cue
 entries regardless of the \fB\-\-cues\fR options used.
+.TP
+\fB\-\-default\-track\fR
+Sets the 'default' flag for all tracks read from this file. If the user does
+not explicitly select a track himself then the player should prefer the
+track that has his 'default' flag set. Only one track of each kind (audio,
+video, subttiles) can have his 'default' flag set.
 .LP
 Other options:
 .TP

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.7 2003/04/20 21:22:19 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.8 2003/04/21 08:29:50 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -47,6 +47,9 @@ void textsubs_packetizer_c::set_header() {
   set_serial(-1);
   set_track_type(track_subtitle);
   set_codec_id(MKV_S_TEXTASCII);
+
+  if (ti->default_track)
+    set_as_default_track('s');
 
   generic_packetizer_c::set_header();
 

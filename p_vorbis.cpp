@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.12 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.13 2003/04/21 08:29:50 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -131,6 +131,9 @@ void vorbis_packetizer_c::set_header() {
 
   set_audio_sampling_freq((float)vi.rate);
   set_audio_channels(vi.channels);
+
+  if (ti->default_track)
+    set_as_default_track('a');
 
   generic_packetizer_c::set_header();
 }

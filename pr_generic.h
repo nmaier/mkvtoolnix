@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.25 2003/04/20 14:59:33 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.26 2003/04/21 08:29:50 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -53,6 +53,8 @@ typedef struct {
   char fourcc[5];
 
   audio_sync_t async;
+
+  int default_track;
 } track_info_t;
 
 class generic_packetizer_c: public q_c {
@@ -75,6 +77,8 @@ protected:
 
   int hvideo_pixel_width, hvideo_pixel_height;
   float hvideo_frame_rate;
+
+  int hdefault_track;
 public:
 
   generic_packetizer_c(track_info_t *nti) throw (error_c);
@@ -107,6 +111,8 @@ public:
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);
   virtual void set_video_frame_rate(float frame_rate);
+
+  virtual void set_as_default_track(char type);
 };
  
 class generic_reader_c {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.26 2003/04/20 19:32:11 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.27 2003/04/21 08:29:50 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -67,6 +67,9 @@ void video_packetizer_c::set_header() {
   set_video_pixel_width(width);
   set_video_pixel_height(height);
   set_video_frame_rate(fps);
+
+  if (ti->default_track)
+    set_as_default_track('v');
 
   generic_packetizer_c::set_header();
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.23 2003/04/20 14:59:33 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.24 2003/04/21 08:29:50 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,6 +28,8 @@
 #include "common.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"
+
+static int default_tracks[3] = {0, 0, 0};
 
 generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
   q_c() {
@@ -51,6 +53,8 @@ generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
   hvideo_pixel_width = -1;
   hvideo_pixel_height = -1;
   hvideo_frame_rate = -1.0;
+
+  hdefault_track = -1;
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
@@ -145,6 +149,26 @@ void generic_packetizer_c::set_video_frame_rate(float frame_rate) {
   hvideo_frame_rate = frame_rate;
 }
 
+void generic_packetizer_c::set_as_default_track(char type) {
+  int idx;
+
+  if (type == 'a')
+    idx = 0;
+  else if (type == 'v')
+    idx = 1;
+  else
+    idx = 2;
+
+  if (default_tracks[idx] != 0)
+    fprintf(stdout, "Warning: Another default track for %s tracks has already "
+            "been set. Not setting the 'default' flag for this track.\n",
+            idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle");
+  else {
+    default_tracks[idx] = 1;
+    hdefault_track = 1;
+  }
+}
+
 void generic_packetizer_c::set_header() {
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
@@ -193,6 +217,12 @@ void generic_packetizer_c::set_header() {
       (&GetChild<KaxTrackMaxCache>(static_cast<KaxTrackEntry &>
                                    (*track_entry))))
       = htrack_max_cache;
+
+  if (hdefault_track != -1)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackFlagDefault>(static_cast<KaxTrackEntry &>
+                                      (*track_entry))))
+      = hdefault_track;
 
   if (htrack_type == track_video) {
     KaxTrackVideo &video =

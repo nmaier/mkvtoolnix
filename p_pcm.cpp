@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.14 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.15 2003/04/21 08:29:50 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -69,6 +69,9 @@ void pcm_packetizer_c::set_header() {
   set_codec_id(MKV_A_PCM16);
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
+
+  if (ti->default_track)
+    set_as_default_track('a');
 
   generic_packetizer_c::set_header();
 }
