@@ -1,4 +1,4 @@
-mkvtoolnix 0.3.4 and Windows
+mkvtoolnix 0.4.0 and Windows
 ----------------------------
 
 Since 2003-05-09 it is possible to compile mkvtoolnix under the cygwin
