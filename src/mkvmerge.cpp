@@ -45,6 +45,8 @@
 #include <ebml/EbmlVoid.h>
 
 #include <matroska/FileKax.h>
+#include <matroska/KaxAttached.h>
+#include <matroska/KaxAttachements.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxClusterData.h>
@@ -110,8 +112,16 @@ typedef struct {
   generic_packetizer_c *packetizer;
 } packetizer_t;
 
+typedef struct {
+  char *name, *mime_type, *description;
+  int64_t size;
+  bool to_all_files;
+} attachment_t;
+
 vector<packetizer_t *> packetizers;
 vector<filelist_t *> files;
+vector<attachment_t *> attachments;
+int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
 
 // Variables set by the command line parser.
 char *outfile = NULL;
@@ -207,6 +217,15 @@ static void usage(void) {
     "  --dont-link              Don't link splitted files.\n"
     "  --link-to-previous <UID> Link the first file to the given UID.\n"
     "  --link-to-next <UID>     Link the last file to the given UID.\n"
+    "  --attachment-description <desc>\n"
+    "                           Description for the following attachment.\n"
+    "  --attachment-mime-type <mime type>\n"
+    "                           Mime type for the following attachment.\n"
+    "  --attach-file <file>     Creates a file attachment inside the\n"
+    "                           Matroska file.\n"
+    "  --attach-file-once <file>\n"
+    "                           Creates a file attachment inside the\n"
+    "                           firsts Matroska file written.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -426,6 +445,8 @@ static float parse_aspect_ratio(char *s) {
   float w, h;
 
   div = strchr(s, '/');
+  if (div == NULL)
+    div = strchr(s, ':');
   if (div == NULL)
     return strtod(s, NULL);
 
@@ -703,6 +724,76 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
   }
 }
 
+static void render_attachments(IOCallback *out) {
+  KaxAttachements *kax_as;
+  KaxAttached *kax_a;
+  KaxFileData *fdata;
+  attachment_t *attch;
+  int i;
+  char *name;
+  binary *buffer;
+  int64_t size;
+  mm_io_c *io;
+
+  if (!(((file_num == 1) && (attachment_sizes_first > 0)) ||
+        (attachment_sizes_others > 0)))
+    return;
+
+  kax_as = new KaxAttachements();
+  kax_a = NULL;
+  for (i = 0; i < attachments.size(); i++) {
+    attch = attachments[i];
+
+    if ((file_num == 1) || attch->to_all_files) {
+      if (kax_a == NULL)
+        kax_a = &GetChild<KaxAttached>(*kax_as);
+      else
+        kax_a = &GetNextChild<KaxAttached>(*kax_as, *kax_a);
+
+      if (attch->description != NULL)
+        *static_cast<EbmlUnicodeString *>
+          (&GetChild<KaxFileDescription>(*kax_a)) =
+          cstr_to_UTFstring(attch->mime_type);;
+
+      if (attch->mime_type != NULL)
+        *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*kax_a)) =
+          attch->mime_type;
+
+      name = &attch->name[strlen(attch->name) - 1];
+      while ((name != attch->name) && (*name != '/'))
+        name--;
+      if (*name == '/')
+        name++;
+      if (*name == 0)
+        die("Internal error: *name == 0 on %d.", __LINE__);
+
+      *static_cast<EbmlUnicodeString *>
+        (&GetChild<KaxFileName>(*kax_a)) =
+        cstr_to_UTFstring(name);
+
+      try {
+        io = new mm_io_c(attch->name, MODE_READ);
+        io->setFilePointer(0, seek_end);
+        size = io->getFilePointer();
+        io->setFilePointer(0, seek_beginning);
+
+        buffer = new binary[size];
+        io->read(buffer, size);
+        delete io;
+
+        fdata = &GetChild<KaxFileData>(*kax_a);
+        fdata->SetBuffer(buffer, size);
+      } catch (...) {
+        mxprint(stderr, "Error: Could not open the attachment '%s'.\n",
+                attch->name);
+      }
+    }
+  }
+
+  kax_as->Render(*out);
+  delete kax_as;
+}
+
 static void create_readers() {
   filelist_t *file;
   int i;
@@ -851,6 +942,8 @@ static void parse_args(int argc, char **argv) {
   cue_creation_t cues;
   int64_t id;
   language_t lang;
+  attachment_t *attachment;
+  mm_io_c *io;
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.audio_syncs = new vector<audio_sync_t>;
@@ -862,6 +955,8 @@ static void parse_args(int argc, char **argv) {
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
+  attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
+  memset(attachment, 0, sizeof(attachment_t));
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -1033,6 +1128,62 @@ static void parse_args(int argc, char **argv) {
 
     else if (!strcmp(argv[i], "--no-lacing"))
       no_lacing = true;
+
+    else if (!strcmp(argv[i], "--attachment-description")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: --attachment-description lacks the "
+                "description.\n");
+        exit(1);
+      }
+      safefree(attachment->description);
+      attachment->description = safestrdup(argv[i + 1]);
+      i++;
+
+    } else if (!strcmp(argv[i], "--attachment-mime-type")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: --attachment-mime-type lacks the "
+                "MIME type.\n");
+        exit(1);
+      }
+      safefree(attachment->mime_type);
+      attachment->mime_type = safestrdup(argv[i + 1]);
+      i++;
+
+    } else if (!strcmp(argv[i], "--attach-file") ||
+               !strcmp(argv[i], "--attach-file-once")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: %s lacks the file name.\n", argv[i]);
+        exit(1);
+      }
+
+      if (attachment->mime_type == NULL) {
+        mxprint(stderr, "Error: No MIME type was set for the attachment '%s'."
+                "\n", argv[i + 1]);
+        exit(1);
+      }
+
+      attachment->name = safestrdup(argv[i + 1]);
+      if (!strcmp(argv[i], "--attach-file"))
+        attachment->to_all_files = true;
+      try {
+        io = new mm_io_c(attachment->name, MODE_READ);
+        io->setFilePointer(0, seek_end);
+        attachment->size = io->getFilePointer();
+        delete io;
+        if (attachment->size == 0)
+          throw exception();
+      } catch (...) {
+        mxprint(stderr, "Error: Could not open the attachment '%s', or its "
+                "size is 0.\n", attachment->name);
+        exit(1);
+      }
+
+      attachments.push_back(attachment);
+      attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
+      memset(attachment, 0, sizeof(attachment_t));
+
+      i++;
+    }
 
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
@@ -1212,6 +1363,12 @@ static void parse_args(int argc, char **argv) {
     if (split_after <= 0)
       mxprint(stderr, "Warning: '--dont-link' is only useful in combination "
               "with '--split'.\n");
+  }
+
+  for (i = 0; i < attachments.size(); i++) {
+    attachment_sizes_first += attachments[i]->size;
+    if (attachments[i]->to_all_files)
+      attachment_sizes_others += attachments[i]->size;
   }
 }
 
@@ -1442,6 +1599,7 @@ void create_next_output_file(bool last_file, bool first_file) {
 
     cluster_helper->set_output(out);
     render_headers(out, last_file, first_file);
+    render_attachments(out);
 
     return;
   }
@@ -1464,6 +1622,7 @@ void create_next_output_file(bool last_file, bool first_file) {
 
   cluster_helper->set_output(out);
   render_headers(out, last_file, first_file);
+  render_attachments(out);
 
   file_num++;
 }

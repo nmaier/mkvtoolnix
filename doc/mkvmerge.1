@@ -1,11 +1,14 @@
 .TH MKVMERGE "1" "June 2003" "mkvmerge v0.5.0" "User Commands"
 
+
 .SH NAME
 mkvmerge \- Merge multimedia streams into a Matroska file
+
 
 .SH SYNOPSIS
 .B mkvmerge
 [\fIglobal options\fR] \-o \fIout\fR [\fIoptions\fR] <file1> [[\fIoptions\fR] <file2> ...] [@optionsfile]
+
 
 .SH DESCRIPTION
 .LP
@@ -13,6 +16,8 @@ This program takes the input from several media files and joins
 their streams (all of them or just a selection) into a Matroska file.
 .UR http://www.matroska.org/
 .UE
+
+
 .LP
 Global options:
 .TP
@@ -87,6 +92,35 @@ section \fBFILE LINKING\fR below for details.
 \fB\-\-link\-to\-next\fR <\fIUID\fR>
 Links the last output file to the segment with the given \fIUID\fR. See the
 section \fBFILE LINKING\fR below for details.
+.TP
+\fB\-\-attachment\-description\fR <\fIdescription\fR>
+Plain text description of the following attachment. Applies to the next
+\fB\-\-attach\-file\fR or \fB\-\-attach\-file\-once\fR command.
+.TP
+\fB\-\-attachment\-mime\-type\fR <\fIMIME type\fR>
+MIME type of the following attachment. Applies to the next
+\fB\-\-attach\-file\fR or \fB\-\-attach\-file\-once\fR command.
+A list of officially recognized MIME types can be found e.g. at
+.URL
+ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types
+The MIME type is mandatory for an attachment.
+.TP
+\fB\-\-attach\-file\fR <\fIfile name\fR>
+.TP
+\fB\-\-attach\-file\-once\fR <\fIfile name\fR>
+Creates a file attachment inside the Matroska file. The MIME type must have
+been set before this option can used. The difference between the two forms
+is that during splitting the files attached with \fB\-\-attach\-file\fR are
+attached to all output files while the ones attached with
+\fB\-\-attach\-file\-once\fR are only attached to the first file created.
+If splitting is not used then both do the same.
+.br
+\fBmkvextract\fR can be used to extract attached files from a Matroska file.
+.br
+\fBNote:\fR If an input file is a Matroska file then the attached files will
+not be copied to the output file(s). This may change in the future.
+
+
 .LP
 Options that can be used for each input file:
 .TP
@@ -167,6 +201,8 @@ listed with the \fB\-\-list\-languages\fR option.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
+
+
 .LP
 Options that only apply to video tracks:
 .TP
@@ -358,6 +394,7 @@ If you do not see the language or default track flags that you've specified
 in \fBmkvinfo\fR's output then please read the section about \fBDEFAULT
 VALUES\fR.
 
+
 .SH SUBTITLES
 .LP
 There are several text subtitle formats that can be embedded into Matroska.
@@ -381,6 +418,7 @@ Substation Alpha (SSA) / Advanced Substation Alpha scripts (ASS) with some
 limitations: 1) Files saved with more than one byte per character (e.g.
 all UTF-16 formats) are not supported, UTF-8/ASCII only; 2) The \fB\\fe\fR
 markup is not supported correctly.
+
 
 .SH FILE LINKING
 .LP
@@ -419,6 +457,7 @@ If splitting is used then the first file is linked to the UID given with
 with \'\fB\-\-link\-to\-next\fR\'. If splitting is not used then the one
 output file will be linked to both of the two UIDs.
 
+
 .SH TRACK IDS
 .LP
 Some of the options for \fBmkvmerge\fR need a track ID to specify which track
@@ -448,6 +487,7 @@ The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
 \fB\-\-stracks\fR, \fB\-\-sync\fR, \fB\-\-default-track\fR, \fB\-\-cues\fR
 and \fB\-\-language\fR.
 
+
 .SH DEFAULT VALUES
 .LP
 The Matroska specs say that some elements have a default value. Usually an
@@ -458,6 +498,27 @@ The default value for the \fIlanguage\fR is English (\fIeng\fR),
 and the default value for the \fIdefault track flag\fR is \fItrue\fR. Therefore
 if you used \fB--language 0:eng\fR for a track then it will not show up
 in \fBmkvinfo\fR's output.
+
+
+.SH ATTACHMENTS
+.LP
+Maybe you also want to keep some photos along with your Matroska file, or
+you're using SSA subtitles and need a special TrueType font that's really
+rare. In these cases you can attach those files to the Matroska file. They
+will not be just appended to the file but embedded in it. A player can then
+show those files (the 'photos' case) or use them to render the subtitles
+(the 'TrueType fonts' case).
+.LP
+Here's an example how to attach a photo and a TrueType font to the output
+file:
+.br
+$ \fBmkvmerge -o output.mkv -A video.avi sound.ogg \-\-attachment\-description
+"Me and the band behind the stage in a small get-together"
+\-\-attachment\-mime\-type image/jpeg \-\-attach\-file me_and_the_band.jpg
+\-\-attachment\-description "The real rare and unbelievably good looking font"
+\-\-attachment\-type application/octet\-stream
+\-\-attach\-file really_cool_font.ttf
+
 
 .SH NOTES
 .LP
@@ -485,6 +546,9 @@ DTS audio files
 .TP
 *
 MP3 audio files
+.TP
+*
+RealVideo and RealAudio from RealMedia files
 .TP
 *
 Track selection
