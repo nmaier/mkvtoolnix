@@ -18,24 +18,27 @@ DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 
 LDFLAGS = @LDFLAGS@ $(avilib0_6_10_libdirs) $(aviclasses_libdirs)
 
-if HAVE_WXWINDOWS
-SUBDIRS = mmg
-endif
+SUBDIRS = . @MMG_SUBDIRS@
+
+noinst_LIBRARIES = libmtxcommon.a
+
+libmtxcommon_a_SOURCES = base64.cpp \
+			chapters.cpp chapters.h \
+			chapter_parser_xml.cpp \
+			compression.cpp compression.h \
+			common.cpp common.h \
+			iso639.cpp iso639.h \
+			mm_io.cpp mm_io.h \
+			tagparser_start.cpp tagparser.h \
+			tagparser_end.cpp
 
 bin_PROGRAMS = mkvmerge mkvinfo mkvextract base64tool
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			aac_common.cpp aac_common.h \
 			ac3_common.cpp ac3_common.h \
-			base64.cpp base64.h \
-			chapters.cpp chapters.h \
-			chapter_parser_xml.cpp \
-			compression.cpp compression.h \
 			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
-			common.cpp common.h \
-			iso639.cpp iso639.h \
-			mm_io.cpp mm_io.h \
 			mp3_common.cpp mp3_common.h \
 			p_aac.cpp p_aac.h \
 			p_ac3.cpp p_ac3.h \
@@ -61,9 +64,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_ogm.cpp r_ogm.h \
 			r_vobsub.cpp r_vobsub.h \
 			r_wav.cpp r_wav.h \
-			subtitles.cpp subtitles.h \
-			tagparser_start.cpp tagparser.h \
-			tagparser_end.cpp
+			subtitles.cpp subtitles.h
 
 mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			common.cpp common.h \
@@ -88,10 +89,12 @@ base64tool_SOURCES = base64tool.cpp \
 			common.cpp common.h \
 			mm_io.cpp mm_io.h
 
-mkvmerge_LDADD = @AVILIB_LIBS@ @AVICLASSES_LIBS@ @PROFILING_LIBS@ \
-		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \
-		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ @ZLIB_LIBS@ @LZO_LIBS@ \
-		@BZ2_LIBS@
+mkvmerge_LDADD = -L. -lmtxcommon @AVILIB_LIBS@ @AVICLASSES_LIBS@ \
+		@MATROSKA_LIBS@ @EBML_LIBS@ \
+		@VORBIS_LIBS@ @OGG_LIBS@ \
+		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ \
+		@ZLIB_LIBS@ @LZO_LIBS@ @BZ2_LIBS@ \
+		@PROFILING_LIBS@
 
 mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
 		@WXWINDOWS_LIBS@ @MINGW_LIBS@
