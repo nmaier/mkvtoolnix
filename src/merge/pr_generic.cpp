@@ -1000,6 +1000,14 @@ generic_packetizer_c::connect(generic_packetizer_c *src,
     process_deferred_packets();
 }
 
+void
+generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
+  if ((ti->async.linear != 1.0) || (ti->async.displacement != 0) ||
+      (initial_displacement != 0))
+    return;
+  initial_displacement = displacement;
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(container) \

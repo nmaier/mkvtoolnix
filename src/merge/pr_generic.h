@@ -503,6 +503,8 @@ public:
     if (ti->avi_block_sizes != NULL)
       ti->avi_block_sizes->push_back(block_size);
   }
+
+  virtual void set_displacement_maybe(int64_t displacement);
 };
 
 extern vector<generic_packetizer_c *> ptzrs_in_header_order;

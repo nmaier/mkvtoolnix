@@ -1,3 +1,9 @@
+2004-11-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The first packet of an AAC track read from
+	Real containers might not start at the timecode 0. This offset was
+	ignored by mkvmerge.
+
 2004-11-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Made the muxing dialog ("mkvmerge is running")
