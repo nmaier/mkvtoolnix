@@ -306,7 +306,6 @@ FunctionEnd
 !insertmacro StrStr "un."
 
 Function .onInit
-  !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
 
 Section "Program files" SEC01
