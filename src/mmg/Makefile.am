@@ -5,6 +5,8 @@ bin_PROGRAMS = mmg
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/common
 
+CXXFLAGS = @CXXFLAGS@ -Wshadow
+
 LDFLAGS = @LDFLAGS@ -L$(top_srcdir)/src/common
 
 #mmg_DEPENDENCIES = ../common/libmtxcommon.la ../common/libmtxebmlcommon.la \

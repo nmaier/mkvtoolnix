@@ -96,16 +96,13 @@ void video_packetizer_c::set_headers() {
   if (!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES))
     set_codec_private(ti->private_data, ti->private_size);
 
-  // Set MinCache and MaxCache to 1 for I- and P-frames. If you only
-  // have I-frames then both can be set to 0 (e.g. MJPEG). 2 is needed
+  // Set MinCache to 1 for I- and P-frames. If you only
+  // have I-frames then it can be set to 0 (e.g. MJPEG). 2 is needed
   // if there are B-frames as well.
-  if (bframes) {
+  if (bframes)
     set_track_min_cache(2);
-    set_track_max_cache(2);
-  } else {
+  else
     set_track_min_cache(1);
-    set_track_max_cache(1);
-  }
   if (fps != 0.0)
     set_track_default_duration_ns((int64_t)(1000000000.0 / fps));
 
@@ -182,7 +179,6 @@ int video_packetizer_c::process(unsigned char *buf, int size,
         if (!bframes) {
           set_codec_id(MKV_V_MPEG4_ASP);
           set_track_min_cache(2);
-          set_track_max_cache(2);
           rerender_track_headers();
         }
         bframes = true;

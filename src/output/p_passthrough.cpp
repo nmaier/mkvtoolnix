@@ -37,17 +37,35 @@ passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *nreader,
   generic_packetizer_c(nreader, nti) {
   packets_processed = 0;
   bytes_processed = 0;
+  duration_forced = 0;
 }
 
-void passthrough_packetizer_c::set_headers() {
+void
+passthrough_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int passthrough_packetizer_c::process(unsigned char *buf, int size,
-                                      int64_t timecode, int64_t duration,
-                                      int64_t bref, int64_t fref) {
+void
+passthrough_packetizer_c::force_duration(int n_frames) {
+  duration_forced += n_frames;
+}
+
+int
+passthrough_packetizer_c::process(unsigned char *buf,
+                                  int size,
+                                  int64_t timecode,
+                                  int64_t duration,
+                                  int64_t bref,
+                                  int64_t fref) {
+  bool forced;
+
   debug_enter("passthrough_packetizer_c::process");
 
+  if (duration_forced > 0) {
+    forced = true;
+    duration_forced--;
+  } else
+    forced = false;
   packets_processed++;
   bytes_processed += size;
   if (needs_negative_displacement(duration)) {
@@ -56,8 +74,10 @@ int passthrough_packetizer_c::process(unsigned char *buf, int size,
     return EMOREDATA;
   }
   while (needs_positive_displacement(duration)) {
-    add_packet(buf, size, (int64_t)((timecode + ti->async.displacement) *
-                                    ti->async.linear), bref, fref);
+    add_packet(buf, size,
+               (int64_t)((timecode + ti->async.displacement) *
+                         ti->async.linear),
+               duration, forced, bref, fref);
     displace(duration);
   }
 
@@ -69,13 +89,14 @@ int passthrough_packetizer_c::process(unsigned char *buf, int size,
   sync_to_keyframe = false;
   timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
   duration = (int64_t)(duration * ti->async.linear);
-  add_packet(buf, size, timecode, duration, false, bref, fref);
+  add_packet(buf, size, timecode, duration, forced, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");
   return EMOREDATA;
 }
 
-void passthrough_packetizer_c::dump_debug_info() {
+void
+passthrough_packetizer_c::dump_debug_info() {
   mxdebug("passthrough_packetizer_c: packets processed: %lld, "
           "bytes processed: %lld, packets in queue: %d\n",
           packets_processed, bytes_processed, packet_queue.size());

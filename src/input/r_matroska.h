@@ -37,6 +37,7 @@
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
+#include <matroska/KaxContentEncoding.h>
 
 using namespace libebml;
 using namespace libmatroska;
@@ -67,6 +68,10 @@ typedef struct {
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs
   char sub_type; // 't' = text, 'v' = VobSub
+  bool passthrough;             // No special packetizer available.
+
+  uint32_t min_cache, max_cache;
+  bool lacing_flag;
 
   // Parameters for video tracks
   uint32_t v_width, v_height, v_dwidth, v_dheight;
@@ -95,6 +100,7 @@ typedef struct {
 
   int64_t previous_timecode;
 
+  KaxContentEncodings *kax_c_encodings;
   vector<kax_content_encoding_t> *c_encodings;
 
   compression_c *zlib_compressor, *bzlib_compressor, *lzo1x_compressor;
@@ -139,6 +145,8 @@ public:
 
 protected:
   virtual int read_headers();
+  virtual void init_passthrough_packetizer(kax_track_t *t);
+  virtual void set_packetizer_headers(kax_track_t *t);
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual kax_track_t *new_kax_track();

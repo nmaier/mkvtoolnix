@@ -10,6 +10,8 @@ endif
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) -I.
 
+CXXFLAGS = @CXXFLAGS@ -Wshadow
+
 #lib_LTLIBRARIES = libmtxcommon.la libmtxebmlcommon.la libmtxkaxcommon.la \
 #		libmtxcomp.la
 

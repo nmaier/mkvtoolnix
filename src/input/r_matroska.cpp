@@ -55,12 +55,13 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "matroska.h"
-#include "mkvmerge.h"
-#include "mm_io.h"
 #include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
+#include "hacks.h"
+#include "matroska.h"
+#include "mkvmerge.h"
+#include "mm_io.h"
 #include "pr_generic.h"
 #include "r_matroska.h"
 
@@ -84,6 +85,8 @@ using namespace libmatroska;
 #define PFX "matroska_reader: "
 #define MAP_TRACK_TYPE(c) ((c) == 'a' ? track_audio : \
                            (c) == 'v' ? track_video : track_subtitle)
+#define MAP_TRACK_TYPE_STRING(c) ((c) == 'a' ? "audio" : \
+                                  (c) == 'v' ? "video" : "subtite")
 
 // }}}
 
@@ -159,6 +162,8 @@ kax_reader_c::~kax_reader_c() {
         delete tracks[i]->bzlib_compressor;
       if (tracks[i]->lzo1x_compressor != NULL)
         delete tracks[i]->lzo1x_compressor;
+      if (tracks[i]->kax_c_encodings != NULL)
+        delete tracks[i]->kax_c_encodings;
       safefree(tracks[i]);
     }
 
@@ -510,11 +515,6 @@ void kax_reader_c::verify_tracks() {
                    "Ignoring track %u.\n", t->tnum);
             continue;
 #endif
-          } else {
-            if (verbose)
-              mxwarn(PFX "Unknown/unsupported audio "
-                     "codec ID '%s' for track %u.\n", t->codec_id, t->tnum);
-            continue;
           }
         }
 
@@ -523,13 +523,6 @@ void kax_reader_c::verify_tracks() {
 
         if (t->a_channels == 0)
           t->a_channels = 1;
-
-        if (t->a_formattag == 0) {
-          if (verbose)
-            mxwarn(PFX "The audio format tag was not "
-                   "set for track %u.\n", t->tnum);
-          continue;
-        }
 
         // This track seems to be ok.
         t->ok = 1;
@@ -804,8 +797,10 @@ int kax_reader_c::read_headers() {
           KaxCodecID *kcodecid;
           KaxCodecPrivate *kcodecpriv;
           KaxTrackFlagDefault *ktfdefault;
+          KaxTrackFlagLacing *ktflacing;
           KaxTrackLanguage *ktlanguage;
           KaxTrackMinCache *ktmincache;
+          KaxTrackMaxCache *ktmaxcache;
           KaxTrackName *ktname;
           KaxContentEncodings *kcencodings;
           int kcenc_idx;
@@ -990,6 +985,13 @@ int kax_reader_c::read_headers() {
               mxinfo(PFX "|  + MinCache: %u\n", uint32(*ktmincache));
             if (uint32(*ktmincache) > 1)
               track->v_bframes = true;
+            track->min_cache = uint32(*ktmincache);
+          }
+
+          ktmaxcache = FINDFIRST(ktentry, KaxTrackMaxCache);
+          if (ktmaxcache != NULL) {
+            mxverb(2, PFX "|  + MaxCache: %u\n", uint32(*ktmaxcache));
+            track->max_cache = uint32(*ktmaxcache);
           }
 
           ktfdefault = FINDFIRST(ktentry, KaxTrackFlagDefault);
@@ -998,6 +1000,13 @@ int kax_reader_c::read_headers() {
               mxinfo(PFX "|  + Default flag: %d\n", uint32(*ktfdefault));
             track->default_track = uint32(*ktfdefault);
           }
+
+          ktflacing = FINDFIRST(ktentry, KaxTrackFlagLacing);
+          if (ktflacing != NULL) {
+            mxverb(2, PFX "|  + Lacing flag: %d\n", uint32(*ktflacing));
+            track->lacing_flag = uint32(*ktflacing);
+          } else
+            track->lacing_flag = true;
 
           ktlanguage = FINDFIRST(ktentry, KaxTrackLanguage);
           if (ktlanguage != NULL) {
@@ -1021,6 +1030,7 @@ int kax_reader_c::read_headers() {
 
           kcencodings = FINDFIRST(ktentry, KaxContentEncodings);
           if (kcencodings != NULL) {
+            track->kax_c_encodings = new KaxContentEncodings(*kcencodings);
             for (kcenc_idx = 0; kcenc_idx < kcencodings->ListSize();
                  kcenc_idx++) {
               l3 = (*kcencodings)[kcenc_idx];
@@ -1174,9 +1184,7 @@ int kax_reader_c::read_headers() {
           }
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        if (verbose > 1)
-          mxinfo(PFX "|+ found cluster, headers are "
-                 "parsed completely :)\n");
+        mxverb(2, PFX "|+ found cluster, headers are parsed completely :)\n");
         saved_l1 = l1;
         exit_loop = true;
 
@@ -1229,6 +1237,71 @@ int kax_reader_c::read_headers() {
 
 // {{{ FUNCTION kax_reader_c::create_packetizers()
 
+
+void
+kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
+  passthrough_packetizer_c *ptzr;
+  track_info_c *nti;
+
+  mxverb(1, "+-> Using the passthrough output module for the %s "
+         "track with the ID %u.\n", MAP_TRACK_TYPE_STRING(t->type), t->tnum);
+
+  nti = new track_info_c(*ti);
+  nti->language = safestrdup(t->language);
+  nti->track_name = safestrdup(t->track_name);
+
+  ptzr = new passthrough_packetizer_c(this, nti);
+  t->packetizer = ptzr;
+  t->passthrough = true;
+
+  ptzr->set_track_type(MAP_TRACK_TYPE(t->type));
+  ptzr->set_codec_id(t->codec_id);
+  ptzr->set_codec_private((unsigned char *)t->private_data,
+                          t->private_size);
+  if (t->v_frate > 0.0)
+    ptzr->set_track_default_duration_ns((int64_t)(1000000000.0 / t->v_frate));
+  if (t->min_cache > 0)
+    ptzr->set_track_min_cache(t->min_cache);
+  if (t->max_cache > 0)
+    ptzr->set_track_max_cache(t->max_cache);
+
+  if (t->type == 'v') {
+    ptzr->set_video_pixel_width(t->v_width);
+    ptzr->set_video_pixel_height(t->v_height);
+    if (!ti->aspect_ratio_given) { // The user hasn't set it.
+      if (t->v_dwidth != 0)
+        ptzr->set_video_display_width(t->v_dwidth);
+      if (t->v_dheight != 0)
+        ptzr->set_video_display_height(t->v_dheight);
+    }
+    if (ptzr->get_cue_creation() == CUES_UNSPECIFIED)
+      ptzr->set_cue_creation(CUES_IFRAMES);
+
+  } else if (t->type == 'a') {
+    ptzr->set_audio_sampling_freq(t->a_sfreq);
+    ptzr->set_audio_channels(t->a_channels);
+    if (t->a_bps != 0)
+      ptzr->set_audio_bit_depth(t->a_bps);
+    if (t->a_osfreq != 0.0)
+      t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
+
+  } else {
+    // Nothing to do for subs, I guess.
+  }
+
+}
+
+void
+kax_reader_c::set_packetizer_headers(kax_track_t *t) {
+  if (t->default_track)
+    t->packetizer->set_as_default_track(MAP_TRACK_TYPE(t->type),
+                                        DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
+  if (t->tuid != 0)
+    if (!t->packetizer->set_uid(t->tuid))
+      mxwarn(PFX "Could not keep the track UID %u because it is already "
+             "allocated for the new file.\n", t->tuid);
+}
+
 void kax_reader_c::create_packetizer(int64_t tid) {
   uint32_t i;
   kax_track_t *t;
@@ -1253,23 +1326,37 @@ void kax_reader_c::create_packetizer(int64_t tid) {
       nti->language = safestrdup(t->language);
     if (nti->track_name == NULL)
       nti->track_name = safestrdup(t->track_name);
-
     nti->id = t->tnum;          // ID for this track.
+
+    if (hack_engaged(ENGAGE_FORCE_PASSTHROUGH_PACKETIZER)) {
+      init_passthrough_packetizer(t);
+      set_packetizer_headers(t);
+      delete nti;
+
+      return;
+    }
+
     switch (t->type) {
       case 'v':
-        if (verbose)
-          mxinfo("+-> Using video output module for track ID %u.\n",
+        if (!strncmp(t->codec_id, "V_MPEG4", 7) ||
+            !strcmp(t->codec_id, MKV_V_MSCOMP) ||
+            !strncmp(t->codec_id, "V_REAL", 6) ||
+            !strcmp(t->codec_id, MKV_V_QUICKTIME)) {
+          mxverb(1, "+-> Using video output module for track ID %u.\n",
                  t->tnum);
-        t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
-                                               t->v_width,
-                                               t->v_height,
-                                               t->v_bframes, nti);
-        if (!nti->aspect_ratio_given) { // The user didn't set it.
-          if (t->v_dwidth != 0)
-            t->packetizer->set_video_display_width(t->v_dwidth);
-          if (t->v_dheight != 0)
-            t->packetizer->set_video_display_height(t->v_dheight);
-        }
+          t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
+                                                 t->v_width,
+                                                 t->v_height,
+                                                 t->v_bframes, nti);
+          if (!nti->aspect_ratio_given) { // The user hasn't set it.
+            if (t->v_dwidth != 0)
+              t->packetizer->set_video_display_width(t->v_dwidth);
+            if (t->v_dheight != 0)
+              t->packetizer->set_video_display_height(t->v_dheight);
+          }
+        } else 
+          init_passthrough_packetizer(t);
+
         break;
 
       case 'a':
@@ -1367,24 +1454,6 @@ void kax_reader_c::create_packetizer(int64_t tid) {
             mxinfo("+-> Using the AAC output module for track ID %u.\n",
                    t->tnum);
 
-        } else if (t->a_formattag == FOURCC('r', 'e', 'a', 'l')) {
-          passthrough_packetizer_c *ptzr;
-
-          ptzr = new passthrough_packetizer_c(this, ti);
-          t->packetizer = ptzr;
-
-          ptzr->set_track_type(track_audio);
-          ptzr->set_codec_id(t->codec_id);
-          ptzr->set_codec_private((unsigned char *)t->private_data,
-                                  t->private_size);
-          ptzr->set_audio_sampling_freq(t->a_sfreq);
-          ptzr->set_audio_channels(t->a_channels);
-          if (t->a_bps != 0)
-            ptzr->set_audio_bit_depth(t->a_bps);
-
-          if (verbose)
-            mxinfo("+-> Using the generic audio output module for stream "
-                   "%u (CodecID: %s).\n", t->tnum, t->codec_id);
 #if defined(HAVE_FLAC_FORMAT_H)
         } else if ((t->a_formattag == FOURCC('f', 'L', 'a', 'C')) ||
                    (t->a_formattag == 0xf1ac)) {
@@ -1411,10 +1480,9 @@ void kax_reader_c::create_packetizer(int64_t tid) {
 
 #endif
         } else
-          mxerror(PFX "Unsupported audio track %s for track %d.\n",
-                  t->codec_id, t->tnum);
+          init_passthrough_packetizer(t);
 
-        if ((t->packetizer != NULL) && (t->a_osfreq != 0.0))
+        if (t->a_osfreq != 0.0)
           t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
 
         break;
@@ -1430,7 +1498,11 @@ void kax_reader_c::create_packetizer(int64_t tid) {
 
           t->sub_type = 'v';
 
-        } else {
+        } else if (!strncmp(t->codec_id, "S_TEXT", 6) ||
+                   !strcmp(t->codec_id, MKV_S_TEXTASS) ||
+                   !strcmp(t->codec_id, MKV_S_TEXTSSA) ||
+                   !strcmp(t->codec_id, "S_SSA") ||
+                   !strcmp(t->codec_id, "S_ASS")) {
           t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
                                                     t->private_data,
                                                     t->private_size, false,
@@ -1440,23 +1512,18 @@ void kax_reader_c::create_packetizer(int64_t tid) {
                    "%u.\n", t->tnum);
 
           t->sub_type = 't';
-        }
+        } else
+          init_passthrough_packetizer(t);
+
         break;
 
       default:
         mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
         break;
     }
-    if (t->default_track)
-      t->packetizer->set_as_default_track(MAP_TRACK_TYPE(t->type),
-                                          DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
-    if (t->tuid != 0)
-      if (!t->packetizer->set_uid(t->tuid))
-        mxwarn(PFX "Could not keep the track UID %u because it is already "
-               "allocated for the new file.\n", t->tuid);
+    set_packetizer_headers(t);
     delete nti;
   }
-
 }
 
 void kax_reader_c::create_packetizers() {
@@ -1553,11 +1620,6 @@ int kax_reader_c::read(generic_packetizer_c *) {
               (block_group->FindNextElt(*ref_block, false));
           }
 
-          duration = static_cast<KaxBlockDuration *>
-            (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
-          if (duration != NULL)
-            block_duration = (int64_t)uint64(*duration);
-
           block = static_cast<KaxBlock *>
             (block_group->FindFirstElt(KaxBlock::ClassInfos, false));
           if (block != NULL) {
@@ -1565,7 +1627,46 @@ int kax_reader_c::read(generic_packetizer_c *) {
             block_track = find_track_by_num(block->TrackNum());
           }
 
-          if ((block_track != NULL) && (block_track->packetizer != NULL)) {
+          if ((block_track != NULL) && (block_track->packetizer != NULL) &&
+              block_track->passthrough) {
+            duration = static_cast<KaxBlockDuration *>
+              (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
+            if (duration != NULL) {
+              int frames;
+
+              frames = block->NumberFrames();
+              block_duration = (int64_t)uint64(*duration) / frames;
+              ((passthrough_packetizer_c *)
+               block_track->packetizer)->force_duration(frames);
+            } else if (block_track->v_frate != 0)
+              block_duration = (int64_t)(1000.0 / block_track->v_frate);
+
+            last_timecode = block->GlobalTimecode() / 1000000;
+            if (bref_found)
+                block_bref += (int64_t)last_timecode;
+            if (fref_found)
+              block_fref += (int64_t)last_timecode;
+
+            for (i = 0; i < (int)block->NumberFrames(); i++) {
+              DataBuffer &data = block->GetBuffer(i);
+              block_track->packetizer->process((unsigned char *)data.Buffer(),
+                                               data.Size(),
+                                               (int64_t)last_timecode,
+                                               block_duration,
+                                               block_bref,
+                                               block_fref);
+            }
+
+          } else if ((block_track != NULL) &&
+                     (block_track->packetizer != NULL)) {
+            duration = static_cast<KaxBlockDuration *>
+              (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
+            if (duration != NULL)
+              block_duration = (int64_t)uint64(*duration) /
+                block->NumberFrames();
+            else if (block_track->v_frate != 0)
+              block_duration = (int64_t)(1000.0 / block_track->v_frate);
+
             if ((block_track->type == 's') && (block_duration == -1) &&
                 (block_track->sub_type == 't')) {
               mxwarn("Text subtitle block does not "
@@ -1739,11 +1840,21 @@ void kax_reader_c::set_headers() {
       t->headers_set = true;
     }
   }
-  for (i = 0; i < tracks.size(); i++)
+  for (i = 0; i < tracks.size(); i++) {
     if ((tracks[i]->packetizer != NULL) && !tracks[i]->headers_set) {
       tracks[i]->packetizer->set_headers();
       tracks[i]->headers_set = true;
     }
+    if ((tracks[i]->packetizer != NULL) && tracks[i]->passthrough) {
+      tracks[i]->packetizer->get_track_entry()->
+        EnableLacing(tracks[i]->lacing_flag);
+      if (tracks[i]->kax_c_encodings != NULL) {
+        tracks[i]->packetizer->get_track_entry()->
+          PushElement(*tracks[i]->kax_c_encodings);
+        tracks[i]->kax_c_encodings = NULL;
+      }
+    }
+  }
 }
 
 // }}}
@@ -1863,6 +1974,8 @@ bool kax_reader_c::reverse_encodings(kax_track_t *track, unsigned char *&data,
   compression_c *compressor;
 
   if (track->c_encodings->size() == 0)
+    return false;
+  if (track->passthrough)
     return false;
 
   new_data = data;

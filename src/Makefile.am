@@ -15,6 +15,8 @@ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) \
 	-Icommon -Iinput -Ioutput
 
+CXXFLAGS = @CXXFLAGS@ -Wshadow
+
 LDFLAGS = @LDFLAGS@ $(avilib0_6_10_libdirs) $(aviclasses_libdirs) \
 	-Lcommon -Linput -Loutput
 

@@ -31,6 +31,7 @@
 #define ENGAGE_NATIVE_BFRAMES "native_bframes"
 #define ENGAGE_NO_VARIABLE_DATA "no_variable_data"
 #define ENGAGE_SAVE_DEFAULT_HEADER_VALUES "save_default_header_values"
+#define ENGAGE_FORCE_PASSTHROUGH_PACKETIZER "force_passthrough_packetizer"
 
 bool hack_engaged(const char *hack);
 

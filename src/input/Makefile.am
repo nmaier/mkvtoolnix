@@ -11,6 +11,8 @@ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) \
 	-I$(top_srcdir)/src/common -I$(top_srcdir)/src/output
 
+CXXFLAGS = @CXXFLAGS@ -Wshadow
+
 noinst_LIBRARIES = libmtxinput.a
 
 libmtxinput_a_SOURCES = r_aac.cpp \

@@ -11,6 +11,8 @@ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) \
 	-I../common
 
+CXXFLAGS = @CXXFLAGS@ -Wshadow
+
 noinst_LIBRARIES = libmtxoutput.a
 
 libmtxoutput_a_SOURCES = p_aac.cpp \
