@@ -1966,7 +1966,7 @@ parse_args(int argc,
       if (next_arg == NULL)
         mxerror(_("'--attachment-mime-type' lacks the MIME type.\n"));
 
-      if (attachment->description != NULL)
+      if (attachment->mime_type != NULL)
         mxwarn(_("More than one MIME type was given for a single attachment. "
                  "'%s' will be discarded and '%s' used instead.\n"),
                attachment->mime_type, next_arg);
