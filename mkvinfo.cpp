@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.10 2003/04/17 16:18:04 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.11 2003/04/17 17:23:26 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -54,6 +54,7 @@
 #include "KaxClusterData.h"
 #include "KaxBlock.h"
 #include "KaxCues.h"
+#include "KaxBlockData.h"
 
 #include "common.h"
 
@@ -591,6 +592,30 @@ void process_file() {
                           data.Size());
                 }
 
+              } else if (EbmlId(*l3) ==
+                         KaxBlockDuration::ClassInfos.GlobalId) {
+                KaxBlockDuration &duration =
+                  *static_cast<KaxBlockDuration *>(l3);
+                duration.ReadData(es->I_O());
+                fprintf(stdout, "(%s) | + block duration: %.3fms", NAME,
+                        ((float)uint64(duration)) * tc_scale /
+                        1000000000000.0);
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxReferenceBlock::ClassInfos.GlobalId) {
+                KaxReferenceBlock &reference =
+                  *static_cast<KaxReferenceBlock *>(l3);
+                reference.ReadData(es->I_O());
+                fprintf(stdout, "(%s) | + reference block: %.3fms", NAME,
+                        ((float)int64(reference)) * tc_scale /
+                        1000000000000.0);
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
               } else {
                  fprintf(stdout, "(%s) |  + unknown element, level 3: %s",
                          NAME, typeid(*l3).name());
@@ -615,6 +640,7 @@ void process_file() {
                                     0xFFFFFFFFL, true);
               }
             } // while (l3 != NULL)
+
           } else {
             fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
                     typeid(*l2).name());
