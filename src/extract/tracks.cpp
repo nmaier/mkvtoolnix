@@ -568,8 +568,8 @@ create_output_files() {
         } else if (tracks[i].type == FILE_TYPE_SSA) {
           char *s, *p1;
           unsigned char *pd;
-          int bom_len;
-          string sconv;
+          int bom_len, pos1, pos2;
+          string sconv, format;
 
           pd = (unsigned char *)tracks[i].private_data;
           bom_len = 0;
@@ -612,6 +612,20 @@ create_output_files() {
           } else if ((sconv.length() == 0) ||
                      (sconv[sconv.length()- 1] != '\n'))
             sconv += "\n";
+
+          // Keep the Format: line so that the extracted file has the
+          // correct field order.
+          pos1 = sconv.find("Format:", sconv.find("[Events]"));
+          if (pos1 < 0)
+            mxerror("Internal bug: tracks.cpp SSA #1. %s", BUGMSG);
+          pos2 = sconv.find("\n", pos1);
+          if (pos2 < 0)
+            pos2 = sconv.length();
+          format = sconv.substr(pos1 + 7, pos2 - pos1 - 7);
+          tracks[i].ssa_format = split(format, ",");
+          strip(tracks[i].ssa_format);
+          for (pos1 = 0; pos1 < tracks[i].ssa_format.size(); pos1++)
+            tracks[i].ssa_format[pos1] = downcase(tracks[i].ssa_format[pos1]);
 
           sconv = from_utf8(tracks[i].conv_handle, sconv);
           tracks[i].out->puts_unl(sconv);
@@ -775,6 +789,11 @@ handle_data(KaxBlock *block,
         break;
 
       case FILE_TYPE_SSA:
+        static const char *kax_ssa_fields[10] = {
+          "readorder", "layer", "style", "name", "marginl", "marginr",
+          "marginv", "effect", "text", NULL
+        };
+
         if ((end == start) && !track->warning_printed) {
           mxwarn(_("Subtitle track %lld is missing some duration elements. "
                    "Please check the resulting SSA/ASS file for entries that "
@@ -813,43 +832,37 @@ handle_data(KaxBlock *block,
         // Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect,
         // Text
 
-        if (!strcmp(track->codec_id, MKV_S_TEXTSSA))
-          line = string("Dialogue: Marked=0,") +
-            // Append the start and end time.
-            mxsprintf("%lld:%02lld:%02lld.%02lld",
-                      start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
-                      (start / 1000) % 60, (start % 1000) / 10) + comma +
-            mxsprintf("%lld:%02lld:%02lld.%02lld",
-                      end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
-                      (end / 1000) % 60, (end % 1000) / 10) + comma +
-            // Append the other fields.
-            fields[2] + comma + // Style
-            fields[3] + comma + // Name
-            fields[4] + comma + // MarginL
-            fields[5] + comma + // MarginR
-            fields[6] + comma + // MarginV
-            fields[7] + comma + // Effect
-            fields[8] + string("\n"); // Text
+        // Problem is that the CodecPrivate may contain a Format: line
+        // that defines a different layout. So let's account for that.
 
-        else
-          line = string("Dialogue: ") +
-            fields[1] + comma + // Layer
-            mxsprintf("%lld:%02lld:%02lld.%02lld",
-                      start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
-                      (start / 1000) % 60, (start % 1000) / 10) + comma +
-            mxsprintf("%lld:%02lld:%02lld.%02lld",
-                      end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
-                      (end / 1000) % 60, (end % 1000) / 10) + comma +
-            fields[2] + comma + // Style
-            comma +             // Actor
-            fields[4] + comma + // MarginL
-            fields[5] + comma + // MarginR
-            fields[6] + comma + // MarginV
-            fields[7] + comma + // Effect
-            fields[8] + string("\n"); // Text
+        line = "Dialogue: ";
+        for (i = 0; i < track->ssa_format.size(); i++) {
+          string &format = track->ssa_format[i];
+
+          if (i > 0)
+            line += ",";
+          if (format == "marked")
+            line += "Marked=0";
+          else if (format == "start")
+            line += mxsprintf("%lld:%02lld:%02lld.%02lld",
+                              start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
+                              (start / 1000) % 60, (start % 1000) / 10);
+          else if (format == "end")
+            line += mxsprintf("%lld:%02lld:%02lld.%02lld",
+                              end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
+                              (end / 1000) % 60, (end % 1000) / 10);
+          else {
+            for (k = 0; kax_ssa_fields[k] != NULL; k++)
+              if (format == kax_ssa_fields[k]) {
+                line += fields[k];
+                break;
+              }
+          }
+        }
 
         // Do the charset conversion.
         line = from_utf8(track->conv_handle, line);
+        line += "\n";
 
         // Now store that entry.
         ssa_line.num = num;

@@ -73,6 +73,7 @@ typedef struct {
   char *sub_charset;
   int conv_handle;
   vector<ssa_line_c> ssa_lines;
+  vector<string> ssa_format;
   bool warning_printed;
 
   wave_header wh;
