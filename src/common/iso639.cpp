@@ -270,6 +270,7 @@ const iso639_language_t iso639_languages[] =
    {"Kimbundu", "kmb", NULL},
    {"Kinyarwanda", "kin", "rw"},
    {"Kirghiz", "kir", "ky"},
+   {"Klingon; tlhlngan-Hol", "tlh", NULL},
    {"Komi", "kom", "kv"},
    {"Kongo", "kon", "kg"},
    {"Konkani", "kok", NULL},
