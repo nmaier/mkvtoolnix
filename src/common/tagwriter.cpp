@@ -91,8 +91,7 @@ write_xml_element_rec(int level,
   EbmlMaster *m;
   int elt_idx, i;
   bool found;
-  char *s;
-  string x;
+  string s;
 
   elt_idx = parent_idx;
   found = false;
@@ -146,16 +145,15 @@ write_xml_element_rec(int level,
       break;
 
     case ebmlt_string:
-      x = escape_xml(string(*dynamic_cast<EbmlString *>(e)).c_str());
-      out->printf("%s</%s>\n", x.c_str(), tag_elements[elt_idx].name);
+      s = escape_xml(string(*dynamic_cast<EbmlString *>(e)));
+      out->printf("%s</%s>\n", s.c_str(), tag_elements[elt_idx].name);
       break;
 
     case ebmlt_ustring:
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
-      x = escape_xml(s);
-      out->printf("%s</%s>\n", x.c_str(), tag_elements[elt_idx].name);
-      safefree(s);
+      s = escape_xml(s);
+      out->printf("%s</%s>\n", s.c_str(), tag_elements[elt_idx].name);
       break;
 
     case ebmlt_time:

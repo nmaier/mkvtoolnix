@@ -694,8 +694,6 @@ convert_old_tags(KaxTag *tag) {
   KaxTagName *kname;
   KaxTagString *kvalue;
   string name, value;
-  char *tmp;
-  bool found;
   int i;
 
   targets = &GetChild<KaxTagTargets>(*tag);
@@ -709,12 +707,8 @@ convert_old_tags(KaxTag *tag) {
     kname = FINDFIRST(simple, KaxTagName);
     kvalue = FINDFIRST(simple, KaxTagString);
     if ((kname != NULL) && (kvalue != NULL)) {
-      tmp = UTFstring_to_cstrutf8((const UTFstring &)(*kname));
-      name = tmp;
-      safefree(tmp);
-      tmp = UTFstring_to_cstrutf8((const UTFstring &)(*kvalue));
-      value = tmp;
-      safefree(tmp);
+      name = UTFstring_to_cstrutf8((const UTFstring &)(*kname));
+      value = UTFstring_to_cstrutf8((const UTFstring &)(*kvalue));
       if (name == "CATALOG")
         *static_cast<EbmlUnicodeString *>(kname) =
           cstrutf8_to_UTFstring("CATALOG_NUMBER");

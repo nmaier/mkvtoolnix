@@ -894,14 +894,10 @@ kax_reader_c::read_headers() {
 
         ktitle = FINDFIRST(l1, KaxTitle);
         if (ktitle != NULL) {
-          char *tmp;
-          tmp = UTFstring_to_cstr(UTFstring(*ktitle));
+          title = UTFstring_to_cstr(UTFstring(*ktitle));
           if (verbose > 1)
-            mxinfo(PFX "| + title: %s\n", tmp);
-          safefree(tmp);
-          tmp = UTFstring_to_cstrutf8(UTFstring(*ktitle));
-          title = tmp;
-          safefree(tmp);
+            mxinfo(PFX "| + title: %s\n", title.c_str());
+          title = UTFstring_to_cstrutf8(UTFstring(*ktitle));
         }
 
         // Let's try to parse the "writing application" string. This usually
@@ -920,17 +916,14 @@ kax_reader_c::read_headers() {
         // store a lower case version of the first as the application's name.
         kwriting_app = FINDFIRST(l1, KaxWritingApp);
         if (kwriting_app != NULL) {
-          char *tmp;
           int idx;
           vector<string> parts, ver_parts;
           string s;
 
-          tmp = UTFstring_to_cstrutf8(UTFstring(*kwriting_app));
-          if (verbose > 1)
-            mxinfo(PFX "| + writing app: %s\n", tmp);
-          s = tmp;
-          safefree(tmp);
+          s = UTFstring_to_cstrutf8(UTFstring(*kwriting_app));
           strip(s);
+          if (verbose > 1)
+            mxinfo(PFX "| + writing app: %s\n", s.c_str());
           if (starts_with_case(s, "avi-mux gui"))
             s.replace(0, strlen("avi-mux gui"), "avimuxgui");
 
@@ -1252,14 +1245,12 @@ kax_reader_c::read_headers() {
 
           ktname = FINDFIRST(ktentry, KaxTrackName);
           if (ktname != NULL) {
-            char *tmp;
             safefree(track->track_name);
             track->track_name =
-              UTFstring_to_cstrutf8(UTFstring(*ktname));
-            tmp = UTFstring_to_cstr(UTFstring(*ktname));
+              safestrdup(UTFstring_to_cstrutf8(UTFstring(*ktname)).c_str());
             if (verbose > 1)
-              mxinfo(PFX "|  + Name: %s\n", tmp);
-            safefree(tmp);
+              mxinfo(PFX "|  + Name: %s\n",
+                     UTFstring_to_cstr(UTFstring(*ktname)).c_str());
           }
 
           kcencodings = FINDFIRST(ktentry, KaxContentEncodings);
@@ -2115,11 +2106,10 @@ void
 kax_reader_c::identify() {
   int i;
   string info;
-  char *str;
 
   if (identify_verbose && (title.length() > 0))
     mxinfo("File '%s': container: Matroska [title:%s]\n", ti->fname,
-           escape(title.c_str()).c_str());
+           escape(title).c_str());
   else
     mxinfo("File '%s': container: Matroska\n", ti->fname);
   for (i = 0; i < tracks.size(); i++)
@@ -2158,18 +2148,14 @@ kax_reader_c::identify() {
     mxinfo("Attachment ID %lld: type '%s', size %lld bytes, ",
            attachments[i].id, attachments[i].mime_type.c_str(),
            attachments[i].size);
-    if (attachments[i].description.length() > 0) {
-      str = UTFstring_to_cstr(attachments[i].description.c_str());
-      mxinfo("description '%s', ", str);
-      safefree(str);
-    }
+    if (attachments[i].description.length() > 0)
+      mxinfo("description '%s', ",
+             UTFstring_to_cstr(attachments[i].description).c_str());
     if (attachments[i].name.length() == 0)
       mxinfo("no file name given\n");
-    else {
-      str = UTFstring_to_cstr(attachments[i].name.c_str());
-      mxinfo("file name '%s'\n", str);
-      safefree(str);
-    }
+    else
+      mxinfo("file name '%s'\n",
+             UTFstring_to_cstr(attachments[i].name).c_str());
   }
 }
 

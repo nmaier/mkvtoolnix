@@ -80,18 +80,12 @@ get_simple_tag(const char *name,
       if (utname == uname) {
         KaxTagString *tvalue;
         tvalue = FINDFIRST(m[i], KaxTagString);
-        if (tvalue != NULL) {
-          char *value;
-
-          value =
+        if (tvalue != NULL)
+          return
             UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
                                             (tvalue)));
-          rvalue = value;
-          safefree(value);
-          return rvalue;
-        } else {
+        else
           return "";
-        }
       }
     }
 
@@ -194,33 +188,23 @@ get_chapter_index(int idx,
 static string
 get_simple_tag_name(KaxTagSimple &tag) {
   KaxTagName *tname;
-  string result;
-  char *name;
 
   tname = FINDFIRST(&tag, KaxTagName);
   if (tname == NULL)
     return "";
-  name = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
+  return UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
                                          (tname)));
-  result = name;
-  safefree(name);
-  return result;
 }
 
 static string
 get_simple_tag_value(KaxTagSimple &tag) {
   KaxTagString *tstring;
-  string result;
-  char *value;
 
   tstring = FINDFIRST(&tag, KaxTagString);
   if (tstring == NULL)
     return "";
-  value = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
-                                          (tstring)));
-  result = value;
-  safefree(value);
-  return result;
+  return UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>
+                                         (tstring)));
 }
 
 #define print_if_global(name, format) \

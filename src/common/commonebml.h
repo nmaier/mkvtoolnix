@@ -18,9 +18,12 @@
 
 #include "os.h"
 
+#include <string>
+
 #include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUnicodeString.h>
 
+using namespace std;
 using namespace libebml;
 
 #if defined(DEBUG)
@@ -32,11 +35,11 @@ void MTX_DLL_API __debug_dump_elements(EbmlElement *e, int level);
 
 #define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
 
-bool MTX_DLL_API is_valid_utf8_string(const char *c);
-UTFstring MTX_DLL_API cstr_to_UTFstring(const char *c);
-UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const char *c);
-char *MTX_DLL_API UTFstring_to_cstr(const UTFstring &u);
-char *MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
+bool MTX_DLL_API is_valid_utf8_string(const string &c);
+UTFstring MTX_DLL_API cstr_to_UTFstring(const string &c);
+UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const string &c);
+string MTX_DLL_API UTFstring_to_cstr(const UTFstring &u);
+string MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
 
 #define is_id(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
 

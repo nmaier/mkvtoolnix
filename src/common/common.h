@@ -219,9 +219,9 @@ vector<string> MTX_DLL_API split(const char *src, const char *pattern = ",",
 string MTX_DLL_API join(const char *pattern, vector<string> &strings);
 void MTX_DLL_API strip(string &s, bool newlines = false);
 void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
-string MTX_DLL_API escape(const char *src);
-string MTX_DLL_API escape_xml(const char *src);
-string MTX_DLL_API unescape(const char *src);
+string MTX_DLL_API escape(const string &src);
+string MTX_DLL_API escape_xml(const string &src);
+string MTX_DLL_API unescape(const string &src);
 bool MTX_DLL_API starts_with(const string &s, const char *start);
 bool MTX_DLL_API starts_with(const string &s, const string &start);
 bool MTX_DLL_API starts_with_case(const string &s, const char *start);

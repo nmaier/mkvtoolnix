@@ -157,31 +157,15 @@ usage() {
 #endif
 }
 
-string
-UTFstring_to_string_local(const UTFstring &src) {
-  string retval;
-  char *str;
-  str = UTFstring_to_cstr(src);
-  retval = str;
-  safefree(str);
-  return retval;
-}
-
 #if defined(HAVE_WXWINDOWS) && WXUNICODE
 string
 UTFstring_to_string(const UTFstring &src) {
-  string retval;
-  char *str;
-
   if (!use_gui)
-    return UTFstring_to_string_local(src);
-  str = UTFstring_to_cstrutf8(src);
-  retval = str;
-  safefree(str);
-  return retval;
+    return UTFstring_to_cstr(src);
+  return UTFstring_to_cstrutf8(src);
 }
 #else  // HAVE_WXWINDOWS && WXUNICODE
-#define UTFstring_to_string(src) UTFstring_to_string_local(src)
+#define UTFstring_to_string(src) UTFstring_to_cstr(src)
 #endif // HAVE_WXWINDOWS && WXUNICODE
 #define UTF2STR(s) UTFstring_to_string(UTFstring(s)).c_str()
 
@@ -1654,8 +1638,7 @@ handle_elements_rec(EbmlStream *es,
   EbmlMaster *m;
   int elt_idx, i;
   bool found;
-  string format, s2;
-  char *s;
+  string format, s;
 
   found = false;
   for (elt_idx = 0; mapping[elt_idx].name != NULL; elt_idx++)
@@ -1695,8 +1678,7 @@ handle_elements_rec(EbmlStream *es,
       format += ": %s";
       s = UTFstring_to_cstr(UTFstring(*static_cast
                                       <EbmlUnicodeString *>(e)).c_str());
-      show_element(e, level, format.c_str(), s);
-      safefree(s);
+      show_element(e, level, format.c_str(), s.c_str());
       break;
 
     case ebmlt_time:
@@ -1707,8 +1689,8 @@ handle_elements_rec(EbmlStream *es,
 
     case ebmlt_binary:
       format += ": %s";
-      s2 = format_binary(*static_cast<EbmlBinary *>(e));
-      show_element(e, level, format.c_str(), s2.c_str());
+      s = format_binary(*static_cast<EbmlBinary *>(e));
+      show_element(e, level, format.c_str(), s.c_str());
       break;
 
     default:

@@ -54,40 +54,31 @@ __debug_dump_elements(EbmlElement *e,
  */
 
 UTFstring
-cstr_to_UTFstring(const char *c) {
+cstr_to_UTFstring(const string &c) {
+  wchar_t *new_string;
+  UTFstring u;
+  int len;
+
+  len = c.length();
+  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
 #if defined(COMP_MSC) || defined(COMP_MINGW)
-  wchar_t *new_string;
-  int len;
-  UTFstring u;
-
-  len = strlen(c);
-  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
   MultiByteToWideChar(CP_ACP, 0, c, -1, new_string, len + 1);
-
   u = new_string;
-  safefree(new_string);
-
-  return u;
 #else
-  wchar_t *new_string;
   char *old_locale;
-  UTFstring u;
-  int len;
 
-  len = strlen(c);
-  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
   memset(new_string, 0, (len + 1) * sizeof(wchar_t));
   new_string[len] = L'\0';
   old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
   setlocale(LC_CTYPE, "");
-  mbstowcs(new_string, c, len);
+  mbstowcs(new_string, c.c_str(), len);
   setlocale(LC_CTYPE, old_locale);
   safefree(old_locale);
   u = UTFstring(new_string);
+#endif
   safefree(new_string);
 
   return u;
-#endif
 }
 
 static int
@@ -132,12 +123,12 @@ wchar_to_utf8_byte_length(uint32_t w) {
 }
 
 UTFstring
-cstrutf8_to_UTFstring(const char *c) {
+cstrutf8_to_UTFstring(const string &c) {
   wchar_t *new_string;
   int slen, dlen, src, dst, clen;
   UTFstring u;
 
-  slen = strlen(c);
+  slen = c.length();
   dlen = 0;
   for (src = 0; src < slen; dlen++) {
     clen = utf8_byte_length(c[src]);
@@ -201,23 +192,22 @@ cstrutf8_to_UTFstring(const char *c) {
   return u;
 }
 
-char *
+string
 UTFstring_to_cstr(const UTFstring &u) {
-#if defined(COMP_MSC) || defined(COMP_MINGW)
+  string retval;
   char *new_string;
   int len;
+
+#if defined(COMP_MSC) || defined(COMP_MINGW)
   BOOL dummy;
 
   len = u.length();
   new_string = (char *)safemalloc(len + 1);
   WideCharToMultiByte(CP_ACP, 0, u.c_str(), -1, new_string, len + 1, " ",
                       &dummy);
-
-  return new_string;
 #else
   const wchar_t *sptr;
-  char *new_string, *old_locale;
-  int len;
+  char *old_locale;
 
   len = u.length();
   new_string = (char *)safemalloc(len * 4 + 1);
@@ -229,16 +219,19 @@ UTFstring_to_cstr(const UTFstring &u) {
   new_string[len * 4] = 0;
   setlocale(LC_CTYPE, old_locale);
   safefree(old_locale);
-
-  return new_string;
 #endif
+  retval = new_string;
+  safefree(new_string);
+
+  return retval;
 }
 
-char *
+string
 UTFstring_to_cstrutf8(const UTFstring &u) {
   int src, dst, dlen, slen, clen;
   unsigned char *new_string;
   uint32_t uc;
+  string retval;
 
   dlen = 0;
   slen = u.length();
@@ -246,7 +239,7 @@ UTFstring_to_cstrutf8(const UTFstring &u) {
   for (src = 0, dlen = 0; src < slen; src++)
     dlen += wchar_to_utf8_byte_length((uint32_t)u[src]);
 
-  new_string = (unsigned char *)malloc(dlen + 1);
+  new_string = (unsigned char *)safemalloc(dlen + 1);
 
   for (src = 0, dst = 0; src < slen; src++) {
     uc = (uint32_t)u[src];
@@ -291,16 +284,18 @@ UTFstring_to_cstrutf8(const UTFstring &u) {
   }
 
   new_string[dst] = 0;
+  retval = (char *)new_string;
+  safefree(new_string);
 
-  return (char *)new_string;
+  return retval;
 }
 
 bool
-is_valid_utf8_string(const char *c) {
+is_valid_utf8_string(const string &c) {
   int slen, dlen, src, clen;
   UTFstring u;
 
-  slen = strlen(c);
+  slen = c.length();
   dlen = 0;
   for (src = 0; src < slen; dlen++) {
     clen = utf8_byte_length(c[src]);
