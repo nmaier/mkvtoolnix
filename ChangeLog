@@ -1,5 +1,8 @@
 2004-07-24  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: new feature: Added support for extracting TTA tracks
+	to TTA files.
+
 	* mkvmerge: bug fix: SRT file recognition failed if the file
 	contained spaces at the end of the first line.
 

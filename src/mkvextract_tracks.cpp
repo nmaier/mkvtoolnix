@@ -71,14 +71,18 @@ extern "C" {
 #include <matroska/KaxTrackVideo.h>
 
 #include "chapters.h"
+#include "checksums.h"
 #include "common.h"
 #include "librmff.h"
 #include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"
+#include "tta_common.h"
 
 using namespace libmatroska;
 using namespace std;
+
+static const double tta_frame_time = 1.04489795918367346939l;
 
 int conv_utf8;
 vector<rmff_file_t *> rmfiles;
@@ -351,6 +355,16 @@ check_output_files() {
 
           tracks[i].type = TYPEREAL;
 
+        } else if (!strcmp(tracks[i].codec_id, MKV_A_TTA)) {
+          if (tracks[i].a_bps == 0) {
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
+            continue;
+          }
+
+          tracks[i].type = TYPETTA;
+
         } else {
           mxwarn(_("Unsupported CodecID '%s' for ID %lld. "
                    "The track will be skipped.\n"), tracks[i].codec_id,
@@ -417,7 +431,7 @@ create_output_files() {
         AVI_set_video(tracks[i].avi, tracks[i].v_width, tracks[i].v_height,
                       tracks[i].v_fps, ccodec);
 
-        mxinfo(_("Track ID %lld is extracted to an AVI file '%s'.\n"),
+        mxinfo(_("Track ID %lld is being extracted to an AVI file '%s'.\n"),
                tracks[i].tid, tracks[i].out_name);
 
       } else if (tracks[i].type == TYPEREAL) {
@@ -438,6 +452,19 @@ create_output_files() {
           rmff_set_track_data(tracks[i].rmtrack, "Audio",
                               "audio/x-pn-realaudio");
 
+      } else if (tracks[i].type == TYPETTA) {
+        string dummy_out_name;
+
+        try {
+          dummy_out_name = mxsprintf("%s.temp-tta-extraction-%u",
+                                     tracks[i].out_name,
+                                     (uint32_t)time(NULL));
+          tracks[i].out = new mm_io_c(dummy_out_name.c_str(), MODE_CREATE);
+        } catch (exception &ex) {
+          mxerror(_(" The file '%s' could not be opened for writing (%s).\n"),
+                  dummy_out_name.c_str(), strerror(errno));
+        }
+
       } else {
 
         try {
@@ -447,7 +474,7 @@ create_output_files() {
                   tracks[i].out_name, strerror(errno));
         }
 
-        mxinfo(_("Track ID %lld is extracted to a %s file '%s'.\n"),
+        mxinfo(_("Track ID %lld is being extracted to a %s file '%s'.\n"),
                tracks[i].tid, typenames[tracks[i].type],
                tracks[i].out_name);
 
@@ -616,8 +643,9 @@ handle_data(KaxBlock *block,
       case TYPEAVI:
         AVI_write_frame(track->avi, (char *)data.Buffer(), data.Size(),
                         has_ref ? 0 : 1);
-        if (iabs(block_duration - (int64_t)(1000.0 / track->v_fps)) > 1) {
-          int nfr = irnd(block_duration * track->v_fps / 1000.0);
+        if (iabs(block_duration / 1000000 -
+                 (int64_t)(1000.0 / track->v_fps)) > 1) {
+          int nfr = irnd(block_duration / 1000000 * track->v_fps / 1000.0);
           for (k = 2; k <= nfr; k++)
             AVI_write_frame(track->avi, "", 0, 0);
         }
@@ -866,6 +894,12 @@ handle_data(KaxBlock *block,
         rmff_release_frame(rmf_frame);
         break;
 
+      case TYPETTA:
+        track->frame_sizes.push_back(data.Size());
+        if (block_duration > 0)
+          track->last_duration = block_duration;
+        // Intended fallthrough.
+
       default:
         track->out->write(data.Buffer(), data.Size());
         track->bytes_written += data.Size();
@@ -953,6 +987,74 @@ close_files() {
           delete tracks[i].out;
 
           break;
+
+        case TYPETTA: {
+          mm_io_c *tta_file;
+          tta_file_header_t tta_header;
+          vector<int64_t>::iterator frame_size;
+          unsigned char *buffer;
+          uint32_t crc;
+          int nread;
+          string file_name;
+
+          try {
+            tta_file = new mm_io_c(tracks[i].out_name, MODE_CREATE);
+          } catch (exception &ex) {
+            mxerror(_(" The file '%s' could not be opened for writing (%s)."
+                      "\n"), tracks[i].out_name, strerror(errno));
+          }
+
+          memcpy(tta_header.signature, "TTA1", 4);
+          if (tracks[i].a_bps != 3)
+            put_uint16(&tta_header.audio_format, 1);
+          else
+            put_uint16(&tta_header.audio_format, 3);
+          put_uint16(&tta_header.channels, tracks[i].a_channels);
+          put_uint16(&tta_header.bits_per_sample, tracks[i].a_bps);
+          put_uint32(&tta_header.sample_rate, (int)tracks[i].a_sfreq);
+          mxverb(2, "bw: %lld num: %d\n", tracks[i].bytes_written,
+                 tracks[i].frame_sizes.size());
+          if (tracks[i].last_duration <= 0)
+            tracks[i].last_duration = (int64_t)(TTA_FRAME_TIME *
+                                                tracks[i].a_sfreq) *
+              1000000000ll;
+          mxverb(2, "ladu: %lld\n", tracks[i].last_duration);
+          put_uint32(&tta_header.data_length,
+                     (uint32_t)(tracks[i].a_sfreq *
+                                (TTA_FRAME_TIME *
+                                 (tracks[i].frame_sizes.size() - 1) +
+                                 (double)tracks[i].last_duration /
+                                 1000000000.0l)));
+          put_uint32(&tta_header.crc,
+                     calc_crc32((unsigned char *)&tta_header,
+                                sizeof(tta_file_header_t) - 4));
+          tta_file->write(&tta_header, sizeof(tta_file_header_t));
+          buffer = (unsigned char *)safemalloc(tracks[i].frame_sizes.size() *
+                                               4);
+          for (k = 0; k < tracks[i].frame_sizes.size(); k++)
+            put_uint32(buffer + 4 * k, tracks[i].frame_sizes[k]);
+          tta_file->write(buffer, tracks[i].frame_sizes.size() * 4);
+          crc = calc_crc32(buffer, tracks[i].frame_sizes.size() * 4);
+          mxverb(2, "crc: 0x%08x\n", crc);
+          tta_file->write_uint32(crc);
+          safefree(buffer);
+
+          buffer = (unsigned char *)safemalloc(128000);
+          tracks[i].out->setFilePointer(0);
+          do {
+            nread = tracks[i].out->read(buffer, 128000);
+            if (tta_file->write(buffer, nread) != nread)
+              mxerror(_("Writing %d bytes to the final TTA file failed while "
+                        "copying the temporary file. Perhaps the hard disk "
+                        "is full.\n"), nread);
+          } while (nread == 128000);
+
+          file_name = tracks[i].out->get_file_name();
+          delete tta_file;
+          delete tracks[i].out;
+          unlink(file_name.c_str());
+          break;
+        }
 
         default:
           delete tracks[i].out;
@@ -1350,7 +1452,7 @@ extract_tracks(const char *file_name) {
                              (float)uint64(def_duration) / 1000000.0,
                              1000000000.0 / (float)uint64(def_duration));
                 v_fps = 1000000000.0 / (float)uint64(def_duration);
-                default_duration = uint64(def_duration) / 1000000;
+                default_duration = uint64(def_duration);
 
               } else
                 l3->SkipData(*es, l3->Generic().Context);
@@ -1483,7 +1585,7 @@ extract_tracks(const char *file_name) {
                 duration.ReadData(es->I_O());
                 show_element(l3, 3, _("Block duration: %.3fms"),
                              ((float)uint64(duration)) * tc_scale / 1000000.0);
-                block_duration = uint64(duration) * tc_scale / 1000000;
+                block_duration = uint64(duration) * tc_scale;
 
               } else if (EbmlId(*l3) ==
                          KaxReferenceBlock::ClassInfos.GlobalId) {

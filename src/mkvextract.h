@@ -90,6 +90,10 @@ typedef struct {
 
   bool embed_in_ogg;
   bool extract_cuesheet;
+
+  // Needed for TTA.
+  vector<int64_t> frame_sizes;
+  int64_t last_duration;
 } kax_track_t;
 
 extern vector<kax_track_t> tracks;

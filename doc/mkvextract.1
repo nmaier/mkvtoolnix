@@ -142,6 +142,12 @@ Vorbis audio will be written into an Ogg/Vorbis file.
 A_REAL/*
 RealAudio tracks are written to RealMedia files.
 .TP
+A_TTA1
+TrueAudio tracks are written to TTA files. Please note that due to Matroska's
+limited timecode precision the extracted file's header will be different
+regarding two fields: data_length (the total number of samples in the file)
+and the CRC.
+.TP
 S_TEXT/UTF8
 Simple text subtitles will be written as SRT files.
 .TP
