@@ -690,8 +690,9 @@ bool process_file(const char *file_name) {
 
           } else if (is_id(l2, KaxDuration)) {
             KaxDuration &duration = *static_cast<KaxDuration *>(l2);
-            show_element(l2, 2, "Duration: %.3fs",
-                         float(duration) * tc_scale / 1000000000.0);
+            show_element(l2, 2, "Duration: %.3fs (" FMT_TIMECODE ")",
+                         float(duration) * tc_scale / 1000000000.0,
+                         ARG_TIMECODE_NS(float(duration) * tc_scale));
 
           } else if (is_id(l2, KaxMuxingApp)) {
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
