@@ -23,7 +23,7 @@
   \brief The RealMedia file format library
   \author Moritz Bunkus <moritz@bunkus.org>
 
-  \version $Id$
+  $Id$
 */
 
 /** \mainpage
@@ -57,7 +57,7 @@
   rmff_frame_t *frame;
 
   file = rmff_open_file("sample_file.rm", RMFF_OPEN_MODE_READING);
-  if (file != NULL) {
+  if (file == NULL) {
     // Handle the error.
     return;
   }
@@ -72,12 +72,57 @@
   rmff_close_file(file);
   \endcode
 
+  \subsection creating_new Creating a new file
+
+  Creating a new file is a bit more complex. This library only provides a
+  low level codec independant layer to the RealMedia file format.
+
+  Creating a new file involves the following step in this particular order:
+  -# open a new file with \c RMFF_OPEN_MODR_WRITING,
+  -# add track entries with ::rmff_add_track,
+  -# write the headers with ::rmff_write_headers,
+  -# write all the frames with ::rmff_write_frame,
+  -# optionally write the indexes with ::rmff_write_index,
+  -# fix all the headers with ::rmff_fix_headers and
+  -# close the file with ::rmff_close_file.
+
+  Please note that the error handling is not shown in the following example:
+  \code
+  rmff_file_t *file;
+  rmff_track_t *track;
+  rmff_frame_t *frame;
+
+  file = rmff_open_file("new_file.rm", RMFF_OPEN_MODE_WRITING);
+  track = rmff_add_track(file, 1); // Also create an index for this track.
+  // The track types etc are stored in the ::rmff_mdpr_t#type_specific_data
+  // It usually contains a ::real_audio_v4_props_t, ::real_audio_v5_props_t
+  // or ::real_video_props_t structures which have to be set by the
+  // calling application.
+
+  // After setting the structures:
+  rmff_write_headers(file);
+  while (!done) {
+    // Generate frames.
+    ...
+    frame = rmff_allocate_frame(size, NULL);
+    rmff_write_frame(track, frame);
+    rmff_release_frame(frame);
+  }
+  rmff_write_index(file);
+  rmff_fix_headers(file);
+  rmff_close_file(file);
+  \endcode
+
   \section memory_handling Memory handling
 
   Generally \a librmff allocates and frees memory itself. You should
   \b never mess with pointers inside the structures directly but use
-  the provided functions for manipulating it. There's one exception to
-  this rule: the frame handling.
+  the provided functions for manipulating it. There are two exceptions to
+  this rule: the frame handling and the \c app_data pointers.
+
+  The \c app_data members in ::rmff_file_t and ::rmff_track_t are never
+  touched by \a librmff and can be used by the application to store
+  its own data.
 
   The functions ::rmff_read_next_frame, ::rmff_release_frame and
   ::rmff_allocate_frame allow the application to provide its
@@ -120,6 +165,12 @@ extern "C" {
 
 #include "mb_file_io.h"
 
+#define RMFF_VERSION_MAJOR 0
+#define RMFF_VERSION_MINOR 5
+#define RMFF_VERSION_MICRO 0
+#define RMFF_VERSION (RMFF_VERSION_MAJOR * 10000 + RMFF_VERSION_MINOR * 100 + \
+                      RMFF_VERSION_MICRO)
+
 /** \brief The stream may be saved to disc. Can be set in the
     \link ::rmff_prop_t PROP header\endlink. */
 #define RMFF_FILE_FLAG_SAVE_ENABLED   0x0001
@@ -138,7 +189,7 @@ extern "C" {
   ::rmff_get_uint32_be, ::rmff_put_uint16_be and
   ::rmff_put_uint32_be for accessing the members.
 */
-typedef struct {
+typedef struct rmff_prop_t {
   uint32_t max_bit_rate;
   uint32_t avg_bit_rate;
   uint32_t max_packet_size;
@@ -158,7 +209,7 @@ typedef struct {
   strings must not be modified by the application. The function
   ::rmff_set_cont_header must be used instead.
 */
-typedef struct {
+typedef struct rmff_cont_t {
   char *title;
   char *author;
   char *copyright;
@@ -173,7 +224,7 @@ typedef struct {
   ::rmff_get_uint32_be, ::rmff_put_uint16_be and
   ::rmff_put_uint32_be for accessing the members.
 */
-typedef struct {
+typedef struct rmff_mdpr_t {
   /** \brief The track number. It is unique regarding the file. */
   uint16_t id;
   /** \brief The maximum bitrate in bits/second.
