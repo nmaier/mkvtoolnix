@@ -859,9 +859,9 @@ generic_packetizer_c::add_packet(memories_c &mems,
     mems[0]->release();
     for (i = 1; i < mems.size(); i++) {
       add_length = mems[i]->size;
-      pack->data_adds.push_back(compressor->compress(mems[i]->data,
-                                                     add_length));
-      pack->data_adds_lengths.push_back(add_length);
+      pack->data_adds[i - 1] = compressor->compress(mems[i]->data,
+                                                    add_length);
+      pack->data_adds_lengths[i - 1] = add_length;
       mems[i]->release();
     }
   } else {
@@ -874,12 +874,12 @@ generic_packetizer_c::add_packet(memories_c &mems,
     for (i = 1; i < mems.size(); i++) {
       if (!mems[i]->is_free) {
         add_length = mems[i]->size;
-        pack->data_adds.push_back((unsigned char *)safememdup(mems[i]->data,
-                                                              add_length));
-        pack->data_adds_lengths.push_back(add_length);
+        pack->data_adds[i - 1] = (unsigned char *)safememdup(mems[i]->data,
+                                                             add_length);
+        pack->data_adds_lengths[i - 1] = add_length;
       } else {
-        pack->data_adds.push_back(mems[i]->data);
-        pack->data_adds_lengths.push_back(mems[i]->size);
+        pack->data_adds[i - 1] = mems[i]->data;
+        pack->data_adds_lengths[i - 1] = mems[i]->size;
         mems[i]->lock();
       }
     }
