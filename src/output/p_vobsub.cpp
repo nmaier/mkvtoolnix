@@ -94,8 +94,9 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
     date = get_uint16_be(data + start_off) * 1024;
     next_off = get_uint16_be(data + start_off + 2);
     if (next_off < start_off) {
-      mxverb(3, PFX "BAD SPU DATA next_off < start_off (%u < %u)\n", next_off,
-             start_off);
+      mxwarn(PFX "Encountered broken SPU packet (next_off < start_off) at "
+             "timecode " FMT_TIMECODE ". This packet might be displayed "
+             "incorrectly or not at all.\n", TIMECODE);
       return -1;
     }
     mxverb(4, PFX "date = %u\n", date);

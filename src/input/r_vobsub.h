@@ -36,12 +36,14 @@ public:
   vobsub_packetizer_c *packetizer;
   vector<int64_t> positions, sizes, timecodes, durations;
   int idx;
+  bool headers_set;
 
 public:
   vobsub_track_c(const char *new_language) {
     language = safestrdup(new_language);
     packetizer = NULL;
     idx = 0;
+    headers_set = false;
   };
   ~vobsub_track_c() {
     safefree(language);
@@ -76,6 +78,7 @@ public:
 protected:
   virtual void parse_headers();
   virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 };
 
 #endif  // __R_VOBSUB_H

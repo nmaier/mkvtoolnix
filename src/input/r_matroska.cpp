@@ -1228,14 +1228,22 @@ int kax_reader_c::read_headers() {
 
 // {{{ FUNCTION kax_reader_c::create_packetizers()
 
-void kax_reader_c::create_packetizers() {
-  int i;
+void kax_reader_c::create_packetizer(int64_t tid) {
+  uint32_t i;
   kax_track_t *t;
   track_info_c *nti;
 
-  for (i = 0; i < tracks.size(); i++) {
-    t = tracks[i];
+  t = NULL;
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->tnum == tid) {
+      t = tracks[i];
+      break;
+    }
+  if (t == NULL)
+    return;
 
+  if ((t->packetizer == NULL) && t->ok &&
+      demuxing_requested(t->type, t->tnum)) {
     nti = new track_info_c(*ti);
     nti->private_data =
       (unsigned char *)safememdup(t->private_data, t->private_size);
@@ -1247,211 +1255,215 @@ void kax_reader_c::create_packetizers() {
     if (nti->track_name == NULL)
       nti->track_name = safestrdup(t->track_name);
 
-    if (t->ok && demuxing_requested(t->type, t->tnum)) {
-      nti->id = t->tnum;         // ID for this track.
-      switch (t->type) {
+    nti->id = t->tnum;          // ID for this track.
+    switch (t->type) {
+      case 'v':
+        if (verbose)
+          mxinfo("+-> Using video output module for track ID %u.\n",
+                 t->tnum);
+        t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
+                                               t->v_width,
+                                               t->v_height,
+                                               t->v_bframes, nti);
+        if (!nti->aspect_ratio_given) { // The user didn't set it.
+          if (t->v_dwidth != 0)
+            t->packetizer->set_video_display_width(t->v_dwidth);
+          if (t->v_dheight != 0)
+            t->packetizer->set_video_display_height(t->v_dheight);
+        }
+        break;
 
-        case 'v':
+      case 'a':
+        if (t->a_formattag == 0x0001) {
+          t->packetizer = new pcm_packetizer_c(this,
+                                               (unsigned long)t->a_sfreq,
+                                               t->a_channels, t->a_bps,
+                                               nti);
           if (verbose)
-            mxinfo("+-> Using video output module for track ID %u.\n",
+            mxinfo("+-> Using the PCM output module for track ID %u.\n",
                    t->tnum);
-          t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
-                                                 t->v_width,
-                                                 t->v_height,
-                                                 t->v_bframes, nti);
-          if (!nti->aspect_ratio_given) { // The user didn't set it.
-            if (t->v_dwidth != 0)
-              t->packetizer->set_video_display_width(t->v_dwidth);
-            if (t->v_dheight != 0)
-              t->packetizer->set_video_display_height(t->v_dheight);
-          }
-          break;
+        } else if (t->a_formattag == 0x0055) {
+          t->packetizer = new mp3_packetizer_c(this,
+                                               (unsigned long)t->a_sfreq,
+                                               t->a_channels, nti);
+          if (verbose)
+            mxinfo("+-> Using the MPEG audio output module for track ID %u."
+                   "\n", t->tnum);
+        } else if (t->a_formattag == 0x2000) {
+          int bsid;
 
-        case 'a':
-          if (t->a_formattag == 0x0001) {
-            t->packetizer = new pcm_packetizer_c(this,
+          if (!strcmp(t->codec_id, "A_AC3/BSID9"))
+            bsid = 9;
+          else if (!strcmp(t->codec_id, "A_AC3/BSID10"))
+            bsid = 10;
+          else
+            bsid = 0;
+          t->packetizer = new ac3_packetizer_c(this,
+                                               (unsigned long)t->a_sfreq,
+                                               t->a_channels, bsid, nti);
+          if (verbose)
+            mxinfo("+-> Using the AC3 output module for track ID %u.\n",
+                   t->tnum);
+        } else if (t->a_formattag == 0x2001) {
+          mxerror("Reading DTS from Matroska not implemented yet,"
+                  "cannot we get a complete DTS_Header here for construction"
+                  "of the packetizer?");
+          /*
+            t->packetizer = new dts_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, t->a_bps,
                                                  nti);
-            if (verbose)
-              mxinfo("+-> Using the PCM output module for track ID %u.\n",
-                     t->tnum);
-          } else if (t->a_formattag == 0x0055) {
-            t->packetizer = new mp3_packetizer_c(this,
-                                                 (unsigned long)t->a_sfreq,
-                                                 t->a_channels, nti);
-            if (verbose)
-              mxinfo("+-> Using the MPEG audio output module for track ID %u."
-                     "\n", t->tnum);
-          } else if (t->a_formattag == 0x2000) {
-            int bsid;
+          */
+        } else if (t->a_formattag == 0xFFFE) {
+          t->packetizer = new vorbis_packetizer_c(this,
+                                                  t->headers[0],
+                                                  t->header_sizes[0],
+                                                  t->headers[1],
+                                                  t->header_sizes[1],
+                                                  t->headers[2],
+                                                  t->header_sizes[2], nti);
+          if (verbose)
+            mxinfo("+-> Using the Vorbis output module for track ID %u.\n",
+                   t->tnum);
+        } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
+          // A_AAC/MPEG2/MAIN
+          // 0123456789012345
+          int id, profile, sbridx;
 
-            if (!strcmp(t->codec_id, "A_AC3/BSID9"))
-              bsid = 9;
-            else if (!strcmp(t->codec_id, "A_AC3/BSID10"))
-              bsid = 10;
-            else
-              bsid = 0;
-            t->packetizer = new ac3_packetizer_c(this,
-                                                 (unsigned long)t->a_sfreq,
-                                                 t->a_channels, bsid, nti);
-            if (verbose)
-              mxinfo("+-> Using the AC3 output module for track ID %u.\n",
-                     t->tnum);
-          } else if (t->a_formattag == 0x2001) {
-            mxerror("Reading DTS from Matroska not implemented yet,"
-                    "cannot we get a complete DTS_Header here for construction"
-                    "of the packetizer?");
-            /*
-              t->packetizer = new dts_packetizer_c(this,
-                                                   (unsigned long)t->a_sfreq,
-                                                   nti);
-            */
-          } else if (t->a_formattag == 0xFFFE) {
-            t->packetizer = new vorbis_packetizer_c(this,
-                                                    t->headers[0],
-                                                    t->header_sizes[0],
-                                                    t->headers[1],
-                                                    t->header_sizes[1],
-                                                    t->headers[2],
-                                                    t->header_sizes[2], nti);
-            if (verbose)
-              mxinfo("+-> Using the Vorbis output module for track ID %u.\n",
-                     t->tnum);
-          } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
-            // A_AAC/MPEG2/MAIN
-            // 0123456789012345
-            int id, profile, sbridx;
-
-            id = 0;
-            profile = 0;
-            if (t->codec_id[10] == '2')
-              id = AAC_ID_MPEG2;
-            else if (t->codec_id[10] == '4')
-              id = AAC_ID_MPEG4;
-            else
-              mxerror(PFX "Malformed codec id '%s' for track %d.\n",
-                      t->codec_id, t->tnum);
-
-            if (!strcmp(&t->codec_id[12], "MAIN"))
-              profile = AAC_PROFILE_MAIN;
-            else if (!strcmp(&t->codec_id[12], "LC"))
-              profile = AAC_PROFILE_LC;
-            else if (!strcmp(&t->codec_id[12], "SSR"))
-              profile = AAC_PROFILE_SSR;
-            else if (!strcmp(&t->codec_id[12], "LTP"))
-              profile = AAC_PROFILE_LTP;
-            else if (!strcmp(&t->codec_id[12], "LC/SBR"))
-              profile = AAC_PROFILE_SBR;
-            else
-              mxerror(PFX "Malformed codec id %s for track %d.\n",
-                      t->codec_id, t->tnum);
-
-            for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
-              if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||
-                  ((*ti->aac_is_sbr)[sbridx] == -1)) {
-                profile = AAC_PROFILE_SBR;
-                break;
-              }
-
-            t->packetizer = new aac_packetizer_c(this, id, profile,
-                                                 (unsigned long)t->a_sfreq,
-                                                 t->a_channels, nti,
-                                                 false, true);
-            if (verbose)
-              mxinfo("+-> Using the AAC output module for track ID %u.\n",
-                     t->tnum);
-
-          } else if (t->a_formattag == FOURCC('r', 'e', 'a', 'l')) {
-            passthrough_packetizer_c *ptzr;
-
-            ptzr = new passthrough_packetizer_c(this, ti);
-            t->packetizer = ptzr;
-
-            ptzr->set_track_type(track_audio);
-            ptzr->set_codec_id(t->codec_id);
-            ptzr->set_codec_private((unsigned char *)t->private_data,
-                                    t->private_size);
-            ptzr->set_audio_sampling_freq(t->a_sfreq);
-            ptzr->set_audio_channels(t->a_channels);
-            if (t->a_bps != 0)
-              ptzr->set_audio_bit_depth(t->a_bps);
-
-            if (verbose)
-              mxinfo("+-> Using the generic audio output module for stream "
-                     "%u (CodecID: %s).\n", t->tnum, t->codec_id);
-#if defined(HAVE_FLAC_FORMAT_H)
-          } else if ((t->a_formattag == FOURCC('f', 'L', 'a', 'C')) ||
-                     (t->a_formattag == 0xf1ac)) {
-            safefree(nti->private_data);
-            nti->private_data = NULL;
-            nti->private_size = 0;
-            if (t->a_formattag == FOURCC('f', 'L', 'a', 'C'))
-              t->packetizer =
-                new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
-                                      t->a_bps,
-                                      (unsigned char *)t->private_data,
-                                      t->private_size, nti);
-            else
-              t->packetizer =
-                new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
-                                      t->a_bps,
-                                      ((unsigned char *)t->private_data) +
-                                      sizeof(alWAVEFORMATEX),
-                                      t->private_size - sizeof(alWAVEFORMATEX),
-                                      nti);
-            if (verbose)
-              mxinfo("+-> Using the FLAC output module for track ID %u.\n",
-                     t->tnum);
-
-#endif
-          } else
-            mxerror(PFX "Unsupported audio track %s for track %d.\n",
+          id = 0;
+          profile = 0;
+          if (t->codec_id[10] == '2')
+            id = AAC_ID_MPEG2;
+          else if (t->codec_id[10] == '4')
+            id = AAC_ID_MPEG4;
+          else
+            mxerror(PFX "Malformed codec id '%s' for track %d.\n",
                     t->codec_id, t->tnum);
 
-          if ((t->packetizer != NULL) && (t->a_osfreq != 0.0))
-            t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
+          if (!strcmp(&t->codec_id[12], "MAIN"))
+            profile = AAC_PROFILE_MAIN;
+          else if (!strcmp(&t->codec_id[12], "LC"))
+            profile = AAC_PROFILE_LC;
+          else if (!strcmp(&t->codec_id[12], "SSR"))
+            profile = AAC_PROFILE_SSR;
+          else if (!strcmp(&t->codec_id[12], "LTP"))
+            profile = AAC_PROFILE_LTP;
+          else if (!strcmp(&t->codec_id[12], "LC/SBR"))
+            profile = AAC_PROFILE_SBR;
+          else
+            mxerror(PFX "Malformed codec id %s for track %d.\n",
+                    t->codec_id, t->tnum);
 
-          break;
+          for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
+            if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||
+                ((*ti->aac_is_sbr)[sbridx] == -1)) {
+              profile = AAC_PROFILE_SBR;
+              break;
+            }
 
-        case 's':
-          if (!strcmp(t->codec_id, MKV_S_VOBSUB)) {
+          t->packetizer = new aac_packetizer_c(this, id, profile,
+                                               (unsigned long)t->a_sfreq,
+                                               t->a_channels, nti,
+                                               false, true);
+          if (verbose)
+            mxinfo("+-> Using the AAC output module for track ID %u.\n",
+                   t->tnum);
+
+        } else if (t->a_formattag == FOURCC('r', 'e', 'a', 'l')) {
+          passthrough_packetizer_c *ptzr;
+
+          ptzr = new passthrough_packetizer_c(this, ti);
+          t->packetizer = ptzr;
+
+          ptzr->set_track_type(track_audio);
+          ptzr->set_codec_id(t->codec_id);
+          ptzr->set_codec_private((unsigned char *)t->private_data,
+                                  t->private_size);
+          ptzr->set_audio_sampling_freq(t->a_sfreq);
+          ptzr->set_audio_channels(t->a_channels);
+          if (t->a_bps != 0)
+            ptzr->set_audio_bit_depth(t->a_bps);
+
+          if (verbose)
+            mxinfo("+-> Using the generic audio output module for stream "
+                   "%u (CodecID: %s).\n", t->tnum, t->codec_id);
+#if defined(HAVE_FLAC_FORMAT_H)
+        } else if ((t->a_formattag == FOURCC('f', 'L', 'a', 'C')) ||
+                   (t->a_formattag == 0xf1ac)) {
+          safefree(nti->private_data);
+          nti->private_data = NULL;
+          nti->private_size = 0;
+          if (t->a_formattag == FOURCC('f', 'L', 'a', 'C'))
             t->packetizer =
-              new vobsub_packetizer_c(this, t->private_data, t->private_size,
-                                      false, nti);
-            if (verbose)
-              mxinfo("+-> Using the VobSub output module for track ID %u.\n",
-                     t->tnum);
+              new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
+                                    t->a_bps,
+                                    (unsigned char *)t->private_data,
+                                    t->private_size, nti);
+          else
+            t->packetizer =
+              new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
+                                    t->a_bps,
+                                    ((unsigned char *)t->private_data) +
+                                    sizeof(alWAVEFORMATEX),
+                                    t->private_size - sizeof(alWAVEFORMATEX),
+                                    nti);
+          if (verbose)
+            mxinfo("+-> Using the FLAC output module for track ID %u.\n",
+                   t->tnum);
 
-            t->sub_type = 'v';
+#endif
+        } else
+          mxerror(PFX "Unsupported audio track %s for track %d.\n",
+                  t->codec_id, t->tnum);
 
-          } else {
-            t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
-                                                      t->private_data,
-                                                      t->private_size, false,
-                                                      true, nti);
-            if (verbose)
-              mxinfo("+-> Using the text subtitle output module for track ID "
-                     "%u.\n", t->tnum);
+        if ((t->packetizer != NULL) && (t->a_osfreq != 0.0))
+          t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
 
-            t->sub_type = 't';
-          }
-          break;
+        break;
 
-        default:
-          mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
-          break;
-      }
-      if (t->tuid != 0)
-        if (!t->packetizer->set_uid(t->tuid))
-          mxwarn(PFX "Could not keep the track "
-                 "UID %u because it is already allocated for the new "
-                 "file.\n", t->tuid);
+      case 's':
+        if (!strcmp(t->codec_id, MKV_S_VOBSUB)) {
+          t->packetizer =
+            new vobsub_packetizer_c(this, t->private_data, t->private_size,
+                                    false, nti);
+          if (verbose)
+            mxinfo("+-> Using the VobSub output module for track ID %u.\n",
+                   t->tnum);
+
+          t->sub_type = 'v';
+
+        } else {
+          t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
+                                                    t->private_data,
+                                                    t->private_size, false,
+                                                    true, nti);
+          if (verbose)
+            mxinfo("+-> Using the text subtitle output module for track ID "
+                   "%u.\n", t->tnum);
+
+          t->sub_type = 't';
+        }
+        break;
+
+      default:
+        mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
+        break;
     }
-
+    if (t->tuid != 0)
+      if (!t->packetizer->set_uid(t->tuid))
+        mxwarn(PFX "Could not keep the track UID %u because it is already "
+               "allocated for the new file.\n", t->tuid);
     delete nti;
   }
 
+}
+
+void kax_reader_c::create_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < ti->track_order->size(); i++)
+    create_packetizer((*ti->track_order)[i]);
+  for (i = 0; i < tracks.size(); i++)
+    create_packetizer(tracks[i]->tnum);
   if (segment_title.length() == 0)
     segment_title = title;
 }
@@ -1704,12 +1716,26 @@ void kax_reader_c::display_progress(bool final) {
 }
 
 void kax_reader_c::set_headers() {
-  int i;
+  uint32_t i, k;
+  kax_track_t *t;
 
+  for (i = 0; i < ti->track_order->size(); i++) {
+    t = NULL;
+    for (k = 0; k < tracks.size(); k++)
+      if (tracks[k]->tnum == (*ti->track_order)[i]) {
+        t = tracks[k];
+        break;
+      }
+    if ((t != NULL) && (t->packetizer != NULL) && !t->headers_set) {
+      t->packetizer->set_headers();
+      t->headers_set = true;
+    }
+  }
   for (i = 0; i < tracks.size(); i++)
-    if (demuxing_requested(tracks[i]->type, tracks[i]->tnum) &&
-        tracks[i]->ok)
+    if ((tracks[i]->packetizer != NULL) && !tracks[i]->headers_set) {
       tracks[i]->packetizer->set_headers();
+      tracks[i]->headers_set = true;
+    }
 }
 
 // }}}

@@ -190,6 +190,7 @@ real_reader_c::~real_reader_c() {
     safefree(demuxer);
   }
   demuxers.clear();
+  ti->private_data = NULL;
 }
 
 // }}}
@@ -422,12 +423,21 @@ void real_reader_c::parse_headers() {
 
 // {{{ FUNCTION real_reader_c::create_packetizers()
 
-void real_reader_c::create_packetizers() {
+void real_reader_c::create_packetizer(int64_t tid) {
   int i;
   real_demuxer_t *dmx;
 
-  for (i = 0; i < demuxers.size(); i++) {
-    dmx = demuxers[i];
+  dmx = NULL;
+  for (i = 0; i < demuxers.size(); i++)
+    if (demuxers[i]->id == tid) {
+      dmx = demuxers[i];
+      break;
+    }
+  if (dmx == NULL)
+    return;
+
+  if (dmx->packetizer == NULL) {
+    ti->id = dmx->id;
     ti->private_data = dmx->private_data;
     ti->private_size = dmx->private_size;
 
@@ -484,8 +494,15 @@ void real_reader_c::create_packetizers() {
 
     dmx->packetizer->duplicate_data_on_add(false);
   }
+}
 
-  ti->private_data = NULL;
+void real_reader_c::create_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < ti->track_order->size(); i++)
+    create_packetizer((*ti->track_order)[i]);
+  for (i = 0; i < demuxers.size(); i++)
+    create_packetizer(demuxers[i]->id);
 }
 
 // }}}
@@ -636,10 +653,26 @@ void real_reader_c::display_progress(bool final) {
 }
 
 void real_reader_c::set_headers() {
-  int i;
+  uint32_t i, k;
+  real_demuxer_t *d;
 
+  for (i = 0; i < ti->track_order->size(); i++) {
+    d = NULL;
+    for (k = 0; k < demuxers.size(); k++)
+      if (demuxers[k]->id == (*ti->track_order)[i]) {
+        d = demuxers[k];
+        break;
+      }
+    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
+      d->packetizer->set_headers();
+      d->headers_set = true;
+    }
+  }
   for (i = 0; i < demuxers.size(); i++)
-    demuxers[i]->packetizer->set_headers();
+    if ((demuxers[i]->packetizer != NULL) && !demuxers[i]->headers_set) {
+      demuxers[i]->packetizer->set_headers();
+      demuxers[i]->headers_set = true;
+    }
 }
 
 void real_reader_c::identify() {

@@ -47,6 +47,7 @@ extern "C" {
 
 typedef struct avi_demuxer_t {
   generic_packetizer_c *packetizer;
+  bool headers_set;
   int channels, bits_per_sample, samples_per_second, aid;
   int64_t bytes_processed;
 #ifdef HAVE_AVICLASSES
@@ -66,10 +67,14 @@ private:
 #endif
   mm_io_c *io;
   video_packetizer_c *vpacketizer;
+  bool vheaders_set;
   vector<avi_demuxer_t *> ademuxers;
   double fps;
   int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
   int video_done, maxframes, is_divx, rederive_keyframes;
+#ifdef HAVE_AVICLASSES
+  w32BITMAPINFOHEADER *bih;
+#endif
 
 public:
   avi_reader_c(track_info_c *nti) throw (error_c);
@@ -83,9 +88,11 @@ public:
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
-private:
+protected:
   virtual void add_audio_demuxer(int aid);
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 };
 
 #endif  // __R_AVI_H

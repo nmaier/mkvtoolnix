@@ -108,6 +108,7 @@ typedef struct {
   bool warning_printed;
 
   generic_packetizer_c *packetizer;
+  bool headers_set;
 } qtmp4_demuxer_t;
 
 class qtmp4_reader_c: public generic_reader_c {
@@ -134,6 +135,7 @@ public:
 protected:
   virtual void parse_headers();
   virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
   virtual void handle_header_atoms(uint32_t parent, int64_t parent_size,
                                    uint64_t parent_pos, int level);
   virtual void read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,

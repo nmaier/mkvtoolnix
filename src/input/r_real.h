@@ -40,6 +40,7 @@ typedef struct {
 
 typedef struct {
   generic_packetizer_c *packetizer;
+  bool headers_set;
   int id;
 
   uint32_t start_time, preroll;
@@ -86,6 +87,7 @@ public:
 protected:
   virtual void parse_headers();
   virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
   virtual real_demuxer_t *find_demuxer(int id);
   virtual void assemble_packet(real_demuxer_t *dmx, unsigned char *p, int size,
                                int64_t timecode, bool keyframe);

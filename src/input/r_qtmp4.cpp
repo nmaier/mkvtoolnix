@@ -117,6 +117,7 @@ qtmp4_reader_c::~qtmp4_reader_c() {
     free(dmx);
     demuxers.pop_back();
   }
+  ti->private_data = NULL;
 
   delete io;
 }
@@ -1010,20 +1011,22 @@ bool qtmp4_reader_c::parse_esds_atom(mm_mem_io_c *memio,
   return true;
 }
 
-void qtmp4_reader_c::create_packetizers() {
+void qtmp4_reader_c::create_packetizer(int64_t tid) {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
   passthrough_packetizer_c *ptzr;
 
-  main_dmx = -1;
-  for (i = 0; i < demuxers.size(); i++) {
-    dmx = demuxers[i];
-    if (!dmx->ok)
-      continue;
+  dmx = NULL;
+  for (i = 0; i < demuxers.size(); i++)
+    if (demuxers[i]->id == tid) {
+      dmx = demuxers[i];
+      break;
+    }
+  if (dmx == NULL)
+    return;
 
-    if (!demuxing_requested(dmx->type, dmx->id))
-      continue;
-
+  if (dmx->ok && demuxing_requested(dmx->type, dmx->id) &&
+      (dmx->packetizer == NULL)) {
     ti->id = dmx->id;
     if (dmx->type == 'v') {
 
@@ -1111,12 +1114,38 @@ void qtmp4_reader_c::create_packetizers() {
   }
 }
 
-void qtmp4_reader_c::set_headers() {
+void qtmp4_reader_c::create_packetizers() {
   uint32_t i;
 
+  main_dmx = -1;
+
+  for (i = 0; i < ti->track_order->size(); i++)
+    create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->packetizer != NULL)
+    create_packetizer(demuxers[i]->id);
+}
+
+void qtmp4_reader_c::set_headers() {
+  uint32_t i, k;
+  qtmp4_demuxer_t *d;
+
+  for (i = 0; i < ti->track_order->size(); i++) {
+    d = NULL;
+    for (k = 0; k < demuxers.size(); k++)
+      if (demuxers[k]->id == (*ti->track_order)[i]) {
+        d = demuxers[k];
+        break;
+      }
+    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
+      d->packetizer->set_headers();
+      d->headers_set = true;
+    }
+  }
+  for (i = 0; i < demuxers.size(); i++)
+    if ((demuxers[i]->packetizer != NULL) && !demuxers[i]->headers_set) {
       demuxers[i]->packetizer->set_headers();
+      demuxers[i]->headers_set = true;
+    }
 }
 
 int qtmp4_reader_c::display_priority() {

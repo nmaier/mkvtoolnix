@@ -147,16 +147,15 @@ vobsub_reader_c::~vobsub_reader_c() {
   delete idx_file;
 }
 
-void vobsub_reader_c::create_packetizers() {
+void vobsub_reader_c::create_packetizer(int64_t tid) {
   uint32_t i, k;
   int64_t avg_duration;
   char language[4];
   const char *c;
 
-  for (i = 0; i < tracks.size(); i++) {
-    if (!demuxing_requested('s', i))
-      continue;
-
+  if ((tid < tracks.size()) && demuxing_requested('s', tid) &&
+      (tracks[tid]->packetizer == NULL)) {
+    i = tid;
     ti->id = i;
     if ((c = map_iso639_1_to_iso639_2(tracks[i]->language)) != NULL) {
       strcpy(language, c);
@@ -183,8 +182,17 @@ void vobsub_reader_c::create_packetizers() {
     if (verbose)
       mxinfo("+-> Using VobSub subtitle output module for subtitle track "
              "%u (language: %s).\n", i, tracks[i]->language);
+    ti->language = NULL;
   }
-  ti->language = NULL;
+}
+
+void vobsub_reader_c::create_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < ti->track_order->size(); i++)
+    create_packetizer((*ti->track_order)[i]);
+  for (i = 0; i < tracks.size(); i++)
+    create_packetizer(i);
 }
 
 void vobsub_reader_c::parse_headers() {
@@ -379,9 +387,24 @@ void vobsub_reader_c::identify() {
 }
 
 void vobsub_reader_c::set_headers() {
-  uint32_t i;
+  uint32_t i, k;
+  vobsub_track_c *t;
 
+  for (i = 0; i < ti->track_order->size(); i++) {
+    t = NULL;
+    for (k = 0; k < tracks.size(); k++)
+      if (k == (*ti->track_order)[i]) {
+        t = tracks[k];
+        break;
+      }
+    if ((t != NULL) && (t->packetizer != NULL) && !t->headers_set) {
+      t->packetizer->set_headers();
+      t->headers_set = true;
+    }
+  }
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->packetizer != NULL)
+    if ((tracks[i]->packetizer != NULL) && !tracks[i]->headers_set) {
       tracks[i]->packetizer->set_headers();
+      tracks[i]->headers_set = true;
+    }
 }

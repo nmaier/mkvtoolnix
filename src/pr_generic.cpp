@@ -996,6 +996,7 @@ track_info_c::track_info_c():
   compression_list = new vector<cue_creation_t>;
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
+  track_order = new vector<int64_t>;
 }
 
 track_info_c::track_info_c(const track_info_c &src):
@@ -1046,6 +1047,7 @@ void track_info_c::free_contents() {
     delete tags;
   delete all_fourccs;
   delete display_properties;
+  delete track_order;
 
   initialized = false;
 }
@@ -1126,10 +1128,14 @@ track_info_c &track_info_c::operator =(const track_info_c &src) {
   no_attachments = src.no_attachments;
   no_tags = src.no_tags;
 
+  track_order = new vector<int64_t>(*src.track_order);
+
   initialized = true;
 
   return *this;
 }
+
+//--------------------------------------------------------------------
 
 struct ltstr {
   bool operator()(const char* s1, const char* s2) const {

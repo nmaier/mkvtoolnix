@@ -345,7 +345,7 @@ void ogm_reader_c::add_new_demuxer(ogm_demuxer_t *dmx) {
   num_sdemuxers++;
 }
 
-void ogm_reader_c::create_packetizers() {
+void ogm_reader_c::create_packetizer(int64_t tid) {
   vorbis_info vi;
   vorbis_comment vc;
   ogg_packet op;
@@ -354,10 +354,17 @@ void ogm_reader_c::create_packetizers() {
   int i;
   ogm_demuxer_t *dmx;
 
-  memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
-  i = 0;
-  while (i < num_sdemuxers) {
-    dmx = sdemuxers[i];
+  dmx = NULL;
+  for (i = 0; i < num_sdemuxers; i++)
+    if (sdemuxers[i]->serial == tid) {
+      dmx = sdemuxers[i];
+      break;
+    }
+  if (dmx == NULL)
+    return;
+
+  if (dmx->packetizer == NULL) {
+    memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
     sth = (stream_header *)&dmx->packet_data[0][1];
     ti->private_data = NULL;
     ti->private_size = 0;
@@ -388,8 +395,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("ogm_reader: could not initialize video "
                  "packetizer for stream id %d. Will try to continue and "
                  "ignore this stream.\n", dmx->serial);
-          delete dmx;
-          continue;
+          break;
         }
 
         if (verbose)
@@ -408,8 +414,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("ogm_reader: could not initialize PCM "
                  "packetizer for stream id %d. Will try to continue and "
                  "ignore this stream.\n", dmx->serial);
-          free_demuxer(i);
-          continue;
+          break;
         }
 
         if (verbose)
@@ -426,8 +431,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("Error: ogm_reader: could not initialize MP3 "
                  "packetizer for stream id %d. Will try to continue and "
                  "ignore this stream.\n", dmx->serial);
-          free_demuxer(i);
-          continue;
+          break;
         }
 
         if (verbose)
@@ -444,8 +448,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("ogm_reader: could not initialize AC3 "
                  "packetizer for stream id %d. Will try to continue and "
                  "ignore this stream.\n", dmx->serial);
-          free_demuxer(i);
-          continue;
+          break;
         }
 
         if (verbose)
@@ -476,8 +479,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("Error: ogm_reader: could not initialize Vorbis "
                  "packetizer for stream id %d. Will try to continue and "
                  "ignore this stream.\n", dmx->serial);
-          free_demuxer(i);
-          continue;
+          break;
         }
 
         if (verbose)
@@ -495,8 +497,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("ogm_reader: could not initialize the "
                  "text subtitles packetizer for stream id %d. Will try to "
                  "continue and ignore this stream.\n", dmx->serial);
-          free_demuxer(i);
-          continue;
+          break;
         }
 
         if (verbose)
@@ -529,8 +530,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("ogm_reader: could not initialize the "
                  "FLAC packetizer for stream id %d. Will try to "
                  "continue and ignore this stream.\n", dmx->serial);
-          free_demuxer(i);
-          continue;
+          break;
         }
 
         if (verbose)
@@ -545,8 +545,16 @@ void ogm_reader_c::create_packetizers() {
         break;
 
     }
-    i++;
   }
+}
+
+void ogm_reader_c::create_packetizers() {
+  int i;
+
+  for (i = 0; i < ti->track_order->size(); i++)
+    create_packetizer((*ti->track_order)[i]);
+  for (i = 0; i < num_sdemuxers; i++)
+    create_packetizer(sdemuxers[i]->serial);
 }
 
 /*
@@ -991,10 +999,26 @@ void ogm_reader_c::display_progress(bool final) {
 }
 
 void ogm_reader_c::set_headers() {
-  int i;
+  uint32_t i, k;
+  ogm_demuxer_t *d;
 
+  for (i = 0; i < ti->track_order->size(); i++) {
+    d = NULL;
+    for (k = 0; k < num_sdemuxers; k++)
+      if (sdemuxers[k]->serial == (*ti->track_order)[i]) {
+        d = sdemuxers[k];
+        break;
+      }
+    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
+      d->packetizer->set_headers();
+      d->headers_set = true;
+    }
+  }
   for (i = 0; i < num_sdemuxers; i++)
-    sdemuxers[i]->packetizer->set_headers();
+    if ((sdemuxers[i]->packetizer != NULL) && !sdemuxers[i]->headers_set) {
+      sdemuxers[i]->packetizer->set_headers();
+      sdemuxers[i]->headers_set = true;
+    }
 }
 
 void ogm_reader_c::identify() {

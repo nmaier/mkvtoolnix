@@ -100,6 +100,7 @@ typedef struct {
   compression_c *zlib_compressor, *bzlib_compressor, *lzo1x_compressor;
 
   generic_packetizer_c *packetizer;
+  bool headers_set;
 } kax_track_t;
 
 class kax_reader_c: public generic_reader_c {
@@ -139,6 +140,7 @@ public:
 protected:
   virtual int read_headers();
   virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
   virtual kax_track_t *new_kax_track();
   virtual kax_track_t *find_track_by_num(uint32_t num, kax_track_t *c = NULL);
   virtual kax_track_t *find_track_by_uid(uint32_t uid, kax_track_t *c = NULL);

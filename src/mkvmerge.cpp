@@ -329,6 +329,10 @@ static void usage() {
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
     "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
+    "  --track-order <TID1,TID2,TID3,...>\n"
+    "                           A comma separated list of track IDs that\n"
+    "                           controls the order of the tracks in the "
+    "                           output file.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -924,6 +928,22 @@ static void parse_fourcc(char *s, const char *opt, track_info_c &ti) {
   memcpy(fourcc.fourcc, c, 4);
   fourcc.fourcc[4] = 0;
   ti.all_fourccs->push_back(fourcc);
+}
+
+static void parse_track_order(const char *s, track_info_c &ti) {
+  vector<string> parts;
+  uint32_t i;
+  int64_t id;
+
+  ti.track_order->clear();
+  parts = split(s, ",");
+  strip(parts);
+  for (i = 0; i < parts.size(); i++) {
+    if (!parse_int(parts[i].c_str(), id) || (id < 0))
+      mxerror("'%s' is not a valid track ID in '--track-order %s'.\n",
+              parts[i].c_str(), s);
+    ti.track_order->push_back(id);
+  }
 }
 
 // }}}
@@ -1734,6 +1754,13 @@ static void parse_args(int argc, char **argv) {
 
       parse_language(next_arg, lang, "timecodes", "timecodes", false);
       ti->all_ext_timecodes->push_back(lang);
+      i++;
+
+    } else if (!strcmp(this_arg, "--track-order")) {
+      if (next_arg == NULL)
+        mxerror("'--track-order' lacks its argument.\n");
+
+      parse_track_order(next_arg, *ti);
       i++;
 
     }

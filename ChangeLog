@@ -1,3 +1,12 @@
+2003-12-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: The user can alter the order in which the
+	tracks for an input file are put into the output file with the new
+	"--track-order" option.
+
+	* mmg: bug fix: The "AAC is SBR" check box was grayed out for AAC
+	inside MP4 files.
+
 2003-12-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The "load settings" function did not load all

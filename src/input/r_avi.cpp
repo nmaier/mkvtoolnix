@@ -84,10 +84,6 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
 #ifdef HAVE_AVICLASSES
   w32AVISTREAMINFO stream_info;
   long format_size;
-  w32BITMAPINFOHEADER *bih;
-  char codec[5];
-#else
-  char *codec;
 #endif
 
   try {
@@ -105,8 +101,11 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
 
   fsize = 0;
   rederive_keyframes = 0;
+  vpacketizer = NULL;
+  vheaders_set = false;
 
 #ifdef HAVE_AVICLASSES
+  bih = NULL;
   avi = CreateAVIReadHandler(io);
   if (avi == NULL)
     throw error_c(PFX "Could not initialize the AVI handler.");
@@ -137,48 +136,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
   }
   mxverb(2, "5: max_frame_size %d\n", max_frame_size);
 
-  if (demuxing_requested('v', 0)) {
-    memcpy(codec, &bih->biCompression, 4);
-    codec[4] = 0;
-    if (!strcasecmp(codec, "DIV3") ||
-        !strcasecmp(codec, "AP41") || // Angel Potion
-        !strcasecmp(codec, "MPG3") ||
-        !strcasecmp(codec, "MP43"))
-      is_divx = RAVI_DIVX3;
-    else if (!strcasecmp(codec, "MP42") ||
-             !strcasecmp(codec, "DIV2") ||
-             !strcasecmp(codec, "DIVX") ||
-             !strcasecmp(codec, "XVID") ||
-             !strcasecmp(codec, "DX50"))
-      is_divx = RAVI_MPEG4;
-    else
-      is_divx = 0;
-
-    ti->private_data = (unsigned char *)bih;
-    if (ti->private_data != NULL)
-      ti->private_size = get_uint32(&bih->biSize);
-    ti->id = 0;                 // ID for the video track.
-    vpacketizer = new video_packetizer_c(this, NULL, fps,
-                                         get_uint32(&bih->biWidth),
-                                         get_uint32(&bih->biHeight),
-                                         false, ti);
-    if (verbose)
-      mxinfo("+-> Using video output module for video track ID 0.\n");
-    mxverb(2, "6: width %u, height %u\n", get_uint32(&bih->biWidth),
-           get_uint32(&bih->biHeight));
-  } else
-    vpacketizer = NULL;
-
-  safefree(bih);
-
-  i = 0;
-  while (true) {
-    if (avi->GetStream(streamtypeAUDIO, i) == NULL)
-      break;
-    if (demuxing_requested('a', i + 1))
-      add_audio_demuxer(i);
-    i++;
-  }
+  create_packetizers();
 
   for (i = 0; i < ademuxers.size(); i++) {
     demuxer = ademuxers[i];
@@ -207,37 +165,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
       fsize = AVI_frame_size(avi, i);
   max_frame_size = fsize;
 
-  if (demuxing_requested('v', 0)) {
-    codec = AVI_video_compressor(avi);
-    if (!strcasecmp(codec, "DIV3") ||
-        !strcasecmp(codec, "AP41") || // Angel Potion
-        !strcasecmp(codec, "MPG3") ||
-        !strcasecmp(codec, "MP43"))
-      is_divx = RAVI_DIVX3;
-    else if (!strcasecmp(codec, "MP42") ||
-             !strcasecmp(codec, "DIV2") ||
-             !strcasecmp(codec, "DIVX") ||
-             !strcasecmp(codec, "XVID") ||
-             !strcasecmp(codec, "DX50"))
-      is_divx = RAVI_MPEG4;
-    else
-      is_divx = 0;
-
-    ti->private_data = (unsigned char *)avi->bitmap_info_header;
-    if (ti->private_data != NULL)
-      ti->private_size = get_uint32(&avi->bitmap_info_header->bi_size);
-    ti->id = 0;                 // ID for the video track.
-    vpacketizer = new video_packetizer_c(this, NULL, AVI_frame_rate(avi),
-                                         AVI_video_width(avi),
-                                         AVI_video_height(avi), false, ti);
-    if (verbose)
-      mxinfo("+-> Using video output module for video track ID 0.\n");
-  } else
-    vpacketizer = NULL;
-
-  for (i = 0; i < AVI_audio_tracks(avi); i++)
-    if (demuxing_requested('a', i + 1))
-      add_audio_demuxer(i);
+  create_packetizers();
 
   for (i = 0; i < ademuxers.size(); i++) {
     demuxer = ademuxers[i];
@@ -270,6 +198,7 @@ avi_reader_c::~avi_reader_c() {
 #ifdef HAVE_AVICLASSES
   avi->Release();
   delete io;
+  safefree(bih);
 #else
   if (avi != NULL)
     AVI_close(avi);
@@ -298,6 +227,106 @@ avi_reader_c::~avi_reader_c() {
 
 // }}}
 
+void avi_reader_c::create_packetizer(int64_t tid) {
+#ifdef HAVE_AVICLASSES
+  char codec[4];
+
+  if ((tid == 0) && demuxing_requested('v', 0) && (vpacketizer == NULL)) {
+    memcpy(codec, &bih->biCompression, 4);
+    codec[4] = 0;
+    if (!strcasecmp(codec, "DIV3") ||
+        !strcasecmp(codec, "AP41") || // Angel Potion
+        !strcasecmp(codec, "MPG3") ||
+        !strcasecmp(codec, "MP43"))
+      is_divx = RAVI_DIVX3;
+    else if (!strcasecmp(codec, "MP42") ||
+             !strcasecmp(codec, "DIV2") ||
+             !strcasecmp(codec, "DIVX") ||
+             !strcasecmp(codec, "XVID") ||
+             !strcasecmp(codec, "DX50"))
+      is_divx = RAVI_MPEG4;
+    else
+      is_divx = 0;
+
+    ti->private_data = (unsigned char *)bih;
+    if (ti->private_data != NULL)
+      ti->private_size = get_uint32(&bih->biSize);
+    ti->id = 0;                 // ID for the video track.
+    vpacketizer = new video_packetizer_c(this, NULL, fps,
+                                         get_uint32(&bih->biWidth),
+                                         get_uint32(&bih->biHeight),
+                                         false, ti);
+    if (verbose)
+      mxinfo("+-> Using video output module for video track ID 0.\n");
+    mxverb(2, "6: width %u, height %u\n", get_uint32(&bih->biWidth),
+           get_uint32(&bih->biHeight));
+  }
+  if (tid == 0)
+    return;
+
+  if ((avi->GetStream(streamtypeAUDIO, tid) != NULL) &&
+      demuxing_requested('a', tid))
+    add_audio_demuxer(tid - 1);
+
+#else
+  char *codec;
+
+  if ((tid == 0) && demuxing_requested('v', 0) && (vpacketizer == NULL)) {
+    codec = AVI_video_compressor(avi);
+    if (!strcasecmp(codec, "DIV3") ||
+        !strcasecmp(codec, "AP41") || // Angel Potion
+        !strcasecmp(codec, "MPG3") ||
+        !strcasecmp(codec, "MP43"))
+      is_divx = RAVI_DIVX3;
+    else if (!strcasecmp(codec, "MP42") ||
+             !strcasecmp(codec, "DIV2") ||
+             !strcasecmp(codec, "DIVX") ||
+             !strcasecmp(codec, "XVID") ||
+             !strcasecmp(codec, "DX50"))
+      is_divx = RAVI_MPEG4;
+    else
+      is_divx = 0;
+
+    ti->private_data = (unsigned char *)avi->bitmap_info_header;
+    if (ti->private_data != NULL)
+      ti->private_size = get_uint32(&avi->bitmap_info_header->bi_size);
+    ti->id = 0;                 // ID for the video track.
+    vpacketizer = new video_packetizer_c(this, NULL, AVI_frame_rate(avi),
+                                         AVI_video_width(avi),
+                                         AVI_video_height(avi), false, ti);
+    if (verbose)
+      mxinfo("+-> Using video output module for video track ID 0.\n");
+  }
+  if (tid == 0)
+    return;
+
+  if ((tid <= AVI_audio_tracks(avi)) && demuxing_requested('a', tid))
+    add_audio_demuxer(tid - 1);
+#endif
+}
+
+void avi_reader_c::create_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < ti->track_order->size(); i++)
+    create_packetizer((*ti->track_order)[i]);
+
+  create_packetizer(0);
+
+#ifdef HAVE_AVICLASSES
+  i = 0;
+  while (true) {
+    if (avi->GetStream(streamtypeAUDIO, i) == NULL)
+      break;
+    create_packetizer(i + 1);
+    i++;
+  }
+#else
+  for (i = 0; i < AVI_audio_tracks(avi); i++)
+    create_packetizer(i + 1);
+#endif
+}
+
 // {{{ FUNCTION avi_reader_c::add_audio_demuxer
 
 void avi_reader_c::add_audio_demuxer(int aid) {
@@ -306,9 +335,6 @@ void avi_reader_c::add_audio_demuxer(int aid) {
 #ifdef HAVE_AVICLASSES
   w32AVISTREAMINFO stream_info;
   long format_size;
-
-
-//   w32WAVEFORMATEX *wfe;
   w32WAVEFORMATEX *wfe;
   IAVIReadStream *stream;
 #else
@@ -668,13 +694,39 @@ void avi_reader_c::display_progress(bool final) {
 // {{{ FUNCTION avi_reader_c::set_headers
 
 void avi_reader_c::set_headers() {
-  int i;
+  uint32_t i, k;
+  avi_demuxer_t *d;
 
-  if (vpacketizer != NULL)
+  for (i = 0; i < ti->track_order->size(); i++) {
+    if ((*ti->track_order)[i] == 0) {
+      if ((vpacketizer != NULL) && !vheaders_set) {
+        vpacketizer->set_headers();
+        vheaders_set = true;
+      }
+      continue;
+    }
+    d = NULL;
+    for (k = 0; k < ademuxers.size(); k++)
+      if ((ademuxers[k]->aid + 1) == (*ti->track_order)[i]) {
+        d = ademuxers[k];
+        break;
+      }
+    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
+      d->packetizer->set_headers();
+      d->headers_set = true;
+    }
+  }
+
+  if ((vpacketizer != NULL) && !vheaders_set) {
     vpacketizer->set_headers();
+    vheaders_set = true;
+  }
 
   for (i = 0; i < ademuxers.size(); i++)
-    ademuxers[i]->packetizer->set_headers();
+    if (!ademuxers[i]->headers_set) {
+      ademuxers[i]->packetizer->set_headers();
+      ademuxers[i]->headers_set = true;
+    }
 }
 
 // }}}

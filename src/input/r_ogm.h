@@ -69,6 +69,7 @@ public:
 struct ogm_demuxer_t {
   ogg_stream_state os;
   generic_packetizer_c *packetizer;
+  bool headers_set;
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
   bool headers_read;
@@ -125,6 +126,7 @@ private:
   virtual int read_headers();
   virtual void process_header_page(ogg_page *);
   virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
   virtual void free_demuxer(int);
 };
 
