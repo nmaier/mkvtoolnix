@@ -1,29 +1,20 @@
-mkvtoolnix 0.0.2
-================
+MKVToolNix 0.2
+==============
 
-These tools allow information about (mkvinfo) and creation of
-(mkverge) Matroska media files. Matroska is a new multimedia file
+These tools allow information about (mkvinfo) or extraction
+from (mkvdemux) or creation of (mkvmerge) or the splitting of
+(mkvsplit) Matroska files. Matroska is a new multimedia file
 format aiming to become THE new container format for the future. You
 can find more information about it and its underlying technology, the
 Extensible Binary Meta Language (EBML), at
 
 http://www.matroska.org/
 
-Installation is simple. First make sure that you have a recent version
-of libmatroska installed on your computer. Refere to libmatroska's
-documentation for installation instructions.
+At the moment only mkvinfo and mkvmerge are available, but the others
+will be as well.
 
-Now run './configure'. If, for some reason, there is no 'configure'
-script then run './autogen.sh' which will recreate it. If configure
-can not find the Matroska libraries then you'll have to explicitely
-state where they are, e.g.
-
-./configure --with-matroska-include=/where/i/put/libmatroska/src \
-  --with-matroska-lib=/where/i/put/libmatroska/make/linux
-
-After configure has finished simply run 'make' followed by 'make
-install'. If you want a system wide installation then you'll have to
-run 'make install' as root.
+MkvToolNix aims to become for Matroska what the OGMTools are for
+OGM.
 
 The full documentation for each command is now maintained in its
 man page only. Type 'mkvmerge -h' to get you started.
@@ -32,31 +23,52 @@ This code comes under the GPL (see www.gnu.org or the file COPYING).
 Modify as needed.
 
 The newest version can always be found at
-http://www.bunkus.org/videotools/mkvtoolnix/index.html
+http://www.bunkus.org/videotools/mkvtoolnix/
 
 Moritz Bunkus <moritz@bunkus.org>
 
-------------------
+Installation
+------------
+
+Installation is not trivial but not impossible either. You first need
+libebml and libmatroska, which can be obtained via cvs:
+
+cvs -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska login
+
+Just hit the enter key if you're prompted for a password. Now check out
+the sources themselves:
+
+cvs -z3 -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska \
+  co libmatroska
+cvs -z3 -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska \
+  co libebml
+
+Change to libebml/make/linux and run 'make'. Change to
+libmatroska/make/linux. Once more run 'make'.
+
+After you've compiled the two libraries you can now compile MkvToolNix
+itself:
+
+bunzip2 < mkvtoolnix-...tar.bz2 | tar xvf -
+cd mkvtoolnix-...
+./configure --with-matroska-include=/where/i/put/libmatroska/src \
+  --with-matroska-lib=/where/i/put/libmatroska/make/linux \
+  --with-ebml-include=/where/i/put/libebml/src \
+  --with-ebml-lib=/where/i/put/libebml/make/linux
+make
+
+And you're done.
 
 Example
-=======
+-------
 
-Here's a *very* brief example of how you could use mkvmerge with
-mencoder in order to rip a DVD to a Matroska file with MPEG4 video and
-Vorbis audio:
+Here's a *very* brief example of how you could use mkvmerge
+with mencoder in order to rip a DVD:
 
 a) Extract the audio to PCM audio and let mencoder calculate the
 video frame numbers:
 
 mencoder -dvd 1 -ovc frameno -oac pcm -o frameno.avi
-
-If you're low on disk space then you can save a lot of space by
-encoding the sound to MP3 with a very low bitrate. Using PCM is super
-fast and uses a lot of space. MP3 is super small and takes rather
-long. It's your choice. For MP3 use
-
-mencoder -dvd 1 -ovc frameno -oac mp3lame -lameopts cbr:br=64 \
-  -o frameno.avi
 
 b) Extract the audio again, this time to a plain WAV file:
 
@@ -73,25 +85,15 @@ d) Encode the audio to Vorbis:
 
 oggenc -q3 -oaudio-q3.ogg audio.wav
 
-If you're low on disk space then you can now remove the temporary
-WAV file.
-
 e) Somehow calculate the bitrate for your video. Use something like...
 
-video_size = (target_size - audio-size) / XXXXXXXX
+video_size = (target_size - audio-size) / 1.0115
 video_bitrate = video_size / length / 1024 * 8
 
- - target_size, audio_size in bytes
- - length in seconds
- - XXXXXXXX is the overhead caused by putting the streams into an
-   Matroska file.
- - video_bitrate will be in kbit/s
-
-Remember. If you calculated a video_bitrate for ONE CD and want to
-switch to TWO CDs later on you cannot simply use twice the
-video_bitrate as before - simply because the audio does not get bigger
-as well. Re-caculate the values above with your new target_size
-instead.
+target_size, audio_size in bytes
+length in seconds
+1.0115 is the overhead caused by putting the streams into an Matroska file.
+video_bitrate will be in kbit/s
 
 f) Use the two-pass encoding for the video:
 
@@ -109,5 +111,4 @@ g) Merge:
 
 mkvmerge -o movie.mkv -A movie.avi audio-q3.ogg
 
--A is necessary in order to avoid copying the raw PCM (or MP3) audio
-as well.
+-A is necessary in order to avoid copying the raw PCM audio as well.
