@@ -1,3 +1,20 @@
+2003-08-21  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvinfo: Added support for the following elements:
+        KaxPrevFilename, KaxNextFilename, KaxTrackFlagEnabled,
+        KaxTrackName, KaxCodecName, KaxCodecSettings, KaxCodecInfoURL,
+        KaxCodecDownloadURL, KaxCodecDecodeAll, KaxTrackOverlay,
+        KaxAudioPosition, KaxAudioOutputSamplingFreq, KaxVideoDisplayUnit,
+        KaxVideoColourSpace, KaxVideoGamma, KaxVideoFlagInterlaced,
+        KaxVideoStereoMode, KaxVideoAspectRatio, KaxClusterPosition,
+        KaxClusterPrevSize, KaxBlockVirtual, KaxBlockAdditions,
+        KaxBlockMore, KaxBlockAddID, KaxBlockAdditional,
+        KaxReferenceVirtual, KaxSliceBlockAddID, KaxChapters,
+        KaxEditionEntry, KaxChapterAtom, KaxChapterUID,
+        KaxChapterTimeStart, KaxChapterTimeEnd, KaxChapterTrack,
+        KaxChapterTrackNumber, KaxChapterDisplay, KaxChapterString,
+        KaxChapterLanguage, KaxChapterCountry
+
 2003-08-20  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v0.6.3.
