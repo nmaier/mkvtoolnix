@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.28 2003/05/03 09:46:29 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.29 2003/05/03 09:48:29 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -993,17 +993,12 @@ void process_file() {
                         fprintf(stdout, "\n");
                       }
 
-                      if (upper_lvl_el > 0) {		// we cannot come from l6
-                        die("level 6 on cues !?");
-
-                      } else {
-                        l5->SkipData(static_cast<EbmlStream &>(*es),
-                                     l5->Generic().Context);
-                        delete l5;
-                        l5 = es->FindNextElement(l4->Generic().Context,
-                                                 upper_lvl_el, 0xFFFFFFFFL,
-                                                 true, 1);
-                      }
+                      l5->SkipData(static_cast<EbmlStream &>(*es),
+                                   l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true, 1);
                     } // while (l5 != NULL)
 
                   } else if (!is_ebmlvoid(l4, 4)) {
