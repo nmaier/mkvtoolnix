@@ -63,6 +63,7 @@ using namespace libebml;
 #define TYPESSA      13
 #define TYPEREAL     14
 #define TYPEQTMP4    15
+#define TYPEFLAC     16
 
 #define iabs(a) ((a) < 0 ? (-1 * (a)) : (a))
 

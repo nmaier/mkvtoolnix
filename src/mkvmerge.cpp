@@ -75,6 +75,7 @@
 #include "r_ac3.h"
 #include "r_avi.h"
 #include "r_dts.h"
+#include "r_flac.h"
 #include "r_matroska.h"
 #include "r_mp3.h"
 #include "r_ogm.h"
@@ -213,29 +214,35 @@ bool hack_engaged(const char *hack) {
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
-   {"aac", TYPEAAC, "AAC (Advanced Audio Coding)"},
-   {"ac3", TYPEAC3, "A/52 (aka AC3)"},
-   {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
-   {"dts", TYPEDTS, "DTS (Digital Theater System)"},
-   {"mp2", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
-   {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
-   {"mkv", TYPEMATROSKA, "general Matroska files"},
-   {"ogg", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
-   {"mov", TYPEQTMP4, "Quicktime/MP4 audio and video"},
-   {"rm ", TYPEREAL, "RealMedia audio and video"},
-   {"srt", TYPESRT, "SRT text subtitles"},
-   {"ssa", TYPESSA, "SSA/ASS text subtitles"},
-   {"idx", TYPEVOBSUB, "VobSub subtitles"},
-   {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
+   {"aac ", TYPEAAC, "AAC (Advanced Audio Coding)"},
+   {"ac3 ", TYPEAC3, "A/52 (aka AC3)"},
+   {"avi ", TYPEAVI, "AVI (Audio/Video Interleaved)"},
+   {"dts ", TYPEDTS, "DTS (Digital Theater System)"},
+   {"mp2 ", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
+   {"mp3 ", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
+   {"mkv ", TYPEMATROSKA, "general Matroska files"},
+   {"ogg ", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
+   {"mov ", TYPEQTMP4, "Quicktime/MP4 audio and video"},
+   {"rm  ", TYPEREAL, "RealMedia audio and video"},
+   {"srt ", TYPESRT, "SRT text subtitles"},
+   {"ssa ", TYPESSA, "SSA/ASS text subtitles"},
+   {"idx ", TYPEVOBSUB, "VobSub subtitles"},
+   {"wav ", TYPEWAV, "WAVE (uncompressed PCM)"},
+#if defined(HAVE_FLAC_FORMAT_H)
+   {"flac", TYPEFLAC, "FLAC lossless audio (slow!)"},
+#endif
    {"output modules:", -1, ""},
-   {"   ", -1,      "AAC audio"},
-   {"   ", -1,      "AC3 audio"},
-   {"   ", -1,      "DTS audio"},
-   {"   ", -1,      "MP3 audio"},
-   {"   ", -1,      "simple text subtitles"},
-   {"   ", -1,      "uncompressed PCM audio"},
-   {"   ", -1,      "Video (not MPEG1/2)"},
-   {"   ", -1,      "Vorbis audio"},
+   {"    ", -1,      "AAC audio"},
+   {"    ", -1,      "AC3 audio"},
+   {"    ", -1,      "DTS audio"},
+#if defined(HAVE_FLAC_FORMAT_H)
+   {"    ", -1,      "FLAC"},
+#endif
+   {"    ", -1,      "MP3 audio"},
+   {"    ", -1,      "simple text subtitles"},
+   {"    ", -1,      "uncompressed PCM audio"},
+   {"    ", -1,      "Video (not MPEG1/2)"},
+   {"    ", -1,      "Vorbis audio"},
    {NULL,  -1,      NULL}};
 
 // }}}
@@ -375,6 +382,8 @@ static int get_type(char *filename) {
     type = TYPEWAV;
   else if (ogm_reader_c::probe_file(mm_io, size))
     type = TYPEOGM;
+  else if (flac_reader_c::probe_file(mm_io, size))
+    type = TYPEFLAC;
   else if (real_reader_c::probe_file(mm_io, size))
     type = TYPEREAL;
   else if (qtmp4_reader_c::probe_file(mm_io, size))
@@ -1070,6 +1079,11 @@ static void create_readers() {
         case TYPEQTMP4:
           file->reader = new qtmp4_reader_c(file->ti);
           break;
+#if defined(HAVE_FLAC_FORMAT_H)
+        case TYPEFLAC:
+          file->reader = new flac_reader_c(file->ti);
+          break;
+#endif
         default:
           mxerror("EVIL internal bug! (unknown file type)\n");
           break;

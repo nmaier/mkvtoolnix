@@ -21,6 +21,7 @@ libmtxinput_a_SOURCES = r_aac.cpp \
 			r_ac3.cpp \
 			r_avi.cpp \
 			r_dts.cpp \
+			r_flac.cpp \
 			r_matroska.cpp \
 			r_mp3.cpp \
 			r_qtmp4.cpp \
