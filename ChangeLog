@@ -1,5 +1,8 @@
 2004-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Tags are being kept when reading Matroska
+	files.
+
 	* mkvmerge: bug fix: Large values for --sync (over 2100) would
 	cause an integer overflow resulting in no sync being done at all.
 

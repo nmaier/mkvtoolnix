@@ -77,7 +77,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     ti->async.linear = 1.0;
     ti->async.displacement = 0;
   } else
-    ti->async.displacement *= 1000000; // ms to ns
+    ti->async.displacement *= (int64_t)1000000; // ms to ns
   initial_displacement = ti->async.displacement;
   ti->async.displacement = 0;
 
@@ -1155,8 +1155,10 @@ track_info_c &track_info_c::operator =(const track_info_c &src) {
   for (i = 0; i < src.all_tags->size(); i++)
     (*all_tags)[i].file_name = safestrdup((*src.all_tags)[i].file_name);
   tags_ptr = src.tags_ptr;
-  tags = NULL;
-//   tags = src.tags;
+  if (src.tags != NULL)
+    tags = static_cast<KaxTags *>(src.tags->Clone());
+  else
+    tags = NULL;
 
   aac_is_sbr = new vector<int64_t>(*src.aac_is_sbr);
 

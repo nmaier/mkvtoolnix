@@ -1460,6 +1460,10 @@ kax_reader_c::create_packetizer(int64_t tid) {
     if (nti->track_name == NULL)
       nti->track_name = safestrdup(t->track_name);
     nti->id = t->tnum;          // ID for this track.
+    if (t->tag != NULL) {
+      nti->tags = new KaxTags;
+      nti->tags->PushElement(*t->tag);
+    }
 
     if (hack_engaged(ENGAGE_FORCE_PASSTHROUGH_PACKETIZER)) {
       init_passthrough_packetizer(t);
@@ -1655,6 +1659,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
         break;
     }
     set_packetizer_headers(t);
+    if (t->tag != NULL)
+      nti->tags->Remove(0);
     delete nti;
   }
 }
