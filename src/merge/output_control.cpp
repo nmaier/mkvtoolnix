@@ -388,7 +388,7 @@ display_progress() {
 
     winner = &files[0];
     for (i = files.begin() + 1; i != files.end(); ++i)
-      if (i->size > winner->size)
+      if (!i->appending && (i->size > winner->size))
         winner = &(*i);
 
     display_reader = winner->reader;
