@@ -708,6 +708,8 @@ mmg_dialog::mmg_dialog():
   SetSize(520, 718);
 #endif
 
+  muxing_in_progress = false;
+
   cfg = wxConfigBase::Get();
   cfg->SetPath(wxT("/GUI"));
   if (cfg->Read(wxT("window_position_x"), &window_pos_x) &&
@@ -956,6 +958,15 @@ mmg_dialog::set_last_chapters_in_menu(wxString name) {
 
 void
 mmg_dialog::on_run(wxCommandEvent &evt) {
+  if (muxing_in_progress) {
+    wxMessageBox(wxT("Another muxing job in still in progress. Please wait "
+                     "until it has finished or abort it manually before "
+                     "starting a new one."),
+                 wxT("Cannot start second muxing job"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+
   update_command_line();
 
   if (tc_output->GetValue().Length() == 0) {
@@ -978,13 +989,13 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
     return;
 
   set_on_top(false);
-#ifdef SYS_WINDOWS
-  Iconize(true);
-#endif
-  delete new mux_dialog(this);
-#ifdef SYS_WINDOWS
-  Iconize(false);
-#endif
+  muxing_in_progress = true;
+  new mux_dialog(this);
+}
+
+void
+mmg_dialog::muxing_has_finished() {
+  muxing_in_progress = false;
   restore_on_top();
 }
 
@@ -1705,20 +1716,20 @@ mmg_dialog::on_close(wxCloseEvent &evt) {
 }
 
 void
-set_on_top(bool on_top) {
+mmg_dialog::set_on_top(bool on_top) {
   long style;
 
-  style = mdlg->GetWindowStyleFlag();
+  style = GetWindowStyleFlag();
   if (on_top)
     style |= wxSTAY_ON_TOP;
   else
     style &= ~wxSTAY_ON_TOP;
-  mdlg->SetWindowStyleFlag(style);
+  SetWindowStyleFlag(style);
 }
 
 void
-restore_on_top() {
-  set_on_top(mdlg->settings_page->cb_on_top->IsChecked());
+mmg_dialog::restore_on_top() {
+  set_on_top(settings_page->cb_on_top->IsChecked());
 }
 
 IMPLEMENT_CLASS(cli_options_dlg, wxDialog);

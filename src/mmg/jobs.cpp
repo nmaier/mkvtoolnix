@@ -47,7 +47,7 @@
 
 job_run_dialog::job_run_dialog(wxWindow *parent,
                                vector<int> &njobs_to_start):
-  wxDialog(parent, -1, wxT("mkvmerge is running"), wxDefaultPosition,
+  wxDialog(NULL, -1, wxT("mkvmerge is running"), wxDefaultPosition,
            wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER |
            wxMINIMIZE_BOX | wxMAXIMIZE_BOX) {
   wxStaticBoxSizer *siz_sb;
@@ -725,7 +725,7 @@ job_dialog::on_view_log(wxCommandEvent &evt) {
   if (log.length() == 0)
     return;
   dialog = new job_log_dialog(this, log);
-  delete dialog;
+  dialog->Destroy();
 }
 
 void
@@ -736,20 +736,18 @@ job_dialog::on_item_selected(wxListEvent &evt) {
 void
 job_dialog::start_jobs(vector<int> &jobs_to_start) {
   wxString temp_settings;
+  job_run_dialog *jrdlg;
   int i;
 
-  temp_settings.Printf(wxT("%s/jobs/temp.mmg"), wxGetCwd().c_str());
+  temp_settings = wxGetCwd() + wxT("/jobs/temp.mmg");
   mdlg->save(temp_settings, true);
 
-#ifdef SYS_WINDOWS
-  mdlg->Iconize(true);
+  mdlg->Show(false);
   Show(false);
-#endif
-  delete new job_run_dialog(this, jobs_to_start);
-#ifdef SYS_WINDOWS
+  jrdlg = new job_run_dialog(this, jobs_to_start);
+  jrdlg->Destroy();
   Show(true);
-  mdlg->Iconize(false);
-#endif
+  mdlg->Show(true);
 
   mdlg->load(temp_settings, true);
   wxRemoveFile(temp_settings);

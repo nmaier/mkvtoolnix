@@ -177,7 +177,7 @@ tab_settings::on_xyz_selected(wxCommandEvent &evt) {
 void
 tab_settings::on_on_top_selected(wxCommandEvent &evt) {
   save_preferences();
-  set_on_top(cb_on_top->IsChecked());
+  mdlg->set_on_top(cb_on_top->IsChecked());
 }
 
 void
@@ -214,7 +214,7 @@ tab_settings::load_preferences() {
   if (!cfg->Read(wxT("on_top"), &b))
     b = false;
   cb_on_top->SetValue(b);
-  set_on_top(b);
+  mdlg->set_on_top(b);
 }
 
 void

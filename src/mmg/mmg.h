@@ -96,8 +96,6 @@ wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);
 wxString format_date_time(time_t date_time);
 
-void set_on_top(bool on_top);
-void restore_on_top();
 wxString create_track_order();
 
 void wxdie(const wxString &errmsg);
