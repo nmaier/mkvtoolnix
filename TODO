@@ -1,0 +1,29 @@
+Things I have to do before I even CONSIDER a proper release:
+
+* mkvmerge (muxer):
+
+- Ogg/OGM reader
+- Vorbis packetizer
+- SRT reader
+- S_TEXT/... packetizer
+- splitting after a specific size
+- cue data
+- man page
+
+
+* mkvdemux:
+
+- write it ;)
+- support for video (to AVI), AC3, MP3, PCM (to WAV), Vorbis (to Ogg)
+- man page
+
+
+* mkvinfo:
+
+- man page
+
+
+* general:
+
+- debian subdir ;)
+- The final version of the Matroska specs should be available.
