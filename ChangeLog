@@ -1,5 +1,9 @@
 2004-06-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: feature removed: Dropped support for 'time
+	slices'. They were not used, didn't offer the player any
+	additional value and caused massive increase in overhead.
+
 	* mmg: new feature: Added a dialog for adding arbitrary command
 	line options which includes a list of advanced options to chose
 	from.

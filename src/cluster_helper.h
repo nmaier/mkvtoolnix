@@ -81,7 +81,7 @@ private:
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);
-  void set_duration_and_timeslices(render_groups_t *rg);
+  void set_duration(render_groups_t *rg);
 };
 
 extern cluster_helper_c *cluster_helper;

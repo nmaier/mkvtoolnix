@@ -52,7 +52,7 @@ extern bool segment_title_set;
 extern float video_fps;
 
 extern bool write_cues, cue_writing_requested, video_track_present;
-extern bool no_lacing, no_linking, use_timeslices, use_durations;
+extern bool no_lacing, no_linking, use_durations;
 
 extern bool identifying, identify_verbose;
 

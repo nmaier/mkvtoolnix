@@ -307,18 +307,14 @@ void cluster_helper_c::set_output(mm_io_c *nout) {
   out = nout;
 }
 
-void cluster_helper_c::set_duration_and_timeslices(render_groups_t *rg) {
+void cluster_helper_c::set_duration(render_groups_t *rg) {
   uint32_t i;
   int64_t block_duration, def_duration;
   KaxBlockGroup *group;
-  KaxSlices *slices;
-  KaxTimeSlice *slice;
-  bool first_lace;
 
   if (rg->durations.size() == 0)
     return;
 
-  slice = NULL;
   group = rg->groups.back();
   block_duration = 0;
   for (i = 0; i < rg->durations.size(); i++)
@@ -328,33 +324,6 @@ void cluster_helper_c::set_duration_and_timeslices(render_groups_t *rg) {
   if ((block_duration > 0) && (block_duration != def_duration) &&
       (use_durations || rg->duration_mandatory))
     group->SetBlockDuration(block_duration);
-
-  if (!use_timeslices)
-    return;
-  if ((rg->durations.size() == 1) && 
-      (use_durations || rg->duration_mandatory ||
-       ((def_duration > 0) && (def_duration == block_duration))))
-    return;
-
-  slices = &GetChild<KaxSlices>(*group);
-
-  first_lace = true;
-
-  for (i = 0; i < rg->durations.size(); i++) {
-    if ((rg->durations[i] != def_duration) || (i > 0)) {
-      if (first_lace) {
-        slice = &GetChild<KaxTimeSlice>(*slices);
-        first_lace = false;
-      } else
-        slice = &GetNextChild<KaxTimeSlice>(*slices, *slice);
-      *static_cast<EbmlUInteger *>
-        (&GetChild<KaxSliceFrameNumber>(*slice)) = i;
-      if (rg->durations[i] != def_duration)
-        *static_cast<EbmlUInteger *>
-          (&GetChild<KaxSliceDuration>(*slice)) =
-          (int64_t)(rg->durations[i] * TIMECODE_SCALE);
-    }
-  }
 }
 
 /*
@@ -446,7 +415,7 @@ int cluster_helper_c::render() {
     if (pack->bref != -1)
       render_group->more_data = false;
     if (!render_group->more_data) {
-      set_duration_and_timeslices(render_group);
+      set_duration(render_group);
       new_block_group = &AddNewChild<KaxBlockGroup>(*cluster);
       new_block_group->SetParent(*cluster);
       render_group->groups.push_back(new_block_group);
@@ -556,7 +525,7 @@ int cluster_helper_c::render() {
 
   if (elements_in_cluster > 0) {
     for (i = 0; i < render_groups.size(); i++)
-      set_duration_and_timeslices(render_groups[i]);
+      set_duration(render_groups[i]);
     static_cast<kax_cluster_c *>(cluster)->
       set_max_timecode(max_cl_timecode - timecode_offset);
     cluster->Render(*out, *kax_cues);

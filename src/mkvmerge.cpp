@@ -149,7 +149,7 @@ bool no_lacing = false, no_linking = true;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
-bool use_timeslices = false, use_durations = false;
+bool use_durations = false;
 
 float video_fps = -1.0;
 int default_tracks[3], default_tracks_priority[3];
@@ -257,7 +257,6 @@ usage() {
     "  --no-clusters-in-meta-seek\n"
     "                           Do not write meta seek data for clusters.\n"
     "  --disable-lacing         Do not Use lacing.\n"
-    "  --enable-timeslices      Use timeslices for laces.\n"
     "  --enable-durations       Enable block durations for all blocks.\n"
     "\n File splitting and linking (more global options):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
@@ -1757,9 +1756,6 @@ parse_args(int argc,
 
     else if (!strcmp(this_arg, "--disable-lacing"))
       no_lacing = true;
-
-    else if (!strcmp(this_arg, "--enable-timeslices"))
-      use_timeslices = true;
 
     else if (!strcmp(this_arg, "--enable-durations"))
       use_durations = true;
