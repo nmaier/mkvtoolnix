@@ -346,3 +346,214 @@ get_chapter_uid(KaxChapterAtom &atom) {
     return -1;
   return uint64(*static_cast<EbmlUInteger *>(uid));
 }
+
+void
+fix_mandatory_chapter_elements(EbmlElement *e) {
+  if (e == NULL)
+    return;
+
+  if (dynamic_cast<KaxEditionEntry *>(e) != NULL) {
+    KaxEditionEntry &ee = *static_cast<KaxEditionEntry *>(e);
+    GetChild<KaxEditionFlagDefault>(ee);
+    GetChild<KaxEditionFlagHidden>(ee);
+    GetChild<KaxEditionProcessed>(ee);
+    if (FINDFIRST(&ee, KaxEditionUID) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(ee)) =
+        create_unique_uint32(UNIQUE_EDITION_IDS);
+
+  } else if (dynamic_cast<KaxChapterAtom *>(e) != NULL) {
+    KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
+
+    GetChild<KaxChapterFlagHidden>(a);
+    GetChild<KaxChapterFlagEnabled>(a);
+    if (FINDFIRST(&a, KaxChapterUID) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(a)) =
+        create_unique_uint32(UNIQUE_CHAPTER_IDS);
+    if (FINDFIRST(&a, KaxChapterTimeStart) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(a)) = 0;
+
+  } else if (dynamic_cast<KaxChapterTrack *>(e) != NULL) {
+    KaxChapterTrack &t = *static_cast<KaxChapterTrack *>(e);
+
+    if (FINDFIRST(&t, KaxChapterTrackNumber) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTrackNumber>(t)) = 0;
+
+  } else if (dynamic_cast<KaxChapterDisplay *>(e) != NULL) {
+    KaxChapterDisplay &d = *static_cast<KaxChapterDisplay *>(e);
+
+    if (FINDFIRST(&d, KaxChapterString) == NULL)
+      *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(d)) = L"";
+    if (FINDFIRST(&d, KaxChapterLanguage) == NULL)
+      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(d)) = "und";
+
+  }
+
+  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
+    EbmlMaster *m;
+    int i;
+
+    m = static_cast<EbmlMaster *>(e);
+    for (i = 0; i < m->ListSize(); i++)
+      fix_mandatory_chapter_elements((*m)[i]);
+  }
+}
+
+static void
+remove_entries(int64_t min_tc,
+               int64_t max_tc,
+               int64_t offset,
+               EbmlMaster &m) {
+  int i;
+  bool remove;
+  KaxChapterAtom *atom;
+  KaxChapterTimeStart *cts;
+  KaxChapterTimeEnd *cte;
+  EbmlMaster *m2;
+  int64_t start_tc, end_tc;
+
+  i = 0;
+  while (i < m.ListSize()) {
+    atom = dynamic_cast<KaxChapterAtom *>(m[i]);
+    if (atom != NULL) {
+      cts = static_cast<KaxChapterTimeStart *>
+        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+
+      remove = false;
+
+      start_tc = uint64(*static_cast<EbmlUInteger *>(cts));
+      if (start_tc < min_tc)
+        remove = true;
+      else if ((max_tc >= 0) && (start_tc > max_tc))
+        remove = true;
+
+      if (remove) {
+        m.Remove(i);
+        delete atom;
+      } else
+        i++;
+
+    } else
+      i++;
+  }
+
+  for (i = 0; i < m.ListSize(); i++) {
+    atom = dynamic_cast<KaxChapterAtom *>(m[i]);
+    if (atom != NULL) {
+      cts = static_cast<KaxChapterTimeStart *>
+        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
+      cte = static_cast<KaxChapterTimeEnd *>
+        (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
+
+      *static_cast<EbmlUInteger *>(cts) =
+        uint64(*static_cast<EbmlUInteger *>(cts)) - offset;
+      if (cte != NULL) {
+        end_tc =  uint64(*static_cast<EbmlUInteger *>(cte));
+        if ((max_tc >= 0) && (end_tc > max_tc))
+          end_tc = max_tc;
+        end_tc -= offset;
+        *static_cast<EbmlUInteger *>(cte) = end_tc;
+      }
+    }
+
+    m2 = dynamic_cast<EbmlMaster *>(m[i]);
+    if (m2 != NULL)
+      remove_entries(min_tc, max_tc, offset, *m2);
+  }    
+}
+
+KaxChapters *
+select_chapters_in_timeframe(KaxChapters *chapters,
+                             int64_t min_tc,
+                             int64_t max_tc,
+                             int64_t offset) {
+  uint32_t i, k, num_atoms;
+  KaxEditionEntry *eentry;
+
+  for (i = 0; i < chapters->ListSize(); i++) {
+    if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == NULL)
+      continue;
+    remove_entries(min_tc, max_tc, offset,
+                   *static_cast<EbmlMaster *>((*chapters)[i]));
+  }
+
+  i = 0;
+  while (i < chapters->ListSize()) {
+    if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == NULL) {
+      i++;
+      continue;
+    }
+    eentry = static_cast<KaxEditionEntry *>((*chapters)[i]);
+    num_atoms = 0;
+    for (k = 0; k < eentry->ListSize(); k++)
+      if (dynamic_cast<KaxChapterAtom *>((*eentry)[k]) != NULL)
+        num_atoms++;
+
+    if (num_atoms == 0) {
+      chapters->Remove(i);
+      delete eentry;
+
+    } else
+      i++;
+  }
+
+  if (chapters->ListSize() == 0) {
+    delete chapters;
+    chapters = NULL;
+  }
+
+  return chapters;
+}
+
+KaxEditionEntry *
+find_edition_with_uid(KaxChapters &chapters,
+                      uint64_t uid) {
+  KaxEditionEntry *eentry;
+  KaxEditionUID *euid;
+  int eentry_idx;
+
+  if (uid == 0)
+    return FINDFIRST(&chapters, KaxEditionEntry);
+
+  for (eentry_idx = 0; eentry_idx < chapters.ListSize(); eentry_idx++) {
+    eentry = dynamic_cast<KaxEditionEntry *>(chapters[eentry_idx]);
+    if (eentry == NULL)
+      continue;
+    euid = FINDFIRST(eentry, KaxEditionUID);
+    if ((euid != NULL) && (uint64(*euid) == uid))
+      return eentry;
+  }
+
+  return NULL;
+}
+
+KaxChapterAtom *
+find_chapter_with_uid(KaxChapters &chapters,
+                      uint64_t uid) {
+  KaxEditionEntry *eentry;
+  KaxChapterAtom *atom;
+  KaxChapterUID *cuid;
+  int eentry_idx, atom_idx;
+
+  if (uid == 0) {
+    eentry = FINDFIRST(&chapters, KaxEditionEntry);
+    if (eentry == NULL)
+      return NULL;
+    return FINDFIRST(eentry, KaxChapterAtom);
+  }
+
+  for (eentry_idx = 0; eentry_idx < chapters.ListSize(); eentry_idx++) {
+    eentry = dynamic_cast<KaxEditionEntry *>(chapters[eentry_idx]);
+    if (eentry == NULL)
+      continue;
+    for (atom_idx = 0; atom_idx < eentry->ListSize(); atom_idx++) {
+      atom = dynamic_cast<KaxChapterAtom *>((*eentry)[atom_idx]);
+      if (atom == NULL)
+        continue;
+      cuid = FINDFIRST(atom, KaxChapterUID);
+      if ((cuid != NULL) && (uint64(*cuid) == uid))
+        return atom;
+    }
+  }
+
+  return NULL;
+}

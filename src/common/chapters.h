@@ -26,6 +26,7 @@
 namespace libmatroska {
   class KaxChapters;
   class KaxTags;
+  class KaxEditionEntry;
   class KaxChapterAtom;
 };
 
@@ -79,6 +80,10 @@ int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom);
 string MTX_DLL_API get_chapter_name(KaxChapterAtom &atom);
 
 void MTX_DLL_API fix_mandatory_chapter_elements(EbmlElement *e);
+KaxEditionEntry *MTX_DLL_API find_edition_with_uid(KaxChapters &chapters,
+                                                   uint64_t uid);
+KaxChapterAtom *MTX_DLL_API find_chapter_with_uid(KaxChapters &chapters,
+                                                  uint64_t uid);
 
 #endif // __CHAPTERS_H
 

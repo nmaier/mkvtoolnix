@@ -177,42 +177,47 @@ char *dump_packets = NULL;
 
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment *kax_segment;
-KaxInfo *kax_infos;
 KaxTracks *kax_tracks;
 KaxTrackEntry *kax_last_entry;
 KaxCues *kax_cues;
-EbmlVoid *kax_sh_void = NULL;
-KaxDuration *kax_duration;
 KaxSeekHead *kax_sh_main = NULL, *kax_sh_cues = NULL;
-KaxTags *kax_tags = NULL;
-KaxTags *tags_from_cue_chapters = NULL;
-KaxAttachments *kax_as = NULL;
 KaxChapters *kax_chapters = NULL;
-EbmlVoid *kax_chapters_void = NULL;
-EbmlVoid *void_after_track_headers = NULL;
 
-char *chapter_file_name = NULL;
-char *chapter_language = NULL;
-char *chapter_charset = NULL;
+static KaxInfo *kax_infos;
+static KaxDuration *kax_duration;
+
+static KaxTags *kax_tags = NULL;
+static KaxTags *tags_from_cue_chapters = NULL;
+static KaxChapters *chapters_in_this_file = NULL;
+
+static KaxAttachments *kax_as = NULL;
+
+static EbmlVoid *kax_sh_void = NULL;
+static EbmlVoid *kax_chapters_void = NULL;
+static EbmlVoid *void_after_track_headers = NULL;
+
+static char *chapter_file_name = NULL;
+static char *chapter_language = NULL;
+static char *chapter_charset = NULL;
 
 string segment_title;
 bool segment_title_set = false;
 
 int64_t tags_size = 0;
-bool accept_tags = true;
+static bool accept_tags = true;
 
 int file_num = 1;
 bool splitting = false;
 
 // Specs say that track numbers should start at 1.
-int track_number = 1;
+static int track_number = 1;
 
 string default_language = "und";
 
-mm_io_c *out = NULL;
+static mm_io_c *out = NULL;
 
-bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
-bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
+static bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
+static bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -2839,6 +2844,8 @@ create_next_output_file() {
         evoid.Render(*out);
       }
     } else {
+      chapters_in_this_file =
+        static_cast<KaxChapters *>(kax_chapters->Clone());
       kax_chapters->Render(*out, true);
       if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
         EbmlVoid evoid;
@@ -2877,6 +2884,7 @@ void
 finish_file(bool last_file) {
   int i;
   KaxChapters *chapters_here;
+  KaxTags *tags_here;
   int64_t start, end, offset;
 
   mxinfo("\n");
@@ -2949,8 +2957,11 @@ finish_file(bool last_file) {
     chapters_here = copy_chapters(kax_chapters);
     chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
                                                  offset);
-    if (chapters_here != NULL)
+    if (chapters_here != NULL) {
       kax_chapters_void->ReplaceWith(*chapters_here, *out, true, false);
+      chapters_in_this_file =
+        static_cast<KaxChapters *>(chapters_here->Clone());
+    }
     delete kax_chapters_void;
     kax_chapters_void = NULL;
   } else
@@ -2966,17 +2977,31 @@ finish_file(bool last_file) {
 
   // Render the tags if we have some.
   if (kax_tags != NULL) {
-    fix_mandatory_tag_elements(kax_tags);
-    kax_tags->UpdateSize();
-    kax_tags->Render(*out);
-  }
+    if (chapters_in_this_file == NULL) {
+      KaxChapters temp_chapters;
+      tags_here = select_tags_for_chapters(*kax_tags, temp_chapters);
+   } else
+      tags_here = select_tags_for_chapters(*kax_tags, *chapters_in_this_file);
+    if (tags_here != NULL) {
+      fix_mandatory_tag_elements(tags_here);
+      tags_here->UpdateSize();
+      tags_here->Render(*out);
+    }
+  } else
+    tags_here = NULL;
 
   // Write meta seek information if it is not disabled.
   if (cue_writing_requested)
     kax_sh_main->IndexThis(*kax_cues, *kax_segment);
 
-  if (kax_tags != NULL)
-    kax_sh_main->IndexThis(*kax_tags, *kax_segment);
+  if (tags_here != NULL) {
+    kax_sh_main->IndexThis(*tags_here, *kax_segment);
+    delete tags_here;
+  }
+  if (chapters_in_this_file != NULL) {
+    delete chapters_in_this_file;
+    chapters_in_this_file = NULL;
+  }
 
   if (chapters_here != NULL) {
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
