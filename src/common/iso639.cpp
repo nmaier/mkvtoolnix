@@ -607,11 +607,16 @@ map_iso639_2_to_iso639_1(const char *iso639_2_code) {
 
 const char *
 map_english_name_to_iso639_2(const char *name) {
-  uint32_t i;
+  uint32_t i, j;
+  vector<string> names;
 
-  for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
-    if (!strcasecmp(name, iso639_languages[i].english_name))
-      return iso639_languages[i].iso639_2_code;
+  for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
+    names = split(iso639_languages[i].english_name, ";");
+    strip(names);
+    for (j = 0; j < names.size(); j++)
+      if (!strcasecmp(name, names[j].c_str()))
+          return iso639_languages[i].iso639_2_code;
+  }
 
   return NULL;
 }
