@@ -328,6 +328,8 @@ char *asctime_r(const struct tm *tm, char *buf) {
 
 // }}}
 
+// {{{ Adler32 checksum
+
 #define BASE 65521
 #define A0 check += *buffer++; sum2 += check;
 #define A1 A0 A0
@@ -361,6 +363,8 @@ uint32_t calc_adler32(const unsigned char *buffer, int size) {
 
   return check;
 }
+
+// }}}
 
 bool process_file(const char *file_name) {
   int upper_lvl_el, i;
