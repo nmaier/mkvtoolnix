@@ -669,8 +669,10 @@ mmg_dialog::mmg_dialog():
                wxGROW, 5);
 
   tc_output = new wxTextCtrl(panel, ID_TC_OUTPUT, wxT(""));
-  sbs_low->Add(tc_output, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT |
-               wxGROW, 5);
+  sbs_low->Add(0, 5, 0, 0, 0);
+  sbs_low->Add(tc_output, 1, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM |
+               wxGROW, 2);
+  sbs_low->Add(0, 5, 0, 0, 0);
 
   b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, wxT("Browse"));
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
@@ -710,8 +712,10 @@ mmg_dialog::mmg_dialog():
 
 #ifdef SYS_WINDOWS
   SetSizeHints(520, 740);
+  SetSize(520, 740);
 #else
   SetSizeHints(520, 718);
+  SetSize(520, 718);
 #endif
 
   last_open_dir = wxT("");

@@ -199,7 +199,8 @@ src/output/libmtxoutput.a: $(libmtxoutput_OBJECTS)
 
 mkvmerge_SOURCES = src/mkvmerge.cpp \
 			src/cluster_helper.cpp \
-			src/pr_generic.cpp
+			src/pr_generic.cpp \
+			src/timecode_factory.cpp
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
