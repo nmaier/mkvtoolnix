@@ -62,7 +62,9 @@ install' in both directories. This will install the libraries into
 /usr/local/include/matroska respectively.
 
 After you've compiled the two libraries you can now compile MkvToolNix
-itself:
+itself. If you want to use the GUI for mkvinfo then you also need
+wxWindows v2.4.0 or later (http://www.wxwindows.org/). If configure
+finds the wx-config script then support for the GUI will be enabled.
 
 bunzip2 < mkvtoolnix-...tar.bz2 | tar xvf -
 cd mkvtoolnix-...

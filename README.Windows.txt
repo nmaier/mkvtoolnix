@@ -46,11 +46,15 @@ cvs -d :ext:anonymous@matroska.corecodec.org:/cvsroot/matroska \
 cd libmatroska/make/linux
 make LIBEBML_INCLUDE_DIR=/usr/local/include/ebml lib install
 
-  The same applies to the releases. Of course here you have to replace
-  the 'cvs -d ...' with 'tar xvzf libebml-...', and you have to
-  include the proper version number in the cd commands.
+   The same applies to the releases. Of course here you have to replace
+   the 'cvs -d ...' with 'tar xvzf libebml-...', and you have to
+   include the proper version number in the cd commands.
 
-5) Get the mkvtoolnix sources either from CVS or a release (note that
+5) Download and install wxWindows (http://www.wxwindows.org/) if you
+   want a GUI for mkvinfo. Make sure that mkvtoolnix' configure can
+   find the wx-config script.
+
+6) Get the mkvtoolnix sources either from CVS or a release (note that
    0.3.2 is the first version that can be compiled under cygwin). For
    the CVS version do the following:
 
@@ -73,4 +77,4 @@ cd mkvtoolnix-x.y.z
 make
 make install
 
-6) Be happy and drink some milk. Moooo!
+7) Be happy and drink some milk. Moooo!
