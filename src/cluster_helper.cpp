@@ -412,6 +412,8 @@ int cluster_helper_c::render() {
     else
       last_block_group = NULL;
 
+    if (pack->bref != -1)
+      render_group->more_data = false;
     if (!render_group->more_data) {
       set_duration_and_timeslices(render_group);
       new_block_group = &AddNewChild<KaxBlockGroup>(*cluster);
