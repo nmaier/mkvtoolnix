@@ -1742,12 +1742,15 @@ mmg_dialog::load_job_queue() {
   if (!cfg->Read(wxT("number_of_jobs"), &num))
     return;
 
-  for (i = 0; i < jobs.size(); i++)
+  for (i = 0; i < jobs.size(); i++) {
     delete jobs[i].description;
+    delete jobs[i].log;
+  }
   jobs.clear();
 
   for (i = 0; i < num; i++) {
-    s.Printf(wxT("/jobs/%u"), i);
+    cfg->SetPath(wxT("/jobs"));
+    s.Printf(wxT("%u"), i);
     if (!cfg->HasGroup(s))
       continue;
     cfg->SetPath(s);
