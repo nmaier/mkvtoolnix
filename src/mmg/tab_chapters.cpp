@@ -279,7 +279,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
                    wxPoint(X1, 380 + Y1 + YOFF), wxSize(120, -1), 0, NULL);
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language_code->Append(sorted_iso_codes[i]);
-  cob_language_code->SetValue(_(""));
+  cob_language_code->SetValue("");
 
   new wxStaticText(this, wxID_STATIC, _("Country:"),
                    wxPoint(470 - 120 - (X1 -25), 380  + Y1));
@@ -287,9 +287,10 @@ tab_chapters::tab_chapters(wxWindow *parent,
     new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, _(""),
                    wxPoint(470 - 120, 380 + Y1 + YOFF),
                    wxSize(120, -1), 0, NULL);
+  cob_country_code->Append("");
   for (i = 0; cctlds[i] != NULL; i++)
     cob_country_code->Append(_(cctlds[i]));
-  cob_country_code->SetValue(_(""));
+  cob_country_code->SetValue("");
 
   enable_inputs(false);
 
@@ -1108,6 +1109,17 @@ tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
   if (cdisplay == NULL)
     return;
 
+  if (cob_country_code->GetValue().Length() == 0) {
+    i = 0;
+    while (i < cdisplay->ListSize()) {
+      if (EbmlId(*(*cdisplay)[i]) == KaxChapterCountry::ClassInfos.GlobalId) {
+        delete (*cdisplay)[i];
+        cdisplay->Remove(i);
+      } else
+        i++;
+    }
+    return;
+  }
   ccountry = &GetChild<KaxChapterCountry>(*cdisplay);
   *static_cast<EbmlString *>(ccountry) =
     cob_country_code->GetValue().c_str();
