@@ -244,3 +244,96 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   return NULL;
 }
 
+#define is_id(c) (EbmlId(*e) == c::ClassInfos.GlobalId)
+
+static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
+  uint32_t i;
+  EbmlMaster *dst;
+
+  dst = static_cast<EbmlMaster *>(&src->Generic().Create());
+  while (dst->ListSize() > 0) {
+    EbmlElement *e;
+    e = (*dst)[0];
+    dst->Remove(0);
+    delete e;
+  }
+  for (i = 0; i < src->ListSize(); i++) {
+    EbmlElement *e;
+
+    e = (*src)[i];
+    try {
+      EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
+      dst->PushElement(*copy_chapters_recursive(m));
+    } catch (...) {
+      if (is_id(KaxChapterUID)) {
+        KaxChapterUID *esrc, *edst;
+        edst = new KaxChapterUID;
+        esrc = static_cast<KaxChapterUID *>(e);
+        *edst = *esrc;
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterTimeStart)) {
+        KaxChapterTimeStart *esrc, *edst;
+        edst = new KaxChapterTimeStart;
+        esrc = static_cast<KaxChapterTimeStart *>(e);
+        *edst = *esrc;
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterTimeEnd)) {
+        KaxChapterTimeEnd *esrc, *edst;
+        edst = new KaxChapterTimeEnd;
+        esrc = static_cast<KaxChapterTimeEnd *>(e);
+        *edst = *esrc;
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterTrackNumber)) {
+        KaxChapterTrackNumber *esrc, *edst;
+        edst = new KaxChapterTrackNumber;
+        esrc = static_cast<KaxChapterTrackNumber *>(e);
+        *edst = *esrc;
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterString)) {
+        KaxChapterString *esrc, *edst;
+        edst = new KaxChapterString;
+        esrc = static_cast<KaxChapterString *>(e);
+        *static_cast<EbmlUnicodeString *>(edst) = UTFstring(*esrc);
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterLanguage)) {
+        KaxChapterLanguage *esrc, *edst;
+        edst = new KaxChapterLanguage;
+        esrc = static_cast<KaxChapterLanguage *>(e);
+        *static_cast<EbmlString *>(edst) = string(*esrc);
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterCountry)) {
+        KaxChapterCountry *esrc, *edst;
+        edst = new KaxChapterCountry;
+        esrc = static_cast<KaxChapterCountry *>(e);
+        *static_cast<EbmlString *>(edst) = string(*esrc);
+        dst->PushElement(*edst);
+
+      }
+    }
+  }
+
+  return dst;
+}
+
+KaxChapters *copy_chapters(KaxChapters *source) {
+  KaxChapters *dst;
+  uint32_t ee;
+
+  if (source == NULL)
+    return NULL;
+
+  dst = new KaxChapters;
+  for (ee = 0; ee < source->ListSize(); ee++) {
+    EbmlMaster *master;
+    master = copy_chapters_recursive(static_cast<EbmlMaster *>((*source)[ee]));
+    dst->PushElement(*master);
+  }
+
+  return dst;
+}

@@ -42,5 +42,7 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
 void write_chapters_xml(KaxChapters *chapters, FILE *out);
 void write_chapters_simple(int &chapter_num, KaxChapters *chapters, FILE *out);
 
+KaxChapters *copy_chapters(KaxChapters *source);
+
 #endif // __CHAPTERS_H
 
