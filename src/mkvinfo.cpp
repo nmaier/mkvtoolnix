@@ -216,9 +216,11 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
 }
 
 bool is_ebmlvoid(EbmlElement *l, int level, int &upper_lvl_el) {
+  if (upper_lvl_el < 0)
+    upper_lvl_el = 0;
+
   if (EbmlId(*l) == EbmlVoid::ClassInfos.GlobalId) {
     show_element(l, level, "EbmlVoid");
-    upper_lvl_el = 0;
 
     return true;
   }
