@@ -29,8 +29,18 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <fcntl.h>
+
+//SLM
+#ifdef WIN32
+#define uint16_t unsigned __int16
+#define uint32_t unsigned __int32
+#define uint64_t unsigned __int64
+#else
 #include <unistd.h>
 #include <inttypes.h>
+#endif
+
+
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>

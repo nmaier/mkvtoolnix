@@ -23,7 +23,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+//SLM
+#ifdef WIN32
+#else
 #include <unistd.h>
+#endif
+
 #include <sys/stat.h>
 #include <string.h>
 

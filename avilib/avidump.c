@@ -29,14 +29,23 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+//SLM
+#ifdef WIN32
+#include <io.h>
+#define STDOUT_FILENO fileno(stdout)
+#else
 #include <unistd.h>
+#endif
+
 #include <ctype.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#if defined(__bsdi__) || defined(__FreeBSD__)
+//SLM
+#if defined(__bsdi__) || defined(__FreeBSD__) || defined WIN32
 typedef off_t off64_t;
 #define lseek64 lseek
 #endif

@@ -25,6 +25,12 @@
  *
  */
 
+//SLM
+#ifdef WIN32
+#include <io.h>
+#define strncasecmp(a,b,c) _strnicmp(a,b,c)
+#endif
+
 #include "avilib.h"
 //#include <time.h>
 
@@ -38,6 +44,12 @@ long AVI_errno = 0;
 static char id_str[MAX_INFO_STRLEN];
 
 #define FRAME_RATE_SCALE 1000000
+
+//SLM
+/* ssize_t not defined in vc6 */
+#if !defined(ssize_t)
+typedef int ssize_t;
+#endif
 
 /*******************************************************************
  *                                                                 *
@@ -190,6 +202,22 @@ static int avi_add_index_entry(avi_t *AVI, unsigned char *tag, long flags, unsig
 
    return 0;
 }
+
+//SLM
+#ifndef S_IRUSR
+#define S_IRWXU       00700       /* read, write, execute: owner */
+#define S_IRUSR       00400       /* read permission: owner */
+#define S_IWUSR       00200       /* write permission: owner */
+#define S_IXUSR       00100       /* execute permission: owner */
+#define S_IRWXG       00070       /* read, write, execute: group */
+#define S_IRGRP       00040       /* read permission: group */
+#define S_IWGRP       00020       /* write permission: group */
+#define S_IXGRP       00010       /* execute permission: group */
+#define S_IRWXO       00007       /* read, write, execute: other */
+#define S_IROTH       00004       /* read permission: other */
+#define S_IWOTH       00002       /* write permission: other */
+#define S_IXOTH       00001       /* execute permission: other */
+#endif
 
 /*
    AVI_open_output_file: Open an AVI File and write a bunch
