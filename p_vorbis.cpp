@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.1 2003/03/03 18:00:30 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.2 2003/03/03 23:20:44 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -51,11 +51,10 @@ vorbis_packetizer_c::vorbis_packetizer_c(audio_sync_t *nasync, range_t *nrange,
   int i;
 
   packetno = 0;
-  old_granulepos = 0;
+  last_bs = 0;
+  samples = 0;
   memcpy(&async, nasync, sizeof(audio_sync_t));
   memcpy(&range, nrange, sizeof(range_t));
-  last_granulepos = 0;
-  last_granulepos_seen = 0;
   memset(headers, 0, 3 * sizeof(ogg_packet));
   headers[0].packet = (unsigned char *)malloc(l_header);
   headers[1].packet = (unsigned char *)malloc(l_comments);
@@ -219,6 +218,8 @@ void vorbis_packetizer_c::setup_displacement() {
 
 void vorbis_packetizer_c::set_header() {
   using namespace LIBMATROSKA_NAMESPACE;
+  unsigned char *buffer;
+  int n, offset, i, lsize;
   
   if (kax_last_entry == NULL)
     track_entry =
@@ -251,6 +252,40 @@ void vorbis_packetizer_c::set_header() {
   
   KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(track_audio);
   *(static_cast<EbmlUInteger *>(&kax_chans)) = vi.channels;
+
+  // We use lacing for the blocks. The first bytes is the number of
+  // packets being laced. For each packet in the lace there's the length
+  // coded like this:
+  // length = 0
+  // while (next byte == 255) { length += 255 }
+  // length += this byte which is < 255
+  // The last packet's length can be calculated by the length of
+  // the KaxCodecPrivate and all prior packets, so there's no length for it.
+  lsize = 1 + (headers[0].bytes / 255) + 1 + (headers[1].bytes / 255) + 1 +
+    headers[0].bytes + headers[1].bytes + headers[2].bytes;
+  buffer = (unsigned char *)malloc(lsize);
+  if (buffer == NULL)
+    die("malloc");
+
+  buffer[0] = 3;                // The number of packets.
+  offset = 1;
+  for (i = 0; i < 2; i++) {
+    for (n = headers[i].bytes; n >= 255; n -= 255) {
+      buffer[offset] = 255;
+      offset++;
+    }
+    buffer[offset] = n;
+    offset++;
+    memcpy(&buffer[offset], headers[i].packet, headers[i].bytes);
+    offset += headers[i].bytes;
+  }
+  memcpy(&buffer[offset], headers[2].packet, headers[2].bytes);
+
+  KaxCodecPrivate &codec_private = 
+    GetChild<KaxCodecPrivate>(static_cast<KaxTrackEntry &>(*track_entry));
+  codec_private.CopyBuffer((binary *)buffer, lsize);
+
+  free(buffer);
 }
 
 /* 
@@ -270,6 +305,7 @@ void vorbis_packetizer_c::set_header() {
  */
 int vorbis_packetizer_c::process(char *data, int size, int64_t timecode) {
   ogg_packet op;
+  u_int64_t this_bs, samples_here;
   
   /*
    * We might want to skip a certain amount of packets if this packetizer
@@ -282,13 +318,16 @@ int vorbis_packetizer_c::process(char *data, int size, int64_t timecode) {
 //     return EMOREDATA;
 //   }
 
-  op.packet = (unsigned char *)data;
-  op.bytes = size;
-  fprintf(stdout, "packet_bs: %ld\n", vorbis_packet_blocksize(&vi, &op));
-
   // Recalculate the timecode if needed.
   if (timecode == -1)
-    die("timecode = -1");
+    timecode = samples * 1000 / vi.rate;
+
+  op.packet = (unsigned char *)data;
+  op.bytes = size;
+  this_bs = vorbis_packet_blocksize(&vi, &op);
+  samples_here = (this_bs + last_bs) / 4;
+  samples += samples_here;
+  last_bs = this_bs;
 
   // Handle the displacement.
   timecode += async.displacement;

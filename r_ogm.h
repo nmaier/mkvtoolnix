@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.5 2003/03/03 13:47:50 mosu Exp $
+    \version \$Id: r_ogm.h,v 1.6 2003/03/03 23:20:44 mosu Exp $
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -47,6 +47,7 @@ typedef struct {
   int                   num_packets;
   int                   packet_sizes[3];
   void                 *packet_data[3];
+  int                   vorbis_rate;
 } ogm_demuxer_t;
 
 class ogm_reader_c: public generic_reader_c {

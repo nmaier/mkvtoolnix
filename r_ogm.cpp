@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.5 2003/03/03 18:00:30 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.6 2003/03/03 23:20:44 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -259,6 +259,9 @@ void ogm_reader_c::add_new_demuxer(ogm_demuxer_t *dmx) {
 }
 
 void ogm_reader_c::create_packetizers() {
+  vorbis_info vi;
+  vorbis_comment vc;
+  ogg_packet op;
   BITMAPINFOHEADER bih;
   char *codec;
   stream_header *sth;
@@ -368,6 +371,16 @@ void ogm_reader_c::create_packetizers() {
         break;
 
       case OGM_STREAM_TYPE_VORBIS:
+        vorbis_info_init(&vi);
+        vorbis_comment_init(&vc);
+        memset(&op, 0, sizeof(ogg_packet));
+        op.packet = (unsigned char *)dmx->packet_data[0];
+        op.bytes = dmx->packet_sizes[0];
+        op.b_o_s = 1;
+        vorbis_synthesis_headerin(&vi, &vc, &op);
+        dmx->vorbis_rate = vi.rate;
+        vorbis_info_clear(&vi);
+        vorbis_comment_clear(&vc);
         try {
           dmx->packetizer = 
             new vorbis_packetizer_c(&async, &range,
@@ -626,7 +639,8 @@ void ogm_reader_c::process_page(ogg_page *og) {
       switch (dmx->stype) {
         case OGM_STREAM_TYPE_VORBIS:
           ((vorbis_packetizer_c *)dmx->packetizer)->
-            process((char *)op.packet, op.bytes, ogg_page_granulepos(og));
+            process((char *)op.packet, op.bytes, -1);
+//                     ogg_page_granulepos(og) * 1000 / dmx->vorbis_rate);
           break;
 
         case OGM_STREAM_TYPE_VIDEO:
