@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_dts.h,v 1.4 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_dts.h,v 1.5 2003/06/12 23:05:49 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -46,6 +46,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
   virtual void set_headers();
+  virtual void identify();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 };

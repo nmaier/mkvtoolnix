@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.16 2003/05/23 09:51:22 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.17 2003/06/12 23:05:49 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -166,4 +166,9 @@ void srt_reader_c::display_progress() {
 
 void srt_reader_c::set_headers() {
   textsubs_packetizer->set_headers();
+}
+
+void srt_reader_c::identify() {
+  fprintf(stdout, "File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
+          ti->fname);
 }

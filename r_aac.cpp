@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.7 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_aac.cpp,v 1.8 2003/06/12 23:05:49 mosu Exp $
     \brief AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -123,4 +123,9 @@ void aac_reader_c::display_progress() {
 
 void aac_reader_c::set_headers() {
   aacpacketizer->set_headers();
+}
+
+void aac_reader_c::identify() {
+  fprintf(stdout, "File '%s': container: AAC\nTrack ID 0: audio (AAC)\n",
+          ti->fname);
 }

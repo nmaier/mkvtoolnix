@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.98 2003/06/11 18:25:24 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.99 2003/06/12 23:05:49 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -247,6 +247,7 @@ bool no_lacing = false, no_linking = false;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
+bool identify_only = false;
 
 float video_fps = -1.0;
 int default_tracks[3];
@@ -357,6 +358,7 @@ static void usage(void) {
     "  --sub-charset            Sets the charset the text subtitles are\n"
     "                           written in for the conversion to UTF-8.\n"
     "\n\n Other options:\n"
+    "  -i, --identify <file>    Print information about the source file.\n"
     "  -l, --list-types         Lists supported input file types.\n"
     "  --list-languages         Lists all ISO639 languages and their\n"
     "                           ISO639-2 codes.\n"
@@ -739,6 +741,139 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
   }
 }
 
+static void create_readers() {
+  filelist_t *file;
+  int i;
+
+  for (i = 0; i < files.size(); i++) {
+    file = files[i];
+    try {
+      switch (file->type) {
+        case TYPEMATROSKA:
+          file->reader = new mkv_reader_c(file->ti);
+          break;
+#ifdef HAVE_OGGVORBIS
+        case TYPEOGM:
+          file->reader = new ogm_reader_c(file->ti);
+          break;
+#endif // HAVE_OGGVORBIS
+        case TYPEAVI:
+          if (file->ti->stracks != NULL)
+            fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
+          file->reader = new avi_reader_c(file->ti);
+          break;
+        case TYPEWAV:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "WAVE files.\n");
+          file->reader = new wav_reader_c(file->ti);
+          break;
+        case TYPESRT:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "SRT files.\n");
+          file->reader = new srt_reader_c(file->ti);
+          break;
+        case TYPEMP3:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "MP3 files.\n");
+          file->reader = new mp3_reader_c(file->ti);
+          break;
+        case TYPEAC3:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "AC3 files.\n");
+          file->reader = new ac3_reader_c(file->ti);
+          break;
+        case TYPEDTS:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "DTS files.\n");
+          file->reader = new dts_reader_c(file->ti);
+          break;
+        case TYPEAAC:
+          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
+              (file->ti->stracks != NULL))
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                    "AAC files.\n");
+          file->reader = new aac_reader_c(file->ti);
+          break;
+          //           case TYPECHAPTERS:
+          //             if (chapters != NULL) {
+          //               fprintf(stderr, "Error: only one chapter file allowed.\n");
+          //               exit(1);
+          //             }
+          //             chapters = chapter_information_read(file->name);
+          //             break;
+          //           case TYPEMICRODVD:
+          //             if ((atracks != NULL) || (vtracks != NULL) ||
+          //                 (stracks != NULL))
+          //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+            //                       "MicroDVD files.\n");
+            //             file->reader = new microdvd_reader_c(file->name, &async);
+            //             break;
+            //           case TYPEVOBSUB:
+            //             if ((atracks != NULL) || (vtracks != NULL) ||
+            //                 (stracks != NULL))
+            //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+            //                       "VobSub files.\n");
+            //             file->reader = new vobsub_reader_c(file->name, &async);
+            //             break;
+            default:
+              fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
+              exit(1);
+              break;
+      }
+    } catch (error_c error) {
+      fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
+              error.get_error());
+      exit(1);
+    }
+  }
+}
+
+static void identify(const char *filename) {
+  track_info_t ti;
+  filelist_t *file;
+
+  memset(&ti, 0, sizeof(track_info_t));
+  ti.async.linear = 1.0;
+  ti.cues = CUES_UNSPECIFIED;
+  ti.aspect_ratio = 1.0;
+
+  file = (filelist_t *)safemalloc(sizeof(filelist_t));
+
+  file->name = safestrdup(filename);
+  file->type = get_type(file->name);
+  ti.fname = file->name;
+  
+  if (file->type == TYPEUNKNOWN) {
+    fprintf(stderr, "Error: File %s has unknown type. Please have a look "
+            "at the supported file types ('mkvmerge --list-types') and "
+            "contact me at moritz@bunkus.org if your file type is "
+            "supported but not recognized properly.\n", file->name);
+    exit(1);
+  }
+
+  file->fp = NULL;
+  file->status = EMOREDATA;
+  file->pack = NULL;
+  file->ti = duplicate_track_info(&ti);
+
+  files.push_back(file);
+
+  verbose = 0;
+  create_readers();
+
+  file->reader->identify();
+}
+
 static void parse_args(int argc, char **argv) {
   track_info_t ti;
   int i, j, noaudio, novideo, nosubs;
@@ -753,6 +888,14 @@ static void parse_args(int argc, char **argv) {
   ti.async.linear = 1.0;
   ti.cues = CUES_UNSPECIFIED;
   ti.aspect_ratio = 1.0;
+
+  // Check if only information about the file is wanted. In this mode only
+  // two parameters are allowed: the --identify switch and the file.
+  if ((argc == 2) &&
+      (!strcmp(argv[0], "-i") || !strcmp(argv[0], "--identify"))) {
+    identify(argv[1]);
+    exit(0);
+  }
 
   // First parse options that either just print some infos and then exit
   // or that are needed right at the beginning.
@@ -783,6 +926,10 @@ static void parse_args(int argc, char **argv) {
     } else if (!strcmp(argv[i], "--list-languages")) {
       list_iso639_languages();
       exit(0);
+    } else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--identify")) {
+      fprintf(stderr, "Error: --identify can only be used with a file name. "
+              "No other options are allowed.\n");
+      exit(1);
     }
 
   if (outfile == NULL) {
@@ -1103,103 +1250,6 @@ static void parse_args(int argc, char **argv) {
     if (split_after <= 0)
       fprintf(stderr, "Warning: '--dont-link' is only useful in combination "
               "with '--split'.\n");
-  }
-}
-
-static void create_readers() {
-  filelist_t *file;
-  int i;
-
-  for (i = 0; i < files.size(); i++) {
-    file = files[i];
-    try {
-      switch (file->type) {
-        case TYPEMATROSKA:
-          file->reader = new mkv_reader_c(file->ti);
-          break;
-#ifdef HAVE_OGGVORBIS
-        case TYPEOGM:
-          file->reader = new ogm_reader_c(file->ti);
-          break;
-#endif // HAVE_OGGVORBIS
-        case TYPEAVI:
-          if (file->ti->stracks != NULL)
-            fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
-          file->reader = new avi_reader_c(file->ti);
-          break;
-        case TYPEWAV:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                    "WAVE files.\n");
-          file->reader = new wav_reader_c(file->ti);
-          break;
-        case TYPESRT:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                    "SRT files.\n");
-          file->reader = new srt_reader_c(file->ti);
-          break;
-        case TYPEMP3:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                    "MP3 files.\n");
-          file->reader = new mp3_reader_c(file->ti);
-          break;
-        case TYPEAC3:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                    "AC3 files.\n");
-          file->reader = new ac3_reader_c(file->ti);
-          break;
-        case TYPEDTS:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                    "DTS files.\n");
-          file->reader = new dts_reader_c(file->ti);
-          break;
-        case TYPEAAC:
-          if ((file->ti->atracks != NULL) || (file->ti->vtracks != NULL) ||
-              (file->ti->stracks != NULL))
-            fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                    "AAC files.\n");
-          file->reader = new aac_reader_c(file->ti);
-          break;
-          //           case TYPECHAPTERS:
-          //             if (chapters != NULL) {
-          //               fprintf(stderr, "Error: only one chapter file allowed.\n");
-          //               exit(1);
-          //             }
-          //             chapters = chapter_information_read(file->name);
-          //             break;
-          //           case TYPEMICRODVD:
-          //             if ((atracks != NULL) || (vtracks != NULL) ||
-          //                 (stracks != NULL))
-          //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-            //                       "MicroDVD files.\n");
-            //             file->reader = new microdvd_reader_c(file->name, &async);
-            //             break;
-            //           case TYPEVOBSUB:
-            //             if ((atracks != NULL) || (vtracks != NULL) ||
-            //                 (stracks != NULL))
-            //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-            //                       "VobSub files.\n");
-            //             file->reader = new vobsub_reader_c(file->name, &async);
-            //             break;
-            default:
-              fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
-              exit(1);
-              break;
-      }
-    } catch (error_c error) {
-      fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
-              error.get_error());
-      exit(1);
-    }
   }
 }
 
@@ -1598,8 +1648,6 @@ void main_loop() {
 }
 
 int main(int argc, char **argv) {
-  int i, k;
-
   init_globals();
 
   setup();

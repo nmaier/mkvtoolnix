@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.27 2003/05/23 06:34:58 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.28 2003/06/12 23:05:49 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
@@ -161,11 +161,14 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
                                   &dtsheader);
 
         if (pos >= 0) {
-          fprintf(stderr,"Using WAV demultiplexer for %s.\n"
-                  "+-> Using DTS output module for audio stream. %s %s\n",
-                  ti->fname, (dts_swap_bytes)? "(bytes swapped)" : "",
-                  (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
-          print_dts_header(&dtsheader);
+          if (verbose) {
+            fprintf(stderr,"Using WAV demultiplexer for %s.\n"
+                    "+-> Using DTS output module for audio stream. %s %s\n",
+                    ti->fname, (dts_swap_bytes)? "(bytes swapped)" : "",
+                    (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
+            print_dts_header(&dtsheader);
+            is_dts = true;
+          }
 
           dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
           // .wav's with DTS are always filled up with other stuff to match
@@ -189,8 +192,8 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
     if (verbose)
       fprintf(stdout, "Using WAV demultiplexer for %s.\n+-> Using "
               "PCM output module for audio stream.\n", ti->fname);
+    is_dts = false;
   }
-
 }
 
 wav_reader_c::~wav_reader_c() {
@@ -284,4 +287,9 @@ void wav_reader_c::set_headers() {
     pcmpacketizer->set_headers();
   if (dtspacketizer)
     dtspacketizer->set_headers();
+}
+
+void wav_reader_c::identify() {
+  fprintf(stdout, "File '%s': container: WAV\nTrack ID 0: audio (%s)\n",
+          ti->fname, is_dts ? "DTS" : "PCM");
 }

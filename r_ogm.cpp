@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.35 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.36 2003/06/12 23:05:49 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -758,6 +758,34 @@ void ogm_reader_c::set_headers() {
 
   for (i = 0; i < num_sdemuxers; i++)
     sdemuxers[i]->packetizer->set_headers();
+}
+
+void ogm_reader_c::identify() {
+  int i;
+  stream_header *sth;
+  char fourcc[5];
+
+  fprintf(stdout, "File '%s': container: Ogg/OGM\n", ti->fname);
+  for (i = 0; i < num_sdemuxers; i++) {
+    sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
+    memcpy(fourcc, sth->subtype, 4);
+    fourcc[4] = 0;
+    fprintf(stdout, "Track ID %u: %s (%s)\n", sdemuxers[i]->sid,
+            (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
+             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
+             sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
+             sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3) ? "audio" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? "video" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
+            "unknown",
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ? "Vorbis" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ? "PCM" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ? "MP3" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
+            "unknown");
+  }
 }
 
 #endif // HAVE_OGGVORBIS

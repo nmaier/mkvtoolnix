@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_dts.cpp,v 1.6 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_dts.cpp,v 1.7 2003/06/12 23:05:49 mosu Exp $
     \brief DTS demultiplexer module
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>
@@ -124,4 +124,9 @@ void dts_reader_c::display_progress() {
 
 void dts_reader_c::set_headers() {
   dtspacketizer->set_headers();
+}
+
+void dts_reader_c::identify() {
+  fprintf(stdout, "File '%s': container: DTS\nTrack ID 0: audio (DTS)\n",
+          ti->fname);
 }

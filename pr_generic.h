@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.50 2003/06/09 09:07:42 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.51 2003/06/12 23:05:49 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -168,6 +168,7 @@ public:
   virtual int display_priority() = 0;
   virtual void display_progress() = 0;
   virtual void set_headers() = 0;
+  virtual void identify() = 0;
 };
 
 track_info_t *duplicate_track_info(track_info_t *src);

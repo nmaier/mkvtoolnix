@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.28 2003/06/11 18:25:24 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.29 2003/06/12 23:05:49 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -184,7 +184,7 @@ void cluster_helper_c::find_next_splitpoint() {
   splitpoint_t *sp;
 
   if ((next_splitpoint >= splitpoints.size()) ||
-      (file_num > split_max_num_files)) {
+      (file_num >= split_max_num_files)) {
     next_splitpoint = splitpoints.size();
     return;
   }

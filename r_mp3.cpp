@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.23 2003/06/03 14:29:14 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.24 2003/06/12 23:05:49 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -133,4 +133,9 @@ void mp3_reader_c::display_progress() {
 
 void mp3_reader_c::set_headers() {
   mp3packetizer->set_headers();
+}
+
+void mp3_reader_c::identify() {
+  fprintf(stdout, "File '%s': container: MP3\nTrack ID 0: audio (MP3)\n",
+          ti->fname);
 }

@@ -48,6 +48,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
   virtual void set_headers();
+  virtual void identify();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 

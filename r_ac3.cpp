@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.25 2003/06/03 14:29:14 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.26 2003/06/12 23:05:49 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -123,4 +123,9 @@ void ac3_reader_c::display_progress() {
 
 void ac3_reader_c::set_headers() {
   ac3packetizer->set_headers();
+}
+
+void ac3_reader_c::identify() {
+  fprintf(stdout, "File '%s': container: AC3\nTrack ID 0: audio (AC3)\n",
+          ti->fname);
 }

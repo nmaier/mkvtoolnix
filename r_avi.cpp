@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.35 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.36 2003/06/12 23:05:49 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -492,5 +492,30 @@ void avi_reader_c::set_headers() {
   while (demuxer != NULL) {
     demuxer->packetizer->set_headers();
     demuxer = demuxer->next;
+  }
+}
+
+void avi_reader_c::identify() {
+  int i;
+  const char *type;
+
+  fprintf(stdout, "File '%s': container: AVI\nTrack ID 0: video (%s)\n",
+          ti->fname, AVI_video_compressor(avi));
+  for (i = 0; i < AVI_audio_tracks(avi); i++) {
+    AVI_set_audio_track(avi, i);
+    switch (AVI_audio_format(avi)) {
+      case 0x0001:
+        type = "PCM";
+        break;
+      case 0x0055:
+        type = "MP3";
+        break;
+      case 0x2000:
+        type = "AC3";
+        break;
+      default:
+        type = "unknown";
+    }
+    fprintf(stdout, "Track ID %d: audio (%s)\n", i + 1, type);
   }
 }

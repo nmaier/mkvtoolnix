@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.14 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.15 2003/06/12 23:05:49 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -43,6 +43,7 @@ public:
   virtual int read();
   virtual packet_t *get_packet();
   virtual void set_headers();
+  virtual void identify();
 
   virtual int display_priority();
   virtual void display_progress();
