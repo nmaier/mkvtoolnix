@@ -6,7 +6,7 @@
  * see the file COPYING for details
  * or visit http://www.gnu.org/copyleft/gpl.html
  *
- * $Id: tab_chapters.cpp 1045 2003-09-17 11:56:16Z mosu $
+ * $Id$
  *
  * "chapter editor" tab
  *
@@ -889,10 +889,13 @@ tab_chapters::verify() {
   if (id.IsOk())
     copy_values(id);
 
+  fix_mandatory_chapter_elements(chapters);
+
   for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
     eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
     for (cidx = 0; cidx < eentry->ListSize(); cidx++) {
-      if (!verify_atom_recursively((*eentry)[cidx]))
+      if ((dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != NULL) &&
+          !verify_atom_recursively((*eentry)[cidx]))
         return false;
     }
   }
