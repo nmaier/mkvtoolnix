@@ -30,6 +30,26 @@
 #include "pr_generic.h"
 #include "p_vobsub.h"
 
+class vobsub_track_c {
+public:
+  char *language;
+  vobsub_packetizer_c *packetizer;
+  vector<int64_t> positions, sizes, timecodes, durations;
+  int idx;
+
+public:
+  vobsub_track_c(const char *new_language) {
+    language = safestrdup(new_language);
+    packetizer = NULL;
+    idx = 0;
+  };
+  ~vobsub_track_c() {
+    safefree(language);
+    if (packetizer != NULL)
+      delete packetizer;
+  }
+};
+
 class vobsub_reader_c: public generic_reader_c {
 private:
   mm_io_c *sub_file;
@@ -38,10 +58,7 @@ private:
   int act_wchar, version, ifo_data_size;
   string idx_data;
 
-  int64_t last_filepos, last_timestamp;
-  bool done;
-
-  vobsub_packetizer_c *packetizer;
+  vector<vobsub_track_c *> tracks;
 
 public:
   vobsub_reader_c(track_info_t *nti) throw (error_c);
@@ -57,7 +74,8 @@ public:
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 protected:
-  virtual bool parse_headers();
+  virtual void parse_headers();
+  virtual void create_packetizers();
 };
 
 #endif  // __R_VOBSUB_H

@@ -59,15 +59,10 @@ using namespace std;
                                 ishexdigit(*(s + 6)) && \
                                 ishexdigit(*(s + 7)) && \
                                 ishexdigit(*(s + 8)))
-// timestamp: 00:01:43:603, filepos: 000000000
-#define isvobsubline_v3(s)     ((strlen(s) >= 43) && \
+#define isvobsubline_v7(s)     ((strlen(s) >= 42) && \
                                 istimestampstr(s) && istimecode(s + 11) && \
                                 iscommafileposstr(s + 23) && \
                                 isfilepos(s + 34))
-#define isvobsubline_v7(s)     ((strlen(s) >= 42) && \
-                                istimecodestr(s) && istimecode(s + 10) && \
-                                iscommafileposstr(s + 22) && \
-                                isfilepos(s + 33))
 
 #define PFX "vobsub_reader: "
 
@@ -90,10 +85,9 @@ int vobsub_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  mm_io_c *ifo_file;
-  string sub_name, ifo_name, line;
+  string sub_name, line;
   int len;
-
+  
   try {
     idx_file = new mm_text_io_c(ti->fname);
   } catch (...) {
@@ -115,34 +109,8 @@ vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
     throw error_c(emsg.c_str());
   }
 
-  ifo_name = ti->fname;
-  len = ifo_name.rfind(".");
-  if (len >= 0)
-    ifo_name.erase(len);
-  ifo_name += ".ifo";
-
-  ifo_file = NULL;
-  try {
-    ifo_file = new mm_io_c(ifo_name.c_str(), MODE_READ);
-    ifo_file->setFilePointer(0, seek_end);
-    ifo_data_size = ifo_file->getFilePointer();
-    ifo_file->setFilePointer(0);
-    ifo_data = (unsigned char *)safemalloc(ifo_data_size);
-    if (ifo_file->read(ifo_data, ifo_data_size) != ifo_data_size)
-      mxerror(PFX "Could not read the IFO file.\n");
-    delete ifo_file;
-  } catch (...) {
-    if (ifo_file != NULL)
-      delete ifo_file;
-    ifo_data = NULL;
-    ifo_data_size = 0;
-  }
-
   idx_data = "";
-  last_filepos = -1;
-  last_timestamp = -1;
   act_wchar = 0;
-  done = false;
 
   len = strlen("# VobSub index file, v");
   if (!idx_file->getline2(line) ||
@@ -156,143 +124,189 @@ vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
     version = version * 10 + line[len] - '0';
     len++;
   }
-  mxverb(2, PFX "Version: %u\n", version);
+  if (version < 7)
+    mxerror(PFX "Only v7 and newer VobSub files are supported. If you have an "
+            "older version then use the VSConv utility from "
+            "http://sourceforge.net/projects/guliverkli/ to convert these "
+            "files to v7 files.\n");
 
-  if ((version != 3) && (version != 7))
-    mxerror(PFX "Unsupported file type version %d.\n", version);
-
-  if (!parse_headers())
-    throw error_c(PFX "The input file is not a valid VobSub file.");
-
-  packetizer = new vobsub_packetizer_c(this, idx_data.c_str(),
-                                       idx_data.length(), ifo_data,
-                                       ifo_data_size, COMPRESSION_ZLIB,
-                                       COMPRESSION_NONE, ti);
-
-  if (verbose) {
-    mxinfo("Using VobSub subtitle reader for '%s'/'%s'. ", ti->fname,
-           sub_name.c_str());
-    if (ifo_data_size != 0)
-      mxinfo("Using IFO file '%s'.", ifo_name.c_str());
-    else
-      mxinfo("No IFO file found.");
-    mxinfo("\n+-> Using VobSub subtitle output module for subtitles.\n");
-  }
+  parse_headers();
+  mxinfo("Using VobSub subtitle reader for '%s' & '%s'.\n", ti->fname,
+         sub_name.c_str());
+  create_packetizers();
 }
 
 vobsub_reader_c::~vobsub_reader_c() {
+  uint32_t i;
+
+  for (i = 0; i < tracks.size(); i++)
+    delete tracks[i];
   delete sub_file;
   delete idx_file;
-  safefree(ifo_data);
-  delete packetizer;
 }
 
-bool vobsub_reader_c::parse_headers() {
-  int64_t pos;
+void vobsub_reader_c::create_packetizers() {
+  uint32_t i, k;
+  int64_t avg_duration;
+
+  for (i = 0; i < tracks.size(); i++) {
+    if (!demuxing_requested('s', i))
+      continue;
+
+    ti->id = i;
+//     ti.language = tracks[i]->language;
+    tracks[i]->packetizer =
+      new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(),
+                              COMPRESSION_ZLIB, COMPRESSION_NONE, ti);
+    avg_duration = 0;
+    for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
+      tracks[i]->durations.push_back(tracks[i]->timecodes[k + 1] -
+                                     tracks[i]->timecodes[k]);
+      avg_duration += tracks[i]->timecodes[k + 1] - tracks[i]->timecodes[k];
+    }
+    if (tracks[i]->timecodes.size() == 0)
+      avg_duration = 1000;
+    else
+      avg_duration /= (tracks[i]->timecodes.size() - 1);
+    tracks[i]->durations.push_back(avg_duration);
+
+    if (verbose)
+      mxinfo("+-> Using VobSub subtitle output module for subtitle track "
+             "%u (language: %s).\n", i, tracks[i]->language);
+  }
+}
+
+void vobsub_reader_c::parse_headers() {
   string line;
   const char *sline;
+  char language[3];
+  vobsub_track_c *track, *last_track;
+  int64_t filepos, last_pos, timestamp;
+  int hour, minute, second, msecond, idx;
+  uint32_t i;
+
+  language[0] = 0;
+  track = NULL;
+  last_track = NULL;
+  last_pos = -1;
 
   while (1) {
-    pos = idx_file->getFilePointer();
-
     if (!idx_file->getline2(line))
-      return false;
+      break;
 
     if ((line.length() == 0) || (line[0] == '#')) {
-      idx_data += line;
-      idx_data += "\n";
+//       idx_data += line;
+//       idx_data += "\n";
       continue;
     }
 
     sline = line.c_str();
-    if (((version == 3) && isvobsubline_v3(sline)) ||
-        ((version == 7) && isvobsubline_v7(sline))) {
-      idx_file->setFilePointer(pos);
-      return true;
+
+    if (!strncasecmp(sline, "id:", 3)) {
+      if (line.length() >= 6) {
+        language[0] = sline[4];
+        language[1] = sline[5];
+        language[2] = 0;
+      } else
+        language[0] = 0;
+      last_track = track;
+      track = new vobsub_track_c(language);
+      tracks.push_back(track);
+      continue;
+    }
+
+    if (!strncasecmp(sline, "alt:", 4))
+      continue;
+
+    if ((version == 7) && isvobsubline_v7(sline)) {
+      if (track == NULL)
+        mxerror(PFX ".idx file does not contain an 'id: ...' line to indicate "
+                "the language.\n");
+
+      idx = 34;
+      filepos = hexvalue(sline[idx]);
+      idx++;
+      while ((idx < line.length()) && ishexdigit(sline[idx])) {
+        filepos = filepos * 16 + hexvalue(sline[idx]);
+        idx++;
+      }
+
+      if (last_pos != -1) {
+        if (last_track != NULL) {
+          last_track->sizes.push_back(filepos - last_pos);
+          last_track = NULL;
+        } else
+          track->sizes.push_back(filepos - last_pos);
+      }
+      last_pos = filepos;
+      track->positions.push_back(filepos);
+
+      sscanf(&sline[11], "%02d:%02d:%02d:%03d", &hour, &minute, &second,
+             &msecond);
+      timestamp = (int64_t)hour * 60 * 60 * 1000 +
+        (int64_t)minute * 60 * 1000 + (int64_t)second * 1000 +
+        (int64_t)msecond;
+      track->timecodes.push_back(timestamp);
+
+      continue;
     }
 
     idx_data += line;
     idx_data += "\n";
   }
+
+  if ((last_pos != -1) && (track != NULL)) {
+    sub_file->setFilePointer(0, seek_end);
+    track->sizes.push_back(sub_file->getFilePointer() - last_pos);
+    sub_file->setFilePointer(0);
+  }
+
+  for (i = 0; i < tracks.size(); i++)
+    if ((tracks[i]->positions.size() != tracks[i]->timecodes.size()) ||
+        (tracks[i]->positions.size() != tracks[i]->sizes.size()))
+      mxerror(PFX "Have %u positions, %u sizes and %u timecodes. This should "
+              "not have happened. Please file a bug report.\n",
+              tracks[i]->positions.size(), tracks[i]->sizes.size(),
+              tracks[i]->timecodes.size());
 }
 
-int vobsub_reader_c::read(generic_packetizer_c *) {
-  string line;
-  const char *s;
-  int64_t filepos, timestamp;
-  int hour, minute, second, msecond, timestamp_offset, filepos_offset, idx;
-  unsigned char *buffer;
-  int size;
+int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
+  vobsub_track_c *track;
+  unsigned char *data;
+  uint32_t i, id;
 
-  if (done)
-    return 0;
-
-  if (!idx_file->getline2(line)) {
-    if (last_filepos != -1) {
-      sub_file->setFilePointer(0, seek_end);
-      size = sub_file->getFilePointer() - last_filepos;
-      sub_file->setFilePointer(last_filepos);
-      buffer = (unsigned char *)safemalloc(size);
-      if (sub_file->read(buffer, size) != size)
-        mxerror(PFX "Could not read %u bytes from the VobSub file.\n", size);
-      packetizer->process(buffer, size, last_timestamp, 1000);
-      safefree(buffer);
+  track = NULL;
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->packetizer == ptzr) {
+      track = tracks[i];
+      break;
     }
 
-    done = true;
+  if ((track == NULL) || (track->idx >= track->positions.size()))
+    return 0;
+
+  id = i;
+  i = track->idx;
+  sub_file->setFilePointer(track->positions[i]);
+  data = (unsigned char *)safemalloc(track->sizes[i]);
+  if (sub_file->read(data, track->sizes[i]) != track->sizes[i]) {
+    mxwarn(PFX "Could not read %lld bytes from the .sub file. Aborting.\n",
+           track->sizes[i]);
+    safefree(data);
     return 0;
   }
+  mxverb(2, PFX "track: %u, size: %lld, at: %lld, timecode: %lld, duration: "
+         "%lld\n", id, track->sizes[i], track->positions[i],
+         track->timecodes[i], track->durations[i]);
+  track->packetizer->process(data, track->sizes[i], track->timecodes[i],
+                             track->durations[i]);
+  safefree(data);
+  track->idx++;
 
-  s = line.c_str();
-
-  if ((version == 3) && !isvobsubline_v3(s))
+  if (track->idx >= track->sizes.size())
+    return 0;
+  else
     return EMOREDATA;
-  if ((version == 7) && !isvobsubline_v7(s))
-    return EMOREDATA;
-
-  if (version == 3) {
-// timestamp: 00:01:43:603, filepos: 000000000
-    timestamp_offset = 11;
-    filepos_offset = 34;
-  } else if (version == 7) {
-    die(PFX "Version 7 has not been implemented yet.");
-  } else
-    die(PFX "Unknown version. Should not have happened.");
-
-  sscanf(&s[timestamp_offset], "%02d:%02d:%02d:%03d", &hour, &minute, &second,
-         &msecond);
-  timestamp = (int64_t)hour * 60 * 60 * 1000 +
-    (int64_t)minute * 60 * 1000 + (int64_t)second * 1000 + (int64_t)msecond;
-
-  idx = filepos_offset;
-  filepos = hexvalue(s[idx]);
-  idx++;
-  while ((idx < line.length()) && ishexdigit(s[idx])) {
-    filepos = filepos * 16 + hexvalue(s[idx]);
-    idx++;
-  }
-
-  mxverb(3, PFX "Timestamp: %lld, file pos: %lld\n", timestamp, filepos);
-
-  if (last_filepos == -1) {
-    last_filepos = filepos;
-    last_timestamp = timestamp;
-    return EMOREDATA;
-  }
-
-  // Now process the stuff...
-  sub_file->setFilePointer(last_filepos);
-  size = filepos - last_filepos;
-  buffer = (unsigned char *)safemalloc(size);
-  if (sub_file->read(buffer, size) != size)
-    mxerror(PFX "Could not read %u bytes from the VobSub file.\n", size);
-  packetizer->process(buffer, size, last_timestamp,
-                      timestamp - last_timestamp);
-  safefree(buffer);
-  last_timestamp = timestamp;
-  last_filepos = filepos;
-
-  return EMOREDATA;
 }
 
 int vobsub_reader_c::display_priority() {
@@ -309,10 +323,17 @@ void vobsub_reader_c::display_progress(bool final) {
 }
 
 void vobsub_reader_c::identify() {
+  uint32_t i;
+
   mxinfo("File '%s': container: VobSub\n", ti->fname);
-  mxinfo("Track ID 0: subtitles (VobSub)\n");
+  for (i = 0; i < tracks.size(); i++)
+    mxinfo("Track ID %u: subtitles (VobSub)\n", i);
 }
 
 void vobsub_reader_c::set_headers() {
-  packetizer->set_headers();
+  uint32_t i;
+
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->packetizer != NULL)
+      tracks[i]->packetizer->set_headers();
 }

@@ -439,43 +439,6 @@ void kax_reader_c::verify_tracks() {
                      "private data found.\n", t->tnum, t->codec_id);
             continue;
           }
-
-          c = (unsigned char *)t->private_data;
-          if (c[0] > 1) {
-            if (verbose)
-              mxwarn(PFX "VobSub track does not contain valid headers.\n");
-            continue;
-          }
-
-          offset = 1;
-          t->header_sizes[c[0]] = t->private_size;
-          for (i = 0; i < c[0]; i++) {
-            length = 0;
-            while ((c[offset] == (unsigned char)255) &&
-                   (length < t->private_size)) {
-              length += 255;
-              offset++;
-            }
-            if (offset >= (t->private_size - 1)) {
-              if (verbose)
-                mxwarn(PFX "VobSub track does not "
-                       "contain valid headers.\n");
-              continue;
-            }
-            length += c[offset];
-            offset++;
-            t->header_sizes[i] = length;
-            t->header_sizes[c[0]] -= length;
-          }
-          t->header_sizes[c[0]] -= offset;
-
-          t->headers[0] = &c[offset];
-          if (c[0] == 1)
-            t->headers[1] = & c[offset + t->header_sizes[0]];
-          else {
-            t->headers[1] = NULL;
-            t->header_sizes[1] = 0;
-          }
         }
         t->ok = 1;
         break;
@@ -1236,8 +1199,7 @@ void kax_reader_c::create_packetizers() {
               }
 
             t->packetizer =
-              new vobsub_packetizer_c(this, t->headers[0], t->header_sizes[0],
-                                      t->headers[1], t->header_sizes[1],
+              new vobsub_packetizer_c(this, t->private_data, t->private_size,
                                       compression, compressed, &nti);
             if (verbose)
               mxinfo("Matroska demultiplexer (%s): using the VobSub "
