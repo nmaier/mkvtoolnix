@@ -28,6 +28,7 @@
 #include "mm_io.h"
 #include "pr_generic.h"
 
+#include <matroska/KaxChapters.h>
 #include <matroska/KaxCues.h>
 #include <matroska/KaxSeekHead.h>
 #include <matroska/KaxSegment.h>
@@ -42,6 +43,7 @@ extern KaxTracks *kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
 extern KaxCues *kax_cues;
 extern KaxSeekHead *kax_sh_main, *kax_sh_cues;
+extern KaxChapters *kax_chapters;
 extern int track_number;
 extern int64_t tags_size;
 

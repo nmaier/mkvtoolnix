@@ -128,6 +128,8 @@ private:
   virtual int packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlStream *es,
                                   EbmlElement *l0, int64_t pos);
+  virtual void handle_chapters(mm_io_c *io, EbmlStream *es,
+                               EbmlElement *l0, int64_t pos);
   virtual int64_t get_queued_bytes();
 };
 

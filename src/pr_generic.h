@@ -114,6 +114,8 @@ typedef struct {
 
   vector<cue_creation_t> *compression_list; // As given on the command line
   int compression;              // For this very track
+
+  bool no_chapters;
 } track_info_t;
 
 class generic_reader_c;

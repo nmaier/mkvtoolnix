@@ -1,3 +1,9 @@
+2003-09-12  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: For Matroska source files: If the source contains
+        chapters then these are kept unless the user specified chapters
+        with --chapters.
+
 2003-09-11  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Implemented an experimental VobSub reader and

@@ -224,17 +224,18 @@ file_type_t file_types[] =
 
 static void usage() {
   mxinfo(
-    "mkvmerge -o out [global options] [options] <file1> [@optionsfile ...]"
+    "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
     "  -v, --verbose            verbose status\n"
     "  -q, --quiet              suppress status output\n"
     "  -o, --output out         Write to the file 'out'.\n"
     "  --title <title>          Title for this output file.\n"
+    "  --global-tags <file>     Read global tags from a XML file.\n"
+    "\n Chapter handling:\n"
     "  --chapters <file>        Read chapter information from the file.\n"
     "  --chapter-language <lng> Set the 'language' element in chapter entries."
     "\n  --chapter-charset <cset> Charset for a simple chapter file.\n"
-    "  --global-tags <file>     Read global tags from a XML file.\n"
-    "\n General output control (still global, advanced options):\n"
+    "\n General output control (advanced global options):\n"
     "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
     "                           If the number is postfixed with 'ms' then\n"
     "                           put at most n milliseconds of data into each\n"
@@ -243,7 +244,7 @@ static void usage() {
     "  --no-clusters-in-meta-seek\n"
     "                           Do not write meta seek data for clusters.\n"
     "  --enable-lacing          Use lacing.\n"
-    "\n File splitting and linking (still global):\n"
+    "\n File splitting and linking (more global options):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
@@ -251,7 +252,7 @@ static void usage() {
     "  --dont-link              Don't link splitted files.\n"
     "  --link-to-previous <UID> Link the first file to the given UID.\n"
     "  --link-to-next <UID>     Link the last file to the given UID.\n"
-    "\n Attachment support (still global):\n"
+    "\n Attachment support (more global options):\n"
     "  --attachment-description <desc>\n"
     "                           Description for the following attachment.\n"
     "  --attachment-mime-type <mime type>\n"
@@ -271,6 +272,7 @@ static void usage() {
     "  -A, --noaudio            Don't copy any audio track from this file.\n"
     "  -D, --novideo            Don't copy any video track from this file.\n"
     "  -S, --nosubs             Don't copy any text track from this file.\n"
+    "  --no-chapters            Don't keep chapters from a Matroska file.\n"
     "  -y, --sync <TID:d[,o[/p]]>\n"
     "                           Synchronize, delay the audio track with the\n"
     "                           id TID by d ms. \n"
@@ -1348,6 +1350,9 @@ static void parse_args(int argc, char **argv) {
       kax_chapters = parse_chapters(next_arg, 0, -1, 0, chapter_language,
                                     chapter_charset);
       i++;
+
+    } else if (!strcmp(this_arg, "--no-chapters")) {
+      ti.no_chapters = true;
 
     } else if (!strcmp(this_arg, "--dump-packets")) {
       if (next_arg == NULL)

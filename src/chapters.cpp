@@ -321,6 +321,34 @@ static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
   return dst;
 }
 
+static void set_chapter_mandatory_elements(EbmlMaster *m) {
+  uint32_t i;
+
+  if (EbmlId(*m) == KaxChapterTrack::ClassInfos.GlobalId) {
+    KaxChapterTrackNumber *tnumber;
+    tnumber = &GetChild<KaxChapterTrackNumber>(*m);
+    if (!tnumber->ValueIsSet())
+      *static_cast<EbmlUInteger *>(tnumber) = 0;
+  } else if (EbmlId(*m) == KaxChapterDisplay::ClassInfos.GlobalId) {
+    KaxChapterLanguage *lang;
+    GetChild<KaxChapterString>(*m);
+    lang = &GetChild<KaxChapterLanguage>(*m);
+    if (!lang->ValueIsSet())
+      *static_cast<EbmlString *>(lang) = "eng";
+  }
+
+  for (i = 0; i < m->ListSize(); i++) {
+    EbmlElement *e;
+
+    e = (*m)[i];
+    try {
+      EbmlMaster *new_m = &dynamic_cast<EbmlMaster &>(*e);
+      set_chapter_mandatory_elements(new_m);
+    } catch (...) {
+    }
+  }
+}
+
 KaxChapters *copy_chapters(KaxChapters *source) {
   KaxChapters *dst;
   uint32_t ee;
@@ -332,6 +360,7 @@ KaxChapters *copy_chapters(KaxChapters *source) {
   for (ee = 0; ee < source->ListSize(); ee++) {
     EbmlMaster *master;
     master = copy_chapters_recursive(static_cast<EbmlMaster *>((*source)[ee]));
+    set_chapter_mandatory_elements(master);
     dst->PushElement(*master);
   }
 
