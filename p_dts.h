@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.h,v 1.3 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_dts.h,v 1.4 2003/05/20 06:27:08 mosu Exp $
     \brief class definition for the DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -27,7 +27,7 @@
 
 class dts_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t samples_written;
+  int64_t samples_written, bytes_written;
   
   int buffer_size;
   

@@ -13,7 +13,7 @@
 
 /*!
   \file
-  \version \$Id: dts_common.h,v 1.4 2003/05/18 20:57:07 mosu Exp $
+  \version \$Id: dts_common.h,v 1.5 2003/05/20 06:27:08 mosu Exp $
   \brief definitions and helper functions for DTS data
   \author Peter Niemayer <niemayer@isg.de>
   \author Moritz Bunkus <moritz@bunkus.org>
@@ -22,7 +22,7 @@
 #ifndef __DTSCOMMON_H
 #define __DTSCOMMON_H
 
-static const long long max_dts_packet_size = 32768;
+static const long long max_dts_packet_size = 15384;
 
 /* The following code looks a little odd as it was written in C++
    but with the possibility in mind to make this structure and the

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.cpp,v 1.4 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_dts.cpp,v 1.5 2003/05/20 06:27:08 mosu Exp $
     \brief DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -90,6 +90,7 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
   throw (error_c): generic_packetizer_c(nreader, nti) {
   //packetno = 0;
   samples_written = 0;
+  bytes_written = 0;
   
   packet_buffer = NULL;
   buffer_size = 0;
@@ -103,9 +104,9 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
 }
 
 dts_packetizer_c::~dts_packetizer_c() {
-  fprintf(stderr,"wrote DTS eqivalent of %lld PCM samples at %d Hz, that "
-          "is %f seconds of sound\n",
-          samples_written, first_header.core_sampling_frequency,
+  fprintf(stderr,"wrote %lld bytes DTS data equivalent of %lld PCM samples at "
+          "%d Hz, that is %f seconds of sound\n",
+          bytes_written, samples_written, first_header.core_sampling_frequency,
           ((double)samples_written) /
           (double)first_header.core_sampling_frequency);
   safefree(packet_buffer);
@@ -246,6 +247,7 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
                packet_len_in_ms);
     
+    bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);
   }
   

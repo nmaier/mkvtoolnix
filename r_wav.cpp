@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.22 2003/05/19 21:07:07 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.23 2003/05/20 06:27:08 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
@@ -43,7 +43,7 @@ extern "C" {
 void dts_14_to_dts_16(unsigned short * src, const unsigned long srcwords,
                       unsigned short * dst) {
   // srcwords has to be a multiple of 8!
-  // you will get (srcbytes >> 3)*7 destination bytes!
+  // you will get (srcbytes >> 3)*7 destination words!
   
   const unsigned long l = srcwords >> 3;
   
@@ -144,6 +144,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
       }
       
       for (dts_14_16 = 0; dts_14_16 < 2; dts_14_16++) {
+        long erlen = rlen;
         if (dts_14_16) {
           unsigned long words = rlen / (8*sizeof(short));
           dts_14_to_dts_16(buf[cur_buf], words*8, buf[cur_buf^1]);
@@ -151,7 +152,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
         }
         
         dts_header_t dtsheader;
-        int pos = find_dts_header((const unsigned char *)buf[cur_buf], rlen,
+        int pos = find_dts_header((const unsigned char *)buf[cur_buf], erlen,
                                   &dtsheader);
         
         if (pos >= 0) {
@@ -229,6 +230,7 @@ int wav_reader_c::read() {
       cur_buf ^= 1;
     }
     
+    long erlen = rlen;
     if (dts_14_16) {
       unsigned long words = rlen / (8*sizeof(short));
       //if (words*8*sizeof(short) != rlen) {
@@ -236,9 +238,12 @@ int wav_reader_c::read() {
       //}
       dts_14_to_dts_16(buf[cur_buf], words*8, buf[cur_buf^1]);
       cur_buf ^= 1;
+      erlen = words * 7 * sizeof(short);
     }
     
-    dtspacketizer->process((unsigned char *) (buf[cur_buf]), rlen);
+    dtspacketizer->process((unsigned char *) (buf[cur_buf]), erlen);
+
+    bytes_processed += rlen;
    
     if (rlen != max_dts_packet_size)
       return 0;
