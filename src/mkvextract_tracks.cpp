@@ -1084,7 +1084,7 @@ write_all_cuesheets(KaxChapters &chapters,
   for (i = 0; i < tracks.size(); i++) {
     if (tracks[i].extract_cuesheet) {
       string file_name, cue_file_name;
-      int pos, pos2;
+      int pos, pos2, pos3;
 
       file_name = tracks[i].out_name;
       pos = file_name.rfind('/');
@@ -1093,7 +1093,14 @@ write_all_cuesheets(KaxChapters &chapters,
         pos = pos2;
       if (pos >= 0)
         file_name.erase(0, pos2);
-      cue_file_name = (string)tracks[i].out_name + ".cue";
+
+      cue_file_name = (string)tracks[i].out_name;
+      pos = cue_file_name.rfind('.');
+      pos2 = cue_file_name.rfind('/');
+      pos3 = cue_file_name.rfind('\\');
+      if ((pos >= 0) && (pos > pos2) && (pos > pos3))
+        cue_file_name.erase(pos);
+      cue_file_name += ".cue";
 
       try {
         out = new mm_io_c(cue_file_name.c_str(), MODE_WRITE);
