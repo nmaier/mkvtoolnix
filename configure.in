@@ -822,7 +822,7 @@ LDFLAGS="$USER_LDFLAGS @EXTRA_LDFLAGS@"
 
 AC_SUBST(LDFLAGS)
 
-AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile src/extract/Makefile)
+AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mpegparser/Makefile src/mmg/Makefile src/extract/Makefile)
 
 opt_features_yes="`echo "$opt_features_yes" | sed 's/^\;//'`"
 opt_features_no="`echo "$opt_features_no" | sed 's/^\;//'`"

@@ -237,10 +237,10 @@ int32_t M2VParser::QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime tim
   outBuf->duration = (MediaTime)(duration * (1000000000/(m_seqHdr.frameRate*2)));
     
   if(outBuf->frameType == 'P'){
-    outBuf->firstRef = firstRef;
+    outBuf->firstRef = (MediaTime)(firstRef * (1000000000/(m_seqHdr.frameRate*2)));
   }else if(outBuf->frameType == 'B'){
-    outBuf->firstRef = firstRef;
-    outBuf->secondRef = secondRef;
+    outBuf->firstRef = (MediaTime)(firstRef * (1000000000/(m_seqHdr.frameRate*2)));
+    outBuf->secondRef = (MediaTime)(secondRef * (1000000000/(m_seqHdr.frameRate*2)));
   }
   outBuf->rff = (bool) picHdr.repeatFirstField;
   outBuf->tff = (bool) picHdr.topFieldFirst;
