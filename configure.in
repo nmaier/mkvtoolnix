@@ -174,10 +174,14 @@ AC_CACHE_CHECK([if being compiled with mingw32],
   if test "x$ac_cv_mingw32" = "xyes"; then
     export MINGW=1
     MINGW_GUIAPP=-mwindows
+    LIBMTXCOMMONDLL=1
+  else
+    LIBMTXCOMMONDLL=0
   fi
 
 AC_SUBST(MINGW_LIBS)
 AC_SUBST(MINGW_GUIAPP)
+AC_SUBST(LIBMTXCOMMONDLL)
 
 
 dnl
@@ -186,7 +190,7 @@ dnl can be typedef'ed manually.
 dnl
 AC_MSG_CHECKING(for int64_t)
 AC_LANG_PUSH(C++)
-AC_CACHE_VAL(has_int64_t,[
+AC_CACHE_VAL(ac_cv_has_int64_t,[
   AC_TRY_COMPILE([
 #if HAVE_INTTYPES_H
 # include <inttypes.h>
@@ -199,13 +203,13 @@ AC_CACHE_VAL(has_int64_t,[
 #endif
     ],
     [int64_t foo;],
-    has_int64_t=yes,
-    has_int64_t=no)
+    ac_cv_has_int64_t=yes,
+    ac_cv_has_int64_t=no)
   ])
-AC_MSG_RESULT($has_int64_t)
+AC_MSG_RESULT($ac_cv_has_int64_t)
 
 AC_MSG_CHECKING(for uint64_t)
-AC_CACHE_VAL(has_uint64_t,[
+AC_CACHE_VAL(ac_cv_has_uint64_t,[
   AC_TRY_COMPILE([
 #if HAVE_INTTYPES_H
 # include <inttypes.h>
@@ -218,17 +222,17 @@ AC_CACHE_VAL(has_uint64_t,[
 #endif
     ],
     [int64_t foo;],
-    has_uint64_t=yes,
-    has_uint64_t=no)
+    ac_cv_has_uint64_t=yes,
+    ac_cv_has_uint64_t=no)
   ])
-AC_MSG_RESULT($has_uint64_t)
+AC_MSG_RESULT($ac_cv_has_uint64_t)
 AC_LANG_POP
 
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)
 AC_CHECK_SIZEOF(long long)
 
-if test x$has_int64_t = "xyes" ; then
+if test x$ac_cv_has_int64_t = "xyes" ; then
   TYPE64="int64_t"
 else
   case 8 in
@@ -241,7 +245,7 @@ else
                      [the type to define int64_t manually])
 fi
 
-if test x$has_uint64_t = "xyes" ; then
+if test x$ac_cv_has_uint64_t = "xyes" ; then
   TYPEU64="int64_t"
 else
   case 8 in

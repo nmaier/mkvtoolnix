@@ -93,7 +93,16 @@ AVILIB_INCLUDES = -Iavilib-0.6.10
 AVILIB_LIBDIRS = -Lavilib-0.6.10
 DEP_AVILIB = avilib-0.6.10/libavi.a
 
-DEP_COMMON = src/common/libmtxcommon.a
+LIBMTXCOMMONDLL=@LIBMTXCOMMONDLL@
+ifeq (1,$(LIBMTXCOMMONDLL))
+LIBMTXCOMMONEXT = dll
+CXXFLAGS_SRC_COMMON += -DMTX_DLL_EXPORT
+CXXFLAGS_NO_SRC_COMMON += -DMTX_DLL
+else
+LIBMTXCOMMONEXT = a
+endif
+
+DEP_COMMON = src/common/libmtxcommon.$(LIBMTXCOMMONEXT)
 DEP_EBMLCOMMON = src/common/libmtxebmlcommon.a
 DEP_KAXCOMMON = src/common/libmtxkaxcommon.a
 DEP_INPUT = src/input/libmtxinput.a
@@ -103,10 +112,11 @@ DEP_RMFF = librmff/librmff.a
 DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
-APPLICATIONS = src/mkvmerge src/mkvinfo src/mkvextract src/base64tool
+APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ \
+		src/mkvextract@EXEEXT@ src/base64tool@EXEEXT@
 MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1 doc/base64tool.1
 ifeq (yes,$(USE_WXWINDOWS))
-APPLICATIONS += src/mmg/mmg
+APPLICATIONS += src/mmg/mmg@EXEEXT@
 MANPAGES += doc/mmg.1
 endif
 
@@ -155,6 +165,8 @@ SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
 
 RUNAR = $(AR) rcu
 LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
+LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
+		-shared -Wl,--export-all
 CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 
@@ -173,9 +185,21 @@ else
 endif
 
 # Some general rules
+ifeq (1,$(LIBMTXCOMMONDLL))
+%.o: %.cpp
+	@echo '     CXX ' $<
+	@if echo $@ | grep src.common > /dev/null 2>&1; then \
+		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+	else \
+		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+	fi
+else
 %.o: %.cpp
 	@echo '     CXX ' $<
 	$(Q)$(CXXCOMPILE) -c -o $@ $<
+endif
 
 %.o: %.c
 	@echo '      CC ' $<
@@ -186,10 +210,11 @@ endif
 	$(Q)msgfmt -o $@ $<
 
 clean:
-	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS)
+	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS) \
+		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a
 
 distclean dist-clean: clean
-	rm -f configure config.h config.h.in config.log \
+	rm -f configure config.h config.h.in config.log config.cache \
 		Makefile */Makefile */*/Makefile
 
 depend:
@@ -355,23 +380,23 @@ mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS)
 
-src/mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
+src/mkvmerge@EXEEXT@: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
 
-src/mkvinfo: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
+src/mkvinfo@EXEEXT@: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
-src/mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
+src/mkvextract@EXEEXT@: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
 
-src/base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
+src/base64tool@EXEEXT@: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
 
-src/mmg/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
+src/mmg/mmg@EXEEXT@: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
 
