@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.10 2003/04/23 14:38:53 mosu Exp $
+    \version \$Id: common.cpp,v 1.11 2003/04/24 20:32:33 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -105,6 +105,9 @@ void utf8_init() {
 }
 
 void utf8_done() {
+  if (iconv_initialized < 0)
+    return;
+
   if (iconv_initialized & 1)
     iconv_close(ict_to_utf8);
   if (iconv_initialized & 2)
