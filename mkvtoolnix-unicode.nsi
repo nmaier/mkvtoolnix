@@ -334,6 +334,7 @@ Section "Program files" SEC01
   File "doc\ChangeLog.txt"
   File "doc\COPYING.txt"
   File "doc\README*"
+  File "doc\*.hh*"
   SetOutPath "$INSTDIR\doc\images"
   File "doc\images\*.gif"
   SetOutPath "$INSTDIR\examples"
