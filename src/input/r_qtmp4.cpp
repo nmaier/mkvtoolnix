@@ -1381,7 +1381,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ti->private_size = sizeof(alBITMAPINFOHEADER);
         ti->private_data = (unsigned char *)bih;
         dmx->ptzr =
-          add_packetizer(new mpeg4_l2_video_packetizer_c(this, 0.0,
+          add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0,
                                                          dmx->v_width,
                                                          dmx->v_height, false,
                                                          ti));
@@ -1455,7 +1455,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ti->private_size = dmx->priv_size;
         ti->private_data = dmx->priv;
         dmx->ptzr =
-          add_packetizer(new mpeg4_l10_video_packetizer_c(this, fps,
+          add_packetizer(new mpeg4_p10_video_packetizer_c(this, fps,
                                                           dmx->v_width,
                                                           dmx->v_height, ti));
         ti->private_data = NULL;

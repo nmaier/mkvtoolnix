@@ -39,10 +39,10 @@
      otherwise.
 */
 bool
-mpeg4_extract_par(const unsigned char *buffer,
-                  int size,
-                  uint32_t &par_num,
-                  uint32_t &par_den) {
+mpeg4_p2_extract_par(const unsigned char *buffer,
+                     int size,
+                     uint32_t &par_num,
+                     uint32_t &par_den) {
   const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
                                 0, 0,  0,  0,  0,  0, 0, 0};
   const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1,
@@ -117,9 +117,9 @@ mpeg4_extract_par(const unsigned char *buffer,
      a dummy frame) then \a frames will contain no elements.
 */
 void
-mpeg4_find_frame_types(const unsigned char *buffer,
-                       int size,
-                       vector<video_frame_t> &frames) {
+mpeg4_p2_find_frame_types(const unsigned char *buffer,
+                          int size,
+                          vector<video_frame_t> &frames) {
   bit_cursor_c bits(buffer, size);
   uint32_t marker, frame_type;
   bool first_frame;
@@ -221,7 +221,7 @@ read_golomb_se(bit_cursor_c &bits) {
      otherwise.
 */
 bool
-mpeg4_l10_extract_par(const uint8_t *buffer,
+mpeg4_p10_extract_par(const uint8_t *buffer,
                       int buf_size,
                       uint32_t &par_num,
                       uint32_t &par_den) {
@@ -231,7 +231,7 @@ mpeg4_l10_extract_par(const uint8_t *buffer,
 
     avcc.skip(5);
     num_sps = avcc.read_uint8();
-    mxverb(4, "mpeg4_l10_extract_par: num_sps %d\n", num_sps);
+    mxverb(4, "mpeg4_p10_extract_par: num_sps %d\n", num_sps);
 
     for (sps = 0; sps < num_sps; sps++) {
       int length, poc_type, ar_type, nal_unit_type;
@@ -245,7 +245,7 @@ mpeg4_l10_extract_par(const uint8_t *buffer,
       if (!ok)
         throw false;
       nal_unit_type &= 0x1f;
-      mxverb(4, "mpeg4_l10_extract_par: nal_unit_type %d\n", nal_unit_type);
+      mxverb(4, "mpeg4_p10_extract_par: nal_unit_type %d\n", nal_unit_type);
       if (nal_unit_type != 7)   // 7 = SPS
         continue;
 
@@ -255,7 +255,7 @@ mpeg4_l10_extract_par(const uint8_t *buffer,
       poc_type = read_golomb_ue(bits);
 
       if (poc_type > 1) {
-        mxverb(4, "mpeg4_l10_extract_par: poc_type %d\n", poc_type);
+        mxverb(4, "mpeg4_p10_extract_par: poc_type %d\n", poc_type);
         throw false;
       }
 
@@ -289,23 +289,23 @@ mpeg4_l10_extract_par(const uint8_t *buffer,
       }
       ok &= bits.get_bit(flag); // VUI
       if (!flag) {
-        mxverb(4, "mpeg4_l10_extract_par: !VUI\n");
+        mxverb(4, "mpeg4_p10_extract_par: !VUI\n");
         throw false;
       }
       ok &= bits.get_bit(flag); // AR
       if (!flag) {
-        mxverb(4, "mpeg4_l10_extract_par: !AR\n");
+        mxverb(4, "mpeg4_p10_extract_par: !AR\n");
         throw false;
       }
 
       ok &= bits.get_bits(8, ar_type);
       if (!ok) {
-        mxverb(4, "mpeg4_l10_extract_par: no ar_type\n");
+        mxverb(4, "mpeg4_p10_extract_par: no ar_type\n");
         throw false;
       }
       if ((ar_type != 0xff) &&  // custom AR
           (ar_type > 13)) {
-        mxverb(4, "mpeg4_l10_extract_par: wrong ar_type %d\n", ar_type);
+        mxverb(4, "mpeg4_p10_extract_par: wrong ar_type %d\n", ar_type);
         throw false;
       }
 
@@ -319,14 +319,14 @@ mpeg4_l10_extract_par(const uint8_t *buffer,
 
         par_num = par_nums[ar_type];
         par_den = par_denoms[ar_type];
-        mxverb(4, "mpeg4_l10_extract_par: ar_type %d num %d den %d\n",
+        mxverb(4, "mpeg4_p10_extract_par: ar_type %d num %d den %d\n",
                ar_type, par_num, par_den);
         return true;
       }
 
       ok &= bits.get_bits(16, par_num);
       ok &= bits.get_bits(16, par_den);
-      mxverb(4, "mpeg4_l10_extract_par: ar_type %d ok %d num %d den %d\n",
+      mxverb(4, "mpeg4_p10_extract_par: ar_type %d ok %d num %d den %d\n",
              ar_type, ok, par_num, par_den);
       return ok;
     } // for

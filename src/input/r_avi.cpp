@@ -174,7 +174,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
     ti->id = 0;                 // ID for the video track.
     if (is_divx == RAVI_MPEG4) {
       vptzr =
-        add_packetizer(new mpeg4_l2_video_packetizer_c(this,
+        add_packetizer(new mpeg4_p2_video_packetizer_c(this,
                                                        AVI_frame_rate(avi),
                                                        AVI_video_width(avi),
                                                        AVI_video_height(avi),
@@ -571,7 +571,7 @@ avi_reader_c::identify() {
     if (size > 0) {
       buffer = (unsigned char *)safemalloc(size);
       AVI_read_frame(avi, (char *)buffer, &key);
-      if (mpeg4_extract_par(buffer, size, par_num, par_den)) {
+      if (mpeg4_p2_extract_par(buffer, size, par_num, par_den)) {
         width = AVI_video_width(avi);
         height = AVI_video_height(avi);
         aspect_ratio = (float)width / (float)height * (float)par_num /

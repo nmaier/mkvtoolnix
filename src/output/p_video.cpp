@@ -295,8 +295,8 @@ mpeg1_2_video_packetizer_c::create_private_data() {
 
 // ----------------------------------------------------------------
 
-mpeg4_l2_video_packetizer_c::
-mpeg4_l2_video_packetizer_c(generic_reader_c *_reader,
+mpeg4_p2_video_packetizer_c::
+mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             double _fps,
                             int _width,
                             int _height,
@@ -314,7 +314,7 @@ mpeg4_l2_video_packetizer_c(generic_reader_c *_reader,
 }
 
 int
-mpeg4_l2_video_packetizer_c::process(memory_c &mem,
+mpeg4_p2_video_packetizer_c::process(memory_c &mem,
                                      int64_t old_timecode,
                                      int64_t duration,
                                      int64_t bref,
@@ -331,7 +331,7 @@ mpeg4_l2_video_packetizer_c::process(memory_c &mem,
     return FILE_STATUS_MOREDATA;
   }
 
-  mpeg4_find_frame_types(mem.data, mem.size, frames);
+  mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
 
   for (i = 0; i < frames.size(); i++) {
     if ((frames[i].type == 'I') ||
@@ -383,7 +383,7 @@ mpeg4_l2_video_packetizer_c::process(memory_c &mem,
 }
 
 void
-mpeg4_l2_video_packetizer_c::flush_frames(char next_frame,
+mpeg4_p2_video_packetizer_c::flush_frames(char next_frame,
                                           bool flush_all) {
   uint32_t i;
 
@@ -444,12 +444,12 @@ mpeg4_l2_video_packetizer_c::flush_frames(char next_frame,
 }
 
 void
-mpeg4_l2_video_packetizer_c::flush() {
+mpeg4_p2_video_packetizer_c::flush() {
   flush_frames(true);
 }
 
 void
-mpeg4_l2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
+mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
                                                   int size) {
   uint32_t num, den;
 
@@ -457,7 +457,7 @@ mpeg4_l2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
   if (ti->aspect_ratio_given || ti->display_dimensions_given)
     return;
 
-  if (mpeg4_extract_par(buffer, size, num, den)) {
+  if (mpeg4_p2_extract_par(buffer, size, num, den)) {
     ti->aspect_ratio_given = true;
     ti->aspect_ratio = (float)hvideo_pixel_width /
       (float)hvideo_pixel_height * (float)num / (float)den;
@@ -472,8 +472,8 @@ mpeg4_l2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
 
 // ----------------------------------------------------------------
 
-mpeg4_l10_video_packetizer_c::
-mpeg4_l10_video_packetizer_c(generic_reader_c *_reader,
+mpeg4_p10_video_packetizer_c::
+mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                              double _fps,
                              int _width,
                              int _height,
@@ -485,13 +485,13 @@ mpeg4_l10_video_packetizer_c(generic_reader_c *_reader,
 }
 
 void
-mpeg4_l10_video_packetizer_c::extract_aspect_ratio() {
+mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
 
   if (ti->aspect_ratio_given || ti->display_dimensions_given)
     return;
 
-  if (mpeg4_l10_extract_par(ti->private_data, ti->private_size, num, den) &&
+  if (mpeg4_p10_extract_par(ti->private_data, ti->private_size, num, den) &&
       (0 != num) && (0 != den)) {
     double par = (double)num / (double)den;
 

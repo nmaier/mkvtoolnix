@@ -119,12 +119,13 @@ struct video_frame_t {
     timecode(0), duration(0), bref(0), fref(0) {};
 };
 
-bool MTX_DLL_API mpeg4_extract_par(const unsigned char *buffer, int size,
-                                   uint32_t &par_num, uint32_t &par_den);
-void MTX_DLL_API mpeg4_find_frame_types(const unsigned char *buffer, int size,
-                                        vector<video_frame_t> &frames);
+bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer, int size,
+                                      uint32_t &par_num, uint32_t &par_den);
+void MTX_DLL_API mpeg4_p2_find_frame_types(const unsigned char *buffer,
+                                           int size,
+                                           vector<video_frame_t> &frames);
 
-bool MTX_DLL_API mpeg4_l10_extract_par(const uint8_t *buffer, int buf_size,
+bool MTX_DLL_API mpeg4_p10_extract_par(const uint8_t *buffer, int buf_size,
                                        uint32_t &par_num, uint32_t &par_den);
 
 int MTX_DLL_API mpeg1_2_extract_fps_idx(const unsigned char *buffer,

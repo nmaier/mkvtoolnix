@@ -1628,7 +1628,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                    ti->fname.c_str(), (int64_t)t->tnum);
             is_native = IS_MPEG4_L2_CODECID(t->codec_id);
             t->ptzr =
-              add_packetizer(new mpeg4_l2_video_packetizer_c(this,
+              add_packetizer(new mpeg4_p2_video_packetizer_c(this,
                                                              t->v_frate,
                                                              t->v_width,
                                                              t->v_height,
@@ -1639,7 +1639,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
             mxinfo(FMT_TID "Using the MPEG-4 layer 10 (AVC) video output "
                    "module.\n", ti->fname.c_str(), (int64_t)t->tnum);
             t->ptzr =
-              add_packetizer(new mpeg4_l10_video_packetizer_c(this,
+              add_packetizer(new mpeg4_p10_video_packetizer_c(this,
                                                               t->v_frate,
                                                               t->v_width,
                                                               t->v_height,

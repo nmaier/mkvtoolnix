@@ -77,14 +77,14 @@ protected:
   virtual void create_private_data();
 };
 
-class mpeg4_l2_video_packetizer_c: public video_packetizer_c {
+class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
   vector<video_frame_t> queued_frames;
   video_frame_t bref_frame, fref_frame;
   bool aspect_ratio_extracted, input_is_native;
 
 public:
-  mpeg4_l2_video_packetizer_c(generic_reader_c *_reader,
+  mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                               double _fps, int _width, int _height,
                               bool _input_is_native, track_info_c *_ti);
 
@@ -98,9 +98,9 @@ protected:
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
 };
 
-class mpeg4_l10_video_packetizer_c: public video_packetizer_c {
+class mpeg4_p10_video_packetizer_c: public video_packetizer_c {
 public:
-  mpeg4_l10_video_packetizer_c(generic_reader_c *_reader,
+  mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                                double _fps, int _width, int _height,
                                track_info_c *_ti);
 
