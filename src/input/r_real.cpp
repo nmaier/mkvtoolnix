@@ -38,6 +38,87 @@
    http://www.pcisys.net/~melanson/codecs/rmff.htm
 */
 
+extern "C" {
+
+static void *
+mm_io_file_open(const char *path,
+                int mode) {
+  try {
+    open_mode omode;
+
+    if (MB_OPEN_MODE_READING == mode)
+      omode = MODE_READ;
+    else
+      omode = MODE_CREATE;
+
+    return new mm_file_io_c(path, omode);
+  } catch(...) {
+    return NULL;
+  }
+}
+
+static int
+mm_io_file_close(void *file) {
+  if (NULL != file)
+    delete static_cast<mm_file_io_c *>(file);
+  return 0;
+}
+
+static int64_t
+mm_io_file_tell(void *file) {
+  if (NULL != file)
+    return static_cast<mm_file_io_c *>(file)->getFilePointer();
+  return -1;
+}
+
+static int64_t
+mm_io_file_seek(void *file,
+                int64_t offset,
+                int whence) {
+  seek_mode smode;
+
+  if (NULL == file)
+    return -1;
+  if (SEEK_END == whence)
+    smode = seek_end;
+  else if (SEEK_CUR == whence)
+    smode = seek_current;
+  else
+    smode = seek_beginning;
+  if (!static_cast<mm_file_io_c *>(file)->setFilePointer2(offset, smode))
+    return -1;
+  return 0;
+}
+
+static int64_t
+mm_io_file_read(void *file,
+                void *buffer,
+                int64_t bytes) {
+  if (NULL == file)
+    return -1;
+  return static_cast<mm_file_io_c *>(file)->read(buffer, bytes);
+}
+
+static int64_t
+mm_io_file_write(void *file,
+                 const void *buffer,
+                 int64_t bytes) {
+  if (NULL == file)
+    return -1;
+  return static_cast<mm_file_io_c *>(file)->write(buffer, bytes);
+}
+
+}
+
+mb_file_io_t mm_io_file_io = {
+  mm_io_file_open,
+  mm_io_file_close,
+  mm_io_file_read,
+  mm_io_file_write,
+  mm_io_file_tell,
+  mm_io_file_seek
+};
+
 int
 real_reader_c::probe_file(mm_io_c *io,
                           int64_t size) {
@@ -62,15 +143,12 @@ real_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-// }}}
-
-// {{{ C'TOR
-
 real_reader_c::real_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
 
-  file = rmff_open_file(ti->fname.c_str(), RMFF_OPEN_MODE_READING);
+  file = rmff_open_file_with_io(ti->fname.c_str(), RMFF_OPEN_MODE_READING,
+                                &mm_io_file_io);
   if (file == NULL) {
     if (rmff_last_error == RMFF_ERR_NOT_RMFF)
       throw error_c(PFX "Source is not a valid RealMedia file.");
@@ -89,10 +167,6 @@ real_reader_c::real_reader_c(track_info_c *nti)
   parse_headers();
   get_information_from_data();
 }
-
-// }}}
-
-// {{{ D'TOR
 
 real_reader_c::~real_reader_c() {
   real_demuxer_t *demuxer;
@@ -113,10 +187,6 @@ real_reader_c::~real_reader_c() {
   ti->private_data = NULL;
   rmff_close_file(file);
 }
-
-// }}}
-
-// {{{ FUNCTION real_reader_c::parse_headers()
 
 void
 real_reader_c::parse_headers() {
@@ -233,10 +303,6 @@ real_reader_c::parse_headers() {
     }
   }
 }
-
-// }}}
-
-// {{{ FUNCTION real_reader_c::create_packetizers()
 
 void
 real_reader_c::create_packetizer(int64_t tid) {
@@ -375,10 +441,6 @@ real_reader_c::create_packetizers() {
     create_packetizer(demuxers[i]->track->id);
 }
 
-// }}}
-
-// {{{ FUNCTION real_reader_c::find_demuxer(int id)
-
 real_demuxer_t *
 real_reader_c::find_demuxer(int id) {
   int i;
@@ -411,10 +473,6 @@ real_reader_c::finish() {
 
   return FILE_STATUS_DONE;
 }
-
-// }}}
-
-// {{{ FUNCTION real_reader_c::read()
 
 file_status_e
 real_reader_c::read(generic_packetizer_c *,
@@ -747,10 +805,6 @@ real_reader_c::set_dimensions(real_demuxer_t *dmx,
   }
 }
 
-// }}}
-
-// {{{ FUNCTION real_reader_c::get_information_from_data()
-
 void
 real_reader_c::get_information_from_data() {
   int i;
@@ -795,8 +849,6 @@ real_reader_c::get_information_from_data() {
   file->io->seek(file->handle, old_pos, SEEK_SET);
   file->num_packets_read = 0;
 }
-
-// }}}
 
 void
 real_reader_c::flush_packetizers() {
