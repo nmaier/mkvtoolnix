@@ -214,6 +214,7 @@ int main() {return 0;}
     has_uint64_t=no)
   ])
 AC_MSG_RESULT($has_uint64_t)
+AC_LANG_POP
 
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)
@@ -251,8 +252,6 @@ fi
 if test -z "$TYPEU64"; then
   AC_MSG_ERROR(No unsigned 64 bit type found on this platform!)
 fi
-
-AC_LANG_POP
 
 
 dnl
@@ -349,7 +348,7 @@ dnl
                [ VORBIS_LIBS="-lvorbis -lm"
                  vorbis_found=yes ],
                [ vorbis_found=no ],
-               $OGG_LIBS)
+               $OGG_LIBS -lm)
   if test "$vorbis_found" = "no"; then
     AC_MSG_ERROR([Could not find the Vorbis library])
   fi
