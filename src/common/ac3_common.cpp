@@ -120,11 +120,10 @@ find_consecutive_ac3_headers(const unsigned char *buf,
   int i, pos, base, offset;
   ac3_header_t ac3header, new_header;
 
-  pos = find_ac3_header(&buf[base], size - base, &ac3header);
+  pos = find_ac3_header(buf, size, &ac3header);
   if (pos < 0)
     return -1;
-  mxverb(2, "ac3_reader: Found tag at %d size %d\n", base + pos,
-         ac3header.bytes);
+  mxverb(2, "ac3_reader: Found tag at %d size %d\n", pos, ac3header.bytes);
   base = pos + 1;
 
   if (num == 1)
