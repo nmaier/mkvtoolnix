@@ -30,6 +30,7 @@
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "tab_input.h"
+#include "tab_global.h"
 
 using namespace std;
 
@@ -821,6 +822,7 @@ tab_input::add_file(const wxString &file_name) {
           pair = split(args[k], wxU(":"), 2);
           if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
             *file.title = from_utf8(unescape(pair[1]));
+            file.title_was_present = true;
             title_was_present = true;
           }
         }
@@ -898,6 +900,12 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
       tit++;
     }
   }
+
+  // Unset the "file/segment title" box if the segment title came from this
+  // source file and the user hasn't changed it since.
+  if ((f->title != NULL) && (f->title_was_present) &&
+      (*f->title == mdlg->global_page->tc_title->GetValue()))
+    mdlg->global_page->tc_title->SetValue(wxT(""));
 
   for (i = 0; i < f->tracks->size(); i++) {
     t = &(*f->tracks)[i];
