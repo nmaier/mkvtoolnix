@@ -326,6 +326,23 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_line->Add(tc_end_time, 1, wxGROW, 0);
 
   siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
+  siz_fg->Add(1, 0, 0, 0, 0);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  cb_flag_hidden = new wxCheckBox(this, ID_CB_CHAPTERHIDDEN, wxT("hidden"));
+  cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the "
+                                 "player should not show this chapter entry "
+                                 "to the user. Such entries could still be "
+                                 "used by the menu system."));
+  siz_line->Add(cb_flag_hidden, 1, wxGROW | wxRIGHT, 10);
+  cb_flag_enabled = new wxCheckBox(this, ID_CB_CHAPTERENABLED, wxT("enabled"));
+  cb_flag_enabled->SetToolTip(TIP("If a chapter is not marked 'enabled' then "
+                                  "the player should skip the part of the "
+                                  "file that this chapter occupies."));
+  siz_line->Add(cb_flag_enabled, 1, wxGROW, 0);
+
+  siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
+  siz_fg->Add(1, 0, 0, 0, 0);
 
   siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
@@ -422,6 +439,8 @@ tab_chapters::enable_inputs(bool enable) {
   lb_chapter_names->Enable(enable);
   b_add_chapter_name->Enable(enable);
   b_remove_chapter_name->Enable(enable);
+  cb_flag_hidden->Enable(enable);
+  cb_flag_enabled->Enable(enable);
   inputs_enabled = enable;
 }
 
@@ -773,19 +792,15 @@ tab_chapters::on_verify_chapters(wxCommandEvent &evt) {
 }
 
 bool
-tab_chapters::verify_atom_recursively(EbmlElement *e,
-                                      int64_t p_start,
-                                      int64_t p_end) {
+tab_chapters::verify_atom_recursively(EbmlElement *e) {
   KaxChapterUID *uid;
   KaxChapterAtom *chapter;
   KaxChapterTimeStart *start;
-  KaxChapterTimeEnd *end;
   KaxChapterDisplay *display;
   KaxChapterLanguage *language;
   KaxChapterString *cs;
   wxString label;
   uint32_t i;
-  int64_t t_start, t_end;
 
   chapter = static_cast<KaxChapterAtom *>(e);
 
@@ -816,34 +831,6 @@ tab_chapters::verify_atom_recursively(EbmlElement *e,
                  wxICON_ERROR);
     return false;
   }
-  t_start = uint64(*static_cast<EbmlUInteger *>(start));
-  if ((p_start != -1) && (t_start < p_start)) {
-    wxMessageBox(wxT("The chapter '") + label +
-                 wxT("' starts before its parent."),
-                 wxT("Chapter verification error"), wxCENTER | wxOK |
-                 wxICON_ERROR);
-    return false;
-  }
-
-  end = FindChild<KaxChapterTimeEnd>(*chapter);
-  if (end != NULL) {
-    t_end = uint64(*static_cast<EbmlUInteger *>(end));
-    if ((p_end != -1) && (t_end > p_end)) {
-      wxMessageBox(wxT("The chapter '") + label +
-                   wxT("' ends after its parent."),
-                   wxT("Chapter verification error"), wxCENTER | wxOK |
-                   wxICON_ERROR);
-      return false;
-    }
-    if (t_end < t_start) {
-      wxMessageBox(wxT("The chapter '") + label +
-                   wxT("' ends before it starts."),
-                   wxT("Chapter verification error"), wxCENTER | wxOK |
-                   wxICON_ERROR);
-      return false;
-    }
-  } else
-    t_end = -1;
 
   language = FindChild<KaxChapterLanguage>(*display);
   if (language == NULL) {
@@ -856,7 +843,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e,
 
   for (i = 0; i < chapter->ListSize(); i++)
     if (dynamic_cast<KaxChapterAtom *>((*chapter)[i]) != NULL)
-      if (!verify_atom_recursively((*chapter)[i], t_start, t_end))
+      if (!verify_atom_recursively((*chapter)[i]))
         return false;
 
   return true;
@@ -1072,8 +1059,10 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   chapter_node_data_c *t;
   KaxChapterDisplay *display;
   KaxChapterString *cstring;
+  KaxChapterFlagHidden *fhidden;
+  KaxChapterFlagEnabled *fenabled;
   wxString label, language;
-  bool first;
+  bool first, value;
   wxTreeItemId old_id;
 
   enable_buttons(true);
@@ -1119,6 +1108,20 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   }
 
   set_timecode_values(t->chapter);
+
+  fhidden = FINDFIRST(t->chapter, KaxChapterFlagHidden);
+  if (fhidden == NULL)
+    value = false;
+  else
+    value = uint8(*static_cast<EbmlUInteger *>(fhidden)) != 0;
+  cb_flag_hidden->SetValue(value);
+
+  fenabled = FINDFIRST(t->chapter, KaxChapterFlagEnabled);
+  if (fenabled == NULL)
+    value = true;
+  else
+    value = uint8(*static_cast<EbmlUInteger *>(fenabled)) != 0;
+  cb_flag_enabled->SetValue(value);
 
   lb_chapter_names->SetSelection(0);
   b_remove_chapter_name->Enable(lb_chapter_names->GetCount() > 1);
@@ -1687,6 +1690,56 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
   tc_chapter_name->SetFocus();
 }
 
+#define is_id(e, c) (EbmlId(*(e)) == c::ClassInfos.GlobalId)
+
+void
+tab_chapters::on_flag_hidden(wxCommandEvent &evt) {
+  wxTreeItemId selected;
+  chapter_node_data_c *t;
+  int i;
+
+  selected = tc_chapters->GetSelection();
+  if (!selected.IsOk() || (selected == tid_root))
+    return;
+  t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
+  if ((t == NULL) || !t->is_atom)
+    return;
+
+  if (cb_flag_hidden->IsChecked())
+    *static_cast<EbmlUInteger *>
+      (&GetChild<KaxChapterFlagHidden>(*t->chapter)) = 1;
+  else
+    for (i = 0; i < t->chapter->ListSize(); i++)
+      if (is_id((*t->chapter)[i], KaxChapterFlagHidden)) {
+        t->chapter->Remove(i);
+        return;
+      }
+}
+
+void
+tab_chapters::on_flag_enabled(wxCommandEvent &evt) {
+  wxTreeItemId selected;
+  chapter_node_data_c *t;
+  int i;
+
+  selected = tc_chapters->GetSelection();
+  if (!selected.IsOk() || (selected == tid_root))
+    return;
+  t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
+  if ((t == NULL) || !t->is_atom)
+    return;
+
+  if (!cb_flag_enabled->IsChecked())
+    *static_cast<EbmlUInteger *>
+      (&GetChild<KaxChapterFlagEnabled>(*t->chapter)) = 0;
+  else
+    for (i = 0; i < t->chapter->ListSize(); i++)
+      if (is_id((*t->chapter)[i], KaxChapterFlagEnabled)) {
+        t->chapter->Remove(i);
+        return;
+      }
+}
+
 void
 tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
   KaxChapterTimeStart *tstart;
@@ -1802,4 +1855,6 @@ BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
                tab_chapters::on_country_code_selected)
   EVT_LISTBOX(ID_LB_CHAPTERNAMES, tab_chapters::on_chapter_name_selected)
   EVT_TEXT(ID_TC_CHAPTERNAME, tab_chapters::on_chapter_name_changed)
+  EVT_CHECKBOX(ID_CB_CHAPTERHIDDEN, tab_chapters::on_flag_hidden)
+  EVT_CHECKBOX(ID_CB_CHAPTERENABLED, tab_chapters::on_flag_enabled)
 END_EVENT_TABLE();

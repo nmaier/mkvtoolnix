@@ -1,5 +1,8 @@
 2004-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: new feature: Added support for the two flags 'hidden' and
+	'enabled' in the chapter editor.
+
 	* mkvmerge: new feature: The pregap from a CUE sheet is converted
 	into two sub-chapters (one for "INDEX 00", one for "INDEX
 	01"). These sub-chapters have their 'hidden' flag set.
