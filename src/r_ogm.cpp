@@ -271,7 +271,7 @@ void ogm_reader_c::create_packetizers() {
         try {
           dmx->packetizer =
             new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                 get_uint16(&sth->sh.audio.channels), ti);
+                                 get_uint16(&sth->sh.audio.channels), 3, ti);
         } catch (error_c &error) {
           mxwarn("Error: ogm_reader: could not initialize MP3 "
                  "packetizer for stream id %d. Will try to continue and "

@@ -21,25 +21,24 @@
 #ifndef __MP3_COMMON_H
 #define __MP3_COMMON_H
 
-extern int mp3_tabsel[2][16];
-extern long mp3_freqs[9];
+#include "os.h"
 
 typedef struct {
-  int lsf;
-  int mpeg25;
-  int mode;
-  int layer;
   int version;
-  int error_protection;
-  int stereo;
-  int ssize;
-  int bitrate_index;
+  int layer;
+  int protection;
+  int bitrate_index, bitrate;
   int sampling_frequency;
-  int padding;
+  int padding, is_private;
+  int channel_mode, channels;
+  int mode_extension;
+  int copyright, original, emphasis;
   int framesize;
+  int samples_per_channel;
+  bool is_tag;
 } mp3_header_t;
 
-int find_mp3_header(unsigned char *buf, int size, unsigned long *_header);
-void decode_mp3_header(unsigned long header, mp3_header_t *h);
+int find_mp3_header(unsigned char *buf, int size);
+void decode_mp3_header(unsigned char *buf, mp3_header_t *h);
 
 #endif // __MP3_COMMON_H

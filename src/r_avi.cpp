@@ -233,14 +233,14 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       break;
     case 0x0055: // MP3
       if (verbose)
-        mxinfo("+-> Using MP3 output module for audio track ID %d.\n",
+        mxinfo("+-> Using MPEG audio output module for audio track ID %d.\n",
                aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
       demuxer->packetizer = new mp3_packetizer_c(this,
                                                  demuxer->samples_per_second,
-                                                 demuxer->channels, ti);
+                                                 demuxer->channels, 3, ti);
       break;
     case 0x2000: // AC3
       if (verbose)

@@ -33,10 +33,12 @@ using namespace libmatroska;
 
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti)
+                                   int nchannels, int nlayer,
+                                   track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
+  layer = nlayer;
   bytes_output = 0;
   packet_buffer = NULL;
   buffer_size = 0;
@@ -65,16 +67,15 @@ void mp3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 }
 
 int mp3_packetizer_c::mp3_packet_available() {
-  unsigned long header;
   int pos;
   mp3_header_t mp3header;
 
   if (packet_buffer == NULL)
     return 0;
-  pos = find_mp3_header(packet_buffer, buffer_size, &header);
+  pos = find_mp3_header(packet_buffer, buffer_size);
   if (pos < 0)
     return 0;
-  decode_mp3_header(header, &mp3header);
+  decode_mp3_header(&packet_buffer[pos], &mp3header);
   if ((pos + mp3header.framesize + 4) > buffer_size)
     return 0;
 
@@ -94,23 +95,19 @@ void mp3_packetizer_c::remove_mp3_packet(int pos, int framesize) {
   buffer_size = new_size;
 }
 
-unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
-                                                mp3_header_t *mp3header) {
+unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   int pos;
   unsigned char *buf;
   double pims;
 
   if (packet_buffer == NULL)
     return 0;
-  pos = find_mp3_header(packet_buffer, buffer_size, header);
+  pos = find_mp3_header(packet_buffer, buffer_size);
   if (pos < 0)
     return 0;
-  decode_mp3_header(*header, mp3header);
+  decode_mp3_header(&packet_buffer[pos], mp3header);
   if (packetno == 0) {
-    if (mp3header->layer == 3)
-      spf = 384;
-    else if (mp3header->version != 3)
-      spf = 576;
+    spf = mp3header->samples_per_channel;
     if (spf != 1152) {
       set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
@@ -125,7 +122,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
   if ((pos + mp3header->framesize + 4) > buffer_size)
     return 0;
 
-  pims = 1000.0 * (float)spf / mp3_freqs[mp3header->sampling_frequency];
+  pims = 1000.0 * (float)spf / mp3header->sampling_frequency;
 
   if (ti->async.displacement < 0) {
     /*
@@ -168,7 +165,11 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
 }
 
 void mp3_packetizer_c::set_headers() {
-  set_codec_id(MKV_A_MP3);
+  string codec_id;
+
+  codec_id = MKV_A_MP3;
+  codec_id[codec_id.length() - 1] = (char)(layer + '0');
+  set_codec_id(codec_id.c_str());
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 
@@ -178,7 +179,6 @@ void mp3_packetizer_c::set_headers() {
 int mp3_packetizer_c::process(unsigned char *buf, int size,
                               int64_t timecode, int64_t, int64_t, int64_t) {
   unsigned char *packet;
-  unsigned long header;
   mp3_header_t mp3header;
   int64_t my_timecode, old_packetno;
 
@@ -188,18 +188,9 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     my_timecode = timecode;
 
   add_to_buffer(buf, size);
-  while ((packet = get_mp3_packet(&header, &mp3header)) != NULL) {
+  while ((packet = get_mp3_packet(&mp3header)) != NULL) {
     old_packetno = packetno;
     packetno++;
-
-    if ((4 - ((header >> 17) & 3)) != 3) {
-      mxwarn("p_mp3: packet is not a valid MP3 packet (packet number %lld)\n",
-             packetno);
-      safefree(packet);
-      packetno++;
-      debug_leave("mp3_packetizer_c::process");
-      return EMOREDATA;
-    }
 
 #ifdef DEBUG
     dump_packet(packet, mp3header.framesize + 4);

@@ -37,6 +37,7 @@ private:
   mm_io_c *mm_io;
   class mp3_packetizer_c *mp3packetizer;
   int64_t bytes_processed, size;
+  mp3_header_t mp3header;
 
 public:
   mp3_reader_c(track_info_t *nti) throw (error_c);

@@ -21,28 +21,151 @@
 #include "mp3_common.h"
 #include "common.h"
 
-int mp3_tabsel[2][16] =
-  {{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320},
-   {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160}};
 
-long mp3_freqs[9] =
-  {44100, 48000, 32000, 22050, 24000, 16000, 11025, 12000, 8000};
+// Synch word for a frame is 0xFFE0 (first 11 bits must be set)
+// Frame valuable information (for parsing) are stored in the first 4 bytes :
 
-int find_mp3_header(unsigned char *buf, int size, unsigned long *_header) {
+//   AAAAAAAA AAABBCCD EEEEFFGH IIJJKLMM
+// - B : Mpeg version
+//       x 00 = MPEG Version 2.5 (later extension of MPEG 2)
+//       x 01 = reserved
+//       x 10 = MPEG Version 2 (ISO/IEC 13818-3)
+//       x 11 = MPEG Version 1 (ISO/IEC 11172-3)
+
+// - C : Layer version
+//       x 00 = reserved
+//       x 01 = Layer III
+//       x 10 = Layer II
+//       x 11 = Layer I
+
+// - D : Protection bit
+
+// - E : Bitrate index (kbps)
+//             |           MPEG v1           |  MPEG v2 & v2.5   |
+//             |         |         |         |         | Layer-2 |
+//             | Layer-1 | Layer-2 | Layer-3 | Layer-1 | Layer-3 |
+//        -----+---------+---------+---------+---------+---------+
+//        0000 |    free |    free |    free |    free |    free |
+//        0001 |      32 |      32 |      32 |      32 |       8 |
+//        0010 |      64 |      48 |      40 |      48 |      16 |
+//        0011 |      96 |      56 |      48 |      56 |      24 |
+//        0100 |     128 |      64 |      56 |      64 |      32 |
+//        0101 |     160 |      80 |      64 |      80 |      40 |
+//        0110 |     192 |      96 |      80 |      96 |      48 |
+//        0111 |     224 |     112 |      96 |     112 |      56 |
+//        1000 |     256 |     128 |     112 |     128 |      64 |
+//        1001 |     288 |     160 |     128 |     144 |      80 |
+//        1010 |     320 |     192 |     160 |     160 |      96 |
+//        1011 |     352 |     224 |     192 |     176 |     112 |
+//        1100 |     384 |     256 |     224 |     192 |     128 |
+//        1101 |     416 |     320 |     256 |     224 |     144 |
+//        1110 |     448 |     384 |     320 |     256 |     160 |
+//        1111 |     bad |     bad |     bad |     bad |     bad |
+
+// - F : Sampling rate frequency index
+//             | MPEG v1 | MPEG v2 | MPEG v2.5
+//          ---+---------+---------+----------
+//          00 | 44100Hz | 22050Hz | 11025Hz
+//          01 | 48000Hz | 24000Hz | 12000Hz
+//          10 | 32000Hz | 16000Hz |  8000Hz
+//          11 | Reserv. | Reserv. | Reserv.
+
+// - G : Padding bit
+
+// - H : Private bit
+
+// - I : Channel mode
+
+// - J : Mode extension
+
+// - K : Copyright
+
+// - L : Original
+
+// - M : Emphasis
+
+// Length (in bytes) of a frame :
+
+// - Layer I :
+//   Length = (12 * BitRate / SampleRate + Padding) * 4
+
+// - Layer II :
+//   Length = 144 * BitRate / SampleRate + Padding
+
+// - Layer III :
+//  x Mpeg v1 :
+//   Length = 144 * BitRate / SampleRate + Padding
+//  x Mpeg v2 & v2.5 :
+//   Length = 72 * BitRate / SampleRate + Padding
+
+// Size (number of samples - for each channel) of a frame :
+
+//           |        MPEG        |
+//           |  v1  |  v2  | v2.5 |
+//   --------+------+------+------+
+//   Layer-1 |  384 |  384 |  384 |
+//   Layer-2 | 1152 | 1152 | 1152 |
+//   Layer-3 | 1152 |  576 |  576 |
+//   --------+------+------+------+
+
+static int mp3_bitrates_mpeg1[3][16] = {
+  {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
+  {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
+  {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0}
+};
+
+static int mp3_bitrates_mpeg2[3][16] = {
+  {0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0},
+  {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+  {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0}
+};
+
+static int mp3_sampling_freqs[3][4] = {
+  {44100, 48000, 32000, 0},
+  {22050, 24000, 16000, 0},
+  {11025, 12000, 8000, 0}
+};
+
+static int mp3_samples_per_channel[3][3] = {
+  {384, 1152, 1152},
+  {384, 1152, 576},
+  {384, 1152, 576}
+};
+
+int find_mp3_header(unsigned char *buf, int size) {
   int i, pos;
-  unsigned long header;
+  unsigned long header, id3_size;
 
   if (size < 4)
     return -1;
 
   for (pos = 0; pos <= (size - 4); pos++) {
+    if ((buf[pos] == 'I') && (buf[pos + 1] == 'D') && (buf[pos + 2] == '3')) {
+      if ((pos + 10) >= size)
+        return -1;
+
+      for (i = 6, id3_size = 0; i < 10; i++) {
+        id3_size <<= 8;
+        id3_size |= buf[i + pos];
+      }
+      if ((pos + id3_size) >= size)
+        return -1;
+
+      return pos;
+    }
+    if ((buf[pos] == 'T') && (buf[pos + 1] == 'A') && (buf[pos + 2] == 'G')) {
+      if ((pos + 128) >= size)
+        return -1;
+
+      return pos;
+    }
+
     for (i = 0, header = 0; i < 4; i++) {
       header <<= 8;
       header |= buf[i + pos];
     }
 
-    if ((header == FOURCC('R', 'I', 'F', 'F')) ||
-        ((header & 0xffffff00) == FOURCC('I', 'D', '3', ' ')))
+    if (header == FOURCC('R', 'I', 'F', 'F'))
       continue;
 
     if ((header & 0xffe00000) != 0xffe00000)
@@ -60,39 +183,91 @@ int find_mp3_header(unsigned char *buf, int size, unsigned long *_header) {
       continue;
     if ((header & 0xffff0000) == 0xfffe0000)
       continue;
-    *_header = header;
     return pos;
   }
   return -1;
 }
 
-void decode_mp3_header(unsigned long header, mp3_header_t *h) {
-  if (header & (1 << 20)) {
-    h->lsf = (header & (1 << 19)) ? 0 : 1;
-    h->mpeg25 = 0;
-  } else {
-    h->lsf = 1;
-    h->mpeg25 = 1;
-  }
-  h->layer = (header >> 17) & 3;
-  h->version = (header >> 19) & 3;
-  h->mode = (header >> 6) & 3;
-  h->error_protection = ((header >> 16) & 1) ^ 1;
-  h->stereo = (h->mode == 3 ? 0 : 1);
-  if (h->lsf)
-    h->ssize = (h->stereo == 1 ? 9 : 17);
-  else
-    h->ssize = (h->stereo == 1 ? 17: 32);
-  if (h->error_protection)
-    h->ssize += 2;
-  h->bitrate_index = (header >> 12) & 15;
-  if (h->mpeg25)
-    h->sampling_frequency = 6 + ((header >> 10) & 3);
-  else
-    h->sampling_frequency = ((header >> 10) & 3) + (h->lsf * 3);
-  h->padding = (header >> 9) & 1;
-  h->framesize = (long)mp3_tabsel[h->lsf][h->bitrate_index] * 144000;
-  h->framesize /= (mp3_freqs[h->sampling_frequency] << h->lsf);
-  h->framesize = h->framesize + h->padding - 4;
-}
+void decode_mp3_header(unsigned char *buf, mp3_header_t *h) {
+  unsigned long header;
+  int i;
 
+  if ((buf[0] == 'I') && (buf[1] == 'D') && (buf[2] == '3')) {
+    h->is_tag = true;
+    h->framesize = (((uint32_t)buf[6]) << 24) | (((uint32_t)buf[7]) << 16) |
+      (((uint32_t)buf[8]) << 8) | ((uint32_t)buf[9]);
+    return;
+  }
+
+  if ((buf[0] == 'T') && (buf[1] == 'A') && (buf[3] == 'G')) {
+    h->is_tag = true;
+    h->framesize = 128;
+    return;
+  }
+
+  for (i = 0, header = 0; i < 4; i++) {
+    header <<= 8;
+    header |= buf[i];
+  }
+
+  h->is_tag = false;
+  h->version = (header >> 19) & 3;
+  if (h->version == 1)
+    mxerror("Invalid MP3 header value for the version.\n");
+  if (h->version == 0)
+    h->version = 3;             // Well... 2.5 actually
+  else if (h->version == 3)
+    h->version = 1;
+
+  h->layer = (header >> 17) & 3;
+  if (h->layer == 00)
+    mxerror("Invalid MP3 header value for the layer.\n");
+  if (h->layer == 1)
+    h->layer = 3;
+  else if (h->layer == 3)
+    h->layer = 1;
+
+  h->protection = ((header >> 16) & 1) ^ 1;
+
+  h->bitrate_index = (header >> 12) & 15;
+  if (h->version == 1)          // MPEG-1
+    h->bitrate = mp3_bitrates_mpeg1[h->layer - 1][h->bitrate_index];
+  else                          // MPEG-2 or MPEG-2.5
+    h->bitrate = mp3_bitrates_mpeg2[h->layer - 1][h->bitrate_index];
+
+  h->sampling_frequency =
+    mp3_sampling_freqs[h->version - 1][(header >> 10) & 3];
+
+  h->padding = (header >> 9) & 1;
+  h->is_private = (header >> 8) & 1;
+
+  h->channel_mode = (header >> 6) & 3;
+  if (h->channel_mode == 3)
+    h->channels = 1;
+  else
+    h->channels = 2;
+
+  h->mode_extension = (header >> 4) & 3;
+  h->copyright = (header >> 3) & 1;
+  h->original = (header >> 2) & 1;
+  h->emphasis = header & 3;
+
+  if (h->layer == 3) {
+    if (h->version == 1)
+      h->framesize = 144000 * h->bitrate / h->sampling_frequency +
+        h->padding - 4;
+    else
+      h->framesize = 72000 * h->bitrate / h->sampling_frequency +
+        h->padding - 4;
+
+  } else if (h->layer == 2)
+    h->framesize = 144000 * h->bitrate / h->sampling_frequency +
+      h->padding - 4;
+
+  else
+    h->framesize = (12000 * h->bitrate / h->sampling_frequency +
+      h->padding) * 4 - 4;
+
+  h->samples_per_channel =
+    mp3_samples_per_channel[h->version - 1][h->layer - 1];
+}

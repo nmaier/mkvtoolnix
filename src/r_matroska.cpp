@@ -341,7 +341,7 @@ void kax_reader_c::verify_tracks() {
             t->a_formattag = get_uint16(&wfe->w_format_tag);
           }
         } else {
-          if (!strcmp(t->codec_id, MKV_A_MP3))
+          if (!strncmp(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
             t->a_formattag = 0x0055;
           else if (!strncmp(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)))
             t->a_formattag = 0x2000;
@@ -1063,12 +1063,15 @@ void kax_reader_c::create_packetizers() {
               mxinfo("+-> Using the PCM output module for track ID %u.\n",
                      ti->fname, t->tnum);
           } else if (t->a_formattag == 0x0055) {
+            int layer;
+
+            layer = t->codec_id[strlen(t->codec_id) - 1] - '0';
             t->packetizer = new mp3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, &nti);
+                                                 t->a_channels, layer, &nti);
             if (verbose)
-              mxinfo("+-> Using the MP3 output module for track ID %u.\n",
-                     ti->fname, t->tnum);
+              mxinfo("+-> Using the MPEG audio output module for track ID %u."
+                     "\n", ti->fname, t->tnum);
           } else if (t->a_formattag == 0x2000) {
             int bsid;
 
