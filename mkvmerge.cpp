@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.15 2003/02/25 14:24:43 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.16 2003/02/26 08:59:54 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -753,9 +753,7 @@ static void clear_packetq() {
     p = packet_queue[i];
     if (p != NULL) {
       free(p->data);
-      delete p->data_buffer;
-      delete p->group;
-      delete p->block;
+       delete p->data_buffer;
       free(p);
     }
   }
