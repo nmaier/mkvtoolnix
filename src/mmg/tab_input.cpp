@@ -576,6 +576,18 @@ tab_input::on_add_file(wxCommandEvent &evt) {
               track.track_name_was_present = true;
             } else if (pair[0] == "language")
               *track.language = unescape(pair[1]);
+            else if (pair[0] == "display_dimensions") {
+              vector<string> dims;
+              int64_t width, height;
+
+              dims = split(pair[1].c_str(), "x");
+              if ((dims.size() == 2) && parse_int(dims[0].c_str(), width) &&
+                  parse_int(dims[1].c_str(), height)) {
+                track.dwidth->Printf("%lld", width);
+                track.dheight->Printf("%lld", height);
+                track.display_dimensions_selected = true;
+              }
+            }
           }
         }
 

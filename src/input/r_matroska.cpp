@@ -2026,11 +2026,16 @@ kax_reader_c::identify() {
       if (identify_verbose) {
         info = " [";
         if (tracks[i]->language != NULL)
-          info += string("language:") + escape(tracks[i]->language) +
-            string(" ");
+          info += mxsprintf("language:%s ",
+                            escape(tracks[i]->language).c_str());
         if (tracks[i]->track_name != NULL)
-          info += string("track_name:") + escape(tracks[i]->track_name) +
-            string(" ");
+          info += mxsprintf("track_name:%s ",
+                            escape(tracks[i]->track_name).c_str());
+        if ((tracks[i]->v_dwidth != 0) && (tracks[i]->v_dheight != 0) &&
+            ((tracks[i]->v_dwidth != tracks[i]->v_width) ||
+             (tracks[i]->v_dheight != tracks[i]->v_height)))
+          info += mxsprintf("display_dimensions:%ux%u ",
+                            tracks[i]->v_dwidth, tracks[i]->v_dheight);
         info += "]";
       } else
         info = "";
