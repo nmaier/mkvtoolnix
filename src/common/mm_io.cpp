@@ -196,6 +196,9 @@ mm_file_io_c::setFilePointer(int64 offset,
     case seek_end:
       method = FILE_END;
       break;
+    default:
+      method = FILE_BEGIN;
+      break;
   }
 
   high = (LONG)(offset >> 32);

@@ -654,6 +654,7 @@ parse_split(const string &arg) {
   }
 
   // Size in bytes/KB/MB/GB
+  modifier = 1;
   if (mod == 'k')
     modifier = 1024;
   else if (mod == 'm')
@@ -662,8 +663,6 @@ parse_split(const string &arg) {
     modifier = 1024 * 1024 * 1024;
   else if (!isdigit(mod))
     mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
-  else
-    modifier = 1;
   if (modifier != 1)
     s.erase(s.size() - 1);
   if (!parse_int(s, split_after))
