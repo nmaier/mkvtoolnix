@@ -41,6 +41,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   bytes_output = 0;
   packetno = 0;
   spf = 1152;
+  codec_id_set = false;
 
   set_track_type(track_audio);
   set_track_default_duration_ns((int64_t)(1152000000000.0 * ti->async.linear /
@@ -80,16 +81,11 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     spf = mp3header->samples_per_channel;
     codec_id = MKV_A_MP3;
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
-    *(static_cast<EbmlString *>
-      (&GetChild<KaxCodecID>(*track_entry))) = codec_id;
-    if (spf != 1152) {
+    set_codec_id(codec_id.c_str());
+    if (spf != 1152)
       set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
                                               samples_per_sec));
-      *(static_cast<EbmlUInteger *>
-        (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
-        (int64_t)(1000000000.0 * spf * ti->async.linear / samples_per_sec);
-    }
     rerender_headers(out);
   }
 
@@ -141,7 +137,10 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 }
 
 void mp3_packetizer_c::set_headers() {
-  set_codec_id(MKV_A_MP3);
+  if (!codec_id_set) {
+    set_codec_id(MKV_A_MP3);
+    codec_id_set = true;
+  }
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 

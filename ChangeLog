@@ -1,3 +1,8 @@
+2003-12-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If splitting was active then a wrong CodecID
+	was written to the second and all following files for MP2 tracks.
+
 2003-12-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.7.9.
