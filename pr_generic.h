@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.24 2003/04/18 14:27:07 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.25 2003/04/20 14:59:33 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,6 +30,11 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 
+#define CUES_UNSPECIFIED -1
+#define CUES_NONE         0
+#define CUES_IFRAMES      1
+#define CUES_ALL          2
+
 typedef struct {
   int    displacement;
   double linear;
@@ -39,6 +44,7 @@ typedef struct {
   // Options used by the readers.
   char *fname;
   unsigned char *atracks, *vtracks, *stracks;
+  int cues;
 
   // Options used by the packetizers.
   unsigned char *private_data;
@@ -53,8 +59,6 @@ class generic_packetizer_c: public q_c {
 protected:
   track_info_t *ti;
   int64_t free_refs;
-
-  int create_cue_data;
 
   KaxTrackEntry *track_entry;
 

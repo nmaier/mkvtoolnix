@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.24 2003/04/18 14:27:07 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.25 2003/04/20 14:59:33 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -46,7 +46,8 @@ video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
   frames_output = 0;
   avi_compat_mode = 1;
   ref_timecode = -1;
-  set_cue_creation(1);
+  if (get_cue_creation() == CUES_UNSPECIFIED)
+    set_cue_creation(CUES_IFRAMES);
   set_header();
 }
 

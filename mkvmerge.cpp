@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.38 2003/04/19 17:00:01 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.39 2003/04/20 14:59:33 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -170,6 +170,8 @@ static void usage(void) {
     "                           numbers.\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
+    "  --cues <none|iframes|    Create cue (index) entries for this track:\n"
+    "          all>             None at all, only for I frames, for all.\n"
     "\n"
     " Other options:\n"
     "  -l, --list-types         Lists supported input file types.\n"
@@ -413,6 +415,7 @@ static void parse_args(int argc, char **argv) {
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.async.linear = 1.0;
+  ti.cues = CUES_UNSPECIFIED;
 
   // First parse options that either just print some infos and then exit
   // or that are needed right at the beginning.
@@ -570,6 +573,23 @@ static void parse_args(int argc, char **argv) {
       }
       parse_sync(argv[i + 1], &ti.async);
       i++;
+    } else if (!strcmp(argv[i], "--cues")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --cues lacks its argument.\n");
+        exit(1);
+      }
+      if (!strcmp(argv[i + 1], "all"))
+        ti.cues = CUES_ALL;
+      else if (!strcmp(argv[i + 1], "iframes"))
+        ti.cues = CUES_IFRAMES;
+      else if (!strcmp(argv[i + 1], "none"))
+        ti.cues = CUES_NONE;
+      else {
+        fprintf(stderr, "Error: '%s' is an unsupported argument for --cues.\n",
+                argv[i + 1]);
+        exit(1);
+      }
+      i++;
     }
 
     // The argument is an input file.
@@ -715,6 +735,7 @@ static void parse_args(int argc, char **argv) {
         free(ti.stracks);
       memset(&ti, 0, sizeof(track_info_t));
       ti.async.linear = 1.0;
+      ti.cues = CUES_UNSPECIFIED;
     }
   }
   

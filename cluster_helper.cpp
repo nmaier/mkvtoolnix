@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.7 2003/04/18 14:27:07 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.8 2003/04/20 14:59:33 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -207,10 +207,17 @@ int cluster_helper_c::render(IOCallback *out) {
     }
     if (new_group == NULL)
       new_group = last_block_group;
-    else if (write_cues &&
-             ((generic_packetizer_c *)pack->source)->get_cue_creation() &&
-             (pack->bref == -1))
-      kax_cues->AddBlockGroup(*new_group);
+    else if (write_cues) {
+      // Update the cues (index table) either if cue entries for
+      // I frames were requested and this is an I frame...
+      if ((((generic_packetizer_c *)pack->source)->get_cue_creation() == 
+           CUES_IFRAMES) && (pack->bref == -1))
+        kax_cues->AddBlockGroup(*new_group);
+      // ... or if the user requested entries for all frames.
+      else if (((generic_packetizer_c *)pack->source)->get_cue_creation() == 
+               CUES_ALL)
+        kax_cues->AddBlockGroup(*new_group);
+    }
     pack->group = new_group;
     last_block_group = new_group;
   }

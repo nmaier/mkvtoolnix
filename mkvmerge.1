@@ -33,7 +33,8 @@ imprecise seeking and/or processing.
 Tells mkvmerge not to create and write the cue data which can be compared
 to an index in an AVI. Matroska files can be played back without the cue
 data, but seeking will probably be imprecise and slower. Use this only if
-you're really desparate for space or for testing purposes.
+you're really desparate for space or for testing purposes. See also option
+\fB\-\-cues\fR which can be specified for each input file.
 .LP
 Options that can be used for each input file:
 .TP
@@ -74,6 +75,18 @@ Defaults: no manual synch correction (which is the same as \fId\fR = 0 and
 .TP
 \fB\-f\fR, \fB\-\-fourcc\fR <\fIFourCC\fR>
 Forces the FourCC to the specified value. Works only for video tracks.
+.TP
+\fB\-\-cues\fR <\fInone\fR|\fIiframes\fR|\fIall\fR>
+Controls for which tracks cue (index) entries are created. \fInone\fR inhibits
+the creation of cue entries for all tracks contained in the following
+source files. For \fIiframes\fR only blocks with no backward or forward
+references ( = I frames in video tracks) are put into the cue sheet. \fIall\fR
+causes \fBmkvmerge\fR to create cue entries for all blocks which will make
+the file very big.
+.br
+The default is \fIiframes\fR for video tracks and \fInone\fR for all others.
+See also option \fB\-\-no\-cues\fR which inhibits the creation of cue
+entries regardless of the \fB\-\-cues\fR options used.
 .LP
 Other options:
 .TP
