@@ -304,6 +304,11 @@ prefer the track that has his 'default' flag set. Only one track of each kind
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
 .TP
+\fB\-\-blockadd\fR <\fITID\fR:\fIlevel\fR>
+Keep only the BlockAdditions up to this \fIlevel\fR for the given track.
+The default is to keep all levels.
+This option only affects certain kinds of codecs like WAVPACK4.
+.TP
 \fB\-\-track\-name\fR <\fITID\fR:\fIname\fR>
 Sets the track name for the given track (see section \fBTRACK IDS\fR) to
 \fIname\fR.

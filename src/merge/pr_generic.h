@@ -244,6 +244,13 @@ struct pixel_crop_t {
   pixel_crop_t(): left(0), top(0), right(0), bottom(0), id(0) {}
 };
 
+struct max_blockadd_id_t {
+  int64_t max_blockadd_id;
+  int64_t id;
+
+  max_blockadd_id_t(): max_blockadd_id(0), id(0) {}
+};
+
 struct default_duration_t {
   int64_t default_duration;
   int64_t id;
@@ -311,6 +318,7 @@ public:
   pixel_crop_t pixel_cropping;  // For this very track
 
   vector<default_duration_t> default_durations; // As given on the command line
+  vector<max_blockadd_id_t> max_blockadd_ids; // As given on the command line
 
   bool no_chapters, no_attachments, no_tags;
 

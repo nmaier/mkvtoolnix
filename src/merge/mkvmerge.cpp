@@ -195,6 +195,8 @@ usage() {
     "                           Delay to apply to the packets of the track\n"
     "                           by simply adjusting the timecodes.\n"
     "  --default-track <TID>    Sets the 'default' flag for this track.\n"
+    "  --blockadd <TID:x>       Sets the max number of block additional\n"
+    "                           levels for this track.\n"
     "  --track-name <TID:name>  Sets the name for a track.\n"
     "  --cues <TID:none|iframes|all>\n"
     "                           Create cue (index) entries for this track:\n"
@@ -1067,6 +1069,31 @@ parse_default_duration(const string &s,
   ti.default_durations.push_back(dd);
 }
 
+/** \brief Parse the argument for \c --blockadd
+
+   The argument must be a tupel consisting of a track ID and the max number 
+   of BlockAdditional IDs.
+*/
+static void
+parse_max_blockadd_id(const string &s,
+                       track_info_c &ti) {
+  vector<string> parts;
+  max_blockadd_id_t mbi;
+
+  parts = split(s, ":");
+  if (parts.size() != 2)
+    mxerror(_("'%s' is not a valid parts of track ID and block additional in "
+              "'--blockadd %s'.\n"), s.c_str(), s.c_str());
+  if (!parse_int(parts[0], mbi.id))
+    mxerror(_("'%s' is not a valid track ID in '--blockadd %s'.\n"),
+            parts[0].c_str(), s.c_str());
+  if (!parse_int(parts[1], mbi.max_blockadd_id) || (mbi.max_blockadd_id < 0))
+    mxerror(_("'%s' is not a valid block additional max in '--blockadd %s'."
+              "\n"),
+            parts[1].c_str(), s.c_str());
+  ti.max_blockadd_ids.push_back(mbi);
+}
+
 /** \brief Sets the priority mkvmerge runs with
   
    Depending on the OS different functions are used. On Unix like systems
@@ -1736,6 +1763,13 @@ parse_args(vector<string> &args) {
         mxerror(_("'--compression' lacks its argument.\n"));
 
       parse_compression(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--blockadd") {
+      if (no_next_arg)
+        mxerror(_("'--blockadd' lacks its argument.\n"));
+
+      parse_max_blockadd_id(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--track-name") {

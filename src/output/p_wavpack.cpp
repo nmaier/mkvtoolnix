@@ -33,7 +33,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *nreader,
   channels = meta.channel_count;
   bits_per_sample = meta.bits_per_sample;
   samples_per_block = meta.samples_per_block;
-  has_correction = meta.has_correction;
+  has_correction = meta.has_correction && (htrack_max_add_block_ids != 0);
   samples_output = 0;
 
   set_track_type(track_audio);

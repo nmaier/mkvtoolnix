@@ -224,13 +224,22 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
 
+  // Let's see if the user has set a max_block_add_id
+  htrack_max_add_block_ids = -1;
+  for (i = 0; i < ti->max_blockadd_ids.size(); i++) {
+    max_blockadd_id_t &mbi = ti->max_blockadd_ids[i];
+    if ((mbi.id == ti->id) || (mbi.id == -1)) { // -1 == all tracks
+      htrack_max_add_block_ids = mbi.max_blockadd_id;
+      break;
+    }
+  }
+
   // Set default header values to 'unset'.
   hserialno = create_track_number(reader, ti->id);
   huid = 0;
   htrack_type = -1;
   htrack_min_cache = -1;
   htrack_max_cache = -1;
-  htrack_max_add_block_ids = -1;
 
   hcodec_id = "";
   hcodec_private = NULL;
@@ -850,6 +859,11 @@ generic_packetizer_c::add_packet(memories_c &mems,
     reader->ptzr_first_packet = this;
 
   pack = new packet_t;
+  // strip elements to be removed
+  if ((htrack_max_add_block_ids != -1) &&
+      (htrack_max_add_block_ids < (mems.size() - 1)))
+    mems.resize(htrack_max_add_block_ids + 1);
+
   pack->data_adds.resize(mems.size() - 1);
   pack->data_adds_lengths.resize(mems.size() - 1);
 
@@ -1403,6 +1417,7 @@ track_info_c::operator =(const track_info_c &src) {
   avi_audio_sync_enabled = false;
 
   default_durations = src.default_durations;
+  max_blockadd_ids = src.max_blockadd_ids;
 
   initialized = true;
 

@@ -984,6 +984,7 @@ kax_reader_c::read_headers() {
           KaxCodecPrivate *kcodecpriv;
           KaxTrackFlagDefault *ktfdefault;
           KaxTrackFlagLacing *ktflacing;
+          KaxMaxBlockAdditionID *ktmax_blockadd_id;
           KaxTrackLanguage *ktlanguage;
           KaxTrackMinCache *ktmincache;
           KaxTrackMaxCache *ktmaxcache;
@@ -1225,6 +1226,14 @@ kax_reader_c::read_headers() {
             track->lacing_flag = uint32(*ktflacing);
           } else
             track->lacing_flag = true;
+
+          ktmax_blockadd_id = FINDFIRST(ktentry, KaxMaxBlockAdditionID);
+          if (ktmax_blockadd_id != NULL) {
+            mxverb(2, PFX "|  + Max Block Addition ID: %u\n",
+                   uint32(*ktmax_blockadd_id));
+            track->max_blockadd_id = uint32(*ktmax_blockadd_id);
+          } else
+            track->max_blockadd_id = 0;
 
           ktlanguage = FINDFIRST(ktentry, KaxTrackLanguage);
           if (ktlanguage != NULL) {
@@ -1755,6 +1764,9 @@ kax_reader_c::create_packetizer(int64_t tid) {
           meta.bits_per_sample = t->a_bps;
           meta.channel_count = t->a_channels;
           meta.sample_rate = (uint32_t)t->a_sfreq;
+          meta.has_correction = t->max_blockadd_id != 0;
+          if (t->v_frate > 0.0)
+            meta.samples_per_block = (uint32_t)(t->a_sfreq / t->v_frate);
           t->ptzr = add_packetizer(new wavpack_packetizer_c(this, meta, nti));
           mxinfo(FMT_TID "Using the WAVPACK output module.\n",
                  ti->fname.c_str(), (int64_t)t->tnum);
@@ -1852,10 +1864,14 @@ kax_reader_c::read(generic_packetizer_c *,
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   KaxBlockGroup *block_group;
   KaxBlock *block;
+  KaxBlockAdditions *blockadd;
+  KaxBlockMore *blockmore;
+  KaxBlockAdditional *blockadd_data;
   KaxReferenceBlock *ref_block;
   KaxBlockDuration *duration;
   KaxClusterTimecode *ctc;
   int64_t block_fref, block_bref, block_duration, frame_duration;
+  uint64_t blockadd_id;
   kax_track_t *block_track;
   bool found_cluster, bref_found, fref_found;
 
@@ -1934,6 +1950,9 @@ kax_reader_c::read(generic_packetizer_c *,
             block->SetParent(*cluster);
             block_track = find_track_by_num(block->TrackNum());
           }
+
+          blockadd = static_cast<KaxBlockAdditions *>
+            (block_group->FindFirstElt(KaxBlockAdditions::ClassInfos, false));
 
           duration = static_cast<KaxBlockDuration *>
             (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
@@ -2015,9 +2034,36 @@ kax_reader_c::read(generic_packetizer_c *,
                 }
               } else {
                 memory_c mem(re_buffer, re_size, re_modified);
-                PTZR(block_track->ptzr)->
-                  process(mem, (int64_t)last_timecode + i * frame_duration,
-                          block_duration, block_bref, block_fref);
+                if (blockadd) {
+                  memories_c mems;
+                  mems.resize(blockadd->ListSize() + 1);
+                  mems[0] = &mem;
+
+                  for (i=0; i<blockadd->ListSize(); i++) {
+                    if (!(is_id((*blockadd)[i], KaxBlockMore)))
+                      continue;
+                    blockmore = static_cast<KaxBlockMore *>((*blockadd)[i]);
+                    blockadd_id =
+                      uint64(*static_cast<EbmlUInteger *>
+                             (&GetChild<KaxBlockAddID>(*blockmore)));
+                    blockadd_data = &GetChild<KaxBlockAdditional>(*blockmore);
+                    memory_c *blockadded =
+                      new memory_c(blockadd_data->GetBuffer(),
+                                   blockadd_data->GetSize(), false);
+                    mems[blockadd_id] = blockadded;
+                  }
+
+                  PTZR(block_track->ptzr)->
+                    process(mems, (int64_t)last_timecode + i * frame_duration,
+                            block_duration, block_bref, block_fref);
+
+                  for (i = 1; i<mems.size(); i++)
+                    delete mems[i];
+                } else {
+                  PTZR(block_track->ptzr)->
+                    process(mem, (int64_t)last_timecode + i * frame_duration,
+                            block_duration, block_bref, block_fref);
+                }
               }
             }
 

@@ -66,7 +66,7 @@ struct kax_track_t {
   char sub_type; // 't' = text, 'v' = VobSub
   bool passthrough;             // No special packetizer available.
 
-  uint32_t min_cache, max_cache;
+  uint32_t min_cache, max_cache, max_blockadd_id;
   bool lacing_flag;
 
   // Parameters for video tracks
