@@ -25,11 +25,15 @@
 #include <vector>
 #include <stdint.h>
 
+#include "matroska/KaxChapters.h"
+
 #include "os.h"
 #include "wx/confbase.h"
 #include "wx/process.h"
+#include "wx/treectrl.h"
 
 using namespace std;
+using namespace libmatroska;
 
 #ifdef SYS_WINDOWS
 #define ALLFILES "All Files (*.*)|*.*"
@@ -98,6 +102,15 @@ using namespace std;
 #define ID_B_MUX_ABORT 10057
 #define ID_T_ATTACHMENTVALUES 10058
 #define ID_T_INPUTVALUES 10059
+#define ID_TRC_CHAPTERS 10060
+#define ID_B_ADDCHAPTER 10061
+#define ID_B_REMOVECHAPTER 10062
+#define ID_T_CHAPTERVALUES 10063
+#define ID_TC_CHAPTERNAME 10064
+#define ID_TC_CHAPTERLANGUAGES 10065
+#define ID_TC_CHAPTERCOUNTRYCODES 10066
+#define ID_TC_CHAPTERSTART 10067
+#define ID_TC_CHAPTEREND 10068
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -112,7 +125,13 @@ using namespace std;
 #define ID_M_MUXING_COPY_CMDLINE 20101
 #define ID_M_MUXING_SAVE_CMDLINE 20102
 
-#define ID_M_HELP_ABOUT 20200
+#define ID_M_CHAPTERS_NEW 20200
+#define ID_M_CHAPTERS_LOAD 20201
+#define ID_M_CHAPTERS_SAVE 20202
+#define ID_M_CHAPTERS_SAVEAS 20203
+#define ID_M_CHAPTERS_VERIFY 20204
+
+#define ID_M_HELP_ABOUT 29900
 
 typedef struct {
   char type;
@@ -272,6 +291,42 @@ public:
   bool validate_settings();
 };
 
+class tab_chapters: public wxPanel {
+  DECLARE_CLASS(tab_chapters);
+  DECLARE_EVENT_TABLE();
+public:
+  wxTreeCtrl *tc_chapters;
+  wxTreeItemId tid_root;
+  wxButton *b_add_chapter, *b_remove_chapter;
+  wxMenu *m_chapters;
+
+  wxTextCtrl *tc_chapter_name, *tc_language_codes, *tc_country_codes;
+  wxTextCtrl *tc_start_time, *tc_end_time;
+
+  wxTimer value_copy_timer;
+
+  wxString file_name;
+
+  KaxChapters *chapters;
+
+public:
+  tab_chapters(wxWindow *parent, wxMenu *nm_chapters);
+  ~tab_chapters();
+
+  void on_new_chapters(wxCommandEvent &evt);
+  void on_load_chapters(wxCommandEvent &evt);
+  void on_save_chapters(wxCommandEvent &evt);
+  void on_save_chapters_as(wxCommandEvent &evt);
+  void on_verify_chapters(wxCommandEvent &evt);
+  void on_add_chapter(wxCommandEvent &evt);
+  void on_remove_chapter(wxCommandEvent &evt);
+  void on_copy_values(wxTimerEvent &evt);
+  void on_entry_selected(wxTreeEvent &evt);
+
+  void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
+  wxString create_chapter_label(KaxChapterAtom &chapter);
+};
+
 class mux_dialog: public wxDialog {
   DECLARE_CLASS(mux_dialog);
   DECLARE_EVENT_TABLE();
@@ -326,6 +381,7 @@ protected:
   tab_attachments *attachments_page;
   tab_global *global_page;
   tab_settings *settings_page;
+  tab_chapters *chapter_editor_page;
 
 public:
   mmg_dialog();
@@ -354,6 +410,12 @@ public:
   void set_last_settings_in_menu(wxString name);
   void on_file_load_last(wxCommandEvent &evt);
   void update_file_menu();
+
+  void on_new_chapters(wxCommandEvent &evt);
+  void on_load_chapters(wxCommandEvent &evt);
+  void on_save_chapters(wxCommandEvent &evt);
+  void on_save_chapters_as(wxCommandEvent &evt);
+  void on_verify_chapters(wxCommandEvent &evt);
 };
 
 class mmg_app: public wxApp {

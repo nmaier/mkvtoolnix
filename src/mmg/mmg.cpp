@@ -153,6 +153,22 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                       _T("Sa&ve command line\tCtrl-V"),
                       _T("Save the command line to a file"));
 
+  wxMenu *chapter_menu = new wxMenu();
+  chapter_menu->Append(ID_M_CHAPTERS_NEW, _T("&New"),
+                       _T("Create a new chapter file"));
+  chapter_menu->Append(ID_M_CHAPTERS_LOAD, _T("&Load"),
+                       _T("Load a chapter file (simple/OGM format or XML "
+                          "format)"));
+  chapter_menu->Append(ID_M_CHAPTERS_SAVE, _T("&Save"),
+                       _T("Save the current chapters to a XML file"));
+  chapter_menu->Append(ID_M_CHAPTERS_SAVEAS, _T("Save &as"),
+                       _T("Save the current chapters to a file with another "
+                          "name"));
+  chapter_menu->AppendSeparator();
+  chapter_menu->Append(ID_M_CHAPTERS_VERIFY, _T("&Verify"),
+                       _T("Verify the current chapter entries to see if there "
+                          "are any errors"));
+
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_ABOUT, _T("&About\tF1"),
                     _T("Show program information"));
@@ -160,6 +176,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   wxMenuBar *menu_bar = new wxMenuBar();
   menu_bar->Append(file_menu, _T("&File"));
   menu_bar->Append(muxing_menu, _T("&Muxing"));
+  menu_bar->Append(chapter_menu, _T("&Chapter Editor"));
   menu_bar->Append(help_menu, _T("&Help"));
   SetMenuBar(menu_bar);
 
@@ -180,11 +197,13 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   attachments_page = new tab_attachments(notebook);
   global_page = new tab_global(notebook);
   settings_page = new tab_settings(notebook);
+  chapter_editor_page = new tab_chapters(notebook, chapter_menu);
 
   notebook->AddPage(input_page, _("Input"));
   notebook->AddPage(attachments_page, _("Attachments"));
   notebook->AddPage(global_page, _("Global"));
   notebook->AddPage(settings_page, _("Settings"));
+  notebook->AddPage(chapter_editor_page, _("Chapter Editor"));
 
   bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
@@ -759,6 +778,26 @@ void mmg_dialog::update_file_menu() {
   }
 }
 
+void mmg_dialog::on_new_chapters(wxCommandEvent &evt) {
+  chapter_editor_page->on_new_chapters(evt);
+}
+
+void mmg_dialog::on_load_chapters(wxCommandEvent &evt) {
+  chapter_editor_page->on_load_chapters(evt);
+}
+
+void mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
+  chapter_editor_page->on_save_chapters(evt);
+}
+
+void mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
+  chapter_editor_page->on_save_chapters_as(evt);
+}
+
+void mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
+  chapter_editor_page->on_verify_chapters(evt);
+}
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
@@ -775,6 +814,11 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_FILE_LOADLAST2, mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST3, mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST4, mmg_dialog::on_file_load_last)
+  EVT_MENU(ID_M_CHAPTERS_NEW, mmg_dialog::on_new_chapters)
+  EVT_MENU(ID_M_CHAPTERS_LOAD, mmg_dialog::on_load_chapters)
+  EVT_MENU(ID_M_CHAPTERS_SAVE, mmg_dialog::on_save_chapters)
+  EVT_MENU(ID_M_CHAPTERS_SAVEAS, mmg_dialog::on_save_chapters_as)
+  EVT_MENU(ID_M_CHAPTERS_VERIFY, mmg_dialog::on_verify_chapters)
 END_EVENT_TABLE();
 
 bool mmg_app::OnInit() {
