@@ -151,6 +151,54 @@
     free(buffer);
   }
   \endcode
+
+
+  \section packed_video_frames Packed video frames
+
+  The RealVideo frames are not stored one-complete-frame in one packet
+  (packet meaning one 'frame' used by ::rmff_write_frame and returned by
+  ::rmff_read_next_frame). They are split up into several sub packets.
+  However, the Real decoder libraries usually need a completely assembled
+  frame that contains all sub packets along with the offsets to each sub
+  packet in the complete frame.
+
+  \a librmff can make the developper's life easier because it provides
+  a function ::rmff_write_packed_video_frame that will split up such
+  an assembled packet into all the sub packets and write those
+  automatically.
+
+  \subsection packed_format Bitstream format
+
+  The bitstream for such a sub packet looks like this:
+
+  <tt>AABBBBBB BCCCCCCC {DEFFFFFF FFFFFFFF (GGGGGGGG GGGGGGGG)
+  HIJJJJJJ JJJJJJJJ (KKKKKKKK KKKKKKKK) LLLLLLLL}</tt>
+
+  - \c A, two bits: Sub packet type indicator
+    - \c 00 partial frame
+    - \c 01 whole frame. If this is the case then only the bits <tt>A, B</tt>
+    and \c C are present. In all the other cases the other bits are present
+    as well.
+    - \c 10 last partial frame
+    - \c 11 multiple frames
+  - \c B, seven bits: number of sub packets in the complete frame
+  - \c C, seven bits: current sub packet's sequence number starting at 1
+  - \c D, one bit: unknown
+  - \c E, one bit: If set the \c G bits/bytes are not present.
+  - \c F, 14 bits: The complete frame's length in bytes. If \c E is NOT set
+  then the total length is <tt>(F << 16) | G</tt>, otherwise \c G is not present
+  and the total length is just \c F.
+  - \c H, one bit, unknown
+  - \c I, one bit: If set the \c L bits/bytes are not present.
+  - \c J, 14 bits: The current packet's offset in bytes. If \c J is NOT set
+  then the offset is <tt>(J << 16) | K</tt>, otherwise \c K is not present
+  and the offset is just \c J. Note that if \c AA is 10 then the offset is
+  to be interpreted from the end of the of the complete frame. In this case
+  it is equal to the current sub packet's length.
+  - \c L, 8 bits: The current frame's sequence number / frame number % 255.
+  Can be used for detecting frame boundaries if the sub packaging has failed
+  or the stream is broken.
+  - The rest is the video data.
 */
 
 #ifndef __RMFF_H
@@ -159,6 +207,8 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+#include "os.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -723,6 +773,22 @@ int rmff_fix_headers(rmff_file_t *file);
 */
 int rmff_write_frame(rmff_track_t *track, rmff_frame_t *frame);
 
+/** \brief Unpacks a packed video frame into sub packets and writes each.
+
+  Please see the section about packed video \ref packed_video_frames frames
+  for a description of this function.
+
+  This function takes such a complete frame, splits it up into their sub
+  packets and writes each sub packet out into the file this track belongs to.
+
+  \param track The track this frame belongs to.
+  \param frame The assembled/packed video frame that is to be split up.
+
+  \returns \c RMFF_ERR_OK on success or one of the other \c RMFF_ERR_*
+  constants on error.
+*/
+int rmff_write_packed_video_frame(rmff_track_t *track, rmff_frame_t *frame);
+
 /** \brief Creates an index at the end of the file.
 
   The application can request that an index is created For each track
@@ -808,6 +874,17 @@ uint16_t rmff_get_uint16_be(const void *buf);
 */
 uint32_t rmff_get_uint32_be(const void *buf);
 
+/** \brief Reads a 32bit uint from an address.
+
+  The uint is converted from little endian byte order to the machine's byte
+  order.
+
+  \param buf The address to read from.
+
+  \returns The 32bit uint converted to the machine's byte order.
+*/
+uint32_t rmff_get_uint32_le(const void *buf);
+
 /** \brief Write a 16bit uint at an address.
 
   The value is converted from the machine's byte order to big endian byte
@@ -827,6 +904,26 @@ void rmff_put_uint16_be(void *buf, uint16_t value);
   \param value The value to write.
 */
 void rmff_put_uint32_be(void *buf, uint32_t value);
+
+/** \brief Write a 32bit uint at an address.
+
+  The value is converted from the machine's byte order to little endian byte
+  order.
+
+  \param buf The address to write to.
+  \param value The value to write.
+*/
+void rmff_put_uint32_le(void *buf, uint32_t value);
+
+#if defined(ARCH_LITTLEENDIAN)
+# define rmff_get_uint32_me(b) rmff_get_uint32_le(b)
+# define rmff_put_uint32_me(b) rmff_put_uint32_le(b)
+#elif defined(ARCH_BIGENDIAN)
+# define rmff_get_uint32_me(b) rmff_get_uint32_be(b)
+# define rmff_put_uint32_me(b) rmff_put_uint32_be(b)
+#else
+# error Neither ARCH_LITTLEENDIAN nor ARCH_BIGENDIAN has been defined.
+#endif
 
 #if defined(__cplusplus)
 }

@@ -58,6 +58,7 @@ typedef struct rmff_track_internal_t {
   uint32_t avg_packet_size;
   uint32_t highest_timecode;
   uint32_t num_packets;
+  uint32_t num_packed_frames;
   int index_this;
   uint32_t total_bytes;
   rmff_bitrate_t bitrate;
@@ -126,6 +127,21 @@ rmff_get_uint32_be(const void *buf) {
   return ret;
 }
 
+uint32_t
+rmff_get_uint32_le(const void *buf) {
+  uint32_t ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[3] & 0xff;
+  ret = (ret << 8) + (tmp[2] & 0xff);
+  ret = (ret << 8) + (tmp[1] & 0xff);
+  ret = (ret << 8) + (tmp[0] & 0xff);
+
+  return ret;
+}
+
 void
 rmff_put_uint16_be(void *buf,
                    uint16_t value) {
@@ -148,6 +164,19 @@ rmff_put_uint32_be(void *buf,
   tmp[2] = (value >>= 8) & 0xff;
   tmp[1] = (value >>= 8) & 0xff;
   tmp[0] = (value >>= 8) & 0xff;
+}
+
+void
+rmff_put_uint32_le(void *buf,
+                   uint32_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[0] = value & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+  tmp[2] = (value >>= 8) & 0xff;
+  tmp[3] = (value >>= 8) & 0xff;
 }
 
 #define read_uint8() file_read_uint8(io, fh)
@@ -1378,4 +1407,125 @@ rmff_write_index(rmff_file_t *file) {
   }
 
   return clear_error();
+}
+
+int
+rmff_write_packed_video_frame(rmff_track_t *track,
+                              rmff_frame_t *frame) {
+  unsigned char *src_ptr, *ptr, *dst;
+  int num_subpackets, i, offset, total_len;
+  uint32_t *offsets, *lengths;
+  rmff_frame_t *spframe;
+  rmff_track_internal_t *tint;
+
+  if ((track == NULL) || (frame == NULL) ||
+      (track->file == NULL) ||
+      (track->file->open_mode != RMFF_OPEN_MODE_WRITING))
+    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+
+  tint = (rmff_track_internal_t *)track->internal;
+  src_ptr = frame->data;
+  num_subpackets = *src_ptr + 1;
+  src_ptr++;
+  if (frame->size < (num_subpackets * 8 + 1))
+    return set_error(RMFF_ERR_DATA, "RealVideo unpacking failed: frame size "
+                     "too small. Could not extract sub packet offsets.",
+                     RMFF_ERR_DATA);
+
+  offsets = (uint32_t *)safemalloc(num_subpackets * sizeof(uint32_t));
+  for (i = 0; i < num_subpackets; i++) {
+    src_ptr += 4;
+    offsets[i] = rmff_get_uint32_me(src_ptr);
+    src_ptr += 4;
+  }
+  if ((offsets[num_subpackets - 1] + (src_ptr - frame->data)) >= frame->size) {
+    safefree(offsets);
+    return set_error(RMFF_ERR_DATA, "RealVideo unpacking failed: frame size "
+                     "too small. The sub packet offsets indicate a size "
+                     "larger than the actual size.", RMFF_ERR_DATA);
+  }
+  total_len = frame->size - (src_ptr - frame->data);
+  lengths = (uint32_t *)safemalloc(num_subpackets * sizeof(uint32_t));
+  for (i = 0; i < (num_subpackets - 1); i++)
+    lengths[i] = offsets[i + 1] - offsets[i];
+  lengths[num_subpackets - 1] = total_len - offsets[num_subpackets - 1];
+
+  dst = (unsigned char *)safemalloc(frame->size * 2);
+  for (i = 0; i < num_subpackets; i++) {
+    ptr = dst;
+    if (num_subpackets == 1) {
+      /* BROKEN! */
+      *ptr = 0xc0;              /* complete frame */
+      ptr++;
+
+    } else {
+      *ptr = (num_subpackets >> 1) & 0x7f; /* number of subpackets */
+      if (i == (num_subpackets - 1)) /* last fragment? */
+        *ptr |= 0x80;
+      ptr++;
+
+      *ptr = i + 1;             /* fragment number */
+      *ptr |= ((num_subpackets & 0x01) << 7); /* number of subpackets */
+      ptr++;
+    }
+
+    /* total packet length: */
+    if (total_len > 0x3fff) {
+      rmff_put_uint16_be(ptr, ((total_len & 0x3fff0000) >> 16));
+      ptr += 2;
+      rmff_put_uint16_be(ptr, total_len & 0x0000ffff);
+    } else
+      rmff_put_uint16_be(ptr, 0x4000 | total_len);
+    ptr += 2;
+
+    /* fragment offset from beginning/end: */
+    if (num_subpackets == 1)
+      offset = frame->timecode;
+    else if (i < (num_subpackets - 1))
+      offset = offsets[i];
+    else
+      /* If it's the last packet then the 'offset' is the fragment's length. */
+      offset = lengths[i];
+
+    if (offset > 0x3fff) {
+      rmff_put_uint16_be(ptr, ((offset & 0x3fff0000) >> 16));
+      ptr += 2;
+      rmff_put_uint16_be(ptr, offset & 0x0000ffff);
+    } else
+      rmff_put_uint16_be(ptr, 0x4000 | offset);
+    ptr += 2;
+
+    /* sequence number = frame number & 0xff */
+    *ptr = tint->num_packed_frames & 0xff;
+    ptr++;
+
+    memcpy(ptr, src_ptr, lengths[i]);
+    src_ptr += lengths[i];
+    ptr += lengths[i];
+
+    spframe = rmff_allocate_frame(ptr - dst, dst);
+    if (spframe == NULL) {
+      safefree(offsets);
+      safefree(lengths);
+      safefree(dst);
+      return set_error(RMFF_ERR_IO, "Memory allocation error: Could not get a "
+                       "rmff_frame_t", RMFF_ERR_IO);
+    }
+    spframe->timecode = frame->timecode;
+    spframe->flags = frame->flags;
+    if (rmff_write_frame(track, spframe) != RMFF_ERR_OK) {
+      safefree(offsets);
+      safefree(lengths);
+      safefree(dst);
+      return rmff_last_error;
+    }
+    rmff_release_frame(spframe);
+  }
+  safefree(offsets);
+  safefree(lengths);
+  safefree(dst);
+
+  tint->num_packed_frames++;
+
+  return set_error(RMFF_ERR_OK, NULL, RMFF_ERR_OK);
 }
