@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.19 2003/05/09 10:05:25 mosu Exp $
+    \version \$Id: common.h,v 1.20 2003/05/11 09:04:43 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -79,6 +79,7 @@ void _trace(const char *func, const char *file, int line);
 
 uint16_t get_uint16(const void *buf);
 uint32_t get_uint32(const void *buf);
+uint64_t get_uint64(const void *buf);
 
 extern int cc_local_utf8;
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.28 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.29 2003/05/11 09:04:43 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -233,21 +233,23 @@ void ogm_reader_c::create_packetizers() {
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
         bih.bi_size = sizeof(BITMAPINFOHEADER);
-        bih.bi_width = sth->sh.video.width;
-        bih.bi_height = sth->sh.video.height;
+        bih.bi_width = get_uint32(&sth->sh.video.width);
+        bih.bi_height = get_uint32(&sth->sh.video.height);
         bih.bi_planes = 1;
         bih.bi_bit_count = 24;
         memcpy(&bih.bi_compression, ti->fourcc, 4);
-        bih.bi_size_image = sth->sh.video.width * sth->sh.video.height * 3;
+        bih.bi_size_image = bih.bi_width * bih.bi_height * 3;
         ti->private_data = (unsigned char *)&bih;
         ti->private_size = sizeof(BITMAPINFOHEADER);
 
         try {
           dmx->packetizer =
-            new video_packetizer_c(this,
-                                   (double)10000000 / (double)sth->time_unit, 
-                                   sth->sh.video.width, sth->sh.video.height,
-                                   sth->bits_per_sample, 1, ti);
+            new video_packetizer_c(this, (double)10000000 /
+                                   (double)get_uint64(&sth->time_unit),
+                                   get_uint32(&sth->sh.video.width),
+                                   get_uint32(&sth->sh.video.height),
+                                   get_uint16(&sth->bits_per_sample),
+                                   1, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
@@ -265,9 +267,9 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_PCM:
         try {
           dmx->packetizer =
-            new pcm_packetizer_c(this, sth->samples_per_unit,
-                                 sth->sh.audio.channels, 
-                                 sth->bits_per_sample, ti);
+            new pcm_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                 get_uint16(&sth->sh.audio.channels),
+                                 get_uint16(&sth->bits_per_sample), ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize PCM "
                   "packetizer for stream id %d. Will try to continue and "
@@ -284,8 +286,8 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_MP3:
         try {
           dmx->packetizer = 
-            new mp3_packetizer_c(this, sth->samples_per_unit,
-                                 sth->sh.audio.channels, ti);
+            new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                 get_uint16(&sth->sh.audio.channels), ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize MP3 "
                   "packetizer for stream id %d. Will try to continue and "
@@ -302,8 +304,8 @@ void ogm_reader_c::create_packetizers() {
       case OGM_STREAM_TYPE_AC3:
         try {
           dmx->packetizer = 
-            new ac3_packetizer_c(this, sth->samples_per_unit,
-                                 sth->sh.audio.channels, ti);
+            new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                 get_uint16(&sth->sh.audio.channels), ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize AC3 "
                   "packetizer for stream id %d. Will try to continue and "
@@ -444,7 +446,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
   // The new stream headers introduced by OggDS (see ogmstreams.h).
   if (((*op.packet & PACKET_TYPE_BITS ) == PACKET_TYPE_HEADER) &&
-      (op.bytes >= ((int)sizeof(stream_header) + 1 - sizeof(int)))) {
+      (op.bytes >= ((int)sizeof(stream_header) + 1))) {
     sth = (stream_header *)(op.packet + 1);
     if (!strncmp(sth->streamtype, "video", 5)) {
       nvstreams++;

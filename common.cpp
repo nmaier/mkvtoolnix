@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.19 2003/05/09 10:05:25 mosu Exp $
+    \version \$Id: common.cpp,v 1.20 2003/05/11 09:04:43 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -67,6 +67,24 @@ uint32_t get_uint32(const void *buf) {
   tmp = (unsigned char *) buf;
 
   ret = tmp[3] & 0xff;
+  ret = (ret << 8) + (tmp[2] & 0xff);
+  ret = (ret << 8) + (tmp[1] & 0xff);
+  ret = (ret << 8) + (tmp[0] & 0xff);
+
+  return ret;
+}
+
+uint64_t get_uint64(const void *buf) {
+  uint64_t ret;
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  ret = tmp[7] & 0xff;
+  ret = (ret << 8) + (tmp[6] & 0xff);
+  ret = (ret << 8) + (tmp[5] & 0xff);
+  ret = (ret << 8) + (tmp[4] & 0xff);
+  ret = (ret << 8) + (tmp[3] & 0xff);
   ret = (ret << 8) + (tmp[2] & 0xff);
   ret = (ret << 8) + (tmp[1] & 0xff);
   ret = (ret << 8) + (tmp[0] & 0xff);
