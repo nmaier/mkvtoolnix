@@ -32,6 +32,8 @@
 #include <winbase.h>
 #include <wingdi.h>
 #include <winuser.h>
+#else
+#include <unistd.h>
 #endif // SYS_WINDOWS
 
 #include "mm_io.h"
