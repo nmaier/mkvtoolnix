@@ -11,6 +11,7 @@
    Matroska reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 // {{{ includes
@@ -75,6 +76,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_tta.h"
 #include "p_video.h"
 #include "p_vobsub.h"
+#include "p_vobbtn.h"
 #include "p_vorbis.h"
 
 using namespace std;
@@ -82,8 +84,10 @@ using namespace libmatroska;
 
 #define PFX "matroska_reader: "
 #define MAP_TRACK_TYPE(c) ((c) == 'a' ? track_audio : \
+                           (c) == 'b' ? track_buttons : \
                            (c) == 'v' ? track_video : track_subtitle)
 #define MAP_TRACK_TYPE_STRING(c) ((c) == 'a' ? "audio" : \
+                                  (c) == 'b' ? "buttons" : \
                                   (c) == 'v' ? "video" : "subtitle")
 
 #define in_parent(p) (in->getFilePointer() < \
@@ -529,6 +533,16 @@ kax_reader_c::verify_tracks() {
                      "private data found.\n", t->tnum, t->codec_id.c_str());
             continue;
           }
+        }
+        t->ok = 1;
+        break;
+
+      case 'b':
+        if (t->codec_id != MKV_B_VOBBTN) {
+          if (verbose)
+            mxwarn(PFX "CodecID '%s' for track %u is unknown.\n",
+                   t->codec_id.c_str(), t->tnum);
+          continue;
         }
         t->ok = 1;
         break;
@@ -1770,6 +1784,24 @@ kax_reader_c::create_packetizer(int64_t tid) {
 
         break;
 
+      case 'b':
+        if (t->codec_id == MKV_B_VOBBTN) {
+          safefree(nti->private_data);
+          nti->private_data = NULL;
+          nti->private_size = 0;
+          t->ptzr =
+            add_packetizer(new vobbtn_packetizer_c(this, t->v_width,
+                                                   t->v_height, nti));
+          mxinfo(FMT_TID "Using the VobBtn output module.\n",
+                 ti->fname.c_str(), (int64_t)t->tnum);
+
+          t->sub_type = 'b';
+
+        } else
+          init_passthrough_packetizer(t);
+
+        break;
+
       default:
         mxerror(FMT_TID "Unsupported track type for this track.\n",
                 ti->fname.c_str(), (int64_t)t->tnum);
@@ -2085,6 +2117,7 @@ kax_reader_c::identify() {
       mxinfo("Track ID %d: %s (%s%s%s)%s\n", tracks[i]->tnum,
              tracks[i]->type == 'v' ? "video" :
              tracks[i]->type == 'a' ? "audio" :
+             tracks[i]->type == 'b' ? "buttons" :
              tracks[i]->type == 's' ? "subtitles" : "unknown",
              tracks[i]->codec_id.c_str(),
              tracks[i]->ms_compat ? ", " : "",

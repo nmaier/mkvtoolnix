@@ -11,6 +11,7 @@
    class definitions for the Matroska reader
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <s.lhomme@free.fr>.
 */
 
 #ifndef __R_MATROSKA_H
@@ -61,7 +62,7 @@ struct kax_track_t {
   string codec_id;
   bool ms_compat;
 
-  char type; // 'v' = video, 'a' = audio, 't' = text subs
+  char type; // 'v' = video, 'a' = audio, 't' = text subs, 'b' = buttons
   char sub_type; // 't' = text, 'v' = VobSub
   bool passthrough;             // No special packetizer available.
 

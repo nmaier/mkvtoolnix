@@ -11,6 +11,7 @@
    Definitions for the various Codec IDs
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #ifndef __MATROSKA_H
@@ -64,6 +65,8 @@
 #define MKV_S_TEXTASCII  "S_TEXT/ASCII"
 #define MKV_S_VOBSUB     "S_VOBSUB"
 #define MKV_S_VOBSUBZLIB "S_VOBSUB/ZLIB"
+
+#define MKV_B_VOBBTN     "B_VOBBTN"
 
 // see http://www.matroska.org/technical/specs/tagging/index.html#targettypes 
 #define TAG_TARGETTYPE_COLLECTION     70

@@ -226,6 +226,13 @@ can be obtained with the \fB\-\-identify\fR switch (see
 section \fBTRACK IDS\fR). They're \fBnot\fR simply
 the track numbers. Default: copy all subtitle tracks.
 .TP
+\fB\-s\fR, \fB\-\-btracks\fR <\fIn\fR,\fIm\fR,...>
+Copy the button tracks \fIn\fR, \fIm\fR etc.
+The numbers are track IDs which can be obtained with the \fB\-\-identify\fR
+switch (see section \fBTRACK IDS\fR).
+They're \fBnot\fR simply the track numbers.
+Default: copy all button tracks.
+.TP
 \fB\-A\fR, \fB\-\-noaudio\fR
 Don't copy any audio track from this file.
 .TP
@@ -234,6 +241,9 @@ Don't copy any video track from this file.
 .TP
 \fB\-S\fR, \fB\-\-nosubs\fR
 Don't copy any subtitle track from this file.
+.TP
+\fB\-S\fR, \fB\-\-nobuttons\fR
+Don't copy any button track from this file.
 .TP
 \fB\-\-no\-chapters\fR
 If the source is a Matroska file then don't copy chapters from it.
@@ -289,7 +299,7 @@ tracks by selecting different track IDs each time.
 Sets the 'default' flag for the given track (see section \fBTRACK IDS\fR).
 If the user does not explicitly select a track himself then the player should
 prefer the track that has his 'default' flag set. Only one track of each kind
-(audio, video, subtitles) can have his 'default' flag set.
+(audio, video, subtitles, buttons) can have his 'default' flag set.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
@@ -624,8 +634,8 @@ tracks that are read from an input file. This was the behavior of these
 switches prior to version 0.4.4.
 .LP
 The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
-\fB\-\-stracks\fR, \fB\-\-sync\fR, \fB\-\-default-track\fR, \fB\-\-cues\fR
-and \fB\-\-language\fR.
+\fB\-\-stracks\fR, \fB\-\-btracks\fR, \fB\-\-sync\fR, \fB\-\-default-track\fR,
+\fB\-\-cues\fR and \fB\-\-language\fR.
 
 
 .SH SUBTITLES

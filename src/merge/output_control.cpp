@@ -11,6 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
+   \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #include "os.h"
@@ -84,6 +85,7 @@
 #include "r_srt.h"
 #include "r_ssa.h"
 #include "r_tta.h"
+#include "r_vobbtn.h"
 #include "r_vobsub.h"
 #include "r_wav.h"
 #include "tag_common.h"
@@ -301,6 +303,8 @@ get_file_type(const string &filename) {
     type = FILE_TYPE_DTS;
   else if (aac_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_AAC;
+  else if (vobbtn_reader_c::probe_file(mm_io, size))
+    type = FILE_TYPE_VOBBTN;
   else if (mpeg_es_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_MPEG;
   else {
@@ -1111,6 +1115,9 @@ create_readers() {
           break;
         case FILE_TYPE_MPEG:
           file->reader = new mpeg_es_reader_c(file->ti);
+          break;
+        case FILE_TYPE_VOBBTN:
+          file->reader = new vobbtn_reader_c(file->ti);
           break;
         default:
           mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);

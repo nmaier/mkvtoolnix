@@ -11,6 +11,7 @@
    class definition for the generic reader and packetizer
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #ifndef __PR_GENERIC_H
@@ -237,8 +238,8 @@ public:
 
   // Options used by the readers.
   string fname;
-  bool no_audio, no_video, no_subs;
-  vector<int64_t> atracks, vtracks, stracks;
+  bool no_audio, no_video, no_subs, no_buttons;
+  vector<int64_t> atracks, vtracks, stracks, btracks;
 
   // Options used by the packetizers.
   unsigned char *private_data;

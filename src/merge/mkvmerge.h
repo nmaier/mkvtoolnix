@@ -11,6 +11,7 @@
    definition of global variables found in mkvmerge.cpp
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #ifndef __MKVMERGE_H
@@ -45,7 +46,8 @@ enum file_type_e {
   FILE_TYPE_FLAC,
   FILE_TYPE_TTA,
   FILE_TYPE_MPEG,
-  FILE_TYPE_MAX = FILE_TYPE_MPEG
+  FILE_TYPE_VOBBTN,
+  FILE_TYPE_MAX = FILE_TYPE_VOBBTN
 };
 
 int64_t create_track_number(generic_reader_c *reader, int64_t tid);

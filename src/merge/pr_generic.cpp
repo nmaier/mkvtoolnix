@@ -11,6 +11,7 @@
    functions common for all readers/packetizers
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #include <map>
@@ -1045,6 +1046,7 @@ generic_reader_c::generic_reader_c(track_info_c *nti) {
   add_all_requested_track_ids2(atracks);
   add_all_requested_track_ids2(vtracks);
   add_all_requested_track_ids2(stracks);
+  add_all_requested_track_ids2(btracks);
   add_all_requested_track_ids(all_fourccs);
   add_all_requested_track_ids(display_properties);
   add_all_requested_track_ids(audio_syncs);
@@ -1100,6 +1102,10 @@ generic_reader_c::demuxing_requested(char type,
     if (ti->no_subs)
       return false;
     tracks = &ti->stracks;
+  } else if (type == 'b') {
+    if (ti->no_buttons)
+      return false;
+    tracks = &ti->btracks;
   } else
     die("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track "
         "type %c.", type);
@@ -1203,6 +1209,7 @@ track_info_c::track_info_c():
   no_audio(false),
   no_video(false),
   no_subs(false),
+  no_buttons(false),
   private_data(NULL),
   private_size(0),
   aspect_ratio(0.0),
@@ -1251,6 +1258,7 @@ track_info_c::operator =(const track_info_c &src) {
   no_audio = src.no_audio;
   no_video = src.no_video;
   no_subs = src.no_subs;
+  no_buttons = src.no_buttons;
 
   private_size = src.private_size;
   private_data = (unsigned char *)safememdup(src.private_data, private_size);

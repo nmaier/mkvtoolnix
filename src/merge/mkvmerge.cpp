@@ -169,9 +169,12 @@ usage() {
     "                           video tracks.\n"
     "  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
     "                           all subtitle tracks.\n"
+    "  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
+    "                           all buttons tracks.\n"
     "  -A, --noaudio            Don't copy any audio track from this file.\n"
     "  -D, --novideo            Don't copy any video track from this file.\n"
     "  -S, --nosubs             Don't copy any text track from this file.\n"
+    "  -B, --nobuttons          Don't copy any buttons track from this file.\n"
     "  --no-chapters            Don't keep chapters from a Matroska file.\n"
     "  --no-attachments         Don't keep attachments from a Matroska file.\n"
     "  --no-tags                Don't keep tags from a Matroska file.\n"
@@ -423,7 +426,7 @@ parse_and_add_tags(const string &file_name) {
   delete tags;
 }
 
-/** \brief Parse the \c --atracks / \c --vtracks / \c --stracks argument
+/** \brief Parse the \c --xtracks arguments
   
    The argument is a comma separated list of track IDs.
 */
@@ -1577,6 +1580,9 @@ parse_args(vector<string> &args) {
     else if ((this_arg == "-S") || (this_arg == "--nosubs"))
       ti->no_subs = true;
 
+    else if ((this_arg == "-B") || (this_arg == "--nobuttons"))
+      ti->no_buttons = true;
+
     else if ((this_arg == "-a") || (this_arg == "--atracks")) {
       if (no_next_arg)
         mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
@@ -1596,6 +1602,13 @@ parse_args(vector<string> &args) {
         mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
 
       parse_tracks(next_arg, ti->stracks, this_arg);
+      sit++;
+
+    } else if ((this_arg == "-b") || (this_arg == "--btracks")) {
+      if (no_next_arg)
+        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
+
+      parse_tracks(next_arg, ti->btracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-f") || (this_arg == "--fourcc")) {
@@ -1788,6 +1801,9 @@ parse_args(vector<string> &args) {
 
       if ((ti->stracks.size() != 0) && ti->no_subs)
         mxerror(_("'-S' and '-s' used on the same source file.\n"));
+
+      if ((ti->btracks.size() != 0) && ti->no_buttons)
+        mxerror(_("'-B' and '-b' used on the same source file.\n"));
 
       memset(&file, 0, sizeof(filelist_t));
 

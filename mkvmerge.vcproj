@@ -98,7 +98,7 @@
 				Name="VCPostBuildEventTool"/>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="copy /f config.msvc.h config.h"/>
+				CommandLine="copy config.msvc.h config.h"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -310,6 +310,12 @@
 				RelativePath=".\src\input\r_tta.h">
 			</File>
 			<File
+				RelativePath=".\src\input\r_vobbtn.cpp">
+			</File>
+			<File
+				RelativePath=".\src\input\r_vobbtn.h">
+			</File>
+			<File
 				RelativePath=".\src\input\r_vobsub.cpp">
 			</File>
 			<File
@@ -396,6 +402,12 @@
 			</File>
 			<File
 				RelativePath=".\src\output\p_video.h">
+			</File>
+			<File
+				RelativePath=".\src\output\p_vobbtn.cpp">
+			</File>
+			<File
+				RelativePath=".\src\output\p_vobbtn.h">
 			</File>
 			<File
 				RelativePath=".\src\output\p_vobsub.cpp">
