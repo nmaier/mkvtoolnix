@@ -155,13 +155,8 @@ job_run_dialog::start_next_job() {
   mdlg->load(wxString::Format(wxT("%s/jobs/%d.mmg"), wxGetCwd().c_str(),
                               jobs[ndx].id));
 
-#if defined(SYS_WINDOWS)
   opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"),
-                       (int)GetCurrentProcessId(), (int)time(NULL));
-#else
-  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"), getpid(),
-                       (int)time(NULL));
-#endif
+                       (int)wxGetProcessId(), (int)time(NULL));
   try {
     opt_file = new wxFile(opt_file_name, wxFile::write);
   } catch (...) {
@@ -208,21 +203,20 @@ job_run_dialog::start_next_job() {
                               jobs[ndx].id, jobs[ndx].description->c_str(),
                               format_date_time(jobs[ndx].started_on).c_str()));
 
-  line = wxT("");
   t_update->Start(100);
 }
 
 void
 job_run_dialog::process_input() {
-  wxString tmp;
+  wxString tmp, wx_line;
   bool got_char;
   long value;
-  wxChar c;
+  char c;
 
   if (process == NULL)
     return;
 
-  c = wxT('\0');
+  c = 0;
 
   while (process->IsInputAvailable()) {
     if (!out->Eof()) {
@@ -231,20 +225,21 @@ job_run_dialog::process_input() {
     } else
       got_char = false;
 
-    if (got_char && ((c == wxT('\n')) || (c == wxT('\r')) || out->Eof())) {
-      if (line.Find(wxT("progress")) == 0) {
-        if (line.Find(wxT("%)")) != 0) {
-          line.Remove(line.Find(wxT("%)")));
-          tmp = line.AfterLast(wxT('('));
+    if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
+      wx_line = wxU(to_utf8(cc_local_utf8, line).c_str());
+      if (wx_line.Find(wxT("progress")) == 0) {
+        if (wx_line.Find(wxT("%)")) != 0) {
+          wx_line.Remove(wx_line.Find(wxT("%)")));
+          tmp = wx_line.AfterLast(wxT('('));
           tmp.ToLong(&value);
           if ((value >= 0) && (value <= 100))
             g_progress->SetValue(value);
         }
-      } else if (line.Length() > 0)
-        *jobs[jobs_to_start[current_job]].log += line + wxT("\n");
-      line = wxT("");
+      } else if (wx_line.Length() > 0)
+        *jobs[jobs_to_start[current_job]].log += wx_line + wxT("\n");
+      line = "";
     } else if ((unsigned char)c != 0xff)
-      line.Append(c);
+      line += c;
 
     if (out->Eof())
       break;

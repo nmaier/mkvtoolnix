@@ -1,3 +1,8 @@
+2004-11-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: File names with non-ASCII characters were not
+	working if mmg was compiled against a Unicode enabled wxWidgets.
+
 2004-11-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added reading DTS from AVIs and from

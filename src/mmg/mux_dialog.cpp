@@ -50,9 +50,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #endif
            wxDEFAULT_FRAME_STYLE) {
   char c;
-  string arg_utf8;
+  string arg_utf8, line;
   long value;
-  wxString line, tmp;
+  wxString wx_line, tmp;
   wxInputStream *out;
   wxFile *opt_file;
   uint32_t i;
@@ -119,13 +119,8 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
   process = new mux_process(this);
 
-#if defined(SYS_WINDOWS)
   opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"),
-                       (int)GetCurrentProcessId(), (int)time(NULL));
-#else
-  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"), getpid(),
-                       (int)time(NULL));
-#endif
+                       (int)wxGetProcessId(), (int)time(NULL));
   try {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     opt_file = new wxFile(opt_file_name, wxFile::write);
@@ -156,39 +151,34 @@ mux_dialog::mux_dialog(wxWindow *parent):
                   process);
   out = process->GetInputStream();
 
-  line = wxT("");
+  line = "";
   log = wxT("");
   while (1) {
-    if (!out->Eof()) {
+    if (!out->Eof())
       c = out->GetC();
-      if ((unsigned char)c != 0xff)
-        log.Append(c);
-    }
     while (app->Pending())
       app->Dispatch();
 
     if ((c == '\n') || (c == '\r') || out->Eof()) {
-      if (line.Find(wxT("Warning:")) == 0)
-        tc_warnings->AppendText(line + wxT("\n"));
-      else if (line.Find(wxT("Error:")) == 0)
-        tc_errors->AppendText(line + wxT("\n"));
-      else if (line.Find(wxT("progress")) == 0) {
-        if (line.Find(wxT("%)")) != 0) {
-          line.Remove(line.Find(wxT("%)")));
-          tmp = line.AfterLast(wxT('('));
+      wx_line = wxU(to_utf8(cc_local_utf8, line).c_str());
+      log += wx_line + wxT("\n");
+      if (wx_line.Find(wxT("Warning:")) == 0)
+        tc_warnings->AppendText(wx_line + wxT("\n"));
+      else if (wx_line.Find(wxT("Error:")) == 0)
+        tc_errors->AppendText(wx_line + wxT("\n"));
+      else if (wx_line.Find(wxT("progress")) == 0) {
+        if (wx_line.Find(wxT("%)")) != 0) {
+          wx_line.Remove(wx_line.Find(wxT("%)")));
+          tmp = wx_line.AfterLast(wxT('('));
           tmp.ToLong(&value);
           if ((value >= 0) && (value <= 100))
             update_gauge(value);
         }
-      } else if (line.Length() > 0)
-        tc_output->AppendText(line + wxT("\n"));
-      line = wxT("");
-    } else if ((unsigned char)c != 0xff) {
-      char s[2];
-      s[0] = c;
-      s[1] = 0;
-      line.Append(wxU(s));
-    }
+      } else if (wx_line.Length() > 0)
+        tc_output->AppendText(wx_line + wxT("\n"));
+      line = "";
+    } else if ((unsigned char)c != 0xff)
+      line += c;
 
     if (out->Eof())
       break;

@@ -529,13 +529,6 @@ wxdie(const wxString &errmsg) {
 
 mmg_dialog::mmg_dialog():
   wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION " ('" VERSIONNAME "')")) {
-//           wxPoint(0, 0),
-// #ifdef SYS_WINDOWS
-//           wxSize(520, 740),
-// #else
-//           wxSize(520, 718),
-// #endif
-//           wxDEFAULT_FRAME_STYLE) {
   wxBoxSizer *bs_main;
   wxPanel *panel;
 
@@ -782,7 +775,7 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   wxFileConfig *cfg;
   wxString tmp_name;
 
-  tmp_name.Printf(wxT("tempsettings-%u.mmg"), getpid());
+  tmp_name.Printf(wxT("tempsettings-%d.mmg"), (int)wxGetProcessId());
   cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
   tc_output->SetValue(wxT(""));
 
