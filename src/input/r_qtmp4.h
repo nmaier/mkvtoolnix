@@ -94,16 +94,18 @@ typedef struct {
   qt_editlist_t *editlist_table;
   uint32_t editlist_table_len;
 
+  esds_t esds;
+  bool esds_parsed;
+
+  unsigned char *v_stsd;
+  uint32_t v_stsd_size;
   uint32_t v_width, v_height, v_bitdepth;
-  qt_image_description_t *v_desc;
-  uint32_t v_desc_size;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
-  unsigned char *a_priv;
-  uint32_t a_priv_size;
   sound_v1_stsd_atom_t a_stsd;
-  esds_t a_esds;
-  bool a_esds_parsed;
+
+  unsigned char *priv;
+  uint32_t priv_size;
 
   bool warning_printed;
 
@@ -141,9 +143,12 @@ protected:
   virtual void read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
                          uint32_t &hsize);
   virtual void free_demuxer(qtmp4_demuxer_t *dmx);
-  virtual bool parse_esds_atom(mm_mem_io_c *memio, qtmp4_demuxer_t *dmx,
+  virtual void parse_header_priv_atoms(qtmp4_demuxer_t *dmx,
+                                       unsigned char *mem, int size,
+                                       int level);
+  virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_t *dmx,
                                int level);
-  virtual uint32_t read_esds_descr_len(mm_mem_io_c *memio);
+  virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
   virtual void flush_packetizers();
 };
 
