@@ -228,11 +228,10 @@ file_type_t file_types[] =
    {"    ", -1,      "Vorbis audio"},
    {NULL,  -1,      NULL}};
 
-// }}}
-
-// {{{ FUNCTION usage()
-
-static void usage() {
+/** \brief Outputs usage information
+ */
+static void
+usage() {
   mxinfo(
     "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
@@ -345,11 +344,13 @@ static void usage() {
   );
 }
 
-// }}}
-
-// {{{ FUNCTION get_type(char *filename)
-
-static int get_type(char *filename) {
+/** \brief Probe the file type
+ *
+ * Opens the input file and calls the \c probe_file function for each known
+ * file reader class. Uses \c mm_text_io_c for subtitle probing.
+ */
+static int
+get_type(char *filename) {
   mm_io_c *mm_io;
   mm_text_io_c *mm_text_io;
   uint64_t size;
@@ -422,12 +423,19 @@ static int get_type(char *filename) {
   return type;
 }
 
-// }}}
-
-// {{{ helper functions (sighandler, display_progress)
-
+/** \brief Fix the file after mkvmerge has been interrupted
+ *
+ * On Unix like systems mkvmerge will install a signal handler. On \c SIGUSR1
+ * all debug information will be dumped to \c stdout if mkvmerge has been
+ * compiled with \c -DDEBUG.
+ *
+ * On \c SIGINT mkvmerge will try to sanitize the current output file
+ * by writing the cues, the meta seek information and by updating the
+ * segment duration and the segment length.
+ */
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
-static void sighandler(int signum) {
+static void
+sighandler(int signum) {
 #ifdef DEBUG
   if (signum == SIGUSR1)
     debug_facility.dump_info();
@@ -487,7 +495,10 @@ static void sighandler(int signum) {
 static int display_counter = 1;
 static generic_reader_c *display_reader = NULL;
 
-static void display_progress(bool force) {
+/** \brief Selects a reader for displaying its progress information
+ */
+static void
+display_progress(bool force) {
   generic_reader_c *winner;
   int i;
 
@@ -505,11 +516,12 @@ static void display_progress(bool force) {
   display_counter++;
 }
 
-// }}}
-
-// {{{ command line parsing, helper functions
-
-void parse_and_add_tags(const char *file_name) {
+/** \brief Parse tags and add them to the list of all tags
+ *
+ * Also tests the tags for missing mandatory elements.
+ */
+void
+parse_and_add_tags(const char *file_name) {
   KaxTags *tags;
   KaxTag *tag;
   KaxTagTargets *targets;
@@ -543,7 +555,10 @@ void parse_and_add_tags(const char *file_name) {
   delete tags;
 }
 
-void add_tags(KaxTag *tags) {
+/** \brief Add some tags to the list of all tags
+ */
+void
+add_tags(KaxTag *tags) {
   if (!accept_tags)
     return;
 
@@ -553,7 +568,10 @@ void add_tags(KaxTag *tags) {
   kax_tags->PushElement(*tags);
 }
 
-void add_packetizer(generic_packetizer_c *packetizer) {
+/** \brief Add a packetizer to the list of packetizers
+ */
+void
+add_packetizer(generic_packetizer_c *packetizer) {
   packetizer_t *pack = (packetizer_t *)safemalloc(sizeof(packetizer_t));
   pack->packetizer = packetizer;
   pack->status = EMOREDATA;
@@ -561,7 +579,14 @@ void add_packetizer(generic_packetizer_c *packetizer) {
   packetizers.push_back(pack);
 }
 
-static void parse_tracks(char *s, vector<int64_t> *tracks, const char *opt) {
+/** \brief Parse the \c --atracks / \c --vtracks / \c --stracks argument
+ *
+ * The argument is a comma separated list of track IDs.
+ */
+static void
+parse_tracks(char *s,
+             vector<int64_t> *tracks,
+             const char *opt) {
   char *comma;
   int64_t tid;
   string orig = s;
@@ -587,6 +612,13 @@ static void parse_tracks(char *s, vector<int64_t> *tracks, const char *opt) {
   }
 }
 
+/** \brief Parse the \c --sync argument
+ *
+ * The argument must have the form <tt>TID:d</tt> or
+ * <tt>TID:d,l1/l2</tt>, e.g. <tt>0:200</tt>.  The part before the
+ * comma is the displacement in ms. The optional part after comma is
+ * the linear factor which defaults to 1 if not given.
+ */
 static void parse_sync(char *s, audio_sync_t &async, const char *opt) {
   char *linear, *div, *colon;
   double d1, d2;
@@ -632,7 +664,14 @@ static void parse_sync(char *s, audio_sync_t &async, const char *opt) {
   async.displacement = atoi(s);
 }
 
-static void parse_aspect_ratio(char *s, const char *opt, track_info_c &ti) {
+/** \brief Parse the \c --aspect-ratio argument
+ *
+ * The argument must have the form \c TID:w/h or \c TID:float, e.g. \c 0:16/9
+ */
+static void
+parse_aspect_ratio(char *s,
+                   const char *opt,
+                   track_info_c &ti) {
   char *div, *c;
   float w, h;
   string orig = s;
@@ -674,7 +713,13 @@ static void parse_aspect_ratio(char *s, const char *opt, track_info_c &ti) {
   ti.display_properties->push_back(dprop);
 }
 
-static void parse_display_dimensions(char *s, track_info_c &ti) {
+/** \brief Parse the \c --display-dimensions argument
+ *
+ * The argument must have the form \c TID:wxh, e.g. \c 0:640x480.
+ */
+static void
+parse_display_dimensions(char *s,
+                         track_info_c &ti) {
   char *x, *c;
   string orig = s;
   int w, h;
@@ -710,7 +755,20 @@ static void parse_display_dimensions(char *s, track_info_c &ti) {
   ti.display_properties->push_back(dprop);
 }
 
-static void parse_split(const char *arg) {
+/** \brief Parse the \c --split argument
+ *
+ * The \c --split option takes several formats.
+ *
+ * \arg size based: If only a number is given or the number is
+ * postfixed with '<tt>K</tt>', '<tt>M</tt>' or '<tt>G</tt>' this is
+ * interpreted as the size after which to split.
+ *
+ * \arg time based: If a number postfixed with '<tt>s</tt>' or in a
+ * format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
+ * given then this is interpreted as the time after which to split.
+ */
+static void
+parse_split(const char *arg) {
   int64_t modifier;
   char *s, *p;
   string orig = arg;
@@ -778,7 +836,13 @@ static void parse_split(const char *arg) {
   split_by_time = false;
 }
 
-static void parse_cues(char *s, cue_creation_t &cues) {
+/** \brief Parse the \c --cues argument
+ *
+ * The argument must have the form \c TID:cuestyle, e.g. \c 0:none.
+ */
+static void
+parse_cues(char *s,
+           cue_creation_t &cues) {
   char *colon;
   string orig = s;
 
@@ -804,7 +868,13 @@ static void parse_cues(char *s, cue_creation_t &cues) {
     mxerror("'%s' is an unsupported argument for --cues.\n", orig.c_str());
 }
 
-static void parse_compression(char *s, cue_creation_t &compression) {
+/** \brief Parse the \c --compression argument
+ *
+ * The argument must have the form \c TID:compression, e.g. \c 0:bz2.
+ */
+static void
+parse_compression(char *s,
+                  cue_creation_t &compression) {
   char *colon;
   string orig = s;
 
@@ -836,8 +906,17 @@ static void parse_compression(char *s, cue_creation_t &compression) {
             "compression methods are 'none', and 'zlib'.\n", orig.c_str());
 }
 
-static void parse_language(char *s, language_t &lang, const char *opt,
-                           const char *topic, bool check) {
+/** \brief Parse the argument for a couple of options
+ *
+ * Some options have similar parameter styles. The arguments must have
+ * the form \c TID:value, e.g. \c 0:XVID.
+ */
+static void
+parse_language(char *s,
+               language_t &lang,
+               const char *opt,
+               const char *topic,
+               bool check) {
   char *colon;
   string orig = s;
 
@@ -860,7 +939,13 @@ static void parse_language(char *s, language_t &lang, const char *opt,
   lang.language = safestrdup(s);
 }
 
-static void parse_sub_charset(char *s, language_t &sub_charset) {
+/** \brief Parse the \c --subtitle-charset argument
+ *
+ * The argument must have the form \c TID:charset, e.g. \c 0:ISO8859-15.
+ */
+static void
+parse_sub_charset(char *s,
+                  language_t &sub_charset) {
   char *colon;
   string orig = s;
 
@@ -882,7 +967,14 @@ static void parse_sub_charset(char *s, language_t &sub_charset) {
   sub_charset.language = safestrdup(s);
 }
 
-static void parse_tags(char *s, tags_t &tags, const char *opt) {
+/** \brief Parse the \c --tags argument
+ *
+ * The argument must have the form \c TID:filename, e.g. \c 0:tags.xml.
+ */
+static void
+parse_tags(char *s,
+           tags_t &tags,
+           const char *opt) {
   char *colon;
   string orig = s;
 
@@ -902,7 +994,14 @@ static void parse_tags(char *s, tags_t &tags, const char *opt) {
   tags.file_name = safestrdup(s);
 }
 
-static void parse_fourcc(char *s, const char *opt, track_info_c &ti) {
+/** \brief Parse the \c --fourcc argument
+ *
+ * The argument must have the form \c TID:fourcc, e.g. \c 0:XVID.
+ */
+static void
+parse_fourcc(char *s,
+             const char *opt,
+             track_info_c &ti) {
   char *c;
   string orig = s;
   fourcc_t fourcc;
@@ -922,7 +1021,13 @@ static void parse_fourcc(char *s, const char *opt, track_info_c &ti) {
   ti.all_fourccs->push_back(fourcc);
 }
 
-static void parse_track_order(const char *s, track_info_c &ti) {
+/** \brief Parse the argument for \c --track-order
+ *
+ * The argument must be a comma separated list of track IDs.
+ */
+static void
+parse_track_order(const char *s,
+                  track_info_c &ti) {
   vector<string> parts;
   uint32_t i;
   int64_t id;
@@ -938,11 +1043,14 @@ static void parse_track_order(const char *s, track_info_c &ti) {
   }
 }
 
-// }}}
-
-// {{{ render functions (render_headers, render_attachments)
-
-static void render_headers(mm_io_c *rout) {
+/** \brief Render the basic EBML and Matroska headers
+ *
+ * Renders the segment information and track headers. Also reserves
+ * some space with EBML Void elements so that the headers can be
+ * overwritten safely by the rerender_headers function.
+ */
+static void
+render_headers(mm_io_c *rout) {
   EbmlHead head;
   bool first_file;
   int i;
@@ -1055,7 +1163,13 @@ static void render_headers(mm_io_c *rout) {
   }
 }
 
-void rerender_track_headers() {
+/** \brief Overwrites the track headers with current values
+ *
+ * Can be used by packetizers that have to modify their headers
+ * depending on the track contents.
+ */
+void
+rerender_track_headers() {
   int64_t new_void_size;
 
   kax_tracks->UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
@@ -1072,7 +1186,10 @@ void rerender_track_headers() {
   out->restore_pos();
 }
 
-static void render_attachments(IOCallback *rout) {
+/** \brief Render all attachments into the output file at the current position
+ */
+static void
+render_attachments(IOCallback *rout) {
   KaxAttachments *other_as;
   KaxAttached *kax_a;
   KaxFileData *fdata;
@@ -1159,11 +1276,15 @@ static void render_attachments(IOCallback *rout) {
   kax_as->Render(*rout);
 }
 
-// }}}
-
-// {{{ FUNCTION create_readers()
-
-static void create_readers() {
+/** \brief Creates the file readers
+ *
+ * For each file the appropriate file reader class is instantiated.
+ * The newly created class must read all track information in its
+ * contrsuctor and throw an exception in case of an error. Otherwise
+ * it is assumed that the file can be hanlded.
+ */
+static void
+create_readers() {
   filelist_t *file;
   int i;
 
@@ -1225,11 +1346,14 @@ static void create_readers() {
   }
 }
 
-// }}}
-
-// {{{ FUNCTION identify(const char *filename)
-
-static void identify(const char *filename) {
+/** \brief Identify a file type and its contents
+ *
+ * This function called for \c --identify. It sets up dummy track info
+ * data for the reader, probes the input file, creates the file reader
+ * and calls its identify function.
+ */
+static void
+identify(const char *filename) {
   track_info_c ti;
   filelist_t *file;
 
@@ -1260,11 +1384,22 @@ static void identify(const char *filename) {
   file->reader->identify();
 }
 
-// }}}
-
-// {{{ FUNCTION parse_args(int argc, char **argv)
-
-static void parse_args(int argc, char **argv) {
+/** \brief Parses and handles command line arguments
+ *
+ * Also probes input files for their type and creates the appropriate
+ * file reader.
+ *
+ * Options are parsed in several passes because some options must be
+ * handled/known before others. The first pass finds
+ * '<tt>--identify</tt>'. The second pass handles options that only
+ * print some information and exit right afterwards
+ * (e.g. '<tt>--version</tt>' or '<tt>--list-types</tt>'). The third
+ * pass looks for '<tt>--output-file</tt>'. The fourth pass handles
+ * everything else.
+ */
+static void
+parse_args(int argc,
+           char **argv) {
   track_info_c *ti;
   int i, j;
   filelist_t *file;
@@ -1849,11 +1984,14 @@ static void parse_args(int argc, char **argv) {
   safefree(attachment);
 }
 
-// }}}
-
-// {{{ command line parsing helper functions
-
-static char **add_string(int &num, char **values, const char *new_string) {
+/** \brief Add a copy of a string to an array
+ *
+ * Creates a copy of a string and appends that one to a string array.
+ */
+static char **
+add_string(int &num,
+           char **values,
+           const char *new_string) {
   values = (char **)saferealloc(values, (num + 1) * sizeof(char *));
   values[num] = safestrdup(new_string);
   num++;
@@ -1861,7 +1999,16 @@ static char **add_string(int &num, char **values, const char *new_string) {
   return values;
 }
 
-static char **read_args_from_file(int &num_args, char **args, char *filename) {
+/** \brief Reads command line arguments from a file
+ *
+ * Each line contains exactly one command line argument or a
+ * comment. Arguments are converted to UTF-8 and appended to the array
+ * \c args.
+ */
+static char **
+read_args_from_file(int &num_args,
+                    char **args,
+                    char *filename) {
   mm_text_io_c *mm_io;
   string buffer, opt1, opt2;
   bool skip_next;
@@ -1902,7 +2049,15 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
   return args;
 }
 
-static void handle_args(int argc, char **argv) {
+/** \brief Expand the command line parameters
+ *
+ * Takes each command line paramter, converts it to UTF-8, and reads more
+ * commands from command files if the argument starts with '@'. Puts all
+ * arguments into a new array.
+ */
+static void
+handle_args(int argc,
+            char **argv) {
   int i, num_args, cc_command_line;
   char **args, *utf8;
 
@@ -1934,11 +2089,14 @@ static void handle_args(int argc, char **argv) {
     safefree(args);
 }
 
-// }}}
-
-// {{{ global setup and cleanup functions
-
-static void setup() {
+/** \brief Global program initialization
+ *
+ * Both platform dependant and independant initialization is done here.
+ * For Unix like systems a signal handler is installed. The locale's
+ * \c LC_CTYPE is set and the process priority is decreased.
+ */
+static void
+setup() {
 #if ! defined(COMP_MSC)
   if (setlocale(LC_CTYPE, "") == NULL)
     mxerror("Could not set the locale properly. Check the "
@@ -1962,7 +2120,10 @@ static void setup() {
   cluster_helper = new cluster_helper_c();
 }
 
-static void init_globals() {
+/** \brief Initialize global variables
+ */
+static void
+init_globals() {
   track_number = 1;
   cluster_helper = NULL;
   kax_sh_main = NULL;
@@ -1976,7 +2137,10 @@ static void init_globals() {
   clear_list_of_unique_uint32();
 }
 
-static void destroy_readers() {
+/** \brief Deletes the file readers
+ */
+static void
+destroy_readers() {
   int i;
   filelist_t *file;
 
@@ -1994,7 +2158,12 @@ static void destroy_readers() {
   }
 }
 
-static void cleanup() {
+/** \brief Uninitialization
+ *
+ * Frees memory and shuts down the readers.
+ */
+static void
+cleanup() {
   delete cluster_helper;
   filelist_t *file;
 
@@ -2023,17 +2192,16 @@ static void cleanup() {
   utf8_done();
 }
 
-// }}}
-
-// {{{ FUNCTIONs create_output_name()/file(), finish_file()
-
-// Transform the output filename and insert the current file number.
-// Rules and search order:
-// 1) %d
-// 2) %[0-9]+d
-// 3) . ("-%03d" will be inserted before the .)
-// 4) "-%03d" will be appended
-string create_output_name() {
+/** \brief Transform the output filename and insert the current file number
+ *
+ * Rules and search order:
+ * \arg %d
+ * \arg %[0-9]+d
+ * \arg . ("-%03d" will be inserted before the .)
+ * \arg "-%03d" will be appended
+ */
+string
+create_output_name() {
   int p, p2, i;
   string s(outfile);
   bool ok;
@@ -2085,7 +2253,14 @@ string create_output_name() {
   return s;
 }
 
-void create_next_output_file() {
+/** \brief Creates the next output file
+ *
+ * Creates a new file name depending on the split settings. Opens that
+ * file for writing and calls \c render_headers(). Also renders
+ * attachments if they exist and the chapters if no splitting is used.
+ */
+void
+create_next_output_file() {
   string this_outfile;
 
   kax_segment = new KaxSegment();
@@ -2145,7 +2320,16 @@ void create_next_output_file() {
   file_num++;
 }
 
-void finish_file(bool last_file) {
+/** \brief Finishes and closes the current file
+ *
+ * Renders the data that is generated during the muxing run. The cues
+ * and meta seek information are rendered at the end. If splitting is
+ * active the chapters are stripped to those that actually lie in this
+ * file and rendered at the front.  The segment duration and the
+ * segment size are set to their actual values.
+ */
+void
+finish_file(bool last_file) {
   int i;
   KaxChapters *chapters_here;
   int64_t start, end, offset;
@@ -2201,6 +2385,8 @@ void finish_file(bool last_file) {
   }
   out->restore_pos();
 
+  // If splitting is active: Select the chapters that lie in this file
+  // and render them in the space that was resesrved at the beginning.
   if ((kax_chapters != NULL) && splitting) {
     if (no_linking)
       offset = cluster_helper->get_timecode_offset();
@@ -2282,11 +2468,14 @@ void finish_file(bool last_file) {
     packetizers[i]->packetizer->reset();;
 }
 
-// }}}
-
-// {{{ FUNCTION main_loop()
-
-void main_loop() {
+/** \brief Request packets and handle the next one
+ *
+ * Requests packets from each packetizer, selects the packet with the
+ * lowest timecode and hands it over to the cluster helper for
+ * rendering.  Also displays the progress.
+ */
+void
+main_loop() {
   packet_t *pack;
   int i;
   packetizer_t *ptzr, *winner;
@@ -2344,11 +2533,14 @@ void main_loop() {
     display_progress(true);
 }
 
-// }}}
-
-// {{{ FUNCTION main(int argc, char **argv)
-
-int main(int argc, char **argv) {
+/** \brief Setup and high level program control
+ *
+ * Calls the functions for setup, handling the command line arguments,
+ * creating the readers, the main loop, finishing the current output
+ * file and cleaning up.
+ */
+int
+main(int argc, char **argv) {
   time_t start, end;
 
   init_globals();
@@ -2379,5 +2571,3 @@ int main(int argc, char **argv) {
 
   mxexit();
 }
-
-// }}}
