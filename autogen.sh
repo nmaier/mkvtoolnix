@@ -19,6 +19,14 @@ DIE=0
         DIE=1
 }
 
+(autoheader --version) < /dev/null > /dev/null 2>&1 || {
+        echo
+        echo "You must have autoheader installed to compile $package."
+        echo "Download the appropriate package for your distribution,"
+        echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+        DIE=1
+}
+
 (automake --version) < /dev/null > /dev/null 2>&1 || {
         echo
         echo "You must have automake installed to compile $package."
@@ -55,7 +63,7 @@ esac
 echo "Generating configuration files for $package, please wait...."
 
 echo "  aclocal $ACLOCAL_FLAGS" && aclocal $ACLOCAL_FLAGS
-#echo "  autoheader" && autoheader
+echo "  autoheader" && autoheader
 #echo "  libtoolize --automake" && libtoolize --automake
 echo "  autoconf" && autoconf
 echo "  automake --add-missing --copy" && automake --add-missing --copy

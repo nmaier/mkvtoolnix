@@ -77,9 +77,7 @@
 #include "r_dts.h"
 #include "r_matroska.h"
 #include "r_mp3.h"
-#ifdef HAVE_OGGVORBIS
 #include "r_ogm.h"
-#endif
 #include "r_qtmp4.h"
 #include "r_real.h"
 #include "r_srt.h"
@@ -219,9 +217,7 @@ file_type_t file_types[] =
    {"mp2", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"mkv", TYPEMATROSKA, "general Matroska files"},
-#ifdef HAVE_OGGVORBIS
    {"ogg", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
-#endif // HAVE_OGGVORBIS
    {"mov", TYPEQTMP4, "Quicktime/MP4 audio and video"},
    {"rm ", TYPEREAL, "RealMedia audio and video"},
    {"srt", TYPESRT, "SRT text subtitles"},
@@ -236,9 +232,7 @@ file_type_t file_types[] =
    {"   ", -1,      "simple text subtitles"},
    {"   ", -1,      "uncompressed PCM audio"},
    {"   ", -1,      "Video (not MPEG1/2)"},
-#ifdef HAVE_OGGVORBIS
    {"   ", -1,      "Vorbis audio"},
-#endif // HAVE_OGGVORBIS
    {NULL,  -1,      NULL}};
 
 // }}}
@@ -371,10 +365,8 @@ static int get_type(char *filename) {
     type = TYPEMATROSKA;
   else if (wav_reader_c::probe_file(mm_io, size))
     type = TYPEWAV;
-#ifdef HAVE_OGGVORBIS
   else if (ogm_reader_c::probe_file(mm_io, size))
     type = TYPEOGM;
-#endif // HAVE_OGGVORBIS
   else if (real_reader_c::probe_file(mm_io, size))
     type = TYPEREAL;
   else if (qtmp4_reader_c::probe_file(mm_io, size))
@@ -986,11 +978,9 @@ static void create_readers() {
         case TYPEMATROSKA:
           file->reader = new kax_reader_c(file->ti);
           break;
-#ifdef HAVE_OGGVORBIS
         case TYPEOGM:
           file->reader = new ogm_reader_c(file->ti);
           break;
-#endif // HAVE_OGGVORBIS
         case TYPEAVI:
           file->reader = new avi_reader_c(file->ti);
           break;

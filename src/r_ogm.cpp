@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_OGGVORBIS
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -751,5 +749,3 @@ void ogm_reader_c::identify() {
            "unknown");
   }
 }
-
-#endif // HAVE_OGGVORBIS

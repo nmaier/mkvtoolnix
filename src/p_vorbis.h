@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_OGGVORBIS
-
 #ifndef __P_VORBIS_H
 #define __P_VORBIS_H
 
@@ -58,5 +56,3 @@ public:
 };
 
 #endif  // __P_VORBIS_H
-
-#endif // HAVE_OGGVORBIS

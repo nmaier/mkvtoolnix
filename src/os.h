@@ -1,6 +1,8 @@
 #ifndef __OS_H
 #define __OS_H
 
+#include "config.h"
+
 #if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN__) || defined(__MINGW32__)
 # define SYS_WINDOWS
 # if defined __MINGW32__

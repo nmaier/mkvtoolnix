@@ -21,6 +21,8 @@
 // A lot of code in this file is from the mplayer sources. The original
 // authors are to be thanked for their work.
 
+#include "os.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

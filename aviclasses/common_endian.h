@@ -26,7 +26,7 @@
 #define LIL_ENDIAN 0x0102
 #define BIG_ENDIAN 0x0201
 
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN == 1
 # define AVI_BYTE_ORDER BIG_ENDIAN
 #else
 # define AVI_BYTE_ORDER LIL_ENDIAN
@@ -38,7 +38,7 @@ typedef enum {
 } eEndianness;
 
 template<class _T, eEndianness _ENDIANNESS>
-class TOOLS_DLL_API EndianValue {
+class EndianValue {
 protected:
   _T  m_Value;
 

@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_OGGVORBIS
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -206,5 +204,3 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
 void vorbis_packetizer_c::dump_debug_info() {
   mxdebug("vorbis_packetizer_c: queue: %d\n", packet_queue.size());
 }
-
-#endif // HAVE_OGGVORBIS

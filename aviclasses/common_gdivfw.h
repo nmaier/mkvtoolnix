@@ -305,10 +305,10 @@ typedef struct {
 #define bitmapFOURCC  mmioFOURCC
 
 inline bool isValidFOURCC(uint32 fcc) {
-  return isalpha(uint8(fcc>>24))
-    && isalpha(uint8(fcc>>16))
-    && isalpha(uint8(fcc>> 8))
-    && isalpha(uint8(fcc    ));
+  return isprint(uint8(fcc>>24))
+    && isprint(uint8(fcc>>16))
+    && isprint(uint8(fcc>> 8))
+    && isprint(uint8(fcc    ));
 }
 
 /* form types, list types, and chunk types */

@@ -4,6 +4,7 @@ AC_INIT(src/mkvmerge.cpp)
 AC_PREREQ(2.50)
 
 AM_INIT_AUTOMAKE(mkvtoolnix,0.7.1)
+AM_CONFIG_HEADER(config.h)
 
 AC_PROG_CC
 AC_PROG_CC_C_O
@@ -612,13 +613,13 @@ dnl
 dnl Check for libexpat
 dnl
 AC_ARG_WITH(expat-prefix,
-  [  --with-expat-prefix=PFX         Path to where the Expat library is installed],,
+  [  --with-expat-prefix=PFX       Path to where the Expat library is installed],,
   with_expat_given=no)
 AC_ARG_WITH(expat-includes,
-  [  --with-expat-includes=DIR       Path to the Expat include file],,
+  [  --with-expat-includes=DIR     Path to the Expat include file],,
   with_expat_includes_given=no)
 AC_ARG_WITH(expat-libraries,
-  [  --with-expat-libraries=DIR      Path to where the Expat library is installed],,
+  [  --with-expat-libraries=DIR    Path to where the Expat library is installed],,
   with_expat_libraries_given=no)
 
   EXPAT_CFLAGS=
@@ -662,7 +663,7 @@ dnl
 dnl Check for zlib
 dnl
 AC_ARG_WITH(zlib,
-  [  --with-zlib-prefix=PFX          Path to where the zlib library is installed],,
+  [  --with-zlib-prefix=PFX        Path to where the zlib library is installed],,
   with_zlib_given=no)
 
   ZLIB_CFLAGS=
@@ -694,7 +695,7 @@ dnl
 dnl Check for liblzo
 dnl
 AC_ARG_WITH(lzo,
-  [  --with-lzo-prefix=PFX          Path to where the lzo library is installed],,
+  [  --with-lzo-prefix=PFX         Path to where the lzo library is installed],,
   with_lzo_given=no)
 
   LZO_CFLAGS=
@@ -726,7 +727,7 @@ dnl
 dnl Check for libbz2
 dnl
 AC_ARG_WITH(bz2,
-  [  --with-bz2-prefix=PFX           Path to where the bz2 library is installed],,
+  [  --with-bz2-prefix=PFX         Path to where the bz2 library is installed],,
   with_bz2_given=no)
 
   BZ2_CFLAGS=
@@ -784,14 +785,13 @@ dnl
         WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
         WXWINDOWS_LIBS=$(wx-config --libs)
       fi
-      echo '#define HAVE_WXWINDOWS 1' >> config.h
+      AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
       AC_MSG_RESULT($wxwversion ok)
       have_wxwindows=yes
     else
       AC_MSG_RESULT(no: version $wxwversion is too old)
     fi
   else
-    echo '/* #define HAVE_WXWINDOWS 1 */' >> config.h
     AC_MSG_RESULT(no: wx-config was not found)
   fi
 
@@ -800,19 +800,28 @@ AC_SUBST(WXWINDOWS_LDFLAGS)
 AC_SUBST(WXWINDOWS_LIBS)
 AM_CONDITIONAL(HAVE_WXWINDOWS, test x"$have_wxwindows" = "xyes")
 
-AVILIB_CFLAGS="-D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
-AVILIB_LIBS="-lavi"
 
-AVICLASSES_CXXFLAGS="-D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
-AVICLASSES_LIBS="-laviclasses"
+dnl
+dnl Option to use the (old) avilib library instead of the AVI classes
+dnl
+AC_ARG_ENABLE(avilib,
+  [  --enable-avilib               Use avilib instead of AVIclasses],
+  have_aviclasses=no, have_aviclasses=yes)
 
-AC_SUBST(AVILIB_CFLAGS)
+  if test "x$have_aviclasses" = "xyes"; then
+    AC_DEFINE(HAVE_AVICLASSES, 1,
+      [Define if the newer AVIclasses should be used])
+  fi
+
+  AVILIB_LIBS="-lavi"
+
+  AVICLASSES_LIBS="-laviclasses"
+
 AC_SUBST(AVILIB_LIBS)
-AC_SUBST(AVICLASSES_CXXFLAGS)
 AC_SUBST(AVICLASSES_LIBS)
 
-CFLAGS="-Wall -Wno-sign-compare -Wno-comment @EXTRA_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
-CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment @EXTRA_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @AVILIB_CFLAGS@ @AVICLASSES_CXXFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@ @EXPAT_CFLAGS@ @ZLIB_CFLAGS@ @LZO_CFLAGS@ @BZ2_CFLAGS@"
+CFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
+CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@ @EXPAT_CFLAGS@ @ZLIB_CFLAGS@ @LZO_CFLAGS@ @BZ2_CFLAGS@"
 CPPFLAGS="@EXTRA_CFLAGS@"
 LDFLAGS="@EXTRA_LDFLAGS@"
 

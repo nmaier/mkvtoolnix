@@ -23,6 +23,7 @@
 #ifndef f_AVIINDEX_H
 #define f_AVIINDEX_H
 
+#include "common_endian.h"
 #include "common_gdivfw.h"
 
 class AVIIndexChainNode;

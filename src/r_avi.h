@@ -27,9 +27,13 @@
 
 #include <vector>
 
+#ifdef HAVE_AVICLASSES
+#include <AVIReadHandler.h>
+#else
 extern "C" {
 #include <avilib.h>
 }
+#endif
 
 #include "mm_io.h"
 #include "pr_generic.h"
@@ -43,16 +47,24 @@ extern "C" {
 
 typedef struct avi_demuxer_t {
   generic_packetizer_c *packetizer;
-  int channels, bits_per_sample, samples_per_second;
-  int aid;
-  int eos;
+  int channels, bits_per_sample, samples_per_second, aid;
   int64_t bytes_processed;
+#ifdef HAVE_AVICLASSES
+  IAVIReadStream *stream;
+  int frame, maxframes;
+#endif
 } avi_demuxer_t;
 
 class avi_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk, *old_chunk;
+#ifdef HAVE_AVICLASSES
+	IAVIReadHandler	*avi;
+	IAVIReadStream *s_video;
+#else
   avi_t *avi;
+#endif
+  mm_io_c *io;
   video_packetizer_c *vpacketizer;
   vector<avi_demuxer_t *> ademuxers;
   double fps;
@@ -72,7 +84,7 @@ public:
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
-  virtual void add_audio_demuxer(avi_t *avi, int aid);
+  virtual void add_audio_demuxer(int aid);
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);
 };
 
