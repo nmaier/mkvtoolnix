@@ -644,7 +644,7 @@ tab_chapters::load(wxString name) {
       source_is_simple_format = false;
 
     } else {
-      new_chapters = parse_chapters(wxMBL(name), 0, -1, 0, NULL, NULL, true,
+      new_chapters = parse_chapters(wxMBL(name), 0, -1, 0, "", "", true,
                                     &source_is_simple_format);
       source_is_kax_file = false;
     }
