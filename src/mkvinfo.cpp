@@ -1597,17 +1597,26 @@ def_handle2(block_group,
       KaxBlockDuration &duration =
         *static_cast<KaxBlockDuration *>(l3);
       bduration = ((float)uint64(duration)) * tc_scale / 1000000.0;
-      show_element(l3, 3, "Block duration: %.3fms", bduration);
+      show_element(l3, 3, "Block duration: %lld.%06lldms",
+                   uint64(duration) * tc_scale / 1000000,
+                   (uint64(duration) * tc_scale % 1000000));
 
     } else if (is_id(l3, KaxReferenceBlock)) {
+      int64_t r;
+
       KaxReferenceBlock &reference =
         *static_cast<KaxReferenceBlock *>(l3);
-      show_element(l3, 3, "Reference block: %.3fms", 
-                   ((float)int64(reference)) * tc_scale / 1000000.0);
-      if (int64(reference) <= 0)
+      r = int64(reference) * tc_scale;
+      if (r <= 0) {
+        r *= -1;
+        show_element(l3, 3, "Reference block: -%lld.%06lldms", 
+                     r / 1000000, r % 1000000);
         bref_found = true;
-      else if (int64(reference) > 0)
+      } else if (int64(reference) > 0) {
+        show_element(l3, 3, "Reference block: %lld.%06lldms", 
+                     r / 1000000, r % 1000000);
         fref_found = true;
+      }
 
     } else if (is_id(l3, KaxReferencePriority)) {
       KaxReferencePriority &priority =
