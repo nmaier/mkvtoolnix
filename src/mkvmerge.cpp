@@ -16,8 +16,8 @@
 
 #include "os.h"
 
-#include <errno.h>
 #include <ctype.h>
+#include <errno.h>
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 #include <signal.h>
 #endif
