@@ -57,6 +57,8 @@ extern bool identifying, identify_verbose;
 
 extern char *dump_packets;
 
+extern uint64_t engage_hacks;
+
 void add_packetizer(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 

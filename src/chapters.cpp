@@ -234,7 +234,7 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
                             int64_t max_tc, int64_t offset,
                             const char *language, const char *charset,
-                            bool exception_on_error) {
+                            bool exception_on_error, bool *is_simple_format) {
   mm_text_io_c *in;
 
   try {
@@ -248,9 +248,13 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   }
 
   try {
-    if (probe_simple_chapters(in))
+    if (probe_simple_chapters(in)) {
+      if (is_simple_format != NULL)
+        *is_simple_format = true;
       return parse_simple_chapters(in, min_tc, max_tc, offset, language,
                                    charset, exception_on_error);
+    } else if (is_simple_format != NULL)
+      *is_simple_format = false;
 
     if (probe_xml_chapters(in))
       return parse_xml_chapters(in, min_tc, max_tc, offset,
