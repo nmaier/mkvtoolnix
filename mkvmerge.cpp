@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.96 2003/06/11 17:06:48 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.97 2003/06/11 18:20:28 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -87,6 +87,7 @@ private:
 public:
   bitvalue_c(int nsize);
   bitvalue_c(const bitvalue_c &src);
+  bitvalue_c(const char *s, int allowed_bitlength = -1);
   virtual ~bitvalue_c();
 
   bitvalue_c &operator =(const bitvalue_c &src);
@@ -109,6 +110,57 @@ bitvalue_c::bitvalue_c(int nbitsize) {
 bitvalue_c::bitvalue_c(const bitvalue_c &src) {
   value = NULL;
   *this = src;
+}
+
+#define ishexdigit(c) (isdigit(c) || (((c) >= 'a') && ((c) <= 'f')) || \
+                       (((c) >= 'A') && ((c) <= 'F')))
+#define upperchar(c) (((c) >= 'a') ? ((c) - 'a' + 'A') : (c))
+#define hextodec(c) (isdigit(c) ? ((c) - '0') : ((c) - 'A' + 10))
+
+bitvalue_c::bitvalue_c(const char *s, int allowed_bitlength) {
+  int len, i;
+  string s2;
+
+  len = strlen(s);
+  if (len < 2)
+    throw exception();
+
+  if ((s[0] == '0') && (s[1] == 'x')) {
+    i = 0;
+    while (i < len) {
+      if ((len - i) < 4)
+        throw exception();
+      if ((s[i] != '0') || (s[i + 1] != 'x'))
+        throw exception();
+      s2 += s[i + 2];
+      s2 += s[i + 3];
+      i += 4;
+      if (i < len) {
+        if (s[i] != ' ')
+          throw exception();
+        i++;
+      }
+    }
+    s = s2.c_str();
+    len = strlen(s);
+  }
+
+  if ((len % 2) == 1)
+    throw exception();
+
+  if ((allowed_bitlength != -1) && ((len * 4) != allowed_bitlength))
+    throw exception();
+
+  for (i = 0; i < len; i++)
+    if (!ishexdigit(s[i]))
+      throw exception();
+
+  value = (unsigned char *)safemalloc(len / 2);
+  bitsize = len * 4;
+
+  for (i = 0; i < len; i += 2)
+    value[i / 2] = hextodec(upperchar(s[i])) * 16 +
+      hextodec(upperchar(s[i + 1]));
 }
 
 bitvalue_c &bitvalue_c::operator =(const bitvalue_c &src) {
@@ -221,6 +273,7 @@ int track_number = 1;
 mm_io_c *out;
 
 bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
+bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -271,7 +324,9 @@ static void usage(void) {
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
     "  --split-max-files <n>    Create at most n files.\n"
-    "  --dont-link              Don't link splitted files (see man page).\n"
+    "  --dont-link              Don't link splitted files.\n"
+    "  --link-to-previous <UID> Link the first file to the given UID.\n"
+    "  --link-to-next <UID>     Link the last file to the given UID.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -309,6 +364,9 @@ static void usage(void) {
     "  -V, --version            Show version information.\n"
     "  @optionsfile             Reads additional command line options from\n"
     "                           the specified file (see man page).\n"
+    "\n\nPlease read the man page/the HTML documentation to mkvmerge. It\n"
+    "explains several details in great length which are not obvious from\n"
+    "this listing.\n"
   );
 }
 
@@ -636,10 +694,16 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       if (!first_file) {
         KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
         kax_prevuid.CopyBuffer(seguid_prev.data(), 128 / 8);
+      } else if (seguid_link_previous != NULL) {
+        KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
+        kax_prevuid.CopyBuffer(seguid_link_previous->data(), 128 / 8);
       }
       if (!last_file) {
         KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
         kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
+      } else if (seguid_link_next != NULL) {
+        KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
+        kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
       }
     }
 
@@ -669,7 +733,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       files[i]->reader->set_headers();
 
     kax_tracks->Render(*out);
-  } catch (std::exception &ex) {
+  } catch (exception &ex) {
     fprintf(stderr, "Error: Could not render the track headers.\n");
     exit(1);
   }
@@ -765,6 +829,42 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(argv[i], "--dont-link")) {
       no_linking = true;
+
+    } else if (!strcmp(argv[i], "--link-to-previous")) {
+      if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
+        fprintf(stderr, "Error: --link-to-previous lacks the previous UID."
+                "\n");
+        exit(1);
+      }
+      if (seguid_link_previous != NULL) {
+        fprintf(stderr, "Error: Previous UID was already given.\n");
+        exit(1);
+      }
+      try {
+        seguid_link_previous = new bitvalue_c(argv[i + 1], 128);
+      } catch (exception &ex) {
+        fprintf(stderr, "Error: Unknown format for the previous UID.\n");
+        exit(1);
+      }
+      i++;
+
+    } else if (!strcmp(argv[i], "--link-to-next")) {
+      if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
+        fprintf(stderr, "Error: --link-to-next lacks the previous UID."
+                "\n");
+        exit(1);
+      }
+      if (seguid_link_next != NULL) {
+        fprintf(stderr, "Error: Next UID was already given.\n");
+        exit(1);
+      }
+      try {
+        seguid_link_next = new bitvalue_c(argv[i + 1], 128);
+      } catch (exception &ex) {
+        fprintf(stderr, "Error: Unknown format for the next UID.\n");
+        exit(1);
+      }
+      i++;
 
     } else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
@@ -994,9 +1094,16 @@ static void parse_args(int argc, char **argv) {
     exit(1);
   }
 
-  if ((split_after <= 0) && no_linking)
-    fprintf(stderr, "Warning: '--dont-link' is only useful in combination "
-            "with '--split'.\n");
+  if (no_linking) {
+    if ((seguid_link_previous != NULL) || (seguid_link_next != NULL)) {
+      fprintf(stderr, "Error: '--dont-link' cannot be used together with "
+              "'--link-to-previous' or '--link-to-next'.\n");
+      exit(1);
+    }
+    if (split_after <= 0)
+      fprintf(stderr, "Warning: '--dont-link' is only useful in combination "
+              "with '--split'.\n");
+  }
 }
 
 static void create_readers() {
@@ -1334,7 +1441,7 @@ void create_next_output_file(bool last_file, bool first_file) {
     // Open the a dummy file.
     try {
       out = new mm_null_io_c();
-    } catch (std::exception &ex) {
+    } catch (exception &ex) {
       die("mkvmerge.cpp/create_next_output_file(): Could not create a dummy "
           "output class.");
     }
@@ -1353,7 +1460,7 @@ void create_next_output_file(bool last_file, bool first_file) {
   // Open the output file.
   try {
     out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
-  } catch (std::exception &ex) {
+  } catch (exception &ex) {
     fprintf(stderr, "Error: Couldn't open output file %s (%s).\n",
             this_outfile.c_str(), strerror(errno));
     exit(1);
