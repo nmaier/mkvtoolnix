@@ -101,6 +101,7 @@ void show_error(const char *fmt, ...);
 kax_track_t *find_track(int tid);
 
 bool extract_tracks(const char *file_name);
+extern int conv_utf8;
 void extract_tags(const char *file_name);
 void extract_chapters(const char *file_name, bool chapter_format_simple);
 void extract_attachments(const char *file_name);

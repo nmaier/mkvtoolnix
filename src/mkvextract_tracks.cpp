@@ -80,6 +80,8 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
+int conv_utf8;
+
 // }}}
 
 // {{{ FUNCTIONS flush_ogg_pages(), write_ogg_pages()

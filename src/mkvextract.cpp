@@ -121,7 +121,7 @@ void usage() {
 " on the mode.\n"
 "\n"
 " First mode extracts some tracks to external files.\n"
-"  -c charset     Convert text subtitles to this charset.\n"
+"  -c charset     Convert text subtitles to this charset (default: UTF-8).\n"
 "  TID:out        Write track with the ID TID to the file 'out'.\n"
 "\n"
 " Second mode extracts the tags and converts them to XML. The output is\n"
@@ -195,7 +195,8 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
 
   file_name = argv[2];
 
-  conv_handle = 0;
+  conv_handle = conv_utf8;
+  sub_charset = "UTF-8";
 
   // Now process all the other options.
   for (i = 3; i < argc; i++)
@@ -244,6 +245,8 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       track.sub_charset = safestrdup(sub_charset);
       tracks.push_back(track);
       safefree(copy);
+      conv_handle = conv_utf8;
+      sub_charset = "UTF-8";
     }
 
   if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS))
@@ -315,6 +318,7 @@ int main(int argc, char **argv) {
 #endif
 
   utf8_init(NULL);
+  conv_utf8 = utf8_init("UTF-8");
 
   parse_args(argc, argv, input_file, mode);
   if (mode == MODE_TRACKS) {
