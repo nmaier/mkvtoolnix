@@ -106,7 +106,7 @@ wxString cli_options[][2] = {
     wxT("Force Xiph style lacing.") },
   { wxT("--engage lacing_ebml"),
     wxT("Force EBML style lacing.") },
-  { wxT("--engage native_bframes"),
+  { wxT("--engage native_mpeg4"),
     wxT("Analyze MPEG4 bitstreams, put each frame into one Matroska block, "
         "use proper timestamping (I P B B = 0 120 40 80), use "
         "V_MPEG4/ISO/... CodecIDs.") },

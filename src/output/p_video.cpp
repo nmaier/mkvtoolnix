@@ -80,21 +80,21 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
 
   if (ncodec_id != NULL)
     set_codec_id(ncodec_id);
-  else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_BFRAMES)) {
+  else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_MPEG4)) {
     if (bframes)
       set_codec_id(MKV_V_MPEG4_ASP);
     else
       set_codec_id(MKV_V_MPEG4_SP);
   } else
     set_codec_id(MKV_V_MSCOMP);
-  if ((!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES)) &&
+  if ((!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_MPEG4)) &&
       (hcodec_id != NULL) && !strcmp(hcodec_id, MKV_V_MSCOMP) &&
       (ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
       (ti->fourcc[0] != 0))
     memcpy(&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression,
            ti->fourcc, 4);
-  if (!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES))
+  if (!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_MPEG4))
     set_codec_private(ti->private_data, ti->private_size);
 }
 
@@ -138,7 +138,7 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_enter("video_packetizer_c::process");
 
-  if (hack_engaged(ENGAGE_NATIVE_BFRAMES) && is_mpeg4 && (fps != 0.0)) {
+  if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4 && (fps != 0.0)) {
     find_mpeg4_frame_types(mem.data, mem.size, frames);
     for (i = 0; i < frames.size(); i++) {
       if ((frames[i].type == 'I') ||

@@ -28,7 +28,7 @@
 #define ENGAGE_NO_META_SEEK "no_meta_seek"
 #define ENGAGE_LACING_XIPH "lacing_xiph"
 #define ENGAGE_LACING_EBML "lacing_ebml"
-#define ENGAGE_NATIVE_BFRAMES "native_bframes"
+#define ENGAGE_NATIVE_MPEG4 "native_mpeg4"
 #define ENGAGE_NO_VARIABLE_DATA "no_variable_data"
 #define ENGAGE_NO_DEFAULT_HEADER_VALUES "no_default_header_values"
 #define ENGAGE_FORCE_PASSTHROUGH_PACKETIZER "force_passthrough_packetizer"
