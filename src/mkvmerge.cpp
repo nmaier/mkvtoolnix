@@ -83,6 +83,7 @@
 #include "r_real.h"
 #include "r_srt.h"
 #include "r_ssa.h"
+#include "r_vobsub.h"
 #include "r_wav.h"
 #include "tagparser.h"
 
@@ -202,6 +203,7 @@ file_type_t file_types[] =
    {"rm ", TYPEREAL, "RealMedia audio and video"},
    {"srt", TYPESRT, "SRT text subtitles"},
    {"ssa", TYPESSA, "SSA/ASS text subtitles"},
+   {"idx", TYPEVOBSUB, "VobSub subtitles"},
    {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
    {"output modules:", -1, ""},
    {"   ", -1,      "AAC audio"},
@@ -368,6 +370,8 @@ static int get_type(char *filename) {
       type = TYPESRT;
     else if (ssa_reader_c::probe_file(mm_text_io, size))
       type = TYPESSA;
+    else if (vobsub_reader_c::probe_file(mm_text_io, size))
+      type = TYPEVOBSUB;
     else
       type = TYPEUNKNOWN;
 
@@ -930,6 +934,9 @@ static void create_readers() {
           break;
         case TYPESSA:
           file->reader = new ssa_reader_c(file->ti);
+          break;
+        case TYPEVOBSUB:
+          file->reader = new vobsub_reader_c(file->ti);
           break;
         case TYPEQTMP4:
           file->reader = new qtmp4_reader_c(file->ti);

@@ -53,5 +53,6 @@
 #define MKV_S_TEXTSSA    "S_TEXT/SSA"
 #define MKV_S_TEXTASS    "S_TEXT/ASS"
 #define MKV_S_TEXTUSF    "S_TEXT/USF"
+#define MKV_S_VOBSUB     "S_VOBSUB"
 
 #endif // __MATROSKA_H

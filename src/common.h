@@ -63,6 +63,12 @@ using namespace libebml;
 #define TYPEREAL     14
 #define TYPEQTMP4    15
 
+/* compression types */
+#define COMPRESSION_NONE          0
+#define COMPRESSION_LZO           1
+#define COMPRESSION_ZLIB          2
+#define COMPRESSION_BZ2           3
+
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \

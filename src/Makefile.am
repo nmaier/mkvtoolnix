@@ -22,6 +22,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			p_pcm.cpp p_pcm.h \
 			p_textsubs.cpp p_textsubs.h \
 			p_video.cpp p_video.h \
+			p_vobsub.cpp p_vobsub.h \
 			p_vorbis.cpp p_vorbis.h \
 			pr_generic.h pr_generic.cpp \
 			r_aac.cpp r_aac.h \
@@ -35,6 +36,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_srt.cpp r_srt.h \
 			r_ssa.cpp r_ssa.h \
 			r_ogm.cpp r_ogm.h \
+			r_vobsub.cpp r_vobsub.h \
 			r_wav.cpp r_wav.h \
 			subtitles.cpp subtitles.h \
 			tagparser_start.cpp tagparser.h \
@@ -65,13 +67,13 @@ base64tool_SOURCES = base64tool.cpp \
 
 mkvmerge_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \
-		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ @ZLIB_LIBS@
+		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ @ZLIB_LIBS@ @LZO_LIBS@
 
 mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
 		@WXWINDOWS_LIBS@ @MINGW_LIBS@
 
 mkvextract_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
-		@VORBIS_LIBS@ @OGG_LIBS@ @ICONV_LIBS@
+		@VORBIS_LIBS@ @OGG_LIBS@ @ICONV_LIBS@ @LZO_LIBS@
 
 base64tool_LDADD = @EBML_LIBS@ @ICONV_LIBS@
 

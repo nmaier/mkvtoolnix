@@ -1,17 +1,21 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
+  mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  r_vobsub.cpp
-  VobSub text subtitle reader module
+  r_vobsub.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version $Id$
+    \brief VobSub stream reader
+    \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <ctype.h>
@@ -20,14 +24,21 @@
 #include <string.h>
 #include <errno.h>
 
-#include <ogg/ogg.h>
-
-#include "ogmmerge.h"
-#include "ogmstreams.h"
+#include "common.h"
+#include "mm_io.h"
+#include "p_vobsub.h"
 #include "r_vobsub.h"
-#include "subtitles.h"
 
-#define istimecodestr(s)      (!strncmp(s, "timecode: ", 11))
+using namespace std;
+
+#define hexvalue(c) (isdigit(c) ? (c) - '0' : \
+                     tolower(c) == 'a' ? 10 : \
+                     tolower(c) == 'b' ? 11 : \
+                     tolower(c) == 'c' ? 12 : \
+                     tolower(c) == 'd' ? 13 : \
+                     tolower(c) == 'e' ? 14 : 15)
+#define istimecodestr(s)       (!strncmp(s, "timecode: ", 10))
+#define istimestampstr(s)      (!strncmp(s, "timestamp: ", 11))
 #define iscommafileposstr(s)   (!strncmp(s, ", filepos: ", 11))
 #define iscolon(s)             (*(s) == ':')
 #define istwodigits(s)         (isdigit(*(s)) && isdigit(*(s + 1)))
@@ -48,292 +59,237 @@
                                 ishexdigit(*(s + 6)) && \
                                 ishexdigit(*(s + 7)) && \
                                 ishexdigit(*(s + 8)))
-#define isvobsubline(s)        (istimecodestr(s) && istimecode(s + 11) && \
+// timestamp: 00:01:43:603, filepos: 000000000
+#define isvobsubline_v3(s)     ((strlen(s) >= 43) && \
+                                istimestampstr(s) && istimecode(s + 11) && \
                                 iscommafileposstr(s + 23) && \
                                 isfilepos(s + 34))
+#define isvobsubline_v7(s)     ((strlen(s) >= 42) && \
+                                istimecodestr(s) && istimecode(s + 10) && \
+                                iscommafileposstr(s + 22) && \
+                                isfilepos(s + 33))
+
+#define PFX "vobsub_reader: "
 
 int vobsub_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
-  char chunk[2048];
+  char chunk[80];
 
-  if (mm_io->setFilePointer(0, seek_beginning) != 0)
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read(chunk, 80) != 80)
+      return 0;
+    if (strncasecmp(chunk, "# VobSub index file, v",
+                    strlen("# VobSub index file, v")))
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (...) {
     return 0;
-  if (fgets(chunk, 2047) == NULL)
-    return 0;
-  if (strncmp(chunk, "# VobSub index file, v7",
-              strlen("# VobSub index file, v7")))
-    return 0;
-  if (mm_io->setFilePointer(0, seek_beginning) != 0)
-    return 0;
+  }
   return 1;
 }
 
-vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
-  throw (error_c) {
-  char *name;
+vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
+  mm_io_c *ifo_file;
+  string sub_name, ifo_name, line;
+  int len;
 
-  if ((file = fopen(fname, "r")) == NULL)
-    throw error_c("vobsub_reader: Could not open source file.");
-  if (!vobsub_reader_c::probe_file(0))
-    throw error_c("vobsub_reader: Source is not a valid VobSub index file.");
+  try {
+    idx_file = new mm_text_io_c(ti->fname);
+  } catch (...) {
+    throw error_c(PFX "Cound not open the source file.");
+  }
 
-  name = safestrdup(fname);
-  if ((strlen(name) > 4) && (name[strlen(name) - 4] == '.'))
-    name[strlen(name) - 4] = 0;
-  else
-    name = (char *)saferealloc(name, strlen(name) + 5);
-  strcat(name, ".sub");
-  if ((subfile = fopen(name, "r")) == NULL)
-    throw error_c("vobsub_reader: Could not open the sub file.");
+  sub_name = ti->fname;
+  len = sub_name.rfind(".");
+  if (len >= 0)
+    sub_name.erase(len);
+  sub_name += ".sub";
 
-  vobsub_packetizer = NULL;
-  all_packetizers = NULL;
-  num_packetizers = 0;
-  if (verbose)
-    mxprint(stdout, "Using VobSub subtitle reader for %s/%s.\n+-> Using " \
-            "VobSub subtitle output module for subtitles.\n", fname, name);
-  safefree(name);
-  memcpy(&async, nasync, sizeof(audio_sync_t));
-  if (ncomments == NULL)
-    comments = ncomments;
-  else
-    comments = dup_comments(ncomments);
+  try {
+    sub_file = new mm_io_c(sub_name.c_str(), MODE_READ);
+  } catch (...) {
+    string emsg = PFX "Could not open the sub file '";
+    emsg += sub_name;
+    emsg += "'.";
+    throw error_c(emsg.c_str());
+  }
+
+  ifo_name = ti->fname;
+  len = ifo_name.rfind(".");
+  if (len >= 0)
+    ifo_name.erase(len);
+  ifo_name += ".ifo";
+
+  ifo_file = NULL;
+  try {
+    ifo_file = new mm_io_c(ifo_name.c_str(), MODE_READ);
+    ifo_file->setFilePointer(0, seek_end);
+    ifo_data_size = ifo_file->getFilePointer();
+    ifo_file->setFilePointer(0);
+    ifo_data = (unsigned char *)safemalloc(ifo_data_size);
+    if (ifo_file->read(ifo_data, ifo_data_size) != ifo_data_size)
+      mxerror(PFX "Could not read the IFO file.\n");
+    delete ifo_file;
+  } catch (...) {
+    if (ifo_file != NULL)
+      delete ifo_file;
+    ifo_data = NULL;
+    ifo_data_size = 0;
+  }
+
+  idx_data = "";
+  last_filepos = -1;
+  last_timestamp = -1;
+
+  len = strlen("# VobSub index file, v");
+  if (!idx_file->getline2(line) ||
+      strncasecmp(line.c_str(), "# VobSub index file, v", len) ||
+      (line.length() < (len + 1)))
+    mxerror(PFX "No version number found.\n");
+
+  version = line[len] - '0';
+  len++;
+  while ((len < line.length()) && isdigit(line[len])) {
+    version = version * 10 + line[len] - '0';
+    len++;
+  }
+  mxverb(2, PFX "Version: %u\n", version);
+
+  if ((version != 3) && (version != 7))
+    mxerror(PFX "Unsupported file type version %d.\n", version);
+
+  if (!parse_headers())
+    throw error_c(PFX "The input file is not a valid VobSub file.");
+
+  packetizer = new vobsub_packetizer_c(this, idx_data.c_str(),
+                                       idx_data.length(), ifo_data,
+                                       ifo_data_size, COMPRESSION_LZO,
+                                       COMPRESSION_NONE, ti);
+
+  if (verbose) {
+    mxinfo("Using VobSub subtitle reader for '%s'/'%s'. ", ti->fname,
+           sub_name.c_str());
+    if (ifo_data_size != 0)
+      mxinfo("Using IFO file '%s'.", ifo_name.c_str());
+    else
+      mxinfo("No IFO file found.");
+    mxinfo("\n+-> Using VobSub subtitle output module for subtitles.\n");
+  }
 }
 
 vobsub_reader_c::~vobsub_reader_c() {
-  int i;
-  for (i = 0; i < num_packetizers; i++)
-    if (all_packetizers[i] != NULL)
-      delete all_packetizers[i];
-  if (comments != NULL)
-    free_comments(comments);
+  delete sub_file;
+  delete idx_file;
+  safefree(ifo_data);
+  delete packetizer;
 }
 
-void vobsub_reader_c::add_vobsub_packetizer(int width, int height,
-                                            char *palette, int langidx,
-                                            char *id, int index) {
-  all_packetizers = (vobsub_packetizer_c **)saferealloc(all_packetizers,
-                                                        (num_packetizers + 1) *
-                                                        sizeof(void *));
-  try {
-    vobsub_packetizer = new vobsub_packetizer_c(this, width, height, palette,
-                                                langidx, id, index,
-                                                &async);
-  } catch (error_c error) {
-    mxprint(stderr, "Error: vobsub_reader: Could not create a new "
-            "vobsub_packetizer: %s\n", error.get_error());
-    exit(1);
-  }
-  all_packetizers[num_packetizers] = vobsub_packetizer;
-  num_packetizers++;
-}
+bool vobsub_reader_c::parse_headers() {
+  int64_t pos;
+  string line;
+  const char *sline;
 
-int vobsub_reader_c::read() {
-  ogg_int64_t start, filepos, last_start, last_filepos;
-  char *s, *s2;
-  int width = -1, height = -1;
-  char *palette = NULL;
-  int langidx = -1;
-  char *id = NULL;
-  int index = -1;
-  int lineno;
-
-  chunk[2047] = 0;
-  lineno = 0;
-  last_start = -1;
-  last_filepos = -1;
   while (1) {
-    if (fgets(chunk, 2047) == NULL)
-      break;
-    lineno++;
-    if ((*chunk == 0) || (strchr("#\n\r", *chunk) != NULL))
+    pos = idx_file->getFilePointer();
+
+    if (!idx_file->getline2(line))
+      return false;
+
+    if ((line.length() == 0) || (line[0] == '#')) {
+      idx_data += line;
+      idx_data += "\n";
       continue;
-    if (!strncmp(chunk, "size: ", 6)) {
-      if (sscanf(&chunk[6], "%dx%d", &width, &height) != 2) {
-        width = -1;
-        height = -1;
-        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"size:\" entry "
-                "on line %d. Ignored.\n", lineno);
-      }
-    } else if (!strncmp(chunk, "palette: ", 9)) {
-      if (strlen(chunk) < 10)
-        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"palette:\" entry "
-                "on line %d. Ignored.\n", lineno);
-      else
-        palette = safestrdup(&chunk[9]);
-    } else if (!strncmp(chunk, "langidx: ", 9)) {
-      langidx = strtol(&chunk[9], NULL, 10);
-      if ((langidx < 0) || (errno != 0)) {
-        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"langidx:\" entry "
-                "on line %d. Ignored.\n", lineno);
-        langidx = -1;
-      }
-    } else if (!strncmp(chunk, "id:", 3)) {
-      s = &chunk[3];
-      while (isblank(*s))
-        s++;
-      s2 = strchr(s, ',');
-      if (s2 == NULL) {
-        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
-                "on line %d. Ignored.\n", lineno);
-
-        continue;
-      }
-      *s2 = 0;
-      id = safestrdup(s);
-      s = s2 + 1;
-      while (isblank(*s))
-        s++;
-      if (strncmp(s, "index:", 6)) {
-        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
-                "on line %d. Ignored.\n", lineno);
-
-        continue;
-      }
-      s += 6;
-      while (isblank(*s))
-        s++;
-      index = strtol(s, NULL, 10);
-      if ((index < 0) || (errno != 0)) {
-        mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
-                "on line %d. Ignored.\n", lineno);
-        continue;
-      }
-    } else if (!isvobsubline(chunk))
-      mxprint(stdout, "vobsub_reader: Warning: Unknown line format on line "
-              "%d. Ignored.\n", lineno);
-    else if (vobsub_packetizer == NULL) {
-      if ((width == -1) || (height == -1)) {
-        mxprint(stdout, "vobsub_reader: No \"size:\" entry found. File seems "
-                "to be defect. Aborting.\n");
-        exit(1);
-      }
-      if (palette == NULL) {
-        mxprint(stdout, "vobsub_reader: No \"palette:\" entry found. File "
-                "seems to be defect. Aborting.\n");
-        exit(1);
-      }
-      if (langidx == -1) {
-        mxprint(stdout, "vobsub_reader: No \"langidx:\" entry found. File "
-                "seems to be defect. Aborting.\n");
-        exit(1);
-      }
-      if ((id == NULL) || (index == -1)) {
-              mxprint(stdout, "vobsub_reader: No \"id:\" entry found. File "
-                "seems to be defect. Aborting.\n");
-        exit(1);
-      }
-      add_vobsub_packetizer(width, height, palette, langidx, id, index);
-      width = -1;
-      height = -1;
-      if (palette != NULL) {
-        safefree(palette);
-        palette = NULL;
-      }
-      langidx = -1;
-      if (id != NULL) {
-        safefree(id);
-        id = NULL;
-      }
-      index = -1;
-    } else {
-// timecode: 00:00:03:440, filepos: 000000000
-// 0123456789012345678901234567890123456789012
-//           1         2         3         4
-      chunk[13] = 0;
-      chunk[16] = 0;
-      chunk[19] = 0;
-      chunk[23] = 0;
-
-      start = atol(&chunk[11]) * 3600000 + atol(&chunk[14]) * 60000 +
-              atol(&chunk[17]) * 1000 + atol(&chunk[20]);
-      filepos = strtoll(&chunk[34], NULL, 16);
-
-      if ((last_start != -1) && (last_filepos != -1)) {
-        if (mm_io->setFilePointer(subfile, last_filepos, seek_beginning) != 0)
-          mxprint(stderr, "Warning: vobsub_reader: Could not seek to position "
-                  "%lld. Ignoring this entry.\n", last_filepos);
-        else if (last_filepos == filepos)
-          mxprint(stderr, "Warning: vobsub_reader: This entry and the last "
-                  "entry start at the same position in the file. Ignored.\n");
-        else {
-          s = (char *)safemalloc(filepos - last_filepos);
-          if (mm_io->read(s, 1, filepos - last_filepos, subfile) !=
-              (filepos - last_filepos))
-            mxprint(stderr, "Warning: vobsub_reader: Could not read entry "
-                    "from the sub file. Ignored.\n");
-          else
-            vobsub_packetizer->process(last_start, start - last_start, s,
-                                       filepos - last_filepos, 0);
-          safefree(s);
-        }
-      }
-      last_start = start;
-      last_filepos = filepos;
-
-      mxprint(stdout, "line %d, start %lld, filepos %lld\n", lineno,
-              start, filepos);
     }
+
+    sline = line.c_str();
+    if (((version == 3) && isvobsubline_v3(sline)) ||
+        ((version == 7) && isvobsubline_v7(sline))) {
+      idx_file->setFilePointer(pos);
+      return true;
+    }
+
+    idx_data += line;
+    idx_data += "\n";
   }
-  if ((last_start != -1) && (last_filepos != -1) &&
-      (vobsub_packetizer != NULL)) {
-    if (mm_io->setFilePointer(subfile, 0, seek_end) != 0) {
-      mxprint(stderr, "Warning: vobsub_reader: Could not seek to end of "
-              "the sub file. Ignoring last entry.\n");
-      vobsub_packetizer->produce_eos_packet();
-      return 0;
+}
+
+int vobsub_reader_c::read(generic_packetizer_c *) {
+  string line;
+  const char *s;
+  int64_t filepos, timestamp;
+  int hour, minute, second, msecond, timestamp_offset, filepos_offset, idx;
+
+  if (done)
+    return 0;
+
+  if (!idx_file->getline2(line)) {
+    if (last_filepos != -1) {
     }
-    filepos = mm_io->getFilePointer();
-    if (mm_io->setFilePointer(subfile, last_filepos, seek_beginning) != 0)
-      mxprint(stderr, "Warning: vobsub_reader: Could not seek to position "
-              "%lld. Ignoring this entry.\n", last_filepos);
-    else if (last_filepos == filepos)
-      mxprint(stderr, "Warning: vobsub_reader: This entry and the last "
-              "entry start at the same position in the file. Ignored.\n");
-    else {
-      s = (char *)safemalloc(filepos - last_filepos);
-      if (mm_io->read(s, 1, filepos - last_filepos, subfile) !=
-          (filepos - last_filepos))
-        mxprint(stderr, "Warning: vobsub_reader: Could not read entry "
-                "from the sub file. Ignored.\n");
-      else
-        vobsub_packetizer->process(last_start, start - last_start, s,
-                                   filepos - last_filepos, 1);
-      safefree(s);
-    }
+
+    done = true;
+    return 0;
   }
 
-  return 0;
-}
+  s = line.c_str();
 
-int vobsub_reader_c::serial_in_use(int serial) {
-//  return vobsubpacketizer->serial_in_use(serial);
-  return 0;
-}
+  if ((version == 3) && !isvobsubline_v3(s))
+    return EMOREDATA;
+  if ((version == 7) && !isvobsubline_v7(s))
+    return EMOREDATA;
 
-ogmmerge_page_t *vobsub_reader_c::get_header_page(int header_type) {
-//  return vobsubpacketizer->get_header_page(header_type);
-  return NULL;
-}
+  if (version == 3) {
+// timestamp: 00:01:43:603, filepos: 000000000
+    timestamp_offset = 11;
+    filepos_offset = 34;
+  } else if (version == 7) {
+    die(PFX "Version 7 has not been implemented yet.");
+  } else
+    die(PFX "Unknown version. Should not have happened.");
 
-ogmmerge_page_t *vobsub_reader_c::get_page() {
-//  return vobsubpacketizer->get_page();
-  return NULL;
+  sscanf(&s[timestamp_offset], "%02d:%02d:%02d:%03d", &hour, &minute, &second,
+         &msecond);
+  timestamp = (int64_t)hour * 60 * 60 * 1000 +
+    (int64_t)minute * 60 * 1000 + (int64_t)second * 1000 + (int64_t)msecond;
+
+  idx = filepos_offset;
+  filepos = hexvalue(s[idx]);
+  idx++;
+  while ((idx < line.length()) && ishexdigit(s[idx])) {
+    filepos = filepos * 16 + hexvalue(s[idx]);
+    idx++;
+  }
+
+  mxverb(2, PFX "Timestamp: %lld, file pos: %lld\n", timestamp, filepos);
+
+  if (last_filepos == -1) {
+    last_filepos = filepos;
+    last_timestamp = timestamp;
+    return EMOREDATA;
+  }
+
+  // Now process the stuff...
+
+  return EMOREDATA;
 }
 
 int vobsub_reader_c::display_priority() {
   return DISPLAYPRIORITY_LOW;
 }
 
-void vobsub_reader_c::reset() {
-//  if (vobsubpacketizer != NULL)
-//    vobsubpacketizer->reset();
-}
-
 static char wchar[] = "-\\|/-\\|/-";
 
 void vobsub_reader_c::display_progress(bool final) {
-  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
+  mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
+}
+
+void vobsub_reader_c::identify() {
+  mxinfo("File '%s': container: VobSub\n", ti->fname);
+  mxinfo("Track ID 0: subtitles (VobSub)\n");
+}
+
+void vobsub_reader_c::set_headers() {
 }
