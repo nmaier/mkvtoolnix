@@ -1,5 +1,8 @@
 2004-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: If the FourCC was set for one track it had been
+	used for each track you selected as well.
+
 	* mkvmerge: new feature: Tags are being kept when reading Matroska
 	files.
 
