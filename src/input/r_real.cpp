@@ -319,9 +319,8 @@ real_reader_c::create_packetizer(int64_t tid) {
         }
         if (sbr)
           profile = AAC_PROFILE_SBR;
-        for (i = 0; i < (int)ti->aac_is_sbr->size(); i++)
-          if (((*ti->aac_is_sbr)[i] == -1) ||
-              ((*ti->aac_is_sbr)[i] == track->id)) {
+        for (i = 0; i < (int)ti->aac_is_sbr.size(); i++)
+          if ((ti->aac_is_sbr[i] == -1) || (ti->aac_is_sbr[i] == track->id)) {
             profile = AAC_PROFILE_SBR;
             break;
           }

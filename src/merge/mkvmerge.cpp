@@ -384,20 +384,20 @@ parse_and_add_tags(const string &file_name) {
  */
 static void
 parse_tracks(string s,
-             vector<int64_t> *tracks,
+             vector<int64_t> &tracks,
              const string &opt) {
   int i;
   int64_t tid;
   vector<string> elements;
 
-  tracks->clear();
+  tracks.clear();
 
   elements = split(s, ",");
   strip(elements);
   for (i = 0; i < elements.size(); i++) {
     if (!parse_int(elements[i], tid))
       mxerror(_("Invalid track ID in '%s %s'.\n"), opt.c_str(), s.c_str());
-    tracks->push_back(tid);
+    tracks.push_back(tid);
   }
 }
 
@@ -410,8 +410,9 @@ parse_tracks(string s,
  */
 static void
 parse_sync(string s,
-           audio_sync_t &async,
-           const string &opt) {
+           const string &opt,
+           track_info_c &ti) {
+  audio_sync_t async;
   vector<string> parts;
   string orig, linear, div;
   int idx;
@@ -460,6 +461,8 @@ parse_sync(string s,
   } else
     async.linear = 1.0;
   async.displacement = atoi(s.c_str());
+
+  ti.audio_syncs.push_back(async);
 }
 
 /** \brief Parse the \c --aspect-ratio argument
@@ -469,8 +472,8 @@ parse_sync(string s,
 static void
 parse_aspect_ratio(const string &s,
                    const string &opt,
-                   track_info_c &ti,
-                   bool is_factor) {
+                   bool is_factor,
+                   track_info_c &ti) {
   int idx;
   float w, h;
   string div;
@@ -499,7 +502,7 @@ parse_aspect_ratio(const string &s,
     idx = parts[1].find(':');
   if (idx < 0) {
     dprop.aspect_ratio = strtod(parts[1].c_str(), NULL);
-    ti.display_properties->push_back(dprop);
+    ti.display_properties.push_back(dprop);
     return;
   }
 
@@ -520,7 +523,7 @@ parse_aspect_ratio(const string &s,
             s.c_str());
 
   dprop.aspect_ratio = w / h;
-  ti.display_properties->push_back(dprop);
+  ti.display_properties.push_back(dprop);
 }
 
 /** \brief Parse the \c --display-dimensions argument
@@ -552,7 +555,8 @@ parse_display_dimensions(const string s,
   dprop.aspect_ratio = -1.0;
   dprop.width = w;
   dprop.height = h;
-  ti.display_properties->push_back(dprop);
+
+  ti.display_properties.push_back(dprop);
 }
 
 /** \brief Parse the \c --cropping argument
@@ -589,7 +593,7 @@ parse_cropping(const string &s,
               "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
               "(argument was '%s').\n"), s.c_str());
 
-  ti.pixel_crop_list->push_back(crop);
+  ti.pixel_crop_list.push_back(crop);
 }
 
 /** \brief Parse the \c --split argument
@@ -687,11 +691,12 @@ parse_split(const string &arg) {
  */
 static void
 parse_delay(const string &s,
-            audio_sync_t &async) {
+            track_info_c &ti) {
   string unit;
   vector<string> parts;
   int unit_idx;
   int64_t mult;
+  packet_delay_t delay;
 
   // Extract the track number.
   parts = split(s, ":", 2);
@@ -700,7 +705,7 @@ parse_delay(const string &s,
     mxerror(_("Invalid delay option. No track ID specified in "
               "'--delay %s'.\n"), s.c_str());
 
-  if (!parse_int(parts[0], async.id))
+  if (!parse_int(parts[0], delay.id))
     mxerror(_("Invalid track ID specified in '--delay %s'.\n"), s.c_str());
 
   for (unit_idx = 0; isdigit(parts[1][unit_idx]); unit_idx++)
@@ -719,9 +724,11 @@ parse_delay(const string &s,
   else if (unit == "ns")
     mxerror(_("Invalid unit given in '--delay %s'.\n"), s.c_str());
 
-  if (!parse_int(parts[1], async.displacement))
+  if (!parse_int(parts[1], delay.delay))
     mxerror(_("Invalid delay given in '--delay %s'.\n"), s.c_str());
-  async.displacement *= mult;
+  delay.delay *= mult;
+
+  ti.packet_delays.push_back(delay);
 }
 
 /** \brief Parse the \c --cues argument
@@ -730,8 +737,9 @@ parse_delay(const string &s,
  */
 static void
 parse_cues(const string &s,
-           cue_creation_t &cues) {
+           track_info_c &ti) {
   vector<string> parts;
+  cue_creation_t cues;
 
   // Extract the track number.
   parts = split(s, ":", 2);
@@ -755,6 +763,8 @@ parse_cues(const string &s,
     cues.cues =  CUE_STRATEGY_NONE;
   else
     mxerror(_("'%s' is an unsupported argument for --cues.\n"), s.c_str());
+
+  ti.cue_creations.push_back(cues);
 }
 
 /** \brief Parse the \c --compression argument
@@ -763,8 +773,9 @@ parse_cues(const string &s,
  */
 static void
 parse_compression(const string &s,
-                  compression_method_t &compression) {
+                  track_info_c &ti) {
   vector<string> parts;
+  compression_method_t compression;
 
   // Extract the track number.
   parts = split(s, ":", 2);
@@ -798,6 +809,8 @@ parse_compression(const string &s,
   if (compression.method == COMPRESSION_UNSPECIFIED)
     mxerror(_("'%s' is an unsupported argument for --compression. Available "
               "compression methods are 'none' and 'zlib'.\n"), s.c_str());
+
+  ti.compression_list.push_back(compression);
 }
 
 /** \brief Parse the argument for a couple of options
@@ -842,7 +855,7 @@ parse_language(const string &s,
     }
   }
 
-  lang.language = safestrdup(parts[1]);
+  lang.language = parts[1];
 }
 
 /** \brief Parse the \c --subtitle-charset argument
@@ -851,8 +864,9 @@ parse_language(const string &s,
  */
 static void
 parse_sub_charset(const string &s,
-                  language_t &sub_charset) {
+                  track_info_c &ti) {
   vector<string> parts;
+  subtitle_charset_t sub_charset;
 
   // Extract the track number.
   parts = split(s, ":", 2);
@@ -869,7 +883,8 @@ parse_sub_charset(const string &s,
     mxerror(_("Invalid sub charset specified in '--sub-charset %s'.\n"),
             s.c_str());
 
-  sub_charset.language = safestrdup(parts[1]);
+  sub_charset.charset = parts[1];
+  ti.sub_charsets.push_back(sub_charset);
 }
 
 /** \brief Parse the \c --tags argument
@@ -878,9 +893,10 @@ parse_sub_charset(const string &s,
  */
 static void
 parse_tags(const string &s,
-           tags_t &tags,
-           const string &opt) {
+           const string &opt,
+           track_info_c &ti) {
   vector<string> parts;
+  tags_t tags;
 
   // Extract the track number.
   parts = split(s, ":", 2);
@@ -898,6 +914,7 @@ parse_tags(const string &s,
             s.c_str());
 
   tags.file_name = from_utf8_c(cc_local_utf8, parts[1]);
+  ti.all_tags.push_back(tags);
 }
 
 /** \brief Parse the \c --fourcc argument
@@ -925,7 +942,7 @@ parse_fourcc(const string &s,
               "\n"), opt.c_str(), orig.c_str());
   memcpy(fourcc.fourcc, parts[1].c_str(), 4);
   fourcc.fourcc[4] = 0;
-  ti.all_fourccs->push_back(fourcc);
+  ti.all_fourccs.push_back(fourcc);
 }
 
 /** \brief Parse the argument for \c --track-order
@@ -1380,7 +1397,7 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--global-tags' lacks the file name.\n"));
 
-      parse_and_add_tags(from_utf8(cc_local_utf8, next_arg).c_str());
+      parse_and_add_tags(from_utf8(cc_local_utf8, next_arg));
       sit++;
 
     } else if ((this_arg == "--chapter-language")) {
@@ -1530,14 +1547,14 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--aspect-ratio' lacks the aspect ratio.\n"));
 
-      parse_aspect_ratio(next_arg, this_arg, *ti, false);
+      parse_aspect_ratio(next_arg, this_arg, false, *ti);
       sit++;
 
     } else if ((this_arg == "--aspect-ratio-factor")) {
       if (no_next_arg)
         mxerror(_("'--aspect-ratio-factor' lacks the aspect ratio factor.\n"));
 
-      parse_aspect_ratio(next_arg, this_arg, *ti, true);
+      parse_aspect_ratio(next_arg, this_arg, true, *ti);
       sit++;
 
     } else if ((this_arg == "--display-dimensions")) {
@@ -1558,24 +1575,21 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'%s' lacks the audio delay.\n"), this_arg.c_str());
 
-      parse_sync(next_arg, async, this_arg);
-      ti->audio_syncs->push_back(async);
+      parse_sync(next_arg, this_arg, *ti);
       sit++;
 
     } else if ((this_arg == "--cues")) {
       if (no_next_arg)
         mxerror(_("'--cues' lacks its argument.\n"));
 
-      parse_cues(next_arg, cues);
-      ti->cue_creations->push_back(cues);
+      parse_cues(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "--delay")) {
       if (no_next_arg)
         mxerror(_("'--delay' lacks the delay to apply.\n"));
 
-      parse_delay(next_arg, async);
-      ti->packet_delays->push_back(async);
+      parse_delay(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "--default-track")) {
@@ -1586,7 +1600,7 @@ parse_args(vector<string> &args) {
         mxerror(_("Invalid track ID specified in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
 
-      ti->default_track_flags->push_back(id);
+      ti->default_track_flags.push_back(id);
       sit++;
 
     } else if ((this_arg == "--language")) {
@@ -1594,7 +1608,7 @@ parse_args(vector<string> &args) {
         mxerror(_("'--language' lacks its argument.\n"));
 
       parse_language(next_arg, lang, "language", "language", true);
-      ti->languages->push_back(lang);
+      ti->languages.push_back(lang);
       sit++;
 
     } else if ((this_arg == "--default-language")) {
@@ -1613,16 +1627,14 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--sub-charset' lacks its argument.\n"));
 
-      parse_sub_charset(next_arg, lang);
-      ti->sub_charsets->push_back(lang);
+      parse_sub_charset(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "-t") || (this_arg == "--tags")) {
       if (no_next_arg)
         mxerror(_("'%s' lacks its argument.\n"), this_arg.c_str());
 
-      parse_tags(next_arg, tags, this_arg);
-      ti->all_tags->push_back(tags);
+      parse_tags(next_arg, this_arg, *ti);
       sit++;
 
     } else if ((this_arg == "--aac-is-sbr")) {
@@ -1633,7 +1645,7 @@ parse_args(vector<string> &args) {
         mxerror(_("Invalid track ID specified in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
 
-      ti->aac_is_sbr->push_back(id);
+      ti->aac_is_sbr.push_back(id);
       sit++;
 
     } else if ((this_arg == "--compression")) {
@@ -1642,8 +1654,7 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--compression' lacks its argument.\n"));
 
-      parse_compression(next_arg, compression);
-      ti->compression_list->push_back(compression);
+      parse_compression(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "--track-name")) {
@@ -1651,7 +1662,7 @@ parse_args(vector<string> &args) {
         mxerror(_("'--track-name' lacks its argument.\n"));
 
       parse_language(next_arg, lang, "track-name", "track name", false);
-      ti->track_names->push_back(lang);
+      ti->track_names.push_back(track_name_t(lang.language, lang.id));
       sit++;
 
     } else if ((this_arg == "--timecodes")) {
@@ -1662,7 +1673,7 @@ parse_args(vector<string> &args) {
 
       s = from_utf8(cc_local_utf8, next_arg);
       parse_language(s, lang, "timecodes", "timecodes", false);
-      ti->all_ext_timecodes->push_back(lang);
+      ti->all_ext_timecodes.push_back(ext_timecodes_t(lang.language, lang.id));
       sit++;
 
     } else if ((this_arg == "--track-order")) {
@@ -1697,13 +1708,13 @@ parse_args(vector<string> &args) {
                   "one of your input files. This is most likely not what you "
                   "want.\n"), outfile.c_str());
 
-      if ((ti->atracks->size() != 0) && ti->no_audio)
+      if ((ti->atracks.size() != 0) && ti->no_audio)
         mxerror(_("'-A' and '-a' used on the same source file.\n"));
 
-      if ((ti->vtracks->size() != 0) && ti->no_video)
+      if ((ti->vtracks.size() != 0) && ti->no_video)
         mxerror(_("'-D' and '-d' used on the same source file.\n"));
 
-      if ((ti->stracks->size() != 0) && ti->no_subs)
+      if ((ti->stracks.size() != 0) && ti->no_subs)
         mxerror(_("'-S' and '-s' used on the same source file.\n"));
 
       memset(&file, 0, sizeof(filelist_t));

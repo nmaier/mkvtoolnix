@@ -63,10 +63,10 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
       throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
 
     sub_charset_found = false;
-    for (i = 0; i < ti->sub_charsets->size(); i++)
-      if ((*ti->sub_charsets)[i].id == 0) {
+    for (i = 0; i < ti->sub_charsets.size(); i++)
+      if ((ti->sub_charsets[i].id == 0) || (ti->sub_charsets[i].id == -1)) {
         sub_charset_found = true;
-        cc_utf8 = utf8_init((*ti->sub_charsets)[i].language);
+        cc_utf8 = utf8_init(ti->sub_charsets[i].charset);
         break;
       }
 

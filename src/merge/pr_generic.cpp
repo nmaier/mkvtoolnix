@@ -41,13 +41,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_c *nti)
   throw(error_c) {
   int i;
-  audio_sync_t *as;
-  cue_creation_t *cc;
-  int64_t id;
-  language_t *lang;
-  tags_t *tags;
-  display_properties_t *dprop;
-  fourcc_t *fourcc;
   bool found;
 
 #ifdef DEBUG
@@ -70,11 +63,11 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   // Let's see if the user specified audio sync for this track.
   found = false;
-  for (i = 0; i < ti->audio_syncs->size(); i++) {
-    as = &(*ti->audio_syncs)[i];
-    if ((as->id == ti->id) || (as->id == -1)) { // -1 == all tracks
+  for (i = 0; i < ti->audio_syncs.size(); i++) {
+    audio_sync_t &as = ti->audio_syncs[i];
+    if ((as.id == ti->id) || (as.id == -1)) { // -1 == all tracks
       found = true;
-      ti->async = *as;
+      ti->async = as;
       break;
     }
   }
@@ -88,27 +81,27 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   // Let's see if the user has specified a delay for this track.
   ti->packet_delay = 0;
-  for (i = 0; i < ti->packet_delays->size(); i++) {
-    as = &(*ti->packet_delays)[i];
-    if ((as->id == ti->id) || (as->id == -1)) { // -1 == all tracks
-      ti->packet_delay = as->displacement;
+  for (i = 0; i < ti->packet_delays.size(); i++) {
+    packet_delay_t &pd = ti->packet_delays[i];
+    if ((pd.id == ti->id) || (pd.id == -1)) { // -1 == all tracks
+      ti->packet_delay = pd.delay;
       break;
     }
   }
 
   // Let's see if the user has specified which cues he wants for this track.
   ti->cues =  CUE_STRATEGY_UNSPECIFIED;
-  for (i = 0; i < ti->cue_creations->size(); i++) {
-    cc = &(*ti->cue_creations)[i];
-    if ((cc->id == ti->id) || (cc->id == -1)) { // -1 == all tracks
-      ti->cues = cc->cues;
+  for (i = 0; i < ti->cue_creations.size(); i++) {
+    cue_creation_t &cc = ti->cue_creations[i];
+    if ((cc.id == ti->id) || (cc.id == -1)) { // -1 == all tracks
+      ti->cues = cc.cues;
       break;
     }
   }
 
   // Let's see if the user has given a default track flag for this track.
-  for (i = 0; i < ti->default_track_flags->size(); i++) {
-    id = (*ti->default_track_flags)[i];
+  for (i = 0; i < ti->default_track_flags.size(); i++) {
+    int64_t id = ti->default_track_flags[i];
     if ((id == ti->id) || (id == -1)) { // -1 == all tracks
       ti->default_track = true;
       break;
@@ -116,40 +109,40 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Let's see if the user has specified a language for this track.
-  for (i = 0; i < ti->languages->size(); i++) {
-    lang = &(*ti->languages)[i];
-    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      ti->language = lang->language;
+  for (i = 0; i < ti->languages.size(); i++) {
+    language_t &lang = ti->languages[i];
+    if ((lang.id == ti->id) || (lang.id == -1)) { // -1 == all tracks
+      ti->language = lang.language;
       break;
     }
   }
 
   // Let's see if the user has specified a sub charset for this track.
-  for (i = 0; i < ti->sub_charsets->size(); i++) {
-    lang = &(*ti->sub_charsets)[i];
-    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      ti->sub_charset = lang->language;
+  for (i = 0; i < ti->sub_charsets.size(); i++) {
+    subtitle_charset_t &sc = ti->sub_charsets[i];
+    if ((sc.id == ti->id) || (sc.id == -1)) { // -1 == all tracks
+      ti->sub_charset = sc.charset;
       break;
     }
   }
 
   // Let's see if the user has specified a sub charset for this track.
-  for (i = 0; i < ti->all_tags->size(); i++) {
-    tags = &(*ti->all_tags)[i];
-    if ((tags->id == ti->id) || (tags->id == -1)) { // -1 == all tracks
-      ti->tags_ptr = tags;
+  for (i = 0; i < ti->all_tags.size(); i++) {
+    tags_t &tags = ti->all_tags[i];
+    if ((tags.id == ti->id) || (tags.id == -1)) { // -1 == all tracks
+      ti->tags_ptr = i;
       if (ti->tags != NULL)
         delete ti->tags;
       ti->tags = new KaxTags;
-      parse_xml_tags(ti->tags_ptr->file_name, ti->tags);
+      parse_xml_tags(ti->all_tags[ti->tags_ptr].file_name, ti->tags);
       break;
     }
   }
 
   // Let's see if the user has specified how this track should be compressed.
   ti->compression = COMPRESSION_UNSPECIFIED;
-  for (i = 0; i < ti->compression_list->size(); i++) {
-    compression_method_t &cm = (*ti->compression_list)[i];
+  for (i = 0; i < ti->compression_list.size(); i++) {
+    compression_method_t &cm = ti->compression_list[i];
     if ((cm.id == ti->id) || (cm.id == -1)) { // -1 == all tracks
       ti->compression = cm.method;
       break;
@@ -157,36 +150,36 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Let's see if the user has specified a name for this track.
-  for (i = 0; i < ti->track_names->size(); i++) {
-    lang = &(*ti->track_names)[i];
-    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      ti->track_name = lang->language;
+  for (i = 0; i < ti->track_names.size(); i++) {
+    track_name_t &tn = ti->track_names[i];
+    if ((tn.id == ti->id) || (tn.id == -1)) { // -1 == all tracks
+      ti->track_name = tn.name;
       break;
     }
   }
 
   // Let's see if the user has specified external timecodes for this track.
-  for (i = 0; i < ti->all_ext_timecodes->size(); i++) {
-    lang = &(*ti->all_ext_timecodes)[i];
-    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
-      ti->ext_timecodes = lang->language;
+  for (i = 0; i < ti->all_ext_timecodes.size(); i++) {
+    ext_timecodes_t &et = ti->all_ext_timecodes[i];
+    if ((et.id == ti->id) || (et.id == -1)) { // -1 == all tracks
+      ti->ext_timecodes = et.ext_timecodes;
       break;
     }
   }
 
   // Let's see if the user has specified an aspect ratio or display dimensions
   // for this track.
-  for (i = 0; i < ti->display_properties->size(); i++) {
-    dprop = &(*ti->display_properties)[i];
-    if ((dprop->id == ti->id) || (dprop->id == -1)) { // -1 == all tracks
-      if (dprop->aspect_ratio < 0) {
-        ti->display_width = dprop->width;
-        ti->display_height = dprop->height;
+  for (i = 0; i < ti->display_properties.size(); i++) {
+    display_properties_t &dprop = ti->display_properties[i];
+    if ((dprop.id == ti->id) || (dprop.id == -1)) { // -1 == all tracks
+      if (dprop.aspect_ratio < 0) {
+        ti->display_width = dprop.width;
+        ti->display_height = dprop.height;
         ti->display_dimensions_given = true;
       } else {
-        ti->aspect_ratio = dprop->aspect_ratio;
+        ti->aspect_ratio = dprop.aspect_ratio;
         ti->aspect_ratio_given = true;
-        ti->aspect_ratio_is_factor = dprop->ar_factor;
+        ti->aspect_ratio_is_factor = dprop.ar_factor;
       }
     }
   }
@@ -198,10 +191,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   memset(ti->fourcc, 0, 5);
   // Let's see if the user has specified a FourCC for this track.
-  for (i = 0; i < ti->all_fourccs->size(); i++) {
-    fourcc = &(*ti->all_fourccs)[i];
-    if ((fourcc->id == ti->id) || (fourcc->id == -1)) { // -1 == all tracks
-      memcpy(ti->fourcc, fourcc->fourcc, 4);
+  for (i = 0; i < ti->all_fourccs.size(); i++) {
+    fourcc_t &fourcc = ti->all_fourccs[i];
+    if ((fourcc.id == ti->id) || (fourcc.id == -1)) { // -1 == all tracks
+      memcpy(ti->fourcc, fourcc.fourcc, 4);
       ti->fourcc[4] = 0;
       break;
     }
@@ -210,12 +203,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   memset(&ti->pixel_cropping, 0, sizeof(pixel_crop_t));
   ti->pixel_cropping.id = -2;
   // Let's see if the user has specified a FourCC for this track.
-  for (i = 0; i < ti->pixel_crop_list->size(); i++) {
-    pixel_crop_t *cropping;
-    cropping = &(*ti->pixel_crop_list)[i];
-    if ((cropping->id == ti->id) || (cropping->id == -1)) { // -1 == all tracks
-      memcpy(&ti->pixel_cropping, cropping, sizeof(pixel_crop_t));
-      ti->fourcc[4] = 0;
+  for (i = 0; i < ti->pixel_crop_list.size(); i++) {
+    pixel_crop_t &cropping = ti->pixel_crop_list[i];
+    if ((cropping.id == ti->id) || (cropping.id == -1)) { // -1 == all tracks
+      ti->pixel_cropping = cropping;
       break;
     }
   }
@@ -296,8 +287,8 @@ generic_packetizer_c::set_tag_track_uid() {
     if (!tag->CheckMandatory())
       mxerror(_("The tags in '%s' could not be parsed: some mandatory "
                 "elements are missing.\n"),
-              ti->tags_ptr != NULL ? ti->tags_ptr->file_name.c_str() :
-              ti->fname.c_str());
+              ti->tags_ptr >= 0 ? ti->all_tags[ti->tags_ptr].file_name.c_str()
+              : ti->fname.c_str());
   }
 }
 
@@ -950,7 +941,7 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
   int i, cur_bytes;
 
   if ((ti->avi_samples_per_sec == 0) || (ti->avi_block_align == 0) ||
-      (ti->avi_avg_bytes_per_sec == 0) || (ti->avi_block_sizes == NULL)) {
+      (ti->avi_avg_bytes_per_sec == 0) || !ti->avi_audio_sync_enabled) {
     enable_avi_audio_sync(false);
     return -1;
   }
@@ -959,8 +950,8 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
      duration = num_bytes * 1000000000 / ti->avi_avg_bytes_per_sec;
   else {
     samples = 0.0;
-    for (i = 0; (i < ti->avi_block_sizes->size()) && (num_bytes > 0); i++) {
-      block_size = (*ti->avi_block_sizes)[i];
+    for (i = 0; (i < ti->avi_block_sizes.size()) && (num_bytes > 0); i++) {
+      block_size = ti->avi_block_sizes[i];
       cur_bytes = num_bytes < block_size ? num_bytes : block_size;
       samples += (double)ti->avi_samples_per_chunk * cur_bytes /
         ti->avi_block_align;
@@ -1019,11 +1010,11 @@ generic_packetizer_c::contains_gap() {
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(container) \
-  for (i = 0; i < ti->container->size(); i++) \
-    add_requested_track_id((*ti->container)[i].id);
+  for (i = 0; i < ti->container.size(); i++) \
+    add_requested_track_id(ti->container[i].id);
 #define add_all_requested_track_ids2(container) \
-  for (i = 0; i < ti->container->size(); i++) \
-    add_requested_track_id((*ti->container)[i]);
+  for (i = 0; i < ti->container.size(); i++) \
+    add_requested_track_id(ti->container[i]);
 
 generic_reader_c::generic_reader_c(track_info_c *nti) {
   int i;
@@ -1086,15 +1077,15 @@ generic_reader_c::demuxing_requested(char type,
   if (type == 'v') {
     if (ti->no_video)
       return false;
-    tracks = ti->vtracks;
+    tracks = &ti->vtracks;
   } else if (type == 'a') {
     if (ti->no_audio)
       return false;
-    tracks = ti->atracks;
+    tracks = &ti->atracks;
   } else if (type == 's') {
     if (ti->no_subs)
       return false;
-    tracks = ti->stracks;
+    tracks = &ti->stracks;
   } else
     die("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track "
         "type %c.", type);
@@ -1208,37 +1199,20 @@ track_info_c::track_info_c():
   display_dimensions_given(false),
   cues(CUE_STRATEGY_NONE),
   default_track(false),
-  tags_ptr(NULL),
+  tags_ptr(-1),
   tags(NULL),
   packet_delay(0),
   compression(COMPRESSION_NONE),
   no_chapters(false),
   no_attachments(false),
-  no_tags(false) {
-  atracks = new vector<int64_t>;
-  vtracks = new vector<int64_t>;
-  stracks = new vector<int64_t>;
+  no_tags(false),
+  avi_audio_sync_enabled(false) {
 
-  all_fourccs = new vector<fourcc_t>;
   memset(fourcc, 0, 5);
-  display_properties = new vector<display_properties_t>;
-  audio_syncs = new vector<audio_sync_t>;
   async.linear = 1.0;
   async.displacement = 0;
-  cue_creations = new vector<cue_creation_t>;
-  default_track_flags = new vector<int64_t>;
-  languages = new vector<language_t>;
-  sub_charsets = new vector<language_t>;
-  all_tags = new vector<tags_t>;
-  aac_is_sbr = new vector<int64_t>;
-  packet_delays = new vector<audio_sync_t>;
-  compression_list = new vector<compression_method_t>;
-  track_names = new vector<language_t>;
-  all_ext_timecodes = new vector<language_t>;
-  pixel_crop_list = new vector<pixel_crop_t>;
   memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
   pixel_cropping.id = -2;
-  avi_block_sizes = NULL;
 }
 
 void
@@ -1246,27 +1220,9 @@ track_info_c::free_contents() {
   if (!initialized)
     return;
 
-  delete atracks;
-  delete vtracks;
-  delete stracks;
-  delete audio_syncs;
-  delete cue_creations;
-  delete default_track_flags;
-  delete languages;
-  delete sub_charsets;
-  delete all_tags;
-  delete aac_is_sbr;
-  delete packet_delays;
-  delete compression_list;
-  delete track_names;
-  delete all_ext_timecodes;
   safefree(private_data);
   if (tags != NULL)
     delete tags;
-  delete all_fourccs;
-  delete display_properties;
-  delete avi_block_sizes;
-  delete pixel_crop_list;
 
   initialized = false;
 }
@@ -1282,60 +1238,55 @@ track_info_c::operator =(const track_info_c &src) {
   no_video = src.no_video;
   no_subs = src.no_subs;
 
-  atracks = new vector<int64_t>(*src.atracks);
-  vtracks = new vector<int64_t>(*src.vtracks);
-  stracks = new vector<int64_t>(*src.stracks);
-
   private_size = src.private_size;
   private_data = (unsigned char *)safememdup(src.private_data, private_size);
 
-  all_fourccs = new vector<fourcc_t>(*src.all_fourccs);
+  all_fourccs = src.all_fourccs;
   memcpy(fourcc, src.fourcc, 5);
 
-  display_properties =
-    new vector<display_properties_t>(*src.display_properties);
+  display_properties = src.display_properties;
   aspect_ratio = src.aspect_ratio;
   aspect_ratio_given = false;
   aspect_ratio_is_factor = false;
   display_dimensions_given = false;
 
-  audio_syncs = new vector<audio_sync_t>(*src.audio_syncs);
+  audio_syncs = src.audio_syncs;
   memcpy(&async, &src.async, sizeof(audio_sync_t));
 
-  cue_creations = new vector<cue_creation_t>(*src.cue_creations);
+  cue_creations = src.cue_creations;
   cues = src.cues;
 
-  default_track_flags = new vector<int64_t>(*src.default_track_flags);
+  default_track_flags = src.default_track_flags;
   default_track = src.default_track;
 
-  languages = new vector<language_t>(*src.languages);
+  languages = src.languages;
   language = src.language;
 
-  sub_charsets = new vector<language_t>(*src.sub_charsets);
+  sub_charsets = src.sub_charsets;
   sub_charset = src.sub_charset;
 
-  all_tags = new vector<tags_t>(*src.all_tags);
+  all_tags = src.all_tags;
   tags_ptr = src.tags_ptr;
   if (src.tags != NULL)
     tags = static_cast<KaxTags *>(src.tags->Clone());
   else
     tags = NULL;
 
-  aac_is_sbr = new vector<int64_t>(*src.aac_is_sbr);
+  aac_is_sbr = src.aac_is_sbr;
 
   packet_delay = src.packet_delay;
-  packet_delays = new vector<audio_sync_t>(*src.packet_delays);
+  packet_delays = src.packet_delays;
 
-  compression_list = new vector<compression_method_t>(*src.compression_list);
+  compression_list = src.compression_list;
   compression = src.compression;
 
-  track_names = new vector<language_t>(*src.track_names);
+  track_names = src.track_names;
   track_name = src.track_name;
 
-  all_ext_timecodes = new vector<language_t>(*src.all_ext_timecodes);
+  all_ext_timecodes = src.all_ext_timecodes;
   ext_timecodes = src.ext_timecodes;
 
-  pixel_crop_list = new vector<pixel_crop_t>(*src.pixel_crop_list);
+  pixel_crop_list = src.pixel_crop_list;
   pixel_cropping = src.pixel_cropping;
 
   no_chapters = src.no_chapters;
@@ -1348,7 +1299,8 @@ track_info_c::operator =(const track_info_c &src) {
   avi_samples_per_sec = src.avi_samples_per_sec;
   avi_avg_bytes_per_sec = src.avi_avg_bytes_per_sec;
   avi_samples_per_chunk = src.avi_samples_per_chunk;
-  avi_block_sizes = NULL;
+  avi_block_sizes.clear();
+  avi_audio_sync_enabled = false;
 
   initialized = true;
 

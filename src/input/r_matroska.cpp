@@ -1679,9 +1679,9 @@ kax_reader_c::create_packetizer(int64_t tid) {
               profile = AAC_PROFILE_SBR;
           }
 
-          for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
-            if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||
-                ((*ti->aac_is_sbr)[sbridx] == -1)) {
+          for (sbridx = 0; sbridx < ti->aac_is_sbr.size(); sbridx++)
+            if ((ti->aac_is_sbr[sbridx] == t->tnum) ||
+                (ti->aac_is_sbr[sbridx] == -1)) {
               profile = AAC_PROFILE_SBR;
               break;
             }
