@@ -877,6 +877,9 @@ void close_files() {
   }
 }
 
+#define fits_parent(l, p) (l->GetElementPosition() < \
+                           (p->GetElementPosition() + p->ElementSize()))
+
 bool process_file(const char *file_name) {
   int upper_lvl_el;
   // Elements for different levels
@@ -944,17 +947,22 @@ bool process_file(const char *file_name) {
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
     while (l1 != NULL) {
-      if (upper_lvl_el != 0)
+      if (upper_lvl_el > 0)
+        break;
+      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
         break;
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
         show_element(l1, 1, "Segment information");
 
+        upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
-          if (upper_lvl_el != 0)
+          if (upper_lvl_el > 0)
+            break;
+          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
             break;
 
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
@@ -962,12 +970,16 @@ bool process_file(const char *file_name) {
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
             show_element(l2, 2, "Timecode scale: %llu", tc_scale);
+          } else
+            upper_lvl_el = 0;
+
+          if (upper_lvl_el == 0) {
+            l2->SkipData(*es, l2->Generic().Context);
+            delete l2;
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
 
-          l2->SkipData(*es, l2->Generic().Context);
-          delete l2;
-          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                   0xFFFFFFFFL, true, 1);
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
@@ -975,10 +987,13 @@ bool process_file(const char *file_name) {
         // contained in this segment.
         show_element(l1, 1, "Segment tracks");
 
+        upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
-          if (upper_lvl_el != 0)
+          if (upper_lvl_el > 0)
+            break;
+          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
             break;
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
@@ -989,10 +1004,13 @@ bool process_file(const char *file_name) {
             mkv_track_type = '?';
             ms_compat = false;
 
+            upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
             while (l3 != NULL) {
-              if (upper_lvl_el != 0)
+              if (upper_lvl_el > 0)
+                break;
+              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
                 break;
 
               // Now evaluate the data belonging to this track
@@ -1039,10 +1057,13 @@ bool process_file(const char *file_name) {
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
                 show_element(l3, 3, "Audio track");
 
+                upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
-                  if (upper_lvl_el != 0)
+                  if (upper_lvl_el > 0)
+                    break;
+                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
                     break;
 
                   if (EbmlId(*l4) ==
@@ -1072,22 +1093,28 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Bit depth: %u", uint8(bps));
                     if (track != NULL)
                       track->a_bps = uint8(bps);
+                  } else
+                    upper_lvl_el = 0;
+
+                  if (upper_lvl_el == 0) {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
                   }
 
-                  l4->SkipData(*es,
-                               l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context,
-                                           upper_lvl_el, 0xFFFFFFFFL, true, 1);
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) == KaxTrackVideo::ClassInfos.GlobalId) {
                 show_element(l3, 3, "Video track");
 
+                upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
-                  if (upper_lvl_el != 0)
+                  if (upper_lvl_el > 0)
+                    break;
+                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
                     break;
 
                   if (EbmlId(*l4) == KaxVideoPixelWidth::ClassInfos.GlobalId) {
@@ -1116,12 +1143,16 @@ bool process_file(const char *file_name) {
                     if (track != NULL)
                       track->v_fps = float(framerate);
 
+                  } else
+                    upper_lvl_el = 0;
+
+                  if (upper_lvl_el == 0) {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true);
                   }
 
-                  l4->SkipData(*es, l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context,
-                                           upper_lvl_el, 0xFFFFFFFFL, true, 1);
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) == KaxCodecID::ClassInfos.GlobalId) {
@@ -1175,7 +1206,8 @@ bool process_file(const char *file_name) {
                 if (track != NULL)
                   track->v_fps = 1000000000.0 / (float)uint64(def_duration);
 
-              }
+              } else
+                upper_lvl_el = 0;
 
               if (upper_lvl_el > 0) {  // we're coming from l4
                 upper_lvl_el--;
@@ -1183,16 +1215,22 @@ bool process_file(const char *file_name) {
                 l3 = l4;
                 if (upper_lvl_el > 0)
                   break;
-              } else {
+              } else if (upper_lvl_el == 0) {
                 l3->SkipData(*es,
                              l3->Generic().Context);
                 delete l3;
+                upper_lvl_el = 0;
                 l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
+              } else {
+                delete l3;
+                l3 = l4;
               }
-            } // while (l3 != NULL)
 
-          }
+            }
+
+          } else
+            upper_lvl_el = 0;
 
           if (upper_lvl_el > 0) {  // we're coming from l3
             upper_lvl_el--;
@@ -1200,13 +1238,17 @@ bool process_file(const char *file_name) {
             l2 = l3;
             if (upper_lvl_el > 0)
               break;
-          } else {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
+          } else if (upper_lvl_el == 0) {
+            l2->SkipData(*es, l2->Generic().Context);
             delete l2;
+            upper_lvl_el = 0;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
+          } else {
+            delete l2;
+            l2 = l3;
           }
+
         } // while (l2 != NULL)
 
         // Headers have been parsed completely. Now create the output files
@@ -1223,10 +1265,13 @@ bool process_file(const char *file_name) {
           fflush(stdout);
         }
 
+        upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
-          if (upper_lvl_el != 0)
+          if (upper_lvl_el > 0)
+            break;
+          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
             break;
 
           if (EbmlId(*l2) == KaxClusterTimecode::ClassInfos.GlobalId) {
@@ -1246,6 +1291,8 @@ bool process_file(const char *file_name) {
                                      0xFFFFFFFFL, false, 1);
             while (l3 != NULL) {
               if (upper_lvl_el > 0)
+                break;
+              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
                 break;
 
               delete_element = true;
@@ -1280,18 +1327,22 @@ bool process_file(const char *file_name) {
                 has_reference = true;
               }
 
-              l3->SkipData(*es, l3->Generic().Context);
-              if (delete_element)
-                delete l3;
-              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                       0xFFFFFFFFL, true, 1);
+              if (upper_lvl_el == 0) {
+                l3->SkipData(*es, l3->Generic().Context);
+                if (delete_element)
+                  delete l3;
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+              }
+
             } // while (l3 != NULL)
 
             // Now write the stuff to the file. Or not. Or get something to
             // drink. Or read a good book. Dunno, your choice, really.
             handle_data(block, block_duration, has_reference);
 
-          }
+          } else
+            upper_lvl_el = 0;
 
           if (upper_lvl_el > 0) {    // we're coming from l3
             upper_lvl_el--;
@@ -1300,15 +1351,23 @@ bool process_file(const char *file_name) {
             if (upper_lvl_el > 0)
               break;
 
-          } else {
+          } else if (upper_lvl_el == 0) {
             l2->SkipData(*es,
                          l2->Generic().Context);
             delete l2;
+            upper_lvl_el = 0;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
+
+          } else {
+            delete l2;
+            l2 = l3;
           }
+
         } // while (l2 != NULL)
-      }
+
+      } else
+        upper_lvl_el = 0;
 
       if (upper_lvl_el > 0) {    // we're coming from l2
         upper_lvl_el--;
@@ -1316,12 +1375,19 @@ bool process_file(const char *file_name) {
         l1 = l2;
         if (upper_lvl_el > 0)
           break;
-      } else {
+
+      } else if (upper_lvl_el == 0) {
         l1->SkipData(*es, l1->Generic().Context);
         delete l1;
+        upper_lvl_el = 0;
         l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
+
+      } else {
+        delete l1;
+        l1 = l2;
       }
+
     } // while (l1 != NULL)
 
     delete l0;
