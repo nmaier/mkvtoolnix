@@ -54,8 +54,6 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_HEADER = $(INSTALL_DATA)
 
 # Variable stuff as set by configure
-AVICLASSES_LIBS = @AVICLASSES_LIBS@
-AVILIB_LIBS = @AVILIB_LIBS@
 BZ2_LIBS = @BZ2_LIBS@
 DEBUG_CFLAGS = @DEBUG_CFLAGS@
 EBML_CFLAGS = @EBML_CFLAGS@
@@ -87,29 +85,18 @@ CFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
 CXXFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
 
 # Which additional stuff to compile
-USE_AVICLASSES = @USE_AVICLASSES@
-USE_AVILIB0610 = @USE_AVILIB0610@
 USE_WXWINDOWS = @USE_WXWINDOWS@
 
-ifeq (yes,$(USE_AVICLASSES))
-AVICLASSES_INCLUDES = -Iaviclasses
-AVICLASSES_LIBDIRS = -Laviclasses
-AVICLASSES_LIBRARIES = -laviclasses
-DEP_AVICLASSES = aviclasses/libaviclasses.a
-endif
-
-ifeq (yes,$(USE_AVILIB0610))
 AVILIB_INCLUDES = -Iavilib-0.6.10
 AVILIB_LIBDIRS = -Lavilib-0.6.10
 DEP_AVILIB = avilib-0.6.10/libavi.a
-endif
 
 DEP_COMMON = src/common/libmtxcommon.a
 DEP_EBMLCOMMON = src/common/libmtxebmlcommon.a
 DEP_KAXCOMMON = src/common/libmtxkaxcommon.a
 DEP_INPUT = src/input/libmtxinput.a
 DEP_OUTPUT = src/output/libmtxoutput.a
-DEP_AVI = $(DEP_AVILIB) $(DEP_AVICLASSES)
+DEP_AVI = $(DEP_AVILIB)
 DEP_RMFF = librmff/librmff.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
@@ -144,9 +131,9 @@ install-mans:
 	  $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst; \
 	done
 
-SYSTEM_INCLUDES = $(AVILIB_INCLUDES) $(AVICLASSES_INCLUDES) \
+SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
 		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output
-SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) $(AVICLASSES_LIBDIRS) \
+SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
 		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output
 
 RUNAR = $(AR) rcu
@@ -189,18 +176,6 @@ libavi_OBJECTS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(libavi_SOURCES)))
 avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libavi_OBJECTS)
-	$(RANLIB) $@
-
-#
-# aviclasses
-#
-
-libaviclasses_SOURCES = $(wildcard aviclasses/*.cpp)
-libaviclasses_OBJECTS := $(patsubst %.cpp,%.o,$(libaviclasses_SOURCES))
-
-aviclasses/libaviclasses.a: $(libaviclasses_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libaviclasses_OBJECTS)
 	$(RANLIB) $@
 
 #
@@ -266,7 +241,7 @@ mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
-		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) -lrmff \
+		-lavi -lrmff \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat $(ICONV_LIBS)
 

@@ -641,69 +641,10 @@ AC_SUBST(WXWINDOWS_LIBS)
 AC_SUBST(MMG_SUBDIRS)
 AC_SUBST(USE_WXWINDOWS)
 
-
-dnl
-dnl Option to use the (old) avilib library instead of the AVI classes
-dnl
-AC_ARG_WITH(avilib,
-  [  --with-avilib=version         Which avilib should be used (noclasses, 0.6.10)],
-  with_avilib_given=yes, with_avilib_given=no)
-
-  AC_MSG_CHECKING(which AVI libraries to use)
-  # Defaults: use aviclasses and prefer the new avilib.
-  if test x"`uname -s`" = x"Darwin"; then
-    have_aviclasses=no
-  else
-    have_aviclasses=yes
-  fi
-  if test "x$with_avilib_given" = "xyes"; then
-    set - `echo ${with_avilib} | sed 's/,/ /g'`
-    while test "x$1" != "x"; do
-      case "$1" in
-        noclasses)
-          have_aviclasses=no
-          ;;
-        "0.6.10")
-          have_avilib0_6_10=yes
-          ;;
-        *)
-          echo ""
-          echo "*** Unknown AVI library \"$1\" in \"${with_avilib}\". "
-          echo "*** Supported values are:"
-          echo "*** 0.6.10    - the new avilib with OpenDML support"
-          echo "*** noclasses - Do not use the AVI classes by Cyrius with "
-          echo "***             OpenDML support"
-          exit 1
-          ;;
-      esac
-      shift
-    done
-  fi
-  if test "x$have_aviclasses" = "xyes"; then 
-    AC_DEFINE(HAVE_AVICLASSES, 1,
-      [Define if the newer AVIclasses should be used.])
-    AVICLASSES_LIBS="-laviclasses"
-    avi_libs_to_use="classes "
-    USE_AVICLASSES=yes
-  fi
-  AC_DEFINE(HAVE_AVILIB0_6_10, 1,
-            [Define if the newer avilib from transcode 0.6.10 should be used.])
-  avi_libs_to_use="${avi_libs_to_use}0.6.10 "
-  have_avilib0_6_10=yes
-  USE_AVILIB0610=yes
-  AVILIB_LIBS="-lavi"
-
-  AC_MSG_RESULT($avi_libs_to_use)
-
-AC_SUBST(AVILIB_LIBS)
-AC_SUBST(AVICLASSES_LIBS)
-AC_SUBST(USE_AVILIB0610)
-AC_SUBST(USE_AVICLASSES)
-
 CFLAGS="$USER_CPPFLAGS @EXTRA_CFLAGS@ $USER_CFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
 CXXFLAGS="$USER_CPPFLAGS @EXTRA_CFLAGS@ $USER_CXXFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
 LDFLAGS="$USER_LDFLAGS @EXTRA_LDFLAGS@"
 
 AC_SUBST(LDFLAGS)
 
-AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile)
+AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mmg/Makefile)

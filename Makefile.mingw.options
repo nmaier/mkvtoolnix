@@ -6,10 +6,6 @@ LIBDIRS = -Lc:/cygwin/usr/local/src/libebml/make/mingw32 \
 	-Lc:/cygwin/usr/local/src/libmatroska/make/mingw32 \
 	-Lc:/cygwin/usr/local/lib
 
-# Which AVI libraries should be used for reading AVIs?
-# Default is to use aviclasses.
-AVILIB = aviclasses
-
 # Which compression libraries should be supported?
 # zlib is always used, possible other values are bzlib and lzo.
 #COMPRESSION_LIBS = bzlib lzo

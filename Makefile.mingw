@@ -9,14 +9,6 @@ CFLAGS += -g -DDEBUG
 CXXFLAGS += -g -DDEBUG
 endif
 
-ifneq (,$(findstring aviclasses,$(AVILIB)))
-CXXFLAGS += -DHAVE_AVICLASSES=1
-AVICLASSES_INCLUDES = -Iaviclasses
-AVICLASSES_LIBDIRS = -Laviclasses
-AVICLASSES_LIBRARIES = -laviclasses
-DEP_AVICLASSES = aviclasses/libaviclasses.a
-endif
-
 ifneq (,$(findstring bzlib,$(COMPRESSION_LIBS)))
 CXXFLAGS += -DHAVE_BZLIB_H=1
 COMPRESSION_LIBRARIES = -lbz2
@@ -47,25 +39,21 @@ endif
 DEP_INPUT = src/input/libmtxinput.a
 DEP_OUTPUT = src/output/libmtxoutput.a
 DEP_AVILIB = avilib-0.6.10/libavi.a
-DEP_AVI = $(DEP_AVILIB)  $(DEP_AVICLASSES)
+DEP_AVI = $(DEP_AVILIB)
 DEP_RMFF = librmff/librmff.a
 
 #
 # System settings. Don't change anything below here.
 #
-ifneq (,$(findstring aviclasses,$(AVILIB)))
-SUBDIRS = avilib-0.6.10 aviclasses src
-else
 SUBDIRS = avilib-0.6.10 src
-endif
 
 APPLICATIONS=src/mkvmerge src/mkvinfo src/mkvextract src/base64tool src/mmg
 
 all: config.h $(APPLICATIONS)
 
-SYSTEM_INCLUDES = -Iavilib-0.6.10 $(AVICLASSES_INCLUDES) \
+SYSTEM_INCLUDES = -Iavilib-0.6.10 \
 		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output
-SYSTEM_LIBDIRS = -Lavilib-0.6.10 $(AVICLASSES_LIBDIRS) \
+SYSTEM_LIBDIRS = -Lavilib-0.6.10 \
 		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output
 
 RUNAR = $(AR) rcu
@@ -116,18 +104,6 @@ libavi_OBJECTS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(libavi_SOURCES)))
 avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libavi_OBJECTS)
-	$(RANLIB) $@
-
-#
-# aviclasses
-#
-
-libaviclasses_SOURCES = $(wildcard aviclasses/*.cpp)
-libaviclasses_OBJECTS := $(patsubst %.cpp,%.o,$(libaviclasses_SOURCES))
-
-aviclasses/libaviclasses.a: $(libaviclasses_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libaviclasses_OBJECTS)
 	$(RANLIB) $@
 
 #
@@ -193,8 +169,7 @@ mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
-		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) \
-		-lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
+		-lavi -lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat -liconv -lrmff
 
 mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)

@@ -27,13 +27,9 @@
 
 #include <vector>
 
-#ifdef HAVE_AVICLASSES
-#include <AVIReadHandler.h>
-#else
 extern "C" {
 #include <avilib.h>
 }
-#endif
 
 #include "mm_io.h"
 #include "pr_generic.h"
@@ -49,21 +45,12 @@ typedef struct avi_demuxer_t {
   bool headers_set;
   int channels, bits_per_sample, samples_per_second, aid;
   int64_t bytes_processed;
-#ifdef HAVE_AVICLASSES
-  IAVIReadStream *stream;
-  int frame, maxframes;
-#endif
 } avi_demuxer_t;
 
 class avi_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk, *old_chunk;
-#ifdef HAVE_AVICLASSES
-	IAVIReadHandler	*avi;
-	IAVIReadStream *s_video;
-#else
   avi_t *avi;
-#endif
   mm_io_c *io;
   int vptzr;
   bool vheaders_set;
@@ -71,9 +58,6 @@ private:
   double fps;
   int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
   int video_done, maxframes, is_divx, rederive_keyframes, chunk_size;
-#ifdef HAVE_AVICLASSES
-  w32BITMAPINFOHEADER *bih;
-#endif
 
 public:
   avi_reader_c(track_info_c *nti) throw (error_c);
