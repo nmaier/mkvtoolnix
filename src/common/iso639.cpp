@@ -544,18 +544,33 @@ char *get_iso639_english_name(const char *iso639_2_code) {
   return NULL;
 }
 
-int
+bool
 is_valid_iso639_2_code(const char *iso639_2_code) {
   int i;
 
   i = 0;
   while (iso639_languages[i].iso639_2_code != NULL) {
     if (!strcmp(iso639_languages[i].iso639_2_code, iso639_2_code))
-      return i;
+      return true;
     i++;
   }
 
-  return 0;
+  return false;
+}
+
+bool
+is_valid_iso639_1_code(const char *iso639_1_code) {
+  int i;
+
+  i = 0;
+  while (iso639_languages[i].iso639_2_code != NULL) {
+    if ((iso639_languages[i].iso639_1_code != NULL) &&
+        !strcmp(iso639_languages[i].iso639_1_code, iso639_1_code))
+      return true;
+    i++;
+  }
+
+  return false;
 }
 
 void

@@ -22,7 +22,8 @@ typedef struct {
 
 extern const iso639_language_t MTX_DLL_API iso639_languages[];
 
-int MTX_DLL_API is_valid_iso639_2_code(const char *iso639_2_code);
+bool MTX_DLL_API is_valid_iso639_2_code(const char *iso639_2_code);
+bool MTX_DLL_API is_valid_iso639_1_code(const char *iso639_1_code);
 const char *MTX_DLL_API get_iso639_english_name(const char *iso639_2_code);
 const char *MTX_DLL_API map_iso639_1_to_iso639_2(const char *iso639_1_code);
 const char *MTX_DLL_API map_iso639_2_to_iso639_1(const char *iso639_2_code);
