@@ -84,10 +84,12 @@ cperror(parser_data_t *pdata,
   throw error_c(new_string, true);
 }
 
+#define el_get_bool(pdata, el) el_get_uint(pdata, el, 0, true)
 static void
 el_get_uint(parser_data_t *pdata,
             EbmlElement *el,
-            uint64_t min_value = 0) {
+            uint64_t min_value = 0,
+            bool is_bool = false) {
   int64 value;
 
   strip(*pdata->bin);
@@ -97,6 +99,8 @@ el_get_uint(parser_data_t *pdata,
   if (value < min_value)
     cperror(pdata, "Unsigned integer (%lld) is too small. Mininum value is "
             "%lld.", value, min_value);
+  if (is_bool && (value > 0))
+    value = 1;
 
   *(static_cast<EbmlUInteger *>(el)) = value;
 }
@@ -196,6 +200,51 @@ start_next_level(parser_data_t *pdata,
     euid = new KaxEditionUID;
     m->PushElement(*euid);
     pdata->parents->push_back(euid);
+    pdata->data_allowed = true;
+
+  } else if (!strcmp(name, "EditionFlagHidden")) {
+    KaxEditionFlagHidden *ehidden;
+
+    if (strcmp(parent_name, "EditionEntry"))
+      cperror_nochild();
+
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxEditionFlagHidden::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    ehidden = new KaxEditionFlagHidden;
+    m->PushElement(*ehidden);
+    pdata->parents->push_back(ehidden);
+    pdata->data_allowed = true;
+
+  } else if (!strcmp(name, "EditionManaged")) {
+    KaxEditionManaged *emanaged;
+
+    if (strcmp(parent_name, "EditionEntry"))
+      cperror_nochild();
+
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxEditionManaged::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    emanaged = new KaxEditionManaged;
+    m->PushElement(*emanaged);
+    pdata->parents->push_back(emanaged);
+    pdata->data_allowed = true;
+
+  } else if (!strcmp(name, "EditionFlagDefault")) {
+    KaxEditionFlagDefault *edefault;
+
+    if (strcmp(parent_name, "EditionEntry"))
+      cperror_nochild();
+
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxEditionFlagDefault::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    edefault = new KaxEditionFlagDefault;
+    m->PushElement(*edefault);
+    pdata->parents->push_back(edefault);
     pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterUID")) {
@@ -428,7 +477,16 @@ end_this_level(parser_data_t *pdata,
         create_unique_uint32(UNIQUE_CHAPTER_IDS);
     }
 
-  } else if (!strcmp(name, "ChapterAtom")) {
+  } else if (!strcmp(name, "EditionFlagHidden"))
+    el_get_bool(pdata, parent_elt);
+
+  else if (!strcmp(name, "EditionManaged"))
+    el_get_uint(pdata, parent_elt);
+
+  else if (!strcmp(name, "EditionFlagDefault"))
+    el_get_bool(pdata, parent_elt);
+
+  else if (!strcmp(name, "ChapterAtom")) {
     m = static_cast<EbmlMaster *>(parent_elt);
     if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
       cperror(pdata, "<ChapterAtom> is missing the <ChapterTimeStart> "
@@ -450,10 +508,10 @@ end_this_level(parser_data_t *pdata,
     el_get_time(pdata, parent_elt);
 
   else if (!strcmp(name, "ChapterFlagHidden"))
-    el_get_uint(pdata, parent_elt);
+    el_get_bool(pdata, parent_elt);
 
   else if (!strcmp(name, "ChapterFlagEnabled"))
-    el_get_uint(pdata, parent_elt);
+    el_get_bool(pdata, parent_elt);
 
   else if (!strcmp(name, "ChapterTrack")) {
     m = static_cast<EbmlMaster *>(parent_elt);
