@@ -818,7 +818,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
           vpkg_offset = vpkg_length - vpkg_offset;
       }
 
-      len = min(bc.get_len(), vpkg_length - vpkg_offset);
+      len = min(bc.get_len(), (int)(vpkg_length - vpkg_offset));
       segment.offset = vpkg_offset;
       segment.data = (unsigned char *)safemalloc(len);
       segment.size = len;

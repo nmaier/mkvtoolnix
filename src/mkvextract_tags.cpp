@@ -120,7 +120,7 @@ void extract_tags(const char *file_name) {
       }
 
       show_element(l0, 0, "Next level 0 element is not a segment but %s",
-                   typeid(*l0).name());
+                   l0->Generic().DebugName);
 
       l0->SkipData(*es, l0->Generic().Context);
       delete l0;
