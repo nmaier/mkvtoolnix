@@ -21,6 +21,7 @@
 #include "os.h"
 
 #include "common.h"
+#include "mm_io.h"
 #include "mpeg4_common.h"
 
 /** Extract the pixel aspect ratio from a MPEG4 video frame
@@ -175,239 +176,34 @@ mpeg4_find_frame_types(const unsigned char *buffer,
   }
 }
 
-#define NAL_SPS			7
+static int64_t
+read_golomb_ue(bit_cursor_c &bits) {
+  int i;
+  int64_t value;
 
-/** \brief identifies the exact end of the bitstream
- * @return the length of the trailing, or 0 if damaged
- */
-static int
-decode_rbsp_trailing(const uint8_t *src) {
-  int v;
-  int r;
-
-  v = *src;
-  for (r = 1; r < 9; r++) {
-    if (v & 1)
-      return r;
-    v >>= 1;
-  }
-  return 0;
-}
-
-/** \brief Decodes a network abstraction layer unit.
- * @param consumed is the number of bytes used as input
- * @param length is the length of the array
- * @param dst_length is the number of decoded bytes
- * @returns decoded bytes, might be src+1 if no escapes 
- */
-static uint8_t *
-decode_nal(const uint8_t *src,
-           int length,
-           int &dst_length,
-           int &consumed,
-           int &nal_unit_type) {
-  int i, si, di;
-  uint8_t *dst;
-
-  nal_unit_type = src[0] & 0x1F;
-
-  src++;
-  length--;
-  for (i = 0; (i + 1) < length; i += 2) {
-    if (src[i] != 0)
-      continue;
-    if ((i > 0) && (src[i - 1] == 0))
-      i--;
-    if (((i + 2) < length) && (src[i + 1] == 0) && (src[i + 2] <= 3)) {
-      if (src[i + 2] != 3) {
-        /* startcode, so we must be past the end */
-        length = i;
-      }
+  i = 0;
+  while (i < 64) {
+    bool bit;
+    if (!bits.get_bit(bit))
+      throw false;
+    if (bit)
       break;
-    }
+    i++;
   }
 
-  if (i >= (length - 1)) { //no escaped 0
-    dst_length = length;
-    consumed = length + 1; //+1 for the header
-    return (uint8_t *)safememdup(src, length);
-  }
+  if (!bits.get_bits(i, value))
+    throw false;
 
-  dst = (uint8_t *)safemalloc(length);
-
-  si = 0;
-  di = 0;
-  while (si < length) { 
-    //remove escapes (very rare 1:2^22)
-    if (((si + 2) < length) && (src[si] == 0) && (src[si + 1] == 0) &&
-        (src[si + 2] <= 3)) {
-      if (src[si + 2] == 3) { //escape
-        dst[di++] = 0;
-        dst[di++] = 0;
-        si += 3;
-        continue;
-      } else //next start code
-        break;
-    }
-
-    dst[di++] = src[si++];
-  }
-
-  dst_length = di;
-  consumed = si + 1; //+1 for the header
-  return dst;
+  return ((1 << i) - 1) + value;
 }
 
-static const uint8_t golomb_vlc_len[512] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-  9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
-  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
-  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-};
+static int64_t
+read_golomb_se(bit_cursor_c &bits) {
+  int64_t value;
 
-static int
-ilog2(uint32_t value) {
-  int n;
+  value = read_golomb_ue(bits);
 
-  n = 0;
-  if (value & 0xffff0000) {
-    value >>= 16;
-    n += 16;
-  }
-  if (value & 0xff00) {
-    value >>= 8;
-    n += 8;
-  }
-  if (value >= 0x80)
-    return n + 7;
-  else if (value >= 0x40)
-    return n + 6;
-  else if (value >= 0x20)
-    return n + 5;
-  else if (value >= 0x10)
-    return n + 4;
-  else if (value >= 0x08)
-    return n + 3;
-  else if (value >= 0x04)
-    return n + 2;
-  else if (value >= 0x02)
-    return n + 1;
-
-  return n;
-}
-
-static bool
-skip_golomb_ue(bit_cursor_c &bits) {
-  uint32_t buf;
-  bool ok;
-
-  ok = bits.get_bits(32, buf);
-  if (buf >= (1 << 27)) {
-    buf >>= 23;
-    ok &= bits.skip_bits(golomb_vlc_len[buf]);
-  } else {
-    int log;
-
-    log = 2 * ilog2(buf) - 31;
-    ok &= bits.skip_bits(32 - log);
-  }
-
-  return ok;
-}
-
-static bool
-decode_seq_parameter_set(bit_cursor_c &bits,
-                         uint32_t &par_num,
-                         uint32_t &par_den) {
-  bool ok;
-
-  ok = true;
-  ok &= bits.skip_bits(8);      // profile_idc
-  ok &= bits.skip_bits(4);      // constraint_setX_flag
-  ok &= bits.skip_bits(4);      // reserved
-  ok &= bits.skip_bits(8);      // level_idc
-  ok &= skip_golomb_ue(bits);   // sps_id
-  ok &= skip_golomb_ue(bits);   // sps: log2_max_frame_num
-  ok &= skip_golomb_ue(bits);   // sps: poc_type
-
-  return false;
-}
-
-static bool
-decode_nal_units(const uint8_t *buffer,
-                 int buf_size,
-                 uint32_t &par_num,
-                 uint32_t &par_den) {
-  int nal_length_size;
-  int buf_index;
-
-  nal_length_size = 2;
-  buf_index = 0;
-
-  while (true) {
-    int consumed;
-    int dst_length;
-    int bit_length;
-    uint8_t *ptr;
-    int i, nalsize = 0;
-    int nal_unit_type;
-
-    if (buf_index >= buf_size)
-      break;
-    nalsize = 0;
-    for (i = 0; i < nal_length_size; i++)
-      nalsize = (nalsize << 8) | buffer[buf_index++];
-
-    nal_unit_type = -1;
-    ptr = decode_nal(buffer + buf_index, buf_size - buf_index,
-                     dst_length, consumed, nal_unit_type);
-
-    if (ptr[dst_length - 1] == 0)
-      dst_length--;
-    bit_length = 8 * dst_length - decode_rbsp_trailing(ptr + dst_length - 1);
-
-    if (nal_unit_type == NAL_SPS) {
-      bit_cursor_c bc(ptr, (bit_length + 7) / 8);
-      bool result;
-
-      result = decode_seq_parameter_set(bc, par_num, par_den);
-      safefree(ptr);
-      return result;
-    }
-
-    buf_index += consumed;
-    safefree(ptr);
-  }
-
-  return false;
+  return (value & 0x01) != 0x00 ? (value + 1) / 2 : -(value / 2);
 }
 
 /** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
@@ -429,18 +225,112 @@ mpeg4_l10_extract_par(const uint8_t *buffer,
                       int buf_size,
                       uint32_t &par_num,
                       uint32_t &par_den) {
-  const uint8_t *p;
-  int cnt, i, nalsize;
+  try {
+    mm_mem_io_c avcc(buffer, buf_size);
+    int num_sps, sps;
 
-  p = buffer;
-  // Decode sps from avcC
-  cnt = *(p + 5) & 0x1f; // Number of sps
-  p += 6;
-  for (i = 0; i < cnt; i++) {
-    nalsize = get_uint16_be(p) + 2;
-    if (decode_nal_units(p, nalsize, par_num, par_den))
-      return true;
-    p += nalsize;
+    avcc.skip(5);
+    num_sps = avcc.read_uint8();
+    mxverb(4, "mpeg4_l10_extract_par: num_sps %d\n", num_sps);
+
+    for (sps = 0; sps < num_sps; sps++) {
+      int length, poc_type, ar_type, nal_unit_type;
+      bool ok, flag;
+
+      length = avcc.read_uint16_be();
+      bit_cursor_c bits(&buffer[avcc.getFilePointer()],
+                        (length + avcc.getFilePointer()) >  buf_size ?
+                        buf_size - avcc.getFilePointer() : length);
+      ok = bits.get_bits(8, nal_unit_type);
+      if (!ok)
+        throw false;
+      nal_unit_type &= 0x1f;
+      mxverb(4, "mpeg4_l10_extract_par: nal_unit_type %d\n", nal_unit_type);
+      if (nal_unit_type != 7)   // 7 = SPS
+        continue;
+
+      ok &= bits.skip_bits(16);
+      read_golomb_ue(bits);
+      read_golomb_ue(bits);
+      poc_type = read_golomb_ue(bits);
+
+      if (poc_type > 1) {
+        mxverb(4, "mpeg4_l10_extract_par: poc_type %d\n", poc_type);
+        throw false;
+      }
+
+      if (poc_type == 0)
+        read_golomb_ue(bits);
+      else {
+        int cycles, i;
+
+        bits.skip_bits(1);
+        read_golomb_se(bits);
+        read_golomb_se(bits);
+        cycles = read_golomb_ue(bits);
+        for (i = 0; i < cycles; ++i)
+          read_golomb_se(bits);
+      }
+
+      read_golomb_ue(bits);
+      ok &= bits.skip_bits(1);
+      read_golomb_ue(bits);
+      read_golomb_ue(bits);
+      ok &= bits.get_bit(flag); // MB only
+      if (!flag)
+        ok &= bits.skip_bits(1);
+      ok &= bits.skip_bits(1);
+      ok &= bits.get_bit(flag); // cropping
+      if (flag) {
+        read_golomb_ue(bits);
+        read_golomb_ue(bits);
+        read_golomb_ue(bits);
+        read_golomb_ue(bits);
+      }
+      ok &= bits.get_bit(flag); // VUI
+      if (!flag) {
+        mxverb(4, "mpeg4_l10_extract_par: !VUI\n");
+        throw false;
+      }
+      ok &= bits.get_bit(flag); // AR
+      if (!flag) {
+        mxverb(4, "mpeg4_l10_extract_par: !AR\n");
+        throw false;
+      }
+
+      ok &= bits.get_bits(8, ar_type);
+      if (!ok) {
+        mxverb(4, "mpeg4_l10_extract_par: no ar_type\n");
+        throw false;
+      }
+      if ((ar_type != 0xff) &&  // custom AR
+          (ar_type > 13)) {
+        mxverb(4, "mpeg4_l10_extract_par: wrong ar_type %d\n", ar_type);
+        throw false;
+      }
+
+      if (ar_type <= 13) {
+        static const int par_nums[14] = {
+          0, 1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160
+        };
+        static const int par_denoms[14] = {
+          0, 1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99
+        };
+
+        par_num = par_nums[ar_type];
+        par_den = par_denoms[ar_type];
+        mxverb(4, "mpeg4_l10_extract_par: ar_type %d num %d den %d\n",
+               ar_type, par_num, par_den);
+        return true;
+      }
+
+      ok &= bits.get_bits(16, par_num);
+      ok &= bits.get_bits(16, par_den);
+      mxverb(4, "mpeg4_l10_extract_par: ar_type %d ok %d num %d den %d\n",
+             ar_type, ok, par_num, par_den);
+      return ok;
+    } // for
+  } catch(...) {
   }
 
   return false;
