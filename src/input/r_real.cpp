@@ -260,8 +260,7 @@ real_reader_c::create_packetizer(int64_t tid) {
       mxprints(buffer, "V_REAL/%s", dmx->fourcc);
       dmx->ptzr =
         add_packetizer(new video_packetizer_c(this, buffer, dmx->fps,
-                                              dmx->width, dmx->height, false,
-                                              ti));
+                                              dmx->width, dmx->height, ti));
       if ((dmx->fourcc[0] != 'R') || (dmx->fourcc[1] != 'V') ||
           (dmx->fourcc[2] != '4') || (dmx->fourcc[3] != '0'))
         dmx->rv_dimensions = true;

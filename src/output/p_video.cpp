@@ -32,82 +32,42 @@ extern "C" {
 
 using namespace libmatroska;
 
-video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
-                                       const char *ncodec_id,
-                                       double nfps,
-                                       int nwidth,
-                                       int nheight,
-                                       bool nbframes,
-                                       track_info_c *nti)
-  throw (error_c) : generic_packetizer_c(nreader, nti) {
-  char *fourcc;
+video_packetizer_c::video_packetizer_c(generic_reader_c *_reader,
+                                       const char *_codec_id,
+                                       double _fps,
+                                       int _width,
+                                       int _height,
+                                       track_info_c *_ti):
+  generic_packetizer_c(_reader, _ti),
+  fps(_fps), width(_width), height(_height),
+  frames_output(0), ref_timecode(-1), duration_shift(0) {
 
-  fps = nfps;
-  width = nwidth;
-  height = nheight;
-  frames_output = 0;
-  bframes = nbframes;
-  ref_timecode = -1;
   if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
     set_cue_creation(CUE_STRATEGY_IFRAMES);
-  duration_shift = 0;
-  bref_frame.type = '?';
-  fref_frame.type = '?';
-  aspect_ratio_extracted = false;
 
   set_track_type(track_video);
 
-  mpeg_video = MPEG_VIDEO_NONE;
-  if ((ti->private_data != NULL) &&
-      (ti->private_size >= sizeof(alBITMAPINFOHEADER))) {
-    fourcc = (char *)&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression;
-    if (!strncasecmp(fourcc, "DIVX", 4) ||
-        !strncasecmp(fourcc, "XVID", 4) ||
-        !strncasecmp(fourcc, "DX5", 3))
-      mpeg_video = MPEG_VIDEO_V4_LAYER_2;
-  }
-  if ((mpeg_video == MPEG_VIDEO_NONE) && (ncodec_id != NULL) &&
-      !strncmp(ncodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2)) {
-    if (!strcmp(ncodec_id, MKV_V_MPEG4_AVC))
-      mpeg_video = MPEG_VIDEO_V4_LAYER_10;
-    else
-      mpeg_video = MPEG_VIDEO_V4_LAYER_2;
-  }
-
-  if ((mpeg_video == MPEG_VIDEO_NONE) && (ncodec_id != NULL) &&
-      (!strcmp(ncodec_id, MKV_V_MPEG1) || !strcmp(ncodec_id, MKV_V_MPEG2)))
-    mpeg_video = (ncodec_id[6] == '1') ? MPEG_VIDEO_V1 : MPEG_VIDEO_V2;
-
-  if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
-      hack_engaged(ENGAGE_NATIVE_MPEG4))
-    set_codec_id(MKV_V_MPEG4_ASP);
-  else if (ncodec_id != NULL)
-    set_codec_id(ncodec_id);
+  if (_codec_id != NULL)
+    set_codec_id(_codec_id);
   else
     set_codec_id(MKV_V_MSCOMP);
 
-  if (((mpeg_video != MPEG_VIDEO_V4_LAYER_2) ||
-       !hack_engaged(ENGAGE_NATIVE_MPEG4)) &&
-      (hcodec_id != "") && (hcodec_id == MKV_V_MSCOMP) &&
+  set_codec_private(ti->private_data, ti->private_size);
+  check_fourcc();
+}
+
+void
+video_packetizer_c::check_fourcc() {
+  if ((hcodec_id == MKV_V_MSCOMP) &&
       (ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
       (ti->fourcc[0] != 0))
     memcpy(&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression,
            ti->fourcc, 4);
-  if ((mpeg_video != MPEG_VIDEO_V4_LAYER_2) ||
-      !hack_engaged(ENGAGE_NATIVE_MPEG4))
-    set_codec_private(ti->private_data, ti->private_size);
 }
 
 void
 video_packetizer_c::set_headers() {
-  // Set MinCache to 1 for I- and P-frames. If you only
-  // have I-frames then it can be set to 0 (e.g. MJPEG). 2 is needed
-  // if there are B-frames as well.
-  if (bframes)
-    set_track_min_cache(2);
-  else
-    set_track_min_cache(1);
   if (fps > 0.0)
     set_track_default_duration((int64_t)(1000000000.0 / fps));
 
@@ -134,87 +94,6 @@ video_packetizer_c::process(memory_c &mem,
                             int64_t bref,
                             int64_t fref) {
   int64_t timecode;
-  vector<video_frame_t> frames;
-  uint32_t i;
-
-  debug_enter("video_packetizer_c::process");
-
-  if (!aspect_ratio_extracted) {
-    if (mpeg_video == MPEG_VIDEO_V4_LAYER_2)
-      extract_mpeg4_aspect_ratio(mem.data, mem.size);
-    else if (mpeg_video == MPEG_VIDEO_V4_LAYER_10)
-      extract_mpeg4_aspect_ratio(ti->private_data, ti->private_size);
-    aspect_ratio_extracted = true;
-  }
-
-  if ((fps < 0.0) &&
-      ((mpeg_video == MPEG_VIDEO_V1) || (mpeg_video == MPEG_VIDEO_V2)))
-    extract_mpeg1_2_fps(mem.data, mem.size);
-
-  if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
-      hack_engaged(ENGAGE_NATIVE_MPEG4))
-    mpeg4_find_frame_types(mem.data, mem.size, frames);
-
-  if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
-      hack_engaged(ENGAGE_NATIVE_MPEG4) && (fps != 0.0)) {
-    for (i = 0; i < frames.size(); i++) {
-      if ((frames[i].type == 'I') ||
-          ((frames[i].type != 'B') && (fref_frame.type != '?')))
-        flush_frames(frames[i].type);
-
-      if (old_timecode == -1)
-        timecode = (int64_t)(1000000000.0 * frames_output / fps) +
-          duration_shift;
-      else
-        timecode = old_timecode;
-
-      if ((duration == -1) || (duration == (int64_t)(1000.0 / fps)))
-        duration = (int64_t)(1000000000.0 / fps);
-      else
-        duration_shift += duration - (int64_t)(1000000000.0 / fps);
-
-      frames_output++;
-      frames[i].timecode = timecode;
-      frames[i].duration = duration;
-      frames[i].data = (unsigned char *)safememdup(&mem.data[frames[i].pos],
-                                                   frames[i].size);
-
-      if (frames[i].type == 'I') {
-        frames[i].bref = -1;
-        frames[i].fref = -1;
-        if (bref_frame.type == '?') {
-          bref_frame = frames[i];
-          memory_c mem(frames[i].data, frames[i].size, false);
-          add_packet(mem, frames[i].timecode, frames[i].duration);
-        } else
-          fref_frame = frames[i];
-
-      } else if (frames[i].type != 'B') {
-        frames_output--;
-        if (bref_frame.type == '?')
-          mxerror("video_packetizer: Found a P frame but no I frame. This "
-                  "should not have happened. Either this is a bug in mkvmerge "
-                  "or the video stream is damaged.\n");
-        frames[i].bref = bref_frame.timecode;
-        frames[i].fref = -1;
-        fref_frame = frames[i];
-
-      } else {
-        if (!bframes) {
-          set_codec_id(MKV_V_MPEG4_ASP);
-          set_track_min_cache(2);
-          rerender_track_headers();
-        }
-        bframes = true;
-        queued_frames.push_back(frames[i]);
-
-      }
-    }
-
-    debug_leave("video_packetizer_c::process");
-
-    return FILE_STATUS_MOREDATA;
-  }
 
   if (old_timecode == -1)
     timecode = (int64_t)(1000000000.0 * frames_output / fps) + duration_shift;
@@ -240,12 +119,7 @@ video_packetizer_c::process(memory_c &mem,
       ref_timecode = timecode;
   }
 
-  debug_leave("video_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-video_packetizer_c::~video_packetizer_c() {
 }
 
 void
@@ -255,39 +129,125 @@ video_packetizer_c::dump_debug_info() {
           ref_timecode);
 }
 
-void
-video_packetizer_c::flush() {
-  flush_frames(true);
+connection_result_e
+video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+  video_packetizer_c *vsrc;
+
+  vsrc = dynamic_cast<video_packetizer_c *>(src);
+  if (vsrc == NULL)
+    return CAN_CONNECT_NO_FORMAT;
+  if ((width != vsrc->width) || (height != vsrc->height) ||
+      (fps != vsrc->fps) || (hcodec_id != vsrc->hcodec_id))
+    return CAN_CONNECT_NO_PARAMETERS;
+  if (((ti->private_data == NULL) && (vsrc->ti->private_data != NULL)) ||
+      ((ti->private_data != NULL) && (vsrc->ti->private_data == NULL)) ||
+      (ti->private_size != vsrc->ti->private_size))
+    return CAN_CONNECT_NO_PARAMETERS;
+  if ((ti->private_data != NULL) &&
+      memcmp(ti->private_data, vsrc->ti->private_data, ti->private_size))
+    return CAN_CONNECT_NO_PARAMETERS;
+  return CAN_CONNECT_YES;
 }
 
-void
-video_packetizer_c::extract_mpeg4_aspect_ratio(const unsigned char *buffer,
-                                               int size) {
-  uint32_t num, den;
+// ----------------------------------------------------------------
 
-  aspect_ratio_extracted = true;
-  if (ti->aspect_ratio_given || ti->display_dimensions_given)
-    return;
+mpeg1_2_video_packetizer_c::
+mpeg1_2_video_packetizer_c(generic_reader_c *_reader,
+                           int _version,
+                           double _fps,
+                           int _width,
+                           int _height,
+                           int _dwidth,
+                           int _dheight,
+                           bool _framed,
+                           track_info_c *_ti):
+  video_packetizer_c(_reader, "V_MPEG1", _fps, _width, _height, _ti),
+  framed(_framed), aspect_ratio_extracted(false) {
 
-  if (((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
-       mpeg4_extract_par(buffer, size, num, den))
-      ||
-      ((mpeg_video == MPEG_VIDEO_V4_LAYER_10) &&
-       mpeg4_l10_extract_par(buffer, size, num, den))) {
-    ti->aspect_ratio_given = true;
-    ti->aspect_ratio = (float)hvideo_pixel_width /
-      (float)hvideo_pixel_height * (float)num / (float)den;
-    generic_packetizer_c::set_headers();
-    rerender_track_headers();
-    mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
-           "from the MPEG4 video data and set the display dimensions to "
-           "%u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
-           (uint32_t)ti->display_width, (uint32_t)ti->display_height);
+  set_codec_id(mxsprintf("V_MPEG%d", _version));
+  if (!ti->aspect_ratio_given && !ti->display_dimensions_given) {
+    if ((_dwidth > 0) && (_dheight > 0)) {
+      ti->display_dimensions_given = true;
+      ti->display_width = _dwidth;
+      ti->display_height = _dheight;
+    }
+  } else
+    aspect_ratio_extracted = true;
+}
+
+int
+mpeg1_2_video_packetizer_c::process(memory_c &mem,
+                                    int64_t timecode,
+                                    int64_t duration,
+                                    int64_t bref,
+                                    int64_t fref) {
+  unsigned char *data_ptr;
+  int new_bytes, state;
+
+  if (fps < 0.0)
+    extract_fps(mem.data, mem.size);
+
+  if (!aspect_ratio_extracted)
+    extract_aspect_ratio(mem.data, mem.size);
+
+  if (framed) {
+    assert(0);
   }
+
+  state = parser.GetState();
+  if ((state == MPV_PARSER_STATE_EOS) ||
+      (state == MPV_PARSER_STATE_ERROR))
+    return FILE_STATUS_DONE;
+
+  data_ptr = mem.data;
+  new_bytes = mem.size;
+
+  do {
+    int bytes_to_add;
+
+    bytes_to_add = (parser.GetFreeBufferSpace() < new_bytes) ?
+      parser.GetFreeBufferSpace() : new_bytes;
+    if (bytes_to_add > 0) {
+      parser.WriteData(data_ptr, bytes_to_add);
+      data_ptr += bytes_to_add;
+      new_bytes -= bytes_to_add;
+    }
+
+    state = parser.GetState();
+    while (state == MPV_PARSER_STATE_FRAME) {
+      MPEGFrame *frame;
+
+      frame = parser.ReadFrame();
+      if (frame == NULL)
+        break;
+
+      if (hcodec_private == NULL)
+        create_private_data();
+
+      memory_c new_mem(frame->data, frame->size, true);
+      video_packetizer_c::process(new_mem, frame->timecode, frame->duration,
+                                  frame->firstRef, frame->secondRef);
+      frame->data = NULL;
+      delete frame;
+
+      state = parser.GetState();
+    }
+  } while (new_bytes > 0);
+
+  return FILE_STATUS_MOREDATA;
 }
 
 void
-video_packetizer_c::extract_mpeg1_2_fps(const unsigned char *buffer,
+mpeg1_2_video_packetizer_c::flush() {
+  memory_c dummy((unsigned char *)"", 0, false);
+
+  parser.SetEOS();
+  process(dummy);
+  video_packetizer_c::flush();
+}
+
+void
+mpeg1_2_video_packetizer_c::extract_fps(const unsigned char *buffer,
                                         int size) {
   int idx;
 
@@ -303,8 +263,128 @@ video_packetizer_c::extract_mpeg1_2_fps(const unsigned char *buffer,
 }
 
 void
-video_packetizer_c::flush_frames(char next_frame,
-                                 bool flush_all) {
+mpeg1_2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
+                                                 int size) {
+  float ar;
+
+  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+    return;
+
+  if (mpeg1_2_extract_ar(buffer, size, ar)) {
+    ti->display_dimensions_given = true;
+    if ((ar <= 0) || (ar == 1))
+      set_video_display_width(width);
+    else
+      set_video_display_width((int)(height * ar));
+    set_video_display_height(height);
+    rerender_track_headers();
+    aspect_ratio_extracted = true;
+  }
+}
+
+void
+mpeg1_2_video_packetizer_c::create_private_data() {
+  MPEGChunk *raw_seq_hdr;
+
+  raw_seq_hdr = parser.GetRealSequenceHeader();
+  if (raw_seq_hdr != NULL) {
+    set_codec_private(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+    rerender_track_headers();
+  }
+}
+
+// ----------------------------------------------------------------
+
+mpeg4_l2_video_packetizer_c::
+mpeg4_l2_video_packetizer_c(generic_reader_c *_reader,
+                            double _fps,
+                            int _width,
+                            int _height,
+                            bool _input_is_native,
+                            track_info_c *_ti):
+  video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
+  aspect_ratio_extracted(false), input_is_native(_input_is_native) {
+
+  assert(!input_is_native);
+
+  if (!hack_engaged(ENGAGE_NATIVE_MPEG4) || (_fps == 0.0)) {
+    set_codec_id(MKV_V_MSCOMP);
+    check_fourcc();
+  }
+}
+
+int
+mpeg4_l2_video_packetizer_c::process(memory_c &mem,
+                                     int64_t old_timecode,
+                                     int64_t duration,
+                                     int64_t bref,
+                                     int64_t fref) {
+  int64_t timecode;
+  vector<video_frame_t> frames;
+  int i;
+
+  if (!aspect_ratio_extracted)
+    extract_aspect_ratio(mem.data, mem.size);
+
+  if (!hack_engaged(ENGAGE_NATIVE_MPEG4) || (fps == 0.0)) {
+    video_packetizer_c::process(mem, old_timecode, duration, bref, fref);
+    return FILE_STATUS_MOREDATA;
+  }
+
+  mpeg4_find_frame_types(mem.data, mem.size, frames);
+
+  for (i = 0; i < frames.size(); i++) {
+    if ((frames[i].type == 'I') ||
+        ((frames[i].type != 'B') && (fref_frame.type != '?')))
+      flush_frames(frames[i].type);
+
+    if (old_timecode == -1)
+      timecode = (int64_t)(1000000000.0 * frames_output / fps) +
+        duration_shift;
+    else
+      timecode = old_timecode;
+
+    if ((duration == -1) || (duration == (int64_t)(1000.0 / fps)))
+      duration = (int64_t)(1000000000.0 / fps);
+    else
+      duration_shift += duration - (int64_t)(1000000000.0 / fps);
+
+    frames_output++;
+    frames[i].timecode = timecode;
+    frames[i].duration = duration;
+    frames[i].data = (unsigned char *)safememdup(&mem.data[frames[i].pos],
+                                                 frames[i].size);
+
+    if (frames[i].type == 'I') {
+      frames[i].bref = -1;
+      frames[i].fref = -1;
+      if (bref_frame.type == '?') {
+        bref_frame = frames[i];
+        memory_c mem(frames[i].data, frames[i].size, false);
+        add_packet(mem, frames[i].timecode, frames[i].duration);
+      } else
+        fref_frame = frames[i];
+
+    } else if (frames[i].type != 'B') {
+      frames_output--;
+      if (bref_frame.type == '?')
+        mxerror("video_packetizer: Found a P frame but no I frame. This "
+                "should not have happened. Either this is a bug in mkvmerge "
+                "or the video stream is damaged.\n");
+      frames[i].bref = bref_frame.timecode;
+      frames[i].fref = -1;
+      fref_frame = frames[i];
+
+    } else
+      queued_frames.push_back(frames[i]);
+  }
+
+  return FILE_STATUS_MOREDATA;
+}
+
+void
+mpeg4_l2_video_packetizer_c::flush_frames(char next_frame,
+                                          bool flush_all) {
   uint32_t i;
 
   if (bref_frame.type == '?') {
@@ -363,102 +443,61 @@ video_packetizer_c::flush_frames(char next_frame,
     bref_frame.type = '?';
 }
 
-connection_result_e
-video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
-  video_packetizer_c *vsrc;
+void
+mpeg4_l2_video_packetizer_c::flush() {
+  flush_frames(true);
+}
 
-  vsrc = dynamic_cast<video_packetizer_c *>(src);
-  if (vsrc == NULL)
-    return CAN_CONNECT_NO_FORMAT;
-  if ((width != vsrc->width) || (height != vsrc->height) ||
-      (fps != vsrc->fps) || (hcodec_id != vsrc->hcodec_id))
-    return CAN_CONNECT_NO_PARAMETERS;
-  if (((ti->private_data == NULL) && (vsrc->ti->private_data != NULL)) ||
-      ((ti->private_data != NULL) && (vsrc->ti->private_data == NULL)) ||
-      (ti->private_size != vsrc->ti->private_size))
-    return CAN_CONNECT_NO_PARAMETERS;
-  if ((ti->private_data != NULL) &&
-      memcmp(ti->private_data, vsrc->ti->private_data, ti->private_size))
-    return CAN_CONNECT_NO_PARAMETERS;
-  return CAN_CONNECT_YES;
+void
+mpeg4_l2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
+                                                  int size) {
+  uint32_t num, den;
+
+  aspect_ratio_extracted = true;
+  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+    return;
+
+  if (mpeg4_extract_par(buffer, size, num, den)) {
+    ti->aspect_ratio_given = true;
+    ti->aspect_ratio = (float)hvideo_pixel_width /
+      (float)hvideo_pixel_height * (float)num / (float)den;
+    generic_packetizer_c::set_headers();
+    rerender_track_headers();
+    mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
+           "from the MPEG4 layer 2 video data and set the display dimensions "
+           "to %u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
+           (uint32_t)ti->display_width, (uint32_t)ti->display_height);
+  }
 }
 
 // ----------------------------------------------------------------
 
-mpeg_12_video_packetizer_c::
-mpeg_12_video_packetizer_c(generic_reader_c *_reader,
-                           int _version,
-                           double _fps,
-                           int _width,
-                           int _height,
-                           int _dwidth,
-                           int _dheight,
-                           track_info_c *_ti):
-  video_packetizer_c(_reader, "V_MPEG1", _fps, _width, _height, true, _ti) {
+mpeg4_l10_video_packetizer_c::
+mpeg4_l10_video_packetizer_c(generic_reader_c *_reader,
+                             double _fps,
+                             int _width,
+                             int _height,
+                             track_info_c *_ti):
+  video_packetizer_c(_reader, MKV_V_MPEG4_AVC, _fps, _width, _height, _ti) {
 
-  mpeg_video = (_version == 1) ? MPEG_VIDEO_V1 : MPEG_VIDEO_V2;
-  set_codec_id(mxsprintf("V_MPEG%d", _version));
-  if (!ti->aspect_ratio_given && !ti->display_dimensions_given) {
-    ti->display_dimensions_given = true;
-    ti->display_width = _dwidth;
-    ti->display_height = _dheight;
-  }
-}
-
-int
-mpeg_12_video_packetizer_c::process(memory_c &mem,
-                                    int64_t,
-                                    int64_t,
-                                    int64_t,
-                                    int64_t) {
-  unsigned char *data_ptr;
-  int new_bytes, state;
-
-  state = parser.GetState();
-  if ((state == MPV_PARSER_STATE_EOS) ||
-      (state == MPV_PARSER_STATE_ERROR))
-    return FILE_STATUS_DONE;
-
-  data_ptr = mem.data;
-  new_bytes = mem.size;
-
-  do {
-    int bytes_to_add;
-
-    bytes_to_add = (parser.GetFreeBufferSpace() < new_bytes) ?
-      parser.GetFreeBufferSpace() : new_bytes;
-    if (bytes_to_add > 0) {
-      parser.WriteData(data_ptr, bytes_to_add);
-      data_ptr += bytes_to_add;
-      new_bytes -= bytes_to_add;
-    }
-
-    state = parser.GetState();
-    while (state == MPV_PARSER_STATE_FRAME) {
-      MPEGFrame *frame;
-
-      frame = parser.ReadFrame();
-      if (frame == NULL)
-        break;
-
-      memory_c new_mem(frame->data, frame->size, true);
-      video_packetizer_c::process(new_mem, frame->timecode, frame->duration,
-                                  frame->firstRef, frame->secondRef);
-      frame->data = NULL;
-      delete frame;
-
-      state = parser.GetState();
-    }
-  } while (new_bytes > 0);
-
-  return FILE_STATUS_MOREDATA;
+  if ((ti->private_data != NULL) && (ti->private_size > 0))
+    extract_aspect_ratio();
 }
 
 void
-mpeg_12_video_packetizer_c::flush() {
-  memory_c dummy((unsigned char *)"", 0, false);
+mpeg4_l10_video_packetizer_c::extract_aspect_ratio() {
+  uint32_t num, den;
 
-  parser.SetEOS();
-  process(dummy);
-  video_packetizer_c::flush();
+  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+    return;
+
+  if (mpeg4_l10_extract_par(ti->private_data, ti->private_size, num, den)) {
+    ti->aspect_ratio_given = true;
+    ti->aspect_ratio = (float)hvideo_pixel_width /
+      (float)hvideo_pixel_height * (float)num / (float)den;
+    mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
+           "from the MPEG-4 layer 10 (AVC) video data and set the display "
+           "dimensions to %u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
+           (uint32_t)ti->display_width, (uint32_t)ti->display_height);
+  }
 }

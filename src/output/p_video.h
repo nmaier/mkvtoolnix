@@ -30,26 +30,19 @@
 class video_packetizer_c: public generic_packetizer_c {
 protected:
   double fps;
-  int width, height, bpp, frames_output;
+  int width, height, frames_output;
   int64_t ref_timecode, duration_shift;
-  bool avi_compat_mode, bframes, pass_through;
-  bool aspect_ratio_extracted;
-  mpeg_video_type_e mpeg_video;
-  vector<video_frame_t> queued_frames;
-  video_frame_t bref_frame, fref_frame;
+  bool pass_through;
 
 public:
-  video_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
-                     double nfps, int nwidth, int nheight, bool nbframes,
-                     track_info_c *nti)
-    throw (error_c);
-  virtual ~video_packetizer_c();
+  video_packetizer_c(generic_reader_c *_reader, const char *_codec_id,
+                     double _fps, int _width, int _height,
+                     track_info_c *_ti);
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
                       int64_t fref = VFT_NOBFRAME);
   virtual void set_headers();
-  virtual void flush();
 
   virtual void dump_debug_info();
 
@@ -59,25 +52,60 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src);
 
 protected:
-  virtual void flush_frames(char next_frame = '?', bool flush_all = false);
-  virtual void extract_mpeg4_aspect_ratio(const unsigned char *buffer,
-                                          int size);
-  virtual void extract_mpeg1_2_fps(const unsigned char *buffer, int size);
+  virtual void check_fourcc();
 };
 
-class mpeg_12_video_packetizer_c: public video_packetizer_c {
+class mpeg1_2_video_packetizer_c: public video_packetizer_c {
 protected:
   M2VParser parser;
+  bool framed, aspect_ratio_extracted;
 
 public:
-  mpeg_12_video_packetizer_c(generic_reader_c *_reader, int _version,
+  mpeg1_2_video_packetizer_c(generic_reader_c *_reader, int _version,
                              double _fps, int _width, int _height,
-                             int _dwidth, int _dheight, track_info_c *_ti);
+                             int _dwidth, int _dheight, bool _framed,
+                             track_info_c *_ti);
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
                       int64_t fref = VFT_NOBFRAME);
   virtual void flush();
+
+protected:
+  virtual void extract_fps(const unsigned char *buffer, int size);
+  virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
+  virtual void create_private_data();
+};
+
+class mpeg4_l2_video_packetizer_c: public video_packetizer_c {
+protected:
+  vector<video_frame_t> queued_frames;
+  video_frame_t bref_frame, fref_frame;
+  bool aspect_ratio_extracted, input_is_native;
+
+public:
+  mpeg4_l2_video_packetizer_c(generic_reader_c *_reader,
+                              double _fps, int _width, int _height,
+                              bool _input_is_native, track_info_c *_ti);
+
+  virtual int process(memory_c &mem, int64_t old_timecode = -1,
+                      int64_t duration = -1, int64_t bref = VFT_IFRAME,
+                      int64_t fref = VFT_NOBFRAME);
+  virtual void flush();
+
+protected:
+  virtual void flush_frames(char next_frame = '?', bool flush_all = false);
+  virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
+};
+
+class mpeg4_l10_video_packetizer_c: public video_packetizer_c {
+public:
+  mpeg4_l10_video_packetizer_c(generic_reader_c *_reader,
+                               double _fps, int _width, int _height,
+                               track_info_c *_ti);
+
+protected:
+  virtual void extract_aspect_ratio();
 };
 
 #endif // __P_VIDEO_H

@@ -149,9 +149,9 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new mpeg_12_video_packetizer_c(this, version, frame_rate,
+  add_packetizer(new mpeg1_2_video_packetizer_c(this, version, frame_rate,
                                                 width, height, dwidth, dheight,
-                                                ti));
+                                                false, ti));
 
   mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
          ti->fname.c_str(), (int64_t)0);
@@ -801,15 +801,16 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   } else {                      // if (track->type == 'a')
     if ((track->fourcc == FOURCC('m', 'p', 'g', '1')) ||
         (track->fourcc == FOURCC('m', 'p', 'g', '2'))) {
-      mpeg_12_video_packetizer_c *ptzr;
+      mpeg1_2_video_packetizer_c *ptzr;
 
       ti->private_data = track->raw_seq_hdr;
       ti->private_size = track->raw_seq_hdr_size;
       ptzr =
-        new mpeg_12_video_packetizer_c(this, track->v_version,
+        new mpeg1_2_video_packetizer_c(this, track->v_version,
                                        track->v_frame_rate,
                                        track->v_width, track->v_height,
-                                       track->v_dwidth, track->v_dheight, ti);
+                                       track->v_dwidth, track->v_dheight,
+                                       false, ti);
       track->ptzr = add_packetizer(ptzr);
       ti->private_data = NULL;
       ti->private_size = 0;

@@ -56,6 +56,22 @@
 /** MPEG-1/-2 frame rate: 60 frames per second */
 #define MPEGVIDEO_FPS_60        0x08
 
+/** MPEG-1/-2 aspect ratio 1:1 */
+#define MPEGVIDEO_AR_1_1        0x10
+/** MPEG-1/-2 aspect ratio 4:3 */
+#define MPEGVIDEO_AR_4_3        0x20
+/** MPEG-1/-2 aspect ratio 16:9 */
+#define MPEGVIDEO_AR_16_9       0x30
+/** MPEG-1/-2 aspect ratio 2.21 */
+#define MPEGVIDEO_AR_2_21       0x40
+
+#define IS_MPEG4_L2_FOURCC(s) \
+  (!strncasecmp((s), "DIVX", 4) || !strncasecmp((s), "XVID", 4) || \
+   !strncasecmp((s), "DX5", 3))
+#define IS_MPEG4_L2_CODECID(s) \
+  (((s) == MKV_V_MPEG4_SP) || ((s) == MKV_V_MPEG4_AP) || \
+   ((s) == MKV_V_MPEG4_ASP))
+
 enum mpeg_video_type_e {
   MPEG_VIDEO_NONE = 0,
   MPEG_VIDEO_V1,
@@ -73,7 +89,7 @@ enum mpeg_video_type_e {
    such packed frames can be analyzed. The results are stored in these
    structures: one structure for one frame in the analyzed chunk.
 */
-typedef struct {
+struct video_frame_t {
   /** The beginning of the frame data. This is a pointer into an existing
       buffer handed over to ::mpeg4_find_frame_types. */
   unsigned char *data;
@@ -97,7 +113,11 @@ typedef struct {
       \link video_frame_t::timecode timecode \endlink.
       This value is only set for B frames. */
   int64_t fref;
-} video_frame_t;
+
+  video_frame_t():
+    data(NULL), size(0), pos(0), type('?'), priv(NULL),
+    timecode(0), duration(0), bref(0), fref(0) {};
+};
 
 bool MTX_DLL_API mpeg4_extract_par(const unsigned char *buffer, int size,
                                    uint32_t &par_num, uint32_t &par_den);
@@ -110,5 +130,7 @@ bool MTX_DLL_API mpeg4_l10_extract_par(const uint8_t *buffer, int buf_size,
 int MTX_DLL_API mpeg1_2_extract_fps_idx(const unsigned char *buffer,
                                         int size);
 double MTX_DLL_API mpeg1_2_get_fps(int idx);
+bool MTX_DLL_API mpeg1_2_extract_ar(const unsigned char *buffer, int size,
+                                    float &ar);
 
 #endif /* __MPEG4_COMMON_H */

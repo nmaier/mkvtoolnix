@@ -172,14 +172,27 @@ avi_reader_c::create_packetizer(int64_t tid) {
     if (ti->private_data != NULL)
       ti->private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
     ti->id = 0;                 // ID for the video track.
-    vptzr = add_packetizer(new video_packetizer_c(this, NULL,
-                                                  AVI_frame_rate(avi),
-                                                  AVI_video_width(avi),
-                                                  AVI_video_height(avi),
-                                                  false, ti));
-    if (verbose)
-      mxinfo(FMT_TID "Using the video output module for the video track.\n",
-             ti->fname.c_str(), (int64_t)0);
+    if (is_divx == RAVI_MPEG4) {
+      vptzr =
+        add_packetizer(new mpeg4_l2_video_packetizer_c(this,
+                                                       AVI_frame_rate(avi),
+                                                       AVI_video_width(avi),
+                                                       AVI_video_height(avi),
+                                                       false,
+                                                       ti));
+      if (verbose)
+        mxinfo(FMT_TID "Using the MPEG-4 layer 2 video output module for "
+               "this track.\n", ti->fname.c_str(), (int64_t)0);
+    } else {
+      vptzr = add_packetizer(new video_packetizer_c(this, NULL,
+                                                    AVI_frame_rate(avi),
+                                                    AVI_video_width(avi),
+                                                    AVI_video_height(avi),
+                                                    ti));
+      if (verbose)
+        mxinfo(FMT_TID "Using the video output module for the video track.\n",
+               ti->fname.c_str(), (int64_t)0);
+    }
   }
   if (tid == 0)
     return;

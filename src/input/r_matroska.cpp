@@ -1591,15 +1591,72 @@ kax_reader_c::create_packetizer(int64_t tid) {
         if (starts_with(t->codec_id, "V_MPEG4", 7) ||
             (t->codec_id == MKV_V_MSCOMP) ||
             starts_with(t->codec_id, "V_REAL", 6) ||
-            (t->codec_id == MKV_V_QUICKTIME)) {
-          mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
-                 (int64_t)t->tnum);
-          t->ptzr = add_packetizer(new video_packetizer_c(this,
-                                                          t->codec_id.c_str(),
-                                                          t->v_frate,
-                                                          t->v_width,
-                                                          t->v_height,
-                                                          t->v_bframes, nti));
+            (t->codec_id == MKV_V_QUICKTIME) ||
+            (t->codec_id == MKV_V_MPEG1) ||
+            (t->codec_id == MKV_V_MPEG2)) {
+          const char *fourcc;
+
+          if ((t->codec_id == MKV_V_MSCOMP) &&
+              (t->private_data != NULL) &&
+              (t->private_size >= sizeof(alBITMAPINFOHEADER)))
+            fourcc = (const char *)
+              &((alBITMAPINFOHEADER *)t->private_data)->bi_compression;
+          else
+            fourcc = NULL;
+
+          if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
+            int version;
+
+            version = t->codec_id[6] - '0';
+            mxinfo(FMT_TID "Using the MPEG-%d video output module.\n",
+                   ti->fname.c_str(), (int64_t)t->tnum, version);
+            t->ptzr =
+              add_packetizer(new mpeg1_2_video_packetizer_c(this,
+                                                            version,
+                                                            t->v_frate,
+                                                            t->v_width,
+                                                            t->v_height,
+                                                            t->v_dwidth,
+                                                            t->v_dheight,
+                                                            true, nti));
+
+          } else if (IS_MPEG4_L2_CODECID(t->codec_id) ||
+                     ((fourcc != NULL) && IS_MPEG4_L2_FOURCC(fourcc))) {
+            bool is_native;
+
+            mxinfo(FMT_TID "Using the MPEG-4 layer 2 video output module.\n",
+                   ti->fname.c_str(), (int64_t)t->tnum);
+            is_native = IS_MPEG4_L2_CODECID(t->codec_id);
+            t->ptzr =
+              add_packetizer(new mpeg4_l2_video_packetizer_c(this,
+                                                             t->v_frate,
+                                                             t->v_width,
+                                                             t->v_height,
+                                                             is_native,
+                                                             nti));
+
+          } else if (t->codec_id == MKV_V_MPEG4_AVC) {
+            mxinfo(FMT_TID "Using the MPEG-4 layer 10 (AVC) video output "
+                   "module.\n", ti->fname.c_str(), (int64_t)t->tnum);
+            t->ptzr =
+              add_packetizer(new mpeg4_l10_video_packetizer_c(this,
+                                                              t->v_frate,
+                                                              t->v_width,
+                                                              t->v_height,
+                                                              nti));
+
+          } else {
+            mxinfo(FMT_TID "Using the video output module.\n",
+                   ti->fname.c_str(), (int64_t)t->tnum);
+            t->ptzr =
+              add_packetizer(new video_packetizer_c(this,
+                                                    t->codec_id.c_str(),
+                                                    t->v_frate,
+                                                    t->v_width,
+                                                    t->v_height,
+                                                    nti));
+          }
+
           if (!PTZR(t->ptzr)->ti->aspect_ratio_given) {
             // The user hasn't set it.
             if (t->v_dwidth != 0)

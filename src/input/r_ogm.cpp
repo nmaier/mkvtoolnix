@@ -429,7 +429,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                                       get_uint64_le(&sth->time_unit),
                                       get_uint32_le(&sth->sh.video.width),
                                       get_uint32_le(&sth->sh.video.height),
-                                      false, ti);
+                                      ti);
 
         mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
                (int64_t)tid);

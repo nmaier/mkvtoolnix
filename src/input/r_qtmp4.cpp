@@ -1381,21 +1381,27 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ti->private_size = sizeof(alBITMAPINFOHEADER);
         ti->private_data = (unsigned char *)bih;
         dmx->ptzr =
-          add_packetizer(new video_packetizer_c(this, MKV_V_MSCOMP, 0.0,
-                                                dmx->v_width, dmx->v_height,
-                                                false, ti));
+          add_packetizer(new mpeg4_l2_video_packetizer_c(this, 0.0,
+                                                         dmx->v_width,
+                                                         dmx->v_height, true,
+                                                         ti));
         safefree(bih);
         ti->private_data = NULL;
+        mxinfo(FMT_TID "Using the MPEG-4 layer 2 video output module.\n",
+               ti->fname.c_str(), (int64_t)dmx->id);
 
       } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) ||
                  !strncasecmp(dmx->fourcc, "mpg2", 4)) {
-        string codec_id;
+        int version;
 
-        codec_id = mxsprintf("V_MPEG%c", dmx->fourcc[3]);
+        version = dmx->fourcc[3] - '0';
         dmx->ptzr =
-          add_packetizer(new video_packetizer_c(this, codec_id.c_str(),
-                                                -1.0, dmx->v_width,
-                                                dmx->v_height, false, ti));
+          add_packetizer(new mpeg1_2_video_packetizer_c(this, version,
+                                                        -1.0, dmx->v_width,
+                                                        dmx->v_height, 0, 0,
+                                                        false, ti));
+        mxinfo(FMT_TID "Using the MPEG-%d video output module.\n",
+               ti->fname.c_str(), (int64_t)dmx->id, version);
 
       } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
         double fps;
@@ -1449,15 +1455,17 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ti->private_size = dmx->priv_size;
         ti->private_data = dmx->priv;
         dmx->ptzr =
-          add_packetizer(new video_packetizer_c(this, MKV_V_MPEG4_AVC, fps,
-                                                dmx->v_width, dmx->v_height,
-                                                false, ti));
+          add_packetizer(new mpeg4_l10_video_packetizer_c(this, fps,
+                                                          dmx->v_width,
+                                                          dmx->v_height, ti));
         ti->private_data = NULL;
 
         if (hack_engaged(ENGAGE_AVC_USE_BFRAMES))
           dmx->avc_use_bframes = true;
         else
           PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
+        mxinfo(FMT_TID "Using the MPEG-4 layer 10 (AVC) video output "
+               "module.\n", ti->fname.c_str(), (int64_t)dmx->id);
 
       } else {
         ti->private_size = dmx->v_stsd_size;
@@ -1465,11 +1473,11 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         dmx->ptzr =
           add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0,
                                                 dmx->v_width, dmx->v_height,
-                                                false, ti));
+                                                ti));
         ti->private_data = NULL;
+        mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
+               ti->fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
       }
-      mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
-             ti->fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
 
     } else {
       if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||

@@ -383,6 +383,68 @@ mpeg1_2_extract_fps_idx(const unsigned char *buffer,
   return buffer[idx] & 0x0f;
 }
 
+/** \brief Extract the aspect ratio from a MPEG video sequence header
+
+   This function looks for a MPEG sequence header in a buffer containing
+   a MPEG1 or MPEG2 video frame. If such a header is found its
+   aspect ratio is extracted and returned.
+
+   \param buffer The buffer to search for the header.
+   \param size The buffer size.
+
+   \return \c true if a MPEG sequence header was found and \c false otherwise.
+*/
+bool
+mpeg1_2_extract_ar(const unsigned char *buffer,
+                   int size,
+                   float &ar) {
+  uint32_t marker;
+  int idx;
+
+  mxverb(3, "mpeg_video_ar: start search in %d bytes\n", size);
+  if (size < 8) {
+    mxverb(3, "mpeg_video_ar: sequence header too small\n");
+    return -1;
+  }
+  marker = get_uint32_be(buffer);
+  idx = 4;
+  while ((idx < size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
+    marker <<= 8;
+    marker |= buffer[idx];
+    idx++;
+  }
+  if (idx >= size) {
+    mxverb(3, "mpeg_video_ar: no sequence header start code found\n");
+    return -1;
+  }
+
+  mxverb(3, "mpeg_video_ar: found sequence header start code at %d\n",
+         idx - 4);
+  idx += 3;                     // width and height
+  if (idx >= size) {
+    mxverb(3, "mpeg_video_ar: sequence header too small\n");
+    return -1;
+  }
+
+  switch (buffer[idx] & 0xf0) {
+    case MPEGVIDEO_AR_1_1:
+      ar = 1.0f;
+      break;
+    case MPEGVIDEO_AR_4_3:
+      ar = 4.0f / 3.0f;
+      break;
+    case MPEGVIDEO_AR_16_9:
+      ar = 16.0f / 9.0f;
+      break;
+    case MPEGVIDEO_AR_2_21:
+      ar = 2.21f;
+      break;
+    default:
+      ar = -1.0f;
+  }
+  return true;
+}
+
 /** \brief Get the number of frames per second
 
    Converts the index returned by ::mpeg_video_extract_fps_idx to a number.
