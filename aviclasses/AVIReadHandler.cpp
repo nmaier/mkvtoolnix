@@ -1497,7 +1497,7 @@ void AVIReadHandler::_parseFile(List2<AVIStreamNode>& streamlist) {
     }
 
     if (dwLength) {
-      if (m_pInput->setFilePointer2(dwLength + (dwLength&1), seek_current) == -1)
+      if (!m_pInput->setFilePointer2(dwLength + (dwLength&1), seek_current))
         break;
     }
 
@@ -1627,11 +1627,11 @@ terminate_scan:
             break;
 
           if (fccType2 != formtypeAVIEXTENDED && fccType2 != listtypeAVIMOVIE) {
-            if (m_pInput->setFilePointer2(dwLength + (dwLength&1) - 4, seek_current) == -1)
+            if (!m_pInput->setFilePointer2(dwLength + (dwLength&1) - 4, seek_current))
               break;
           }
         } else {
-          if (m_pInput->setFilePointer2(dwLength + (dwLength&1), seek_current) == -1)
+          if (!m_pInput->setFilePointer2(dwLength + (dwLength&1), seek_current))
             break;
         }
       }
@@ -1840,7 +1840,7 @@ bool AVIReadHandler::_parseStreamHeader(List2<AVIStreamNode>& streamlist, uint32
       }
 
       if (dwLength) {
-        if (m_pInput->setFilePointer2(dwLength + (dwLength&1), seek_current) == -1)
+        if (!m_pInput->setFilePointer2(dwLength + (dwLength&1), seek_current))
           break;
       }
     }
@@ -2440,7 +2440,7 @@ long AVIReadHandler::ReadData(int stream, void *buffer, sint64 position, long le
 
 //  _RPT3(0,"Reading from file %d, position %I64x, size %d\n", nCurrentFile, position, len);
 
-  if (m_pInput->setFilePointer2(position & _LL(0x0000FFFFFFFFFFFF), seek_beginning) == -1)
+  if (!m_pInput->setFilePointer2(position & _LL(0x0000FFFFFFFFFFFF), seek_beginning))
     return -1;
   return m_pInput->read(buffer, len);
 }
