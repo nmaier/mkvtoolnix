@@ -837,7 +837,8 @@ dnl
 
       if test "$wxwver_ok" = "1" ; then
         WXWINDOWS_CFLAGS=`wx-config --cxxflags`
-        WXWINDOWS_LIBS=`wx-config --libs`
+        WXWINDOWS_LIBS=`wx-config --libs | \
+          sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
         AC_CACHE_VAL(am_cv_wx_compilation, [
           AC_LANG_PUSH(C++)
           ac_save_CXXFLAGS="$CXXFLAGS"
