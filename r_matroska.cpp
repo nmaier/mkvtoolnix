@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.25 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.26 2003/05/06 08:15:36 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -334,7 +334,8 @@ void mkv_reader_c::verify_tracks() {
             t->headers[1] = &c[offset + t->header_sizes[0]];
             t->headers[2] = &c[offset + t->header_sizes[0] +
                                t->header_sizes[1]];
-            t->header_sizes[2] = t->private_size - offset;
+            t->header_sizes[2] = t->private_size - offset -
+              t->header_sizes[0] - t->header_sizes[1];
 
             t->a_formattag = 0xFFFE;
           } else {
@@ -666,7 +667,7 @@ int mkv_reader_c::read_headers() {
                         "%llu\n", c_priv.GetSize());
                 track->private_size = c_priv.GetSize();
                 if (track->private_size > 0)
-                  track->private_data = safememdup(track->private_data,
+                  track->private_data = safememdup(&binary(c_priv),
                                                    track->private_size);
 
               } else if (EbmlId(*l3) ==
