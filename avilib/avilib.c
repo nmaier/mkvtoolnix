@@ -1292,9 +1292,14 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
             if (AVI->wave_format_ex[AVI->aptr] != NULL) {
               memcpy(AVI->wave_format_ex[AVI->aptr], &wfe,
                      sizeof(WAVEFORMATEX));
-              if (wfe.cb_size > 0)
-                memcpy(AVI->wave_format_ex[AVI->aptr] + sizeof(WAVEFORMATEX),
-                       hdrl_data + i + sizeof(WAVEFORMATEX), wfe.cb_size);
+              if (wfe.cb_size > 0) {
+                off_t lpos = lseek(AVI->fdes, 0, SEEK_CUR);
+                lseek(AVI->fdes, header_offset + i + sizeof(WAVEFORMATEX),
+                      SEEK_SET);
+                read(AVI->fdes, AVI->wave_format_ex[AVI->aptr] +
+                     sizeof(WAVEFORMATEX), wfe.cb_size);
+                lseek(AVI->fdes, lpos, SEEK_SET);
+              }
             }
 
             AVI->track[AVI->aptr].a_fmt   = str2ushort(hdrl_data+i  );
