@@ -133,8 +133,6 @@ cluster_helper_c::add_packet(packet_t *packet) {
        (video_packetizer == NULL))) {
     split = false;
     c = clusters[clusters.size() - 1];
-    if (first_timecode_in_file == -1)
-      first_timecode_in_file = packet->assigned_timecode;
 
     // Maybe we want to start a new file now.
     if (!split_by_time) {
@@ -192,11 +190,6 @@ cluster_helper_c::add_packet(packet_t *packet) {
         first_timecode = -1;
     }
   }
-
-  if ((packet->unmodified_assigned_timecode + packet->unmodified_duration) >
-      max_timecode_and_duration)
-    max_timecode_and_duration = packet->unmodified_assigned_timecode +
-      packet->unmodified_duration;
 
   packet->packet_num = packet_num;
   packet_num++;
@@ -488,6 +481,12 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       free_ref(pack->timecode, pack->source);
     }
 
+    if (first_timecode_in_file == -1)
+      first_timecode_in_file = pack->assigned_timecode;
+
+    if ((pack->assigned_timecode + pack->duration) > max_timecode_and_duration)
+      max_timecode_and_duration = pack->assigned_timecode + pack->duration;
+
     if ((pack->bref != -1) || (pack->fref != -1) ||
         !track_entry.LacingEnabled())
       render_group->more_data = false;
@@ -741,6 +740,9 @@ cluster_helper_c::free_ref(int64_t ref_timecode,
 
 int64_t
 cluster_helper_c::get_duration() {
+  mxverb(3, "cluster_helper_c::get_duration(): %lld - %lld = %lld\n",
+         max_timecode_and_duration, first_timecode_in_file,
+         max_timecode_and_duration - first_timecode_in_file);
   return max_timecode_and_duration - first_timecode_in_file;
 }
 
