@@ -1831,6 +1831,20 @@ def_handle(chapters) {
           KaxEditionUID &edition_uid = *static_cast<KaxEditionUID *>(l3);
           show_element(l3, 3, "Edition UID: %llu", uint64(edition_uid));
 
+        } else if (is_id(l3, KaxEditionFlagHidden)) {
+          KaxEditionFlagHidden &fhidden =
+            *static_cast<KaxEditionFlagHidden *>(l3);
+          show_element(l3, 3, "Hidden: %u", uint8(fhidden));
+
+        } else if (is_id(l3, KaxEditionFlagDefault)) {
+          KaxEditionFlagDefault &fdefault =
+            *static_cast<KaxEditionFlagDefault *>(l3);
+          show_element(l3, 3, "Default: %u", uint8(fdefault));
+
+        } else if (is_id(l3, KaxEditionManaged)) {
+          KaxEditionManaged &managed = *static_cast<KaxEditionManaged *>(l3);
+          show_element(l3, 3, "Managed: %llu", uint64(managed));
+
         } else if (!parse_chapter_atom(es, l3, 3) &&
                    !is_global(es, l3, 3))
           show_unknown_element(l3, 3);

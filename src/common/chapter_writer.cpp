@@ -354,6 +354,7 @@ write_chapters_xml(KaxChapters *chapters,
   int i, j;
   KaxEditionEntry *edition;
   KaxEditionUID *edition_uid;
+  EbmlElement *e;
 
   o = out;
 
@@ -365,9 +366,30 @@ write_chapters_xml(KaxChapters *chapters,
       if (edition != NULL)
         out->printf("    <EditionUID>%llu</EditionUID>\n",
                     uint64(*static_cast<EbmlUInteger *>(edition_uid)));
-      for (j = 0; j < edition->ListSize(); j++)
-        if (is_id((*edition)[j], KaxChapterAtom))
-          write_chapter_atom_xml((KaxChapterAtom *)(*edition)[j], 2);
+      for (j = 0; j < edition->ListSize(); j++) {
+        e = (*edition)[j];
+
+        if (is_id(e, KaxChapterAtom))
+          write_chapter_atom_xml(static_cast<KaxChapterAtom *>(e), 2);
+
+        else if (is_id(e, KaxEditionFlagHidden)) {
+          pt(2, "<EditionFlagHidden>");
+          o->printf("%u</EditionFlagHidden>\n",
+                    uint8(*static_cast<EbmlUInteger *>(e)));
+
+        } else if (is_id(e, KaxEditionManaged)) {
+          pt(2, "<EditionManaged>");
+          o->printf("%u</EditionManaged>\n",
+                    uint8(*static_cast<EbmlUInteger *>(e)));
+
+        } else if (is_id(e, KaxEditionFlagDefault)) {
+          pt(2, "<EditionFlagDefault>");
+          o->printf("%u</EditionFlagDefault>\n",
+                    uint8(*static_cast<EbmlUInteger *>(e)));
+
+        }
+      }
+ 
       out->printf("  </EditionEntry>\n");
     }
   }

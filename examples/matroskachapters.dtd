@@ -1,5 +1,15 @@
 <!ELEMENT Chapters (EditionEntry*)>
-<!ELEMENT EditionEntry (ChapterAtom*)>
+<!ELEMENT EditionEntry (
+          EditionUID,
+          EditionFlagHidden?,
+          EditionManaged?,
+          EditionFlagDefault?,
+          ChapterAtom*)>
+
+<!ELEMENT EditionUID (#PCDATA)>
+<!ELEMENT EditionFlagHidden (#PCDATA)>
+<!ELEMENT EditionManaged (#PCDATA)>
+<!ELEMENT EditionFlagDefault (#PCDATA)>
 
 <!ELEMENT ChapterAtom (
           ChapterTimeStart,

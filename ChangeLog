@@ -1,5 +1,9 @@
 2004-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvinfo, mkvextract: new feature: Added support for
+	the new 'EditionFlagHidden', 'EditionFlagDefault' and
+	'EditionManaged' elements.
+
 	* mkvmerge: Added 'EditionUID' to valid elements below '<Targets>'
 	in XML tags. Fixed the creation of the 'Targets' with
 	--global-tags and --tags.
