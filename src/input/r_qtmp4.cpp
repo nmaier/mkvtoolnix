@@ -1396,13 +1396,56 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                                 dmx->v_height, false, ti));
 
       } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
+        double fps;
+
+        fps = 0.0;
+        if ((dmx->durmap_table.size() == 1) &&
+            (dmx->durmap_table[0].duration != 0)) {
+          if ((dmx->sample_size != 0) ||
+              (dmx->frame_offset_table.size() == 0)) {
+            // Constant FPS. Let's set the default duration.
+            fps = (double)dmx->timescale /
+              (double)dmx->durmap_table[0].duration;
+            mxverb(3, PFX "fps1: %f\n", fps);
+
+          } else if ((dmx->sample_table.size() > 0) &&
+                     (dmx->sample_table.size() ==
+                      dmx->frame_offset_table.size())) {
+            // Constant FPS but the frame offsets are used. This one is
+            // a bit trickier. I have to find the maximum timecode including
+            // the frame offsets (for PTS/DTS conversion) and divide that
+            // by the number of frames.
+            int64_t max_tc;
+            int i;
+
+            max_tc = 0;
+
+            for (i = 0; i < dmx->sample_table.size(); i++) {
+              int64_t timecode;
+
+              timecode = ((int64_t)dmx->sample_table[i].pts +
+                          (int64_t)dmx->frame_offset_table[dmx->pos]) *
+                1000000000 / dmx->timescale;
+              if (timecode > max_tc)
+                max_tc = timecode;
+            }
+            if (max_tc > 0)
+              fps = (double)dmx->sample_table.size() * 1000000000.0 /
+                (double)max_tc;
+
+            mxverb(3, PFX "fps2: max_tc %lld s_t.s %u fps %f\n", max_tc,
+                   dmx->sample_table.size(), fps);
+          }
+        }
+
         ti->private_size = dmx->priv_size;
         ti->private_data = dmx->priv;
         dmx->ptzr =
-          add_packetizer(new video_packetizer_c(this, MKV_V_MPEG4_AVC, 0.0,
+          add_packetizer(new video_packetizer_c(this, MKV_V_MPEG4_AVC, fps,
                                                 dmx->v_width, dmx->v_height,
                                                 false, ti));
         ti->private_data = NULL;
+
 
       } else {
         ti->private_size = dmx->v_stsd_size;
