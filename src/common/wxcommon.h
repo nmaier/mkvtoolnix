@@ -1,20 +1,16 @@
 /*
-  wxcommon.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief definitions for wxWindows
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * wxcommon.h
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * definitions for wxWindows
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #ifndef __WXCOMMON_H
 #define __WXCOMMON_H

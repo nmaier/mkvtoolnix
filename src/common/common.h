@@ -1,22 +1,19 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  common.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief definitions used in all programs, helper functions
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * definitions used in all programs, helper functions
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ * The bit_cursor_c class was originally written by Peter Niemayer
+ *   <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #ifndef __COMMON_H
 #define __COMMON_H

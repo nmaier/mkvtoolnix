@@ -1,23 +1,18 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-  from component media subtypes
-
-  dts_common.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-  \file
-  \version $Id$
-  \brief definitions and helper functions for DTS data
-  \author Peter Niemayer <niemayer@isg.de>
-  \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * definitions and helper functions for DTS data
+ *
+ * Written by Peter Niemayer <niemayer@isg.de>.
+ * Modified by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #ifndef __DTSCOMMON_H
 #define __DTSCOMMON_H

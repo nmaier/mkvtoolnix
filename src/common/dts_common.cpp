@@ -1,23 +1,18 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  dts_common.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief helper function for DTS data
-    \author Peter Niemayer <niemayer@isg.de>
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * helper function for DTS data
+ *
+ * Written by Peter Niemayer <niemayer@isg.de>.
+ * Modified by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <string.h>
 #include <stdio.h>
@@ -65,7 +60,7 @@ static const int core_samplefreqs[16] = {
 };
 
 static const int transmission_bitrates[32] = {
-     32000,     56000,     64000,     96000,
+    32000,     56000,     64000,     96000,
    112000,    128000,    192000,    224000,
    256000,    320000,    384000,    448000,
    512000,    576000,    640000,    768000,

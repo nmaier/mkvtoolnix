@@ -1,49 +1,48 @@
 /*
-  base64.cpp
-  Base64 encoding and decoding.
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Part of this file (the two encoding functions) were adopted from
-  http://base64.sourceforge.net/ and are licensed under the MIT license
-  (following):
-
-LICENCE:        Copyright (c) 2001 Bob Trower, Trantor Standard Systems Inc.
-
-                Permission is hereby granted, free of charge, to any person
-                obtaining a copy of this software and associated
-                documentation files (the "Software"), to deal in the
-                Software without restriction, including without limitation
-                the rights to use, copy, modify, merge, publish, distribute,
-                sublicense, and/or sell copies of the Software, and to
-                permit persons to whom the Software is furnished to do so,
-                subject to the following conditions:
-
-                The above copyright notice and this permission notice shall
-                be included in all copies or substantial portions of the
-                Software.
-
-                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
-                KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-                WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-                PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
-                OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-                OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-                OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-                SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-  The decoding function was adapted from
-  http://sourceforge.net/projects/base64decoder/ and is licensed under
-  the GPL v2 or later. See the file COPYING for details.
-
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief base64 encoding and decoding functions
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * base64.cpp
+ * Base64 encoding and decoding.
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>
+ *
+ * Part of this file (the two encoding functions) were adopted from
+ * http://base64.sourceforge.net/ and are licensed under the MIT license
+ * (following):
+ *
+ * LICENCE:     Copyright (c) 2001 Bob Trower, Trantor Standard Systems Inc.
+ *
+ *              Permission is hereby granted, free of charge, to any person
+ *              obtaining a copy of this software and associated
+ *              documentation files (the "Software"), to deal in the
+ *              Software without restriction, including without limitation
+ *              the rights to use, copy, modify, merge, publish, distribute,
+ *              sublicense, and/or sell copies of the Software, and to
+ *              permit persons to whom the Software is furnished to do so,
+ *              subject to the following conditions:
+ *
+ *              The above copyright notice and this permission notice shall
+ *              be included in all copies or substantial portions of the
+ *              Software.
+ *
+ *              THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+ *              KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ *              WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ *              PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+ *              OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ *              OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ *              OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ *              SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * The decoding function was adapted from
+ * http://sourceforge.net/projects/base64decoder/ and is licensed under
+ * the GPL v2 or later. See the file COPYING for details.
+ *
+ * $Id$
+ *
+ * base64 encoding and decoding functions
+ *
+ * See the above URLs for the original authors.
+ * Modified by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <ctype.h>
 
