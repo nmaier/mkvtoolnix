@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.11 2003/04/11 11:52:57 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.12 2003/04/13 15:23:03 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -52,7 +52,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 /*
  * Probes a file by simply comparing the first four bytes to 'OggS'.
  */
-int ogm_reader_c::probe_file(FILE *file, u_int64_t size) {
+int ogm_reader_c::probe_file(FILE *file, int64_t size) {
   unsigned char data[4];
   
   if (size < 4)
@@ -75,7 +75,7 @@ int ogm_reader_c::probe_file(FILE *file, u_int64_t size) {
  */
 ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  u_int64_t size;
+  int64_t size;
   
   if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("ogm_reader: Could not open source file.");

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.9 2003/04/11 11:30:18 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.10 2003/04/13 15:23:03 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@ extern "C" {
 #include <dmalloc.h>
 #endif
 
-int ac3_reader_c::probe_file(FILE *file, u_int64_t size) { 
+int ac3_reader_c::probe_file(FILE *file, int64_t size) { 
   char         buf[4096];
   int          pos;
   ac3_header_t ac3header;

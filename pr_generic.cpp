@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.10 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.11 2003/04/13 15:23:03 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -122,7 +122,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   walk_clusters();
 }
 
-u_int64_t cluster_helper_c::get_timecode() {
+int64_t cluster_helper_c::get_timecode() {
   if (clusters == NULL)
     return 0;
   if (clusters[num_clusters - 1]->packets == NULL)
@@ -187,7 +187,7 @@ int cluster_helper_c::render(IOCallback *out) {
   KaxCues dummy_cues;
   KaxCluster *cluster;
   int i;
-  u_int64_t cluster_timecode;
+  int64_t cluster_timecode;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
 
@@ -198,9 +198,15 @@ int cluster_helper_c::render(IOCallback *out) {
   clstr = clusters[num_clusters - 1];
   cluster = clstr->cluster;
   cluster_timecode = get_timecode();
+  if (verbose > 1)
+    fprintf(stdout, "cluster_helper_c::render: cluster_timecode %lld\n",
+            cluster_timecode);
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
+    if (verbose > 1)
+      fprintf(stdout, "  cluster_helper_c::render: pack->timestamp %lld\n",
+              pack->timestamp);
 
     pack->group = &cluster->GetNewBlock();
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
@@ -245,7 +251,7 @@ int cluster_helper_c::render(IOCallback *out) {
   return 1;
 }
 
-ch_contents_t *cluster_helper_c::find_packet_cluster(u_int64_t pid) {
+ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t pid) {
   int i, k;
 
   if (clusters == NULL)
@@ -259,7 +265,7 @@ ch_contents_t *cluster_helper_c::find_packet_cluster(u_int64_t pid) {
   return NULL;
 }
 
-packet_t *cluster_helper_c::find_packet(u_int64_t pid) {
+packet_t *cluster_helper_c::find_packet(int64_t pid) {
   int i, k;
 
   if (clusters == NULL)
@@ -367,7 +373,7 @@ int cluster_helper_c::free_clusters() {
   return 1;
 }
 
-int cluster_helper_c::free_ref(u_int64_t pid, void *source) {
+int cluster_helper_c::free_ref(int64_t pid, void *source) {
   int i, k;
   packet_t *p;
 

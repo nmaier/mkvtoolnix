@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.9 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_ogm.h,v 1.10 2003/04/13 15:23:03 mosu Exp $
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -71,7 +71,7 @@ public:
   virtual int            display_priority();
   virtual void           display_progress();
   
-  static int             probe_file(FILE *file, u_int64_t size);
+  static int             probe_file(FILE *file, int64_t size);
     
 private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);

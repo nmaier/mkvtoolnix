@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.7 2003/04/11 11:29:01 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.8 2003/04/13 15:23:03 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -175,7 +175,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
                                  int64_t timecode, int64_t) {
   unsigned char zero[2];
   ogg_packet op;
-  u_int64_t this_bs, samples_here, samples_needed;
+  int64_t this_bs, samples_here, samples_needed;
   
   // Recalculate the timecode if needed.
   if (timecode == -1)
@@ -226,7 +226,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   if (timecode < 0)
     return EMOREDATA;
 
-  add_packet(data, size, (u_int64_t)timecode);
+  add_packet(data, size, (int64_t)timecode);
 
   return EMOREDATA;
 }

@@ -32,7 +32,7 @@
 #include <dmalloc.h>
 #endif
 
-int microdvd_reader_c::probe_file(FILE *file, u_int64_t size) {
+int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
   int  i;
   

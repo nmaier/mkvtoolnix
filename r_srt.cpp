@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.4 2003/03/06 23:39:40 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.5 2003/04/13 15:23:03 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -45,7 +45,7 @@
 #define issrttimestamp(s) (istimestamp(s) && isarrow(s + 12) && \
                            istimestamp(s + 17))
                         
-int srt_reader_c::probe_file(FILE *file, u_int64_t size) {
+int srt_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
   
   if (fseek(file, 0, SEEK_SET) != 0)

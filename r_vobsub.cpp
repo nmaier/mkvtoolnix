@@ -57,7 +57,7 @@
                                 iscommafileposstr(s + 23) && \
                                 isfilepos(s + 34))
                         
-int vobsub_reader_c::probe_file(FILE *file, u_int64_t size) {
+int vobsub_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
   
   if (fseek(file, 0, SEEK_SET) != 0)

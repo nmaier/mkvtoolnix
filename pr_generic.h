@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.13 2003/04/11 11:29:28 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.14 2003/04/13 15:23:03 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -55,18 +55,18 @@ public:
   void           add_cluster(KaxCluster *cluster);
   KaxCluster    *get_cluster();
   void           add_packet(packet_t *packet);
-  u_int64_t      get_timecode();
+  int64_t        get_timecode();
   packet_t      *get_packet(int num);
   int            get_packet_count();
   int            render(IOCallback *out);
-  int            free_ref(u_int64_t pid, void *source);
+  int            free_ref(int64_t pid, void *source);
   int            free_clusters();
   int            get_cluster_content_size();
 
 private:
   int            find_cluster(KaxCluster *cluster);
-  ch_contents_t *find_packet_cluster(u_int64_t pid);
-  packet_t      *find_packet(u_int64_t pid);
+  ch_contents_t *find_packet_cluster(int64_t pid);
+  packet_t      *find_packet(int64_t pid);
   void           free_contents(ch_contents_t *clstr);
   void           check_clusters(int num);
 };
@@ -109,7 +109,7 @@ typedef struct packet_t {
   KaxCluster          *cluster;
   unsigned char       *data;
   int                  length, superseeded;
-  u_int64_t            timestamp, id, bref, fref;
+  int64_t              timestamp, id, bref, fref;
   generic_packetizer_c *source;
 } packet_t;
 

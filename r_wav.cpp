@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.7 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.8 2003/04/13 15:23:03 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@ extern "C" {
 #include <dmalloc.h>
 #endif
 
-int wav_reader_c::probe_file(FILE *file, u_int64_t size) {
+int wav_reader_c::probe_file(FILE *file, int64_t size) {
   wave_header wheader;
   if (size < sizeof(wave_header))
     return 0;
@@ -57,7 +57,7 @@ int wav_reader_c::probe_file(FILE *file, u_int64_t size) {
 
 wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  u_int64_t size;
+  int64_t size;
   
   if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("wav_reader: Could not open source file.");

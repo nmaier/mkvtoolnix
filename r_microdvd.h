@@ -46,7 +46,7 @@ public:
   virtual int              display_priority();
   virtual void             display_progress();
 
-  static int               probe_file(FILE *file, u_int64_t size);
+  static int               probe_file(FILE *file, int64_t size);
 };
 
 #endif  // __R_MICRODVD_H 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.8 2003/04/11 10:32:31 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.9 2003/04/13 15:23:02 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -200,7 +200,7 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
   unsigned char *packet;
   unsigned long header;
   ac3_header_t ac3header;
-  u_int64_t my_timecode;
+  int64_t my_timecode;
 
   if (timecode != -1)
     my_timecode = timecode;
@@ -208,8 +208,8 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (timecode != -1)
-      my_timecode = (u_int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
-                                samples_per_sec);
+      my_timecode = (int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
+                              samples_per_sec);
 
     add_packet(packet, ac3header.bytes, my_timecode);
     packetno++;

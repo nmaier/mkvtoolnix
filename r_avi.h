@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.10 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_avi.h,v 1.11 2003/04/13 15:23:03 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -41,7 +41,7 @@ typedef struct avi_demuxer_t {
   int                   channels, bits_per_sample, samples_per_second;
   int                   aid;
   int                   eos;
-  u_int64_t             bytes_processed;
+  int64_t               bytes_processed;
   avi_demuxer_t        *next;
 } avi_demuxer_t;
 
@@ -68,7 +68,7 @@ public:
   virtual int       display_priority();
   virtual void      display_progress();
 
-  static int        probe_file(FILE *file, u_int64_t size);
+  static int        probe_file(FILE *file, int64_t size);
     
 private:
   virtual int       add_audio_demuxer(avi_t *avi, int aid);

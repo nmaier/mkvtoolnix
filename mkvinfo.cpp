@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.6 2003/04/13 14:00:54 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.7 2003/04/13 15:23:02 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -69,7 +69,7 @@ using namespace LIBMATROSKA_NAMESPACE;
 typedef struct track_t {
   int tnum;
   char type;
-  u_int64_t size;
+  int64_t size;
 } track_t;
 
 track_t **tracks = NULL;
@@ -148,7 +148,7 @@ void process_file() {
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   EbmlStream *es;
-  u_int64_t last_pos;
+  int64_t last_pos;
   u_int32_t cluster_tc;
 
   try {

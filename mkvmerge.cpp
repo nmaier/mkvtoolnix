@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.29 2003/04/13 14:00:54 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.30 2003/04/13 15:23:02 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -171,7 +171,7 @@ static void usage(void) {
 
 static int get_type(char *filename) {
   FILE *f = fopen(filename, "r");
-  u_int64_t size;
+  int64_t size;
   
   if (f == NULL) {
     fprintf(stderr, "Error: could not open source file (%s).\n", filename);
@@ -723,7 +723,7 @@ static void parse_args(int argc, char **argv) {
 }
 
 static int write_packet(packet_t *pack) {
-  u_int64_t timecode;
+  int64_t timecode;
 
   cluster_helper->add_packet(pack);
   timecode = cluster_helper->get_timecode();

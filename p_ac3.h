@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.8 2003/04/11 10:36:55 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.9 2003/04/13 15:23:02 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,7 +27,7 @@
 
 class ac3_packetizer_c: public q_c {
 private:
-  u_int64_t      bytes_output, packetno;
+  int64_t        bytes_output, packetno;
   unsigned long  samples_per_sec;
   int            channels;
   unsigned char *packet_buffer;

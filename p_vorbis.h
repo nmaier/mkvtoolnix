@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.h,v 1.6 2003/04/11 11:29:15 mosu Exp $
+    \version \$Id: p_vorbis.h,v 1.7 2003/04/13 15:23:03 mosu Exp $
     \brief class definition for the Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,7 +34,7 @@
 
 class vorbis_packetizer_c: public q_c {
 private:
-  u_int64_t       last_bs, samples;
+  int64_t         last_bs, samples;
   int             packetno;
   audio_sync_t    async;
   vorbis_info     vi;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.16 2003/04/11 11:36:18 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.17 2003/04/13 15:23:03 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -40,7 +40,7 @@ extern "C" {
 #include <dmalloc.h>
 #endif
 
-int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
+int avi_reader_c::probe_file(FILE *file, int64_t size) {
   unsigned char data[12];
   
   if (size < 12)
@@ -64,7 +64,7 @@ int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
 avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int            fsize, i;
-  u_int64_t      size;
+  int64_t        size;
   FILE          *f;
   int            extract_video = 1;
   avi_demuxer_t *demuxer;

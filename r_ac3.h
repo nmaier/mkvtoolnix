@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_ac3.h,v 1.6 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_ac3.h,v 1.7 2003/04/13 15:23:03 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,8 +34,7 @@ private:
   unsigned char          *chunk;
   FILE                   *file;
   class ac3_packetizer_c *ac3packetizer;
-  u_int64_t               bytes_processed;
-  u_int64_t               size;
+  int64_t                 bytes_processed, size;
      
 public:
   ac3_reader_c(track_info_t *nti) throw (error_c);
@@ -46,7 +45,7 @@ public:
   virtual int       display_priority();
   virtual void      display_progress();
 
-  static int        probe_file(FILE *file, u_int64_t size);
+  static int        probe_file(FILE *file, int64_t size);
 };
 
 #endif // __R_AC3_H

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.1 2003/04/11 10:03:16 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.2 2003/04/13 15:23:03 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -63,7 +63,7 @@ typedef struct {
   unsigned char *headers[3];
   u_int32_t header_sizes[3];
 
-  u_int64_t units_processed;
+  int64_t units_processed;
 
   int ok;
 
@@ -77,7 +77,7 @@ private:
   mkv_track_t **tracks;
   int num_tracks;
 
-  u_int64_t tc_scale;
+  int64_t tc_scale;
   u_int32_t cluster_tc;
 
   StdIOCallback *in;
@@ -95,7 +95,7 @@ public:
   virtual int          display_priority();
   virtual void         display_progress();
   
-  static int           probe_file(FILE *file, u_int64_t size);
+  static int           probe_file(FILE *file, int64_t size);
     
 private:
   virtual int          demuxing_requested(mkv_track_t *t);

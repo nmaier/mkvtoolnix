@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.9 2003/04/11 11:19:30 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.10 2003/04/13 15:23:02 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -196,7 +196,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
   unsigned char *packet;
   unsigned long header;
   mp3_header_t mp3header;
-  u_int64_t my_timecode;
+  int64_t my_timecode;
 
   if (timecode != -1)
     my_timecode = timecode;
@@ -210,8 +210,8 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     }  
 
     if (timecode == -1)
-      my_timecode = (u_int64_t)(1000.0 * packetno * 1152 * ti->async.linear / 
-                                samples_per_sec);
+      my_timecode = (int64_t)(1000.0 * packetno * 1152 * ti->async.linear / 
+                              samples_per_sec);
 
     add_packet(packet, mp3header.framesize + 4, my_timecode);
     packetno++;
