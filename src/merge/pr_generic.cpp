@@ -257,7 +257,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   hvideo_display_height = -1;
 
   hcompression = COMPRESSION_UNSPECIFIED;
-  compressor = NULL;
 
   timecode_factory = timecode_factory_c::create(ti->ext_timecodes,
                                                 ti->fname, ti->id);
@@ -267,8 +266,6 @@ generic_packetizer_c::~generic_packetizer_c() {
   delete ti;
 
   safefree(hcodec_private);
-  if (compressor != NULL)
-    delete compressor;
   delete timecode_factory;
 }
 
@@ -775,7 +772,8 @@ generic_packetizer_c::set_headers() {
     *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) =
       hcompression - 1;
 
-    compressor = compression_c::create(hcompression);
+    compressor =
+      counted_ptr<compression_c>(compression_c::create(hcompression));
   }
 
   if (no_lacing)
@@ -829,7 +827,7 @@ generic_packetizer_c::add_packet(memory_c &mem,
   pack = new packet_t;
 
   length = mem.size;
-  if (compressor != NULL) {
+  if (NULL != compressor.get()) {
     pack->data = compressor->compress(mem.data, length);
     mem.release();
   } else
@@ -875,7 +873,7 @@ generic_packetizer_c::add_packet(memories_c &mems,
   pack->data_adds_lengths.resize(mems.size() - 1);
 
   length = mems[0]->size;
-  if (compressor != NULL) {
+  if (NULL != compressor.get()) {
     pack->data = compressor->compress(mems[0]->data, length);
     mems[0]->release();
     for (i = 1; i < mems.size(); i++) {
@@ -1085,11 +1083,8 @@ generic_packetizer_c::connect(generic_packetizer_c *src,
   htrack_type = src->htrack_type;
   htrack_default_duration = src->htrack_default_duration;
   huid  = src->huid;
-  if (compressor != NULL)
-    delete compressor;
   hcompression = src->hcompression;
-  compressor = src->compressor;
-  src->compressor = NULL;
+  compressor = counted_ptr<compression_c>(compression_c::create(hcompression));
   last_cue_timecode = src->last_cue_timecode;
   correction_timecode_offset = 0;
   if (_append_timecode_offset == -1)

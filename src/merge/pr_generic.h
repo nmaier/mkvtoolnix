@@ -32,6 +32,7 @@
 #include "compression.h"
 #include "error.h"
 #include "mm_io.h"
+#include "smart_pointers.h"
 #include "timecode_factory.h"
 
 using namespace libmatroska;
@@ -432,7 +433,7 @@ protected:
   int hvideo_display_width, hvideo_display_height;
 
   compression_method_e hcompression;
-  compression_c *compressor;
+  counted_ptr<compression_c> compressor;
 
   timecode_factory_c *timecode_factory;
 
