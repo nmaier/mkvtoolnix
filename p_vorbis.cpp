@@ -69,6 +69,8 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
                     "stream's parameters from the first packets.\n");
 
   set_track_type(track_audio);
+  set_track_default_duration_ns((int64_t)(1024000000000.0 * ti->async.linear /
+                                          vi.rate));
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
@@ -190,7 +192,8 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     return EMOREDATA;
   }
 
-  add_packet(data, size, (int64_t)timecode, samples_here * 1000 / vi.rate);
+  add_packet(data, size, (int64_t)timecode, (int64_t)(samples_here * 1000 *
+             ti->async.linear / vi.rate));
 
   debug_leave("vorbis_packetizer_c::process");
 

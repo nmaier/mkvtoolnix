@@ -217,6 +217,10 @@ void generic_packetizer_c::set_track_default_duration_ns(int64_t def_dur) {
   htrack_default_duration = def_dur;
 }
 
+int64_t generic_packetizer_c::get_track_default_duration_ns() {
+  return htrack_default_duration;
+}
+
 void generic_packetizer_c::set_audio_sampling_freq(float freq) {
   haudio_sampling_freq = freq;
 }

@@ -170,6 +170,7 @@ public:
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);
   virtual void set_track_default_duration_ns(int64_t default_duration);
+  virtual int64_t get_track_default_duration_ns();
 
   virtual void set_audio_sampling_freq(float freq);
   virtual void set_audio_channels(int channels);

@@ -47,6 +47,8 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
   remaining_sync = 0;
 
   set_track_type(track_audio);
+  set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear /
+                                          pcm_interleave));
 }
 
 pcm_packetizer_c::~pcm_packetizer_c() {

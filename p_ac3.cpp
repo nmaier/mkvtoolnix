@@ -42,6 +42,8 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   channels = nchannels;
 
   set_track_type(track_audio);
+  set_track_default_duration_ns((int64_t)(1536000000000.0 *ti->async.linear /
+                                          samples_per_sec));
   duplicate_data_on_add(false);
 }
 

@@ -42,6 +42,8 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   packetno = 0;
 
   set_track_type(track_audio);
+  set_track_default_duration_ns((int64_t)(1152000000000.0 * ti->async.linear /
+                                          samples_per_sec));
   duplicate_data_on_add(false);
 }
 

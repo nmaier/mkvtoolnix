@@ -21,6 +21,8 @@
 #ifndef __CLUSTER_HELPER_C
 #define __CLUSTER_HELPER_C
 
+#include <vector>
+
 #include "os.h"
 
 #include "KaxBlock.h"
@@ -28,6 +30,8 @@
 
 #include "mm_io.h"
 #include "pr_generic.h"
+
+using namespace std;
 
 typedef struct {
   KaxCluster *cluster;
@@ -44,10 +48,10 @@ class cluster_helper_c {
 private:
   ch_contents_t **clusters;
   int num_clusters, cluster_content_size, next_splitpoint;
-  KaxBlockGroup *last_block_group;
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets, first_timecode;
   mm_io_c *out;
+  vector<int64_t> durations;
 public:
   static vector<splitpoint_t *> splitpoints;
 
