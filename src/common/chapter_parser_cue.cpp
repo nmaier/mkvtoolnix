@@ -56,8 +56,7 @@ probe_cue_chapters(mm_text_io_c *in) {
     return false;
   if (starts_with_case(s, "performer ") || starts_with_case(s, "title ") ||
       starts_with_case(s, "file ") || starts_with_case(s, "catalog ") ||
-      starts_with_case(s, "rem date") || starts_with_case(s, "rem genre") ||
-      starts_with_case(s, "rem discid") || starts_with_case(s, "rem comment"))
+      starts_with_case(s, "rem "))
     return true;
   return false;
 }
@@ -132,9 +131,10 @@ typedef struct {
   string genre;
   string global_disc_id;
   string isrc;
-  string global_rem;
-  string global_comment;
-  string comment;
+  string flags;
+  vector<string> global_rem;
+  vector<string> global_comment;
+  vector<string> comment;
   const char *language;
   int line_num;
   int cc_utf8;
@@ -185,6 +185,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   KaxTag *tag;
   KaxTagTargets *targets;
   string s;
+  int i;
 
   if (tags == NULL)
     return;
@@ -203,8 +204,11 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   create_tag2(a.date, a.global_date, "DATE");
   create_tag2(a.genre, a.global_genre, "GENRE");
   create_tag1(a.isrc, "ISRC");
-  create_tag1(a.global_comment, "COMMENTS");
-  create_tag1(a.comment, "COMMENTS");
+  create_tag1(a.flags, "CUE_FLAGS");
+  for (i = 0; i < a.global_comment.size(); i++)
+    create_tag1(a.global_comment[i], "COMMENTS");
+  for (i = 0; i < a.comment.size(); i++)
+    create_tag1(a.comment[i], "COMMENTS");
 
   (*tags)->PushElement(*tag);
 }
@@ -214,6 +218,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
                                 KaxTags **tags) {
   KaxTag *tag;
   string s;
+  int i;
 
   if (tags == NULL)
     return;
@@ -224,12 +229,12 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   tag = new KaxTag;
 
   create_tag1(a.global_performer, "ARTIST");
-  create_tag1(a.global_title, "ALBUM");
+  create_tag1(a.global_title, "TITLE");
   create_tag1(a.global_date, "DATE");
   create_tag1(a.global_disc_id, "DISCID");
   create_tag1(a.global_catalog, "CATALOG");
-  create_tag1(a.global_comment, "COMMENTS");
-  create_tag1(a.global_rem, "COMMENTS");
+  for (i = 0; i < a.global_rem.size(); i++)
+    create_tag1(a.global_rem[i], "COMMENTS");
 
   (*tags)->PushElement(*tag);
 }
@@ -340,6 +345,25 @@ get_quoted(string src,
   return src;
 }
 
+static string
+erase_colon(string &s,
+            int skip) {
+  int i;
+
+  i = skip + 1;
+  while ((i < s.length()) && (s[i] == ' '))
+    i++;
+  while ((i < s.length()) && (isalpha(s[i])))
+    i++;
+  if (i == s.length())
+    return s;
+  if (s[i] == ':')
+    s.erase(i, 1);
+  else if (s.substr(i, 2) == " :")
+    s.erase(i, 2);
+  return s;
+}
+
 KaxChapters *
 parse_cue_chapters(mm_text_io_c *in,
                    int64_t min_tc,
@@ -433,39 +457,48 @@ parse_cue_chapters(mm_text_io_c *in,
         a.performer = "";
         a.title = "";
         a.isrc = "";
-        a.comment = "";
+        a.comment.clear();
         a.date = "";
         a.genre = "";
-
-      } else if (starts_with_case(line, "rem date ")) {
-        if (a.num == 0)
-          a.global_date = get_quoted(line, 9);
-        else
-          a.date = get_quoted(line, 9);
-
-      } else if (starts_with_case(line, "rem genre ")) {
-        if (a.num == 0)
-          a.global_genre = get_quoted(line, 10);
-        else
-          a.genre = get_quoted(line, 10);
-
-      } else if (starts_with_case(line, "rem discid "))
-        a.global_disc_id = get_quoted(line, 11);
-
-      else if (starts_with_case(line, "rem comment ")) {
-        if (a.num == 0)
-          a.global_comment = get_quoted(line, 12);
-        else
-          a.comment = get_quoted(line, 12);
-
-      } else if (starts_with_case(line, "rem ")) {
-        if (a.num == 0)
-          a.global_rem = get_quoted(line, 4);
-        else
-          a.comment = get_quoted(line, 4);
+        a.flags = "";
 
       } else if (starts_with_case(line, "isrc "))
         a.isrc = get_quoted(line, 5);
+
+      else if (starts_with_case(line, "flags "))
+        a.flags = get_quoted(line, 6);
+
+      else if (starts_with_case(line, "rem ")) {
+        erase_colon(line, 4);
+        if (starts_with_case(line, "rem date ") ||
+            starts_with_case(line, "rem year ")) {
+          if (a.num == 0)
+            a.global_date = get_quoted(line, 9);
+          else
+            a.date = get_quoted(line, 9);
+
+        } else if (starts_with_case(line, "rem genre ")) {
+          if (a.num == 0)
+            a.global_genre = get_quoted(line, 10);
+          else
+            a.genre = get_quoted(line, 10);
+
+        } else if (starts_with_case(line, "rem discid "))
+          a.global_disc_id = get_quoted(line, 11);
+
+        else if (starts_with_case(line, "rem comment ")) {
+          if (a.num == 0)
+            a.global_comment.push_back(get_quoted(line, 12));
+          else
+            a.comment.push_back(get_quoted(line, 12));
+
+        } else {
+          if (a.num == 0)
+            a.global_rem.push_back(get_quoted(line, 4));
+          else
+            a.comment.push_back(get_quoted(line, 4));
+        }
+      }
     }
 
     if (a.num >= 1)

@@ -265,7 +265,7 @@ print_comments(const char *prefix,
     if (is_id(tag[i], KaxTagSimple) &&
         (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) ==
          "COMMENTS"))
-      out.printf("%sREM COMMENT \"%s\"\n", prefix,
+      out.printf("%sREM \"%s\"\n", prefix,
                  get_simple_tag_value(*static_cast<KaxTagSimple *>(tag[i])).
                  c_str());
 }
@@ -284,11 +284,12 @@ write_cuesheet(const char *file_name,
   if (chapters.ListSize() == 0)
     return;
 
-  print_if_global("DATE", "REM DATE %s\n");
-  print_if_global("DISCID", "REM DISCID %s\n");
-  print_if_global("ARTIST", "PERFORMER \"%s\"\n");
-  print_if_global("ALBUM", "TITLE \"%s\"\n");
   print_if_global("CATALOG", "CATALOG %s\n");
+  print_if_global("ARTIST", "PERFORMER \"%s\"\n");
+  print_if_global("TITLE", "TITLE \"%s\"\n");
+  print_if_global("DATE", "REM DATE \"%s\"\n");
+  print_if_global("DISCID", "REM DISCID %s\n");
+    
   tag = find_tag_for_track(-1, tuid, 0, tags);
   if (tag != NULL)
     print_comments("", *tag, out);
@@ -304,6 +305,7 @@ write_cuesheet(const char *file_name,
       print_if_available("TITLE", "    TITLE \"%s\"\n");
       print_if_available("ARTIST", "    PERFORMER \"%s\"\n");
       print_if_available("ISRC", "    ISRC %s\n");
+      print_if_available("CUE_FLAGS", "    FLAGS %s\n");
       index_00 = get_chapter_index(0, atom);
       index_01 = get_chapter_index(1, atom);
       if (index_01 == -1) {
@@ -322,8 +324,8 @@ write_cuesheet(const char *file_name,
                  (index_01 / 1000000 / 1000) % 60,
                  irnd((double)(index_01 % 1000000000ll) * 75.0 /
                       1000000000.0));
-      print_if_available("DATE", "    REM DATE %s\n");
-      print_if_available("GENRE", "    REM GENRE %s\n");
+      print_if_available("DATE", "    REM DATE \"%s\"\n");
+      print_if_available("GENRE", "    REM GENRE \"%s\"\n");
       print_comments("    ", *tag, out);
     } else {
       index_01 = get_chapter_start(atom);
