@@ -64,7 +64,7 @@ tab_global::tab_global(wxWindow *parent):
   cb_link->SetValue(false);
   cb_link->Enable(false);
   siz_line->Add(cb_link, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(1, 15, 0, 0, 0);
 
   st_split_max_files = new wxStaticText(this, wxID_STATIC,
                                   wxT("max. number of files:"));
