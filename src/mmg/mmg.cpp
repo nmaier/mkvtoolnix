@@ -1312,9 +1312,9 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
     last_job_id = 0;
   job.id = last_job_id;
   job.status = jobs_pending;
-  job.added_at = wxGetLocalTime();
-  job.started_at = -1;
-  job.finished_at = -1;
+  job.added_on = wxGetLocalTime();
+  job.started_on = -1;
+  job.finished_on = -1;
   job.description = new wxString(description);
   jobs.push_back(job);
 
@@ -1328,6 +1328,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_manage_jobs(wxCommandEvent &evt) {
+  job_dialog jdlg(this);
 }
 
 void
@@ -1362,12 +1363,12 @@ mmg_dialog::load_job_queue() {
       s == wxS("done") ? jobs_done :
       s == wxS("aborted") ? jobs_aborted :
       jobs_failed;
-    cfg->Read(wxS("added_at"), &value);
-    job.added_at = value;
-    cfg->Read(wxS("started_at"), &value);
-    job.started_at = value;
-    cfg->Read(wxS("finished_at"), &value);
-    job.finished_at = value;
+    cfg->Read(wxS("added_on"), &value);
+    job.added_on = value;
+    cfg->Read(wxS("started_on"), &value);
+    job.started_on = value;
+    cfg->Read(wxS("finished_on"), &value);
+    job.finished_on = value;
     cfg->Read(wxS("description"), &s);
     job.description = new wxString(s);
     jobs.push_back(job);
@@ -1402,9 +1403,9 @@ mmg_dialog::save_job_queue() {
                jobs[i].status == jobs_done ? wxS("done") :
                jobs[i].status == jobs_aborted ? wxS("aborted") :
                wxS("failed"));
-    cfg->Write(wxS("added_at"), jobs[i].added_at);
-    cfg->Write(wxS("started_at"), jobs[i].started_at);
-    cfg->Write(wxS("finished_at"), jobs[i].finished_at);
+    cfg->Write(wxS("added_on"), jobs[i].added_on);
+    cfg->Write(wxS("started_on"), jobs[i].started_on);
+    cfg->Write(wxS("finished_on"), jobs[i].finished_on);
     cfg->Write(wxS("description"), *jobs[i].description);
   }
   cfg->Flush();
