@@ -31,7 +31,7 @@ private:
   double fps;
   int width, height, bpp, frames_output;
   int64_t ref_timecode, duration_shift;
-  bool avi_compat_mode, bframes, pass_through, is_mpeg4;
+  bool avi_compat_mode, bframes, pass_through, is_mpeg4, is_mpeg1_2;
   bool aspect_ratio_extracted;
   vector<video_frame_t> queued_frames;
   video_frame_t bref_frame, fref_frame;
@@ -58,7 +58,9 @@ public:
 
 protected:
   virtual void flush_frames(char next_frame = '?', bool flush_all = false);
-  virtual void extract_mpeg4_aspect_ratio(memory_c &mem);
+  virtual void extract_mpeg4_aspect_ratio(const unsigned char *buffer,
+                                          int size);
+  virtual void extract_mpeg1_2_fps(const unsigned char *buffer, int size);
 };
 
 #endif // __P_VIDEO_H

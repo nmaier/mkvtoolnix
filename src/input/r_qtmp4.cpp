@@ -1166,7 +1166,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         codec_id = mxsprintf("V_MPEG%c", dmx->fourcc[3]);
         dmx->ptzr =
           add_packetizer(new video_packetizer_c(this, codec_id.c_str(),
-                                                0.0, dmx->v_width,
+                                                -1.0, dmx->v_width,
                                                 dmx->v_height, false, ti));
 
       } else {

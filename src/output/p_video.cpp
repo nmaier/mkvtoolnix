@@ -69,6 +69,8 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
              !strncmp(ncodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
     is_mpeg4 = true;
 
+  is_mpeg1_2 = !strcmp(ncodec_id, "V_MPEG1") || !strcmp(ncodec_id, "V_MPEG2");
+
   if (ncodec_id != NULL)
     set_codec_id(ncodec_id);
   else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_MPEG4)) {
@@ -98,7 +100,7 @@ video_packetizer_c::set_headers() {
     set_track_min_cache(2);
   else
     set_track_min_cache(1);
-  if (fps != 0.0)
+  if (fps > 0.0)
     set_track_default_duration((int64_t)(1000000000.0 / fps));
 
   set_video_pixel_width(width);
@@ -129,8 +131,12 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_enter("video_packetizer_c::process");
 
+  if (is_mpeg1_2 && (fps < 0.0))
+    extract_mpeg1_2_fps(mem.data, mem.size);
+
   if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4)
     mpeg4_find_frame_types(mem.data, mem.size, frames);
+
   if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4 && (fps != 0.0)) {
     for (i = 0; i < frames.size(); i++) {
       if ((frames[i].type == 'I') ||
@@ -192,7 +198,7 @@ video_packetizer_c::process(memory_c &mem,
   }
 
   if (is_mpeg4 && !aspect_ratio_extracted)
-    extract_mpeg4_aspect_ratio(mem);
+    extract_mpeg4_aspect_ratio(mem.data, mem.size);
 
   if (old_timecode == -1)
     timecode = (int64_t)(1000000000.0 * frames_output / fps) + duration_shift;
@@ -239,14 +245,15 @@ video_packetizer_c::flush() {
 }
 
 void
-video_packetizer_c::extract_mpeg4_aspect_ratio(memory_c &mem) {
+video_packetizer_c::extract_mpeg4_aspect_ratio(const unsigned char *buffer,
+                                               int size) {
   uint32_t num, den;
 
   aspect_ratio_extracted = true;
   if (ti->aspect_ratio_given || ti->display_dimensions_given)
     return;
 
-  if (mpeg4_extract_par(mem.data, mem.size, num, den)) {
+  if (mpeg4_extract_par(buffer, size, num, den)) {
     ti->aspect_ratio_given = true;
     ti->aspect_ratio = (float)hvideo_pixel_width /
       (float)hvideo_pixel_height * (float)num / (float)den;
@@ -256,6 +263,22 @@ video_packetizer_c::extract_mpeg4_aspect_ratio(memory_c &mem) {
            "from the MPEG4 data and set the display dimensions to "
            "%u/%u.\n", (int64_t)ti->id, ti->fname,
            (uint32_t)ti->display_width, (uint32_t)ti->display_height);
+  }
+}
+
+void
+video_packetizer_c::extract_mpeg1_2_fps(const unsigned char *buffer,
+                                        int size) {
+  int idx;
+
+  idx = mpeg1_2_extract_fps_idx(buffer, size);
+  if (idx >= 0) {
+    fps = mpeg1_2_get_fps(idx);
+    if (fps > 0) {
+      set_track_default_duration((int64_t)(1000000000.0 / fps));
+      rerender_track_headers();
+    } else
+      fps = 0.0;
   }
 }
 
