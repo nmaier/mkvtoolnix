@@ -1619,6 +1619,7 @@ static void init_globals() {
   default_tracks[0] = 0;
   default_tracks[1] = 0;
   default_tracks[2] = 0;
+  clear_list_of_unique_uint32();
 }
 
 static void destroy_readers() {
