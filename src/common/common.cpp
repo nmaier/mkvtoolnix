@@ -531,11 +531,7 @@ static char *convert_charset(iconv_t ict, const char *src) {
   srccopy = safestrdup(src);
   psrc = srccopy;
   pdst = dst;
-#if defined(COMP_CYGWIN) || defined(COMP_MINGW)
-  iconv(ict, (const char **)&psrc, &lsrc, &pdst, &ldst);
-#else
-  iconv(ict, &psrc, &lsrc, &pdst, &ldst);
-#endif
+  iconv(ict, (ICONV_CONST char **)&psrc, &lsrc, &pdst, &ldst);
   safefree(srccopy);
 
   return dst;

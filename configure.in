@@ -215,8 +215,8 @@ size_t iconv();
     am_cv_proto_iconv=`echo "[$]am_cv_proto_iconv" | tr -s ' ' | sed -e 's/( /(/'`
     AC_MSG_RESULT([$]{ac_t:-
          }[$]am_cv_proto_iconv)
-dnl    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
-dnl      [Define as const if the declaration of iconv() needs const.])
+    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
+      [Define as const if the declaration of iconv() needs const.])
   else
     echo '*** The iconv library is needed but could not be found.'
     echo '*** Please install it and re-run configure.'
