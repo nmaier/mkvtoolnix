@@ -551,15 +551,8 @@ create_track_order() {
 }
 
 void
-wxdie(const wxString &errmsg,
-      ...) {
-  wxString buffer;
-  va_list ap;
-
-  va_start(ap, errmsg);
-  buffer.PrintfV(errmsg, ap);
-  va_end(ap);
-  wxMessageBox(buffer, wxT("A serious error occured"), wxOK | wxICON_ERROR);
+wxdie(const wxString &errmsg) {
+  wxMessageBox(errmsg, wxT("A serious error occured"), wxOK | wxICON_ERROR);
   exit(1);
 }
 
@@ -1590,6 +1583,11 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   save(wxGetCwd() + description);
 
   save_job_queue();
+
+  if (settings_page->cb_filenew_after_add_to_jobqueue->IsChecked()) {
+    wxCommandEvent dummy;
+    on_file_new(dummy);
+  }
 
   set_status_bar(wxT("Job added to job queue"));
 }

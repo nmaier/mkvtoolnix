@@ -112,7 +112,7 @@ void set_on_top(bool on_top);
 void restore_on_top();
 wxString create_track_order();
 
-void wxdie(const wxString &errmsg, ...);
+void wxdie(const wxString &errmsg);
 
 #if defined(SYS_WINDOWS)
 #define TIP(s) format_tooltip(wxT(s))

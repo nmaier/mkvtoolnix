@@ -100,6 +100,13 @@ tab_settings::tab_settings(wxWindow *parent):
                                             "whose description matches the "
                                             "new one."));
   siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
+
+  siz_misc->Add(0, 5, 0, 0, 0);
+  cb_filenew_after_add_to_jobqueue =
+    new wxCheckBox(this, ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE,
+                   wxT("Clear inputs after adding a job to the job queue"));
+  siz_misc->Add(cb_filenew_after_add_to_jobqueue,0, wxLEFT, 5);
+
   cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, wxT("Always on top"));
 #if defined(SYS_WINDOWS)
   siz_misc->Add(0, 5, 0, 0, 0);
@@ -197,6 +204,9 @@ tab_settings::load_preferences() {
   if (!cfg->Read(wxT("ask_before_overwriting"), &b))
     b = true;
   cb_ask_before_overwriting->SetValue(b);
+  if (!cfg->Read(wxT("filenew_after_add_to_jobqueue"), &b))
+    b = false;
+  cb_filenew_after_add_to_jobqueue->SetValue(b);
   if (!cfg->Read(wxT("on_top"), &b))
     b = false;
   cb_on_top->SetValue(b);
@@ -213,6 +223,8 @@ tab_settings::save_preferences() {
              cb_autoset_output_filename->IsChecked());
   cfg->Write(wxT("ask_before_overwriting"),
              cb_ask_before_overwriting->IsChecked());
+  cfg->Write(wxT("filenew_after_add_to_jobqueue"),
+             cb_filenew_after_add_to_jobqueue->IsChecked());
   cfg->Write(wxT("on_top"), cb_on_top->IsChecked());
   cfg->Flush();
 }
@@ -291,5 +303,6 @@ BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
   EVT_COMBOBOX(ID_COB_PRIORITY, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, tab_settings::on_xyz_selected)
+  EVT_CHECKBOX(ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_ON_TOP, tab_settings::on_on_top_selected)
 END_EVENT_TABLE();

@@ -28,6 +28,7 @@
 #define ID_CB_AUTOSET_OUTPUT_FILENAME      15003
 #define ID_CB_ASK_BEFORE_OVERWRITING       15004
 #define ID_CB_ON_TOP                       15005
+#define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE    15006
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
@@ -36,6 +37,7 @@ public:
   wxTextCtrl *tc_mkvmerge;
   wxCheckBox *cb_show_commandline, *cb_autoset_output_filename;
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
+  wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxComboBox *cob_priority;
 
 public:
