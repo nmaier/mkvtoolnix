@@ -23,16 +23,17 @@
 
 #include "os.h"
 
+#include "byte_buffer.h"
 #include "common.h"
 #include "pr_generic.h"
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:
-  int packetno, bps, channels, bits_per_sample, tempbuf_size;
-  int64_t bytes_output, remaining_sync;
+  int packetno, bps, channels, bits_per_sample, packet_size;
+  int64_t bytes_output, skip_bytes;
   unsigned long samples_per_sec;
-  unsigned char *tempbuf;
   bool big_endian;
+  byte_buffer_c buffer;
 
 public:
   pcm_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
@@ -45,10 +46,9 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
+  virtual void flush();
 
   virtual void dump_debug_info();
 };
-
-const int pcm_interleave = 16;
 
 #endif // __P_PCM_H

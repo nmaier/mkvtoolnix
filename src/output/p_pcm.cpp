@@ -33,33 +33,41 @@ using namespace libmatroska;
 
 pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, int nbits_per_sample,
-                                   track_info_c *nti, bool nbig_endian)
+                                   int nchannels,
+                                   int nbits_per_sample,
+                                   track_info_c *nti,
+                                   bool nbig_endian)
   throw (error_c):
   generic_packetizer_c(nreader, nti) {
+  int i;
+
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
-  tempbuf = (unsigned char *)safemalloc(bps + 128);
-  tempbuf_size = bps;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
-  remaining_sync = 0;
+  skip_bytes = 0;
   big_endian = nbig_endian;
+  for (i = 32; i > 2; i >>= 2)
+    if ((samples_per_sec % i) == 0)
+      break;
+  if ((i == 2) && ((packet_size % 5) == 0))
+    i = 5;
+  packet_size = samples_per_sec / i;
 
   set_track_type(track_audio);
-  if (use_durations)
-    set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear /
-                                            pcm_interleave));
+  set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear *
+                                          packet_size / samples_per_sec));
+
+  packet_size *= channels * bits_per_sample / 8;
 }
 
 pcm_packetizer_c::~pcm_packetizer_c() {
-  if (tempbuf != NULL)
-    safefree(tempbuf);
 }
 
-void pcm_packetizer_c::set_headers() {
+void
+pcm_packetizer_c::set_headers() {
   if (big_endian)
     set_codec_id(MKV_A_PCM_BE);
   else
@@ -71,19 +79,16 @@ void pcm_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int pcm_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t, int64_t, int64_t, int64_t) {
-  int i, bytes_per_packet, remaining_bytes, complete_packets;
+int
+pcm_packetizer_c::process(unsigned char *buf,
+                          int size,
+                          int64_t,
+                          int64_t,
+                          int64_t,
+                          int64_t) {
   unsigned char *new_buf;
 
   debug_enter("pcm_packetizer_c::process");
-
-  if (size > tempbuf_size) {
-    tempbuf = (unsigned char *)saferealloc(tempbuf, size + 128);
-    tempbuf_size = size;
-  }
-
-  new_buf = buf;
 
   if (initial_displacement != 0) {
     if (initial_displacement > 0) {
@@ -93,52 +98,52 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
       pad_size = bps * initial_displacement / 1000;
       new_buf = (unsigned char *)safemalloc(size + pad_size);
       memset(new_buf, 0, pad_size);
-      memcpy(&new_buf[pad_size], buf, size);
-      size += pad_size;
+      buffer.add(new_buf, pad_size);
+      safefree(new_buf);
     } else
       // Skip bytes.
-      remaining_sync = -1 * bps * initial_displacement / 1000;
+      skip_bytes = -1 * bps * initial_displacement / 1000;
     initial_displacement = 0;
   }
 
-  if (remaining_sync > 0) {
-    if (remaining_sync > size) {
-      remaining_sync -= size;
-      debug_leave("pcm_packetizer_c::process");
+  if (skip_bytes) {
+    if (skip_bytes > size) {
+      skip_bytes -= size;
       return EMOREDATA;
     }
-    memmove(buf, &buf[remaining_sync], size - remaining_sync);
-    size -= remaining_sync;
-    remaining_sync = 0;
-  }
+    size -= skip_bytes;
+    new_buf = &buf[skip_bytes];
+    skip_bytes = 0;
+  } else
+    new_buf = buf;
+  buffer.add(new_buf, size);
 
-  bytes_per_packet = bps / pcm_interleave;
-  complete_packets = size / bytes_per_packet;
-  remaining_bytes = size % bytes_per_packet;
-
-  for (i = 0; i < complete_packets; i++) {
-    add_packet(new_buf + i * bytes_per_packet, bytes_per_packet,
-               (int64_t)((bytes_output * 1000 / bps) * ti->async.linear),
-               (int64_t)(bytes_per_packet * 1000.0 * ti->async.linear / bps));
-    bytes_output += bytes_per_packet;
-    packetno++;
+  while (buffer.get_size() >= packet_size) {
+    add_packet(buffer.get_buffer(), packet_size, bytes_output * 1000 / bps,
+               packet_size * 1000 / bps);
+    buffer.remove(packet_size);
+    bytes_output += packet_size;
   }
-  if (remaining_bytes != 0) {
-    add_packet(new_buf + complete_packets * bytes_per_packet, remaining_bytes,
-               (int64_t)((bytes_output * 1000 / bps) * ti->async.linear),
-               (int64_t)(remaining_bytes * 1000.0 * ti->async.linear / bps));
-    bytes_output += remaining_bytes;
-    packetno++;
-  }
-
-  if (new_buf != buf)
-    safefree(new_buf);
 
   debug_leave("pcm_packetizer_c::process");
 
   return EMOREDATA;
 }
 
-void pcm_packetizer_c::dump_debug_info() {
+void
+pcm_packetizer_c::flush() {
+  uint32_t size;
+
+  size = buffer.get_size();
+  if (size > 0) {
+    add_packet(buffer.get_buffer(), size, bytes_output * 1000 /
+               bps, size * 1000 / bps);
+    bytes_output += size;
+    buffer.remove(size);
+  }
+}
+
+void
+pcm_packetizer_c::dump_debug_info() {
   mxdebug("pcm_packetizer_c: queue: %d\n", packet_queue.size());
 }
