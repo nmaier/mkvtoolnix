@@ -194,13 +194,13 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   *static_cast<EbmlUInteger *>(&GetChild<KaxTagChapterUID>(*targets)) = cuid;
 
   create_tag1(a.title, "TITLE");
-  tag->PushElement(*create_simple_tag(a, "SET_PART",
+  tag->PushElement(*create_simple_tag(a, "PART_NUMBER",
                                       mxsprintf("%d", a.num)));
   create_tag2(a.performer, a.global_performer, "ARTIST");
   create_tag2(a.date, a.global_date, "DATE");
   create_tag2(a.genre, a.global_genre, "GENRE");
   create_tag1(a.isrc, "ISRC");
-  create_tag1(a.flags, "CD_TRACK_FLAGS");
+  create_tag1(a.flags, "CDAUDIO_TRACK_FLAGS");
   for (i = 0; i < a.global_comment.size(); i++)
     create_tag1(a.global_comment[i], "COMMENT");
   for (i = 0; i < a.comment.size(); i++)
@@ -229,6 +229,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   *static_cast<EbmlUInteger *>(&GetChild<KaxTagEditionUID>(*targets)) =
     a.edition_uid;
 
+  create_tag1("MEDIA", "LEVEL_TYPE");
   create_tag1(a.global_performer, "ARTIST");
   create_tag1(a.global_title, "TITLE");
   create_tag1(a.global_date, "DATE");
