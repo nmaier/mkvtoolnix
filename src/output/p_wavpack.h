@@ -27,7 +27,6 @@ private:
   int channels, sample_rate, bits_per_sample;
   int64_t samples_per_block;
   int64_t samples_output;
-  uint16_t version;
   bool has_correction;
 
 public:
