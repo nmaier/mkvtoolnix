@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.12 2003/04/28 07:20:46 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.13 2003/04/28 07:27:27 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -483,9 +483,9 @@ int mkv_reader_c::read_headers() {
             KaxDuration duration = *static_cast<KaxDuration *>(l2);
             duration.ReadData(es->I_O());
 
-            segment_duration = float(duration);
+            segment_duration = float(duration) * tc_scale / 1000000000.0;
             fprintf(stdout, "matroska_reader: | + duration: %.3fs\n",
-                    segment_duration * tc_scale / 1000000000.0);
+                    segment_duration);
 
           } else
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
@@ -1109,8 +1109,8 @@ void mkv_reader_c::display_progress() {
 
   if (segment_duration != 0.0) {
     fprintf(stdout, "progress: %.3fs/%.3fs (%d%%)\r",
-            last_timecode / 1000000.0, segment_duration / 1000.0,
-            (int)(last_timecode / 10000.0 / segment_duration));
+            last_timecode / 1000.0, segment_duration,
+            (int)(last_timecode / 10 / segment_duration));
     fflush(stdout);
     return;
   }
