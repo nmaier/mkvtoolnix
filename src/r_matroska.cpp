@@ -405,19 +405,11 @@ void kax_reader_c::verify_tracks() {
           }
         }
 
-        if (t->a_sfreq == 0.0) {
-          if (verbose)
-            mxwarn("matroska_reader: The sampling frequency was not "
-                   "set for track %u.\n", t->tnum);
-          continue;
-        }
+        if (t->a_sfreq == 0.0)
+          t->a_sfreq = 8000.0;
 
-        if (t->a_channels == 0) {
-          if (verbose)
-            mxwarn("matroska_reader: The number of channels was not "
-                   "set for track %u.\n", t->tnum);
-          continue;
-        }
+        if (t->a_channels == 0)
+          t->a_channels = 1;
 
         if (t->a_formattag == 0) {
           if (verbose)
