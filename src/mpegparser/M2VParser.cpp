@@ -22,24 +22,26 @@
 
 #include "M2VParser.h"
 
+#include "common.h"
+
 #define BUFF_SIZE 2*1024*1024
 
 MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
   if(bCopy){
-    this->data  = new binary[size];
+    this->data  = (binary *)safemalloc(size);
     memcpy(this->data, data, size);
   }else{
     this->data = data;
   }
   this->bCopy = bCopy;
-  this->size = size;    
+  this->size = size;
   firstRef = -1;
   secondRef = -1;
 }
 
 MPEGFrame::~MPEGFrame(){
   if (bCopy)
-    delete [] data;
+    safefree(data);
 }
 
 void M2VParser::SetEOS(){
@@ -220,7 +222,7 @@ int32_t M2VParser::QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime tim
   if(seqHdr){
     bCopy = false;
     dataLen += seqHdr->GetSize();
-    pData = new binary[dataLen];
+    pData = (binary *)safemalloc(dataLen);
     memcpy(pData, seqHdr->GetPointer(), seqHdr->GetSize());
     memcpy(pData+seqHdr->GetSize(),chunk->GetPointer(), chunk->GetSize());
     delete seqHdr;

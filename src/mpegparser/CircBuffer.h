@@ -94,7 +94,7 @@ public:
       return read_ptr[0];
     }
     uint32_t bbw = bytes_before_wrap_read();
-    if((i+1) < bbw)
+    if(i < bbw)
       return read_ptr[i];
     else
       return m_buf[i - bbw];

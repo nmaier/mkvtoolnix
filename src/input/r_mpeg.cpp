@@ -204,8 +204,10 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
         parser.GetFreeBufferSpace() : READ_SIZE;
       buffer = new unsigned char[bytes_to_read];
       bytes_read = in.read(buffer, bytes_to_read);
-      if (bytes_read == 0)
+      if (bytes_read == 0) {
+        delete [] buffer;
         break;
+      }
       bytes_probed += bytes_read;
 
       parser.WriteData(buffer, bytes_read);
