@@ -105,6 +105,8 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line);
 
 vector<string> split(const char *src, const char *pattern = ",",
                      int max_num = -1);
+void strip(string &s);
+void strip(vector<string> &v);
 
 UTFstring cstr_to_UTFstring(const char *c);
 char *UTFstring_to_cstr(const UTFstring &u);

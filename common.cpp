@@ -608,6 +608,36 @@ vector<string> split(const char *src, const char *pattern, int max_num) {
   return v;
 }
 
+void strip(string &s) {
+  int i, len;
+  const char *c;
+
+  c = s.c_str();
+  i = 0;
+  while ((c[i] != 0) && isspace(c[i]))
+    i++;
+
+  if (i > 0)
+    s.erase(0, i);
+
+  c = s.c_str();
+  len = s.length();
+  i = 0;
+
+  while ((i < len) && isspace(c[len - i - 1]))
+    i++;
+
+  if (i > 0)
+    s.erase(len - i, i);
+}
+
+void strip(vector<string> &v) {
+  int i;
+
+  for (i = 0; i < v.size(); i++)
+    strip(v[i]);
+}
+
 /*
  * Integer parsing
  */
