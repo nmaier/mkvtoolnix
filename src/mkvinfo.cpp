@@ -75,12 +75,13 @@ extern "C" {
 #define MATROSKA_VERSION 2
 #endif
 
+#include "mkvinfo.h"
+#include "mkvinfo_tag_types.h"
+
 #include "checksums.h"
 #include "common.h"
 #include "commonebml.h"
 #include "matroska.h"
-#include "mkvinfo.h"
-#include "mkvinfo_tag_types.h"
 #include "mm_io.h"
 
 using namespace libmatroska;
