@@ -24,7 +24,7 @@
 #include "common.h"
 #include "iso639.h"
 
-iso639_language_t iso639_languages[] =
+const iso639_language_t iso639_languages[] =
   {{"Abkhazian", "abk", "ab"},
    {"Achinese", "ace", NULL},
    {"Acoli", "ach", NULL},
@@ -535,7 +535,7 @@ iso639_language_t iso639_languages[] =
    {"Zuni", "zun", NULL},
    {NULL, NULL, NULL}};
 
-char *get_iso639_english_name(const char *iso639_2_code) {
+const char *get_iso639_english_name(const char *iso639_2_code) {
   int i;
 
   i = 0;
@@ -578,4 +578,25 @@ void list_iso639_languages() {
            iso639_languages[i].iso639_1_code : "");
     i++;
   }
+}
+
+const char *map_iso639_1_to_iso639_2(const char *iso639_1_code) {
+  uint32_t i;
+
+  for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
+    if ((iso639_languages[i].iso639_1_code != NULL) &&
+        !strcmp(iso639_1_code, iso639_languages[i].iso639_1_code))
+      return iso639_languages[i].iso639_2_code;
+
+  return NULL;
+}
+
+const char *map_iso639_2_to_iso639_1(const char *iso639_2_code) {
+  uint32_t i;
+
+  for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
+    if (!strcmp(iso639_2_code, iso639_languages[i].iso639_2_code))
+      return iso639_languages[i].iso639_1_code;
+
+  return NULL;
 }

@@ -25,6 +25,7 @@
 #include <errno.h>
 
 #include "common.h"
+#include "iso639.h"
 #include "mm_io.h"
 #include "p_vobsub.h"
 #include "r_vobsub.h"
@@ -148,13 +149,19 @@ vobsub_reader_c::~vobsub_reader_c() {
 void vobsub_reader_c::create_packetizers() {
   uint32_t i, k;
   int64_t avg_duration;
+  char language[4];
+  const char *c;
 
   for (i = 0; i < tracks.size(); i++) {
     if (!demuxing_requested('s', i))
       continue;
 
     ti->id = i;
-//     ti.language = tracks[i]->language;
+    if ((c = map_iso639_1_to_iso639_2(tracks[i]->language)) != NULL) {
+      strcpy(language, c);
+      ti->language = language;
+    } else
+      ti->language = NULL;
     tracks[i]->packetizer =
       new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(),
                               COMPRESSION_ZLIB, COMPRESSION_NONE, ti);
@@ -215,7 +222,8 @@ void vobsub_reader_c::parse_headers() {
       continue;
     }
 
-    if (!strncasecmp(sline, "alt:", 4))
+    if (!strncasecmp(sline, "alt:", 4) ||
+        !strncasecmp(sline, "langidx:", 8))
       continue;
 
     if ((version == 7) && isvobsubline_v7(sline)) {
