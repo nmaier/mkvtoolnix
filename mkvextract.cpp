@@ -32,6 +32,9 @@
 #endif
 
 #include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
@@ -73,6 +76,18 @@ using namespace std;
 
 #define NAME "mkvextract"
 
+class ssa_line_c {
+public:
+  char *line;
+  int num;
+
+  bool operator < (const ssa_line_c &cmp) const;
+};
+
+bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
+  return num < cmp.num;
+}
+
 typedef struct {
   char *out_name;
 
@@ -98,6 +113,7 @@ typedef struct {
 
   int srt_num;
   int conv_handle;
+  vector<ssa_line_c> ssa_lines;
 
   wave_header wh;
   int64_t bytes_written;
@@ -463,6 +479,8 @@ void create_output_files() {
         if (tracks[i].type == TYPEOGM) {
           ogg_stream_init(&tracks[i].osstate, rand());
 
+          // Handle the three header packets: Headers, comments, codec
+          // setup data.
           op.b_o_s = 1;
           op.e_o_s = 0;
           op.packetno = 0;
@@ -486,6 +504,7 @@ void create_output_files() {
         } else if (tracks[i].type == TYPEWAV) {
           wave_header *wh = &tracks[i].wh;
 
+          // Write the WAV header.
           memcpy(&wh->riff.id, "RIFF", 4);
           memcpy(&wh->riff.wave_id, "WAVE", 4);
           memcpy(&wh->format.id, "fmt ", 4);
@@ -512,6 +531,10 @@ void create_output_files() {
           memcpy(s, tracks[i].private_data, tracks[i].private_size);
           s[tracks[i].private_size] = 0;
           tracks[i].mm_io->puts_unl(s);
+          tracks[i].mm_io->puts_unl("\n[Events]\nFormat: Marked, Start, End, "
+                                    "Style, Name, MarginL, MarginR, MarginV, "
+                                    "Effect, Text\n");
+
           safefree(s);
         }
       }
@@ -521,9 +544,12 @@ void create_output_files() {
 
 void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
   mkv_track_t *track;
-  int i, len;
+  int i, len, num;
   int64_t start, end;
   char *s, buffer[200], *s2;
+  vector<string> fields;
+  string line, comma = ",";
+  ssa_line_c ssa_line;
 
   track = find_track(block->TrackNum());
   if ((track == NULL) || !track->in_use){
@@ -602,45 +628,65 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         break;
 
       case TYPESSA:
-        // Do the charset conversion.
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;
-        s2 = from_utf8(tracks[i].conv_handle, s);
+        
+        // Split the line into the fields.
+        // Specs say that the following fields are to put into the block:
+        // 0: ReadOrder, 1: Layer, 2: Style, 3: Name, 4: MarginL, 5: MarginR,
+        // 6: MarginV, 7: Effect, 8: Text
+        fields = split(s, ",", 9);
         safefree(s);
-        len = strlen(s2);
-        s = (char *)safemalloc(len + 2);
-        strcpy(s, s2);
-        safefree(s2);
-        s[len] = '\n';
-        s[len + 1] = 0;
-
-        s2 = strchr(s, ',');
-        if (s2 == NULL) {
+        if (fields.size() != 9) {
           fprintf(stdout, "Warning: Invalid format for a SSA line ('%s'). "
                   "Ignoring this entry.\n", s);
-          safefree(s);
           continue;
         }
 
-        // Print "Dialogue: "
-        tracks[i].mm_io->puts_unl("Dialogue: ");
-        *s2 = 0;
-        s2++;
-        tracks[i].mm_io->puts_unl(s);
-        tracks[i].mm_io->puts_unl(",");
+        // Convert the ReadOrder entry so that we can re-order the entries
+        // later.
+        if (!parse_int(fields[0].c_str(), num)) {
+          fprintf(stdout, "Warning: Invalid format for a SSA line ('%s'). "
+                  "Ignoring this entry.\n", s);
+          continue;
+        }
+
+        // Reconstruct the 'original' line. It'll look like this for SSA:
+        // Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect,
+        // Text
+
+        line = string("Dialogue: Marked=0,");
+
+        // Append the start and end time.
         sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
                 start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
                 (start / 1000) % 60, (start % 1000) / 10);
-        tracks[i].mm_io->puts_unl(buffer);
-        tracks[i].mm_io->puts_unl(",");
+        line += string(buffer) + comma;
+
         sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                 (end / 1000) % 60, (end % 1000) / 10);
-        tracks[i].mm_io->puts_unl(buffer);
-        tracks[i].mm_io->puts_unl(",");
-        tracks[i].mm_io->puts_unl(s2);
+        line += string(buffer) + comma;
+
+        // Append the other fields.
+        line += fields[2] + comma + // Style
+          fields[3] + comma +   // Name
+          fields[4] + comma +   // MarginL
+          fields[5] + comma +   // MarginR
+          fields[6] + comma +   // MarginV
+          fields[7] + comma;    // Effect
+
+        // Do the charset conversion.
+        s = from_utf8(tracks[i].conv_handle, fields[8].c_str());
+        line += string(s) + "\n";
         safefree(s);
+
+        // Now store that entry.
+        ssa_line.num = num;
+        ssa_line.line = safestrdup(line.c_str());
+        tracks[i].ssa_lines.push_back(ssa_line);
+
         break;
 
       default:
@@ -654,7 +700,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
 }
 
 void close_files() {
-  int i;
+  int i, k;
   ogg_packet op;
 
   for (i = 0; i < tracks.size(); i++) {
@@ -665,6 +711,8 @@ void close_files() {
           break;
 
         case TYPEOGM:
+          // Set the "end of stream" marker on the last packet, handle it
+          // and flush all remaining Ogg pages.
           op.b_o_s = 0;
           op.e_o_s = 1;
           op.packetno = tracks[i].packetno;
@@ -682,11 +730,25 @@ void close_files() {
           break;
 
         case TYPEWAV:
+          // Fix the header with the real number of bytes written.
           tracks[i].mm_io->setFilePointer(0);
           tracks[i].wh.riff.len = tracks[i].bytes_written + 36;
           tracks[i].wh.data.len = tracks[i].bytes_written;
           tracks[i].mm_io->write(&tracks[i].wh, sizeof(wave_header));
           delete tracks[i].mm_io;
+
+          break;
+
+        case TYPESSA:
+          // Sort the SSA lines according to their ReadOrder number and
+          // write them.
+          sort(tracks[i].ssa_lines.begin(), tracks[i].ssa_lines.end());
+          for (k = 0; k < tracks[i].ssa_lines.size(); k++) {
+            tracks[i].mm_io->puts_unl(tracks[i].ssa_lines[k].line);
+            safefree(tracks[i].ssa_lines[k].line);
+          }
+          delete tracks[i].mm_io;
+
           break;
 
         default:
