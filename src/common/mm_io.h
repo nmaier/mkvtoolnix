@@ -163,11 +163,13 @@ class MTX_DLL_API mm_mem_io_c: public mm_io_c {
 protected:
   int64_t pos, mem_size, allocated, increase;
   unsigned char *mem;
-  bool free_mem;
+  const unsigned char *ro_mem;
+  bool free_mem, read_only;
   string file_name;
 
 public:
-  mm_mem_io_c(unsigned char *_mem, uint64_t _mem_size, int _increase = 0);
+  mm_mem_io_c(unsigned char *_mem, uint64_t _mem_size, int _increase);
+  mm_mem_io_c(const unsigned char *_mem, uint64_t _mem_size);
   ~mm_mem_io_c();
 
   virtual uint64 getFilePointer();

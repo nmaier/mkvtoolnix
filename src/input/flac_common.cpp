@@ -27,7 +27,7 @@
 static bool
 flac_skip_utf8(bit_cursor_c &bits,
                int size) {
-  unsigned long value;
+  uint32_t value;
   int num;
 
   if (!bits.get_bits(8, value))
@@ -59,7 +59,7 @@ flac_get_num_samples(unsigned char *mem,
                      int size,
                      FLAC__StreamMetadata_StreamInfo &stream_info) {
   bit_cursor_c bits(mem, size);
-  unsigned long value;
+  uint32_t value;
   int free_sample_size;
   int samples;
 

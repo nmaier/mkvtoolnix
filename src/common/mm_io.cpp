@@ -691,13 +691,33 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
   mem_size(_mem_size),
   allocated(_mem_size),
   increase(_increase),
-  mem(_mem) {
+  mem(_mem),
+  ro_mem(NULL),
+  read_only(false) {
+
+  if (increase <= 0)
+    throw exception();
 
   if ((mem == NULL) && (increase > 0)) {
     mem = (unsigned char *)safemalloc(mem_size);
     free_mem = true;
   } else
     free_mem = false;
+}
+
+mm_mem_io_c::mm_mem_io_c(const unsigned char *_mem,
+                         uint64_t _mem_size) :
+  pos(0),
+  mem_size(_mem_size),
+  allocated(_mem_size),
+  increase(0),
+  mem(NULL),
+  ro_mem(_mem),
+  free_mem(false),
+  read_only(true) {
+
+  if (ro_mem == NULL)
+    throw exception();
 }
 
 mm_mem_io_c::~mm_mem_io_c() {
@@ -714,7 +734,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
   int64_t npos;
 
-  if ((mem == NULL) || (mem_size == 0))
+  if (((mem == NULL) && (ro_mem == NULL)) || (mem_size == 0))
     throw exception();
 
   if (mode == seek_beginning)
@@ -738,7 +758,10 @@ mm_mem_io_c::read(void *buffer,
   int64_t rbytes;
 
   rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
-  memcpy(buffer, &mem[pos], rbytes);
+  if (read_only)
+    memcpy(buffer, &ro_mem[pos], rbytes);
+  else
+    memcpy(buffer, &mem[pos], rbytes);
   pos += rbytes;
 
   return rbytes;
@@ -748,6 +771,9 @@ size_t
 mm_mem_io_c::write(const void *buffer,
                    size_t size) {
   int64_t wbytes;
+
+  if (read_only)
+    throw exception();
 
   if ((pos + size) >= allocated) {
     if (increase) {
@@ -775,6 +801,8 @@ mm_mem_io_c::close() {
   if (free_mem)
     safefree(mem);
   mem = NULL;
+  ro_mem = NULL;
+  read_only = true;
   free_mem = false;
   mem_size = 0;
   increase = 0;
