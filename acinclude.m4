@@ -139,7 +139,6 @@ AC_ARG_ENABLE(vorbistest, [  --disable-vorbistest          Do not try to compile
 
   VORBIS_LIBS="$VORBIS_LIBDIR -lvorbis -lm"
   VORBISFILE_LIBS="-lvorbisfile"
-  VORBISENC_LIBS="-lvorbisenc"
 
   AC_MSG_CHECKING(for Vorbis)
   no_vorbis=""
@@ -212,13 +211,11 @@ int main ()
      VORBIS_CFLAGS=""
      VORBIS_LIBS=""
      VORBISFILE_LIBS=""
-     VORBISENC_LIBS=""
      ifelse([$2], , :, [$2])
   fi
   AC_SUBST(VORBIS_CFLAGS)
   AC_SUBST(VORBIS_LIBS)
   AC_SUBST(VORBISFILE_LIBS)
-  AC_SUBST(VORBISENC_LIBS)
   rm -f conf.vorbistest
 ])
 
