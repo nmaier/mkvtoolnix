@@ -1,3 +1,11 @@
+2005-02-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: When "appending" a file all tracks where added to
+	the end of the track list making it unnecessarily difficult to
+	concatenate similar structured files. Now the tracks from the
+	"appended" files are inserted into the track list after their
+	counterparts from the file this new one is appended to.
+
 2005-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: An "appended" file could not be removed if there

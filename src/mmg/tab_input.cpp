@@ -742,7 +742,7 @@ tab_input::add_file(const wxString &file_name,
   wxString name, command, id, type, exact, video_track_name, opt_file_name;
   wxArrayString output, errors;
   vector<wxString> args, pair;
-  int result, pos;
+  int result, pos, new_file_pos;
   unsigned int i, k;
   wxFile *opt_file;
   string arg_utf8;
@@ -930,10 +930,26 @@ tab_input::add_file(const wxString &file_name,
     return;
   }
 
+  // Look for a place to insert the new file. If the file is only "added",
+  // then it will be added to the back of the list. If it is "appended",
+  // then it should be inserted right after the currently selected file.
+  if (!append)
+    new_file_pos = lb_input_files->GetCount();
+  else {
+    new_file_pos = lb_input_files->GetSelection();
+    if (wxNOT_FOUND == new_file_pos)
+      new_file_pos = lb_input_files->GetCount();
+    else {
+      do {
+        ++new_file_pos;
+      } while ((files.size() > new_file_pos) && files[new_file_pos].appending);
+    }
+  }
+
   name.Printf(wxT("%s%s (%s)"), append ? wxT("++> ") : wxT(""),
               file_name.AfterLast(wxT(PSEP)).c_str(),
               file_name.BeforeLast(wxT(PSEP)).c_str());
-  lb_input_files->Append(name);
+  lb_input_files->Insert(name, new_file_pos);
 
   file.file_name = file_name;
   mdlg->set_title_maybe(file.title);
@@ -941,15 +957,25 @@ tab_input::add_file(const wxString &file_name,
     mdlg->set_title_maybe(video_track_name);
   mdlg->set_output_maybe(file.file_name);
   file.appending = append;
-  files.push_back(file);
+  files.insert(files.begin() + new_file_pos, file);
+
+  // After inserting the file the "source" index is wrong for all files
+  // after the insertion position.
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->source >= new_file_pos)
+      ++tracks[i]->source;
+
+  if (name.StartsWith(wxT("++> ")))
+    name.Remove(0, 4);
+
   for (i = 0; i < file.tracks.size(); i++) {
     string format;
     wxString label;
+    int new_track_pos;
 
     mmg_track_ptr &t = file.tracks[i];
     t->enabled = true;
-    t->source = files.size() - 1;
-    tracks.push_back(t.get());
+    t->source = new_file_pos;
 
     fix_format("%s%s (ID %lld, type: %s) from %s", format);
     label.Printf(wxU(format.c_str()), t->appending ? wxT("++> ") : wxT(""),
@@ -958,8 +984,41 @@ tab_input::add_file(const wxString &file_name,
                  t->type == 'v' ? wxT("video") :
                  t->type == 's' ? wxT("subtitles") : wxT("unknown"),
                  name.c_str());
-    clb_tracks->Append(label);
-    clb_tracks->Check(clb_tracks->GetCount() - 1, true);
+
+    // Look for a place to insert this new track. If the file is "added" then
+    // the new track is simply appended to the list of existing tracks.
+    // If the file is "appended" then it should be put to the end of the
+    // chain of tracks being appended. The n'th track from this new file
+    // should be appended to the n'th track of the "old" file this new file is
+    // appended to. So first I have to find the n'th track of the "old" file.
+    // Then I have to skip over all the other tracks that are already appended
+    // to that n'th track. The insertion point is right after that.
+    if (append) {
+      int nth_old_track;
+
+      nth_old_track = 0;
+      new_track_pos = 0;
+      while ((tracks.size() > new_track_pos) && (nth_old_track < (i + 1))) {
+        if (tracks[new_track_pos]->source == (new_file_pos - 1))
+          ++nth_old_track;
+        ++new_track_pos;
+      }
+
+      // Either we've found the n'th track from the "old" file or we're at
+      // the end of the list. In the latter case we just append the track
+      // at the end and let the user figure out which track he really wants
+      // to append it to.
+      if (nth_old_track == (i + 1))
+        while ((tracks.size() > new_track_pos) &&
+               tracks[new_track_pos]->appending)
+          ++new_track_pos;
+
+    } else
+      new_track_pos = tracks.size();
+
+    tracks.insert(tracks.begin() + new_track_pos, t.get());
+    clb_tracks->Insert(label, new_track_pos);
+    clb_tracks->Check(new_track_pos, true);
   }
 
   st_tracks->Enable(true);
