@@ -1272,6 +1272,7 @@ static const char *mosu_hacks[] = {
   ENGAGE_LACING_EBML,
   ENGAGE_NATIVE_BFRAMES,
   ENGAGE_NO_VARIABLE_DATA,
+  ENGAGE_SAVE_DEFAULT_HEADER_VALUES,
   NULL
 };
 static vector<const char *> engaged_hacks;
