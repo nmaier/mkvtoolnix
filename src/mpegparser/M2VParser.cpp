@@ -283,6 +283,7 @@ int32_t M2VParser::FillQueues(){
     MPEGChunk* seqHdr = NULL;
     while(chunk->GetType() != MPEG_VIDEO_PICTURE_START_CODE){
       if(chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE){
+        if (chunks.size() == 1) return -1;
         if(seqHdr) delete seqHdr;
         m_seqHdr = ParseSequenceHeader(chunk);
         seqHdr = chunk;
@@ -291,6 +292,8 @@ int32_t M2VParser::FillQueues(){
       }
       chunks.erase(chunks.begin());
       if(chunks.empty()){
+        if(seqHdr != NULL)
+          chunks.push_back(seqHdr);
         return -1;
       }
       chunk = chunks.front();
