@@ -897,7 +897,7 @@ ogm_reader_c::process_page(ogg_page *og) {
              (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1])))
           dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 -
                                    hdrlen, ogg_page_granulepos(og) * 1000000,
-                                   lenbytes * 1000000);
+                                   (int64_t)lenbytes * 1000000);
 
       } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
         dmx->packetizer->process(op.packet, op.bytes);
