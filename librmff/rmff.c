@@ -1028,7 +1028,7 @@ write_data_header(rmff_file_t *file) {
   fint = (rmff_file_internal_t *)file->internal;
 
   bw = write_uint32_be(rmffFOURCC('D', 'A', 'T', 'A'));
-  bw += write_uint32_be(fint->data_contents_size + 4 + 4 + 2 + 4 + 4 + 4);
+  bw += write_uint32_be(fint->data_contents_size + 4 + 4 + 2 + 4 + 4);
   bw += write_uint16_be(0);     /* object_version */
   bw += write_uint32_be(fint->num_packets); /* num_packets_in_chunk */
   bw += write_uint32_be(0);     /* next_data_header_offset */
