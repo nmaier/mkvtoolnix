@@ -45,6 +45,7 @@ public:
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual bool setFilePointer2(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size);
+  virtual uint32_t read(string &buffer, size_t size);
   virtual unsigned char read_uint8();
   virtual uint16_t read_uint16();
   virtual uint32_t read_uint24();

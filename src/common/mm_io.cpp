@@ -361,6 +361,23 @@ mm_io_c::puts_unl(const char *s) {
   return bytes_written;
 }
 
+uint32_t
+mm_io_c::read(string &buffer,
+              size_t size) {
+  char cbuffer[size + 1];
+  int nread;
+
+  nread = read(buffer, size);
+  if (nread < 0)
+    buffer = "";
+  else {
+    cbuffer[nread] = 0;
+    buffer = cbuffer;
+  }
+
+  return nread;
+}
+
 unsigned char
 mm_io_c::read_uint8() {
   unsigned char value;
