@@ -97,21 +97,21 @@ xio_write(int fd,
 
 int
 xio_ftruncate(int fd,
-              off_t length) {
+              int64_t length) {
   if ((fd < 0) || (fd >= MAX_INSTANCES) || (instances[fd] == NULL))
     return -1;
   return instances[fd]->truncate(length);
 }
 
-off_t
+int64_t
 xio_lseek(int fd,
-          off_t offset,
+          int64_t offset,
           int whence) {
   int64_t expected_pos;
   seek_mode smode;
 
   if ((fd < 0) || (fd >= MAX_INSTANCES) || (instances[fd] == NULL))
-    return (off_t)-1;
+    return (int64_t)-1;
   if (whence == SEEK_SET) {
     smode = seek_beginning;
     expected_pos = offset;
@@ -124,7 +124,7 @@ xio_lseek(int fd,
   }
   instances[fd]->setFilePointer(offset, smode);
   if (instances[fd]->getFilePointer() != expected_pos)
-    return (off_t)-1;
+    return (int64_t)-1;
   return expected_pos;
 }
 
