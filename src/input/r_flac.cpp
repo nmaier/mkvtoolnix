@@ -143,7 +143,28 @@ flac_reader_c::~flac_reader_c() {
 
 bool flac_reader_c::parse_file() {
   FLAC__StreamDecoder *decoder;
-  int result;
+  int result, offset, pd_size;
+  uint32_t i;
+  unsigned char *pass_data;
+  flac_block_t block;
+
+  if ((pass == 2) &&
+      ((pass_data = retrieve_pass_data(ti, pd_size)) != NULL)) {
+    offset = 20;
+    metadata_parsed = get_uint32(&pass_data[0]);
+    channels = get_uint32(&pass_data[4]);
+    sample_rate = get_uint32(&pass_data[8]);
+    bits_per_sample = get_uint32(&pass_data[12]);
+    pd_size = get_uint32(&pass_data[16]);
+    for (i = 0; i < pd_size; i++) {
+      memcpy(&block, &pass_data[offset + i * sizeof(flac_block_t)],
+             sizeof(flac_block_t));
+      blocks.push_back(block);
+    }
+    safefree(pass_data);
+
+    return metadata_parsed;
+  }
 
   done = false;
   file->setFilePointer(0);
@@ -186,6 +207,23 @@ bool flac_reader_c::parse_file() {
   file->setFilePointer(0);
   blocks[0].len -= 4;
   blocks[0].filepos = 4;
+
+  if (pass == 1) {
+    offset = 20;
+    pass_data = (unsigned char *)safemalloc(offset + blocks.size() *
+                                            sizeof(flac_block_t));
+    put_uint32(&pass_data[0], (uint32_t)metadata_parsed);
+    put_uint32(&pass_data[4], channels);
+    put_uint32(&pass_data[8], sample_rate);
+    put_uint32(&pass_data[12], bits_per_sample);
+    put_uint32(&pass_data[16], blocks.size());
+    for (i = 0; i < blocks.size(); i++)
+      memcpy(&pass_data[offset + i * sizeof(flac_block_t)], &blocks[i],
+             sizeof(flac_block_t));
+    set_pass_data(ti, pass_data, offset + blocks.size() *
+                  sizeof(flac_block_t));
+    safefree(pass_data);
+  }
 
   return metadata_parsed;
 }

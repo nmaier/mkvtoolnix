@@ -278,5 +278,7 @@ protected:
 
 track_info_t *duplicate_track_info(track_info_t *src);
 void free_track_info(track_info_t *ti);
+void set_pass_data(track_info_t *ti, unsigned char *data, int size);
+unsigned char *retrieve_pass_data(track_info_t *ti, int &size);
 
 #endif  // __PR_GENERIC_H

@@ -24,11 +24,17 @@
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
+#include <map>
+#include <string>
+
+#include "base64.h"
 #include "common.h"
 #include "compression.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"
 #include "tagparser.h"
+
+using namespace std;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
@@ -1006,4 +1012,42 @@ void free_track_info(track_info_t *ti) {
   if (ti->tags != NULL)
     delete ti->tags;
   safefree(ti);
+}
+
+struct ltstr {
+  bool operator()(const char* s1, const char* s2) const {
+    return strcmp(s1, s2) < 0;
+  }
+};
+static map<const char *, string, ltstr> pass_data;
+
+void set_pass_data(track_info_t *ti, unsigned char *data, int size) {
+  string key, value;
+
+  key = string(ti->fname) + string("::") + to_string(ti->id);
+  value = base64_encode(data, size);
+  mxverb(4, "add_pass_data for %s orig length %d, b64 length %d\n",
+         key.c_str(), size, value.length());
+  pass_data[key.c_str()] = value;
+}
+
+unsigned char *retrieve_pass_data(track_info_t *ti, int &size) {
+  map<const char *, string, ltstr>::iterator it;
+  string key, value;
+  unsigned char *data;
+
+  key = string(ti->fname) + string("::") + to_string(ti->id);
+  it = pass_data.find(key.c_str());
+  if (it != pass_data.end()) {
+    size = -1;
+    return NULL;
+  }
+
+  value = it->second;
+  data = (unsigned char *)safemalloc(value.length());
+  size = base64_decode(value, data);
+  data = (unsigned char *)saferealloc(data, size);
+  mxverb(4, "retrieve_pass_data for %s b64 length %d, orig length %d\n",
+         key.c_str(), value.length(), size);
+  return data;
 }
