@@ -93,7 +93,8 @@ class Test
   end
 
   def xtr_tracks_s(*args)
-    command = "../src/mkvextract tracks data/mkv/complex.mkv "
+    command = "../src/mkvextract tracks data/mkv/complex.mkv " +
+      "--no-variable-data "
     command += args.join(" ")
     command += ":#{tmp}"
     sys(command, 0)
@@ -102,7 +103,9 @@ class Test
 
   def xtr_tracks(*args)
     command = "../src/mkvextract tracks "
-    command += args.join(" ")
+    command += args[0]
+    command += " --no-variable-data "
+    command += args[1..args.size - 1].join(" ")
     sys(command, 0)
   end
 end
