@@ -1,3 +1,7 @@
+2004-05-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The OGM reader was not Endian safe.
+
 2004-05-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: Rewrite of the VobSub handling code.
