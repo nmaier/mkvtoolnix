@@ -59,7 +59,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   safety_last_timecode = 0;
   safety_last_duration = 0;
   last_cue_timecode = -1;
-  timecode_offset = 0;
+  correction_timecode_offset = 0;
   default_track_warning_printed = false;
 
   // Let's see if the user specified audio sync for this track.
@@ -782,11 +782,11 @@ generic_packetizer_c::add_packet(memory_c &mem,
   int length;
   packet_t *pack;
 
-  timecode += timecode_offset;
+  timecode += correction_timecode_offset;
   if (bref >= 0)
-    bref += timecode_offset;
+    bref += correction_timecode_offset;
   if (fref >= 0)
-    fref += timecode_offset;
+    fref += correction_timecode_offset;
 
   if (timecode < 0) {
     mem.release();
@@ -802,7 +802,7 @@ generic_packetizer_c::add_packet(memory_c &mem,
 
       needed_timecode_offset = safety_last_timecode +
         safety_last_duration - timecode;
-      timecode_offset += needed_timecode_offset;
+      correction_timecode_offset += needed_timecode_offset;
       timecode += needed_timecode_offset;
       if (bref >= 0)
         bref += needed_timecode_offset;
@@ -1067,7 +1067,7 @@ generic_reader_c::set_timecode_offset(int64_t offset) {
 
   max_timecode_seen = offset;
   foreach(it, reader_packetizers)
-    it->orig->timecode_offset = offset;
+    it->orig->correction_timecode_offset = offset;
 }
 
 void

@@ -359,12 +359,20 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
 */
 
 int
-cluster_helper_c::render() {
+cluster_helper_c::render(bool flush) {
+  if ((clusters == NULL) || (num_clusters == 0))
+    return 0;
+
+  walk_clusters();
+  return render_cluster(clusters[num_clusters - 1]);
+}
+
+int
+cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   KaxCluster *cluster;
   KaxBlockGroup *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
-  ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
   int64_t max_cl_timecode;
   generic_packetizer_c *source;
@@ -373,12 +381,9 @@ cluster_helper_c::render() {
   bool added_to_cues;
   LacingType lacing_type;
 
-  if ((clusters == NULL) || (num_clusters == 0))
-    return 0;
+  assert((clstr != NULL) && !clstr->rendered);
 
   max_cl_timecode = 0;
-  walk_clusters();
-  clstr = clusters[num_clusters - 1];
   cluster = clstr->cluster;
 
   // Splitpoint stuff

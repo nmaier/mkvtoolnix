@@ -331,7 +331,7 @@ protected:
 public:
   track_info_c *ti;
   generic_reader_c *reader;
-  int64_t timecode_offset;
+  int64_t correction_timecode_offset;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
