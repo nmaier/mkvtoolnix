@@ -79,7 +79,9 @@ protected:
 
 class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
-  vector<video_frame_t> queued_frames;
+  deque<video_frame_t> available_frames, queued_frames;
+  deque<int64_t> available_timecodes, available_durations;
+  int64_t timecodes_generated;
   video_frame_t bref_frame, fref_frame;
   bool aspect_ratio_extracted, input_is_native, output_is_native;
 
@@ -94,6 +96,12 @@ public:
   virtual void flush();
 
 protected:
+  virtual int process_native(memory_c &mem, int64_t old_timecode,
+                             int64_t old_duration, int64_t bref,
+                             int64_t fref);
+  virtual int process_non_native(memory_c &mem, int64_t old_timecode,
+                                 int64_t old_duration, int64_t bref,
+                                 int64_t fref);
   virtual void flush_frames(char next_frame = '?', bool flush_all = false);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
 };

@@ -122,6 +122,7 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
                           vector<video_frame_t> &frames) {
   bit_cursor_c bits(buffer, size);
   uint32_t marker, frame_type;
+  int first_frame_start;
   bool first_frame;
   video_frame_t frame;
   vector<video_frame_t>::iterator fit;
@@ -129,6 +130,7 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
   frame.pos = 0;
   frames.clear();
   first_frame = true;
+  first_frame_start = 0;
   mxverb(3, "\nmpeg4_frames: start search in %d bytes\n", size);
   while (!bits.eof()) {
     if (!bits.peek_bits(32, marker))
@@ -143,6 +145,9 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
            bits.get_bit_position() / 8);
     bits.skip_bits(32);
     if (marker == MPEGVIDEO_OBJECT_PLAIN_START_CODE) {
+      if (0 > first_frame_start)
+        first_frame_start = bits.get_bit_position() / 8 - 4;
+
       if (!bits.get_bits(2, frame_type))
         break;
       if (!first_frame) {
@@ -151,12 +156,19 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
         frame.pos = (bits.get_bit_position() / 8) - 4;
       } else {
         first_frame = false;
-        frame.pos = bits.get_bit_position() / 8 - 4;
+        frame.pos = first_frame_start;
       }
       frame.type = frame_type == 0 ? 'I' : frame_type == 1 ? 'P' :
         frame_type == 2 ? 'B' : 'S';
       bits.byte_align();
-    }
+
+    } else if (first_frame &&
+               ((MPEGVIDEO_VOS_START_CODE == marker) ||
+                (MPEGVIDEO_VISUAL_OBJECT_START_CODE == marker) ||
+                (0x00000140 > marker)))
+      first_frame_start = -1;
+    else
+      first_frame_start = bits.get_bit_position() / 8 - 4;
   }
 
   if (!first_frame) {

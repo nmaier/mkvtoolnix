@@ -303,6 +303,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             bool _input_is_native,
                             track_info_c *_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
+  timecodes_generated(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
   output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
 
@@ -314,8 +315,14 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
     set_codec_id(MKV_V_MSCOMP);
     check_fourcc();
 
-  } else
+  } else {
     set_codec_id(MKV_V_MPEG4_ASP);
+    if (!input_is_native) {
+      safefree(ti->private_data);
+      ti->private_data = NULL;
+      ti->private_size = 0;
+    }
+  }
 }
 
 int
@@ -324,65 +331,124 @@ mpeg4_p2_video_packetizer_c::process(memory_c &mem,
                                      int64_t duration,
                                      int64_t bref,
                                      int64_t fref) {
-  int64_t timecode;
-  vector<video_frame_t> frames;
-  int i;
-
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(mem.data, mem.size);
 
-  if (!output_is_native)
+  if (input_is_native == output_is_native)
     return
       video_packetizer_c::process(mem, old_timecode, duration, bref, fref);
 
+  if (input_is_native)
+    return process_native(mem, old_timecode, duration, bref, fref);
+
+  return process_non_native(mem, old_timecode, duration, bref, fref);
+}
+
+int
+mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
+                                                int64_t old_timecode,
+                                                int64_t old_duration,
+                                                int64_t bref,
+                                                int64_t fref) {
+  vector<video_frame_t> frames;
+  vector<video_frame_t>::iterator new_frame;
+
+  if (NULL == ti->private_data) {
+    uint32_t pos, size;
+
+    if (mpeg4_p2_find_config_data(mem.data, mem.size, pos, size)) {
+      ti->private_data = (unsigned char *)safememdup(&mem.data[pos], size);
+      ti->private_size = size;
+      set_codec_private(ti->private_data, ti->private_size);
+      rerender_track_headers();
+    }
+  }
+
   mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
 
-  for (i = 0; i < frames.size(); i++) {
-    if ((frames[i].type == 'I') ||
-        ((frames[i].type != 'B') && (fref_frame.type != '?')))
-      flush_frames(frames[i].type);
-
-    if (old_timecode == -1)
-      timecode = (int64_t)(1000000000.0 * frames_output / fps) +
-        duration_shift;
+  foreach(new_frame, frames) {
+    if ((1 == frames.size()) && (new_frame->size == mem.size) &&
+        (0 == new_frame->pos))
+      new_frame->data = mem.grab();
     else
-      timecode = old_timecode;
+      new_frame->data = (unsigned char *)safememdup(&mem.data[new_frame->pos],
+                                                    new_frame->size);
+    available_frames.push_back(*new_frame);
+  }
 
-    if ((duration == -1) || (duration == (int64_t)(1000.0 / fps)))
-      duration = (int64_t)(1000000000.0 / fps);
-    else
-      duration_shift += duration - (int64_t)(1000000000.0 / fps);
+  if (-1 != old_timecode)
+    available_timecodes.push_back(old_timecode);
+  if (-1 != old_duration)
+    available_durations.push_back(old_duration);
+
+  while (!available_frames.empty()) {
+    int64_t timecode;
+
+    if ((-1 == old_timecode) && (0 == available_timecodes.size())) {
+      available_timecodes.push_back((int64_t)(timecodes_generated *
+                                              1000000000.0 / fps));
+      ++timecodes_generated;
+    }
+
+    if (0 == available_timecodes.size())
+      break;
+
+    timecode = available_timecodes[0];
+    available_timecodes.pop_front();
+    video_frame_t &frame = available_frames[0];
+
+    if ((-1 == old_duration) && (0 == available_durations.size()))
+      available_durations.push_back((int64_t)(1000000000.0 / fps));
+    if (0 == available_durations.size())
+      frame.duration = -1;
+    else {
+      frame.duration = available_durations[0];
+      available_durations.pop_front();
+    }
+    
+    if (('I' == frame.type) ||
+        (('B' != frame.type) && ('?' != fref_frame.type)))
+      flush_frames(frame.type);
 
     frames_output++;
-    frames[i].timecode = timecode;
-    frames[i].duration = duration;
-    frames[i].data = (unsigned char *)safememdup(&mem.data[frames[i].pos],
-                                                 frames[i].size);
+    frame.timecode = timecode;
 
-    if (frames[i].type == 'I') {
-      frames[i].bref = -1;
-      frames[i].fref = -1;
+    if (frame.type == 'I') {
+      frame.bref = -1;
+      frame.fref = -1;
       if (bref_frame.type == '?') {
-        bref_frame = frames[i];
-        memory_c mem(frames[i].data, frames[i].size, false);
-        add_packet(mem, frames[i].timecode, frames[i].duration);
+        bref_frame = frame;
+        memory_c mem(frame.data, frame.size, true);
+        add_packet(mem, frame.timecode, frame.duration);
       } else
-        fref_frame = frames[i];
+        fref_frame = frame;
 
-    } else if (frames[i].type != 'B') {
+    } else if (frame.type != 'B') {
       frames_output--;
       if (bref_frame.type == '?')
         mxerror("video_packetizer: Found a P frame but no I frame. This "
                 "should not have happened. Either this is a bug in mkvmerge "
                 "or the video stream is damaged.\n");
-      frames[i].bref = bref_frame.timecode;
-      frames[i].fref = -1;
-      fref_frame = frames[i];
+      frame.bref = bref_frame.timecode;
+      frame.fref = -1;
+      fref_frame = frame;
 
     } else
-      queued_frames.push_back(frames[i]);
+      queued_frames.push_back(frame);
+
+    available_frames.pop_front();
   }
 
+  return FILE_STATUS_MOREDATA;
+}
+
+int
+mpeg4_p2_video_packetizer_c::process_native(memory_c &mem,
+                                            int64_t old_timecode,
+                                            int64_t duration,
+                                            int64_t bref,
+                                            int64_t fref) {
+  // Not implemented yet.
   return FILE_STATUS_MOREDATA;
 }
 
