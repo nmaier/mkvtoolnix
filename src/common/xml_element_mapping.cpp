@@ -34,6 +34,8 @@ init_mapping_table(parser_element_t *table) {
   int i;
 
   for (i = 0; table[i].name != NULL; i++) {
+    if (ebmlt_skip == table[i].type)
+      continue;
     debug_name = table[i].debug_name != NULL ? table[i].debug_name :
       table[i].name;
     try {
@@ -57,6 +59,7 @@ xml_element_map_init() {
     {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionFlagOrdered", ebmlt_bool, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, no_id, NULL, NULL, NULL},
+    {"EditionProcessed", ebmlt_skip, 2, 0, 0, no_id, NULL, NULL, NULL},
 
     {"ChapterAtom", ebmlt_master, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},

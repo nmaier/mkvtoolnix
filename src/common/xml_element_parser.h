@@ -41,7 +41,7 @@ typedef struct {
   const char *parser_name;
   const parser_element_t *mapping;
 
-  int depth;
+  int depth, skip_depth;
   bool done_reading, data_allowed;
 
   string *bin;
