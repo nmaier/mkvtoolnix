@@ -17,11 +17,10 @@ mkvmerge_SOURCES = mkvmerge.cpp \
 			cluster_helper.cpp \
 			pr_generic.cpp
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
-mkvmerge_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON) $(DEP_KAXCOMMON) \
+mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
-		-lmtxkaxcommon -lmtxebmlcommon -lmtxcommon \
-		-lmatroska -lebml \
+		-lmtxcommon -lmatroska -lebml \
 		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) \
 		-lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat -liconv
@@ -30,8 +29,8 @@ mkvinfo_SOURCES = mkvinfo.cpp \
 			mkvinfo_gui.cpp \
 			mkvinfo_tag_types.cpp
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
-mkvinfo_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON)
-mkvinfo_LDADD = -lmtxebmlcommon -lmtxcommon -lmatroska -lebml \
+mkvinfo_DEPENDENCIES += $(DEP_COMMON)
+mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
 		-liconv
 
@@ -41,15 +40,13 @@ mkvextract_SOURCES = mkvextract.cpp \
 			mkvextract_tags.cpp \
 			mkvextract_tracks.cpp
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
-mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON) $(DEP_KAXCOMMON) \
-		$(DEP_AVILIB)
-mkvextract_LDADD = -lmtxebmlcommon -lmtxkaxcommon -lmtxcommon \
-		-lvorbis -logg -lavi -lmatroska -lebml -liconv
+mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB)
+mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -liconv
 
 base64tool_SOURCES = base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
-base64tool_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON)
-base64tool_LDADD = -lmtxcommon -lmtxebmlcommon -liconv
+base64tool_DEPENDENCIES += $(DEP_COMMON)
+base64tool_LDADD = -lmtxcommon -liconv
 
 # Definitions that are needed before the inclusions.
 SUBDIRS = common input output mmg
@@ -60,7 +57,7 @@ EXTRA_CLEAN = $(PROGRAMS)
 all: subdirs $(PROGRAMS)
 
 # Include the common stuff.
-include ../Makefile.mingw.common
+include ../Makefile.common
 
 mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 	$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)

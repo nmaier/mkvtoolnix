@@ -48,7 +48,6 @@
 
 using namespace std;
 
-#include "common.h"
 #include "hacks.h"
 #include "mkvmerge.h"
 

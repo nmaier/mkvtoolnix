@@ -5,10 +5,10 @@
 include ../../Makefile.mingw.options
 
 ifneq (,$(findstring yes,$(MTX_DLLS)))
-LIBRARIES = libmtxcommon.dll libmtxebmlcommon.dll libmtxkaxcommon.dll
+LIBRARIES = libmtxcommon.dll
 CXXFLAGS += -DMTX_DLL_EXPORT
 else
-LIBRARIES = libmtxcommon.a libmtxebmlcommon.a libmtxkaxcommon.a
+LIBRARIES = libmtxcommon.a
 endif
 
 SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/src -I$(TOP)/src/common
@@ -16,27 +16,22 @@ SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/src -I$(TOP)/src/common
 libmtxcommon_SOURCES = base64.cpp \
 			aac_common.cpp \
 			ac3_common.cpp \
+			chapters.cpp \
+			chapter_parser_xml.cpp \
+			chapter_writer.cpp \
 			common.cpp \
+			commonebml.cpp \
 			compression.cpp \
 			dts_common.cpp \
 			iso639.cpp \
-			mp3_common.cpp
-libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
-
-libmtxebmlcommon_SOURCES = commonebml.cpp \
-			mm_io.cpp
-libmtxebmlcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxebmlcommon_SOURCES))
-
-libmtxkaxcommon_SOURCES = chapters.cpp \
-			chapter_parser_xml.cpp \
-			chapter_writer.cpp \
+			mp3_common.cpp \
+			mm_io.cpp \
 			tagparser_start.cpp \
 			tagparser_end.cpp \
 			tagwriter.cpp
-libmtxkaxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxkaxcommon_SOURCES))
+libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
 
-ALL_SOURCES = $(libmtxcommon_SOURCES) $(libmtxebmlcommon_SOURCES) \
-		$(libmtxkaxcommon_SOURCES)
+ALL_SOURCES = $(libmtxcommon_SOURCES)
 EXTRA_CLEAN = lib*.dll
 
 all: $(LIBRARIES)
@@ -45,27 +40,9 @@ include ../../Makefile.common
 
 libmtxcommon.dll: $(libmtxcommon_OBJECTS)
 	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
-		-liconv -lz $(COMPRESSION_LIBRARIES)
-
-libmtxebmlcommon.dll: $(libmtxebmlcommon_OBJECTS)
-	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxebmlcommon_OBJECTS) \
-		-L. -lmtxcommon -lebml
-
-libmtxkaxcommon.dll: $(libmtxkaxcommon_OBJECTS)
-	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxkaxcommon_OBJECTS) \
-		-L. -lmtxcommon -lmatroska -lebml -lmtxebmlcommon -lexpat
+		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml -lexpat
 
 libmtxcommon.a: $(libmtxcommon_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libmtxcommon_OBJECTS)
-	$(RANLIB) $@
-
-libmtxebmlcommon.a: $(libmtxebmlcommon_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxebmlcommon_OBJECTS)
-	$(RANLIB) $@
-
-libmtxkaxcommon.a: $(libmtxkaxcommon_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxkaxcommon_OBJECTS)
 	$(RANLIB) $@

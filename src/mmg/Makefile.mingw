@@ -21,9 +21,8 @@ mmg_SOURCES = mmg.cpp \
 			tab_global.cpp \
 			tab_settings.cpp
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
-mmg_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON) $(DEP_KAXCOMMON)
-mmg_LDADD = -lmtxkaxcommon -lmtxebmlcommon -lmtxcommon \
-		-lmatroska -lebml -liconv -lexpat \
+mmg_DEPENDENCIES += $(DEP_COMMON)
+mmg_LDADD = -lmtxcommon -lmatroska -lebml -liconv -lexpat \
 		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
 		-mwindows
 
