@@ -736,14 +736,20 @@ job_dialog::on_item_selected(wxListEvent &evt) {
 void
 job_dialog::start_jobs(vector<int> &jobs_to_start) {
   wxString temp_settings;
-  job_run_dialog *dlg;
   int i;
 
   temp_settings.Printf(wxT("%s/jobs/temp.mmg"), wxGetCwd().c_str());
   mdlg->save(temp_settings, true);
 
-  dlg = new job_run_dialog(this, jobs_to_start);
-  delete dlg;
+#ifdef SYS_WINDOWS
+  mdlg->Show(false);
+  Show(false);
+#endif
+  delete new job_run_dialog(this, jobs_to_start);
+#ifdef SYS_WINDOWS
+  mdlg->Show(true);
+  Show(true);
+#endif
 
   mdlg->load(temp_settings, true);
   wxRemoveFile(temp_settings);
