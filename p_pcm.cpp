@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.7 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.8 2003/03/06 23:38:37 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -93,13 +93,13 @@ void pcm_packetizer_c::set_header() {
   }
   codec_id.CopyBuffer((binary *)APCM, countof(APCM));
 
-  KaxTrackAudio &track_audio =
+  KaxTrackAudio &audio =
     GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
 
-  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(track_audio);
+  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(audio);
   *(static_cast<EbmlFloat *>(&kax_freq)) = (float)samples_per_sec;
   
-  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(track_audio);
+  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(audio);
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 

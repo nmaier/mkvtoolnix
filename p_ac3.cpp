@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.6 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.7 2003/03/06 23:38:37 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -191,13 +191,13 @@ void ac3_packetizer_c::set_header() {
     GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
   codec_id.CopyBuffer((binary *)AC3CODECID, countof(AC3CODECID));
 
-  KaxTrackAudio &track_audio =
+  KaxTrackAudio &audio =
     GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
 
-  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(track_audio);
+  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(audio);
   *(static_cast<EbmlFloat *>(&kax_freq)) = (float)samples_per_sec;
   
-  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(track_audio);
+  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(audio);
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.5 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.6 2003/03/06 23:38:37 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -117,13 +117,13 @@ void vorbis_packetizer_c::set_header() {
     GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
   codec_id.CopyBuffer((binary *)AVORBIS, countof(AVORBIS));
 
-  KaxTrackAudio &track_audio =
+  KaxTrackAudio &audio =
     GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
 
-  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(track_audio);
+  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(audio);
   *(static_cast<EbmlFloat *>(&kax_freq)) = (float)vi.rate;
   
-  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(track_audio);
+  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(audio);
   *(static_cast<EbmlUInteger *>(&kax_chans)) = vi.channels;
 
   // We use lacing for the blocks. The first bytes is the number of

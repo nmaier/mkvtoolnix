@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.14 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.15 2003/03/06 23:38:37 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -89,16 +89,16 @@ void video_packetizer_c::set_header() {
     codec_private.CopyBuffer((binary *)ti->private_data, ti->private_size);
   }
 
-  KaxTrackVideo &track_video =
+  KaxTrackVideo &video =
     GetChild<KaxTrackVideo>(static_cast<KaxTrackEntry &>(*track_entry));
 
-  KaxVideoPixelHeight &pheight = GetChild<KaxVideoPixelHeight>(track_video);
+  KaxVideoPixelHeight &pheight = GetChild<KaxVideoPixelHeight>(video);
   *(static_cast<EbmlUInteger *>(&pheight)) = height;
 
-  KaxVideoPixelWidth &pwidth = GetChild<KaxVideoPixelWidth>(track_video);
+  KaxVideoPixelWidth &pwidth = GetChild<KaxVideoPixelWidth>(video);
   *(static_cast<EbmlUInteger *>(&pwidth)) = width;
 
-  KaxVideoFrameRate &frate = GetChild<KaxVideoFrameRate>(track_video);
+  KaxVideoFrameRate &frate = GetChild<KaxVideoFrameRate>(video);
   *(static_cast<EbmlFloat *>(&frate)) = fps;
 }
 
