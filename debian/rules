@@ -76,8 +76,8 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf	
-	dh_installdocs doc/matroska-tags.xml doc/matroskatags.dtd
-#	dh_installexamples
+#	dh_installdocs doc/matroskatags.dtd doc/matroskachapters.dtd doc/example-tags-1.xml doc/example-chapters-1.xml doc/example-chapters-2.xml
+	dh_installexamples examples
 #	dh_installmenu
 #	dh_installlogrotate
 #	dh_installemacsen
