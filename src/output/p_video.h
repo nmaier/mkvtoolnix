@@ -84,11 +84,13 @@ protected:
   int64_t timecodes_generated;
   video_frame_t bref_frame, fref_frame;
   bool aspect_ratio_extracted, input_is_native, output_is_native;
+  int64_t csum;
 
 public:
   mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                               double _fps, int _width, int _height,
                               bool _input_is_native, track_info_c *_ti);
+  virtual ~mpeg4_p2_video_packetizer_c();
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,

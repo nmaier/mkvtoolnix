@@ -21,6 +21,7 @@
 
 #include <FLAC/stream_decoder.h>
 
+#include "bit_cursor.h"
 #include "common.h"
 #include "flac_common.h"
 

@@ -21,6 +21,7 @@
 
 #include <matroska/KaxTrackVideo.h>
 
+#include "bit_cursor.h"
 #include "common.h"
 #include "error.h"
 #include "p_aac.h"

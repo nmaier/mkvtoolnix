@@ -295,6 +295,8 @@ mpeg1_2_video_packetizer_c::create_private_data() {
 
 // ----------------------------------------------------------------
 
+
+
 mpeg4_p2_video_packetizer_c::
 mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             double _fps,
@@ -305,7 +307,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
   timecodes_generated(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
-  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
+  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)), csum(0) {
 
   if (input_is_native && !output_is_native)
     mxerror("mkvmerge does not support muxing from native MPEG-4 to "
@@ -325,14 +327,27 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
   }
 }
 
+mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
+  mxinfo("\nCSUM: %lld\n", csum);
+}
+
 int
 mpeg4_p2_video_packetizer_c::process(memory_c &mem,
                                      int64_t old_timecode,
                                      int64_t duration,
                                      int64_t bref,
                                      int64_t fref) {
+  vector<video_frame_t> frames;
+  vector<video_frame_t>::const_iterator frame;
+
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(mem.data, mem.size);
+
+  mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
+  foreach(frame, frames) {
+    csum += frame->type + frame->size;
+    mxinfo("\nFRAME: type %c size %d\n", frame->type, frame->size);
+  }
 
   if (input_is_native == output_is_native)
     return

@@ -17,6 +17,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "bit_cursor.h"
 #include "common.h"
 #include "dts_common.h"
 

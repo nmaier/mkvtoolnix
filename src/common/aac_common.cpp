@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "bit_cursor.h"
 #include "common.h"
 #include "aac_common.h"
 #include "matroska.h"

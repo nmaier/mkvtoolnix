@@ -18,27 +18,31 @@
 
 #include <string>
 
-#include "common.h"
-
 using namespace std;
 
 class MTX_DLL_API error_c {
 private:
   string error;
 public:
-  error_c() {
-    error = "unknown error";
-  };
-  error_c(char *nerror, bool freeit = false) {
-    error = nerror;
-    if (freeit)
-      safefree(nerror);
-  };
-  error_c(const char *nerror) { error = nerror; };
-  error_c(const string &nerror) { error = nerror; };
-  error_c(const error_c &e) { error = e.error; };
-  const char *get_error() const { return error.c_str(); };
-  operator const char *() const { return error.c_str(); };
+  error_c():
+    error("unknown error") {
+  }
+
+  error_c(const char *_error):
+    error(_error) {
+  }
+
+  error_c(const string &_error):
+    error(_error) {
+  }
+
+  const char *get_error() const {
+    return error.c_str();
+  }
+
+  operator const char *() const {
+    return error.c_str();
+  }
 };
 
 #endif // __ERROR_H

@@ -96,7 +96,9 @@ chapter_error(const char *fmt,
   vsprintf(&new_error[strlen(new_error)], new_fmt.c_str(), ap);
   strcat(new_error, "\n");
   va_end(ap);
-  throw error_c(new_error, true);
+  new_fmt = new_error;
+  safefree(new_error);
+  throw error_c(new_fmt);
 }
 
 /** \brief Reads the start of a file and checks for OGM style comments.
