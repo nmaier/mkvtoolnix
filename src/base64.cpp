@@ -52,6 +52,7 @@ LICENCE:        Copyright (c) 2001 Bob Trower, Trantor Standard Systems Inc.
 
 #include "os.h"
 #include "base64.h"
+#include "common.h"
 
 using namespace std;
 
@@ -121,7 +122,7 @@ int base64_decode(const string &src, unsigned char *dst) {
         i++;
       } else if (c == '=')
         pad++;
-      else if (!isblank(c) && (c != '\r') && (c != '\n'))
+      else if (!isblanktab(c) && !iscr(c))
         return -1;
     }
 

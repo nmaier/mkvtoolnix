@@ -34,7 +34,6 @@
 #if defined(COMP_MINGW) || defined(COMP_MSC)
 # define LLD "%I64d"
 # define LLU "%I64u"
-# define isblank(c) (((c) == ' ') || ((c) == '\t'))
 #else
 # define LLD "%lld"
 # define LLU "%llu"

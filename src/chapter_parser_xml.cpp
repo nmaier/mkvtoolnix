@@ -177,7 +177,7 @@ static void add_data(void *user_data, const XML_Char *s, int len) {
 
   if (!pdata->data_allowed) {
     for (i = 0; i < len; i++)
-      if (!isblank(s[i]) && (s[i] != '\r') && (s[i] != '\n'))
+      if (!isblanktab(s[i]) && !iscr(s[i]))
         cperror(pdata, "Data is not allowed inside <%s>.", parent_name);
     return;
   }

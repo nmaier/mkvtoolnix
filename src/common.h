@@ -68,6 +68,9 @@ using namespace libebml;
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \
                            ((unsigned char)d))
+#define isblanktab(c) (((c) == ' ') || ((c) == '\t'))
+#define iscr(c) (((c) == '\n') || ((c) == '\r'))
+
 
 #define TIMECODE_SCALE 1000000
 

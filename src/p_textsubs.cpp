@@ -118,8 +118,7 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
     idx1++;
   }
   if (idx2 != subs) {
-    while (((idx2 - 1) != subs) &&
-           ((*(idx2 - 1) == '\n') || (*(idx2 - 1) == '\r'))) {
+    while (((idx2 - 1) != subs) && iscr(*(idx2 - 1))) {
       *idx2 = 0;
       idx2--;
     }
