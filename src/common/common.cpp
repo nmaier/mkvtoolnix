@@ -1321,6 +1321,48 @@ string mxsprintf(const char *fmt, ...) {
   return dst;
 }
 
+void
+mxhexdump(int level,
+          const unsigned char *buffer,
+          int length) {
+  int i, j;
+  char output[24];
+
+  if (verbose < level)
+    return;
+  j = 0;
+  for (i = 0; i < length; i++) {
+    if ((i % 16) == 0) {
+      if (i > 0) {
+        output[j] = 0;
+        mxinfo("%s\n", output);
+        j = 0;
+      }
+      mxinfo("%08x  ", i);
+
+    } else if ((i % 8) == 0) {
+      mxinfo(" ");
+      output[j] = ' ';
+      j++;
+
+    }
+    if ((buffer[i] >= 32) && (buffer[i] < 128))
+      output[j] = buffer[i];
+    else
+      output[j] = '.';
+    j++;
+    mxinfo("%02x ", buffer[i]);
+  }
+  while ((i % 16) != 0) {
+    if ((i % 8) == 0)
+      mxinfo(" ");
+    mxinfo("   ");
+    i++;
+  }
+  output[j] = 0;
+  mxinfo("%s\n", output);
+}
+
 const char *timecode_parser_error = NULL;
 
 static bool

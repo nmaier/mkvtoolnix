@@ -130,6 +130,8 @@ void MTX_DLL_API mxexit(int code = -1);
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void MTX_DLL_API _trace(const char *func, const char *file, int line);
 
+void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
+
 #define get_fourcc(b) get_uint32_be(b)
 uint16_t MTX_DLL_API get_uint16(const void *buf);
 uint32_t MTX_DLL_API get_uint24(const void *buf);
