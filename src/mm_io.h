@@ -26,6 +26,7 @@
 #include <stdint.h>
 
 #include <string>
+#include <stack>
 
 #include <ebml/IOCallback.h>
 
@@ -38,6 +39,7 @@ protected:
   bool _eof;
 #endif
   void *file;
+  stack<int64_t> positions;
 
 public:
   mm_io_c();
@@ -61,6 +63,9 @@ public:
   virtual char *gets(char *buffer, size_t max_size);
   virtual string getline();
   virtual size_t puts_unl(const char *s);
+
+  virtual void save_pos(int64_t new_pos = -1);
+  virtual bool restore_pos();
 };
 
 class mm_null_io_c: public mm_io_c {

@@ -346,6 +346,23 @@ void mm_io_c::skip(int64 num_bytes) {
     throw exception();
 }
 
+void mm_io_c::save_pos(int64_t new_pos) {
+  positions.push(getFilePointer());
+
+  if (new_pos != -1)
+    setFilePointer(new_pos);
+}
+
+bool mm_io_c::restore_pos() {
+  if (positions.size() == 0)
+    return false;
+
+  setFilePointer(positions.top());
+  positions.pop();
+
+  return true;
+}
+
 /*
  * Dummy class for output to /dev/null. Needed for two pass stuff.
  */
