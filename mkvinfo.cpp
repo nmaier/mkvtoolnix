@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.32 2003/05/04 18:31:24 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.33 2003/05/05 18:37:36 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -95,9 +95,8 @@ int num_tracks = 0;
 StdIOCallback *in = NULL;
 
 void add_track(track_t *s) {
-  tracks = (track_t **)realloc(tracks, sizeof(track_t *) * (num_tracks + 1));
-  if (tracks == NULL)
-    die("realloc");
+  tracks = (track_t **)saferealloc(tracks, sizeof(track_t *) *
+                                   (num_tracks + 1));
   tracks[num_tracks] = s;
   num_tracks++;
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.13 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.14 2003/05/05 18:37:36 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -69,9 +69,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("wav_reader: could not read WAVE header.");
   bps = wheader.common.wChannels * wheader.common.wBitsPerSample *
         wheader.common.dwSamplesPerSec / 8;
-  chunk = (unsigned char *)malloc(bps + 1);
-  if (chunk == NULL)
-    die("malloc");
+  chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
   pcmpacketizer = new pcm_packetizer_c(wheader.common.dwSamplesPerSec,
                                        wheader.common.wChannels,
@@ -85,7 +83,7 @@ wav_reader_c::~wav_reader_c() {
   if (file != NULL)
     fclose(file);
   if (chunk != NULL)
-    free(chunk);
+    safefree(chunk);
   if (pcmpacketizer != NULL)
     delete pcmpacketizer;
 }

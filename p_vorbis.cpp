@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.17 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.18 2003/05/05 18:37:36 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -50,15 +50,9 @@ vorbis_packetizer_c::vorbis_packetizer_c(unsigned char *d_header, int l_header,
   last_bs = 0;
   samples = 0;
   memset(headers, 0, 3 * sizeof(ogg_packet));
-  headers[0].packet = (unsigned char *)malloc(l_header);
-  headers[1].packet = (unsigned char *)malloc(l_comments);
-  headers[2].packet = (unsigned char *)malloc(l_codecsetup);
-  if ((headers[0].packet == NULL) || (headers[1].packet == NULL) ||
-      (headers[2].packet == NULL))
-    die("malloc");
-  memcpy(headers[0].packet, d_header, l_header);
-  memcpy(headers[1].packet, d_comments, l_comments);
-  memcpy(headers[2].packet, d_codecsetup, l_codecsetup);
+  headers[0].packet = (unsigned char *)safememdup(d_header, l_header);
+  headers[1].packet = (unsigned char *)safememdup(d_comments, l_comments);
+  headers[2].packet = (unsigned char *)safememdup(d_codecsetup, l_codecsetup);
   headers[0].bytes = l_header;
   headers[1].bytes = l_comments;
   headers[2].bytes = l_codecsetup;
@@ -78,7 +72,7 @@ vorbis_packetizer_c::~vorbis_packetizer_c() {
 
   for (i = 0; i < 3; i++)
     if (headers[i].packet != NULL)
-      free(headers[i].packet);
+      safefree(headers[i].packet);
 }
 
 void vorbis_packetizer_c::set_headers() {
@@ -101,9 +95,7 @@ void vorbis_packetizer_c::set_headers() {
   // and that's why the first byte is (num_packets - 1).
   lsize = 1 + (headers[0].bytes / 255) + 1 + (headers[1].bytes / 255) + 1 +
     headers[0].bytes + headers[1].bytes + headers[2].bytes;
-  buffer = (unsigned char *)malloc(lsize);
-  if (buffer == NULL)
-    die("malloc");
+  buffer = (unsigned char *)safemalloc(lsize);
 
   buffer[0] = 2;                // The number of packets less one.
   offset = 1;
@@ -122,7 +114,7 @@ void vorbis_packetizer_c::set_headers() {
 
   set_codec_private(buffer, lsize);
 
-  free(buffer);
+  safefree(buffer);
 
   set_audio_sampling_freq((float)vi.rate);
   set_audio_channels(vi.channels);

@@ -13,12 +13,11 @@
 
 /*!
     \file
-    \version \$Id: ac3_common.cpp,v 1.2 2003/02/16 17:04:38 mosu Exp $
+    \version \$Id: ac3_common.cpp,v 1.3 2003/05/05 18:37:36 mosu Exp $
     \brief helper function for AC3 data
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#include <malloc.h>
 #include <string.h>
 
 #include "ac3_common.h"

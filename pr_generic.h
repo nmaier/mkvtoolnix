@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.33 2003/05/03 20:22:18 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.34 2003/05/05 18:37:36 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -57,7 +57,7 @@ typedef struct {
 
   int default_track;
 
-  char *language;
+  char *language, *sub_charset;
 } track_info_t;
 
 class generic_packetizer_c: public q_c {

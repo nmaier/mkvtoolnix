@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.14 2003/05/05 14:57:45 mosu Exp $
+    \version \$Id: common.cpp,v 1.15 2003/05/05 18:37:36 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -22,6 +22,7 @@
 #include <iconv.h>
 #include <langinfo.h>
 #include <locale.h>
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -90,14 +91,10 @@ int add_mkv_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
     if (!strcmp(mkv_convs[i].charset, charset))
       return i;
 
-  mkv_convs = (mkv_conv_t *)realloc(mkv_convs, (num_mkv_convs + 1) *
-                                    sizeof(mkv_conv_t));
-  if (mkv_convs == NULL)
-    die("realloc");
+  mkv_convs = (mkv_conv_t *)saferealloc(mkv_convs, (num_mkv_convs + 1) *
+                                        sizeof(mkv_conv_t));
   c = &mkv_convs[num_mkv_convs];
-  c->charset = strdup(charset);
-  if (c->charset == NULL)
-    die("strdup");
+  c->charset = safestrdup(charset);
   c->ict_from_utf8 = ict_from;
   c->ict_to_utf8 = ict_to;
   num_mkv_convs++;
@@ -145,9 +142,9 @@ void utf8_done() {
   int i;
 
   for (i = 0; i < num_mkv_convs; i++)
-    free(mkv_convs[i].charset);
+    safefree(mkv_convs[i].charset);
   if (mkv_convs != NULL)
-    free(mkv_convs);
+    safefree(mkv_convs);
 }
 
 static char *convert_charset(iconv_t ict, char *src) {
@@ -156,9 +153,7 @@ static char *convert_charset(iconv_t ict, char *src) {
   int len;
 
   len = strlen(src) * 4;
-  dst = (char *)malloc(len + 1);
-  if (dst == NULL)
-    die("malloc");
+  dst = (char *)safemalloc(len + 1);
   memset(dst, 0, len + 1);
 
   iconv(ict, NULL, 0, NULL, 0);      // Reset the iconv state.
@@ -166,7 +161,7 @@ static char *convert_charset(iconv_t ict, char *src) {
   ldst = len;
   psrc = src;
   pdst = dst;
-  fprintf(stdout, "ic: %d\n", iconv(ict, &psrc, &lsrc, &pdst, &ldst));
+  iconv(ict, &psrc, &lsrc, &pdst, &ldst);
 
   return dst;
 }
@@ -175,9 +170,7 @@ char *to_utf8(int handle, char *local) {
   char *copy;
 
   if (handle == -1) {
-    copy = strdup(local);
-    if (copy == NULL)
-      die("strdup");
+    copy = safestrdup(local);
     return copy;
   }
 
@@ -191,9 +184,7 @@ char *from_utf8(int handle, char *utf8) {
   char *copy;
 
   if (handle == -1) {
-    copy = strdup(utf8);
-    if (copy == NULL)
-      die("strdup");
+    copy = safestrdup(utf8);
     return copy;
   }
 
@@ -221,10 +212,8 @@ int is_unique_uint32(uint32_t number) {
 }
 
 void add_unique_uint32(uint32_t number) {
-  ru_numbers = (uint32_t *)realloc(ru_numbers, (num_ru_numbers + 1) *
-                                   sizeof(uint32_t));
-  if (ru_numbers == NULL)
-    die("realloc");
+  ru_numbers = (uint32_t *)saferealloc(ru_numbers, (num_ru_numbers + 1) *
+                                       sizeof(uint32_t));
 
   ru_numbers[num_ru_numbers] = number;
   num_ru_numbers++;
@@ -242,4 +231,82 @@ uint32_t create_unique_uint32() {
   add_unique_uint32(rnumber);
 
   return rnumber;
+}
+
+/*
+ * Miscellaneous stuff
+ */
+
+char *_safestrdup(const char *s, const char *file, int line) {
+  char *copy;
+
+  if (s == NULL)
+    return NULL;
+
+  copy = strdup(s);
+  if (copy == NULL) {
+    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL\n", file,
+            line);
+    exit(1);
+  }
+
+  return copy;
+}
+
+unsigned char *_safestrdup(const unsigned char *s, const char *file,
+                           int line) {
+  char *copy;
+
+  if (s == NULL)
+    return NULL;
+
+  copy = strdup((const char *)s);
+  if (copy == NULL) {
+    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL\n", file,
+            line);
+    exit(1);
+  }
+
+  return (unsigned char *)copy;
+}
+
+void *_safememdup(const void *s, size_t size, const char *file, int line) {
+  void *copy;
+
+  if (s == NULL)
+    return NULL;
+
+  copy = malloc(size);
+  if (copy == NULL) {
+    fprintf(stderr, "die @ %s/%d : in safememdup: malloc == NULL\n", file,
+            line);
+    exit(1);
+  }
+  memcpy(copy, s, size);
+
+  return copy;
+}
+
+void *_safemalloc(size_t size, const char *file, int line) {
+  void *mem;
+
+  mem = malloc(size);
+  if (mem == NULL) {
+    fprintf(stderr, "die @ %s/%d : in safemalloc: malloc == NULL\n", file,
+            line);
+    exit(1);
+  }
+
+  return mem;
+}
+
+void *_saferealloc(void *mem, size_t size, const char *file, int line) {
+  mem = realloc(mem, size);
+  if (mem == NULL) {
+    fprintf(stderr, "die @ %s/%d : in safemalloc: realloc == NULL\n", file,
+            line);
+    exit(1);
+  }
+
+  return mem;
 }

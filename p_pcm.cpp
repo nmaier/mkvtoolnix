@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.19 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.20 2003/05/05 18:37:36 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,9 +37,7 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
   generic_packetizer_c(nti) {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
-  tempbuf = (unsigned char *)malloc(bps + 128);
-  if (tempbuf == NULL)
-    die("malloc");
+  tempbuf = (unsigned char *)safemalloc(bps + 128);
   tempbuf_size = bps;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
@@ -50,7 +48,7 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
 
 pcm_packetizer_c::~pcm_packetizer_c() {
   if (tempbuf != NULL)
-    free(tempbuf);
+    safefree(tempbuf);
 }
 
 void pcm_packetizer_c::set_headers() {
@@ -73,9 +71,7 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
   unsigned char *new_buf;
 
   if (size > tempbuf_size) { 
-    tempbuf = (unsigned char *)realloc(tempbuf, size + 128);
-    if (tempbuf == NULL)
-      die("realloc");
+    tempbuf = (unsigned char *)saferealloc(tempbuf, size + 128);
     tempbuf_size = size;
   }
 
@@ -87,9 +83,7 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
       int pad_size;
 
       pad_size = bps * ti->async.displacement / 1000;
-      new_buf = (unsigned char *)malloc(size + pad_size);
-      if (new_buf == NULL)
-        die("malloc");
+      new_buf = (unsigned char *)safemalloc(size + pad_size);
       memset(new_buf, 0, pad_size);
       memcpy(&new_buf[pad_size], buf, size);
       size += pad_size;
@@ -127,7 +121,7 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
   }
 
   if (new_buf != buf)
-    free(new_buf);
+    safefree(new_buf);
 
   return EMOREDATA;
 }

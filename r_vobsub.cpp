@@ -77,16 +77,11 @@ vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
   if (!vobsub_reader_c::probe_file(file, 0))
     throw error_c("vobsub_reader: Source is not a valid VobSub index file.");
 
-  name = strdup(fname);
-  if (name == NULL)
-    die("strdup");
+  name = safestrdup(fname);
   if ((strlen(name) > 4) && (name[strlen(name) - 4] == '.'))
     name[strlen(name) - 4] = 0;
-  else {
-    name = (char *)realloc(name, strlen(name) + 5);
-    if (name == NULL)
-      die("realloc");
-  }
+  else
+    name = (char *)saferealloc(name, strlen(name) + 5);
   strcat(name, ".sub");
   if ((subfile = fopen(name, "r")) == NULL)
     throw error_c("vobsub_reader: Could not open the sub file.");
@@ -97,7 +92,7 @@ vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
   if (verbose)
     fprintf(stdout, "Using VobSub subtitle reader for %s/%s.\n+-> Using " \
             "VobSub subtitle output module for subtitles.\n", fname, name);
-  free(name);
+  safefree(name);
   memcpy(&async, nasync, sizeof(audio_sync_t));
   if (ncomments == NULL)
     comments = ncomments;
@@ -117,11 +112,9 @@ vobsub_reader_c::~vobsub_reader_c() {
 void vobsub_reader_c::add_vobsub_packetizer(int width, int height,
                                             char *palette, int langidx,
                                             char *id, int index) {
-  all_packetizers = (vobsub_packetizer_c **)realloc(all_packetizers,
-                                                    (num_packetizers + 1) *
-                                                    sizeof(void *));
-  if (all_packetizers == NULL)
-    die("realloc");
+  all_packetizers = (vobsub_packetizer_c **)saferealloc(all_packetizers,
+                                                        (num_packetizers + 1) *
+                                                        sizeof(void *));
   try {
     vobsub_packetizer = new vobsub_packetizer_c(width, height, palette,
                                                 langidx, id, index,
@@ -166,11 +159,8 @@ int vobsub_reader_c::read() {
       if (strlen(chunk) < 10)
         fprintf(stdout, "vobsub_reader: Warning: Incorrect \"palette:\" entry "
                 "on line %d. Ignored.\n", lineno);
-      else {
-        palette = strdup(&chunk[9]);
-        if (palette == NULL)
-          die("strdup");
-      }
+      else
+        palette = safestrdup(&chunk[9]);
     } else if (!strncmp(chunk, "langidx: ", 9)) {
       langidx = strtol(&chunk[9], NULL, 10);
       if ((langidx < 0) || (errno != 0)) {
@@ -190,9 +180,7 @@ int vobsub_reader_c::read() {
         continue;
       }
       *s2 = 0;
-      id = strdup(s);
-      if (id == NULL)
-        die("strdup");
+      id = safestrdup(s);
       s = s2 + 1;
       while (isspace(*s))
         s++;
@@ -239,12 +227,12 @@ int vobsub_reader_c::read() {
       width = -1;
       height = -1;
       if (palette != NULL) {
-        free(palette);
+        safefree(palette);
         palette = NULL;
       }
       langidx = -1;
       if (id != NULL) {
-        free(id);
+        safefree(id);
         id = NULL;
       }
       index = -1;
@@ -269,9 +257,7 @@ int vobsub_reader_c::read() {
           fprintf(stderr, "Warning: vobsub_reader: This entry and the last "
                   "entry start at the same position in the file. Ignored.\n");
         else {
-          s = (char *)malloc(filepos - last_filepos);
-          if (s == NULL)
-            die("malloc");
+          s = (char *)safemalloc(filepos - last_filepos);
           if (fread(s, 1, filepos - last_filepos, subfile) != 
               (filepos - last_filepos))
             fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
@@ -279,7 +265,7 @@ int vobsub_reader_c::read() {
           else
             vobsub_packetizer->process(last_start, start - last_start, s,
                                        filepos - last_filepos, 0);
-          free(s);
+          safefree(s);
         }
       }
       last_start = start;
@@ -305,9 +291,7 @@ int vobsub_reader_c::read() {
       fprintf(stderr, "Warning: vobsub_reader: This entry and the last "
               "entry start at the same position in the file. Ignored.\n");
     else {
-      s = (char *)malloc(filepos - last_filepos);
-      if (s == NULL)
-        die("malloc");
+      s = (char *)safemalloc(filepos - last_filepos);
       if (fread(s, 1, filepos - last_filepos, subfile) != 
           (filepos - last_filepos))
         fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
@@ -315,7 +299,7 @@ int vobsub_reader_c::read() {
       else
         vobsub_packetizer->process(last_start, start - last_start, s,
                                    filepos - last_filepos, 1);
-      free(s);
+      safefree(s);
     }
   }
 

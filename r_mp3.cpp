@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.13 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.14 2003/05/05 18:37:36 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -75,9 +75,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   size = ftell(file);
   if (fseek(file, 0, SEEK_SET) != 0)
     throw error_c("mp3_reader: Could not seek to beginning of file.");
-  chunk = (unsigned char *)malloc(4096);
-  if (chunk == NULL)
-    die("malloc");
+  chunk = (unsigned char *)safemalloc(4096);
   if (fread(chunk, 1, 4096, file) != 4096)
     throw error_c("mp3_reader: Could not read 4096 bytes.");
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -100,7 +98,7 @@ mp3_reader_c::~mp3_reader_c() {
   if (file != NULL)
     fclose(file);
   if (chunk != NULL)
-    free(chunk);
+    safefree(chunk);
   if (mp3packetizer != NULL)
     delete mp3packetizer;
 }

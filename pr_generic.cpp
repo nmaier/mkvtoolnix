@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.32 2003/05/03 20:22:18 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.33 2003/05/05 18:37:36 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -63,9 +63,9 @@ generic_packetizer_c::~generic_packetizer_c() {
   free_track_info(ti);
 
   if (hcodec_id != NULL)
-    free(hcodec_id);
+    safefree(hcodec_id);
   if (hcodec_private != NULL)
-    free(hcodec_private);
+    safefree(hcodec_private);
 }
 
 void generic_packetizer_c::set_cue_creation(int ncreate_cue_data) {
@@ -107,29 +107,22 @@ void generic_packetizer_c::set_track_type(int type) {
 }
 
 void generic_packetizer_c::set_codec_id(char *id) {
-  if (hcodec_id != NULL)
-    free(hcodec_id);
+  safefree(hcodec_id);
   if (id == NULL) {
     hcodec_id = NULL;
     return;
   }
-  hcodec_id = strdup(id);
-  if (hcodec_id == NULL)
-    die("malloc");
+  hcodec_id = safestrdup(id);
 }
 
 void generic_packetizer_c::set_codec_private(unsigned char *cp, int length) {
-  if (hcodec_private != NULL)
-    free(hcodec_private);
+  safefree(hcodec_private);
   if (cp == NULL) {
     hcodec_private = NULL;
     hcodec_private_length = 0;
     return;
   }
-  hcodec_private = (unsigned char *)malloc(length);
-  if (hcodec_private == NULL)
-    die("malloc");
-  memcpy(hcodec_private, cp, length);
+  hcodec_private = (unsigned char *)safememdup(cp, length);
   hcodec_private_length = length;
 }
 
@@ -186,11 +179,8 @@ void generic_packetizer_c::set_as_default_track(char type) {
 }
 
 void generic_packetizer_c::set_language(char *language) {
-  if (ti->language != NULL)
-    free(ti->language);
-  ti->language = strdup(language);
-  if (ti->language == NULL)
-    die("strdup");
+  safefree(ti->language);
+  ti->language = safestrdup(language);
 }
 
 void generic_packetizer_c::set_headers() {
@@ -315,42 +305,15 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   if (src == NULL)
     return NULL;
 
-  dst = (track_info_t *)malloc(sizeof(track_info_t));
-  if (dst == NULL)
-    die("malloc");
-
-  memcpy(dst, src, sizeof(track_info_t));
-  if (src->fname != NULL) {
-    dst->fname = strdup(src->fname);
-    if (dst->fname == NULL)
-      die("strdup");
-  }
-  if (src->atracks != NULL) {
-    dst->atracks = (unsigned char *)strdup((char *)src->atracks);
-    if (dst->atracks == NULL)
-      die("strdup");
-  }
-  if (src->vtracks != NULL) {
-    dst->vtracks = (unsigned char *)strdup((char *)src->vtracks);
-    if (dst->vtracks == NULL)
-      die("strdup");
-  }
-  if (src->stracks != NULL) {
-    dst->stracks = (unsigned char *)strdup((char *)src->stracks);
-    if (dst->stracks == NULL)
-      die("strdup");
-  }
-  if (src->private_data != NULL) {
-    dst->private_data = (unsigned char *)malloc(src->private_size);
-    if (dst->private_data == NULL)
-      die("malloc");
-    memcpy(dst->private_data, src->private_data, src->private_size);
-  }
-  if (src->language != NULL) {
-    dst->language = strdup(src->language);
-    if (dst->language == NULL)
-      die("strdup");
-  }
+  dst = (track_info_t *)safememdup(src, sizeof(track_info_t));
+  dst->fname = safestrdup(src->fname);
+  dst->atracks = safestrdup(src->atracks);
+  dst->vtracks = safestrdup(src->vtracks);
+  dst->stracks = safestrdup(src->stracks);
+  dst->private_data = (unsigned char *)safememdup(src->private_data,
+                                                  src->private_size);
+  dst->language = safestrdup(src->language);
+  dst->sub_charset = safestrdup(src->sub_charset);
 
   return dst;
 }
@@ -359,19 +322,12 @@ void free_track_info(track_info_t *ti) {
   if (ti == NULL)
     return;
 
-  if (ti->fname != NULL)
-    free(ti->fname);
-  if (ti->atracks != NULL)
-    free(ti->atracks);
-  if (ti->vtracks != NULL)
-    free(ti->vtracks);
-  if (ti->stracks != NULL)
-    free(ti->stracks);
-  if (ti->private_data != NULL)
-    free(ti->private_data);
-  if (ti->language != NULL)
-    free(ti->language);
-
-  free(ti);
+  safefree(ti->fname);
+  safefree(ti->atracks);
+  safefree(ti->vtracks);
+  safefree(ti->stracks);
+  safefree(ti->private_data);
+  safefree(ti->language);
+  safefree(ti->sub_charset);
+  safefree(ti);
 }
-

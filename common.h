@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.16 2003/05/05 14:57:45 mosu Exp $
+    \version \$Id: common.h,v 1.17 2003/05/05 18:37:36 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -88,6 +88,17 @@ char *from_utf8(int handle, char *utf8);
 int is_unique_uint32(uint32_t number);
 void add_unique_uint32(uint32_t number);
 uint32_t create_unique_uint32();
+
+#define safefree(p) if ((p) != NULL) free(p);
+#define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
+void *_safemalloc(size_t size, const char *file, int line);
+#define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
+char *_safestrdup(const char *s, const char *file, int line);
+unsigned char *_safestrdup(const unsigned char *s, const char *file, int line);
+#define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
+void *_safememdup(const void *src, size_t size, const char *file, int line);
+#define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
+void *_saferealloc(void *mem, size_t size, const char *file, int line);
 
 extern int verbose;
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.9 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.10 2003/05/05 18:37:36 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -117,20 +117,16 @@ int srt_reader_c::read() {
       if ((*chunk == '\n') || (*chunk == '\r'))
         break;
       if (subtitles == NULL) {
-        subtitles = strdup(chunk);
-        if (subtitles == NULL)
-          die("malloc");
+        subtitles = safestrdup(chunk);
       } else {
-        subtitles = (char *)realloc(subtitles, strlen(chunk) + 1 +
-                                    strlen(subtitles));
-        if (subtitles == NULL)
-          die("malloc");
+        subtitles = (char *)saferealloc(subtitles, strlen(chunk) + 1 +
+                                        strlen(subtitles));
         strcat(subtitles, chunk);
       }
     }
     if (subtitles != NULL) {
       subs.add(start, end, subtitles);
-      free(subtitles);
+      safefree(subtitles);
     }
   }
 

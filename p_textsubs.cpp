@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.13 2003/05/05 14:57:45 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.14 2003/05/05 18:37:36 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -87,9 +87,7 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
       num_newlines++;
     idx1++;
   }
-  subs = (char *)malloc(strlen((char *)_subs) + num_newlines * 2 + 1);
-  if (subs == NULL)
-    die("malloc");
+  subs = (char *)safemalloc(strlen((char *)_subs) + num_newlines * 2 + 1);
 
   // Unify the new lines into DOS style newlines.
   idx1 = (char *)_subs;
@@ -119,11 +117,11 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
     char *utf8_subs = to_utf8(cc_local_utf8, subs);
     add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, -1, -1,
                length);
-    free(utf8_subs);
+    safefree(utf8_subs);
   } else
     add_packet((unsigned char *)subs, strlen(subs), start, -1, -1, length);
 
-  free(subs);
+  safefree(subs);
 
   return EMOREDATA;
 }

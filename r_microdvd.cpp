@@ -153,14 +153,10 @@ int microdvd_reader_c::read() {
       if (s2 != NULL)
         *s2 = 0;
       if (subtitles == NULL) {
-        subtitles = strdup(s);
-        if (subtitles == NULL)
-          die("malloc");
+        subtitles = safestrdup(s);
       } else {
-        subtitles = (char *)realloc(subtitles, strlen(s) + 2 +
-                                    strlen(subtitles));
-        if (subtitles == NULL)
-          die("malloc");
+        subtitles = (char *)saferealloc(subtitles, strlen(s) + 2 +
+                                        strlen(subtitles));
         sprintf(&subtitles[strlen(subtitles)], "\n%s", s);
       }
       if (s2 != NULL)
@@ -170,7 +166,7 @@ int microdvd_reader_c::read() {
     }
     if (subtitles != NULL) {
       subs.add(start, end, subtitles);
-      free(subtitles);
+      safefree(subtitles);
       subtitles = NULL;
     }
   }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.21 2003/05/05 14:57:45 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.22 2003/05/05 18:37:36 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -112,8 +112,8 @@ mkv_reader_c::~mkv_reader_c() {
   for (i = 0; i < num_tracks; i++)
     if (tracks[i] != NULL) {
       if (tracks[i]->private_data != NULL)
-        free(tracks[i]->private_data);
-      free(tracks[i]);
+        safefree(tracks[i]->private_data);
+      safefree(tracks[i]);
     }
   
   if (es != NULL)
@@ -142,16 +142,12 @@ int mkv_reader_c::packets_available() {
 mkv_track_t *mkv_reader_c::new_mkv_track() {
   mkv_track_t *t;
   
-  t = (mkv_track_t *)malloc(sizeof(mkv_track_t));
-  if (t != NULL) {
-    memset(t, 0, sizeof(mkv_track_t));
-    tracks = (mkv_track_t **)realloc(tracks, (num_tracks + 1) *
-                                     sizeof(mkv_track_t *));
-    if (tracks == NULL)
-      return NULL;
-    tracks[num_tracks] = t;
-    num_tracks++;
-  }
+  t = (mkv_track_t *)safemalloc(sizeof(mkv_track_t));
+  memset(t, 0, sizeof(mkv_track_t));
+  tracks = (mkv_track_t **)saferealloc(tracks, (num_tracks + 1) *
+                                       sizeof(mkv_track_t *));
+  tracks[num_tracks] = t;
+  num_tracks++;
   
   return t;
 }
@@ -662,7 +658,7 @@ int mkv_reader_c::read_headers() {
                 codec_id.ReadData(es->I_O());
                 fprintf(stdout, "matroska_reader: |  + Codec ID: %s\n",
                         &binary(codec_id));
-                track->codec_id = strdup((char *)&binary(codec_id));
+                track->codec_id = safestrdup((char *)&binary(codec_id));
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
                 KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate*>(l3);
@@ -670,13 +666,9 @@ int mkv_reader_c::read_headers() {
                 fprintf(stdout, "matroska_reader: |  + CodecPrivate, length "
                         "%llu\n", c_priv.GetSize());
                 track->private_size = c_priv.GetSize();
-                if (track->private_size > 0) {
-                  track->private_data = malloc(track->private_size);
-                  if (track->private_data == NULL)
-                    return 0;
-                  memcpy(track->private_data, c_priv.GetBuffer(),
-                         track->private_size);
-                }
+                if (track->private_size > 0)
+                  track->private_data = safememdup(track->private_data,
+                                                   track->private_size);
 
               } else if (EbmlId(*l3) ==
                          KaxTrackMinCache::ClassInfos.GlobalId) {

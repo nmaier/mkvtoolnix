@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.54 2003/05/05 14:57:45 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.55 2003/05/05 18:37:36 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -192,6 +192,8 @@ static void usage(void) {
     "\n Options that only apply to text subtitle tracks:\n"
     "  --no-utf8-subs           Outputs text subtitles unmodified and do not\n"
     "                           convert the text to UTF-8.\n"
+    "  --sub-charset            Sets the charset the text subtitles are\n"
+    "                           written in for the conversion to UTF-8.\n"
     "\n\n Other options:\n"
     "  -l, --list-types         Lists supported input file types.\n"
     "  --list-languages         Lists all ISO639 languages and their\n"
@@ -301,9 +303,7 @@ static unsigned char *parse_tracks(char *s) {
                   n);
           exit(1);
         }
-        tracks = (unsigned char *)realloc(tracks, ntracks + 2);
-        if (tracks == NULL)
-          die("malloc");
+        tracks = (unsigned char *)saferealloc(tracks, ntracks + 2);
         tracks[ntracks] = (unsigned char)n;
         tracks[ntracks + 1] = 0;
         nstart = NULL;
@@ -325,9 +325,7 @@ static unsigned char *parse_tracks(char *s) {
               n);
       exit(1);
     }
-    tracks = (unsigned char *)realloc(tracks, ntracks + 2);
-    if (tracks == NULL)
-      die("malloc");
+    tracks = (unsigned char *)saferealloc(tracks, ntracks + 2);
     tracks[ntracks] = (unsigned char)n;
     tracks[ntracks + 1] = 0;
     nstart = NULL;
@@ -491,9 +489,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: only one output file allowed.\n");
         exit(1);
       }
-      outfile = strdup(argv[i + 1]);
-      if (outfile == NULL)
-        die("strdup");
+      outfile = safestrdup(argv[i + 1]);
       i++;
     } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
       fprintf(stdout, "Known file types:\n  ext  description\n" \
@@ -579,7 +575,7 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       if (ti.atracks != NULL)
-        free(ti.atracks);
+        safefree(ti.atracks);
       ti.atracks = parse_tracks(argv[i + 1]);
       i++;
     } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vtracks")) {
@@ -588,7 +584,7 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       if (ti.vtracks != NULL)
-        free(ti.vtracks);
+        safefree(ti.vtracks);
       ti.vtracks = parse_tracks(argv[i + 1]);
       i++;
     } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stracks")) {
@@ -597,7 +593,7 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       if (ti.stracks != NULL)
-        free(ti.stracks);
+        safefree(ti.stracks);
       ti.stracks = parse_tracks(argv[i + 1]);
       i++;
     } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
@@ -654,6 +650,14 @@ static void parse_args(int argc, char **argv) {
 
       ti.language = argv[i + 1];
       i++;
+    } else if (!strcmp(argv[i], "--sub-charset")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: --sub-charset lacks its argument.\n");
+        exit(1);
+      }
+
+      ti.sub_charset = argv[i + 1];
+      i++;
     }
 
     // The argument is an input file.
@@ -670,27 +674,13 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: -S and -s used on the same source file.\n");
         exit(1);
       }
-      if (noaudio) {
-        ti.atracks = (unsigned char *)malloc(1);
-        if (ti.atracks == NULL)
-          die("malloc");
-        *ti.atracks = 0;
-      }
-      if (novideo) {
-        ti.vtracks = (unsigned char *)malloc(1);
-        if (ti.vtracks == NULL)
-          die("malloc");
-        *ti.vtracks = 0;
-      }
-      if (nosubs) {
-        ti.stracks = (unsigned char *)malloc(1);
-        if (ti.stracks == NULL)
-          die("malloc");
-        *ti.stracks = 0;
-      }
-      file = (filelist_t *)malloc(sizeof(filelist_t));
-      if (file == NULL)
-        die("malloc");
+      if (noaudio)
+        ti.atracks = (unsigned char *)safestrdup("");
+      if (novideo)
+        ti.vtracks = (unsigned char *)safestrdup("");
+      if (nosubs)
+        ti.stracks = (unsigned char *)safestrdup("");
+      file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
       file->name = argv[i];
       file->type = get_type(file->name);
@@ -786,17 +776,17 @@ static void parse_args(int argc, char **argv) {
 
         add_file(file);
       } else
-        free(file);
+        safefree(file);
 
       noaudio = 0;
       novideo = 0;
       nosubs = 0;
       if (ti.atracks != NULL)
-        free(ti.atracks);
+        safefree(ti.atracks);
       if (ti.vtracks != NULL)
-        free(ti.vtracks);
+        safefree(ti.vtracks);
       if (ti.stracks != NULL)
-        free(ti.stracks);
+        safefree(ti.stracks);
       memset(&ti, 0, sizeof(track_info_t));
       ti.async.linear = 1.0;
       ti.cues = CUES_UNSPECIFIED;
@@ -814,18 +804,14 @@ static void parse_args(int argc, char **argv) {
       file = file->next;
     }
     vorbis_comment_clear(chapters);
-    free(chapters);
+    safefree(chapters);
     chapters = NULL;
   }*/
 }
 
 static char **add_string(int &num, char **values, char *new_string) {
-  values = (char **)realloc(values, (num + 1) * sizeof(char *));
-  if (values == NULL)
-    die("realloc");
-  values[num] = strdup(new_string);
-  if (values[num] == NULL)
-    die("strdup");
+  values = (char **)saferealloc(values, (num + 1) * sizeof(char *));
+  values[num] = safestrdup(new_string);
   num++;
 
   return values;
@@ -899,9 +885,9 @@ static void handle_args(int argc, char **argv) {
   parse_args(num_args, args);
 
   for (i = 0; i < num_args; i++)
-    free(args[i]);
+    safefree(args[i]);
   if (args != NULL)
-    free(args);
+    safefree(args);
 }
 
 static int write_packet(packet_t *pack) {
@@ -1041,7 +1027,7 @@ int main(int argc, char **argv) {
     filelist_t *next = file->next;
     if (file->reader)
       delete file->reader;
-    free(file);
+    safefree(file);
     file = next;
   }
   

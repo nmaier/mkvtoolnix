@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.22 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.23 2003/05/05 18:37:36 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -112,10 +112,10 @@ ogm_reader_c::~ogm_reader_c() {
     dmx = sdemuxers[i];
     ogg_stream_clear(&dmx->os);
     delete dmx->packetizer;
-    free(dmx);
+    safefree(dmx);
   }
   if (sdemuxers != NULL)
-    free(sdemuxers);
+    safefree(sdemuxers);
   ti->private_data = NULL;
 }
 
@@ -156,8 +156,8 @@ void ogm_reader_c::free_demuxer(int idx) {
   dmx = sdemuxers[idx];
   for (i = 0; i < 3; i++)
     if (dmx->packet_data[i] != NULL)
-      free(dmx->packet_data[i]);
-  free(dmx);
+      safefree(dmx->packet_data[i]);
+  safefree(dmx);
 
   memmove(&sdemuxers[idx], &sdemuxers[idx + 1], num_sdemuxers - idx - 1);
   num_sdemuxers--;
@@ -203,10 +203,8 @@ int ogm_reader_c::read_page(ogg_page *og) {
 }
 
 void ogm_reader_c::add_new_demuxer(ogm_demuxer_t *dmx) {
-  sdemuxers = (ogm_demuxer_t **)realloc(sdemuxers, sizeof(ogm_demuxer_t *) *
-                                        (num_sdemuxers + 1));
-  if (sdemuxers == NULL)
-    die ("realloc");
+  sdemuxers = (ogm_demuxer_t **)saferealloc(sdemuxers, sizeof(ogm_demuxer_t *)
+                                            * (num_sdemuxers + 1));
   sdemuxers[num_sdemuxers] = dmx;
   num_sdemuxers++;
 }
@@ -255,7 +253,7 @@ void ogm_reader_c::create_packetizers() {
           fprintf(stderr, "Error: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", dmx->serial);
-          free(dmx);
+          safefree(dmx);
           continue;
         }
 
@@ -415,15 +413,10 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_pagein(&new_oss, og);
   ogg_stream_packetout(&new_oss, &op);
   
-  dmx = (ogm_demuxer_t *)malloc(sizeof(ogm_demuxer_t));
-  if (dmx == NULL)
-    die("malloc");
+  dmx = (ogm_demuxer_t *)safemalloc(sizeof(ogm_demuxer_t));
   memset(dmx, 0, sizeof(ogm_demuxer_t));
   dmx->num_packets = 1;
-  dmx->packet_data[0] = (unsigned char *)malloc(op.bytes);
-  if (dmx->packet_data[0] == NULL)
-    die("malloc");
-  memcpy(dmx->packet_data[0], op.packet, op.bytes);
+  dmx->packet_data[0] = (unsigned char *)safememdup(op.packet, op.bytes);
   dmx->packet_sizes[0] = op.bytes;
 
   /*
@@ -435,8 +428,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     numstreams++;
     if (!demuxing_requested(ti->atracks, ogg_page_serialno(og))) {
       ogg_stream_clear(&new_oss);
-      free(dmx->packet_data[0]);
-      free(dmx);
+      safefree(dmx->packet_data[0]);
+      safefree(dmx);
       return;
     }
       
@@ -458,8 +451,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       numstreams++;
       if (!demuxing_requested(ti->vtracks, ogg_page_serialno(og))) {
         ogg_stream_clear(&new_oss);
-        free(dmx->packet_data[0]);
-        free(dmx);
+        safefree(dmx->packet_data[0]);
+        safefree(dmx);
         return;
       }
       
@@ -496,8 +489,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       else {
         fprintf(stderr, "Error: ogm_reader: Unknown audio stream type %u. "
                 "Ignoring stream id %d.\n", codec_id, numstreams);
-        free(dmx->packet_data[0]);
-        free(dmx);
+        safefree(dmx->packet_data[0]);
+        safefree(dmx);
         return;
       }
 
@@ -535,8 +528,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
   // Failed to detect a supported header.  
   ogg_stream_clear(&new_oss);
-  free(dmx->packet_data[0]);
-  free(dmx);
+  safefree(dmx->packet_data[0]);
+  safefree(dmx);
 
   return;
 }
@@ -623,17 +616,11 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     if ((*op.packet & 3) == PACKET_TYPE_HEADER) {
       dmx->num_packets++;
-      dmx->packet_data[2] = (unsigned char *)malloc(op.bytes);
-      if (dmx->packet_data[2] == NULL)
-        die("malloc");
-      memcpy(dmx->packet_data[2], op.packet, op.bytes);
+      dmx->packet_data[2] = (unsigned char *)safememdup(op.packet, op.bytes);
       dmx->packet_sizes[2] = op.bytes;
     } else if ((*op.packet & 3) == PACKET_TYPE_COMMENT) {
       dmx->num_packets++;
-      dmx->packet_data[1] = (unsigned char *)malloc(op.bytes);
-      if (dmx->packet_data[1] == NULL)
-        die("malloc");
-      memcpy(dmx->packet_data[1], op.packet, op.bytes);
+      dmx->packet_data[1] = (unsigned char *)safememdup(op.packet, op.bytes);
       dmx->packet_sizes[1] = op.bytes;
     }
   }

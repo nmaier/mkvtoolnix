@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.24 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.25 2003/05/05 18:37:36 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -85,9 +85,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     const char *msg = "avi_reader: Could not initialize AVI source. Reason: ";
     char *s, *error;
     error = AVI_strerror();
-    s = (char *)malloc(strlen(msg) + strlen(error) + 1);
-    if (s == NULL)
-      die("malloc");
+    s = (char *)safemalloc(strlen(msg) + strlen(error) + 1);
     sprintf(s, "%s%s", msg, error);
     throw error_c(s);
   }
@@ -186,9 +184,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     demuxer = demuxer->next;
   }
   max_frame_size = fsize;
-  chunk = (unsigned char *)malloc(fsize < 16384 ? 16384 : fsize);
-  if (chunk == NULL)
-    die("malloc");
+  chunk = (unsigned char *)safemalloc(fsize < 16384 ? 16384 : fsize);
   act_wchar = 0;
   old_key = 0;
   old_chunk = NULL;
@@ -201,7 +197,7 @@ avi_reader_c::~avi_reader_c() {
   if (avi != NULL)
     AVI_close(avi);
   if (chunk != NULL)
-    free(chunk);
+    safefree(chunk);
   if (vpacketizer != NULL)
     delete vpacketizer;
 
@@ -210,12 +206,12 @@ avi_reader_c::~avi_reader_c() {
     if (demuxer->packetizer != NULL)
       delete demuxer->packetizer;
     tmp = demuxer->next;
-    free(demuxer);
+    safefree(demuxer);
     demuxer = tmp;
   }
 
   if (old_chunk != NULL)
-    free(old_chunk);
+    safefree(old_chunk);
 
   ti->private_data = NULL;
 }
@@ -228,9 +224,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   while ((append_to != NULL) && (append_to->next != NULL))
     append_to = append_to->next;
   AVI_set_audio_track(avi, aid);
-  demuxer = (avi_demuxer_t *)malloc(sizeof(avi_demuxer_t));
-  if (demuxer == NULL)
-    die("malloc");
+  demuxer = (avi_demuxer_t *)safemalloc(sizeof(avi_demuxer_t));
   memset(demuxer, 0, sizeof(avi_demuxer_t));
   demuxer->aid = aid;
   wfe = avi->wave_format_ex[aid];
@@ -332,10 +326,7 @@ int avi_reader_c::read() {
           break;
         }
         key = is_keyframe(chunk, nread, key);
-        old_chunk = (unsigned char *)malloc(nread);
-        if (old_chunk == NULL)
-          die("malloc");
-        memcpy(old_chunk, chunk, nread);
+        old_chunk = (unsigned char *)safememdup(chunk, nread);
         old_key = key;
         old_nread = nread;
         frames++;
@@ -367,13 +358,10 @@ int avi_reader_c::read() {
                              old_key ? -1 : 0);
         if (! last_frame) {
           if (old_chunk != NULL)
-            free(old_chunk);
+            safefree(old_chunk);
           if (nread == 0) 
             fprintf(stdout, "hmm\n");
-          old_chunk = (unsigned char *)malloc(nread);
-          if (old_chunk == NULL)
-            die("malloc");
-          memcpy(old_chunk, chunk, nread);
+          old_chunk = (unsigned char *)safememdup(chunk, nread);
           old_key = key;
           old_nread = nread;
         } else if (nread > 0)

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.17 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.18 2003/05/05 18:37:36 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,15 +43,13 @@ ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
 
 ac3_packetizer_c::~ac3_packetizer_c() {
   if (packet_buffer != NULL)
-    free(packet_buffer);
+    safefree(packet_buffer);
 }
 
 void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
   
-  new_buffer = (unsigned char *)realloc(packet_buffer, buffer_size + size);
-  if (new_buffer == NULL)
-    die("realloc");
+  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
   
   memcpy(new_buffer + buffer_size, buf, size);
   packet_buffer = new_buffer;
@@ -76,15 +74,12 @@ void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
   unsigned char *temp_buf;
   
   new_size = buffer_size - (pos + framesize);
-  if (new_size != 0) {
-    temp_buf = (unsigned char *)malloc(new_size);
-    if (temp_buf == NULL)
-      die("malloc");
-    memcpy(temp_buf, &packet_buffer[pos + framesize],
-           new_size);
-  } else
+  if (new_size != 0)
+    temp_buf = (unsigned char *)safememdup(&packet_buffer[pos + framesize],
+                                           new_size);
+  else
     temp_buf = NULL;
-  free(packet_buffer);
+  safefree(packet_buffer);
   packet_buffer = temp_buf;
   buffer_size = new_size;
 }
@@ -124,10 +119,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     fprintf(stdout, "ac3_packetizer: skipping %d bytes (no valid AC3 header "
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
-  buf = (unsigned char *)malloc(ac3header->bytes);
-  if (buf == NULL)
-    die("malloc");
-  memcpy(buf, packet_buffer + pos, ac3header->bytes);
+  buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
   
   if (ti->async.displacement > 0) {
     /*
@@ -180,7 +172,7 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
 
     add_packet(packet, ac3header.bytes, my_timecode);
     packetno++;
-    free(packet);
+    safefree(packet);
   }
 
   return EMOREDATA;

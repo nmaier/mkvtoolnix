@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.18 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: queue.cpp,v 1.19 2003/05/05 18:37:36 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,11 +39,11 @@ q_c::~q_c() {
   while (qpage) {
     if (qpage->pack != NULL) {
       if (qpage->pack->data != NULL)
-        free(qpage->pack->data);
-      free(qpage->pack);
+        safefree(qpage->pack->data);
+      safefree(qpage->pack);
     }
     tmppage = qpage->next;
-    free(qpage);
+    safefree(qpage);
     qpage = tmppage;
   }
 }
@@ -56,17 +56,10 @@ void q_c::add_packet(unsigned char  *data, int length, int64_t timecode,
     return;
   if (timecode < 0)
     die("timecode < 0");
-  qpage = (q_page_t *)malloc(sizeof(q_page_t));
-  if (qpage == NULL)
-    die("malloc");
-  qpage->pack = (packet_t *)malloc(sizeof(packet_t));
-  if (qpage->pack == NULL)
-    die("malloc");
+  qpage = (q_page_t *)safemalloc(sizeof(q_page_t));
+  qpage->pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(qpage->pack, 0, sizeof(packet_t));
-  qpage->pack->data = (unsigned char *)malloc(length);
-  if (qpage->pack->data == NULL)
-    die("malloc");
-  memcpy(qpage->pack->data, data, length);
+  qpage->pack->data = (unsigned char *)safememdup(data, length);
   qpage->pack->length = length;
   qpage->pack->timecode = timecode;
   qpage->pack->bref = bref;
@@ -90,7 +83,7 @@ packet_t *q_c::get_packet() {
     qpage = first->next;
     if (qpage == NULL)
       current = NULL;
-    free(first);
+    safefree(first);
     first = qpage;
     return pack;
   }

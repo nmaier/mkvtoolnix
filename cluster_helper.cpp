@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.11 2003/05/03 20:01:44 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.12 2003/05/05 18:37:36 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -45,7 +45,7 @@ cluster_helper_c::~cluster_helper_c() {
     free_contents(clusters[i]);
 
   if (clusters != NULL)
-    free(clusters);
+    safefree(clusters);
 }
 
 void cluster_helper_c::free_contents(ch_contents_t *clstr) {
@@ -60,12 +60,12 @@ void cluster_helper_c::free_contents(ch_contents_t *clstr) {
   for (i = 0; i < clstr->num_packets; i++) {
     p = clstr->packets[i];
     if (p->data != NULL)
-      free(p->data);
-    free(p);
+      safefree(p->data);
+    safefree(p);
   }
   if (clstr->packets != NULL)
-    free(clstr->packets);
-  free(clstr);
+    safefree(clstr->packets);
+  safefree(clstr);
 }
 
 KaxCluster *cluster_helper_c::get_cluster() {
@@ -81,10 +81,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
     return;
 
   c = clusters[num_clusters - 1];
-  c->packets = (packet_t **)realloc(c->packets, sizeof(packet_t *) *
-                                    (c->num_packets + 1));
-  if (c->packets == NULL)
-    die("realloc");
+  c->packets = (packet_t **)saferealloc(c->packets, sizeof(packet_t *) *
+                                        (c->num_packets + 1));
 
   c->packets[c->num_packets] = packet;
   c->num_packets++;
@@ -139,13 +137,9 @@ void cluster_helper_c::add_cluster(KaxCluster *cluster) {
 
   if (find_cluster(cluster) != -1)
     return;
-  c = (ch_contents_t *)malloc(sizeof(ch_contents_t));
-  if (c == NULL)
-    die("malloc");
-  clusters = (ch_contents_t **)realloc(clusters, sizeof(ch_contents_t *) *
-                                       (num_clusters + 1));
-  if (clusters == NULL)
-    die("realloc");
+  c = (ch_contents_t *)safemalloc(sizeof(ch_contents_t));
+  clusters = (ch_contents_t **)saferealloc(clusters, sizeof(ch_contents_t *) *
+                                           (num_clusters + 1));
   memset(c, 0, sizeof(ch_contents_t));
   clusters[num_clusters] = c;
   num_clusters++;
@@ -231,7 +225,7 @@ int cluster_helper_c::render(IOCallback *out) {
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
-    free(pack->data);
+    safefree(pack->data);
     pack->data = NULL;
   }
 
@@ -353,13 +347,11 @@ int cluster_helper_c::free_clusters() {
   // Part 4 - prune the cluster list and remove all the entries freed in
   // part 3.
   if (k == 0) {
-    free(clusters);
+    safefree(clusters);
     num_clusters = 0;
     add_cluster(new KaxCluster());
   } else if (k != num_clusters) {
-    new_clusters = (ch_contents_t **)malloc(sizeof(ch_contents_t *) * k);
-    if (new_clusters == NULL)
-      die("malloc");
+    new_clusters = (ch_contents_t **)safemalloc(sizeof(ch_contents_t *) * k);
 
     idx = 0;
     for (i = 0; i < num_clusters; i++)
@@ -368,7 +360,7 @@ int cluster_helper_c::free_clusters() {
         idx++;
       }
 
-    free(clusters);
+    safefree(clusters);
     clusters = new_clusters;
     num_clusters = k;
   }

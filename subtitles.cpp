@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.4 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.5 2003/05/05 18:37:36 mosu Exp $
     \brief subtitle helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -38,20 +38,18 @@ subtitles_c::~subtitles_c() {
   
   while (current != NULL) {
     if (current->subs != NULL)
-      free(current->subs);
+      safefree(current->subs);
     last = current;
     current = current->next;
-    free(last);
+    safefree(last);
   }
 }
     
 void subtitles_c::add(int64_t nstart, int64_t nend, char *nsubs) {
   sub_t *s;
   
-  s = (sub_t *)malloc(sizeof(sub_t));
-  if (s == NULL)
-    die("malloc");
-  s->subs = strdup(nsubs);
+  s = (sub_t *)safemalloc(sizeof(sub_t));
+  s->subs = safestrdup(nsubs);
   s->start = nstart;
   s->end = nend;
   s->next = NULL;
@@ -138,8 +136,8 @@ void subtitles_c::process(textsubs_packetizer_c *p) {
   while ((current = get_next()) != NULL) {
     p->process((unsigned char *)current->subs, 0, current->start,
                current->end - current->start);
-    free(current->subs);
-    free(current);
+    safefree(current->subs);
+    safefree(current);
   }
 }
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.20 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.21 2003/05/05 18:37:36 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,15 +43,13 @@ mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
 
 mp3_packetizer_c::~mp3_packetizer_c() {
   if (packet_buffer != NULL)
-    free(packet_buffer);
+    safefree(packet_buffer);
 }
 
 void mp3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
   
-  new_buffer = (unsigned char *)realloc(packet_buffer, buffer_size + size);
-  if (new_buffer == NULL)
-    die("realloc");
+  new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
   
   memcpy(new_buffer + buffer_size, buf, size);
   packet_buffer = new_buffer;
@@ -80,12 +78,10 @@ void mp3_packetizer_c::remove_mp3_packet(int pos, int framesize) {
   unsigned char *temp_buf;
   
   new_size = buffer_size - (pos + framesize + 4) + 1;
-  temp_buf = (unsigned char *)malloc(new_size);
-  if (temp_buf == NULL)
-    die("malloc");
+  temp_buf = (unsigned char *)safemalloc(new_size);
   if (new_size != 0)
     memcpy(temp_buf, &packet_buffer[pos + framesize + 4 - 1], new_size);
-  free(packet_buffer);
+  safefree(packet_buffer);
   packet_buffer = temp_buf;
   buffer_size = new_size;
 }
@@ -124,10 +120,8 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
   if ((verbose > 1) && (pos > 1))
     fprintf(stdout, "mp3_packetizer: skipping %d bytes (no valid MP3 header "
             "found).\n", pos);
-  buf = (unsigned char *)malloc(mp3header->framesize + 4);
-  if (buf == NULL)
-    die("malloc");
-  memcpy(buf, packet_buffer + pos, mp3header->framesize + 4);
+  buf = (unsigned char *)safememdup(packet_buffer + pos, mp3header->framesize
+                                    + 4);
   
   if (ti->async.displacement > 0) {
     /*
@@ -177,7 +171,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     if ((4 - ((header >> 17) & 3)) != 3) {
       fprintf(stdout, "Warning: p_mp3: packet is not a valid MP3 packet (" \
               "packet number %lld)\n", packetno);
-      free(packet);
+      safefree(packet);
       packetno++;
       return EMOREDATA;
     }  
@@ -188,7 +182,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 
     add_packet(packet, mp3header.framesize + 4, my_timecode);
     packetno++;
-    free(packet);
+    safefree(packet);
   }
 
   return EMOREDATA;
