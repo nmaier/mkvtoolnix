@@ -774,3 +774,40 @@ AC_DEFUN(PATH_LZO,
   AC_SUBST(LZO_CFLAGS)
   AC_SUBST(LZO_LIBS)
 ])
+
+AC_DEFUN(PATH_BZ2,
+[ AC_ARG_WITH(bz2,
+	      [  --with-bz2=PREFIX             Path to where the bz2 library is installed],
+	      , with_bz2_given=no)
+
+  BZ2_CFLAGS=
+  BZ2_LIBS=
+  if test "$with_bz2" != "yes" -a "$with_bz2" != ""; then
+    BZ2_CFLAGS="-I$with_bz2/include"
+    BZ2_LIBS="-L$with_bz2/lib"
+  fi
+
+	AC_CHECK_LIB(bz2, BZ2_bzCompress,
+		     [ BZ2_LIBS="$BZ2_LIBS -lbz2"
+		       bz2_found=yes ],
+		     [ bz2_found=no ],
+		     "$BZ2_LIBS")
+  if test "$bz2_found" = "no"; then
+    AC_MSG_ERROR([Could not find the bz2 library])
+  fi
+	bz2_save_CFLAGS="$CFLAGS"
+	CFLAGS="$CFLAGS $BZ2_CFLAGS"
+  AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
+  if test "$bz2_found" = "no"; then
+    AC_MSG_ERROR([Could not find bzlib.h])
+  fi
+	CFLAGS="$bz2_save_CFLAGS"
+
+  if test "x$bz2_found" = "xno"; then
+    exit 1
+  fi
+
+  AC_SUBST(BZ2_CFLAGS)
+  AC_SUBST(BZ2_LIBS)
+])
+
