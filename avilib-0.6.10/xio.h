@@ -24,6 +24,10 @@
 #ifndef __iolib_h
 #define __iolib_h
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -37,5 +41,9 @@ int xio_fstat(int fd, struct stat *buf);
 int xio_lstat(const char *filename, struct stat *buf);
 int xio_stat(const char *filename, struct stat *buf);
 int xio_rename(const char *oldpath, const char *newpath);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif

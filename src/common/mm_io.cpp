@@ -120,6 +120,11 @@ bool mm_io_c::eof() {
   return feof((FILE *)file) != 0 ? true : false;
 }
 
+int
+mm_io_c::truncate(int64_t pos) {
+  return ftruncate(fileno((FILE *)file), pos);
+}
+
 #else // SYS_UNIX
 
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
@@ -257,6 +262,11 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
 
 bool mm_io_c::eof() {
   return _eof;
+}
+
+int
+mm_io_c::truncate(int64_t pos) {
+  _chsize((HANDLE)file, pos);
 }
 
 #endif

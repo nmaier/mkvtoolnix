@@ -74,6 +74,8 @@ public:
   virtual int64_t get_size();
 
   virtual const char *get_file_name();
+
+  virtual int truncate(int64_t pos);
 };
 
 class MTX_DLL_API mm_null_io_c: public mm_io_c {
