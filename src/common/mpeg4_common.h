@@ -40,6 +40,14 @@
 /** MPEG-1/-2 frame rate: 60 frames per second */
 #define MPEGVIDEO_FPS_60        0x08
 
+enum mpeg_video_type_e {
+  MPEG_VIDEO_NONE = 0,
+  MPEG_VIDEO_V1,
+  MPEG_VIDEO_V2,
+  MPEG_VIDEO_V4_LAYER_2,
+  MPEG_VIDEO_V4_LAYER_10
+};
+
 /** Pointers to MPEG4 video frames and their data
  *
  * MPEG4 video can be stored in a "packed" format, e.g. in AVI. This means

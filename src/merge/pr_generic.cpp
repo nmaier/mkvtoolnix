@@ -90,7 +90,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Let's see if the user has specified which cues he wants for this track.
-  ti->cues =  CUE_STRATEGY_UNSPECIFIED;
+  ti->cues = CUE_STRATEGY_UNSPECIFIED;
   for (i = 0; i < ti->cue_creations.size(); i++) {
     cue_creation_t &cc = ti->cue_creations[i];
     if ((cc.id == ti->id) || (cc.id == -1)) { // -1 == all tracks
@@ -310,8 +310,8 @@ void
 generic_packetizer_c::set_track_type(int type) {
   htrack_type = type;
 
-  if ((type == track_audio) && (ti->cues ==  CUE_STRATEGY_UNSPECIFIED))
-    ti->cues =  CUE_STRATEGY_SPARSE;
+  if ((type == track_audio) && (ti->cues == CUE_STRATEGY_UNSPECIFIED))
+    ti->cues = CUE_STRATEGY_SPARSE;
   if (type == track_audio)
     reader->num_audio_tracks++;
   else if (type == track_video) {

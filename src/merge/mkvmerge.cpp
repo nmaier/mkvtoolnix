@@ -758,11 +758,11 @@ parse_cues(const string &s,
             s.c_str());
 
   if (parts[1] == "all")
-    cues.cues =  CUE_STRATEGY_ALL;
+    cues.cues = CUE_STRATEGY_ALL;
   else if (parts[1] == "iframes")
-    cues.cues =  CUE_STRATEGY_IFRAMES;
+    cues.cues = CUE_STRATEGY_IFRAMES;
   else if (parts[1] == "none")
-    cues.cues =  CUE_STRATEGY_NONE;
+    cues.cues = CUE_STRATEGY_NONE;
   else
     mxerror(_("'%s' is an unsupported argument for --cues.\n"), s.c_str());
 

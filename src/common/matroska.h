@@ -49,6 +49,7 @@
 #define MKV_V_MPEG4_SP   "V_MPEG4/ISO/SP"
 #define MKV_V_MPEG4_ASP  "V_MPEG4/ISO/ASP"
 #define MKV_V_MPEG4_AP   "V_MPEG4/ISO/AP"
+#define MKV_V_MPEG4_AVC  "V_MPEG4/ISO/AVC"
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 #define MKV_V_REALV1     "V_REAL/RV10"
 #define MKV_V_REALV2     "V_REAL/RV20"

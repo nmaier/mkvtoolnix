@@ -31,8 +31,9 @@ private:
   double fps;
   int width, height, bpp, frames_output;
   int64_t ref_timecode, duration_shift;
-  bool avi_compat_mode, bframes, pass_through, is_mpeg4, is_mpeg1_2;
+  bool avi_compat_mode, bframes, pass_through;
   bool aspect_ratio_extracted;
+  mpeg_video_type_e mpeg_video;
   vector<video_frame_t> queued_frames;
   video_frame_t bref_frame, fref_frame;
 

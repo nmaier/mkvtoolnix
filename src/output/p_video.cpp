@@ -48,8 +48,8 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   frames_output = 0;
   bframes = nbframes;
   ref_timecode = -1;
-  if (get_cue_creation() ==  CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation( CUE_STRATEGY_IFRAMES);
+  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
+    set_cue_creation(CUE_STRATEGY_IFRAMES);
   duration_shift = 0;
   bref_frame.type = '?';
   fref_frame.type = '?';
@@ -57,38 +57,47 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
 
   set_track_type(track_video);
 
-  is_mpeg4 = false;
+  mpeg_video = MPEG_VIDEO_NONE;
   if ((ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER))) {
     fourcc = (char *)&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression;
     if (!strncasecmp(fourcc, "DIVX", 4) ||
         !strncasecmp(fourcc, "XVID", 4) ||
         !strncasecmp(fourcc, "DX5", 3))
-      is_mpeg4 = true;
-  } else if ((ncodec_id != NULL) &&
-             !strncmp(ncodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
-    is_mpeg4 = true;
+      mpeg_video = MPEG_VIDEO_V4_LAYER_2;
+  }
+  if ((mpeg_video == MPEG_VIDEO_NONE) && (ncodec_id != NULL) &&
+      !strncmp(ncodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2)) {
+    if (!strcmp(ncodec_id, MKV_V_MPEG4_AVC))
+      mpeg_video = MPEG_VIDEO_V4_LAYER_10;
+    else
+      mpeg_video = MPEG_VIDEO_V4_LAYER_2;
+  }
 
-  is_mpeg1_2 = (ncodec_id != NULL) &&
-    (!strcmp(ncodec_id, "V_MPEG1") || !strcmp(ncodec_id, "V_MPEG2"));
+  if ((mpeg_video == MPEG_VIDEO_NONE) && (ncodec_id != NULL) &&
+      (!strcmp(ncodec_id, "V_MPEG1") || !strcmp(ncodec_id, "V_MPEG2")))
+    mpeg_video = (ncodec_id[6] == '1') ? MPEG_VIDEO_V1 : MPEG_VIDEO_V2;
 
   if (ncodec_id != NULL)
     set_codec_id(ncodec_id);
-  else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_MPEG4)) {
+  else if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
+           hack_engaged(ENGAGE_NATIVE_MPEG4)) {
     if (bframes)
       set_codec_id(MKV_V_MPEG4_ASP);
     else
       set_codec_id(MKV_V_MPEG4_SP);
   } else
     set_codec_id(MKV_V_MSCOMP);
-  if ((!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_MPEG4)) &&
+  if (((mpeg_video != MPEG_VIDEO_V4_LAYER_2) ||
+       !hack_engaged(ENGAGE_NATIVE_MPEG4)) &&
       (hcodec_id != "") && (hcodec_id == MKV_V_MSCOMP) &&
       (ti->private_data != NULL) &&
       (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
       (ti->fourcc[0] != 0))
     memcpy(&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression,
            ti->fourcc, 4);
-  if (!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_MPEG4))
+  if ((mpeg_video != MPEG_VIDEO_V4_LAYER_2) ||
+      !hack_engaged(ENGAGE_NATIVE_MPEG4))
     set_codec_private(ti->private_data, ti->private_size);
 }
 
@@ -132,13 +141,23 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_enter("video_packetizer_c::process");
 
-  if (is_mpeg1_2 && (fps < 0.0))
+  if (!aspect_ratio_extracted) {
+    if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) ||
+        (mpeg_video == MPEG_VIDEO_V4_LAYER_10))
+      extract_mpeg4_aspect_ratio(mem.data, mem.size);
+    aspect_ratio_extracted = true;
+  }
+
+  if ((fps < 0.0) &&
+      (mpeg_video == MPEG_VIDEO_V1) || (mpeg_video == MPEG_VIDEO_V2))
     extract_mpeg1_2_fps(mem.data, mem.size);
 
-  if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4)
+  if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
+      hack_engaged(ENGAGE_NATIVE_MPEG4))
     mpeg4_find_frame_types(mem.data, mem.size, frames);
 
-  if (hack_engaged(ENGAGE_NATIVE_MPEG4) && is_mpeg4 && (fps != 0.0)) {
+  if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
+      hack_engaged(ENGAGE_NATIVE_MPEG4) && (fps != 0.0)) {
     for (i = 0; i < frames.size(); i++) {
       if ((frames[i].type == 'I') ||
           ((frames[i].type != 'B') && (fref_frame.type != '?')))
@@ -197,9 +216,6 @@ video_packetizer_c::process(memory_c &mem,
 
     return FILE_STATUS_MOREDATA;
   }
-
-  if (is_mpeg4 && !aspect_ratio_extracted)
-    extract_mpeg4_aspect_ratio(mem.data, mem.size);
 
   if (old_timecode == -1)
     timecode = (int64_t)(1000000000.0 * frames_output / fps) + duration_shift;

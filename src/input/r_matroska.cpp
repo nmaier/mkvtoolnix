@@ -1492,7 +1492,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
          (t->v_pcright > 0) || (t->v_pcbottom > 0)))
       ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
                                      t->v_pcright, t->v_pcbottom);
-    if (ptzr->get_cue_creation() ==  CUE_STRATEGY_UNSPECIFIED)
+    if (ptzr->get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
       ptzr->set_cue_creation( CUE_STRATEGY_IFRAMES);
 
   } else if (t->type == 'a') {

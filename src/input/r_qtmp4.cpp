@@ -228,7 +228,9 @@ qtmp4_reader_c::parse_headers() {
          strncasecmp(dmx->fourcc, "SVQ", 3) &&
          strncasecmp(dmx->fourcc, "cvid", 4) &&
          strncasecmp(dmx->fourcc, "rle ", 4) &&
-         strncasecmp(dmx->fourcc, "mp4v", 4)) ||
+         strncasecmp(dmx->fourcc, "mp4v", 4) &&
+         strncasecmp(dmx->fourcc, "avc1", 4))
+        ||
         ((dmx->type == 'a') &&
          strncasecmp(dmx->fourcc, "QDM", 3) &&
          strncasecmp(dmx->fourcc, "MP4A", 4) &&
@@ -302,6 +304,13 @@ qtmp4_reader_c::parse_headers() {
                    "config. Skipping this track.\n", dmx->id);
             continue;
           }
+        }
+
+      } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
+        if ((dmx->priv == NULL) || (dmx->priv_size < 4)) {
+          mxwarn(PFX "MPEG4 part 10/AVC track %u is missing its decoder "
+                 "config. Skipping this track.\n", dmx->id);
+          continue;
         }
       }
     }
@@ -1169,6 +1178,15 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           add_packetizer(new video_packetizer_c(this, codec_id.c_str(),
                                                 -1.0, dmx->v_width,
                                                 dmx->v_height, false, ti));
+
+      } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
+        ti->private_size = dmx->priv_size;
+        ti->private_data = dmx->priv;
+        dmx->ptzr =
+          add_packetizer(new video_packetizer_c(this, MKV_V_MPEG4_AVC, 0.0,
+                                                dmx->v_width, dmx->v_height,
+                                                false, ti));
+        ti->private_data = NULL;
 
       } else {
         ti->private_size = dmx->v_stsd_size;
