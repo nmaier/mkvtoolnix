@@ -49,7 +49,7 @@ cluster_helper_c::cluster_helper_c() {
   out = NULL;
   timecode_offset = 0;
   last_packets = NULL;
-  first_timecode = -1;
+  first_timecode = 0;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -106,8 +106,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   c->num_packets++;
   cluster_content_size += packet->length;
 
-  if (packet->timecode > max_timecode)
-    max_timecode = packet->timecode;
+  if ((packet->timecode + packet->duration) > max_timecode)
+    max_timecode = (packet->timecode + packet->duration);
 
   walk_clusters();
 
@@ -377,9 +377,10 @@ int cluster_helper_c::render() {
 
       for (k = 0, block_duration = 0; k < durations.size(); k++)
         block_duration += durations[k];
-      if ((pack->duration_mandatory) ||
-          (def_duration != block_duration))
-      last_block_group->SetBlockDuration(block_duration * 1000000);
+//       if ((pack->duration_mandatory) ||
+//           (def_duration != block_duration))
+      if (def_duration != block_duration)
+        last_block_group->SetBlockDuration(block_duration * 1000000);
 
       durations.clear();
     }
@@ -465,6 +466,10 @@ int cluster_helper_c::render() {
   }
 
   if (elements_in_cluster > 0) {
+    def_duration = last_source->get_track_default_duration_ns() / 1000000;
+    if ((block_duration != 0) && (def_duration != block_duration))
+      last_block_group->SetBlockDuration(block_duration * 1000000);
+
     cluster->Render(*out, *kax_cues);
 
     if (kax_seekhead != NULL)
