@@ -8,7 +8,7 @@ class T_017chapters < Test
 
   def run
     merge("--sub-charset 0:ISO-8859-1 data/textsubs/vde.srt " +
-           "--chapters data/text/shortchaps.txt")
+           "--chapter-charset ISO-8859-1 --chapters data/text/shortchaps.txt")
     hash = hash_tmp
     merge("--sub-charset 0:ISO-8859-1 data/textsubs/vde.srt " +
            "--chapters data/text/vmap.chapters.xml")
