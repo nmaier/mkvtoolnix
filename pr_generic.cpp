@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.16 2003/04/17 18:15:18 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.17 2003/04/17 19:33:02 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -238,6 +238,8 @@ int cluster_helper_c::render(IOCallback *out) {
     }
     if (new_group == NULL)
       new_group = last_block_group;
+    else
+      kax_cues->AddBlockGroup(*new_group);
     pack->group = new_group;
     last_block_group = new_group;
   }

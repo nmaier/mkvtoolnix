@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.33 2003/04/17 18:15:18 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.34 2003/04/17 19:33:02 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -455,9 +455,6 @@ static void parse_args(int argc, char **argv) {
   try {
     render_head(out);
 
-    kax_cues = new KaxCues();
-    kax_segment = new KaxSegment();
-
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
     KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
     *(static_cast<EbmlUInteger *>(&time_scale)) = TIMECODE_SCALE;
@@ -759,6 +756,9 @@ int main(int argc, char **argv) {
   packet_t *pack;
 
   nice(2);
+
+  kax_segment = new KaxSegment();
+  kax_cues = new KaxCues();
 
   cluster_helper = new cluster_helper_c();
   cluster_helper->add_cluster(new KaxCluster());
