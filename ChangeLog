@@ -1,3 +1,9 @@
+2004-01-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: For some special atom sizes in Quicktime and
+	MP4 files the size was not read correctly. This affected
+	e.g. files created by Nero Digital.
+
 2004-01-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Segfault when muxing some video formats due

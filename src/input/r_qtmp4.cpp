@@ -66,9 +66,9 @@ int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
     in->setFilePointer(0, seek_beginning);
 
     atom_size = in->read_uint32_be();
+    atom = in->read_uint32_be();
     if (atom_size == 1)
       atom_size = in->read_uint64_be();
-    atom = in->read_uint32_be();
 
     mxverb(3, PFX "Atom: '%c%c%c%c'; size: %llu\n", BE2STR(atom), atom_size);
 
@@ -145,15 +145,15 @@ void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
                                uint32_t &hsize) {
   pos = io->getFilePointer();
   size = io->read_uint32_be();
+  atom = io->read_uint32_be(); 
   hsize = 8;
   if (size == 1) {
     size = io->read_uint64_be();
     hsize += 8;
   } else if (size == 0)
-    size = file_size - io->getFilePointer() + 4;
+    size = file_size - io->getFilePointer() + 8;
   if (size < hsize)
     mxerror(PFX "Invalid chunk size %llu at %lld.\n", size, pos);
-  atom = io->read_uint32_be();
 }
 
 #define skip_atom() io->setFilePointer(atom_pos + atom_size)
