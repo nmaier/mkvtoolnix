@@ -45,7 +45,7 @@ using namespace libebml;
 kax_analyzer_c::kax_analyzer_c(wxWindow *nparent, string nname):
   wxDialog(nparent, -1, "Analysis running", wxDefaultPosition,
 #ifdef SYS_WINDOWS
-           wxSize(300, 100),
+           wxSize(300, 130),
 #else
            wxSize(300, 100),
 #endif
@@ -63,7 +63,11 @@ kax_analyzer_c::kax_analyzer_c(wxWindow *nparent, string nname):
   wxButton *b_abort =
     new wxButton(this, ID_B_ANALYZER_ABORT, _("Abort"), wxPoint(0, 0),
                  wxDefaultSize);
+#if defined(SYS_WINDOWS)
+  b_abort->Move(wxPoint(150 - b_abort->GetSize().GetWidth() / 2, 70));
+#else
   b_abort->Move(wxPoint(150 - b_abort->GetSize().GetWidth() / 2, 60));
+#endif
 }
 
 kax_analyzer_c::~kax_analyzer_c() {
