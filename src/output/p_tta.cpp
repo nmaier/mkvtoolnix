@@ -65,13 +65,15 @@ tta_packetizer_c::process(memory_c &mem,
   debug_enter("tta_packetizer_c::process");
 
   if (duration == -1) {
-    add_packet(mem, samples_output * 1000000000 / sample_rate,
-               (int64_t)(1000000000.0 * ti->async.linear * TTA_FRAME_TIME));
-    samples_output += (int64_t)(TTA_FRAME_TIME * sample_rate);
+    add_packet(mem, irnd(samples_output * 1000000000 / sample_rate),
+               irnd(1000000000.0 * ti->async.linear * TTA_FRAME_TIME));
+    samples_output += irnd(TTA_FRAME_TIME * sample_rate);
   } else {
-    add_packet(mem, samples_output * 1000000000 / sample_rate,
+    mxverb(2, "tta_packetizer: incomplete block with duration %lld\n",
+           duration);
+    add_packet(mem, irnd((double)samples_output * 1000000000 / sample_rate),
                duration);
-    samples_output += (int64_t)(duration * sample_rate / 1000000000ll);
+    samples_output += irnd(duration * sample_rate / 1000000000ll);
   }
 
   debug_leave("tta_packetizer_c::process");
