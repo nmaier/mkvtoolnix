@@ -166,7 +166,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
 
   packetizer = new vobsub_packetizer_c(this, idx_data.c_str(),
                                        idx_data.length(), ifo_data,
-                                       ifo_data_size, COMPRESSION_LZO,
+                                       ifo_data_size, COMPRESSION_ZLIB,
                                        COMPRESSION_NONE, ti);
 
   if (verbose) {
