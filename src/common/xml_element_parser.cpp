@@ -226,6 +226,9 @@ add_data(void *user_data,
 
   pdata = (parser_data_t *)user_data;
 
+  if (pdata->skip_depth > 0)
+    return;
+
   if (!pdata->data_allowed) {
     for (i = 0; i < len; i++)
       if (!isblanktab(s[i]) && !iscr(s[i]))
@@ -242,6 +245,22 @@ add_data(void *user_data,
 
 static void end_element(void *user_data, const char *name);
 
+static int
+find_element_index(parser_data_t *pdata,
+                   const char *name,
+                   int parent_idx) {
+  int elt_idx;
+
+  elt_idx = parent_idx;
+  while (pdata->mapping[elt_idx].name != NULL) {
+    if (!strcmp(pdata->mapping[elt_idx].name, name))
+      return elt_idx;
+    elt_idx++;
+  }
+
+  return -1;
+}
+
 static void
 add_new_element(parser_data_t *pdata,
                 const char *name,
@@ -251,17 +270,8 @@ add_new_element(parser_data_t *pdata,
   int elt_idx, i;
   bool found;
 
-  elt_idx = parent_idx;
-  found = false;
-  while (pdata->mapping[elt_idx].name != NULL) {
-    if (!strcmp(pdata->mapping[elt_idx].name, name)) {
-      found = true;
-      break;
-    }
-    elt_idx++;
-  }
-
-  if (!found)
+  elt_idx = find_element_index(pdata, name, parent_idx);
+  if (-1 == elt_idx)
     xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
                pdata->mapping[parent_idx].name);
 
@@ -323,19 +333,9 @@ start_element(void *user_data,
               const char *name,
               const char **atts) {
   parser_data_t *pdata;
-  int parent_idx, i;
+  int elt_idx, parent_idx, i;
 
   pdata = (parser_data_t *)user_data;
-
-  if (pdata->data_allowed)
-    xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
-               xmlp_pname);
-
-  pdata->data_allowed = false;
-  pdata->format = NULL;
-
-  if (pdata->bin != NULL)
-    die("start_element: pdata->bin != NULL");
 
   if (pdata->depth == 0) {
     if (pdata->done_reading)
@@ -347,6 +347,23 @@ start_element(void *user_data,
 
   } else
     parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
+
+  elt_idx = find_element_index(pdata, name, parent_idx);
+  if ((pdata->skip_depth > 0) ||
+      ((-1 != elt_idx) && (EBMLT_SKIP == pdata->mapping[elt_idx].type))) {
+    pdata->skip_depth++;
+    return;
+  }
+
+  if (pdata->data_allowed)
+    xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
+               xmlp_pname);
+
+  pdata->data_allowed = false;
+  pdata->format = NULL;
+
+  if (pdata->bin != NULL)
+    die("start_element: pdata->bin != NULL");
 
   add_new_element(pdata, name, parent_idx);
 
@@ -369,6 +386,11 @@ end_element(void *user_data,
   EbmlMaster *m;
 
   pdata = (parser_data_t *)user_data;
+
+  if (pdata->skip_depth > 0) {
+    pdata->skip_depth--;
+    return;
+  }
 
   if (pdata->data_allowed && (pdata->bin == NULL))
     pdata->bin = new string;
