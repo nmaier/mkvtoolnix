@@ -44,7 +44,7 @@ MPEGFrame::~MPEGFrame(){
 
 void M2VParser::SetEOS(){
   MPEGChunk * c;
-  while(c = mpgBuf->ReadChunk()){
+  while((c = mpgBuf->ReadChunk())){
     if(c) chunks.push_back(c);
   }
   mpgBuf->ForceFinal();  //Force the last frame out.
