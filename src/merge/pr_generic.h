@@ -89,8 +89,6 @@ public:
     return 0;
   }
   unsigned char *grab() {
-    if (size == 0)
-      die("memory_c::grab(): size == 0\n");
     if (is_free) {
       is_free = false;
       return data;
