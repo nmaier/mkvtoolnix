@@ -44,7 +44,6 @@ private:
   int64_t ref_timecode, duration_shift;
   bool avi_compat_mode, bframes, pass_through, is_mpeg4;
   bool aspect_ratio_extracted;
-  char *codec_id;
   vector<video_frame_t> queued_frames;
   video_frame_t bref_frame, fref_frame;
 

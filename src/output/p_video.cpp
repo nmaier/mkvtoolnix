@@ -47,6 +47,8 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
                                        bool nbframes,
                                        track_info_c *nti)
   throw (error_c) : generic_packetizer_c(nreader, nti) {
+  char *fourcc;
+
   fps = nfps;
   width = nwidth;
   height = nheight;
@@ -56,18 +58,12 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   if (get_cue_creation() == CUES_UNSPECIFIED)
     set_cue_creation(CUES_IFRAMES);
   video_track_present = true;
-  codec_id = safestrdup(ncodec_id);
   duration_shift = 0;
   bref_frame.type = '?';
   fref_frame.type = '?';
   aspect_ratio_extracted = false;
 
   set_track_type(track_video);
-}
-
-void
-video_packetizer_c::set_headers() {
-  char *fourcc;
 
   is_mpeg4 = false;
   if ((ti->private_data != NULL) &&
@@ -77,12 +73,12 @@ video_packetizer_c::set_headers() {
         !strncasecmp(fourcc, "XVID", 4) ||
         !strncasecmp(fourcc, "DX5", 3))
       is_mpeg4 = true;
-  } else if ((hcodec_id != NULL) &&
-             !strncmp(hcodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
+  } else if ((ncodec_id != NULL) &&
+             !strncmp(ncodec_id, MKV_V_MPEG4_SP, strlen(MKV_V_MPEG4_SP) - 2))
     is_mpeg4 = true;
 
-  if (codec_id != NULL)
-    set_codec_id(codec_id);
+  if (ncodec_id != NULL)
+    set_codec_id(ncodec_id);
   else if (is_mpeg4 && hack_engaged(ENGAGE_NATIVE_BFRAMES)) {
     if (bframes)
       set_codec_id(MKV_V_MPEG4_ASP);
@@ -99,7 +95,10 @@ video_packetizer_c::set_headers() {
            ti->fourcc, 4);
   if (!is_mpeg4 || !hack_engaged(ENGAGE_NATIVE_BFRAMES))
     set_codec_private(ti->private_data, ti->private_size);
+}
 
+void
+video_packetizer_c::set_headers() {
   // Set MinCache to 1 for I- and P-frames. If you only
   // have I-frames then it can be set to 0 (e.g. MJPEG). 2 is needed
   // if there are B-frames as well.
@@ -232,7 +231,6 @@ video_packetizer_c::process(memory_c &mem,
 }
 
 video_packetizer_c::~video_packetizer_c() {
-  safefree(codec_id);
 }
 
 void
@@ -445,7 +443,7 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   if (vsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
   if ((width != vsrc->width) || (height != vsrc->height) ||
-      (fps != vsrc->fps) || strcmp(codec_id, vsrc->codec_id))
+      (fps != vsrc->fps) || strcmp(hcodec_id, vsrc->hcodec_id))
     return CAN_CONNECT_NO_PARAMETERS;
   if (((ti->private_data == NULL) && (vsrc->ti->private_data != NULL)) ||
       ((ti->private_data != NULL) && (vsrc->ti->private_data == NULL)) ||
