@@ -1,5 +1,9 @@
 2004-10-10  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge/mkvinfo/mkvextract: bug fix: The chapter and tag
+	element tables were not always intialized correctly depending on
+	the compiler and the optimization flags used.
+
 	* mkvmerge: bug fix: The OGM reader was broken if at least one
 	track was not to be copied from the file (happened between 0.9.5
 	and 0.9.6).

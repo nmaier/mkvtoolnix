@@ -100,6 +100,8 @@ EbmlMaster *MTX_DLL_API sort_ebml_master(EbmlMaster *e);
 const EbmlCallbacks &MTX_DLL_API
 find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
 const EbmlCallbacks &MTX_DLL_API
+find_ebml_callbacks(const EbmlCallbacks &base, const char *debug_name);
+const EbmlCallbacks &MTX_DLL_API
 find_ebml_parent_callbacks(const EbmlCallbacks &base, const EbmlId &id);
 const EbmlSemantic &MTX_DLL_API
 find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
