@@ -42,6 +42,7 @@ mmg_dialog *mdlg;
 wxString last_open_dir;
 wxString mkvmerge_path;
 vector<wxString> last_settings;
+vector<wxString> last_chapters;
 vector<mmg_file_t> files;
 
 wxString &break_line(wxString &line, int break_after) {
@@ -153,7 +154,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                       _T("Sa&ve command line\tCtrl-V"),
                       _T("Save the command line to a file"));
 
-  wxMenu *chapter_menu = new wxMenu();
+  chapter_menu = new wxMenu();
   chapter_menu->Append(ID_M_CHAPTERS_NEW, _T("&New"),
                        _T("Create a new chapter file"));
   chapter_menu->Append(ID_M_CHAPTERS_LOAD, _T("&Load"),
@@ -168,6 +169,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   chapter_menu->Append(ID_M_CHAPTERS_VERIFY, _T("&Verify"),
                        _T("Verify the current chapter entries to see if there "
                           "are any errors"));
+  chapter_menu_sep = false;
+  update_chapter_menu();
 
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_ABOUT, _T("&About\tF1"),
@@ -386,6 +389,36 @@ void mmg_dialog::set_last_settings_in_menu(wxString name) {
   cfg->Flush();
 
   update_file_menu();
+}
+
+void mmg_dialog::set_last_chapters_in_menu(wxString name) {
+  uint32_t i;
+  vector<wxString>::iterator eit;
+  wxConfigBase *cfg;
+  wxString s;
+
+  i = 0;
+  while (i < last_chapters.size()) {
+    if (last_chapters[i] == name) {
+      eit = last_chapters.begin();
+      eit += i;
+      last_chapters.erase(eit);
+    } else
+      i++;
+  }
+  last_chapters.insert(last_chapters.begin(), name);
+  while (last_chapters.size() > 4)
+    last_chapters.pop_back();
+
+  cfg = wxConfigBase::Get();
+  cfg->SetPath("/GUI");
+  for (i = 0; i < last_chapters.size(); i++) {
+    s.Printf("last_chapters %d", i);
+    cfg->Write(s, last_chapters[i]);
+  }
+  cfg->Flush();
+
+  update_chapter_menu();
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
@@ -758,6 +791,16 @@ void mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
   load(last_settings[evt.GetId() - ID_M_FILE_LOADLAST1]);
 }
 
+void mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
+  if ((evt.GetId() < ID_M_CHAPTERS_LOADLAST1) ||
+      ((evt.GetId() - ID_M_CHAPTERS_LOADLAST1) >= last_chapters.size()))
+    return;
+
+  notebook->SetSelection(4);
+  chapter_editor_page->load(last_chapters[evt.GetId() -
+                                          ID_M_CHAPTERS_LOADLAST1]);
+}
+
 void mmg_dialog::update_file_menu() {
   uint32_t i;
   wxMenuItem *mi;
@@ -776,6 +819,27 @@ void mmg_dialog::update_file_menu() {
   for (i = 0; i < last_settings.size(); i++) {
     s.Printf("&%u. %s", i + 1, last_settings[i].c_str());
     file_menu->Append(ID_M_FILE_LOADLAST1 + i, s);
+  }
+}
+
+void mmg_dialog::update_chapter_menu() {
+  uint32_t i;
+  wxMenuItem *mi;
+  wxString s;
+
+  for (i = ID_M_CHAPTERS_LOADLAST1; i <= ID_M_CHAPTERS_LOADLAST4; i++) {
+    mi = chapter_menu->Remove(i);
+    if (mi != NULL)
+      delete mi;
+  }
+
+  if ((last_chapters.size() > 0) && !chapter_menu_sep) {
+    chapter_menu->AppendSeparator();
+    chapter_menu_sep = true;
+  }
+  for (i = 0; i < last_chapters.size(); i++) {
+    s.Printf("&%u. %s", i + 1, last_chapters[i].c_str());
+    chapter_menu->Append(ID_M_CHAPTERS_LOADLAST1 + i, s);
   }
 }
 
@@ -825,6 +889,10 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_CHAPTERS_SAVE, mmg_dialog::on_save_chapters)
   EVT_MENU(ID_M_CHAPTERS_SAVEAS, mmg_dialog::on_save_chapters_as)
   EVT_MENU(ID_M_CHAPTERS_VERIFY, mmg_dialog::on_verify_chapters)
+  EVT_MENU(ID_M_CHAPTERS_LOADLAST1, mmg_dialog::on_chapters_load_last)
+  EVT_MENU(ID_M_CHAPTERS_LOADLAST2, mmg_dialog::on_chapters_load_last)
+  EVT_MENU(ID_M_CHAPTERS_LOADLAST3, mmg_dialog::on_chapters_load_last)
+  EVT_MENU(ID_M_CHAPTERS_LOADLAST4, mmg_dialog::on_chapters_load_last)
 END_EVENT_TABLE();
 
 bool mmg_app::OnInit() {
@@ -841,6 +909,9 @@ bool mmg_app::OnInit() {
     k.Printf("last_settings %u", i);
     if (cfg->Read(k, &v))
       last_settings.push_back(v);
+    k.Printf("last_chapters %u", i);
+    if (cfg->Read(k, &v))
+      last_chapters.push_back(v);
   }
 
   app = this;

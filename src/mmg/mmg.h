@@ -132,6 +132,11 @@ using namespace libmatroska;
 #define ID_M_CHAPTERS_SAVE 20202
 #define ID_M_CHAPTERS_SAVEAS 20203
 #define ID_M_CHAPTERS_VERIFY 20204
+#define ID_M_CHAPTERS_LOADSEPARATOR 20290
+#define ID_M_CHAPTERS_LOADLAST1 20291
+#define ID_M_CHAPTERS_LOADLAST2 20292
+#define ID_M_CHAPTERS_LOADLAST3 20293
+#define ID_M_CHAPTERS_LOADLAST4 20294
 
 #define ID_M_HELP_ABOUT 29900
 
@@ -160,6 +165,7 @@ typedef struct {
 extern wxString last_open_dir;
 extern wxString mkvmerge_path;
 extern vector<wxString> last_settings;
+extern vector<wxString> last_chapters;
 extern vector<mmg_file_t> files;
 extern vector<mmg_attachment_t> attachments;
 extern wxArrayString sorted_charsets;
@@ -336,6 +342,7 @@ public:
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void enable_inputs(bool enable);
   bool select_file_name();
+  bool load(wxString name);
   void save();
 };
 
@@ -387,8 +394,8 @@ protected:
   wxStatusBar *status_bar;
 
   wxNotebook *notebook;
-  wxMenu *file_menu;
-  bool file_menu_sep;
+  wxMenu *file_menu, *chapter_menu;
+  bool file_menu_sep, chapter_menu_sep;
 
   tab_input *input_page;
   tab_attachments *attachments_page;
@@ -423,6 +430,10 @@ public:
   void set_last_settings_in_menu(wxString name);
   void on_file_load_last(wxCommandEvent &evt);
   void update_file_menu();
+
+  void set_last_chapters_in_menu(wxString name);
+  void on_chapters_load_last(wxCommandEvent &evt);
+  void update_chapter_menu();
 
   void on_new_chapters(wxCommandEvent &evt);
   void on_load_chapters(wxCommandEvent &evt);

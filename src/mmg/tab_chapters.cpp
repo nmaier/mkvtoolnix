@@ -270,46 +270,52 @@ void tab_chapters::add_recursively(wxTreeItemId &parent, EbmlMaster &master) {
 }
 
 void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
-  KaxChapters *new_chapters;
-  wxString s;
   wxFileDialog dlg(NULL, "Choose a chapter file", last_open_dir, "",
                    _T("Chapter files (*.xml;*.txt)|*.xml;*.txt|" ALLFILES),
                    wxOPEN);
 
-  if(dlg.ShowModal() == wxID_OK) {
-    last_open_dir = dlg.GetDirectory();
-    try {
-      new_chapters = parse_chapters(dlg.GetPath().c_str(), 0, -1, 0, NULL,
-                                    NULL, true);
-    } catch (error_c e) {
-      s = (const char *)e;
-      break_line(s);
-      while (s[s.Length() - 1] == '\n')
-        s.Remove(s.Length() - 1);
-      wxMessageBox(s, _T("Error parsing the chapter file"),
-                   wxOK | wxCENTER | wxICON_ERROR);
-      return;
-    }
+  if (dlg.ShowModal() == wxID_OK)
+    if (load(dlg.GetPath()))
+      last_open_dir = dlg.GetDirectory();
+}
 
-    if (chapters != NULL)
-      delete chapters;
-    tc_chapters->DeleteAllItems();
-    chapters = new_chapters;
-    m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
-    m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
-    m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
-    b_add_chapter->Enable(true);
-    b_remove_chapter->Enable(true);
+bool tab_chapters::load(wxString name) {
+  KaxChapters *new_chapters;
+  wxString s;
 
-    file_name = dlg.GetPath();
-    tid_root = tc_chapters->AddRoot(file_name);
-    add_recursively(tid_root, *chapters);
-    expand_subtree(*tc_chapters, tid_root);
-
-    enable_inputs(false);
-    
-    mdlg->set_status_bar("Chapters loaded.");
+  try {
+    new_chapters = parse_chapters(name.c_str(), 0, -1, 0, NULL, NULL, true);
+  } catch (error_c e) {
+    s = (const char *)e;
+    break_line(s);
+    while (s[s.Length() - 1] == '\n')
+      s.Remove(s.Length() - 1);
+    wxMessageBox(s, _T("Error parsing the chapter file"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
   }
+
+  if (chapters != NULL)
+    delete chapters;
+  tc_chapters->DeleteAllItems();
+  chapters = new_chapters;
+  m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
+  m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
+  m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
+  b_add_chapter->Enable(true);
+  b_remove_chapter->Enable(true);
+
+  file_name = name;
+  tid_root = tc_chapters->AddRoot(file_name);
+  add_recursively(tid_root, *chapters);
+  expand_subtree(*tc_chapters, tid_root);
+
+  enable_inputs(false);
+    
+  mdlg->set_last_chapters_in_menu(name);
+  mdlg->set_status_bar("Chapters loaded.");
+
+  return true;
 }
 
 void tab_chapters::on_save_chapters(wxCommandEvent &evt) {
@@ -362,6 +368,7 @@ void tab_chapters::save() {
   fprintf(fout, "</Chapters>\n");
   fclose(fout);
 
+  mdlg->set_last_chapters_in_menu(file_name);
   mdlg->set_status_bar(_("Chapters written."));
 }
 
