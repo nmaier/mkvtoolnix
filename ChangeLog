@@ -1,5 +1,8 @@
 2003-08-11  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: For RV40 (RealVideo 9) the actual video dimensions are
+        decoded from the first video frame.
+
         * Released v0.6.2.
 
         * mkvmerge: Video aspect ratio was set wrong if the user did not

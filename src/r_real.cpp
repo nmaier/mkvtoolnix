@@ -24,6 +24,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <matroska/KaxTrackVideo.h>
+
 #include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
@@ -442,6 +444,9 @@ void real_reader_c::create_packetizers() {
       dmx->packetizer = new video_packetizer_c(this, buffer, dmx->fps,
                                                dmx->width, dmx->height,
                                                false, ti);
+      if ((dmx->fourcc[0] != 'R') || (dmx->fourcc[1] != 'V') ||
+          (dmx->fourcc[2] != '4') || (dmx->fourcc[3] != '0'))
+        dmx->rv_dimensions = true;
 
       if (verbose)
         mxprint(stdout, "+-> Using video output module for stream %u (FourCC: "
@@ -678,6 +683,8 @@ void real_reader_c::identify() {
 
 // }}}
 
+// {{{ FUNCTION real_reader_c::deliver_segments()
+
 void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
   uint32_t len, total;
   rv_segment_t *segment;
@@ -736,6 +743,10 @@ void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
   dmx->segments->clear();
 }
 
+// }}}
+
+// {{{ FUNCTSION real_reader_c::assemble_packet()
+
 void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
                                     int size, int64_t timecode,
                                     bool keyframe) {
@@ -765,31 +776,20 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       // bit 6: 1=short header (only one block?)
       vpkg_header = bc.get_byte();
 
-      if (verbose > 1)
-        mxprint(stdout, "\nPACKET: size: %d; fib: ", size);
-
       if ((vpkg_header & 0xc0) == 0x40) {
         // seems to be a very short header
         // 2 bytes, purpose of the second byte yet unknown
         bc.skip(1);
         vpkg_length = bc.get_len();
-        if (verbose > 1)
-          mxprint(stdout, "short, len: %d\n", vpkg_length);
 
       } else {
-        if ((vpkg_header & 0x40) == 0) {
+        if ((vpkg_header & 0x40) == 0)
           // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
           vpkg_subseq = bc.get_byte() & 0x7f;
-          if (verbose > 1)
-            mxprint(stdout, "subseq: %d ", vpkg_subseq);
-        }
 
         // size of the complete packet
         // bit 14 is always one (same applies to the offset)
         vpkg_length = bc.get_word();
-        if (verbose > 1)
-          mxprint(stdout, "l: %02x %02x ", vpkg_length >> 8,
-                  vpkg_length & 0xff);
 
         if ((vpkg_length & 0x8000) == 0x8000)
           dmx->f_merged = true;
@@ -798,9 +798,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
           vpkg_length <<= 16;
           vpkg_length |= bc.get_word();
           vpkg_length &= 0x3fffffff;
-          if (verbose > 1)
-            mxprint(stdout, "l+: %02x %02x ",
-                    (vpkg_length >> 8) & 0xff, vpkg_length & 0xff);
+
         } else
           vpkg_length &= 0x3fff;
 
@@ -809,23 +807,15 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         // _end_ of the packet, so it's equal to fragment size!!!
         vpkg_offset = bc.get_word();
 
-        if (verbose > 1)
-          mxprint(stdout, "o: %02x %02x ", vpkg_offset >> 8,
-                  vpkg_offset & 0xff);
-
         if ((vpkg_offset & 0x4000) == 0) {
           vpkg_offset <<= 16;
           vpkg_offset |= bc.get_word();
           vpkg_offset &= 0x3fffffff;
-          if (verbose > 1)
-            mxprint(stdout, "o+: %02x %02x ",
-                    (vpkg_offset >> 8 ) &0xff, vpkg_offset & 0xff);
+
         } else
           vpkg_offset &= 0x3fff;
 
         vpkg_seqnum = bc.get_byte();
-        if (verbose > 1)
-          mxprint(stdout, "seq: %02x\n", vpkg_seqnum);
 
         if ((vpkg_header & 0xc0) == 0xc0) {
           this_timecode = vpkg_offset;
@@ -842,6 +832,9 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       dmx->segments->push_back(segment);
       dmx->c_timecode = this_timecode;
 
+      if (!dmx->rv_dimensions)
+        set_dimensions(dmx, segment.data, segment.size);
+
       if (((vpkg_header & 0x80) == 0x80) ||
           ((vpkg_offset + len) >= vpkg_length)) {
         deliver_segments(dmx, this_timecode);
@@ -852,5 +845,96 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
   } catch(...) {
     die("real_reader: Caught exception during parsing of a video "
         "packet. Aborting.\n");
+  }
+}
+
+// }}}
+
+bool real_reader_c::get_rv_dimensions(unsigned char *buf, int size,
+                                      uint32_t &width, uint32_t &height) {
+  const uint32_t cw[8] = {160, 176, 240, 320, 352, 640, 704, 0};
+  const uint32_t ch1[8] = {120, 132, 144, 240, 288, 480, 0, 0};
+  const uint32_t ch2[4] = {180, 360, 576, 0};
+  uint32_t w, h, c, v;
+  bit_cursor_c bc(buf, size);
+
+  bc.skip_bits(13);
+  bc.skip_bits(13);
+  if (!bc.get_bits(3, v))
+    return false;
+
+  w = cw[v];
+  if (w == 0) {
+    do {
+      if (!bc.get_bits(8, c))
+        return false;
+      w += (c << 2);
+    } while (c == 255);
+  }
+
+  if (!bc.get_bits(3, c))
+    return false;
+  h = ch1[c];
+  if (h == 0) {
+    if (!bc.get_bits(1, v))
+      return false;
+    c = ((c << 1) | v) & 3;
+    h = ch2[c];
+    if (h == 0) {
+      do {
+        if (!bc.get_bits(8, c))
+          return false;
+        h += (c << 2);
+      } while (c == 255);
+    }
+  }
+
+  width = w;
+  height = h;
+
+  return true;
+}
+
+void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
+                                   int size) {
+  uint32_t width, height, disp_width, disp_height;
+  KaxTrackEntry *track_entry;
+
+  if (get_rv_dimensions(buffer, size, width, height)) {
+    if ((dmx->width != width) || (dmx->height != height)) {
+      dmx->width = width;
+      dmx->height = height;
+
+      if (!ti->aspect_ratio_given)
+        ti->aspect_ratio = (float)width / (float)height;
+
+      if (ti->aspect_ratio > ((float)width / (float)height)) {
+        disp_width = (uint32_t)(height * ti->aspect_ratio);
+        disp_height = height;
+
+      } else {
+        disp_width = width;
+        disp_height = (uint32_t)(width / ti->aspect_ratio);
+      }
+
+      track_entry = dmx->packetizer->get_track_entry();
+      KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoPixelWidth>(video))) = width;
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoPixelHeight>(video))) = height;
+
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoDisplayWidth>(video))) = disp_width;
+      *(static_cast<EbmlUInteger *>
+        (&GetChild<KaxVideoDisplayHeight>(video))) = disp_height;
+
+      out->save_pos(video.GetElementPosition());
+      video.Render(*out);
+      out->restore_pos();
+    }
+
+    dmx->rv_dimensions = true;
   }
 }

@@ -50,6 +50,7 @@ typedef struct {
   float fps;
 
   char fourcc[5], type;
+  bool rv_dimensions;
 
   unsigned char *private_data;
   int private_size;
@@ -92,6 +93,10 @@ protected:
                                int64_t timecode, bool keyframe);
   virtual void deliver_segments(real_demuxer_t *dmx, int64_t timecode);
   virtual int finish();
+  virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width,
+                                 uint32_t &height);
+  virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
+                              int size);
 };
 
 #endif  // __R_REAL_H
