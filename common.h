@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.13 2003/04/23 14:38:53 mosu Exp $
+    \version \$Id: common.h,v 1.14 2003/04/27 09:14:47 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -21,6 +21,7 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#include <stdint.h>
 #include <sys/types.h>
 
 #ifdef WIN32
@@ -81,6 +82,10 @@ void utf8_init();
 void utf8_done();
 char *to_utf8(char *local);
 char *from_utf8(char *utf8);
+
+int is_unique_uint32(uint32_t number);
+void add_unique_uint32(uint32_t number);
+uint32_t create_unique_uint32();
 
 extern int verbose;
 

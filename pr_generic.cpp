@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.25 2003/04/26 11:26:15 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.26 2003/04/27 09:14:47 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -190,7 +190,7 @@ void generic_packetizer_c::set_header() {
 
     KaxTrackUID &tuid =
       GetChild<KaxTrackUID>(static_cast<KaxTrackEntry &>(*track_entry));
-    *(static_cast<EbmlUInteger *>(&tuid)) = hserialno;
+    *(static_cast<EbmlUInteger *>(&tuid)) = create_unique_uint32();
   }
 
   if (htrack_type != -1)

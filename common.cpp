@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.11 2003/04/24 20:32:33 mosu Exp $
+    \version \$Id: common.cpp,v 1.12 2003/04/27 09:14:47 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -174,4 +174,45 @@ char *from_utf8(char *utf8) {
   iconv(ict_from_utf8, &sutf8, &lutf8, &slocal, &llocal);
 
   return local;
+}
+
+/*
+ * Random unique uint32_t numbers
+ */
+
+static uint32_t *ru_numbers = NULL;
+static int num_ru_numbers = 0;
+
+int is_unique_uint32(uint32_t number) {
+  int i;
+
+  for (i = 0; i < num_ru_numbers; i++)
+    if (ru_numbers[i] == number)
+      return 0;
+
+  return 1;
+}
+
+void add_unique_uint32(uint32_t number) {
+  ru_numbers = (uint32_t *)realloc(ru_numbers, (num_ru_numbers + 1) *
+                                   sizeof(uint32_t));
+  if (ru_numbers == NULL)
+    die("realloc");
+
+  ru_numbers[num_ru_numbers] = number;
+  num_ru_numbers++;
+}
+
+uint32_t create_unique_uint32() {
+  uint32_t rnumber, half;
+
+  do {
+    half = (uint32_t)(65535.0 * rand() / RAND_MAX);
+    rnumber = half;
+    half = (uint32_t)(65535.0 * rand() / RAND_MAX);
+    rnumber |= (half << 16);
+  } while ((rnumber == 0) || !is_unique_uint32(rnumber));
+  add_unique_uint32(rnumber);
+
+  return rnumber;
 }
