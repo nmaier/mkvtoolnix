@@ -34,6 +34,13 @@ Write to the file '\fIout\fR'.
 \fB\-\-title\fR <\fItitle\fR>
 Sets the general title for the output file, e.g. the movie name.
 .TP
+\fB\-\-global\-tags\fR <\fIfile\fR>
+Read global tags from the XML \fIfile\fR. See the section about tags
+below for details.
+
+.LP
+Chapter handling: (global options)
+.TP
 \fB\-\-chapter\-language\fR <\fBlanguage\fR>
 Sets the ISO639-2 language code that is written for each chapter entry. Applies
 only to simple chapter files. Defaults to "eng". See the section about chapters
@@ -47,13 +54,9 @@ below for details.
 \fB\-\-chapters <\fIfile\fR>
 Read chapter information from the \fIfile\fR. See the section about chapters
 below for details.
-.TP
-\fB\-\-global\-tags\fR <\fIfile\fR>
-Read global tags from the XML \fIfile\fR. See the section about tags
-below for details.
 
 .LP
-General output control (still global, advanced options):
+General output control (advanced global options):
 .TP
 \fB\-\-cluster\-length \fR \fIn[ms]\fR
 Put at most \fIn\fR data blocks into each cluster. If the number is
@@ -79,7 +82,7 @@ even if this option is given. This will increase the file's size, especially
 if there are many audio tracks. This option is not intended for everyday use.
 
 .LP
-File splitting and linking (still global):
+File splitting and linking (more global options):
 .TP
 \fB\-\-split\fR <\fId[k|m|g]\fR> or \fB\-\-split\fR <\fIHH:MM:SS\fR|\fIns\fR>
 Splits the output file after a given size or a given time. For splitting after
@@ -113,7 +116,7 @@ Links the last output file to the segment with the given \fIUID\fR. See the
 section \fBFILE LINKING\fR below for details.
 
 .LP
-Attachment support (still global):
+Attachment support (more global options):
 .TP
 \fB\-\-attachment\-description\fR <\fIdescription\fR>
 Plain text description of the following attachment. Applies to the next
@@ -172,6 +175,9 @@ Don't copy any video track from this file.
 .TP
 \fB\-S\fR, \fB\-\-nosubs\fR
 Don't copy any subtitle track from this file.
+.TP
+\fB\-\-no\-chapters\fR
+If the source is a Matroska file then don't copy chapters from it.
 .TP
 \fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>
 Synchronize manually, delay the audio track with the id \fITID\fR by \fId\fR
@@ -661,10 +667,17 @@ well. This means that each file only includes the chapter entries that
 apply to it, and that the timecodes will be offset to match the new timecodes
 of each output file.
 .LP
-Another shortcoming is that \fBmkvmerge\fR will silently discards chapters
-found in source files - e.g. when reading them from an OGM file or another
-Matroska file. You can use \fBmkvextract\fR to export chapters from another
-Matroska file and use the result with \fBmkvmerge\fR.
+\fBmkvmerge\fR is able to copy chapters from Matroska source files unless this
+is explicitely disabled with the \fI\-\-no\-chapters\fR option. At the
+moment \fBmkvmerge\fR is limited to one 'buch of chapters' globally. This means
+that only the first chapter section found in all source files is used. If
+the user specified chapters on the command line then these take precedence
+over any chapters found in source files. \fBmkvmerge\fR does not merge
+chapters. This must be done manually by using \fBmkvextract\fR to extract
+the chapter information and editing the resulting files.
+.LP
+One shortcoming is that \fBmkvmerge\fR cannot parse chapter information found
+in OGM files.
 
 
 .SH TAGS
