@@ -34,6 +34,11 @@
 #include "p_video.h"
 
 typedef struct {
+  unsigned char *data;
+  uint64_t size, offset;
+} rv_segment_t;
+
+typedef struct {
   generic_packetizer_c *packetizer;
   int id;
 
@@ -49,14 +54,13 @@ typedef struct {
   unsigned char *private_data;
   int private_size;
 
-  unsigned char *last_packet;
-  int last_seq, last_len, ctb_len, kf_last_timecode;
-  bool keyframe;
-
   unsigned char *c_data;
   int c_len, c_numpackets;
   int64_t c_timecode, c_reftimecode;
   bool c_keyframe;
+
+  vector<rv_segment_t> *segments;
+  bool f_merged;
 } real_demuxer_t;
 
 class real_reader_c: public generic_reader_c {
@@ -80,12 +84,13 @@ public:
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
-private:
+protected:
   virtual void parse_headers();
   virtual void create_packetizers();
   virtual real_demuxer_t *find_demuxer(int id);
   virtual void assemble_packet(real_demuxer_t *dmx, unsigned char *p, int size,
                                int64_t timecode, bool keyframe);
+  virtual void deliver_segments(real_demuxer_t *dmx, int64_t timecode);
   virtual int finish();
 };
 

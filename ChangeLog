@@ -1,3 +1,9 @@
+2003-08-11  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: RealVideo: Support for all kinds of frames including
+        "short" and "merged" frames (results are identical to Gabest's
+        output).
+
 2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: The aspect ratio setting will only cause upscaling of
@@ -27,8 +33,6 @@
 
         * mkvmerge: MP3: Better support for other MPEG versions and layers
         (number of samples per packet).
-
-        * mkvmerge: RealVideo: Support for "merged" frames.
 
         * mkvinfo: Added Adler32 calculation and display for frame
         contents with the -c option.
