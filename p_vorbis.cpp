@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.6 2003/03/06 23:38:37 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.7 2003/04/11 11:29:01 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -127,20 +127,22 @@ void vorbis_packetizer_c::set_header() {
   *(static_cast<EbmlUInteger *>(&kax_chans)) = vi.channels;
 
   // We use lacing for the blocks. The first bytes is the number of
-  // packets being laced. For each packet in the lace there's the length
+  // packets being laced which is one less than the number of blocks that
+  // are actually stored. For each packet in the lace there's the length
   // coded like this:
   // length = 0
   // while (next byte == 255) { length += 255 }
   // length += this byte which is < 255
   // The last packet's length can be calculated by the length of
-  // the KaxCodecPrivate and all prior packets, so there's no length for it.
+  // the KaxCodecPrivate and all prior packets, so there's no length for it -
+  // and that's why the first byte is (num_packets - 1).
   lsize = 1 + (headers[0].bytes / 255) + 1 + (headers[1].bytes / 255) + 1 +
     headers[0].bytes + headers[1].bytes + headers[2].bytes;
   buffer = (unsigned char *)malloc(lsize);
   if (buffer == NULL)
     die("malloc");
 
-  buffer[0] = 3;                // The number of packets.
+  buffer[0] = 2;                // The number of packets less one.
   offset = 1;
   for (i = 0; i < 2; i++) {
     for (n = headers[i].bytes; n >= 255; n -= 255) {
@@ -170,7 +172,7 @@ void vorbis_packetizer_c::set_header() {
  * has to generate silence packets and put them into the Matroska file first.
  */
 int vorbis_packetizer_c::process(unsigned char *data, int size,
-                                 int64_t timecode) {
+                                 int64_t timecode, int64_t) {
   unsigned char zero[2];
   ogg_packet op;
   u_int64_t this_bs, samples_here, samples_needed;
@@ -211,6 +213,8 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   samples_here = (this_bs + last_bs) / 4;
   samples += samples_here;
   last_bs = this_bs;
+
+//   fprintf(stdout, "samples in this Vorbis packet: %llu\n", samples_here);
 
   // Handle the displacement.
   timecode += ti->async.displacement;
