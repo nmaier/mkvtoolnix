@@ -65,7 +65,7 @@ public:
   int64_t get_timecode();
   packet_t *get_packet(int num);
   int get_packet_count();
-  int render();
+  int render(bool flush = false);
   int free_ref(int64_t ref_timecode, generic_packetizer_c *source);
   int free_clusters();
   int get_cluster_content_size();
@@ -83,6 +83,7 @@ private:
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);
   void set_duration(render_groups_t *rg);
+  int render_cluster(ch_contents_t *clstr);
 };
 
 extern cluster_helper_c *cluster_helper;
