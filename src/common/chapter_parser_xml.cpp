@@ -154,66 +154,6 @@ end_chapter_country(void *pdata) {
                string(*s).c_str());
 }
 
-static void
-remove_entries(int64_t min_tc,
-               int64_t max_tc,
-               int64_t offset,
-               EbmlMaster &m) {
-  int i;
-  bool remove;
-  KaxChapterAtom *atom;
-  KaxChapterTimeStart *cts;
-  KaxChapterTimeEnd *cte;
-  int64_t start_tc, end_tc;
-
-  i = 0;
-  while (i < m.ListSize()) {
-    if (EbmlId(*m[i]) == KaxChapterAtom::ClassInfos.GlobalId) {
-      atom = static_cast<KaxChapterAtom *>(m[i]);
-      cts = static_cast<KaxChapterTimeStart *>
-        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
-
-      remove = false;
-
-      start_tc = uint64(*static_cast<EbmlUInteger *>(cts));
-      if (start_tc < min_tc)
-        remove = true;
-      else if ((max_tc >= 0) && (start_tc > max_tc))
-        remove = true;
-
-      if (remove) {
-        m.Remove(i);
-        delete atom;
-      } else
-        i++;
-
-    } else
-      i++;
-  }
-
-  for (i = 0; i < m.ListSize(); i++) {
-    if (EbmlId(*m[i]) == KaxChapterAtom::ClassInfos.GlobalId) {
-      atom = static_cast<KaxChapterAtom *>(m[i]);
-      cts = static_cast<KaxChapterTimeStart *>
-        (atom->FindFirstElt(KaxChapterTimeStart::ClassInfos, false));
-      cte = static_cast<KaxChapterTimeEnd *>
-        (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
-
-      *static_cast<EbmlUInteger *>(cts) =
-        uint64(*static_cast<EbmlUInteger *>(cts)) - offset;
-      if (cte != NULL) {
-        end_tc =  uint64(*static_cast<EbmlUInteger *>(cte));
-        if ((max_tc >= 0) && (end_tc > max_tc))
-          end_tc = max_tc;
-        end_tc -= offset;
-        *static_cast<EbmlUInteger *>(cte) = end_tc;
-      }
-
-      remove_entries(min_tc, max_tc, offset, *atom);
-    }
-  }    
-}
-
 bool
 probe_xml_chapters(mm_text_io_c *in) {
   string s;
@@ -230,38 +170,6 @@ probe_xml_chapters(mm_text_io_c *in) {
   }
 
   return false;
-}
-
-KaxChapters *
-select_chapters_in_timeframe(KaxChapters *chapters,
-                             int64_t min_tc,
-                             int64_t max_tc,
-                             int64_t offset) {
-  uint32_t i;
-  KaxEditionEntry *eentry;
-
-  for (i = 0; i < chapters->ListSize(); i++) {
-    remove_entries(min_tc, max_tc, offset,
-                   *static_cast<EbmlMaster *>((*chapters)[i]));
-  }
-
-  i = 0;
-  while (i < chapters->ListSize()) {
-    eentry = static_cast<KaxEditionEntry *>((*chapters)[i]);
-    if (eentry->ListSize() == 0) {
-      chapters->Remove(i);
-      delete eentry;
-
-    } else
-      i++;
-  }
-
-  if (chapters->ListSize() == 0) {
-    delete chapters;
-    chapters = NULL;
-  }
-
-  return chapters;
 }
 
 KaxChapters *
@@ -318,57 +226,6 @@ parse_xml_chapters(mm_text_io_c *in,
   fix_mandatory_chapter_elements(chapters);
 
   return chapters;
-}
-
-void
-fix_mandatory_chapter_elements(EbmlElement *e) {
-  if (e == NULL)
-    return;
-
-  if (dynamic_cast<KaxEditionEntry *>(e) != NULL) {
-    KaxEditionEntry &ee = *static_cast<KaxEditionEntry *>(e);
-    GetChild<KaxEditionFlagDefault>(ee);
-    GetChild<KaxEditionFlagHidden>(ee);
-    GetChild<KaxEditionProcessed>(ee);
-    if (FINDFIRST(&ee, KaxEditionUID) == NULL)
-      *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(ee)) =
-        create_unique_uint32(UNIQUE_EDITION_IDS);
-
-  } else if (dynamic_cast<KaxChapterAtom *>(e) != NULL) {
-    KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
-
-    GetChild<KaxChapterFlagHidden>(a);
-    GetChild<KaxChapterFlagEnabled>(a);
-    if (FINDFIRST(&a, KaxChapterUID) == NULL)
-      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(a)) =
-        create_unique_uint32(UNIQUE_CHAPTER_IDS);
-    if (FINDFIRST(&a, KaxChapterTimeStart) == NULL)
-      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(a)) = 0;
-
-  } else if (dynamic_cast<KaxChapterTrack *>(e) != NULL) {
-    KaxChapterTrack &t = *static_cast<KaxChapterTrack *>(e);
-
-    if (FINDFIRST(&t, KaxChapterTrackNumber) == NULL)
-      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTrackNumber>(t)) = 0;
-
-  } else if (dynamic_cast<KaxChapterDisplay *>(e) != NULL) {
-    KaxChapterDisplay &d = *static_cast<KaxChapterDisplay *>(e);
-
-    if (FINDFIRST(&d, KaxChapterString) == NULL)
-      *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(d)) = L"";
-    if (FINDFIRST(&d, KaxChapterLanguage) == NULL)
-      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(d)) = "und";
-
-  }
-
-  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
-    EbmlMaster *m;
-    int i;
-
-    m = static_cast<EbmlMaster *>(e);
-    for (i = 0; i < m->ListSize(); i++)
-      fix_mandatory_chapter_elements((*m)[i]);
-  }
 }
 
 // }}}
