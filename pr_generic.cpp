@@ -91,6 +91,16 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
 
+  // Let's see if the user has specified a sub charset for this track.
+  for (i = 0; i < ti->sub_charsets->size(); i++) {
+    lang = &(*ti->sub_charsets)[i];
+    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
+      safefree(ti->sub_charset);
+      ti->sub_charset = safestrdup(lang->language);
+      break;
+    }
+  }
+
   // Set default header values to 'unset'.
   hserialno = track_number++;
   huid = 0;
@@ -520,6 +530,10 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   for (i = 0; i < src->languages->size(); i++)
     (*dst->languages)[i].language = safestrdup((*src->languages)[i].language);
   dst->language = safestrdup(src->language);
+  dst->sub_charsets = new vector<language_t>(*src->sub_charsets);
+  for (i = 0; i < src->sub_charsets->size(); i++)
+    (*dst->sub_charsets)[i].language =
+      safestrdup((*src->sub_charsets)[i].language);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->sub_charset = safestrdup(src->sub_charset);
@@ -543,6 +557,9 @@ void free_track_info(track_info_t *ti) {
   for (i = 0; i < ti->languages->size(); i++)
     safefree((*ti->languages)[i].language);
   delete ti->languages;
+  for (i = 0; i < ti->sub_charsets->size(); i++)
+    safefree((*ti->sub_charsets)[i].language);
+  delete ti->sub_charsets;
   safefree(ti->language);
   safefree(ti->private_data);
   safefree(ti->sub_charset);

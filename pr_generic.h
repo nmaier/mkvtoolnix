@@ -94,7 +94,8 @@ typedef struct {
   vector<language_t> *languages; // As given on the command line
   char *language;               // For this very track
 
-  char *sub_charset;
+  vector<language_t> *sub_charsets; // As given on the command line
+  char *sub_charset;            // For this very track
 } track_info_t;
 
 class generic_reader_c;

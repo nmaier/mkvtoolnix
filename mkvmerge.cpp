@@ -234,7 +234,8 @@ static void usage(void) {
     "                           Works only for video tracks.\n"
     "  --aspect-ratio <f|a/b>   Sets the aspect ratio.\n"
     "\n Options that only apply to text subtitle tracks:\n"
-    "  --sub-charset <charset>  Sets the charset the text subtitles are\n"
+    "  --sub-charset <TID:charset>\n"
+    "                           Sets the charset the text subtitles are\n"
     "                           written in for the conversion to UTF-8.\n"
     "\n\n Other options:\n"
     "  -i, --identify <file>    Print information about the source file.\n"
@@ -579,6 +580,29 @@ static void parse_language(char *s, language_t &lang) {
   lang.language = s;
 }
 
+static void parse_sub_charset(char *s, language_t &sub_charset) {
+  char *colon;
+
+  // Extract the track number.
+  if ((colon = strchr(s, ':')) == NULL) {
+    fprintf(stderr, "Error: Invalid sub charset option. No track ID specified "
+            "(%s).\n", s);
+    exit(1);
+  }
+  *colon = 0;
+  if (!parse_int(s, sub_charset.id)) {
+    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    exit(1);
+  }
+  s = &colon[1];
+  if (*s == 0) {
+    fprintf(stderr, "Error: Invalid sub charset specified.\n");
+    exit(1);
+  }
+
+  sub_charset.language = s;
+}
+
 static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
   EbmlHead head;
   int i;
@@ -773,6 +797,7 @@ static void identify(const char *filename) {
   ti.cue_creations = new vector<cue_creation_t>;
   ti.default_track_flags = new vector<int64_t>;
   ti.languages = new vector<language_t>;
+  ti.sub_charsets = new vector<language_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -820,6 +845,7 @@ static void parse_args(int argc, char **argv) {
   ti.cue_creations = new vector<cue_creation_t>;
   ti.default_track_flags = new vector<int64_t>;
   ti.languages = new vector<language_t>;
+  ti.sub_charsets = new vector<language_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -1095,8 +1121,8 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: --sub-charset lacks its argument.\n");
         exit(1);
       }
-
-      ti.sub_charset = argv[i + 1];
+      parse_sub_charset(argv[i + 1], lang);
+      ti.sub_charsets->push_back(lang);
       i++;
     }
 
@@ -1145,11 +1171,13 @@ static void parse_args(int argc, char **argv) {
       delete ti.cue_creations;
       delete ti.default_track_flags;
       delete ti.languages;
+      delete ti.sub_charsets;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
       ti.default_track_flags = new vector<int64_t>;
       ti.languages = new vector<language_t>;
+      ti.sub_charsets = new vector<language_t>;
       ti.aspect_ratio = 1.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;
