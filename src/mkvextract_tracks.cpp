@@ -989,19 +989,27 @@ close_files() {
           break;
 
         case TYPETTA: {
-          mm_io_c *tta_file;
+          mm_io_c *temp_file;
           tta_file_header_t tta_header;
           vector<int64_t>::iterator frame_size;
           unsigned char *buffer;
           uint32_t crc;
           int nread;
-          string file_name;
+          string temp_name;
 
+          temp_name = tracks[i].out->get_file_name();
+          delete tracks[i].out;
           try {
-            tta_file = new mm_io_c(tracks[i].out_name, MODE_CREATE);
+            tracks[i].out = new mm_io_c(tracks[i].out_name, MODE_CREATE);
           } catch (exception &ex) {
             mxerror(_(" The file '%s' could not be opened for writing (%s)."
                       "\n"), tracks[i].out_name, strerror(errno));
+          }
+          try {
+            temp_file = new mm_io_c(temp_name.c_str(), MODE_READ);
+          } catch (exception &ex) {
+            mxerror(_(" The file '%s' could not be opened for reading (%s)."
+                      "\n"), temp_name.c_str(), strerror(errno));
           }
 
           memcpy(tta_header.signature, "TTA1", 4);
@@ -1028,31 +1036,29 @@ close_files() {
           put_uint32(&tta_header.crc,
                      calc_crc32((unsigned char *)&tta_header,
                                 sizeof(tta_file_header_t) - 4));
-          tta_file->write(&tta_header, sizeof(tta_file_header_t));
+          tracks[i].out->write(&tta_header, sizeof(tta_file_header_t));
           buffer = (unsigned char *)safemalloc(tracks[i].frame_sizes.size() *
                                                4);
           for (k = 0; k < tracks[i].frame_sizes.size(); k++)
             put_uint32(buffer + 4 * k, tracks[i].frame_sizes[k]);
-          tta_file->write(buffer, tracks[i].frame_sizes.size() * 4);
+          tracks[i].out->write(buffer, tracks[i].frame_sizes.size() * 4);
           crc = calc_crc32(buffer, tracks[i].frame_sizes.size() * 4);
           mxverb(2, "crc: 0x%08x\n", crc);
-          tta_file->write_uint32(crc);
+          tracks[i].out->write_uint32(crc);
           safefree(buffer);
 
           buffer = (unsigned char *)safemalloc(128000);
-          tracks[i].out->setFilePointer(0);
           do {
-            nread = tracks[i].out->read(buffer, 128000);
-            if (tta_file->write(buffer, nread) != nread)
+            nread = temp_file->read(buffer, 128000);
+            if (tracks[i].out->write(buffer, nread) != nread)
               mxerror(_("Writing %d bytes to the final TTA file failed while "
                         "copying the temporary file. Perhaps the hard disk "
                         "is full.\n"), nread);
           } while (nread == 128000);
 
-          file_name = tracks[i].out->get_file_name();
-          delete tta_file;
           delete tracks[i].out;
-          unlink(file_name.c_str());
+          delete temp_file;
+          unlink(temp_name.c_str());
           break;
         }
 
