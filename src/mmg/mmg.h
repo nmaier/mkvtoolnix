@@ -135,6 +135,8 @@ using namespace libmatroska;
 #define ID_B_SETVALUES 10087
 #define ID_B_INPUTUP 10088
 #define ID_B_INPUTDOWN 10089
+#define ID_B_TRACKUP 10090
+#define ID_B_TRACKDOWN 10091
 
 #define ID_M_FILE_NEW 20000
 #define ID_M_FILE_LOAD 20001
@@ -216,7 +218,7 @@ class tab_input: public wxPanel {
 protected:
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_browse_tags, *b_browse_timecodes;
-  wxButton *b_move_up, *b_move_down;
+  wxButton *b_file_up, *b_file_down, *b_track_up, *b_track_down;
   wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
   wxCheckBox *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;
@@ -239,6 +241,8 @@ public:
   void on_move_file_up(wxCommandEvent &evt);
   void on_move_file_down(wxCommandEvent &evt);
   void on_file_selected(wxCommandEvent &evt);
+  void on_move_track_up(wxCommandEvent &evt);
+  void on_move_track_down(wxCommandEvent &evt);
   void on_track_selected(wxCommandEvent &evt);
   void on_track_enabled(wxCommandEvent &evt);
   void on_nochapters_clicked(wxCommandEvent &evt);

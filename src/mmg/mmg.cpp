@@ -567,7 +567,7 @@ void mmg_dialog::update_command_line() {
   mmg_file_t *f;
   mmg_track_t *t;
   mmg_attachment_t *a;
-  wxString sid, old_cmdline, arg, aids, sids, dids;
+  wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
 
   old_cmdline = cmdline;
   cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" ";
@@ -586,6 +586,7 @@ void mmg_dialog::update_command_line() {
     aids = "";
     sids = "";
     dids = "";
+    track_order = "";
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
       string format;
 
@@ -596,6 +597,9 @@ void mmg_dialog::update_command_line() {
       tracks_selected_here = true;
       fix_format("%lld", format);
       sid.Printf(format.c_str(), t->id);
+      if (track_order.Length() > 0)
+        track_order += ",";
+      track_order += sid;
 
       if (t->type == 'a') {
         no_audio = false;
@@ -768,6 +772,11 @@ void mmg_dialog::update_command_line() {
         cmdline += "-S ";
         clargs.Add("-S");
       }
+
+      cmdline += "--track-order " + track_order + " ";
+      clargs.Add("--track-order");
+      clargs.Add(track_order);
+
       cmdline += "\"" + *f->file_name + "\" ";
       clargs.Add(*f->file_name);
     }
