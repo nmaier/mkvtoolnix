@@ -33,6 +33,9 @@
 
 #include <iostream>
 
+#include <ogg/ogg.h>
+#include <vorbis/codec.h>
+
 extern "C" {
 #include "avilib/avilib.h"
 }
@@ -75,6 +78,7 @@ typedef struct {
 
   mm_io_c *mm_io;
   avi_t *avi;
+  ogg_stream_state osstate;
 
   int64_t tid;
   bool in_use;
@@ -97,6 +101,12 @@ typedef struct {
 
   wave_header wh;
   int64_t bytes_written;
+
+  unsigned char *buffered_data;
+  int buffered_size;
+  int64_t packetno, last_end;
+  int header_sizes[3];
+  unsigned char *headers[3];
 } mkv_track_t;
 
 vector<mkv_track_t> tracks;
@@ -248,9 +258,29 @@ void show_error(const char *fmt, ...) {
   fprintf(stdout, "(%s) %s\n", NAME, args_buffer);
 }
 
+void flush_ogg_pages(mkv_track_t &track) {
+  ogg_page page;
+
+  while (ogg_stream_flush(&track.osstate, &page)) {
+    track.mm_io->write(page.header, page.header_len);
+    track.mm_io->write(page.body, page.body_len);
+  }
+}
+
+void write_ogg_pages(mkv_track_t &track) {
+  ogg_page page;
+
+  while (ogg_stream_pageout(&track.osstate, &page)) {
+    track.mm_io->write(page.header, page.header_len);
+    track.mm_io->write(page.body, page.body_len);
+  }
+}
+
 void create_output_files() {
-  int i;
-  bool something_to_do;
+  int i, k, offset;
+  bool something_to_do, is_ok;
+  unsigned char *c;
+  ogg_packet op;
 
   something_to_do = false;
 
@@ -290,17 +320,50 @@ void create_output_files() {
         }
 
         if (!strcmp(tracks[i].codec_id, MKV_A_VORBIS)) {
-          fprintf(stdout, "Warning: Extraction of Vorbis is not supported - yet. "
-                  "I promise I'll implement it. Really Soon Now (tm)! "
-                  "Skipping track.\n");
-          continue;
-
           tracks[i].type = TYPEOGM; // Yeah, I know, I know...
           if (tracks[i].private_data == NULL) {
             fprintf(stdout, "Warning: Track ID %lld is missing some critical "
                     "information. Skipping track.\n", tracks[i].tid);
             continue;
           }
+
+          c = (unsigned char *)tracks[i].private_data;
+          if (c[0] != 2) {
+            fprintf(stderr, "Error: Vorbis track ID %lld does not contain "
+                    "valid headers. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+
+          is_ok = true;
+          offset = 1;
+          for (k = 0; k < 2; k++) {
+            int length = 0;
+            while ((c[offset] == (unsigned char)255) &&
+                   (length < tracks[i].private_size)) {
+              length += 255;
+              offset++;
+            }
+            if (offset >= (tracks[i].private_size - 1)) {
+              fprintf(stderr, "Error: Vorbis track ID %lld does not contain "
+                      "valid headers. Skipping track.\n", tracks[i].tid);
+              is_ok = false;
+              break;
+            }
+            length += c[offset];
+            offset++;
+            tracks[i].header_sizes[k] = length;
+          }
+
+          if (!is_ok)
+            continue;
+
+          tracks[i].headers[0] = &c[offset];
+          tracks[i].headers[1] = &c[offset + tracks[i].header_sizes[0]];
+          tracks[i].headers[2] = &c[offset + tracks[i].header_sizes[0] +
+                                    tracks[i].header_sizes[1]];
+          tracks[i].header_sizes[2] = tracks[i].private_size -
+            offset - tracks[i].header_sizes[0] - tracks[i].header_sizes[1];
+
         } else if (!strcmp(tracks[i].codec_id, MKV_A_MP3))
           tracks[i].type = TYPEMP3;
         else if (!strcmp(tracks[i].codec_id, MKV_A_AC3))
@@ -397,7 +460,27 @@ void create_output_files() {
                 tracks[i].out_name);
 
         if (tracks[i].type == TYPEOGM) {
-          // to be implemented
+          ogg_stream_init(&tracks[i].osstate, rand());
+
+          op.b_o_s = 1;
+          op.e_o_s = 0;
+          op.packetno = 0;
+          op.packet = tracks[i].headers[0];
+          op.bytes = tracks[i].header_sizes[0];
+          op.granulepos = 0;
+          ogg_stream_packetin(&tracks[i].osstate, &op);
+          flush_ogg_pages(tracks[i]);
+          op.b_o_s = 0;
+          op.packetno = 1;
+          op.packet = tracks[i].headers[1];
+          op.bytes = tracks[i].header_sizes[1];
+          ogg_stream_packetin(&tracks[i].osstate, &op);
+          op.packetno = 2;
+          op.packet = tracks[i].headers[2];
+          op.bytes = tracks[i].header_sizes[2];
+          ogg_stream_packetin(&tracks[i].osstate, &op);
+          flush_ogg_pages(tracks[i]);
+          tracks[i].packetno = 3;
 
         } else if (tracks[i].type == TYPEWAV) {
           wave_header *wh = &tracks[i].wh;
@@ -450,8 +533,6 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
   start = block->GlobalTimecode() / 1000000; // in ms
   end = start + block_duration;
 
-  fprintf(stdout, "\nS: %lld, D: %lld\n", start, block_duration);
-
   for (i = 0; i < block->NumberFrames(); i++) {
     DataBuffer &data = block->GetBuffer(i);
     switch (track->type) {
@@ -461,7 +542,28 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         break;
 
       case TYPEOGM:
-        // to be implemented
+        if (track->buffered_data != NULL) {
+          ogg_packet op;
+
+          op.b_o_s = 0;
+          op.e_o_s = 0;
+          op.packetno = track->packetno;
+          op.packet = track->buffered_data;
+          op.bytes = track->buffered_size;
+          op.granulepos = start * (int64_t)track->a_sfreq / 1000;
+          ogg_stream_packetin(&track->osstate, &op);
+          safefree(track->buffered_data);
+
+          write_ogg_pages(*track);
+
+          track->packetno++;
+        }
+
+        track->buffered_data = (unsigned char *)safememdup(data.Buffer(),
+                                                           data.Size());
+        track->buffered_size = data.Size();
+        track->last_end = end;
+
         break;
 
       case TYPESRT:
@@ -552,6 +654,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
 
 void close_files() {
   int i;
+  ogg_packet op;
 
   for (i = 0; i < tracks.size(); i++) {
     if (tracks[i].in_use) {
@@ -561,7 +664,20 @@ void close_files() {
           break;
 
         case TYPEOGM:
-          // to be implemented
+          op.b_o_s = 0;
+          op.e_o_s = 1;
+          op.packetno = tracks[i].packetno;
+          op.packet = tracks[i].buffered_data;
+          op.bytes = tracks[i].buffered_size;
+          op.granulepos = tracks[i].last_end * (int64_t)tracks[i].a_sfreq /
+            1000;
+          ogg_stream_packetin(&tracks[i].osstate, &op);
+          safefree(tracks[i].buffered_data);
+
+          flush_ogg_pages(tracks[i]);
+
+          delete tracks[i].mm_io;
+
           break;
 
         case TYPEWAV:
