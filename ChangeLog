@@ -1,5 +1,9 @@
 2005-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: An "appended" file could not be removed if there
+	were two tracks that we not separated by a track from another file
+	in the track list box.
+
 	* mmg: bug fix: The check whether or not a file might be
 	overwritten while splitting is active has been fixed.
 

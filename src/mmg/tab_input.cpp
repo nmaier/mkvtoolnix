@@ -983,7 +983,8 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   // Files may not be removed if something else is still being appended to
   // them.
   for (i = 0; i < (tracks.size() - 1); i++)
-    if ((tracks[i]->source == selected_file) && tracks[i + 1]->appending) {
+    if ((tracks[i]->source == selected_file) && tracks[i + 1]->appending &&
+        (tracks[i]->source != tracks[i + 1]->source)) {
       wxString err;
 
       err.Printf(wxT("The current file (number %d) cannot be removed. There "
