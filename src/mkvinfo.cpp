@@ -73,6 +73,7 @@ extern "C" {
 #include "mkvinfo.h"
 #include "mkvinfo_tag_types.h"
 
+#include "chapters.h"
 #include "checksums.h"
 #include "common.h"
 #include "commonebml.h"
@@ -430,106 +431,6 @@ bool parse_simpletag(EbmlStream *es,
 
       } else if (!is_global(es, l1, level + 1) &&
                  !parse_simpletag(es, l1, level + 1))
-        show_unknown_element(l1, level + 1);
-
-    } // while (l1 != NULL)
-
-    return true;
-
-  } 
-
-  return false;
-}
-
-bool
-parse_chapter_atom(EbmlStream *es,
-                   EbmlElement *l0,
-                   int level) {
-  EbmlMaster *m0, *m1;
-  EbmlElement *l1, *l2;
-  int i0, i1;
-
-  if (is_id(l0, KaxChapterAtom)) {
-    show_element(l0, level, "Chapter atom");
-
-    m0 = static_cast<EbmlMaster *>(l0);
-    for (i0 = 0; i0 < m0->ListSize(); i0++) {
-      l1 = (*m0)[i0];
-
-      if (is_id(l1, KaxChapterUID)) {
-        KaxChapterUID &c_uid = *static_cast<KaxChapterUID *>(l1);
-        show_element(l1, level + 1, "UID: %u", uint32(c_uid));
-
-      } else if (is_id(l1, KaxChapterTimeStart)) {
-        uint64_t s;
-        KaxChapterTimeStart &start =
-          *static_cast<KaxChapterTimeStart *>(l1);
-        s = uint64(start);
-        show_element(l1, level + 1, "Start: " FMT_TIMECODEN, ARG_TIMECODEN(s));
-
-      } else if (is_id(l1, KaxChapterTimeEnd)) {
-        uint64_t e;
-        KaxChapterTimeEnd &end =
-          *static_cast<KaxChapterTimeEnd *>(l1);
-        e = uint64(end);
-        show_element(l1, level + 1, "End: " FMT_TIMECODEN, ARG_TIMECODEN(e));
-
-      } else if (is_id(l1, KaxChapterTrack)) {
-        show_element(l1, level + 1, "Track");
-
-        m1 = static_cast<EbmlMaster *>(l1);
-        for (i1 = 0; i1 < m1->ListSize(); i1++) {
-          l2 = (*m1)[i1];
-
-          if (is_id(l2, KaxChapterTrackNumber)) {
-            KaxChapterTrackNumber &c_tnumber =
-              *static_cast<KaxChapterTrackNumber *>(l2);
-            show_element(l2, level + 2, "Track number: %u", uint32(c_tnumber));
-
-          } else if (!is_global(es, l2, level + 2))
-            show_unknown_element(l2, level + 2);
-
-        } // while (l2 != NULL)
-
-      } else if (is_id(l1, KaxChapterDisplay)) {
-        show_element(l1, level + 1, "Display");
-
-        m1 = static_cast<EbmlMaster *>(l1);
-        for (i1 = 0; i1 < m1->ListSize(); i1++) {
-          l2 = (*m1)[i1];
-
-          if (is_id(l2, KaxChapterString)) {
-            KaxChapterString &c_string =
-              *static_cast<KaxChapterString *>(l2);
-            show_element(l2, level + 2, "String: %s", UTF2STR(c_string));
-
-          } else if (is_id(l2, KaxChapterLanguage)) {
-            KaxChapterLanguage &c_lang =
-              *static_cast<KaxChapterLanguage *>(l2);
-            show_element(l2, level + 2, "Language: %s",
-                         string(c_lang).c_str());
-
-          } else if (is_id(l2, KaxChapterCountry)) {
-            KaxChapterCountry &c_country =
-              *static_cast<KaxChapterCountry *>(l2);
-            show_element(l2, level + 2, "Country: %s",
-                         string(c_country).c_str());
-
-          } else if (!is_global(es, l2, level + 2))
-            show_unknown_element(l2, level + 2);
-
-        } // while (l2 != NULL)
-
-      } else if (is_id(l1, KaxChapterFlagHidden)) {
-        show_element(l1, level + 1, "Hidden: %u",
-                     uint8(*static_cast<KaxChapterFlagHidden *>(l1)));
-
-      } else if (is_id(l1, KaxChapterFlagEnabled)) {
-        show_element(l1, level + 1, "Enabled: %u",
-                     uint8(*static_cast<KaxChapterFlagEnabled *>(l1)));
-
-      } else if (!parse_chapter_atom(es, l1, level + 1) &&
-                 !is_global(es, l1, level + 1))
         show_unknown_element(l1, level + 1);
 
     } // while (l1 != NULL)
@@ -1815,10 +1716,80 @@ def_handle2(cluster,
   } // while (l2 != NULL)
 }
 
+static int
+cet_index(const EbmlId &id) {
+  int i;
+
+  for (i = 0; chapter_elements[i].name != NULL; i++)
+    if (id == chapter_elements[i].id)
+      return i;
+
+  return -1;
+}
+
+void
+handle_chapter_rec(EbmlStream *es,
+                   int level,
+                   int parent_idx,
+                   EbmlElement *e) {
+  EbmlMaster *m;
+  int elt_idx, i;
+  string format;
+  char *s;
+
+  elt_idx = cet_index(e->Generic().GlobalId);
+  if (elt_idx == -1) {
+    show_element(e, level, "(Unknown element: %s)", e->Generic().DebugName);
+    return;
+  }
+
+  format = chapter_elements[elt_idx].name;
+  switch (chapter_elements[elt_idx].type) {
+    case ebmlt_master:
+      show_element(e, level, format.c_str());
+      m = dynamic_cast<EbmlMaster *>(e);
+      assert(m != NULL);
+      for (i = 0; i < m->ListSize(); i++)
+        handle_chapter_rec(es, level + 1, elt_idx, (*m)[i]);
+
+      break;
+
+    case ebmlt_uint:
+    case ebmlt_bool:
+      format += ": %llu";
+      show_element(e, level, format.c_str(),
+                   uint64(*dynamic_cast<EbmlUInteger *>(e)));
+      break;
+
+    case ebmlt_string:
+      format += ": %s";
+      show_element(e, level, format.c_str(),
+                   string(*dynamic_cast<EbmlString *>(e)).c_str());
+      break;
+
+    case ebmlt_ustring:
+      format += ": %s";
+      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
+                                          <EbmlUnicodeString *>(e)).c_str());
+      show_element(e, level, format.c_str(), s);
+      safefree(s);
+      break;
+
+    case ebmlt_time:
+      format += ": " FMT_TIMECODEN;
+      show_element(e, level, format.c_str(),
+                   ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))));
+      break;
+
+    default:
+      assert(false);
+  }
+}
+
 void
 def_handle(chapters) {
-  EbmlMaster *m1, *m2;
-  int i1, i2;
+  EbmlMaster *m1;
+  int i1;
 
   show_element(l1, 1, "Chapters");
 
@@ -1826,44 +1797,8 @@ def_handle(chapters) {
   m1 = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
 
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
-    if (is_id(l2, KaxEditionEntry)) {
-      show_element(l2, 2, "Edition entry");
-
-      m2 = static_cast<EbmlMaster *>(l2);
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
-
-        if (is_id(l3, KaxEditionUID)) {
-          KaxEditionUID &edition_uid = *static_cast<KaxEditionUID *>(l3);
-          show_element(l3, 3, "Edition UID: %llu", uint64(edition_uid));
-
-        } else if (is_id(l3, KaxEditionFlagHidden)) {
-          KaxEditionFlagHidden &fhidden =
-            *static_cast<KaxEditionFlagHidden *>(l3);
-          show_element(l3, 3, "Hidden: %u", uint8(fhidden));
-
-        } else if (is_id(l3, KaxEditionFlagDefault)) {
-          KaxEditionFlagDefault &fdefault =
-            *static_cast<KaxEditionFlagDefault *>(l3);
-          show_element(l3, 3, "Default: %u", uint8(fdefault));
-
-        } else if (is_id(l3, KaxEditionManaged)) {
-          KaxEditionManaged &managed = *static_cast<KaxEditionManaged *>(l3);
-          show_element(l3, 3, "Managed: %llu", uint64(managed));
-
-        } else if (!parse_chapter_atom(es, l3, 3) &&
-                   !is_global(es, l3, 3))
-          show_unknown_element(l3, 3);
-
-      } // while (l3 != NULL)
-
-    } else if (!is_global(es, l2, 2))
-      show_unknown_element(l2, 2);
-
-  } // while (l2 != NULL)
+  for (i1 = 0; i1 < m1->ListSize(); i1++)
+    handle_chapter_rec(es, 2, 0, (*m1)[i1]);
 }
 
 void

@@ -260,7 +260,7 @@ write_xml_element_rec(int level,
       for (i = 0; i < m->ListSize(); i++)
         write_xml_element_rec(level + 1, elt_idx, (*m)[i]);
 
-      if (chapter_elements[elt_idx].write_end_hook != NULL) {
+      if (chapter_elements[elt_idx].end_hook != NULL) {
         chapter_writer_cb_t cb;
 
         cb.level = level;
@@ -268,7 +268,7 @@ write_xml_element_rec(int level,
         cb.elt_idx = elt_idx;
         cb.e = e;
 
-        chapter_elements[elt_idx].write_end_hook(&cb);
+        chapter_elements[elt_idx].end_hook(&cb);
       }
 
       for (i = 0; i < level; i++)
@@ -348,9 +348,13 @@ write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
   int i;
 
-  chapter_elements[cet_index("ChapterAtom")].write_end_hook =
+  for (i = 0; chapter_elements[i].name != NULL; i++) {
+    chapter_elements[i].start_hook = NULL;
+    chapter_elements[i].end_hook = NULL;
+  }
+  chapter_elements[cet_index("ChapterAtom")].end_hook =
     end_write_chapter_atom;
-  chapter_elements[cet_index("ChapterDisplay")].write_end_hook =
+  chapter_elements[cet_index("ChapterDisplay")].end_hook =
     end_write_chapter_display;
 
   o = out;

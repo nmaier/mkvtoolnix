@@ -24,7 +24,6 @@
 
 #include "chapters.h"
 #include "commonebml.h"
-#include "ebml_ids.h"
 #include "error.h"
 #include "iso639.h"
 #include "mm_io.h"
@@ -50,59 +49,6 @@ typedef struct {
   jmp_buf parse_error_jmp;
   string *parse_error_msg;
 } parser_data_t;
-
-static void end_edition_entry(void *pdata);
-static void end_edition_uid(void *pdata);
-static void end_chapter_uid(void *pdata);
-static void end_chapter_atom(void *pdata);
-static void end_chapter_track(void *pdata);
-static void end_chapter_display(void *pdata);
-static void end_chapter_language(void *pdata);
-static void end_chapter_country(void *pdata);
-
-parser_element_t chapter_elements[] = {
-  {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL, NULL},
-
-  {"EditionEntry", ebmlt_master, 1, 0, 0, KaxEditionEntry_TheId, NULL,
-   end_edition_entry, NULL},
-  {"EditionUID", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionUID_TheId, NULL,
-   end_edition_uid, NULL},
-  {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
-   NULL, NULL, NULL},
-  {"EditionManaged", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionManaged_TheId,
-   NULL, NULL, NULL},
-  {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
-   NULL, NULL, NULL},
-
-  {"ChapterAtom", ebmlt_master, 2, 0, 0, KaxChapterAtom_TheId, NULL,
-   end_chapter_atom, NULL},
-  {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxChapterUID_TheId, NULL,
-   end_chapter_uid, NULL},
-  {"ChapterTimeStart", ebmlt_time, 3, 0, 0, KaxChapterTimeStart_TheId, NULL,
-   NULL, NULL},
-  {"ChapterTimeEnd", ebmlt_time, 3, 0, 0, KaxChapterTimeEnd_TheId, NULL,
-   NULL, NULL},
-  {"ChapterFlagHidden", ebmlt_bool, 3, 0, 0, KaxChapterFlagHidden_TheId,
-   NULL, NULL, NULL},
-  {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, KaxChapterFlagEnabled_TheId,
-   NULL, NULL, NULL},
-
-  {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
-   NULL, end_chapter_track, NULL},
-  {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE,
-   KaxChapterTrackNumber_TheId, NULL, NULL, NULL},
-
-  {"ChapterDisplay", ebmlt_master, 3, 0, 0, KaxChapterDisplay_TheId,
-   NULL, end_chapter_display, NULL},
-  {"ChapterString", ebmlt_ustring, 4, 0, 0, KaxChapterString_TheId,
-   NULL, NULL, NULL},
-  {"ChapterLanguage", ebmlt_string, 4, 0, 0, KaxChapterLanguage_TheId,
-   NULL, end_chapter_language, NULL},
-  {"ChapterCountry", ebmlt_string, 4, 0, 0, KaxChapterCountry_TheId,
-   NULL, end_chapter_country, NULL},
-
-  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
-};
 
 // {{{ XML chapters
 
@@ -619,6 +565,18 @@ select_chapters_in_timeframe(KaxChapters *chapters,
   return chapters;
 }
 
+static int
+cet_index(const char *name) {
+  int i;
+
+  for (i = 0; chapter_elements[i].name != NULL; i++)
+    if (!strcmp(name, chapter_elements[i].name))
+      return i;
+
+  assert(false);
+  return -1;
+}
+
 KaxChapters *
 parse_xml_chapters(mm_text_io_c *in,
                    int64_t min_tc,
@@ -631,6 +589,21 @@ parse_xml_chapters(mm_text_io_c *in,
   XML_Error xerror;
   string buffer, error;
   KaxChapters *chapters;
+  int i;
+
+  for (i = 0; chapter_elements[i].name != NULL; i++) {
+    chapter_elements[i].start_hook = NULL;
+    chapter_elements[i].end_hook = NULL;
+  }
+  chapter_elements[cet_index("EditionEntry")].end_hook = end_edition_entry;
+  chapter_elements[cet_index("EditionUID")].end_hook = end_edition_uid;
+  chapter_elements[cet_index("ChapterAtom")].end_hook = end_chapter_atom;
+  chapter_elements[cet_index("ChapterUID")].end_hook = end_chapter_uid;
+  chapter_elements[cet_index("ChapterTrack")].end_hook = end_chapter_track;
+  chapter_elements[cet_index("ChapterDisplay")].end_hook = end_chapter_display;
+  chapter_elements[cet_index("ChapterLanguage")].end_hook =
+    end_chapter_language;
+  chapter_elements[cet_index("ChapterCountry")].end_hook = end_chapter_country;
 
   done = 0;
 

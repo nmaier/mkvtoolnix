@@ -49,7 +49,6 @@ typedef struct {
   const EbmlId id;
   parser_element_callback_t start_hook;
   parser_element_callback_t end_hook;
-  parser_element_callback_t write_end_hook;
 } parser_element_t;
 
 extern parser_element_t chapter_elements[];
