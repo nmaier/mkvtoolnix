@@ -114,9 +114,8 @@ int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  num_buffers = 0;
-  buffers = NULL;
 
+  title = "";
   segment_duration = 0.0;
   first_timecode = -1.0;
 
@@ -765,11 +764,9 @@ int kax_reader_c::read_headers() {
           if (verbose > 1)
             mxinfo(PFX "| + title: %s\n", tmp);
           safefree(tmp);
-          if (segment_title.length() == 0) {
-            tmp = UTFstring_to_cstrutf8(UTFstring(*ktitle));
-            segment_title = tmp;
-            safefree(tmp);
-          }
+          tmp = UTFstring_to_cstrutf8(UTFstring(*ktitle));
+          title = tmp;
+          safefree(tmp);
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
@@ -1420,6 +1417,9 @@ void kax_reader_c::create_packetizers() {
                  "file.\n", t->tuid);
     }
   }
+
+  if (segment_title.length() == 0)
+    segment_title = title;
 }
 
 // }}}
@@ -1687,13 +1687,20 @@ void kax_reader_c::identify() {
   string info;
   char *str;
 
-  mxinfo("File '%s': container: Matroska\n", ti->fname);
+  if (identify_verbose && (title.length() > 0))
+    mxinfo("File '%s': container: Matroska [title:%s]\n", ti->fname,
+           escape(title.c_str()).c_str());
+  else
+    mxinfo("File '%s': container: Matroska\n", ti->fname);
   for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->ok) {
       if (identify_verbose) {
         info = " [";
         if (tracks[i]->language != NULL)
-          info += string("language:") + string(tracks[i]->language) +
+          info += string("language:") + escape(tracks[i]->language) +
+            string(" ");
+        if (tracks[i]->track_name != NULL)
+          info += string("track_name:") + escape(tracks[i]->track_name) +
             string(" ");
         info += "]";
       } else

@@ -102,11 +102,6 @@ typedef struct {
   generic_packetizer_c *packetizer;
 } kax_track_t;
 
-typedef struct {
-  unsigned char *data;
-  int length;
-} buffer_t;
-
 class kax_reader_c: public generic_reader_c {
 private:
   int act_wchar;
@@ -120,13 +115,10 @@ private:
 
   EbmlStream *es;
   EbmlElement *saved_l1, *saved_l2, *segment;
-
   KaxCluster *cluster;
 
-  buffer_t **buffers;
-  int num_buffers;
-
   float segment_duration, last_timecode, first_timecode;
+  string title;
 
   vector<kax_attachment_t> attachments;
 

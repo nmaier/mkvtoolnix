@@ -192,9 +192,10 @@ void vobsub_reader_c::parse_headers() {
   const char *sline;
   char language[3];
   vobsub_track_c *track;
-  int64_t filepos, timestamp, next_pos;
+  int64_t filepos, timestamp, next_pos, this_pos;
   int hour, minute, second, msecond, idx;
-  uint32_t i, k, l, m;
+  vector<int64_t> *positions, sorted_positions;
+  uint32_t i, k, l, tsize, psize, ssize;
 
   language[0] = 0;
   track = NULL;
@@ -252,36 +253,50 @@ void vobsub_reader_c::parse_headers() {
     idx_data += "\n";
   }
 
-  filepos = sub_file->get_size();
-  for (i = 0; i < tracks.size(); i++) {
-    for (k = 0; k < tracks[i]->positions.size(); k++) {
-      next_pos = filepos;
-      for (l = 0; l < tracks.size(); l++) {
-        for (m = 0; m < tracks[l]->positions.size(); m++) {
-          if ((tracks[l]->positions[m] < next_pos) &&
-              (tracks[l]->positions[m] > tracks[i]->positions[k]))
-            next_pos = tracks[l]->positions[m];
-        }
-      }
-      tracks[i]->sizes.push_back(next_pos - tracks[i]->positions[k]);
+  if (!identifying) {
+    filepos = sub_file->get_size();
+    tsize = tracks.size();
+    for (i = 0; i < tsize; i++) {
+      positions = &tracks[i]->positions;
+      psize = positions->size();
+      for (k = 0; k < psize; k++)
+        sorted_positions.push_back((*positions)[k]);
     }
-  }
+    sort(sorted_positions.begin(), sorted_positions.end());
+    ssize = sorted_positions.size();
 
-  for (i = 0; i < tracks.size(); i++)
-    if ((tracks[i]->positions.size() != tracks[i]->timecodes.size()) ||
-        (tracks[i]->positions.size() != tracks[i]->sizes.size()))
-      mxerror(PFX "Have %u positions, %u sizes and %u timecodes. This should "
-              "not have happened. Please file a bug report.\n",
-              tracks[i]->positions.size(), tracks[i]->sizes.size(),
-              tracks[i]->timecodes.size());
+    for (i = 0; i < tsize; i++) {
+      positions = &tracks[i]->positions;
+      psize = positions->size();
+      for (k = 0; k < psize; k++) {
+        next_pos = filepos;
+        this_pos = (*positions)[k];
+        for (l = 0; l < ssize; l++)
+          if (sorted_positions[l] > this_pos) {
+            next_pos = sorted_positions[l];
+            break;
+          }
 
-  if (verbose > 1) {
-    for (i = 0; i < tracks.size(); i++) {
-      mxinfo("vobsub_reader: Track number %u\n", i);
-      for (k = 0; k < tracks[i]->positions.size(); k++)
-        mxinfo("vobsub_reader:  %04u position: %12lld, size: %12lld, "
-               "timecode: " "%12lld\n", k, tracks[i]->positions[k],
-               tracks[i]->sizes[k], tracks[i]->timecodes[k]);
+        tracks[i]->sizes.push_back(next_pos - this_pos);
+      }
+    }
+
+    for (i = 0; i < tracks.size(); i++)
+      if ((tracks[i]->positions.size() != tracks[i]->timecodes.size()) ||
+          (tracks[i]->positions.size() != tracks[i]->sizes.size()))
+        mxerror(PFX "Have %u positions, %u sizes and %u timecodes. This "
+                "should not have happened. Please file a bug report.\n",
+                tracks[i]->positions.size(), tracks[i]->sizes.size(),
+                tracks[i]->timecodes.size());
+
+    if (verbose > 1) {
+      for (i = 0; i < tracks.size(); i++) {
+        mxinfo("vobsub_reader: Track number %u\n", i);
+        for (k = 0; k < tracks[i]->positions.size(); k++)
+          mxinfo("vobsub_reader:  %04u position: %12lld, size: %12lld, "
+                 "timecode: " "%12lld\n", k, tracks[i]->positions[k],
+                 tracks[i]->sizes[k], tracks[i]->timecodes[k]);
+      }
     }
   }
 }
