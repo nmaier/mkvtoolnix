@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.10 2003/04/11 10:05:11 mosu Exp $
+    \version \$Id: common.h,v 1.11 2003/04/17 12:21:21 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -65,6 +65,9 @@
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \
                            ((unsigned char)d))
+
+#define TIMECODE_SCALE 1000000
+
 typedef struct {
   int    displacement;
   double linear;
@@ -89,6 +92,9 @@ typedef double stamp_t;
 
 #define die(s) _die(s, __FILE__, __LINE__)
 void _die(const char *s, const char *file, int line);
+
+#define trace() _trace(__func__, __FILE__, __LINE__)
+void _trace(const char *func, const char *file, int line);
 
 char *map_video_codec_fourcc(char *fourcc, int *set_codec_private);
 char *map_audio_codec_id(int id, int bps, int *set_codec_private);
