@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: matroska.h,v 1.5 2003/04/20 21:25:59 mosu Exp $
+    \version \$Id: matroska.h,v 1.6 2003/04/23 08:16:39 mosu Exp $
     \brief Definitions for the various Codec IDs
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,7 @@
 
 #define MKV_A_MP3        "A_MPEGLAYER3"
 #define MKV_A_AC3        "A_AC3"
-#define MKV_A_PCM16      "A_PCM16IN"
+#define MKV_A_PCM16      "A_PCMLIN16"
 #define MKV_A_VORBIS     "A_VORBIS"
 #define MKV_A_ACM        "A_MS/ACM"
 
