@@ -256,8 +256,8 @@ video_packetizer_c::extract_mpeg4_aspect_ratio(memory_c &mem) {
     rerender_track_headers();
     mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
            "from the MPEG4 data and set the display dimensions to "
-           "%u/%u.\n", ti->id, ti->fname, ti->display_width,
-           ti->display_height);
+           "%u/%u.\n", (int64_t)ti->id, ti->fname,
+           (uint32_t)ti->display_width, (uint32_t)ti->display_height);
   }
 }
 

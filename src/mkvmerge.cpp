@@ -1328,7 +1328,7 @@ parse_append_to(const char *s,
 
 static void
 set_timecode_scale() {
-  vector<packetizer_t *>::iterator ptzr;
+  vector<packetizer_t *>::const_iterator ptzr;
   bool video_present, audio_present;
   int64_t highest_sample_rate;
 
