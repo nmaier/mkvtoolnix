@@ -32,7 +32,7 @@
 
 typedef struct {
   int64_t filepos;
-  int type, len, samples;
+  int type, len;
 } flac_block_t;
 
 class flac_reader_c: public generic_reader_c {
@@ -46,6 +46,7 @@ private:
   int header_size;
   vector<flac_block_t> blocks;
   vector<flac_block_t>::iterator current_block;
+  FLAC__StreamMetadata_StreamInfo stream_info;
 
 public:
   flac_reader_c(track_info_c *nti) throw (error_c);
