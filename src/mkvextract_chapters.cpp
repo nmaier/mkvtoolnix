@@ -136,6 +136,8 @@ void extract_chapters(const char *file_name, bool chapter_format_simple) {
         KaxChapters &chapters = *static_cast<KaxChapters *>(l1);
         chapters.Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2,
                       true);
+        if (verbose > 0)
+          debug_c::dump_elements(&chapters, 0);
 
         if (!chapters_extracted && !chapter_format_simple) {
           mxinfo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Chapters>\n");

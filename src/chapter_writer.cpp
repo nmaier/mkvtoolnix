@@ -216,27 +216,27 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
   EbmlElement *e;
   char *s;
 
-  pt(level, "<Display>\n");
+  pt(level, "<ChapterDisplay>\n");
 
   for (i = 0; i < display->ListSize(); i++) {
     e = (*display)[i];
     if (is_id(KaxChapterString)) {
-      pt(level + 1, "<String>");
+      pt(level + 1, "<ChapterString>");
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
-      mxprint(o, "%s</String>\n", s);
+      mxprint(o, "%s</ChapterString>\n", s);
       safefree(s);
 
     } else if (is_id(KaxChapterLanguage)) {
-      pt(level + 1, "<Langauge>");
-      mxprint(o, "%s</Language>\n", string(*static_cast
-                                           <EbmlString *>(e)).c_str());
+      pt(level + 1, "<ChapterLanguage>");
+      mxprint(o, "%s</ChapterLanguage>\n", string(*static_cast
+                                                  <EbmlString *>(e)).c_str());
 
 
     } else if (is_id(KaxChapterCountry)) {
-      pt(level + 1, "<Country>");
-      mxprint(o, "%s</Country>\n", string(*static_cast
-                                          <EbmlString *>(e)).c_str());
+      pt(level + 1, "<ChapterCountry>");
+      mxprint(o, "%s</ChapterCountry>\n", string(*static_cast
+                                                 <EbmlString *>(e)).c_str());
 
 
     } else if (is_id(KaxChapterAtom))
@@ -244,27 +244,28 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
 
   }
 
-  pt(level, "</Display>\n");
+  pt(level, "</ChapterDisplay>\n");
 }
 
 static void write_chapter_track_xml(KaxChapterTrack *track, int level) {
   int i;
   EbmlElement *e;
 
-  pt(level, "<Track>\n");
+  pt(level, "<ChapterTrack>\n");
 
   for (i = 0; i < track->ListSize(); i++) {
     e = (*track)[i];
     if (is_id(KaxChapterTrackNumber)) {
-      pt(level + 1, "<TrackNumber>");
-      mxprint(o, "%u</TrackNumber\n", uint32(*static_cast<EbmlUInteger *>(e)));
+      pt(level + 1, "<ChapterTrackNumber>");
+      mxprint(o, "%u</ChapterTrackNumber\n",
+              uint32(*static_cast<EbmlUInteger *>(e)));
 
     } else if (is_id(KaxChapterAtom))
       write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
 
   }
 
-  pt(level, "</Track>\n");
+  pt(level, "</ChapterTrack>\n");
 }
 
 static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
@@ -272,25 +273,26 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
   EbmlElement *e;
   uint64_t v;
 
-  pt(level, "<Atom>\n");
+  pt(level, "<ChapterAtom>\n");
 
   for (i = 0; i < atom->ListSize(); i++) {
     e = (*atom)[i];
     if (is_id(KaxChapterUID)) {
-      pt(level + 1, "<UID>");
-      mxprint(o, "%u</UID\n", uint32(*static_cast<EbmlUInteger *>(e)));
+      pt(level + 1, "<!-- <ChapterUID>");
+      mxprint(o, "%u</ChapterUID> -->\n",
+              uint32(*static_cast<EbmlUInteger *>(e)));
 
     } else if (is_id(KaxChapterTimeStart)) {
-      pt(level + 1, "<TimeStart>");
+      pt(level + 1, "<ChapterTimeStart>");
       v = uint64(*static_cast<EbmlUInteger *>(e)) / 1000000;
-      mxprint(o, "%02llu:%02llu:%02llu.%03llu</TimeStart>\n",
+      mxprint(o, "%02llu:%02llu:%02llu.%03llu</ChapterTimeStart>\n",
               v / 1000 / 60 / 60, (v / 1000 / 60) % 60, (v / 1000) % 60,
               v % 1000);
 
     } else if (is_id(KaxChapterTimeEnd)) {
-      pt(level + 1, "<TimeEnd>");
+      pt(level + 1, "<ChapterTimeEnd>");
       v = uint64(*static_cast<EbmlUInteger *>(e)) / 1000000;
-      mxprint(o, "%02llu:%02llu:%02llu.%03llu</TimeEnd>\n",
+      mxprint(o, "%02llu:%02llu:%02llu.%03llu</ChapterTimeEnd>\n",
               v / 1000 / 60 / 60, (v / 1000 / 60) % 60, (v / 1000) % 60,
               v % 1000);
 
@@ -305,7 +307,7 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
 
   }
 
-  pt(level, "</Atom>\n");
+  pt(level, "</ChapterAtom>\n");
 }
 
 void write_chapters_xml(KaxChapters *chapters, FILE *out) {
