@@ -1655,7 +1655,7 @@ kax_reader_c::read(generic_packetizer_c *) {
             duration = static_cast<KaxBlockDuration *>
               (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
             if (duration != NULL)
-              block_duration = (int64_t)uint64(*duration) /
+              block_duration = (int64_t)uint64(*duration) * tc_scale /
                 block->NumberFrames();
             else if (block_track->v_frate != 0)
               block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
@@ -1679,7 +1679,7 @@ kax_reader_c::read(generic_packetizer_c *) {
             duration = static_cast<KaxBlockDuration *>
               (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
             if (duration != NULL)
-              block_duration = (int64_t)uint64(*duration) /
+              block_duration = (int64_t)uint64(*duration) * tc_scale /
                 block->NumberFrames();
             else if (block_track->v_frate != 0)
               block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
