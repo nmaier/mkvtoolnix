@@ -24,10 +24,10 @@
 
 #include <errno.h>
 #include <string.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #if defined(SYS_WINDOWS)
-#include <stdarg.h>
 #include <windef.h>
 #include <winbase.h>
 #include <wingdi.h>
@@ -539,6 +539,26 @@ mm_io_c::getch() {
   return c;
 }
 
+int
+mm_io_c::printf(const char *fmt,
+                ...) {
+  va_list ap;
+  string new_fmt;
+  char *new_string;
+  int len;
+
+  fix_format(fmt, new_fmt);
+  va_start(ap, fmt);
+  len = get_varg_len(new_fmt.c_str(), ap);
+  new_string = (char *)safemalloc(len + 1);
+  vsprintf(new_string, new_fmt.c_str(), ap);
+  va_end(ap);
+  len = write(new_string, len);
+  safefree(new_string);
+
+  return len;
+}
+
 /*
  * Dummy class for output to /dev/null. Needed for two pass stuff.
  */
@@ -816,4 +836,37 @@ mm_text_io_c::setFilePointer(int64_t offset,
     mm_io_c::setFilePointer(bom_len, seek_beginning);
   else
     mm_io_c::setFilePointer(offset, seek_beginning);
+}
+
+/*
+ * Class for reading from stdin & writing to stdout.
+ */
+
+mm_stdio_c::mm_stdio_c() {
+}
+
+uint64
+mm_stdio_c::getFilePointer() {
+  return 0;
+}
+
+void
+mm_stdio_c::setFilePointer(int64,
+                           seek_mode) {
+}
+
+uint32
+mm_stdio_c::read(void *buffer,
+                 size_t size) {
+  return fread(buffer, 1, size, stdin);
+}
+
+size_t
+mm_stdio_c::write(const void *buffer,
+                  size_t size) {
+  return fwrite(buffer, 1, size, stdout);
+}
+
+void
+mm_stdio_c::close() {
 }

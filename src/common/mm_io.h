@@ -76,6 +76,8 @@ public:
   virtual const char *get_file_name();
 
   virtual int truncate(int64_t pos);
+
+  virtual int printf(const char *fmt, ...);
 };
 
 class MTX_DLL_API mm_null_io_c: public mm_io_c {
@@ -123,6 +125,17 @@ public:
   virtual string getline();
   virtual int read_next_char(char *buffer);
   virtual byte_order_e get_byte_order();
+};
+
+class MTX_DLL_API mm_stdio_c: public mm_io_c {
+public:
+  mm_stdio_c();
+
+  virtual uint64 getFilePointer();
+  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
+  virtual uint32 read(void *buffer, size_t size);
+  virtual size_t write(const void *buffer, size_t size);
+  virtual void close();
 };
 
 #endif // __MM_IO_H
