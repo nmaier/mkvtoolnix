@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.10 2003/04/20 21:18:51 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.11 2003/05/03 20:01:44 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -61,8 +61,6 @@ void cluster_helper_c::free_contents(ch_contents_t *clstr) {
     p = clstr->packets[i];
     if (p->data != NULL)
       free(p->data);
-    if (p->data_buffer != NULL)
-      delete p->data_buffer;
     free(p);
   }
   if (clstr->packets != NULL)
@@ -164,6 +162,7 @@ int cluster_helper_c::get_cluster_content_size() {
 int cluster_helper_c::render(IOCallback *out) {
   KaxCluster *cluster;
   KaxBlockGroup *new_group;
+  DataBuffer *data_buffer;
   int i;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
@@ -178,7 +177,7 @@ int cluster_helper_c::render(IOCallback *out) {
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
 
-    pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
+    data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>
       (*((generic_packetizer_c *)pack->source)->get_track_entry());
@@ -192,15 +191,15 @@ int cluster_helper_c::render(IOCallback *out) {
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
         cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
-                          *pack->data_buffer, new_group, *bref_packet->group,
+                          *data_buffer, new_group, *bref_packet->group,
                           *fref_packet->group);
       } else {
         cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
-                          *pack->data_buffer, new_group, *bref_packet->group);
+                          *data_buffer, new_group, *bref_packet->group);
       }
     } else {                    // This is a key frame. No references.
       cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
-                        *pack->data_buffer, new_group);
+                        *data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);

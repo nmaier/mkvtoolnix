@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.16 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: queue.h,v 1.17 2003/05/03 20:01:44 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,7 +28,6 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 typedef struct packet_t {
-  DataBuffer *data_buffer;
   KaxBlockGroup *group;
   KaxBlock *block;
   KaxCluster *cluster;
