@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.14 2003/04/18 13:06:57 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.15 2003/04/18 23:17:42 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -698,8 +698,10 @@ void process_file() {
 
               if (EbmlId(*l3) == KaxCueTime::ClassInfos.GlobalId) {
                 KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
+                cue_time.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + found cue time: %llu", NAME,
                         uint64(cue_time));
+//                         ((float)uint64(cue_time)) * tc_scale / 1000000000.0);
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", last_pos);
                 fprintf(stdout, "\n");
@@ -720,7 +722,8 @@ void process_file() {
 
                   if (EbmlId(*l4) == KaxCueTrack::ClassInfos.GlobalId) {
                     KaxCueTrack &cue_track = *static_cast<KaxCueTrack *>(l4);
-                    fprintf(stdout, "(%s) |  + found cue track: %u", NAME,
+                    cue_track.ReadData(es->I_O());
+                    fprintf(stdout, "(%s) |   + found cue track: %u", NAME,
                             uint32(cue_track));
                     if (verbose > 1)
                       fprintf(stdout, " at %llu", last_pos);
@@ -730,7 +733,8 @@ void process_file() {
                              KaxCueClusterPosition::ClassInfos.GlobalId) {
                     KaxCueClusterPosition &cue_cp =
                       *static_cast<KaxCueClusterPosition *>(l4);
-                    fprintf(stdout, "(%s) |  + found cue cluster position: "
+                    cue_cp.ReadData(es->I_O());
+                    fprintf(stdout, "(%s) |   + found cue cluster position: "
                             "%llu", NAME, uint64(cue_cp));
                     if (verbose > 1)
                       fprintf(stdout, " at %llu", last_pos);
@@ -740,7 +744,8 @@ void process_file() {
                              KaxCueBlockNumber::ClassInfos.GlobalId) {
                     KaxCueBlockNumber &cue_bn =
                       *static_cast<KaxCueBlockNumber *>(l4);
-                    fprintf(stdout, "(%s) |  + found cue block number: %llu",
+                    cue_bn.ReadData(es->I_O());
+                    fprintf(stdout, "(%s) |   + found cue block number: %llu",
                             NAME, uint64(cue_bn));
                     if (verbose > 1)
                       fprintf(stdout, " at %llu", last_pos);
@@ -750,7 +755,8 @@ void process_file() {
                              KaxCueCodecState::ClassInfos.GlobalId) {
                     KaxCueCodecState &cue_cs =
                       *static_cast<KaxCueCodecState *>(l4);
-                    fprintf(stdout, "(%s) |  + found cue codec state: %llu",
+                    cue_cs.ReadData(es->I_O());
+                    fprintf(stdout, "(%s) |   + found cue codec state: %llu",
                             NAME, uint64(cue_cs));
                     if (verbose > 1)
                       fprintf(stdout, " at %llu", last_pos);
@@ -774,8 +780,9 @@ void process_file() {
                       if (EbmlId(*l5) == KaxCueRefTime::ClassInfos.GlobalId) {
                         KaxCueRefTime &cue_rt =
                           *static_cast<KaxCueRefTime *>(l5);
-                        fprintf(stdout, "(%s) |   + found cue ref time: %llu",
-                                NAME, uint64(cue_rt));
+                        fprintf(stdout, "(%s) |    + found cue ref time: %.3fs",
+                                NAME, ((float)uint64(cue_rt)) * tc_scale /
+                                1000000000.0);
                         if (verbose > 1)
                           fprintf(stdout, " at %llu", last_pos);
                         fprintf(stdout, "\n");
@@ -784,7 +791,8 @@ void process_file() {
                                  KaxCueRefCluster::ClassInfos.GlobalId) {
                         KaxCueRefCluster &cue_rc =
                           *static_cast<KaxCueRefCluster *>(l5);
-                        fprintf(stdout, "(%s) |   + found cue ref cluster: "
+                        cue_rc.ReadData(es->I_O());
+                        fprintf(stdout, "(%s) |    + found cue ref cluster: "
                                 "%llu", NAME, uint64(cue_rc));
                         if (verbose > 1)
                           fprintf(stdout, " at %llu", last_pos);
@@ -794,7 +802,8 @@ void process_file() {
                                  KaxCueRefNumber::ClassInfos.GlobalId) {
                         KaxCueRefNumber &cue_rn =
                           *static_cast<KaxCueRefNumber *>(l5);
-                        fprintf(stdout, "(%s) |   + found cue ref number: "
+                        cue_rn.ReadData(es->I_O());
+                        fprintf(stdout, "(%s) |    + found cue ref number: "
                                 "%llu", NAME, uint64(cue_rn));
                         if (verbose > 1)
                           fprintf(stdout, " at %llu", last_pos);
@@ -804,14 +813,15 @@ void process_file() {
                                  KaxCueRefCodecState::ClassInfos.GlobalId) {
                         KaxCueRefCodecState &cue_rcs =
                           *static_cast<KaxCueRefCodecState *>(l5);
-                        fprintf(stdout, "(%s) |   + found cue ref codec state"
+                        cue_rcs.ReadData(es->I_O());
+                        fprintf(stdout, "(%s) |    + found cue ref codec state"
                                 ": %llu", NAME, uint64(cue_rcs));
                         if (verbose > 1)
                           fprintf(stdout, " at %llu", last_pos);
                         fprintf(stdout, "\n");
 
                       } else {
-                        fprintf(stdout, "(%s) |   + unknown element, "
+                        fprintf(stdout, "(%s) |    + unknown element, "
                                 "level 5: %s", NAME, typeid(*l5).name());
                         if (verbose > 1)
                           fprintf(stdout, " at %llu", last_pos);
