@@ -31,9 +31,9 @@
 #define COMPRESSION_NONE          4
 #define COMPRESSION_NUM           4
 
-extern const char *compression_schemes[];
+extern const char *MTX_DLL_API xcompression_schemes[];
 
-class compression_c {
+class MTX_DLL_API compression_c {
 protected:
   int scheme;
   int64_t raw_size, compressed_size, items;
@@ -64,7 +64,7 @@ public:
 #if defined(HAVE_LZO1X_H)
 #include <lzo1x.h>
 
-class lzo_compression_c: public compression_c {
+class MTX_DLL_API lzo_compression_c: public compression_c {
 protected:
   lzo_byte *wrkmem;
 
@@ -80,7 +80,7 @@ public:
 #if defined(HAVE_ZLIB_H)
 #include <zlib.h>
 
-class zlib_compression_c: public compression_c {
+class MTX_DLL_API zlib_compression_c: public compression_c {
 public:
   zlib_compression_c();
   virtual ~zlib_compression_c();
@@ -93,7 +93,7 @@ public:
 #if defined(HAVE_BZLIB_H)
 #include <bzlib.h>
 
-class bzlib_compression_c: public compression_c {
+class MTX_DLL_API bzlib_compression_c: public compression_c {
 public:
   bzlib_compression_c();
   virtual ~bzlib_compression_c();

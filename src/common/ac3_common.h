@@ -21,6 +21,8 @@
 #ifndef __AC3COMMON_H
 #define __AC3COMMON_H
 
+#include "os.h"
+
 #define A52_CHANNEL 0
 #define A52_MONO 1
 #define A52_STEREO 2
@@ -45,7 +47,7 @@ typedef struct {
   int bsid;
 } ac3_header_t;
 
-int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header);
+int MTX_DLL_API find_ac3_header(unsigned char *buf, int size,
+                                ac3_header_t *ac3_header);
 
 #endif // __AC3COMMON_H
-

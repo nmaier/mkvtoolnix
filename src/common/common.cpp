@@ -20,6 +20,7 @@
 
 #include "os.h"
 
+#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <iconv.h>
@@ -48,7 +49,6 @@
 using namespace std;
 
 #include "common.h"
-#include "pr_generic.h"
 
 int verbose = 1;
 
@@ -1042,10 +1042,6 @@ void debug_c::dump_info() {
     entry->last_number_of_calls = entry->number_of_calls;
   }
 #endif // defined SYS_UNIX
-
-  mxprint(stdout, "DBG> dumping packetzer info:\n");
-  for (i = 0; i < packetizers.size(); i++)
-    packetizers[i]->dump_debug_info();
 }
 
 #endif // DEBUG

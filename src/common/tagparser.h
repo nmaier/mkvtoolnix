@@ -186,7 +186,7 @@ typedef struct {
   vector<KaxTagSimple *> *simple_tags;
 } parser_data_t;
 
-void tperror(parser_data_t *pdata, const char *fmt, ...);
+void MTX_DLL_API tperror(parser_data_t *pdata, const char *fmt, ...);
 
 #define tperror_unknown() tperror(pdata, "Unknown/unsupported element: %s", \
                                   name)
@@ -196,8 +196,8 @@ void tperror(parser_data_t *pdata, const char *fmt, ...);
                                       "allowed under <%s>.", name, \
                                       parent_name.c_str());
  
-void end_xml_tag_element(void *user_data, const char *name);
+void MTX_DLL_API end_xml_tag_element(void *user_data, const char *name);
 
-void parse_xml_tags(const char *name, KaxTags *tags);
+void MTX_DLL_API parse_xml_tags(const char *name, KaxTags *tags);
 
 #endif // __TAGPARSER_H

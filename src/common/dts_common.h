@@ -148,9 +148,9 @@ typedef struct dts_header_s {
 } dts_header_t;
 
 
-int find_dts_header(const unsigned char *buf, unsigned int size,
-                    struct dts_header_s *dts_header);
-void print_dts_header(const struct dts_header_s *dts_header);
+int MTX_DLL_API find_dts_header(const unsigned char *buf, unsigned int size,
+                                struct dts_header_s *dts_header);
+void MTX_DLL_API print_dts_header(const struct dts_header_s *dts_header);
 
 inline int get_dts_packet_length_in_core_samples(const struct dts_header_s
                                                  *dts_header) {

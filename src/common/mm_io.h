@@ -31,7 +31,7 @@
 using namespace std;
 using namespace libebml;
 
-class mm_io_c: public IOCallback {
+class MTX_DLL_API mm_io_c: public IOCallback {
 protected:
 #if !defined(SYS_UNIX)
   bool _eof;
@@ -76,7 +76,7 @@ public:
   virtual const char *get_file_name();
 };
 
-class mm_null_io_c: public mm_io_c {
+class MTX_DLL_API mm_null_io_c: public mm_io_c {
 protected:
   int64_t pos;
 
@@ -90,7 +90,7 @@ public:
   virtual void close();
 };
 
-class mm_mem_io_c: public mm_io_c {
+class MTX_DLL_API mm_mem_io_c: public mm_io_c {
 protected:
   int64_t pos, mem_size;
   unsigned char *mem;
@@ -109,7 +109,7 @@ public:
 enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE,
                    BO_NONE};
 
-class mm_text_io_c: public mm_io_c {
+class MTX_DLL_API mm_text_io_c: public mm_io_c {
 protected:
   byte_order_e byte_order;
   int bom_len;

@@ -29,7 +29,7 @@
 using namespace libebml;
 
 #if defined(DEBUG)
-void __debug_dump_elements(EbmlElement *e, int level);
+void MTX_DLL_API __debug_dump_elements(EbmlElement *e, int level);
 #define debug_dump_elements(e, l) __debug_dump_elements(e, l)
 #else
 #define debug_dump_elements(e, l) ;
@@ -37,10 +37,10 @@ void __debug_dump_elements(EbmlElement *e, int level);
 
 #define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
 
-UTFstring cstr_to_UTFstring(const char *c);
-UTFstring cstrutf8_to_UTFstring(const char *c);
-char *UTFstring_to_cstr(const UTFstring &u);
-char *UTFstring_to_cstrutf8(const UTFstring &u);
+UTFstring MTX_DLL_API cstr_to_UTFstring(const char *c);
+UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const char *c);
+char *MTX_DLL_API UTFstring_to_cstr(const UTFstring &u);
+char *MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
 
 template <typename type>type &GetEmptyChild(EbmlMaster &master) {
   EbmlElement *e;

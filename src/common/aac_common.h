@@ -21,7 +21,9 @@
 #ifndef __AACCOMMON_H
 #define __AACCOMMON_H
 
-extern const int aac_sampling_freq[16];
+#include "os.h"
+
+extern const int MTX_DLL_API aac_sampling_freq[16];
 
 typedef struct {
   int sample_rate;
@@ -33,10 +35,11 @@ typedef struct {
   int header_bit_size, header_byte_size, data_byte_size;
 } aac_header_t;
 
-int parse_aac_adif_header(unsigned char *buf, int size,
-                          aac_header_t *aac_header);
-int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header,
-                    bool emphasis_present);
-int get_aac_sampling_freq_idx(int sampling_freq);
+int MTX_DLL_API parse_aac_adif_header(unsigned char *buf, int size,
+                                   aac_header_t *aac_header);
+int MTX_DLL_API find_aac_header(unsigned char *buf, int size,
+                             aac_header_t *aac_header,
+                             bool emphasis_present);
+int MTX_DLL_API get_aac_sampling_freq_idx(int sampling_freq);
 
 #endif // __AACCOMMON_H

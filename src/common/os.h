@@ -36,9 +36,24 @@
 #endif // COMP_MSC
 
 #if defined(COMP_MINGW) || defined(COMP_MSC)
+
+// For DLL stuff...
+# if defined(MTX_DLL)
+#  if defined(MTX_DLL_EXPORT)
+#   define MTX_DLL_API __declspec(dllexport)
+#  else // MTX_DLL_EXPORT
+#   define MTX_DLL_API __declspec(dllimport)
+#  endif
+# else // MTX_DLL
+#  define MTX_DLL_API
+# endif
+
 # define LLD "%I64d"
 # define LLU "%I64u"
-#else
+
+#else  // COMP_MINGW || COMP_MSC
+
+# define MTX_DLL_API
 # define LLD "%lld"
 # define LLU "%llu"
 #endif // COMP_MINGW || COMP_MSC

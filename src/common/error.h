@@ -27,7 +27,7 @@
 
 using namespace std;
 
-class error_c {
+class MTX_DLL_API error_c {
 private:
   string error;
 public:

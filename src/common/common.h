@@ -84,101 +84,109 @@ using namespace std;
                         (int32_t)((t) / 1000) % 60, \
                         (int32_t)(t) % 1000
 
-void fix_format(const char *fmt, string &new_fmt);
+void MTX_DLL_API fix_format(const char *fmt, string &new_fmt);
 #if defined(__GNUC__)
-void die(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
-void mxprint(void *stream, const char *fmt, ...)
+void MTX_DLL_API die(const char *fmt, ...)
+  __attribute__ ((format (printf, 1, 2)));
+void MTX_DLL_API mxprint(void *stream, const char *fmt, ...)
   __attribute__ ((format (printf, 2, 3)));
-void mxprints(char *dst, const char *fmt, ...)
+void MTX_DLL_API mxprints(char *dst, const char *fmt, ...)
   __attribute__ ((format (printf, 2, 3)));
-string mxsprintf(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
-void mxwarn(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
-void mxerror(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
-void mxinfo(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
-void mxverb(int level, const char *fmt, ...)
+string MTX_DLL_API mxsprintf(const char *fmt, ...)
+  __attribute__ ((format (printf, 1, 2)));
+void MTX_DLL_API mxwarn(const char *fmt, ...)
+  __attribute__ ((format (printf, 1, 2)));
+void MTX_DLL_API mxerror(const char *fmt, ...)
+  __attribute__ ((format (printf, 1, 2)));
+void MTX_DLL_API mxinfo(const char *fmt, ...)
+  __attribute__ ((format (printf, 1, 2)));
+void MTX_DLL_API mxverb(int level, const char *fmt, ...)
   __attribute__ ((format (printf, 2, 3)));
-void mxdebug(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+void MTX_DLL_API mxdebug(const char *fmt, ...)
+  __attribute__ ((format (printf, 1, 2)));
 #else
-void die(const char *fmt, ...);
-void mxprint(void *stream, const char *fmt, ...);
-void mxprints(char *dst, const char *fmt, ...);
-string mxsprintf(const char *fmt, ...);
-void mxwarn(const char *fmt, ...);
-void mxerror(const char *fmt, ...);
-void mxinfo(const char *fmt, ...);
-void mxverb(int level, const char *fmt, ...);
-void mxdebug(const char *fmt, ...);
+void MTX_DLL_API die(const char *fmt, ...);
+void MTX_DLL_API mxprint(void *stream, const char *fmt, ...);
+void MTX_DLL_API mxprints(char *dst, const char *fmt, ...);
+string MTX_DLL_API mxsprintf(const char *fmt, ...);
+void MTX_DLL_API mxwarn(const char *fmt, ...);
+void MTX_DLL_API mxerror(const char *fmt, ...);
+void MTX_DLL_API mxinfo(const char *fmt, ...);
+void MTX_DLL_API mxverb(int level, const char *fmt, ...);
+void MTX_DLL_API mxdebug(const char *fmt, ...);
 #endif
-void mxexit(int code = -1);
+void MTX_DLL_API mxexit(int code = -1);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
-void _trace(const char *func, const char *file, int line);
+void MTX_DLL_API _trace(const char *func, const char *file, int line);
 
 #define get_fourcc(b) get_uint32_be(b)
-uint16_t get_uint16(const void *buf);
-uint32_t get_uint24(const void *buf);
-uint32_t get_uint32(const void *buf);
-uint64_t get_uint64(const void *buf);
-uint16_t get_uint16_be(const void *buf);
-uint32_t get_uint24_be(const void *buf);
-uint32_t get_uint32_be(const void *buf);
-uint64_t get_uint64_be(const void *buf);
-void put_uint16(void *buf, uint16_t value);
-void put_uint32(void *buf, uint32_t value);
-void put_uint64(void *buf, uint64_t value);
+uint16_t MTX_DLL_API get_uint16(const void *buf);
+uint32_t MTX_DLL_API get_uint24(const void *buf);
+uint32_t MTX_DLL_API get_uint32(const void *buf);
+uint64_t MTX_DLL_API get_uint64(const void *buf);
+uint16_t MTX_DLL_API get_uint16_be(const void *buf);
+uint32_t MTX_DLL_API get_uint24_be(const void *buf);
+uint32_t MTX_DLL_API get_uint32_be(const void *buf);
+uint64_t MTX_DLL_API get_uint64_be(const void *buf);
+void MTX_DLL_API put_uint16(void *buf, uint16_t value);
+void MTX_DLL_API put_uint32(void *buf, uint32_t value);
+void MTX_DLL_API put_uint64(void *buf, uint64_t value);
 
-extern int cc_local_utf8;
+extern int MTX_DLL_API cc_local_utf8;
 
-int utf8_init(const char *charset);
-void utf8_done();
-char *to_utf8(int handle, const char *local);
-char *from_utf8(int handle, const char *utf8);
-string &to_utf8(int handle, string &local);
-string &from_utf8(int handle, string &utf8);
+int MTX_DLL_API utf8_init(const char *charset);
+void MTX_DLL_API utf8_done();
+char *MTX_DLL_API to_utf8(int handle, const char *local);
+char *MTX_DLL_API from_utf8(int handle, const char *utf8);
+string &MTX_DLL_API to_utf8(int handle, string &local);
+string &MTX_DLL_API from_utf8(int handle, string &utf8);
 
-void clear_list_of_unique_uint32();
-bool is_unique_uint32(uint32_t number);
-void add_unique_uint32(uint32_t number);
-uint32_t create_unique_uint32();
+void MTX_DLL_API clear_list_of_unique_uint32();
+bool MTX_DLL_API is_unique_uint32(uint32_t number);
+void MTX_DLL_API add_unique_uint32(uint32_t number);
+uint32_t MTX_DLL_API create_unique_uint32();
 
 #define safefree(p) if ((p) != NULL) free(p);
 #define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
-void *_safemalloc(size_t size, const char *file, int line);
+void *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
 #define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
-char *_safestrdup(const char *s, const char *file, int line);
+char *MTX_DLL_API _safestrdup(const char *s, const char *file, int line);
 unsigned char *_safestrdup(const unsigned char *s, const char *file, int line);
 #define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
-void *_safememdup(const void *src, size_t size, const char *file, int line);
+void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file,
+                           int line);
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
-void *_saferealloc(void *mem, size_t size, const char *file, int line);
+void *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file,
+                            int line);
 
-vector<string> split(const char *src, const char *pattern = ",",
-                     int max_num = -1);
-string join(const char *pattern, vector<string> &strings);
-void strip(string &s, bool newlines = false);
-void strip(vector<string> &v, bool newlines = false);
-string escape(const char *src);
-string escape_xml(const char *src);
-string unescape(const char *src);
-bool starts_with(const string &s, const char *start);
-bool starts_with(const string &s, const string &start);
-bool starts_with_case(const string &s, const char *start);
-bool starts_with_case(const string &s, const string &start);
+vector<string> MTX_DLL_API split(const char *src, const char *pattern = ",",
+                              int max_num = -1);
+string MTX_DLL_API join(const char *pattern, vector<string> &strings);
+void MTX_DLL_API strip(string &s, bool newlines = false);
+void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
+string MTX_DLL_API escape(const char *src);
+string MTX_DLL_API escape_xml(const char *src);
+string MTX_DLL_API unescape(const char *src);
+bool MTX_DLL_API starts_with(const string &s, const char *start);
+bool MTX_DLL_API starts_with(const string &s, const string &start);
+bool MTX_DLL_API starts_with_case(const string &s, const char *start);
+bool MTX_DLL_API starts_with_case(const string &s, const string &start);
 
 #define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
 #define myabs(a) ((a) < 0 ? (a) * -1 : (a))
 
-bool parse_int(const char *s, int64_t &value);
-bool parse_int(const char *s, int &value);
-string to_string(int64_t i);
-bool parse_double(const char *s, double &value);
+bool MTX_DLL_API parse_int(const char *s, int64_t &value);
+bool MTX_DLL_API parse_int(const char *s, int &value);
+string MTX_DLL_API to_string(int64_t i);
+bool MTX_DLL_API parse_double(const char *s, double &value);
 
-int get_arg_len(const char *fmt, ...);
-int get_varg_len(const char *fmt, va_list ap);
+int MTX_DLL_API get_arg_len(const char *fmt, ...);
+int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
 
-extern int verbose;
+extern int MTX_DLL_API verbose;
 
-class bit_cursor_c {
+class MTX_DLL_API bit_cursor_c {
 private:
   const unsigned char *end_of_data;
   const unsigned char *byte_position;
@@ -341,7 +349,7 @@ public:
   }
 };
 
-class byte_cursor_c {
+class MTX_DLL_API byte_cursor_c {
 private:
   int pos, size;
   const unsigned char *data;
@@ -362,7 +370,7 @@ public:
   virtual int get_len();
 };
 
-class bitvalue_c {
+class MTX_DLL_API bitvalue_c {
 private:
   unsigned char *value;
   int bitsize;
@@ -392,7 +400,7 @@ typedef struct {
   const char *label;
 } debug_data_t;
 
-class debug_c {
+class MTX_DLL_API debug_c {
 private:
   vector<generic_packetizer_c *> packetizers;
   vector<debug_data_t *> entries;
@@ -407,7 +415,7 @@ public:
   void dump_info();
 };
 
-extern debug_c debug_facility;
+extern debug_c MTX_DLL_API debug_facility;
 
 #define debug_enter(func) debug_facility.enter(func)
 #define debug_leave(func) debug_facility.leave(func)
