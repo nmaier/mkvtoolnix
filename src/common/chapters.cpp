@@ -652,7 +652,6 @@ select_chapters_in_timeframe(KaxChapters *chapters,
   // Check the parameters.
   if (chapters == NULL)
     return NULL;
-  assert(min_tc < max_tc);
 
   // Remove the atoms that are outside of the requested range.
   for (i = 0; i < chapters->ListSize(); i++) {
