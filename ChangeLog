@@ -1,3 +1,12 @@
+2003-11-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: When a file is being added then some information from it
+	(languages, track names, file title) are kept, and the appropriate
+	input boxes are pre-set with these values. Works only for formats
+	that support such information (Matroska, VobSub).
+
+	* mkvmerge: Sped up the reading of VobSub .idx files.
+
 2003-11-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.7.5.
