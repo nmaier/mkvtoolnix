@@ -319,8 +319,15 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
   id = i;
   i = track->idx;
   if (track->sizes[i] > 64 * 1024) {
-    mxwarn(PFX "Skipping entry at timecode %llds because it is too big "
-           "(%lld bytes).\n", track->timecodes[i] / 1000, track->sizes[i]);
+    mxwarn(PFX "Skipping entry at timecode %llds of track ID %u in '%s' "
+           "because it is too big (%lld bytes). This is usually the case for "
+           "the very last index lines for each track in the .idx file because "
+           "for those the packet size is assumed to reach until the end of "
+           "the file. If you have removed lines from the .idx file manually "
+           "then this should not worry you. In fact, this warning should not "
+           "worry anyone, but make sure that the very last subtitles are "
+           "present in the output file.\n",
+           track->timecodes[i] / 1000, track->idx, ti->fname, track->sizes[i]);
     track->idx++;
     return EMOREDATA;
   }

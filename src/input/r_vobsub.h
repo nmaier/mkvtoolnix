@@ -56,7 +56,6 @@ class vobsub_reader_c: public generic_reader_c {
 private:
   mm_io_c *sub_file;
   mm_text_io_c *idx_file;
-  unsigned char *ifo_data;
   int act_wchar, version, ifo_data_size;
   string idx_data;
 
