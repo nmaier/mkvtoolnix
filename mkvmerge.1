@@ -53,6 +53,25 @@ This option is normally not needed.
 \fB\-\-no\-lacing\fR
 Disable lacing for all tracks. This will increase the file's size, especially
 if there are many audio tracks. This option is not intended for everyday use.
+.TP
+\fB\-\-split\fR <\fId[k|m|g]\fR> or \fB\-\-split\fR <\fIHH:MM:SS\fR|\fIns\fR>
+Splits the output file after a given size or a given time. For splitting after
+a specific size the parameter \fId\fR may end with k, m or g to indicate
+that the size is in KB, MB or GB respectively. For time-based splitting use
+the form HH:MM:SS or add 's' to the number of seconds \fIn\fRafter which the
+file should be split.
+.br
+For this splitting mode the output filename is treated differently than for
+the normal operation. It may contain a printf like expression '%d' including
+an optional field width, e.g. '%02d'. If it does then the current file number
+will be formatted appropriately and inserted at that point in the filename.
+If there is no such pattern then a pattern of '-%03d' is assumed right before
+the file's extension: '-o output.mkv' would result in 'output-001.mkv' and
+so on. If there's no extension then '-%03d' will be appended to the name.
+.TP
+\fB\-\-split\-max\-files\fR <\fIn\fR>
+Create at most \fIn\fR files, even if the last file will be longer or larger
+than indicated by \fB\-\-split\fR.
 .LP
 Options that can be used for each input file:
 .TP
