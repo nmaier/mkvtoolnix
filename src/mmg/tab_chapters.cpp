@@ -1879,7 +1879,8 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
   KaxChapterLanguage *clanguage;
   KaxChapterCountry *ccountry;
   wxString language;
-  uint32_t i;
+  uint32_t i, count;
+  bool found;
 
   no_update = true;
 
@@ -1901,7 +1902,18 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
       language = sorted_iso_codes[i];
       break;
     }
-  cob_language_code->SetValue(language);
+
+  count = cob_language_code->GetCount();
+  found = false;
+  for (i = 0; i < count; i++)
+    if (cob_language_code->GetString(i) == language) {
+      found = true;
+      break;
+    }
+  if (found)
+    cob_language_code->SetSelection(i);
+  else
+    cob_language_code->SetValue(language);
 
   ccountry = FINDFIRST(display, KaxChapterCountry);
   if (ccountry != NULL)
