@@ -514,6 +514,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
           (&GetChild<KaxBlockAdditional>(*block_more));
         block_additional->SetBuffer((binary *)pack->data_adds[k],
                                     pack->data_adds_lengths[k]);
+        pack->data_adds[k] = NULL;
       }
     }
 
