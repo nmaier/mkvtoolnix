@@ -102,6 +102,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
   virtual void create_packetizers();
+  virtual void add_available_track_ids();
 
   virtual void found_new_stream(int id);
 

@@ -827,6 +827,14 @@ mpeg_ps_reader_c::create_packetizers() {
     create_packetizer(i);
 }
 
+void
+mpeg_ps_reader_c::add_available_track_ids() {
+  int i;
+
+  for (i = 0; i < tracks.size(); i++)
+    available_track_ids.push_back(i);
+}
+
 file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
