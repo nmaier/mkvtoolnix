@@ -153,7 +153,7 @@ find_tag_for_track(int idx,
         continue;
       tag_tuid = get_tag_tuid(*static_cast<KaxTag *>(m[i]));
       if (((tuid == -1) || (tag_tuid == -1) || (tuid == tag_tuid)) &&
-          ((get_simple_tag("SET_PART",
+          ((get_simple_tag("PART_NUMBER",
                            *static_cast<EbmlMaster *>(m[i])) == sidx) ||
            (idx == -1)))
         return static_cast<KaxTag *>(m[i]);
@@ -309,8 +309,7 @@ write_cuesheet(const char *file_name,
       print_if_available("TITLE", "    TITLE \"%s\"\n");
       print_if_available("ARTIST", "    PERFORMER \"%s\"\n");
       print_if_available("ISRC", "    ISRC %s\n");
-      print_if_available("CUE_FLAGS", "    FLAGS %s\n");
-      print_if_available("CD_TRACK_FLAGS", "    FLAGS %s\n");
+      print_if_available("CDAUDIO_TRACK_FLAGS", "    FLAGS %s\n");
       index_00 = get_chapter_index(0, atom);
       index_01 = get_chapter_index(1, atom);
       if (index_01 == -1) {
