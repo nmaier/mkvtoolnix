@@ -39,6 +39,7 @@ public:
     if (freeit)
       safefree(nerror);
   };
+  error_c(const char *nerror) { error = nerror; };
   error_c(const string &nerror) { error = nerror; };
   error_c(const error_c &e) { error = e.error; };
   const char *get_error() const { return error.c_str(); };
