@@ -121,8 +121,12 @@ Options that only apply to text subtitle tracks:
 With this option text subtitles will not be recoded, and the track's
 CodecId will be set to S_TEXT/ASCII. Without this option the text subtitles
 will be converted to UTF\-8, and the track's CodecId will be set to
-S_TEXT/UTF8. \fBmkvmerge\fR uses the value of \fILC_CTYPE\fR as the source
-charset or ISO\-8859\-15 if \fILC_CTYPE\fR is not set.
+S_TEXT/UTF8. \fBmkvmerge\fR uses the current locale to determine the charset
+from which to convert which can be overridden with \fB\-\-sub\-charset\fR.
+.TP
+\fB\-\-sub\-charset\fR
+Sets the charset for the conversion to UTF-8 for UTF-8 subtitles. If not
+specified the charset will be derived from the current locale settings.
 .LP
 Other options:
 .TP
