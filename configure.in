@@ -26,6 +26,8 @@ AC_CHECK_TOOL(LD, ld, :)
 dnl Check for headers
 AC_HEADER_STDC()
 
+AC_CHECK_FUNCS(vsscanf,,)
+
 dnl Optional features that are built and those that aren't
 opt_features_yes=""
 opt_features_no=""

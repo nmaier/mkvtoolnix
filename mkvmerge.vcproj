@@ -141,6 +141,9 @@
 				RelativePath=".\src\pr_generic.cpp">
 			</File>
 			<File
+				RelativePath=".\src\timecode_factory.cpp">
+			</File>
+			<File
 				RelativePath=".\avilib-0.6.10\xio.cpp">
 			</File>
 		</Filter>
@@ -165,6 +168,9 @@
 			</File>
 			<File
 				RelativePath=".\src\pr_generic.h">
+			</File>
+			<File
+				RelativePath=".\src\timecode_factory.h">
 			</File>
 			<File
 				RelativePath=".\avilib-0.6.10\xio.h">
@@ -222,6 +228,12 @@
 		<Filter
 			Name="input"
 			Filter="">
+			<File
+				RelativePath=".\src\input\flac_common.cpp">
+			</File>
+			<File
+				RelativePath=".\src\input\flac_common.h">
+			</File>
 			<File
 				RelativePath=".\src\input\qtmp4_atoms.h">
 			</File>
@@ -483,12 +495,6 @@
 				RelativePath=".\src\common\extern_data.h">
 			</File>
 			<File
-				RelativePath=".\src\common\flac_common.cpp">
-			</File>
-			<File
-				RelativePath=".\src\common\flac_common.h">
-			</File>
-			<File
 				RelativePath=".\src\common\hacks.cpp">
 			</File>
 			<File
@@ -529,6 +535,9 @@
 			</File>
 			<File
 				RelativePath=".\src\common\ogmstreams.h">
+			</File>
+			<File
+				RelativePath=".\src\common\os.cpp">
 			</File>
 			<File
 				RelativePath=".\src\common\tagparser.cpp">
