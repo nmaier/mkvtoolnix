@@ -1247,6 +1247,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
          "track with the ID %u.\n", MAP_TRACK_TYPE_STRING(t->type), t->tnum);
 
   nti = new track_info_c(*ti);
+  nti->id = t->tnum;
   nti->language = safestrdup(t->language);
   nti->track_name = safestrdup(t->track_name);
 
