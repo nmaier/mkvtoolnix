@@ -674,9 +674,9 @@ def_handle(info) {
 
     } else if (is_id(l2, KaxDuration)) {
       KaxDuration &duration = *static_cast<KaxDuration *>(l2);
-      show_element(l2, 2, "Duration: %.3fs (" FMT_TIMECODE ")",
+      show_element(l2, 2, "Duration: %.3fs (" FMT_TIMECODEN ")",
                    float(duration) * tc_scale / 1000000000.0,
-                   ARG_TIMECODE_NS(float(duration) * tc_scale));
+                   ARG_TIMECODEN(float(duration) * tc_scale));
 
     } else if (is_id(l2, KaxMuxingApp)) {
       KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
@@ -1564,10 +1564,10 @@ def_handle2(block_group,
       KaxBlock &block = *static_cast<KaxBlock *>(l3);
       block.SetParent(*cluster);
       show_element(l3, 3, "Block (track number %u, %d frame(s), "
-                   "timecode %.3fs = " FMT_TIMECODE ")",
+                   "timecode %.3fs = " FMT_TIMECODEN ")",
                    block.TrackNum(), block.NumberFrames(),
                    (float)block.GlobalTimecode() / 1000000000.0,
-                   ARG_TIMECODE_NS(block.GlobalTimecode()));
+                   ARG_TIMECODEN(block.GlobalTimecode()));
       lf_timecode = block.GlobalTimecode() / 1000000;
       lf_tnum = block.TrackNum();
       bduration = -1.0;

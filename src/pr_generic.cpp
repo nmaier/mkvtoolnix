@@ -499,7 +499,7 @@ generic_packetizer_c::set_headers() {
       track_entry =
         &GetNextChild<KaxTrackEntry>(*kax_tracks, *kax_last_entry);
     kax_last_entry = track_entry;
-    track_entry->SetGlobalTimecodeScale(TIMECODE_SCALE);
+    track_entry->SetGlobalTimecodeScale(irnd(timecode_scale));
   }
 
   KaxTrackNumber &tnumber = GetChild<KaxTrackNumber>(*track_entry);
@@ -693,6 +693,8 @@ generic_packetizer_c::fix_headers() {
   else
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 0;
+
+  track_entry->SetGlobalTimecodeScale(irnd(timecode_scale));
 }
 
 void
@@ -811,7 +813,7 @@ generic_packetizer_c::parse_ext_timecode_file(const char *name) {
   if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") ||
       !parse_int(&line.c_str()[strlen("# timecode format v")],
                  ext_timecodes_version))
-    mxerror(_("The timcode file '%s' contains an unsupported/unrecognized "
+    mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
               "format line. The very first line must look like "
               "'# timecode format v1'.\n"), name);
   if (ext_timecodes_version == 1)
@@ -819,7 +821,7 @@ generic_packetizer_c::parse_ext_timecode_file(const char *name) {
   else if (ext_timecodes_version == 2)
     parse_ext_timecode_file_v2(in, name);
   else
-    mxerror(_("The timcode file '%s' contains an unsupported/unrecognized "
+    mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
               "format (version %d).\n"), name, ext_timecodes_version);
 
   delete in;
@@ -839,7 +841,7 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
   line_no = 1;
   do {
     if (!in->getline2(line))
-      mxerror(_("The timcode file '%s' does not contain a valid 'Assume' line "
+      mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
                 "with the default number of frames per second.\n"), name);
     line_no++;
     strip(line);
@@ -847,12 +849,12 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
       break;
   } while (true);
   if (!starts_with_case(line, "assume "))
-    mxerror(_("The timcode file '%s' does not contain a valid 'Assume' line "
+    mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
               "with the default number of frames per second.\n"), name);
   line.erase(0, 6);
   strip(line);
   if (!parse_double(line.c_str(), default_fps))
-    mxerror(_("The timcode file '%s' does not contain a valid 'Assume' line "
+    mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
               "with the default number of frames per second.\n"), name);
   if (timecode_ranges != NULL)
     delete timecode_ranges;
@@ -970,7 +972,7 @@ generic_packetizer_c::parse_ext_timecode_file_v2(mm_io_c *in,
     if ((line.length() == 0) || (line[0] == '#'))
       continue;
     if (!parse_double(line.c_str(), timecode))
-      mxerror(_("The line %d of the timcode file '%s' does not contain a "
+      mxerror(_("The line %d of the timecode file '%s' does not contain a "
                 "valid floating point number.\n"), line_no, name);
     ext_timecodes->push_back((int64_t)timecode * 1000000);
   }

@@ -74,4 +74,6 @@ extern int64_t split_after;
 extern int split_max_num_files;
 extern bool split_by_time;
 
+extern double timecode_scale;
+
 #endif // __MKVMERGE_H

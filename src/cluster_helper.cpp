@@ -101,8 +101,8 @@ cluster_helper_c::get_cluster() {
   return NULL;
 }
 
-#define RND_TIMECODE_SCALE(a) (((int64_t)(a / TIMECODE_SCALE)) * \
-                               TIMECODE_SCALE)
+#define RND_TIMECODE_SCALE(a) (a / irnd(timecode_scale) * \
+                               irnd(timecode_scale))
 
 void
 cluster_helper_c::add_packet(packet_t *packet) {
@@ -301,7 +301,7 @@ cluster_helper_c::add_cluster(KaxCluster *cluster) {
   c->cluster = cluster;
   cluster_content_size = 0;
   cluster->SetParent(*kax_segment);
-  cluster->SetPreviousTimecode(last_cluster_tc, TIMECODE_SCALE);
+  cluster->SetPreviousTimecode(last_cluster_tc, irnd(timecode_scale));
 }
 
 int

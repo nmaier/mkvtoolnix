@@ -160,6 +160,8 @@ bool split_by_time = false;
 int split_max_num_files = 65535;
 bool use_durations = false;
 
+double timecode_scale = TIMECODE_SCALE;
+
 float video_fps = -1.0;
 int default_tracks[3], default_tracks_priority[3];
 
@@ -503,7 +505,7 @@ sighandler(int signum) {
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
     (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) / TIMECODE_SCALE;
+     cluster_helper->get_first_timecode()) / timecode_scale;
   kax_duration->Render(*out);
   out->restore_pos();
   mxinfo(_(" done\n"));
@@ -1138,6 +1140,48 @@ parse_append_to(const char *s,
   }
 }
 
+static void
+set_timecode_scale() {
+  vector<packetizer_t *>::iterator ptzr;
+  bool video_present, audio_present;
+  int64_t highest_sample_rate;
+
+  video_present = false;
+  audio_present = false;
+  highest_sample_rate = 0;
+
+  foreach(ptzr, packetizers)
+    if ((*ptzr)->packetizer->get_track_type() == track_video)
+      video_present = true;
+    else if ((*ptzr)->packetizer->get_track_type() == track_audio) {
+      int64_t sample_rate;
+
+      audio_present = true;
+      sample_rate = (int64_t)(*ptzr)->packetizer->get_audio_sampling_freq();
+      if (sample_rate > highest_sample_rate)
+        highest_sample_rate = sample_rate;
+    }
+
+  if (audio_present && !video_present && (highest_sample_rate > 0)) {
+    int64_t max_ns_with_timecode_scale;
+
+    timecode_scale = (double)1000000000.0 / (double)highest_sample_rate;
+    max_ns_with_timecode_scale = (int64_t)(32760 * timecode_scale);
+    if (max_ns_with_timecode_scale < max_ns_per_cluster)
+      max_ns_per_cluster = max_ns_with_timecode_scale;
+
+    mxverb(2, "mkvmerge: audio only file detected. highest sample rate: %lld, "
+           "new timecode_scale: %lf, max_ns_with_timecode_scale: %lld, "
+           "max_ns_per_cluster: %lld\n", highest_sample_rate,
+           timecode_scale, max_ns_with_timecode_scale, max_ns_per_cluster);
+  }
+
+  KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
+  *(static_cast<EbmlUInteger *>(&time_scale)) = irnd(timecode_scale);
+
+  kax_cues->SetGlobalTimecodeScale(irnd(timecode_scale));
+}
+
 /** \brief Render the basic EBML and Matroska headers
  *
  * Renders the segment information and track headers. Also reserves
@@ -1163,8 +1207,6 @@ render_headers(mm_io_c *rout) {
     head.Render(*rout);
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
-    KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
-    *(static_cast<EbmlUInteger *>(&time_scale)) = TIMECODE_SCALE;
 
     kax_duration = &GetChild<KaxDuration>(*kax_infos);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
@@ -1236,9 +1278,6 @@ render_headers(mm_io_c *rout) {
     if (write_meta_seek_for_clusters)
       kax_sh_cues = new KaxSeekHead();
 
-    kax_infos->Render(*rout);
-    kax_sh_main->IndexThis(*kax_infos, *kax_segment);
-
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
 
@@ -1251,9 +1290,13 @@ render_headers(mm_io_c *rout) {
     for (i = 0; i < files.size(); i++)
       if (!files[i]->appending)
         files[i]->reader->set_headers();
+    set_timecode_scale();
     for (i = 0; i < packetizers.size(); i++)
       if (packetizers[i]->packetizer != NULL)
         packetizers[i]->packetizer->fix_headers();
+
+    kax_infos->Render(*rout, true);
+    kax_sh_main->IndexThis(*kax_infos, *kax_segment);
 
     kax_tracks->Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
     kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
@@ -2360,6 +2403,7 @@ init_globals() {
   memset(default_tracks_priority, 0, sizeof(default_tracks_priority));
   display_counter = 1;
   display_reader = NULL;
+  timecode_scale = TIMECODE_SCALE;
   clear_list_of_unique_uint32();
 }
 
@@ -2542,7 +2586,7 @@ create_next_output_file() {
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
-  kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
+  kax_cues->SetGlobalTimecodeScale(irnd(timecode_scale));
 
   if (splitting)
     this_outfile = create_output_name();
@@ -2630,7 +2674,7 @@ finish_file(bool last_file) {
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
     (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) / TIMECODE_SCALE;
+     cluster_helper->get_first_timecode()) / timecode_scale;
   kax_duration->Render(*out);
 
   // If splitting is active and this is the last part then remove the

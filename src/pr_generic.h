@@ -411,6 +411,9 @@ public:
   virtual int64_t get_track_default_duration();
 
   virtual void set_audio_sampling_freq(float freq);
+  virtual float get_audio_sampling_freq() {
+    return haudio_sampling_freq;
+  }
   virtual void set_audio_output_sampling_freq(float freq);
   virtual void set_audio_channels(int channels);
   virtual void set_audio_bit_depth(int bit_depth);
