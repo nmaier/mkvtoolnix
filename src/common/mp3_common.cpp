@@ -298,12 +298,15 @@ find_consecutive_mp3_headers(const unsigned char *buf,
       pos = find_mp3_header(&buf[base + offset], size - base - offset);
       if (pos == 0) {
         decode_mp3_header(&buf[base + offset], &new_header);
-        if ((new_header.channels == mp3header.channels) &&
+        if ((new_header.version == mp3header.version) &&
+            (new_header.layer == mp3header.layer) &&
+            (new_header.channels == mp3header.channels) &&
             (new_header.sampling_frequency == mp3header.sampling_frequency)) {
           mxverb(2, "find_cons_mp3_h: found good header %d\n", i);
           offset += new_header.framesize;
           continue;
-        }
+        } else
+          break;
       } else
         break;
     }
