@@ -285,7 +285,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
   base += pos;
 
   do {
-    mxverb(2, "find_cons_mp3_h: starting with base at %d\n", base);
+    mxverb(4, "find_cons_mp3_h: starting with base at %d\n", base);
     offset = mp3header.framesize;
     for (i = 0; i < (num - 1); i++) {
       if ((size - base - offset) < 4)
@@ -297,7 +297,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
             (new_header.layer == mp3header.layer) &&
             (new_header.channels == mp3header.channels) &&
             (new_header.sampling_frequency == mp3header.sampling_frequency)) {
-          mxverb(2, "find_cons_mp3_h: found good header %d\n", i);
+          mxverb(4, "find_cons_mp3_h: found good header %d\n", i);
           offset += new_header.framesize;
           continue;
         } else
