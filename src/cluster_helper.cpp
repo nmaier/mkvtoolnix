@@ -593,8 +593,6 @@ int cluster_helper_c::render() {
   return 1;
 }
 
-#define iabs(a) ((a) < 0 ? (-1 * (a)) : (a))
-
 ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
                                                      void *source) {
   int i, k;

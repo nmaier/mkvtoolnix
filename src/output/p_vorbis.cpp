@@ -71,6 +71,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
   if (use_durations)
     set_track_default_duration_ns((int64_t)(1024000000000.0 *
                                             ti->async.linear / vi.rate));
+  ti->async.displacement = initial_displacement;
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
@@ -142,12 +143,8 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
 
   debug_enter("vorbis_packetizer_c::process");
 
-  // Recalculate the timecode if needed.
-  if (timecode == -1)
-    timecode = samples * 1000 / vi.rate;
-
   // Positive displacement, first packet? Well then lets create silence.
-  if ((packetno == 0) && (ti->async.displacement > 0)) {
+  if ((packetno == 0) && (initial_displacement > 0)) {
     // Create a fake packet so we can use vorbis_packet_blocksize().
     zero[0] = 0;
     zero[1] = 0;
@@ -156,7 +153,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     op.bytes = 2;
 
     // Calculate how many samples we have to create.
-    samples_needed = vi.rate * ti->async.displacement / 1000;
+    samples_needed = vi.rate * initial_displacement / 1000;
 
     this_bs = vorbis_packet_blocksize(&vi, &op);
     samples_here = (this_bs + last_bs) / 4;
@@ -167,8 +164,6 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
       add_packet(zero, 2, samples * 1000 / vi.rate, samples_here * 1000 /
                  vi.rate);
     }
-
-    ti->async.displacement = 0;
   }
 
   // Update the number of samples we have processed so that we can
@@ -180,8 +175,14 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   samples += samples_here;
   last_bs = this_bs;
 
-  // Handle the displacement.
-  timecode += ti->async.displacement;
+  // Recalculate the timecode if needed.
+  if (timecode == -1) {
+    if (initial_displacement > 0)
+      timecode = samples * 1000 / vi.rate;
+    else
+      timecode = samples * 1000 / vi.rate + initial_displacement;
+  } else
+    timecode += initial_displacement;
 
   // Handle the linear sync - simply multiply with the given factor.
   timecode = (int64_t)((double)timecode * ti->async.linear);

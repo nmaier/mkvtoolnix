@@ -75,9 +75,9 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
 
   end = start + length;
   // Adjust the start and end values according to the audio adjustment.
-  start += ti->async.displacement;
+  start += initial_displacement;
   start = (int64_t)(ti->async.linear * start);
-  end += ti->async.displacement;
+  end += initial_displacement;
   end = (int64_t)(ti->async.linear * end);
 
   if (end < 0)

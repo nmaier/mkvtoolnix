@@ -51,6 +51,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   ti = duplicate_track_info(nti);
   free_refs = -1;
   enqueued_bytes = 0;
+  safety_last_timecode = 0;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -66,6 +67,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     ti->async.linear = 1.0;
     ti->async.displacement = 0;
   }
+  initial_displacement = ti->async.displacement;
+  ti->async.displacement = 0;
 
   // Let's see if the user has specified which cues he wants for this track.
   ti->cues = CUES_UNSPECIFIED;
@@ -598,9 +601,14 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
 
   if (data == NULL)
     return;
-  if (timecode < 0)
-    die("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < 0 "
-        "(%lld)", timecode);
+  if (timecode < 0) {
+    drop_packet(data);
+    return;
+  }
+  if (timecode < safety_last_timecode)
+    die("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
+        "last_timecode (%lld < %lld)", timecode, safety_last_timecode);
+  safety_last_timecode = timecode;
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
@@ -629,6 +637,11 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   packet_queue.push_back(pack);
 
   enqueued_bytes += pack->length;
+}
+
+void generic_packetizer_c::drop_packet(unsigned char *data) {
+  if (!duplicate_data)
+    safefree(data);
 }
 
 packet_t *generic_packetizer_c::get_packet() {
@@ -840,6 +853,27 @@ int64_t generic_packetizer_c::get_next_timecode(int64_t timecode) {
   mxverb(4, "ext_timecodes: %lld for %lld\n", new_timecode, frameno - 1);
 
   return new_timecode;
+}
+
+bool generic_packetizer_c::needs_negative_displacement(float duration) {
+  return ((initial_displacement < 0) &&
+          (ti->async.displacement > initial_displacement));
+}
+
+bool generic_packetizer_c::needs_positive_displacement(float duration) {
+  return ((initial_displacement > 0) &&
+          (iabs(ti->async.displacement - initial_displacement) >
+           (duration / 2)));
+}
+
+void generic_packetizer_c::displace(float by_ms) {
+  ti->async.displacement += (int64_t)by_ms;
+  if (initial_displacement < 0) {
+    if (ti->async.displacement < initial_displacement)
+      initial_displacement = 0;
+  } else if (iabs(initial_displacement - ti->async.displacement) <
+             (by_ms / 2))
+    initial_displacement = 0;
 }
 
 //--------------------------------------------------------------------

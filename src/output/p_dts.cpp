@@ -168,15 +168,12 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
 
   pims = get_dts_packet_length_in_milliseconds(&dtsheader);
 
-  if (ti->async.displacement < 0) {
+  if (needs_negative_displacement(pims)) {
     /*
      * DTS audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    ti->async.displacement += (int)pims;
-    if (ti->async.displacement > -(pims / 2))
-      ti->async.displacement = 0;
-
+    displace(-pims);
     remove_dts_packet(pos, dtsheader.frame_byte_size);
 
     return 0;
@@ -190,7 +187,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   buf = (unsigned char *)safememdup(packet_buffer + pos,
                                     dtsheader.frame_byte_size);
 
-  if (ti->async.displacement > 0) {
+  if (needs_positive_displacement(pims)) {
     /*
      * DTS audio synchronization. displacement > 0 is solved by duplicating
      * the very first DTS packet as often as necessary. I cannot create
@@ -198,10 +195,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
      * settings the packet's values to 0 does not work as the DTS header
      * contains a CRC of its data.
      */
-    ti->async.displacement -= (int)pims;
-    if (ti->async.displacement < (pims / 2))
-      ti->async.displacement = 0;
-
+    displace(pims);
     return buf;
   }
 
@@ -237,11 +231,13 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
       (int64_t)get_dts_packet_length_in_milliseconds(&dtsheader);
 
     if (timecode == -1)
-      my_timecode = (int64_t)(((double)samples_written*1000.0) /
+      my_timecode = (int64_t)(((double)samples_written * 1000.0) /
                               ((double)dtsheader.core_sampling_frequency));
-
+    else
+      my_timecode = timecode + initial_displacement;
+    my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
-               packet_len_in_ms);
+               (int64_t)(packet_len_in_ms * ti->async.linear));
 
     bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);

@@ -29,6 +29,7 @@
 class passthrough_packetizer_c: public generic_packetizer_c {
 private:
   int64_t packets_processed, bytes_processed;
+  bool sync_to_keyframe;
 
 public:
   passthrough_packetizer_c(generic_reader_c *nreader, track_info_t *nti)

@@ -145,7 +145,8 @@ protected:
   bool duplicate_data;
 
   track_info_t *ti;
-  int64_t free_refs, enqueued_bytes;
+  int64_t initial_displacement;
+  int64_t free_refs, enqueued_bytes, safety_last_timecode;
 
   KaxTrackEntry *track_entry;
 
@@ -189,6 +190,7 @@ public:
                           int64_t duration, bool duration_mandatory = false,
                           int64_t bref = -1, int64_t fref = -1,
                           int ref_priority = -1);
+  virtual void drop_packet(unsigned char *data);
   virtual packet_t *get_packet();
   virtual int packet_available();
   virtual int64_t get_smallest_timecode();
@@ -245,6 +247,10 @@ public:
 
   virtual int64_t get_next_timecode(int64_t timecode);
   virtual void parse_ext_timecode_file(const char *name);
+
+  virtual bool needs_negative_displacement(float duration);
+  virtual bool needs_positive_displacement(float duration);
+  virtual void displace(float by_ms);
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

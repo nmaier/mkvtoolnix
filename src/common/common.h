@@ -64,6 +64,8 @@ using namespace libebml;
 #define TYPEREAL     14
 #define TYPEQTMP4    15
 
+#define iabs(a) ((a) < 0 ? (-1 * (a)) : (a))
+
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \

@@ -43,10 +43,8 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   spf = 1152;
 
   set_track_type(track_audio);
-  if (use_durations)
-    set_track_default_duration_ns((int64_t)(1152000000000.0 *
-                                            ti->async.linear /
-                                            samples_per_sec));
+  set_track_default_duration_ns((int64_t)(1152000000000.0 * ti->async.linear /
+                                          samples_per_sec));
   duplicate_data_on_add(false);
 }
 
@@ -84,7 +82,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     *(static_cast<EbmlString *>
       (&GetChild<KaxCodecID>(*track_entry))) = codec_id;
-    if ((spf != 1152) && use_durations) {
+    if (spf != 1152) {
       set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
                                               samples_per_sec));
@@ -100,45 +98,44 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 
   pims = 1000.0 * (float)spf / mp3header->sampling_frequency;
 
-  if (ti->async.displacement < 0) {
+  if (needs_negative_displacement(pims)) {
     /*
      * MP3 audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    ti->async.displacement += (int)pims;
-    if (ti->async.displacement > -(pims / 2))
-      ti->async.displacement = 0;
-
+    displace(-pims);
     byte_buffer.remove(mp3header->framesize + pos);
 
     return NULL;
   }
 
-  if ((verbose > 1) && (pos > 1))
-    mxwarn("mp3_packetizer: skipping %d bytes (no valid MP3 header found).\n",
-           pos);
+  if (pos > 0) {
+    if (verbose)
+      mxwarn("mp3_packetizer: skipping %d bytes (no valid MP3 header found)."
+             "\n", pos);
+    byte_buffer.remove(pos);
+    pos = 0;
+  }
   if (fast_mode)
     buf = (unsigned char *)safemalloc(mp3header->framesize);
   else
-    buf = (unsigned char *)safememdup(byte_buffer.get_buffer() + pos,
+    buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
                                       mp3header->framesize);
 
-  if (ti->async.displacement > 0) {
+  if (needs_positive_displacement(pims)) {
     /*
      * MP3 audio synchronization. displacement > 0 is solved by creating
      * silent MP3 packets and repeating it over and over again (well only as
      * often as necessary of course. Wouldn't want to spoil your movie by
      * providing a silent MP3 stream ;)).
      */
-    ti->async.displacement -= (int)pims;
-    if (ti->async.displacement < (pims / 2))
-      ti->async.displacement = 0;
+    displace(pims);
     memset(buf + 4, 0, mp3header->framesize - 4);
 
     return buf;
   }
 
-  byte_buffer.remove(mp3header->framesize + pos);
+  byte_buffer.remove(mp3header->framesize);
 
   return buf;
 }
@@ -155,28 +152,24 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
                               int64_t timecode, int64_t, int64_t, int64_t) {
   unsigned char *packet;
   mp3_header_t mp3header;
-  int64_t my_timecode, old_packetno;
+  int64_t my_timecode;
 
   debug_enter("mp3_packetizer_c::process");
 
-  if (timecode != -1)
-    my_timecode = timecode;
-
   byte_buffer.add(buf, size);
   while ((packet = get_mp3_packet(&mp3header)) != NULL) {
-    old_packetno = packetno;
-    packetno++;
-
 #ifdef DEBUG
     dump_packet(packet, mp3header.framesize);
 #endif    
 
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * old_packetno * spf * ti->async.linear /
-                              samples_per_sec);
-
+      my_timecode = (int64_t)(1000.0 * packetno * spf / samples_per_sec);
+    else
+      my_timecode = timecode + ti->async.displacement;
+    my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, mp3header.framesize, my_timecode,
                (int64_t)(1000.0 * spf * ti->async.linear / samples_per_sec));
+    packetno++;
   }
 
   debug_leave("mp3_packetizer_c::process");

@@ -72,10 +72,10 @@ void vobsub_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-#define TIMECODE (timecode - ti->async.displacement) / 60 / 60 / 1000, \
-                 ((timecode - ti->async.displacement) / 60 / 1000) % 60, \
-                 ((timecode - ti->async.displacement) / 1000) % 60, \
-                 (timecode - ti->async.displacement) % 1000
+#define TIMECODE (timecode - initial_displacement) / 60 / 60 / 1000, \
+                 ((timecode - initial_displacement) / 60 / 1000) % 60, \
+                 ((timecode - initial_displacement) / 1000) % 60, \
+                 (timecode - initial_displacement) % 1000
 #define FMT_TIMECODE "%02lld:%02lld:%02lld.%03lld"
 
 int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
@@ -156,7 +156,7 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
 
   packet_num++;
 
-  timecode += ti->async.displacement;
+  timecode += initial_displacement;
   if (timecode < 0)
     return EMOREDATA;
 

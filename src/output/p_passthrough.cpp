@@ -50,7 +50,25 @@ int passthrough_packetizer_c::process(unsigned char *buf, int size,
 
   packets_processed++;
   bytes_processed += size;
+  if (needs_negative_displacement(duration)) {
+    displace(-duration);
+    sync_to_keyframe = true;
+    return EMOREDATA;
+  }
+  while (needs_positive_displacement(duration)) {
+    add_packet(buf, size, (int64_t)((timecode + ti->async.displacement) *
+                                    ti->async.linear), bref, fref);
+    displace(duration);
+  }
 
+  if (sync_to_keyframe && (bref != -1)) {
+    if (!duplicate_data)
+      safefree(buf);
+    return EMOREDATA;
+  }
+  sync_to_keyframe = false;
+  timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
+  duration = (int64_t)(duration * ti->async.linear);
   add_packet(buf, size, timecode, duration, false, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");

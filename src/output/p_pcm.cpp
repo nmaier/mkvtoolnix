@@ -85,20 +85,20 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
 
   new_buf = buf;
 
-  if (ti->async.displacement != 0) {
-    if (ti->async.displacement > 0) {
+  if (initial_displacement != 0) {
+    if (initial_displacement > 0) {
       // Add silence.
       int pad_size;
 
-      pad_size = bps * ti->async.displacement / 1000;
+      pad_size = bps * initial_displacement / 1000;
       new_buf = (unsigned char *)safemalloc(size + pad_size);
       memset(new_buf, 0, pad_size);
       memcpy(&new_buf[pad_size], buf, size);
       size += pad_size;
     } else
       // Skip bytes.
-      remaining_sync = -1 * bps * ti->async.displacement / 1000;
-    ti->async.displacement = 0;
+      remaining_sync = -1 * bps * initial_displacement / 1000;
+    initial_displacement = 0;
   }
 
   if (remaining_sync > 0) {

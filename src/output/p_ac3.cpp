@@ -72,18 +72,14 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   if ((pos + ac3header->bytes) > size)
     return NULL;
 
-  pims = ((double)ac3header->bytes) * 1000.0 /
-         ((double)ac3header->bit_rate / 8.0);
+  pims = 1536000.0 / samples_per_sec;
 
-  if (ti->async.displacement < 0) {
+  if (needs_negative_displacement(pims)) {
     /*
      * AC3 audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    ti->async.displacement += (int)pims;
-    if (ti->async.displacement > -(pims / 2))
-      ti->async.displacement = 0;
-
+    displace(-pims);
     byte_buffer.remove(pos + ac3header->bytes);
 
     return NULL;
@@ -98,7 +94,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   else
     buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
 
-  if (ti->async.displacement > 0) {
+  if (needs_positive_displacement(pims)) {
     /*
      * AC3 audio synchronization. displacement > 0 is solved by duplicating
      * the very first AC3 packet as often as necessary. I cannot create
@@ -106,10 +102,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
      * settings the packet's values to 0 does not work as the AC3 header
      * contains a CRC of its data.
      */
-    ti->async.displacement -= (int)pims;
-    if (ti->async.displacement < (pims / 2))
-      ti->async.displacement = 0;
-
+    displace(pims);
     return buf;
   }
 
@@ -141,15 +134,13 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
 
   debug_enter("ac3_packetizer_c::process");
 
-  if (timecode != -1)
-    my_timecode = timecode;
-
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1536 * ti->async.linear /
-                              samples_per_sec);
-
+      my_timecode = (int64_t)(1000.0 * packetno * 1536 / samples_per_sec);
+    else
+      my_timecode = timecode + initial_displacement;
+    my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, ac3header.bytes, my_timecode,
                (int64_t)(1000.0 * 1536 * ti->async.linear / samples_per_sec));
     packetno++;
