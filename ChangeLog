@@ -1,5 +1,8 @@
 2003-08-30  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvinfo: Rewrote mkvinfo to use libebml's Read() function
+        instead of manually reading each and every element.
+
         * mkvmerge: Added support for XML based chapter files.
 
 2003-08-29  Moritz Bunkus  <moritz@bunkus.org>
