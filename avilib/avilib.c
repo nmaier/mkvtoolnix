@@ -1039,12 +1039,12 @@ int AVI_close(avi_t *AVI)
    if(AVI->video_index) free(AVI->video_index);
    //FIXME
    //if(AVI->audio_index) free(AVI->audio_index);
-   free(AVI);
    if (AVI->bitmap_info_header)
      free(AVI->bitmap_info_header);
    for (i = 0; i < AVI_MAX_TRACKS; i++)
      if (AVI->wave_format_ex[i])
        free(AVI->wave_format_ex[i]);
+   free(AVI);
 
    return ret;
 }
