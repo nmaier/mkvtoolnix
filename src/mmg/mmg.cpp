@@ -1333,7 +1333,7 @@ mmg_dialog::update_command_line() {
           aids += wxT(",");
         aids += sid;
 
-        if (t->aac_is_sbr) {
+        if (!t->appending && t->aac_is_sbr) {
           clargs.Add(wxT("--aac-is-sbr"));
           clargs.Add(sid);
         }
@@ -1357,12 +1357,12 @@ mmg_dialog::update_command_line() {
         }
       }
 
-      if (t->language != wxT("und")) {
+      if (!t->appending && (t->language != wxT("und"))) {
         clargs.Add(wxT("--language"));
         clargs.Add(sid + wxT(":") + extract_language_code(t->language));
       }
 
-      if (t->cues != wxT("default")) {
+      if (!t->appending && (t->cues != wxT("default"))) {
         clargs.Add(wxT("--cues"));
         if (t->cues == wxT("only for I frames"))
           clargs.Add(sid + wxT(":iframes"));
@@ -1387,41 +1387,43 @@ mmg_dialog::update_command_line() {
         clargs.Add(arg);
       }
 
-      if ((t->track_name.Length() > 0) || t->track_name_was_present) {
+      if (!t->appending &&
+          ((t->track_name.Length() > 0) || t->track_name_was_present)) {
         clargs.Add(wxT("--track-name"));
         clargs.Add(sid + wxT(":") + t->track_name);
       }
 
-      if (t->default_track) {
+      if (!t->appending && t->default_track) {
         clargs.Add(wxT("--default-track"));
         clargs.Add(sid);
       }
 
-      if (t->tags.Length() > 0) {
+      if (!t->appending && (t->tags.Length() > 0)) {
         clargs.Add(wxT("--tags"));
         clargs.Add(sid + wxT(":") + t->tags);
       }
 
-      if (!t->display_dimensions_selected && (t->aspect_ratio.Length() > 0)) {
+      if (!t->appending && !t->display_dimensions_selected &&
+          (t->aspect_ratio.Length() > 0)) {
         clargs.Add(wxT("--aspect-ratio"));
         clargs.Add(sid + wxT(":") + t->aspect_ratio);
-      } else if (t->display_dimensions_selected &&
+      } else if (!t->appending && t->display_dimensions_selected &&
                  (t->dwidth.Length() > 0) && (t->dheight.Length() > 0)) {
         clargs.Add(wxT("--display-dimensions"));
         clargs.Add(sid + wxT(":") + t->dwidth + wxT("x") + t->dheight);
       }
 
-      if (t->fourcc.Length() > 0) {
+      if (!t->appending && (t->fourcc.Length() > 0)) {
         clargs.Add(wxT("--fourcc"));
         clargs.Add(sid + wxT(":") + t->fourcc);
       }
 
-      if (t->compression.Length() > 0) {
+      if (!t->appending && (t->compression.Length() > 0)) {
         clargs.Add(wxT("--compression"));
         clargs.Add(sid + wxT(":") + t->compression);
       }
 
-      if (t->timecodes.Length() > 0) {
+      if (!t->appending && (t->timecodes.Length() > 0)) {
         clargs.Add(wxT("--timecodes"));
         clargs.Add(sid + wxT(":") + t->timecodes);
       }
