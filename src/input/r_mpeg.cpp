@@ -762,6 +762,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   if (!demuxing_requested(tracks[id]->type, id))
     return;
 
+  ti->id = id;
   mpeg_ps_track_ptr &track = tracks[id];
   if (track->type == 'a') {
     if ((track->fourcc == FOURCC('M', 'P', '1', ' ')) ||
