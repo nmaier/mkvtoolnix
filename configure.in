@@ -146,14 +146,17 @@ AC_SUBST(PROFILING_LIBS)
 dnl
 dnl Check for mingw
 dnl
-AC_MSG_CHECKING(if being compiled with mingw32)
+AC_CACHE_CHECK([if being compiled with mingw32],
+  [ac_cv_mingw32],[
   if test "x`gcc --version | grep -i mingw`" = "x" ; then
-    AC_MSG_RESULT(no)
+    ac_cv_mingw32=no
   else
-    AC_MSG_RESULT(yes)
+    ac_cv_mingw32=yes
+  fi])
+
+  if test "x$ac_cv_mingw32" = "xyes"; then
     export MINGW=1
     MINGW_GUIAPP=-mwindows
-dnl    MINGW_LIBS=-lcharset
   fi
 
 AC_SUBST(MINGW_LIBS)
