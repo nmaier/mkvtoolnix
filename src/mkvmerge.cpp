@@ -2320,9 +2320,6 @@ int main(int argc, char **argv) {
 
   setup();
 
-  int i;
-  for (i = 1; i < argc; i++)
-    printf("cmdline arg %d: %s\n", i, argv[i]);
   handle_args(argc, argv);
 
   if (split_after > 0) {
