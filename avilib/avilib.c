@@ -30,6 +30,11 @@
 #include <io.h>
 #define ftruncate _chsize
 #define strncasecmp _strnicmp
+typedef int ssize_t;
+#endif
+
+#ifdef __CYGWIN__
+#include <unistd.h>
 #endif
 
 #include "avilib.h"
@@ -45,12 +50,6 @@ long AVI_errno = 0;
 static char id_str[MAX_INFO_STRLEN];
 
 #define FRAME_RATE_SCALE 1000000
-
-//SLM
-/* ssize_t not defined in vc6 */
-#if defined WIN32
-typedef int ssize_t;
-#endif
 
 /*******************************************************************
  *                                                                 *
