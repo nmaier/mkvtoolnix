@@ -393,6 +393,23 @@ bool process_file(const char *file_name) {
               sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
             show_element(l2, 2, "Next segment UID:%s", buffer);
 
+          } else if (EbmlId(*l2) == KaxSegmentFilename::ClassInfos.GlobalId) {
+            char *str;
+            KaxSegmentFilename &filename =
+              *static_cast<KaxSegmentFilename *>(l2);
+            filename.ReadData(es->I_O());
+            str = UTFstring_to_cstr(UTFstring(filename));
+            show_element(l2, 2, "Segment filename: %s", str);
+            safefree(str);
+
+          } else if (EbmlId(*l2) == KaxTitle::ClassInfos.GlobalId) {
+            char *str;
+            KaxTitle &title = *static_cast<KaxTitle *>(l2);
+            title.ReadData(es->I_O());
+            str = UTFstring_to_cstr(UTFstring(title));
+            show_element(l2, 2, "Title: %s", str);
+            safefree(str);
+
           } else if (!is_ebmlvoid(l2, 2))
             show_unknown_element(l2, 2);
 
