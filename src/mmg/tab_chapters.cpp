@@ -66,10 +66,12 @@ void expand_subtree(wxTreeCtrl &tree, wxTreeItemId &root, bool expand = true) {
 
 #define Y1 30
 #define X1 140
+#define X2 370
 #define XS 360
 
 tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {
+  uint32_t i;
 
   m_chapters = nm_chapters;
 
@@ -108,12 +110,28 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
   tc_language_codes =
     new wxTextCtrl(this, ID_TC_CHAPTERLANGUAGES, _(""),
                    wxPoint(X1, 285 + 3 * Y1 + YOFF), wxSize(XS - X1, -1));
+  cob_add_language_code =
+    new wxComboBox(this, ID_CB_CHAPTERSELECTLANGUAGECODE, _(""),
+                   wxPoint(X2, 285 + 3 * Y1 + YOFF), wxSize(120, -1),
+                   0, NULL);
+  for (i = 0; i < sorted_iso_codes.Count(); i++)
+    cob_add_language_code->Append(sorted_iso_codes[i]);
+  cob_add_language_code->SetValue(_(""));
 
   new wxStaticText(this, wxID_STATIC, _("Country codes:"),
                    wxPoint(10, 285  + 4 * Y1));
   tc_country_codes =
     new wxTextCtrl(this, ID_TC_CHAPTERCOUNTRYCODES, _(""),
                    wxPoint(X1, 285 + 4 * Y1 + YOFF), wxSize(XS - X1, -1));
+  cob_add_country_code =
+    new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, _(""),
+                   wxPoint(X2, 285 + 4 * Y1 + YOFF), wxSize(120, -1),
+                   0, NULL);
+  for (i = 0; cctlds[i] != NULL; i++)
+    cob_add_country_code->Append(_(cctlds[i]));
+  cob_add_country_code->SetValue(_(""));
+
+  enable_inputs(false);
 
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, false);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, false);
@@ -133,6 +151,16 @@ tab_chapters::~tab_chapters() {
     delete chapters;
 }
 
+void tab_chapters::enable_inputs(bool enable) {
+  tc_chapter_name->Enable(enable);
+  tc_start_time->Enable(enable);
+  tc_end_time->Enable(enable);
+  tc_language_codes->Enable(enable);
+  tc_country_codes->Enable(enable);
+  cob_add_language_code->Enable(enable);
+  cob_add_country_code->Enable(enable);
+}
+
 void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
   file_name = "";
   if (chapters != NULL)
@@ -146,6 +174,8 @@ void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
   b_add_chapter->Enable(true);
   b_remove_chapter->Enable(true);
+
+  enable_inputs(false);
 
   mdlg->set_status_bar("New chapters created.");
 }
@@ -270,6 +300,8 @@ void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
     tid_root = tc_chapters->AddRoot(file_name);
     add_recursively(tid_root, *chapters);
     expand_subtree(*tc_chapters, tid_root);
+
+    enable_inputs(false);
     
     mdlg->set_status_bar("Chapters loaded.");
   }
@@ -313,8 +345,11 @@ void tab_chapters::on_entry_selected(wxTreeEvent &evt) {
     tc_end_time->SetValue("");
     tc_language_codes->SetValue("");
     tc_country_codes->SetValue("");
+    enable_inputs(false);
     return;
   }
+
+  enable_inputs(true);
 
   label = "(unnamed chapter)";
   languages = "";
@@ -369,10 +404,22 @@ void tab_chapters::on_entry_selected(wxTreeEvent &evt) {
     tc_end_time->SetValue("");
 }
 
+void tab_chapters::on_language_code_selected(wxCommandEvent &evt) {
+
+
+}
+
+void tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
+}
+
 IMPLEMENT_CLASS(tab_chapters, wxPanel);
 BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_BUTTON(ID_B_ADDCHAPTER, tab_chapters::on_add_chapter)
   EVT_BUTTON(ID_B_REMOVECHAPTER, tab_chapters::on_remove_chapter)
   EVT_TIMER(ID_T_CHAPTERVALUES, tab_chapters::on_copy_values)
   EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS, tab_chapters::on_entry_selected)
+  EVT_COMBOBOX(ID_CB_CHAPTERSELECTLANGUAGECODE,
+               tab_chapters::on_language_code_selected)
+  EVT_COMBOBOX(ID_CB_CHAPTERSELECTCOUNTRYCODE,
+               tab_chapters::on_country_code_selected)
 END_EVENT_TABLE();

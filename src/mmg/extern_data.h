@@ -24,5 +24,6 @@
 
 extern const char *sub_charsets[];
 extern const char *mime_types[];          
+extern const char *cctlds[];
 
 #endif // __EXTERN_DATA_H

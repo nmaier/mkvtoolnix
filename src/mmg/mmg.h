@@ -111,6 +111,8 @@ using namespace libmatroska;
 #define ID_TC_CHAPTERCOUNTRYCODES 10066
 #define ID_TC_CHAPTERSTART 10067
 #define ID_TC_CHAPTEREND 10068
+#define ID_CB_CHAPTERSELECTLANGUAGECODE 10069
+#define ID_CB_CHAPTERSELECTCOUNTRYCODE 10070
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -302,6 +304,7 @@ public:
 
   wxTextCtrl *tc_chapter_name, *tc_language_codes, *tc_country_codes;
   wxTextCtrl *tc_start_time, *tc_end_time;
+  wxComboBox *cob_add_language_code, *cob_add_country_code;
 
   wxTimer value_copy_timer;
 
@@ -322,9 +325,13 @@ public:
   void on_remove_chapter(wxCommandEvent &evt);
   void on_copy_values(wxTimerEvent &evt);
   void on_entry_selected(wxTreeEvent &evt);
+  void on_language_code_selected(wxCommandEvent &evt);
+  void on_country_code_selected(wxCommandEvent &evt);
 
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
+
+  void enable_inputs(bool enable);
 };
 
 class mux_dialog: public wxDialog {
