@@ -30,6 +30,7 @@
 #include <zlib.h>
 #endif
 
+#include "aac_common.h"
 #include "common.h"
 #include "matroska.h"
 #include "mkvmerge.h"
@@ -1076,40 +1077,25 @@ void qtmp4_reader_c::create_packetizer(int64_t tid) {
                  "%u (FourCC: %.4s).\n", dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4)) {
-        int profile, srate_idx, channels, osrate_idx;
+        int profile, sample_rate, channels, output_sample_rate;
         bool sbraac;
 
-        osrate_idx = 0;
         if ((dmx->a_esds.decoder_config_len == 2) ||
             (dmx->a_esds.decoder_config_len == 5)) {
-          profile = (dmx->a_esds.decoder_config[0] >> 3) - 1;
-          srate_idx = ((dmx->a_esds.decoder_config[0] & 0x07) << 1) |
-            (dmx->a_esds.decoder_config[1] >> 7);
-          channels = (dmx->a_esds.decoder_config[1] & 0x7f) >> 3;
-          mxverb(2, PFX "AAC: profile: %d, sample_rate_idx: %d, channels: "
-                 "%d", profile, srate_idx, channels);
-          if (dmx->a_esds.decoder_config_len == 5) {
-            osrate_idx = (dmx->a_esds.decoder_config[4] & 0x7f) >> 3;
-            sbraac = true;
-            mxverb(2, ", SBR sample_rate_idx: %d", osrate_idx);
+          parse_aac_data(dmx->a_esds.decoder_config,
+                         dmx->a_esds.decoder_config_len, profile, channels,
+                         sample_rate, output_sample_rate, sbraac);
+          mxverb(2, PFX "AAC: profile: %d, sample_rate: %d, channels: "
+                 "%d, output_sample_rate: %d, sbr: %d\n", profile, sample_rate,
+                 channels, output_sample_rate, (int)sbraac);
+          if (sbraac)
             profile = AAC_PROFILE_SBR;
-          } else if (aac_sampling_freq[srate_idx] < 44100) {
-            sbraac = true;
-            profile = AAC_PROFILE_SBR;
-            osrate_idx =
-              get_aac_sampling_freq_idx(aac_sampling_freq[srate_idx] * 2);
-            mxverb(2, ", implicit SBR sample_rate_idx: %d", osrate_idx);
-          } else
-            sbraac = false;
-          mxverb(2, "\n");
-
-          srate_idx = aac_sampling_freq[srate_idx];
           dmx->packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                                                 srate_idx, channels, ti,
+                                                 sample_rate, channels, ti,
                                                  false, true);
           if (sbraac)
             dmx->packetizer->
-              set_audio_output_sampling_freq(aac_sampling_freq[osrate_idx]);
+              set_audio_output_sampling_freq(output_sample_rate);
           if (verbose)
             mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id);
 
