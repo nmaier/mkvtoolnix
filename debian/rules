@@ -71,7 +71,7 @@ install: build
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
-	dh_installexamples examples/*xml examples/*dtd
+	dh_installexamples examples/*
 	dh_installman doc/*.1
 	dh_installchangelogs ChangeLog
 
