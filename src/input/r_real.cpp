@@ -381,8 +381,9 @@ real_reader_c::parse_headers() {
                 dmx->fourcc[4] = 0;
                 p += 4;
                 if (size > (p - buffer)) {
-                  dmx->extra_data = (unsigned char *)p;
                   dmx->extra_data_size = size - (p - buffer);
+                  dmx->extra_data =
+                    (unsigned char *)safememdup(p, dmx->extra_data_size);
                 }
               }
 
