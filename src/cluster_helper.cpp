@@ -96,7 +96,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
 
   if (clusters == NULL)
     add_cluster(new KaxCluster());
-  else if ((packet->timecode - timecode) > max_ms_per_cluster) {
+  else if (((packet->timecode - timecode) > max_ms_per_cluster) &&
+           all_references_resolved(clusters[num_clusters - 1])) {
     render();
     add_cluster(new KaxCluster());
   }
@@ -143,12 +144,32 @@ void cluster_helper_c::add_packet(packet_t *packet) {
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
-  if (((packet->timecode - timecode) > max_ms_per_cluster) ||
-      (get_packet_count() > max_blocks_per_cluster) ||
-      (get_cluster_content_size() > 1500000)) {
+  if ((((packet->timecode - timecode) > max_ms_per_cluster) ||
+       (get_packet_count() > max_blocks_per_cluster) ||
+       (get_cluster_content_size() > 1500000)) &&
+      all_references_resolved(c)) {
     render();
     add_cluster(new KaxCluster());
   }
+}
+
+bool cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
+  int i;
+  packet_t *pack;
+
+  for (i = 0; i < cluster->num_packets; i++) {
+    pack = cluster->packets[i];
+    if ((pack->bref != -1) && (find_packet(pack->bref) == NULL)) {
+//       mxprint(stdout, "pack: %lld bref: %lld\n", pack->timecode, pack->bref);
+      return false;
+    }
+    if ((pack->fref != -1) && (find_packet(pack->fref) == NULL)) {
+//       mxprint(stdout, "pack: %lld fref: %lld\n", pack->timecode, pack->fref);
+      return false;
+    }
+  }
+
+  return true;
 }
 
 int64_t cluster_helper_c::get_timecode() {

@@ -81,6 +81,7 @@ private:
   packet_t *find_packet(int64_t ref_timecode);
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
+  bool all_references_resolved(ch_contents_t *cluster);
 };
 
 extern cluster_helper_c *cluster_helper;
