@@ -466,7 +466,6 @@ int main ()
     return 1;
   fprintf(f, "%s\n", KaxCodeVersion.c_str());
   fclose(f);
-  yonk();
   return 0;
 }
 
