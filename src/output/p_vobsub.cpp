@@ -75,7 +75,7 @@ vobsub_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-int
+int64_t
 vobsub_packetizer_c::extract_duration(unsigned char *data,
                                       int buf_size,
                                       int64_t timecode) {
@@ -117,7 +117,7 @@ vobsub_packetizer_c::extract_duration(unsigned char *data,
         case 0x02:
           /* Stop display */
           mxverb(4, "stop display: %u", date / 90);
-          return date / 90;
+          return (int64_t)date * 1000000 / 90;
           break;
         case 0x03:
           /* Palette */

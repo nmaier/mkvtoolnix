@@ -1,3 +1,8 @@
+2004-02-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: VobSub durations were not converted from ms
+	to ns precision resulting in VERY short packets :)
+
 2004-02-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The change from ms to ns precision broke
