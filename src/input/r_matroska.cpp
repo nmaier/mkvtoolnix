@@ -1822,13 +1822,8 @@ kax_reader_c::read(generic_packetizer_c *,
               block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
             frame_duration = (block_duration == -1) ? 0 : block_duration;
 
-            if ((block_track->type == 's') && (block_duration == -1) &&
-                (block_track->sub_type == 't')) {
-              mxwarn("Text subtitle block does not contain a block duration "
-                     "element. This file is broken. Assuming a duration of "
-                     "1000ms.\n");
-              block_duration = 1000000000;
-            }
+            if ((block_track->type == 's') && (block_duration == -1))
+              block_duration = 0;
 
             last_timecode = block->GlobalTimecode();
             if (bref_found) {
