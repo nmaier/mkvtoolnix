@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.8 2003/03/06 23:38:37 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.9 2003/04/11 11:19:30 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,12 +35,11 @@
 #endif
 
 mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
-                                   int nchannels, int nmp3rate,
-                                   track_info_t *nti) throw (error_c):
+                                   int nchannels, track_info_t *nti)
+  throw (error_c):
   q_c(nti) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
-  mp3rate = nmp3rate;
   bytes_output = 0;
   packet_buffer = NULL;
   buffer_size = 0;
@@ -192,10 +191,15 @@ void mp3_packetizer_c::set_header() {
   *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
 }
 
-int mp3_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
+int mp3_packetizer_c::process(unsigned char *buf, int size,
+                              int64_t timecode = -1, int64_t) {
   unsigned char *packet;
   unsigned long header;
   mp3_header_t mp3header;
+  u_int64_t my_timecode;
+
+  if (timecode != -1)
+    my_timecode = timecode;
 
   add_to_buffer(buf, size);
   while ((packet = get_mp3_packet(&header, &mp3header)) != NULL) {
@@ -205,15 +209,14 @@ int mp3_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
       return EMOREDATA;
     }  
 
-    add_packet(packet, mp3header.framesize + 4,
-               (u_int64_t)(1000.0 * packetno * 1152 * ti->async.linear / 
-               samples_per_sec));
+    if (timecode == -1)
+      my_timecode = (u_int64_t)(1000.0 * packetno * 1152 * ti->async.linear / 
+                                samples_per_sec);
+
+    add_packet(packet, mp3header.framesize + 4, my_timecode);
     packetno++;
     free(packet);
   }
 
-  if (last_frame)
-    return 0;
-  else
-    return EMOREDATA;
+  return EMOREDATA;
 }
