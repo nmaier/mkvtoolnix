@@ -1,3 +1,9 @@
+2004-10-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: The chapter and tag element tables were not
+	initialized on Windows resulting in a crash when one of those
+	elements was encountered.
+
 2004-10-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.9.6.
