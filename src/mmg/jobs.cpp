@@ -93,14 +93,14 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
 
   cb_abort_after_current =
     new wxCheckBox(this, -1, wxT("Abort after current job"));
-  cb_abort_after_current->SetToolTip(wxT("Abort processing after the current "
+  cb_abort_after_current->SetToolTip(TIP("Abort processing after the current "
                                          "job"));
   siz_all->Add(cb_abort_after_current, 0, wxALIGN_LEFT | wxLEFT, 10);
 
   b_ok = new wxButton(this, wxID_OK, wxT("&Ok"));
   b_ok->Enable(false);
   b_abort = new wxButton(this, ID_JOBS_B_ABORT, wxT("&Abort"));
-  b_abort->SetToolTip(wxT("Abort the muxing process right now"));
+  b_abort->SetToolTip(TIP("Abort the muxing process right now"));
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(1, 0, 1, wxGROW, 0);
@@ -422,29 +422,29 @@ job_dialog::job_dialog(wxWindow *parent):
 
   siz_b_right = new wxBoxSizer(wxVERTICAL);
   b_up = new wxButton(this, ID_JOBS_B_UP, wxT("&Up"));
-  b_up->SetToolTip(wxT("Move the selected job(s) up"));
+  b_up->SetToolTip(TIP("Move the selected job(s) up"));
   siz_b_right->Add(b_up, 0, wxLEFT | wxBOTTOM, 10);
   b_down = new wxButton(this, ID_JOBS_B_DOWN, wxT("&Down"));
-  b_down->SetToolTip(wxT("Move the selected job(s) down"));
+  b_down->SetToolTip(TIP("Move the selected job(s) down"));
   siz_b_right->Add(b_down, 0, wxLEFT | wxBOTTOM, 10);
   siz_b_right->Add(0, 15, 0, 0, 0);
 
   b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, wxT("&Re-enable"));
-  b_reenable->SetToolTip(wxT("Re-enable the selected job(s)"));
+  b_reenable->SetToolTip(TIP("Re-enable the selected job(s)"));
   siz_b_right->Add(b_reenable, 0, wxLEFT | wxBOTTOM, 10);
   b_disable = new wxButton(this, ID_JOBS_B_DISABLE, wxT("&Disable"));
-  b_disable->SetToolTip(wxT("Disable the selected job(s) and sets their "
+  b_disable->SetToolTip(TIP("Disable the selected job(s) and sets their "
                             "status to 'done'"));
   siz_b_right->Add(b_disable, 0, wxLEFT | wxBOTTOM, 10);
   siz_b_right->Add(0, 15, 0, 0, 0);
 
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, wxT("D&elete"));
-  b_delete->SetToolTip(wxT("Delete the selected job(s) from the job queue"));
+  b_delete->SetToolTip(TIP("Delete the selected job(s) from the job queue"));
   siz_b_right->Add(b_delete, 0, wxLEFT | wxBOTTOM, 10);
   siz_b_right->Add(0, 15, 0, 0, 0);
 
   b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, wxT("&View log"));
-  b_view_log->SetToolTip(wxT("View the output that mkvmerge generated during "
+  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during "
                              "the muxing process for the selected job(s)"));
   siz_b_right->Add(b_view_log, 0, wxLEFT, 10);
   siz_line->Add(siz_b_right, 0, 0, 0);
@@ -459,13 +459,13 @@ job_dialog::job_dialog(wxWindow *parent):
   siz_b_bottom->Add(1, 0, 1, wxGROW, 0);
 
   b_start = new wxButton(this, ID_JOBS_B_START, wxT("&Start"));
-  b_start->SetToolTip(wxT("Start the jobs whose status is 'pending'"));
+  b_start->SetToolTip(TIP("Start the jobs whose status is 'pending'"));
   siz_b_bottom->Add(b_start, 0, wxRIGHT, 10);
   siz_b_bottom->Add(10, 0, 0, 0, 0);
   b_start_selected = new wxButton(this, ID_JOBS_B_START_SELECTED,
                                   wxT("S&tart selected"), wxDefaultPosition,
                                   wxSize(100, -1));
-  b_start_selected->SetToolTip(wxT("Start the selected job(s) regardless of "
+  b_start_selected->SetToolTip(TIP("Start the selected job(s) regardless of "
                                    "their status"));
   siz_b_bottom->Add(b_start_selected, 0, wxLEFT, 10);
   siz_all->Add(siz_b_bottom, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);

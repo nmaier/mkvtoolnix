@@ -109,6 +109,13 @@ wxString format_date_time(time_t date_time);
 void set_on_top(bool on_top);
 void restore_on_top();
 
+#if defined(SYS_WINDOWS)
+#define TIP(s) format_tooltip(wxT(s))
+wxString format_tooltip(const wxString &s);
+#else
+#define TIP(s) wxT(s)
+#endif
+
 class mmg_app: public wxApp {
 public:
   virtual bool OnInit();

@@ -48,7 +48,7 @@ tab_global::tab_global(wxWindow *parent):
   siz_fs_title->Add(new wxStaticText(this, -1, wxT("File/segment title:")),
                     0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_title = new wxTextCtrl(this, ID_TC_SEGMENTTITLE, wxT(""));
-  tc_title->SetToolTip(wxT("This is the title that players may show "
+  tc_title->SetToolTip(TIP("This is the title that players may show "
                            "as the 'main title' for this movie."));
   siz_fs_title->Add(tc_title, 1, wxALIGN_CENTER_VERTICAL | wxGROW |
                     wxLEFT | wxRIGHT, 5);
@@ -58,13 +58,13 @@ tab_global::tab_global(wxWindow *parent):
                          wxVERTICAL);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_split = new wxCheckBox(this, ID_CB_SPLIT, wxT("Enable splitting"));
-  cb_split->SetToolTip(wxT("Enables splitting of the output into more than "
+  cb_split->SetToolTip(TIP("Enables splitting of the output into more than "
                            "one file. You can split after a given size "
                            "or after a given amount of time has passed."));
   siz_line->Add(cb_split, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
 
   cb_link = new wxCheckBox(this, ID_CB_LINK, wxT("link files"));
-  cb_link->SetToolTip(wxT("Use 'segment linking' for the resulting "
+  cb_link->SetToolTip(TIP("Use 'segment linking' for the resulting "
                           "files. For an in-depth explanation of this "
                           "feature consult the mkvmerge documentation."));
   cb_link->SetValue(false);
@@ -77,7 +77,7 @@ tab_global::tab_global(wxWindow *parent):
   st_split_max_files->Enable(false);
   siz_line->Add(st_split_max_files, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   tc_split_max_files = new wxTextCtrl(this, ID_TC_SPLITMAXFILES, wxT(""));
-  tc_split_max_files->SetToolTip(wxT("The maximum number of files that will "
+  tc_split_max_files->SetToolTip(TIP("The maximum number of files that will "
                                      "be created even if the last file might "
                                      "contain more bytes/time than wanted. "
                                      "Useful e.g. when you want exactly two "
@@ -114,7 +114,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_split_by_size->Append(wxT("703M"));
   cob_split_by_size->Append(wxT("800M"));
   cob_split_by_size->Append(wxT("1000M"));
-  cob_split_by_size->SetToolTip(wxT("The size after which a new output file "
+  cob_split_by_size->SetToolTip(TIP("The size after which a new output file "
                                     "is being started. The letters 'G', 'M' "
                                     "and 'K' can be used to indicate giga/"
                                     "mega/kilo bytes respectively. All units "
@@ -135,7 +135,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_split_by_time->Append(wxT(""));
   cob_split_by_time->Append(wxT("01:00:00"));
   cob_split_by_time->Append(wxT("1800s"));
-  cob_split_by_time->SetToolTip(wxT("The time after which a new output file "
+  cob_split_by_time->SetToolTip(TIP("The time after which a new output file "
                                     "is being started. The time can be given "
                                     "either in the form HH:MM:SS or as the "
                                     "number of seconds followed by 's'. "
@@ -176,7 +176,7 @@ tab_global::tab_global(wxWindow *parent):
                    0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_previous_segment_uid = new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID,
                                            wxT(""));
-  tc_previous_segment_uid->SetToolTip(wxT("For an in-depth explanantion of "
+  tc_previous_segment_uid->SetToolTip(TIP("For an in-depth explanantion of "
                                           "file/segment linking and this "
                                           "feature please read mkvmerge's "
                                           "documentation."));
@@ -187,7 +187,7 @@ tab_global::tab_global(wxWindow *parent):
                    0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_next_segment_uid = new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID,
                                        wxT(""));
-  tc_next_segment_uid->SetToolTip(wxT("For an in-depth explanantion of "
+  tc_next_segment_uid->SetToolTip(TIP("For an in-depth explanantion of "
                                       "file/segment linking and this "
                                       "feature please read mkvmerge's "
                                       "documentation."));
@@ -204,13 +204,13 @@ tab_global::tab_global(wxWindow *parent):
                       0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   siz_chap_l1 = new wxBoxSizer(wxHORIZONTAL);
   tc_chapters = new wxTextCtrl(this, ID_TC_CHAPTERS, wxT(""));
-  tc_chapters->SetToolTip(wxT("mkvmerge supports two chapter formats: The "
+  tc_chapters->SetToolTip(TIP("mkvmerge supports two chapter formats: The "
                               "OGM like text format and the full featured "
                               "XML format."));
   siz_chap_l1->Add(tc_chapters, 1, wxALIGN_CENTER_VERTICAL | wxGROW |
                    wxRIGHT, 5);
   b_browse_chapters = new wxButton(this, ID_B_BROWSECHAPTERS, wxT("Browse"));
-  b_browse_chapters->SetToolTip(wxT("mkvmerge supports two chapter formats: "
+  b_browse_chapters->SetToolTip(TIP("mkvmerge supports two chapter formats: "
                                     "The OGM like text format and the full "
                                     "featured XML format."));
   siz_chap_l1->Add(b_browse_chapters, 0, wxALIGN_CENTER_VERTICAL | wxLEFT |
@@ -225,7 +225,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_chap_language->Append(wxT(""));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_chap_language->Append(sorted_iso_codes[i]);
-  cob_chap_language->SetToolTip(wxT("mkvmerge supports two chapter formats: "
+  cob_chap_language->SetToolTip(TIP("mkvmerge supports two chapter formats: "
                                     "The OGM like text format and the full "
                                     "featured XML format. This option "
                                     "specifies the language to be associated "
@@ -245,7 +245,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_chap_charset->Append(wxT(""));
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_chap_charset->Append(sorted_charsets[i]);
-  cob_chap_charset->SetToolTip(wxT("mkvmerge supports two chapter formats: "
+  cob_chap_charset->SetToolTip(TIP("mkvmerge supports two chapter formats: "
                                    "The OGM like text format and the full "
                                    "featured XML format. If the OGM format "
                                    "is used and the file's charset is not "
@@ -262,7 +262,7 @@ tab_global::tab_global(wxWindow *parent):
                    0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_cue_name_format = new wxTextCtrl(this, ID_TC_CUENAMEFORMAT, wxT(""),
                                       wxDefaultPosition, wxSize(150, -1));
-  tc_cue_name_format->SetToolTip(wxT("mkvmerge can read CUE sheets for audio "
+  tc_cue_name_format->SetToolTip(TIP("mkvmerge can read CUE sheets for audio "
                                      "cds and automatically convert them to "
                                      "chapters. This option controls how the "
                                      "chapter names are created. The sequence "
@@ -289,7 +289,7 @@ tab_global::tab_global(wxWindow *parent):
                    wxLEFT | wxRIGHT, 5);
   b_browse_global_tags = new wxButton(this, ID_B_BROWSEGLOBALTAGS,
                                       wxT("Browse"));
-  b_browse_global_tags->SetToolTip(wxT("The difference between tags associated"
+  b_browse_global_tags->SetToolTip(TIP("The difference between tags associated"
                                        " with a track and global tags is "
                                        "explained in mkvmerge's documentation."
                                        " In short: global tags apply to the "

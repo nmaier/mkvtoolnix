@@ -519,6 +519,15 @@ is_popular_language_code(const char *code) {
     !strcmp(code, "swe");   // Swedish
 }
 
+#if defined(SYS_WINDOWS)
+wxString
+format_tooltip(const wxString &s) {
+  wxString tooltip(s);
+
+  return break_line(tooltip, 30);
+}
+#endif
+
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
                                   wxPoint(0, 0),
 #ifdef SYS_WINDOWS

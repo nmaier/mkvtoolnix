@@ -65,7 +65,7 @@ tab_settings::tab_settings(wxWindow *parent):
   cob_priority =
     new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_priority->SetToolTip(wxT("Sets the priority that mkvmerge will run "
+  cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run "
                                "with."));
 #if defined(SYS_WINDOWS)
   cob_priority->Append(wxT("highest"));
@@ -82,7 +82,7 @@ tab_settings::tab_settings(wxWindow *parent):
     new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME,
                    wxT("Auto-set output filename"));
   cb_autoset_output_filename->
-    SetToolTip(wxT("If checked mmg will automatically set the output filename "
+    SetToolTip(TIP("If checked mmg will automatically set the output filename "
                    "if it hasn't been set already. This happens when you add "
                    "a file. It will be set to the same name as the "
                    "input file but with the extension '.mkv'. If unset mmg "
@@ -93,7 +93,7 @@ tab_settings::tab_settings(wxWindow *parent):
   cb_ask_before_overwriting =
     new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
                    wxT("Ask before overwriting things (files, jobs)"));
-  cb_ask_before_overwriting->SetToolTip(wxT("If checked mmg will ask for "
+  cb_ask_before_overwriting->SetToolTip(TIP("If checked mmg will ask for "
                                             "confirmation before overwriting "
                                             "existing files, or before adding "
                                             "a new job if there's an old job "

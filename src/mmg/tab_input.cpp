@@ -113,20 +113,20 @@ tab_input::tab_input(wxWindow *parent):
   siz_line->Add(st_file_options, 0, wxALIGN_CENTER_VERTICAL, 0);
   cb_no_chapters = new wxCheckBox(this, ID_CB_NOCHAPTERS, wxT("No chapters"));
   cb_no_chapters->SetValue(false);
-  cb_no_chapters->SetToolTip(wxT("Do not copy chapters from this file. Only "
+  cb_no_chapters->SetToolTip(TIP("Do not copy chapters from this file. Only "
                                  "applies to Matroska files."));
   cb_no_chapters->Enable(false);
   siz_line->Add(cb_no_chapters, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
   cb_no_attachments = new wxCheckBox(this, ID_CB_NOATTACHMENTS,
                                      wxT("No attachments"));
   cb_no_attachments->SetValue(false);
-  cb_no_attachments->SetToolTip(wxT("Do not copy attachments from this file. "
+  cb_no_attachments->SetToolTip(TIP("Do not copy attachments from this file. "
                                     "Only applies to Matroska files."));
   cb_no_attachments->Enable(false);
   siz_line->Add(cb_no_attachments, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
   cb_no_tags = new wxCheckBox(this, ID_CB_NOTAGS, wxT("No tags"));
   cb_no_tags->SetValue(false);
-  cb_no_tags->SetToolTip(wxT("Do not copy tags from this file. Only "
+  cb_no_tags->SetToolTip(TIP("Do not copy tags from this file. Only "
                              "applies to Matroska files."));
   cb_no_tags->Enable(false);
   siz_line->Add(cb_no_tags, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
@@ -213,7 +213,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_language =
     new wxComboBox(this, ID_CB_LANGUAGE, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_language->SetToolTip(wxT("Language for this track. Select one of the "
+  cob_language->SetToolTip(TIP("Language for this track. Select one of the "
                                "ISO639-2 language codes."));
   cob_language->Append(wxT("none"));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
@@ -224,7 +224,7 @@ tab_input::tab_input(wxWindow *parent):
   st_delay->Enable(false);
   siz_fg->Add(st_delay, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_delay = new wxTextCtrl(this, ID_TC_DELAY, wxT(""));
-  tc_delay->SetToolTip(wxT("Delay this track by a couple of ms. Can be "
+  tc_delay->SetToolTip(TIP("Delay this track by a couple of ms. Can be "
                            "negative. Only applies to audio and subtitle "
                            "tracks. Some audio formats cannot be delayed at "
                            "the moment."));
@@ -238,7 +238,7 @@ tab_input::tab_input(wxWindow *parent):
   st_track_name->Enable(false);
   siz_fg->Add(st_track_name, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_track_name = new wxTextCtrl(this, ID_TC_TRACKNAME, wxT(""));
-  tc_track_name->SetToolTip(wxT("Name for this track, e.g. \"director's "
+  tc_track_name->SetToolTip(TIP("Name for this track, e.g. \"director's "
                                 "comments\"."));
   siz_fg->Add(tc_track_name, 0, wxGROW | wxRIGHT, 15);
 
@@ -246,7 +246,7 @@ tab_input::tab_input(wxWindow *parent):
   st_stretch->Enable(false);
   siz_fg->Add(st_stretch, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxT(""));
-  tc_stretch->SetToolTip(wxT("Stretch the audio or subtitle track by a "
+  tc_stretch->SetToolTip(TIP("Stretch the audio or subtitle track by a "
                              "factor. This should be a positive floating "
                              "point number. Not all formats can be stretched "
                              "at the moment."));
@@ -262,7 +262,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_cues =
     new wxComboBox(this, ID_CB_CUES, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_cues->SetToolTip(wxT("Selects for which blocks mkvmerge will produce "
+  cob_cues->SetToolTip(TIP("Selects for which blocks mkvmerge will produce "
                            "index entries ( = cue entries). \"default\" is a "
                            "good choice for almost all situations."));
   cob_cues->Append(wxT("default"));
@@ -279,7 +279,7 @@ tab_input::tab_input(wxWindow *parent):
     new wxComboBox(this, ID_CB_SUBTITLECHARSET, wxT(""),
                    wxDefaultPosition, wxDefaultSize, 0, NULL,
                    wxCB_DROPDOWN | wxCB_READONLY);
-  cob_sub_charset->SetToolTip(wxT("Selects the character set a subtitle file "
+  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file "
                                   "was written with. Only needed for non-UTF "
                                   "files that mkvmerge does not detect "
                                   "correctly."));
@@ -310,7 +310,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_fourcc->Append(wxT("DIV3"));
   cob_fourcc->Append(wxT("DX50"));
   cob_fourcc->Append(wxT("XVID"));
-  cob_fourcc->SetToolTip(wxT("Forces the FourCC of the video track to this "
+  cob_fourcc->SetToolTip(TIP("Forces the FourCC of the video track to this "
                              "value. Note that this only works for video "
                              "tracks that use the AVI compatibility mode "
                              "or for QuickTime video tracks. This option "
@@ -330,7 +330,7 @@ tab_input::tab_input(wxWindow *parent):
     cob_compression->Append(wxT("bz2"));
   if (capabilities[wxT("LZO")] == wxT("true"))
     cob_compression->Append(wxT("lzo"));
-  cob_compression->SetToolTip(wxT("Sets the compression used for VobSub "
+  cob_compression->SetToolTip(TIP("Sets the compression used for VobSub "
                                   "subtitles. If nothing is chosen then the "
                                   "VobSubs will be automatically compressed "
                                   "with zlib. 'none' results is files that "
@@ -358,7 +358,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_aspect_ratio->Append(wxT("2.00"));
   cob_aspect_ratio->Append(wxT("2.21"));
   cob_aspect_ratio->Append(wxT("2.35"));
-  cob_aspect_ratio->SetToolTip(wxT("Sets the display aspect ratio of the "
+  cob_aspect_ratio->SetToolTip(TIP("Sets the display aspect ratio of the "
                                    "track. The format can be either 'a/b' in "
                                    "which case both numbers must be integer "
                                    "(e.g. 16/9) or just a single floting "
@@ -376,7 +376,7 @@ tab_input::tab_input(wxWindow *parent):
   siz_line->Add(rb_display_dimensions, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT,
                 10);
   tc_display_width = new wxTextCtrl(this, ID_TC_DISPLAYWIDTH, wxT(""));
-  tc_display_width->SetToolTip(wxT("Sets the display width of the track."
+  tc_display_width->SetToolTip(TIP("Sets the display width of the track."
                                    "The height must be set as well, or this "
                                    "field will be ignored."));
   siz_line->Add(tc_display_width, 2, wxGROW, 0);
@@ -384,7 +384,7 @@ tab_input::tab_input(wxWindow *parent):
   st_x->Enable(false);
   siz_line->Add(st_x, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_display_height = new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, wxT(""));
-  tc_display_height->SetToolTip(wxT("Sets the display height of the track."
+  tc_display_height->SetToolTip(TIP("Sets the display height of the track."
                                     "The width must be set as well, or this "
                                     "field will be ignored."));
   siz_line->Add(tc_display_height, 2, wxGROW, 0);
@@ -396,7 +396,7 @@ tab_input::tab_input(wxWindow *parent):
   cb_default =
     new wxCheckBox(this, ID_CB_MAKEDEFAULT, wxT("Make default track"));
   cb_default->SetValue(false);
-  cb_default->SetToolTip(wxT("Make this track the default track for its type "
+  cb_default->SetToolTip(TIP("Make this track the default track for its type "
                              "(audio, video, subtitles). Players should "
                              "prefer tracks with the default track flag "
                              "set."));
@@ -404,7 +404,7 @@ tab_input::tab_input(wxWindow *parent):
   cb_aac_is_sbr =
     new wxCheckBox(this, ID_CB_AACISSBR, wxT("AAC is SBR/HE-AAC/AAC+"));
   cb_aac_is_sbr->SetValue(false);
-  cb_aac_is_sbr->SetToolTip(wxT("This track contains SBR AAC/HE-AAC/AAC+ data."
+  cb_aac_is_sbr->SetToolTip(TIP("This track contains SBR AAC/HE-AAC/AAC+ data."
                                 " Only needed for AAC input files, because SBR"
                                 " AAC cannot be detected automatically for "
                                 "these files. Not needed for AAC tracks read "
@@ -436,14 +436,14 @@ tab_input::tab_input(wxWindow *parent):
   st_timecodes->Enable(false);
   siz_fg->Add(st_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_timecodes = new wxTextCtrl(this, ID_TC_TIMECODES, wxT(""));
-  tc_timecodes->SetToolTip(wxT("mkvmerge can read and use timecodes from an "
+  tc_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes from an "
                                "external text file. This feature is a very "
                                "advanced feature. Almost all users should "
                                "leave this entry empty."));
   siz_fg->Add(tc_timecodes, 1, wxGROW | wxRIGHT, 10);
   b_browse_timecodes = new wxButton(this, ID_B_BROWSE_TIMECODES,
                                     wxT("Browse"));
-  b_browse_timecodes->SetToolTip(wxT("mkvmerge can read and use timecodes "
+  b_browse_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes "
                                      "from an external text file. This "
                                      "feature is a very advanced feature. "
                                      "Almost all users should leave this "

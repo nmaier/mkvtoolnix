@@ -97,7 +97,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   cob_mimetype =
     new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_mimetype->SetToolTip(wxT("MIME type for this track. Select one of the "
+  cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the "
                                "pre-defined MIME types or enter one "
                                "yourself."));
   cob_mimetype->Append(wxT(""));
@@ -111,7 +111,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
                    wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
   cob_style->Append(wxT("To all files"));
   cob_style->Append(wxT("Only to the first"));
-  cob_style->SetToolTip(wxT("If splitting is a file can be attached either to "
+  cob_style->SetToolTip(TIP("If splitting is a file can be attached either to "
                             "all files created or only to the first file. Has "
                             "no effect if no splitting is used."));
   siz_ddlists->Add(cob_style, 1, wxGROW | wxRIGHT, 5);

@@ -277,7 +277,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
   b_set_values =
     new wxButton(this, ID_B_SETVALUES, wxT("Set values"), wxPoint(370, 128),
                  wxSize(120, -1));
-  b_set_values->SetToolTip(wxT("Here you can set the values for the language "
+  b_set_values->SetToolTip(TIP("Here you can set the values for the language "
                                "and "
                                "the country that you want to apply to all the "
                                "chapters below and including the currently "
@@ -286,7 +286,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
   b_adjust_timecodes =
     new wxButton(this, ID_B_ADJUSTTIMECODES, wxT("Adjust timecodes"),
                  wxPoint(370, 154), wxSize(120, -1));
-  b_adjust_timecodes->SetToolTip(wxT("Here you can adjust all the timcdoes "
+  b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcdoes "
                                      "of the "
                                      "selected chapter and all its childrend "
                                      "by "
