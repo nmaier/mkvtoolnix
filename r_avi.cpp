@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.8 2003/02/25 13:25:51 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.9 2003/02/25 16:19:12 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,7 +33,7 @@ extern "C" {
 #include "queue.h"
 #include "r_avi.h"
 #include "p_video.h"
-//#include "p_pcm.h"
+#include "p_pcm.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
 
@@ -319,10 +319,12 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_bits(avi);
-/*      demuxer->packetizer = new pcm_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new pcm_packetizer_c(wfe, wfe ? wfe->cb_size +
+                                                 sizeof(WAVEFORMATEX) : 0,
+                                                 demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
-                                                 &async, &range, comments);*/
+                                                 &async, &range);
       break;
     case 0x0055: // MP3
       if (verbose)
@@ -491,13 +493,15 @@ int avi_reader_c::read() {
           nread = AVI_read_audio(avi, chunk, demuxer->samples_per_second *
                                  demuxer->channels * demuxer->bits_per_sample /
                                  8);
-          if (nread <= 0) {
-            demuxer->eos = 1;
-            *chunk = 1;
-//            ((pcm_packetizer_c *)demuxer->packetizer)->process(chunk, 1, 1);
-//            demuxer->packetizer->flush_pages();
-          } /*else
-            ((pcm_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);*/
+          if (nread > 0) {
+            if (nread < (demuxer->samples_per_second * demuxer->channels *
+                         demuxer->bits_per_sample / 8))
+              demuxer->eos = 1;
+            else
+              demuxer->eos = 0;
+            ((pcm_packetizer_c *)demuxer->packetizer)->process(chunk, nread,
+                                                               demuxer->eos);
+          }
           break;
         case 0x0055: // MP3
           nread = AVI_read_audio(avi, chunk, 16384);
