@@ -512,14 +512,15 @@ format_tooltip(const wxString &s) {
 wxString
 create_track_order(bool all) {
   int i;
-  wxString s;
+  wxString s, format;
 
+  format = wxT("%d:" LLD);
   for (i = 0; i < tracks.size(); i++) {
     if (!all && (!tracks[i]->enabled || tracks[i]->appending))
       continue;
     if (s.length() > 0)
       s += wxT(",");
-    s += wxString::Format(wxT("%d:" LLD), tracks[i]->source, tracks[i]->id);
+    s += wxString::Format(format, tracks[i]->source, tracks[i]->id);
   }
 
   return s;
@@ -1125,7 +1126,7 @@ mmg_dialog::update_command_line() {
   mmg_file_t *f;
   mmg_attachment_t *a;
   wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
-  wxString append_mapping;
+  wxString append_mapping, format;
 
   old_cmdline = cmdline;
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
@@ -1142,6 +1143,7 @@ mmg_dialog::update_command_line() {
     clargs.Add(settings_page->cob_priority->GetValue());
   }
 
+  format = wxT(LLD);
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
     tracks_selected_here = false;
@@ -1157,7 +1159,9 @@ mmg_dialog::update_command_line() {
         continue;
 
       tracks_selected_here = true;
-      sid.Printf(wxT(LLD), t->id);
+      // Avoid compiler warnings about mismatching format and arguments
+      // because mingw does not know about the %I64d syntax.
+      sid.Printf(format, t->id);
 
       if (t->type == wxT('a')) {
         no_audio = false;
