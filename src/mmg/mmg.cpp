@@ -30,6 +30,7 @@
 #include "common.h"
 
 wxString last_open_dir;
+wxString mkvmerge_path;
 vector<mmg_file_t> files;
 
 wxString &break_line(wxString &line, int break_after) {
@@ -103,9 +104,11 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                    wxNB_TOP);
   tab_input *input_page = new tab_input(notebook);
   tab_attachments *attachments_page = new tab_attachments(notebook);
+  tab_settings *settings_page = new tab_settings(notebook);
 
   notebook->AddPage(input_page, _("Input"));
   notebook->AddPage(attachments_page, _("Attachments"));
+  notebook->AddPage(settings_page, _("Settings"));
 
   bs_main->Add(notebook, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
@@ -152,7 +155,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   last_open_dir = "";
-  cmdline = "mkvmerge -o \"" + tc_output->GetValue() + "\" ";
+  cmdline = mkvmerge_path + " -o \"" + tc_output->GetValue() + "\" ";
   tc_cmdline->SetValue(cmdline);
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
@@ -194,7 +197,7 @@ void mmg_dialog::update_command_line() {
   wxString sid, old_cmdline;
 
   old_cmdline = cmdline;
-  cmdline = "mkvmerge -o \"" + tc_output->GetValue() + "\" ";
+  cmdline = mkvmerge_path + " -o \"" + tc_output->GetValue() + "\" ";
 
   tracks_present = false;
   for (fidx = 0; fidx < files.size(); fidx++) {

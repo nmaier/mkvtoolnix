@@ -58,6 +58,8 @@ using namespace std;
 #define ID_TC_DESCRIPTION 10028
 #define ID_CB_ATTACHMENTSTYLE 10029
 #define ID_LB_ATTACHMENTS 10030
+#define ID_TC_MKVMERGE 10031
+#define ID_B_BROWSEMKVMERGE 10032
 
 typedef struct {
   char type;
@@ -82,6 +84,7 @@ typedef struct {
 } mmg_attachment_t;
 
 extern wxString last_open_dir;
+extern wxString mkvmerge_path;
 extern vector<mmg_file_t> files;
 extern vector<mmg_attachment_t> attachments;
 
@@ -164,6 +167,9 @@ protected:
 
   int selected_attachment;
 
+public:
+  tab_attachments(wxWindow *parent);
+
   void on_add_attachment(wxCommandEvent &evt);
   void on_remove_attachment(wxCommandEvent &evt);
   void on_attachment_selected(wxCommandEvent &evt);
@@ -172,9 +178,21 @@ protected:
   void on_style_changed(wxCommandEvent &evt);
 
   void enable(bool e);
+};
+
+class tab_settings: public wxPanel {
+  DECLARE_CLASS(tab_settings);
+  DECLARE_EVENT_TABLE();
+protected:
+  wxTextCtrl *tc_mkvmerge;
 
 public:
-  tab_attachments(wxWindow *parent);
+  tab_settings(wxWindow *parent);
+
+  void on_browse(wxCommandEvent &evt);
+
+  void load();
+  void save();
 };
 
 #endif // __MMG_DIALOG_H

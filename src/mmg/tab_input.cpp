@@ -19,6 +19,9 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <errno.h>
+#include <string.h>
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
@@ -265,15 +268,24 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
 
-    command = "mkvmerge -i \"" + dlg.GetPath() + "\"";
-    if ((result = wxExecute(command, output, errors)) != 0) {
+    command = mkvmerge_path + " -i \"" + dlg.GetPath() + "\"";
+    result = wxExecute(command, output, errors);
+    if ((result > 0) && (result < 10)) {
       name.Printf("'mkvmerge -i' failed. Return code: %d\n\n", result);
       for (i = 0; i < output.Count(); i++)
         name += break_line(output[i]) + "\n";
       name += "\n";
       for (i = 0; i < errors.Count(); i++)
         name += break_line(errors[i]) + "\n";
-      wxMessageBox(name, "'mkvmerge -i' failed");
+      wxMessageBox(name, "'mkvmerge -i' failed", wxOK | wxCENTER |
+                   wxICON_ERROR);
+      return;
+    } else if (result > 0) {
+      name.Printf("'mkvmerge -i' failed. Return code: %d. Errno: %d (%s).\n"
+                  "Make sure that you've selected a mkvmerge executable"
+                  "on the 'settings' tab.", result, errno, strerror(errno));
+      wxMessageBox(name, "'mkvmerge -i' failed", wxOK | wxCENTER |
+                   wxICON_ERROR);
       return;
     }
 

@@ -1,0 +1,97 @@
+/*
+  mkvmerge GUI -- utility for splicing together matroska files
+      from component media subtypes
+
+  tab_input.cpp
+
+  Written by Moritz Bunkus <moritz@bunkus.org>
+  Parts of this code were written by Florian Wager <root@sirelvis.de>
+
+  Distributed under the GPL
+  see the file COPYING for details
+  or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version $Id$
+    \brief "settings" tab
+    \author Moritz Bunkus <moritz@bunkus.org>
+*/
+
+#include "wx/wxprec.h"
+
+#include "wx/wx.h"
+#include "wx/notebook.h"
+#include "wx/listctrl.h"
+#include "wx/statline.h"
+#include "wx/config.h"
+
+#include "mmg.h"
+#include "common.h"
+#include "matroskalogo-big.xpm"
+
+tab_settings::tab_settings(wxWindow *parent):
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
+          wxTAB_TRAVERSAL) {
+  new wxStaticBox(this, -1, _("mkvmrge executable"), wxPoint(10, 5),
+                  wxSize(475, 50));
+  tc_mkvmerge =
+    new wxTextCtrl(this, ID_TC_MKVMERGE, _(""), wxPoint(15, 25),
+                   wxSize(370, -1), wxTE_READONLY);
+
+  new wxButton(this, ID_B_BROWSEMKVMERGE, _("Browse"), wxPoint(395, 25),
+               wxDefaultSize, 0);
+
+  new wxStaticBox(this, -1, _("About"), wxPoint(10, 350),
+                  wxSize(475, 104));
+  new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm),
+                     wxPoint(20, 370), wxSize(64,64));
+  new wxStaticText(this, wxID_STATIC,
+                   _("mkvmerge GUI v" VERSION "\n"
+                     "This GUI was written by Moritz Bunkus <moritz@"
+                     "bunkus.org>\n"
+                     "Based on mmg by Florian Wagner <root@sirelvis.de>\n"
+                     "mkvmerge GUI is licensed under the GPL.\n"
+                     "http://www.bunkus.org/videotools/mkvtoolnix/"),
+                   wxPoint(95, 360), wxDefaultSize, 0);
+  load();
+}
+
+void tab_settings::on_browse(wxCommandEvent &evt) {
+  wxFileDialog dlg(NULL, "Choose the mkvmerge executable",
+#ifdef SYS_WINDOWS
+                   tc_mkvmerge->GetValue().BeforeLast('\\'), "",
+                   _T("Executable files (*.exe)|*.exe|All files (*.*)|*.*"),
+#else
+                   tc_mkvmerge->GetValue().BeforeLast('/'), "",
+                   _T("All files (*)|*"),
+#endif
+                   wxOPEN);
+  if(dlg.ShowModal() == wxID_OK) {
+    tc_mkvmerge->SetValue(dlg.GetPath());
+    mkvmerge_path = "\"" + dlg.GetPath() + "\"";
+    save();
+  }
+}
+
+void tab_settings::load() {
+  wxString s;
+  wxConfig cfg("mkvmergeGUI");
+
+  if (!cfg.Read("/mkvmerge/executable", &s))
+    s = "mkvmerge";
+  mkvmerge_path = "\"" + s + "\"";
+  tc_mkvmerge->SetValue(s);
+}
+
+void tab_settings::save() {
+  wxConfig cfg("mkvmergeGUI");
+
+  cfg.Write("/mkvmerge/executable", tc_mkvmerge->GetValue());
+}
+
+IMPLEMENT_CLASS(tab_settings, wxPanel);
+BEGIN_EVENT_TABLE(tab_settings, wxPanel)
+  EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
+END_EVENT_TABLE();
