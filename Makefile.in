@@ -53,6 +53,7 @@ install_sh_PROGRAM = $(install_sh) -c
 install_sh_SCRIPT = $(install_sh) -c
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_HEADER = $(INSTALL_DATA)
+GCC_DEP_STYLE = @GCC_DEP_STYLE@
 
 # Variable stuff as set by configure
 BZ2_LIBS = @BZ2_LIBS@
@@ -221,12 +222,22 @@ depend:
 	@echo Calculating dependecies:
 	@rm -f .depend
 	@touch .depend
+ifeq (v2,$(GCC_DEP_STYLE))
+	@for i in $(ALL_SOURCES); do \
+		o="`dirname "$$i"`/" ; \
+		echo ' CXX -MM '$$i ; \
+		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM $$i | \
+		awk 'BEGIN { pfx="'$$o'" } { print pfx $$0 ; pfx="" }' \
+		>> .depend ; \
+	done
+else
 	@for i in $(ALL_SOURCES); do \
 		o="`echo $$i | sed -e 's/\.c$$/.o/' -e 's/\.cpp$$/.o/'`" ; \
-		echo '  ' $$i: $$o ; \
+		echo ' CXX -MM '$$i ; \
 		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
 		-MT $$o $$i >> .depend ; \
 	done
+endif
 
 update-po:
 	xgettext --keyword=_ --keyword=N_ --default-domain=mkvtoolnix \
