@@ -97,9 +97,6 @@ static void
 el_get_string(parser_data_t *pdata,
               EbmlElement *el) {
   strip(*pdata->bin);
-  if (pdata->bin->length() == 0)
-    xmlp_error(pdata, "Expected a string but found only whitespaces.");
-
   *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
 }
 
@@ -107,9 +104,6 @@ static void
 el_get_utf8string(parser_data_t *pdata,
                   EbmlElement *el) {
   strip(*pdata->bin);
-  if (pdata->bin->length() == 0)
-    xmlp_error(pdata, "Expected a string but found only whitespaces.");
-
   *(static_cast<EbmlUnicodeString *>(el)) =
     cstrutf8_to_UTFstring(pdata->bin->c_str());
 }
@@ -323,7 +317,7 @@ end_element(void *user_data,
   pdata = (parser_data_t *)user_data;
 
   if (pdata->data_allowed && (pdata->bin == NULL))
-    xmlp_error(pdata, "Element <%s> does not contain any data.", name);
+    pdata->bin = new string;
 
   if (pdata->depth == 1) {
     m = static_cast<EbmlMaster *>(xmlp_pelt);
