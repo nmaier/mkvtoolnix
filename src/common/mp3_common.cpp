@@ -282,7 +282,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
       break;
     mxverb(2, "mp3_reader: Found tag at %d size %d\n", base + pos,
            mp3header.framesize);
-    base = pos + 1;
+    base += pos + 1;
   } while (true);
 
   if (num == 1)

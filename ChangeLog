@@ -1,3 +1,8 @@
+2004-07-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The word 'TAG' occuring in e.g. SRT subs
+	caused the ID3/MP3 frame detection to be stuck n an endless loop.
+
 2004-07-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.9.4.
