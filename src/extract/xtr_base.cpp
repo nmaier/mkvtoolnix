@@ -234,7 +234,7 @@ xtr_base_c::create_extractor(const string &new_codec_id,
                              track_spec_t &tspec) {
   // Audio formats
   if ((new_codec_id == MKV_A_AC3) ||
-      (new_codec_id == MKV_A_MP3) ||
+      starts_with_case(new_codec_id, "A_MPEG/L") ||
       (new_codec_id == MKV_A_DTS))
     return new xtr_base_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_PCM)
