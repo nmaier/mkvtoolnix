@@ -1033,7 +1033,7 @@ void ogm_reader_c::identify() {
       memcpy(fourcc, sth->subtype, 4);
       fourcc[4] = 0;
     }
-    mxinfo("Track ID %u: %s (%s)\n", sdemuxers[i]->serial,
+    mxinfo("Track ID %d: %s (%s)\n", sdemuxers[i]->serial,
            (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||

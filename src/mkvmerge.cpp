@@ -939,7 +939,7 @@ static void parse_track_order(const char *s, track_info_c &ti) {
   parts = split(s, ",");
   strip(parts);
   for (i = 0; i < parts.size(); i++) {
-    if (!parse_int(parts[i].c_str(), id) || (id < 0))
+    if (!parse_int(parts[i].c_str(), id))
       mxerror("'%s' is not a valid track ID in '--track-order %s'.\n",
               parts[i].c_str(), s);
     ti.track_order->push_back(id);
