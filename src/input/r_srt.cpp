@@ -206,10 +206,6 @@ srt_reader_c::read(generic_packetizer_c *) {
     subs.add(start, end, subtitles.c_str());
   }
 
-  if ((subs.check() != 0) && verbose)
-    mxwarn("srt_reader: The subtitle file seems to be "
-           "badly broken. The output file might not be playable "
-           "correctly.\n");
   subs.process((textsubs_packetizer_c *)PTZR0);
 
   PTZR0->flush();

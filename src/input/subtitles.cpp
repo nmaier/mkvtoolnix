@@ -44,7 +44,10 @@ subtitles_c::~subtitles_c() {
   }
 }
 
-void subtitles_c::add(int64_t nstart, int64_t nend, const char *nsubs) {
+void
+subtitles_c::add(int64_t nstart,
+                 int64_t nend,
+                 const char *nsubs) {
   sub_t *s;
 
   s = (sub_t *)safemalloc(sizeof(sub_t));
@@ -62,7 +65,8 @@ void subtitles_c::add(int64_t nstart, int64_t nend, const char *nsubs) {
   }
 }
 
-int subtitles_c::check() {
+int
+subtitles_c::check() {
   sub_t *current;
   int error = 0;
   char *c;
@@ -129,7 +133,8 @@ int subtitles_c::check() {
   return error;
 }
 
-void subtitles_c::process(textsubs_packetizer_c *p) {
+void
+subtitles_c::process(textsubs_packetizer_c *p) {
   sub_t *current;
 
   while ((current = get_next()) != NULL) {
@@ -139,7 +144,8 @@ void subtitles_c::process(textsubs_packetizer_c *p) {
   }
 }
 
-sub_t *subtitles_c::get_next() {
+sub_t *
+subtitles_c::get_next() {
   sub_t *current;
 
   if (first == NULL)
