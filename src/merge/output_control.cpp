@@ -795,7 +795,7 @@ render_attachments(IOCallback *rout) {
  */
 static void
 check_append_mapping() {
-  vector<append_spec_t>::iterator amap, cmp_amap;
+  vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
   vector<int64_t>::iterator id;
   vector<filelist_t>::iterator src_file, dst_file;
   vector<packetizer_t>::iterator ptzr;
@@ -974,11 +974,13 @@ check_append_mapping() {
       continue;
 
     // Find consecutive mappings.
+    trav_amap = amap;
     path_length = 2;
     do {
       foreach(cmp_amap, append_mapping)
-        if ((amap->src_file_id == cmp_amap->dst_file_id) &&
-            (amap->src_track_id == cmp_amap->dst_track_id)) {
+        if ((trav_amap->src_file_id == cmp_amap->dst_file_id) &&
+            (trav_amap->src_track_id == cmp_amap->dst_track_id)) {
+          trav_amap = cmp_amap;
           path_length++;
           break;
         }
