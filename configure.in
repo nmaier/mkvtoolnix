@@ -121,11 +121,9 @@ AC_ARG_ENABLE([debug],
   [  --enable-debug                compile with debug information])
   if test x"$enable_debug" = x"yes"; then
     dnl debug information
-    DEBUG_CFLAGS="-g"
-    echo '#define DEBUG' >> config.h
+    DEBUG_CFLAGS="-g -DDEBUG"
   else
     DEBUG_CFLAGS=""
-    echo '/*#define DEBUG*/' >> config.h
   fi
 AC_ARG_ENABLE([profiling],
     [  --enable-profiling            compile with profiling information])
