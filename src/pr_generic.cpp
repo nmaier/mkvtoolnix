@@ -298,6 +298,9 @@ int generic_packetizer_c::set_uid(uint32_t uid) {
   if (is_unique_uint32(uid)) {
     add_unique_uint32(uid);
     huid = uid;
+    if (track_entry != NULL)
+      *(static_cast<EbmlUInteger *>(&GetChild<KaxTrackUID>(*track_entry))) =
+        huid;
     return 1;
   }
 
@@ -323,7 +326,15 @@ int generic_packetizer_c::get_track_num() {
 
 void generic_packetizer_c::set_track_name(const char *name) {
   safefree(ti->track_name);
+  if (name == NULL) {
+    ti->track_name = NULL;
+    return;
+  }
   ti->track_name = safestrdup(name);
+  if (track_entry != NULL)
+    *(static_cast<EbmlUnicodeString *>
+      (&GetChild<KaxTrackName>(*track_entry))) =
+      cstrutf8_to_UTFstring(ti->track_name);
 }
 
 void generic_packetizer_c::set_codec_id(const char *id) {
@@ -333,6 +344,9 @@ void generic_packetizer_c::set_codec_id(const char *id) {
     return;
   }
   hcodec_id = safestrdup(id);
+  if (track_entry != NULL)
+    *(static_cast<EbmlString *>
+      (&GetChild<KaxCodecID>(*track_entry))) = hcodec_id;
 }
 
 void generic_packetizer_c::set_codec_private(const unsigned char *cp,
@@ -345,18 +359,32 @@ void generic_packetizer_c::set_codec_private(const unsigned char *cp,
   }
   hcodec_private = (unsigned char *)safememdup(cp, length);
   hcodec_private_length = length;
+  if (track_entry != NULL) {
+    KaxCodecPrivate &codec_private = GetChild<KaxCodecPrivate>(*track_entry);
+    codec_private.CopyBuffer((binary *)hcodec_private, hcodec_private_length);
+  }
 }
 
 void generic_packetizer_c::set_track_min_cache(int min_cache) {
   htrack_min_cache = min_cache;
+  if (track_entry != NULL)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackMinCache>(*track_entry))) = min_cache;
 }
 
 void generic_packetizer_c::set_track_max_cache(int max_cache) {
   htrack_max_cache = max_cache;
+  if (track_entry != NULL)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackMinCache>(*track_entry))) = max_cache;
 }
 
 void generic_packetizer_c::set_track_default_duration_ns(int64_t def_dur) {
   htrack_default_duration = def_dur;
+  if (track_entry != NULL)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
+      htrack_default_duration;
 }
 
 int64_t generic_packetizer_c::get_track_default_duration_ns() {
@@ -365,34 +393,74 @@ int64_t generic_packetizer_c::get_track_default_duration_ns() {
 
 void generic_packetizer_c::set_audio_sampling_freq(float freq) {
   haudio_sampling_freq = freq;
+  if (track_entry != NULL) {
+    KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
+    *(static_cast<EbmlFloat *>(&GetChild<KaxAudioSamplingFreq>(audio))) =
+      haudio_sampling_freq;
+  }
 }
 
 void generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
   haudio_output_sampling_freq = freq;
+  if (track_entry != NULL) {
+    KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
+    *(static_cast<EbmlFloat *>(&GetChild<KaxAudioOutputSamplingFreq>(audio))) =
+      haudio_output_sampling_freq;
+  }
 }
 
 void generic_packetizer_c::set_audio_channels(int channels) {
   haudio_channels = channels;
+  if (track_entry != NULL) {
+    KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxAudioChannels>(audio))) =
+      haudio_channels;
+  }
 }
 
 void generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
   haudio_bit_depth = bit_depth;
+  if (track_entry != NULL) {
+    KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxAudioBitDepth>(audio))) =
+      haudio_bit_depth;
+  }
 }
 
 void generic_packetizer_c::set_video_pixel_width(int width) {
   hvideo_pixel_width = width;
+  if (track_entry != NULL) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoPixelWidth>(video))) =
+      hvideo_pixel_width;
+  }
 }
 
 void generic_packetizer_c::set_video_pixel_height(int height) {
   hvideo_pixel_height = height;
+  if (track_entry != NULL) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoPixelHeight>(video))) =
+      hvideo_pixel_height;
+  }
 }
 
 void generic_packetizer_c::set_video_display_width(int width) {
   hvideo_display_width = width;
+  if (track_entry != NULL) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoDisplayWidth>(video))) =
+      hvideo_display_width;
+  }
 }
 
 void generic_packetizer_c::set_video_display_height(int height) {
   hvideo_display_height = height;
+  if (track_entry != NULL) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoDisplayHeight>(video))) =
+      hvideo_display_height;
+  }
 }
 
 void generic_packetizer_c::set_video_aspect_ratio(float ar) {
@@ -442,6 +510,9 @@ void generic_packetizer_c::force_default_track(int type) {
 void generic_packetizer_c::set_language(const char *language) {
   safefree(ti->language);
   ti->language = safestrdup(language);
+  if (track_entry != NULL)
+    *(static_cast<EbmlString *>
+      (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
 }
 
 void generic_packetizer_c::set_default_compression_method(int method) {
