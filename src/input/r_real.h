@@ -54,8 +54,8 @@ typedef struct {
   bool is_aac;
   bool rv_dimensions;
 
-  unsigned char *private_data;
-  int private_size;
+  unsigned char *private_data, *extra_data;
+  int private_size, extra_data_size;
 
   unsigned char *c_data;
   int c_len, c_numpackets;

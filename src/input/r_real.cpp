@@ -375,6 +375,11 @@ void real_reader_c::parse_headers() {
               } else {
                 memcpy(dmx->fourcc, p, 4);
                 dmx->fourcc[4] = 0;
+                p += 4;
+                if (size > (p - buffer)) {
+                  dmx->extra_data = (unsigned char *)p;
+                  dmx->extra_data_size = size - (p - buffer);
+                }
               }
 
             } else {
@@ -384,7 +389,15 @@ void real_reader_c::parse_headers() {
               dmx->channels = get_uint16_be(&ra5p->channels);
               dmx->samples_per_second = get_uint16_be(&ra5p->sample_rate);
               dmx->bits_per_sample = get_uint16_be(&ra5p->sample_size);
+              if (size > (sizeof(real_audio_v5_props_t) + 4)) {
+                dmx->extra_data = (unsigned char *)(ra5p + 1);
+                dmx->extra_data += 4;
+                dmx->extra_data_size = size - 4 -
+                  sizeof(real_audio_v5_props_t);
+              }
             }
+            mxverb(2, "real_reader: extra_data_size: %d\n",
+                   dmx->extra_data_size);
 
             if (ok) {
               dmx->private_data = (unsigned char *)safememdup(buffer, size);
@@ -475,29 +488,63 @@ void real_reader_c::create_packetizer(int64_t tid) {
 
       } else if (!strcasecmp(dmx->fourcc, "raac") ||
                  !strcasecmp(dmx->fourcc, "racp")) {
-        int profile;
+        int profile, channels, sample_rate, output_sample_rate;
+        uint32_t extra_len;
+        bool sbr, extra_data_parsed;
 
-        if (!strcasecmp(dmx->fourcc, "racp"))
+        profile = -1;
+        output_sample_rate = 0;
+        sbr = false;
+        extra_data_parsed = false;
+        if (dmx->extra_data_size > 4) {
+          extra_len = get_uint32_be(dmx->extra_data);
+          mxverb(2, "real_reader: extra_len: %u\n", extra_len);
+          if (dmx->extra_data_size >= (4 + extra_len)) {
+            extra_data_parsed = true;
+            parse_aac_data(&dmx->extra_data[4 + 1], extra_len - 1,
+                           profile, channels, sample_rate, output_sample_rate,
+                           sbr);
+            mxverb(2, "real_reader: 1. profile: %d, channels: %d, "
+                   "sample_rate: %d, output_sample_rate: %d, sbr: %d\n",
+                   profile, channels, sample_rate, output_sample_rate,
+                   (int)sbr);
+            if (sbr)
+              profile = AAC_PROFILE_SBR;
+          }
+        }
+        if (profile == -1) {
+          channels = dmx->channels;
+          sample_rate = dmx->samples_per_second;
+          if (!strcasecmp(dmx->fourcc, "racp") ||
+              (dmx->samples_per_second < 44100)) {
+            output_sample_rate = 2 * sample_rate;
+            sbr = true;
+          }
+        }
+        if (sbr)
           profile = AAC_PROFILE_SBR;
-        else
-          profile = AAC_PROFILE_LC;
         for (i = 0; i < (int)ti->aac_is_sbr->size(); i++)
           if (((*ti->aac_is_sbr)[i] == -1) ||
               ((*ti->aac_is_sbr)[i] == dmx->id)) {
             profile = AAC_PROFILE_SBR;
             break;
           }
+        mxverb(2, "real_reader: 2. profile: %d, channels: %d, sample_rate: "
+               "%d, output_sample_rate: %d, sbr: %d\n", profile, channels,
+               sample_rate, output_sample_rate, (int)sbr);
         ti->private_data = NULL;
         ti->private_size = 0;
         dmx->is_aac = true;
         dmx->packetizer =
           new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                               dmx->samples_per_second, dmx->channels, ti,
-                               false, true);
+                               sample_rate, channels, ti, false, true);
         ((aac_packetizer_c *)dmx->packetizer)->set_samples_per_packet(2048);
         mxverb(1, "+-> Using the AAC output module for stream "
                "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
-        if (profile != AAC_PROFILE_SBR)
+        if (profile == AAC_PROFILE_SBR)
+          dmx->packetizer->
+            set_audio_output_sampling_freq(output_sample_rate);
+        else if (!extra_data_parsed)
           mxwarn("RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. "
                  "In some cases this can NOT be detected automatically. "
                  "Therefore you have to specifiy '--aac-is-sbr %u' manually "
