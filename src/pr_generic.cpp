@@ -1063,7 +1063,6 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
       samples += (double)ti->avi_samples_per_chunk * cur_bytes / block_size;
       num_bytes -= cur_bytes;
     }
-    samples += ti->avi_samples_per_chunk;
     duration = (int64_t)(samples * 1000000000 / ti->avi_samples_per_sec);
   }
 
