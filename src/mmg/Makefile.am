@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = dist-zip foreign
 
 bin_PROGRAMS = mmg
 
-DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/common
 
 LDFLAGS = @LDFLAGS@ -L$(top_srcdir)/src/common

@@ -11,7 +11,7 @@ aviclasses_incdirs = -I$(top_srcdir)/aviclasses
 aviclasses_libdirs = -L$(top_srcdir)/aviclasses
 endif
 
-DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) \
 	-I$(top_srcdir)/src/common -I$(top_srcdir)/src/output
 
