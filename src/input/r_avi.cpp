@@ -83,7 +83,6 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
   long fsize, i;
   int64_t size;
-  vector<avi_demuxer_t>::iterator demuxer;
 
   try {
     io = new mm_io_c(ti->fname, MODE_READ);
