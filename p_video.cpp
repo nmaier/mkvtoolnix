@@ -33,6 +33,7 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
+                                       const char *ncodec_id,
                                        double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        bool navi_compat_mode, bool nbframes,
@@ -50,12 +51,16 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   if (get_cue_creation() == CUES_UNSPECIFIED)
     set_cue_creation(CUES_IFRAMES);
   video_track_present = true;
+  codec_id = safestrdup(ncodec_id);
 
   set_track_type(track_video);
 }
 
 void video_packetizer_c::set_headers() {
-  set_codec_id(MKV_V_MSCOMP);
+  if (codec_id != NULL)
+    set_codec_id(codec_id);
+  else
+    set_codec_id(MKV_V_MSCOMP);
   set_codec_private(ti->private_data, ti->private_size);
 
   // Set MinCache and MaxCache to 1 for I- and P-frames. If you only
@@ -78,11 +83,13 @@ void video_packetizer_c::set_headers() {
 }
 
 // Semantics:
-// bref == 0: I frame, no references
-// bref > 0: P or B frame, use timecode of last I / P frame as the bref
-// bref < 0: P or B frame, use this bref as the backward reference
+// bref == -1: I frame, no references
+// bref == -2: P or B frame, use timecode of last I / P frame as the bref
+// bref > 0: P or B frame, use this bref as the backward reference
+//           (absolute reference, not relative!)
 // fref == 0: P frame, no forward reference
-// fref > 0: B frame with given forward reference
+// fref > 0: B frame with given forward reference (absolute reference,
+//           not relative!)
 int video_packetizer_c::process(unsigned char *buf, int size,
                                 int64_t old_timecode, int64_t flags,
                                 int64_t bref, int64_t fref) {

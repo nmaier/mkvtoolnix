@@ -55,10 +55,6 @@ int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-/*
- * allocates and initializes local storage for a particular
- * substream conversion.
- */
 avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int fsize, i;
@@ -128,7 +124,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     } else
       memcpy(&avi->bitmap_info_header->bi_compression, ti->fourcc, 4);
     ti->id = 0;                 // ID for the video track.
-    vpacketizer = new video_packetizer_c(this, AVI_frame_rate(avi),
+    vpacketizer = new video_packetizer_c(this, NULL, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!

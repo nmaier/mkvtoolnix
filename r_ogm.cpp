@@ -231,7 +231,7 @@ void ogm_reader_c::create_packetizers() {
 
         try {
           dmx->packetizer =
-            new video_packetizer_c(this, (double)10000000 /
+            new video_packetizer_c(this, NULL, (double)10000000 /
                                    (double)get_uint64(&sth->time_unit),
                                    get_uint32(&sth->sh.video.width),
                                    get_uint32(&sth->sh.video.height),

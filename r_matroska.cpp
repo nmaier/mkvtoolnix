@@ -900,7 +900,8 @@ void mkv_reader_c::create_packetizers() {
           if (verbose)
             fprintf(stdout, "Matroska demultiplexer (%s): using video output "
                     "module for track ID %u.\n", ti->fname, t->tnum);
-          t->packetizer = new video_packetizer_c(this, t->v_frate, t->v_width,
+          t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
+                                                 t->v_width,
                                                  t->v_height, 24, 1,
                                                  t->v_bframes, &nti);
           if (nti.aspect_ratio == 1.0) { // The user didn't set it.

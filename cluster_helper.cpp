@@ -277,7 +277,7 @@ int cluster_helper_c::render() {
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
     // Now put the packet into the cluster.
-    if (pack->bref != VFT_IFRAME) { // P and B frames: add backward reference.
+    if (pack->bref != -1) { // P and B frames: add backward reference.
       bref_packet = find_packet(pack->bref);
       if (bref_packet == NULL) {
         string err = "bref_packet == NULL. Wanted bref: " +
@@ -291,7 +291,7 @@ int cluster_helper_c::render() {
         die(err.c_str());
       }
       assert(bref_packet->group != NULL);
-      if (pack->fref != VFT_NOBFRAME) { // It's even a B frame: add forward ref
+      if (pack->fref != -1) { // It's even a B frame: add forward ref
         fref_packet = find_packet(pack->fref);
         if (fref_packet == NULL) {
           string err = "fref_packet == NULL. Wanted fref: " +
