@@ -95,7 +95,7 @@ int32_t
 wv_parse_frame(mm_io_c *mm_io,
                wavpack_header_t &wphdr,
                wavpack_meta_t &meta) {
-  uint32_t bcount, total_bytes;
+  uint32_t bcount;
 
   // read next WavPack header
   bcount = read_next_header(mm_io, &wphdr);
@@ -122,22 +122,20 @@ wv_parse_frame(mm_io_c *mm_io,
 
     if (wphdr.flags & WV_INITIAL_BLOCK)  {
       meta.channel_count = (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
-      total_bytes = wphdr.ck_size + 8;
       if (wphdr.flags & WV_FINAL_BLOCK) {
         mxverb(3, "wavpack_reader: %s block: %s, %d bytes\n",
                (wphdr.flags & WV_MONO_FLAG) ? "mono" : "stereo",
                (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
                wphdr.ck_size + 8);
       }
-    } else  {
+    } else {
       meta.channel_count += (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
-      total_bytes = wphdr.ck_size + 8;
 
       if (wphdr.flags & WV_FINAL_BLOCK) {
         mxverb(2, "wavpack_reader: %d chans: %s, %d bytes\n",
                meta.channel_count, 
                (wphdr.flags & WV_HYBRID_FLAG) ? "hybrid" : "lossless",
-               total_bytes);
+               wphdr.ck_size + 8);
       }
     }
   } else

@@ -87,7 +87,6 @@ wavpack_packetizer_c::process(memories_c &mems,
                               int64_t) {
   debug_enter("wavpack_packetizer_c::process");
   memory_c & mem = *mems[0];
-  //  memory_c & mem_correc = *mems[1];
   int64_t samples = get_uint32_le(&mem.data[12]);
   int64_t sample_index = get_uint32_le(&mem.data[8]);
 
