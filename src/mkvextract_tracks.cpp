@@ -105,8 +105,10 @@ static void
 set_rmff_headers() {
   int i;
 
-  for (i = 0; i < rmfiles.size(); i++)
+  for (i = 0; i < rmfiles.size(); i++) {
+    rmfiles[i]->cont_header_present = 1;
     rmff_write_headers(rmfiles[i]);
+  }
 }
 
 static void
@@ -424,7 +426,7 @@ create_output_files() {
                               "video/x-pn-realvideo");
         else
           rmff_set_track_data(tracks[i].rmtrack, "Audio",
-                              "audio/x-pn-realvideo");
+                              "audio/x-pn-realaudio");
 
       } else {
 
