@@ -61,20 +61,20 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0);
   cb_no_chapters =
     new wxCheckBox(this, ID_CB_NOCHAPTERS, _("No chapters"),
-                   wxPoint(90, 88 + YOFF), wxDefaultSize, 0);
+                   wxPoint(90, 90 + YOFF2), wxDefaultSize, 0);
   cb_no_chapters->SetValue(false);
   cb_no_chapters->SetToolTip(_("Do not copy chapters from this file. Only "
                                "applies to Matroska files."));
   cb_no_chapters->Enable(false);
   cb_no_attachments =
     new wxCheckBox(this, ID_CB_NOATTACHMENTS, _("No attachments"),
-                   wxPoint(195, 88 + YOFF), wxDefaultSize, 0);
+                   wxPoint(195, 90 + YOFF2), wxDefaultSize, 0);
   cb_no_attachments->SetValue(false);
   cb_no_attachments->SetToolTip(_("Do not copy attachments from this file. "
                                   "Only applies to Matroska files."));
   cb_no_attachments->Enable(false);
   cb_no_tags =
-    new wxCheckBox(this, ID_CB_NOTAGS, _("No tags"), wxPoint(315, 88 + YOFF),
+    new wxCheckBox(this, ID_CB_NOTAGS, _("No tags"), wxPoint(315, 90 + YOFF2),
                    wxDefaultSize, 0);
   cb_no_tags->SetValue(false);
   cb_no_tags->SetToolTip(_("Do not copy tags from this file. Only "

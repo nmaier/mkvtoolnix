@@ -40,10 +40,12 @@ using namespace libmatroska;
 #define ALLFILES "All Files (*.*)|*.*"
 #define PSEP '\\'
 #define YOFF (-4)
+#define YOFF2 0
 #else
 #define ALLFILES "All Files (*)|*"
 #define PSEP '/'
 #define YOFF (-2)
+#define YOFF2 (-3)
 #endif
 
 #define ID_DIALOG 10000
