@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.16 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.17 2003/05/25 15:35:39 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -48,6 +48,8 @@ private:
                                         ac3_header_t *ac3header);
   virtual int ac3_packet_available();
   virtual void remove_ac3_packet(int pos, int framesize);
+
+  virtual void dump_debug_info();
 };
 
 #endif // __P_AC3_H

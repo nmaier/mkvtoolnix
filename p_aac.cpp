@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.6 2003/05/22 11:11:05 mosu Exp $
+    \version \$Id: p_aac.cpp,v 1.7 2003/05/25 15:35:39 mosu Exp $
     \brief AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -203,6 +203,8 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
   aac_header_t aacheader;
   int64_t my_timecode;
 
+  debug_enter("aac_packetizer_c::process");
+
   if (headerless) {
     if (timecode != -1)
       my_timecode = timecode;
@@ -211,6 +213,8 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
                               samples_per_sec);
     add_packet(buf, size, my_timecode,
                (int64_t)(1000.0 * 1024 * ti->async.linear / samples_per_sec));
+
+    debug_leave("aac_packetizer_c::process");
 
     return EMOREDATA;
   }
@@ -229,5 +233,12 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
     packetno++;
   }
 
+  debug_leave("aac_packetizer_c::process");
+
   return EMOREDATA;
+}
+
+void aac_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> aac_packetizer_c: queue: %d; buffer size: %d\n",
+          packet_queue.size(), buffer_size);
 }

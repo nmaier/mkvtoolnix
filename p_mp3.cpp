@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.27 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.28 2003/05/25 15:35:39 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -162,6 +162,8 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
   mp3_header_t mp3header;
   int64_t my_timecode;
 
+  debug_enter("mp3_packetizer_c::process");
+
   if (timecode != -1)
     my_timecode = timecode;
 
@@ -174,6 +176,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
               "packet number %lld)\n", packetno);
       safefree(packet);
       packetno++;
+      debug_leave("mp3_packetizer_c::process");
       return EMOREDATA;
     }
 
@@ -185,5 +188,12 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
                (int64_t)(1000.0 * 1152 * ti->async.linear / samples_per_sec));
   }
 
+  debug_leave("mp3_packetizer_c::process");
+
   return EMOREDATA;
+}
+
+void mp3_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> mp3_packetizer_c: queue: %d; buffer_size: %d\n",
+          packet_queue.size(), buffer_size);
 }

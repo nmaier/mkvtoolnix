@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.36 2003/05/22 11:10:40 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.37 2003/05/25 15:35:39 mosu Exp $
     \brief video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -74,6 +74,8 @@ int video_packetizer_c::process(unsigned char *buf, int size,
                                 int64_t) {
   int64_t timecode;
 
+  debug_enter("video_packetizer_c::process");
+
   if (old_timecode == -1)
     timecode = (int64_t)(1000.0 * frames_output / fps);
   else
@@ -91,8 +93,16 @@ int video_packetizer_c::process(unsigned char *buf, int size,
 
   frames_output++;
 
+  debug_leave("video_packetizer_c::process");
+
   return EMOREDATA;
 }
 
 video_packetizer_c::~video_packetizer_c() {
+}
+
+void video_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> video_packetizer_c: queue: %d; frames_output: %d; "
+          "ref_timecode: %lld\n", packet_queue.size(), frames_output,
+          ref_timecode);
 }

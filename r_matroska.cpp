@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.39 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.40 2003/05/25 15:35:39 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -957,6 +957,8 @@ int mkv_reader_c::read() {
   if (saved_l1 == NULL)         // We're done.
     return 0;
 
+  debug_enter("mkv_reader_c::read");
+
   exit_loop = 0;
   upper_lvl_el = 0;
   l1 = saved_l1;
@@ -1125,6 +1127,8 @@ int mkv_reader_c::read() {
     printf("matroska_reader: exception caught\n");
     return 0;
   }
+
+  debug_leave("mkv_reader_c::read");
 
   if (found_data)
     return EMOREDATA;

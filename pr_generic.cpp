@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.45 2003/05/23 10:21:31 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.46 2003/05/25 15:35:39 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -31,6 +31,9 @@ static int default_tracks[3] = {0, 0, 0};
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
+#ifdef DEBUG
+  debug_c::add_packetizer(this);
+#endif
   reader = nreader;
   add_packetizer(this);
   duplicate_data = true;

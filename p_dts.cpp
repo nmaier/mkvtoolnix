@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.cpp,v 1.6 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_dts.cpp,v 1.7 2003/05/25 15:35:39 mosu Exp $
     \brief DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -227,7 +227,11 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
                               int64_t timecode, int64_t, int64_t, int64_t) {
 
   int64_t my_timecode;
-  if (timecode != -1) my_timecode = timecode;
+
+  debug_enter("dts_packetizer_c::process");
+
+  if (timecode != -1)
+    my_timecode = timecode;
 
   add_to_buffer(buf, size);
 
@@ -251,5 +255,11 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);
   }
 
+  debug_leave("dts_packetizer_c::process");
+
   return EMOREDATA;
+}
+
+void dts_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> dts_packetizer_c: queue: %d\n", packet_queue.size());
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.25 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: common.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -30,9 +30,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
+#include <time.h>
 #include <wchar.h>
 
 #include "common.h"
+#include "pr_generic.h"
 
 int verbose = 1;
 
@@ -388,3 +391,110 @@ char *UTFstring_to_cstr(const UTFstring &u) {
   return new_string;
 #endif
 }
+
+#ifdef DEBUG
+/*
+ * debugging stuff
+ */
+
+static vector<debug_c *> dbg_entries;
+static vector<generic_packetizer_c *>dbg_packetizers;
+
+debug_c::debug_c(const char *nlabel) {
+  elapsed_time = 0;
+  number_of_calls = 0;
+  last_elapsed_time = 0;
+  last_number_of_calls = 0;
+  label = nlabel;
+}
+
+void debug_c::enter(const char *label) {
+  int i;
+  debug_c *entry;
+  struct timeval tv;
+
+  entry = NULL;
+  for (i = 0; i < dbg_entries.size(); i++)
+    if (!strcmp(dbg_entries[i]->label, label)) {
+      entry = dbg_entries[i];
+      break;
+    }
+
+  if (entry == NULL) {
+    entry = new debug_c(label);
+    dbg_entries.push_back(entry);
+  }
+
+  gettimeofday(&tv, NULL);
+  entry->entered_at = (uint64_t)tv.tv_sec * (uint64_t)1000000 +
+    tv.tv_usec;
+}
+
+void debug_c::leave(const char *label) {
+  int i;
+  debug_c *entry;
+  struct timeval tv;
+
+  gettimeofday(&tv, NULL);
+
+  entry = NULL;
+  for (i = 0; i < dbg_entries.size(); i++)
+    if (!strcmp(dbg_entries[i]->label, label)) {
+      entry = dbg_entries[i];
+      break;
+    }
+
+  if ((entry == NULL) || (entry->entered_at == 0)) {
+    string s("leave without enter: ");
+    s += label;
+    die(s.c_str());
+  }
+
+  entry->number_of_calls++;
+  entry->elapsed_time += (uint64_t)tv.tv_sec * (uint64_t)1000000 +
+    tv.tv_usec - entry->entered_at;
+  entry->entered_at = 0;
+}
+
+void debug_c::add_packetizer(void *ptzr) {
+  int i;
+
+  for (i = 0; i < dbg_packetizers.size(); i++)
+    if (dbg_packetizers[i] == ptzr)
+      return;
+
+  dbg_packetizers.push_back((generic_packetizer_c *)ptzr);
+}
+
+void debug_c::dump_info() {
+  int i;
+  debug_c *entry;
+  uint64_t diff_calls, diff_time;
+
+  fprintf(stderr, "\nDBG> dumping time info:\n");
+  for (i = 0; i < dbg_entries.size(); i++) {
+    entry = dbg_entries[i];
+    fprintf(stderr, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
+            "time/call: %.3fms", entry->label, entry->number_of_calls,
+            entry->elapsed_time / 1000000.0,
+            entry->elapsed_time / (float)entry->number_of_calls / 1000.0);
+    diff_calls = entry->number_of_calls - entry->last_number_of_calls;
+    diff_time = entry->elapsed_time - entry->last_elapsed_time;
+    if ((entry->last_elapsed_time != 0) &&
+        (entry->last_number_of_calls != 0) &&
+        (diff_calls > 0)) {
+      fprintf(stderr, ", since the last call: # calls: %llu, elapsed time: "
+              "%.3fs, time/call: %.3fms", diff_calls, diff_time / 1000000.0,
+              diff_time / (float)diff_calls / 1000.0);
+    }
+    fprintf(stderr, "\n");
+    entry->last_elapsed_time = entry->elapsed_time;
+    entry->last_number_of_calls = entry->number_of_calls;
+  }
+
+  fprintf(stderr, "DBG> dumping packetzer info:\n");
+  for (i = 0; i < dbg_packetizers.size(); i++)
+    dbg_packetizers[i]->dump_debug_info();
+}
+
+#endif // DEBUG

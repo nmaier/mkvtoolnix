@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.26 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_video.h,v 1.27 2003/05/25 15:35:39 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -45,6 +45,8 @@ public:
                       int64_t flags = VFT_IFRAME, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
+
+  virtual void dump_debug_info();
 };
 
 #endif // __P_VIDEO_H

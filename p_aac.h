@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.h,v 1.6 2003/05/22 11:11:05 mosu Exp $
+    \version \$Id: p_aac.h,v 1.7 2003/05/25 15:35:39 mosu Exp $
     \brief class definition for the AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -59,6 +59,8 @@ private:
                                         aac_header_t *aacheader);
   virtual int aac_packet_available();
   virtual void remove_aac_packet(int pos, int framesize);
+
+  virtual void dump_debug_info();
 };
 
 #endif // __P_AAC_H

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.34 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.35 2003/05/25 15:35:39 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -317,6 +317,8 @@ int avi_reader_c::read() {
   int need_more_data;
   int done, frames_read, size;
 
+  debug_enter("avi_reader_c::read (video)");
+
   need_more_data = 0;
   if ((vpacketizer != NULL) && !video_done) {
     last_frame = 0;
@@ -324,7 +326,9 @@ int avi_reader_c::read() {
 
     // Make sure we have a frame to work with.
     if (old_chunk == NULL) {
+      debug_enter("AVI_read_frame");
       nread = AVI_read_frame(avi, (char *)chunk, &key);
+      debug_leave("AVI_read_frame");
       if (nread < 0) {
         frames = maxframes + 1;
         done = 1;
@@ -341,7 +345,9 @@ int avi_reader_c::read() {
       done = 0;
       // Check whether we have identical frames
       while (!done && (frames <= (maxframes - 1))) {
+        debug_enter("AVI_read_frame");
         nread = AVI_read_frame(avi, (char *)chunk, &key);
+        debug_leave("AVI_read_frame");
         if (nread < 0) {
           vpacketizer->process(old_chunk, old_nread, -1, -1,
                                old_key ? -1 : 0);
@@ -383,6 +389,9 @@ int avi_reader_c::read() {
       need_more_data = 1;
   }
 
+  debug_leave("avi_reader_c::read (video)");
+  debug_enter("avi_reader_c::read (audio)");
+
   demuxer = ademuxers;
   while (demuxer != NULL) {
     if (demuxer->packetizer->packet_available() >= 2) {
@@ -397,7 +406,9 @@ int avi_reader_c::read() {
     else
       size = 16384;
 
+    debug_enter("AVI_read_audio");
     nread = AVI_read_audio(avi, (char *)chunk, size);
+    debug_leave("AVI_read_audio");
     if (nread > 0) {
       if (nread < size)
         demuxer->eos = 1;
@@ -409,6 +420,8 @@ int avi_reader_c::read() {
      need_more_data = 1;
     demuxer = demuxer->next;
   }
+
+  debug_leave("avi_reader_c::read (audio)");
 
   if (need_more_data)
     return EMOREDATA;

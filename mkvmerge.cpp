@@ -13,13 +13,14 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.80 2003/05/23 10:21:31 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.81 2003/05/25 15:35:39 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #include <errno.h>
 #include <ctype.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -224,6 +225,13 @@ static void usage(void) {
     "  @optionsfile             Reads additional command line options from\n"
     "                           the specified file (see man page).\n"
   );
+}
+
+static void sighandler(int signum) {
+#ifdef DEBUG
+  if (signum == SIGUSR1)
+    debug_c::dump_info();
+#endif // DEBUG
 }
 
 static int get_type(char *filename) {
@@ -1047,6 +1055,8 @@ int main(int argc, char **argv) {
   packetizer_t *ptzr, *winner;
   filelist_t *file;
   int64_t old_pos;
+
+  signal(SIGUSR1, sighandler);
 
   nice(2);
 

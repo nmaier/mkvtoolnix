@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.h,v 1.5 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_dts.h,v 1.6 2003/05/25 15:35:39 mosu Exp $
     \brief class definition for the DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -53,6 +53,8 @@ private:
   virtual unsigned char *get_dts_packet(dts_header_t &dts_header);
   virtual int dts_packet_available();
   virtual void remove_dts_packet(int pos, int framesize);
+
+  virtual void dump_debug_info();
 };
 
 #endif // __P_DTS_H

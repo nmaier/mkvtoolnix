@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.30 2003/05/23 10:23:45 mosu Exp $
+    \version \$Id: common.h,v 1.31 2003/05/25 15:35:39 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -30,6 +30,8 @@
 #endif
 #include <sys/types.h>
 
+#include <vector>
+
 #ifdef WIN32
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
@@ -39,6 +41,8 @@
 #include "EbmlUnicodeString.h"
 
 #include "config.h"
+
+using namespace std;
 
 #define VERSIONINFO "mkvmerge v" VERSION
 
@@ -197,5 +201,32 @@ public:
     return byte_position - start_of_data + 8 - bits_valid;
   }
 };
+
+#ifdef DEBUG
+
+class debug_c {
+private:
+  uint64_t entered_at, elapsed_time, number_of_calls;
+  uint64_t last_elapsed_time, last_number_of_calls;
+
+  const char *label;
+public:
+  debug_c(const char *nlabel);
+
+  static void enter(const char *label);
+  static void leave(const char *label);
+  static void add_packetizer(void *ptzr);
+  static void dump_info();
+};
+
+#define debug_enter(func) debug_c::enter(func)
+#define debug_leave(func) debug_c::leave(func)
+
+#else // DEBUG
+
+#define debug_enter(func)
+#define debug_leave(func)
+
+#endif // DEBUG
 
 #endif // __COMMON_H

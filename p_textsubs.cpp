@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.19 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.20 2003/05/25 15:35:39 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -123,4 +123,9 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   safefree(subs);
 
   return EMOREDATA;
+}
+
+void textsubs_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> textsubs_packetizer_c: queue: %d\n",
+          packet_queue.size());
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.25 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -160,6 +160,8 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
   ac3_header_t ac3header;
   int64_t my_timecode;
 
+  debug_enter("ac3_packetizer_c::process");
+
   if (timecode != -1)
     my_timecode = timecode;
 
@@ -174,5 +176,12 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
     packetno++;
   }
 
+  debug_leave("ac3_packetizer_c::process");
+
   return EMOREDATA;
+}
+
+void ac3_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> ac3_packetizer_c: queue: %d; buffer size: %d\n",
+          packet_queue.size(), buffer_size);
 }

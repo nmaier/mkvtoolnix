@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.34 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.35 2003/05/25 15:35:39 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -556,6 +556,8 @@ void ogm_reader_c::process_page(ogg_page *og) {
   if (dmx == NULL)
     return;
 
+  debug_enter("ogm_reader_c::process_page");
+
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     hdrlen = (*op.packet & PACKET_LEN_BITS01) >> 6;
@@ -596,9 +598,12 @@ void ogm_reader_c::process_page(ogg_page *og) {
 
     if (eos) {
       dmx->eos = 1;
+      debug_leave("ogm_reader_c::process_page");
       return;
     }
   }
+
+  debug_leave("ogm_reader_c::process_page");
 }
 
 /*

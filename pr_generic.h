@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.43 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.44 2003/05/25 15:35:39 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -123,6 +123,8 @@ public:
   virtual int process(unsigned char *data, int size,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;
+
+  virtual void dump_debug_info() = 0;
 
   virtual void set_cue_creation(int create_cue_data);
   virtual int get_cue_creation();

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.25 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -68,6 +68,8 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
   int i, bytes_per_packet, remaining_bytes, complete_packets;
   unsigned char *new_buf;
 
+  debug_enter("pcm_packetizer_c::process");
+
   if (size > tempbuf_size) {
     tempbuf = (unsigned char *)saferealloc(tempbuf, size + 128);
     tempbuf_size = size;
@@ -94,6 +96,7 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
   if (remaining_sync > 0) {
     if (remaining_sync > size) {
       remaining_sync -= size;
+      debug_leave("pcm_packetizer_c::process");
       return EMOREDATA;
     }
     memmove(buf, &buf[remaining_sync], size - remaining_sync);
@@ -123,5 +126,11 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
   if (new_buf != buf)
     safefree(new_buf);
 
+  debug_leave("pcm_packetizer_c::process");
+
   return EMOREDATA;
+}
+
+void pcm_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> pcm_packetizer_c: queue: %d\n", packet_queue.size());
 }

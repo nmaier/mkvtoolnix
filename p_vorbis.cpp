@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.25 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -138,6 +138,8 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   ogg_packet op;
   int64_t this_bs, samples_here, samples_needed;
 
+  debug_enter("vorbis_packetizer_c::process");
+
   // Recalculate the timecode if needed.
   if (timecode == -1)
     timecode = samples * 1000 / vi.rate;
@@ -183,12 +185,21 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   timecode = (int64_t)((double)timecode * ti->async.linear);
 
   // If a negative sync value was used we may have to skip this packet.
-  if (timecode < 0)
+  if (timecode < 0) {
+    debug_leave("vorbis_packetizer_c::process");
     return EMOREDATA;
+  }
 
   add_packet(data, size, (int64_t)timecode, samples_here * 1000 / vi.rate);
 
+  debug_leave("vorbis_packetizer_c::process");
+
   return EMOREDATA;
+}
+
+void vorbis_packetizer_c::dump_debug_info() {
+  fprintf(stderr, "DBG> vorbis_packetizer_c: queue: %d\n",
+          packet_queue.size());
 }
 
 #endif // HAVE_OGGVORBIS
