@@ -67,6 +67,7 @@
 #include "cluster_helper.h"
 #include "common.h"
 #include "commonebml.h"
+#include "extern_data.h"
 #include "hacks.h"
 #include "iso639.h"
 #include "mkvmerge.h"
@@ -630,6 +631,7 @@ parse_and_add_tags(const char *file_name) {
     targets = &GetChild<KaxTagTargets>(*tag);
     *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
       1;
+    fix_mandatory_tag_elements(tag);
     if (!tag->CheckMandatory())
       mxerror(_("Error parsing the tags in '%s': some mandatory "
                 "elements are missing.\n"), file_name);
@@ -1658,6 +1660,38 @@ set_process_priority(int priority) {
 #endif
 }
 
+static string
+guess_mime_type(const char *file_name) {
+  vector<string> extensions;
+  string f;
+  int i, k;
+
+  f = file_name;
+  i = f.rfind('.');
+  if (i < 0)
+    mxerror(_("No MIME type has been set for the attachment '%s', and "
+              "the file name contains no extension. Therefore the MIME "
+              "type could not be guessed automatically.\n"), file_name);
+  f.erase(0, i + 1);
+
+  for (i = 0; mime_types[i].name != NULL; i++) {
+    if (mime_types[i].extensions[0] == 0)
+      continue;
+
+    extensions = split(mime_types[i].extensions, " ");
+    for (k = 0; k < extensions.size(); k++)
+      if (!strcasecmp(extensions[k].c_str(), f.c_str())) {
+        mxinfo(_("Automatic MIME type recognition for '%s': %s\n"),
+               file_name, mime_types[i].name);
+        return extensions[k];
+      }
+  }
+
+  mxerror(_("No MIME type has been set for the attachment '%s', and "
+            "it could not be guessed based on its extension.\n"), file_name);
+  return "";
+}
+
 /** \brief Parses and handles command line arguments
  *
  * Also probes input files for their type and creates the appropriate
@@ -1948,11 +1982,10 @@ parse_args(int argc,
       if (next_arg == NULL)
         mxerror(_("'%s' lacks the file name.\n"), this_arg);
 
-      if (attachment->mime_type == NULL)
-        mxerror(_("No MIME type was set for the attachment '%s'.\n"),
-                next_arg);
-
       attachment->name = from_utf8(cc_local_utf8, next_arg);
+      if (attachment->mime_type == NULL)
+        attachment->mime_type = safestrdup(guess_mime_type(next_arg).c_str());
+
       if (!strcmp(this_arg, "--attach-file"))
         attachment->to_all_files = true;
       try {
@@ -2720,6 +2753,7 @@ create_next_output_file() {
   add_tags_from_cue_chapters();
 
   if (kax_tags != NULL) {
+    fix_mandatory_tag_elements(kax_tags);
     if (!kax_tags->CheckMandatory())
       mxerror(_("Some tag elements are missing (this error "
                 "should not have occured - another similar error should have "
@@ -2833,7 +2867,8 @@ finish_file(bool last_file) {
 
   // Render the tags if we have some.
   if (kax_tags != NULL) {
-    kax_tags->UpdateSize();
+    fix_mandatory_tag_elements(kax_tags);
+    kax_tags->UpdateSize(false);
     kax_tags->Render(*out);
   }
 

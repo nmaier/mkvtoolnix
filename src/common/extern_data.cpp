@@ -1,5 +1,5 @@
 /*
- * mkvmerge GUI -- utility for splicing together matroska files
+ * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
  *
  * Distributed under the GPL
@@ -8,7 +8,7 @@
  *
  * $Id$
  *
- * Data for ComboBoxes
+ * Data for ComboBoxes in mmg and other occurences
  *
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
