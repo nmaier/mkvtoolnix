@@ -1,3 +1,16 @@
+mkvtoolnix (0.8.9-3) unstable; urgency=low
+
+  * Built on a clean Debian/sid system so that it should not depend on
+    libgcc1 3.4 anymore.
+
+ -- Moritz Bunkus <moritz@bunkus.org>  Tue, 11 May 2004 12:36:58 +0200
+
+mkvtoolnix (0.8.9-2) unstable; urgency=low
+
+  * Built with gcc 3.3.3 instead of 3.4.
+
+ -- Moritz Bunkus <moritz@bunkus.org>  Fri,  7 May 2004 10:11:23 +0200
+
 mkvtoolnix (0.8.9-1) unstable; urgency=low
 
   * New Version.
