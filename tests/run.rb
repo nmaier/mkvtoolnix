@@ -37,7 +37,7 @@ class Test
   def sys(command, *arg)
     @commands.push(command)
     command += "&> /dev/null" unless (command =~ />/)
-    puts("[running #{command}]") if (ENV["DEBUG"] == "yes")
+    $stderr.puts(command) if (ENV["DEBUG"] == "yes")
     if (!system(command))
       if ((arg.size == 0) || ((arg[0] << 8) != $?))
         error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
@@ -57,7 +57,7 @@ class Test
   end
 
   def hash_file(name)
-    puts("[running md5sum #{name}]") if (ENV["DEBUG"] == "yes")
+    $stderr.puts("md5sum #{name}") if (ENV["DEBUG"] == "yes")
     return `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
   end
 
