@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.8 2003/02/28 18:54:14 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.9 2003/03/01 16:59:59 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -115,23 +115,29 @@ void video_packetizer_c::set_header() {
 }
 
 int video_packetizer_c::process(char *buf, int size, int num_frames,
-                                int key, int last_frame) {
+                                int key, int last_frame,
+                                u_int64_t old_timecode) {
+  u_int64_t timecode;
+
   if (size > max_frame_size) {
     fprintf(stderr, "FATAL: p_video: size (%d) > max_frame_size (%d)\n",
             size, max_frame_size);
     exit(1);
   }
 
+  if (old_timecode == 0)
+    timecode = (u_int64_t)(1000.0 * frames_output / fps);
+  else
+    timecode = old_timecode;
+
   if ((packetno >= range.start) &&
       ((range.end == 0) || (packetno < range.end))) {
     if (key)
       // Add a key frame and save its ID so that we can reference it later.
-      last_id = add_packet(buf, size,
-                           (u_int64_t)(1000.0 * frames_output / fps));
+      last_id = add_packet(buf, size, timecode);
     else
       // This is a P frame - let's reference the last frame.
-      last_id = add_packet(buf, size,
-                           (u_int64_t)(1000.0 * frames_output / fps), last_id);
+      last_id = add_packet(buf, size, timecode, last_id);
     frames_output += num_frames;
   }
   packetno++;
