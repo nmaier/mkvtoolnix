@@ -212,7 +212,7 @@ tab_global::tab_global(wxWindow *parent):
   new wxStaticText(this, -1, _("Command line charset:"),
                    wxPoint(15, 372));
   cob_cl_charset =
-    new wxComboBox(this, ID_CB_CLCHARSET, "", wxPoint(130, 368),
+    new wxComboBox(this, ID_CB_CLCHARSET, "", wxPoint(155, 368),
                    wxSize(130, -1), 0, NULL, wxCB_DROPDOWN |
                    wxCB_READONLY);
   cob_cl_charset->Append("");
@@ -227,7 +227,7 @@ tab_global::tab_global(wxWindow *parent):
 
 
   new wxStaticBox(this, -1, _("Advanced options (DO NOT CHANGE!)"),
-                  wxPoint(10, 400), wxSize(475, 70));
+                  wxPoint(10, 400), wxSize(475, 62));
   cb_no_cues =
     new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 415),
                    wxDefaultSize, 0);
@@ -249,7 +249,7 @@ tab_global::tab_global(wxWindow *parent):
                                    "know what you're doing!"));
   cb_enable_durations =
     new wxCheckBox(this, ID_CB_ENABLEDURATIONS, _("Enable durations"),
-                   wxPoint(15, 440), wxDefaultSize, 0);
+                   wxPoint(15, 436), wxDefaultSize, 0);
   cb_enable_durations->SetToolTip(_T("Enable durations for all blocks and not "
                                      "only for blocks that definitely need "
                                      "them (subtitles). DO NOT "
@@ -257,7 +257,7 @@ tab_global::tab_global(wxWindow *parent):
                                      "know what you're doing!"));
   cb_enable_timeslices =
     new wxCheckBox(this, ID_CB_ENABLETIMESLICES, _("Enable timeslices"),
-                   wxPoint(145, 440), wxDefaultSize, 0);
+                   wxPoint(145, 436), wxDefaultSize, 0);
   cb_enable_durations->SetToolTip(_T("Enable timeslices for laced blocks. "
                                      "DO NOT "
                                      "ENSABLE this option unless you REALLY "
