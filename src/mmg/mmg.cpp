@@ -720,7 +720,7 @@ mmg_dialog::mmg_dialog():
   icon.LoadFile(wxT("matroskalogo_big.ico"), wxBITMAP_TYPE_ICO);
   SetIcon(icon);
 #else
-  SetIcon(wxIcon((const char *)matroskalogo_big_xpm, wxBITMAP_TYPE_XPM));
+  SetIcon(wxICON(matroskalogo_big));
 #endif
 
   set_status_bar(wxT("mkvmerge GUI ready"));
