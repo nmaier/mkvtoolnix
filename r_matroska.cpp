@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.9 2003/04/21 10:06:48 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.10 2003/04/22 20:25:21 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -355,12 +355,13 @@ void mkv_reader_c::verify_tracks() {
               }
               length += c[offset];
               offset++;
-              t->headers[i] = &c[offset];
               t->header_sizes[i] = length;
-              offset += length;
             }
 
-            t->headers[2] = &c[offset];
+            t->headers[0] = &c[offset];
+            t->headers[1] = &c[offset + t->header_sizes[0]];
+            t->headers[2] = &c[offset + t->header_sizes[0] +
+                               t->header_sizes[1]];
             t->header_sizes[2] = t->private_size - offset;
 
             t->a_formattag = 0xFFFE;

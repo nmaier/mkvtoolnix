@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.13 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.14 2003/04/22 20:25:21 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -120,10 +120,11 @@ void vorbis_packetizer_c::set_header() {
     }
     buffer[offset] = n;
     offset++;
+  }
+  for (i = 0; i <= 2; i++) {
     memcpy(&buffer[offset], headers[i].packet, headers[i].bytes);
     offset += headers[i].bytes;
   }
-  memcpy(&buffer[offset], headers[2].packet, headers[2].bytes);
 
   set_codec_private(buffer, lsize);
 
