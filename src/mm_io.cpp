@@ -120,7 +120,7 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
 
   switch (mode) {
     case MODE_READ:
-      access_mode = GENERIC_READ;
+      access_mode = GENERIC_READ | GENERIC_WRITE;
       share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
       disposition = OPEN_EXISTING;
       break;
@@ -410,6 +410,17 @@ bool mm_io_c::write_bom(const char *charset) {
     return false;
 
   return (write(bom, bom_len) == bom_len);
+}
+
+int64_t mm_io_c::get_size() {
+  int64_t size;
+
+  save_pos();
+  setFilePointer(0, seek_end);
+  size = getFilePointer();
+  restore_pos();
+
+  return size;
 }
 
 /*

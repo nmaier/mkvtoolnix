@@ -71,6 +71,8 @@ public:
   virtual void save_pos(int64_t new_pos = -1);
   virtual bool restore_pos();
 
+  virtual int64_t get_size();
+
   virtual const char *get_file_name();
 };
 
