@@ -288,6 +288,8 @@ int ssa_reader_c::read(generic_packetizer_c *) {
     safefree(clines[i].line);
   }
 
+  textsubs_packetizer->flush();
+
   return 0;
 }
 

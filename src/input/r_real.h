@@ -98,6 +98,7 @@ protected:
   virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
                               int size);
   virtual void get_information_from_data();
+  virtual void flush_packetizers();
 };
 
 #endif  // __R_REAL_H

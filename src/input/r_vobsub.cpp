@@ -338,6 +338,7 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
     mxwarn(PFX "Could not read %lld bytes from the .sub file. Aborting.\n",
            track->sizes[i]);
     safefree(data);
+    flush_packetizers();
     return 0;
   }
   mxverb(2, PFX "track: %u, size: %lld, at: %lld, timecode: %lld, duration: "
@@ -348,9 +349,10 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
   safefree(data);
   track->idx++;
 
-  if (track->idx >= track->sizes.size())
+  if (track->idx >= track->sizes.size()) {
+    flush_packetizers();
     return 0;
-  else
+  } else
     return EMOREDATA;
 }
 
@@ -410,4 +412,12 @@ void vobsub_reader_c::set_headers() {
       tracks[i]->packetizer->set_headers();
       tracks[i]->headers_set = true;
     }
+}
+
+void vobsub_reader_c::flush_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->packetizer != NULL)
+      tracks[i]->packetizer->flush();
 }

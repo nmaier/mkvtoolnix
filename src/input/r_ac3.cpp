@@ -104,8 +104,10 @@ int ac3_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
-  if (nread <= 0)
+  if (nread <= 0) {
+    ac3packetizer->flush();
     return 0;
+  }
 
   ac3packetizer->process(chunk, nread);
   bytes_processed += nread;

@@ -534,6 +534,8 @@ int real_reader_c::finish() {
 
   done = true;
 
+  flush_packetizers();
+
   return 0;
 }
 
@@ -1046,3 +1048,11 @@ void real_reader_c::get_information_from_data() {
 }
 
 // }}}
+
+void real_reader_c::flush_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < demuxers.size(); i++)
+    if (demuxers[i]->packetizer != NULL)
+      demuxers[i]->packetizer->flush();
+}

@@ -162,8 +162,10 @@ int aac_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
-  if (nread <= 0)
+  if (nread <= 0) {
+    aacpacketizer->flush();
     return 0;
+  }
 
   aacpacketizer->process(chunk, nread);
   bytes_processed += nread;

@@ -1658,6 +1658,7 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
   } catch (exception ex) {
     mxwarn(PFX "exception caught\n");
+    flush_packetizers();
     return 0;
   }
 
@@ -1665,8 +1666,10 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
   if (found_data)
     return EMOREDATA;
-  else
+  else {
+    flush_packetizers();
     return 0;
+  }
 }
 
 // }}}
@@ -1887,3 +1890,12 @@ bool kax_reader_c::reverse_encodings(kax_track_t *track, unsigned char *&data,
 
   return modified;
 }
+
+void kax_reader_c::flush_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->packetizer != NULL)
+      tracks[i]->packetizer->flush();
+}
+

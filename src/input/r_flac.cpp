@@ -237,6 +237,7 @@ int flac_reader_c::read(generic_packetizer_c *) {
   file->setFilePointer(current_block->filepos);
   if (file->read(buf, current_block->len) != current_block->len) {
     safefree(buf);
+    packetizer->flush();
     return 0;
   }
   packetizer->process(buf, current_block->len, samples * 1000 / sample_rate,
@@ -244,8 +245,10 @@ int flac_reader_c::read(generic_packetizer_c *) {
   samples += current_block->samples;
   current_block++;
 
-  if (current_block == blocks.end())
+  if (current_block == blocks.end()) {
+    packetizer->flush();
     return 0;
+  }
   return EMOREDATA;
 }
 

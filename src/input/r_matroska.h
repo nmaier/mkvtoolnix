@@ -153,6 +153,7 @@ protected:
   virtual int64_t get_queued_bytes();
   virtual bool reverse_encodings(kax_track_t *track, unsigned char *&data,
                                  uint32_t &size, uint32_t type);
+  virtual void flush_packetizers();
 };
 
 

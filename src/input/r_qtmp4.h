@@ -144,6 +144,7 @@ protected:
   virtual bool parse_esds_atom(mm_mem_io_c *memio, qtmp4_demuxer_t *dmx,
                                int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c *memio);
+  virtual void flush_packetizers();
 };
 
 #endif  // __R_QTMP4_H

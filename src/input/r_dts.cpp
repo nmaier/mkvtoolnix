@@ -99,8 +99,10 @@ int dts_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, max_dts_packet_size);
-  if (nread <= 0)
+  if (nread <= 0) {
+    dtspacketizer->flush();
     return 0;
+  }
 
   dtspacketizer->process(chunk, nread);
   bytes_processed += nread;

@@ -600,8 +600,10 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
 
     if (need_more_data)
       return EMOREDATA;
-    else
+    else {
+      vpacketizer->flush();
       return 0;
+    }
   }
 
   for (i = 0; i < ademuxers.size(); i++) {
@@ -649,8 +651,10 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
 
     if (need_more_data)
       return EMOREDATA;
-    else
+    else {
+      demuxer->packetizer->flush();
       return 0;
+    }
   }
 
   return 0;

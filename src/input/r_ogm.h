@@ -128,6 +128,7 @@ private:
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
   virtual void free_demuxer(int);
+  virtual void flush_packetizers();
 };
 
 

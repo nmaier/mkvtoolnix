@@ -839,6 +839,7 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
                "position %lld. Aborting.\n", frame, dmx->chunk_table_len,
                frame_size, dmx->chunk_table[dmx->pos].pos);
         safefree(buffer);
+        flush_packetizers();
 
         return 0;
       }
@@ -895,6 +896,7 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
                "position %lld. Aborting.\n", frame, dmx->sample_table_len,
                frame_size, dmx->sample_table[frame].pos);
         safefree(buffer);
+        flush_packetizers();
 
         return 0;
       }
@@ -909,9 +911,13 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
 
     if (chunks_left)
       return EMOREDATA;
-    else
+    else {
+      flush_packetizers();
       return 0;
+    }
   }
+
+  flush_packetizers();
 
   return 0;
 }
@@ -1183,4 +1189,12 @@ void qtmp4_reader_c::identify() {
            dmx->type == 'a' ? "audio" : "unknown",
            dmx->fourcc);
   }
+}
+
+void qtmp4_reader_c::flush_packetizers() {
+  uint32_t i;
+
+  for (i = 0; i < demuxers.size(); i++)
+    if (demuxers[i]->packetizer != NULL)
+      demuxers[i]->packetizer->flush();
 }

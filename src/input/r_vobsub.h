@@ -79,6 +79,7 @@ protected:
   virtual void parse_headers();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
+  virtual void flush_packetizers();
 };
 
 #endif  // __R_VOBSUB_H

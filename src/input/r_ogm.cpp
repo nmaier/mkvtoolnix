@@ -949,8 +949,10 @@ int ogm_reader_c::read(generic_packetizer_c *) {
 
   do {
     // Make sure we have a page that we can work with.
-    if (read_page(&og) == 0)
+    if (read_page(&og) == 0) {
+      flush_packetizers();
       return 0;
+    }
 
     // Is this the first page of a new stream? No, so process it normally.
     if (!ogg_page_bos(&og))
@@ -963,6 +965,7 @@ int ogm_reader_c::read(generic_packetizer_c *) {
       return EMOREDATA;
 
   // No, we're done with this file.
+  flush_packetizers();
   return 0;
 }
 
@@ -1055,3 +1058,12 @@ void ogm_reader_c::identify() {
            "unknown");
   }
 }
+
+void ogm_reader_c::flush_packetizers() {
+  int i;
+
+  for (i = 0; i < num_sdemuxers; i++)
+    if (sdemuxers[i]->packetizer != NULL)
+      sdemuxers[i]->packetizer->flush();
+}
+

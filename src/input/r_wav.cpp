@@ -218,16 +218,19 @@ int wav_reader_c::read(generic_packetizer_c *) {
     int nread;
 
     nread = mm_io->read(chunk, bps);
-    if (nread <= 0)
+    if (nread <= 0) {
+      pcmpacketizer->flush();
       return 0;
+    }
 
     pcmpacketizer->process(chunk, nread);
 
     bytes_processed += nread;
 
-    if (nread != bps)
+    if (nread != bps) {
+      pcmpacketizer->flush();
       return 0;
-    else
+    } else
       return EMOREDATA;
   }
 
@@ -236,8 +239,10 @@ int wav_reader_c::read(generic_packetizer_c *) {
     int cur_buf = 0;
     long rlen = mm_io->read(buf[cur_buf], max_dts_packet_size);
 
-    if (rlen <= 0)
+    if (rlen <= 0) {
+      dtspacketizer->flush();
       return 0;
+    }
 
     if (dts_swap_bytes) {
       swab((const char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
@@ -259,9 +264,10 @@ int wav_reader_c::read(generic_packetizer_c *) {
 
     bytes_processed += rlen;
 
-    if (rlen != max_dts_packet_size)
+    if (rlen != max_dts_packet_size) {
+      dtspacketizer->flush();
       return 0;
-    else
+    } else
       return EMOREDATA;
   }
 

@@ -220,6 +220,8 @@ public:
   virtual void drop_packet(unsigned char *data);
   virtual packet_t *get_packet();
   virtual int packet_available();
+  virtual void flush() {
+  };
   virtual int64_t get_smallest_timecode();
   virtual int64_t get_queued_bytes();
 

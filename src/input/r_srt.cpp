@@ -208,6 +208,8 @@ int srt_reader_c::read(generic_packetizer_c *) {
            "correctly.\n");
   subs.process(textsubs_packetizer);
 
+  textsubs_packetizer->flush();
+
   return 0;
 }
 
