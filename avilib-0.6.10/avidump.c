@@ -56,9 +56,12 @@
                    ((x>>8)  & 0x0000ff00) |\
                    ((x<<8)  & 0x00ff0000) |\
                    ((x<<24) & 0xff000000))
+# define SWAP8(x) (( (SWAP4(x)<<32) & 0xffffffff00000000ULL) |\
+                   ( SWAP4(x))
 #else
 # define SWAP2(a) (a)
 # define SWAP4(a) (a)
+# define SWAP8(a) (a)
 #endif
 
 typedef unsigned long DWORD;
@@ -93,11 +96,19 @@ typedef unsigned char boolean;
 #define idx1tag MAKEFOURCC('i','d','x','1')
 #define Tag00db MAKEFOURCC('0','0','d','b')
 #define Tag00dc MAKEFOURCC('0','0','d','c')
+#define Tag01db MAKEFOURCC('0','1','d','b')
+#define Tag01dc MAKEFOURCC('0','1','d','c')
+#define Tag00wb MAKEFOURCC('0','0','w','b')
 #define Tag01wb MAKEFOURCC('0','1','w','b')
 #define Tagwave MAKEFOURCC('f','m','t',' ')
 #define Tagdata MAKEFOURCC('d','a','t','a')
 #define TagDATA MAKEFOURCC('D','A','T','A')
+#define indxtag MAKEFOURCC('i','n','d','x')
 #define Tag00__ MAKEFOURCC('0','0','_','_')
+#define Tagix00 MAKEFOURCC('i','x','0','0')
+#define Tagix01 MAKEFOURCC('i','x','0','1')
+#define Tagix02 MAKEFOURCC('i','x','0','2')
+#define Tagix03 MAKEFOURCC('i','x','0','3')
 
 /* Build a string from a FOURCC number
    (s must have room for at least 5 chars) */
@@ -127,6 +138,8 @@ static DWORD fcc_type;
 #define CCODE  4
 #define HEX16  5
 #define _TAG   6
+#define INT8   7
+#define INT64  8
 
 struct FLAGLIST {
     int  bit;
@@ -224,6 +237,28 @@ struct VAL names_idx1[] = {
     { INT32,  "length" },
     { EoLST,  NULL }    
 };
+struct VAL names_indx[] = {
+    { INT16, "longs/entry"},
+    { INT8, "index_sub_t" },
+    { INT8, "index_t" },
+    { INT32, "entries_used"},
+    { CCODE, "fcc_handler"},
+    { INT32, "reserved1"},
+    { INT32, "reserved2"},
+    { INT32, "reserved3"},
+    { EoLST,  NULL }    
+};
+struct VAL names_stdidx[] = {
+    { INT16, "longs/entry"},
+    { INT8, "index_sub_t" },
+    { INT8, "index_t" },
+    { INT32, "entries_used"},
+    { CCODE, "fcc_handler"},
+    { INT64, "base_offset"},
+    { INT32, "reserved3"},
+    { EoLST,  NULL }    
+};
+
 
 #define MAX_BUF (4096)
 static char buffer[MAX_BUF];
@@ -289,9 +324,20 @@ static void dump_vals(int fd, int count, struct VAL *names)
 {
     DWORD i,j,val32;
     WORD  val16;
+    off_t val64;
+    char  val8;
     
     for (i = 0; names[i].type != EoLST; i++) {
 	switch (names[i].type) {
+	case INT8:
+	    xio_read(fd, &val8, 1);
+	    printf("\t%-12s = %d\n",names[i].name,val8);
+	    break;
+	case INT64:
+	    xio_read(fd, &val64, 8);
+	    val64 = SWAP8(val64);
+	    printf("\t%-12s = 0x%016llx\n",names[i].name,val64);
+	    break;
 	case INT32:
 	    xio_read(fd, &val32, 4);
 	    val32 = SWAP4(val32);
@@ -561,9 +607,58 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	dump_vals(fd,sizeof(names_strf_auds)/sizeof(char*),names_strf_auds);
 	break;
 
-    case idx1tag:
+    case indxtag: {
+	long chunks=*chunksize-sizeof(names_indx)/sizeof(char*);
+	off_t offset;
+	DWORD size, duration;
+	long u=0;
+	off_t indxend = datapos + chunks;
+	dump_vals(fd,sizeof(names_indx)/sizeof(char*),names_indx);
 
-	while (datapos<filesize) {
+	while (datapos < indxend) {
+	    xio_read(fd, &offset,8);
+	    xio_read(fd, &size, 4);
+	    xio_read(fd, &duration,4);
+	    offset = SWAP8(offset);
+	    size = SWAP4(size);
+	    duration = SWAP4(duration);
+	    if (size!=0)
+	    printf("\t\t [%6ld] 0x%016llx 0x%08lx %8d\n", u++, offset, size,
+		    duration);
+	    datapos += 16;
+	}
+	break;
+	}
+    case Tagix00:
+    case Tagix01:
+    case Tagix02:
+    case Tagix03: {
+	long chunks=*chunksize-sizeof(names_stdidx)/sizeof(char*);
+	unsigned int offset, size, key;
+	long u=0;
+	off_t indxend = datapos + chunks;
+	dump_vals(fd,sizeof(names_stdidx)/sizeof(char*),names_stdidx);
+
+	while (datapos < indxend) {
+	    xio_read(fd, &offset,4);
+	    xio_read(fd, &size, 4);
+	    offset = SWAP4(offset);
+	    size = SWAP4(size);
+	    key  = size;
+	    key  = key&0x80000000?0:1;
+	    size &= 0x7fffffff;
+	    if (size!=0)
+	    printf("\t\t [%6ld] 0x%08lx 0x%08lx key=%s\n", u++, offset, size,
+		    key?"yes":"no");
+	    datapos += 8;
+	}
+		  }
+	break;
+
+    case idx1tag: {
+	off_t idxend = datapos+*chunksize;
+
+	while (datapos<idxend) {
 
 	    DWORD val32;
 	    static long u=0;
@@ -600,6 +695,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	    printf("%8ld\n",val32);
 
 	    datapos+=16;
+	}
 	}
 	break;
 
@@ -692,6 +788,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
     break;
     
     case Tag01wb:
+    case Tag00wb:
 
       if(mode==1) {
 	xio_lseek(fd, datapos, SEEK_SET);
@@ -703,6 +800,8 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
       
     case Tag00db:
     case Tag00dc:
+    case Tag01db:
+    case Tag01dc:
     case Tag00__:
 
       if(mode==0) {
