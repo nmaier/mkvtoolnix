@@ -40,15 +40,15 @@ tab_attachments::tab_attachments(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Attachments:"), wxPoint(5, 5),
                    wxDefaultSize, 0);
   lb_attachments =
-    new wxListBox(this, ID_LB_ATTACHMENTS, wxPoint(5, 24), wxSize(435, 120),
+    new wxListBox(this, ID_LB_ATTACHMENTS, wxPoint(5, 24), wxSize(420, 120),
                   0);
 
   b_add_attachment =
-    new wxButton(this, ID_B_ADDATTACHMENT, _("+"), wxPoint(450, 24),
-                 wxSize(24, -1), 0);
+    new wxButton(this, ID_B_ADDATTACHMENT, _("add"), wxPoint(435, 24),
+                 wxSize(50, -1), 0);
   b_remove_attachment =
-    new wxButton(this, ID_B_REMOVEATTACHMENT, _("-"), wxPoint(450, 56),
-                 wxSize(24, -1), 0);
+    new wxButton(this, ID_B_REMOVEATTACHMENT, _("remove"), wxPoint(435, 56),
+                 wxSize(50, -1), 0);
   b_remove_attachment->Enable(false);
   new wxStaticText(this, wxID_STATIC, _("Attachment options:"),
                    wxPoint(5, 150), wxDefaultSize, 0);

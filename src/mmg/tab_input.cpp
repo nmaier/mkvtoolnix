@@ -48,15 +48,24 @@ tab_input::tab_input(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Input files:"), wxPoint(5, 5),
                    wxDefaultSize, 0);
   lb_input_files =
-    new wxListBox(this, ID_LB_INPUTFILES, wxPoint(5, 24), wxSize(435, 60), 0);
+    new wxListBox(this, ID_LB_INPUTFILES, wxPoint(5, 24), wxSize(360, 60), 0);
 
   b_add_file =
-    new wxButton(this, ID_B_ADDFILE, _("+"), wxPoint(450, 24),
-                 wxSize(24, -1), 0);
+    new wxButton(this, ID_B_ADDFILE, _("add"), wxPoint(375, 24),
+                 wxSize(50, -1));
   b_remove_file =
-    new wxButton(this, ID_B_REMOVEFILE, _("-"), wxPoint(450, 56),
-                 wxSize(24, -1), 0);
+    new wxButton(this, ID_B_REMOVEFILE, _("remove"), wxPoint(375, 56),
+                 wxSize(50, -1));
   b_remove_file->Enable(false);
+  b_move_up =
+    new wxButton(this, ID_B_INPUTUP, _("up"), wxPoint(435, 24),
+                 wxSize(50, -1));
+  b_move_up->Enable(false);
+  b_move_down =
+    new wxButton(this, ID_B_INPUTDOWN, _("down"), wxPoint(435, 56),
+                 wxSize(50, -1));
+  b_move_down->Enable(false);
+
   new wxStaticText(this, wxID_STATIC, _("File options:"), wxPoint(5, 90),
                    wxDefaultSize, 0);
   cb_no_chapters =
@@ -614,8 +623,50 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
   cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
+  b_move_up->Enable(false);
+  b_move_down->Enable(false);
   clb_tracks->Enable(false);
   no_track_mode();
+}
+
+void tab_input::on_move_file_up(wxCommandEvent &evt) {
+  wxString s;
+  mmg_file_t f;
+
+  if (selected_file < 1)
+    return;
+
+  f = files[selected_file - 1];
+  files[selected_file - 1] = files[selected_file];
+  files[selected_file] = f;
+  s = lb_input_files->GetString(selected_file - 1);
+  lb_input_files->SetString(selected_file - 1,
+                            lb_input_files->GetString(selected_file));
+  lb_input_files->SetString(selected_file, s);
+  lb_input_files->SetSelection(selected_file - 1);
+  selected_file--;
+  b_move_up->Enable(selected_file > 0);
+  b_move_down->Enable(true);
+}
+
+void tab_input::on_move_file_down(wxCommandEvent &evt) {
+  wxString s;
+  mmg_file_t f;
+
+  if ((selected_file < 0) || (selected_file >= (files.size() - 1)))
+    return;
+
+  f = files[selected_file + 1];
+  files[selected_file + 1] = files[selected_file];
+  files[selected_file] = f;
+  s = lb_input_files->GetString(selected_file + 1);
+  lb_input_files->SetString(selected_file + 1,
+                            lb_input_files->GetString(selected_file));
+  lb_input_files->SetString(selected_file, s);
+  lb_input_files->SetSelection(selected_file + 1);
+  selected_file++;
+  b_move_up->Enable(true);
+  b_move_down->Enable(selected_file < (files.size() - 1));
 }
 
 void tab_input::on_file_selected(wxCommandEvent &evt) {
@@ -628,6 +679,8 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
   b_remove_file->Enable(true);
   selected_file = -1;
   new_sel = lb_input_files->GetSelection();
+  b_move_up->Enable(new_sel > 0);
+  b_move_down->Enable(new_sel < (files.size() - 1));
   f = &files[new_sel];
   if (f->container == TYPEMATROSKA) {
     cb_no_chapters->Enable(true);
@@ -1241,6 +1294,8 @@ IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)
   EVT_BUTTON(ID_B_REMOVEFILE, tab_input::on_remove_file) 
+  EVT_BUTTON(ID_B_INPUTUP, tab_input::on_move_file_up)
+  EVT_BUTTON(ID_B_INPUTDOWN, tab_input::on_move_file_down)
   EVT_BUTTON(ID_B_BROWSETAGS, tab_input::on_browse_tags)
   EVT_BUTTON(ID_B_BROWSE_TIMECODES, tab_input::on_browse_timecodes_clicked)
   EVT_TEXT(ID_TC_TAGS, tab_input::on_tags_changed)
