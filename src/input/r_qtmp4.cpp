@@ -44,8 +44,13 @@ using namespace libmatroska;
 
 #define PFX "Quicktime/MP4 reader: "
 
+#if WORDS_BIGENDIAN == 1
+#define BE2STR(a) ((char *)&a)[0], ((char *)&a)[1], ((char *)&a)[2], \
+                  ((char *)&a)[3]
+#else
 #define BE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], \
                   ((char *)&a)[0]
+#endif
 
 int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
   uint32_t atom;
@@ -235,7 +240,8 @@ void qtmp4_reader_c::parse_headers() {
 
     if ((dmx->type == 'v') &&
         ((dmx->v_width == 0) || (dmx->v_height == 0) ||
-         (*((uint32_t *)dmx->fourcc) == 0))) {
+         ((dmx->fourcc[0] == 0) && (dmx->fourcc[1] == 0) &&
+          (dmx->fourcc[2] == 0) && (dmx->fourcc[3] == 0)))) {
       mxwarn(PFX "Track %u is missing some data. Broken header atoms?\n",
              dmx->id);
       continue;
@@ -809,7 +815,7 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
           frame_size /= get_uint32_be(&dmx->a_stsd.v1.samples_per_packet);
         } else
           frame_size = frame_size * dmx->a_channels *
-            dmx->a_stsd.v0.sample_size / 8;
+            get_uint16_be(&dmx->a_stsd.v0.sample_size) / 8;
 
       }
 
@@ -894,8 +900,6 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
                                is_keyframe ? VFT_IFRAME :
                                VFT_PFRAMEAUTOMATIC);
       dmx->pos++;
-      if (dmx->pos == 3252)
-        mxverb(2, PFX "\njo?\n");
       if (dmx->pos < dmx->sample_table_len)
         chunks_left = true;
     }
