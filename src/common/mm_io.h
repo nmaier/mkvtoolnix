@@ -89,6 +89,9 @@ protected:
 #if defined(SYS_WINDOWS)
   bool _eof;
 #endif
+#if HAVE_POSIX_FADVISE
+  unsigned long read_count, write_count;
+#endif
   string file_name;
   void *file;
 

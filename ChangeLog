@@ -1,3 +1,9 @@
+2005-02-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Use the posix_fadvise function on *nix
+	systems. This results in a considerable speed up for the whole
+	muxing process.
+
 2005-01-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: It was possible to create chapter entries with

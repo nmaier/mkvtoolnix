@@ -11,6 +11,7 @@
    IO callback class implementation
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modifications by Peter Niemayer <niemayer@isg.de>.
 */
 
 #include "os.h"
@@ -18,12 +19,15 @@
 #include <exception>
 
 #include <errno.h>
+#if HAVE_POSIX_FADVISE
+# include <fcntl.h>
+#endif
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #if defined(SYS_WINDOWS)
-#include <windows.h>
+# include <windows.h>
 #else
 #include <unistd.h>
 #endif // SYS_WINDOWS
@@ -34,23 +38,50 @@
 using namespace std;
 
 #if !defined(SYS_WINDOWS)
+
+# if HAVE_POSIX_FADVISE
+static const unsigned long read_using_willneed = 16 * 1024 * 1024;
+static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
+# endif
+
 mm_file_io_c::mm_file_io_c(const string &path,
-                           const open_mode mode) {
+                           const open_mode mode):
+  file_name(path) {
+
   string local_path;
   char *cmode;
+# if HAVE_POSIX_FADVISE
+  int advise;
 
+  advise = 0;
+  read_count = 0;
+  write_count = 0;
+# endif
+  
   switch (mode) {
     case MODE_READ:
       cmode = "rb";
+# if HAVE_POSIX_FADVISE
+      advise = POSIX_FADV_WILLNEED;
+# endif
       break;
     case MODE_WRITE:
       cmode = "a+b";
+# if HAVE_POSIX_FADVISE
+      advise = POSIX_FADV_DONTNEED;
+# endif
       break;
     case MODE_CREATE:
       cmode = "w+b";
+# if HAVE_POSIX_FADVISE
+      advise = POSIX_FADV_DONTNEED;
+# endif
       break;
     case MODE_SAFE:
       cmode = "rb";
+# if HAVE_POSIX_FADVISE
+      advise = POSIX_FADV_WILLNEED;
+# endif
       break;
     default:
       throw 0;
@@ -62,8 +93,12 @@ mm_file_io_c::mm_file_io_c(const string &path,
   if (file == NULL)
     throw exception();
 
-  file_name = path;
-  dos_style_newlines = false;
+# if HAVE_POSIX_FADVISE
+  if (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
+                         advise))
+    mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
+            path.c_str(), errno, strerror(errno));
+# endif
 }
 
 uint64
@@ -97,13 +132,46 @@ mm_file_io_c::write(const void *buffer,
     mxerror("Cound not write to the output file: %d (%s)\n", errno,
             strerror(errno));
 
+# if HAVE_POSIX_FADVISE
+  write_count += bwritten;
+  if (write_count > write_before_dontneed) {
+    uint64 pos = getFilePointer();
+    write_count = 0;
+    if (0 != posix_fadvise(fileno((FILE *)file), 0, pos, POSIX_FADV_DONTNEED))
+      mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
+              file_name.c_str(), errno, strerror(errno));
+  }
+# endif
+
   return bwritten;
 }
 
 uint32
 mm_file_io_c::read(void *buffer,
                    size_t size) {
-  return fread(buffer, 1, size, (FILE *)file);
+  int64_t bread;
+
+  bread = fread(buffer, 1, size, (FILE *)file); 
+
+# if HAVE_POSIX_FADVISE
+  if (bread >= 0) {
+    read_count += bread;
+    if (read_count > read_using_willneed) {
+      uint64 pos = getFilePointer();
+      int fd = fileno((FILE *)file);
+      read_count = 0;
+      if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED))
+        mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
+                file_name.c_str(), errno, strerror(errno));
+      if (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
+                             POSIX_FADV_WILLNEED))
+        mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
+                file_name.c_str(), errno, strerror(errno));
+    }
+  }
+# endif
+
+  return bread;
 }
 
 void
