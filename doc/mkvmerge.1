@@ -561,7 +561,7 @@ Matroska files: The track's ID is the track number as reported by \fBmkvinfo\fR
 or \fBmkvmerge \-\-identify\fR. It is \fBnot\fR the track UID.
 .LP
 The special track ID '-1' is a wild card and applies the given switch to all
-tracks that are read from an input file. This was the behaviour of these
+tracks that are read from an input file. This was the behavior of these
 switches prior to version 0.4.4.
 .LP
 The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
@@ -695,7 +695,7 @@ into one Matroska \fIChapterAtom\fR. It does not set any
 tracks in the file.
 .LP
 The charset used in the file is assumed to be the same charset that the
-current system's locale returns. If this is not the case then the swith
+current system's locale returns. If this is not the case then the switch
 \fI\-\-chapter\-charset\fR should be used. If the file contains a valid
 BOM (byte order marker) then all UTF styles are converted automatically.
 In this case \fI\-\-chapter\-charset\fR is simply ignored. You can use
@@ -766,8 +766,8 @@ apply to it, and that the timecodes will be offset to match the new timecodes
 of each output file.
 .LP
 \fBmkvmerge\fR is able to copy chapters from Matroska source files unless this
-is explicitely disabled with the \fI\-\-no\-chapters\fR option. At the
-moment \fBmkvmerge\fR is limited to one 'buch of chapters' globally. This means
+is explicitly disabled with the \fI\-\-no\-chapters\fR option. At the
+moment \fBmkvmerge\fR is limited to one 'bunch of chapters' globally. This means
 that only the first chapter section found in all source files is used. If
 the user specified chapters on the command line then these take precedence
 over any chapters found in source files. \fBmkvmerge\fR does not merge
@@ -786,7 +786,7 @@ Matroska supports an extensive set of tags that is deprecated and a
 new, simpler system like it is is used in most other containers:
 \fIKEY=VALUE\fR. However, in Matroska these tags can also be nested,
 and both the \fIKEY\fR and the \fIVALUE\fR are elements of their
-own. The exaple file \fIexample-tags-2.xml\fR show how to use this new
+own. The example file \fIexample-tags-2.xml\fR show how to use this new
 system.
 
 .LP
@@ -896,7 +896,7 @@ The date format used by both \fBmkvmerge\fR when reading XML tag files
 and by \fBmkvextract\fR when outputting XML tag data is the \fIISO-8601\fR
 format. It has the following structure:
 \fIYYYY\fR-\fIMM\fR-\fIDD\fRT\fIHH\fR:\fIMM\fR:\fISS\fR\fI+TZTZ\fR.
-\fIYYYY\fR is the year (four digist long), \fIMM\fR the month (two digits
+\fIYYYY\fR is the year (four digits long), \fIMM\fR the month (two digits
 long starting with 01), \fIDD\fR the day of the month (two digits long
 starting with 01), \fIHH\fR the hour of the day (two digits long, range
 00 - 23), \fIMM\fR the minute (two digits long, range 00 - 59), \fISS\fR
