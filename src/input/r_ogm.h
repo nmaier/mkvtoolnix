@@ -65,7 +65,7 @@ public:
 struct ogm_demuxer_t {
   ogg_stream_state os;
   int ptzr;
-  int sid, stype, serial, eos;
+  int sid, stype, serialno, eos;
   int units_processed, vorbis_rate;
   bool headers_read, native_mode;
   char *language, *title;
@@ -76,11 +76,12 @@ struct ogm_demuxer_t {
   int flac_header_packets, channels, bits_per_sample;
   int64_t last_granulepos;
 #endif
+  bool in_use;
 
   ogm_demuxer_t():
-    ptzr(-1), sid(0), stype(0), serial(0), eos(0), units_processed(0),
+    ptzr(-1), sid(0), stype(0), serialno(0), eos(0), units_processed(0),
     vorbis_rate(0), headers_read(false), native_mode(true),
-    language(NULL), title(NULL) {
+    language(NULL), title(NULL), in_use(false) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
   ~ogm_demuxer_t() {
@@ -96,8 +97,8 @@ class ogm_reader_c: public generic_reader_c {
 private:
   ogg_sync_state oy;
   mm_io_c *mm_io;
-  int act_wchar, num_sdemuxers, nastreams, nvstreams, ntstreams, numstreams;
-  ogm_demuxer_t   **sdemuxers;
+  int act_wchar, nastreams, nvstreams, ntstreams, numstreams;
+  vector<ogm_demuxer_t *> sdemuxers;
   int bos_pages_read;
   int64_t file_size;
 
@@ -118,15 +119,13 @@ public:
 private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);
   virtual int read_page(ogg_page *);
-  virtual void add_new_demuxer(ogm_demuxer_t *);
   virtual void handle_new_stream(ogg_page *);
   virtual void handle_new_stream_and_packets(ogg_page *); 
- virtual void process_page(ogg_page *);
+  virtual void process_page(ogg_page *);
   virtual int packet_available();
   virtual int read_headers();
   virtual void process_header_page(ogg_page *pg);
   virtual void process_header_packets(ogm_demuxer_t *dmx);
-  virtual void free_demuxer(int);
   virtual void flush_packetizers();
   virtual void handle_stream_comments();
 };
