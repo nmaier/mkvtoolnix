@@ -46,6 +46,8 @@ public:
   void on_xyz_selected(wxCommandEvent &evt);
   void on_on_top_selected(wxCommandEvent &evt);
 
+  void set_on_top(bool on_top);
+
   void load_preferences();
   void save_preferences();
 

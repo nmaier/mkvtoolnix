@@ -159,11 +159,16 @@ tab_settings::on_xyz_selected(wxCommandEvent &evt) {
 
 void
 tab_settings::on_on_top_selected(wxCommandEvent &evt) {
+  save_preferences();
+  set_on_top(cb_on_top->IsChecked());
+}
+
+void
+tab_settings::set_on_top(bool on_top) {
   long style;
 
-  save_preferences();
   style = mdlg->GetWindowStyleFlag();
-  if (cb_on_top->IsChecked())
+  if (on_top)
     style |= wxSTAY_ON_TOP;
   else
     style &= ~wxSTAY_ON_TOP;
@@ -201,6 +206,7 @@ tab_settings::load_preferences() {
   if (!cfg->Read(wxT("on_top"), &b))
     b = false;
   cb_on_top->SetValue(b);
+  set_on_top(b);
 }
 
 void
