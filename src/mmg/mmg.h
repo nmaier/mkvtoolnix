@@ -51,6 +51,7 @@ using namespace std;
 #define ID_B_SAVECMDLINE 10021
 #define ID_B_COPYTOCLIPBOARD 10022
 #define ID_TC_CMDLINE 10023
+#define ID_T_UPDATECMDLINE 10024
 
 typedef struct {
   char type;
@@ -73,6 +74,8 @@ extern wxString last_open_dir;
 extern vector<mmg_file_t> *files;
 
 wxString &break_line(wxString &line, int break_after = 80);
+wxString extract_language_code(wxString &source);
+wxString shell_escape(wxString &source);
 
 class mmg_dialog: public wxFrame {    
   DECLARE_CLASS(mmg_dialog);
@@ -81,6 +84,10 @@ protected:
   wxButton *b_browse_output, *b_run, *b_save_cmdline, *b_copy_to_clipboard;
   wxTextCtrl *tc_output, *tc_cmdline;
 
+  wxString cmdline;
+
+  wxTimer cmdline_timer;
+
 public:
   mmg_dialog();
 
@@ -88,7 +95,13 @@ public:
   void on_run(wxCommandEvent &evt);
   void on_save_cmdline(wxCommandEvent &evt);
   void on_copy_to_clipboard(wxCommandEvent &evt);
+
+  void on_update_command_line(wxTimerEvent &evt);
+  void update_command_line();
+  wxString &get_command_line();
 };
+
+extern mmg_dialog *mdlg;
 
 class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);

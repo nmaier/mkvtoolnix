@@ -31,10 +31,13 @@
 #include "extern_data.h"
 #include "iso639.h"
 
+static wxArrayString sorted_iso_codes;
+static wxArrayString sorted_charsets;
+
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
           wxTAB_TRAVERSAL) {
-  int i, selidx;
+  uint32_t i;
   wxString language;
 
   new wxStaticText(this, wxID_STATIC, _("Input files:"), wxPoint(5, 5),
@@ -68,26 +71,28 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0);
   new wxStaticText(this, wxID_STATIC, _("Language:"), wxPoint(5, 285),
                    wxDefaultSize, 0);
-  wxString *cob_language_strings = NULL;
+
+  if (sorted_iso_codes.Count() == 0) {
+    for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
+      if (iso639_languages[i].english_name == NULL)
+        language = iso639_languages[i].iso639_2_code;
+      else
+        language.Printf("%s (%s)", iso639_languages[i].iso639_2_code,
+                        iso639_languages[i].english_name);
+      sorted_iso_codes.Add(language);
+    }
+    sorted_iso_codes.Sort();
+  }
+
   cob_language =
     new wxComboBox(this, ID_CB_LANGUAGE, _(""), wxPoint(90, 285),
-                   wxSize(130, -1), 0, cob_language_strings,
-                   wxCB_DROPDOWN | wxCB_SORT | wxCB_READONLY);
+                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN);
   cob_language->SetToolTip(_("Language for this track. Select one of the "
                              "ISO639-2 language codes."));
-  selidx = -1;
-  for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
-    if (iso639_languages[i].english_name == NULL)
-      language = iso639_languages[i].iso639_2_code;
-    else
-      language.Printf("%s (%s)", iso639_languages[i].iso639_2_code,
-                      iso639_languages[i].english_name);
-    if (!strcmp(iso639_languages[i].iso639_2_code, "eng") && (selidx == -1)) {
-      cob_language->SetValue(language);
-      selidx = i;
-    }
-    cob_language->Append(language);
-  }
+  cob_language->Append(_("none"));
+  for (i = 0; i < sorted_iso_codes.Count(); i++)
+    cob_language->Append(sorted_iso_codes[i]);
+
   new wxStaticText(this, wxID_STATIC, _("Delay (in ms):"),
                    wxPoint(255, 285), wxDefaultSize, 0);
   tc_delay =
@@ -114,11 +119,10 @@ tab_input::tab_input(wxWindow *parent):
                            "Not all formats can be stretched at the moment."));
   new wxStaticText(this, wxID_STATIC, _("Cues:"), wxPoint(5, 335),
                    wxDefaultSize, 0);
-  wxString *cob_cues_strings = NULL;
+
   cob_cues =
     new wxComboBox(this, ID_CB_CUES, _(""), wxPoint(90, 335),
-                   wxSize(130, -1), 0, cob_cues_strings, wxCB_DROPDOWN |
-                   wxCB_READONLY);
+                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_cues->SetToolTip(_("Selects for which blocks mkvmerge will produce "
                          "index entries ( = cue entries). \"default\" is a "
                          "good choice for almost all situations."));
@@ -138,8 +142,16 @@ tab_input::tab_input(wxWindow *parent):
                                 "files that mkvmerge does not detect "
                                 "correctly."));
   cob_sub_charset->Append(_("default"));
-  for (i = 0; sub_charsets[i] != NULL; i++)
-    cob_sub_charset->Append(_(sub_charsets[i]));
+
+  if (sorted_charsets.Count() == 0) {
+    for (i = 0; sub_charsets[i] != NULL; i++)
+      sorted_charsets.Add(sub_charsets[i]);
+    sorted_charsets.Sort();
+  }
+
+  for (i = 0; i < sorted_charsets.Count(); i++)
+    cob_sub_charset->Append(sorted_charsets[i]);
+
   cb_default =
     new wxCheckBox(this, ID_CB_MAKEDEFAULT, _("Make default track"),
                    wxPoint(5, 355), wxSize(200, -1), 0);
@@ -287,7 +299,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
         parse_int(id, track.id);
         track.ctype = new wxString(exact);
         track.enabled = true;
-        track.language = new wxString("eng (English)");
+        track.language = new wxString("none");
         track.sub_charset = new wxString("default");
         track.cues = new wxString("default");
         track.track_name = new wxString("");
