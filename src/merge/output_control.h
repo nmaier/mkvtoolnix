@@ -113,7 +113,7 @@ enum timecode_scale_mode_e {
   TIMECODE_SCALE_MODE_AUTO
 };
 
-class MTX_DLL_API family_uids_c: public vector<bitvalue_c> {
+class family_uids_c: public vector<bitvalue_c> {
 public:
 	bool add_family_uid(const KaxSegmentFamily &family);
 };
