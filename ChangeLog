@@ -1,5 +1,8 @@
 2004-08-01  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Handle TTA files with ID3 tags correctly ( =
+	skip the ID3 tags).
+
 	* mkvmerge: bug fix: There was an illegal free() in the OGM
 	reader.
 

@@ -21,20 +21,25 @@
 #include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
+#include "id3_common.h"
 #include "p_tta.h"
 #include "r_tta.h"
 
 int
 tta_reader_c::probe_file(mm_io_c *mm_io,
                          int64_t size) {
+  int tag_size;
   unsigned char buf[4];
 
   if (size < 26)
     return 0;
   try {
     mm_io->setFilePointer(0, seek_beginning);
+    tag_size = skip_id3v2_tag(*mm_io);
+    if (tag_size == -1)
+      return 0;
     if (mm_io->read(buf, 4) != 4)
-      mm_io->setFilePointer(0, seek_beginning);
+      return 0;
     mm_io->setFilePointer(0, seek_beginning);
   } catch (exception &ex) {
     return 0;
@@ -49,6 +54,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
   uint32_t seek_point;
   int64_t seek_sum;
+  int tag_size;
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
@@ -57,10 +63,17 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
     if (identifying)
       return;
 
+    tag_size = skip_id3v2_tag(*mm_io);
+    if (tag_size < 0)
+      mxerror(_("tta_reader: tag_size < 0 in the c'tor. %s\n"), BUGMSG);
+    size -= tag_size;
+
     if (mm_io->read(&header, sizeof(tta_file_header_t)) !=
         sizeof(tta_file_header_t))
       mxerror(FMT_FN "The file header is too short.\n", ti->fname);
-    seek_sum = mm_io->getFilePointer() + 4;
+    seek_sum = mm_io->getFilePointer() + 4 - tag_size;
+
+    size -= id3_tag_present_at_end(*mm_io);
 
     do {
       seek_point = mm_io->read_uint32();
