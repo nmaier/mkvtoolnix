@@ -1107,7 +1107,6 @@ mmg_dialog::update_command_line() {
   bool tracks_selected_here;
   bool no_audio, no_video, no_subs;
   mmg_file_t *f;
-  mmg_track_t *t;
   mmg_attachment_t *a;
   wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
 
@@ -1135,10 +1134,10 @@ mmg_dialog::update_command_line() {
     aids = wxT("");
     sids = wxT("");
     dids = wxT("");
-    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+    for (tidx = 0; tidx < f->tracks.size(); tidx++) {
       string format;
 
-      t = &(*f->tracks)[tidx];
+      mmg_track_ptr &t = f->tracks[tidx];
       if (!t->enabled)
         continue;
 
@@ -1169,43 +1168,43 @@ mmg_dialog::update_command_line() {
           sids += wxT(",");
         sids += sid;
 
-        if ((t->sub_charset->Length() > 0) &&
-            (*t->sub_charset != wxT("default"))) {
+        if ((t->sub_charset.Length() > 0) &&
+            (t->sub_charset != wxT("default"))) {
           clargs.Add(wxT("--sub-charset"));
-          clargs.Add(sid + wxT(":") + shell_escape(*t->sub_charset));
+          clargs.Add(sid + wxT(":") + shell_escape(t->sub_charset));
         }
       }
 
-      if (*t->language != wxT("none")) {
+      if (t->language != wxT("none")) {
         clargs.Add(wxT("--language"));
-        clargs.Add(sid + wxT(":") + extract_language_code(*t->language));
+        clargs.Add(sid + wxT(":") + extract_language_code(t->language));
       }
 
-      if (*t->cues != wxT("default")) {
+      if (t->cues != wxT("default")) {
         clargs.Add(wxT("--cues"));
-        if (*t->cues == wxT("only for I frames"))
+        if (t->cues == wxT("only for I frames"))
           clargs.Add(sid + wxT(":iframes"));
-        else if (*t->cues == wxT("for all frames"))
+        else if (t->cues == wxT("for all frames"))
           clargs.Add(sid + wxT(":all"));
-        else if (*t->cues == wxT("none"))
+        else if (t->cues == wxT("none"))
           clargs.Add(sid + wxT(":none"));
       }
 
-      if ((t->delay->Length() > 0) || (t->stretch->Length() > 0)) {
+      if ((t->delay.Length() > 0) || (t->stretch.Length() > 0)) {
         arg = sid + wxT(":");
-        if (t->delay->Length() > 0)
-          arg += *t->delay;
+        if (t->delay.Length() > 0)
+          arg += t->delay;
         else
           arg += wxT("0");
-        if (t->stretch->Length() > 0)
-          arg += *t->stretch;
+        if (t->stretch.Length() > 0)
+          arg += t->stretch;
         clargs.Add(wxT("--sync"));
         clargs.Add(arg);
       }
 
-      if ((t->track_name->Length() > 0) || t->track_name_was_present) {
+      if ((t->track_name.Length() > 0) || t->track_name_was_present) {
         clargs.Add(wxT("--track-name"));
-        clargs.Add(sid + wxT(":") + *t->track_name);
+        clargs.Add(sid + wxT(":") + t->track_name);
       }
 
       if (t->default_track) {
@@ -1213,33 +1212,33 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid);
       }
 
-      if (t->tags->Length() > 0) {
+      if (t->tags.Length() > 0) {
         clargs.Add(wxT("--tags"));
-        clargs.Add(sid + wxT(":") + *t->tags);
+        clargs.Add(sid + wxT(":") + t->tags);
       }
 
-      if (!t->display_dimensions_selected && (t->aspect_ratio->Length() > 0)) {
+      if (!t->display_dimensions_selected && (t->aspect_ratio.Length() > 0)) {
         clargs.Add(wxT("--aspect-ratio"));
-        clargs.Add(sid + wxT(":") + *t->aspect_ratio);
+        clargs.Add(sid + wxT(":") + t->aspect_ratio);
       } else if (t->display_dimensions_selected &&
-                 (t->dwidth->Length() > 0) && (t->dheight->Length() > 0)) {
+                 (t->dwidth.Length() > 0) && (t->dheight.Length() > 0)) {
         clargs.Add(wxT("--display-dimensions"));
-        clargs.Add(sid + wxT(":") + *t->dwidth + wxT("x") + *t->dheight);
+        clargs.Add(sid + wxT(":") + t->dwidth + wxT("x") + t->dheight);
       }
 
-      if (t->fourcc->Length() > 0) {
+      if (t->fourcc.Length() > 0) {
         clargs.Add(wxT("--fourcc"));
-        clargs.Add(sid + wxT(":") + *t->fourcc);
+        clargs.Add(sid + wxT(":") + t->fourcc);
       }
 
-      if (t->compression->Length() > 0) {
+      if (t->compression.Length() > 0) {
         clargs.Add(wxT("--compression"));
-        clargs.Add(sid + wxT(":") + *t->compression);
+        clargs.Add(sid + wxT(":") + t->compression);
       }
 
-      if (t->timecodes->Length() > 0) {
+      if (t->timecodes.Length() > 0) {
         clargs.Add(wxT("--timecodes"));
-        clargs.Add(sid + wxT(":") + *t->timecodes);
+        clargs.Add(sid + wxT(":") + t->timecodes);
       }
     }
 
@@ -1271,7 +1270,7 @@ mmg_dialog::update_command_line() {
       if (no_subs)
         clargs.Add(wxT("-S"));
 
-      clargs.Add(*f->file_name);
+      clargs.Add(f->file_name);
     }
   }
 
@@ -1285,16 +1284,16 @@ mmg_dialog::update_command_line() {
     a = &attachments[fidx];
 
     clargs.Add(wxT("--attachment-mime-type"));
-    clargs.Add(*a->mime_type);
-    if (a->description->Length() > 0) {
+    clargs.Add(a->mime_type);
+    if (a->description.Length() > 0) {
       clargs.Add(wxT("--attachment-description"));
-      clargs.Add(no_cr(*a->description));
+      clargs.Add(no_cr(a->description));
     }
     if (a->style == 0)
       clargs.Add(wxT("--attach-file"));
     else
       clargs.Add(wxT("--attach-file-once"));
-    clargs.Add(*a->file_name);
+    clargs.Add(a->file_name);
   }
 
   if (global_page->tc_title->GetValue().Length() > 0) {

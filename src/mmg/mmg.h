@@ -27,6 +27,7 @@
 #include "ebml/EbmlUnicodeString.h"
 
 #include "iso639.h"
+#include "smart_pointers.h"
 #include "wxcommon.h"
 
 #ifdef SYS_WINDOWS
@@ -44,32 +45,47 @@
 using namespace std;
 using namespace libebml;
 
-typedef struct {
+struct mmg_track_t {
   char type;
   int64_t id;
   int source;
-  wxString *ctype;
+  wxString ctype;
   bool enabled, display_dimensions_selected;
 
   bool default_track, aac_is_sbr;
   bool track_name_was_present;
-  wxString *language, *track_name, *cues, *delay, *stretch, *sub_charset;
-  wxString *tags, *fourcc, *aspect_ratio, *compression, *timecodes;
-  wxString *dwidth, *dheight;
-} mmg_track_t;
+  wxString language, track_name, cues, delay, stretch, sub_charset;
+  wxString tags, fourcc, aspect_ratio, compression, timecodes;
+  wxString dwidth, dheight;
 
-typedef struct {
-  wxString *file_name, *title;
+  mmg_track_t():
+    type(0), id(0), source(0),
+    enabled(false), display_dimensions_selected(false),
+    default_track(false), aac_is_sbr(false), track_name_was_present(false) {};
+};
+typedef counted_ptr<mmg_track_t> mmg_track_ptr;
+
+struct mmg_file_t {
+  wxString file_name, title;
   bool title_was_present;
   int container;
-  vector<mmg_track_t> *tracks;
+  vector<mmg_track_ptr> tracks;
   bool no_chapters, no_attachments, no_tags;
-} mmg_file_t;
 
-typedef struct {
-  wxString *file_name, *description, *mime_type;
+  mmg_file_t():
+    title_was_present(false), container(0),
+    no_chapters(false), no_attachments(false), no_tags(false) {};
+};
+typedef counted_ptr<mmg_file_t> mmg_file_ptr;
+
+struct mmg_attachment_t {
+  wxString file_name, description, mime_type;
   int style;
-} mmg_attachment_t;
+
+  mmg_attachment_t():
+    style(0) {};
+};
+typedef counted_ptr<mmg_attachment_t> mmg_attachment_ptr;
 
 extern wxString last_open_dir;
 extern wxString mkvmerge_path;

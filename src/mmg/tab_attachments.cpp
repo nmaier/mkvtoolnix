@@ -155,28 +155,24 @@ tab_attachments::add_attachment(const wxString &file_name) {
   uint32_t i, j;
   vector<wxString> extensions;
 
-  attch.file_name = new wxString(file_name);
+  attch.file_name = file_name;
   name = file_name.AfterLast(wxT(PSEP));
   ext = name.AfterLast(wxT('.'));
   name += wxString(wxT(" (")) + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
   lb_attachments->Append(name);
-  attch.mime_type = NULL;
   if (ext.Length() > 0) {
-    for (i = 0; (mime_types[i].name != NULL) && (attch.mime_type == NULL);
+    for (i = 0; (mime_types[i].name != NULL) && (attch.mime_type == wxT(""));
          i++) {
       if (mime_types[i].extensions[0] == 0)
         continue;
       extensions = split(wxU(mime_types[i].extensions), wxU(" "));
       for (j = 0; j < extensions.size(); j++)
         if (!wxStricmp(extensions[j], ext)) {
-          attch.mime_type = new wxString(wxU(mime_types[i].name));
+          attch.mime_type = wxU(mime_types[i].name);
           break;
         }
     }
   }
-  if (attch.mime_type == NULL)
-    attch.mime_type = new wxString(wxT(""));
-  attch.description = new wxString(wxT(""));
   attch.style = 0;
 
   attachments.push_back(attch);
@@ -184,19 +180,10 @@ tab_attachments::add_attachment(const wxString &file_name) {
 
 void
 tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
-  mmg_attachment_t *a;
-  vector<mmg_attachment_t>::iterator eit;
-
   if (selected_attachment == -1)
     return;
 
-  a = &attachments[selected_attachment];
-  delete a->file_name;
-  delete a->description;
-  delete a->mime_type;
-  eit = attachments.begin();
-  eit += selected_attachment;
-  attachments.erase(eit);
+  attachments.erase(attachments.begin() + selected_attachment);
   lb_attachments->Delete(selected_attachment);
   enable(false);
   b_remove_attachment->Enable(false);
@@ -211,8 +198,8 @@ tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
   selected_attachment = -1;
   new_sel = lb_attachments->GetSelection();
   a = &attachments[new_sel];
-  tc_description->SetValue(*a->description);
-  cob_mimetype->SetValue(*a->mime_type);
+  tc_description->SetValue(a->description);
+  cob_mimetype->SetValue(a->mime_type);
   cob_style->SetSelection(a->style);
   enable(true);
   selected_attachment = new_sel;
@@ -224,8 +211,7 @@ tab_attachments::on_description_changed(wxCommandEvent &evt) {
   if (selected_attachment == -1)
     return;
 
-  *attachments[selected_attachment].description =
-    tc_description->GetValue();
+  attachments[selected_attachment].description = tc_description->GetValue();
 }
 
 void
@@ -233,8 +219,7 @@ tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
   if (selected_attachment == -1)
     return;
 
-  *attachments[selected_attachment].mime_type =
-    cob_mimetype->GetValue();
+  attachments[selected_attachment].mime_type = cob_mimetype->GetValue();
 }
 
 void
@@ -258,15 +243,15 @@ tab_attachments::save(wxConfigBase *cfg) {
     a = &attachments[i];
     s.Printf(wxT("attachment %u"), i);
     cfg->SetPath(s);
-    cfg->Write(wxT("file_name"), *a->file_name);
+    cfg->Write(wxT("file_name"), a->file_name);
     s = wxT("");
-    for (j = 0; j < a->description->Length(); j++)
-      if ((*a->description)[j] == wxT('\n'))
+    for (j = 0; j < a->description.Length(); j++)
+      if (a->description[j] == wxT('\n'))
         s += wxT("!\\N!");
       else
-        s += (*a->description)[j];
+        s += a->description[j];
     cfg->Write(wxT("description"), s);
-    cfg->Write(wxT("mime_type"), *a->mime_type);
+    cfg->Write(wxT("mime_type"), a->mime_type);
     cfg->Write(wxT("style"), a->style);
 
     cfg->SetPath(wxT(".."));
@@ -275,21 +260,12 @@ tab_attachments::save(wxConfigBase *cfg) {
 
 void
 tab_attachments::load(wxConfigBase *cfg) {
-  mmg_attachment_t *ap, a;
-  uint32_t i;
-  int num, pos;
-  wxString s, c;
+  int num, i;
 
   enable(false);
   selected_attachment = -1;
   lb_attachments->Clear();
   b_remove_attachment->Enable(false);
-  for (i = 0; i < attachments.size(); i++) {
-    ap = &attachments[i];
-    delete ap->file_name;
-    delete ap->description;
-    delete ap->mime_type;
-  }
   attachments.clear();
 
   cfg->SetPath(wxT("/attachments"));
@@ -297,14 +273,15 @@ tab_attachments::load(wxConfigBase *cfg) {
     return;
 
   for (i = 0; i < (uint32_t)num; i++) {
+    mmg_attachment_t a;
+    wxString s, c;
+    int pos;
+
     s.Printf(wxT("attachment %d"), i);
     cfg->SetPath(s);
-    a.file_name = new wxString;
-    a.description = new wxString;
-    a.mime_type = new wxString;
-    cfg->Read(wxT("file_name"), a.file_name);
+    cfg->Read(wxT("file_name"), &a.file_name);
     cfg->Read(wxT("description"), &s);
-    cfg->Read(wxT("mime_type"), a.mime_type);
+    cfg->Read(wxT("mime_type"), &a.mime_type);
     cfg->Read(wxT("style"), &a.style);
     if ((a.style != 0) && (a.style != 1))
       a.style = 0;
@@ -312,13 +289,13 @@ tab_attachments::load(wxConfigBase *cfg) {
     while (pos >= 0) {
       c = s.Mid(0, pos);
       s.Remove(0, pos + 4);
-      *a.description += c + wxT("\n");
+      a.description += c + wxT("\n");
       pos = s.Find(wxT("!\\N!"));
     }
-    *a.description += s;
+    a.description += s;
 
-    s = a.file_name->BeforeLast(PSEP);
-    c = a.file_name->AfterLast(PSEP);
+    s = a.file_name.BeforeLast(PSEP);
+    c = a.file_name.AfterLast(PSEP);
     lb_attachments->Append(c + wxT(" (") + s + wxT(")"));
     attachments.push_back(a);
 
@@ -333,9 +310,9 @@ tab_attachments::validate_settings() {
 
   for (i = 0; i < attachments.size(); i++) {
     a = &attachments[i];
-    if (a->mime_type->Length() == 0) {
+    if (a->mime_type.Length() == 0) {
       wxMessageBox(wxT("No MIME type has been selected for the attachment '") +
-                       *a->file_name + wxT("'."), wxT("Missing input"),
+                       a->file_name + wxT("'."), wxT("Missing input"),
                    wxOK | wxCENTER | wxICON_ERROR);
       return false;
     }

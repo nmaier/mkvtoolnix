@@ -744,16 +744,11 @@ tab_input::add_file(const wxString &file_name) {
     return;
   }
 
-  memset(&file, 0, sizeof(mmg_file_t));
-  file.tracks = new vector<mmg_track_t>;
-  file.title = new wxString;
-
   for (i = 0; i < output.Count(); i++) {
     if (output[i].Find(wxT("Track")) == 0) {
       wxString info;
-      mmg_track_t track;
+      mmg_track_ptr track(new mmg_track_t);
 
-      memset(&track, 0, sizeof(mmg_track_t));
       id = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).
         BeforeFirst(wxT(':'));
       type = output[i].AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).
@@ -761,29 +756,29 @@ tab_input::add_file(const wxString &file_name) {
       exact = output[i].AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
       info = output[i].AfterFirst(wxT('[')).BeforeLast(wxT(']'));
       if (type == wxT("audio"))
-        track.type = 'a';
+        track->type = 'a';
       else if (type == wxT("video"))
-        track.type = 'v';
+        track->type = 'v';
       else if (type == wxT("subtitles"))
-        track.type = 's';
+        track->type = 's';
       else
-        track.type = '?';
-      parse_int(wxMB(id), track.id);
-      track.ctype = new wxString(exact);
-      track.enabled = true;
-      track.language = new wxString(wxT("und"));
-      track.sub_charset = new wxString(wxT("default"));
-      track.cues = new wxString(wxT("default"));
-      track.track_name = new wxString(wxT(""));
-      track.delay = new wxString(wxT(""));
-      track.stretch = new wxString(wxT(""));
-      track.tags = new wxString(wxT(""));
-      track.aspect_ratio = new wxString(wxT(""));
-      track.dwidth = new wxString(wxT(""));
-      track.dheight = new wxString(wxT(""));
-      track.fourcc = new wxString(wxT(""));
-      track.compression = new wxString(wxT(""));
-      track.timecodes = new wxString(wxT(""));
+        track->type = '?';
+      parse_int(wxMB(id), track->id);
+      track->ctype = exact;
+      track->enabled = true;
+      track->language = wxT("und");
+      track->sub_charset = wxT("default");
+      track->cues = wxT("default");
+      track->track_name = wxT("");
+      track->delay = wxT("");
+      track->stretch = wxT("");
+      track->tags = wxT("");
+      track->aspect_ratio = wxT("");
+      track->dwidth = wxT("");
+      track->dheight = wxT("");
+      track->fourcc = wxT("");
+      track->compression = wxT("");
+      track->timecodes = wxT("");
 
       if (info.length() > 0) {
         args = split(info, wxU(" "));
@@ -792,10 +787,10 @@ tab_input::add_file(const wxString &file_name) {
           if (pair.size() != 2)
             continue;
           if (pair[0] == wxT("track_name")) {
-            *track.track_name = from_utf8(unescape(pair[1]));
-            track.track_name_was_present = true;
+            track->track_name = from_utf8(unescape(pair[1]));
+            track->track_name_was_present = true;
           } else if (pair[0] == wxT("language"))
-            *track.language = unescape(pair[1]);
+            track->language = unescape(pair[1]);
           else if (pair[0] == wxT("display_dimensions")) {
             vector<wxString> dims;
             int64_t width, height;
@@ -803,18 +798,18 @@ tab_input::add_file(const wxString &file_name) {
             dims = split(pair[1], wxU("x"));
             if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) &&
                 parse_int(wxMB(dims[1]), height)) {
-              track.dwidth->Printf(wxT("%d"), (int)width);
-              track.dheight->Printf(wxT("%d"), (int)height);
-              track.display_dimensions_selected = true;
+              track->dwidth.Printf(wxT("%d"), (int)width);
+              track->dheight.Printf(wxT("%d"), (int)height);
+              track->display_dimensions_selected = true;
             }
           }
         }
       }
 
-      if ((track.type == 'v') && (track.track_name->length() > 0))
-        video_track_name = *track.track_name;
+      if ((track->type == 'v') && (track->track_name.Length() > 0))
+        video_track_name = track->track_name;
 
-      file.tracks->push_back(track);
+      file.tracks.push_back(track);
 
     } else if ((pos = output[i].Find(wxT("container:"))) > 0) {
       wxString container, info;
@@ -856,7 +851,7 @@ tab_input::add_file(const wxString &file_name) {
         for (k = 0; k < args.size(); k++) {
           pair = split(args[k], wxU(":"), 2);
           if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
-            *file.title = from_utf8(unescape(pair[1]));
+            file.title = from_utf8(unescape(pair[1]));
             file.title_was_present = true;
             title_was_present = true;
           }
@@ -865,8 +860,7 @@ tab_input::add_file(const wxString &file_name) {
     }
   }
 
-  if (file.tracks->size() == 0) {
-    delete file.tracks;
+  if (file.tracks.size() == 0) {
     wxMessageBox(wxT("The input file '") + file_name +
                  wxT("' does not contain any tracks."),
                  wxT("No tracks found"));
@@ -877,25 +871,23 @@ tab_input::add_file(const wxString &file_name) {
   name += wxT(" (") + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
   lb_input_files->Append(name);
 
-  file.file_name = new wxString(file_name);
-  mdlg->set_title_maybe(*file.title);
-  if ((file.container == FILE_TYPE_OGM) &&
-      (video_track_name.length() > 0))
+  file.file_name = file_name;
+  mdlg->set_title_maybe(file.title);
+  if ((file.container == FILE_TYPE_OGM) && (video_track_name.Length() > 0))
     mdlg->set_title_maybe(video_track_name);
-  mdlg->set_output_maybe(*file.file_name);
+  mdlg->set_output_maybe(file.file_name);
   files.push_back(file);
-  for (i = 0; i < file.tracks->size(); i++) {
+  for (i = 0; i < file.tracks.size(); i++) {
     string format;
     wxString label;
-    mmg_track_t *t;
 
-    t = &(*file.tracks)[i];
+    mmg_track_ptr &t = file.tracks[i];
     t->enabled = true;
     t->source = files.size() - 1;
-    tracks.push_back(t);
+    tracks.push_back(t.get());
 
     fix_format("%s (ID %lld, type: %s) from %s", format);
-    label.Printf(wxU(format.c_str()), t->ctype->c_str(), t->id,
+    label.Printf(wxU(format.c_str()), t->ctype.c_str(), t->id,
                  t->type == 'a' ? wxT("audio") :
                  t->type == 'v' ? wxT("video") :
                  t->type == 's' ? wxT("subtitles") : wxT("unknown"),
@@ -940,33 +932,11 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
 
   // Unset the "file/segment title" box if the segment title came from this
   // source file and the user hasn't changed it since.
-  if ((f->title != NULL) && (f->title_was_present) &&
-      (*f->title == mdlg->global_page->tc_title->GetValue()))
+  if ((f->title != wxT("")) && f->title_was_present &&
+      (f->title == mdlg->global_page->tc_title->GetValue()))
     mdlg->global_page->tc_title->SetValue(wxT(""));
 
-  for (i = 0; i < f->tracks->size(); i++) {
-    t = &(*f->tracks)[i];
-    delete t->ctype;
-    delete t->language;
-    delete t->sub_charset;
-    delete t->cues;
-    delete t->track_name;
-    delete t->delay;
-    delete t->stretch;
-    delete t->tags;
-    delete t->aspect_ratio;
-    delete t->dwidth;
-    delete t->dheight;
-    delete t->fourcc;
-    delete t->compression;
-    delete t->timecodes;
-  }
-  delete f->tracks;
-  delete f->file_name;
-  delete f->title;
-  eit = files.begin();
-  eit += selected_file;
-  files.erase(eit);
+  files.erase(files.begin() + selected_file);
   lb_input_files->Delete(selected_file);
   selected_file = -1;
   st_file_options->Enable(false);
@@ -1114,35 +1084,35 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   b_track_down->Enable(new_sel < (tracks.size() - 1));
 
   if (t->type == 'a')
-    audio_track_mode(*t->ctype);
+    audio_track_mode(t->ctype);
   else if (t->type == 'v') {
-    video_track_mode(*t->ctype);
+    video_track_mode(t->ctype);
     enable_ar_controls(t);
   } else if (t->type == 's')
-    subtitle_track_mode(*t->ctype);
+    subtitle_track_mode(t->ctype);
 
-  lang = *t->language;
+  lang = t->language;
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     if (extract_language_code(sorted_iso_codes[i]) == lang) {
       lang = sorted_iso_codes[i];
       break;
     }
   cob_language->SetValue(lang);
-  tc_track_name->SetValue(*t->track_name);
-  cob_cues->SetValue(*t->cues);
-  tc_delay->SetValue(*t->delay);
-  tc_stretch->SetValue(*t->stretch);
-  cob_sub_charset->SetValue(*t->sub_charset);
-  tc_tags->SetValue(*t->tags);
+  tc_track_name->SetValue(t->track_name);
+  cob_cues->SetValue(t->cues);
+  tc_delay->SetValue(t->delay);
+  tc_stretch->SetValue(t->stretch);
+  cob_sub_charset->SetValue(t->sub_charset);
+  tc_tags->SetValue(t->tags);
   cb_default->SetValue(t->default_track);
   cb_aac_is_sbr->SetValue(t->aac_is_sbr);
-  cob_aspect_ratio->SetValue(*t->aspect_ratio);
-  tc_display_width->SetValue(*t->dwidth); 
-  tc_display_height->SetValue(*t->dheight);
+  cob_aspect_ratio->SetValue(t->aspect_ratio);
+  tc_display_width->SetValue(t->dwidth); 
+  tc_display_height->SetValue(t->dheight);
   selected_track = new_sel;
-  cob_compression->SetValue(*t->compression);
-  tc_timecodes->SetValue(*t->timecodes);
-  cob_fourcc->SetValue(*t->fourcc);
+  cob_compression->SetValue(t->compression);
+  tc_timecodes->SetValue(t->timecodes);
+  cob_fourcc->SetValue(t->fourcc);
   tc_track_name->SetFocus();
 
   dont_copy_values_now = false;
@@ -1186,7 +1156,7 @@ tab_input::on_language_selected(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->language = cob_language->GetStringSelection();
+  tracks[selected_track]->language = cob_language->GetStringSelection();
 }
 
 void
@@ -1194,7 +1164,7 @@ tab_input::on_cues_selected(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->cues = cob_cues->GetStringSelection();
+  tracks[selected_track]->cues = cob_cues->GetStringSelection();
 }
 
 void
@@ -1202,7 +1172,7 @@ tab_input::on_subcharset_selected(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->sub_charset = cob_sub_charset->GetStringSelection();
+  tracks[selected_track]->sub_charset = cob_sub_charset->GetStringSelection();
 }
 
 void
@@ -1215,7 +1185,7 @@ tab_input::on_browse_tags(wxCommandEvent &evt) {
                    wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    *tracks[selected_track]->tags = dlg.GetPath();
+    tracks[selected_track]->tags = dlg.GetPath();
     tc_tags->SetValue(dlg.GetPath());
   }
 }
@@ -1230,7 +1200,7 @@ tab_input::on_browse_timecodes_clicked(wxCommandEvent &evt) {
                                 ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    *tracks[selected_track]->timecodes = dlg.GetPath();
+    tracks[selected_track]->timecodes = dlg.GetPath();
     tc_timecodes->SetValue(dlg.GetPath());
   }
 }
@@ -1240,7 +1210,7 @@ tab_input::on_tags_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->tags = tc_tags->GetValue();
+  tracks[selected_track]->tags = tc_tags->GetValue();
 }
 
 void
@@ -1248,7 +1218,7 @@ tab_input::on_timecodes_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->timecodes = tc_timecodes->GetValue();
+  tracks[selected_track]->timecodes = tc_timecodes->GetValue();
 }
 
 void
@@ -1256,7 +1226,7 @@ tab_input::on_delay_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->delay = tc_delay->GetValue();
+  tracks[selected_track]->delay = tc_delay->GetValue();
 }
 
 void
@@ -1264,7 +1234,7 @@ tab_input::on_stretch_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->stretch = tc_stretch->GetValue();
+  tracks[selected_track]->stretch = tc_stretch->GetValue();
 }
 
 void
@@ -1272,7 +1242,7 @@ tab_input::on_track_name_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->track_name = tc_track_name->GetValue();
+  tracks[selected_track]->track_name = tc_track_name->GetValue();
 }
 
 void
@@ -1280,7 +1250,7 @@ tab_input::on_aspect_ratio_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->aspect_ratio =
+  tracks[selected_track]->aspect_ratio =
     cob_aspect_ratio->GetStringSelection();
 }
 
@@ -1289,7 +1259,7 @@ tab_input::on_fourcc_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->fourcc = cob_fourcc->GetStringSelection();
+  tracks[selected_track]->fourcc = cob_fourcc->GetStringSelection();
 }
 
 void
@@ -1297,8 +1267,7 @@ tab_input::on_compression_selected(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->compression =
-    cob_compression->GetStringSelection();
+  tracks[selected_track]->compression = cob_compression->GetStringSelection();
 }
 
 void
@@ -1306,7 +1275,7 @@ tab_input::on_display_width_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->dwidth = tc_display_width->GetValue();
+  tracks[selected_track]->dwidth = tc_display_width->GetValue();
 }
 
 void
@@ -1314,7 +1283,7 @@ tab_input::on_display_height_changed(wxCommandEvent &evt) {
   if (selected_track == -1)
     return;
 
-  *tracks[selected_track]->dheight = tc_display_height->GetValue();
+  tracks[selected_track]->dheight = tc_display_height->GetValue();
 }
 
 void
@@ -1349,15 +1318,14 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
     return;
 
   t = tracks[selected_track];
-  *t->aspect_ratio = cob_aspect_ratio->GetValue();
-  *t->fourcc = cob_fourcc->GetValue();
+  t->aspect_ratio = cob_aspect_ratio->GetValue();
+  t->fourcc = cob_fourcc->GetValue();
 }
 
 void
 tab_input::save(wxConfigBase *cfg) {
   uint32_t fidx, tidx;
   mmg_file_t *f;
-  mmg_track_t *t;
   wxString s;
 
   cfg->SetPath(wxT("/input"));
@@ -1366,17 +1334,17 @@ tab_input::save(wxConfigBase *cfg) {
     f = &files[fidx];
     s.Printf(wxT("file %u"), fidx);
     cfg->SetPath(s);
-    cfg->Write(wxT("file_name"), *f->file_name);
+    cfg->Write(wxT("file_name"), f->file_name);
     cfg->Write(wxT("container"), f->container);
     cfg->Write(wxT("no_chapters"), f->no_chapters);
     cfg->Write(wxT("no_attachments"), f->no_attachments);
     cfg->Write(wxT("no_tags"), f->no_tags);
 
-    cfg->Write(wxT("number_of_tracks"), (int)f->tracks->size());
-    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+    cfg->Write(wxT("number_of_tracks"), (int)f->tracks.size());
+    for (tidx = 0; tidx < f->tracks.size(); tidx++) {
       string format;
 
-      t = &(*f->tracks)[tidx];
+      mmg_track_ptr &t = f->tracks[tidx];
       s.Printf(wxT("track %u"), tidx);
       cfg->SetPath(s);
       s.Printf(wxT("%c"), t->type);
@@ -1385,24 +1353,24 @@ tab_input::save(wxConfigBase *cfg) {
       s.Printf(wxU(format.c_str()), t->id);
       cfg->Write(wxT("id"), s);
       cfg->Write(wxT("enabled"), t->enabled);
-      cfg->Write(wxT("content_type"), *t->ctype);
+      cfg->Write(wxT("content_type"), t->ctype);
       cfg->Write(wxT("default_track"), t->default_track);
       cfg->Write(wxT("aac_is_sbr"), t->aac_is_sbr);
-      cfg->Write(wxT("language"), *t->language);
-      cfg->Write(wxT("track_name"), *t->track_name);
-      cfg->Write(wxT("cues"), *t->cues);
-      cfg->Write(wxT("delay"), *t->delay);
-      cfg->Write(wxT("stretch"), *t->stretch);
-      cfg->Write(wxT("sub_charset"), *t->sub_charset);
-      cfg->Write(wxT("tags"), *t->tags);
-      cfg->Write(wxT("timecodes"), *t->timecodes);
+      cfg->Write(wxT("language"), t->language);
+      cfg->Write(wxT("track_name"), t->track_name);
+      cfg->Write(wxT("cues"), t->cues);
+      cfg->Write(wxT("delay"), t->delay);
+      cfg->Write(wxT("stretch"), t->stretch);
+      cfg->Write(wxT("sub_charset"), t->sub_charset);
+      cfg->Write(wxT("tags"), t->tags);
+      cfg->Write(wxT("timecodes"), t->timecodes);
       cfg->Write(wxT("display_dimensions_selected"),
                  t->display_dimensions_selected);
-      cfg->Write(wxT("aspect_ratio"), *t->aspect_ratio);
-      cfg->Write(wxT("display_width"), *t->dwidth);
-      cfg->Write(wxT("display_height"), *t->dheight);
-      cfg->Write(wxT("fourcc"), *t->fourcc);
-      cfg->Write(wxT("compression"), *t->compression);
+      cfg->Write(wxT("aspect_ratio"), t->aspect_ratio);
+      cfg->Write(wxT("display_width"), t->dwidth);
+      cfg->Write(wxT("display_height"), t->dheight);
+      cfg->Write(wxT("fourcc"), t->fourcc);
+      cfg->Write(wxT("compression"), t->compression);
       cfg->Write(wxT("track_name_was_present"), t->track_name_was_present);
 
       cfg->SetPath(wxT(".."));
@@ -1416,13 +1384,11 @@ tab_input::save(wxConfigBase *cfg) {
 void
 tab_input::load(wxConfigBase *cfg) {
   long fidx, tidx, i;
-  mmg_file_t *f, fi;
-  mmg_track_t *t, tr;
+  mmg_file_t fi;
   wxString s, c, id, track_order;
   string format;
   vector<wxString> pair, entries;
   int num_files, num_tracks;
-  bool b;
 
   dont_copy_values_now = true;
 
@@ -1433,31 +1399,6 @@ tab_input::load(wxConfigBase *cfg) {
   selected_track = -1;
   b_remove_file->Enable(false);
 
-  for (fidx = 0; fidx < files.size(); fidx++) {
-    f = &files[fidx];
-
-    delete f->file_name;
-    delete f->title;
-    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
-      t = &(*f->tracks)[tidx];
-
-      delete t->ctype;
-      delete t->language;
-      delete t->track_name;
-      delete t->cues;
-      delete t->delay;
-      delete t->sub_charset;
-      delete t->tags;
-      delete t->stretch;
-      delete t->aspect_ratio;
-      delete t->dwidth;
-      delete t->dheight;
-      delete t->fourcc;
-      delete t->compression;
-      delete t->timecodes;
-    }
-    delete f->tracks;
-  }
   files.clear();
   tracks.clear();
 
@@ -1475,23 +1416,19 @@ tab_input::load(wxConfigBase *cfg) {
       cfg->SetPath(wxT(".."));
       continue;
     }
-    if (!cfg->Read(wxT("file_name"), &s)) {
+    if (!cfg->Read(wxT("file_name"), &fi.file_name)) {
       cfg->SetPath(wxT(".."));
       continue;
     }
-    fi.file_name = new wxString(s);
-    cfg->Read(wxT("title"), &s);
-    fi.title = new wxString(s);
+    cfg->Read(wxT("title"), &fi.title);
     cfg->Read(wxT("container"), &fi.container);
-    fi.no_chapters = false;
-    cfg->Read(wxT("no_chapters"), &fi.no_chapters);
-    fi.no_attachments = false;
-    cfg->Read(wxT("no_attachments"), &fi.no_attachments);
-    fi.no_tags = false;
-    cfg->Read(wxT("no_tags"), &fi.no_tags);
-    fi.tracks = new vector<mmg_track_t>;
+    cfg->Read(wxT("no_chapters"), &fi.no_chapters, false);
+    cfg->Read(wxT("no_attachments"), &fi.no_attachments, false);
+    cfg->Read(wxT("no_tags"), &fi.no_tags, false);
 
     for (tidx = 0; tidx < (uint32_t)num_tracks; tidx++) {
+      mmg_track_ptr tr(new mmg_track_t);
+
       s.Printf(wxT("track %ld"), tidx);
       cfg->SetPath(s);
       if (!cfg->Read(wxT("type"), &c) || (c.Length() != 1) ||
@@ -1499,66 +1436,46 @@ tab_input::load(wxConfigBase *cfg) {
         cfg->SetPath(wxT(".."));
         continue;
       }
-      tr.type = c.c_str()[0];
-      if (((tr.type != 'a') && (tr.type != 'v') && (tr.type != 's')) ||
-          !parse_int(wxMB(id), tr.id)) {
+      tr->type = c.c_str()[0];
+      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's')) ||
+          !parse_int(wxMB(id), tr->id)) {
         cfg->SetPath(wxT(".."));
         continue;
       }
-      cfg->Read(wxT("enabled"), &tr.enabled);
-      cfg->Read(wxT("content_type"), &s);
-      tr.ctype = new wxString(s);
-      tr.default_track = false;
-      cfg->Read(wxT("default_track"), &tr.default_track);
-      tr.aac_is_sbr = false;
-      cfg->Read(wxT("aac_is_sbr"), &tr.aac_is_sbr);
-      cfg->Read(wxT("language"), &s);
-      tr.language = new wxString(s);
-      cfg->Read(wxT("track_name"), &s);
-      tr.track_name = new wxString(s);
-      cfg->Read(wxT("cues"), &s);
-      tr.cues = new wxString(s);
-      cfg->Read(wxT("delay"), &s);
-      tr.delay = new wxString(s);
-      cfg->Read(wxT("stretch"), &s);
-      tr.stretch = new wxString(s);
-      cfg->Read(wxT("sub_charset"), &s);
-      tr.sub_charset = new wxString(s);
-      cfg->Read(wxT("tags"), &s);
-      tr.tags = new wxString(s);
+      cfg->Read(wxT("enabled"), &tr->enabled);
+      cfg->Read(wxT("content_type"), &tr->ctype);
+      cfg->Read(wxT("default_track"), &tr->default_track, false);
+      cfg->Read(wxT("aac_is_sbr"), &tr->aac_is_sbr, false);
+      cfg->Read(wxT("language"), &tr->language);
+      cfg->Read(wxT("track_name"), &tr->track_name);
+      cfg->Read(wxT("cues"), &tr->cues);
+      cfg->Read(wxT("delay"), &tr->delay);
+      cfg->Read(wxT("stretch"), &tr->stretch);
+      cfg->Read(wxT("sub_charset"), &tr->sub_charset);
+      cfg->Read(wxT("tags"), &tr->tags);
       cfg->Read(wxT("display_dimensions_selected"),
-                &tr.display_dimensions_selected);
-      cfg->Read(wxT("aspect_ratio"), &s);
-      tr.aspect_ratio = new wxString(s);
-      cfg->Read(wxT("display_width"), &s);
-      tr.dwidth = new wxString(s);
-      cfg->Read(wxT("display_height"), &s);
-      tr.dheight = new wxString(s);
-      cfg->Read(wxT("fourcc"), &s);
-      tr.fourcc = new wxString(s);
-      cfg->Read(wxT("compression"), &s);
-      tr.compression = new wxString(s);
-      cfg->Read(wxT("timecodes"), &s);
-      tr.timecodes = new wxString(s);
-      if (!cfg->Read(wxT("track_name_was_present"), &b))
-        b = false;
-      tr.track_name_was_present = b;
-      tr.source = files.size();
-      if (track_order.length() > 0)
+                &tr->display_dimensions_selected, false);
+      cfg->Read(wxT("aspect_ratio"), &tr->aspect_ratio);
+      cfg->Read(wxT("display_width"), &tr->dwidth);
+      cfg->Read(wxT("display_height"), &tr->dheight);
+      cfg->Read(wxT("fourcc"), &tr->fourcc);
+      cfg->Read(wxT("compression"), &tr->compression);
+      cfg->Read(wxT("timecodes"), &tr->timecodes);
+      cfg->Read(wxT("track_name_was_present"), &tr->track_name_was_present,
+                false);
+      tr->source = files.size();
+      if (track_order.Length() > 0)
         track_order += wxT(",");
       track_order += wxString::Format(wxUCS(format.c_str()), files.size(),
-                                      tr.id);
+                                      tr->id);
 
-      fi.tracks->push_back(tr);
+      fi.tracks.push_back(tr);
       cfg->SetPath(wxT(".."));
     }
 
-    if (fi.tracks->size() == 0) {
-      delete fi.tracks;
-      delete fi.file_name;
-    } else {
-      s = fi.file_name->BeforeLast(PSEP);
-      c = fi.file_name->AfterLast(PSEP);
+    if (fi.tracks.size() != 0) {
+      s = fi.file_name.BeforeLast(PSEP);
+      c = fi.file_name.AfterLast(PSEP);
       lb_input_files->Append(c + wxT(" (") + s + wxT(")"));
       files.push_back(fi);
     }
@@ -1573,7 +1490,6 @@ tab_input::load(wxConfigBase *cfg) {
     entries = split(s, (wxString)wxT(","));
     for (i = 0; i < entries.size(); i++) {
       wxString label, name;
-      mmg_track_t *t;
       bool found;
       int j;
 
@@ -1592,8 +1508,8 @@ tab_input::load(wxConfigBase *cfg) {
                   "Moritz Bunkus <moritz@bunkus.org>\n\n"
                   "(Problematic occured in tab_input::load(), #2)"));
       found = false;
-      for (j = 0; j < files[fidx].tracks->size(); j++)
-        if ((*files[fidx].tracks)[j].id == tidx) {
+      for (j = 0; j < files[fidx].tracks.size(); j++)
+        if (files[fidx].tracks[j]->id == tidx) {
           found = true;
           tidx = j;
         }
@@ -1603,15 +1519,15 @@ tab_input::load(wxConfigBase *cfg) {
                   "a bug in mmg. Please report this to the author\n"
                   "Moritz Bunkus <moritz@bunkus.org>\n\n"
                   "(Problematic occured in tab_input::load(), #3)"));
-      t = &(*files[fidx].tracks)[tidx];
+      mmg_track_ptr &t = files[fidx].tracks[tidx];
       t->enabled = true;
-      tracks.push_back(t);
+      tracks.push_back(t.get());
 
       fix_format("%s (ID %lld, type: %s) from %s", format);
-      name = files[fidx].file_name->AfterLast(wxT(PSEP));
-      name += wxT(" (") + files[fidx].file_name->BeforeLast(wxT(PSEP)) +
+      name = files[fidx].file_name.AfterLast(wxT(PSEP));
+      name += wxT(" (") + files[fidx].file_name.BeforeLast(wxT(PSEP)) +
         wxT(")");
-      label.Printf(wxU(format.c_str()), t->ctype->c_str(), t->id,
+      label.Printf(wxU(format.c_str()), t->ctype.c_str(), t->id,
                    t->type == 'a' ? wxT("audio") :
                    t->type == 'v' ? wxT("video") :
                    t->type == 's' ? wxT("subtitles") : wxT("unknown"),
@@ -1630,7 +1546,6 @@ bool
 tab_input::validate_settings() {
   uint32_t fidx, tidx, i;
   mmg_file_t *f;
-  mmg_track_t *t;
   bool tracks_selected, dot_present, ok;
   int64_t dummy_i;
   string format, s;
@@ -1640,8 +1555,8 @@ tab_input::validate_settings() {
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
 
-    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
-      t = &(*f->tracks)[tidx];
+    for (tidx = 0; tidx < f->tracks.size(); tidx++) {
+      mmg_track_ptr &t = f->tracks[tidx];
       if (!t->enabled)
         continue;
 
@@ -1649,17 +1564,17 @@ tab_input::validate_settings() {
       fix_format("%lld", format);
       sid.Printf(wxU(format.c_str()), t->id);
 
-      s = wxMB(*t->delay);
+      s = wxMB(t->delay);
       strip(s);
       if ((s.length() > 0) && !parse_int(s, dummy_i)) {
         wxMessageBox(wxT("The delay setting for track nr. ") + sid +
-                     wxT(" in file '") + *f->file_name + wxT("' is invalid."),
+                     wxT(" in file '") + f->file_name + wxT("' is invalid."),
                      wxT("mkvmerge GUI: error"),
                      wxOK | wxCENTER | wxICON_ERROR);
         return false;
       }
 
-      s = wxMB(*t->stretch);
+      s = wxMB(t->stretch);
       strip(s);
       if (s.length() > 0) {
         dot_present = false;
@@ -1672,7 +1587,7 @@ tab_input::validate_settings() {
             i++;
           } else {
             wxMessageBox(wxT("The stretch setting for track nr. ") + sid +
-                         wxT(" in file '") + *f->file_name +
+                         wxT(" in file '") + f->file_name +
                          wxT("' is invalid."), wxT("mkvmerge GUI: error"),
                          wxOK | wxCENTER | wxICON_ERROR);
             return false;
@@ -1680,18 +1595,18 @@ tab_input::validate_settings() {
         }
       }
 
-      s = wxMB(*t->fourcc);
+      s = wxMB(t->fourcc);
       strip(s);
       if ((s.length() > 0) && (s.length() != 4)) {
         wxMessageBox(wxT("The FourCC setting for track nr. ") + sid +
-                     wxT(" in file '") + *f->file_name +
+                     wxT(" in file '") + f->file_name +
                      wxT("' is not excatly four characters long."),
                      wxT("mkvmerge GUI: error"),
                      wxOK | wxCENTER | wxICON_ERROR);
         return false;
       }
 
-      s = wxMB(*t->aspect_ratio);
+      s = wxMB(t->aspect_ratio);
       strip(s);
       if (s.length() > 0) {
         dot_present = false;
@@ -1728,7 +1643,7 @@ tab_input::validate_settings() {
 
         if (!ok) {
           wxMessageBox(wxT("The aspect ratio setting for track nr. ") + sid +
-                       wxT(" in file '") + *f->file_name +
+                       wxT(" in file '") + f->file_name +
                        wxT("' is invalid."), wxT("mkvmerge GUI: error"),
                        wxOK | wxCENTER | wxICON_ERROR);
           return false;
