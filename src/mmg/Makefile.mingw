@@ -40,6 +40,10 @@ mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 clean:
 	rm -f *.o $(PROGRAMS)
 
+Makefile: Makefile.mingw
+	@echo Re-copying Makefile from Makefile.mingw
+	sed "s/-f Makefile\.mingw//g" < $< > $@
+
 depend:
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
 		$(mmg_SOURCES) > .depend

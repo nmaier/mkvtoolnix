@@ -16,14 +16,7 @@ endif
 # And now the targets.
 .PHONY: config.h
 
-all: config.h subdirs
-
-config.h:
-	if [ ! -f config.h ]; then \
-	  cp config.h.mingw config.h ; \
-	else \
-	  true; \
-	fi
+all: subdirs
 
 subdirs:
 	list='$(SUBDIRS)'; \
@@ -38,6 +31,10 @@ clean:
 	  echo "Making clean in $$subdir"; \
 	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
 	done
+
+Makefile: Makefile.mingw
+	@echo Re-copying Makefile from Makefile.mingw
+	sed "s/-f Makefile\.mingw//g" < $< > $@
 
 depend:
 	list='$(SUBDIRS)'; \

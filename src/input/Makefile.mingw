@@ -43,6 +43,10 @@ libmtxinput.a: $(libmtxinput_OBJECTS)
 clean:
 	rm -f *.o $(LIBRARIES)
 
+Makefile: Makefile.mingw
+	@echo Re-copying Makefile from Makefile.mingw
+	sed "s/-f Makefile\.mingw//g" < $< > $@
+
 depend:
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
 		$(libmtxinput_SOURCES) > .depend

@@ -87,6 +87,10 @@ clean:
 	done
 	rm -f *.o $(PROGRAMS)
 
+Makefile: Makefile.mingw
+	@echo Re-copying Makefile from Makefile.mingw
+	sed "s/-f Makefile\.mingw//g" < $< > $@
+
 depend:
 	list='$(SUBDIRS)'; \
 	for subdir in $$list; do \

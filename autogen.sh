@@ -29,8 +29,10 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
   for i in `find -name Makefile.mingw`; do
     n=`echo $i | sed 's/\.mingw$//'`
     echo "Creating $n from $i"
-    sed "s/Makefile\.mingw\([^\.]\)/Makefile\1/g" < $i > $n
+    sed "s/-f Makefile\.mingw//g" < $i > $n
   done
+  echo "Creating config.h from config.h.mingw"
+  cp config.h.mingw config.h
   echo ''
 
   echo 'Creating dependencies (calling "make depend")'

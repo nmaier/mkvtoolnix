@@ -28,6 +28,10 @@ libavi.a: $(libavi_OBJECTS)
 clean:
 	rm -f *.o $(LIBRARIES) .depend
 
+Makefile: Makefile.mingw
+	@echo Re-copying Makefile from Makefile.mingw
+	sed "s/-f Makefile\.mingw//g" < $< > $@
+
 depend:
 	$(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
 	  $(libavi_SOURCES) > .depend
