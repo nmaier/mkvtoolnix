@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.h,v 1.7 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_mp3.h,v 1.8 2003/04/11 11:19:49 mosu Exp $
     \brief class definition for the MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,16 +30,16 @@ private:
   u_int64_t      bytes_output, packetno;
   unsigned long  samples_per_sec;
   int            channels;
-  int            mp3rate;
   unsigned char *tempbuf, *packet_buffer;
   int            buffer_size;
 
 public:
   mp3_packetizer_c(unsigned long nsamples_per_sec, int nchannels,
-                   int nmp3rate, track_info_t *nti) throw (error_c);
+                   track_info_t *nti) throw (error_c);
   virtual ~mp3_packetizer_c();
     
-  virtual int            process(unsigned char *buf, int size, int last_frame);
+  virtual int            process(unsigned char *buf, int size,
+                                 int64_t timecode = -1, int64_t length = -1);
   virtual void           set_header();
 
 private:
