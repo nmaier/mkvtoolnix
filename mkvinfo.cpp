@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.11 2003/04/17 17:23:26 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.12 2003/04/17 19:23:49 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -53,8 +53,9 @@
 #include "KaxCluster.h"
 #include "KaxClusterData.h"
 #include "KaxBlock.h"
-#include "KaxCues.h"
 #include "KaxBlockData.h"
+#include "KaxCues.h"
+#include "KaxCuesData.h"
 
 #include "common.h"
 
@@ -147,6 +148,7 @@ void process_file() {
   int upper_lvl_el, exit_loop, i, delete_object;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
+  EbmlElement *l5 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
   int64_t last_pos;
@@ -667,6 +669,242 @@ void process_file() {
           }
         } // while (l2 != NULL)
 
+      } else if (EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) {
+        fprintf(stdout, "(%s) |+ found cues", NAME);
+        if (verbose > 1)
+          fprintf(stdout, " at %llu", last_pos);
+        fprintf(stdout, "\n");
+
+        last_pos = in->getFilePointer();
+        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                            true);
+        while (l2 != NULL) {
+          if (upper_lvl_el != 0)
+            break;
+
+          if (EbmlId(*l2) == KaxCuePoint::ClassInfos.GlobalId) {
+            fprintf(stdout, "(%s) | + found cue point", NAME);
+            if (verbose > 1)
+              fprintf(stdout, " at %llu", last_pos);
+            fprintf(stdout, "\n");
+
+            last_pos = in->getFilePointer();
+            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
+                                0xFFFFFFFFL, true);
+            while (l3 != NULL) {
+              if (upper_lvl_el != 0)
+                break;
+
+              if (EbmlId(*l3) == KaxCueTime::ClassInfos.GlobalId) {
+                KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
+                fprintf(stdout, "(%s) |  + found cue time: %llu", NAME,
+                        uint64(cue_time));
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxCueTrackPositions::ClassInfos.GlobalId) {
+                fprintf(stdout, "(%s) |  + found cue track positions", NAME);
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
+                last_pos = in->getFilePointer();
+                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
+                                    0xFFFFFFFFL, true);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxCueTrack::ClassInfos.GlobalId) {
+                    KaxCueTrack &cue_track = *static_cast<KaxCueTrack *>(l4);
+                    fprintf(stdout, "(%s) |  + found cue track: %u", NAME,
+                            uint32(cue_track));
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", last_pos);
+                    fprintf(stdout, "\n");
+
+                  } else if (EbmlId(*l4) ==
+                             KaxCueClusterPosition::ClassInfos.GlobalId) {
+                    KaxCueClusterPosition &cue_cp =
+                      *static_cast<KaxCueClusterPosition *>(l4);
+                    fprintf(stdout, "(%s) |  + found cue cluster position: "
+                            "%llu", NAME, uint64(cue_cp));
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", last_pos);
+                    fprintf(stdout, "\n");
+
+                  } else if (EbmlId(*l4) ==
+                             KaxCueBlockNumber::ClassInfos.GlobalId) {
+                    KaxCueBlockNumber &cue_bn =
+                      *static_cast<KaxCueBlockNumber *>(l4);
+                    fprintf(stdout, "(%s) |  + found cue block number: %llu",
+                            NAME, uint64(cue_bn));
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", last_pos);
+                    fprintf(stdout, "\n");
+
+                  } else if (EbmlId(*l4) ==
+                             KaxCueCodecState::ClassInfos.GlobalId) {
+                    KaxCueCodecState &cue_cs =
+                      *static_cast<KaxCueCodecState *>(l4);
+                    fprintf(stdout, "(%s) |  + found cue codec state: %llu",
+                            NAME, uint64(cue_cs));
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", last_pos);
+                    fprintf(stdout, "\n");
+
+                  } else if (EbmlId(*l4) ==
+                             KaxCueReference::ClassInfos.GlobalId) {
+                    fprintf(stdout, "(%s) |  + found cue reference", NAME);
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", last_pos);
+                    fprintf(stdout, "\n");
+
+
+                    last_pos = in->getFilePointer();
+                    l5 = es->FindNextID(l4->Generic().Context, upper_lvl_el,
+                                        0xFFFFFFFFL, true);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) == KaxCueRefTime::ClassInfos.GlobalId) {
+                        KaxCueRefTime &cue_rt =
+                          *static_cast<KaxCueRefTime *>(l5);
+                        fprintf(stdout, "(%s) |   + found cue ref time: %llu",
+                                NAME, uint64(cue_rt));
+                        if (verbose > 1)
+                          fprintf(stdout, " at %llu", last_pos);
+                        fprintf(stdout, "\n");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxCueRefCluster::ClassInfos.GlobalId) {
+                        KaxCueRefCluster &cue_rc =
+                          *static_cast<KaxCueRefCluster *>(l5);
+                        fprintf(stdout, "(%s) |   + found cue ref cluster: "
+                                "%llu", NAME, uint64(cue_rc));
+                        if (verbose > 1)
+                          fprintf(stdout, " at %llu", last_pos);
+                        fprintf(stdout, "\n");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxCueRefNumber::ClassInfos.GlobalId) {
+                        KaxCueRefNumber &cue_rn =
+                          *static_cast<KaxCueRefNumber *>(l5);
+                        fprintf(stdout, "(%s) |   + found cue ref number: "
+                                "%llu", NAME, uint64(cue_rn));
+                        if (verbose > 1)
+                          fprintf(stdout, " at %llu", last_pos);
+                        fprintf(stdout, "\n");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxCueRefCodecState::ClassInfos.GlobalId) {
+                        KaxCueRefCodecState &cue_rcs =
+                          *static_cast<KaxCueRefCodecState *>(l5);
+                        fprintf(stdout, "(%s) |   + found cue ref codec state"
+                                ": %llu", NAME, uint64(cue_rcs));
+                        if (verbose > 1)
+                          fprintf(stdout, " at %llu", last_pos);
+                        fprintf(stdout, "\n");
+
+                      } else {
+                        fprintf(stdout, "(%s) |   + unknown element, "
+                                "level 5: %s", NAME, typeid(*l5).name());
+                        if (verbose > 1)
+                          fprintf(stdout, " at %llu", last_pos);
+                        fprintf(stdout, "\n");
+                      }
+
+                      if (upper_lvl_el > 0) {		// we cannot come from l6
+                        die("level 6 on cues !?");
+
+                      } else {
+                        l5->SkipData(static_cast<EbmlStream &>(*es),
+                                     l5->Generic().Context);
+                        delete l5;
+                        last_pos = in->getFilePointer();
+                        l5 = es->FindNextID(l4->Generic().Context,
+                                            upper_lvl_el, 0xFFFFFFFFL, true);
+                      }
+                    } // while (l5 != NULL)
+
+                  } else {
+                    fprintf(stdout, "(%s) |  + unknown element, level 4: %s",
+                            NAME, typeid(*l4).name());
+                    if (verbose > 1)
+                      fprintf(stdout, " at %llu", last_pos);
+                    fprintf(stdout, "\n");
+                  }
+
+                  if (upper_lvl_el > 0) {		// we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(static_cast<EbmlStream &>(*es),
+                                 l4->Generic().Context);
+                    delete l4;
+                    last_pos = in->getFilePointer();
+                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
+                                        0xFFFFFFFFL, true);
+                  }
+                } // while (l4 != NULL)
+
+              } else {
+                fprintf(stdout, "(%s) |  + unknown element, level 3: %s", NAME,
+                        typeid(*l3).name());
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+              }
+
+              if (upper_lvl_el > 0) {		// we're coming from l4
+                upper_lvl_el--;
+                delete l3;
+                l3 = l4;
+                if (upper_lvl_el > 0)
+                  break;
+
+              } else {
+                l3->SkipData(static_cast<EbmlStream &>(*es),
+                             l3->Generic().Context);
+                delete l3;
+                last_pos = in->getFilePointer();
+                l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
+                                    0xFFFFFFFFL, true);
+              }
+            } // while (l3 != NULL)
+
+          } else {
+            fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
+                    typeid(*l2).name());
+            if (verbose > 1)
+              fprintf(stdout, " at %llu", last_pos);
+            fprintf(stdout, "\n");
+          }
+
+          if (upper_lvl_el > 0) {		// we're coming from l3
+            upper_lvl_el--;
+            delete l2;
+            l2 = l3;
+            if (upper_lvl_el > 0)
+              break;
+
+          } else {
+            l2->SkipData(static_cast<EbmlStream &>(*es),
+                         l2->Generic().Context);
+            delete l2;
+            last_pos = in->getFilePointer();
+            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
+                                0xFFFFFFFFL, true);
+//             if (l2) printf("[mkv] [fb]? 2 : %s\n", typeid(*l2).name());
+          }
+        } // while (l2 != NULL)
       } else {
         fprintf(stdout, "(%s) |+ unknown element, level 1: %s", NAME,
                 typeid(*l1).name());
