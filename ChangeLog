@@ -1,5 +1,9 @@
 2003-10-14  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: If 'no linking' and splitting was active
+        mkvmerge would abort on the start of the second output file due to
+        timecodes that were calculated incorrectly.
+
         * mkvmerge: Implemented some speedups for a couple of container
         formats and track types (mainly AVI reader, MP3/AC3/AAC
         packetizers). Especially noticeable when splitting is active as
