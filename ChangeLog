@@ -1,3 +1,10 @@
+2004-10-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Changed the Ogg/OGM reader to use the stream number
+	and not its serial number as the track ID (meaning the track IDs
+	will be 0, 1, 2... etc. instead of the random numbers oggenc uses
+	as the serial numbers).
+
 2004-09-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: The CUE sheet parser now accepts INDEX
