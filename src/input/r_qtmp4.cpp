@@ -1208,8 +1208,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         int profile, sample_rate, channels, output_sample_rate;
         bool sbraac;
 
-        if ((dmx->esds.decoder_config_len == 2) ||
-            (dmx->esds.decoder_config_len == 5)) {
+        if (dmx->esds.decoder_config_len >= 2) {
           parse_aac_data(dmx->esds.decoder_config,
                          dmx->esds.decoder_config_len, profile, channels,
                          sample_rate, output_sample_rate, sbraac);
@@ -1218,6 +1217,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                  channels, output_sample_rate, (int)sbraac);
           if (sbraac)
             profile = AAC_PROFILE_SBR;
+          ti->private_data = dmx->esds.decoder_config;
+          ti->private_size = dmx->esds.decoder_config_len;
           dmx->ptzr =
             add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                                 sample_rate, channels, ti,
@@ -1227,6 +1228,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
               set_audio_output_sampling_freq(output_sample_rate);
           mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname.c_str(),
                  (int64_t)dmx->id);
+          ti->private_data = NULL;
+          ti->private_size = 0;
 
         } else
           mxerror(FMT_TID "AAC found, but decoder config data has length %u."

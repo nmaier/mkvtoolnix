@@ -222,7 +222,7 @@ parse_aac_data(unsigned char *data,
   if (size == 5) {
     output_sample_rate = aac_sampling_freq[(data[4] & 0x7f) >> 3];
     sbr = true;
-  } else if (sample_rate < 44100) {
+  } else if (sample_rate <= 24000) {
     output_sample_rate = 2 * sample_rate;
     sbr = true;
   } else

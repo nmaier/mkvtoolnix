@@ -443,8 +443,7 @@ kax_reader_c::verify_tracks() {
             c = (unsigned char *)t->private_data;
             if (c[0] != 2) {
               if (verbose)
-                mxwarn(PFX "Vorbis track does not "
-                       "contain valid headers.\n");
+                mxwarn(PFX "Vorbis track does not contain valid headers.\n");
               continue;
             }
 
@@ -458,8 +457,7 @@ kax_reader_c::verify_tracks() {
               }
               if (offset >= (t->private_size - 1)) {
                 if (verbose)
-                  mxwarn(PFX "Vorbis track does not "
-                         "contain valid headers.\n");
+                  mxwarn(PFX "Vorbis track does not contain valid headers.\n");
                 continue;
               }
               length += c[offset];
@@ -497,8 +495,15 @@ kax_reader_c::verify_tracks() {
                      (t->codec_id == MKV_A_AAC_2SBR) ||
                      (t->codec_id == MKV_A_AAC_4SBR))
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
-          else if (starts_with(t->codec_id, MKV_A_REAL_COOK,
-                               strlen("A_REAL/")))
+          else if (t->codec_id == MKV_A_AAC) {
+            if ((t->private_data == NULL) || (t->private_size < 2)) {
+              mxwarn(PFX "The AAC track number %u is missing its private "
+                     "data. Ignoring this track.\n", t->tnum);
+              continue;
+            }
+            t->a_formattag = FOURCC('M', 'P', '4', 'A');
+          } else if (starts_with(t->codec_id, MKV_A_REAL_COOK,
+                                 strlen("A_REAL/")))
             t->a_formattag = FOURCC('r', 'e', 'a', 'l');
           else if (t->codec_id == MKV_A_FLAC) {
 #if defined(HAVE_FLAC_FORMAT_H)
@@ -1651,7 +1656,19 @@ kax_reader_c::create_packetizer(int64_t tid) {
           id = 0;
           profile = 0;
           if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
-            if (!parse_aac_codec_id(string(t->codec_id), id, profile))
+            int channels, sfreq, osfreq;
+            bool sbr;
+
+            if (t->codec_id == MKV_A_AAC) {
+              id = AAC_ID_MPEG4;
+              if (!parse_aac_data((unsigned char *)t->private_data,
+                                  t->private_size, profile, channels, sfreq,
+                                  osfreq, sbr))
+                mxerror(FMT_TID "Malformed AAC codec initialization data "
+                        "found.\n", ti->fname.c_str(), (int64_t)t->tnum);
+              if (sbr)
+                profile = AAC_PROFILE_SBR;
+            } else if (!parse_aac_codec_id(string(t->codec_id), id, profile))
               mxerror(FMT_TID "Malformed codec id '%s'.\n", ti->fname.c_str(),
                       (int64_t)t->tnum, t->codec_id.c_str());
           } else {
