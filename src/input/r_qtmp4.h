@@ -110,7 +110,6 @@ typedef struct {
   bool warning_printed;
 
   int ptzr;
-  bool headers_set;
 } qtmp4_demuxer_t;
 
 class qtmp4_reader_c: public generic_reader_c {
@@ -129,7 +128,6 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual int display_priority();
   virtual void display_progress(bool final = false);
-  virtual void set_headers();
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);

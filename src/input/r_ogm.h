@@ -70,7 +70,6 @@ public:
 struct ogm_demuxer_t {
   ogg_stream_state os;
   int ptzr;
-  bool headers_set;
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
   bool headers_read, native_mode;
@@ -112,7 +111,6 @@ public:
   virtual ~ogm_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);
-  virtual void set_headers();
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);

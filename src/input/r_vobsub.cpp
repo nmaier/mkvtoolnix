@@ -201,8 +201,6 @@ void
 vobsub_reader_c::create_packetizers() {
   uint32_t i;
 
-  for (i = 0; i < ti->track_order->size(); i++)
-    create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < tracks.size(); i++)
     create_packetizer(i);
 }
@@ -577,33 +575,6 @@ vobsub_reader_c::identify() {
       info = "";
     mxinfo("Track ID %u: subtitles (VobSub)%s\n", i, info.c_str());
   }
-}
-
-void
-vobsub_reader_c::set_headers() {
-  uint32_t i, k;
-  vobsub_track_c *t;
-
-  for (i = 0; i < tracks.size(); i++)
-    tracks[i]->headers_set = false;
-
-  for (i = 0; i < ti->track_order->size(); i++) {
-    t = NULL;
-    for (k = 0; k < tracks.size(); k++)
-      if (k == (*ti->track_order)[i]) {
-        t = tracks[k];
-        break;
-      }
-    if ((t != NULL) && (t->ptzr != -1) && !t->headers_set) {
-      PTZR(t->ptzr)->set_headers();
-      t->headers_set = true;
-    }
-  }
-  for (i = 0; i < tracks.size(); i++)
-    if ((tracks[i]->ptzr != -1) && !tracks[i]->headers_set) {
-      PTZR(tracks[i]->ptzr)->set_headers();
-      tracks[i]->headers_set = true;
-    }
 }
 
 void

@@ -1669,8 +1669,6 @@ void
 kax_reader_c::create_packetizers() {
   uint32_t i;
 
-  for (i = 0; i < ti->track_order->size(); i++)
-    create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < tracks.size(); i++)
     create_packetizer(tracks[i]->tnum);
   if (segment_title_set == false) {
@@ -1918,7 +1916,7 @@ kax_reader_c::read(generic_packetizer_c *) {
 
 // }}}
 
-// {{{ FUNCTIONS display_*, set_headers()
+// {{{ FUNCTIONS display_*
 
 int
 kax_reader_c::display_priority() {
@@ -1967,39 +1965,14 @@ kax_reader_c::display_progress(bool final) {
 
 void
 kax_reader_c::set_headers() {
-  uint32_t i, k;
-  kax_track_t *t;
+  uint32_t i;
+
+  generic_reader_c::set_headers();
 
   for (i = 0; i < tracks.size(); i++)
-    tracks[i]->headers_set = false;
-
-  for (i = 0; i < ti->track_order->size(); i++) {
-    t = NULL;
-    for (k = 0; k < tracks.size(); k++)
-      if (tracks[k]->tnum == (*ti->track_order)[i]) {
-        t = tracks[k];
-        break;
-      }
-    if ((t != NULL) && (t->ptzr != -1) && !t->headers_set) {
-      PTZR(t->ptzr)->set_headers();
-      t->headers_set = true;
-    }
-  }
-  for (i = 0; i < tracks.size(); i++) {
-    if ((tracks[i]->ptzr != -1) && !tracks[i]->headers_set) {
-      PTZR(tracks[i]->ptzr)->set_headers();
-      tracks[i]->headers_set = true;
-    }
-    if ((tracks[i]->ptzr != -1) && tracks[i]->passthrough) {
+    if ((tracks[i]->ptzr != -1) && tracks[i]->passthrough)
       PTZR(tracks[i]->ptzr)->get_track_entry()->
         EnableLacing(tracks[i]->lacing_flag);
-//       if (tracks[i]->kax_c_encodings != NULL) {
-//         PTZR(tracks[i]->ptzr)->get_track_entry()->
-//           PushElement(*tracks[i]->kax_c_encodings);
-//         tracks[i]->kax_c_encodings = NULL;
-//       }
-    }
-  }
 }
 
 // }}}

@@ -101,7 +101,6 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   fsize = 0;
   rederive_keyframes = 0;
   vptzr = -1;
-  vheaders_set = false;
 
   frames = 0;
   delete io;
@@ -194,9 +193,6 @@ void
 avi_reader_c::create_packetizers() {
   uint32_t i, bps;
   vector<avi_demuxer_t>::iterator demuxer;
-
-  for (i = 0; i < ti->track_order->size(); i++)
-    create_packetizer((*ti->track_order)[i]);
 
   create_packetizer(0);
 
@@ -535,48 +531,6 @@ avi_reader_c::display_progress(bool final) {
     if (act_wchar == strlen(wchar))
       act_wchar = 0;
   }
-}
-
-// }}}
-
-// {{{ FUNCTION avi_reader_c::set_headers
-
-void
-avi_reader_c::set_headers() {
-  uint32_t i;
-  vector<avi_demuxer_t>::iterator d;
-
-  vheaders_set = false;
-  foreach(d, ademuxers)
-    d->headers_set = false;
-
-  for (i = 0; i < ti->track_order->size(); i++) {
-    if ((*ti->track_order)[i] == 0) {
-      if ((vptzr != -1) && !vheaders_set) {
-        PTZR(vptzr)->set_headers();
-        vheaders_set = true;
-      }
-      continue;
-    }
-    foreach(d, ademuxers)
-      if ((d->aid + 1) == (*ti->track_order)[i])
-        break;
-    if ((d != ademuxers.end()) && (d->ptzr != -1) && !d->headers_set) {
-      PTZR(d->ptzr)->set_headers();
-      d->headers_set = true;
-    }
-  }
-
-  if ((vptzr != -1) && !vheaders_set) {
-    PTZR(vptzr)->set_headers();
-    vheaders_set = true;
-  }
-
-  foreach(d, ademuxers)
-    if (!d->headers_set) {
-      PTZR(d->ptzr)->set_headers();
-      d->headers_set = true;
-    }
 }
 
 // }}}

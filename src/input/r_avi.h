@@ -42,7 +42,6 @@ extern "C" {
 
 typedef struct avi_demuxer_t {
   int ptzr;
-  bool headers_set;
   int channels, bits_per_sample, samples_per_second, aid;
   int64_t bytes_processed;
 } avi_demuxer_t;
@@ -53,7 +52,6 @@ private:
   avi_t *avi;
   mm_io_c *io;
   int vptzr;
-  bool vheaders_set;
   vector<avi_demuxer_t> ademuxers;
   double fps;
   int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
@@ -66,7 +64,6 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual int display_priority();
   virtual void display_progress(bool final = false);
-  virtual void set_headers();
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);

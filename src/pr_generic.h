@@ -200,7 +200,6 @@ public:
 
   bool no_chapters, no_attachments, no_tags;
 
-  vector<int64_t> *track_order;
   vector<int64_t> *append_mapping;
 
   // The following variables are needed for the broken way of
@@ -249,11 +248,10 @@ typedef struct packetizer_container_t {
 #define NPTZR() reader_packetizers.size()
 
 class generic_reader_c {
-protected:
+public:
   track_info_c *ti;
   vector<packetizer_container_t> reader_packetizers;
   generic_reader_c *connected_to;
-public:
   int64_t max_timecode_seen;
 
 public:
@@ -264,6 +262,7 @@ public:
   virtual int display_priority();
   virtual void display_progress(bool final = false);
   virtual void set_headers();
+  virtual void set_headers_for_track(int64_t tid);
   virtual void identify() = 0;
   virtual void create_packetizer(int64_t tid) = 0;
   virtual void create_packetizers() {
@@ -288,7 +287,6 @@ class generic_packetizer_c {
 protected:
   deque<packet_t *> packet_queue;
 
-  track_info_c *ti;
   int64_t initial_displacement;
   int64_t free_refs, enqueued_bytes, safety_last_timecode;
 
@@ -325,6 +323,7 @@ protected:
   int64_t last_cue_timecode;
 
 public:
+  track_info_c *ti;
   generic_reader_c *reader;
   int64_t timecode_offset;
 

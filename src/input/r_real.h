@@ -40,7 +40,6 @@ typedef struct {
 
 typedef struct {
   int ptzr;
-  bool headers_set;
   rmff_track_t *track;
 
   int bsid, channels, samples_per_second, bits_per_sample;
@@ -77,7 +76,6 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual int display_priority();
   virtual void display_progress(bool final = false);
-  virtual void set_headers();
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);

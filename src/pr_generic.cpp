@@ -1196,6 +1196,17 @@ generic_reader_c::set_headers() {
     it->orig->set_headers();
 }
 
+void
+generic_reader_c::set_headers_for_track(int64_t tid) {
+  vector<packetizer_container_t>::iterator it;
+
+  foreach(it, reader_packetizers)
+    if (it->orig->ti->id == tid) {
+      it->orig->set_headers();
+      break;
+    }
+}
+
 int
 generic_reader_c::display_priority() {
   return DISPLAYPRIORITY_LOW;
@@ -1246,7 +1257,6 @@ track_info_c::track_info_c():
   compression_list = new vector<cue_creation_t>;
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
-  track_order = new vector<int64_t>;
   append_mapping = new vector<int64_t>;
   avi_block_sizes = NULL;
 }
@@ -1291,7 +1301,6 @@ track_info_c::free_contents() {
     delete tags;
   delete all_fourccs;
   delete display_properties;
-  delete track_order;
   delete append_mapping;
   delete avi_block_sizes;
 
@@ -1376,8 +1385,6 @@ track_info_c::operator =(const track_info_c &src) {
   no_chapters = src.no_chapters;
   no_attachments = src.no_attachments;
   no_tags = src.no_tags;
-
-  track_order = new vector<int64_t>(*src.track_order);
 
   append_mapping = new vector<int64_t>(*src.append_mapping);
 

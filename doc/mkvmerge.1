@@ -86,6 +86,14 @@ below for details.
 .LP
 General output control (advanced global options):
 .TP
+\fB\-\-track\-order\fR <\fIFID1:TID1\fR[,\fIFID2:TID2\fR,...]>
+This option changes the order in which the tracks for an input file are
+created. The argument is a comma separated list of pairs IDs. Each pair
+contains first the file ID which is simply the number of the file on the
+command line starting at 0. The second is a track ID from that file.
+If some track IDs are omitted then those tracks are created after the
+ones given with this option have been created.
+.TP
 \fB\-\-cluster\-length \fR \fIn[ms]\fR
 Put at most \fIn\fR data blocks into each cluster. If the number is
 postfixed with 'ms' then put at most \fIn\fR milliseconds of data into
@@ -295,11 +303,6 @@ to correct that.
 Read the timecodes to be used for the specific track ID from \fIfilename\fR.
 These timecodes forcefully override the timecodes that \fBmkvmerge\fR
 normally calculates. Read the section about \fBEXTERNAL TIMECODE FILES\fR.
-.TP
-\fB\-\-track\-order\fR <\fITID1\fR[,\fITID2\fR,...]>
-This option changes the order in which the tracks for an input file are
-created. If some track IDs are omitted then those tracks are created after the
-ones given with this option have been created.
 .TP
 \fB\-\-append\-to\fR <\fISTID1:DTID1\fR,[\fISTID2:DTID2\fR...]>
 This option controls to which track a track of the current file is appended

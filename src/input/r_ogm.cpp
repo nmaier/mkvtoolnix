@@ -598,8 +598,6 @@ void
 ogm_reader_c::create_packetizers() {
   int i;
 
-  for (i = 0; i < ti->track_order->size(); i++)
-    create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < num_sdemuxers; i++)
     create_packetizer(sdemuxers[i]->serial);
 }
@@ -1092,33 +1090,6 @@ ogm_reader_c::display_progress(bool final) {
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
   fflush(stdout);
-}
-
-void
-ogm_reader_c::set_headers() {
-  uint32_t i, k;
-  ogm_demuxer_t *d;
-
-  for (i = 0; i < num_sdemuxers; i++)
-    sdemuxers[i]->headers_set = false;
-
-  for (i = 0; i < ti->track_order->size(); i++) {
-    d = NULL;
-    for (k = 0; k < num_sdemuxers; k++)
-      if (sdemuxers[k]->serial == (*ti->track_order)[i]) {
-        d = sdemuxers[k];
-        break;
-      }
-    if ((d != NULL) && (d->ptzr != -1) && !d->headers_set) {
-      PTZR(d->ptzr)->set_headers();
-      d->headers_set = true;
-    }
-  }
-  for (i = 0; i < num_sdemuxers; i++)
-    if ((sdemuxers[i]->ptzr != -1) && !sdemuxers[i]->headers_set) {
-      PTZR(sdemuxers[i]->ptzr)->set_headers();
-      sdemuxers[i]->headers_set = true;
-    }
 }
 
 void

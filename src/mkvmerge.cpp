@@ -132,9 +132,15 @@ typedef struct {
   bool to_all_files;
 } attachment_t;
 
+typedef struct {
+  int64_t file_id;
+  int64_t track_id;
+} track_order_t;
+
 vector<packetizer_t *> packetizers;
 vector<filelist_t *> files;
 vector<attachment_t *> attachments;
+vector<track_order_t> track_order;
 int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
 
 // Variables set by the command line parser.
@@ -249,6 +255,10 @@ usage() {
     "                           Pattern for the conversion from CUE sheet\n"
     "                           entries to chapter names.\n"
     "\n General output control (advanced global options):\n"
+    "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
+    "                           A comma separated list of both file IDs\n"
+    "                           and track IDs that controls the order of the "
+    "                           tracks in the output file.\n"
     "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
     "                           If the number is postfixed with 'ms' then\n"
     "                           put at most n milliseconds of data into each\n"
@@ -308,10 +318,6 @@ usage() {
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
     "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
-    "  --track-order <TID1,TID2,TID3,...>\n"
-    "                           A comma separated list of track IDs that\n"
-    "                           controls the order of the tracks in the\n"
-    "                           output file.\n"
     "  --append-to <STID1:DTID1,STID2:DTID2,...>\n"
     "                           A comma separated list of pairs of track IDs\n"
     "                           that controls which track of the current\n"
@@ -1066,20 +1072,25 @@ parse_fourcc(char *s,
  * The argument must be a comma separated list of track IDs.
  */
 static void
-parse_track_order(const char *s,
-                  track_info_c &ti) {
-  vector<string> parts;
+parse_track_order(const char *s) {
+  vector<string> parts, pair;
   uint32_t i;
-  int64_t id;
+  track_order_t to;
 
-  ti.track_order->clear();
   parts = split(s, ",");
   strip(parts);
   for (i = 0; i < parts.size(); i++) {
-    if (!parse_int(parts[i].c_str(), id))
-      mxerror("'%s' is not a valid track ID in '--track-order %s'.\n",
-              parts[i].c_str(), s);
-    ti.track_order->push_back(id);
+    pair = split(parts[i].c_str(), ":");
+    if (pair.size() != 2)
+      mxerror("'%s' is not a valid pair of file ID and track ID in "
+              "'--track-order %s'.\n", parts[i].c_str(), s);
+    if (!parse_int(pair[0].c_str(), to.file_id))
+      mxerror("'%s' is not a valid file ID in '--track-order %s'.\n",
+              pair[0].c_str(), s);
+    if (!parse_int(pair[1].c_str(), to.track_id))
+      mxerror("'%s' is not a valid file ID in '--track-order %s'.\n",
+              pair[1].c_str(), s);
+    track_order.push_back(to);
   }
 }
 
@@ -1209,6 +1220,12 @@ render_headers(mm_io_c *rout) {
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
 
+    for (i = 0; i < track_order.size(); i++)
+      if ((track_order[i].file_id >= 0) &&
+          (track_order[i].file_id < files.size()) &&
+          files[track_order[i].file_id]->first)
+        files[track_order[i].file_id]->reader->
+          set_headers_for_track(track_order[i].track_id);
     for (i = 0; i < files.size(); i++)
       if (files[i]->first)
         files[i]->reader->set_headers();
@@ -1409,10 +1426,12 @@ create_readers() {
     }
   }
 
-  for (i = 0; i < files.size(); i++) {
-    files[i]->reader->create_packetizers();
-    if (!file->first)
-      file->reader->connect(files[i - 1]->reader);
+  if (!identifying) {
+    for (i = 0; i < files.size(); i++) {
+      files[i]->reader->create_packetizers();
+      if (!file->first)
+        file->reader->connect(files[i - 1]->reader);
+    }
   }
 }
 
@@ -2060,8 +2079,10 @@ parse_args(int argc,
     } else if (!strcmp(this_arg, "--track-order")) {
       if (next_arg == NULL)
         mxerror("'--track-order' lacks its argument.\n");
+      if (track_order.size() > 0)
+        mxerror("'--track-order' may only be given once.\n");
 
-      parse_track_order(next_arg, *ti);
+      parse_track_order(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--append-to")) {

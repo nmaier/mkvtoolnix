@@ -36,7 +36,7 @@ public:
   int ptzr;
   vector<int64_t> positions, timecodes, durations;
   int idx, aid;
-  bool headers_set, mpeg_version_warning_printed;
+  bool mpeg_version_warning_printed;
   int64_t packet_num, spu_size, overhead;
 
 public:
@@ -44,7 +44,6 @@ public:
     language = safestrdup(new_language);
     ptzr = -1;
     idx = 0;
-    headers_set = false;
     mpeg_version_warning_printed = false;
     packet_num = 0;
     aid = -1;
@@ -70,7 +69,6 @@ public:
   virtual ~vobsub_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);
-  virtual void set_headers();
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);

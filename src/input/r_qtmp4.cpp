@@ -1204,37 +1204,8 @@ qtmp4_reader_c::create_packetizers() {
 
   main_dmx = -1;
 
-  for (i = 0; i < ti->track_order->size(); i++)
-    create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < demuxers.size(); i++)
     create_packetizer(demuxers[i]->id);
-}
-
-void
-qtmp4_reader_c::set_headers() {
-  uint32_t i, k;
-  qtmp4_demuxer_t *d;
-
-  for (i = 0; i < demuxers.size(); i++)
-    demuxers[i]->headers_set = false;
-
-  for (i = 0; i < ti->track_order->size(); i++) {
-    d = NULL;
-    for (k = 0; k < demuxers.size(); k++)
-      if (demuxers[k]->id == (*ti->track_order)[i]) {
-        d = demuxers[k];
-        break;
-      }
-    if ((d != NULL) && (d->ptzr != -1) && !d->headers_set) {
-      PTZR(d->ptzr)->set_headers();
-      d->headers_set = true;
-    }
-  }
-  for (i = 0; i < demuxers.size(); i++)
-    if ((demuxers[i]->ptzr != -1) && !demuxers[i]->headers_set) {
-      PTZR(demuxers[i]->ptzr)->set_headers();
-      demuxers[i]->headers_set = true;
-    }
 }
 
 int
