@@ -13,16 +13,13 @@
 
 /*!
     \file
-    \version \$Id: error.h,v 1.6 2003/03/03 18:00:30 mosu Exp $
+    \version \$Id: error.h,v 1.7 2003/05/05 20:18:32 mosu Exp $
     \brief class definitions for the error exception class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __ERROR_H
 #define __ERROR_H
-
-#include <malloc.h>
-#include <string.h>
 
 #include "common.h"
 

@@ -13,13 +13,12 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.12 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.13 2003/05/05 20:18:32 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <assert.h>
-#include <malloc.h>
 
 #include "cluster_helper.h"
 #include "common.h"

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.23 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.24 2003/05/05 20:18:32 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -22,7 +22,6 @@
 
 #ifdef HAVE_OGGVORBIS
 
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

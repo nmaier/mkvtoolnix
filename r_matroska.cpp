@@ -13,12 +13,11 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.22 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.23 2003/05/05 20:18:32 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

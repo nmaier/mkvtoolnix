@@ -13,12 +13,11 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.5 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.6 2003/05/05 20:18:32 mosu Exp $
     \brief subtitle helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
