@@ -534,7 +534,8 @@ const iso639_language_t iso639_languages[] =
    {"Zuni", "zun", NULL},
    {NULL, NULL, NULL}};
 
-const char *get_iso639_english_name(const char *iso639_2_code) {
+const
+char *get_iso639_english_name(const char *iso639_2_code) {
   int i;
 
   i = 0;
@@ -547,7 +548,8 @@ const char *get_iso639_english_name(const char *iso639_2_code) {
   return NULL;
 }
 
-int is_valid_iso639_2_code(const char *iso639_2_code) {
+int
+is_valid_iso639_2_code(const char *iso639_2_code) {
   int i;
 
   i = 0;
@@ -560,7 +562,8 @@ int is_valid_iso639_2_code(const char *iso639_2_code) {
   return 0;
 }
 
-void list_iso639_languages() {
+void
+list_iso639_languages() {
   int i;
 
   i = 0;
@@ -579,7 +582,8 @@ void list_iso639_languages() {
   }
 }
 
-const char *map_iso639_1_to_iso639_2(const char *iso639_1_code) {
+const char *
+map_iso639_1_to_iso639_2(const char *iso639_1_code) {
   uint32_t i;
 
   for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
@@ -590,12 +594,24 @@ const char *map_iso639_1_to_iso639_2(const char *iso639_1_code) {
   return NULL;
 }
 
-const char *map_iso639_2_to_iso639_1(const char *iso639_2_code) {
+const char *
+map_iso639_2_to_iso639_1(const char *iso639_2_code) {
   uint32_t i;
 
   for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
     if (!strcmp(iso639_2_code, iso639_languages[i].iso639_2_code))
       return iso639_languages[i].iso639_1_code;
+
+  return NULL;
+}
+
+const char *
+map_english_name_to_iso639_2(const char *name) {
+  uint32_t i;
+
+  for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
+    if (!strcasecmp(name, iso639_languages[i].english_name))
+      return iso639_languages[i].iso639_2_code;
 
   return NULL;
 }

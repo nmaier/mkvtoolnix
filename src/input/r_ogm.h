@@ -74,6 +74,7 @@ struct ogm_demuxer_t {
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
   bool headers_read;
+  char *language;
   vector<unsigned char *> packet_data, nh_packet_data;
   vector<int> packet_sizes, nh_packet_sizes;
 #if defined(HAVE_FLAC_FORMAT_H)
@@ -84,13 +85,14 @@ struct ogm_demuxer_t {
 
   ogm_demuxer_t():
     packetizer(NULL), sid(0), stype(0), serial(0), eos(0), units_processed(0),
-    vorbis_rate(0), headers_read(false) {
+    vorbis_rate(0), headers_read(false), language(NULL) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
   ~ogm_demuxer_t() {
     uint32_t i;
     for (i = 0; i < packet_data.size(); i++)
       safefree(packet_data[i]);
+    safefree(language);
   }
 };
 
@@ -100,7 +102,6 @@ private:
   mm_io_c *mm_io;
   int act_wchar, num_sdemuxers, nastreams, nvstreams, ntstreams, numstreams;
   ogm_demuxer_t   **sdemuxers;
-  char **comments;
   int bos_pages_read;
   int64_t file_size;
 
@@ -130,6 +131,7 @@ private:
   virtual void create_packetizer(int64_t tid);
   virtual void free_demuxer(int);
   virtual void flush_packetizers();
+  virtual void handle_stream_comments();
 };
 
 

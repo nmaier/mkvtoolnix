@@ -34,7 +34,9 @@ extern "C" {                    // for BITMAPINFOHEADER
 }
 
 #include "aac_common.h"
+#include "chapters.h"
 #include "common.h"
+#include "iso639.h"
 #include "matroska.h"
 #include "mkvmerge.h"
 #include "ogmstreams.h"
@@ -52,6 +54,47 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "r_ogm.h"
 
 #define BUFFER_SIZE 4096
+
+static void
+free_string_array(char **comments) {
+  int i;
+
+  if (comments == NULL)
+    return;
+  for (i = 0; comments[i] != NULL; i++)
+    safefree(comments[i]);
+  safefree(comments);
+}
+
+static char **
+extract_vorbis_comments(unsigned char *buffer,
+                        int size) {
+  mm_mem_io_c in(buffer, size);
+  char **comments;
+  uint32_t i, n, len;
+
+  comments = NULL;
+  try {
+    in.skip(7);                 // 0x03 "vorbis"
+    n = in.read_uint32();       // vendor_length
+    in.skip(n);                 // vendor_string
+    n = in.read_uint32();       // user_comment_list_length
+    comments = (char **)safemalloc((n + 1) * sizeof(char *));
+    memset(comments, 0, (n + 1) * sizeof(char *));
+    for (i = 0; i < n; i++) {
+      len = in.read_uint32();
+      comments[i] = (char *)safemalloc(len + 1);
+      if (in.read(comments[i], len) != len)
+        throw false;
+      comments[i][len] = 0;
+    }
+  } catch(...) {
+    free_string_array(comments);
+    return NULL;
+  }
+
+  return comments;
+}
 
 #if defined(HAVE_FLAC_FORMAT_H)
 #define FPFX "flac_header_extraction: "
@@ -279,6 +322,7 @@ ogm_reader_c::ogm_reader_c(track_info_c *nti)
 
   if (read_headers() <= 0)
     throw error_c("ogm_reader: Could not read all header packets.");
+  handle_stream_comments();
   create_packetizers();
 }
 
@@ -391,6 +435,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
     ti->private_data = NULL;
     ti->private_size = 0;
     ti->id = dmx->serial;       // ID for this track.
+    ti->language = safestrdup(dmx->language);
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
@@ -609,6 +654,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         break;
 
     }
+    ti->language = NULL;
   }
 }
 
@@ -965,6 +1011,8 @@ ogm_reader_c::process_header_page(ogg_page *og) {
 
   if ((dmx->stype == OGM_STREAM_TYPE_VORBIS) && (dmx->packet_data.size() == 3))
     dmx->headers_read = true;
+  else if (dmx->packet_data.size() == 2)
+    dmx->headers_read = true;
 }
 
 /*
@@ -994,10 +1042,7 @@ ogm_reader_c::read_headers() {
 
       for (i = 0; i < num_sdemuxers; i++) {
         dmx = sdemuxers[i];
-        if (((dmx->stype == OGM_STREAM_TYPE_VORBIS) ||
-             (dmx->stype == OGM_STREAM_TYPE_FLAC)) &&
-            !dmx->headers_read) {
-          // Not all three headers have been found for this Vorbis stream.
+        if (!dmx->headers_read) {
           done = 0;
           break;
         }
@@ -1146,4 +1191,68 @@ ogm_reader_c::flush_packetizers() {
   for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->packetizer != NULL)
       sdemuxers[i]->packetizer->flush();
+}
+
+void
+ogm_reader_c::handle_stream_comments() {
+  int i, j;
+  ogm_demuxer_t *dmx;
+  char **comments, name[100];
+  const char *iso639_2;
+  vector<string> comment;
+  vector<char *> chapters;
+  mm_io_c *out;
+
+  for (i = 0; i < num_sdemuxers; i++) {
+    dmx = sdemuxers[i];
+    if (dmx->stype == OGM_STREAM_TYPE_FLAC)
+      continue;
+    comments = extract_vorbis_comments(dmx->packet_data[1],
+                                       dmx->packet_sizes[1]);
+    if (comments == NULL)
+      continue;
+    chapters.clear();
+    for (j = 0; comments[j] != NULL; j++) {
+      mxverb(2, "ogm_reader: commment for #%d for %d: %s\n", j, dmx->serial,
+             comments[j]);
+      comment = split(comments[j], "=", 2);
+      if (comment.size() != 2)
+        continue;
+      if (comment[0] == "LANGUAGE") {
+        iso639_2 = map_english_name_to_iso639_2(comment[1].c_str());
+        if (iso639_2 == NULL)
+          iso639_2 = map_iso639_1_to_iso639_2(comment[1].c_str());
+        if ((iso639_2 == NULL) && (is_valid_iso639_2_code(comment[1].c_str())))
+          iso639_2 = comment[1].c_str();
+        if (iso639_2 != NULL) {
+          safefree(dmx->language);
+          dmx->language = safestrdup(iso639_2);
+        }
+
+      } else if (starts_with(comment[0], "CHAPTER"))
+        chapters.push_back(comments[j]);
+    }
+    if ((chapters.size() > 0) && !ti->no_chapters && (kax_chapters == NULL)) {
+#if defined(SYS_WINDOWS)
+      sprintf(name, "mkvmerge-ogm-reader-chapters-%d-%d",
+              (int)GetCurrentProcessId(), (int)time(NULL));
+#else
+      sprintf(name, "mkvmerge-ogm-reader-chapters-%d-%d", getpid(),
+              (int)time(NULL));
+#endif
+      try {
+        out = new mm_io_c(name, MODE_WRITE);
+        out->write_bom("UTF-8");
+        for (j = 0; j < chapters.size(); j++) {
+          out->puts_unl(chapters[j]);
+          out->puts_unl("\n");
+        }
+        delete out;
+        kax_chapters = parse_chapters(name);
+      } catch (...) {
+      }
+      unlink(name);
+    }
+    free_string_array(comments);
+  }
 }

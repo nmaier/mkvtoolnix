@@ -1616,6 +1616,8 @@ static void parse_args(int argc, char **argv) {
                 next_arg);
 
       chapter_file_name = safestrdup(next_arg);
+      if (kax_chapters != NULL)
+        delete kax_chapters;
       kax_chapters = parse_chapters(next_arg, 0, -1, 0, chapter_language,
                                     chapter_charset);
       i++;
