@@ -2500,7 +2500,7 @@ finish_file(bool last_file) {
     chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
                                                  offset, false);
     if (chapters_here != NULL)
-      kax_chapters_void->ReplaceWith(*chapters_here, *out, true, true);
+      kax_chapters_void->ReplaceWith(*chapters_here, *out, true, false);
     delete kax_chapters_void;
     kax_chapters_void = NULL;
   } else
