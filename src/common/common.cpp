@@ -520,30 +520,26 @@ typedef struct {
   char *charset;
 } kax_conv_t;
 
-static kax_conv_t *kax_convs = NULL;
-static int num_kax_convs = 0;
+static vector<kax_conv_t> kax_convs;
 int cc_local_utf8 = -1;
 
 int
 add_kax_conv(const char *charset,
              iconv_t ict_from,
              iconv_t ict_to) {
-  kax_conv_t *c;
+  kax_conv_t c;
   int i;
 
-  for (i = 0; i < num_kax_convs; i++)
+  for (i = 0; i < kax_convs.size(); i++)
     if (!strcmp(kax_convs[i].charset, charset))
       return i;
 
-  kax_convs = (kax_conv_t *)saferealloc(kax_convs, (num_kax_convs + 1) *
-                                        sizeof(kax_conv_t));
-  c = &kax_convs[num_kax_convs];
-  c->charset = safestrdup(charset);
-  c->ict_from_utf8 = ict_from;
-  c->ict_to_utf8 = ict_to;
-  num_kax_convs++;
+  c.charset = safestrdup(charset);
+  c.ict_from_utf8 = ict_from;
+  c.ict_to_utf8 = ict_to;
+  kax_convs.push_back(c);
 
-  return num_kax_convs - 1;
+  return kax_convs.size() - 1;
 }
 
 int
@@ -568,7 +564,7 @@ utf8_init(const string &charset) {
   } else
     lc_charset = charset;
 
-  for (i = 0; i < num_kax_convs; i++)
+  for (i = 0; i < kax_convs.size(); i++)
     if (kax_convs[i].charset == lc_charset)
       return i;
 
@@ -595,15 +591,14 @@ void
 utf8_done() {
   int i;
 
-  for (i = 0; i < num_kax_convs; i++) {
+  for (i = 0; i < kax_convs.size(); i++) {
     if (kax_convs[i].ict_from_utf8 != (iconv_t)(-1))
       iconv_close(kax_convs[i].ict_from_utf8);
     if (kax_convs[i].ict_to_utf8 != (iconv_t)(-1))
       iconv_close(kax_convs[i].ict_to_utf8);
     safefree(kax_convs[i].charset);
   }
-  if (kax_convs != NULL)
-    safefree(kax_convs);
+  kax_convs.clear();
 }
 
 static char *
@@ -642,9 +637,9 @@ to_utf8_c(int handle,
     return copy;
   }
 
-  if (handle >= num_kax_convs)
+  if (handle >= kax_convs.size())
     die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %d).",
-        handle, num_kax_convs);
+        handle, kax_convs.size());
 
   return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
@@ -672,9 +667,9 @@ from_utf8_c(int handle,
     return copy;
   }
 
-  if (handle >= num_kax_convs)
+  if (handle >= kax_convs.size())
     die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %d).",
-        handle, num_kax_convs);
+        handle, kax_convs.size());
 
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
@@ -787,39 +782,8 @@ create_unique_uint32(int category) {
  * Miscellaneous stuff
  */
 
-char *
-_safestrdup(const char *s,
-            const char *file,
-            int line) {
-  char *copy;
-
-  if (s == NULL)
-    return NULL;
-
-  copy = strdup(s);
-  if (copy == NULL)
-    die("common.cpp/safestrdup() called from file %s, line %d: strdup() "
-        "returned NULL for '%s'.", file, line, s);
-
-  return copy;
-}
-
-unsigned char *
-_safestrdup(const unsigned char *s,
-            const char *file,
-            int line) {
-  char *copy;
-
-  if (s == NULL)
-    return NULL;
-
-  copy = strdup((const char *)s);
-  if (copy == NULL)
-    die("common.cpp/safestrdup() called from file %s, line %d: strdup() "
-        "returned NULL for '%s'.", file, line, s);
-
-  return (unsigned char *)copy;
-}
+static uint64_t _safedupped = 0;
+static uint64_t _safemalloced = 0;
 
 void *
 _safememdup(const void *s,
@@ -830,6 +794,8 @@ _safememdup(const void *s,
 
   if (s == NULL)
     return NULL;
+
+  _safedupped += size;
 
   copy = malloc(size);
   if (copy == NULL)
@@ -845,6 +811,8 @@ _safemalloc(size_t size,
             const char *file,
             int line) {
   void *mem;
+
+  _safemalloced += size;
 
   mem = malloc(size);
   if (mem == NULL)
@@ -865,6 +833,18 @@ _saferealloc(void *mem,
         "returned NULL for a size of %d bytes.", file, line, size);
 
   return mem;
+}
+
+void
+safefree(void *p) {
+  if (p != NULL)
+    free(p);
+}
+
+void
+dump_malloc_report() {
+  mxinfo("%llu bytes malloced, %llu bytes duplicated\n",
+         _safemalloced - _safedupped, _safedupped);
 }
 
 /*

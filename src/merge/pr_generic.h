@@ -123,10 +123,10 @@ typedef struct {
   KaxBlock *block;
   KaxCluster *cluster;
   unsigned char *data;
-  int length, superseeded, ref_priority;
+  int length, ref_priority;
   int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
   int64_t unmodified_assigned_timecode, unmodified_duration;
-  bool duration_mandatory;
+  bool duration_mandatory, superseeded;
   generic_packetizer_c *source;
 } packet_t;
 

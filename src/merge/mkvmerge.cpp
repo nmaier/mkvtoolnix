@@ -233,6 +233,8 @@ usage() {
   ));
 }
 
+static bool print_malloc_report = false;
+
 /** \brief Prints information about what has been compiled into mkvmerge
  */
 static void
@@ -1679,6 +1681,9 @@ parse_args(vector<string> &args) {
 
     }
 
+    else if (this_arg == "--print-malloc-report")
+      print_malloc_report = true;
+
     else if (this_arg.length() == 0)
       mxerror("An empty file name is not valid.\n");
 
@@ -1880,6 +1885,9 @@ main(int argc,
          (end - start) == 1 ? "" : "s");
 
   cleanup();
+
+  if (print_malloc_report)
+    dump_malloc_report();
 
   mxexit();
 }

@@ -32,11 +32,17 @@ using namespace std;
                                     (double)((int64_t)timecode_scale)) * \
                                (int64_t)timecode_scale)
 
-typedef struct {
+struct ch_contents_t {
   KaxCluster *cluster;
-  packet_t **packets;
-  int num_packets, is_referenced, rendered;
-} ch_contents_t;
+  vector<packet_t *> packets;
+  bool is_referenced, rendered;
+
+  ch_contents_t():
+    cluster(NULL),
+    is_referenced(false),
+    rendered(false) {
+  }
+};
 
 typedef struct {
   vector<KaxBlockGroup *> groups;
@@ -47,8 +53,8 @@ typedef struct {
 
 class cluster_helper_c {
 private:
-  ch_contents_t **clusters;
-  int num_clusters, cluster_content_size;
+  vector<ch_contents_t *> clusters;
+  int cluster_content_size;
   int64_t max_timecode_and_duration;
   int64_t last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets, first_timecode;

@@ -181,24 +181,36 @@ void MTX_DLL_API add_unique_uint32(uint32_t number, int category);
 bool MTX_DLL_API remove_unique_uint32(uint32_t number, int category);
 uint32_t MTX_DLL_API create_unique_uint32(int category);
 
-#define safefree(p) if ((p) != NULL) free(p);
+void MTX_DLL_API safefree(void *p);
 #define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
 void *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
+#define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
+void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file,
+                              int line);
 #define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
-char *MTX_DLL_API _safestrdup(const char *s, const char *file, int line);
 inline char *
 _safestrdup(const string &s,
             const char *file,
             int line) {
-  return _safestrdup(s.c_str(), file, line);
+  return (char *)_safememdup(s.c_str(), s.length() + 1, file, line);
 }
-unsigned char *_safestrdup(const unsigned char *s, const char *file, int line);
-#define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
-void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file,
-                           int line);
+inline unsigned char *
+_safestrdup(const unsigned char *s,
+            const char *file,
+            int line) {
+  return (unsigned char *)_safememdup(s, strlen((const char *)s) + 1, file,
+                                      line);
+}
+inline char *
+_safestrdup(const char *s,
+            const char *file,
+            int line) {
+  return (char *)_safememdup(s, strlen(s) + 1, file, line);
+}
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
 void *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file,
-                            int line);
+                               int line);
+void MTX_DLL_API dump_malloc_report();
 
 vector<string> MTX_DLL_API split(const char *src, const char *pattern = ",",
                               int max_num = -1);
