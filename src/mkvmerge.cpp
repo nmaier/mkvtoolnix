@@ -685,11 +685,60 @@ parse_and_add_tags(const char *file_name) {
   delete tags;
 }
 
+/** \brief Convert older tags to current specs
+ */
+void
+convert_old_tags(KaxTag *tag) {
+  KaxTagTargets *targets;
+  KaxTagSimple *simple;
+  KaxTagName *kname;
+  KaxTagString *kvalue;
+  string name, value;
+  char *tmp;
+  bool found;
+  int i;
+
+  targets = &GetChild<KaxTagTargets>(*tag);
+  i = 0;
+  while (i < tag->ListSize()) {
+    simple = dynamic_cast<KaxTagSimple *>((*tag)[i]);
+    if (simple == NULL) {
+      i++;
+      continue;
+    }
+    kname = FINDFIRST(simple, KaxTagName);
+    kvalue = FINDFIRST(simple, KaxTagString);
+    if ((kname != NULL) && (kvalue != NULL)) {
+      tmp = UTFstring_to_cstrutf8((const UTFstring &)(*kname));
+      name = tmp;
+      safefree(tmp);
+      tmp = UTFstring_to_cstrutf8((const UTFstring &)(*kvalue));
+      value = tmp;
+      safefree(tmp);
+      if (name == "CATALOG")
+        *static_cast<EbmlUnicodeString *>(kname) =
+          cstrutf8_to_UTFstring("CATALOG_NUMBER");
+
+      else if (name == "DATE")
+        *static_cast<EbmlUnicodeString *>(kname) =
+          cstrutf8_to_UTFstring("DATE_RELEASED");
+
+      else if (name == "LEVEL_TYPE") {
+        // TO BE DONE!
+      }
+    }
+  }
+}
+
 /** \brief Add some tags to the list of all tags
  */
 void
 add_tags(KaxTag *tags) {
   if (!accept_tags)
+    return;
+
+  convert_old_tags(tags);
+  if (tags->ListSize() == 0)
     return;
 
   if (kax_tags == NULL)

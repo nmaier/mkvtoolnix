@@ -283,17 +283,18 @@ write_cuesheet(const char *file_name,
   string s;
   int i, j;
   int64_t temp_index;
-  vector<int64_t> indices;
   
   if (chapters.ListSize() == 0)
     return;
 
   out.write_bom("UTF-8");
 
-  print_if_global("CATALOG", "CATALOG %s\n");
+  print_if_global("CATALOG", "CATALOG %s\n"); // until 0.9.6
+  print_if_global("CATALOG_NUMBER", "CATALOG %s\n"); // 0.9.7 and newer
   print_if_global("ARTIST", "PERFORMER \"%s\"\n");
   print_if_global("TITLE", "TITLE \"%s\"\n");
-  print_if_global("DATE", "REM DATE \"%s\"\n");
+  print_if_global("DATE", "REM DATE \"%s\"\n"); // until 0.9.6
+  print_if_global("DATE_RELEASED", "REM DATE \"%s\"\n"); // 0.9.7 and newer
   print_if_global("DISCID", "REM DISCID %s\n");
     
   tag = find_tag_for_track(-1, tuid, 0, tags);
@@ -313,24 +314,21 @@ write_cuesheet(const char *file_name,
       print_if_available("ISRC", "    ISRC %s\n");
       print_if_available("CDAUDIO_TRACK_FLAGS", "    FLAGS %s\n");
 	  
-      j = 0;
-      do {
-        if ((temp_index = get_chapter_index(j, atom)) != -1)	
-          indices.push_back(temp_index);
-        j++;
-      } while ((temp_index != -1) && (j <= 99));
-
-      for (j = 0; j < indices.size(); j++) {
+      for (j = 0; j < 100; j++) {
+        temp_index = get_chapter_index(j, atom);
+        if (temp_index == -1)
+          continue;
         out.printf("    INDEX %02d %02lld:%02lld:%02lld\n", 
                    j,
-                   indices[j] / 1000000 / 1000 / 60,
-                   (indices[j] / 1000000 / 1000) % 60,
-                   irnd((double)(indices[j] % 1000000000ll) * 75.0 /
+                   temp_index / 1000000 / 1000 / 60,
+                   (temp_index / 1000000 / 1000) % 60,
+                   irnd((double)(temp_index % 1000000000ll) * 75.0 /
                         1000000000.0));
       }
-      indices.clear();
 
-      print_if_available("DATE", "    REM DATE \"%s\"\n");
+      print_if_available("DATE", "    REM DATE \"%s\"\n"); // until 0.9.6
+      // 0.9.7 and newer:
+      print_if_available("DATE_RELEASED", "    REM DATE \"%s\"\n");
       print_if_available("GENRE", "    REM GENRE \"%s\"\n");
       print_comments("    ", *tag, out);
     } 

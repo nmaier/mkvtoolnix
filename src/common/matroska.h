@@ -16,7 +16,7 @@
 #ifndef __MATROSKA_H
 #define __MATROSKA_H
 
-// see http://cvs.corecodec.org/cgi-bin/cvsweb.cgi/~checkout~/matroska/doc/website/specs/codex.html?rev=HEAD&content-type=text/html
+// see http://www.matroska.org/technical/specs/codecid/index.html
 
 #define MKV_A_AAC_2MAIN  "A_AAC/MPEG2/MAIN"
 #define MKV_A_AAC_2LC    "A_AAC/MPEG2/LC"
@@ -61,5 +61,35 @@
 #define MKV_S_TEXTASCII  "S_TEXT/ASCII"
 #define MKV_S_VOBSUB     "S_VOBSUB"
 #define MKV_S_VOBSUBZLIB "S_VOBSUB/ZLIB"
+
+// see http://www.matroska.org/technical/specs/tagging/index.html#targettypes 
+#define TAG_TARGETTYPE_COLLECTION     70
+
+#define TAG_TARGETTYPE_EDITION        60
+#define TAG_TARGETTYPE_ISSUE          60
+#define TAG_TARGETTYPE_VOLUME         60
+#define TAG_TARGETTYPE_OPUS           60
+#define TAG_TARGETTYPE_SEASON         60
+#define TAG_TARGETTYPE_SEQUEL         60
+#define TAG_TARGETTYPE_VOLUME         60
+
+#define TAG_TARGETTYPE_ALBUM          50
+#define TAG_TARGETTYPE_OPERA          50
+#define TAG_TARGETTYPE_CONCERT        50
+#define TAG_TARGETTYPE_MOVIE          50
+#define TAG_TARGETTYPE_EPISODE        50
+
+#define TAG_TARGETTYPE_PART           40
+#define TAG_TARGETTYPE_SESSION        40
+
+#define TAG_TARGETTYPE_TRACK          30
+#define TAG_TARGETTYPE_SONG           30
+#define TAG_TARGETTYPE_CHAPTER        30
+
+#define TAG_TARGETTYPE_SUBTRACK       20
+#define TAG_TARGETTYPE_MOVEMENT       20
+#define TAG_TARGETTYPE_SCENE          20
+
+#define TAG_TARGETTYPE_SHOT           10
 
 #endif // __MATROSKA_H
