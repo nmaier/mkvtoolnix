@@ -338,7 +338,7 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
 
 int
 cluster_helper_c::render(bool flush) {
-  if ((clusters.size() == 0) || (clusters.size() == 0))
+  if (clusters.size() == 0)
     return 0;
 
   walk_clusters();
