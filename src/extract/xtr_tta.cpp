@@ -79,6 +79,7 @@ xtr_tta_c::finish_file() {
   delete out;
   out = NULL;
 
+  in = NULL;
   try {
     in = new mm_file_io_c(temp_file_name);
   } catch (exception &ex) {

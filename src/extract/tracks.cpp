@@ -181,18 +181,13 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   // Now find backward and forward references.
   bref = 0;
   fref = 0;
-  for (i = 0; i < 2; i++) {
-    if (0 == i)
-      kreference = FINDFIRST(&blockgroup, KaxReferenceBlock);
+  kreference = FINDFIRST(&blockgroup, KaxReferenceBlock);
+  for (i = 0; (2 > i) && (NULL != kreference); i++) {
+    if (int64(*kreference) < 0)
+      bref = int64(*kreference);
     else
-      kreference = FINDNEXT(&blockgroup, KaxReferenceBlock, kreference);
-
-    if (NULL != kreference) {
-      if (int64(*kreference) < 0)
-        bref = int64(*kreference);
-      else
-        fref = int64(*kreference);
-    }
+      fref = int64(*kreference);
+    kreference = FINDNEXT(&blockgroup, KaxReferenceBlock, kreference);
   }
 
   // Any block additions present?
