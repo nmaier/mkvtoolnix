@@ -1,3 +1,13 @@
+2003-11-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: When 'default track' is selected then all other
+	tracks of the same type will have their 'default track' flag
+	cleared.
+
+	* mkvmerge: SPU packets belonging to the same timecode are grouped
+	together, and the duration is extracted directly from the SPU
+	stream.
+
 2003-10-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: The VobSubs are now stripped of the MPEG program

@@ -609,11 +609,22 @@ void tab_input::on_track_enabled(wxCommandEvent &evt) {
 }
 
 void tab_input::on_default_track_clicked(wxCommandEvent &evt) {
+  uint32_t i, k;
+  mmg_track_t *t;
+
   if ((selected_file == -1) || (selected_track == -1))
     return;
 
-  (*files[selected_file].tracks)[selected_track].default_track =
-    cb_default->GetValue();
+  t = &(*files[selected_file].tracks)[selected_track];
+  t->default_track = cb_default->GetValue();
+  if (cb_default->GetValue())
+    for (i = 0; i < files.size(); i++) {
+      if (i != selected_file)
+        for (k = 0; k < files[i].tracks->size(); k++)
+          if ((k != selected_track) &&
+              ((*files[i].tracks)[k].type == t->type))
+            (*files[i].tracks)[k].default_track = false;
+    }
 }
 
 void tab_input::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
