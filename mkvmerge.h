@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.16 2003/06/08 18:59:43 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.17 2003/06/11 17:06:48 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -43,7 +43,7 @@ extern int track_number;
 extern float video_fps;
 
 extern bool write_cues, cue_writing_requested, video_track_present;
-extern bool no_lacing;
+extern bool no_lacing, no_linking;
 
 void add_packetizer(generic_packetizer_c *packetizer);
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.26 2003/06/09 09:07:41 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.27 2003/06/11 17:06:48 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -47,6 +47,7 @@ cluster_helper_c::cluster_helper_c() {
   out = NULL;
   timecode_offset = 0;
   last_packets = NULL;
+  first_timecode = -1;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -269,6 +270,11 @@ int cluster_helper_c::render() {
     pack = clstr->packets[i];
     source = ((generic_packetizer_c *)pack->source);
 
+    if (first_timecode == -1)
+      first_timecode = pack->timecode;
+    if (timecode_offset == -1)
+      timecode_offset = pack->timecode;
+
     data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
@@ -367,7 +373,6 @@ int cluster_helper_c::render() {
         last_packets[source->get_track_num()] = pack->packet_num;
       }
 
-
     } else if ((pass == 2) &&   // second pass: process and split
                (next_splitpoint < splitpoints.size()) && // splitpoint's avail
                ((splitpoints[next_splitpoint]->packet_num - 1) ==
@@ -396,7 +401,11 @@ int cluster_helper_c::render() {
       cluster->SetPreviousTimecode(0, TIMECODE_SCALE);
 
       elements_in_cluster = 0;
-      timecode_offset = pack->timecode;
+      if (no_linking) {
+        timecode_offset = -1;
+        first_timecode = 0;
+      } else
+        first_timecode = -1;
     }
   }
 
@@ -575,4 +584,8 @@ int cluster_helper_c::free_ref(int64_t ref_timecode, void *source) {
 
 int64_t cluster_helper_c::get_max_timecode() {
   return max_timecode - timecode_offset;
+}
+
+int64_t cluster_helper_c::get_first_timecode() {
+  return first_timecode;
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.95 2003/06/10 22:04:42 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.96 2003/06/11 17:06:48 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -191,7 +191,7 @@ bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
 bool write_meta_seek = true;
 int64_t meta_seek_size = 0;
-bool no_lacing = false;
+bool no_lacing = false, no_linking = false;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
@@ -271,6 +271,7 @@ static void usage(void) {
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
     "  --split-max-files <n>    Create at most n files.\n"
+    "  --dont-link              Don't link splitted files (see man page).\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -631,13 +632,15 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
     KaxSegmentUID &kax_seguid = GetChild<KaxSegmentUID>(*kax_infos);
     kax_seguid.CopyBuffer(seguid_current.data(), 128 / 8);
 
-    if (!first_file) {
-      KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
-      kax_prevuid.CopyBuffer(seguid_prev.data(), 128 / 8);
-    }
-    if (!last_file) {
-      KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
-      kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
+    if (!no_linking) {
+      if (!first_file) {
+        KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
+        kax_prevuid.CopyBuffer(seguid_prev.data(), 128 / 8);
+      }
+      if (!last_file) {
+        KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
+        kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
+      }
     }
 
     kax_segment->WriteHead(*out, 5);
@@ -759,6 +762,9 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       i++;
+
+    } else if (!strcmp(argv[i], "--dont-link")) {
+      no_linking = true;
 
     } else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
@@ -987,6 +993,10 @@ static void parse_args(int argc, char **argv) {
     usage();
     exit(1);
   }
+
+  if ((split_after <= 0) && no_linking)
+    fprintf(stderr, "Warning: '--dont-link' is only useful in combination "
+            "with '--split'.\n");
 }
 
 static void create_readers() {
@@ -1398,7 +1408,8 @@ void finish_file() {
   old_pos = out->getFilePointer();
   out->setFilePointer(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
-    cluster_helper->get_max_timecode() * 1000000.0 / TIMECODE_SCALE;
+    (cluster_helper->get_max_timecode() -
+     cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
   kax_duration->Render(*out);
   out->setFilePointer(old_pos);
 

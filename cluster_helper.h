@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.9 2003/06/09 09:07:41 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.10 2003/06/11 17:06:48 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -44,7 +44,7 @@ private:
   int num_clusters, cluster_content_size, next_splitpoint;
   KaxBlockGroup *last_block_group;
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
-  int64_t packet_num, timecode_offset, *last_packets;
+  int64_t packet_num, timecode_offset, *last_packets, first_timecode;
   mm_io_c *out;
 public:
   static vector<splitpoint_t *> splitpoints;
@@ -65,6 +65,7 @@ public:
   int free_clusters();
   int get_cluster_content_size();
   int64_t get_max_timecode();
+  int64_t get_first_timecode();
   void find_next_splitpoint();
   int get_next_splitpoint();
 

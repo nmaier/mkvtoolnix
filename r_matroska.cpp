@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.45 2003/06/07 14:30:10 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.46 2003/06/11 17:06:48 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -101,6 +101,7 @@ mkv_reader_c::mkv_reader_c(track_info_t *nti) throw (error_c):
   buffers = NULL;
 
   segment_duration = 0.0;
+  first_timecode = -1.0;
 
   if (!read_headers())
     throw error_c("matroska_reader: Failed to read the headers.");
@@ -1005,6 +1006,9 @@ int mkv_reader_c::read() {
             ctc.ReadData(es->I_O());
             cluster_tc = uint64(ctc);
             cluster->InitTimecode(cluster_tc, tc_scale);
+            if (first_timecode == -1.0)
+              first_timecode = (float)cluster_tc * (float)tc_scale /
+                1000000.0;
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
 
@@ -1215,8 +1219,8 @@ void mkv_reader_c::display_progress() {
 
   if (segment_duration != 0.0) {
     fprintf(stdout, "progress: %.3fs/%.3fs (%d%%)\r",
-            last_timecode / 1000.0, segment_duration,
-            (int)(last_timecode / 10 / segment_duration));
+            (last_timecode - first_timecode) / 1000.0, segment_duration,
+            (int)((last_timecode - first_timecode) / 10 / segment_duration));
     fflush(stdout);
     return;
   }

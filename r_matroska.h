@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.16 2003/06/07 14:30:10 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.17 2003/06/11 17:06:48 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -92,7 +92,7 @@ private:
   buffer_t **buffers;
   int num_buffers;
 
-  float segment_duration, last_timecode;
+  float segment_duration, last_timecode, first_timecode;
 
 public:
   mkv_reader_c(track_info_t *nti) throw (error_c);
