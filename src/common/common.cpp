@@ -98,6 +98,10 @@ bitvalue_c::bitvalue_c(string s,
     }
     previous_was_space = false;
 
+    // Skip hyphens and curly braces. Makes copy & paste a bit easier.
+    if ((s[i] == '-') || (s[i] == '{') || (s[i] == '}'))
+      continue;
+
     // Space or tab followed by "0x"? Then skip it.
     if (s.substr(i, 2) == "0x") {
       i++;
