@@ -40,11 +40,6 @@ typedef struct {
 } ch_contents_t;
 
 typedef struct {
-  int64_t timecode, filepos, cues_size, packet_num;
-  int64_t *last_packets;
-} splitpoint_t;
-
-typedef struct {
   vector<KaxBlockGroup *> groups;
   vector<int64_t> durations;
   generic_packetizer_c *source;
@@ -54,12 +49,11 @@ typedef struct {
 class cluster_helper_c {
 private:
   ch_contents_t **clusters;
-  int num_clusters, cluster_content_size, next_splitpoint;
+  int num_clusters, cluster_content_size;
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets, first_timecode;
+  int64_t bytes_in_file;
   mm_io_c *out;
-public:
-  static vector<splitpoint_t *> splitpoints;
 
 public:
   cluster_helper_c();
@@ -79,9 +73,6 @@ public:
   int64_t get_max_timecode();
   int64_t get_first_timecode();
   int64_t get_timecode_offset();
-  void find_next_splitpoint();
-  int get_next_splitpoint();
-  void dump_splitpoints();
 
 private:
   int find_cluster(KaxCluster *cluster);

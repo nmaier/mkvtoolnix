@@ -159,16 +159,8 @@ mux_dialog::mux_dialog(wxWindow *parent):
           if ((value >= 0) && (value <= 100))
             update_gauge(value);
         }
-      } else {
-        if (line.Find("Pass 1:") == 0)
-          st_label->SetLabel("Muxing in progress (pass 1 of 2: finding "
-                             "points for splitting).");
-        else if (line.Find("Pass 2:") == 0)
-          st_label->SetLabel("Muxing in progress (pass 2 of 2: muxing "
-                             "and splitting).");
-        if (line.Length() > 0)
-          tc_output->AppendText(line + "\n");
-      }
+      } else if (line.Length() > 0)
+        tc_output->AppendText(line + "\n");
       line = "";
     } else if ((unsigned char)c != 0xff)
       line.Append(c);

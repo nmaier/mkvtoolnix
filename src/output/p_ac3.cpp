@@ -95,10 +95,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     mxwarn("ac3_packetizer: skipping %d bytes (no valid AC3 header "
            "found). This might make audio/video go out of sync, but this "
            "stream is damaged.\n", pos);
-  if (fast_mode)
-    buf = (unsigned char *)safemalloc(ac3header->bytes);
-  else
-    buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
+  buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
 
   if (needs_positive_displacement(pins)) {
     /*

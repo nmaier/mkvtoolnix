@@ -138,8 +138,7 @@ video_packetizer_c::process(unsigned char *buf,
 
   debug_enter("video_packetizer_c::process");
 
-  if (hack_engaged(ENGAGE_NATIVE_BFRAMES) && is_mpeg4 && (pass != 1) &&
-      (fps != 0.0)) {
+  if (hack_engaged(ENGAGE_NATIVE_BFRAMES) && is_mpeg4 && (fps != 0.0)) {
     find_mpeg4_frame_types(buf, size, frames);
     for (i = 0; i < frames.size(); i++) {
       if ((frames[i].type == 'I') ||

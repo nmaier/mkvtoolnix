@@ -114,11 +114,8 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     byte_buffer.remove(pos);
     pos = 0;
   }
-  if (fast_mode)
-    buf = (unsigned char *)safemalloc(mp3header->framesize);
-  else
-    buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
-                                      mp3header->framesize);
+  buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
+                                    mp3header->framesize);
 
   if (needs_positive_displacement(pins)) {
     /*

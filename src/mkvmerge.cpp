@@ -183,12 +183,8 @@ bool segment_title_set = false;
 int64_t tags_size = 0;
 bool accept_tags = true;
 
-// Actual pass. 0 for normal operation. 1 for first pass of splitting
-// (only find split points, output goes to /dev/null). 2 for the second
-// pass of the splitting run.
-int pass = 0;
 int file_num = 1;
-bool fast_mode = false;
+bool splitting = false;
 
 // Specs say that track numbers should start at 1.
 int track_number = 1;
@@ -936,10 +932,12 @@ static void parse_track_order(const char *s, track_info_c &ti) {
 
 // {{{ render functions (render_headers, render_attachments)
 
-static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
+static void render_headers(mm_io_c *rout) {
   EbmlHead head;
+  bool first_file;
   int i;
 
+  first_file = splitting && (file_num == 1);
   try {
     EDocType &doc_type = GetChild<EDocType>(head);
     *static_cast<EbmlString *>(&doc_type) = "matroska";
@@ -982,13 +980,11 @@ static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
       if (first_file) {
         seguid_current.generate_random();
-        if (!last_file)
-          seguid_next.generate_random();
+        seguid_next.generate_random();
       } else {
         seguid_prev = seguid_current;
         seguid_current = seguid_next;
-        if (!last_file)
-          seguid_next.generate_random();
+        seguid_next.generate_random();
       }
     } else {
       memset(seguid_current.data(), 0, 128 / 8);
@@ -1008,7 +1004,7 @@ static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
         KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
         kax_prevuid.CopyBuffer(seguid_link_previous->data(), 128 / 8);
       }
-      if (!last_file) {
+      if (splitting) {
         KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
         kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
       } else if (seguid_link_next != NULL) {
@@ -1291,8 +1287,7 @@ static void parse_args(int argc, char **argv) {
     mxexit();
   }
 
-  // First parse options that either just print some infos and then exit
-  // or that are needed right at the beginning.
+  // First parse options that either just print some infos and then exit.
   for (i = 0; i < argc; i++) {
     this_arg = argv[i];
     if ((i + 1) >= argc)
@@ -1301,23 +1296,13 @@ static void parse_args(int argc, char **argv) {
       next_arg = argv[i + 1];
 
     if (!strcmp(this_arg, "-V") || !strcmp(this_arg, "--version")) {
-      mxinfo(VERSIONINFO "\n");
+      mxinfo("mkvmerge v" VERSION ", built on " __DATE__ " " __TIME__ "\n");
       mxexit(0);
 
     } else if (!strcmp(this_arg, "-h") || !strcmp(this_arg, "-?") ||
                !strcmp(this_arg, "--help")) {
       usage();
       mxexit(0);
-
-    } else if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output")) {
-      if (next_arg == NULL)
-        mxerror("'%s' lacks a file name.\n", this_arg);
-
-      if (outfile != NULL)
-        mxerror("Only one output file allowed.\n");
-
-      outfile = safestrdup(next_arg);
-      i++;
 
     } else if (!strcmp(this_arg, "-l") || !strcmp(this_arg, "--list-types")) {
       mxinfo("Known file types:\n  ext  description\n"
@@ -1334,7 +1319,29 @@ static void parse_args(int argc, char **argv) {
       mxerror("'%s' can only be used with a file name. "
               "No other options are allowed.\n", this_arg);
 
-    else if (!strcmp(this_arg, "--command-line-charset")) {
+  }
+
+  mxinfo("mkvmerge v" VERSION ", built on " __DATE__ " " __TIME__ "\n");
+
+  // Now parse options that are needed right at the beginning.
+  for (i = 0; i < argc; i++) {
+    this_arg = argv[i];
+    if ((i + 1) >= argc)
+      next_arg = NULL;
+    else
+      next_arg = argv[i + 1];
+
+    if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output")) {
+      if (next_arg == NULL)
+        mxerror("'%s' lacks a file name.\n", this_arg);
+
+      if (outfile != NULL)
+        mxerror("Only one output file allowed.\n");
+
+      outfile = safestrdup(next_arg);
+      i++;
+
+    } else if (!strcmp(this_arg, "--command-line-charset")) {
       if (next_arg == NULL)
         mxerror("'--command-line-charset' lacks the charset.\n");
       cc_command_line = utf8_init(next_arg);
@@ -2055,52 +2062,14 @@ string create_output_name() {
   return s;
 }
 
-void create_next_output_file(bool last_file, bool first_file) {
+void create_next_output_file() {
   string this_outfile;
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
   kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
 
-  if (pass == 1) {
-    // Open the a dummy file.
-    try {
-      out = new mm_null_io_c();
-    } catch (exception &ex) {
-      die("mkvmerge.cpp/create_next_output_file(): Could not create a dummy "
-          "output class.");
-    }
-    fast_mode = true;
-
-    cluster_helper->set_output(out);
-    render_headers(out, last_file, first_file);
-    render_attachments(out);
-    if (kax_chapters != NULL) {
-      kax_chapters_void = new EbmlVoid;
-      kax_chapters->UpdateSize();
-      kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
-      kax_chapters_void->Render(*out);
-      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
-        EbmlVoid evoid;
-        evoid.SetSize(100);
-        evoid.Render(*out);
-      }
-    }
-
-    if (kax_tags != NULL) {
-      if (!kax_tags->CheckMandatory())
-        mxerror("Some tag elements are missing (this error "
-                "should not have occured - another similar error should have "
-                "occured earlier...).\n");
-
-      kax_tags->UpdateSize();
-      tags_size = kax_tags->ElementSize();
-    }
-
-    return;
-  }
-
-  if (pass == 2)
+  if (splitting)
     this_outfile = create_output_name();
   else
     this_outfile = outfile;
@@ -2115,12 +2084,11 @@ void create_next_output_file(bool last_file, bool first_file) {
   if (verbose)
     mxinfo("Opened '%s\' for writing.\n", this_outfile.c_str());
 
-  fast_mode = false;
   cluster_helper->set_output(out);
-  render_headers(out, last_file, first_file);
+  render_headers(out);
   render_attachments(out);
   if (kax_chapters != NULL) {
-    if (pass == 2) {
+    if (splitting) {
       kax_chapters_void = new EbmlVoid;
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
@@ -2152,7 +2120,7 @@ void create_next_output_file(bool last_file, bool first_file) {
   file_num++;
 }
 
-void finish_file() {
+void finish_file(bool last_file) {
   int i;
   KaxChapters *chapters_here;
   int64_t start, end, offset;
@@ -2175,9 +2143,40 @@ void finish_file() {
     (cluster_helper->get_max_timecode() -
      cluster_helper->get_first_timecode()) / TIMECODE_SCALE;
   kax_duration->Render(*out);
+
+  // If splitting is active and this is the last part then remove the
+  // 'next segment UID' and re-render the kax_infos.
+  if (splitting && last_file) {
+    EbmlVoid *void_after_infos;
+    int64_t void_size;
+    bool changed;
+
+    void_size = kax_infos->ElementSize();
+    for (i = 0, changed = false; i < kax_infos->ListSize(); i++)
+      if (EbmlId(*(*kax_infos)[i]) == KaxNextUID::ClassInfos.GlobalId) {
+        delete (*kax_infos)[i];
+        kax_infos->Remove(i);
+        changed = true;
+        break;
+      }
+
+    if (changed) {
+      out->setFilePointer(kax_infos->GetElementPosition());
+      kax_infos->UpdateSize();
+      void_size -= kax_infos->ElementSize();
+      kax_infos->Render(*out);
+      mxverb(2, "splitting: removed nextUID; void size: %lld\n", void_size);
+      void_after_infos = new EbmlVoid();
+      void_after_infos->SetSize(void_size);
+      void_after_infos->UpdateSize();
+      void_after_infos->SetSize(void_size - void_after_infos->HeadSize());
+      void_after_infos->Render(*out);
+      delete void_after_infos;
+    }
+  }
   out->restore_pos();
 
-  if ((kax_chapters != NULL) && (pass > 0)) {
+  if ((kax_chapters != NULL) && splitting) {
     if (no_linking)
       offset = cluster_helper->get_timecode_offset();
     else
@@ -2220,7 +2219,7 @@ void finish_file() {
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       kax_sh_main->IndexThis(*chapters_here, *kax_segment);
     delete chapters_here;
-  } else if ((pass == 0) && (kax_chapters != NULL))
+  } else if (!splitting && (kax_chapters != NULL))
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       kax_sh_main->IndexThis(*kax_chapters, *kax_segment);
 
@@ -2333,68 +2332,23 @@ int main(int argc, char **argv) {
 
   handle_args(argc, argv);
 
-  if (split_after > 0) {
-    mxinfo("Pass 1: finding split points. This may take a while.\n\n");
+  if (split_after > 0)
+    splitting = true;
 
-    start = time(NULL);
+  start = time(NULL);
 
-    create_readers();
+  create_readers();
 
-    if (packetizers.size() == 0)
-      mxerror("No streams to output found. Aborting.\n");
+  if (packetizers.size() == 0)
+    mxerror("No streams to output found. Aborting.\n");
 
-    pass = 1;
-    create_next_output_file(true, true);
-    main_loop();
-    finish_file();
+  create_next_output_file();
+  main_loop();
+  finish_file(true);
 
-    end = time(NULL);
-
-    if (dump_splitpoints)
-      cluster_helper->dump_splitpoints();
-
-    mxinfo("\nPass 1 took %ld second%s.\nPass 2: merging the files. This will "
-           "take even longer.\n\n", end - start,
-           (end - start) == 1 ? "" : "s");
-
-    start = time(NULL);
-
-    delete cluster_helper;
-    destroy_readers();
-
-    init_globals();
-    cluster_helper = new cluster_helper_c();
-    cluster_helper->find_next_splitpoint();
-    create_readers();
-
-    pass = 2;
-    create_next_output_file(cluster_helper->get_next_splitpoint() >= 
-                            cluster_helper_c::splitpoints.size(), true);
-    main_loop();
-    finish_file();
-
-    end = time(NULL);
-    mxinfo("Pass 2 took %ld second%s.\n", end - start,
-           (end - start) == 1 ? "" : "s");
-
-  } else {
-
-    start = time(NULL);
-
-    create_readers();
-
-    if (packetizers.size() == 0)
-      mxerror("No streams to output found. Aborting.\n");
-
-    pass = 0;
-    create_next_output_file(true, true);
-    main_loop();
-    finish_file();
-
-    end = time(NULL);
-    mxinfo("Muxing took %ld second%s.\n", end - start,
-           (end - start) == 1 ? "" : "s");
-  }
+  end = time(NULL);
+  mxinfo("Muxing took %ld second%s.\n", end - start,
+         (end - start) == 1 ? "" : "s");
 
   cleanup();
 

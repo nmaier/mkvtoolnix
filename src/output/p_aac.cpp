@@ -91,15 +91,10 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
     mxwarn("aac_packetizer: skipping %d bytes (no valid AAC header "
            "found). This might make audio/video go out of sync, but this "
            "stream is damaged.\n", pos);
-  if ((aacheader->header_bit_size % 8) == 0) {
-    if (fast_mode)
-      buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
-    else
-      buf = (unsigned char *)safememdup(packet_buffer + pos +
-                                        aacheader->header_byte_size,
-                                        aacheader->data_byte_size);
-  } else if (!fast_mode)
-    buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
+  if ((aacheader->header_bit_size % 8) == 0)
+    buf = (unsigned char *)safememdup(packet_buffer + pos +
+                                      aacheader->header_byte_size,
+                                      aacheader->data_byte_size);
   else {
     // Header is not byte aligned, i.e. MPEG-4 ADTS
     // This code is from mpeg4ip/server/mp4creator/aac.cpp

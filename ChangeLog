@@ -1,3 +1,9 @@
+2004-01-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Changed the two-pass splitting into a one-pass
+	splitting. The resulting files will always be a little bit larger
+	than the desired size/length, but this shouldn't matter.
+
 2004-01-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Segfault when using external timecode v1

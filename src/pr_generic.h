@@ -382,7 +382,4 @@ protected:
   virtual void dump_packet(const void *buffer, int size);
 };
 
-void set_pass_data(track_info_c *ti, unsigned char *data, int size);
-unsigned char *retrieve_pass_data(track_info_c *ti, int &size);
-
 #endif  // __PR_GENERIC_H

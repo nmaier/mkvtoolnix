@@ -692,12 +692,9 @@ generic_packetizer_c::add_packet(unsigned char *data,
         ((copy_this == cp_default) && !duplicate_data))
       safefree(data);
   } else if ((copy_this == cp_yes) ||
-             ((copy_this == cp_default) && duplicate_data)) {
-    if (!fast_mode)
-      pack->data = (unsigned char *)safememdup(data, length);
-    else
-      pack->data = (unsigned char *)safemalloc(length);
-  } else
+             ((copy_this == cp_default) && duplicate_data))
+    pack->data = (unsigned char *)safememdup(data, length);
+  else
     pack->data = data;
   pack->length = length;
   pack->timecode = timecode;
@@ -1185,44 +1182,4 @@ track_info_c &track_info_c::operator =(const track_info_c &src) {
   initialized = true;
 
   return *this;
-}
-
-//--------------------------------------------------------------------
-
-struct ltstr {
-  bool operator()(const char* s1, const char* s2) const {
-    return strcmp(s1, s2) < 0;
-  }
-};
-static map<const char *, string, ltstr> pass_data;
-
-void set_pass_data(track_info_c *ti, unsigned char *data, int size) {
-  string key, value;
-
-  key = string(ti->fname) + string("::") + to_string(ti->id);
-  value = base64_encode(data, size);
-  mxverb(4, "add_pass_data for %s orig length %d, b64 length %d\n",
-         key.c_str(), size, value.length());
-  pass_data[key.c_str()] = value;
-}
-
-unsigned char *retrieve_pass_data(track_info_c *ti, int &size) {
-  map<const char *, string, ltstr>::iterator it;
-  string key, value;
-  unsigned char *data;
-
-  key = string(ti->fname) + string("::") + to_string(ti->id);
-  it = pass_data.find(key.c_str());
-  if (it != pass_data.end()) {
-    size = -1;
-    return NULL;
-  }
-
-  value = it->second;
-  data = (unsigned char *)safemalloc(value.length());
-  size = base64_decode(value, data);
-  data = (unsigned char *)saferealloc(data, size);
-  mxverb(4, "retrieve_pass_data for %s b64 length %d, orig length %d\n",
-         key.c_str(), value.length(), size);
-  return data;
 }

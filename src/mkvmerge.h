@@ -63,13 +63,13 @@ bool hack_engaged(const char *hack);
 void add_packetizer(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 
-void create_next_output_file(bool last_file = false, bool first_file = false);
-void finish_file();
+void create_next_output_file();
+void finish_file(bool last_file = false);
 void rerender_track_headers();
 string create_output_name();
 
-extern int pass, file_num;
-extern bool fast_mode;
+extern int file_num;
+extern bool splitting;
 
 extern int64_t max_ns_per_cluster;
 extern int max_blocks_per_cluster;
