@@ -15,8 +15,6 @@
 #ifndef __TAGWRITER_H
 #define __TAGWRITER_H
 
-#include <stdio.h>
-
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>
 

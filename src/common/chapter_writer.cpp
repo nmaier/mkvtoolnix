@@ -21,10 +21,10 @@
 
 #include <matroska/KaxChapters.h>
 
+#include "chapters.h"
 #include "commonebml.h"
 #include "mm_io.h"
-#include "chapters.h"
-#include "xml_element_mapping.h"
+#include "xml_element_writer.h"
 
 using namespace std;
 using namespace libmatroska;
@@ -203,107 +203,14 @@ write_chapters_simple(int &chapter_num,
 
 // {{{ XML chapter output
 
-typedef struct {
-  int level;
-  int parent_idx;
-  int elt_idx;
-  EbmlElement *e;
-  mm_io_c *out;
-} chapter_writer_cb_t;
-
 static void
-pt(chapter_writer_cb_t *cb,
+pt(xml_writer_cb_t *cb,
    const char *tag) {
   int i;
 
   for (i = 0; i < cb->level; i++)
     cb->out->printf("  ");
   cb->out->printf("%s", tag);
-}
-
-static void
-write_xml_element_rec(int level,
-                      int parent_idx,
-                      EbmlElement *e,
-                      mm_io_c *out) {
-  EbmlMaster *m;
-  int elt_idx, i;
-  bool found;
-  string s;
-
-  elt_idx = parent_idx;
-  found = false;
-  while ((chapter_elements[elt_idx].name != NULL) &&
-         (chapter_elements[elt_idx].level >=
-          chapter_elements[parent_idx].level)) {
-    if (chapter_elements[elt_idx].id == e->Generic().GlobalId) {
-      found = true;
-      break;
-    }
-    elt_idx++;
-  }
-
-  for (i = 0; i < level; i++)
-    out->printf("  ");
-
-  if (!found) {
-    out->printf("<!-- Unknown element '%s' -->\n", e->Generic().DebugName);
-    return;
-  }
-
-  out->printf("<%s>", chapter_elements[elt_idx].name);
-  switch (chapter_elements[elt_idx].type) {
-    case EBMLT_MASTER:
-      out->printf("\n");
-      m = dynamic_cast<EbmlMaster *>(e);
-      assert(m != NULL);
-      for (i = 0; i < m->ListSize(); i++)
-        write_xml_element_rec(level + 1, elt_idx, (*m)[i], out);
-
-      if (chapter_elements[elt_idx].end_hook != NULL) {
-        chapter_writer_cb_t cb;
-
-        cb.level = level;
-        cb.parent_idx = parent_idx;
-        cb.elt_idx = elt_idx;
-        cb.e = e;
-        cb.out = out;
-
-        chapter_elements[elt_idx].end_hook(&cb);
-      }
-
-      for (i = 0; i < level; i++)
-        out->printf("  ");
-      out->printf("</%s>\n", chapter_elements[elt_idx].name);
-      break;
-
-    case EBMLT_UINT:
-    case EBMLT_BOOL:
-      out->printf("%llu</%s>\n", uint64(*dynamic_cast<EbmlUInteger *>(e)),
-                  chapter_elements[elt_idx].name);
-      break;
-
-    case EBMLT_STRING:
-      s = escape_xml(string(*dynamic_cast<EbmlString *>(e)));
-      out->printf("%s</%s>\n", s.c_str(), chapter_elements[elt_idx].name);
-      break;
-
-    case EBMLT_USTRING:
-      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
-                                          <EbmlUnicodeString *>(e)).c_str());
-      s = escape_xml(s);
-      out->printf("%s</%s>\n", s.c_str(), chapter_elements[elt_idx].name);
-      break;
-
-    case EBMLT_TIME:
-      out->printf(FMT_TIMECODEN "</%s>\n", 
-                  ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))),
-                  chapter_elements[elt_idx].name);
-      break;
-
-    default:
-      assert(false);
-  }
 }
 
 static int
@@ -321,9 +228,9 @@ cet_index(const char *name) {
 static void
 end_write_chapter_atom(void *data) {
   KaxChapterAtom *atom;
-  chapter_writer_cb_t *cb;
+  xml_writer_cb_t *cb;
 
-  cb = (chapter_writer_cb_t *)data;
+  cb = (xml_writer_cb_t *)data;
   atom = dynamic_cast<KaxChapterAtom *>(cb->e);
   assert(atom != NULL);
   if (FINDFIRST(atom, KaxChapterTimeStart) == NULL)
@@ -333,9 +240,9 @@ end_write_chapter_atom(void *data) {
 static void
 end_write_chapter_display(void *data) {
   KaxChapterDisplay *display;
-  chapter_writer_cb_t *cb;
+  xml_writer_cb_t *cb;
 
-  cb = (chapter_writer_cb_t *)data;
+  cb = (xml_writer_cb_t *)data;
   display = dynamic_cast<KaxChapterDisplay *>(cb->e);
   assert(display != NULL);
   if (FINDFIRST(display, KaxChapterString) == NULL)
@@ -359,7 +266,7 @@ write_chapters_xml(KaxChapters *chapters,
     end_write_chapter_display;
 
   for (i = 0; i < chapters->ListSize(); i++)
-    write_xml_element_rec(1, 0, (*chapters)[i], out);
+    write_xml_element_rec(1, 0, (*chapters)[i], out, chapter_elements);
 }
 
 // }}}
