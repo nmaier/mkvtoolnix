@@ -1831,9 +1831,24 @@ kax_reader_c::read(generic_packetizer_c *,
 
           block = static_cast<KaxBlock *>
             (block_group->FindFirstElt(KaxBlock::ClassInfos, false));
-          if (block != NULL) {
-            block->SetParent(*cluster);
-            block_track = find_track_by_num(block->TrackNum());
+          if (NULL == block) {
+            mxwarn(FMT_FN "A block group was found at position %lld, but "
+                   "no block element was found inside it. This might make "
+                   "mkvmerge crash.\n", ti.fname.c_str(),
+                   block_group->GetElementPosition());
+            continue;
+          }
+
+          block->SetParent(*cluster);
+          block_track = find_track_by_num(block->TrackNum());
+
+          if (NULL == block_track) {
+            mxwarn(FMT_FN "A block was found at timestamp " FMT_TIMECODE
+                   "for track number %u. However, no headers where found for "
+                   "that track number. The block will be skipped.\n",
+                   ti.fname.c_str(), ARG_TIMECODE_NS(block->GlobalTimecode()),
+                   (unsigned int)block->TrackNum());
+            continue;
           }
 
           blockadd = static_cast<KaxBlockAdditions *>
