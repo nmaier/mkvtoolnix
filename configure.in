@@ -859,6 +859,7 @@ AC_ARG_WITH(avilib,
     AC_DEFINE(HAVE_AVILIB0_6_10, 1,
       [Define if the newer avilib from transcode 0.6.10 should be used.])
     avi_libs_to_use="${avi_libs_to_use}0.6.10 "
+    have_avilib0_6_10=yes
   fi
   AM_CONDITIONAL(HAVE_AVILIB, test x"$have_avilib0_6_10" != "xyes")
   AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" == "xyes")
