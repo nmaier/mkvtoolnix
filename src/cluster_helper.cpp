@@ -490,6 +490,10 @@ int cluster_helper_c::render() {
                                                   timecode_offset),
                                     *data_buffer, *bref_packet->group,
                                     lacing_type);
+
+        // All packets with an ID smaller than the referenced packet's ID
+        // are not needed anymore. Be happy!
+        free_ref(pack->bref, pack->source);
       }
 
     } else {                    // This is a key frame. No references.
