@@ -252,7 +252,7 @@ extern "C" {
 #include "mb_file_io.h"
 
 #define RMFF_VERSION_MAJOR 0
-#define RMFF_VERSION_MINOR 5
+#define RMFF_VERSION_MINOR 6
 #define RMFF_VERSION_MICRO 0
 #define RMFF_VERSION (RMFF_VERSION_MAJOR * 10000 + RMFF_VERSION_MINOR * 100 + \
                       RMFF_VERSION_MICRO)
