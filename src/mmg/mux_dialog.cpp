@@ -58,6 +58,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   char c;
   string arg_utf8;
   long value;
+  wxButton *b_minimize;
   wxString line, tmp;
   wxInputStream *out;
   wxFile *opt_file;
@@ -107,11 +108,14 @@ mux_dialog::mux_dialog(wxWindow *parent):
   b_ok->Enable(false);
   siz_buttons->Add(b_ok);
   siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  b_abort = new wxButton(this, ID_B_MUX_ABORT, wxT("Abort"));
+  siz_buttons->Add(b_abort);
+  siz_buttons->Add(0, 0, 1, wxGROW, 0);
   b_save_log = new wxButton(this, ID_B_MUX_SAVELOG, wxT("Save log"));
   siz_buttons->Add(b_save_log);
   siz_buttons->Add(0, 0, 1, wxGROW, 0);
-  b_abort = new wxButton(this, ID_B_MUX_ABORT, wxT("Abort"));
-  siz_buttons->Add(b_abort);
+  b_minimize = new wxButton(this, ID_B_MUX_MINIMIZE, wxT("Minimize"));
+  siz_buttons->Add(b_minimize);
   siz_buttons->Add(0, 0, 1, wxGROW, 0);
 
   siz_all = new wxBoxSizer(wxVERTICAL);
@@ -210,19 +214,23 @@ mux_dialog::~mux_dialog() {
   wxRemoveFile(opt_file_name);
 }
 
-void mux_dialog::update_window(wxString text) {
+void
+mux_dialog::update_window(wxString text) {
   st_label->SetLabel(text);
 }
 
-void mux_dialog::update_gauge(long value) {
+void
+mux_dialog::update_gauge(long value) {
   g_progress->SetValue(value);
 }
 
-void mux_dialog::on_ok(wxCommandEvent &evt) {
+void
+mux_dialog::on_ok(wxCommandEvent &evt) {
   Close(true);
 }
 
-void mux_dialog::on_save_log(wxCommandEvent &evt) {
+void
+mux_dialog::on_save_log(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
   wxFileDialog dlg(NULL, wxT("Choose an output file"), last_open_dir, wxT(""),
@@ -237,7 +245,8 @@ void mux_dialog::on_save_log(wxCommandEvent &evt) {
   }
 }
 
-void mux_dialog::on_abort(wxCommandEvent &evt) {
+void
+mux_dialog::on_abort(wxCommandEvent &evt) {
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
 #else
@@ -245,12 +254,19 @@ void mux_dialog::on_abort(wxCommandEvent &evt) {
 #endif
 }
 
+void
+mux_dialog::on_minimize(wxCommandEvent &evt) {
+  mdlg->Iconize(true);
+}
+
 mux_process::mux_process(mux_dialog *mux_dlg):
   wxProcess(wxPROCESS_REDIRECT), 
   dlg(mux_dlg) {
 }
 
-void mux_process::OnTerminate(int pid, int status) {
+void
+mux_process::OnTerminate(int pid,
+                         int status) {
   wxString s;
 
   s.Printf(wxT("mkvmerge %s with a return code of %d. %s\n"),
@@ -265,6 +281,7 @@ void mux_process::OnTerminate(int pid, int status) {
 #endif
            : status == 2 ? wxT("There were ERRORs.") : wxT(""));
   dlg->update_window(s);
+  dlg->SetTitle(wxT("mkvmerge has finished"));
 }
 
 IMPLEMENT_CLASS(mux_dialog, wxDialog);
@@ -272,4 +289,5 @@ BEGIN_EVENT_TABLE(mux_dialog, wxDialog)
   EVT_BUTTON(ID_B_MUX_OK, mux_dialog::on_ok)
   EVT_BUTTON(ID_B_MUX_SAVELOG, mux_dialog::on_save_log)
   EVT_BUTTON(ID_B_MUX_ABORT, mux_dialog::on_abort)
+  EVT_BUTTON(ID_B_MUX_MINIMIZE, mux_dialog::on_minimize)
 END_EVENT_TABLE();

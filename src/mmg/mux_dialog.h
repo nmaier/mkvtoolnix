@@ -28,6 +28,7 @@
 #define ID_B_MUX_OK                       17000
 #define ID_B_MUX_SAVELOG                  17001
 #define ID_B_MUX_ABORT                    17002
+#define ID_B_MUX_MINIMIZE                 17003
 
 class mux_dialog: public wxDialog {
   DECLARE_CLASS(mux_dialog);
@@ -51,6 +52,7 @@ public:
   void on_ok(wxCommandEvent &evt);
   void on_save_log(wxCommandEvent &evt);
   void on_abort(wxCommandEvent &evt);
+  void on_minimize(wxCommandEvent &evt);
 };
 
 class mux_process: public wxProcess {

@@ -58,6 +58,7 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   wxStaticBoxSizer *siz_sb;
   wxBoxSizer *siz_line, *siz_all;
   wxFlexGridSizer *siz_fg;
+  wxButton *b_minimize;
   jobs_to_start = njobs_to_start;
   abort = false;
   current_job = -1;
@@ -101,12 +102,15 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   b_ok->Enable(false);
   b_abort = new wxButton(this, ID_JOBS_B_ABORT, wxT("&Abort"));
   b_abort->SetToolTip(TIP("Abort the muxing process right now"));
+  b_minimize = new wxButton(this, ID_JOBS_B_MINIMIZE, wxT("Minimize"));
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_line->Add(b_ok, 0, 0, 0);
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_line->Add(b_abort, 0, 0, 0);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(b_minimize, 0, 0, 0);
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_all->Add(siz_line, 0, wxGROW | wxTOP | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
@@ -145,6 +149,7 @@ job_run_dialog::start_next_job() {
     cb_abort_after_current->Enable(false);
     b_ok->Enable(true);
     b_ok->SetFocus();
+    SetTitle(wxT("mkvmerge has finished"));
 
     return;
   }
@@ -321,6 +326,11 @@ job_run_dialog::add_to_log(wxString text) {
     tc_log->AppendText(wxT("\n"));
   tc_log->AppendText(text);
   tc_log->ShowPosition(tc_log->GetValue().length());
+}
+
+void
+job_run_dialog::on_minimize(wxCommandEvent &evt) {
+  mdlg->Iconize(true);
 }
 
 // ---------------------------------------------------
@@ -759,6 +769,7 @@ job_dialog::start_jobs(vector<int> &jobs_to_start) {
 IMPLEMENT_CLASS(job_run_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_run_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_ABORT, job_run_dialog::on_abort)
+  EVT_BUTTON(ID_JOBS_B_MINIMIZE, job_run_dialog::on_minimize)
   EVT_END_PROCESS(1, job_run_dialog::on_end_process)
   EVT_IDLE(job_run_dialog::on_idle)
   EVT_TIMER(1, job_run_dialog::on_timer)
