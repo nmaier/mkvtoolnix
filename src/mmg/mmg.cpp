@@ -1034,7 +1034,7 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
-                    wxT("' does already exist. Do you want to overwrite it?"),
+                    wxT("' already exists. Do you want to overwrite it?"),
                     wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
     return;
 
@@ -1627,7 +1627,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
     return;
 
   line = wxT("The output file '") + tc_output->GetValue() +
-    wxT("' does already exist. Do you want to overwrite it?");
+    wxT("' already exists. Do you want to overwrite it?");
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(break_line(line, 60), wxT("Overwrite existing file?"),
@@ -1647,7 +1647,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
     if (!settings_page->cb_ask_before_overwriting->IsChecked())
       break;
     line = wxT("A job with the description '") + description +
-      wxT("' does already exist. Do you really want to add another one "
+      wxT("' already exists. Do you really want to add another one "
           "with the same description?");
     break_line(line, 60);
     ok = true;
