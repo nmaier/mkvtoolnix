@@ -284,6 +284,7 @@ usage() {
     "                           A comma separated list of file and track IDs\n"
     "                           that controls which track of a file is\n"
     "                           appended to another track of another file.\n"
+    "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
     "\n File splitting and linking (more global options):\n"
     "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
@@ -1148,34 +1149,37 @@ set_timecode_scale() {
   bool video_present, audio_present;
   int64_t highest_sample_rate;
 
-  video_present = false;
-  audio_present = false;
-  highest_sample_rate = 0;
+  if (!timecode_scale_forced) {
+    video_present = false;
+    audio_present = false;
+    highest_sample_rate = 0;
 
-  foreach(ptzr, packetizers)
-    if ((*ptzr)->packetizer->get_track_type() == track_video)
-      video_present = true;
-    else if ((*ptzr)->packetizer->get_track_type() == track_audio) {
-      int64_t sample_rate;
+    foreach(ptzr, packetizers)
+      if ((*ptzr)->packetizer->get_track_type() == track_video)
+        video_present = true;
+      else if ((*ptzr)->packetizer->get_track_type() == track_audio) {
+        int64_t sample_rate;
 
-      audio_present = true;
-      sample_rate = (int64_t)(*ptzr)->packetizer->get_audio_sampling_freq();
-      if (sample_rate > highest_sample_rate)
-        highest_sample_rate = sample_rate;
+        audio_present = true;
+        sample_rate = (int64_t)(*ptzr)->packetizer->get_audio_sampling_freq();
+        if (sample_rate > highest_sample_rate)
+          highest_sample_rate = sample_rate;
+      }
+
+    if (audio_present && !video_present && (highest_sample_rate > 0)) {
+      int64_t max_ns_with_timecode_scale;
+
+      timecode_scale = (double)1000000000.0 / (double)highest_sample_rate -
+        1.0;
+      max_ns_with_timecode_scale = (int64_t)(32700 * timecode_scale);
+      if (max_ns_with_timecode_scale < max_ns_per_cluster)
+        max_ns_per_cluster = max_ns_with_timecode_scale;
+
+      mxverb(2, "mkvmerge: audio only file detected. highest sample rate: "
+             "%lld, new timecode_scale: %lf, max_ns_with_timecode_scale: "
+             "%lld, max_ns_per_cluster: %lld\n", highest_sample_rate,
+             timecode_scale, max_ns_with_timecode_scale, max_ns_per_cluster);
     }
-
-  if (audio_present && !video_present && (highest_sample_rate > 0)) {
-    int64_t max_ns_with_timecode_scale;
-
-    timecode_scale = (double)1000000000.0 / (double)highest_sample_rate - 1.0;
-    max_ns_with_timecode_scale = (int64_t)(32700 * timecode_scale);
-    if (max_ns_with_timecode_scale < max_ns_per_cluster)
-      max_ns_per_cluster = max_ns_with_timecode_scale;
-
-    mxverb(2, "mkvmerge: audio only file detected. highest sample rate: %lld, "
-           "new timecode_scale: %lf, max_ns_with_timecode_scale: %lld, "
-           "max_ns_per_cluster: %lld\n", highest_sample_rate,
-           timecode_scale, max_ns_with_timecode_scale, max_ns_per_cluster);
   }
 
   KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
@@ -2181,6 +2185,23 @@ parse_args(int argc,
       parse_append_to(next_arg, *ti);
       i++;
 
+    } else if (!strcmp(this_arg, "--timecode-scale")) {
+      int64_t temp;
+
+      if (next_arg == NULL)
+        mxerror(_("'--timecode-scale' lacks its argument.\n"));
+      if (timecode_scale_forced)
+        mxerror(_("'--timecode-scale' was used more than once.\n"));
+
+      if (!parse_int(next_arg, temp))
+        mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
+
+      if ((temp > 10000000) || (temp < 1000))
+        mxerror(_("The given timecode scale factor is outside the valid "
+                  "range (1000...10000000).\n"));
+
+      timecode_scale = temp;
+      timecode_scale_forced = true;
     }
 
     // The argument is an input file.
