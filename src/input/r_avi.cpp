@@ -180,8 +180,9 @@ avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
 
   if (video_fps < 0)
     video_fps = fps;
-  chunk = (unsigned char *)safemalloc(max_frame_size < MIN_CHUNK_SIZE ?
-                                      MIN_CHUNK_SIZE : max_frame_size);
+  chunk_size = max_frame_size < MIN_CHUNK_SIZE ? MIN_CHUNK_SIZE :
+    max_frame_size;
+  chunk = (unsigned char *)safemalloc(chunk_size);
   act_wchar = 0;
   old_key = 0;
   old_chunk = NULL;
@@ -621,7 +622,7 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
     if (demuxer->frame < demuxer->maxframes) {
       debug_enter("aviclasses->Read() audio");
       result = demuxer->stream->Read(demuxer->frame, AVISTREAMREAD_CONVENIENT,
-                                     chunk, max_frame_size, &nread, &blread);
+                                     chunk, chunk_size, &nread, &blread);
       debug_leave("aviclasses->Read() audio");
       demuxer->frame += blread;
       if (result == S_OK) {
@@ -632,10 +633,12 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
     }
 #else
     AVI_set_audio_track(avi, demuxer->aid);
-    if (AVI_audio_format(avi) == 0x0001)
+    if (AVI_audio_format(avi) == 0x0001) {
       size = demuxer->channels * demuxer->bits_per_sample *
-        demuxer->samples_per_second / 8;
-    else
+        demuxer->samples_per_second / 8 / 4;
+      if (size > chunk_size)
+        size = chunk_size;
+    } else
       size = MIN_CHUNK_SIZE;
 
     debug_enter("AVI_read_audio");

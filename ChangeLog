@@ -1,5 +1,8 @@
 2004-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: AVIs with uncompressed sound were leading to
+	buffer overflows.
+
 	* mkvmerge/mmg: allow the track names to be empty so that you can
 	remove them when muxing Matroska files. Same for the file title.
 

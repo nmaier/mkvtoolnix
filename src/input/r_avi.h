@@ -71,7 +71,7 @@ private:
   vector<avi_demuxer_t *> ademuxers;
   double fps;
   int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
-  int video_done, maxframes, is_divx, rederive_keyframes;
+  int video_done, maxframes, is_divx, rederive_keyframes, chunk_size;
 #ifdef HAVE_AVICLASSES
   w32BITMAPINFOHEADER *bih;
 #endif
