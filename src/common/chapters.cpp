@@ -240,8 +240,6 @@ parse_simple_chapters(mm_text_io_c *in,
         parse_int(line.substr(13, 2), minute);
         parse_int(line.substr(16, 2), second);
         parse_int(line.substr(19, 3), msecs);
-        if (hour > 23)
-          chapter_error("Invalid hour: %d", hour);
         if (minute > 59)
           chapter_error("Invalid minute: %d", minute);
         if (second > 59)

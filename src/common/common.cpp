@@ -1614,8 +1614,6 @@ parse_timecode(const char *src,
     return set_tcp_error("Invalid format");
   if (sscanf(src, "%02d:%02d:%02d", &h, &m, &s) != 3)
     return set_tcp_error("Invalid format (non-numbers encountered)");
-  if (h > 23)
-    return set_tcp_error("Invalid hour");
   if (m > 59)
     return set_tcp_error("Invalid minute");
   if (s > 59)
