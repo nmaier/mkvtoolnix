@@ -965,6 +965,11 @@ ogm_reader_c::read(generic_packetizer_c *,
   int i;
   ogg_page og;
 
+  // Some tracks may contain huge gaps. We don't want to suck in the complete
+  // file.
+  if (get_queued_bytes() > 20 * 1024 * 1024)
+    return FILE_STATUS_HOLDING;
+
   do {
     // Make sure we have a page that we can work with.
     if (read_page(&og) == FILE_STATUS_DONE) {

@@ -392,6 +392,8 @@ public:
     available_track_ids.push_back(0);
   }
 
+  virtual int64_t get_queued_bytes();
+
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
 };
