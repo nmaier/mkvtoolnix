@@ -50,8 +50,10 @@ using namespace std;
 
 #include "common.h"
 #include "hacks.h"
+#include "mkvmerge.h"
 
 int verbose = 1;
+bool suppress_warnings = false;
 
 bitvalue_c::bitvalue_c(int nbitsize) {
   assert(nbitsize > 0);
@@ -1193,6 +1195,8 @@ static bool warning_issued = false;
 void mxwarn(const char *fmt, ...) {
   va_list ap;
 
+  if (suppress_warnings)
+    return;
   va_start(ap, fmt);
   mxmsg(MXMSG_WARNING, fmt, ap);
   va_end(ap);

@@ -84,6 +84,7 @@ using namespace std;
                         (int32_t)(t) % 1000
 #define ARG_TIMECODE_NS(t) ARG_TIMECODE(t / 1000000)
 
+extern bool MTX_DLL_API suppress_warnings;
 void MTX_DLL_API fix_format(const char *fmt, string &new_fmt);
 #if defined(__GNUC__)
 void MTX_DLL_API die(const char *fmt, ...)

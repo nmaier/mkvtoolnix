@@ -1248,6 +1248,7 @@ static void identify(const char *filename) {
 
   verbose = 0;
   identifying = true;
+  suppress_warnings = true;
   create_readers();
 
   file->reader->identify();
