@@ -50,34 +50,25 @@
 #include "mux_dialog.h"
 
 #define JOB_LOG_DIALOG_WIDTH 600
-#define JOB_RUN_DIALOG_WIDTH 400
+#define JOB_RUN_DIALOG_WIDTH 500
 
 job_run_dialog::job_run_dialog(wxWindow *parent,
-                               vector<int> &jobs_to_start):
+                               vector<int> &njobs_to_start):
   wxDialog(parent, -1, "mkvmerge is running", wxDefaultPosition,
 #ifdef SYS_WINDOWS
            wxSize(JOB_RUN_DIALOG_WIDTH, 360),
 #else
-           wxSize(JOB_RUN_DIALOG_WIDTH, 155),
+           wxSize(JOB_RUN_DIALOG_WIDTH, 285),
 #endif
            wxCAPTION) {
-  wxGauge *g_progress, *g_jobs;
-  wxButton *b_ok, *b_abort;
-  wxCheckBox *cb_abort_after_current;
-  wxStaticText *st_jobs, *st_current;
-  wxString line, tmp, opt_file_name;
-  wxInputStream *out;
-  wxArrayString *arg_list;
-  wxProcess *process;
-  char c, *arg_utf8;
-  long value;
-  mm_io_c *opt_file;
-  uint32_t i, job, ndx;
-  bool got_char;
+  jobs_to_start = njobs_to_start;
+  abort = false;
+  current_job = -1;
+  t_update = new wxTimer(this, 1);
+  process = NULL;
 
-  c = 0;
   new wxStaticBox(this, -1, wxS("Status and progress"), wxPoint(10, 10),
-                  wxSize(JOB_RUN_DIALOG_WIDTH - 20, 70));
+                  wxSize(JOB_RUN_DIALOG_WIDTH - 20, 205));
   st_jobs = new wxStaticText(this, -1, wxS(""), wxPoint(20, 27),
                               wxSize(200, -1));
   g_jobs = new wxGauge(this, -1, jobs_to_start.size(),
@@ -88,140 +79,177 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   g_progress = new wxGauge(this, -1, 100, 
                            wxPoint(JOB_RUN_DIALOG_WIDTH / 2 - 50, 55),
                            wxSize(JOB_RUN_DIALOG_WIDTH / 2 - 20 + 50, 15));
+  new wxStaticText(this, -1, wxS("Log output:"), wxPoint(20, 83));
+  tc_log = new wxTextCtrl(this, -1, wxS(""), wxPoint(20, 105),
+                          wxSize(JOB_RUN_DIALOG_WIDTH - 40, 100),
+                          wxTE_MULTILINE | wxTE_READONLY);
   cb_abort_after_current =
     new wxCheckBox(this, -1, wxS("Abort after current job"),
-                   wxPoint(20, 90), wxSize(200, -1));
+                   wxPoint(20, 220), wxSize(200, -1));
+  cb_abort_after_current->SetToolTip(wxS("Abort processing after the current "
+                                         "job"));
 
   b_ok = new wxButton(this, wxID_OK, wxS("&Ok"),
-                      wxPoint(JOB_RUN_DIALOG_WIDTH / 2 - 40 - 80, 125),
+                      wxPoint(JOB_RUN_DIALOG_WIDTH / 2 - 40 - 80, 250),
                       wxSize(80, -1));
   b_abort = new wxButton(this, ID_JOBS_B_ABORT, wxS("&Abort"),
-                         wxPoint(JOB_RUN_DIALOG_WIDTH / 2 + 40, 125));
+                         wxPoint(JOB_RUN_DIALOG_WIDTH / 2 + 40, 250));
+  b_abort->SetToolTip(wxS("Abort the muxing process right now"));
   b_ok->Enable(false);
-  abort = false;
 
-  Show(true);
+  start_next_job();
 
-  for (job = 0; job < jobs_to_start.size(); job++) {
-    ndx = jobs_to_start[job];
-    st_jobs->SetLabel(wxString::Format(wxS("Processing job %d/%d"), job + 1,
-                                       jobs_to_start.size()));
-    st_current->SetLabel(wxString::Format(wxS("Current job ID %d:"),
-                                          jobs[ndx].id));
-    while (app->Pending())
-      app->Dispatch();
+  ShowModal();
+}
 
-    mdlg->load(wxString::Format(wxS("%s/jobs/%d.mmg"), wxGetCwd().c_str(),
-                                jobs[ndx].id));
+void
+job_run_dialog::start_next_job() {
+  wxString tmp;
+  wxArrayString *arg_list;
+  char *arg_utf8;
+  mm_io_c *opt_file;
+  uint32_t i, ndx;
 
-    process = new wxProcess(this, 1);
-    process->Redirect();
-    lock = new wxSemaphore();
+  t_update->Stop();
 
-#if defined(SYS_WINDOWS)
-    opt_file_name.Printf("mmg-mkvmerge-options-%d-%d",
-                         (int)GetCurrentProcessId(), (int)time(NULL));
-#else
-    opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
-                         (int)time(NULL));
-#endif
-    try {
-      opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
-    } catch (...) {
-      jobs[ndx].log->Printf("Could not create a temporary file for mkvmerge's "
-                            "command line option called '%s' (error code %d, "
-                            "%s).", opt_file_name.c_str(), errno,
-                            strerror(errno));
-      jobs[ndx].status = jobs_failed;
-      mdlg->save_job_queue();
-      delete process;
-      continue;
-    }
-    opt_file->write_bom("UTF-8");
+  current_job++;
 
-    mdlg->update_command_line();
-    arg_list = &mdlg->get_command_line_args();
-    for (i = 1; i < arg_list->Count(); i++) {
-      if ((*arg_list)[i].Length() == 0)
-        opt_file->puts_unl("#EMPTY#");
-      else {
-        arg_utf8 = to_utf8(cc_local_utf8, (*arg_list)[i].c_str());
-        opt_file->puts_unl(arg_utf8);
-        safefree(arg_utf8);
-      }
-      opt_file->puts_unl("\n");
-    }
-    delete opt_file;
-
-    pid = wxExecute((*arg_list)[0] + " @" + opt_file_name, wxEXEC_ASYNC,
-                    process);
-    out = process->GetInputStream();
-    line = wxS("");
-    *jobs[ndx].log = wxS("");
-    while (1) {
-      got_char = false;
-      if (!out->Eof() && process->IsInputAvailable()) {
-        c = out->GetC();
-        got_char = true;
-      } else
-        wxUsleep(100);
-      mxinfo("yielding\n");
-      while (app->Pending())
-        app->Dispatch();
-
-      if (got_char && ((c == wxC('\n')) || (c == wxC('\r')) || out->Eof())) {
-        if (line.Find(wxS("progress")) == 0) {
-          if (line.Find(wxS("%)")) != 0) {
-            line.Remove(line.Find(wxS("%)")));
-            tmp = line.AfterLast(wxC('('));
-            tmp.ToLong(&value);
-            if ((value >= 0) && (value <= 100))
-              g_progress->SetValue(value);
-          }
-        } else if (line.Length() > 0)
-          *jobs[ndx].log += line + wxS("\n");
-        line = wxS("");
-      } else if ((unsigned char)c != 0xff)
-        line.Append(c);
-
-      if (out->Eof())
-        break;
-    }
-
-    while (1) {
-      if (lock->WaitTimeout(100) == wxSEMA_NO_ERROR)
-        break;
-      app->Yield();
-    }
-
-    if (abort)
-      jobs[ndx].status = jobs_aborted;
-    if (exit_code == 0)
-      jobs[ndx].status = jobs_done;
-    else if (exit_code == 1)
-      jobs[ndx].status = jobs_done_warnings;
+  if ((current_job >= jobs_to_start.size()) ||
+      cb_abort_after_current->IsChecked() || abort) {
+    if (abort ||
+        (cb_abort_after_current->IsChecked() &&
+         (current_job < jobs_to_start.size())))
+      add_to_log(wxString::Format(wxS("Aborted processing on %s"),
+                                  format_date_time(time(NULL)).c_str()));
     else
-      jobs[ndx].status = jobs_failed;
-    mdlg->save_job_queue();
-    delete process;
-    wxRemoveFile(opt_file_name);
+      add_to_log(wxString::Format(wxS("Finished processing on %s"),
+                                  format_date_time(time(NULL)).c_str()));
+    b_abort->Enable(false);
+    cb_abort_after_current->Enable(false);
+    b_ok->Enable(true);
+    b_ok->SetFocus();
 
-    g_jobs->SetValue(job + 1);
-    if (cb_abort_after_current->IsChecked() || abort)
-      break;
+    return;
   }
 
-  b_abort->Enable(false);
-  cb_abort_after_current->Enable(false);
-  b_ok->Enable(true);
-  b_ok->SetFocus();
-  ShowModal();
+  ndx = jobs_to_start[current_job];
+  st_jobs->SetLabel(wxString::Format(wxS("Processing job %d/%d"),
+                                     current_job + 1,
+                                     jobs_to_start.size()));
+  st_current->SetLabel(wxString::Format(wxS("Current job ID %d:"),
+                                        jobs[ndx].id));
+
+  mdlg->load(wxString::Format(wxS("%s/jobs/%d.mmg"), wxGetCwd().c_str(),
+                              jobs[ndx].id));
+
+#if defined(SYS_WINDOWS)
+  opt_file_name.Printf("mmg-mkvmerge-options-%d-%d",
+                       (int)GetCurrentProcessId(), (int)time(NULL));
+#else
+  opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
+                       (int)time(NULL));
+#endif
+  try {
+    opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
+  } catch (...) {
+    jobs[ndx].log->Printf("Could not create a temporary file for mkvmerge's "
+                          "command line option called '%s' (error code %d, "
+                          "%s).", opt_file_name.c_str(), errno,
+                          strerror(errno));
+    jobs[ndx].status = jobs_failed;
+    mdlg->save_job_queue();
+    if (process != NULL) {
+      delete process;
+      process = NULL;
+    }
+    start_next_job();
+    return;
+  }
+
+  opt_file->write_bom("UTF-8");
+
+  mdlg->update_command_line();
+  arg_list = &mdlg->get_command_line_args();
+  for (i = 1; i < arg_list->Count(); i++) {
+    if ((*arg_list)[i].Length() == 0)
+      opt_file->puts_unl("#EMPTY#");
+    else {
+      arg_utf8 = to_utf8(cc_local_utf8, (*arg_list)[i].c_str());
+      opt_file->puts_unl(arg_utf8);
+      safefree(arg_utf8);
+    }
+    opt_file->puts_unl("\n");
+  }
+  delete opt_file;
+
+  process = new wxProcess(this, 1);
+  process->Redirect();
+  pid = wxExecute((*arg_list)[0] + " @" + opt_file_name, wxEXEC_ASYNC,
+                  process);
+  out = process->GetInputStream();
+
+  *jobs[ndx].log = wxS("");
+  jobs[ndx].started_on = time(NULL);
+  jobs[ndx].finished_on = -1;
+
+  add_to_log(wxString::Format(wxS("Starting job ID %d (%s) on %s"),
+                              jobs[ndx].id, jobs[ndx].description->c_str(),
+                              format_date_time(jobs[ndx].started_on).c_str()));
+
+  line = wxS("");
+  t_update->Start(100);
+}
+
+void
+job_run_dialog::process_input() {
+  wxString tmp;
+  bool got_char;
+  long value;
+  wxChar c;
+
+  if (process == NULL)
+    return;
+
+  while (process->IsInputAvailable()) {
+    if (!out->Eof()) {
+      c = out->GetC();
+      got_char = true;
+    } else
+      got_char = false;
+
+    if (got_char && ((c == wxC('\n')) || (c == wxC('\r')) || out->Eof())) {
+      if (line.Find(wxS("progress")) == 0) {
+        if (line.Find(wxS("%)")) != 0) {
+          line.Remove(line.Find(wxS("%)")));
+          tmp = line.AfterLast(wxC('('));
+          tmp.ToLong(&value);
+          if ((value >= 0) && (value <= 100))
+            g_progress->SetValue(value);
+        }
+      } else if (line.Length() > 0)
+        *jobs[jobs_to_start[current_job]].log += line + wxS("\n");
+      line = wxS("");
+    } else if ((unsigned char)c != 0xff)
+      line.Append(c);
+
+    if (out->Eof())
+      break;
+  }
+}
+
+void
+job_run_dialog::on_timer(wxTimerEvent &evt) {
+  process_input();
+}
+
+void
+job_run_dialog::on_idle(wxIdleEvent &evt) {
+  process_input();
 }
 
 void
 job_run_dialog::on_abort(wxCommandEvent &evt) {
   abort = true;
-  lock->Post();
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
 #else
@@ -231,8 +259,50 @@ job_run_dialog::on_abort(wxCommandEvent &evt) {
 
 void
 job_run_dialog::on_end_process(wxProcessEvent &evt) {
+  int exit_code, ndx;
+  wxString s;
+  const char *status;
+
+  ndx = jobs_to_start[current_job];
   exit_code = evt.GetExitCode();
-  lock->Post();
+  if (abort) {
+    jobs[ndx].status = jobs_aborted;
+    status = "aborted";
+  } else if (exit_code == 0) {
+    jobs[ndx].status = jobs_done;
+    status = "completed OK";
+  } else if (exit_code == 1) {
+    jobs[ndx].status = jobs_done_warnings;
+    status = "completed with warnings";
+  } else {
+    jobs[ndx].status = jobs_failed;
+    status = "failed";
+  }
+  jobs[ndx].finished_on = time(NULL);
+
+  add_to_log(wxString::Format(wxS("Finished job ID %d on %s: status '%s'"),
+                              jobs[ndx].id,
+                              format_date_time(jobs[ndx].finished_on).c_str(),
+                              status));
+
+  mdlg->save_job_queue();
+  delete process;
+  process = NULL;
+  out = NULL;
+  wxRemoveFile(opt_file_name);
+
+  if (!abort)
+    g_jobs->SetValue(current_job + 1);
+
+  start_next_job();
+}
+
+void
+job_run_dialog::add_to_log(wxString text) {
+  if (tc_log->GetValue().length() > 0)
+    tc_log->AppendText(wxS("\n"));
+  tc_log->AppendText(text);
+  tc_log->ShowPosition(tc_log->GetValue().length());
 }
 
 // ---------------------------------------------------
@@ -326,23 +396,36 @@ job_dialog::job_dialog(wxWindow *parent):
 
   b_up = new wxButton(this, ID_JOBS_B_UP, wxS("&Up"), wxPoint(700, 40),
                       wxSize(80, -1));
+  b_up->SetToolTip(wxS("Move the selected job(s) up"));
   b_down = new wxButton(this, ID_JOBS_B_DOWN, wxS("&Down"), wxPoint(700, 70),
                         wxSize(80, -1));
+  b_down->SetToolTip(wxS("Move the selected job(s) down"));
   b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, wxS("&Re-enable"),
                             wxPoint(700, 115), wxSize(80, -1));
+  b_reenable->SetToolTip(wxS("Re-enable the selected job(s)"));
+  b_disable = new wxButton(this, ID_JOBS_B_DISABLE, wxS("&Disable"),
+                            wxPoint(700, 145), wxSize(80, -1));
+  b_disable->SetToolTip(wxS("Disable the selected job(s) and sets their "
+                            "status to 'done'"));
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, wxS("D&elete"),
-                          wxPoint(700, 150), wxSize(80, -1));
+                          wxPoint(700, 190), wxSize(80, -1));
+  b_delete->SetToolTip(wxS("Delete the selected job(s) from the job queue"));
   b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, wxS("&View log"),
-                            wxPoint(700, 195), wxSize(80, -1));
+                            wxPoint(700, 235), wxSize(80, -1));
+  b_view_log->SetToolTip(wxS("View the output that mkvmerge generated during "
+                             "the muxing process for the selected job(s)"));
 
   b_ok = new wxButton(this, wxID_OK, wxS("&Ok"), wxPoint(20, 355),
                       wxSize(100, -1));
   b_ok->SetDefault();
   b_start = new wxButton(this, ID_JOBS_B_START, wxS("&Start"),
                          wxPoint(460, 355), wxSize(100, -1));
+  b_start->SetToolTip(wxS("Start the jobs whose status is 'pending'"));
   b_start_selected = new wxButton(this, ID_JOBS_B_START_SELECTED,
                                   wxS("S&tart selected"),
                                   wxPoint(580, 355), wxSize(100, -1));
+  b_start_selected->SetToolTip(wxS("Start the selected job(s) regardless of "
+                                   "their status"));
 
   enable_buttons(false);
 
@@ -362,7 +445,7 @@ job_dialog::create_list_item(int i) {
   s.Printf(wxS("%s"),
            jobs[i].status == jobs_pending ? wxS("pending") :
            jobs[i].status == jobs_done ? wxS("done") :
-           jobs[i].status == jobs_done_warnings ? wxS("done_warnings") :
+           jobs[i].status == jobs_done_warnings ? wxS("done/warnings") :
            jobs[i].status == jobs_aborted ? wxS("aborted") :
            wxS("failed"));
   lv_jobs->SetItem(dummy, 1, s);
@@ -392,6 +475,7 @@ job_dialog::enable_buttons(bool enable) {
   b_up->Enable(enable);
   b_down->Enable(enable);
   b_reenable->Enable(enable);
+  b_disable->Enable(enable);
   b_delete->Enable(enable);
   b_start_selected->Enable(enable);
   b_view_log->Enable(enable);
@@ -517,6 +601,22 @@ job_dialog::on_reenable(wxCommandEvent &evt) {
 }
 
 void
+job_dialog::on_disable(wxCommandEvent &evt) {
+  long item;
+
+  item = -1;
+  while (true) {
+    item = lv_jobs->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if (item == -1)
+      break;
+    jobs[item].status = jobs_done;
+    lv_jobs->SetItem(item, 1, wxS("done"));
+  }
+
+  mdlg->save_job_queue();
+}
+
+void
 job_dialog::on_view_log(wxCommandEvent &evt) {
   job_log_dialog *dialog;
   wxString log;
@@ -526,16 +626,24 @@ job_dialog::on_view_log(wxCommandEvent &evt) {
     if (!lv_jobs->IsSelected(i))
       continue;
     log +=
-      wxString::Format(wxS("--- BEGIN job %d (%s), added on %s\n"), jobs[i].id,
-                       jobs[i].description->c_str(),
+      wxString::Format(wxS("--- BEGIN job %d (%s, added on %s)"),
+                       jobs[i].id, jobs[i].description->c_str(),
                        format_date_time(jobs[i].added_on).c_str());
+    if (jobs[i].started_on != -1)
+      log += wxString::Format(wxS(", started on %s"),
+                              format_date_time(jobs[i].started_on).c_str());
+    log += wxS("\n");
     if (jobs[i].log->size() == 0)
       log += wxS("--- No job output found.\n");
     else
       log += *jobs[i].log;
     if (log.Last() != wxC('\n'))
       log += wxS("\n");
-    log += wxString::Format(wxS("--- END job %d\n\n"), jobs[i].id);
+    log += wxString::Format(wxS("--- END job %d"), jobs[i].id);
+    if (jobs[i].finished_on != -1)
+      log += wxString::Format(wxS(", finished on %s"),
+                              format_date_time(jobs[i].finished_on).c_str());
+    log += wxS("\n\n");
   }
 
   if (log.length() == 0)
@@ -574,6 +682,8 @@ IMPLEMENT_CLASS(job_run_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_run_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_ABORT, job_run_dialog::on_abort)
   EVT_END_PROCESS(1, job_run_dialog::on_end_process)
+  EVT_IDLE(job_run_dialog::on_idle)
+  EVT_TIMER(1, job_run_dialog::on_timer)
 END_EVENT_TABLE();
 
 IMPLEMENT_CLASS(job_log_dialog, wxDialog);
@@ -588,7 +698,8 @@ BEGIN_EVENT_TABLE(job_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_UP, job_dialog::on_up)
   EVT_BUTTON(ID_JOBS_B_DOWN, job_dialog::on_down)
   EVT_BUTTON(ID_JOBS_B_DELETE, job_dialog::on_delete)
-  EVT_BUTTON(ID_JOBS_B_REENABLE, job_dialog::on_reenable)
+  EVT_BUTTON(ID_JOBS_B_REENABLE, job_dialog::on_reenable) 
+  EVT_BUTTON(ID_JOBS_B_DISABLE, job_dialog::on_disable)
   EVT_BUTTON(ID_JOBS_B_VIEW_LOG, job_dialog::on_view_log)
   EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
   EVT_LIST_ITEM_DESELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
