@@ -78,3 +78,18 @@ make
 make install
 
 7) Be happy and drink some milk. Moooo!
+
+Bug reports
+-----------
+
+If you're sure you've found a bug - e.g. if one of my programs crashes
+with an obscur error message, or if the resulting file is missing part
+of the original data, then by all means submit a bug report.
+
+I use Anthill (http://www.bunkus.org/anthill/index.php) as my bug
+database. You can submit your bug reports there. Please be as verbose
+as possible - e.g. include the command line, if you use Windows or
+Linux etc.pp. If at all possible please include sample files as well
+so that I can reproduce the issue. If they are larger than 1M then
+please upload them somewhere and post a link in the Anthill bug
+report.
