@@ -82,12 +82,17 @@ public:
 chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
                                        wxString old_def_language,
                                        wxString old_def_country):
-  wxDialog(parent, 0, "") {
+  wxDialog(parent, 0, "", wxDefaultPosition) {
   wxButton *b_ok, *b_cancel;
-  wxPanel *panel;
+#if defined(SYS_WINDOWS)
+#define CVD_YOFF1 (-23)
+  wxDialog *panel = this;
+#else
+#define CVD_YOFF1 0
+  wxPanel *panel = new wxPanel;
+#endif
 
   SetSize(350, 200);
-  panel = new wxPanel(this, -1);
   if (set_defaults) {
     SetTitle("Change the default values");
     new wxStaticText(panel, wxID_STATIC,
@@ -97,14 +102,16 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
                      "saved when you exit mmg.",
                      wxPoint(10, 10), wxSize(380, 100), 0);
 
-    new wxStaticText(panel, wxID_STATIC, "Language:", wxPoint(10, 90));
+    new wxStaticText(panel, wxID_STATIC, "Language:",
+                     wxPoint(10, 92 + CVD_YOFF1));
     tc_language =
-      new wxTextCtrl(panel, wxID_STATIC, old_def_language, wxPoint(90, 90),
-                     wxSize(220, -1));
-    new wxStaticText(panel, wxID_STATIC, "Country:", wxPoint(10, 125));
+      new wxTextCtrl(panel, wxID_STATIC, old_def_language,
+                     wxPoint(90, 90 + CVD_YOFF1), wxSize(220, -1));
+    new wxStaticText(panel, wxID_STATIC, "Country:",
+                     wxPoint(10, 127 + CVD_YOFF1));
     tc_country =
-      new wxTextCtrl(panel, wxID_STATIC, old_def_country, wxPoint(90, 125),
-                     wxSize(220, -1));
+      new wxTextCtrl(panel, wxID_STATIC, old_def_country,
+                     wxPoint(90, 125 + CVD_YOFF1), wxSize(220, -1));
 
   } else {
     SetTitle("Select values to be applied");
@@ -116,19 +123,19 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
 
     cb_language =
       new wxCheckBox(panel, ID_CVD_CB_LANGUAGE, "Set language to:",
-                     wxPoint(10, 90));
+                     wxPoint(10, 92 + CVD_YOFF1));
     cb_language->SetValue(false);
     tc_language =
-      new wxTextCtrl(panel, wxID_STATIC, old_def_language, wxPoint(135, 90),
-                     wxSize(175, -1));
+      new wxTextCtrl(panel, wxID_STATIC, old_def_language,
+                     wxPoint(135, 90 + CVD_YOFF1), wxSize(175, -1));
     tc_language->Enable(false);
     cb_country =
       new wxCheckBox(panel, ID_CVD_CB_COUNTRY, "Set country to:",
-                     wxPoint(10, 125));
+                     wxPoint(10, 127 + CVD_YOFF1));
     cb_country->SetValue(false);
     tc_country =
-      new wxTextCtrl(panel, wxID_STATIC, old_def_country, wxPoint(135, 125),
-                     wxSize(175, -1));
+      new wxTextCtrl(panel, wxID_STATIC, old_def_country,
+                     wxPoint(135, 125 + CVD_YOFF1), wxSize(175, -1));
     tc_country->Enable(false);
 
   }
@@ -140,11 +147,11 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent, bool set_defaults,
   b_ok->Move(wxPoint(GetSize().GetWidth() / 2 - b_ok->GetSize().GetWidth() -
                      b_cancel->GetSize().GetWidth() / 2,
                      GetSize().GetHeight() -
-                     b_ok->GetSize().GetHeight() * 3 / 2));
+                     b_ok->GetSize().GetHeight() * 3 / 2 + CVD_YOFF1));
   b_cancel->Move(wxPoint(GetSize().GetWidth() / 2 +
                          b_cancel->GetSize().GetWidth() / 2,
                          GetSize().GetHeight() -
-                         b_ok->GetSize().GetHeight() * 3 / 2));
+                         b_ok->GetSize().GetHeight() * 3 / 2 + CVD_YOFF1));
 }
 
 void chapter_values_dlg::on_language_clicked(wxCommandEvent &evt) {
@@ -1142,10 +1149,14 @@ void tab_chapters::on_set_values(wxCommandEvent &evt) {
 
   if (dlg.cb_language->IsChecked()) {
     s = dlg.tc_language->GetValue().c_str();
+    verify_language_codes(s, parts);
+    s = join(" ", parts);
     set_values_recursively(id, s, true);
   }
   if (dlg.cb_country->IsChecked()) {
     s = dlg.tc_country->GetValue().c_str();
+    verify_country_codes(s, parts);
+    s = join(" ", parts);
     set_values_recursively(id, s, false);
   }
 }
@@ -1160,7 +1171,6 @@ bool tab_chapters::copy_values(wxTreeItemId id) {
   EbmlElement *e;
   int64_t ts_start, ts_end;
   vector<string> l_codes, c_codes;
-  vector<string>::iterator eit;
   string s;
   uint32_t i;
 
