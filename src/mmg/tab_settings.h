@@ -27,6 +27,7 @@
 #define ID_COB_PRIORITY                    15002
 #define ID_CB_AUTOSET_OUTPUT_FILENAME      15003
 #define ID_CB_ASK_BEFORE_OVERWRITING       15004
+#define ID_CB_ON_TOP                       15005
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
@@ -34,7 +35,7 @@ class tab_settings: public wxPanel {
 public:
   wxTextCtrl *tc_mkvmerge;
   wxCheckBox *cb_show_commandline, *cb_autoset_output_filename;
-  wxCheckBox *cb_ask_before_overwriting;
+  wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxComboBox *cob_priority;
 
 public:
@@ -43,6 +44,7 @@ public:
 
   void on_browse(wxCommandEvent &evt);
   void on_xyz_selected(wxCommandEvent &evt);
+  void on_on_top_selected(wxCommandEvent &evt);
 
   void load_preferences();
   void save_preferences();

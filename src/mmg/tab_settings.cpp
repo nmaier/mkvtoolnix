@@ -31,6 +31,7 @@
 #include "common.h"
 #include "matroskalogo_big.xpm"
 #include "mmg.h"
+#include "mmg_dialog.h"
 #include "tab_settings.h"
 
 tab_settings::tab_settings(wxWindow *parent):
@@ -57,9 +58,10 @@ tab_settings::tab_settings(wxWindow *parent):
     new wxStaticBoxSizer(new wxStaticBox(this, -1,
                                          wxT("Miscellaneous options")),
                          wxVERTICAL);
+  siz_misc->Add(0, 5, 0, 0, 0);
   siz_proc_prio = new wxBoxSizer(wxHORIZONTAL);
   siz_proc_prio->Add(new wxStaticText(this, -1, wxT("Process priority:")),
-                     0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP | wxRIGHT, 5);
+                     0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   cob_priority =
     new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
@@ -72,9 +74,9 @@ tab_settings::tab_settings(wxWindow *parent):
   cob_priority->Append(wxT("normal"));
   cob_priority->Append(wxT("lower"));
   cob_priority->Append(wxT("lowest"));
-  siz_proc_prio->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP,
-                     5);
+  siz_proc_prio->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
   siz_misc->Add(siz_proc_prio);
+  siz_misc->Add(0, 5, 0, 0, 0);
 
   cb_autoset_output_filename =
     new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME,
@@ -85,12 +87,21 @@ tab_settings::tab_settings(wxWindow *parent):
                    "a file. It will be set to the same name as the "
                    "input file but with the extension '.mkv'. If unset mmg "
                    "will not touch the output filename."));
-  siz_misc->Add(cb_autoset_output_filename, 0, wxLEFT | wxTOP, 5);
+  siz_misc->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
+  siz_misc->Add(0, 5, 0, 0, 0);
 
   cb_ask_before_overwriting =
     new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
                    wxT("Ask before overwriting existing files"));
-  siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT | wxTOP, 5);
+  siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
+  cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, wxT("Always on top"));
+#if defined(SYS_WINDOWS)
+  siz_misc->Add(0, 5, 0, 0, 0);
+  siz_misc->Add(cb_on_top, 0, wxLEFT, 5);
+#else
+  cb_on_top->Show(false);
+#endif
+  siz_misc->Add(0, 5, 0, 0, 0);
 
   siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
                                    wxHORIZONTAL);
@@ -147,6 +158,19 @@ tab_settings::on_xyz_selected(wxCommandEvent &evt) {
 }
 
 void
+tab_settings::on_on_top_selected(wxCommandEvent &evt) {
+  long style;
+
+  save_preferences();
+  style = mdlg->GetWindowStyleFlag();
+  if (cb_on_top->IsChecked())
+    style |= wxSTAY_ON_TOP;
+  else
+    style &= ~wxSTAY_ON_TOP;
+  mdlg->SetWindowStyleFlag(style);
+}
+
+void
 tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
   wxString priority;
@@ -174,6 +198,9 @@ tab_settings::load_preferences() {
   if (!cfg->Read(wxT("ask_before_overwriting"), &b))
     b = true;
   cb_ask_before_overwriting->SetValue(b);
+  if (!cfg->Read(wxT("on_top"), &b))
+    b = false;
+  cb_on_top->SetValue(b);
 }
 
 void
@@ -186,6 +213,7 @@ tab_settings::save_preferences() {
              cb_autoset_output_filename->IsChecked());
   cfg->Write(wxT("ask_before_overwriting"),
              cb_ask_before_overwriting->IsChecked());
+  cfg->Write(wxT("on_top"), cb_on_top->IsChecked());
   cfg->Flush();
 }
 
@@ -263,4 +291,5 @@ BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
   EVT_COMBOBOX(ID_COB_PRIORITY, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, tab_settings::on_xyz_selected)
+  EVT_CHECKBOX(ID_CB_ON_TOP, tab_settings::on_on_top_selected)
 END_EVENT_TABLE();
