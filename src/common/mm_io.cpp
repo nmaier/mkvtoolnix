@@ -809,7 +809,7 @@ mm_text_io_c::mm_text_io_c(mm_io_c *_in,
 
 int
 mm_text_io_c::read_next_char(char *buffer) {
-  unsigned char stream[4];
+  unsigned char stream[6];
   unsigned long data;
   int size, i;
 

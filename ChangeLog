@@ -1,3 +1,8 @@
+2004-11-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a buffer overflow in the UTF-8 file
+	reading routines.
+
 2004-11-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.0.
