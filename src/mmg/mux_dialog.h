@@ -23,6 +23,8 @@
 #define ID_B_MUX_SAVELOG                  17001
 #define ID_B_MUX_ABORT                    17002
 
+class mux_process;
+
 class mux_dialog: public wxDialog {
   DECLARE_CLASS(mux_dialog);
   DECLARE_EVENT_TABLE();
@@ -30,7 +32,7 @@ protected:
   long pid;
   wxStaticText *st_label;
   wxGauge *g_progress;
-  wxProcess *process;
+  mux_process *process;
   wxString log, opt_file_name;
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
@@ -45,6 +47,7 @@ public:
   void on_ok(wxCommandEvent &evt);
   void on_save_log(wxCommandEvent &evt);
   void on_abort(wxCommandEvent &evt);
+  void done();
 };
 
 class mux_process: public wxProcess {
