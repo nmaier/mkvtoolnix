@@ -404,6 +404,7 @@ main(int argc,
   textdomain("mkvtoolnix");
 #endif
 
+  srand(time(NULL));
   utf8_init(NULL);
   conv_utf8 = utf8_init("UTF-8");
 

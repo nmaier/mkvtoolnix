@@ -482,7 +482,10 @@ create_output_files() {
         if (tracks[i].type == TYPEOGM) {
           ogg_packet op;
 
-          ogg_stream_init(&tracks[i].osstate, rand());
+          if (no_variable_data)
+            ogg_stream_init(&tracks[i].osstate, 1804289383);
+          else
+            ogg_stream_init(&tracks[i].osstate, rand());
 
           // Handle the three header packets: Headers, comments, codec
           // setup data.
@@ -578,7 +581,10 @@ create_output_files() {
             unsigned char *ptr;
             ogg_packet op;
 
-            ogg_stream_init(&tracks[i].osstate, rand());
+            if (no_variable_data)
+              ogg_stream_init(&tracks[i].osstate, 1804289383);
+            else
+              ogg_stream_init(&tracks[i].osstate, rand());
 
             // Handle the three header packets: Headers, comments, codec
             // setup data.
