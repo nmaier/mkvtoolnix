@@ -20,6 +20,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			queue.cpp queue.h \
 			r_ac3.cpp r_ac3.h \
 			r_avi.cpp r_avi.h \
+			r_matroska.cpp r_matroska.h \
 			r_mp3.cpp r_mp3.h \
 			r_srt.cpp r_srt.h \
 			r_ogm.cpp r_ogm.h \
@@ -30,6 +31,6 @@ mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			common.cpp common.h
 
 mkvmerge_LDADD = @AVILIB_LIBS@ @DMALLOC_LIBS@ @PROFILING_LIBS@ \
-		@MATROSKA_LIBS@ @OGG_LIBS@ @VORBIS_LIBS@
+		@MATROSKA_LIBS@ @EBML_LIBS@ @OGG_LIBS@ @VORBIS_LIBS@
 
-mkvinfo_LDADD = @DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@
+mkvinfo_LDADD = @DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@
