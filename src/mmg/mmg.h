@@ -92,6 +92,7 @@ wxString join(const wxString &pattern, vector<wxString> &strings);
 wxString &strip(wxString &s, bool newlines = false);
 vector<wxString> & strip(vector<wxString> &v, bool newlines = false);
 string to_utf8(const wxString &src);
+wxString from_utf8(const wxString &src);
 wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);
 wxString format_date_time(time_t date_time);

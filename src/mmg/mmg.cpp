@@ -431,22 +431,31 @@ strip(vector<wxString> &v,
 
 string
 to_utf8(const wxString &src) {
-  char *utf8;
   string retval;
 
 #if WXUNICODE
+  char *utf8;
   int len;
 
   len = wxConvUTF8.WC2MB(NULL, src.c_str(), 0);
   utf8 = (char *)safemalloc(len + 1);
   wxConvUTF8.WC2MB(utf8, src.c_str(), len + 1);
-#else
-  utf8 = to_utf8_c(cc_local_utf8, src);
-#endif
   retval = utf8;
   safefree(utf8);
+#else
+  retval = to_utf8(cc_local_utf8, src.c_str());
+#endif
 
   return retval;
+}
+
+wxString
+from_utf8(const wxString &src) {
+#if WXUNICODE
+  return src;
+#else
+  return wxString(from_utf8(cc_local_utf8, src.c_str()).c_str());
+#endif
 }
 
 wxString

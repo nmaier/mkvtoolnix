@@ -634,21 +634,6 @@ tab_input::enable_ar_controls(mmg_track_t *track) {
   rb_display_dimensions->SetValue(!ar_enabled);
 }
 
-static wxString
-from_utf8(const wxString &src) {
-#if WXUNICODE
-  return src;
-#else
-  wxString retval;
-  char *local;
-
-  local = from_utf8_c(cc_local_utf8, src.c_str());
-  retval = local;
-  safefree(local);
-  return retval;
-#endif
-}
-
 void
 tab_input::on_add_file(wxCommandEvent &evt) {
   wxString media_files;
