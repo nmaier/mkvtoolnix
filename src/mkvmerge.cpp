@@ -1937,7 +1937,6 @@ static void setup() {
 #if defined(SYS_WINDOWS)
   SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
-  printf("jo!\n");
 #endif
 
   srand(time(NULL));

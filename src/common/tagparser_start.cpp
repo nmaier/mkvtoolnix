@@ -732,6 +732,58 @@ static void start_level6(parser_data_t *pdata, const char *name) {
     die("tagparser_start: Unknown element - should not have happened.");
 }
 
+static void handle_simple_tag(parser_data_t *pdata, const char *name) {
+  string parent_name;
+  int parent, i;
+  KaxTagSimple *p_simple;
+
+  parent_name = (*pdata->parent_names)[pdata->parent_names->size() - 2];
+  parent = (*pdata->parents)[pdata->parents->size() - 1];
+
+  pdata->data_allowed = true;
+  if (pdata->simple_tags->size() == 0)
+    p_simple = NULL;
+  else
+    p_simple = (*(pdata->simple_tags))[pdata->simple_tags->size() - 1];
+
+  if (!strcmp(name, "Simple")) {
+    KaxTagSimple *simple;
+
+    pdata->parents->push_back(E_Simple);
+    pdata->data_allowed = false;
+    if (pdata->simple_tags->size() == 0)
+      simple = &AddEmptyChild<KaxTagSimple>(*pdata->tag);
+    else
+      simple = &AddEmptyChild<KaxTagSimple>(*p_simple);
+    pdata->simple_tags->push_back(simple);
+
+  } else if (parent != E_Simple)
+    tperror_nochild();
+
+  else if (!strcmp(name, "Name")) {
+    check_instances(p_simple, KaxTagName);
+    pdata->parents->push_back(E_Name);
+
+  } else if (!strcmp(name, "String")) {
+    check_instances(p_simple, KaxTagString);
+    for (i = 0; i < p_simple->ListSize(); i++)
+      if (EbmlId(*(*p_simple)[i]) == KaxTagBinary::ClassInfos.GlobalId)
+        tperror(pdata, "'String' and 'Binary' must not both be present "
+                "as children under one 'Simple' tag.\n");
+    pdata->parents->push_back(E_String);
+
+  } else if (!strcmp(name, "Binary")) {
+    check_instances(p_simple, KaxTagBinary);
+    for (i = 0; i < p_simple->ListSize(); i++)
+      if (EbmlId(*(*p_simple)[i]) == KaxTagString::ClassInfos.GlobalId)
+        tperror(pdata, "'String' and 'Binary' must not both be present "
+                "as children under one 'Simple' tag.\n");
+    pdata->parents->push_back(E_Binary);
+
+  } else
+    tperror_nochild();
+}
+
 static void start_element(void *user_data, const char *name,
                           const char **atts) {
   parser_data_t *pdata;
@@ -749,6 +801,14 @@ static void start_element(void *user_data, const char *name,
 
   if (pdata->bin != NULL)
     assert("start_element: pdata->bin != NULL");
+
+  if (pdata->parsing_simple ||
+      ((pdata->depth >= 2) && !strcmp(name, "Simple"))) {
+    handle_simple_tag(pdata, name);
+    pdata->parsing_simple = true;
+    (pdata->depth)++;
+    return;
+  }
 
   if (pdata->depth == 0) {
     if (pdata->done_reading)
@@ -843,6 +903,8 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   pdata->parent_names = new vector<string>;
   pdata->parents = new vector<int>;
   pdata->file_name = name;
+  pdata->parsing_simple = false;
+  pdata->simple_tags = new vector<KaxTagSimple *>;
 
   XML_SetUserData(parser, pdata);
   XML_SetElementHandler(parser, start_element, end_xml_tag_element);
@@ -871,5 +933,6 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   XML_ParserFree(parser);
   delete pdata->parent_names;
   delete pdata->parents;
+  delete pdata->simple_tags;
   safefree(pdata);
 }

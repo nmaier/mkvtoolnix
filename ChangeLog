@@ -1,3 +1,24 @@
+2003-12-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The timescodes for Vorbis were calculated one
+	packet too early (meaning that the first packet did not start at
+	0).
+
+	* mmg: Made "don't link" ON by default because some players might
+	have problems with the second and all following files if they
+	don't expect them not to start at 0.
+
+	* mkvmerge, mkvextract, mkvinfo: Added support for the new tagging
+	system.
+
+	* mmg: bug fix: The default values for the chapter language and
+	chapter country are now applied when loading simple (OGM) style
+	chapter files as well.
+
+	* mkvmerge: bug fix: The VobSub packetizer will assume MPEG2 if no
+	MPEG version identifier was found ("Unsupported MPEG version:
+	0x00...").
+
 2003-12-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: There are MP4 files that actually contain HE-AAC but

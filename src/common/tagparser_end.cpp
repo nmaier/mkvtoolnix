@@ -605,6 +605,25 @@ static void end_level6(parser_data_t *pdata, const char *name) {
   die("tagparser_end: Unknown element. This should not have happened.");
 }
 
+static void end_simple(parser_data_t *pdata, const char *name) {
+  
+  if (!strcmp(name, "Simple")) {
+    pdata->simple_tags->pop_back();
+    if (pdata->simple_tags->size() == 0)
+      pdata->parsing_simple = false;
+
+  } else {
+    KaxTagSimple *simple =
+      (*pdata->simple_tags)[pdata->simple_tags->size() - 1];
+    if (!strcmp(name, "Name"))
+      el_get_utf8string(pdata, &GetChild<KaxTagName>(*simple));
+    else if (!strcmp(name, "String"))
+      el_get_utf8string(pdata, &GetChild<KaxTagString>(*simple));
+    else if (!strcmp(name, "Binary"))
+      el_get_binary(pdata, &GetChild<KaxTagBinary>(*simple));
+  }
+}
+
 void end_xml_tag_element(void *user_data, const char *name) {
   parser_data_t *pdata;
 
@@ -613,7 +632,9 @@ void end_xml_tag_element(void *user_data, const char *name) {
   if (pdata->data_allowed && (pdata->bin == NULL))
     tperror(pdata, "Element <%s> does not contain any data.", name);
 
-  if (pdata->depth == 1)
+  if (pdata->parsing_simple)
+    end_simple(pdata, name);
+  else if (pdata->depth == 1)
     ;                           // Nothing to do here!
   else if (pdata->depth == 2)
     end_level1(pdata, name);

@@ -323,6 +323,52 @@ bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level) {
   return false;
 }
 
+string format_binary(EbmlBinary &bin, int max_len = 10);
+
+bool parse_simpletag(EbmlStream *es, EbmlElement *l0, int level) {
+  EbmlMaster *m0;
+  EbmlElement *l1;
+  int i0;
+  string s;
+  char *str;
+
+  if (is_id(l0, KaxTagSimple)) {
+    show_element(l0, level, "Simple tag");
+
+    m0 = static_cast<EbmlMaster *>(l0);
+    for (i0 = 0; i0 < m0->ListSize(); i0++) {
+      l1 = (*m0)[i0];
+
+      if (is_id(l1, KaxTagName)) {
+        KaxTagName &c_name = *static_cast<KaxTagName *>(l1);
+        str = UTFstring_to_cstr(UTFstring(c_name));
+        show_element(l1, level + 1, "Name: %s", str);
+        safefree(str);
+
+      } else if (is_id(l1, KaxTagString)) {
+        KaxTagString &c_string = *static_cast<KaxTagString *>(l1);
+        str = UTFstring_to_cstr(UTFstring(c_string));
+        show_element(l1, level + 1, "String: %s", str);
+        safefree(str);
+
+      } else if (is_id(l1, KaxTagBinary)) {
+        KaxTagBinary &c_binary = *static_cast<KaxTagBinary *>(l1);
+        s = format_binary(c_binary);
+        show_element(l1, level + 1, "Binary: %s", s.c_str());
+
+      } else if (!is_global(es, l1, level + 1) &&
+                 !parse_simpletag(es, l1, level + 1))
+        show_unknown_element(l1, level + 1);
+
+    } // while (l1 != NULL)
+
+    return true;
+
+  } 
+
+  return false;
+}
+
 bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level) {
   EbmlMaster *m0, *m1;
   EbmlElement *l1, *l2;
@@ -516,7 +562,7 @@ void read_master(EbmlMaster *m, EbmlStream *es, const EbmlSemanticContext &ctx,
   sort_master(*m);
 }
 
-string format_binary(EbmlBinary &bin, int max_len = 10) {
+string format_binary(EbmlBinary &bin, int max_len) {
   int len, i;
   string result;
 
@@ -2389,7 +2435,8 @@ bool process_file(const char *file_name) {
                 } // while (l4 != NULL)
 
               } else if (!is_global(es, l3, 3) &&
-                         !parse_multicomment(es, l3, 3))
+                         !parse_multicomment(es, l3, 3) &&
+                         !parse_simpletag(es, l3, 3))
                 show_unknown_element(l3, 3);
 
             } // while (l3 != NULL)

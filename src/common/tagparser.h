@@ -116,6 +116,9 @@ using namespace libmatroska;
 #define E_CommentName                    78
 #define E_Comments                       79
 #define E_CommentLanguage                81
+#define E_Simple                         82
+#define E_String                         83
+#define E_Binary                         84
 
 // MAX: 81
 
@@ -125,7 +128,7 @@ typedef struct {
   const char *file_name;
 
   int depth;
-  bool done_reading, data_allowed;
+  bool done_reading, data_allowed, parsing_simple;
 
   vector<string> *parent_names;
   vector<int> *parents;
@@ -179,6 +182,8 @@ typedef struct {
   KaxTagMultiTitleEmail *t_email;
 
   KaxTagMultiComment *m_comment;
+
+  vector<KaxTagSimple *> *simple_tags;
 } parser_data_t;
 
 void tperror(parser_data_t *pdata, const char *fmt, ...);

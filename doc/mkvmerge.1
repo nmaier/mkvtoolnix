@@ -725,7 +725,7 @@ The XML based chapter format looks like this:
 .LP
 <?xml version="1.0" encoding="ISO-8859-1"?>
 .br
-<!DOCTYPE Tags SYSTEM "matroskachapters.dtd">
+<!DOCTYPE Chapters SYSTEM "matroskachapters.dtd">
 .br
 <Chapters>
 .br
@@ -799,13 +799,12 @@ in OGM files.
 .LP
 \fBIntroduction\fR
 
-Matroska supports an extensive set of tags. Unlike other
-containers/formats it does not rely on a free form specification of
-the type \fIKEY=VALUE\fR but provides a big number of tags that are a
-subset of several well-known tagging schemes unified in one big tag
-tree. The full specification can be found at
-.UR http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/tagging/index.html
-<http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/tagging/index.html>
+Matroska supports an extensive set of tags that is deprecated and a
+new, simpler system like it is is used in most other containers:
+\fIKEY=VALUE\fR. However, in Matroska these tags can also be nested,
+and both the \fIKEY\fR and the \fIVALUE\fR are elements of their
+own. The exaple file \fIexample-tags-2.xml\fR show how to use this new
+system.
 
 .LP
 \fBScope of the tags\fR
@@ -856,7 +855,7 @@ $ \fBmkvmerge -o file.mkv --tags 0:tags.xml file.avi\fR
 \fBmkvmerge\fR supports a XML based tag file format. The format is
 very easy and closely connected to the Matroska tag specs found at the
 URL mentioned above. Both the binary and the source \fBmkvtoolnix\fR
-distributions come with a sample file called \fImatroska-tags.xml\fR
+distributions come with a sample file called \example-tags-2.xml\fR
 which simply lists all known tags and which can be used as a basis for
 real life tag files.
 
@@ -876,11 +875,9 @@ White spaces directly before and after tag contents are ignored.
 .LP
 \fBData types\fR
 
-The data type expected can be found in the official Matroska tag specs.
-The types \fIinteger\fR, \fIunsigned integer\fR, \fIfloat\fR, \fIstring\fR
-and \fIUTF-8 string\fR look just like you expect them to: \fI4254\fR,
-\fI-2\fR, \fI5.0\fR, \fIhello world\fR and \fIhello world\fR. Two data
-types are treadet differently, however: \fIbinary\fR and \fIdate\fR.
+The new Matroska tagging system only knows two data types, a UTF-8 string
+and a binary type. The first is used for the tag's name and the \fI<String>\fR
+element while the binary type is used for the \fI<Binary>\fR type.
 
 .LP
 
@@ -898,6 +895,19 @@ characters and is used e.g. in email programs. \fBmkvtoolnix\fR comes
 with a utility, \fBbase64tool\fR, that can be used to encode to and
 decode from Base64. \fBmkvextract\fR will output Base64 encoded data
 for binary elements.
+
+.LP
+
+The deprecated tagging system knows some more data types which can be
+found in the official Matroska tag specs. \fBThe following two paragraphs only
+apply to the deprecated tags\fR (an example file is still available and called
+\fIexample-tags-deprecated.xml\fR):
+
+.LP
+
+The types \fIinteger\fR, \fIunsigned integer\fR, \fIfloat\fR, \fIstring\fR
+and \fIUTF-8 string\fR look just like you expect them to: \fI4254\fR,
+\fI-2\fR, \fI5.0\fR, \fIhello world\fR and \fIhello world\fR.
 
 .LP
 

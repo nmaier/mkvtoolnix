@@ -11,7 +11,8 @@
           MultiIdentifier?,
           MultiLegal?,
           MultiTitle?,
-          MultiComment*)>
+          MultiComment*,
+          Simple*)>
 
 <!ELEMENT Targets (
           TrackUID*,
@@ -186,3 +187,9 @@
           Comments,
           Language?)>
 <!ELEMENT Comments (#PCDATA)>
+
+<!ELEMENT Simple (
+          Name,
+          String?,
+          Binary?,
+          Simple*)>

@@ -186,6 +186,32 @@ static void handle_multicomments(EbmlElement *e, int level) {
     pr_unk();
 }
 
+static void handle_simpletags(EbmlElement *e, int level) {
+  int i;
+
+  if (is_id(KaxTagName))
+    pr_us("Name");
+
+  else if (is_id(KaxTagString))
+    pr_us("String");
+
+  else if (is_id(KaxTagBinary))
+    pr_b("Binary");
+
+  else if (is_id(KaxTagSimple)) {
+    for (i = 0; i < level; i++)
+      mxprint(o, "  ");
+    mxprint(o, "<Simple>\n");
+    for (i = 0; i < (int)((EbmlMaster *)e)->ListSize(); i++)
+      handle_simpletags((*((EbmlMaster *)e))[i], level + 1);
+    for (i = 0; i < level; i++)
+      mxprint(o, "  ");
+    mxprint(o, "</Simple>\n");
+
+  } else
+    pr_unk();
+}
+
 static void handle_level5(EbmlElement *e) {
   int i, level = 5;
 
@@ -547,6 +573,12 @@ static void handle_level2(EbmlElement *e) {
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_multicomments((*(EbmlMaster *)e)[i], 3);
     mxprint(o, "    </MultiComment>\n");
+
+  } else if (is_id(KaxTagSimple)) {
+    mxprint(o, "    <Simple>\n");
+    for (i = 0; i < (int)((EbmlMaster *)e)->ListSize(); i++)
+      handle_simpletags((*((EbmlMaster *)e))[i], level + 1);
+    mxprint(o, "    </Simple>\n");
 
   } else
     pr_unk();
