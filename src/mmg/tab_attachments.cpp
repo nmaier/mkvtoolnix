@@ -33,7 +33,7 @@
 vector<mmg_attachment_t> attachments;
 
 tab_attachments::tab_attachments(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
   wxArrayString sorted_mime_types;
   uint32_t i;

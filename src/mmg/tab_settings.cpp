@@ -29,10 +29,10 @@
 
 #include "mmg.h"
 #include "common.h"
-#include "matroskalogo-big.xpm"
+#include "matroskalogo_big.xpm"
 
 tab_settings::tab_settings(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
   new wxStaticBox(this, -1, _("mkvmrge executable"), wxPoint(10, 5),
                   wxSize(475, 50));
@@ -56,7 +56,6 @@ tab_settings::tab_settings(wxWindow *parent):
                      "http://www.bunkus.org/videotools/mkvtoolnix/"),
                    wxPoint(95, 360), wxDefaultSize, 0);
 
-  wxConfigBase::Set(new wxConfig("mkvmergeGUI"));
   load_preferences();
 }
 
@@ -83,14 +82,17 @@ void tab_settings::on_browse(wxCommandEvent &evt) {
 void tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
 
-  if (!cfg->Read("/mkvmerge/executable", &mkvmerge_path))
+  cfg->SetPath("/GUI");
+  if (!cfg->Read("mkvmerge_executable", &mkvmerge_path))
     mkvmerge_path = "mkvmerge";
+  if (!cfg->Read("last_directory", &last_open_dir))
+    last_open_dir = "";
   tc_mkvmerge->SetValue(mkvmerge_path);
 }
 
 void tab_settings::save_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
-  cfg->Write("/mkvmerge/executable", tc_mkvmerge->GetValue());
+  cfg->Write("/GUI/mkvmerge_executable", tc_mkvmerge->GetValue());
   cfg->Flush();
 }
 

@@ -40,7 +40,7 @@ wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
 
 tab_input::tab_input(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
   uint32_t i;
   wxString language;

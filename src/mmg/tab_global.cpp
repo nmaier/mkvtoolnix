@@ -31,7 +31,7 @@
 #include "common.h"
 
 tab_global::tab_global(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxSUNKEN_BORDER |
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
   uint32_t i;
 

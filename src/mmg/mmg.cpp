@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #include "wx/clipbrd.h"
 #include "wx/file.h"
-#include "wx/confbase.h"
+#include "wx/config.h"
 #include "wx/fileconf.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
@@ -33,11 +33,15 @@
 
 #include "mmg.h"
 #include "common.h"
+#ifdef SYS_UNIX
+#include "matroskalogo_big.xpm"
+#endif
 
 mmg_app *app;
 mmg_dialog *mdlg;
 wxString last_open_dir;
 wxString mkvmerge_path;
+vector<wxString> last_settings;
 vector<mmg_file_t> files;
 
 wxString &break_line(wxString &line, int break_after) {
@@ -126,7 +130,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                                   wxSize(520, 718),
 #endif
                                   wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
-  wxMenu *file_menu = new wxMenu();
+  file_menu = new wxMenu();
   file_menu->Append(ID_M_FILE_LOAD, _T("&Load settings\tCtrl-L"),
                     _T("Load muxing settings from a file"));
   file_menu->Append(ID_M_FILE_SAVE, _T("&Save settings\tCtrl-S"),
@@ -211,6 +215,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
 
+  SetIcon(wxICON(matroskalogo_big));
+
   set_status_bar("mkvmerge GUI ready");
 
   if (app->argc > 1) {
@@ -278,6 +284,7 @@ void mmg_dialog::load(wxString file_name) {
   wxString s;
   int version;
 
+  set_last_settings_in_menu(file_name);
   cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
   cfg->SetPath("/mkvmergeGUI");
   if (!cfg->Read("file_version", &version) || (version != 1)) {
@@ -312,6 +319,7 @@ void mmg_dialog::on_file_save(wxCommandEvent &evt) {
 void mmg_dialog::save(wxString file_name) {
   wxFileConfig *cfg;
 
+  set_last_settings_in_menu(file_name);
   cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
   cfg->SetPath("/mkvmergeGUI");
   cfg->Write("file_version", 1);
@@ -326,6 +334,26 @@ void mmg_dialog::save(wxString file_name) {
   delete cfg;
 
   set_status_bar("Configuration saved.");
+}
+
+void mmg_dialog::set_last_settings_in_menu(wxString name) {
+  uint32_t i;
+  vector<wxString>::iterator eit;
+
+  i = 0;
+  while (i < last_settings.size()) {
+    if (last_settings[i] == name) {
+      eit = last_settings.begin();
+      eit += i;
+      last_settings.erase(eit);
+    } else
+      i++;
+  }
+  last_settings.insert(last_settings.begin(), name);
+  if (last_settings.size() > 4)
+    last_settings.pop_back();
+
+  
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
@@ -684,6 +712,9 @@ void mmg_dialog::update_command_line() {
     tc_cmdline->SetValue(cmdline);
 }
 
+void mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
+}
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
@@ -696,14 +727,36 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_COPY_CMDLINE, mmg_dialog::on_copy_to_clipboard)
   EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
   EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
+  EVT_MENU(ID_M_FILE_LOADLAST1, mmg_dialog::on_file_load_last)
+  EVT_MENU(ID_M_FILE_LOADLAST2, mmg_dialog::on_file_load_last)
+  EVT_MENU(ID_M_FILE_LOADLAST3, mmg_dialog::on_file_load_last)
+  EVT_MENU(ID_M_FILE_LOADLAST4, mmg_dialog::on_file_load_last)
 END_EVENT_TABLE();
 
 bool mmg_app::OnInit() {
+  wxConfigBase::Set(new wxConfig("mkvmergeGUI"));
   app = this;
   mdlg = new mmg_dialog();
   mdlg->Show(true);
 
   return true;
+}
+
+int mmg_app::OnExit() {
+  uint32_t i;
+  wxString s;
+  wxConfigBase *cfg;
+
+  cfg = wxConfigBase::Get();
+  cfg->SetPath("/GUI");
+  cfg->Write("last_directory", last_open_dir);
+  for (i = 0; i < last_settings.size(); i++) {
+    s.Printf("last_settings %d", i);
+    cfg->Write(s, last_settings[i]);
+  }
+  cfg->Flush();
+
+  return 0;
 }
 
 IMPLEMENT_APP(mmg_app)

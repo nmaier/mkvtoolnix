@@ -101,6 +101,10 @@ using namespace std;
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
 #define ID_M_FILE_EXIT 20002
+#define ID_M_FILE_LOADLAST1 20090
+#define ID_M_FILE_LOADLAST2 20091
+#define ID_M_FILE_LOADLAST3 20092
+#define ID_M_FILE_LOADLAST4 20093
 
 #define ID_M_MUXING_START 20100
 #define ID_M_MUXING_COPY_CMDLINE 20101
@@ -132,6 +136,7 @@ typedef struct {
 
 extern wxString last_open_dir;
 extern wxString mkvmerge_path;
+extern vector<wxString> last_settings;
 extern vector<mmg_file_t> files;
 extern vector<mmg_attachment_t> attachments;
 extern wxArrayString sorted_charsets;
@@ -303,6 +308,8 @@ protected:
 
   wxStatusBar *status_bar;
 
+  wxMenu *file_menu;
+
   tab_input *input_page;
   tab_attachments *attachments_page;
   tab_global *global_page;
@@ -331,11 +338,15 @@ public:
 
   void on_clear_status_bar(wxTimerEvent &evt);
   void set_status_bar(wxString text);
+
+  void set_last_settings_in_menu(wxString name);
+  void on_file_load_last(wxCommandEvent &evt);
 };
 
 class mmg_app: public wxApp {
 public:
   virtual bool OnInit();
+  virtual int OnExit();
 };
 
 extern mmg_dialog *mdlg;
