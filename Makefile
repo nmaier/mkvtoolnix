@@ -10,7 +10,7 @@ LD=$(CXX)
 READERS_SOURCES=r_avi.cpp
 READERS_OBJECTS=$(patsubst %.cpp,%.o,$(READERS_SOURCES))
 
-OTHER_SOURCES=common.cpp
+OTHER_SOURCES=common.cpp queue.cpp
 OTHER_OBJECTS=$(patsubst %.cpp,%.o,$(OTHER_SOURCES))
 
 MKVMERGE_OBJECTS=$(READERS_OBJECTS) $(OTHER_OBJECTS)
