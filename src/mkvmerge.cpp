@@ -2055,7 +2055,7 @@ parse_args(int argc,
       if (next_arg == NULL)
         mxerror(_("'--cluster-length' lacks the length.\n"));
 
-      s = strstr("ms", next_arg);
+      s = strstr(next_arg, "ms");
       if (s != NULL) {
         *s = 0;
         if (!parse_int(next_arg, max_ns_per_cluster) ||
