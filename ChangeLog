@@ -1,5 +1,10 @@
 2003-06-15  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Several options now need an explicity track ID to specify
+        which tracks of an input file the option should be applied
+        to. These options include --atracks, --vtracks, --stracks, --sync,
+        --default-track, --cues and --language.
+
         * The Matroska reader now handles track selection correctly.
 
 2003-06-13  Moritz Bunkus  <moritz@bunkus.org>
