@@ -31,9 +31,11 @@
 #define VFT_NOBFRAME -1
 
 typedef struct {
+  unsigned char *data;
+  int size, pos;
   char type;
-  int pos;
-} frame_t;
+  int64_t timecode, duration, bref, fref;
+} video_frame_t;
 
 class video_packetizer_c: public generic_packetizer_c {
 private:
@@ -42,6 +44,8 @@ private:
   int64_t ref_timecode, duration_shift;
   bool avi_compat_mode, bframes, pass_through, is_mpeg4;
   char *codec_id;
+  vector<video_frame_t> queued_frames;
+  video_frame_t bref_frame, fref_frame;
 
 public:
   video_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
@@ -54,12 +58,15 @@ public:
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
                       int64_t fref = VFT_NOBFRAME);
   virtual void set_headers();
+  virtual void flush();
 
   virtual void dump_debug_info();
 
 protected:
-  void find_mpeg4_frame_types(unsigned char *buf, int size,
-                              vector<frame_t> &frames);
+  virtual void find_mpeg4_frame_types(unsigned char *buf, int size,
+                                      vector<video_frame_t> &frames);
+  virtual void flush_frames(char next_frame = '?', bool flush_all = false);
+  virtual void deliver(video_frame_t &frame);
 };
 
 #endif // __P_VIDEO_H
