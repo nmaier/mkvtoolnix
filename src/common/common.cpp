@@ -557,10 +557,11 @@ utf8_init(const char *charset) {
 #else
     lc_charset = nl_langinfo(CODESET);
 #endif
-    if ((lc_charset == "UTF8") || (lc_charset == "UTF-8"))
-      return -1;
   } else
     lc_charset = charset;
+
+  if ((lc_charset == "UTF8") || (lc_charset == "UTF-8"))
+    return -1;
 
   for (i = 0; i < num_kax_convs; i++)
     if (kax_convs[i].charset == lc_charset)
