@@ -808,7 +808,7 @@ dnl
 dnl Option to use the (old) avilib library instead of the AVI classes
 dnl
 AC_ARG_WITH(avilib,
-  [  --with-avilib=version         Which avilib should be used (old, noclasses, 0.6.10)],
+  [  --with-avilib=version         Which avilib should be used (noclasses, 0.6.10)],
   with_avilib_given=yes, with_avilib_given=no)
 
   AC_MSG_CHECKING(which AVI libraries to use)
@@ -818,9 +818,6 @@ AC_ARG_WITH(avilib,
     set - `echo ${with_avilib} | sed 's/,/ /g'`
     while test "x$1" != "x"; do
       case "$1" in
-        old)
-          have_avilib=yes
-          ;;
         noclasses)
           have_aviclasses=no
           ;;
@@ -831,7 +828,6 @@ AC_ARG_WITH(avilib,
           echo ""
           echo "*** Unknown AVI library \"$1\" in \"${with_avilib}\". "
           echo "*** Supported values are:"
-          echo "*** old       - the old and tested avilib, no OpenDML support"
           echo "*** 0.6.10    - the new avilib with OpenDML support"
           echo "*** noclasses - Do not use the AVI classes by Cyrius with "
           echo "***             OpenDML support"
@@ -877,4 +873,4 @@ CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFIL
 CPPFLAGS="@EXTRA_CFLAGS@"
 LDFLAGS="@EXTRA_LDFLAGS@"
 
-AC_OUTPUT(Makefile avilib/Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/mmg/Makefile doc/Makefile)
+AC_OUTPUT(Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/mmg/Makefile doc/Makefile)
