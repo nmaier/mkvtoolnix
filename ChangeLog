@@ -1,5 +1,8 @@
 2005-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The track numbers were assigned wrongly when
+	appending tracks (this is more or less cosmetic).
+
 	* mkvmerge: bug fix: Splitting by time was broken for audio-only
 	files.
 
