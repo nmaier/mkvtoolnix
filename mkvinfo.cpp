@@ -215,14 +215,70 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
       file_name = argv[i];
 }
 
-int is_ebmlvoid(EbmlElement *l, int level) {
+bool is_ebmlvoid(EbmlElement *l, int level) {
   if (EbmlId(*l) == EbmlVoid::ClassInfos.GlobalId) {
     show_element(l, level, "EbmlVoid");
 
-    return 1;
+    return true;
   }
 
-  return 0;
+  return false;
+}
+
+bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level,
+                        int &upper_lvl_el, EbmlElement *&l_upper) {
+  EbmlElement *l1;
+
+  if (EbmlId(*l0) == KaxTagMultiComment::ClassInfos.GlobalId) {
+    show_element(l0, level, "MultiComment");
+
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                             0xFFFFFFFFL, true, 1);
+    while (l1 != NULL) {
+      if (upper_lvl_el != 0) {
+        l_upper = l1;
+        return true;
+      }
+
+      if (EbmlId(*l1) == KaxTagMultiCommentName::ClassInfos.GlobalId) {
+        KaxTagMultiCommentName &c_name =
+          *static_cast<KaxTagMultiCommentName *>(l1);
+        c_name.ReadData(es->I_O());
+        show_element(l1, level + 1, "Name: %s", string(c_name).c_str());
+
+      } else if (EbmlId(*l1) ==
+                 KaxTagMultiCommentComments::ClassInfos.GlobalId) {
+        char *str;
+
+        KaxTagMultiCommentComments &c_comments =
+          *static_cast<KaxTagMultiCommentComments *>(l1);
+        c_comments.ReadData(es->I_O());
+        str = UTFstring_to_cstr(UTFstring(c_comments));
+        show_element(l1, level + 1, "Comments: %s", str);
+        safefree(str);
+
+      } else if (EbmlId(*l1) ==
+                 KaxTagMultiCommentLanguage::ClassInfos.GlobalId) {
+        KaxTagMultiCommentLanguage &c_language =
+          *static_cast<KaxTagMultiCommentLanguage *>(l1);
+        c_language.ReadData(es->I_O());
+        show_element(l1, level + 1, "Language: %s",
+                     string(c_language).c_str());
+
+      } else if (!is_ebmlvoid(l1, level + 1))
+        show_unknown_element(l1, level + 1);
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true, 1);
+    } // while (l1 != NULL)
+
+    return true;
+
+  } 
+
+  return false;
 }
 
 #if defined(COMP_MSC) || defined(COMP_MINGW)
@@ -249,7 +305,7 @@ bool process_file(const char *file_name) {
   int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
-  EbmlElement *l5 = NULL, *l6 = NULL;
+  EbmlElement *l5 = NULL, *l6 = NULL, *l7 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
@@ -1207,13 +1263,24 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Chapter UID: %llu",
                                  uint64(chapteruid));
 
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
-                  l4->SkipData(*es, l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                           0xFFFFFFFFL, true, 1);
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
 
                 } // while (l4 != NULL)
 
@@ -1391,13 +1458,24 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Popularimeter: %lld", 
                                  int64(popularimeter));
 
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
-                  l4->SkipData(*es, l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                           0xFFFFFFFFL, true, 1);
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
 
                 } // while (l4 != NULL)
 
@@ -1442,13 +1520,25 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Sub genre: %s",
                                  string(sub_genre).c_str());
 
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
-                  l4->SkipData(*es, l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                           0xFFFFFFFFL, true, 1);
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) ==
@@ -1553,13 +1643,25 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Official audio source URL: %s",
                                  string(official_source_url).c_str());
 
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
-                  l4->SkipData(*es, l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                           0xFFFFFFFFL, true, 1);
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) ==
@@ -1638,13 +1740,25 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "Original dimensions: %s",
                                  string(original_dimensions).c_str());
 
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
-                  l4->SkipData(*es, l4->Generic().Context);
-                  delete l4;
-                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
-                                           0xFFFFFFFFL, true, 1);
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
                 } // while (l4 != NULL)
 
               } else if (EbmlId(*l3) ==
@@ -1758,18 +1872,31 @@ bool process_file(const char *file_name) {
                               show_element(l6, 6, "Price date (invalid, "
                                            "value: %d)", temptime);
 
-                          } else if (!is_ebmlvoid(l6, 6))
+                          } else if (!is_ebmlvoid(l6, 6) &&
+                                     !parse_multicomment(es, l6, 6,
+                                                         upper_lvl_el, l7))
                             show_unknown_element(l6, 6);
 
-                          l6->SkipData(*es, l6->Generic().Context);
-                          delete l6;
-                          l6 = es->FindNextElement(l5->Generic().Context,
-                                                   upper_lvl_el, 0xFFFFFFFFL,
-                                                   true, 1);
+                          if (upper_lvl_el > 0) { // we're coming from l7
+                            upper_lvl_el--;
+                            delete l6;
+                            l6 = l7;
+                            if (upper_lvl_el > 0)
+                              break;
+
+                          } else {
+                            l6->SkipData(*es, l6->Generic().Context);
+                            delete l6;
+                            l6 = es->FindNextElement(l5->Generic().Context,
+                                                     upper_lvl_el, 0xFFFFFFFFL,
+                                                     true, 1);
+                          }
 
                         } // while (l6 != NULL)
 
-                      } else if (!is_ebmlvoid(l5, 5))
+                      } else if (!is_ebmlvoid(l5, 5) &&
+                                 !parse_multicomment(es, l5, 5, upper_lvl_el,
+                                                     l6))
                         show_unknown_element(l5, 5);
 
                       if (upper_lvl_el > 0) {    // we're coming from l6
@@ -1788,7 +1915,8 @@ bool process_file(const char *file_name) {
                       }
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
                   if (upper_lvl_el > 0) {    // we're coming from l5
@@ -1847,7 +1975,7 @@ bool process_file(const char *file_name) {
                         time_t temptime;
                         char buffer[40];
                         KaxTagMultiDateDateBegin &d_begin =
-                          *static_cast<KaxTagMultiDateDateBegin *>(l6);
+                          *static_cast<KaxTagMultiDateDateBegin *>(l5);
                         d_begin.ReadData(es->I_O());
 
                         temptime = d_begin.GetEpochDate();
@@ -1865,7 +1993,7 @@ bool process_file(const char *file_name) {
                         time_t temptime;
                         char buffer[40];
                         KaxTagMultiDateDateEnd &d_end =
-                          *static_cast<KaxTagMultiDateDateEnd *>(l6);
+                          *static_cast<KaxTagMultiDateDateEnd *>(l5);
                         d_end.ReadData(es->I_O());
 
                         temptime = d_end.GetEpochDate();
@@ -1877,17 +2005,29 @@ bool process_file(const char *file_name) {
                           show_element(l5, 5, "End (invalid, value: %d)",
                                        temptime);
 
-                      } else if (!is_ebmlvoid(l5, 5))
+                      } else if (!is_ebmlvoid(l5, 5) &&
+                                 !parse_multicomment(es, l5, 5, upper_lvl_el,
+                                                     l6))
                         show_unknown_element(l5, 5);
 
-                      l5->SkipData(*es, l5->Generic().Context);
-                      delete l5;
-                      l5 = es->FindNextElement(l4->Generic().Context,
-                                               upper_lvl_el, 0xFFFFFFFFL,
-                                               true, 1);
+                      if (upper_lvl_el > 0) {    // we're coming from l6
+                        upper_lvl_el--;
+                        delete l5;
+                        l5 = l6;
+                        if (upper_lvl_el > 0)
+                          break;
+
+                      } else {
+                        l5->SkipData(*es, l5->Generic().Context);
+                        delete l5;
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                      }
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
                   if (upper_lvl_el > 0) {    // we're coming from l5
@@ -1973,17 +2113,29 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "Email: %s",
                                      string(e_email).c_str());
 
-                      } else if (!is_ebmlvoid(l5, 5))
+                      } else if (!is_ebmlvoid(l5, 5) &&
+                                 !parse_multicomment(es, l5, 5, upper_lvl_el,
+                                                     l6))
                         show_unknown_element(l5, 5);
 
-                      l5->SkipData(*es, l5->Generic().Context);
-                      delete l5;
-                      l5 = es->FindNextElement(l4->Generic().Context,
-                                               upper_lvl_el, 0xFFFFFFFFL,
-                                               true, 1);
+                      if (upper_lvl_el > 0) {    // we're coming from l6
+                        upper_lvl_el--;
+                        delete l5;
+                        l5 = l6;
+                        if (upper_lvl_el > 0)
+                          break;
+
+                      } else {
+                        l5->SkipData(*es, l5->Generic().Context);
+                        delete l5;
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                      }
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
                   if (upper_lvl_el > 0) {    // we're coming from l5
@@ -2063,17 +2215,29 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "String: %s", str);
                         safefree(str);
 
-                      } else if (!is_ebmlvoid(l5, 5))
+                      } else if (!is_ebmlvoid(l5, 5) &&
+                                 !parse_multicomment(es, l5, 5, upper_lvl_el,
+                                                     l6))
                         show_unknown_element(l5, 5);
 
-                      l5->SkipData(*es, l5->Generic().Context);
-                      delete l5;
-                      l5 = es->FindNextElement(l4->Generic().Context,
-                                               upper_lvl_el, 0xFFFFFFFFL,
-                                               true, 1);
+                      if (upper_lvl_el > 0) {    // we're coming from l6
+                        upper_lvl_el--;
+                        delete l5;
+                        l5 = l6;
+                        if (upper_lvl_el > 0)
+                          break;
+
+                      } else {
+                        l5->SkipData(*es, l5->Generic().Context);
+                        delete l5;
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                      }
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
                   if (upper_lvl_el > 0) {    // we're coming from l5
@@ -2142,17 +2306,29 @@ bool process_file(const char *file_name) {
                         l_URL.ReadData(es->I_O());
                         show_element(l5, 5, "URL: %s", string(l_URL).c_str());
 
-                      } else if (!is_ebmlvoid(l5, 5))
+                      } else if (!is_ebmlvoid(l5, 5) &&
+                                 !parse_multicomment(es, l5, 5, upper_lvl_el,
+                                                     l6))
                         show_unknown_element(l5, 5);
 
-                      l5->SkipData(*es, l5->Generic().Context);
-                      delete l5;
-                      l5 = es->FindNextElement(l4->Generic().Context,
-                                               upper_lvl_el, 0xFFFFFFFFL,
-                                               true, 1);
+                      if (upper_lvl_el > 0) {    // we're coming from l6
+                        upper_lvl_el--;
+                        delete l5;
+                        l5 = l6;
+                        if (upper_lvl_el > 0)
+                          break;
+
+                      } else {
+                        l5->SkipData(*es, l5->Generic().Context);
+                        delete l5;
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                      }
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
                   if (upper_lvl_el > 0) {    // we're coming from l5
@@ -2267,17 +2443,29 @@ bool process_file(const char *file_name) {
                         show_element(l5, 5, "Language: %s",
                                      string(t_language).c_str());
 
-                      } else if (!is_ebmlvoid(l5, 5))
+                      } else if (!is_ebmlvoid(l5, 5) &&
+                                 !parse_multicomment(es, l5, 5, upper_lvl_el,
+                                                     l6))
                         show_unknown_element(l5, 5);
 
-                      l5->SkipData(*es, l5->Generic().Context);
-                      delete l5;
-                      l5 = es->FindNextElement(l4->Generic().Context,
-                                               upper_lvl_el, 0xFFFFFFFFL,
-                                               true, 1);
+                      if (upper_lvl_el > 0) {    // we're coming from l6
+                        upper_lvl_el--;
+                        delete l5;
+                        l5 = l6;
+                        if (upper_lvl_el > 0)
+                          break;
+
+                      } else {
+                        l5->SkipData(*es, l5->Generic().Context);
+                        delete l5;
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                      }
                     } // while (l5 != NULL)
                     
-                  } else if (!is_ebmlvoid(l4, 4))
+                  } else if (!is_ebmlvoid(l4, 4) &&
+                             !parse_multicomment(es, l4, 4, upper_lvl_el, l5))
                     show_unknown_element(l4, 4);
 
                   if (upper_lvl_el > 0) {    // we're coming from l5
@@ -2297,7 +2485,8 @@ bool process_file(const char *file_name) {
 
                 } // while (l4 != NULL)
 
-              } else if (!is_ebmlvoid(l3, 3))
+              } else if (!is_ebmlvoid(l3, 3) &&
+                         !parse_multicomment(es, l3, 3, upper_lvl_el, l4))
                 show_unknown_element(l3, 3);
 
               if (upper_lvl_el > 0) { // we're coming from l4

@@ -1,3 +1,10 @@
+2003-07-07  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvinfo: Added support for the rest of the tags:
+        KaxTagMultiComment, KaxTagMultiCommentName,
+        KaxTagMultiCommentComments and KaxTagMultiCommentLanguage. Almost
+        all tags have been successfully tested.
+
 2003-07-06  Moritz Bunkus  <moritz@bunkus.org>
 
         * Added a RealMedia demuxer that can handle both RealVideo and
