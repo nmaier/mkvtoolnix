@@ -1074,7 +1074,17 @@ ogm_reader_c::identify() {
   char fourcc[5];
   string info;
 
-  mxinfo("File '%s': container: Ogg/OGM\n", ti->fname);
+  // Check if a video track has a TITLE comment. If yes we use this as the
+  // new segment title / global file title.
+  if (identify_verbose)
+    for (i = 0; i < sdemuxers.size(); i++)
+      if ((sdemuxers[i]->title != NULL) &&
+          (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO)) {
+        info = string(" [title:") + escape(sdemuxers[i]->title) + string("]");
+        break;
+      }
+
+  mxinfo("File '%s': container: Ogg/OGM%s\n", ti->fname, info.c_str());
   for (i = 0; i < sdemuxers.size(); i++) {
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
       sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
@@ -1086,13 +1096,10 @@ ogm_reader_c::identify() {
       if (sdemuxers[i]->language != NULL)
         info += string("language:") + escape(sdemuxers[i]->language) +
           string(" ");
-      if (sdemuxers[i]->title != NULL) {
-        if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO)
-          info += string("title:");
-        else
-          info += string("track_name:");
-        info += escape(sdemuxers[i]->title) + string(" ");
-      }
+      if ((sdemuxers[i]->title != NULL) &&
+          (sdemuxers[i]->stype != OGM_STREAM_TYPE_VIDEO))
+        info += string("track_name:") + escape(sdemuxers[i]->title) +
+          string(" ");
       info += "]";
     } else
       info = "";
