@@ -57,7 +57,7 @@ int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
       atom_size = in->read_uint64_be();
     atom = in->read_uint32_be();
 
-    mxverb(2, PFX "Atom: '%c%c%c%c'; size: %llu\n", BE2STR(atom), atom_size);
+    mxverb(3, PFX "Atom: '%c%c%c%c'; size: %llu\n", BE2STR(atom), atom_size);
 
     if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
         (atom == FOURCC('f', 't', 'y', 'p')))
