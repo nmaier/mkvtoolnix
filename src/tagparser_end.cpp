@@ -78,7 +78,7 @@ static void el_get_float(parser_data_t *pdata, EbmlElement *el,
   float value;
 
   strip(*pdata->bin);
-  value = strtof(pdata->bin->c_str(), &endptr);
+  value = (float)strtod(pdata->bin->c_str(), &endptr);
 
   if (((value == 0.0) && (endptr == pdata->bin->c_str())) ||
       (errno == ERANGE))

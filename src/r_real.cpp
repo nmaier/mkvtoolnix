@@ -31,7 +31,11 @@
 #include "p_passthrough.h"
 #include "p_video.h"
 
+#if __GNUC__ == 2
+#pragma pack(2)
+#else
 #pragma pack(push,2)
+#endif
 
 typedef struct {
   uint32_t size;
@@ -95,7 +99,11 @@ typedef struct {
   uint32_t fourcc3;             // fourcc
 } real_audio_v5_props_t;
 
+#if __GNUC__ == 2
+#pragma pack()
+#else
 #pragma pack(pop)
+#endif
 
 typedef struct {
   uint32_t chunks;              // number of chunks
