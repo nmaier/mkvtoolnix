@@ -1,3 +1,14 @@
+2005-02-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: Fixed compilation with the upcoming new versions
+	of libebml and libmatroska.
+
+2005-01-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge did not accept XML chapter files
+	created with older mkvtoolnix versions due to deprecated chapter
+	elements. Such elements are now skipped.
+
 2004-12-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Again the window handling. Hopefully this is
