@@ -63,9 +63,9 @@ KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
                                             KaxTags **tags = NULL);
 
 
-void MTX_DLL_API write_chapters_xml(KaxChapters *chapters, FILE *out);
+void MTX_DLL_API write_chapters_xml(KaxChapters *chapters, mm_io_c *out);
 void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters,
-                                       FILE *out);
+                                       mm_io_c *out);
 
 KaxChapters *MTX_DLL_API copy_chapters(KaxChapters *source);
 KaxChapters *MTX_DLL_API

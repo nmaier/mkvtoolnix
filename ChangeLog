@@ -1,3 +1,11 @@
+2004-08-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvextract, mmg: Changes to the chapter
+	handling. EditionUIDs are always created. mkvextract outputs
+	EditionUIDs and ChapterUIDs normally. mkvmerge tries to keep
+	EditionUIDs and ChapterUIDs but replaces them if they aren't
+	unique.
+
 2004-08-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The 'down' button on the 'input' tab was not

@@ -750,11 +750,15 @@ tab_chapters::select_file_name() {
 
 void
 tab_chapters::save() {
-  FILE *fout;
+  mm_io_c *out;
   wxString err;
 
-  fout = fopen(wxMBL(file_name), "w");
-  if (fout == NULL) {
+  try {
+    out = new mm_io_c(wxMBL(file_name), MODE_WRITE);
+#if defined(SYS_WINDOWS)
+    out->use_dos_style_newlines(true);
+#endif
+  } catch (...) {
     err.Printf(wxT("Could not open the destination file '%s' for writing."
                    " Error code: %d (%s)."), file_name.c_str(), errno,
                wxUCS(strerror(errno)));
@@ -763,10 +767,15 @@ tab_chapters::save() {
     return;
   }
 
-  fprintf(fout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Chapters>\n");
-  write_chapters_xml(chapters, fout);
-  fprintf(fout, "</Chapters>\n");
-  fclose(fout);
+  out->write_bom("UTF-8");
+  out->printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+              "\n"
+              "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
+              "\n"
+              "<Chapters>\n");
+  write_chapters_xml(chapters, out);
+  out->printf("</Chapters>\n");
+  delete out;
 
   source_is_kax_file = false;
   source_is_simple_format = false;
@@ -791,7 +800,11 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   wxString label;
   uint32_t i;
 
-  chapter = static_cast<KaxChapterAtom *>(e);
+  if (dynamic_cast<KaxEditionUID *>(e) != NULL)
+    return true;
+  chapter = dynamic_cast<KaxChapterAtom *>(e);
+  if (chapter == NULL)
+    return false;
 
   if (FindChild<KaxChapterUID>(*chapter) == NULL) {
     uid = &GetChild<KaxChapterUID>(*chapter);
@@ -887,8 +900,13 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
 
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
   if (id == tid_root) {
+    KaxEditionUID *euid;
+
     eentry = new KaxEditionEntry;
     chapters->PushElement(*eentry);
+    euid = new KaxEditionUID;
+    *static_cast<EbmlUInteger *>(euid) = create_unique_uint32();
+    eentry->PushElement(*euid);
     d = new chapter_node_data_c(eentry);
     s.Printf(wxT("EditionEntry %u"), chapters->ListSize());
     id = tc_chapters->AppendItem(tid_root, s, -1, -1, d);
