@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.39 2003/04/20 14:59:33 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.40 2003/04/20 15:07:11 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -141,7 +141,7 @@ file_type_t file_types[] =
 
 static void usage(void) {
   fprintf(stdout,
-    "mkvmerge -o out [global options] [options] <file1> [[options] <file2> ...]"
+    "mkvmerge -o out [global options] [options] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
     "  -v, --verbose            verbose status\n"
     "  -q, --quiet              suppress status output\n"
@@ -177,6 +177,8 @@ static void usage(void) {
     "  -l, --list-types         Lists supported input file types.\n"
     "  -h, --help               Show this help.\n"
     "  -V, --version            Show version information.\n"
+    "  @optionsfile             Reads additional command line options from\n"
+    "                           the specified file (see man page).\n"
   );
 }
 

@@ -3,7 +3,7 @@
 mkvmerge \- Merge multimedia streams into a Matroska file
 .SH SYNOPSIS
 .B mkvmerge
-[\fIglobal options\fR] \-o \fIout\fR [\fIoptions\fR] <file1> [[\fIoptions\fR] <file2> ...]
+[\fIglobal options\fR] \-o \fIout\fR [\fIoptions\fR] <file1> [[\fIoptions\fR] <file2> ...] [@optionsfile]
 .SH DESCRIPTION
 .LP
 This program takes the input from several media files and joins
@@ -98,6 +98,27 @@ Show usage information.
 .TP
 \fB\-V\fR, \fB\-\-version\fR
 Show version information.
+.TP
+\fB@\fR\fIoptionsfile\fR
+Reads additional command line arguments from the file \fIoptionsfile\fR.
+Lines whose first non-whitespace character is a hash mark (#) are treated
+as comments and ignored. Whitespaces at the start and end of a line will
+be stripped. If a space is encountered then the line will be split into
+exactly two arguments - the string before the space and the string after
+it. There is no meta character escaping.
+.br
+The command line \fBmkvmerge \-o "my file.mkv" -A "a movie.avi" sound.ogg\fR
+could be converted into the following option file:
+.br
+# Write to the file "my file.mkv".
+.br
+\-o my file.mkv
+.br
+# Only take the video from "a movie.avi".
+.br
+\-A a movie.avi
+.br
+sound.ogg
 .SH USAGE
 .LP
 For each file the user can select which tracks \fBmkvmerge\fR should take.
