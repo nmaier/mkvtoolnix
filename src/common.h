@@ -209,6 +209,25 @@ public:
   }
 };
 
+class byte_cursor_c {
+private:
+  int pos, size;
+  const unsigned char *data;
+
+public:
+  byte_cursor_c(const unsigned char *ndata, int nsize);
+
+  virtual unsigned char get_byte();
+  virtual unsigned short get_word();
+  virtual unsigned int get_dword();
+  virtual void get_bytes(unsigned char *dst, int n);
+
+  virtual void skip(int n);
+
+  virtual int get_pos();
+  virtual int get_len();
+};
+
 class bitvalue_c {
 private:
   unsigned char *value;

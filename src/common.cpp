@@ -155,6 +155,76 @@ void bitvalue_c::generate_random() {
     value[i] = (unsigned char)(255.0 * rand() / RAND_MAX);
 }
 
+// ---------------------------------------------------------------------
+
+byte_cursor_c::byte_cursor_c(const unsigned char *ndata, int nsize) :
+  size(nsize),
+  data(ndata) {
+  pos = 0;
+  if (nsize < 0)
+    throw exception();
+}
+
+unsigned char byte_cursor_c::get_byte() {
+  if ((pos + 1) > size)
+    throw exception();
+
+  pos++;
+
+  return data[pos - 1];
+}
+
+unsigned short byte_cursor_c::get_word() {
+  unsigned short v;
+
+  if ((pos + 2) > size)
+    throw exception();
+
+  v = data[pos];
+  v = (v << 8) | (data[pos + 1] & 0xff);
+  pos += 2;
+
+  return v;
+}
+
+unsigned int byte_cursor_c::get_dword() {
+  unsigned int v;
+
+  if ((pos + 4) > size)
+    throw exception();
+
+  v = data[pos];
+  v = (v << 8) | (data[pos + 1] & 0xff);
+  v = (v << 8) | (data[pos + 2] & 0xff);
+  v = (v << 8) | (data[pos + 3] & 0xff);
+  pos += 4;
+
+  return v;
+}
+
+void byte_cursor_c::skip(int n) {
+  if ((pos + n) > size)
+    throw exception();
+
+  pos += n;
+}
+
+void byte_cursor_c::get_bytes(unsigned char *dst, int n) {
+  if ((pos + n) > size)
+    throw exception();
+
+  memcpy(dst, &data[pos], n);
+  pos += n;
+}
+
+int byte_cursor_c::get_pos() {
+  return pos;
+}
+
+int byte_cursor_c::get_len() {
+  return size - pos;
+}
+
 /*
  * Control functions
  */
