@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.14 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.15 2003/04/17 12:28:44 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -26,12 +26,14 @@
 #include "IOCallback.h"
 #include "KaxBlock.h"
 #include "KaxCluster.h"
+#include "KaxSegment.h"
 #include "KaxTracks.h"
 
 #include "common.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 
+extern KaxSegment kax_segment;
 extern KaxTracks *kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
 extern int track_number;
@@ -48,6 +50,7 @@ class cluster_helper_c {
 private:
   ch_contents_t **clusters;
   int             num_clusters, cluster_content_size;
+  KaxBlockGroup  *last_block_group;
 public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
@@ -108,7 +111,7 @@ typedef struct packet_t {
   KaxBlock            *block;
   KaxCluster          *cluster;
   unsigned char       *data;
-  int                  length, superseeded;
+  int                  length, superseeded, rendered;
   int64_t              timestamp, id, bref, fref;
   generic_packetizer_c *source;
 } packet_t;
