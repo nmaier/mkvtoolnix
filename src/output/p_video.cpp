@@ -384,3 +384,74 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
     return CAN_CONNECT_NO_PARAMETERS;
   return CAN_CONNECT_YES;
 }
+
+// ----------------------------------------------------------------
+
+mpeg_12_video_packetizer_c::
+mpeg_12_video_packetizer_c(generic_reader_c *_reader,
+                           int _version,
+                           double _fps,
+                           int _width,
+                           int _height,
+                           int _dwidth,
+                           int _dheight,
+                           track_info_c *_ti):
+  video_packetizer_c(_reader, "V_MPEG1", _fps, _width, _height, true, _ti) {
+
+  mpeg_video = (_version == 1) ? MPEG_VIDEO_V1 : MPEG_VIDEO_V2;
+  set_codec_id(mxsprintf("V_MPEG%d", _version));
+  if (!ti->aspect_ratio_given && !ti->display_dimensions_given) {
+    ti->display_dimensions_given = true;
+    ti->display_width = _dwidth;
+    ti->display_height = _dheight;
+  }
+}
+
+int
+mpeg_12_video_packetizer_c::process(memory_c &mem,
+                                    int64_t,
+                                    int64_t,
+                                    int64_t,
+                                    int64_t) {
+  unsigned char *data_ptr;
+  int new_bytes, state;
+
+  state = parser.GetState();
+  if ((state == MPV_PARSER_STATE_EOS) ||
+      (state == MPV_PARSER_STATE_ERROR))
+    return FILE_STATUS_DONE;
+
+  data_ptr = mem.data;
+  new_bytes = mem.size;
+
+  do {
+    int bytes_to_add;
+
+    bytes_to_add = (parser.GetFreeBufferSpace() < new_bytes) ?
+      parser.GetFreeBufferSpace() : new_bytes;
+    if (bytes_to_add > 0) {
+      parser.WriteData(data_ptr, bytes_to_add);
+      data_ptr += bytes_to_add;
+      new_bytes -= bytes_to_add;
+    }
+
+    state = parser.GetState();
+    while (state == MPV_PARSER_STATE_FRAME) {
+      MPEGFrame *frame;
+
+      frame = parser.ReadFrame();
+      if (frame == NULL)
+        break;
+
+      memory_c new_mem(frame->data, frame->size, true);
+      video_packetizer_c::process(new_mem, frame->timecode, frame->duration,
+                                  frame->firstRef, frame->secondRef);
+      frame->data = NULL;
+      delete frame;
+
+      state = parser.GetState();
+    }
+  } while (new_bytes > 0);
+
+  return FILE_STATUS_MOREDATA;
+}

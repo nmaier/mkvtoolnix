@@ -30,8 +30,7 @@ class track_info_c;
 class mpeg_es_reader_c: public generic_reader_c {
 private:
   mm_io_c *mm_io;
-  int64_t bytes_processed, size, duration;
-  M2VParser m2v_parser;
+  int64_t bytes_processed, size;
 
   int version, width, height;
   double frame_rate, aspect_ratio;
@@ -90,9 +89,6 @@ public:
   virtual int get_progress();
   virtual void identify();
   virtual void create_packetizer(int64_t id);
-
-  static bool read_frame(M2VParser &parser, mm_io_c &in,
-                         int64_t max_size = -1);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 };

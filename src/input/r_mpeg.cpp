@@ -120,8 +120,6 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %e AR %e\n",
            version, width, height, frame_rate, aspect_ratio);
 
-    duration = 0;
-
   } catch (exception &ex) {
     throw error_c("mpeg_es_reader: Could not open the file.");
   }
@@ -138,43 +136,30 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new video_packetizer_c(this,
-                                        mxsprintf("V_MPEG%d", version).c_str(),
-                                        frame_rate, width, height, false, ti));
-  // Unless overridden on the command line handle the embedded aspect ratio
-  // of the MPEG-1/-2 stream.
-  if (!PTZR0->ti->aspect_ratio_given && !PTZR0->ti->display_dimensions_given) {
-    PTZR0->ti->display_dimensions_given = true;
-    PTZR0->ti->display_width = (int)(height * aspect_ratio);
-    PTZR0->ti->display_height = height;
-  }
+  add_packetizer(new mpeg_12_video_packetizer_c(this, version, frame_rate,
+                                                width, height,
+                                                (int)(height * aspect_ratio),
+                                                height, ti));
 
-  mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
-         (int64_t)0);
+  mxinfo(FMT_TID "Using the MPEG 1/2 video output module.\n",
+         ti->fname.c_str(), (int64_t)0);
 }
 
 file_status_e
 mpeg_es_reader_c::read(generic_packetizer_c *,
                        bool) {
-  MPEGFrame *frame;
+  unsigned char *chunk;
+  int num_read;
 
-  if (!read_frame(m2v_parser, *mm_io)) {
-    PTZR0->flush();
+  chunk = (unsigned char *)safemalloc(20000);
+  num_read = mm_io->read(chunk, 20000);
+  if (num_read <= 0) {
+    safefree(chunk);
     return FILE_STATUS_DONE;
   }
 
-  frame = m2v_parser.ReadFrame();
-  if (!frame) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
-
-  memory_c mem(frame->data, frame->size, true);
-  PTZR0->process(mem, frame->timecode, frame->duration,
-                 frame->firstRef, frame->secondRef);
-
-  frame->data = NULL;
-  delete frame;
+  memory_c mem(chunk, num_read, true);
+  PTZR0->process(mem);
 
   bytes_processed = mm_io->getFilePointer();
 
@@ -387,49 +372,6 @@ file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
   return FILE_STATUS_DONE;
-}
-
-bool
-mpeg_ps_reader_c::read_frame(M2VParser &parser,
-                             mm_io_c &in,
-                             int64_t max_size) {
-//   int bytes_probed;
-
-//   bytes_probed = 0;
-//   while (true) {
-//     int state;
-
-//     state = parser.GetState();
-
-//     if (state == MPV_PARSER_STATE_NEED_DATA) {
-//       unsigned char *buffer;
-//       int bytes_read, bytes_to_read;
-
-//       if ((max_size != -1) && (bytes_probed > max_size))
-//         return false;
-
-//       bytes_to_read = (parser.GetFreeBufferSpace() < READ_SIZE) ?
-//         parser.GetFreeBufferSpace() : READ_SIZE;
-//       buffer = new unsigned char[bytes_to_read];
-//       bytes_read = in.read(buffer, bytes_to_read);
-//       if (bytes_read == 0) {
-//         delete [] buffer;
-//         break;
-//       }
-//       bytes_probed += bytes_read;
-
-//       parser.WriteData(buffer, bytes_read);
-//       delete [] buffer;
-
-//     } else if (state == MPV_PARSER_STATE_FRAME)
-//       return true;
-
-//     else if ((state == MPV_PARSER_STATE_EOS) ||
-//              (state == MPV_PARSER_STATE_ERROR))
-//       return false;
-//   }
-
-  return false;
 }
 
 int

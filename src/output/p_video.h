@@ -21,13 +21,14 @@
 #include "common.h"
 #include "mpeg4_common.h"
 #include "pr_generic.h"
+#include "M2VParser.h"
 
 #define VFT_IFRAME -1
 #define VFT_PFRAMEAUTOMATIC -2
 #define VFT_NOBFRAME -1
 
 class video_packetizer_c: public generic_packetizer_c {
-private:
+protected:
   double fps;
   int width, height, bpp, frames_output;
   int64_t ref_timecode, duration_shift;
@@ -62,6 +63,20 @@ protected:
   virtual void extract_mpeg4_aspect_ratio(const unsigned char *buffer,
                                           int size);
   virtual void extract_mpeg1_2_fps(const unsigned char *buffer, int size);
+};
+
+class mpeg_12_video_packetizer_c: public video_packetizer_c {
+protected:
+  M2VParser parser;
+
+public:
+  mpeg_12_video_packetizer_c(generic_reader_c *_reader, int _version,
+                             double _fps, int _width, int _height,
+                             int _dwidth, int _dheight, track_info_c *_ti);
+
+  virtual int process(memory_c &mem, int64_t old_timecode = -1,
+                      int64_t duration = -1, int64_t bref = VFT_IFRAME,
+                      int64_t fref = VFT_NOBFRAME);
 };
 
 #endif // __P_VIDEO_H
