@@ -500,7 +500,7 @@ render_headers(mm_io_c *rout) {
   bool first_file;
   int i;
 
-  first_file = splitting && (file_num == 1);
+  first_file = (file_num == 1);
   try {
     EDocType &doc_type = GetChild<EDocType>(head);
     *static_cast<EbmlString *>(&doc_type) = "matroska";
@@ -581,20 +581,25 @@ render_headers(mm_io_c *rout) {
       }
     }
 
-    if (!no_linking) {
+    if (first_file && (NULL != seguid_link_previous)) {
+      KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
+      kax_prevuid.CopyBuffer(seguid_link_previous->data(), 128 / 8);
+    }
+    // The next segment UID is also set in finish_file(). This is not
+    // redundant! It is set here as well in order to reserve enough space
+    // for the KaxInfo structure in the file. If it is removed later then
+    // an EbmlVoid element will be used for the freed space.
+    if (NULL != seguid_link_next) {
+      KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
+      kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
+    }
+    if (!no_linking && splitting) {
+      KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
+      kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
+
       if (!first_file) {
         KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
         kax_prevuid.CopyBuffer(seguid_prev.data(), 128 / 8);
-      } else if (seguid_link_previous != NULL) {
-        KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
-        kax_prevuid.CopyBuffer(seguid_link_previous->data(), 128 / 8);
-      }
-      if (splitting) {
-        KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
-        kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
-      } else if (seguid_link_next != NULL) {
-        KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
-        kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
       }
     }
 
@@ -1411,7 +1416,8 @@ finish_file(bool last_file) {
   int i;
   KaxChapters *chapters_here;
   KaxTags *tags_here;
-  int64_t start, end, offset;
+  int64_t start, end, offset, info_size;
+  int changed;
 
   mxinfo("\n");
 
@@ -1436,34 +1442,43 @@ finish_file(bool last_file) {
          (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
 
-  // If splitting is active and this is the last part then remove the
-  // 'next segment UID' and re-render the kax_infos.
-  if (splitting && last_file) {
-    EbmlVoid *void_after_infos;
-    int64_t void_size;
-    bool changed;
-
-    void_size = kax_infos->ElementSize();
-    for (i = 0, changed = false; i < kax_infos->ListSize(); i++)
+  // If splitting is active and this is the last part then handle the
+  // 'next segment UID'. If it was given on the command line then set it here.
+  // Otherwise remove an existing one (e.g. from file linking during
+  // splitting).
+  changed = 0;
+  kax_infos->UpdateSize(true);
+  info_size = kax_infos->ElementSize();
+  if (last_file && (NULL != seguid_link_next)) {
+    KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
+    kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
+    changed = 1;
+  } else if (!last_file && no_linking) {
+    for (i = 0; i < kax_infos->ListSize(); i++)
       if (EbmlId(*(*kax_infos)[i]) == KaxNextUID::ClassInfos.GlobalId) {
         delete (*kax_infos)[i];
         kax_infos->Remove(i);
-        changed = true;
+        changed = 2;
         break;
       }
+  }
 
-    if (changed) {
-      out->setFilePointer(kax_infos->GetElementPosition());
-      kax_infos->UpdateSize();
-      void_size -= kax_infos->ElementSize();
-      kax_infos->Render(*out);
-      mxverb(2, "splitting: removed nextUID; void size: %lld\n", void_size);
-      void_after_infos = new EbmlVoid();
-      void_after_infos->SetSize(void_size);
-      void_after_infos->UpdateSize();
-      void_after_infos->SetSize(void_size - void_after_infos->HeadSize());
-      void_after_infos->Render(*out);
-      delete void_after_infos;
+  if (0 != changed) {
+    out->setFilePointer(kax_infos->GetElementPosition());
+    kax_infos->UpdateSize(true);
+    info_size -= kax_infos->ElementSize();
+    kax_infos->Render(*out, true);
+    if (2 == changed) {
+      if (2 < info_size) {
+        EbmlVoid void_after_infos;
+        void_after_infos.SetSize(info_size);
+        void_after_infos.UpdateSize();
+        void_after_infos.SetSize(info_size - void_after_infos.HeadSize());
+        void_after_infos.Render(*out);
+      } else if (0 < info_size) {
+        char zero[2] = {0, 0};
+        out->write(zero, info_size);
+      }
     }
   }
   out->restore_pos();

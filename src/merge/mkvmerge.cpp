@@ -1915,16 +1915,8 @@ parse_args(vector<string> args) {
     }
   }
 
-  if (no_linking &&
-      ((seguid_link_previous != NULL) || (seguid_link_next != NULL))) {
-    mxwarn(_("'--link' must be used if '--link-to-previous' or "
-             "'--link-to-next' are used as well. File linking will be turned "
-             "on now.\n"));
-    no_linking = false;
-  }
   if ((split_after <= 0) && !no_linking)
-    mxwarn(_("'--link', '--link-to-previous' and '--link-to-next' are "
-             "only useful in combination with '--split'.\n"));
+    mxwarn(_("'--link' is only useful in combination with '--split'.\n"));
 
   delete ti;
 }
