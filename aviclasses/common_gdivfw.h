@@ -22,6 +22,10 @@
 #include "os.h"
 
 #include <ctype.h>
+#if defined(SYS_WINDOWS)
+#include <windef.h>
+#include <winerror.h>
+#endif
 
 #include "ac_common.h"
 #include "common_endian.h"
@@ -253,7 +257,7 @@ typedef struct {
 //
 // Success codes
 //
-#if !defined(SYS_WINDOWS)
+#if !defined(S_OK)
 #define S_OK                                   ((long)0x00000000L)
 #define S_FALSE                                ((long)0x00000001L)
 #endif

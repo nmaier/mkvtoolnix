@@ -18,6 +18,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include "os.h"
+
 #include <exception>
 
 #include <errno.h>
@@ -26,8 +28,10 @@
 #include <stdlib.h>
 #if defined(SYS_WINDOWS)
 #include <stdarg.h>
-#include <w32api/windef.h>
-#include <w32api/winbase.h>
+#include <windef.h>
+#include <winbase.h>
+#include <wingdi.h>
+#include <winuser.h>
 #endif // SYS_WINDOWS
 
 #include "mm_io.h"

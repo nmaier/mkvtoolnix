@@ -37,6 +37,11 @@
 #include <sys/time.h>
 #include <time.h>
 #include <wchar.h>
+#if defined(SYS_WINDOWS)
+#include <windef.h>
+#include <winbase.h>
+#include <winnls.h>
+#endif
 
 #include <string>
 #include <vector>
