@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.7 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.8 2003/04/11 11:37:41 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -93,9 +93,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
 
   bytes_processed = 0;
   mp3packetizer = new mp3_packetizer_c(mp3_freqs[mp3header.sampling_frequency],
-                                       mp3header.stereo ? 2 : 1,
-                                       mp3_tabsel[mp3header.lsf]
-                                       [mp3header.bitrate_index], ti);
+                                       mp3header.stereo ? 2 : 1, ti);
   if (verbose)
     fprintf(stdout, "Using MP3 demultiplexer for %s.\n+-> Using " \
             "MP3 output module for audio stream.\n", ti->fname);
