@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.15 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.16 2003/04/11 11:36:18 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -107,13 +107,13 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
       fsize = AVI_frame_size(avi, i);
   max_frame_size = fsize;
 
-  if (ti->vstreams != NULL) {
+  if (ti->vtracks != NULL) {
     extract_video = 0;
-    for (i = 0; i < strlen((char *)ti->vstreams); i++) {
-      if (ti->vstreams[i] > 1)
+    for (i = 0; i < strlen((char *)ti->vtracks); i++) {
+      if (ti->vtracks[i] > 0)
         fprintf(stderr, "Warning: avi_reader: only one video stream per AVI " \
-                "is supported. Will ignore -d %d.\n", ti->vstreams[i]);
-      else if (ti->vstreams[i] == 1)
+                "is supported. Will ignore -d %d.\n", ti->vtracks[i]);
+      else if (ti->vtracks[i] == 1)
         extract_video = 1;
     }
   }
@@ -152,18 +152,18 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     vpacketizer = NULL;
 
   ademuxers = NULL;
-  if (ti->astreams != NULL) { // use only specific audio streams or none at all
-    for (i = 0; i < strlen((char *)ti->astreams); i++) {
-      if (ti->astreams[i] > AVI_audio_tracks(avi))
+  if (ti->atracks != NULL) { // use only specific audio tracks or none at all
+    for (i = 0; i < strlen((char *)ti->atracks); i++) {
+      if (ti->atracks[i] >= AVI_audio_tracks(avi))
         fprintf(stderr, "Warning: avi_reader: the AVI does not contain an " \
-                "audio stream with the id %d. Number of audio streams: %d\n",
-                ti->astreams[i], AVI_audio_tracks(avi));
+                "audio stream with the id %d. Number of audio tracks: %d\n",
+                ti->atracks[i], AVI_audio_tracks(avi));
       else {
         int already_extracting = 0;
         avi_demuxer_t *demuxer = ademuxers;
         
         while (demuxer) {
-          if (demuxer->aid == ti->astreams[i]) {
+          if (demuxer->aid == ti->atracks[i]) {
             already_extracting = 1;
             break;
           }
@@ -172,12 +172,12 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
         if (already_extracting)
           fprintf(stderr, "Warning: avi_reader: already extracting audio " \
                   "stream number %d. Will only do this once.\n",
-                  ti->astreams[i]);
+                  ti->atracks[i]);
         else
-          add_audio_demuxer(avi, ti->astreams[i] - 1);
+          add_audio_demuxer(avi, ti->atracks[i]);
       }
     }
-  } else // use all audio streams (no parameter specified)*/
+  } else // use all audio tracks (no parameter specified)
     for (i = 0; i < AVI_audio_tracks(avi); i++)
       add_audio_demuxer(avi, i);
 
@@ -245,7 +245,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
     case 0x0001: // raw PCM audio
       if (verbose)
         fprintf(stdout, "+-> Using PCM output module for audio stream %d.\n",
-                aid + 1);
+                aid);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_bits(avi);
@@ -256,28 +256,26 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
     case 0x0055: // MP3
       if (verbose)
         fprintf(stdout, "+-> Using MP3 output module for audio stream %d.\n",
-                aid + 1);
+                aid);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
       demuxer->packetizer = new mp3_packetizer_c(demuxer->samples_per_second,
-                                                 demuxer->channels,
-                                                 demuxer->bits_per_sample, ti);
+                                                 demuxer->channels, ti);
       break;
     case 0x2000: // AC3
       if (verbose)
         fprintf(stdout, "+-> Using AC3 output module for audio stream %d.\n",
-                aid + 1);
+                aid);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
       demuxer->packetizer = new ac3_packetizer_c(demuxer->samples_per_second,
-                                                 demuxer->channels,
-                                                 demuxer->bits_per_sample, ti);
+                                                 demuxer->channels, ti);
       break;
     default:
       fprintf(stderr, "Error: Unknown audio format 0x%04x for audio stream " \
-              "%d.\n", AVI_audio_format(avi), aid + 1);
+              "%d.\n", AVI_audio_format(avi), aid);
       return -1;
   }
   
@@ -320,7 +318,7 @@ int avi_reader_c::read() {
   int nread, key, last_frame;
   avi_demuxer_t *demuxer;
   int need_more_data;
-  int done, frames_read;
+  int done, frames_read, size;
   
   need_more_data = 0;
   if ((vpacketizer != NULL) && !video_done) {
@@ -352,7 +350,8 @@ int avi_reader_c::read() {
       while (!done && (frames <= (maxframes - 1))) {
         nread = AVI_read_frame(avi, (char *)chunk, &key);
         if (nread < 0) {
-          vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 1);
+          vpacketizer->process(old_chunk, old_nread, -1,
+                               frames_read | (old_key ? VFT_IFRAME : 0));
           frames = maxframes + 1;
           break;
         }
@@ -368,7 +367,8 @@ int avi_reader_c::read() {
         frames++;
       }
       if (nread > 0) {
-        vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 0);
+          vpacketizer->process(old_chunk, old_nread, -1,
+                               frames_read | (old_key ? VFT_IFRAME : 0));
         if (! last_frame) {
           if (old_chunk != NULL)
             free(old_chunk);
@@ -381,7 +381,7 @@ int avi_reader_c::read() {
           old_key = key;
           old_nread = nread;
         } else if (nread > 0)
-          vpacketizer->process(chunk, nread, 1, key, 1);
+          vpacketizer->process(chunk, nread, -1, 1 | (key ? VFT_IFRAME : 0));
       }
     }
     if (last_frame) {
@@ -395,38 +395,19 @@ int avi_reader_c::read() {
   while (demuxer != NULL) {
     while (!demuxer->eos && !demuxer->packetizer->packet_available()) {
       AVI_set_audio_track(avi, demuxer->aid);
-      switch (AVI_audio_format(avi)) {
-        case 0x0001: // raw PCM
-          nread = AVI_read_audio(avi, (char *)chunk,
-                                 demuxer->channels * demuxer->bits_per_sample *
-                                 demuxer->samples_per_second / 8);
-          if (nread > 0) {
-            if (nread < (demuxer->samples_per_second * demuxer->channels *
-                         demuxer->bits_per_sample / 8))
-              demuxer->eos = 1;
-            else
-              demuxer->eos = 0;
-            ((pcm_packetizer_c *)demuxer->packetizer)->process(chunk, nread,
-                                                               demuxer->eos);
-          }
-          break;
-        case 0x0055: // MP3
-          nread = AVI_read_audio(avi, (char *)chunk, 16384);
-          if (nread <= 0)
-            demuxer->eos = 1;
-          else
-            ((mp3_packetizer_c *)demuxer->packetizer)->process(chunk, nread,
-                                                               0);
-          
-          break;
-        case 0x2000: // AC3
-          nread = AVI_read_audio(avi, (char *)chunk, 16384);
-          if (nread <= 0)
-            demuxer->eos = 1;
-          else
-            ((ac3_packetizer_c *)demuxer->packetizer)->process(chunk, nread,
-                                                               0);
-          break;
+      if (AVI_audio_format(avi) == 0x0001)
+        size = demuxer->channels * demuxer->bits_per_sample *
+          demuxer->samples_per_second / 8;
+      else
+        size = 16384;
+
+      nread = AVI_read_audio(avi, (char *)chunk, size);
+      if (nread > 0) {
+        if (nread < size)
+          demuxer->eos = 1;
+        else
+          demuxer->eos = 0;
+        demuxer->packetizer->process(chunk, nread);
       }
     }
     if (!demuxer->eos)
