@@ -42,6 +42,15 @@ parse_chapters(const string &file_name, int64_t min_tc = 0,
                bool *is_simple_format = NULL,
                KaxTags **tags = NULL);
 
+KaxChapters *MTX_DLL_API
+parse_chapters(mm_text_io_c *io, int64_t min_tc = 0,
+               int64_t max_tc = -1, int64_t offset = 0,
+               const string &language = "",
+               const string &charset = "",
+               bool exception_on_error = false,
+               bool *is_simple_format = NULL,
+               KaxTags **tags = NULL);
+
 bool MTX_DLL_API probe_xml_chapters(mm_text_io_c *in);
 KaxChapters *MTX_DLL_API parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
                                             int64_t max_tc, int64_t offset,

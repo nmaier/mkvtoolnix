@@ -1088,11 +1088,11 @@ void
 ogm_reader_c::handle_stream_comments() {
   int i, j;
   ogm_demuxer_t *dmx;
-  char **comments, name[100];
+  char **comments;
   const char *iso639_2;
   vector<string> comment;
   vector<char *> chapters;
-  mm_io_c *out;
+  mm_mem_io_c *out;
   bool comments_in_utf8;
 
   for (i = 0; i < sdemuxers.size(); i++) {
@@ -1176,25 +1176,20 @@ ogm_reader_c::handle_stream_comments() {
       }
     }
     if ((chapters.size() > 0) && !ti->no_chapters && (kax_chapters == NULL)) {
-#if defined(SYS_WINDOWS)
-      sprintf(name, "mkvmerge-ogm-reader-chapters-%d-%d",
-              (int)GetCurrentProcessId(), (int)time(NULL));
-#else
-      sprintf(name, "mkvmerge-ogm-reader-chapters-%d-%d", getpid(),
-              (int)time(NULL));
-#endif
+      out = NULL;
       try {
-        out = new mm_file_io_c(name, MODE_WRITE);
+        out = new mm_mem_io_c(NULL, 0, 1000);
         out->write_bom("UTF-8");
         for (j = 0; j < chapters.size(); j++) {
           out->puts_unl(chapters[j]);
           out->puts_unl("\n");
         }
-        delete out;
-        kax_chapters = parse_chapters(name);
+        out->set_file_name(ti->fname);
+        kax_chapters = parse_chapters(new mm_text_io_c(out));
       } catch (...) {
+        if (out != NULL)
+          delete out;
       }
-      unlink(name);
     }
     for (j = 0; j < chapters.size(); j++)
       safefree(chapters[j]);

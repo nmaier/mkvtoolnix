@@ -264,18 +264,38 @@ parse_chapters(const string &file_name,
                bool *is_simple_format,
                KaxTags **tags) {
   mm_text_io_c *in;
+  KaxChapters *result;
 
   in = NULL;
+  result = NULL;
   try {
+
     in = new mm_text_io_c(new mm_file_io_c(file_name));
+    result = parse_chapters(in, min_tc, max_tc, offset, language, charset,
+                            exception_on_error, is_simple_format, tags);
+    delete in;
   } catch (...) {
+    if (in != NULL)
+      delete in;
     if (exception_on_error)
       throw error_c(mxsprintf("Could not open '%s' for reading.\n",
                               file_name.c_str()));
     else
       mxerror("Could not open '%s' for reading.\n", file_name.c_str());
   }
+  return result;
+}
 
+KaxChapters *
+parse_chapters(mm_text_io_c *in,
+               int64_t min_tc,
+               int64_t max_tc,
+               int64_t offset,
+               const string &language,
+               const string &charset,
+               bool exception_on_error,
+               bool *is_simple_format,
+               KaxTags **tags) {
   try {
     if (probe_simple_chapters(in)) {
       if (is_simple_format != NULL)
@@ -294,11 +314,9 @@ parse_chapters(const string &file_name,
       return parse_xml_chapters(in, min_tc, max_tc, offset,
                                 exception_on_error);
 
-    delete in;
-
     throw error_c(mxsprintf("Unknown file format for '%s'. It does not "
                             "contain a support chapter format.\n",
-                            file_name.c_str()));
+                            in->get_file_name().c_str()));
   } catch (error_c e) {
     if (exception_on_error)
       throw e;
