@@ -82,6 +82,7 @@ handle_attachments(KaxAttachments *atts) {
   bool found;
   mm_io_c *out;
 
+  out = NULL;
   for (i = 0; i < atts->ListSize(); i++) {
     att = dynamic_cast<KaxAttached *>((*atts)[i]);
     assert(att != NULL);
