@@ -279,8 +279,10 @@ tab_global::tab_global(wxWindow *parent):
                    0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
 
   tc_global_tags = new wxTextCtrl(this, ID_TC_GLOBALTAGS, wxT(""));
+  siz_gl_tags->Add(0, 5, 0, 0, 0);
   siz_gl_tags->Add(tc_global_tags, 1, wxALIGN_CENTER_VERTICAL | wxGROW |
-                   wxLEFT | wxRIGHT, 5);
+                   wxTOP | wxBOTTOM, 2);
+  siz_gl_tags->Add(0, 5, 0, 0, 0);
   b_browse_global_tags = new wxButton(this, ID_B_BROWSEGLOBALTAGS,
                                       wxT("Browse"));
   b_browse_global_tags->SetToolTip(TIP("The difference between tags associated"
