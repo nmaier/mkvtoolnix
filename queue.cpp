@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.12 2003/04/18 08:42:20 mosu Exp $
+    \version \$Id: queue.cpp,v 1.13 2003/04/18 10:08:24 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -115,11 +115,11 @@ int q_c::packet_available() {
     return 1;
 }
 
-stamp_t q_c::get_smallest_timecode() {
+int64_t q_c::get_smallest_timecode() {
   if (first != NULL)
     return first->pack->timecode;
   else
-    return MAX_TIMESTAMP;
+    return 0x0FFFFFFFLL;
 }
 
 long q_c::get_queued_bytes() {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.6 2003/04/18 08:42:20 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.7 2003/04/18 10:08:24 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "mkvmerge.h"
 #include "pr_generic.h"
 #include "r_srt.h"
 #include "subtitles.h"

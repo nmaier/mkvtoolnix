@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.9 2003/04/13 15:23:02 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.10 2003/04/18 10:08:24 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "mkvmerge.h"
 #include "queue.h"
 #include "ac3_common.h"
 #include "p_ac3.h"
@@ -33,8 +34,6 @@
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
-
-
 
 ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)

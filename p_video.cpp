@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.18 2003/04/17 16:19:38 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.19 2003/04/18 10:08:24 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "queue.h"
 #include "p_video.h"

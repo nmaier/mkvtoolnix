@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.14 2003/04/18 08:42:20 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.15 2003/04/18 10:08:24 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,6 +33,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
 }
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "ogmstreams.h"

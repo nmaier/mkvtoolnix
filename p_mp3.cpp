@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.11 2003/04/17 12:22:56 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.12 2003/04/18 10:08:24 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "mkvmerge.h"
 #include "queue.h"
 #include "mp3_common.h"
 #include "p_mp3.h"

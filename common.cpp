@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.8 2003/04/17 12:21:04 mosu Exp $
+    \version \$Id: common.cpp,v 1.9 2003/04/18 10:08:24 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -163,65 +163,6 @@ char *map_audio_codec_id(int id, int bps, int *set_codec_private) {
     *set_codec_private = 1;
     return "A_MS/ACM";
   }
-}
-
-track_info_t *duplicate_track_info(track_info_t *src) {
-  track_info_t *dst;
-
-  if (src == NULL)
-    return NULL;
-
-  dst = (track_info_t *)malloc(sizeof(track_info_t));
-  if (dst == NULL)
-    die("malloc");
-
-  memcpy(dst, src, sizeof(track_info_t));
-  if (src->fname != NULL) {
-    dst->fname = strdup(src->fname);
-    if (dst->fname == NULL)
-      die("strdup");
-  }
-  if (src->atracks != NULL) {
-    dst->atracks = (unsigned char *)strdup((char *)src->atracks);
-    if (dst->atracks == NULL)
-      die("strdup");
-  }
-  if (src->vtracks != NULL) {
-    dst->vtracks = (unsigned char *)strdup((char *)src->vtracks);
-    if (dst->vtracks == NULL)
-      die("strdup");
-  }
-  if (src->stracks != NULL) {
-    dst->stracks = (unsigned char *)strdup((char *)src->stracks);
-    if (dst->stracks == NULL)
-      die("strdup");
-  }
-  if (src->private_data != NULL) {
-    dst->private_data = (unsigned char *)malloc(src->private_size);
-    if (dst->private_data == NULL)
-      die("malloc");
-    memcpy(dst->private_data, src->private_data, src->private_size);
-  }
-
-  return dst;
-}
-
-void free_track_info(track_info_t *ti) {
-  if (ti == NULL)
-    return;
-
-  if (ti->fname != NULL)
-    free(ti->fname);
-  if (ti->atracks != NULL)
-    free(ti->atracks);
-  if (ti->vtracks != NULL)
-    free(ti->vtracks);
-  if (ti->stracks != NULL)
-    free(ti->stracks);
-  if (ti->private_data != NULL)
-    free(ti->private_data);
-
-  free(ti);
 }
 
 u_int16_t get_uint16(const void *buf) {

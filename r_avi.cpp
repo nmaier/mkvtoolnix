@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.19 2003/04/18 08:42:20 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.20 2003/04/18 10:08:24 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,6 +27,7 @@ extern "C" {
 #include <avilib.h>
 }
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
 #include "queue.h"

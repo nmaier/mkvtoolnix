@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.2 2003/04/11 11:54:36 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.3 2003/04/18 10:08:24 mosu Exp $
     \brief subtitle helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include <string.h>
 #include <typeinfo>
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "subtitles.h"
 

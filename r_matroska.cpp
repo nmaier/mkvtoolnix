@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.5 2003/04/18 08:47:01 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.6 2003/04/18 10:08:24 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,6 +30,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
 }
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "r_matroska.h"
@@ -89,6 +90,8 @@ mkv_reader_c::mkv_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   tracks = NULL;
   num_tracks = 0;
+  num_buffers = 0;
+  buffers = NULL;
 
   fprintf(stdout, "WARNING! Matroska files cannot be processed at the "
           "moment.\n");
@@ -117,6 +120,37 @@ mkv_reader_c::~mkv_reader_c() {
     delete in;
   if (segment != NULL)
     delete segment;
+}
+
+void mkv_reader_c::add_buffer(DataBuffer &dbuffer) {
+  buffer_t *buffer;
+
+  buffer = (buffer_t *)malloc(sizeof(buffer_t));
+  if (buffer == NULL)
+    die("malloc");
+  buffer->data = (unsigned char *)malloc(dbuffer.Size());
+  if (buffer->data == NULL)
+    die("malloc");
+  buffer->length = dbuffer.Size();
+  memcpy(buffer->data, dbuffer.Buffer(), buffer->length);
+  buffers = (buffer_t **)realloc(buffers, (num_buffers + 1) *
+                                 sizeof(buffer_t *));
+  if (buffers == NULL)
+    die("realloc");
+  buffers[num_buffers] = buffer;
+  num_buffers++;
+}
+
+void mkv_reader_c::free_buffers() {
+  int i;
+
+  for (i = 0; i < num_buffers; i++) {
+    free(buffers[i]->data);
+    free(buffers[i]);
+  }
+  free(buffers);
+  buffers = NULL;
+  num_buffers = 0;
 }
 
 int mkv_reader_c::packets_available() {
@@ -873,7 +907,8 @@ int mkv_reader_c::read() {
           if (EbmlId(*l2) == KaxClusterTimecode::ClassInfos.GlobalId) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
-            cluster_tc = uint32(ctc);
+            cluster_tc = uint64(ctc);
+            cluster->InitTimecode(cluster_tc);
 //             printf("[mkv]  Cluster timecode: %u\n", cluster_tc);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
@@ -889,12 +924,15 @@ int mkv_reader_c::read() {
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
 //                 printf("[mkv]   Block data\n");
                 KaxBlock &block = *static_cast<KaxBlock *>(l3);
+                block.SetParent(*cluster);
                 block.ReadData(es->I_O());
 
-//                 t = find_track_by_num(block.TrackNum());
+                t = find_track_by_num(block.TrackNum());
                 if ((t != NULL) && demuxing_requested(t)) {
+                  block_timecode = block.Timecod() / 1000.0;
                   for (i = 0; i < (int)block.NumberFrames(); i++) {
                     DataBuffer &data = block.GetBuffer(i);
+                    add_buffer(data);
 //                     printf("[mkv] block %d tc: %10u\n", i, block.Timecod() +
 //                            cluster_tc);
 //                     handle_data(block);

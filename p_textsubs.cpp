@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.2 2003/04/11 11:23:40 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.3 2003/04/18 10:08:24 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "p_textsubs.h"

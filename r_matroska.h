@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.2 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.3 2003/04/18 10:08:24 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,6 +28,7 @@
 #include "error.h"
 
 #include "KaxBlock.h"
+#include "KaxCluster.h"
 #include "StdIOCallback.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
@@ -70,6 +71,11 @@ typedef struct {
   generic_packetizer_c *packetizer;
 } mkv_track_t;
 
+typedef struct {
+  unsigned char *data;
+  int length;
+} buffer_t;
+
 class mkv_reader_c: public generic_reader_c {
 private:
   int act_wchar;
@@ -84,6 +90,13 @@ private:
 
   EbmlStream *es;
   EbmlElement *saved_l1, *saved_l2, *segment;
+
+  KaxCluster *cluster;
+
+  mkv_track_t *current_track;
+  buffer_t **buffers;
+  int num_buffers;
+  int64_t block_timecode;
      
 public:
   mkv_reader_c(track_info_t *nti) throw (error_c);
@@ -102,10 +115,12 @@ private:
   virtual int          read_headers();
   virtual void         create_packetizers();
   virtual mkv_track_t *new_mkv_track();
-  virtual mkv_track_t *find_track_by_num(u_int32_t num, mkv_track_t *c);
+  virtual mkv_track_t *find_track_by_num(u_int32_t num, mkv_track_t *c = NULL);
   virtual void         verify_tracks();
   virtual int          packets_available();
   virtual void         handle_subtitles(mkv_track_t *t, KaxBlock &block);
+  virtual void         add_buffer(DataBuffer &dbuffer);
+  virtual void         free_buffers();
 };
 
 

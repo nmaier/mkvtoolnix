@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.8 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.9 2003/04/18 10:08:24 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,6 +31,7 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "p_vorbis.h"

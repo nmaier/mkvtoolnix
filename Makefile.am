@@ -8,6 +8,7 @@ bin_PROGRAMS = mkvmerge mkvinfo
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			ac3_common.cpp ac3_common.h \
+			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \
 			mp3_common.cpp mp3_common.h \
 			p_ac3.cpp p_ac3.h \

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.11 2003/04/17 12:21:21 mosu Exp $
+    \version \$Id: common.h,v 1.12 2003/04/18 10:08:24 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -68,28 +68,6 @@
 
 #define TIMECODE_SCALE 1000000
 
-typedef struct {
-  int    displacement;
-  double linear;
-} audio_sync_t;
-
-typedef struct {
-  // Options used by the readers.
-  char *fname;
-  unsigned char *atracks, *vtracks, *stracks;
-
-  // Options used by the packetizers.
-  unsigned char *private_data;
-  int private_size;
-
-  char fourcc[5];
-
-  audio_sync_t async;
-} track_info_t;
-
-typedef double stamp_t;
-#define MAX_TIMESTAMP ((double)3.40282347e+38F)
-
 #define die(s) _die(s, __FILE__, __LINE__)
 void _die(const char *s, const char *file, int line);
 
@@ -99,13 +77,9 @@ void _trace(const char *func, const char *file, int line);
 char *map_video_codec_fourcc(char *fourcc, int *set_codec_private);
 char *map_audio_codec_id(int id, int bps, int *set_codec_private);
 
-track_info_t *duplicate_track_info(track_info_t *src);
-void free_track_info(track_info_t *ti);
-
 u_int16_t get_uint16(const void *buf);
 u_int32_t get_uint32(const void *buf);
 
 extern int verbose;
-extern float video_fps;
 
 #endif // __COMMON_H

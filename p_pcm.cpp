@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.10 2003/04/17 12:23:41 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.11 2003/04/18 10:08:24 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "mkvmerge.h"
 #include "common.h"
 #include "queue.h"
 #include "p_pcm.h"
