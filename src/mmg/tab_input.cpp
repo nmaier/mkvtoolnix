@@ -1413,6 +1413,8 @@ tab_input::load(wxConfigBase *cfg) {
   int num_files, num_tracks;
   bool b;
 
+  dont_copy_values_now = true;
+
   clb_tracks->Clear();
   lb_input_files->Clear();
   no_track_mode();
@@ -1449,8 +1451,10 @@ tab_input::load(wxConfigBase *cfg) {
   tracks.clear();
 
   cfg->SetPath(wxT("/input"));
-  if (!cfg->Read(wxT("number_of_files"), &num_files) || (num_files < 0))
+  if (!cfg->Read(wxT("number_of_files"), &num_files) || (num_files < 0)) {
+    dont_copy_values_now = false;
     return;
+  }
 
   fix_format("%u:%lld", format);
   for (fidx = 0; fidx < num_files; fidx++) {
@@ -1607,6 +1611,8 @@ tab_input::load(wxConfigBase *cfg) {
   }
   st_tracks->Enable(tracks.size() > 0);
   clb_tracks->Enable(tracks.size() > 0);
+
+  dont_copy_values_now = false;
 }
 
 bool
