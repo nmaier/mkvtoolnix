@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.15 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.16 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #ifndef __P_AC3_H
 #define __P_AC3_H
 
@@ -41,7 +41,7 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
-    
+
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_ac3_packet(unsigned long *header,

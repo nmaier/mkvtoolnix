@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.4 2003/05/19 20:51:12 mosu Exp $
+    \version \$Id: r_aac.cpp,v 1.5 2003/05/20 06:30:24 mosu Exp $
     \brief AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,10 +29,10 @@
 #include "r_aac.h"
 #include "p_aac.h"
 
-int aac_reader_c::probe_file(FILE *file, int64_t size) { 
+int aac_reader_c::probe_file(FILE *file, int64_t size) {
   char buf[4096];
   aac_header_t aacheader;
-  
+
   if (size < 4096)
     return 0;
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -47,15 +47,15 @@ int aac_reader_c::probe_file(FILE *file, int64_t size) {
     return 1;
   if (find_aac_header((unsigned char *)buf, 4096, &aacheader) < 0)
     return 0;
-  
-  return 1;    
+
+  return 1;
 }
 
 aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int adif;
   aac_header_t aacheader;
-  
+
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("aac_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
@@ -96,7 +96,7 @@ aac_reader_c::~aac_reader_c() {
 
 int aac_reader_c::read() {
   int nread;
-  
+
   nread = fread(chunk, 1, 4096, file);
   if (nread <= 0)
     return 0;

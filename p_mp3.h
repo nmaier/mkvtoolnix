@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.h,v 1.16 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_mp3.h,v 1.17 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the MP3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #ifndef __P_MP3_H
 #define __P_MP3_H
 

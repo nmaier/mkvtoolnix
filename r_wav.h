@@ -14,7 +14,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.h,v 1.12 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: r_wav.h,v 1.13 2003/05/20 06:30:25 mosu Exp $
     \brief class definitions for the WAV reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -44,7 +44,7 @@ private:
   int bps;
   struct wave_header wheader;
   int64_t bytes_processed;
-     
+
 public:
   wav_reader_c(track_info_t *nti) throw (error_c);
   virtual ~wav_reader_c();
@@ -52,7 +52,7 @@ public:
   virtual int read();
   virtual packet_t *get_packet();
   virtual void set_headers();
-    
+
   virtual int display_priority();
   virtual void display_progress();
 

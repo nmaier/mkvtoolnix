@@ -51,10 +51,10 @@
 #define isvobsubline(s)        (istimecodestr(s) && istimecode(s + 11) && \
                                 iscommafileposstr(s + 23) && \
                                 isfilepos(s + 34))
-                        
+
 int vobsub_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
-  
+
   if (fseek(file, 0, SEEK_SET) != 0)
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
@@ -70,7 +70,7 @@ int vobsub_reader_c::probe_file(FILE *file, int64_t size) {
 vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
   throw (error_c) {
   char *name;
-  
+
   if ((file = fopen(fname, "r")) == NULL)
     throw error_c("vobsub_reader: Could not open source file.");
   if (!vobsub_reader_c::probe_file(file, 0))
@@ -141,7 +141,7 @@ int vobsub_reader_c::read() {
   lineno = 0;
   last_start = -1;
   last_filepos = -1;
-  while (1) {  
+  while (1) {
     if (fgets(chunk, 2047, file) == NULL)
       break;
     lineno++;
@@ -175,7 +175,7 @@ int vobsub_reader_c::read() {
       if (s2 == NULL) {
         fprintf(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
                 "on line %d. Ignored.\n", lineno);
-      
+
         continue;
       }
       *s2 = 0;
@@ -186,7 +186,7 @@ int vobsub_reader_c::read() {
       if (strncmp(s, "index:", 6)) {
         fprintf(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
                 "on line %d. Ignored.\n", lineno);
-      
+
         continue;
       }
       s += 6;
@@ -243,7 +243,7 @@ int vobsub_reader_c::read() {
       chunk[16] = 0;
       chunk[19] = 0;
       chunk[23] = 0;
-      
+
       start = atol(&chunk[11]) * 3600000 + atol(&chunk[14]) * 60000 +
               atol(&chunk[17]) * 1000 + atol(&chunk[20]);
       filepos = strtoll(&chunk[34], NULL, 16);
@@ -257,7 +257,7 @@ int vobsub_reader_c::read() {
                   "entry start at the same position in the file. Ignored.\n");
         else {
           s = (char *)safemalloc(filepos - last_filepos);
-          if (fread(s, 1, filepos - last_filepos, subfile) != 
+          if (fread(s, 1, filepos - last_filepos, subfile) !=
               (filepos - last_filepos))
             fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
                     "from the sub file. Ignored.\n");
@@ -269,7 +269,7 @@ int vobsub_reader_c::read() {
       }
       last_start = start;
       last_filepos = filepos;
-      
+
       fprintf(stdout, "line %d, start %lld, filepos %lld\n", lineno,
               start, filepos);
     }
@@ -291,7 +291,7 @@ int vobsub_reader_c::read() {
               "entry start at the same position in the file. Ignored.\n");
     else {
       s = (char *)safemalloc(filepos - last_filepos);
-      if (fread(s, 1, filepos - last_filepos, subfile) != 
+      if (fread(s, 1, filepos - last_filepos, subfile) !=
           (filepos - last_filepos))
         fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
                 "from the sub file. Ignored.\n");

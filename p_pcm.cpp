@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.24 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.25 2003/05/20 06:30:24 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -68,7 +68,7 @@ int pcm_packetizer_c::process(unsigned char *buf, int size,
   int i, bytes_per_packet, remaining_bytes, complete_packets;
   unsigned char *new_buf;
 
-  if (size > tempbuf_size) { 
+  if (size > tempbuf_size) {
     tempbuf = (unsigned char *)saferealloc(tempbuf, size + 128);
     tempbuf_size = size;
   }

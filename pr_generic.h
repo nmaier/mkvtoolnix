@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.42 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.43 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -151,7 +151,7 @@ public:
   virtual void set_as_default_track(int type);
   virtual void force_default_track(int type);
 };
- 
+
 class generic_reader_c {
 protected:
   track_info_t *ti;

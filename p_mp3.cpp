@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.26 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.27 2003/05/20 06:30:24 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -52,9 +52,9 @@ mp3_packetizer_c::~mp3_packetizer_c() {
 
 void mp3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
-  
+
   new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-  
+
   memcpy(new_buffer + buffer_size, buf, size);
   packet_buffer = new_buffer;
   buffer_size += size;
@@ -64,7 +64,7 @@ int mp3_packetizer_c::mp3_packet_available() {
   unsigned long header;
   int pos;
   mp3_header_t mp3header;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_mp3_header(packet_buffer, buffer_size, &header);
@@ -73,14 +73,14 @@ int mp3_packetizer_c::mp3_packet_available() {
   decode_mp3_header(header, &mp3header);
   if ((pos + mp3header.framesize + 4) > buffer_size)
     return 0;
-  
+
   return 1;
 }
 
 void mp3_packetizer_c::remove_mp3_packet(int pos, int framesize) {
   int new_size;
   unsigned char *temp_buf;
-  
+
   new_size = buffer_size - (pos + framesize + 4) + 1;
   temp_buf = (unsigned char *)safemalloc(new_size);
   if (new_size != 0)
@@ -95,7 +95,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
   int pos;
   unsigned char *buf;
   double pims;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_mp3_header(packet_buffer, buffer_size, header);
@@ -115,9 +115,9 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
     ti->async.displacement += (int)pims;
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
-    
+
     remove_mp3_packet(pos, mp3header->framesize);
-    
+
     return 0;
   }
 
@@ -126,7 +126,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
             "found).\n", pos);
   buf = (unsigned char *)safememdup(packet_buffer + pos, mp3header->framesize
                                     + 4);
-  
+
   if (ti->async.displacement > 0) {
     /*
      * MP3 audio synchronization. displacement > 0 is solved by creating
@@ -138,7 +138,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
     if (ti->async.displacement < (pims / 2))
       ti->async.displacement = 0;
     memset(buf + 4, 0, mp3header->framesize);
-    
+
     return buf;
   }
 
@@ -175,10 +175,10 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
       safefree(packet);
       packetno++;
       return EMOREDATA;
-    }  
+    }
 
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1152 * ti->async.linear / 
+      my_timecode = (int64_t)(1000.0 * packetno * 1152 * ti->async.linear /
                               samples_per_sec);
 
     add_packet(packet, mp3header.framesize + 4, my_timecode,

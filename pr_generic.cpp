@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.42 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.43 2003/05/20 06:30:24 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -245,7 +245,7 @@ void generic_packetizer_c::set_headers() {
   }
 
   if (hcodec_private != NULL) {
-    KaxCodecPrivate &codec_private = 
+    KaxCodecPrivate &codec_private =
       GetChild<KaxCodecPrivate>(static_cast<KaxTrackEntry &>(*track_entry));
     codec_private.CopyBuffer((binary *)hcodec_private, hcodec_private_length);
   }

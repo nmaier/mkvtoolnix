@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.25 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_video.h,v 1.26 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #ifndef __P_VIDEO_H
 #define __P_VIDEO_H
 
@@ -40,7 +40,7 @@ public:
                      int nheight, int nbpp, int navi_compat_mode,
                      track_info_t *nti) throw (error_c);
   virtual ~video_packetizer_c();
-    
+
   virtual int process(unsigned char *buf, int size, int64_t old_timecode = -1,
                       int64_t flags = VFT_IFRAME, int64_t bref = -1,
                       int64_t fref = -1);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.24 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.25 2003/05/20 06:30:24 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -82,7 +82,7 @@ vorbis_packetizer_c::~vorbis_packetizer_c() {
 void vorbis_packetizer_c::set_headers() {
   unsigned char *buffer;
   int n, offset, i, lsize;
-  
+
   set_codec_id(MKV_A_VORBIS);
 
   // We use lacing for the blocks. The first bytes is the number of
@@ -124,7 +124,7 @@ void vorbis_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-/* 
+/*
  * Some notes - processing is straight-forward if no AV synchronization
  * is needed - the packet is simply stored in the Matroska file.
  * Unfortunately things are not that easy if AV sync is done. For a
@@ -137,7 +137,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   unsigned char zero[2];
   ogg_packet op;
   int64_t this_bs, samples_here, samples_needed;
-  
+
   // Recalculate the timecode if needed.
   if (timecode == -1)
     timecode = samples * 1000 / vi.rate;
@@ -190,5 +190,5 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
 
   return EMOREDATA;
 }
- 
+
 #endif // HAVE_OGGVORBIS

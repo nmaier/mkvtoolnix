@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.7 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.8 2003/05/20 06:30:25 mosu Exp $
     \brief subtitle helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -34,7 +34,7 @@ subtitles_c::subtitles_c() {
 
 subtitles_c::~subtitles_c() {
   sub_t *current = first;
-  
+
   while (current != NULL) {
     if (current->subs != NULL)
       safefree(current->subs);
@@ -43,16 +43,16 @@ subtitles_c::~subtitles_c() {
     safefree(last);
   }
 }
-    
+
 void subtitles_c::add(int64_t nstart, int64_t nend, char *nsubs) {
   sub_t *s;
-  
+
   s = (sub_t *)safemalloc(sizeof(sub_t));
   s->subs = safestrdup(nsubs);
   s->start = nstart;
   s->end = nend;
   s->next = NULL;
-  
+
   if (last == NULL) {
     first = s;
     last = s;
@@ -66,13 +66,13 @@ int subtitles_c::check() {
   sub_t *current;
   int error = 0;
   char *c;
-  
+
   current = first;
   while ((current != NULL) && (current->next != NULL)) {
     if (current->end > current->next->start) {
       if (verbose) {
         char short_subs[21];
-        
+
         memset(short_subs, 0, 21);
         strncpy(short_subs, current->subs, 20);
         for (c = short_subs; *c != 0; c++)
@@ -95,14 +95,14 @@ int subtitles_c::check() {
     }
     current = current->next;
   }
-  
+
   current = first;
   while (current != NULL) {
     if (current->start > current->end) {
       error = 1;
       if (verbose) {
         char short_subs[21];
-        
+
         memset(short_subs, 0, 21);
         strncpy(short_subs, current->subs, 20);
         for (c = short_subs; *c != 0; c++)
@@ -125,13 +125,13 @@ int subtitles_c::check() {
     }
     current = current->next;
   }
-  
+
   return error;
 }
 
 void subtitles_c::process(textsubs_packetizer_c *p) {
   sub_t *current;
-  
+
   while ((current = get_next()) != NULL) {
     p->process((unsigned char *)current->subs, 0, current->start,
                current->end - current->start);
@@ -142,16 +142,16 @@ void subtitles_c::process(textsubs_packetizer_c *p) {
 
 sub_t *subtitles_c::get_next() {
   sub_t *current;
-  
+
   if (first == NULL)
     return NULL;
-  
+
   current = first;
   if (first == last) {
     first = NULL;
     last = NULL;
   } else
     first = first->next;
-  
+
   return current;
 }

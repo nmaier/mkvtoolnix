@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: ac3_common.cpp,v 1.4 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: ac3_common.cpp,v 1.5 2003/05/20 06:30:24 mosu Exp $
     \brief helper function for AC3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -25,7 +25,7 @@
 int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header) {
   static int rate[] = { 32,  40,  48,  56,  64,  80,  96, 112, 128, 160,
                        192, 224, 256, 320, 384, 448, 512, 576, 640};
-  static unsigned char lfeon[8] = {0x10, 0x10, 0x04, 0x04, 0x04, 0x01, 
+  static unsigned char lfeon[8] = {0x10, 0x10, 0x04, 0x04, 0x04, 0x01,
                                    0x04, 0x01};
   static unsigned char halfrate[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3};
   ac3_header_t header;
@@ -66,18 +66,18 @@ int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header) {
         return -1;
     }
     switch(header.flags & A52_CHANNEL_MASK) {
-      case A52_MONO: 
+      case A52_MONO:
         header.channels=1;
         break;
-      case A52_CHANNEL: 
+      case A52_CHANNEL:
       case A52_STEREO:
       case A52_CHANNEL1:
       case A52_CHANNEL2:
-      case A52_DOLBY: 
+      case A52_DOLBY:
         header.channels=2;
         break;
       case A52_2F1R:
-      case A52_3F: 
+      case A52_3F:
         header.channels=3;
         break;
       case A52_3F1R:
@@ -91,9 +91,9 @@ int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header) {
     if (header.flags & A52_LFE)
       header.channels++;
     memcpy(ac3_header, &header, sizeof(ac3_header_t));
-    
+
     return i;
   }
-  
+
   return -1;
 }

@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_aac.h,v 1.4 2003/05/19 20:51:12 mosu Exp $
+    \version \$Id: p_aac.h,v 1.5 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #ifndef __P_AAC_H
 #define __P_AAC_H
 
@@ -42,7 +42,7 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
-    
+
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_aac_packet(unsigned long *header,

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.40 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.41 2003/05/20 06:30:24 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -214,7 +214,7 @@ void process_file() {
     es = new EbmlStream(static_cast<StdIOCallback &>(*in));
     if (es == NULL)
       die("new EbmlStream");
-    
+
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
@@ -225,7 +225,7 @@ void process_file() {
     l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
     delete l0;
     fprintf(stdout, "(%s) + EBML head\n", NAME);
-    
+
     // Next element must be a segment
     l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
@@ -241,7 +241,7 @@ void process_file() {
     if (verbose > 1)
       fprintf(stdout, " at %llu", l0->GetElementPosition());
     fprintf(stdout, "\n");
-    
+
     upper_lvl_el = 0;
     exit_loop = 0;
     // We've got our segment, so let's find the tracks
@@ -312,13 +312,13 @@ void process_file() {
         if (verbose > 1)
           fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
-        
+
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
-          
+
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             // We actually found a track entry :) We're happy now.
             fprintf(stdout, "(%s) | + a track", NAME);
@@ -333,7 +333,7 @@ void process_file() {
             while (l3 != NULL) {
               if (upper_lvl_el != 0)
                 break;
-              
+
               // Now evaluate the data belonging to this track
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
                 KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
@@ -395,7 +395,7 @@ void process_file() {
                 while (l4 != NULL) {
                   if (upper_lvl_el != 0)
                     break;
-                
+
                   if (EbmlId(*l4) ==
                       KaxAudioSamplingFreq::ClassInfos.GlobalId) {
                     KaxAudioSamplingFreq &freq =
@@ -601,7 +601,7 @@ void process_file() {
                   *static_cast<KaxTrackFlagLacing *>(l3);
                 f_lacing.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + Lacing flag: %d", NAME,
-                        uint32(f_lacing)); 
+                        uint32(f_lacing));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
@@ -612,7 +612,7 @@ void process_file() {
                   *static_cast<KaxTrackFlagDefault *>(l3);
                 f_default.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + Default flag: %d", NAME,
-                        uint32(f_default)); 
+                        uint32(f_default));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
@@ -799,7 +799,7 @@ void process_file() {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
             cluster_tc = uint64(ctc);
-            
+
             fprintf(stdout, "(%s) | + cluster timecode: %.3fs", NAME,
                     (float)cluster_tc * (float)tc_scale / 1000000000.0);
             if (verbose > 1)
@@ -1177,7 +1177,7 @@ void process_file() {
                                  0xFFFFFFFFL, true, 1);
       }
     } // while (l1 != NULL)
-    
+
   } catch (std::exception &ex) {
     fprintf(stdout, "(%s) caught exception: %s\n", NAME, ex.what());
   }

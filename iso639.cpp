@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: iso639.cpp,v 1.2 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: iso639.cpp,v 1.3 2003/05/20 06:30:24 mosu Exp $
     \brief ISO639 language definitions, lookup functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -573,7 +573,7 @@ void list_iso639_languages() {
             iso639_languages[i].english_name != NULL ?
             iso639_languages[i].english_name : "",
             iso639_languages[i].iso639_2_code,
-            iso639_languages[i].iso639_1_code != NULL ? 
+            iso639_languages[i].iso639_1_code != NULL ?
             iso639_languages[i].iso639_1_code : "");
     i++;
   }

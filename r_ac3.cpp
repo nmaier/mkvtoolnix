@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.21 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.22 2003/05/20 06:30:24 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -33,11 +33,11 @@ extern "C" {
 #include "r_ac3.h"
 #include "p_ac3.h"
 
-int ac3_reader_c::probe_file(FILE *file, int64_t size) { 
+int ac3_reader_c::probe_file(FILE *file, int64_t size) {
   char buf[4096];
   int pos;
   ac3_header_t ac3header;
-  
+
   if (size < 4096)
     return 0;
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -47,19 +47,19 @@ int ac3_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   }
   fseek(file, 0, SEEK_SET);
-  
+
   pos = find_ac3_header((unsigned char *)buf, 4096, &ac3header);
   if (pos < 0)
     return 0;
-  
-  return 1;    
+
+  return 1;
 }
 
 ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int pos;
   ac3_header_t ac3header;
-  
+
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("ac3_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
@@ -95,7 +95,7 @@ ac3_reader_c::~ac3_reader_c() {
 
 int ac3_reader_c::read() {
   int nread;
-  
+
   nread = fread(chunk, 1, 4096, file);
   if (nread <= 0)
     return 0;

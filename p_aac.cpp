@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.4 2003/05/19 20:51:12 mosu Exp $
+    \version \$Id: p_aac.cpp,v 1.5 2003/05/20 06:30:24 mosu Exp $
     \brief AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -55,9 +55,9 @@ aac_packetizer_c::~aac_packetizer_c() {
 
 void aac_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
-  
+
   new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-  
+
   memcpy(new_buffer + buffer_size, buf, size);
   packet_buffer = new_buffer;
   buffer_size += size;
@@ -66,20 +66,20 @@ void aac_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 int aac_packetizer_c::aac_packet_available() {
   int pos;
   aac_header_t  aacheader;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_aac_header(packet_buffer, buffer_size, &aacheader);
   if (pos < 0)
     return 0;
-  
+
   return 1;
 }
 
 void aac_packetizer_c::remove_aac_packet(int pos, int framesize) {
   int new_size;
   unsigned char *temp_buf;
-  
+
   new_size = buffer_size - (pos + framesize);
   if (new_size != 0)
     temp_buf = (unsigned char *)safememdup(&packet_buffer[pos + framesize],
@@ -96,7 +96,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
   int pos, i, up_shift, down_shift;
   unsigned char *buf, *src;
   double pims;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_aac_header(packet_buffer, buffer_size, aacheader);
@@ -116,9 +116,9 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     ti->async.displacement += (int)pims;
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
-    
+
     remove_aac_packet(pos, aacheader->bytes);
-    
+
     return 0;
   }
 
@@ -145,7 +145,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
       buf[i] = (src[i] << up_shift);
     }
   }
-  
+
   if (ti->async.displacement > 0) {
     /*
      * AAC audio synchronization. displacement > 0 is solved by duplicating
@@ -157,12 +157,12 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     ti->async.displacement -= (int)pims;
     if (ti->async.displacement < (pims / 2))
       ti->async.displacement = 0;
-    
+
     return buf;
   }
 
   remove_aac_packet(pos, aacheader->bytes);
-  
+
   return buf;
 }
 
@@ -207,7 +207,7 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
   add_to_buffer(buf, size);
   while ((packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1024 * ti->async.linear / 
+      my_timecode = (int64_t)(1000.0 * packetno * 1024 * ti->async.linear /
                               samples_per_sec);
 
     add_packet(packet, aacheader.data_byte_size, my_timecode,

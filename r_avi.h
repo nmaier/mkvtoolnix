@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.14 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: r_avi.h,v 1.15 2003/05/20 06:30:24 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -54,7 +54,7 @@ private:
   double fps;
   int frames, max_frame_size, act_wchar, old_key, old_nread;
   int video_done, maxframes, is_divx, rederive_keyframes;
-     
+
 public:
   avi_reader_c(track_info_t *nti) throw (error_c);
   virtual ~avi_reader_c();
@@ -66,7 +66,7 @@ public:
   virtual void set_headers();
 
   static int probe_file(FILE *file, int64_t size);
-    
+
 private:
   virtual int add_audio_demuxer(avi_t *avi, int aid);
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);

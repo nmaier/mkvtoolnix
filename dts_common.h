@@ -13,7 +13,7 @@
 
 /*!
   \file
-  \version \$Id: dts_common.h,v 1.5 2003/05/20 06:27:08 mosu Exp $
+  \version \$Id: dts_common.h,v 1.6 2003/05/20 06:30:24 mosu Exp $
   \brief definitions and helper functions for DTS data
   \author Peter Niemayer <niemayer@isg.de>
   \author Moritz Bunkus <moritz@bunkus.org>
@@ -30,62 +30,62 @@ static const long long max_dts_packet_size = 15384;
 */
 
 typedef struct dts_header_s {
-  
+
   // ---------------------------------------------------
 
   // ---------------------------------------------------
-  
+
   enum {
     // Used to extremely precisely specify the end-of-stream (single PCM
     // sample resolution).
-    frametype_termination = 0, 
+    frametype_termination = 0,
 
     frametype_normal
   } frametype;
-  
+
   // 0 for normal frames, 1 to 30 for termination frames. Number of PCM
   // samples the frame is shorter than normal.
   unsigned int deficit_sample_count;
-  
+
   // If true, a CRC-sum is included in the data.
-  bool crc_present; 
+  bool crc_present;
 
   // number of PCM core sample blocks in this frame. Each PCM core sample block
   // consists of 32 samples. Notice that "core samples" means "samples
   // after the input decimator", so at sampling frequencies >48kHz, one core
   // sample represents 2 (or 4 for frequencies >96kHz) output samples.
   unsigned int num_pcm_sample_blocks;
-  
+
   // Number of bytes this frame occupies (range: 95 to 16 383).
   unsigned int frame_byte_size;
-  
+
   // Number of audio channels, -1 for "unknown".
   int audio_channels;
 
   // String describing the audio channel arrangement
   const char *audio_channel_arrangement;
-  
+
   // -1 for "invalid"
   unsigned int core_sampling_frequency;
-  
+
   // in bit per second, or -1 == "open", -2 == "variable", -3 == "lossless"
   int transmission_bitrate;
-  
-  // if true, sub-frames contain coefficients for downmixing to stereo 
+
+  // if true, sub-frames contain coefficients for downmixing to stereo
   bool embedded_down_mix;
-  
+
   // if true, sub-frames contain coefficients for dynamic range correction
   bool embedded_dynamic_range;
-  
+
   // if true, a time stamp is embedded at the end of the core audio data
   bool embedded_time_stamp;
-  
+
   // if true, auxiliary data is appended at the end of the core audio data
   bool auxiliary_data;
-  
+
   // if true, the source material was mastered in HDCD format
   bool hdcd_master;
-  
+
   enum extension_audio_descriptor_enum {
     extension_xch = 0,          // channel extension
     extension_unknown1,
@@ -99,41 +99,41 @@ typedef struct dts_header_s {
 
   // if true, extended coding data is placed after the core audio data
   bool extended_coding;
-  
+
   // if true, audio data check words are placed in each sub-sub-frame
   // rather than in each sub-frame, only
   bool audio_sync_word_in_sub_sub;
-  
+
   enum lfe_type_enum {
     lfe_none,
     lfe_128, // 128 indicates the interpolation factor to reconstruct the
-             // LFE channel 
+             // LFE channel
     lfe_64,  //  64 indicates the interpolation factor to reconstruct the
-             // LFE channel 
+             // LFE channel
     lfe_invalid
   } lfe_type;
-  
+
   // if true, past frames will be used to predict ADPCM values for the
   // current one. This means, if this flag is false, the current frame is
   // better suited as an audio-jump-point (like an "I-frame" in video-coding).
-  bool predictor_history_flag; 
-  
+  bool predictor_history_flag;
+
   // which FIR coefficients to use for sub-band reconstruction
   enum multirate_interpolator_enum {
     mi_non_perfect,
     mi_perfect
   } multirate_interpolator;
-  
+
   // 0 to 15
   unsigned int encoder_software_revision;
-  
+
   // 0 to 3 - "top-secret" bits indicating the "copy history" of the material
   unsigned int copy_history;
-  
+
   // 16, 20 or 24 bits per sample, or -1 == invalid
   int source_pcm_resolution;
 
-  // if true, source surround channels are mastered in DTS-ES 
+  // if true, source surround channels are mastered in DTS-ES
   bool source_surround_in_es;
 
   // if true, left and right front channels are encoded as
@@ -142,7 +142,7 @@ typedef struct dts_header_s {
 
   // same as front_sum_difference for surround left and right channels
   bool surround_sum_difference;
-  
+
   // gain in dB to apply for dialog normalization
   int dialog_normalization_gain;
 } dts_header_t;

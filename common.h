@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.26 2003/05/19 18:24:52 mosu Exp $
+    \version \$Id: common.h,v 1.27 2003/05/20 06:30:24 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -55,7 +55,7 @@
 #define TYPEUNKNOWN   0
 #define TYPEOGM       1
 #define TYPEAVI       2
-#define TYPEWAV       3 
+#define TYPEWAV       3
 #define TYPESRT       4
 #define TYPEMP3       5
 #define TYPEAC3       6
@@ -113,47 +113,47 @@ private:
   const unsigned char *byte_position;
   const unsigned char *start_of_data;
   unsigned int bits_valid;
-  
+
   bool out_of_data;
 
-public:  
+public:
   bit_cursor_c(const unsigned char *data, unsigned int len):
     end_of_data(data+len), byte_position(data), start_of_data(data),
     bits_valid(8), out_of_data(false) {
     if (byte_position >= end_of_data)
       out_of_data = true;
   }
-  
+
   bool get_bits(unsigned int n, unsigned long &r) {
     // returns true if less bits are available than asked for
     r = 0;
-    
+
     while (n > 0) {
       if (byte_position >= end_of_data) {
         out_of_data = true;
         return true;
       }
-      
+
       unsigned int b = 8; // number of bits to extract from the current byte
       if (b > n)
         b = n;
       if (b > bits_valid)
         b = bits_valid;
-      
+
       unsigned int rshift = bits_valid-b;
-      
+
       r <<= b;
       r |= ((*byte_position) >> rshift) & (0xff >> (8-b));
-      
+
       bits_valid -= b;
       if (bits_valid == 0) {
         bits_valid = 8;
         byte_position += 1;
       }
-      
+
       n -= b;
     }
-    
+
     return false;
   }
 
@@ -190,7 +190,7 @@ public:
 
   int get_bit_position() {
     return byte_position - start_of_data + 8 - bits_valid;
-  }  
+  }
 };
 
 #endif // __COMMON_H

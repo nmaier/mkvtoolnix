@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.h,v 1.8 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_textsubs.h,v 1.9 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the simple text subtitle packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -33,7 +33,7 @@ public:
   textsubs_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
     throw (error_c);
   virtual ~textsubs_packetizer_c();
-    
+
   virtual int  process(unsigned char *_subs, int size, int64_t start = -1,
                        int64_t length = -1, int64_t bref = -1,
                        int64_t fref = -1);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.12 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.13 2003/05/20 06:30:24 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -38,12 +38,12 @@ using namespace LIBMATROSKA_NAMESPACE;
 
 typedef struct {
   uint32_t tnum, tuid;
-  
+
   char *codec_id;
   int ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs
-  
+
   // Parameters for video tracks
   uint32_t v_width, v_height, v_dwidth, v_dheight;
   float v_frate;
@@ -107,9 +107,9 @@ public:
   virtual int display_priority();
   virtual void display_progress();
   virtual void set_headers();
-  
+
   static int probe_file(FILE *file, int64_t size);
-    
+
 private:
   virtual int demuxing_requested(mkv_track_t *t);
   virtual int read_headers();

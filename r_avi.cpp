@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.31 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.32 2003/05/20 06:30:24 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -38,7 +38,7 @@ extern "C" {
 
 int avi_reader_c::probe_file(FILE *file, int64_t size) {
   unsigned char data[12];
-  
+
   if (size < 12)
     return 0;
   fseek(file, 0, SEEK_SET);
@@ -154,7 +154,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
       else {
         int already_extracting = 0;
         avi_demuxer_t *demuxer = ademuxers;
-        
+
         while (demuxer) {
           if (demuxer->aid == ti->atracks[i]) {
             already_extracting = 1;
@@ -192,7 +192,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
 
 avi_reader_c::~avi_reader_c() {
   struct avi_demuxer_t *demuxer, *tmp;
-  
+
   if (avi != NULL)
     AVI_close(avi);
   if (chunk != NULL)
@@ -218,7 +218,7 @@ avi_reader_c::~avi_reader_c() {
 int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   avi_demuxer_t *demuxer, *append_to;
   WAVEFORMATEX *wfe;
-  
+
   append_to = ademuxers;
   while ((append_to != NULL) && (append_to->next != NULL))
     append_to = append_to->next;
@@ -272,7 +272,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
               "%d.\n", AVI_audio_format(avi), aid);
       return -1;
   }
-  
+
   if (append_to == NULL)
     ademuxers = demuxer;
   else
@@ -313,7 +313,7 @@ int avi_reader_c::read() {
   avi_demuxer_t *demuxer;
   int need_more_data;
   int done, frames_read, size;
-  
+
   need_more_data = 0;
   if ((vpacketizer != NULL) && !video_done) {
     last_frame = 0;
@@ -362,7 +362,7 @@ int avi_reader_c::read() {
         if (! last_frame) {
           if (old_chunk != NULL)
             safefree(old_chunk);
-          if (nread == 0) 
+          if (nread == 0)
             fprintf(stdout, "hmm\n");
           old_chunk = (unsigned char *)safememdup(chunk, nread);
           old_key = key;
@@ -379,7 +379,7 @@ int avi_reader_c::read() {
     } else if (frames != (maxframes + 1))
       need_more_data = 1;
   }
-  
+
   demuxer = ademuxers;
   while (demuxer != NULL) {
     if (demuxer->packetizer->packet_available() >= 2) {
@@ -406,22 +406,22 @@ int avi_reader_c::read() {
      need_more_data = 1;
     demuxer = demuxer->next;
   }
-  
+
   if (need_more_data)
     return EMOREDATA;
-  else 
-    return 0;  
+  else
+    return 0;
 }
 
 packet_t *avi_reader_c::get_packet() {
   generic_packetizer_c *winner;
   avi_demuxer_t *demuxer;
-  
+
   winner = NULL;
-  
+
   if ((vpacketizer != NULL) && (vpacketizer->packet_available()))
     winner = vpacketizer;
-  
+
   demuxer = ademuxers;
   while (demuxer != NULL) {
     if (winner == NULL) {
@@ -433,7 +433,7 @@ packet_t *avi_reader_c::get_packet() {
       winner = demuxer->packetizer;
     demuxer = demuxer->next;
   }
-  
+
   if (winner != NULL)
     return winner->get_packet();
   else
@@ -468,10 +468,10 @@ void avi_reader_c::display_progress() {
 
 void avi_reader_c::set_headers() {
   avi_demuxer_t *demuxer;
-  
+
   if (vpacketizer != NULL)
     vpacketizer->set_headers();
-  
+
   demuxer = ademuxers;
   while (demuxer != NULL) {
     demuxer->packetizer->set_headers();

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.17 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.18 2003/05/20 06:30:24 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -203,13 +203,13 @@ int cluster_helper_c::render(IOCallback *out) {
     else if (write_cues) {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
-      if ((((generic_packetizer_c *)pack->source)->get_cue_creation() == 
+      if ((((generic_packetizer_c *)pack->source)->get_cue_creation() ==
            CUES_IFRAMES) && (pack->bref == -1)) {
         kax_cues->AddBlockGroup(*new_group);
         cue_writing_requested = 1;
       }
       // ... or if the user requested entries for all frames.
-      else if (((generic_packetizer_c *)pack->source)->get_cue_creation() == 
+      else if (((generic_packetizer_c *)pack->source)->get_cue_creation() ==
                CUES_ALL) {
         kax_cues->AddBlockGroup(*new_group);
         cue_writing_requested = 1;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.h,v 1.3 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: subtitles.h,v 1.4 2003/05/20 06:30:25 mosu Exp $
     \brief class definition for the subtitle helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -36,7 +36,7 @@ private:
 public:
   subtitles_c();
   ~subtitles_c();
-  
+
   void add(int64_t, int64_t, char *);
   int check();
   void process(textsubs_packetizer_c *);

@@ -33,7 +33,7 @@ private:
   vobsub_packetizer_c  *vobsub_packetizer, **all_packetizers;
   int num_packetizers, act_wchar;
   char **comments;
-     
+
 public:
   vobsub_reader_c(char *fname, track_info_t *nti) throw (error_c);
   virtual ~vobsub_reader_c();
@@ -43,7 +43,7 @@ public:
   virtual ogmmerge_page_t *get_page();
   virtual ogmmerge_page_t *get_header_page(int header_type =
                                            PACKET_TYPE_HEADER);
-    
+
   virtual void reset();
   virtual int display_priority();
   virtual void display_progress();

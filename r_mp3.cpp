@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.19 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.20 2003/05/20 06:30:24 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,12 +29,12 @@
 #include "r_mp3.h"
 #include "p_mp3.h"
 
-int mp3_reader_c::probe_file(FILE *file, int64_t size) { 
+int mp3_reader_c::probe_file(FILE *file, int64_t size) {
   unsigned char buf[4096];
   int pos;
   unsigned long header;
   mp3_header_t mp3header;
-  
+
   if (size < 4096)
     return 0;
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -44,7 +44,7 @@ int mp3_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   }
   fseek(file, 0, SEEK_SET);
-  
+
   pos = find_mp3_header(buf, 4096, &header);
   if (pos < 0)
     return 0;
@@ -57,8 +57,8 @@ int mp3_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   if ((4 - ((header >> 17) & 3)) != 3)
     return 0;
-  
-  return 1;    
+
+  return 1;
 }
 
 mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
@@ -105,7 +105,7 @@ mp3_reader_c::~mp3_reader_c() {
 
 int mp3_reader_c::read() {
   int nread;
-  
+
   nread = fread(chunk, 1, 4096, file);
   if (nread <= 0)
     return 0;

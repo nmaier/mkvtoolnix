@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.34 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.35 2003/05/20 06:30:24 mosu Exp $
     \brief video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -88,7 +88,7 @@ int video_packetizer_c::process(unsigned char *buf, int size,
   }
 
   frames_output++;
-    
+
   return EMOREDATA;
 }
 

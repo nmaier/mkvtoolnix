@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.h,v 1.10 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: r_srt.h,v 1.11 2003/05/20 06:30:25 mosu Exp $
     \brief class definition for the Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -34,7 +34,7 @@ private:
   FILE *file;
   textsubs_packetizer_c *textsubs_packetizer;
   int act_wchar;
-     
+
 public:
   srt_reader_c(track_info_t *nti) throw (error_c);
   virtual ~srt_reader_c();
@@ -42,7 +42,7 @@ public:
   virtual int read();
   virtual packet_t *get_packet();
   virtual void set_headers();
-    
+
   virtual int display_priority();
   virtual void display_progress();
 

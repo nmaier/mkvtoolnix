@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.68 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.69 2003/05/20 06:30:24 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -91,7 +91,7 @@ typedef struct filelist_tag {
   int type;
 
   int status;
-  
+
   packet_t *pack;
 
   generic_reader_c *reader;
@@ -308,7 +308,7 @@ static int get_type(char *filename) {
   FILE *f = fopen(filename, "rb");
   off_t size;
   int type;
-  
+
   if (f == NULL) {
     fprintf(stderr, "Error: could not open source file (%s).\n", filename);
     exit(1);
@@ -345,7 +345,7 @@ static int get_type(char *filename) {
     type = TYPEAAC;
 //     else if (microdvd_reader_c::probe_file(f, size))
 //     type = TYPEMICRODVD;
-//   else if (vobsub_reader_c::probe_file(f, size)) 
+//   else if (vobsub_reader_c::probe_file(f, size))
 //     type = TYPEVOBSUB;
 //   else if (chapter_information_probe(f, size))
 //     type = TYPECHAPTERS;
@@ -375,7 +375,7 @@ static int display_counter = 1;
 
 static void display_progress(int force) {
   filelist_t *winner, *current;
-  
+
   if (((display_counter % 500) == 0) || force) {
     display_counter = 0;
     winner = input;
@@ -404,7 +404,7 @@ static unsigned char *parse_tracks(char *s) {
   char *nstart;
   int n, ntracks;
   unsigned char *tracks;
-  
+
   nstart = NULL;
   tracks = NULL;
   ntracks = 0;
@@ -435,7 +435,7 @@ static unsigned char *parse_tracks(char *s) {
     }
     c++;
   }
-  
+
   if (nstart != NULL) {
     n = atoi(nstart);
     if ((n <= 0) || (n > 255)) {
@@ -449,14 +449,14 @@ static unsigned char *parse_tracks(char *s) {
     nstart = NULL;
     ntracks++;
   }
-  
+
   return tracks;
 }
 
 static void parse_sync(char *s, audio_sync_t *async) {
   char *linear, *div;
   double d1, d2;
-  
+
   if ((linear = strchr(s, ',')) != NULL) {
     *linear = 0;
     linear++;
@@ -515,7 +515,7 @@ static float parse_aspect_ratio(char *s) {
 //   char *c, *a, *dot;
 //   int num_colons;
 //   double seconds;
-  
+
 //   dot = strchr(s, '.');
 //   if (dot != NULL) {
 //     *dot = 0;
@@ -548,10 +548,10 @@ static float parse_aspect_ratio(char *s) {
 //   }
 //   seconds *= 60;
 //   seconds += atoi(a);
-  
+
 //   if (dot != NULL)
 //     seconds += strtod(dot, NULL) / 1000.0;
-  
+
 //   return seconds;
 // }
 
@@ -591,7 +591,7 @@ static void render_headers(mm_io_callback *out) {
 
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
-  
+
     file = input;
     while (file) {
       file->reader->set_headers();
@@ -995,7 +995,7 @@ static void parse_args(int argc, char **argv) {
       ti.aspect_ratio = 1.0;
     }
   }
-  
+
   if (input == NULL) {
     usage();
     exit(1);
@@ -1129,7 +1129,7 @@ int main(int argc, char **argv) {
   }
 
   render_headers(out);
-  
+
   /* let her rip! */
   while (1) {
     /* Step 1: make sure a packet is available for each output
@@ -1140,13 +1140,13 @@ int main(int argc, char **argv) {
       while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
              (ptzr->packetizer->packet_available() < 2))
         ptzr->status = ptzr->packetizer->read();
-      if (ptzr->pack == NULL) 
+      if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
       if ((ptzr->pack != NULL) && !ptzr->packetizer->packet_available())
         ptzr->pack->duration_mandatory = 1;
     }
 
-    /* Step 2: Pick the packet with the lowest timecode and 
+    /* Step 2: Pick the packet with the lowest timecode and
     ** stuff it into the Matroska file.
     */
     winner = NULL;
@@ -1167,9 +1167,9 @@ int main(int argc, char **argv) {
 
     /* Step 3: Write out the winning packet */
     write_packet(pack);
-    
+
     winner->pack = NULL;
-    
+
     /* display some progress information */
     if (verbose >= 1)
       display_progress(0);
@@ -1183,7 +1183,7 @@ int main(int argc, char **argv) {
     display_progress(1);
     fprintf(stdout, "\n");
   }
-  
+
   // Render the cues.
   if (write_cues && cue_writing_requested) {
     if (verbose == 1)
@@ -1248,7 +1248,7 @@ int main(int argc, char **argv) {
     safefree(packetizers[packetizers.size() - 1]);
     packetizers.pop_back();
   }
-  
+
   delete out;
   delete kax_segment;
   delete kax_cues;

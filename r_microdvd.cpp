@@ -30,7 +30,7 @@
 int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
   int i;
-  
+
   if (fseek(file, 0, SEEK_SET) != 0)
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
@@ -82,16 +82,16 @@ int microdvd_reader_c::read() {
             "converted to time stamps.");
     exit(1);
   }
-  
+
   lineno = 0;
   while (1) {
     if (fgets(chunk, 2047, file) == NULL)
       break;
-    
+
     lineno++;
-  
+
 // {123}{4567}Some text|and even another line.
-    
+
     if ((chunk[0] == 0) || (strchr("\n\r", chunk[0]) != NULL))
       continue;
     if ((chunk[0] != '{') || !isdigit(chunk[1])) {

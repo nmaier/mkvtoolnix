@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.24 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.25 2003/05/20 06:30:24 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -52,9 +52,9 @@ ac3_packetizer_c::~ac3_packetizer_c() {
 
 void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
-  
+
   new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-  
+
   memcpy(new_buffer + buffer_size, buf, size);
   packet_buffer = new_buffer;
   buffer_size += size;
@@ -63,20 +63,20 @@ void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 int ac3_packetizer_c::ac3_packet_available() {
   int pos;
   ac3_header_t  ac3header;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_ac3_header(packet_buffer, buffer_size, &ac3header);
   if (pos < 0)
     return 0;
-  
+
   return 1;
 }
 
 void ac3_packetizer_c::remove_ac3_packet(int pos, int framesize) {
   int new_size;
   unsigned char *temp_buf;
-  
+
   new_size = buffer_size - (pos + framesize);
   if (new_size != 0)
     temp_buf = (unsigned char *)safememdup(&packet_buffer[pos + framesize],
@@ -93,7 +93,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   int pos;
   unsigned char *buf;
   double pims;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_ac3_header(packet_buffer, buffer_size, ac3header);
@@ -113,9 +113,9 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     ti->async.displacement += (int)pims;
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
-    
+
     remove_ac3_packet(pos, ac3header->bytes);
-    
+
     return 0;
   }
 
@@ -124,7 +124,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
   buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
-  
+
   if (ti->async.displacement > 0) {
     /*
      * AC3 audio synchronization. displacement > 0 is solved by duplicating
@@ -136,12 +136,12 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     ti->async.displacement -= (int)pims;
     if (ti->async.displacement < (pims / 2))
       ti->async.displacement = 0;
-    
+
     return buf;
   }
 
   remove_ac3_packet(pos, ac3header->bytes);
-  
+
   return buf;
 }
 
@@ -166,7 +166,7 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
+      my_timecode = (int64_t)(1000.0 * packetno * 1536 * ti->async.linear /
                               samples_per_sec);
 
     add_packet(packet, ac3header.bytes, my_timecode,

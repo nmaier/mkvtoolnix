@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.12 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.13 2003/05/20 06:30:25 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -41,10 +41,10 @@
                         isthreedigits(s + 9))
 #define issrttimecode(s) (istimecode(s) && isarrow(s + 12) && \
                            istimecode(s + 17))
-                        
+
 int srt_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
-  
+
   if (fseek(file, 0, SEEK_SET) != 0)
     return 0;
   if (fgets(chunk, 2047, file) == NULL)
@@ -84,7 +84,7 @@ int srt_reader_c::read() {
   char *subtitles;
   subtitles_c subs;
 
-  while (1) {  
+  while (1) {
     if (fgets(chunk, 2047, file) == NULL)
       break;
     if (fgets(chunk, 2047, file) == NULL)
@@ -95,7 +95,7 @@ int srt_reader_c::read() {
 
 // 00:00:00,000 --> 00:00:00,000
 // 01234567890123456789012345678
-//           1         2  
+//           1         2
     chunk[2] = 0;
     chunk[5] = 0;
     chunk[8] = 0;
@@ -104,7 +104,7 @@ int srt_reader_c::read() {
     chunk[22] = 0;
     chunk[25] = 0;
     chunk[29] = 0;
-    
+
     start = atol(chunk) * 3600000 + atol(&chunk[3]) * 60000 +
             atol(&chunk[6]) * 1000 + atol(&chunk[9]);
     end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +

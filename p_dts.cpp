@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.cpp,v 1.5 2003/05/20 06:27:08 mosu Exp $
+    \version \$Id: p_dts.cpp,v 1.6 2003/05/20 06:30:24 mosu Exp $
     \brief DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -91,14 +91,14 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
   //packetno = 0;
   samples_written = 0;
   bytes_written = 0;
-  
+
   packet_buffer = NULL;
   buffer_size = 0;
   skipping_is_normal = false;
-  
+
   first_header = dtsheader;
   last_header = dtsheader;
-  
+
   set_track_type(track_audio);
   duplicate_data_on_add(false);
 }
@@ -114,9 +114,9 @@ dts_packetizer_c::~dts_packetizer_c() {
 
 void dts_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   unsigned char *new_buffer;
-  
+
   new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
-  
+
   memcpy(new_buffer + buffer_size, buf, size);
   packet_buffer = new_buffer;
   buffer_size += size;
@@ -125,21 +125,21 @@ void dts_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 int dts_packetizer_c::dts_packet_available() {
   int pos;
   dts_header_t dtsheader;
-  
+
   if (packet_buffer == NULL)
     return 0;
-  
+
   pos = find_dts_header(packet_buffer, buffer_size, &dtsheader);
   if (pos < 0)
     return 0;
-  
+
   return 1;
 }
 
 void dts_packetizer_c::remove_dts_packet(int pos, int framesize) {
   int new_size;
   unsigned char *temp_buf;
-  
+
   new_size = buffer_size - (pos + framesize);
   if (new_size != 0)
     temp_buf = (unsigned char *)safememdup(&packet_buffer[pos + framesize],
@@ -155,7 +155,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   int pos;
   unsigned char *buf;
   double pims;
-  
+
   if (packet_buffer == NULL)
     return 0;
   pos = find_dts_header(packet_buffer, buffer_size, &dtsheader);
@@ -172,7 +172,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
 
 
   pims = get_dts_packet_length_in_milliseconds(&dtsheader);
-  
+
   if (ti->async.displacement < 0) {
     /*
      * DTS audio synchronization. displacement < 0 means skipping an
@@ -181,9 +181,9 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     ti->async.displacement += (int)pims;
     if (ti->async.displacement > -(pims / 2))
       ti->async.displacement = 0;
-    
+
     remove_dts_packet(pos, dtsheader.frame_byte_size);
-    
+
     return 0;
   }
 
@@ -191,10 +191,10 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     fprintf(stdout, "dts_packetizer: skipping %d bytes (no valid DTS header "
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
-  
+
   buf = (unsigned char *)safememdup(packet_buffer + pos,
                                     dtsheader.frame_byte_size);
-  
+
   if (ti->async.displacement > 0) {
     /*
      * DTS audio synchronization. displacement > 0 is solved by duplicating
@@ -206,12 +206,12 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     ti->async.displacement -= (int)pims;
     if (ti->async.displacement < (pims / 2))
       ti->async.displacement = 0;
-    
+
     return buf;
   }
 
   remove_dts_packet(pos, dtsheader.frame_byte_size);
-  
+
   return buf;
 }
 
@@ -225,31 +225,31 @@ void dts_packetizer_c::set_headers() {
 
 int dts_packetizer_c::process(unsigned char *buf, int size,
                               int64_t timecode, int64_t, int64_t, int64_t) {
-  
-  int64_t my_timecode;  
+
+  int64_t my_timecode;
   if (timecode != -1) my_timecode = timecode;
-  
+
   add_to_buffer(buf, size);
-  
+
   dts_header_t dtsheader;
   unsigned char *packet;
   while ((packet = get_dts_packet(dtsheader)) != NULL) {
     int64_t packet_len_in_ms =
       (int64_t)get_dts_packet_length_in_milliseconds(&dtsheader);
-    
+
     if (timecode == -1)
       my_timecode = (int64_t)(((double)samples_written*1000.0) /
                               ((double)dtsheader.core_sampling_frequency));
-   
+
 //     fprintf(stderr,"DTS packet timecode %lld  len %lld\n", my_timecode,
 //             packet_len_in_ms);
-   
+
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
                packet_len_in_ms);
-    
+
     bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);
   }
-  
+
   return EMOREDATA;
 }

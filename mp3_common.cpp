@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mp3_common.cpp,v 1.7 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: mp3_common.cpp,v 1.8 2003/05/20 06:30:24 mosu Exp $
     \brief helper functions for MP3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -31,10 +31,10 @@ long mp3_freqs[9] =
 int find_mp3_header(unsigned char *buf, int size, unsigned long *_header) {
   int i, pos;
   unsigned long header;
-  
+
   if (size < 4)
     return -1;
-  
+
   for (pos = 0; pos <= (size - 4); pos++) {
     for (i = 0, header = 0; i < 4; i++) {
       header <<= 8;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.31 2003/05/18 20:57:08 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.32 2003/05/20 06:30:24 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -49,7 +49,7 @@ extern "C" {                    // for BITMAPINFOHEADER
  */
 int ogm_reader_c::probe_file(FILE *file, int64_t size) {
   unsigned char data[4];
-  
+
   if (size < 4)
     return 0;
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -71,7 +71,7 @@ int ogm_reader_c::probe_file(FILE *file, int64_t size) {
 ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int64_t size;
-  
+
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("ogm_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
@@ -81,7 +81,7 @@ ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("ogm_reader: Could not seek to beginning of file.");
   if (!ogm_reader_c::probe_file(file, size))
     throw error_c("ogm_reader: Source is not a valid OGG media file.");
-  
+
   ogg_sync_init(&oy);
   act_wchar = 0;
   sdemuxers = 0;
@@ -103,7 +103,7 @@ ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
 ogm_reader_c::~ogm_reader_c() {
   int i;
   ogm_demuxer_t *dmx;
-  
+
   ogg_sync_clear(&oy);
 
   for (i = 0; i < num_sdemuxers; i++) {
@@ -122,7 +122,7 @@ ogm_reader_c::~ogm_reader_c() {
  */
 int ogm_reader_c::demuxing_requested(unsigned char *streams, int serialno) {
   int i;
-  
+
   if (streams == NULL)
     return 1;
 
@@ -168,7 +168,7 @@ void ogm_reader_c::free_demuxer(int idx) {
 int ogm_reader_c::read_page(ogg_page *og) {
   int np, done, nread;
   unsigned char *buf;
-  
+
   done = 0;
   while (!done) {
     np = ogg_sync_pageseek(&oy, og);
@@ -193,9 +193,9 @@ int ogm_reader_c::read_page(ogg_page *og) {
       ogg_sync_wrote(&oy, nread);
     } else
       // Alright, we have a page.
-      done = 1;    
+      done = 1;
   }
-  
+
   // Here EMOREDATA actually indicates success - a page has been read.
   return EMOREDATA;
 }
@@ -285,7 +285,7 @@ void ogm_reader_c::create_packetizers() {
 
       case OGM_STREAM_TYPE_MP3:
         try {
-          dmx->packetizer = 
+          dmx->packetizer =
             new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
                                  get_uint16(&sth->sh.audio.channels), ti);
         } catch (error_c &error) {
@@ -303,7 +303,7 @@ void ogm_reader_c::create_packetizers() {
 
       case OGM_STREAM_TYPE_AC3:
         try {
-          dmx->packetizer = 
+          dmx->packetizer =
             new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
                                  get_uint16(&sth->sh.audio.channels), ti);
         } catch (error_c &error) {
@@ -332,7 +332,7 @@ void ogm_reader_c::create_packetizers() {
         vorbis_info_clear(&vi);
         vorbis_comment_clear(&vc);
         try {
-          dmx->packetizer = 
+          dmx->packetizer =
             new vorbis_packetizer_c(this,
                                     dmx->packet_data[0], dmx->packet_sizes[0],
                                     dmx->packet_data[1], dmx->packet_sizes[1],
@@ -414,7 +414,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   // Read the first page and get its first packet.
   ogg_stream_pagein(&new_oss, og);
   ogg_stream_packetout(&new_oss, &op);
-  
+
   dmx = (ogm_demuxer_t *)safemalloc(sizeof(ogm_demuxer_t));
   memset(dmx, 0, sizeof(ogm_demuxer_t));
   dmx->num_packets = 1;
@@ -434,13 +434,13 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       safefree(dmx);
       return;
     }
-      
+
     dmx->stype = OGM_STREAM_TYPE_VORBIS;
     dmx->serial = ogg_page_serialno(og);
     memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
     dmx->sid = nastreams;
     add_new_demuxer(dmx);
-      
+
     return;
   }
 
@@ -457,7 +457,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
         safefree(dmx);
         return;
       }
-      
+
       dmx->stype = OGM_STREAM_TYPE_VIDEO;
       dmx->serial = ogg_page_serialno(og);
       memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
@@ -465,10 +465,10 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       add_new_demuxer(dmx);
       if (video_fps < 0)
         video_fps = 10000000.0 / (float)sth->time_unit;
-      
+
       return;
     }
-    
+
     if (!strncmp(sth->streamtype, "audio", 5)) {
       nastreams++;
       numstreams++;
@@ -476,7 +476,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
         ogg_stream_clear(&new_oss);
         return;
       }
-      
+
       sth = (stream_header *)&op.packet[1];
       memcpy(buf, (char *)sth->subtype, 4);
       buf[4] = 0;
@@ -512,7 +512,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
         ogg_stream_clear(&new_oss);
         return;
       }
-      
+
       dmx->stype = OGM_STREAM_TYPE_TEXT;
       dmx->serial = ogg_page_serialno(og);
       memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
@@ -528,7 +528,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
    * are not supported.
    */
 
-  // Failed to detect a supported header.  
+  // Failed to detect a supported header.
   ogg_stream_clear(&new_oss);
   safefree(dmx->packet_data[0]);
   safefree(dmx);
@@ -549,7 +549,7 @@ void ogm_reader_c::process_page(ogg_page *og) {
   ogg_packet op;
   int hdrlen, eos, i;
   long lenbytes;
-  
+
   dmx = find_demuxer(ogg_page_serialno(og));
   if (dmx == NULL)
     return;
@@ -605,7 +605,7 @@ void ogm_reader_c::process_page(ogg_page *og) {
 void ogm_reader_c::process_header_page(ogg_page *og) {
   ogm_demuxer_t *dmx;
   ogg_packet     op;
-  
+
   dmx = find_demuxer(ogg_page_serialno(og));
   if (dmx == NULL)
     return;
@@ -632,7 +632,7 @@ int ogm_reader_c::read_headers() {
   int done, i;
   ogm_demuxer_t *dmx;
   ogg_page og;
-  
+
   done = 0;
   while (!done) {
     // Make sure we have a page that we can work with.
@@ -658,7 +658,7 @@ int ogm_reader_c::read_headers() {
       }
     }
   }
-  
+
   fseek(file, 0, SEEK_SET);
   ogg_sync_clear(&oy);
   ogg_sync_init(&oy);
@@ -681,14 +681,14 @@ int ogm_reader_c::read() {
 
     // Is this the first page of a new stream? No, so process it normally.
     if (!ogg_page_bos(&og))
-      process_page(&og);    
+      process_page(&og);
   } while (ogg_page_bos(&og));
 
   // Are there streams that have not finished yet?
   for (i = 0; i < num_sdemuxers; i++)
     if (!sdemuxers[i]->eos)
       return EMOREDATA;
-  
+
   // No, we're done with this file.
   return 0;
 }
@@ -697,9 +697,9 @@ packet_t *ogm_reader_c::get_packet() {
   generic_packetizer_c *winner;
   ogm_demuxer_t *demuxer;
   int i;
-  
+
   winner = NULL;
-  
+
   for (i = 0; i < num_sdemuxers; i++) {
     demuxer = sdemuxers[i];
     if (winner == NULL) {
@@ -710,7 +710,7 @@ packet_t *ogm_reader_c::get_packet() {
                 demuxer->packetizer->get_smallest_timecode()))
       winner = demuxer->packetizer;
   }
-  
+
   if (winner != NULL)
     return winner->get_packet();
   else
@@ -719,7 +719,7 @@ packet_t *ogm_reader_c::get_packet() {
 
 int ogm_reader_c::display_priority() {
   int i;
-  
+
   for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO)
       return DISPLAYPRIORITY_MEDIUM;
@@ -732,7 +732,7 @@ static char wchar[] = "-\\|/-\\|/-";
 void ogm_reader_c::display_progress() {
   int i;
 
-  for (i = 0; i < num_sdemuxers; i++)  
+  for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
       fprintf(stdout, "progress: %d frames\r", sdemuxers[i]->units_processed);
       fflush(stdout);
@@ -748,7 +748,7 @@ void ogm_reader_c::display_progress() {
 
 void ogm_reader_c::set_headers() {
   int i;
-  
+
   for (i = 0; i < num_sdemuxers; i++)
     sdemuxers[i]->packetizer->set_headers();
 }

@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_dts.h,v 1.4 2003/05/20 06:27:08 mosu Exp $
+    \version \$Id: p_dts.h,v 1.5 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #ifndef __P_DTS_H
 #define __P_DTS_H
 
@@ -28,17 +28,17 @@
 class dts_packetizer_c: public generic_packetizer_c {
 private:
   int64_t samples_written, bytes_written;
-  
+
   int buffer_size;
-  
+
   unsigned char *packet_buffer;
-  
+
   dts_header_t first_header;
   dts_header_t last_header;
 
 public:
   bool skipping_is_normal;
-  
+
   dts_packetizer_c(generic_reader_c *nreader, const dts_header_t &dts_header,
                    track_info_t *nti) throw (error_c);
   virtual ~dts_packetizer_c();
@@ -47,7 +47,7 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
-    
+
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_dts_packet(dts_header_t &dts_header);

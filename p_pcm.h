@@ -13,11 +13,11 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.16 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.17 2003/05/20 06:30:24 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
- 
+
 #ifndef __P_PCM_H
 #define __P_PCM_H
 
@@ -30,13 +30,13 @@ private:
   int64_t bytes_output, remaining_sync;
   unsigned long samples_per_sec;
   unsigned char *tempbuf;
-  
+
 public:
   pcm_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
                    int nchannels, int nbits_per_sample, track_info_t *nti)
     throw (error_c);
   virtual ~pcm_packetizer_c();
-    
+
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_dts.cpp,v 1.3 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: r_dts.cpp,v 1.4 2003/05/20 06:30:24 mosu Exp $
     \brief DTS demultiplexer module
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>
@@ -30,11 +30,11 @@
 #include "r_dts.h"
 #include "p_dts.h"
 
-int dts_reader_c::probe_file(FILE *file, int64_t size) { 
+int dts_reader_c::probe_file(FILE *file, int64_t size) {
   char buf[max_dts_packet_size];
   int pos;
   dts_header_t dtsheader;
-  
+
   if (size < max_dts_packet_size)
     return 0;
   if (fseek(file, 0, SEEK_SET) != 0)
@@ -44,19 +44,19 @@ int dts_reader_c::probe_file(FILE *file, int64_t size) {
     return 0;
   }
   fseek(file, 0, SEEK_SET);
-  
+
   pos = find_dts_header((unsigned char *)buf, max_dts_packet_size, &dtsheader);
   if (pos < 0)
     return 0;
-  
-  return 1;    
+
+  return 1;
 }
 
 dts_reader_c::dts_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int pos;
   dts_header_t dtsheader;
-  
+
   if ((file = fopen(ti->fname, "rb")) == NULL)
     throw error_c("dts_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
@@ -69,19 +69,19 @@ dts_reader_c::dts_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("dts_reader: Could not read max_dts_packet_size bytes.");
   if (fseek(file, 0, SEEK_SET) != 0)
     throw error_c("dts_reader: Could not seek to beginning of file.");
-  
+
   pos = find_dts_header(chunk, max_dts_packet_size, &dtsheader);
-  
+
   if (pos < 0)
     throw error_c("dts_reader: No valid DTS packet found in the first "
                   "max_dts_packet_size bytes.\n");
   bytes_processed = 0;
   dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
-  
+
   if (verbose) {
     fprintf(stdout, "Using DTS demultiplexer for %s.\n+-> Using "
             "DTS output module for audio stream.\n", ti->fname);
-    
+
     print_dts_header(&dtsheader);
   }
 }
@@ -96,7 +96,7 @@ dts_reader_c::~dts_reader_c() {
 
 int dts_reader_c::read() {
   int nread;
-  
+
   nread = fread(chunk, 1, max_dts_packet_size, file);
   if (nread <= 0)
     return 0;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: dts_common.cpp,v 1.5 2003/05/19 18:24:52 mosu Exp $
+    \version \$Id: dts_common.cpp,v 1.6 2003/05/20 06:30:24 mosu Exp $
     \brief helper function for DTS data
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>
@@ -40,11 +40,11 @@ static const channel_arrangement channel_arrangements[16] = {
   { 2, "LT, RT (left and right total)" },
   { 3, "C, L, R (center, left, right)" },
   { 3, "L, R, S (left, right, surround)" },
-  { 4, "C, L, R, S (center, left, right, surround)" }, 
-  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)"}, 
+  { 4, "C, L, R, S (center, left, right, surround)" },
+  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)"},
   { 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)"},
   { 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, "
-    "surround-left, surround-right)"}, 
+    "surround-left, surround-right)"},
   { 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, "
     "overhead)"},
   { 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, "
@@ -75,12 +75,12 @@ static const int transmission_bitrates[32] = {
   3840000,   -1 /*open*/, -2 /*variable*/, -3 /*lossless*/
   // [15]  768000 is actually 754500 for DVD
   // [24] 1536000 is actually 1509750 for DVD
-  // [22] 1411200 is actually 1234800 for 14-bit DTS-CD audio 
+  // [22] 1411200 is actually 1234800 for 14-bit DTS-CD audio
 };
 
 enum source_pcm_resolution {
   spr_16 = 0,
-  spr_16_ES,  //_ES means: surround channels mastered in DTS-ES 
+  spr_16_ES,  //_ES means: surround channels mastered in DTS-ES
   spr_20,
   spr_20_ES,
   spr_invalid4,
@@ -91,13 +91,13 @@ enum source_pcm_resolution {
 
 int find_dts_header(const unsigned char *buf, unsigned int size,
                     struct dts_header_s *dts_header) {
-  
+
   unsigned int size_to_search = size-15;
   if (size_to_search > size) {
     // not enough data for one header
     return -1;
   }
-  
+
   unsigned int offset;
   for (offset = 0; offset < size_to_search; offset++) {
      // sync words appear aligned in the bit stream
@@ -112,35 +112,35 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
     // no header found
     return -1;
   }
-  
+
   bit_cursor_c bc(buf+offset+4, size-offset-4);
-  
+
   unsigned int t;
-  
+
   bc.get_bits(1, t);
   dts_header->frametype = (t)? dts_header_s::frametype_normal :
     dts_header_s::frametype_termination;
-  
+
   bc.get_bits(5, t);
   dts_header->deficit_sample_count = (t+1) % 32;
-  
+
   bc.get_bits(1, t);
   dts_header->crc_present = (t)? true : false;
-   
+
   bc.get_bits(7, t);
   if (t < 5)  {
     fprintf(stderr,"DTS_Header problem: invalid number of blocks in frame\n");
     //return -1;
   }
   dts_header->num_pcm_sample_blocks = t + 1;
-  
+
   bc.get_bits(14, t);
   if (t < 95) {
     fprintf(stderr,"DTS_Header problem: invalid frame bytes size\n");
     return -1;
   }
   dts_header->frame_byte_size = t+1;
-  
+
   bc.get_bits(6, t);
   if (t >= 16) {
     dts_header->audio_channels = -1;
@@ -157,38 +157,38 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
     fprintf(stderr,"DTS_Header problem: invalid core sampling frequency\n");
     return -1;
   }
-    
+
   bc.get_bits(5, t);
   dts_header->transmission_bitrate = transmission_bitrates[t];
-  
+
   bc.get_bit(dts_header->embedded_down_mix);
   bc.get_bit(dts_header->embedded_dynamic_range);
   bc.get_bit(dts_header->embedded_time_stamp);
   bc.get_bit(dts_header->auxiliary_data);
   bc.get_bit(dts_header->hdcd_master);
-  
+
   bc.get_bits(3, t);
-  dts_header->extension_audio_descriptor = 
+  dts_header->extension_audio_descriptor =
     (dts_header_s::extension_audio_descriptor_enum)t;
-  
+
   bc.get_bit(dts_header->extended_coding);
-  
+
   bc.get_bit(dts_header->audio_sync_word_in_sub_sub);
-  
+
   bc.get_bits(2, t);
   dts_header->lfe_type = (dts_header_s::lfe_type_enum)t;
-  
+
   bc.get_bit(dts_header->predictor_history_flag);
-  
+
   if (dts_header->crc_present) {
     bc.get_bits(16, t);
     // unsigned short header_CRC_sum = t; // not used yet
   }
-  
+
   bc.get_bits(1, t);
   dts_header->multirate_interpolator =
     (dts_header_s::multirate_interpolator_enum)t;
-  
+
   bc.get_bits(4, t);
   dts_header->encoder_software_revision = t;
   if (t > 7) {
@@ -196,10 +196,10 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
             "encoder version\n");
     return -1;
   }
-  
+
   bc.get_bits(2, t);
   dts_header->copy_history = t;
-  
+
   bc.get_bits(3, t);
   switch (t) {
     case spr_16:
@@ -231,16 +231,16 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
       dts_header->source_pcm_resolution = 24;
       dts_header->source_surround_in_es = true;
       break;
-    
+
     default:
       fprintf(stderr,"DTS_Header problem: invalid source PCM resolution\n");
       return -1;
   }
-  
+
   bc.get_bit(dts_header->front_sum_difference);
 
   bc.get_bit(dts_header->surround_sum_difference);
-  
+
   bool out_of_data = bc.get_bits(4, t);
   if (dts_header->encoder_software_revision == 7) {
     dts_header->dialog_normalization_gain = -((int)t);
@@ -249,20 +249,20 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
   } else {
     dts_header->dialog_normalization_gain = 0;
   }
-  
+
   if (out_of_data) {
     fprintf(stderr,"DTS_Header problem: not enough data to read header\n");
     return -1;
   }
-  
+
   return offset;
-  
+
 }
 
 // ============================================================================
 
 void print_dts_header(const struct dts_header_s *h) {
-  
+
   fprintf(stderr,"DTS Frame Header Information:\n");
 
   fprintf(stderr,"Frame Type             : ");
@@ -273,7 +273,7 @@ void print_dts_header(const struct dts_header_s *h) {
             h->deficit_sample_count);
   }
   fprintf(stderr,"\n");
-  
+
   fprintf(stderr,"CRC available          : %s\n", (h->crc_present)? "yes" :
           "no");
 
@@ -282,13 +282,13 @@ void print_dts_header(const struct dts_header_s *h) {
           h->num_pcm_sample_blocks, h->num_pcm_sample_blocks * 32,
           (h->num_pcm_sample_blocks * 32000.0) / h->core_sampling_frequency,
           h->frame_byte_size);
-  
+
   fprintf(stderr,"Audio Channels         : %d%s, arrangement: %s\n",
           h->audio_channels, (h->source_surround_in_es)? " ES" : "" ,
           h->audio_channel_arrangement);
-  
+
   fprintf(stderr,"Core sampling frequency: %u\n", h->core_sampling_frequency);
-  
+
   fprintf(stderr,"Transmission_bitrate   : ");
   if (h->transmission_bitrate == -1) {
     fprintf(stderr,"open");
@@ -301,7 +301,7 @@ void print_dts_header(const struct dts_header_s *h) {
   }
   fprintf(stderr,"\n");
 
-  
+
   fprintf(stderr,"Embedded Down Mix      : %s\n",
           (h->embedded_down_mix)? "yes" : "no");
   fprintf(stderr,"Embedded Dynamic Range : %s\n",
@@ -312,55 +312,55 @@ void print_dts_header(const struct dts_header_s *h) {
           (h->auxiliary_data)? "yes" : "no");
   fprintf(stderr,"HDCD Master            : %s\n",
           (h->hdcd_master)? "yes" : "no");
-  
+
   fprintf(stderr,"Extended Coding        : ");
   if (h->extended_coding) {
     switch (h->extension_audio_descriptor) {
       case dts_header_s::extension_xch:
         fprintf(stderr,"Extra Channels");
-        break; 
+        break;
       case dts_header_s::extension_x96k:
         fprintf(stderr,"Extended frequency (x96k)");
-        break; 
+        break;
       case dts_header_s::extension_xch_x96k:
         fprintf(stderr,"Extra Channels and Extended frequency (x96k)");
-        break; 
+        break;
       default:
         fprintf(stderr,"yes, but unknown");
-        break; 
+        break;
     }
   } else {
     fprintf(stderr,"no");
   }
   fprintf(stderr,"\n");
-  
+
   fprintf(stderr,"Audio Sync in sub-subs : %s\n",
           (h->audio_sync_word_in_sub_sub)? "yes" : "no");
-  
+
   fprintf(stderr,"Low Frequency Effects  : ");
   switch (h->lfe_type) {
     case dts_header_s::lfe_none:
       fprintf(stderr,"none");
-      break; 
+      break;
     case dts_header_s::lfe_128:
       fprintf(stderr,"yes, interpolation factor 128");
-      break; 
+      break;
     case dts_header_s::lfe_64:
       fprintf(stderr,"yes, interpolation factor 64");
-      break; 
+      break;
     case dts_header_s::lfe_invalid:
       fprintf(stderr,"Invalid");
-      break; 
+      break;
   }
   fprintf(stderr,"\n");
-  
+
   fprintf(stderr,"Predictor History used : %s\n",
           (h->predictor_history_flag)? "yes" : "no");
 
   fprintf(stderr,"Multirate Interpolator : %s\n",
           (h->multirate_interpolator == dts_header_s::mi_non_perfect)?
           "non perfect" : "perfect");
-  
+
   fprintf(stderr,"Encoder Software Vers. : %u\n",
           h->encoder_software_revision);
   fprintf(stderr,"Copy History Bits      : %u\n", h->copy_history);
@@ -370,7 +370,7 @@ void print_dts_header(const struct dts_header_s *h) {
           (h->front_sum_difference)? "yes" : "no");
   fprintf(stderr,"Surr. Encoded as Diff. : %s\n",
           (h->surround_sum_difference)? "yes" : "no");
-  
+
   fprintf(stderr,"Dialog Normaliz. Gain  : %d\n",
           h->dialog_normalization_gain);
 }
