@@ -89,7 +89,7 @@ General output control (advanced global options):
 \fB\-\-cluster\-length \fR \fIn[ms]\fR
 Put at most \fIn\fR data blocks into each cluster. If the number is
 postfixed with 'ms' then put at most \fIn\fR milliseconds of data into
-each cluster. The maximum length for a cluster is 65535ms. Programs will
+each cluster. The maximum length for a cluster is 32767ms. Programs will
 only be able to seek to clusters, so creating larger clusters may lead to
 imprecise seeking and/or processing.
 .TP
