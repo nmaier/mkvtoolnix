@@ -145,29 +145,29 @@ generic_packetizer_c::~generic_packetizer_c() {
 
 void generic_packetizer_c::set_tag_track_uid() {
   int is, it;
-  bool skip;
   KaxTag *tag;
   KaxTagTargets *targets;
+  EbmlElement *el;
 
   if (ti->tags == NULL)
     return;
 
   for (is = 0; is < ti->tags->ListSize(); is++) {
     tag = (KaxTag *)(*ti->tags)[is];
-    skip = false;
 
-    for (it = 0; it < tag->ListSize(); it++)
-      if ((*tag)[it]->Generic().GlobalId ==
-          KaxTagTargets::ClassInfos.GlobalId) {
-        skip = true;
-        break;
+    for (it = 0; it < tag->ListSize(); it++) {
+      el = (*tag)[it];
+      if (el->Generic().GlobalId == KaxTagTargets::ClassInfos.GlobalId) {
+        tag->Remove(it);
+        delete el;
+        it--;
+        continue;
       }
-
-    if (!skip) {
-      targets = &GetChild<KaxTagTargets>(*tag);
-      *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
-        huid;
     }
+
+    targets = &GetChild<KaxTagTargets>(*tag);
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
+      huid;
 
     if (!tag->CheckMandatory()) {
       mxprint(stderr, "Error parsing the tags in '%s': some mandatory "
@@ -337,6 +337,7 @@ void generic_packetizer_c::set_language(char *language) {
 
 void generic_packetizer_c::set_headers() {
   int idx;
+  KaxTag *tag;
 
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
@@ -449,6 +450,15 @@ void generic_packetizer_c::set_headers() {
 
   if (no_lacing)
     track_entry->EnableLacing(false);
+
+  set_tag_track_uid();
+  if (ti->tags != NULL) {
+    while (ti->tags->ListSize() != 0) {
+      tag = (KaxTag *)(*ti->tags)[0];
+      add_tags(tag);
+      ti->tags->Remove(0);
+    }
+  }
 }
 
 void generic_packetizer_c::duplicate_data_on_add(bool duplicate) {

@@ -31,6 +31,7 @@
 #include <matroska/KaxSeekHead.h>
 #include <matroska/KaxSegment.h>
 #include <matroska/KaxTracks.h>
+#include <matroska/KaxTag.h>
 
 using namespace std;
 using namespace LIBMATROSKA_NAMESPACE;
@@ -41,6 +42,7 @@ extern KaxTrackEntry *kax_last_entry;
 extern KaxCues *kax_cues;
 extern KaxSeekHead *kax_seekhead;
 extern int track_number;
+extern int64_t tags_size;
 
 extern float video_fps;
 
@@ -50,6 +52,7 @@ extern bool no_lacing, no_linking;
 extern bool identifying;
 
 void add_packetizer(generic_packetizer_c *packetizer);
+void add_tags(KaxTag *tags);
 
 void create_next_output_file(bool last_file = false, bool first_file = false);
 void finish_file();

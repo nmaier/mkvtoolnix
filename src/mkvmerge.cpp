@@ -149,6 +149,10 @@ KaxCues *kax_cues;
 EbmlVoid *kax_seekhead_void = NULL;
 KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
+KaxTags *kax_tags = NULL;
+
+int64_t tags_size = 0;
+bool accept_tags = true;
 
 // Actual pass. 0 for normal operation. 1 for first pass of splitting
 // (only find split points, output goes to /dev/null). 2 for the second
@@ -1576,6 +1580,8 @@ static void cleanup() {
   }
 
   safefree(outfile);
+  if (kax_tags != NULL)
+    delete kax_tags;
 
   utf8_done();
 }
@@ -1657,6 +1663,17 @@ void create_next_output_file(bool last_file, bool first_file) {
     render_headers(out, last_file, first_file);
     render_attachments(out);
 
+    if (kax_tags != NULL) {
+      if (!kax_tags->CheckMandatory()) {
+        mxprint(stderr, "Error: Some tag elements are missing (this error "
+                "should not have occured - another similar error should have "
+                "occured earlier...).\n");
+        exit(1);
+      }
+      kax_tags->UpdateSize();
+      tags_size = kax_tags->ElementSize();
+    }
+
     return;
   }
 
@@ -1680,6 +1697,17 @@ void create_next_output_file(bool last_file, bool first_file) {
   render_headers(out, last_file, first_file);
   render_attachments(out);
 
+  if (kax_tags != NULL) {
+    if (!kax_tags->CheckMandatory()) {
+      mxprint(stderr, "Error: Some tag elements are missing (this error "
+              "should not have occured - another similar error should have "
+              "occured earlier...).\n");
+      exit(1);
+    }
+    kax_tags->UpdateSize();
+    tags_size = kax_tags->ElementSize();
+  }
+
   file_num++;
 }
 
@@ -1696,10 +1724,27 @@ void finish_file() {
       mxprint(stdout, "\n");
   }
 
+  // Now re-render the kax_duration and fill in the biggest timecode
+  // as the file's duration.
+  old_pos = out->getFilePointer();
+  out->setFilePointer(kax_duration->GetElementPosition());
+  *(static_cast<EbmlFloat *>(kax_duration)) =
+    (cluster_helper->get_max_timecode() -
+     cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
+  kax_duration->Render(*out);
+  out->setFilePointer(old_pos);
+
+  // Render the tags if we have some.
+  if (kax_tags != NULL)
+    kax_tags->Render(*out);
+
   // Write meta seek information if it is not disabled.
   if (write_meta_seek) {
     if (write_cues && cue_writing_requested)
       kax_seekhead->IndexThis(*kax_cues, *kax_segment);
+
+    if (kax_tags != NULL)
+      kax_seekhead->IndexThis(*kax_tags, *kax_segment);
 
     kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
@@ -1718,16 +1763,6 @@ void finish_file() {
       }
     }
   }
-
-  // Now re-render the kax_duration and fill in the biggest timecode
-  // as the file's duration.
-  old_pos = out->getFilePointer();
-  out->setFilePointer(kax_duration->GetElementPosition());
-  *(static_cast<EbmlFloat *>(kax_duration)) =
-    (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
-  kax_duration->Render(*out);
-  out->setFilePointer(old_pos);
 
   // Set the correct size for the segment.
   if (kax_segment->ForceSize(out->getFilePointer() -
@@ -1804,6 +1839,16 @@ void main_loop() {
     display_progress(1);
     mxprint(stdout, "\n");
   }
+}
+
+void add_tags(KaxTag *tags) {
+  if (!accept_tags)
+    return;
+
+  if (kax_tags == NULL)
+    kax_tags = new KaxTags;
+
+  kax_tags->PushElement(*tags);
 }
 
 int main(int argc, char **argv) {

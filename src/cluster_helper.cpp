@@ -260,7 +260,7 @@ int cluster_helper_c::render() {
 
   // Splitpoint stuff
   if ((header_overhead == -1) && (pass != 0))
-    header_overhead = out->getFilePointer();
+    header_overhead = out->getFilePointer() + tags_size;
 
   elements_in_cluster = 0;
   num_cue_elements_here = 0;
