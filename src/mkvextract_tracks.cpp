@@ -143,11 +143,10 @@ static void create_output_files() {
         }
 
       } else if (tracks[i].track_type == 'a') {
-        if ((tracks[i].a_sfreq == 0.0) || (tracks[i].a_channels == 0)) {
-          mxwarn("Track ID %lld is missing some critical "
-                 "information. Skipping track.\n", tracks[i].tid);
-          continue;
-        }
+        if (tracks[i].a_sfreq == 0.0)
+          tracks[i].a_sfreq = 8000.0;
+        if (tracks[i].a_channels == 0)
+          tracks[i].a_channels = 1;
 
         if (!strcmp(tracks[i].codec_id, MKV_A_VORBIS)) {
           tracks[i].type = TYPEOGM; // Yeah, I know, I know...
@@ -227,7 +226,8 @@ static void create_output_files() {
 
           if (!strcmp(&tracks[i].codec_id[12], "MAIN"))
             tracks[i].aac_profile = 0;
-          else if (!strcmp(&tracks[i].codec_id[12], "LC"))
+          else if (!strcmp(&tracks[i].codec_id[12], "LC") ||
+                   !strcmp(&tracks[i].codec_id[12], "SBR"))
             tracks[i].aac_profile = 1;
           else if (!strcmp(&tracks[i].codec_id[12], "SSR"))
             tracks[i].aac_profile = 2;
