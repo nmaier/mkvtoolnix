@@ -1263,6 +1263,8 @@ bool process_file(const char *file_name) {
                              "KaxChapters" :
                              (id == KaxTags::ClassInfos.GlobalId) ?
                              "KaxTags" :
+                             (id == KaxSeekHead::ClassInfos.GlobalId) ?
+                             "KaxSeekHead" :
                              "unknown");
 
               } else if (is_id(l3, KaxSeekPosition)) {
