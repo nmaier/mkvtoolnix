@@ -30,12 +30,17 @@
 #define VFT_PFRAMEAUTOMATIC -2
 #define VFT_NOBFRAME -1
 
+typedef struct {
+  char type;
+  int pos;
+} frame_t;
+
 class video_packetizer_c: public generic_packetizer_c {
 private:
   double fps;
   int width, height, bpp, frames_output;
   int64_t ref_timecode, duration_shift;
-  bool avi_compat_mode, bframes, pass_through, mpeg4;
+  bool avi_compat_mode, bframes, pass_through, is_mpeg4;
   char *codec_id;
 
 public:
@@ -51,6 +56,10 @@ public:
   virtual void set_headers();
 
   virtual void dump_debug_info();
+
+protected:
+  void find_mpeg4_frame_types(unsigned char *buf, int size,
+                              vector<frame_t> &frames);
 };
 
 #endif // __P_VIDEO_H
