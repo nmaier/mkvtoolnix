@@ -667,6 +667,52 @@ UTFstring cstr_to_UTFstring(const char *c) {
 #endif
 }
 
+UTFstring cstrutf8_to_UTFstring(const char *c) {
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+  wchar_t *new_string;
+  int len;
+  UTFstring u;
+
+  len = strlen(c);
+  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
+  MultiByteToWideChar(CP_ACP, 0, c, -1, new_string, len + 1);
+
+  u = new_string;
+  safefree(new_string);
+
+  return u;
+#else
+  wchar_t *new_string;
+  char *old_locale;
+  string new_locale;
+  UTFstring u;
+  int len, pos;
+
+  len = strlen(c);
+  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
+  memset(new_string, 0, (len + 1) * sizeof(wchar_t));
+  new_string[len] = L'\0';
+  old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
+  setlocale(LC_CTYPE, "");
+  new_locale = setlocale(LC_CTYPE, NULL);
+  if ((pos = new_locale.rfind(".")) >= 0)
+    new_locale.erase(pos);
+  new_locale += ".UTF-8";
+  if (setlocale(LC_CTYPE, new_locale.c_str()) == NULL)
+    die("Could not set the locale to %s. This is your normal locale with the "
+        "UTF-8 charset. Please consider your system documentation how to "
+        "generate this locale manually. For Debian you can use 'dpkg-reconfi"
+        "gure locales' and select the appropriate ones.", new_locale.c_str());
+  mbstowcs(new_string, c, len);
+  setlocale(LC_CTYPE, old_locale);
+  safefree(old_locale);
+  u = UTFstring(new_string);
+  safefree(new_string);
+
+  return u;
+#endif
+}
+
 char *UTFstring_to_cstr(const UTFstring &u) {
 #if defined(COMP_MSC) || defined(COMP_MINGW)
   char *new_string;
@@ -722,14 +768,18 @@ vector<string> split(const char *src, const char *pattern, int max_num) {
   return v;
 }
 
-void strip(string &s) {
+void strip(string &s, bool newlines) {
   int i, len;
   const char *c;
 
   c = s.c_str();
   i = 0;
-  while ((c[i] != 0) && isspace(c[i]))
-    i++;
+  if (newlines)
+    while ((c[i] != 0) && (isspace(c[i]) || (c[i] == '\r') || (c[i] == '\n')))
+      i++;
+  else
+    while ((c[i] != 0) && isspace(c[i]))
+      i++;
 
   if (i > 0)
     s.erase(0, i);
@@ -738,18 +788,23 @@ void strip(string &s) {
   len = s.length();
   i = 0;
 
-  while ((i < len) && isspace(c[len - i - 1]))
-    i++;
+  if (newlines)
+    while ((i < len) && (isspace(c[len - i - 1]) || (c[len - i - 1] == '\r') ||
+                         c[len - i - 1] == '\n'))
+      i++;
+  else
+    while ((i < len) && isspace(c[len - i - 1]))
+      i++;
 
   if (i > 0)
     s.erase(len - i, i);
 }
 
-void strip(vector<string> &v) {
+void strip(vector<string> &v, bool newlines) {
   int i;
 
   for (i = 0; i < v.size(); i++)
-    strip(v[i]);
+    strip(v[i], newlines);
 }
 
 /*
