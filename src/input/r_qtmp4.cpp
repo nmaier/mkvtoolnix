@@ -274,12 +274,34 @@ qtmp4_reader_c::parse_headers() {
                dmx->id);
         continue;
       }
-      if (!strncasecmp(dmx->fourcc, "mp4v", 4) &&
-          (dmx->esds.decoder_config == NULL)) {
-      mxwarn(PFX "MPEG4 track %u is missing the esds atom/the decoder "
-             "config. Skipping this track.\n", dmx->id);
+      if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
+        if (!dmx->esds_parsed) {
+          mxwarn(PFX "The video track %u is missing the ESDS atom. "
+                 "Skipping this track.\n", dmx->id);
+          continue;
+        }
 
-      continue;
+        // The MP4 container can also contain MPEG1 and MPEG2 encoded
+        // video. The object type ID in the ESDS tells the demuxer what
+        // it is. So let's check for those.
+        // If the FourCC is unmodified then MPEG4 is assumed.
+        if ((dmx->esds.object_type_id == MP4OTI_MPEG2VisualSimple) ||
+            (dmx->esds.object_type_id == MP4OTI_MPEG2VisualMain) ||
+            (dmx->esds.object_type_id == MP4OTI_MPEG2VisualSNR) ||
+            (dmx->esds.object_type_id == MP4OTI_MPEG2VisualSpatial) ||
+            (dmx->esds.object_type_id == MP4OTI_MPEG2VisualHigh) ||
+            (dmx->esds.object_type_id == MP4OTI_MPEG2Visual422))
+          memcpy(dmx->fourcc, "mpg2", 4);
+        else if (dmx->esds.object_type_id == MP4OTI_MPEG1Visual)
+          memcpy(dmx->fourcc, "mpg1", 4);
+        else {
+          // This is MPEG4 video, and we need header data for it.
+          if (dmx->esds.decoder_config == NULL) {
+            mxwarn(PFX "MPEG4 track %u is missing the esds atom/the decoder "
+                   "config. Skipping this track.\n", dmx->id);
+            continue;
+          }
+        }
       }
     }
 
@@ -1065,36 +1087,33 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
   e->decoder_config_len = 0;
 
   tag = memio.read_uint8();
-  if (tag != MP4DT_DEC_SPECIFIC) {
+  if (tag == MP4DT_DEC_SPECIFIC) {
+    len = read_esds_descr_len(memio);
+    e->decoder_config_len = len;
+    e->decoder_config = (uint8_t *)safemalloc(len);
+    if (memio.read(e->decoder_config, len) != len)
+      throw exception();
+    mxverb(2, PFX "%*sesds: decoder specific descriptor, len: %u\n", lsp, "",
+           len);
+    mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n", lsp + 2, "");
+    mxhexdump(3, e->decoder_config, e->decoder_config_len);
+
+    tag = memio.read_uint8();
+  } else
     mxverb(2, PFX "%*stag is not DEC_SPECIFIC (0x%02x) but 0x%02x.\n", lsp, "",
            MP4DT_DEC_SPECIFIC, (uint32_t)tag);
-    return false;
-  }
 
-  len = read_esds_descr_len(memio);
-  e->decoder_config_len = len;
-  e->decoder_config = (uint8_t *)safemalloc(len);
-  if (memio.read(e->decoder_config, len) != len)
-    throw exception();
-  mxverb(2, PFX "%*sesds: decoder specific descriptor, len: %u\n", lsp, "",
-         len);
-  mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n", lsp + 2, "");
-  mxhexdump(3, e->decoder_config, e->decoder_config_len);
-
-  tag = memio.read_uint8();
-  if (tag != MP4DT_SL_CONFIG) {
+  if (tag == MP4DT_SL_CONFIG) {
+    len = read_esds_descr_len(memio);
+    e->sl_config_len = len;
+    e->sl_config = (uint8_t *)safemalloc(len);
+    if (memio.read(e->sl_config, len) != len)
+      throw exception();
+    mxverb(2, PFX "%*sesds: sync layer config descriptor, len: %u\n", lsp, "",
+           len);
+  } else
     mxverb(2, PFX "%*stag is not SL_CONFIG (0x%02x) but 0x%02x.\n", lsp, "",
            MP4DT_SL_CONFIG, (uint32_t)tag);
-    return false;
-  }
-
-  len = read_esds_descr_len(memio);
-  e->sl_config_len = len;
-  e->sl_config = (uint8_t *)safemalloc(len);
-  if (memio.read(e->sl_config, len) != len)
-    throw exception();
-  mxverb(2, PFX "%*sesds: sync layer config descriptor, len: %u\n", lsp, "",
-         len);
 
   return true;
 }
@@ -1139,6 +1158,17 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                                 false, ti));
         safefree(bih);
         ti->private_data = NULL;
+
+      } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) ||
+                 !strncasecmp(dmx->fourcc, "mpg2", 4)) {
+        string codec_id;
+
+        codec_id = mxsprintf("V_MPEG%c", dmx->fourcc[3]);
+        dmx->ptzr =
+          add_packetizer(new video_packetizer_c(this, codec_id.c_str(),
+                                                0.0, dmx->v_width,
+                                                dmx->v_height, false, ti));
+
       } else {
         ti->private_size = dmx->v_stsd_size;
         ti->private_data = (unsigned char *)dmx->v_stsd;

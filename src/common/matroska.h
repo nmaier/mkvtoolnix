@@ -44,6 +44,8 @@
 #define MKV_A_FLAC       "A_FLAC"
 #define MKV_A_TTA        "A_TTA1"
 
+#define MKV_V_MPEG1      "V_MPEG1"
+#define MKV_V_MPEG2      "V_MPEG2"
 #define MKV_V_MPEG4_SP   "V_MPEG4/ISO/SP"
 #define MKV_V_MPEG4_ASP  "V_MPEG4/ISO/ASP"
 #define MKV_V_MPEG4_AP   "V_MPEG4/ISO/AP"
