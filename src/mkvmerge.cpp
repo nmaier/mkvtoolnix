@@ -2202,6 +2202,7 @@ parse_args(int argc,
 
       timecode_scale = temp;
       timecode_scale_forced = true;
+      i++;
     }
 
     // The argument is an input file.
