@@ -127,15 +127,15 @@ el_get_time(parser_data_t *pdata,
 static void
 el_get_binary(parser_data_t *pdata,
               EbmlElement *el) {
-  int64_t result;
+  int64_t length;
   binary *buffer;
   mm_io_c *io;
 
-  result = 0;
+  length = 0;
   buffer = NULL;
   strip(*pdata->bin, true);
   if (pdata->bin->length() == 0)
-    xmlp_error(pdata, "Found neither Base64 encoded data nor '@file' to read "
+    xmlp_error(pdata, "Found no encoded data nor '@file' to read "
                "binary data from.");
 
   if ((*pdata->bin)[0] == '@') {
@@ -144,28 +144,75 @@ el_get_binary(parser_data_t *pdata,
     try {
       io = new mm_file_io_c(&(pdata->bin->c_str())[1]);
       io->setFilePointer(0, seek_end);
-      result = io->getFilePointer();
+      length = io->getFilePointer();
       io->setFilePointer(0, seek_beginning);
-      if (result <= 0)
+      if (length <= 0)
         xmlp_error(pdata, "The file '%s' is empty.",
                    &(pdata->bin->c_str())[1]);
-      buffer = new binary[result];
-      io->read(buffer, result);
+      buffer = new binary[length];
+      io->read(buffer, length);
       delete io;
     } catch(...) {
       xmlp_error(pdata, "Could not open/read the file '%s'.",
                  &(pdata->bin->c_str())[1]);
     }
 
-  } else {
+  } else if ((pdata->format == NULL) || !strcasecmp(pdata->format, "base64")) {
     buffer = new binary[pdata->bin->length() / 4 * 3 + 1];
-    result = base64_decode(*pdata->bin, (unsigned char *)buffer);
-    if (result < 0)
+    length = base64_decode(*pdata->bin, (unsigned char *)buffer);
+    if (length < 0)
       xmlp_error(pdata, "Could not decode the Base64 encoded data - it seems "
                  "to be broken.");
-  }
+  } else if (!strcasecmp(pdata->format, "hex")) {
+    const char *p;
+    bool upper;
 
-  (static_cast<EbmlBinary *>(el))->SetBuffer(buffer, result);
+    p = pdata->bin->c_str();
+    length = 0;
+    while (*p != 0) {
+      if (isdigit(*p) || ((tolower(*p) >= 'a') && (tolower(*p) <= 'f')))
+        ++length;
+      else if (!isblanktab(*p))
+        xmlp_error(pdata, "Invalid hexadecimal data encountered: '%c' is "
+                   "neither white space nor a hexadecimal number.", *p);
+      ++p;
+    }
+    if (((length % 2) != 0) || (length == 0))
+      xmlp_error(pdata, "Too few hexadecimal digits found. The number of "
+                 "digits must be > 0 and divisable by 2.");
+
+    buffer = new binary[length / 2];
+    p = pdata->bin->c_str();
+    upper = true;
+    length = 0;
+    while (*p != 0) {
+      uint8_t value;
+
+      if (isblanktab(*p)) {
+        ++p;
+        continue;
+      }
+      value = isdigit(*p) ? *p - '0' : tolower(*p) - 'a' + 10;
+      if (upper)
+        buffer[length] = value << 4;
+      else {
+        buffer[length] |= value;
+        ++length;
+      }
+      upper = !upper;
+      ++p;
+    }
+
+  } else if (!strcasecmp(pdata->format, "ascii")) {
+    length = pdata->bin->length();
+    buffer = new binary[length];
+    memcpy(buffer, pdata->bin->c_str(), pdata->bin->length());
+
+  } else
+    xmlp_error(pdata, "Invalid binary data format '%s' specified. Supported "
+               "are 'Base64', 'ASCII' and 'hex'.");
+
+  (static_cast<EbmlBinary *>(el))->SetBuffer(buffer, length);
 }
 
 static void
@@ -283,6 +330,7 @@ start_element(void *user_data,
                xmlp_pname);
 
   pdata->data_allowed = false;
+  pdata->format = NULL;
 
   if (pdata->bin != NULL)
     die("start_element: pdata->bin != NULL");
@@ -302,9 +350,13 @@ start_element(void *user_data,
 
   parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
   for (i = 0; (atts[i] != NULL) && (atts[i + 1] != NULL); i += 2) {
-    pdata->bin = new string(atts[i + 1]);
-    add_new_element(pdata, atts[i], parent_idx);
-    end_element(pdata, atts[i]);
+    if (!strcasecmp(atts[i], "format"))
+      pdata->format = atts[i + 1];
+    else {
+      pdata->bin = new string(atts[i + 1]);
+      add_new_element(pdata, atts[i], parent_idx);
+      end_element(pdata, atts[i]);
+    }
   }
 }
 

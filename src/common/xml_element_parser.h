@@ -45,6 +45,7 @@ typedef struct {
   bool done_reading, data_allowed;
 
   string *bin;
+  const char *format;
 
   vector<EbmlElement *> *parents;
   vector<int> *parent_idxs;
