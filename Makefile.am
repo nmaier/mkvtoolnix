@@ -38,6 +38,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 
 mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			common.cpp common.h \
+			mkvinfo_gui.cpp \
 			mm_io.cpp mm_io.h \
 			iso639.cpp iso639.h
 
@@ -45,7 +46,8 @@ mkvmerge_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \
 		@ICONV_LIBS@
 
-mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@
+mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
+		@WXWINDOWS_LIBS@
 
 man_MANS = mkvmerge.1 mkvinfo.1
 

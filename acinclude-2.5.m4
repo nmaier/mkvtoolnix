@@ -639,3 +639,25 @@ dnl      [Define as const if the declaration of iconv() needs const.])
   AC_SUBST(ICONV_LIBS)
 ])
 
+dnl PATH_WXWINDOWS([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl Test for wxWindows, and define MATROSKA_CFLAGS and MATROSKA_LIBS
+dnl
+AC_DEFUN(PATH_WXWINDOWS,
+[
+  AC_MSG_CHECKING(for wxWindows)
+  if wx-config --cxxflags > /dev/null 2>&1; then
+    wx_config="yes"
+    WXWINDOWS_CFLAGS=$(wx-config --cxxflags)
+    WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
+    WXWINDOWS_LIBS=$(wx-config --libs)
+    echo '#define HAVE_WXWINDOWS 1' >> config.h
+    AC_MSG_RESULT(yes)
+  else
+    echo '/* #define HAVE_WXWINDOWS 1 */' >> config.h
+    AC_MSG_RESULT(no: wx-config was not found)
+  fi
+
+  AC_SUBST(WXWINDOWS_CFLAGS)
+  AC_SUBST(WXWINDOWS_LDFLAGS)
+  AC_SUBST(WXWINDOWS_LIBS)
+])

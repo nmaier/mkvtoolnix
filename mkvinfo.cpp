@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.48 2003/05/27 19:20:36 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.49 2003/05/28 07:39:45 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -66,11 +66,10 @@ extern "C" {
 #include "KaxTrackAudio.h"
 #include "KaxTrackVideo.h"
 
+#include "mkvinfo.h"
 #include "common.h"
 #include "matroska.h"
 #include "mm_io.h"
-
-#define NAME "MKVInfo"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
@@ -83,7 +82,6 @@ typedef struct {
 
 mkv_track_t **tracks = NULL;
 int num_tracks = 0;
-mm_io_c *in = NULL;
 
 void add_track(mkv_track_t *s) {
   tracks = (mkv_track_t **)saferealloc(tracks, sizeof(mkv_track_t *) *
@@ -116,6 +114,9 @@ void usage() {
   fprintf(stdout,
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
+#ifdef HAVE_WXWINDOWS
+    "  -g, --gui      Start the GUI. All other options are ignored.\n"
+#endif
     "  inname         Use 'inname' as the source.\n"
     "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
     "                 description of what mkvinfo outputs.\n"
@@ -123,45 +124,21 @@ void usage() {
     "  -V, --version  Show version information.\n");
 }
 
-static void parse_args(int argc, char **argv) {
-  int i;
-  char *infile = NULL;
-
-  verbose = 0;
-
-  for (i = 1; i < argc; i++)
-    if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      fprintf(stdout, "mkvinfo v" VERSION "\n");
-      exit(0);
-    } else if (!strcmp(argv[i], "-v") || ! strcmp(argv[i], "--verbose"))
-      verbose++;
-    else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
-             !strcmp(argv[i], "--help")) {
-      usage();
-      exit(0);
-    } else if (infile != NULL) {
-      fprintf(stderr, "Error: Only one input file is allowed.\n");
-      exit(1);
-    } else
-      infile = argv[i];
-
-  if (infile == NULL) {
-    usage();
-    exit(0);
-  }
-
-  /* open input file */
-  try {
-    in = new mm_io_c(infile, MODE_READ);
-  } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Couldn't open input file %s (%s).\n", infile,
-            strerror(errno));
-    exit(1);
-  }
-}
-
 #define ARGS_BUFFER_LEN (200 * 1024) // Ok let's be ridiculous here :)
 static char args_buffer[ARGS_BUFFER_LEN];
+
+void show_error(const char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  args_buffer[ARGS_BUFFER_LEN - 1] = 0;
+  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
+  va_end(ap);
+
+  // Now this is where the future GUI code will add this entry to the
+  // tree view or whatever. For now just dump the stuff to stdout.
+  fprintf(stdout, "(%s) %s\n", NAME, args_buffer);
+}
 
 void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   va_list ap;
@@ -189,6 +166,43 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
     fprintf(stdout, "(%s) + %s\n", NAME, args_buffer);
 }
 
+#define show_info(f, args...) show_element(NULL, -1, f, ## args)
+#define show_warning(l, f, args...) show_element(NULL, l, f, ## args)
+#define show_unknown_element(e, l) \
+  show_element(e, l, "Unknown element: %s", typeid(*e).name())
+
+void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
+  int i;
+
+  verbose = 0;
+  file_name = NULL;
+
+  use_gui = false;
+
+  for (i = 1; i < argc; i++)
+    if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--gui")) {
+#ifndef HAVE_WXWINDOWS
+      fprintf(stderr, "Error: mkvinfo was compiled without GUI support.\n");
+      exit(1);
+#else // HAVE_WXWINDOWS
+      use_gui = true;
+#endif // HAVE_WXWINDOWS
+    } else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
+      fprintf(stdout, "mkvinfo v" VERSION "\n");
+      exit(0);
+    } else if (!strcmp(argv[i], "-v") || ! strcmp(argv[i], "--verbose"))
+      verbose++;
+    else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
+             !strcmp(argv[i], "--help")) {
+      usage();
+      exit(0);
+    } else if (file_name != NULL) {
+      fprintf(stderr, "Error: Only one input file is allowed.\n");
+      exit(1);
+    } else
+      file_name = argv[i];
+}
+
 int is_ebmlvoid(EbmlElement *l, int level) {
   if (EbmlId(*l) == EbmlVoid::ClassInfos.GlobalId) {
     show_element(l, level, "EbmlVoid");
@@ -199,13 +213,8 @@ int is_ebmlvoid(EbmlElement *l, int level) {
   return 0;
 }
 
-#define show_info(f, args...) show_element(NULL, -1, f, ## args)
-#define show_warning(l, f, args...) show_element(NULL, l, f, ## args)
-#define show_unknown_element(e, l) \
-  show_element(e, l, "Unknown element: %s", typeid(*e).name())
-
-void process_file() {
-  int upper_lvl_el, exit_loop, i;
+bool process_file(const char *file_name) {
+  int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
   EbmlElement *l5 = NULL;
@@ -214,6 +223,16 @@ void process_file() {
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
   char mkv_track_type;
   bool ms_compat;
+  mm_io_c *in;
+
+  // open input file
+  try {
+    in = new mm_io_c(file_name, MODE_READ);
+  } catch (std::exception &ex) {
+    show_error("Error: Couldn't open input file %s (%s).\n", file_name,
+               strerror(errno));
+    return false;
+  }
 
   try {
     es = new EbmlStream(*in);
@@ -221,8 +240,10 @@ void process_file() {
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
-      show_info("No EBML head found.");
-      exit(0);
+      show_error("No EBML head found.");
+      delete es;
+
+      return false;
     }
     show_element(l0, 0, "EBML head");
       
@@ -234,8 +255,8 @@ void process_file() {
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
       if (l0 == NULL) {
-        show_info("No segment/level 0 element found.");
-        exit(0);
+        show_error("No segment/level 0 element found.");
+        return false;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
         show_element(l0, 0, "segment");
@@ -250,7 +271,6 @@ void process_file() {
     }
 
     upper_lvl_el = 0;
-    exit_loop = 0;
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
@@ -669,8 +689,14 @@ void process_file() {
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         show_element(l1, 1, "Cluster");
-        if (verbose == 0)
-          exit(0);
+        if (verbose == 0) {
+          delete l1;
+          delete l0;
+          delete es;
+          delete in;
+
+          return true;
+        }
         cluster = (KaxCluster *)l1;
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -941,9 +967,6 @@ void process_file() {
       } else if (!is_ebmlvoid(l1, 1))
         show_unknown_element(l1, 1);
 
-      if (exit_loop)      // we've found the first cluster, so get out
-        break;
-
       if (upper_lvl_el > 0) {    // we're coming from l2
         upper_lvl_el--;
         delete l1;
@@ -958,16 +981,38 @@ void process_file() {
       }
     } // while (l1 != NULL)
 
+    delete l0;
+    delete es;
+    delete in;
+
+    return true;
   } catch (std::exception &ex) {
-    fprintf(stdout, "(%s) caught exception: %s\n", NAME, ex.what());
+    show_error("Caught exception: %s", ex.what());
+    delete in;
+
+    return false;
   }
 }
 
-int main(int argc, char **argv) {
+int console_main(int argc, char **argv) {
+  char *file_name;
+  bool dummy;
+
   nice(2);
 
-  parse_args(argc, argv);
-  process_file();
-
-  return 0;
+  parse_args(argc, argv, file_name, dummy);
+  if (file_name == NULL) {
+    usage();
+    exit(1);
+  }
+  if (process_file(file_name))
+    return 0;
+  else
+    return 1;
 }
+
+#ifndef HAVE_WXWINDOWS
+int main(int argc, char **argv) {
+  return console_main(argc, argv);
+}
+#endif // HAVE_WXWINDOWS
