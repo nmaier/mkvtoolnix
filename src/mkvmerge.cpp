@@ -344,6 +344,27 @@ usage() {
   );
 }
 
+/** \brief Prints information about what has been compiled into mkvmerge
+ */
+static void
+print_capabilities() {
+#if defined(HAVE_AVICLASSES)
+  mxinfo("AVICLASSES\n");
+#endif
+#if defined(HAVE_AVILIB0_6_10)
+  mxinfo("AVILIB0_6_10\n");
+#endif
+#if defined(HAVE_BZLIB_H)
+  mxinfo("BZ2\n");
+#endif
+#if defined(HAVE_LZO1X_H)
+  mxinfo("LZO\n");
+#endif
+#if defined(HAVE_FLAC_FORMAT_H)
+  mxinfo("FLAC\n");
+#endif
+}
+
 /** \brief Probe the file type
  *
  * Opens the input file and calls the \c probe_file function for each known
@@ -619,7 +640,10 @@ parse_tracks(char *s,
  * comma is the displacement in ms. The optional part after comma is
  * the linear factor which defaults to 1 if not given.
  */
-static void parse_sync(char *s, audio_sync_t &async, const char *opt) {
+static void
+parse_sync(char *s,
+           audio_sync_t &async,
+           const char *opt) {
   char *linear, *div, *colon;
   double d1, d2;
   string orig = s;
@@ -1461,6 +1485,12 @@ parse_args(int argc,
     } else if (!strcmp(this_arg, "-i") || !strcmp(this_arg, "--identify"))
       mxerror("'%s' can only be used with a file name. "
               "No other options are allowed.\n", this_arg);
+
+    else if (!strcmp(this_arg, "--capabilities")) {
+      print_capabilities();
+      mxexit(0);
+
+    }
 
   }
 
