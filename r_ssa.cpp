@@ -64,13 +64,6 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
     while (!mm_io->eof()) {
       old_pos = mm_io->getFilePointer();
       line = mm_io->getline();
-      if (line.length() == 0)   // Ignore empty lines.
-        continue;
-      if (line.c_str()[0] == ';') { // Just a comment.
-        global += "\r\n";       // DOS style newlines
-        global += line;
-        continue;
-      }
 
       if (!strncasecmp(line.c_str(), "Dialogue: ", strlen("Dialogue: "))) {
         // End of global data - restore file position to just before this
