@@ -103,7 +103,7 @@ void tab_attachments::on_add_attachment(wxCommandEvent &evt) {
   uint32_t i, j;
   vector<string> extensions;
 
-  wxFileDialog dlg(NULL, "Choose an attachment file", "", last_open_dir,
+  wxFileDialog dlg(NULL, "Choose an attachment file", last_open_dir, "",
                    _T(ALLFILES), wxOPEN);
 
   if(dlg.ShowModal() == wxID_OK) {
