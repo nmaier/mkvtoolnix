@@ -57,6 +57,6 @@ mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
 mkvextract_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
 		@VORBIS_LIBS@ @OGG_LIBS@ @ICONV_LIBS@
 
-man_MANS = mkvmerge.1 mkvinfo.1
+man_MANS = mkvmerge.1 mkvinfo.1 mkvextract.1
 
 EXTRA_DIST = $(man_MANS)
