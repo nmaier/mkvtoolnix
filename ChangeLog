@@ -1,7 +1,27 @@
+2003-12-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Display dimensions were sometimes off by one,
+	e.g. 640x479 instead of 640x480. This should not happen anymore
+	for sane pixel dimensions.
+
+	* mkvmerge: Changed the options '--fourcc' and
+	'--aspect-ratio'. They now take a track ID just like all the other
+	track specific options.
+
+	* mkvmerge: new feature: Added an option '--display-dimensions'
+	which allows the direct setting of the display dimensions. It is
+	mutually exclusive with '--aspect-ratio', of course.
+
 2003-11-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The language combo box was not correctly set on
 	Windows.
+
+2003-11-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Added an option for dumpig all split points including
+	file size and timestamp information after the first splitting
+	pass.
 
 2003-11-23  Moritz Bunkus  <moritz@bunkus.org>
 

@@ -890,14 +890,21 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
 
   if (get_rv_dimensions(buffer, size, width, height)) {
     if ((dmx->width != width) || (dmx->height != height)) {
-      if (!ti->aspect_ratio_given) {
+      if (!ti->aspect_ratio_given && !ti->display_dimensions_given) {
         disp_width = dmx->width;
         disp_height = dmx->height;
 
         dmx->width = width;
         dmx->height = height;
 
-      } else {
+      } else if (ti->display_dimensions_given) {
+        disp_width = ti->display_width;
+        disp_height = ti->display_height;
+
+        dmx->width = width;
+        dmx->height = height;
+
+      } else {                  // ti->aspect_ratio_given == true
         dmx->width = width;
         dmx->height = height;
 

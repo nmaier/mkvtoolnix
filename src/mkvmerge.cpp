@@ -332,7 +332,10 @@ static void usage() {
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
-    "  --aspect-ratio <f|a/b>   Sets the aspect ratio.\n"
+    "  --aspect-ratio <f|a/b>   Sets the display dimensions by calculating\n"
+    "                           width and height for this aspect ratio.\n"
+    "  --display-dimensions <width>x<height>\n"
+    "                           Explicitely set the display dimensions.\n"
     "\n Options that only apply to text subtitle tracks:\n"
     "  --sub-charset <TID:charset>\n"
     "                           Sets the charset the text subtitles are\n"
@@ -633,16 +636,30 @@ static void parse_sync(char *s, audio_sync_t &async, const char *opt) {
   async.displacement = atoi(s);
 }
 
-static float parse_aspect_ratio(char *s, const char *opt) {
-  char *div;
+static void parse_aspect_ratio(char *s, const char *opt, track_info_t &ti) {
+  char *div, *c;
   float w, h;
   string orig = s;
+  display_properties_t dprop;
 
+  c = strchr(s, ':');
+  if (c == NULL)
+    mxerror("Aspect ratio: missing track ID in '%s %s'.\n", opt, orig.c_str());
+  *c = 0;
+  if (!parse_int(s, dprop.id))
+    mxerror("Aspect ratio: invalid track ID in '%s %s'.\n", opt, orig.c_str());
+  dprop.width = -1;
+  dprop.height = -1;
+
+  s = c + 1;
   div = strchr(s, '/');
   if (div == NULL)
     div = strchr(s, ':');
-  if (div == NULL)
-    return strtod(s, NULL);
+  if (div == NULL) {
+    dprop.aspect_ratio = strtod(s, NULL);
+    ti.display_properties->push_back(dprop);
+    return;
+  }
 
   *div = 0;
   div++;
@@ -657,7 +674,44 @@ static float parse_aspect_ratio(char *s, const char *opt) {
   if (h == 0.0)
     mxerror("Aspect ratio: divisor is 0 in '%s %s'.\n", opt, orig.c_str());
 
-  return w/h;
+  dprop.aspect_ratio = w / h;
+  ti.display_properties->push_back(dprop);
+}
+
+static void parse_display_dimensions(char *s, track_info_t &ti) {
+  char *x, *c;
+  string orig = s;
+  int w, h;
+  display_properties_t dprop;
+
+  c = strchr(s, ':');
+  if (c == NULL)
+    mxerror("Display dimensions: not given in the form "
+            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+            orig.c_str());
+  *c = 0;
+  c++;
+  x = strchr(c, 'x');
+  if (x == NULL)
+    mxerror("Display dimensions: not given in the form "
+            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+            orig.c_str());
+  *x = 0;
+  x++;
+  if (*x == 0)
+    mxerror("Display dimensions: not given in the form "
+            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+            orig.c_str());
+  if (!parse_int(s, dprop.id) || !parse_int(c, w) || !parse_int(x, h) ||
+      (w <= 0) || (h <= 0))
+    mxerror("Display dimensions: not given in the form "
+            "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n",
+            orig.c_str());
+
+  dprop.aspect_ratio = -1.0;
+  dprop.width = w;
+  dprop.height = h;
+  ti.display_properties->push_back(dprop);
 }
 
 static void parse_split(const char *arg) {
@@ -850,6 +904,26 @@ static void parse_tags(char *s, tags_t &tags, const char *opt) {
             orig.c_str());
 
   tags.file_name = s;
+}
+
+static void parse_fourcc(char *s, const char *opt, track_info_t &ti) {
+  char *c;
+  string orig = s;
+  fourcc_t fourcc;
+
+  c = strchr(s, ':');
+  if (c == NULL)
+    mxerror("FourCC: Missing track ID in '%s %s'.\n", opt, orig.c_str());
+  *c = 0;
+  c++;
+  if (!parse_int(s, fourcc.id))
+    mxerror("FourCC: Invalid track ID in '%s %s'.\n", opt, orig.c_str());
+  if (strlen(c) != 4)
+    mxerror("The FourCC must be exactly four characters long in '%s %s'."
+            "\n", opt, orig.c_str());
+  memcpy(fourcc.fourcc, c, 4);
+  fourcc.fourcc[4] = 0;
+  ti.all_fourccs->push_back(fourcc);
 }
 
 // }}}
@@ -1125,6 +1199,8 @@ static void identify(const char *filename) {
   ti.compression_list = new vector<cue_creation_t>;
   ti.track_names = new vector<language_t>;
   ti.all_ext_timecodes = new vector<language_t>;
+  ti.all_fourccs = new vector<fourcc_t>;
+  ti.display_properties = new vector<display_properties_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -1184,6 +1260,8 @@ static void parse_args(int argc, char **argv) {
   ti.compression_list = new vector<cue_creation_t>;
   ti.track_names = new vector<language_t>;
   ti.all_ext_timecodes = new vector<language_t>;
+  ti.all_fourccs = new vector<fourcc_t>;
+  ti.display_properties = new vector<display_properties_t>;
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
@@ -1588,20 +1666,21 @@ static void parse_args(int argc, char **argv) {
       if (next_arg == NULL)
         mxerror("'%s' lacks the FourCC.\n", this_arg);
 
-      if (strlen(next_arg) != 4)
-        mxerror("The FourCC must be exactly four characters long in '%s %s'."
-                "\n", this_arg, next_arg);
-
-      memcpy(ti.fourcc, next_arg, 4);
-      ti.fourcc[4] = 0;
+      parse_fourcc(next_arg, this_arg, ti);
       i++;
 
     } else if (!strcmp(this_arg, "--aspect-ratio")) {
       if (next_arg == NULL)
         mxerror("'--aspect-ratio' lacks the aspect ratio.\n");
 
-      ti.aspect_ratio = parse_aspect_ratio(next_arg, this_arg);
-      ti.aspect_ratio_given = true;
+      parse_aspect_ratio(next_arg, this_arg, ti);
+      i++;
+
+    } else if (!strcmp(this_arg, "--display-dimensions")) {
+      if (next_arg == NULL)
+        mxerror("'--display-dimensions' lacks the dimensions.\n");
+
+      parse_display_dimensions(next_arg, ti);
       i++;
 
     } else if (!strcmp(this_arg, "-y") || !strcmp(this_arg, "--sync")) {
@@ -1741,6 +1820,8 @@ static void parse_args(int argc, char **argv) {
         safefree((*ti.track_names)[j].language);
       delete ti.track_names;
       delete ti.all_ext_timecodes;
+      delete ti.all_fourccs;
+      delete ti.display_properties;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
@@ -1756,6 +1837,8 @@ static void parse_args(int argc, char **argv) {
       ti.compression_list = new vector<cue_creation_t>;
       ti.track_names = new vector<language_t>;
       ti.all_ext_timecodes = new vector<language_t>;
+      ti.all_fourccs = new vector<fourcc_t>;
+      ti.display_properties = new vector<display_properties_t>;
     }
   }
 
@@ -1794,6 +1877,8 @@ static void parse_args(int argc, char **argv) {
     safefree((*ti.track_names)[j].language);
   delete ti.track_names;
   delete ti.all_ext_timecodes;
+  delete ti.all_fourccs;
+  delete ti.display_properties;
   safefree(attachment);
 }
 

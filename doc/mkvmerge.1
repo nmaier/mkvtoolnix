@@ -333,12 +333,31 @@ are ignored.
 .LP
 Options that only apply to video tracks:
 .TP
-\fB\-f\fR, \fB\-\-fourcc\fR <\fIFourCC\fR>
-Forces the FourCC to the specified value. Works only for video tracks.
+\fB\-f\fR, \fB\-\-fourcc\fR <\fITID\fR:\fIFourCC\fR>
+Forces the FourCC to the specified value. Works only for video tracks in the
+\'MS compatibility mode'.
 .TP
-\fB\-\-aspect\-ratio\fR <\fIar\fR|\fIw\fR/\fIh\fR>
-Sets the aspect ratio for the track. The ratio can be given either as a
-floating point number or as 'width/height', e.g. 16/9.
+\fB\-\-display\-dimensions\fR <\fITID\fR:\fIwidth\fRx\fIheight\fR>
+Matroska files contain two values that set the display properties that a
+player should scale the image on playback to: display width and display height.
+These values can be set with this option, e.g. '1:640x480'.
+.br
+Another way to specify the values is to use the
+\fB\-\-aspect\-ratio\fR option (see below). These options are mutually
+exclusive.
+.TP
+\fB\-\-aspect\-ratio\fR <\fITID\fR:\fIar\fR|\fIw\fR/\fIh\fR>
+Matroska files contain two values that set the display properties that
+a player should scale the image on playback to: display width and
+display height.  With this option \fBmkvmerge\fR will automatically
+calculate the display width and display height based on the image's
+original width and height and the aspect ratio given with this option.
+The ratio can be given either as a floating point number or as
+\'width/height', e.g. 16/9.
+.br
+Another way to specify the values is to use the
+\fB\-\-aspect\-ratio\fR option (see above). These options are mutually
+exclusive.
 .LP
 Options that only apply to text subtitle tracks:
 .TP

@@ -1239,8 +1239,8 @@ void kax_reader_c::create_packetizers() {
     memcpy(&nti, ti, sizeof(track_info_t));
     nti.private_data = (unsigned char *)t->private_data;
     nti.private_size = t->private_size;
-    if (nti.fourcc[0] == 0)
-      memcpy(nti.fourcc, t->v_fourcc, 5);
+    if (nti._fourcc[0] == 0)
+      memcpy(nti._fourcc, t->v_fourcc, 5);
     if (nti.default_track == 0)
       nti.default_track = t->default_track;
     if (nti.language == NULL)
@@ -1253,8 +1253,8 @@ void kax_reader_c::create_packetizers() {
       switch (t->type) {
 
         case 'v':
-          if (nti.fourcc[0] == 0)
-            memcpy(nti.fourcc, t->v_fourcc, 5);
+          if (nti._fourcc[0] == 0)
+            memcpy(nti._fourcc, t->v_fourcc, 5);
           if (verbose)
             mxinfo("+-> Using video output module for track ID %u.\n",
                    t->tnum);

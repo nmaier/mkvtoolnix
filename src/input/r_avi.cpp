@@ -157,11 +157,11 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     ti->private_data = (unsigned char *)bih;
     if (ti->private_data != NULL)
       ti->private_size = get_uint32(&bih->biSize);
-    if (ti->fourcc[0] == 0) {
-      memcpy(ti->fourcc, codec, 4);
-      ti->fourcc[4] = 0;
+    if (ti->_fourcc[0] == 0) {
+      memcpy(ti->_fourcc, codec, 4);
+      ti->_fourcc[4] = 0;
     } else
-      memcpy(&bih->biCompression, ti->fourcc, 4);
+      memcpy(&bih->biCompression, ti->_fourcc, 4);
     ti->id = 0;                 // ID for the video track.
     vpacketizer = new video_packetizer_c(this, NULL, fps,
                                          get_uint32(&bih->biWidth),

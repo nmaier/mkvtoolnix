@@ -77,6 +77,17 @@ typedef struct {
 } tags_t;
 
 typedef struct {
+  float aspect_ratio;
+  int width, height;
+  int64_t id;
+} display_properties_t;
+
+typedef struct {
+  char fourcc[5];
+  int64_t id;
+} fourcc_t;
+
+typedef struct {
   // The track ID.
   int64_t id;
 
@@ -89,9 +100,12 @@ typedef struct {
   unsigned char *private_data;
   int private_size;
 
-  char fourcc[5];
+  vector<fourcc_t> *all_fourccs;
+  char _fourcc[5];
+  vector<display_properties_t> *display_properties;
   float aspect_ratio;
-  bool aspect_ratio_given;
+  int display_width, display_height;
+  bool aspect_ratio_given, display_dimensions_given;
 
   vector<audio_sync_t> *audio_syncs; // As given on the command line
   audio_sync_t async;           // For this very track

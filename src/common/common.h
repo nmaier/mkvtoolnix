@@ -150,6 +150,9 @@ UTFstring cstrutf8_to_UTFstring(const char *c);
 char *UTFstring_to_cstr(const UTFstring &u);
 char *UTFstring_to_cstrutf8(const UTFstring &u);
 
+#define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
+#define myabs(a) ((a) < 0 ? (a) * -1 : (a))
+
 bool parse_int(const char *s, int64_t &value);
 bool parse_int(const char *s, int &value);
 string to_string(int64_t i);

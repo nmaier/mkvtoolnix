@@ -35,7 +35,7 @@ private:
   double fps;
   int width, height, bpp, frames_output;
   int64_t ref_timecode, duration_shift;
-  bool avi_compat_mode, bframes, pass_through;
+  bool avi_compat_mode, bframes, pass_through, mpeg4;
   char *codec_id;
 
 public:

@@ -44,6 +44,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   int64_t id;
   language_t *lang;
   tags_t *tags;
+  display_properties_t *dprop;
+  fourcc_t *fourcc;
   bool found;
 
 #ifdef DEBUG
@@ -152,6 +154,35 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
       safefree(ti->ext_timecodes);
       ti->ext_timecodes = safestrdup(lang->language);
+      break;
+    }
+  }
+
+  // Let's see if the user has specified an aspect ratio or display dimensions
+  // for this track.
+  for (i = 0; i < ti->display_properties->size(); i++) {
+    dprop = &(*ti->display_properties)[i];
+    if ((dprop->id == ti->id) || (dprop->id == -1)) { // -1 == all tracks
+      if (dprop->aspect_ratio < 0) {
+        ti->display_width = dprop->width;
+        ti->display_height = dprop->height;
+        ti->display_dimensions_given = true;
+      } else {
+        ti->aspect_ratio = dprop->aspect_ratio;
+        ti->aspect_ratio_given = true;
+      }
+    }
+  }
+  if (ti->aspect_ratio_given && ti->display_dimensions_given)
+    mxerror("Both '--aspect-ratio' and '--display-dimensions' were given for "
+            "'%s'.\n", ti->fname);
+
+  // Let's see if the user has specified a FourCC for this track.
+  for (i = 0; i < ti->all_fourccs->size(); i++) {
+    fourcc = &(*ti->all_fourccs)[i];
+    if ((fourcc->id == ti->id) || (fourcc->id == -1)) { // -1 == all tracks
+      memcpy(ti->_fourcc, fourcc->fourcc, 4);
+      ti->_fourcc[4] = 0;
       break;
     }
   }
@@ -495,18 +526,25 @@ void generic_packetizer_c::set_headers() {
 
     if ((hvideo_pixel_height != -1) && (hvideo_pixel_width != -1)) {
       if ((hvideo_display_width == -1) || (hvideo_display_height == -1) ||
-          ti->aspect_ratio_given) {
-        if (!ti->aspect_ratio_given)
-          ti->aspect_ratio = (float)hvideo_pixel_width /
-            (float)hvideo_pixel_height;
-        if (ti->aspect_ratio >
-            ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
-          disp_width = (int)(hvideo_pixel_height * ti->aspect_ratio);
-          disp_height = hvideo_pixel_height;
+          ti->aspect_ratio_given || ti->display_dimensions_given) {
+        if (ti->display_dimensions_given) {
+          disp_width = ti->display_width;
+          disp_height = ti->display_height;
 
         } else {
-          disp_width = hvideo_pixel_width;
-          disp_height = (int)(hvideo_pixel_width / ti->aspect_ratio);
+          if (!ti->aspect_ratio_given)
+            ti->aspect_ratio = (float)hvideo_pixel_width /
+              (float)hvideo_pixel_height;
+          if (ti->aspect_ratio >
+              ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
+            disp_width = myrnd(hvideo_pixel_height * ti->aspect_ratio);
+            disp_height = hvideo_pixel_height;
+
+          } else {
+            disp_width = hvideo_pixel_width;
+            disp_height = myrnd(hvideo_pixel_width / ti->aspect_ratio);
+
+          }
 
         }
 
@@ -970,6 +1008,12 @@ track_info_t *duplicate_track_info(track_info_t *src) {
       safestrdup((*src->all_ext_timecodes)[i].language);
   dst->ext_timecodes = safestrdup(src->ext_timecodes);
   dst->tags = NULL;
+  dst->all_fourccs = new vector<fourcc_t>(*src->all_fourccs);
+  dst->_fourcc[0] = 0;
+  dst->display_properties =
+    new vector<display_properties_t>(*src->display_properties);
+  dst->aspect_ratio_given = false;
+  dst->display_dimensions_given = false;
 
   return dst;
 }
@@ -1011,6 +1055,8 @@ void free_track_info(track_info_t *ti) {
   safefree(ti->private_data);
   if (ti->tags != NULL)
     delete ti->tags;
+  delete ti->all_fourccs;
+  delete ti->display_properties;
   safefree(ti);
 }
 
