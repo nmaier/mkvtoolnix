@@ -39,7 +39,7 @@ private:
   int64_t raw_size, compressed_size, items;
 
   lzo_byte *lzo_wrkmem;
-  z_stream zc_stream;
+  z_stream zc_stream, zd_stream;
   bz_stream bzc_stream;
 
 public:

@@ -68,40 +68,56 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
 
   set_track_type(track_subtitle);
 
-  if (compression_type == COMPRESSION_LZO) {
-    if ((result = lzo_init()) != LZO_E_OK)
-      mxerror("vobsub_packetizer: lzo_init() failed. Result: %d\n", result);
-    lzo_wrkmem = (lzo_bytep)lzo_malloc(LZO1X_999_MEM_COMPRESS);
-    if (lzo_wrkmem == NULL)
-      mxerror("vobsub_packetizer: lzo_malloc(LZO1X_999_MEM_COMPRESS) failed."
-              "\n");
-    compression = "LZO";
+  if (compression_type != compressed_type) {
+    if (compression_type == COMPRESSION_LZO) {
+      if ((result = lzo_init()) != LZO_E_OK)
+        mxerror("vobsub_packetizer: lzo_init() failed. Result: %d\n", result);
+      lzo_wrkmem = (lzo_bytep)lzo_malloc(LZO1X_999_MEM_COMPRESS);
+      if (lzo_wrkmem == NULL)
+        mxerror("vobsub_packetizer: lzo_malloc(LZO1X_999_MEM_COMPRESS) failed."
+                "\n");
+      compression = "LZO";
 
-  } else if (compression_type == COMPRESSION_ZLIB) {
-    zc_stream.zalloc = (alloc_func)0;
-    zc_stream.zfree = (free_func)0;
-    zc_stream.opaque = (voidpf)0;
-    result = deflateInit(&zc_stream, 9);
-    if (result != Z_OK)
-      mxerror("vobsub_packetizer: deflateInit() failed. Result: %d\n", result);
-    compression = "Zlib";
+    } else if (compression_type == COMPRESSION_ZLIB) {
+      zc_stream.zalloc = (alloc_func)0;
+      zc_stream.zfree = (free_func)0;
+      zc_stream.opaque = (voidpf)0;
+      result = deflateInit(&zc_stream, 9);
+      if (result != Z_OK)
+        mxerror("vobsub_packetizer: deflateInit() failed. Result: %d\n",
+                result);
+      compression = "Zlib";
 
-  } else if (compression_type == COMPRESSION_BZ2) {
-    bzc_stream.bzalloc = NULL;
-    bzc_stream.bzfree = NULL;
-    bzc_stream.opaque = NULL;
+    } else if (compression_type == COMPRESSION_BZ2) {
+      bzc_stream.bzalloc = NULL;
+      bzc_stream.bzfree = NULL;
+      bzc_stream.opaque = NULL;
 
-    result = BZ2_bzCompressInit(&bzc_stream, 9, 0, 30);
-    if (result != BZ_OK)
-      mxerror("vobsub_packetizer: BZ2_bzCompressInit() failed. Result: %d\n",
-              result);
-    compression = "bzip2";
+      result = BZ2_bzCompressInit(&bzc_stream, 9, 0, 30);
+      if (result != BZ_OK)
+        mxerror("vobsub_packetizer: BZ2_bzCompressInit() failed. Result: %d\n",
+                result);
+      compression = "bzip2";
 
-  } else if (compression_type != COMPRESSION_NONE)
-    die("vobsub_packetizer: Compression schmeme %d not implemented.",
-        compression_type);
-  else
-    compression = "no";
+    } else if (compression_type != COMPRESSION_NONE)
+      die("vobsub_packetizer: Compression schmeme %d not implemented.",
+          compression_type);
+    else
+      compression = "no";
+
+    if (compressed_type == COMPRESSION_ZLIB) {
+      zd_stream.zalloc = (alloc_func)0;
+      zd_stream.zfree = (free_func)0;
+      zd_stream.opaque = (voidpf)0;
+      result = inflateInit(&zd_stream);
+      if (result != Z_OK)
+        mxerror("vobsub_packetizer: inflateInit() failed. Result: %d\n",
+                result);
+
+    } else if (compressed_type != COMPRESSION_NONE)
+      die("vobsub_packetizer: Compression schmeme %d not implemented.",
+          compressed_type);
+  }
 
   mxverb(2, "vobsub_packetizer: Using %s compression.\n", compression);
 }
@@ -110,12 +126,17 @@ vobsub_packetizer_c::~vobsub_packetizer_c() {
   safefree(idx_data);
   safefree(ifo_data);
 
-  if (compression_type == COMPRESSION_LZO) {
-    safefree(lzo_wrkmem);
-  } else if (compression_type == COMPRESSION_ZLIB)
-    deflateEnd(&zc_stream);
-  else if (compression_type == COMPRESSION_BZ2)
-    BZ2_bzCompressEnd(&bzc_stream);
+  if (compression_type != compressed_type) {
+    if (compression_type == COMPRESSION_LZO) {
+      safefree(lzo_wrkmem);
+    } else if (compression_type == COMPRESSION_ZLIB)
+      deflateEnd(&zc_stream);
+    else if (compression_type == COMPRESSION_BZ2)
+      BZ2_bzCompressEnd(&bzc_stream);
+
+    if (compressed_type == COMPRESSION_ZLIB)
+      inflateEnd(&zd_stream);
+  }
 
   if (items != 0)
     mxverb(2, "vobsub_packetizer: Overall stats: raw size: %lld, compressed "
@@ -169,7 +190,31 @@ void vobsub_packetizer_c::set_headers() {
 
 unsigned char *vobsub_packetizer_c::uncompress(unsigned char *buffer,
                                                int &size) {
-  return NULL;
+  unsigned char *dst;
+  int result, dstsize;
+
+  dst = (unsigned char *)safemalloc(size * 20);
+
+  if (compressed_type == COMPRESSION_ZLIB) {
+    zd_stream.next_in = (Bytef *)buffer;
+    zd_stream.next_out = (Bytef *)dst;
+    zd_stream.avail_in = size;
+    zd_stream.avail_out = 20 * size;
+    result = inflate(&zd_stream, Z_FULL_FLUSH);
+    if (result != Z_OK)
+      mxerror("vobsub_packetizer: Zlib decompression failed. Result: %d\n",
+              result);
+
+    dstsize = 20 * size - zd_stream.avail_out;
+  }
+
+  mxverb(3, "vobsub_packetizer: Decompression from %d to %d, %d%%\n",
+         size, dstsize, dstsize * 100 / size);
+
+  dst = (unsigned char *)saferealloc(dst, dstsize);
+  size = dstsize;
+
+  return dst;
 }
 
 unsigned char *vobsub_packetizer_c::compress(unsigned char *buffer,
