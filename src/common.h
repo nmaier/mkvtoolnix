@@ -217,7 +217,7 @@ public:
   }
 
   int get_bit_position() {
-    return byte_position - start_of_data + 8 - bits_valid;
+    return (byte_position - start_of_data) * 8 + 8 - bits_valid;
   }
 
   bool skip_bits(unsigned int num) {
