@@ -701,11 +701,11 @@ mmg_dialog::mmg_dialog():
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
 #ifdef SYS_WINDOWS
-  SetSizeHints(520, 740);
-  SetSize(520, 740);
+  SetSizeHints(600, 740);
+  SetSize(600, 740);
 #else
-  SetSizeHints(520, 718);
-  SetSize(520, 718);
+  SetSizeHints(600, 718);
+  SetSize(600, 718);
 #endif
 
   muxing_in_progress = false;

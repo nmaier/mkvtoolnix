@@ -49,6 +49,7 @@
 #define ID_B_TRACKUP                      11028
 #define ID_B_TRACKDOWN                    11029
 #define ID_T_INPUTVALUES                  11030
+#define ID_B_APPENDFILE                   11031
 
 class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);
@@ -56,7 +57,7 @@ class tab_input: public wxPanel {
 protected:
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_browse_tags, *b_browse_timecodes;
-  wxButton *b_track_up, *b_track_down;
+  wxButton *b_track_up, *b_track_down, *b_append_file;
   wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
   wxCheckBox *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;

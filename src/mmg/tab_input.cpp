@@ -88,10 +88,18 @@ tab_input::tab_input(wxWindow *parent):
   b_remove_file = new wxButton(this, ID_B_REMOVEFILE, wxT("remove"),
                                wxDefaultPosition, wxSize(50, -1));
   b_remove_file->Enable(false);
+  b_append_file = new wxButton(this, ID_B_APPENDFILE, wxT("append"),
+                               wxDefaultPosition, wxSize(60, -1));
+  b_append_file->Enable(false);
 
   siz_column->Add(b_add_file, 0, wxBOTTOM, 10);
   siz_column->Add(b_remove_file, 0, 0, 0);
   siz_line->Add(siz_column, 0, wxLEFT, 10);
+
+  siz_column = new wxBoxSizer(wxVERTICAL);
+  siz_column->Add(b_append_file, 0, wxBOTTOM, 10);
+  siz_line->Add(siz_column, 0, wxLEFT, 10);
+
   siz_all->Add(siz_line, 2, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
@@ -981,6 +989,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
+  b_append_file->Enable(false);
   b_track_up->Enable(false);
   b_track_down->Enable(false);
   no_track_mode();
@@ -1056,6 +1065,7 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   wxString label;
 
   b_remove_file->Enable(true);
+  b_append_file->Enable(true);
   selected_file = -1;
   old_track = selected_track;
   selected_track = -1;
@@ -1437,6 +1447,7 @@ tab_input::load(wxConfigBase *cfg) {
   selected_file = -1;
   selected_track = -1;
   b_remove_file->Enable(false);
+  b_append_file->Enable(false);
 
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
