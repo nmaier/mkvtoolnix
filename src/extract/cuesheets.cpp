@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <wchar.h>
 
 #if defined(COMP_MSC)
 #include <assert.h>

@@ -16,9 +16,11 @@
 #include "os.h"
 
 #if defined(COMP_MSC)
-#include <libcharset.h>
-#elif !defined(COMP_MINGW)
-#include <langinfo.h>
+# include <libcharset.h>
+#elif HAVE_NL_LANGINFO
+# include <langinfo.h>
+#elif HAVE_LOCALE_CHARSET
+# include <libcharset.h>
 #endif
 #if defined(SYS_WINDOWS)
 #include <windows.h>

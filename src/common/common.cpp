@@ -21,9 +21,11 @@
 #include <errno.h>
 #include <iconv.h>
 #if defined(COMP_MSC)
-#include <libcharset.h>
-#elif !defined(COMP_MINGW)
-#include <langinfo.h>
+# include <libcharset.h>
+#elif HAVE_NL_LANGINFO
+# include <langinfo.h>
+#elif HAVE_LOCALE_CHARSET
+# include <libcharset.h>
 #endif
 #include <locale.h>
 #include <stdarg.h>
@@ -40,8 +42,8 @@
 #include <sys/time.h>
 #endif
 #include <time.h>
-#include <wchar.h>
 #if defined(SYS_WINDOWS)
+#include <wchar.h>
 #include <windows.h>
 #endif
 
@@ -466,8 +468,10 @@ get_local_charset() {
   lc_charset = nl_langinfo(CODESET);
   if (parse_int(lc_charset, i))
     lc_charset = string("ISO") + lc_charset + string("-US");
-#else
+#elif HAVE_NL_LANGINFO
   lc_charset = nl_langinfo(CODESET);
+#elif HAVE_LOCALE_CHARSET
+  lc_charset = locale_charset();
 #endif
 
   return lc_charset;
