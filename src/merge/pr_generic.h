@@ -468,7 +468,8 @@ public:
 
   virtual const char *get_format_name() = 0;
   virtual int can_connect_to(generic_packetizer_c *src) = 0;
-  virtual void connect(generic_packetizer_c *src);
+  virtual void connect(generic_packetizer_c *src,
+                       int64_t _append_timecode_offset = -1);
 
   virtual void enable_avi_audio_sync(bool enable) {
     if (enable && (ti->avi_block_sizes == NULL))

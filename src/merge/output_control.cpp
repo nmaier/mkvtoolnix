@@ -1500,6 +1500,7 @@ append_track(packetizer_t &ptzr,
   vector<generic_packetizer_c *>::const_iterator gptzr;
   filelist_t &src_file = files[amap.src_file_id];
   filelist_t &dst_file = files[amap.dst_file_id];
+  generic_packetizer_c *old_packetizer;
   int64_t timecode_adjustment;
 
   // Find the generic_packetizer_c that we will be appending to the one
@@ -1513,36 +1514,43 @@ append_track(packetizer_t &ptzr,
   // If we're dealing with a subtitle track or if the appending file contains
   // chapters then we have to suck the previous file dry. See below for the
   // reason (short version: we need all max_timecode_seen values).
-  if ((((*gptzr)->get_track_type() == track_subtitle) ||
-       (src_file.reader->chapters != NULL)) &&
-      !dst_file.done) {
-    vector<deferred_connection_t>::const_iterator def_con;
+
+//   start TEMPORARILY DISABLED
+//   if ((((*gptzr)->get_track_type() == track_subtitle) ||
+//        (src_file.reader->chapters != NULL)) &&
+//       !dst_file.done) {
+//     vector<deferred_connection_t>::const_iterator def_con;
     
+//     dst_file.reader->read_all();
+//     dst_file.done = true;
+//     foreach(def_con, dst_file.deferred_connections)
+//       append_track(*def_con->ptzr, def_con->amap);
+//     dst_file.deferred_connections.clear();
+//   }
+
+//   if (((*gptzr)->get_track_type() == track_subtitle) &&
+//       (dst_file.reader->num_video_tracks == 0) &&
+//       (video_packetizer != NULL) && !ptzr.deferred) {
+//     vector<filelist_t>::iterator file;
+
+//     foreach(file, files) {
+//       if (mxfind(video_packetizer, file->reader->reader_packetizers) !=
+//           file->reader->reader_packetizers.end()) {
+//         deferred_connection_t new_def_con;
+
+//         ptzr.deferred = true;
+//         new_def_con.amap = amap;
+//         new_def_con.ptzr = &ptzr;
+//         file->deferred_connections.push_back(new_def_con);
+//         return;
+//       }
+//     }
+//   }
+//   middle TEMPORARILY DISABLED
+  if (((*gptzr)->get_track_type() == track_subtitle) ||
+      (src_file.reader->chapters != NULL))
     dst_file.reader->read_all();
-    dst_file.done = true;
-    foreach(def_con, dst_file.deferred_connections)
-      append_track(*def_con->ptzr, def_con->amap);
-    dst_file.deferred_connections.clear();
-  }
-
-  if (((*gptzr)->get_track_type() == track_subtitle) &&
-      (dst_file.reader->num_video_tracks == 0) &&
-      (video_packetizer != NULL) && !ptzr.deferred) {
-    vector<filelist_t>::iterator file;
-
-    foreach(file, files) {
-      if (mxfind(video_packetizer, file->reader->reader_packetizers) !=
-          file->reader->reader_packetizers.end()) {
-        deferred_connection_t new_def_con;
-
-        ptzr.deferred = true;
-        new_def_con.amap = amap;
-        new_def_con.ptzr = &ptzr;
-        file->deferred_connections.push_back(new_def_con);
-        return;
-      }
-    }
-  }
+//   end TEMPORARILY DISABLED
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
@@ -1557,9 +1565,8 @@ append_track(packetizer_t &ptzr,
     display_reader = src_file.reader;
   }
 
-  // The actual connection. Also fix the ptzr structure and reset the
-  // ptzr's state to "I want more".
-  (*gptzr)->connect(ptzr.packetizer);
+  // Also fix the ptzr structure and reset the ptzr's state to "I want more".
+  old_packetizer = ptzr.packetizer;
   ptzr.packetizer = *gptzr;
   ptzr.file = amap.src_file_id;
   ptzr.status = file_status_moredata;
@@ -1579,9 +1586,11 @@ append_track(packetizer_t &ptzr,
   // But then again I don't expect that people will try to concatenate such
   // files if they've been split before.
   timecode_adjustment = dst_file.reader->max_timecode_seen;
-  if (((ptzr.packetizer->get_track_type() == track_subtitle) ||
-       (src_file.reader->chapters != NULL)) &&
-      !ptzr.deferred) {
+//   if (((ptzr.packetizer->get_track_type() == track_subtitle) ||
+//        (src_file.reader->chapters != NULL)) &&
+//       !ptzr.deferred) {
+  if ((ptzr.packetizer->get_track_type() == track_subtitle) ||
+      (src_file.reader->chapters != NULL)) {
     vector<append_spec_t>::const_iterator cmp_amap;
 
     if (src_file.reader->ptzr_first_packet == NULL)
@@ -1603,8 +1612,15 @@ append_track(packetizer_t &ptzr,
     }
   }
 
-  if (ptzr.packetizer->get_track_type() == track_subtitle)
-    ptzr.packetizer->append_timecode_offset = timecode_adjustment;
+  if (ptzr.packetizer->get_track_type() == track_subtitle) {
+    mxverb(2, "append_track: new timecode_adjustment for subtitle track: "
+           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti->id);
+    // The actual connection.
+    ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
+  } else
+    // The actual connection.
+    ptzr.packetizer->connect(old_packetizer);
+
 
   // Append some more chapters and adjust their timecodes by the highest
   // timecode seen in the previous file/the track that we've been searching

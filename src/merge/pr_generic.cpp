@@ -989,7 +989,8 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
 }
 
 void
-generic_packetizer_c::connect(generic_packetizer_c *src) {
+generic_packetizer_c::connect(generic_packetizer_c *src,
+                              int64_t _append_timecode_offset) {
   deque<packet_t *>::iterator packet;
 
   free_refs = src->free_refs;
@@ -1005,10 +1006,10 @@ generic_packetizer_c::connect(generic_packetizer_c *src) {
   src->compressor = NULL;
   last_cue_timecode = src->last_cue_timecode;
   correction_timecode_offset = 0;
-  if (htrack_type != track_subtitle)
+  if (_append_timecode_offset == -1)
     append_timecode_offset = src->max_timecode_seen;
   else
-    append_timecode_offset = src->reader->max_timecode_seen;
+    append_timecode_offset = _append_timecode_offset;
   connected_to++;
   if (connected_to == 2)
     process_deferred_packets();
