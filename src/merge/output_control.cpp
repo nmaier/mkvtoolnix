@@ -1501,7 +1501,8 @@ static void establish_deferred_connections(filelist_t &file);
  */
 void
 append_track(packetizer_t &ptzr,
-             const append_spec_t &amap) {
+             const append_spec_t &amap,
+             filelist_t *deferred_file = NULL) {
   vector<generic_packetizer_c *>::const_iterator gptzr;
   filelist_t &src_file = files[amap.src_file_id];
   filelist_t &dst_file = files[amap.dst_file_id];
@@ -1519,7 +1520,6 @@ append_track(packetizer_t &ptzr,
   // If we're dealing with a subtitle track or if the appending file contains
   // chapters then we have to suck the previous file dry. See below for the
   // reason (short version: we need all max_timecode_seen values).
-
   if ((((*gptzr)->get_track_type() == track_subtitle) ||
        (src_file.reader->chapters != NULL)) &&
       !dst_file.done) {
@@ -1592,11 +1592,10 @@ append_track(packetizer_t &ptzr,
   // But then again I don't expect that people will try to concatenate such
   // files if they've been split before.
   timecode_adjustment = dst_file.reader->max_timecode_seen;
-//   if (((ptzr.packetizer->get_track_type() == track_subtitle) ||
-//        (src_file.reader->chapters != NULL)) &&
-//       !ptzr.deferred) {
-  if ((ptzr.packetizer->get_track_type() == track_subtitle) ||
-      (src_file.reader->chapters != NULL)) {
+  if (ptzr.deferred && (deferred_file != NULL))
+    timecode_adjustment = deferred_file->reader->max_timecode_seen;
+  else if ((ptzr.packetizer->get_track_type() == track_subtitle) ||
+             (src_file.reader->chapters != NULL)) {
     vector<append_spec_t>::const_iterator cmp_amap;
 
     if (src_file.reader->ptzr_first_packet == NULL)
@@ -1623,10 +1622,12 @@ append_track(packetizer_t &ptzr,
            "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti->id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
-  } else
+  } else {
+    mxverb(2, "append_track: new timecode_adjustment for NON subtitle track: "
+           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti->id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
-
+  }
 
   // Append some more chapters and adjust their timecodes by the highest
   // timecode seen in the previous file/the track that we've been searching
@@ -1703,7 +1704,7 @@ establish_deferred_connections(filelist_t &file) {
   file.deferred_connections.clear();
 
   foreach(def_con, def_cons)
-    append_track(*def_con->ptzr, def_con->amap);
+    append_track(*def_con->ptzr, def_con->amap, &file);
 
   // \todo Select a new file that the subs will defer to.
 }
@@ -1731,7 +1732,8 @@ main_loop() {
       while ((ptzr->pack == NULL) && (ptzr->status == file_status_moredata) &&
              (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
-      if (ptzr->status != file_status_moredata)
+      if ((ptzr->status != file_status_moredata) &&
+          (ptzr->old_status == file_status_moredata))
         ptzr->packetizer->force_duration_on_last_packet();
       if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
