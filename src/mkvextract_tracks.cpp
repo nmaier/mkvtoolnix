@@ -227,7 +227,7 @@ static void create_output_files() {
           if (!strcmp(&tracks[i].codec_id[12], "MAIN"))
             tracks[i].aac_profile = 0;
           else if (!strcmp(&tracks[i].codec_id[12], "LC") ||
-                   !strcmp(&tracks[i].codec_id[12], "SBR"))
+                   (strstr(&tracks[i].codec_id[12], "SBR") != NULL))
             tracks[i].aac_profile = 1;
           else if (!strcmp(&tracks[i].codec_id[12], "SSR"))
             tracks[i].aac_profile = 2;
