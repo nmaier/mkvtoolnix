@@ -90,7 +90,7 @@ tab_input::tab_input(wxWindow *parent):
   siz_column->Add(b_add_file, 0, wxBOTTOM, 10);
   siz_column->Add(b_remove_file, 0, 0, 0);
   siz_line->Add(siz_column, 0, wxLEFT, 10);
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_all->Add(siz_line, 2, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
@@ -140,7 +140,7 @@ tab_input::tab_input(wxWindow *parent):
   siz_column->Add(0, 1, 0, wxGROW, 0);
   siz_column->Add(b_track_down, 0, 0, 0);
   siz_line->Add(siz_column, 0, wxLEFT, 10);
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_all->Add(siz_line, 3, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
@@ -437,7 +437,7 @@ tab_input::tab_input(wxWindow *parent):
                                      "entry empty."));
   siz_fg->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL);
   siz_toptions->Add(siz_fg, 2, wxGROW | wxLEFT | wxRIGHT, 10);
-  siz_all->Add(siz_toptions, 8, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_all->Add(siz_toptions, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
   SetSizer(siz_all);
 
