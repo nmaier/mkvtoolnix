@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.1 2003/02/16 17:04:39 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.2 2003/02/19 09:31:24 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,23 +35,26 @@ struct packet_t;
 typedef class generic_packetizer_c {
   protected:
     int serialno;
+    void *private_data;
+    int private_data_size;
   public:
     LIBMATROSKA_NAMESPACE::KaxTrackEntry *track_entry;
 
-    generic_packetizer_c() { track_entry = NULL; };
-    virtual ~generic_packetizer_c() {};
+    generic_packetizer_c();
+    virtual ~generic_packetizer_c();
     virtual int       packet_available() = 0;
     virtual packet_t *get_packet() = 0;
     virtual void      set_header() = 0;
     virtual stamp_t   get_smallest_timestamp() = 0;
+    virtual void      set_private_data(void *data, int size);
 } generic_packetizer_c;
  
 typedef class generic_reader_c {
 //  protected:
 //    vorbis_comment *chapter_info;
   public:
-    generic_reader_c() {};
-    virtual ~generic_reader_c() {};
+    generic_reader_c();
+    virtual ~generic_reader_c();
     virtual int              read() = 0;
     virtual packet_t        *get_packet() = 0;
     virtual int              display_priority() = 0;

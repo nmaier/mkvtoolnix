@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.1 2003/02/16 17:04:39 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.2 2003/02/19 09:31:24 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,7 +35,8 @@
 #include <dmalloc.h>
 #endif
 
-video_packetizer_c::video_packetizer_c(char *ncodec, double nfps, int nwidth,
+video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
+                                       char *ncodec, double nfps, int nwidth,
                                        int nheight, int nbpp,
                                        int nmax_frame_size, audio_sync_t *as,
                                        range_t *nrange, int navi_compat_mode)
@@ -56,6 +57,7 @@ video_packetizer_c::video_packetizer_c(char *ncodec, double nfps, int nwidth,
   range.end *= fps;
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
+  set_private_data(pr_data, pd_size);
   set_header();
 //  add_index(serialno);
 }
@@ -94,7 +96,7 @@ void video_packetizer_c::set_header() {
   if (set_codec_private || avi_compat_mode) {
     KaxCodecPrivate &codec_private = 
       GetChild<KaxCodecPrivate>(static_cast<KaxTrackEntry &>(*track_entry));
-    codec_private.CopyBuffer((binary *)codec, countof(codec));
+    codec_private.CopyBuffer((binary *)private_data, private_data_size);
   }
 
   KaxTrackVideo &track_video =
@@ -109,7 +111,6 @@ void video_packetizer_c::set_header() {
   KaxVideoFrameRate &frate = GetChild<KaxVideoFrameRate>(track_video);
   *(static_cast<EbmlFloat *>(&frate)) = fps;
 }
-
 
 int video_packetizer_c::process(char *buf, int size, int num_frames,
                                 int key, int last_frame) {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.5 2003/02/18 10:46:49 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.6 2003/02/19 09:31:24 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -41,6 +41,58 @@ extern "C" {
 #include <dmalloc.h>
 #endif
 
+#ifdef DEBUG
+static void dump_bih(BITMAPINFOHEADER *b) {
+  char *bi_compression = (char *)&b->bi_compression;
+  int i;
+
+  if (b == NULL) {
+    fprintf(stdout, "[bih] IS NULL\n");
+    return;
+  }
+  fprintf(stdout, "[bih] size: %u, width: %u, height: %u\n", b->bi_size,
+          b->bi_width, b->bi_height);
+  fprintf(stdout, "[bih] planes: %u, bit_count: %u, compression: 0x%04x "
+          "(%c%c%c%c)\n",
+          b->bi_planes, b->bi_bit_count, b->bi_compression, bi_compression[0],
+          bi_compression[1], bi_compression[2], bi_compression[3]);
+  fprintf(stdout, "[bih] size_image: %u xppm: %u yppm: %u\n", b->bi_size_image,
+          b->bi_x_pels_per_meter, b->bi_y_pels_per_meter);
+  fprintf(stdout, "[bih] clr_used: %u, clr_important: %d\n", b->bi_clr_used,
+          b->bi_clr_important);
+  if (b->bi_size > sizeof(BITMAPINFOHEADER)) {
+    unsigned char *data = (unsigned char *)b + sizeof(BITMAPINFOHEADER);
+    fprintf(stdout, "[bih] data: ");
+    for (i = 0; i < (b->bi_size - sizeof(BITMAPINFOHEADER)); i++)
+      fprintf(stdout, "%x%x ", (data[i] & 0xf0) >> 4, data[i] & 0x0f);
+    fprintf(stdout, "\n\n");
+  } else
+    fprintf(stdout, "[bih] no additional data\n\n");
+}
+
+static void dump_wfe(WAVEFORMATEX *w) {
+  int i;
+  
+  if (w == NULL) {
+    fprintf(stdout, "[wfe] IS NULL\n");
+    return;
+  }
+  fprintf(stdout, "[wfe] format 0x%04x, channels %u, samp/sec %u\n",
+          w->w_format_tag, w->n_channels, w->n_samples_per_sec);
+  fprintf(stdout, "[wfe] avg b/s %u, block align %u, bits/sam %u\n",
+          w->n_avg_bytes_per_sec, w->n_block_align, w->w_bits_per_sample);
+  fprintf(stdout, "[wfe] size %u\n", w->cb_size);
+  if (w->cb_size > 0) {
+    unsigned char *data = (unsigned char *)w + sizeof(WAVEFORMATEX);
+    fprintf(stdout, "[wfe] data: ");
+    for (i = 0; i < w->cb_size; i++)
+      fprintf(stdout, "%x%x ", (data[i] & 0xf0) >> 4, data[i] & 0x0f);
+    fprintf(stdout, "\n\n");
+  } else
+    fprintf(stdout, "[wfe] no additional data\n\n");
+}
+#endif // DEBUG
+
 int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
   char data[12];
   
@@ -56,80 +108,6 @@ int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
     return 0;
   return 1;
 }
-
-#ifdef DEBUG
-static void dump_bih(BITMAPINFOHEADER &b) {
-  char *bi_compression = (char *)&b.bi_compression;
-  int i;
-  
-  fprintf(stdout, "[bih] size: %u, width: %u, height: %u\n", b.bi_size,
-          b.bi_width, b.bi_height);
-  fprintf(stdout, "[bih] planes: %u, bit_count: %u, compression: 0x%04x "
-          "(%c%c%c%c)\n",
-          b.bi_planes, b.bi_bit_count, b.bi_compression, bi_compression[0],
-          bi_compression[1], bi_compression[2], bi_compression[3]);
-  fprintf(stdout, "[bih] size_image: %u xppm: %u yppm: %u\n", b.bi_size_image,
-          b.bi_x_pels_per_meter, b.bi_y_pels_per_meter);
-  fprintf(stdout, "[bih] clr_used: %u, clr_important: %d\n", b.bi_clr_used,
-          b.bi_clr_important);
-  fprintf(stdout, "[bih] data: %p\n", b.data);
-  if (b.data != NULL) {
-    fprintf(stdout, "[bih] ");
-    for (i = 0; i < (b.bi_size - sizeof(BITMAPINFOHEADER) + sizeof(void *));
-         i++) {
-      unsigned char c = ((unsigned char *)b.data)[i];
-      fprintf(stdout, "%x%x ", (c & 0xf0) >> 4, c & 0x0f);
-    }
-    fprintf(stdout, "\n");
-  }
-  fprintf(stdout, "\n");
-}
-
-static void dump_asi(AVISTREAMINFO &a) {
-  int i;
-  char *fcc_type = (char *)&a.fcc_type;
-  char *fcc_handler = (char *)&a.fcc_handler;
-  
-  fprintf(stdout, "[asi] fcc_type '%c%c%c%c' fcc_handler '%c%c%c%c'\n", 
-          fcc_type[0], fcc_type[1], fcc_type[2], fcc_type[3], 
-          fcc_handler[0], fcc_handler[1], fcc_handler[2], fcc_handler[3]);
-  fprintf(stdout, "[asi] flags %u, caps %u, prio %u, lang %u\n",
-          a.dw_flags, a.dw_caps, a.w_priority, a.w_language);
-  fprintf(stdout, "[asi] scale %u, rate %u, start %u, length %u\n",
-          a.dw_scale, a.dw_rate, a.dw_start, a.dw_length);
-  fprintf(stdout, "[asi] ini_fr %u, sug_b_s %u, qual %u, sam_si %u\n",
-          a.dw_initial_frames, a.dw_suggested_buffer_size, a.dw_quality,
-          a.dw_sample_size);
-  fprintf(stdout, "[asi] left %u, top %u, right %u, bottom %u\n",
-          a.dw_left, a.dw_top, a.dw_right, a.dw_bottom);
-  fprintf(stdout, "[asi] edit_count %u, format_change_count %u\n",
-          a.dw_edit_count, a.dw_format_change_count);
-
-  fprintf(stdout, "[asi] sz_name '");
-  for (i = 0; (i < 64) && a.sz_name[i]; i++)
-    fprintf(stdout, "%c", a.sz_name[i]);
-  fprintf(stdout, "'\n\n");
-}
-
-static void dump_wfe(WAVEFORMATEX &w) {
-  int i;
-  
-  fprintf(stdout, "[wfe] format 0x%04x, channels %u, samp/sec %u\n",
-          w.w_format_tag, w.n_channels, w.n_samples_per_sec);
-  fprintf(stdout, "[wfe] avg b/s %u, block align %u, bits/sam %u\n",
-          w.n_avg_bytes_per_sec, w.n_block_align, w.w_bits_per_sample);
-  fprintf(stdout, "[wfe] size %u, data %p\n", w.cb_size, w.data);
-  if (w.data != NULL) {
-    fprintf(stdout, "[wfe] ");
-    for (i = 0; i < w.cb_size; i++) {
-      unsigned char c = ((unsigned char *)w.data)[i];
-      fprintf(stdout, "%x%x ", (c & 0xf0) >> 4, c & 0x0f);
-    }
-    fprintf(stdout, "\n");
-  }
-  fprintf(stdout, "\n");
-}
-#endif // DEBUG
 
 /*
  * allocates and initializes local storage for a particular
@@ -175,11 +153,6 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
     throw error_c(s);
   }
 
-#ifdef DEBUG  
-  dump_asi(avi->avi_stream_info);
-  dump_bih(avi->bitmap_info_header);
-#endif
-  
   if (astreams != NULL)
     this->astreams = (unsigned char *)strdup((char *)astreams);
   else
@@ -233,7 +206,10 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
 
     if (nfourcc != NULL)
       codec = nfourcc;
-    vpacketizer = new video_packetizer_c(codec, AVI_frame_rate(avi),
+    vpacketizer = new video_packetizer_c(avi->bitmap_info_header,
+                                         avi->bitmap_info_header == NULL ? 0 : 
+                                           sizeof(BITMAPINFOHEADER),
+                                         codec, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
@@ -243,6 +219,10 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
   } else
     vpacketizer = NULL;
 
+#ifdef DEBUG  
+  dump_bih(avi->bitmap_info_header);
+#endif
+  
   memcpy(&async, nasync, sizeof(audio_sync_t));
   memcpy(&range, nrange, sizeof(range_t));
   ademuxers = NULL;
@@ -324,9 +304,6 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   while ((append_to != NULL) && (append_to->next != NULL))
     append_to = append_to->next;
   AVI_set_audio_track(avi, aid);
-#ifdef DEBUG
-  dump_wfe(avi->wave_format_ex[aid]);
-#endif
   demuxer = (avi_demuxer_t *)malloc(sizeof(avi_demuxer_t));
   if (demuxer == NULL)
     die("malloc");
@@ -352,7 +329,10 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new mp3_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new mp3_packetizer_c(avi->wave_format_ex[aid],
+                                                 avi->wave_format_ex[aid] ?
+                                                   sizeof(WAVEFORMATEX) : 0,
+                                                 demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
                                                  &async, &range);
@@ -379,6 +359,10 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
     ademuxers = demuxer;
   else
     append_to->next = demuxer;
+
+#ifdef DEBUG
+  dump_wfe(avi->wave_format_ex[aid]);
+#endif
 
   return 0;
 }
