@@ -1,5 +1,7 @@
 2004-10-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: Made mmg's main window properly resizable.
+
 	* mkvmerge: Rewrote the code for the external timecode files. This
 	also fixes bug 99: The durations for the individual tracks were
 	not correct for those tracks for which --timecodes was used.
