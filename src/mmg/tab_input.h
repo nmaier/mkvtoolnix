@@ -83,6 +83,7 @@ public:
   tab_input(wxWindow *parent);
 
   void on_add_file(wxCommandEvent &evt);
+  void add_file(const wxString &file_name);
   void on_remove_file(wxCommandEvent &evt);
   void on_move_file_up(wxCommandEvent &evt);
   void on_move_file_down(wxCommandEvent &evt);

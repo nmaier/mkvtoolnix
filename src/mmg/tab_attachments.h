@@ -51,6 +51,7 @@ public:
   tab_attachments(wxWindow *parent);
 
   void on_add_attachment(wxCommandEvent &evt);
+  void add_attachment(const wxString &file_name);
   void on_remove_attachment(wxCommandEvent &evt);
   void on_attachment_selected(wxCommandEvent &evt);
   void on_description_changed(wxCommandEvent &evt);

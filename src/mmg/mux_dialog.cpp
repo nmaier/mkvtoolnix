@@ -55,7 +55,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
            wxSize(500, 520),
 #endif
            wxCAPTION) {
-  wxChar c;
+  char c;
   string arg_utf8;
   long value;
   wxString line, tmp;
@@ -151,7 +151,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
     while (app->Pending())
       app->Dispatch();
 
-    if ((c == wxT('\n')) || (c == wxT('\r')) || out->Eof()) {
+    if ((c == '\n') || (c == '\r') || out->Eof()) {
       if (line.Find(wxT("Warning:")) == 0)
         tc_warnings->AppendText(line + wxT("\n"));
       else if (line.Find(wxT("Error:")) == 0)
@@ -167,8 +167,12 @@ mux_dialog::mux_dialog(wxWindow *parent):
       } else if (line.Length() > 0)
         tc_output->AppendText(line + wxT("\n"));
       line = wxT("");
-    } else if ((unsigned char)c != 0xff)
-      line.Append(c);
+    } else if ((unsigned char)c != 0xff) {
+      char s[2];
+      s[0] = c;
+      s[1] = 0;
+      line.Append(wxU(s));
+    }
 
     if (out->Eof())
       break;

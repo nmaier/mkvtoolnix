@@ -22,8 +22,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
-#include "wx/notebook.h"
+#include "wx/dnd.h"
 #include "wx/listctrl.h"
+#include "wx/notebook.h"
 #include "wx/statline.h"
 
 #include "common.h"
@@ -32,6 +33,22 @@
 #include "tab_attachments.h"
 
 vector<mmg_attachment_t> attachments;
+
+class attachments_drop_target_c: public wxFileDropTarget {
+private:
+  tab_attachments *owner;
+public:
+  attachments_drop_target_c(tab_attachments *n_owner):
+    owner(n_owner) {};
+  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
+    int i;
+
+    for (i = 0; i < files.Count(); i++)
+      owner->add_attachment(files[i]);
+
+    return true;
+  }
+};
 
 tab_attachments::tab_attachments(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
@@ -90,6 +107,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   t_get_entries.SetOwner(this, ID_T_ATTACHMENTVALUES);
   t_get_entries.Start(333);
+
+  SetDropTarget(new attachments_drop_target_c(this));
 }
 
 void
@@ -101,42 +120,47 @@ tab_attachments::enable(bool e) {
 
 void
 tab_attachments::on_add_attachment(wxCommandEvent &evt) {
-  mmg_attachment_t attch;
-  wxString name, ext;
-  uint32_t i, j;
-  vector<wxString> extensions;
-
   wxFileDialog dlg(NULL, wxT("Choose an attachment file"), last_open_dir,
                    wxT(""), wxT(ALLFILES), wxOPEN);
 
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    attch.file_name = new wxString(dlg.GetPath());
-    name = dlg.GetFilename();
-    ext = name.AfterLast(wxT('.'));
-    name += wxString(wxT(" (")) + last_open_dir + wxT(")");
-    lb_attachments->Append(name);
-    attch.mime_type = NULL;
-    if (ext.Length() > 0) {
-      for (i = 0; (mime_types[i].name != NULL) && (attch.mime_type == NULL);
-           i++) {
-        if (mime_types[i].extensions[0] == 0)
-          continue;
-        extensions = split(wxU(mime_types[i].extensions), wxU(" "));
-        for (j = 0; j < extensions.size(); j++)
-          if (!wxStricmp(extensions[j], ext)) {
-            attch.mime_type = new wxString(wxU(mime_types[i].name));
-            break;
-          }
-      }
-    }
-    if (attch.mime_type == NULL)
-      attch.mime_type = new wxString(wxT(""));
-    attch.description = new wxString(wxT(""));
-    attch.style = 0;
-
-    attachments.push_back(attch);
+    add_attachment(dlg.GetPath());
   }
+}
+
+void
+tab_attachments::add_attachment(const wxString &file_name) {
+  mmg_attachment_t attch;
+  wxString name, ext;
+  uint32_t i, j;
+  vector<wxString> extensions;
+
+  attch.file_name = new wxString(file_name);
+  name = file_name.AfterLast(wxT(PSEP));
+  ext = name.AfterLast(wxT('.'));
+  name += wxString(wxT(" (")) + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
+  lb_attachments->Append(name);
+  attch.mime_type = NULL;
+  if (ext.Length() > 0) {
+    for (i = 0; (mime_types[i].name != NULL) && (attch.mime_type == NULL);
+         i++) {
+      if (mime_types[i].extensions[0] == 0)
+        continue;
+      extensions = split(wxU(mime_types[i].extensions), wxU(" "));
+      for (j = 0; j < extensions.size(); j++)
+        if (!wxStricmp(extensions[j], ext)) {
+          attch.mime_type = new wxString(wxU(mime_types[i].name));
+          break;
+        }
+    }
+  }
+  if (attch.mime_type == NULL)
+    attch.mime_type = new wxString(wxT(""));
+  attch.description = new wxString(wxT(""));
+  attch.style = 0;
+
+  attachments.push_back(attch);
 }
 
 void

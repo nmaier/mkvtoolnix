@@ -25,8 +25,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
-#include "wx/notebook.h"
+#include "wx/dnd.h"
 #include "wx/listctrl.h"
+#include "wx/notebook.h"
 #include "wx/statline.h"
 
 #include "common.h"
@@ -41,6 +42,22 @@ using namespace std;
 wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
 bool title_was_present = false;
+
+class input_drop_target_c: public wxFileDropTarget {
+private:
+  tab_input *owner;
+public:
+  input_drop_target_c(tab_input *n_owner):
+    owner(n_owner) {};
+  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
+    int i;
+
+    for (i = 0; i < files.Count(); i++)
+      owner->add_file(files[i]);
+
+    return true;
+  }
+};
 
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
@@ -347,6 +364,8 @@ tab_input::tab_input(wxWindow *parent):
 
   value_copy_timer.SetOwner(this, ID_T_INPUTVALUES);
   value_copy_timer.Start(333);
+
+  SetDropTarget(new input_drop_target_c(this));
 }
 
 void
@@ -474,13 +493,7 @@ from_utf8(const wxString &src) {
 
 void
 tab_input::on_add_file(wxCommandEvent &evt) {
-  mmg_file_t file;
-  wxString file_name, name, command, id, type, exact, media_files;
-  wxString video_track_name;
-  wxArrayString output, errors;
-  vector<wxString> args, pair;
-  int result, pos;
-  unsigned int i, k;
+  wxString media_files;
 
   media_files = wxT("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;");
   if (capabilities[wxT("FLAC")] == wxT("true"))
@@ -519,171 +532,181 @@ tab_input::on_add_file(wxCommandEvent &evt) {
 
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    file_name = dlg.GetPath();
+    add_file(dlg.GetPath());
+  }
+}
 
-    command = wxT("\"") + mkvmerge_path + wxT("\" --identify-verbose \"") +
-      file_name + wxT("\"");
-    result = wxExecute(command, output, errors);
-    if ((result < 0) || (result > 1)) {
-      name.Printf(wxT("'mkvmerge -i' failed. Return code: %d\n\n"), result);
-      for (i = 0; i < output.Count(); i++)
-        name += break_line(output[i]) + wxT("\n");
-      name += wxT("\n");
-      for (i = 0; i < errors.Count(); i++)
-        name += break_line(errors[i]) + wxT("\n");
-      wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
-                   wxICON_ERROR);
-      return;
-    } else if (result > 0) {
-      name.Printf(wxT("'mkvmerge -i' failed. Return code: %d. Errno: %d "
-                      "(%s).\nMake sure that you've selected a mkvmerge "
-                      "executable on the 'settings' tab."), result, errno,
-                  wxUCS(strerror(errno)));
-      wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
-                   wxICON_ERROR);
-      return;
-    }
+void
+tab_input::add_file(const wxString &file_name) {
+  mmg_file_t file;
+  wxString name, command, id, type, exact, video_track_name;
+  wxArrayString output, errors;
+  vector<wxString> args, pair;
+  int result, pos;
+  unsigned int i, k;
 
-    memset(&file, 0, sizeof(mmg_file_t));
-    file.tracks = new vector<mmg_track_t>;
-    file.title = new wxString;
+  command = wxT("\"") + mkvmerge_path + wxT("\" --identify-verbose \"") +
+    file_name + wxT("\"");
+  result = wxExecute(command, output, errors);
+  if ((result < 0) || (result > 1)) {
+    name.Printf(wxT("'mkvmerge -i' failed. Return code: %d\n\n"), result);
+    for (i = 0; i < output.Count(); i++)
+      name += break_line(output[i]) + wxT("\n");
+    name += wxT("\n");
+    for (i = 0; i < errors.Count(); i++)
+      name += break_line(errors[i]) + wxT("\n");
+    wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
+                 wxICON_ERROR);
+    return;
+  } else if (result > 0) {
+    name.Printf(wxT("'mkvmerge -i' failed. Return code: %d. Errno: %d "
+                    "(%s).\nMake sure that you've selected a mkvmerge "
+                    "executable on the 'settings' tab."), result, errno,
+                wxUCS(strerror(errno)));
+    wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
+                 wxICON_ERROR);
+    return;
+  }
 
-    for (i = 0; i < output.Count(); i++) {
-      if (output[i].Find(wxT("Track")) == 0) {
-        wxString info;
-        mmg_track_t track;
+  memset(&file, 0, sizeof(mmg_file_t));
+  file.tracks = new vector<mmg_track_t>;
+  file.title = new wxString;
 
-        memset(&track, 0, sizeof(mmg_track_t));
-        id = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).
-          BeforeFirst(wxT(':'));
-        type = output[i].AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).
-          RemoveLast();
-        exact = output[i].AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
-        info = output[i].AfterFirst(wxT('[')).BeforeLast(wxT(']'));
-        if (type == wxT("audio"))
-          track.type = 'a';
-        else if (type == wxT("video"))
-          track.type = 'v';
-        else if (type == wxT("subtitles"))
-          track.type = 's';
-        else
-          track.type = '?';
-        parse_int(wxMB(id), track.id);
-        track.ctype = new wxString(exact);
-        track.enabled = true;
-        track.language = new wxString(wxT("none"));
-        track.sub_charset = new wxString(wxT("default"));
-        track.cues = new wxString(wxT("default"));
-        track.track_name = new wxString(wxT(""));
-        track.delay = new wxString(wxT(""));
-        track.stretch = new wxString(wxT(""));
-        track.tags = new wxString(wxT(""));
-        track.aspect_ratio = new wxString(wxT(""));
-        track.dwidth = new wxString(wxT(""));
-        track.dheight = new wxString(wxT(""));
-        track.fourcc = new wxString(wxT(""));
-        track.compression = new wxString(wxT(""));
-        track.timecodes = new wxString(wxT(""));
+  for (i = 0; i < output.Count(); i++) {
+    if (output[i].Find(wxT("Track")) == 0) {
+      wxString info;
+      mmg_track_t track;
 
-        if (info.length() > 0) {
-          args = split(info, wxU(" "));
-          for (k = 0; k < args.size(); k++) {
-            pair = split(args[k], wxU(":"), 2);
-            if (pair.size() != 2)
-              continue;
-            if (pair[0] == wxT("track_name")) {
-              *track.track_name = from_utf8(unescape(pair[1]));
-              track.track_name_was_present = true;
-            } else if (pair[0] == wxT("language"))
-              *track.language = unescape(pair[1]);
-            else if (pair[0] == wxT("display_dimensions")) {
-              vector<wxString> dims;
-              int64_t width, height;
+      memset(&track, 0, sizeof(mmg_track_t));
+      id = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).
+        BeforeFirst(wxT(':'));
+      type = output[i].AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).
+        RemoveLast();
+      exact = output[i].AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
+      info = output[i].AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+      if (type == wxT("audio"))
+        track.type = 'a';
+      else if (type == wxT("video"))
+        track.type = 'v';
+      else if (type == wxT("subtitles"))
+        track.type = 's';
+      else
+        track.type = '?';
+      parse_int(wxMB(id), track.id);
+      track.ctype = new wxString(exact);
+      track.enabled = true;
+      track.language = new wxString(wxT("none"));
+      track.sub_charset = new wxString(wxT("default"));
+      track.cues = new wxString(wxT("default"));
+      track.track_name = new wxString(wxT(""));
+      track.delay = new wxString(wxT(""));
+      track.stretch = new wxString(wxT(""));
+      track.tags = new wxString(wxT(""));
+      track.aspect_ratio = new wxString(wxT(""));
+      track.dwidth = new wxString(wxT(""));
+      track.dheight = new wxString(wxT(""));
+      track.fourcc = new wxString(wxT(""));
+      track.compression = new wxString(wxT(""));
+      track.timecodes = new wxString(wxT(""));
 
-              dims = split(pair[1], wxU("x"));
-              if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) &&
-                  parse_int(wxMB(dims[1]), height)) {
-                track.dwidth->Printf(wxT("%d"), (int)width);
-                track.dheight->Printf(wxT("%d"), (int)height);
-                track.display_dimensions_selected = true;
-              }
-            }
-          }
-        }
+      if (info.length() > 0) {
+        args = split(info, wxU(" "));
+        for (k = 0; k < args.size(); k++) {
+          pair = split(args[k], wxU(":"), 2);
+          if (pair.size() != 2)
+            continue;
+          if (pair[0] == wxT("track_name")) {
+            *track.track_name = from_utf8(unescape(pair[1]));
+            track.track_name_was_present = true;
+          } else if (pair[0] == wxT("language"))
+            *track.language = unescape(pair[1]);
+          else if (pair[0] == wxT("display_dimensions")) {
+            vector<wxString> dims;
+            int64_t width, height;
 
-        if ((track.type == 'v') && (track.track_name->length() > 0))
-          video_track_name = *track.track_name;
-
-        file.tracks->push_back(track);
-
-      } else if ((pos = output[i].Find(wxT("container:"))) > 0) {
-        wxString container, info;
-
-        container = output[i].Mid(pos + 11).BeforeFirst(wxT(' '));
-        info = output[i].Mid(pos + 11).AfterFirst(wxT('[')).
-          BeforeLast(wxT(']'));
-        if (container == wxT("AAC"))
-          file.container = TYPEAAC;
-        else if (container == wxT("AC3"))
-          file.container = TYPEAC3;
-        else if (container == wxT("AVI"))
-          file.container = TYPEAVI;
-        else if (container == wxT("DTS"))
-          file.container = TYPEDTS;
-        else if (container == wxT("Matroska"))
-          file.container = TYPEMATROSKA;
-        else if (container == wxT("MP2/MP3"))
-          file.container = TYPEMP3;
-        else if (container == wxT("Ogg/OGM"))
-          file.container = TYPEOGM;
-        else if (container == wxT("Quicktime/MP4"))
-          file.container = TYPEQTMP4;
-        else if (container == wxT("RealMedia"))
-          file.container = TYPEREAL;
-        else if (container == wxT("SRT"))
-          file.container = TYPESRT;
-        else if (container == wxT("SSA/ASS"))
-          file.container = TYPESSA;
-        else if (container == wxT("VobSub"))
-          file.container = TYPEVOBSUB;
-        else if (container == wxT("WAV"))
-          file.container = TYPEWAV;
-        else
-          file.container = TYPEUNKNOWN;
-
-        if (info.length() > 0) {
-          args = split(info, wxU(" "));
-          for (k = 0; k < args.size(); k++) {
-            pair = split(args[k], wxU(":"), 2);
-            if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
-              *file.title = from_utf8(unescape(pair[1]));
-              title_was_present = true;
+            dims = split(pair[1], wxU("x"));
+            if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) &&
+                parse_int(wxMB(dims[1]), height)) {
+              track.dwidth->Printf(wxT("%d"), (int)width);
+              track.dheight->Printf(wxT("%d"), (int)height);
+              track.display_dimensions_selected = true;
             }
           }
         }
       }
+
+      if ((track.type == 'v') && (track.track_name->length() > 0))
+        video_track_name = *track.track_name;
+
+      file.tracks->push_back(track);
+
+    } else if ((pos = output[i].Find(wxT("container:"))) > 0) {
+      wxString container, info;
+
+      container = output[i].Mid(pos + 11).BeforeFirst(wxT(' '));
+      info = output[i].Mid(pos + 11).AfterFirst(wxT('[')).
+        BeforeLast(wxT(']'));
+      if (container == wxT("AAC"))
+        file.container = TYPEAAC;
+      else if (container == wxT("AC3"))
+        file.container = TYPEAC3;
+      else if (container == wxT("AVI"))
+        file.container = TYPEAVI;
+      else if (container == wxT("DTS"))
+        file.container = TYPEDTS;
+      else if (container == wxT("Matroska"))
+        file.container = TYPEMATROSKA;
+      else if (container == wxT("MP2/MP3"))
+        file.container = TYPEMP3;
+      else if (container == wxT("Ogg/OGM"))
+        file.container = TYPEOGM;
+      else if (container == wxT("Quicktime/MP4"))
+        file.container = TYPEQTMP4;
+      else if (container == wxT("RealMedia"))
+        file.container = TYPEREAL;
+      else if (container == wxT("SRT"))
+        file.container = TYPESRT;
+      else if (container == wxT("SSA/ASS"))
+        file.container = TYPESSA;
+      else if (container == wxT("VobSub"))
+        file.container = TYPEVOBSUB;
+      else if (container == wxT("WAV"))
+        file.container = TYPEWAV;
+      else
+        file.container = TYPEUNKNOWN;
+
+      if (info.length() > 0) {
+        args = split(info, wxU(" "));
+        for (k = 0; k < args.size(); k++) {
+          pair = split(args[k], wxU(":"), 2);
+          if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
+            *file.title = from_utf8(unescape(pair[1]));
+            title_was_present = true;
+          }
+        }
+      }
     }
-
-    if (file.tracks->size() == 0) {
-      delete file.tracks;
-      wxMessageBox(wxT("The input file '") + dlg.GetPath() +
-                   wxT("' does not contain any tracks."),
-                   wxT("No tracks found"));
-      return;
-    }
-
-    name = dlg.GetFilename();
-    name += wxT(" (") + last_open_dir + wxT(")");
-    lb_input_files->Append(name);
-
-    file.file_name = new wxString(dlg.GetPath());
-    mdlg->set_title_maybe(*file.title);
-    if ((file.container == TYPEOGM) &&
-        (video_track_name.length() > 0))
-      mdlg->set_title_maybe(video_track_name);
-    mdlg->set_output_maybe(*file.file_name);
-    files.push_back(file);
   }
+
+  if (file.tracks->size() == 0) {
+    delete file.tracks;
+    wxMessageBox(wxT("The input file '") + file_name +
+                 wxT("' does not contain any tracks."),
+                 wxT("No tracks found"));
+    return;
+  }
+
+  name = file_name.AfterLast(wxT(PSEP));
+  name += wxT(" (") + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
+  lb_input_files->Append(name);
+
+  file.file_name = new wxString(file_name);
+  mdlg->set_title_maybe(*file.title);
+  if ((file.container == TYPEOGM) &&
+      (video_track_name.length() > 0))
+    mdlg->set_title_maybe(video_track_name);
+  mdlg->set_output_maybe(*file.file_name);
+  files.push_back(file);
 }
 
 void

@@ -23,8 +23,9 @@
 #include <stdio.h>
 
 #include "wx/wx.h"
-#include "wx/notebook.h"
+#include "wx/dnd.h"
 #include "wx/listctrl.h"
+#include "wx/notebook.h"
 #include "wx/statline.h"
 
 #include <ebml/EbmlStream.h>
@@ -43,6 +44,19 @@
 using namespace std;
 using namespace libebml;
 using namespace libmatroska;
+
+class chapters_drop_target_c: public wxFileDropTarget {
+private:
+  tab_chapters *owner;
+public:
+  chapters_drop_target_c(tab_chapters *n_owner):
+    owner(n_owner) {};
+  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
+    owner->load(files[0]);
+
+    return true;
+  }
+};
 
 #define FINDFIRST(p, c) (static_cast<c *> \
   (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
@@ -318,6 +332,8 @@ tab_chapters::tab_chapters(wxWindow *parent,
   source_is_simple_format = false;
 
   no_update = false;
+
+  SetDropTarget(new chapters_drop_target_c(this));
 }
 
 tab_chapters::~tab_chapters() {

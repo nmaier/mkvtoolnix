@@ -1,3 +1,10 @@
+2004-05-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: new feature: Implement drag'n'drop of files onto the input,
+	attachment and chapter tabs. For the input and attachment tabs it
+	works like pressing the 'add' button. On the chapters tab it works
+	like calling 'Chapter Editor -> Open'.
+
 2004-05-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo/mmg: Enabled compilation with wxWidgets 2.5 and Unicode
