@@ -33,8 +33,8 @@ wxString last_open_dir;
 vector<mmg_file_t> *files;
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI", wxPoint(0, 0),
-                                  wxSize(520, 600), wxCAPTION |
-                                  wxMINIMIZE_BOX | wxSYSTEM_MENU) {
+                                  wxSize(520, 700),
+                                  wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
   wxBoxSizer *bs_main = new wxBoxSizer(wxVERTICAL);
   this->SetSizer(bs_main);
   this->SetAutoLayout(true);
@@ -50,17 +50,44 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI", wxPoint(0, 0),
 
   wxStaticBox *sb_low = new wxStaticBox(this, -1, _("Output filename"));
   wxStaticBoxSizer *sbs_low = new wxStaticBoxSizer(sb_low, wxHORIZONTAL);
-  bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+  bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
   tc_output =
     new wxTextCtrl(this, ID_TC_OUTPUT, _(""), wxDefaultPosition,
                    wxSize(400, -1), 0);
-  sbs_low->Add(tc_output, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+  sbs_low->Add(tc_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   b_browse_output =
     new wxButton(this, ID_B_BROWSEOUTPUT, _("Browse"), wxDefaultPosition,
                  wxDefaultSize, 0);
-  sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+  sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+  wxStaticBox *sb_low2 = new wxStaticBox(this, -1, _("Command line"));
+  wxStaticBoxSizer *sbs_low2 = new wxStaticBoxSizer(sb_low2, wxHORIZONTAL);
+  bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+  tc_cmdline =
+    new wxTextCtrl(this, ID_TC_CMDLINE, _(""), wxDefaultPosition,
+                   wxSize(490, 50), wxTE_READONLY | wxTE_WORDWRAP);
+  sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+  wxBoxSizer *bs_low3 = new wxBoxSizer(wxHORIZONTAL);
+  bs_main->Add(bs_low3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+  b_run = new wxButton(this, ID_B_RUN, _("Run"), wxDefaultPosition,
+                       wxDefaultSize, 0);
+  bs_low3->Add(b_run, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+  bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+  b_save_cmdline = new wxButton(this, ID_B_SAVECMDLINE, _("Save command line"),
+                                wxDefaultPosition, wxDefaultSize, 0);
+  bs_low3->Add(b_save_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+  bs_low3->Add(20, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+  b_copy_to_clipboard = new wxButton(this, ID_B_COPYTOCLIPBOARD,
+                                     _("Copy to clipboard"), wxDefaultPosition,
+                                     wxDefaultSize, 0);
+  bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   files = new vector<mmg_file_t>;
   last_open_dir = "";
@@ -72,6 +99,15 @@ void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
                       "All Files (*.*)|*.*"), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK)
     tc_output->SetValue(dlg.GetPath());
+}
+
+void mmg_dialog::on_run(wxCommandEvent &evt) {
+}
+
+void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
+}
+
+void mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
 }
 
 class mmg_app: public wxApp {

@@ -70,8 +70,8 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0);
   wxString *cob_language_strings = NULL;
   cob_language =
-    new wxComboBox(this, ID_CB_LANGUAGE, _(""), wxPoint(120, 285),
-                   wxSize(100, -1), 0, cob_language_strings,
+    new wxComboBox(this, ID_CB_LANGUAGE, _(""), wxPoint(90, 285),
+                   wxSize(130, -1), 0, cob_language_strings,
                    wxCB_DROPDOWN | wxCB_SORT | wxCB_READONLY);
   cob_language->SetToolTip(_("Language for this track. Select one of the "
                              "ISO639-2 language codes."));
@@ -91,8 +91,8 @@ tab_input::tab_input(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Delay (in ms):"),
                    wxPoint(255, 285), wxDefaultSize, 0);
   tc_delay =
-    new wxTextCtrl(this, ID_TC_DELAY, _(""), wxPoint(370, 285),
-                   wxSize(100, -1), 0);
+    new wxTextCtrl(this, ID_TC_DELAY, _(""), wxPoint(355, 285),
+                   wxSize(130, -1), 0);
   tc_delay->SetToolTip(_("Delay this track by a couple of ms. Can be "
                          "negative. Only applies to audio and subtitle tracks."
                          " Some audio formats cannot be delayed at the "
@@ -100,15 +100,15 @@ tab_input::tab_input(wxWindow *parent):
   new wxStaticText(this, wxID_STATIC, _("Track name:"), wxPoint(5, 310),
                    wxDefaultSize, 0);
   tc_track_name =
-    new wxTextCtrl(this, ID_TC_TRACKNAME, _(""), wxPoint(120, 310),
-                   wxSize(100, -1), 0);
+    new wxTextCtrl(this, ID_TC_TRACKNAME, _(""), wxPoint(90, 310),
+                   wxSize(130, -1), 0);
   tc_track_name->SetToolTip(_("Name for this track, e.g. \"director's "
                               "comments\"."));
   new wxStaticText(this, wxID_STATIC, _("Stretch by:"), wxPoint(255, 310),
                    wxDefaultSize, 0);
   tc_stretch =
-    new wxTextCtrl(this, ID_TC_STRETCH, _(""), wxPoint(370, 310),
-                   wxSize(100, -1), 0);
+    new wxTextCtrl(this, ID_TC_STRETCH, _(""), wxPoint(355, 310),
+                   wxSize(130, -1), 0);
   tc_stretch->SetToolTip(_("Stretch the audio or subtitle track by a factor. "
                            "This should be a positive floating point number. "
                            "Not all formats can be stretched at the moment."));
@@ -116,8 +116,8 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0);
   wxString *cob_cues_strings = NULL;
   cob_cues =
-    new wxComboBox(this, ID_CB_CUES, _(""), wxPoint(120, 335),
-                   wxSize(100, -1), 0, cob_cues_strings, wxCB_DROPDOWN |
+    new wxComboBox(this, ID_CB_CUES, _(""), wxPoint(90, 335),
+                   wxSize(130, -1), 0, cob_cues_strings, wxCB_DROPDOWN |
                    wxCB_READONLY);
   cob_cues->SetToolTip(_("Selects for which blocks mkvmerge will produce "
                          "index entries ( = cue entries). \"default\" is a "
@@ -130,8 +130,8 @@ tab_input::tab_input(wxWindow *parent):
                    wxPoint(255, 335), wxDefaultSize, 0);
   wxString *cob_sub_charsetStrings = NULL;
   cob_sub_charset =
-    new wxComboBox(this, ID_CB_SUBTITLECHARSET, _(""), wxPoint(370, 335),
-                   wxDefaultSize, 0, cob_sub_charsetStrings,
+    new wxComboBox(this, ID_CB_SUBTITLECHARSET, _(""), wxPoint(355, 335),
+                   wxSize(130, -1), 0, cob_sub_charsetStrings,
                    wxCB_DROPDOWN|wxCB_SORT);
   cob_sub_charset->SetToolTip(_("Selects the character set a subtitle file "
                                 "was written with. Only needed for non-UTF "

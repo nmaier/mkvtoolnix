@@ -47,6 +47,10 @@ using namespace std;
 #define ID_CB_AACISSBR 10017
 #define ID_TC_TAGS 10018
 #define ID_B_BROWSETAGS 10019
+#define ID_B_RUN 10020
+#define ID_B_SAVECMDLINE 10021
+#define ID_B_COPYTOCLIPBOARD 10022
+#define ID_TC_CMDLINE 10023
 
 typedef struct {
   char type;
@@ -74,13 +78,16 @@ class mmg_dialog: public wxFrame {
   DECLARE_CLASS(mmg_dialog);
   DECLARE_EVENT_TABLE();
 protected:
-  wxButton *b_browse_output;
-  wxTextCtrl *tc_output;
+  wxButton *b_browse_output, *b_run, *b_save_cmdline, *b_copy_to_clipboard;
+  wxTextCtrl *tc_output, *tc_cmdline;
 
 public:
   mmg_dialog();
 
   void on_browse_output(wxCommandEvent &evt);
+  void on_run(wxCommandEvent &evt);
+  void on_save_cmdline(wxCommandEvent &evt);
+  void on_copy_to_clipboard(wxCommandEvent &evt);
 };
 
 class tab_input: public wxPanel {
