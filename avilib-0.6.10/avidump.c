@@ -44,11 +44,10 @@
 #endif
 
 //#define AVI_DEBUG
-
 #ifdef HAVE_ENDIAN_H
 # include <endian.h>
 #endif
-#if BYTE_ORDER == BIG_ENDIAN
+#if defined(BYTE_ORDER) && (BYTE_ORDER == BIG_ENDIAN)
 # define SWAP2(x) (((x>>8) & 0x00ff) |\
                    ((x<<8) & 0xff00))
 
@@ -75,7 +74,7 @@ typedef unsigned char boolean;
 /* Macro to convert expressions of form 'F','O','U','R' to
    numbers of type FOURCC: */
 
-#if BYTE_ORDER == BIG_ENDIAN
+#if defined(BYTE_ORDER) && (BYTE_ORDER == BIG_ENDIAN)
 # define MAKEFOURCC(a,b,c,d) ((((DWORD)a)<<24) | (((DWORD)b)<<16) | \
                               (((DWORD)c)<< 8) | ( (DWORD)d)      )
 #else
@@ -115,7 +114,7 @@ typedef unsigned char boolean;
 
 static void FOURCC2Str(FOURCC fcc, char* s)
 {
-#if BYTE_ORDER == BIG_ENDIAN
+#if defined(BYTE_ORDER) && (BYTE_ORDER == BIG_ENDIAN)
     s[0]=(fcc >> 24) & 0xFF;
     s[1]=(fcc >> 16) & 0xFF;
     s[2]=(fcc >>  8) & 0xFF;
