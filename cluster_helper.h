@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.1 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.2 2003/04/18 13:08:04 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -49,15 +49,15 @@ public:
   packet_t      *get_packet(int num);
   int            get_packet_count();
   int            render(IOCallback *out);
-  int            free_ref(int64_t pid, void *source);
+  int            free_ref(int64_t ref_timecode, void *source);
   int            free_clusters();
   int            get_cluster_content_size();
   int64_t        get_max_timecode();
 
 private:
   int            find_cluster(KaxCluster *cluster);
-  ch_contents_t *find_packet_cluster(int64_t pid);
-  packet_t      *find_packet(int64_t pid);
+  ch_contents_t *find_packet_cluster(int64_t ref_timecode);
+  packet_t      *find_packet(int64_t ref_timecode);
   void           free_contents(ch_contents_t *clstr);
   void           check_clusters(int num);
 };

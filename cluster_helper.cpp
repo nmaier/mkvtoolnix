@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.3 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.4 2003/04/18 13:08:04 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,8 +27,8 @@
 
 #include "StdIOCallback.h"
 
-//#define walk_clusters() check_clusters(__LINE__)
-#define walk_clusters()
+#define walk_clusters() check_clusters(__LINE__)
+//#define walk_clusters()
 
 cluster_helper_c::cluster_helper_c() {
   num_clusters = 0;
@@ -203,7 +203,7 @@ int cluster_helper_c::render(IOCallback *out) {
                         *pack->data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
-      free_ref(pack->id - 1, pack->source);
+      free_ref(pack->timecode, pack->source);
     }
     if (new_group == NULL)
       new_group = last_block_group;
@@ -228,7 +228,7 @@ int cluster_helper_c::render(IOCallback *out) {
   return 1;
 }
 
-ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t pid) {
+ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode) {
   int i, k;
 
   if (clusters == NULL)
@@ -236,13 +236,13 @@ ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t pid) {
 
   for (i = 0; i < num_clusters; i++)
     for (k = 0; k < clusters[i]->num_packets; k++)
-      if (clusters[i]->packets[k]->id == pid)
+      if (clusters[i]->packets[k]->timecode == ref_timecode)
         return clusters[i];
 
   return NULL;
 }
 
-packet_t *cluster_helper_c::find_packet(int64_t pid) {
+packet_t *cluster_helper_c::find_packet(int64_t ref_timecode) {
   int i, k;
 
   if (clusters == NULL)
@@ -250,7 +250,7 @@ packet_t *cluster_helper_c::find_packet(int64_t pid) {
 
   for (i = 0; i < num_clusters; i++)
     for (k = 0; k < clusters[i]->num_packets; k++)
-      if (clusters[i]->packets[k]->id == pid)
+      if (clusters[i]->packets[k]->timecode == ref_timecode)
         return clusters[i]->packets[k];
 
   return NULL;
@@ -271,8 +271,8 @@ void cluster_helper_c::check_clusters(int num) {
       clstr = find_packet_cluster(p->bref);
       if (clstr == NULL) {
         fprintf(stderr, "Error: backward refenrece could not be resolved "
-                "(%lld -> %lld), id %lld. Called from line %d.\n",
-                p->timecode, p->bref, p->id, num);
+                "(%lld -> %lld). Called from line %d.\n",
+                p->timecode, p->bref, num);
         die("internal error");
       }
     }
@@ -295,7 +295,7 @@ int cluster_helper_c::free_clusters() {
   for (i = 0; i < num_clusters; i++) {
     for (k = 0; k < clusters[i]->num_packets; k++) {
       p = clusters[i]->packets[k];
-      if (((generic_packetizer_c *)p->source)->get_free_refs() >= p->id)
+      if (((generic_packetizer_c *)p->source)->get_free_refs() > p->timecode)
         p->superseeded = 1;
     }
   }
@@ -311,7 +311,7 @@ int cluster_helper_c::free_clusters() {
         clstr = find_packet_cluster(p->bref);
         if (clstr == NULL) {
           fprintf(stderr, "Error: backward refenrece could not be resolved "
-                  "(%llu).\n", p->bref);
+                  "(%lld).\n", p->bref);
           die("internal error");
         }
         clstr->is_referenced = 1;
@@ -362,8 +362,8 @@ int cluster_helper_c::free_clusters() {
   return 1;
 }
 
-int cluster_helper_c::free_ref(int64_t pid, void *source) {
-  ((generic_packetizer_c *)source)->set_free_refs(pid);
+int cluster_helper_c::free_ref(int64_t ref_timecode, void *source) {
+  ((generic_packetizer_c *)source)->set_free_refs(ref_timecode);
 
   return 1;
 }

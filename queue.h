@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.12 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: queue.h,v 1.13 2003/04/18 13:08:04 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,14 +28,14 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 typedef struct packet_t {
-  DataBuffer    *data_buffer;
+  DataBuffer *data_buffer;
   KaxBlockGroup *group;
-  KaxBlock      *block;
-  KaxCluster    *cluster;
+  KaxBlock *block;
+  KaxCluster *cluster;
   unsigned char *data;
-  int            length, superseeded;
-  int64_t        timecode, id, bref, fref;
-  void          *source;
+  int length, superseeded;
+  int64_t timecode, bref, fref;
+  void *source;
 } packet_t;
 
 // q_page_t is used internally only
@@ -53,14 +53,13 @@ public:
   q_c();
   virtual ~q_c();
     
-  virtual int64_t   add_packet(unsigned char *data, int lenth,
-                               int64_t timecode, int64_t bref = 0,
-                               int64_t fref = 0);
+  virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
+                          int64_t bref = 0, int64_t fref = 0);
   virtual packet_t *get_packet();
-  virtual int       packet_available();
-  virtual int64_t   get_smallest_timecode();
+  virtual int packet_available();
+  virtual int64_t get_smallest_timecode();
     
-  virtual long      get_queued_bytes();
+  virtual long get_queued_bytes();
 };
 
 #endif  // __QUEUE_H

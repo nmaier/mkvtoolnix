@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.18 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: p_video.h,v 1.19 2003/04/18 13:08:04 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,7 +34,7 @@ private:
   double         fps;
   int            width, height, bpp, packetno;
   int            frames_output, avi_compat_mode;
-  int64_t        last_id;
+  int64_t        ref_timecode;
 
 public:
   video_packetizer_c(double nfps, int nwidth, int nheight, int nbpp,

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.14 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: queue.cpp,v 1.15 2003/04/18 13:08:04 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,8 +30,6 @@
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
-
-int64_t q_c::id = 1;
 
 q_c::q_c() {
   first = NULL;
@@ -54,13 +52,12 @@ q_c::~q_c() {
   }
 }
 
-int64_t q_c::add_packet(unsigned char  *data, int length,
-                        int64_t timecode, int64_t bref,
-                        int64_t fref) {
+void q_c::add_packet(unsigned char  *data, int length, int64_t timecode,
+                     int64_t bref, int64_t fref) {
   q_page_t *qpage;
   
   if (data == NULL)
-    return 0;
+    return;
   if (timecode < 0)
     die("timecode < 0");
   qpage = (q_page_t *)malloc(sizeof(q_page_t));
@@ -79,16 +76,12 @@ int64_t q_c::add_packet(unsigned char  *data, int length,
   qpage->pack->bref = bref;
   qpage->pack->fref = fref;
   qpage->pack->source = this;
-  qpage->pack->id = id;
-  id++;
   qpage->next = NULL;
   if (current != NULL)
     current->next = qpage;
   if (first == NULL)
     first = qpage;
   current = qpage;
-
-  return id - 1;
 }
 
 packet_t *q_c::get_packet() {

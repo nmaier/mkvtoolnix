@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.21 2003/04/18 12:00:46 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.22 2003/04/18 13:08:04 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -45,7 +45,7 @@ video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
   avi_compat_mode = 1;
-  last_id = 1;
+  ref_timecode = -1;
   set_header();
 }
 
@@ -81,12 +81,15 @@ int video_packetizer_c::process(unsigned char *buf, int size,
   else
     timecode = old_timecode;
 
-  if ((flags & VFT_IFRAME) != 0)
-    // Add a key frame and save its ID so that we can reference it later.
-    last_id = add_packet(buf, size, timecode);
-  else
+  if ((flags & VFT_IFRAME) != 0) {
+    // Add a key frame and save its timecode so that we can reference it later.
+    add_packet(buf, size, timecode);
+    ref_timecode = timecode;
+  } else {
     // This is a P frame - let's reference the last frame.
-    last_id = add_packet(buf, size, timecode, last_id);
+    add_packet(buf, size, timecode, ref_timecode);
+    ref_timecode = timecode;
+  }
 
   if (num_frames > 1)
     fprintf(stdout, "Warning: video_packetizer: num_frames > 1\n");
