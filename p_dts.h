@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_dts.h,v 1.6 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief class definition for the DTS output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

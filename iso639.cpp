@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: iso639.cpp,v 1.3 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id$
     \brief ISO639 language definitions, lookup functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */

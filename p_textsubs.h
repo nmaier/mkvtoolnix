@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.h,v 1.10 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief class definition for the simple text subtitle packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */

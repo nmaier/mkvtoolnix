@@ -14,7 +14,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.h,v 1.15 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief class definitions for the WAV reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

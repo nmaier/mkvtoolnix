@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.16 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.17 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief class definition for the AC3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

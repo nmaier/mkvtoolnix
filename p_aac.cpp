@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.8 2003/05/26 21:49:11 mosu Exp $
+    \version \$Id$
     \brief AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.59 2003/06/10 21:57:15 mosu Exp $
+    \version \$Id$
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief PCM output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

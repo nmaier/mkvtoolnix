@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.8 2003/05/20 06:30:25 mosu Exp $
+    \version \$Id$
     \brief subtitle helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */

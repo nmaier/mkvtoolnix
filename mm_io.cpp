@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mm_io.cpp,v 1.4 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id$
     \brief IO callback class implementation
     \author Moritz Bunkus <moritz@bunkus.org>
 */

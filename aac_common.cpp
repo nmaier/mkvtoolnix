@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: aac_common.cpp,v 1.5 2003/05/19 20:51:12 mosu Exp $
+    \version \$Id$
     \brief helper function for AAC data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

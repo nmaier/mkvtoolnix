@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.38 2003/06/06 20:56:28 mosu Exp $
+    \version \$Id$
     \brief video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

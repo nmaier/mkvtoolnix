@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp4.h,v 1.2 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id$
     \brief class definitions for the dummy MP4 reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

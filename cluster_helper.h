@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.10 2003/06/11 17:06:48 mosu Exp $
+    \version \$Id$
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */

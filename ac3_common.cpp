@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: ac3_common.cpp,v 1.5 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id$
     \brief helper function for AC3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

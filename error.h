@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: error.h,v 1.8 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id$
     \brief class definitions for the error exception class
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.28 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief MP3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

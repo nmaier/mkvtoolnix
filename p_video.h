@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.27 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief class definition for the video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

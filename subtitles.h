@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.h,v 1.4 2003/05/20 06:30:25 mosu Exp $
+    \version \$Id$
     \brief class definition for the subtitle helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */

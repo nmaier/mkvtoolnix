@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: dts_common.cpp,v 1.6 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id$
     \brief helper function for DTS data
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>

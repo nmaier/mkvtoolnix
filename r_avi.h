@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.17 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

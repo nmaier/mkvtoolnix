@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: matroska.h,v 1.13 2003/05/19 20:51:12 mosu Exp $
+    \version \$Id$
     \brief Definitions for the various Codec IDs
     \author Moritz Bunkus <moritz@bunkus.org>
 */

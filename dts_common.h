@@ -13,7 +13,7 @@
 
 /*!
   \file
-  \version \$Id: dts_common.h,v 1.7 2003/06/07 12:26:08 mosu Exp $
+  \version \$Id$
   \brief definitions and helper functions for DTS data
   \author Peter Niemayer <niemayer@isg.de>
   \author Moritz Bunkus <moritz@bunkus.org>

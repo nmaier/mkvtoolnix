@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: aac_common.h,v 1.4 2003/05/19 20:51:12 mosu Exp $
+    \version \$Id$
     \brief definitions and helper functions for AAC data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

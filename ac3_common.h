@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: ac3_common.h,v 1.3 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id$
     \brief definitions and helper functions for AC3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

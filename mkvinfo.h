@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.h,v 1.5 2003/06/10 21:57:15 mosu Exp $
+    \version \$Id$
     \brief definition of global variables and functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */

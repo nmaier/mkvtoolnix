@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief AC3 output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */

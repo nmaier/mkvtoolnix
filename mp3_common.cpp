@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mp3_common.cpp,v 1.8 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id$
     \brief helper functions for MP3 data
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.29 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */

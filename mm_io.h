@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mm_io.h,v 1.4 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id$
     \brief IO callback class definitions
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.17 2003/06/11 17:06:48 mosu Exp $
+    \version \$Id$
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.21 2003/05/29 18:50:03 mosu Exp $
+    \version \$Id$
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

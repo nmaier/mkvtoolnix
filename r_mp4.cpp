@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp4.cpp,v 1.3 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id$
     \brief MP4 identification class
     \author Moritz Bunkus <moritz@bunkus.org>
 */

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.18 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

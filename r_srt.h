@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.h,v 1.13 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief class definition for the Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */

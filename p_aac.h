@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.h,v 1.7 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id$
     \brief class definition for the AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
