@@ -37,7 +37,11 @@ using namespace libmatroska;
 
 void
 fix_mandatory_tag_elements(EbmlElement *e) {
-  if (dynamic_cast<KaxTagSimple *>(e) != NULL) {
+  if (dynamic_cast<KaxTag *>(e) != NULL) {
+    KaxTag &t = *static_cast<KaxTag *>(e);
+    GetChild<KaxTagTargets>(t);
+
+  } else if (dynamic_cast<KaxTagSimple *>(e) != NULL) {
     KaxTagSimple &s = *static_cast<KaxTagSimple *>(e);
     GetChild<KaxTagLangue>(s);
     GetChild<KaxTagDefault>(s);

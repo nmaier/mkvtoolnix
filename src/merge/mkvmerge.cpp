@@ -401,30 +401,22 @@ void
 parse_and_add_tags(const string &file_name) {
   KaxTags *tags;
   KaxTag *tag;
-  KaxTagTargets *targets;
-  bool found;
 
   tags = new KaxTags;
 
   parse_xml_tags(file_name, tags);
 
   while (tags->ListSize() > 0) {
-    tag = (KaxTag *)(*tags)[0];
-    targets = &GetChild<KaxTagTargets>(*tag);
-    found = true;
-    if (FINDFIRST(targets, KaxTagTrackUID) == NULL) {
-      *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
-        1;
-      found = false;
+    tag = dynamic_cast<KaxTag *>((*tags)[0]);
+    if (NULL != tag) {
+      fix_mandatory_tag_elements(tag);
+      if (!tag->CheckMandatory())
+        mxerror(_("Error parsing the tags in '%s': some mandatory "
+                  "elements are missing.\n"), file_name.c_str());
+      add_tags(tag);
     }
-    fix_mandatory_tag_elements(tag);
-    if (!tag->CheckMandatory())
-      mxerror(_("Error parsing the tags in '%s': some mandatory "
-                "elements are missing.\n"), file_name.c_str());
-    if (!found)
-      targets->Remove(targets->ListSize() - 1);
+
     tags->Remove(0);
-    add_tags(tag);
   }
 
   delete tags;
