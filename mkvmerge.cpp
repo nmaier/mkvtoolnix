@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.7 2003/02/17 11:33:50 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.8 2003/02/19 11:08:01 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -46,6 +46,7 @@
 #include "KaxClusterData.h"
 #include "KaxBlock.h"
 #include "KaxBlockAdditional.h"
+#include "KaxCues.h"
 
 #include "common.h"
 #include "queue.h"
@@ -795,6 +796,7 @@ void add_to_index(int serial, ogg_int64_t granulepos, int64_t filepos) {
 
 int write_packet(packet_t *pack, filelist_t *file, StdIOCallback *out) {
   KaxCluster cluster;
+  KaxCues dummy_cues;
   KaxClusterTimecode &timecode = GetChild<KaxClusterTimecode>(cluster);
   *(static_cast<EbmlUInteger *>(&timecode)) = 0;
   
@@ -805,7 +807,7 @@ int write_packet(packet_t *pack, filelist_t *file, StdIOCallback *out) {
     static_cast<KaxTrackEntry &>(*pack->source->track_entry);
   block.AddFrame(track_entry, pack->timestamp, data);
 
-  cluster.Render(static_cast<StdIOCallback &>(*out));
+  cluster.Render(static_cast<StdIOCallback &>(*out), dummy_cues);
 
   if (verbose > 1)
     fprintf(stdout, "timestamp %llu, size %d, written packet for %s (%s)\n",
