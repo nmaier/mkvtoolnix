@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.7 2003/06/08 15:38:03 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.8 2003/06/08 18:59:43 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -46,6 +46,9 @@ private:
   int64_t packet_num, timecode_offset;
   mm_io_c *out;
 public:
+  static vector<splitpoint_t *> splitpoints;
+
+public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
 
@@ -61,6 +64,8 @@ public:
   int free_clusters();
   int get_cluster_content_size();
   int64_t get_max_timecode();
+  void find_next_splitpoint();
+  int get_next_splitpoint();
 
 private:
   int find_cluster(KaxCluster *cluster);
@@ -68,7 +73,6 @@ private:
   packet_t *find_packet(int64_t ref_timecode);
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
-  void find_next_splitpoint();
 };
 
 extern cluster_helper_c *cluster_helper;

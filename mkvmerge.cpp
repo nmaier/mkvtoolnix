@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.91 2003/06/08 16:14:05 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.92 2003/06/08 18:59:43 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -80,6 +80,80 @@
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
 
+class bitvalue_c {
+private:
+  unsigned char *value;
+  int bitsize;
+public:
+  bitvalue_c(int nsize);
+  bitvalue_c(const bitvalue_c &src);
+  virtual ~bitvalue_c();
+
+  bitvalue_c &operator =(const bitvalue_c &src);
+  bool operator ==(const bitvalue_c &cmp) const;
+  unsigned char operator [](int index) const;
+
+  int size() const;
+  void generate_random();
+  unsigned char *data() const;
+};
+
+bitvalue_c::bitvalue_c(int nbitsize) {
+  assert(nbitsize > 0);
+  assert((nbitsize % 8) == 0);
+  bitsize = nbitsize;
+  value = (unsigned char *)safemalloc(bitsize / 8);
+  memset(value, 0, bitsize / 8);
+}
+
+bitvalue_c::bitvalue_c(const bitvalue_c &src) {
+  value = NULL;
+  *this = src;
+}
+
+bitvalue_c &bitvalue_c::operator =(const bitvalue_c &src) {
+  safefree(value);
+  bitsize = src.bitsize;
+  value = (unsigned char *)safememdup(src.value, bitsize / 8);
+
+  return *this;
+}
+
+bitvalue_c::~bitvalue_c() {
+  safefree(value);
+}
+
+bool bitvalue_c::operator ==(const bitvalue_c &cmp) const {
+  int i;
+
+  if (cmp.bitsize != bitsize)
+    return false;
+  for (i = 0; i < bitsize / 8; i++)
+    if (value[i] != cmp.value[i])
+      return false;
+  return true;
+}
+
+unsigned char bitvalue_c::operator [](int index) const {
+  assert((index >= 0) && (index < (bitsize / 8)));
+  return value[index];
+}
+
+int bitvalue_c::size() const {
+  return bitsize;
+}
+
+unsigned char *bitvalue_c::data() const {
+  return value;
+}
+
+void bitvalue_c::generate_random() {
+  int i;
+
+  for (i = 0; i < bitsize / 8; i++)
+    value[i] = (unsigned char)(255.0 * rand() / RAND_MAX);
+}
+
 typedef struct {
   char *ext;
   int   type;
@@ -145,6 +219,8 @@ int file_num = 1;
 int track_number = 1;
 
 mm_io_c *out;
+
+bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -509,7 +585,7 @@ static void parse_split(const char *arg) {
   split_by_time = false;
 }
 
-static void render_headers(mm_io_c *out) {
+static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
   EbmlHead head;
   int i;
 
@@ -538,6 +614,31 @@ static void render_headers(mm_io_c *out) {
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
       cstr_to_UTFstring(VERSIONINFO);
     GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
+
+    // Generate the segment UIDs.
+    if (first_file) {
+      seguid_current.generate_random();
+      if (!last_file)
+        seguid_next.generate_random();
+    } else {
+      seguid_prev = seguid_current;
+      seguid_current = seguid_next;
+      if (!last_file)
+        seguid_next.generate_random();
+    }
+
+    // Set the segment UIDs.
+    KaxSegmentUID &kax_seguid = GetChild<KaxSegmentUID>(*kax_infos);
+    kax_seguid.CopyBuffer(seguid_current.data(), 128 / 8);
+
+    if (!first_file) {
+      KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
+      kax_prevuid.CopyBuffer(seguid_prev.data(), 128 / 8);
+    }
+    if (!last_file) {
+      KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
+      kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
+    }
 
     kax_segment->WriteHead(*out, 5);
 
@@ -618,7 +719,8 @@ static void parse_args(int argc, char **argv) {
     }
 
   if (outfile == NULL) {
-    fprintf(stderr, "Error: no output files given.\n");
+    fprintf(stderr, "Error: no output file given.\n\n");
+    usage();
     exit(1);
   }
 
@@ -1196,12 +1298,15 @@ string create_output_name() {
   return s;
 }
 
-void create_next_output_file() {
+void create_next_output_file(bool last_file, bool first_file) {
   string this_outfile;
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
   kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
+
+  fprintf(stdout, "createnext: last: %s, first: %s\n", last_file ? "true" :
+          "false", first_file ? "true" : "false");
 
   if (pass == 1) {
     // Open the a dummy file.
@@ -1213,7 +1318,7 @@ void create_next_output_file() {
     }
 
     cluster_helper->set_output(out);
-    render_headers(out);
+    render_headers(out, last_file, first_file);
 
     return;
   }
@@ -1235,7 +1340,7 @@ void create_next_output_file() {
     fprintf(stdout, "Opened '%s\' for writing.\n", this_outfile.c_str());
 
   cluster_helper->set_output(out);
-  render_headers(out);
+  render_headers(out, last_file, first_file);
 
   file_num++;
 }
@@ -1362,8 +1467,6 @@ void main_loop() {
   }
 }
 
-extern vector<splitpoint_t *>splitpoints;
-
 int main(int argc, char **argv) {
   int i;
 
@@ -1380,15 +1483,15 @@ int main(int argc, char **argv) {
     create_readers();
 
     pass = 1;
-    create_next_output_file();
+    create_next_output_file(true, true);
     main_loop();
     finish_file();
 
     fprintf(stdout, "\nPass 2: merging the files. This will take even longer."
             "\n\n");
 
-    for (i = 0; i < splitpoints.size(); i++) {
-      splitpoint_t *sp = splitpoints[i];
+    for (i = 0; i < cluster_helper_c::splitpoints.size(); i++) {
+      splitpoint_t *sp = cluster_helper_c::splitpoints[i];
       fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, pn: %lld\n",
               i, sp->timecode, sp->filepos, sp->cues_size,
               sp->filepos + sp->cues_size, sp->packet_num);
@@ -1399,10 +1502,12 @@ int main(int argc, char **argv) {
 
     init_globals();
     cluster_helper = new cluster_helper_c();
+    cluster_helper->find_next_splitpoint();
     create_readers();
 
     pass = 2;
-    create_next_output_file();
+    create_next_output_file(cluster_helper->get_next_splitpoint() >= 
+                            cluster_helper_c::splitpoints.size(), true);
     main_loop();
     finish_file();
 
@@ -1411,7 +1516,7 @@ int main(int argc, char **argv) {
     create_readers();
 
     pass = 0;
-    create_next_output_file();
+    create_next_output_file(true, true);
     main_loop();
     finish_file();
   }

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.57 2003/06/07 14:30:10 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.58 2003/06/08 18:59:43 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -343,6 +343,36 @@ bool process_file(const char *file_name) {
               show_element(l2, 2, "Date: %s UTC", buffer);
             } else
               show_element(l2, 2, "Date (invalid, value: %d)", temptime);
+
+          } else if (EbmlId(*l2) == KaxSegmentUID::ClassInfos.GlobalId) {
+            KaxSegmentUID &uid = *static_cast<KaxSegmentUID *>(l2);
+            uid.ReadData(es->I_O());
+            char buffer[uid.GetSize() * 5 + 1];
+            const unsigned char *b = (const unsigned char *)&binary(uid);
+            buffer[0] = 0;
+            for (i = 0; i < uid.GetSize(); i++)
+              sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+            show_element(l2, 2, "Segment UID:%s", buffer);
+
+          } else if (EbmlId(*l2) == KaxPrevUID::ClassInfos.GlobalId) {
+            KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
+            uid.ReadData(es->I_O());
+            char buffer[uid.GetSize() * 5 + 1];
+            const unsigned char *b = (const unsigned char *)&binary(uid);
+            buffer[0] = 0;
+            for (i = 0; i < uid.GetSize(); i++)
+              sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+            show_element(l2, 2, "Previous segment UID:%s", buffer);
+
+          } else if (EbmlId(*l2) == KaxNextUID::ClassInfos.GlobalId) {
+            KaxNextUID &uid = *static_cast<KaxNextUID *>(l2);
+            uid.ReadData(es->I_O());
+            char buffer[uid.GetSize() * 5 + 1];
+            const unsigned char *b = (const unsigned char *)&binary(uid);
+            buffer[0] = 0;
+            for (i = 0; i < uid.GetSize(); i++)
+              sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+            show_element(l2, 2, "Next segment UID:%s", buffer);
 
           } else if (!is_ebmlvoid(l2, 2))
             show_unknown_element(l2, 2);

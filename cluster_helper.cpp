@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.24 2003/06/08 16:14:05 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.25 2003/06/08 18:59:43 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -28,7 +28,7 @@
 
 #include "StdIOCallback.h"
 
-vector<splitpoint_t *> splitpoints;
+vector<splitpoint_t *> cluster_helper_c::splitpoints;
 
 //#define walk_clusters() check_clusters(__LINE__)
 #define walk_clusters()
@@ -230,6 +230,10 @@ void cluster_helper_c::find_next_splitpoint() {
   next_splitpoint = i;
 }
 
+int cluster_helper_c::get_next_splitpoint() {
+  return next_splitpoint;
+}
+
 void cluster_helper_c::set_output(mm_io_c *nout) {
   out = nout;
 }
@@ -252,12 +256,8 @@ int cluster_helper_c::render() {
   cluster = clstr->cluster;
 
   // Splitpoint stuff
-  if (header_overhead == -1) {
-    if (pass != 0)
-      header_overhead = out->getFilePointer();
-    if (pass == 2)
-      find_next_splitpoint();
-  }
+  if ((header_overhead == -1) && (pass != 0))
+    header_overhead = out->getFilePointer();
 
   elements_in_cluster = 0;
   num_cue_elements_here = 0;
@@ -362,13 +362,14 @@ int cluster_helper_c::render() {
         if (kax_seekhead != NULL)
           kax_seekhead->IndexThis(*cluster, *kax_segment);
       }
+      find_next_splitpoint();
 
       old_max_timecode = max_timecode;
       max_timecode = pack->timecode;
 
       fprintf(stdout, "\n");
       finish_file();
-      create_next_output_file();
+      create_next_output_file(next_splitpoint >= splitpoints.size());
 
       max_timecode = old_max_timecode;
 
@@ -381,8 +382,6 @@ int cluster_helper_c::render() {
 
       elements_in_cluster = 0;
       timecode_offset = pack->timecode;
-
-      find_next_splitpoint();
     }
   }
 

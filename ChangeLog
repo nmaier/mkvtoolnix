@@ -1,3 +1,11 @@
+2003-06-08  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Added support for splitting output files by size or by time and
+        limiting the number of output files.
+
+        * Added support for the segment UID/next segment UID/previous
+        segment UID.
+
 2003-06-06  Moritz Bunkus  <moritz@bunkus.org>
 
         * A lot of changes to comply with libmatroska/libebml 0.4.4.
