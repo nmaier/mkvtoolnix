@@ -49,6 +49,7 @@
 using namespace std;
 
 #include "common.h"
+#include "hacks.h"
 
 int verbose = 1;
 
@@ -599,6 +600,8 @@ void clear_list_of_unique_uint32() {
 bool is_unique_uint32(uint32_t number) {
   int i;
 
+  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
+    return true;
   for (i = 0; i < ru_numbers.size(); i++)
     if (ru_numbers[i] == number)
       return false;
@@ -607,11 +610,19 @@ bool is_unique_uint32(uint32_t number) {
 }
 
 void add_unique_uint32(uint32_t number) {
-  ru_numbers.push_back(number);
+  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
+    ru_numbers.push_back(ru_numbers.size() + 1);
+  else
+    ru_numbers.push_back(number);
 }
 
 uint32_t create_unique_uint32() {
   uint32_t rnumber, half;
+
+  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
+    ru_numbers.push_back(ru_numbers.size() + 1);
+    return ru_numbers.size();
+  }
 
   do {
     half = (uint32_t)(65535.0 * rand() / RAND_MAX);
@@ -1251,4 +1262,47 @@ string mxsprintf(const char *fmt, ...) {
   safefree(new_string);
 
   return dst;
+}
+
+static const char *mosu_hacks[] = {
+  ENGAGE_SPACE_AFTER_CHAPTERS,
+  ENGAGE_NO_CHAPTERS_IN_META_SEEK,
+  ENGAGE_NO_META_SEEK,
+  ENGAGE_LACING_XIPH,
+  ENGAGE_LACING_EBML,
+  ENGAGE_NATIVE_BFRAMES,
+  ENGAGE_NO_VARIABLE_DATA,
+  NULL
+};
+static vector<const char *> engaged_hacks;
+
+bool hack_engaged(const char *hack) {
+  uint32_t i;
+
+  if (hack == NULL)
+    return false;
+  for (i = 0; i < engaged_hacks.size(); i++)
+    if (!strcmp(engaged_hacks[i], hack))
+      return true;
+
+  return false;
+}
+
+void engage_hacks(const char *hacks) {
+  vector<string> engage_args;
+  int aidx, hidx;
+  bool valid_hack;
+
+  engage_args = split(hacks, ",");
+  for (aidx = 0; aidx < engage_args.size(); aidx++) {
+    valid_hack = false;
+    for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
+      if (engage_args[aidx] == mosu_hacks[hidx]) {
+        valid_hack = true;
+        engaged_hacks.push_back(mosu_hacks[hidx]);
+        break;
+      }
+    if (!valid_hack)
+      mxerror("'%s' is not a valid hack.\n", engage_args[aidx].c_str());
+  }
 }

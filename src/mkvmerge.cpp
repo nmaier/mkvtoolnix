@@ -197,29 +197,6 @@ mm_io_c *out = NULL;
 bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
 bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
-const char *mosu_hacks[] = {
-  ENGAGE_SPACE_AFTER_CHAPTERS,
-  ENGAGE_NO_CHAPTERS_IN_META_SEEK,
-  ENGAGE_NO_META_SEEK,
-  ENGAGE_LACING_XIPH,
-  ENGAGE_LACING_EBML,
-  ENGAGE_NATIVE_BFRAMES,
-  NULL
-};
-vector<const char *> engaged_hacks;
-
-bool hack_engaged(const char *hack) {
-  uint32_t i;
-
-  if (hack == NULL)
-    return false;
-  for (i = 0; i < engaged_hacks.size(); i++)
-    if (!strcmp(engaged_hacks[i], hack))
-      return true;
-
-  return false;
-}
-
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
@@ -986,22 +963,31 @@ static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
       cstr_to_UTFstring(version.c_str());
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
       cstr_to_UTFstring(VERSIONINFO);
-    GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
+    if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA))
+      GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
+    else
+      GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(0);
 
     if (segment_title.length() > 0)
       *((EbmlUnicodeString *)&GetChild<KaxTitle>(*kax_infos)) =
         cstrutf8_to_UTFstring(segment_title.c_str());
 
     // Generate the segment UIDs.
-    if (first_file) {
-      seguid_current.generate_random();
-      if (!last_file)
-        seguid_next.generate_random();
+    if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
+      if (first_file) {
+        seguid_current.generate_random();
+        if (!last_file)
+          seguid_next.generate_random();
+      } else {
+        seguid_prev = seguid_current;
+        seguid_current = seguid_next;
+        if (!last_file)
+          seguid_next.generate_random();
+      }
     } else {
-      seguid_prev = seguid_current;
-      seguid_current = seguid_next;
-      if (!last_file)
-        seguid_next.generate_random();
+      memset(seguid_current.data(), 0, 128 / 8);
+      memset(seguid_prev.data(), 0, 128 / 8);
+      memset(seguid_next.data(), 0, 128 / 8);
     }
 
     // Set the segment UIDs.
@@ -1371,24 +1357,9 @@ static void parse_args(int argc, char **argv) {
 
     // Global options
     if (!strcmp(this_arg, "--engage")) {
-      vector<string> engage_args;
-      int aidx, hidx;
-      bool valid_hack;
-
       if (next_arg == NULL)
         mxerror("'--engage' lacks its argument.\n");
-      engage_args = split(next_arg, ",");
-      for (aidx = 0; aidx < engage_args.size(); aidx++) {
-        valid_hack = false;
-        for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
-          if (engage_args[aidx] == mosu_hacks[hidx]) {
-            valid_hack = true;
-            engaged_hacks.push_back(mosu_hacks[hidx]);
-            break;
-          }
-        if (!valid_hack)
-          mxerror("'%s' is not a valid hack.\n", engage_args[aidx].c_str());
-      }
+      engage_hacks(next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-q"))

@@ -184,6 +184,9 @@ bool MTX_DLL_API parse_double(const char *s, double &value);
 int MTX_DLL_API get_arg_len(const char *fmt, ...);
 int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
 
+void MTX_DLL_API engage_hacks(const char *hacks);
+bool MTX_DLL_API hack_engaged(const char *hack);
+
 extern int MTX_DLL_API verbose;
 
 class MTX_DLL_API bit_cursor_c {
