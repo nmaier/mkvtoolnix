@@ -78,28 +78,10 @@ void vobsub_packetizer_c::set_headers() {
                  (timecode - initial_displacement) % 1000
 #define FMT_TIMECODE "%02lld:%02lld:%02lld.%03lld"
 
-
-int a,b; /* Temporary vars */
-unsigned int date, type;
-unsigned int off;
-unsigned int start_off = 0;
-unsigned int next_off;
-unsigned int start_pts;
-unsigned int end_pts;
-unsigned int current_nibble[2];
-unsigned int control_start;
-unsigned int display = 0;
-unsigned int start_col = 0;
-unsigned int end_col = 0;
-unsigned int start_row = 0;
-unsigned int end_row = 0;
-unsigned int width = 0;
-unsigned int height = 0;
-unsigned int stride = 0;
-
 int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
                                           int64_t timecode) {
   uint32_t date, control_start, next_off, start_off, off;
+  unsigned char type;
   int duration;
   bool unknown;
 
@@ -111,10 +93,15 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
     start_off = next_off;
     date = get_uint16_be(data + start_off) * 1024;
     next_off = get_uint16_be(data + start_off + 2);
+    if (next_off < start_off) {
+      mxverb(3, PFX "BAD SPU DATA next_off < start_off (%u < %u)\n", next_off,
+             start_off);
+      return -1;
+    }
     mxverb(4, PFX "date = %u\n", date);
     off = start_off + 4;
     for (type = data[off++]; type != 0xff; type = data[off++]) {
-      mxverb(4, PFX "cmd = %d ",type);
+      mxverb(4, PFX "cmd = %d ", type);
       unknown = false;
       switch(type) {
         case 0x00:
@@ -128,7 +115,7 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
         case 0x02:
           /* Stop display */
           mxverb(4, "stop display: %u", date / 90);
-          duration = date / 90;
+          return date / 90;
           break;
         case 0x03:
           /* Palette */

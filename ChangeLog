@@ -1,5 +1,8 @@
 2003-12-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Avoid deadlocks when parsing broken SPU
+	packets from VobSubs.
+
 	* mmg: new feature: Added buttons for moving input files up and
 	down in the input file box.
 
