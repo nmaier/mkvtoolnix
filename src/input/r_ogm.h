@@ -40,14 +40,27 @@
 #define OGM_STREAM_TYPE_MP3     4
 #define OGM_STREAM_TYPE_AC3     5
 #define OGM_STREAM_TYPE_TEXT    6
+#define OGM_STREAM_TYPE_FLAC    7
 
-typedef struct {
+struct ogm_demuxer_t {
   ogg_stream_state os;
   generic_packetizer_c *packetizer;
   int sid, stype, serial, eos;
-  int units_processed, num_packets, vorbis_rate, packet_sizes[3];
-  unsigned char *packet_data[3];
-} ogm_demuxer_t;
+  int units_processed, vorbis_rate;
+  vector<unsigned char *> packet_data;
+  vector<int> packet_sizes;
+
+  ogm_demuxer_t():
+    packetizer(NULL), sid(0), stype(0), serial(0), eos(0), units_processed(0),
+    vorbis_rate(0) {
+    memset(&os, 0, sizeof(ogg_stream_state));
+  }
+  ~ogm_demuxer_t() {
+    uint32_t i;
+    for (i = 0; i < packet_data.size(); i++)
+      safefree(packet_data[i]);
+  }
+};
 
 class ogm_reader_c: public generic_reader_c {
 private:

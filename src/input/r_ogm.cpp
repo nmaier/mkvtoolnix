@@ -110,10 +110,9 @@ ogm_reader_c::~ogm_reader_c() {
     dmx = sdemuxers[i];
     ogg_stream_clear(&dmx->os);
     delete dmx->packetizer;
-    safefree(dmx);
+    delete dmx;
   }
-  if (sdemuxers != NULL)
-    safefree(sdemuxers);
+  safefree(sdemuxers);
   ti->private_data = NULL;
 }
 
@@ -130,16 +129,9 @@ ogm_demuxer_t *ogm_reader_c::find_demuxer(int serialno) {
 #define BUFFER_SIZE 4096
 
 void ogm_reader_c::free_demuxer(int idx) {
-  int i;
-  ogm_demuxer_t *dmx;
-
   if (idx >= num_sdemuxers)
     return;
-  dmx = sdemuxers[idx];
-  for (i = 0; i < 3; i++)
-    if (dmx->packet_data[i] != NULL)
-      safefree(dmx->packet_data[i]);
-  safefree(dmx);
+  delete sdemuxers[idx];
 
   memmove(&sdemuxers[idx], &sdemuxers[idx + 1], num_sdemuxers - idx - 1);
   num_sdemuxers--;
@@ -236,7 +228,7 @@ void ogm_reader_c::create_packetizers() {
           mxwarn("ogm_reader: could not initialize video "
                  "packetizer for stream id %d. Will try to continue and "
                  "ignore this stream.\n", dmx->serial);
-          safefree(dmx);
+          delete dmx;
           continue;
         }
 
@@ -399,11 +391,9 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_pagein(&new_oss, og);
   ogg_stream_packetout(&new_oss, &op);
 
-  dmx = (ogm_demuxer_t *)safemalloc(sizeof(ogm_demuxer_t));
-  memset(dmx, 0, sizeof(ogm_demuxer_t));
-  dmx->num_packets = 1;
-  dmx->packet_data[0] = (unsigned char *)safememdup(op.packet, op.bytes);
-  dmx->packet_sizes[0] = op.bytes;
+  dmx = new ogm_demuxer_t;
+  dmx->packet_data.push_back((unsigned char *)safememdup(op.packet, op.bytes));
+  dmx->packet_sizes.push_back(op.bytes);
 
   /*
    * Check the contents for known stream headers. This one is the
@@ -414,12 +404,31 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     numstreams++;
     if (!demuxing_requested('a', ogg_page_serialno(og))) {
       ogg_stream_clear(&new_oss);
-      safefree(dmx->packet_data[0]);
-      safefree(dmx);
+      delete dmx;
       return;
     }
 
     dmx->stype = OGM_STREAM_TYPE_VORBIS;
+    dmx->serial = ogg_page_serialno(og);
+    memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
+    dmx->sid = nastreams;
+    add_new_demuxer(dmx);
+
+    return;
+  }
+
+  // FLAC
+  if ((op.bytes >= 4) && !strncmp((char *)op.packet, "fLaC", 4)) {
+    mxerror("FLAC in Ogg is not supported yet.\n");
+    nastreams++;
+    numstreams++;
+    if (!demuxing_requested('a', ogg_page_serialno(og))) {
+      ogg_stream_clear(&new_oss);
+      delete dmx;
+      return;
+    }
+
+    dmx->stype = OGM_STREAM_TYPE_FLAC;
     dmx->serial = ogg_page_serialno(og);
     memcpy(&dmx->os, &new_oss, sizeof(ogg_stream_state));
     dmx->sid = nastreams;
@@ -437,8 +446,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       numstreams++;
       if (!demuxing_requested('v', ogg_page_serialno(og))) {
         ogg_stream_clear(&new_oss);
-        safefree(dmx->packet_data[0]);
-        safefree(dmx);
+        delete dmx;
         return;
       }
 
@@ -475,8 +483,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       else {
         mxwarn("ogm_reader: Unknown audio stream type %u. "
                "Ignoring stream id %d.\n", codec_id, numstreams);
-        safefree(dmx->packet_data[0]);
-        safefree(dmx);
+        delete dmx;
         return;
       }
 
@@ -514,8 +521,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 
   // Failed to detect a supported header.
   ogg_stream_clear(&new_oss);
-  safefree(dmx->packet_data[0]);
-  safefree(dmx);
+  delete dmx;
 
   return;
 }
@@ -604,15 +610,9 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
 
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
-    if ((*op.packet & 3) == PACKET_TYPE_HEADER) {
-      dmx->num_packets++;
-      dmx->packet_data[2] = (unsigned char *)safememdup(op.packet, op.bytes);
-      dmx->packet_sizes[2] = op.bytes;
-    } else if ((*op.packet & 3) == PACKET_TYPE_COMMENT) {
-      dmx->num_packets++;
-      dmx->packet_data[1] = (unsigned char *)safememdup(op.packet, op.bytes);
-      dmx->packet_sizes[1] = op.bytes;
-    }
+    dmx->packet_data.push_back((unsigned char *)
+                               safememdup(op.packet, op.bytes));
+    dmx->packet_sizes.push_back(op.bytes);
   }
 }
 
@@ -642,7 +642,8 @@ int ogm_reader_c::read_headers() {
 
       for (i = 0; i < num_sdemuxers; i++) {
         dmx = sdemuxers[i];
-        if ((dmx->stype == OGM_STREAM_TYPE_VORBIS) && (dmx->num_packets < 3)) {
+        if ((dmx->stype == OGM_STREAM_TYPE_VORBIS) &&
+            (dmx->packet_data.size() < 3)) {
           // Not all three headers have been found for this Vorbis stream.
           done = 0;
           break;
@@ -731,9 +732,11 @@ void ogm_reader_c::identify() {
 
   mxinfo("File '%s': container: Ogg/OGM\n", ti->fname);
   for (i = 0; i < num_sdemuxers; i++) {
-    sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
-    memcpy(fourcc, sth->subtype, 4);
-    fourcc[4] = 0;
+    if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
+      sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
+      memcpy(fourcc, sth->subtype, 4);
+      fourcc[4] = 0;
+    }
     mxinfo("Track ID %u: %s (%s)\n", sdemuxers[i]->serial,
            (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
@@ -748,6 +751,7 @@ void ogm_reader_c::identify() {
            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC ? "FLAC" :
            "unknown");
   }
 }
