@@ -140,6 +140,7 @@ protected:
   int haudio_channels, haudio_bit_depth;
 
   int hvideo_pixel_width, hvideo_pixel_height;
+  int hvideo_display_width, hvideo_display_height;
 
   int64_t dumped_packet_number;
 
@@ -197,6 +198,8 @@ public:
 
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);
+  virtual void set_video_display_width(int width);
+  virtual void set_video_display_height(int height);
   virtual void set_video_aspect_ratio(float ar);
 
   virtual void set_as_default_track(int type);

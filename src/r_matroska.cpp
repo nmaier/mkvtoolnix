@@ -1105,13 +1105,10 @@ void kax_reader_c::create_packetizers() {
                                                  t->v_height,
                                                  t->v_bframes, &nti);
           if (!nti.aspect_ratio_given) { // The user didn't set it.
-            if (t->v_dwidth == 0)
-              t->v_dwidth = t->v_width;
-            if (t->v_dheight == 0)
-              t->v_dheight = t->v_height;
-            if ((t->v_dwidth != t->v_width) || (t->v_dheight != t->v_height))
-              t->packetizer->set_video_aspect_ratio((float)t->v_dwidth /
-                                                    (float)t->v_dheight);
+            if (t->v_dwidth != 0)
+              t->packetizer->set_video_display_width(t->v_dwidth);
+            if (t->v_dheight != 0)
+              t->packetizer->set_video_display_height(t->v_dheight);
           }
           break;
 

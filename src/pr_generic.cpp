@@ -132,6 +132,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   hvideo_pixel_width = -1;
   hvideo_pixel_height = -1;
+  hvideo_display_width = -1;
+  hvideo_display_height = -1;
 
   dumped_packet_number = 0;
 }
@@ -289,6 +291,14 @@ void generic_packetizer_c::set_video_pixel_height(int height) {
   hvideo_pixel_height = height;
 }
 
+void generic_packetizer_c::set_video_display_width(int width) {
+  hvideo_display_width = width;
+}
+
+void generic_packetizer_c::set_video_display_height(int height) {
+  hvideo_display_height = height;
+}
+
 void generic_packetizer_c::set_video_aspect_ratio(float ar) {
   ti->aspect_ratio = ar;
 }
@@ -410,18 +420,25 @@ void generic_packetizer_c::set_headers() {
       GetChild<KaxTrackVideo>(*track_entry);
 
     if ((hvideo_pixel_height != -1) && (hvideo_pixel_width != -1)) {
-      if (!ti->aspect_ratio_given)
-        ti->aspect_ratio = (float)hvideo_pixel_width /
-          (float)hvideo_pixel_height;
-      if (ti->aspect_ratio >
-          ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
-        disp_width = (int)(hvideo_pixel_height * ti->aspect_ratio);
-        disp_height = hvideo_pixel_height;
+      if ((hvideo_display_width == -1) || (hvideo_display_height == -1) ||
+          ti->aspect_ratio_given) {
+        if (!ti->aspect_ratio_given)
+          ti->aspect_ratio = (float)hvideo_pixel_width /
+            (float)hvideo_pixel_height;
+        if (ti->aspect_ratio >
+            ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
+          disp_width = (int)(hvideo_pixel_height * ti->aspect_ratio);
+          disp_height = hvideo_pixel_height;
+
+        } else {
+          disp_width = hvideo_pixel_width;
+          disp_height = (int)(hvideo_pixel_width / ti->aspect_ratio);
+
+        }
 
       } else {
-        disp_width = hvideo_pixel_width;
-        disp_height = (int)(hvideo_pixel_width / ti->aspect_ratio);
-
+        disp_width = hvideo_display_width;
+        disp_height = hvideo_display_height;
       }
 
       *(static_cast<EbmlUInteger *>
