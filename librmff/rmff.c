@@ -60,8 +60,8 @@ set_error(int error_number,
   return return_value;
 }
 
-static uint16_t
-get_uint16_be(const void *buf) {
+uint16_t
+rmff_get_uint16_be(const void *buf) {
   uint16_t ret;
   unsigned char *tmp;
 
@@ -73,8 +73,8 @@ get_uint16_be(const void *buf) {
   return ret;
 }
 
-static uint32_t
-get_uint32_be(const void *buf) {
+uint32_t
+rmff_get_uint32_be(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -88,8 +88,8 @@ get_uint32_be(const void *buf) {
   return ret;
 }
 
-static void
-put_uint16_be(void *buf,
+void
+rmff_put_uin16_be(void *buf,
               uint16_t value) {
   unsigned char *tmp;
 
@@ -99,8 +99,8 @@ put_uint16_be(void *buf,
   tmp[0] = (value >>= 8) & 0xff;
 }
 
-static void
-put_uint32_be(void *buf,
+void
+rmff_put_uin32_be(void *buf,
               uint32_t value) {
   unsigned char *tmp;
 
@@ -115,9 +115,9 @@ put_uint32_be(void *buf,
 #define read_uint8() file_read_uint8(io, fh)
 #define read_uint16_be() file_read_uint16_be(io, fh)
 #define read_uint32_be() file_read_uint32_be(io, fh)
-#define read_uint16_be_to(addr) put_uint16_be(addr, read_uint16_be())
-#define read_uint32_be_to(addr) put_uint32_be(addr, read_uint32_be())
-#define get_fourcc(b) get_uint32_be(b)
+#define read_uint16_be_to(addr) rmff_put_uin16_be(addr, read_uint16_be())
+#define read_uint32_be_to(addr) rmff_put_uin32_be(addr, read_uint32_be())
+#define get_fourcc(b) rmff_get_uint32_be(b)
 
 static uint8_t
 file_read_uint8(mb_file_io_t *io,
@@ -134,7 +134,7 @@ file_read_uint16_be(mb_file_io_t *io,
   unsigned char tmp[2];
 
   io->read(fh, tmp, 2);
-  return get_uint16_be(tmp);
+  return rmff_get_uint16_be(tmp);
 }
 
 static uint32_t
@@ -143,7 +143,7 @@ file_read_uint32_be(mb_file_io_t *io,
   unsigned char tmp[4];
 
   io->read(fh, tmp, 4);
-  return get_uint32_be(tmp);
+  return rmff_get_uint32_be(tmp);
 }
 
 void
@@ -183,24 +183,24 @@ _safestrdup(const char *s,
   return copy;
 }
 
-/* static void * */
-/* _safememdup(const void *s, */
-/*             size_t size, */
-/*             const char *file, */
-/*             int line) { */
-/*   void *copy; */
+static void *
+_safememdup(const void *s,
+            size_t size,
+            const char *file,
+            int line) {
+  void *copy;
 
-/*   if (s == NULL) */
-/*     return NULL; */
+  if (s == NULL)
+    return NULL;
 
-/*   copy = malloc(size); */
-/*   if (copy == NULL) */
-/*     die("safememdup() called from file %s, line %d: malloc() " */
-/*         "returned NULL for a size of %d bytes.", file, line, size); */
-/*   memcpy(copy, s, size); */
+  copy = malloc(size);
+  if (copy == NULL)
+    die("safememdup() called from file %s, line %d: malloc() "
+        "returned NULL for a size of %d bytes.", file, line, size);
+  memcpy(copy, s, size);
 
-/*   return copy; */
-/* } */
+  return copy;
+}
 
 static void *
 _safemalloc(size_t size,
@@ -440,7 +440,7 @@ rmff_read_headers(rmff_file_t *file) {
       track.file = (struct rmff_file_t *)file;
       mdpr = &track.mdpr_header;
       read_uint16_be_to(&mdpr->id);
-      track.id = get_uint16_be(&mdpr->id);
+      track.id = rmff_get_uint16_be(&mdpr->id);
       read_uint32_be_to(&mdpr->max_bit_rate);
       read_uint32_be_to(&mdpr->avg_bit_rate);
       read_uint32_be_to(&mdpr->max_packet_size);
@@ -474,7 +474,7 @@ rmff_read_headers(rmff_file_t *file) {
                (get_fourcc(&ra4p->fourcc1) ==
                 rmffFOURCC('.', 'r', 'a', 0xfd))) {
         track.type = RMFF_TRACK_TYPE_AUDIO;
-        if ((get_uint16_be(&ra4p->version1) == 5) &&
+        if ((rmff_get_uint16_be(&ra4p->version1) == 5) &&
             (size < sizeof(real_audio_v5_props_t)))
           return set_error(RMFF_ERR_DATA, "RealAudio v5 data indicated but "
                            "data too small", RMFF_ERR_DATA);
@@ -588,6 +588,24 @@ rmff_read_next_frame(rmff_file_t *file,
   return frame;
 }
 
+rmff_frame_t *
+rmff_allocate_frame(uint32_t size,
+                    void *buffer) {
+  rmff_frame_t *frame;
+
+  if (size == 0)
+    return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+  frame = (rmff_frame_t *)safecalloc(sizeof(rmff_frame_t));
+  if (buffer == NULL) {
+    buffer = safemalloc(size);
+    frame->allocated_by_rmff = 1;
+  }
+  frame->size = size;
+  frame->data = (unsigned char *)buffer;
+
+  return frame;
+}
+
 void
 rmff_release_frame(rmff_frame_t *frame) {
   if (frame == NULL)
@@ -614,4 +632,33 @@ rmff_set_cont_header(rmff_file_t *file,
   file->cont_header.author = safestrdup(author);
   file->cont_header.copyright = safestrdup(copyright);
   file->cont_header.comment = safestrdup(comment);
+}
+
+void
+rmff_set_track_data(rmff_track_t *track,
+                    const char *name,
+                    const char *mime_type) {
+  if (track == NULL)
+    return;
+  if (name != track->mdpr_header.name) {
+    safefree(track->mdpr_header.name);
+    track->mdpr_header.name = safestrdup(name);
+  }
+  if (mime_type != track->mdpr_header.mime_type) {
+    safefree(track->mdpr_header.mime_type);
+    track->mdpr_header.mime_type = safestrdup(mime_type);
+  }
+}
+
+void
+rmff_set_track_specific_data(rmff_track_t *track,
+                             const unsigned char *data,
+                             uint32_t size) {
+  if (track == NULL)
+    return;
+  if (data != track->mdpr_header.type_specific_data) {
+    safefree(track->mdpr_header.type_specific_data);
+    track->mdpr_header.type_specific_data =
+      (unsigned char *)safememdup(data, size);
+  }
 }
