@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.h,v 1.7 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_ac3.h,v 1.8 2003/04/11 10:36:55 mosu Exp $
     \brief class definition for the AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,20 +30,18 @@ private:
   u_int64_t      bytes_output, packetno;
   unsigned long  samples_per_sec;
   int            channels;
-  int            bitrate;
   unsigned char *packet_buffer;
   int            buffer_size;
 
 public:
   ac3_packetizer_c(unsigned long nsamples_per_sec, int nchannels,
-                   int nbitrate, track_info_t *nti) throw (error_c);
+                   track_info_t *nti) throw (error_c);
   virtual ~ac3_packetizer_c();
     
-  virtual int            process(unsigned char *buf, int size, int last_frame);
+  virtual int            process(unsigned char *buf, int size,
+                                 int64_t timescode = -1, int64_t length = -1);
   virtual void           set_header();
     
-  virtual void           set_params(unsigned long nsamples_per_sec,
-                                    int nchannels, int nbitrate);
 private:
   virtual void           add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_ac3_packet(unsigned long *header,
