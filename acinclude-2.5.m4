@@ -452,7 +452,7 @@ dnl
 dnl Now check if the installed Matroska is sufficiently new.
 dnl
       rm -f conf.matroskatest
-      AC_LANG(C++)
+      AC_LANG_PUSH(C++)
       AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
@@ -474,7 +474,7 @@ int main ()
 }
 
 ],, no_matroska=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
-      AC_LANG(C)
+      AC_LANG_POP
       CXXFLAGS="$ac_save_CXXFLAGS"
       LIBS="$ac_save_LIBS"
   fi

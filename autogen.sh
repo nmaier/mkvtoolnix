@@ -41,6 +41,17 @@ if test "$DIE" -eq 1; then
         exit 1
 fi
 
+export WANT_AUTOCONF_2_5=1
+AUTOCONFVER=`autoconf --version | head -n 1 | sed 's;[^0-9\.];;g'`
+case $AUTOCONFVER in
+  2.1*)
+    cp acinclude-2.1.m4 acinclude.m4
+    ;;
+  *)
+    cp acinclude-2.5.m4 acinclude.m4
+    ;;
+esac
+
 echo "Generating configuration files for $package, please wait...."
 
 echo "  aclocal $ACLOCAL_FLAGS" && aclocal $ACLOCAL_FLAGS
