@@ -1,5 +1,8 @@
 2005-03-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Extracting the FPS from some AVC MP4 files
+	did not work.
+
 	* mkvmerge: bug fix: Appending + splitting was segfaulting if used
 	together and at least one split occured after a track has been
 	appended.

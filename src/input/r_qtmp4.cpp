@@ -892,6 +892,9 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_ptr &new_dmx,
     new_dmx->keyframe_table.push_back(io->read_uint32_be());
 
   mxverb(2, PFX "%*sSync/keyframe table: %u entries\n", level * 2, "", count);
+  for (i = 0; i < count; ++i)
+    mxverb(4, PFX "%*skeyframe at %u\n", (level + 1) * 2, "",
+           new_dmx->keyframe_table[i]);
 }
 
 void
@@ -1417,46 +1420,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                  "that it looks like you expected it to.\n",
                  ti.fname.c_str(), (int64_t)dmx->id);
 
-        fps = 0.0;
-        if ((dmx->durmap_table.size() == 1) &&
-            (dmx->durmap_table[0].duration != 0)) {
-          if ((dmx->sample_size != 0) ||
-              (dmx->frame_offset_table.size() == 0)) {
-            // Constant FPS. Let's set the default duration.
-            fps = (double)dmx->timescale /
-              (double)dmx->durmap_table[0].duration;
-            mxverb(3, PFX "fps1: %f\n", fps);
-
-          } else if ((dmx->sample_table.size() > 0) &&
-                     (dmx->sample_table.size() ==
-                      dmx->frame_offset_table.size())) {
-            // Constant FPS but the frame offsets are used. This one is
-            // a bit trickier. I have to find the maximum timecode including
-            // the frame offsets (for PTS/DTS conversion) and divide that
-            // by the number of frames.
-            int64_t max_tc;
-            int i;
-
-            max_tc = 0;
-
-            for (i = 0; i < dmx->sample_table.size(); i++) {
-              int64_t timecode;
-
-              timecode = ((int64_t)dmx->sample_table[i].pts +
-                          (int64_t)dmx->frame_offset_table[dmx->pos]) *
-                1000000000 / dmx->timescale;
-              if (timecode > max_tc)
-                max_tc = timecode;
-            }
-            if (max_tc > 0)
-              fps = (double)dmx->sample_table.size() * 1000000000.0 /
-                (double)max_tc;
-
-            mxverb(3, PFX "fps2: max_tc %lld s_t.s %u fps %f\n", max_tc,
-                   dmx->sample_table.size(), fps);
-          }
-        }
-
+        fps = dmx->calculate_fps();
         ti.private_size = dmx->priv_size;
         ti.private_data = dmx->priv;
         dmx->ptzr =
@@ -1618,3 +1582,65 @@ qtmp4_reader_c::add_available_track_ids() {
   for (i =0 ; i < demuxers.size(); i++)
     available_track_ids.push_back(demuxers[i]->id);
 }
+
+double
+qtmp4_demuxer_t::calculate_fps() {
+  double fps;
+
+  fps = 0.0;
+
+  if ((1 == durmap_table.size()) && (0 != durmap_table[0].duration) &&
+      ((0 != sample_size) || (0 == frame_offset_table.size()))) {
+    // Constant FPS. Let's set the default duration.
+    fps = (double)timescale / (double)durmap_table[0].duration;
+    mxverb(3, PFX "calculate_fps: case 1: %f\n", fps);
+    return fps;
+  }
+
+  if ((0 < sample_table.size()) &&
+      (sample_table.size() == frame_offset_table.size())) {
+    // Constant FPS but the frame offsets are used. This one is
+    // a bit trickier. I have to find the maximum timecode including
+    // the frame offsets (for PTS/DTS conversion) and divide that
+    // by the number of frames.
+    int64_t max_tc;
+    int i;
+
+    max_tc = 0;
+
+    for (i = 0; i < sample_table.size(); ++i) {
+      int64_t timecode;
+
+      timecode = ((int64_t)sample_table[i].pts +
+                  (int64_t)frame_offset_table[pos]) * 1000000000 / timescale;
+      if (timecode > max_tc)
+        max_tc = timecode;
+    }
+    if (0 < max_tc)
+      fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
+
+    mxverb(3, PFX "calculate_fps: case 2: max_tc %lld s_t.s %u fps %f\n",
+           max_tc, sample_table.size(), fps);
+    return fps;
+  }
+
+  if (0 < sample_table.size()) {
+    int64_t max_tc;
+    int i;
+
+    max_tc = 0;
+
+    for (i = 0; i < sample_table.size(); ++i)
+      if ((int64_t)sample_table[i].pts > max_tc)
+        max_tc = (int64_t)sample_table[i].pts;
+    if (0 < max_tc)
+      fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
+
+    mxverb(3, PFX "calculate_fps: case 3: max_tc %lld s_t.s %u fps %f\n",
+           max_tc, sample_table.size(), fps);
+    return fps;
+  }
+
+  return 0.0;
+}
+

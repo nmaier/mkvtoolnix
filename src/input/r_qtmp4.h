@@ -156,6 +156,8 @@ struct qtmp4_demuxer_t {
     safefree(esds.decoder_config);
     safefree(esds.sl_config);
   }
+
+  double calculate_fps();
 };
 typedef counted_ptr<qtmp4_demuxer_t> qtmp4_demuxer_ptr;
 
