@@ -1235,7 +1235,7 @@ static void identify(const char *filename) {
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
-  file->name = safestrdup(filename);
+  file->name = from_utf8(cc_local_utf8, filename);
   file->type = get_type(file->name);
   ti.fname = file->name;
   
@@ -1797,9 +1797,9 @@ static void parse_args(int argc, char **argv) {
 
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
-      file->name = safestrdup(this_arg);
+      file->name = from_utf8(cc_local_utf8, this_arg);
       file->type = get_type(file->name);
-      ti->fname = safestrdup(this_arg);
+      ti->fname = from_utf8(cc_local_utf8, this_arg);
 
       if (file->type == TYPEUNKNOWN)
         mxerror("File '%s' has unknown type. Please have a look "
@@ -2093,6 +2093,7 @@ void create_next_output_file() {
     this_outfile = create_output_name();
   else
     this_outfile = outfile;
+  this_outfile = from_utf8(cc_local_utf8, this_outfile);
 
   // Open the output file.
   try {

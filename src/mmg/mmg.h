@@ -103,6 +103,9 @@ vector<wxString> split(const wxString &src, const char *pattern = ",",
 wxString join(const char *pattern, vector<wxString> &strings);
 wxString &strip(wxString &s, bool newlines = false);
 vector<wxString> & strip(vector<wxString> &v, bool newlines = false);
+wxString to_utf8(const wxString &src);
+wxString from_utf8(const wxString &src);
+wxString unescape(const wxString &src);
 
 class mmg_app: public wxApp {
 public:

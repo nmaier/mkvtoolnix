@@ -234,7 +234,7 @@ strip(vector<wxString> &v,
 }
 
 wxString
-to_utf8_wx(wxString &src) {
+to_utf8(const wxString &src) {
   char *utf8;
   wxString retval;
 
@@ -243,6 +243,49 @@ to_utf8_wx(wxString &src) {
   safefree(utf8);
 
   return retval;
+}
+
+wxString
+from_utf8(const wxString &src) {
+  char *local;
+  wxString retval;
+
+  local = from_utf8(cc_local_utf8, src.c_str());
+  retval = local;
+  safefree(local);
+
+  return retval;
+}
+
+wxString
+unescape(const wxString &src) {
+  wxString dst;
+  int current_char, next_char;
+
+  if (src.length() <= 1)
+    return src;
+  next_char = 1;
+  current_char = 0;
+  while (current_char < src.length()) {
+    if (src[current_char] == wxC('\\')) {
+      if (next_char == src.length()) // This is an error...
+        dst += wxC('\\');
+      else {
+        if (src[next_char] == wxC('2'))
+          dst += wxC('"');
+        else if (src[next_char] == wxC('s'))
+          dst += wxC(' ');
+        else
+          dst += src[next_char];
+        current_char++;
+      }
+    } else
+      dst += src[current_char];
+    current_char++;
+    next_char = current_char + 1;
+  }
+
+  return dst;
 }
 
 bool
@@ -1034,7 +1077,7 @@ void mmg_dialog::update_command_line() {
       cmdline += " " + shell_escape(clargs[i]);
   }
 
-  cmdline = to_utf8_wx(cmdline);
+  cmdline = to_utf8(cmdline);
   if (old_cmdline != cmdline)
     tc_cmdline->SetValue(cmdline);
 }

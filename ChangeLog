@@ -1,3 +1,8 @@
+2004-02-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: File names with non-ASCII characters like
+	Umlaute are handled correctly.
+
 2004-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Some RealMedia files contain several tracks

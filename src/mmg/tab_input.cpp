@@ -445,9 +445,9 @@ void tab_input::enable_ar_controls(mmg_track_t *track) {
 
 void tab_input::on_add_file(wxCommandEvent &evt) {
   mmg_file_t file;
-  wxString name, command, id, type, exact;
+  wxString file_name, name, command, id, type, exact;
   wxArrayString output, errors;
-  vector<string> args, pair;
+  vector<wxString> args, pair;
   int result, pos;
   unsigned int i, k;
 
@@ -486,9 +486,10 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
 
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
+    file_name = dlg.GetPath();
 
-    command = "\"" + mkvmerge_path + "\" --identify-verbose \"" +
-      dlg.GetPath() + "\"";
+    command = "\"" + mkvmerge_path + "\" --identify-verbose \"" + file_name +
+      "\"";
     result = wxExecute(command, output, errors);
     if ((result < 0) || (result > 1)) {
       name.Printf("'mkvmerge -i' failed. Return code: %d\n\n", result);
@@ -549,20 +550,16 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
         track.timecodes = new wxString("");
 
         if (info.length() > 0) {
-          args = split(info.c_str(), " ");
+          args = split(info, " ");
           for (k = 0; k < args.size(); k++) {
-            pair = split(args[k].c_str(), ":", 2);
+            pair = split(args[k], ":", 2);
             if (pair.size() != 2)
               continue;
             if (pair[0] == "track_name") {
-              char *name_local;
-              name_local =
-                from_utf8(cc_local_utf8, unescape(pair[1].c_str()).c_str());
-              *track.track_name = name_local;
-              safefree(name_local);
+              *track.track_name = from_utf8(unescape(pair[1]));
               track.track_name_was_present = true;
             } else if (pair[0] == "language")
-              *track.language = unescape(pair[1].c_str()).c_str();
+              *track.language = unescape(pair[1]);
           }
         }
 
@@ -603,15 +600,11 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
           file.container = TYPEUNKNOWN;
 
         if (info.length() > 0) {
-          args = split(info.c_str(), " ");
+          args = split(info, " ");
           for (k = 0; k < args.size(); k++) {
-            pair = split(args[k].c_str(), ":", 2);
+            pair = split(args[k], ":", 2);
             if ((pair.size() == 2) && (pair[0] == "title")) {
-              char *title_local;
-              title_local = 
-                from_utf8(cc_local_utf8, unescape(pair[1].c_str()).c_str());
-              *file.title = title_local;
-              safefree(title_local);
+              *file.title = from_utf8(unescape(pair[1]));
               title_was_present = true;
             }
           }
