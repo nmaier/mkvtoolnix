@@ -1384,7 +1384,7 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
     *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(*cdisplay)) =
       default_chapter_country.c_str();
   // Workaround for a bug in libebml
-  if (i == t->chapter->ListSize())
+  if (i == (t->chapter->ListSize() - 1))
     t->chapter->PushElement(*cdisplay);
   else
     t->chapter->InsertElement(*cdisplay, i + 1);

@@ -18,6 +18,7 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include "os.h"
 #include "config.h"
 
 #include <stdio.h>
@@ -27,6 +28,11 @@
 #include <vorbis/codec.h>
 #if defined(HAVE_FLAC_FORMAT_H)
 #include <FLAC/stream_decoder.h>
+#endif
+#if defined(SYS_WINDOWS)
+#include <stdarg.h>
+#include <windef.h>
+#include <winbase.h>
 #endif
 
 extern "C" {                    // for BITMAPINFOHEADER
