@@ -230,6 +230,18 @@ strip(vector<wxString> &v,
   return v;
 }
 
+wxString
+to_utf8_wx(wxString &src) {
+  char *utf8;
+  wxString retval;
+
+  utf8 = to_utf8(cc_local_utf8, src.c_str());
+  retval = utf8;
+  safefree(utf8);
+
+  return retval;
+}
+
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                                   wxPoint(0, 0),
 #ifdef SYS_WINDOWS
@@ -648,16 +660,32 @@ void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
 }
 
 void mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
-  wxFile *file;
   uint32_t i;
+  char *arg_utf8;
+  mm_io_c *file;
+
   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
                    _T(ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
-    file = new wxFile(dlg.GetPath(), wxFile::write);
+    try {
+      file = new mm_io_c(dlg.GetPath().c_str(), MODE_CREATE);
+      file->write_bom("UTF-8");
+    } catch (...) {
+      wxMessageBox("Could not create the specified file.",
+                   "File creation failed", wxOK | wxCENTER |
+                   wxICON_ERROR);
+      return;
+    }
     for (i = 1; i < clargs.Count(); i++) {
-      file->Write(clargs[i]);
-      file->Write("\n");
+      if (clargs[i].length() == 0)
+        file->puts_unl("#EMPTY#");
+      else {
+        arg_utf8 = to_utf8(cc_local_utf8, clargs[i].c_str());
+        file->puts_unl(arg_utf8);
+        safefree(arg_utf8);
+      }
+      file->puts_unl("\n");
     }
     delete file;
 
@@ -697,7 +725,8 @@ void mmg_dialog::update_command_line() {
   wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
 
   old_cmdline = cmdline;
-  cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" ";
+  cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" " +
+    "--command-line-charset UTF-8 ";
 
   clargs.Clear();
   clargs.Add(mkvmerge_path);
@@ -966,6 +995,7 @@ void mmg_dialog::update_command_line() {
       cmdline += " " + shell_escape(clargs[i]);
   }
 
+  cmdline = to_utf8_wx(cmdline);
   if (old_cmdline != cmdline)
     tc_cmdline->SetValue(cmdline);
 }
@@ -1121,6 +1151,8 @@ bool mmg_app::OnInit() {
   uint32_t i;
   wxString k, v;
 
+  cc_local_utf8 = utf8_init(NULL);
+
   cfg = new wxConfig("mkvmergeGUI");
   wxConfigBase::Set(cfg); 
   cfg->SetPath("/GUI");
@@ -1160,6 +1192,8 @@ int mmg_app::OnExit() {
   cfg->Flush();
 
   delete cfg;
+
+  utf8_done();
 
   return 0;
 }

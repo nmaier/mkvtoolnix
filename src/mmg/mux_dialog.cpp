@@ -56,7 +56,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
            wxSize(500, 520),
 #endif
            wxCAPTION) {
-  char c;
+  char c, *arg_utf8;
   long value;
   wxString line, tmp;
   wxInputStream *out;
@@ -112,6 +112,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #endif
   try {
     opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
+    opt_file->write_bom("UTF-8");
   } catch (...) {
     wxString error;
     error.Printf("Could not create a temporary file for mkvmerge's command "
@@ -125,8 +126,11 @@ mux_dialog::mux_dialog(wxWindow *parent):
   for (i = 1; i < arg_list->Count(); i++) {
     if ((*arg_list)[i].Length() == 0)
       opt_file->puts_unl("#EMPTY#");
-    else
-      opt_file->puts_unl((*arg_list)[i].c_str());
+    else {
+      arg_utf8 = to_utf8(cc_local_utf8, (*arg_list)[i].c_str());
+      opt_file->puts_unl(arg_utf8);
+      safefree(arg_utf8);
+    }
     opt_file->puts_unl("\n");
   }
   delete opt_file;

@@ -1266,7 +1266,7 @@ static void identify(const char *filename) {
 
 static void parse_args(int argc, char **argv) {
   track_info_c *ti;
-  int i, j, cc_command_line;
+  int i, j;
   filelist_t *file;
   char *s, *this_arg, *next_arg;
   audio_sync_t async;
@@ -1281,8 +1281,6 @@ static void parse_args(int argc, char **argv) {
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
-
-  cc_command_line = cc_local_utf8;
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -1351,11 +1349,6 @@ static void parse_args(int argc, char **argv) {
       outfile = safestrdup(next_arg);
       i++;
 
-    } else if (!strcmp(this_arg, "--command-line-charset")) {
-      if (next_arg == NULL)
-        mxerror("'--command-line-charset' lacks the charset.\n");
-      cc_command_line = utf8_init(next_arg);
-
     }
   }
 
@@ -1393,14 +1386,11 @@ static void parse_args(int argc, char **argv) {
       verbose++;
 
     else if (!strcmp(this_arg, "--title")) {
-      char *tmp;
       if (next_arg == NULL)
         mxerror("'--title' lacks the title.\n");
 
-      tmp = to_utf8(cc_command_line, next_arg);
-      segment_title = tmp;
+      segment_title = next_arg;
       segment_title_set = true;
-      safefree(tmp);
       i++;
 
     } else if (!strcmp(this_arg, "--split")) {
@@ -1509,7 +1499,7 @@ static void parse_args(int argc, char **argv) {
       if (attachment->description != NULL)
         mxwarn("More than one description given for a single attachment.\n");
       safefree(attachment->description);
-      attachment->description = to_utf8(cc_command_line, next_arg);
+      attachment->description = next_arg;
       i++;
 
     } else if (!strcmp(this_arg, "--attachment-mime-type")) {
@@ -1770,14 +1760,10 @@ static void parse_args(int argc, char **argv) {
       i++;
 
     } else if (!strcmp(this_arg, "--track-name")) {
-      char *utf8;
       if (next_arg == NULL)
         mxerror("'--track-name' lacks its argument.\n");
 
       parse_language(next_arg, lang, "track-name", "track name", false);
-      utf8 = to_utf8(cc_command_line, lang.language);
-      safefree(lang.language);
-      lang.language = utf8;
       ti->track_names->push_back(lang);
       i++;
 
@@ -1875,6 +1861,7 @@ static char **add_string(int &num, char **values, const char *new_string) {
 static char **read_args_from_file(int &num_args, char **args, char *filename) {
   mm_text_io_c *mm_io;
   string buffer, opt1, opt2;
+  bool skip_next;
 
   mm_io = NULL;
   try {
@@ -1884,7 +1871,12 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
             "arguments from.", filename);
   }
 
+  skip_next = false;
   while (!mm_io->eof() && mm_io->getline2(buffer)) {
+    if (skip_next) {
+      skip_next = false;
+      continue;
+    }
     strip(buffer);
 
     if (buffer == "#EMPTY#") {
@@ -1895,6 +1887,10 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
     if ((buffer[0] == '#') || (buffer[0] == 0))
       continue;
 
+    if (buffer == "--command-line-charset") {
+      skip_next = true;
+      continue;
+    }
     args = add_string(num_args, args, buffer.c_str());
   }
 
@@ -1904,17 +1900,28 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
 }
 
 static void handle_args(int argc, char **argv) {
-  int i, num_args;
-  char **args;
+  int i, num_args, cc_command_line;
+  char **args, *utf8;
 
   args = NULL;
   num_args = 0;
+  cc_command_line = cc_local_utf8;
 
   for (i = 1; i < argc; i++)
     if (argv[i][0] == '@')
       args = read_args_from_file(num_args, args, &argv[i][1]);
-    else
-      args = add_string(num_args, args, argv[i]);
+    else {
+      if (!strcmp(argv[i], "--command-line-charset")) {
+        if ((i + 1) == argc)
+          mxerror("'--command-line-charset' is missing its argument.\n");
+        cc_command_line = utf8_init(argv[i + 1]);
+        i++;
+      } else {
+        utf8 = to_utf8(cc_command_line, argv[i]);
+        args = add_string(num_args, args, utf8);
+        safefree(utf8);
+      }
+    }
 
   parse_args(num_args, args);
 

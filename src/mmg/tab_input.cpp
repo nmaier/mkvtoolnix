@@ -531,7 +531,11 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
             if (pair.size() != 2)
               continue;
             if (pair[0] == "track_name") {
-              *track.track_name = unescape(pair[1].c_str()).c_str();
+              char *name_local;
+              name_local =
+                from_utf8(cc_local_utf8, unescape(pair[1].c_str()).c_str());
+              *track.track_name = name_local;
+              safefree(name_local);
               track.track_name_was_present = true;
             } else if (pair[0] == "language")
               *track.language = unescape(pair[1].c_str()).c_str();
@@ -579,7 +583,11 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
           for (k = 0; k < args.size(); k++) {
             pair = split(args[k].c_str(), ":", 2);
             if ((pair.size() == 2) && (pair[0] == "title")) {
-              *file.title = unescape(pair[1].c_str()).c_str();
+              char *title_local;
+              title_local = 
+                from_utf8(cc_local_utf8, unescape(pair[1].c_str()).c_str());
+              *file.title = title_local;
+              safefree(title_local);
               title_was_present = true;
             }
           }

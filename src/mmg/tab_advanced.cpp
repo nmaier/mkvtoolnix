@@ -38,7 +38,7 @@ tab_advanced::tab_advanced(wxWindow *parent):
 
   new wxStaticBox(this, -1, _("Other options"),
                   wxPoint(10, 5), wxSize(475, 50));
-  new wxStaticText(this, -1, _("Command line charset:"), wxPoint(15, 25));
+//   new wxStaticText(this, -1, _("Command line charset:"), wxPoint(15, 25));
   cob_cl_charset =
     new wxComboBox(this, ID_CB_CLCHARSET, "", wxPoint(155, 25),
                    wxSize(130, -1), 0, NULL, wxCB_DROPDOWN |
@@ -52,6 +52,7 @@ tab_advanced::tab_advanced(wxWindow *parent):
                                 "system's current locale. The options that "
                                 "this setting affects are: segment title, "
                                 "track name and attachment description."));
+  cob_cl_charset->Show(false);
 
   new wxStaticBox(this, -1, _("Advanced options (DO NOT CHANGE!)"),
                   wxPoint(10, 400), wxSize(475, 62));

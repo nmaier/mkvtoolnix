@@ -1,5 +1,12 @@
 2004-02-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: When adding a Matroska file that contains a track
+	name or a title with non-ASCII characters those would be displayed
+	as UTF-8 in the appropriate input boxes. This has been changed,
+	but obviously it won't work if you add files with Japanese
+	characters on a system with a different locale. For full Unicode
+	support you'll have to wait quite a bit longer.
+
 	* mmg: bug fix: For some 'browse file' buttons the default
 	directory was not set to the last directory a file was selected
 	from.
