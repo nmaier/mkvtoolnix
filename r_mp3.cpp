@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.22 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.23 2003/06/03 14:29:14 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -47,7 +47,7 @@ int mp3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   }
 
   pos = find_mp3_header(buf, 4096, &header);
-  if (pos < 0)
+  if (pos != 0)
     return 0;
   decode_mp3_header(header, &mp3header);
   if ((4 - ((header >> 17) & 3)) != 3)

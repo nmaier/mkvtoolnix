@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.24 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.25 2003/06/03 14:29:14 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -50,7 +50,7 @@ int ac3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   }
 
   pos = find_ac3_header((unsigned char *)buf, 4096, &ac3header);
-  if (pos < 0)
+  if (pos != 0)
     return 0;
 
   return 1;
