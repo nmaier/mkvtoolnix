@@ -1,3 +1,12 @@
+2003-05-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Tracks read from a Matroska file will keep their UID if it
+	hasn't been used yet.
+
+	* Support for reading text subtitle streams from OGM files.
+
+	* Added support for EbmlVoid everywhere to mkvinfo.
+
 2003-05-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Support for KaxTrackLanguage and ISO639 languages.
