@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.8 2003/04/16 20:10:08 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.9 2003/04/17 15:58:07 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -449,6 +449,28 @@ void process_file() {
                 c_priv.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + CodecPrivate, length %llu",
                         NAME, c_priv.GetSize());
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackMinCache::ClassInfos.GlobalId) {
+                KaxTrackMinCache &min_cache =
+                  *static_cast<KaxTrackMinCache*>(l3);
+                min_cache.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + MinCache: %u", NAME,
+                        uint32(min_cache));
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", last_pos);
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackMaxCache::ClassInfos.GlobalId) {
+                KaxTrackMaxCache &max_cache =
+                  *static_cast<KaxTrackMaxCache*>(l3);
+                max_cache.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |  + MaxCache: %u", NAME,
+                        uint32(max_cache));
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", last_pos);
                 fprintf(stdout, "\n");
