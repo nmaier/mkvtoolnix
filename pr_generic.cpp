@@ -33,6 +33,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   audio_sync_t *as;
   cue_creation_t *cc;
   int64_t id;
+  language_t *lang;
 
 #ifdef DEBUG
   debug_c::add_packetizer(this);
@@ -72,6 +73,16 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     id = (*ti->default_track_flags)[i];
     if ((id == ti->id) || (id == -1)) { // -1 == all tracks
       ti->default_track = true;
+      break;
+    }
+  }
+
+  // Let's see if the user has specified a language for this track.
+  ti->language = NULL;
+  for (i = 0; i < ti->languages->size(); i++) {
+    lang = &(*ti->languages)[i];
+    if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
+      ti->language = lang->language;
       break;
     }
   }
@@ -488,6 +499,7 @@ bool generic_reader_c::demuxing_requested(char type, int64_t id) {
 
 track_info_t *duplicate_track_info(track_info_t *src) {
   track_info_t *dst;
+  int i;
 
   if (src == NULL)
     return NULL;
@@ -500,15 +512,19 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->audio_syncs = new vector<audio_sync_t>(*src->audio_syncs);
   dst->cue_creations = new vector<cue_creation_t>(*src->cue_creations);
   dst->default_track_flags = new vector<int64_t>(*src->default_track_flags);
+  dst->languages = new vector<language_t>(*src->languages);
+  for (i = 0; i < src->languages->size(); i++)
+    (*dst->languages)[i].language = safestrdup((*src->languages)[i].language);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
-  dst->language = safestrdup(src->language);
   dst->sub_charset = safestrdup(src->sub_charset);
 
   return dst;
 }
 
 void free_track_info(track_info_t *ti) {
+  int i;
+
   if (ti == NULL)
     return;
 
@@ -519,6 +535,9 @@ void free_track_info(track_info_t *ti) {
   delete ti->audio_syncs;
   delete ti->cue_creations;
   delete ti->default_track_flags;
+  for (i = 0; i < ti->languages->size(); i++)
+    safefree((*ti->languages)[i].language);
+  delete ti->languages;
   safefree(ti->private_data);
   safefree(ti->language);
   safefree(ti->sub_charset);

@@ -60,6 +60,11 @@ typedef struct {
 } cue_creation_t;
 
 typedef struct {
+  char *language;
+  int64_t id;
+} language_t;
+
+typedef struct {
   // The track ID.
   int64_t id;
 
@@ -84,7 +89,10 @@ typedef struct {
   vector<int64_t> *default_track_flags; // As given on the command line
   bool default_track;           // For this very track
 
-  char *language, *sub_charset;
+  vector<language_t> *languages; // As given on the command line
+  char *language;               // For this very track
+
+  char *sub_charset;
 } track_info_t;
 
 class generic_reader_c;

@@ -360,7 +360,7 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
   }
 }
 
-static void parse_sync(char *s, audio_sync_t *async) {
+static void parse_sync(char *s, audio_sync_t &async) {
   char *linear, *div, *colon;
   double d1, d2;
 
@@ -371,7 +371,7 @@ static void parse_sync(char *s, audio_sync_t *async) {
     exit(1);
   }
   *colon = 0;
-  if (!parse_int(s, async->id)) {
+  if (!parse_int(s, async.id)) {
     fprintf(stderr, "Error: Invalid track ID specified.\n");
     exit(1);
   }
@@ -387,7 +387,7 @@ static void parse_sync(char *s, audio_sync_t *async) {
     linear++;
     div = strchr(linear, '/');
     if (div == NULL)
-      async->linear = strtod(linear, NULL) / 1000.0;
+      async.linear = strtod(linear, NULL) / 1000.0;
     else {
       *div = 0;
       div++;
@@ -397,15 +397,15 @@ static void parse_sync(char *s, audio_sync_t *async) {
         fprintf(stderr, "Error: linear sync: division by zero?\n");
         exit(1);
       }
-      async->linear = d1 / d2;
+      async.linear = d1 / d2;
     }
-    if (async->linear <= 0.0) {
+    if (async.linear <= 0.0) {
       fprintf(stderr, "Error: linear sync value may not be <= 0.\n");
       exit(1);
     }
   } else
-    async->linear = 1.0;
-  async->displacement = atoi(s);
+    async.linear = 1.0;
+  async.displacement = atoi(s);
 }
 
 static float parse_aspect_ratio(char *s) {
@@ -511,7 +511,7 @@ static void parse_split(const char *arg) {
   split_by_time = false;
 }
 
-static void parse_cues(char *s, cue_creation_t *cues) {
+static void parse_cues(char *s, cue_creation_t &cues) {
   char *colon;
 
   // Extract the track number.
@@ -521,7 +521,7 @@ static void parse_cues(char *s, cue_creation_t *cues) {
     exit(1);
   }
   *colon = 0;
-  if (!parse_int(s, cues->id)) {
+  if (!parse_int(s, cues.id)) {
     fprintf(stderr, "Error: Invalid track ID specified.\n");
     exit(1);
   }
@@ -532,15 +532,44 @@ static void parse_cues(char *s, cue_creation_t *cues) {
   }
 
   if (!strcmp(s, "all"))
-    cues->cues = CUES_ALL;
+    cues.cues = CUES_ALL;
   else if (!strcmp(s, "iframes"))
-    cues->cues = CUES_IFRAMES;
+    cues.cues = CUES_IFRAMES;
   else if (!strcmp(s, "none"))
-    cues->cues = CUES_NONE;
+    cues.cues = CUES_NONE;
   else {
     fprintf(stderr, "Error: '%s' is an unsupported argument for --cues.\n", s);
     exit(1);
   }
+}
+
+static void parse_language(char *s, language_t &lang) {
+  char *colon;
+
+  // Extract the track number.
+  if ((colon = strchr(s, ':')) == NULL) {
+    fprintf(stderr, "Error: Invalid language option. No track ID specified "
+            "(%s).\n", s);
+    exit(1);
+  }
+  *colon = 0;
+  if (!parse_int(s, lang.id)) {
+    fprintf(stderr, "Error: Invalid track ID specified.\n");
+    exit(1);
+  }
+  s = &colon[1];
+  if (*s == 0) {
+    fprintf(stderr, "Error: Invalid language specified.\n");
+    exit(1);
+  }
+
+  if (!is_valid_iso639_2_code(s)) {
+    fprintf(stderr, "Error: '%s' is not a valid ISO639-2 code. See "
+            "'mkvmerge --list-languages'.\n", s);
+    exit(1);
+  }
+  
+  lang.language = s;
 }
 
 static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
@@ -728,6 +757,7 @@ static void identify(const char *filename) {
   ti.audio_syncs = new vector<audio_sync_t>;
   ti.cue_creations = new vector<cue_creation_t>;
   ti.default_track_flags = new vector<int64_t>;
+  ti.languages = new vector<language_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -768,11 +798,13 @@ static void parse_args(int argc, char **argv) {
   audio_sync_t async;
   cue_creation_t cues;
   int64_t id;
+  language_t lang;
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.audio_syncs = new vector<audio_sync_t>;
   ti.cue_creations = new vector<cue_creation_t>;
   ti.default_track_flags = new vector<int64_t>;
+  ti.languages = new vector<language_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -1009,7 +1041,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: -y lacks the audio delay.\n");
         exit(1);
       }
-      parse_sync(argv[i + 1], &async);
+      parse_sync(argv[i + 1], async);
       ti.audio_syncs->push_back(async);
       i++;
 
@@ -1018,7 +1050,7 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: --cues lacks its argument.\n");
         exit(1);
       }
-      parse_cues(argv[i + 1], &cues);
+      parse_cues(argv[i + 1], cues);
       ti.cue_creations->push_back(cues);
       i++;
 
@@ -1039,13 +1071,8 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: --language lacks its argument.\n");
         exit(1);
       }
-      if (!is_valid_iso639_2_code(argv[i + 1])) {
-        fprintf(stderr, "Error: '%s' is not a valid ISO639-2 code. See "
-                "'mkvmerge --list-languages'.\n", argv[i + 1]);
-        exit(1);
-      }
-
-      ti.language = argv[i + 1];
+      parse_language(argv[i + 1], lang);
+      ti.languages->push_back(lang);
       i++;
 
     } else if (!strcmp(argv[i], "--sub-charset")) {
@@ -1102,10 +1129,12 @@ static void parse_args(int argc, char **argv) {
       delete ti.audio_syncs;
       delete ti.cue_creations;
       delete ti.default_track_flags;
+      delete ti.languages;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
       ti.default_track_flags = new vector<int64_t>;
+      ti.languages = new vector<language_t>;
       ti.aspect_ratio = 1.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;
