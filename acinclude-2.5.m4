@@ -640,7 +640,7 @@ AC_DEFUN(PATH_WXWINDOWS,
         WXWINDOWS_LDFLAGS=$(wx-config --ldflags | sed 's;-L;-Lc:/cygwin;g')
         WXWINDOWS_LIBS=$(wx-config --libs | sed -e 's;-L;-Lc:/cygwin;g' -e 's; /usr/local/lib/libwx; c:/cygwin/usr/local/lib/libwx;g')
       else
-        WXWINDOWS_CFLAGS=$(wx-config --cxxflags | sed 's;-I;-Ic:/cygwin;g')
+        WXWINDOWS_CFLAGS=$(wx-config --cxxflags)
         WXWINDOWS_LDFLAGS=$(wx-config --ldflags)
         WXWINDOWS_LIBS=$(wx-config --libs)
       fi
