@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.51 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -39,8 +39,9 @@ using namespace std;
 #define CUES_ALL          2
 
 typedef struct {
-  int    displacement;
+  int displacement;
   double linear;
+  int64_t id;
 } audio_sync_t;
 
 typedef struct {
@@ -54,6 +55,9 @@ typedef struct {
 } packet_t;
 
 typedef struct {
+  // The track ID.
+  int64_t id;
+
   // Options used by the readers.
   char *fname;
   bool no_audio, no_video, no_subs;
@@ -67,6 +71,7 @@ typedef struct {
   char fourcc[5];
   float aspect_ratio;
 
+  vector<audio_sync_t> *audio_syncs;
   audio_sync_t async;
 
   int default_track;

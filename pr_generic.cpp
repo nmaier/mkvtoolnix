@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.53 2003/06/09 09:07:42 mosu Exp $
+    \version \$Id$
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,6 +29,9 @@
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
+  int i;
+  audio_sync_t *as;
+
 #ifdef DEBUG
   debug_c::add_packetizer(this);
 #endif
@@ -39,6 +42,17 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   track_entry = NULL;
   ti = duplicate_track_info(nti);
   free_refs = -1;
+
+  // Let's see if the user specified audio sync for this track.
+  ti->async.linear = 1.0;
+  ti->async.displacement = 0;
+  for (i = 0; i < ti->audio_syncs->size(); i++) {
+    as = &(*ti->audio_syncs)[i];
+    if ((as->id == ti->id) || (as->id == -1)) { // -1 == all tracks
+      ti->async = *as;
+      break;
+    }
+  }
 
   // Set default header values to 'unset'.
   hserialno = track_number++;
@@ -461,6 +475,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->atracks = new vector<int64_t>(*src->atracks);
   dst->vtracks = new vector<int64_t>(*src->vtracks);
   dst->stracks = new vector<int64_t>(*src->stracks);
+  dst->audio_syncs = new vector<audio_sync_t>(*src->audio_syncs);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->language = safestrdup(src->language);
@@ -477,6 +492,7 @@ void free_track_info(track_info_t *ti) {
   delete ti->atracks;
   delete ti->vtracks;
   delete ti->stracks;
+  delete ti->audio_syncs;
   safefree(ti->private_data);
   safefree(ti->language);
   safefree(ti->sub_charset);

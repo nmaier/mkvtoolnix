@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.47 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -894,6 +894,7 @@ void mkv_reader_c::create_packetizers() {
       nti.language = t->language;
 
     if (t->ok && demuxing_requested(t->type, t->tnum)) {
+      nti.id = t->tnum;         // ID for this track.
       switch (t->type) {
 
         case 'v':

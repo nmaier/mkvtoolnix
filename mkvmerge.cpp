@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.99 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -337,7 +337,9 @@ static void usage(void) {
     "  -A, --noaudio            Don't copy any audio track from this file.\n"
     "  -D, --novideo            Don't copy any video track from this file.\n"
     "  -S, --nosubs             Don't copy any text track from this file.\n"
-    "  -y, --sync <d[,o[/p]]>   Ssynchronize, delay the audio track by d ms.\n"
+    "  -y, --sync <TID:d[,o[/p]]>\n"
+    "                           Synchronize, delay the audio track with the\n"
+    "                           id TID by d ms. \n"
     "                           d > 0: Pad with silent samples.\n"
     "                           d < 0: Remove samples from the beginning.\n"
     "                           o/p: Adjust the timecodes by o/p to fix\n"
@@ -492,9 +494,24 @@ static void parse_tracks(char *s, vector<int64_t> *tracks) {
 }
 
 static void parse_sync(char *s, audio_sync_t *async) {
-  char *linear, *div;
+  char *linear, *div, *colon;
   double d1, d2;
 
+  // Extract the track number.
+  if ((colon = strchr(s, ':')) == NULL) {
+    fprintf(stderr, "Error: Invalid sync option. No track ID specified (%s)."
+            "\n", s);
+    exit(1);
+  }
+  *colon = 0;
+  async->id = strtol(s, NULL, 10);
+  s = &colon[1];
+  if (*s == 0) {
+    fprintf(stderr, "Error: Invalid sync option specified.\n");
+    exit(1);
+  }
+
+  // Now parse the actual sync values.
   if ((linear = strchr(s, ',')) != NULL) {
     *linear = 0;
     linear++;
@@ -804,7 +821,7 @@ static void identify(const char *filename) {
   filelist_t *file;
 
   memset(&ti, 0, sizeof(track_info_t));
-  ti.async.linear = 1.0;
+  ti.audio_syncs = new vector<audio_sync_t>;
   ti.cues = CUES_UNSPECIFIED;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
@@ -843,9 +860,10 @@ static void parse_args(int argc, char **argv) {
   int i, j;
   filelist_t *file;
   char *s;
+  audio_sync_t async;
 
   memset(&ti, 0, sizeof(track_info_t));
-  ti.async.linear = 1.0;
+  ti.audio_syncs = new vector<audio_sync_t>;
   ti.cues = CUES_UNSPECIFIED;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
@@ -1084,7 +1102,8 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: -y lacks the audio delay.\n");
         exit(1);
       }
-      parse_sync(argv[i + 1], &ti.async);
+      parse_sync(argv[i + 1], &async);
+      ti.audio_syncs->push_back(async);
       i++;
 
     } else if (!strcmp(argv[i], "--cues")) {
@@ -1173,8 +1192,9 @@ static void parse_args(int argc, char **argv) {
       delete ti.atracks;
       delete ti.vtracks;
       delete ti.stracks;
+      delete ti.audio_syncs;
       memset(&ti, 0, sizeof(track_info_t));
-      ti.async.linear = 1.0;
+      ti.audio_syncs = new vector<audio_sync_t>;
       ti.cues = CUES_UNSPECIFIED;
       ti.aspect_ratio = 1.0;
       ti.atracks = new vector<int64_t>;

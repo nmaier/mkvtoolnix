@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.36 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -127,6 +127,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
       ti->fourcc[4] = 0;
     } else
       memcpy(&avi->bitmap_info_header->bi_compression, ti->fourcc, 4);
+    ti->id = 0;                 // ID for the video track.
     vpacketizer = new video_packetizer_c(this, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
@@ -200,6 +201,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
     ti->private_size = wfe->cb_size + sizeof(WAVEFORMATEX);
   else
     ti->private_size = 0;
+  ti->id = aid + 1;             // ID for this audio track.
   switch (AVI_audio_format(avi)) {
     case 0x0001: // raw PCM audio
       if (verbose)

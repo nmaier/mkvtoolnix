@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_dts.cpp,v 1.7 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief DTS demultiplexer module
     \author Peter Niemayer <niemayer@isg.de>
     \author Moritz Bunkus <moritz@bunkus.org>
@@ -77,6 +77,7 @@ dts_reader_c::dts_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("dts_reader: No valid DTS packet found in the first "
                   "max_dts_packet_size bytes.\n");
   bytes_processed = 0;
+  ti->id = 0;                   // ID for this track.
   dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
 
   if (verbose) {

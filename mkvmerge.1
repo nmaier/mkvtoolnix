@@ -90,16 +90,19 @@ Options that can be used for each input file:
 \fB\-a\fR, \fB\-\-atracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the audio tracks \fIn\fR, \fIm\fR etc. The numbers are track IDs which
 can be obtained with the \fB\-\-identify\fR switch. They're \fBnot\fR simply
-the track numbers. Default: copy all audio tracks.
+the track numbers (see section \fBTRACK IDS\fR). Default: copy all audio
+tracks.
 .TP
 \fB\-d\fR, \fB\-\-vtracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the video tracks \fIn\fR, \fIm\fR etc. The numbers are track IDs which
-can be obtained with the \fB\-\-identify\fR switch. They're \fBnot\fR simply
+can be obtained with the \fB\-\-identify\fR switch (see
+section \fBTRACK IDS\fR). They're \fBnot\fR simply
 the track numbers. Default: copy all video tracks.
 .TP
 \fB\-s\fR, \fB\-\-stracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the subtitle tracks \fIn\fR, \fIm\fR etc. The numbers are track IDs which
-can be obtained with the \fB\-\-identify\fR switch. They're \fBnot\fR simply
+can be obtained with the \fB\-\-identify\fR switch (see
+section \fBTRACK IDS\fR). They're \fBnot\fR simply
 the track numbers. Default: copy all subtitle tracks.
 .TP
 \fB\-A\fR, \fB\-\-noaudio\fR
@@ -111,8 +114,10 @@ Don't copy any video track from this file.
 \fB\-T\fR, \fB\-\-nosubs\fR
 Don't copy any subtitle track from this file.
 .TP
-\fB\-y\fR, \fB\-\-sync\fR <\fId\fR[,\fIo\fR[/\fIp\fR]]>
-Synchronize manually, delay the audio track by \fId\fR ms.
+\fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>
+Synchronize manually, delay the audio track with the id \fITID\fR by \fId\fR
+ms. The track IDs are the same as the ones given with \fB\-\-identify\fR (see
+section \fBTRACK IDS\fR).
 .br
 \fId\fR > 0: Pad with silent samples.
 .br
@@ -355,6 +360,31 @@ If splitting is used then the first file is linked to the UID given with
 \'\fB\-\-link\-to\-previous\fR\' and the last file is linked to the UID given
 with \'\fB\-\-link\-to\-next\fR\'. If splitting is not used then the one
 output file will be linked to both of the two UIDs.
+
+.SH TRACK IDS
+.LP
+Some of the options for \fBmkvmerge\fR need a track ID to specify which track
+they should be applied to. Those track IDs are printed by the readers when
+demuxing the current input file, or if \fBmkvmerge\fR is called with the
+\fB\-\-identify\fR option. Track IDs are assigned like this:
+.TP
+*
+AVI files: The video track has the ID 0. All audio tracks get the ID 1, 2...
+.TP
+*
+AAC, AC3, MP3, SRT and WAV files: The one 'track' in that file gets the ID 0.
+.TP
+*
+Ogg/OGM files: The track's ID is its serial number as given in the Ogg stream
+header page.
+.TP
+*
+Matroska files: The track's ID is the track number as reported by \fBmkvinfo\fR
+or \fBmkvmerge \-\-identify\fR. It is \fBnot\fR the track UID.
+.LP
+The special track ID '-1' is a wildcard and applies the given switch to all
+tracks that are read from an input file. This was the bahviour of these
+switches prior to version 0.4.4.
 
 .SH NOTES
 .LP

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.8 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -74,6 +74,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     else
       adif = 0;
     bytes_processed = 0;
+    ti->id = 0;                 // ID for this track.
     aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
                                          aacheader.sample_rate,
                                          aacheader.channels, ti);

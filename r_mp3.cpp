@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.24 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -87,6 +87,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   decode_mp3_header(header, &mp3header);
 
   bytes_processed = 0;
+  ti->id = 0;                   // ID for this track.
   mp3packetizer = new mp3_packetizer_c(this,
                                        mp3_freqs[mp3header.sampling_frequency],
                                        mp3header.stereo ? 2 : 1, ti);

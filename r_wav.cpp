@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.28 2003/06/12 23:05:49 mosu Exp $
+    \version \$Id$
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
@@ -130,6 +130,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
     wheader.common.dwSamplesPerSec / 8;
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
+  ti->id = 0;                   // ID for this track.
 
   {
     // check wether .wav file contains DTS data...

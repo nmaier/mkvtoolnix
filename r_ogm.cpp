@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.37 2003/06/12 23:09:00 mosu Exp $
+    \version \$Id$
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -209,6 +209,7 @@ void ogm_reader_c::create_packetizers() {
     sth = (stream_header *)&dmx->packet_data[0][1];
     ti->private_data = NULL;
     ti->private_size = 0;
+    ti->id = dmx->serial;       // ID for this track.
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
