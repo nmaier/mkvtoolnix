@@ -38,7 +38,6 @@ public:
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxComboBox *cob_priority;
-  wxLogWindow *log_window;
 
 public:
   tab_settings(wxWindow *parent);

@@ -501,9 +501,16 @@ format_date_time(time_t date_time) {
 #if defined(SYS_WINDOWS)
 wxString
 format_tooltip(const wxString &s) {
-  wxString tooltip(s);
+  wxString tooltip(s), nl(wxT("\n"));
+  unsigned int i;
 
-  return break_line(tooltip, 30);
+  for (i = 30; i < tooltip.length(); ++i)
+    if (wxT(' ') == tooltip[i])
+      return tooltip.Left(i) + nl + tooltip.Right(tooltip.length() - i - 1);
+    else if (wxT('(') == tooltip[i])
+      return tooltip.Left(i) + nl + tooltip.Right(tooltip.length() - i);
+
+  return tooltip;
 }
 #endif
 
@@ -582,6 +589,9 @@ mmg_dialog::mmg_dialog():
   int window_pos_x, window_pos_y;
 
   mdlg = this;
+
+  log_window = new wxLogWindow(this, wxT("mmg debug output"), false);
+  wxLog::SetActiveTarget(log_window);
 
   file_menu = new wxMenu();
   file_menu->Append(ID_M_FILE_NEW, wxT("&New\tCtrl-N"),

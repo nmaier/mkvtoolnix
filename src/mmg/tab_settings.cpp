@@ -154,9 +154,6 @@ tab_settings::tab_settings(wxWindow *parent):
   siz_all->Add(siz_about, 0, wxGROW | wxALL, 5);
   SetSizer(siz_all);
 
-  log_window = new wxLogWindow(this, wxT("mmg debug output"), false);
-  wxLog::SetActiveTarget(log_window);
-
   load_preferences();
 }
 
@@ -205,7 +202,7 @@ tab_settings::on_on_top_selected(wxCommandEvent &evt) {
 void
 tab_settings::on_gui_debugging_selected(wxCommandEvent &evt) {
   save_preferences();
-  log_window->Show(cb_gui_debugging->IsChecked());
+  mdlg->log_window->Show(cb_gui_debugging->IsChecked());
 }
 
 void
@@ -241,7 +238,7 @@ tab_settings::load_preferences() {
   cb_warn_usage->SetValue(b);
   cfg->Read(wxT("gui_debugging"), &b, false);
   cb_gui_debugging->SetValue(b);
-  log_window->Show(b);
+  mdlg->log_window->Show(b);
 }
 
 void

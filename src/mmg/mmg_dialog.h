@@ -111,6 +111,7 @@ public:
   job_dialog *jdlg;
 
   wxHtmlHelpController *help;
+  wxLogWindow *log_window;
 
   bool warned_chapter_editor_not_empty;
 
