@@ -15,5 +15,4 @@ mmg_SOURCES = mmg.cpp mmg.h \
 			tab_settings.cpp
 
 mmg_LDADD = @PROFILING_LIBS@ @EBML_LIBS@ @WXWINDOWS_LIBS@ @MINGW_LIBS@ \
-		@ICONV_LIBS@
-
+		@MINGW_GUIAPP@ @ICONV_LIBS@
