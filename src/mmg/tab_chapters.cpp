@@ -793,7 +793,7 @@ void tab_chapters::on_add_chapter(wxCommandEvent &evt) {
   s = create_chapter_label(*chapter);
 
   if (d->is_atom) {
-    pid = tc_chapters->GetParent(id);
+    pid = tc_chapters->GetItemParent(id);
     pd = (chapter_node_data_c *)tc_chapters->GetItemData(pid);
     if (pd->is_atom)
       m = pd->chapter;
