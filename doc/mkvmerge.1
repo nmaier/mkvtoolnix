@@ -564,9 +564,14 @@ by OGMs. The full specs can be found at
 .UR http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html
 <http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html>
 .LP
-\fBmkvmerge\fR's chapter support is still a bit limited, though. At the moment
-it only supports reading chapter data in the same format that the OGM tools
-expect. It looks basically like this:
+\fBmkvmerge\fR supports two kinds of chapter files as its input. The first
+format, called 'simple chapter format', is the same format that the OGM tools
+expect. The second format is a XML based chapter format which supports all
+of Matroska's chapter functionality.
+.LP
+\fBThe simple chapter format\fR
+
+It looks basically like this:
 .LP
 CHAPTER01=00:00:00.000
 .br
@@ -593,6 +598,64 @@ In this case \fI\-\-chapter\-charset\fR is simply ignored. You can use
 \fBmkvinfo\fR or \fBmkvextract\fR to verify that the chapter names have
 been converted properly.
 .LP
+\fBThe XML based chapter format\fR
+
+The XML based chapter format looks like this:
+.LP
+<?xml version="1.0" encoding="ISO-8859-1"?>
+.br
+<!DOCTYPE Tags SYSTEM "matroskachapters.dtd">
+.br
+<Chapters>
+.br
+  <EditionEntry>
+.br
+    <ChapterAtom>
+.br
+      <ChapterTimeStart>00:00:30.000</ChapterTimeStart>
+.br
+      <ChapterTimeEnd>00:01:20.000</ChapterTimeEnd>
+.br
+      <ChapterDisplay>
+.br
+        <ChapterString>A short chapter</ChapterString>
+.br
+        <ChapterLanguage>eng</ChapterLanguage>
+.br
+      </ChapterDisplay>
+.br
+      <ChapterAtom>
+.br
+        <ChapterTimeStart>00:00:46.000</ChapterTimeStart>
+.br
+        <ChapterTimeEnd>00:01:10.000</ChapterTimeEnd>
+.br
+        <ChapterDisplay>
+.br
+          <ChapterString>A part of that short chapter</ChapterString>
+.br
+          <ChapterLanguage>eng</ChapterLanguage>
+.br
+        </ChapterDisplay>
+.br
+      </ChapterAtom>
+.br
+    </ChapterAtom>
+.br
+  </EditionEntry>
+.br
+</Chapters>
+
+With this format three things are possible that are not possible with the
+simple chapter format: 1) The timestamp for the end of the chapter can be
+set, 2) chapters can be nested, 3) the language and country can be set.
+.LP
+The mkvtoolnix distribution contains some sample files in the \fIdoc\fR
+subdirectory which can be used as a basis.
+.LP
+\fBGeneral notes\fR
+
+.LP
 When splitting files \fBmkvmerge\fR will correctly adjust the chapters as
 well. This means that each file only includes the chapter entries that
 apply to it, and that the timecodes will be offset to match the new timecodes
@@ -602,9 +665,6 @@ Another shortcoming is that \fBmkvmerge\fR will silently discards chapters
 found in source files - e.g. when reading them from an OGM file or another
 Matroska file. You can use \fBmkvextract\fR to export chapters from another
 Matroska file and use the result with \fBmkvmerge\fR.
-.LP
-The upcoming version of \fBmkvmerge\fR will address most of the shortcomings
-mentioned above.
 
 
 .SH TAGS
