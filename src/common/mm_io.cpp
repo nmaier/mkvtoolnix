@@ -456,6 +456,59 @@ mm_io_c::read_uint64_be() {
   return get_uint64_be(buffer);
 }
 
+int
+mm_io_c::write_uint8(unsigned char value) {
+  return write(&value, 1);
+}
+
+int
+mm_io_c::write_uint16(uint16_t value) {
+  uint16_t buffer;
+
+  put_uint16(&buffer, value);
+  return write(&buffer, sizeof(uint16_t));
+}
+
+int
+mm_io_c::write_uint32(uint32_t value) {
+  uint32_t buffer;
+
+  put_uint32(&buffer, value);
+  return write(&buffer, sizeof(uint32_t));
+}
+
+int
+mm_io_c::write_uint64(uint64_t value) {
+  uint64_t buffer;
+
+  put_uint64(&buffer, value);
+  return write(&buffer, sizeof(uint64_t));
+}
+
+int
+mm_io_c::write_uint16_be(uint16_t value) {
+  uint16_t buffer;
+
+  put_uint16_be(&buffer, value);
+  return write(&buffer, sizeof(uint16_t));
+}
+
+int
+mm_io_c::write_uint32_be(uint32_t value) {
+  uint32_t buffer;
+
+  put_uint32_be(&buffer, value);
+  return write(&buffer, sizeof(uint32_t));
+}
+
+int
+mm_io_c::write_uint64_be(uint64_t value) {
+  uint64_t buffer;
+
+  put_uint64_be(&buffer, value);
+  return write(&buffer, sizeof(uint64_t));
+}
+
 void
 mm_io_c::skip(int64 num_bytes) {
   int64_t pos;

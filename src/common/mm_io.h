@@ -59,6 +59,13 @@ public:
   virtual uint32_t read_uint24_be();
   virtual uint32_t read_uint32_be();
   virtual uint64_t read_uint64_be();
+  virtual int write_uint8(unsigned char value);
+  virtual int write_uint16(uint16_t value);
+  virtual int write_uint32(uint32_t value);
+  virtual int write_uint64(uint64_t value);
+  virtual int write_uint16_be(uint16_t value);
+  virtual int write_uint32_be(uint32_t value);
+  virtual int write_uint64_be(uint64_t value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size);
   virtual void close();
