@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.27 2003/05/06 10:22:55 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.28 2003/05/07 17:40:09 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -927,8 +927,8 @@ int mkv_reader_c::read() {
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
                 block = (KaxBlock *)l3;
-                block->SetParent(*cluster);
                 block->ReadData(es->I_O());
+                block->SetParent(*cluster);
 
                 block_track = find_track_by_num(block->TrackNum());
                 if ((block_track != NULL) && demuxing_requested(block_track))

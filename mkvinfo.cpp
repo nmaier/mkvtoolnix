@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.35 2003/05/06 09:59:37 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.36 2003/05/07 17:40:09 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -818,8 +818,8 @@ void process_file() {
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
                 KaxBlock &block = *static_cast<KaxBlock *>(l3);
-                block.SetParent(*cluster);
                 block.ReadData(es->I_O());
+                block.SetParent(*cluster);
                 fprintf(stdout, "(%s) |  + block (track number %u, %d frame(s)"
                         ", timecode %.3fs)", NAME, block.TrackNum(),
                         block.NumberFrames(),
