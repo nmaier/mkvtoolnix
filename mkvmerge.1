@@ -104,6 +104,11 @@ Sets the 'default' flag for all tracks read from this file. If the user does
 not explicitly select a track himself then the player should prefer the
 track that has his 'default' flag set. Only one track of each kind (audio,
 video, subttiles) can have his 'default' flag set.
+.TP
+\fB\-\-language\fR <\fIlanguage\fR>
+Sets the language for all tracks read from this file. Only ISO639-2 codes
+are allowed. All languages including their ISO639-2 codes can be listed
+with the \fB\-\-list\-languages\fR option.
 .LP
 Options that only apply to video tracks:
 .TP
@@ -123,6 +128,10 @@ Other options:
 .TP
 \fB\-l\fR, \fB\-\-list\-types\fR
 Lists supported input file types.
+.TP
+\fB\-\-list\-languages\fR
+Lists all languages and their ISO639-2 code which can be used with the
+\fB\-\-language\fR option.
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 Show usage information.
