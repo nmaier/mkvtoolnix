@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.79 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.80 2003/05/23 10:21:31 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -131,6 +131,8 @@ KaxSeekHead *kax_seekhead = NULL;
 bool write_meta_seek = true;
 int64_t meta_seek_size = 0;
 
+bool no_lacing = false;
+
 // Specs say that track numbers should start at 1.
 int track_number = 1;
 
@@ -180,6 +182,7 @@ static void usage(void) {
     "  --no-cues                Do not write the cue data (the index).\n"
     "  --no-meta-seek           Do not write any meta seek information.\n"
     "  --meta-seek-size <d>     Reserve d bytes for the meta seek entries.\n"
+    "  --no-lacing              Do not use lacing.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -649,6 +652,8 @@ static void parse_args(int argc, char **argv) {
     else if (!strcmp(argv[i], "--no-meta-seek"))
       write_meta_seek = false;
 
+    else if (!strcmp(argv[i], "--no-lacing"))
+      no_lacing = true;
 
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.44 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.45 2003/05/23 10:21:31 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -315,6 +315,9 @@ void generic_packetizer_c::set_headers() {
         haudio_bit_depth;
 
   }
+
+  if (no_lacing)
+    track_entry->EnableLacing(false);
 }
 
 void generic_packetizer_c::duplicate_data_on_add(bool duplicate) {

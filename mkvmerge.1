@@ -49,6 +49,10 @@ Reserve \fRd\fR bytes for the meta seek information (see
 \fBmkvmerge\fR will abort with an appropriate warning message if the space
 is not enough and also provide the optimal size to use with this option.
 This option is normally not needed.
+.TP
+\fB\-\-no\-lacing\fR
+Disable lacing for all tracks. This will increase the file's size, especially
+if there are many audio tracks. This option is not intended for everyday use.
 .LP
 Options that can be used for each input file:
 .TP
