@@ -64,6 +64,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxClusterData.h>
+#include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxContexts.h>
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
@@ -130,7 +131,7 @@ kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
 // {{{ D'TOR
 
 kax_reader_c::~kax_reader_c() {
-  int i;
+  int i, k;
 
   for (i = 0; i < tracks.size(); i++)
     if (tracks[i] != NULL) {
@@ -140,6 +141,19 @@ kax_reader_c::~kax_reader_c() {
       safefree(tracks[i]->codec_id);
       safefree(tracks[i]->language);
       safefree(tracks[i]->track_name);
+      for (k = 0; k < tracks[i]->c_encodings->size(); k++) {
+        safefree((*tracks[i]->c_encodings)[k].comp_settings);
+        safefree((*tracks[i]->c_encodings)[k].enc_keyid);
+        safefree((*tracks[i]->c_encodings)[k].sig_keyid);
+        safefree((*tracks[i]->c_encodings)[k].signature);
+      }
+      delete tracks[i]->c_encodings;
+      if (tracks[i]->zlib_compressor != NULL)
+        delete tracks[i]->zlib_compressor;
+      if (tracks[i]->bzlib_compressor != NULL)
+        delete tracks[i]->bzlib_compressor;
+      if (tracks[i]->lzo1x_compressor != NULL)
+        delete tracks[i]->lzo1x_compressor;
       safefree(tracks[i]);
     }
 
@@ -178,6 +192,7 @@ kax_track_t *kax_reader_c::new_kax_track() {
 
   t = (kax_track_t *)safemalloc(sizeof(kax_track_t));
   memset(t, 0, sizeof(kax_track_t));
+  t->c_encodings = new vector<kax_content_encoding_t>;
   tracks.push_back(t);
 
   // Set some default values.
@@ -217,11 +232,87 @@ void kax_reader_c::verify_tracks() {
   unsigned char *c;
   uint32_t u, offset, length;
   kax_track_t *t;
+  kax_content_encoding_t *ce;
   alBITMAPINFOHEADER *bih;
   alWAVEFORMATEX *wfe;
 
   for (tnum = 0; tnum < tracks.size(); tnum++) {
     t = tracks[tnum];
+
+    t->ok = 1;
+    for (i = 0; i < t->c_encodings->size(); i++) {
+      ce = &(*t->c_encodings)[i];
+
+      if (ce->type == 1) {
+        mxwarn(PFX "Track number %u has been encrypted and decryption has "
+               "not yet been implemented. Skipping track.\n", t->tnum);
+        t->ok = 0;
+        break;
+      }
+
+      if (ce->type != 0) {
+        mxwarn(PFX "Unknown content encoding type %u for track %u. Skipping "
+               "track.\n", ce->type, t->tnum);
+        t->ok = 0;
+        break;
+      }
+
+      if (ce->comp_algo == 0) {
+#if !defined(HAVE_ZLIB_H)
+        mxwarn(PFX "Track %u was compressed with zlib but mkvmerge has not "
+               "been compiled with support for zlib compression. Skipping "
+               "track.\n", t->tnum);
+        t->ok = 0;
+        break;
+#else
+        if (t->zlib_compressor == NULL)
+          t->zlib_compressor = new zlib_compression_c();
+#endif
+      } else if (ce->comp_algo == 1) {
+#if !defined(HAVE_BZLIB_H)
+        mxwarn(PFX "Track %u was compressed with bzlib but mkvmerge has not "
+               "been compiled with support for bzlib compression. Skipping "
+               "track.\n", t->tnum);
+        t->ok = 0;
+        break;
+#else
+        if (t->bzlib_compressor == NULL)
+          t->bzlib_compressor = new bzlib_compression_c();
+#endif
+      } else if (ce->comp_algo == 2) {
+#if !defined(HAVE_LZO1X_H)
+        mxwarn(PFX "Track %u was compressed with lzo1x but mkvmerge has not "
+               "been compiled with support for lzo1x compression. Skipping "
+               "track.\n", t->tnum);
+        t->ok = 0;
+        break;
+#else
+        if (t->lzo1x_compressor == NULL)
+          t->lzo1x_compressor = new lzo_compression_c();
+#endif
+      } else {
+        mxwarn(PFX "Track %u has been compressed with an unknown/unsupported "
+               "compression algorithm (%u). Skipping track.\n", t->tnum,
+               ce->comp_algo);
+        t->ok = 0;
+        break;
+      }
+    }
+
+    if (!t->ok)
+      continue;
+    t->ok = 0;
+
+    if (t->private_data != NULL) {
+      c = (unsigned char *)t->private_data;
+      length = t->private_size;
+      if (reverse_encodings(t, c, length, 2)) {
+        safefree(t->private_data);
+        t->private_data = c;
+        t->private_size = length;
+      }
+    }
+
     switch (t->type) {
       case 'v':                 // video track
         if (t->codec_id == NULL)
@@ -435,7 +526,7 @@ void kax_reader_c::verify_tracks() {
         break;
 
       case 's':
-        if (!strncmp(t->codec_id, MKV_S_VOBSUB, strlen(MKV_S_VOBSUB))) {
+        if (!strcmp(t->codec_id, MKV_S_VOBSUB)) {
           if (t->private_data == NULL) {
             if (verbose)
               mxwarn(PFX "CodecID for track %u is '%s', but there was no "
@@ -592,7 +683,7 @@ void kax_reader_c::handle_chapters(mm_io_c *io, EbmlStream *es,
 int kax_reader_c::read_headers() {
   int upper_lvl_el;
   // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
   kax_track_t *track;
   bool exit_loop;
 
@@ -707,6 +798,8 @@ int kax_reader_c::read_headers() {
           KaxTrackLanguage *ktlanguage;
           KaxTrackMinCache *ktmincache;
           KaxTrackName *ktname;
+          int kcenc_idx;
+          vector<kax_content_encoding_t>::iterator ce_ins_it;
 
           if (verbose > 1)
             mxinfo(PFX "| + a track...\n");
@@ -914,6 +1007,107 @@ int kax_reader_c::read_headers() {
             if (verbose > 1)
               mxinfo(PFX "|  + Name: %s\n", tmp);
             safefree(tmp);
+          }
+
+          for (kcenc_idx = 0; kcenc_idx < ktentry->ListSize(); kcenc_idx++) {
+            l3 = (*ktentry)[kcenc_idx];
+            if (EbmlId(*l3) == KaxContentEncoding::ClassInfos.GlobalId) {
+              KaxContentEncoding *kcenc;
+              KaxContentEncodingOrder *ce_order;
+              KaxContentEncodingType *ce_type;
+              KaxContentEncodingScope *ce_scope;
+              KaxContentCompression *ce_comp;
+              KaxContentEncryption *ce_enc;
+              kax_content_encoding_t enc;
+
+              memset(&enc, 0, sizeof(kax_content_encoding_t));
+              kcenc = static_cast<KaxContentEncoding *>(l3);
+
+              ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
+              if (ce_order != NULL)
+                enc.order = uint32(*ce_order);
+
+              ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
+              if (ce_type != NULL)
+                enc.type = uint32(*ce_type);
+
+              ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
+              if (ce_scope != NULL)
+                enc.scope = uint32(*ce_scope);
+              else
+                enc.scope = 1;
+
+              ce_comp = FINDFIRST(kcenc, KaxContentCompression);
+              if (ce_comp != NULL) {
+                KaxContentCompAlgo *cc_algo;
+                KaxContentCompSettings *cc_settings;
+
+                cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
+                if (cc_algo != NULL)
+                  enc.comp_algo = uint32(*cc_algo);
+
+                cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
+                if (cc_settings != NULL) {
+                  enc.comp_settings =
+                    (unsigned char *)safememdup(&binary(*cc_settings),
+                                                cc_settings->GetSize());
+                  enc.comp_settings_len = cc_settings->GetSize();
+                }
+              }
+
+              ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
+              if (ce_enc != NULL) {
+                KaxContentEncAlgo *ce_ealgo;
+                KaxContentEncKeyID *ce_ekeyid;
+                KaxContentSigAlgo *ce_salgo;
+                KaxContentSigHashAlgo *ce_shalgo;
+                KaxContentSigKeyID *ce_skeyid;
+                KaxContentSignature *ce_signature;
+
+                ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
+                if (ce_ealgo != NULL)
+                  enc.enc_algo = uint32(*ce_ealgo);
+
+                ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
+                if (ce_ekeyid != NULL) {
+                  enc.enc_keyid =
+                    (unsigned char *)safememdup(&binary(*ce_ekeyid),
+                                                ce_ekeyid->GetSize());
+                  enc.enc_keyid_len = ce_ekeyid->GetSize();
+                }
+
+                ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
+                if (ce_salgo != NULL)
+                  enc.enc_algo = uint32(*ce_salgo);
+
+                ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
+                if (ce_shalgo != NULL)
+                  enc.enc_algo = uint32(*ce_shalgo);
+
+                ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
+                if (ce_skeyid != NULL) {
+                  enc.sig_keyid =
+                    (unsigned char *)safememdup(&binary(*ce_skeyid),
+                                                ce_skeyid->GetSize());
+                  enc.sig_keyid_len = ce_skeyid->GetSize();
+                }
+
+                ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
+                if (ce_signature != NULL) {
+                  enc.signature =
+                    (unsigned char *)safememdup(&binary(*ce_signature),
+                                                ce_signature->GetSize());
+                  enc.signature_len = ce_signature->GetSize();
+                }
+
+              }
+
+              ce_ins_it = track->c_encodings->begin();
+              while ((ce_ins_it != track->c_encodings->end()) &&
+                     (enc.order <= (*ce_ins_it).order))
+                ce_ins_it++;
+              track->c_encodings->insert(ce_ins_it, enc);
+            }
           }
 
           ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
@@ -1186,38 +1380,10 @@ void kax_reader_c::create_packetizers() {
           break;
 
         case 's':
-          if (!strncmp(t->codec_id, MKV_S_VOBSUB, strlen(MKV_S_VOBSUB))) {
-            int compressed, compression, idx;
-            char *cstr;
-
-            if ((cstr = strchr(t->codec_id, '/')) != NULL) {
-              cstr++;
-              if (!strcmp(cstr, "LZO"))
-                compressed = COMPRESSION_LZO;
-              else if (!strcmp(cstr, "Z") || !strcmp(cstr, "ZLIB"))
-                compressed = COMPRESSION_ZLIB;
-              else if (!strcmp(cstr, "BZ2"))
-                compressed = COMPRESSION_BZ2;
-              else
-                mxerror(PFX "Unsupported compressed method '%s'.\n", cstr);
-            } else
-              compressed = COMPRESSION_NONE;
-
-#if defined(HAVE_ZLIB_H)
-            compression = COMPRESSION_ZLIB;
-#else
-            compression = COMPRESSION_NONE;
-#endif
-            for (idx = 0; idx < ti->compression_list->size(); idx++)
-              if (((*ti->compression_list)[idx].id == t->tnum) ||
-                  ((*ti->compression_list)[idx].id == -1)) {
-                compression = (*ti->compression_list)[idx].cues;
-                break;
-              }
-
+          if (!strcmp(t->codec_id, MKV_S_VOBSUB)) {
             t->packetizer =
               new vobsub_packetizer_c(this, t->private_data, t->private_size,
-                                      compression, compressed, &nti);
+                                      &nti);
             if (verbose)
               mxinfo("+-> Using the VobSub output module for track ID %u.\n",
                      t->tnum);
@@ -1366,14 +1532,22 @@ int kax_reader_c::read(generic_packetizer_c *) {
               block_fref += (int64_t)last_timecode;
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {
+              unsigned char *re_buffer;
+              uint32_t re_size;
+              bool re_modified;
+
               DataBuffer &data = block->GetBuffer(i);
+              re_buffer = data.Buffer();
+              re_size = data.Size();
+              re_modified = reverse_encodings(block_track, re_buffer, re_size,
+                                              1);
               if ((block_track->type == 's') &&
                   (block_track->sub_type == 't')) {
                 char *lines;
 
-                lines = (char *)safemalloc(data.Size() + 1);
-                lines[data.Size()] = 0;
-                memcpy(lines, data.Buffer(), data.Size());
+                lines = (char *)safemalloc(re_size + 1);
+                lines[re_size] = 0;
+                memcpy(lines, re_buffer, re_size);
                 block_track->packetizer->process((unsigned char *)lines, 0,
                                                  (int64_t)last_timecode,
                                                  block_duration,
@@ -1381,12 +1555,13 @@ int kax_reader_c::read(generic_packetizer_c *) {
                                                  block_fref);
                 safefree(lines);
               } else
-                block_track->packetizer->process((unsigned char *)
-                                                 data.Buffer(), data.Size(),
+                block_track->packetizer->process(re_buffer, re_size,
                                                  (int64_t)last_timecode,
                                                  block_duration,
                                                  block_bref,
                                                  block_fref);
+              if (re_modified)
+                safefree(re_buffer);
             }
 
             block_track->previous_timecode = (int64_t)last_timecode;
@@ -1589,4 +1764,43 @@ void kax_reader_c::add_attachments(KaxAttachments *a) {
 
     a->PushElement(*attached);
   }
+}
+
+bool kax_reader_c::reverse_encodings(kax_track_t *track, unsigned char *&data,
+                                     uint32_t &size, uint32_t type) {
+  int new_size;
+  unsigned char *new_data, *old_data;
+  bool modified;
+  vector<kax_content_encoding_t>::iterator ce;
+  compression_c *compressor;
+
+  if (track->c_encodings->size() == 0)
+    return false;
+
+  new_data = data;
+  new_size = size;
+  modified = false;
+  for (ce = track->c_encodings->begin(); ce < track->c_encodings->end();
+       ce++) {
+    if ((ce->scope & type) == 0)
+      continue;
+
+    if (ce->comp_algo == 0)
+      compressor = track->zlib_compressor;
+    else if (ce->comp_algo == 1)
+      compressor = track->bzlib_compressor;
+    else
+      compressor = track->lzo1x_compressor;
+
+    old_data = new_data;
+    new_data = compressor->decompress(old_data, new_size);
+    if (modified)
+      safefree(old_data);
+    modified = true;
+  }
+
+  data = new_data;
+  size = new_size;
+
+  return modified;
 }

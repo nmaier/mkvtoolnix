@@ -21,7 +21,7 @@
 #include "compression.h"
 
 const char *compression_schemes[] = {
-  "unspecified", "none", "lzo", "zlib", "bz2"
+  "unspecified", "zlib", "bz2", "lzo", "none"
 };
 
 #if defined(HAVE_LZO1X_H)
@@ -233,9 +233,9 @@ compression_c::~compression_c() {
 }
 
 compression_c *compression_c::create(int scheme) {
-  if ((scheme < COMPRESSION_NONE) ||
+  if ((scheme <= COMPRESSION_UNSPECIFIED) ||
       (scheme > COMPRESSION_NUM))
-    return 0;
+    return NULL;
 
   return create(compression_schemes[scheme]);
 }

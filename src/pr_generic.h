@@ -32,6 +32,7 @@
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTags.h>
 
+#include "compression.h"
 #include "error.h"
 #include "mm_io.h"
 
@@ -153,6 +154,9 @@ protected:
 
   int64_t dumped_packet_number;
 
+  int hcompression;
+  compression_c *compressor;
+
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
     throw (error_c);
@@ -218,6 +222,8 @@ public:
   virtual void set_tag_track_uid();
 
   virtual void set_track_name(const char *name);
+
+  virtual void set_default_compression_method(int method);
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

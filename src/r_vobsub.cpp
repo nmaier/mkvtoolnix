@@ -164,13 +164,7 @@ void vobsub_reader_c::create_packetizers() {
     } else
       ti->language = NULL;
     tracks[i]->packetizer =
-      new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(),
-#if defined(HAVE_ZLIB_H)
-                              COMPRESSION_ZLIB,
-#else
-                              COMPRESSION_NONE,
-#endif
-                              COMPRESSION_NONE, ti);
+      new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(), ti);
     avg_duration = 0;
     for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
       tracks[i]->durations.push_back(tracks[i]->timecodes[k + 1] -

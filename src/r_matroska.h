@@ -27,10 +27,11 @@
 
 #include <vector>
 
-#include "mm_io.h"
 #include "common.h"
-#include "pr_generic.h"
+#include "compression.h"
 #include "error.h"
+#include "mm_io.h"
+#include "pr_generic.h"
 
 #include <ebml/EbmlUnicodeString.h>
 
@@ -47,6 +48,16 @@ typedef struct {
   unsigned char *data;
   int64 size, id;
 } kax_attachment_t;
+
+typedef struct {
+  uint32_t order, type, scope;
+  uint32_t comp_algo;
+  unsigned char *comp_settings;
+  uint32_t comp_settings_len;
+  uint32_t enc_algo, sig_algo, sig_hash_algo;
+  unsigned char *enc_keyid, *sig_keyid, *signature;
+  uint32_t enc_keyid_len, sig_keyid_len, signature_len;
+} kax_content_encoding_t;
 
 typedef struct {
   uint32_t tnum, tuid;
@@ -83,6 +94,10 @@ typedef struct {
   bool ok;
 
   int64_t previous_timecode;
+
+  vector<kax_content_encoding_t> *c_encodings;
+
+  compression_c *zlib_compressor, *bzlib_compressor, *lzo1x_compressor;
 
   generic_packetizer_c *packetizer;
 } kax_track_t;
@@ -129,7 +144,7 @@ public:
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
-private:
+protected:
   virtual int read_headers();
   virtual void create_packetizers();
   virtual kax_track_t *new_kax_track();
@@ -142,6 +157,8 @@ private:
   virtual void handle_chapters(mm_io_c *io, EbmlStream *es,
                                EbmlElement *l0, int64_t pos);
   virtual int64_t get_queued_bytes();
+  virtual bool reverse_encodings(kax_track_t *track, unsigned char *&data,
+                                 uint32_t &size, uint32_t type);
 };
 
 

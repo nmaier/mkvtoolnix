@@ -18,6 +18,7 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackAudio.h>
@@ -158,16 +159,19 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   hvideo_display_width = -1;
   hvideo_display_height = -1;
 
+  hcompression = COMPRESSION_UNSPECIFIED;
+  compressor = NULL;
+
   dumped_packet_number = 0;
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
   free_track_info(ti);
 
-  if (hcodec_id != NULL)
-    safefree(hcodec_id);
-  if (hcodec_private != NULL)
-    safefree(hcodec_private);
+  safefree(hcodec_id);
+  safefree(hcodec_private);
+  if (compressor != NULL)
+    delete compressor;
 }
 
 void generic_packetizer_c::set_tag_track_uid() {
@@ -378,6 +382,10 @@ void generic_packetizer_c::set_language(const char *language) {
   ti->language = safestrdup(language);
 }
 
+void generic_packetizer_c::set_default_compression_method(int method) {
+  hcompression = method;
+}
+
 void generic_packetizer_c::set_headers() {
   int idx, disp_width, disp_height;
   KaxTag *tag;
@@ -516,6 +524,32 @@ void generic_packetizer_c::set_headers() {
 
   }
 
+  if (ti->compression != COMPRESSION_UNSPECIFIED)
+    hcompression = ti->compression;
+  if ((hcompression != COMPRESSION_UNSPECIFIED) &&
+      (hcompression != COMPRESSION_NONE)) {
+    KaxContentEncoding *c_encoding;
+    KaxContentCompression *c_comp;
+
+    c_encoding = &GetChild<KaxContentEncoding>(*track_entry);
+    // First modification
+    *static_cast<EbmlUInteger *>
+      (&GetChild<KaxContentEncodingOrder>(*c_encoding)) = 0;
+    // It's a compression.
+    *static_cast<EbmlUInteger *>
+      (&GetChild<KaxContentEncodingType>(*c_encoding)) = 0;
+    // Only the frame contents have been compresed.
+    *static_cast<EbmlUInteger *>
+      (&GetChild<KaxContentEncodingScope>(*c_encoding)) = 1;
+
+    c_comp = &GetChild<KaxContentCompression>(*c_encoding);
+    // Set compression method.
+    *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) =
+      hcompression - 1;
+
+    compressor = compression_c::create(hcompression);
+  }
+
   if (no_lacing)
     track_entry->EnableLacing(false);
 
@@ -549,7 +583,12 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
-  if (duplicate_data) {
+
+  if (compressor != NULL) {
+    pack->data = compressor->compress(data, length);
+    if (!duplicate_data)
+      safefree(data);
+  } else if (duplicate_data) {
     if (!fast_mode)
       pack->data = (unsigned char *)safememdup(data, length);
     else

@@ -25,10 +25,10 @@
 
 /* compression types */
 #define COMPRESSION_UNSPECIFIED   0
-#define COMPRESSION_NONE          1
-#define COMPRESSION_LZO           2
-#define COMPRESSION_ZLIB          3
-#define COMPRESSION_BZ2           4
+#define COMPRESSION_ZLIB          1
+#define COMPRESSION_BZ2           2
+#define COMPRESSION_LZO           3
+#define COMPRESSION_NONE          4
 #define COMPRESSION_NUM           4
 
 extern const char *compression_schemes[];

@@ -31,15 +31,10 @@ class vobsub_packetizer_c: public generic_packetizer_c {
 private:
   unsigned char *idx_data;
   int idx_data_size;
-  bool compressed;
-  int compression_type, compressed_type;
-  int64_t raw_size, compressed_size, items;
-  compression_c *compressor, *decompressor;
 
 public:
   vobsub_packetizer_c(generic_reader_c *nreader,
                       const void *nidx_data, int nidx_data_size,
-                      int ncompression_type, int ncompressed_type,
                       track_info_t *nti) throw (error_c);
   virtual ~vobsub_packetizer_c();
 
