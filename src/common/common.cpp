@@ -1,3 +1,4 @@
+
 /*
  * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
@@ -1494,6 +1495,31 @@ mxsprintf(const char *fmt,
   safefree(new_string);
 
   return dst;
+}
+
+/** \brief Platform independant version of sscanf
+ *
+ * This is a platform independant version of sscanf. It first fixes the format
+ * string (\see fix_format) and then calls sscanf.
+ *
+ * \param str The string to parse
+ * \param fmt The format string
+ * \returns The number of elements assigned
+ */
+int
+mxsscanf(const string &str,
+         const char *fmt,
+         ...) {
+  va_list ap;
+  string new_fmt;
+  int result;
+
+  fix_format(fmt, new_fmt);
+  va_start(ap, fmt);
+  result = vsscanf(str.c_str(), new_fmt.c_str(), ap);
+  va_end(ap);
+
+  return result;
 }
 
 void
