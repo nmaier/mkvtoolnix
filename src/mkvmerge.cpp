@@ -1965,7 +1965,7 @@ void main_loop() {
   if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
     cluster_helper->render();
 
-  if (verbose == 1)
+  if (verbose >= 1)
     display_progress(1);
 }
 
