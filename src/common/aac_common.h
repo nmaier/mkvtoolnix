@@ -41,5 +41,11 @@ int MTX_DLL_API find_aac_header(unsigned char *buf, int size,
                              aac_header_t *aac_header,
                              bool emphasis_present);
 int MTX_DLL_API get_aac_sampling_freq_idx(int sampling_freq);
+bool MTX_DLL_API parse_aac_data(unsigned char *data, int size,
+                                int &profile, int &channels, int &sample_rate,
+                                int &output_sample_rate, bool &sbr);
+int MTX_DLL_API create_aac_data(unsigned char *data, int profile,
+                                int channels, int sample_rate,
+                                int output_sample_rate, bool sbr);
 
 #endif // __AACCOMMON_H

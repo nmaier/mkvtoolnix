@@ -24,6 +24,8 @@
 #include "common.h"
 #include "aac_common.h"
 
+#define AAC_SYNC_EXTENSION_TYPE 0x02b7
+
 const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                    24000, 22050, 16000, 12000, 11025,  8000,
                                    0, 0, 0, 0}; // filling
@@ -190,4 +192,52 @@ int get_aac_sampling_freq_idx(int sampling_freq) {
       return i;
 
   return 0;                     // should never happen
+}
+
+bool
+parse_aac_data(unsigned char *data,
+               int size,
+               int &profile,
+               int &channels,
+               int &sample_rate,
+               int &output_sample_rate,
+               bool &sbr) {
+  if (size < 2)
+    return false;
+
+  profile = (data[0] >> 3) - 1;
+  sample_rate = aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
+  channels = (data[1] & 0x7f) >> 3;
+  if (size == 5) {
+    output_sample_rate = aac_sampling_freq[(data[4] & 0x7f) >> 3];
+    sbr = true;
+  } else if (sample_rate < 44100) {
+    output_sample_rate = 2 * sample_rate;
+    sbr = true;
+  } else
+    sbr = false;
+
+  return true;
+}
+
+int
+create_aac_data(unsigned char *data,
+                int profile,
+                int channels,
+                int sample_rate,
+                int output_sample_rate,
+                bool sbr) {
+  int srate_idx;
+
+  srate_idx = get_aac_sampling_freq_idx(sample_rate);
+  data[0] = ((profile + 1) << 3) | ((srate_idx & 0x0e) >> 1);
+  data[1] = ((srate_idx & 0x01) << 7) | (channels << 3);
+  if (sbr) {
+    srate_idx = get_aac_sampling_freq_idx(output_sample_rate);
+    data[2] = AAC_SYNC_EXTENSION_TYPE >> 3;
+    data[3] = ((AAC_SYNC_EXTENSION_TYPE & 0x07) << 5) | 5;
+    data[4] = (1 << 7) | (srate_idx << 3);
+    return 5;
+  }
+  return 2;
 }
