@@ -27,6 +27,26 @@
 
 #include "librmff.h"
 
+typedef struct rmff_file_internal_t {
+  uint32_t max_bit_rate;
+  uint32_t avg_bit_rate;
+  uint32_t max_packet_size;
+  uint32_t avg_packet_size;
+  uint32_t highest_timecode;
+  uint32_t num_packets;
+  uint32_t data_offset;
+  uint32_t index_offset;
+} rmff_file_internal_t;
+
+typedef struct rmff_track_internal_t {
+  uint32_t max_bit_rate;
+  uint32_t avg_bit_rate;
+  uint32_t max_packet_size;
+  uint32_t avg_packet_size;
+  uint32_t highest_timecode;
+  uint32_t num_packets;
+} rmff_track_internal_t;
+
 int rmff_last_error = RMFF_ERR_OK;
 const char *rmff_last_error_msg = NULL;
 static const char *rmff_std_error_messages[] = {
@@ -89,8 +109,8 @@ rmff_get_uint32_be(const void *buf) {
 }
 
 void
-rmff_put_uin16_be(void *buf,
-              uint16_t value) {
+rmff_put_uint16_be(void *buf,
+                   uint16_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -100,8 +120,8 @@ rmff_put_uin16_be(void *buf,
 }
 
 void
-rmff_put_uin32_be(void *buf,
-              uint32_t value) {
+rmff_put_uint32_be(void *buf,
+                   uint32_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -115,8 +135,13 @@ rmff_put_uin32_be(void *buf,
 #define read_uint8() file_read_uint8(io, fh)
 #define read_uint16_be() file_read_uint16_be(io, fh)
 #define read_uint32_be() file_read_uint32_be(io, fh)
-#define read_uint16_be_to(addr) rmff_put_uin16_be(addr, read_uint16_be())
-#define read_uint32_be_to(addr) rmff_put_uin32_be(addr, read_uint32_be())
+#define read_uint16_be_to(addr) rmff_put_uint16_be(addr, read_uint16_be())
+#define read_uint32_be_to(addr) rmff_put_uint32_be(addr, read_uint32_be())
+#define write_uint8(v) file_write_uint8(io, fh, v)
+#define write_uint16_be(v) file_write_uint16_be(io, fh, v)
+#define write_uint32_be(v) file_write_uint32_be(io, fh, v)
+#define write_uint16_be_from(addr) write_uint16_be(rmff_get_uint16_be(addr))
+#define write_uint32_be_from(addr) write_uint32_be(rmff_get_uint32_be(addr))
 #define get_fourcc(b) rmff_get_uint32_be(b)
 
 static uint8_t
@@ -144,6 +169,33 @@ file_read_uint32_be(mb_file_io_t *io,
 
   io->read(fh, tmp, 4);
   return rmff_get_uint32_be(tmp);
+}
+
+static int
+file_write_uint8(mb_file_io_t *io,
+                 void *fh,
+                 uint8_t value) {
+  return io->write(fh, &value, 1);
+}
+
+static int
+file_write_uint16_be(mb_file_io_t *io,
+                     void *fh,
+                     uint16_t value) {
+  unsigned char tmp[2];
+
+  rmff_put_uint16_be(tmp, value);
+  return io->write(fh, &tmp, 2);
+}
+
+static int
+file_write_uint32_be(mb_file_io_t *io,
+                     void *fh,
+                     uint32_t value) {
+  unsigned char tmp[4];
+
+  rmff_put_uint32_be(tmp, value);
+  return io->write(fh, &tmp, 4);
 }
 
 void
@@ -268,6 +320,7 @@ open_file_for_reading(const char *path,
   file->size = io->tell(file_h);
   io->seek(file_h, 4, SEEK_SET);
   file->open_mode = RMFF_OPEN_MODE_READING;
+  file->internal = safecalloc(sizeof(rmff_file_internal_t));
 
   return file;
 }
@@ -294,6 +347,7 @@ open_file_for_writing(const char *path,
   file->io = io;
   file->size = -1;
   file->open_mode = RMFF_OPEN_MODE_WRITING;
+  file->internal = safecalloc(sizeof(rmff_file_internal_t));
 
   return file;
 }
@@ -325,6 +379,7 @@ rmff_free_track_data(rmff_track_t *track) {
   safefree(track->mdpr_header.name);
   safefree(track->mdpr_header.mime_type);
   safefree(track->mdpr_header.type_specific_data);
+  safefree(track->internal);
 }
 
 void
@@ -342,6 +397,7 @@ rmff_close_file(rmff_file_t *file) {
   safefree(file->cont_header.author);
   safefree(file->cont_header.copyright);
   safefree(file->cont_header.comment);
+  safefree(file->internal);
   file->io->close(file->handle);
   safefree(file);
 }
@@ -415,22 +471,22 @@ rmff_read_headers(rmff_file_t *file) {
 
       size = read_uint16_be(); /* title_len */
       if (size > 0) {
-        cont->title = (char *)safemalloc(size + 1);
+        cont->title = (char *)safecalloc(size + 1);
         io->read(fh, cont->title, size);
       }
       size = read_uint16_be(); /* author_len */
       if (size > 0) {
-        cont->author = (char *)safemalloc(size + 1);
+        cont->author = (char *)safecalloc(size + 1);
         io->read(fh, cont->author, size);
       }
       size = read_uint16_be(); /* copyright_len */
       if (size > 0) {
-        cont->copyright = (char *)safemalloc(size + 1);
+        cont->copyright = (char *)safecalloc(size + 1);
         io->read(fh, cont->copyright, size);
       }
       size = read_uint16_be(); /* comment_len */
       if (size > 0) {
-        cont->comment = (char *)safemalloc(size + 1);
+        cont->comment = (char *)safecalloc(size + 1);
         io->read(fh, cont->comment, size);
       }
       file->cont_header_present = 1;
@@ -459,7 +515,7 @@ rmff_read_headers(rmff_file_t *file) {
         io->read(fh, mdpr->mime_type, size);
       }
       size = read_uint32_be();  /* type_specific_size */
-      mdpr->type_specific_size = size; 
+      rmff_put_uint32_be(&mdpr->type_specific_size, size);
       if (size > 0) {
         mdpr->type_specific_data = (unsigned char *)safemalloc(size);
         io->read(fh, mdpr->type_specific_data, size);
@@ -480,6 +536,7 @@ rmff_read_headers(rmff_file_t *file) {
                            "data too small", RMFF_ERR_DATA);
       }
 
+      track.internal = safecalloc(sizeof(rmff_track_internal_t));
       file->tracks =
         (rmff_track_t *)saferealloc(file->tracks, (file->num_tracks + 1) *
                                     sizeof(rmff_track_t));
@@ -660,5 +717,257 @@ rmff_set_track_specific_data(rmff_track_t *track,
     safefree(track->mdpr_header.type_specific_data);
     track->mdpr_header.type_specific_data =
       (unsigned char *)safememdup(data, size);
+    rmff_put_uint32_be(&track->mdpr_header.type_specific_size, size);
   }
+}
+
+rmff_track_t *
+rmff_add_track(rmff_file_t *file) {
+  rmff_track_t track;
+  int i, id, found;
+
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
+    return (rmff_track_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+
+  id = 0;
+  do {
+    found = 0;
+    for (i = 0; i < file->num_tracks; i++)
+      if (file->tracks[i].id == id) {
+        found = 1;
+        id++;
+        break;
+      }
+  } while (found);
+
+  memset(&track, 0, sizeof(rmff_track_t));
+  track.id = id;
+  track.file = file;
+
+  file->tracks =
+    (rmff_track_t *)saferealloc(file->tracks, (file->num_tracks + 1) *
+                                sizeof(rmff_track_t));
+  file->tracks[file->num_tracks] = track;
+  file->num_tracks++;
+
+  return &file->tracks[file->num_tracks - 1];
+}
+
+void
+rmff_set_std_audio_v4_values(real_audio_v4_props_t *props) {
+}
+
+void
+rmff_set_std_audio_v5_values(real_audio_v5_props_t *props) {
+}
+
+void
+rmff_set_std_video_values(real_video_props_t *props) {
+}
+
+static int
+write_prop_header(rmff_file_t *file) {
+  void *fh;
+  mb_file_io_t *io;
+  int bw;
+
+  io = file->io;
+  fh = file->handle;
+
+  /* Write the PROP header. */
+  bw = write_uint32_be(rmffFOURCC('P', 'R', 'O', 'P'));
+  bw += write_uint32_be(0x32);  /* object_size */
+  bw += write_uint16_be(0);     /* object_version */
+
+  bw += write_uint32_be_from(&file->prop_header.max_bit_rate);
+  bw += write_uint32_be_from(&file->prop_header.avg_bit_rate);
+  bw += write_uint32_be_from(&file->prop_header.max_packet_size);
+  bw += write_uint32_be_from(&file->prop_header.avg_packet_size);
+  bw += write_uint32_be_from(&file->prop_header.num_packets);
+  bw += write_uint32_be_from(&file->prop_header.duration);
+  bw += write_uint32_be_from(&file->prop_header.preroll);
+  bw += write_uint32_be_from(&file->prop_header.index_offset);
+  bw += write_uint32_be_from(&file->prop_header.data_offset);
+  bw += write_uint16_be_from(&file->prop_header.num_streams);
+  bw += write_uint16_be_from(&file->prop_header.flags);
+
+  return bw;
+}
+
+static int
+write_cont_header(rmff_file_t *file) {
+  void *fh;
+  mb_file_io_t *io;
+  int bw, wanted_len, title_len, author_len, copyright_len, comment_len;
+
+  io = file->io;
+  fh = file->handle;
+
+  if (file->cont_header.title == NULL)
+    title_len = 0;
+  else
+    title_len = strlen(file->cont_header.title);
+  if (file->cont_header.author == NULL)
+    author_len = 0;
+  else
+    author_len = strlen(file->cont_header.author);
+  if (file->cont_header.copyright == NULL)
+    copyright_len = 0;
+  else
+    copyright_len = strlen(file->cont_header.copyright);
+  if (file->cont_header.comment == NULL)
+    comment_len = 0;
+  else
+    comment_len = strlen(file->cont_header.comment);
+
+  wanted_len = 4 + 4 + 2 + 4 * 2 + title_len + author_len + copyright_len +
+    comment_len;
+
+  /* Write the CONT header. */
+  bw = write_uint32_be(rmffFOURCC('C', 'O', 'N', 'T'));
+  bw += write_uint32_be(wanted_len); /* object_size */
+  bw += write_uint16_be(0);     /* object_version */
+  bw += write_uint16_be(title_len);
+  if (file->cont_header.title != NULL)
+    bw += io->write(fh, file->cont_header.title, title_len);
+  bw += write_uint16_be(author_len);
+  if (file->cont_header.author != NULL)
+    bw += io->write(fh, file->cont_header.author, author_len);
+  bw += write_uint16_be(copyright_len);
+  if (file->cont_header.copyright != NULL)
+    bw += io->write(fh, file->cont_header.copyright, copyright_len);
+  bw += write_uint16_be(comment_len);
+  if (file->cont_header.comment != NULL)
+    bw += io->write(fh, file->cont_header.comment, comment_len);
+
+  if (bw == wanted_len)
+    return 0;
+  return set_error(RMFF_ERR_IO, "Could not write the CONT header",
+                   RMFF_ERR_IO);
+}
+
+static int
+write_mdpr_header(rmff_track_t *track) {
+  void *fh;
+  mb_file_io_t *io;
+  int bw, wanted_len, name_len, mime_type_len;
+
+  io = track->file->io;
+  fh = track->file->handle;
+
+  rmff_put_uint16_be(&track->mdpr_header.id, track->id);
+  if (track->mdpr_header.name == NULL)
+    name_len = 0;
+  else
+    name_len = strlen(track->mdpr_header.name);
+  if (track->mdpr_header.mime_type == NULL)
+    mime_type_len = 0;
+  else
+    mime_type_len = strlen(track->mdpr_header.mime_type);
+
+  wanted_len = 4 + 4 + 2 + 2 + 7 * 4 + 1 + name_len + 1 + mime_type_len +
+    4 + rmff_get_uint32_be(&track->mdpr_header.type_specific_size);
+
+  /* Write the MDPR header. */
+  bw = write_uint32_be(rmffFOURCC('M', 'D', 'P', 'R'));
+  bw += write_uint32_be(wanted_len); /* object_size */
+  bw += write_uint16_be(0);     /* object_version */
+
+  bw += write_uint16_be_from(&track->mdpr_header.id);
+  bw += write_uint32_be_from(&track->mdpr_header.max_bit_rate);
+  bw += write_uint32_be_from(&track->mdpr_header.avg_bit_rate);
+  bw += write_uint32_be_from(&track->mdpr_header.max_packet_size);
+  bw += write_uint32_be_from(&track->mdpr_header.avg_packet_size);
+  bw += write_uint32_be_from(&track->mdpr_header.start_time);
+  bw += write_uint32_be_from(&track->mdpr_header.preroll);
+  bw += write_uint32_be_from(&track->mdpr_header.duration);
+  bw += write_uint8(name_len);
+  if (track->mdpr_header.name != NULL)
+    bw += io->write(fh, track->mdpr_header.name, name_len);
+  bw += write_uint8(mime_type_len);
+  if (track->mdpr_header.mime_type != NULL)
+    bw += io->write(fh, track->mdpr_header.mime_type, mime_type_len);
+  bw += write_uint32_be_from(&track->mdpr_header.type_specific_size);
+  if (track->mdpr_header.type_specific_data != NULL)
+    bw +=
+      io->write(fh, track->mdpr_header.type_specific_data,
+                rmff_get_uint32_be(&track->mdpr_header.type_specific_size));
+
+  if (wanted_len != bw)
+    return set_error(RMFF_ERR_IO, "Could not write the MDPR header",
+                     RMFF_ERR_IO);
+  return RMFF_ERR_OK;
+}
+
+int
+rmff_write_headers(rmff_file_t *file) {
+  void *fh;
+  mb_file_io_t *io;
+  int i, bw;
+  rmff_file_internal_t *fint;
+  const char *signature = ".RMF";
+
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
+    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+
+  io = file->io;
+  fh = file->handle;
+  io->seek(fh, 0, SEEK_SET);
+
+  /* Write the file header. */
+  bw = io->write(fh, signature, 4);
+  bw += write_uint32_be(0x12);  /* header_size */
+  bw += write_uint16_be(1);     /* object_version */
+  bw += write_uint32_be(0);     /* file_version */
+  bw += write_uint32_be(0);     /* temporary: num_headers */
+
+  if (bw != 18)
+    return set_error(RMFF_ERR_IO, "Could not write the file header",
+                     RMFF_ERR_IO);
+
+  rmff_put_uint16_be(&file->prop_header.num_streams, file->num_tracks);
+  bw = write_prop_header(file);
+  if (bw != 0x32)
+    return set_error(RMFF_ERR_IO, "Could not write the PROP header",
+                     RMFF_ERR_IO);
+
+  if (file->cont_header_present) {
+    bw = write_cont_header(file);
+    if (bw != RMFF_ERR_OK)
+      return bw;
+  }
+
+  for (i = 0; i < file->num_tracks; i++) {
+    bw = write_mdpr_header(&file->tracks[i]);
+    if (bw < RMFF_ERR_OK)
+      return bw;
+  }
+
+  fint = (rmff_file_internal_t *)file->internal;
+  fint->data_offset = io->tell(fh);
+
+  return RMFF_ERR_OK;
+}
+
+int
+rmff_fix_headers(rmff_file_t *file) {
+  return -1;
+}
+
+void
+rmff_copy_track_headers(rmff_track_t *dst,
+                        rmff_track_t *src) {
+  if ((dst == NULL) || (src == NULL))
+    return;
+
+  rmff_free_track_data(dst);
+  memcpy(&dst->mdpr_header, &src->mdpr_header, sizeof(rmff_mdpr_t));
+  dst->mdpr_header.name = safestrdup(src->mdpr_header.name);
+  dst->mdpr_header.mime_type = safestrdup(src->mdpr_header.mime_type);
+  dst->mdpr_header.type_specific_data = (unsigned char *)
+    safememdup(src->mdpr_header.type_specific_data,
+               rmff_get_uint32_be(&src->mdpr_header.type_specific_size));
+  dst->internal = (unsigned char *)safememdup(src->internal,
+                                              sizeof(rmff_track_internal_t));
+  dst->type = src->type;
 }

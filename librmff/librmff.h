@@ -32,6 +32,9 @@
  * at providing the programmer an easy way to read and write RealMedia
  * files. It does not contain any codecs for audio/video handling.
  *
+ * You can find a description of the RealMedia file format at
+ * http://www.pcisys.net/~melanson/codecs/rmff.htm
+ *
  * \section License
  *
  * The library was written by Moritz Bunkus <moritz@bunkus.org>. It is
@@ -52,16 +55,20 @@
   rmff_frame_t *frame;
 
   file = rmff_open_file("sample_file.rm", RMFF_OPEN_MODE_READING);
-  if (file == NULL) {
+  if (file != NULL) {
+    // Handle the error.
+    return;
+  }
+  if (rmff_read_headers(file) == RMFF_ERR_OK) {
     // Output some general information about the tracks in the file.
     // Now read all the frames.
     while ((frame = rmff_read_next_frame(file, NULL)) != NULL) {
       // Do something with the frame and release it afterwards.
       rmff_release_frame(frame);
     }
-    rmff_close_file(file);
   }
-    \endcode
+  rmff_close_file(file);
+  \endcode
  *
  * \section memory_handling Memory handling
  *
@@ -291,9 +298,10 @@ typedef struct rmff_track_t {
   uint32_t id;
   int type;
   rmff_mdpr_t mdpr_header;
-  int is_big_endian;
 
   struct rmff_file_t *file;
+
+  void *internal;
 } rmff_track_t;
 
 typedef struct rmff_file_t {
@@ -316,6 +324,8 @@ typedef struct rmff_file_t {
 
   rmff_track_t *tracks;
   int num_tracks;
+
+  void *internal;
 } rmff_file_t;
 
 /** \brief No error has occured. */
@@ -441,6 +451,53 @@ rmff_frame_t *rmff_allocate_frame(uint32_t size, void *buffer);
  */
 void rmff_release_frame(rmff_frame_t *frame);
 
+/** \brief Creates a new track for a file.
+ *
+ * The track will be added to the list of tracks in this file.
+ * \a librmff will allocate a track ID that is unique in this file.
+ *
+ * \param file The file the track will be added to.
+ * \returns A pointer to a newly allocated ::rmff_track_t structure or
+ *   \c NULL in case of an error.
+ */
+rmff_track_t *rmff_add_track(rmff_file_t *file);
+
+/** \brief Set some default values for RealAudio streams.
+ *
+ * Some of the fields in the \a props structure will be set to pre-defined
+ * values, especially the \c uknown fields. Should be used after
+ * rmff_add_track(rmff_file_t*).
+ *
+ * \param props A pointer to the structure whose values should be set.
+ * \see rmff_set_std_audio_v5_values(real_audio_v5_props_t*),
+ *   rmff_set_std_video_values(real_video_props_t*)
+ */
+void rmff_set_std_audio_v4_values(real_audio_v4_props_t *props);
+
+/** \brief Set some default values for RealAudio streams.
+ *
+ * Some of the fields in the \a props structure will be set to pre-defined
+ * values, especially the \c uknown fields. Should be used after
+ * rmff_add_track(rmff_file_t*).
+ *
+ * \param props A pointer to the structure whose values should be set.
+ * \see rmff_set_std_audio_v4_values(real_audio_v5_props_t*),
+ *   rmff_set_std_video_values(real_video_props_t*)
+ */
+void rmff_set_std_audio_v5_values(real_audio_v5_props_t *props);
+
+/** \brief Set some default values for RealVideo streams.
+ *
+ * Some of the fields in the \a props structure will be set to pre-defined
+ * values, especially the \c uknown fields. Should be used after
+ * rmff_add_track(rmff_file_t*).
+ *
+ * \param props A pointer to the structure whose values should be set.
+ * \see rmff_set_std_audio_v4_values(real_audio_v4_props_t*),
+ *   rmff_set_std_audio_v5_values(real_audio_v5_props_t*)
+ */
+void rmff_set_std_video_values(real_video_props_t *props);
+
 /** \brief Sets the contents of the \link ::rmff_cont_t CONT file header
  * \endlink.
  *
@@ -487,6 +544,12 @@ void rmff_set_track_data(rmff_track_t *track, const char *name,
  */
 void rmff_set_track_specific_data(rmff_track_t *track,
                                   const unsigned char *data, uint32_t size);
+
+int rmff_write_headers(rmff_file_t *file);
+
+int rmff_fix_headers(rmff_file_t *file);
+
+void rmff_copy_track_headers(rmff_track_t *dst, rmff_track_t *src);
 
 /** \brief The error code of the last function call.
  * Contains the last error code for a function that failed. If a function
