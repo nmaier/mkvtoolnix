@@ -151,6 +151,8 @@ def merge(*args)
 end
 
 def main
+  ENV['LC_ALL'] = "en_US.ISO-8859-1"
+
   results = Results.new
 
   test_failed = false
