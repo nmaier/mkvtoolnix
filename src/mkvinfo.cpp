@@ -1917,8 +1917,11 @@ process_file(const char *file_name) {
         return false;
       }
       if (is_id(l0, KaxSegment)) {
-        show_element(l0, 0, "Segment, size %lld", l0->GetSize() -
-                     l0->HeadSize());
+        if (l0->GetSize() == -1)
+          show_element(l0, 0, "Segment, size unknown");
+        else
+          show_element(l0, 0, "Segment, size %lld", l0->GetSize() -
+                       l0->HeadSize());
         break;
       }
 
