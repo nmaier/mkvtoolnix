@@ -15,6 +15,7 @@ mkvmerge \- Merge multimedia streams into a Matroska file
 This program takes the input from several media files and joins
 their streams (all of them or just a selection) into a Matroska file.
 .UR http://www.matroska.org/
+<http://www.matroska.org/>
 .UE
 
 
@@ -35,6 +36,10 @@ Sets the general title for the output file, e.g. the movie name.
 .TP
 \fB\-\-chapters <\fIfile\fR>
 Read chapter information from the \fIfile\fR. See the section about chapters
+below for details.
+.TP
+\fB\-\-global\-chapters\fR <\fIfile\fR>
+Read global chapters from the XML \fIfile\fR. See the section about tags
 below for details.
 
 .LP
@@ -117,8 +122,8 @@ Plain text description of the following attachment. Applies to the next
 MIME type of the following attachment. Applies to the next
 \fB\-\-attach\-file\fR or \fB\-\-attach\-file\-once\fR command.
 A list of officially recognized MIME types can be found e.g. at
-.URL
-ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types
+.UR ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types
+<ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types>
 The MIME type is mandatory for an attachment.
 .TP
 \fB\-\-attach\-file\fR <\fIfile name\fR>
@@ -217,7 +222,10 @@ listed with the \fB\-\-list\-languages\fR option.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
-
+.TP
+\fB\-t\fR, \fB\-\-tags\fR <\fITID\fR:\fIfile\fR>
+Read tags for the track with the number \fITID\fR from the \fIfile\fR. See
+the section about tags below for details.
 
 .LP
 Options that only apply to video tracks:
@@ -540,7 +548,8 @@ $ \fBmkvmerge -o output.mkv -A video.avi sound.ogg \-\-attachment\-description
 .LP
 The Matroska chapter system is more powerful than the old known system used
 by OGMs. The full specs can be found at
-.URL http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html
+.UR http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html
+<http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html>
 .LP
 \fBmkvmerge\fR's chapter support is still a bit limited, though. At the moment
 it only supports reading chapter data in the same format that the OGM tools
@@ -575,6 +584,124 @@ Matroska file and use the result with \fBmkvmerge\fR.
 .LP
 The upcoming version of \fBmkvmerge\fR will address most of the shortcomings
 mentioned above.
+
+
+.SH TAGS
+.LP
+\fBIntroduction\fR
+
+Matroska supports an extensive set of tags. Unlike other
+containers/formats it does not rely on a free form specification of
+the type \fIKEY=VALUE\fR but provides a big number of tags that are a
+subset of several well-known tagging schemes unified in one big tag
+tree. The full specification can be found at
+.UR http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/tagging/index.html
+<http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/tagging/index.html>
+
+.LP
+\fBScope of the tags\fR
+
+Matroska tags do not automatically apply to the complete file. They
+may, however, apply to different parts of the file: to one or more
+tracks, to one or more chapters, or even to a combination of both. The
+aforementioned URL gives more details about this fact.
+
+.LP
+
+One important fact is that tags are linked to tracks or chapters with
+the \fITargets\fR Matroska tag element, and that the UIDs used for
+this linking are NOT the track IDs \fBmkvmerge\fR uses
+everywhere. Instead the numbers used are the UIDs which \fBmkvmerge\fR
+calculates automatically (if the track is taken from a file format
+other than Matroska) or which are copied from the source file if the
+track's source file is a Matroska file. Therefore it is difficult to
+know which UIDs to use in the tag file before the file is handed
+over to \fBmkvmerge\fR.
+
+.LP
+
+\fBmkvmerge\fR knows two options with which you can add tags to
+Matroska files: The \fB\-\-global\-tags\fR and the \fB\-\-tags\fR
+options. The difference is that the former option,
+\fB\-\-global\-tags\fR, will not modify the tags read from the file in
+any way, while the latter option, \fB\-\-tags\fR, automatically
+inserts the UID that \fBmkvmerge\fR generates for the tag specified
+with the \fITID\fR part of the \fB\-\-tags\fR option.  Therefore the
+tag file used with \fB\-\-tags\fR does not need any \fITargets\fR
+element (in fact they are deleted if the tag file contained any),
+while the one used with \fB\-\-global\-tags\fR does need them.
+
+.LP
+\fBExample\fR
+
+Let's say that you want to add tags to a video track read from
+an AVI. \fBmkvmerge -i file.avi\fR tells you that the video track's ID
+(do not mix this ID with the UID!) is 0. So you create your tag file,
+leave out any \fITargets\fR element and call \fBmkvmerge\fR:
+.br
+$ \fBmkvmerge -o file.mkv --tags 0:tags.xml file.avi\fR
+
+.LP
+\fBTag file format\fR
+
+\fBmkvmerge\fR supports a XML based tag file format. The format is
+very easy and closely connected to the Matroska tag specs found at the
+URL mentioned above. Both the binary and the source \fBmkvtoolnix\fR
+distributions come with a sample file called \fImatroska-tags.xml\fR
+which simply lists all known tags and which can be used as a basis for
+real life tag files.
+
+.LP
+
+The basics are:
+.TP
+*
+The outermost element must be \fB<Tags>\fR.
+.TP
+*
+One logical tag is contained inside one pair of \fB<Tag>\fR XML tags.
+.TP
+*
+White spaces directly before and after tag contents are ignored.
+
+.LP
+\fBData types\fR
+
+The data type expected can be found in the official Matroska tag specs.
+The types \fIinteger\fR, \fIunsigned integer\fR, \fIfloat\fR, \fIstring\fR
+and \fIUTF-8 string\fR look just like you expect them to: \fI4254\fR,
+\fI-2\fR, \fI5.0\fR, \fIhello world\fR and \fIhello world\fR. Two data
+types are treadet differently, however: \fIbinary\fR and \fIdate\fR.
+
+.LP
+
+As binary data itself would not fit into a XML file \fBmkvmerge\fR
+supports two other methods of storing binary data. If the contents of
+a XML tag starts with '@' then the following text is treated as a
+\fIfile name\fR. The corresponding file's content is copied into the
+Matroska element.
+
+.LP
+
+Otherwise the data is expected to be \fIBase64\fR encoded. This is an
+encoding that transforms binary data into a limited set of ASCII
+characters and is used e.g. in email programs. \fBmkvtoolnix\fR comes
+with a utility, \fBbase64util\fR, that can be used to encode to and
+decode from Base64. \fBmkvextract\fR will output Base64 encoded data
+for binary elements.
+
+.LP
+
+The date format used by both \fBmkvmerge\fR when reading XML tag files
+and by \fBmkvextract\fR when outputting XML tag data is the \fIISO-8601\fR
+format. It has the following structure:
+\fIYYYY\fR-\fIMM\fR-\fIDD\fRT\fIHH\fR:\fIMM\fR:\fISS\fR\fI+TZTZ\fR.
+\fIYYYY\fR is the year (four digist long), \fIMM\fR the month (two digits
+long starting with 01), \fIDD\fR the day of the month (two digits long
+starting with 01), \fIHH\fR the hour of the day (two digits long, range
+00 - 23), \fIMM\fR the minute (two digits long, range 00 - 59), \fISS\fR
+the seconds (two digits long, range 00 - 59). \fI+TZTZ\fR is the time zone,
+e.g. +0100 or -0200. An example would be 2003-07-30T19:10:16+0200.
 
 
 .SH NOTES
