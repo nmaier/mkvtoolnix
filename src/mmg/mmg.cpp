@@ -22,6 +22,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
+#include "wx/clipbrd.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 #include "wx/statline.h"
@@ -177,6 +178,11 @@ void mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
 }
 
 void mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
+  update_command_line();
+  if (wxTheClipboard->Open()) {
+    wxTheClipboard->SetData(new wxTextDataObject(cmdline));
+    wxTheClipboard->Close();
+  }
 }
 
 wxString &mmg_dialog::get_command_line() {
