@@ -53,9 +53,9 @@ public:
 tab_attachments::tab_attachments(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) {
   uint32_t i;
-  wxStaticBox *sb_top, *sb_bottom;
-  wxStaticBoxSizer *siz_box_top, *siz_box_bottom;
-  wxFlexGridSizer *siz_ddlists;
+  wxStaticBox *sb_top;
+  wxStaticBoxSizer *siz_box_top, *siz_box_bottom; 
+ wxFlexGridSizer *siz_ddlists;
   wxBoxSizer *siz_buttons, *siz_all;
 
   sb_top = new wxStaticBox(this, wxID_STATIC, wxT("Attachments"));
@@ -75,8 +75,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   siz_box_top->Add(siz_buttons);
 
-  sb_bottom = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options"));
-  siz_box_bottom = new wxStaticBoxSizer(sb_bottom, wxVERTICAL);
+  sb_options = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options"));
+  siz_box_bottom = new wxStaticBoxSizer(sb_options, wxVERTICAL);
 
   st_description = new wxStaticText(this, wxID_STATIC, wxT("Description:"));
   siz_box_bottom->Add(st_description, 0, wxALIGN_LEFT | wxLEFT, 5);
@@ -140,6 +140,7 @@ tab_attachments::enable(bool e) {
   cob_mimetype->Enable(e);
   st_style->Enable(e);
   cob_style->Enable(e);
+  sb_options->Enable(e);
 }
 
 void

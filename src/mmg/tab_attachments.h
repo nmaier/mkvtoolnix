@@ -43,6 +43,7 @@ protected:
   wxComboBox *cob_mimetype, *cob_style;
   wxTextCtrl *tc_description;
   wxStaticText *st_description, *st_mimetype, *st_style;
+  wxStaticBox *sb_options;
 
   int selected_attachment;
 
