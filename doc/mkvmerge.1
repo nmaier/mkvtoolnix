@@ -793,18 +793,18 @@ in a predefined way. The resulting file looks like this:
 .LP
 [EBML head] [segment {meta seek #1} {attachments} {chapters}
 [segment information] [track information] [cluster 1] {cluster 2} ...
-{cluster n} {meta seek #2} {tags}]
+{cluster n} {cues} {meta seek #2} {tags}]
 .LP
 The elements in curly braces are optional and depend on the contents and
 options used. Some notes:
 .TP
 *
 meta seek #1 includes only a small number of level 1 elements, and only if
-they actually exist: attachments, chapters, tags, meta seek #2. Older versions
-of \fBmkvmerge\fR used to put the clusters into this meta seek element as well.
-Therefore some imprecise guessing was necessary to reserve enough space. It
-often failed. Now only the clusters are stored in meta seek #2, and meta
-seek #1 refers to the meta seek element #2.
+they actually exist: attachments, chapters, cues, tags, meta seek #2. Older
+versions of \fBmkvmerge\fR used to put the clusters into this meta seek
+element as well. Therefore some imprecise guessing was necessary to reserve
+enough space. It often failed. Now only the clusters are stored in meta
+seek #2, and meta seek #1 refers to the meta seek element #2.
 .TP
 *
 Attachment, chapter and tag elements are only present if they were added.
