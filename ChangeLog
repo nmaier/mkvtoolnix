@@ -1,5 +1,9 @@
 2004-10-10  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The OGM reader was broken if at least one
+	track was not to be copied from the file (happened between 0.9.5
+	and 0.9.6).
+
 	* mmg: bug fix: After loading saved mmg settings the track input
 	box listed the tracks always coming from the last input file and
 	not from the one they really came from.
