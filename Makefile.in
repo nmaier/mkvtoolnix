@@ -73,7 +73,6 @@ MINGW_LIBS = @MINGW_LIBS@
 OGG_LIBS = @OGG_LIBS@
 VORBIS_LIBS = @VORBIS_LIBS@
 WXWINDOWS_CFLAGS = @WXWINDOWS_CFLAGS@
-WXWINDOWS_LDFLAGS = @WXWINDOWS_LDFLAGS@
 WXWINDOWS_LIBS = @WXWINDOWS_LIBS@
 ZLIB_LIBS = @ZLIB_LIBS@
 LIBINTL_LIBS = @LIBINTL_LIBS@
@@ -303,7 +302,7 @@ mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
 mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
-		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
+		$(WXWINDOWS_LIBS) \
 		$(ICONV_LIBS) $(LIBINTL_LIBS)
 
 mkvextract_SOURCES = $(wildcard src/extract/*.cpp)
@@ -321,7 +320,7 @@ mmg_SOURCES = $(wildcard src/mmg/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
-		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) $(LIBINTL_LIBS)
+		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS)
 
 src/mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 	@echo '    LINK ' $@
