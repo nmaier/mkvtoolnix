@@ -130,22 +130,32 @@ video_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+video_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                   string &error_message) {
   video_packetizer_c *vsrc;
 
   vsrc = dynamic_cast<video_packetizer_c *>(src);
   if (vsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((width != vsrc->width) || (height != vsrc->height) ||
-      (fps != vsrc->fps) || (hcodec_id != vsrc->hcodec_id))
-    return CAN_CONNECT_NO_PARAMETERS;
+  connect_check_v_width(width, vsrc->width);
+  connect_check_v_height(height, vsrc->height);
+  connect_check_codec_id(hcodec_id, vsrc->hcodec_id);
+
   if (((ti.private_data == NULL) && (vsrc->ti.private_data != NULL)) ||
       ((ti.private_data != NULL) && (vsrc->ti.private_data == NULL)) ||
-      (ti.private_size != vsrc->ti.private_size))
+      (ti.private_size != vsrc->ti.private_size)) {
+    error_message = mxsprintf("The codec's private data does not match "
+                              "(lengths: %d and %d).", ti.private_size,
+                              vsrc->ti.private_size);
     return CAN_CONNECT_NO_PARAMETERS;
+  }
   if ((ti.private_data != NULL) &&
-      memcmp(ti.private_data, vsrc->ti.private_data, ti.private_size))
+      memcmp(ti.private_data, vsrc->ti.private_data, ti.private_size)) {
+    error_message = mxsprintf("The codec's private data does not match "
+                              "(lengths: %d and %d).", ti.private_size,
+                              vsrc->ti.private_size);
     return CAN_CONNECT_NO_PARAMETERS;
+  }
   return CAN_CONNECT_YES;
 }
 

@@ -223,14 +223,14 @@ mp3_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-mp3_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+mp3_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                 string &error_message) {
   mp3_packetizer_c *msrc;
 
   msrc = dynamic_cast<mp3_packetizer_c *>(src);
   if (msrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((samples_per_sec != msrc->samples_per_sec) ||
-      (channels != msrc->channels))
-    return CAN_CONNECT_NO_PARAMETERS;
+  connect_check_a_samplerate(samples_per_sec, msrc->samples_per_sec);
+  connect_check_a_channels(channels, msrc->channels);
   return CAN_CONNECT_YES;
 }

@@ -110,15 +110,15 @@ wavpack_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-wavpack_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+wavpack_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                     string &error_message) {
   wavpack_packetizer_c *psrc;
 
   psrc = dynamic_cast<wavpack_packetizer_c *>(src);
   if (psrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((sample_rate != psrc->sample_rate) ||
-      (channels != psrc->channels) ||
-      (bits_per_sample != psrc->bits_per_sample))
-    return CAN_CONNECT_NO_PARAMETERS;
+  connect_check_a_samplerate(sample_rate, psrc->sample_rate);
+  connect_check_a_channels(channels, psrc->channels);
+  connect_check_a_bitdepth(bits_per_sample, psrc->bits_per_sample);
   return CAN_CONNECT_YES;
 }

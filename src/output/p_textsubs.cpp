@@ -145,7 +145,8 @@ textsubs_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                      string &error_message) {
   textsubs_packetizer_c *psrc;
 
   psrc = dynamic_cast<textsubs_packetizer_c *>(src);

@@ -403,6 +403,45 @@ enum connection_result_e {
   CAN_CONNECT_NO_PARAMETERS
 };
 
+#define connect_check_a_samplerate(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The sample rate of the two audio tracks is " \
+                              "different: %d and %d", (int)(a), (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+#define connect_check_a_channels(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The number of channels of the two audio " \
+                              "tracks is different: %d and %d", (int)(a), \
+                              (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+#define connect_check_a_bitdepth(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The number of bits per sample of the two " \
+                              "audio tracks is different: %d and %d", \
+                              (int)(a), (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+#define connect_check_v_width(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The width of the two  tracks is " \
+                              "different: %d and %d", (int)(a), (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+#define connect_check_v_height(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The height of the two tracks is " \
+                              "different: %d and %d", (int)(a), (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+#define connect_check_codec_id(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The CodecID of the two tracks is different: " \
+                              "%s and %s", (a).c_str(), (b).c_str()); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+
 class generic_packetizer_c {
 protected:
   deque<packet_t *> packet_queue, deferred_packets;
@@ -590,7 +629,8 @@ public:
   virtual void force_duration_on_last_packet();
 
   virtual const char *get_format_name() = 0;
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src) = 0;
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
+                                             string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src,
                        int64_t _append_timecode_offset = -1);
 

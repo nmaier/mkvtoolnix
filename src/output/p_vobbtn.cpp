@@ -90,13 +90,14 @@ vobbtn_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-vobbtn_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+vobbtn_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                    string &error_message) {
   vobbtn_packetizer_c *vsrc;
 
   vsrc = dynamic_cast<vobbtn_packetizer_c *>(src);
   if (vsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((width != vsrc->width) || (height != vsrc->height))
-    return CAN_CONNECT_NO_PARAMETERS;
+  connect_check_v_width(width, vsrc->width);
+  connect_check_v_height(height, vsrc->height);
   return CAN_CONNECT_YES;
 }

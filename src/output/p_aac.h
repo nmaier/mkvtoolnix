@@ -45,7 +45,8 @@ public:
   virtual const char *get_format_name() {
     return "AAC";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
+                                             string &error_message);
 
 private:
   virtual unsigned char *get_aac_packet(unsigned long *header,

@@ -234,16 +234,21 @@ aac_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-aac_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                 string &error_message) {
   aac_packetizer_c *asrc;
 
   asrc = dynamic_cast<aac_packetizer_c *>(src);
   if (asrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((samples_per_sec != asrc->samples_per_sec) ||
-      (channels != asrc->channels) || (id != asrc->id) ||
-      (profile != asrc->profile))
+
+  connect_check_a_samplerate(samples_per_sec, asrc->samples_per_sec);
+  connect_check_a_channels(channels, asrc->channels);
+  if (profile != asrc->profile) {
+    error_message = mxsprintf("The AAC profiles are different: %d and %d",
+                              (int)profile, (int)asrc->profile);
     return CAN_CONNECT_NO_PARAMETERS;
+  }
   return CAN_CONNECT_YES;
 }
 

@@ -42,7 +42,8 @@ public:
   virtual const char *get_format_name() {
     return "TTA";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
+                                             string &error_message);
 };
 
 #endif // __P_TTA_H

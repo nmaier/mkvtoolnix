@@ -215,12 +215,19 @@ dts_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-dts_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+dts_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                 string &error_message) {
   dts_packetizer_c *dsrc;
 
   dsrc = dynamic_cast<dts_packetizer_c *>(src);
   if (dsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
+  if (get_first_header_later)
+    return CAN_CONNECT_NO_FORMAT;
+  connect_check_a_samplerate(first_header.core_sampling_frequency,
+                             dsrc->first_header.core_sampling_frequency);
+  connect_check_a_channels(first_header.audio_channels,
+                           dsrc->first_header.audio_channels);
   // Hmm...
   return CAN_CONNECT_YES;
 }

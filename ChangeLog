@@ -1,3 +1,8 @@
+2005-03-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Added more descriptive error messages if two tracks
+	cannot be concatenated because "their parameters do not match".
+
 2005-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: A failing call to posix_fadvise will only

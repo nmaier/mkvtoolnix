@@ -143,15 +143,15 @@ pcm_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-pcm_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+pcm_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                 string &error_message) {
   pcm_packetizer_c *psrc;
 
   psrc = dynamic_cast<pcm_packetizer_c *>(src);
   if (psrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((samples_per_sec != psrc->samples_per_sec) ||
-      (channels != psrc->channels) ||
-      (bits_per_sample != psrc->bits_per_sample))
-    return CAN_CONNECT_NO_PARAMETERS;
+  connect_check_a_samplerate(samples_per_sec, psrc->samples_per_sec);
+  connect_check_a_channels(channels, psrc->channels);
+  connect_check_a_bitdepth(bits_per_sample, psrc->bits_per_sample);
   return CAN_CONNECT_YES;
 }

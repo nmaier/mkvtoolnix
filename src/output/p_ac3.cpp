@@ -182,15 +182,15 @@ ac3_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-ac3_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+ac3_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                 string &error_message) {
   ac3_packetizer_c *asrc;
 
   asrc = dynamic_cast<ac3_packetizer_c *>(src);
   if (asrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((samples_per_sec != asrc->samples_per_sec) ||
-      (channels != asrc->channels) || (bsid != asrc->bsid))
-    return CAN_CONNECT_NO_PARAMETERS;
+  connect_check_a_samplerate(samples_per_sec, asrc->samples_per_sec);
+  connect_check_a_channels(channels, asrc->channels);
   return CAN_CONNECT_YES;
 }
 

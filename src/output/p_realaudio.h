@@ -49,7 +49,8 @@ public:
   virtual const char *get_format_name() {
     return "RealAudio";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
+                                             string &error_message);
 
 protected:
   virtual void dump_debug_info();

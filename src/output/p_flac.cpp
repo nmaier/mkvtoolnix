@@ -118,19 +118,29 @@ flac_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-flac_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                  string &error_message) {
   flac_packetizer_c *fsrc;
 
   fsrc = dynamic_cast<flac_packetizer_c *>(src);
   if (fsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  if ((stream_info.sample_rate != fsrc->stream_info.sample_rate) ||
-      (stream_info.channels != fsrc->stream_info.channels) ||
-      (stream_info.bits_per_sample != fsrc->stream_info.bits_per_sample) ||
-      (l_header != fsrc->l_header) ||
+
+  connect_check_a_samplerate(stream_info.sample_rate,
+                             fsrc->stream_info.sample_rate);
+  connect_check_a_channels(stream_info.channels,
+                           fsrc->stream_info.channels);
+  connect_check_a_bitdepth(stream_info.bits_per_sample,
+                           fsrc->stream_info.bits_per_sample);
+
+  if ((l_header != fsrc->l_header) ||
       (NULL == header.get()) || (NULL == fsrc->header.get()) ||
-      memcmp(header.get(), fsrc->header.get(), l_header))
+      memcmp(header.get(), fsrc->header.get(), l_header)) {
+    error_message = mxsprintf("The FLAC header data is different for the "
+                              "two tracks (lengths: %d and %d)",
+                              l_header, fsrc->l_header);
     return CAN_CONNECT_NO_PARAMETERS;
+  }
   return CAN_CONNECT_YES;
 }
 #endif

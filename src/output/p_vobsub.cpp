@@ -77,7 +77,8 @@ vobsub_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-vobsub_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+vobsub_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                    string &error_message) {
   vobsub_packetizer_c *vsrc;
 
   vsrc = dynamic_cast<vobsub_packetizer_c *>(src);

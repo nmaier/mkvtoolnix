@@ -102,12 +102,13 @@ passthrough_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e
-passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src) {
+passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                         string &error_message) {
   passthrough_packetizer_c *psrc;
 
   psrc = dynamic_cast<passthrough_packetizer_c *>(src);
   if (psrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
-  // For now...
+  connect_check_codec_id(hcodec_id, psrc->hcodec_id);
   return CAN_CONNECT_NO_PARAMETERS;
 }

@@ -1012,6 +1012,7 @@ check_append_mapping() {
   foreach(amap, append_mapping) {
     vector<generic_packetizer_c *>::const_iterator gptzr;
     generic_packetizer_c *src_ptzr, *dst_ptzr;
+    string error_message;
     int result;
 
     src_file = files.begin() + amap->src_file_id;
@@ -1030,16 +1031,23 @@ check_append_mapping() {
       die("((src_ptzr == NULL) || (dst_ptzr == NULL)). %s\n", BUGMSG);
 
     // And now try to connect the packetizers.
-    result = src_ptzr->can_connect_to(dst_ptzr);
-    if (result != CAN_CONNECT_YES)
+    result = src_ptzr->can_connect_to(dst_ptzr, error_message);
+    if (CAN_CONNECT_YES != result) {
+      string reason(result == CAN_CONNECT_NO_FORMAT ?
+                    "the formats do not match" :
+                    result == CAN_CONNECT_NO_PARAMETERS ?
+                    "the track parameters do not match" :
+                    "of unknown reasons");
+
+      if (CAN_CONNECT_NO_PARAMETERS == result)
+        reason += mxsprintf(" (%s)", error_message.c_str());
+
       mxerror("The track number %lld from the file '%s' cannot be appended "
               "to the track number %lld from the file '%s' because %s.\n",
               amap->src_track_id, files[amap->src_file_id].name.c_str(),
               amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
-              result == CAN_CONNECT_NO_FORMAT ? "the formats do not match" :
-              result == CAN_CONNECT_NO_PARAMETERS ?
-              "the stream parameters do not match" :
-              "of unknown reasons");
+              reason.c_str());
+    }
     src_ptzr->connect(dst_ptzr);
     dst_file->appended_to = true;
   }
