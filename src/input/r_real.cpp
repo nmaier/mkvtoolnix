@@ -147,8 +147,8 @@ real_reader_c::parse_headers() {
           !demuxing_requested('a', track->id))
         continue;
       if ((track->mdpr_header.mime_type == NULL) ||
-          (!strcmp(track->mdpr_header.mime_type, "audio/x-pn-realaudio") &&
-           !strcmp(track->mdpr_header.mime_type, "video/x-pn-realvideo")))
+          (strcmp(track->mdpr_header.mime_type, "audio/x-pn-realaudio") &&
+           strcmp(track->mdpr_header.mime_type, "video/x-pn-realvideo")))
         continue;
 
       ts_data = track->mdpr_header.type_specific_data;
