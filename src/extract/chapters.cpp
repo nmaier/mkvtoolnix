@@ -11,6 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <errno.h>
 #include <ctype.h>
 #include <stdarg.h>

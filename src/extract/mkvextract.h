@@ -88,6 +88,7 @@ typedef struct {
 
   bool embed_in_ogg;
   bool extract_cuesheet;
+  int extract_blockadd_level;
 
   // Needed for TTA.
   vector<int64_t> frame_sizes;

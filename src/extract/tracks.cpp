@@ -10,7 +10,10 @@
    extracts tracks from Matroska files into other files
   
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
+
+#include "os.h"
 
 #include <errno.h>
 #include <ctype.h>
@@ -476,11 +479,13 @@ create_output_files() {
 
         try {
           tracks[i].out = new mm_file_io_c(tracks[i].out_name, MODE_CREATE);
-          if (tracks[i].max_blockadd_id != 0) {
+          if ((tracks[i].max_blockadd_id != 0) &&
+              ((tracks[i].extract_blockadd_level == -1) ||
+               (tracks[i].extract_blockadd_level != 0))) {
             string tmpstr = tracks[i].out_name;
             size_t pos = tmpstr.rfind('.');
             if ((pos != string::npos) && (pos != 0))
-              tmpstr = tmpstr.substr(0, pos - 1);
+              tmpstr = tmpstr.substr(0, pos + 1);
             tmpstr += "wvc";
             tracks[i].out2 = new mm_file_io_c(tmpstr, MODE_CREATE);
           }
@@ -667,6 +672,7 @@ handle_data(KaxBlock *block,
   int64_t start, end;
   char *s, buffer[200], *s2, adts[56 / 8];
   vector<string> fields;
+  vector<uint32_t> flags;
   string line, comma = ",";
   ssa_line_c ssa_line;
   rmff_frame_t *rmf_frame;
@@ -958,9 +964,38 @@ handle_data(KaxBlock *block,
 
       case FILE_TYPE_WAVPACK4:
         track->out->write("wvpk", 4);
-        put_uint32_le(buffer, data.Size());
-        track->out->write(buffer, 4);
-        track->out->write(data.Buffer(), data.Size());
+        // support multi-track files
+        if (track->a_channels > 2) {
+          flags.clear();
+          binary *mybuffer = data.Buffer();
+          int32_t data_size = data.Size();
+          uint32_t block_size = get_uint32_le(&mybuffer[24]);
+          put_uint32_le(buffer, block_size + 24);
+          track->out->write(buffer, 4);
+          track->out->write(data.Buffer(), 24);
+          flags.push_back(*(uint32_t*)&mybuffer[16]);
+          mybuffer += 28;
+          track->out->write(mybuffer, block_size);
+          mybuffer += block_size;
+          data_size -= block_size + 28;
+          while (data_size > 0) {
+            track->out->write("wvpk", 4);
+            block_size = get_uint32_le(&mybuffer[8]);
+            put_uint32_le(buffer, block_size + 24);
+            track->out->write(buffer, 4);
+            track->out->write(data.Buffer(), 16);
+            track->out->write(mybuffer, 8);
+            flags.push_back(*(uint32_t*)mybuffer);
+            mybuffer += 12;
+            track->out->write(mybuffer, block_size);
+            mybuffer += block_size;
+            data_size -= block_size + 12;
+          }
+        } else {
+          put_uint32_le(buffer, data.Size());
+          track->out->write(buffer, 4);
+          track->out->write(data.Buffer(), data.Size());
+        }
         // support hybrid mode data
         if (track->out2 && block_adds) {
           KaxBlockMore *block_more = FINDFIRST(block_adds, KaxBlockMore);
@@ -971,12 +1006,36 @@ handle_data(KaxBlock *block,
           if (block_addition == NULL)
             break;
 
-          track->out2->write("wvpk", 4);
-          put_uint32_le(buffer, block_addition->GetSize() + 20);
-          track->out2->write(buffer, 4);
-          track->out2->write(data.Buffer(), 20);
-          track->out2->write(block_addition->GetBuffer(),
-                             block_addition->GetSize());
+          if (track->a_channels > 2) {
+            int32_t data_size = block_addition->GetSize();
+            binary *mybuffer = block_addition->GetBuffer();
+            size_t flags_index = 0;
+            uint32_t flag;
+            while (data_size > 0) {
+              track->out2->write("wvpk", 4);
+              uint32_t block_size = get_uint32_le(&mybuffer[4]);
+              put_uint32_le(buffer, block_size + 24);
+              track->out2->write(buffer, 4);
+              track->out2->write(data.Buffer(), 16);
+              // write the flags from the lossy part
+              flag = flags[flags_index++];
+              track->out2->write(&flag, 4);
+              // write the CRC
+              track->out2->write(mybuffer, 4);
+              mybuffer += 8;
+              track->out2->write(mybuffer, block_size);
+              mybuffer += block_size;
+              data_size -= 8 + block_size;
+            }
+          } else {
+            track->out2->write("wvpk", 4);
+            put_uint32_le(buffer, block_addition->GetSize() + 20);
+            track->out2->write(buffer, 4);
+            track->out2->write(data.Buffer(), 20);
+            track->out2->write(block_addition->GetBuffer(),
+                               block_addition->GetSize());
+          }
+          delete block_adds;
         }
         break;
 
@@ -1614,6 +1673,7 @@ extract_tracks(const char *file_name) {
               track->private_data = private_data;
               track->private_size = private_size;
               track->default_duration = default_duration;
+              track->max_blockadd_id = max_blockadd_id;
 
             } else {
               safefree(codec_id);
@@ -1721,9 +1781,11 @@ extract_tracks(const char *file_name) {
               } else if (EbmlId(*l3) ==
                          KaxBlockAdditions::ClassInfos.GlobalId) {
                 blockadds = static_cast<KaxBlockAdditions *>(l3);
-                blockadds->ReadData(es->I_O(), SCOPE_ALL_DATA);
+                blockadds->Read(*es, KaxBlockAdditions::ClassInfos.Context,
+                                upper_lvl_el, l4, true);
                 show_element(l3, 3, _("Block Additions"));
 
+                delete_element = false;
                 has_reference = true;
               } else
                 l3->SkipData(*es, l3->Generic().Context);

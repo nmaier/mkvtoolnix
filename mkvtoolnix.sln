@@ -1,9 +1,15 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mkvmerge", "mkvmerge.vcproj", "{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}"
 	ProjectSection(ProjectDependencies) = postProject
+		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E} = {78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmtxcommon", "libmtxcommon.vcproj", "{2DF9A3BE-DC42-4074-83DE-98491AE03410}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mkvextract", "mkvextract.vcproj", "{11651DFD-E21B-47C3-3387-E8F7DEDDAFA5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E} = {78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common.vcproj", "{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -17,10 +23,14 @@ Global
 		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Debug.Build.0 = Debug|Win32
 		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Release.ActiveCfg = Release|Win32
 		{11651DFD-E21B-47C3-8733-8EFD7EDDAF5A}.Release.Build.0 = Release|Win32
-		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Debug.ActiveCfg = Debug|Win32
-		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Debug.Build.0 = Debug|Win32
-		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Release.ActiveCfg = Release|Win32
-		{2DF9A3BE-DC42-4074-83DE-98491AE03410}.Release.Build.0 = Release|Win32
+		{11651DFD-E21B-47C3-3387-E8F7DEDDAFA5}.Debug.ActiveCfg = Debug|Win32
+		{11651DFD-E21B-47C3-3387-E8F7DEDDAFA5}.Debug.Build.0 = Debug|Win32
+		{11651DFD-E21B-47C3-3387-E8F7DEDDAFA5}.Release.ActiveCfg = Release|Win32
+		{11651DFD-E21B-47C3-3387-E8F7DEDDAFA5}.Release.Build.0 = Release|Win32
+		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Debug.ActiveCfg = Debug|Win32
+		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Debug.Build.0 = Debug|Win32
+		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Release.ActiveCfg = Release|Win32
+		{78D11FC6-DC8A-420D-B5B0-22AC5A9B722E}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

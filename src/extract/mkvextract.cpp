@@ -14,6 +14,8 @@
 
 // {{{ includes
 
+#include "os.h"
+
 #include <errno.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -125,11 +127,13 @@ usage() {
 " on the mode.\n"
 "\n"
 " First mode extracts some tracks to external files.\n"
-"  -c charset     Convert text subtitles to this charset (default: UTF-8).\n"
-"  --no-ogg       Write raw FLAC files (default: write OggFLAC files).\n"
-"  --cuesheet     Also try to extract the CUE sheet from the chapter\n"
-"                 information and tags for this track.\n"
-"  TID:out        Write track with the ID TID to the file 'out'.\n"
+"  -c charset       Convert text subtitles to this charset (default: UTF-8).\n"
+"  --no-ogg         Write raw FLAC files (default: write OggFLAC files).\n"
+"  --cuesheet       Also try to extract the CUE sheet from the chapter\n"
+"                   information and tags for this track.\n"
+"  --blockadd level Keep only the BlockAdditions up to this level\n"
+"                   (default: keep all levels)\n"
+"  TID:out          Write track with the ID TID to the file 'out'.\n"
 "\n"
 " Example:\n"
 " mkvextract tracks \"a movie.mkv\" 2:audio.ogg 3:subs.srt\n"
@@ -189,6 +193,7 @@ parse_args(int argc,
   int64_t tid;
   kax_track_t track;
   bool embed_in_ogg, extract_cuesheet;
+  int extract_blockadd_level = -1;
 
   file_name = NULL;
   sub_charset = NULL;
@@ -266,6 +271,19 @@ parse_args(int argc,
         mxerror(_("'--cuesheet' is only allowed when extracting tracks.\n"));
       extract_cuesheet = true;
  
+    } else if (!strcmp(argv[i], "--blockadd")) {
+      if (mode != MODE_TRACKS)
+        mxerror(_("'--blockadd' is only allowed when extracting tracks.\n"));
+
+      if ((i + 1) >= argc)
+        mxerror(_("'--blockadd' lacks a level.\n"));
+
+      if (!parse_int(argv[i + 1], extract_blockadd_level) ||
+          (extract_blockadd_level < -1))
+        mxerror("Invalid BlockAddition level in argument '%s'.\n",
+                argv[i + 1]);
+      i++;
+ 
    } else if (mode == MODE_TAGS)
       mxerror(_("No further options allowed when extracting %s.\n"), argv[1]);
 
@@ -307,6 +325,7 @@ parse_args(int argc,
       track.sub_charset = safestrdup(sub_charset);
       track.embed_in_ogg = embed_in_ogg;
       track.extract_cuesheet = extract_cuesheet;
+      track.extract_blockadd_level = extract_blockadd_level;
       tracks.push_back(track);
       safefree(copy);
       conv_handle = conv_utf8;
