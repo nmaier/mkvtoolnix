@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.51 2003/05/29 18:35:19 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.52 2003/05/29 20:19:53 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -333,6 +333,20 @@ bool process_file(const char *file_name) {
             show_element(l2, 2, "Writing application: %ls",
                          UTFstring(writingapp).c_str());
 #endif
+
+          } else if (EbmlId(*l2) == KaxDateUTC::ClassInfos.GlobalId) {
+            struct tm tmutc;
+            time_t temptime;
+            char buffer[40];
+            KaxDateUTC &dateutc = *static_cast<KaxDateUTC *>(l2);
+            dateutc.ReadData(es->I_O());
+            temptime = dateutc.GetEpochDate();
+            if ((gmtime_r(&temptime, &tmutc) != NULL) &&
+                (asctime_r(&tmutc, buffer) != NULL)) {
+              buffer[strlen(buffer) - 1] = 0;
+              show_element(l2, 2, "Date: %s", buffer);
+            } else
+              show_element(l2, 2, "Date (invalid, value: %d)", temptime);
 
           } else if (!is_ebmlvoid(l2, 2))
             show_unknown_element(l2, 2);

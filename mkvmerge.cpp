@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.82 2003/05/29 18:50:03 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.83 2003/05/29 20:19:53 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -510,7 +510,7 @@ static void render_headers(mm_io_c *out) {
       cstr_to_UTFstring(version.c_str());
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
       cstr_to_UTFstring(VERSIONINFO);
-
+    GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
 
     kax_segment->WriteHead(*out, 5);
 
