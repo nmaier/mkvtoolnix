@@ -616,10 +616,10 @@ tab_chapters::load(wxString name) {
   int pos;
 
   try {
-    if (kax_analyzer_c::probe(wxMBL(name))) {
+    if (kax_analyzer_c::probe(wxMB(name))) {
       if (analyzer != NULL)
         delete analyzer;
-      analyzer = new kax_analyzer_c(this, wxMBL(name));
+      analyzer = new kax_analyzer_c(this, wxMB(name));
       file_name = name;
       if (!analyzer->process()) {
         delete analyzer;
@@ -644,7 +644,7 @@ tab_chapters::load(wxString name) {
       source_is_simple_format = false;
 
     } else {
-      new_chapters = parse_chapters(wxMBL(name), 0, -1, 0, "", "", true,
+      new_chapters = parse_chapters(wxMB(name), 0, -1, 0, "", "", true,
                                     &source_is_simple_format);
       source_is_kax_file = false;
     }
@@ -713,7 +713,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
   if (dlg.ShowModal() != wxID_OK)
     return;
 
-  if (!kax_analyzer_c::probe(wxMBL(dlg.GetPath()))) {
+  if (!kax_analyzer_c::probe(wxMB(dlg.GetPath()))) {
     wxMessageBox(wxT("The file you tried to save to is NOT a Matroska file."),
                  wxT("Wrong file selected"), wxOK | wxCENTER | wxICON_ERROR);
     return;
@@ -728,7 +728,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
 
   if (analyzer != NULL)
     delete analyzer;
-  analyzer = new kax_analyzer_c(this, wxMBL(file_name));
+  analyzer = new kax_analyzer_c(this, wxMB(file_name));
   if (!analyzer->process()) {
     delete analyzer;
     analyzer = NULL;
@@ -755,7 +755,7 @@ tab_chapters::select_file_name() {
                    wxT("Chapter files (*.xml)|*.xml|"
                        ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
-    if (kax_analyzer_c::probe(wxMBL(dlg.GetPath()))) {
+    if (kax_analyzer_c::probe(wxMB(dlg.GetPath()))) {
       wxMessageBox(wxT("The file you tried to save to is a Matroska file. For "
                        "this to work you have to use the 'Save to Matroska "
                        "file' menu option."), wxT("Wrong file selected"),
@@ -776,7 +776,7 @@ tab_chapters::save() {
   wxString err;
 
   try {
-    out = new mm_file_io_c(wxMBL(file_name), MODE_WRITE);
+    out = new mm_file_io_c(wxMB(file_name), MODE_WRITE);
 #if defined(SYS_WINDOWS)
     out->use_dos_style_newlines(true);
 #endif
@@ -1363,11 +1363,11 @@ tab_chapters::set_values_recursively(wxTreeItemId id,
 
       if (set_language) {
         language = new KaxChapterLanguage;
-        *static_cast<EbmlString *>(language) = wxMBL(s);
+        *static_cast<EbmlString *>(language) = wxMB(s);
         display->PushElement(*language);
       } else {
         country = new KaxChapterCountry;
-        *static_cast<EbmlString *>(country) = wxMBL(s);
+        *static_cast<EbmlString *>(country) = wxMB(s);
         display->PushElement(*country);
       }
 
@@ -1565,7 +1565,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
 
   s = tc_uid->GetValue();
   if (s.Length() > 0) {
-    if (!parse_int(wxMBL(s), ts_start))
+    if (!parse_int(wxMB(s), ts_start))
       wxMessageBox(wxT("Invalid UID. A UID is simply a number."),
                    wxT("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
     else {
@@ -1691,7 +1691,7 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
   else
     s = wxT("eng");
   *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*cdisplay)) =
-    wxMBL(s);
+    wxMB(s);
   if (default_chapter_country.length() > 0)
     *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(*cdisplay)) =
       default_chapter_country.c_str();
