@@ -325,7 +325,7 @@ bool process_file(const char *file_name) {
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
             writingapp.ReadData(es->I_O());
             str = UTFstring_to_cstr(UTFstring(writingapp));
-            show_element(l2, 2, "Writing application: %ls", str);
+            show_element(l2, 2, "Writing application: %s", str);
             safefree(str);
 
           } else if (EbmlId(*l2) == KaxDateUTC::ClassInfos.GlobalId) {
