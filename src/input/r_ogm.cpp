@@ -1036,7 +1036,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
 
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     if (((dmx->stype != OGM_STREAM_TYPE_VORBIS) || !dmx->native_mode) &&
-        ((op.packet[0] & PACKET_TYPE_BITS) != 1)) {
+        ((op.packet[0] & 1) != 1)) {
       mxwarn("ogm_reader: Missing header/comment packets for stream %d in "
              "'%s'. This file is broken but should be muxed correctly. If "
              "not please contact the author Moritz Bunkus "
