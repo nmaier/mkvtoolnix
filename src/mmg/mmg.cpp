@@ -965,11 +965,11 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
 
   set_on_top(false);
 #ifdef SYS_WINDOWS
-  Show(false);
+  Iconize(true);
 #endif
   delete new mux_dialog(this);
 #ifdef SYS_WINDOWS
-  Show(true);
+  Iconize(false);
 #endif
   restore_on_top();
 }
