@@ -38,25 +38,44 @@ print_binary(int level,
   const unsigned char *p;
   string s;
   int i, size;
+  bool ascii_only;
 
   b = (EbmlBinary *)e;
   p = (const unsigned char *)b->GetBuffer();
   size = b->GetSize();
 
-  for (i = 0; i < size; i++) {
-    if ((i % 16) != 0)
-      s += " ";
-    s += mxsprintf("%02x", *p);
-    ++p;
-    if ((((i + 1) % 16) == 0) && ((i + 1) < size))
-      s += mxsprintf("\n%*s", (level + 1) * 2, "");
-  }
+  ascii_only = true;
+  for (i = 0; i < size; i++)
+    if ((p[i] < ' ') || (p[i] > 127)) {
+      ascii_only = false;
+      break;
+    }
 
-  if ((level * 2 + 2 * strlen(name) + 2 + 3 + s.length()) <= 78)
-    out->printf("%s</%s>\n", s.c_str(), name);
-  else
-    out->printf("\n%*s%s\n%*s</%s>\n", (level + 1) * 2, "", s.c_str(),
-                level * 2, "", name);
+  if (ascii_only) {
+    s.append((const char *)p, size);
+    out->printf("<%s format=\"ascii\">%s</%s>\n", name, escape_xml(s).c_str(),
+                name);
+
+  } else {
+    string prefix;
+
+    prefix = mxsprintf("<%s format=\"hex\">", name);
+
+    for (i = 0; i < size; i++) {
+      if ((i % 16) != 0)
+        s += " ";
+      s += mxsprintf("%02x", *p);
+      ++p;
+      if ((((i + 1) % 16) == 0) && ((i + 1) < size))
+        s += mxsprintf("\n%*s", (level + 1) * 2, "");
+    }
+
+    if ((level * 2 + 2 * strlen(name) + 2 + 3 + s.length()) <= 78)
+      out->printf("%s%s</%s>\n", prefix.c_str(), s.c_str(), name);
+    else
+      out->printf("%s\n%*s%s\n%*s</%s>\n", prefix.c_str(), (level + 1) * 2, "",
+                  s.c_str(), level * 2, "", name);
+  }
 }
 
 void
@@ -82,17 +101,15 @@ write_xml_element_rec(int level,
     elt_idx++;
   }
 
-  for (i = 0; i < level; i++)
-    out->printf("  ");
+  out->printf("%*s", level * 2, "");
 
   if (!found) {
     out->printf("<!-- Unknown element '%s' -->\n", e->Generic().DebugName);
     return;
   }
 
-  out->printf("<%s%s>", element_map[elt_idx].name,
-              element_map[elt_idx].type == EBMLT_BINARY ?
-              " format=\"hex\"" : "");
+  if (element_map[elt_idx].type != EBMLT_BINARY)
+    out->printf("<%s>", element_map[elt_idx].name);
   switch (element_map[elt_idx].type) {
     case EBMLT_MASTER:
       out->printf("\n");
@@ -113,9 +130,7 @@ write_xml_element_rec(int level,
         element_map[elt_idx].end_hook(&cb);
       }
 
-      for (i = 0; i < level; i++)
-        out->printf("  ");
-      out->printf("</%s>\n", element_map[elt_idx].name);
+      out->printf("%*s</%s>\n", level * 2, "", element_map[elt_idx].name);
       break;
 
     case EBMLT_UINT:
