@@ -85,12 +85,12 @@ tab_settings::tab_settings(wxWindow *parent):
                    "a file. It will be set to the same name as the "
                    "input file but with the extension '.mkv'. If unset mmg "
                    "will not touch the output filename."));
-  siz_misc->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
+  siz_misc->Add(cb_autoset_output_filename, 0, wxLEFT | wxTOP, 5);
 
   cb_ask_before_overwriting =
     new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
                    wxT("Ask before overwriting existing files"));
-  siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
+  siz_misc->Add(cb_ask_before_overwriting, 0, wxLEFT | wxTOP, 5);
 
   siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
                                    wxHORIZONTAL);
