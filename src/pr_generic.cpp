@@ -26,6 +26,7 @@
 #include "common.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"
+#include "tagparser.h"
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_t *nti) throw(error_c) {
@@ -34,6 +35,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   cue_creation_t *cc;
   int64_t id;
   language_t *lang;
+  tags_t *tags;
   bool found;
 
 #ifdef DEBUG
@@ -97,6 +99,17 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     if ((lang->id == ti->id) || (lang->id == -1)) { // -1 == all tracks
       safefree(ti->sub_charset);
       ti->sub_charset = safestrdup(lang->language);
+      break;
+    }
+  }
+
+  // Let's see if the user has specified a sub charset for this track.
+  for (i = 0; i < ti->all_tags->size(); i++) {
+    tags = &(*ti->all_tags)[i];
+    if ((tags->id == ti->id) || (tags->id == -1)) { // -1 == all tracks
+      ti->tags_ptr = tags;
+      ti->tags = new KaxTags;
+      parse_xml_tags(ti->tags_ptr->file_name, ti->tags);
       break;
     }
   }
@@ -538,6 +551,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   for (i = 0; i < src->sub_charsets->size(); i++)
     (*dst->sub_charsets)[i].language =
       safestrdup((*src->sub_charsets)[i].language);
+  dst->all_tags = new vector<tags_t>(*src->all_tags);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->sub_charset = safestrdup(src->sub_charset);
@@ -564,6 +578,7 @@ void free_track_info(track_info_t *ti) {
   for (i = 0; i < ti->sub_charsets->size(); i++)
     safefree((*ti->sub_charsets)[i].language);
   delete ti->sub_charsets;
+  delete ti->all_tags;
   safefree(ti->language);
   safefree(ti->private_data);
   safefree(ti->sub_charset);

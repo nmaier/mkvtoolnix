@@ -29,6 +29,7 @@
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxTracks.h>
+#include <matroska/KaxTags.h>
 
 #include "error.h"
 
@@ -68,6 +69,11 @@ typedef struct {
 } language_t;
 
 typedef struct {
+  const char *file_name;
+  int64_t id;
+} tags_t;
+
+typedef struct {
   // The track ID.
   int64_t id;
 
@@ -97,6 +103,10 @@ typedef struct {
 
   vector<language_t> *sub_charsets; // As given on the command line
   char *sub_charset;            // For this very track
+
+  vector<tags_t> *all_tags;     // As given on the command line
+  tags_t *tags_ptr;             // For this very track
+  KaxTags *tags;                // For this very track
 } track_info_t;
 
 class generic_reader_c;

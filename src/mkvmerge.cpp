@@ -249,6 +249,7 @@ static void usage(void) {
     "                           None at all, only for I frames, for all.\n"
     "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
     "                           code, see --list-languages).\n"
+    "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -646,6 +647,29 @@ static void parse_sub_charset(char *s, language_t &sub_charset) {
   sub_charset.language = s;
 }
 
+static void parse_tags(char *s, tags_t &tags) {
+  char *colon;
+
+  // Extract the track number.
+  if ((colon = strchr(s, ':')) == NULL) {
+    mxprint(stderr, "Error: Invalid tags option. No track ID specified "
+            "(%s).\n", s);
+    exit(1);
+  }
+  *colon = 0;
+  if (!parse_int(s, tags.id)) {
+    mxprint(stderr, "Error: Invalid track ID specified.\n");
+    exit(1);
+  }
+  s = &colon[1];
+  if (*s == 0) {
+    mxprint(stderr, "Error: Invalid tags file name specified.\n");
+    exit(1);
+  }
+
+  tags.file_name = s;
+}
+
 static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
   EbmlHead head;
   int i;
@@ -917,6 +941,7 @@ static void identify(const char *filename) {
   ti.default_track_flags = new vector<int64_t>;
   ti.languages = new vector<language_t>;
   ti.sub_charsets = new vector<language_t>;
+  ti.all_tags = new vector<tags_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -960,6 +985,7 @@ static void parse_args(int argc, char **argv) {
   int64_t id;
   language_t lang;
   attachment_t *attachment;
+  tags_t tags;
   mm_io_c *io;
 
   memset(&ti, 0, sizeof(track_info_t));
@@ -968,12 +994,14 @@ static void parse_args(int argc, char **argv) {
   ti.default_track_flags = new vector<int64_t>;
   ti.languages = new vector<language_t>;
   ti.sub_charsets = new vector<language_t>;
+  ti.all_tags = new vector<tags_t>;
   ti.aspect_ratio = 1.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
+  memset(&tags, 0, sizeof(tags_t));
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -1305,6 +1333,15 @@ static void parse_args(int argc, char **argv) {
       parse_sub_charset(argv[i + 1], lang);
       ti.sub_charsets->push_back(lang);
       i++;
+
+    } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tags")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: %s lacks its argument.\n", argv[i]);
+        exit(1);
+      }
+      parse_tags(argv[i + 1], tags);
+      ti.all_tags->push_back(tags);
+      i++;
     }
 
     // The argument is an input file.
@@ -1353,12 +1390,14 @@ static void parse_args(int argc, char **argv) {
       delete ti.default_track_flags;
       delete ti.languages;
       delete ti.sub_charsets;
+      delete ti.all_tags;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
       ti.default_track_flags = new vector<int64_t>;
       ti.languages = new vector<language_t>;
       ti.sub_charsets = new vector<language_t>;
+      ti.all_tags = new vector<tags_t>;
       ti.aspect_ratio = 1.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;
