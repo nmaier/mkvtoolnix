@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.15 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: p_video.h,v 1.16 2003/04/11 11:27:32 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,6 +23,11 @@
 
 #include "common.h"
 #include "queue.h"
+
+#define VFT_IFRAME 0x10000000L
+#define VFT_PFRAME 0x20000000L
+#define VFT_BFRAME 0x40000000L
+#define VNUMFRAMES 0x0000FFFFL
 
 class video_packetizer_c: public q_c {
 private:
@@ -36,8 +41,8 @@ public:
                      int navi_compat_mode, track_info_t *nti) throw (error_c);
   virtual ~video_packetizer_c();
     
-  virtual int  process(unsigned char *buf, int size, int num_frames, int key,
-                       int last_frame, int64_t old_timecode = -1);
+  virtual int  process(unsigned char *buf, int size, int64_t old_timecode = -1,
+                       int64_t flags = VFT_IFRAME);
   virtual void set_header();
 };
 
