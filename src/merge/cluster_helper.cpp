@@ -410,6 +410,9 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     pack = clstr->packets[i];
     source = pack->source;
 
+    if (source->contains_gap())
+      cluster->SetSilentTrackUsed();
+
     render_group = NULL;
     for (k = 0; k < render_groups.size(); k++)
       if (render_groups[k]->source == source) {

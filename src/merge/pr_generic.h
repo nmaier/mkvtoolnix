@@ -361,6 +361,8 @@ public:
     throw (error_c);
   virtual ~generic_packetizer_c();
 
+  virtual bool contains_gap();
+
   virtual file_status_t read() {
     return reader->read(this);
   }

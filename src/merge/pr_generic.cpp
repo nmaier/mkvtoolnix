@@ -1008,6 +1008,14 @@ generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
   initial_displacement = displacement;
 }
 
+bool
+generic_packetizer_c::contains_gap() {
+  if (timecode_factory != NULL)
+    return timecode_factory->contains_gap();
+  else
+    return false;
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(container) \

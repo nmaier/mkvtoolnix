@@ -50,14 +50,19 @@ public:
 
   virtual void parse(mm_io_c &) {
   }
-  virtual void get_next(int64_t &timecode, int64_t &duration,
+  virtual bool get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false) {
+    return true;
   }
   virtual void peek_next(int64_t &timecode, int64_t &duration) {
     get_next(timecode, duration, true);
   }
   virtual double get_default_duration(double proposal) {
     return proposal;
+  }
+  
+  virtual bool contains_gap() {
+    return false;
   }
 
   static timecode_factory_c *create(const string &_file_name,
@@ -84,7 +89,7 @@ public:
   }
 
   virtual void parse(mm_io_c &in);
-  virtual void get_next(int64_t &timecode, int64_t &duration,
+  virtual bool get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false);
   virtual double get_default_duration(double proposal) {
     return default_fps != 0.0 ? (double)1000000000.0 / default_fps : proposal;
@@ -113,11 +118,37 @@ public:
   }
 
   virtual void parse(mm_io_c &in);
-  virtual void get_next(int64_t &timecode, int64_t &duration,
+  virtual bool get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false);
   virtual double get_default_duration(double proposal) {
     return default_fps != 0.0 ? (double)1000000000.0 / default_fps : proposal;
   }
+};
+
+class timecode_factory_v3_c: public timecode_factory_c {
+protected:
+  vector<timecode_range_c> ranges;
+  uint32_t current_range;
+  int64_t frameno;
+  double default_fps;
+
+public:
+  timecode_factory_v3_c(const string &_file_name, const string &_source_name,
+                        int64_t _tid):
+    timecode_factory_c(_file_name, _source_name, _tid),
+    current_range(0),
+    frameno(0),
+    default_fps(0.0) {
+  }
+  void parse(mm_io_c &in);
+  bool get_next(int64_t &timecode, int64_t &duration,
+                        bool peek_only = false);
+  bool ContainGap() {
+    return true;
+  }
+
+protected:
+  virtual int64_t get_at(int64_t frame);
 };
 
 #endif // __TIMECODE_FACTORY_H
