@@ -33,23 +33,29 @@ extern "C" {
 #include "r_ac3.h"
 #include "p_ac3.h"
 
+#define PROBESIZE 8192
+
 int ac3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
-  char buf[4096];
+  unsigned char buf[PROBESIZE];
   int pos;
   ac3_header_t ac3header;
 
-  if (size < 4096)
+  if (size < PROBESIZE)
     return 0;
   try {
     mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, 4096) != 4096)
+    if (mm_io->read(buf, PROBESIZE) != PROBESIZE)
       return 0;
     mm_io->setFilePointer(0, seek_beginning);
   } catch (exception &ex) {
     return 0;
   }
 
-  pos = find_ac3_header((unsigned char *)buf, 4096, &ac3header);
+  pos = find_ac3_header(buf, PROBESIZE, &ac3header);
+  if ((pos < 0) || ((pos + ac3header.bytes) >= PROBESIZE))
+    return 0;
+  pos = find_ac3_header(&buf[pos + ac3header.bytes], PROBESIZE - pos -
+                        ac3header.bytes, &ac3header);
   if (pos != 0)
     return 0;
 

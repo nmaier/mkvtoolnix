@@ -1,5 +1,12 @@
 2003-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: Improved the file type detection for AC3 and AAC files
+	a bit.
+
+	* mkvmerge: Implemented a lot of fixes for big endian systems and
+	processors that don't allow non-aligned memory access for word or
+	bigger sized objects.
+
 	* mmg: Made mmg accept return codes of 1 when 'mkvmerge -i' is run
 	when an input file is added. This way mmg won't reject mkvmerge's
 	output if mkvmerge only printed some warnings which will result in

@@ -29,23 +29,38 @@
 #include "r_aac.h"
 #include "p_aac.h"
 
-int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
-  char buf[4096];
-  aac_header_t aacheader;
+#define PROBESIZE 8192
 
-  if (size < 4096)
+int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+  unsigned char buf[PROBESIZE];
+  aac_header_t aacheader;
+  int pos;
+
+  if (size < PROBESIZE)
     return 0;
   try {
     mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, 4096) != 4096)
+    if (mm_io->read(buf, PROBESIZE) != PROBESIZE)
       mm_io->setFilePointer(0, seek_beginning);
     mm_io->setFilePointer(0, seek_beginning);
   } catch (exception &ex) {
     return 0;
   }
-  if (parse_aac_adif_header((unsigned char *)buf, 4096, &aacheader))
+  if (parse_aac_adif_header(buf, PROBESIZE, &aacheader))
     return 1;
-  if (find_aac_header((unsigned char *)buf, 4096, &aacheader, false) != 0)
+  pos = find_aac_header(buf, PROBESIZE, &aacheader, false);
+  if ((pos < 0) || ((pos + aacheader.bytes) >= PROBESIZE)) {
+    pos = find_aac_header(buf, PROBESIZE, &aacheader, true);
+    if ((pos < 0) || ((pos + aacheader.bytes) >= PROBESIZE))
+      return 0;
+    pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos -
+                          aacheader.bytes, &aacheader, true);
+    if (pos != 0)
+      return 0;
+  }
+  pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos -
+                        aacheader.bytes, &aacheader, false);
+  if (pos != 0)
     return 0;
 
   return 1;

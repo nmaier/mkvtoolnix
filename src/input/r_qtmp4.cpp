@@ -69,7 +69,8 @@ int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
     mxverb(3, PFX "Atom: '%c%c%c%c'; size: %llu\n", BE2STR(atom), atom_size);
 
     if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
-        (atom == FOURCC('f', 't', 'y', 'p')))
+        (atom == FOURCC('f', 't', 'y', 'p')) ||
+        (atom == FOURCC('m', 'd', 'a', 't')))
         return 1;
 
   } catch (exception &ex) {
