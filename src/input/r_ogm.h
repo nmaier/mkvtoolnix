@@ -65,7 +65,7 @@ public:
 struct ogm_demuxer_t {
   ogg_stream_state os;
   int ptzr;
-  int sid, stype, serialno, eos;
+  int stype, serialno, eos;
   int units_processed, vorbis_rate;
   bool headers_read, native_mode;
   char *language, *title;
@@ -79,7 +79,7 @@ struct ogm_demuxer_t {
   bool in_use;
 
   ogm_demuxer_t():
-    ptzr(-1), sid(0), stype(0), serialno(0), eos(0), units_processed(0),
+    ptzr(-1), stype(0), serialno(0), eos(0), units_processed(0),
     vorbis_rate(0), headers_read(false), native_mode(true),
     language(NULL), title(NULL), in_use(false) {
     memset(&os, 0, sizeof(ogg_stream_state));
@@ -97,7 +97,6 @@ class ogm_reader_c: public generic_reader_c {
 private:
   ogg_sync_state oy;
   mm_io_c *mm_io;
-  int act_wchar, nastreams, nvstreams, ntstreams, numstreams;
   vector<ogm_demuxer_t *> sdemuxers;
   int bos_pages_read;
   int64_t file_size;
