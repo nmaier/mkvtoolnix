@@ -25,7 +25,6 @@
 #include "wx/dialog.h"
 #include "wx/listctrl.h"
 
-#define ID_JOBS_B_OK                      17000
 #define ID_JOBS_B_UP                      17001
 #define ID_JOBS_B_DOWN                    17002
 #define ID_JOBS_B_DELETE                  17003
@@ -55,16 +54,34 @@ typedef struct {
 
 extern vector<job_t> jobs;
 
-class job_log_display_dlg: public wxDialog {
-  DECLARE_CLASS(job_log_display_dlg);
+class job_log_dialog: public wxDialog {
+  DECLARE_CLASS(job_log_dialog);
   DECLARE_EVENT_TABLE();
 protected:
   wxString text;
 
 public:
-  job_log_display_dlg(wxWindow *parent, wxString &log);
+  job_log_dialog(wxWindow *parent, wxString &log);
 
   void on_save(wxCommandEvent &evt);
+};
+
+class job_run_dialog: public wxDialog {
+  DECLARE_CLASS(job_run_dialog);
+  DECLARE_EVENT_TABLE();
+protected:
+  long pid;
+  bool abort;
+  wxTextCtrl *tc_output;
+  wxGauge *g_progress, *g_jobs;
+  wxButton *b_ok, *b_abort;
+  wxCheckBox *cb_abort_after_current;
+  wxStaticText *st_jobs;
+
+public:
+  job_run_dialog(wxWindow *parent, vector<int> &jobs_to_start);
+
+  void on_abort(wxCommandEvent &evt);
 };
 
 class job_dialog: public wxDialog {
@@ -78,7 +95,6 @@ protected:
 public:
   job_dialog(wxWindow *parent);
 
-  void on_ok(wxCommandEvent &evt);
   void on_start(wxCommandEvent &evt);
   void on_start_selected(wxCommandEvent &evt);
   void on_reenable(wxCommandEvent &evt);
@@ -91,6 +107,7 @@ public:
   void enable_buttons(bool enable);
   void swap_rows(int lower, int higher);
   void create_list_item(int i);
+  void start_jobs(vector<int> &jobs_to_start);
 }; 
 
 #endif // __JOBS_H

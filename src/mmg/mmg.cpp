@@ -612,7 +612,8 @@ mmg_dialog::on_file_load(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::load(wxString file_name) {
+mmg_dialog::load(wxString file_name,
+                 bool used_for_jobs) {
   wxFileConfig *cfg;
   wxString s;
   int version;
@@ -620,12 +621,13 @@ mmg_dialog::load(wxString file_name) {
   cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
   cfg->SetPath("/mkvmergeGUI");
   if (!cfg->Read("file_version", &version) || (version != 1)) {
+    if (used_for_jobs)
+      return;
     wxMessageBox("The file does not seem to be a valid mkvmerge GUI "
                  "settings file.", "Error loading settings",
                  wxOK | wxCENTER | wxICON_ERROR);
     return;
   }
-  set_last_settings_in_menu(file_name);
   cfg->Read("output_file_name", &s);
   tc_output->SetValue(s);
   verified_output_file = wxS("");
@@ -637,7 +639,10 @@ mmg_dialog::load(wxString file_name) {
 
   delete cfg;
 
-  set_status_bar("Configuration loaded.");
+  if (!used_for_jobs) {
+    set_last_settings_in_menu(file_name);
+    set_status_bar("Configuration loaded.");
+  }
 }
 
 void
@@ -656,8 +661,6 @@ mmg_dialog::save(wxString file_name,
                  bool used_for_jobs) {
   wxFileConfig *cfg;
 
-  if (!used_for_jobs)
-    set_last_settings_in_menu(file_name);
   cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
   cfg->SetPath("/mkvmergeGUI");
   cfg->Write("file_version", 1);
@@ -671,8 +674,10 @@ mmg_dialog::save(wxString file_name,
 
   delete cfg;
 
-  if (!used_for_jobs)
+  if (!used_for_jobs) {
     set_status_bar("Configuration saved.");
+    set_last_settings_in_menu(file_name);
+  }
 }
 
 void

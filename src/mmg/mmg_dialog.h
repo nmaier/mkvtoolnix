@@ -130,7 +130,7 @@ public:
   wxString &get_command_line();
   wxArrayString &get_command_line_args();
 
-  void load(wxString file_name);
+  void load(wxString file_name, bool used_for_jobs = false);
   void save(wxString file_name, bool used_for_jobs = false);
 
   void on_clear_status_bar(wxTimerEvent &evt);
