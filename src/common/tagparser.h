@@ -114,6 +114,8 @@ using namespace libmatroska;
 #define E_Simple                         82
 #define E_String                         83
 #define E_Binary                         84
+#define E_TagLanguage                    85
+#define E_DefaultLanguage                86
 
 // MAX: 81
 

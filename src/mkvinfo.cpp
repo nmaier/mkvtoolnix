@@ -420,6 +420,14 @@ bool parse_simpletag(EbmlStream *es,
         s = format_binary(c_binary);
         show_element(l1, level + 1, "Binary: %s", s.c_str());
 
+      } else if (is_id(l1, KaxTagLangue)) {
+        KaxTagLangue &c_string = *static_cast<KaxTagLangue *>(l1);
+        show_element(l1, level + 1, "Language: %s", string(c_string).c_str());
+
+      } else if (is_id(l1, KaxTagDefault)) {
+        KaxTagDefault &c_int = *static_cast<KaxTagDefault *>(l1);
+        show_element(l1, level + 1, "Default: %d", uint8(c_int));
+
       } else if (!is_global(es, l1, level + 1) &&
                  !parse_simpletag(es, l1, level + 1))
         show_unknown_element(l1, level + 1);

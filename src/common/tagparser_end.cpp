@@ -41,7 +41,8 @@ using namespace libmatroska;
 static void
 el_get_uint(parser_data_t *pdata,
             EbmlElement *el,
-            uint64_t min_value = 0) {
+            uint64_t min_value = 0,
+            uint64_t max_value = 9223372036854775807ULL) {
   int64 value;
 
   strip(*pdata->bin);
@@ -51,6 +52,9 @@ el_get_uint(parser_data_t *pdata,
   if (value < min_value)
     tperror(pdata, "Unsigned integer (%lld) is too small. Mininum value is "
             "%lld.", value, min_value);
+  if (value > max_value)
+    tperror(pdata, "Unsigned integer (%lld) is too big. Maximum value is "
+            "%lld.", value, max_value);
 
   *(static_cast<EbmlUInteger *>(el)) = value;
 }
@@ -647,6 +651,10 @@ end_simple(parser_data_t *pdata,
       el_get_utf8string(pdata, &GetChild<KaxTagString>(*simple));
     else if (!strcmp(name, "Binary"))
       el_get_binary(pdata, &GetChild<KaxTagBinary>(*simple));
+    else if (!strcmp(name, "TagLanguage"))
+      el_get_string(pdata, &GetChild<KaxTagLangue>(*simple), true);
+    else if (!strcmp(name, "DefaultLanguage"))
+      el_get_uint(pdata, &GetChild<KaxTagDefault>(*simple), 0, 1);
   }
 }
 

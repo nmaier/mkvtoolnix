@@ -792,6 +792,14 @@ handle_simple_tag(parser_data_t *pdata,
                 "as children under one 'Simple' tag.\n");
     pdata->parents->push_back(E_Binary);
 
+  } else if (!strcmp(name, "TagLanguage")) {
+    check_instances(p_simple, KaxTagLangue);
+    pdata->parents->push_back(E_TagLanguage);
+
+  } else if (!strcmp(name, "DefaultLanguage")) {
+    check_instances(p_simple, KaxTagDefault);
+    pdata->parents->push_back(E_DefaultLanguage);
+
   } else
     tperror_nochild();
 }

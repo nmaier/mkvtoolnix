@@ -214,6 +214,12 @@ handle_simpletags(EbmlElement *e,
   else if (is_id(e, KaxTagBinary))
     pr_b("Binary");
 
+  else if (is_id(e, KaxTagLangue))
+    pr_s("TagLanguage");
+
+  else if (is_id(e, KaxTagDefault))
+    pr_ui("DefaultLanguage");
+
   else if (is_id(e, KaxTagSimple)) {
     for (i = 0; i < level; i++)
       mxprint(o, "  ");
