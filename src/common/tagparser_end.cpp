@@ -369,6 +369,8 @@ end_level3(parser_data_t *pdata,
       el_get_uint(pdata, pdata->chapter_uid);
     else if (!strcmp(name, "EditionUID"))
       el_get_uint(pdata, pdata->edition_uid);
+    else if (!strcmp(name, "TargetType"))
+      el_get_string(pdata, &GetChild<KaxTagTargetType>(*pdata->targets));
 
   } else if (parent == E_General) {
     if (!strcmp(name, "Subject"))

@@ -1880,6 +1880,10 @@ def_handle(tag_targets) {
       KaxTagEditionUID &editionuid = *static_cast<KaxTagEditionUID *>(l4);
       show_element(l4, 4, "Edition UID: %llu", uint64(editionuid));
 
+    } else if (is_id(l4, KaxTagTargetType)) {
+      KaxTagTargetType &ttype = *static_cast<KaxTagTargetType *>(l4);
+      show_element(l4, 4, "Target type: %s", string(ttype).c_str());
+
     } else if (!is_global(es, l4, 4) &&
                !parse_multicomment(es, l4, 4))
       show_unknown_element(l4, 4);

@@ -370,6 +370,12 @@ handle_level3(EbmlElement *e) {
   else if (is_id(e, KaxTagChapterUID))
     pr_ui("ChapterUID");
 
+  else if (is_id(e, KaxTagEditionUID))
+    pr_ui("EditionUID");
+
+  else if (is_id(e, KaxTagTargetType))
+    pr_s("TargetType");
+
   else if (is_id(e, KaxTagSubject))
     pr_us("Subject");
 
