@@ -51,7 +51,7 @@
 # endif
 #endif
 
-#define VERSIONNAME "Every Little Kiss"
+#define VERSIONNAME "Invisible Touch"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
 #define BUGMSG _("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
