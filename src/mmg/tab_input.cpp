@@ -1052,7 +1052,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   f = &files[t->source];
 
   b_track_up->Enable(new_sel > 0);
-  b_track_down->Enable(new_sel < (f->tracks->size() - 1));
+  b_track_down->Enable(new_sel < (tracks.size() - 1));
 
   if (t->type == 'a')
     audio_track_mode(*t->ctype);
