@@ -12,6 +12,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			base64.cpp base64.h \
 			chapters.cpp chapters.h \
 			chapter_parser_xml.cpp \
+			compression.cpp compression.h \
 			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \

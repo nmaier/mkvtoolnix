@@ -24,6 +24,7 @@
 #include <matroska/KaxTrackVideo.h>
 
 #include "common.h"
+#include "compression.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"
 #include "tagparser.h"

@@ -21,13 +21,10 @@
 #ifndef __P_VOBSUB_H
 #define __P_VOBSUB_H
 
-#include <bzlib.h>
-#include <lzo1x.h>
-#include <zlib.h>
-
 #include "os.h"
 
 #include "common.h"
+#include "compression.h"
 #include "pr_generic.h"
 
 class vobsub_packetizer_c: public generic_packetizer_c {
@@ -37,10 +34,7 @@ private:
   bool compressed;
   int compression_type, compressed_type;
   int64_t raw_size, compressed_size, items;
-
-  lzo_byte *lzo_wrkmem;
-  z_stream zc_stream, zd_stream;
-  bz_stream bzc_stream;
+  compression_c *compressor, *decompressor;
 
 public:
   vobsub_packetizer_c(generic_reader_c *nreader,
@@ -55,10 +49,6 @@ public:
   virtual void set_headers();
 
   virtual void dump_debug_info();
-
-protected:
-  virtual unsigned char *uncompress(unsigned char *buffer, int &size);
-  virtual unsigned char *compress(unsigned char *buffer, int &size);
 };
 
 #endif // __P_VOBSUB_H
