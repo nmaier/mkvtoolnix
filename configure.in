@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_CONFIG_HEADERS(config.h:config.h.in)
 
 PACKAGE="mkvtoolnix"
-VERSION="0.8.7"
+VERSION="0.8.8"
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
@@ -373,8 +373,8 @@ int main ()
   fi
 
   ebml_ver_req_major=0
-  ebml_ver_req_minor=6
-  ebml_ver_req_micro=5
+  ebml_ver_req_minor=7
+  ebml_ver_req_micro=0
 
   AC_MSG_CHECKING(Ebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro})
 
@@ -487,8 +487,8 @@ int main ()
   fi
 
   kax_ver_req_major=0
-  kax_ver_req_minor=6
-  kax_ver_req_micro=3
+  kax_ver_req_minor=7
+  kax_ver_req_micro=0
   AC_MSG_CHECKING(Matroska version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro})
 
   matroska_version=`cat conf.matroskatest`
