@@ -137,6 +137,7 @@ typedef struct {
 } kax_track_t;
 
 vector<kax_track_t> tracks;
+bool chapter_format_simple = false;
 
 kax_track_t *find_track(int tid) {
   int i;
@@ -176,9 +177,11 @@ void usage() {
 " Third mode extracts attachments from inname.\n"
 "  AID:outname    Write the attachment with the ID AID to 'outname'.\n"
 "\n"
-" Second mode extracts the chapters and converts them to XML. The output is\n"
+" Fourth mode extracts the chapters and converts them to XML. The output is\n"
 " written to the standard output. The output can be used as a source\n"
 " for mkvmerge.\n"
+"  -s, --simple   Exports the chapter infomartion in the simple format\n"
+"                 used in OGM tools (CHAPTER01=... CHAPTER01NAME=...).\n"
 "\n"
 " These options can be used instead of the mode keyword to obtain\n"
 " further information:\n"
@@ -251,10 +254,18 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       conv_handle = utf8_init(argv[i + 1]);
       i++;
 
-    } else if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS)) {
+    } else if (mode == MODE_TAGS) {
       mxprint(stderr, "Error: No further options allowed when extracting "
               "%s.\n", argv[1]);
       exit(1);
+
+    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
+      if (mode != MODE_CHAPTERS) {
+        mxprint(stderr, "Error: %s is only allowed for chapter extraction.\n",
+                argv[i]);
+        exit(1);
+      }
+      chapter_format_simple = true;
 
     } else {
       copy = safestrdup(argv[i]);
@@ -1580,6 +1591,7 @@ void extract_chapters(const char *file_name) {
   EbmlStream *es;
   mm_io_c *in;
   bool chapters_extracted = false;
+  int next_chapter = 1;
 
   // open input file
   try {
@@ -1640,13 +1652,16 @@ void extract_chapters(const char *file_name) {
         chapters.Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2,
                       true);
 
-        if (!chapters_extracted) {
+        if (!chapters_extracted && !chapter_format_simple) {
           mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
                   "<Chapters>\n");
           chapters_extracted = true;
         }
 
-        write_chapters_xml(&chapters, stdout);
+        if (chapter_format_simple)
+          write_chapters_simple(next_chapter, &chapters, stdout);
+        else
+          write_chapters_xml(&chapters, stdout);
 
       } else
         upper_lvl_el = 0;
@@ -1683,7 +1698,7 @@ void extract_chapters(const char *file_name) {
     return;
   }
 
-  if (chapters_extracted)
+  if (chapters_extracted && !chapter_format_simple)
     mxprint(stdout, "</Chapters>\n");
 }
 

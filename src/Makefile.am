@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = dist-zip foreign
 
-bin_PROGRAMS = mkvmerge mkvinfo mkvextract
+bin_PROGRAMS = mkvmerge mkvinfo mkvextract base64tool
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			aac_common.cpp aac_common.h \
@@ -53,6 +53,11 @@ mkvextract_SOURCES = mkvextract.cpp \
 			mm_io.cpp mm_io.h \
 			tagwriter.cpp tagwriter.h
 
+base64tool_SOURCES = base64tool.cpp \
+			base64.cpp base64.h \
+			common.cpp common.h \
+			mm_io.cpp mm_io.h
+
 mkvmerge_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \
 		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ -lexpat
@@ -62,4 +67,6 @@ mkvinfo_LDADD = @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ @ICONV_LIBS@ \
 
 mkvextract_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
 		@VORBIS_LIBS@ @OGG_LIBS@ @ICONV_LIBS@
+
+base64tool_LDADD = @EBML_LIBS@ @ICONV_LIBS@
 
