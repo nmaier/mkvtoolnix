@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.18 2003/02/27 19:51:53 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.19 2003/03/03 13:47:50 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -54,6 +54,9 @@
 #include "r_avi.h"
 #include "r_mp3.h"
 #include "r_wav.h"
+#ifdef HAVE_OGGVORBIS
+#include "r_ogm.h"
+#endif
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -100,7 +103,9 @@ StdIOCallback *out;
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
-//    {"ogg", TYPEOGM, "general OGG media stream, Vorbis audio embedded in OGG"},
+#ifdef HAVE_OGGVORBIS
+   {"ogg", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
+#endif // HAVE_OGGVORBIS
    {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
    {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
 //    {"srt", TYPESRT, "SRT text subtitles"},
@@ -109,7 +114,9 @@ file_type_t file_types[] =
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"ac3", TYPEAC3, "A/52 (aka AC3)"},
    {"output modules:", -1, ""},
-//    {"   ", -1,      "Vorbis audio"},
+#ifdef HAVE_OGGVORBIS
+   {"   ", -1,      "Vorbis audio"},
+#endif // HAVE_OGGVORBIS
    {"   ", -1,      "Video (not MPEG1/2)"},
 //    {"   ", -1,      "uncompressed PCM audio"},
 //    {"   ", -1,      "text subtitles"},
@@ -186,8 +193,10 @@ static int get_type(char *filename) {
     return TYPEAVI;
   else if (wav_reader_c::probe_file(f, size))
     return TYPEWAV;
-//   else if (ogm_reader_c::probe_file(f, size))
-//     return TYPEOGM;
+#ifdef HAVE_OGGVORBIS
+  else if (ogm_reader_c::probe_file(f, size))
+    return TYPEOGM;
+#endif // HAVE_OGGVORBIS
 //   else if (srt_reader_c::probe_file(f, size))
 //     return TYPESRT;
   else if (mp3_reader_c::probe_file(f, size))
@@ -610,11 +619,12 @@ static void parse_args(int argc, char **argv) {
       file->fp = NULL;
       try {
         switch (file->type) {
-/*          case TYPEOGM:
+#ifdef HAVE_OGGVORBIS
+          case TYPEOGM:
             file->reader = new ogm_reader_c(file->name, astreams, vstreams, 
-                                            tstreams, &async, &range,
-                                            comments, fourcc);
-            break;*/
+                                            tstreams, &async, &range, fourcc);
+            break;
+#endif // HAVE_OGGVORBIS
           case TYPEAVI:
             if (tstreams != NULL)
               fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");

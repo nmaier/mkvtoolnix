@@ -1,17 +1,21 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
+  mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
   r_ogm.h
-  class definitions for the OGG demultiplexer module
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: r_ogm.h,v 1.5 2003/03/03 13:47:50 mosu Exp $
+    \brief class definitions for the OGG media stream reader
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __R_OGM_H
@@ -21,8 +25,8 @@
 
 #include <ogg/ogg.h>
 
-#include "ogmmerge.h"
-#include "queue.h"
+#include "common.h"
+#include "pr_generic.h"
 
 #define OGM_STREAM_TYPE_UNKNOWN 0
 #define OGM_STREAM_TYPE_VORBIS  1
@@ -32,7 +36,7 @@
 #define OGM_STREAM_TYPE_AC3     5
 #define OGM_STREAM_TYPE_TEXT    6
 
-typedef struct ogm_demuxer_t {
+typedef struct {
   ogg_stream_state      os;
   generic_packetizer_c *packetizer;
   int                   sid;
@@ -40,7 +44,9 @@ typedef struct ogm_demuxer_t {
   int                   eos;
   int                   serial;
   int                   units_processed;
-  ogm_demuxer_t        *next;
+  int                   num_packets;
+  int                   packet_sizes[3];
+  void                 *packet_data[3];
 } ogm_demuxer_t;
 
 class ogm_reader_c: public generic_reader_c {
@@ -50,28 +56,25 @@ private:
   FILE             *file;
   char             *filename;
   int               act_wchar;
-  ogm_demuxer_t    *sdemuxers;
+  ogm_demuxer_t   **sdemuxers;
+  int               num_sdemuxers;
   int               nastreams, nvstreams, ntstreams, numstreams;
   audio_sync_t      async;
   range_t           range;
   char            **comments;
   char             *fourcc;
-  int               o_eos;
+  int               o_eos, bos_pages_read;
      
 public:
   ogm_reader_c(char *fname, unsigned char *astreams,
                unsigned char *vstreams, unsigned char *tstreams,
-               audio_sync_t *nasync, range_t *nrange, char **ncomments,
-               char *nfourcc) throw (error_c);
+               audio_sync_t *nasync, range_t *nrange, char *nfourcc)
+    throw (error_c);
   virtual ~ogm_reader_c();
 
   virtual int                   read();
-  virtual int                   serial_in_use(int);
-  virtual ogmmerge_page_t      *get_page();
-  virtual ogmmerge_page_t      *get_header_page(int header_type =
-                                                PACKET_TYPE_HEADER);
+  virtual packet_t             *get_packet();
 
-  virtual void                  reset();
   virtual int                   display_priority();
   virtual void                  display_progress();
   
@@ -83,12 +86,15 @@ public:
 private:
   virtual ogm_demuxer_t        *find_demuxer(int serialno);
   virtual int                   demuxing_requested(unsigned char *, int);
-  virtual void                  flush_packetizers();
   virtual int                   read_page(ogg_page *);
   virtual void                  add_new_demuxer(ogm_demuxer_t *);
-  virtual int                   pages_available();
   virtual void                  handle_new_stream(ogg_page *);
   virtual void                  process_page(ogg_page *);
+  virtual int                   packet_available();
+  virtual int                   read_headers();
+  virtual void                  process_header_page(ogg_page *);
+  virtual void                  create_packetizers();
+  virtual void                  free_demuxer(int);
 };
 
 

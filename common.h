@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.4 2003/02/16 17:04:38 mosu Exp $
+    \version \$Id: common.h,v 1.5 2003/03/03 13:47:50 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -21,7 +21,8 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
-#define VERSION "0.0.1"
+#include "config.h"
+
 #define VERSIONINFO "mkvmerge v" VERSION
 
 #define DISPLAYPRIORITY_HIGH   10

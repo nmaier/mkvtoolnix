@@ -74,9 +74,11 @@ int main ()
 
   if test "x$no_ogg" = "x" ; then
      AC_MSG_RESULT(yes)
+     echo '#define HAVE_OGG 1' > config.h
      ifelse([$1], , :, [$1])     
   else
      AC_MSG_RESULT(no)
+     echo '/*#define HAVE_OGG 1*/' > config.h
      if test -f conf.oggtest ; then
        :
      else
@@ -171,9 +173,17 @@ int main ()
 
   if test "x$no_vorbis" = "x" ; then
      AC_MSG_RESULT(yes)
+     echo '#define HAVE_VORBIS 1' >> config.h
+     if test "x$no_vorbis" = "x" ; then
+        echo '#define HAVE_OGGVORBIS 1' >> config.h
+     else
+        echo '/*#define HAVE_OGGVORBIS 1*/' >> config.h
+     fi
      ifelse([$1], , :, [$1])     
   else
      AC_MSG_RESULT(no)
+     echo '/*#define HAVE_VORBIS 1*/' >> config.h
+     echo '/*#define HAVE_OGGVORBIS 1*/' >> config.h
      if test -f conf.vorbistest ; then
        :
      else
@@ -232,9 +242,11 @@ AC_ARG_ENABLE([debug],
     [  --enable-debug                compile with debug information])
 if test x"$enable_debug" = x"yes"; then
     dnl debug information
-    DEBUG_CFLAGS="-g -DDEBUG"
+    DEBUG_CFLAGS="-g"
+    echo '#define DEBUG' >> config.h
 else
     DEBUG_CFLAGS=""
+    echo '/*#define DEBUG*/' >> config.h
 fi
   AC_SUBST(DEBUG_CFLAGS)
 ])
