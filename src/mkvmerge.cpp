@@ -149,7 +149,6 @@ bool no_lacing = false, no_linking = true;
 int64_t split_after = -1;
 bool split_by_time = false;
 int split_max_num_files = 65535;
-bool dump_splitpoints = false;
 bool use_timeslices = false, use_durations = false;
 
 float video_fps = -1.0;
@@ -265,7 +264,6 @@ usage() {
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
     "  --split-max-files <n>    Create at most n files.\n"
-    "  --dump-splitpoints       Show all possible splitpoints.\n"
     "  --link                   Link splitted files.\n"
     "  --link-to-previous <UID> Link the first file to the given UID.\n"
     "  --link-to-next <UID>     Link the last file to the given UID.\n"
@@ -1686,9 +1684,6 @@ parse_args(int argc,
         mxerror("Wrong argument to '--split-max-files'.\n");
 
       i++;
-
-    } else if (!strcmp(this_arg, "--dump-splitpoints")) {
-      dump_splitpoints = true;
 
     } else if (!strcmp(this_arg, "--link")) {
       no_linking = false;
