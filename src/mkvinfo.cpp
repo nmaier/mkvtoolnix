@@ -1925,6 +1925,8 @@ setup() {
 #endif
 
   cc_local_utf8 = utf8_init(NULL);
+
+  xml_element_map_init();
 }
 
 void

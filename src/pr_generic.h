@@ -198,6 +198,9 @@ public:
 
   vector<int64_t> *aac_is_sbr;  // For AAC+/HE-AAC/SBR
 
+  vector<audio_sync_t> *packet_delays; // As given on the command line
+  int64_t packet_delay;         // For this very track
+
   vector<cue_creation_t> *compression_list; // As given on the command line
   int compression;              // For this very track
 

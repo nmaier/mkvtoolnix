@@ -80,6 +80,16 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   initial_displacement = ti->async.displacement;
   ti->async.displacement = 0;
 
+  // Let's see if the user has specified a delay for this track.
+  ti->packet_delay = 0;
+  for (i = 0; i < ti->packet_delays->size(); i++) {
+    as = &(*ti->packet_delays)[i];
+    if ((as->id == ti->id) || (as->id == -1)) { // -1 == all tracks
+      ti->packet_delay = as->displacement;
+      break;
+    }
+  }
+
   // Let's see if the user has specified which cues he wants for this track.
   ti->cues = CUES_UNSPECIFIED;
   for (i = 0; i < ti->cue_creations->size(); i++) {
@@ -850,7 +860,7 @@ generic_packetizer_c::add_packet(memory_c &mem,
   pack->duration = duration;
   pack->duration_mandatory = duration_mandatory;
   pack->source = this;
-  pack->assigned_timecode = get_next_timecode(timecode);
+  pack->assigned_timecode = get_next_timecode(timecode) + ti->packet_delay;
 
   if (reader->max_timecode_seen < (pack->assigned_timecode + pack->duration))
     reader->max_timecode_seen = pack->assigned_timecode + pack->duration;
@@ -1327,6 +1337,7 @@ track_info_c::track_info_c():
   sub_charset(NULL),
   tags_ptr(NULL),
   tags(NULL),
+  packet_delay(0),
   compression(COMPRESSION_NONE),
   track_name(NULL),
   ext_timecodes(NULL),
@@ -1349,6 +1360,7 @@ track_info_c::track_info_c():
   sub_charsets = new vector<language_t>;
   all_tags = new vector<tags_t>;
   aac_is_sbr = new vector<int64_t>;
+  packet_delays = new vector<audio_sync_t>;
   compression_list = new vector<cue_creation_t>;
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
@@ -1463,6 +1475,9 @@ track_info_c::operator =(const track_info_c &src) {
     tags = NULL;
 
   aac_is_sbr = new vector<int64_t>(*src.aac_is_sbr);
+
+  packet_delay = src.packet_delay;
+  packet_delays = new vector<audio_sync_t>(*src.packet_delays);
 
   compression_list = new vector<cue_creation_t>(*src.compression_list);
   compression = src.compression;

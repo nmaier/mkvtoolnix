@@ -63,6 +63,7 @@
 #include "mkvextract.h"
 #include "mm_io.h"
 #include "tagwriter.h"
+#include "xml_element_mapping.h"
 
 using namespace libmatroska;
 using namespace std;
@@ -405,6 +406,8 @@ main(int argc,
 
   utf8_init(NULL);
   conv_utf8 = utf8_init("UTF-8");
+
+  xml_element_map_init();
 
   parse_args(argc, argv, input_file, mode);
   if (mode == MODE_TRACKS) {
