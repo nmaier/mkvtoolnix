@@ -15,7 +15,7 @@
 
 #include "ebml/EbmlElement.h"
 
-#include "chapters.h"
+#include "xml_element_mapping.h"
 
 namespace libmatroska {
   extern EbmlId KaxChapters_TheId;
@@ -39,7 +39,23 @@ namespace libmatroska {
   extern EbmlId KaxChapterCountry_TheId;
   extern EbmlId KaxChapterProcess_TheId;
   extern EbmlId KaxChapterProcessTime_TheId;
-}
+
+  extern EbmlId KaxTags_TheId;
+  extern EbmlId KaxTag_TheId;
+  extern EbmlId KaxTagTargets_TheId;
+  extern EbmlId KaxTagSimple_TheId;
+  extern EbmlId KaxTagName_TheId;
+  extern EbmlId KaxTagLangue_TheId;
+  extern EbmlId KaxTagDefault_TheId;
+  extern EbmlId KaxTagString_TheId;
+  extern EbmlId KaxTagBinary_TheId;
+  extern EbmlId KaxTagTrackUID_TheId;
+  extern EbmlId KaxTagEditionUID_TheId;
+  extern EbmlId KaxTagChapterUID_TheId;
+  extern EbmlId KaxTagAttachmentUID_TheId;
+};
+
+using namespace libmatroska;
 
 parser_element_t chapter_elements[] = {
   {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL},
@@ -84,3 +100,27 @@ parser_element_t chapter_elements[] = {
   {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
 };
 
+parser_element_t tag_elements[] = {
+  {"Tags", ebmlt_master, 0, 0, 0, KaxTags_TheId, NULL, NULL},
+
+  {"Tag", ebmlt_master, 1, 0, 0, KaxTag_TheId, NULL, NULL},
+
+  {"Targets", ebmlt_master, 2, 0, 0, KaxTagTargets_TheId, NULL, NULL},
+  {"TrackUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagTrackUID_TheId,
+   NULL, NULL},
+  {"EditionUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagEditionUID_TheId,
+   NULL, NULL},
+  {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagChapterUID_TheId,
+   NULL, NULL},
+  {"AttachmentUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagAttachmentUID_TheId,
+   NULL, NULL},
+
+  {"Simple", ebmlt_master, 2, 0, 0, KaxTagSimple_TheId, NULL, NULL},
+  {"Name", ebmlt_ustring, 3, 0, 0,  KaxTagName_TheId, NULL, NULL},
+  {"String", ebmlt_ustring, 3, 0, 0, KaxTagString_TheId, NULL, NULL},
+  {"Binary", ebmlt_binary, 3, 0, 0, KaxTagBinary_TheId, NULL, NULL},
+  {"TagLanguage", ebmlt_string, 3, 0, 0, KaxTagLangue_TheId, NULL, NULL},
+  {"DefaultLanguage", ebmlt_bool, 3, 0, 1, KaxTagDefault_TheId, NULL, NULL},
+
+  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
+};

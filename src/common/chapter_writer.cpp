@@ -24,6 +24,7 @@
 #include "commonebml.h"
 #include "mm_io.h"
 #include "chapters.h"
+#include "xml_element_mapping.h"
 
 using namespace std;
 using namespace libmatroska;

@@ -27,6 +27,7 @@
 #include "error.h"
 #include "iso639.h"
 #include "mm_io.h"
+#include "xml_element_mapping.h"
 
 using namespace std;
 using namespace libmatroska;

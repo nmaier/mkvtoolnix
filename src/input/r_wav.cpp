@@ -22,7 +22,7 @@
 #elif __GNUC__ == 2
 #define __USE_XOPEN
 #include <unistd.h>
-#else
+#elif defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
 

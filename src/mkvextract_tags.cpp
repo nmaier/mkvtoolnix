@@ -76,6 +76,7 @@ extract_tags(const char *file_name) {
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   EbmlStream *es;
   mm_io_c *in;
+  mm_stdio_c out;
   bool tags_extracted = false;
 
   // open input file
@@ -139,7 +140,7 @@ extract_tags(const char *file_name) {
           tags_extracted = true;
         }
 
-        write_tags_xml(tags, stdout);
+        write_tags_xml(tags, &out);
 
       } else
         l1->SkipData(*es, l1->Generic().Context);

@@ -79,6 +79,7 @@ extern "C" {
 #include "commonebml.h"
 #include "matroska.h"
 #include "mm_io.h"
+#include "xml_element_mapping.h"
 
 using namespace libmatroska;
 using namespace std;

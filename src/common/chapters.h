@@ -32,27 +32,6 @@ namespace libmatroska {
 using namespace libebml;
 using namespace libmatroska;
 
-typedef void (*parser_element_callback_t)(void *pdata);
-
-enum ebml_type_t {ebmlt_master, ebmlt_int, ebmlt_uint, ebmlt_bool,
-                  ebmlt_string, ebmlt_ustring, ebmlt_time};
-
-#define NO_MIN_VALUE -9223372036854775807ll-1
-#define NO_MAX_VALUE 9223372036854775807ll
-
-typedef struct {
-  const char *name;
-  ebml_type_t type;
-  int level;
-  int64_t min_value;
-  int64_t max_value;
-  const EbmlId id;
-  parser_element_callback_t start_hook;
-  parser_element_callback_t end_hook;
-} parser_element_t;
-
-extern parser_element_t chapter_elements[];
-
 KaxChapters *MTX_DLL_API
 parse_chapters(const char *file_name, int64_t min_tc = 0,
                int64_t max_tc = -1, int64_t offset = 0,
