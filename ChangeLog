@@ -1,3 +1,9 @@
+2004-04-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Some strings read from RealMedia files were
+	not zero-terminated resulting in broken track recognition for some
+	files.
+
 2004-04-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v0.8.8.
