@@ -1,3 +1,18 @@
+2004-12-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Fixed a crash/memory corruption showing weird
+	characters in the input boxes. This happened when the user removed
+	a file from mmg while mmg was updating the command line.
+
+	* mmg: bug fix: mmg now has an icon associated with it while it is
+	running instead of the generic Windows application icon (Windows
+	only). 
+
+	* mmg: bug fix: The main window is now minimized during
+	muxing. This allows to hide both of the windows while muxing is
+	running and restoring them later, even if they were iconized when
+	muxing finished (Windows only).
+
 2004-11-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The first packet of an AAC track read from
