@@ -2,10 +2,12 @@
 
 class Test
   attr_reader :commands
+  attr_reader :debug_commands
 
   def initialize
     @tmp_num = 0
     @commands = Array.new
+    @debug_commands = Array.new
   end
 
   def description
@@ -36,8 +38,8 @@ class Test
 
   def sys(command, *arg)
     @commands.push(command)
+    @debug_commands.push(command)
     command += "&> /dev/null" unless (command =~ />/)
-    $stderr.puts(command) if (ENV["DEBUG"] == "yes")
     if (!system(command))
       if ((arg.size == 0) || ((arg[0] << 8) != $?))
         error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
@@ -57,7 +59,7 @@ class Test
   end
 
   def hash_file(name)
-    $stderr.puts("md5sum #{name}") if (ENV["DEBUG"] == "yes")
+    @debug_commands.push("md5sum #{name}")
     return `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
   end
 
@@ -65,6 +67,7 @@ class Test
     output = hash_file(@tmp)
     if (erase)
       File.unlink(@tmp)
+      @debug_commands.push("rm #{@tmp}")
       @tmp = nil
     end
     return output
@@ -211,6 +214,13 @@ def main
 
   ENV['PATH'] = "../src:" + ENV['PATH']
 
+  if (ENV["DEBUG"] == "1")
+    $stderr.puts("#!/bin/bash\n\n")
+    $stderr.puts("export LD_LIBRARY_PATH=/usr/local/lib\n\n")
+    $stderr.puts("rm new_results.txt &> /dev/null")
+    $stderr.puts("touch new_results.txt\n\n")
+  end
+
   num_tests = 0
   num_failed = 0
   start = Time.now
@@ -286,6 +296,41 @@ def main
       results.set(class_name, "failed")
       num_failed += 1
     end
+
+    if (ENV["DEBUG"] == "1")
+      $stderr.puts("echo -n Running #{class_name}")
+      $stderr.puts("FAILED=0")
+      $stderr.puts("echo -n #{class_name}: >> new_results.txt")
+      first = true
+      current_test.debug_commands.each do |c|
+        c.gsub!(/\/tmp\//, "$HOME/tmp/")
+        if (c =~ /^md5sum/)
+          $stderr.puts("echo -n - >> new_results.txt") unless (first)
+          first = false
+          $stderr.puts("SUM=`" + c + " | gawk '{print $1}'`")
+          $stderr.puts("echo -n $SUM >> new_results.txt")
+        else
+          if (c =~ />/)
+            $stderr.puts(c)
+          else
+            $stderr.puts(c + " &> /dev/null")
+          end
+          $stderr.puts("if [ $? -ne 0 -a $? -ne 1 ]; then")
+          $stderr.puts("  FAILED=1")
+          $stderr.puts("fi")
+        end
+      end
+      da = results.date_added?(class_name).strftime("%Y%m%d-%H%M%S")
+      $stderr.puts("if [ $FAILED -eq 1 ]; then")
+      $stderr.puts("  echo :failed:#{da} >> new_results.txt")
+      $stderr.puts("  echo '  FAILED'")
+      $stderr.puts("else")
+      $stderr.puts("  echo :passed:#{da} >> new_results.txt")
+      $stderr.puts("  echo '  ok'")
+      $stderr.puts("fi")
+      $stderr.puts("rm ~/tmp/mkvtoolnix-auto-test-* &> /dev/null\n\n")
+    end
+
   end
   duration = Time.now - start
 
