@@ -88,10 +88,10 @@ dnl
 dnl Extra include and library dirs that someone would like to specify.
 dnl
 AC_ARG_WITH(extra-includes,
-  [  --with-extra-includes=DIR     Path to other include directories],,
+  [  --with-extra-includes=DIR     Path to other include directories separated by ';'],,
   with_extra_include_given=no)
 AC_ARG_WITH(extra-libs,
-	[  --with-extra-libs=DIR         Path to other library directories],,
+  [  --with-extra-libs=DIR         Path to other library directories separated by ';'],,
   with_extra_libs_given=no)
   EXTRA_CFLAGS=
   if test "$with_extra_includes" != ""; then
@@ -173,14 +173,6 @@ dnl
 dnl Some systems have iconv in libc, some have it in libiconv (OSF/1 and
 dnl those with the standalone portable GNU libiconv installed).
 dnl
-AC_ARG_WITH([libiconv-prefix],
-  [  --with-libiconv-prefix=DIR    search for libiconv in DIR/include and DIR/lib],[
-    for dir in `echo "$withval" | tr : ' '`; do
-      if test -d $dir/include; then CPPFLAGS="$CPPFLAGS -I$dir/include"; fi
-      if test -d $dir/lib; then LDFLAGS="$LDFLAGS -L$dir/lib"; fi
-    done
-   ])
-
   AC_CACHE_CHECK(for iconv, am_cv_func_iconv, [
     am_cv_func_iconv="no, consider installing GNU libiconv"
     am_cv_lib_iconv=no
@@ -242,49 +234,19 @@ AC_SUBST(ICONV_LIBS)
 dnl
 dnl Check for libogg
 dnl
-AC_ARG_WITH(ogg-prefix,
-  [  --with-ogg-prefix=PFX         Prefix where libogg is installed],
-  ogg_prefix="$withval", ogg_prefix="")
-AC_ARG_WITH(ogg-includes,
-  [  --with-ogg-includes=DIR       Directory where libogg headers are installed],
-  ogg_includes="$withval", ogg_includes="")
-AC_ARG_WITH(ogg-libraries,
-  [  --with-ogg-libraries=DIR      Directory where libogg is installed],
-  ogg_libraries="$withval", ogg_libraries="")
-
-  if test "x$ogg_prefix" != "x"; then
-    OGG_CFLAGS="-I$ogg_prefix/include"
-    OGG_LIBS="-L$ogg_prefix/lib"
-  else
-    if test "x$ogg_includes" != "x"; then
-      OGG_CFLAGS="-I$ogg_includes"
-    elif test "x$prefix" != "xNONE"; then
-      OGG_CFLAGS="-I$prefix"
-    fi
-    if test "x$ogg_libraries" != "x"; then
-      OGG_LIBS="-L$ogg_libraries"
-    elif test "x$prefix" != "xNONE"; then
-      OGG_LIBS="-L$prefix"
-    fi
-  fi
-
-	AC_CHECK_LIB(ogg, ogg_sync_init,
-		     [ OGG_LIBS="$OGG_LIBS -logg"
-		       ogg_found=yes ],
-		     [ ogg_found=no ],
-		     "$OGG_LIBS")
+  AC_CHECK_LIB(ogg, ogg_sync_init,
+               [ OGG_LIBS="-logg"
+                 ogg_found=yes ],
+               [ ogg_found=no ],
+               "$OGG_LIBS")
   if test "$ogg_found" = "no"; then
     AC_MSG_ERROR([Could not find the Ogg library])
   fi
-	ogg_save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $OGG_CFLAGS"
   AC_CHECK_HEADERS(ogg/ogg.h, , ogg_found=no)
   if test "$ogg_found" = "no"; then
     AC_MSG_ERROR([Could not find the Ogg header files])
   fi
-	CFLAGS="$ogg_save_CFLAGS"
 
-AC_SUBST(OGG_CFLAGS)
 AC_SUBST(OGG_LIBS)
 
 
@@ -292,128 +254,60 @@ AC_SUBST(OGG_LIBS)
 dnl
 dnl Check for libvorbis
 dnl
-AC_ARG_WITH(vorbis-prefix,
-  [  --with-vorbis-prefix=PFX      Prefix where libvorbis is installed],
-  vorbis_prefix="$withval", vorbis_prefix="")
-AC_ARG_WITH(vorbis-includes,
-  [  --with-vorbis-includes=DIR    Directory where libvorbis headers are installed],
-  vorbis_includes="$withval", vorbis_includes="")
-AC_ARG_WITH(vorbis-libraries,
-  [  --with-vorbis-libraries=DIR   Directory where libvorbis is installed],
-  vorbis_libraries="$withval", vorbis_libraries="")
-
-  if test "x$vorbis_prefix" != "x"; then
-    VORBIS_CFLAGS="-I$vorbis_prefix/include"
-    VORBIS_LIBS="-L$vorbis_prefix/lib"
-  else
-    if test "x$vorbis_includes" != "x"; then
-      VORBIS_CFLAGS="-I$vorbis_includes"
-    elif test "x$prefix" != "xNONE"; then
-      VORBIS_CFLAGS="-I$prefix"
-    fi
-    if test "x$vorbis_libraries" != "x"; then
-      VORBIS_LIBS="-L$vorbis_libraries"
-    elif test "x$prefix" != "xNONE"; then
-      VORBIS_LIBS="-L$prefix"
-    fi
-  fi
-
-	AC_CHECK_LIB(vorbis, vorbis_synthesis_init,
-		     [ VORBIS_LIBS="$VORBIS_LIBS -lvorbis -lm"
-		       vorbis_found=yes ],
-		     [ vorbis_found=no ],
-		     $VORBIS_LIBS $OGG_LIBS)
+  AC_CHECK_LIB(vorbis, vorbis_synthesis_init,
+               [ VORBIS_LIBS="-lvorbis -lm"
+                 vorbis_found=yes ],
+               [ vorbis_found=no ],
+               $OGG_LIBS)
   if test "$vorbis_found" = "no"; then
     AC_MSG_ERROR([Could not find the Vorbis library])
   fi
-	vorbis_save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $VORBIS_CFLAGS"
   AC_CHECK_HEADERS(vorbis/codec.h, , vorbis_found=no)
   if test "$vorbis_found" = "no"; then
     AC_MSG_ERROR([Could not find the Vorbis header files])
   fi
-	CFLAGS="$vorbis_save_CFLAGS"
 
-AC_SUBST(VORBIS_CFLAGS)
 AC_SUBST(VORBIS_LIBS)
 
+
+dnl
+dnl Check for libFLAC
+dnl
+  AC_CHECK_LIB(FLAC, FLAC__stream_decoder_new,
+               [ FLAC_LIBS="-lflac -m"
+                 flac_found=yes ],
+               [ flac_found=no ],
+               "$FLAC_LIBS")
+  if test "$flac_found" = "yes"; then
+    AC_CHECK_HEADERS(FLAC/format.h, , flac_found=no)
+  fi
+
+AC_SUBST(FLAC_LIBS)
 
 
 dnl
 dnl Test for libebml, and define EBML_CFLAGS and EBML_LIBS
 dnl
-AC_ARG_WITH(ebml-prefix,
-  [  --with-ebml-prefix=PFX        Prefix where libebml is installed],
-  ebml_prefix="$withval", ebml_prefix="")
-AC_ARG_WITH(ebml-include,
-  [  --with-ebml-include=DIR       Path to where the libebml include files are installed],
-  ebml_include="$withval", ebml_include="")
-AC_ARG_WITH(ebml-lib,
-  [  --with-ebml-lib=DIR           Path to where libebml is installed],
-  ebml_lib="$withval", ebml_lib="")
-AC_ARG_ENABLE(ebmltest,
-  [  --disable-ebmltest            Do not try to compile and run a test EBML program],,
-  enable_ebmltest=yes)
-  if test "x$ebml_prefix" != "x"; then
-    ebml_args="$ebml_args --prefix=$ebml_prefix"
-    if test "x$ebml_include" != "x"; then
-      EBML_CFLAGS="-I$ebml_include"
-    else
-      EBML_CFLAGS="-I$ebml_prefix/include"
-    fi
-    if test "x$ebml_lib" != "x"; then
-      EBML_LIBS="-L$ebml_lib"
-    else
-      EBML_LIBS="-L$ebml_prefix/lib"
-    fi
-  elif test "x$prefix" != "xNONE"; then
-    ebml_args="$ebml_args --prefix=$prefix"
-    if test "x$ebml_include" != "x"; then
-      EBML_CFLAGS="-I$ebml_include"
-    else
-      EBML_CFLAGS="-I$prefix/include"
-    fi
-    if test "x$ebml_lib" != "x"; then
-      EBML_LIBS="-L$ebml_lib"
-    else
-      EBML_LIBS="-L$prefix/lib"
-    fi
-  else
-    if test "x$ebml_include" != "x"; then
-      EBML_CFLAGS="-I$ebml_include"
-    fi
-    if test "x$ebml_lib" != "x"; then
-      EBML_LIBS="-L$ebml_lib"
-    else
-      EBML_LIBS="-L/usr/local/lib"
-    fi
-  fi
-
-  EBML_LIBS="$EBML_LIBS -lebml"
-
   AC_MSG_CHECKING(for EBML)
-  no_ebml=""
 
-  if test "x$enable_ebmltest" = "xyes" ; then
-    ac_save_CXXFLAGS="$CXXFLAGS"
-    ac_save_LIBS="$LIBS"
-    CXXFLAGS="$CFLAGS $EBML_CFLAGS"
-    LIBS="$LIBS $EBML_LIBS"
-dnl
-dnl Now check if the installed EBML is sufficiently new.
-dnl
-    rm -f conf.ebmltest
-    AC_LANG_PUSH(C++)
-    AC_TRY_RUN([
+  EBML_LIBS="-lebml"
+  ac_save_CXXFLAGS="$CXXFLAGS"
+  ac_save_LIBS="$LIBS"
+  LIBS="$LIBS $EBML_LIBS"
+  rm -f conf.ebmltest
+  AC_LANG_PUSH(C++)
+  AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ebml/EbmlVersion.h>
+#include <ebml/EbmlDummy.h>
 
 using namespace libebml;
 
 int main ()
 {
+  EbmlDummy d;
   FILE *f;
   f = fopen("conf.ebmltest", "wb");
   if (f == NULL)
@@ -423,15 +317,44 @@ int main ()
   return 0;
 }
 
-],, no_ebml=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
-    AC_LANG_POP
-    CXXFLAGS="$ac_save_CXXFLAGS"
-    LIBS="$ac_save_LIBS"
-  fi
+],ebml_found=yes,ebml_found=no,)
 
-  if test "x$no_ebml" = "x" -a -f conf.ebmltest ; then
+  if test "$ebml_found" = "no" ; then
+    EBML_CFLAGS="-I/usr/local/include"
+    EBML_LIBS="-L/usr/local/lib $EBML_LIBS"
+    CXXFLAGS="-I/usr/local/include $CXXFLAGS"
+    LIBS="-L/usr/local/lib $LIBS"
+    AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ebml/EbmlVersion.h>
+#include <ebml/EbmlDummy.h>
+
+using namespace libebml;
+
+int main ()
+{
+  EbmlDummy d;
+  FILE *f;
+  f = fopen("conf.ebmltest", "wb");
+  if (f == NULL)
+    return 1;
+  fprintf(f, "%s\n", EbmlCodeVersion.c_str());
+  fclose(f);
+  return 0;
+}
+
+],ebml_found=yes,ebml_found=no,)
+  fi
+  AC_LANG_POP
+  CXXFLAGS="$ac_save_CXXFLAGS"
+  LIBS="$ac_save_LIBS"
+
+  if test "$ebml_found" = "yes" -a -f conf.ebmltest ; then
     AC_MSG_RESULT(yes)
   else
+    rm -f conf.ebmltest
     AC_MSG_RESULT(no)
     exit 1
   fi
@@ -461,6 +384,7 @@ int main ()
       fi
     fi
   fi
+  rm -f conf.ebmltest
   if test "$mver_ok" = "1" ; then
     AC_MSG_RESULT(ok ($ebml_version))
   else
@@ -469,7 +393,6 @@ int main ()
     echo '*** '${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}' and re-run configure.'
     exit 1
   fi
-  rm -f conf.ebmltest
 
 AC_SUBST(EBML_CFLAGS)
 AC_SUBST(EBML_LIBS)
@@ -479,78 +402,27 @@ AC_SUBST(EBML_LIBS)
 dnl
 dnl Test for libmatroska, and define MATROSKA_CFLAGS and MATROSKA_LIBS
 dnl
-AC_ARG_WITH(matroska-prefix,
-  [  --with-matroska-prefix=PFX    Prefix where libmatroska is installed],
-  matroska_prefix="$withval", matroska_prefix="")
-AC_ARG_WITH(matroska-include,
-  [  --with-matroska-include=DIR   Path to where the libmatroska include files installed],
-  matroska_include="$withval", matroska_include="")
-AC_ARG_WITH(matroska-lib,
-  [  --with-matroska-lib=DIR       Path to where the libmatroska library installed],
-  matroska_lib="$withval", matroska_lib="")
-AC_ARG_ENABLE(matroskatest,
-  [  --disable-matroskatest        Do not try to compile and run a test Matroska program],,
-  enable_matroskatest=yes)
-  if test "x$matroska_prefix" != "x"; then
-    matroska_args="$matroska_args --prefix=$matroska_prefix"
-    if test "x$matroska_include" != "x"; then
-      MATROSKA_CFLAGS="-I$matroska_include"
-    else
-      MATROSKA_CFLAGS="-I$matroska_prefix/include"
-    fi
-    if test "x$matroska_lib" != "x"; then
-      MATROSKA_LIBS="-L$matroska_lib"
-    else
-      MATROSKA_LIBS="-L$matroska_prefix/lib"
-    fi
-  elif test "x$prefix" != "xNONE"; then
-    matroska_args="$matroska_args --prefix=$prefix"
-    if test "x$matroska_include" != "x"; then
-      MATROSKA_CFLAGS="-I$matroska_include"
-    else
-      MATROSKA_CFLAGS="-I$prefix/include"
-    fi
-    if test "x$matroska_lib" != "x"; then
-      MATROSKA_LIBS="-L$matroska_lib"
-    else
-      MATROSKA_LIBS="-L$prefix/lib"
-    fi
-  else
-    if test "x$matroska_include" != "x"; then
-      MATROSKA_CFLAGS="-I$matroska_include"
-    fi
-    if test "x$matroska_lib" != "x"; then
-      MATROSKA_LIBS="-L$matroska_lib"
-    else
-      MATROSKA_LIBS="-L/usr/local/lib"
-    fi
-  fi
-
-  MATROSKA_LIBS="$MATROSKA_LIBS -lmatroska"
-
   AC_MSG_CHECKING(for Matroska)
-  no_matroska=""
 
-  if test "x$enable_matroskatest" = "xyes" ; then
-    ac_save_CXXFLAGS="$CXXFLAGS"
-    ac_save_LIBS="$LIBS"
-    CXXFLAGS="$CXXFLAGS $MATROSKA_CFLAGS $EBML_CFLAGS"
-    LIBS="$LIBS $MATROSKA_LIBS $EBML_LIBS"
-dnl
-dnl Now check if the installed Matroska is sufficiently new.
-dnl
-    rm -f conf.matroskatest
-    AC_LANG_PUSH(C++)
-    AC_TRY_RUN([
+  MATROSKA_LIBS="-lmatroska"
+  ac_save_CXXFLAGS="$CXXFLAGS"
+  ac_save_LIBS="$LIBS"
+  CXXFLAGS="$CFLAGS $MATROSKA_CFLAGS"
+  LIBS="$LIBS $MATROSKA_LIBS $EBML_LIBS"
+  rm -f conf.matroskatest
+  AC_LANG_PUSH(C++)
+  AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
 #include <ebml/EbmlConfig.h>
 #include <matroska/KaxVersion.h>
+#include <matroska/KaxTracks.h>
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace libmatroska;
 
 int main ()
 {
+  KaxTracks tracks;
   FILE *f;
   f = fopen("conf.matroskatest", "wb");
   if (f == NULL)
@@ -560,15 +432,43 @@ int main ()
   return 0;
 }
 
-],, no_matroska=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
-    AC_LANG_POP
-    CXXFLAGS="$ac_save_CXXFLAGS"
-    LIBS="$ac_save_LIBS"
-  fi
+],matroska_found=yes,matroska_found=no,)
+  if test "$matroska_found" = "no" ; then
+    MATROSKA_CFLAGS="-I/usr/local/include"
+    MATROSKA_LIBS="-L/usr/local/lib $MATROSKA_LIBS"
+    CXXFLAGS="-I/usr/local/include $CXXFLAGS"
+    LIBS="-L/usr/local/lib $LIBS"
+    AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+#include <ebml/EbmlConfig.h>
+#include <matroska/KaxVersion.h>
+#include <matroska/KaxTracks.h>
 
-  if test "x$no_matroska" = "x" -a -f conf.matroskatest ; then
+using namespace libmatroska;
+
+int main ()
+{
+  KaxTracks tracks;
+  FILE *f;
+  f = fopen("conf.matroskatest", "wb");
+  if (f == NULL)
+    return 1;
+  fprintf(f, "%s\n", KaxCodeVersion.c_str());
+  fclose(f);
+  return 0;
+}
+
+],matroska_found=yes,matroska_found=no,)
+  fi
+  AC_LANG_POP
+  CXXFLAGS="$ac_save_CXXFLAGS"
+  LIBS="$ac_save_LIBS"
+
+  if test "$matroska_found" = "yes" -a -f conf.matroskatest ; then
     AC_MSG_RESULT(yes)
   else
+    rm -f conf.matroskatest
     AC_MSG_RESULT(no)
     exit 1
   fi
@@ -597,6 +497,7 @@ int main ()
       fi
     fi
   fi
+  rm -f conf.matroskatest
   if test "$mver_ok" = "1" ; then
     AC_MSG_RESULT(ok ($matroska_version))
   else
@@ -605,7 +506,6 @@ int main ()
     echo '*** '${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}' and re-run configure.'
     exit 1
   fi
-  rm -f conf.matroskatest
 
 AC_SUBST(MATROSKA_CFLAGS)
 AC_SUBST(MATROSKA_LIBS)
@@ -615,46 +515,16 @@ AC_SUBST(MATROSKA_LIBS)
 dnl
 dnl Check for libexpat
 dnl
-AC_ARG_WITH(expat-prefix,
-  [  --with-expat-prefix=PFX       Path to where the Expat library is installed],,
-  with_expat_given=no)
-AC_ARG_WITH(expat-includes,
-  [  --with-expat-includes=DIR     Path to the Expat include file],,
-  with_expat_includes_given=no)
-AC_ARG_WITH(expat-libraries,
-  [  --with-expat-libraries=DIR    Path to where the Expat library is installed],,
-  with_expat_libraries_given=no)
-
-  EXPAT_CFLAGS=
-  EXPAT_LIBS=
-  if test "$with_expat_includes" != ""; then
-    EXPAT_CFLAGS="-I$with_expat_includes"
-  elif test "$with_expat_prefix" != "yes" -a "$with_expat_prefix" != ""; then
-		EXPAT_CFLAGS="-I$with_expat_prefix/include"
-	fi
-  if test "$with_expat_libraries" != ""; then
-    EXPAT_LIBS="-L$with_expat_libraries"
-  elif test "$with_expat_prefix" != "yes" -a "$with_expat_prefix" != ""; then
-		EXPAT_LIBS="-L$with_expat_prefix/lib"
+  AC_CHECK_LIB(expat, XML_ParserCreate,
+               [ EXPAT_LIBS="-lexpat"
+                 expat_found=yes ],
+               [ expat_found=no ],)
+  if test "$expat_found" = "no"; then
+    AC_MSG_ERROR([Could not find the Expat library])
   fi
-	AC_CHECK_LIB(expat, XML_ParserCreate,
-		     [ EXPAT_LIBS="$EXPAT_LIBS -lexpat"
-		       expat_found=yes ],
-		     [ expat_found=no ],
-		     "$EXPAT_LIBS")
-	if test "$expat_found" = "no"; then
-		AC_MSG_ERROR([Could not find the Expat library])
-	fi
-	expat_save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $EXPAT_CFLAGS"
-	AC_CHECK_HEADERS(expat.h, , expat_found=no)
-	if test "$expat_found" = "no"; then
-		AC_MSG_ERROR([Could not find expat.h])
-	fi
-	CFLAGS="$expat_save_CFLAGS"
-
-  if test "x$expat_found" = "xno"; then
-    exit 1
+  AC_CHECK_HEADERS(expat.h, , expat_found=no)
+  if test "$expat_found" = "no"; then
+    AC_MSG_ERROR([Could not find expat.h])
   fi
 
 AC_SUBST(EXPAT_CFLAGS)
@@ -665,31 +535,15 @@ AC_SUBST(EXPAT_LIBS)
 dnl
 dnl Check for zlib
 dnl
-AC_ARG_WITH(zlib,
-  [  --with-zlib-prefix=PFX        Path to where the zlib library is installed],,
-  with_zlib_given=no)
-
-  ZLIB_CFLAGS=
-  ZLIB_LIBS=
-  if test "$with_zlib_prefix" != "yes" -a "$with_zlib_prefix" != ""; then
-    ZLIB_CFLAGS="-I$with_zlib_prefix/include"
-    ZLIB_LIBS="-L$with_zlib_prefix/lib"
-  fi
-
-	AC_CHECK_LIB(z, zlibVersion,
-		     [ ZLIB_LIBS="$ZLIB_LIBS -lz"
-		       zlib_found=yes ],
-		     [ zlib_found=no ],
-		     "$ZLIB_LIBS")
+  AC_CHECK_LIB(z, zlibVersion,
+               [ ZLIB_LIBS="-lz"
+                 zlib_found=yes ],
+               [ zlib_found=no ],)
   if test "$zlib_found" = "no"; then
     AC_MSG_ERROR([Could not find the zlib library])
   fi
-	zlib_save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $ZLIB_CFLAGS"
   AC_CHECK_HEADERS(zlib.h, , zlib_found=no)
-	CFLAGS="$zlib_save_CFLAGS"
 
-AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 
 
@@ -697,31 +551,14 @@ AC_SUBST(ZLIB_LIBS)
 dnl
 dnl Check for liblzo
 dnl
-AC_ARG_WITH(lzo,
-  [  --with-lzo-prefix=PFX         Path to where the lzo library is installed],,
-  with_lzo_given=no)
-
-  LZO_CFLAGS=
-  LZO_LIBS=
-  if test "$with_lzo_prefix" != "yes" -a "$with_lzo_prefix" != ""; then
-    LZO_CFLAGS="-I$with_lzo_prefix/include"
-    LZO_LIBS="-L$with_lzo_prefix/lib"
+  AC_CHECK_LIB(lzo, lzo1x_1_compress,
+               [ LZO_LIBS="-llzo"
+                 lzo_found=yes ],
+               [ lzo_found=no ],)
+  if test "$lzo_found" = "yes"; then
+    AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
   fi
 
-	AC_CHECK_LIB(lzo, lzo1x_1_compress,
-		     [ LZO_LIBS="$LZO_LIBS -llzo"
-		       lzo_found=yes ],
-		     [ lzo_found=no ],
-		     "$LZO_LIBS")
-  if test "$lzo_found" = "no"; then
-    AC_MSG_ERROR([Could not find the lzo library])
-  fi
-	lzo_save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $LZO_CFLAGS"
-  AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
-	CFLAGS="$lzo_save_CFLAGS"
-
-AC_SUBST(LZO_CFLAGS)
 AC_SUBST(LZO_LIBS)
 
 
@@ -729,31 +566,14 @@ AC_SUBST(LZO_LIBS)
 dnl
 dnl Check for libbz2
 dnl
-AC_ARG_WITH(bz2,
-  [  --with-bz2-prefix=PFX         Path to where the bz2 library is installed],,
-  with_bz2_given=no)
-
-  BZ2_CFLAGS=
-  BZ2_LIBS=
-  if test "$with_bz2_prefix" != "yes" -a "$with_bz2_prefix" != ""; then
-    BZ2_CFLAGS="-I$with_bz2_prefix/include"
-    BZ2_LIBS="-L$with_bz2_prefix/lib"
+  AC_CHECK_LIB(bz2, BZ2_bzCompress,
+               [ BZ2_LIBS="-lbz2"
+                 bz2_found=yes ],
+               [ bz2_found=no ],)
+  if test "$bz2_found" = "yes"; then
+    AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
   fi
 
-	AC_CHECK_LIB(bz2, BZ2_bzCompress,
-		     [ BZ2_LIBS="$BZ2_LIBS -lbz2"
-		       bz2_found=yes ],
-		     [ bz2_found=no ],
-		     "$BZ2_LIBS")
-  if test "$bz2_found" = "no"; then
-    AC_MSG_ERROR([Could not find the bz2 library])
-  fi
-	bz2_save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $BZ2_CFLAGS"
-  AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
-	CFLAGS="$bz2_save_CFLAGS"
-
-AC_SUBST(BZ2_CFLAGS)
 AC_SUBST(BZ2_LIBS)
 
 
@@ -870,8 +690,8 @@ AC_ARG_WITH(avilib,
 AC_SUBST(AVILIB_LIBS)
 AC_SUBST(AVICLASSES_LIBS)
 
-CFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
-CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@ @EXPAT_CFLAGS@ @ZLIB_CFLAGS@ @LZO_CFLAGS@ @BZ2_CFLAGS@"
+CFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
+CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWINDOWS_CFLAGS@"
 CPPFLAGS="@EXTRA_CFLAGS@"
 LDFLAGS="@EXTRA_LDFLAGS@"
 
