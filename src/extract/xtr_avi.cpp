@@ -84,10 +84,10 @@ xtr_avi_c::handle_block(KaxBlock &block,
 
     AVI_write_frame(avi, (char *)data.Buffer(), data.Size(),
                     bref != 0 ? 0 : 1);
-    if (iabs(duration / 1000000 - (int64_t)(1000.0 / fps)) > 1) {
+    if (((double)duration / 1000000.0 - (1000.0 / fps)) >= 1.5) {
       int k, nfr;
 
-      nfr = irnd(duration / 1000000 * fps / 1000.0);
+      nfr = irnd((double)duration / 1000000.0 * fps / 1000.0);
       for (k = 2; k <= nfr; k++)
         AVI_write_frame(avi, "", 0, 0);
     }

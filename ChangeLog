@@ -1,3 +1,9 @@
+2005-03-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Due to the compiler doing some strange number
+	conversion mkvextract seemed to hang on Windows with certain
+	files.
+
 2005-03-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Appending VobSubs with more than one track in
