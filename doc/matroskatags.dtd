@@ -75,8 +75,8 @@
           DiscTrack?,
           SetPart?,
           InitialKey?,
-          OfficialFileURL?,
-          OfficialSourceURL?,
+          OfficialAudioFileURL?,
+          OfficialAudioSourceURL?,
           MultiComment*)>
 <!element AudioEncryption (#PCDATA)>
 <!element AudioGain (#PCDATA)>
@@ -86,8 +86,8 @@
 <!element DiscTrack (#PCDATA)>
 <!element SetPart (#PCDATA)>
 <!element InitialKey (#PCDATA)>
-<!element OfficialFileURL (#PCDATA)>
-<!element OfficialSourceURL (#PCDATA)>
+<!element OfficialAudioFileURL (#PCDATA)>
+<!element OfficialAudioSourceURL (#PCDATA)>
 
 <!element ImageSpecific (
           CaptureDPI?,
@@ -106,13 +106,13 @@
 
 <!element MultiCommercial (Commercial+)>
 <!element Commercial(
-          CommercialType,
+          Type,
           Address?,
           URL*,
           Email*,
           MultiPrice*,
           MultiComment*)>
-<!element CommercialType (#PCDATA)>
+<!element Type (#PCDATA)>
 <!element Address (#PCDATA)>
 <!element URL (#PCDATA)>
 <!element Email (#PCDATA)>
@@ -127,13 +127,12 @@
 
 <!element MultiDate (Date+)>
 <!element Date (
-          DateType,
-          DateBegin?,
-          DateEnd?,
+          Type,
+          Begin?,
+          End?,
           MultiComment*)>
-<!element DateType (#PCDATA)>
-<!element DateBegin (#PCDATA)>
-<!element DateEnd (#PCDATA)>
+<!element Begin (#PCDATA)>
+<!element End (#PCDATA)>
 
 <!element MultiEntity (Entity+)>
 <!element Entity (
@@ -148,17 +147,16 @@
 
 <!element MultiIdentifier (Identifier+)>
 <!element Identifier (
-          IdentifierType,
-          IdentifierBinary?,
-          IdentifierString?,
+          Type,
+          Binary?,
+          String?,
           MultiComment*)>
-<!element IdentifierType (#PCDATA)>
-<!element IdentifierBinary (#PCDATA)>
-<!element IdentifierString (#PCDATA)>
+<!element Binary (#PCDATA)>
+<!element String (#PCDATA)>
 
 <!element MultiLegal (Legal+)>
 <!element Legal (
-          LegalType,
+          Type,
           URL*,
           Address?,
           MultiComment*)>
@@ -175,13 +173,11 @@
           Email*,
           Language?,
           MultiComment*)>
-<!element TitleType (#PCDATA)>
 <!element SubTitle (#PCDATA)>
 <!element Edition (#PCDATA)>
 
 <!element MultiComment (
-          CommentName?,
+          Name?,
           Comments,
           Language?)>
-<!element CommentName (#PCDATA)>
 <!element Comments (#PCDATA)>

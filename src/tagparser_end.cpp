@@ -372,10 +372,10 @@ void end_level3(parser_data_t *pdata, const char *name) {
     else if (!strcmp(name, "InitialKey"))
       el_get_string(pdata,
                     &GetChild<KaxTagInitialKey>(*pdata->audio_specific));
-    else if (!strcmp(name, "OfficialFileURL"))
+    else if (!strcmp(name, "OfficialAudioFileURL"))
       el_get_string(pdata, &GetChild<KaxTagOfficialAudioFileURL>
                     (*pdata->audio_specific));
-    else if (!strcmp(name, "OfficialSourceURL"))
+    else if (!strcmp(name, "OfficialAudioSourceURL"))
       el_get_string(pdata, &GetChild<KaxTagOfficialAudioSourceURL>
                     (*pdata->audio_specific));
 
@@ -436,7 +436,7 @@ void end_level4(parser_data_t *pdata, const char *name) {
   parent = (*pdata->parents)[pdata->parents->size() - 2];
 
   if (parent == E_Commercial) {
-    if (!strcmp(name, "CommercialType"))
+    if (!strcmp(name, "Type"))
       el_get_uint(pdata, &GetChild<KaxTagMultiCommercialType>
                   (*pdata->commercial), 1);
     else if (!strcmp(name, "Address"))
@@ -451,18 +451,18 @@ void end_level4(parser_data_t *pdata, const char *name) {
     }
 
   } else if (parent == E_Date) {
-    if (!strcmp(name, "DateType"))
+    if (!strcmp(name, "Type"))
       el_get_uint(pdata, &GetChild<KaxTagMultiDateType>
                   (*pdata->date), 1);
-    else if (!strcmp(name, "DateBegin"))
+    else if (!strcmp(name, "Begin"))
       el_get_date(pdata, &GetChild<KaxTagMultiDateDateBegin>
                   (*pdata->date));
-    else if (!strcmp(name, "DateEnd"))
+    else if (!strcmp(name, "End"))
       el_get_date(pdata, &GetChild<KaxTagMultiDateDateEnd>
                   (*pdata->date));
 
   } else if (parent == E_Entity) {
-    if (!strcmp(name, "EntityType"))
+    if (!strcmp(name, "Type"))
       el_get_uint(pdata, &GetChild<KaxTagMultiEntityType>
                   (*pdata->entity), 1);
     else if (!strcmp(name, "Name"))
@@ -477,18 +477,18 @@ void end_level4(parser_data_t *pdata, const char *name) {
                         (*pdata->entity));
 
   } else if (parent == E_Identifier) {
-    if (!strcmp(name, "IdentifierType"))
+    if (!strcmp(name, "Type"))
       el_get_uint(pdata, &GetChild<KaxTagMultiIdentifierType>
                   (*pdata->identifier), 1);
-    else if (!strcmp(name, "IdentifierBinary"))
+    else if (!strcmp(name, "Binary"))
       el_get_binary(pdata, &GetChild<KaxTagMultiIdentifierBinary>
                     (*pdata->identifier));
-    else if (!strcmp(name, "IdentifierString"))
+    else if (!strcmp(name, "String"))
       el_get_utf8string(pdata, &GetChild<KaxTagMultiIdentifierString>
                         (*pdata->identifier));
 
   } else if (parent == E_Legal) {
-    if (!strcmp(name, "LegalType"))
+    if (!strcmp(name, "Type"))
       el_get_uint(pdata, &GetChild<KaxTagMultiLegalType>
                   (*pdata->legal), 1);
     else if (!strcmp(name, "URL"))
@@ -498,7 +498,7 @@ void end_level4(parser_data_t *pdata, const char *name) {
                         (*pdata->legal));
 
   } else if (parent == E_Title) {
-    if (!strcmp(name, "TitleType"))
+    if (!strcmp(name, "Type"))
       el_get_uint(pdata, &GetChild<KaxTagMultiTitleType>
                   (*pdata->title), 1);
     else if (!strcmp(name, "Name"))

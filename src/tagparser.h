@@ -70,8 +70,8 @@ using namespace libmatroska;
 #define E_DiscTrack                      33
 #define E_SetPart                        34
 #define E_InitialKey                     35
-#define E_OfficialFileURL                36
-#define E_OfficialSourceURL              37
+#define E_OfficialAudioFileURL           36
+#define E_OfficialAudioSourceURL         37
 #define E_ImageSpecific                  38
 #define E_CaptureDPI                     39
 #define E_CaptureLightness               40

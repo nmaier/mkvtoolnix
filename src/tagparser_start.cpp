@@ -334,12 +334,12 @@ void start_level3(parser_data_t *pdata, const char *name) {
     } else if (!strcmp(name, "InitialKey")) {
       check_instances(pdata->audio_specific, KaxTagInitialKey);
       pdata->parents->push_back(E_InitialKey);
-    } else if (!strcmp(name, "OfficialFileURL")) {
+    } else if (!strcmp(name, "OfficialAudioFileURL")) {
       check_instances(pdata->audio_specific, KaxTagOfficialAudioFileURL);
-      pdata->parents->push_back(E_OfficialFileURL);
-    } else if (!strcmp(name, "OfficialSourceURL")) {
+      pdata->parents->push_back(E_OfficialAudioFileURL);
+    } else if (!strcmp(name, "OfficialAudioSourceURL")) {
       check_instances(pdata->audio_specific, KaxTagOfficialAudioSourceURL);
-      pdata->parents->push_back(E_OfficialSourceURL);
+      pdata->parents->push_back(E_OfficialAudioSourceURL);
     } else
       perror_nochild();
 
@@ -451,7 +451,7 @@ void start_level4(parser_data_t *pdata, const char *name) {
   if (parent == E_Commercial) {
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "CommercialType")) {
+    if (!strcmp(name, "Type")) {
       check_instances(pdata->commercial, KaxTagMultiCommercialType);
       pdata->parents->push_back(E_CommercialType);
     } else if (!strcmp(name, "Address")) {
@@ -489,13 +489,13 @@ void start_level4(parser_data_t *pdata, const char *name) {
   } else if (parent == E_Date) {
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "DateType")) {
+    if (!strcmp(name, "Type")) {
       check_instances(pdata->date, KaxTagMultiDateType);
       pdata->parents->push_back(E_DateType);
-    } else if (!strcmp(name, "DateBegin")) {
+    } else if (!strcmp(name, "Begin")) {
       check_instances(pdata->date, KaxTagMultiDateDateBegin);
       pdata->parents->push_back(E_DateBegin);
-    } else if (!strcmp(name, "DateEnd")) {
+    } else if (!strcmp(name, "End")) {
       check_instances(pdata->date, KaxTagMultiDateDateEnd);
       pdata->parents->push_back(E_DateEnd);
     } else
@@ -504,7 +504,7 @@ void start_level4(parser_data_t *pdata, const char *name) {
   } else if (parent == E_Entity) {
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "EntityType")) {
+    if (!strcmp(name, "Type")) {
       check_instances(pdata->entity, KaxTagMultiEntityType);
       pdata->parents->push_back(E_EntityType);
     } else if (!strcmp(name, "Name")) {
@@ -535,13 +535,13 @@ void start_level4(parser_data_t *pdata, const char *name) {
   } else if (parent == E_Identifier) {
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "IdentifierType")) {
+    if (!strcmp(name, "Type")) {
       check_instances(pdata->identifier, KaxTagMultiIdentifierType);
       pdata->parents->push_back(E_IdentifierType);
-    } else if (!strcmp(name, "IdentifierBinary")) {
+    } else if (!strcmp(name, "Binary")) {
       check_instances(pdata->identifier, KaxTagMultiIdentifierBinary);
       pdata->parents->push_back(E_IdentifierBinary);
-    } else if (!strcmp(name, "IdentifierString")) {
+    } else if (!strcmp(name, "String")) {
       check_instances(pdata->identifier, KaxTagMultiIdentifierString);
       pdata->parents->push_back(E_IdentifierString);
     } else
@@ -550,7 +550,7 @@ void start_level4(parser_data_t *pdata, const char *name) {
   } else if (parent == E_Legal) {
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "LegalType")) {
+    if (!strcmp(name, "Type")) {
       check_instances(pdata->legal, KaxTagMultiLegalType);
       pdata->parents->push_back(E_LegalType);
     } else if (!strcmp(name, "URL")) {
@@ -569,7 +569,7 @@ void start_level4(parser_data_t *pdata, const char *name) {
   } else if (parent == E_Title) {
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "TitleType")) {
+    if (!strcmp(name, "Type")) {
       check_instances(pdata->title, KaxTagMultiTitleType);
       pdata->parents->push_back(E_TitleType);
     } else if (!strcmp(name, "Name")) {
@@ -758,7 +758,7 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
     len = io->read(buffer, 5000);
     if (len != 5000)
       done = 1;
-    if (XML_Parse(parser, buffer, len, done) == XML_STATUS_ERROR) {
+    if (XML_Parse(parser, buffer, len, done) == 0) {
       mxprint(stderr, "XML parser error at  line %d of '%s': %s. Aborting.\n",
               XML_GetCurrentLineNumber(parser), name,
               XML_ErrorString(XML_GetErrorCode(parser)));

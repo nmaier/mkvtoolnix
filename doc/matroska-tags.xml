@@ -55,8 +55,8 @@
       <DiscTrack>1</DiscTrack>
       <SetPart>2</SetPart>
       <InitialKey>InitialKey</InitialKey>
-      <OfficialFileURL>OfficialFileURL</OfficialFileURL>
-      <OfficialSourceURL>OfficialSourceURL</OfficialSourceURL>
+      <OfficialAudioFileURL>OfficialAudioFileURL</OfficialAudioFileURL>
+      <OfficialAudioSourceURL>OfficialAudioSourceURL</OfficialAudioSourceURL>
     </AudioSpecific>
 
     <ImageSpecific>
@@ -70,7 +70,7 @@
 
     <MultiCommercial>
       <Commercial>
-        <CommercialType>1</CommercialType>
+        <Type>1</Type>
         <Address>Address</Address>
         <URL>URL</URL>
         <Email>Email</Email>
@@ -85,15 +85,15 @@
 
     <MultiDate>
       <Date>
-        <DateType>2</DateType>
-        <DateBegin>2003-07-18T20:00:00+0100</DateBegin>
-        <DateEnd>2003-07-18T20:00:00+0000</DateEnd>
+        <Type>2</Type>
+        <Begin>2003-07-18T20:00:00+0100</Begin>
+        <End>2003-07-18T20:00:00+0000</End>
       </Date>
     </MultiDate>
 
     <MultiEntity>
       <Entity>
-        <EntityType>3</EntityType>
+        <Type>3</Type>
         <Name>Name</Name>
         <URL>URL</URL>
         <Email>Email</Email>
@@ -103,19 +103,19 @@
 
     <MultiIdentifier>
       <Identifier>
-        <IdentifierType>4</IdentifierType>
+        <Type>4</Type>
         <!-- Binary data can also be read from a file. This is indicated
              by the @ as the first character. The rest is the file name.
              The file itself is read as-is and NOT assumed to be Base64
              encoded. -->
-        <IdentifierBinary>@file.txt</IdentifierBinary>
-        <IdentifierString>IdentifierString</IdentifierString>
+        <Binary>@file.txt</Binary>
+        <String>IdentifierString</String>
       </Identifier>
     </MultiIdentifier>
 
     <MultiLegal>
       <Legal>
-        <LegalType>3</LegalType>
+        <Type>3</Type>
         <URL>URL</URL>
         <Address>Address</Address>
       </Legal>
@@ -123,7 +123,7 @@
 
     <MultiTitle>
       <Title>
-        <TitleType>2</TitleType>
+        <Type>2</Type>
         <Name>Name</Name>
         <SubTitle>SubTitle</SubTitle>
         <Edition>Edition</Edition>
@@ -134,7 +134,7 @@
       </Title>
       <!-- Let's test whether a complete second Title entry works. -->
       <Title>
-        <TitleType>3</TitleType>
+        <Type>3</Type>
         <Name>Name2</Name>
         <SubTitle>SubTitle2</SubTitle>
         <Edition>Edition2</Edition>
@@ -147,7 +147,7 @@
 
 <!-- MultiComments don't work at the moment. -->
 <!--     <MultiComment> -->
-<!--       <CommentName>CommentName</CommentName> -->
+<!--       <Name>CommentName</Name> -->
 <!--       <Comments>Comments</Comments> -->
 <!--       <Language>Language</Language> -->
 <!--     </MultiComment> -->
