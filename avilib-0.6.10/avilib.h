@@ -49,16 +49,16 @@
 
 typedef struct
 {
-  off_t key;
-  off_t pos;
-  off_t len;
+  int64_t key;
+  int64_t pos;
+  int64_t len;
 } video_index_entry;
 
 typedef struct
 {
-   off_t pos;
-   off_t len;
-   off_t tot;
+   int64_t pos;
+   int64_t len;
+   int64_t tot;
 } audio_index_entry;
 
 
@@ -133,15 +133,15 @@ typedef struct track_s
     long   padrate;	      /* byte rate used for zero padding */
 
     long   audio_strn;        /* Audio stream number */
-    off_t  audio_bytes;       /* Total number of bytes of audio data */
+    int64_t  audio_bytes;       /* Total number of bytes of audio data */
     long   audio_chunks;      /* Chunks of audio data in the file */
 
     char   audio_tag[4];      /* Tag of audio data */
     long   audio_posc;        /* Audio position: chunk */
     long   audio_posb;        /* Audio position: byte within chunk */
  
-    off_t  a_codech_off;       /* absolut offset of audio codec information */ 
-    off_t  a_codecf_off;       /* absolut offset of audio codec information */ 
+    int64_t  a_codech_off;       /* absolut offset of audio codec information */ 
+    int64_t  a_codecf_off;       /* absolut offset of audio codec information */ 
 
     audio_index_entry *audio_index;
     avisuperindex_chunk *audio_superindex;
@@ -218,12 +218,12 @@ typedef struct
   
   track_t track[AVI_MAX_TRACKS];  // up to AVI_MAX_TRACKS audio tracks supported
   
-  off_t  pos;               /* position in file */
+  int64_t  pos;               /* position in file */
   long   n_idx;             /* number of index entries actually filled */
   long   max_idx;           /* number of index entries actually allocated */
   
-  off_t  v_codech_off;      /* absolut offset of video codec (strh) info */ 
-  off_t  v_codecf_off;      /* absolut offset of video codec (strf) info */ 
+  int64_t  v_codech_off;      /* absolut offset of video codec (strh) info */ 
+  int64_t  v_codecf_off;      /* absolut offset of video codec (strf) info */ 
   
   uint8_t (*idx)[16]; /* index entries (AVI idx1 tag) */
 
@@ -231,10 +231,10 @@ typedef struct
   avisuperindex_chunk *video_superindex;  /* index of indices */
   int is_opendml;           /* set to 1 if this is an odml file with multiple index chunks */
   
-  off_t  last_pos;          /* Position of last frame written */
+  int64_t  last_pos;          /* Position of last frame written */
   uint32_t last_len;   /* Length of last frame written */
   int must_use_index;       /* Flag if frames are duplicated */
-  off_t  movi_start;
+  int64_t  movi_start;
   int total_frames;         /* total number of frames if dmlh is present */
   
   int anum;            // total number of audio tracks 
