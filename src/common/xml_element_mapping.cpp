@@ -57,74 +57,83 @@ namespace libmatroska {
 
 using namespace libmatroska;
 
-parser_element_t chapter_elements[] = {
-  {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL},
+parser_element_t *chapter_elements;
+parser_element_t *tag_elements;
 
-  {"EditionEntry", ebmlt_master, 1, 0, 0, KaxEditionEntry_TheId, NULL, NULL},
-  {"EditionUID", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionUID_TheId, NULL,
-   NULL},
-  {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
-   NULL, NULL},
-  {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
-   NULL, NULL},
+void
+xml_element_map_init() {
+  static parser_element_t _chapter_elements[] = {
+    {"Chapters", ebmlt_master, 0, 0, 0, KaxChapters_TheId, NULL, NULL},
 
-  {"ChapterAtom", ebmlt_master, 2, 0, 0, KaxChapterAtom_TheId, NULL,
-   NULL},
-  {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxChapterUID_TheId, NULL,
-   NULL},
-  {"ChapterTimeStart", ebmlt_time, 3, 0, 0, KaxChapterTimeStart_TheId, NULL,
-   NULL},
-  {"ChapterTimeEnd", ebmlt_time, 3, 0, 0, KaxChapterTimeEnd_TheId, NULL,
-   NULL},
-  {"ChapterFlagHidden", ebmlt_bool, 3, 0, 0, KaxChapterFlagHidden_TheId,
-   NULL, NULL},
-  {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, KaxChapterFlagEnabled_TheId,
-   NULL, NULL},
+    {"EditionEntry", ebmlt_master, 1, 0, 0, KaxEditionEntry_TheId, NULL, NULL},
+    {"EditionUID", ebmlt_uint, 2, 0, NO_MAX_VALUE, KaxEditionUID_TheId, NULL,
+     NULL},
+    {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
+     NULL, NULL},
+    {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
+     NULL, NULL},
 
-  {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
-   NULL, NULL},
-  {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE,
-   KaxChapterTrackNumber_TheId, NULL, NULL},
+    {"ChapterAtom", ebmlt_master, 2, 0, 0, KaxChapterAtom_TheId, NULL,
+     NULL},
+    {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxChapterUID_TheId, NULL,
+     NULL},
+    {"ChapterTimeStart", ebmlt_time, 3, 0, 0, KaxChapterTimeStart_TheId, NULL,
+     NULL},
+    {"ChapterTimeEnd", ebmlt_time, 3, 0, 0, KaxChapterTimeEnd_TheId, NULL,
+     NULL},
+    {"ChapterFlagHidden", ebmlt_bool, 3, 0, 0, KaxChapterFlagHidden_TheId,
+     NULL, NULL},
+    {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, KaxChapterFlagEnabled_TheId,
+     NULL, NULL},
 
-  {"ChapterDisplay", ebmlt_master, 3, 0, 0, KaxChapterDisplay_TheId,
-   NULL, NULL},
-  {"ChapterString", ebmlt_ustring, 4, 0, 0, KaxChapterString_TheId,
-   NULL, NULL},
-  {"ChapterLanguage", ebmlt_string, 4, 0, 0, KaxChapterLanguage_TheId,
-   NULL, NULL},
-  {"ChapterCountry", ebmlt_string, 4, 0, 0, KaxChapterCountry_TheId,
-   NULL, NULL},
+    {"ChapterTrack", ebmlt_master, 3, 0, 0, KaxChapterTrack_TheId,
+     NULL, NULL},
+    {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE,
+     KaxChapterTrackNumber_TheId, NULL, NULL},
 
-  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
-};
+    {"ChapterDisplay", ebmlt_master, 3, 0, 0, KaxChapterDisplay_TheId,
+     NULL, NULL},
+    {"ChapterString", ebmlt_ustring, 4, 0, 0, KaxChapterString_TheId,
+     NULL, NULL},
+    {"ChapterLanguage", ebmlt_string, 4, 0, 0, KaxChapterLanguage_TheId,
+     NULL, NULL},
+    {"ChapterCountry", ebmlt_string, 4, 0, 0, KaxChapterCountry_TheId,
+     NULL, NULL},
 
-parser_element_t tag_elements[] = {
-  {"Tags", ebmlt_master, 0, 0, 0, KaxTags_TheId, NULL, NULL},
+    {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
+  };
 
-  {"Tag", ebmlt_master, 1, 0, 0, KaxTag_TheId, NULL, NULL},
+  static parser_element_t _tag_elements[] = {
+    {"Tags", ebmlt_master, 0, 0, 0, KaxTags_TheId, NULL, NULL},
 
-  {"Targets", ebmlt_master, 2, 0, 0, KaxTagTargets_TheId, NULL, NULL},
-  {"TrackUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagTrackUID_TheId,
-   NULL, NULL},
-  {"EditionUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagEditionUID_TheId,
-   NULL, NULL},
-  {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagChapterUID_TheId,
-   NULL, NULL},
-  {"AttachmentUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagAttachmentUID_TheId,
-   NULL, NULL},
-  {"TargetType", ebmlt_string, 3, 0, 0, KaxTagTargetType_TheId, NULL, NULL},
-  {"TargetTypeValue", ebmlt_uint, 3, 0, NO_MAX_VALUE,
-   KaxTagTargetTypeValue_TheId, NULL, NULL},
+    {"Tag", ebmlt_master, 1, 0, 0, KaxTag_TheId, NULL, NULL},
 
-  {"Simple", ebmlt_master, 2, 0, 0, KaxTagSimple_TheId, NULL, NULL},
-  {"Name", ebmlt_ustring, 3, 0, 0,  KaxTagName_TheId, NULL, NULL},
-  {"String", ebmlt_ustring, 3, 0, 0, KaxTagString_TheId, NULL, NULL},
-  {"Binary", ebmlt_binary, 3, 0, 0, KaxTagBinary_TheId, NULL, NULL},
-  {"TagLanguage", ebmlt_string, 3, 0, 0, KaxTagLangue_TheId, NULL, NULL},
-  {"DefaultLanguage", ebmlt_bool, 3, 0, 1, KaxTagDefault_TheId, NULL, NULL},
+    {"Targets", ebmlt_master, 2, 0, 0, KaxTagTargets_TheId, NULL, NULL},
+    {"TrackUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagTrackUID_TheId,
+     NULL, NULL},
+    {"EditionUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagEditionUID_TheId,
+     NULL, NULL},
+    {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, KaxTagChapterUID_TheId,
+     NULL, NULL},
+    {"AttachmentUID", ebmlt_uint, 3, 0, NO_MAX_VALUE,
+     KaxTagAttachmentUID_TheId, NULL, NULL},
+    {"TargetType", ebmlt_string, 3, 0, 0, KaxTagTargetType_TheId, NULL, NULL},
+    {"TargetTypeValue", ebmlt_uint, 3, 0, NO_MAX_VALUE,
+     KaxTagTargetTypeValue_TheId, NULL, NULL},
 
-  {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
-};
+    {"Simple", ebmlt_master, 2, 0, 0, KaxTagSimple_TheId, NULL, NULL},
+    {"Name", ebmlt_ustring, 3, 0, 0,  KaxTagName_TheId, NULL, NULL},
+    {"String", ebmlt_ustring, 3, 0, 0, KaxTagString_TheId, NULL, NULL},
+    {"Binary", ebmlt_binary, 3, 0, 0, KaxTagBinary_TheId, NULL, NULL},
+    {"TagLanguage", ebmlt_string, 3, 0, 0, KaxTagLangue_TheId, NULL, NULL},
+    {"DefaultLanguage", ebmlt_bool, 3, 0, 1, KaxTagDefault_TheId, NULL, NULL},
+
+    {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
+  };
+
+  chapter_elements = _chapter_elements;
+  tag_elements = _tag_elements;
+}
 
 int
 xml_element_map_index(const parser_element_t *element_map,

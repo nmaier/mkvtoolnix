@@ -261,6 +261,13 @@ Defaults: no manual sync correction (which is the same as \fId\fR = 0 and
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
 .TP
+\fB\-\-delay\fR <\fITID\fR:\fIx\fR>
+The delay to apply to the packets of the track by simply adjusting the
+timecodes.
+The argument \fIx\fR must be postfixed with \fBs\fR, \fBms\fR, \fBus\fR or
+\fBns\fR to specify seconds, milliseconds, microseconds and nanoseconds
+respectively.
+.TP
 \fB\-\-cues\fR <\fITID\fR:\fInone\fR|\fIiframes\fR|\fIall\fR>
 Controls for which tracks cue (index) entries are created for the given track
 (see section \fBTRACK IDS\fR). \fInone\fR inhibits the creation of cue entries.

@@ -88,6 +88,7 @@
 #include "r_vobsub.h"
 #include "r_wav.h"
 #include "tagparser.h"
+#include "xml_element_mapping.h"
 
 using namespace libmatroska;
 using namespace std;
@@ -296,7 +297,7 @@ usage() {
     "                           appended to another track of another file.\n"
     "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
     "\n File splitting and linking (more global options):\n"
-    "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
+    "  --split <d[K,M,G]|HH:MM:SS|s>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
     "  --split-max-files <n>    Create at most n files.\n"
@@ -335,6 +336,8 @@ usage() {
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
+    "  --delay <Xs|ms|us|ns>    Delay to apply to the packets of the track\n"
+    "                           by simply adjusting the timecodes.\n"
     "  --default-track <TID>    Sets the 'default' flag for this track.\n"
     "  --track-name <TID:name>  Sets the name for a track.\n"
     "  --cues <TID:none|iframes|all>\n"
@@ -1005,6 +1008,49 @@ parse_split(const char *arg) {
 
   safefree(s);
   split_by_time = false;
+}
+
+/** \brief Parse the \c --delay argument
+ *
+ * time based: A number that must be postfixed with <tt>s</tt>,
+ * <tt>ms</tt>, <tt>us</tt> or <tt>ns</tt> to specify seconds,
+ * milliseconds, microseconds and nanoseconds respectively.
+ */
+static void
+parse_delay(const char *arg,
+            audio_sync_t &async) {
+  char *colon, *unit;
+  string orig = arg;
+  int64_t mult;
+
+  // Extract the track number.
+  if ((colon = strchr(arg, ':')) == NULL)
+    mxerror(_("Invalid delay option. No track ID specified in "
+              "'--delay %s'.\n"), arg);
+
+  *colon = 0;
+  if (!parse_int(arg, async.id))
+    mxerror(_("Invalid track ID specified in '--delay %s'.\n"), orig.c_str());
+
+  colon++;
+  for (unit = colon; isdigit(*unit); unit++)
+    ;
+  if (unit == colon)
+    mxerror(_("Missing delay given in '--delay %s'.\n"), orig.c_str());
+  mult = 1;
+  if (!strcasecmp(unit, "s"))
+    mult = 1000000000;
+  else if (!strcasecmp(unit, "ms"))
+    mult = 1000000;
+  else if (!strcasecmp(unit, "us"))
+    mult = 1000;
+  else if (strcasecmp(unit, "ns"))
+    mxerror(_("Invalid unit given in '--delay %s'.\n"), orig.c_str());
+  *unit = 0;
+
+  if (!parse_int(colon, async.displacement))
+    mxerror(_("Invalid delay given in '--delay %s'.\n"), orig.c_str());
+  async.displacement *= mult;
 }
 
 /** \brief Parse the \c --cues argument
@@ -2282,6 +2328,14 @@ parse_args(int argc,
       ti->cue_creations->push_back(cues);
       i++;
 
+    } else if (!strcmp(this_arg, "--delay")) {
+      if (next_arg == NULL)
+        mxerror(_("'--delay' lacks the delay to apply.\n"));
+
+      parse_delay(next_arg, async);
+      ti->packet_delays->push_back(async);
+      i++;
+
     } else if (!strcmp(this_arg, "--default-track")) {
       if (next_arg == NULL)
         mxerror(_("'--default-track' lacks the track ID.\n"));
@@ -2598,6 +2652,8 @@ setup() {
   cc_local_utf8 = utf8_init(NULL);
 
   cluster_helper = new cluster_helper_c();
+
+  xml_element_map_init();
 }
 
 /** \brief Initialize global variables

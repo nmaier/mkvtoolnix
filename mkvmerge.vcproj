@@ -24,6 +24,7 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -73,6 +74,7 @@
 				AdditionalIncludeDirectories="&quot;.\avilib-0.6.10&quot;;.\librmff;src\common;src\input;src\output;.;.\src;..\..\work\libebml;..\..\work\libmatroska;..\..\..\zlib;..\..\..\libogg\include;..\..\..\libvorbis\include;..\..\..\expat\lib;..\..\..\flac\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;FLAC__NO_DLL"
 				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -551,6 +553,12 @@
 			</File>
 			<File
 				RelativePath=".\src\common\xml_element_mapping.h">
+			</File>
+			<File
+				RelativePath=".\src\common\xml_element_parser.cpp">
+			</File>
+			<File
+				RelativePath=".\src\common\xml_element_parser.h">
 			</File>
 		</Filter>
 	</Files>
