@@ -50,7 +50,7 @@ public:
   virtual const char *get_format_name() {
     return "Flac";
   }
-  virtual int can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
 };
 
 #endif  // HAVE_FLAC_STREAM_DECODER_H

@@ -96,14 +96,14 @@ ra_packetizer_c::process(memory_c &mem,
 //       skip_to_keyframe = false;
 //     else {
 //       displace(-duration);
-//       return file_status_moredata;
+//       return FILE_STATUS_MOREDATA;
 //     }
 //   }
 
 //   if (needs_negative_displacement(duration)) {
 //     skip_to_keyframe = true;
 //     displace(-duration);
-//     return file_status_moredata;
+//     return FILE_STATUS_MOREDATA;
 //   } else if (needs_positive_displacement(duration)) {
 //     if (!buffer_until_keyframe) {
 //       buffer_until_keyframe = true;
@@ -134,7 +134,7 @@ ra_packetizer_c::process(memory_c &mem,
 //       buffered_packets.push_back(mem.grab());
 //       buffered_timecodes.push_back(timecode);
 //       buffered_durations.push_back(duration);
-//       return file_status_moredata;
+//       return FILE_STATUS_MOREDATA;
 //     }
 //   }
 
@@ -143,14 +143,14 @@ ra_packetizer_c::process(memory_c &mem,
 
   debug_leave("ra_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
 ra_packetizer_c::dump_debug_info() {
 }
 
-int
+connection_result_e
 ra_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   ra_packetizer_c *psrc;
 

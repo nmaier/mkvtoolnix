@@ -33,17 +33,17 @@
 #define ID_JOBS_B_SAVE_LOG                17011
 #define ID_JOBS_B_DISABLE                 17012
 
-enum job_status_t {
-  jobs_pending,
-  jobs_done,
-  jobs_done_warnings,
-  jobs_aborted,
-  jobs_failed
+enum job_status_e {
+  JOBS_PENDING,
+  JOBS_DONE,
+  JOBS_DONE_WARNINGS,
+  JOBS_ABORTED,
+  JOBS_FAILED
 };
 
 typedef struct {
   int32_t id;
-  job_status_t status;
+  job_status_e status;
   int32_t added_on, started_on, finished_on;
   wxString *description, *log;
 } job_t;

@@ -256,15 +256,15 @@ ssa_reader_c::parse_file() {
   subs.sort();
 }
 
-file_status_t
+file_status_e
 ssa_reader_c::read(generic_packetizer_c *,
                    bool) {
   if (subs.empty())
-    return file_status_done;
+    return FILE_STATUS_DONE;
 
   subs.process((textsubs_packetizer_c *)PTZR0);
 
-  return subs.empty() ? file_status_done : file_status_moredata;
+  return subs.empty() ? FILE_STATUS_DONE : FILE_STATUS_MOREDATA;
 }
 
 int

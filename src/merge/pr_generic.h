@@ -36,7 +36,7 @@
 using namespace libmatroska;
 using namespace std;
 
-// CUES_* control the creation of cue entries for a track.
+// CUE_STRATEGY_* control the creation of cue entries for a track.
 // UNSPECIFIED: is used for command line parsing.
 // NONE:        don't create any cue entries.
 // IFRAMES:     Create cue entries for all I frames.
@@ -44,11 +44,13 @@ using namespace std;
 // SPARSE:      Create cue entries for I frames if no video track exists, but
 //              create at most one cue entries every two seconds. Used for
 //              audio only files.
-#define CUES_UNSPECIFIED -1
-#define CUES_NONE         0
-#define CUES_IFRAMES      1
-#define CUES_ALL          2
-#define CUES_SPARSE       3
+enum cue_strategy_e {
+  CUE_STRATEGY_UNSPECIFIED = -1,
+  CUE_STRATEGY_NONE,
+  CUE_STRATEGY_IFRAMES,
+  CUE_STRATEGY_ALL,
+  CUE_STRATEGY_SPARSE
+};
 
 #define DEFTRACK_TYPE_AUDIO 0
 #define DEFTRACK_TYPE_VIDEO 1
@@ -57,10 +59,10 @@ using namespace std;
 class generic_packetizer_c;
 class generic_reader_c;
 
-enum file_status_t {
-  file_status_done = 0,
-  file_status_holding,
-  file_status_moredata
+enum file_status_e {
+  FILE_STATUS_DONE = 0,
+  FILE_STATUS_HOLDING,
+  FILE_STATUS_MOREDATA
 };
 
 class memory_c {
@@ -110,10 +112,12 @@ typedef struct {
   int64_t id;
 } audio_sync_t;
 
-#define DEFAULT_TRACK_PRIOIRTY_NONE          0
-#define DEFAULT_TRACK_PRIORITY_FROM_TYPE    10
-#define DEFAULT_TRACK_PRIORITY_FROM_SOURCE  50
-#define DEFAULT_TRACK_PRIORITY_CMDLINE     255  
+enum default_track_priority_e {
+  DEFAULT_TRACK_PRIOIRTY_NONE = 0,
+  DEFAULT_TRACK_PRIORITY_FROM_TYPE = 10,
+  DEFAULT_TRACK_PRIORITY_FROM_SOURCE = 50,
+  DEFAULT_TRACK_PRIORITY_CMDLINE = 255
+};
 
 #define FMT_FN "'%s': "
 #define FMT_TID "'%s' track %lld: "
@@ -131,10 +135,17 @@ typedef struct {
 } packet_t;
 
 struct cue_creation_t {
-  int cues;
+  cue_strategy_e cues;
   int64_t id;
 
-  cue_creation_t(): cues(0), id(0) {}
+  cue_creation_t(): cues(CUE_STRATEGY_NONE), id(0) {}
+};
+
+struct compression_method_t {
+  compression_method_e method;
+  int64_t id;
+
+  compression_method_t(): method(COMPRESSION_UNSPECIFIED), id(0) {}
 };
 
 struct language_t {
@@ -204,7 +215,7 @@ public:
   audio_sync_t async;           // For this very track
 
   vector<cue_creation_t> *cue_creations; // As given on the command line
-  int cues;                     // For this very track
+  cue_strategy_e cues;          // For this very track
 
   vector<int64_t> *default_track_flags; // As given on the command line
   bool default_track;           // For this very track
@@ -224,8 +235,8 @@ public:
   vector<audio_sync_t> *packet_delays; // As given on the command line
   int64_t packet_delay;         // For this very track
 
-  vector<cue_creation_t> *compression_list; // As given on the command line
-  int compression;              // For this very track
+  vector<compression_method_t> *compression_list; // As given on the cmd line
+  compression_method_e compression; // For this very track
 
   vector<language_t> *track_names; // As given on the command line
   string track_name;            // For this very track
@@ -284,7 +295,7 @@ public:
   generic_reader_c(track_info_c *nti);
   virtual ~generic_reader_c();
 
-  virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false)
+  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false)
     = 0;
   virtual void read_all();
   virtual int get_progress() = 0;
@@ -311,9 +322,11 @@ protected:
   virtual bool demuxing_requested(char type, int64_t id);
 };
 
-#define CAN_CONNECT_YES            0
-#define CAN_CONNECT_NO_FORMAT     -1
-#define CAN_CONNECT_NO_PARAMETERS -2
+enum connection_result_e {
+  CAN_CONNECT_YES,
+  CAN_CONNECT_NO_FORMAT,
+  CAN_CONNECT_NO_PARAMETERS
+};
 
 class generic_packetizer_c {
 protected:
@@ -342,7 +355,7 @@ protected:
   int hvideo_pixel_width, hvideo_pixel_height;
   int hvideo_display_width, hvideo_display_height;
 
-  int hcompression;
+  compression_method_e hcompression;
   compression_c *compressor;
 
   timecode_factory_c *timecode_factory;
@@ -363,7 +376,7 @@ public:
 
   virtual bool contains_gap();
 
-  virtual file_status_t read() {
+  virtual file_status_e read() {
     return reader->read(this);
   }
   virtual void reset() {
@@ -405,10 +418,10 @@ public:
 
   virtual void dump_debug_info() = 0;
 
-  virtual void set_cue_creation(int create_cue_data) {
+  virtual void set_cue_creation(cue_strategy_e create_cue_data) {
     ti->cues = create_cue_data;
   }
-  virtual int get_cue_creation() {
+  virtual cue_strategy_e get_cue_creation() {
     return ti->cues;
   }
   virtual int64_t get_last_cue_timecode() {
@@ -470,7 +483,7 @@ public:
 
   virtual void set_track_name(const string &name);
 
-  virtual void set_default_compression_method(int method) {
+  virtual void set_default_compression_method(compression_method_e method) {
     hcompression = method;
   }
 
@@ -488,7 +501,7 @@ public:
   virtual void force_duration_on_last_packet();
 
   virtual const char *get_format_name() = 0;
-  virtual int can_connect_to(generic_packetizer_c *src) = 0;
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src) = 0;
   virtual void connect(generic_packetizer_c *src,
                        int64_t _append_timecode_offset = -1);
 

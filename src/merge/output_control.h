@@ -17,6 +17,7 @@
 
 #include "os.h"
 
+#include "mkvmerge.h"
 #include "pr_generic.h"
 
 namespace libmatroska {
@@ -45,7 +46,7 @@ typedef struct {
 } append_spec_t;
 
 typedef struct packetizer_t {
-  file_status_t status, old_status;
+  file_status_e status, old_status;
   packet_t *pack;
   generic_packetizer_c *packetizer, *orig_packetizer;
   int64_t file, orig_file;
@@ -60,7 +61,7 @@ typedef struct {
 typedef struct {
   char *name;
 
-  int type;
+  file_type_e type;
 
   packet_t *pack;
 
@@ -95,10 +96,10 @@ typedef struct {
   int64_t track_id;
 } track_order_t;
 
-enum timecode_scale_mode_t {
-  timecode_scale_mode_normal = 0,
-  timecode_scale_mode_fixed,
-  timecode_scale_mode_auto
+enum timecode_scale_mode_e {
+  TIMECODE_SCALE_MODE_NORMAL = 0,
+  TIMECODE_SCALE_MODE_FIXED,
+  TIMECODE_SCALE_MODE_AUTO
 };
 
 extern vector<packetizer_t> packetizers;
@@ -110,7 +111,7 @@ extern vector<append_spec_t> append_mapping;
 extern string outfile;
 
 extern double timecode_scale;
-extern timecode_scale_mode_t timecode_scale_mode;
+extern timecode_scale_mode_e timecode_scale_mode;
 
 extern bitvalue_c *seguid_link_previous, *seguid_link_next;
 
@@ -153,7 +154,7 @@ extern bool split_by_time;
 
 extern double timecode_scale;
 
-int get_file_type(const string &filename);
+file_type_e get_file_type(const string &filename);
 void create_readers();
 
 void setup();

@@ -1658,7 +1658,7 @@ handle_elements_rec(EbmlStream *es,
 
   format = mapping[elt_idx].name;
   switch (mapping[elt_idx].type) {
-    case ebmlt_master:
+    case EBMLT_MASTER:
       show_element(e, level, format.c_str());
       m = dynamic_cast<EbmlMaster *>(e);
       assert(m != NULL);
@@ -1666,33 +1666,33 @@ handle_elements_rec(EbmlStream *es,
         handle_elements_rec(es, level + 1, elt_idx, (*m)[i], mapping);
       break;
 
-    case ebmlt_uint:
-    case ebmlt_bool:
+    case EBMLT_UINT:
+    case EBMLT_BOOL:
       format += ": %llu";
       show_element(e, level, format.c_str(),
                    uint64(*dynamic_cast<EbmlUInteger *>(e)));
       break;
 
-    case ebmlt_string:
+    case EBMLT_STRING:
       format += ": %s";
       show_element(e, level, format.c_str(),
                    string(*dynamic_cast<EbmlString *>(e)).c_str());
       break;
 
-    case ebmlt_ustring:
+    case EBMLT_USTRING:
       format += ": %s";
       s = UTFstring_to_cstr(UTFstring(*static_cast
                                       <EbmlUnicodeString *>(e)).c_str());
       show_element(e, level, format.c_str(), s.c_str());
       break;
 
-    case ebmlt_time:
+    case EBMLT_TIME:
       format += ": " FMT_TIMECODEN;
       show_element(e, level, format.c_str(),
                    ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))));
       break;
 
-    case ebmlt_binary:
+    case EBMLT_BINARY:
       format += ": %s";
       s = format_binary(*static_cast<EbmlBinary *>(e));
       show_element(e, level, format.c_str(), s.c_str());

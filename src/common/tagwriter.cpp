@@ -115,7 +115,7 @@ write_xml_element_rec(int level,
 
   out->printf("<%s>", tag_elements[elt_idx].name);
   switch (tag_elements[elt_idx].type) {
-    case ebmlt_master:
+    case EBMLT_MASTER:
       out->printf("\n");
       m = dynamic_cast<EbmlMaster *>(e);
       assert(m != NULL);
@@ -138,31 +138,31 @@ write_xml_element_rec(int level,
       out->printf("</%s>\n", tag_elements[elt_idx].name);
       break;
 
-    case ebmlt_uint:
-    case ebmlt_bool:
+    case EBMLT_UINT:
+    case EBMLT_BOOL:
       out->printf("%llu</%s>\n", uint64(*dynamic_cast<EbmlUInteger *>(e)),
                   tag_elements[elt_idx].name);
       break;
 
-    case ebmlt_string:
+    case EBMLT_STRING:
       s = escape_xml(string(*dynamic_cast<EbmlString *>(e)));
       out->printf("%s</%s>\n", s.c_str(), tag_elements[elt_idx].name);
       break;
 
-    case ebmlt_ustring:
+    case EBMLT_USTRING:
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
       s = escape_xml(s);
       out->printf("%s</%s>\n", s.c_str(), tag_elements[elt_idx].name);
       break;
 
-    case ebmlt_time:
+    case EBMLT_TIME:
       out->printf(FMT_TIMECODEN "</%s>\n", 
                   ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))),
                   tag_elements[elt_idx].name);
       break;
 
-    case ebmlt_binary:
+    case EBMLT_BINARY:
       print_binary(level, tag_elements[elt_idx].name, e, out);
       break;
 

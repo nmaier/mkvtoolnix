@@ -169,17 +169,22 @@ from_utf8_c(int handle,
 string MTX_DLL_API to_utf8(int handle, const string &local);
 string MTX_DLL_API from_utf8(int handle, const string &utf8);
 
-#define UNIQUE_ALL_IDS        -1
-#define UNIQUE_TRACK_IDS       0
-#define UNIQUE_CHAPTER_IDS     1
-#define UNIQUE_EDITION_IDS     2
-#define UNIQUE_ATTACHMENT_IDS  3
+enum unique_id_category_e {
+  UNIQUE_ALL_IDS = -1,
+  UNIQUE_TRACK_IDS = 0,
+  UNIQUE_CHAPTER_IDS = 1,
+  UNIQUE_EDITION_IDS = 2,
+  UNIQUE_ATTACHMENT_IDS = 3
+};
 
-void MTX_DLL_API clear_list_of_unique_uint32(int category);
-bool MTX_DLL_API is_unique_uint32(uint32_t number, int category);
-void MTX_DLL_API add_unique_uint32(uint32_t number, int category);
-bool MTX_DLL_API remove_unique_uint32(uint32_t number, int category);
-uint32_t MTX_DLL_API create_unique_uint32(int category);
+void MTX_DLL_API clear_list_of_unique_uint32(unique_id_category_e category);
+bool MTX_DLL_API is_unique_uint32(uint32_t number,
+                                  unique_id_category_e category);
+void MTX_DLL_API add_unique_uint32(uint32_t number,
+                                   unique_id_category_e category);
+bool MTX_DLL_API remove_unique_uint32(uint32_t number,
+                                      unique_id_category_e category);
+uint32_t MTX_DLL_API create_unique_uint32(unique_id_category_e category);
 
 void MTX_DLL_API safefree(void *p);
 #define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)

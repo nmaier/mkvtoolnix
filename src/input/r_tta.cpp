@@ -121,20 +121,20 @@ tta_reader_c::create_packetizer(int64_t) {
          (int64_t)0);
 }
 
-file_status_t
+file_status_e
 tta_reader_c::read(generic_packetizer_c *,
                    bool) {
   unsigned char *buf;
   int nread;
 
   if (pos >= seek_points.size())
-    return file_status_done;
+    return FILE_STATUS_DONE;
 
   buf = (unsigned char *)safemalloc(seek_points[pos]);
   nread = mm_io->read(buf, seek_points[pos]);
   if (nread <= 0) {
     PTZR0->flush();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
   pos++;
 
@@ -154,9 +154,9 @@ tta_reader_c::read(generic_packetizer_c *,
   bytes_processed += nread;
 
   if (pos >= seek_points.size())
-    return file_status_done;
+    return FILE_STATUS_DONE;
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 int

@@ -264,7 +264,7 @@ add_new_element(parser_data_t *pdata,
   if (pdata->mapping[elt_idx].start_hook != NULL)
     pdata->mapping[elt_idx].start_hook(pdata);
 
-  pdata->data_allowed = pdata->mapping[elt_idx].type != ebmlt_master;
+  pdata->data_allowed = pdata->mapping[elt_idx].type != EBMLT_MASTER;
 
   (pdata->depth)++;
 }
@@ -337,25 +337,25 @@ end_element(void *user_data,
     assert(found);
 
     switch (pdata->mapping[elt_idx].type) {
-      case ebmlt_master:
+      case EBMLT_MASTER:
         break;
-      case ebmlt_uint:
+      case EBMLT_UINT:
         el_get_uint(pdata, xmlp_pelt, pdata->mapping[elt_idx].min_value,
                     false);
         break;
-      case ebmlt_bool:
+      case EBMLT_BOOL:
         el_get_uint(pdata, xmlp_pelt, 0, true);
         break;
-      case ebmlt_string:
+      case EBMLT_STRING:
         el_get_string(pdata, xmlp_pelt);
         break;
-      case ebmlt_ustring:
+      case EBMLT_USTRING:
         el_get_utf8string(pdata, xmlp_pelt);
         break;
-      case ebmlt_time:
+      case EBMLT_TIME:
         el_get_time(pdata, xmlp_pelt);
         break;
-      case ebmlt_binary:
+      case EBMLT_BINARY:
         el_get_binary(pdata, xmlp_pelt);
         break;
       default:

@@ -66,26 +66,26 @@ typedef struct {
 static int track_number = 1;
 
 file_type_t file_types[] =
-  {{"---", TYPEUNKNOWN, "<unknown>"},
+  {{"---", FILE_TYPE_UNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
-   {"aac ", TYPEAAC, "AAC (Advanced Audio Coding)"},
-   {"ac3 ", TYPEAC3, "A/52 (aka AC3)"},
-   {"avi ", TYPEAVI, "AVI (Audio/Video Interleaved)"},
-   {"dts ", TYPEDTS, "DTS (Digital Theater System)"},
-   {"mp2 ", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
-   {"mp3 ", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
-   {"mkv ", TYPEMATROSKA, "general Matroska files"},
-   {"ogg ", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
-   {"mov ", TYPEQTMP4, "Quicktime/MP4 audio and video"},
-   {"rm  ", TYPEREAL, "RealMedia audio and video"},
-   {"srt ", TYPESRT, "SRT text subtitles"},
-   {"ssa ", TYPESSA, "SSA/ASS text subtitles"},
-   {"idx ", TYPEVOBSUB, "VobSub subtitles"},
-   {"wav ", TYPEWAV, "WAVE (uncompressed PCM)"},
+   {"aac ", FILE_TYPE_AAC, "AAC (Advanced Audio Coding)"},
+   {"ac3 ", FILE_TYPE_AC3, "A/52 (aka AC3)"},
+   {"avi ", FILE_TYPE_AVI, "AVI (Audio/Video Interleaved)"},
+   {"dts ", FILE_TYPE_DTS, "DTS (Digital Theater System)"},
+   {"mp2 ", FILE_TYPE_MP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
+   {"mp3 ", FILE_TYPE_MP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
+   {"mkv ", FILE_TYPE_MATROSKA, "general Matroska files"},
+   {"ogg ", FILE_TYPE_OGM, "general OGG media stream, audio/video embedded in OGG"},
+   {"mov ", FILE_TYPE_QTMP4, "Quicktime/MP4 audio and video"},
+   {"rm  ", FILE_TYPE_REAL, "RealMedia audio and video"},
+   {"srt ", FILE_TYPE_SRT, "SRT text subtitles"},
+   {"ssa ", FILE_TYPE_SSA, "SSA/ASS text subtitles"},
+   {"idx ", FILE_TYPE_VOBSUB, "VobSub subtitles"},
+   {"wav ", FILE_TYPE_WAV, "WAVE (uncompressed PCM)"},
 #if defined(HAVE_FLAC_FORMAT_H)
-   {"flac", TYPEFLAC, "FLAC lossless audio"},
+   {"flac", FILE_TYPE_FLAC, "FLAC lossless audio"},
 #endif
-   {"tta",  TYPETTA, "TTA lossless audio"},
+   {"tta",  FILE_TYPE_TTA, "TTA lossless audio"},
    {"output modules:", -1, ""},
    {"    ", -1,      "AAC audio"},
    {"    ", -1,      "AC3 audio"},
@@ -318,7 +318,7 @@ identify(const string &filename) {
   file.type = get_file_type(file.name);
   ti.fname = file.name;
   
-  if (file.type == TYPEUNKNOWN)
+  if (file.type == FILE_TYPE_UNKNOWN)
     mxerror(_("File %s has unknown type. Please have a look "
               "at the supported file types ('mkvmerge --list-types') and "
               "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
@@ -748,11 +748,11 @@ parse_cues(const string &s,
             s.c_str());
 
   if (parts[1] == "all")
-    cues.cues = CUES_ALL;
+    cues.cues =  CUE_STRATEGY_ALL;
   else if (parts[1] == "iframes")
-    cues.cues = CUES_IFRAMES;
+    cues.cues =  CUE_STRATEGY_IFRAMES;
   else if (parts[1] == "none")
-    cues.cues = CUES_NONE;
+    cues.cues =  CUE_STRATEGY_NONE;
   else
     mxerror(_("'%s' is an unsupported argument for --cues.\n"), s.c_str());
 }
@@ -763,7 +763,7 @@ parse_cues(const string &s,
  */
 static void
 parse_compression(const string &s,
-                  cue_creation_t &compression) {
+                  compression_method_t &compression) {
   vector<string> parts;
 
   // Extract the track number.
@@ -781,21 +781,21 @@ parse_compression(const string &s,
     mxerror(_("Invalid compression option specified in '--compression %s'.\n"),
             s.c_str());
 
-  compression.cues = -1;
+  compression.method = COMPRESSION_UNSPECIFIED;
   parts[1] = downcase(parts[1]);
 #ifdef HAVE_LZO1X_H
   if ((parts[1] == "lzo") || (parts[1] == "lzo1x"))
-    compression.cues = COMPRESSION_LZO;
+    compression.method = COMPRESSION_LZO;
 #endif
   if (parts[1] == "zlib")
-    compression.cues = COMPRESSION_ZLIB;
+    compression.method = COMPRESSION_ZLIB;
 #ifdef HAVE_BZLIB_H
   if ((parts[1] == "bz2") || (parts[1] == "bzlib"))
-    compression.cues = COMPRESSION_BZ2;
+    compression.method = COMPRESSION_BZ2;
 #endif
   if (parts[1] == "none")
-    compression.cues = COMPRESSION_NONE;
-  if (compression.cues == -1)
+    compression.method = COMPRESSION_NONE;
+  if (compression.method == COMPRESSION_UNSPECIFIED)
     mxerror(_("'%s' is an unsupported argument for --compression. Available "
               "compression methods are 'none' and 'zlib'.\n"), s.c_str());
 }
@@ -1467,14 +1467,14 @@ parse_args(vector<string> &args) {
 
       if (no_next_arg)
         mxerror(_("'--timecode-scale' lacks its argument.\n"));
-      if (timecode_scale_mode != timecode_scale_mode_normal)
+      if (timecode_scale_mode != TIMECODE_SCALE_MODE_NORMAL)
         mxerror(_("'--timecode-scale' was used more than once.\n"));
 
       if (!parse_int(next_arg, temp))
         mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
 
       if (temp == -1)
-        timecode_scale_mode = timecode_scale_mode_auto;
+        timecode_scale_mode = TIMECODE_SCALE_MODE_AUTO;
       else {
         if ((temp > 10000000) || (temp < 1000))
           mxerror(_("The given timecode scale factor is outside the valid "
@@ -1482,7 +1482,7 @@ parse_args(vector<string> &args) {
                     "even if a video track is present').\n"));
 
         timecode_scale = temp;
-        timecode_scale_mode = timecode_scale_mode_fixed;
+        timecode_scale_mode = TIMECODE_SCALE_MODE_FIXED;
       }
       sit++;
     }
@@ -1637,11 +1637,13 @@ parse_args(vector<string> &args) {
       sit++;
 
     } else if ((this_arg == "--compression")) {
+      compression_method_t compression;
+
       if (no_next_arg)
         mxerror(_("'--compression' lacks its argument.\n"));
 
-      parse_compression(next_arg, cues);
-      ti->compression_list->push_back(cues);
+      parse_compression(next_arg, compression);
+      ti->compression_list->push_back(compression);
       sit++;
 
     } else if ((this_arg == "--track-name")) {
@@ -1721,14 +1723,14 @@ parse_args(vector<string> &args) {
       file.type = get_file_type(file.name);
       ti->fname = from_utf8(cc_local_utf8, this_arg);
 
-      if (file.type == TYPEUNKNOWN)
+      if (file.type == FILE_TYPE_UNKNOWN)
         mxerror(_("The file '%s' has unknown type. Please have a look "
                   "at the supported file types ('mkvmerge --list-types') and "
                   "contact the author Moritz Bunkus <moritz@bunkus.org> if "
                   "your file type is supported but not recognized "
                   "properly.\n"), file.name);
 
-      if (file.type != TYPECHAPTERS) {
+      if (file.type != FILE_TYPE_CHAPTERS) {
         file.pack = NULL;
         file.ti = ti;
         file.done = false;

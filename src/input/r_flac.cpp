@@ -293,20 +293,20 @@ flac_reader_c::parse_file() {
   return metadata_parsed;
 }
 
-file_status_t
+file_status_e
 flac_reader_c::read(generic_packetizer_c *,
                     bool) {
   unsigned char *buf;
   int samples_here;
 
   if (current_block == blocks.end())
-    return file_status_done;
+    return FILE_STATUS_DONE;
   buf = (unsigned char *)safemalloc(current_block->len);
   file->setFilePointer(current_block->filepos);
   if (file->read(buf, current_block->len) != current_block->len) {
     safefree(buf);
     PTZR0->flush();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
   memory_c mem(buf, current_block->len, true);
   samples_here = flac_get_num_samples(buf, current_block->len, stream_info);
@@ -316,9 +316,9 @@ flac_reader_c::read(generic_packetizer_c *,
 
   if (current_block == blocks.end()) {
     PTZR0->flush();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 FLAC__SeekableStreamDecoderReadStatus

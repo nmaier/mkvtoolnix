@@ -124,7 +124,7 @@ int split_max_num_files = 65535;
 bool use_durations = false;
 
 double timecode_scale = TIMECODE_SCALE;
-timecode_scale_mode_t timecode_scale_mode = timecode_scale_mode_normal;
+timecode_scale_mode_e timecode_scale_mode = TIMECODE_SCALE_MODE_NORMAL;
 
 float video_fps = -1.0;
 int default_tracks[3], default_tracks_priority[3];
@@ -245,12 +245,13 @@ sighandler(int signum) {
  * Opens the input file and calls the \c probe_file function for each known
  * file reader class. Uses \c mm_text_io_c for subtitle probing.
  */
-int
+file_type_e
 get_file_type(const string &filename) {
   mm_io_c *mm_io;
   mm_text_io_c *mm_text_io;
   uint64_t size;
-  int type, i;
+  file_type_e type;
+  int i;
   const int probe_sizes[] = {16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024,
                              256 * 1024, 0};
 
@@ -268,40 +269,40 @@ get_file_type(const string &filename) {
             filename.c_str());
   }
 
-  type = TYPEUNKNOWN;
+  type = FILE_TYPE_UNKNOWN;
   if (avi_reader_c::probe_file(mm_io, size))
-    type = TYPEAVI;
+    type = FILE_TYPE_AVI;
   else if (kax_reader_c::probe_file(mm_io, size))
-    type = TYPEMATROSKA;
+    type = FILE_TYPE_MATROSKA;
   else if (wav_reader_c::probe_file(mm_io, size))
-    type = TYPEWAV;
+    type = FILE_TYPE_WAV;
   else if (ogm_reader_c::probe_file(mm_io, size))
-    type = TYPEOGM;
+    type = FILE_TYPE_OGM;
   else if (flac_reader_c::probe_file(mm_io, size))
-    type = TYPEFLAC;
+    type = FILE_TYPE_FLAC;
   else if (real_reader_c::probe_file(mm_io, size))
-    type = TYPEREAL;
+    type = FILE_TYPE_REAL;
   else if (qtmp4_reader_c::probe_file(mm_io, size))
-    type = TYPEQTMP4;
+    type = FILE_TYPE_QTMP4;
   else if (tta_reader_c::probe_file(mm_io, size))
-    type = TYPETTA;
+    type = FILE_TYPE_TTA;
   else {
-    for (i = 0; (probe_sizes[i] != 0) && (type == TYPEUNKNOWN); i++)
+    for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
-        type = TYPEMP3;
+        type = FILE_TYPE_MP3;
       else if (ac3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
-        type = TYPEAC3;
+        type = FILE_TYPE_AC3;
   }
-  if (type != TYPEUNKNOWN)
+  if (type != FILE_TYPE_UNKNOWN)
     ;
   else if (mp3_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
-    type = TYPEMP3;
+    type = FILE_TYPE_MP3;
   else if (dts_reader_c::probe_file(mm_io, size))
-    type = TYPEDTS;
+    type = FILE_TYPE_DTS;
   else if (aac_reader_c::probe_file(mm_io, size))
-    type = TYPEAAC;
+    type = FILE_TYPE_AAC;
   else if (mpeg_es_reader_c::probe_file(mm_io, size))
-    type = TYPEMPEG;
+    type = FILE_TYPE_MPEG;
   else {
     delete mm_io;
 
@@ -317,13 +318,13 @@ get_file_type(const string &filename) {
     }
 
     if (srt_reader_c::probe_file(mm_text_io, size))
-      type = TYPESRT;
+      type = FILE_TYPE_SRT;
     else if (ssa_reader_c::probe_file(mm_text_io, size))
-      type = TYPESSA;
+      type = FILE_TYPE_SSA;
     else if (vobsub_reader_c::probe_file(mm_text_io, size))
-      type = TYPEVOBSUB;
+      type = FILE_TYPE_VOBSUB;
     else
-      type = TYPEUNKNOWN;
+      type = FILE_TYPE_UNKNOWN;
 
     mm_io = mm_text_io;
   }
@@ -381,7 +382,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   memset(&pack, 0, sizeof(packetizer_t));
   pack.packetizer = packetizer;
   pack.orig_packetizer = packetizer;
-  pack.status = file_status_moredata;
+  pack.status = FILE_STATUS_MOREDATA;
   pack.old_status = pack.status;
   pack.file = -1;
   foreach(file, files)
@@ -417,10 +418,10 @@ set_timecode_scale() {
         highest_sample_rate = sample_rate;
     }
 
-  if (timecode_scale_mode != timecode_scale_mode_fixed) {
+  if (timecode_scale_mode != TIMECODE_SCALE_MODE_FIXED) {
     if (audio_present && (highest_sample_rate > 0) &&
         (!video_present ||
-         (timecode_scale_mode == timecode_scale_mode_auto))) {
+         (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))) {
       int64_t max_ns_with_timecode_scale;
 
       timecode_scale = (double)1000000000.0 / (double)highest_sample_rate -
@@ -470,7 +471,7 @@ render_headers(mm_io_c *rout) {
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
 
     if ((video_packetizer == NULL) ||
-        (timecode_scale_mode == timecode_scale_mode_auto))
+        (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))
       kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_64);
     else
       kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_32);
@@ -1061,54 +1062,54 @@ create_readers() {
   foreach(file, files) {
     try {
       switch (file->type) {
-        case TYPEMATROSKA:
+        case FILE_TYPE_MATROSKA:
           file->reader = new kax_reader_c(file->ti);
           break;
-        case TYPEOGM:
+        case FILE_TYPE_OGM:
           file->reader = new ogm_reader_c(file->ti);
           break;
-        case TYPEAVI:
+        case FILE_TYPE_AVI:
           file->reader = new avi_reader_c(file->ti);
           break;
-        case TYPEREAL:
+        case FILE_TYPE_REAL:
           file->reader = new real_reader_c(file->ti);
           break;
-        case TYPEWAV:
+        case FILE_TYPE_WAV:
           file->reader = new wav_reader_c(file->ti);
           break;
-        case TYPESRT:
+        case FILE_TYPE_SRT:
           file->reader = new srt_reader_c(file->ti);
           break;
-        case TYPEMP3:
+        case FILE_TYPE_MP3:
           file->reader = new mp3_reader_c(file->ti);
           break;
-        case TYPEAC3:
+        case FILE_TYPE_AC3:
           file->reader = new ac3_reader_c(file->ti);
           break;
-        case TYPEDTS:
+        case FILE_TYPE_DTS:
           file->reader = new dts_reader_c(file->ti);
           break;
-        case TYPEAAC:
+        case FILE_TYPE_AAC:
           file->reader = new aac_reader_c(file->ti);
           break;
-        case TYPESSA:
+        case FILE_TYPE_SSA:
           file->reader = new ssa_reader_c(file->ti);
           break;
-        case TYPEVOBSUB:
+        case FILE_TYPE_VOBSUB:
           file->reader = new vobsub_reader_c(file->ti);
           break;
-        case TYPEQTMP4:
+        case FILE_TYPE_QTMP4:
           file->reader = new qtmp4_reader_c(file->ti);
           break;
 #if defined(HAVE_FLAC_FORMAT_H)
-        case TYPEFLAC:
+        case FILE_TYPE_FLAC:
           file->reader = new flac_reader_c(file->ti);
           break;
 #endif
-        case TYPETTA:
+        case FILE_TYPE_TTA:
           file->reader = new tta_reader_c(file->ti);
           break;
-        case TYPEMPEG:
+        case FILE_TYPE_MPEG:
           file->reader = new mpeg_es_reader_c(file->ti);
           break;
         default:
@@ -1581,7 +1582,7 @@ append_track(packetizer_t &ptzr,
   old_packetizer = ptzr.packetizer;
   ptzr.packetizer = *gptzr;
   ptzr.file = amap.src_file_id;
-  ptzr.status = file_status_moredata;
+  ptzr.status = FILE_STATUS_MOREDATA;
 
   // If we're dealing with a subtitle track or if the appending file contains
   // chapters then we have to do some magic. During splitting timecodes are
@@ -1670,8 +1671,8 @@ append_tracks_maybe() {
       continue;
     if (!files[ptzr->orig_file].appended_to)
       continue;
-    if ((ptzr->status == file_status_moredata) ||
-        (ptzr->status == file_status_holding))
+    if ((ptzr->status == FILE_STATUS_MOREDATA) ||
+        (ptzr->status == FILE_STATUS_HOLDING))
       continue;
     foreach(amap, append_mapping)
       if ((amap->dst_file_id == ptzr->file) &&
@@ -1732,14 +1733,14 @@ main_loop() {
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
     foreach(ptzr, packetizers) {
-      if (ptzr->status == file_status_holding)
-        ptzr->status = file_status_moredata;
+      if (ptzr->status == FILE_STATUS_HOLDING)
+        ptzr->status = FILE_STATUS_MOREDATA;
       ptzr->old_status = ptzr->status;
-      while ((ptzr->pack == NULL) && (ptzr->status == file_status_moredata) &&
+      while ((ptzr->pack == NULL) && (ptzr->status == FILE_STATUS_MOREDATA) &&
              (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
-      if ((ptzr->status != file_status_moredata) &&
-          (ptzr->old_status == file_status_moredata))
+      if ((ptzr->status != FILE_STATUS_MOREDATA) &&
+          (ptzr->old_status == FILE_STATUS_MOREDATA))
         ptzr->packetizer->force_duration_on_last_packet();
       if (ptzr->pack == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
@@ -1747,7 +1748,7 @@ main_loop() {
       // Has this packetizer changed its status from "data available" to
       // "file done" during this loop? If so then decrease the number of
       // unfinished packetizers in the corresponding file structure.
-      if ((ptzr->status == file_status_done) &&
+      if ((ptzr->status == FILE_STATUS_DONE) &&
           (ptzr->old_status != ptzr->status)) {
         filelist_t &file = files[ptzr->file];
 

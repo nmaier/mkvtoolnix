@@ -47,7 +47,7 @@ public:
   virtual const char *get_format_name() {
     return "text subtitle";
   }
-  virtual int can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
 };
 
 

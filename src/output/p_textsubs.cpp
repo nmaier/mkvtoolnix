@@ -84,14 +84,14 @@ textsubs_packetizer_c::process(memory_c &mem,
   end = (int64_t)(ti->async.linear * end);
 
   if (end < 0)
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   else if (start < 0)
     start = 0;
 
   if (length < 0) {
     mxwarn("textsubs_packetizer: Ignoring an entry which starts after it ends."
            "\n");
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   }
 
   // Count the number of lines.
@@ -138,7 +138,7 @@ textsubs_packetizer_c::process(memory_c &mem,
     add_packet(mem, start, length, true);
   }
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -146,7 +146,7 @@ textsubs_packetizer_c::dump_debug_info() {
   mxdebug("textsubs_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
-int
+connection_result_e
 textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   textsubs_packetizer_c *psrc;
 

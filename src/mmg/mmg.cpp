@@ -1549,7 +1549,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   if (last_job_id > 2000000000)
     last_job_id = 0;
   job.id = last_job_id;
-  job.status = jobs_pending;
+  job.status = JOBS_PENDING;
   job.added_on = wxGetLocalTime();
   job.started_on = -1;
   job.finished_on = -1;
@@ -1605,11 +1605,11 @@ mmg_dialog::load_job_queue() {
     job.id = value;
     cfg->Read(wxT("status"), &s);
     job.status =
-      s == wxT("pending") ? jobs_pending :
-      s == wxT("done") ? jobs_done :
-      s == wxT("done_warnings") ? jobs_done_warnings :
-      s == wxT("aborted") ? jobs_aborted :
-      jobs_failed;
+      s == wxT("pending") ? JOBS_PENDING :
+      s == wxT("done") ? JOBS_DONE :
+      s == wxT("done_warnings") ? JOBS_DONE_WARNINGS :
+      s == wxT("aborted") ? JOBS_ABORTED :
+      JOBS_FAILED;
     cfg->Read(wxT("added_on"), &value);
     job.added_on = value;
     cfg->Read(wxT("started_on"), &value);
@@ -1649,10 +1649,10 @@ mmg_dialog::save_job_queue() {
     cfg->SetPath(s);
     cfg->Write(wxT("id"), jobs[i].id);
     cfg->Write(wxT("status"),
-               jobs[i].status == jobs_pending ? wxT("pending") :
-               jobs[i].status == jobs_done ? wxT("done") :
-               jobs[i].status == jobs_done_warnings ? wxT("done_warnings") :
-               jobs[i].status == jobs_aborted ? wxT("aborted") :
+               jobs[i].status == JOBS_PENDING ? wxT("pending") :
+               jobs[i].status == JOBS_DONE ? wxT("done") :
+               jobs[i].status == JOBS_DONE_WARNINGS ? wxT("done_warnings") :
+               jobs[i].status == JOBS_ABORTED ? wxT("aborted") :
                wxT("failed"));
     cfg->Write(wxT("added_on"), jobs[i].added_on);
     cfg->Write(wxT("started_on"), jobs[i].started_on);

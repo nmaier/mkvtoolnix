@@ -97,7 +97,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
 
   // Let's see if the user has specified which cues he wants for this track.
-  ti->cues = CUES_UNSPECIFIED;
+  ti->cues =  CUE_STRATEGY_UNSPECIFIED;
   for (i = 0; i < ti->cue_creations->size(); i++) {
     cc = &(*ti->cue_creations)[i];
     if ((cc->id == ti->id) || (cc->id == -1)) { // -1 == all tracks
@@ -149,9 +149,9 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   // Let's see if the user has specified how this track should be compressed.
   ti->compression = COMPRESSION_UNSPECIFIED;
   for (i = 0; i < ti->compression_list->size(); i++) {
-    cc = &(*ti->compression_list)[i];
-    if ((cc->id == ti->id) || (cc->id == -1)) { // -1 == all tracks
-      ti->compression = cc->cues;
+    compression_method_t &cm = (*ti->compression_list)[i];
+    if ((cm.id == ti->id) || (cm.id == -1)) { // -1 == all tracks
+      ti->compression = cm.method;
       break;
     }
   }
@@ -319,8 +319,8 @@ void
 generic_packetizer_c::set_track_type(int type) {
   htrack_type = type;
 
-  if ((type == track_audio) && (ti->cues == CUES_UNSPECIFIED))
-    ti->cues = CUES_SPARSE;
+  if ((type == track_audio) && (ti->cues ==  CUE_STRATEGY_UNSPECIFIED))
+    ti->cues =  CUE_STRATEGY_SPARSE;
   if (type == track_audio)
     reader->num_audio_tracks++;
   else if (type == track_video) {
@@ -1206,7 +1206,7 @@ track_info_c::track_info_c():
   aspect_ratio_given(false),
   aspect_ratio_is_factor(false),
   display_dimensions_given(false),
-  cues(0),
+  cues(CUE_STRATEGY_NONE),
   default_track(false),
   tags_ptr(NULL),
   tags(NULL),
@@ -1232,7 +1232,7 @@ track_info_c::track_info_c():
   all_tags = new vector<tags_t>;
   aac_is_sbr = new vector<int64_t>;
   packet_delays = new vector<audio_sync_t>;
-  compression_list = new vector<cue_creation_t>;
+  compression_list = new vector<compression_method_t>;
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
   pixel_crop_list = new vector<pixel_crop_t>;
@@ -1326,7 +1326,7 @@ track_info_c::operator =(const track_info_c &src) {
   packet_delay = src.packet_delay;
   packet_delays = new vector<audio_sync_t>(*src.packet_delays);
 
-  compression_list = new vector<cue_creation_t>(*src.compression_list);
+  compression_list = new vector<compression_method_t>(*src.compression_list);
   compression = src.compression;
 
   track_names = new vector<language_t>(*src.track_names);

@@ -75,7 +75,7 @@ ac3_reader_c::create_packetizer(int64_t) {
          (int64_t)0);
 }
 
-file_status_t
+file_status_e
 ac3_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread;
@@ -83,14 +83,14 @@ ac3_reader_c::read(generic_packetizer_c *,
   nread = mm_io->read(chunk, 4096);
   if (nread <= 0) {
     PTZR0->flush();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
 
   memory_c mem(chunk, nread, false);
   PTZR0->process(mem);
   bytes_processed += nread;
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 int

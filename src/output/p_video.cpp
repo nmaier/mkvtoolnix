@@ -48,8 +48,8 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   frames_output = 0;
   bframes = nbframes;
   ref_timecode = -1;
-  if (get_cue_creation() == CUES_UNSPECIFIED)
-    set_cue_creation(CUES_IFRAMES);
+  if (get_cue_creation() ==  CUE_STRATEGY_UNSPECIFIED)
+    set_cue_creation( CUE_STRATEGY_IFRAMES);
   duration_shift = 0;
   bref_frame.type = '?';
   fref_frame.type = '?';
@@ -195,7 +195,7 @@ video_packetizer_c::process(memory_c &mem,
 
     debug_leave("video_packetizer_c::process");
 
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   }
 
   if (is_mpeg4 && !aspect_ratio_extracted)
@@ -227,7 +227,7 @@ video_packetizer_c::process(memory_c &mem,
 
   debug_leave("video_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 video_packetizer_c::~video_packetizer_c() {
@@ -344,7 +344,7 @@ video_packetizer_c::flush_frames(char next_frame,
     bref_frame.type = '?';
 }
 
-int
+connection_result_e
 video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   video_packetizer_c *vsrc;
 

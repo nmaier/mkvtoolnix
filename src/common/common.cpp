@@ -695,23 +695,24 @@ static vector<uint32_t> ru_numbers[4];
 static bool random_seeded = false;
 
 void
-clear_list_of_unique_uint32(int category) {
+clear_list_of_unique_uint32(unique_id_category_e category) {
   int i;
 
-  assert((category >= -1) && (category <= 3));
+  assert((category >= UNIQUE_ALL_IDS) && (category <= UNIQUE_ATTACHMENT_IDS));
   if (category == UNIQUE_ALL_IDS)
     for (i = 0; i < 4; i++)
-      clear_list_of_unique_uint32(i);
+      clear_list_of_unique_uint32((unique_id_category_e)i);
   else
     ru_numbers[category].clear();
 }
 
 bool
 is_unique_uint32(uint32_t number,
-                 int category) {
+                 unique_id_category_e category) {
   int i;
 
-  assert((category >= 0) && (category <= 3));
+  assert((category >= UNIQUE_TRACK_IDS) &&
+         (category <= UNIQUE_ATTACHMENT_IDS));
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
@@ -724,8 +725,9 @@ is_unique_uint32(uint32_t number,
 
 void
 add_unique_uint32(uint32_t number,
-                  int category) {
-  assert((category >= 0) && (category <= 3));
+                  unique_id_category_e category) {
+  assert((category >= UNIQUE_TRACK_IDS) &&
+         (category <= UNIQUE_ATTACHMENT_IDS));
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     ru_numbers[category].push_back(ru_numbers[category].size() + 1);
@@ -735,10 +737,11 @@ add_unique_uint32(uint32_t number,
 
 bool
 remove_unique_uint32(uint32_t number,
-                     int category) {
+                     unique_id_category_e category) {
   vector<uint32_t>::iterator dit;
 
-  assert((category >= 0) && (category <= 3));
+  assert((category >= UNIQUE_TRACK_IDS) &&
+         (category <= UNIQUE_ATTACHMENT_IDS));
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
@@ -752,10 +755,11 @@ remove_unique_uint32(uint32_t number,
 }
 
 uint32_t
-create_unique_uint32(int category) {
+create_unique_uint32(unique_id_category_e category) {
   uint32_t rnumber, half;
 
-  assert((category >= 0) && (category <= 3));
+  assert((category >= UNIQUE_TRACK_IDS) &&
+         (category <= UNIQUE_ATTACHMENT_IDS));
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
     ru_numbers[category].push_back(ru_numbers[category].size() + 1);

@@ -213,7 +213,7 @@ vorbis_packetizer_c::process(memory_c &mem,
   // If a negative sync value was used we may have to skip this packet.
   if (chosen_timecode < 0) {
     debug_leave("vorbis_packetizer_c::process");
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   }
 
   mxverb(2, "Vorbis: samples_here at %lld (orig %lld expected %lld): %lld "
@@ -224,7 +224,7 @@ vorbis_packetizer_c::process(memory_c &mem,
 
   debug_leave("vorbis_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -232,7 +232,7 @@ vorbis_packetizer_c::dump_debug_info() {
   mxdebug("vorbis_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
-int
+connection_result_e
 vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   vorbis_packetizer_c *vsrc;
 

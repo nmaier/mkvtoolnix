@@ -103,14 +103,14 @@ flac_packetizer_c::process(memory_c &mem,
              "and is being skipped.\n"), ti->fname.c_str(), (int64_t)ti->id,
            num_packets + 1);
     debug_leave("flac_packetizer_c::process");
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   }
   duration = duration * 1000000000ll / stream_info.sample_rate;
   add_packet(mem, timecode, duration);
   num_packets++;
   debug_leave("flac_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -118,7 +118,7 @@ flac_packetizer_c::dump_debug_info() {
   mxdebug("flac_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
-int
+connection_result_e
 flac_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   flac_packetizer_c *fsrc;
 

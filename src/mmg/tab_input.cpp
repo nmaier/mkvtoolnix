@@ -815,33 +815,33 @@ tab_input::add_file(const wxString &file_name) {
       info = output[i].Mid(pos + 11).AfterFirst(wxT('[')).
         BeforeLast(wxT(']'));
       if (container == wxT("AAC"))
-        file.container = TYPEAAC;
+        file.container = FILE_TYPE_AAC;
       else if (container == wxT("AC3"))
-        file.container = TYPEAC3;
+        file.container = FILE_TYPE_AC3;
       else if (container == wxT("AVI"))
-        file.container = TYPEAVI;
+        file.container = FILE_TYPE_AVI;
       else if (container == wxT("DTS"))
-        file.container = TYPEDTS;
+        file.container = FILE_TYPE_DTS;
       else if (container == wxT("Matroska"))
-        file.container = TYPEMATROSKA;
+        file.container = FILE_TYPE_MATROSKA;
       else if (container == wxT("MP2/MP3"))
-        file.container = TYPEMP3;
+        file.container = FILE_TYPE_MP3;
       else if (container == wxT("Ogg/OGM"))
-        file.container = TYPEOGM;
+        file.container = FILE_TYPE_OGM;
       else if (container == wxT("Quicktime/MP4"))
-        file.container = TYPEQTMP4;
+        file.container = FILE_TYPE_QTMP4;
       else if (container == wxT("RealMedia"))
-        file.container = TYPEREAL;
+        file.container = FILE_TYPE_REAL;
       else if (container == wxT("SRT"))
-        file.container = TYPESRT;
+        file.container = FILE_TYPE_SRT;
       else if (container == wxT("SSA/ASS"))
-        file.container = TYPESSA;
+        file.container = FILE_TYPE_SSA;
       else if (container == wxT("VobSub"))
-        file.container = TYPEVOBSUB;
+        file.container = FILE_TYPE_VOBSUB;
       else if (container == wxT("WAV"))
-        file.container = TYPEWAV;
+        file.container = FILE_TYPE_WAV;
       else
-        file.container = TYPEUNKNOWN;
+        file.container = FILE_TYPE_UNKNOWN;
 
       if (info.length() > 0) {
         args = split(info, wxU(" "));
@@ -871,7 +871,7 @@ tab_input::add_file(const wxString &file_name) {
 
   file.file_name = new wxString(file_name);
   mdlg->set_title_maybe(*file.title);
-  if ((file.container == TYPEOGM) &&
+  if ((file.container == FILE_TYPE_OGM) &&
       (video_track_name.length() > 0))
     mdlg->set_title_maybe(video_track_name);
   mdlg->set_output_maybe(*file.file_name);
@@ -1034,7 +1034,7 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   selected_track = -1;
   new_sel = lb_input_files->GetSelection();
   f = &files[new_sel];
-  if (f->container == TYPEMATROSKA) {
+  if (f->container == FILE_TYPE_MATROSKA) {
     st_file_options->Enable(true);
     cb_no_chapters->Enable(true);
     cb_no_attachments->Enable(true);

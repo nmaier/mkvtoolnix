@@ -153,20 +153,20 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
          (int64_t)0);
 }
 
-file_status_t
+file_status_e
 mpeg_es_reader_c::read(generic_packetizer_c *,
                        bool) {
   MPEGFrame *frame;
 
   if (!read_frame(m2v_parser, *mm_io)) {
     PTZR0->flush();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
 
   frame = m2v_parser.ReadFrame();
   if (!frame) {
     PTZR0->flush();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
 
   memory_c mem(frame->data, frame->size, true);
@@ -178,7 +178,7 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
 
   bytes_processed = mm_io->getFilePointer();
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 bool

@@ -115,8 +115,8 @@ find_dts_header(const unsigned char *buf,
   unsigned int t;
 
   bc.get_bits(1, t);
-  dts_header->frametype = (t)? dts_header_s::frametype_normal :
-    dts_header_s::frametype_termination;
+  dts_header->frametype = (t)? dts_header_s::FRAMETYPE_NORMAL :
+    dts_header_s::FRAMETYPE_TERMINATION;
 
   bc.get_bits(5, t);
   dts_header->deficit_sample_count = (t+1) % 32;
@@ -166,14 +166,14 @@ find_dts_header(const unsigned char *buf,
 
   bc.get_bits(3, t);
   dts_header->extension_audio_descriptor =
-    (dts_header_s::extension_audio_descriptor_enum)t;
+    (dts_header_s::extension_audio_descriptor_e)t;
 
   bc.get_bit(dts_header->extended_coding);
 
   bc.get_bit(dts_header->audio_sync_word_in_sub_sub);
 
   bc.get_bits(2, t);
-  dts_header->lfe_type = (dts_header_s::lfe_type_enum)t;
+  dts_header->lfe_type = (dts_header_s::lfe_type_e)t;
 
   bc.get_bit(dts_header->predictor_history_flag);
 
@@ -184,7 +184,7 @@ find_dts_header(const unsigned char *buf,
 
   bc.get_bits(1, t);
   dts_header->multirate_interpolator =
-    (dts_header_s::multirate_interpolator_enum)t;
+    (dts_header_s::multirate_interpolator_e)t;
 
   bc.get_bits(4, t);
   dts_header->encoder_software_revision = t;
@@ -263,7 +263,7 @@ print_dts_header(const struct dts_header_s *h) {
   mxinfo("DTS Frame Header Information:\n");
 
   mxinfo("Frame Type             : ");
-  if (h->frametype == dts_header_s::frametype_normal) {
+  if (h->frametype == dts_header_s::FRAMETYPE_NORMAL) {
     mxinfo("normal");
   } else {
     mxinfo("termination, deficit sample count = %u",
@@ -311,13 +311,13 @@ print_dts_header(const struct dts_header_s *h) {
   mxinfo("Extended Coding        : ");
   if (h->extended_coding) {
     switch (h->extension_audio_descriptor) {
-      case dts_header_s::extension_xch:
+      case dts_header_s::EXTENSION_XCH:
         mxinfo("Extra Channels");
         break;
-      case dts_header_s::extension_x96k:
+      case dts_header_s::EXTENSION_X96K:
         mxinfo("Extended frequency (x96k)");
         break;
-      case dts_header_s::extension_xch_x96k:
+      case dts_header_s::EXTENSION_XCH_X96K:
         mxinfo("Extra Channels and Extended frequency (x96k)");
         break;
       default:
@@ -333,16 +333,16 @@ print_dts_header(const struct dts_header_s *h) {
 
   mxinfo("Low Frequency Effects  : ");
   switch (h->lfe_type) {
-    case dts_header_s::lfe_none:
+    case dts_header_s::LFE_NONE:
       mxinfo("none");
       break;
-    case dts_header_s::lfe_128:
+    case dts_header_s::LFE_128:
       mxinfo("yes, interpolation factor 128");
       break;
-    case dts_header_s::lfe_64:
+    case dts_header_s::LFE_64:
       mxinfo("yes, interpolation factor 64");
       break;
-    case dts_header_s::lfe_invalid:
+    case dts_header_s::LFE_INVALID:
       mxinfo("Invalid");
       break;
   }
@@ -352,7 +352,7 @@ print_dts_header(const struct dts_header_s *h) {
          (h->predictor_history_flag)? "yes" : "no");
 
   mxinfo("Multirate Interpolator : %s\n",
-         (h->multirate_interpolator == dts_header_s::mi_non_perfect)?
+         (h->multirate_interpolator == dts_header_s::MI_NON_PERFECT)?
          "non perfect" : "perfect");
 
   mxinfo("Encoder Software Vers. : %u\n",

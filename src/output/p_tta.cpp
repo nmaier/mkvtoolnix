@@ -77,7 +77,7 @@ tta_packetizer_c::process(memory_c &mem,
 
   debug_leave("tta_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -85,7 +85,7 @@ tta_packetizer_c::dump_debug_info() {
   mxdebug("tta_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
-int
+connection_result_e
 tta_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   tta_packetizer_c *psrc;
 

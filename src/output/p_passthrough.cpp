@@ -62,7 +62,7 @@ passthrough_packetizer_c::process(memory_c &mem,
   if ((duration > 0) && needs_negative_displacement(duration)) {
     displace(-duration);
     sync_to_keyframe = true;
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   }
   if ((duration > 0) && needs_positive_displacement(duration) &&
       sync_complete_group) {
@@ -77,7 +77,7 @@ passthrough_packetizer_c::process(memory_c &mem,
   }
 
   if (sync_to_keyframe && (bref != -1))
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   sync_to_keyframe = false;
   timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
   duration = (int64_t)(duration * ti->async.linear);
@@ -88,7 +88,7 @@ passthrough_packetizer_c::process(memory_c &mem,
   add_packet(mem, timecode, duration, duration_mandatory, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -103,7 +103,7 @@ passthrough_packetizer_c::dump_debug_info() {
           packets_processed, bytes_processed, packet_queue.size());
 }
 
-int
+connection_result_e
 passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   passthrough_packetizer_c *psrc;
 

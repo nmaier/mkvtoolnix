@@ -68,7 +68,7 @@ public:
   real_reader_c(track_info_c *nti) throw (error_c);
   virtual ~real_reader_c();
 
-  virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false);
+  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual int get_progress();
   virtual void identify();
   virtual void create_packetizers();
@@ -81,7 +81,7 @@ protected:
   virtual void parse_headers();
   virtual real_demuxer_t *find_demuxer(int id);
   virtual void assemble_video_packet(real_demuxer_t *dmx, rmff_frame_t *frame);
-  virtual file_status_t finish();
+  virtual file_status_e finish();
   virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width,
                                  uint32_t &height);
   virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,

@@ -104,10 +104,10 @@ find_track(int tid) {
   return NULL;
 }
 
-char typenames[TYPEMAX + 1][20] =
+char typenames[FILE_TYPE_MAX + 1][20] =
   {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3", "chapter", "MicroDVD",
    "VobSub", "Matroska", "DTS", "AAC", "SSA/ASS", "RealMedia", "Quicktime/MP4",
-   "FLAC", "TTA"};
+   "FLAC", "TTA", "MPEG ES"};
 
 void
 usage() {

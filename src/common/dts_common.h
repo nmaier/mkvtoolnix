@@ -30,12 +30,12 @@ typedef struct dts_header_s {
 
   // ---------------------------------------------------
 
-  enum {
+  enum frametype_e {
     // Used to extremely precisely specify the end-of-stream (single PCM
     // sample resolution).
-    frametype_termination = 0,
+    FRAMETYPE_TERMINATION = 0,
 
-    frametype_normal
+    FRAMETYPE_NORMAL
   } frametype;
 
   // 0 for normal frames, 1 to 30 for termination frames. Number of PCM
@@ -81,15 +81,15 @@ typedef struct dts_header_s {
   // if true, the source material was mastered in HDCD format
   bool hdcd_master;
 
-  enum extension_audio_descriptor_enum {
-    extension_xch = 0,          // channel extension
-    extension_unknown1,
-    extension_x96k,             // frequency extension
-    extension_xch_x96k,         // both channel and frequency extension
-    extension_unknown4,
-    extension_unknown5,
-    extension_unknown6,
-    extension_unknown7
+  enum extension_audio_descriptor_e {
+    EXTENSION_XCH = 0,          // channel extension
+    EXTENSION_UNKNOWN1,
+    EXTENSION_X96K,             // frequency extension
+    EXTENSION_XCH_X96K,         // both channel and frequency extension
+    EXTENSION_UNKNOWN4,
+    EXTENSION_UNKNOWN5,
+    EXTENSION_UNKNOWN6,
+    EXTENSION_UNKNOWN7
   } extension_audio_descriptor; // significant only if extended_coding == true
 
   // if true, extended coding data is placed after the core audio data
@@ -99,13 +99,13 @@ typedef struct dts_header_s {
   // rather than in each sub-frame, only
   bool audio_sync_word_in_sub_sub;
 
-  enum lfe_type_enum {
-    lfe_none,
-    lfe_128, // 128 indicates the interpolation factor to reconstruct the
+  enum lfe_type_e {
+    LFE_NONE,
+    LFE_128, // 128 indicates the interpolation factor to reconstruct the
              // LFE channel
-    lfe_64,  //  64 indicates the interpolation factor to reconstruct the
+    LFE_64,  //  64 indicates the interpolation factor to reconstruct the
              // LFE channel
-    lfe_invalid
+    LFE_INVALID
   } lfe_type;
 
   // if true, past frames will be used to predict ADPCM values for the
@@ -114,9 +114,9 @@ typedef struct dts_header_s {
   bool predictor_history_flag;
 
   // which FIR coefficients to use for sub-band reconstruction
-  enum multirate_interpolator_enum {
-    mi_non_perfect,
-    mi_perfect
+  enum multirate_interpolator_e {
+    MI_NON_PERFECT,
+    MI_PERFECT
   } multirate_interpolator;
 
   // 0 to 15
@@ -153,7 +153,7 @@ inline int get_dts_packet_length_in_core_samples(const struct dts_header_s
   int r;
 
   r = dts_header->num_pcm_sample_blocks * 32;
-  if (dts_header->frametype == dts_header_s::frametype_termination)
+  if (dts_header->frametype == dts_header_s::FRAMETYPE_TERMINATION)
     r -= dts_header->deficit_sample_count;
 
   return r;

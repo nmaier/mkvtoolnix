@@ -217,7 +217,7 @@ mp3_packetizer_c::process(memory_c &mem,
 
   debug_leave("mp3_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -226,7 +226,7 @@ mp3_packetizer_c::dump_debug_info() {
           packet_queue.size(), byte_buffer.get_size());
 }
 
-int
+connection_result_e
 mp3_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   mp3_packetizer_c *msrc;
 

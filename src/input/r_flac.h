@@ -51,7 +51,7 @@ public:
   flac_reader_c(track_info_c *nti) throw (error_c);
   virtual ~flac_reader_c();
 
-  virtual file_status_t read(generic_packetizer_c *ptzr, bool force = false);
+  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 

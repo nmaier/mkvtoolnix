@@ -15,7 +15,7 @@
 
 #include "compression.h"
 
-const char *compression_schemes[] = {
+const char *compression_methods[] = {
   "unspecified", "zlib", "bz2", "lzo", "none"
 };
 
@@ -245,32 +245,32 @@ compression_c::~compression_c() {
 }
 
 compression_c *
-compression_c::create(int scheme) {
-  if ((scheme <= COMPRESSION_UNSPECIFIED) ||
-      (scheme > COMPRESSION_NUM))
+compression_c::create(compression_method_e method) {
+  if ((method <= COMPRESSION_UNSPECIFIED) ||
+      (method > COMPRESSION_NUM))
     return NULL;
 
-  return create(compression_schemes[scheme]);
+  return create(compression_methods[method]);
 }
 
 compression_c *
-compression_c::create(const char *scheme) {
+compression_c::create(const char *method) {
 #if defined(HAVE_LZO1X_H)
-  if (!strcasecmp(scheme, compression_schemes[COMPRESSION_LZO]))
+  if (!strcasecmp(method, compression_methods[COMPRESSION_LZO]))
     return new lzo_compression_c();
 #endif // HAVE_LZO1X_H
 
 #if defined(HAVE_ZLIB_H)
-  if (!strcasecmp(scheme, compression_schemes[COMPRESSION_ZLIB]))
+  if (!strcasecmp(method, compression_methods[COMPRESSION_ZLIB]))
     return new zlib_compression_c();
 #endif // HAVE_ZLIB_H
 
 #if defined(HAVE_BZLIB_H)
-  if (!strcasecmp(scheme, compression_schemes[COMPRESSION_BZ2]))
+  if (!strcasecmp(method, compression_methods[COMPRESSION_BZ2]))
     return new bzlib_compression_c();
 #endif // HAVE_BZLIB_H
 
-  if (!strcasecmp(scheme, "none"))
+  if (!strcasecmp(method, "none"))
     return new compression_c(COMPRESSION_NONE);
 
   return NULL;

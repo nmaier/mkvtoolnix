@@ -174,7 +174,7 @@ check_output_files() {
                    tracks[i].tid);
             continue;
           }
-          tracks[i].type = TYPEAVI;
+          tracks[i].type = FILE_TYPE_AVI;
 
         } else if (!strncmp(tracks[i].codec_id, "V_REAL/", 7)) {
           if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
@@ -185,7 +185,7 @@ check_output_files() {
                    tracks[i].tid);
             continue;
           }
-          tracks[i].type = TYPEREAL;
+          tracks[i].type = FILE_TYPE_REAL;
 
         } else {
           mxwarn(_("The extraction of video tracks is only supported for "
@@ -202,7 +202,7 @@ check_output_files() {
           tracks[i].a_channels = 1;
 
         if (!strcmp(tracks[i].codec_id, MKV_A_VORBIS)) {
-          tracks[i].type = TYPEOGM; // Yeah, I know, I know...
+          tracks[i].type = FILE_TYPE_OGM; // Yeah, I know, I know...
           if (tracks[i].private_data == NULL) {
             mxwarn(_("Track ID %lld is missing some critical "
                      "information. The track will be skipped.\n"),
@@ -250,11 +250,11 @@ check_output_files() {
             offset - tracks[i].header_sizes[0] - tracks[i].header_sizes[1];
 
         } else if (!strncmp(tracks[i].codec_id, MKV_A_MP3, 8))
-          tracks[i].type = TYPEMP3;
+          tracks[i].type = FILE_TYPE_MP3;
         else if (!strcmp(tracks[i].codec_id, MKV_A_AC3))
-          tracks[i].type = TYPEAC3;
+          tracks[i].type = FILE_TYPE_AC3;
         else if (!strcmp(tracks[i].codec_id, MKV_A_PCM)) {
-          tracks[i].type = TYPEWAV; // Yeah, I know, I know...
+          tracks[i].type = FILE_TYPE_WAV; // Yeah, I know, I know...
           if (tracks[i].a_bps == 0) {
             mxwarn(_("Track ID %lld is missing some critical "
                      "information. The track will be skipped.\n"),
@@ -321,7 +321,7 @@ check_output_files() {
           else
             tracks[i].aac_srate_idx = 11;
 
-          tracks[i].type = TYPEAAC;
+          tracks[i].type = FILE_TYPE_AAC;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_DTS)) {
           mxwarn(_("Extraction of DTS is not supported - yet. "
@@ -337,7 +337,7 @@ check_output_files() {
             continue;
           }
 
-          tracks[i].type = TYPEFLAC;
+          tracks[i].type = FILE_TYPE_FLAC;
 
         } else if (!strncmp(tracks[i].codec_id, "A_REAL/", 7)) {
           if ((tracks[i].private_data == NULL) ||
@@ -348,7 +348,7 @@ check_output_files() {
             continue;
           }
 
-          tracks[i].type = TYPEREAL;
+          tracks[i].type = FILE_TYPE_REAL;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_TTA)) {
           if (tracks[i].a_bps == 0) {
@@ -358,7 +358,7 @@ check_output_files() {
             continue;
           }
 
-          tracks[i].type = TYPETTA;
+          tracks[i].type = FILE_TYPE_TTA;
 
         } else {
           mxwarn(_("Unsupported CodecID '%s' for ID %lld. "
@@ -370,12 +370,12 @@ check_output_files() {
       } else if (tracks[i].track_type == 's') {
         if (!strcmp(tracks[i].codec_id, MKV_S_TEXTUTF8) ||
             !strcmp(tracks[i].codec_id, MKV_S_TEXTASCII))
-          tracks[i].type = TYPESRT;
+          tracks[i].type = FILE_TYPE_SRT;
         else if (!strcmp(tracks[i].codec_id, MKV_S_TEXTSSA) ||
                  !strcmp(tracks[i].codec_id, MKV_S_TEXTASS) ||
                  !strcmp(tracks[i].codec_id, "S_SSA") ||
                  !strcmp(tracks[i].codec_id, "S_ASS"))
-          tracks[i].type = TYPESSA;
+          tracks[i].type = FILE_TYPE_SSA;
         else {
           mxwarn(_("Unsupported CodecID '%s' for ID %lld. "
                    "The track will be skipped.\n"), tracks[i].codec_id,
@@ -412,7 +412,7 @@ create_output_files() {
   // RIGHT NOW! Or I'll go insane...
   for (i = 0; i < tracks.size(); i++) {
     if (tracks[i].in_use) {
-      if (tracks[i].type == TYPEAVI) {
+      if (tracks[i].type == FILE_TYPE_AVI) {
         alBITMAPINFOHEADER *bih;
         char ccodec[5];
         string writing_app;
@@ -435,7 +435,7 @@ create_output_files() {
         mxinfo(_("Track ID %lld is being extracted to an AVI file '%s'.\n"),
                tracks[i].tid, tracks[i].out_name);
 
-      } else if (tracks[i].type == TYPEREAL) {
+      } else if (tracks[i].type == FILE_TYPE_REAL) {
         rmff_file_t *file;
 
         file = open_rmff_file(tracks[i].out_name);
@@ -453,7 +453,7 @@ create_output_files() {
           rmff_set_track_data(tracks[i].rmtrack, "Audio",
                               "audio/x-pn-realaudio");
 
-      } else if (tracks[i].type == TYPETTA) {
+      } else if (tracks[i].type == FILE_TYPE_TTA) {
         string dummy_out_name;
 
         try {
@@ -480,7 +480,7 @@ create_output_files() {
                tracks[i].tid, typenames[tracks[i].type],
                tracks[i].out_name);
 
-        if (tracks[i].type == TYPEOGM) {
+        if (tracks[i].type == FILE_TYPE_OGM) {
           ogg_packet op;
 
           if (no_variable_data)
@@ -510,7 +510,7 @@ create_output_files() {
           flush_ogg_pages(tracks[i]);
           tracks[i].packetno = 3;
 
-        } else if (tracks[i].type == TYPEWAV) {
+        } else if (tracks[i].type == FILE_TYPE_WAV) {
           wave_header *wh = &tracks[i].wh;
 
           // Write the WAV header.
@@ -530,11 +530,11 @@ create_output_files() {
 
           tracks[i].out->write(wh, sizeof(wave_header));
 
-        }  else if (tracks[i].type == TYPESRT) {
+        }  else if (tracks[i].type == FILE_TYPE_SRT) {
           tracks[i].srt_num = 1;
           tracks[i].out->write_bom(tracks[i].sub_charset);
 
-        } else if (tracks[i].type == TYPESSA) {
+        } else if (tracks[i].type == FILE_TYPE_SSA) {
           char *s, *p1;
           unsigned char *pd;
           int bom_len;
@@ -585,7 +585,7 @@ create_output_files() {
           sconv = from_utf8(tracks[i].conv_handle, sconv);
           tracks[i].out->puts_unl(sconv);
 
-        } else if (tracks[i].type == TYPEFLAC) {
+        } else if (tracks[i].type == FILE_TYPE_FLAC) {
           if (!tracks[i].embed_in_ogg)
             tracks[i].out->write(tracks[i].private_data,
                                  tracks[i].private_size);
@@ -659,7 +659,7 @@ handle_data(KaxBlock *block,
   for (i = 0; i < block->NumberFrames(); i++) {
     DataBuffer &data = block->GetBuffer(i);
     switch (track->type) {
-      case TYPEAVI:
+      case FILE_TYPE_AVI:
         AVI_write_frame(track->avi, (char *)data.Buffer(), data.Size(),
                         has_ref ? 0 : 1);
         if (iabs(block_duration / 1000000 -
@@ -670,7 +670,7 @@ handle_data(KaxBlock *block,
         }
         break;
 
-      case TYPEOGM:
+      case FILE_TYPE_OGM:
         if (track->buffered_data != NULL) {
           ogg_packet op;
 
@@ -695,7 +695,7 @@ handle_data(KaxBlock *block,
 
         break;
 
-      case TYPESRT:
+      case FILE_TYPE_SRT:
         if ((end == start) && !track->warning_printed) {
           mxwarn(_("Subtitle track %lld is missing some duration elements. "
                    "Please check the resulting SRT file for entries that "
@@ -741,7 +741,7 @@ handle_data(KaxBlock *block,
         safefree(s);
         break;
 
-      case TYPESSA:
+      case FILE_TYPE_SSA:
         if ((end == start) && !track->warning_printed) {
           mxwarn(_("Subtitle track %lld is missing some duration elements. "
                    "Please check the resulting SSA/ASS file for entries that "
@@ -825,7 +825,7 @@ handle_data(KaxBlock *block,
 
         break;
 
-      case TYPEAAC:
+      case FILE_TYPE_AAC:
         // Recreate the ADTS headers. What a fun. Like runing headlong into
         // a solid wall. But less painful. Well such is life, you know.
         // But then again I've just seen a beautiful girl walking by my
@@ -884,7 +884,7 @@ handle_data(KaxBlock *block,
 
         break;
 
-      case TYPEFLAC:
+      case FILE_TYPE_FLAC:
         if (track->embed_in_ogg) {
           if (track->buffered_data != NULL) {
             ogg_packet op;
@@ -914,7 +914,7 @@ handle_data(KaxBlock *block,
 
         break;
 
-      case TYPEREAL:
+      case FILE_TYPE_REAL:
         rmf_frame = rmff_allocate_frame(data.Size(), data.Buffer());
         if (rmf_frame == NULL)
           mxerror(_("Memory for a RealAudio/RealVideo frame could not be "
@@ -929,7 +929,7 @@ handle_data(KaxBlock *block,
         rmff_release_frame(rmf_frame);
         break;
 
-      case TYPETTA:
+      case FILE_TYPE_TTA:
         track->frame_sizes.push_back(data.Size());
         if (block_duration > 0)
           track->last_duration = block_duration;
@@ -957,11 +957,11 @@ close_files() {
   for (i = 0; i < tracks.size(); i++) {
     if (tracks[i].in_use) {
       switch (tracks[i].type) {
-        case TYPEAVI:
+        case FILE_TYPE_AVI:
           AVI_close(tracks[i].avi);
           break;
 
-        case TYPEOGM:
+        case FILE_TYPE_OGM:
           // Set the "end of stream" marker on the last packet, handle it
           // and flush all remaining Ogg pages.
           op.b_o_s = 0;
@@ -980,7 +980,7 @@ close_files() {
 
           break;
 
-        case TYPEFLAC:
+        case FILE_TYPE_FLAC:
           if (tracks[i].embed_in_ogg) {
             // Set the "end of stream" marker on the last packet, handle it
             // and flush all remaining Ogg pages.
@@ -1001,7 +1001,7 @@ close_files() {
 
           break;
 
-        case TYPEWAV:
+        case FILE_TYPE_WAV:
           // Fix the header with the real number of bytes written.
           tracks[i].out->setFilePointer(0);
           put_uint32(&tracks[i].wh.riff.len, tracks[i].bytes_written + 36);
@@ -1011,7 +1011,7 @@ close_files() {
 
           break;
 
-        case TYPESSA:
+        case FILE_TYPE_SSA:
           // Sort the SSA lines according to their ReadOrder number and
           // write them.
           sort(tracks[i].ssa_lines.begin(), tracks[i].ssa_lines.end());
@@ -1023,7 +1023,7 @@ close_files() {
 
           break;
 
-        case TYPETTA: {
+        case FILE_TYPE_TTA: {
           mm_io_c *temp_file;
           tta_file_header_t tta_header;
           unsigned char *buffer;

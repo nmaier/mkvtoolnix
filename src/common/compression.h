@@ -19,29 +19,31 @@
 #include "common.h"
 
 /* compression types */
-#define COMPRESSION_UNSPECIFIED   0
-#define COMPRESSION_ZLIB          1
-#define COMPRESSION_BZ2           2
-#define COMPRESSION_LZO           3
-#define COMPRESSION_NONE          4
-#define COMPRESSION_NUM           4
+enum compression_method_e {
+  COMPRESSION_UNSPECIFIED = 0,
+  COMPRESSION_ZLIB,
+  COMPRESSION_BZ2,
+  COMPRESSION_LZO,
+  COMPRESSION_NONE,
+  COMPRESSION_NUM = COMPRESSION_NONE
+};
 
-extern const char *MTX_DLL_API xcompression_schemes[];
+extern const char *MTX_DLL_API xcompression_methods[];
 
 class MTX_DLL_API compression_c {
 protected:
-  int scheme;
+  compression_method_e method;
   int64_t raw_size, compressed_size, items;
 
 public:
-  compression_c(int nscheme):
-    scheme(nscheme), raw_size(0), compressed_size(0), items(0) {
+  compression_c(compression_method_e _method):
+    method(_method), raw_size(0), compressed_size(0), items(0) {
   };
 
   virtual ~compression_c();
 
-  int get_scheme() {
-    return scheme;
+  compression_method_e get_method() {
+    return method;
   };
 
   virtual unsigned char *decompress(unsigned char *buffer, int &size) {
@@ -52,8 +54,8 @@ public:
     return (unsigned char *)safememdup(buffer, size);
   };
 
-  static compression_c *create(int scheme);
-  static compression_c *create(const char *scheme);
+  static compression_c *create(compression_method_e method);
+  static compression_c *create(const char *method);
 };
 
 #if defined(HAVE_LZO1X_H)

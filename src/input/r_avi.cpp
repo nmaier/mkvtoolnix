@@ -376,7 +376,7 @@ avi_reader_c::is_keyframe(unsigned char *data,
 
 // {{{ FUNCTION avi_reader_c::read
 
-file_status_t
+file_status_e
 avi_reader_c::read(generic_packetizer_c *ptzr,
                    bool force) {
   vector<avi_demuxer_t>::const_iterator demuxer;
@@ -474,10 +474,10 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
     debug_leave("avi_reader_c::read (video)");
 
     if (need_more_data)
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
     else {
       PTZR(vptzr)->flush();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     }
   }
 
@@ -515,14 +515,14 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
     debug_leave("avi_reader_c::read (audio)");
 
     if (need_more_data)
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
     else {
       PTZR(demuxer->ptzr)->flush();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     }
   }
 
-  return file_status_done;
+  return FILE_STATUS_DONE;
 }
 
 // }}}

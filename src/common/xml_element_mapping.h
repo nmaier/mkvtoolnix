@@ -24,15 +24,15 @@ using namespace libebml;
 
 typedef void (*parser_element_callback_t)(void *pdata);
 
-enum ebml_type_t {ebmlt_master, ebmlt_int, ebmlt_uint, ebmlt_bool,
-                  ebmlt_string, ebmlt_ustring, ebmlt_time, ebmlt_binary};
+enum ebml_type_e {EBMLT_MASTER, EBMLT_INT, EBMLT_UINT, EBMLT_BOOL,
+                  EBMLT_STRING, EBMLT_USTRING, EBMLT_TIME, EBMLT_BINARY};
 
 #define NO_MIN_VALUE -9223372036854775807ll-1
 #define NO_MAX_VALUE 9223372036854775807ll
 
 typedef struct {
   const char *name;
-  ebml_type_t type;
+  ebml_type_e type;
   int level;
   int64_t min_value;
   int64_t max_value;

@@ -509,13 +509,13 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     else if (write_cues && !added_to_cues) {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
-      if (((source->get_cue_creation() == CUES_IFRAMES) && (pack->bref == -1))
+      if (((source->get_cue_creation() ==  CUE_STRATEGY_IFRAMES) && (pack->bref == -1))
           ||
           // ... or if the user requested entries for all frames ...
-          (source->get_cue_creation() == CUES_ALL) ||
+          (source->get_cue_creation() ==  CUE_STRATEGY_ALL) ||
           // ... or if this is an audio track, there is no video track and the
           // last cue entry was created more than 2s ago.
-          ((source->get_cue_creation() == CUES_SPARSE) &&
+          ((source->get_cue_creation() ==  CUE_STRATEGY_SPARSE) &&
            (source->get_track_type() == track_audio) &&
            (video_packetizer == NULL) &&
            ((source->get_last_cue_timecode() < 0) ||

@@ -50,68 +50,68 @@ init_mapping_table(parser_element_t *table) {
 void
 xml_element_map_init() {
   static parser_element_t _chapter_elements[] = {
-    {"Chapters", ebmlt_master, 0, 0, 0, no_id, NULL, NULL, NULL},
+    {"Chapters", EBMLT_MASTER, 0, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"EditionEntry", ebmlt_master, 1, 0, 0, no_id, NULL, NULL, NULL},
-    {"EditionUID", ebmlt_uint, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
-    {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, no_id, NULL, NULL, NULL},
-    {"EditionProcessed", ebmlt_uint, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"EditionEntry", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
+    {"EditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
+    {"EditionFlagHidden", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
+    {"EditionProcessed", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      NULL},
-    {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, no_id, NULL, NULL, NULL},
+    {"EditionFlagDefault", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"ChapterAtom", ebmlt_master, 2, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
-    {"ChapterTimeStart", ebmlt_time, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterTimeEnd", ebmlt_time, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterFlagHidden", ebmlt_bool, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterFlagEnabled", ebmlt_bool, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterProcessedPrivate", ebmlt_binary, 3, 0, 0, no_id, NULL, NULL,
+    {"ChapterAtom", EBMLT_MASTER, 2, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
+    {"ChapterTimeStart", EBMLT_TIME, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterTimeEnd", EBMLT_TIME, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterFlagHidden", EBMLT_BOOL, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterFlagEnabled", EBMLT_BOOL, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessedPrivate", EBMLT_BINARY, 3, 0, 0, no_id, NULL, NULL,
      NULL},
-    {"ChapterPhysicalEquiv", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL,
+    {"ChapterPhysicalEquiv", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL,
      NULL, NULL},
 
-    {"ChapterProcess", ebmlt_master, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterProcessTime", ebmlt_uint, 4, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterProcessCommand", ebmlt_binary, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcess", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessTime", EBMLT_UINT, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessCommand", EBMLT_BINARY, 4, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"ChapterTrack", ebmlt_master, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"ChapterTrack", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterTrackNumber", EBMLT_UINT, 4, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      NULL},
 
-    {"ChapterDisplay", ebmlt_master, 3, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterString", ebmlt_ustring, 4, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterLanguage", ebmlt_string, 4, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterCountry", ebmlt_string, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterDisplay", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterString", EBMLT_USTRING, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterLanguage", EBMLT_STRING, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterCountry", EBMLT_STRING, 4, 0, 0, no_id, NULL, NULL, NULL},
 
-    {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
+    {NULL, EBMLT_MASTER, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
   };
 
   static parser_element_t _tag_elements[] = {
-    {"Tags", ebmlt_master, 0, 0, 0, no_id, NULL, NULL, NULL},
+    {"Tags", EBMLT_MASTER, 0, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"Tag", ebmlt_master, 1, 0, 0, no_id, NULL, NULL, NULL},
+    {"Tag", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"Targets", ebmlt_master, 2, 0, 0, no_id, NULL, NULL, "TagTargets"},
-    {"TrackUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"Targets", EBMLT_MASTER, 2, 0, 0, no_id, NULL, NULL, "TagTargets"},
+    {"TrackUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      "TagTrackUID"},
-    {"EditionUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"EditionUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      "TagEditionUID"},
-    {"ChapterUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"ChapterUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      "TagChapterUID"},
-    {"AttachmentUID", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"AttachmentUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      "TagAttachmentUID"},
-    {"TargetType", ebmlt_string, 3, 0, 0, no_id, NULL, NULL, "TagTargetType"},
-    {"TargetTypeValue", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
+    {"TargetType", EBMLT_STRING, 3, 0, 0, no_id, NULL, NULL, "TagTargetType"},
+    {"TargetTypeValue", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      "TagTargetTypeValue"},
 
-    {"Simple", ebmlt_master, 2, 0, 0, no_id, NULL, NULL, "TagSimple"},
-    {"Name", ebmlt_ustring, 3, 0, 0,  no_id, NULL, NULL, "TagName"},
-    {"String", ebmlt_ustring, 3, 0, 0, no_id, NULL, NULL, "TagString"},
-    {"Binary", ebmlt_binary, 3, 0, 0, no_id, NULL, NULL, "TagBinary"},
-    {"TagLanguage", ebmlt_string, 3, 0, 0, no_id, NULL, NULL, "TagLanguage"},
-    {"DefaultLanguage", ebmlt_bool, 3, 0, 1, no_id, NULL, NULL, "TagDefault"},
+    {"Simple", EBMLT_MASTER, 2, 0, 0, no_id, NULL, NULL, "TagSimple"},
+    {"Name", EBMLT_USTRING, 3, 0, 0,  no_id, NULL, NULL, "TagName"},
+    {"String", EBMLT_USTRING, 3, 0, 0, no_id, NULL, NULL, "TagString"},
+    {"Binary", EBMLT_BINARY, 3, 0, 0, no_id, NULL, NULL, "TagBinary"},
+    {"TagLanguage", EBMLT_STRING, 3, 0, 0, no_id, NULL, NULL, "TagLanguage"},
+    {"DefaultLanguage", EBMLT_BOOL, 3, 0, 1, no_id, NULL, NULL, "TagDefault"},
 
-    {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
+    {NULL, EBMLT_MASTER, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
   };
 
   chapter_elements = _chapter_elements;

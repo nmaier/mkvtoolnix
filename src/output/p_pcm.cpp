@@ -103,7 +103,7 @@ pcm_packetizer_c::process(memory_c &mem,
   if (skip_bytes) {
     if (skip_bytes > mem.size) {
       skip_bytes -= mem.size;
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
     }
     mem.size -= skip_bytes;
     new_buf = &mem.data[skip_bytes];
@@ -123,7 +123,7 @@ pcm_packetizer_c::process(memory_c &mem,
 
   debug_leave("pcm_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -145,7 +145,7 @@ pcm_packetizer_c::dump_debug_info() {
   mxdebug("pcm_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
-int
+connection_result_e
 pcm_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   pcm_packetizer_c *psrc;
 

@@ -50,7 +50,7 @@ public:
   virtual const char *get_format_name() {
     return "DTS";
   }
-  virtual int can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
 
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);

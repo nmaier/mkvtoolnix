@@ -176,7 +176,7 @@ wav_reader_c::create_packetizer(int64_t) {
   }
 }
 
-file_status_t
+file_status_e
 wav_reader_c::read(generic_packetizer_c *,
                    bool) {
   if (!is_dts) {
@@ -185,7 +185,7 @@ wav_reader_c::read(generic_packetizer_c *,
     nread = mm_io->read(chunk, bps);
     if (nread <= 0) {
       PTZR0->flush();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     }
 
     memory_c mem(chunk, nread, false);
@@ -195,11 +195,11 @@ wav_reader_c::read(generic_packetizer_c *,
 
     if (nread != bps) {
       PTZR0->flush();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     } else if (mm_io->eof())
-      return file_status_done;
+      return FILE_STATUS_DONE;
     else
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
   }
 
   if (is_dts) {
@@ -209,7 +209,7 @@ wav_reader_c::read(generic_packetizer_c *,
 
     if (rlen <= 0) {
       PTZR0->flush();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     }
 
     if (dts_swap_bytes) {
@@ -235,12 +235,12 @@ wav_reader_c::read(generic_packetizer_c *,
 
     if (rlen != max_dts_packet_size) {
       PTZR0->flush();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     } else
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
   }
 
-  return file_status_done;
+  return FILE_STATUS_DONE;
 }
 
 int

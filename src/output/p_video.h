@@ -54,7 +54,7 @@ public:
   virtual const char *get_format_name() {
     return "video";
   }
-  virtual int can_connect_to(generic_packetizer_c *src);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src);
 
 protected:
   virtual void flush_frames(char next_frame = '?', bool flush_all = false);

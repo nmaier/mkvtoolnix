@@ -164,7 +164,7 @@ job_run_dialog::start_next_job() {
                               "mkvmerge's command line option called '%s"
                               "' (error code %d, %s)."), opt_file_name.c_str(),
                           errno, wxUCS(strerror(errno)));
-    jobs[ndx].status = jobs_failed;
+    jobs[ndx].status = JOBS_FAILED;
     mdlg->save_job_queue();
     if (process != NULL) {
       delete process;
@@ -281,16 +281,16 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
   ndx = jobs_to_start[current_job];
   exit_code = evt.GetExitCode();
   if (abort) {
-    jobs[ndx].status = jobs_aborted;
+    jobs[ndx].status = JOBS_ABORTED;
     status = "aborted";
   } else if (exit_code == 0) {
-    jobs[ndx].status = jobs_done;
+    jobs[ndx].status = JOBS_DONE;
     status = "completed OK";
   } else if (exit_code == 1) {
-    jobs[ndx].status = jobs_done_warnings;
+    jobs[ndx].status = JOBS_DONE_WARNINGS;
     status = "completed with warnings";
   } else {
-    jobs[ndx].status = jobs_failed;
+    jobs[ndx].status = JOBS_FAILED;
     status = "failed";
   }
   jobs[ndx].finished_on = time(NULL);
@@ -488,10 +488,10 @@ job_dialog::create_list_item(int i) {
   dummy = lv_jobs->InsertItem(i, s);
 
   s.Printf(wxT("%s"),
-           jobs[i].status == jobs_pending ? wxT("pending") :
-           jobs[i].status == jobs_done ? wxT("done") :
-           jobs[i].status == jobs_done_warnings ? wxT("done/warnings") :
-           jobs[i].status == jobs_aborted ? wxT("aborted") :
+           jobs[i].status == JOBS_PENDING ? wxT("pending") :
+           jobs[i].status == JOBS_DONE ? wxT("done") :
+           jobs[i].status == JOBS_DONE_WARNINGS ? wxT("done/warnings") :
+           jobs[i].status == JOBS_ABORTED ? wxT("aborted") :
            wxT("failed"));
   lv_jobs->SetItem(dummy, 1, s);
 
@@ -532,7 +532,7 @@ job_dialog::on_start(wxCommandEvent &evt) {
   vector<int> jobs_to_start;
 
   for (i = 0; i < jobs.size(); i++)
-    if (jobs[i].status == jobs_pending)
+    if (jobs[i].status == JOBS_PENDING)
       jobs_to_start.push_back(i);
   if (jobs_to_start.size() == 0)
     return;
@@ -669,7 +669,7 @@ job_dialog::on_reenable(wxCommandEvent &evt) {
     item = lv_jobs->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     if (item == -1)
       break;
-    jobs[item].status = jobs_pending;
+    jobs[item].status = JOBS_PENDING;
     lv_jobs->SetItem(item, 1, wxT("pending"));
   }
 
@@ -685,7 +685,7 @@ job_dialog::on_disable(wxCommandEvent &evt) {
     item = lv_jobs->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     if (item == -1)
       break;
-    jobs[item].status = jobs_done;
+    jobs[item].status = JOBS_DONE;
     lv_jobs->SetItem(item, 1, wxT("done"));
   }
 

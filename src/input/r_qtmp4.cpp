@@ -855,7 +855,7 @@ qtmp4_reader_c::handle_header_atoms(uint32_t parent,
   io->setFilePointer(target_pos);
 }
 
-file_status_t
+file_status_e
 qtmp4_reader_c::read(generic_packetizer_c *ptzr,
                      bool force) {
   uint32_t i, k, frame, frame_size;
@@ -920,7 +920,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         safefree(buffer);
         flush_packetizers();
 
-        return file_status_done;
+        return FILE_STATUS_DONE;
       }
 
       if ((dmx->pos + 1) < dmx->chunk_table_len)
@@ -984,7 +984,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
           safefree(buffer);
           flush_packetizers();
 
-          return file_status_done;
+          return FILE_STATUS_DONE;
         }
         frame_size += dmx->esds.decoder_config_len;
       } else {
@@ -997,7 +997,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
           safefree(buffer);
           flush_packetizers();
 
-          return file_status_done;
+          return FILE_STATUS_DONE;
         }
       }
 
@@ -1010,16 +1010,16 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
     }
 
     if (chunks_left)
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
     else {
       flush_packetizers();
-      return file_status_done;
+      return FILE_STATUS_DONE;
     }
   }
 
   flush_packetizers();
 
-  return file_status_done;
+  return FILE_STATUS_DONE;
 }
 
 uint32_t

@@ -167,8 +167,8 @@ void
 dts_packetizer_c::set_headers() {
   set_codec_id(MKV_A_DTS);
   set_audio_sampling_freq((float)first_header.core_sampling_frequency);
-  if ((first_header.lfe_type == dts_header_t::lfe_64) ||
-      (first_header.lfe_type == dts_header_t::lfe_128))
+  if ((first_header.lfe_type == dts_header_t::LFE_64) ||
+      (first_header.lfe_type == dts_header_t::LFE_128))
     set_audio_channels(first_header.audio_channels + 1);
   else
     set_audio_channels(first_header.audio_channels);
@@ -214,7 +214,7 @@ dts_packetizer_c::process(memory_c &mem,
 
   debug_leave("dts_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -222,7 +222,7 @@ dts_packetizer_c::dump_debug_info() {
   mxdebug("dts_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
-int
+connection_result_e
 dts_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   dts_packetizer_c *dsrc;
 

@@ -1492,8 +1492,8 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
          (t->v_pcright > 0) || (t->v_pcbottom > 0)))
       ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
                                      t->v_pcright, t->v_pcbottom);
-    if (ptzr->get_cue_creation() == CUES_UNSPECIFIED)
-      ptzr->set_cue_creation(CUES_IFRAMES);
+    if (ptzr->get_cue_creation() ==  CUE_STRATEGY_UNSPECIFIED)
+      ptzr->set_cue_creation( CUE_STRATEGY_IFRAMES);
 
   } else if (t->type == 'a') {
     ptzr->set_audio_sampling_freq(t->a_sfreq);
@@ -1796,7 +1796,7 @@ kax_reader_c::create_packetizers() {
 
 // {{{ FUNCTION kax_reader_c::read()
 
-file_status_t
+file_status_e
 kax_reader_c::read(generic_packetizer_c *,
                    bool force) {
   int upper_lvl_el, i, bgidx;
@@ -1812,15 +1812,15 @@ kax_reader_c::read(generic_packetizer_c *,
   bool found_cluster, bref_found, fref_found;
 
   if (tracks.size() == 0)
-    return file_status_done;
+    return FILE_STATUS_DONE;
 
   l0 = segment;
 
   if (saved_l1 == NULL)         // We're done.
-    return file_status_done;
+    return FILE_STATUS_DONE;
 
   if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
-    return file_status_holding;
+    return FILE_STATUS_HOLDING;
 
   debug_enter("kax_reader_c::read");
 
@@ -2012,16 +2012,16 @@ kax_reader_c::read(generic_packetizer_c *,
   } catch (exception ex) {
     mxwarn(PFX "exception caught\n");
     flush_packetizers();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
 
   debug_leave("kax_reader_c::read");
 
   if (found_cluster)
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   else {
     flush_packetizers();
-    return file_status_done;
+    return FILE_STATUS_DONE;
   }
 }
 

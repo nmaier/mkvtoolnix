@@ -196,7 +196,7 @@ aac_packetizer_c::process(memory_c &mem,
 
     if (needs_negative_displacement(duration)) {
       displace(-duration);
-      return file_status_moredata;
+      return FILE_STATUS_MOREDATA;
     }
     while (needs_positive_displacement(duration)) {
       add_packet(mem, my_timecode + ti->async.displacement, duration);
@@ -210,7 +210,7 @@ aac_packetizer_c::process(memory_c &mem,
 
     debug_leave("aac_packetizer_c::process");
 
-    return file_status_moredata;
+    return FILE_STATUS_MOREDATA;
   }
 
   byte_buffer.add(mem.data, mem.size);
@@ -230,7 +230,7 @@ aac_packetizer_c::process(memory_c &mem,
 
   debug_leave("aac_packetizer_c::process");
 
-  return file_status_moredata;
+  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -239,7 +239,7 @@ aac_packetizer_c::dump_debug_info() {
           packet_queue.size(), byte_buffer.get_size());
 }
 
-int
+connection_result_e
 aac_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   aac_packetizer_c *asrc;
 
