@@ -3,7 +3,7 @@ dnl process this file with autoconf to generate the configure script
 AC_INIT(src/mkvmerge.cpp)
 AC_PREREQ(2.50)
 
-AM_INIT_AUTOMAKE(mkvtoolnix,0.8.0)
+AM_INIT_AUTOMAKE(mkvtoolnix,0.8.1)
 AM_CONFIG_HEADER(config.h)
 
 SAVED_CFLAGS="$CFLAGS"
