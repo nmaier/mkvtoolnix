@@ -74,12 +74,6 @@ extern "C" {
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
 
-#ifdef NO_WSTRING
-#define WCHARMODIFIER
-#else
-#define WCHARMODIFIER "l"
-#endif
-
 typedef struct {
   unsigned int tnum, tuid;
   char type;
@@ -319,16 +313,20 @@ bool process_file(const char *file_name) {
                          float(duration) * tc_scale / 1000000000.0);
 
           } else if (EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) {
+            char *str;
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
             muxingapp.ReadData(es->I_O());
-            show_element(l2, 2, "Muxing application: %" WCHARMODIFIER "s",
-                         UTFstring(muxingapp).c_str());
+            str = UTFstring_to_cstr(UTFstring(muxingapp));
+            show_element(l2, 2, "Muxing application: %s", str);
+            safefree(str);
 
           } else if (EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) {
+            char *str;
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
             writingapp.ReadData(es->I_O());
-            show_element(l2, 2, "Writing application: %" WCHARMODIFIER "s",
-                         UTFstring(writingapp).c_str());
+            str = UTFstring_to_cstr(UTFstring(writingapp));
+            show_element(l2, 2, "Writing application: %ls", str);
+            safefree(str);
 
           } else if (EbmlId(*l2) == KaxDateUTC::ClassInfos.GlobalId) {
             struct tm tmutc;

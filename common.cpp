@@ -362,9 +362,6 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line) {
  */
 
 UTFstring cstr_to_UTFstring(const char *c) {
-#ifdef NO_WSTRING
-  return UTFstring(c);
-#else
   wchar_t *new_string;
   char *old_locale;
   UTFstring u;
@@ -383,25 +380,24 @@ UTFstring cstr_to_UTFstring(const char *c) {
   safefree(new_string);
 
   return u;
-#endif
 }
 
 char *UTFstring_to_cstr(const UTFstring &u) {
-#ifdef NO_WSTRING
-  return safestrdup(u.c_str());
-#else
   const wchar_t *sptr;
-  char *new_string;
+  char *new_string, *old_locale;
   int len;
 
-  len = u.size();
+  len = u.length();
   new_string = (char *)safemalloc(len * 4 + 1);
   memset(new_string, 0, len * 4 + 1);
   sptr = u.c_str();
+  old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
+  setlocale(LC_CTYPE, "");
   wcsrtombs(new_string, &sptr, len, NULL);
+  setlocale(LC_CTYPE, old_locale);
+  safefree(old_locale);
 
   return new_string;
-#endif
 }
 
 #ifdef DEBUG
