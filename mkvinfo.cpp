@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.20 2003/04/22 20:35:32 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.21 2003/04/25 17:23:29 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,19 +43,23 @@
 #include "EbmlSubHead.h"
 #include "EbmlStream.h"
 #include "FileKax.h"
+
+#include "KaxAttachements.h"
+#include "KaxBlock.h"
+#include "KaxBlockData.h"
+#include "KaxChapters.h"
+#include "KaxCluster.h"
+#include "KaxClusterData.h"
+#include "KaxCues.h"
+#include "KaxCuesData.h"
 #include "KaxInfo.h"
 #include "KaxInfoData.h"
+#include "KaxSeekHead.h"
 #include "KaxSegment.h"
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
 #include "KaxTrackAudio.h"
 #include "KaxTrackVideo.h"
-#include "KaxCluster.h"
-#include "KaxClusterData.h"
-#include "KaxBlock.h"
-#include "KaxBlockData.h"
-#include "KaxCues.h"
-#include "KaxCuesData.h"
 
 #include "common.h"
 
@@ -536,6 +540,110 @@ void process_file() {
             l2 = l3;
             if (upper_lvl_el > 0)
               break;
+          } else {
+            l2->SkipData(static_cast<EbmlStream &>(*es),
+                         l2->Generic().Context);
+            delete l2;
+            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
+                                0xFFFFFFFFL, true);
+          }
+        } // while (l2 != NULL)
+
+      } else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
+        fprintf(stdout, "(%s) |+ found seek head", NAME);
+        if (verbose > 1)
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
+        fprintf(stdout, "\n");
+
+        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                            true);
+        while (l2 != NULL) {
+          if (upper_lvl_el != 0)
+            break;
+
+          if (EbmlId(*l2) == KaxSeek::ClassInfos.GlobalId) {
+            fprintf(stdout, "(%s) |  + seek entry", NAME);
+            if (verbose > 1)
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
+            fprintf(stdout, "\n");
+
+            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
+                                0xFFFFFFFFL, true);
+            while (l3 != NULL) {
+              if (upper_lvl_el != 0)
+                break;
+
+              if (EbmlId(*l3) == KaxSeekID::ClassInfos.GlobalId) {
+                binary *b;
+                int s;
+                KaxSeekID &seek_id = static_cast<KaxSeekID &>(*l3);
+                seek_id.ReadData(es->I_O());
+                b = seek_id.GetBuffer();
+                s = seek_id.GetSize();
+                EbmlId id(b, s);
+                fprintf(stdout, "(%s) |   + seek ID: ", NAME);
+                for (i = 0; i < s; i++)
+                  fprintf(stdout, "0x%02x ", ((unsigned char *)b)[i]);
+                fprintf(stdout, "(%s)",
+                        (id == KaxInfo::ClassInfos.GlobalId) ?
+                        "KaxInfo" :
+                        (id == KaxCluster::ClassInfos.GlobalId) ?
+                        "KaxCluster" :
+                        (id == KaxTracks::ClassInfos.GlobalId) ?
+                        "KaxTracks" :
+                        (id == KaxCues::ClassInfos.GlobalId) ?
+                        "KaxCues" :
+                        (id == KaxAttachements::ClassInfos.GlobalId) ?
+                        "KaxAttachements" :
+                        (id == KaxChapters::ClassInfos.GlobalId) ?
+                        "KaxChapters" :
+                        "unknown");
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+
+              } else if (EbmlId(*l3) == KaxSeekPosition::ClassInfos.GlobalId) {
+                KaxSeekPosition &seek_pos =
+                  static_cast<KaxSeekPosition &>(*l3);
+                seek_pos.ReadData(es->I_O());
+                fprintf(stdout, "(%s) |   + seek position: %llu", NAME,
+                        uint64(seek_pos));
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+
+              } else {
+                fprintf(stdout, "(%s) |  + unknown element, level 3: %s", NAME,
+                        typeid(*l3).name());
+                if (verbose > 1)
+                  fprintf(stdout, " at %llu", l3->GetElementPosition());
+                fprintf(stdout, "\n");
+              }
+
+
+              l3->SkipData(static_cast<EbmlStream &>(*es),
+                           l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
+                                  0xFFFFFFFFL, true);
+            } // while (l3 != NULL)
+
+
+          } else {
+            fprintf(stdout, "(%s) |  + unknown element, level 2: %s", NAME,
+                    typeid(*l2).name());
+            if (verbose > 1)
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
+            fprintf(stdout, "\n");
+          }
+
+          if (upper_lvl_el > 0) {		// we're coming from l3
+            upper_lvl_el--;
+            delete l2;
+            l2 = l3;
+            if (upper_lvl_el > 0)
+              break;
+
           } else {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
