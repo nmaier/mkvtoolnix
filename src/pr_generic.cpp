@@ -987,6 +987,8 @@ track_info_c::track_info_c():
   memset(fourcc, 0, 5);
   display_properties = new vector<display_properties_t>;
   audio_syncs = new vector<audio_sync_t>;
+  async.linear = 1.0;
+  async.displacement = 0;
   cue_creations = new vector<cue_creation_t>;
   default_track_flags = new vector<int64_t>;
   languages = new vector<language_t>;
