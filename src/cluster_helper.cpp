@@ -51,6 +51,7 @@ cluster_helper_c::cluster_helper_c() {
   clusters = NULL;
   cluster_content_size = 0;
   max_timecode = 0;
+  max_timecode_internal = 0;
   last_cluster_tc = 0;
   num_cue_elements = 0;
   header_overhead = -1;
@@ -178,11 +179,7 @@ cluster_helper_c::add_packet(packet_t *packet) {
       render();
 
       old_max_timecode = max_timecode;
-      if ((packet->unmodified_assigned_timecode +
-           packet->unmodified_duration) >
-          max_timecode)
-        max_timecode = packet->unmodified_assigned_timecode +
-          packet->unmodified_duration;
+      max_timecode = max_timecode_internal;
       num_cue_elements = 0;
 
       mxinfo("\n");
@@ -221,6 +218,11 @@ cluster_helper_c::add_packet(packet_t *packet) {
       packet->unmodified_duration;
 
   walk_clusters();
+
+  if ((packet->unmodified_assigned_timecode + packet->unmodified_duration) >
+      max_timecode_internal)
+    max_timecode_internal = packet->unmodified_assigned_timecode +
+      packet->unmodified_duration;
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
