@@ -449,19 +449,43 @@ real_demuxer_t *real_reader_c::find_demuxer(int id) {
   return NULL;
 }
 
+int real_reader_c::finish() {
+  int i;
+  real_demuxer_t *dmx;
+
+  for (i = 0; i < demuxers.size(); i++) {
+    dmx = demuxers[i];
+    if ((dmx->type == 'a') && (dmx->c_data != NULL)) {
+      int64_t dur = dmx->c_timecode / dmx->c_numpackets;
+      dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode + dur,
+                               dur);
+    }
+  }
+
+  done = true;
+
+  return 0;
+}
+
 int real_reader_c::read() {
   uint32_t object_version, length, id, timestamp, flags, object_id;
   unsigned char *chunk;
   real_demuxer_t *dmx;
+  int64_t fpos;
+
+  if (done)
+    return 0;
 
   try {
+    fpos = io->getFilePointer();
     object_version = io->read_uint16_be();
     length = io->read_uint16_be();
 
     object_id = object_version << 16 + length;
 
     if (object_id == FOURCC('I', 'N', 'D', 'X'))
-      return 0;
+      return finish();
+
     if (object_id == FOURCC('D', 'A', 'T', 'A')) {
       io->skip(2);              // object_version
       io->skip(4);              // num_packets
@@ -475,6 +499,14 @@ int real_reader_c::read() {
     io->skip(1);                // reserved
     flags = io->read_uint8();
 
+    if (length < 12) {
+      mxprint(stdout, "real_reader: %s: Data packet length is too small: %u. "
+              "Other values: object_version: 0x%04x, id: 0x%04x, "
+              "timestamp: %u, flags: 0x%02x. File position: %lld. Aborting.\n",
+              ti->fname, length, object_version, id, timestamp, flags, fpos);
+      return finish();
+    }
+
     dmx = find_demuxer(id);
 
     if (dmx == NULL) {
@@ -487,18 +519,30 @@ int real_reader_c::read() {
     chunk = (unsigned char *)safemalloc(length);
     if (io->read(chunk, length) != length) {
       safefree(chunk);
-      return 0;
+      return finish();
     }
 
     if (dmx->type == 'v')
       assemble_packet(dmx, chunk, length, timestamp, (flags & 2) == 2);
-    else
-      dmx->packetizer->process(chunk, length, timestamp);
+    else {
+      if ((timestamp - last_timestamp) <= (5 * 60 * 1000)) {
+        if (dmx->c_data != NULL)
+          dmx->packetizer->process(dmx->c_data, dmx->c_len, timestamp,
+                                   timestamp - dmx->c_timecode);
+        dmx->c_data = chunk;
+        dmx->c_len = length;
+        dmx->c_timecode = timestamp;
+        dmx->c_numpackets++;
+      } else {
+        timestamp = last_timestamp;
+        safefree(chunk);
+      }
+    }
 
     last_timestamp = timestamp;
 
   } catch (exception &ex) {
-    return 0;
+    return finish();
   }
 
   return EMOREDATA;

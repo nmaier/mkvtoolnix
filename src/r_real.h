@@ -52,6 +52,10 @@ typedef struct {
   unsigned char *last_packet;
   int last_seq, last_len, ctb_len, kf_last_timecode;
   bool keyframe;
+
+  unsigned char *c_data;
+  int c_len, c_numpackets;
+  int64_t c_timecode;
 } real_demuxer_t;
 
 class real_reader_c: public generic_reader_c {
@@ -60,6 +64,7 @@ private:
   vector<real_demuxer_t *> demuxers;
   int act_wchar;
   int64_t file_size, last_timestamp;
+  bool done;
 
 public:
   real_reader_c(track_info_t *nti) throw (error_c);
@@ -80,6 +85,7 @@ private:
   virtual real_demuxer_t *find_demuxer(int id);
   virtual void assemble_packet(real_demuxer_t *dmx, unsigned char *p, int size,
                                int64_t timecode, bool keyframe);
+  virtual int finish();
 };
 
 #endif  // __R_REAL_H
