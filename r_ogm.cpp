@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.24 2003/05/05 20:18:32 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.25 2003/05/05 20:48:49 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,7 +36,6 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "common.h"
 #include "pr_generic.h"
 #include "ogmstreams.h"
-#include "queue.h"
 #include "r_ogm.h"
 #include "p_vorbis.h"
 #include "p_video.h"

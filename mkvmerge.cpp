@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.55 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.56 2003/05/05 20:48:49 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -61,7 +61,6 @@
 #include "cluster_helper.h"
 #include "common.h"
 #include "iso639.h"
-#include "queue.h"
 #include "r_ac3.h"
 #include "r_avi.h"
 #include "r_mp3.h"

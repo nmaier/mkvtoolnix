@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.10 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.11 2003/05/05 20:48:49 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,6 @@
 
 #include "common.h"
 #include "error.h"
-#include "queue.h"
 
 #include "p_mp3.h"
 

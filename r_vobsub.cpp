@@ -24,7 +24,6 @@
 
 #include "ogmmerge.h"
 #include "ogmstreams.h"
-#include "queue.h"
 #include "r_vobsub.h"
 #include "subtitles.h"
 

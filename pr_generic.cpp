@@ -13,12 +13,10 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.33 2003/05/05 18:37:36 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.34 2003/05/05 20:48:49 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
-
-#include <malloc.h>
 
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
@@ -31,8 +29,7 @@
 
 static int default_tracks[3] = {0, 0, 0};
 
-generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
-  q_c() {
+generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c) {
   track_entry = NULL;
   ti = duplicate_track_info(nti);
   free_refs = -1;
@@ -285,6 +282,65 @@ void generic_packetizer_c::set_headers() {
         haudio_bit_depth;
 
   }
+}
+
+void generic_packetizer_c::add_packet(unsigned char  *data, int length,
+                                      int64_t timecode, int64_t bref,
+                                      int64_t fref, int64_t duration) {
+  packet_t *pack;
+
+  if (data == NULL)
+    return;
+  if (timecode < 0)
+    die("timecode < 0");
+
+  pack = (packet_t *)safemalloc(sizeof(packet_t));
+  memset(pack, 0, sizeof(packet_t));
+  pack->data = (unsigned char *)safememdup(data, length);
+  pack->length = length;
+  pack->timecode = timecode;
+  pack->bref = bref;
+  pack->fref = fref;
+  pack->duration = duration;
+  pack->source = this;
+
+  packet_queue.push_back(pack);
+}
+
+packet_t *generic_packetizer_c::get_packet() {
+  packet_t *pack;
+
+  if (packet_queue.size() == 0)
+    return NULL;
+
+  pack = packet_queue.front();
+  packet_queue.pop_front();
+
+  return pack;
+}
+
+int generic_packetizer_c::packet_available() {
+  if (packet_queue.size() == 0)
+    return 0;
+
+  return 1;
+}
+
+int64_t generic_packetizer_c::get_smallest_timecode() {
+  if (packet_queue.size() == 0)
+    return 0x0FFFFFFFLL;
+
+  return packet_queue.front()->timecode;
+}
+
+int64_t generic_packetizer_c::get_queued_bytes() {
+  int64_t bytes;
+  int i;
+
+  for (i = 0, bytes = 0; i < packet_queue.size(); i++)
+    bytes += packet_queue[i]->length;
+
+  return bytes;
 }
 
 //--------------------------------------------------------------------

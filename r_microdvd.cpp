@@ -24,7 +24,6 @@
 
 #include "ogmmerge.h"
 #include "ogmstreams.h"
-#include "queue.h"
 #include "r_microdvd.h"
 #include "subtitles.h"
 

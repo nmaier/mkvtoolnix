@@ -23,7 +23,6 @@
 #include <ogg/ogg.h>
 
 #include "ogmmerge.h"
-#include "queue.h"
 
 #include "p_vobsub.h"
 
