@@ -425,9 +425,13 @@ end_this_level(parser_data_t *pdata,
     if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
       cperror(pdata, "<ChapterDisplay> is missing the <ChapterString> "
               "child.");
-    if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL)
-      cperror(pdata, "<ChapterDisplay> is missing the <ChapterLanguage> "
-              "child.");
+    if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL) {
+      KaxChapterLanguage *cl;
+
+      cl = new KaxChapterLanguage;
+      *static_cast<EbmlString *>(cl) = "und";
+      m->PushElement(*cl);
+    }
 
   } else if (!strcmp(name, "ChapterString"))
     el_get_utf8string(pdata, parent_elt);
