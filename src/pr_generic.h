@@ -26,6 +26,7 @@
 #include <deque>
 #include <vector>
 
+#include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxTracks.h>
@@ -118,7 +119,7 @@ typedef struct {
   vector<language_t> *track_names; // As given on the command line
   char *track_name;             // For this very track
 
-  bool no_chapters;
+  bool no_chapters, no_attachments, no_tags;
 } track_info_t;
 
 class generic_reader_c;
@@ -234,6 +235,8 @@ public:
   virtual void set_headers() = 0;
   virtual void identify() = 0;
 
+  virtual void add_attachments(KaxAttachments *a) {
+  };
 //   virtual void set_tag_track_uids() = 0;
 
 protected:

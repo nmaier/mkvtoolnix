@@ -657,6 +657,10 @@ void mmg_dialog::update_command_line() {
         cmdline += "--no-chapters ";
         clargs.Add("--no-chapters");
       }
+      if (f->no_attachments) {
+        cmdline += "--no-attachments ";
+        clargs.Add("--no-attachments");
+      }
       if (no_video) {
         cmdline += "-D ";
         clargs.Add("-D");

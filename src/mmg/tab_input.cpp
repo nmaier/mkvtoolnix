@@ -61,11 +61,18 @@ tab_input::tab_input(wxWindow *parent):
                    wxDefaultSize, 0);
   cb_no_chapters =
     new wxCheckBox(this, ID_CB_NOCHAPTERS, _("No chapters"), wxPoint(5, 110),
-                   wxSize(100, -1), 0);
+                   wxDefaultSize, 0);
   cb_no_chapters->SetValue(false);
   cb_no_chapters->SetToolTip(_("Do not copy chapters from this file. Only "
                                "applies to Matroska files."));
   cb_no_chapters->Enable(false);
+  cb_no_attachments =
+    new wxCheckBox(this, ID_CB_NOATTACHMENTS, _("No attachments"),
+                   wxPoint(110, 110), wxDefaultSize, 0);
+  cb_no_attachments->SetValue(false);
+  cb_no_attachments->SetToolTip(_("Do not copy attachments from this file. "
+                                  "Only applies to Matroska files."));
+  cb_no_attachments->Enable(false);
   new wxStaticText(this, wxID_STATIC, _("Tracks:"), wxPoint(5, 140),
                    wxDefaultSize, 0);
   clb_tracks =
@@ -424,6 +431,7 @@ void tab_input::on_remove_file(wxCommandEvent &evt) {
   lb_input_files->Delete(selected_file);
   selected_file = -1;
   cb_no_chapters->Enable(false);
+  cb_no_attachments->Enable(false);
   b_remove_file->Enable(false);
   clb_tracks->Enable(false);
   no_track_mode();
@@ -438,10 +446,12 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
 
   b_remove_file->Enable(true);
   cb_no_chapters->Enable(true);
+  cb_no_attachments->Enable(true);
   selected_file = -1;
   new_sel = lb_input_files->GetSelection();
   f = &files[new_sel];
   cb_no_chapters->SetValue(f->no_chapters);
+  cb_no_attachments->SetValue(f->no_attachments);
 
   clb_tracks->Clear();
   for (i = 0; i < f->tracks->size(); i++) {
@@ -466,6 +476,11 @@ void tab_input::on_file_selected(wxCommandEvent &evt) {
 void tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
   if (selected_file -1)
     files[selected_file].no_chapters = cb_no_chapters->GetValue();
+}
+
+void tab_input::on_noattachments_clicked(wxCommandEvent &evt) {
+  if (selected_file -1)
+    files[selected_file].no_attachments = cb_no_attachments->GetValue();
 }
 
 void tab_input::on_track_selected(wxCommandEvent &evt) {
@@ -631,6 +646,7 @@ void tab_input::save(wxConfigBase *cfg) {
     cfg->SetPath(s);
     cfg->Write("file_name", *f->file_name);
     cfg->Write("no_chapters", f->no_chapters);
+    cfg->Write("no_attachments", f->no_attachments);
 
     cfg->Write("number_of_tracks", (int)f->tracks->size());
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
@@ -718,6 +734,7 @@ void tab_input::load(wxConfigBase *cfg) {
     }
     fi.file_name = new wxString(s);
     cfg->Read("no_chapters", &fi.no_chapters);
+    cfg->Read("no_attachments", &fi.no_attachments);
     fi.tracks = new vector<mmg_track_t>;
 
     for (tidx = 0; tidx < (uint32_t)num_tracks; tidx++) {
@@ -905,6 +922,7 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_CHECKLISTBOX(ID_CLB_TRACKS, tab_input::on_track_enabled)
 
   EVT_CHECKBOX(ID_CB_NOCHAPTERS, tab_input::on_nochapters_clicked)
+  EVT_CHECKBOX(ID_CB_NOATTACHMENTS, tab_input::on_noattachments_clicked)
   EVT_CHECKBOX(ID_CB_MAKEDEFAULT, tab_input::on_default_track_clicked)
   EVT_CHECKBOX(ID_CB_AACISSBR, tab_input::on_aac_is_sbr_clicked)
 

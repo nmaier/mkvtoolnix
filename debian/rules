@@ -76,7 +76,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf	
-#	dh_installdocs doc/matroskatags.dtd doc/matroskachapters.dtd doc/example-tags-1.xml doc/example-chapters-1.xml doc/example-chapters-2.xml
+	dh_installdocs doc/mkvmerge-gui.html
 	dh_installexamples examples/*xml examples/*dtd
 #	dh_installmenu
 #	dh_installlogrotate

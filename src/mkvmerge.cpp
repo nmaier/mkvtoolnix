@@ -300,6 +300,7 @@ static void usage() {
     "  -D, --novideo            Don't copy any video track from this file.\n"
     "  -S, --nosubs             Don't copy any text track from this file.\n"
     "  --no-chapters            Don't keep chapters from a Matroska file.\n"
+    "  --no-attachments         Don't keep attachments from a Matroska file.\n"
     "  -y, --sync <TID:d[,o[/p]]>\n"
     "                           Synchronize, delay the audio track with the\n"
     "                           id TID by d ms. \n"
@@ -885,6 +886,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
 }
 
 static void render_attachments(IOCallback *out) {
+  KaxAttachments *other_as;
   KaxAttached *kax_a;
   KaxFileData *fdata;
   attachment_t *attch;
@@ -894,9 +896,21 @@ static void render_attachments(IOCallback *out) {
   int64_t size;
   mm_io_c *io;
 
-  if (!(((file_num == 1) && (attachment_sizes_first > 0)) ||
-        (attachment_sizes_others > 0)))
+  other_as = new KaxAttachments;
+  for (i = 0; i < files.size(); i++)
+    files[i]->reader->add_attachments(other_as);
+  for (i = 0, size = 0; i < other_as->ListSize(); i++) {
+    kax_a = static_cast<KaxAttached *>((*other_as)[i]);
+    fdata = FindChild<KaxFileData>(*kax_a);
+    if (fdata != NULL)
+      size += fdata->GetSize();
+  }
+
+  if (!(((file_num == 1) && ((attachment_sizes_first + size) > 0)) ||
+        ((attachment_sizes_others + size) > 0))) {
+    delete other_as;
     return;
+  }
 
   if (kax_as != NULL)
     delete kax_as;
@@ -936,10 +950,7 @@ static void render_attachments(IOCallback *out) {
 
       try {
         io = new mm_io_c(attch->name, MODE_READ);
-        io->setFilePointer(0, seek_end);
-        size = io->getFilePointer();
-        io->setFilePointer(0, seek_beginning);
-
+        size = io->get_size();
         buffer = new binary[size];
         io->read(buffer, size);
         delete io;
@@ -951,6 +962,12 @@ static void render_attachments(IOCallback *out) {
       }
     }
   }
+
+  while (other_as->ListSize() > 0) {
+    kax_as->PushElement(*(*other_as)[0]);
+    other_as->Remove(0);
+  }
+  delete other_as;
 
   kax_as->Render(*out);
 }
@@ -1416,6 +1433,9 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(this_arg, "--no-chapters")) {
       ti.no_chapters = true;
+
+    } else if (!strcmp(this_arg, "--no-attachments")) {
+      ti.no_attachments = true;
 
     } else if (!strcmp(this_arg, "--dump-packets")) {
       if (next_arg == NULL)

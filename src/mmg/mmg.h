@@ -116,6 +116,7 @@ using namespace libmatroska;
 #define ID_CB_CHAPTERSELECTLANGUAGECODE 10069
 #define ID_CB_CHAPTERSELECTCOUNTRYCODE 10070
 #define ID_B_ADDSUBCHAPTER 10071
+#define ID_CB_NOATTACHMENTS 10072
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -164,7 +165,7 @@ typedef struct {
 typedef struct {
   wxString *file_name;
   vector<mmg_track_t> *tracks;
-  bool no_chapters;
+  bool no_chapters, no_attachments;
 } mmg_file_t;
 
 typedef struct {
@@ -191,7 +192,7 @@ class tab_input: public wxPanel {
 protected:
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_browse_tags;
-  wxCheckBox *cb_no_chapters, *cb_default, *cb_aac_is_sbr;
+  wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;
   wxComboBox *cob_language, *cob_cues, *cob_sub_charset;
   wxComboBox *cob_aspect_ratio, *cob_fourcc;
@@ -210,6 +211,7 @@ public:
   void on_track_selected(wxCommandEvent &evt);
   void on_track_enabled(wxCommandEvent &evt);
   void on_nochapters_clicked(wxCommandEvent &evt);
+  void on_noattachments_clicked(wxCommandEvent &evt);
   void on_default_track_clicked(wxCommandEvent &evt);
   void on_aac_is_sbr_clicked(wxCommandEvent &evt);
   void on_language_selected(wxCommandEvent &evt);

@@ -143,6 +143,9 @@ kax_reader_c::~kax_reader_c() {
       safefree(tracks[i]);
     }
 
+  for (i = 0; i < attachments.size(); i++)
+    safefree(attachments[i].data);
+
   if (es != NULL)
     delete es;
   if (saved_l1 != NULL)
@@ -464,10 +467,11 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
   KaxAttachments *atts;
   KaxAttached *att;
   EbmlElement *l1, *l2;
+  UTFstring description, name;
   int upper_lvl_el, i, k;
-  string name, type;
+  string mime_type;
   int64_t size, id;
-  char *str;
+  unsigned char *data;
   bool found;
   kax_attachment_t matt;
 
@@ -484,8 +488,9 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
     for (i = 0; i < atts->ListSize(); i++) {
       att = (KaxAttached *)(*atts)[i];
       if (EbmlId(*att) == KaxAttached::ClassInfos.GlobalId) {
-        name = "";
-        type = "";
+        name = L"";
+        mime_type = "";
+        description = L"";
         size = -1;
         id = -1;
 
@@ -494,13 +499,15 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
 
           if (EbmlId(*l2) == KaxFileName::ClassInfos.GlobalId) {
             KaxFileName &fname = *static_cast<KaxFileName *>(l2);
-            str = UTFstring_to_cstr(UTFstring(fname));
-            name = str;
-            safefree(str);
+            name = UTFstring(fname);
+
+          } else if (EbmlId(*l2) == KaxFileDescription::ClassInfos.GlobalId) {
+            KaxFileDescription &fdesc = *static_cast<KaxFileDescription *>(l2);
+            description = UTFstring(fdesc);
 
           } else if (EbmlId(*l2) == KaxMimeType::ClassInfos.GlobalId) {
             KaxMimeType &mtype = *static_cast<KaxMimeType *>(l2);
-            type = string(mtype);
+            mime_type = string(mtype);
 
           } else if (EbmlId(*l2) == KaxFileUID::ClassInfos.GlobalId) {
             KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
@@ -509,11 +516,12 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
           } else if (EbmlId(*l2) == KaxFileData::ClassInfos.GlobalId) {
             KaxFileData &fdata = *static_cast<KaxFileData *>(l2);
             size = fdata.GetSize();
-
+            data = (unsigned char *)fdata.GetBuffer();
           }
         }
 
-        if ((id != -1) && (size != -1) && (type.length() != 0)) {
+        if ((id != -1) && (size != -1) && (mime_type.length() > 0) &&
+            (name.length() > 0)) {
           found = false;
 
           for (k = 0; k < attachments.size(); k++)
@@ -524,9 +532,11 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlStream *es,
 
           if (!found) {
             matt.name = name;
-            matt.type = type;
+            matt.mime_type = mime_type;
+            matt.description = description;
             matt.size = size;
             matt.id = id;
+            matt.data = (unsigned char *)safememdup(data, size);
             attachments.push_back(matt);
           }
         }
@@ -1487,6 +1497,7 @@ void kax_reader_c::set_headers() {
 void kax_reader_c::identify() {
   int i;
   string info;
+  char *str;
 
   mxinfo("File '%s': container: Matroska\n", ti->fname);
   for (i = 0; i < tracks.size(); i++)
@@ -1511,12 +1522,20 @@ void kax_reader_c::identify() {
 
   for (i = 0; i < attachments.size(); i++) {
     mxinfo("Attachment ID %lld: type '%s', size %lld bytes, ",
-           attachments[i].id, attachments[i].type.c_str(),
+           attachments[i].id, attachments[i].mime_type.c_str(),
            attachments[i].size);
+    if (attachments[i].description.length() > 0) {
+      str = UTFstring_to_cstr(attachments[i].description.c_str());
+      mxinfo("description '%s', ", str);
+      safefree(str);
+    }
     if (attachments[i].name.length() == 0)
       mxinfo("no file name given\n");
-    else
-      mxinfo("file name '%s'\n", attachments[i].name.c_str());
+    else {
+      str = UTFstring_to_cstr(attachments[i].name.c_str());
+      mxinfo("file name '%s'\n", str);
+      safefree(str);
+    }
   }
 }
 
@@ -1532,4 +1551,38 @@ int64_t kax_reader_c::get_queued_bytes() {
       bytes += tracks[i]->packetizer->get_queued_bytes();
 
   return bytes;
+}
+
+void kax_reader_c::add_attachments(KaxAttachments *a) {
+  uint32_t i;
+  KaxAttached *attached;
+  KaxFileData *fdata;
+  binary *buffer;
+
+  if (ti->no_attachments)
+    return;
+
+  for (i = 0; i < attachments.size(); i++) {
+    attached = new KaxAttached;
+    if (attachments[i].description.length() > 0)
+      *static_cast<EbmlUnicodeString *>
+        (&GetChild<KaxFileDescription>(*attached)) =
+        attachments[i].description;
+
+    *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*attached)) =
+      attachments[i].mime_type;
+
+    *static_cast<EbmlUnicodeString *>(&GetChild<KaxFileName>(*attached)) =
+      attachments[i].name;
+
+    *static_cast<EbmlUInteger *>(&GetChild<KaxFileUID>(*attached)) =
+      attachments[i].id;
+
+    fdata = &GetChild<KaxFileData>(*attached);
+    buffer = new binary[attachments[i].size];
+    memcpy(buffer, attachments[i].data, attachments[i].size);
+    fdata->SetBuffer(buffer, attachments[i].size);
+
+    a->PushElement(*attached);
+  }
 }

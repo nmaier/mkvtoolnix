@@ -32,14 +32,19 @@
 #include "pr_generic.h"
 #include "error.h"
 
+#include <ebml/EbmlUnicodeString.h>
+
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 
+using namespace libebml;
 using namespace libmatroska;
 using namespace std;
 
 typedef struct {
-  string name, type;
+  string mime_type;
+  UTFstring name, description;
+  unsigned char *data;
   int64 size, id;
 } kax_attachment_t;
 
@@ -118,6 +123,7 @@ public:
   virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify();
+  virtual void add_attachments(KaxAttachments *a);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
