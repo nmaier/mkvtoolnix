@@ -348,6 +348,7 @@ typedef struct {
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
   bool do_convert;
+  string global_catalog;
   string global_performer;
   string performer;
   string global_title;
@@ -358,8 +359,8 @@ typedef struct {
   string global_genre;
   string genre;
   string global_disc_id;
-  string disc_id;
   string isrc;
+  string global_comment;
   string comment;
   const char *language;
   int line_num;
@@ -397,6 +398,13 @@ create_simple_tag(cue_parser_args_t &a,
   return simple;
 }
 
+#define create_tag1(v1, text) \
+  if (v1 != "") \
+    tag->PushElement(*create_simple_tag(a, text, v1));
+#define create_tag2(v1, v2, text) \
+  if (((v1) != "" ? (v1) : (v2)) != "") \
+    tag->PushElement(*create_simple_tag(a, text, ((v1) != "" ? (v1) : (v2))));
+
 static void
 add_tag_for_cue_entry(cue_parser_args_t &a,
                       KaxTags **tags,
@@ -415,40 +423,14 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   targets = &GetChild<KaxTagTargets>(*tag);
   *static_cast<EbmlUInteger *>(&GetChild<KaxTagChapterUID>(*targets)) = cuid;
 
-  tag->PushElement(*create_simple_tag(a, "TITLE", a.title));
-  tag->PushElement(*create_simple_tag(a, "TRACKNUMBER",
+  create_tag1(a.title, "TITLE");
+  tag->PushElement(*create_simple_tag(a, "SET_PART",
                                       mxsprintf("%d", a.num)));
-  if (a.global_performer != "") {
-    if ((a.performer == "") || (a.performer == a.global_performer))
-      tag->PushElement(*create_simple_tag(a, "ARTIST", a.global_performer));
-    else {
-      tag->PushElement(*create_simple_tag(a, "ALBUM_ARTIST",
-                                          a.global_performer));
-      tag->PushElement(*create_simple_tag(a, "ARTIST", a.performer));
-    }
-  } else if (a.performer != "")
-    tag->PushElement(*create_simple_tag(a, "ARTIST", a.performer));
-  if (a.global_title != "")
-    tag->PushElement(*create_simple_tag(a, "ALBUM", a.global_title));
-  s = a.date;
-  if (s == "")
-    s = a.global_date;
-  if (s != "")
-    tag->PushElement(*create_simple_tag(a, "DATE", s));
-  s = a.genre;
-  if (s == "")
-    s = a.global_genre;
-  if (s != "")
-    tag->PushElement(*create_simple_tag(a, "GENRE", s));
-  s = a.disc_id;
-  if (s == "")
-    s = a.global_disc_id;
-  if (s != "")
-    tag->PushElement(*create_simple_tag(a, "DISCID", s));
-  if (a.isrc != "")
-    tag->PushElement(*create_simple_tag(a, "ISRC", a.isrc));
-  if (a.comment != "")
-    tag->PushElement(*create_simple_tag(a, "COMMENTS", a.comment));
+  create_tag2(a.performer, a.global_performer, "ARTIST");
+  create_tag2(a.date, a.global_date, "DATE");
+  create_tag2(a.genre, a.global_genre, "GENRE");
+  create_tag1(a.isrc, "ISRC");
+  create_tag1(a.comment, "COMMENTS");
 
   (*tags)->PushElement(*tag);
 }
@@ -467,17 +449,12 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
 
   tag = new KaxTag;
 
-  if (a.global_performer != "")
-    tag->PushElement(*create_simple_tag(a, "ALBUM_ARTIST",
-                                        a.global_performer));
-  if (a.global_title != "")
-    tag->PushElement(*create_simple_tag(a, "ALBUM", a.global_title));
-  if (a.global_date != "")
-    tag->PushElement(*create_simple_tag(a, "DATE", a.global_date));
-  if (a.global_genre != "")
-    tag->PushElement(*create_simple_tag(a, "GENRE", a.global_genre));
-  if (a.global_disc_id != "")
-    tag->PushElement(*create_simple_tag(a, "DISCID", a.global_disc_id));
+  create_tag1(a.global_performer, "ARTIST");
+  create_tag1(a.global_title, "ALBUM");
+  create_tag1(a.global_date, "DATE");
+  create_tag1(a.global_disc_id, "DISCID");
+  create_tag1(a.global_catalog, "CATALOG");
+  create_tag1(a.global_comment, "COMMENTS");
 
   (*tags)->PushElement(*tag);
 }
@@ -641,7 +618,10 @@ parse_cue_chapters(mm_text_io_c *in,
         else
           a.performer = get_quoted(line, 10);
 
-      } else if (starts_with_case(line, "title ")) {
+      } else if (starts_with_case(line, "catalog "))
+        a.global_catalog = get_quoted(line, 8);
+
+      else if (starts_with_case(line, "title ")) {
         if (a.num == 0)
           a.global_title = get_quoted(line, 6);
         else
@@ -678,6 +658,9 @@ parse_cue_chapters(mm_text_io_c *in,
         a.performer = "";
         a.title = "";
         a.isrc = "";
+        a.comment = "";
+        a.date = "";
+        a.genre = "";
 
       } else if (starts_with_case(line, "rem date ")) {
         if (a.num == 0)
@@ -691,16 +674,16 @@ parse_cue_chapters(mm_text_io_c *in,
         else
           a.genre = get_quoted(line, 10);
 
-      } else if (starts_with_case(line, "rem discid ")) {
+      } else if (starts_with_case(line, "rem discid "))
+        a.global_disc_id = get_quoted(line, 11);
+
+      else if (starts_with_case(line, "rem comment ")) {
         if (a.num == 0)
-          a.global_disc_id = get_quoted(line, 11);
+          a.global_comment = get_quoted(line, 12);
         else
-          a.disc_id = get_quoted(line, 11);
+          a.comment = get_quoted(line, 12);
 
-      } else if (starts_with_case(line, "rem comment "))
-        a.comment = get_quoted(line, 12);
-
-      else if (starts_with_case(line, "isrc "))
+      } else if (starts_with_case(line, "isrc "))
         a.isrc = get_quoted(line, 5);
     }
 
