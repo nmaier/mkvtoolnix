@@ -18,10 +18,15 @@
 #include <string.h>
 #include <errno.h>
 
+#include <memory>
+
+#include "ac3_common.h"
 #include "common.h"
 #include "error.h"
 #include "M2VParser.h"
+#include "mp3_common.h"
 #include "r_mpeg.h"
+#include "smart_pointers.h"
 #include "p_video.h"
 
 #define PROBESIZE 4
@@ -263,6 +268,8 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
     bytes_processed = 0;
 
     memset(streams_found, 0, sizeof(bool) * 256);
+    for (i = 0; i < 256; i++)
+      id2idx[i] = -1;
     header = mm_io->read_uint32_be();
     done = mm_io->eof();
     version = -1;
@@ -321,25 +328,16 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
           }
 
           stream_id = header & 0xff;
+          if (!streams_found[stream_id])
+            found_new_stream(stream_id);
           streams_found[stream_id] = true;
           pes_packet_length = mm_io->read_uint16_be();
           mxverb(3, "mpeg_ps: id 0x%02x len %u at %lld\n", stream_id,
                  pes_packet_length, mm_io->getFilePointer() - 4 - 2);
 
-          switch (stream_id) {
-            
-          }
-
           mm_io->skip(pes_packet_length);
 
           header = mm_io->read_uint32_be();
-          while (!mpeg_is_start_code(header) && !mm_io->eof() &&
-                 (mm_io->getFilePointer() < PS_PROBE_SIZE)) {
-            header <<= 8;
-            header |= mm_io->read_uint8();
-          }
-          if (!mpeg_is_start_code(header))
-            done = true;
 
           break;
       }
@@ -364,6 +362,271 @@ mpeg_ps_reader_c::~mpeg_ps_reader_c() {
   delete mm_io;
 }
 
+bool
+mpeg_ps_reader_c::read_timestamp(int c,
+                                 int64_t &timestamp) {
+  int d, e;
+
+  d = mm_io->read_uint16_be();
+  e = mm_io->read_uint16_be();
+
+  if (((c & 1) != 1) || ((d & 1) != 1) || ((e & 1) != 1))
+    return false;
+
+  timestamp = (((c >> 1) & 7) << 30) | ((d >> 1) << 15) | (e >> 1);
+  timestamp = timestamp * 100000 / 9;
+
+  return true;
+}
+
+bool
+mpeg_ps_reader_c::parse_packet(int id,
+                               int64_t &timestamp,
+                               int &length) {
+  uint8_t c;
+
+  length = mm_io->read_uint16_be();
+  if ((id < 0xbc) || (id >= 0xf0) ||
+      (id == 0xbe) ||           // padding stream
+      (id == 0xbf)) {           // private 2 stream
+    mm_io->skip(length);
+    return false;
+  }
+
+  if (length == 0)
+    return false;
+
+  // Skip stuFFing bytes
+  while (length > 0) {
+    c = mm_io->read_uint8();
+    length--;
+    if (c != 0xff)
+      break;
+  }
+
+  // Skip STD buffer size
+  if ((c & 0xc0) == 0x40) {
+    if (length < 2)
+      return false;
+    length -= 2;
+    mm_io->skip(1);
+    c = mm_io->read_uint8();
+  }
+
+  // Presentation time stamp
+  if ((c & 0xf0) == 0x20) {
+    if (!read_timestamp(c, timestamp))
+      return false;
+    length -= 4;
+
+  } else if ((c & 0xf0) == 0x30) {
+    if (!read_timestamp(c, timestamp))
+      return false;
+    length -= 4;
+    mm_io->skip(5);
+    length -= 5;
+
+  } else if ((c & 0xc0) == 0x80) {
+    mxerror("mpeg_ps_reader: System-2 (VOB) streams are not supported yet.\n");
+
+  } else if (c != 0x0f)
+    return false;
+
+  if (length <= 0)
+    return false;
+
+  return true;
+}
+
+void
+mpeg_ps_reader_c::found_new_stream(int id) {
+  if ((id < 0xc0) || (id > 0xef))
+    return;
+
+  mm_io->save_pos();
+
+  try {
+    int64_t timecode;
+    int length;
+    unsigned char *buf;
+
+    if (!parse_packet(id, timecode, length))
+      throw false;
+
+    mpeg_ps_track_ptr track(new mpeg_ps_track_t);
+
+    if (id < 0xe0) {
+      track->type = 'a';
+      track->fourcc = FOURCC('M', 'P', '2', ' ');
+    } else {
+      track->type = 'v';
+      track->fourcc = FOURCC('m', 'p', 'g', '0' + version);
+    }
+
+    autofree_ptr<unsigned char> af_buf(safemalloc(length));
+    buf = af_buf;
+    if (mm_io->read(buf, length) != length)
+      throw false;
+
+    if (track->type == 'v') {
+      if ((track->fourcc == FOURCC('m', 'p', 'g', '1')) ||
+          (track->fourcc == FOURCC('m', 'p', 'g', '2'))) {
+        int state;
+        auto_ptr<M2VParser> m2v_parser(new M2VParser);
+        MPEG2SequenceHeader seq_hdr;
+        MPEGChunk *raw_seq_hdr;
+
+        m2v_parser->WriteData(buf, length);
+
+        state = m2v_parser->GetState();
+        while (state != MPV_PARSER_STATE_FRAME) {
+          if (!find_next_packet_for_id(id))
+            throw false;
+
+          if (!parse_packet(id, timecode, length))
+            throw false;
+          autofree_ptr<unsigned char> new_buf(safemalloc(length));
+          if (mm_io->read(new_buf, length) != length)
+            throw false;
+
+          m2v_parser->WriteData(new_buf, length);
+
+          state = m2v_parser->GetState();
+        }
+
+        seq_hdr = m2v_parser->GetSequenceHeader();
+        auto_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+        if (frame.get() == NULL)
+          throw false;
+
+        track->v_version = m2v_parser->GetMPEGVersion();
+        track->v_width = seq_hdr.width;
+        track->v_height = seq_hdr.height;
+        track->v_frame_rate = seq_hdr.frameRate;
+        track->v_aspect_ratio = seq_hdr.aspectRatio;
+        raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
+        if (raw_seq_hdr != NULL) {
+          track->raw_seq_hdr = (unsigned char *)
+            safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+          track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
+        }
+        track->fourcc = FOURCC('m', 'p', 'g', '0' + track->v_version);
+
+      } else {                  // if (track->fourcc == ...)
+        // Unsupported video track type
+        mm_io->restore_pos();
+        return;
+
+      }
+
+    } else {                    // if (track->type == 'v')
+      if (track->fourcc == FOURCC('M', 'P', '2', ' ')) {
+        mp3_header_t header;
+
+        if (find_mp3_header(buf, length) != 0)
+          throw "Error parsing the first MP2/MP3 audio frame.";
+        decode_mp3_header(buf, &header);
+        track->a_channels = header.channels;
+        track->a_sample_rate = header.sampling_frequency;
+        track->fourcc = FOURCC('M', 'P', '0' + header.layer, ' ');
+
+      } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
+        ac3_header_t header;
+
+        if (find_ac3_header(buf, length, &header) != 0)
+          throw "Error parsing the first AC3 audio frame.";
+        track->a_channels = header.channels;
+        track->a_sample_rate = header.sample_rate;
+
+//       } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
+
+//       } else if (track->fourcc == FOURCC('P', 'C', 'M', ' ')) {
+
+      } else {
+        // Unsupported audio track type
+        mm_io->restore_pos();
+        return;
+      }
+    }
+ 
+    id2idx[id] = tracks.size();
+    tracks.push_back(track);
+  } catch(const char *msg) {
+    mxerror(FMT_FN "%s\n", ti->fname.c_str(), msg);
+  } catch(...) {
+    mxerror(FMT_FN "Error parsing a MPEG PS packet during the "
+            "header reading phase. This stream seems to be badly damaged.\n",
+            ti->fname.c_str());
+  }
+
+  mm_io->restore_pos();
+}
+
+bool
+mpeg_ps_reader_c::find_next_packet_for_id(int id) {
+  try {
+    uint32_t header;
+
+    header = mm_io->read_uint32_be();
+    while (1) {
+      uint8_t stream_id, byte;
+      uint16_t pes_packet_length;
+
+      switch (header) {
+        case MPEGVIDEO_PACKET_START_CODE:
+          if (version == -1) {
+            byte = mm_io->read_uint8();
+            if ((byte & 0xc0) != 0)
+              version = 2;      // MPEG-2 PS
+            else
+              version = 1;
+            mm_io->skip(-1);
+          }
+
+          mm_io->skip(2 * 4);   // pack header
+          if (version == 2) {
+            mm_io->skip(1);
+            byte = mm_io->read_uint8() & 0x07;
+            mm_io->skip(byte);  // stuffing bytes
+          }
+          header = mm_io->read_uint32_be();
+          break;
+
+        case MPEGVIDEO_SYSTEM_HEADER_START_CODE:
+          mm_io->skip(2 * 4);   // system header
+          byte = mm_io->read_uint8();
+          while ((byte & 0x80) == 0x80) {
+            mm_io->skip(2);     // P-STD info
+            byte = mm_io->read_uint8();
+          }
+          mm_io->skip(-1);
+          header = mm_io->read_uint32_be();
+          break;
+
+        case MPEGVIDEO_MPEG_PROGRAM_END_CODE:
+          return false;
+
+        default:
+          if (!mpeg_is_start_code(header))
+            return false;
+
+          stream_id = header & 0xff;
+          if (stream_id == id)
+            return true;
+
+          pes_packet_length = mm_io->read_uint16_be();
+          mm_io->skip(pes_packet_length);
+
+          header = mm_io->read_uint32_be();
+
+          break;
+      }
+    }
+  } catch(...) {
+    return false;
+  }
+}
+
 void
 mpeg_ps_reader_c::create_packetizer(int64_t) {
 }
@@ -381,7 +644,24 @@ mpeg_ps_reader_c::get_progress() {
 
 void
 mpeg_ps_reader_c::identify() {
+  int i;
+
   mxinfo("File '%s': container: MPEG %d program stream (PS)\n",
          ti->fname.c_str(), version);
+  for (i = 0; i < tracks.size(); i++) {
+    mpeg_ps_track_ptr &track = tracks[i];
+    mxinfo("Track ID %d: %s (%s)\n", i,
+           track->type == 'a' ? "audio" : "video",
+           track->fourcc == FOURCC('m', 'p', 'g', '1') ? "MPEG-1" :
+           track->fourcc == FOURCC('m', 'p', 'g', '2') ? "MPEG-2" :
+           track->fourcc == FOURCC('M', 'P', '1', ' ') ? "MPEG-1 layer 1" :
+           track->fourcc == FOURCC('M', 'P', '2', ' ') ? "MPEG-1 layer 2" :
+           track->fourcc == FOURCC('M', 'P', '3', ' ') ? "MPEG-1 layer 3" :
+           track->fourcc == FOURCC('A', 'C', '3', ' ') ? "AC3" :
+           track->fourcc == FOURCC('D', 'T', 'S', ' ') ? "DTS" :
+           track->fourcc == FOURCC('P', 'C', 'M', ' ') ? "PCM" :
+           track->fourcc == FOURCC('L', 'P', 'C', 'M') ? "LPCM" :
+           "unknown");
+  }
 }
 

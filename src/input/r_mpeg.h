@@ -51,22 +51,27 @@ public:
 };
 
 struct mpeg_ps_track_t {
+  int ptzr;
+
   char type;                    // 'v' for video, 'a' for audio, 's' for subs
-  int id;
+  uint32_t fourcc;
 
   int v_version, v_width, v_height;
   double v_frame_rate, v_aspect_ratio;
-  M2VParser *m2v_parser;
+  unsigned char *raw_seq_hdr;
+  int raw_seq_hdr_size;
 
   int a_channels, a_sample_rate, a_bits_per_sample;
 
   mpeg_ps_track_t():
-    type(0), id(0), v_version(0), v_width(0), v_height(0),
-    v_frame_rate(0), v_aspect_ratio(0), m2v_parser(NULL),
+    ptzr(0), type(0), fourcc(0),
+    v_version(0), v_width(0), v_height(0),
+    v_frame_rate(0), v_aspect_ratio(0),
+    raw_seq_hdr(NULL), raw_seq_hdr_size(0),
     a_channels(0), a_sample_rate(0), a_bits_per_sample(0) {
   };
   ~mpeg_ps_track_t() {
-    delete m2v_parser;
+    safefree(raw_seq_hdr);
   }
 };
 
@@ -77,6 +82,7 @@ private:
   mm_io_c *mm_io;
   int64_t bytes_processed, size, duration;
 
+  int id2idx[256];
   int version;
 
   vector<mpeg_ps_track_ptr> tracks;
@@ -89,6 +95,12 @@ public:
   virtual int get_progress();
   virtual void identify();
   virtual void create_packetizer(int64_t id);
+
+  virtual void found_new_stream(int id);
+
+  virtual bool read_timestamp(int c, int64_t &timestamp);
+  virtual bool parse_packet(int id, int64_t &timestamp, int &size);
+  virtual bool find_next_packet_for_id(int id);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 };
