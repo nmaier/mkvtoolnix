@@ -1,1 +1,40 @@
-Moritz Bunkus <moritz@bunkus.org>
+The authors for the main code in alphabetical order:
+
+Bunkus, Moritz (Mosu) <moritz@bunkus.org>
+    * Almost everything
+
+Le Guen, Nicolas (Goldenear) <nleguen@pepper-prod.com>
+    * Enhancements and updates to the "CUE sheet to tags & chapter
+      conversion" process
+    * Small updates to mmg and the MIME type list
+
+Lhomme, Steve (robux4) <steve.lhomee@free.fr>
+    * Fixes for compilation with MSVC
+    * Enhancements and fixes to the XML chapter parser
+
+Mistry, Shailesh L <shailesh.mistry@milan.eclipse.co.uk>
+    * Fixes for compilation of avilib with cygwin
+
+Niemayer, Peter <niemayer@isg.de>
+    * The DTS code (reader, packetizers, dts_common)
+
+Pettersen, Vegard <vegard_p@broadpark.no>
+    * Extended support for converting CUE sheets to tags & chapters
+
+Stone, Jory (jcsston) <jcsston@toughguy.net>
+    * Fixes to mkvinfo's GUI
+
+?, ? (Lefungus)
+    * Avoid several compiler warnings
+
+-------------------------------------------------------
+
+Stuff that was developped externally and only included/patched in mkvtoolnix:
+
+avilib:
+    * Johanni, Rainer <Rainer@Johanni.de> (original source code)
+    * Östreich, Thomas <ostreich@theorie.physik.uni-goettingen.de>
+      (lots of modifications in transcode)
+    * Bunkus, Moritz <moritz@bunkus.org> (lots of modifications in
+      ogmtools and mkvtoolnix)
+    * probably others
