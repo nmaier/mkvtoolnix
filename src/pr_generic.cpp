@@ -855,7 +855,6 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
 
     timecode_ranges->push_back(t);
   }
-  delete in;
 
   mxverb(3, "ext_timecodes: Version %d, default fps %f, %u entries.\n",
          ext_timecodes_version, default_fps, timecode_ranges->size());
