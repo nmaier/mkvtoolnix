@@ -76,7 +76,7 @@ int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 // {{{ C'TOR
 
-avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
+avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   long fsize, i;
   int64_t size, bps;
