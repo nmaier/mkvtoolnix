@@ -31,7 +31,6 @@
 #include "pr_generic.h"
 #include "p_flac.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 
 using namespace libmatroska;
 

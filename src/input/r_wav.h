@@ -25,6 +25,7 @@
 #include "dts_common.h"
 #include "error.h"
 #include "mm_io.h"
+#include "pr_generic.h"
 
 extern "C" {
 #include "avilib.h"

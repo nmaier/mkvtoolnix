@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "error.h"
-#include "mkvmerge.h"
 #include "M2VParser.h"
 #include "r_mpeg.h"
 #include "p_video.h"

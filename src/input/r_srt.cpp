@@ -19,7 +19,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "pr_generic.h"
 #include "r_srt.h"
 #include "subtitles.h"

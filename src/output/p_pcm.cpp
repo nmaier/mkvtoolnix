@@ -18,7 +18,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "p_pcm.h"

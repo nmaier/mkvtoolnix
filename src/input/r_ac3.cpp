@@ -22,7 +22,6 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
 #include "r_ac3.h"

@@ -21,7 +21,6 @@
 
 #include <algorithm>
 
-#include "mkvmerge.h"
 #include "pr_generic.h"
 #include "r_ssa.h"
 #include "subtitles.h"

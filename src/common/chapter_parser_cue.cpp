@@ -21,13 +21,13 @@
 #include <string>
 
 #include <matroska/KaxChapters.h>
+#include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
 #include "chapters.h"
 #include "commonebml.h"
 #include "error.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 
 using namespace std;
 using namespace libmatroska;

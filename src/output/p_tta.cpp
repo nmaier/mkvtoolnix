@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 #include "p_tta.h"
 #include "tta_common.h"
 

@@ -22,7 +22,7 @@
 #include "pr_generic.h"
 #include "dts_common.h"
 #include "matroska.h"
-#include "mkvmerge.h"
+#include "output_control.h"
 #include "p_dts.h"
 
 using namespace libmatroska;

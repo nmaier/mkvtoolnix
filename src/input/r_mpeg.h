@@ -18,6 +18,7 @@
 
 #include "os.h"
 
+#include "pr_generic.h"
 #include "M2VParser.h"
 
 class error_c;

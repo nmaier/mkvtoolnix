@@ -22,7 +22,6 @@
 #include "ac3_common.h"
 #include "p_ac3.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 
 using namespace libmatroska;
 

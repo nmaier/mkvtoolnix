@@ -45,8 +45,8 @@
 using namespace std;
 
 #include "base64.h"
+#include "common.h"
 #include "hacks.h"
-#include "mkvmerge.h"
 
 int verbose = 1;
 bool suppress_warnings = false;

@@ -22,7 +22,6 @@
 #include "aac_common.h"
 #include "p_aac.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 
 using namespace libmatroska;
 

@@ -23,7 +23,6 @@
 #include "chapters.h"
 #include "commonebml.h"
 #include "error.h"
-#include "mkvmerge.h"
 
 using namespace std;
 using namespace libmatroska;

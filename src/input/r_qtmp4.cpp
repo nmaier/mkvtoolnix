@@ -30,7 +30,6 @@
 #include "avilib.h"
 #include "common.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 #include "p_aac.h"
 #include "p_mp3.h"
 #include "p_passthrough.h"

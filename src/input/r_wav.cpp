@@ -31,7 +31,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
 #include "r_wav.h"

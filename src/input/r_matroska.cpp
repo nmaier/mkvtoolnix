@@ -47,6 +47,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxSeekHead.h>
 #include <matroska/KaxSegment.h>
+#include <matroska/KaxTag.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
@@ -56,7 +57,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "commonebml.h"
 #include "hacks.h"
 #include "matroska.h"
-#include "mkvmerge.h"
+#include "output_control.h"
 #include "mm_io.h"
 #include "pr_generic.h"
 #include "r_matroska.h"

@@ -982,10 +982,8 @@ mmg_dialog::on_about(wxCommandEvent &evt) {
                    "\n"
                    "Help is available in form of tool tips and the HTML "
                    "documentation\n"
-                   "for mkvmerge, mkvmerge.html. It can also be viewed online "
                    "at\n"
-                   "http://www.bunkus.org/videotools/mkvtoolnix/doc/"
-                   "mkvmerge.html"),
+                   "http://www.bunkus.org/videotools/mkvtoolnix/doc/"),
                wxT("About mkvmerge's GUI"),
                wxOK | wxCENTER | wxICON_INFORMATION);
 }

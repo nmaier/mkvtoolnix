@@ -18,7 +18,6 @@
 #include <string.h>
 #include <typeinfo>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "subtitles.h"
 

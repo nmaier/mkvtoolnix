@@ -19,7 +19,6 @@
 #include <string.h>
 
 #include "matroska.h"
-#include "mkvmerge.h"
 #include "pr_generic.h"
 #include "p_realaudio.h"
 
