@@ -1163,6 +1163,7 @@ ogm_reader_c::identify() {
   int i;
   stream_header *sth;
   char fourcc[5];
+  string info;
 
   mxinfo("File '%s': container: Ogg/OGM\n", ti->fname);
   for (i = 0; i < num_sdemuxers; i++) {
@@ -1171,7 +1172,18 @@ ogm_reader_c::identify() {
       memcpy(fourcc, sth->subtype, 4);
       fourcc[4] = 0;
     }
-    mxinfo("Track ID %d: %s (%s)\n", sdemuxers[i]->serial,
+    if (identify_verbose) {
+      info = " [";
+      if (sdemuxers[i]->language != NULL)
+        info += string("language:") + escape(sdemuxers[i]->language) +
+          string(" ");
+      if (sdemuxers[i]->title != NULL)
+        info += string("track_name:") + escape(sdemuxers[i]->title) +
+          string(" ");
+      info += "]";
+    } else
+      info = "";
+    mxinfo("Track ID %d: %s (%s)%s\n", sdemuxers[i]->serial,
            (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
@@ -1189,7 +1201,8 @@ ogm_reader_c::identify() {
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC ? "FLAC" :
-           "unknown");
+           "unknown",
+           info.c_str());
   }
 }
 

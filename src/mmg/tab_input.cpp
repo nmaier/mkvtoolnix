@@ -459,6 +459,7 @@ void
 tab_input::on_add_file(wxCommandEvent &evt) {
   mmg_file_t file;
   wxString file_name, name, command, id, type, exact, media_files;
+  wxString video_track_name;
   wxArrayString output, errors;
   vector<wxString> args, pair;
   int result, pos;
@@ -578,6 +579,9 @@ tab_input::on_add_file(wxCommandEvent &evt) {
           }
         }
 
+        if ((track.type == 'v') && (track.track_name->length() > 0))
+          video_track_name = *track.track_name;
+
         file.tracks->push_back(track);
 
       } else if ((pos = output[i].Find("container:")) > 0) {
@@ -642,6 +646,9 @@ tab_input::on_add_file(wxCommandEvent &evt) {
 
     file.file_name = new wxString(dlg.GetPath());
     mdlg->set_title_maybe(*file.title);
+    if ((file.container == TYPEOGM) &&
+        (video_track_name.length() > 0))
+      mdlg->set_title_maybe(video_track_name);
     mdlg->set_output_maybe(*file.file_name);
     files.push_back(file);
   }

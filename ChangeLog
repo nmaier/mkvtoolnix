@@ -1,3 +1,8 @@
+2004-03-10  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge/mmg: bug fix: The LANGUAGE and TITLE comments from OGM
+	files were not set in the GUI when adding such files.
+
 2004-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: If the FourCC was set for one track it had been
