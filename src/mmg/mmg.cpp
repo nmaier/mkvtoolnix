@@ -951,8 +951,10 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
                     wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
     return;
 
+  set_on_top(false);
   mux_dlg = new mux_dialog(this);
   delete mux_dlg;
+  restore_on_top();
 }
 
 void
@@ -1548,7 +1550,9 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_manage_jobs(wxCommandEvent &evt) {
+  set_on_top(false);
   job_dialog jdlg(this);
+  restore_on_top();
 }
 
 void
@@ -1645,6 +1649,23 @@ mmg_dialog::on_add_cli_options(wxCommandEvent &evt) {
 
   if (dlg.go(cli_options))
     update_command_line();
+}
+
+void
+set_on_top(bool on_top) {
+  long style;
+
+  style = mdlg->GetWindowStyleFlag();
+  if (on_top)
+    style |= wxSTAY_ON_TOP;
+  else
+    style &= ~wxSTAY_ON_TOP;
+  mdlg->SetWindowStyleFlag(style);
+}
+
+void
+restore_on_top() {
+  set_on_top(mdlg->settings_page->cb_on_top->IsChecked());
 }
 
 IMPLEMENT_CLASS(cli_options_dlg, wxDialog);

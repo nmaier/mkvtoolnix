@@ -1,5 +1,11 @@
 2004-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: new feature: Temporarily disaable 'always on top' if the
+	muxing or the job dialog are visible.
+
+	* mmg: new feature: Ask for confirmation before adding a job if
+	there's already an old job with the same description.
+
 	* mkvmerge: new feature: You can specifiy the time after which to
 	split with ms precision.
 

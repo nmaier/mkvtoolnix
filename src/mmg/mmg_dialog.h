@@ -82,7 +82,7 @@ class tab_settings;
 class mmg_dialog: public wxFrame {    
   DECLARE_CLASS(mmg_dialog);
   DECLARE_EVENT_TABLE();
-protected:
+public:
   wxButton *b_browse_output;
   wxStaticBox *sb_commandline;
   wxTextCtrl *tc_output, *tc_cmdline;

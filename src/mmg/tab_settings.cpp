@@ -170,18 +170,6 @@ tab_settings::on_on_top_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_settings::set_on_top(bool on_top) {
-  long style;
-
-  style = mdlg->GetWindowStyleFlag();
-  if (on_top)
-    style |= wxSTAY_ON_TOP;
-  else
-    style &= ~wxSTAY_ON_TOP;
-  mdlg->SetWindowStyleFlag(style);
-}
-
-void
 tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
   wxString priority;
