@@ -1,3 +1,11 @@
+2004-05-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Some MP3 streams are padded in the front with
+	trash (mostly those in AVI files). This trash might contain valid
+	MP3 headers which do not match the remaining headers for the
+	actual track. Both the MP3 reader and the MP3 packetizer can now
+	skip up to one of those bogus headers in the trash.
+
 2004-05-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: On some occasions the chapter editor thought there

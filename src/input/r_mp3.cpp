@@ -31,72 +31,32 @@
 
 int
 mp3_reader_c::probe_file(mm_io_c *mm_io,
-                         int64_t size) {
-  unsigned char buf[16384];
-  int pos, pos2, ptr;
-  mp3_header_t mp3header;
-
-  try {
-    mm_io->setFilePointer(0, seek_beginning);
-
-    ptr = 0;
-    while (1) {
-      mm_io->setFilePointer(ptr, seek_beginning);
-      size = mm_io->read(buf, 16384);
-      pos = find_mp3_header(buf, size);
-      if (pos < 0)
-        return 0;
-      decode_mp3_header(&buf[pos], &mp3header);
-      if (!mp3header.is_tag)
-        break;
-      mxverb(2, "mp3_reader: Found tag at %d size %d\n", ptr + pos,
-             mp3header.framesize);
-      ptr += pos + mp3header.framesize;
-    }
-
-    pos2 = find_mp3_header(&buf[pos + mp3header.framesize],
-                           size - pos - mp3header.framesize);
-    mxverb(2, "mp3_reader: Found first at %d, length %d, version %d, "
-           "layer %d, second at %d\n", ptr + pos, mp3header.framesize,
-           mp3header.version, mp3header.layer, pos2);
-         
-    if (pos2 != 0)
-      return 0;
-
-  } catch (exception &ex) {
-    return 0;
-  }
-
-  return 1;
+                         int64_t) {
+  return (find_valid_headers(mm_io) != -1) ? 1 : 0;
 }
 
 mp3_reader_c::mp3_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
-  int pos, ptr, buf_size;
+  int pos;
   unsigned char buf[16384];
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
     size = mm_io->get_size();
 
-    ptr = 0;
-    while (1) {
-      mm_io->setFilePointer(ptr, seek_beginning);
-      buf_size = mm_io->read(buf, 16384);
-      pos = find_mp3_header(buf, buf_size);
-      if (pos < 0)
-        throw error_c("Could not find a valid MP3 packet.");
-      decode_mp3_header(&buf[pos], &mp3header);
-      if (!mp3header.is_tag)
-        break;
-      mxverb(2, "mp3_reader: Found tag at %d size %d\n", ptr + pos,
-             mp3header.framesize);
-      ptr += pos + mp3header.framesize;
-    }
-
-    mm_io->setFilePointer(ptr + pos, seek_beginning);
-    mxverb(2, "mp3_reader: Found header at %d\n", ptr + pos);
+    pos = find_valid_headers(mm_io);
+    if (pos < 0)
+      throw error_c("Could not find a valid MP3 packet.");
+    mm_io->setFilePointer(pos, seek_beginning);
+    mm_io->read(buf, 16384);
+    decode_mp3_header(buf, &mp3header);
+    mm_io->setFilePointer(pos, seek_beginning);
+    if ((pos > 0) && verbose)
+      mxwarn("mp3_reader: skipping %d bytes at the beginning of '%s' (no "
+                 "valid MP3 header found).\n", pos, ti->fname);
+    mxverb(2, "mp3_reader: Found header at %d size %d\n", pos,
+           mp3header.framesize);
 
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
@@ -151,4 +111,71 @@ mp3_reader_c::identify() {
          "%d)\n", ti->fname,
          mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5",
          mp3header.layer);
+}
+
+int
+mp3_reader_c::find_valid_headers(mm_io_c *mm_io) {
+  unsigned char buf[16384];
+  int pos, pos2, ptr, buf_size;
+  mp3_header_t mp3header;
+
+  ptr = 0;
+
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+
+    while (1) {
+      mm_io->setFilePointer(ptr, seek_beginning);
+      buf_size = mm_io->read(buf, 16384);
+      pos = find_mp3_header(buf, buf_size);
+      if (pos < 0)
+        return -1;
+      decode_mp3_header(&buf[pos], &mp3header);
+      if (!mp3header.is_tag)
+        break;
+      mxverb(2, "mp3_reader: Found tag at %d size %d\n", ptr + pos,
+             mp3header.framesize);
+      ptr += pos + mp3header.framesize;
+    }
+
+    pos2 = find_mp3_header(&buf[pos + mp3header.framesize],
+                           buf_size - pos - mp3header.framesize);
+    mxverb(2, "mp3_reader: Found first at %d, length %d, version %d, "
+           "layer %d, second at %d\n", ptr + pos, mp3header.framesize,
+           mp3header.version, mp3header.layer, pos2);
+         
+    if (pos2 != 0) {
+      int offset;
+
+      // Next try... maybe we've found a bogus header in the trash.
+      offset = pos + 1;
+      pos = find_mp3_header(&buf[offset], buf_size - offset);
+      if (pos < 0)
+        return -1;
+      decode_mp3_header(&buf[offset + pos], &mp3header);
+      mxverb(2, "mp3_reader: Second header search, first header at %d + %d "
+             "(version: %d, layer: %d, sampling freq: %d, channels: %d, "
+             "bitrate: %d)\n", offset, pos, mp3header.version, mp3header.layer,
+             mp3header.sampling_frequency, mp3header.channels,
+             mp3header.bitrate);
+      pos2 = find_mp3_header(&buf[offset + pos + mp3header.framesize],
+                             buf_size - offset - pos - mp3header.framesize);
+      mxverb(2, "mp3_reader: Second header search, second header? %d\n", pos2);
+      if (pos2 < 0)
+        return -1;
+      decode_mp3_header(&buf[offset + pos + pos2], &mp3header);
+      mxverb(2, "mp3_reader: Second header search, second header at %d + %d "
+             "(version: %d, layer: %d, sampling freq: %d, channels: %d, "
+             "bitrate: %d)\n", offset + pos, pos2, mp3header.version,
+             mp3header.layer, mp3header.sampling_frequency, mp3header.channels,
+             mp3header.bitrate);
+      if (pos2 > 0)
+        return -1;
+      pos += offset;
+    }
+  } catch (exception &ex) {
+    return -1;
+  }
+
+  return ptr + pos;
 }

@@ -34,7 +34,7 @@ private:
   unsigned long samples_per_sec;
   int channels, spf;
   byte_buffer_c byte_buffer;
-  bool codec_id_set;
+  bool codec_id_set, valid_headers_found;
 
 public:
   mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,

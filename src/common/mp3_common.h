@@ -38,7 +38,7 @@ typedef struct {
   bool is_tag;
 } mp3_header_t;
 
-int MTX_DLL_API find_mp3_header(unsigned char *buf, int size);
-void MTX_DLL_API decode_mp3_header(unsigned char *buf, mp3_header_t *h);
+int MTX_DLL_API find_mp3_header(const unsigned char *buf, int size);
+void MTX_DLL_API decode_mp3_header(const unsigned char *buf, mp3_header_t *h);
 
 #endif // __MP3_COMMON_H

@@ -132,14 +132,16 @@ static int mp3_samples_per_channel[3][3] = {
   {384, 1152, 576}
 };
 
-int find_mp3_header(unsigned char *buf, int size) {
+int
+find_mp3_header(const unsigned char *buf,
+                int size) {
   int i, pos;
   unsigned long header;
 
   if (size < 4)
     return -1;
 
-  for (pos = 0; pos <= (size - 4); pos++) {
+  for (pos = 0; pos < (size - 4); pos++) {
     if ((buf[pos] == 'I') && (buf[pos + 1] == 'D') && (buf[pos + 2] == '3')) {
       if ((pos + 10) >= size)
         return -1;
@@ -176,7 +178,9 @@ int find_mp3_header(unsigned char *buf, int size) {
   return -1;
 }
 
-void decode_mp3_header(unsigned char *buf, mp3_header_t *h) {
+void
+decode_mp3_header(const unsigned char *buf,
+                  mp3_header_t *h) {
   unsigned long header;
   int i;
 
@@ -214,13 +218,9 @@ void decode_mp3_header(unsigned char *buf, mp3_header_t *h) {
   else if (h->version == 3)
     h->version = 1;
 
-  h->layer = (header >> 17) & 3;
-  if (h->layer == 00)
+  h->layer = 4 - (header >> 17) & 3;
+  if (h->layer == 4)
     mxerror("Invalid MP3 header value for the layer.\n");
-  if (h->layer == 1)
-    h->layer = 3;
-  else if (h->layer == 3)
-    h->layer = 1;
 
   h->protection = ((header >> 16) & 1) ^ 1;
 

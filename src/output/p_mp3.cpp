@@ -43,6 +43,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   packetno = 0;
   spf = 1152;
   codec_id_set = false;
+  valid_headers_found = false;
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1152000000000.0 * ti->async.linear /
@@ -76,6 +77,57 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     mxverb(2, "mp3_packetizer: Removing TAG packet with size %d\n",
            mp3header->framesize);
     byte_buffer.remove(mp3header->framesize + pos);
+  }
+
+  // Try to be smart. We might get fed trash before the very first MP3
+  // header. And now a user has presented streams in which the trash
+  // contains valid MP3 headers before the 'real' ones...
+  // Screw the guys who program apps that use _random_ _trash_ for filling
+  // gaps. Screw those who try to use AVI no matter the 'cost'!
+  if (!valid_headers_found) {
+    int pos2, offset;
+
+    // Try to find a second header.
+    if ((pos + mp3header->framesize + 4) >= size)
+      return NULL;
+    pos2 = find_mp3_header(&buf[pos + mp3header->framesize], size - pos -
+                           mp3header->framesize);
+    if (pos2 < 0)               // Found something?
+      return NULL;
+    // Two consecutive headers? If yes, then we have something valid here.
+    if (pos2 == 0)
+      valid_headers_found = true;
+    else {
+      // Nope... The second header is not where it's supposed to be.
+      // Try to find another MP3 header behind the first one.
+      offset = pos + 1;
+      pos = find_mp3_header(&buf[offset], size - offset);
+      if (pos < 0)              // Found something?
+        return NULL;            // This should not happen, you know...
+      if ((offset + pos + mp3header->framesize + 4) > size)
+        return NULL;            // Not the whole frame is present.
+      decode_mp3_header(&buf[offset + pos], mp3header);
+      pos2 = find_mp3_header(&buf[offset + pos + mp3header->framesize],
+                             size - offset - pos - mp3header->framesize);
+      if (pos2 < 0)             // Second header found?
+        return NULL;
+      if (pos2 == 0) {
+        // Yay, two consecutive headers. Throw away the trash at the
+        // beginning.
+        if (verbose)
+          mxwarn("mp3_packetizer: skipping %d bytes at the beginning (no "
+                 "valid MP3 header found).\n", offset + pos);
+        byte_buffer.remove(offset + pos);
+        buf = byte_buffer.get_buffer();
+        size = byte_buffer.get_size();
+        pos = 0;
+        valid_headers_found = true;
+      } else {
+        // Not consecutive... Oh well, I cannot do anything about this.
+        // The stream will likely come out wrong.
+        valid_headers_found = true;
+      }
+    }
   }
 
   if (packetno == 0) {
