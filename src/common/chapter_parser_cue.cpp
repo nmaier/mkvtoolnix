@@ -11,6 +11,8 @@
  * chapter parser for CUE sheets
  *
  * Written by Moritz Bunkus <moritz@bunkus.org>.
+ * Patches by Nicolas Le Guen <nleguen@pepper-prod.com> and
+ * Vegard Pettersen <vegard_p@broadpark.no>
  */
 
 #include <ctype.h>
@@ -24,6 +26,7 @@
 #include "chapters.h"
 #include "commonebml.h"
 #include "error.h"
+#include "matroska.h"
 #include "mkvmerge.h"
 
 using namespace std;
@@ -193,12 +196,15 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   tag = new KaxTag;
   targets = &GetChild<KaxTagTargets>(*tag);
   *static_cast<EbmlUInteger *>(&GetChild<KaxTagChapterUID>(*targets)) = cuid;
+  *static_cast<EbmlUInteger *>(&GetChild<KaxTagTargetTypeValue>(*targets)) =
+    TAG_TARGETTYPE_TRACK;
+  *static_cast<EbmlString *>(&GetChild<KaxTagTargetType>(*targets)) = "track";
 
   create_tag1(a.title, "TITLE");
   tag->PushElement(*create_simple_tag(a, "PART_NUMBER",
                                       mxsprintf("%d", a.num)));
   create_tag2(a.performer, a.global_performer, "ARTIST");
-  create_tag2(a.date, a.global_date, "DATE");
+  create_tag2(a.date, a.global_date, "DATE_RELEASED");
   create_tag2(a.genre, a.global_genre, "GENRE");
   create_tag1(a.isrc, "ISRC");
   create_tag1(a.flags, "CDAUDIO_TRACK_FLAGS");
@@ -229,13 +235,15 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   targets = &GetChild<KaxTagTargets>(*tag);
   *static_cast<EbmlUInteger *>(&GetChild<KaxTagEditionUID>(*targets)) =
     a.edition_uid;
+  *static_cast<EbmlUInteger *>(&GetChild<KaxTagTargetTypeValue>(*targets)) =
+    TAG_TARGETTYPE_ALBUM;
+  *static_cast<EbmlString *>(&GetChild<KaxTagTargetType>(*targets)) = "album";
 
-  create_tag1("MEDIA", "LEVEL_TYPE");
   create_tag1(a.global_performer, "ARTIST");
   create_tag1(a.global_title, "TITLE");
-  create_tag1(a.global_date, "DATE");
+  create_tag1(a.global_date, "DATE_RELEASED");
   create_tag1(a.global_disc_id, "DISCID");
-  create_tag1(a.global_catalog, "CATALOG");
+  create_tag1(a.global_catalog, "CATALOG_NUMBER");
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
