@@ -39,6 +39,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual void identify();
+  virtual void create_packetizer(int64_t tid);
 
   static int probe_file(mm_text_io_c *mm_io, int64_t size);
 };

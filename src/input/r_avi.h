@@ -68,14 +68,14 @@ public:
   virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify();
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 protected:
   virtual void add_audio_demuxer(int aid);
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);
-  virtual void create_packetizers();
-  virtual void create_packetizer(int64_t tid);
 };
 
 #endif  // __R_AVI_H

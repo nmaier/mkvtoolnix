@@ -105,6 +105,9 @@ typedef struct {
 #define DEFAULT_TRACK_PRIORITY_FROM_SOURCE  50
 #define DEFAULT_TRACK_PRIORITY_CMDLINE     255  
 
+#define FMT_FN "'%s': "
+#define FMT_TID "'%s' track %lld: "
+
 typedef struct {
   KaxBlockGroup *group;
   KaxBlock *block;
@@ -243,6 +246,7 @@ typedef struct packetizer_container_t {
 #define OPTZR(i) reader_packetizers[i].orig
 #define PTZR(i) reader_packetizers[i].current
 #define PTZR0 PTZR(0)
+#define NPTZR() reader_packetizers.size()
 
 class generic_reader_c {
 protected:
@@ -261,6 +265,10 @@ public:
   virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify() = 0;
+  virtual void create_packetizer(int64_t tid) = 0;
+  virtual void create_packetizers() {
+    create_packetizer(0);
+  }
 
   virtual void add_attachments(KaxAttachments *a) {
   }

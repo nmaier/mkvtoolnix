@@ -114,6 +114,8 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual void set_headers();
   virtual void identify();
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 
   virtual int display_priority();
   virtual void display_progress(bool final = false);
@@ -131,8 +133,6 @@ private:
   virtual int read_headers();
   virtual void process_header_page(ogg_page *pg);
   virtual void process_header_packets(ogm_demuxer_t *dmx);
-  virtual void create_packetizers();
-  virtual void create_packetizer(int64_t tid);
   virtual void free_demuxer(int);
   virtual void flush_packetizers();
   virtual void handle_stream_comments();

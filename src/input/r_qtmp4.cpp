@@ -100,11 +100,9 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
       throw error_c(PFX "Source is not a valid Quicktime/MP4 file.");
 
     if (verbose)
-      mxinfo("Using Quicktime/MP4 demultiplexer for %s.\n", ti->fname);
+      mxinfo(FMT_FN "Using the Quicktime/MP4 demultiplexer.\n", ti->fname);
 
     parse_headers();
-    if (!identifying)
-      create_packetizers();
 
   } catch (exception &ex) {
     throw error_c(PFX "Could not read the source file.");
@@ -1133,8 +1131,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                                 false, ti));
         ti->private_data = NULL;
       }
-      mxinfo("+-> Using the video packetizer for track %u (FourCC: %.4s).\n",
-             dmx->id, dmx->fourcc);
+      mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
+             ti->fname, (int64_t)dmx->id, dmx->fourcc);
 
     } else {
       if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
@@ -1149,9 +1147,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ptzr->set_audio_channels(dmx->a_channels);
         ptzr->set_audio_bit_depth(dmx->a_bitdepth);
 
-        if (verbose)
-          mxinfo("+-> Using generic audio output module for stream "
-                 "%u (FourCC: %.4s).\n", dmx->id, dmx->fourcc);
+        mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s)."
+               "\n", ti->fname, (int64_t)dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4)) {
         int profile, sample_rate, channels, output_sample_rate;
@@ -1174,11 +1171,12 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           if (sbraac)
             PTZR(dmx->ptzr)->
               set_audio_output_sampling_freq(output_sample_rate);
-          if (verbose)
-            mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id);
+          mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname,
+                 (int64_t)dmx->id);
 
         } else
-          mxerror(PFX "AAC found, but decoder config data has length %u.\n",
+          mxerror(FMT_TID "AAC found, but decoder config data has length %u."
+                  "\n", ti->fname, (int64_t)dmx->id,
                   dmx->esds.decoder_config_len);
 
       } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
@@ -1188,8 +1186,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                               dmx->a_channels, dmx->a_bitdepth,
                                               ti, (dmx->a_bitdepth > 8) &&
                                               (dmx->fourcc[0] == 't')));
-        if (verbose)
-          mxinfo("+-> Using PCM output module for stream %u.\n", dmx->id);
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname,
+               (int64_t)dmx->id);
 
       } else
         die(PFX "Should not have happened #1.");

@@ -140,8 +140,8 @@ kax_reader_c::kax_reader_c(track_info_c *nti)
 
   if (!read_headers())
     throw error_c(PFX "Failed to read the headers.");
-
-  create_packetizers();
+  if (verbose)
+    mxinfo(FMT_FN "Using the Matroska demultiplexer.\n", ti->fname);
 }
 
 // }}}
@@ -1375,8 +1375,9 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   passthrough_packetizer_c *ptzr;
   track_info_c *nti;
 
-  mxverb(1, "+-> Using the passthrough output module for the %s "
-         "track with the ID %u.\n", MAP_TRACK_TYPE_STRING(t->type), t->tnum);
+  mxinfo(FMT_TID "Using the passthrough output module for this %s "
+         "track.\n", ti->fname, (int64_t)t->tnum,
+         MAP_TRACK_TYPE_STRING(t->type));
 
   nti = new track_info_c(*ti);
   nti->id = t->tnum;
@@ -1479,8 +1480,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
             !strcmp(t->codec_id, MKV_V_MSCOMP) ||
             !strncmp(t->codec_id, "V_REAL", 6) ||
             !strcmp(t->codec_id, MKV_V_QUICKTIME)) {
-          mxverb(1, "+-> Using video output module for track ID %u.\n",
-                 t->tnum);
+          mxinfo(FMT_TID "Using the video output module.\n", ti->fname,
+                 (int64_t)t->tnum);
           t->ptzr = add_packetizer(new video_packetizer_c(this, t->codec_id,
                                                           t->v_frate,
                                                           t->v_width,
@@ -1502,16 +1503,14 @@ kax_reader_c::create_packetizer(int64_t tid) {
           t->ptzr =
             add_packetizer(new pcm_packetizer_c(this, (int32_t)t->a_sfreq,
                                                 t->a_channels, t->a_bps, nti));
-          if (verbose)
-            mxinfo("+-> Using the PCM output module for track ID %u.\n",
-                   t->tnum);
+          mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname,
+                 (int64_t)t->tnum);
         } else if (t->a_formattag == 0x0055) {
           t->ptzr =
             add_packetizer(new mp3_packetizer_c(this, (int32_t)t->a_sfreq,
                                                 t->a_channels, nti));
-          if (verbose)
-            mxinfo("+-> Using the MPEG audio output module for track ID %u."
-                   "\n", t->tnum);
+          mxinfo(FMT_TID "Using the MPEG audio output module.\n",
+                 ti->fname, (int64_t)t->tnum);
         } else if (t->a_formattag == 0x2000) {
           int bsid;
 
@@ -1524,9 +1523,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
           t->ptzr =
             add_packetizer(new ac3_packetizer_c(this, (int32_t)t->a_sfreq,
                                                 t->a_channels, bsid, nti));
-          if (verbose)
-            mxinfo("+-> Using the AC3 output module for track ID %u.\n",
-                   t->tnum);
+          mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname,
+                 (int64_t)t->tnum);
         } else if (t->a_formattag == 0x2001) {
           mxerror("Reading DTS from Matroska not implemented yet,"
                   "cannot we get a complete DTS_Header here for construction"
@@ -1545,9 +1543,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                    t->header_sizes[1],
                                                    t->headers[2],
                                                    t->header_sizes[2], nti));
-          if (verbose)
-            mxinfo("+-> Using the Vorbis output module for track ID %u.\n",
-                   t->tnum);
+          mxinfo(FMT_TID "Using the Vorbis output module.\n", ti->fname,
+                 (int64_t)t->tnum);
         } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
           // A_AAC/MPEG2/MAIN
           // 0123456789012345
@@ -1560,8 +1557,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
           else if (t->codec_id[10] == '4')
             id = AAC_ID_MPEG4;
           else
-            mxerror(PFX "Malformed codec id '%s' for track %d.\n",
-                    t->codec_id, t->tnum);
+            mxerror(FMT_TID "Malformed codec id '%s'.\n", ti->fname,
+                    (int64_t)t->tnum, t->codec_id);
 
           if (!strcmp(&t->codec_id[12], "MAIN"))
             profile = AAC_PROFILE_MAIN;
@@ -1574,8 +1571,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
           else if (!strcmp(&t->codec_id[12], "LC/SBR"))
             profile = AAC_PROFILE_SBR;
           else
-            mxerror(PFX "Malformed codec id %s for track %d.\n",
-                    t->codec_id, t->tnum);
+            mxerror(FMT_TID "Malformed codec id '%s'.\n", ti->fname,
+                    (int64_t)t->tnum, t->codec_id);
 
           for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
             if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||
@@ -1589,9 +1586,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                 (int32_t)t->a_sfreq,
                                                 t->a_channels, nti,
                                                 false, true));
-          if (verbose)
-            mxinfo("+-> Using the AAC output module for track ID %u.\n",
-                   t->tnum);
+          mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname,
+                 (int64_t)t->tnum);
 
 #if defined(HAVE_FLAC_FORMAT_H)
         } else if ((t->a_formattag == FOURCC('f', 'L', 'a', 'C')) ||
@@ -1616,9 +1612,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                       nti);
             t->ptzr = add_packetizer(p);
           }
-          if (verbose)
-            mxinfo("+-> Using the FLAC output module for track ID %u.\n",
-                   t->tnum);
+          mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname,
+                 (int64_t)t->tnum);
 
 #endif
         } else
@@ -1634,9 +1629,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
           t->ptzr =
             add_packetizer(new vobsub_packetizer_c(this, t->private_data,
                                                    t->private_size, nti));
-          if (verbose)
-            mxinfo("+-> Using the VobSub output module for track ID %u.\n",
-                   t->tnum);
+          mxinfo(FMT_TID "Using the VobSub output module.\n", ti->fname,
+                 (int64_t)t->tnum);
 
           t->sub_type = 'v';
 
@@ -1650,9 +1644,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                      t->private_data,
                                                      t->private_size, false,
                                                      true, nti));
-          if (verbose)
-            mxinfo("+-> Using the text subtitle output module for track ID "
-                   "%u.\n", t->tnum);
+          mxinfo(FMT_TID "Using the text subtitle output module.\n",
+                 ti->fname, (int64_t)t->tnum);
 
           t->sub_type = 't';
         } else
@@ -1661,7 +1654,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
         break;
 
       default:
-        mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
+        mxerror(FMT_TID "Unsupported track type for this track.\n",
+                ti->fname, (int64_t)t->tnum);
         break;
     }
     set_packetizer_headers(t);

@@ -59,7 +59,6 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
   int pos;
-  dts_header_t dtsheader;
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
@@ -81,19 +80,23 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
                   "max_dts_packet_size bytes.\n");
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
-  add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
 
-  if (verbose) {
-    mxinfo("Using DTS demultiplexer for %s.\n+-> Using "
-           "DTS output module for audio stream.\n", ti->fname);
-
-    print_dts_header(&dtsheader);
-  }
+  if (verbose)
+    mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti->fname);
 }
 
 dts_reader_c::~dts_reader_c() {
   delete mm_io;
   safefree(chunk);
+}
+
+void
+dts_reader_c::create_packetizer(int64_t) {
+  if (NPTZR() != 0)
+    return;
+  add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
+  mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname, (int64_t)0);
+  print_dts_header(&dtsheader);
 }
 
 int

@@ -131,13 +131,13 @@ public:
   virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify();
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 
   static int probe_file(mm_io_c *in, int64_t size);
 
 protected:
   virtual void parse_headers();
-  virtual void create_packetizers();
-  virtual void create_packetizer(int64_t tid);
   virtual void handle_header_atoms(uint32_t parent, int64_t parent_size,
                                    uint64_t parent_pos, int level);
   virtual void read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,

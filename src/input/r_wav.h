@@ -26,9 +26,10 @@
 
 #include <stdio.h>
 
-#include "mm_io.h"
 #include "common.h"
+#include "dts_common.h"
 #include "error.h"
+#include "mm_io.h"
 
 extern "C" {
 #include "avilib.h"
@@ -43,6 +44,7 @@ private:
   struct wave_header wheader;
   int64_t bytes_processed;
   bool is_dts;
+  dts_header_t dtsheader;
 
 public:
   wav_reader_c(track_info_c *nti) throw (error_c);
@@ -50,6 +52,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual void identify();
+  virtual void create_packetizer(int64_t tid);
 
   virtual int display_priority();
   virtual void display_progress(bool final = false);

@@ -122,7 +122,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
   if (!idx_file->getline2(line) ||
       strncasecmp(line.c_str(), "# VobSub index file, v", len) ||
       (line.length() < (len + 1)))
-    mxerror(PFX "No version number found.\n");
+    mxerror(PFX "%s: No version number found.\n", ti->fname);
 
   version = line[len] - '0';
   len++;
@@ -131,15 +131,15 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
     len++;
   }
   if (version < 7)
-    mxerror(PFX "Only v7 and newer VobSub files are supported. If you have an "
-            "older version then use the VSConv utility from "
+    mxerror(PFX "%s: Only v7 and newer VobSub files are supported. If you "
+            "have an older version then use the VSConv utility from "
             "http://sourceforge.net/projects/guliverkli/ to convert these "
-            "files to v7 files.\n");
+            "files to v7 files.\n", ti->fname);
 
   parse_headers();
-  mxinfo("Using VobSub subtitle reader for '%s' & '%s'.\n", ti->fname,
-         sub_name.c_str());
-  create_packetizers();
+  if (verbose)
+    mxinfo(FMT_FN "Using the VobSub subtitle reader (SUB file '%s').\n",
+           ti->fname, sub_name.c_str());
 }
 
 vobsub_reader_c::~vobsub_reader_c() {
@@ -191,9 +191,8 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
       avg_duration /= (tracks[i]->timecodes.size() - 1);
     tracks[i]->durations.push_back(avg_duration);
 
-    if (verbose)
-      mxinfo("+-> Using VobSub subtitle output module for subtitle track "
-             "%u (language: %s).\n", i, tracks[i]->language);
+    mxinfo(FMT_TID "Using the VobSub subtitle output module (language: %s).\n",
+           ti->fname, (int64_t)i, tracks[i]->language);
     ti->language = NULL;
   }
 }

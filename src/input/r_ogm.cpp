@@ -324,12 +324,11 @@ ogm_reader_c::ogm_reader_c(track_info_c *nti)
   num_sdemuxers = 0;
 
   if (verbose)
-    mxinfo("Using OGG/OGM demultiplexer for %s.\n", ti->fname);
+    mxinfo(FMT_FN "Using the OGG/OGM demultiplexer.\n", ti->fname);
 
   if (read_headers() <= 0)
     throw error_c("ogm_reader: Could not read all header packets.");
   handle_stream_comments();
-  create_packetizers();
 }
 
 ogm_reader_c::~ogm_reader_c() {
@@ -460,73 +459,39 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         ti->private_data = (unsigned char *)&bih;
         ti->private_size = sizeof(alBITMAPINFOHEADER);
 
-        try {
-          ptzr = new video_packetizer_c(this, NULL, (double)10000000.0 /
-                                        get_uint64(&sth->time_unit),
-                                        get_uint32(&sth->sh.video.width),
-                                        get_uint32(&sth->sh.video.height),
-                                        false, ti);
-        } catch (error_c &error) {
-          mxwarn("ogm_reader: could not initialize video "
-                 "packetizer for stream id %d. Will try to continue and "
-                 "ignore this stream.\n", dmx->serial);
-          break;
-        }
+        ptzr = new video_packetizer_c(this, NULL, (double)10000000.0 /
+                                      get_uint64(&sth->time_unit),
+                                      get_uint32(&sth->sh.video.width),
+                                      get_uint32(&sth->sh.video.height),
+                                      false, ti);
 
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using video output "
-                 "module for stream %d.\n", ti->fname, dmx->serial);
+        mxinfo(FMT_TID "Using the video output module.\n", ti->fname,
+               (int64_t)dmx->serial);
 
         break;
 
       case OGM_STREAM_TYPE_PCM:
-        try {
-          ptzr = new pcm_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                      get_uint16(&sth->sh.audio.channels),
-                                      get_uint16(&sth->bits_per_sample), ti);
-        } catch (error_c &error) {
-          mxwarn("ogm_reader: could not initialize PCM "
-                 "packetizer for stream id %d. Will try to continue and "
-                 "ignore this stream.\n", dmx->serial);
-          break;
-        }
+        ptzr = new pcm_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                    get_uint16(&sth->sh.audio.channels),
+                                    get_uint16(&sth->bits_per_sample), ti);
 
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using PCM output "
-                 "module for stream %d.\n", ti->fname, dmx->serial);
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname,
+               (int64_t)dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_MP3:
-        try {
-          ptzr = new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                      get_uint16(&sth->sh.audio.channels), ti);
-        } catch (error_c &error) {
-          mxwarn("Error: ogm_reader: could not initialize MP3 "
-                 "packetizer for stream id %d. Will try to continue and "
-                 "ignore this stream.\n", dmx->serial);
-          break;
-        }
-
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using MP3 output "
-                 "module for stream %d.\n", ti->fname, dmx->serial);
+        ptzr = new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                    get_uint16(&sth->sh.audio.channels), ti);
+        mxinfo(FMT_TID "Using the MP3 output module.\n", ti->fname,
+               (int64_t)dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_AC3:
-        try {
-          ptzr = new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                      get_uint16(&sth->sh.audio.channels), 0,
-                                      ti);
-        } catch (error_c &error) {
-          mxwarn("ogm_reader: could not initialize AC3 "
-                 "packetizer for stream id %d. Will try to continue and "
-                 "ignore this stream.\n", dmx->serial);
-          break;
-        }
-
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using AC3 output "
-                 "module for stream %d.\n", ti->fname, dmx->serial);
+        ptzr = new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                    get_uint16(&sth->sh.audio.channels), 0,
+                                    ti);
+        mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname,
+               (int64_t)dmx->serial);
 
         break;
 
@@ -552,21 +517,13 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                "%d, sbr %d, output_sample_rate %d, ex %d\n", ti->id, ti->fname,
                profile, channels, sample_rate, (int)sbr, output_sample_rate,
                (int)aac_info_extracted);
-        try {
-          ptzr = new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate,
-                                      channels, ti, false, true);
-          if (sbr)
-            ptzr->set_audio_output_sampling_freq(output_sample_rate);
-        } catch (error_c &error) {
-          mxwarn("ogm_reader: could not initialize AAC "
-                 "packetizer for stream id %d. Will try to continue and "
-                 "ignore this stream.\n", dmx->serial);
-          break;
-        }
+        ptzr = new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate,
+                                    channels, ti, false, true);
+        if (sbr)
+          ptzr->set_audio_output_sampling_freq(output_sample_rate);
 
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using AAC output "
-                 "module for stream %d.\n", ti->fname, dmx->serial);
+        mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname,
+               (int64_t)dmx->serial);
 
         break;
 
@@ -581,72 +538,46 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         dmx->vorbis_rate = vi.rate;
         vorbis_info_clear(&vi);
         vorbis_comment_clear(&vc);
-        try {
-          ptzr =
-            new vorbis_packetizer_c(this,
-                                    dmx->packet_data[0], dmx->packet_sizes[0],
-                                    dmx->packet_data[1], dmx->packet_sizes[1],
-                                    dmx->packet_data[2], dmx->packet_sizes[2],
-                                    ti);
-        } catch (error_c &error) {
-          mxwarn("Error: ogm_reader: could not initialize Vorbis "
-                 "packetizer for stream id %d. Will try to continue and "
-                 "ignore this stream.\n", dmx->serial);
-          break;
-        }
+        ptzr =
+          new vorbis_packetizer_c(this,
+                                  dmx->packet_data[0], dmx->packet_sizes[0],
+                                  dmx->packet_data[1], dmx->packet_sizes[1],
+                                  dmx->packet_data[2], dmx->packet_sizes[2],
+                                  ti);
 
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using Vorbis output "
-                 "module for stream %d.\n", ti->fname, dmx->serial);
+        mxinfo(FMT_TID "Using the Vorbis output module.\n", ti->fname,
+               (int64_t)dmx->serial);
 
         break;
 
       case OGM_STREAM_TYPE_TEXT:
-        try {
-          ptzr = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true,
-                                           false, ti);
-        } catch (error_c &error) {
-          mxwarn("ogm_reader: could not initialize the "
-                 "text subtitles packetizer for stream id %d. Will try to "
-                 "continue and ignore this stream.\n", dmx->serial);
-          break;
-        }
-
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using text subtitle "
-                 "output module for stream %d.\n", ti->fname, dmx->serial);
+        ptzr = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true,
+                                         false, ti);
+        mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname,
+               (int64_t)dmx->serial);
 
         break;
 
 #if defined(HAVE_FLAC_FORMAT_H)
       case OGM_STREAM_TYPE_FLAC:
-        try {
-          unsigned char *buf;
-          int size;
+        unsigned char *buf;
+        int size;
 
-          size = 0;
-          for (i = 1; i < (int)dmx->packet_sizes.size(); i++)
-            size += dmx->packet_sizes[i];
-          buf = (unsigned char *)safemalloc(size);
-          size = 0;
-          for (i = 1; i < (int)dmx->packet_sizes.size(); i++) {
-            memcpy(&buf[size], dmx->packet_data[i], dmx->packet_sizes[i]);
-            size += dmx->packet_sizes[i];
-          }
-          ptzr = new flac_packetizer_c(this, dmx->vorbis_rate, dmx->channels,
-                                       dmx->bits_per_sample, buf, size, ti);
-          safefree(buf);
-
-        } catch (error_c &error) {
-          mxwarn("ogm_reader: could not initialize the "
-                 "FLAC packetizer for stream id %d. Will try to "
-                 "continue and ignore this stream.\n", dmx->serial);
-          break;
+        size = 0;
+        for (i = 1; i < (int)dmx->packet_sizes.size(); i++)
+          size += dmx->packet_sizes[i];
+        buf = (unsigned char *)safemalloc(size);
+        size = 0;
+        for (i = 1; i < (int)dmx->packet_sizes.size(); i++) {
+          memcpy(&buf[size], dmx->packet_data[i], dmx->packet_sizes[i]);
+          size += dmx->packet_sizes[i];
         }
+        ptzr = new flac_packetizer_c(this, dmx->vorbis_rate, dmx->channels,
+                                     dmx->bits_per_sample, buf, size, ti);
+        safefree(buf);
 
-        if (verbose)
-          mxinfo("OGG/OGM demultiplexer (%s): using the FLAC "
-                 "output module for stream %d.\n", ti->fname, dmx->serial);
+        mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname,
+               (int64_t)dmx->serial);
 
         break;
 #endif

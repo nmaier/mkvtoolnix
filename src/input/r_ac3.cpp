@@ -68,7 +68,6 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
   int pos;
-  ac3_header_t ac3header;
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
@@ -88,16 +87,22 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
                   "4096 bytes.\n");
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
-  add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
-                                      ac3header.channels, ac3header.bsid, ti));
   if (verbose)
-    mxinfo("Using AC3 demultiplexer for %s.\n+-> Using "
-           "AC3 output module for audio stream.\n", ti->fname);
+    mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti->fname);
 }
 
 ac3_reader_c::~ac3_reader_c() {
   delete mm_io;
   safefree(chunk);
+}
+
+void
+ac3_reader_c::create_packetizer(int64_t) {
+  if (NPTZR() != 0)
+    return;
+  add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
+                                      ac3header.channels, ac3header.bsid, ti));
+  mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname, (int64_t)0);
 }
 
 int

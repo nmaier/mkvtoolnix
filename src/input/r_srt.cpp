@@ -70,26 +70,35 @@ srt_reader_c::probe_file(mm_text_io_c *mm_io,
 srt_reader_c::srt_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
-  bool is_utf8;
 
   try {
     mm_io = new mm_text_io_c(ti->fname);
     if (!srt_reader_c::probe_file(mm_io, 0))
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti->id = 0;                 // ID for this track.
-    is_utf8 = mm_io->get_byte_order() != BO_NONE;
-    add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
-                                             true, is_utf8, ti));
   } catch (exception &ex) {
     throw error_c("srt_reader: Could not open the source file.");
   }
   if (verbose)
-    mxinfo("Using SRT subtitle reader for %s.\n+-> Using "
-           "text subtitle output module for subtitles.\n", ti->fname);
+    mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti->fname);
 }
 
 srt_reader_c::~srt_reader_c() {
   delete mm_io;
+}
+
+void
+srt_reader_c::create_packetizer(int64_t) {
+  bool is_utf8;
+
+  if (NPTZR() != 0)
+    return;
+
+  is_utf8 = mm_io->get_byte_order() != BO_NONE;
+  add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
+                                           true, is_utf8, ti));
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname,
+         (int64_t)0);
 }
 
 #define STATE_INITIAL         0

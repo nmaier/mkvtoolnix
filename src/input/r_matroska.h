@@ -143,6 +143,8 @@ public:
   virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify();
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
   virtual void add_attachments(KaxAttachments *a);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
@@ -151,8 +153,6 @@ protected:
   virtual int read_headers();
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
-  virtual void create_packetizers();
-  virtual void create_packetizer(int64_t tid);
   virtual kax_track_t *new_kax_track();
   virtual kax_track_t *find_track_by_num(uint32_t num, kax_track_t *c = NULL);
   virtual kax_track_t *find_track_by_uid(uint32_t uid, kax_track_t *c = NULL);

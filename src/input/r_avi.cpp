@@ -82,7 +82,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
   long fsize, i;
-  int64_t size, bps;
+  int64_t size;
   vector<avi_demuxer_t>::iterator demuxer;
 
   try {
@@ -95,7 +95,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   }
 
   if (verbose)
-    mxinfo("Using AVI demultiplexer for %s. Opening file. This "
+    mxinfo(FMT_FN "Using the AVI demultiplexer. Opening file. This "
            "may take some time depending on the file's size.\n", ti->fname);
 
   fsize = 0;
@@ -120,15 +120,6 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
     if (AVI_frame_size(avi, i) > fsize)
       fsize = AVI_frame_size(avi, i);
   max_frame_size = fsize;
-
-  create_packetizers();
-
-  foreach(demuxer, ademuxers) {
-    bps = demuxer->samples_per_second * demuxer->channels *
-      demuxer->bits_per_sample / 8;
-    if (bps > fsize)
-      fsize = bps;
-  }
 
   if (video_fps < 0)
     video_fps = fps;
@@ -189,7 +180,8 @@ avi_reader_c::create_packetizer(int64_t tid) {
                                                   AVI_video_height(avi),
                                                   false, ti));
     if (verbose)
-      mxinfo("+-> Using video output module for video track ID 0.\n");
+      mxinfo(FMT_TID "Using the video output module for the video track.\n",
+             ti->fname, (int64_t)0);
   }
   if (tid == 0)
     return;
@@ -200,7 +192,8 @@ avi_reader_c::create_packetizer(int64_t tid) {
 
 void
 avi_reader_c::create_packetizers() {
-  uint32_t i;
+  uint32_t i, bps;
+  vector<avi_demuxer_t>::iterator demuxer;
 
   for (i = 0; i < ti->track_order->size(); i++)
     create_packetizer((*ti->track_order)[i]);
@@ -209,6 +202,15 @@ avi_reader_c::create_packetizers() {
 
   for (i = 0; i < AVI_audio_tracks(avi); i++)
     create_packetizer(i + 1);
+
+  foreach(demuxer, ademuxers) {
+    bps = demuxer->samples_per_second * demuxer->channels *
+      demuxer->bits_per_sample / 8;
+    if (bps > chunk_size) {
+      chunk_size = bps;
+      chunk = (unsigned char *)saferealloc(chunk, chunk_size);
+    }
+  }
 }
 
 // {{{ FUNCTION avi_reader_c::add_audio_demuxer
@@ -257,23 +259,23 @@ avi_reader_c::add_audio_demuxer(int aid) {
   switch(audio_format) {
     case 0x0001: // raw PCM audio
       if (verbose)
-        mxinfo("+-> Using the PCM output module for audio track ID %d.\n",
-               aid + 1);
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname,
+               (int64_t)aid + 1);
       packetizer = new pcm_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels,
                                         demuxer.bits_per_sample, ti);
       break;
     case 0x0055: // MP3
       if (verbose)
-        mxinfo("+-> Using the MPEG audio output module for audio track ID "
-               "%d.\n", aid + 1);
+        mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
+               (int64_t)aid + 1);
       packetizer = new mp3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, ti);
       break;
     case 0x2000: // AC3
       if (verbose)
-        mxinfo("+-> Using the AC3 output module for audio track ID %d.\n",
-               aid + 1);
+        mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname,
+               (int64_t)aid + 1);
       packetizer = new ac3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, 0, ti);
       break;
@@ -282,21 +284,22 @@ avi_reader_c::add_audio_demuxer(int aid) {
       bool is_sbr;
 
       if ((ti->private_size != 2) && (ti->private_size != 5))
-        mxerror("The AAC track %d does not contain valid headers. The extra "
-                "header size is %d bytes, expected were 2 or 5 bytes.\n",
-                aid + 1, ti->private_size);
+        mxerror(FMT_TID "This AAC track does not contain valid headers. The "
+                "extra header size is %d bytes, expected were 2 or 5 bytes.\n",
+                ti->fname, (int64_t)aid + 1, ti->private_size);
       if (!parse_aac_data(ti->private_data, ti->private_size, profile,
                           channels, sample_rate, output_sample_rate,
                           is_sbr))
-        mxerror("The AAC track %d does not contain valid headers. Could not "
-                "parse the AAC information.\n", aid + 1);
+        mxerror(FMT_TID "This AAC track does not contain valid headers. Could "
+                "not parse the AAC information.\n", ti->fname, (int64_t)aid +
+                1);
       if (is_sbr)
         profile = AAC_PROFILE_SBR;
       demuxer.samples_per_second = sample_rate;
       demuxer.channels = channels;
       if (verbose)
-        mxinfo("+-> Using the AAC output module for audio track ID %d.\n",
-               aid + 1);
+        mxinfo(FMT_TID "Using the AAC audio output module.\n", ti->fname,
+               (int64_t)aid + 1);
       packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                         demuxer.samples_per_second,
                                         demuxer.channels, ti, false, true);
@@ -305,8 +308,8 @@ avi_reader_c::add_audio_demuxer(int aid) {
       break;
     }
     default:
-      mxerror("Unknown/unsupported audio format 0x%04x for audio track ID "
-              "%d.\n", audio_format, aid + 1);
+      mxerror(FMT_TID "Unknown/unsupported audio format 0x%04x for this audio "
+              "track.\n", ti->fname, (int64_t)aid + 1, audio_format);
   }
   demuxer.ptzr = add_packetizer(packetizer);
 

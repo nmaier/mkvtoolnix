@@ -1400,6 +1400,10 @@ create_readers() {
     } catch (error_c error) {
       mxerror("Demultiplexer failed to initialize:\n%s\n", error.get_error());
     }
+  }
+
+  for (i = 0; i < files.size(); i++) {
+    files[i]->reader->create_packetizers();
     if (!file->first)
       file->reader->connect(files[i - 1]->reader);
   }

@@ -79,13 +79,13 @@ public:
   virtual void display_progress(bool final = false);
   virtual void set_headers();
   virtual void identify();
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 protected:
   virtual void parse_headers();
-  virtual void create_packetizers();
-  virtual void create_packetizer(int64_t tid);
   virtual real_demuxer_t *find_demuxer(int id);
   virtual void assemble_video_packet(real_demuxer_t *dmx, rmff_frame_t *frame);
   virtual int finish();

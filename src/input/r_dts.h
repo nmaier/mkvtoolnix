@@ -25,16 +25,18 @@
 
 #include <stdio.h>
 
+#include "common.h"
+#include "dts_common.h"
+#include "error.h"
 #include "mm_io.h"
 #include "pr_generic.h"
-#include "common.h"
-#include "error.h"
 
 class dts_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
   mm_io_c *mm_io;
   int64_t bytes_processed, size;
+  dts_header_t dtsheader;
 
 public:
   dts_reader_c(track_info_c *nti) throw (error_c);
@@ -44,6 +46,7 @@ public:
   virtual int display_priority();
   virtual void display_progress(bool final = false);
   virtual void identify();
+  virtual void create_packetizer(int64_t id);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 };

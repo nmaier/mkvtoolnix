@@ -89,12 +89,10 @@ real_reader_c::real_reader_c(track_info_c *nti)
   done = false;
 
   if (verbose)
-    mxinfo("Using RealMedia demultiplexer for %s.\n", ti->fname);
+    mxinfo(FMT_FN "Using the RealMedia demultiplexer.\n", ti->fname);
 
   parse_headers();
   get_information_from_data();
-  if (!identifying)
-    create_packetizers();
 }
 
 // }}}
@@ -273,9 +271,8 @@ real_reader_c::create_packetizer(int64_t tid) {
           (dmx->fourcc[2] != '4') || (dmx->fourcc[3] != '0'))
         dmx->rv_dimensions = true;
 
-      if (verbose)
-        mxinfo("+-> Using video output module for stream %u (FourCC: "
-               "%s).\n", track->id, dmx->fourcc);
+      mxinfo(FMT_TID "Using the video output module (FourCC: %s).\n",
+             ti->fname, (int64_t)track->id, dmx->fourcc);
 
     } else {
       ra_packetizer_c *ptzr;
@@ -285,8 +282,8 @@ real_reader_c::create_packetizer(int64_t tid) {
           add_packetizer(new ac3_bs_packetizer_c(this, dmx->samples_per_second,
                                                  dmx->channels, dmx->bsid,
                                                  ti));
-        mxverb(1, "+-> Using the AC3 output module for stream "
-               "%u (FourCC: %s).\n", track->id, dmx->fourcc);
+        mxinfo(FMT_TID "Using the AC3 output module (FourCC: %s).\n",
+               ti->fname, (int64_t)track->id, dmx->fourcc);
 
       } else if (!strcasecmp(dmx->fourcc, "raac") ||
                  !strcasecmp(dmx->fourcc, "racp")) {
@@ -343,8 +340,8 @@ real_reader_c::create_packetizer(int64_t tid) {
           add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                               sample_rate, channels, ti, false,
                                               true));
-        mxverb(1, "+-> Using the AAC output module for stream "
-               "%u (FourCC: %s).\n", track->id, dmx->fourcc);
+        mxinfo(FMT_TID "Using the AAC output module (FourCC: %s).\n",
+               ti->fname, (int64_t)track->id, dmx->fourcc);
         if (profile == AAC_PROFILE_SBR)
           PTZR(dmx->ptzr)->set_audio_output_sampling_freq(output_sample_rate);
         else if (!extra_data_parsed)
@@ -366,9 +363,8 @@ real_reader_c::create_packetizer(int64_t tid) {
         dmx->ptzr = add_packetizer(ptzr);
         dmx->segments = new vector<rv_segment_t>;
 
-        if (verbose)
-          mxinfo("+-> Using the RealAudio output module for stream "
-                 "%u (FourCC: %s).\n", track->id, dmx->fourcc);
+        mxinfo(FMT_TID "Using the RealAudio output module (FourCC: %s).\n",
+               ti->fname, (int64_t)track->id, dmx->fourcc);
       }
     }
   }

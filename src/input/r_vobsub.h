@@ -72,13 +72,13 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual void set_headers();
   virtual void identify();
+  virtual void create_packetizers();
+  virtual void create_packetizer(int64_t tid);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
 protected:
   virtual void parse_headers();
-  virtual void create_packetizers();
-  virtual void create_packetizer(int64_t tid);
   virtual void flush_packetizers();
   virtual int deliver_packet(unsigned char *buf, int size,
                              int64_t timecode, int64_t default_duration,

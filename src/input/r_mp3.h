@@ -44,6 +44,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual void identify();
+  virtual void create_packetizer(int64_t tid);
 
   virtual int display_priority();
   virtual void display_progress(bool final = false);

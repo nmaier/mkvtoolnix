@@ -75,8 +75,6 @@ aac_reader_c::aac_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
   int adif, i;
-  aac_header_t aacheader;
-  generic_packetizer_c *aacpacketizer;
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
@@ -106,31 +104,39 @@ aac_reader_c::aac_reader_c(track_info_c *nti)
         aacheader.profile = AAC_PROFILE_SBR;
         break;
       }
-    if ((aacheader.profile != AAC_PROFILE_SBR) && !identifying)
-      mxwarn("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
-             "This can NOT be detected automatically. Therefore you have to "
-             "specifiy '--aac-is-sbr 0' manually for this input file if the "
-             "file actually contains SBR AAC. The file will be muxed in the "
-             "WRONG way otherwise. Also read mkvmerge's documentation.\n");
-
-    aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
-                                         aacheader.sample_rate,
-                                         aacheader.channels, ti,
-                                         emphasis_present);
-    add_packetizer(aacpacketizer);
-    if (aacheader.profile == AAC_PROFILE_SBR)
-      aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
   } catch (exception &ex) {
     throw error_c("aac_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo("Using AAC demultiplexer for %s.\n+-> Using "
-           "AAC output module for audio stream.\n", ti->fname);
+    mxinfo(FMT_FN "Using the AAC demultiplexer.\n", ti->fname);
 }
 
 aac_reader_c::~aac_reader_c() {
   delete mm_io;
   safefree(chunk);
+}
+
+void
+aac_reader_c::create_packetizer(int64_t) {
+  generic_packetizer_c *aacpacketizer;
+
+  if (NPTZR() != 0)
+    return;
+  if (aacheader.profile != AAC_PROFILE_SBR)
+    mxwarn("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
+           "This can NOT be detected automatically. Therefore you have to "
+           "specifiy '--aac-is-sbr 0' manually for this input file if the "
+           "file actually contains SBR AAC. The file will be muxed in the "
+           "WRONG way otherwise. Also read mkvmerge's documentation.\n");
+
+  aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
+                                       aacheader.sample_rate,
+                                       aacheader.channels, ti,
+                                       emphasis_present);
+  add_packetizer(aacpacketizer);
+  if (aacheader.profile == AAC_PROFILE_SBR)
+    aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
+  mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname, (int64_t)0);
 }
 
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)

@@ -108,12 +108,13 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
     return;
   }
   if (verbose)
-    mxinfo("Using the FLAC demultiplexer for %s.\n", ti->fname);
+    mxinfo(FMT_FN "Using the FLAC demultiplexer.\n", ti->fname);
 
   read_buffer = (unsigned char *)safemalloc(BUFFER_SIZE);
   if (!parse_file())
     throw error_c(FPFX "Could not read all header packets.");
 
+  header = NULL;
   try {
     block_size = 0;
     for (current_block = blocks.begin();
@@ -131,49 +132,34 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
         mxerror(FPFX "Could not read a header packet.\n");
       block_size += current_block->len;
     }
-    add_packetizer(new flac_packetizer_c(this, sample_rate, channels,
-                                         bits_per_sample, buf, block_size,
-                                         ti));
-    safefree(buf);
+    header = buf;
+    header_size = block_size;
   } catch (error_c &error) {
     mxerror(FPFX "could not initialize the FLAC packetizer.\n");
   }
-
-  if (verbose)
-    mxinfo("+-> Using the FLAC output module.\n");
 }
 
 flac_reader_c::~flac_reader_c() {
   delete file;
   safefree(read_buffer);
+  safefree(header);
+}
+
+void
+flac_reader_c::create_packetizer(int64_t) {
+  if (NPTZR() != 0)
+    return;
+
+  add_packetizer(new flac_packetizer_c(this, sample_rate, channels,
+                                       bits_per_sample, header, header_size,
+                                       ti));
+  mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname, (int64_t)0);
 }
 
 bool
 flac_reader_c::parse_file() {
   FLAC__StreamDecoder *decoder;
   int result;
-// , offset, pd_size;
-//   uint32_t i;
-//   unsigned char *pass_data;
-//   flac_block_t block;
-
-//   if ((pass == 2) &&
-//       ((pass_data = retrieve_pass_data(ti, pd_size)) != NULL)) {
-//     offset = 20;
-//     metadata_parsed = get_uint32(&pass_data[0]);
-//     channels = get_uint32(&pass_data[4]);
-//     sample_rate = get_uint32(&pass_data[8]);
-//     bits_per_sample = get_uint32(&pass_data[12]);
-//     pd_size = get_uint32(&pass_data[16]);
-//     for (i = 0; i < pd_size; i++) {
-//       memcpy(&block, &pass_data[offset + i * sizeof(flac_block_t)],
-//              sizeof(flac_block_t));
-//       blocks.push_back(block);
-//     }
-//     safefree(pass_data);
-
-//     return metadata_parsed;
-//   }
 
   done = false;
   file->setFilePointer(0);
@@ -216,23 +202,6 @@ flac_reader_c::parse_file() {
   file->setFilePointer(0);
   blocks[0].len -= 4;
   blocks[0].filepos = 4;
-
-//   if (pass == 1) {
-//     offset = 20;
-//     pass_data = (unsigned char *)safemalloc(offset + blocks.size() *
-//                                             sizeof(flac_block_t));
-//     put_uint32(&pass_data[0], (uint32_t)metadata_parsed);
-//     put_uint32(&pass_data[4], channels);
-//     put_uint32(&pass_data[8], sample_rate);
-//     put_uint32(&pass_data[12], bits_per_sample);
-//     put_uint32(&pass_data[16], blocks.size());
-//     for (i = 0; i < blocks.size(); i++)
-//       memcpy(&pass_data[offset + i * sizeof(flac_block_t)], &blocks[i],
-//              sizeof(flac_block_t));
-//     set_pass_data(ti, pass_data, offset + blocks.size() *
-//                   sizeof(flac_block_t));
-//     safefree(pass_data);
-//   }
 
   return metadata_parsed;
 }

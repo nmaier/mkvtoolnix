@@ -68,10 +68,10 @@ ssa_reader_c::probe_file(mm_text_io_c *mm_io,
 ssa_reader_c::ssa_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
-  string line, global;
+  string line;
   int64_t old_pos;
   char section;
-  bool is_ass, sub_charset_found;
+  bool sub_charset_found;
   int i;
 
   is_ass = false;
@@ -136,20 +136,28 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
       throw error_c("ssa_reader: Invalid format. Could not find the "
                     "\"Format\" line in the \"[Events]\" section.");
 
-    add_packetizer(new textsubs_packetizer_c(this, is_ass ?  MKV_S_TEXTASS :
-                                             MKV_S_TEXTSSA, global.c_str(),
-                                             global.length(), false, false,
-                                             ti));
   } catch (exception &ex) {
     throw error_c("ssa_reader: Could not open the source file.");
   }
   if (verbose)
-    mxinfo("Using SSA/ASS subtitle reader for %s.\n+-> Using "
-           "text subtitle output module for subtitles.\n", ti->fname);
+    mxinfo(FMT_FN "Using the SSA/ASS subtitle reader.\n", ti->fname);
 }
 
 ssa_reader_c::~ssa_reader_c() {
   delete mm_io;
+}
+
+void
+ssa_reader_c::create_packetizer(int64_t) {
+  if (NPTZR() != 0)
+    return;
+
+  add_packetizer(new textsubs_packetizer_c(this, is_ass ?  MKV_S_TEXTASS :
+                                           MKV_S_TEXTSSA, global.c_str(),
+                                           global.length(), false, false,
+                                           ti));
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname,
+         (int64_t)0);
 }
 
 string

@@ -39,6 +39,8 @@ private:
   mm_text_io_c *mm_io;
   vector<string> format;
   int cc_utf8;
+  bool is_ass;
+  string global;
 
 public:
   ssa_reader_c(track_info_c *nti) throw (error_c);
@@ -46,6 +48,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual void identify();
+  virtual void create_packetizer(int64_t tid);
 
   static int probe_file(mm_text_io_c *mm_io, int64_t size);
 

@@ -47,6 +47,8 @@ private:
   int pos, size, channels, sample_rate, bits_per_sample;
   bool metadata_parsed, done;
   int64_t samples, packet_start, file_size, old_progress;
+  unsigned char *header;
+  int header_size;
   vector<flac_block_t> blocks;
   vector<flac_block_t>::iterator current_block;
 
@@ -56,6 +58,7 @@ public:
 
   virtual int read(generic_packetizer_c *ptzr);
   virtual void identify();
+  virtual void create_packetizer(int64_t id);
 
   virtual int display_priority();
   virtual void display_progress(bool final = false);

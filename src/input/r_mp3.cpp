@@ -60,11 +60,8 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
 
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
-    add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency,
-                                        mp3header.channels, ti));
     if (verbose)
-      mxinfo("Using MP2/MP3 demultiplexer for %s.\n+-> Using "
-             "MPEG audio output module for audio stream.\n", ti->fname);
+      mxinfo(FMT_FN "Using the MP2/MP3 demultiplexer.\n", ti->fname);
   } catch (exception &ex) {
     throw error_c("mp3_reader: Could not open the source file.");
   }
@@ -72,6 +69,16 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
 
 mp3_reader_c::~mp3_reader_c() {
   delete mm_io;
+}
+
+void
+mp3_reader_c::create_packetizer(int64_t) {
+  if (NPTZR() != 0)
+    return;
+  add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency,
+                                      mp3header.channels, ti));
+  mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
+         (int64_t)0);
 }
 
 int

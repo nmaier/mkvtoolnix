@@ -25,10 +25,11 @@
 
 #include <stdio.h>
 
-#include "mm_io.h"
-#include "pr_generic.h"
+#include "aac_common.h"
 #include "common.h"
 #include "error.h"
+#include "mm_io.h"
+#include "pr_generic.h"
 
 class aac_reader_c: public generic_reader_c {
 private:
@@ -36,6 +37,7 @@ private:
   mm_io_c *mm_io;
   int64_t bytes_processed, size;
   bool emphasis_present;
+  aac_header_t aacheader;
 
 public:
   aac_reader_c(track_info_c *nti) throw (error_c);
@@ -45,6 +47,7 @@ public:
   virtual int display_priority();
   virtual void display_progress(bool final = false);
   virtual void identify();
+  virtual void create_packetizer(int64_t id);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 

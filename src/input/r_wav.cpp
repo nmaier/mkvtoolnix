@@ -95,6 +95,9 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   ti->id = 0;                   // ID for this track.
   is_dts = false;
 
+  if (verbose)
+    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti->fname);
+
   {
     // check wether .wav file contains DTS data...
     unsigned short obuf[max_dts_packet_size/2];
@@ -120,33 +123,26 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
           cur_buf ^= 1;
         }
 
-        dts_header_t dtsheader;
-        int pos = find_dts_header((const unsigned char *)buf[cur_buf], erlen,
-                                  &dtsheader);
-
-        if (pos >= 0) {
-          if (verbose) {
-            mxinfo("Using WAV demultiplexer for %s.\n"
-                   "+-> Using DTS output module for audio stream. %s %s\n",
-                   ti->fname, (dts_swap_bytes)? "(bytes swapped)" : "",
-                   (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
-            print_dts_header(&dtsheader);
-            is_dts = true;
-          }
-
-          add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
-          // .wav's with DTS are always filled up with other stuff to match
-          // the bitrate...
-          ((dts_packetizer_c *)PTZR0)->skipping_is_normal = true;
-          break;
-        }
-
+        if (find_dts_header((const unsigned char *)buf[cur_buf], erlen,
+                            &dtsheader) >= 0)
+          is_dts = true;
       }
 
       if (is_dts)
         break;
     }
   }
+}
+
+wav_reader_c::~wav_reader_c() {
+  delete mm_io;
+  safefree(chunk);
+}
+
+void
+wav_reader_c::create_packetizer(int64_t) {
+  if (NPTZR() != 0)
+    return;
 
   if (!is_dts) {
     generic_packetizer_c *ptzr;
@@ -155,17 +151,19 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
                            get_uint16(&wheader.common.wChannels),
                            get_uint16(&wheader.common.wBitsPerSample), ti);
     add_packetizer(ptzr);
+    mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname, (int64_t)0);
 
-    if (verbose)
-      mxinfo("Using WAV demultiplexer for %s.\n+-> Using "
-             "PCM output module for audio stream.\n", ti->fname);
-    is_dts = false;
+  } else {
+    add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
+    // .wav's with DTS are always filled up with other stuff to match
+    // the bitrate...
+    ((dts_packetizer_c *)PTZR0)->skipping_is_normal = true;
+    mxinfo(FMT_TID "Using the DTS output module. %s %s\n",
+           ti->fname, (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" : "",
+           (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
+    if (verbose > 1)
+      print_dts_header(&dtsheader);
   }
-}
-
-wav_reader_c::~wav_reader_c() {
-  delete mm_io;
-  safefree(chunk);
 }
 
 int
