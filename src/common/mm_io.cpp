@@ -562,7 +562,7 @@ mm_io_c::printf(const char *fmt,
   if (dos_style_newlines) {
     pos = 0;
     while ((pos = s.find('\n', pos)) >= 0) {
-      s.replace(pos, 1, "\n\r");
+      s.replace(pos, 1, "\r\n");
       pos += 2;
     }
   }
