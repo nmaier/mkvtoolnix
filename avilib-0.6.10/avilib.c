@@ -625,7 +625,7 @@ avi_t* AVI_open_output_file(char * filename)
       we do not truncate the file when we open it.
       Instead it is truncated when the AVI file is closed */
 
-#if defined(SYS_UNIX)
+#if defined(SYS_UNIX) || defined(SYS_APPLE)
    AVI->fdes = xio_open(filename, O_RDWR|O_CREAT,
 		    S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 #elif defined(COMP_MINGW) || defined(COMP_CYGWIN)
