@@ -293,6 +293,8 @@ void tab_global::load(wxConfigBase *cfg) {
   cfg->Read("segment_title", &s);
   tc_title->SetValue(s);
 
+  ec = false;
+  er = true;
   cfg->Read("enable_splitting", &ec);
   cb_split->SetValue(ec);
   cfg->Read("split_by_size", &er);
@@ -306,6 +308,7 @@ void tab_global::load(wxConfigBase *cfg) {
   cob_split_by_time->SetValue(s);
   cfg->Read("split_max_files", &s);
   tc_split_max_files->SetValue(s);
+  b = false;
   cfg->Read("dont_link", &b);
   cb_dontlink->SetValue(b);
 
@@ -331,14 +334,19 @@ void tab_global::load(wxConfigBase *cfg) {
   cfg->Read("global_tags", &s);
   tc_global_tags->SetValue(s);
 
+  b = false;
   cfg->Read("no_cues", &b);
   cb_no_cues->SetValue(b);
+  b = false;
   cfg->Read("no_clusters", &b);
   cb_no_clusters->SetValue(b);
+  b = false;
   cfg->Read("disable_lacing", &b);
   cb_disable_lacing->SetValue(b);
+  b = false;
   cfg->Read("enable_durations", &b);
   cb_enable_durations->SetValue(b);
+  b = false;
   cfg->Read("enable_timeslices", &b);
   cb_enable_timeslices->SetValue(b);
 }

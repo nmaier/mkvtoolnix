@@ -19,6 +19,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include <unistd.h>
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
@@ -134,6 +136,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   mdlg = this;
 
   file_menu = new wxMenu();
+  file_menu->Append(ID_M_FILE_NEW, _T("&New\tCtrl-N"),
+                    _T("Start with empty settings"));
   file_menu->Append(ID_M_FILE_LOAD, _T("&Load settings\tCtrl-L"),
                     _T("Load muxing settings from a file"));
   file_menu->Append(ID_M_FILE_SAVE, _T("&Save settings\tCtrl-S"),
@@ -157,7 +161,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                       _T("Save the command line to a file"));
 
   chapter_menu = new wxMenu();
-  chapter_menu->Append(ID_M_CHAPTERS_NEW, _T("&New"),
+  chapter_menu->Append(ID_M_CHAPTERS_NEW, _T("&New chapters"),
                        _T("Create a new chapter file"));
   chapter_menu->Append(ID_M_CHAPTERS_LOAD, _T("&Load"),
                        _T("Load a chapter file (simple/OGM format or XML "
@@ -319,6 +323,25 @@ void mmg_dialog::on_clear_status_bar(wxTimerEvent &evt) {
 
 void mmg_dialog::on_quit(wxCommandEvent &evt) {
   Close(true);
+}
+
+void mmg_dialog::on_file_new(wxCommandEvent &evt) {
+  wxFileConfig *cfg;
+  wxString tmp_name;
+
+  tmp_name.Printf("tempsettings-%u.mmg", getpid());
+  cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", tmp_name);
+  tc_output->SetValue("");
+
+  input_page->load(cfg);
+  attachments_page->load(cfg);
+  global_page->load(cfg);
+  settings_page->load(cfg);
+
+  delete cfg;
+  unlink(tmp_name);
+
+  set_status_bar("Configuration cleared.");
 }
 
 void mmg_dialog::on_file_load(wxCommandEvent &evt) {
@@ -959,6 +982,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_TIMER(ID_T_UPDATECMDLINE, mmg_dialog::on_update_command_line)
   EVT_TIMER(ID_T_STATUSBAR, mmg_dialog::on_clear_status_bar)
   EVT_MENU(ID_M_FILE_EXIT, mmg_dialog::on_quit)
+  EVT_MENU(ID_M_FILE_NEW, mmg_dialog::on_file_new)
   EVT_MENU(ID_M_FILE_LOAD, mmg_dialog::on_file_load)
   EVT_MENU(ID_M_FILE_SAVE, mmg_dialog::on_file_save)
   EVT_MENU(ID_M_MUXING_START, mmg_dialog::on_run)

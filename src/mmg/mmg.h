@@ -124,9 +124,10 @@ using namespace libmatroska;
 #define ID_CB_ENABLETIMESLICES 10077
 #define ID_CB_COMPRESSION 10078
 
-#define ID_M_FILE_LOAD 20000
-#define ID_M_FILE_SAVE 20001
-#define ID_M_FILE_EXIT 20002
+#define ID_M_FILE_NEW 20000
+#define ID_M_FILE_LOAD 20001
+#define ID_M_FILE_SAVE 20002
+#define ID_M_FILE_EXIT 20003
 #define ID_M_FILE_LOADSEPARATOR 20090
 #define ID_M_FILE_LOADLAST1 20091
 #define ID_M_FILE_LOADLAST2 20092
@@ -447,6 +448,7 @@ public:
   void on_copy_to_clipboard(wxCommandEvent &evt);
 
   void on_quit(wxCommandEvent &evt);
+  void on_file_new(wxCommandEvent &evt);
   void on_file_load(wxCommandEvent &evt);
   void on_file_save(wxCommandEvent &evt);
   void on_about(wxCommandEvent &evt);

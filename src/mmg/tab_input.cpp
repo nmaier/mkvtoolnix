@@ -835,8 +835,11 @@ void tab_input::load(wxConfigBase *cfg) {
     }
     fi.file_name = new wxString(s);
     cfg->Read("container", &fi.container);
+    fi.no_chapters = false;
     cfg->Read("no_chapters", &fi.no_chapters);
+    fi.no_attachments = false;
     cfg->Read("no_attachments", &fi.no_attachments);
+    fi.no_tags = false;
     cfg->Read("no_tags", &fi.no_tags);
     fi.tracks = new vector<mmg_track_t>;
 
@@ -857,7 +860,9 @@ void tab_input::load(wxConfigBase *cfg) {
       cfg->Read("enabled", &tr.enabled);
       cfg->Read("content_type", &s);
       tr.ctype = new wxString(s);
+      tr.default_track = false;
       cfg->Read("default_track", &tr.default_track);
+      tr.aac_is_sbr = false;
       cfg->Read("aac_is_sbr", &tr.aac_is_sbr);
       cfg->Read("language", &s);
       tr.language = new wxString(s);
