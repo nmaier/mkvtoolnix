@@ -655,13 +655,35 @@ void generic_packetizer_c::set_headers() {
   }
 }
 
-void generic_packetizer_c::add_packet(unsigned char  *data, int length,
-                                      int64_t timecode,
-                                      int64_t duration,
-                                      bool duration_mandatory,
-                                      int64_t bref, int64_t fref,
-                                      int ref_priority,
-                                      copy_packet_mode_t copy_this) {
+void
+generic_packetizer_c::add_packet(unsigned char *data,
+                                 int length,
+                                 int64_t timecode,
+                                 int64_t duration,
+                                 bool duration_mandatory,
+                                 int64_t bref,
+                                 int64_t fref,
+                                 int ref_priority,
+                                 copy_packet_mode_t copy_this) {
+  add_packet_ns(data, length,
+                timecode > 0 ? timecode * 1000000 : timecode,
+                duration > 0 ? duration * 1000000 : duration,
+                duration_mandatory,
+                bref > 0 ? bref * 1000000 : bref,
+                fref > 0 ? fref * 1000000 : fref,
+                ref_priority, copy_this);
+}
+
+void
+generic_packetizer_c::add_packet_ns(unsigned char *data,
+                                    int length,
+                                    int64_t timecode,
+                                    int64_t duration,
+                                    bool duration_mandatory,
+                                    int64_t bref,
+                                    int64_t fref,
+                                    int ref_priority,
+                                    copy_packet_mode_t copy_this) {
   packet_t *pack;
 
   if (data == NULL)
@@ -895,7 +917,7 @@ generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
   pit = timecode_ranges->begin();
   for (iit = pit + 1; iit < timecode_ranges->end(); iit++, pit++)
     iit->base_timecode = pit->base_timecode +
-      ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000.0 /
+      ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000000000.0 /
       pit->fps;
 
   for (iit = timecode_ranges->begin(); iit < timecode_ranges->end(); iit++)
@@ -923,11 +945,12 @@ generic_packetizer_c::parse_ext_timecode_file_v2(mm_io_c *in,
     if (!parse_double(line.c_str(), timecode))
       mxerror("The line %d of the timcode file '%s' does not contain a valid "
               "floating point number.\n", line_no, name);
-    ext_timecodes->push_back((int64_t)timecode);
+    ext_timecodes->push_back((int64_t)timecode * 1000000);
   }
 }
 
-int64_t generic_packetizer_c::get_next_timecode(int64_t timecode) {
+int64_t
+generic_packetizer_c::get_next_timecode(int64_t timecode) {
   int64_t new_timecode;
   timecode_range_c *t;
 
@@ -938,7 +961,7 @@ int64_t generic_packetizer_c::get_next_timecode(int64_t timecode) {
           "a bug report.\n");
 
     t = &(*timecode_ranges)[current_tc_range];
-    new_timecode = (int64_t)(t->base_timecode + 1000.0 *
+    new_timecode = (int64_t)(t->base_timecode + 1000000000.0 *
                              (frameno - t->start_frame) / t->fps);
     frameno++;
     if ((frameno > t->end_frame) &&

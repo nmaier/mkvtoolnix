@@ -276,6 +276,11 @@ public:
                           int64_t bref = -1, int64_t fref = -1,
                           int ref_priority = -1,
                           copy_packet_mode_t copy_this = cp_default);
+  virtual void add_packet_ns(unsigned char *data, int lenth, int64_t timecode,
+                             int64_t duration, bool duration_mandatory = false,
+                             int64_t bref = -1, int64_t fref = -1,
+                             int ref_priority = -1,
+                             copy_packet_mode_t copy_this = cp_default);
   virtual void drop_packet(unsigned char *data, copy_packet_mode_t copy_this);
   virtual packet_t *get_packet();
   virtual int packet_available() {

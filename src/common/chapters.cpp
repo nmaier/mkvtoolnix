@@ -66,7 +66,8 @@ string default_chapter_country;
 // }}}
 // {{{ helper functions
 
-static void chapter_error(const char *fmt, ...) {
+static void
+chapter_error(const char *fmt, ...) {
   va_list ap;
   string new_fmt;
   char *new_error;
@@ -88,7 +89,8 @@ static void chapter_error(const char *fmt, ...) {
 
 // {{{ simple chapter parsing
 
-bool probe_simple_chapters(mm_text_io_c *in) {
+bool
+probe_simple_chapters(mm_text_io_c *in) {
   string line;
 
   in->setFilePointer(0);
@@ -123,11 +125,14 @@ bool probe_simple_chapters(mm_text_io_c *in) {
 // CHAPTER01=00:00:00.000
 // CHAPTER01NAME=Hallo Welt
 
-KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
-                                   int64_t max_tc, int64_t offset,
-                                   const char *language,
-                                   const char *charset,
-                                   bool exception_on_error) {
+KaxChapters *
+parse_simple_chapters(mm_text_io_c *in,
+                      int64_t min_tc,
+                      int64_t max_tc,
+                      int64_t offset,
+                      const char *language,
+                      const char *charset,
+                      bool exception_on_error) {
   KaxChapters *chaps;
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
@@ -148,6 +153,14 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   num = 0;
   start = 0;
   cc_utf8 = 0;
+
+  // The core now uses ns precision timecodes.
+  if (min_tc > 0)
+    min_tc /= 1000000;
+  if (max_tc > 0)
+    max_tc /= 1000000;
+  if (offset > 0)
+    offset /= 1000000;
 
   if (in->get_byte_order() == BO_NONE) {
     do_convert = true;
@@ -260,7 +273,8 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
 //     INDEX 00 04:46:62
 //     INDEX 01 04:49:64
 
-bool probe_cue_chapters(mm_text_io_c *in) {
+bool
+probe_cue_chapters(mm_text_io_c *in) {
   string s;
 
   in->setFilePointer(0);
@@ -273,10 +287,13 @@ bool probe_cue_chapters(mm_text_io_c *in) {
 }
 
 char *cue_to_chapter_name_format = NULL;
-static void cue_entries_to_chapter_name(string &performer, string &title,
-                                        string &global_performer,
-                                        string &global_title, string &name,
-                                        int num) {
+static void
+cue_entries_to_chapter_name(string &performer,
+                            string &title,
+                            string &global_performer,
+                            string &global_title,
+                            string &name,
+                            int num) {
   const char *this_char, *next_char;
 
   name = "";
@@ -314,10 +331,14 @@ static void cue_entries_to_chapter_name(string &performer, string &title,
   }
 }
 
-KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
-                                int64_t max_tc, int64_t offset,
-                                const char *language, const char *charset,
-                                bool exception_on_error) {
+KaxChapters *
+parse_cue_chapters(mm_text_io_c *in,
+                   int64_t min_tc,
+                   int64_t max_tc,
+                   int64_t offset,
+                   const char *language,
+                   const char *charset,
+                   bool exception_on_error) {
   KaxChapters *chapters;
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
@@ -343,6 +364,14 @@ KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
 
   if (language == NULL)
     language = "eng";
+
+  // The core now uses ns precision timecodes.
+  if (min_tc > 0)
+    min_tc /= 1000000;
+  if (max_tc > 0)
+    max_tc /= 1000000;
+  if (offset > 0)
+    offset /= 1000000;
 
   atom = NULL;
   edition = NULL;
@@ -492,10 +521,15 @@ KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
   return chapters;
 }
 
-KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
-                            int64_t max_tc, int64_t offset,
-                            const char *language, const char *charset,
-                            bool exception_on_error, bool *is_simple_format) {
+KaxChapters *
+parse_chapters(const char *file_name,
+               int64_t min_tc,
+               int64_t max_tc,
+               int64_t offset,
+               const char *language,
+               const char *charset,
+               bool exception_on_error,
+               bool *is_simple_format) {
   mm_text_io_c *in;
 
   in = NULL;
@@ -543,7 +577,8 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
 
 #define is_id(c) (EbmlId(*e) == c::ClassInfos.GlobalId)
 
-static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
+static EbmlMaster *
+copy_chapters_recursive(EbmlMaster *src) {
   uint32_t i;
   EbmlMaster *dst, *m;
 
@@ -631,7 +666,8 @@ static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
   return dst;
 }
 
-static void set_chapter_mandatory_elements(EbmlMaster *m) {
+static void
+set_chapter_mandatory_elements(EbmlMaster *m) {
   uint32_t i;
   EbmlMaster *new_m;
 
@@ -653,7 +689,8 @@ static void set_chapter_mandatory_elements(EbmlMaster *m) {
       set_chapter_mandatory_elements(new_m);
 }
 
-KaxChapters *copy_chapters(KaxChapters *source) {
+KaxChapters *
+copy_chapters(KaxChapters *source) {
   KaxChapters *dst;
   uint32_t ee;
 

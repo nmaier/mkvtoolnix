@@ -62,7 +62,9 @@ typedef struct {
   cperror(pdata, "Only one instance of <%s> is allowed under <%s>.", name, \
           parent_name)
 
-static void cperror(parser_data_t *pdata, const char *fmt, ...) {
+static void
+cperror(parser_data_t *pdata,
+        const char *fmt, ...) {
   va_list ap;
   string new_fmt;
   char *new_string;
@@ -86,8 +88,10 @@ static void cperror(parser_data_t *pdata, const char *fmt, ...) {
   throw error_c(new_string, true);
 }
 
-static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
-                        uint64_t min_value = 0) {
+static void
+el_get_uint(parser_data_t *pdata,
+            EbmlElement *el,
+            uint64_t min_value = 0) {
   int64 value;
 
   strip(*pdata->bin);
@@ -101,8 +105,10 @@ static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlUInteger *>(el)) = value;
 }
 
-static void el_get_string(parser_data_t *pdata, EbmlElement *el,
-                          bool check_language = false) {
+static void
+el_get_string(parser_data_t *pdata,
+              EbmlElement *el,
+              bool check_language = false) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     cperror(pdata, "Expected a string but found only whitespaces.");
@@ -115,7 +121,9 @@ static void el_get_string(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
 }
 
-static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
+static void
+el_get_utf8string(parser_data_t *pdata,
+                  EbmlElement *el) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     cperror(pdata, "Expected a string but found only whitespaces.");
@@ -134,7 +142,9 @@ static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
                         istwodigits(s + 6) && isdot(s + 8) && \
                         isthreedigits(s + 9))
 
-static void el_get_time(parser_data_t *pdata, EbmlElement *el) {
+static void
+el_get_time(parser_data_t *pdata,
+            EbmlElement *el) {
   const char *errmsg = "Expected a time in the following format: HH:MM:SS.mmm"
     " (HH = hour, MM = minute, SS = second, mmm = millisecond). Found '%s' "
     "instead.";
@@ -169,7 +179,10 @@ static void el_get_time(parser_data_t *pdata, EbmlElement *el) {
      (second * 1000) + msec) * 1000000;
 }
 
-static void add_data(void *user_data, const XML_Char *s, int len) {
+static void
+add_data(void *user_data,
+         const XML_Char *s,
+         int len) {
   parser_data_t *pdata;
   int i;
 
@@ -189,7 +202,9 @@ static void add_data(void *user_data, const XML_Char *s, int len) {
     (*pdata->bin) += s[i];
 }
 
-static void start_next_level(parser_data_t *pdata, const char *name) {
+static void
+start_next_level(parser_data_t *pdata,
+                 const char *name) {
   EbmlMaster *m;
 
   if (!strcmp(name, "ChapterAtom")) {
@@ -363,8 +378,10 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
     cperror_nochild();
 }
 
-static void start_element(void *user_data, const char *name,
-                          const char **atts) {
+static void
+start_element(void *user_data,
+              const char *name,
+              const char **atts) {
   parser_data_t *pdata;
   KaxChapters *chapters;
   KaxEditionEntry *eentry;
@@ -406,7 +423,9 @@ static void start_element(void *user_data, const char *name,
   (pdata->depth)++;
 }
 
-static void end_this_level(parser_data_t *pdata, const char *name) {
+static void
+end_this_level(parser_data_t *pdata,
+               const char *name) {
   EbmlMaster *m;
 
   if (!strcmp(name, "ChapterAtom")) {
@@ -458,7 +477,9 @@ static void end_this_level(parser_data_t *pdata, const char *name) {
     die("chapter_parser_xml/end_this_level(): Unknown name '%s'.", name);
 }
 
-static void end_element(void *user_data, const char *name) {
+static void
+end_element(void *user_data,
+            const char *name) {
   parser_data_t *pdata;
   EbmlMaster *m;
 
@@ -492,8 +513,10 @@ static void end_element(void *user_data, const char *name) {
   pdata->parents->pop_back();
 }
 
-static void validate_chapters(int64_t parent_start_tc, int64_t parent_end_tc,
-                              EbmlMaster &m) {
+static void
+validate_chapters(int64_t parent_start_tc,
+                  int64_t parent_end_tc,
+                  EbmlMaster &m) {
   int i;
   KaxChapterAtom *atom;
   KaxChapterTimeStart *cts;
@@ -508,37 +531,24 @@ static void validate_chapters(int64_t parent_start_tc, int64_t parent_end_tc,
       cte = static_cast<KaxChapterTimeEnd *>
         (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
 
-      start_tc = uint64(*static_cast<EbmlUInteger *>(cts)) / 1000000;
+      start_tc = uint64(*static_cast<EbmlUInteger *>(cts));
       if (start_tc < parent_start_tc)
         mxerror("The sub-chapter starts before its parent starts: "
-                "%02lld:%02lld:%02lld.%03lld < %02lld:%02lld:%02lld.%03lld\n",
-                start_tc / 60 / 60 / 1000, (start_tc / 60 / 1000) % 60,
-                (start_tc / 1000) % 60, start_tc % 1000,
-                parent_start_tc / 60 / 60 / 1000,
-                (parent_start_tc / 60 / 1000) % 60,
-                (parent_start_tc / 1000) % 60, parent_start_tc % 1000);
+                FMT_TIMECODE " < " FMT_TIMECODE "\n",
+                ARG_TIMECODE_NS(start_tc), ARG_TIMECODE_NS(parent_start_tc));
 
       
       if (cte != NULL) {
-        end_tc = uint64(*static_cast<EbmlUInteger *>(cte)) / 1000000;
+        end_tc = uint64(*static_cast<EbmlUInteger *>(cte));
         if (end_tc < start_tc)
           mxerror("This chapter ends before it starts: "
-                  "%02lld:%02lld:%02lld.%03lld < %02lld:%02lld:%02lld.%03lld"
-                  "\n",
-                  end_tc / 60 / 60 / 1000, (end_tc / 60 / 1000) % 60,
-                  (end_tc / 1000) % 60, end_tc % 1000,
-                  start_tc / 60 / 60 / 1000, (start_tc / 60 / 1000) % 60,
-                  (start_tc / 1000) % 60, start_tc % 1000);
+                  FMT_TIMECODE " < " FMT_TIMECODE "\n",
+                  ARG_TIMECODE_NS(end_tc), ARG_TIMECODE_NS(start_tc));
 
         if ((parent_end_tc >= 0) && (end_tc > parent_end_tc))
           mxerror("The sub-chapter ends after its parent ends: "
-                  "%02lld:%02lld:%02lld.%03lld < %02lld:%02lld:%02lld.%03lld"
-                  "\n",
-                  parent_end_tc / 60 / 60 / 1000,
-                  (parent_end_tc / 60 / 1000) % 60,
-                  (parent_end_tc / 1000) % 60, parent_end_tc % 1000,
-                  end_tc / 60 / 60 / 1000, (end_tc / 60 / 1000) % 60,
-                  (end_tc / 1000) % 60, end_tc % 1000);
+                  FMT_TIMECODE " < " FMT_TIMECODE "\n",
+                  ARG_TIMECODE_NS(parent_end_tc), ARG_TIMECODE_NS(end_tc));
       } else
         end_tc = -1;
 
@@ -547,8 +557,11 @@ static void validate_chapters(int64_t parent_start_tc, int64_t parent_end_tc,
   }    
 }
 
-static void remove_entries(int64_t min_tc, int64_t max_tc, int64_t offset,
-                           EbmlMaster &m) {
+static void
+remove_entries(int64_t min_tc,
+               int64_t max_tc,
+               int64_t offset,
+               EbmlMaster &m) {
   int i;
   bool remove;
   KaxChapterAtom *atom;
@@ -565,7 +578,7 @@ static void remove_entries(int64_t min_tc, int64_t max_tc, int64_t offset,
 
       remove = false;
 
-      start_tc = uint64(*static_cast<EbmlUInteger *>(cts)) / 1000000;
+      start_tc = uint64(*static_cast<EbmlUInteger *>(cts));
       if (start_tc < min_tc)
         remove = true;
       else if ((max_tc >= 0) && (start_tc > max_tc))
@@ -590,13 +603,13 @@ static void remove_entries(int64_t min_tc, int64_t max_tc, int64_t offset,
         (atom->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false));
 
       *static_cast<EbmlUInteger *>(cts) =
-        uint64(*static_cast<EbmlUInteger *>(cts)) - (offset * 1000000);
+        uint64(*static_cast<EbmlUInteger *>(cts)) - offset;
       if (cte != NULL) {
-        end_tc =  uint64(*static_cast<EbmlUInteger *>(cte)) / 1000000;
+        end_tc =  uint64(*static_cast<EbmlUInteger *>(cte));
         if ((max_tc >= 0) && (end_tc > max_tc))
           end_tc = max_tc;
         end_tc -= offset;
-        *static_cast<EbmlUInteger *>(cte) = end_tc * 1000000;
+        *static_cast<EbmlUInteger *>(cte) = end_tc;
       }
 
       remove_entries(min_tc, max_tc, offset, *atom);
@@ -604,7 +617,8 @@ static void remove_entries(int64_t min_tc, int64_t max_tc, int64_t offset,
   }    
 }
 
-bool probe_xml_chapters(mm_text_io_c *in) {
+bool
+probe_xml_chapters(mm_text_io_c *in) {
   string s;
 
   in->setFilePointer(0);
@@ -621,9 +635,12 @@ bool probe_xml_chapters(mm_text_io_c *in) {
   return false;
 }
 
-KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters,
-                                          int64_t min_tc, int64_t max_tc,
-                                          int64_t offset, bool validate) {
+KaxChapters *
+select_chapters_in_timeframe(KaxChapters *chapters,
+                             int64_t min_tc,
+                             int64_t max_tc,
+                             int64_t offset,
+                             bool validate) {
   uint32_t i;
   KaxEditionEntry *eentry;
 
@@ -653,9 +670,12 @@ KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters,
   return chapters;
 }
 
-KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
-                                int64_t max_tc, int64_t offset,
-                                bool exception_on_error = false) {
+KaxChapters *
+parse_xml_chapters(mm_text_io_c *in,
+                   int64_t min_tc,
+                   int64_t max_tc,
+                   int64_t offset,
+                   bool exception_on_error = false) {
   bool done;
   parser_data_t *pdata;
   XML_Parser parser;

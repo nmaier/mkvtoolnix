@@ -140,7 +140,7 @@ int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
 char *outfile = NULL;
 int64_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
-int max_ms_per_cluster = 2000;
+int64_t max_ns_per_cluster = 2000000000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
 bool write_meta_seek_for_clusters = true;
@@ -456,7 +456,7 @@ static void sighandler(int signum) {
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
     (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
+     cluster_helper->get_first_timecode()) / TIMECODE_SCALE;
   kax_duration->Render(*out);
   out->restore_pos();
   mxinfo(" done\n");
@@ -1449,11 +1449,12 @@ static void parse_args(int argc, char **argv) {
       s = strstr("ms", next_arg);
       if (s != NULL) {
         *s = 0;
-        if (!parse_int(next_arg, max_ms_per_cluster) ||
-            (max_ms_per_cluster < 100) ||
-            (max_ms_per_cluster > 32000))
+        if (!parse_int(next_arg, max_ns_per_cluster) ||
+            (max_ns_per_cluster < 100) ||
+            (max_ns_per_cluster > 32000))
           mxerror("Cluster length '%s' out of range (100..32000).\n",
                   next_arg);
+        max_ns_per_cluster *= 1000000;
 
         max_blocks_per_cluster = 65535;
       } else {
@@ -1463,7 +1464,7 @@ static void parse_args(int argc, char **argv) {
           mxerror("Cluster length '%s' out of range (0..60000).\n",
                   next_arg);
 
-        max_ms_per_cluster = 32000;
+        max_ns_per_cluster = 32000000000ull;
       }
 
       i++;
@@ -2171,7 +2172,7 @@ void finish_file() {
   out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
     (cluster_helper->get_max_timecode() -
-     cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
+     cluster_helper->get_first_timecode()) / TIMECODE_SCALE;
   kax_duration->Render(*out);
   out->restore_pos();
 

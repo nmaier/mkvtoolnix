@@ -71,7 +71,8 @@ string create_output_name();
 extern int pass, file_num;
 extern bool fast_mode;
 
-extern int max_ms_per_cluster, max_blocks_per_cluster;
+extern int64_t max_ns_per_cluster;
+extern int max_blocks_per_cluster;
 extern int default_tracks[3], default_tracks_priority[3];
 extern int64_t split_after;
 extern int split_max_num_files;
