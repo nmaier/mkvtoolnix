@@ -1,4 +1,5 @@
 /** MPEG video helper functions (MPEG 1, 2 and 4)
+ *
  * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
  *
@@ -110,10 +111,10 @@ mpeg4_extract_par(const unsigned char *buffer,
  *   a dummy frame) then \a frames will contain no elements.
  */
 void
-mpeg4_find_frame_types(const unsigned char *buf,
+mpeg4_find_frame_types(const unsigned char *buffer,
                        int size,
                        vector<video_frame_t> &frames) {
-  bit_cursor_c bits(buf, size);
+  bit_cursor_c bits(buffer, size);
   uint32_t marker, frame_type;
   bool first_frame;
   video_frame_t frame;

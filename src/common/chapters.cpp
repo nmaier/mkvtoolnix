@@ -167,8 +167,8 @@ probe_simple_chapters(mm_text_io_c *in) {
  *   end timecodes after the timerange check has been made.
  * \param language This language is added as the \c KaxChapterLanguage
  *   for all entries.
- * \param country This country is added as the \c KaxChapterCountry for
- *   all entries.
+ * \param charset The charset the chapters are supposed to be it. The entries
+ *   will be converted to UTF-8 if necessary.
  * \param exception_on_error If set to \c true then an exception is thrown
  *   if an error occurs. Otherwise \c NULL will be returned.
  *
@@ -307,13 +307,35 @@ parse_simple_chapters(mm_text_io_c *in,
 /** \brief Probe a file for different chapter formats and parse the file.
  *
  * The file \a file_name is opened and checked for supported chapter formats.
+ * These include simple OGM style chapters, CUE sheets and mkvtoolnix' own
+ * XML chapter format.
  *
  * Its parameters don't have to be checked for validity.
  *
- * \see ::parse_chapters(mm_text_io_c *in,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
- * for a full description of its parameters and return values.
+ * \param file_name The name of the text file to read from.
+ * \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
+ *   given then only those chapters that lie in the timerange
+ *   <tt>[min_tc..max_tc]</tt> are kept.
+ * \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
+ *   given then only those chapters that lie in the timerange
+ *   <tt>[min_tc..max_tc]</tt> are kept.
+ * \param offset An optional offset that is subtracted from all start and
+ *   end timecodes after the timerange check has been made.
+ * \param language This language is added as the \c KaxChapterLanguage
+ *   for entries that don't specifiy it.
+ * \param charset The charset the chapters are supposed to be it. The entries
+ *   will be converted to UTF-8 if necessary. This parameter is ignored for XML
+ *   chapter files.
+ * \param exception_on_error If set to \c true then an exception is thrown
+ *   if an error occurs. Otherwise \c NULL will be returned.
+ * \param is_simple_format This boolean will be set to \c true if the chapter
+ *   format is either the OGM style format or a CUE sheet.
+ * \param tags When parsing a CUE sheet tags will be created along with the
+ *   chapter entries. These tags will be stored in this parameter.
  *
- * \param file_name The file name that is to be opened.
+ * \return The chapters parsed from the file or \c NULL if an error occured.
+ *
+ * \see ::parse_chapters(mm_text_io_c *in,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
  */
 KaxChapters *
 parse_chapters(const string &file_name,
@@ -367,8 +389,9 @@ parse_chapters(const string &file_name,
  *   end timecodes after the timerange check has been made.
  * \param language This language is added as the \c KaxChapterLanguage
  *   for entries that don't specifiy it.
- * \param country This country is added as the \c KaxChapterCountry for
- *   entries that don't specifiy it.
+ * \param charset The charset the chapters are supposed to be it. The entries
+ *   will be converted to UTF-8 if necessary. This parameter is ignored for XML
+ *   chapter files.
  * \param exception_on_error If set to \c true then an exception is thrown
  *   if an error occurs. Otherwise \c NULL will be returned.
  * \param is_simple_format This boolean will be set to \c true if the chapter
@@ -488,8 +511,8 @@ get_chapter_uid(KaxChapterAtom &atom) {
  * The Matroska specs and \c libmatroska say that several elements are
  * mandatory. This function makes sure that they all exist by adding them
  * with their default values if they're missing. It works recursively. See
- * \url http://www.matroska.org/technical/specs/chapters/index.html
- * for a list or mandatory elements.
+ * <a href="http://www.matroska.org/technical/specs/chapters/index.html">
+ * the Matroska chapter specs</a> for a list or mandatory elements.
  *
  * The parameters are checked for validity.
  *

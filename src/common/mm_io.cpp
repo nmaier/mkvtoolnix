@@ -943,7 +943,7 @@ mm_text_io_c::get_byte_order() {
 }
 
 void
-mm_text_io_c::setFilePointer(int64_t offset,
+mm_text_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
   if ((offset == 0) && (mode == seek_beginning))
     mm_proxy_io_c::setFilePointer(bom_len, seek_beginning);

@@ -1,4 +1,5 @@
-/*
+/** MPEG video helper functions (MPEG 1, 2 and 4)
+ *
  * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
  *
@@ -6,11 +7,10 @@
  * see the file COPYING for details
  * or visit http://www.gnu.org/copyleft/gpl.html
  *
- * $Id$
+ * \file
+ * \version $Id$
  *
- * MPEG1, 2 and 4 video helper functions
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+ * \author Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #ifndef __MPEG4_COMMON_H
@@ -38,21 +38,48 @@
 /** MPEG-1/-2 frame rate: 60 frames per second */
 #define MPEGVIDEO_FPS_60        0x08
 
+/** Pointers to MPEG4 video frames and their data
+ *
+ * MPEG4 video can be stored in a "packed" format, e.g. in AVI. This means
+ * that one AVI chunk may contain more than one video frame. This is
+ * usually the case with B frames due to limitations in how AVI and
+ * Windows' media frameworks work. With ::mpeg4_find_frame_types
+ * such packed frames can be analyzed. The results are stored in these
+ * structures: one structure for one frame in the analyzed chunk.
+ */
 typedef struct {
+  /** The beginning of the frame data. This is a pointer into an existing
+      buffer handed over to ::mpeg4_find_frame_types. */
   unsigned char *data;
-  int size, pos;
+  /** The size of the frame in bytes. */
+  int size;
+  /** The position of the frame in the original buffer. */
+  int pos;
+  /** The frame type: \c 'I', \c 'P' or \c 'B'. */
   char type;
+  /** Private data. */
   unsigned char *priv;
-  int64_t timecode, duration, bref, fref;
+  /** The timecode of the frame in \c ns. */
+  int64_t timecode;
+  /** The duration of the frame in \c ns. */
+  int64_t duration;
+  /** The frame's backward reference in \c ns relative to its
+      \link video_frame_t::timecode timecode \endlink.
+      This value is only set for P and B frames. */
+  int64_t bref;
+  /** The frame's forward reference in \c ns relative to its
+      \link video_frame_t::timecode timecode \endlink.
+      This value is only set for B frames. */
+  int64_t fref;
 } video_frame_t;
 
 bool MTX_DLL_API mpeg4_extract_par(const unsigned char *buffer, int size,
                                    uint32_t &par_num, uint32_t &par_den);
-void MTX_DLL_API mpeg4_find_frame_types(const unsigned char *buf, int size,
+void MTX_DLL_API mpeg4_find_frame_types(const unsigned char *buffer, int size,
                                         vector<video_frame_t> &frames);
 
 int MTX_DLL_API mpeg1_2_extract_fps_idx(const unsigned char *buffer,
-                                           int size);
+                                        int size);
 double MTX_DLL_API mpeg1_2_get_fps(int idx);
 
 #endif /* __MPEG4_COMMON_H */
