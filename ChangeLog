@@ -1,5 +1,9 @@
 2004-07-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: new feature: Limited support for extracting chapters
+	as CUE sheets that haven't been created by using a CUE sheet with
+	mkvmerge's "--chapters" option.
+
 	* mkvmerge: bug fix: Block durations with 0s length (e.g. entries
 	in a SSA file) were not written.
 

@@ -330,6 +330,15 @@ write_cuesheet(const char *file_name,
       print_if_available("DATE", "    REM DATE %s\n");
       print_if_available("GENRE", "    REM GENRE %s\n");
       print_comments("    ", *tag, out);
+    } else {
+      index_01 = get_chapter_start(atom);
+      out.printf("    TITLE \"%s\"\n",
+                 get_chapter_name(atom).c_str());
+      out.printf("    INDEX 01 %02lld:%02lld:%02lld\n", 
+                 index_01 / 1000000 / 1000 / 60,
+                 (index_01 / 1000000 / 1000) % 60,
+                 irnd((double)(index_01 % 1000000000ll) * 75.0 /
+                      1000000000.0));
     }
   }
 }
