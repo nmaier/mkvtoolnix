@@ -534,7 +534,7 @@ create_output_files() {
           tracks[i].out->write_bom(tracks[i].sub_charset);
 
         } else if (tracks[i].type == TYPESSA) {
-          char *s;
+          char *s, *p1;
           unsigned char *pd;
           int bom_len;
           string sconv;
@@ -568,8 +568,19 @@ create_output_files() {
           sconv = s;
           safefree(s);
           tracks[i].out->write_bom(tracks[i].sub_charset);
-          sconv += "\n[Events]\nFormat: Marked, Start, End, "
-            "Style, Name, MarginL, MarginR, MarginV, Effect, Text\n";
+
+          if (((p1 = strstr(sconv.c_str(), "[Events]")) == NULL) ||
+              (strstr(p1, "Format:") == NULL)) {
+            if (!strcmp(tracks[i].codec_id, MKV_S_TEXTSSA))
+              sconv += "\n[Events]\nFormat: Marked, Start, End, "
+                "Style, Name, MarginL, MarginR, MarginV, Effect, Text\n";
+            else
+              sconv += "\n[Events]\nFormat: Layer, Start, End, "
+                "Style, Actor, MarginL, MarginR, MarginV, Effect, Text\n";
+          } else if ((sconv.length() == 0) ||
+                     (sconv[sconv.length()- 1] != '\n'))
+            sconv += "\n";
+
           from_utf8(tracks[i].conv_handle, sconv);
           tracks[i].out->puts_unl(sconv.c_str());
 
@@ -764,30 +775,46 @@ handle_data(KaxBlock *block,
         // Reconstruct the 'original' line. It'll look like this for SSA:
         // Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect,
         // Text
+        // and for ASS:
+        // Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect,
+        // Text
 
-        line = string("Dialogue: Marked=0,");
+        if (!strcmp(track->codec_id, MKV_S_TEXTSSA))
+          line = string("Dialogue: Marked=0,") +
+            // Append the start and end time.
+            mxsprintf("%lld:%02lld:%02lld.%02lld",
+                      start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
+                      (start / 1000) % 60, (start % 1000) / 10) + comma +
+            mxsprintf("%lld:%02lld:%02lld.%02lld",
+                      end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
+                      (end / 1000) % 60, (end % 1000) / 10) + comma +
+            // Append the other fields.
+            fields[2] + comma + // Style
+            fields[3] + comma + // Name
+            fields[4] + comma + // MarginL
+            fields[5] + comma + // MarginR
+            fields[6] + comma + // MarginV
+            fields[7] + comma + // Effect
+            fields[8] + string("\n"); // Text
 
-        // Append the start and end time.
-        mxprints(buffer, "%lld:%02lld:%02lld.%02lld",
-                 start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
-                 (start / 1000) % 60, (start % 1000) / 10);
-        line += string(buffer) + comma;
-
-        mxprints(buffer, "%lld:%02lld:%02lld.%02lld",
-                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
-                 (end / 1000) % 60, (end % 1000) / 10);
-        line += string(buffer) + comma;
-
-        // Append the other fields.
-        line += fields[2] + comma + // Style
-          fields[3] + comma +   // Name
-          fields[4] + comma +   // MarginL
-          fields[5] + comma +   // MarginR
-          fields[6] + comma +   // MarginV
-          fields[7] + comma;    // Effect
+        else
+          line = string("Dialogue: ") +
+            fields[1] + comma + // Layer
+            mxsprintf("%lld:%02lld:%02lld.%02lld",
+                      start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
+                      (start / 1000) % 60, (start % 1000) / 10) + comma +
+            mxsprintf("%lld:%02lld:%02lld.%02lld",
+                      end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
+                      (end / 1000) % 60, (end % 1000) / 10) + comma +
+            fields[2] + comma + // Style
+            comma +             // Actor
+            fields[4] + comma + // MarginL
+            fields[5] + comma + // MarginR
+            fields[6] + comma + // MarginV
+            fields[7] + comma + // Effect
+            fields[8] + string("\n"); // Text
 
         // Do the charset conversion.
-        line += fields[8] + "\n";
         from_utf8(track->conv_handle, line);
 
         // Now store that entry.

@@ -120,12 +120,8 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
         strip(format);
       }
 
-      // Now just append the current line and some DOS style newlines.
-      // But not if we've already encountered the [Events] section.
-      if (section != 'e') {
-        global += "\r\n";
-        global += line;
-      }
+      global += "\r\n";
+      global += line;
     }
 
     if (format.size() == 0)
@@ -232,7 +228,7 @@ ssa_reader_c::read(generic_packetizer_c *,
   vector<string> fields;
   ssa_line_c cline;
 
-  num = 1;
+  num = 0;
 
   do {
     line = mm_io->getline();

@@ -1,5 +1,8 @@
 2004-09-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvextract: bug fix: ASS was handled like SSA which is
+	not correct in each case, especially when extracting it.
+
 	* mkvextract: bug fix: The WAV writer was not endian safe.
 
 2004-09-27  Moritz Bunkus  <moritz@bunkus.org>
