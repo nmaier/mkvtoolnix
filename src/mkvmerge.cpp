@@ -2563,7 +2563,7 @@ add_string(int &num,
 static char **
 read_args_from_file(int &num_args,
                     char **args,
-                    char *filename) {
+                    const char *filename) {
   mm_text_io_c *mm_io;
   string buffer, opt1, opt2;
   bool skip_next;
@@ -2610,6 +2610,7 @@ read_args_from_file(int &num_args,
  * commands from command files if the argument starts with '@'. Puts all
  * arguments into a new array.
  */
+#if !defined(SYS_WINDOWS)
 static void
 handle_args(int argc,
             char **argv) {
@@ -2643,6 +2644,72 @@ handle_args(int argc,
   if (args != NULL)
     safefree(args);
 }
+
+#else  // !defined(SYS_WINDOWS)
+
+static void
+handle_args(int argc,
+            char **argv) {
+  int i, num_args;
+  char **args;
+  wchar_t *p;
+  string utf8;
+  bool quoted, ignore_me, skip_first;
+
+  args = NULL;
+  num_args = 0;
+  p = GetCommandLineW();
+  quoted = false;
+  ignore_me = true;
+  skip_first = true;
+  while (*p != 0) {
+    if (*p == L'"')
+      quoted = !quoted;
+    else if (*p == L' ') {
+      if (quoted)
+        utf8 += ' ';
+      else if (!ignore_me) {
+        if (!skip_first) {
+          if (utf8[0] == '@')
+            args = read_args_from_file(num_args, args, utf8.substr(1).c_str());
+          else
+            args = add_string(num_args, args, utf8.c_str());
+        }
+        skip_first = false;
+        ignore_me = true;
+        utf8.clear();
+      }
+    } else {
+      ignore_me = false;
+      if (*p < 0x80)
+        utf8 += (char)*p;
+      else if (*p < 0x800) {
+        utf8 += (char)(0xc0 | (*p >> 6));
+        utf8 += (char)(0x80 | (*p & 0x3f));
+      } else {
+        utf8 += (char)(0xe0 | (*p >> 12));
+        utf8 += (char)(0x80 | ((*p >> 6) & 0x3f));
+        utf8 += (char)(0x80 | (*p & 0x3f));
+      }
+    }
+
+    ++p;
+  }
+  if (!ignore_me && !skip_first) {
+    if (utf8[0] == '@')
+      args = read_args_from_file(num_args, args, utf8.substr(1).c_str());
+    else
+      args = add_string(num_args, args, utf8.c_str());
+  }
+
+  parse_args(num_args, args);
+
+  for (i = 0; i < num_args; i++)
+    safefree(args[i]);
+  if (args != NULL)
+    safefree(args);
+}
+#endif // !defined(SYS_WINDOWS)
 
 /** \brief Global program initialization
  *
