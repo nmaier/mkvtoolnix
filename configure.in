@@ -829,20 +829,27 @@ AC_ARG_WITH(avilib,
         ;;
     esac
   fi
+  AC_MSG_CHECKING(which AVI libraries to use)
   if test "x$have_aviclasses" = "xyes"; then 
     AC_DEFINE(HAVE_AVICLASSES, 1,
       [Define if the newer AVIclasses should be used.])
     AVICLASSES_LIBS="-laviclasses"
+    avi_libs_to_use="classes "
   fi
   if test "x$have_avilib0_6_10" = "xyes"; then
     AC_DEFINE(HAVE_AVILIB0_6_10, 1,
       [Define if the newer avilib from transcode 0.6.10 should be used.])
+    avi_libs_to_use="${avi_libs_to_use}0.6.10 "
+  else
+    avi_libs_to_use="${avi_libs_to_use}old "
   fi
   AM_CONDITIONAL(HAVE_AVILIB, test x"$have_avilib0_6_10" != "xyes")
   AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" == "xyes")
   AM_CONDITIONAL(HAVE_AVICLASSES, test x"$have_aviclasses" = "xyes")
 
   AVILIB_LIBS="-lavi"
+
+  AC_MSG_RESULT($avi_libs_to_use)
 
 AC_SUBST(AVILIB_LIBS)
 AC_SUBST(AVICLASSES_LIBS)
