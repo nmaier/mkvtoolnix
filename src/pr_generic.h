@@ -476,6 +476,8 @@ public:
       ti->avi_block_sizes->push_back(block_size);
   }
 
+  virtual void set_displacement_maybe(int64_t displacement);
+
 protected:
   virtual void dump_packet(const void *buffer, int size);
 };

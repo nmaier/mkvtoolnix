@@ -969,6 +969,14 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
   return duration;
 }
 
+void
+generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
+  if ((ti->async.linear != 1.0) || (ti->async.displacement != 0) ||
+      (initial_displacement != 0))
+    return;
+  initial_displacement = displacement;
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(container) \

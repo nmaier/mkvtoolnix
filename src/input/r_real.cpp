@@ -347,6 +347,10 @@ real_reader_c::create_packetizer(int64_t tid) {
                  "The file will be muxed in the WRONG way otherwise. Also "
                  "read mkvmerge's documentation.\n", track->id);
 
+        // AAC packetizers might need the timecode of the first packet in order
+        // to fill in stuff. Let's misuse ref_timecode for that.
+        dmx->ref_timecode = -1;
+
       } else {
         ptzr = new ra_packetizer_c(this, dmx->samples_per_second,
                                    dmx->channels, dmx->bits_per_sample,
@@ -452,12 +456,19 @@ real_reader_c::read(generic_packetizer_c *,
   }
 
   if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO)
-    assemble_video_packet(dmx, frame); // mem, timecode, (frame->flags & 2) == 2);
+    assemble_video_packet(dmx, frame);
 
-  else if (dmx->is_aac)
+  else if (dmx->is_aac) {
+    // If the first AAC packet does not start at 0 then let the AAC
+    // packetizer adjust its data accordingly.
+    if (dmx->ref_timecode == -1) {
+      dmx->ref_timecode = timecode;
+      PTZR(dmx->ptzr)->set_displacement_maybe(timecode);
+    }
+
     deliver_aac_frames(dmx, mem);
 
-  else
+  } else
     queue_audio_frames(dmx, mem, timecode, frame->flags);
 
   rmff_release_frame(frame);
