@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.30 2003/06/07 21:59:24 mosu Exp $
+    \version \$Id$
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
