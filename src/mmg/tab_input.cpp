@@ -314,6 +314,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_fourcc->Append(wxT("DIVX"));
   cob_fourcc->Append(wxT("DIV3"));
   cob_fourcc->Append(wxT("DX50"));
+  cob_fourcc->Append(wxT("MP4V"));
   cob_fourcc->Append(wxT("XVID"));
   cob_fourcc->SetToolTip(TIP("Forces the FourCC of the video track to this "
                              "value. Note that this only works for video "
