@@ -132,7 +132,7 @@ find_track_by_uid(int tuid) {
 void
 usage() {
 #ifdef HAVE_WXWINDOWS
-  mxinfo(_(
+  mxinfo(Y(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
     "  -g, --gui      Start the GUI (and open inname if it was given).\n"
@@ -144,7 +144,7 @@ usage() {
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n"));
 #else
-  mxinfo(_(
+  mxinfo(Y(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
     "  inname         Use 'inname' as the source.\n"
@@ -211,7 +211,7 @@ show_error(const char *fmt,
 #define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
                                                   ## args)
 #define show_unknown_element(e, l) \
-  _show_element(e, es, true, l, _("Unknown element: %s"), \
+  _show_element(e, es, true, l, Y("Unknown element: %s"), \
                 e->Generic().DebugName)
 #define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
                                                      ## args)
@@ -287,7 +287,7 @@ parse_args(int argc,
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--gui")) {
 #ifndef HAVE_WXWINDOWS
-      mxerror(_("mkvinfo was compiled without GUI support.\n"));
+      mxerror(Y("mkvinfo was compiled without GUI support.\n"));
 #else // HAVE_WXWINDOWS
       use_gui = true;
 #endif // HAVE_WXWINDOWS
@@ -309,7 +309,7 @@ parse_args(int argc,
       calc_checksums = true;
       show_summary = true;
     } else if (file_name != NULL)
-      mxerror(_("Only one input file is allowed.\n"));
+      mxerror(Y("Only one input file is allowed.\n"));
     else
       file_name = argv[i];
 }
@@ -1271,10 +1271,10 @@ def_handle(tracks) {
       }
 
       if (show_summary)
-        mxinfo(_("Track %lld: %s, codec ID: %s%s%s%s\n"), kax_track_number,
-               kax_track_type == 'a' ? _("audio") :
-               kax_track_type == 'v' ? _("video") :
-               kax_track_type == 's' ? _("subtitles") : _("unknown"),
+        mxinfo(Y("Track %lld: %s, codec ID: %s%s%s%s\n"), kax_track_number,
+               kax_track_type == 'a' ? Y("audio") :
+               kax_track_type == 'v' ? Y("video") :
+               kax_track_type == 's' ? Y("subtitles") : Y("unknown"),
                kax_codec_id.c_str(), fourcc_buffer.c_str(),
                summary.size() > 0 ? ", " : "",
                join(", ", summary).c_str());
@@ -1727,20 +1727,20 @@ def_handle2(block_group,
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (bduration != -1.0)
-        mxinfo(_("%c frame, track %u, timecode %lld, duration %.3f, size %d, "
+        mxinfo(Y("%c frame, track %u, timecode %lld, duration %.3f, size %d, "
                  "adler 0x%08x\n"), bref_found && fref_found ? 'B' :
                bref_found ? 'P' : !fref_found ? 'I' : '?',
                lf_tnum, lf_timecode, bduration, frame_sizes[fidx],
                frame_adlers[fidx]);
       else
-        mxinfo(_("%c frame, track %u, timecode %lld, size %d, adler "
+        mxinfo(Y("%c frame, track %u, timecode %lld, size %d, adler "
                  "0x%08x\n"), bref_found && fref_found ? 'B' :
                bref_found ? 'P' : !fref_found ? 'I' : '?',
                lf_tnum, lf_timecode, frame_sizes[fidx],
                frame_adlers[fidx]);
     }
   } else if (verbose > 2)
-    show_element(NULL, 2, _("[%c frame for track %u, timecode %lld]"),
+    show_element(NULL, 2, Y("[%c frame for track %u, timecode %lld]"),
                  bref_found && fref_found ? 'B' :
                  bref_found ? 'P' : !fref_found ? 'I' : '?',
                  lf_tnum, lf_timecode);

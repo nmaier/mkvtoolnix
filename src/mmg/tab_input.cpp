@@ -1480,7 +1480,8 @@ tab_input::load(wxConfigBase *cfg) {
       tr.source = files.size();
       if (track_order.length() > 0)
         track_order += wxT(",");
-      track_order += wxString::Format(format.c_str(), files.size(), tr.id);
+      track_order += wxString::Format(wxUCS(format.c_str()), files.size(),
+                                      tr.id);
 
       fi.tracks->push_back(tr);
       cfg->SetPath(wxT(".."));
