@@ -13,8 +13,7 @@ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 
 noinst_LIBRARIES = libmtxoutput.a
 
-libmtxoutput_a_SOURCES = mpeg4bitstream.cpp \
-			p_aac.cpp \
+libmtxoutput_a_SOURCES = p_aac.cpp \
 			p_ac3.cpp \
 			p_dts.cpp \
 			p_flac.cpp \
