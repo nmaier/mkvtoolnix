@@ -11,6 +11,7 @@
    the timecode factory
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Modifications by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #include <map>
@@ -125,11 +126,9 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   mxverb(3, "ext_timecodes: Version 1, default fps %f, %u entries.\n",
          default_fps, ranges.size());
 
-  if (ranges.size() == 0) {
-    mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),
-           file_name.c_str());
+  if (ranges.size() == 0)
     t.start_frame = 0;
-  } else {
+  else {
     sort(ranges.begin(), ranges.end());
     do {
       done = true;
