@@ -73,6 +73,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
       throw "";
     }
 
+    mm_io->setFilePointer(0);
     version = parser.GetMPEGVersion();
     seq_hdr = parser.GetSequenceHeader();
     width = seq_hdr.width;
