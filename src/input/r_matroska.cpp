@@ -1430,7 +1430,9 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
 void
 kax_reader_c::set_packetizer_headers(kax_track_t *t) {
   if (t->default_track)
-    PTZR(t->ptzr)->set_as_default_track(MAP_TRACK_TYPE(t->type),
+    PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : 
+                                        t->type == 'a' ? DEFTRACK_TYPE_AUDIO :
+                                        DEFTRACK_TYPE_SUBS,
                                         DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
   if (t->tuid != 0)
     if (!PTZR(t->ptzr)->set_uid(t->tuid))

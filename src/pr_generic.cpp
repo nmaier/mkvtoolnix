@@ -543,11 +543,11 @@ generic_packetizer_c::set_headers() {
       htrack_default_duration;
 
   if (htrack_type == track_audio)
-    idx = 0;
+    idx = DEFTRACK_TYPE_AUDIO;
   else if (htrack_type == track_video)
-    idx = 1;
+    idx = DEFTRACK_TYPE_VIDEO;
   else
-    idx = 2;
+    idx = DEFTRACK_TYPE_SUBS;
 
   if (ti->default_track)
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
@@ -686,11 +686,11 @@ generic_packetizer_c::fix_headers() {
   int idx;
 
   if (htrack_type == track_audio)
-    idx = 0;
+    idx = DEFTRACK_TYPE_AUDIO;
   else if (htrack_type == track_video)
-    idx = 1;
+    idx = DEFTRACK_TYPE_VIDEO;
   else
-    idx = 2;
+    idx = DEFTRACK_TYPE_SUBS;
 
   if (default_tracks[idx] == hserialno)
     *(static_cast<EbmlUInteger *>

@@ -1,5 +1,9 @@
 2004-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The Matroska reader contained a nice little
+	illegal memory access (introduced in 0.9.3 with the fixes to the
+	'default track' handling).
+
 	* mkvmerge: bug fix: The SSA reader was segfaulting if a line
 	contained an empty text field.
 

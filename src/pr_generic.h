@@ -53,6 +53,10 @@ using namespace std;
 #define CUES_ALL          2
 #define CUES_SPARSE       3
 
+#define DEFTRACK_TYPE_AUDIO 0
+#define DEFTRACK_TYPE_VIDEO 1
+#define DEFTRACK_TYPE_SUBS  2
+
 class memory_c {
 public:
   unsigned char *data;
