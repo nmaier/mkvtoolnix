@@ -1057,6 +1057,7 @@ void tab_input::load(wxConfigBase *cfg) {
     f = &files[fidx];
 
     delete f->file_name;
+    delete f->title;
     for (tidx = 0; tidx < f->tracks->size(); tidx++) {
       t = &(*f->tracks)[tidx];
 
@@ -1095,6 +1096,8 @@ void tab_input::load(wxConfigBase *cfg) {
       continue;
     }
     fi.file_name = new wxString(s);
+    cfg->Read("title", &s);
+    fi.title = new wxString(s);
     cfg->Read("container", &fi.container);
     fi.no_chapters = false;
     cfg->Read("no_chapters", &fi.no_chapters);

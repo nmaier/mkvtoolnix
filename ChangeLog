@@ -1,5 +1,9 @@
 2003-12-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The "load settings" function did not load all
+	settings, and some strings were not allocated at all resulting in
+	a crash when a track was removed after loading these settings.
+
 	* mkvmerge: bug fix: The AAC packetizer was not working if packets
 	were being read from a raw AAC file (it worked fine from MP4 and
 	Matroska files).
