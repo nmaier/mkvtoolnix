@@ -249,6 +249,8 @@ ssa_reader_c::read(generic_packetizer_c *,
 
     // Split the line into fields.
     fields = split(line.c_str(), ",", format.size());
+    while (fields.size() < format.size())
+      fields.push_back(string(""));
 
     // Parse the start time.
     stime = get_element("Start", fields);

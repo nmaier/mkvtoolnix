@@ -1,5 +1,8 @@
 2004-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The SSA reader was segfaulting if a line
+	contained an empty text field.
+
 	* mmg: new feature: Added support for the two flags 'hidden' and
 	'enabled' in the chapter editor.
 
