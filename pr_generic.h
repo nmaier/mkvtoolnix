@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.9 2003/02/28 14:50:04 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.10 2003/03/01 16:49:28 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -42,33 +42,33 @@ typedef struct {
   KaxCluster  *cluster;
   packet_t   **packets;
   int          num_packets, is_referenced, rendered;
-} ch_contents;
+} ch_contents_t;
 
 class cluster_helper_c {
 private:
-  ch_contents **clusters;
-  int           num_clusters, cluster_content_size;
+  ch_contents_t **clusters;
+  int             num_clusters, cluster_content_size;
 public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
 
-  void         add_cluster(KaxCluster *cluster);
-  KaxCluster  *get_cluster();
-  void         add_packet(packet_t *packet);
-  u_int64_t    get_timecode();
-  packet_t    *get_packet(int num);
-  int          get_packet_count();
-  int          render(IOCallback *out);
-  int          free_ref(u_int64_t pid, void *source);
-  int          free_clusters();
-  int          get_cluster_content_size();
+  void           add_cluster(KaxCluster *cluster);
+  KaxCluster    *get_cluster();
+  void           add_packet(packet_t *packet);
+  u_int64_t      get_timecode();
+  packet_t      *get_packet(int num);
+  int            get_packet_count();
+  int            render(IOCallback *out);
+  int            free_ref(u_int64_t pid, void *source);
+  int            free_clusters();
+  int            get_cluster_content_size();
 
 private:
-  int          find_cluster(KaxCluster *cluster);
-  ch_contents *find_packet_cluster(u_int64_t pid);
-  packet_t    *find_packet(u_int64_t pid);
-  void         free_contents(ch_contents *clstr);
-  void         check_clusters(int num);
+  int            find_cluster(KaxCluster *cluster);
+  ch_contents_t *find_packet_cluster(u_int64_t pid);
+  packet_t      *find_packet(u_int64_t pid);
+  void           free_contents(ch_contents_t *clstr);
+  void           check_clusters(int num);
 };
 
 extern cluster_helper_c *cluster_helper;
