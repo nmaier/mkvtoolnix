@@ -30,9 +30,6 @@
 #include "common.h"
 #include "error.h"
 
-#include "p_dts.h"
-#include "p_pcm.h"
-
 extern "C" {
 #include "avilib.h"
 }
@@ -41,8 +38,6 @@ class wav_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
   mm_io_c *mm_io;
-  class pcm_packetizer_c *pcmpacketizer;
-  class dts_packetizer_c *dtspacketizer;
   int dts_swap_bytes, dts_14_16;
   int bps;
   struct wave_header wheader;
@@ -54,7 +49,6 @@ public:
   virtual ~wav_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);
-  virtual void set_headers();
   virtual void identify();
 
   virtual int display_priority();

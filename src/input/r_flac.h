@@ -43,7 +43,6 @@ typedef struct {
 class flac_reader_c: public generic_reader_c {
 private:
   mm_io_c *file;
-  flac_packetizer_c *packetizer;
   unsigned char *read_buffer;
   int pos, size, channels, sample_rate, bits_per_sample;
   bool metadata_parsed, done;
@@ -56,7 +55,6 @@ public:
   virtual ~flac_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);
-  virtual void set_headers();
   virtual void identify();
 
   virtual int display_priority();

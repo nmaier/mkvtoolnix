@@ -105,7 +105,6 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
   }
   if (identifying) {
     read_buffer = NULL;
-    packetizer = NULL;
     return;
   }
   if (verbose)
@@ -132,8 +131,9 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
         mxerror(FPFX "Could not read a header packet.\n");
       block_size += current_block->len;
     }
-    packetizer = new flac_packetizer_c(this, sample_rate, channels,
-                                       bits_per_sample, buf, block_size, ti);
+    add_packetizer(new flac_packetizer_c(this, sample_rate, channels,
+                                         bits_per_sample, buf, block_size,
+                                         ti));
     safefree(buf);
   } catch (error_c &error) {
     mxerror(FPFX "could not initialize the FLAC packetizer.\n");
@@ -144,8 +144,6 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
 }
 
 flac_reader_c::~flac_reader_c() {
-  if (packetizer != NULL)
-    delete packetizer;
   delete file;
   safefree(read_buffer);
 }
@@ -249,17 +247,17 @@ flac_reader_c::read(generic_packetizer_c *) {
   file->setFilePointer(current_block->filepos);
   if (file->read(buf, current_block->len) != current_block->len) {
     safefree(buf);
-    packetizer->flush();
+    PTZR0->flush();
     return 0;
   }
   memory_c mem(buf, current_block->len, true);
-  packetizer->process(mem, samples * 1000000000 / sample_rate,
-                      current_block->samples * 1000000000 / sample_rate);
+  PTZR0->process(mem, samples * 1000000000 / sample_rate,
+                 current_block->samples * 1000000000 / sample_rate);
   samples += current_block->samples;
   current_block++;
 
   if (current_block == blocks.end()) {
-    packetizer->flush();
+    PTZR0->flush();
     return 0;
   }
   return EMOREDATA;
@@ -377,11 +375,6 @@ flac_reader_c::display_progress(bool final) {
            distance(blocks.begin(), current_block),
            blocks.size(), distance(blocks.begin(), current_block) * 100 /
            blocks.size());
-}
-
-void
-flac_reader_c::set_headers() {
-  packetizer->set_headers();
 }
 
 void

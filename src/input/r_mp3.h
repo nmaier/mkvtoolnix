@@ -35,7 +35,6 @@ class mp3_reader_c: public generic_reader_c {
 private:
   unsigned char chunk[16384];
   mm_io_c *mm_io;
-  class mp3_packetizer_c *mp3packetizer;
   int64_t bytes_processed, size;
   mp3_header_t mp3header;
 
@@ -44,7 +43,6 @@ public:
   virtual ~mp3_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);
-  virtual void set_headers();
   virtual void identify();
 
   virtual int display_priority();

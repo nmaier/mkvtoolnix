@@ -107,8 +107,6 @@ real_reader_c::~real_reader_c() {
 
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
-    if (demuxer->packetizer != NULL)
-      delete demuxer->packetizer;
     if (demuxer->segments != NULL) {
       for (j = 0; j < demuxer->segments->size(); j++)
         safefree((*demuxer->segments)[j].data);
@@ -157,6 +155,7 @@ real_reader_c::parse_headers() {
       dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
       memset(dmx, 0, sizeof(real_demuxer_t));
       dmx->track = track;
+      dmx->ptzr = -1;
 
       if (track->type == RMFF_TRACK_TYPE_VIDEO) {
         dmx->rvp = (real_video_props_t *)track->mdpr_header.type_specific_data;
@@ -256,7 +255,7 @@ real_reader_c::create_packetizer(int64_t tid) {
   if (dmx == NULL)
     return;
 
-  if (dmx->packetizer == NULL) {
+  if (dmx->ptzr == -1) {
     track = dmx->track;
     ti->id = track->id;
     ti->private_data = dmx->private_data;
@@ -266,9 +265,10 @@ real_reader_c::create_packetizer(int64_t tid) {
       char buffer[20];
 
       mxprints(buffer, "V_REAL/%s", dmx->fourcc);
-      dmx->packetizer =
-        new video_packetizer_c(this, buffer, dmx->fps, dmx->width, dmx->height,
-                               false, ti);
+      dmx->ptzr =
+        add_packetizer(new video_packetizer_c(this, buffer, dmx->fps,
+                                              dmx->width, dmx->height, false,
+                                              ti));
       if ((dmx->fourcc[0] != 'R') || (dmx->fourcc[1] != 'V') ||
           (dmx->fourcc[2] != '4') || (dmx->fourcc[3] != '0'))
         dmx->rv_dimensions = true;
@@ -281,9 +281,10 @@ real_reader_c::create_packetizer(int64_t tid) {
       ra_packetizer_c *ptzr;
 
       if (!strncmp(dmx->fourcc, "dnet", 4)) {
-        dmx->packetizer =
-          new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels,
-                                  dmx->bsid, ti);
+        dmx->ptzr =
+          add_packetizer(new ac3_bs_packetizer_c(this, dmx->samples_per_second,
+                                                 dmx->channels, dmx->bsid,
+                                                 ti));
         mxverb(1, "+-> Using the AC3 output module for stream "
                "%u (FourCC: %s).\n", track->id, dmx->fourcc);
 
@@ -338,14 +339,14 @@ real_reader_c::create_packetizer(int64_t tid) {
         ti->private_data = NULL;
         ti->private_size = 0;
         dmx->is_aac = true;
-        dmx->packetizer =
-          new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                               sample_rate, channels, ti, false, true);
+        dmx->ptzr =
+          add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
+                                              sample_rate, channels, ti, false,
+                                              true));
         mxverb(1, "+-> Using the AAC output module for stream "
                "%u (FourCC: %s).\n", track->id, dmx->fourcc);
         if (profile == AAC_PROFILE_SBR)
-          dmx->packetizer->
-            set_audio_output_sampling_freq(output_sample_rate);
+          PTZR(dmx->ptzr)->set_audio_output_sampling_freq(output_sample_rate);
         else if (!extra_data_parsed)
           mxwarn("RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. "
                  "In some cases this can NOT be detected automatically. "
@@ -362,7 +363,7 @@ real_reader_c::create_packetizer(int64_t tid) {
                                    (dmx->fourcc[2] << 8) | dmx->fourcc[3],
                                    dmx->private_data, dmx->private_size,
                                    ti);
-        dmx->packetizer = ptzr;
+        dmx->ptzr = add_packetizer(ptzr);
         dmx->segments = new vector<rv_segment_t>;
 
         if (verbose)
@@ -526,7 +527,7 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx,
            "0x%08x duration %llu\n", dmx->track->id, ti->fname, segment.size,
            dmx->last_timecode, (uint32_t)segment.flags, duration);
     memory_c mem(segment.data, segment.size, true);
-    dmx->packetizer->process(mem, dmx->last_timecode, duration,
+    PTZR(dmx->ptzr)->process(mem, dmx->last_timecode, duration,
                              (segment.flags & 2) == 2 ? -1 :
                              dmx->ref_timecode);
     if ((segment.flags & 2) == 2)
@@ -574,7 +575,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   for (i = 0; i < num_sub_packets; i++) {
     sub_length = get_uint16_be(&chunk[2 + i * 2]);
     memory_c mem(&chunk[data_idx], sub_length, false);
-    dmx->packetizer->process(mem);
+    PTZR(dmx->ptzr)->process(mem);
     data_idx += sub_length;
   }
 }
@@ -610,14 +611,14 @@ real_reader_c::set_headers() {
         d = demuxers[k];
         break;
       }
-    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
-      d->packetizer->set_headers();
+    if ((d != NULL) && (d->ptzr != -1) && !d->headers_set) {
+      PTZR(d->ptzr)->set_headers();
       d->headers_set = true;
     }
   }
   for (i = 0; i < demuxers.size(); i++)
-    if ((demuxers[i]->packetizer != NULL) && !demuxers[i]->headers_set) {
-      demuxers[i]->packetizer->set_headers();
+    if ((demuxers[i]->ptzr != -1) && !demuxers[i]->headers_set) {
+      PTZR(demuxers[i]->ptzr)->set_headers();
       demuxers[i]->headers_set = true;
     }
 }
@@ -657,7 +658,7 @@ real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
     memory_c mem(assembled->data, assembled->size, true);
     if (!dmx->rv_dimensions)
       set_dimensions(dmx, assembled->data, assembled->size);
-    dmx->packetizer->process(mem, (int64_t)assembled->timecode * 1000000, -1,
+    PTZR(dmx->ptzr)->process(mem, (int64_t)assembled->timecode * 1000000, -1,
                              (assembled->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
                              RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME : 
                              VFT_PFRAMEAUTOMATIC);
@@ -760,7 +761,7 @@ real_reader_c::set_dimensions(real_demuxer_t *dmx,
 
       }
 
-      track_entry = dmx->packetizer->get_track_entry();
+      track_entry = PTZR(dmx->ptzr)->get_track_entry();
       KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
 
       *(static_cast<EbmlUInteger *>
@@ -836,6 +837,6 @@ real_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->packetizer != NULL)
-      demuxers[i]->packetizer->flush();
+    if (demuxers[i]->ptzr != -1)
+      PTZR(demuxers[i]->ptzr)->flush();
 }

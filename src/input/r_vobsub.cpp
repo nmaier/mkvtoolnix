@@ -159,7 +159,7 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
   const char *c;
 
   if ((tid < tracks.size()) && demuxing_requested('s', tid) &&
-      (tracks[tid]->packetizer == NULL)) {
+      (tracks[tid]->ptzr == -1)) {
     i = tid;
     ti->id = i;
     if ((c = map_iso639_1_to_iso639_2(tracks[i]->language)) != NULL) {
@@ -167,9 +167,9 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
       ti->language = language;
     } else
       ti->language = NULL;
-    tracks[i]->packetizer =
-      new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(), true,
-                              ti);
+    tracks[i]->ptzr =
+      add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(),
+                                             idx_data.length(), true, ti));
     if (tracks[i]->timecodes.size() > 0) {
       avg_duration = 0;
       for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
@@ -341,7 +341,7 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr) {
 
   track = NULL;
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->packetizer == ptzr) {
+    if (PTZR(tracks[i]->ptzr) == ptzr) {
       track = tracks[i];
       break;
     }
@@ -382,7 +382,7 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr) {
          track->timecodes[i], ARG_TIMECODE_NS(track->timecodes[i]),
          track->durations[i]);
   memory_c mem(data, track->sizes[i], true);
-  track->packetizer->process(mem, track->timecodes[i], track->durations[i]);
+  PTZR(track->ptzr)->process(mem, track->timecodes[i], track->durations[i]);
   track->idx++;
 
   if (track->idx >= track->sizes.size()) {
@@ -442,14 +442,14 @@ vobsub_reader_c::set_headers() {
         t = tracks[k];
         break;
       }
-    if ((t != NULL) && (t->packetizer != NULL) && !t->headers_set) {
-      t->packetizer->set_headers();
+    if ((t != NULL) && (t->ptzr != -1) && !t->headers_set) {
+      PTZR(t->ptzr)->set_headers();
       t->headers_set = true;
     }
   }
   for (i = 0; i < tracks.size(); i++)
-    if ((tracks[i]->packetizer != NULL) && !tracks[i]->headers_set) {
-      tracks[i]->packetizer->set_headers();
+    if ((tracks[i]->ptzr != -1) && !tracks[i]->headers_set) {
+      PTZR(tracks[i]->ptzr)->set_headers();
       tracks[i]->headers_set = true;
     }
 }
@@ -459,6 +459,6 @@ vobsub_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->packetizer != NULL)
-      tracks[i]->packetizer->flush();
+    if (tracks[i]->ptzr != -1)
+      PTZR(tracks[i]->ptzr)->flush();
 }

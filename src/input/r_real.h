@@ -39,7 +39,7 @@ typedef struct {
 } rv_segment_t;
 
 typedef struct {
-  generic_packetizer_c *packetizer;
+  int ptzr;
   bool headers_set;
   rmff_track_t *track;
 

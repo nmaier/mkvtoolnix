@@ -341,7 +341,6 @@ ogm_reader_c::~ogm_reader_c() {
   for (i = 0; i < num_sdemuxers; i++) {
     dmx = sdemuxers[i];
     ogg_stream_clear(&dmx->os);
-    delete dmx->packetizer;
     delete dmx;
   }
   safefree(sdemuxers);
@@ -425,6 +424,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   int i, profile, channels, sample_rate, output_sample_rate;
   bool sbr, aac_info_extracted;
   ogm_demuxer_t *dmx;
+  generic_packetizer_c *ptzr;
 
   dmx = NULL;
   for (i = 0; i < num_sdemuxers; i++)
@@ -435,7 +435,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   if (dmx == NULL)
     return;
 
-  if (dmx->packetizer == NULL) {
+  if (dmx->ptzr == -1) {
     memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
     sth = (stream_header *)&dmx->packet_data[0][1];
     ti->private_data = NULL;
@@ -444,6 +444,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
     ti->language = dmx->language; // safestrdup(dmx->language);
     ti->track_name = dmx->title; // safestrdup(dmx->title);
 
+    ptzr = NULL;
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
         // AVI compatibility mode. Fill in the values we've got and guess
@@ -459,12 +460,11 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         ti->private_size = sizeof(alBITMAPINFOHEADER);
 
         try {
-          dmx->packetizer =
-            new video_packetizer_c(this, NULL, (double)10000000 /
-                                   (double)get_uint64(&sth->time_unit),
-                                   get_uint32(&sth->sh.video.width),
-                                   get_uint32(&sth->sh.video.height),
-                                   false, ti);
+          ptzr = new video_packetizer_c(this, NULL, (double)10000000.0 /
+                                        get_uint64(&sth->time_unit),
+                                        get_uint32(&sth->sh.video.width),
+                                        get_uint32(&sth->sh.video.height),
+                                        false, ti);
         } catch (error_c &error) {
           mxwarn("ogm_reader: could not initialize video "
                  "packetizer for stream id %d. Will try to continue and "
@@ -480,10 +480,9 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
       case OGM_STREAM_TYPE_PCM:
         try {
-          dmx->packetizer =
-            new pcm_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                 get_uint16(&sth->sh.audio.channels),
-                                 get_uint16(&sth->bits_per_sample), ti);
+          ptzr = new pcm_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                      get_uint16(&sth->sh.audio.channels),
+                                      get_uint16(&sth->bits_per_sample), ti);
         } catch (error_c &error) {
           mxwarn("ogm_reader: could not initialize PCM "
                  "packetizer for stream id %d. Will try to continue and "
@@ -498,9 +497,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
       case OGM_STREAM_TYPE_MP3:
         try {
-          dmx->packetizer =
-            new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                 get_uint16(&sth->sh.audio.channels), ti);
+          ptzr = new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                      get_uint16(&sth->sh.audio.channels), ti);
         } catch (error_c &error) {
           mxwarn("Error: ogm_reader: could not initialize MP3 "
                  "packetizer for stream id %d. Will try to continue and "
@@ -515,9 +513,9 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
       case OGM_STREAM_TYPE_AC3:
         try {
-          dmx->packetizer =
-            new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                 get_uint16(&sth->sh.audio.channels), 0, ti);
+          ptzr = new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
+                                      get_uint16(&sth->sh.audio.channels), 0,
+                                      ti);
         } catch (error_c &error) {
           mxwarn("ogm_reader: could not initialize AC3 "
                  "packetizer for stream id %d. Will try to continue and "
@@ -554,12 +552,10 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                profile, channels, sample_rate, (int)sbr, output_sample_rate,
                (int)aac_info_extracted);
         try {
-          dmx->packetizer =
-            new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate,
-                                 channels, ti, false, true);
+          ptzr = new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate,
+                                      channels, ti, false, true);
           if (sbr)
-            dmx->packetizer->
-              set_audio_output_sampling_freq(output_sample_rate);
+            ptzr->set_audio_output_sampling_freq(output_sample_rate);
         } catch (error_c &error) {
           mxwarn("ogm_reader: could not initialize AAC "
                  "packetizer for stream id %d. Will try to continue and "
@@ -585,7 +581,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         vorbis_info_clear(&vi);
         vorbis_comment_clear(&vc);
         try {
-          dmx->packetizer =
+          ptzr =
             new vorbis_packetizer_c(this,
                                     dmx->packet_data[0], dmx->packet_sizes[0],
                                     dmx->packet_data[1], dmx->packet_sizes[1],
@@ -606,9 +602,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
       case OGM_STREAM_TYPE_TEXT:
         try {
-          dmx->packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8,
-                                                      NULL, 0, true, false,
-                                                      ti);
+          ptzr = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true,
+                                           false, ti);
         } catch (error_c &error) {
           mxwarn("ogm_reader: could not initialize the "
                  "text subtitles packetizer for stream id %d. Will try to "
@@ -637,9 +632,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
             memcpy(&buf[size], dmx->packet_data[i], dmx->packet_sizes[i]);
             size += dmx->packet_sizes[i];
           }
-          dmx->packetizer =
-            new flac_packetizer_c(this, dmx->vorbis_rate, dmx->channels,
-                                  dmx->bits_per_sample, buf, size, ti);
+          ptzr = new flac_packetizer_c(this, dmx->vorbis_rate, dmx->channels,
+                                       dmx->bits_per_sample, buf, size, ti);
           safefree(buf);
 
         } catch (error_c &error) {
@@ -661,6 +655,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         break;
 
     }
+    if (ptzr != NULL)
+      dmx->ptzr = add_packetizer(ptzr);
     ti->language = NULL;
     ti->track_name = NULL;
   }
@@ -687,7 +683,7 @@ ogm_reader_c::packet_available() {
     return 0;
 
   for (i = 0; i < num_sdemuxers; i++)
-    if (!sdemuxers[i]->packetizer->packet_available())
+    if (!PTZR(sdemuxers[i]->ptzr)->packet_available())
       return 0;
 
   return 1;
@@ -904,15 +900,15 @@ ogm_reader_c::process_page(ogg_page *og) {
         continue;
       for (i = 0; i < (int)dmx->nh_packet_data.size(); i++) {
         memory_c mem(dmx->nh_packet_data[i], dmx->nh_packet_sizes[i], true);
-        dmx->packetizer->process(mem, 0);
+        PTZR(dmx->ptzr)->process(mem, 0);
       }
       dmx->nh_packet_data.clear();
       if (dmx->last_granulepos == -1) {
         memory_c mem(op.packet, op.bytes, false);
-        dmx->packetizer->process(mem, -1);
+        PTZR(dmx->ptzr)->process(mem, -1);
       } else {
         memory_c mem(op.packet, op.bytes, false);
-        dmx->packetizer->process(mem, dmx->last_granulepos * 1000000000 /
+        PTZR(dmx->ptzr)->process(mem, dmx->last_granulepos * 1000000000 /
                                  dmx->vorbis_rate);
         dmx->last_granulepos = ogg_page_granulepos(og);
       }
@@ -940,7 +936,7 @@ ogm_reader_c::process_page(ogg_page *og) {
 
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
         memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
-        dmx->packetizer->process(mem, -1, -1,
+        PTZR(dmx->ptzr)->process(mem, -1, -1,
                                  (*op.packet & PACKET_IS_SYNCPOINT ?
                                   VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
         dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
@@ -951,17 +947,17 @@ ogm_reader_c::process_page(ogg_page *og) {
             ((op.packet[hdrlen + 1] != ' ') &&
              (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1]))) {
           memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
-          dmx->packetizer->process(mem, ogg_page_granulepos(og) * 1000000,
+          PTZR(dmx->ptzr)->process(mem, ogg_page_granulepos(og) * 1000000,
                                    (int64_t)lenbytes * 1000000);
         }
 
       } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
         memory_c mem(op.packet, op.bytes, false);
-        dmx->packetizer->process(mem);
+        PTZR(dmx->ptzr)->process(mem);
 
       } else {
         memory_c mem(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen, false);
-        dmx->packetizer->process(mem);
+        PTZR(dmx->ptzr)->process(mem);
         dmx->units_processed += op.bytes - 1;
       }
     }
@@ -1155,14 +1151,14 @@ ogm_reader_c::set_headers() {
         d = sdemuxers[k];
         break;
       }
-    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
-      d->packetizer->set_headers();
+    if ((d != NULL) && (d->ptzr != -1) && !d->headers_set) {
+      PTZR(d->ptzr)->set_headers();
       d->headers_set = true;
     }
   }
   for (i = 0; i < num_sdemuxers; i++)
-    if ((sdemuxers[i]->packetizer != NULL) && !sdemuxers[i]->headers_set) {
-      sdemuxers[i]->packetizer->set_headers();
+    if ((sdemuxers[i]->ptzr != -1) && !sdemuxers[i]->headers_set) {
+      PTZR(sdemuxers[i]->ptzr)->set_headers();
       sdemuxers[i]->headers_set = true;
     }
 }
@@ -1220,8 +1216,8 @@ ogm_reader_c::flush_packetizers() {
   int i;
 
   for (i = 0; i < num_sdemuxers; i++)
-    if (sdemuxers[i]->packetizer != NULL)
-      sdemuxers[i]->packetizer->flush();
+    if (sdemuxers[i]->ptzr != -1)
+      PTZR(sdemuxers[i]->ptzr)->flush();
 }
 
 void

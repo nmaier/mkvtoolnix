@@ -137,12 +137,10 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
       throw error_c("ssa_reader: Invalid format. Could not find the "
                     "\"Format\" line in the \"[Events]\" section.");
 
-    textsubs_packetizer = new textsubs_packetizer_c(this, is_ass ? 
-                                                    MKV_S_TEXTASS :
-                                                    MKV_S_TEXTSSA,
-                                                    global.c_str(),
-                                                    global.length(), false,
-                                                    false, ti);
+    add_packetizer(new textsubs_packetizer_c(this, is_ass ?  MKV_S_TEXTASS :
+                                             MKV_S_TEXTSSA, global.c_str(),
+                                             global.length(), false, false,
+                                             ti));
   } catch (exception &ex) {
     throw error_c("ssa_reader: Could not open the source file.");
   }
@@ -152,8 +150,6 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
 }
 
 ssa_reader_c::~ssa_reader_c() {
-  if (textsubs_packetizer != NULL)
-    delete textsubs_packetizer;
   delete mm_io;
 }
 
@@ -295,12 +291,11 @@ ssa_reader_c::read(generic_packetizer_c *) {
     mxprints(buffer, "%d", clines[i].num);
     line = string(buffer) + string(clines[i].line);
     memory_c mem((unsigned char *)line.c_str(), 0, false);
-    textsubs_packetizer->process(mem, clines[i].start,
-                                 clines[i].end - clines[i].start);
+    PTZR0->process(mem, clines[i].start, clines[i].end - clines[i].start);
     safefree(clines[i].line);
   }
 
-  textsubs_packetizer->flush();
+  PTZR0->flush();
 
   return 0;
 }
@@ -318,11 +313,6 @@ ssa_reader_c::display_progress(bool) {
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
-}
-
-void
-ssa_reader_c::set_headers() {
-  textsubs_packetizer->set_headers();
 }
 
 void

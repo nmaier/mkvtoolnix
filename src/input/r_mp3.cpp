@@ -100,8 +100,8 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
 
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
-    mp3packetizer = new mp3_packetizer_c(this, mp3header.sampling_frequency,
-                                         mp3header.channels, ti);
+    add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency,
+                                        mp3header.channels, ti));
     if (verbose)
       mxinfo("Using MP2/MP3 demultiplexer for %s.\n+-> Using "
              "MPEG audio output module for audio stream.\n", ti->fname);
@@ -112,8 +112,6 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
 
 mp3_reader_c::~mp3_reader_c() {
   delete mm_io;
-  if (mp3packetizer != NULL)
-    delete mp3packetizer;
 }
 
 int
@@ -122,12 +120,12 @@ mp3_reader_c::read(generic_packetizer_c *) {
 
   nread = mm_io->read(chunk, 16384);
   if (nread <= 0) {
-    mp3packetizer->flush();
+    PTZR0->flush();
     return 0;
   }
 
   memory_c mem(chunk, nread, false);
-  mp3packetizer->process(mem);
+  PTZR0->process(mem);
   bytes_processed += nread;
 
   return EMOREDATA;
@@ -145,11 +143,6 @@ mp3_reader_c::display_progress(bool final) {
   else
     mxinfo("progress: %lld/%lld bytes (%d%%)\r", bytes_processed, size,
            (int)(bytes_processed * 100L / size));
-}
-
-void
-mp3_reader_c::set_headers() {
-  mp3packetizer->set_headers();
 }
 
 void

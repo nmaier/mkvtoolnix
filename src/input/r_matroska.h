@@ -107,7 +107,7 @@ typedef struct {
 
   KaxTag *tag;
 
-  generic_packetizer_c *packetizer;
+  int ptzr;
   bool headers_set;
 } kax_track_t;
 

@@ -53,7 +53,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   debug_facility.add_packetizer(this);
 #endif
   reader = nreader;
-  reader->add_packetizer(this);
 
   track_entry = NULL;
   ti = new track_info_c(*nti);
@@ -61,6 +60,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   enqueued_bytes = 0;
   safety_last_timecode = 0;
   last_cue_timecode = -1;
+  timecode_offset = 0;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -242,7 +242,8 @@ generic_packetizer_c::~generic_packetizer_c() {
     delete ext_timecodes;
 }
 
-void generic_packetizer_c::set_tag_track_uid() {
+void
+generic_packetizer_c::set_tag_track_uid() {
   int is, it;
   KaxTag *tag;
   KaxTagTargets *targets;
@@ -274,7 +275,8 @@ void generic_packetizer_c::set_tag_track_uid() {
   }
 }
 
-int generic_packetizer_c::set_uid(uint32_t uid) {
+int
+generic_packetizer_c::set_uid(uint32_t uid) {
   if (is_unique_uint32(uid)) {
     add_unique_uint32(uid);
     huid = uid;
@@ -287,7 +289,8 @@ int generic_packetizer_c::set_uid(uint32_t uid) {
   return 0;
 }
 
-void generic_packetizer_c::set_track_type(int type) {
+void
+generic_packetizer_c::set_track_type(int type) {
   htrack_type = type;
 
   if ((type == track_audio) && (ti->cues == CUES_UNSPECIFIED))
@@ -298,7 +301,8 @@ void generic_packetizer_c::set_track_type(int type) {
     set_as_default_track(type, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
 }
 
-void generic_packetizer_c::set_track_name(const char *name) {
+void
+generic_packetizer_c::set_track_name(const char *name) {
   safefree(ti->track_name);
   if (name == NULL) {
     ti->track_name = NULL;
@@ -311,7 +315,8 @@ void generic_packetizer_c::set_track_name(const char *name) {
       cstrutf8_to_UTFstring(ti->track_name);
 }
 
-void generic_packetizer_c::set_codec_id(const char *id) {
+void
+generic_packetizer_c::set_codec_id(const char *id) {
   safefree(hcodec_id);
   if (id == NULL) {
     hcodec_id = NULL;
@@ -323,7 +328,8 @@ void generic_packetizer_c::set_codec_id(const char *id) {
       (&GetChild<KaxCodecID>(*track_entry))) = hcodec_id;
 }
 
-void generic_packetizer_c::set_codec_private(const unsigned char *cp,
+void
+generic_packetizer_c::set_codec_private(const unsigned char *cp,
                                              int length) {
   safefree(hcodec_private);
   if (cp == NULL) {
@@ -339,21 +345,24 @@ void generic_packetizer_c::set_codec_private(const unsigned char *cp,
   }
 }
 
-void generic_packetizer_c::set_track_min_cache(int min_cache) {
+void
+generic_packetizer_c::set_track_min_cache(int min_cache) {
   htrack_min_cache = min_cache;
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackMinCache>(*track_entry))) = min_cache;
 }
 
-void generic_packetizer_c::set_track_max_cache(int max_cache) {
+void
+generic_packetizer_c::set_track_max_cache(int max_cache) {
   htrack_max_cache = max_cache;
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackMinCache>(*track_entry))) = max_cache;
 }
 
-void generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
+void
+generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
   htrack_default_duration = def_dur;
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
@@ -361,11 +370,13 @@ void generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
       htrack_default_duration;
 }
 
-int64_t generic_packetizer_c::get_track_default_duration() {
+int64_t
+generic_packetizer_c::get_track_default_duration() {
   return htrack_default_duration;
 }
 
-void generic_packetizer_c::set_audio_sampling_freq(float freq) {
+void
+generic_packetizer_c::set_audio_sampling_freq(float freq) {
   haudio_sampling_freq = freq;
   if (track_entry != NULL) {
     KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
@@ -374,7 +385,8 @@ void generic_packetizer_c::set_audio_sampling_freq(float freq) {
   }
 }
 
-void generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
+void
+generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
   haudio_output_sampling_freq = freq;
   if (track_entry != NULL) {
     KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
@@ -383,7 +395,8 @@ void generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
   }
 }
 
-void generic_packetizer_c::set_audio_channels(int channels) {
+void
+generic_packetizer_c::set_audio_channels(int channels) {
   haudio_channels = channels;
   if (track_entry != NULL) {
     KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
@@ -392,7 +405,8 @@ void generic_packetizer_c::set_audio_channels(int channels) {
   }
 }
 
-void generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
+void
+generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
   haudio_bit_depth = bit_depth;
   if (track_entry != NULL) {
     KaxTrackAudio &audio = GetChild<KaxTrackAudio>(*track_entry);
@@ -401,7 +415,8 @@ void generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
   }
 }
 
-void generic_packetizer_c::set_video_pixel_width(int width) {
+void
+generic_packetizer_c::set_video_pixel_width(int width) {
   hvideo_pixel_width = width;
   if (track_entry != NULL) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
@@ -410,7 +425,8 @@ void generic_packetizer_c::set_video_pixel_width(int width) {
   }
 }
 
-void generic_packetizer_c::set_video_pixel_height(int height) {
+void
+generic_packetizer_c::set_video_pixel_height(int height) {
   hvideo_pixel_height = height;
   if (track_entry != NULL) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
@@ -419,7 +435,8 @@ void generic_packetizer_c::set_video_pixel_height(int height) {
   }
 }
 
-void generic_packetizer_c::set_video_display_width(int width) {
+void
+generic_packetizer_c::set_video_display_width(int width) {
   hvideo_display_width = width;
   if (track_entry != NULL) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
@@ -428,7 +445,8 @@ void generic_packetizer_c::set_video_display_width(int width) {
   }
 }
 
-void generic_packetizer_c::set_video_display_height(int height) {
+void
+generic_packetizer_c::set_video_display_height(int height) {
   hvideo_display_height = height;
   if (track_entry != NULL) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
@@ -437,7 +455,9 @@ void generic_packetizer_c::set_video_display_height(int height) {
   }
 }
 
-void generic_packetizer_c::set_as_default_track(int type, int priority) {
+void
+generic_packetizer_c::set_as_default_track(int type,
+                                           int priority) {
   int idx;
 
   idx = 0;
@@ -461,7 +481,8 @@ void generic_packetizer_c::set_as_default_track(int type, int priority) {
            ti->id, ti->fname);
 }
 
-void generic_packetizer_c::set_language(const char *language) {
+void
+generic_packetizer_c::set_language(const char *language) {
   safefree(ti->language);
   ti->language = safestrdup(language);
   if (track_entry != NULL)
@@ -469,7 +490,8 @@ void generic_packetizer_c::set_language(const char *language) {
       (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
 }
 
-void generic_packetizer_c::set_headers() {
+void
+generic_packetizer_c::set_headers() {
   int idx, disp_width, disp_height;
   KaxTag *tag;
 
@@ -670,6 +692,12 @@ generic_packetizer_c::add_packet(memory_c &mem,
   int length;
   packet_t *pack;
 
+  timecode += timecode_offset;
+  if (bref >= 0)
+    bref += timecode_offset;
+  if (fref >= 0)
+    fref += timecode_offset;
+
   if (timecode < 0) {
     mem.release();
     return;
@@ -707,12 +735,16 @@ generic_packetizer_c::add_packet(memory_c &mem,
   pack->source = this;
   pack->assigned_timecode = get_next_timecode(timecode);
 
+  if (reader->max_timecode_seen < (pack->assigned_timecode + pack->duration))
+    reader->max_timecode_seen = pack->assigned_timecode + pack->duration;
+
   packet_queue.push_back(pack);
 
   enqueued_bytes += pack->length;
 }
 
-packet_t *generic_packetizer_c::get_packet() {
+packet_t *
+generic_packetizer_c::get_packet() {
   packet_t *pack;
 
   if (packet_queue.size() == 0)
@@ -726,7 +758,9 @@ packet_t *generic_packetizer_c::get_packet() {
   return pack;
 }
 
-void generic_packetizer_c::dump_packet(const void *buffer, int size) {
+void
+generic_packetizer_c::dump_packet(const void *buffer,
+                                  int size) {
   char *path;
   mm_io_c *out;
 
@@ -746,7 +780,8 @@ void generic_packetizer_c::dump_packet(const void *buffer, int size) {
   safefree(path);
 }
 
-void generic_packetizer_c::parse_ext_timecode_file(const char *name) {
+void
+generic_packetizer_c::parse_ext_timecode_file(const char *name) {
   mm_io_c *in;
   string line;
 
@@ -1001,6 +1036,20 @@ generic_packetizer_c::force_duration_on_last_packet() {
 
 //--------------------------------------------------------------------
 
+generic_reader_c::generic_reader_c(track_info_c *nti) {
+  ti = new track_info_c(*nti);
+  connected_to = NULL;
+  max_timecode_seen = 0;
+}
+
+generic_reader_c::~generic_reader_c() {
+  int i;
+
+  for (i = 0; i < reader_packetizers.size(); i++)
+    delete reader_packetizers[i].orig;
+  delete ti;
+}
+
 bool
 generic_reader_c::demuxing_requested(char type,
                                      int64_t id) {
@@ -1034,10 +1083,15 @@ generic_reader_c::demuxing_requested(char type,
   return false;
 }
 
-void
+int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
-  reader_packetizers.push_back(ptzr);
+  packetizer_container_t cont;
+
+  cont.orig = ptzr;
+  cont.current = ptzr;
+  reader_packetizers.push_back(cont);
   add_packetizer_globally(ptzr);
+  return reader_packetizers.size() - 1;
 }
 
 void
@@ -1053,7 +1107,7 @@ generic_reader_c::connect(generic_reader_c *prior) {
     mxerror("Cannot append '%s' to '%s' as the latter file contains no tracks "
             "to be read.\n", ti->fname, prior->ti->fname);
   for (i = 0; i < reader_packetizers.size(); i++) {
-    pcurrent = reader_packetizers[i];
+    pcurrent = reader_packetizers[i].orig;
     pprior = NULL;
     conn_id = pcurrent->get_source_track_num();
     for (j = 0; j < ti->append_mapping->size(); j += 2)
@@ -1062,8 +1116,9 @@ generic_reader_c::connect(generic_reader_c *prior) {
         break;
       }
     for (j = 0; j < prior->reader_packetizers.size(); j++)
-      if (conn_id == prior->reader_packetizers[j]->get_source_track_num()) {
-        pprior = prior->reader_packetizers[j];
+      if (conn_id ==
+          prior->reader_packetizers[j].orig->get_source_track_num()) {
+        pprior = prior->reader_packetizers[j].orig;
         break;
       }
     if (pprior == NULL)
@@ -1083,6 +1138,23 @@ generic_reader_c::connect(generic_reader_c *prior) {
               conn_id, prior->ti->fname);
   }
   connected_to = prior;
+}
+
+void
+generic_reader_c::set_timecode_offset(int64_t offset) {
+  vector<packetizer_container_t>::iterator it;
+
+  max_timecode_seen = offset;
+  foreach(it, reader_packetizers)
+    it->orig->timecode_offset = offset;
+}
+
+void
+generic_reader_c::set_headers() {
+  vector<packetizer_container_t>::iterator it;
+
+  foreach(it, reader_packetizers)
+    it->orig->set_headers();
 }
 
 //--------------------------------------------------------------------
@@ -1122,7 +1194,8 @@ track_info_c::track_info_c():
   append_mapping = new vector<int64_t>;
 }
 
-void track_info_c::free_contents() {
+void
+track_info_c::free_contents() {
   uint32_t i;
 
   if (!initialized)
@@ -1167,7 +1240,8 @@ void track_info_c::free_contents() {
   initialized = false;
 }
 
-track_info_c &track_info_c::operator =(const track_info_c &src) {
+track_info_c &
+track_info_c::operator =(const track_info_c &src) {
   uint32_t i;
 
   free_contents();

@@ -88,8 +88,8 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
                   "4096 bytes.\n");
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
-  ac3packetizer = new ac3_packetizer_c(this, ac3header.sample_rate,
-                                       ac3header.channels, ac3header.bsid, ti);
+  add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
+                                      ac3header.channels, ac3header.bsid, ti));
   if (verbose)
     mxinfo("Using AC3 demultiplexer for %s.\n+-> Using "
            "AC3 output module for audio stream.\n", ti->fname);
@@ -97,10 +97,7 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
 
 ac3_reader_c::~ac3_reader_c() {
   delete mm_io;
-  if (chunk != NULL)
-    safefree(chunk);
-  if (ac3packetizer != NULL)
-    delete ac3packetizer;
+  safefree(chunk);
 }
 
 int
@@ -109,12 +106,12 @@ ac3_reader_c::read(generic_packetizer_c *) {
 
   nread = mm_io->read(chunk, 4096);
   if (nread <= 0) {
-    ac3packetizer->flush();
+    PTZR0->flush();
     return 0;
   }
 
   memory_c mem(chunk, nread, false);
-  ac3packetizer->process(mem);
+  PTZR0->process(mem);
   bytes_processed += nread;
 
   return EMOREDATA;
@@ -132,11 +129,6 @@ ac3_reader_c::display_progress(bool final) {
   else
     mxinfo("progress: %lld/%lld bytes (%d%%)\r", bytes_processed, size,
            (int)(bytes_processed * 100L / size));
-}
-
-void
-ac3_reader_c::set_headers() {
-  ac3packetizer->set_headers();
 }
 
 void

@@ -226,29 +226,38 @@ public:
 
 class generic_packetizer_c;
 
+typedef struct packetizer_container_t {
+  generic_packetizer_c *orig;
+  generic_packetizer_c *current;
+} packetizer_container_t;
+
+#define OPTZR(i) reader_packetizers[i].orig
+#define PTZR(i) reader_packetizers[i].current
+#define PTZR0 PTZR(0)
+
 class generic_reader_c {
 protected:
   track_info_c *ti;
-  vector<generic_packetizer_c *> reader_packetizers;
+  vector<packetizer_container_t> reader_packetizers;
   generic_reader_c *connected_to;
 public:
-  generic_reader_c(track_info_c *nti) {
-    ti = new track_info_c(*nti);
-    connected_to = NULL;
-  }
-  virtual ~generic_reader_c() {
-    delete ti;
-  }
+  int64_t max_timecode_seen;
+
+public:
+  generic_reader_c(track_info_c *nti);
+  virtual ~generic_reader_c();
+
   virtual int read(generic_packetizer_c *ptzr) = 0;
   virtual int display_priority() = 0;
   virtual void display_progress(bool final = false) = 0;
-  virtual void set_headers() = 0;
+  virtual void set_headers();
   virtual void identify() = 0;
 
   virtual void add_attachments(KaxAttachments *a) {
   }
-  virtual void add_packetizer(generic_packetizer_c *ptzr);
+  virtual int add_packetizer(generic_packetizer_c *ptzr);
   virtual void connect(generic_reader_c *prior);
+  virtual void set_timecode_offset(int64_t offset);
 
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
@@ -261,7 +270,6 @@ protected:
 class generic_packetizer_c {
 protected:
   deque<packet_t *> packet_queue;
-  generic_reader_c *reader;
 
   track_info_c *ti;
   int64_t initial_displacement;
@@ -298,6 +306,10 @@ protected:
   bool ext_timecodes_warning_printed;
 
   int64_t last_cue_timecode;
+
+public:
+  generic_reader_c *reader;
+  int64_t timecode_offset;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)

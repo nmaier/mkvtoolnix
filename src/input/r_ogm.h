@@ -69,7 +69,7 @@ public:
 
 struct ogm_demuxer_t {
   ogg_stream_state os;
-  generic_packetizer_c *packetizer;
+  int ptzr;
   bool headers_set;
   int sid, stype, serial, eos;
   int units_processed, vorbis_rate;
@@ -84,7 +84,7 @@ struct ogm_demuxer_t {
 #endif
 
   ogm_demuxer_t():
-    packetizer(NULL), sid(0), stype(0), serial(0), eos(0), units_processed(0),
+    ptzr(-1), sid(0), stype(0), serial(0), eos(0), units_processed(0),
     vorbis_rate(0), headers_read(false), language(NULL), title(NULL) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }

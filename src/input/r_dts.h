@@ -29,14 +29,11 @@
 #include "pr_generic.h"
 #include "common.h"
 #include "error.h"
-#include "p_dts.h"
-#include "dts_common.h"
 
 class dts_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
   mm_io_c *mm_io;
-  class dts_packetizer_c *dtspacketizer;
   int64_t bytes_processed, size;
 
 public:
@@ -46,7 +43,6 @@ public:
   virtual int read(generic_packetizer_c *ptzr);
   virtual int display_priority();
   virtual void display_progress(bool final = false);
-  virtual void set_headers();
   virtual void identify();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);

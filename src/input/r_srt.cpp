@@ -79,8 +79,8 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti->id = 0;                 // ID for this track.
     is_utf8 = mm_io->get_byte_order() != BO_NONE;
-    textsubs_packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL,
-                                                    0, true, is_utf8, ti);
+    add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
+                                             true, is_utf8, ti));
   } catch (exception &ex) {
     throw error_c("srt_reader: Could not open the source file.");
   }
@@ -90,8 +90,6 @@ srt_reader_c::srt_reader_c(track_info_c *nti)
 }
 
 srt_reader_c::~srt_reader_c() {
-  if (textsubs_packetizer != NULL)
-    delete textsubs_packetizer;
   delete mm_io;
 }
 
@@ -213,9 +211,9 @@ srt_reader_c::read(generic_packetizer_c *) {
     mxwarn("srt_reader: The subtitle file seems to be "
            "badly broken. The output file might not be playable "
            "correctly.\n");
-  subs.process(textsubs_packetizer);
+  subs.process((textsubs_packetizer_c *)PTZR0);
 
-  textsubs_packetizer->flush();
+  PTZR0->flush();
 
   return 0;
 }
@@ -233,11 +231,6 @@ srt_reader_c::display_progress(bool) {
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
-}
-
-void
-srt_reader_c::set_headers() {
-  textsubs_packetizer->set_headers();
 }
 
 void

@@ -29,12 +29,9 @@
 #include "common.h"
 #include "pr_generic.h"
 
-#include "p_textsubs.h"
-
 class srt_reader_c: public generic_reader_c {
 private:
   mm_text_io_c *mm_io;
-  textsubs_packetizer_c *textsubs_packetizer;
   int act_wchar;
 
 public:
@@ -42,7 +39,6 @@ public:
   virtual ~srt_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);
-  virtual void set_headers();
   virtual void identify();
 
   virtual int display_priority();

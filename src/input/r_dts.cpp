@@ -81,7 +81,7 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
                   "max_dts_packet_size bytes.\n");
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
-  dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
+  add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
 
   if (verbose) {
     mxinfo("Using DTS demultiplexer for %s.\n+-> Using "
@@ -94,8 +94,6 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
 dts_reader_c::~dts_reader_c() {
   delete mm_io;
   safefree(chunk);
-  if (dtspacketizer != NULL)
-    delete dtspacketizer;
 }
 
 int
@@ -104,12 +102,12 @@ dts_reader_c::read(generic_packetizer_c *) {
 
   nread = mm_io->read(chunk, max_dts_packet_size);
   if (nread <= 0) {
-    dtspacketizer->flush();
+    PTZR0->flush();
     return 0;
   }
 
   memory_c mem(chunk, nread, false);
-  dtspacketizer->process(mem);
+  PTZR0->process(mem);
   bytes_processed += nread;
 
   return EMOREDATA;
@@ -127,11 +125,6 @@ dts_reader_c::display_progress(bool final) {
   else
     mxinfo("progress: %lld/%lld bytes (%d%%)\r", bytes_processed, size,
            (int)(bytes_processed * 100L / size));
-}
-
-void
-dts_reader_c::set_headers() {
-  dtspacketizer->set_headers();
 }
 
 void

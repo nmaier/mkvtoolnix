@@ -107,7 +107,7 @@ typedef struct {
 
   bool warning_printed;
 
-  generic_packetizer_c *packetizer;
+  int ptzr;
   bool headers_set;
 } qtmp4_demuxer_t;
 

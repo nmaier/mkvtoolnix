@@ -132,8 +132,6 @@ qtmp4_reader_c::~qtmp4_reader_c() {
 
 void
 qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
-  if (dmx->packetizer != NULL)
-    delete dmx->packetizer;
   safefree(dmx->sample_table);
   safefree(dmx->chunk_table);
   safefree(dmx->chunkmap_table);
@@ -385,6 +383,7 @@ qtmp4_reader_c::handle_header_atoms(uint32_t parent,
         new_dmx = (qtmp4_demuxer_t *)safemalloc(sizeof(qtmp4_demuxer_t));
         memset(new_dmx, 0, sizeof(qtmp4_demuxer_t));
         new_dmx->type = '?';
+        new_dmx->ptzr = -1;
 
         handle_header_atoms(atom, atom_size - atom_hsize,
                             atom_pos + atom_hsize, level + 1);
@@ -814,7 +813,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
 
-    if (dmx->packetizer != ptzr)
+    if (PTZR(dmx->ptzr) != ptzr)
       continue;
 
     if (dmx->sample_size != 0) {
@@ -879,7 +878,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
         (dmx->pos + 1);
 
       memory_c mem(buffer, frame_size, true);
-      dmx->packetizer->process(mem, timecode, duration, is_keyframe ?
+      PTZR(dmx->ptzr)->process(mem, timecode, duration, is_keyframe ?
                                VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
       dmx->pos++;
 
@@ -927,7 +926,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
       }
 
       memory_c mem(buffer, frame_size, true);
-      dmx->packetizer->process(mem, timecode, duration, is_keyframe ?
+      PTZR(dmx->ptzr)->process(mem, timecode, duration, is_keyframe ?
                                VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
       dmx->pos++;
       if (dmx->pos < dmx->sample_table_len)
@@ -1060,16 +1059,16 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
   if (dmx == NULL)
     return;
 
-  if (dmx->ok && demuxing_requested(dmx->type, dmx->id) &&
-      (dmx->packetizer == NULL)) {
+  if (dmx->ok && demuxing_requested(dmx->type, dmx->id) && (dmx->ptzr == -1)) {
     ti->id = dmx->id;
     if (dmx->type == 'v') {
 
       ti->private_size = dmx->v_desc_size;
       ti->private_data = (unsigned char *)dmx->v_desc;
-      dmx->packetizer =
-        new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0, dmx->v_width,
-                               dmx->v_height, false, ti);
+      dmx->ptzr =
+        add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0,
+                                              dmx->v_width, dmx->v_height,
+                                              false, ti));
       ti->private_data = NULL;
 
       mxinfo("+-> Using the video packetizer for track %u (FourCC: %.4s).\n",
@@ -1079,7 +1078,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
           !strncasecmp(dmx->fourcc, "QDM2", 4)) {
         ptzr = new passthrough_packetizer_c(this, ti);
-        dmx->packetizer = ptzr;
+        dmx->ptzr = add_packetizer(ptzr);
 
         ptzr->set_track_type(track_audio);
         ptzr->set_codec_id(dmx->fourcc[3] == '2' ? MKV_A_QDMC2 : MKV_A_QDMC);
@@ -1106,11 +1105,12 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                  channels, output_sample_rate, (int)sbraac);
           if (sbraac)
             profile = AAC_PROFILE_SBR;
-          dmx->packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                                                 sample_rate, channels, ti,
-                                                 false, true);
+          dmx->ptzr =
+            add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
+                                                sample_rate, channels, ti,
+                                                false, true));
           if (sbraac)
-            dmx->packetizer->
+            PTZR(dmx->ptzr)->
               set_audio_output_sampling_freq(output_sample_rate);
           if (verbose)
             mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id);
@@ -1121,11 +1121,11 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
       } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
                  !strncasecmp(dmx->fourcc, "swot", 4)) {
-        dmx->packetizer =
-          new pcm_packetizer_c(this, (uint32_t)dmx->a_samplerate,
-                               dmx->a_channels, dmx->a_bitdepth, ti,
-                               (dmx->a_bitdepth > 8) &&
-                               (dmx->fourcc[0] == 't'));
+        dmx->ptzr =
+          add_packetizer(new pcm_packetizer_c(this, (int32_t)dmx->a_samplerate,
+                                              dmx->a_channels, dmx->a_bitdepth,
+                                              ti, (dmx->a_bitdepth > 8) &&
+                                              (dmx->fourcc[0] == 't')));
         if (verbose)
           mxinfo("+-> Using PCM output module for stream %u.\n", dmx->id);
 
@@ -1165,14 +1165,14 @@ qtmp4_reader_c::set_headers() {
         d = demuxers[k];
         break;
       }
-    if ((d != NULL) && (d->packetizer != NULL) && !d->headers_set) {
-      d->packetizer->set_headers();
+    if ((d != NULL) && (d->ptzr != -1) && !d->headers_set) {
+      PTZR(d->ptzr)->set_headers();
       d->headers_set = true;
     }
   }
   for (i = 0; i < demuxers.size(); i++)
-    if ((demuxers[i]->packetizer != NULL) && !demuxers[i]->headers_set) {
-      demuxers[i]->packetizer->set_headers();
+    if ((demuxers[i]->ptzr != -1) && !demuxers[i]->headers_set) {
+      PTZR(demuxers[i]->ptzr)->set_headers();
       demuxers[i]->headers_set = true;
     }
 }
@@ -1219,6 +1219,6 @@ qtmp4_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->packetizer != NULL)
-      demuxers[i]->packetizer->flush();
+    if (demuxers[i]->ptzr != -1)
+      PTZR(demuxers[i]->ptzr)->flush();
 }

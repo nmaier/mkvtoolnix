@@ -75,9 +75,6 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   generic_reader_c(nti) {
   int64_t size;
 
-  pcmpacketizer = 0;
-  dtspacketizer = 0;
-
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
     mm_io->setFilePointer(0, seek_end);
@@ -96,6 +93,7 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
+  is_dts = false;
 
   {
     // check wether .wav file contains DTS data...
@@ -136,25 +134,27 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
             is_dts = true;
           }
 
-          dtspacketizer = new dts_packetizer_c(this, dtsheader, ti);
+          add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
           // .wav's with DTS are always filled up with other stuff to match
           // the bitrate...
-          dtspacketizer->skipping_is_normal = true;
+          ((dts_packetizer_c *)PTZR0)->skipping_is_normal = true;
           break;
         }
 
       }
 
-      if (dtspacketizer)
+      if (is_dts)
         break;
     }
   }
 
-  if (!dtspacketizer) {
-    pcmpacketizer =
+  if (!is_dts) {
+    generic_packetizer_c *ptzr;
+    ptzr =
       new pcm_packetizer_c(this, get_uint32(&wheader.common.dwSamplesPerSec),
                            get_uint16(&wheader.common.wChannels),
                            get_uint16(&wheader.common.wBitsPerSample), ti);
+    add_packetizer(ptzr);
 
     if (verbose)
       mxinfo("Using WAV demultiplexer for %s.\n+-> Using "
@@ -165,32 +165,27 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
 
 wav_reader_c::~wav_reader_c() {
   delete mm_io;
-  if (chunk != NULL)
-    safefree(chunk);
-  if (pcmpacketizer != NULL)
-    delete pcmpacketizer;
-  if (dtspacketizer != NULL)
-    delete dtspacketizer;
+  safefree(chunk);
 }
 
 int
 wav_reader_c::read(generic_packetizer_c *) {
-  if (pcmpacketizer) {
+  if (!is_dts) {
     int nread;
 
     nread = mm_io->read(chunk, bps);
     if (nread <= 0) {
-      pcmpacketizer->flush();
+      PTZR0->flush();
       return 0;
     }
 
     memory_c mem(chunk, nread, false);
-    pcmpacketizer->process(mem);
+    PTZR0->process(mem);
 
     bytes_processed += nread;
 
     if (nread != bps) {
-      pcmpacketizer->flush();
+      PTZR0->flush();
       return 0;
     } else if (mm_io->eof())
       return 0;
@@ -198,13 +193,13 @@ wav_reader_c::read(generic_packetizer_c *) {
       return EMOREDATA;
   }
 
-  if (dtspacketizer) {
+  if (is_dts) {
     unsigned short buf[2][max_dts_packet_size/2];
     int cur_buf = 0;
     long rlen = mm_io->read(buf[cur_buf], max_dts_packet_size);
 
     if (rlen <= 0) {
-      dtspacketizer->flush();
+      PTZR0->flush();
       return 0;
     }
 
@@ -225,12 +220,12 @@ wav_reader_c::read(generic_packetizer_c *) {
     }
 
     memory_c mem((unsigned char *)buf[cur_buf], erlen, false);
-    dtspacketizer->process(mem);
+    PTZR0->process(mem);
 
     bytes_processed += rlen;
 
     if (rlen != max_dts_packet_size) {
-      dtspacketizer->flush();
+      PTZR0->flush();
       return 0;
     } else
       return EMOREDATA;
@@ -254,14 +249,6 @@ wav_reader_c::display_progress(bool final) {
     mxinfo("progress: %d/%d seconds (%d%%)\r",
            (int)(bytes_processed / bps), (int)samples,
            (int)(bytes_processed * 100L / bps / samples));
-}
-
-void
-wav_reader_c::set_headers() {
-  if (pcmpacketizer)
-    pcmpacketizer->set_headers();
-  if (dtspacketizer)
-    dtspacketizer->set_headers();
 }
 
 void

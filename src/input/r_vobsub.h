@@ -33,7 +33,7 @@
 class vobsub_track_c {
 public:
   char *language;
-  vobsub_packetizer_c *packetizer;
+  int ptzr;
   vector<int64_t> positions, sizes, timecodes, durations;
   int idx;
   bool headers_set;
@@ -41,14 +41,12 @@ public:
 public:
   vobsub_track_c(const char *new_language) {
     language = safestrdup(new_language);
-    packetizer = NULL;
+    ptzr = -1;
     idx = 0;
     headers_set = false;
   };
   ~vobsub_track_c() {
     safefree(language);
-    if (packetizer != NULL)
-      delete packetizer;
   }
 };
 
