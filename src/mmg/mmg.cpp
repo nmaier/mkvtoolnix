@@ -82,6 +82,8 @@ wxString shell_escape(wxString &source) {
       escaped += "\\\"";
     else if (source[i] == '\\')
       escaped += "\\\\";
+    else if (source[i] == '\n')
+      escaped += " ";
     else
       escaped += source[i];
   }
@@ -150,6 +152,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   bs_low3->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   last_open_dir = "";
+  cmdline = "mkvmerge -o \"" + tc_output->GetValue() + "\" ";
+  tc_cmdline->SetValue(cmdline);
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
 }
