@@ -1,9 +1,10 @@
 AUTOMAKE_OPTIONS = dist-zip foreign
 
-CFLAGS=@CFLAGS@ @EXTRA_CFLAGS@
-CPPFLAGS=@CPPFLAGS@ @EXTRA_CFLAGS@
-CXXFLAGS=@CXXFLAGS@ @EXTRA_CFLAGS@
-LDFLAGS=@LDFLAGS@ @EXTRA_LDFLAGS@
+DEFAULT_INCLUDES = -I$(top_srcdir) \
+			-I$(top_srcdir)/avilib \
+			-I$(top_srcdir)/aviclasses \
+			-I$(top_srcdir)/src
+LDFLAGS = -L$(top_srcdir)/avilib -L$(top_srcdir)/aviclasses
 
 if HAVE_WXWINDOWS
 SUBDIRS = mmg
@@ -75,7 +76,7 @@ base64tool_SOURCES = base64tool.cpp \
 			common.cpp common.h \
 			mm_io.cpp mm_io.h
 
-mkvmerge_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ \
+mkvmerge_LDADD = @AVILIB_LIBS@ @AVICLASSES_LIBS@ @PROFILING_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ @VORBIS_LIBS@ @OGG_LIBS@ \
 		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ @ZLIB_LIBS@ @LZO_LIBS@ \
 		@BZ2_LIBS@
@@ -87,4 +88,3 @@ mkvextract_LDADD = @AVILIB_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@ @EBML_LIBS@ \
 		@VORBIS_LIBS@ @OGG_LIBS@ @ICONV_LIBS@ @LZO_LIBS@ @BZ2_LIBS@
 
 base64tool_LDADD = @EBML_LIBS@ @ICONV_LIBS@
-

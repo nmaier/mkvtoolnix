@@ -2,12 +2,8 @@ AUTOMAKE_OPTIONS = dist-zip foreign
 
 bin_PROGRAMS = mmg
 
-INCLUDES = -I.. -I../..
-
-CFLAGS=@CFLAGS@ @EXTRA_CFLAGS@
-CPPFLAGS=@CPPFLAGS@ @EXTRA_CFLAGS@
-CXXFLAGS=@CXXFLAGS@ @EXTRA_CFLAGS@
-LDFLAGS=@LDFLAGS@ @EXTRA_LDFLAGS@
+DEFAULT_INCLUDES = -I$(top_srcdir) \
+			-I$(top_srcdir)/src
 
 mmg_SOURCES = mmg.cpp mmg.h \
 			../chapters.cpp ../chapters.h \

@@ -1,4 +1,4 @@
-DEFAULT_INCLUDES = -I.. -I../src
+DEFAULT_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src -I.
 
 noinst_LIBRARIES = libaviclasses.a
 
