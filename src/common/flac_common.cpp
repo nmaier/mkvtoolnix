@@ -252,6 +252,8 @@ flac_decode_headers(unsigned char *mem,
     }
   }
 
+  FLAC__stream_decoder_delete(decoder);
+
   return result;
 }
 

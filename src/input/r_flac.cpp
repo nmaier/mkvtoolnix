@@ -24,10 +24,11 @@
 #include <FLAC/stream_decoder.h>
 #endif
 
-#include "mkvmerge.h"
 #include "common.h"
-#include "pr_generic.h"
+#include "flac_common.h"
 #include "matroska.h"
+#include "mkvmerge.h"
+#include "pr_generic.h"
 #include "r_flac.h"
 
 #define BUFFER_SIZE 4096
@@ -153,6 +154,7 @@ bool
 flac_reader_c::parse_file() {
   FLAC__StreamDecoder *decoder;
   int result;
+  bool ok;
 
   done = false;
   file->setFilePointer(0);
@@ -181,10 +183,46 @@ flac_reader_c::parse_file() {
     mxerror(FPFX "Could not initialize the FLAC decoder.\n");
 
   old_progress = -5;
-  result = (int)FLAC__stream_decoder_process_until_end_of_stream(decoder);
-  mxinfo("+-> Pre-parsing FLAC file: 100%%\n");
-  mxverb(2, FPFX "extract, result: %d, mdp: %d, num blocks: %u\n",
+  result = (int)FLAC__stream_decoder_process_until_end_of_metadata(decoder);
+  mxverb(2, FPFX "extract->metadata, result: %d, mdp: %d, num blocks: %u\n",
          result, metadata_parsed, blocks.size());
+
+  if (!metadata_parsed)
+    mxerror(FMT_FN "No metadata block found. This file is broken.\n",
+            ti->fname);
+
+#if defined(HAVE_FLAC_DECODER_SKIP)
+  ok = FLAC__stream_decoder_skip_single_frame(decoder);
+#else
+  ok = FLAC__stream_decoder_process_single(decoder);
+#endif
+  while (ok) {
+    FLAC__StreamDecoderState state;
+    flac_block_t block;
+
+    state = FLAC__stream_decoder_get_state(decoder);
+    if ((state == FLAC__STREAM_DECODER_END_OF_STREAM) ||
+        (state == FLAC__STREAM_DECODER_ABORTED) ||
+        (state == FLAC__STREAM_DECODER_UNPARSEABLE_STREAM))
+      break;
+    
+    block.type = FLAC_BLOCK_TYPE_DATA;
+    block.filepos = packet_start;
+    block.len = (file->getFilePointer() - size + pos) - packet_start;
+    packet_start = file->getFilePointer() - size + pos;
+    blocks.push_back(block);
+
+    mxverb(2, FPFX "skip frame, block at %lld with size %d\n",
+           block.filepos, block.len);
+
+#if defined(HAVE_FLAC_DECODER_SKIP)
+    ok = FLAC__stream_decoder_skip_single_frame(decoder);
+#else
+    ok = FLAC__stream_decoder_process_single(decoder);
+#endif
+  }
+
+  mxinfo("+-> Pre-parsing FLAC file: 100%%\n");
 
   if ((blocks.size() < 3) || (blocks[1].type != FLAC_BLOCK_TYPE_HEADERS))
     mxerror(FPFX "Could not read all header packets.\n");
@@ -203,6 +241,7 @@ int
 flac_reader_c::read(generic_packetizer_c *,
                     bool) {
   unsigned char *buf;
+  int samples_here;
 
   if (current_block == blocks.end())
     return 0;
@@ -214,8 +253,9 @@ flac_reader_c::read(generic_packetizer_c *,
     return 0;
   }
   memory_c mem(buf, current_block->len, true);
+  samples_here = flac_get_num_samples(buf, current_block->len, stream_info);
   PTZR0->process(mem, samples * 1000000000 / sample_rate);
-  samples += current_block->samples;
+  samples += samples_here;
   current_block++;
 
   if (current_block == blocks.end()) {
@@ -261,20 +301,8 @@ flac_reader_c::read_cb(FLAC__byte buffer[],
 }
 
 FLAC__StreamDecoderWriteStatus
-flac_reader_c::write_cb(const FLAC__Frame *frame,
+flac_reader_c::write_cb(const FLAC__Frame *,
                         const FLAC__int32 * const []) {
-  flac_block_t block;
-
-  block.type = FLAC_BLOCK_TYPE_DATA;
-  block.filepos = packet_start;
-  block.len = (file->getFilePointer() - size + pos) - packet_start;
-  block.samples = frame->header.blocksize;
-  packet_start = file->getFilePointer() - size + pos;
-  blocks.push_back(block);
-
-  mxverb(2, FPFX "write cb, block at %lld with size %d\n", block.filepos,
-         block.len);
-
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
@@ -300,6 +328,8 @@ flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
       mxverb(2, FPFX "  channels: %u\n", metadata->data.stream_info.channels);
       mxverb(2, FPFX "  bits_per_sample: %u\n",
              metadata->data.stream_info.bits_per_sample);
+      memcpy(&stream_info, &metadata->data.stream_info,
+             sizeof(FLAC__StreamMetadata_StreamInfo));
       metadata_parsed = true;
       break;
     default:
