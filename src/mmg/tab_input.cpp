@@ -649,14 +649,14 @@ tab_input::on_add_file(wxCommandEvent &evt) {
   if (capabilities[wxT("FLAC")] == wxT("true"))
     media_files += wxT("*.flac;");
   media_files += wxT("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
-                     "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;"
+                     "*.mkv;*.mov;*.mp4;*.mpeg;*.mpg;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
                      "*.srt;*.ssa;*.tta;*.wav;*.wv)|"
                      "*.aac;*.ac3;*.ass;*.avi;*.dts;");
   if (capabilities[wxT("FLAC")] == wxT("true"))
     media_files += wxT("*.flac;");
   media_files += wxT("*.idx;*.m1v;*.m2v;*.m4a;*.mp2;*.mp3;*.mka;"
-                     "*.mkv;*.mov;*.mp4;*.ogm;*.ogg;"
+                     "*.mkv;*.mov;*.mp4;*.mpeg;*.mpg;*.ogm;*.ogg;"
                      "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
                      "*.srt;*.ssa;*.tta;*.wav|"
                      "AAC (Advanced Audio Coding) (*.aac;*.m4a;*.mp4)|"
@@ -668,6 +668,8 @@ tab_input::on_add_file(wxCommandEvent &evt) {
     media_files += wxT("FLAC (Free Lossless Audio Codec) (*.flac;*.ogg)|"
                        "*.flac;*.ogg|");
   media_files += wxT("MPEG audio files (*.mp2;*.mp3)|*.mp2;*.mp3|"
+                     "MPEG program streams (*.mpg;*.mpeg;*.m2v)|*.mpg;*.mpeg;"
+                     "*.m2v|"
                      "MPEG video elementary streams (*.m1v;*.m2v)|*.m1v;*.m2v|"
                      "Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
                      "QuickTime/MP4 A/V (*.mov;*.mp4)|*.mov;*.mp4|"
