@@ -21,7 +21,6 @@ endif
 
 ifneq (,$(WXWINDOWS))
 WXWINDOWS_LIBS = $(shell wx-config --libs)
-WXWINDOWS_LDFLAGS = $(shell wx-config --ldflags)
 CXXFLAGS += -DHAVE_WXWINDOWS=1 $(shell wx-config --cflags)
 endif
 
