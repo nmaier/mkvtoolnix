@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.30 2003/05/02 20:34:48 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.31 2003/05/02 21:49:42 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -182,7 +182,7 @@ void generic_packetizer_c::set_language(char *language) {
     die("strdup");
 }
 
-void generic_packetizer_c::set_header() {
+void generic_packetizer_c::set_headers() {
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
       track_entry =

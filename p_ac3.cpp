@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.15 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.16 2003/05/02 21:49:41 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,7 +43,6 @@ ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
   buffer_size = 0;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
-  set_header();
 }
 
 ac3_packetizer_c::~ac3_packetizer_c() {
@@ -154,7 +153,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   return buf;
 }
 
-void ac3_packetizer_c::set_header() {
+void ac3_packetizer_c::set_headers() {
   set_serial(-1);
   set_track_type(track_audio);
   set_codec_id(MKV_A_AC3);
@@ -164,7 +163,7 @@ void ac3_packetizer_c::set_header() {
   if (ti->default_track)
     set_as_default_track('a');
 
-  generic_packetizer_c::set_header();
+  generic_packetizer_c::set_headers();
 }
 
 int ac3_packetizer_c::process(unsigned char *buf, int size,

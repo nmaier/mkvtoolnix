@@ -45,6 +45,7 @@ public:
     
   virtual int display_priority();
   virtual void display_progress();
+  virtual void set_headers();
 
   static int probe_file(FILE *file, int64_t size);
 };

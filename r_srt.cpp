@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.7 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.8 2003/05/02 21:49:42 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -163,4 +163,8 @@ void srt_reader_c::display_progress() {
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
   fflush(stdout);
+}
+
+void srt_reader_c::set_headers() {
+  textsubs_packetizer->set_headers();
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.16 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.17 2003/05/02 21:49:42 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -1127,4 +1127,11 @@ void mkv_reader_c::display_progress() {
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
   fflush(stdout);
+}
+
+void mkv_reader_c::set_headers() {
+  int i;
+  
+  for (i = 0; i < num_tracks; i++)
+    tracks[i]->packetizer->set_headers();
 }

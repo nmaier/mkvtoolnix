@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.50 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.51 2003/05/02 21:49:41 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -415,18 +415,52 @@ static void parse_sync(char *s, audio_sync_t *async) {
 //   return seconds;
 // }
 
-static void render_head(StdIOCallback *out) {
+static void render_headers(StdIOCallback *out) {
   EbmlHead head;
+  filelist_t *file;
 
-  EDocType &doc_type = GetChild<EDocType>(head);
-  *static_cast<EbmlString *>(&doc_type) = "matroska";
-  EDocTypeVersion &doc_type_ver = GetChild<EDocTypeVersion>(head);
-  *(static_cast<EbmlUInteger *>(&doc_type_ver)) = 1;
-  EDocTypeReadVersion &doc_type_read_ver =
-    GetChild<EDocTypeReadVersion>(head);
-  *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
+  try {
+    EDocType &doc_type = GetChild<EDocType>(head);
+    *static_cast<EbmlString *>(&doc_type) = "matroska";
+    EDocTypeVersion &doc_type_ver = GetChild<EDocTypeVersion>(head);
+    *(static_cast<EbmlUInteger *>(&doc_type_ver)) = 1;
+    EDocTypeReadVersion &doc_type_read_ver =
+      GetChild<EDocTypeReadVersion>(head);
+    *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
 
-  head.Render(static_cast<StdIOCallback &>(*out));
+    head.Render(static_cast<StdIOCallback &>(*out));
+
+    kax_infos = &GetChild<KaxInfo>(*kax_segment);
+    KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
+    *(static_cast<EbmlUInteger *>(&time_scale)) = TIMECODE_SCALE;
+
+    kax_duration = &GetChild<KaxDuration>(*kax_infos);
+    *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
+
+    kax_segment->Render(static_cast<StdIOCallback &>(*out));
+
+    // Reserve some space for the meta seek stuff.
+    if (write_cues && write_meta_seek) {
+      kax_seekhead = new KaxSeekHead();
+      kax_seekhead_void = new EbmlVoid();
+      kax_seekhead_void->SetSize(meta_seek_size);
+      kax_seekhead_void->Render(static_cast<StdIOCallback &>(*out));
+    }
+
+    kax_tracks = &GetChild<KaxTracks>(*kax_segment);
+    kax_last_entry = NULL;
+  
+    file = input;
+    while (file) {
+      file->reader->set_headers();
+      file = file->next;
+    }
+
+    kax_tracks->Render(static_cast<StdIOCallback &>(*out));
+  } catch (std::exception &ex) {
+    fprintf(stderr, "Error: Could not render the track headers.\n");
+    exit(1);
+  }
 }
 
 static void parse_args(int argc, char **argv) {
@@ -461,7 +495,9 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: only one output file allowed.\n");
         exit(1);
       }
-      outfile = argv[i + 1];
+      outfile = strdup(argv[i + 1]);
+      if (outfile == NULL)
+        die("strdup");
       i++;
     } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
       fprintf(stdout, "Known file types:\n  ext  description\n" \
@@ -472,52 +508,13 @@ static void parse_args(int argc, char **argv) {
     } else if (!strcmp(argv[i], "--list-languages")) {
       list_iso639_languages();
       exit(0);
-    } else if (!strcmp(argv[i], "--no-cues"))
-      write_cues = 0;
-    else if (!strcmp(argv[i], "--no-meta-seek"))
-      write_meta_seek = 0;
+    }
 
   if (outfile == NULL) {
     fprintf(stderr, "Error: no output files given.\n");
     exit(1);
   }
 
-  // Open the output file.
-  try {
-    out = new StdIOCallback(outfile, MODE_CREATE);
-  } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
-            strerror(errno));
-    exit(1);
-  }
-
-  try {
-    render_head(out);
-
-    kax_infos = &GetChild<KaxInfo>(*kax_segment);
-    KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
-    *(static_cast<EbmlUInteger *>(&time_scale)) = TIMECODE_SCALE;
-
-    kax_duration = &GetChild<KaxDuration>(*kax_infos);
-    *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
-
-    kax_segment->Render(static_cast<StdIOCallback &>(*out));
-
-    // Reserve some space for the meta seek stuff.
-    if (write_cues && write_meta_seek) {
-      kax_seekhead = new KaxSeekHead();
-      kax_seekhead_void = new EbmlVoid();
-      kax_seekhead_void->SetSize(meta_seek_size);
-      kax_seekhead_void->Render(static_cast<StdIOCallback &>(*out));
-    }
-  } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Could not render the file header.\n");
-    exit(1);
-  }
-
-  kax_tracks = &GetChild<KaxTracks>(*kax_segment);
-  kax_last_entry = NULL;
-  
   for (i = 0; i < argc; i++) {
 
     // Ignore the options we took care of in the first step.
@@ -525,8 +522,6 @@ static void parse_args(int argc, char **argv) {
       i++;
       continue;
     }
-    if (!strcmp(argv[i], "--no-cues") || !strcmp(argv[i], "--no-meta-seek"))
-      continue;
 
     // Global options
     if (!strcmp(argv[i], "-q"))
@@ -569,7 +564,11 @@ static void parse_args(int argc, char **argv) {
         exit(1);
       }
       i++;
-    }
+    } else if (!strcmp(argv[i], "--no-cues"))
+      write_cues = 0;
+    else if (!strcmp(argv[i], "--no-meta-seek"))
+      write_meta_seek = 0;
+
 
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
@@ -812,12 +811,6 @@ static void parse_args(int argc, char **argv) {
     usage();
     exit(1);
   }
-  try {
-    kax_tracks->Render(static_cast<StdIOCallback &>(*out));
-  } catch (std::exception &ex) {
-    fprintf(stderr, "Error: Could not render the track headers.\n");
-    exit(1);
-  }
 /*  if (chapters != NULL) {
     file = input;
     while (file != NULL) {
@@ -946,6 +939,17 @@ int main(int argc, char **argv) {
   cluster_helper->add_cluster(new KaxCluster());
 
   handle_args(argc, argv);
+
+  // Open the output file.
+  try {
+    out = new StdIOCallback(outfile, MODE_CREATE);
+  } catch (std::exception &ex) {
+    fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
+            strerror(errno));
+    exit(1);
+  }
+
+  render_headers(out);
   
   /* let her rip! */
   while (1) {

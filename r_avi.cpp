@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.22 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.23 2003/05/02 21:49:42 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -475,3 +475,15 @@ void avi_reader_c::display_progress() {
   fflush(stdout);
 }
 
+void avi_reader_c::set_headers() {
+  avi_demuxer_t *demuxer;
+  
+  if (vpacketizer != NULL)
+    vpacketizer->set_headers();
+  
+  demuxer = ademuxers;
+  while (demuxer != NULL) {
+    demuxer->packetizer->set_headers();
+    demuxer = demuxer->next;
+  }
+}

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.31 2003/05/02 20:34:48 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.32 2003/05/02 21:49:42 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -68,7 +68,7 @@ protected:
   KaxTrackEntry *track_entry;
 
   // Header entries. Can be set via set_XXX and will be 'rendered'
-  // by set_header().
+  // by set_headers().
   int hserialno, htrack_type, htrack_min_cache, htrack_max_cache;
 
   char *hcodec_id;
@@ -89,7 +89,7 @@ public:
 
   virtual void set_free_refs(int64_t nfree_refs);
   virtual int64_t get_free_refs();
-  virtual void set_header();
+  virtual void set_headers();
   virtual int process(unsigned char *data, int size,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;
@@ -130,6 +130,7 @@ public:
   virtual packet_t *get_packet() = 0;
   virtual int display_priority() = 0;
   virtual void display_progress() = 0;
+  virtual void set_headers() = 0;
 };
 
 track_info_t *duplicate_track_info(track_info_t *src);

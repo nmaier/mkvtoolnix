@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.11 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.12 2003/05/02 21:49:42 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -127,4 +127,8 @@ void wav_reader_c::display_progress() {
           (int)(bytes_processed / bps), (int)samples,
           (int)(bytes_processed * 100L / bps / samples));
   fflush(stdout);
+}
+
+void wav_reader_c::set_headers() {
+  pcmpacketizer->set_headers();
 }

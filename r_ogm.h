@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.11 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_ogm.h,v 1.12 2003/05/02 21:49:42 mosu Exp $
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -59,6 +59,7 @@ public:
 
   virtual int read();
   virtual packet_t *get_packet();
+  virtual void set_headers();
 
   virtual int display_priority();
   virtual void display_progress();

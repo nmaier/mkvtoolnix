@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.17 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.18 2003/05/02 21:49:41 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -50,8 +50,6 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
   remaining_sync = 0;
-
-  set_header();
 }
 
 pcm_packetizer_c::~pcm_packetizer_c() {
@@ -59,7 +57,7 @@ pcm_packetizer_c::~pcm_packetizer_c() {
     free(tempbuf);
 }
 
-void pcm_packetizer_c::set_header() {
+void pcm_packetizer_c::set_headers() {
   set_serial(-1);
   set_track_type(track_audio);
   set_codec_id(MKV_A_PCM);
@@ -70,7 +68,7 @@ void pcm_packetizer_c::set_header() {
   if (ti->default_track)
     set_as_default_track('a');
 
-  generic_packetizer_c::set_header();
+  generic_packetizer_c::set_headers();
 }
 
 int pcm_packetizer_c::process(unsigned char *buf, int size,

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.22 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_video.h,v 1.23 2003/05/02 21:49:42 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,7 +43,7 @@ public:
   virtual int process(unsigned char *buf, int size, int64_t old_timecode = -1,
                       int64_t flags = VFT_IFRAME, int64_t bref = -1,
                       int64_t fref = -1);
-  virtual void set_header();
+  virtual void set_headers();
 };
 
 #endif // __P_VIDEO_H

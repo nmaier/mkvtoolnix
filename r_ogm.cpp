@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.19 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.20 2003/05/02 21:49:42 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -787,6 +787,13 @@ void ogm_reader_c::display_progress() {
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
   fflush(stdout);
+}
+
+void ogm_reader_c::set_headers() {
+  int i;
+  
+  for (i = 0; i < num_sdemuxers; i++)
+    sdemuxers[i]->packetizer->set_headers();
 }
 
 #endif // HAVE_OGGVORBIS

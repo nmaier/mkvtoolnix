@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.11 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.12 2003/05/02 21:49:42 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -139,4 +139,8 @@ void mp3_reader_c::display_progress() {
           bytes_processed, size,
           (int)(bytes_processed * 100L / size));
   fflush(stdout);
+}
+
+void mp3_reader_c::set_headers() {
+  mp3packetizer->set_headers();
 }

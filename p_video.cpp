@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.28 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.29 2003/05/02 21:49:42 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -49,10 +49,9 @@ video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
   ref_timecode = -1;
   if (get_cue_creation() == CUES_UNSPECIFIED)
     set_cue_creation(CUES_IFRAMES);
-  set_header();
 }
 
-void video_packetizer_c::set_header() {
+void video_packetizer_c::set_headers() {
   set_serial(-1);
   set_track_type(track_video);
   set_codec_id(MKV_V_MSCOMP);
@@ -71,7 +70,7 @@ void video_packetizer_c::set_header() {
   if (ti->default_track)
     set_as_default_track('v');
 
-  generic_packetizer_c::set_header();
+  generic_packetizer_c::set_headers();
 }
 
 int video_packetizer_c::process(unsigned char *buf, int size,

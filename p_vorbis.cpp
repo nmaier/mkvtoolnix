@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.15 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.16 2003/05/02 21:49:42 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -75,7 +75,6 @@ vorbis_packetizer_c::vorbis_packetizer_c(unsigned char *d_header, int l_header,
     if (vorbis_synthesis_headerin(&vi, &vc, &headers[i]) < 0)
       throw error_c("Error: vorbis_packetizer: Could not extract the "
                     "stream's parameters from the first packets.\n");
-  set_header();
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
@@ -86,7 +85,7 @@ vorbis_packetizer_c::~vorbis_packetizer_c() {
       free(headers[i].packet);
 }
 
-void vorbis_packetizer_c::set_header() {
+void vorbis_packetizer_c::set_headers() {
   unsigned char *buffer;
   int n, offset, i, lsize;
   
@@ -135,7 +134,7 @@ void vorbis_packetizer_c::set_header() {
   if (ti->default_track)
     set_as_default_track('a');
 
-  generic_packetizer_c::set_header();
+  generic_packetizer_c::set_headers();
 }
 
 /* 

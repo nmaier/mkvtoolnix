@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.6 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.7 2003/05/02 21:49:42 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -106,6 +106,7 @@ public:
 
   virtual int display_priority();
   virtual void display_progress();
+  virtual void set_headers();
   
   static int probe_file(FILE *file, int64_t size);
     

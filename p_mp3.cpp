@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.17 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.18 2003/05/02 21:49:41 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,7 +43,6 @@ mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
   packet_buffer = NULL;
   buffer_size = 0;
   packetno = 0;
-  set_header();
 }
 
 mp3_packetizer_c::~mp3_packetizer_c() {
@@ -154,7 +153,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
   return buf;
 }
 
-void mp3_packetizer_c::set_header() {
+void mp3_packetizer_c::set_headers() {
   set_serial(-1);
   set_track_type(track_audio);
   set_codec_id(MKV_A_MP3);
@@ -164,7 +163,7 @@ void mp3_packetizer_c::set_header() {
   if (ti->default_track)
     set_as_default_track('a');
 
-  generic_packetizer_c::set_header();
+  generic_packetizer_c::set_headers();
 }
 
 int mp3_packetizer_c::process(unsigned char *buf, int size,

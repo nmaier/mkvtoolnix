@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.13 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.14 2003/05/02 21:49:42 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -132,3 +132,6 @@ void ac3_reader_c::display_progress() {
   fflush(stdout);
 }
 
+void ac3_reader_c::set_headers() {
+  ac3packetizer->set_headers();
+}

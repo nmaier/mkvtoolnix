@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_ac3.h,v 1.8 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: r_ac3.h,v 1.9 2003/05/02 21:49:42 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -44,6 +44,7 @@ public:
   virtual packet_t *get_packet();
   virtual int display_priority();
   virtual void display_progress();
+  virtual void set_headers();
 
   static int probe_file(FILE *file, int64_t size);
 };

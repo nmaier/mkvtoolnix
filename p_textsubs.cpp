@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.10 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.11 2003/05/02 21:49:41 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,13 +37,12 @@ using namespace LIBMATROSKA_NAMESPACE;
 textsubs_packetizer_c::textsubs_packetizer_c(track_info_t *nti)
   throw (error_c): generic_packetizer_c(nti) {
   packetno = 0;
-  set_header();
 }
 
 textsubs_packetizer_c::~textsubs_packetizer_c() {
 }
 
-void textsubs_packetizer_c::set_header() {
+void textsubs_packetizer_c::set_headers() {
   set_serial(-1);
   set_track_type(track_subtitle);
   if (ti->no_utf8_subs)
@@ -54,7 +53,7 @@ void textsubs_packetizer_c::set_header() {
   if (ti->default_track)
     set_as_default_track('s');
 
-  generic_packetizer_c::set_header();
+  generic_packetizer_c::set_headers();
 
   track_entry->EnableLacing(false);
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.h,v 1.4 2003/04/18 13:21:11 mosu Exp $
+    \version \$Id: p_textsubs.h,v 1.5 2003/05/02 21:49:41 mosu Exp $
     \brief class definition for the simple text subtitle packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,7 +36,7 @@ public:
   virtual int  process(unsigned char *_subs, int size, int64_t start = -1,
                        int64_t length = -1, int64_t bref = -1,
                        int64_t fref = -1);
-  virtual void set_header();
+  virtual void set_headers();
 };
 
 
