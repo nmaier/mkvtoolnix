@@ -1,3 +1,166 @@
+2003-04-30 13:31  mosu
+
+	* matroska.h: Sync with the specs.
+
+2003-04-30 13:31  mosu
+
+	* debian/: changelog, control: Updated version information.
+
+2003-04-30 13:29  mosu
+
+	* README, mkvinfo.1, mkvmerge.1: Updated version information.
+	Updated installation instructions.
+
+2003-04-29 18:23  mosu
+
+	* matroska.h, p_pcm.cpp, pr_generic.cpp, pr_generic.h,
+	r_matroska.cpp: Support for moving the bits per sample from the
+	CodecID to KaxAudioBitDepth.
+
+2003-04-29 14:43  mosu
+
+	* debian/files: files is an auto generated file by the dpkg build
+	process.
+
+2003-04-28 09:32  mosu
+
+	* debian/: changelog, control: New dependencies.
+
+2003-04-28 09:27  mosu
+
+	* r_matroska.cpp: Fixed progress output.
+
+2003-04-28 09:20  mosu
+
+	* r_matroska.cpp: Sync with libebml.
+
+2003-04-28 09:12  mosu
+
+	* mkvinfo.cpp: Sync with libebml.
+
+2003-04-27 11:15  mosu
+
+	* mkvinfo.cpp: Fixed sizes of track UID and track number.
+
+2003-04-27 11:14  mosu
+
+	* common.cpp, common.h, mkvmerge.cpp, pr_generic.cpp: Support for
+	random unique track UIDs.
+
+2003-04-27 10:32  mosu
+
+	* mkvmerge.cpp: Support for not writing the meta seek information.
+
+2003-04-27 10:11  mosu
+
+	* mkvmerge.1: Documentation for --no-meta-seek and
+	--meta-seek-size.
+
+2003-04-26 13:26  mosu
+
+	* mkvinfo.cpp, pr_generic.cpp: Support for the mandatory
+	KaxTrackUID. Cosmetics.
+
+2003-04-26 13:07  mosu
+
+	* mkvinfo.cpp, r_matroska.cpp: Synced changes in libmatroska.
+
+2003-04-25 19:23  mosu
+
+	* mkvinfo.cpp: Support for seek entries.
+
+2003-04-25 18:29  mosu
+
+	* mkvmerge.cpp: Initial support for meta seek information.
+
+2003-04-24 23:02  mosu
+
+	* acinclude.m4: Better automatic detection of the EBML and Matroska
+	header files for properly installed versions of libebml and
+	libmatroska.
+
+2003-04-24 22:36  mosu
+
+	* matroska.h, mkvmerge.1, mkvmerge.cpp, p_textsubs.cpp,
+	pr_generic.h: Support for S_TEXT/UTF8 subtitles (which are also the
+	default now). Reordered the help output and the mkvmerge man page a
+	bit.
+
+2003-04-24 22:32  mosu
+
+	* common.cpp: Fixed the "was iconv initialized?" detection.
+
+2003-04-24 22:24  mosu
+
+	* configure.in: Bumped version number in anticipation of the first
+	release :)
+
+2003-04-23 16:38  mosu
+
+	* common.cpp, common.h, mkvmerge.cpp: Removed the CodecID mapping
+	which was unused anyway. Added charset conversion from and to UFT8
+	with iconv (untested).
+
+2003-04-23 15:10  mosu
+
+	* mkvmerge.1, mkvmerge.cpp: Lines read from an option file are only
+	split on the first space if the line starts with "-". Otherwise
+	filenames with spaces in them would require an additional argument
+	before them.
+
+2003-04-23 10:16  mosu
+
+	* matroska.h: Changed the PCM CodecId to match the specs.
+
+2003-04-23 08:24  mosu
+
+	* README: Updated the overhead factor. Included a note about low
+	disk space and MP3 encoding.
+
+2003-04-22 22:35  mosu
+
+	* mkvinfo.cpp: Cue time entries are now printed in seconds.
+
+2003-04-22 22:25  mosu
+
+	* p_vorbis.cpp, r_matroska.cpp: Fixes for incorrect lacing
+	creation/reading for the Vorbis headers in CodecPrivate.
+
+2003-04-22 15:39  mosu
+
+	* r_ogm.cpp: Made the Ogg/Ogm reader not abort if no valid Ogg page
+	was found. Just read more data and retry.
+
+2003-04-22 12:59  mosu
+
+	* debian/rules: Automatic generation of configure if it is missing.
+
+2003-04-21 18:20  mosu
+
+	* mkvinfo.cpp: Fixed rescaling of ReferenceBlock values as they are
+	now scaled correctly by libmatroska.
+
+2003-04-21 17:40  mosu
+
+	* debian/: changelog, control, copyright, dirs, docs, files,
+	mkvtoolnix.substvars, rules: Added a Debian subdir :)
+
+2003-04-21 12:06  mosu
+
+	* r_matroska.cpp, r_matroska.h: Removed the now unnecessary extra
+	function for handling text subtitles.
+
+2003-04-21 12:01  mosu
+
+	* TODO: Update on the TODO list.
+
+2003-04-21 10:29  mosu
+
+	* mkvmerge.1, mkvmerge.cpp, p_ac3.cpp, p_mp3.cpp, p_pcm.cpp,
+	p_textsubs.cpp, p_video.cpp, p_vorbis.cpp, pr_generic.cpp,
+	pr_generic.h: Support for the "default" flag via a switch
+	"--default-track".
+
 2003-04-20 23:25  mosu
 
 	* matroska.h: Sync with the specs.
