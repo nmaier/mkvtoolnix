@@ -43,6 +43,20 @@
 
 using namespace std;
 
+#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+# error Sorry, mkvmerge cannot be compiled if wxWindows has been built with Unicode support.
+# if defined(SYS_WINDOWS)
+#  define wxS(s)                /* not implemented yet */
+#  define wxC(c)
+# else
+#  define wxS(s)                /* not implemented yet */
+#  define wxC(c)
+# endif
+#else
+# define wxS(s) s
+# define wxC(c) c
+#endif
+
 typedef struct {
   char type;
   int64_t id;
@@ -82,6 +96,11 @@ extern bool title_was_present;
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
 wxString shell_escape(wxString source);
+vector<wxString> split(const wxString &src, const char *pattern = ",",
+                       int max_num = -1);
+wxString join(const char *pattern, vector<wxString> &strings);
+wxString &strip(wxString &s, bool newlines = false);
+vector<wxString> & strip(vector<wxString> &v, bool newlines = false);
 
 class mmg_app: public wxApp {
 public:

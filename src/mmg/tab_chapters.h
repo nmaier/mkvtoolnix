@@ -45,6 +45,7 @@
 #define ID_LB_CHAPTERNAMES                16013
 #define ID_B_ADD_CHAPTERNAME              16014
 #define ID_B_REMOVE_CHAPTERNAME           16015
+#define ID_B_ADJUSTTIMECODES              16016
 
 using namespace libmatroska;
 
@@ -55,7 +56,7 @@ public:
   wxTreeCtrl *tc_chapters;
   wxTreeItemId tid_root;
   wxButton *b_add_chapter, *b_add_subchapter, *b_remove_chapter;
-  wxButton *b_set_values;
+  wxButton *b_set_values, *b_adjust_timecodes;
   wxMenu *m_chapters;
 
   wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
@@ -93,12 +94,14 @@ public:
   void on_remove_chapter_name(wxCommandEvent &evt);
   void on_set_default_values(wxCommandEvent &evt);
   void on_set_values(wxCommandEvent &evt);
+  void on_adjust_timecodes(wxCommandEvent &evt);
   void set_values_recursively(wxTreeItemId id, string &language,
                               bool set_language);
   void set_display_values(KaxChapterDisplay *display);
+  void adjust_timecodes_recursively(wxTreeItemId id, int64_t adjust_by);
 
   bool copy_values(wxTreeItemId id);
-  int64_t parse_time(string s);
+  int64_t parse_time(wxString s);
   bool verify_atom_recursively(EbmlElement *e, int64_t p_start = -1,
                                int64_t p_end = -1);
   bool verify();

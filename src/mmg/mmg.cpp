@@ -56,7 +56,9 @@ vector<wxString> last_settings;
 vector<wxString> last_chapters;
 vector<mmg_file_t> files;
 
-wxString &break_line(wxString &line, int break_after) {
+wxString &
+break_line(wxString &line,
+           int break_after) {
   uint32_t i, chars;
   wxString broken;
 
@@ -86,7 +88,8 @@ wxString &break_line(wxString &line, int break_after) {
   return line;
 }
 
-wxString extract_language_code(wxString source) {
+wxString
+extract_language_code(wxString source) {
   wxString copy;
   int pos;
 
@@ -97,7 +100,8 @@ wxString extract_language_code(wxString source) {
   return copy;
 }
 
-wxString shell_escape(wxString source) {
+wxString
+shell_escape(wxString source) {
   uint32_t i;
   wxString escaped;
 
@@ -120,7 +124,8 @@ wxString shell_escape(wxString source) {
   return escaped;
 }
 
-wxString no_cr(wxString source) {
+wxString
+no_cr(wxString source) {
   uint32_t i;
   wxString escaped;
 
@@ -132,6 +137,97 @@ wxString no_cr(wxString source) {
   }
 
   return escaped;
+}
+
+vector<wxString>
+split(const wxString &src,
+      const char *pattern,
+      int max_num) {
+  int num, i, plen;
+  char *copy, *p1, *p2;
+  vector<wxString> v;
+
+  plen = strlen(pattern);
+  copy = safestrdup(src);
+  p2 = copy;
+  p1 = strstr(p2, pattern);
+  num = 1;
+  while ((p1 != NULL) && ((max_num == -1) || (num < max_num))) {
+    for (i = 0; i < plen; i++)
+      p1[i] = 0;
+    v.push_back(wxString(p2));
+    p2 = &p1[plen];
+    p1 = strstr(p2, pattern);
+    num++;
+  }
+  if (*p2 != 0)
+    v.push_back(wxString(p2));
+  safefree(copy);
+
+  return v;
+}
+
+wxString
+join(const char *pattern,
+     vector<wxString> &strings) {
+  wxString dst;
+  uint32_t i;
+
+  if (strings.size() == 0)
+    return "";
+  dst = strings[0];
+  for (i = 1; i < strings.size(); i++) {
+    dst += pattern;
+    dst += strings[i];
+  }
+
+  return dst;
+}
+
+wxString &
+strip(wxString &s,
+      bool newlines) {
+  int i, len;
+  const wxChar *c;
+
+  c = s.c_str();
+  i = 0;
+  if (newlines)
+    while ((c[i] != 0) && (isblanktab(c[i]) || iscr(c[i])))
+      i++;
+  else
+    while ((c[i] != 0) && isblanktab(c[i]))
+      i++;
+
+  if (i > 0)
+    s.Remove(0, i);
+
+  c = s.c_str();
+  len = s.length();
+  i = 0;
+
+  if (newlines)
+    while ((i < len) && (isblanktab(c[len - i - 1]) || iscr(c[len - i - 1])))
+      i++;
+  else
+    while ((i < len) && isblanktab(c[len - i - 1]))
+      i++;
+
+  if (i > 0)
+    s.Remove(len - i, i);
+
+  return s;
+}
+
+vector<wxString> &
+strip(vector<wxString> &v,
+      bool newlines) {
+  int i;
+
+  for (i = 0; i < v.size(); i++)
+    strip(v[i], newlines);
+
+  return v;
 }
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,

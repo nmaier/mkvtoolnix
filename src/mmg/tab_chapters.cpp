@@ -244,6 +244,14 @@ tab_chapters::tab_chapters(wxWindow *parent,
                            "chapters below and including the currently "
                            "selected entry.");
 
+  b_adjust_timecodes =
+    new wxButton(this, ID_B_ADJUSTTIMECODES, _("Adjust timecodes"),
+                 wxPoint(370, 154), wxSize(120, -1));
+  b_adjust_timecodes->SetToolTip("Here you can adjust all the timcdoes of the "
+                                 "selected chapter and all its childrend by "
+                                 "a specific amount either increasing or "
+                                 "decreasing it.");
+
   new wxStaticText(this, wxID_STATIC, _("Start:"), wxPoint(10, 235));
   tc_start_time =
     new wxTextCtrl(this, ID_TC_CHAPTERSTART, _(""),
@@ -335,6 +343,7 @@ tab_chapters::enable_buttons(bool enable) {
   b_add_subchapter->Enable(enable);
   b_remove_chapter->Enable(enable);
   b_set_values->Enable(enable);
+  b_adjust_timecodes->Enable(enable);
 }
 
 void
@@ -1281,6 +1290,120 @@ tab_chapters::on_set_values(wxCommandEvent &evt) {
   set_display_values(cdisplay);
 }
 
+void
+tab_chapters::on_adjust_timecodes(wxCommandEvent &evt) {
+  KaxChapterDisplay *cdisplay;
+  wxTreeItemId id;
+  chapter_node_data_c *t;
+  wxString sadjustment;
+  uint32_t i, n, offset;
+  int64_t adjustment, mult;
+
+  id = tc_chapters->GetSelection();
+  if (!id.IsOk())
+    return;
+
+  sadjustment =
+    wxGetTextFromUser(wxS("You can use this function for adjusting the "
+                          "timecodes\nof the selected chapter and all its "
+                          "children by a fixed amount.\nThe amount can be "
+                          "positive or negative. The format used can be\n"
+                          "either just a number in which case it is inter"
+                          "preted as the number of seconds,\nor it can have "
+                          "the usual HH:MM:SS.mmm or HH:MM:SS format.\n"
+                          "Example: -00:05:23 would let all the chpaters "
+                          "begin\n5minutes and 23seconds earlier than now."),
+                      wxS("Adjust chapter timecodes"));
+  strip(sadjustment);
+  if (sadjustment.Length() == 0)
+    return;
+
+  if (sadjustment.c_str()[0] == wxC('-')) {
+    mult = -1;
+    offset = 1;
+  } else if (sadjustment.c_str()[0] == wxC('+')) {
+    mult = 1;
+    offset = 1;
+  } else {
+    mult = 1;
+    offset = 0;
+  }
+  sadjustment.Remove(0, offset);
+  if (sadjustment.Length() == 0)
+    return;
+  adjustment = parse_time(sadjustment);
+  if (adjustment == -1) {
+    wxMessageBox(wxS("Invalid format used for the adjustment."),
+                 wxS("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+  adjustment *= mult;
+
+  adjust_timecodes_recursively(id, adjustment);
+
+  t = (chapter_node_data_c *)tc_chapters->GetItemData(id);
+  if ((t == NULL) || !t->is_atom)
+    return;
+
+  cdisplay = NULL;
+  n = 0;
+  for (i = 0; i < t->chapter->ListSize(); i++)
+    if (EbmlId(*(*t->chapter)[i]) == KaxChapterDisplay::ClassInfos.GlobalId) {
+      n++;
+      if (n == (lb_chapter_names->GetSelection() + 1)) {
+        cdisplay = (KaxChapterDisplay *)(*t->chapter)[i];
+        break;
+      }
+    }
+  if (cdisplay == NULL)
+    return;
+
+  set_display_values(cdisplay);
+}
+
+void
+tab_chapters::adjust_timecodes_recursively(wxTreeItemId id,
+                                           int64_t adjust_by) {
+  KaxChapterTimeStart *tstart;
+  KaxChapterTimeEnd *tend;
+  chapter_node_data_c *d;
+  wxTreeItemId next_child;
+  wxString text;
+  long cookie;
+  int64_t t;
+
+  if (!id.IsOk())
+    return;
+
+  d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
+  if ((d != NULL) && (d->is_atom)) {
+    tstart = FINDFIRST(d->chapter, KaxChapterTimeStart);
+    if (tstart != NULL) {
+      t = uint64(*tstart);
+      t += adjust_by;
+      if (t < 0)
+        t = 0;
+      *static_cast<EbmlUInteger *>(tstart) = t;
+    }
+    tend = FINDFIRST(d->chapter, KaxChapterTimeEnd);
+    if (tend != NULL) {
+      t = uint64(*tend);
+      t += adjust_by;
+      if (t < 0)
+        t = 0;
+      *static_cast<EbmlUInteger *>(tend) = t;
+    }
+    text = create_chapter_label(*d->chapter);
+    tc_chapters->SetItemText(id, text);
+  }
+
+  next_child = tc_chapters->GetFirstChild(id, cookie);
+  while (next_child.IsOk()) {
+    adjust_timecodes_recursively(next_child, adjust_by);
+    next_child = tc_chapters->GetNextChild(id, cookie);
+  }
+}
+
 bool
 tab_chapters::copy_values(wxTreeItemId id) {
   chapter_node_data_c *data;
@@ -1289,7 +1412,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
   EbmlElement *e;
   int64_t ts_start, ts_end;
   vector<string> l_codes, c_codes;
-  string s;
+  wxString s;
   uint32_t i;
 
   data = (chapter_node_data_c *)tc_chapters->GetItemData(id);
@@ -1541,9 +1664,10 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
                              istwodigits(s + 6))
 
 int64_t
-tab_chapters::parse_time(string s) {
+tab_chapters::parse_time(wxString s) {
   const char *c;
   int hour, minutes, seconds, msecs;
+  int64_t secs;
 
   strip(s);
   if (s.length() == 0)
@@ -1563,7 +1687,8 @@ tab_chapters::parse_time(string s) {
             (int64_t)minutes * 60 * 1000 +
             (int64_t)seconds * 1000) * 1000000;
 
-  }
+  } else if (parse_int(c, secs))
+    return secs * 1000000000;
 
   return -1;
 }
@@ -1580,6 +1705,7 @@ BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_BUTTON(ID_B_ADDSUBCHAPTER, tab_chapters::on_add_subchapter)
   EVT_BUTTON(ID_B_REMOVECHAPTER, tab_chapters::on_remove_chapter)
   EVT_BUTTON(ID_B_SETVALUES, tab_chapters::on_set_values)
+  EVT_BUTTON(ID_B_ADJUSTTIMECODES, tab_chapters::on_adjust_timecodes)
   EVT_BUTTON(ID_B_ADD_CHAPTERNAME, tab_chapters::on_add_chapter_name)
   EVT_BUTTON(ID_B_REMOVE_CHAPTERNAME, tab_chapters::on_remove_chapter_name)
   EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS, tab_chapters::on_entry_selected)
