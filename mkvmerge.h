@@ -13,13 +13,15 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.13 2003/06/07 23:19:09 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.14 2003/06/08 15:38:03 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
 #ifndef __MKVMERGE_H
 #define __MKVMERGE_H
+
+#include <string>
 
 #include "pr_generic.h"
 
@@ -28,6 +30,7 @@
 #include "KaxSegment.h"
 #include "KaxTracks.h"
 
+using namespace std;
 using namespace LIBMATROSKA_NAMESPACE;
 
 extern KaxSegment *kax_segment;
@@ -43,9 +46,12 @@ extern bool write_cues, cue_writing_requested, video_track_present;
 extern bool no_lacing;
 
 void add_packetizer(generic_packetizer_c *packetizer);
-void create_next_output_file();
 
-extern int pass;
+void create_next_output_file();
+void finish_file();
+string create_output_name();
+
+extern int pass, max_ms_per_cluster, max_blocks_per_cluster;
 extern int default_tracks[3];
 extern int64_t split_after;
 

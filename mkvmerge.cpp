@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.89 2003/06/07 23:19:09 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.90 2003/06/08 15:38:03 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1044,23 +1044,8 @@ static void handle_args(int argc, char **argv) {
     safefree(args);
 }
 
-static int write_packet(packet_t *pack) {
-  int64_t timecode;
-
-  cluster_helper->add_packet(pack);
-  timecode = cluster_helper->get_timecode();
-
-  if (((pack->timecode - timecode) > max_ms_per_cluster) ||
-      (cluster_helper->get_packet_count() > max_blocks_per_cluster) ||
-      (cluster_helper->get_cluster_content_size() > 1500000)) {
-    cluster_helper->render(out);
-    cluster_helper->add_cluster(new KaxCluster());
-  }
-
-  return 1;
-}
-
 static void setup() {
+#if ! defined __CYGWIN__ && ! defined WIN32
   if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
     fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
             "that your system supports this locale.\n");
@@ -1071,6 +1056,7 @@ static void setup() {
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
     exit(1);
   }
+#endif
 
   signal(SIGUSR1, sighandler);
 
@@ -1129,53 +1115,105 @@ static void cleanup() {
   utf8_done();
 }
 
-void open_new_output_file() {
-  char *this_outfile, *s;
+// Transform the output filename and insert the current file number.
+// Rules and search order:
+// 1) %d
+// 2) %[0-9]+d
+// 3) . ("-%03d" will be inserted before the .)
+// 4) "-%03d" will be appended
+string create_output_name() {
+  int p, p2, i;
+  string s(outfile);
+  bool ok;
+  char buffer[20];
+
+  // First possibility: %d
+  p = s.find("%d");
+  if (p >= 0) {
+    sprintf(buffer, "%d", file_num);
+    s.replace(p, 2, buffer);
+
+    return s;
+  }
+
+  // Now search for something like %02d
+  ok = false;
+  p = s.find("%");
+  if (p >= 0) {
+    p2 = s.find("d", p + 1);
+    if (p2 >= 0)
+      for (i = p + 1; i < p2; i++)
+        if (!isdigit(s[i]))
+          break;
+      ok = true;
+  }
+
+  if (ok) {                     // We've found e.g. %02d
+    string format(&s.c_str()[p]), len = format;
+    format.erase(p2 - p + 1);
+    len.erase(0, 1);
+    len.erase(p2 - p - 1);
+    char buffer[strtol(len.c_str(), NULL, 10) + 1];
+    sprintf(buffer, format.c_str(), file_num);
+    s.replace(p, format.size(), buffer);
+
+    return s;
+  }
+
+  sprintf(buffer, "-%03d", file_num);
+
+  // See if we can find a '.'.
+  p = s.rfind(".");
+  if (p >= 0)
+    s.insert(p, buffer);
+  else
+    s.append(buffer);
+
+  return s;
+}
+
+void create_next_output_file() {
+  string this_outfile;
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
   kax_cues->SetGlobalTimecodeScale(TIMECODE_SCALE);
 
-  if (pass == 0)
-    this_outfile = safestrdup(outfile);
-  else if (pass == 2) {
-    s = &outfile[strlen(outfile) - 1];
-    while ((s != outfile) && (*s != '.'))
-      s--;
-    if ((s != outfile) && (*s == '.')) {
-      this_outfile = (char *)safemalloc(strlen(outfile) + 1 + 1 + 3);
-      *s = 0;
-      sprintf(this_outfile, "%s-%03d.%s", outfile, file_num, &s[1]);
-      *s = 0;
-    } else {
-      this_outfile = (char *)safemalloc(strlen(outfile) + 1 + 1 + 3);
-      sprintf(this_outfile, "%s-%03d", outfile, file_num);
-    }
-  } else {
+  if (pass == 1) {
     // Open the a dummy file.
     try {
       out = new mm_null_io_c();
     } catch (std::exception &ex) {
-      die("mkvmerge.cpp/open_new_output_file(): Could not create a dummy "
+      die("mkvmerge.cpp/create_next_output_file(): Could not create a dummy "
           "output class.");
     }
 
+    cluster_helper->set_output(out);
     render_headers(out);
 
     return;
   }
 
+  if (pass == 2)
+    this_outfile = create_output_name();
+  else
+    this_outfile = outfile;
+
   // Open the output file.
   try {
-    out = new mm_io_c(this_outfile, MODE_CREATE);
+    out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Couldn't open output file %s (%s).\n",
-            this_outfile, strerror(errno));
+            this_outfile.c_str(), strerror(errno));
     exit(1);
   }
-  safefree(this_outfile);
+  if (verbose)
+    fprintf(stdout, "Opened '%s\' for writing.\n", this_outfile.c_str());
 
+  cluster_helper->set_output(out);
   render_headers(out);
+
+  file_num++;
 }
 
 void finish_file() {
@@ -1279,8 +1317,9 @@ void main_loop() {
     else                        // exit if there are no more packets
       break;
 
-    // Step 3: Write out the winning packet
-    write_packet(pack);
+    // Step 3: Add the winning packet to a cluster. Full clusters will be
+    // rendered automatically.
+    cluster_helper->add_packet(pack);
 
     winner->pack = NULL;
 
@@ -1291,7 +1330,7 @@ void main_loop() {
 
   // Render all remaining packets (if there are any).
   if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
-    cluster_helper->render(out);
+    cluster_helper->render();
 
   if (verbose == 1) {
     display_progress(1);
@@ -1317,7 +1356,7 @@ int main(int argc, char **argv) {
     create_readers();
 
     pass = 1;
-    open_new_output_file();
+    create_next_output_file();
     main_loop();
     finish_file();
 
@@ -1326,9 +1365,9 @@ int main(int argc, char **argv) {
 
     for (i = 0; i < splitpoints.size(); i++) {
       splitpoint_t *sp = splitpoints[i];
-      fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, nk: %lld\n",
+      fprintf(stdout, "%d: tc %lld, fpos %lld + cues %lld = %lld, pn: %lld\n",
               i, sp->timecode, sp->filepos, sp->cues_size,
-              sp->filepos + sp->cues_size, sp->keyframe_num);
+              sp->filepos + sp->cues_size, sp->packet_num);
     }
 
     delete cluster_helper;
@@ -1339,7 +1378,7 @@ int main(int argc, char **argv) {
     create_readers();
 
     pass = 2;
-    open_new_output_file();
+    create_next_output_file();
     main_loop();
     finish_file();
 
@@ -1348,7 +1387,7 @@ int main(int argc, char **argv) {
     create_readers();
 
     pass = 0;
-    open_new_output_file();
+    create_next_output_file();
     main_loop();
     finish_file();
   }

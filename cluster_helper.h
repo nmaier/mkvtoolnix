@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.h,v 1.6 2003/06/07 23:19:09 mosu Exp $
+    \version \$Id: cluster_helper.h,v 1.7 2003/06/08 15:38:03 mosu Exp $
     \brief class definition for the cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include "KaxBlock.h"
 #include "KaxCluster.h"
 
+#include "mm_io.h"
 #include "pr_generic.h"
 
 typedef struct {
@@ -33,7 +34,7 @@ typedef struct {
 } ch_contents_t;
 
 typedef struct {
-  int64_t timecode, filepos, cues_size, keyframe_num;
+  int64_t timecode, filepos, cues_size, packet_num;
 } splitpoint_t;
 
 class cluster_helper_c {
@@ -42,18 +43,20 @@ private:
   int num_clusters, cluster_content_size, next_splitpoint;
   KaxBlockGroup *last_block_group;
   int64_t max_timecode, last_cluster_tc, num_cue_elements, header_overhead;
-  int64_t num_keyframes;
+  int64_t packet_num, timecode_offset;
+  mm_io_c *out;
 public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
 
+  void set_output(mm_io_c *nout);
   void add_cluster(KaxCluster *cluster);
   KaxCluster *get_cluster();
   void add_packet(packet_t *packet);
   int64_t get_timecode();
   packet_t *get_packet(int num);
   int get_packet_count();
-  int render(IOCallback *out);
+  int render();
   int free_ref(int64_t ref_timecode, void *source);
   int free_clusters();
   int get_cluster_content_size();

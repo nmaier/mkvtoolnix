@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.48 2003/06/07 23:19:09 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.49 2003/06/08 15:38:03 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -48,7 +48,7 @@ typedef struct {
   KaxCluster *cluster;
   unsigned char *data;
   int length, superseeded, duration_mandatory;
-  int64_t timecode, bref, fref, duration;
+  int64_t timecode, bref, fref, duration, packet_num;
   void *source;
 } packet_t;
 

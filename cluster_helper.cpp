@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.22 2003/06/07 23:19:09 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.23 2003/06/08 15:38:03 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -43,7 +43,9 @@ cluster_helper_c::cluster_helper_c() {
   num_cue_elements = 0;
   next_splitpoint = 0;
   header_overhead = -1;
-  num_keyframes = 0;
+  packet_num = 0;
+  out = NULL;
+  timecode_offset = 0;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -84,9 +86,13 @@ KaxCluster *cluster_helper_c::get_cluster() {
 
 void cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
+  int64_t timecode;
 
   if (clusters == NULL)
     add_cluster(new KaxCluster());
+
+  packet->packet_num = packet_num;
+  packet_num++;
 
   c = clusters[num_clusters - 1];
   c->packets = (packet_t **)saferealloc(c->packets, sizeof(packet_t *) *
@@ -100,6 +106,15 @@ void cluster_helper_c::add_packet(packet_t *packet) {
     max_timecode = packet->timecode;
 
   walk_clusters();
+
+  // Render the cluster if it is full (according to my many criteria).
+  timecode = get_timecode();
+  if (((packet->timecode - timecode) > max_ms_per_cluster) ||
+      (get_packet_count() > max_blocks_per_cluster) ||
+      (get_cluster_content_size() > 1500000)) {
+    render();
+    add_cluster(new KaxCluster());
+  }
 }
 
 int64_t cluster_helper_c::get_timecode() {
@@ -190,29 +205,38 @@ void cluster_helper_c::find_next_splitpoint() {
   if (i == next_splitpoint)
     i++;
 
-  if (i < splitpoints.size()) {
-    size_now = splitpoints[i]->filepos + splitpoints[i]->cues_size;
-    fprintf(stdout, "Found a splitpoint: last: %d, next: %d, last_size: %lld,"
-            " size now: %lld, diff: %lld\n", next_splitpoint, i, last_size,
-            size_now, size_now - last_size);
-  } else
-    fprintf(stdout, "No more splitpoints found.\n");
+//   if (i < splitpoints.size()) {
+//     size_now = splitpoints[i]->filepos + splitpoints[i]->cues_size;
+//     fprintf(stdout, "Found a splitpoint: last: %d, next: %d, last_size: %lld,"
+//             " size now: %lld, diff: %lld\n", next_splitpoint, i, last_size,
+//             size_now, size_now - last_size);
+//   } else
+//     fprintf(stdout, "No more splitpoints found.\n");
   next_splitpoint = i;
 }
 
-int cluster_helper_c::render(IOCallback *out) {
+void cluster_helper_c::set_output(mm_io_c *nout) {
+  out = nout;
+}
+
+int cluster_helper_c::render() {
   KaxCluster *cluster;
   KaxBlockGroup *new_group;
   DataBuffer *data_buffer;
-  int i;
+  int i, elements_in_cluster, num_cue_elements_here;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
-  int64_t block_duration = 0;
+  int64_t block_duration, old_max_timecode;
   splitpoint_t *sp;
 
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
 
+  walk_clusters();
+  clstr = clusters[num_clusters - 1];
+  cluster = clstr->cluster;
+
+  // Splitpoint stuff
   if (header_overhead == -1) {
     if (pass != 0)
       header_overhead = out->getFilePointer();
@@ -220,9 +244,9 @@ int cluster_helper_c::render(IOCallback *out) {
       find_next_splitpoint();
   }
 
-  walk_clusters();
-  clstr = clusters[num_clusters - 1];
-  cluster = clstr->cluster;
+  elements_in_cluster = 0;
+  num_cue_elements_here = 0;
+  block_duration = 0;
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
@@ -232,33 +256,8 @@ int cluster_helper_c::render(IOCallback *out) {
       static_cast<KaxTrackEntry &>
       (*((generic_packetizer_c *)pack->source)->get_track_entry());
 
-    if ((pass == 1) && (pack->bref == -1) &&
-        ((video_fps == -1) ||
-         (((generic_packetizer_c *)(pack->source))->get_track_type() ==
-          track_video))) {
-      sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
-      sp->timecode = pack->timecode;
-      if (num_cue_elements > 0) {
-        kax_cues->UpdateSize();
-        sp->cues_size = kax_cues->ElementSize();
-      } else
-        sp->cues_size = 0;
-      sp->filepos = out->getFilePointer() - header_overhead;
-      if (i > 0) {
-        cluster->UpdateSize();
-        sp->filepos += cluster->ElementSize();
-      }
-      sp->keyframe_num = num_keyframes;
-      splitpoints.push_back(sp);
-    } else if ((pass == 2) && (pack->bref == -1) &&
-               (next_splitpoint < splitpoints.size()) &&
-               (splitpoints[next_splitpoint]->keyframe_num == num_keyframes)) {
-      fprintf(stdout, "weeeeeeee!\n");
-      find_next_splitpoint();
-    }
-
+    // Now put the packet into the cluster.
     if (pack->bref != -1) {      // P and B frames: add backward reference.
-      num_keyframes++;
       bref_packet = find_packet(pack->bref);
       assert(bref_packet != NULL);
       assert(bref_packet->group != NULL);
@@ -266,22 +265,27 @@ int cluster_helper_c::render(IOCallback *out) {
         fref_packet = find_packet(pack->fref);
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
-        cluster->AddFrame(track_entry, pack->timecode * 1000000,
+        cluster->AddFrame(track_entry,
+                          (pack->timecode - timecode_offset) * 1000000,
                           *data_buffer, new_group, *bref_packet->group,
                           *fref_packet->group);
       } else {
-        cluster->AddFrame(track_entry, pack->timecode * 1000000,
+        cluster->AddFrame(track_entry,
+                          (pack->timecode - timecode_offset) * 1000000,
                           *data_buffer, new_group, *bref_packet->group);
       }
 
     } else {                    // This is a key frame. No references.
 
-      cluster->AddFrame(track_entry, pack->timecode * 1000000,
+      cluster->AddFrame(track_entry,
+                        (pack->timecode - timecode_offset) * 1000000,
                         *data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);
     }
+
+    elements_in_cluster++;
 
     if (new_group == NULL)
       new_group = last_block_group;
@@ -292,6 +296,7 @@ int cluster_helper_c::render(IOCallback *out) {
            CUES_IFRAMES) && (pack->bref == -1)) {
         kax_cues->AddBlockGroup(*new_group);
         num_cue_elements++;
+        num_cue_elements_here++;
         cue_writing_requested = 1;
       }
       // ... or if the user requested entries for all frames.
@@ -299,6 +304,7 @@ int cluster_helper_c::render(IOCallback *out) {
                CUES_ALL) {
         kax_cues->AddBlockGroup(*new_group);
         num_cue_elements++;
+        num_cue_elements_here++;
         cue_writing_requested = 1;
       }
     }
@@ -310,14 +316,71 @@ int cluster_helper_c::render(IOCallback *out) {
       new_group->SetBlockDuration(block_duration * 1000000);
     pack->group = new_group;
     last_block_group = new_group;
+
+    // The next stuff is for splitting files.
+    if ((pass == 1) &&          // first pass: find splitpoints
+        (pack->bref == -1) &&   // this is a keyframe
+        ((video_fps == -1) ||   // either no video track present...
+         (((generic_packetizer_c *)(pack->source))->get_track_type() ==
+          track_video))) {      // ...or this is the video track
+      sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
+      sp->timecode = pack->timecode;
+      if ((num_cue_elements - num_cue_elements_here) > 0) {
+        kax_cues->UpdateSize();
+        sp->cues_size = kax_cues->ElementSize();
+      } else
+        sp->cues_size = 0;
+      sp->filepos = out->getFilePointer() - header_overhead;
+      if (elements_in_cluster > 0) {
+        cluster->UpdateSize();
+        sp->filepos += cluster->ElementSize();
+      }
+      sp->packet_num = pack->packet_num;
+      splitpoints.push_back(sp);
+
+    } else if ((pass == 2) &&   // second pass: process and split
+               (next_splitpoint < splitpoints.size()) && // splitpoint's avail
+               ((splitpoints[next_splitpoint]->packet_num - 1) ==
+                pack->packet_num)) {
+      if (elements_in_cluster > 0) {
+        cluster->Render(*out, *kax_cues);
+        if (kax_seekhead != NULL)
+          kax_seekhead->IndexThis(*cluster, *kax_segment);
+      }
+
+      old_max_timecode = max_timecode;
+      max_timecode = pack->timecode;
+
+      fprintf(stdout, "\n");
+      finish_file();
+      create_next_output_file();
+
+      max_timecode = old_max_timecode;
+
+      delete cluster;
+      cluster = new KaxCluster();
+      clstr->cluster = cluster;
+
+      cluster->SetParent(*kax_segment);
+      cluster->SetPreviousTimecode(0, TIMECODE_SCALE);
+
+      elements_in_cluster = 0;
+      timecode_offset = pack->timecode;
+
+      find_next_splitpoint();
+    }
   }
 
-  cluster->Render(*out, *kax_cues);
+  if (elements_in_cluster > 0) {
+    cluster->Render(*out, *kax_cues);
 
-  last_cluster_tc = cluster->GlobalTimecode();
+    if (kax_seekhead != NULL)
+      kax_seekhead->IndexThis(*cluster, *kax_segment);
 
-  if (kax_seekhead != NULL)
-    kax_seekhead->IndexThis(*cluster, *kax_segment);
+    last_cluster_tc = cluster->GlobalTimecode();
+  } else
+    last_cluster_tc = 0;
+
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
@@ -482,5 +545,5 @@ int cluster_helper_c::free_ref(int64_t ref_timecode, void *source) {
 }
 
 int64_t cluster_helper_c::get_max_timecode() {
-  return max_timecode;
+  return max_timecode - timecode_offset;
 }
