@@ -30,6 +30,7 @@ using namespace std;
 
 #include "base64.h"
 #include "common.h"
+#include "commonebml.h"
 #include "matroska.h"
 
 static FILE *o;

@@ -32,6 +32,7 @@
 #include "mmg.h"
 #include "chapters.h"
 #include "common.h"
+#include "commonebml.h"
 #include "error.h"
 #include "extern_data.h"
 #include "iso639.h"

@@ -34,6 +34,7 @@
 
 #include "base64.h"
 #include "common.h"
+#include "commonebml.h"
 #include "iso639.h"
 #include "mm_io.h"
 #include "tagparser.h"

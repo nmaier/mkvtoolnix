@@ -12,6 +12,8 @@
 # else
 #  define COMP_MSC
 # endif
+#elif defined(__APPLE__)
+# define SYS_APPLE
 #else
 # define COMP_GCC
 # define SYS_UNIX

@@ -26,7 +26,7 @@
 
 #include <matroska/KaxChapters.h>
 
-#include "common.h"
+#include "commonebml.h"
 #include "error.h"
 #include "iso639.h"
 #include "mm_io.h"

@@ -26,7 +26,7 @@
 
 #include <matroska/KaxChapters.h>
 
-#include "common.h"
+#include "commonebml.h"
 #include "mm_io.h"
 #include "chapters.h"
 

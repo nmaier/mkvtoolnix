@@ -29,6 +29,7 @@
 
 #include "base64.h"
 #include "common.h"
+#include "commonebml.h"
 #include "compression.h"
 #include "mkvmerge.h"
 #include "pr_generic.h"

@@ -60,6 +60,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "mm_io.h"
 #include "chapters.h"
 #include "common.h"
+#include "commonebml.h"
 #include "pr_generic.h"
 #include "r_matroska.h"
 

@@ -26,6 +26,7 @@
 #include <matroska/KaxChapters.h>
 
 #include "chapters.h"
+#include "commonebml.h"
 #include "error.h"
 #include "mkvmerge.h"
 

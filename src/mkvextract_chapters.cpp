@@ -66,6 +66,7 @@ extern "C" {
 
 #include "chapters.h"
 #include "common.h"
+#include "commonebml.h"
 #include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"

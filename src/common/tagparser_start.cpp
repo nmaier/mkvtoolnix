@@ -31,6 +31,7 @@
 #include <expat.h>
 
 #include "common.h"
+#include "commonebml.h"
 #include "mm_io.h"
 #include "tagparser.h"
 

@@ -27,14 +27,11 @@
 
 #include <vector>
 
-#include <ebml/EbmlMaster.h>
-#include <ebml/EbmlUnicodeString.h>
 #include "config.h"
 
 #define VERSIONINFO "mkvmerge v" VERSION
 
 using namespace std;
-using namespace libebml;
 
 #define DISPLAYPRIORITY_HIGH   10
 #define DISPLAYPRIORITY_MEDIUM  5
@@ -161,11 +158,6 @@ bool starts_with(const string &s, const char *start);
 bool starts_with(const string &s, const string &start);
 bool starts_with_case(const string &s, const char *start);
 bool starts_with_case(const string &s, const string &start);
-
-UTFstring cstr_to_UTFstring(const char *c);
-UTFstring cstrutf8_to_UTFstring(const char *c);
-char *UTFstring_to_cstr(const UTFstring &u);
-char *UTFstring_to_cstrutf8(const UTFstring &u);
 
 #define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
 #define myabs(a) ((a) < 0 ? (a) * -1 : (a))
@@ -407,71 +399,18 @@ public:
   void leave(const char *label);
   void add_packetizer(void *ptzr);
   void dump_info();
-
-  static void dump_elements(EbmlElement *e, int level);
 };
 
 extern debug_c debug_facility;
 
 #define debug_enter(func) debug_facility.enter(func)
 #define debug_leave(func) debug_facility.leave(func)
-#define debug_dump_elements(e, l) debug_c::dump_elements(e, l)
 
 #else // DEBUG
 
 #define debug_enter(func)
 #define debug_leave(func)
-#define debug_dump_elements(e, l)
 
 #endif // DEBUG
-
-#define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
-
-template <typename type>type &GetEmptyChild(EbmlMaster &master) {
-  EbmlElement *e;
-  EbmlMaster *m;
-
-  e = master.FindFirstElt(type::ClassInfos, true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
-    while (m->ListSize() > 0) {
-      delete (*m)[0];
-      m->Remove(0);
-    }
-  }
-
-	return *(static_cast<type *>(e));
-}
-
-template <typename type>type &GetNextEmptyChild(EbmlMaster &master,
-                                                const type &past_elt) {
-  EbmlElement *e;
-  EbmlMaster *m;
-
-  e = master.FindNextElt(past_elt, true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
-    while (m->ListSize() > 0) {
-      delete (*m)[0];
-      m->Remove(0);
-    }
-  }
-
-	return *(static_cast<type *>(e));
-}
-
-template <typename type>type &AddEmptyChild(EbmlMaster &master) {
-  EbmlElement *e;
-  EbmlMaster *m;
-
-  e = new type;
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
-    while (m->ListSize() > 0) {
-      delete (*m)[0];
-      m->Remove(0);
-    }
-  }
-  master.PushElement(*e);
-
-	return *(static_cast<type *>(e));
-}
 
 #endif // __COMMON_H

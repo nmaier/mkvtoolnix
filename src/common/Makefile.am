@@ -10,20 +10,25 @@ endif
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src \
 	$(avilib0_6_10_incdirs) $(aviclasses_incdirs) -I.
 
-noinst_LIBRARIES = libmtxcommon.a
+lib_LTLIBRARIES = libmtxcommon.la libmtxebmlcommon.la libmtxkaxcommon.la \
+		libmtxcomp.la
 
-libmtxcommon_a_SOURCES = base64.cpp \
+libmtxcommon_la_SOURCES = base64.cpp \
 			aac_common.cpp \
 			ac3_common.cpp \
-			chapters.cpp \
-			chapter_parser_xml.cpp \
-			chapter_writer.cpp \
-			compression.cpp \
 			common.cpp \
 			dts_common.cpp \
 			iso639.cpp \
-			mm_io.cpp \
-			mp3_common.cpp \
+			mp3_common.cpp
+
+libmtxebmlcommon_la_SOURCES = commonebml.cpp \
+			mm_io.cpp
+
+libmtxkaxcommon_la_SOURCES = chapters.cpp \
+			chapter_parser_xml.cpp \
+			chapter_writer.cpp \
 			tagparser_start.cpp \
 			tagparser_end.cpp \
 			tagwriter.cpp
+
+libmtxcomp_la_SOURCES = compression.cpp

@@ -76,6 +76,7 @@ extern "C" {
 #include "mkvinfo.h"
 #include "mkvinfo_tag_types.h"
 #include "common.h"
+#include "commonebml.h"
 #include "matroska.h"
 #include "mm_io.h"
 
