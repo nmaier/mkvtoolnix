@@ -677,7 +677,7 @@ tab_input::select_file(bool append) {
         (capabilities[wxT("FLAC")] != wxT("true")))
       continue;
 
-    extensions = split(file_types[ft].extensions, wxT(" "));
+    extensions = split(wxString(file_types[ft].extensions), wxU(" "));
     for (e = 0; e < extensions.size(); e++) {
       bool found;
 
