@@ -1217,7 +1217,8 @@ render_headers(mm_io_c *rout) {
       *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
         cstr_to_UTFstring(version.c_str());
       *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
-        cstr_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
+        cstr_to_UTFstring(VERSIONINFO " ('The Na-Na Song') "
+                          "built on " __DATE__ " " __TIME__);
       GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
     } else {
       *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
