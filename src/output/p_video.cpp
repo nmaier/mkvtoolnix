@@ -460,6 +460,7 @@ mpeg4_p2_video_packetizer_c::flush_frames() {
     b_offset = 0;
 
   num_bframes = 0;
+  b_fref = -1;
   b_bref = last_i_p_frame;
   for (i = 0; i < queued_frames.size(); ++i) {
     if (FRAME_TYPE_I == queued_frames[i].type) {
