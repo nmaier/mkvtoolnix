@@ -240,7 +240,7 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
 
 // }}}
 
-// {{{ is_global, parse_multicomment, asctime_r, gmtime_r
+// {{{ is_global, parse_multicomment/chapter_atom, asctime_r, gmtime_r
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
@@ -312,6 +312,192 @@ bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level,
       }
 
       if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
+      }
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
+
+    } // while (l1 != NULL)
+
+    return true;
+
+  } 
+
+  return false;
+}
+
+bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level,
+                        int &upper_lvl_el, EbmlElement *&l_upper,
+                        mm_io_c *in) {
+  EbmlElement *l1 = NULL, *l2 = NULL, *l3 = NULL;
+
+  if (is_id(l0, KaxChapterAtom)) {
+    show_element(l0, level, "Chapter atom");
+
+    upper_lvl_el = 0;
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                             0xFFFFFFFFL, true);
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
+
+      if (is_id(l1, KaxChapterUID)) {
+        KaxChapterUID &c_uid = *static_cast<KaxChapterUID *>(l1);
+        c_uid.ReadData(es->I_O());
+        show_element(l1, level + 1, "UID: %u", uint32(c_uid));
+
+      } else if (is_id(l1, KaxChapterTimeStart)) {
+        uint64_t s;
+        KaxChapterTimeStart &start =
+          *static_cast<KaxChapterTimeStart *>(l1);
+        start.ReadData(es->I_O());
+        s = uint64(start) / 1000000;
+        show_element(l1, level + 1, "Start: %02llu:%02llu:%02llu.%03llu",
+                     (s / 1000 / 60 / 60), (s / 1000 / 60) % 60,
+                     (s / 1000) % 60, s % 1000);
+
+      } else if (is_id(l1, KaxChapterTimeEnd)) {
+        uint64_t e;
+        KaxChapterTimeEnd &end =
+          *static_cast<KaxChapterTimeEnd *>(l1);
+        end.ReadData(es->I_O());
+        e = uint64(end) / 1000000;
+        show_element(l1, level + 1, "End: %02llu:%02llu:%02llu.%03llu",
+                     (e / 1000 / 60 / 60), (e / 1000 / 60) % 60,
+                     (e / 1000) % 60, e % 1000);
+
+      } else if (is_id(l1, KaxChapterTrack)) {
+        show_element(l1, level + 1, "Track");
+
+        upper_lvl_el = 0;
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
+
+          if (is_id(l2, KaxChapterTrackNumber)) {
+            KaxChapterTrackNumber &c_tnumber =
+              *static_cast<KaxChapterTrackNumber *>(l2);
+            c_tnumber.ReadData(es->I_O());
+            show_element(l2, level + 2, "Track number: %u", uint32(c_tnumber));
+
+          } else if (!parse_chapter_atom(es, l2, level + 2, upper_lvl_el, l3,
+                                         in) &&
+                     !is_global(l2, level + 2, upper_lvl_el))
+            show_unknown_element(l2, level + 2);
+
+          if (!in_parent(l1)) {
+            delete l2;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
+            if (upper_lvl_el > 0)
+              break;
+            delete l2;
+            l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
+
+        } // while (l2 != NULL)
+
+      } else if (is_id(l1, KaxChapterDisplay)) {
+        show_element(l1, level + 1, "Display");
+
+        upper_lvl_el = 0;
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
+
+          if (is_id(l2, KaxChapterString)) {
+            char *str;
+            KaxChapterString &c_string =
+              *static_cast<KaxChapterString *>(l2);
+            c_string.ReadData(es->I_O());
+            str = UTFstring_to_cstr(UTFstring(c_string));
+            show_element(l2, level + 2, "String: %s", str);
+            safefree(str);
+
+          } else if (is_id(l2, KaxChapterLanguage)) {
+            KaxChapterLanguage &c_lang =
+              *static_cast<KaxChapterLanguage *>(l2);
+            c_lang.ReadData(es->I_O());
+            show_element(l2, level + 2, "Language: %s",
+                         string(c_lang).c_str());
+
+          } else if (is_id(l2, KaxChapterCountry)) {
+            KaxChapterCountry &c_country =
+              *static_cast<KaxChapterCountry *>(l2);
+            c_country.ReadData(es->I_O());
+            show_element(l2, level + 2, "Country: %s",
+                         string(c_country).c_str());
+
+          } else if (!parse_chapter_atom(es, l2, level + 2, upper_lvl_el, l3,
+                                         in) &&
+                     !is_global(l2, level + 2, upper_lvl_el))
+            show_unknown_element(l2, level + 2);
+
+          if (!in_parent(l1)) {
+            delete l2;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
+            if (upper_lvl_el > 0)
+              break;
+            delete l2;
+            l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
+
+        } // while (l2 != NULL)
+
+      } else if (!parse_chapter_atom(es, l1, level + 1, upper_lvl_el, l2, in)
+                 &&
+                 !is_global(l1, level + 1, upper_lvl_el))
+        show_unknown_element(l1, level + 1);
+
+      if (!in_parent(l0)) {
+        delete l1;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
+        if (upper_lvl_el > 0)
+          break;
+        delete l1;
+        l1 = l2;
+        continue;
+
+      } else if (upper_lvl_el < 0) {
         upper_lvl_el++;
         if (upper_lvl_el < 0)
           break;
@@ -1793,6 +1979,83 @@ bool process_file(const char *file_name) {
               }
 
               if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
+              }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
+
+            } // while (l3 != NULL)
+
+          } else if (!is_global(l2, 2, upper_lvl_el))
+            show_unknown_element(l2, 2);
+
+          if (!in_parent(l1)) {
+            delete l2;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
+            if (upper_lvl_el > 0)
+              break;
+            delete l2;
+            l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
+
+        } // while (l2 != NULL)
+
+      } else if (is_id(l1, KaxChapters)) {
+        show_element(l1, 1, "Chapters");
+
+        upper_lvl_el = 0;
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true);
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
+
+          if (is_id(l2, KaxEditionEntry)) {
+            show_element(l2, 2, "Edition entry");
+
+            upper_lvl_el = 0;
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true);
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
+
+              if (!parse_chapter_atom(es, l3, 3, upper_lvl_el, l4, in) &&
+                  !is_global(l3, 3, upper_lvl_el))
+                show_unknown_element(l3, 3);
+
+              if (!in_parent(l2)) {
+                delete l3;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
+                if (upper_lvl_el > 0)
+                  break;
+                delete l3;
+                l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
                 upper_lvl_el++;
                 if (upper_lvl_el < 0)
                   break;
