@@ -185,7 +185,7 @@ unsigned short byte_cursor_c::get_uint16_be() {
   if ((pos + 2) > size)
     throw exception();
 
-  v = get_uint16_be(&data[pos]);
+  v = ::get_uint16_be(&data[pos]);
   pos += 2;
 
   return v;
@@ -197,7 +197,7 @@ unsigned int byte_cursor_c::get_uint32_be() {
   if ((pos + 4) > size)
     throw exception();
 
-  v = get_uint32_be(&data[pos]);
+  v = ::get_uint32_be(&data[pos]);
   pos += 4;
 
   return v;
@@ -209,7 +209,7 @@ unsigned short byte_cursor_c::get_uint16() {
   if ((pos + 2) > size)
     throw exception();
 
-  v = get_uint16(&data[pos]);
+  v = ::get_uint16(&data[pos]);
   pos += 2;
 
   return v;
@@ -221,7 +221,7 @@ unsigned int byte_cursor_c::get_uint32() {
   if ((pos + 4) > size)
     throw exception();
 
-  v = get_uint32(&data[pos]);
+  v = ::get_uint32(&data[pos]);
   pos += 4;
 
   return v;
