@@ -74,7 +74,8 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
-void extract_tags(const char *file_name) {
+void
+extract_tags(const char *file_name) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;

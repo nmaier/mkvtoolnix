@@ -45,8 +45,10 @@ using namespace libmatroska;
   if (FindChild<c>(*p) != NULL) \
     tperror_oneinstance();
 
-static bool is_multicomment(parser_data_t *pdata, const char *name,
-                            EbmlElement *parent_elt) {
+static bool
+is_multicomment(parser_data_t *pdata,
+                const char *name,
+                EbmlElement *parent_elt) {
   string parent_name;
   int parent;
 
@@ -91,7 +93,9 @@ static bool is_multicomment(parser_data_t *pdata, const char *name,
   return false;
 }
 
-static void start_level1(parser_data_t *pdata, const char *name) {
+static void
+start_level1(parser_data_t *pdata,
+             const char *name) {
   string parent_name;
 
   parent_name = (*pdata->parent_names)[pdata->parent_names->size() - 2];
@@ -108,7 +112,9 @@ static void start_level1(parser_data_t *pdata, const char *name) {
   pdata->parents->push_back(E_Tag);
 }
 
-static void start_level2(parser_data_t *pdata, const char *name) {
+static void
+start_level2(parser_data_t *pdata,
+             const char *name) {
   string parent_name;
 
   if (is_multicomment(pdata, name, pdata->tag))
@@ -205,7 +211,9 @@ static void start_level2(parser_data_t *pdata, const char *name) {
     tperror_nochild();
 }
 
-static void start_level3(parser_data_t *pdata, const char *name) {
+static void
+start_level3(parser_data_t *pdata,
+             const char *name) {
   string parent_name;
   int parent;
 
@@ -499,7 +507,9 @@ static void start_level3(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 3, %d", parent);
 }
 
-static void start_level4(parser_data_t *pdata, const char *name) {
+static void
+start_level4(parser_data_t *pdata,
+             const char *name) {
   string parent_name;
   int parent;
 
@@ -696,7 +706,9 @@ static void start_level4(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 4, %d", parent);
 }
 
-static void start_level5(parser_data_t *pdata, const char *name) {
+static void
+start_level5(parser_data_t *pdata,
+             const char *name) {
   string parent_name;
   int parent;
 
@@ -728,12 +740,16 @@ static void start_level5(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 5, %d", parent);
 }
 
-static void start_level6(parser_data_t *pdata, const char *name) {
+static void
+start_level6(parser_data_t *pdata,
+             const char *name) {
   if (!is_multicomment(pdata, name, NULL))
     die("tagparser_start: Unknown element - should not have happened.");
 }
 
-static void handle_simple_tag(parser_data_t *pdata, const char *name) {
+static void
+handle_simple_tag(parser_data_t *pdata,
+                  const char *name) {
   string parent_name;
   int parent, i;
   KaxTagSimple *p_simple;
@@ -785,8 +801,10 @@ static void handle_simple_tag(parser_data_t *pdata, const char *name) {
     tperror_nochild();
 }
 
-static void start_element(void *user_data, const char *name,
-                          const char **atts) {
+static void
+start_element(void *user_data,
+              const char *name,
+              const char **atts) {
   parser_data_t *pdata;
 
   pdata = (parser_data_t *)user_data;
@@ -839,7 +857,10 @@ static void start_element(void *user_data, const char *name,
   (pdata->depth)++;
 }
 
-void tperror(parser_data_t *pdata, const char *fmt, ...) {
+void
+tperror(parser_data_t *pdata,
+        const char *fmt,
+        ...) {
   va_list ap;
   string new_fmt;
 
@@ -855,7 +876,10 @@ void tperror(parser_data_t *pdata, const char *fmt, ...) {
   mxexit(2);
 }
 
-static void add_data(void *user_data, const XML_Char *s, int len) {
+static void
+add_data(void *user_data,
+         const XML_Char *s,
+         int len) {
   parser_data_t *pdata;
   int i;
 
@@ -877,7 +901,9 @@ static void add_data(void *user_data, const XML_Char *s, int len) {
     (*pdata->bin) += s[i];
 }
 
-void parse_xml_tags(const char *name, KaxTags *tags) {
+void
+parse_xml_tags(const char *name,
+               KaxTags *tags) {
   char buffer[5000];
   int len, done;
   parser_data_t *pdata;

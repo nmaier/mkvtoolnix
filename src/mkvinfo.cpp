@@ -104,7 +104,7 @@ bool show_summary = false;
 void
 add_track(kax_track_t *s) {
   tracks = (kax_track_t **)saferealloc(tracks, sizeof(kax_track_t *) *
-                                   (num_tracks + 1));
+                                       (num_tracks + 1));
   tracks[num_tracks] = s;
   num_tracks++;
 }

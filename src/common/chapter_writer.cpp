@@ -48,20 +48,26 @@ public:
   bool operator < (const chapter_entry_c &cmp) const;
 };
 
-chapter_entry_c::chapter_entry_c(string n, int64_t s, int64_t l) {
+chapter_entry_c::chapter_entry_c(string n,
+                                 int64_t s,
+                                 int64_t l) {
   name = n;
   start = s;
   level = l;
 }
 
-bool chapter_entry_c::operator <(const chapter_entry_c &cmp) const {
+bool
+chapter_entry_c::operator <(const chapter_entry_c &cmp)
+  const {
   return start < cmp.start;
 }
 
-static vector<chapter_entry_c> chapter_start_times, chapter_names,
-  chapter_entries;
+static vector<chapter_entry_c> chapter_start_times, chapter_names;
+static vector<chapter_entry_c> chapter_entries;
 
-static void handle_name(int level, const char *name) {
+static void
+handle_name(int level,
+            const char *name) {
   int i, j;
   vector<chapter_entry_c>::iterator itr;
 
@@ -80,7 +86,9 @@ static void handle_name(int level, const char *name) {
   chapter_names.push_back(chapter_entry_c(name, 0, level));
 }
 
-static void handle_start_time(int level, int64_t start_time) {
+static void
+handle_start_time(int level,
+                  int64_t start_time) {
   int i, j;
   vector<chapter_entry_c>::iterator itr;
 
@@ -101,8 +109,9 @@ static void handle_start_time(int level, int64_t start_time) {
 
 static void write_chapter_atom_simple(KaxChapterAtom *atom, int level);
 
-static void write_chapter_display_simple(KaxChapterDisplay *display,
-                                         int level) {
+static void
+write_chapter_display_simple(KaxChapterDisplay *display,
+                             int level) {
   int i;
   EbmlElement *e;
   char *s;
@@ -121,7 +130,9 @@ static void write_chapter_display_simple(KaxChapterDisplay *display,
   }
 }
 
-static void write_chapter_track_simple(KaxChapterTrack *track, int level) {
+static void
+write_chapter_track_simple(KaxChapterTrack *track,
+                           int level) {
   int i;
   EbmlElement *e;
 
@@ -134,7 +145,9 @@ static void write_chapter_track_simple(KaxChapterTrack *track, int level) {
   }
 }
 
-static void write_chapter_atom_simple(KaxChapterAtom *atom, int level) {
+static void
+write_chapter_atom_simple(KaxChapterAtom *atom,
+                          int level) {
   int i;
   EbmlElement *e;
   uint64_t v;
@@ -158,8 +171,10 @@ static void write_chapter_atom_simple(KaxChapterAtom *atom, int level) {
   }
 }
 
-void write_chapters_simple(int &chapter_num, KaxChapters *chapters,
-                           FILE *out) {
+void
+write_chapters_simple(int &chapter_num,
+                      KaxChapters *chapters,
+                      FILE *out) {
   int i, j;
   int64_t v;
   KaxEditionEntry *edition;
@@ -198,7 +213,9 @@ void write_chapters_simple(int &chapter_num, KaxChapters *chapters,
 
 static FILE *o;
 
-static void pt(int level, const char *tag) {
+static void
+pt(int level,
+   const char *tag) {
   int i;
 
   for (i = 0; i < level; i++)
@@ -208,7 +225,9 @@ static void pt(int level, const char *tag) {
 
 static void write_chapter_atom_xml(KaxChapterAtom *atom, int level);
 
-static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
+static void
+write_chapter_display_xml(KaxChapterDisplay *display,
+                          int level) {
   int i;
   EbmlElement *e;
   char *s;
@@ -256,7 +275,9 @@ static void write_chapter_display_xml(KaxChapterDisplay *display, int level) {
   pt(level, "</ChapterDisplay>\n");
 }
 
-static void write_chapter_track_xml(KaxChapterTrack *track, int level) {
+static void
+write_chapter_track_xml(KaxChapterTrack *track,
+                        int level) {
   int i;
   EbmlElement *e;
 
@@ -277,7 +298,9 @@ static void write_chapter_track_xml(KaxChapterTrack *track, int level) {
   pt(level, "</ChapterTrack>\n");
 }
 
-static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
+static void
+write_chapter_atom_xml(KaxChapterAtom *atom,
+                       int level) {
   int i;
   EbmlElement *e;
   uint64_t v;
@@ -333,7 +356,9 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
   pt(level, "</ChapterAtom>\n");
 }
 
-void write_chapters_xml(KaxChapters *chapters, FILE *out) {
+void
+write_chapters_xml(KaxChapters *chapters,
+                   FILE *out) {
   int i, j;
   KaxEditionEntry *edition;
 

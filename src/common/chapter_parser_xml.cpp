@@ -64,7 +64,8 @@ typedef struct {
 
 static void
 cperror(parser_data_t *pdata,
-        const char *fmt, ...) {
+        const char *fmt,
+        ...) {
   va_list ap;
   string new_fmt;
   char *new_string;

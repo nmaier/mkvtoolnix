@@ -85,7 +85,9 @@ using namespace std;
 
 vector<kax_track_t> tracks;
 
-bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
+bool
+ssa_line_c::operator < (const ssa_line_c &cmp)
+  const {
   return num < cmp.num;
 }
 
@@ -93,7 +95,8 @@ bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
 
 // {{{ FUNCTIONS find_track(), usage()
 
-kax_track_t *find_track(int tid) {
+kax_track_t *
+find_track(int tid) {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
@@ -108,7 +111,8 @@ char typenames[17][20] = {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3",
                           "AAC", "SSA/ASS", "RealMedia", "Quicktime/MP4",
                           "FLAC"};
 
-void usage() {
+void
+usage() {
   const char *usage_infos =
 "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 "   or  mkvextract tags <inname> [options]\n"
@@ -166,7 +170,11 @@ void usage() {
 
 static bool chapter_format_simple = false;
 
-void parse_args(int argc, char **argv, char *&file_name, int &mode) {
+void
+parse_args(int argc,
+           char **argv,
+           char *&file_name,
+           int &mode) {
   int i, conv_handle;
   char *colon, *copy, *sub_charset;
   int64_t tid;
@@ -288,7 +296,11 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
 #define ARGS_BUFFER_LEN (200 * 1024) // Ok let's be ridiculous here :)
 static char args_buffer[ARGS_BUFFER_LEN];
 
-void show_element(EbmlElement *l, int level, const char *fmt, ...) {
+void
+show_element(EbmlElement *l,
+             int level,
+             const char *fmt,
+             ...) {
   va_list ap;
   char level_buffer[10];
   string new_fmt;
@@ -314,7 +326,9 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   mxinfo("\n");
 }
 
-void show_error(const char *fmt, ...) {
+void
+show_error(const char *fmt,
+           ...) {
   va_list ap;
   string new_fmt;
 
@@ -331,7 +345,9 @@ void show_error(const char *fmt, ...) {
 
 // {{{ FUNCTION main()
 
-int main(int argc, char **argv) {
+int
+main(int argc,
+     char **argv) {
   char *input_file;
   int mode;
 

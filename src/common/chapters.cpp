@@ -67,7 +67,8 @@ string default_chapter_country;
 // {{{ helper functions
 
 static void
-chapter_error(const char *fmt, ...) {
+chapter_error(const char *fmt,
+              ...) {
   va_list ap;
   string new_fmt;
   char *new_error;
@@ -287,6 +288,7 @@ probe_cue_chapters(mm_text_io_c *in) {
 }
 
 char *cue_to_chapter_name_format = NULL;
+
 static void
 cue_entries_to_chapter_name(string &performer,
                             string &title,

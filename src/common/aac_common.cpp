@@ -30,8 +30,10 @@ const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                    24000, 22050, 16000, 12000, 11025,  8000,
                                    0, 0, 0, 0}; // filling
 
-int parse_aac_adif_header(unsigned char *buf, int size,
-                          aac_header_t *aac_header) {
+int
+parse_aac_adif_header(unsigned char *buf,
+                      int size,
+                      aac_header_t *aac_header) {
   int i, k;
   bool b, eob;
   unsigned int bits;
@@ -116,8 +118,12 @@ int parse_aac_adif_header(unsigned char *buf, int size,
   return 1;
 }
 
-static int is_adts_header(unsigned char *buf, int size, int bpos,
-                          aac_header_t *aac_header, bool emphasis_present) {
+static int
+is_adts_header(unsigned char *buf,
+               int size,
+               int bpos,
+               aac_header_t *aac_header,
+               bool emphasis_present) {
   int id, profile, sfreq_index, channels, frame_length;
   bool eob, protection_absent, b;
   unsigned int bits;
@@ -170,8 +176,11 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   return 1;
 }
 
-int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header,
-                    bool emphasis_present) {
+int
+find_aac_header(unsigned char *buf,
+                int size,
+                aac_header_t *aac_header,
+                bool emphasis_present) {
   int bpos;
 
   bpos = 0;
@@ -184,7 +193,8 @@ int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header,
   return -1;
 }
 
-int get_aac_sampling_freq_idx(int sampling_freq) {
+int
+get_aac_sampling_freq_idx(int sampling_freq) {
   int i;
 
   for (i = 0; i < 16; i++)

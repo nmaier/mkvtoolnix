@@ -89,7 +89,8 @@ operator!=(const dts_header_t &l,
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
                                    const dts_header_t &dtsheader,
                                    track_info_c *nti)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+  throw (error_c):
+  generic_packetizer_c(nreader, nti) {
   //packetno = 0;
   samples_written = 0;
   bytes_written = 0;

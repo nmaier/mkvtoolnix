@@ -552,18 +552,20 @@ create_track_order() {
 
 void
 wxdie(const wxString &errmsg) {
-  wxMessageBox(errmsg, wxT("A serious error occured"), wxOK | wxICON_ERROR);
+  wxMessageBox(errmsg, wxT("A serious error has occured"),
+               wxOK | wxICON_ERROR);
   exit(1);
 }
 
-mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
-                                  wxPoint(0, 0),
+mmg_dialog::mmg_dialog():
+  wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
+          wxPoint(0, 0),
 #ifdef SYS_WINDOWS
-                                  wxSize(520, 740),
+          wxSize(520, 740),
 #else
-                                  wxSize(520, 718),
+          wxSize(520, 718),
 #endif
-                                  wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
+          wxCAPTION | wxMINIMIZE_BOX | wxSYSTEM_MENU) {
   mdlg = this;
 
   file_menu = new wxMenu();

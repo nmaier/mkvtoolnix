@@ -44,7 +44,8 @@ public:
 };
 
 bool
-ssa_line_c::operator < (const ssa_line_c &cmp) const {
+ssa_line_c::operator < (const ssa_line_c &cmp)
+  const {
   return start < cmp.start;
 }
 

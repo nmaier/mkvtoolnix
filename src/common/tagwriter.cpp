@@ -35,7 +35,11 @@ using namespace std;
 
 static FILE *o;
 
-static void print_tag(int level, const char *name, const char *fmt, ...) {
+static void
+print_tag(int level,
+          const char *name,
+          const char *fmt,
+          ...) {
   int idx;
   va_list ap;
   string new_fmt;
@@ -50,7 +54,10 @@ static void print_tag(int level, const char *name, const char *fmt, ...) {
   mxprint(o, "</%s>\n", name);
 }
 
-static void print_binary(int level, const char *name, EbmlElement *e) {
+static void
+print_binary(int level,
+             const char *name,
+             EbmlElement *e) {
   EbmlBinary *b;
   string s;
   int i, idx, old_idx;
@@ -93,7 +100,10 @@ static void print_binary(int level, const char *name, EbmlElement *e) {
   mxprint(o, "</%s>\n", name);
 }
 
-static void print_date(int level, const char *name, EbmlElement *e) {
+static void
+print_date(int level,
+           const char *name,
+           EbmlElement *e) {
   int idx;
   time_t tme;
   struct tm *tm;
@@ -116,7 +126,10 @@ static void print_date(int level, const char *name, EbmlElement *e) {
   mxprint(o, "</%s>\n", name);
 }
 
-static void print_string(int level, const char *name, const char *src) {
+static void
+print_string(int level,
+             const char *name,
+             const char *src) {
   int idx;
   string s;
 
@@ -140,7 +153,10 @@ static void print_string(int level, const char *name, const char *src) {
   mxprint(o, "<%s>%s</%s>\n", name, s.c_str(), name);
 }
 
-static void print_utf_string(int level, const char *name, EbmlElement *e) {
+static void
+print_utf_string(int level,
+                 const char *name,
+                 EbmlElement *e) {
   char *s;
 
   s = UTFstring_to_cstrutf8(*static_cast<EbmlUnicodeString *>(e));
@@ -148,7 +164,9 @@ static void print_utf_string(int level, const char *name, EbmlElement *e) {
   safefree(s);
 }
 
-static void print_unknown(int level, EbmlElement *e) {
+static void
+print_unknown(int level,
+              EbmlElement *e) {
   int idx;
 
   for (idx = 0; idx < level; idx++)
@@ -173,7 +191,9 @@ static void print_unknown(int level, EbmlElement *e) {
 
 #define pr_unk() print_unknown(level, e)
 
-static void handle_multicomments(EbmlElement *e, int level) {
+static void
+handle_multicomments(EbmlElement *e,
+                     int level) {
   if (is_id(KaxTagMultiCommentName))
     pr_s("Name");
 
@@ -187,7 +207,9 @@ static void handle_multicomments(EbmlElement *e, int level) {
     pr_unk();
 }
 
-static void handle_simpletags(EbmlElement *e, int level) {
+static void
+handle_simpletags(EbmlElement *e,
+                  int level) {
   int i;
 
   if (is_id(KaxTagName))
@@ -213,7 +235,8 @@ static void handle_simpletags(EbmlElement *e, int level) {
     pr_unk();
 }
 
-static void handle_level5(EbmlElement *e) {
+static void
+handle_level5(EbmlElement *e) {
   int i, level = 5;
 
   if (is_id(KaxTagMultiPriceCurrency))
@@ -236,7 +259,8 @@ static void handle_level5(EbmlElement *e) {
     pr_unk();
 }
 
-static void handle_level4(EbmlElement *e) {
+static void
+handle_level4(EbmlElement *e) {
   int i, level = 4;
 
   if (is_id(KaxTagMultiCommercialType))
@@ -337,7 +361,8 @@ static void handle_level4(EbmlElement *e) {
     pr_unk();
 }
 
-static void handle_level3(EbmlElement *e) {
+static void
+handle_level3(EbmlElement *e) {
   int i, level = 3;
 
   if (is_id(KaxTagTrackUID))
@@ -500,7 +525,8 @@ static void handle_level3(EbmlElement *e) {
     pr_unk();
 }
 
-static void handle_level2(EbmlElement *e) {
+static void
+handle_level2(EbmlElement *e) {
   int i, level = 2;
 
   if (is_id(KaxTagTargets)) {
@@ -585,7 +611,8 @@ static void handle_level2(EbmlElement *e) {
     pr_unk();
 }
 
-static void handle_level1(EbmlElement *e) {
+static void
+handle_level1(EbmlElement *e) {
   int i, level = 1;
 
   if (is_id(KaxTag)) {
@@ -598,7 +625,9 @@ static void handle_level1(EbmlElement *e) {
 
 }
 
-void write_tags_xml(KaxTags &tags, FILE *out) {
+void
+write_tags_xml(KaxTags &tags,
+               FILE *out) {
   int i;
 
   o = out;

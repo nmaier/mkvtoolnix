@@ -42,14 +42,17 @@ lzo_compression_c::~lzo_compression_c() {
   safefree(wrkmem);
 }
 
-unsigned char *lzo_compression_c::decompress(unsigned char *buffer,
-                                             int &size) {
+unsigned char *
+lzo_compression_c::decompress(unsigned char *buffer,
+                              int &size) {
   die("lzo_compression_c::decompress() not implemented\n");
 
   return NULL;
 }
 
-unsigned char *lzo_compression_c::compress(unsigned char *buffer, int &size) {
+unsigned char *
+lzo_compression_c::compress(unsigned char *buffer,
+                            int &size) {
   unsigned char *dst;
   int result, dstsize;
 
@@ -84,8 +87,9 @@ zlib_compression_c::zlib_compression_c():
 zlib_compression_c::~zlib_compression_c() {
 }
 
-unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
-                                             int &size) {
+unsigned char *
+zlib_compression_c::decompress(unsigned char *buffer,
+                               int &size) {
   int result, dstsize, n;
   unsigned char *dst;
   z_stream d_stream;
@@ -124,7 +128,9 @@ unsigned char *zlib_compression_c::decompress(unsigned char *buffer,
   return dst;
 }
 
-unsigned char *zlib_compression_c::compress(unsigned char *buffer, int &size) {
+unsigned char *
+zlib_compression_c::compress(unsigned char *buffer,
+                             int &size) {
   int result, dstsize, n;
   unsigned char *dst;
   z_stream c_stream;
@@ -171,8 +177,9 @@ bzlib_compression_c::bzlib_compression_c():
 bzlib_compression_c::~bzlib_compression_c() {
 }
 
-unsigned char *bzlib_compression_c::decompress(unsigned char *buffer,
-                                             int &size) {
+unsigned char *
+bzlib_compression_c::decompress(unsigned char *buffer,
+                                int &size) {
   int result;
   bz_stream d_stream;
 
@@ -190,8 +197,9 @@ unsigned char *bzlib_compression_c::decompress(unsigned char *buffer,
   return NULL;
 }
 
-unsigned char *bzlib_compression_c::compress(unsigned char *buffer,
-                                             int &size) {
+unsigned char *
+bzlib_compression_c::compress(unsigned char *buffer,
+                              int &size) {
   unsigned char *dst;
   int result, dstsize;
   bz_stream c_stream;
@@ -241,7 +249,8 @@ compression_c::~compression_c() {
            compressed_size * 100.0 / raw_size, compressed_size / items);
 }
 
-compression_c *compression_c::create(int scheme) {
+compression_c *
+compression_c::create(int scheme) {
   if ((scheme <= COMPRESSION_UNSPECIFIED) ||
       (scheme > COMPRESSION_NUM))
     return NULL;
@@ -249,7 +258,8 @@ compression_c *compression_c::create(int scheme) {
   return create(compression_schemes[scheme]);
 }
 
-compression_c *compression_c::create(const char *scheme) {
+compression_c *
+compression_c::create(const char *scheme) {
 #if defined(HAVE_LZO1X_H)
   if (!strcasecmp(scheme, compression_schemes[COMPRESSION_LZO]))
     return new lzo_compression_c();

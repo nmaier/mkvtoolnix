@@ -38,7 +38,8 @@
 using namespace std;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
-                                           track_info_c *nti) throw(error_c) {
+                                           track_info_c *nti)
+  throw(error_c) {
   int i;
   audio_sync_t *as;
   cue_creation_t *cc;
@@ -1228,16 +1229,30 @@ generic_reader_c::display_progress(bool) {
 
 track_info_c::track_info_c():
   initialized(true),
-  id(0), fname(NULL),
-  no_audio(false), no_video(false), no_subs(false),
-  private_data(NULL), private_size(0),
-  aspect_ratio(0.0), display_width(0), display_height(0),
-  aspect_ratio_given(false), display_dimensions_given(false),
-  cues(0), default_track(false), language(NULL), sub_charset(NULL),
-  tags_ptr(NULL), tags(NULL),
+  id(0),
+  fname(NULL),
+  no_audio(false),
+  no_video(false),
+  no_subs(false),
+  private_data(NULL),
+  private_size(0),
+  aspect_ratio(0.0),
+  display_width(0),
+  display_height(0),
+  aspect_ratio_given(false),
+  display_dimensions_given(false),
+  cues(0),
+  default_track(false),
+  language(NULL),
+  sub_charset(NULL),
+  tags_ptr(NULL),
+  tags(NULL),
   compression(COMPRESSION_NONE),
-  track_name(NULL), ext_timecodes(NULL),
-  no_chapters(false), no_attachments(false), no_tags(false) {
+  track_name(NULL),
+  ext_timecodes(NULL),
+  no_chapters(false),
+  no_attachments(false),
+  no_tags(false) {
   atracks = new vector<int64_t>;
   vtracks = new vector<int64_t>;
   stracks = new vector<int64_t>;

@@ -45,7 +45,8 @@ static const char *mosu_hacks[] = {
 };
 static vector<const char *> engaged_hacks;
 
-bool hack_engaged(const char *hack) {
+bool
+hack_engaged(const char *hack) {
   uint32_t i;
 
   if (hack == NULL)
@@ -57,7 +58,8 @@ bool hack_engaged(const char *hack) {
   return false;
 }
 
-void engage_hacks(const char *hacks) {
+void
+engage_hacks(const char *hacks) {
   vector<string> engage_args;
   int aidx, hidx;
   bool valid_hack;

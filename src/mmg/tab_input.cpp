@@ -48,7 +48,7 @@ private:
   tab_input *owner;
 public:
   input_drop_target_c(tab_input *n_owner):
-    owner(n_owner) {};
+    owner(n_owner) {}
   virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
     int i;
 

@@ -30,7 +30,8 @@
 
 using namespace std;
 
-void usage(int retval) {
+void
+usage(int retval) {
   mxinfo(
     "base64util <encode|decode> <input> <output> [maxlen]\n"
     "\n"
@@ -41,7 +42,9 @@ void usage(int retval) {
   exit(retval);
 }
 
-int main(int argc, char *argv[]) {
+int
+main(int argc,
+     char *argv[]) {
   int maxlen;
   uint64_t size;
   unsigned char *buffer;

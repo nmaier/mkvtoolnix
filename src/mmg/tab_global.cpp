@@ -308,7 +308,8 @@ tab_global::tab_global(wxWindow *parent):
   SetSizer(siz_all);
 }
 
-void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
+void
+tab_global::on_browse_global_tags(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, wxT("Choose the tags file"), last_open_dir, wxT(""),
                    wxT("Tag files (*.xml)|*.xml|" ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
@@ -317,7 +318,8 @@ void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
   }
 }
 
-void tab_global::on_browse_chapters(wxCommandEvent &evt) {
+void
+tab_global::on_browse_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, wxT("Choose the chapter file"), last_open_dir,
                    wxT(""),
                    wxT("Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|"
@@ -328,7 +330,8 @@ void tab_global::on_browse_chapters(wxCommandEvent &evt) {
   }
 }
 
-void tab_global::on_split_clicked(wxCommandEvent &evt) {
+void
+tab_global::on_split_clicked(wxCommandEvent &evt) {
   bool ec, er;
 
   ec = cb_split->IsChecked();
@@ -343,7 +346,8 @@ void tab_global::on_split_clicked(wxCommandEvent &evt) {
   tc_split_max_files->Enable(ec);
 }
 
-void tab_global::on_splitby_clicked(wxCommandEvent &evt) {
+void
+tab_global::on_splitby_clicked(wxCommandEvent &evt) {
   bool er;
 
   er = rb_split_by_size->GetValue();
@@ -351,7 +355,8 @@ void tab_global::on_splitby_clicked(wxCommandEvent &evt) {
   cob_split_by_time->Enable(!er);
 }
 
-void tab_global::load(wxConfigBase *cfg) {
+void
+tab_global::load(wxConfigBase *cfg) {
   wxString s;
   bool b, ec, er;
 
@@ -411,7 +416,8 @@ void tab_global::load(wxConfigBase *cfg) {
   title_was_present = b;
 }
 
-void tab_global::save(wxConfigBase *cfg) {
+void
+tab_global::save(wxConfigBase *cfg) {
   cfg->SetPath(wxT("/global"));
   cfg->Write(wxT("segment_title"), tc_title->GetValue());
 

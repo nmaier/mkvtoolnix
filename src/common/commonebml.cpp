@@ -38,7 +38,9 @@
 using namespace libebml;
 
 #if defined(DEBUG)
-void __debug_dump_elements(EbmlElement *e, int level) {
+void
+__debug_dump_elements(EbmlElement *e,
+                      int level) {
   int i;
   EbmlMaster *m;
 
@@ -59,7 +61,8 @@ void __debug_dump_elements(EbmlElement *e, int level) {
  * UTFstring <-> C string conversion
  */
 
-UTFstring cstr_to_UTFstring(const char *c) {
+UTFstring
+cstr_to_UTFstring(const char *c) {
 #if defined(COMP_MSC) || defined(COMP_MINGW)
   wchar_t *new_string;
   int len;
@@ -95,7 +98,8 @@ UTFstring cstr_to_UTFstring(const char *c) {
 #endif
 }
 
-static int utf8_byte_length(unsigned char c) {
+static int
+utf8_byte_length(unsigned char c) {
   if (c < 0x80)                 // 0xxxxxxx
     return 1;
   else if (c < 0xc0)            // 10xxxxxx
@@ -120,7 +124,8 @@ static int utf8_byte_length(unsigned char c) {
   return 0;
 }
 
-static int wchar_to_utf8_byte_length(uint32_t w) {
+static int
+wchar_to_utf8_byte_length(uint32_t w) {
   if (w < 0x00000080)
     return 1;
   else if (w < 0x00000800)
@@ -140,7 +145,8 @@ static int wchar_to_utf8_byte_length(uint32_t w) {
   return 0;
 }
 
-UTFstring cstrutf8_to_UTFstring(const char *c) {
+UTFstring
+cstrutf8_to_UTFstring(const char *c) {
   wchar_t *new_string;
   int slen, dlen, src, dst, clen;
   UTFstring u;
@@ -202,7 +208,8 @@ UTFstring cstrutf8_to_UTFstring(const char *c) {
   return u;
 }
 
-char *UTFstring_to_cstr(const UTFstring &u) {
+char *
+UTFstring_to_cstr(const UTFstring &u) {
 #if defined(COMP_MSC) || defined(COMP_MINGW)
   char *new_string;
   int len;
@@ -234,7 +241,8 @@ char *UTFstring_to_cstr(const UTFstring &u) {
 #endif
 }
 
-char *UTFstring_to_cstrutf8(const UTFstring &u) {
+char *
+UTFstring_to_cstrutf8(const UTFstring &u) {
   int src, dst, dlen, slen, clen;
   unsigned char *new_string;
   uint32_t uc;

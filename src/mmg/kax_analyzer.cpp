@@ -48,7 +48,8 @@ using namespace libebml;
 //            data[i]->pos, data[i]->size);
 // }
 
-kax_analyzer_c::kax_analyzer_c(wxWindow *nparent, string nname):
+kax_analyzer_c::kax_analyzer_c(wxWindow *nparent,
+                               string nname):
   wxDialog(nparent, -1, wxT("Analysis running"), wxDefaultPosition,
 #ifdef SYS_WINDOWS
            wxSize(300, 130),
@@ -86,7 +87,8 @@ kax_analyzer_c::~kax_analyzer_c() {
     delete segment;
 }
 
-bool kax_analyzer_c::probe(string file_name) {
+bool
+kax_analyzer_c::probe(string file_name) {
   try {
     unsigned char data[4];
     mm_io_c in(file_name.c_str(), MODE_READ);
@@ -106,7 +108,8 @@ bool kax_analyzer_c::probe(string file_name) {
 #define in_parent(p) (file->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
 
-bool kax_analyzer_c::process() {
+bool
+kax_analyzer_c::process() {
   int upper_lvl_el;
   uint32_t i;
   int64_t file_size;
@@ -189,8 +192,9 @@ bool kax_analyzer_c::process() {
   return true;
 }
 
-EbmlElement *kax_analyzer_c::read_element(uint32_t num,
-                                          const EbmlCallbacks &callbacks) {
+EbmlElement *
+kax_analyzer_c::read_element(uint32_t num,
+                             const EbmlCallbacks &callbacks) {
   EbmlElement *e;
   int upper_lvl_el;
 
@@ -210,7 +214,9 @@ EbmlElement *kax_analyzer_c::read_element(uint32_t num,
   return e;
 }
 
-void kax_analyzer_c::overwrite_elements(EbmlElement *e, int found_where) {
+void
+kax_analyzer_c::overwrite_elements(EbmlElement *e,
+                                   int found_where) {
   vector<analyzer_data_c *>::iterator dit;
   string info;
   int64_t pos, size;
@@ -307,7 +313,8 @@ void kax_analyzer_c::overwrite_elements(EbmlElement *e, int found_where) {
 //   mxinfo("overwrite_elements: %s", info.c_str());
 }
 
-bool kax_analyzer_c::update_element(EbmlElement *e) {
+bool
+kax_analyzer_c::update_element(EbmlElement *e) {
   uint32_t i, k, found_where, found_what;
   int64_t space_here, pos;
   vector<KaxSeekHead *> all_heads;
@@ -605,7 +612,8 @@ bool kax_analyzer_c::update_element(EbmlElement *e) {
   return false;
 }
 
-void kax_analyzer_c::on_abort(wxCommandEvent &evt) {
+void
+kax_analyzer_c::on_abort(wxCommandEvent &evt) {
   abort = true;
 }
 

@@ -73,7 +73,8 @@ bitvalue_c::bitvalue_c(const bitvalue_c &src) {
 #define upperchar(c) (((c) >= 'a') ? ((c) - 'a' + 'A') : (c))
 #define hextodec(c) (isdigit(c) ? ((c) - '0') : ((c) - 'A' + 10))
 
-bitvalue_c::bitvalue_c(const char *s, int allowed_bitlength) {
+bitvalue_c::bitvalue_c(const char *s,
+                       int allowed_bitlength) {
   int len, i;
   string s2;
 
@@ -119,7 +120,8 @@ bitvalue_c::bitvalue_c(const char *s, int allowed_bitlength) {
       hextodec(upperchar(s[i + 1]));
 }
 
-bitvalue_c &bitvalue_c::operator =(const bitvalue_c &src) {
+bitvalue_c &
+bitvalue_c::operator =(const bitvalue_c &src) {
   safefree(value);
   bitsize = src.bitsize;
   value = (unsigned char *)safememdup(src.value, bitsize / 8);
@@ -131,7 +133,9 @@ bitvalue_c::~bitvalue_c() {
   safefree(value);
 }
 
-bool bitvalue_c::operator ==(const bitvalue_c &cmp) const {
+bool
+bitvalue_c::operator ==(const bitvalue_c &cmp)
+  const {
   int i;
 
   if (cmp.bitsize != bitsize)
@@ -142,20 +146,27 @@ bool bitvalue_c::operator ==(const bitvalue_c &cmp) const {
   return true;
 }
 
-unsigned char bitvalue_c::operator [](int index) const {
+unsigned char
+bitvalue_c::operator [](int index)
+  const {
   assert((index >= 0) && (index < (bitsize / 8)));
   return value[index];
 }
 
-int bitvalue_c::size() const {
+int
+bitvalue_c::size()
+  const {
   return bitsize;
 }
 
-unsigned char *bitvalue_c::data() const {
+unsigned char *
+bitvalue_c::data()
+  const {
   return value;
 }
 
-void bitvalue_c::generate_random() {
+void
+bitvalue_c::generate_random() {
   int i;
 
   for (i = 0; i < bitsize / 8; i++)
@@ -164,7 +175,8 @@ void bitvalue_c::generate_random() {
 
 // ---------------------------------------------------------------------
 
-byte_cursor_c::byte_cursor_c(const unsigned char *ndata, int nsize) :
+byte_cursor_c::byte_cursor_c(const unsigned char *ndata,
+                             int nsize):
   size(nsize),
   data(ndata) {
   pos = 0;
@@ -172,7 +184,8 @@ byte_cursor_c::byte_cursor_c(const unsigned char *ndata, int nsize) :
     throw exception();
 }
 
-unsigned char byte_cursor_c::get_uint8() {
+unsigned char
+byte_cursor_c::get_uint8() {
   if ((pos + 1) > size)
     throw exception();
 
@@ -181,7 +194,8 @@ unsigned char byte_cursor_c::get_uint8() {
   return data[pos - 1];
 }
 
-unsigned short byte_cursor_c::get_uint16_be() {
+unsigned short
+byte_cursor_c::get_uint16_be() {
   unsigned short v;
 
   if ((pos + 2) > size)
@@ -193,7 +207,8 @@ unsigned short byte_cursor_c::get_uint16_be() {
   return v;
 }
 
-unsigned int byte_cursor_c::get_uint32_be() {
+unsigned int
+byte_cursor_c::get_uint32_be() {
   unsigned int v;
 
   if ((pos + 4) > size)
@@ -205,7 +220,8 @@ unsigned int byte_cursor_c::get_uint32_be() {
   return v;
 }
 
-unsigned short byte_cursor_c::get_uint16() {
+unsigned short
+byte_cursor_c::get_uint16() {
   unsigned short v;
 
   if ((pos + 2) > size)
@@ -217,7 +233,8 @@ unsigned short byte_cursor_c::get_uint16() {
   return v;
 }
 
-unsigned int byte_cursor_c::get_uint32() {
+unsigned int
+byte_cursor_c::get_uint32() {
   unsigned int v;
 
   if ((pos + 4) > size)
@@ -229,14 +246,17 @@ unsigned int byte_cursor_c::get_uint32() {
   return v;
 }
 
-void byte_cursor_c::skip(int n) {
+void
+byte_cursor_c::skip(int n) {
   if ((pos + n) > size)
     throw exception();
 
   pos += n;
 }
 
-void byte_cursor_c::get_bytes(unsigned char *dst, int n) {
+void
+byte_cursor_c::get_bytes(unsigned char *dst,
+                         int n) {
   if ((pos + n) > size)
     throw exception();
 
@@ -244,11 +264,13 @@ void byte_cursor_c::get_bytes(unsigned char *dst, int n) {
   pos += n;
 }
 
-int byte_cursor_c::get_pos() {
+int
+byte_cursor_c::get_pos() {
   return pos;
 }
 
-int byte_cursor_c::get_len() {
+int
+byte_cursor_c::get_len() {
   return size - pos;
 }
 
@@ -256,7 +278,9 @@ int byte_cursor_c::get_len() {
  * Control functions
  */
 
-void die(const char *fmt, ...) {
+void
+die(const char *fmt,
+    ...) {
   va_list ap;
 
   mxprint(stdout, "'die' called: ");
@@ -270,7 +294,10 @@ void die(const char *fmt, ...) {
   exit(2);
 }
 
-void _trace(const char *func, const char *file, int line) {
+void
+_trace(const char *func,
+       const char *file,
+       int line) {
   mxdebug("trace: %s:%s (%d)\n", file, func, line);
 }
 
@@ -278,7 +305,8 @@ void _trace(const char *func, const char *file, int line) {
  * Endianess stuff
  */
 
-uint16_t get_uint16(const void *buf) {
+uint16_t
+get_uint16(const void *buf) {
   uint16_t ret;
   unsigned char *tmp;
 
@@ -290,7 +318,8 @@ uint16_t get_uint16(const void *buf) {
   return ret;
 }
 
-uint32_t get_uint24(const void *buf) {
+uint32_t
+get_uint24(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -303,7 +332,8 @@ uint32_t get_uint24(const void *buf) {
   return ret;
 }
 
-uint32_t get_uint32(const void *buf) {
+uint32_t
+get_uint32(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -317,7 +347,8 @@ uint32_t get_uint32(const void *buf) {
   return ret;
 }
 
-uint64_t get_uint64(const void *buf) {
+uint64_t
+get_uint64(const void *buf) {
   uint64_t ret;
   unsigned char *tmp;
 
@@ -335,7 +366,8 @@ uint64_t get_uint64(const void *buf) {
   return ret;
 }
 
-uint16_t get_uint16_be(const void *buf) {
+uint16_t
+get_uint16_be(const void *buf) {
   uint16_t ret;
   unsigned char *tmp;
 
@@ -347,7 +379,8 @@ uint16_t get_uint16_be(const void *buf) {
   return ret;
 }
 
-uint32_t get_uint24_be(const void *buf) {
+uint32_t
+get_uint24_be(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -360,7 +393,8 @@ uint32_t get_uint24_be(const void *buf) {
   return ret;
 }
 
-uint32_t get_uint32_be(const void *buf) {
+uint32_t
+get_uint32_be(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -374,7 +408,8 @@ uint32_t get_uint32_be(const void *buf) {
   return ret;
 }
 
-uint64_t get_uint64_be(const void *buf) {
+uint64_t
+get_uint64_be(const void *buf) {
   uint64_t ret;
   unsigned char *tmp;
 
@@ -392,7 +427,9 @@ uint64_t get_uint64_be(const void *buf) {
   return ret;
 }
 
-void put_uint16(void *buf, uint16_t value) {
+void
+put_uint16(void *buf,
+           uint16_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -401,7 +438,9 @@ void put_uint16(void *buf, uint16_t value) {
   tmp[1] = (value >>= 8) & 0xff;
 }
 
-void put_uint32(void *buf, uint32_t value) {
+void
+put_uint32(void *buf,
+           uint32_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -412,7 +451,9 @@ void put_uint32(void *buf, uint32_t value) {
   tmp[3] = (value >>= 8) & 0xff;
 }
 
-void put_uint64(void *buf, uint64_t value) {
+void
+put_uint64(void *buf,
+           uint64_t value) {
   unsigned char *tmp;
 
   tmp = (unsigned char *) buf;
@@ -481,7 +522,10 @@ static kax_conv_t *kax_convs = NULL;
 static int num_kax_convs = 0;
 int cc_local_utf8 = -1;
 
-int add_kax_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
+int
+add_kax_conv(const char *charset,
+             iconv_t ict_from,
+             iconv_t ict_to) {
   kax_conv_t *c;
   int i;
 
@@ -500,7 +544,8 @@ int add_kax_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
   return num_kax_convs - 1;
 }
 
-int utf8_init(const char *charset) {
+int
+utf8_init(const char *charset) {
   string lc_charset;
   iconv_t ict_from_utf8, ict_to_utf8;
   int i;
@@ -540,7 +585,8 @@ int utf8_init(const char *charset) {
   return add_kax_conv(lc_charset.c_str(), ict_from_utf8, ict_to_utf8);
 }
 
-void utf8_done() {
+void
+utf8_done() {
   int i;
 
   for (i = 0; i < num_kax_convs; i++) {
@@ -554,7 +600,9 @@ void utf8_done() {
     safefree(kax_convs);
 }
 
-static char *convert_charset(iconv_t ict, const char *src) {
+static char *
+convert_charset(iconv_t ict,
+                const char *src) {
   char *dst, *psrc, *pdst, *srccopy;
   size_t lsrc, ldst;
   int len;
@@ -578,7 +626,9 @@ static char *convert_charset(iconv_t ict, const char *src) {
   return dst;
 }
 
-char *to_utf8(int handle, const char *local) {
+char *
+to_utf8(int handle,
+        const char *local) {
   char *copy;
 
   if (handle == -1) {
@@ -593,7 +643,9 @@ char *to_utf8(int handle, const char *local) {
   return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
 
-string &to_utf8(int handle, string &local) {
+string &
+to_utf8(int handle,
+        string &local) {
   char *cutf8;
 
   cutf8 = to_utf8(handle, local.c_str());
@@ -603,7 +655,9 @@ string &to_utf8(int handle, string &local) {
   return local;
 }
 
-char *from_utf8(int handle, const char *utf8) {
+char *
+from_utf8(int handle,
+          const char *utf8) {
   char *copy;
 
   if (handle == -1) {
@@ -618,7 +672,9 @@ char *from_utf8(int handle, const char *utf8) {
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
 
-string &from_utf8(int handle, string &utf8) {
+string &
+from_utf8(int handle,
+          string &utf8) {
   char *clocal;
 
   clocal = from_utf8(handle, utf8.c_str());
@@ -634,11 +690,13 @@ string &from_utf8(int handle, string &utf8) {
 
 static vector<uint32_t> ru_numbers;
 
-void clear_list_of_unique_uint32() {
+void
+clear_list_of_unique_uint32() {
   ru_numbers.clear();
 }
 
-bool is_unique_uint32(uint32_t number) {
+bool
+is_unique_uint32(uint32_t number) {
   int i;
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
@@ -650,14 +708,16 @@ bool is_unique_uint32(uint32_t number) {
   return true;
 }
 
-void add_unique_uint32(uint32_t number) {
+void
+add_unique_uint32(uint32_t number) {
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     ru_numbers.push_back(ru_numbers.size() + 1);
   else
     ru_numbers.push_back(number);
 }
 
-uint32_t create_unique_uint32() {
+uint32_t
+create_unique_uint32() {
   uint32_t rnumber, half;
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
@@ -680,7 +740,10 @@ uint32_t create_unique_uint32() {
  * Miscellaneous stuff
  */
 
-char *_safestrdup(const char *s, const char *file, int line) {
+char *
+_safestrdup(const char *s,
+            const char *file,
+            int line) {
   char *copy;
 
   if (s == NULL)
@@ -694,8 +757,10 @@ char *_safestrdup(const char *s, const char *file, int line) {
   return copy;
 }
 
-unsigned char *_safestrdup(const unsigned char *s, const char *file,
-                           int line) {
+unsigned char *
+_safestrdup(const unsigned char *s,
+            const char *file,
+            int line) {
   char *copy;
 
   if (s == NULL)
@@ -709,7 +774,11 @@ unsigned char *_safestrdup(const unsigned char *s, const char *file,
   return (unsigned char *)copy;
 }
 
-void *_safememdup(const void *s, size_t size, const char *file, int line) {
+void *
+_safememdup(const void *s,
+            size_t size,
+            const char *file,
+            int line) {
   void *copy;
 
   if (s == NULL)
@@ -724,7 +793,10 @@ void *_safememdup(const void *s, size_t size, const char *file, int line) {
   return copy;
 }
 
-void *_safemalloc(size_t size, const char *file, int line) {
+void *
+_safemalloc(size_t size,
+            const char *file,
+            int line) {
   void *mem;
 
   mem = malloc(size);
@@ -735,7 +807,11 @@ void *_safemalloc(size_t size, const char *file, int line) {
   return mem;
 }
 
-void *_saferealloc(void *mem, size_t size, const char *file, int line) {
+void *
+_saferealloc(void *mem,
+             size_t size,
+             const char *file,
+             int line) {
   mem = realloc(mem, size);
   if (mem == NULL)
     die("common.cpp/saferealloc() called from file %s, line %d: realloc() "
@@ -748,7 +824,10 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line) {
  * standard string processing
  */
 
-vector<string> split(const char *src, const char *pattern, int max_num) {
+vector<string>
+split(const char *src,
+      const char *pattern,
+      int max_num) {
   int num, i, plen;
   char *copy, *p1, *p2;
   vector<string> v;
@@ -773,7 +852,9 @@ vector<string> split(const char *src, const char *pattern, int max_num) {
   return v;
 }
 
-string join(const char *pattern, vector<string> &strings) {
+string
+join(const char *pattern,
+     vector<string> &strings) {
   string dst;
   uint32_t i;
 
@@ -788,7 +869,9 @@ string join(const char *pattern, vector<string> &strings) {
   return dst;
 }
 
-void strip(string &s, bool newlines) {
+void
+strip(string &s,
+      bool newlines) {
   int i, len;
   const char *c;
 
@@ -819,14 +902,17 @@ void strip(string &s, bool newlines) {
     s.erase(len - i, i);
 }
 
-void strip(vector<string> &v, bool newlines) {
+void
+strip(vector<string> &v,
+      bool newlines) {
   int i;
 
   for (i = 0; i < v.size(); i++)
     strip(v[i], newlines);
 }
 
-string escape(const char *src) {
+string
+escape(const char *src) {
   string dst;
 
   while (*src != 0) {
@@ -844,7 +930,8 @@ string escape(const char *src) {
   return dst;
 }
 
-string unescape(const char *src) {
+string
+unescape(const char *src) {
   string dst;
   const char *next_char;
 
@@ -871,7 +958,8 @@ string unescape(const char *src) {
   return dst;
 }
 
-string escape_xml(const char *src) {
+string
+escape_xml(const char *src) {
   string dst;
 
   while (*src != 0) {
@@ -889,19 +977,27 @@ string escape_xml(const char *src) {
   return dst;
 }
 
-bool starts_with(const string &s, const char *start) {
+bool
+starts_with(const string &s,
+            const char *start) {
   return strncmp(s.c_str(), start, strlen(start)) == 0;
 }
 
-bool starts_with(const string &s, const string &start) {
+bool
+starts_with(const string &s,
+            const string &start) {
   return strncmp(s.c_str(), start.c_str(), start.length()) == 0;
 }
 
-bool starts_with_case(const string &s, const char *start) {
+bool
+starts_with_case(const string &s,
+                 const char *start) {
   return strncasecmp(s.c_str(), start, strlen(start)) == 0;
 }
 
-bool starts_with_case(const string &s, const string &start) {
+bool
+starts_with_case(const string &s,
+                 const string &start) {
   return strncasecmp(s.c_str(), start.c_str(), start.length()) == 0;
 }
 
@@ -909,7 +1005,8 @@ bool starts_with_case(const string &s, const string &start) {
  * Integer parsing
  */
 
-uint32_t round_to_nearest_pow2(uint32_t value) {
+uint32_t
+round_to_nearest_pow2(uint32_t value) {
   int64_t best_value, test_value;
 
   best_value = 0;
@@ -923,7 +1020,9 @@ uint32_t round_to_nearest_pow2(uint32_t value) {
   return best_value;
 }
 
-bool parse_int(const char *s, int64_t &value) {
+bool
+parse_int(const char *s,
+          int64_t &value) {
   const char *p;
   int sign;
 
@@ -949,7 +1048,9 @@ bool parse_int(const char *s, int64_t &value) {
   return true;
 }
 
-bool parse_int(const char *s, int &value) {
+bool
+parse_int(const char *s,
+          int &value) {
   int64_t tmp;
   bool result;
 
@@ -959,7 +1060,9 @@ bool parse_int(const char *s, int &value) {
   return result;
 }
 
-bool parse_double(const char *s, double &value) {
+bool
+parse_double(const char *s,
+             double &value) {
   char *endptr;
   string old_locale;
   bool ok;
@@ -982,7 +1085,8 @@ bool parse_double(const char *s, double &value) {
   return ok;
 }
 
-string to_string(int64_t i) {
+string
+to_string(int64_t i) {
   char buf[100];
 
   sprintf(buf, "%lld", i);
@@ -1007,7 +1111,8 @@ debug_c::~debug_c() {
   }
 }
 
-void debug_c::enter(const char *label) {
+void
+debug_c::enter(const char *label) {
   int i;
   debug_data_t *entry;
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
@@ -1038,7 +1143,8 @@ void debug_c::enter(const char *label) {
 #endif
 }
 
-void debug_c::leave(const char *label) {
+void
+debug_c::leave(const char *label) {
   int i;
   debug_data_t *entry;
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
@@ -1071,7 +1177,8 @@ void debug_c::leave(const char *label) {
   entry->entered_at = 0;
 }
 
-void debug_c::add_packetizer(void *ptzr) {
+void
+debug_c::add_packetizer(void *ptzr) {
   int i;
 
   for (i = 0; i < packetizers.size(); i++)
@@ -1081,7 +1188,8 @@ void debug_c::add_packetizer(void *ptzr) {
   packetizers.push_back((generic_packetizer_c *)ptzr);
 }
 
-void debug_c::dump_info() {
+void
+debug_c::dump_info() {
   int i;
 #if defined(SYS_UNIX) || defined(SYS_APPLE)
   debug_data_t *entry;
@@ -1116,7 +1224,9 @@ void debug_c::dump_info() {
  * Other related news
  */
 
-void fix_format(const char *fmt, string &new_fmt) {
+void
+fix_format(const char *fmt,
+           string &new_fmt) {
 #if defined(COMP_MINGW) || defined(COMP_MSC)
   int i, len;
   bool state;
@@ -1155,7 +1265,10 @@ void fix_format(const char *fmt, string &new_fmt) {
 #endif
 }
 
-void mxprint(void *stream, const char *fmt, ...) {
+void
+mxprint(void *stream,
+        const char *fmt,
+        ...) {
   va_list ap;
   string new_fmt;
 
@@ -1166,7 +1279,10 @@ void mxprint(void *stream, const char *fmt, ...) {
   va_end(ap);
 }
 
-void mxprints(char *dst, const char *fmt, ...) {
+void
+mxprints(char *dst,
+         const char *fmt,
+         ...) {
   va_list ap;
   string new_fmt;
 
@@ -1176,7 +1292,10 @@ void mxprints(char *dst, const char *fmt, ...) {
   va_end(ap);
 }
 
-static void mxmsg(int level, const char *fmt, va_list &ap) {
+static void
+mxmsg(int level,
+      const char *fmt,
+      va_list &ap) {
   string new_fmt;
   bool nl;
   FILE *stream;
@@ -1210,7 +1329,10 @@ static void mxmsg(int level, const char *fmt, va_list &ap) {
   fflush(stream);
 }
 
-void mxverb(int level, const char *fmt, ...) {
+void
+mxverb(int level,
+       const char *fmt,
+       ...) {
   va_list ap;
 
   if (verbose < level)
@@ -1221,7 +1343,9 @@ void mxverb(int level, const char *fmt, ...) {
   va_end(ap);
 }
 
-void mxinfo(const char *fmt, ...) {
+void
+mxinfo(const char *fmt,
+       ...) {
   va_list ap;
 
   va_start(ap, fmt);
@@ -1231,7 +1355,9 @@ void mxinfo(const char *fmt, ...) {
 
 static bool warning_issued = false;
 
-void mxwarn(const char *fmt, ...) {
+void
+mxwarn(const char *fmt,
+       ...) {
   va_list ap;
 
   if (suppress_warnings)
@@ -1243,7 +1369,9 @@ void mxwarn(const char *fmt, ...) {
   warning_issued = true;
 }
 
-void mxerror(const char *fmt, ...) {
+void
+mxerror(const char *fmt,
+        ...) {
   va_list ap;
 
   va_start(ap, fmt);
@@ -1254,7 +1382,9 @@ void mxerror(const char *fmt, ...) {
   exit(2);
 }
 
-void mxdebug(const char *fmt, ...) {
+void
+mxdebug(const char *fmt,
+        ...) {
   va_list ap;
 
   va_start(ap, fmt);
@@ -1262,7 +1392,8 @@ void mxdebug(const char *fmt, ...) {
   va_end(ap);
 }
 
-void mxexit(int code) {
+void
+mxexit(int code) {
   if (code != -1)
     exit(code);
 
@@ -1272,7 +1403,9 @@ void mxexit(int code) {
   exit(0);
 }
 
-int get_arg_len(const char *fmt, ...) {
+int
+get_arg_len(const char *fmt,
+            ...) {
   int size;
   va_list ap;
 
@@ -1283,7 +1416,9 @@ int get_arg_len(const char *fmt, ...) {
   return size;
 }
 
-int get_varg_len(const char *fmt, va_list ap) {
+int
+get_varg_len(const char *fmt,
+             va_list ap) {
   int size, result;
   char *dst;
 
@@ -1303,7 +1438,9 @@ int get_varg_len(const char *fmt, va_list ap) {
   return -1;
 }
 
-string mxsprintf(const char *fmt, ...) {
+string
+mxsprintf(const char *fmt,
+          ...) {
   va_list ap;
   string new_fmt, dst;
   char *new_string;

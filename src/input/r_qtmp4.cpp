@@ -89,7 +89,7 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
 }
 
 qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
-  throw (error_c) :
+  throw (error_c):
   generic_reader_c(nti) {
   try {
     io = new mm_io_c(ti->fname, MODE_READ);

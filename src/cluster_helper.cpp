@@ -37,14 +37,14 @@ class kax_cluster_c: public KaxCluster {
 public:
   kax_cluster_c(): KaxCluster() {
     PreviousTimecode = 0;
-  };
+  }
 
   void set_min_timecode(int64_t min_timecode) {
     MinTimecode = min_timecode;
-  };
+  }
   void set_max_timecode(int64_t max_timecode) {
     MaxTimecode = max_timecode;
-  };
+  }
 };
 
 // #define walk_clusters() check_clusters(__LINE__)
@@ -77,7 +77,8 @@ cluster_helper_c::~cluster_helper_c() {
     safefree(clusters);
 }
 
-void cluster_helper_c::free_contents(ch_contents_t *clstr) {
+void
+cluster_helper_c::free_contents(ch_contents_t *clstr) {
   packet_t *p;
   int i;
 
@@ -97,7 +98,8 @@ void cluster_helper_c::free_contents(ch_contents_t *clstr) {
   safefree(clstr);
 }
 
-KaxCluster *cluster_helper_c::get_cluster() {
+KaxCluster *
+cluster_helper_c::get_cluster() {
   if (clusters != NULL)
     return clusters[num_clusters - 1]->cluster;
   return NULL;
@@ -106,7 +108,8 @@ KaxCluster *cluster_helper_c::get_cluster() {
 #define RND_TIMECODE_SCALE(a) (((int64_t)(a / TIMECODE_SCALE)) * \
                                TIMECODE_SCALE)
 
-void cluster_helper_c::add_packet(packet_t *packet) {
+void
+cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
   packet_t *p;
   int64_t timecode, old_max_timecode, additional_size;
@@ -229,7 +232,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   }
 }
 
-bool cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
+bool
+cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
   int i;
   packet_t *pack;
 
@@ -244,7 +248,8 @@ bool cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
   return true;
 }
 
-int64_t cluster_helper_c::get_timecode() {
+int64_t
+cluster_helper_c::get_timecode() {
   if (clusters == NULL)
     return 0;
   if (clusters[num_clusters - 1]->packets == NULL)
@@ -252,7 +257,8 @@ int64_t cluster_helper_c::get_timecode() {
   return clusters[num_clusters - 1]->packets[0]->assigned_timecode;
 }
 
-packet_t *cluster_helper_c::get_packet(int num) {
+packet_t *
+cluster_helper_c::get_packet(int num) {
   ch_contents_t *c;
 
   if (clusters == NULL)
@@ -265,13 +271,15 @@ packet_t *cluster_helper_c::get_packet(int num) {
   return c->packets[num];
 }
 
-int cluster_helper_c::get_packet_count() {
+int
+cluster_helper_c::get_packet_count() {
   if (clusters == NULL)
     return -1;
   return clusters[num_clusters - 1]->num_packets;
 }
 
-int cluster_helper_c::find_cluster(KaxCluster *cluster) {
+int
+cluster_helper_c::find_cluster(KaxCluster *cluster) {
   int i;
 
   if (clusters == NULL)
@@ -282,7 +290,8 @@ int cluster_helper_c::find_cluster(KaxCluster *cluster) {
   return -1;
 }
 
-void cluster_helper_c::add_cluster(KaxCluster *cluster) {
+void
+cluster_helper_c::add_cluster(KaxCluster *cluster) {
   ch_contents_t *c;
 
   if (find_cluster(cluster) != -1)
@@ -299,15 +308,18 @@ void cluster_helper_c::add_cluster(KaxCluster *cluster) {
   cluster->SetPreviousTimecode(last_cluster_tc, TIMECODE_SCALE);
 }
 
-int cluster_helper_c::get_cluster_content_size() {
+int
+cluster_helper_c::get_cluster_content_size() {
   return cluster_content_size;
 }
 
-void cluster_helper_c::set_output(mm_io_c *nout) {
+void
+cluster_helper_c::set_output(mm_io_c *nout) {
   out = nout;
 }
 
-void cluster_helper_c::set_duration(render_groups_t *rg) {
+void
+cluster_helper_c::set_duration(render_groups_t *rg) {
   uint32_t i;
   int64_t block_duration, def_duration;
   KaxBlockGroup *group;
@@ -333,7 +345,8 @@ void cluster_helper_c::set_duration(render_groups_t *rg) {
             question doesn't it"
 */
 
-int cluster_helper_c::render() {
+int
+cluster_helper_c::render() {
   KaxCluster *cluster;
   KaxBlockGroup *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
@@ -553,8 +566,9 @@ int cluster_helper_c::render() {
   return 1;
 }
 
-ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
-                                                     void *source) {
+ch_contents_t *
+cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
+                                      void *source) {
   int i, k;
   packet_t *pack;
 
@@ -573,7 +587,9 @@ ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
   return NULL;
 }
 
-packet_t *cluster_helper_c::find_packet(int64_t ref_timecode, void *source) {
+packet_t *
+cluster_helper_c::find_packet(int64_t ref_timecode,
+                              void *source) {
   int i, k;
   packet_t *pack;
 
@@ -592,7 +608,8 @@ packet_t *cluster_helper_c::find_packet(int64_t ref_timecode, void *source) {
   return NULL;
 }
 
-void cluster_helper_c::check_clusters(int num) {
+void
+cluster_helper_c::check_clusters(int num) {
   int i, k;
   packet_t *p;
   ch_contents_t *clstr;
@@ -615,7 +632,8 @@ void cluster_helper_c::check_clusters(int num) {
 
 // #define PRINT_CLUSTERS
 
-int cluster_helper_c::free_clusters() {
+int
+cluster_helper_c::free_clusters() {
   int i, k, idx;
   packet_t *p;
   ch_contents_t *clstr, **new_clusters;
@@ -707,20 +725,25 @@ int cluster_helper_c::free_clusters() {
   return 1;
 }
 
-int cluster_helper_c::free_ref(int64_t ref_timecode, void *source) {
+int
+cluster_helper_c::free_ref(int64_t ref_timecode,
+                           void *source) {
   ((generic_packetizer_c *)source)->set_free_refs(ref_timecode);
 
   return 1;
 }
 
-int64_t cluster_helper_c::get_max_timecode() {
+int64_t
+cluster_helper_c::get_max_timecode() {
   return max_timecode - timecode_offset;
 }
 
-int64_t cluster_helper_c::get_first_timecode() {
+int64_t
+cluster_helper_c::get_first_timecode() {
   return first_timecode;
 }
 
-int64_t cluster_helper_c::get_timecode_offset() {
+int64_t
+cluster_helper_c::get_timecode_offset() {
   return timecode_offset;
 }

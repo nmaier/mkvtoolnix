@@ -37,7 +37,10 @@
   <S_O> F = bitstream mode
 */
 
-int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header) {
+int
+find_ac3_header(unsigned char *buf,
+                int size,
+                ac3_header_t *ac3_header) {
   static int rate[] = { 32,  40,  48,  56,  64,  80,  96, 112, 128, 160,
                        192, 224, 256, 320, 384, 448, 512, 576, 640};
   static unsigned char lfeon[8] = {0x10, 0x10, 0x04, 0x04, 0x04, 0x01,

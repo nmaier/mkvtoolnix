@@ -817,7 +817,8 @@ tab_chapters::verify_atom_recursively(EbmlElement *e,
   return true;
 }
 
-bool tab_chapters::verify() {
+bool
+tab_chapters::verify() {
   KaxEditionEntry *eentry;
   wxTreeItemId id;
   uint32_t eidx, cidx;

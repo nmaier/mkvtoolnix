@@ -74,8 +74,11 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
-static void handle_attachments(mm_io_c *in, EbmlStream *es, EbmlElement *l0,
-                               int64_t pos) {
+static void
+handle_attachments(mm_io_c *in,
+                   EbmlStream *es,
+                   EbmlElement *l0,
+                   int64_t pos) {
   KaxAttachments *atts;
   KaxAttached *att;
   KaxFileData *fdata;
@@ -163,7 +166,8 @@ static void handle_attachments(mm_io_c *in, EbmlStream *es, EbmlElement *l0,
   in->restore_pos();
 }
 
-void extract_attachments(const char *file_name) {
+void
+extract_attachments(const char *file_name) {
   int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;

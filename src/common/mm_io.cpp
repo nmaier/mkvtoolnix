@@ -42,7 +42,8 @@
 using namespace std;
 
 #if !defined(SYS_WINDOWS)
-mm_io_c::mm_io_c(const char *path, const open_mode mode) {
+mm_io_c::mm_io_c(const char *path,
+                 const open_mode mode) {
   char *cmode;
 
   switch (mode) {
@@ -80,11 +81,14 @@ mm_io_c::~mm_io_c() {
   safefree(file_name);
 }
 
-uint64 mm_io_c::getFilePointer() {
+uint64
+mm_io_c::getFilePointer() {
   return ftello((FILE *)file);
 }
 
-void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
+void
+mm_io_c::setFilePointer(int64 offset,
+                        seek_mode mode) {
   int whence;
 
   if (mode == seek_beginning)
@@ -98,7 +102,9 @@ void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
     throw exception();
 }
 
-size_t mm_io_c::write(const void *buffer, size_t size) {
+size_t
+mm_io_c::write(const void *buffer,
+               size_t size) {
   size_t bwritten;
 
   bwritten = fwrite(buffer, 1, size, (FILE *)file);
@@ -109,16 +115,20 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
   return bwritten;
 }
 
-uint32 mm_io_c::read(void *buffer, size_t size) {
+uint32
+mm_io_c::read(void *buffer,
+              size_t size) {
   return fread(buffer, 1, size, (FILE *)file);
 }
 
-void mm_io_c::close() {
+void
+mm_io_c::close() {
   if (file != NULL)
     fclose((FILE *)file);
 }
 
-bool mm_io_c::eof() {
+bool
+mm_io_c::eof() {
   return feof((FILE *)file) != 0 ? true : false;
 }
 
@@ -129,7 +139,8 @@ mm_io_c::truncate(int64_t pos) {
 
 #else // SYS_UNIX
 
-mm_io_c::mm_io_c(const char *path, const open_mode mode) {
+mm_io_c::mm_io_c(const char *path,
+                 const open_mode mode) {
   DWORD access_mode, share_mode, disposition;
 
   switch (mode) {
@@ -175,12 +186,14 @@ mm_io_c::~mm_io_c() {
   close();
 }
 
-void mm_io_c::close() {
+void
+mm_io_c::close() {
   if (file != NULL)
     CloseHandle((HANDLE)file);
 }
 
-uint64 mm_io_c::getFilePointer() {
+uint64
+mm_io_c::getFilePointer() {
   LONG high = 0;
   DWORD low;
   
@@ -191,7 +204,9 @@ uint64 mm_io_c::getFilePointer() {
   return (((uint64)high) << 32) | (uint64)low;
 }
 
-void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
+void
+mm_io_c::setFilePointer(int64 offset,
+                        seek_mode mode) {
   DWORD method;
   LONG high;
 
@@ -211,7 +226,9 @@ void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
   SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high, method);
 }
 
-uint32 mm_io_c::read(void *buffer, size_t size) {
+uint32
+mm_io_c::read(void *buffer,
+              size_t size) {
   DWORD bytes_read;
 
   if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
@@ -225,7 +242,9 @@ uint32 mm_io_c::read(void *buffer, size_t size) {
   return bytes_read;
 }
 
-size_t mm_io_c::write(const void *buffer, size_t size) {
+size_t
+mm_io_c::write(const void *buffer,
+               size_t size) {
   DWORD bytes_written;
 
   if (!WriteFile((HANDLE)file, buffer, size, &bytes_written, NULL))
@@ -262,7 +281,8 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
   return bytes_written;
 }
 
-bool mm_io_c::eof() {
+bool
+mm_io_c::eof() {
   return _eof;
 }
 
@@ -284,11 +304,13 @@ mm_io_c::truncate(int64_t pos) {
 
 #endif
 
-const char *mm_io_c::get_file_name() {
+const char *
+mm_io_c::get_file_name() {
   return file_name;
 }
 
-string mm_io_c::getline() {
+string
+mm_io_c::getline() {
   char c;
   string s;
 
@@ -306,7 +328,8 @@ string mm_io_c::getline() {
   return s;
 }
 
-bool mm_io_c::getline2(string &s) {
+bool
+mm_io_c::getline2(string &s) {
   try {
     s = getline();
   } catch(...) {
@@ -316,7 +339,8 @@ bool mm_io_c::getline2(string &s) {
   return true;
 }
 
-bool mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
+bool
+mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
   try {
     setFilePointer(offset, mode);
     return true;
@@ -325,7 +349,8 @@ bool mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
   }
 }
 
-size_t mm_io_c::puts_unl(const char *s) {
+size_t
+mm_io_c::puts_unl(const char *s) {
   int i;
   size_t bytes_written;
 
@@ -337,7 +362,8 @@ size_t mm_io_c::puts_unl(const char *s) {
   return bytes_written;
 }
 
-unsigned char mm_io_c::read_uint8() {
+unsigned char
+mm_io_c::read_uint8() {
   unsigned char value;
 
   if (read(&value, 1) != 1)
@@ -346,7 +372,8 @@ unsigned char mm_io_c::read_uint8() {
   return value;
 }
 
-uint16_t mm_io_c::read_uint16() {
+uint16_t
+mm_io_c::read_uint16() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
@@ -355,7 +382,8 @@ uint16_t mm_io_c::read_uint16() {
   return get_uint16(buffer);
 }
 
-uint32_t mm_io_c::read_uint24() {
+uint32_t
+mm_io_c::read_uint24() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
@@ -364,7 +392,8 @@ uint32_t mm_io_c::read_uint24() {
   return get_uint24(buffer);
 }
 
-uint32_t mm_io_c::read_uint32() {
+uint32_t
+mm_io_c::read_uint32() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
@@ -373,7 +402,8 @@ uint32_t mm_io_c::read_uint32() {
   return get_uint32(buffer);
 }
 
-uint64_t mm_io_c::read_uint64() {
+uint64_t
+mm_io_c::read_uint64() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
@@ -382,7 +412,8 @@ uint64_t mm_io_c::read_uint64() {
   return get_uint64(buffer);
 }
 
-uint16_t mm_io_c::read_uint16_be() {
+uint16_t
+mm_io_c::read_uint16_be() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
@@ -391,7 +422,8 @@ uint16_t mm_io_c::read_uint16_be() {
   return get_uint16_be(buffer);
 }
 
-uint32_t mm_io_c::read_uint24_be() {
+uint32_t
+mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
@@ -400,7 +432,8 @@ uint32_t mm_io_c::read_uint24_be() {
   return get_uint24_be(buffer);
 }
 
-uint32_t mm_io_c::read_uint32_be() {
+uint32_t
+mm_io_c::read_uint32_be() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
@@ -409,7 +442,8 @@ uint32_t mm_io_c::read_uint32_be() {
   return get_uint32_be(buffer);
 }
 
-uint64_t mm_io_c::read_uint64_be() {
+uint64_t
+mm_io_c::read_uint64_be() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
@@ -418,7 +452,8 @@ uint64_t mm_io_c::read_uint64_be() {
   return get_uint64_be(buffer);
 }
 
-void mm_io_c::skip(int64 num_bytes) {
+void
+mm_io_c::skip(int64 num_bytes) {
   int64_t pos;
 
   pos = getFilePointer();
@@ -427,14 +462,16 @@ void mm_io_c::skip(int64 num_bytes) {
     throw exception();
 }
 
-void mm_io_c::save_pos(int64_t new_pos) {
+void
+mm_io_c::save_pos(int64_t new_pos) {
   positions.push(getFilePointer());
 
   if (new_pos != -1)
     setFilePointer(new_pos);
 }
 
-bool mm_io_c::restore_pos() {
+bool
+mm_io_c::restore_pos() {
   if (positions.size() == 0)
     return false;
 
@@ -444,7 +481,8 @@ bool mm_io_c::restore_pos() {
   return true;
 }
 
-bool mm_io_c::write_bom(const char *charset) {
+bool
+mm_io_c::write_bom(const char *charset) {
   const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   const unsigned char utf16le_bom[2] = {0xff, 0xfe};
   const unsigned char utf16be_bom[2] = {0xfe, 0xff};
@@ -479,7 +517,8 @@ bool mm_io_c::write_bom(const char *charset) {
   return (write(bom, bom_len) == bom_len);
 }
 
-int64_t mm_io_c::get_size() {
+int64_t
+mm_io_c::get_size() {
   int64_t size;
 
   save_pos();
@@ -490,7 +529,8 @@ int64_t mm_io_c::get_size() {
   return size;
 }
 
-int mm_io_c::getch() {
+int
+mm_io_c::getch() {
   unsigned char c;
 
   if (read(&c, 1) != 1)
@@ -507,11 +547,14 @@ mm_null_io_c::mm_null_io_c() {
   pos = 0;
 }
 
-uint64 mm_null_io_c::getFilePointer() {
+uint64
+mm_null_io_c::getFilePointer() {
   return pos;
 }
 
-void mm_null_io_c::setFilePointer(int64 offset, seek_mode mode) {
+void
+mm_null_io_c::setFilePointer(int64 offset,
+                             seek_mode mode) {
   if (mode == seek_beginning)
     pos = offset;
   else if (mode == seek_end)
@@ -520,36 +563,45 @@ void mm_null_io_c::setFilePointer(int64 offset, seek_mode mode) {
     pos += offset;
 }
 
-uint32 mm_null_io_c::read(void *buffer, size_t size) {
+uint32
+mm_null_io_c::read(void *buffer,
+                   size_t size) {
   memset(buffer, 0, size);
   pos += size;
 
   return size;
 }
 
-size_t mm_null_io_c::write(const void *buffer, size_t size) {
+size_t
+mm_null_io_c::write(const void *buffer,
+                    size_t size) {
   pos += size;
 
   return size;
 }
 
-void mm_null_io_c::close() {
+void
+mm_null_io_c::close() {
 }
 
 /*
  * IO callback class working on memory
  */
-mm_mem_io_c::mm_mem_io_c(unsigned char *nmem, uint64_t nsize) {
+mm_mem_io_c::mm_mem_io_c(unsigned char *nmem,
+                         uint64_t nsize) {
   mem = nmem;
   mem_size = nsize;
   pos = 0;
 }
 
-uint64_t mm_mem_io_c::getFilePointer() {
+uint64_t
+mm_mem_io_c::getFilePointer() {
   return pos;
 }
 
-void mm_mem_io_c::setFilePointer(int64 offset, seek_mode mode) {
+void
+mm_mem_io_c::setFilePointer(int64 offset,
+                            seek_mode mode) {
   int64_t npos;
 
   if ((mem == NULL) || (mem_size == 0))
@@ -570,7 +622,9 @@ void mm_mem_io_c::setFilePointer(int64 offset, seek_mode mode) {
     pos = npos;
 }
 
-uint32 mm_mem_io_c::read(void *buffer, size_t size) {
+uint32
+mm_mem_io_c::read(void *buffer,
+                  size_t size) {
   int64_t rbytes;
 
   rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
@@ -580,7 +634,9 @@ uint32 mm_mem_io_c::read(void *buffer, size_t size) {
   return rbytes;
 }
 
-size_t mm_mem_io_c::write(const void *buffer, size_t size) {
+size_t
+mm_mem_io_c::write(const void *buffer,
+                   size_t size) {
   int64_t wbytes;
 
   wbytes = (pos + size) >= mem_size ? mem_size - pos : size;
@@ -590,13 +646,15 @@ size_t mm_mem_io_c::write(const void *buffer, size_t size) {
   return wbytes;
 }
 
-void mm_mem_io_c::close() {
+void
+mm_mem_io_c::close() {
   mem = NULL;
   mem_size = 0;
   pos = 0;
 }
 
-bool mm_mem_io_c::eof() {
+bool
+mm_mem_io_c::eof() {
   return pos >= mem_size;
 }
 
@@ -604,7 +662,8 @@ bool mm_mem_io_c::eof() {
  * Class for handling UTF-8/UTF-16/UTF-32 text files.
  */
 
-mm_text_io_c::mm_text_io_c(const char *path): mm_io_c(path, MODE_READ) {
+mm_text_io_c::mm_text_io_c(const char *path):
+  mm_io_c(path, MODE_READ) {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
@@ -640,7 +699,8 @@ mm_text_io_c::mm_text_io_c(const char *path): mm_io_c(path, MODE_READ) {
 // 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx
 
 
-int mm_text_io_c::read_next_char(char *buffer) {
+int
+mm_text_io_c::read_next_char(char *buffer) {
   unsigned char stream[4];
   unsigned long data;
   int size, i;
@@ -718,7 +778,8 @@ int mm_text_io_c::read_next_char(char *buffer) {
   return 0;
 }
 
-string mm_text_io_c::getline() {
+string
+mm_text_io_c::getline() {
   string s;
   int len;
   char utf8char[8];
@@ -743,11 +804,14 @@ string mm_text_io_c::getline() {
   }
 }
 
-byte_order_e mm_text_io_c::get_byte_order() {
+byte_order_e
+mm_text_io_c::get_byte_order() {
   return byte_order;
 }
 
-void mm_text_io_c::setFilePointer(int64_t offset, seek_mode mode) {
+void
+mm_text_io_c::setFilePointer(int64_t offset,
+                             seek_mode mode) {
   if ((offset == 0) && (mode == seek_beginning))
     mm_io_c::setFilePointer(bom_len, seek_beginning);
   else

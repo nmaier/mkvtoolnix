@@ -59,7 +59,10 @@ using namespace std;
 static const char base64_encoding[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl"
 "mnopqrstuvwxyz0123456789+/";
 
-static void encode_block(const unsigned char in[3], int len, string &out) {
+static void
+encode_block(const unsigned char in[3],
+             int len,
+             string &out) {
   out += base64_encoding[in[0] >> 2];
   out += base64_encoding[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
   out += (unsigned char)
@@ -68,8 +71,11 @@ static void encode_block(const unsigned char in[3], int len, string &out) {
   out += (unsigned char)(len > 2 ? base64_encoding[in[2] & 0x3f] : '=');
 }
 
-string base64_encode(const unsigned char *src, int src_len, bool line_breaks,
-                     int max_line_len) {
+string
+base64_encode(const unsigned char *src,
+              int src_len,
+              bool line_breaks,
+              int max_line_len) {
   unsigned char in[3];
   int pos, i, len, blocks_out, len_mod;
   string out;
@@ -101,7 +107,9 @@ string base64_encode(const unsigned char *src, int src_len, bool line_breaks,
 }
 
 
-int base64_decode(const string &src, unsigned char *dst) {
+int
+base64_decode(const string &src,
+              unsigned char *dst) {
   unsigned char in[4], values[4], mid[6], c;
   int i, k, pos, dst_pos, pad;
 

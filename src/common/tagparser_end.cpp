@@ -43,8 +43,10 @@ using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
-static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
-                        uint64_t min_value = 0) {
+static void
+el_get_uint(parser_data_t *pdata,
+            EbmlElement *el,
+            uint64_t min_value = 0) {
   int64 value;
 
   strip(*pdata->bin);
@@ -58,8 +60,10 @@ static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlUInteger *>(el)) = value;
 }
 
-static void el_get_sint(parser_data_t *pdata, EbmlElement *el,
-                        int64_t min_value = -9223372036854775807LL-1) {
+static void
+el_get_sint(parser_data_t *pdata,
+            EbmlElement *el,
+            int64_t min_value = -9223372036854775807LL-1) {
   int64 value;
 
   strip(*pdata->bin);
@@ -73,8 +77,10 @@ static void el_get_sint(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlSInteger *>(el)) = value;
 }
 
-static void el_get_float(parser_data_t *pdata, EbmlElement *el,
-                         float min_value = (float)1.40129846432481707e-45) {
+static void
+el_get_float(parser_data_t *pdata,
+             EbmlElement *el,
+             float min_value = (float)1.40129846432481707e-45) {
   char *endptr;
   float value;
 
@@ -89,8 +95,10 @@ static void el_get_float(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlFloat *>(el)) = value;
 }
 
-static void el_get_string(parser_data_t *pdata, EbmlElement *el,
-                          bool check_language = false) {
+static void
+el_get_string(parser_data_t *pdata,
+              EbmlElement *el,
+              bool check_language = false) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     tperror(pdata, "Expected a string but found only whitespaces.");
@@ -103,7 +111,9 @@ static void el_get_string(parser_data_t *pdata, EbmlElement *el,
   *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
 }
 
-static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
+static void
+el_get_utf8string(parser_data_t *pdata,
+                  EbmlElement *el) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     tperror(pdata, "Expected a string but found only whitespaces.");
@@ -112,7 +122,9 @@ static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
     cstrutf8_to_UTFstring(pdata->bin->c_str());
 }
 
-static void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
+static void
+el_get_binary(parser_data_t *pdata,
+              EbmlElement *el) {
   int64_t result;
   binary *buffer;
   mm_io_c *io;
@@ -156,7 +168,9 @@ static void el_get_binary(parser_data_t *pdata, EbmlElement *el) {
 // ISO 8601 format: 2003-07-17T19:50:53+0200
 //                  012345678901234567890123
 //                            1         2
-static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
+static void
+el_get_date(parser_data_t *pdata,
+            EbmlElement *el) {
   const char *errmsg = "Expected a date in ISO 8601 format but found '%s'. "
     "The ISO 8601 date format looks like this: YYYY-MM-DDTHH:MM:SS:-TZTZ, "
     "e.g. 2003-07-17T19:50:52+0200. The time zone (TZ) may also be negative.";
@@ -243,7 +257,9 @@ static void el_get_date(parser_data_t *pdata, EbmlElement *el) {
   (static_cast<EbmlDate *>(el))->SetEpochDate(tme);
 }
 
-static bool is_multicomment(parser_data_t *pdata, const char *name) {
+static bool
+is_multicomment(parser_data_t *pdata,
+                const char *name) {
   int parent;
 
   parent = (*pdata->parents)[pdata->parents->size() - 2];
@@ -263,7 +279,9 @@ static bool is_multicomment(parser_data_t *pdata, const char *name) {
   return true;
 }
 
-static void end_level1(parser_data_t *pdata, const char *) {
+static void
+end_level1(parser_data_t *pdata,
+           const char *) {
   // Can only be "Tag"
   pdata->targets = NULL;
   pdata->general = NULL;
@@ -279,7 +297,9 @@ static void end_level1(parser_data_t *pdata, const char *) {
   pdata->m_comment = NULL;
 }
 
-static void end_level2(parser_data_t *pdata, const char *name) {
+static void
+end_level2(parser_data_t *pdata,
+           const char *name) {
   if (!strcmp(name, "Targets")) {
     pdata->track_uid = NULL;
     pdata->chapter_uid = NULL;
@@ -330,7 +350,9 @@ static void end_level2(parser_data_t *pdata, const char *name) {
   }
 }
 
-static void end_level3(parser_data_t *pdata, const char *name) {
+static void
+end_level3(parser_data_t *pdata,
+           const char *name) {
   string parent_name;
   int parent;
 
@@ -471,7 +493,9 @@ static void end_level3(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 3, %d", parent);
 }
 
-static void end_level4(parser_data_t *pdata, const char *name) {
+static void
+end_level4(parser_data_t *pdata,
+           const char *name) {
   string parent_name;
   int parent;
 
@@ -574,7 +598,9 @@ static void end_level4(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 4, %d", parent);
 }
 
-static void end_level5(parser_data_t *pdata, const char *name) {
+static void
+end_level5(parser_data_t *pdata,
+           const char *name) {
   string parent_name;
   int parent;
 
@@ -599,14 +625,18 @@ static void end_level5(parser_data_t *pdata, const char *name) {
     die("Unknown parent: level 4, %d", parent);
 }
 
-static void end_level6(parser_data_t *pdata, const char *name) {
+static void
+end_level6(parser_data_t *pdata,
+           const char *name) {
   if (is_multicomment(pdata, name))
     return;
 
   die("tagparser_end: Unknown element. This should not have happened.");
 }
 
-static void end_simple(parser_data_t *pdata, const char *name) {
+static void
+end_simple(parser_data_t *pdata,
+           const char *name) {
   
   if (!strcmp(name, "Simple")) {
     pdata->simple_tags->pop_back();
@@ -625,7 +655,9 @@ static void end_simple(parser_data_t *pdata, const char *name) {
   }
 }
 
-void end_xml_tag_element(void *user_data, const char *name) {
+void
+end_xml_tag_element(void *user_data,
+                    const char *name) {
   parser_data_t *pdata;
 
   pdata = (parser_data_t *)user_data;

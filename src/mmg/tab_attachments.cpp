@@ -279,7 +279,8 @@ tab_attachments::save(wxConfigBase *cfg) {
   }
 }
 
-void tab_attachments::load(wxConfigBase *cfg) {
+void
+tab_attachments::load(wxConfigBase *cfg) {
   mmg_attachment_t *ap, a;
   uint32_t i;
   int num, pos;

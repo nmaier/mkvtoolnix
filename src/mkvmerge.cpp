@@ -2722,7 +2722,8 @@ main_loop() {
  * file and cleaning up.
  */
 int
-main(int argc, char **argv) {
+main(int argc,
+     char **argv) {
   time_t start, end;
 
   init_globals();

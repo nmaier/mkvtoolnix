@@ -74,7 +74,9 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
-void extract_chapters(const char *file_name, bool chapter_format_simple) {
+void
+extract_chapters(const char *file_name,
+                 bool chapter_format_simple) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
