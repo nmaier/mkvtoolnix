@@ -1,3 +1,10 @@
+2004-11-10  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The Matroska reader doesn't insist on having
+	a default duration ( = FPS) for video tracks in the "AVI
+	compatibility mode" ( = with the CodecID "V_MS/VFW/FOURCC"). This
+	enables re-muxing of Matroska files created from MP4 files.
+
 2004-11-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: File names with non-ASCII characters were not

@@ -374,14 +374,6 @@ kax_reader_c::verify_tracks() {
             }
 
             memcpy(t->v_fourcc, &bih->bi_compression, 4);
-
-            if (t->v_frate == 0.0) {
-              if (verbose)
-                mxwarn(PFX "(MS compatibility "
-                       "mode, track %u) No VideoFrameRate/DefaultDuration "
-                       "element was found.\n", t->tnum);
-              continue;
-            }
           }
         }
 
