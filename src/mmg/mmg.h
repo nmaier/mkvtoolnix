@@ -134,7 +134,8 @@ using namespace libmatroska;
 #define ID_M_CHAPTERS_LOAD 20201
 #define ID_M_CHAPTERS_SAVE 20202
 #define ID_M_CHAPTERS_SAVEAS 20203
-#define ID_M_CHAPTERS_VERIFY 20204
+#define ID_M_CHAPTERS_SAVETOKAX 20204
+#define ID_M_CHAPTERS_VERIFY 20205
 #define ID_M_CHAPTERS_LOADSEPARATOR 20290
 #define ID_M_CHAPTERS_LOADLAST1 20291
 #define ID_M_CHAPTERS_LOADLAST2 20292
@@ -337,6 +338,7 @@ public:
   void on_load_chapters(wxCommandEvent &evt);
   void on_save_chapters(wxCommandEvent &evt);
   void on_save_chapters_as(wxCommandEvent &evt);
+  void on_save_chapters_to_kax_file(wxCommandEvent &evt);
   void on_verify_chapters(wxCommandEvent &evt);
   void on_add_chapter(wxCommandEvent &evt);
   void on_add_subchapter(wxCommandEvent &evt);
@@ -453,6 +455,7 @@ public:
   void on_load_chapters(wxCommandEvent &evt);
   void on_save_chapters(wxCommandEvent &evt);
   void on_save_chapters_as(wxCommandEvent &evt);
+  void on_save_chapters_to_kax_file(wxCommandEvent &evt);
   void on_verify_chapters(wxCommandEvent &evt);
 
   void on_window_selected(wxCommandEvent &evt);

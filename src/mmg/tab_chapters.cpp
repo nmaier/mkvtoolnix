@@ -154,6 +154,7 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
 
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, false);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, false);
+  m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, false);
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, false);
   enable_buttons(false);
 
@@ -198,6 +199,7 @@ void tab_chapters::on_new_chapters(wxCommandEvent &evt) {
 
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
+  m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, true);
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
   enable_buttons(true);
 
@@ -393,6 +395,7 @@ bool tab_chapters::load(wxString name) {
   chapters = new_chapters;
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
   m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
+  m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, true);
   m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
   enable_buttons(true);
 
@@ -427,6 +430,42 @@ void tab_chapters::on_save_chapters(wxCommandEvent &evt) {
   save();
 }
 
+void tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
+  if (!verify())
+    return;
+
+  wxFileDialog dlg(this, _("Choose an output file"), last_open_dir, "",
+                   _T("Matroska files (*.mkv;*.mka)|*.mkv;*.mka|"
+                      ALLFILES), wxSAVE);
+  if (dlg.ShowModal() != wxID_OK)
+    return;
+
+  if (!kax_analyzer_c::probe(dlg.GetPath().c_str())) {
+    wxMessageBox(_("The file you tried to save to is NOT a Matroska file."),
+                 _("Wrong file selected"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+
+  last_open_dir = dlg.GetDirectory();
+  file_name = dlg.GetPath();
+  tc_chapters->SetItemText(tid_root, file_name);
+
+  source_is_kax_file = true;
+  source_is_simple_format = false;
+
+  if (analyzer != NULL)
+    delete analyzer;
+  analyzer = new kax_analyzer_c(this, file_name.c_str());
+  if (!analyzer->process()) {
+    delete analyzer;
+    analyzer = NULL;
+    return;
+  }
+  if (analyzer->update_element(chapters))
+    mdlg->set_status_bar(_("Chapters written."));
+  mdlg->set_last_chapters_in_menu(file_name);
+}
+
 void tab_chapters::on_save_chapters_as(wxCommandEvent &evt) {
   if (!verify())
     return;
@@ -437,10 +476,17 @@ void tab_chapters::on_save_chapters_as(wxCommandEvent &evt) {
 }
 
 bool tab_chapters::select_file_name() {
-  wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
+  wxFileDialog dlg(this, _("Choose an output file"), last_open_dir, "",
                    _T("Chapter files (*.xml)|*.xml|"
                       ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
+    if (kax_analyzer_c::probe(dlg.GetPath().c_str())) {
+      wxMessageBox(_("The file you tried to save to is a Matroska file. For "
+                     "this to work you have to use the 'Save to Matroska file'"
+                     " menu option."), _("Wrong file selected"),
+                   wxOK | wxCENTER | wxICON_ERROR);
+      return false;
+    }
     last_open_dir = dlg.GetDirectory();
     file_name = dlg.GetPath();
     tc_chapters->SetItemText(tid_root, file_name);

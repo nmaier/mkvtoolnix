@@ -162,6 +162,9 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
                           "format)"));
   chapter_menu->Append(ID_M_CHAPTERS_SAVE, _T("&Save"),
                        _T("Save the current chapters to a XML file"));
+  chapter_menu->Append(ID_M_CHAPTERS_SAVETOKAX, _T("Save to &Matroska file"),
+                       _T("Save the current chapters to an existing Matroska "
+                          "file"));
   chapter_menu->Append(ID_M_CHAPTERS_SAVEAS, _T("Save &as"),
                        _T("Save the current chapters to a file with another "
                           "name"));
@@ -867,6 +870,11 @@ void mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
   chapter_editor_page->on_save_chapters(evt);
 }
 
+void mmg_dialog::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
+  notebook->SetSelection(4);
+  chapter_editor_page->on_save_chapters_to_kax_file(evt);
+}
+
 void mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
   notebook->SetSelection(4);
   chapter_editor_page->on_save_chapters_as(evt);
@@ -901,6 +909,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_CHAPTERS_LOAD, mmg_dialog::on_load_chapters)
   EVT_MENU(ID_M_CHAPTERS_SAVE, mmg_dialog::on_save_chapters)
   EVT_MENU(ID_M_CHAPTERS_SAVEAS, mmg_dialog::on_save_chapters_as)
+  EVT_MENU(ID_M_CHAPTERS_SAVETOKAX, mmg_dialog::on_save_chapters_to_kax_file)
   EVT_MENU(ID_M_CHAPTERS_VERIFY, mmg_dialog::on_verify_chapters)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST1, mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST2, mmg_dialog::on_chapters_load_last)
