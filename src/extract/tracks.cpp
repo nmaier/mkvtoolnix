@@ -1166,7 +1166,7 @@ extract_tracks(const char *file_name) {
   KaxBlock *block;
   kax_track_t *track;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
-  bool ms_compat, delete_element, has_reference;
+  bool ms_compat, delete_element, has_reference, tracks_found;
   int64_t block_duration;
   mm_io_c *in;
   KaxChapters all_chapters;
@@ -1221,6 +1221,8 @@ extract_tracks(const char *file_name) {
       delete l0;
     }
 
+    tracks_found = false;
+
     upper_lvl_el = 0;
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
@@ -1263,11 +1265,13 @@ extract_tracks(const char *file_name) {
 
         }
 
-      } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
+      } else if ((EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) &&
+                 !tracks_found) {
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
         show_element(l1, 1, _("Segment tracks"));
 
+        tracks_found = true;
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
