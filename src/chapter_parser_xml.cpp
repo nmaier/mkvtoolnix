@@ -27,6 +27,7 @@
 #include <matroska/KaxChapters.h>
 
 #include "common.h"
+#include "iso639.h"
 #include "mm_io.h"
 
 using namespace std;
@@ -60,12 +61,22 @@ typedef struct {
   cperror(pdata, "Only one instance of <%s> is allowed under <%s>.", name, \
           parent_name)
 
-template <typename Type>Type &GetEmptyChild(EbmlMaster &master);
-template <typename Type>Type &GetNextEmptyChild(EbmlMaster &master,
-                                                const Type &past_elt);
+template <typename Type>Type &CreateEmptyChild(EbmlMaster &master) {
+  EbmlElement *e;
 
-bool probe_xml_chapters(mm_text_io_c *in) {
-  return true;                  // TODO: Implement some kind of checking...
+  e = new Type;
+  try {
+    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
+    if (m != NULL)
+      while (m->ListSize() > 0) {
+        delete (*m)[0];
+        m->Remove(0);
+      }
+    master.PushElement(*m);
+  } catch (...) {
+  }
+
+	return *(static_cast<Type *>(e));
 }
 
 static void cperror(parser_data_t *pdata, const char *fmt, ...) {
@@ -89,6 +100,89 @@ static void cperror(parser_data_t *pdata, const char *fmt, ...) {
 #endif
 
   mxexit(2);
+}
+
+static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
+                        uint64_t min_value = 0) {
+  int64 value;
+
+  strip(*pdata->bin);
+  if (!parse_int(pdata->bin->c_str(), value))
+    cperror(pdata, "Expected an unsigned integer but found '%s'.",
+            pdata->bin->c_str());
+  if (value < min_value)
+    cperror(pdata, "Unsigned integer (%lld) is too small. Mininum value is "
+            "%lld.", value, min_value);
+
+  *(static_cast<EbmlUInteger *>(el)) = value;
+}
+
+static void el_get_string(parser_data_t *pdata, EbmlElement *el,
+                          bool check_language = false) {
+  strip(*pdata->bin);
+  if (pdata->bin->length() == 0)
+    cperror(pdata, "Expected a string but found only whitespaces.");
+
+  if (check_language && !is_valid_iso639_2_code(pdata->bin->c_str()))
+    cperror(pdata, "'%s' is not a valid ISO639-2 language code. See the "
+            "output of 'mkvmerge --list-languages' for a list of all "
+            "valid language codes.", pdata->bin->c_str());
+
+  *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
+}
+
+static void el_get_utf8string(parser_data_t *pdata, EbmlElement *el) {
+  strip(*pdata->bin);
+  if (pdata->bin->length() == 0)
+    cperror(pdata, "Expected a string but found only whitespaces.");
+
+  *(static_cast<EbmlUnicodeString *>(el)) =
+    cstrutf8_to_UTFstring(pdata->bin->c_str());
+}
+
+#define iscolon(s) (*(s) == ':')
+#define isdot(s) (*(s) == '.')
+#define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
+#define isthreedigits(s) (istwodigits(s) && isdigit(*(s + 2)))
+#define istimestamp(s) ((strlen(s) == 12) && \
+                        istwodigits(s) && iscolon(s + 2) && \
+                        istwodigits(s + 3) && iscolon(s + 5) && \
+                        istwodigits(s + 6) && isdot(s + 8) && \
+                        isthreedigits(s + 9))
+
+static void el_get_time(parser_data_t *pdata, EbmlElement *el) {
+  const char *errmsg = "Expected a time in the following format: HH:MM:SS.mmm"
+    " (HH = hour, MM = minute, SS = second, mmm = millisecond). Found '%s' "
+    "instead.";
+  char *p;
+  int64_t hour, minute, second, msec;
+
+  strip(*pdata->bin);
+  p = safestrdup(pdata->bin->c_str());
+
+  if (!istimestamp(p))
+    cperror(pdata, errmsg, pdata->bin->c_str());
+
+  p[2] = 0;
+  p[5] = 0;
+  p[8] = 0;
+
+  if (!parse_int(p, hour) || !parse_int(&p[3], minute) ||
+      !parse_int(&p[6], second) || !parse_int(&p[9], msec))
+    cperror(pdata, errmsg, pdata->bin->c_str());
+
+  if ((hour < 0) || (hour > 23))
+    cperror(pdata, "Invalid hour given (%d).", hour);
+  if ((minute < 0) || (minute > 59))
+    cperror(pdata, "Invalid minute given (%d).", minute);
+  if ((second < 0) || (second > 59))
+    cperror(pdata, "Invalid second given (%d).", second);
+
+  safefree(p);
+
+  *(static_cast<EbmlUInteger *>(el)) =
+    ((hour * 60 * 60 * 1000) + (minute * 60 * 1000) +
+     (second * 1000) + msec) * 1000000;
 }
 
 static void add_data(void *user_data, const XML_Char *s, int len) {
@@ -116,26 +210,33 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
 
   if (!strcmp(name, "ChapterAtom")) {
     KaxChapterAtom *catom;
+    KaxChapterUID *cuid;
 
     if (strcmp(parent_name, "EditionEntry") &&
         strcmp(parent_name, "ChapterAtom"))
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    catom = new KaxChapterAtom;
-    m->PushElement(*catom);
+    catom = &CreateEmptyChild<KaxChapterAtom>(*m);
     pdata->parents->push_back(catom);
 
+    cuid = &GetChild<KaxChapterUID>(*catom);
+    *(static_cast<EbmlUInteger *>(cuid)) = create_unique_uint32();
+
   } else if (!strcmp(name, "ChapterUID")) {
-    KaxChapterUID *cuid;
+    cperror(pdata, "ChapterUID values are generated automatically.");
+//     KaxChapterUID *cuid;
 
-    if (strcmp(parent_name, "ChapterAtom"))
-      cperror_nochild();
+//     if (strcmp(parent_name, "ChapterAtom"))
+//       cperror_nochild();
 
-    m = static_cast<EbmlMaster *>(parent_elt);
-    cuid = new KaxChapterUID;
-    m->PushElement(*cuid);
-    pdata->parents->push_back(cuid);
+//     m = static_cast<EbmlMaster *>(parent_elt);
+//     if (m->FindFirstElt(KaxChapterAtom::ClassInfos, false) != NULL)
+//       cperror_oneinstance();
+
+//     cuid = new KaxChapterUID;
+//     m->PushElement(*cuid);
+//     pdata->parents->push_back(cuid);
 
   } else if (!strcmp(name, "ChapterTimeStart")) {
     KaxChapterTimeStart *cts;
@@ -144,9 +245,13 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
     cts = new KaxChapterTimeStart;
     m->PushElement(*cts);
     pdata->parents->push_back(cts);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterTimeEnd")) {
     KaxChapterTimeEnd *cte;
@@ -155,9 +260,13 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterTimeEnd::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
     cte = new KaxChapterTimeEnd;
     m->PushElement(*cte);
     pdata->parents->push_back(cte);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterTrack")) {
     KaxChapterTrack *ct;
@@ -166,8 +275,10 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    ct = new KaxChapterTrack;
-    m->PushElement(*ct);
+    if (m->FindFirstElt(KaxChapterTrack::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    ct = &CreateEmptyChild<KaxChapterTrack>(*m);
     pdata->parents->push_back(ct);
 
   } else if (!strcmp(name, "ChapterDisplay")) {
@@ -177,8 +288,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
-    cd = new KaxChapterDisplay;
-    m->PushElement(*cd);
+    cd = &CreateEmptyChild<KaxChapterDisplay>(*m);
     pdata->parents->push_back(cd);
 
   } else if (!strcmp(name, "ChapterTrackNumber")) {
@@ -188,9 +298,13 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
     ctn = new KaxChapterTrackNumber;
     m->PushElement(*ctn);
     pdata->parents->push_back(ctn);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterString")) {
     KaxChapterString *cs;
@@ -199,9 +313,13 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
       cperror_nochild();
 
     m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterString::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
     cs = new KaxChapterString;
     m->PushElement(*cs);
     pdata->parents->push_back(cs);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterLanguage")) {
     KaxChapterLanguage *cl;
@@ -213,6 +331,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
     cl = new KaxChapterLanguage;
     m->PushElement(*cl);
     pdata->parents->push_back(cl);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterCountry")) {
     KaxChapterCountry *cc;
@@ -224,6 +343,7 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
     cc = new KaxChapterCountry;
     m->PushElement(*cc);
     pdata->parents->push_back(cc);
+    pdata->data_allowed = true;
 
   } else
     cperror_nochild();
@@ -273,6 +393,49 @@ static void start_element(void *user_data, const char *name,
 }
 
 static void end_this_level(parser_data_t *pdata, const char *name) {
+  EbmlMaster *m;
+
+  if (!strcmp(name, "ChapterAtom")) {
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
+      cperror(pdata, "<ChapterAtom> is missing the <ChapterTimeStart> "
+              "child.");
+
+  } else if (!strcmp(name, "ChapterTimeStart"))
+    el_get_time(pdata, parent_elt);
+
+  else if (!strcmp(name, "ChapterTimeEnd"))
+    el_get_time(pdata, parent_elt);
+
+  else if (!strcmp(name, "ChapterTrack")) {
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) == NULL)
+      cperror(pdata, "<ChapterTrack> is missing the <ChapterTrackNumber> "
+              "child.");
+
+  } else if (!strcmp(name, "ChapterTrackNumber"))
+    el_get_uint(pdata, parent_elt, 1);
+
+  else if (!strcmp(name, "ChapterDisplay")) {
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
+      cperror(pdata, "<ChapterDisplay> is missing the <ChapterString> "
+              "child.");
+    if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL)
+      cperror(pdata, "<ChapterDisplay> is missing the <ChapterLanguage> "
+              "child.");
+
+  } else if (!strcmp(name, "ChapterString"))
+    el_get_utf8string(pdata, parent_elt);
+
+  else if (!strcmp(name, "ChapterLanguage"))
+    el_get_string(pdata, parent_elt, true);
+
+  else if (!strcmp(name, "ChapterCountry"))
+    el_get_string(pdata, parent_elt);
+
+  else
+    die("chapter_parser_xml/end_this_level(): Unknown name '%s'.", name);
 }
 
 static void end_element(void *user_data, const char *name) {
@@ -296,7 +459,7 @@ static void end_element(void *user_data, const char *name) {
     if (m->ListSize() == 0)
       cperror(pdata, "At least one <ChapterAtom> element is needed.");
 
-  } else if (pdata->depth == 4)
+  } else
     end_this_level(pdata, name);
 
   if (pdata->bin != NULL) {
@@ -307,6 +470,23 @@ static void end_element(void *user_data, const char *name) {
   pdata->data_allowed = false;
   pdata->depth--;
   pdata->parents->pop_back();
+}
+
+bool probe_xml_chapters(mm_text_io_c *in) {
+  string s;
+
+  in->setFilePointer(0);
+
+  while (in->getline2(s)) {
+    // I assume that if it looks like XML then it is a XML chapter file :)
+    strip(s);
+    if (!strncasecmp(s.c_str(), "<?xml", 5))
+      return true;
+    else if (s.length() > 0)
+      return false;
+  }
+
+  return false;
 }
 
 KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
@@ -333,8 +513,11 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   XML_SetElementHandler(parser, start_element, end_element);
   XML_SetCharacterDataHandler(parser, add_data);
 
+  in->setFilePointer(0);
+
   done = !in->getline2(buffer);
   while (!done) {
+    buffer += "\n";
     if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
       xerror = XML_GetErrorCode(parser);
       if (xerror == XML_ERROR_INVALID_TOKEN)
@@ -343,7 +526,7 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
           "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
       else
         emsg = "";
-      mxerror("XML parser error at  line %d of '%s': %s.%s Aborting.\n",
+      mxerror("XML parser error at line %d of '%s': %s.%s Aborting.\n",
               XML_GetCurrentLineNumber(parser), pdata->file_name,
               XML_ErrorString(xerror), emsg);
     }
@@ -352,10 +535,15 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   } while (!done);
 
   chapters = pdata->chapters;
+  if (!chapters->CheckMandatory())
+    die("chapters->CheckMandatory() failed. Should not have happened!");
 
   XML_ParserFree(parser);
   delete pdata->parents;
   safefree(pdata);
+
+  if ((chapters != NULL) && (verbose > 1))
+    debug_c::dump_elements(chapters, 0);
 
   return chapters;
 }
