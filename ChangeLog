@@ -1,5 +1,10 @@
 2003-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: new feature: RealAudio can be read from Matroska files.
+
+        * mkvmerge: bugfix: RealVideo was not read correctly from Matroska
+        files.
+
         * mkvmerge: bugfix: The SRT reader would abort if there was more
         than one empty line between subtitle entries line.
 

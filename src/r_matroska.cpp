@@ -38,15 +38,17 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "common.h"
 #include "pr_generic.h"
 #include "r_matroska.h"
-#include "p_vorbis.h"
-#include "p_video.h"
-#include "p_pcm.h"
-#include "p_textsubs.h"
-#include "p_mp3.h"
+
+#include "p_aac.h"
 #include "p_ac3.h"
 #include "p_dts.h"
-#include "p_aac.h"
+#include "p_mp3.h"
+#include "p_passthrough.h"
+#include "p_pcm.h"
+#include "p_textsubs.h"
+#include "p_video.h"
 #include "p_vobsub.h"
+#include "p_vorbis.h"
 
 #include <ebml/EbmlContexts.h>
 #include <ebml/EbmlHead.h>
@@ -401,6 +403,8 @@ void kax_reader_c::verify_tracks() {
                      !strcmp(t->codec_id, MKV_A_AAC_2SBR) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4SBR))
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
+          else if (!strncmp(t->codec_id, MKV_A_REAL_COOK, strlen("A_REAL/")))
+            t->a_formattag = FOURCC('r', 'e', 'a', 'l');
           else {
             if (verbose)
               mxwarn(PFX "Unknown/unsupported audio "
@@ -1072,8 +1076,8 @@ void kax_reader_c::create_packetizers() {
           if (nti.fourcc[0] == 0)
             memcpy(nti.fourcc, t->v_fourcc, 5);
           if (verbose)
-            mxinfo("Matroska demultiplexer (%s): using video output "
-                   "module for track ID %u.\n", ti->fname, t->tnum);
+            mxinfo("+-> Using video output module for track ID %u.\n",
+                   ti->fname, t->tnum);
           t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
                                                  t->v_width,
                                                  t->v_height,
@@ -1093,15 +1097,15 @@ void kax_reader_c::create_packetizers() {
                                                  t->a_channels, t->a_bps,
                                                  &nti);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the PCM "
-                     "output module for track ID %u.\n", ti->fname, t->tnum);
+              mxinfo("+-> Using the PCM output module for track ID %u.\n",
+                     ti->fname, t->tnum);
           } else if (t->a_formattag == 0x0055) {
             t->packetizer = new mp3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, &nti);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the MP3 "
-                     "output module for track ID %u.\n", ti->fname, t->tnum);
+              mxinfo("+-> Using the MP3 output module for track ID %u.\n",
+                     ti->fname, t->tnum);
           } else if (t->a_formattag == 0x2000) {
             int bsid;
 
@@ -1115,8 +1119,8 @@ void kax_reader_c::create_packetizers() {
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, bsid, &nti);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the AC3 "
-                     "output module for track ID %u.\n", ti->fname, t->tnum);
+              mxinfo("+-> Using the AC3 output module for track ID %u.\n",
+                     ti->fname, t->tnum);
           } else if (t->a_formattag == 0x2001) {
             mxerror("Reading DTS from Matroska not implemented yet,"
                     "cannot we get a complete DTS_Header here for construction"
@@ -1135,8 +1139,8 @@ void kax_reader_c::create_packetizers() {
                                                     t->headers[2],
                                                     t->header_sizes[2], &nti);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the Vorbis "
-                     "output module for track ID %u.\n", ti->fname, t->tnum);
+              mxinfo("+-> Using the Vorbis output module for track ID %u.\n",
+                     ti->fname, t->tnum);
           } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
             // A_AAC/MPEG2/MAIN
             // 0123456789012345
@@ -1147,8 +1151,8 @@ void kax_reader_c::create_packetizers() {
             else if (t->codec_id[10] == '4')
               id = AAC_ID_MPEG4;
             else
-              mxerror(PFX "Malformed codec id "
-                      "%s for track %d.\n", t->codec_id, t->tnum);
+              mxerror(PFX "Malformed codec id '%s' for track %d.\n",
+                      t->codec_id, t->tnum);
 
             if (!strcmp(&t->codec_id[12], "MAIN"))
               profile = AAC_PROFILE_MAIN;
@@ -1161,8 +1165,8 @@ void kax_reader_c::create_packetizers() {
             else if (!strcmp(&t->codec_id[12], "LC/SBR"))
               profile = AAC_PROFILE_SBR;
             else
-              mxerror(PFX "Malformed codec id "
-                      "%s for track %d.\n", t->codec_id, t->tnum);
+              mxerror(PFX "Malformed codec id %s for track %d.\n",
+                      t->codec_id, t->tnum);
 
             for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
               if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||
@@ -1176,11 +1180,29 @@ void kax_reader_c::create_packetizers() {
                                                  t->a_channels, &nti,
                                                  false, true);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the AAC "
-                     "output module for track ID %u.\n", ti->fname, t->tnum);
+              mxinfo("+-> Using the AAC output module for track ID %u.\n",
+                     ti->fname, t->tnum);
+
+          } else if (t->a_formattag == FOURCC('r', 'e', 'a', 'l')) {
+            passthrough_packetizer_c *ptzr;
+
+            ptzr = new passthrough_packetizer_c(this, ti);
+            t->packetizer = ptzr;
+
+            ptzr->set_track_type(track_audio);
+            ptzr->set_codec_id(t->codec_id);
+            ptzr->set_codec_private((unsigned char *)t->private_data,
+                                    t->private_size);
+            ptzr->set_audio_sampling_freq(t->a_sfreq);
+            ptzr->set_audio_channels(t->a_channels);
+            if (t->a_bps != 0)
+              ptzr->set_audio_bit_depth(t->a_bps);
+
+            if (verbose)
+              mxinfo("+-> Using the generic audio output module for stream "
+                     "%u (CodecID: %s).\n", t->tnum, t->codec_id);
           } else
-            mxerror(PFX "Unsupported track type "
-                    "for track %d.\n", t->tnum);
+            mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
 
           if ((t->packetizer != NULL) && (t->a_osfreq != 0.0))
             t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
@@ -1266,7 +1288,7 @@ int kax_reader_c::read(generic_packetizer_c *) {
   KaxClusterTimecode *ctc;
   int64_t block_fref, block_bref, block_duration;
   kax_track_t *block_track;
-  bool found_data;
+  bool found_data, bref_found, fref_found;
 
   if (tracks.size() == 0)
     return 0;
@@ -1316,14 +1338,19 @@ int kax_reader_c::read(generic_packetizer_c *) {
           block_fref = VFT_NOBFRAME;
           block_track = NULL;
           block = NULL;
+          bref_found = false;
+          fref_found = false;
 
           ref_block = static_cast<KaxReferenceBlock *>
             (block_group->FindFirstElt(KaxReferenceBlock::ClassInfos, false));
           while (ref_block != NULL) {
-            if (int64(*ref_block) < 0)
+            if (int64(*ref_block) < 0) {
               block_bref = int64(*ref_block) * tc_scale / 1000000;
-            else
+              bref_found = true;
+            } else {
               block_fref = int64(*ref_block) * tc_scale / 1000000;
+              fref_found = true;
+            }
 
             ref_block = static_cast<KaxReferenceBlock *>
               (block_group->FindNextElt(*ref_block, false));
@@ -1351,9 +1378,9 @@ int kax_reader_c::read(generic_packetizer_c *) {
             }
 
             last_timecode = block->GlobalTimecode() / 1000000;
-            if (block_bref != VFT_IFRAME)
+            if (bref_found)
               block_bref += (int64_t)last_timecode;
-            if (block_fref != VFT_NOBFRAME)
+            if (fref_found)
               block_fref += (int64_t)last_timecode;
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {

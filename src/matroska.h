@@ -41,6 +41,11 @@
 #define MKV_A_ACM        "A_MS/ACM"
 #define MKV_A_QDMC       "A_QUICKTIME/QDMC"
 #define MKV_A_QDMC2      "A_QUICKTIME/QDM2"
+#define MKV_A_REAL_14_4  "A_REAL/14_4"
+#define MKV_A_REAL_28_8  "A_REAL/28_8"
+#define MKV_A_REAL_COOK  "A_REAL/COOK"
+#define MKV_A_REAL_SIPR  "A_REAL/SIPR"
+#define MKV_A_REAL_ATRC  "A_REAL/ATRC"
 
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 #define MKV_V_REALV1     "V_REAL/RV10"
