@@ -308,6 +308,16 @@ static void write_chapter_atom_xml(KaxChapterAtom *atom, int level) {
               v / 1000 / 60 / 60, (v / 1000 / 60) % 60, (v / 1000) % 60,
               v % 1000);
 
+    } else if (is_id(KaxChapterFlagHidden)) {
+      pt(level + 1, "<ChapterFlagHidden>");
+      mxprint(o, "%u</ChapterFlagHidden>\n",
+              uint8(*static_cast<EbmlUInteger *>(e)));
+
+    } else if (is_id(KaxChapterFlagEnabled)) {
+      pt(level + 1, "<ChapterFlagEnabled>");
+      mxprint(o, "%u</ChapterFlagEnabled>\n",
+              uint8(*static_cast<EbmlUInteger *>(e)));
+
     } else if (is_id(KaxChapterTrack))
       write_chapter_track_xml((KaxChapterTrack *)e, level + 1);
 

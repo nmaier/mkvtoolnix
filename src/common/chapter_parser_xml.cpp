@@ -252,6 +252,36 @@ static void start_next_level(parser_data_t *pdata, const char *name) {
     pdata->parents->push_back(cte);
     pdata->data_allowed = true;
 
+  } else if (!strcmp(name, "ChapterFlagHidden")) {
+    KaxChapterFlagHidden *cfh;
+
+    if (strcmp(parent_name, "ChapterAtom"))
+      cperror_nochild();
+
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterFlagHidden::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    cfh = new KaxChapterFlagHidden;
+    m->PushElement(*cfh);
+    pdata->parents->push_back(cfh);
+    pdata->data_allowed = true;
+
+  } else if (!strcmp(name, "ChapterFlagEnabled")) {
+    KaxChapterFlagEnabled *cfe;
+
+    if (strcmp(parent_name, "ChapterAtom"))
+      cperror_nochild();
+
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterFlagEnabled::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    cfe = new KaxChapterFlagEnabled;
+    m->PushElement(*cfe);
+    pdata->parents->push_back(cfe);
+    pdata->data_allowed = true;
+
   } else if (!strcmp(name, "ChapterTrack")) {
     KaxChapterTrack *ct;
 
@@ -390,6 +420,12 @@ static void end_this_level(parser_data_t *pdata, const char *name) {
 
   else if (!strcmp(name, "ChapterTimeEnd"))
     el_get_time(pdata, parent_elt);
+
+  else if (!strcmp(name, "ChapterFlagHidden"))
+    el_get_uint(pdata, parent_elt);
+
+  else if (!strcmp(name, "ChapterFlagEnabled"))
+    el_get_uint(pdata, parent_elt);
 
   else if (!strcmp(name, "ChapterTrack")) {
     m = static_cast<EbmlMaster *>(parent_elt);

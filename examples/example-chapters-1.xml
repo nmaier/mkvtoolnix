@@ -46,4 +46,20 @@
       </ChapterDisplay>
     </ChapterAtom>
   </EditionEntry>
+
+  <!-- There are two new flags that have been added to Matroska lately. -->
+  <!-- They are flags that enable/disable and hide/unhide chapters. -->
+  <!-- Here's just a small example: -->
+  <EditionEntry>
+    <ChapterAtom>
+      <ChapterTimeStart>00:02:00.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:04:00.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>A hidden and not enabled chapter.</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+      <ChapterFlagHidden>1</ChapterFlagHidden>
+      <ChapterFlagEnabled>0</ChapterFlagEnabled>
+    </ChapterAtom>
+  </EditionEntry>
 </Chapters>

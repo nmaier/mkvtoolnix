@@ -453,6 +453,14 @@ bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level) {
 
         } // while (l2 != NULL)
 
+      } else if (is_id(l1, KaxChapterFlagHidden)) {
+        show_element(l1, level + 1, "Hidden: %u",
+                     uint8(*static_cast<KaxChapterFlagHidden *>(l1)));
+
+      } else if (is_id(l1, KaxChapterFlagEnabled)) {
+        show_element(l1, level + 1, "Enabled: %u",
+                     uint8(*static_cast<KaxChapterFlagEnabled *>(l1)));
+
       } else if (!parse_chapter_atom(es, l1, level + 1) &&
                  !is_global(es, l1, level + 1))
         show_unknown_element(l1, level + 1);

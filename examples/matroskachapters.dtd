@@ -6,6 +6,8 @@
           ChapterTimeEnd?,
           ChapterTrack?,
           ChapterDisplay+,
+          ChapterFlagHidden?,
+          ChapterFlagEnabled?,
           ChapterAtom*)>
 
 <!ELEMENT ChapterTrack (ChapterTrackNumber)>
@@ -16,6 +18,8 @@
 
 <!ELEMENT ChapterTimeStart (#PCDATA)>
 <!ELEMENT ChapterTimeEnd (#PCDATA)>
+<!ELEMENT ChapterFlagHidden (#PCDATA)>
+<!ELEMENT ChapterFlagEnabled (#PCDATA)>
 
 <!ELEMENT ChapterString (#PCDATA)>
 <!ELEMENT ChapterLanguage (#PCDATA)>

@@ -582,6 +582,20 @@ static EbmlMaster *copy_chapters_recursive(EbmlMaster *src) {
         *edst = *esrc;
         dst->PushElement(*edst);
 
+      } else if (is_id(KaxChapterFlagHidden)) {
+        KaxChapterFlagHidden *esrc, *edst;
+        edst = new KaxChapterFlagHidden;
+        esrc = static_cast<KaxChapterFlagHidden *>(e);
+        *edst = *esrc;
+        dst->PushElement(*edst);
+
+      } else if (is_id(KaxChapterFlagEnabled)) {
+        KaxChapterFlagEnabled *esrc, *edst;
+        edst = new KaxChapterFlagEnabled;
+        esrc = static_cast<KaxChapterFlagEnabled *>(e);
+        *edst = *esrc;
+        dst->PushElement(*edst);
+
       } else if (is_id(KaxChapterTrackNumber)) {
         KaxChapterTrackNumber *esrc, *edst;
         edst = new KaxChapterTrackNumber;
