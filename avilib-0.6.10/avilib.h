@@ -190,14 +190,11 @@ typedef struct __attribute__((__packed__))
   uint32_t dw_suggested_buffer_size;
   uint32_t dw_quality;
   uint32_t dw_sample_size;
-  uint32_t dw_left;
-  uint32_t dw_top;
-  uint32_t dw_right;
-  uint32_t dw_bottom;
-  uint32_t dw_edit_count;
-  uint32_t dw_format_change_count;
-  char     sz_name[64];
-} alAVISTREAMINFO;
+  uint16_t dw_left;
+  uint16_t dw_top;
+  uint16_t dw_right;
+  uint16_t dw_bottom;
+} alAVISTREAMHEADER;
 
 typedef struct
 {
@@ -215,6 +212,7 @@ typedef struct
   char   video_tag[4];      /* Tag of video data */
   long   video_pos;         /* Number of next frame to be read
 			       (if index present) */
+  alAVISTREAMHEADER video_stream_header;
   
   uint32_t max_len;    /* maximum video chunk present */
   
@@ -246,6 +244,7 @@ typedef struct
   
   alBITMAPINFOHEADER *bitmap_info_header;
   alWAVEFORMATEX *wave_format_ex[AVI_MAX_TRACKS];
+  alAVISTREAMHEADER stream_headers[AVI_MAX_TRACKS];
 
   void*		extradata;
   unsigned long	extradata_size;

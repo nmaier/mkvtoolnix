@@ -2332,6 +2332,8 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    AVI->max_len = 0;
             vids_strh_seen = 1;
             lasttag = 1; /* vids */
+            memcpy(&AVI->video_stream_header, hdrl_data + i,
+                   sizeof(alAVISTREAMHEADER));
          }
          else if (strncasecmp ((char *)hdrl_data+i,"auds",4) ==0 && ! auds_strh_seen)
          {
@@ -2352,6 +2354,8 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	   AVI->track[AVI->aptr].a_vbr = !str2ulong(hdrl_data+i+44);
 
 	   AVI->track[AVI->aptr].padrate = str2ulong(hdrl_data+i+24);
+           memcpy(&AVI->stream_headers[AVI->aptr], hdrl_data + i,
+                   sizeof(alAVISTREAMHEADER));
 
 	   //	   auds_strh_seen = 1;
 	   lasttag = 2; /* auds */
