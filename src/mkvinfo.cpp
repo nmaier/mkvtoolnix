@@ -73,11 +73,13 @@ extern "C" {
 #include "mkvinfo.h"
 #include "mkvinfo_tag_types.h"
 
+#include "chapters.h"
 #include "checksums.h"
 #include "common.h"
 #include "commonebml.h"
 #include "matroska.h"
 #include "mm_io.h"
+#include "xml_element_mapping.h"
 
 using namespace libmatroska;
 using namespace std;
@@ -430,106 +432,6 @@ bool parse_simpletag(EbmlStream *es,
 
       } else if (!is_global(es, l1, level + 1) &&
                  !parse_simpletag(es, l1, level + 1))
-        show_unknown_element(l1, level + 1);
-
-    } // while (l1 != NULL)
-
-    return true;
-
-  } 
-
-  return false;
-}
-
-bool
-parse_chapter_atom(EbmlStream *es,
-                   EbmlElement *l0,
-                   int level) {
-  EbmlMaster *m0, *m1;
-  EbmlElement *l1, *l2;
-  int i0, i1;
-
-  if (is_id(l0, KaxChapterAtom)) {
-    show_element(l0, level, "Chapter atom");
-
-    m0 = static_cast<EbmlMaster *>(l0);
-    for (i0 = 0; i0 < m0->ListSize(); i0++) {
-      l1 = (*m0)[i0];
-
-      if (is_id(l1, KaxChapterUID)) {
-        KaxChapterUID &c_uid = *static_cast<KaxChapterUID *>(l1);
-        show_element(l1, level + 1, "UID: %u", uint32(c_uid));
-
-      } else if (is_id(l1, KaxChapterTimeStart)) {
-        uint64_t s;
-        KaxChapterTimeStart &start =
-          *static_cast<KaxChapterTimeStart *>(l1);
-        s = uint64(start);
-        show_element(l1, level + 1, "Start: " FMT_TIMECODEN, ARG_TIMECODEN(s));
-
-      } else if (is_id(l1, KaxChapterTimeEnd)) {
-        uint64_t e;
-        KaxChapterTimeEnd &end =
-          *static_cast<KaxChapterTimeEnd *>(l1);
-        e = uint64(end);
-        show_element(l1, level + 1, "End: " FMT_TIMECODEN, ARG_TIMECODEN(e));
-
-      } else if (is_id(l1, KaxChapterTrack)) {
-        show_element(l1, level + 1, "Track");
-
-        m1 = static_cast<EbmlMaster *>(l1);
-        for (i1 = 0; i1 < m1->ListSize(); i1++) {
-          l2 = (*m1)[i1];
-
-          if (is_id(l2, KaxChapterTrackNumber)) {
-            KaxChapterTrackNumber &c_tnumber =
-              *static_cast<KaxChapterTrackNumber *>(l2);
-            show_element(l2, level + 2, "Track number: %u", uint32(c_tnumber));
-
-          } else if (!is_global(es, l2, level + 2))
-            show_unknown_element(l2, level + 2);
-
-        } // while (l2 != NULL)
-
-      } else if (is_id(l1, KaxChapterDisplay)) {
-        show_element(l1, level + 1, "Display");
-
-        m1 = static_cast<EbmlMaster *>(l1);
-        for (i1 = 0; i1 < m1->ListSize(); i1++) {
-          l2 = (*m1)[i1];
-
-          if (is_id(l2, KaxChapterString)) {
-            KaxChapterString &c_string =
-              *static_cast<KaxChapterString *>(l2);
-            show_element(l2, level + 2, "String: %s", UTF2STR(c_string));
-
-          } else if (is_id(l2, KaxChapterLanguage)) {
-            KaxChapterLanguage &c_lang =
-              *static_cast<KaxChapterLanguage *>(l2);
-            show_element(l2, level + 2, "Language: %s",
-                         string(c_lang).c_str());
-
-          } else if (is_id(l2, KaxChapterCountry)) {
-            KaxChapterCountry &c_country =
-              *static_cast<KaxChapterCountry *>(l2);
-            show_element(l2, level + 2, "Country: %s",
-                         string(c_country).c_str());
-
-          } else if (!is_global(es, l2, level + 2))
-            show_unknown_element(l2, level + 2);
-
-        } // while (l2 != NULL)
-
-      } else if (is_id(l1, KaxChapterFlagHidden)) {
-        show_element(l1, level + 1, "Hidden: %u",
-                     uint8(*static_cast<KaxChapterFlagHidden *>(l1)));
-
-      } else if (is_id(l1, KaxChapterFlagEnabled)) {
-        show_element(l1, level + 1, "Enabled: %u",
-                     uint8(*static_cast<KaxChapterFlagEnabled *>(l1)));
-
-      } else if (!parse_chapter_atom(es, l1, level + 1) &&
-                 !is_global(es, l1, level + 1))
         show_unknown_element(l1, level + 1);
 
     } // while (l1 != NULL)
@@ -1816,9 +1718,74 @@ def_handle2(cluster,
 }
 
 void
+handle_chapter_rec(EbmlStream *es,
+                   int level,
+                   int parent_idx,
+                   EbmlElement *e) {
+  EbmlMaster *m;
+  int elt_idx, i;
+  bool found;
+  string format;
+  char *s;
+
+  found = false;
+  for (elt_idx = 0; chapter_elements[elt_idx].name != NULL; elt_idx++)
+    if (e->Generic().GlobalId == chapter_elements[elt_idx].id) {
+      found = true;
+      break;
+    }
+  if (!found) {
+    show_element(e, level, "(Unknown element: %s)", e->Generic().DebugName);
+    return;
+  }
+
+  format = chapter_elements[elt_idx].name;
+  switch (chapter_elements[elt_idx].type) {
+    case ebmlt_master:
+      show_element(e, level, format.c_str());
+      m = dynamic_cast<EbmlMaster *>(e);
+      assert(m != NULL);
+      for (i = 0; i < m->ListSize(); i++)
+        handle_chapter_rec(es, level + 1, elt_idx, (*m)[i]);
+
+      break;
+
+    case ebmlt_uint:
+    case ebmlt_bool:
+      format += ": %llu";
+      show_element(e, level, format.c_str(),
+                   uint64(*dynamic_cast<EbmlUInteger *>(e)));
+      break;
+
+    case ebmlt_string:
+      format += ": %s";
+      show_element(e, level, format.c_str(),
+                   string(*dynamic_cast<EbmlString *>(e)).c_str());
+      break;
+
+    case ebmlt_ustring:
+      format += ": %s";
+      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
+                                          <EbmlUnicodeString *>(e)).c_str());
+      show_element(e, level, format.c_str(), s);
+      safefree(s);
+      break;
+
+    case ebmlt_time:
+      format += ": " FMT_TIMECODEN;
+      show_element(e, level, format.c_str(),
+                   ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))));
+      break;
+
+    default:
+      assert(false);
+  }
+}
+
+void
 def_handle(chapters) {
-  EbmlMaster *m1, *m2;
-  int i1, i2;
+  EbmlMaster *m1;
+  int i1;
 
   show_element(l1, 1, "Chapters");
 
@@ -1826,44 +1793,8 @@ def_handle(chapters) {
   m1 = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
 
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
-    if (is_id(l2, KaxEditionEntry)) {
-      show_element(l2, 2, "Edition entry");
-
-      m2 = static_cast<EbmlMaster *>(l2);
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
-
-        if (is_id(l3, KaxEditionUID)) {
-          KaxEditionUID &edition_uid = *static_cast<KaxEditionUID *>(l3);
-          show_element(l3, 3, "Edition UID: %llu", uint64(edition_uid));
-
-        } else if (is_id(l3, KaxEditionFlagHidden)) {
-          KaxEditionFlagHidden &fhidden =
-            *static_cast<KaxEditionFlagHidden *>(l3);
-          show_element(l3, 3, "Hidden: %u", uint8(fhidden));
-
-        } else if (is_id(l3, KaxEditionFlagDefault)) {
-          KaxEditionFlagDefault &fdefault =
-            *static_cast<KaxEditionFlagDefault *>(l3);
-          show_element(l3, 3, "Default: %u", uint8(fdefault));
-
-        } else if (is_id(l3, KaxEditionManaged)) {
-          KaxEditionManaged &managed = *static_cast<KaxEditionManaged *>(l3);
-          show_element(l3, 3, "Managed: %llu", uint64(managed));
-
-        } else if (!parse_chapter_atom(es, l3, 3) &&
-                   !is_global(es, l3, 3))
-          show_unknown_element(l3, 3);
-
-      } // while (l3 != NULL)
-
-    } else if (!is_global(es, l2, 2))
-      show_unknown_element(l2, 2);
-
-  } // while (l2 != NULL)
+  for (i1 = 0; i1 < m1->ListSize(); i1++)
+    handle_chapter_rec(es, 2, 0, (*m1)[i1]);
 }
 
 void
@@ -1901,718 +1832,6 @@ def_handle(tag_targets) {
 }
 
 void
-def_handle(tag_general) {
-  EbmlMaster *m3;
-  int i3;
-  string strc;
-
-  show_element(l3, 3, "General");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagSubject)) {
-      KaxTagSubject &subject =
-        *static_cast<KaxTagSubject *>(l4);
-      show_element(l4, 4, "Subject: %s", UTF2STR(subject));
-
-    } else if (is_id(l4, KaxTagBibliography)) {
-      KaxTagBibliography &bibliography =
-        *static_cast<KaxTagBibliography *>(l4);
-      show_element(l4, 4, "Bibliography: %s",
-                   UTF2STR(bibliography));
-
-    } else if (is_id(l4, KaxTagLanguage)) {
-      KaxTagLanguage &language =
-        *static_cast<KaxTagLanguage *>(l4);
-      show_element(l4, 4, "Language: %s",
-                   string(language).c_str());
-
-    } else if (is_id(l4, KaxTagRating)) {
-      KaxTagRating &rating =
-        *static_cast<KaxTagRating *>(l4);
-      strc = "Rating: " + format_binary(rating);
-      show_element(l4, 4, strc.c_str());
-
-    } else if (is_id(l4, KaxTagEncoder)) {
-      KaxTagEncoder &encoder =
-        *static_cast<KaxTagEncoder *>(l4);
-      show_element(l4, 4, "Encoder: %s", UTF2STR(encoder));
-
-    } else if (is_id(l4, KaxTagEncodeSettings)) {
-      KaxTagEncodeSettings &encode_settings =
-        *static_cast<KaxTagEncodeSettings *>(l4);
-      show_element(l4, 4, "Encode settings: %s",
-                   UTF2STR(encode_settings));
-
-    } else if (is_id(l4, KaxTagFile)) {
-      KaxTagFile &file =
-        *static_cast<KaxTagFile *>(l4);
-      show_element(l4, 4, "File: %s", UTF2STR(file));
-
-    } else if (is_id(l4, KaxTagArchivalLocation)) {
-      KaxTagArchivalLocation &archival_location =
-        *static_cast<KaxTagArchivalLocation *>(l4);
-      show_element(l4, 4, "Archival location: %s",
-                   UTF2STR(archival_location));
-
-    } else if (is_id(l4, KaxTagKeywords)) {
-      KaxTagKeywords &keywords =
-        *static_cast<KaxTagKeywords *>(l4);
-      show_element(l4, 4, "Keywords: %s", UTF2STR(keywords));
-
-    } else if (is_id(l4, KaxTagMood)) {
-      KaxTagMood &mood =
-        *static_cast<KaxTagMood *>(l4);
-      show_element(l4, 4, "Mood: %s", UTF2STR(mood));
-
-    } else if (is_id(l4, KaxTagRecordLocation)) {
-      KaxTagRecordLocation &record_location =
-        *static_cast<KaxTagRecordLocation *>(l4);
-      show_element(l4, 4, "Record location: %s",
-                   string(record_location).c_str());
-
-    } else if (is_id(l4, KaxTagSource)) {
-      KaxTagSource &source =
-        *static_cast<KaxTagSource *>(l4);
-      show_element(l4, 4, "Source: %s", UTF2STR(source));
-
-    } else if (is_id(l4, KaxTagSourceForm)) {
-      KaxTagSourceForm &source_form =
-        *static_cast<KaxTagSourceForm *>(l4);
-      show_element(l4, 4, "Source form: %s",
-                   UTF2STR(source_form));
-
-    } else if (is_id(l4, KaxTagProduct)) {
-      KaxTagProduct &product =
-        *static_cast<KaxTagProduct *>(l4);
-      show_element(l4, 4, "Product: %s", UTF2STR(product));
-
-    } else if (is_id(l4, KaxTagOriginalMediaType)) {
-      KaxTagOriginalMediaType &original_media_type =
-        *static_cast<KaxTagOriginalMediaType *>(l4);
-      show_element(l4, 4, "Original media type: %s",
-                   UTF2STR(original_media_type));
-
-    } else if (is_id(l4, KaxTagEncoder)) {
-      KaxTagEncoder &encoder =
-        *static_cast<KaxTagEncoder *>(l4);
-      show_element(l4, 4, "Encoder: %s", UTF2STR(encoder));
-
-    } else if (is_id(l4, KaxTagPlayCounter)) {
-      KaxTagPlayCounter &play_counter =
-        *static_cast<KaxTagPlayCounter *>(l4);
-      show_element(l4, 4, "Play counter: %llu", 
-                   uint64(play_counter));
-
-    } else if (is_id(l4, KaxTagPopularimeter)) {
-      KaxTagPopularimeter &popularimeter =
-        *static_cast<KaxTagPopularimeter *>(l4);
-      show_element(l4, 4, "Popularimeter: %lld", 
-                   int64(popularimeter));
-
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_genres) {
-  EbmlMaster *m3;
-  int i3;
-  string strc;
-
-  show_element(l3, 3, "Genres");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagAudioGenre)) {
-      KaxTagAudioGenre &audio_genre =
-        *static_cast<KaxTagAudioGenre *>(l4);
-      show_element(l4, 4, "Audio genre: %s",
-                   string(audio_genre).c_str());
-
-    } else if (is_id(l4, KaxTagVideoGenre)) {
-      KaxTagVideoGenre &video_genre =
-        *static_cast<KaxTagVideoGenre *>(l4);
-      strc = "Video genre: " + format_binary(video_genre);
-      show_element(l4, 4, strc.c_str());
-
-    } else if (is_id(l4, KaxTagSubGenre)) {
-      KaxTagSubGenre &sub_genre =
-        *static_cast<KaxTagSubGenre *>(l4);
-      show_element(l4, 4, "Sub genre: %s",
-                   string(sub_genre).c_str());
-
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_audio_specific) {
-  EbmlMaster *m3;
-  int i3;
-  string strc;
-
-  show_element(l3, 3, "Audio specific");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagAudioEncryption)) {
-      KaxTagAudioEncryption &encryption =
-        *static_cast<KaxTagAudioEncryption *>(l4);
-      strc = "Audio encryption: " + format_binary(encryption);
-      show_element(l4, 4, strc.c_str());
-
-    } else if (is_id(l4, KaxTagAudioGain)) {
-      KaxTagAudioGain &audio_gain =
-        *static_cast<KaxTagAudioGain *>(l4);
-      show_element(l4, 4, "Audio gain: %.3f", float(audio_gain));
-
-    } else if (is_id(l4, KaxTagAudioPeak)) {
-      KaxTagAudioPeak &audio_peak =
-        *static_cast<KaxTagAudioPeak *>(l4);
-      show_element(l4, 4, "Audio peak: %.3f", float(audio_peak));
-
-    } else if (is_id(l4, KaxTagBPM)) {
-      KaxTagBPM &bpm = *static_cast<KaxTagBPM *>(l4);
-      show_element(l4, 4, "BPM: %.3f", float(bpm));
-
-    } else if (is_id(l4, KaxTagEqualisation)) {
-      KaxTagEqualisation &equalisation =
-        *static_cast<KaxTagEqualisation *>(l4);
-      strc = "Equalisation: " + format_binary(equalisation);
-      show_element(l4, 4, strc.c_str());
-
-    } else if (is_id(l4, KaxTagDiscTrack)) {
-      KaxTagDiscTrack &disc_track =
-        *static_cast<KaxTagDiscTrack *>(l4);
-      show_element(l4, 4, "Disc track: %u", uint32(disc_track));
-
-    } else if (is_id(l4, KaxTagSetPart)) {
-      KaxTagSetPart &set_part =
-        *static_cast<KaxTagSetPart *>(l4);
-      show_element(l4, 4, "Set part: %u", uint32(set_part));
-
-    } else if (is_id(l4, KaxTagInitialKey)) {
-      KaxTagInitialKey &initial_key =
-        *static_cast<KaxTagInitialKey *>(l4);
-      show_element(l4, 4, "Initial key: %s",
-                   string(initial_key).c_str());
-
-    } else if (is_id(l4, KaxTagOfficialAudioFileURL)) {
-      KaxTagOfficialAudioFileURL &official_file_url =
-        *static_cast<KaxTagOfficialAudioFileURL *>(l4);
-      show_element(l4, 4, "Official audio file URL: %s",
-                   string(official_file_url).c_str());
-
-    } else if (is_id(l4, KaxTagOfficialAudioSourceURL)) {
-      KaxTagOfficialAudioSourceURL &official_source_url =
-        *static_cast<KaxTagOfficialAudioSourceURL *>(l4);
-      show_element(l4, 4, "Official audio source URL: %s",
-                   string(official_source_url).c_str());
-
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_image_specific) {
-  EbmlMaster *m3;
-  int i3;
-  string strc;
-
-  show_element(l3, 3, "Image specific");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagCaptureDPI)) {
-      KaxTagCaptureDPI &capture_dpi =
-        *static_cast<KaxTagCaptureDPI *>(l4);
-      show_element(l4, 4, "Capture DPI: %u",
-                   uint32(capture_dpi));
-
-    } else if (is_id(l4, KaxTagCaptureLightness)) {
-      KaxTagCaptureLightness &capture_lightness =
-        *static_cast<KaxTagCaptureLightness *>(l4);
-      strc = "Capture lightness: " +
-        format_binary(capture_lightness);
-      show_element(l4, 4, strc.c_str());
-
-    } else if (is_id(l4, KaxTagCapturePaletteSetting)) {
-      KaxTagCapturePaletteSetting &capture_palette_setting =
-        *static_cast<KaxTagCapturePaletteSetting *>(l4);
-      show_element(l4, 4, "Capture palette setting: %u",
-                   uint32(capture_palette_setting));
-
-    } else if (is_id(l4, KaxTagCaptureSharpness)) {
-      KaxTagCaptureSharpness &capture_sharpness =
-        *static_cast<KaxTagCaptureSharpness *>(l4);
-      strc = "Capture sharpness: " +
-        format_binary(capture_sharpness);
-      show_element(l4, 4, strc.c_str());
-
-    } else if (is_id(l4, KaxTagCropped)) {
-      KaxTagCropped &cropped =
-        *static_cast<KaxTagCropped *>(l4);
-      show_element(l4, 4, "Cropped: %s", UTF2STR(cropped));
-
-    } else if (is_id(l4, KaxTagOriginalDimensions)) {
-      KaxTagOriginalDimensions &original_dimensions =
-        *static_cast<KaxTagOriginalDimensions *>(l4);
-      show_element(l4, 4, "Original dimensions: %s",
-                   string(original_dimensions).c_str());
-
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_multi_commercial) {
-  EbmlMaster *m3, *m4, *m5;
-  int i3, i4, i5;
-
-  show_element(l3, 3, "Multi commercial");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagCommercial)) {
-      show_element(l4, 4, "Commercial");
-
-      m4 = static_cast<EbmlMaster *>(l4);
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
-
-        if (is_id(l5, KaxTagMultiCommercialType)) {
-          int type;
-
-          KaxTagMultiCommercialType &c_type =
-            *static_cast<KaxTagMultiCommercialType *>(l5);
-          type = uint32(c_type);
-          show_element(l5, 5, "Type: %u (%s)", type,
-                       (type >= 1) &&
-                       (type <= NUM_COMMERCIAL_TYPES) ?
-                       commercial_types[type - 1] : "unknown");
-
-        } else if (is_id(l5, KaxTagMultiCommercialAddress)) {
-          KaxTagMultiCommercialAddress &c_address =
-            *static_cast<KaxTagMultiCommercialAddress *>(l5);
-          show_element(l5, 5, "Address: %s", UTF2STR(c_address));
-
-        } else if (is_id(l5, KaxTagMultiCommercialURL)) {
-          KaxTagMultiCommercialURL &c_url =
-            *static_cast<KaxTagMultiCommercialURL *>(l5);
-          show_element(l5, 5, "URL: %s",
-                       string(c_url).c_str());
-
-        } else if (is_id(l5, KaxTagMultiCommercialEmail)) {
-          KaxTagMultiCommercialEmail &c_email =
-            *static_cast<KaxTagMultiCommercialEmail *>(l5);
-          show_element(l5, 5, "Email: %s",
-                       string(c_email).c_str());
-
-        } else if (is_id(l5, KaxTagMultiPrice)) {
-          show_element(l5, 5, "Multi price");
-
-          m5 = static_cast<EbmlMaster *>(l5);
-          for (i5 = 0; i5 < m5->ListSize(); i5++) {
-            l6 = (*m5)[i5];
-
-            if (is_id(l6, KaxTagMultiPriceCurrency)) {
-              KaxTagMultiPriceCurrency &p_currency =
-                *static_cast<KaxTagMultiPriceCurrency *>(l6);
-              show_element(l6, 6, "Currency: %s",
-                           string(p_currency).c_str());
-
-            } else if (is_id(l6, KaxTagMultiPriceAmount)) {
-              KaxTagMultiPriceAmount &p_amount =
-                *static_cast<KaxTagMultiPriceAmount *>(l6);
-              show_element(l6, 6, "Amount: %.3f",
-                           float(p_amount));
-
-            } else if (is_id(l6, KaxTagMultiPricePriceDate)) {
-              struct tm tmutc;
-              time_t temptime;
-              char buffer[40];
-              KaxTagMultiPricePriceDate &p_pdate =
-                *static_cast<KaxTagMultiPricePriceDate *>(l6);
-
-              temptime = p_pdate.GetEpochDate();
-              if ((gmtime_r(&temptime, &tmutc) != NULL) &&
-                  (asctime_r(&tmutc, buffer) != NULL)) {
-                buffer[strlen(buffer) - 1] = 0;
-                show_element(l6, 6, "Price date: %s UTC",
-                             buffer);
-              } else
-                show_element(l6, 6, "Price date (invalid, "
-                             "value: %d)", temptime);
-
-            } else if (!is_global(es, l6, 6) &&
-                       !parse_multicomment(es, l6, 6))
-              show_unknown_element(l6, 6);
-
-          } // while (l6 != NULL)
-
-        } else if (!is_global(es, l5, 5) &&
-                   !parse_multicomment(es, l5, 5))
-          show_unknown_element(l5, 5);
-
-      } // while (l5 != NULL)
-                    
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_multi_date) {
-  EbmlMaster *m3, *m4;
-  int i3, i4;
-
-  show_element(l3, 3, "Multi date");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagDate)) {
-      show_element(l4, 4, "Date");
-
-      m4 = static_cast<EbmlMaster *>(l4);
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
-
-        if (is_id(l5, KaxTagMultiDateType)) {
-          int type;
-          KaxTagMultiDateType &d_type =
-            *static_cast<KaxTagMultiDateType *>(l5);
-          type = uint32(d_type);
-          show_element(l5, 5, "Type: %u (%s)", type,
-                       (type >= 1) &&
-                       (type <= NUM_DATE_TYPES) ?
-                       date_types[type - 1] : "unknown");
-
-        } else if (is_id(l5, KaxTagMultiDateDateBegin)) {
-          struct tm tmutc;
-          time_t temptime;
-          char buffer[40];
-          KaxTagMultiDateDateBegin &d_begin =
-            *static_cast<KaxTagMultiDateDateBegin *>(l5);
-
-          temptime = d_begin.GetEpochDate();
-          if ((gmtime_r(&temptime, &tmutc) != NULL) &&
-              (asctime_r(&tmutc, buffer) != NULL)) {
-            buffer[strlen(buffer) - 1] = 0;
-            show_element(l5, 5, "Begin: %s UTC", buffer);
-          } else
-            show_element(l5, 5, "Begin (invalid, value: %d)",
-                         temptime);
-
-        } else if (is_id(l5, KaxTagMultiDateDateEnd)) {
-          struct tm tmutc;
-          time_t temptime;
-          char buffer[40];
-          KaxTagMultiDateDateEnd &d_end =
-            *static_cast<KaxTagMultiDateDateEnd *>(l5);
-
-          temptime = d_end.GetEpochDate();
-          if ((gmtime_r(&temptime, &tmutc) != NULL) &&
-              (asctime_r(&tmutc, buffer) != NULL)) {
-            buffer[strlen(buffer) - 1] = 0;
-            show_element(l5, 5, "End: %s UTC", buffer);
-          } else
-            show_element(l5, 5, "End (invalid, value: %d)",
-                         temptime);
-
-        } else if (!is_global(es, l5, 5) &&
-                   !parse_multicomment(es, l5, 5))
-          show_unknown_element(l5, 5);
-
-      } // while (l5 != NULL)
-                    
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-
-}
-
-void
-def_handle(tag_multi_entity) {
-  EbmlMaster *m3, *m4;
-  int i3, i4;
-
-  show_element(l3, 3, "Multi entity");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagEntity)) {
-      show_element(l4, 4, "Entity");
-
-      m4 = static_cast<EbmlMaster *>(l4);
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
-
-        if (is_id(l5, KaxTagMultiEntityType)) {
-          int type;
-          KaxTagMultiEntityType &e_type =
-            *static_cast<KaxTagMultiEntityType *>(l5);
-          type = uint32(e_type);
-          show_element(l5, 5, "Type: %u (%s)", type,
-                       (type >= 1) &&
-                       (type <= NUM_ENTITY_TYPES) ?
-                       entity_types[type - 1] : "unknown");
-
-        } else if (is_id(l5, KaxTagMultiEntityName)) {
-          KaxTagMultiEntityName &e_name =
-            *static_cast<KaxTagMultiEntityName *>(l5);
-          show_element(l5, 5, "Name: %s", UTF2STR(e_name));
-
-        } else if (is_id(l5, KaxTagMultiEntityAddress)) {
-          KaxTagMultiEntityAddress &e_address =
-            *static_cast<KaxTagMultiEntityAddress *>(l5);
-          show_element(l5, 5, "Address: %s", UTF2STR(e_address));
-
-        } else if (is_id(l5, KaxTagMultiEntityURL)) {
-          KaxTagMultiEntityURL &e_URL =
-            *static_cast<KaxTagMultiEntityURL *>(l5);
-          show_element(l5, 5, "URL: %s", string(e_URL).c_str());
-
-        } else if (is_id(l5, KaxTagMultiEntityEmail)) {
-          KaxTagMultiEntityEmail &e_email =
-            *static_cast<KaxTagMultiEntityEmail *>(l5);
-          show_element(l5, 5, "Email: %s",
-                       string(e_email).c_str());
-
-        } else if (!is_global(es, l5, 5) &&
-                   !parse_multicomment(es, l5, 5))
-          show_unknown_element(l5, 5);
-
-      } // while (l5 != NULL)
-                    
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_multi_identifier) {
-  EbmlMaster *m3, *m4;
-  int i3, i4;
-  string strc;
-
-  show_element(l3, 3, "Multi identifier");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagIdentifier)) {
-      show_element(l4, 4, "Identifier");
-
-      m4 = static_cast<EbmlMaster *>(l4);
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
-
-        if (is_id(l5, KaxTagMultiIdentifierType)) {
-          int type;
-          KaxTagMultiIdentifierType &i_type =
-            *static_cast<KaxTagMultiIdentifierType *>(l5);
-          type = uint32(i_type);
-          show_element(l5, 5, "Type: %u (%s)", type,
-                       (type >= 1) &&
-                       (type <= NUM_IDENTIFIER_TYPES) ?
-                       identifier_types[type - 1] : "unknown");
-
-        } else if (is_id(l5, KaxTagMultiIdentifierBinary)) {
-          KaxTagMultiIdentifierBinary &i_binary =
-            *static_cast<KaxTagMultiIdentifierBinary *>(l5);
-          strc = "Binary: " + format_binary(i_binary);
-          show_element(l5, 5, strc.c_str());
-
-        } else if (is_id(l5, KaxTagMultiIdentifierString)) {
-          KaxTagMultiIdentifierString &i_string =
-            *static_cast<KaxTagMultiIdentifierString *>(l5);
-          show_element(l5, 5, "String: %s", UTF2STR(i_string));
-
-        } else if (!is_global(es, l5, 5) &&
-                   !parse_multicomment(es, l5, 5))
-          show_unknown_element(l5, 5);
-
-      } // while (l5 != NULL)
-                    
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_multi_legal) {
-  EbmlMaster *m3, *m4;
-  int i3, i4;
-  string strc;
-
-  show_element(l3, 3, "Multi legal");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagLegal)) {
-      show_element(l4, 4, "Legal");
-
-      m4 = static_cast<EbmlMaster *>(l4);
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
-
-        if (is_id(l5, KaxTagMultiLegalType)) {
-          int type;
-          KaxTagMultiLegalType &l_type =
-            *static_cast<KaxTagMultiLegalType *>(l5);
-          type = uint32(l_type);
-          show_element(l5, 5, "Type: %u (%s)", type,
-                       (type >= 1) &&
-                       (type <= NUM_LEGAL_TYPES) ?
-                       legal_types[type - 1] : "unknown");
-
-        } else if (is_id(l5, KaxTagMultiLegalAddress)) {
-          KaxTagMultiLegalAddress &l_address =
-            *static_cast<KaxTagMultiLegalAddress *>(l5);
-          show_element(l5, 5, "Address: %s", UTF2STR(l_address));
-
-        } else if (is_id(l5, KaxTagMultiLegalURL)) {
-          KaxTagMultiLegalURL &l_URL =
-            *static_cast<KaxTagMultiLegalURL *>(l5);
-          show_element(l5, 5, "URL: %s", string(l_URL).c_str());
-
-        } else if (is_id(l5, KaxTagMultiLegalContent)) {
-          KaxTagMultiLegalContent &l_content =
-            *static_cast<KaxTagMultiLegalContent *>(l5);
-          show_element(l5, 5, "Content: %s", UTF2STR(l_content));
-
-        } else if (!is_global(es, l5, 5) &&
-                   !parse_multicomment(es, l5, 5))
-          show_unknown_element(l5, 5);
-
-      } // while (l5 != NULL)
-                    
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
-def_handle(tag_multi_title) {
-  EbmlMaster *m3, *m4;
-  int i3, i4;
-  string strc;
-
-  show_element(l3, 3, "Multi title");
-
-  m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
-    if (is_id(l4, KaxTagTitle)) {
-      show_element(l4, 4, "Title");
-
-      m4 = static_cast<EbmlMaster *>(l4);
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
-
-        if (is_id(l5, KaxTagMultiTitleType)) {
-          int type;
-          KaxTagMultiTitleType &t_type =
-            *static_cast<KaxTagMultiTitleType *>(l5);
-          type = uint32(t_type);
-          show_element(l5, 5, "Type: %u (%s)", type,
-                       (type >= 1) &&
-                       (type <= NUM_TITLE_TYPES) ?
-                       title_types[type - 1] : "unknown");
-
-        } else if (is_id(l5, KaxTagMultiTitleName)) {
-          KaxTagMultiTitleName &t_name =
-            *static_cast<KaxTagMultiTitleName *>(l5);
-          show_element(l5, 5, "Name: %s", UTF2STR(t_name));
-
-        } else if (is_id(l5, KaxTagMultiTitleSubTitle)) {
-          KaxTagMultiTitleSubTitle &t_sub_title =
-            *static_cast<KaxTagMultiTitleSubTitle *>(l5);
-          show_element(l5, 5, "Sub title: %s",
-                       UTF2STR(t_sub_title));
-
-        } else if (is_id(l5, KaxTagMultiTitleEdition)) {
-          KaxTagMultiTitleEdition &t_edition =
-            *static_cast<KaxTagMultiTitleEdition *>(l5);
-          show_element(l5, 5, "Edition: %s", UTF2STR(t_edition));
-
-        } else if (is_id(l5, KaxTagMultiTitleAddress)) {
-          KaxTagMultiTitleAddress &t_address =
-            *static_cast<KaxTagMultiTitleAddress *>(l5);
-          show_element(l5, 5, "Address: %s", UTF2STR(t_address));
-
-        } else if (is_id(l5, KaxTagMultiTitleURL)) {
-          KaxTagMultiTitleURL &t_URL =
-            *static_cast<KaxTagMultiTitleURL *>(l5);
-          show_element(l5, 5, "URL: %s", string(t_URL).c_str());
-
-        } else if (is_id(l5, KaxTagMultiTitleEmail)) {
-          KaxTagMultiTitleEmail &t_email =
-            *static_cast<KaxTagMultiTitleEmail *>(l5);
-          show_element(l5, 5, "Email: %s",
-                       string(t_email).c_str());
-
-        } else if (is_id(l5, KaxTagMultiTitleLanguage)) {
-          KaxTagMultiTitleLanguage &t_language =
-            *static_cast<KaxTagMultiTitleLanguage *>(l5);
-          show_element(l5, 5, "Language: %s",
-                       string(t_language).c_str());
-
-        } else if (!is_global(es, l5, 5) &&
-                   !parse_multicomment(es, l5, 5))
-          show_unknown_element(l5, 5);
-
-      } // while (l5 != NULL)
-                    
-    } else if (!is_global(es, l4, 4) &&
-               !parse_multicomment(es, l4, 4))
-      show_unknown_element(l4, 4);
-
-  } // while (l4 != NULL)
-}
-
-void
 def_handle(tags) {
   EbmlMaster *m1, *m2;
   int i1, i2;
@@ -2636,38 +1855,7 @@ def_handle(tags) {
         if (is_id(l3, KaxTagTargets))
           handle(tag_targets);
 
-        else if (is_id(l3, KaxTagGeneral))
-          handle(tag_general);
-
-        else if (is_id(l3, KaxTagGenres))
-          handle(tag_genres);
-
-        else if (is_id(l3, KaxTagAudioSpecific))
-          handle(tag_audio_specific);
-
-        else if (is_id(l3, KaxTagImageSpecific))
-          handle(tag_image_specific);
-
-        else if (is_id(l3, KaxTagMultiCommercial))
-          handle(tag_multi_commercial);
-
-        else if (is_id(l3, KaxTagMultiDate))
-          handle(tag_multi_date);
-
-        else if (is_id(l3, KaxTagMultiEntity))
-          handle(tag_multi_entity);
-
-        else if (is_id(l3, KaxTagMultiIdentifier))
-          handle(tag_multi_identifier);
-
-        else if (is_id(l3, KaxTagMultiLegal))
-          handle(tag_multi_legal);
-
-        else if (is_id(l3, KaxTagMultiTitle))
-          handle(tag_multi_title);
-
         else if (!is_global(es, l3, 3) &&
-                 !parse_multicomment(es, l3, 3) &&
                  !parse_simpletag(es, l3, 3))
           show_unknown_element(l3, 3);
 

@@ -18,19 +18,19 @@
 
 #include <stdio.h>
 
+#include "ebml/EbmlElement.h"
+
 #include "common.h"
 #include "mm_io.h"
 
 namespace libmatroska {
   class KaxChapters;
   class KaxTags;
-};
-
-using namespace libmatroska;
-
-namespace libmatroska {
   class KaxChapterAtom;
 };
+
+using namespace libebml;
+using namespace libmatroska;
 
 KaxChapters *MTX_DLL_API
 parse_chapters(const char *file_name, int64_t min_tc = 0,

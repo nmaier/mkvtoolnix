@@ -92,4 +92,14 @@ template <typename type>type &AddEmptyChild(EbmlMaster &master) {
 	return *(static_cast<type *>(e));
 }
 
+EbmlElement *MTX_DLL_API empty_ebml_master(EbmlElement *e);
+EbmlElement *MTX_DLL_API create_ebml_element(const EbmlCallbacks &callbacks,
+                                             const EbmlId &id);
+const EbmlCallbacks &MTX_DLL_API
+find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
+const EbmlCallbacks &MTX_DLL_API
+find_ebml_parent_callbacks(const EbmlCallbacks &base, const EbmlId &id);
+const EbmlSemantic &MTX_DLL_API
+find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
+
 #endif // __COMMONEBML_H

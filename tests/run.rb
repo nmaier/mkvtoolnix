@@ -19,12 +19,12 @@ class Test
   def run_test
     begin
       return run
-    rescue Class => ex
+    rescue RuntimeError => ex
       n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
       Dir.entries("/tmp").each do |e|
         File.unlink("/tmp/#{e}") if (e =~ /^#{n}/)
       end
-      p(ex)
+      puts(ex.to_s)
       return nil
     end
   end

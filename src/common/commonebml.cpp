@@ -315,3 +315,115 @@ is_valid_utf8_string(const char *c) {
   return true;
 }
 
+EbmlElement *
+empty_ebml_master(EbmlElement *e) {
+  EbmlMaster *m;
+
+  m = dynamic_cast<EbmlMaster *>(e);
+  if (m == NULL)
+    return e;
+
+  while (m->ListSize() > 0) {
+    delete (*m)[0];
+    m->Remove(0);
+  }
+
+  return m;
+}
+
+EbmlElement *
+create_ebml_element(const EbmlCallbacks &callbacks,
+                    const EbmlId &id) {
+  const EbmlSemanticContext &context = callbacks.Context;
+  int i;
+
+//   if (id == parent->Generic().GlobalId)
+//     return empty_ebml_master(&parent->Generic().Create());
+
+  for (i = 0; i < context.Size; i++)
+    if (id == context.MyTable[i].GetCallbacks.GlobalId)
+      return empty_ebml_master(&context.MyTable[i].GetCallbacks.Create());
+
+  for (i = 0; i < context.Size; i++) {
+    EbmlElement *e;
+
+    if (!(context != context.MyTable[i].GetCallbacks.Context))
+      continue;
+
+    e = create_ebml_element(context.MyTable[i].GetCallbacks, id);
+    if (e != NULL)
+      return e;
+  }
+
+  return NULL;
+}
+
+const EbmlCallbacks &
+find_ebml_callbacks(const EbmlCallbacks &base,
+                    const EbmlId &id) {
+  const EbmlSemanticContext &context = base.Context;
+  int i;
+
+  if (base.GlobalId == id)
+    return base;
+
+  for (i = 0; i < context.Size; i++)
+    if (id == context.MyTable[i].GetCallbacks.GlobalId)
+      return context.MyTable[i].GetCallbacks;
+
+  for (i = 0; i < context.Size; i++) {
+    if (!(context != context.MyTable[i].GetCallbacks.Context))
+      continue;
+    try {
+      return find_ebml_callbacks(context.MyTable[i].GetCallbacks, id);
+    } catch (...) {
+    }
+  }
+
+  throw "";
+}
+
+const EbmlCallbacks &
+find_ebml_parent_callbacks(const EbmlCallbacks &base,
+                           const EbmlId &id) {
+  const EbmlSemanticContext &context = base.Context;
+  int i;
+
+  for (i = 0; i < context.Size; i++)
+    if (id == context.MyTable[i].GetCallbacks.GlobalId)
+      return base;
+
+  for (i = 0; i < context.Size; i++) {
+    if (!(context != context.MyTable[i].GetCallbacks.Context))
+      continue;
+    try {
+      return find_ebml_parent_callbacks(context.MyTable[i].GetCallbacks, id);
+    } catch (...) {
+    }
+  }
+
+  throw "";
+}
+
+const EbmlSemantic &
+find_ebml_semantic(const EbmlCallbacks &base,
+                   const EbmlId &id) {
+  const EbmlSemanticContext &context = base.Context;
+  int i;
+
+  for (i = 0; i < context.Size; i++)
+    if (id == context.MyTable[i].GetCallbacks.GlobalId)
+      return context.MyTable[i];
+
+  for (i = 0; i < context.Size; i++) {
+    if (!(context != context.MyTable[i].GetCallbacks.Context))
+      continue;
+    try {
+      return find_ebml_semantic(context.MyTable[i].GetCallbacks, id);
+    } catch (...) {
+    }
+  }
+
+  throw "";
+}
+
