@@ -101,7 +101,7 @@ typedef struct {
 
   compression_c *zlib_compressor, *bzlib_compressor, *lzo1x_compressor;
 
-  KaxTag *tag;
+  KaxTags *tags;
 
   int ptzr;
   bool headers_set;

@@ -1,3 +1,8 @@
+2004-09-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was only copying the last tag of a
+	list of tags applying to a track from a Matroska file.
+
 2004-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge will show a nice warning if the
