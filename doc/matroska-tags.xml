@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!doctype Tags system "matroskatags.dtd">
+<!--<!doctype Tags system "matroskatags.dtd">-->
 
 <Tags>
   <Tag>
     <Targets>
+      <!-- TrackUIDs and ChapterUIDs can occur more than once. -->
       <TrackUID>1</TrackUID>
+      <TrackUID>2</TrackUID>
+      <TrackUID>3</TrackUID>
+      <TrackUID>4</TrackUID>
       <ChapterUID>2</ChapterUID>
+      <ChapterUID>4</ChapterUID>
+      <ChapterUID>6</ChapterUID>
+      <ChapterUID>8</ChapterUID>
     </Targets>
 
     <General>
       <Subject>Subject</Subject>
-      <Biobliography>Bibliography</Bibliography>
+      <Bibliography>Bibliography</Bibliography>
       <Language>Language</Language>
-      <Rating>Rating</Rating>
+      <Rating>QUJDREVG</Rating>
       <Encoder>Encoder</Encoder>
       <EncodeSettings>EncodeSettings</EncodeSettings>
       <File>File</File>
@@ -25,63 +32,68 @@
       <SourceForm>SourceForm</SourceForm>
       <Product>Product</Product>
       <OriginalMediaType>OriginalMediaType</OriginalMediaType>
-      <PlayCounter>PlayCounter</PlayCounter>
-      <Popularimeter>Popularimeter</Popularimeter>
+      <PlayCounter>1</PlayCounter>
+      <!-- Popularimeter is actually the only element that is a signed integer
+           and may be negative. -->
+      <Popularimeter>-10</Popularimeter>
     </General>
 
     <Genres>
       <AudioGenre>AudioGenre</AudioGenre>
-      <VideoGenre>VideoGenre</VideoGenre>
+      <!-- VideoGenre is binary data base64 encoded. -->
+      <VideoGenre>QUJDREVG</VideoGenre>
       <SubGenre>SubGenre</SubGenre>
     </Genres>
 
     <AudioSpecific>
-      <AudioEncryption>AudioEncryption</AudioEncryption>
-      <AudioGain>AudioGain</AudioGain>
-      <AudioPeak>AudioPeak</AudioPeak>
-      <BPM>BPM</BPM>
-      <Equalisation>Equalisation</Equalisation>
-      <DiscTrack>DiscTrack</DiscTrack>
-      <SetPart>SetPart</SetPart>
+      <!-- AudioEncryption is binary data base64 encoded. -->
+      <AudioEncryption>QUJDREVG</AudioEncryption>
+      <AudioGain>1.0</AudioGain>
+      <AudioPeak>1.0</AudioPeak>
+      <BPM>128</BPM>
+      <Equalisation>QUJDREVG</Equalisation>
+      <DiscTrack>1</DiscTrack>
+      <SetPart>2</SetPart>
       <InitialKey>InitialKey</InitialKey>
       <OfficialFileURL>OfficialFileURL</OfficialFileURL>
       <OfficialSourceURL>OfficialSourceURL</OfficialSourceURL>
     </AudioSpecific>
 
     <ImageSpecific>
-      <CaptureDPI>CaptureDPI</CaptureDPI>
-      <CaptureLightness>CaptureLightness</CaptureLightness>
-      <CapturePaletteSetting>CapturePaletteSetting</CapturePaletteSetting>
-      <CaptureSharpness>CaptureSharpness</CaptureSharpness>
+      <CaptureDPI>72</CaptureDPI>
+      <CaptureLightness>QUJDREVG</CaptureLightness>
+      <CapturePaletteSetting>256</CapturePaletteSetting>
+      <CaptureSharpness>QUJDREVG</CaptureSharpness>
       <Cropped>Cropped</Cropped>
       <OriginalDimensions>OriginalDimensions</OriginalDimensions>
     </ImageSpecific>
 
     <MultiCommercial>
       <Commercial>
-        <CommercialType>CommercialType</CommercialType>
+        <CommercialType>1</CommercialType>
         <Address>Address</Address>
         <URL>URL</URL>
         <Email>Email</Email>
         <MultiPrice>
           <Currency>Currency</Currency>
-          <Amount>Amount</Amount>
-          <PriceDate>PriceDate</PriceDate>
+          <Amount>5</Amount>
+          <!-- Dates are given in the extended ISO 8601 format. -->
+          <PriceDate>2003-07-18T20:00:00+0200</PriceDate>
         </MultiPrice>
       </Commercial>
     </MultiCommercial>
 
     <MultiDate>
       <Date>
-        <DateType>DateType</DateType>
-        <DateBegin>DateBegin</DateBegin>
-        <DateEnd>DateEnd</DateEnd>
+        <DateType>2</DateType>
+        <DateBegin>2003-07-18T20:00:00+0100</DateBegin>
+        <DateEnd>2003-07-18T20:00:00+0000</DateEnd>
       </Date>
     </MultiDate>
 
     <MultiEntity>
       <Entity>
-        <EntityType>EntityType</EntityType>
+        <EntityType>3</EntityType>
         <Name>Name</Name>
         <URL>URL</URL>
         <Email>Email</Email>
@@ -91,15 +103,19 @@
 
     <MultiIdentifier>
       <Identifier>
-        <IdentifierType>IdentifierType</IdentifierType>
-        <IdentifierBinary>IdentifierBinary</IdentifierBinary>
+        <IdentifierType>4</IdentifierType>
+        <!-- Binary data can also be read from a file. This is indicated
+             by the @ as the first character. The rest is the file name.
+             The file itself is read as-is and NOT assumed to be Base64
+             encoded. -->
+        <IdentifierBinary>@file.txt</IdentifierBinary>
         <IdentifierString>IdentifierString</IdentifierString>
       </Identifier>
     </MultiIdentifier>
 
     <MultiLegal>
       <Legal>
-        <LegalType>LegalType</LegalType>
+        <LegalType>3</LegalType>
         <URL>URL</URL>
         <Address>Address</Address>
       </Legal>
@@ -107,7 +123,7 @@
 
     <MultiTitle>
       <Title>
-        <TitleType>TitleType</TitleType>
+        <TitleType>2</TitleType>
         <Name>Name</Name>
         <SubTitle>SubTitle</SubTitle>
         <Edition>Edition</Edition>
@@ -116,13 +132,25 @@
         <Email>Email</Email>
         <Language>Language</Language>
       </Title>
+      <!-- Let's test whether a complete second Title entry works. -->
+      <Title>
+        <TitleType>3</TitleType>
+        <Name>Name2</Name>
+        <SubTitle>SubTitle2</SubTitle>
+        <Edition>Edition2</Edition>
+        <Address>Address2</Address>
+        <URL>URL2</URL>
+        <Email>Email2</Email>
+        <Language>Language2</Language>
+      </Title>
     </MultiTitle>
 
-    <MultiComment>
-      <CommentName>CommentName</CommentName>
-      <Comments>Comments</Comments>
-      <Language>Language</Language>
-    </MultiComment>
+<!-- MultiComments don't work at the moment. -->
+<!--     <MultiComment> -->
+<!--       <CommentName>CommentName</CommentName> -->
+<!--       <Comments>Comments</Comments> -->
+<!--       <Language>Language</Language> -->
+<!--     </MultiComment> -->
 
   </Tag>
 </Tags>
