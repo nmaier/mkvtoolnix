@@ -39,10 +39,19 @@
 using namespace libmatroska;
 using namespace std;
 
+// CUES_* control the creation of cue entries for a track.
+// UNSPECIFIED: is used for command line parsing.
+// NONE:        don't create any cue entries.
+// IFRAMES:     Create cue entries for all I frames.
+// ALL:         Create cue entries for all frames (not really useful).
+// SPARSE:      Create cue entries for I frames if no video track exists, but
+//              create at most one cue entries every two seconds. Used for
+//              audio only files.
 #define CUES_UNSPECIFIED -1
 #define CUES_NONE         0
 #define CUES_IFRAMES      1
 #define CUES_ALL          2
+#define CUES_SPARSE       3
 
 typedef struct {
   int displacement;
@@ -157,8 +166,13 @@ public:
 
 public:
   track_info_c();
-  track_info_c(const track_info_c &src);
-  virtual ~track_info_c();
+  track_info_c(const track_info_c &src):
+    initialized(false) {
+    *this = src;
+  }
+  virtual ~track_info_c() {
+    free_contents();
+  }
 
   track_info_c &operator =(const track_info_c &src);
   virtual void free_contents();
@@ -174,7 +188,31 @@ public:
   }
 };
 
-class generic_reader_c;
+class generic_packetizer_c;
+
+class generic_reader_c {
+protected:
+  track_info_c *ti;
+public:
+  generic_reader_c(track_info_c *nti) {
+    ti = new track_info_c(*nti);
+  }
+  virtual ~generic_reader_c() {
+    delete ti;
+  }
+  virtual int read(generic_packetizer_c *ptzr) = 0;
+  virtual int display_priority() = 0;
+  virtual void display_progress(bool final = false) = 0;
+  virtual void set_headers() = 0;
+  virtual void identify() = 0;
+
+  virtual void add_attachments(KaxAttachments *a) {
+  };
+//   virtual void set_tag_track_uids() = 0;
+
+protected:
+  virtual bool demuxing_requested(char type, int64_t id);
+};
 
 class generic_packetizer_c {
 protected:
@@ -216,16 +254,23 @@ protected:
   int ext_timecodes_version;
   bool ext_timecodes_warning_printed;
 
+  int64_t last_cue_timecode;
+
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
     throw (error_c);
   virtual ~generic_packetizer_c();
 
-  virtual int read();
+  virtual int read() {
+    return reader->read(this);
+  }
+  virtual void reset() {
+    track_entry = NULL;
+  }
 
-  virtual void reset();
-
-  virtual void duplicate_data_on_add(bool duplicate);
+  virtual void duplicate_data_on_add(bool duplicate) {
+    duplicate_data = duplicate;
+  }
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
                           int64_t duration, bool duration_mandatory = false,
                           int64_t bref = -1, int64_t fref = -1,
@@ -233,14 +278,25 @@ public:
                           copy_packet_mode_t copy_this = cp_default);
   virtual void drop_packet(unsigned char *data, copy_packet_mode_t copy_this);
   virtual packet_t *get_packet();
-  virtual int packet_available();
+  virtual int packet_available() {
+    return packet_queue.size();
+  }
   virtual void flush() {
-  };
-  virtual int64_t get_smallest_timecode();
-  virtual int64_t get_queued_bytes();
+  }
+  virtual int64_t get_smallest_timecode() {
+    return (packet_queue.size() == 0) ? 0x0FFFFFFF :
+      packet_queue.front()->timecode;
+  }
+  virtual int64_t get_queued_bytes() {
+    return enqueued_bytes;
+  }
 
-  virtual void set_free_refs(int64_t nfree_refs);
-  virtual int64_t get_free_refs();
+  virtual void set_free_refs(int64_t nfree_refs) {
+    free_refs = nfree_refs;
+  }
+  virtual int64_t get_free_refs() {
+    return free_refs;
+  }
   virtual void set_headers();
   virtual int process(unsigned char *data, int size,
                       int64_t timecode = -1, int64_t length = -1,
@@ -248,15 +304,31 @@ public:
 
   virtual void dump_debug_info() = 0;
 
-  virtual void set_cue_creation(int create_cue_data);
-  virtual int get_cue_creation();
+  virtual void set_cue_creation(int create_cue_data) {
+    ti->cues = create_cue_data;
+  }
+  virtual int get_cue_creation() {
+    return ti->cues;
+  }
+  virtual int64_t get_last_cue_timecode() {
+    return last_cue_timecode;
+  }
+  virtual void set_last_cue_timecode(int64_t timecode) {
+    last_cue_timecode = timecode;
+  }
 
-  virtual KaxTrackEntry *get_track_entry();
-  virtual int get_track_num();
+  virtual KaxTrackEntry *get_track_entry() {
+    return track_entry;
+  }
+  virtual int get_track_num() {
+    return hserialno;
+  }
 
   virtual int set_uid(uint32_t uid);
   virtual void set_track_type(int type);
-  virtual int get_track_type();
+  virtual int get_track_type() {
+    return htrack_type;
+  }
   virtual void set_language(const char *language);
 
   virtual void set_codec_id(const char *id);
@@ -276,7 +348,9 @@ public:
   virtual void set_video_pixel_height(int height);
   virtual void set_video_display_width(int width);
   virtual void set_video_display_height(int height);
-  virtual void set_video_aspect_ratio(float ar);
+  virtual void set_video_aspect_ratio(float ar) {
+    ti->aspect_ratio = ar;
+  }
 
   virtual void set_as_default_track(int type, int priority);
 
@@ -284,43 +358,30 @@ public:
 
   virtual void set_track_name(const char *name);
 
-  virtual void set_default_compression_method(int method);
+  virtual void set_default_compression_method(int method) {
+    hcompression = method;
+  }
 
   virtual int64_t get_next_timecode(int64_t timecode);
   virtual void parse_ext_timecode_file(const char *name);
   virtual void parse_ext_timecode_file_v1(mm_io_c *in, const char *name);
   virtual void parse_ext_timecode_file_v2(mm_io_c *in, const char *name);
 
-  virtual bool needs_negative_displacement(float duration);
-  virtual bool needs_positive_displacement(float duration);
+  virtual bool needs_negative_displacement(float duration) {
+    return ((initial_displacement < 0) &&
+            (ti->async.displacement > initial_displacement));
+  }
+  virtual bool needs_positive_displacement(float duration) {
+    return ((initial_displacement > 0) &&
+            (iabs(ti->async.displacement - initial_displacement) >
+             (duration / 2)));
+  }
   virtual void displace(float by_ms);
 
 protected:
   virtual void dump_packet(const void *buffer, int size);
 };
 
-class generic_reader_c {
-protected:
-  track_info_c *ti;
-public:
-  generic_reader_c(track_info_c *nti);
-  virtual ~generic_reader_c();
-  virtual int read(generic_packetizer_c *ptzr) = 0;
-  virtual int display_priority() = 0;
-  virtual void display_progress(bool final = false) = 0;
-  virtual void set_headers() = 0;
-  virtual void identify() = 0;
-
-  virtual void add_attachments(KaxAttachments *a) {
-  };
-//   virtual void set_tag_track_uids() = 0;
-
-protected:
-  virtual bool demuxing_requested(char type, int64_t id);
-};
-
-track_info_c *duplicate_track_info(track_info_c *src);
-void free_track_info(track_info_c *ti);
 void set_pass_data(track_info_c *ti, unsigned char *data, int size);
 unsigned char *retrieve_pass_data(track_info_c *ti, int &size);
 

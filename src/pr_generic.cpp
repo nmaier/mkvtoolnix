@@ -61,6 +61,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   free_refs = -1;
   enqueued_bytes = 0;
   safety_last_timecode = 0;
+  last_cue_timecode = -1;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -271,34 +272,6 @@ void generic_packetizer_c::set_tag_track_uid() {
   }
 }
 
-int generic_packetizer_c::read() {
-  return reader->read(this);
-}
-
-void generic_packetizer_c::reset() {
-  track_entry = NULL;
-}
-
-void generic_packetizer_c::set_cue_creation(int ncreate_cue_data) {
-  ti->cues = ncreate_cue_data;
-}
-
-int generic_packetizer_c::get_cue_creation() {
-  return ti->cues;
-}
-
-void generic_packetizer_c::set_free_refs(int64_t nfree_refs) {
-  free_refs = nfree_refs;
-}
-
-int64_t generic_packetizer_c::get_free_refs() {
-  return free_refs;
-}
-
-KaxTrackEntry *generic_packetizer_c::get_track_entry() {
-  return track_entry;
-}
-
 int generic_packetizer_c::set_uid(uint32_t uid) {
   if (is_unique_uint32(uid)) {
     add_unique_uint32(uid);
@@ -315,18 +288,12 @@ int generic_packetizer_c::set_uid(uint32_t uid) {
 void generic_packetizer_c::set_track_type(int type) {
   htrack_type = type;
 
+  if ((type == track_audio) && (ti->cues == CUES_UNSPECIFIED))
+    ti->cues = CUES_SPARSE;
   if (ti->default_track)
     set_as_default_track(type, DEFAULT_TRACK_PRIORITY_CMDLINE);
   else
     set_as_default_track(type, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
-}
-
-int generic_packetizer_c::get_track_type() {
-  return htrack_type;
-}
-
-int generic_packetizer_c::get_track_num() {
-  return hserialno;
 }
 
 void generic_packetizer_c::set_track_name(const char *name) {
@@ -468,10 +435,6 @@ void generic_packetizer_c::set_video_display_height(int height) {
   }
 }
 
-void generic_packetizer_c::set_video_aspect_ratio(float ar) {
-  ti->aspect_ratio = ar;
-}
-
 void generic_packetizer_c::set_as_default_track(int type, int priority) {
   int idx;
 
@@ -502,10 +465,6 @@ void generic_packetizer_c::set_language(const char *language) {
   if (track_entry != NULL)
     *(static_cast<EbmlString *>
       (&GetChild<KaxTrackLanguage>(*track_entry))) = ti->language;
-}
-
-void generic_packetizer_c::set_default_compression_method(int method) {
-  hcompression = method;
 }
 
 void generic_packetizer_c::set_headers() {
@@ -693,10 +652,6 @@ void generic_packetizer_c::set_headers() {
   }
 }
 
-void generic_packetizer_c::duplicate_data_on_add(bool duplicate) {
-  duplicate_data = duplicate;
-}
-
 void generic_packetizer_c::add_packet(unsigned char  *data, int length,
                                       int64_t timecode,
                                       int64_t duration,
@@ -772,21 +727,6 @@ packet_t *generic_packetizer_c::get_packet() {
   return pack;
 }
 
-int generic_packetizer_c::packet_available() {
-  return packet_queue.size();
-}
-
-int64_t generic_packetizer_c::get_smallest_timecode() {
-  if (packet_queue.size() == 0)
-    return 0x0FFFFFFF;
-
-  return packet_queue.front()->timecode;
-}
-
-int64_t generic_packetizer_c::get_queued_bytes() {
-  return enqueued_bytes;
-}
-
 void generic_packetizer_c::dump_packet(const void *buffer, int size) {
   char *path;
   mm_io_c *out;
@@ -835,8 +775,9 @@ void generic_packetizer_c::parse_ext_timecode_file(const char *name) {
   delete in;
 }
 
-void generic_packetizer_c::
-parse_ext_timecode_file_v1(mm_io_c *in, const char *name) {
+void
+generic_packetizer_c::parse_ext_timecode_file_v1(mm_io_c *in,
+                                                 const char *name) {
   string line;
   timecode_range_c t;
   vector<string> fields;
@@ -959,8 +900,9 @@ parse_ext_timecode_file_v1(mm_io_c *in, const char *name) {
            iit->start_frame, iit->end_frame, iit->fps, iit->base_timecode);
 }
 
-void generic_packetizer_c::
-parse_ext_timecode_file_v2(mm_io_c *in, const char *name) {
+void
+generic_packetizer_c::parse_ext_timecode_file_v2(mm_io_c *in,
+                                                 const char *name) {
   int line_no;
   string line;
   double timecode;
@@ -1031,17 +973,6 @@ int64_t generic_packetizer_c::get_next_timecode(int64_t timecode) {
   return timecode;
 }
 
-bool generic_packetizer_c::needs_negative_displacement(float duration) {
-  return ((initial_displacement < 0) &&
-          (ti->async.displacement > initial_displacement));
-}
-
-bool generic_packetizer_c::needs_positive_displacement(float duration) {
-  return ((initial_displacement > 0) &&
-          (iabs(ti->async.displacement - initial_displacement) >
-           (duration / 2)));
-}
-
 void generic_packetizer_c::displace(float by_ms) {
   ti->async.displacement += (int64_t)by_ms;
   if (initial_displacement < 0) {
@@ -1053,14 +984,6 @@ void generic_packetizer_c::displace(float by_ms) {
 }
 
 //--------------------------------------------------------------------
-
-generic_reader_c::generic_reader_c(track_info_c *nti) {
-  ti = new track_info_c(*nti);
-}
-
-generic_reader_c::~generic_reader_c() {
-  delete ti;
-}
 
 bool generic_reader_c::demuxing_requested(char type, int64_t id) {
   vector<int64_t> *tracks;
@@ -1127,15 +1050,6 @@ track_info_c::track_info_c():
   track_names = new vector<language_t>;
   all_ext_timecodes = new vector<language_t>;
   track_order = new vector<int64_t>;
-}
-
-track_info_c::track_info_c(const track_info_c &src):
-  initialized(false) {
-  *this = src;
-}
-
-track_info_c::~track_info_c() {
-  free_contents();
 }
 
 void track_info_c::free_contents() {

@@ -529,12 +529,20 @@ int cluster_helper_c::render() {
       // I frames were requested and this is an I frame...
       if (((source->get_cue_creation() == CUES_IFRAMES) && (pack->bref == -1))
           ||
-      // ... or if the user requested entries for all frames.
-          (source->get_cue_creation() == CUES_ALL)) {
+      // ... or if the user requested entries for all frames...
+          (source->get_cue_creation() == CUES_ALL) ||
+      // ... or if this is an audio track, there is no video track and the
+      // last cue entry was created more than 2s ago.
+          ((source->get_cue_creation() == CUES_SPARSE) &&
+           (source->get_track_type() == track_audio) && !video_track_present &&
+           ((source->get_last_cue_timecode() < 0) ||
+            ((pack->assigned_timecode - source->get_last_cue_timecode()) >=
+             2000)))) {
         kax_cues->AddBlockGroup(*new_block_group);
         num_cue_elements++;
         num_cue_elements_here++;
         cue_writing_requested = 1;
+        source->set_last_cue_timecode(pack->assigned_timecode);
       }
     }
 

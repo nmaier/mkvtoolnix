@@ -51,7 +51,7 @@ passthrough_packetizer_c::process(unsigned char *buf,
                                   int64_t duration,
                                   int64_t bref,
                                   int64_t fref) {
-  process(buf, size, timecode, duration, bref, fref, false);
+  return process(buf, size, timecode, duration, bref, fref, false);
 }
 
 int
