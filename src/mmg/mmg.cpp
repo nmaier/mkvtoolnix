@@ -139,6 +139,9 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   file_menu->Append(ID_M_FILE_EXIT, _T("&Quit\tCtrl-Q"),
                     _T("Quit the application"));
 
+  file_menu_sep = false;
+  update_file_menu();
+
   wxMenu *muxing_menu = new wxMenu();
   muxing_menu->Append(ID_M_MUXING_START,
                       _T("Sta&rt muxing (run mkvmerge)\tCtrl-R"),
@@ -224,8 +227,8 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
 
     file = app->argv[1];
     if (!wxFileExists(file) || wxDirExists(file))
-      wxMessageBox("The file does exist.", "Error loading settings",
-                   wxOK | wxCENTER | wxICON_ERROR);
+      wxMessageBox("The file '" + file + "' does exist.",
+                   "Error loading settings", wxOK | wxCENTER | wxICON_ERROR);
     else {
 #ifdef SYS_WINDOWS
       if ((file.Length() > 3) && (file.c_str()[1] != ':') &&
@@ -284,7 +287,6 @@ void mmg_dialog::load(wxString file_name) {
   wxString s;
   int version;
 
-  set_last_settings_in_menu(file_name);
   cfg = new wxFileConfig("mkvmerge GUI", "Moritz Bunkus", file_name);
   cfg->SetPath("/mkvmergeGUI");
   if (!cfg->Read("file_version", &version) || (version != 1)) {
@@ -293,6 +295,7 @@ void mmg_dialog::load(wxString file_name) {
                  wxOK | wxCENTER | wxICON_ERROR);
     return;
   }
+  set_last_settings_in_menu(file_name);
   cfg->Read("output_file_name", &s);
   tc_output->SetValue(s);
 
@@ -339,6 +342,8 @@ void mmg_dialog::save(wxString file_name) {
 void mmg_dialog::set_last_settings_in_menu(wxString name) {
   uint32_t i;
   vector<wxString>::iterator eit;
+  wxConfigBase *cfg;
+  wxString s;
 
   i = 0;
   while (i < last_settings.size()) {
@@ -350,10 +355,18 @@ void mmg_dialog::set_last_settings_in_menu(wxString name) {
       i++;
   }
   last_settings.insert(last_settings.begin(), name);
-  if (last_settings.size() > 4)
+  while (last_settings.size() > 4)
     last_settings.pop_back();
 
-  
+  cfg = wxConfigBase::Get();
+  cfg->SetPath("/GUI");
+  for (i = 0; i < last_settings.size(); i++) {
+    s.Printf("last_settings %d", i);
+    cfg->Write(s, last_settings[i]);
+  }
+  cfg->Flush();
+
+  update_file_menu();
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
@@ -713,6 +726,32 @@ void mmg_dialog::update_command_line() {
 }
 
 void mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
+  if ((evt.GetId() < ID_M_FILE_LOADLAST1) ||
+      ((evt.GetId() - ID_M_FILE_LOADLAST1) >= last_settings.size()))
+    return;
+
+  load(last_settings[evt.GetId() - ID_M_FILE_LOADLAST1]);
+}
+
+void mmg_dialog::update_file_menu() {
+  uint32_t i;
+  wxMenuItem *mi;
+  wxString s;
+
+  for (i = ID_M_FILE_LOADLAST1; i <= ID_M_FILE_LOADLAST4; i++) {
+    mi = file_menu->Remove(i);
+    if (mi != NULL)
+      delete mi;
+  }
+
+  if ((last_settings.size() > 0) && !file_menu_sep) {
+    file_menu->AppendSeparator();
+    file_menu_sep = true;
+  }
+  for (i = 0; i < last_settings.size(); i++) {
+    s.Printf("&%u. %s", i + 1, last_settings[i].c_str());
+    file_menu->Append(ID_M_FILE_LOADLAST1 + i, s);
+  }
 }
 
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
@@ -734,7 +773,21 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
 END_EVENT_TABLE();
 
 bool mmg_app::OnInit() {
-  wxConfigBase::Set(new wxConfig("mkvmergeGUI"));
+  wxConfigBase *cfg;
+  uint32_t i;
+  wxString k, v;
+
+  cfg = new wxConfig("mkvmergeGUI");
+  wxConfigBase::Set(cfg); 
+  cfg->SetPath("/GUI");
+  if (!cfg->Read("last_directory", &last_open_dir))
+    last_open_dir = "";
+  for (i = 0; i < 4; i++) {
+    k.Printf("last_settings %u", i);
+    if (cfg->Read(k, &v))
+      last_settings.push_back(v);
+  }
+
   app = this;
   mdlg = new mmg_dialog();
   mdlg->Show(true);
@@ -743,18 +796,15 @@ bool mmg_app::OnInit() {
 }
 
 int mmg_app::OnExit() {
-  uint32_t i;
   wxString s;
   wxConfigBase *cfg;
 
   cfg = wxConfigBase::Get();
   cfg->SetPath("/GUI");
   cfg->Write("last_directory", last_open_dir);
-  for (i = 0; i < last_settings.size(); i++) {
-    s.Printf("last_settings %d", i);
-    cfg->Write(s, last_settings[i]);
-  }
   cfg->Flush();
+
+  delete cfg;
 
   return 0;
 }

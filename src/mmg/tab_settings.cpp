@@ -85,8 +85,6 @@ void tab_settings::load_preferences() {
   cfg->SetPath("/GUI");
   if (!cfg->Read("mkvmerge_executable", &mkvmerge_path))
     mkvmerge_path = "mkvmerge";
-  if (!cfg->Read("last_directory", &last_open_dir))
-    last_open_dir = "";
   tc_mkvmerge->SetValue(mkvmerge_path);
 }
 

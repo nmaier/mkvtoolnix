@@ -101,10 +101,11 @@ using namespace std;
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
 #define ID_M_FILE_EXIT 20002
-#define ID_M_FILE_LOADLAST1 20090
-#define ID_M_FILE_LOADLAST2 20091
-#define ID_M_FILE_LOADLAST3 20092
-#define ID_M_FILE_LOADLAST4 20093
+#define ID_M_FILE_LOADSEPARATOR 20090
+#define ID_M_FILE_LOADLAST1 20091
+#define ID_M_FILE_LOADLAST2 20092
+#define ID_M_FILE_LOADLAST3 20093
+#define ID_M_FILE_LOADLAST4 20094
 
 #define ID_M_MUXING_START 20100
 #define ID_M_MUXING_COPY_CMDLINE 20101
@@ -309,6 +310,7 @@ protected:
   wxStatusBar *status_bar;
 
   wxMenu *file_menu;
+  bool file_menu_sep;
 
   tab_input *input_page;
   tab_attachments *attachments_page;
@@ -341,6 +343,7 @@ public:
 
   void set_last_settings_in_menu(wxString name);
   void on_file_load_last(wxCommandEvent &evt);
+  void update_file_menu();
 };
 
 class mmg_app: public wxApp {
