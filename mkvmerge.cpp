@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.93 2003/06/09 09:07:41 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.94 2003/06/09 16:33:07 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1172,9 +1172,24 @@ static void handle_args(int argc, char **argv) {
 
 static void setup() {
 #if ! defined __CYGWIN__ && ! defined WIN32
-  if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
-    fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
-            "that your system supports this locale.\n");
+  string new_locale;
+  int pos;
+
+  if (setlocale(LC_CTYPE, "") == NULL) {
+    fprintf(stderr, "Error: Could not set the locale properly. Check the "
+            "LANG, LC_ALL and LC_CTYPE environment variables.\n");
+    exit(1);
+  }
+  new_locale = setlocale(LC_CTYPE, NULL);
+  pos = new_locale.rfind(".");
+  if (pos >= 0)
+    new_locale.erase(pos);
+  new_locale += ".UTF-8";
+  if (setlocale(LC_CTYPE, new_locale.c_str()) == NULL) {
+    fprintf(stderr, "Error: Could not set the locale '%s'. Make sure "
+            "that your system supports this locale or change the "
+            "environment variables LANG/LC_ALL/LC_CTYPE appropriately.\n",
+            new_locale.c_str());
     exit(1);
   }
   if (setlocale(LC_CTYPE, "") == NULL) {
