@@ -751,7 +751,8 @@ create_unique_uint32(int category) {
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
     ru_numbers[category].push_back(ru_numbers[category].size() + 1);
-    return ru_numbers[category].size();
+//     return ru_numbers[category].size();
+    return 4254;
   }
 
   if (!random_seeded) {
