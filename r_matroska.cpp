@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.17 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.18 2003/05/03 19:42:34 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -55,6 +55,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "KaxContexts.h"
 #include "KaxInfo.h"
 #include "KaxInfoData.h"
+#include "KaxSeekHead.h"
 #include "KaxSegment.h"
 #include "KaxTracks.h"
 #include "KaxTrackAudio.h"
@@ -127,37 +128,6 @@ mkv_reader_c::~mkv_reader_c() {
     delete in;
   if (segment != NULL)
     delete segment;
-}
-
-void mkv_reader_c::add_buffer(DataBuffer &dbuffer) {
-  buffer_t *buffer;
-
-  buffer = (buffer_t *)malloc(sizeof(buffer_t));
-  if (buffer == NULL)
-    die("malloc");
-  buffer->data = (unsigned char *)malloc(dbuffer.Size());
-  if (buffer->data == NULL)
-    die("malloc");
-  buffer->length = dbuffer.Size();
-  memcpy(buffer->data, dbuffer.Buffer(), buffer->length);
-  buffers = (buffer_t **)realloc(buffers, (num_buffers + 1) *
-                                 sizeof(buffer_t *));
-  if (buffers == NULL)
-    die("realloc");
-  buffers[num_buffers] = buffer;
-  num_buffers++;
-}
-
-void mkv_reader_c::free_buffers() {
-  int i;
-
-  for (i = 0; i < num_buffers; i++) {
-    free(buffers[i]->data);
-    free(buffers[i]);
-  }
-  free(buffers);
-  buffers = NULL;
-  num_buffers = 0;
 }
 
 int mkv_reader_c::packets_available() {
@@ -455,6 +425,7 @@ int mkv_reader_c::read_headers() {
 
     upper_lvl_el = 0;
     exit_loop = 0;
+    tc_scale = MKVD_TIMECODESCALE;
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
@@ -747,9 +718,9 @@ int mkv_reader_c::read_headers() {
         saved_l1 = l1;
         exit_loop = 1;
 
-      } else
-        fprintf(stdout, "matroska_reader: |+ unknown element@1: %s, ule "
-                "%d\n", typeid(*l1).name(), upper_lvl_el);
+      } else if (!(EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId))
+        fprintf(stdout, "matroska_reader: |+ unknown element@1: %s\n",
+                typeid(*l1).name());
       
       if (exit_loop)      // we've found the first cluster, so get out
         break;
@@ -775,9 +746,6 @@ int mkv_reader_c::read_headers() {
 
   if (!exit_loop)               // We have NOT found a cluster!
     return 0;
-
-  if (tc_scale == 0)
-    tc_scale = MKVD_TIMECODESCALE;
 
   verify_tracks();
 
@@ -842,41 +810,13 @@ void mkv_reader_c::create_packetizers() {
   }
 }
 
-void mkv_reader_c::handle_blocks() {
-  int i;
-  int64_t bref, fref;
-
-  if (num_buffers == 0)
-    return;
-
-  if ((block_track->type == 't') && (block_duration == -1)) {
-    fprintf(stdout, "Warning: Text subtitle block does not contain a "
-            "block duration element. This file is broken.\n");
-    return;
-  }
-
-  last_timecode = block_timecode;
-
-  if (block_ref1 > 0) {
-    fref = block_ref1;
-    bref = block_ref2;
-  } else {
-    fref = block_ref2;
-    bref = block_ref1;
-  }
-
-  for (i = 0; i < num_buffers; i++)
-    block_track->packetizer->process(buffers[i]->data, buffers[i]->length,
-                                     block_timecode, block_duration,
-                                     bref, fref);
-
-  free_buffers();
-}
-
 int mkv_reader_c::read() {
-  int upper_lvl_el, exit_loop, found_data, i;
+  int upper_lvl_el, exit_loop, found_data, i, delete_element;
   // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
+  KaxBlock *block;
+  int64_t fref, bref, block_duration, block_ref1, block_ref2;
+  mkv_track_t *block_track;
 
   if (num_tracks == 0)
     return 0;
@@ -892,6 +832,8 @@ int mkv_reader_c::read() {
   upper_lvl_el = 0;
   l1 = saved_l1;
   saved_l1 = NULL;
+  saved_l2 = NULL;
+  delete_element = 1;
   found_data = 0;
   try {
     while (l1 != NULL)  {
@@ -928,10 +870,10 @@ int mkv_reader_c::read() {
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
 
             block_duration = -1;
-            block_timecode = -1;
             block_ref1 = -1;
             block_ref2 = -1;
             block_track = NULL;
+            block = NULL;
 
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
@@ -940,19 +882,15 @@ int mkv_reader_c::read() {
                 break;
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
-                KaxBlock &block = *static_cast<KaxBlock *>(l3);
-                block.SetParent(*cluster);
-                block.ReadData(es->I_O());
+                block = (KaxBlock *)l3;
+                block->SetParent(*cluster);
+                block->ReadData(es->I_O());
 
-                block_track = find_track_by_num(block.TrackNum());
-                if ((block_track != NULL) && demuxing_requested(block_track)) {
-                  block_timecode = block.GlobalTimecode() / 1000000;
-                  for (i = 0; i < (int)block.NumberFrames(); i++) {
-                    DataBuffer &data = block.GetBuffer(i);
-                    add_buffer(data);
-                    found_data++;
-                  }
-                }
+                block_track = find_track_by_num(block->TrackNum());
+                if ((block_track != NULL) && demuxing_requested(block_track))
+                  delete_element = 0;
+                else
+                  block = NULL;
 
               } else if (EbmlId(*l3) ==
                          KaxReferenceBlock::ClassInfos.GlobalId) {
@@ -976,22 +914,46 @@ int mkv_reader_c::read() {
                            KaxBlockVirtual::ClassInfos.GlobalId))
                  printf("[mkv]   Uknown element@3: %s\n", typeid(*l3).name());
 
-              if (upper_lvl_el > 0) {		// we're coming from l4
-                upper_lvl_el--;
+              l3->SkipData(static_cast<EbmlStream &>(*es),
+                           l3->Generic().Context);
+              if (delete_element)
                 delete l3;
-                l3 = l4;
-                if (upper_lvl_el > 0)
-                  break;
-              } else {
-                l3->SkipData(static_cast<EbmlStream &>(*es),
-                             l3->Generic().Context);
-                delete l3;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              }
+              else
+                delete_element = 1;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true, 1);
             } // while (l3 != NULL)
 
-            handle_blocks();
+            if (block != NULL) {
+              if ((block_track->type == 't') && (block_duration == -1)) {
+                fprintf(stdout, "Warning: Text subtitle block does not "
+                        "contain a block duration element. This file is "
+                        "broken.\n");
+                delete block;
+
+                return EMOREDATA;
+              }
+
+              last_timecode = block->GlobalTimecode() / 1000000;
+
+              if (block_ref1 > 0) {
+                fref = block_ref1;
+                bref = block_ref2;
+              } else {
+                fref = block_ref2;
+                bref = block_ref1;
+              }
+
+              for (i = 0; i < (int)block->NumberFrames(); i++) {
+                DataBuffer &data = block->GetBuffer(i);
+                block_track->packetizer->process(data.Buffer(), data.Size(),
+                                                 last_timecode,
+                                                 block_duration, bref, fref);
+              }
+              block_track->units_processed += block->NumberFrames();
+
+              delete block;
+            }
           }
 
           if (upper_lvl_el > 0) {		// we're coming from l3
