@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.8 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.9 2003/03/05 13:51:20 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -73,13 +73,11 @@ int ogm_reader_c::probe_file(FILE *file, u_int64_t size) {
  * Opens the file for processing, initializes an ogg_sync_state used for
  * reading from an OGG stream.
  */
-ogm_reader_c::ogm_reader_c(char *fname, unsigned char *astreams,
-                           unsigned char *vstreams, unsigned char *tstreams,
-                           audio_sync_t *nasync,
-                           char *nfourcc) throw (error_c) {
+ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
   u_int64_t size;
   
-  if ((file = fopen(fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("ogm_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("ogm_reader: Could not seek to end of file.");
@@ -99,36 +97,8 @@ ogm_reader_c::ogm_reader_c(char *fname, unsigned char *astreams,
   sdemuxers = NULL;
   num_sdemuxers = 0;
 
-  if (astreams != NULL)
-    this->astreams = (unsigned char *)strdup((char *)astreams);
-  else
-    this->astreams = NULL;
-
-  if (vstreams != NULL)
-    this->vstreams = (unsigned char *)strdup((char *)vstreams);
-  else
-    this->vstreams = NULL;
- 
-  if (tstreams != NULL)
-    this->tstreams = (unsigned char *)strdup((char *)tstreams);
-  else
-    this->tstreams = NULL;
-
-  if (nfourcc != NULL) {
-    fourcc = strdup(nfourcc);
-    if (fourcc == NULL)
-      die("malloc");
-  } else
-    fourcc = NULL;
-
   if (verbose)
-    fprintf(stdout, "Using OGG/OGM demultiplexer for %s.\n", fname);
-
-  filename = strdup(fname);
-  if (filename == NULL)
-    die("malloc");
-
-  memcpy(&async, nasync, sizeof(audio_sync_t));
+    fprintf(stdout, "Using OGG/OGM demultiplexer for %s.\n", ti->fname);
 
   if (read_headers() <= 0)
     throw error_c("ogm_reader: Could not read all header packets.");
@@ -139,13 +109,6 @@ ogm_reader_c::~ogm_reader_c() {
   int i;
   ogm_demuxer_t *dmx;
   
-  if (astreams != NULL)
-    free(astreams);
-  if (vstreams != NULL)
-    free(vstreams);
-  if (tstreams != NULL)
-    free(tstreams);
-
   ogg_sync_clear(&oy);
 
   for (i = 0; i < num_sdemuxers; i++) {
@@ -156,12 +119,6 @@ ogm_reader_c::~ogm_reader_c() {
   }
   if (sdemuxers != NULL)
     free(sdemuxers);
-
-  if (filename != NULL)
-    free(filename);
-
-  if (fourcc != NULL)
-    free(fourcc);
 }
 
 /*
@@ -270,13 +227,15 @@ void ogm_reader_c::create_packetizers() {
   while (i < num_sdemuxers) {
     dmx = sdemuxers[i];
     sth = (stream_header *)&dmx->packet_data[0][1];
+    ti->private_data = NULL;
+    ti->private_size = 0;
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
-        if (fourcc == NULL)
+        if (ti->fourcc == NULL)
           codec = sth->subtype;
         else
-          codec = fourcc;
+          codec = ti->fourcc;
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
         bih.bi_size = sizeof(BITMAPINFOHEADER);
@@ -286,14 +245,15 @@ void ogm_reader_c::create_packetizers() {
         bih.bi_bit_count = 24;
         memcpy(&bih.bi_compression, codec, 4);
         bih.bi_size_image = sth->sh.video.width * sth->sh.video.height * 3;
+        ti->private_data = (unsigned char *)&bih;
+        ti->private_size = sizeof(BITMAPINFOHEADER);
         try {
           dmx->packetizer =
-            new video_packetizer_c((unsigned char *)&bih,
-                                   sizeof(BITMAPINFOHEADER), codec,
+            new video_packetizer_c(codec,
                                    (double)10000000 / (double)sth->time_unit, 
                                    sth->sh.video.width, sth->sh.video.height,
-                                   sth->bits_per_sample, sth->buffersize, NULL,
-                                   1);
+                                   sth->bits_per_sample, sth->buffersize, 1,
+                                   ti);
         } catch (error_c &error) {
           fprintf(stderr, "Fatal: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
@@ -304,16 +264,16 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using video output "
-                    "module for stream %d.\n", filename, numstreams);
+                    "module for stream %d.\n", ti->fname, numstreams);
 
         break;
 
       case OGM_STREAM_TYPE_PCM:
         try {
           dmx->packetizer =
-            new pcm_packetizer_c(NULL, 0, sth->samples_per_unit,
+            new pcm_packetizer_c(sth->samples_per_unit,
                                  sth->sh.audio.channels, 
-                                 sth->bits_per_sample, &async);
+                                 sth->bits_per_sample, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Fatal: ogm_reader: could not initialize PCM "
                   "packetizer for stream id %d. Will try to continue and "
@@ -324,16 +284,15 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using PCM output "
-                    "module for stream %d.\n", filename, numstreams);
+                    "module for stream %d.\n", ti->fname, numstreams);
         break;
 
       case OGM_STREAM_TYPE_MP3:
         try {
           dmx->packetizer = 
-            new mp3_packetizer_c(NULL, 0, sth->samples_per_unit,
+            new mp3_packetizer_c(sth->samples_per_unit,
                                  sth->sh.audio.channels,
-                                 sth->sh.audio.avgbytespersec * 8 / 1000,
-                                 &async);
+                                 sth->sh.audio.avgbytespersec * 8 / 1000, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Fatal: ogm_reader: could not initialize MP3 "
                   "packetizer for stream id %d. Will try to continue and "
@@ -344,16 +303,15 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using MP3 output "
-                    "module for stream %d.\n", filename, numstreams);
+                    "module for stream %d.\n", ti->fname, numstreams);
         break;
 
       case OGM_STREAM_TYPE_AC3:
         try {
           dmx->packetizer = 
-            new ac3_packetizer_c(NULL, 0, sth->samples_per_unit,
+            new ac3_packetizer_c(sth->samples_per_unit,
                                  sth->sh.audio.channels,
-                                 sth->sh.audio.avgbytespersec * 8 / 1000,
-                                 &async);
+                                 sth->sh.audio.avgbytespersec * 8 / 1000, ti);
         } catch (error_c &error) {
           fprintf(stderr, "FATAL: ogm_reader: could not initialize AC3 "
                   "packetizer for stream id %d. Will try to continue and "
@@ -364,7 +322,7 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using AC3 output "
-                    "module for stream %d.\n", filename, numstreams);
+                    "module for stream %d.\n", ti->fname, numstreams);
 
         break;
 
@@ -381,10 +339,10 @@ void ogm_reader_c::create_packetizers() {
         vorbis_comment_clear(&vc);
         try {
           dmx->packetizer = 
-            new vorbis_packetizer_c(&async,
-                                    dmx->packet_data[0], dmx->packet_sizes[0],
+            new vorbis_packetizer_c(dmx->packet_data[0], dmx->packet_sizes[0],
                                     dmx->packet_data[1], dmx->packet_sizes[1],
-                                    dmx->packet_data[2], dmx->packet_sizes[2]);
+                                    dmx->packet_data[2], dmx->packet_sizes[2],
+                                    ti);
         } catch (error_c &error) {
           fprintf(stderr, "FATAL: ogm_reader: could not initialize Vorbis "
                   "packetizer for stream id %d. Will try to continue and "
@@ -395,7 +353,7 @@ void ogm_reader_c::create_packetizers() {
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using Vorbis output "
-                    "module for stream %d.\n", filename, numstreams);
+                    "module for stream %d.\n", ti->fname, numstreams);
 
         break;
     }
@@ -462,14 +420,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   if ((op.bytes >= 7) && !strncmp((char *)&op.packet[1], "vorbis", 6)) {
     nastreams++;
     numstreams++;
-    if (!demuxing_requested(astreams, nastreams)) {
-      ogg_stream_clear(&new_oss);
-      return;
-    }
-
-    nastreams++;
-    numstreams++;
-    if (!demuxing_requested(vstreams, nvstreams)) {
+    if (!demuxing_requested(ti->vstreams, nvstreams)) {
       ogg_stream_clear(&new_oss);
       free(dmx->packet_data[0]);
       free(dmx);
@@ -492,7 +443,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!strncmp(sth->streamtype, "video", 5)) {
       nvstreams++;
       numstreams++;
-      if (!demuxing_requested(vstreams, nvstreams)) {
+      if (!demuxing_requested(ti->vstreams, nvstreams)) {
         ogg_stream_clear(&new_oss);
         free(dmx->packet_data[0]);
         free(dmx);
@@ -513,7 +464,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!strncmp(sth->streamtype, "audio", 5)) {
       nastreams++;
       numstreams++;
-      if (!demuxing_requested(astreams, nastreams)) {
+      if (!demuxing_requested(ti->astreams, nastreams)) {
         ogg_stream_clear(&new_oss);
         return;
       }
@@ -552,7 +503,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       fprintf(stderr, "Warning: ogm_reader: No support for subtitles at "
               "the moment. Ignoring stream id %d.\n", numstreams);
 
-//       if (!demuxing_requested(tstreams, ntstreams)) {
+//       if (!demuxing_requested(ti->tstreams, ntstreams)) {
 //         ogg_stream_clear(&new_oss);
 //         return;
 //       }

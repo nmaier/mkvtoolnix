@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_ac3.h,v 1.5 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_ac3.h,v 1.6 2003/03/05 13:51:20 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -38,7 +38,7 @@ private:
   u_int64_t               size;
      
 public:
-  ac3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
+  ac3_reader_c(track_info_t *nti) throw (error_c);
   virtual ~ac3_reader_c();
 
   virtual int       read();

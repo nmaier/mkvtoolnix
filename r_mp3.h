@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.6 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.7 2003/03/05 13:51:20 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,11 +34,10 @@ private:
   unsigned char          *chunk;
   FILE                   *file;
   class mp3_packetizer_c *mp3packetizer;
-  u_int64_t               bytes_processed;
-  u_int64_t               size;
+  u_int64_t               bytes_processed, size;
      
 public:
-  mp3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
+  mp3_reader_c(track_info_t *nti) throw (error_c);
   virtual ~mp3_reader_c();
 
   virtual int       read();

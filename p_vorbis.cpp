@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.4 2003/03/04 10:15:33 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.5 2003/03/05 13:51:20 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,19 +43,17 @@
 #include <dmalloc.h>
 #endif
 
-vorbis_packetizer_c::vorbis_packetizer_c(audio_sync_t *nasync,
-                                         unsigned char *d_header, int l_header,
+vorbis_packetizer_c::vorbis_packetizer_c(unsigned char *d_header, int l_header,
                                          unsigned char *d_comments,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
-                                         int l_codecsetup)
-  throw (error_c) : q_c() {
+                                         int l_codecsetup, track_info_t *nti)
+  throw (error_c): q_c(nti) {
   int i;
 
   packetno = 0;
   last_bs = 0;
   samples = 0;
-  memcpy(&async, nasync, sizeof(audio_sync_t));
   memset(headers, 0, 3 * sizeof(ogg_packet));
   headers[0].packet = (unsigned char *)malloc(l_header);
   headers[1].packet = (unsigned char *)malloc(l_comments);
@@ -182,7 +180,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     timecode = samples * 1000 / vi.rate;
 
   // Positive displacement, first packet? Well then lets create silence.
-  if ((packetno == 0) && (async.displacement > 0)) {
+  if ((packetno == 0) && (ti->async.displacement > 0)) {
     // Create a fake packet so we can use vorbis_packet_blocksize().
     zero[0] = 0;
     zero[1] = 0;
@@ -191,7 +189,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     op.bytes = 2;
 
     // Calculate how many samples we have to create.
-    samples_needed = vi.rate * 1000 / async.displacement;
+    samples_needed = vi.rate * 1000 / ti->async.displacement;
 
     this_bs = vorbis_packet_blocksize(&vi, &op);
     samples_here = (this_bs + last_bs) / 4;
@@ -202,7 +200,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
       add_packet(zero, 2, samples * 1000 / vi.rate);
     }
 
-    async.displacement = 0;
+    ti->async.displacement = 0;
   }
 
   // Update the number of samples we have processed so that we can
@@ -215,10 +213,10 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   last_bs = this_bs;
 
   // Handle the displacement.
-  timecode += async.displacement;
+  timecode += ti->async.displacement;
 
   // Handle the linear sync - simply multiply with the given factor.
-  timecode = (int64_t)((double)timecode * async.linear);
+  timecode = (int64_t)((double)timecode * ti->async.linear);
 
   // If a negative sync value was used we may have to skip this packet.
   if (timecode < 0)

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.5 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.6 2003/03/05 13:51:20 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,12 +34,10 @@
 #include <dmalloc.h>
 #endif
 
-pcm_packetizer_c::pcm_packetizer_c(unsigned char *nprivate_data,
-                                   int nprivate_size,
-                                   unsigned long nsamples_per_sec,
+pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
-                                   audio_sync_t *nasync)
-                                   throw (error_c) : q_c() {
+                                   track_info_t *nti) throw (error_c):
+  q_c(nti) {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
   tempbuf = (unsigned char *)malloc(bps + 128);
@@ -49,9 +47,7 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned char *nprivate_data,
   channels = nchannels;
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
-  memcpy(&async, nasync, sizeof(audio_sync_t));
   remaining_sync = 0;
-  set_private_data(nprivate_data, nprivate_size);
   set_header();
 }
 
@@ -118,12 +114,12 @@ int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
 
   new_buf = buf;
 
-  if (async.displacement != 0) {
-    if (async.displacement > 0) {
+  if (ti->async.displacement != 0) {
+    if (ti->async.displacement > 0) {
       // Add silence.
       int pad_size;
 
-      pad_size = bps * async.displacement / 1000;
+      pad_size = bps * ti->async.displacement / 1000;
       new_buf = (unsigned char *)malloc(size + pad_size);
       if (new_buf == NULL)
         die("malloc");
@@ -132,8 +128,8 @@ int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
       size += pad_size;
     } else
       // Skip bytes.
-      remaining_sync = -1 * bps * async.displacement / 1000;
-    async.displacement = 0;
+      remaining_sync = -1 * bps * ti->async.displacement / 1000;
+    ti->async.displacement = 0;
   }
 
   if (remaining_sync > 0) {
@@ -152,13 +148,13 @@ int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
 
   for (i = 0; i < complete_packets; i++) {
     add_packet(new_buf + i * bytes_per_packet, bytes_per_packet,
-               (bytes_output * 1000 / bps) * async.linear);
+               (bytes_output * 1000 / bps) * ti->async.linear);
     bytes_output += bytes_per_packet;
     packetno++;
   }
   if (remaining_bytes != 0) {
     add_packet(new_buf + complete_packets * bytes_per_packet, remaining_bytes,
-               (bytes_output * 1000 / bps) * async.linear);
+               (bytes_output * 1000 / bps) * ti->async.linear);
     bytes_output += remaining_bytes;
     packetno++;
   }

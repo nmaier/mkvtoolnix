@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.6 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.7 2003/03/05 13:51:20 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -65,13 +65,13 @@ int mp3_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;    
 }
 
-mp3_reader_c::mp3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
+mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
   int pos;
   unsigned long header;
   mp3_header_t mp3header;
   
-  
-  if ((file = fopen(fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("mp3_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("mp3_reader: Could not seek to end of file.");
@@ -92,15 +92,13 @@ mp3_reader_c::mp3_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
   decode_mp3_header(header, &mp3header);
 
   bytes_processed = 0;
-  mp3packetizer = new mp3_packetizer_c(NULL, 0,
-                                       mp3_freqs[mp3header.sampling_frequency],
+  mp3packetizer = new mp3_packetizer_c(mp3_freqs[mp3header.sampling_frequency],
                                        mp3header.stereo ? 2 : 1,
                                        mp3_tabsel[mp3header.lsf]
-                                         [mp3header.bitrate_index],
-                                       nasync);
+                                       [mp3header.bitrate_index], ti);
   if (verbose)
     fprintf(stdout, "Using MP3 demultiplexer for %s.\n+-> Using " \
-            "MP3 output module for audio stream.\n", fname);
+            "MP3 output module for audio stream.\n", ti->fname);
 }
 
 mp3_reader_c::~mp3_reader_c() {
@@ -135,11 +133,6 @@ int mp3_reader_c::read() {
 packet_t *mp3_reader_c::get_packet() {
   return mp3packetizer->get_packet();
 }
-
-// void mp3_reader_c::reset() {
-//   if (mp3packetizer != NULL)
-//     mp3packetizer->reset();
-// }
 
 int mp3_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.7 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: queue.h,v 1.8 2003/03/05 13:51:20 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,7 +36,7 @@ private:
   struct q_page    *first, *current;
   
 public:
-  q_c() throw (error_c);
+  q_c(track_info_t *nti) throw (error_c);
   virtual ~q_c();
     
   virtual u_int64_t        add_packet(unsigned char *data, int lenth,

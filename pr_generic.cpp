@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.9 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.10 2003/03/05 13:51:20 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,34 +28,24 @@
 
 #include "pr_generic.h"
 
-generic_packetizer_c::generic_packetizer_c() {
+generic_packetizer_c::generic_packetizer_c(track_info_t *nti) {
   serialno = -1;
   track_entry = NULL;
-  private_data = NULL;
-  private_data_size = 0;
+  ti = duplicate_track_info(nti);
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
-  if (private_data != NULL)
-    free(private_data);
-}
-
-void generic_packetizer_c::set_private_data(unsigned char *data, int size) {
-  if (private_data != NULL)
-    free(private_data);
-  private_data = (unsigned char *)malloc(size);
-  if (private_data == NULL)
-    die("malloc");
-  memcpy(private_data, data, size);
-  private_data_size = size;
+  free_track_info(ti);
 }
 
 //--------------------------------------------------------------------
 
-generic_reader_c::generic_reader_c() {
+generic_reader_c::generic_reader_c(track_info_t *nti) {
+  ti = duplicate_track_info(nti);
 }
 
 generic_reader_c::~generic_reader_c() {
+  free_track_info(ti);
 }
 
 //--------------------------------------------------------------------

@@ -1,3 +1,4 @@
+
 /*
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
@@ -13,7 +14,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.h,v 1.5 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: r_wav.h,v 1.6 2003/03/05 13:51:20 mosu Exp $
     \brief class definitions for the WAV reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,7 +44,7 @@ private:
   u_int64_t               bytes_processed;
      
 public:
-  wav_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
+  wav_reader_c(track_info_t *nti) throw (error_c);
   virtual ~wav_reader_c();
 
   virtual int       read();

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.12 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.13 2003/03/05 13:51:20 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,12 +35,11 @@
 #include <dmalloc.h>
 #endif
 
-video_packetizer_c::video_packetizer_c(unsigned char *pr_data, int pd_size,
-                                       char *ncodec, double nfps, int nwidth,
+video_packetizer_c::video_packetizer_c(char *ncodec, double nfps, int nwidth,
                                        int nheight, int nbpp,
-                                       int nmax_frame_size, audio_sync_t *as,
-                                       int navi_compat_mode)
-                                       throw (error_c) : q_c() {
+                                       int nmax_frame_size,
+                                       int navi_compat_mode, track_info_t *nti)
+  throw (error_c) : q_c(nti) {
   packetno = 0;
   memcpy(codec, ncodec, 4);
   codec[4] = 0;
@@ -56,7 +55,6 @@ video_packetizer_c::video_packetizer_c(unsigned char *pr_data, int pd_size,
   frames_output = 0;
   avi_compat_mode = 1;
   last_id = 1;
-  set_private_data(pr_data, pd_size);
   set_header();
 }
 
@@ -95,7 +93,7 @@ void video_packetizer_c::set_header() {
   if (set_codec_private || avi_compat_mode) {
     KaxCodecPrivate &codec_private = 
       GetChild<KaxCodecPrivate>(static_cast<KaxTrackEntry &>(*track_entry));
-    codec_private.CopyBuffer((binary *)private_data, private_data_size);
+    codec_private.CopyBuffer((binary *)ti->private_data, ti->private_size);
   }
 
   KaxTrackVideo &track_video =

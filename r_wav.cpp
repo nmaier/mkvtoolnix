@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.6 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.7 2003/03/05 13:51:20 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -55,10 +55,11 @@ int wav_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;    
 }
 
-wav_reader_c::wav_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
+wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
   u_int64_t size;
   
-  if ((file = fopen(fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("wav_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("wav_reader: Could not seek to end of file.");
@@ -75,13 +76,12 @@ wav_reader_c::wav_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
   if (chunk == NULL)
     die("malloc");
   bytes_processed = 0;
-  pcmpacketizer = new pcm_packetizer_c(NULL, 0,
-                                       wheader.common.dwSamplesPerSec,
+  pcmpacketizer = new pcm_packetizer_c(wheader.common.dwSamplesPerSec,
                                        wheader.common.wChannels,
-                                       wheader.common.wBitsPerSample, nasync);
+                                       wheader.common.wBitsPerSample, ti);
   if (verbose)
     fprintf(stdout, "Using WAV demultiplexer for %s.\n+-> Using " \
-            "PCM output module for audio stream.\n", fname);
+            "PCM output module for audio stream.\n", ti->fname);
 }
 
 wav_reader_c::~wav_reader_c() {

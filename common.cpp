@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.4 2003/02/25 13:17:33 mosu Exp $
+    \version \$Id: common.cpp,v 1.5 2003/03/05 13:51:20 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "common.h"
 
 int verbose = 1;
 
@@ -159,3 +161,61 @@ char *map_audio_codec_id(int id, int bps, int *set_codec_private) {
   }
 }
 
+track_info_t *duplicate_track_info(track_info_t *src) {
+  track_info_t *dst;
+
+  if (src == NULL)
+    return NULL;
+
+  dst = (track_info_t *)malloc(sizeof(track_info_t));
+  if (dst == NULL)
+    die("malloc");
+
+  memcpy(dst, src, sizeof(track_info_t));
+  if (src->fname != NULL) {
+    dst->fname = strdup(src->fname);
+    if (dst->fname == NULL)
+      die("strdup");
+  }
+  if (src->astreams != NULL) {
+    dst->astreams = (unsigned char *)strdup((char *)src->astreams);
+    if (dst->astreams == NULL)
+      die("strdup");
+  }
+  if (src->vstreams != NULL) {
+    dst->vstreams = (unsigned char *)strdup((char *)src->vstreams);
+    if (dst->vstreams == NULL)
+      die("strdup");
+  }
+  if (src->tstreams != NULL) {
+    dst->tstreams = (unsigned char *)strdup((char *)src->tstreams);
+    if (dst->tstreams == NULL)
+      die("strdup");
+  }
+  if (src->private_data != NULL) {
+    dst->private_data = (unsigned char *)malloc(src->private_size);
+    if (dst->private_data == NULL)
+      die("malloc");
+    memcpy(dst->private_data, src->private_data, src->private_size);
+  }
+
+  return dst;
+}
+
+void free_track_info(track_info_t *ti) {
+  if (ti == NULL)
+    return;
+
+  if (ti->fname != NULL)
+    free(ti->fname);
+  if (ti->astreams != NULL)
+    free(ti->astreams);
+  if (ti->vstreams != NULL)
+    free(ti->vstreams);
+  if (ti->tstreams != NULL)
+    free(ti->tstreams);
+  if (ti->private_data != NULL)
+    free(ti->private_data);
+
+  free(ti);
+}

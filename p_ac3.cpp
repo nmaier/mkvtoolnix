@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.5 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.6 2003/03/05 13:51:20 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,19 +36,15 @@
 
 
 
-ac3_packetizer_c::ac3_packetizer_c(unsigned char *nprivate_data,
-                                   int nprivate_size,
-                                   unsigned long nsamples_per_sec,
+ac3_packetizer_c::ac3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, int nbitrate,
-                                   audio_sync_t *nasync)
-  throw (error_c) : q_c() {
+                                   track_info_t *nti) throw (error_c):
+  q_c(nti) {
   packetno = 0;
   bytes_output = 0;
-  memcpy(&async, nasync, sizeof(audio_sync_t));
   packet_buffer = NULL;
   buffer_size = 0;
   set_params(nsamples_per_sec, nchannels, nbitrate);
-  set_private_data(nprivate_data, nprivate_size);
   set_header();
 }
 
@@ -124,14 +120,14 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   pims = ((double)ac3header->bytes) * 1000.0 /
          ((double)ac3header->bit_rate / 8.0);
 
-  if (async.displacement < 0) {
+  if (ti->async.displacement < 0) {
     /*
      * AC3 audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    async.displacement += (int)pims;
-    if (async.displacement > -(pims / 2))
-      async.displacement = 0;
+    ti->async.displacement += (int)pims;
+    if (ti->async.displacement > -(pims / 2))
+      ti->async.displacement = 0;
     
     remove_ac3_packet(pos, ac3header->bytes);
     
@@ -147,7 +143,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     die("malloc");
   memcpy(buf, packet_buffer + pos, ac3header->bytes);
   
-  if (async.displacement > 0) {
+  if (ti->async.displacement > 0) {
     /*
      * AC3 audio synchronization. displacement > 0 is solved by duplicating
      * the very first AC3 packet as often as necessary. I cannot create
@@ -155,9 +151,9 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
      * settings the packet's values to 0 does not work as the AC3 header
      * contains a CRC of its data.
      */
-    async.displacement -= (int)pims;
-    if (async.displacement < (pims / 2))
-      async.displacement = 0;
+    ti->async.displacement -= (int)pims;
+    if (ti->async.displacement < (pims / 2))
+      ti->async.displacement = 0;
     
     return buf;
   }
@@ -213,7 +209,7 @@ int ac3_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     add_packet(packet, ac3header.bytes,
-               (u_int64_t)(1000.0 * packetno * 1536 * async.linear / 
+               (u_int64_t)(1000.0 * packetno * 1536 * ti->async.linear / 
                samples_per_sec));
     packetno++;
     free(packet);

@@ -35,11 +35,10 @@ private:
   vobsub_packetizer_c **all_packetizers;
   int                   num_packetizers;
   int                   act_wchar;
-  audio_sync_t          async;
   char                **comments;
      
 public:
-  vobsub_reader_c(char *fname, audio_sync_t *nasync) throw (error_c);
+  vobsub_reader_c(char *fname, track_info_t *nti) throw (error_c);
   virtual ~vobsub_reader_c();
 
   virtual int              read();

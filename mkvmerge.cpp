@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.20 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.21 2003/03/05 13:51:20 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -387,26 +387,28 @@ static void render_head(StdIOCallback *out) {
 }
 
 static void parse_args(int argc, char **argv) {
+  track_info_t     ti;
   int              i, j;
   int              noaudio, novideo, notext;
-  unsigned char   *astreams, *vstreams, *tstreams;
   filelist_t      *file;
-  audio_sync_t     async;
-  char            *fourcc, *s;
+  char            *s;
 
   noaudio = 0;
   novideo = 0;
   notext  = 0;
-  astreams = NULL;
-  vstreams = NULL;
-  tstreams = NULL;
-  async.displacement = 0;
-  async.linear = 1.0;
-  fourcc = NULL;
 
+  memset(&ti, 0, sizeof(track_info_t));
+  ti.async.linear = 1.0;
+
+  // First parse options that either just print some infos and then exit
+  // or that are needed right at the beginning.
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
       fprintf(stdout, "mkvmerge v" VERSION "\n");
+      exit(0);
+    } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
+               !strcmp(argv[i], "--help")) {
+      usage();
       exit(0);
     } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
       if ((i + 1) >= argc) {
@@ -418,6 +420,12 @@ static void parse_args(int argc, char **argv) {
       }
       outfile = argv[i + 1];
       i++;
+    } else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
+      fprintf(stdout, "Known file types:\n  ext  description\n" \
+              "  ---  --------------------------\n");
+      for (j = 1; file_types[j].ext; j++)
+        fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
+      exit(0);
     }
 
   if (outfile == NULL) {
@@ -425,7 +433,7 @@ static void parse_args(int argc, char **argv) {
     exit(1);
   }
 
-  /* open output file */
+  // Open the output file.
   try {
     out = new StdIOCallback(outfile, MODE_CREATE);
   } catch (std::exception &ex) {
@@ -446,75 +454,19 @@ static void parse_args(int argc, char **argv) {
   kax_last_entry = NULL;
   
   for (i = 1; i < argc; i++) {
+
+    // Ignore the options we took care of in the first step.
+    if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
+      i++;
+      continue;
+    }
+
+    // Global options
     if (!strcmp(argv[i], "-q"))
       verbose = 0;
     else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose = 2;
-    else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
-             !strcmp(argv[i], "--help")) {
-      usage();
-      exit(0);
-    } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output"))
-      i++;
-    else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--list-types")) {
-      fprintf(stdout, "Known file types:\n  ext  description\n" \
-              "  ---  --------------------------\n");
-      for (j = 1; file_types[j].ext; j++)
-        fprintf(stdout, "  %s  %s\n", file_types[j].ext, file_types[j].desc);
-      exit(0);
-    } else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
-      noaudio = 1;
-    else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
-      novideo = 1;
-//     else if (!strcmp(argv[i], "-T") || !strcmp(argv[i], "--notext"))
-//       notext = 1;
-    else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--astreams")) {
-      if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -a lacks the stream number(s).\n");
-        exit(1);
-      }
-      if (astreams != NULL)
-        free(astreams);
-      astreams = parse_streams(argv[i + 1]);
-      i++;
-    } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vstreams")) {
-      if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -d lacks the stream number(s).\n");
-        exit(1);
-      }
-      if (astreams != NULL)
-        free(vstreams);
-      vstreams = parse_streams(argv[i + 1]);
-      i++;
-//     } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tstreams")) {
-//       if ((i + 1) >= argc) {
-//         fprintf(stderr, "Error: -t lacks the stream number(s).\n");
-//         exit(1);
-//       }
-//       if (tstreams != NULL)
-//         free(tstreams);
-//       tstreams = parse_streams(argv[i + 1]);
-//       i++;
-    } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
-      if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -f lacks the FourCC.\n");
-        exit(1);
-      }
-      fourcc = argv[i + 1];
-      if (strlen(fourcc) != 4) {
-        fprintf(stderr, "Error: The FourCC must be exactly four chars "
-                "long.\n");
-        exit(1);
-      }
-      i++;
-    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sync")) {
-      if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -s lacks the audio delay.\n");
-        exit(1);
-      }
-      parse_sync(argv[i + 1], &async);
-      i++;
-    } else if (!strcmp(argv[i], "--cluster-length")) {
+    else if (!strcmp(argv[i], "--cluster-length")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: --cluster-length lacks the length.\n");
         exit(1);
@@ -539,36 +491,94 @@ static void parse_args(int argc, char **argv) {
         max_ms_per_cluster = 65535;
       }
       i++;
-    } else {
-      if ((astreams != NULL) && noaudio) {
+    }
+
+    // Options that apply to the next input file only.
+    else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
+      noaudio = 1;
+    else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
+      novideo = 1;
+//     else if (!strcmp(argv[i], "-T") || !strcmp(argv[i], "--notext"))
+//       notext = 1;
+    else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--astreams")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: -a lacks the stream number(s).\n");
+        exit(1);
+      }
+      if (ti.astreams != NULL)
+        free(ti.astreams);
+      ti.astreams = parse_streams(argv[i + 1]);
+      i++;
+    } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vstreams")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: -d lacks the stream number(s).\n");
+        exit(1);
+      }
+      if (ti.vstreams != NULL)
+        free(ti.vstreams);
+      ti.vstreams = parse_streams(argv[i + 1]);
+      i++;
+//     } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tstreams")) {
+//       if ((i + 1) >= argc) {
+//         fprintf(stderr, "Error: -t lacks the stream number(s).\n");
+//         exit(1);
+//       }
+//       if (tstreams != NULL)
+//         free(tstreams);
+//       tstreams = parse_streams(argv[i + 1]);
+//       i++;
+    } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: -f lacks the FourCC.\n");
+        exit(1);
+      }
+      ti.fourcc = argv[i + 1];
+      if (strlen(ti.fourcc) != 4) {
+        fprintf(stderr, "Error: The FourCC must be exactly four chars "
+                "long.\n");
+        exit(1);
+      }
+      i++;
+    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sync")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: -s lacks the audio delay.\n");
+        exit(1);
+      }
+      parse_sync(argv[i + 1], &ti.async);
+      i++;
+    }
+
+    // The argument is an input file.
+    else {
+      if ((ti.astreams != NULL) && noaudio) {
         fprintf(stderr, "Error: -A and -a used on the same source file.\n");
         exit(1);
       }
-      if ((vstreams != NULL) && novideo) {
+      if ((ti.vstreams != NULL) && novideo) {
         fprintf(stderr, "Error: -D and -d used on the same source file.\n");
         exit(1);
       }
-      if ((tstreams != NULL) && notext) {
+      if ((ti.tstreams != NULL) && notext) {
         fprintf(stderr, "Error: -T and -t used on the same source file.\n");
         exit(1);
       }
       if (noaudio) {
-        astreams = (unsigned char *)malloc(1);
-        if (astreams == NULL)
+        ti.astreams = (unsigned char *)malloc(1);
+        if (ti.astreams == NULL)
           die("malloc");
-        *astreams = 0;
+        *ti.astreams = 0;
       }
       if (novideo) {
-        vstreams = (unsigned char *)malloc(1);
-        if (vstreams == NULL)
+        ti.vstreams = (unsigned char *)malloc(1);
+        if (ti.vstreams == NULL)
           die("malloc");
-        *vstreams = 0;
+        *ti.vstreams = 0;
       }
       if (notext) {
-        tstreams = (unsigned char *)malloc(1);
-        if (tstreams == NULL)
+        ti.tstreams = (unsigned char *)malloc(1);
+        if (ti.tstreams == NULL)
           die("malloc");
-        *tstreams = 0;
+        *ti.tstreams = 0;
       }
       file = (filelist_t *)malloc(sizeof(filelist_t));
       if (file == NULL)
@@ -576,6 +586,7 @@ static void parse_args(int argc, char **argv) {
 
       file->name = argv[i];
       file->type = get_type(file->name);
+      ti.fname = argv[i];
 
       if (file->type == TYPEUNKNOWN) {
         fprintf(stderr, "Error: File %s has unknown type. Please have a look "
@@ -590,22 +601,20 @@ static void parse_args(int argc, char **argv) {
         switch (file->type) {
 #ifdef HAVE_OGGVORBIS
           case TYPEOGM:
-            file->reader = new ogm_reader_c(file->name, astreams, vstreams, 
-                                            tstreams, &async, fourcc);
+            file->reader = new ogm_reader_c(&ti);
             break;
 #endif // HAVE_OGGVORBIS
           case TYPEAVI:
-            if (tstreams != NULL)
+            if (ti.tstreams != NULL)
               fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
-            file->reader = new avi_reader_c(file->name, astreams, vstreams,
-                                            &async, fourcc);
+            file->reader = new avi_reader_c(&ti);
             break;
           case TYPEWAV:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
+            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
+                (ti.tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "WAVE files.\n");
-            file->reader = new wav_reader_c(file->name, &async);
+            file->reader = new wav_reader_c(&ti);
             break;
 //           case TYPESRT:
 //             if ((astreams != NULL) || (vstreams != NULL) ||
@@ -615,18 +624,18 @@ static void parse_args(int argc, char **argv) {
 //             file->reader = new srt_reader_c(file->name, &async);
 //             break;
           case TYPEMP3:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
+            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
+                (ti.tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "MP3 files.\n");
-            file->reader = new mp3_reader_c(file->name, &async);
+            file->reader = new mp3_reader_c(&ti);
             break;
           case TYPEAC3:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
+            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
+                (ti.tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "AC3 files.\n");
-            file->reader = new ac3_reader_c(file->name, &async);
+            file->reader = new ac3_reader_c(&ti);
             break;
 //           case TYPECHAPTERS:
 //             if (chapters != NULL) {
@@ -668,20 +677,17 @@ static void parse_args(int argc, char **argv) {
       } else
         free(file);
 
-      fourcc = NULL;
       noaudio = 0;
       novideo = 0;
       notext = 0;
-      if (astreams != NULL) {
-        free(astreams);
-        astreams = NULL;
-      }
-      if (vstreams != NULL) {
-        free(vstreams);
-        vstreams = NULL;
-      }
-      async.displacement = 0;
-      async.linear = 1.0;
+      if (ti.astreams != NULL)
+        free(ti.astreams);
+      if (ti.vstreams != NULL)
+        free(ti.vstreams);
+      if (ti.tstreams != NULL)
+        free(ti.tstreams);
+      memset(&ti, 0, sizeof(track_info_t));
+      ti.async.linear = 1.0;
     }
   }
   

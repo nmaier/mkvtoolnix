@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ac3.cpp,v 1.7 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: r_ac3.cpp,v 1.8 2003/03/05 13:51:20 mosu Exp $
     \brief AC3 demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -59,13 +59,12 @@ int ac3_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;    
 }
 
-ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync)
-  throw (error_c) {
+ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
   int          pos;
   ac3_header_t ac3header;
   
-  
-  if ((file = fopen(fname, "r")) == NULL)
+  if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("ac3_reader: Could not open source file.");
   if (fseek(file, 0, SEEK_END) != 0)
     throw error_c("ac3_reader: Could not seek to end of file.");
@@ -84,13 +83,12 @@ ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync)
     throw error_c("ac3_reader: No valid AC3 packet found in the first " \
                   "4096 bytes.\n");
   bytes_processed = 0;
-  ac3packetizer = new ac3_packetizer_c(NULL, 0, ac3header.sample_rate,
+  ac3packetizer = new ac3_packetizer_c(ac3header.sample_rate,
                                        ac3header.channels,
-                                       ac3header.bit_rate / 1000,
-                                       nasync);
+                                       ac3header.bit_rate / 1000, ti);
   if (verbose)
     fprintf(stdout, "Using AC3 demultiplexer for %s.\n+-> Using " \
-            "AC3 output module for audio stream.\n", fname);
+            "AC3 output module for audio stream.\n", ti->fname);
 }
 
 ac3_reader_c::~ac3_reader_c() {
@@ -130,11 +128,6 @@ int ac3_reader_c::read() {
 packet_t *ac3_reader_c::get_packet() {
   return ac3packetizer->get_packet();
 }
-
-// void ac3_reader_c::reset() {
-//   if (ac3packetizer != NULL)
-//     ac3packetizer->reset();
-// }
 
 int ac3_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;

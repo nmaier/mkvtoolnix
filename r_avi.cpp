@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.13 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.14 2003/03/05 13:51:20 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -40,58 +40,6 @@ extern "C" {
 #include <dmalloc.h>
 #endif
 
-#ifdef DEBUG
-static void dump_bih(BITMAPINFOHEADER *b) {
-  char *bi_compression = (char *)&b->bi_compression;
-  int i;
-
-  if (b == NULL) {
-    fprintf(stdout, "[bih] IS NULL\n");
-    return;
-  }
-  fprintf(stdout, "[bih] size: %u, width: %u, height: %u\n", b->bi_size,
-          b->bi_width, b->bi_height);
-  fprintf(stdout, "[bih] planes: %u, bit_count: %u, compression: 0x%04x "
-          "(%c%c%c%c)\n",
-          b->bi_planes, b->bi_bit_count, b->bi_compression, bi_compression[0],
-          bi_compression[1], bi_compression[2], bi_compression[3]);
-  fprintf(stdout, "[bih] size_image: %u xppm: %u yppm: %u\n", b->bi_size_image,
-          b->bi_x_pels_per_meter, b->bi_y_pels_per_meter);
-  fprintf(stdout, "[bih] clr_used: %u, clr_important: %d\n", b->bi_clr_used,
-          b->bi_clr_important);
-  if (b->bi_size > sizeof(BITMAPINFOHEADER)) {
-    unsigned char *data = (unsigned char *)b + sizeof(BITMAPINFOHEADER);
-    fprintf(stdout, "[bih] data: ");
-    for (i = 0; i < (b->bi_size - sizeof(BITMAPINFOHEADER)); i++)
-      fprintf(stdout, "%x%x ", (data[i] & 0xf0) >> 4, data[i] & 0x0f);
-    fprintf(stdout, "\n\n");
-  } else
-    fprintf(stdout, "[bih] no additional data\n\n");
-}
-
-static void dump_wfe(WAVEFORMATEX *w) {
-  int i;
-  
-  if (w == NULL) {
-    fprintf(stdout, "[wfe] IS NULL\n");
-    return;
-  }
-  fprintf(stdout, "[wfe] format 0x%04x, channels %u, samp/sec %u\n",
-          w->w_format_tag, w->n_channels, w->n_samples_per_sec);
-  fprintf(stdout, "[wfe] avg b/s %u, block align %u, bits/sam %u\n",
-          w->n_avg_bytes_per_sec, w->n_block_align, w->w_bits_per_sample);
-  fprintf(stdout, "[wfe] size %u\n", w->cb_size);
-  if (w->cb_size > 0) {
-    unsigned char *data = (unsigned char *)w + sizeof(WAVEFORMATEX);
-    fprintf(stdout, "[wfe] data: ");
-    for (i = 0; i < w->cb_size; i++)
-      fprintf(stdout, "%x%x ", (data[i] & 0xf0) >> 4, data[i] & 0x0f);
-    fprintf(stdout, "\n\n");
-  } else
-    fprintf(stdout, "[wfe] no additional data\n\n");
-}
-#endif // DEBUG
-
 int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
   unsigned char data[12];
   
@@ -113,9 +61,8 @@ int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
  * allocates and initializes local storage for a particular
  * substream conversion.
  */
-avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
-                           unsigned char *vstreams, audio_sync_t *nasync,
-                           char *nfourcc) throw (error_c) {
+avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
   int            fsize, i;
   u_int64_t      size;
   FILE          *f;
@@ -123,10 +70,7 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
   avi_demuxer_t *demuxer;
   char          *codec;
 
-  if (fname == NULL)
-    throw error_c("avi_reader: fname == NULL !?");
-  
-  if ((f = fopen(fname, "r")) == NULL)
+  if ((f = fopen(ti->fname, "r")) == NULL)
     throw error_c("avi_reader: Could not open source file.");
   if (fseek(f, 0, SEEK_END) != 0)
     throw error_c("avi_reader: Could not seek to end of file.");
@@ -139,9 +83,9 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
 
   if (verbose)
     fprintf(stdout, "Using AVI demultiplexer for %s. Opening file. This "
-            "may take some time depending on the file's size.\n", fname);
+            "may take some time depending on the file's size.\n", ti->fname);
   rederive_keyframes = 0;
-  if ((avi = AVI_open_input_file(fname, 1)) == NULL) {
+  if ((avi = AVI_open_input_file(ti->fname, 1)) == NULL) {
     const char *msg = "avi_reader: Could not initialize AVI source. Reason: ";
     char *s, *error;
     error = AVI_strerror();
@@ -152,20 +96,6 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
     throw error_c(s);
   }
 
-  if (astreams != NULL)
-    this->astreams = (unsigned char *)strdup((char *)astreams);
-  else
-    this->astreams = NULL;
-  if (vstreams != NULL)
-    this->vstreams = (unsigned char *)strdup((char *)vstreams);
-  else
-    this->vstreams = NULL;
-
-/*  if (ncomments == NULL)
-    comments = ncomments;
-  else
-    comments = dup_comments(ncomments);*/
-    
   fps = AVI_frame_rate(avi);
   if (video_fps < 0)
     video_fps = fps;
@@ -177,13 +107,13 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
       fsize = AVI_frame_size(avi, i);
   max_frame_size = fsize;
 
-  if (vstreams != NULL) {
+  if (ti->vstreams != NULL) {
     extract_video = 0;
-    for (i = 0; i < strlen((char *)vstreams); i++) {
-      if (vstreams[i] > 1)
+    for (i = 0; i < strlen((char *)ti->vstreams); i++) {
+      if (ti->vstreams[i] > 1)
         fprintf(stderr, "Warning: avi_reader: only one video stream per AVI " \
-                "is supported. Will ignore -d %d.\n", vstreams[i]);
-      else if (vstreams[i] == 1)
+                "is supported. Will ignore -d %d.\n", ti->vstreams[i]);
+      else if (ti->vstreams[i] == 1)
         extract_video = 1;
     }
   }
@@ -203,40 +133,32 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
     else
       is_divx = 0;
 
-    if (nfourcc != NULL)
-      codec = nfourcc;
-    vpacketizer = new video_packetizer_c((unsigned char *)
-                                         avi->bitmap_info_header,
-                                         avi->bitmap_info_header == NULL ? 0 : 
-                                           sizeof(BITMAPINFOHEADER),
-                                         codec, AVI_frame_rate(avi),
+    ti->private_data = (unsigned char *)avi->bitmap_info_header;
+    if (ti->private_data != NULL)
+      ti->private_size = avi->bitmap_info_header->bi_size;
+    vpacketizer = new video_packetizer_c(ti->fourcc, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
-                                         fsize, NULL, 1);
+                                         fsize, 1, ti);
     if (verbose)
       fprintf(stdout, "+-> Using video output module for video stream.\n");
   } else
     vpacketizer = NULL;
 
-#ifdef DEBUG  
-  dump_bih(avi->bitmap_info_header);
-#endif
-  
-  memcpy(&async, nasync, sizeof(audio_sync_t));
   ademuxers = NULL;
-  if (astreams != NULL) { // use only specific audio streams (or none at all)
-    for (i = 0; i < strlen((char *)astreams); i++) {
-      if (astreams[i] > AVI_audio_tracks(avi))
+  if (ti->astreams != NULL) { // use only specific audio streams or none at all
+    for (i = 0; i < strlen((char *)ti->astreams); i++) {
+      if (ti->astreams[i] > AVI_audio_tracks(avi))
         fprintf(stderr, "Warning: avi_reader: the AVI does not contain an " \
                 "audio stream with the id %d. Number of audio streams: %d\n",
-                astreams[i], AVI_audio_tracks(avi));
+                ti->astreams[i], AVI_audio_tracks(avi));
       else {
         int already_extracting = 0;
         avi_demuxer_t *demuxer = ademuxers;
         
         while (demuxer) {
-          if (demuxer->aid == astreams[i]) {
+          if (demuxer->aid == ti->astreams[i]) {
             already_extracting = 1;
             break;
           }
@@ -244,9 +166,10 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
         }
         if (already_extracting)
           fprintf(stderr, "Warning: avi_reader: already extracting audio " \
-                  "stream number %d. Will only do this once.\n", astreams[i]);
+                  "stream number %d. Will only do this once.\n",
+                  ti->astreams[i]);
         else
-          add_audio_demuxer(avi, astreams[i] - 1);
+          add_audio_demuxer(avi, ti->astreams[i] - 1);
       }
     }
   } else // use all audio streams (no parameter specified)*/
@@ -274,16 +197,13 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
 avi_reader_c::~avi_reader_c() {
   struct avi_demuxer_t *demuxer, *tmp;
   
-  if (astreams != NULL)
-    free(astreams);
-  if (vstreams != NULL)
-    free(vstreams);
   if (avi != NULL)
     AVI_close(avi);
   if (chunk != NULL)
     free(chunk);
   if (vpacketizer != NULL)
     delete vpacketizer;
+
   demuxer = ademuxers;
   while (demuxer) {
     if (demuxer->packetizer != NULL)
@@ -292,6 +212,7 @@ avi_reader_c::~avi_reader_c() {
     free(demuxer);
     demuxer = tmp;
   }
+
   if (old_chunk != NULL)
     free(old_chunk);
 }
@@ -310,6 +231,11 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   memset(demuxer, 0, sizeof(avi_demuxer_t));
   demuxer->aid = aid;
   wfe = avi->wave_format_ex[aid];
+  ti->private_data = (unsigned char *)wfe;
+  if (wfe != NULL)
+    ti->private_size = wfe->cb_size + sizeof(WAVEFORMATEX);
+  else
+    ti->private_size = 0;
   switch (AVI_audio_format(avi)) {
     case 0x0001: // raw PCM audio
       if (verbose)
@@ -318,13 +244,9 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_bits(avi);
-      demuxer->packetizer = new pcm_packetizer_c((unsigned char *)wfe,
-                                                 wfe ? wfe->cb_size +
-                                                 sizeof(WAVEFORMATEX) : 0,
-                                                 demuxer->samples_per_second,
+      demuxer->packetizer = new pcm_packetizer_c(demuxer->samples_per_second,
                                                  demuxer->channels,
-                                                 demuxer->bits_per_sample,
-                                                 &async);
+                                                 demuxer->bits_per_sample, ti);
       break;
     case 0x0055: // MP3
       if (verbose)
@@ -333,13 +255,9 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new mp3_packetizer_c((unsigned char *)wfe,
-                                                 wfe ? wfe->cb_size +
-                                                 sizeof(WAVEFORMATEX) : 0,
-                                                 demuxer->samples_per_second,
+      demuxer->packetizer = new mp3_packetizer_c(demuxer->samples_per_second,
                                                  demuxer->channels,
-                                                 demuxer->bits_per_sample,
-                                                 &async);
+                                                 demuxer->bits_per_sample, ti);
       break;
     case 0x2000: // AC3
       if (verbose)
@@ -348,13 +266,9 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new ac3_packetizer_c((unsigned char *)wfe,
-                                                 wfe ? wfe->cb_size +
-                                                 sizeof(WAVEFORMATEX) : 0,
-                                                 demuxer->samples_per_second,
+      demuxer->packetizer = new ac3_packetizer_c(demuxer->samples_per_second,
                                                  demuxer->channels,
-                                                 demuxer->bits_per_sample,
-                                                 &async);
+                                                 demuxer->bits_per_sample, ti);
       break;
     default:
       fprintf(stderr, "Error: Unknown audio format 0x%04x for audio stream " \
@@ -366,10 +280,6 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
     ademuxers = demuxer;
   else
     append_to->next = demuxer;
-
-#ifdef DEBUG
-  dump_wfe(avi->wave_format_ex[aid]);
-#endif
 
   return 0;
 }

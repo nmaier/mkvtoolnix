@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.9 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: r_avi.h,v 1.10 2003/03/05 13:51:20 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -53,18 +53,14 @@ private:
   avi_demuxer_t      *ademuxers;
   double              fps;
   int                 frames;
-  unsigned char      *astreams, *vstreams;
   int                 max_frame_size;
   int                 act_wchar;
-  audio_sync_t        async;
   int                 old_key, old_nread;
   int                 video_done, maxframes;
   int                 is_divx, rederive_keyframes;
      
 public:
-  avi_reader_c(char *fname, unsigned char *astreams,
-               unsigned char *vstreams, audio_sync_t *nasync, char *nfourcc)
-    throw (error_c);
+  avi_reader_c(track_info_t *nti) throw (error_c);
   virtual ~avi_reader_c();
 
   virtual int       read();

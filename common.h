@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.6 2003/03/04 09:27:05 mosu Exp $
+    \version \$Id: common.h,v 1.7 2003/03/05 13:51:20 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -57,6 +57,20 @@ typedef struct {
   double linear;
 } audio_sync_t;
 
+typedef struct {
+  // Options used by the readers.
+  char *fname;
+  unsigned char *astreams, *vstreams, *tstreams;
+
+  // Options used by the packetizers.
+  unsigned char *private_data;
+  int private_size;
+
+  char *fourcc;
+
+  audio_sync_t async;
+} track_info_t;
+
 typedef double stamp_t;
 #define MAX_TIMESTAMP ((double)3.40282347e+38F)
 
@@ -65,6 +79,9 @@ void _die(const char *s, const char *file, int line);
 
 char *map_video_codec_fourcc(char *fourcc, int *set_codec_private);
 char *map_audio_codec_id(int id, int bps, int *set_codec_private);
+
+track_info_t *duplicate_track_info(track_info_t *src);
+void free_track_info(track_info_t *ti);
 
 extern int verbose;
 extern float video_fps;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.6 2003/03/04 10:16:28 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.7 2003/03/05 13:51:20 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,20 +34,17 @@
 #include <dmalloc.h>
 #endif
 
-mp3_packetizer_c::mp3_packetizer_c(unsigned char *pr_data, int pd_size,
-                                   unsigned long nsamples_per_sec,
+mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, int nmp3rate,
-                                   audio_sync_t *nasync)
-                                   throw (error_c) : q_c() {
+                                   track_info_t *nti) throw (error_c):
+  q_c(nti) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   mp3rate = nmp3rate;
   bytes_output = 0;
-  memcpy(&async, nasync, sizeof(audio_sync_t));
   packet_buffer = NULL;
   buffer_size = 0;
   packetno = 0;
-  set_private_data(pr_data, pd_size);
   set_header();
 }
 
@@ -117,14 +114,14 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
 
   pims = 1000.0 * 1152.0 / mp3_freqs[mp3header->sampling_frequency];
 
-  if (async.displacement < 0) {
+  if (ti->async.displacement < 0) {
     /*
      * MP3 audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    async.displacement += (int)pims;
-    if (async.displacement > -(pims / 2))
-      async.displacement = 0;
+    ti->async.displacement += (int)pims;
+    if (ti->async.displacement > -(pims / 2))
+      ti->async.displacement = 0;
     
     remove_mp3_packet(pos, mp3header->framesize);
     
@@ -139,16 +136,16 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
     die("malloc");
   memcpy(buf, packet_buffer + pos, mp3header->framesize + 4);
   
-  if (async.displacement > 0) {
+  if (ti->async.displacement > 0) {
     /*
      * MP3 audio synchronization. displacement > 0 is solved by creating
      * silent MP3 packets and repeating it over and over again (well only as
      * often as necessary of course. Wouldn't want to spoil your movie by
      * providing a silent MP3 stream ;)).
      */
-    async.displacement -= (int)pims;
-    if (async.displacement < (pims / 2))
-      async.displacement = 0;
+    ti->async.displacement -= (int)pims;
+    if (ti->async.displacement < (pims / 2))
+      ti->async.displacement = 0;
     memset(buf + 4, 0, mp3header->framesize);
     
     return buf;
@@ -209,7 +206,7 @@ int mp3_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
     }  
 
     add_packet(packet, mp3header.framesize + 4,
-               (u_int64_t)(1000.0 * packetno * 1152 * async.linear / 
+               (u_int64_t)(1000.0 * packetno * 1152 * ti->async.linear / 
                samples_per_sec));
     packetno++;
     free(packet);
