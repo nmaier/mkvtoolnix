@@ -283,7 +283,11 @@ static void cue_entries_to_chapter_name(string &performer, string &title,
         name += title;
       else if (*next_char == 'n')
         name += to_string(num);
-      else {
+      else if (*next_char == 'N') {
+        if (num < 10)
+          name += '0';
+        name += to_string(num);
+      } else {
         name += *this_char;
         this_char--;
       }

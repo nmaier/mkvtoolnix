@@ -66,9 +66,12 @@ for this name can be set. The following meta characters are supported:
 .br
 \fB%p\fR is replaced by the current entry's \fIPERFORMER\fR string,
 .br
-\fB%t\fR is replaced by the current entry's \fITITLE\fR string and
+\fB%t\fR is replaced by the current entry's \fITITLE\fR string,
 .br
-\fB%n\fR is replaced by the current track number.
+\fB%n\fR is replaced by the current track number and
+.br
+\fB%N\fR is replaced by the current track number padded with a leading zero if
+it is < 10.
 .br
 Everything else is copied as-is.
 .br
