@@ -66,14 +66,14 @@ typedef struct {
 static int track_number = 1;
 
 file_type_t file_types[] =
-  {{"---", FILE_TYPE_UNKNOWN, "<unknown>"},
+  {{"---", FILE_TYPE_IS_UNKNOWN, "<unknown>"},
    {"demultiplexers:", -1, ""},
    {"aac ", FILE_TYPE_AAC, "AAC (Advanced Audio Coding)"},
    {"ac3 ", FILE_TYPE_AC3, "A/52 (aka AC3)"},
    {"avi ", FILE_TYPE_AVI, "AVI (Audio/Video Interleaved)"},
    {"dts ", FILE_TYPE_DTS, "DTS (Digital Theater System)"},
-   {"mp2 ", FILE_TYPE_MP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
-   {"mp3 ", FILE_TYPE_MP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
+   {"mp2 ", FILE_TYPE_MP3, "MPEG-1 layer II audio (CBR and VBR/ABR)"},
+   {"mp3 ", FILE_TYPE_MP3, "MPEG-1 layer III audio (CBR and VBR/ABR)"},
    {"mkv ", FILE_TYPE_MATROSKA, "general Matroska files"},
    {"ogg ", FILE_TYPE_OGM, "general OGG media stream, audio/video embedded in OGG"},
    {"mov ", FILE_TYPE_QTMP4, "Quicktime/MP4 audio and video"},
@@ -85,7 +85,9 @@ file_type_t file_types[] =
 #if defined(HAVE_FLAC_FORMAT_H)
    {"flac", FILE_TYPE_FLAC, "FLAC lossless audio"},
 #endif
-   {"tta",  FILE_TYPE_TTA, "TTA lossless audio"},
+   {"tta ", FILE_TYPE_TTA, "TTA lossless audio"},
+   {"m1v ", FILE_TYPE_MPEG, "MPEG-1 video elementary stream"},
+   {"m2v ", FILE_TYPE_MPEG, "MPEG-2 video elementary stream"},
    {"output modules:", -1, ""},
    {"    ", -1,      "AAC audio"},
    {"    ", -1,      "AC3 audio"},
@@ -318,7 +320,7 @@ identify(const string &filename) {
   file.type = get_file_type(file.name);
   ti.fname = file.name;
   
-  if (file.type == FILE_TYPE_UNKNOWN)
+  if (file.type == FILE_TYPE_IS_UNKNOWN)
     mxerror(_("File %s has unknown type. Please have a look "
               "at the supported file types ('mkvmerge --list-types') and "
               "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
@@ -1735,7 +1737,7 @@ parse_args(vector<string> &args) {
       file.type = get_file_type(file.name);
       ti->fname = from_utf8(cc_local_utf8, this_arg);
 
-      if (file.type == FILE_TYPE_UNKNOWN)
+      if (file.type == FILE_TYPE_IS_UNKNOWN)
         mxerror(_("The file '%s' has unknown type. Please have a look "
                   "at the supported file types ('mkvmerge --list-types') and "
                   "contact the author Moritz Bunkus <moritz@bunkus.org> if "

@@ -287,13 +287,13 @@ get_file_type(const string &filename) {
   else if (tta_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_TTA;
   else {
-    for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_UNKNOWN); i++)
+    for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
         type = FILE_TYPE_MP3;
       else if (ac3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
         type = FILE_TYPE_AC3;
   }
-  if (type != FILE_TYPE_UNKNOWN)
+  if (type != FILE_TYPE_IS_UNKNOWN)
     ;
   else if (mp3_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
     type = FILE_TYPE_MP3;

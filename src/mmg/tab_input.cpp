@@ -841,7 +841,7 @@ tab_input::add_file(const wxString &file_name) {
       else if (container == wxT("WAV"))
         file.container = FILE_TYPE_WAV;
       else
-        file.container = FILE_TYPE_UNKNOWN;
+        file.container = FILE_TYPE_IS_UNKNOWN;
 
       if (info.length() > 0) {
         args = split(info, wxU(" "));
