@@ -117,6 +117,11 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     height = seq_hdr.height;
     frame_rate = seq_hdr.frameRate;
     aspect_ratio = seq_hdr.aspectRatio;
+    if (aspect_ratio <= 0)
+      dwidth = width;
+    else
+      dwidth = (int)(height * aspect_ratio);
+    dheight = height;
     raw_seq_hdr = parser.GetRealSequenceHeader();
     if (raw_seq_hdr != NULL) {
       ti->private_data = (unsigned char *)
@@ -144,9 +149,8 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new mpeg_12_video_packetizer_c(this, version, frame_rate,
-                                                width, height,
-                                                (int)(height * aspect_ratio),
-                                                height, ti));
+                                                width, height, dwidth, dheight,
+                                                ti));
 
   mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
          ti->fname.c_str(), (int64_t)0);
@@ -400,6 +404,7 @@ mpeg_ps_reader_c::parse_packet(int id,
   if (length == 0)
     return false;
 
+  c = 0;
   // Skip stuFFing bytes
   while (length > 0) {
     c = mm_io->read_uint8();
@@ -509,6 +514,11 @@ mpeg_ps_reader_c::found_new_stream(int id) {
         track->v_height = seq_hdr.height;
         track->v_frame_rate = seq_hdr.frameRate;
         track->v_aspect_ratio = seq_hdr.aspectRatio;
+        if (track->v_aspect_ratio <= 0)
+          track->v_dwidth = track->v_width;
+        else
+          track->v_dwidth = (int)(track->v_height * track->v_aspect_ratio);
+        track->v_dheight = track->v_height;
         raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
         if (raw_seq_hdr != NULL) {
           track->raw_seq_hdr = (unsigned char *)
@@ -685,9 +695,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         new mpeg_12_video_packetizer_c(this, track->v_version,
                                        track->v_frame_rate,
                                        track->v_width, track->v_height,
-                                       (int)(track->v_height *
-                                             track->v_aspect_ratio),
-                                       track->v_height, ti);
+                                       track->v_dwidth, track->v_dheight, ti);
       track->ptzr = add_packetizer(ptzr);
       ti->private_data = NULL;
       ti->private_size = 0;
