@@ -114,7 +114,7 @@ extern int conv_utf8;
 void extract_tags(const char *file_name);
 void extract_chapters(const char *file_name, bool chapter_format_simple);
 void extract_attachments(const char *file_name);
-void extract_cuesheets(const char *file_name);
+void extract_cuesheet(const char *file_name);
 void write_cuesheet(const char *file_name, KaxChapters &chapters,
                     KaxTags &tags, int64_t tuid, mm_io_c &out);
 

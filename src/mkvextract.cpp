@@ -82,7 +82,7 @@ using namespace std;
 #define MODE_TAGS        1
 #define MODE_ATTACHMENTS 2
 #define MODE_CHAPTERS    3
-#define MODE_CUESHEETS   4
+#define MODE_CUESHEET    4
 
 vector<kax_track_t> tracks;
 
@@ -119,7 +119,7 @@ usage() {
 "   or  mkvextract tags <inname> [options]\n"
 "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 "\n   or  mkvextract chapters <inname> [options]\n"
-"   or  mkvextract cuesheets <inname> [options]\n"
+"   or  mkvextract cuesheet <inname> [options]\n"
 "   or  mkvextract <-h|-V>\n"
 "\n"
 " The first word tells mkvextract what to extract. The second must be the\n"
@@ -219,8 +219,8 @@ parse_args(int argc,
     mode = MODE_ATTACHMENTS;
   else if (!strcmp(argv[1], "chapters"))
     mode = MODE_CHAPTERS;
-  else if (!strcmp(argv[1], "cuesheets"))
-    mode = MODE_CUESHEETS;
+  else if (!strcmp(argv[1], "cuesheet"))
+    mode = MODE_CUESHEET;
   else
     mxerror(_("Unknown mode '%s'.\n"), argv[1]);
 
@@ -264,8 +264,9 @@ parse_args(int argc,
    } else if (mode == MODE_TAGS)
       mxerror(_("No further options allowed when extracting %s.\n"), argv[1]);
 
-    else if (mode == MODE_CUESHEETS)
-      mxerror(_("No further options allowed when regenerating CUE sheets.\n"));
+    else if (mode == MODE_CUESHEET)
+      mxerror(_("No further options allowed when regenerating the CUE "
+                "sheet.\n"));
 
     else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
       if (mode != MODE_CHAPTERS)
@@ -310,7 +311,7 @@ parse_args(int argc,
     }
 
   if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS) ||
-      (mode == MODE_CUESHEETS))
+      (mode == MODE_CUESHEET))
     return;
 
   if (tracks.size() == 0) {
@@ -413,8 +414,8 @@ main(int argc,
   else if (mode == MODE_CHAPTERS)
     extract_chapters(input_file, chapter_format_simple);
 
-  else if (mode == MODE_CUESHEETS)
-    extract_cuesheets(input_file);
+  else if (mode == MODE_CUESHEET)
+    extract_cuesheet(input_file);
 
   else
     die("mkvextract: Unknown mode!?");
