@@ -1633,6 +1633,8 @@ static void init_globals() {
   default_tracks[0] = 0;
   default_tracks[1] = 0;
   default_tracks[2] = 0;
+  display_counter = 1;
+  display_reader = NULL;
 }
 
 static void destroy_readers() {
