@@ -66,6 +66,7 @@ public:
   virtual string getline();
   virtual bool getline2(string &s);
   virtual size_t puts_unl(const char *s);
+  virtual bool write_bom(const char *charset);
 
   virtual void save_pos(int64_t new_pos = -1);
   virtual bool restore_pos();

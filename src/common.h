@@ -116,6 +116,8 @@ int utf8_init(const char *charset);
 void utf8_done();
 char *to_utf8(int handle, const char *local);
 char *from_utf8(int handle, const char *utf8);
+string &to_utf8(int handle, string &local);
+string &from_utf8(int handle, string &utf8);
 
 void clear_list_of_unique_uint32();
 bool is_unique_uint32(uint32_t number);

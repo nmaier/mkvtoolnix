@@ -531,6 +531,16 @@ char *to_utf8(int handle, const char *local) {
   return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
 
+string &to_utf8(int handle, string &local) {
+  char *cutf8;
+
+  cutf8 = to_utf8(handle, local.c_str());
+  local = cutf8;
+  safefree(cutf8);
+
+  return local;
+}
+
 char *from_utf8(int handle, const char *utf8) {
   char *copy;
 
@@ -544,6 +554,16 @@ char *from_utf8(int handle, const char *utf8) {
         handle, num_kax_convs);
 
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
+}
+
+string &from_utf8(int handle, string &utf8) {
+  char *clocal;
+
+  clocal = from_utf8(handle, utf8.c_str());
+  utf8 = clocal;
+  safefree(clocal);
+
+  return utf8;
 }
 
 /*

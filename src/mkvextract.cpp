@@ -154,11 +154,12 @@ static bool chapter_format_simple = false;
 
 void parse_args(int argc, char **argv, char *&file_name, int &mode) {
   int i, conv_handle;
-  char *colon, *copy;
+  char *colon, *copy, *sub_charset;
   int64_t tid;
   kax_track_t track;
 
   file_name = NULL;
+  sub_charset = NULL;
   verbose = 0;
 
   if (argc < 2) {
@@ -208,6 +209,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
         mxerror("-c lacks a charset.\n");
 
       conv_handle = utf8_init(argv[i + 1]);
+      sub_charset = argv[i + 1];
       i++;
 
     } else if (mode == MODE_TAGS)
@@ -239,6 +241,7 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
       track.tid = tid;
       track.out_name = safestrdup(colon);
       track.conv_handle = conv_handle;
+      track.sub_charset = safestrdup(sub_charset);
       tracks.push_back(track);
       safefree(copy);
     }

@@ -70,6 +70,7 @@ typedef struct {
   int64_t default_duration;
 
   int srt_num;
+  char *sub_charset;
   int conv_handle;
   vector<ssa_line_c> ssa_lines;
   bool warning_printed;

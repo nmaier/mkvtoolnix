@@ -111,7 +111,6 @@ static void create_output_files() {
   bool something_to_do, is_ok;
   unsigned char *c;
   ogg_packet op;
-  const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
 
   something_to_do = false;
 
@@ -393,24 +392,47 @@ static void create_output_files() {
 
         }  else if (tracks[i].type == TYPESRT) {
           tracks[i].srt_num = 1;
-          tracks[i].out->write(utf8_bom, 3);
+          tracks[i].out->write_bom(tracks[i].sub_charset);
 
         } else if (tracks[i].type == TYPESSA) {
           char *s;
           unsigned char *pd;
+          int bom_len;
+          string sconv;
+
+          pd = (unsigned char *)tracks[i].private_data;
+          bom_len = 0;
+          // Skip any BOM that might be present.
+          if ((tracks[i].private_size > 3) &&
+              (pd[0] == 0xef) && (pd[1] == 0xbb) && (pd[2] == 0xbf))
+            bom_len = 3;
+          else if ((tracks[i].private_size > 4) &&
+                   (pd[0] == 0xff) && (pd[1] == 0xfe) &&
+                   (pd[2] == 0x00) && (pd[3] == 0x00))
+            bom_len = 4;
+          else if ((tracks[i].private_size > 4) &&
+                   (pd[0] == 0x00) && (pd[1] == 0x00) &&
+                   (pd[2] == 0xfe) && (pd[3] == 0xff))
+            bom_len = 4;
+          else if ((tracks[i].private_size > 2) &&
+                   (pd[0] == 0xff) && (pd[1] == 0xfe))
+            bom_len = 2;
+          else if ((tracks[i].private_size > 2) &&
+                   (pd[0] == 0xfe) && (pd[1] == 0xff))
+            bom_len = 2;
+          pd += bom_len;
+          tracks[i].private_size -= bom_len;
 
           s = (char *)safemalloc(tracks[i].private_size + 1);
-          memcpy(s, tracks[i].private_data, tracks[i].private_size);
+          memcpy(s, pd, tracks[i].private_size);
           s[tracks[i].private_size] = 0;
-          pd = (unsigned char *)tracks[i].private_data;
-          if ((pd[0] != 0x00) && (pd[0] != 0xef) && (pd[0] != 0xff))
-            tracks[i].out->write(utf8_bom, 3);
-          tracks[i].out->puts_unl(s);
-          tracks[i].out->puts_unl("\n[Events]\nFormat: Marked, Start, End, "
-                                    "Style, Name, MarginL, MarginR, MarginV, "
-                                    "Effect, Text\n");
-
+          sconv = s;
           safefree(s);
+          tracks[i].out->write_bom(tracks[i].sub_charset);
+          sconv += "\n[Events]\nFormat: Marked, Start, End, "
+            "Style, Name, MarginL, MarginR, MarginV, Effect, Text\n";
+          from_utf8(tracks[i].conv_handle, sconv);
+          tracks[i].out->puts_unl(sconv.c_str());
         }
       }
     }
@@ -583,9 +605,8 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
           fields[7] + comma;    // Effect
 
         // Do the charset conversion.
-        s = from_utf8(tracks[i].conv_handle, fields[8].c_str());
-        line += string(s) + "\n";
-        safefree(s);
+        line += fields[8] + "\n";
+        from_utf8(tracks[i].conv_handle, line);
 
         // Now store that entry.
         ssa_line.num = num;

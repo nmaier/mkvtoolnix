@@ -99,6 +99,9 @@ int srt_reader_c::read(generic_packetizer_c *) {
   while (1) {
     if (!mm_io->getline2(s))
       break;
+    strip(s);
+    if (s.length() == 0)
+      continue;
     if (!mm_io->getline2(s))
       break;
     if ((s.length() < 29) || !issrttimecode(s.c_str()))

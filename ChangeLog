@@ -1,5 +1,11 @@
 2003-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bugfix: The SRT reader would abort if there was more
+        than one empty line between subtitle entries line.
+
+        * mkvextract: bugfix: Proper BOMs are written according to the
+        desired charset when extracting text subtitles.
+
         * Released v0.7.0.
 
         * mkvextract: Add an UTF-8 BOM to extracted SSA/ASS and SRT

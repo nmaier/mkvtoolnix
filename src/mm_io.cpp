@@ -374,6 +374,41 @@ bool mm_io_c::restore_pos() {
   return true;
 }
 
+bool mm_io_c::write_bom(const char *charset) {
+  const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
+  const unsigned char utf16le_bom[2] = {0xff, 0xfe};
+  const unsigned char utf16be_bom[2] = {0xfe, 0xff};
+  const unsigned char utf32le_bom[4] = {0xff, 0xfe, 0x00, 0x00};
+  const unsigned char utf32be_bom[4] = {0x00, 0x00, 0xff, 0xfe};
+  const unsigned char *bom;
+  int bom_len;
+
+  if (charset == NULL)
+    return false;
+
+  if (!strcmp(charset, "UTF-8") || !strcmp(charset, "UTF8")) {
+    bom_len = 3;
+    bom = utf8_bom;
+  } else if (!strcmp(charset, "UTF-16") || !strcmp(charset, "UTF-16LE") ||
+             !strcmp(charset, "UTF16") || !strcmp(charset, "UTF16LE")) {
+    bom_len = 2;
+    bom = utf16le_bom;
+  } else if (!strcmp(charset, "UTF-16BE") || !strcmp(charset, "UTF16BE")) {
+    bom_len = 2;
+    bom = utf16be_bom;
+  } else if (!strcmp(charset, "UTF-32") || !strcmp(charset, "UTF-32LE") ||
+             !strcmp(charset, "UTF32") || !strcmp(charset, "UTF32LE")) {
+    bom_len = 4;
+    bom = utf32le_bom;
+  } else if (!strcmp(charset, "UTF-32BE") || !strcmp(charset, "UTF32BE")) {
+    bom_len = 4;
+    bom = utf32be_bom;
+  } else
+    return false;
+
+  return (write(bom, bom_len) == bom_len);
+}
+
 /*
  * Dummy class for output to /dev/null. Needed for two pass stuff.
  */
