@@ -49,6 +49,7 @@
 #define ID_M_MUXING_CREATE_OPTIONFILE     60103
 #define ID_M_MUXING_ADD_TO_JOBQUEUE       60104
 #define ID_M_MUXING_MANAGE_JOBS           60105
+#define ID_M_MUXING_ADD_CLI_OPTIONS       60106
 
 #define ID_M_CHAPTERS_NEW                 60200
 #define ID_M_CHAPTERS_LOAD                60201
@@ -86,7 +87,7 @@ protected:
   wxStaticBox *sb_commandline;
   wxTextCtrl *tc_output, *tc_cmdline;
 
-  wxString cmdline;
+  wxString cmdline, cli_options;
   wxArrayString clargs;
 
   wxTimer cmdline_timer;
@@ -157,6 +158,8 @@ public:
 
   void on_add_to_jobqueue(wxCommandEvent &evt);
   void on_manage_jobs(wxCommandEvent &evt);
+
+  void on_add_cli_options(wxCommandEvent &evt);
 
   void load_job_queue();
   void save_job_queue();

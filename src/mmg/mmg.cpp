@@ -61,6 +61,182 @@ vector<mmg_file_t> files;
 map<wxString, wxString, lt_wxString> capabilities;
 vector<job_t> jobs;
 
+#define ID_CLIOPTIONS_COB 2000
+#define ID_CLIOPTIONS_ADD 2001
+
+const wxString cli_options[][2] = {
+  { wxT("### Global output control ###"),
+    wxT("Several options that control the overall output that mkvmerge "
+        "creates.") },
+  { wxT("--cluster-length"),
+    wxT("This option needs an additional argument 'n'. Tells mkvmerge to put "
+        "at most 'n' data blocks into each cluster. If the number is"
+        "postfixed with 'ms' then put at most 'n' milliseconds of data into "
+        "each cluster. The maximum length for a cluster is 32767ms. Programs "
+        "will only be able to seek to clusters, so creating larger clusters "
+        "may lead to imprecise seeking and/or processing.") },
+  { wxT("--no-cues"),
+    wxT("Tells mkvmerge not to create and write the cue data which can be "
+        "compared to an index in an AVI. Matroska files can be played back "
+        "without the cue data, but seeking will probably be imprecise and "
+        "slower. Use this only for testing purposes.") },
+  { wxT("--no-clusters-in-meta-seek"),
+    wxT("Tells mkvmerge not to create a meta seek element at the end of the "
+        "file containing all clusters.") },
+  { wxT("--disable-lacing"),
+    wxT("Disables lacing for all tracks. This will increase the file's size, "
+        "especially if there are many audio tracks. Use only for testing.") },
+  { wxT("--enable-durations"),
+    wxT("Write durations for all blocks. This will increase file size and "
+        "does not offer any additional value for players at the moment.") },
+  { wxT("### Development hacks ###"),
+    wxT("Options meant ONLY for developpers. Do not use them. If something "
+        "is considered to be an officially supported option then it's NOT "
+        "in this list!") },
+  { wxT("--engage space_after_chapters"),
+    wxT("Leave additional space (EbmlVoid) in the output file after the "
+        "chapters.") },
+  { wxT("--engage no_chapters_in_meta_seek"),
+    wxT("Do not add an entry for the chapters in the meta seek element.") },
+  { wxT("--engage no_meta_seek"),
+    wxT("Do not write meta seek elements at all.") },
+  { wxT("--engage lacing_xiph"),
+    wxT("Force Xiph style lacing.") },
+  { wxT("--engage lacing_ebml"),
+    wxT("Force EBML style lacing.") },
+  { wxT("--engage native_bframes"),
+    wxT("Analyze MPEG4 bitstreams, put each frame into one Matroska block, "
+        "use proper timestamping (I P B B = 0 120 40 80), use "
+        "V_MPEG4/ISO/... CodecIDs.") },
+  { wxT("--engage no_variable_data"),
+    wxT("Use fixed values for the elements that change with each file "
+        "otherwise (muxing date, segment UID, track UIDs etc.). Two files "
+        "muxed with the same settings and this switch activated will be "
+        "identical.") },
+  { wxT("--engage no_default_header_values"),
+    wxT("Do not write those header elements whose values are the same "
+        "as their default values according to the Matroska specs.") },
+  { wxT("--engage force_passthrough_packetizer"),
+    wxT("Forces the Matroska reader to use the generic passthrough "
+        "packetizer even for known and supported track types.") },
+  { wxT("--engage cow"),
+    wxT("No help available.") },
+  { wxT(""), wxT("") }
+};
+
+
+class cli_options_dlg: public wxDialog {
+  DECLARE_CLASS(cli_options_dlg);
+  DECLARE_EVENT_TABLE();
+public:
+  wxComboBox *cob_option;
+  wxTextCtrl *tc_options, *tc_description;
+
+public:
+  cli_options_dlg(wxWindow *parent);
+  void on_option_changed(wxCommandEvent &evt);
+  void on_add_clicked(wxCommandEvent &evt);
+  bool go(wxString &options);
+};
+
+cli_options_dlg::cli_options_dlg(wxWindow *parent):
+  wxDialog(parent, 0, wxT("Add command line options"), wxDefaultPosition,
+           wxSize(400, 350)) {
+  wxBoxSizer *siz_all, *siz_line;
+  wxButton *button;
+  int i;
+
+  siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->Add(new wxStaticText(this, -1, wxT("Here you can add more command "
+                                              "line options either by\n"
+                                              "entering them below or by "
+                                              "chosing one from the drop\n"
+                                              "down box and pressing the "
+                                              "'add' button.")),
+               0, wxLEFT | wxRIGHT, 10);
+  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->Add(new wxStaticText(this, -1, wxT("Command line options:")),
+               0, wxLEFT, 10);
+  siz_all->Add(0, 5, 0, 0, 0);
+  tc_options = new wxTextCtrl(this, -1);
+  siz_all->Add(tc_options, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->Add(new wxStaticText(this, -1, wxT("Available options:")),
+               0, wxLEFT, 10);
+  siz_all->Add(0, 5, 0, 0, 0);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  cob_option = new wxComboBox(this, ID_CLIOPTIONS_COB);
+  i = 0;
+  while (cli_options[i][0].length() > 0) {
+    cob_option->Append(cli_options[i][0]);
+    i++;
+  }
+  cob_option->SetSelection(0);
+  siz_line->Add(cob_option, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
+  button = new wxButton(this, ID_CLIOPTIONS_ADD, wxT("Add"));
+  siz_line->Add(button, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->Add(new wxStaticText(this, -1, wxT("Description:")), 0, wxLEFT, 10);
+  siz_all->Add(0, 5, 0, 0, 0);
+  tc_description =
+    new wxTextCtrl(this, -1, cli_options[0][1], wxDefaultPosition,
+                   wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY |
+                   wxTE_WORDWRAP);
+  siz_all->Add(tc_description, 1, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->Add(new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->Add(0, 10, 0, 0, 0);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(new wxButton(this, wxID_OK, wxT("Ok")), 0, 0, 0);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->Add(new wxButton(this, wxID_CANCEL, wxT("Cancel")), 0, 0, 0);
+  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_all->Add(siz_line, 0, wxGROW, 0);
+  siz_all->Add(0, 10, 0, 0, 0);
+
+  SetSizer(siz_all);
+}
+
+void
+cli_options_dlg::on_option_changed(wxCommandEvent &evt) {
+  int i;
+
+  i = cob_option->GetSelection();
+  if (i > 0)
+    tc_description->SetValue(cli_options[i][1]);
+}
+
+void
+cli_options_dlg::on_add_clicked(wxCommandEvent &evt) {
+  wxString sel, opt;
+
+  opt = cob_option->GetStringSelection();
+  if (opt.Left(3) == wxT("###"))
+    return;
+  sel = tc_options->GetValue();
+  if (sel.length() > 0)
+    sel += wxT(" ");
+  sel += opt;
+  tc_options->SetValue(sel);
+}
+
+bool
+cli_options_dlg::go(wxString &options) {
+  tc_options->SetValue(options);
+  if (ShowModal() == wxID_OK) {
+    options = tc_options->GetValue();
+    return true;
+  }
+  return false;
+}
+
 #if WXUNICODE
 wxString
 UTFstring_to_wxString(const UTFstring &u) {
@@ -397,6 +573,11 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
   muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS,
                       wxT("&Manage jobs"),
                       wxT("Brings up the job queue editor"));
+  muxing_menu->AppendSeparator();
+  muxing_menu->Append(ID_M_MUXING_ADD_CLI_OPTIONS,
+                      wxT("Add &command line options"),
+                      wxT("Lets you add arbitrary options to the command "
+                          "line"));
 
   chapter_menu = new wxMenu();
   chapter_menu->Append(ID_M_CHAPTERS_NEW, wxT("&New chapters"),
@@ -636,6 +817,8 @@ mmg_dialog::load(wxString file_name,
   }
   cfg->Read(wxT("output_file_name"), &s);
   tc_output->SetValue(s);
+  if (!cfg->Read(wxT("cli_options"), &cli_options))
+    cli_options = wxT("");
 
   input_page->load(cfg);
   attachments_page->load(cfg);
@@ -671,6 +854,7 @@ mmg_dialog::save(wxString file_name,
   cfg->Write(wxT("file_version"), 1);
   cfg->Write(wxT("gui_version"), wxU(VERSION));
   cfg->Write(wxT("output_file_name"), tc_output->GetValue());
+  cfg->Write(wxT("cli_options"), cli_options);
 
   input_page->save(cfg);
   attachments_page->save(cfg);
@@ -1128,6 +1312,16 @@ mmg_dialog::update_command_line() {
     clargs.Add(global_page->tc_global_tags->GetValue());
   }
 
+  cli_options = strip(cli_options);
+  if (cli_options.length() > 0) {
+    vector<wxString> opts;
+    int i;
+
+    opts = split(cli_options, wxString(wxT(" ")));
+    for (i = 0; i < opts.size(); i++)
+      clargs.Add(strip(opts[i]));
+  }
+
   for (i = args_start; i < clargs.Count(); i++) {
     if (clargs[i].Find(wxT(" ")) >= 0)
       cmdline += wxT(" \"") + shell_escape(clargs[i]) + wxT("\"");
@@ -1426,6 +1620,20 @@ mmg_dialog::save_job_queue() {
   cfg->Flush();
 }
 
+void
+mmg_dialog::on_add_cli_options(wxCommandEvent &evt) {
+  cli_options_dlg dlg(this);
+
+  if (dlg.go(cli_options))
+    update_command_line();
+}
+
+IMPLEMENT_CLASS(cli_options_dlg, wxDialog);
+BEGIN_EVENT_TABLE(cli_options_dlg, wxDialog)
+  EVT_COMBOBOX(ID_CLIOPTIONS_COB, cli_options_dlg::on_option_changed)
+  EVT_BUTTON(ID_CLIOPTIONS_ADD, cli_options_dlg::on_add_clicked)
+END_EVENT_TABLE();
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
@@ -1445,6 +1653,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_CREATE_OPTIONFILE, mmg_dialog::on_create_optionfile)
   EVT_MENU(ID_M_MUXING_ADD_TO_JOBQUEUE, mmg_dialog::on_add_to_jobqueue)
   EVT_MENU(ID_M_MUXING_MANAGE_JOBS, mmg_dialog::on_manage_jobs)
+  EVT_MENU(ID_M_MUXING_ADD_CLI_OPTIONS, mmg_dialog::on_add_cli_options)
   EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
   EVT_MENU(ID_M_FILE_LOADLAST1, mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST2, mmg_dialog::on_file_load_last)
