@@ -300,7 +300,7 @@ public:
     return out_of_data;
   }
 
-  bool get_bits(unsigned int n, unsigned long &r) {
+  bool get_bits(unsigned int n, uint64_t &r) {
     // returns false if less bits are available than asked for
     r = 0;
 
@@ -333,28 +333,35 @@ public:
     return true;
   }
 
+  bool get_bits(unsigned int n, int64_t &r) {
+    uint64_t t;
+    bool b = get_bits(n, t);
+    r = (int64_t)t;
+    return b;
+  }
+
   bool get_bits(unsigned int n, int &r) {
-    unsigned long t;
+    uint64_t t;
     bool b = get_bits(n, t);
     r = (int)t;
     return b;
   }
 
   bool get_bits(unsigned int n, unsigned int &r) {
-    unsigned long t;
+    uint64_t t;
     bool b = get_bits(n, t);
     r = (unsigned int)t;
     return b;
   }
 
   bool get_bit(bool &r) {
-    unsigned long t;
+    uint64_t t;
     bool b = get_bits(1, t);
     r = (bool)t;
     return b;
   }
 
-  bool peek_bits(unsigned int n, unsigned long &r) {
+  bool peek_bits(unsigned int n, uint64_t &r) {
     int tmp_bits_valid;
     const unsigned char *tmp_byte_position;
     // returns false if less bits are available than asked for
@@ -389,22 +396,29 @@ public:
     return true;
   }
 
+  bool peek_bits(unsigned int n, int64_t &r) {
+    uint64_t t;
+    bool b = peek_bits(n, t);
+    r = (int64_t)t;
+    return b;
+  }
+
   bool peek_bits(unsigned int n, int &r) {
-    unsigned long t;
+    uint64_t t;
     bool b = peek_bits(n, t);
     r = (int)t;
     return b;
   }
 
   bool peek_bits(unsigned int n, unsigned int &r) {
-    unsigned long t;
+    uint64_t t;
     bool b = peek_bits(n, t);
     r = (unsigned int)t;
     return b;
   }
 
   bool peek_bit(bool &r) {
-    unsigned long t;
+    uint64_t t;
     bool b = peek_bits(1, t);
     r = (bool)t;
     return b;
