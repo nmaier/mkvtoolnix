@@ -45,7 +45,6 @@
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "mux_dialog.h"
-#include "tab_advanced.h"
 #include "tab_attachments.h"
 #include "tab_chapters.h"
 #include "tab_input.h"
@@ -426,11 +425,10 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
   window_menu->Append(ID_M_WINDOW_INPUT, wxT("&Input\tAlt-1"));
   window_menu->Append(ID_M_WINDOW_ATTACHMENTS, wxT("&Attachments\tAlt-2"));
   window_menu->Append(ID_M_WINDOW_GLOBAL, wxT("&Global options\tAlt-3"));
-  window_menu->Append(ID_M_WINDOW_ADVANCED, wxT("A&dvanced\tAlt-4"));
-  window_menu->Append(ID_M_WINDOW_SETTINGS, wxT("&Settings\tAlt-5"));
+  window_menu->Append(ID_M_WINDOW_SETTINGS, wxT("&Settings\tAlt-4"));
   window_menu->AppendSeparator();
   window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR,
-                      wxT("&Chapter editor\tAlt-6"));
+                      wxT("&Chapter editor\tAlt-5"));
 
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_ABOUT, wxT("&About\tF1"),
@@ -461,13 +459,11 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION),
   input_page = new tab_input(notebook);
   attachments_page = new tab_attachments(notebook);
   global_page = new tab_global(notebook);
-  advanced_page = new tab_advanced(notebook);
   chapter_editor_page = new tab_chapters(notebook, chapter_menu);
 
   notebook->AddPage(input_page, wxT("Input"));
   notebook->AddPage(attachments_page, wxT("Attachments"));
   notebook->AddPage(global_page, wxT("Global"));
-  notebook->AddPage(advanced_page, wxT("Advanced"));
   notebook->AddPage(settings_page, wxT("Settings"));
   notebook->AddPage(chapter_editor_page, wxT("Chapter Editor"));
 
@@ -1132,26 +1128,6 @@ mmg_dialog::update_command_line() {
     clargs.Add(global_page->tc_global_tags->GetValue());
   }
 
-  if (advanced_page->cob_cl_charset->GetValue().Length() > 0) {
-    clargs.Add(wxT("--command-line-charset"));
-    clargs.Add(advanced_page->cob_cl_charset->GetValue());
-  }
-
-  if (advanced_page->cb_no_cues->IsChecked())
-    clargs.Add(wxT("--no-cues"));
-
-  if (advanced_page->cb_no_clusters->IsChecked())
-    clargs.Add(wxT("--no-clusters-in-meta-seek"));
-
-  if (advanced_page->cb_disable_lacing->IsChecked())
-    clargs.Add(wxT("--disable-lacing"));
-
-  if (advanced_page->cb_enable_durations->IsChecked())
-    clargs.Add(wxT("--enable-durations"));
-
-  if (advanced_page->cb_enable_timeslices->IsChecked())
-    clargs.Add(wxT("--enable-timeslices"));
-
   for (i = args_start; i < clargs.Count(); i++) {
     if (clargs[i].Find(wxT(" ")) >= 0)
       cmdline += wxT(" \"") + shell_escape(clargs[i]) + wxT("\"");
@@ -1489,7 +1465,6 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_WINDOW_INPUT, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_ATTACHMENTS, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_GLOBAL, mmg_dialog::on_window_selected)
-  EVT_MENU(ID_M_WINDOW_ADVANCED, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_SETTINGS, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_CHAPTEREDITOR, mmg_dialog::on_window_selected)
 END_EVENT_TABLE();

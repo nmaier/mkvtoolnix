@@ -66,13 +66,12 @@
 #define ID_M_WINDOW_INPUT                 60300
 #define ID_M_WINDOW_ATTACHMENTS           60301
 #define ID_M_WINDOW_GLOBAL                60302
-#define ID_M_WINDOW_ADVANCED              60303
-#define ID_M_WINDOW_SETTINGS              60304
-#define ID_M_WINDOW_CHAPTEREDITOR         60305
+#define ID_M_WINDOW_SETTINGS              60303
+#define ID_M_WINDOW_CHAPTEREDITOR         60304
 
 #define ID_M_HELP_ABOUT                   65000
 
-class tab_advanced;
+/* class tab_advanced; */
 class tab_attachments;
 class tab_chapters;
 class tab_global;
@@ -102,7 +101,6 @@ protected:
   tab_input *input_page;
   tab_attachments *attachments_page;
   tab_global *global_page;
-  tab_advanced *advanced_page;
   tab_settings *settings_page;
   tab_chapters *chapter_editor_page;
 
