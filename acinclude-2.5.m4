@@ -501,7 +501,7 @@ int main ()
     elif test ${mver[[1]]} -lt 4 ; then
       mver_ok=0
     else
-      if test ${mver[[2]]} -ge 3 ; then
+      if test ${mver[[2]]} -ge 4 ; then
         mver_ok=1
       else
         mver_ok=0

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.47 2003/05/26 21:49:11 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.48 2003/06/06 20:56:28 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -48,6 +48,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   htrack_type = -1;
   htrack_min_cache = -1;
   htrack_max_cache = -1;
+  htrack_default_duration = -1;
 
   hcodec_id = NULL;
   hcodec_private = NULL;
@@ -59,7 +60,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
   hvideo_pixel_width = -1;
   hvideo_pixel_height = -1;
-  hvideo_frame_rate = -1.0;
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
@@ -142,6 +142,10 @@ void generic_packetizer_c::set_track_max_cache(int max_cache) {
   htrack_max_cache = max_cache;
 }
 
+void generic_packetizer_c::set_track_default_duration(int64_t def_duration) {
+  htrack_default_duration = def_duration * 1000000;
+}
+
 void generic_packetizer_c::set_audio_sampling_freq(float freq) {
   haudio_sampling_freq = freq;
 }
@@ -164,10 +168,6 @@ void generic_packetizer_c::set_video_pixel_height(int height) {
 
 void generic_packetizer_c::set_video_aspect_ratio(float ar) {
   ti->aspect_ratio = ar;
-}
-
-void generic_packetizer_c::set_video_frame_rate(float frame_rate) {
-  hvideo_frame_rate = frame_rate;
 }
 
 void generic_packetizer_c::set_as_default_track(int type) {
@@ -254,6 +254,11 @@ void generic_packetizer_c::set_headers() {
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackMaxCache>(*track_entry))) = htrack_max_cache;
 
+  if (htrack_default_duration != -1.0)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
+      htrack_default_duration;
+
   if (htrack_type == track_audio)
     idx = 0;
   else if (htrack_type == track_video)
@@ -296,10 +301,6 @@ void generic_packetizer_c::set_headers() {
           (&GetChild<KaxVideoDisplayWidth>(video))) =
           (uint64_t)(hvideo_pixel_height * ti->aspect_ratio);
     }
-
-    if (hvideo_frame_rate != -1.0)
-      *(static_cast<EbmlFloat *>
-        (&GetChild<KaxVideoFrameRate>(video))) = hvideo_frame_rate;
 
   } else if (htrack_type == track_audio) {
     KaxTrackAudio &audio =

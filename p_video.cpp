@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.37 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.38 2003/06/06 20:56:28 mosu Exp $
     \brief video output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -61,10 +61,10 @@ void video_packetizer_c::set_headers() {
   // if there are B-frames as well.
   set_track_min_cache(1);
   set_track_max_cache(1);
+  set_track_default_duration((int64_t)(1000 / fps));
 
   set_video_pixel_width(width);
   set_video_pixel_height(height);
-  set_video_frame_rate(fps);
 
   generic_packetizer_c::set_headers();
 }

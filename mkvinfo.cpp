@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.54 2003/06/03 08:18:12 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.55 2003/06/06 20:56:28 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -73,6 +73,12 @@ extern "C" {
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
+
+#ifdef NO_WSTRING
+#define WCHARMODIFIER
+#else
+#define WCHARMODIFIER "l"
+#endif
 
 typedef struct {
   unsigned int tnum, tuid;
@@ -315,24 +321,14 @@ bool process_file(const char *file_name) {
           } else if (EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) {
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
             muxingapp.ReadData(es->I_O());
-#ifdef NO_WSTRING
-            show_element(l2, 2, "Muxing application: %s",
+            show_element(l2, 2, "Muxing application: %" WCHARMODIFIER "s",
                          UTFstring(muxingapp).c_str());
-#else
-            show_element(l2, 2, "Muxing application: %ls",
-                         UTFstring(muxingapp).c_str());
-#endif
 
           } else if (EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) {
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
             writingapp.ReadData(es->I_O());
-#ifdef NO_WSTRING
-            show_element(l2, 2, "Writing application: %s",
+            show_element(l2, 2, "Writing application: %" WCHARMODIFIER "s",
                          UTFstring(writingapp).c_str());
-#else
-            show_element(l2, 2, "Writing application: %ls",
-                         UTFstring(writingapp).c_str());
-#endif
 
           } else if (EbmlId(*l2) == KaxDateUTC::ClassInfos.GlobalId) {
             struct tm tmutc;
@@ -570,6 +566,16 @@ bool process_file(const char *file_name) {
                 show_element(l3, 3, "MaxCache: %u", uint32(max_cache));
 
               } else if (EbmlId(*l3) ==
+                         KaxTrackDefaultDuration::ClassInfos.GlobalId) {
+                KaxTrackDefaultDuration &def_duration =
+                  *static_cast<KaxTrackDefaultDuration*>(l3);
+                def_duration.ReadData(es->I_O());
+                show_element(l3, 3, "Default duration: %.3fms (%.3f fps for "
+                             "a video track)",
+                             (float)uint64(def_duration) / 1000000.0,
+                             1000000000.0 / (float)uint64(def_duration));
+
+              } else if (EbmlId(*l3) ==
                          KaxTrackFlagLacing::ClassInfos.GlobalId) {
                 KaxTrackFlagLacing &f_lacing =
                   *static_cast<KaxTrackFlagLacing *>(l3);
@@ -723,8 +729,9 @@ bool process_file(const char *file_name) {
         cluster = (KaxCluster *)l1;
 
 #ifdef HAVE_WXWINDOWS
-        frame->show_progress(100 * cluster->GetElementPosition() /
-                             file_size, "Parsing file");
+        if (use_gui)
+          frame->show_progress(100 * cluster->GetElementPosition() /
+                               file_size, "Parsing file");
 #endif // HAVE_WXWINDOWS
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -1040,6 +1047,20 @@ int console_main(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   char *initial_file;
+  int res;
+
+  if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
+    fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
+            "that your system supports this locale.\n");
+    exit(1);
+  }
+  if (setlocale(LC_CTYPE, "") == NULL) {
+    fprintf(stderr, "Error: Could not set the locale properly. Check the "
+            "LANG, LC_ALL and LC_CTYPE environment variables.\n");
+    exit(1);
+  }
+
+  cc_local_utf8 = utf8_init(NULL);
 
   parse_args(argc, argv, initial_file, use_gui);
 
@@ -1048,8 +1069,12 @@ int main(int argc, char **argv) {
     wxEntry(argc, argv);
     return 0;
   } else
-    return console_main(argc, argv);
+    res = console_main(argc, argv);
 #else
-  return console_main(argc, argv);
+  res = console_main(argc, argv);
 #endif
+
+  utf8_done();
+
+  return res;
 }

@@ -1,3 +1,12 @@
+2003-06-06  Moritz Bunkus  <moritz@bunkus.org>
+
+        * A lot of changes to comply with libmatroska/libebml 0.4.4.
+
+2003-06-03  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Implemented stricter content based file type identification for
+        MP3 and AC3 files so that those won't be mis-identified.
+
 2003-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
         * Some improvements to the mkvinfo GUI (thanks to jcsston for the

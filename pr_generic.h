@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.45 2003/05/29 18:50:03 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.46 2003/06/06 20:56:28 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -88,6 +88,7 @@ protected:
   // Header entries. Can be set via set_XXX and will be 'rendered'
   // by set_headers().
   int hserialno, htrack_type, htrack_min_cache, htrack_max_cache;
+  int64_t htrack_default_duration;
   uint32_t huid;
 
   char *hcodec_id;
@@ -98,7 +99,6 @@ protected:
   int haudio_channels, haudio_bit_depth;
 
   int hvideo_pixel_width, hvideo_pixel_height;
-  float hvideo_frame_rate;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
@@ -139,6 +139,7 @@ public:
 
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);
+  virtual void set_track_default_duration(int64_t default_duration);
 
   virtual void set_audio_sampling_freq(float freq);
   virtual void set_audio_channels(int channels);
@@ -147,7 +148,6 @@ public:
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);
   virtual void set_video_aspect_ratio(float ar);
-  virtual void set_video_frame_rate(float frame_rate);
 
   virtual void set_as_default_track(int type);
   virtual void force_default_track(int type);

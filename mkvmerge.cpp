@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.84 2003/06/03 15:17:52 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.85 2003/06/06 20:56:28 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -506,7 +506,7 @@ static void render_headers(mm_io_c *out) {
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
 
     string version = string("libebml v") + EbmlCodeVersion +
-      string(" libmatroska v") + KaxCodeVersion;
+      string(" + libmatroska v") + KaxCodeVersion + string("הצü!!!");
     *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
       cstr_to_UTFstring(version.c_str());
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
@@ -1037,6 +1037,17 @@ int main(int argc, char **argv) {
   packetizer_t *ptzr, *winner;
   filelist_t *file;
   int64_t old_pos;
+
+  if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
+    fprintf(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
+            "that your system supports this locale.\n");
+    exit(1);
+  }
+  if (setlocale(LC_CTYPE, "") == NULL) {
+    fprintf(stderr, "Error: Could not set the locale properly. Check the "
+            "LANG, LC_ALL and LC_CTYPE environment variables.\n");
+    exit(1);
+  }
 
   signal(SIGUSR1, sighandler);
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.32 2003/05/26 21:49:11 mosu Exp $
+    \version \$Id: common.h,v 1.33 2003/06/06 20:56:28 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -91,10 +91,10 @@ uint64_t get_uint64(const void *buf);
 
 extern int cc_local_utf8;
 
-int utf8_init(char *charset);
+int utf8_init(const char *charset);
 void utf8_done();
-char *to_utf8(int handle, char *local);
-char *from_utf8(int handle, char *utf8);
+char *to_utf8(int handle, const char *local);
+char *from_utf8(int handle, const char *utf8);
 
 int is_unique_uint32(uint32_t number);
 void add_unique_uint32(uint32_t number);

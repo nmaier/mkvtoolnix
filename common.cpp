@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.27 2003/05/26 21:49:11 mosu Exp $
+    \version \$Id: common.cpp,v 1.28 2003/06/06 20:56:28 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -138,8 +138,8 @@ int add_mkv_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
   return num_mkv_convs - 1;
 }
 
-int utf8_init(char *charset) {
-  char *lc_charset;
+int utf8_init(const char *charset) {
+  const char *lc_charset;
   iconv_t ict_from_utf8, ict_to_utf8;
   int i;
 
@@ -187,8 +187,8 @@ void utf8_done() {
     safefree(mkv_convs);
 }
 
-static char *convert_charset(iconv_t ict, char *src) {
-  char *dst, *psrc, *pdst;
+static char *convert_charset(iconv_t ict, const char *src) {
+  char *dst, *psrc, *pdst, *srccopy;
   size_t lsrc, ldst;
   int len;
 
@@ -202,18 +202,20 @@ static char *convert_charset(iconv_t ict, char *src) {
   iconv(ict, NULL, 0, NULL, 0);      // Reset the iconv state.
   lsrc = len / 4;
   ldst = len;
-  psrc = src;
+  srccopy = safestrdup(src);
+  psrc = srccopy;
   pdst = dst;
 #ifdef __CYGWIN__
   iconv(ict, (const char **)&psrc, &lsrc, &pdst, &ldst);
 #else
   iconv(ict, &psrc, &lsrc, &pdst, &ldst);
 #endif
+  safefree(srccopy);
 
   return dst;
 }
 
-char *to_utf8(int handle, char *local) {
+char *to_utf8(int handle, const char *local) {
   char *copy;
 
   if (handle == -1) {
@@ -227,7 +229,7 @@ char *to_utf8(int handle, char *local) {
   return convert_charset(mkv_convs[handle].ict_to_utf8, local);
 }
 
-char *from_utf8(int handle, char *utf8) {
+char *from_utf8(int handle, const char *utf8) {
   char *copy;
 
   if (handle == -1) {
@@ -368,6 +370,7 @@ UTFstring cstr_to_UTFstring(const char *c) {
 #else
   wchar_t *new_string;
   const char *sptr;
+  char *old_locale, *cconv;
   UTFstring u;
   int len;
 
@@ -375,8 +378,10 @@ UTFstring cstr_to_UTFstring(const char *c) {
   new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
   memset(new_string, 0, (len + 1) * sizeof(wchar_t));
   new_string[len] = L'\0';
-  sptr = c;
-  mbsrtowcs(new_string, &sptr, len, NULL);
+  old_locale = setlocale(LC_CTYPE, NULL);
+  setlocale(LC_CTYPE, "");
+  int res = mbstowcs(new_string, c, len);
+  setlocale(LC_CTYPE, old_locale);
   u = UTFstring(new_string);
   safefree(new_string);
 

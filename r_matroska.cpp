@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.42 2003/05/29 19:39:46 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.43 2003/06/06 20:56:28 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -481,7 +481,8 @@ int mkv_reader_c::read_headers() {
 
           } else if (!is_ebmlvoid(l2) &&
                      !(EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) &&
-                     !(EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId))
+                     !(EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) &&
+                     !(EbmlId(*l2) == KaxDateUTC::ClassInfos.GlobalId))
             fprintf(stdout, "matroska_reader: | + unknown element@2: %s\n",
                     typeid(*l2).name());
 
@@ -546,6 +547,17 @@ int mkv_reader_c::read_headers() {
                   fprintf(stdout, "matroska_reader: |  + WARNING: There's "
                           "more than one track with the UID %u.\n",
                           track->tnum);
+
+              } else if (EbmlId(*l3) ==
+                         KaxTrackDefaultDuration::ClassInfos.GlobalId) {
+                KaxTrackDefaultDuration &def_duration =
+                  *static_cast<KaxTrackDefaultDuration *>(l3);
+                def_duration.ReadData(es->I_O());
+                track->v_frate = 1000000000.0 / (float)uint64(def_duration);
+                fprintf(stdout, "matroska_reader: |  + Default duration: "
+                        "%.3fms ( = %.3f fps)\n",
+                        (float)uint64(def_duration) / 1000000.0,
+                        track->v_frate);
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
                 KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
@@ -666,6 +678,7 @@ int mkv_reader_c::read_headers() {
 
                   } else if (EbmlId(*l4) ==
                              KaxVideoFrameRate::ClassInfos.GlobalId) {
+                    // For compatibility with older files.
                     KaxVideoFrameRate &framerate =
                       *static_cast<KaxVideoFrameRate *>(l4);
                     framerate.ReadData(es->I_O());
