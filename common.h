@@ -13,13 +13,15 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.8 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: common.h,v 1.9 2003/03/13 09:31:06 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #ifndef __COMMON_H
 #define __COMMON_H
+
+#include <sys/types.h>
 
 #include "config.h"
 
@@ -47,6 +49,7 @@
 #define TYPECHAPTERS  7
 #define TYPEMICRODVD  8
 #define TYPEVOBSUB    9
+#define TYPEMATROSKA 10
 
 #define FOURCC(a, b, c, d) (unsigned long)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
@@ -82,6 +85,9 @@ char *map_audio_codec_id(int id, int bps, int *set_codec_private);
 
 track_info_t *duplicate_track_info(track_info_t *src);
 void free_track_info(track_info_t *ti);
+
+u_int16_t get_uint16(const void *buf);
+u_int32_t get_uint32(const void *buf);
 
 extern int verbose;
 extern float video_fps;
