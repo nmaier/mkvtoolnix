@@ -46,10 +46,14 @@ mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			mm_io.cpp mm_io.h \
 			iso639.cpp iso639.h
 
-mkvextract_SOURCES = mkvextract.cpp \
+mkvextract_SOURCES = mkvextract.cpp mkvextract.h \
 			base64.cpp base64.h \
 			chapters.cpp chapters.h \
 			common.cpp common.h \
+			mkvextract_attachments.cpp \
+			mkvextract_chapters.cpp \
+			mkvextract_tags.cpp \
+			mkvextract_tracks.cpp \
 			mm_io.cpp mm_io.h \
 			tagwriter.cpp tagwriter.h
 

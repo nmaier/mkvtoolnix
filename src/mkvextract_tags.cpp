@@ -1,0 +1,190 @@
+/*
+  mkvextract -- extract tracks from Matroska files into other files
+
+  mkvextract_tags.cpp
+
+  Written by Moritz Bunkus <moritz@bunkus.org>
+
+  Distributed under the GPL
+  see the file COPYING for details
+  or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version $Id$
+    \brief extracts tags from Matroska files into other files
+    \author Moritz Bunkus <moritz@bunkus.org>
+*/
+
+#include <errno.h>
+#include <ctype.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#if defined(COMP_MSC)
+#include <assert.h>
+#else
+#include <unistd.h>
+#endif
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include <avilib.h>
+}
+
+#include <ebml/EbmlHead.h>
+#include <ebml/EbmlSubHead.h>
+#include <ebml/EbmlStream.h>
+#include <ebml/EbmlVoid.h>
+#include <matroska/FileKax.h>
+
+#include <matroska/KaxAttached.h>
+#include <matroska/KaxAttachments.h>
+#include <matroska/KaxBlock.h>
+#include <matroska/KaxBlockData.h>
+#include <matroska/KaxChapters.h>
+#include <matroska/KaxCluster.h>
+#include <matroska/KaxClusterData.h>
+#include <matroska/KaxCues.h>
+#include <matroska/KaxCuesData.h>
+#include <matroska/KaxInfo.h>
+#include <matroska/KaxInfoData.h>
+#include <matroska/KaxSeekHead.h>
+#include <matroska/KaxSegment.h>
+#include <matroska/KaxTags.h>
+#include <matroska/KaxTracks.h>
+#include <matroska/KaxTrackEntryData.h>
+#include <matroska/KaxTrackAudio.h>
+#include <matroska/KaxTrackVideo.h>
+
+#include "chapters.h"
+#include "common.h"
+#include "matroska.h"
+#include "mkvextract.h"
+#include "mm_io.h"
+#include "tagwriter.h"
+
+using namespace libmatroska;
+using namespace std;
+
+void extract_tags(const char *file_name) {
+  int upper_lvl_el;
+  // Elements for different levels
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
+  EbmlStream *es;
+  mm_io_c *in;
+  bool tags_extracted = false;
+
+  // open input file
+  try {
+    in = new mm_io_c(file_name, MODE_READ);
+  } catch (std::exception &ex) {
+    show_error("Error: Couldn't open input file %s (%s).", file_name,
+               strerror(errno));
+    return;
+  }
+
+  try {
+    es = new EbmlStream(*in);
+
+    // Find the EbmlHead element. Must be the first one.
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    if (l0 == NULL) {
+      show_error("Error: No EBML head found.");
+      delete es;
+
+      return;
+    }
+      
+    // Don't verify its data for now.
+    l0->SkipData(*es, l0->Generic().Context);
+    delete l0;
+
+    while (1) {
+      // Next element must be a segment
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+      if (l0 == NULL) {
+        show_error("No segment/level 0 element found.");
+        return;
+      }
+      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
+        show_element(l0, 0, "Segment");
+        break;
+      }
+
+      show_element(l0, 0, "Next level 0 element is not a segment but %s",
+                   typeid(*l0).name());
+
+      l0->SkipData(*es, l0->Generic().Context);
+      delete l0;
+    }
+
+    upper_lvl_el = 0;
+    // We've got our segment, so let's find the tags
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
+    while (l1 != NULL) {
+      if (upper_lvl_el > 0)
+        break;
+      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
+        break;
+
+      if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
+        KaxTags &tags = *static_cast<KaxTags *>(l1);
+        tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
+
+        if (!tags_extracted) {
+          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+                  "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
+                  "<Tags>\n");
+          tags_extracted = true;
+        }
+
+        write_tags_xml(tags, stdout);
+
+      } else
+        upper_lvl_el = 0;
+
+      if (upper_lvl_el > 0) {    // we're coming from l2
+        upper_lvl_el--;
+        delete l1;
+        l1 = l2;
+        if (upper_lvl_el > 0)
+          break;
+
+      } else if (upper_lvl_el == 0) {
+        l1->SkipData(*es, l1->Generic().Context);
+        delete l1;
+        upper_lvl_el = 0;
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
+
+      } else {
+        delete l1;
+        l1 = l2;
+      }
+
+    } // while (l1 != NULL)
+
+    delete l0;
+    delete es;
+    delete in;
+
+  } catch (exception &ex) {
+    show_error("Caught exception: %s", ex.what());
+    delete in;
+
+    return;
+  }
+
+  if (tags_extracted)
+    mxprint(stdout, "</Tags>\n");
+}
+
