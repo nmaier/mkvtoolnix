@@ -22,21 +22,29 @@
 
 typedef struct sub_t {
   int64_t start, end;
-  char *subs;
-  sub_t *next;
+  string subs;
+
+  sub_t(int64_t _start, int64_t _end, const string &_subs):
+    start(_start), end(_end), subs(_subs) {
+  }
+
+  bool operator < (const sub_t &cmp) const {
+    return start < cmp.start;
+  }
 } sub_t;
 
 class subtitles_c {
 private:
-  sub_t *first, *last;
-public:
-  subtitles_c();
-  ~subtitles_c();
+  deque<sub_t> entries;
 
-  void add(int64_t, int64_t, const char *);
-  int check();
+public:
+  void add(int64_t start, int64_t end, const char *subs) {
+    entries.push_back(sub_t(start, end, subs));
+  }
   void process(textsubs_packetizer_c *);
-  sub_t *get_next();
+  void sort() {
+    std::sort(entries.begin(), entries.end());
+  }
 };
 
 int64_t spu_extract_duration(unsigned char *data, int buf_size,
