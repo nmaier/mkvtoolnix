@@ -216,18 +216,18 @@ close_extractors() {
 static void
 write_all_cuesheets(KaxChapters &chapters,
                     KaxTags &tags,
-                    vector<track_spec_t> &tracks) {
+                    vector<track_spec_t> &tspecs) {
   int i;
   mm_io_c *out;
 
   out = NULL;
 
-  for (i = 0; i < tracks.size(); i++) {
-    if (tracks[i].extract_cuesheet) {
+  for (i = 0; i < tspecs.size(); i++) {
+    if (tspecs[i].extract_cuesheet) {
       string file_name, cue_file_name;
       int pos, pos2, pos3;
 
-      file_name = tracks[i].out_name;
+      file_name = tspecs[i].out_name;
       pos = file_name.rfind('/');
       pos2 = file_name.rfind('\\');
       if (pos2 > pos)
@@ -235,7 +235,7 @@ write_all_cuesheets(KaxChapters &chapters,
       if (pos >= 0)
         file_name.erase(0, pos2);
 
-      cue_file_name = (string)tracks[i].out_name;
+      cue_file_name = (string)tspecs[i].out_name;
       pos = cue_file_name.rfind('.');
       pos2 = cue_file_name.rfind('/');
       pos3 = cue_file_name.rfind('\\');
@@ -250,16 +250,40 @@ write_all_cuesheets(KaxChapters &chapters,
                 cue_file_name.c_str(), strerror(errno));
       }
       mxinfo(_("The CUE sheet for track %lld will be written to '%s'.\n"),
-             tracks[i].tid, cue_file_name.c_str());
-      write_cuesheet(file_name.c_str(), chapters, tags, tracks[i].tuid, *out);
+             tspecs[i].tid, cue_file_name.c_str());
+      write_cuesheet(file_name.c_str(), chapters, tags, tspecs[i].tuid, *out);
       delete out;
     }
   }
 }
 
+static void
+find_track_uids(KaxTracks &tracks,
+                vector<track_spec_t> &tspecs) {
+  int t;
+
+  for (t = 0; t < tracks.ListSize(); t++) {
+    KaxTrackEntry *track_entry;
+    int64_t track_number;
+    int s;
+
+    track_entry = dynamic_cast<KaxTrackEntry *>(tracks[t]);
+    if (NULL == track_entry)
+      continue;
+
+    track_number = kt_get_number(*track_entry);
+
+    for (s = 0; s < tspecs.size(); s++)
+      if (tspecs[s].tid == track_number) {
+        tspecs[s].tuid = kt_get_uid(*track_entry);
+        break;
+      }
+  }
+}
+
 bool
 extract_tracks(const char *file_name,
-               vector<track_spec_t> &tracks) {
+               vector<track_spec_t> &tspecs) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
@@ -371,7 +395,8 @@ extract_tracks(const char *file_name,
 
         tracks_found = true;
         l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
-        create_extractors(*dynamic_cast<KaxTracks *>(l1), tracks);
+        find_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
+        create_extractors(*dynamic_cast<KaxTracks *>(l1), tspecs);
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         show_element(l1, 1, _("Cluster"));
@@ -492,7 +517,7 @@ extract_tracks(const char *file_name,
     delete es;
     delete in;
 
-    write_all_cuesheets(all_chapters, all_tags, tracks);
+    write_all_cuesheets(all_chapters, all_tags, tspecs);
 
     // Now just close the files and go to sleep. Mummy will sing you a
     // lullaby. Just close your eyes, listen to her sweet voice, singing,

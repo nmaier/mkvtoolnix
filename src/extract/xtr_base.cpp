@@ -55,6 +55,16 @@ kt_get_number(KaxTrackEntry &track) {
   return uint64(*number);
 }
 
+int64_t
+kt_get_uid(KaxTrackEntry &track) {
+  KaxTrackUID *uid;
+
+  uid = FINDFIRST(&track, KaxTrackUID);
+  if (NULL == uid)
+    return 0;
+  return uint64(*uid);
+}
+
 string
 kt_get_codec_id(KaxTrackEntry &track) {
   KaxCodecID *codec_id;

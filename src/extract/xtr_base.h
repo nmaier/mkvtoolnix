@@ -55,6 +55,7 @@ public:
 
 int64_t kt_get_default_duration(KaxTrackEntry &track);
 int64_t kt_get_number(KaxTrackEntry &track);
+int64_t kt_get_uid(KaxTrackEntry &track);
 string kt_get_codec_id(KaxTrackEntry &track);
 int kt_get_max_blockadd_id(KaxTrackEntry &track);
 

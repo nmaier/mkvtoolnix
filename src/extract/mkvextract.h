@@ -58,7 +58,7 @@ extern bool no_variable_data;
 void show_element(EbmlElement *l, int level, const char *fmt, ...);
 void show_error(const char *fmt, ...);
 
-bool extract_tracks(const char *file_name, vector<track_spec_t> &tracks);
+bool extract_tracks(const char *file_name, vector<track_spec_t> &tspecs);
 void extract_tags(const char *file_name, bool parse_fully);
 void extract_chapters(const char *file_name, bool chapter_format_simple,
                       bool parse_fully);

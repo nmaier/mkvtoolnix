@@ -183,6 +183,9 @@ write_cuesheet(const char *file_name,
   if (chapters.ListSize() == 0)
     return;
 
+  if (no_variable_data)
+    file_name = "no-variable-data";
+
   out.write_bom("UTF-8");
 
   print_if_global("CATALOG", "CATALOG %s\n"); // until 0.9.6
