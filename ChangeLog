@@ -1,3 +1,8 @@
+2004-08-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: There was an illegal free() in the OGM
+	reader.
+
 2004-07-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The subtitle track extraction used the wrong

@@ -462,6 +462,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         mxinfo(FMT_TID "Using the video output module.\n", ti->fname,
                (int64_t)dmx->serial);
+        ti->private_data = NULL;
 
         break;
 
