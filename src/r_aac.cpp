@@ -83,7 +83,7 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     ti->id = 0;                 // ID for this track.
 
     for (i = 0; i < ti->aac_is_sbr->size(); i++)
-      if ((*ti->aac_is_sbr)[i] == 0) {
+      if (((*ti->aac_is_sbr)[i] == 0) || ((*ti->aac_is_sbr)[i] == -1)) {
         aacheader.profile = AAC_PROFILE_SBR;
         break;
       }

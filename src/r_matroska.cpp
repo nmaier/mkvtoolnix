@@ -392,7 +392,6 @@ void kax_reader_c::verify_tracks() {
                      !strcmp(t->codec_id, MKV_A_AAC_4LC) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4SSR) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4LTP) ||
-                     !strcmp(t->codec_id, MKV_A_AAC_4SBR) ||
                      !strcmp(t->codec_id, MKV_A_AAC_2SBR) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4SBR))
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
@@ -1208,7 +1207,8 @@ void kax_reader_c::create_packetizers() {
               exit(1);
             }
             for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
-              if ((*ti->aac_is_sbr)[sbridx] == t->tnum) {
+              if (((*ti->aac_is_sbr)[sbridx] == t->tnum) ||
+                  ((*ti->aac_is_sbr)[sbridx] == -1)) {
                 profile = AAC_PROFILE_SBR;
                 break;
               }
