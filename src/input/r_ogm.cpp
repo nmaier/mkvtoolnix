@@ -1181,6 +1181,33 @@ ogm_reader_c::handle_stream_comments() {
           iso639_2 = map_iso639_1_to_iso639_2(comment[1].c_str());
         if ((iso639_2 == NULL) && (is_valid_iso639_2_code(comment[1].c_str())))
           iso639_2 = comment[1].c_str();
+        if (iso639_2 == NULL) {
+          string lang;
+          int pos1, pos2;
+
+          lang = comment[1];
+          pos1 = lang.find("[");
+          while (pos1 >= 0) {
+            pos2 = lang.find("]", pos1);
+            if (pos2 == -1)
+              pos2 = lang.length() - 1;
+            lang.erase(pos1, pos2 - pos1 + 1);
+            pos1 = lang.find("[");
+          }
+          pos1 = lang.find("(");
+          while (pos1 >= 0) {
+            pos2 = lang.find(")", pos1);
+            if (pos2 == -1)
+              pos2 = lang.length() - 1;
+            lang.erase(pos1, pos2 - pos1 + 1);
+            pos1 = lang.find("(");
+          }
+          for (pos1 = 0; iso639_languages[pos1].iso639_2_code != NULL; pos1++)
+            if (starts_with_case(lang, iso639_languages[pos1].english_name)) {
+              iso639_2 = iso639_languages[pos1].iso639_2_code;
+              break;
+            }
+        }
         if (iso639_2 != NULL) {
           safefree(dmx->language);
           dmx->language = safestrdup(iso639_2);
