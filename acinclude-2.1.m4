@@ -543,9 +543,11 @@ AC_DEFUN(PATH_MINGW,
   else
     AC_MSG_RESULT(yes)
     export MINGW="1"
+    MINGW_GUIAPP=-mwindows
 dnl    MINGW_LIBS=-lcharset
   fi
   AC_SUBST(MINGW_LIBS)
+  AC_SUBST(MINGW_GUIAPP)
 ])
 
 dnl This macros shamelessly stolen from
