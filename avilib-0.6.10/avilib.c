@@ -1815,9 +1815,11 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
             alBITMAPINFOHEADER bih;
             
             memcpy(&bih, hdrl_data + i, sizeof(alBITMAPINFOHEADER));
-            AVI->bitmap_info_header = (alBITMAPINFOHEADER *)malloc(bih.bi_size);
+            AVI->bitmap_info_header = (alBITMAPINFOHEADER *)
+              malloc(str2ulong((unsigned char *)&bih.bi_size));
             if (AVI->bitmap_info_header != NULL)
-              memcpy(AVI->bitmap_info_header, hdrl_data + i, bih.bi_size);
+              memcpy(AVI->bitmap_info_header, hdrl_data + i,
+                     str2ulong((unsigned char *)&bih.bi_size));
             
             AVI->width  = str2ulong(hdrl_data+i+4);
             AVI->height = str2ulong(hdrl_data+i+8);
@@ -1843,16 +1845,18 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
             if (wfe != NULL) {
               memset(wfe, 0, sizeof(alWAVEFORMATEX));
 	      memcpy(wfe, hdrl_data + i, wfes);
-	      if (wfe->cb_size != 0) {
-		nwfe = (char *)realloc(wfe, sizeof(alWAVEFORMATEX) +
-				       wfe->cb_size);
+	      if (str2ushort((unsigned char *)&wfe->cb_size) != 0) {
+		nwfe = (char *)
+                  realloc(wfe, sizeof(alWAVEFORMATEX) +
+                          str2ushort((unsigned char *)&wfe->cb_size));
 		if (nwfe != 0) {
 		  off_t lpos = lseek(AVI->fdes, 0, SEEK_CUR);
 		  lseek(AVI->fdes, header_offset + i + sizeof(alWAVEFORMATEX),
 			SEEK_SET);
 		  wfe = (alWAVEFORMATEX *)nwfe;
 		  nwfe = &nwfe[sizeof(alWAVEFORMATEX)];
-		  avi_read(AVI->fdes, nwfe, wfe->cb_size);
+		  avi_read(AVI->fdes, nwfe,
+                           str2ushort((unsigned char *)&wfe->cb_size));
 		  lseek(AVI->fdes, lpos, SEEK_SET);
 		}
 	      }

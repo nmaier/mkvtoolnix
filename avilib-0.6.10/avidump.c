@@ -39,7 +39,6 @@
 #include <fcntl.h>
 
 #if defined(SYS_UNIX) || defined(COMP_MSC) || defined(__APPLE__)
-typedef off_t off64_t;
 #define lseek64 lseek
 #endif
 
