@@ -108,7 +108,7 @@ struct qtmp4_demuxer_t {
   vector<uint32_t> keyframe_table;
   vector<qt_editlist_t> editlist_table;
   vector<qt_frame_offset_t> raw_frame_offset_table;
-  vector<uint32_t> frame_offset_table;
+  vector<int32_t> frame_offset_table;
 
   esds_t esds;
   bool esds_parsed;
