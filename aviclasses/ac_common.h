@@ -19,6 +19,8 @@
 #ifndef __TOOLS_COMMON_H__
 #define __TOOLS_COMMON_H__
 
+#include "os.h"
+
 #include <stdarg.h>
 #include <assert.h>
 #include <algorithm>
@@ -87,14 +89,14 @@ typedef unsigned __int16  uint16;
 typedef unsigned __int32  uint32;
 typedef unsigned __int64  uint64;
 #else
-typedef signed char      sint8;
-typedef signed short int  sint16;
-typedef signed long      sint32;
-typedef signed long long  sint64;
-typedef unsigned char    uint8;
-typedef unsigned short int  uint16;
-typedef unsigned int     uint32;
-typedef unsigned long long  uint64;
+typedef int8_t sint8;
+typedef int16_t sint16;
+typedef int32_t sint32;
+typedef int64_t sint64;
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
 #endif
 
 
