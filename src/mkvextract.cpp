@@ -1539,6 +1539,7 @@ void extract_tags(const char *file_name) {
 
         if (!tags_extracted) {
           mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+                  "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
                   "<Tags>\n");
           tags_extracted = true;
         }
