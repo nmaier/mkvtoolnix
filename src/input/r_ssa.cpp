@@ -175,7 +175,7 @@ ssa_reader_c::parse_time(string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s.c_str(), th))
+  if (!parse_int(s, th))
     return -1;
   stime.erase(0, pos + 1);
 
@@ -184,7 +184,7 @@ ssa_reader_c::parse_time(string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s.c_str(), tm))
+  if (!parse_int(s, tm))
     return -1;
   stime.erase(0, pos + 1);
 
@@ -193,11 +193,11 @@ ssa_reader_c::parse_time(string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s.c_str(), ts))
+  if (!parse_int(s, ts))
     return -1;
   stime.erase(0, pos + 1);
 
-  if (!parse_int(stime.c_str(), tds))
+  if (!parse_int(stime, tds))
     return -1;
 
   return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) *
@@ -206,16 +206,8 @@ ssa_reader_c::parse_time(string &stime) {
 
 string
 ssa_reader_c::recode_text(vector<string> &fields) {
-  char *s;
-  string res;
-
   // TODO: Handle \fe encoding changes.
-  res = get_element("Text", fields);
-  s = to_utf8(cc_utf8, res.c_str());
-  res = s;
-  safefree(s);
-
-  return res;
+  return to_utf8(cc_utf8, get_element("Text", fields));
 }
 
 int

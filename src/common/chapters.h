@@ -34,10 +34,10 @@ using namespace libebml;
 using namespace libmatroska;
 
 KaxChapters *MTX_DLL_API
-parse_chapters(const char *file_name, int64_t min_tc = 0,
+parse_chapters(const string &file_name, int64_t min_tc = 0,
                int64_t max_tc = -1, int64_t offset = 0,
-               const char *language = NULL,
-               const char *charset = NULL,
+               const string &language = "",
+               const string &charset = "",
                bool exception_on_error = false,
                bool *is_simple_format = NULL,
                KaxTags **tags = NULL);
@@ -51,15 +51,15 @@ bool MTX_DLL_API probe_simple_chapters(mm_text_io_c *in);
 KaxChapters *MTX_DLL_API
 parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
                       int64_t max_tc, int64_t offset,
-                      const char *language, const char *charset,
+                      const string &language, const string &charset,
                       bool exception_on_error = false);
 
-extern char *MTX_DLL_API cue_to_chapter_name_format;
+extern string MTX_DLL_API cue_to_chapter_name_format;
 bool MTX_DLL_API probe_cue_chapters(mm_text_io_c *in);
 KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
                                             int64_t max_tc, int64_t offset,
-                                            const char *language,
-                                            const char *charset,
+                                            const string &language,
+                                            const string &charset,
                                             bool exception_on_error = false,
                                             KaxTags **tags = NULL);
 

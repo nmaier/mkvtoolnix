@@ -581,8 +581,8 @@ create_output_files() {
                      (sconv[sconv.length()- 1] != '\n'))
             sconv += "\n";
 
-          from_utf8(tracks[i].conv_handle, sconv);
-          tracks[i].out->puts_unl(sconv.c_str());
+          sconv = from_utf8(tracks[i].conv_handle, sconv);
+          tracks[i].out->puts_unl(sconv);
 
         } else if (tracks[i].type == TYPEFLAC) {
           if (!tracks[i].embed_in_ogg)
@@ -711,7 +711,7 @@ handle_data(KaxBlock *block,
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;
-        s2 = from_utf8(track->conv_handle, s);
+        s2 = from_utf8_c(track->conv_handle, s);
         safefree(s);
         len = strlen(s2);
         s = (char *)safemalloc(len + 3);
@@ -766,7 +766,7 @@ handle_data(KaxBlock *block,
 
         // Convert the ReadOrder entry so that we can re-order the entries
         // later.
-        if (!parse_int(fields[0].c_str(), num)) {
+        if (!parse_int(fields[0], num)) {
           mxwarn(_("Invalid format for a SSA line ('%s'). "
                    "This entry will be skipped.\n"), s);
           continue;
@@ -815,7 +815,7 @@ handle_data(KaxBlock *block,
             fields[8] + string("\n"); // Text
 
         // Do the charset conversion.
-        from_utf8(track->conv_handle, line);
+        line = from_utf8(track->conv_handle, line);
 
         // Now store that entry.
         ssa_line.num = num;

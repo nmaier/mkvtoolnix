@@ -43,7 +43,7 @@ timecode_factory_c::create(const char *_file_name,
   }
 
   if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") ||
-      !parse_int(&line.c_str()[strlen("# timecode format v")], version))
+      !parse_int(&line[strlen("# timecode format v")], version))
     mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
               "format line. The very first line must look like "
               "'# timecode format v1'.\n"), _file_name);

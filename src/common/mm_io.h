@@ -31,14 +31,14 @@ protected:
 #if defined(SYS_WINDOWS)
   bool _eof;
 #endif
-  char *file_name;
+  string file_name;
   void *file;
   stack<int64_t> positions;
   bool dos_style_newlines;
 
 public:
   mm_io_c();
-  mm_io_c(const char *path, const open_mode mode);
+  mm_io_c(const string &path, const open_mode mode);
   virtual ~mm_io_c();
 
   virtual uint64 getFilePointer();
@@ -68,8 +68,8 @@ public:
   virtual bool eof();
   virtual string getline();
   virtual bool getline2(string &s);
-  virtual size_t puts_unl(const char *s);
-  virtual bool write_bom(const char *charset);
+  virtual size_t puts_unl(const string &s);
+  virtual bool write_bom(const string &charset);
   virtual int getch();
 
   virtual void save_pos(int64_t new_pos = -1);
@@ -77,7 +77,9 @@ public:
 
   virtual int64_t get_size();
 
-  virtual const char *get_file_name();
+  virtual const string &get_file_name() {
+    return file_name;
+  }
 
   virtual int truncate(int64_t pos);
 
@@ -126,7 +128,7 @@ protected:
   int bom_len;
 
 public:
-  mm_text_io_c(const char *path);
+  mm_text_io_c(const string &path);
 
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
   virtual string getline();

@@ -1945,7 +1945,7 @@ tab_chapters::parse_time(wxString s) {
     }
     c++;
   }
-  if (!parse_int(utf8s.c_str(), nsecs))
+  if (!parse_int(utf8s, nsecs))
     return -1;
   return nsecs * 1000000000;
 }

@@ -126,18 +126,17 @@ parse_simple_chapters(mm_text_io_c *in,
                       int64_t min_tc,
                       int64_t max_tc,
                       int64_t offset,
-                      const char *language,
-                      const char *charset,
+                      const string &language,
+                      const string &charset,
                       bool exception_on_error) {
   KaxChapters *chaps;
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
   KaxChapterDisplay *display;
   int64_t start, hour, minute, second, msecs;
-  string name, line;
+  string name, line, use_language;
   int mode, num, cc_utf8;
   bool do_convert;
-  char *recoded_string;
   UTFstring wchar_string;
 
   in->setFilePointer(0);
@@ -160,17 +159,18 @@ parse_simple_chapters(mm_text_io_c *in,
 
   if (in->get_byte_order() == BO_NONE) {
     do_convert = true;
-    cc_utf8 = utf8_init(charset);
+    cc_utf8 = utf8_init(charset.c_str());
 
   } else
     do_convert = false;
 
-  if (language == NULL) {
+  if (language == "") {
     if (default_chapter_language.length() > 0)
-      language = default_chapter_language.c_str();
+      use_language = default_chapter_language;
     else
-      language = "eng";
-  }
+      use_language = "eng";
+  } else
+    use_language = language;
 
   try {
     while (in->getline2(line)) {
@@ -181,10 +181,10 @@ parse_simple_chapters(mm_text_io_c *in,
       if (mode == 0) {
         if (!ischapterline(line.c_str()))
           chapter_error("'%s' is not a CHAPTERxx=... line.", line.c_str());
-        parse_int(line.substr(10, 2).c_str(), hour);
-        parse_int(line.substr(13, 2).c_str(), minute);
-        parse_int(line.substr(16, 2).c_str(), second);
-        parse_int(line.substr(19, 3).c_str(), msecs);
+        parse_int(line.substr(10, 2), hour);
+        parse_int(line.substr(13, 2), minute);
+        parse_int(line.substr(16, 2), second);
+        parse_int(line.substr(19, 3), msecs);
         if (hour > 23)
           chapter_error("Invalid hour: %d", hour);
         if (minute > 59)
@@ -217,17 +217,15 @@ parse_simple_chapters(mm_text_io_c *in,
 
           display = &GetChild<KaxChapterDisplay>(*atom);
 
-          if (do_convert) {
-            recoded_string = to_utf8(cc_utf8, name.c_str());
-            wchar_string = cstrutf8_to_UTFstring(recoded_string);
-            safefree(recoded_string);
-          } else
-            wchar_string = cstrutf8_to_UTFstring(name.c_str());
+          if (do_convert)
+            wchar_string = cstrutf8_to_UTFstring(to_utf8(cc_utf8, name));
+          else
+            wchar_string = cstrutf8_to_UTFstring(name);
           *static_cast<EbmlUnicodeString *>
             (&GetChild<KaxChapterString>(*display)) = wchar_string;
 
           *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
-            language;
+            use_language;
 
           if (default_chapter_country.length() > 0)
             *static_cast<EbmlString *>
@@ -257,12 +255,12 @@ parse_simple_chapters(mm_text_io_c *in,
 // }}}
 
 KaxChapters *
-parse_chapters(const char *file_name,
+parse_chapters(const string &file_name,
                int64_t min_tc,
                int64_t max_tc,
                int64_t offset,
-               const char *language,
-               const char *charset,
+               const string &language,
+               const string &charset,
                bool exception_on_error,
                bool *is_simple_format,
                KaxTags **tags) {
@@ -273,10 +271,10 @@ parse_chapters(const char *file_name,
     in = new mm_text_io_c(file_name);
   } catch (...) {
     if (exception_on_error)
-      throw error_c(string("Could not open '") + string(file_name) +
-                    string("' for reading.\n"));
+      throw error_c(mxsprintf("Could not open '%s' for reading.\n",
+                              file_name.c_str()));
     else
-      mxerror("Could not open '%s' for reading.\n", file_name);
+      mxerror("Could not open '%s' for reading.\n", file_name.c_str());
   }
 
   try {
@@ -299,9 +297,9 @@ parse_chapters(const char *file_name,
 
     delete in;
 
-    throw error_c(string("Unknown file format for '") + string(file_name) +
-                  string("'. It does not contain a supported chapter "
-                         "format.\n"));
+    throw error_c(mxsprintf("Unknown file format for '%s'. It does not "
+                            "contain a support chapter format.\n",
+                            file_name.c_str()));
   } catch (error_c e) {
     if (exception_on_error)
       throw e;

@@ -59,7 +59,7 @@ probe_cue_chapters(mm_text_io_c *in) {
   return false;
 }
 
-char *cue_to_chapter_name_format = NULL;
+string cue_to_chapter_name_format;
 
 static void
 cue_entries_to_chapter_name(string &performer,
@@ -76,10 +76,10 @@ cue_entries_to_chapter_name(string &performer,
   if (performer.length() == 0)
     performer = global_performer;
 
-  if (cue_to_chapter_name_format == NULL)
+  if (cue_to_chapter_name_format == "")
     this_char = "%p - %t";
   else
-    this_char = cue_to_chapter_name_format;
+    this_char = cue_to_chapter_name_format.c_str();
   next_char = this_char + 1;
   while (*this_char != 0) {
     if (*this_char == '%') {
@@ -134,7 +134,7 @@ typedef struct {
   vector<string> global_rem;
   vector<string> global_comment;
   vector<string> comment;
-  const char *language;
+  string language;
   int line_num;
   int cc_utf8;
 } cue_parser_args_t;
@@ -142,17 +142,10 @@ typedef struct {
 static UTFstring
 cue_str_internal_to_utf(cue_parser_args_t &a,
                         const string &s) {
-  if (a.do_convert) {
-    UTFstring wchar_string;
-    char *recoded_string;
-
-    recoded_string = to_utf8(a.cc_utf8, s.c_str());
-    wchar_string = cstrutf8_to_UTFstring(recoded_string);
-    safefree(recoded_string);
-
-    return wchar_string;
-  } else
-    return cstrutf8_to_UTFstring(s.c_str());
+  if (a.do_convert)
+    return cstrutf8_to_UTFstring(to_utf8(a.cc_utf8, s));
+  else
+    return cstrutf8_to_UTFstring(s);
 }
 
 static KaxTagSimple *
@@ -369,8 +362,8 @@ parse_cue_chapters(mm_text_io_c *in,
                    int64_t min_tc,
                    int64_t max_tc,
                    int64_t offset,
-                   const char *language,
-                   const char *charset,
+                   const string &language,
+                   const string &charset,
                    bool exception_on_error,
                    KaxTags **tags) {
   cue_parser_args_t a;
@@ -381,14 +374,14 @@ parse_cue_chapters(mm_text_io_c *in,
 
   if (in->get_byte_order() == BO_NONE) {
     a.do_convert = true;
-    a.cc_utf8 = utf8_init(charset);
+    a.cc_utf8 = utf8_init(charset.c_str());
 
   } else {
     a.do_convert = false;
     a.cc_utf8 = 0;
   }
 
-  if (language == NULL)
+  if (language == "")
     a.language = "eng";
   else
     a.language = language;

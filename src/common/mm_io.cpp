@@ -34,7 +34,7 @@
 using namespace std;
 
 #if !defined(SYS_WINDOWS)
-mm_io_c::mm_io_c(const char *path,
+mm_io_c::mm_io_c(const string &path,
                  const open_mode mode) {
   char *cmode;
 
@@ -55,24 +55,24 @@ mm_io_c::mm_io_c(const char *path,
       throw 0;
   }
 
-  file = (FILE *)fopen(path, cmode);
+  file = (FILE *)fopen(path.c_str(), cmode);
 
   if (file == NULL)
     throw exception();
 
-  file_name = safestrdup(path);
+  file_name = path;
   dos_style_newlines = false;
 }
 
 mm_io_c::mm_io_c() {
-  file_name = NULL;
+  file_name = "";
   file = NULL;
   dos_style_newlines = false;
 }
 
 mm_io_c::~mm_io_c() {
   close();
-  safefree(file_name);
+  file_name = "";
 }
 
 uint64
@@ -133,7 +133,7 @@ mm_io_c::truncate(int64_t pos) {
 
 #else // SYS_UNIX
 
-mm_io_c::mm_io_c(const char *path,
+mm_io_c::mm_io_c(const string &path,
                  const open_mode mode) {
   DWORD access_mode, share_mode, disposition;
 
@@ -162,18 +162,18 @@ mm_io_c::mm_io_c(const char *path,
       throw exception();
   }
 
-  file = (void *)CreateFile(path, access_mode, share_mode, NULL, disposition,
-                            0, NULL);
+  file = (void *)CreateFile(path.c_str(), access_mode, share_mode, NULL,
+                            disposition, 0, NULL);
   _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
     throw exception();
 
-  file_name = safestrdup(path);
+  file_name = path;
   dos_style_newlines = true;
 }
 
 mm_io_c::mm_io_c() {
-  file_name = NULL;
+  file_name = "";
   file = NULL;
   dos_style_newlines = true;
 }
@@ -186,6 +186,7 @@ void
 mm_io_c::close() {
   if (file != NULL)
     CloseHandle((HANDLE)file);
+  file_name = "";
 }
 
 uint64
@@ -300,11 +301,6 @@ mm_io_c::truncate(int64_t pos) {
 
 #endif
 
-const char *
-mm_io_c::get_file_name() {
-  return file_name;
-}
-
 string
 mm_io_c::getline() {
   char c;
@@ -346,14 +342,16 @@ mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
 }
 
 size_t
-mm_io_c::puts_unl(const char *s) {
+mm_io_c::puts_unl(const string &s) {
   int i;
   size_t bytes_written;
+  const char *cs;
 
+  cs = s.c_str();
   bytes_written = 0;
-  for (i = 0; i < strlen(s); i++)
-    if (s[i] != '\r')
-      bytes_written += write(&s[i], 1);
+  for (i = 0; cs[i] != 0; i++)
+    if (cs[i] != '\r')
+      bytes_written += write(&cs[i], 1);
 
   return bytes_written;
 }
@@ -549,7 +547,7 @@ mm_io_c::restore_pos() {
 }
 
 bool
-mm_io_c::write_bom(const char *charset) {
+mm_io_c::write_bom(const string &charset) {
   const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   const unsigned char utf16le_bom[2] = {0xff, 0xfe};
   const unsigned char utf16be_bom[2] = {0xfe, 0xff};
@@ -558,24 +556,24 @@ mm_io_c::write_bom(const char *charset) {
   const unsigned char *bom;
   int bom_len;
 
-  if (charset == NULL)
+  if (charset == "")
     return false;
 
-  if (!strcmp(charset, "UTF-8") || !strcmp(charset, "UTF8")) {
+  if ((charset =="UTF-8") || (charset =="UTF8")) {
     bom_len = 3;
     bom = utf8_bom;
-  } else if (!strcmp(charset, "UTF-16") || !strcmp(charset, "UTF-16LE") ||
-             !strcmp(charset, "UTF16") || !strcmp(charset, "UTF16LE")) {
+  } else if ((charset =="UTF-16") || (charset =="UTF-16LE") ||
+             (charset =="UTF16") || (charset =="UTF16LE")) {
     bom_len = 2;
     bom = utf16le_bom;
-  } else if (!strcmp(charset, "UTF-16BE") || !strcmp(charset, "UTF16BE")) {
+  } else if ((charset =="UTF-16BE") || (charset =="UTF16BE")) {
     bom_len = 2;
     bom = utf16be_bom;
-  } else if (!strcmp(charset, "UTF-32") || !strcmp(charset, "UTF-32LE") ||
-             !strcmp(charset, "UTF32") || !strcmp(charset, "UTF32LE")) {
+  } else if ((charset =="UTF-32") || (charset =="UTF-32LE") ||
+             (charset =="UTF32") || (charset =="UTF32LE")) {
     bom_len = 4;
     bom = utf32le_bom;
-  } else if (!strcmp(charset, "UTF-32BE") || !strcmp(charset, "UTF32BE")) {
+  } else if ((charset =="UTF-32BE") || (charset =="UTF32BE")) {
     bom_len = 4;
     bom = utf32be_bom;
   } else
@@ -756,7 +754,7 @@ mm_mem_io_c::eof() {
  * Class for handling UTF-8/UTF-16/UTF-32 text files.
  */
 
-mm_text_io_c::mm_text_io_c(const char *path):
+mm_text_io_c::mm_text_io_c(const string &path):
   mm_io_c(path, MODE_READ) {
   unsigned char buffer[4];
 

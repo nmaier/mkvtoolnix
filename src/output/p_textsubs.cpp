@@ -129,7 +129,7 @@ textsubs_packetizer_c::process(memory_c &mem,
   *idx2 = 0;
 
   if (recode) {
-    utf8_subs = to_utf8(cc_utf8, subs);
+    utf8_subs = to_utf8_c(cc_utf8, subs);
     safefree(subs);
     memory_c mem((unsigned char *)utf8_subs, strlen(utf8_subs), true);
     add_packet(mem, start, length, true);

@@ -38,23 +38,21 @@ static const char *mosu_hacks[] = {
   ENGAGE_FORCE_PASSTHROUGH_PACKETIZER,
   NULL
 };
-static vector<const char *> engaged_hacks;
+static vector<string> engaged_hacks;
 
 bool
-hack_engaged(const char *hack) {
-  uint32_t i;
+hack_engaged(const string &hack) {
+  vector<string>::const_iterator hit;
 
-  if (hack == NULL)
-    return false;
-  for (i = 0; i < engaged_hacks.size(); i++)
-    if (!strcmp(engaged_hacks[i], hack))
+  foreach(hit, engaged_hacks)
+    if (*hit == hack)
       return true;
 
   return false;
 }
 
 void
-engage_hacks(const char *hacks) {
+engage_hacks(const string &hacks) {
   vector<string> engage_args;
   int aidx, hidx;
   bool valid_hack;

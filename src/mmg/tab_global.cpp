@@ -469,7 +469,7 @@ tab_global::validate_settings() {
                      wxOK | wxCENTER | wxICON_ERROR);
         return false;
       }
-      if ((s.length() == 0) || !parse_int(s.c_str(), dummy_i)) {
+      if ((s.length() == 0) || !parse_int(s, dummy_i)) {
         wxMessageBox(wxT("The format of the split size is invalid."),
                      wxT("mkvmerge GUI error"),
                      wxOK | wxCENTER | wxICON_ERROR);
@@ -494,7 +494,7 @@ tab_global::validate_settings() {
       c = s[s.length() - 1];
       if (tolower(c) == 's') {
         s.erase(s.length() - 1);
-        if ((s.length() == 0) || !parse_int(s.c_str(), dummy_i) ||
+        if ((s.length() == 0) || !parse_int(s, dummy_i) ||
             (dummy_i <= 0)) {
           wxMessageBox(wxT("The format of the split time is invalid."),
                        wxT("mkvmerge GUI error"), wxOK | wxCENTER |
@@ -523,7 +523,7 @@ tab_global::validate_settings() {
 
     s = wxMB(tc_split_max_files->GetValue());
     strip(s);
-    if ((s.length() > 0) && (!parse_int(s.c_str(), dummy_i) ||
+    if ((s.length() > 0) && (!parse_int(s, dummy_i) ||
                              (dummy_i <= 1))) {
       wxMessageBox(wxT("Invalid number of max. split files given."),
                    wxT("mkvmerge GUI error"), wxOK | wxCENTER | wxICON_ERROR);

@@ -623,7 +623,7 @@ from_utf8(const wxString &src) {
   wxString retval;
   char *local;
 
-  local = from_utf8(cc_local_utf8, src.c_str());
+  local = from_utf8_c(cc_local_utf8, src.c_str());
   retval = local;
   safefree(local);
   return retval;
@@ -1591,7 +1591,7 @@ tab_input::validate_settings() {
 
       s = wxMB(*t->delay);
       strip(s);
-      if ((s.length() > 0) && !parse_int(s.c_str(), dummy_i)) {
+      if ((s.length() > 0) && !parse_int(s, dummy_i)) {
         wxMessageBox(wxT("The delay setting for track nr. ") + sid +
                      wxT(" in file '") + *f->file_name + wxT("' is invalid."),
                      wxT("mkvmerge GUI: error"),

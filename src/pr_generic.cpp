@@ -243,8 +243,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   hcompression = COMPRESSION_UNSPECIFIED;
   compressor = NULL;
 
-  dumped_packet_number = 0;
-
   timecode_factory = timecode_factory_c::create(ti->ext_timecodes,
                                                 ti->fname, ti->id);
 }
@@ -879,28 +877,6 @@ generic_packetizer_c::get_packet() {
   enqueued_bytes -= pack->length;
 
   return pack;
-}
-
-void
-generic_packetizer_c::dump_packet(const void *buffer,
-                                  int size) {
-  char *path;
-  mm_io_c *out;
-
-  if (dump_packets == NULL)
-    return;
-
-  path = (char *)safemalloc(strlen(dump_packets) + 1 + 30);
-  mxprints(path, "%s/%u-%010lld", dump_packets, hserialno,
-           dumped_packet_number);
-  dumped_packet_number++;
-  try {
-    out = new mm_io_c(path, MODE_CREATE);
-    out->write(buffer, size);
-    delete out;
-  } catch(...) {
-  }
-  safefree(path);
 }
 
 void

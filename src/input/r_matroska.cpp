@@ -953,7 +953,7 @@ kax_reader_c::read_headers() {
             for (idx = 0; idx < 4; idx++) {
               int num;
 
-              if (!parse_int(ver_parts[idx].c_str(), num) || (num < 0) ||
+              if (!parse_int(ver_parts[idx], num) || (num < 0) ||
                   (num > 255)) {
                 failed = true;
                 break;

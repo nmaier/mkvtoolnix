@@ -69,12 +69,12 @@ bitvalue_c::bitvalue_c(const bitvalue_c &src) {
 #define upperchar(c) (((c) >= 'a') ? ((c) - 'a' + 'A') : (c))
 #define hextodec(c) (isdigit(c) ? ((c) - '0') : ((c) - 'A' + 10))
 
-bitvalue_c::bitvalue_c(const char *s,
+bitvalue_c::bitvalue_c(string s,
                        int allowed_bitlength) {
   int len, i;
   string s2;
 
-  len = strlen(s);
+  len = s.size();
   if (len < 2)
     throw exception();
 
@@ -94,8 +94,8 @@ bitvalue_c::bitvalue_c(const char *s,
         i++;
       }
     }
-    s = s2.c_str();
-    len = strlen(s);
+    s = s2;
+    len = s.size();
   }
 
   if ((len % 2) == 1)
@@ -552,7 +552,7 @@ utf8_init(const char *charset) {
     lc_charset = "CP" + to_string(GetACP());
 #elif defined(SYS_SOLARIS)
     lc_charset = nl_langinfo(CODESET);
-    if (parse_int(lc_charset.c_str(), i))
+    if (parse_int(lc_charset, i))
       lc_charset = string("ISO") + lc_charset + string("-US");
 #else
     lc_charset = nl_langinfo(CODESET);
@@ -627,8 +627,8 @@ convert_charset(iconv_t ict,
 }
 
 char *
-to_utf8(int handle,
-        const char *local) {
+to_utf8_c(int handle,
+          const char *local) {
   char *copy;
 
   if (handle == -1) {
@@ -643,21 +643,22 @@ to_utf8(int handle,
   return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
 
-string &
+string
 to_utf8(int handle,
-        string &local) {
+        const string &local) {
+  string s;
   char *cutf8;
 
-  cutf8 = to_utf8(handle, local.c_str());
-  local = cutf8;
+  cutf8 = to_utf8_c(handle, local.c_str());
+  s = cutf8;
   safefree(cutf8);
 
-  return local;
+  return s;
 }
 
 char *
-from_utf8(int handle,
-          const char *utf8) {
+from_utf8_c(int handle,
+            const char *utf8) {
   char *copy;
 
   if (handle == -1) {
@@ -672,16 +673,17 @@ from_utf8(int handle,
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
 
-string &
+string
 from_utf8(int handle,
-          string &utf8) {
+          const string &utf8) {
+  string s;
   char *clocal;
 
-  clocal = from_utf8(handle, utf8.c_str());
-  utf8 = clocal;
+  clocal = from_utf8_c(handle, utf8.c_str());
+  s = clocal;
   safefree(clocal);
 
-  return utf8;
+  return s;
 }
 
 /*
@@ -1041,6 +1043,30 @@ bool
 starts_with_case(const string &s,
                  const string &start) {
   return strncasecmp(s.c_str(), start.c_str(), start.length()) == 0;
+}
+
+string
+upcase(const string &s) {
+  string dst;
+  int i;
+
+  dst.reserve(s.size());
+  for (i = 0; i < s.size(); i++)
+    dst += toupper(s[i]);
+
+  return dst;
+}
+
+string
+downcase(const string &s) {
+  string dst;
+  int i;
+
+  dst.reserve(s.size());
+  for (i = 0; i < s.size(); i++)
+    dst += tolower(s[i]);
+
+  return dst;
 }
 
 /*

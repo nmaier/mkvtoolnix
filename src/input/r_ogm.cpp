@@ -1120,13 +1120,8 @@ ogm_reader_c::handle_stream_comments() {
       if (comment.size() != 2)
         continue;
 
-      if (!comments_in_utf8) {
-        char *utf8_comment;
-
-        utf8_comment = to_utf8(cc_local_utf8, comment[1].c_str());
-        comment[1] = utf8_comment;
-        safefree(utf8_comment);
-      }
+      if (!comments_in_utf8)
+        comment[1] = to_utf8(cc_local_utf8, comment[1]);
 
       if (comment[0] == "LANGUAGE") {
         iso639_2 = map_english_name_to_iso639_2(comment[1].c_str());
@@ -1177,7 +1172,7 @@ ogm_reader_c::handle_stream_comments() {
         if (comments_in_utf8)
           chapters.push_back(safestrdup(comments[j]));
         else
-          chapters.push_back(to_utf8(cc_local_utf8, comments[j]));
+          chapters.push_back(to_utf8_c(cc_local_utf8, comments[j]));
       }
     }
     if ((chapters.size() > 0) && !ti->no_chapters && (kax_chapters == NULL)) {

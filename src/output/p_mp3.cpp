@@ -203,10 +203,6 @@ mp3_packetizer_c::process(memory_c &mem,
 
   byte_buffer.add(mem.data, mem.size);
   while ((packet = get_mp3_packet(&mp3header)) != NULL) {
-#ifdef DEBUG
-    dump_packet(packet, mp3header.framesize);
-#endif    
-
     if (timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
     else

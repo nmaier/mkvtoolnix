@@ -18,6 +18,10 @@
 
 #include "os.h"
 
+#include <string>
+
+using namespace std;
+
 // Some hacks that are configurable via command line but which should ONLY!
 // be used by the author.
 #define ENGAGE_SPACE_AFTER_CHAPTERS "space_after_chapters"
@@ -30,7 +34,7 @@
 #define ENGAGE_NO_DEFAULT_HEADER_VALUES "no_default_header_values"
 #define ENGAGE_FORCE_PASSTHROUGH_PACKETIZER "force_passthrough_packetizer"
 
-void MTX_DLL_API engage_hacks(const char *hacks);
-bool MTX_DLL_API hack_engaged(const char *hack);
+void MTX_DLL_API engage_hacks(const string &hacks);
+bool MTX_DLL_API hack_engaged(const string &hack);
 
 #endif // __HACKS_H

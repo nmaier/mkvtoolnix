@@ -395,7 +395,7 @@ parse_xml_elements(const char *parser_name,
   pdata = (parser_data_t *)safemalloc(sizeof(parser_data_t));
   memset(pdata, 0, sizeof(parser_data_t));
   pdata->parser = parser;
-  pdata->file_name = in->get_file_name();
+  pdata->file_name = in->get_file_name().c_str();
   pdata->parser_name = parser_name;
   pdata->mapping = mapping;
   pdata->parents = new vector<EbmlElement *>;

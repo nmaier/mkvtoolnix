@@ -319,8 +319,6 @@ protected:
   int hvideo_pixel_width, hvideo_pixel_height;
   int hvideo_display_width, hvideo_display_height;
 
-  int64_t dumped_packet_number;
-
   int hcompression;
   compression_c *compressor;
 
@@ -475,9 +473,6 @@ public:
     if (ti->avi_block_sizes != NULL)
       ti->avi_block_sizes->push_back(block_size);
   }
-
-protected:
-  virtual void dump_packet(const void *buffer, int size);
 };
 
 extern vector<generic_packetizer_c *> ptzrs_in_header_order;

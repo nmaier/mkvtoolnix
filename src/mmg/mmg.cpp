@@ -441,7 +441,7 @@ to_utf8(const wxString &src) {
   utf8 = (char *)safemalloc(len + 1);
   wxConvUTF8.WC2MB(utf8, src.c_str(), len + 1);
 #else
-  utf8 = to_utf8(cc_local_utf8, src.c_str());
+  utf8 = to_utf8_c(cc_local_utf8, src);
 #endif
   retval = utf8;
   safefree(utf8);

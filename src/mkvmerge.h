@@ -51,8 +51,6 @@ extern bool no_lacing, no_linking, use_durations;
 
 extern bool identifying, identify_verbose;
 
-extern char *dump_packets;
-
 int64_t create_track_number(generic_reader_c *reader, int64_t tid);
 
 void add_packetizer_globally(generic_packetizer_c *packetizer);

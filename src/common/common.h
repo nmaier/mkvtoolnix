@@ -184,10 +184,20 @@ extern int MTX_DLL_API cc_local_utf8;
 
 int MTX_DLL_API utf8_init(const char *charset);
 void MTX_DLL_API utf8_done();
-char *MTX_DLL_API to_utf8(int handle, const char *local);
-char *MTX_DLL_API from_utf8(int handle, const char *utf8);
-string &MTX_DLL_API to_utf8(int handle, string &local);
-string &MTX_DLL_API from_utf8(int handle, string &utf8);
+char *MTX_DLL_API to_utf8_c(int handle, const char *local);
+inline char *
+to_utf8_c(int handle,
+          const string &local) {
+  return to_utf8_c(handle, local.c_str());
+}
+char *MTX_DLL_API from_utf8_c(int handle, const char *utf8);
+inline char *
+from_utf8_c(int handle,
+            const string &utf8) {
+  return from_utf8_c(handle, utf8.c_str());
+}
+string MTX_DLL_API to_utf8(int handle, const string &local);
+string MTX_DLL_API from_utf8(int handle, const string &utf8);
 
 #define UNIQUE_ALL_IDS        -1
 #define UNIQUE_TRACK_IDS       0
@@ -206,6 +216,12 @@ uint32_t MTX_DLL_API create_unique_uint32(int category);
 void *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
 #define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
 char *MTX_DLL_API _safestrdup(const char *s, const char *file, int line);
+inline char *
+_safestrdup(const string &s,
+            const char *file,
+            int line) {
+  return _safestrdup(s.c_str(), file, line);
+}
 unsigned char *_safestrdup(const unsigned char *s, const char *file, int line);
 #define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
 void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file,
@@ -216,6 +232,12 @@ void *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file,
 
 vector<string> MTX_DLL_API split(const char *src, const char *pattern = ",",
                               int max_num = -1);
+inline vector<string>
+split(const string &src,
+      const string &pattern = string(","),
+      int max_num = -1) {
+  return split(src.c_str(), pattern.c_str(), max_num);
+}
 string MTX_DLL_API join(const char *pattern, vector<string> &strings);
 void MTX_DLL_API strip(string &s, bool newlines = false);
 void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
@@ -226,6 +248,8 @@ bool MTX_DLL_API starts_with(const string &s, const char *start);
 bool MTX_DLL_API starts_with(const string &s, const string &start);
 bool MTX_DLL_API starts_with_case(const string &s, const char *start);
 bool MTX_DLL_API starts_with_case(const string &s, const string &start);
+string MTX_DLL_API upcase(const string &s);
+string MTX_DLL_API downcase(const string &s);
 
 #define irnd(a) ((int64_t)((double)(a) + 0.5))
 #define iabs(a) ((a) < 0 ? (a) * -1 : (a))
@@ -233,6 +257,16 @@ bool MTX_DLL_API starts_with_case(const string &s, const string &start);
 uint32_t MTX_DLL_API round_to_nearest_pow2(uint32_t value);
 bool MTX_DLL_API parse_int(const char *s, int64_t &value);
 bool MTX_DLL_API parse_int(const char *s, int &value);
+inline bool
+parse_int(const string &s,
+          int64_t &value) {
+  return parse_int(s.c_str(), value);
+}
+inline bool
+parse_int(const string &s,
+          int &value) {
+  return parse_int(s.c_str(), value);
+}
 string MTX_DLL_API to_string(int64_t i);
 bool MTX_DLL_API parse_double(const char *s, double &value);
 
@@ -434,7 +468,7 @@ private:
 public:
   bitvalue_c(int nsize);
   bitvalue_c(const bitvalue_c &src);
-  bitvalue_c(const char *s, int allowed_bitlength = -1);
+  bitvalue_c(string s, int allowed_bitlength = -1);
   virtual ~bitvalue_c();
 
   bitvalue_c &operator =(const bitvalue_c &src);
