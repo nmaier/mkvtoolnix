@@ -72,8 +72,10 @@ void vobsub_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-#define TIMECODE timecode / 60 / 60 / 1000, (timecode / 60 / 1000) % 60, \
-                 (timecode / 1000) % 60, timecode % 1000
+#define TIMECODE (timecode - ti->async.displacement) / 60 / 60 / 1000, \
+                 ((timecode - ti->async.displacement) / 60 / 1000) % 60, \
+                 ((timecode - ti->async.displacement) / 1000) % 60, \
+                 (timecode - ti->async.displacement) % 1000
 #define FMT_TIMECODE "%02lld:%02lld:%02lld.%03lld"
 
 int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
@@ -133,6 +135,7 @@ int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
            FMT_TIMECODE ").\n", TIMECODE);
     duration = default_duration;
   }
+  timecode = (int64_t)((float)timecode * ti->async.linear);
   add_packet(buf, size, timecode, duration, true);
   safefree(buf);
 
@@ -152,6 +155,10 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
   unsigned char buf[5];
 
   packet_num++;
+
+  timecode += ti->async.displacement;
+  if (timecode < 0)
+    return EMOREDATA;
 
   if (extract_from_mpeg) {
     mm_mem_io_c in(srcbuf, size);
@@ -302,6 +309,7 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
   }
 
   spu_size += size;
+  timecode = (int64_t)((float)timecode * ti->async.linear);
   add_packet(srcbuf, size, timecode, duration, true);
 
   return EMOREDATA;

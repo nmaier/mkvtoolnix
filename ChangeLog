@@ -1,3 +1,12 @@
+2003-11-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Added support for --sync for VobSub tracks.
+
+	* mkvtoolnix: Re-worked the configure script. Removed all the lib
+	specific --with-...-include and --with-...-lib options. The
+	--with-extra-includes and --with-extra-libs options can be used
+	instead.
+
 2003-11-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: When a file is being added then some information from it
