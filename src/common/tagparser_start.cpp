@@ -248,6 +248,10 @@ start_level3(parser_data_t *pdata,
                                                *pdata->edition_uid);
       pdata->parents->push_back(E_EditionUID);
 
+    } else if (!strcmp(name, "TargetType")) {
+      check_instances(pdata->targets, KaxTagTargetType);
+      pdata->parents->push_back(E_TargetType);
+
     } else
       tperror_nochild();
 

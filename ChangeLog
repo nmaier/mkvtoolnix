@@ -1,5 +1,9 @@
 2004-08-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvinfo, mkvextract: new feature: Added support for
+	the 'TargetType' tag element (which I meant to add before the
+	0.9.5 release...).
+
 	* mkvmerge: bug fix: The MP3 handling was broken on weird and rare
 	occasions when reading MP3 from a Matroska file.
 

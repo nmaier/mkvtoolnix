@@ -117,6 +117,7 @@ using namespace libmatroska;
 #define E_TagLanguage                    85
 #define E_DefaultLanguage                86
 #define E_EditionUID                     87
+#define E_TargetType                     88
 
 // MAX: 81
 
