@@ -1,3 +1,14 @@
+2004-08-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: The chapter and tag parsers accept XML
+	element attributes instead of sub-elements for those sub-elements
+	that only contain data. Example for a "simple tag":
+	<Simple Name="ARTIST" String="Tori Amos"/>
+
+	* mkvmerge: bug fix: The automatic MIME type detection based on
+	the file name extension was using the file name extension as the
+	MIME type.
+
 2004-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvinfo: new feature: Added the four new PixelCrop

@@ -197,40 +197,16 @@ add_data(void *user_data,
     (*pdata->bin) += s[i];
 }
 
+static void end_element(void *user_data, const char *name);
+
 static void
-start_element(void *user_data,
-              const char *name,
-              const char **atts) {
-  parser_data_t *pdata;
+add_new_element(parser_data_t *pdata,
+                const char *name,
+                int parent_idx) {
   EbmlElement *e;
   EbmlMaster *m;
-  int elt_idx, parent_idx, i;
+  int elt_idx, i;
   bool found;
-
-  pdata = (parser_data_t *)user_data;
-
-  if (atts[0] != NULL)
-    xmlp_error(pdata, "Attributes are not allowed.");
-
-  if (pdata->data_allowed)
-    xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
-               xmlp_pname);
-
-  pdata->data_allowed = false;
-
-  if (pdata->bin != NULL)
-    die("start_element: pdata->bin != NULL");
-
-  if (pdata->depth == 0) {
-    if (pdata->done_reading)
-      xmlp_error(pdata, "More than one root element found.");
-    if (strcmp(name, pdata->mapping[0].name))
-      xmlp_error(pdata, "The root element must be <%s>.",
-                 pdata->mapping[0].name);
-    parent_idx = 0;
-
-  } else
-    parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
 
   elt_idx = parent_idx;
   found = false;
@@ -297,6 +273,45 @@ start_element(void *user_data,
   pdata->data_allowed = pdata->mapping[elt_idx].type != ebmlt_master;
 
   (pdata->depth)++;
+}
+
+static void
+start_element(void *user_data,
+              const char *name,
+              const char **atts) {
+  parser_data_t *pdata;
+  int parent_idx, i;
+
+  pdata = (parser_data_t *)user_data;
+
+  if (pdata->data_allowed)
+    xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
+               xmlp_pname);
+
+  pdata->data_allowed = false;
+
+  if (pdata->bin != NULL)
+    die("start_element: pdata->bin != NULL");
+
+  if (pdata->depth == 0) {
+    if (pdata->done_reading)
+      xmlp_error(pdata, "More than one root element found.");
+    if (strcmp(name, pdata->mapping[0].name))
+      xmlp_error(pdata, "The root element must be <%s>.",
+                 pdata->mapping[0].name);
+    parent_idx = 0;
+
+  } else
+    parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
+
+  add_new_element(pdata, name, parent_idx);
+
+  parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
+  for (i = 0; (atts[i] != NULL) && (atts[i + 1] != NULL); i += 2) {
+    pdata->bin = new string(atts[i + 1]);
+    add_new_element(pdata, atts[i], parent_idx);
+    end_element(pdata, atts[i]);
+  }
 }
 
 static void
