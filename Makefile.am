@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = dist-zip foreign
 
 SUBDIRS = avilib
 
-bin_PROGRAMS = mkvmerge
+bin_PROGRAMS = mkvmerge mkvinfo
 
 mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			ac3_common.cpp ac3_common.h \
@@ -21,7 +21,12 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_mp3.cpp r_mp3.h \
 			r_wav.cpp r_wav.h
 
+mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
+			common.cpp common.h
+
 #mkvmerge_LDADD = @OGG_LIBS@ @VORBIS_LIBS@ @VORBISENC_LIBS@ @AVILIB_LIBS@ \
 #		@DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@
 
 mkvmerge_LDADD = @AVILIB_LIBS@ @DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@
+
+mkvinfo_LDADD = @DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@
