@@ -166,15 +166,17 @@ void vobsub_reader_c::create_packetizers() {
     tracks[i]->packetizer =
       new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(), true,
                               ti);
-    avg_duration = 0;
-    for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
-      tracks[i]->durations.push_back(tracks[i]->timecodes[k + 1] -
-                                     tracks[i]->timecodes[k]);
-      avg_duration += tracks[i]->timecodes[k + 1] - tracks[i]->timecodes[k];
-    }
-    if (tracks[i]->timecodes.size() == 0)
+    if (tracks[i]->timecodes.size() > 0) {
+      avg_duration = 0;
+      for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
+        tracks[i]->durations.push_back(tracks[i]->timecodes[k + 1] -
+                                       tracks[i]->timecodes[k]);
+        avg_duration += tracks[i]->timecodes[k + 1] - tracks[i]->timecodes[k];
+      }
+    } else
       avg_duration = 1000;
-    else
+
+    if (tracks[i]->timecodes.size() > 1)
       avg_duration /= (tracks[i]->timecodes.size() - 1);
     tracks[i]->durations.push_back(avg_duration);
 
@@ -201,11 +203,8 @@ void vobsub_reader_c::parse_headers() {
     if (!idx_file->getline2(line))
       break;
 
-    if ((line.length() == 0) || (line[0] == '#')) {
-//       idx_data += line;
-//       idx_data += "\n";
+    if ((line.length() == 0) || (line[0] == '#'))
       continue;
-    }
 
     sline = line.c_str();
 
