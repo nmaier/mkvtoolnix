@@ -45,11 +45,14 @@ int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   }
   if (parse_aac_adif_header((unsigned char *)buf, 4096, &aacheader))
     return 1;
-  if (find_aac_header((unsigned char *)buf, 4096, &aacheader) < 0)
+  if (find_aac_header((unsigned char *)buf, 4096, &aacheader, false) != 0)
     return 0;
 
   return 1;
 }
+
+#define INITCHUNKSIZE 16384
+#define SINITCHUNKSIZE "16384"
 
 aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
@@ -61,23 +64,29 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     mm_io->setFilePointer(0, seek_end);
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);
-    chunk = (unsigned char *)safemalloc(4096);
-    if (mm_io->read(chunk, 4096) != 4096)
-      throw error_c("aac_reader: Could not read 4096 bytes.");
+    chunk = (unsigned char *)safemalloc(INITCHUNKSIZE);
+    if (mm_io->read(chunk, INITCHUNKSIZE) != INITCHUNKSIZE)
+      throw error_c("aac_reader: Could not read " SINITCHUNKSIZE " bytes.");
     mm_io->setFilePointer(0, seek_beginning);
-    if (parse_aac_adif_header(chunk, 4096, &aacheader)) {
+    if (parse_aac_adif_header(chunk, INITCHUNKSIZE, &aacheader)) {
       throw error_c("aac_reader: ADIF header files are not supported.");
       adif = 1;
-    } else if (find_aac_header(chunk, 4096, &aacheader) < 0)
-      throw error_c("aac_reader: No valid AAC packet found in the first "
-                    "4096 bytes.\n");
-    else
+    } else {
+      if (find_aac_header(chunk, INITCHUNKSIZE, &aacheader, emphasis_present)
+          != 0)
+        throw error_c("aac_reader: No valid AAC packet found in the first "
+                      SINITCHUNKSIZE " bytes.\n");
+      guess_adts_version();
+      fprintf(stdout, "emphasis_present: %s\n", emphasis_present ? "true" :
+              "false");
       adif = 0;
+    }
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
     aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
                                          aacheader.sample_rate,
-                                         aacheader.channels, ti);
+                                         aacheader.channels, ti,
+                                         emphasis_present);
   } catch (exception &ex) {
     throw error_c("aac_reader: Could not open the file.");
   }
@@ -92,6 +101,33 @@ aac_reader_c::~aac_reader_c() {
     safefree(chunk);
   if (aacpacketizer != NULL)
     delete aacpacketizer;
+}
+
+// Try to guess if the MPEG4 header contains the emphasis field (2 bits)
+void aac_reader_c::guess_adts_version() {
+  int pos;
+  aac_header_t aacheader;
+
+  emphasis_present = false;
+
+  // Due to the checks we do have an ADTS header at 0.
+  find_aac_header(chunk, INITCHUNKSIZE, &aacheader, emphasis_present);
+  if (aacheader.id != 0)        // MPEG2
+    return;
+
+  // Now make some sanity checks on the size field.
+  if (aacheader.bytes > 8192) { 
+    emphasis_present = true;    // Looks like it's borked.
+    return;
+  }
+
+  // Looks ok so far. See if the next ADTS is right behind this packet.
+  pos = find_aac_header(&chunk[aacheader.bytes], INITCHUNKSIZE -
+                        aacheader.bytes, &aacheader, emphasis_present);
+  if (pos != 0) {               // Not ok - what do we do now?
+    emphasis_present = true;
+    return;
+  }
 }
 
 int aac_reader_c::read() {

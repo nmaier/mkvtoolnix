@@ -33,6 +33,7 @@ typedef struct {
 
 int parse_aac_adif_header(unsigned char *buf, int size,
                           aac_header_t *aac_header);
-int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header);
+int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header,
+                    bool emphasis_present);
 
 #endif // __AACCOMMON_H

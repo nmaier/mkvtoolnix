@@ -112,7 +112,7 @@ int parse_aac_adif_header(unsigned char *buf, int size,
 }
 
 static int is_adts_header(unsigned char *buf, int size, int bpos,
-                          aac_header_t *aac_header) {
+                          aac_header_t *aac_header, bool emphasis_present) {
   int id, profile, sfreq_index, channels, frame_length;
   bool eob, protection_absent, b;
   unsigned int bits;
@@ -133,7 +133,7 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   bc.get_bits(3, channels);
   bc.get_bit(b);                // original/copy
   bc.get_bit(b);                // home
-  if (id == 0)
+  if ((id == 0) && emphasis_present)
     bc.get_bits(2, bits);       // emphasis, MPEG-4 only
   bc.get_bit(b);                // copyright_id_bit
   bc.get_bit(b);                // copyright_id_start
@@ -152,7 +152,7 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   aac_header->bytes = frame_length;
   aac_header->channels = channels > 6 ? 2 : channels;
   aac_header->bit_rate = 1024;
-  if (id == 0)                // MPEG-4
+  if ((id == 0) && emphasis_present) // MPEG-4
     aac_header->header_bit_size = 58;
   else
     aac_header->header_bit_size = 56;
@@ -165,12 +165,13 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   return 1;
 }
 
-int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header) {
+int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header,
+                    bool emphasis_present) {
   int bpos;
 
   bpos = 0;
   while (bpos < size) {
-    if (is_adts_header(buf, size, bpos, aac_header))
+    if (is_adts_header(buf, size, bpos, aac_header, emphasis_present))
       return bpos;
     bpos++;
   }

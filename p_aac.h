@@ -39,13 +39,13 @@ private:
   unsigned long samples_per_sec;
   int channels, buffer_size, id, profile;
   unsigned char *packet_buffer;
-  bool headerless;
+  bool headerless, emphasis_present;
 
 public:
   aac_packetizer_c(generic_reader_c *nreader, int nid, int nprofile,
                    unsigned long nsamples_per_sec, int nchannels,
-                   track_info_t *nti, bool nheaderless = false)
-    throw (error_c);
+                   track_info_t *nti, bool emphasis_present,
+                   bool nheaderless = false) throw (error_c);
   virtual ~aac_packetizer_c();
 
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,

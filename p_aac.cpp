@@ -34,6 +34,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
                                    int nprofile,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti,
+                                   bool nemphasis_present,
                                    bool nheaderless)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
@@ -45,6 +46,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   id = nid;
   profile = nprofile;
   headerless = nheaderless;
+  emphasis_present = nemphasis_present;
 
   set_track_type(track_audio);
   duplicate_data_on_add(headerless);
@@ -67,11 +69,12 @@ void aac_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
 
 int aac_packetizer_c::aac_packet_available() {
   int pos;
-  aac_header_t  aacheader;
+  aac_header_t aacheader;
 
   if (packet_buffer == NULL)
     return 0;
-  pos = find_aac_header(packet_buffer, buffer_size, &aacheader);
+  pos = find_aac_header(packet_buffer, buffer_size, &aacheader,
+                        emphasis_present);
   if (pos < 0)
     return 0;
 
@@ -101,7 +104,8 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
 
   if (packet_buffer == NULL)
     return 0;
-  pos = find_aac_header(packet_buffer, buffer_size, aacheader);
+  pos = find_aac_header(packet_buffer, buffer_size, aacheader,
+                        emphasis_present);
   if (pos < 0)
     return 0;
   if ((pos + aacheader->bytes) > buffer_size)

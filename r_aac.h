@@ -36,6 +36,7 @@ private:
   mm_io_c *mm_io;
   aac_packetizer_c *aacpacketizer;
   int64_t bytes_processed, size;
+  bool emphasis_present;
 
 public:
   aac_reader_c(track_info_t *nti) throw (error_c);
@@ -49,6 +50,9 @@ public:
   virtual void identify();
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
+
+protected:
+  virtual void guess_adts_version();
 };
 
 #endif // __R_AAC_H

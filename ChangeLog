@@ -1,4 +1,11 @@
+2003-06-19  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Made the AAC reader automatically recognize if a MPEG4 AAC file
+        contains the emphasis header (deprecated) or not (current standard).
+
 2003-06-15  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Released v0.4.4.
 
         * Several options now need an explicity track ID to specify
         which tracks of an input file the option should be applied

@@ -990,7 +990,8 @@ void mkv_reader_c::create_packetizers() {
 
             t->packetizer = new aac_packetizer_c(this, id, profile,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, &nti, true);
+                                                 t->a_channels, &nti,
+                                                 false, true);
             if (verbose)
               fprintf(stdout, "Matroska demultiplexer (%s): using the AAC "
                       "output module for track ID %u.\n", ti->fname, t->tnum);
