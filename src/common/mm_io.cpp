@@ -45,6 +45,11 @@ static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
 bool mm_file_io_c::use_posix_fadvise = false;
 # endif
 
+#define FADVISE_WARNING "mm_file_io_c: Could not posix_fadvise() file '%s' " \
+  "(errno = %d, %s). " \
+  "This only means that access to this file might be slower than it could " \
+  "be. Data integrity is not in danger."
+
 mm_file_io_c::mm_file_io_c(const string &path,
                            const open_mode mode):
   file_name(path) {
@@ -57,6 +62,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   advise = 0;
   read_count = 0;
   write_count = 0;
+  use_posix_fadvise_here = use_posix_fadvise;
 # endif
   
   switch (mode) {
@@ -95,11 +101,12 @@ mm_file_io_c::mm_file_io_c(const string &path,
     throw error_c(mxsprintf("Error opening file %s", path.c_str()));
 
 # if HAVE_POSIX_FADVISE
-  if (use_posix_fadvise &&
+  if (use_posix_fadvise && use_posix_fadvise_here &&
       (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
-                          advise)))
-    mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
-            path.c_str(), errno, strerror(errno));
+                          advise))) {
+    mxwarn(FADVISE_WARNING, path.c_str(), errno, strerror(errno));
+    use_posix_fadvise_here = false;
+  }
 # endif
 }
 
@@ -136,12 +143,15 @@ mm_file_io_c::write(const void *buffer,
 
 # if HAVE_POSIX_FADVISE
   write_count += bwritten;
-  if (use_posix_fadvise && (write_count > write_before_dontneed)) {
+  if (use_posix_fadvise && use_posix_fadvise_here &&
+      (write_count > write_before_dontneed)) {
     uint64 pos = getFilePointer();
     write_count = 0;
-    if (0 != posix_fadvise(fileno((FILE *)file), 0, pos, POSIX_FADV_DONTNEED))
-      mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
-              file_name.c_str(), errno, strerror(errno));
+    if (0 != posix_fadvise(fileno((FILE *)file), 0, pos,
+                           POSIX_FADV_DONTNEED)) {
+      mxwarn(FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+      use_posix_fadvise_here = false;
+    }
   }
 # endif
 
@@ -156,19 +166,22 @@ mm_file_io_c::read(void *buffer,
   bread = fread(buffer, 1, size, (FILE *)file); 
 
 # if HAVE_POSIX_FADVISE
-  if (use_posix_fadvise && (0 <= bread)) {
+  if (use_posix_fadvise && use_posix_fadvise_here && (0 <= bread)) {
     read_count += bread;
     if (read_count > read_using_willneed) {
       uint64 pos = getFilePointer();
       int fd = fileno((FILE *)file);
       read_count = 0;
-      if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED))
-        mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
-                file_name.c_str(), errno, strerror(errno));
-      if (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
-                             POSIX_FADV_WILLNEED))
-        mxerror("mm_file_io_c: Could not fadvise file '%s' (errno = %d, %s)\n",
-                file_name.c_str(), errno, strerror(errno));
+      if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
+        mxwarn(FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+        use_posix_fadvise_here = false;
+      }
+      if (use_posix_fadvise_here && 
+          (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
+                              POSIX_FADV_WILLNEED))) {
+        mxwarn(FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+        use_posix_fadvise_here = false;
+      }
     }
   }
 # endif

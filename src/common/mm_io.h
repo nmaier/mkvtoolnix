@@ -92,6 +92,7 @@ protected:
 #if HAVE_POSIX_FADVISE
   unsigned long read_count, write_count;
   static bool use_posix_fadvise;
+  bool use_posix_fadvise_here;
 #endif
   string file_name;
   void *file;

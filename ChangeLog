@@ -1,5 +1,9 @@
 2005-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: A failing call to posix_fadvise will only
+	turn its usage off for that one file and not abort mkvmerge
+	completely.
+
 	* mmg: bug fix: When "appending" a file all tracks where added to
 	the end of the track list making it unnecessarily difficult to
 	concatenate similar structured files. Now the tracks from the
