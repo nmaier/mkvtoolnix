@@ -1,5 +1,11 @@
 2004-11-10  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Concatenating/appending files is now
+	possible. A lot of things aren't tested, and others simply don't
+	work yet (chapter merging, duplicate tag elimination, proper
+	progress report, support in mmg just to name a few), but the basic
+	functionality seems to work.
+
 	* mkvmerge: bug fix: The Matroska reader doesn't insist on having
 	a default duration ( = FPS) for video tracks in the "AVI
 	compatibility mode" ( = with the CodecID "V_MS/VFW/FOURCC"). This
