@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.31 2003/05/04 10:26:51 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.32 2003/05/04 18:31:24 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -82,6 +82,7 @@ typedef struct {
 #define NAME "MKVInfo"
 
 using namespace LIBMATROSKA_NAMESPACE;
+using namespace std;
 
 typedef struct track_t {
   unsigned int tnum, tuid;
