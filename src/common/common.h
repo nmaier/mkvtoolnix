@@ -181,6 +181,10 @@ public:
       out_of_data = true;
   }
 
+  bool eof() {
+    return out_of_data;
+  }
+
   bool get_bits(unsigned int n, unsigned long &r) {
     // returns false if less bits are available than asked for
     r = 0;
@@ -235,6 +239,62 @@ public:
     return b;
   }
 
+  bool peek_bits(unsigned int n, unsigned long &r) {
+    int tmp_bits_valid;
+    const unsigned char *tmp_byte_position;
+    // returns false if less bits are available than asked for
+    r = 0;
+    tmp_byte_position = byte_position;
+    tmp_bits_valid = bits_valid;
+
+    while (n > 0) {
+      if (tmp_byte_position >= end_of_data)
+        return false;
+
+      unsigned int b = 8; // number of bits to extract from the current byte
+      if (b > n)
+        b = n;
+      if (b > tmp_bits_valid)
+        b = tmp_bits_valid;
+
+      unsigned int rshift = tmp_bits_valid - b;
+
+      r <<= b;
+      r |= ((*tmp_byte_position) >> rshift) & (0xff >> (8 - b));
+
+      tmp_bits_valid -= b;
+      if (tmp_bits_valid == 0) {
+        tmp_bits_valid = 8;
+        tmp_byte_position += 1;
+      }
+
+      n -= b;
+    }
+
+    return true;
+  }
+
+  bool peek_bits(unsigned int n, int &r) {
+    unsigned long t;
+    bool b = peek_bits(n, t);
+    r = (int)t;
+    return b;
+  }
+
+  bool peek_bits(unsigned int n, unsigned int &r) {
+    unsigned long t;
+    bool b = peek_bits(n, t);
+    r = (unsigned int)t;
+    return b;
+  }
+
+  bool peek_bit(bool &r) {
+    unsigned long t;
+    bool b = peek_bits(1, t);
+    r = (bool)t;
+    return b;
+  }
+
   bool byte_align() {
     if (out_of_data)
       return false;
@@ -246,8 +306,11 @@ public:
   }
 
   bool set_bit_position(unsigned int pos) {
-    if (pos >= ((end_of_data - start_of_data) * 8))
+    if (pos >= ((end_of_data - start_of_data) * 8)) {
+      byte_position = end_of_data;
+      out_of_data = true;
       return false;
+    }
 
     byte_position = start_of_data + (pos / 8);
     bits_valid = 8 - (pos % 8);
