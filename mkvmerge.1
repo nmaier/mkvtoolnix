@@ -361,17 +361,26 @@ VALUES\fR.
 .SH SUBTITLES
 .LP
 There are several text subtitle formats that can be embedded into Matroska.
-At the moment \fBmkvmerge\fR supports only one simple text subtitle formats:
-SRT (Subtitle Ripper). These subtitles must be recoded to UTF-8
-so that they can be displayed correctly by a player. For recoded subtitles
-Matroska specifies S_TEXT/UTF8 as the codec ID.
+At the moment \fBmkvmerge\fR supports only text subtitle formats.
+These subtitles must be recoded to UTF-8 so that they can be displayed
+correctly by a player.
 .LP
 \fBmkvmerge\fR does this conversion automatically based on the system's current
 locale. If the subtitle charset is not the same as
 the system's current charset then the user can use \fB\-\-sub\-charset\fR
 switch. If the subtitles are already encoded in UTF-8 then you can use
 \fB\-\-sub\-charset UTF\-8\fR.
-
+.LP
+The following subtitle formats are supported at the moment:
+.TP
+*
+Subtitle Ripper (SRT) files
+.TP
+*
+Substation Alpha (SSA) / Advanced Substation Alpha scripts (ASS) with some
+limitations: 1) Files saved with more than one byte per character (e.g.
+all UTF-16 formats) are not supported, UTF-8/ASCII only; 2) The \fB\\fe\fR
+markup is not supported correctly.
 
 .SH FILE LINKING
 .LP

@@ -117,7 +117,7 @@ vector<filelist_t *> files;
 char *outfile = NULL;
 int64_t file_sizes = 0;
 int max_blocks_per_cluster = 65535;
-int max_ms_per_cluster = 1000;
+int max_ms_per_cluster = 2000;
 bool write_cues = true, cue_writing_requested = false;
 bool video_track_present = false;
 bool write_meta_seek = true;
