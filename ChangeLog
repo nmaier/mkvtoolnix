@@ -1,3 +1,8 @@
+2004-09-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Empty clusters in Matroska files no longer
+	make mkvmerge think that file has been read completely.
+
 2004-08-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for MP2 (and maybe MP3)
