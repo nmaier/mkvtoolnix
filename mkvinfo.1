@@ -1,0 +1,50 @@
+.TH MKVINFO "1" "April 2003" "mkvinfo v0.2" "User Commands"
+.SH NAME
+mkvinfo \- Print information about tracks in Matroska files
+.SH SYNOPSIS
+.B mkvinfo
+[\fIoptions\fR] \fIinname\fR
+.SH DESCRIPTION
+.LP
+This program lists all tracks contained in a Matroska file including
+information about the codecs used.
+.TP
+inname
+Use '\fIinname\fR' as the source.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all Matroska elements. See the section
+\'\fBVERBOSITY LEVELS\fR' for details.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show usage information.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Show version information.
+.SH VERBOSITY LEVELS
+.LP
+The \fB-v\fR option can be used to increase \fBmkvinfo\fR's verbosity level
+and print more information about the current file.
+.TP
+level 0
+will print only the track headers it finds and their types. \fBmkvinfo\fR
+will exit as soon as the headers are parsed completely (more technical:
+as soon as the first cluster is encountered).
+.TP
+level 1
+will also print all Matroska elements ancountered for the complete file.
+.TP
+level 2
+will also print the file position at which each Matroska element can be
+found at.
+.LP
+.SH AUTHOR
+.I mkvinfo
+was written by Moritz Bunkus <moritz@bunkus.org>.
+.SH SEE ALSO
+.BR mkvmerge (1)
+.SH WWW
+The newest version can always be found at
+.UR http://www.bunkus.org/videotools/mkvtoolnix/
+<http://www.bunkus.org/videotools/mkvtoolnix/>
+.UE
