@@ -44,6 +44,8 @@ public:
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
   bool validate_settings();
+
+  void query_mkvmerge_capabilities();
 };
 
 #endif // __TAB_SETTINGS_H
