@@ -680,10 +680,8 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   delete pdata->parents;
   safefree(pdata);
 
-#ifdef DEBUG
   if ((chapters != NULL) && (verbose > 1))
-    debug_c::dump_elements(chapters, 0);
-#endif
+    debug_dump_elements(chapters, 0);
 
   return chapters;
 }

@@ -318,11 +318,13 @@ extern debug_c debug_facility;
 
 #define debug_enter(func) debug_facility.enter(func)
 #define debug_leave(func) debug_facility.leave(func)
+#define debug_dump_elements(e, l) debug_c::dump_elements(e, l)
 
 #else // DEBUG
 
 #define debug_enter(func)
 #define debug_leave(func)
+#define debug_dump_elements(e, l)
 
 #endif // DEBUG
 
