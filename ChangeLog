@@ -1,5 +1,10 @@
 2004-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: mkvmerge will show a nice warning if the
+	entries in a SRT have non-continuous timestamps. It'll also sort
+	the entries by their start timestamp instead of throwing the
+	generic "timecode < previous timecode" warning.
+
 	* mmg: bug fix: The 'Matroska file analysis' window that occurs
 	when reading chapters from a Matroska file did not disappear if it
 	was minimized when the process finished.

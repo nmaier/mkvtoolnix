@@ -105,15 +105,17 @@ srt_reader_c::create_packetizer(int64_t) {
 int
 srt_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int64_t start, end;
+  int64_t start, end, previous_start;
   char *chunk;
   subtitles_c subs;
   string s, subtitles;
   int state, i, line_number;
-  bool non_number_found;
+  bool non_number_found, timecode_warning_printed;
 
   start = 0;
   end = 0;
+  previous_start = 0;
+  timecode_warning_printed = false;
   state = STATE_INITIAL;
   line_number = 0;
   subtitles = "";
@@ -137,8 +139,8 @@ srt_reader_c::read(generic_packetizer_c *,
       non_number_found = false;
       for (i = 0; i < s.length(); i++)
         if (!isdigit(s[i])) {
-          mxwarn("srt_reader: Error in line %d: expected subtitle number "
-                 "and found some text.\n", line_number);
+          mxwarn(FMT_FN "Error in line %d: expected subtitle number "
+                 "and found some text.\n", ti->fname, line_number);
           non_number_found = true;
           break;
         }
@@ -148,9 +150,9 @@ srt_reader_c::read(generic_packetizer_c *,
 
     } else if (state == STATE_TIME) {
       if ((s.length() < 29) || !issrttimecode(s.c_str())) {
-        mxwarn("srt_reader: Error in line %d: expected a SRT timecode "
+        mxwarn(FMT_FN "Error in line %d: expected a SRT timecode "
                "line but found something else. Aborting this file.\n",
-               line_number);
+               ti->fname, line_number);
         break;
       }
 
@@ -178,6 +180,15 @@ srt_reader_c::read(generic_packetizer_c *,
       end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +
         atol(&chunk[23]) * 1000 + atol(&chunk[26]);
       end *= 1000000;
+
+      if (!timecode_warning_printed && (start < previous_start)) {
+        mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller "
+               "than that of the previous entry. All entries from this file "
+               "will be sorted by their start time.\n", ti->fname,
+               line_number);
+        timecode_warning_printed = true;
+      }
+      previous_start = start;
 
       safefree(chunk);
 
@@ -212,6 +223,7 @@ srt_reader_c::read(generic_packetizer_c *,
     subs.add(start, end, subtitles.c_str());
   }
 
+  subs.sort();
   subs.process((textsubs_packetizer_c *)PTZR0);
 
   PTZR0->flush();
