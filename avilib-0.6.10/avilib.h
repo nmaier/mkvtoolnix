@@ -162,7 +162,11 @@ typedef struct
   uint32_t  bi_clr_important;
 } alBITMAPINFOHEADER;
 
-#pragma pack(2)
+#if __GNUC__ == 2
+#pragma pack(1)
+#else
+#pragma pack(push,1)
+#endif
 
 typedef struct
 {
@@ -175,7 +179,11 @@ typedef struct
   uint16_t  cb_size;
 } alWAVEFORMATEX;
 
+#if __GNUC__ == 2
 #pragma pack(4)
+#else
+#pragma pack(pop)
+#endif
 
 typedef struct
 {
