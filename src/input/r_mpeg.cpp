@@ -375,10 +375,10 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
       mxverb(2, "mpeg_ps: Timecode offset: min was %lld ", min_timecode);
       for (i = 0; i < tracks.size(); i++)
         if (tracks[i]->id > 0xff)
-          mxverb(2, "bd(%d)=%lld ", tracks[i]->id - 256,
+          mxverb(2, "bd(%02x)=%lld ", tracks[i]->id - 256,
                  tracks[i]->timecode_offset);
         else
-          mxverb(2, "%d=%lld ", tracks[i]->id, tracks[i]->timecode_offset);
+          mxverb(2, "%02x=%lld ", tracks[i]->id, tracks[i]->timecode_offset);
       mxverb(2, "\n");
     }
 
@@ -848,6 +848,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       packet_pos = mm_io->getFilePointer() - 4;
       if (!parse_packet(new_id, timecode, length, aid)) {
         file_done = true;
+        mxverb(2, "mpeg_ps: file_done: !parse_packet\n");
         return FILE_STATUS_DONE;
       }
 
@@ -867,6 +868,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       if (mm_io->read(buf, length) != length) {
         safefree(buf);
         file_done = true;
+        mxverb(2, "mpeg_ps: file_done: mm_io->read\n");
         return FILE_STATUS_DONE;
       }
 
@@ -878,6 +880,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
   } catch(...) {
   }
   file_done = true;
+  mxverb(2, "mpeg_ps: file_done: exception\n");
   return FILE_STATUS_DONE;
 }
 
