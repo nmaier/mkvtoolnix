@@ -206,62 +206,6 @@ tab_global::tab_global(wxWindow *parent):
                                       "Most of the time you probably want to "
                                       "use the tags associated with a track "
                                       "on the 'input' tab."));
-
-  new wxStaticBox(this, -1, _("Other options"),
-                  wxPoint(10, 355), wxSize(475, 45));
-  new wxStaticText(this, -1, _("Command line charset:"),
-                   wxPoint(15, 372));
-  cob_cl_charset =
-    new wxComboBox(this, ID_CB_CLCHARSET, "", wxPoint(155, 368),
-                   wxSize(130, -1), 0, NULL, wxCB_DROPDOWN |
-                   wxCB_READONLY);
-  cob_cl_charset->Append("");
-  for (i = 0; i < sorted_charsets.Count(); i++)
-    cob_cl_charset->Append(sorted_charsets[i]);
-  cob_cl_charset->SetToolTip(_T("Sets the charset that is used to convert "
-                                "some of the strings entered here into UTF-8. "
-                                "The default is the charset given by the "
-                                "system's current locale. The options that "
-                                "this setting affects are: segment title, "
-                                "track name and attachment description."));
-
-
-  new wxStaticBox(this, -1, _("Advanced options (DO NOT CHANGE!)"),
-                  wxPoint(10, 400), wxSize(475, 62));
-  cb_no_cues =
-    new wxCheckBox(this, ID_CB_NOCUES, _("No cues"), wxPoint(15, 415),
-                   wxDefaultSize, 0);
-  cb_no_cues->SetToolTip(_T("Do not write the cues (the index). DO NOT "
-                            "ENABLE this option unless you REALLY know "
-                            "what you're doing!"));
-  cb_no_clusters =
-    new wxCheckBox(this, ID_CB_NOCLUSTERSINMETASEEK,
-                   _("No clusters in meta seek"), wxPoint(145, 415),
-                   wxDefaultSize, 0);
-  cb_no_clusters->SetToolTip(_T("Do not put all the clusters into the cues "
-                                "(the index). DO NOT ENABLE this option "
-                                "unless you REALLY know what you're doing!"));
-  cb_disable_lacing =
-    new wxCheckBox(this, ID_CB_DISABLELACING, _("Disable lacing"),
-                   wxPoint(325, 415), wxDefaultSize, 0);
-  cb_disable_lacing->SetToolTip(_T("Disable lacing for audio tracks. DO NOT "
-                                   "ENSABLE this option unless you REALLY "
-                                   "know what you're doing!"));
-  cb_enable_durations =
-    new wxCheckBox(this, ID_CB_ENABLEDURATIONS, _("Enable durations"),
-                   wxPoint(15, 436), wxDefaultSize, 0);
-  cb_enable_durations->SetToolTip(_T("Enable durations for all blocks and not "
-                                     "only for blocks that definitely need "
-                                     "them (subtitles). DO NOT "
-                                     "ENABLE this option unless you REALLY "
-                                     "know what you're doing!"));
-  cb_enable_timeslices =
-    new wxCheckBox(this, ID_CB_ENABLETIMESLICES, _("Enable timeslices"),
-                   wxPoint(145, 436), wxDefaultSize, 0);
-  cb_enable_durations->SetToolTip(_T("Enable timeslices for laced blocks. "
-                                     "DO NOT "
-                                     "ENSABLE this option unless you REALLY "
-                                     "know what you're doing!"));
 }
 
 void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
@@ -352,25 +296,6 @@ void tab_global::load(wxConfigBase *cfg) {
 
   cfg->Read("global_tags", &s);
   tc_global_tags->SetValue(s);
-
-  cfg->Read("command_line_charset", &s);
-  cob_cl_charset->SetValue(s);
-
-  b = false;
-  cfg->Read("no_cues", &b);
-  cb_no_cues->SetValue(b);
-  b = false;
-  cfg->Read("no_clusters", &b);
-  cb_no_clusters->SetValue(b);
-  b = false;
-  cfg->Read("disable_lacing", &b);
-  cb_disable_lacing->SetValue(b);
-  b = false;
-  cfg->Read("enable_durations", &b);
-  cb_enable_durations->SetValue(b);
-  b = false;
-  cfg->Read("enable_timeslices", &b);
-  cb_enable_timeslices->SetValue(b);
 }
 
 void tab_global::save(wxConfigBase *cfg) {
@@ -392,14 +317,6 @@ void tab_global::save(wxConfigBase *cfg) {
   cfg->Write("chapter_charset", cob_chap_charset->GetValue());
 
   cfg->Write("global_tags", tc_global_tags->GetValue());
-
-  cfg->Write("command_line_charset", cob_cl_charset->GetValue());
-
-  cfg->Write("no_cues", cb_no_cues->IsChecked());
-  cfg->Write("no_clusters", cb_no_clusters->IsChecked());
-  cfg->Write("disable_lacing", cb_disable_lacing->IsChecked());
-  cfg->Write("enable_durations", cb_enable_durations->IsChecked());
-  cfg->Write("enable_timeslices", cb_enable_timeslices->IsChecked());
 }
 
 bool tab_global::validate_settings() {

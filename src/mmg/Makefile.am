@@ -13,6 +13,7 @@ mmg_SOURCES = mmg.cpp \
 			extern_data.cpp \
 			kax_analyzer.cpp \
 			mux_dialog.cpp \
+			tab_advanced.cpp \
 			tab_attachments.cpp \
 			tab_chapters.cpp \
 			tab_input.cpp \

@@ -185,9 +185,10 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   window_menu->Append(ID_M_WINDOW_INPUT, _("&Input\tAlt-1"));
   window_menu->Append(ID_M_WINDOW_ATTACHMENTS, _("&Attachments\tAlt-2"));
   window_menu->Append(ID_M_WINDOW_GLOBAL, _("&Global options\tAlt-3"));
-  window_menu->Append(ID_M_WINDOW_SETTINGS, _("&Settings\tAlt-4"));
+  window_menu->Append(ID_M_WINDOW_ADVANCED, _("A&dvanced\tAlt-4"));
+  window_menu->Append(ID_M_WINDOW_SETTINGS, _("&Settings\tAlt-5"));
   window_menu->AppendSeparator();
-  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR, _("&Chapter editor\tAlt-5"));
+  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR, _("&Chapter editor\tAlt-6"));
 
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_ABOUT, _T("&About\tF1"),
@@ -217,12 +218,14 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   input_page = new tab_input(notebook);
   attachments_page = new tab_attachments(notebook);
   global_page = new tab_global(notebook);
+  advanced_page = new tab_advanced(notebook);
   settings_page = new tab_settings(notebook);
   chapter_editor_page = new tab_chapters(notebook, chapter_menu);
 
   notebook->AddPage(input_page, _("Input"));
   notebook->AddPage(attachments_page, _("Attachments"));
   notebook->AddPage(global_page, _("Global"));
+  notebook->AddPage(advanced_page, _("Advanced"));
   notebook->AddPage(settings_page, _("Settings"));
   notebook->AddPage(chapter_editor_page, _("Chapter Editor"));
 
@@ -844,13 +847,6 @@ void mmg_dialog::update_command_line() {
     clargs.Add(global_page->tc_chapters->GetValue());
   }
 
-  if (global_page->cob_cl_charset->GetValue().Length() > 0) {
-    cmdline += "--command-line-charset \"" +
-      shell_escape(global_page->cob_cl_charset->GetValue()) + "\" ";
-    clargs.Add("--command-line-charset");
-    clargs.Add(global_page->cob_cl_charset->GetValue());
-  }
-
   if (global_page->tc_global_tags->GetValue().Length() > 0) {
     cmdline += "--global-tags \"" +
       shell_escape(global_page->tc_global_tags->GetValue()) + "\" ";
@@ -858,27 +854,34 @@ void mmg_dialog::update_command_line() {
     clargs.Add(global_page->tc_global_tags->GetValue());
   }
 
-  if (global_page->cb_no_cues->IsChecked()) {
+  if (advanced_page->cob_cl_charset->GetValue().Length() > 0) {
+    cmdline += "--command-line-charset \"" +
+      shell_escape(advanced_page->cob_cl_charset->GetValue()) + "\" ";
+    clargs.Add("--command-line-charset");
+    clargs.Add(advanced_page->cob_cl_charset->GetValue());
+  }
+
+  if (advanced_page->cb_no_cues->IsChecked()) {
     cmdline += "--no-cues ";
     clargs.Add("--no-cues");
   }
 
-  if (global_page->cb_no_clusters->IsChecked()) {
+  if (advanced_page->cb_no_clusters->IsChecked()) {
     cmdline += "--no-clusters-in-meta-seek ";
     clargs.Add("--no-clusters-in-meta-seek");
   }
 
-  if (global_page->cb_disable_lacing->IsChecked()) {
+  if (advanced_page->cb_disable_lacing->IsChecked()) {
     cmdline += "--disable-lacing ";
     clargs.Add("--disable-lacing");
   }
 
-  if (global_page->cb_enable_durations->IsChecked()) {
+  if (advanced_page->cb_enable_durations->IsChecked()) {
     cmdline += "--enable-durations ";
     clargs.Add("--enable-durations");
   }
 
-  if (global_page->cb_enable_timeslices->IsChecked()) {
+  if (advanced_page->cb_enable_timeslices->IsChecked()) {
     cmdline += "--enable-timeslices ";
     clargs.Add("--enable-timeslices");
   }
@@ -1019,6 +1022,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_WINDOW_INPUT, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_ATTACHMENTS, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_GLOBAL, mmg_dialog::on_window_selected)
+  EVT_MENU(ID_M_WINDOW_ADVANCED, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_SETTINGS, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_CHAPTEREDITOR, mmg_dialog::on_window_selected)
 END_EVENT_TABLE();

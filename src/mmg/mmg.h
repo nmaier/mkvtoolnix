@@ -124,6 +124,7 @@ using namespace libmatroska;
 #define ID_CB_ENABLETIMESLICES 10077
 #define ID_CB_COMPRESSION 10078
 #define ID_CB_CLCHARSET 10079
+#define ID_TC_CUENAMEFORMAT 10080
 
 #define ID_M_FILE_NEW 20000
 #define ID_M_FILE_LOAD 20001
@@ -154,8 +155,9 @@ using namespace libmatroska;
 #define ID_M_WINDOW_INPUT 20300
 #define ID_M_WINDOW_ATTACHMENTS 20301
 #define ID_M_WINDOW_GLOBAL 20302
-#define ID_M_WINDOW_SETTINGS 20303
-#define ID_M_WINDOW_CHAPTEREDITOR 20304
+#define ID_M_WINDOW_ADVANCED 20303
+#define ID_M_WINDOW_SETTINGS 20304
+#define ID_M_WINDOW_CHAPTEREDITOR 20305
 
 #define ID_M_HELP_ABOUT 29900
 
@@ -306,14 +308,11 @@ class tab_global: public wxPanel {
 public:
   wxTextCtrl *tc_chapters, *tc_global_tags, *tc_split_max_files, *tc_title;
   wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid;
-  wxTextCtrl *tc_split_bytes, *tc_split_time;
+  wxTextCtrl *tc_split_bytes, *tc_split_time, *tc_cue_name_format;
   wxCheckBox *cb_split, *cb_dontlink;
   wxRadioButton *rb_split_by_size, *rb_split_by_time;
   wxComboBox *cob_split_by_size, *cob_split_by_time;
   wxComboBox *cob_chap_language, *cob_chap_charset;
-  wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_disable_lacing;
-  wxCheckBox *cb_enable_durations, *cb_enable_timeslices;
-  wxComboBox *cob_cl_charset;
 
 public:
   tab_global(wxWindow *parent);
@@ -322,6 +321,22 @@ public:
   void on_browse_global_tags(wxCommandEvent &evt);
   void on_split_clicked(wxCommandEvent &evt);
   void on_splitby_clicked(wxCommandEvent &evt);
+
+  void save(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg);
+  bool validate_settings();
+};
+
+class tab_advanced: public wxPanel {
+  DECLARE_CLASS(tab_advanced);
+  DECLARE_EVENT_TABLE();
+public:
+  wxComboBox *cob_cl_charset;
+  wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_disable_lacing;
+  wxCheckBox *cb_enable_durations, *cb_enable_timeslices;
+
+public:
+  tab_advanced(wxWindow *parent);
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg);
@@ -436,6 +451,7 @@ protected:
   tab_input *input_page;
   tab_attachments *attachments_page;
   tab_global *global_page;
+  tab_advanced *advanced_page;
   tab_settings *settings_page;
   tab_chapters *chapter_editor_page;
 
