@@ -1166,6 +1166,7 @@ track_info_c::track_info_c():
   display_width(0),
   display_height(0),
   aspect_ratio_given(false),
+  aspect_ratio_is_factor(false),
   display_dimensions_given(false),
   cues(0),
   default_track(false),
@@ -1280,6 +1281,7 @@ track_info_c::operator =(const track_info_c &src) {
     new vector<display_properties_t>(*src.display_properties);
   aspect_ratio = src.aspect_ratio;
   aspect_ratio_given = false;
+  aspect_ratio_is_factor = false;
   display_dimensions_given = false;
 
   audio_syncs = new vector<audio_sync_t>(*src.audio_syncs);
