@@ -54,6 +54,7 @@ srt_reader_c::probe_file(mm_text_io_c *mm_io,
   try {
     mm_io->setFilePointer(0, seek_beginning);
     s = mm_io->getline();
+    strip(s);
     if (!parse_int(s.c_str(), dummy))
       return 0;
     s = mm_io->getline();
