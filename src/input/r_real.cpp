@@ -190,6 +190,7 @@ real_reader_c::~real_reader_c() {
       delete demuxer->segments;
     }
     safefree(demuxer->private_data);
+    safefree(demuxer->extra_data);
     safefree(demuxer);
   }
   demuxers.clear();
@@ -393,10 +394,12 @@ real_reader_c::parse_headers() {
               dmx->samples_per_second = get_uint16_be(&ra5p->sample_rate);
               dmx->bits_per_sample = get_uint16_be(&ra5p->sample_size);
               if (size > (sizeof(real_audio_v5_props_t) + 4)) {
-                dmx->extra_data = (unsigned char *)(ra5p + 1);
-                dmx->extra_data += 4;
                 dmx->extra_data_size = size - 4 -
                   sizeof(real_audio_v5_props_t);
+                dmx->extra_data =
+                  (unsigned char *)safememdup((unsigned char *)ra5p + 4 +
+                                              sizeof(real_audio_v5_props_t),
+                                              dmx->extra_data_size);
               }
             }
             mxverb(2, "real_reader: extra_data_size: %d\n",
@@ -545,7 +548,6 @@ real_reader_c::create_packetizer(int64_t tid) {
         dmx->packetizer =
           new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                sample_rate, channels, ti, false, true);
-        ((aac_packetizer_c *)dmx->packetizer)->set_samples_per_packet(2048);
         mxverb(1, "+-> Using the AAC output module for stream "
                "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
         if (profile == AAC_PROFILE_SBR)
@@ -619,10 +621,6 @@ real_reader_c::finish() {
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
     if ((dmx->type == 'a') && (dmx->c_data != NULL)) {
-      if (dmx->is_aac) {
-        safefree(dmx->c_data);
-        continue;
-      }
       dur = dmx->c_timecode / dmx->c_numpackets;
       dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode + dur,
                                dur, dmx->c_keyframe ? -1 : dmx->c_reftimecode);
@@ -708,44 +706,10 @@ real_reader_c::read(generic_packetizer_c *) {
       assemble_packet(dmx, chunk, length, timecode, (flags & 2) == 2);
       safefree(chunk);
 
-    } else if (dmx->is_aac) {
-      if ((dmx->c_data == NULL) && (dmx->c_numpackets == 0)) {
-        // Cache the very first packet in order to find the number of
-        // samples per AAC frame ( = the duration).
-        dmx->c_data = chunk;
-        dmx->c_len = length;
-        dmx->c_timecode = timecode;
-        dmx->c_numpackets = 1;
-        return EMOREDATA;
-
-      } else if (dmx->c_data != NULL) {
-        if ((dmx->c_len < 2) || ((dmx->c_data[1] & 0xf0) == 0))
-          mxerror("real_reader: The AAC track %u of '%s' contains an invalid "
-                  "data packet (either it's too short or the number of "
-                  "AAC sub packets is 0). Aborting.\n", dmx->id, ti->fname);
-
-        // We've got the first packet cached. Now calculate the number of
-        // samples and store that in dmx->c_reftimecode.
-        dmx->c_reftimecode = (timecode - dmx->c_timecode) *
-          dmx->samples_per_second / 1000000000;
-        // Now devide the number of samples in this first packet by the
-        // number of AAC frames in that packet. Also round it to the nearest
-        // power of 2.
-        dmx->c_reftimecode /= chunk[1] >> 4;
-        dmx->c_reftimecode = round_to_nearest_pow2(dmx->c_reftimecode);
-        deliver_aac_frames(dmx, dmx->c_data, dmx->c_len);
-        dmx->c_data = NULL;
-        mxverb(2, "real_reader: %u/'%s': Samples per AAC frame: %lld\n",
-               dmx->id, ti->fname, dmx->c_reftimecode);
-        if (dmx->c_reftimecode != 2048) {
-          ((aac_packetizer_c *)dmx->packetizer)->
-            set_samples_per_packet(dmx->c_reftimecode);
-          rerender_track_headers();
-        }
-      }
+    } else if (dmx->is_aac)
       deliver_aac_frames(dmx, chunk, length);
 
-    } else {
+    else {
       if (dmx->c_data != NULL)
         dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode,
                                  timecode - dmx->c_timecode,

@@ -202,8 +202,15 @@ parse_aac_data(unsigned char *data,
                int &sample_rate,
                int &output_sample_rate,
                bool &sbr) {
+  int i;
+
   if (size < 2)
     return false;
+
+  mxverb(4, "parse_aac_data: size %d, data: 0x", size);
+  for (i = 0; i < size; i++)
+    mxverb(4, "%02x ", data[i]);
+  mxverb(4, "\n");
 
   profile = (data[0] >> 3) - 1;
   sample_rate = aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
