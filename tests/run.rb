@@ -1,5 +1,8 @@
 #!/usr/bin/ruby
 
+class SubtestError < RuntimeError
+end
+
 class Test
   attr_reader :commands
   attr_reader :debug_commands
@@ -18,14 +21,18 @@ class Test
     return error("Trying to run the base class")
   end
 
+  def unlink_tmp_files
+    n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
+    Dir.entries("/tmp").each do |e|
+      File.unlink("/tmp/#{e}") if (e =~ /^#{n}/)
+    end
+  end
+
   def run_test
     begin
       return run
     rescue RuntimeError => ex
-      n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
-      Dir.entries("/tmp").each do |e|
-        File.unlink("/tmp/#{e}") if (e =~ /^#{n}/)
-      end
+      unlink_tmp_files
       puts(ex.to_s)
       return nil
     end
