@@ -258,17 +258,106 @@ decode_nal(const uint8_t *src,
   return dst;
 }
 
+static const uint8_t golomb_vlc_len[512] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
+  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+};
+
+static int
+ilog2(uint32_t value) {
+  int n;
+
+  n = 0;
+  if (value & 0xffff0000) {
+    value >>= 16;
+    n += 16;
+  }
+  if (value & 0xff00) {
+    value >>= 8;
+    n += 8;
+  }
+  if (value >= 0x80)
+    return n + 7;
+  else if (value >= 0x40)
+    return n + 6;
+  else if (value >= 0x20)
+    return n + 5;
+  else if (value >= 0x10)
+    return n + 4;
+  else if (value >= 0x08)
+    return n + 3;
+  else if (value >= 0x04)
+    return n + 2;
+  else if (value >= 0x02)
+    return n + 1;
+
+  return n;
+}
+
+static bool
+skip_golomb_ue(bit_cursor_c &bits) {
+  uint32_t buf;
+  bool ok;
+
+  ok = bits.get_bits(32, buf);
+  if (buf >= (1 << 27)) {
+    buf >>= 23;
+    ok &= bits.skip_bits(golomb_vlc_len[buf]);
+  } else {
+    int log;
+
+    log = 2 * ilog2(buf) - 31;
+    ok &= bits.skip_bits(32 - log);
+  }
+
+  return ok;
+}
+
 static bool
 decode_seq_parameter_set(bit_cursor_c &bits,
                          uint32_t &par_num,
                          uint32_t &par_den) {
-//   bool ok;
+  bool ok;
 
-//   ok = true;
-//   ok &= bits.skip_bits(8);      // profile_idc
-//   ok &= bits.skip_bits(4);      // constraint_setX_flag
-//   ok &= bits.skip_bits(4);      // reserved
-//   ok &= bits.skip_bits(
+  ok = true;
+  ok &= bits.skip_bits(8);      // profile_idc
+  ok &= bits.skip_bits(4);      // constraint_setX_flag
+  ok &= bits.skip_bits(4);      // reserved
+  ok &= bits.skip_bits(8);      // level_idc
+  ok &= skip_golomb_ue(bits);   // sps_id
+  ok &= skip_golomb_ue(bits);   // sps: log2_max_frame_num
+  ok &= skip_golomb_ue(bits);   // sps: poc_type
+
   return false;
 }
 
