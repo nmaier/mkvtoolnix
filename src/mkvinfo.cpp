@@ -17,6 +17,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+// {{{ includes
+
 #include "os.h"
 
 #include <errno.h>
@@ -76,6 +78,10 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
+// }}}
+
+// {{{ structs, output/helper functions
+
 typedef struct {
   unsigned int tnum, tuid;
   char type;
@@ -85,6 +91,7 @@ typedef struct {
 kax_track_t **tracks = NULL;
 int num_tracks = 0;
 bool use_gui = false;
+bool calc_checksums = false;
 
 void add_track(kax_track_t *s) {
   tracks = (kax_track_t **)saferealloc(tracks, sizeof(kax_track_t *) *
@@ -123,6 +130,7 @@ void usage() {
     "  inname         Use 'inname' as the source.\n"
     "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
     "                 description of what mkvinfo outputs.\n"
+    "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n");
 }
@@ -181,6 +189,10 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
 #define show_unknown_element(e, l) \
   show_element(e, l, "Unknown element: %s", e->Generic().DebugName)
 
+// }}}
+
+// {{{ FUNCTION parse_args
+
 void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
   int i;
 
@@ -206,12 +218,18 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
              !strcmp(argv[i], "--help")) {
       usage();
       exit(0);
-    } else if (file_name != NULL) {
+    } else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--checksum"))
+      calc_checksums = true;
+    else if (file_name != NULL) {
       mxprint(stderr, "Error: Only one input file is allowed.\n");
       exit(1);
     } else
       file_name = argv[i];
 }
+
+// }}}
+
+// {{{ parsing helper functions
 
 bool is_ebmlvoid(EbmlElement *l, int level, int &upper_lvl_el) {
   if (upper_lvl_el < 0)
@@ -307,6 +325,42 @@ char *asctime_r(const struct tm *tm, char *buf) {
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
+
+// }}}
+
+#define BASE 65521
+#define A0 check += *buffer++; sum2 += check;
+#define A1 A0 A0
+#define A2 A1 A1
+#define A3 A2 A2
+#define A4 A3 A3
+#define A5 A4 A4
+#define A6 A5 A5
+
+uint32_t calc_adler32(const unsigned char *buffer, int size) {
+  register uint32_t sum2, check;
+  register int k;
+
+  check = 1;
+  k = size;
+
+  sum2 = (check >> 16) & 0xffffL;
+  check &= 0xffffL;
+  while (k >= 64) {
+    A6;
+    k -= 64;
+  }
+
+  if (k)
+    do {
+      A0;
+    } while (--k);
+
+  check %= BASE;
+  check |= (sum2 % BASE) << 16;
+
+  return check;
+}
 
 bool process_file(const char *file_name) {
   int upper_lvl_el, i;
@@ -958,6 +1012,7 @@ bool process_file(const char *file_name) {
                 break;
 
               if (EbmlId(*l3) == KaxBlock::ClassInfos.GlobalId) {
+                char adler[100];
                 KaxBlock &block = *static_cast<KaxBlock *>(l3);
                 block.ReadData(es->I_O());
                 block.SetParent(*cluster);
@@ -969,7 +1024,13 @@ bool process_file(const char *file_name) {
                 lf_tnum = block.TrackNum();
                 for (i = 0; i < (int)block.NumberFrames(); i++) {
                   DataBuffer &data = block.GetBuffer(i);
-                  show_element(NULL, 4, "Frame with size %u", data.Size());
+                  if (calc_checksums)
+                    sprintf(adler, " (adler: 0x%08x)",
+                            calc_adler32(data.Buffer(), data.Size()));
+                  else
+                    adler[0] = 0;
+                  show_element(NULL, 4, "Frame with size %u%s", data.Size(),
+                               adler);
                 }
 
               } else if (EbmlId(*l3) ==

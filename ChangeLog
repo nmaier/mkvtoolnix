@@ -1,5 +1,8 @@
 2003-08-09  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvinfo: Added Adler32 calculation and display for frame
+        contents with the -c option.
+
         * mkvmerge: RealAudio: "dnet" is actually byte-swapped AC3 and is
         being treated as such (re-swapped and output as AC3).
 
