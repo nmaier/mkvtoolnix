@@ -59,7 +59,13 @@ public:
   }
 };
 
+#if defined(SYS_WINDOWS)
 #define LINESPACING 5
+#define GROUPSPACING 10
+#else
+#define LINESPACING 2
+#define GROUPSPACING 5
+#endif
 
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
@@ -69,12 +75,14 @@ tab_input::tab_input(wxWindow *parent):
   wxString language;
   wxArrayString popular_languages;
   wxFlexGridSizer *siz_fg;
+  wxStaticBoxSizer *siz_toptions;
   wxBoxSizer *siz_line, *siz_column, *siz_all;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(0, 5, 0, 0, 0);
   siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Input files:")),
                0, wxALIGN_LEFT | wxLEFT, 10);
+  siz_all->Add(0, 5, 0, 0, 0);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   lb_input_files = new wxListBox(this, ID_LB_INPUTFILES);
   siz_line->Add(lb_input_files, 1, wxGROW, 0);
@@ -98,6 +106,8 @@ tab_input::tab_input(wxWindow *parent):
   siz_fg->Add(b_file_down, 0, 0, 0);
   siz_line->Add(siz_fg, 0, 0, 0);
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("File options:")),
@@ -123,13 +133,16 @@ tab_input::tab_input(wxWindow *parent):
   siz_line->Add(cb_no_tags, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
   siz_all->Add(siz_line, 0, wxLEFT, 10);
 
+  siz_all->Add(0, GROUPSPACING, 0, 0, 0);
+
   siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Tracks:")),
                0, wxALIGN_LEFT | wxLEFT, 10);
+  siz_all->Add(0, 5, 0, 0, 0);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_column = new wxBoxSizer(wxVERTICAL);
   clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
   clb_tracks->Enable(false);
-  siz_line->Add(clb_tracks, 1, wxALIGN_TOP, 0);
+  siz_line->Add(clb_tracks, 1, wxGROW | wxALIGN_TOP, 0);
   b_track_up = new wxButton(this, ID_B_TRACKUP, wxT("up"), wxDefaultPosition,
                             wxSize(50, -1));
   b_track_up->Enable(false);
@@ -139,10 +152,14 @@ tab_input::tab_input(wxWindow *parent):
   b_track_down->Enable(false);
   siz_column->Add(b_track_down, 0, 0, 0);
   siz_line->Add(siz_column, 0, wxALIGN_TOP | wxLEFT, 10);
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_all->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Track options:")),
-               0, wxALIGN_LEFT | wxLEFT, 10);
+  siz_all->Add(0, GROUPSPACING, 0, 0, 0);
+
+  siz_toptions =
+    new wxStaticBoxSizer(new wxStaticBox(this, wxID_STATIC,
+                                         wxT("Track options")),
+                         wxVERTICAL);
 
   siz_fg = new wxFlexGridSizer(4);
   siz_fg->AddGrowableCol(1);
@@ -298,9 +315,9 @@ tab_input::tab_input(wxWindow *parent):
                                   "with zlib. 'none' results is files that "
                                   "are a lot larger."));
   siz_fg->Add(cob_compression, 1, wxGROW, 0);
-  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_toptions->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(0, LINESPACING, 0, 0, 0);
+  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   rb_aspect_ratio =
@@ -324,7 +341,7 @@ tab_input::tab_input(wxWindow *parent):
                                    "which case both numbers must be integer "
                                    "(e.g. 16/9) or just a single floting "
                                    "point number 'f' (e.g. 2.35)."));
-  siz_line->Add(cob_aspect_ratio, 2, wxGROW | wxRIGHT, 10);
+  siz_line->Add(cob_aspect_ratio, 3, wxGROW | wxRIGHT, 10);
 
   siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("or")),
                 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -339,17 +356,17 @@ tab_input::tab_input(wxWindow *parent):
   tc_display_width->SetToolTip(wxT("Sets the display width of the track."
                                    "The height must be set as well, or this "
                                    "field will be ignored."));
-  siz_line->Add(tc_display_width, 1, wxGROW, 0);
+  siz_line->Add(tc_display_width, 2, wxGROW, 0);
   siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("x")),
-                0, wxALIGN_CENTER_VERTICAL, 0);
+                0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_display_height = new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, wxT(""));
   tc_display_height->SetToolTip(wxT("Sets the display height of the track."
                                     "The width must be set as well, or this "
                                     "field will be ignored."));
-  siz_line->Add(tc_display_height, 1, wxGROW, 0);
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_line->Add(tc_display_height, 2, wxGROW, 0);
+  siz_toptions->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(0, LINESPACING, 0, 0, 0);
+  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_default =
@@ -370,7 +387,9 @@ tab_input::tab_input(wxWindow *parent):
                                 "from MP4 or Matroska files."));
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_line->Add(cb_aac_is_sbr, 0, 0, 0);
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_toptions->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
 
   siz_fg = new wxFlexGridSizer(3);
   siz_fg->AddGrowableCol(1);
@@ -400,7 +419,9 @@ tab_input::tab_input(wxWindow *parent):
                                      "Almost all users should leave this "
                                      "entry empty."));
   siz_fg->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL);
-  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_toptions->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
+  siz_all->Add(siz_toptions, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
   SetSizer(siz_all);
 
