@@ -539,7 +539,6 @@ void free_track_info(track_info_t *ti) {
     safefree((*ti->languages)[i].language);
   delete ti->languages;
   safefree(ti->private_data);
-  safefree(ti->language);
   safefree(ti->sub_charset);
   safefree(ti);
 }
