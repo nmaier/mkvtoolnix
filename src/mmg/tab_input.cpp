@@ -309,8 +309,8 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
                       "RealMedia Files (*.rm;*.rmvb)|*.rm;*.rmvb|"
                       "SRT text subtitles (*.srt)|*.srt|"
                       "SSA/ASS text subtitles (*.ssa;*.ass)|*.ssa;*.ass|"
-                      "WAVE (uncompressed PCM) (*.wav)|*.wav|"
-                      "All Files (*.*)|*.*"), wxOPEN);
+                      "WAVE (uncompressed PCM) (*.wav)|*.wav|" ALLFILES),
+                   wxOPEN);
 
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
@@ -774,6 +774,119 @@ void tab_input::load(wxConfigBase *cfg) {
 }
 
 bool tab_input::validate_settings() {
+  uint32_t fidx, tidx, i;
+  mmg_file_t *f;
+  mmg_track_t *t;
+  bool tracks_selected, dot_present, ok;
+  int64_t dummy_i;
+  string s;
+  wxString sid;
+
+  tracks_selected = false;
+  for (fidx = 0; fidx < files.size(); fidx++) {
+    f = &files[fidx];
+
+    for (tidx = 0; tidx < f->tracks->size(); tidx++) {
+      t = &(*f->tracks)[tidx];
+      if (!t->enabled)
+        continue;
+
+      tracks_selected = true;
+      sid.Printf("%lld", t->id);
+
+      s = t->delay->c_str();
+      strip(s);
+      if ((s.length() > 0) && !parse_int(s.c_str(), dummy_i)) {
+        wxMessageBox(_("The delay setting for track nr. " + sid + " in "
+                       "file '" + *f->file_name + "' is invalid."),
+                     _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
+        return false;
+      }
+
+      s = t->stretch->c_str();
+      strip(s);
+      if (s.length() > 0) {
+        dot_present = false;
+        i = 0;
+        while (i < s.length()) {
+          if (isdigit(s[i]) ||
+              (!dot_present && ((s[i] == '.') || (s[i] == ',')))) {
+            if ((s[i] == '.') || (s[i] == ','))
+              dot_present = true;
+            i++;
+          } else {
+            wxMessageBox(_("The stretch setting for track nr. " + sid + " in "
+                           "file '" + *f->file_name + "' is invalid."),
+                         _("mkvmerge GUI: error"), wxOK | wxCENTER |
+                         wxICON_ERROR);
+            return false;
+          }
+        }
+      }
+
+      s = t->fourcc->c_str();
+      strip(s);
+      if ((s.length() > 0) && (s.length() != 4)) {
+        wxMessageBox(_("The FourCC setting for track nr. " + sid + " in "
+                       "file '" + *f->file_name + "' is not excatly four "
+                       "characters long."),
+                     _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
+        return false;
+      }
+
+      s = t->aspect_ratio->c_str();
+      strip(s);
+      if (s.length() > 0) {
+        dot_present = false;
+        i = 0;
+        ok = true;
+        while (i < s.length()) {
+          if (isdigit(s[i]) ||
+              (!dot_present && ((s[i] == '.') || (s[i] == ',')))) {
+            if ((s[i] == '.') || (s[i] == ','))
+              dot_present = true;
+            i++;
+          } else {
+            ok = false;
+            break;
+          }
+        }
+
+        if (!ok) {
+          dot_present = false;
+          i = 0;
+          ok = true;
+          while (i < s.length()) {
+            if (isdigit(s[i]) ||
+                (!dot_present && (s[i] == '/'))) {
+              if (s[i] == '/')
+                dot_present = true;
+              i++;
+            } else {
+              ok = false;
+              break;
+            }
+          }
+        }
+
+        if (!ok) {
+          wxMessageBox(_("The aspect ratio setting for track nr. " + sid +
+                         " in file '" + *f->file_name + "' is invalid."),
+                       _("mkvmerge GUI: error"), wxOK | wxCENTER |
+                       wxICON_ERROR);
+          return false;
+        }
+      }
+    }
+  }
+
+  if (!tracks_selected) {
+    wxMessageBox(_("You have not yet selected any input file and/or no "
+                   "tracks."),
+                 _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+
   return true;
 }
 

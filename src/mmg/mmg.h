@@ -327,8 +327,6 @@ protected:
   tab_global *global_page;
   tab_settings *settings_page;
 
-  bool tracks_selected;
-
 public:
   mmg_dialog();
 

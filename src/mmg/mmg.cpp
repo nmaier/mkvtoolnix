@@ -246,7 +246,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
 void mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose an output file", last_open_dir, "",
                    _T("Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
-                      "All Files (*.*)|*.*"), wxSAVE | wxOVERWRITE_PROMPT);
+                      ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     tc_output->SetValue(dlg.GetPath());
@@ -374,13 +374,6 @@ void mmg_dialog::on_run(wxCommandEvent &evt) {
 
   update_command_line();
 
-  if (!tracks_selected) {
-    wxMessageBox(_("You have not yet selected any input file and/or no "
-                   "tracks."),
-                 _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
-    return;
-  }
-
   if (tc_output->GetValue().Length() == 0) {
     wxMessageBox(_("You have not yet selected an output file."),
                  _("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
@@ -453,7 +446,7 @@ void mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
 
 void mmg_dialog::update_command_line() {
   uint32_t fidx, tidx;
-  bool tracks_present_here;
+  bool tracks_selected_here;
   bool no_audio, no_video, no_subs;
   mmg_file_t *f;
   mmg_track_t *t;
@@ -468,10 +461,9 @@ void mmg_dialog::update_command_line() {
   clargs.Add("-o");
   clargs.Add(tc_output->GetValue());
 
-  tracks_selected = false;
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
-    tracks_present_here = false;
+    tracks_selected_here = false;
     no_audio = true;
     no_video = true;
     no_subs = true;
@@ -482,7 +474,7 @@ void mmg_dialog::update_command_line() {
       if (!t->enabled)
         continue;
 
-      tracks_present_here = true;
+      tracks_selected_here = true;
       fix_format("%lld", format);
       sid.Printf(format.c_str(), t->id);
 
@@ -596,9 +588,7 @@ void mmg_dialog::update_command_line() {
 
     }
 
-    if (tracks_present_here) {
-      tracks_selected = true;
-
+    if (tracks_selected_here) {
       if (f->no_chapters) {
         cmdline += "--no-chapters ";
         clargs.Add("--no-chapters");

@@ -1,5 +1,8 @@
 2003-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: Added a lot of checks on the data given by the user so that
+        invalid data is reported by mmg and not by mkvmerge.
+
         * mmg: Made the app a GUI app which gets rid of the "DOS box" on
         Windows.
 

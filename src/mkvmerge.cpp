@@ -627,7 +627,8 @@ static void parse_split(const char *arg) {
 
   split_after *= modifier;
   if (split_after <= (1024 * 1024))
-    mxerror("Invalid split size in '--split %s'.\n", orig.c_str());
+    mxerror("Invalid split size in '--split %s' (size too small).\n",
+            orig.c_str());
 
   safefree(s);
   split_by_time = false;

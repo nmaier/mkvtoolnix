@@ -269,7 +269,7 @@ bool tab_attachments::validate_settings() {
     a = &attachments[i];
     if (a->mime_type->Length() == 0) {
       wxMessageBox(_T("No MIME type has been selected for the attachment '" +
-                      *a->file_name + "."), _T("Missing input"),
+                      *a->file_name + "'."), _T("Missing input"),
                    wxOK | wxCENTER | wxICON_ERROR);
       return false;
     }
