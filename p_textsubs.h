@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.h,v 1.5 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: p_textsubs.h,v 1.6 2003/05/05 18:47:57 mosu Exp $
     \brief class definition for the simple text subtitle packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,7 +27,7 @@
 
 class textsubs_packetizer_c: public generic_packetizer_c {
 private:
-  int packetno;
+  int packetno, cc_utf8;
 
 public:
   textsubs_packetizer_c(track_info_t *nti) throw (error_c);
