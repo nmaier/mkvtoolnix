@@ -141,4 +141,42 @@ typedef struct {
   video_stsd_atom_t id;
 } qt_image_description_t;
 
+// one byte tag identifiers
+#define MP4DT_O                 0x01 
+#define MP4DT_IO                0x02 
+#define MP4DT_ES                0x03 
+#define MP4DT_DEC_CONFIG        0x04 
+#define MP4DT_DEC_SPECIFIC      0x05 
+#define MP4DT_SL_CONFIG         0x06 
+#define MP4DT_CONTENT_ID        0x07 
+#define MP4DT_SUPPL_CONTENT_ID  0x08 
+#define MP4DT_IP_PTR            0x09 
+#define MP4DT_IPMP_PTR          0x0A 
+#define MP4DT_IPMP              0x0B 
+#define MP4DT_REGISTRATION      0x0D 
+#define MP4DT_ESID_INC          0x0E 
+#define MP4DT_ESID_REF          0x0F 
+#define MP4DT_FILE_IO           0x10 
+#define MP4DT_FILE_O            0x11 
+#define MP4DT_EXT_PROFILE_LEVEL 0x13 
+#define MP4DT_TAGS_START        0x80 
+#define MP4DT_TAGS_END          0xFE 
+
+// MPEG4 esds structure
+typedef struct {
+  uint8_t version;
+  uint32_t flags;
+  uint16_t esid;
+  uint8_t stream_priority;
+  uint8_t object_type_id;
+  uint8_t stream_type;
+  uint32_t buffer_size_db;
+  uint32_t max_bitrate;
+  uint32_t avg_bitrate;
+  uint8_t decoder_config_len;
+  unsigned char *decoder_config;
+  uint8_t sl_config_len;
+  unsigned char *sl_config;
+} esds_t;
+
 #endif // __QTMP4_ATOMS_H

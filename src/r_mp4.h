@@ -102,6 +102,8 @@ typedef struct {
   unsigned char *a_priv;
   uint32_t a_priv_size;
   sound_v1_stsd_atom_t a_stsd;
+  esds_t a_esds;
+  bool a_esds_parsed;
 
   bool warning_printed;
 
@@ -137,8 +139,8 @@ protected:
   virtual void read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
                          uint32_t &hsize);
   virtual void free_demuxer(qtmp4_demuxer_t *dmx);
-//   virtual real_demuxer_t *find_demuxer(int id);
-//   virtual int finish();
+  virtual bool parse_esds_atom(mm_mem_io_c *memio, qtmp4_demuxer_t *dmx);
+  virtual uint32_t read_esds_descr_len(mm_mem_io_c *memio);
 };
 
 #endif  // __R_MP4_H

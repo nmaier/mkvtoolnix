@@ -26,6 +26,7 @@
 #include "common.h"
 #include "matroska.h"
 #include "mkvmerge.h"
+#include "p_aac.h"
 #include "p_passthrough.h"
 #include "p_video.h"
 #include "r_mp4.h"
@@ -35,8 +36,12 @@ using namespace libmatroska;
 
 #define PFX "Quicktime/MP4 reader: "
 
+#define BE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], \
+                  ((char *)&a)[0]
+
 int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
-  uint32_t atom_size, object;
+  uint32_t atom;
+  uint64_t atom_size;
 
   if (size < 20)
     return 0;
@@ -44,10 +49,14 @@ int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
     in->setFilePointer(0, seek_beginning);
 
     atom_size = in->read_uint32_be();
-    object = in->read_uint32_be();
+    if (atom_size == 1)
+      atom_size = in->read_uint64_be();
+    atom = in->read_uint32_be();
 
-    if ((object == FOURCC('m', 'o', 'o', 'v')) ||
-        (object == FOURCC('f', 't', 'y', 'p')))
+    mxverb(2, PFX "Atom: '%c%c%c%c'; size: %llu\n", BE2STR(atom), atom_size);
+
+    if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
+        (atom == FOURCC('f', 't', 'y', 'p')))
         return 1;
 
   } catch (exception &ex) {
@@ -105,6 +114,8 @@ void qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
   safefree(dmx->editlist_table);
   safefree(dmx->v_desc);
   safefree(dmx->a_priv);
+  safefree(dmx->a_esds.decoder_config);
+  safefree(dmx->a_esds.sl_config);
 }
 
 void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
@@ -122,8 +133,6 @@ void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
   atom = io->read_uint32_be();
 }
 
-#define BE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], \
-                  ((char *)&a)[0]
 #define skip_atom() io->setFilePointer(atom_pos + atom_size)
 
 void qtmp4_reader_c::parse_headers() {
@@ -183,10 +192,19 @@ void qtmp4_reader_c::parse_headers() {
          strncasecmp(dmx->fourcc, "svq", 3) &&
          strncasecmp(dmx->fourcc, "cvid", 4)) ||
         ((dmx->type == 'a') &&
-         strncasecmp(dmx->fourcc, "QDM", 3))) {
+         strncasecmp(dmx->fourcc, "QDM", 3) &&
+         strncasecmp(dmx->fourcc, "MP4A", 4))) {
       mxwarn(PFX "Unknown/unsupported FourCC '%.4s' for track %u.\n",
              &dmx->fourcc, dmx->id);
-      free_demuxer(dmx);
+
+      continue;
+    }
+
+    if ((dmx->type == 'a') &&
+        !strncasecmp(dmx->fourcc, "MP4A", 4) &&
+        (dmx->a_esds.decoder_config == NULL)) {
+      mxwarn(PFX "AAC track %u is missing the esds atom/the decoder config.\n",
+             dmx->id);
 
       continue;
     }
@@ -325,10 +343,9 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
              (new_dmx->fourcc[2] == 0) && (new_dmx->fourcc[3] == 0))) {
           free_demuxer(new_dmx);
           safefree(new_dmx);
-        } else {
+        } else
           demuxers.push_back(new_dmx);
-          new_dmx = NULL;
-        }
+        new_dmx = NULL;
 
       }
 
@@ -480,15 +497,44 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
             if ((get_uint16_be(&sv1_stsd.v0.version) == 1) &&
                 (size > sizeof(sound_v1_stsd_atom_t))) {
               io->setFilePointer(pos + sizeof(sound_v1_stsd_atom_t) + 4);
-              new_dmx->a_priv_size = io->read_uint32_be();
-              io->skip(4);
-              new_dmx->a_priv =
-                (unsigned char *)safemalloc(new_dmx->a_priv_size);
-              if (io->read(new_dmx->a_priv, new_dmx->a_priv_size) !=
-                  new_dmx->a_priv_size)
-                throw exception();
-              mxverb(2, PFX "%*sAudio private data size %u\n", (level + 1) * 2,
-                     "", new_dmx->a_priv_size);
+              while (io->getFilePointer() < (pos + size)) {
+                uint32_t add_atom, add_atom_size;
+
+                add_atom_size = io->read_uint32_be();
+                add_atom = io->read_uint32();
+                add_atom_size -= 8;
+                mxverb(2, PFX "%*sAudio private data size: %u, type: '%.4s'\n",
+                       (level + 1) * 2, "", add_atom_size + 8, &add_atom);
+                if (new_dmx->a_priv == NULL) {
+                  mm_mem_io_c *memio;
+                  uint32_t patom_size, patom;
+
+                  new_dmx->a_priv_size = add_atom_size;
+                  new_dmx->a_priv =
+                    (unsigned char *)safemalloc(new_dmx->a_priv_size);
+                  if (io->read(new_dmx->a_priv, new_dmx->a_priv_size) !=
+                      new_dmx->a_priv_size)
+                    throw exception();
+
+                  memio = new mm_mem_io_c(new_dmx->a_priv,
+                                          new_dmx->a_priv_size);
+                  while (!memio->eof()) {
+                    patom_size = memio->read_uint32_be();
+                    patom = memio->read_uint32_be();
+                    mxverb(2, PFX "%*sAtom size: %u, atom: '%c%c%c%c'\n",
+                           (level + 2) * 2, "", patom_size, BE2STR(patom));
+                    if ((patom == FOURCC('e', 's', 'd', 's')) &&
+                         !new_dmx->a_esds_parsed) {
+                      memio->save_pos();
+                      new_dmx->a_esds_parsed = parse_esds_atom(memio, new_dmx);
+                      memio->restore_pos();
+                    }
+                    memio->skip(patom_size - 8);
+                  }
+                  delete memio;
+                } else
+                  io->skip(add_atom_size);
+              }
             }
             memcpy(&new_dmx->a_stsd, &sv1_stsd, sizeof(sound_v1_stsd_atom_t));
 
@@ -825,6 +871,95 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   return 0;
 }
 
+uint32_t qtmp4_reader_c::read_esds_descr_len(mm_mem_io_c *memio) {
+  uint32_t len, num_bytes;
+  uint8_t byte;
+
+  len = 0;
+  num_bytes = 0;
+  do {
+    byte = memio->read_uint8();
+    num_bytes++;
+    len = (len << 7) | (byte & 0x7f);
+  } while (((byte & 0x80) == 0x80) && (num_bytes < 4));
+
+  return len;
+}
+
+bool qtmp4_reader_c::parse_esds_atom(mm_mem_io_c *memio,
+                                     qtmp4_demuxer_t *dmx) {
+  uint32_t len;
+  uint8_t tag;
+  esds_t *e;
+
+  e = &dmx->a_esds;
+  e->version = memio->read_uint8();
+  e->flags = memio->read_uint24_be();
+  mxverb(2, PFX "esds: version: %u, flags: %u\n", e->version, e->flags);
+  tag = memio->read_uint8();
+  if (tag == MP4DT_ES) {
+    len = read_esds_descr_len(memio);
+    e->esid = memio->read_uint16_be();
+    e->stream_priority = memio->read_uint8();
+    mxverb(2, PFX "esds: id: %u, stream priority: %u, len: %u\n", e->esid,
+           (uint32_t)e->stream_priority, len);
+  } else {
+    e->esid = memio->read_uint16_be();
+    mxverb(2, PFX "esds: id: %u\n", e->esid);
+  }
+
+  tag = memio->read_uint8();
+  if (tag != MP4DT_DEC_CONFIG) {
+    mxverb(2, PFX "tag is not DEC_CONFIG (0x%02x) but 0x%02x.\n",
+           MP4DT_DEC_CONFIG, (uint32_t)tag);
+    return false;
+  }
+
+  len = read_esds_descr_len(memio);
+
+  e->object_type_id = memio->read_uint8();
+  e->stream_type = memio->read_uint8();
+  e->buffer_size_db = memio->read_uint24_be();
+  e->max_bitrate = memio->read_uint32_be();
+  e->avg_bitrate = memio->read_uint32_be();
+  mxverb(2, PFX "esds: decoder config descriptor, len: %u, object_type_id: "
+         "%u, stream_type: 0x%2x, buffer_size_db: %u, max_bitrate: %.3fkbit/s"
+         ", avg_bitrate: %.3fkbit/s\n", len, e->object_type_id, e->stream_type,
+         e->buffer_size_db, e->max_bitrate / 1000.0, e->avg_bitrate / 1000.0);
+
+  e->decoder_config_len = 0;
+
+  tag = memio->read_uint8();
+  if (tag != MP4DT_DEC_SPECIFIC) {
+    mxverb(2, PFX "tag is not DEC_SPECIFIC (0x%02x) but 0x%02x.\n",
+           MP4DT_DEC_SPECIFIC, (uint32_t)tag);
+    return false;
+  }
+
+  len = read_esds_descr_len(memio);
+  e->decoder_config_len = len;
+  e->decoder_config = (uint8_t *)safemalloc(len);
+  if (memio->read(e->decoder_config, len) != len)
+    throw exception();
+  mxverb(2, PFX "esds: decoder specific descriptor, len: %u\n", len);
+
+  tag = memio->read_uint8();
+  if (tag != MP4DT_SL_CONFIG) {
+    mxverb(2, PFX "tag is not SL_CONFIG (0x%02x) but 0x%02x.\n",
+           MP4DT_SL_CONFIG, (uint32_t)tag);
+    return false;
+  }
+
+  len = read_esds_descr_len(memio);
+  e->sl_config_len = len;
+  e->sl_config = (uint8_t *)safemalloc(len);
+  if (memio->read(e->sl_config, len) != len)
+    throw exception();
+  mxverb(2, PFX "esds: sync layer config descriptor, len: %u\n", len);
+
+  return true;
+}
+
 void qtmp4_reader_c::create_packetizers() {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
@@ -850,7 +985,8 @@ void qtmp4_reader_c::create_packetizers() {
 
       dmx->packetizer->duplicate_data_on_add(false);
 
-      mxinfo("+-> Using the video packetizer for track %u.\n", dmx->id);
+      mxinfo("+-> Using the video packetizer for track %u (FourCC: %.4s).\n",
+             dmx->id, dmx->fourcc);
 
     } else {
       if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
@@ -868,6 +1004,28 @@ void qtmp4_reader_c::create_packetizers() {
         if (verbose)
           mxinfo("+-> Using generic audio output module for stream "
                  "%u (FourCC: %.4s).\n", dmx->id, dmx->fourcc);
+
+      } else if (!strncasecmp(dmx->fourcc, "MP4A", 4)) {
+        int profile, sample_rate_idx, channels;
+
+        if (dmx->a_esds.decoder_config_len == 2) {
+          profile = (dmx->a_esds.decoder_config[0] >> 3) - 1;
+          sample_rate_idx = ((dmx->a_esds.decoder_config[0] & 0x07) << 1) |
+            (dmx->a_esds.decoder_config[1] >> 7);
+          channels = (dmx->a_esds.decoder_config[1] & 0x7f) >> 3;
+
+          mxverb(2, PFX "AAC: profile: %d, sample_rate_idx: %d, channels: "
+                 "%d\n", profile, sample_rate_idx, channels);
+
+          dmx->packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
+                                                (uint32_t)dmx->a_samplerate,
+                                                 channels, ti, false, true);
+          if (verbose)
+            mxinfo("+-> Using AAC output module for stream %u.\n", dmx->id,
+                   dmx->fourcc);
+        } else
+          mxerror(PFX "AAC found, but decoder config data has length %u.\n",
+                  dmx->a_esds.decoder_config_len);
 
       } else
         die(PFX "Should not have happened #1.");
