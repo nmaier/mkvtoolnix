@@ -154,6 +154,9 @@ KaxSeekHead *kax_seekhead = NULL;
 KaxTags *kax_tags = NULL;
 KaxAttachments *kax_as = NULL;
 KaxChapters *kax_chapters = NULL;
+EbmlVoid *kax_chapters_void = NULL;
+
+char *chapter_file_name = NULL;
 
 string title;
 
@@ -1310,6 +1313,11 @@ static void parse_args(int argc, char **argv) {
         mxprint(stderr, "Error: --chapters lacks the file name.\n");
         exit(1);
       }
+      if (kax_chapters != NULL) {
+        mxprint(stderr, "Error: Only one chapter file allowed.\n");
+        exit(1);
+      }
+      chapter_file_name = safestrdup(argv[i + 1]);
       kax_chapters = parse_chapters(argv[i + 1]);
       i++;
 
@@ -1725,8 +1733,12 @@ void create_next_output_file(bool last_file, bool first_file) {
     cluster_helper->set_output(out);
     render_headers(out, last_file, first_file);
     render_attachments(out);
-    if (kax_chapters != NULL)
-      kax_chapters->Render(*out);
+    if (kax_chapters != NULL) {
+      kax_chapters_void = new EbmlVoid;
+      kax_chapters->UpdateSize();
+      kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
+      kax_chapters_void->Render(*out);
+    }
 
     if (kax_tags != NULL) {
       if (!kax_tags->CheckMandatory()) {
@@ -1761,8 +1773,14 @@ void create_next_output_file(bool last_file, bool first_file) {
   cluster_helper->set_output(out);
   render_headers(out, last_file, first_file);
   render_attachments(out);
-  if (kax_chapters != NULL)
-    kax_chapters->Render(*out);
+  if (kax_chapters != NULL) {
+    if (pass == 2) {
+      kax_chapters_void = new EbmlVoid;
+      kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
+      kax_chapters_void->Render(*out);
+    } else
+      kax_chapters->Render(*out);
+  }
 
   if (kax_tags != NULL) {
     if (!kax_tags->CheckMandatory()) {
@@ -1779,8 +1797,8 @@ void create_next_output_file(bool last_file, bool first_file) {
 }
 
 void finish_file() {
-  int64_t old_pos;
   int i;
+  KaxChapters *chapters_here;
 
   // Render the cues.
   if (write_cues && cue_writing_requested) {
@@ -1793,13 +1811,22 @@ void finish_file() {
 
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
-  old_pos = out->getFilePointer();
-  out->setFilePointer(kax_duration->GetElementPosition());
+  out->save_pos(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
     (cluster_helper->get_max_timecode() -
      cluster_helper->get_first_timecode()) * 1000000.0 / TIMECODE_SCALE;
   kax_duration->Render(*out);
-  out->setFilePointer(old_pos);
+  out->restore_pos();
+
+  if ((kax_chapters != NULL) && (pass > 0)) {
+    chapters_here = parse_chapters(chapter_file_name,
+                                   cluster_helper->get_first_timecode(),
+                                   cluster_helper->get_max_timecode());
+    kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
+    delete kax_chapters_void;
+    kax_chapters_void = NULL;
+  } else
+    chapters_here = NULL;
 
   // Render the tags if we have some.
   if (kax_tags != NULL) {
@@ -1815,7 +1842,10 @@ void finish_file() {
     if (kax_tags != NULL)
       kax_seekhead->IndexThis(*kax_tags, *kax_segment);
 
-    if (kax_chapters != NULL)
+    if (chapters_here != NULL) {
+      kax_seekhead->IndexThis(*chapters_here, *kax_segment);
+      delete chapters_here;
+    } else if (kax_chapters != NULL)
       kax_seekhead->IndexThis(*kax_chapters, *kax_segment);
 
     if (kax_as != NULL) {
