@@ -176,6 +176,7 @@ bool MTX_DLL_API starts_with_case(const string &s, const string &start);
 #define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
 #define myabs(a) ((a) < 0 ? (a) * -1 : (a))
 
+uint32_t MTX_DLL_API round_to_nearest_pow2(uint32_t value);
 bool MTX_DLL_API parse_int(const char *s, int64_t &value);
 bool MTX_DLL_API parse_int(const char *s, int &value);
 string MTX_DLL_API to_string(int64_t i);

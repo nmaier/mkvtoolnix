@@ -868,6 +868,20 @@ bool starts_with_case(const string &s, const string &start) {
  * Integer parsing
  */
 
+uint32_t round_to_nearest_pow2(uint32_t value) {
+  int64_t best_value, test_value;
+
+  best_value = 0;
+  test_value = 1;
+  while (test_value <= 0x80000000ul) {
+    if (iabs(value - test_value) < iabs(value - best_value))
+      best_value = test_value;
+    test_value <<= 1;
+  }
+
+  return best_value;
+}
+
 bool parse_int(const char *s, int64_t &value) {
   const char *p;
   int sign;
