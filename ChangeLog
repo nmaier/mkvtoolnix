@@ -1,3 +1,8 @@
+2004-08-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: use the same UID for the EditionUID in the
+	chapters and in the tag targets when parsing a CUE sheet.
+
 2004-08-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge/mkvextract: new feature: Use the new EditionUID entries
