@@ -269,7 +269,7 @@ get_file_type(const string &filename) {
             filename.c_str());
   }
 
-  type = FILE_TYPE_UNKNOWN;
+  type = FILE_TYPE_IS_UNKNOWN;
   if (avi_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_AVI;
   else if (kax_reader_c::probe_file(mm_io, size))
@@ -324,7 +324,7 @@ get_file_type(const string &filename) {
     else if (vobsub_reader_c::probe_file(mm_text_io, size))
       type = FILE_TYPE_VOBSUB;
     else
-      type = FILE_TYPE_UNKNOWN;
+      type = FILE_TYPE_IS_UNKNOWN;
 
     mm_io = mm_text_io;
   }

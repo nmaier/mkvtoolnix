@@ -21,42 +21,41 @@
 #include <malloc.h>
 #include <string.h>
 
-int
-vsscanf(const char *buffer,
-        const char *format,
-        va_list argPtr) {
-  // Get an upper bound for the # of args
-  size_t count = 0;
-  const char *p = format;
-  while (1) {
-    char c = *(p++);
-    if (c == 0)
-      break;
-    if ((c == '%') && ((p[0] != '*') && (p[0] != '%')))
-      ++count;
-  }
+int __declspec(naked) vsscanf_impl(const char *,const char *,va_list,int,void *) {
+  __asm {
+    push    ebx
+    mov	    ebx,esp
+    mov	    ecx,[ebx+16]
+    mov	    edx,[ebx+20]
+    lea	    edx,[ecx+edx*4-4]
+    jmp	    l3
+l2:
+    push    dword ptr [edx]
+    sub	    edx,4
+l3:
+    cmp	    edx,ecx
+    jae	    l2
+    push    dword ptr [ebx+12]
+    push    dword ptr [ebx+8]
+    call    dword ptr [ebx+24]
+    mov	    esp,ebx
+    pop	    ebx
+    ret
+  };
+}
 
-  // Make a local stack
-  size_t stackSize = (2 + count) * sizeof(void *);
-  void **newStack = (void **)alloca(stackSize);
+int vsscanf(const char *str, const char *format, va_list ap) {
+  const char  *p = format;
+  int	      narg = 0;
 
-  // Fill local stack the way sscanf likes it
-  newStack[0] = (void*)buffer;
-  newStack[1] = (void*)format;
-  memcpy(newStack + 2, argPtr, count * sizeof(void *));
+  while (*p)
+    if (*p++ == '%') {
+      if (*p != '*' && *p != '%')
+	++narg;
+      ++p;
+    }
 
-  // Warp into system sscanf with new stack
-  int result;
-  void *savedESP;
-  _asm {
-    mov     savedESP, esp;
-    mov     esp, newStack;
-    call    sscanf;
-    mov     esp, savedESP;
-    mov     result, eax;
-  }
-
-  return result;
+  return vsscanf_impl(str,format,ap,narg,sscanf);
 }
 
 #endif

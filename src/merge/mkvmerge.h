@@ -26,7 +26,7 @@ enum display_priority_e {
 
 /* file types */
 enum file_type_e {
-  FILE_TYPE_UNKNOWN = 0,
+  FILE_TYPE_IS_UNKNOWN = 0,
   FILE_TYPE_OGM,
   FILE_TYPE_AVI,
   FILE_TYPE_WAV,
