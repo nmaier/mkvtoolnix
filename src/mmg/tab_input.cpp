@@ -481,7 +481,6 @@ void tab_input::on_language_selected(wxCommandEvent &evt) {
 
   *(*files[selected_file].tracks)[selected_track].language =
     cob_language->GetStringSelection();
-  mxinfo("new lang: %s\n", (*files[selected_file].tracks)[selected_track].language->c_str());
 }
 
 void tab_input::on_cues_selected(wxCommandEvent &evt) {
@@ -505,8 +504,8 @@ void tab_input::on_browse_tags(wxCommandEvent &evt) {
     return;
 
   wxFileDialog dlg(NULL, "Choose a tag file", "", last_open_dir,
-                   _T("Tag files (*.xml;*.txt)|*.xml;*.txt|"
-                      "All Files (*.*)|*.*"), wxOPEN);
+                   _T("Tag files (*.xml;*.txt)|*.xml;*.txt|" ALLFILES),
+                   wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     *(*files[selected_file].tracks)[selected_track].tags = dlg.GetPath();

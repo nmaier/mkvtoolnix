@@ -90,6 +90,9 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   enable(false);
   selected_attachment = -1;
+
+  t_get_entries.SetOwner(this, ID_T_ATTACHMENTVALUES);
+  t_get_entries.Start(333);
 }
 
 void tab_attachments::enable(bool e) {
@@ -103,7 +106,7 @@ void tab_attachments::on_add_attachment(wxCommandEvent &evt) {
   wxString name;
 
   wxFileDialog dlg(NULL, "Choose an attachment file", "", last_open_dir,
-                   _T("Media files (*.*)|*.*"), wxOPEN);
+                   _T(ALLFILES), wxOPEN);
 
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
@@ -164,7 +167,7 @@ void tab_attachments::on_description_changed(wxCommandEvent &evt) {
     tc_description->GetValue();
 }
 
-void tab_attachments::on_mimetype_changed(wxCommandEvent &evt) {
+void tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
   if (selected_attachment == -1)
     return;
 
@@ -177,7 +180,7 @@ void tab_attachments::on_style_changed(wxCommandEvent &evt) {
     return;
 
   attachments[selected_attachment].style =
-    cob_style->GetValue().Find("Only") >= 0 ? 1 : 0;
+    cob_style->GetStringSelection().Find("Only") >= 0 ? 1 : 0;
 }
 
 void tab_attachments::save(wxConfigBase *cfg) {
@@ -264,7 +267,6 @@ BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
   EVT_BUTTON(ID_B_REMOVEATTACHMENT, tab_attachments::on_remove_attachment)
   EVT_LISTBOX(ID_LB_ATTACHMENTS, tab_attachments::on_attachment_selected)
   EVT_TEXT(ID_TC_DESCRIPTION, tab_attachments::on_description_changed)
-  EVT_TEXT(ID_CB_MIMETYPE, tab_attachments::on_mimetype_changed)
-  EVT_COMBOBOX(ID_CB_MIMETYPE, tab_attachments::on_mimetype_changed)
+  EVT_TIMER(ID_T_ATTACHMENTVALUES, tab_attachments::on_mimetype_changed)
   EVT_COMBOBOX(ID_CB_ATTACHMENTSTYLE, tab_attachments::on_style_changed)
 END_EVENT_TABLE();

@@ -38,7 +38,7 @@ using namespace std;
 #else
 #define ALLFILES "All Files (*)|*"
 #define PSEP '/'
-#define YOFF 0
+#define YOFF (-2)
 #endif
 
 #define ID_DIALOG 10000
@@ -96,6 +96,7 @@ using namespace std;
 #define ID_B_MUX_OK 10055
 #define ID_B_MUX_SAVELOG 10056
 #define ID_B_MUX_ABORT 10057
+#define ID_T_ATTACHMENTVALUES 10058
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -192,6 +193,8 @@ protected:
 
   int selected_attachment;
 
+  wxTimer t_get_entries;
+
 public:
   tab_attachments(wxWindow *parent);
 
@@ -199,7 +202,7 @@ public:
   void on_remove_attachment(wxCommandEvent &evt);
   void on_attachment_selected(wxCommandEvent &evt);
   void on_description_changed(wxCommandEvent &evt);
-  void on_mimetype_changed(wxCommandEvent &evt);
+  void on_mimetype_changed(wxTimerEvent &evt);
   void on_style_changed(wxCommandEvent &evt);
 
   void enable(bool e);

@@ -67,7 +67,12 @@ tab_settings::~tab_settings() {
 void tab_settings::on_browse(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose the mkvmerge executable",
                    tc_mkvmerge->GetValue().BeforeLast(PSEP), "",
-                   _T("Executable files (*.exe)|*.exe|" ALLFILES), wxOPEN);
+#ifdef SYS_WINDOWS
+                   _T("Executable files (*.exe)|*.exe|" ALLFILES),
+#else
+                   _T("All files (*)|*"),
+#endif
+                   wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     tc_mkvmerge->SetValue(dlg.GetPath());
     mkvmerge_path = dlg.GetPath();
