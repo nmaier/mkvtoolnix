@@ -100,6 +100,7 @@ DEP_INPUT = src/input/libmtxinput.a
 DEP_OUTPUT = src/output/libmtxoutput.a
 DEP_AVI = $(DEP_AVILIB)
 DEP_RMFF = librmff/librmff.a
+DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
 APPLICATIONS = src/mkvmerge src/mkvinfo src/mkvextract src/base64tool
@@ -146,9 +147,11 @@ install-trans:
 	done
 
 SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
-		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output
+		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output \
+		-Isrc/mpegparser
 SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
-		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output
+		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output \
+		-Lsrc/mpegparser
 
 RUNAR = $(AR) rcu
 LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
@@ -159,7 +162,8 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard librmff/*.c) \
 		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
-		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp)
+		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
+		$(wildcard src/mpegparser/*.cpp)
 
 ifeq ($(V),1)
   Q =
@@ -236,6 +240,19 @@ librmff/librmff.a: $(librmff_OBJECTS)
 	$(Q)$(RANLIB) $@
 
 #
+# spyder's MPEG parser
+#
+libmpegparser_SOURCES = $(wildcard src/mpegparser/*.cpp)
+libmpegparser_OBJECTS := $(patsubst %.cpp,%.o,$(libmpegparser_SOURCES))
+
+src/mpegparser/libmpegparser.a: $(libmpegparser_OBJECTS)
+	@rm -f $@
+	@echo '      AR ' $@
+	$(Q)$(RUNAR) $@ $(libmpegparser_OBJECTS)
+	@echo '  RANLIB ' $@
+	$(Q)$(RANLIB) $@
+
+#
 # src/common
 #
 
@@ -292,10 +309,11 @@ mkvmerge_SOURCES = src/mkvmerge.cpp \
 			src/timecode_factory.cpp
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
-		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
+		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF) \
+		$(DEP_MPEGPARSER)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
-		-lavi -lrmff \
+		-lavi -lrmff -lmpegparser \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS)
 

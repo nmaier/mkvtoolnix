@@ -79,6 +79,7 @@
 #include "r_flac.h"
 #include "r_matroska.h"
 #include "r_mp3.h"
+#include "r_mpeg.h"
 #include "r_ogm.h"
 #include "r_qtmp4.h"
 #include "r_real.h"
@@ -236,6 +237,8 @@ file_type_t file_types[] =
    {"ac3 ", TYPEAC3, "A/52 (aka AC3)"},
    {"avi ", TYPEAVI, "AVI (Audio/Video Interleaved)"},
    {"dts ", TYPEDTS, "DTS (Digital Theater System)"},
+   {"m1v ", TYPEMPEG, "MPEG 1 video elementary stream"},
+   {"m2v ", TYPEMPEG, "MPEG 2 video elementary stream"},
    {"mp2 ", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
    {"mp3 ", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"mkv ", TYPEMATROSKA, "general Matroska files"},
@@ -260,7 +263,7 @@ file_type_t file_types[] =
    {"    ", -1,      "MP3 audio"},
    {"    ", -1,      "simple text subtitles"},
    {"    ", -1,      "uncompressed PCM audio"},
-   {"    ", -1,      "Video (not MPEG1/2)"},
+   {"    ", -1,      "Video"},
    {"    ", -1,      "Vorbis audio"},
    {NULL,  -1,      NULL}};
 
@@ -522,6 +525,8 @@ get_type(char *filename) {
     type = TYPEDTS;
   else if (aac_reader_c::probe_file(mm_io, size))
     type = TYPEAAC;
+  else if (mpeg_es_reader_c::probe_file(mm_io, size))
+    type = TYPEMPEG;
   else {
     delete mm_io;
 
@@ -1673,6 +1678,9 @@ create_readers() {
         case TYPETTA:
           (*file).reader = new tta_reader_c((*file).ti);
           break;
+        case TYPEMPEG:
+          (*file).reader = new mpeg_es_reader_c((*file).ti);
+          break;
         default:
           mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);
           break;
@@ -1737,7 +1745,7 @@ identify(const string &filename) {
   suppress_warnings = true;
   create_readers();
 
-  file.reader->identify();
+  files[0].reader->identify();
 }
 
 /** \brief Sets the priority mkvmerge runs with
