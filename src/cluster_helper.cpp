@@ -112,7 +112,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
 
   if (clusters == NULL)
     add_cluster(new kax_cluster_c());
-  else if (((packet->timecode - timecode) > max_ms_per_cluster) &&
+  else if (((packet->assigned_timecode - timecode) > max_ms_per_cluster) &&
            all_references_resolved(clusters[num_clusters - 1])) {
     render();
     add_cluster(new kax_cluster_c());
@@ -129,8 +129,8 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   c->num_packets++;
   cluster_content_size += packet->length;
 
-  if ((packet->timecode + packet->duration) > max_timecode)
-    max_timecode = (packet->timecode + packet->duration);
+  if ((packet->assigned_timecode + packet->duration) > max_timecode)
+    max_timecode = (packet->assigned_timecode + packet->duration);
 
   walk_clusters();
 
@@ -143,7 +143,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
     find_next_splitpoint();
 
     old_max_timecode = max_timecode;
-    max_timecode = packet->timecode;
+    max_timecode = packet->assigned_timecode;
 
     mxinfo("\n");
     finish_file();
@@ -160,7 +160,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
-  if ((((packet->timecode - timecode) > max_ms_per_cluster) ||
+  if ((((packet->assigned_timecode - timecode) > max_ms_per_cluster) ||
        (get_packet_count() > max_blocks_per_cluster) ||
        (get_cluster_content_size() > 1500000)) &&
       all_references_resolved(c)) {
@@ -189,7 +189,7 @@ int64_t cluster_helper_c::get_timecode() {
     return 0;
   if (clusters[num_clusters - 1]->packets == NULL)
     return 0;
-  return clusters[num_clusters - 1]->packets[0]->timecode;
+  return clusters[num_clusters - 1]->packets[0]->assigned_timecode;
 }
 
 packet_t *cluster_helper_c::get_packet(int num) {
@@ -405,13 +405,13 @@ int cluster_helper_c::render() {
     }
 
     if (first_timecode == -1)
-      first_timecode = pack->timecode;
+      first_timecode = pack->assigned_timecode;
     if (timecode_offset == -1)
-      timecode_offset = pack->timecode;
+      timecode_offset = pack->assigned_timecode;
     if (i == 0)
       static_cast<kax_cluster_c *>
-        (cluster)->set_min_timecode(pack->timecode - timecode_offset);
-    max_timecode = pack->timecode;
+        (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
+    max_timecode = pack->assigned_timecode;
 
     data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
@@ -465,22 +465,24 @@ int cluster_helper_c::render() {
         assert(fref_packet->group != NULL);
         render_group->more_data =
           new_block_group->AddFrame(track_entry, 1000000 *
-                                    (pack->timecode - timecode_offset),
-                                    *data_buffer, *bref_packet->group,
-                                    *fref_packet->group, lacing_type);
+                                    (pack->assigned_timecode -
+                                     timecode_offset), *data_buffer,
+                                    *bref_packet->group, *fref_packet->group,
+                                    lacing_type);
       } else {
         render_group->more_data =
           new_block_group->AddFrame(track_entry, 1000000 *
-                                    (pack->timecode - timecode_offset),
-                                    *data_buffer, *bref_packet->group,
-                                    lacing_type);
+                                    (pack->assigned_timecode -
+                                     timecode_offset), *data_buffer,
+                                    *bref_packet->group, lacing_type);
       }
 
     } else {                    // This is a key frame. No references.
       render_group->more_data =
-        new_block_group->AddFrame(track_entry,
-                                  (pack->timecode - timecode_offset) * 1000000,
-                                  *data_buffer, lacing_type);
+        new_block_group->AddFrame(track_entry, 1000000 *
+                                  (pack->assigned_timecode -
+                                   timecode_offset), *data_buffer,
+                                  lacing_type);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);
@@ -535,7 +537,7 @@ int cluster_helper_c::render() {
            // ...or this is the video track
            (source->get_track_type() == track_video))) { 
         sp = (splitpoint_t *)safemalloc(sizeof(splitpoint_t));
-        sp->timecode = pack->timecode;
+        sp->timecode = pack->assigned_timecode;
         if ((num_cue_elements - num_cue_elements_here) > 0) {
           kax_cues->UpdateSize();
           sp->cues_size = kax_cues->ElementSize();

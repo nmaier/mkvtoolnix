@@ -135,6 +135,10 @@ vector<string> split(const char *src, const char *pattern = ",",
                      int max_num = -1);
 void strip(string &s, bool newlines = false);
 void strip(vector<string> &v, bool newlines = false);
+bool starts_with(const string &s, const char *start);
+bool starts_with(const string &s, const string &start);
+bool starts_with_case(const string &s, const char *start);
+bool starts_with_case(const string &s, const string &start);
 
 UTFstring cstr_to_UTFstring(const char *c);
 UTFstring cstrutf8_to_UTFstring(const char *c);
@@ -144,6 +148,7 @@ char *UTFstring_to_cstrutf8(const UTFstring &u);
 bool parse_int(const char *s, int64_t &value);
 bool parse_int(const char *s, int &value);
 string to_string(int64_t i);
+bool parse_double(const char *s, double &value);
 
 int get_arg_len(const char *fmt, ...);
 int get_varg_len(const char *fmt, va_list ap);

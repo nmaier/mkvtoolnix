@@ -56,7 +56,7 @@ typedef struct {
   KaxCluster *cluster;
   unsigned char *data;
   int length, superseeded, ref_priority;
-  int64_t timecode, bref, fref, duration, packet_num;
+  int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
   bool duration_mandatory;
   void *source;
 } packet_t;
@@ -120,8 +120,21 @@ typedef struct {
   vector<language_t> *track_names; // As given on the command line
   char *track_name;             // For this very track
 
+  vector<language_t> *all_ext_timecodes; // As given on the command line
+  char *ext_timecodes;          // For this very track
+
   bool no_chapters, no_attachments, no_tags;
 } track_info_t;
+
+class timecode_range_c {
+public:
+  int64_t start_frame, end_frame;
+  double fps, base_timecode;
+
+  bool operator <(const timecode_range_c &cmp) const {
+    return start_frame < cmp.start_frame;
+  }
+};
 
 class generic_reader_c;
 
@@ -156,6 +169,11 @@ protected:
 
   int hcompression;
   compression_c *compressor;
+
+  vector<timecode_range_c> *ext_timecodes;
+  uint32_t current_tc_range;
+  int64_t frameno;
+  int ext_timecodes_version;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
@@ -224,6 +242,9 @@ public:
   virtual void set_track_name(const char *name);
 
   virtual void set_default_compression_method(int method);
+
+  virtual int64_t get_next_timecode(int64_t timecode);
+  virtual void parse_ext_timecode_file(const char *name);
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

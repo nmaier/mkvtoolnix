@@ -316,6 +316,7 @@ static void usage() {
     "                           code, see --list-languages).\n"
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
+    "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -1052,6 +1053,7 @@ static void identify(const char *filename) {
   ti.aac_is_sbr = new vector<int64_t>;
   ti.compression_list = new vector<cue_creation_t>;
   ti.track_names = new vector<language_t>;
+  ti.all_ext_timecodes = new vector<language_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -1110,6 +1112,7 @@ static void parse_args(int argc, char **argv) {
   ti.stracks = new vector<int64_t>;
   ti.compression_list = new vector<cue_creation_t>;
   ti.track_names = new vector<language_t>;
+  ti.all_ext_timecodes = new vector<language_t>;
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
@@ -1595,6 +1598,14 @@ static void parse_args(int argc, char **argv) {
       ti.track_names->push_back(lang);
       i++;
 
+    } else if (!strcmp(this_arg, "--timecodes")) {
+      if (next_arg == NULL)
+        mxerror("'--timecodes' lacks its argument.\n");
+
+      parse_language(next_arg, lang, "timecodes", "timecodes", false);
+      ti.all_ext_timecodes->push_back(lang);
+      i++;
+
     }
 
     // The argument is an input file.
@@ -1644,6 +1655,7 @@ static void parse_args(int argc, char **argv) {
       for (j = 0; j < ti.track_names->size(); j++)
         safefree((*ti.track_names)[j].language);
       delete ti.track_names;
+      delete ti.all_ext_timecodes;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
@@ -1658,6 +1670,7 @@ static void parse_args(int argc, char **argv) {
       ti.stracks = new vector<int64_t>;
       ti.compression_list = new vector<cue_creation_t>;
       ti.track_names = new vector<language_t>;
+      ti.all_ext_timecodes = new vector<language_t>;
     }
   }
 
@@ -1695,6 +1708,7 @@ static void parse_args(int argc, char **argv) {
   for (j = 0; j < ti.track_names->size(); j++)
     safefree((*ti.track_names)[j].language);
   delete ti.track_names;
+  delete ti.all_ext_timecodes;
   safefree(attachment);
 }
 
@@ -2139,7 +2153,8 @@ void main_loop() {
         if ((winner == NULL) || (winner->pack == NULL))
           winner = ptzr;
         else if (ptzr->pack &&
-                 (ptzr->pack->timecode < winner->pack->timecode))
+                 (ptzr->pack->assigned_timecode <
+                  winner->pack->assigned_timecode))
           winner = ptzr;
       }
     }

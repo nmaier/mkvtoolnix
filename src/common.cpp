@@ -978,6 +978,22 @@ void strip(vector<string> &v, bool newlines) {
     strip(v[i], newlines);
 }
 
+bool starts_with(const string &s, const char *start) {
+  return strncmp(s.c_str(), start, strlen(start)) == 0;
+}
+
+bool starts_with(const string &s, const string &start) {
+  return strncmp(s.c_str(), start.c_str(), start.length()) == 0;
+}
+
+bool starts_with_case(const string &s, const char *start) {
+  return strncasecmp(s.c_str(), start, strlen(start)) == 0;
+}
+
+bool starts_with_case(const string &s, const string &start) {
+  return strncasecmp(s.c_str(), start.c_str(), start.length()) == 0;
+}
+
 /*
  * Integer parsing
  */
@@ -1016,6 +1032,29 @@ bool parse_int(const char *s, int &value) {
   value = tmp;
 
   return result;
+}
+
+bool parse_double(const char *s, double &value) {
+  char *endptr;
+  string old_locale;
+  bool ok;
+
+  old_locale = setlocale(LC_NUMERIC, "C");
+
+  ok = true;
+  value = strtod(s, &endptr);
+  if (endptr != NULL) {
+    if ((value == 0.0) && (endptr == s))
+      ok = false;
+    else if (*endptr != 0)
+      ok = false;
+  }
+  if (errno == ERANGE)
+    ok = false;
+
+  setlocale(LC_NUMERIC, old_locale.c_str());
+
+  return ok;
 }
 
 string to_string(int64_t i) {

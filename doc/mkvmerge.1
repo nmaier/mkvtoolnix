@@ -272,6 +272,37 @@ all if the switch was omitted.
 If the source file is a Matroska file then the CodecID should be enough to
 detect SBR AAC. However, if the CodecID is wrong then this switch can be used
 to correct that.
+.TP
+\fB\-\-timecodes\fR <\fITID\fR:\fIfilename\fR> Read the timecodes to
+be used for the specific track ID from \fIfilename\fR.  These
+timecodes forcefully override the timecodes that \fBmkvmerge\fR
+normally calculates. A frame in this case is the unit that
+\fBmkvmerge\fR creates separately per Matroska block. For video this
+is exactly one frame, for audio this is one packet of the specific
+audio type. E.g. for AC3 this would be a packet containing 1536
+samples. However, it should only be used for video tracks.
+.br
+ The format recognized looks like this: First line is the version
+string:
+.br
+\fB# timecode format v1\fR
+.br
+Second line gives the default number of frames per second:
+.br
+\fBassume 27.930\fR
+.br
+All following lines contain three numbers separated by commas: the
+start frame (0 is the first frame), the end frame and the number of
+frames in this range. The FPS is a floating point number with the dot
+'.' as the decimal point. The ranges can contain gaps for which the
+default FPS is used. Example:
+.br
+\fB800,1000,25\fR
+.br
+\fB1500,1700,30\fR
+.br
+Empty lines, lines containing only whitespace and lines beginning with '#'
+are ignored.
 
 .LP
 Options that only apply to video tracks:
