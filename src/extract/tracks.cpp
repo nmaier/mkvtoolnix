@@ -692,6 +692,11 @@ handle_data(KaxBlock *block,
   ssa_line_c ssa_line;
   rmff_frame_t *rmf_frame;
 
+  static const char *kax_ssa_fields[10] = {
+    "readorder", "layer", "style", "name", "marginl", "marginr",
+    "marginv", "effect", "text", NULL
+  };
+
   track = find_track(block->TrackNum());
   if ((track == NULL) || !track->in_use){
     delete block;
@@ -789,11 +794,6 @@ handle_data(KaxBlock *block,
         break;
 
       case FILE_TYPE_SSA:
-        static const char *kax_ssa_fields[10] = {
-          "readorder", "layer", "style", "name", "marginl", "marginr",
-          "marginv", "effect", "text", NULL
-        };
-
         if ((end == start) && !track->warning_printed) {
           mxwarn(_("Subtitle track %lld is missing some duration elements. "
                    "Please check the resulting SSA/ASS file for entries that "
