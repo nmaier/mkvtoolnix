@@ -111,6 +111,13 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   add_packetizer(new video_packetizer_c(this,
                                         mxsprintf("V_MPEG%d", version).c_str(),
                                         frame_rate, width, height, false, ti));
+  // Unless overridden on the command line handle the embedded aspect ratio
+  // of the MPEG-1/-2 stream.
+  if (!PTZR0->ti->aspect_ratio_given && !PTZR0->ti->display_dimensions_given) {
+    PTZR0->ti->display_dimensions_given = true;
+    PTZR0->ti->display_width = (int)(height * aspect_ratio);
+    PTZR0->ti->display_height = height;
+  }
 
   mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
          (int64_t)0);
