@@ -123,6 +123,7 @@ using namespace libmatroska;
 #define ID_CB_ENABLEDURATIONS 10076
 #define ID_CB_ENABLETIMESLICES 10077
 #define ID_CB_COMPRESSION 10078
+#define ID_CB_CLCHARSET 10079
 
 #define ID_M_FILE_NEW 20000
 #define ID_M_FILE_LOAD 20001
@@ -312,6 +313,7 @@ public:
   wxComboBox *cob_chap_language, *cob_chap_charset;
   wxCheckBox *cb_no_cues, *cb_no_clusters, *cb_disable_lacing;
   wxCheckBox *cb_enable_durations, *cb_enable_timeslices;
+  wxComboBox *cob_cl_charset;
 
 public:
   tab_global(wxWindow *parent);

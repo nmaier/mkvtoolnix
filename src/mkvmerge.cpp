@@ -249,6 +249,7 @@ static void usage() {
     "  -o, --output out         Write to the file 'out'.\n"
     "  --title <title>          Title for this output file.\n"
     "  --global-tags <file>     Read global tags from a XML file.\n"
+    "  --command-line-charset   Charset for strings on the command line\n"
     "\n Chapter handling:\n"
     "  --chapters <file>        Read chapter information from the file.\n"
     "  --chapter-language <lng> Set the 'language' element in chapter entries."
@@ -922,7 +923,7 @@ static void render_attachments(IOCallback *out) {
       if (attch->description != NULL)
         *static_cast<EbmlUnicodeString *>
           (&GetChild<KaxFileDescription>(*kax_a)) =
-          cstr_to_UTFstring(attch->description);
+          cstrutf8_to_UTFstring(attch->description);
 
       if (attch->mime_type != NULL)
         *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*kax_a)) =
@@ -1082,7 +1083,7 @@ static void identify(const char *filename) {
 
 static void parse_args(int argc, char **argv) {
   track_info_t ti;
-  int i, j;
+  int i, j, cc_command_line;
   filelist_t *file;
   char *s, *this_arg, *next_arg;
   audio_sync_t async;
@@ -1110,6 +1111,8 @@ static void parse_args(int argc, char **argv) {
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
+
+  cc_command_line = cc_local_utf8;
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -1166,6 +1169,13 @@ static void parse_args(int argc, char **argv) {
     } else if (!strcmp(this_arg, "-i") || !strcmp(this_arg, "--identify"))
       mxerror("'%s' can only be used with a file name. "
               "No other options are allowed.\n", this_arg);
+
+    else if (!strcmp(this_arg, "--command-line-charset")) {
+      if (next_arg == NULL)
+        mxerror("'--command-line-charset' lacks the charset.\n");
+      cc_command_line = utf8_init(next_arg);
+
+    }
   }
 
   if (outfile == NULL) {
@@ -1182,7 +1192,8 @@ static void parse_args(int argc, char **argv) {
       next_arg = argv[i + 1];
 
     // Ignore the options we took care of in the first step.
-    if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output")) {
+    if (!strcmp(this_arg, "-o") || !strcmp(this_arg, "--output") ||
+        !strcmp(this_arg, "--command-line-charset")) {
       i++;
       continue;
     }
@@ -1220,7 +1231,7 @@ static void parse_args(int argc, char **argv) {
       if ((next_arg == NULL) || (next_arg[0] == 0))
         mxerror("'--title' lacks the title.\n");
 
-      tmp = to_utf8(cc_local_utf8, next_arg);
+      tmp = to_utf8(cc_command_line, next_arg);
       segment_title = tmp;
       safefree(tmp);
       i++;
@@ -1325,11 +1336,9 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--attachment-description' lacks the description.\n");
 
       if (attachment->description != NULL)
-        mxwarn("More than one description given for a single attachment. "
-               "Discarding '%s' and using '%s'.\n", attachment->description,
-               next_arg);
+        mxwarn("More than one description given for a single attachment.\n");
       safefree(attachment->description);
-      attachment->description = safestrdup(next_arg);
+      attachment->description = to_utf8(cc_command_line, next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "--attachment-mime-type")) {
@@ -1580,7 +1589,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--track-name' lacks its argument.\n");
 
       parse_language(next_arg, lang, "track-name", "track name", false);
-      lang.language = to_utf8(cc_local_utf8, lang.language);
+      lang.language = to_utf8(cc_command_line, lang.language);
       ti.track_names->push_back(lang);
       i++;
 

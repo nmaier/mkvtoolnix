@@ -844,6 +844,13 @@ void mmg_dialog::update_command_line() {
     clargs.Add(global_page->tc_chapters->GetValue());
   }
 
+  if (global_page->cob_cl_charset->GetValue().Length() > 0) {
+    cmdline += "--command-line-charset \"" +
+      shell_escape(global_page->cob_cl_charset->GetValue()) + "\" ";
+    clargs.Add("--command-line-charset");
+    clargs.Add(global_page->cob_cl_charset->GetValue());
+  }
+
   if (global_page->tc_global_tags->GetValue().Length() > 0) {
     cmdline += "--global-tags \"" +
       shell_escape(global_page->tc_global_tags->GetValue()) + "\" ";
