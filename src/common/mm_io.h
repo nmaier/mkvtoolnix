@@ -39,6 +39,7 @@ protected:
   char *file_name;
   void *file;
   stack<int64_t> positions;
+  bool dos_style_newlines;
 
 public:
   mm_io_c();
@@ -78,6 +79,9 @@ public:
   virtual int truncate(int64_t pos);
 
   virtual int printf(const char *fmt, ...);
+  virtual void use_dos_style_newlines(bool yes) {
+    dos_style_newlines = yes;
+  }
 };
 
 class MTX_DLL_API mm_null_io_c: public mm_io_c {

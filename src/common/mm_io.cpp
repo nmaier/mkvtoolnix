@@ -69,11 +69,13 @@ mm_io_c::mm_io_c(const char *path,
     throw exception();
 
   file_name = safestrdup(path);
+  dos_style_newlines = false;
 }
 
 mm_io_c::mm_io_c() {
   file_name = NULL;
   file = NULL;
+  dos_style_newlines = false;
 }
 
 mm_io_c::~mm_io_c() {
@@ -175,11 +177,13 @@ mm_io_c::mm_io_c(const char *path,
     throw exception();
 
   file_name = safestrdup(path);
+  dos_style_newlines = true;
 }
 
 mm_io_c::mm_io_c() {
   file_name = NULL;
   file = NULL;
+  dos_style_newlines = true;
 }
 
 mm_io_c::~mm_io_c() {
@@ -543,9 +547,9 @@ int
 mm_io_c::printf(const char *fmt,
                 ...) {
   va_list ap;
-  string new_fmt;
+  string new_fmt, s;
   char *new_string;
-  int len;
+  int len, pos;
 
   fix_format(fmt, new_fmt);
   va_start(ap, fmt);
@@ -553,10 +557,17 @@ mm_io_c::printf(const char *fmt,
   new_string = (char *)safemalloc(len + 1);
   vsprintf(new_string, new_fmt.c_str(), ap);
   va_end(ap);
-  len = write(new_string, len);
+  s = new_string;
   safefree(new_string);
+  if (dos_style_newlines) {
+    pos = 0;
+    while ((pos = s.find('\n', pos)) >= 0) {
+      s.replace(pos, 1, "\n\r");
+      pos += 2;
+    }
+  }
 
-  return len;
+  return write(s.c_str(), s.length());
 }
 
 /*
