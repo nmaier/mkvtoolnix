@@ -206,6 +206,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_language->Append(wxT("none"));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
+  cob_language->SetSizeHints(0, -1);
   siz_fg->Add(cob_language, 0, wxGROW | wxRIGHT, 15);
 
   st_delay = new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):"));
@@ -216,6 +217,7 @@ tab_input::tab_input(wxWindow *parent):
                            "negative. Only applies to audio and subtitle "
                            "tracks. Some audio formats cannot be delayed at "
                            "the moment."));
+  tc_delay->SetSizeHints(0, -1);
   siz_fg->Add(tc_delay, 0, wxGROW, 0);
 
   for (i = 0; i < siz_fg->GetCols(); i++)
@@ -228,6 +230,7 @@ tab_input::tab_input(wxWindow *parent):
   tc_track_name = new wxTextCtrl(this, ID_TC_TRACKNAME, wxT(""));
   tc_track_name->SetToolTip(TIP("Name for this track, e.g. \"director's "
                                 "comments\"."));
+  tc_track_name->SetSizeHints(0, -1);
   siz_fg->Add(tc_track_name, 0, wxGROW | wxRIGHT, 15);
 
   st_stretch = new wxStaticText(this, wxID_STATIC, wxT("Stretch by:"));
@@ -238,6 +241,7 @@ tab_input::tab_input(wxWindow *parent):
                              "factor. This should be a positive floating "
                              "point number. Not all formats can be stretched "
                              "at the moment."));
+  tc_stretch->SetSizeHints(0, -1);
   siz_fg->Add(tc_stretch, 0, wxGROW, 0);
 
   for (i = 0; i < siz_fg->GetCols(); i++)
@@ -257,6 +261,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_cues->Append(wxT("only for I frames"));
   cob_cues->Append(wxT("for all frames"));
   cob_cues->Append(wxT("none"));
+  cob_cues->SetSizeHints(0, -1);
   siz_fg->Add(cob_cues, 0, wxGROW | wxRIGHT, 15);
 
   st_sub_charset = new wxStaticText(this, wxID_STATIC,
@@ -281,6 +286,7 @@ tab_input::tab_input(wxWindow *parent):
 
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_sub_charset->Append(sorted_charsets[i]);
+  cob_sub_charset->SetSizeHints(0, -1);
   siz_fg->Add(cob_sub_charset, 0, wxGROW, 0);
 
   for (i = 0; i < siz_fg->GetCols(); i++)
@@ -303,6 +309,7 @@ tab_input::tab_input(wxWindow *parent):
                              "tracks that use the AVI compatibility mode "
                              "or for QuickTime video tracks. This option "
                              "CANNOT be used to change Matroska's CodecID."));
+  cob_fourcc->SetSizeHints(0, -1);
   siz_fg->Add(cob_fourcc, 0, wxGROW | wxRIGHT, 15);
 
   st_compression = new wxStaticText(this, -1, wxT("Compression:"));
@@ -323,6 +330,7 @@ tab_input::tab_input(wxWindow *parent):
                                   "VobSubs will be automatically compressed "
                                   "with zlib. 'none' results is files that "
                                   "are a lot larger."));
+  cob_compression->SetSizeHints(0, -1);
   siz_fg->Add(cob_compression, 0, wxGROW, 0);
   siz_toptions->Add(siz_fg, 4, wxGROW | wxLEFT | wxRIGHT, 10);
 
