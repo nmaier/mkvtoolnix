@@ -2553,7 +2553,8 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 }
 	 i += 8;
       }
-      else if(strncasecmp(hdrl_data+i,"JUNK",4) == 0) {
+      else if((strncasecmp(hdrl_data+i,"JUNK",4) == 0) ||
+              ((strncasecmp(hdrl_data+i,"strn",4) == 0))){
 	 i += 8;
 	 // do not reset lasttag
       } else
