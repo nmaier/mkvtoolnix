@@ -203,10 +203,10 @@ tab_settings::load_preferences() {
   query_mkvmerge_capabilities();
 
   cfg->Read(wxT("process_priority"), &priority, wxT("normal"));
-  cob_priority->SetSelection(0);
+  cob_priority->SetValue(wxT("normal"));
   for (i = 0; i < cob_priority->GetCount(); i++)
     if (priority == cob_priority->GetString(i)) {
-      cob_priority->SetSelection(i);
+      cob_priority->SetValue(priority);
       break;
     }
 
