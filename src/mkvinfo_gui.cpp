@@ -17,6 +17,10 @@
 using namespace libebml;
 using namespace libmatroska;
 
+#if ! wxCHECK_VERSION(2,4,2)
+# define wxTreeItemIdValue long
+#endif
+
 mi_frame *frame;
 
 enum {
