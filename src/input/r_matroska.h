@@ -114,7 +114,7 @@ private:
   vector<kax_track_t *> tracks;
 
   int64_t tc_scale;
-  uint32_t cluster_tc;
+  int64_t cluster_tc;
 
   mm_io_c *in;
 

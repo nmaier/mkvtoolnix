@@ -1,5 +1,9 @@
 2004-09-02  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The Matroska reader was not handling very big
+	cluster timecodes correctly. Those can occur when the timecode
+	scale factor is very small.
+
 	* mkvmerge: bug fix: Empty clusters in Matroska files no longer
 	make mkvmerge think that file has been read completely.
 
