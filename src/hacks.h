@@ -26,6 +26,8 @@
 #define ENGAGE_SPACE_AFTER_CHAPTERS "space_after_chapters"
 #define ENGAGE_NO_CHAPTERS_IN_META_SEEK "no_chapters_in_meta_seek"
 #define ENGAGE_NO_META_SEEK "no_meta_seek"
+#define ENGAGE_LACING_XIPH "lacing_xiph"
+#define ENGAGE_LACING_EBML "lacing_ebml"
 
 bool hack_engaged(const char *hack);
 

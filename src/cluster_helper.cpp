@@ -26,6 +26,7 @@
 
 #include "cluster_helper.h"
 #include "common.h"
+#include "hacks.h"
 #include "mkvmerge.h"
 #include "p_video.h"
 #include "p_vorbis.h"
@@ -361,6 +362,7 @@ int cluster_helper_c::render() {
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
   render_groups_t *render_group;
+  LacingType lacing_type;
 
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
@@ -376,6 +378,13 @@ int cluster_helper_c::render() {
   elements_in_cluster = 0;
   num_cue_elements_here = 0;
   last_block_group = NULL;
+
+  if (hack_engaged(ENGAGE_LACING_XIPH))
+    lacing_type = LACING_XIPH;
+  else if (hack_engaged(ENGAGE_LACING_EBML))
+    lacing_type = LACING_EBML;
+  else
+    lacing_type = LACING_AUTO;
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
@@ -458,20 +467,20 @@ int cluster_helper_c::render() {
           new_block_group->AddFrame(track_entry, 1000000 *
                                     (pack->timecode - timecode_offset),
                                     *data_buffer, *bref_packet->group,
-                                    *fref_packet->group, LACING_AUTO);
+                                    *fref_packet->group, lacing_type);
       } else {
         render_group->more_data =
           new_block_group->AddFrame(track_entry, 1000000 *
                                     (pack->timecode - timecode_offset),
                                     *data_buffer, *bref_packet->group,
-                                    LACING_AUTO);
+                                    lacing_type);
       }
 
     } else {                    // This is a key frame. No references.
       render_group->more_data =
         new_block_group->AddFrame(track_entry,
                                   (pack->timecode - timecode_offset) * 1000000,
-                                  *data_buffer, LACING_AUTO);
+                                  *data_buffer, lacing_type);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);

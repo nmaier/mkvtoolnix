@@ -192,6 +192,8 @@ const char *mosu_hacks[] = {
   ENGAGE_SPACE_AFTER_CHAPTERS,
   ENGAGE_NO_CHAPTERS_IN_META_SEEK,
   ENGAGE_NO_META_SEEK,
+  ENGAGE_LACING_XIPH,
+  ENGAGE_LACING_EBML,
   NULL
 };
 vector<const char *> engaged_hacks;
