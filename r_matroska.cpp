@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.18 2003/05/03 19:42:34 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.19 2003/05/03 20:22:18 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -165,6 +165,17 @@ mkv_track_t *mkv_reader_c::find_track_by_num(uint32_t n, mkv_track_t *c) {
   
   for (i = 0; i < num_tracks; i++)
     if ((tracks[i] != NULL) && (tracks[i]->tnum == n) &&
+        (tracks[i] != c))
+      return tracks[i];
+  
+  return NULL;
+}
+
+mkv_track_t *mkv_reader_c::find_track_by_uid(uint32_t uid, mkv_track_t *c) {
+  int i;
+  
+  for (i = 0; i < num_tracks; i++)
+    if ((tracks[i] != NULL) && (tracks[i]->tuid == uid) &&
         (tracks[i] != c))
       return tracks[i];
   
@@ -506,12 +517,23 @@ int mkv_reader_c::read_headers() {
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
                 KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
                 tnum.ReadData(es->I_O());
-                fprintf(stdout, "matroska_reader: |  + Track number %d\n",
+                fprintf(stdout, "matroska_reader: |  + Track number: %d\n",
                         uint8(tnum));
                 track->tnum = uint8(tnum);
                 if (find_track_by_num(track->tnum, track) != NULL)
                   fprintf(stdout, "matroska_reader: |  + WARNING: There's "
                           "more than one track with the number %u.\n",
+                          track->tnum);
+
+              } else if (EbmlId(*l3) == KaxTrackUID::ClassInfos.GlobalId) {
+                KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
+                tuid.ReadData(es->I_O());
+                fprintf(stdout, "matroska_reader: |  + Track UID: %u\n",
+                        uint32(tuid));
+                track->tuid = uint32(tuid);
+                if (find_track_by_uid(track->tuid, track) != NULL)
+                  fprintf(stdout, "matroska_reader: |  + WARNING: There's "
+                          "more than one track with the UID %u.\n",
                           track->tnum);
 
               } else if (EbmlId(*l3) == KaxTrackType::ClassInfos.GlobalId) {
@@ -806,6 +828,11 @@ void mkv_reader_c::create_packetizers() {
           exit(1);
           break;
       }
+      if (t->tuid != 0)
+        if (!t->packetizer->set_uid(t->tuid))
+          fprintf(stdout, "Info: matroska_reader: Could not keep the track "
+                  "UID %u because it is already allocated for the new "
+                  "file.\n", t->tuid);
     }
   }
 }

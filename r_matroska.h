@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.8 2003/05/03 19:53:06 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.9 2003/05/03 20:22:18 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -37,7 +37,7 @@ using namespace LIBMATROSKA_NAMESPACE;
 #define MKVD_TIMECODESCALE 1000000 // 1000000 = 1ms
 
 typedef struct {
-  uint32_t tnum;
+  uint32_t tnum, tuid;
   
   char *codec_id;
   int ms_compat;
@@ -113,6 +113,7 @@ private:
   virtual void create_packetizers();
   virtual mkv_track_t *new_mkv_track();
   virtual mkv_track_t *find_track_by_num(uint32_t num, mkv_track_t *c = NULL);
+  virtual mkv_track_t *find_track_by_uid(uint32_t uid, mkv_track_t *c = NULL);
   virtual void verify_tracks();
   virtual int packets_available();
 };

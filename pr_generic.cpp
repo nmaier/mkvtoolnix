@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.31 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.32 2003/05/03 20:22:18 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -39,6 +39,7 @@ generic_packetizer_c::generic_packetizer_c(track_info_t *nti) throw(error_c):
 
   // Set default header values to 'unset'.
   hserialno = -2;
+  huid = 0;
   htrack_type = -1;
   htrack_min_cache = -1;
   htrack_max_cache = -1;
@@ -89,6 +90,16 @@ KaxTrackEntry *generic_packetizer_c::get_track_entry() {
 
 void generic_packetizer_c::set_serial(int serial) {
   hserialno = serial;
+}
+
+int generic_packetizer_c::set_uid(uint32_t uid) {
+  if (is_unique_uint32(uid)) {
+    add_unique_uint32(uid);
+    huid = uid;
+    return 1;
+  }
+
+  return 0;
 }
 
 void generic_packetizer_c::set_track_type(int type) {
@@ -200,11 +211,14 @@ void generic_packetizer_c::set_headers() {
     KaxTrackNumber &tnumber =
       GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
     *(static_cast<EbmlUInteger *>(&tnumber)) = hserialno;
-
-    KaxTrackUID &tuid =
-      GetChild<KaxTrackUID>(static_cast<KaxTrackEntry &>(*track_entry));
-    *(static_cast<EbmlUInteger *>(&tuid)) = create_unique_uint32();
   }
+
+  if (huid == 0)
+    huid = create_unique_uint32();
+
+  KaxTrackUID &tuid =
+    GetChild<KaxTrackUID>(static_cast<KaxTrackEntry &>(*track_entry));
+  *(static_cast<EbmlUInteger *>(&tuid)) = huid;
 
   if (htrack_type != -1)
     *(static_cast<EbmlUInteger *>
