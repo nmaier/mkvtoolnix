@@ -55,8 +55,6 @@ extern char *dump_packets;
 
 int64_t create_track_number(generic_reader_c *reader, int64_t tid);
 
-bool hack_engaged(const char *hack);
-
 void add_packetizer_globally(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 
