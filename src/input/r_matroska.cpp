@@ -98,7 +98,9 @@ using namespace libmatroska;
  * Probes a file by simply comparing the first four bytes to the EBML
  * head signature.
  */
-int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+kax_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
@@ -121,12 +123,13 @@ int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 // {{{ C'TOR
 
-kax_reader_c::kax_reader_c(track_info_c *nti) throw (error_c):
+kax_reader_c::kax_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
 
   title = "";
   segment_duration = 0.0;
-  first_timecode = -1.0;
+  first_timecode = -1;
 
   if (!read_headers())
     throw error_c(PFX "Failed to read the headers.");
@@ -182,7 +185,8 @@ kax_reader_c::~kax_reader_c() {
 
 // {{{ FUNCTIONS packets_available(), new_kax_track(), find_track*
 
-int kax_reader_c::packets_available() {
+int
+kax_reader_c::packets_available() {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
@@ -195,7 +199,8 @@ int kax_reader_c::packets_available() {
   return 1;
 }
 
-kax_track_t *kax_reader_c::new_kax_track() {
+kax_track_t *
+kax_reader_c::new_kax_track() {
   kax_track_t *t;
 
   t = (kax_track_t *)safemalloc(sizeof(kax_track_t));
@@ -209,7 +214,9 @@ kax_track_t *kax_reader_c::new_kax_track() {
   return t;
 }
 
-kax_track_t *kax_reader_c::find_track_by_num(uint32_t n, kax_track_t *c) {
+kax_track_t *
+kax_reader_c::find_track_by_num(uint32_t n,
+                                kax_track_t *c) {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
@@ -220,7 +227,9 @@ kax_track_t *kax_reader_c::find_track_by_num(uint32_t n, kax_track_t *c) {
   return NULL;
 }
 
-kax_track_t *kax_reader_c::find_track_by_uid(uint32_t uid, kax_track_t *c) {
+kax_track_t *
+kax_reader_c::find_track_by_uid(uint32_t uid,
+                                kax_track_t *c) {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
@@ -235,7 +244,8 @@ kax_track_t *kax_reader_c::find_track_by_uid(uint32_t uid, kax_track_t *c) {
 
 // {{{ FUNCTION kax_reader_c::verify_tracks()
 
-void kax_reader_c::verify_tracks() {
+void
+kax_reader_c::verify_tracks() {
   int tnum, i;
   unsigned char *c;
   uint32_t u, offset, length;
@@ -557,8 +567,10 @@ void kax_reader_c::verify_tracks() {
 
 // {{{ FUNCTION kax_reader_c::handle_attachments()
 
-void kax_reader_c::handle_attachments(mm_io_c *io, EbmlElement *l0,
-                                      int64_t pos) {
+void
+kax_reader_c::handle_attachments(mm_io_c *io,
+                                 EbmlElement *l0,
+                                 int64_t pos) {
   KaxAttachments *atts;
   KaxAttached *att;
   EbmlElement *l1, *l2;
@@ -646,8 +658,10 @@ void kax_reader_c::handle_attachments(mm_io_c *io, EbmlElement *l0,
   io->restore_pos();
 }
 
-void kax_reader_c::handle_chapters(mm_io_c *io, EbmlElement *l0,
-                                   int64_t pos) {
+void
+kax_reader_c::handle_chapters(mm_io_c *io,
+                              EbmlElement *l0,
+                              int64_t pos) {
   KaxChapters *chapters;
   EbmlElement *l1, *l2;
   int upper_lvl_el;
@@ -685,7 +699,8 @@ void kax_reader_c::handle_chapters(mm_io_c *io, EbmlElement *l0,
 #define FINDNEXT(p, c, e) (static_cast<c *> \
   (((EbmlMaster *)p)->FindNextElt(*e, false)))
 
-int kax_reader_c::read_headers() {
+int
+kax_reader_c::read_headers() {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
@@ -1260,7 +1275,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   ptzr->set_codec_private((unsigned char *)t->private_data,
                           t->private_size);
   if (t->v_frate > 0.0)
-    ptzr->set_track_default_duration_ns((int64_t)(1000000000.0 / t->v_frate));
+    ptzr->set_track_default_duration((int64_t)(1000000000.0 / t->v_frate));
   if (t->min_cache > 0)
     ptzr->set_track_min_cache(t->min_cache);
   if (t->max_cache > 0)
@@ -1303,7 +1318,8 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
              "allocated for the new file.\n", t->tuid);
 }
 
-void kax_reader_c::create_packetizer(int64_t tid) {
+void
+kax_reader_c::create_packetizer(int64_t tid) {
   uint32_t i;
   kax_track_t *t;
   track_info_c *nti;
@@ -1527,7 +1543,8 @@ void kax_reader_c::create_packetizer(int64_t tid) {
   }
 }
 
-void kax_reader_c::create_packetizers() {
+void
+kax_reader_c::create_packetizers() {
   uint32_t i;
 
   for (i = 0; i < ti->track_order->size(); i++)
@@ -1544,7 +1561,8 @@ void kax_reader_c::create_packetizers() {
 
 // {{{ FUNCTION kax_reader_c::read()
 
-int kax_reader_c::read(generic_packetizer_c *) {
+int
+kax_reader_c::read(generic_packetizer_c *) {
   int upper_lvl_el, i, bgidx;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
@@ -1591,9 +1609,8 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
         cluster_tc = uint64(*ctc);
         cluster->InitTimecode(cluster_tc, tc_scale);
-        if (first_timecode == -1.0)
-          first_timecode = (float)cluster_tc * (float)tc_scale /
-            1000000.0;
+        if (first_timecode == -1)
+          first_timecode = cluster_tc * tc_scale;
 
         for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
           if (!(EbmlId(*(*cluster)[bgidx]) ==
@@ -1612,10 +1629,10 @@ int kax_reader_c::read(generic_packetizer_c *) {
             (block_group->FindFirstElt(KaxReferenceBlock::ClassInfos, false));
           while (ref_block != NULL) {
             if (int64(*ref_block) <= 0) {
-              block_bref = int64(*ref_block) * tc_scale / 1000000;
+              block_bref = int64(*ref_block) * tc_scale;
               bref_found = true;
             } else {
-              block_fref = int64(*ref_block) * tc_scale / 1000000;
+              block_fref = int64(*ref_block) * tc_scale;
               fref_found = true;
             }
 
@@ -1641,19 +1658,19 @@ int kax_reader_c::read(generic_packetizer_c *) {
               block_duration = (int64_t)uint64(*duration) /
                 block->NumberFrames();
             else if (block_track->v_frate != 0)
-              block_duration = (int64_t)(1000.0 / block_track->v_frate);
+              block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
 
-            last_timecode = block->GlobalTimecode() / 1000000;
+            last_timecode = block->GlobalTimecode();
             if (bref_found)
-                block_bref += (int64_t)last_timecode;
+                block_bref += last_timecode;
             if (fref_found)
-              block_fref += (int64_t)last_timecode;
+              block_fref += last_timecode;
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {
               DataBuffer &data = block->GetBuffer(i);
               ((passthrough_packetizer_c *)block_track->packetizer)->
                 process((unsigned char *)data.Buffer(), data.Size(),
-                        (int64_t)last_timecode, block_duration,
+                        last_timecode, block_duration,
                         block_bref, block_fref, duration != NULL);
             }
 
@@ -1665,17 +1682,17 @@ int kax_reader_c::read(generic_packetizer_c *) {
               block_duration = (int64_t)uint64(*duration) /
                 block->NumberFrames();
             else if (block_track->v_frate != 0)
-              block_duration = (int64_t)(1000.0 / block_track->v_frate);
+              block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
 
             if ((block_track->type == 's') && (block_duration == -1) &&
                 (block_track->sub_type == 't')) {
-              mxwarn("Text subtitle block does not "
-                     "contain a block duration element. This file is "
-                     "broken. Assuming a duration of 1000ms.\n");
-              block_duration = 1000;
+              mxwarn("Text subtitle block does not contain a block duration "
+                     "element. This file is broken. Assuming a duration of "
+                     "1000ms.\n");
+              block_duration = 1000000000;
             }
 
-            last_timecode = block->GlobalTimecode() / 1000000;
+            last_timecode = block->GlobalTimecode();
             if (bref_found) {
               if (block_track->a_formattag == FOURCC('r', 'e', 'a', 'l'))
                 block_bref = block_track->previous_timecode;
@@ -1779,7 +1796,8 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
 // {{{ FUNCTIONS display_*, set_headers()
 
-int kax_reader_c::display_priority() {
+int
+kax_reader_c::display_priority() {
   int i;
 
   if (segment_duration != 0.0)
@@ -1794,7 +1812,8 @@ int kax_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void kax_reader_c::display_progress(bool final) {
+void
+kax_reader_c::display_progress(bool final) {
   int i;
 
   if (segment_duration != 0.0) {
@@ -1802,9 +1821,10 @@ void kax_reader_c::display_progress(bool final) {
       mxinfo("progress: %.3fs/%.3fs (100%%)\r", segment_duration,
              segment_duration);
     else
-      mxinfo("progress: %.3fs/%.3fs (%d%%)\r",
-             (last_timecode - first_timecode) / 1000.0, segment_duration,
-             (int)((last_timecode - first_timecode) / 10 / segment_duration));
+      mxinfo("progress: %.3fs/%.3fs (%lld%%)\r",
+             (last_timecode - first_timecode) / 1000000000.0, segment_duration,
+             (int64_t)((last_timecode - first_timecode) / 10000000.0 /
+                       segment_duration));
     return;
   }
 
@@ -1821,7 +1841,8 @@ void kax_reader_c::display_progress(bool final) {
   fflush(stdout);
 }
 
-void kax_reader_c::set_headers() {
+void
+kax_reader_c::set_headers() {
   uint32_t i, k;
   kax_track_t *t;
 
@@ -1861,7 +1882,8 @@ void kax_reader_c::set_headers() {
 
 // {{{ FUNCTION kax_reader_c::identify()
 
-void kax_reader_c::identify() {
+void
+kax_reader_c::identify() {
   int i;
   string info;
   char *str;
@@ -1919,7 +1941,8 @@ void kax_reader_c::identify() {
 
 // }}}
 
-int64_t kax_reader_c::get_queued_bytes() {
+int64_t
+kax_reader_c::get_queued_bytes() {
   int64_t bytes;
   uint32_t i;
 
@@ -1931,7 +1954,8 @@ int64_t kax_reader_c::get_queued_bytes() {
   return bytes;
 }
 
-void kax_reader_c::add_attachments(KaxAttachments *a) {
+void
+kax_reader_c::add_attachments(KaxAttachments *a) {
   uint32_t i;
   KaxAttached *attached;
   KaxFileData *fdata;
@@ -1965,8 +1989,11 @@ void kax_reader_c::add_attachments(KaxAttachments *a) {
   }
 }
 
-bool kax_reader_c::reverse_encodings(kax_track_t *track, unsigned char *&data,
-                                     uint32_t &size, uint32_t type) {
+bool
+kax_reader_c::reverse_encodings(kax_track_t *track,
+                                unsigned char *&data,
+                                uint32_t &size,
+                                uint32_t type) {
   int new_size;
   unsigned char *new_data, *old_data;
   bool modified;
@@ -2006,7 +2033,8 @@ bool kax_reader_c::reverse_encodings(kax_track_t *track, unsigned char *&data,
   return modified;
 }
 
-void kax_reader_c::flush_packetizers() {
+void
+kax_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < tracks.size(); i++)

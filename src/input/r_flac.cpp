@@ -41,30 +41,38 @@
 #define FPFX "flac_reader: "
 
 static FLAC__StreamDecoderReadStatus
-flac_read_cb(const FLAC__StreamDecoder *, FLAC__byte buffer[],
-            unsigned *bytes, void *client_data) {
+flac_read_cb(const FLAC__StreamDecoder *,
+             FLAC__byte buffer[],
+             unsigned *bytes,
+             void *client_data) {
   return ((flac_reader_c *)client_data)->read_cb(buffer, bytes);
 }
 
 static FLAC__StreamDecoderWriteStatus
-flac_write_cb(const FLAC__StreamDecoder *, const FLAC__Frame *frame,
-             const FLAC__int32 * const data[], void *client_data) {
+flac_write_cb(const FLAC__StreamDecoder *,
+              const FLAC__Frame *frame,
+              const FLAC__int32 * const data[],
+              void *client_data) {
   return ((flac_reader_c *)client_data)->write_cb(frame, data);
 }
 
-static void flac_metadata_cb(const FLAC__StreamDecoder *,
-                            const FLAC__StreamMetadata *metadata,
-                            void *client_data) {
+static void
+flac_metadata_cb(const FLAC__StreamDecoder *,
+                 const FLAC__StreamMetadata *metadata,
+                 void *client_data) {
   ((flac_reader_c *)client_data)->metadata_cb(metadata);
 }
 
-static void flac_error_cb(const FLAC__StreamDecoder *,
-                         FLAC__StreamDecoderErrorStatus status,
-                         void *client_data) {
+static void
+flac_error_cb(const FLAC__StreamDecoder *,
+              FLAC__StreamDecoderErrorStatus status,
+              void *client_data) {
   ((flac_reader_c *)client_data)->error_cb(status);
 }
 
-int flac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+flac_reader_c::probe_file(mm_io_c *mm_io,
+                          int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
@@ -82,7 +90,8 @@ int flac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-flac_reader_c::flac_reader_c(track_info_c *nti) throw (error_c):
+flac_reader_c::flac_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   unsigned char *buf;
   uint32_t block_size;
@@ -142,7 +151,8 @@ flac_reader_c::~flac_reader_c() {
   safefree(read_buffer);
 }
 
-bool flac_reader_c::parse_file() {
+bool
+flac_reader_c::parse_file() {
   FLAC__StreamDecoder *decoder;
   int result, offset, pd_size;
   uint32_t i;
@@ -229,7 +239,8 @@ bool flac_reader_c::parse_file() {
   return metadata_parsed;
 }
 
-int flac_reader_c::read(generic_packetizer_c *) {
+int
+flac_reader_c::read(generic_packetizer_c *) {
   unsigned char *buf;
 
   if (current_block == blocks.end())
@@ -241,8 +252,9 @@ int flac_reader_c::read(generic_packetizer_c *) {
     packetizer->flush();
     return 0;
   }
-  packetizer->process(buf, current_block->len, samples * 1000 / sample_rate,
-                      current_block->samples * 1000 / sample_rate);
+  packetizer->process(buf, current_block->len, samples * 1000000000 /
+                      sample_rate, current_block->samples * 1000000000 /
+                      sample_rate);
   samples += current_block->samples;
   current_block++;
 
@@ -253,7 +265,8 @@ int flac_reader_c::read(generic_packetizer_c *) {
   return EMOREDATA;
 }
 
-bool flac_reader_c::fill_buffer() {
+bool
+flac_reader_c::fill_buffer() {
   int progress;
 
   if (pos == size) {
@@ -273,7 +286,8 @@ bool flac_reader_c::fill_buffer() {
 }
 
 FLAC__StreamDecoderReadStatus
-flac_reader_c::read_cb(FLAC__byte buffer[], unsigned *bytes) {
+flac_reader_c::read_cb(FLAC__byte buffer[],
+                       unsigned *bytes) {
   if (done)
     return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
   if (!fill_buffer())
@@ -304,7 +318,8 @@ flac_reader_c::write_cb(const FLAC__Frame *frame,
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
-void flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
+void
+flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
   flac_block_t block;
 
   block.type = FLAC_BLOCK_TYPE_HEADERS;
@@ -343,15 +358,18 @@ void flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
   }
 }
 
-void flac_reader_c::error_cb(FLAC__StreamDecoderErrorStatus status) {
+void
+flac_reader_c::error_cb(FLAC__StreamDecoderErrorStatus status) {
   mxerror(FPFX "Error parsing the file: %d\n", (int)status);
 }
 
-int flac_reader_c::display_priority() {
+int
+flac_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void flac_reader_c::display_progress(bool final) {
+void
+flac_reader_c::display_progress(bool final) {
   if (final)
     mxinfo("progress: %u/%u blocks (100%%)\r", blocks.size(), blocks.size());
   else
@@ -361,17 +379,21 @@ void flac_reader_c::display_progress(bool final) {
            blocks.size());
 }
 
-void flac_reader_c::set_headers() {
+void
+flac_reader_c::set_headers() {
   packetizer->set_headers();
 }
 
-void flac_reader_c::identify() {
+void
+flac_reader_c::identify() {
   mxinfo("File '%s': container: FLAC\nTrack ID 0: audio (FLAC)\n", ti->fname);
 }
 
 #else  // HAVE_FLAC_FORMAT_H
 
-int flac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+flac_reader_c::probe_file(mm_io_c *mm_io,
+                          int64_t size) {
   unsigned char data[4];
 
   if (size < 4)

@@ -68,7 +68,9 @@ using namespace std;
 
 #define PFX "vobsub_reader: "
 
-int vobsub_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+vobsub_reader_c::probe_file(mm_io_c *mm_io,
+                            int64_t size) {
   char chunk[80];
 
   try {
@@ -85,7 +87,8 @@ int vobsub_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-vobsub_reader_c::vobsub_reader_c(track_info_c *nti) throw (error_c):
+vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   string sub_name, line;
   int len;
@@ -147,7 +150,8 @@ vobsub_reader_c::~vobsub_reader_c() {
   delete idx_file;
 }
 
-void vobsub_reader_c::create_packetizer(int64_t tid) {
+void
+vobsub_reader_c::create_packetizer(int64_t tid) {
   uint32_t i, k;
   int64_t avg_duration;
   char language[4];
@@ -173,7 +177,7 @@ void vobsub_reader_c::create_packetizer(int64_t tid) {
         avg_duration += tracks[i]->timecodes[k + 1] - tracks[i]->timecodes[k];
       }
     } else
-      avg_duration = 1000;
+      avg_duration = 1000000000;
 
     if (tracks[i]->timecodes.size() > 1)
       avg_duration /= (tracks[i]->timecodes.size() - 1);
@@ -186,7 +190,8 @@ void vobsub_reader_c::create_packetizer(int64_t tid) {
   }
 }
 
-void vobsub_reader_c::create_packetizers() {
+void
+vobsub_reader_c::create_packetizers() {
   uint32_t i;
 
   for (i = 0; i < ti->track_order->size(); i++)
@@ -195,7 +200,8 @@ void vobsub_reader_c::create_packetizers() {
     create_packetizer(i);
 }
 
-void vobsub_reader_c::parse_headers() {
+void
+vobsub_reader_c::parse_headers() {
   string line;
   const char *sline;
   char language[3];
@@ -252,7 +258,7 @@ void vobsub_reader_c::parse_headers() {
       timestamp = (int64_t)hour * 60 * 60 * 1000 +
         (int64_t)minute * 60 * 1000 + (int64_t)second * 1000 +
         (int64_t)msecond;
-      track->timecodes.push_back(timestamp);
+      track->timecodes.push_back(timestamp * 1000000);
 
       continue;
     }
@@ -294,14 +300,15 @@ void vobsub_reader_c::parse_headers() {
                  (uint32_t)(tracks[i]->positions[k] >> 32),
                  (uint32_t)(tracks[i]->positions[k] & 0xffffffff),
                  tracks[i]->sizes[k], (uint32_t)tracks[i]->sizes[k],
-                 tracks[i]->timecodes[k],
-                 ARG_TIMECODE(tracks[i]->timecodes[k]));
+                 tracks[i]->timecodes[k] / 1000000,
+                 ARG_TIMECODE_NS(tracks[i]->timecodes[k]));
       }
     }
   }
 }
 
-int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
+int
+vobsub_reader_c::read(generic_packetizer_c *ptzr) {
   vobsub_track_c *track;
   unsigned char *data;
   uint32_t i, id;
@@ -327,7 +334,8 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
            "then this should not worry you. In fact, this warning should not "
            "worry anyone, but make sure that the very last subtitles are "
            "present in the output file.\n",
-           track->timecodes[i] / 1000, track->idx, ti->fname, track->sizes[i]);
+           track->timecodes[i] / 1000000000, track->idx, ti->fname,
+           track->sizes[i]);
     track->idx++;
     return EMOREDATA;
   }
@@ -345,7 +353,7 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
          track->sizes[i], (uint32_t)track->sizes[i], track->positions[i],
          (uint32_t)(track->positions[i] >> 32),
          (uint32_t)(track->positions[i] & 0xffffffff),
-         track->timecodes[i], ARG_TIMECODE(track->timecodes[i]),
+         track->timecodes[i], ARG_TIMECODE_NS(track->timecodes[i]),
          track->durations[i]);
   track->packetizer->process(data, track->sizes[i], track->timecodes[i],
                              track->durations[i]);
@@ -359,20 +367,23 @@ int vobsub_reader_c::read(generic_packetizer_c *ptzr) {
     return EMOREDATA;
 }
 
-int vobsub_reader_c::display_priority() {
+int
+vobsub_reader_c::display_priority() {
   return DISPLAYPRIORITY_LOW;
 }
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void vobsub_reader_c::display_progress(bool final) {
+void
+vobsub_reader_c::display_progress(bool final) {
   mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
 }
 
-void vobsub_reader_c::identify() {
+void
+vobsub_reader_c::identify() {
   uint32_t i;
   string info;
   const char *language;
@@ -391,7 +402,8 @@ void vobsub_reader_c::identify() {
   }
 }
 
-void vobsub_reader_c::set_headers() {
+void
+vobsub_reader_c::set_headers() {
   uint32_t i, k;
   vobsub_track_c *t;
 
@@ -417,7 +429,8 @@ void vobsub_reader_c::set_headers() {
     }
 }
 
-void vobsub_reader_c::flush_packetizers() {
+void
+vobsub_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < tracks.size(); i++)

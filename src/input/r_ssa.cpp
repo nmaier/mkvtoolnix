@@ -43,11 +43,14 @@ public:
   bool operator < (const ssa_line_c &cmp) const;
 };
 
-bool ssa_line_c::operator < (const ssa_line_c &cmp) const {
+bool
+ssa_line_c::operator < (const ssa_line_c &cmp) const {
   return start < cmp.start;
 }
 
-int ssa_reader_c::probe_file(mm_text_io_c *mm_io, int64_t size) {
+int
+ssa_reader_c::probe_file(mm_text_io_c *mm_io,
+                         int64_t size) {
   string line;
 
   try {
@@ -62,7 +65,8 @@ int ssa_reader_c::probe_file(mm_text_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-ssa_reader_c::ssa_reader_c(track_info_c *nti) throw (error_c):
+ssa_reader_c::ssa_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   string line, global;
   int64_t old_pos;
@@ -151,7 +155,9 @@ ssa_reader_c::~ssa_reader_c() {
     delete textsubs_packetizer;
 }
 
-string ssa_reader_c::get_element(const char *index, vector<string> &fields) {
+string
+ssa_reader_c::get_element(const char *index,
+                          vector<string> &fields) {
   int i;
 
   for (i = 0; i < format.size(); i++)
@@ -161,7 +167,8 @@ string ssa_reader_c::get_element(const char *index, vector<string> &fields) {
   return string("");
 }
 
-int64_t ssa_reader_c::parse_time(string &stime) {
+int64_t
+ssa_reader_c::parse_time(string &stime) {
   int64_t th, tm, ts, tds;
   int pos;
   string s;
@@ -196,10 +203,12 @@ int64_t ssa_reader_c::parse_time(string &stime) {
   if (!parse_int(stime.c_str(), tds))
     return -1;
 
-  return tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000;
+  return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) *
+    1000000;
 }
 
-string ssa_reader_c::recode_text(vector<string> &fields) {
+string
+ssa_reader_c::recode_text(vector<string> &fields) {
   char *s;
   string res;
 
@@ -212,7 +221,8 @@ string ssa_reader_c::recode_text(vector<string> &fields) {
   return res;
 }
 
-int ssa_reader_c::read(generic_packetizer_c *) {
+int
+ssa_reader_c::read(generic_packetizer_c *) {
   string line, stime, orig_line, comma;
   int i, num;
   int64_t start, end;
@@ -293,24 +303,28 @@ int ssa_reader_c::read(generic_packetizer_c *) {
   return 0;
 }
 
-int ssa_reader_c::display_priority() {
+int
+ssa_reader_c::display_priority() {
   return DISPLAYPRIORITY_LOW;
 }
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void ssa_reader_c::display_progress(bool) {
+void
+ssa_reader_c::display_progress(bool) {
   mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
 }
 
-void ssa_reader_c::set_headers() {
+void
+ssa_reader_c::set_headers() {
   textsubs_packetizer->set_headers();
 }
 
-void ssa_reader_c::identify() {
+void
+ssa_reader_c::identify() {
   mxinfo("File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
          "(SSA/ASS)\n", ti->fname);
 }

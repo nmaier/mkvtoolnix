@@ -40,9 +40,11 @@
 using namespace libmatroska;
 
 flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
-                                     int nsample_rate, int nchannels,
+                                     int nsample_rate,
+                                     int nchannels,
                                      int nbits_per_sample,
-                                     unsigned char *nheader, int nl_header,
+                                     unsigned char *nheader,
+                                     int nl_header,
                                      track_info_c *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   last_timecode = 0;
@@ -72,7 +74,8 @@ flac_packetizer_c::~flac_packetizer_c() {
   safefree(header);
 }
 
-void flac_packetizer_c::set_headers() {
+void
+flac_packetizer_c::set_headers() {
   set_codec_id(MKV_A_FLAC);
   set_codec_private(header, l_header);
   set_audio_sampling_freq((float)sample_rate);
@@ -82,8 +85,13 @@ void flac_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int flac_packetizer_c::process(unsigned char *data, int size,
-                                 int64_t timecode, int64_t, int64_t, int64_t) {
+int
+flac_packetizer_c::process(unsigned char *data,
+                           int size,
+                           int64_t timecode,
+                           int64_t,
+                           int64_t,
+                           int64_t) {
   debug_enter("flac_packetizer_c::process");
   if (timecode == -1)
     timecode = last_timecode;
@@ -94,7 +102,8 @@ int flac_packetizer_c::process(unsigned char *data, int size,
   return EMOREDATA;
 }
 
-void flac_packetizer_c::dump_debug_info() {
+void
+flac_packetizer_c::dump_debug_info() {
   mxdebug("flac_packetizer_c: queue: %d\n", packet_queue.size());
 }
 #endif

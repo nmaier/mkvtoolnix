@@ -29,7 +29,9 @@
 #include "r_mp3.h"
 #include "p_mp3.h"
 
-int mp3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+mp3_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   unsigned char buf[16384];
   int pos, pos2, ptr;
   mp3_header_t mp3header;
@@ -68,7 +70,8 @@ int mp3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-mp3_reader_c::mp3_reader_c(track_info_c *nti) throw (error_c):
+mp3_reader_c::mp3_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   int pos, ptr, buf_size;
   unsigned char buf[16384];
@@ -113,7 +116,8 @@ mp3_reader_c::~mp3_reader_c() {
     delete mp3packetizer;
 }
 
-int mp3_reader_c::read(generic_packetizer_c *) {
+int
+mp3_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 16384);
@@ -128,11 +132,13 @@ int mp3_reader_c::read(generic_packetizer_c *) {
   return EMOREDATA;
 }
 
-int mp3_reader_c::display_priority() {
+int
+mp3_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void mp3_reader_c::display_progress(bool final) {
+void
+mp3_reader_c::display_progress(bool final) {
   if (final)
     mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
   else
@@ -140,11 +146,13 @@ void mp3_reader_c::display_progress(bool final) {
            (int)(bytes_processed * 100L / size));
 }
 
-void mp3_reader_c::set_headers() {
+void
+mp3_reader_c::set_headers() {
   mp3packetizer->set_headers();
 }
 
-void mp3_reader_c::identify() {
+void
+mp3_reader_c::identify() {
   mxinfo("File '%s': container: MP2/MP3\nTrack ID 0: audio (MPEG-%s layer "
          "%d)\n", ti->fname,
          mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5",

@@ -65,7 +65,8 @@ vobsub_packetizer_c::~vobsub_packetizer_c() {
   safefree(idx_data);
 }
 
-void vobsub_packetizer_c::set_headers() {
+void
+vobsub_packetizer_c::set_headers() {
   set_codec_id(MKV_S_VOBSUB);
   set_codec_private(idx_data, idx_data_size);
 
@@ -74,8 +75,10 @@ void vobsub_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
-                                          int64_t timecode) {
+int
+vobsub_packetizer_c::extract_duration(unsigned char *data,
+                                      int buf_size,
+                                      int64_t timecode) {
   uint32_t date, control_start, next_off, start_off, off;
   unsigned char type;
   int duration;
@@ -94,7 +97,7 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
       mxwarn(PFX "Encountered broken SPU packet (next_off < start_off) at "
              "timecode " FMT_TIMECODE ". This packet might be displayed "
              "incorrectly or not at all.\n",
-             ARG_TIMECODE(timecode - initial_displacement));
+             ARG_TIMECODE_NS(timecode - initial_displacement));
       return -1;
     }
     mxverb(4, PFX "date = %u\n", date);
@@ -152,9 +155,11 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
 }
 
 #define deliver() deliver_packet(dst_buf, dst_size, timecode, duration);
-int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
-                                        int64_t timecode,
-                                        int64_t default_duration) {
+int
+vobsub_packetizer_c::deliver_packet(unsigned char *buf,
+                                    int size,
+                                    int64_t timecode,
+                                    int64_t default_duration) {
   int64_t duration;
 
   if ((buf == NULL) || (size == 0)) {
@@ -179,9 +184,13 @@ int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
 }
 
 // Adopted from mplayer's vobsub.c
-int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
-                                int64_t timecode, int64_t duration,
-                                int64_t, int64_t) {
+int
+vobsub_packetizer_c::process(unsigned char *srcbuf,
+                             int size,
+                             int64_t timecode,
+                             int64_t duration,
+                             int64_t,
+                             int64_t) {
   unsigned char *dst_buf;
   uint32_t len, idx, version, packet_size, dst_size;
   int c, packet_aid;
@@ -196,9 +205,6 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
   timecode += initial_displacement;
   if (timecode < 0)
     return EMOREDATA;
-
-  if ((timecode >= 834000) && (timecode < 838000))
-    mxverb(5, "yuck");
 
   if (extract_from_mpeg) {
     mm_mem_io_c in(srcbuf, size);
@@ -235,7 +241,7 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
                      "track %lld for timecode " FMT_TIMECODE ", assuming "
                      "MPEG2. No further warnings will be printed for this "
                      "track.\n", c, packet_num, ti->id,
-                     ARG_TIMECODE(timecode - initial_displacement));
+                     ARG_TIMECODE_NS(timecode - initial_displacement));
               mpeg_version_warning_printed = true;
             }
             version = 2;
@@ -372,6 +378,7 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
   return EMOREDATA;
 }
 
-void vobsub_packetizer_c::dump_debug_info() {
+void
+vobsub_packetizer_c::dump_debug_info() {
   mxdebug("vobsub_packetizer_c: queue: %d\n", packet_queue.size());
 }

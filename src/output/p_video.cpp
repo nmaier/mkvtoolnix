@@ -41,8 +41,10 @@ using namespace libmatroska;
 
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
                                        const char *ncodec_id,
-                                       double nfps, int nwidth,
-                                       int nheight, bool nbframes,
+                                       double nfps,
+                                       int nwidth,
+                                       int nheight,
+                                       bool nbframes,
                                        track_info_c *nti)
   throw (error_c) : generic_packetizer_c(nreader, nti) {
   fps = nfps;
@@ -62,7 +64,8 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   set_track_type(track_video);
 }
 
-void video_packetizer_c::set_headers() {
+void
+video_packetizer_c::set_headers() {
   char *fourcc;
 
   is_mpeg4 = false;
@@ -104,7 +107,7 @@ void video_packetizer_c::set_headers() {
   else
     set_track_min_cache(1);
   if (fps != 0.0)
-    set_track_default_duration_ns((int64_t)(1000000000.0 / fps));
+    set_track_default_duration((int64_t)(1000000000.0 / fps));
 
   set_video_pixel_width(width);
   set_video_pixel_height(height);
@@ -122,9 +125,13 @@ void video_packetizer_c::set_headers() {
 // fref == 0: P frame, no forward reference
 // fref > 0: B frame with given forward reference (absolute reference,
 //           not relative!)
-int video_packetizer_c::process(unsigned char *buf, int size,
-                                int64_t old_timecode, int64_t duration,
-                                int64_t bref, int64_t fref) {
+int
+video_packetizer_c::process(unsigned char *buf,
+                            int size,
+                            int64_t old_timecode,
+                            int64_t duration,
+                            int64_t bref,
+                            int64_t fref) {
   int64_t timecode;
   vector<video_frame_t> frames;
   uint32_t i;
@@ -140,14 +147,15 @@ int video_packetizer_c::process(unsigned char *buf, int size,
         flush_frames(frames[i].type);
 
       if (old_timecode == -1)
-        timecode = (int64_t)(1000.0 * frames_output / fps) + duration_shift;
+        timecode = (int64_t)(1000000000.0 * frames_output / fps) +
+          duration_shift;
       else
         timecode = old_timecode;
 
       if ((duration == -1) || (duration == (int64_t)(1000.0 / fps)))
-        duration = (int64_t)(1000.0 / fps);
+        duration = (int64_t)(1000000000.0 / fps);
       else
-        duration_shift += duration - (int64_t)(1000.0 / fps);
+        duration_shift += duration - (int64_t)(1000000000.0 / fps);
 
       frames_output++;
       frames[i].timecode = timecode;
@@ -196,14 +204,14 @@ int video_packetizer_c::process(unsigned char *buf, int size,
   }
 
   if (old_timecode == -1)
-    timecode = (int64_t)(1000.0 * frames_output / fps) + duration_shift;
+    timecode = (int64_t)(1000000000.0 * frames_output / fps) + duration_shift;
   else
     timecode = old_timecode;
 
-  if ((duration == -1) || (duration == (int64_t)(1000.0 / fps)))
-    duration = (int64_t)(1000.0 / fps);
+  if (duration == -1)
+    duration = (int64_t)(1000000000.0 / fps);
   else
-    duration_shift += duration - (int64_t)(1000.0 / fps);
+    duration_shift += duration - (int64_t)(1000000000.0 / fps);
   frames_output++;
 
   if (bref == VFT_IFRAME) {
@@ -228,19 +236,22 @@ video_packetizer_c::~video_packetizer_c() {
   safefree(codec_id);
 }
 
-void video_packetizer_c::dump_debug_info() {
+void
+video_packetizer_c::dump_debug_info() {
   mxdebug("video_packetizer_c: queue: %d; frames_output: %d; "
           "ref_timecode: %lld\n", packet_queue.size(), frames_output,
           ref_timecode);
 }
 
-void video_packetizer_c::flush() {
+void
+video_packetizer_c::flush() {
   flush_frames(true);
 }
 
-void video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf, int size,
-                                                vector<video_frame_t> &frames)
-{
+void
+video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf,
+                                           int size,
+                                           vector<video_frame_t> &frames) {
   bit_cursor_c bits(buf, size);
   uint32_t marker, frame_type;
   bool first_frame;
@@ -296,7 +307,9 @@ void video_packetizer_c::find_mpeg4_frame_types(unsigned char *buf, int size,
   }
 }
 
-void video_packetizer_c::flush_frames(char next_frame, bool flush_all) {
+void
+video_packetizer_c::flush_frames(char next_frame,
+                                 bool flush_all) {
   uint32_t i;
 
   if (bref_frame.type == '?') {
@@ -334,22 +347,22 @@ void video_packetizer_c::flush_frames(char next_frame, bool flush_all) {
     if ((fref_frame.type == 'P') || (fref_frame.type == 'S'))
       frames_output++;
     fref_frame.timecode = (int64_t)(fref_frame.timecode +
-                                    queued_frames.size() * 1000 / fps);
+                                    queued_frames.size() * 1000000000 / fps);
     add_packet(fref_frame.data, fref_frame.size, fref_frame.timecode,
                fref_frame.duration, false, fref_frame.bref, fref_frame.fref,
                -1, cp_no);
 
     for (i = 0; i < queued_frames.size(); i++)
       add_packet(queued_frames[i].data, queued_frames[i].size,
-                 queued_frames[i].timecode, queued_frames[i].duration, false,
-                 bref_frame.timecode, fref_frame.timecode, -1, cp_no);
+                 queued_frames[i].timecode, queued_frames[i].duration,
+                 false, bref_frame.timecode, fref_frame.timecode, -1,
+                 cp_no);
     queued_frames.clear();
 
     bref_frame = fref_frame;
     fref_frame.type = '?';
   }
 
-  if (flush_all ||
-      ((next_frame == 'I') && (bref_frame.type == 'P')))
+  if (flush_all || ((next_frame == 'I') && (bref_frame.type == 'P')))
     bref_frame.type = '?';
 }

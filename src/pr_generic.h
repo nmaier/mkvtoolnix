@@ -276,11 +276,6 @@ public:
                           int64_t bref = -1, int64_t fref = -1,
                           int ref_priority = -1,
                           copy_packet_mode_t copy_this = cp_default);
-  virtual void add_packet_ns(unsigned char *data, int lenth, int64_t timecode,
-                             int64_t duration, bool duration_mandatory = false,
-                             int64_t bref = -1, int64_t fref = -1,
-                             int ref_priority = -1,
-                             copy_packet_mode_t copy_this = cp_default);
   virtual void drop_packet(unsigned char *data, copy_packet_mode_t copy_this);
   virtual packet_t *get_packet();
   virtual int packet_available() {
@@ -341,8 +336,8 @@ public:
 
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);
-  virtual void set_track_default_duration_ns(int64_t default_duration);
-  virtual int64_t get_track_default_duration_ns();
+  virtual void set_track_default_duration(int64_t default_duration);
+  virtual int64_t get_track_default_duration();
 
   virtual void set_audio_sampling_freq(float freq);
   virtual void set_audio_output_sampling_freq(float freq);
@@ -372,16 +367,16 @@ public:
   virtual void parse_ext_timecode_file_v1(mm_io_c *in, const char *name);
   virtual void parse_ext_timecode_file_v2(mm_io_c *in, const char *name);
 
-  virtual bool needs_negative_displacement(float duration) {
+  inline bool needs_negative_displacement(float) {
     return ((initial_displacement < 0) &&
             (ti->async.displacement > initial_displacement));
   }
-  virtual bool needs_positive_displacement(float duration) {
+  inline bool needs_positive_displacement(float duration) {
     return ((initial_displacement > 0) &&
             (iabs(ti->async.displacement - initial_displacement) >
              (duration / 2)));
   }
-  virtual void displace(float by_ms);
+  virtual void displace(float by_ns);
 
 protected:
   virtual void dump_packet(const void *buffer, int size);

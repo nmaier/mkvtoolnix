@@ -30,7 +30,9 @@
 #include "r_dts.h"
 #include "p_dts.h"
 
-int dts_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+dts_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   char buf[max_dts_packet_size];
   int pos;
   dts_header_t dtsheader;
@@ -53,7 +55,8 @@ int dts_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-dts_reader_c::dts_reader_c(track_info_c *nti) throw (error_c):
+dts_reader_c::dts_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   int pos;
   dts_header_t dtsheader;
@@ -95,7 +98,8 @@ dts_reader_c::~dts_reader_c() {
     delete dtspacketizer;
 }
 
-int dts_reader_c::read(generic_packetizer_c *) {
+int
+dts_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, max_dts_packet_size);
@@ -110,11 +114,13 @@ int dts_reader_c::read(generic_packetizer_c *) {
   return EMOREDATA;
 }
 
-int dts_reader_c::display_priority() {
+int
+dts_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void dts_reader_c::display_progress(bool final) {
+void
+dts_reader_c::display_progress(bool final) {
   if (final)
     mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
   else
@@ -122,10 +128,12 @@ void dts_reader_c::display_progress(bool final) {
            (int)(bytes_processed * 100L / size));
 }
 
-void dts_reader_c::set_headers() {
+void
+dts_reader_c::set_headers() {
   dtspacketizer->set_headers();
 }
 
-void dts_reader_c::identify() {
+void
+dts_reader_c::identify() {
   mxinfo("File '%s': container: DTS\nTrack ID 0: audio (DTS)\n", ti->fname);
 }

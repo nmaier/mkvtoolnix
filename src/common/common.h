@@ -62,8 +62,6 @@ using namespace std;
 #define TYPEQTMP4    15
 #define TYPEFLAC     16
 
-#define iabs(a) ((a) < 0 ? (-1 * (a)) : (a))
-
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \
@@ -175,8 +173,8 @@ bool MTX_DLL_API starts_with(const string &s, const string &start);
 bool MTX_DLL_API starts_with_case(const string &s, const char *start);
 bool MTX_DLL_API starts_with_case(const string &s, const string &start);
 
-#define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
-#define myabs(a) ((a) < 0 ? (a) * -1 : (a))
+#define irnd(a) ((int64_t)((double)(a) + 0.5))
+#define iabs(a) ((a) < 0 ? (a) * -1 : (a))
 
 uint32_t MTX_DLL_API round_to_nearest_pow2(uint32_t value);
 bool MTX_DLL_API parse_int(const char *s, int64_t &value);

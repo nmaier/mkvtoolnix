@@ -33,7 +33,8 @@ using namespace libmatroska;
 
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_c *nti)
+                                   int nchannels,
+                                   track_info_c *nti)
   throw (error_c):
   generic_packetizer_c(nreader, nti), byte_buffer(128 * 1024) {
   samples_per_sec = nsamples_per_sec;
@@ -44,7 +45,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   codec_id_set = false;
 
   set_track_type(track_audio);
-  set_track_default_duration_ns((int64_t)(1152000000000.0 * ti->async.linear /
+  set_track_default_duration((int64_t)(1152000000000.0 * ti->async.linear /
                                           samples_per_sec));
   duplicate_data_on_add(false);
 }
@@ -52,10 +53,11 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
 mp3_packetizer_c::~mp3_packetizer_c() {
 }
 
-unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
+unsigned char *
+mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   int pos, size;
   unsigned char *buf;
-  double pims;
+  double pins;
   string codec_id;
 
   if (byte_buffer.get_size() == 0)
@@ -83,7 +85,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
     if (spf != 1152)
-      set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
+      set_track_default_duration((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
                                               samples_per_sec));
     rerender_track_headers();
@@ -92,14 +94,14 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   if ((pos + mp3header->framesize) > byte_buffer.get_size())
     return NULL;
 
-  pims = 1000.0 * (float)spf / mp3header->sampling_frequency;
+  pins = 1000000000.0 * (double)spf / mp3header->sampling_frequency;
 
-  if (needs_negative_displacement(pims)) {
+  if (needs_negative_displacement(pins)) {
     /*
      * MP3 audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    displace(-pims);
+    displace(-pins);
     byte_buffer.remove(mp3header->framesize + pos);
 
     return NULL;
@@ -118,14 +120,14 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
                                       mp3header->framesize);
 
-  if (needs_positive_displacement(pims)) {
+  if (needs_positive_displacement(pins)) {
     /*
      * MP3 audio synchronization. displacement > 0 is solved by creating
      * silent MP3 packets and repeating it over and over again (well only as
      * often as necessary of course. Wouldn't want to spoil your movie by
      * providing a silent MP3 stream ;)).
      */
-    displace(pims);
+    displace(pins);
     memset(buf + 4, 0, mp3header->framesize - 4);
 
     return buf;
@@ -136,7 +138,8 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   return buf;
 }
 
-void mp3_packetizer_c::set_headers() {
+void
+mp3_packetizer_c::set_headers() {
   if (!codec_id_set) {
     set_codec_id(MKV_A_MP3);
     codec_id_set = true;
@@ -147,8 +150,13 @@ void mp3_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int mp3_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t timecode, int64_t, int64_t, int64_t) {
+int
+mp3_packetizer_c::process(unsigned char *buf,
+                          int size,
+                          int64_t timecode,
+                          int64_t,
+                          int64_t,
+                          int64_t) {
   unsigned char *packet;
   mp3_header_t mp3header;
   int64_t my_timecode;
@@ -162,12 +170,13 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 #endif    
 
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * spf / samples_per_sec);
+      my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, mp3header.framesize, my_timecode,
-               (int64_t)(1000.0 * spf * ti->async.linear / samples_per_sec));
+               (int64_t)(1000000000.0 * spf * ti->async.linear /
+                         samples_per_sec));
     packetno++;
   }
 

@@ -55,8 +55,10 @@ extern "C" {                    // for BITMAPINFOHEADER
 #define FPFX "flac_header_extraction: "
 
 static FLAC__StreamDecoderReadStatus
-fhe_read_cb(const FLAC__StreamDecoder *decoder, FLAC__byte buffer[],
-            unsigned *bytes, void *client_data) {
+fhe_read_cb(const FLAC__StreamDecoder *decoder,
+            FLAC__byte buffer[],
+            unsigned *bytes,
+            void *client_data) {
   flac_header_extractor_c *fhe;
   ogg_packet op;
 
@@ -81,17 +83,20 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder, FLAC__byte buffer[],
 }
 
 static FLAC__StreamDecoderWriteStatus
-fhe_write_cb(const FLAC__StreamDecoder *, const FLAC__Frame *,
-             const FLAC__int32 * const [], void *client_data) {
+fhe_write_cb(const FLAC__StreamDecoder *,
+             const FLAC__Frame *,
+             const FLAC__int32 * const [],
+             void *client_data) {
   mxverb(2, FPFX "write cb\n");
 
   ((flac_header_extractor_c *)client_data)->done = true;
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
-static void fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
-                            const FLAC__StreamMetadata *metadata,
-                            void *client_data) {
+static void
+fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
+                const FLAC__StreamMetadata *metadata,
+                void *client_data) {
   flac_header_extractor_c *fhe;
 
   fhe = (flac_header_extractor_c *)client_data;
@@ -124,16 +129,20 @@ static void fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
   }
 }
 
-static void fhe_error_cb(const FLAC__StreamDecoder *,
-                         FLAC__StreamDecoderErrorStatus status,
-                         void *client_data) {
+static void
+fhe_error_cb(const FLAC__StreamDecoder *,
+             FLAC__StreamDecoderErrorStatus status,
+             void *client_data) {
   ((flac_header_extractor_c *)client_data)->done = true;
   mxverb(2, FPFX "error (%d)\n", (int)status);
 }
 
 flac_header_extractor_c::flac_header_extractor_c(const char *file_name,
                                                  int64_t nsid):
-  metadata_parsed(false), sid(nsid), num_packets(0), num_header_packets(0),
+  metadata_parsed(false),
+  sid(nsid),
+  num_packets(0),
+  num_header_packets(0),
   done(false) {
   file = new mm_io_c(file_name, MODE_READ);
   decoder = FLAC__stream_decoder_new();
@@ -164,7 +173,8 @@ flac_header_extractor_c::~flac_header_extractor_c() {
   delete file;
 }
 
-bool flac_header_extractor_c::extract() {
+bool
+flac_header_extractor_c::extract() {
   int result;
 
   mxverb(2, FPFX "extract\n");
@@ -179,7 +189,8 @@ bool flac_header_extractor_c::extract() {
   return metadata_parsed;
 }
 
-bool flac_header_extractor_c::read_page() {
+bool
+flac_header_extractor_c::read_page() {
   int np, nread;
   unsigned char *buf;
 
@@ -212,7 +223,9 @@ bool flac_header_extractor_c::read_page() {
 /*
  * Probes a file by simply comparing the first four bytes to 'OggS'.
  */
-int ogm_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+ogm_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
@@ -234,7 +247,8 @@ int ogm_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
  * Opens the file for processing, initializes an ogg_sync_state used for
  * reading from an OGG stream.
  */
-ogm_reader_c::ogm_reader_c(track_info_c *nti) throw (error_c):
+ogm_reader_c::ogm_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
 
   try {
@@ -282,7 +296,8 @@ ogm_reader_c::~ogm_reader_c() {
   ti->private_data = NULL;
 }
 
-ogm_demuxer_t *ogm_reader_c::find_demuxer(int serialno) {
+ogm_demuxer_t *
+ogm_reader_c::find_demuxer(int serialno) {
   int i;
 
   for (i = 0; i < num_sdemuxers; i++)
@@ -292,7 +307,8 @@ ogm_demuxer_t *ogm_reader_c::find_demuxer(int serialno) {
   return NULL;
 }
 
-void ogm_reader_c::free_demuxer(int idx) {
+void
+ogm_reader_c::free_demuxer(int idx) {
   if (idx >= num_sdemuxers)
     return;
   delete sdemuxers[idx];
@@ -305,7 +321,8 @@ void ogm_reader_c::free_demuxer(int idx) {
  * Reads an OGG page from the stream. Returns 0 if there are no more pages
  * left, EMOREDATA otherwise.
  */
-int ogm_reader_c::read_page(ogg_page *og) {
+int
+ogm_reader_c::read_page(ogg_page *og) {
   int np, done, nread;
   unsigned char *buf;
 
@@ -338,14 +355,16 @@ int ogm_reader_c::read_page(ogg_page *og) {
   return EMOREDATA;
 }
 
-void ogm_reader_c::add_new_demuxer(ogm_demuxer_t *dmx) {
+void
+ogm_reader_c::add_new_demuxer(ogm_demuxer_t *dmx) {
   sdemuxers = (ogm_demuxer_t **)saferealloc(sdemuxers, sizeof(ogm_demuxer_t *)
                                             * (num_sdemuxers + 1));
   sdemuxers[num_sdemuxers] = dmx;
   num_sdemuxers++;
 }
 
-void ogm_reader_c::create_packetizer(int64_t tid) {
+void
+ogm_reader_c::create_packetizer(int64_t tid) {
   vorbis_info vi;
   vorbis_comment vc;
   ogg_packet op;
@@ -548,7 +567,8 @@ void ogm_reader_c::create_packetizer(int64_t tid) {
   }
 }
 
-void ogm_reader_c::create_packetizers() {
+void
+ogm_reader_c::create_packetizers() {
   int i;
 
   for (i = 0; i < ti->track_order->size(); i++)
@@ -560,7 +580,8 @@ void ogm_reader_c::create_packetizers() {
 /*
  * Checks every demuxer if it has a page available.
  */
-int ogm_reader_c::packet_available() {
+int
+ogm_reader_c::packet_available() {
   int i;
 
   if (num_sdemuxers == 0)
@@ -579,7 +600,8 @@ int ogm_reader_c::packet_available() {
  * it should be extracted then allocate a new packetizer based on the
  * stream type and store the needed data in a new ogm_demuxer_t.
  */
-void ogm_reader_c::handle_new_stream(ogg_page *og) {
+void
+ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_state new_oss;
   ogg_packet op;
   ogm_demuxer_t *dmx;
@@ -756,7 +778,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
  * If the demuxer is found then hand over all packets in this page to the
  * associated packetizer.
  */
-void ogm_reader_c::process_page(ogg_page *og) {
+void
+ogm_reader_c::process_page(ogg_page *og) {
   ogm_demuxer_t *dmx;
   ogg_packet op;
   int hdrlen, eos, i;
@@ -788,7 +811,7 @@ void ogm_reader_c::process_page(ogg_page *og) {
         dmx->packetizer->process(op.packet, op.bytes, -1);
       else {
         dmx->packetizer->process(op.packet, op.bytes, dmx->last_granulepos *
-                                 1000 / dmx->vorbis_rate);
+                                 1000000000 / dmx->vorbis_rate);
         dmx->last_granulepos = ogg_page_granulepos(og);
       }
 
@@ -826,7 +849,8 @@ void ogm_reader_c::process_page(ogg_page *og) {
             ((op.packet[hdrlen + 1] != ' ') &&
              (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1])))
           dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 -
-                                   hdrlen, ogg_page_granulepos(og), lenbytes);
+                                   hdrlen, ogg_page_granulepos(og) * 1000000,
+                                   lenbytes * 1000000);
 
       } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
         dmx->packetizer->process(op.packet, op.bytes);
@@ -851,7 +875,8 @@ void ogm_reader_c::process_page(ogg_page *og) {
 /*
  * Search and store additional headers for the Vorbis streams.
  */
-void ogm_reader_c::process_header_page(ogg_page *og) {
+void
+ogm_reader_c::process_header_page(ogg_page *og) {
   ogm_demuxer_t *dmx;
   ogg_packet     op;
 
@@ -899,7 +924,8 @@ void ogm_reader_c::process_header_page(ogg_page *og) {
  * Read all header packets and - for Vorbis streams - the comment and
  * codec data packets.
  */
-int ogm_reader_c::read_headers() {
+int
+ogm_reader_c::read_headers() {
   int done, i;
   ogm_demuxer_t *dmx;
   ogg_page og;
@@ -943,7 +969,8 @@ int ogm_reader_c::read_headers() {
  * General reader. Before returning it MUST guarantee that each demuxer has
  * a page available OR that the corresponding stream is finished.
  */
-int ogm_reader_c::read(generic_packetizer_c *) {
+int
+ogm_reader_c::read(generic_packetizer_c *) {
   int i;
   ogg_page og;
 
@@ -969,7 +996,8 @@ int ogm_reader_c::read(generic_packetizer_c *) {
   return 0;
 }
 
-int ogm_reader_c::display_priority() {
+int
+ogm_reader_c::display_priority() {
   int i;
 
   for (i = 0; i < num_sdemuxers; i++)
@@ -981,7 +1009,8 @@ int ogm_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void ogm_reader_c::display_progress(bool final) {
+void
+ogm_reader_c::display_progress(bool final) {
   int i;
 
   for (i = 0; i < num_sdemuxers; i++)
@@ -1001,7 +1030,8 @@ void ogm_reader_c::display_progress(bool final) {
   fflush(stdout);
 }
 
-void ogm_reader_c::set_headers() {
+void
+ogm_reader_c::set_headers() {
   uint32_t i, k;
   ogm_demuxer_t *d;
 
@@ -1027,7 +1057,8 @@ void ogm_reader_c::set_headers() {
     }
 }
 
-void ogm_reader_c::identify() {
+void
+ogm_reader_c::identify() {
   int i;
   stream_header *sth;
   char fourcc[5];
@@ -1059,11 +1090,11 @@ void ogm_reader_c::identify() {
   }
 }
 
-void ogm_reader_c::flush_packetizers() {
+void
+ogm_reader_c::flush_packetizers() {
   int i;
 
   for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->packetizer != NULL)
       sdemuxers[i]->packetizer->flush();
 }
-

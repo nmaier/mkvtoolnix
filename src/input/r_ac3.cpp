@@ -35,7 +35,9 @@ extern "C" {
 
 #define PROBESIZE 8192
 
-int ac3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+ac3_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   unsigned char buf[PROBESIZE];
   int pos;
   ac3_header_t ac3header;
@@ -62,7 +64,8 @@ int ac3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-ac3_reader_c::ac3_reader_c(track_info_c *nti) throw (error_c):
+ac3_reader_c::ac3_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   int pos;
   ac3_header_t ac3header;
@@ -100,7 +103,8 @@ ac3_reader_c::~ac3_reader_c() {
     delete ac3packetizer;
 }
 
-int ac3_reader_c::read(generic_packetizer_c *) {
+int
+ac3_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
@@ -115,11 +119,13 @@ int ac3_reader_c::read(generic_packetizer_c *) {
   return EMOREDATA;
 }
 
-int ac3_reader_c::display_priority() {
+int
+ac3_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void ac3_reader_c::display_progress(bool final) {
+void
+ac3_reader_c::display_progress(bool final) {
   if (final)
     mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
   else
@@ -127,10 +133,12 @@ void ac3_reader_c::display_progress(bool final) {
            (int)(bytes_processed * 100L / size));
 }
 
-void ac3_reader_c::set_headers() {
+void
+ac3_reader_c::set_headers() {
   ac3packetizer->set_headers();
 }
 
-void ac3_reader_c::identify() {
+void
+ac3_reader_c::identify() {
   mxinfo("File '%s': container: AC3\nTrack ID 0: audio (AC3)\n", ti->fname);
 }

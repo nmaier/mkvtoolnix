@@ -57,7 +57,9 @@ using namespace libmatroska;
                   ((char *)&a)[3]
 #endif
 
-int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
+int
+qtmp4_reader_c::probe_file(mm_io_c *in,
+                           int64_t size) {
   uint32_t atom;
   uint64_t atom_size;
 
@@ -85,7 +87,8 @@ int qtmp4_reader_c::probe_file(mm_io_c *in, int64_t size) {
   return 0;
 }
 
-qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti) throw (error_c) :
+qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
+  throw (error_c) :
   generic_reader_c(nti) {
   try {
     io = new mm_io_c(ti->fname, MODE_READ);
@@ -127,7 +130,8 @@ qtmp4_reader_c::~qtmp4_reader_c() {
   delete io;
 }
 
-void qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
+void
+qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
   if (dmx->packetizer != NULL)
     delete dmx->packetizer;
   safefree(dmx->sample_table);
@@ -142,8 +146,11 @@ void qtmp4_reader_c::free_demuxer(qtmp4_demuxer_t *dmx) {
   safefree(dmx->a_esds.sl_config);
 }
 
-void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
-                               uint32_t &hsize) {
+void
+qtmp4_reader_c::read_atom(uint32_t &atom,
+                          uint64_t &size,
+                          uint64_t &pos,
+                          uint32_t &hsize) {
   pos = io->getFilePointer();
   size = io->read_uint32_be();
   atom = io->read_uint32_be(); 
@@ -159,7 +166,8 @@ void qtmp4_reader_c::read_atom(uint32_t &atom, uint64_t &size, uint64_t &pos,
 
 #define skip_atom() io->setFilePointer(atom_pos + atom_size)
 
-void qtmp4_reader_c::parse_headers() {
+void
+qtmp4_reader_c::parse_headers() {
   uint32_t atom, atom_hsize, tmp, j, s, pts, last, idx;
   uint64_t atom_size, atom_pos;
   bool headers_parsed;
@@ -338,8 +346,11 @@ void qtmp4_reader_c::parse_headers() {
   mxverb(2, PFX "Number of valid tracks found: %u\n", demuxers.size());
 }
 
-void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
-                                         uint64_t parent_pos, int level) {
+void
+qtmp4_reader_c::handle_header_atoms(uint32_t parent,
+                                    int64_t parent_size,
+                                    uint64_t parent_pos,
+                                    int level) {
   uint64_t atom_size, atom_pos, target_pos;
   uint32_t atom, atom_hsize;
 
@@ -790,7 +801,8 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
   io->setFilePointer(target_pos);
 }
 
-int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
+int
+qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   uint32_t i, k, frame, frame_size;
   qtmp4_demuxer_t *dmx;
   bool chunks_left, is_keyframe;
@@ -810,8 +822,9 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
         continue;
 
       io->setFilePointer(dmx->chunk_table[dmx->pos].pos);
-      timecode = 1000 * ((uint64_t)dmx->chunk_table[dmx->pos].samples *
-                         (uint64_t)dmx->duration) / (uint64_t)dmx->timescale;
+      timecode = 1000000000 *
+        ((uint64_t)dmx->chunk_table[dmx->pos].samples *
+         (uint64_t)dmx->duration) / (uint64_t)dmx->timescale;
 
       if (dmx->sample_size != 1) {
         if (!dmx->warning_printed) {
@@ -856,8 +869,9 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
       }
 
       if ((dmx->pos + 1) < dmx->chunk_table_len)
-        duration = 1000 * ((uint64_t)dmx->chunk_table[dmx->pos + 1].samples *
-                           (uint64_t)dmx->duration) /
+        duration = 1000000000 *
+          ((uint64_t)dmx->chunk_table[dmx->pos + 1].samples *
+           (uint64_t)dmx->duration) /
           (uint64_t)dmx->timescale - timecode;
       else
         duration = dmx->avg_duration;
@@ -878,10 +892,10 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
 
       frame = dmx->pos;
 
-      timecode = (int64_t)dmx->sample_table[frame].pts * 1000 /
+      timecode = (int64_t)dmx->sample_table[frame].pts * 1000000000 /
         dmx->timescale;
       if ((frame + 1) < dmx->sample_table_len)
-        duration = (int64_t)dmx->sample_table[frame + 1].pts * 1000 /
+        duration = (int64_t)dmx->sample_table[frame + 1].pts * 1000000000 /
           dmx->timescale - timecode;
       else
         duration = dmx->avg_duration;
@@ -933,7 +947,8 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   return 0;
 }
 
-uint32_t qtmp4_reader_c::read_esds_descr_len(mm_mem_io_c *memio) {
+uint32_t
+qtmp4_reader_c::read_esds_descr_len(mm_mem_io_c *memio) {
   uint32_t len, num_bytes;
   uint8_t byte;
 
@@ -948,8 +963,10 @@ uint32_t qtmp4_reader_c::read_esds_descr_len(mm_mem_io_c *memio) {
   return len;
 }
 
-bool qtmp4_reader_c::parse_esds_atom(mm_mem_io_c *memio,
-                                     qtmp4_demuxer_t *dmx, int level) {
+bool
+qtmp4_reader_c::parse_esds_atom(mm_mem_io_c *memio,
+                                qtmp4_demuxer_t *dmx,
+                                int level) {
   uint32_t len;
   uint8_t tag;
   esds_t *e;
@@ -1028,7 +1045,8 @@ bool qtmp4_reader_c::parse_esds_atom(mm_mem_io_c *memio,
   return true;
 }
 
-void qtmp4_reader_c::create_packetizer(int64_t tid) {
+void
+qtmp4_reader_c::create_packetizer(int64_t tid) {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
   passthrough_packetizer_c *ptzr;
@@ -1125,7 +1143,8 @@ void qtmp4_reader_c::create_packetizer(int64_t tid) {
   }
 }
 
-void qtmp4_reader_c::create_packetizers() {
+void
+qtmp4_reader_c::create_packetizers() {
   uint32_t i;
 
   main_dmx = -1;
@@ -1136,7 +1155,8 @@ void qtmp4_reader_c::create_packetizers() {
     create_packetizer(demuxers[i]->id);
 }
 
-void qtmp4_reader_c::set_headers() {
+void
+qtmp4_reader_c::set_headers() {
   uint32_t i, k;
   qtmp4_demuxer_t *d;
 
@@ -1162,11 +1182,13 @@ void qtmp4_reader_c::set_headers() {
     }
 }
 
-int qtmp4_reader_c::display_priority() {
+int
+qtmp4_reader_c::display_priority() {
   return DISPLAYPRIORITY_MEDIUM;
 }
 
-void qtmp4_reader_c::display_progress(bool final) {
+void
+qtmp4_reader_c::display_progress(bool final) {
   uint32_t max_chunks;
   qtmp4_demuxer_t *dmx;
 
@@ -1182,7 +1204,8 @@ void qtmp4_reader_c::display_progress(bool final) {
            dmx->pos * 100 / max_chunks);
 }
 
-void qtmp4_reader_c::identify() {
+void
+qtmp4_reader_c::identify() {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
 
@@ -1196,7 +1219,8 @@ void qtmp4_reader_c::identify() {
   }
 }
 
-void qtmp4_reader_c::flush_packetizers() {
+void
+qtmp4_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < demuxers.size(); i++)

@@ -76,7 +76,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   if (!found && (ti->async.linear == 0.0)) {
     ti->async.linear = 1.0;
     ti->async.displacement = 0;
-  }
+  } else
+    ti->async.displacement *= 1000000; // ms to ns
   initial_displacement = ti->async.displacement;
   ti->async.displacement = 0;
 
@@ -351,7 +352,7 @@ void generic_packetizer_c::set_track_max_cache(int max_cache) {
       (&GetChild<KaxTrackMinCache>(*track_entry))) = max_cache;
 }
 
-void generic_packetizer_c::set_track_default_duration_ns(int64_t def_dur) {
+void generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
   htrack_default_duration = def_dur;
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
@@ -359,7 +360,7 @@ void generic_packetizer_c::set_track_default_duration_ns(int64_t def_dur) {
       htrack_default_duration;
 }
 
-int64_t generic_packetizer_c::get_track_default_duration_ns() {
+int64_t generic_packetizer_c::get_track_default_duration() {
   return htrack_default_duration;
 }
 
@@ -559,12 +560,12 @@ void generic_packetizer_c::set_headers() {
               (float)hvideo_pixel_height;
           if (ti->aspect_ratio >
               ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
-            disp_width = myrnd(hvideo_pixel_height * ti->aspect_ratio);
+            disp_width = irnd(hvideo_pixel_height * ti->aspect_ratio);
             disp_height = hvideo_pixel_height;
 
           } else {
             disp_width = hvideo_pixel_width;
-            disp_height = myrnd(hvideo_pixel_width / ti->aspect_ratio);
+            disp_height = irnd(hvideo_pixel_width / ti->aspect_ratio);
 
           }
 
@@ -665,25 +666,6 @@ generic_packetizer_c::add_packet(unsigned char *data,
                                  int64_t fref,
                                  int ref_priority,
                                  copy_packet_mode_t copy_this) {
-  add_packet_ns(data, length,
-                timecode > 0 ? timecode * 1000000 : timecode,
-                duration > 0 ? duration * 1000000 : duration,
-                duration_mandatory,
-                bref > 0 ? bref * 1000000 : bref,
-                fref > 0 ? fref * 1000000 : fref,
-                ref_priority, copy_this);
-}
-
-void
-generic_packetizer_c::add_packet_ns(unsigned char *data,
-                                    int length,
-                                    int64_t timecode,
-                                    int64_t duration,
-                                    bool duration_mandatory,
-                                    int64_t bref,
-                                    int64_t fref,
-                                    int ref_priority,
-                                    copy_packet_mode_t copy_this) {
   packet_t *pack;
 
   if (data == NULL)
@@ -697,7 +679,8 @@ generic_packetizer_c::add_packet_ns(unsigned char *data,
   // I: 0, P: 120, B1: 40, B2: 80.
   if ((timecode < safety_last_timecode) && (fref < 0))
     mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-           "last_timecode (%lld < %lld)", timecode, safety_last_timecode);
+           "last_timecode (%lld < %lld) for %lld of '%s'\n", timecode,
+           safety_last_timecode, ti->id, ti->fname);
   safety_last_timecode = timecode;
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
@@ -999,13 +982,13 @@ generic_packetizer_c::get_next_timecode(int64_t timecode) {
   return timecode;
 }
 
-void generic_packetizer_c::displace(float by_ms) {
-  ti->async.displacement += (int64_t)by_ms;
+void generic_packetizer_c::displace(float by_ns) {
+  ti->async.displacement += (int64_t)by_ns;
   if (initial_displacement < 0) {
     if (ti->async.displacement < initial_displacement)
       initial_displacement = 0;
   } else if (iabs(initial_displacement - ti->async.displacement) <
-             (by_ms / 2))
+             (by_ns / 2))
     initial_displacement = 0;
 }
 

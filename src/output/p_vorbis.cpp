@@ -39,12 +39,15 @@
 using namespace libmatroska;
 
 vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
-                                         unsigned char *d_header, int l_header,
+                                         unsigned char *d_header,
+                                         int l_header,
                                          unsigned char *d_comments,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
-                                         int l_codecsetup, track_info_c *nti)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+                                         int l_codecsetup,
+                                         track_info_c *nti)
+  throw (error_c):
+  generic_packetizer_c(nreader, nti) {
   int i;
 
   packetno = 0;
@@ -69,7 +72,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
 
   set_track_type(track_audio);
   if (use_durations)
-    set_track_default_duration_ns((int64_t)(1024000000000.0 *
+    set_track_default_duration((int64_t)(1024000000000.0 *
                                             ti->async.linear / vi.rate));
   ti->async.displacement = initial_displacement;
 }
@@ -82,7 +85,8 @@ vorbis_packetizer_c::~vorbis_packetizer_c() {
       safefree(headers[i].packet);
 }
 
-void vorbis_packetizer_c::set_headers() {
+void
+vorbis_packetizer_c::set_headers() {
   unsigned char *buffer;
   int n, offset, i, lsize;
 
@@ -135,8 +139,13 @@ void vorbis_packetizer_c::set_headers() {
  * is set before the displacement. For positive displacements the packetizer
  * has to generate silence packets and put them into the Matroska file first.
  */
-int vorbis_packetizer_c::process(unsigned char *data, int size,
-                                 int64_t timecode, int64_t, int64_t, int64_t) {
+int
+vorbis_packetizer_c::process(unsigned char *data,
+                             int size,
+                             int64_t timecode,
+                             int64_t,
+                             int64_t,
+                             int64_t) {
   unsigned char zero[2];
   ogg_packet op;
   int64_t this_bs, samples_here, samples_needed;
@@ -153,7 +162,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
     op.bytes = 2;
 
     // Calculate how many samples we have to create.
-    samples_needed = vi.rate * initial_displacement / 1000;
+    samples_needed = vi.rate * initial_displacement / 1000000000;
 
     this_bs = vorbis_packet_blocksize(&vi, &op);
     samples_here = (this_bs + last_bs) / 4;
@@ -161,17 +170,17 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
       samples += samples_here;
       last_bs = this_bs;
       samples_here = (this_bs + last_bs) / 4;
-      add_packet(zero, 2, samples * 1000 / vi.rate, samples_here * 1000 /
-                 vi.rate);
+      add_packet(zero, 2, samples * 1000 / vi.rate,
+                 samples_here * 1000000000 / vi.rate);
     }
   }
 
   // Recalculate the timecode if needed.
   if (timecode == -1) {
     if (initial_displacement > 0)
-      timecode = samples * 1000 / vi.rate;
+      timecode = samples * 1000000000 / vi.rate;
     else
-      timecode = samples * 1000 / vi.rate + initial_displacement;
+      timecode = samples * 1000000000 / vi.rate + initial_displacement;
   } else
     timecode += initial_displacement;
 
@@ -194,14 +203,16 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
   }
 
   mxverb(2, "Vorbis: samples_here: %lld\n", samples_here);
-  add_packet(data, size, (int64_t)timecode, (int64_t)(samples_here * 1000 *
-             ti->async.linear / vi.rate));
+  add_packet(data, size, (int64_t)timecode,
+             (int64_t)(samples_here * 1000000000 * ti->async.linear /
+                       vi.rate));
 
   debug_leave("vorbis_packetizer_c::process");
 
   return EMOREDATA;
 }
 
-void vorbis_packetizer_c::dump_debug_info() {
+void
+vorbis_packetizer_c::dump_debug_info() {
   mxdebug("vorbis_packetizer_c: queue: %d\n", packet_queue.size());
 }

@@ -89,8 +89,10 @@ enum source_pcm_resolution {
   spr_invalid7
 };
 
-int find_dts_header(const unsigned char *buf, unsigned int size,
-                    struct dts_header_s *dts_header) {
+int
+find_dts_header(const unsigned char *buf,
+                unsigned int size,
+                struct dts_header_s *dts_header) {
 
   unsigned int size_to_search = size-15;
   if (size_to_search > size) {
@@ -261,8 +263,8 @@ int find_dts_header(const unsigned char *buf, unsigned int size,
 
 // ============================================================================
 
-void print_dts_header(const struct dts_header_s *h) {
-
+void
+print_dts_header(const struct dts_header_s *h) {
   mxinfo("DTS Frame Header Information:\n");
 
   mxinfo("Frame Type             : ");
@@ -372,3 +374,47 @@ void print_dts_header(const struct dts_header_s *h) {
          h->dialog_normalization_gain);
 }
 
+void
+dts_14_to_dts_16(const unsigned short *src,
+                 unsigned long srcwords,
+                 unsigned short *dst) {
+  // srcwords has to be a multiple of 8!
+  // you will get (srcbytes >> 3)*7 destination words!
+
+  const unsigned long l = srcwords >> 3;
+
+  for (unsigned long b = 0; b < l; b++) {
+    unsigned short src_0 = (src[0]>>8) | (src[0]<<8);
+    unsigned short src_1 = (src[1]>>8) | (src[1]<<8);
+    // 14 + 2
+    unsigned short dst_0 = (src_0 << 2)   | ((src_1 & 0x3fff) >> 12);
+    dst[0] = (dst_0>>8) | (dst_0<<8);
+    // 12 + 4
+    unsigned short src_2 = (src[2]>>8) | (src[2]<<8);
+    unsigned short dst_1 = (src_1 << 4)  | ((src_2 & 0x3fff) >> 10);
+    dst[1] = (dst_1>>8) | (dst_1<<8);
+    // 10 + 6
+    unsigned short src_3 = (src[3]>>8) | (src[3]<<8);
+    unsigned short dst_2 = (src_2 << 6)  | ((src_3 & 0x3fff) >> 8);
+    dst[2] = (dst_2>>8) | (dst_2<<8);
+    // 8  + 8
+    unsigned short src_4 = (src[4]>>8) | (src[4]<<8);
+    unsigned short dst_3 = (src_3 << 8)  | ((src_4 & 0x3fff) >> 6);
+    dst[3] = (dst_3>>8) | (dst_3<<8);
+    // 6  + 10
+    unsigned short src_5 = (src[5]>>8) | (src[5]<<8);
+    unsigned short dst_4 = (src_4 << 10) | ((src_5 & 0x3fff) >> 4);
+    dst[4] = (dst_4>>8) | (dst_4<<8);
+    // 4  + 12
+    unsigned short src_6 = (src[6]>>8) | (src[6]<<8);
+    unsigned short dst_5 = (src_5 << 12) | ((src_6 & 0x3fff) >> 2);
+    dst[5] = (dst_5>>8) | (dst_5<<8);
+    // 2  + 14
+    unsigned short src_7 = (src[7]>>8) | (src[7]<<8);
+    unsigned short dst_6 = (src_6 << 14) | ((src_7 & 0x3fff) >> 2);
+    dst[6] = (dst_6>>8) | (dst_6<<8);
+
+    dst += 7;
+    src += 8;
+  }
+}

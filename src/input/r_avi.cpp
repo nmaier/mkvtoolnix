@@ -55,7 +55,9 @@ extern "C" {
 
 // {{{ FUNCTION avi_reader_c::probe_file
 
-int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+avi_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   unsigned char data[12];
 
   if (size < 12)
@@ -78,7 +80,8 @@ int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 // {{{ C'TOR
 
-avi_reader_c::avi_reader_c(track_info_c *nti) throw (error_c):
+avi_reader_c::avi_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   long fsize, i;
   int64_t size, bps;
@@ -230,7 +233,8 @@ avi_reader_c::~avi_reader_c() {
 
 // }}}
 
-void avi_reader_c::create_packetizer(int64_t tid) {
+void
+avi_reader_c::create_packetizer(int64_t tid) {
 #ifdef HAVE_AVICLASSES
   char codec[4];
 
@@ -308,7 +312,8 @@ void avi_reader_c::create_packetizer(int64_t tid) {
 #endif
 }
 
-void avi_reader_c::create_packetizers() {
+void
+avi_reader_c::create_packetizers() {
   uint32_t i;
 
   for (i = 0; i < ti->track_order->size(); i++)
@@ -332,7 +337,8 @@ void avi_reader_c::create_packetizers() {
 
 // {{{ FUNCTION avi_reader_c::add_audio_demuxer
 
-void avi_reader_c::add_audio_demuxer(int aid) {
+void
+avi_reader_c::add_audio_demuxer(int aid) {
   avi_demuxer_t *demuxer;
   int i;
 #ifdef HAVE_AVICLASSES
@@ -444,7 +450,10 @@ void avi_reader_c::add_audio_demuxer(int aid) {
 
 // {{{ FUNCTION avi_reader_c::is_keyframe
 
-int avi_reader_c::is_keyframe(unsigned char *data, long size, int suggestion) {
+int
+avi_reader_c::is_keyframe(unsigned char *data,
+                          long size,
+                          int suggestion) {
   int i;
 
   if (!rederive_keyframes)
@@ -475,7 +484,8 @@ int avi_reader_c::is_keyframe(unsigned char *data, long size, int suggestion) {
 
 // {{{ FUNCTION avi_reader_c::read
 
-int avi_reader_c::read(generic_packetizer_c *ptzr) {
+int
+avi_reader_c::read(generic_packetizer_c *ptzr) {
   int key, last_frame, i, frames_read;
   long nread;
   avi_demuxer_t *demuxer;
@@ -573,7 +583,7 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
           done = true;
         frames++;
       }
-      duration = (int64_t)(1000.0 * frames_read / fps);
+      duration = (int64_t)(1000000000.0 * frames_read / fps);
       if (nread > 0) {
         vpacketizer->process(old_chunk, old_nread, -1, duration,
                              old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
@@ -669,7 +679,8 @@ int avi_reader_c::read(generic_packetizer_c *ptzr) {
 
 // {{{ FUNCTIONS avi_reader_c::display_priority/_progess
 
-int avi_reader_c::display_priority() {
+int
+avi_reader_c::display_priority() {
   if (vpacketizer != NULL)
     return DISPLAYPRIORITY_HIGH;
   else
@@ -678,7 +689,8 @@ int avi_reader_c::display_priority() {
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void avi_reader_c::display_progress(bool final) {
+void
+avi_reader_c::display_progress(bool final) {
   int myframes;
 
   if (vpacketizer != NULL) {
@@ -702,7 +714,8 @@ void avi_reader_c::display_progress(bool final) {
 
 // {{{ FUNCTION avi_reader_c::set_headers
 
-void avi_reader_c::set_headers() {
+void
+avi_reader_c::set_headers() {
   uint32_t i, k;
   avi_demuxer_t *d;
 
@@ -746,7 +759,8 @@ void avi_reader_c::set_headers() {
 
 // {{{ FUNCTION avi_reader_c::identify
 
-void avi_reader_c::identify() {
+void
+avi_reader_c::identify() {
   int i;
   const char *type;
 #ifdef HAVE_AVICLASSES

@@ -31,7 +31,9 @@
 
 #define PROBESIZE 8192
 
-int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
+int
+aac_reader_c::probe_file(mm_io_c *mm_io,
+                         int64_t size) {
   unsigned char buf[PROBESIZE];
   aac_header_t aacheader;
   int pos;
@@ -69,7 +71,8 @@ int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 #define INITCHUNKSIZE 16384
 #define SINITCHUNKSIZE "16384"
 
-aac_reader_c::aac_reader_c(track_info_c *nti) throw (error_c):
+aac_reader_c::aac_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   int adif, i;
   aac_header_t aacheader;
@@ -132,7 +135,8 @@ aac_reader_c::~aac_reader_c() {
 }
 
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)
-void aac_reader_c::guess_adts_version() {
+void
+aac_reader_c::guess_adts_version() {
   int pos;
   aac_header_t aacheader;
 
@@ -158,7 +162,8 @@ void aac_reader_c::guess_adts_version() {
   }
 }
 
-int aac_reader_c::read(generic_packetizer_c *) {
+int
+aac_reader_c::read(generic_packetizer_c *) {
   int nread;
 
   nread = mm_io->read(chunk, 4096);
@@ -173,11 +178,13 @@ int aac_reader_c::read(generic_packetizer_c *) {
   return EMOREDATA;
 }
 
-int aac_reader_c::display_priority() {
+int
+aac_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
 }
 
-void aac_reader_c::display_progress(bool final) {
+void
+aac_reader_c::display_progress(bool final) {
   if (final)
     mxinfo("progress: %lld/%lld bytes (100%%)\r", size, size);
   else
@@ -185,10 +192,12 @@ void aac_reader_c::display_progress(bool final) {
            (int)(bytes_processed * 100L / size));
 }
 
-void aac_reader_c::set_headers() {
+void
+aac_reader_c::set_headers() {
   aacpacketizer->set_headers();
 }
 
-void aac_reader_c::identify() {
+void
+aac_reader_c::identify() {
   mxinfo("File '%s': container: AAC\nTrack ID 0: audio (AAC)\n", ti->fname);
 }

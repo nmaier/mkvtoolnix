@@ -30,7 +30,9 @@
 
 using namespace libmatroska;
 
-bool operator!=(const dts_header_t &l, const dts_header_t &r) {
+bool
+operator!=(const dts_header_t &l,
+           const dts_header_t &r) {
   //if (l.frametype != r.frametype) return true;
   //if (l.deficit_sample_count != r.deficit_sample_count) return true;
   if (l.crc_present != r.crc_present)
@@ -107,7 +109,9 @@ dts_packetizer_c::~dts_packetizer_c() {
   safefree(packet_buffer);
 }
 
-void dts_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
+void
+dts_packetizer_c::add_to_buffer(unsigned char *buf,
+                                int size) {
   unsigned char *new_buffer;
 
   new_buffer = (unsigned char *)saferealloc(packet_buffer, buffer_size + size);
@@ -117,7 +121,8 @@ void dts_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   buffer_size += size;
 }
 
-int dts_packetizer_c::dts_packet_available() {
+int
+dts_packetizer_c::dts_packet_available() {
   int pos;
   dts_header_t dtsheader;
 
@@ -131,7 +136,9 @@ int dts_packetizer_c::dts_packet_available() {
   return 1;
 }
 
-void dts_packetizer_c::remove_dts_packet(int pos, int framesize) {
+void
+dts_packetizer_c::remove_dts_packet(int pos,
+                                    int framesize) {
   int new_size;
   unsigned char *temp_buf;
 
@@ -146,10 +153,11 @@ void dts_packetizer_c::remove_dts_packet(int pos, int framesize) {
   buffer_size = new_size;
 }
 
-unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
+unsigned char *
+dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   int pos;
   unsigned char *buf;
-  double pims;
+  double pins;
 
   if (packet_buffer == NULL)
     return 0;
@@ -166,14 +174,14 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   }
 
 
-  pims = get_dts_packet_length_in_milliseconds(&dtsheader);
+  pins = get_dts_packet_length_in_nanoseconds(&dtsheader);
 
-  if (needs_negative_displacement(pims)) {
+  if (needs_negative_displacement(pins)) {
     /*
      * DTS audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    displace(-pims);
+    displace(-pins);
     remove_dts_packet(pos, dtsheader.frame_byte_size);
 
     return 0;
@@ -187,7 +195,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   buf = (unsigned char *)safememdup(packet_buffer + pos,
                                     dtsheader.frame_byte_size);
 
-  if (needs_positive_displacement(pims)) {
+  if (needs_positive_displacement(pins)) {
     /*
      * DTS audio synchronization. displacement > 0 is solved by duplicating
      * the very first DTS packet as often as necessary. I cannot create
@@ -195,7 +203,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
      * settings the packet's values to 0 does not work as the DTS header
      * contains a CRC of its data.
      */
-    displace(pims);
+    displace(pins);
     return buf;
   }
 
@@ -204,7 +212,8 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   return buf;
 }
 
-void dts_packetizer_c::set_headers() {
+void
+dts_packetizer_c::set_headers() {
   set_codec_id(MKV_A_DTS);
   set_audio_sampling_freq((float)first_header.core_sampling_frequency);
   set_audio_channels(first_header.audio_channels);
@@ -212,8 +221,13 @@ void dts_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int dts_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t timecode, int64_t, int64_t, int64_t) {
+int
+dts_packetizer_c::process(unsigned char *buf,
+                          int size,
+                          int64_t timecode,
+                          int64_t,
+                          int64_t,
+                          int64_t) {
 
   int64_t my_timecode;
 
@@ -227,17 +241,17 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
   dts_header_t dtsheader;
   unsigned char *packet;
   while ((packet = get_dts_packet(dtsheader)) != NULL) {
-    int64_t packet_len_in_ms =
-      (int64_t)get_dts_packet_length_in_milliseconds(&dtsheader);
+    int64_t packet_len_in_ns =
+      (int64_t)get_dts_packet_length_in_nanoseconds(&dtsheader);
 
     if (timecode == -1)
-      my_timecode = (int64_t)(((double)samples_written * 1000.0) /
+      my_timecode = (int64_t)(((double)samples_written * 1000000000.0) /
                               ((double)dtsheader.core_sampling_frequency));
     else
       my_timecode = timecode + initial_displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
-               (int64_t)(packet_len_in_ms * ti->async.linear));
+               (int64_t)(packet_len_in_ns * ti->async.linear));
 
     bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);
@@ -248,6 +262,7 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
   return EMOREDATA;
 }
 
-void dts_packetizer_c::dump_debug_info() {
+void
+dts_packetizer_c::dump_debug_info() {
   mxdebug("dts_packetizer_c: queue: %d\n", packet_queue.size());
 }

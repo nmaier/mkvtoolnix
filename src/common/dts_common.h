@@ -164,15 +164,18 @@ inline int get_dts_packet_length_in_core_samples(const struct dts_header_s
   return r;
 }
 
-inline double get_dts_packet_length_in_milliseconds(const struct dts_header_s
-                                                    *dts_header) {
+inline double get_dts_packet_length_in_nanoseconds(const struct dts_header_s
+                                                   *dts_header) {
   // computes the length (in time, not size) of the packet in "samples".
   int samples = get_dts_packet_length_in_core_samples(dts_header);
 
-  double t = ((double)samples*1000.0) /
+  double t = ((double)samples * 1000000000.0) /
     ((double)dts_header->core_sampling_frequency);
 
   return t;
 }
 
+void MTX_DLL_API dts_14_to_dts_16(const unsigned short *src,
+                                  unsigned long srcwords,
+                                  unsigned short *dst);
 #endif // __DTSCOMMON_H

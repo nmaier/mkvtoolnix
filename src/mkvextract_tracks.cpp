@@ -517,8 +517,8 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
       case TYPEAVI:
         AVI_write_frame(track->avi, (char *)data.Buffer(), data.Size(),
                         has_ref ? 0 : 1);
-        if (myabs(block_duration - (int64_t)(1000.0 / track->v_fps)) > 1) {
-          int nfr = myrnd(block_duration * track->v_fps / 1000.0);
+        if (iabs(block_duration - (int64_t)(1000.0 / track->v_fps)) > 1) {
+          int nfr = irnd(block_duration * track->v_fps / 1000.0);
           for (k = 2; k <= nfr; k++)
             AVI_write_frame(track->avi, "", 0, 0);
         }

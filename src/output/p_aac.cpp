@@ -31,13 +31,16 @@
 
 using namespace libmatroska;
 
-aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
+aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
+                                   int nid,
                                    int nprofile,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_c *nti,
+                                   int nchannels, 
+                                   track_info_c *nti,
                                    bool nemphasis_present,
                                    bool nheaderless)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+  throw (error_c):
+  generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
   samples_per_sec = nsamples_per_sec;
@@ -55,11 +58,12 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
 aac_packetizer_c::~aac_packetizer_c() {
 }
 
-unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
-                                                aac_header_t *aacheader) {
+unsigned char *
+aac_packetizer_c::get_aac_packet(unsigned long *header,
+                                 aac_header_t *aacheader) {
   int pos, i, up_shift, down_shift, size;
   unsigned char *buf, *src, *packet_buffer;
-  double pims;
+  double pins;
 
   packet_buffer = byte_buffer.get_buffer();
   size = byte_buffer.get_size();
@@ -69,14 +73,14 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
   if ((pos + aacheader->bytes) > size)
     return NULL;
 
-  pims = samples_per_packet * 1000.0 / samples_per_sec;
+  pins = samples_per_packet * 1000000000.0 / samples_per_sec;
 
-  if (needs_negative_displacement(pims)) {
+  if (needs_negative_displacement(pins)) {
     /*
      * AAC audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    displace(-pims);
+    displace(-pins);
     byte_buffer.remove(pos + aacheader->bytes);
 
     return NULL;
@@ -111,7 +115,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     }
   }
 
-  if (needs_positive_displacement(pims)) {
+  if (needs_positive_displacement(pins)) {
     /*
      * AAC audio synchronization. displacement > 0 is solved by duplicating
      * the very first AAC packet as often as necessary. I cannot create
@@ -119,8 +123,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
      * settings the packet's values to 0 does not work as the AAC header
      * contains a CRC of its data.
      */
-    mxinfo("displacing for %f\n", pims);
-    displace(pims);
+    displace(pins);
 
     return buf;
   }
@@ -162,8 +165,13 @@ void aac_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int aac_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t timecode, int64_t, int64_t, int64_t) {
+int
+aac_packetizer_c::process(unsigned char *buf,
+                          int size,
+                          int64_t timecode,
+                          int64_t,
+                          int64_t,
+                          int64_t) {
   unsigned char *packet;
   unsigned long header;
   aac_header_t aacheader;
@@ -176,9 +184,9 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
     if (timecode != -1)
       my_timecode = timecode;
     else
-      my_timecode = (int64_t)(1000.0 * packetno * samples_per_packet /
+      my_timecode = (int64_t)(1000000000.0 * packetno * samples_per_packet /
                               samples_per_sec);
-    duration = (int64_t)(1000.0 * samples_per_packet * ti->async.linear /
+    duration = (int64_t)(1000000000.0 * samples_per_packet * ti->async.linear /
                          samples_per_sec);
     packetno++;
 
@@ -203,14 +211,14 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
   byte_buffer.add(buf, size);
   while ((packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * samples_per_packet /
+      my_timecode = (int64_t)(1000000000.0 * packetno * samples_per_packet /
                               samples_per_sec);
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, aacheader.data_byte_size, my_timecode,
-               (int64_t)(1000.0 * samples_per_packet * ti->async.linear /
-                         samples_per_sec));
+               (int64_t)(1000000000.0 * samples_per_packet *
+                         ti->async.linear / samples_per_sec));
     packetno++;
   }
 
@@ -223,7 +231,7 @@ void
 aac_packetizer_c::set_samples_per_packet(int nsamples_per_packet) {
   samples_per_packet = nsamples_per_packet;
   if (use_durations)
-    set_track_default_duration_ns((int64_t)(samples_per_packet *
+    set_track_default_duration((int64_t)(samples_per_packet *
                                             1000000000.0 *
                                             ti->async.linear /
                                             samples_per_sec));

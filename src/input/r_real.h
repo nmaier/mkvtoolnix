@@ -70,7 +70,7 @@ class real_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
   vector<real_demuxer_t *> demuxers;
-  int64_t file_size, last_timecode, num_packets_in_chunk, num_packets;
+  int64_t file_size, num_packets_in_chunk, num_packets;
   bool done;
 
 public:

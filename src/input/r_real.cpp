@@ -115,7 +115,9 @@ typedef struct {
 
 // {{{ FUNCTION real_reader_c::probe_file(mm_io_c *io, int64_t size)
 
-int real_reader_c::probe_file(mm_io_c *io, int64_t size) {
+int
+real_reader_c::probe_file(mm_io_c *io,
+                          int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
@@ -141,7 +143,8 @@ int real_reader_c::probe_file(mm_io_c *io, int64_t size) {
 
 // {{{ C'TOR
 
-real_reader_c::real_reader_c(track_info_c *nti) throw (error_c):
+real_reader_c::real_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
 
   try {
@@ -156,7 +159,6 @@ real_reader_c::real_reader_c(track_info_c *nti) throw (error_c):
     throw error_c("real_reader: Could not read the source file.");
   }
 
-  last_timecode = -1;
   done = false;
 
   if (verbose)
@@ -198,7 +200,8 @@ real_reader_c::~real_reader_c() {
 
 // {{{ FUNCTION real_reader_c::parse_headers()
 
-void real_reader_c::parse_headers() {
+void
+real_reader_c::parse_headers() {
   uint32_t object_id, i, id, start_time, preroll, size;
   char *buffer;
   real_demuxer_t *dmx;
@@ -437,7 +440,8 @@ void real_reader_c::parse_headers() {
 
 // {{{ FUNCTION real_reader_c::create_packetizers()
 
-void real_reader_c::create_packetizer(int64_t tid) {
+void
+real_reader_c::create_packetizer(int64_t tid) {
   int i;
   real_demuxer_t *dmx;
   bool duplicate_data;
@@ -520,6 +524,9 @@ void real_reader_c::create_packetizer(int64_t tid) {
             output_sample_rate = 2 * sample_rate;
             sbr = true;
           }
+        } else {
+          dmx->channels = channels;
+          dmx->samples_per_second = sample_rate;
         }
         if (sbr)
           profile = AAC_PROFILE_SBR;
@@ -578,7 +585,8 @@ void real_reader_c::create_packetizer(int64_t tid) {
   }
 }
 
-void real_reader_c::create_packetizers() {
+void
+real_reader_c::create_packetizers() {
   uint32_t i;
 
   for (i = 0; i < ti->track_order->size(); i++)
@@ -591,7 +599,8 @@ void real_reader_c::create_packetizers() {
 
 // {{{ FUNCTION real_reader_c::find_demuxer(int id)
 
-real_demuxer_t *real_reader_c::find_demuxer(int id) {
+real_demuxer_t *
+real_reader_c::find_demuxer(int id) {
   int i;
 
   for (i = 0; i < demuxers.size(); i++)
@@ -601,7 +610,8 @@ real_demuxer_t *real_reader_c::find_demuxer(int id) {
   return NULL;
 }
 
-int real_reader_c::finish() {
+int
+real_reader_c::finish() {
   int i;
   int64_t dur;
   real_demuxer_t *dmx;
@@ -630,11 +640,12 @@ int real_reader_c::finish() {
 
 // {{{ FUNCTION real_reader_c::read()
 
-int real_reader_c::read(generic_packetizer_c *) {
-  uint32_t object_version, length, id, timecode, flags, object_id;
+int
+real_reader_c::read(generic_packetizer_c *) {
+  uint32_t object_version, length, id, flags, object_id;
   unsigned char *chunk;
   real_demuxer_t *dmx;
-  int64_t fpos;
+  int64_t fpos, timecode;
 
   if (done)
     return 0;
@@ -661,14 +672,14 @@ int real_reader_c::read(generic_packetizer_c *) {
     object_version = io->read_uint16_be();
     length = io->read_uint16_be();
     id = io->read_uint16_be();
-    timecode = io->read_uint32_be();
+    timecode = (int64_t)io->read_uint32_be() * 1000000ll;
     io->skip(1);                // reserved
     flags = io->read_uint8();
 
     if (length < 12) {
       mxwarn("real_reader: %s: Data packet length is too "
              "small: %u. Other values: object_version: 0x%04x, id: 0x%04x, "
-             "timecode: %u, flags: 0x%02x. File position: %lld. Aborting "
+             "timecode: %lld, flags: 0x%02x. File position: %lld. Aborting "
              "this file.\n", ti->fname, length, object_version, id, timecode,
              flags, fpos);
       return finish();
@@ -680,8 +691,8 @@ int real_reader_c::read(generic_packetizer_c *) {
       return EMOREDATA;
     }
 
-    mxverb(4, "real_reader: %u/'%s': timecode = %u\n", dmx->id, ti->fname,
-           timecode);
+    mxverb(4, "real_reader: %u/'%s': timecode = %lldms\n", dmx->id, ti->fname,
+           timecode / 1000000);
 
     length -= 12;
 
@@ -716,7 +727,7 @@ int real_reader_c::read(generic_packetizer_c *) {
         // We've got the first packet cached. Now calculate the number of
         // samples and store that in dmx->c_reftimecode.
         dmx->c_reftimecode = (timecode - dmx->c_timecode) *
-          dmx->samples_per_second / 1000;
+          dmx->samples_per_second / 1000000000;
         // Now devide the number of samples in this first packet by the
         // number of AAC frames in that packet. Also round it to the nearest
         // power of 2.
@@ -735,27 +746,20 @@ int real_reader_c::read(generic_packetizer_c *) {
       deliver_aac_frames(dmx, chunk, length);
 
     } else {
-      if ((timecode - last_timecode) <= (5 * 60 * 1000)) {
-        if (dmx->c_data != NULL)
-          dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode,
-                                   timecode - dmx->c_timecode,
-                                   dmx->c_keyframe ? -1 : dmx->c_reftimecode);
-        dmx->c_data = chunk;
-        dmx->c_len = length;
-        dmx->c_reftimecode = dmx->c_timecode;
-        dmx->c_timecode = timecode;
-        if ((flags & 2) == 2)
-          dmx->c_keyframe = true;
-        else
-          dmx->c_keyframe = false;
-        dmx->c_numpackets++;
-      } else {
-        timecode = last_timecode;
-        safefree(chunk);
-      }
+      if (dmx->c_data != NULL)
+        dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode,
+                                 timecode - dmx->c_timecode,
+                                 dmx->c_keyframe ? -1 : dmx->c_reftimecode);
+      dmx->c_data = chunk;
+      dmx->c_len = length;
+      dmx->c_reftimecode = dmx->c_timecode;
+      dmx->c_timecode = timecode;
+      if ((flags & 2) == 2)
+        dmx->c_keyframe = true;
+      else
+        dmx->c_keyframe = false;
+      dmx->c_numpackets++;
     }
-
-    last_timecode = timecode;
 
   } catch (exception &ex) {
     return finish();
@@ -811,11 +815,13 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
 
 // {{{ FUNCTIONS display_*(), set_headers(), identify()
 
-int real_reader_c::display_priority() {
+int
+real_reader_c::display_priority() {
   return DISPLAYPRIORITY_MEDIUM;
 }
 
-void real_reader_c::display_progress(bool final) {
+void
+real_reader_c::display_progress(bool final) {
   if (final)
     mxinfo("progress: %lld/%lld packets (100%%)\r", num_packets_in_chunk,
            num_packets_in_chunk);
@@ -824,7 +830,8 @@ void real_reader_c::display_progress(bool final) {
            num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
 }
 
-void real_reader_c::set_headers() {
+void
+real_reader_c::set_headers() {
   uint32_t i, k;
   real_demuxer_t *d;
 
@@ -850,7 +857,8 @@ void real_reader_c::set_headers() {
     }
 }
 
-void real_reader_c::identify() {
+void
+real_reader_c::identify() {
   int i;
   real_demuxer_t *demuxer;
 
@@ -870,7 +878,9 @@ void real_reader_c::identify() {
 
 // {{{ FUNCTION real_reader_c::deliver_segments()
 
-void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
+void
+real_reader_c::deliver_segments(real_demuxer_t *dmx,
+                                int64_t timecode) {
   uint32_t len, total;
   rv_segment_t *segment;
   int i;
@@ -942,9 +952,12 @@ void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
 
 // {{{ FUNCTSION real_reader_c::assemble_packet()
 
-void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
-                                    int size, int64_t timecode,
-                                    bool keyframe) {
+void
+real_reader_c::assemble_packet(real_demuxer_t *dmx,
+                               unsigned char *p,
+                               int size,
+                               int64_t timecode,
+                               bool keyframe) {
   uint32_t vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum;
   uint32_t len;
   byte_cursor_c bc(p, size);
@@ -1013,7 +1026,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         vpkg_seqnum = bc.get_uint8();
 
         if ((vpkg_header & 0xc0) == 0xc0) {
-          this_timecode = vpkg_offset;
+          this_timecode = (int64_t)vpkg_offset * 1000000ll;
           vpkg_offset = 0;
         } else if ((vpkg_header & 0xc0) == 0x80)
           vpkg_offset = vpkg_length - vpkg_offset;
@@ -1050,8 +1063,11 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
 
 // {{{ FUNCTIONS real_reader_c::get_rv_dimensions(), set_dimensions()
 
-bool real_reader_c::get_rv_dimensions(unsigned char *buf, int size,
-                                      uint32_t &width, uint32_t &height) {
+bool
+real_reader_c::get_rv_dimensions(unsigned char *buf, 
+                                 int size,
+                                 uint32_t &width,
+                                 uint32_t &height) {
   const uint32_t cw[8] = {160, 176, 240, 320, 352, 640, 704, 0};
   const uint32_t ch1[8] = {120, 132, 144, 240, 288, 480, 0, 0};
   const uint32_t ch2[4] = {180, 360, 576, 0};
@@ -1095,8 +1111,10 @@ bool real_reader_c::get_rv_dimensions(unsigned char *buf, int size,
   return true;
 }
 
-void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
-                                   int size) {
+void
+real_reader_c::set_dimensions(real_demuxer_t *dmx,
+                              unsigned char *buffer,
+                              int size) {
   uint32_t width, height, disp_width, disp_height;
   KaxTrackEntry *track_entry;
 
@@ -1155,7 +1173,8 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
 
 // {{{ FUNCTION real_reader_c::get_information_from_data()
 
-void real_reader_c::get_information_from_data() {
+void
+real_reader_c::get_information_from_data() {
   uint32_t length, id;
   int i;
   unsigned char *chunk;
@@ -1221,7 +1240,8 @@ void real_reader_c::get_information_from_data() {
 
 // }}}
 
-void real_reader_c::flush_packetizers() {
+void
+real_reader_c::flush_packetizers() {
   uint32_t i;
 
   for (i = 0; i < demuxers.size(); i++)

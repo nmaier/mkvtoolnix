@@ -45,7 +45,9 @@ using namespace std;
 #define issrttimecode(s) (istimecode(s) && isarrow(s + 12) && \
                            istimecode(s + 17))
 
-int srt_reader_c::probe_file(mm_text_io_c *mm_io, int64_t) {
+int
+srt_reader_c::probe_file(mm_text_io_c *mm_io,
+                         int64_t) {
   string s;
   int64_t dummy;
 
@@ -65,7 +67,8 @@ int srt_reader_c::probe_file(mm_text_io_c *mm_io, int64_t) {
   return 1;
 }
 
-srt_reader_c::srt_reader_c(track_info_c *nti) throw (error_c):
+srt_reader_c::srt_reader_c(track_info_c *nti)
+  throw (error_c):
   generic_reader_c(nti) {
   bool is_utf8;
 
@@ -96,7 +99,8 @@ srt_reader_c::~srt_reader_c() {
 #define STATE_SUBS_OR_NUMBER  2
 #define STATE_TIME            3
 
-int srt_reader_c::read(generic_packetizer_c *) {
+int
+srt_reader_c::read(generic_packetizer_c *) {
   int64_t start, end;
   char *chunk;
   subtitles_c subs;
@@ -166,8 +170,10 @@ int srt_reader_c::read(generic_packetizer_c *) {
 
       start = atol(chunk) * 3600000 + atol(&chunk[3]) * 60000 +
         atol(&chunk[6]) * 1000 + atol(&chunk[9]);
+      start *= 1000000;
       end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +
         atol(&chunk[23]) * 1000 + atol(&chunk[26]);
+      end *= 1000000;
 
       safefree(chunk);
 
@@ -213,24 +219,28 @@ int srt_reader_c::read(generic_packetizer_c *) {
   return 0;
 }
 
-int srt_reader_c::display_priority() {
+int
+srt_reader_c::display_priority() {
   return DISPLAYPRIORITY_LOW;
 }
 
 static char wchar[] = "-\\|/-\\|/-";
 
-void srt_reader_c::display_progress(bool) {
+void
+srt_reader_c::display_progress(bool) {
   mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
 }
 
-void srt_reader_c::set_headers() {
+void
+srt_reader_c::set_headers() {
   textsubs_packetizer->set_headers();
 }
 
-void srt_reader_c::identify() {
+void
+srt_reader_c::identify() {
   mxinfo("File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
          ti->fname);
 }

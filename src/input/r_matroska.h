@@ -124,7 +124,8 @@ private:
   EbmlElement *saved_l1, *saved_l2, *segment;
   KaxCluster *cluster;
 
-  float segment_duration, last_timecode, first_timecode;
+  double segment_duration;
+  int64_t last_timecode, first_timecode;
   string title;
 
   vector<kax_attachment_t> attachments;

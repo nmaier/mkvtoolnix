@@ -33,8 +33,11 @@ using namespace libmatroska;
 
 ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, int nbsid, track_info_c *nti)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+                                   int nchannels,
+                                   int nbsid,
+                                   track_info_c *nti)
+  throw (error_c):
+  generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
   samples_per_sec = nsamples_per_sec;
@@ -43,7 +46,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
 
   set_track_type(track_audio);
   if (use_durations)
-    set_track_default_duration_ns((int64_t)(1536000000000.0 *ti->async.linear /
+    set_track_default_duration((int64_t)(1536000000000.0 *ti->async.linear /
                                             samples_per_sec));
   duplicate_data_on_add(false);
 }
@@ -51,15 +54,18 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
 ac3_packetizer_c::~ac3_packetizer_c() {
 }
 
-void ac3_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
+void
+ac3_packetizer_c::add_to_buffer(unsigned char *buf,
+                                int size) {
   byte_buffer.add(buf, size);
 }
 
-unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
-                                                ac3_header_t *ac3header) {
+unsigned char *
+ac3_packetizer_c::get_ac3_packet(unsigned long *header,
+                                 ac3_header_t *ac3header) {
   int pos, size;
   unsigned char *buf, *packet_buffer;
-  double pims;
+  double pins;
 
   packet_buffer = byte_buffer.get_buffer();
   size = byte_buffer.get_size();
@@ -72,14 +78,14 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   if ((pos + ac3header->bytes) > size)
     return NULL;
 
-  pims = 1536000.0 / samples_per_sec;
+  pins = 1536000000000.0 / samples_per_sec;
 
-  if (needs_negative_displacement(pims)) {
+  if (needs_negative_displacement(pins)) {
     /*
      * AC3 audio synchronization. displacement < 0 means skipping an
      * appropriate number of packets at the beginning.
      */
-    displace(-pims);
+    displace(-pins);
     byte_buffer.remove(pos + ac3header->bytes);
 
     return NULL;
@@ -94,7 +100,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   else
     buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
 
-  if (needs_positive_displacement(pims)) {
+  if (needs_positive_displacement(pins)) {
     /*
      * AC3 audio synchronization. displacement > 0 is solved by duplicating
      * the very first AC3 packet as often as necessary. I cannot create
@@ -102,7 +108,7 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
      * settings the packet's values to 0 does not work as the AC3 header
      * contains a CRC of its data.
      */
-    displace(pims);
+    displace(pins);
     return buf;
   }
 
@@ -111,7 +117,8 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   return buf;
 }
 
-void ac3_packetizer_c::set_headers() {
+void
+ac3_packetizer_c::set_headers() {
   string id = MKV_A_AC3;
 
   if (bsid == 9)
@@ -125,8 +132,13 @@ void ac3_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-int ac3_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t timecode, int64_t, int64_t, int64_t) {
+int
+ac3_packetizer_c::process(unsigned char *buf,
+                          int size,
+                          int64_t timecode,
+                          int64_t,
+                          int64_t,
+                          int64_t) {
   unsigned char *packet;
   unsigned long header;
   ac3_header_t ac3header;
@@ -137,12 +149,14 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
   add_to_buffer(buf, size);
   while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1536 / samples_per_sec);
+      my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /
+                              samples_per_sec);
     else
       my_timecode = timecode + initial_displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, ac3header.bytes, my_timecode,
-               (int64_t)(1000.0 * 1536 * ti->async.linear / samples_per_sec));
+               (int64_t)(1000000000.0 * 1536 * ti->async.linear /
+                         samples_per_sec));
     packetno++;
   }
 
@@ -151,23 +165,27 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
   return EMOREDATA;
 }
 
-void ac3_packetizer_c::dump_debug_info() {
+void
+ac3_packetizer_c::dump_debug_info() {
   mxdebug("ac3_packetizer_c: queue: %d; buffer size: %d\n",
           packet_queue.size(), byte_buffer.get_size());
 }
 
 ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
                                          unsigned long nsamples_per_sec,
-                                         int nchannels, int nbsid,
+                                         int nchannels,
+                                         int nbsid,
                                          track_info_c *nti)
-  throw (error_c): ac3_packetizer_c(nreader, nsamples_per_sec, nchannels,
-                                    nbsid, nti) {
+  throw (error_c):
+  ac3_packetizer_c(nreader, nsamples_per_sec, nchannels, nbsid, nti) {
   bsb_present = false;
 }
 
 static bool warning_printed = false;
 
-void ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
+void
+ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf,
+                                   int size) {
   unsigned char *new_buffer, *dptr, *sendptr, *sptr;
   int size_add;
   bool new_bsb_present;
@@ -219,4 +237,3 @@ void ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   byte_buffer.add(new_buffer, size_add);
   safefree(new_buffer);
 }
-

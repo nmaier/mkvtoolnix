@@ -104,9 +104,23 @@ KaxCluster *cluster_helper_c::get_cluster() {
   return NULL;
 }
 
+#define RND_TIMECODE_SCALE(a) (((int64_t)(a / TIMECODE_SCALE)) * \
+                               TIMECODE_SCALE)
+
 void cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
   int64_t timecode, old_max_timecode;
+
+//   mxinfo("adding at %lld for %lld\n", packet->timecode, packet->bref);
+  // Normalize the timecodes according to the timecode scale.
+  packet->timecode = RND_TIMECODE_SCALE(packet->timecode);
+  if (packet->duration > 0)
+    packet->duration = RND_TIMECODE_SCALE(packet->duration);
+  packet->assigned_timecode = RND_TIMECODE_SCALE(packet->assigned_timecode);
+  if (packet->bref > 0)
+    packet->bref = RND_TIMECODE_SCALE(packet->bref);
+  if (packet->fref > 0)
+    packet->fref = RND_TIMECODE_SCALE(packet->fref);
 
   timecode = get_timecode();
 
@@ -320,7 +334,7 @@ void cluster_helper_c::set_duration_and_timeslices(render_groups_t *rg) {
   block_duration = 0;
   for (i = 0; i < rg->durations.size(); i++)
     block_duration += rg->durations[i];
-  def_duration = rg->source->get_track_default_duration_ns();
+  def_duration = rg->source->get_track_default_duration();
 
   if ((block_duration > 0) && (block_duration != def_duration) &&
       (use_durations || rg->duration_mandatory))
@@ -627,19 +641,12 @@ ch_contents_t *cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
   if (clusters == NULL)
     return NULL;
 
-  for (i = 0; i < num_clusters; i++)
-    for (k = 0; k < clusters[i]->num_packets; k++) {
-      pack = clusters[i]->packets[k];
-      if ((pack->source == source) && (pack->timecode == ref_timecode))
-        return clusters[i];
-    }
-
-  // Be a bit fuzzy and allow timecodes that are 1ms off.
+  // Be a bit fuzzy and allow timecodes that are 10us off.
   for (i = 0; i < num_clusters; i++)
     for (k = 0; k < clusters[i]->num_packets; k++) {
       pack = clusters[i]->packets[k];
       if ((pack->source == source) &&
-          (iabs(pack->timecode - ref_timecode) <= 1))
+          (iabs(pack->timecode - ref_timecode) <= 10000))
         return clusters[i];
     }
 
@@ -653,19 +660,12 @@ packet_t *cluster_helper_c::find_packet(int64_t ref_timecode, void *source) {
   if (clusters == NULL)
     return NULL;
 
-  for (i = 0; i < num_clusters; i++)
-    for (k = 0; k < clusters[i]->num_packets; k++) {
-      pack = clusters[i]->packets[k];
-      if ((pack->source == source) && (pack->timecode == ref_timecode))
-        return pack;
-    }
-
-  // Be a bit fuzzy and allow timecodes that are 1ms off.
+  // Be a bit fuzzy and allow timecodes that are 10us off.
   for (i = 0; i < num_clusters; i++)
     for (k = 0; k < clusters[i]->num_packets; k++) {
       pack = clusters[i]->packets[k];
       if ((pack->source == source) &&
-          (iabs(pack->timecode - ref_timecode) <= 1))
+          (iabs(pack->timecode - ref_timecode) <= 10000))
         return pack;
     }
 

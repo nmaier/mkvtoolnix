@@ -57,7 +57,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
   packet_size = samples_per_sec / i;
 
   set_track_type(track_audio);
-  set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear *
+  set_track_default_duration((int64_t)(1000000000.0 * ti->async.linear *
                                           packet_size / samples_per_sec));
 
   packet_size *= channels * bits_per_sample / 8;
@@ -95,14 +95,14 @@ pcm_packetizer_c::process(unsigned char *buf,
       // Add silence.
       int pad_size;
 
-      pad_size = bps * initial_displacement / 1000;
+      pad_size = bps * initial_displacement / 1000000000;
       new_buf = (unsigned char *)safemalloc(pad_size);
       memset(new_buf, 0, pad_size);
       buffer.add(new_buf, pad_size);
       safefree(new_buf);
     } else
       // Skip bytes.
-      skip_bytes = -1 * bps * initial_displacement / 1000;
+      skip_bytes = -1 * bps * initial_displacement / 1000000000;
     initial_displacement = 0;
   }
 
@@ -122,8 +122,9 @@ pcm_packetizer_c::process(unsigned char *buf,
     safefree(buf);
 
   while (buffer.get_size() >= packet_size) {
-    add_packet(buffer.get_buffer(), packet_size, bytes_output * 1000 / bps,
-               packet_size * 1000 / bps, false, -1, -1, -1, cp_yes);
+    add_packet(buffer.get_buffer(), packet_size, bytes_output * 1000000000 /
+               bps, packet_size * 1000000000 / bps, false, -1, -1, -1,
+               cp_yes);
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }
@@ -139,8 +140,8 @@ pcm_packetizer_c::flush() {
 
   size = buffer.get_size();
   if (size > 0) {
-    add_packet(buffer.get_buffer(), size, bytes_output * 1000 /
-               bps, size * 1000 / bps);
+    add_packet(buffer.get_buffer(), size, bytes_output * 1000000000 /
+               bps, size * 1000000000 / bps, false, -1, -1, -1, cp_yes);
     bytes_output += size;
     buffer.remove(size);
   }

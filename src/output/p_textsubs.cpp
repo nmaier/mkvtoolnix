@@ -33,9 +33,12 @@ using namespace libmatroska;
 textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
                                              const char *ncodec_id,
                                              const void *nglobal_data,
-                                             int nglobal_size, bool nrecode,
-                                             bool is_utf8, track_info_c *nti)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+                                             int nglobal_size,
+                                             bool nrecode,
+                                             bool is_utf8,
+                                             track_info_c *nti)
+  throw (error_c):
+  generic_packetizer_c(nreader, nti) {
   packetno = 0;
   recode = nrecode;
   if (recode) {
@@ -57,7 +60,8 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
   safefree(codec_id);
 }
 
-void textsubs_packetizer_c::set_headers() {
+void
+textsubs_packetizer_c::set_headers() {
   set_codec_id(codec_id);
   if (global_data != NULL)
     set_codec_private((unsigned char *)global_data, global_size);
@@ -67,8 +71,13 @@ void textsubs_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
-int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
-                                   int64_t length, int64_t, int64_t) {
+int
+textsubs_packetizer_c::process(unsigned char *_subs,
+                               int,
+                               int64_t start,
+                               int64_t length,
+                               int64_t,
+                               int64_t) {
   int num_newlines;
   char *subs, *idx1, *idx2, *utf8_subs;
   int64_t end;
@@ -138,7 +147,7 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   return EMOREDATA;
 }
 
-void textsubs_packetizer_c::dump_debug_info() {
-  mxdebug("textsubs_packetizer_c: queue: %d\n",
-          packet_queue.size());
+void
+textsubs_packetizer_c::dump_debug_info() {
+  mxdebug("textsubs_packetizer_c: queue: %d\n", packet_queue.size());
 }
