@@ -19,9 +19,8 @@
 #include <errno.h>
 
 #include "matroska.h"
-#include "mkvmerge.h"
 #include "mp3_common.h"
-#include "pr_generic.h"
+#include "output_control.h"
 #include "p_mp3.h"
 
 using namespace libmatroska;

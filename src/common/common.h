@@ -277,6 +277,9 @@ int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
 extern int MTX_DLL_API verbose;
 
 #define foreach(it, vec) for (it = (vec).begin(); it != (vec).end(); it++)
+#define mxfind(value, cont) std::find(cont.begin(), cont.end(), value)
+#define mxfind2(it, value, cont) \
+  ((id = std::find((cont).begin(), (cont).end(), value)) != (cont).end())
 
 class MTX_DLL_API bit_cursor_c {
 private:

@@ -18,10 +18,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
 #include "id3_common.h"
+#include "output_control.h"
 #include "p_tta.h"
 #include "r_tta.h"
 

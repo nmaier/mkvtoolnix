@@ -27,7 +27,7 @@
 #include "common.h"
 #include "flac_common.h"
 #include "matroska.h"
-#include "mkvmerge.h"
+#include "output_control.h"
 #include "pr_generic.h"
 #include "r_flac.h"
 
@@ -128,8 +128,7 @@ flac_reader_c::flac_reader_c(track_info_c *nti)
   }
   if (identifying)
     return;
-  if (verbose)
-    mxinfo(FMT_FN "Using the FLAC demultiplexer.\n", ti->fname);
+  mxverb(1, FMT_FN "Using the FLAC demultiplexer.\n", ti->fname);
 
   if (!parse_file())
     throw error_c(FPFX "Could not read all header packets.");

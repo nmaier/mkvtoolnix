@@ -239,23 +239,17 @@ public:
   virtual void free_contents();
 };
 
-typedef struct packetizer_container_t {
-  generic_packetizer_c *orig;
-  generic_packetizer_c *current;
-} packetizer_container_t;
-
-#define OPTZR(i) reader_packetizers[i].orig
-#define PTZR(i) reader_packetizers[i].current
+#define PTZR(i) reader_packetizers[i]
 #define PTZR0 PTZR(0)
 #define NPTZR() reader_packetizers.size()
 
 class generic_reader_c {
 public:
   track_info_c *ti;
-  vector<packetizer_container_t> reader_packetizers;
-  vector<int64_t> requested_track_ids, available_track_ids;
-  generic_reader_c *connected_to;
+  vector<generic_packetizer_c *> reader_packetizers;
+  vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
   int64_t max_timecode_seen;
+  bool appending;
 
 public:
   generic_reader_c(track_info_c *nti);
@@ -294,7 +288,7 @@ protected:
 
 class generic_packetizer_c {
 protected:
-  deque<packet_t *> packet_queue;
+  deque<packet_t *> packet_queue, deferred_packets;
 
   int64_t initial_displacement;
   int64_t free_refs, enqueued_bytes;
@@ -329,7 +323,9 @@ protected:
 public:
   track_info_c *ti;
   generic_reader_c *reader;
+  int connected_to;
   int64_t correction_timecode_offset;
+  int64_t append_timecode_offset, max_timecode_seen;
 
 public:
   generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
@@ -347,6 +343,9 @@ public:
                           int64_t duration, bool duration_mandatory = false,
                           int64_t bref = -1, int64_t fref = -1,
                           int ref_priority = -1);
+  virtual void add_packet2(packet_t *pack);
+  virtual void process_deferred_packets();
+
   virtual packet_t *get_packet();
   virtual int packet_available() {
     return packet_queue.size();
@@ -459,6 +458,7 @@ public:
 
   virtual const char *get_format_name() = 0;
   virtual int can_connect_to(generic_packetizer_c *src) = 0;
+  virtual void connect(generic_packetizer_c *src);
 
   virtual void enable_avi_audio_sync(bool enable) {
     if (enable && (ti->avi_block_sizes == NULL))

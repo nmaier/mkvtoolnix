@@ -13,20 +13,22 @@
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
+#include <map>
+#include <string>
+
 #include <matroska/KaxContentEncoding.h>
+#include <matroska/KaxTag.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
-
-#include <map>
-#include <string>
 
 #include "base64.h"
 #include "common.h"
 #include "commonebml.h"
 #include "compression.h"
 #include "mkvmerge.h"
+#include "output_control.h"
 #include "pr_generic.h"
 #include "tagparser.h"
 #include "tag_common.h"
@@ -61,7 +63,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   safety_last_duration = 0;
   last_cue_timecode = -1;
   correction_timecode_offset = 0;
+  append_timecode_offset = 0;
+  max_timecode_seen = 0;
   default_track_warning_printed = false;
+  connected_to = 0;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -537,6 +542,9 @@ generic_packetizer_c::set_headers() {
   KaxTag *tag;
   bool found;
 
+  if (connected_to > 0)
+    return;
+
   found = false;
   for (idx = 0; idx < ptzrs_in_header_order.size(); idx++)
     if (ptzrs_in_header_order[idx] == this) {
@@ -782,56 +790,6 @@ generic_packetizer_c::add_packet(memory_c &mem,
   int length;
   packet_t *pack;
 
-  timecode += correction_timecode_offset;
-  if (bref >= 0)
-    bref += correction_timecode_offset;
-  if (fref >= 0)
-    fref += correction_timecode_offset;
-
-  if (timecode < 0) {
-    mem.release();
-    return;
-  }
-
-  // 'timecode < safety_last_timecode' may only occur for B frames. In this
-  // case we have the coding order, e.g. IPB1B2 and the timecodes
-  // I: 0, P: 120, B1: 40, B2: 80.
-  if ((timecode < safety_last_timecode) && (fref < 0)) {
-    if (htrack_type == track_audio) {
-      int64_t needed_timecode_offset;
-
-      needed_timecode_offset = safety_last_timecode +
-        safety_last_duration - timecode;
-      correction_timecode_offset += needed_timecode_offset;
-      timecode += needed_timecode_offset;
-      if (bref >= 0)
-        bref += needed_timecode_offset;
-      if (fref >= 0)
-        fref += needed_timecode_offset;
-      mxwarn(FMT_TID "The current packet's "
-             "timecode is smaller than that of the previous packet. This "
-             "usually means that the source file is a Matroska file that "
-             "has not been created 100%% correctly. The timecodes of all "
-             "packets will be adjusted by %lldms in order not to lose any "
-             "data. This may throw A/V sync off, but that can be corrected "
-             "with mkvmerge's \"--sync\" option. If you already use "
-             "\"--sync\" and you still get this warning then do NOT worry "
-             "-- this is normal. "
-             "If this error happens more than once and you get this message "
-             "more than once for a particular track then "
-             "either is the source file badly mastered, or mkvmerge "
-             "contains a bug. In this case you should contact the author "
-             "Moritz Bunkus <moritz@bunkus.org>.\n", ti->fname, ti->id,
-             (needed_timecode_offset + 500000) / 1000000);
-    } else
-      mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
-             "'%s'. %s\n", ARG_TIMECODE_NS(timecode),
-             ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname, BUGMSG);
-  }
-  safety_last_timecode = timecode;
-  safety_last_duration = duration;
-
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));
 
@@ -853,15 +811,89 @@ generic_packetizer_c::add_packet(memory_c &mem,
   pack->duration = duration;
   pack->duration_mandatory = duration_mandatory;
   pack->source = this;
-  timecode_factory->get_next(timecode, pack->duration);
-  pack->assigned_timecode = timecode + ti->packet_delay;
-
-  if (reader->max_timecode_seen < (pack->assigned_timecode + pack->duration))
-    reader->max_timecode_seen = pack->assigned_timecode + pack->duration;
-
-  packet_queue.push_back(pack);
 
   enqueued_bytes += pack->length;
+
+  if (connected_to != 1)
+    add_packet2(pack);
+  else
+    deferred_packets.push_back(pack);
+}
+
+void
+generic_packetizer_c::add_packet2(packet_t *pack) {
+  int64_t factory_timecode;
+
+  pack->timecode += correction_timecode_offset + append_timecode_offset;
+  if (pack->bref >= 0)
+    pack->bref += correction_timecode_offset + append_timecode_offset;
+  if (pack->fref >= 0)
+    pack->fref += correction_timecode_offset + append_timecode_offset;
+
+  if (pack->timecode < 0) {
+    safefree(pack->data);
+    safefree(pack);
+    return;
+  }
+
+  // 'timecode < safety_last_timecode' may only occur for B frames. In this
+  // case we have the coding order, e.g. IPB1B2 and the timecodes
+  // I: 0, P: 120, B1: 40, B2: 80.
+  if ((pack->timecode < safety_last_timecode) && (pack->fref < 0)) {
+    if (htrack_type == track_audio) {
+      int64_t needed_timecode_offset;
+
+      needed_timecode_offset = safety_last_timecode +
+        safety_last_duration - pack->timecode;
+      correction_timecode_offset += needed_timecode_offset;
+      pack->timecode += needed_timecode_offset;
+      if (pack->bref >= 0)
+        pack->bref += needed_timecode_offset;
+      if (pack->fref >= 0)
+        pack->fref += needed_timecode_offset;
+      mxwarn(FMT_TID "The current packet's "
+             "timecode is smaller than that of the previous packet. This "
+             "usually means that the source file is a Matroska file that "
+             "has not been created 100%% correctly. The timecodes of all "
+             "packets will be adjusted by %lldms in order not to lose any "
+             "data. This may throw A/V sync off, but that can be corrected "
+             "with mkvmerge's \"--sync\" option. If you already use "
+             "\"--sync\" and you still get this warning then do NOT worry "
+             "-- this is normal. "
+             "If this error happens more than once and you get this message "
+             "more than once for a particular track then "
+             "either is the source file badly mastered, or mkvmerge "
+             "contains a bug. In this case you should contact the author "
+             "Moritz Bunkus <moritz@bunkus.org>.\n", ti->fname, ti->id,
+             (needed_timecode_offset + 500000) / 1000000);
+    } else
+      mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
+             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
+             "'%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
+             ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname, BUGMSG);
+  }
+  safety_last_timecode = pack->timecode;
+  safety_last_duration = pack->duration;
+
+  factory_timecode = pack->timecode;
+  timecode_factory->get_next(factory_timecode, pack->duration);
+  pack->assigned_timecode = factory_timecode + ti->packet_delay;
+
+  if (max_timecode_seen < (pack->assigned_timecode + pack->duration))
+    max_timecode_seen = pack->assigned_timecode + pack->duration;
+  if (reader->max_timecode_seen < max_timecode_seen)
+    reader->max_timecode_seen = max_timecode_seen;
+
+  packet_queue.push_back(pack);
+}
+
+void
+generic_packetizer_c::process_deferred_packets() {
+  deque<packet_t *>::iterator packet;
+
+  foreach(packet, deferred_packets)
+    add_packet2(*packet);
+  deferred_packets.clear();
 }
 
 packet_t *
@@ -945,6 +977,36 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
   return duration;
 }
 
+void
+generic_packetizer_c::connect(generic_packetizer_c *src) {
+  deque<packet_t *>::iterator packet;
+
+  free_refs = src->free_refs;
+  track_entry = src->track_entry;
+  hserialno = src->hserialno;
+  htrack_type = src->htrack_type;
+  htrack_default_duration = src->htrack_default_duration;
+  huid  = src->huid;
+  if (hcompression != src->hcompression) {
+    if (compressor != NULL) {
+      delete compressor;
+      compressor = NULL;
+    }
+    hcompression = src->hcompression;
+    if (hcompression != COMPRESSION_NONE)
+      compressor = compression_c::create(hcompression);
+  }
+  last_cue_timecode = src->last_cue_timecode;
+  correction_timecode_offset = 0;
+  if (htrack_type != track_subtitle)
+    append_timecode_offset = src->max_timecode_seen;
+  else
+    append_timecode_offset = src->reader->max_timecode_seen;
+  connected_to++;
+  if (connected_to == 2)
+    process_deferred_packets();
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(container) \
@@ -958,8 +1020,8 @@ generic_reader_c::generic_reader_c(track_info_c *nti) {
   int i;
 
   ti = new track_info_c(*nti);
-  connected_to = NULL;
   max_timecode_seen = 0;
+  appending = false;
 
   add_all_requested_track_ids2(atracks);
   add_all_requested_track_ids2(vtracks);
@@ -984,14 +1046,19 @@ generic_reader_c::~generic_reader_c() {
   int i;
 
   for (i = 0; i < reader_packetizers.size(); i++)
-    delete reader_packetizers[i].orig;
+    delete reader_packetizers[i];
   delete ti;
 }
 
 int
 generic_reader_c::read_all() {
-  while (read(NULL, true) != 0)
-    ;
+  int i;
+
+  for (i = 0; i < reader_packetizers.size(); i++) {
+    while (read(reader_packetizers[i], true) != 0)
+      ;
+  }
+
   return 0;
 }
 
@@ -1030,39 +1097,37 @@ generic_reader_c::demuxing_requested(char type,
 
 int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
-  packetizer_container_t cont;
-
-  cont.orig = ptzr;
-  cont.current = ptzr;
-  reader_packetizers.push_back(cont);
-  add_packetizer_globally(ptzr);
+  reader_packetizers.push_back(ptzr);
+  used_track_ids.push_back(ptzr->ti->id);
+  if (!appending)
+    add_packetizer_globally(ptzr);
   return reader_packetizers.size() - 1;
 }
 
 void
 generic_reader_c::set_timecode_offset(int64_t offset) {
-  vector<packetizer_container_t>::const_iterator it;
+  vector<generic_packetizer_c *>::const_iterator it;
 
   max_timecode_seen = offset;
   foreach(it, reader_packetizers)
-    it->orig->correction_timecode_offset = offset;
+    (*it)->correction_timecode_offset = offset;
 }
 
 void
 generic_reader_c::set_headers() {
-  vector<packetizer_container_t>::const_iterator it;
+  vector<generic_packetizer_c *>::const_iterator it;
 
   foreach(it, reader_packetizers)
-    it->orig->set_headers();
+    (*it)->set_headers();
 }
 
 void
 generic_reader_c::set_headers_for_track(int64_t tid) {
-  vector<packetizer_container_t>::const_iterator it;
+  vector<generic_packetizer_c *>::const_iterator it;
 
   foreach(it, reader_packetizers)
-    if (it->orig->ti->id == tid) {
-      it->orig->set_headers();
+    if ((*it)->ti->id == tid) {
+      (*it)->set_headers();
       break;
     }
 }

@@ -19,15 +19,14 @@
 #include <vector>
 
 #include <matroska/KaxBlockData.h>
+#include <matroska/KaxSeekHead.h>
 
 #include "cluster_helper.h"
 #include "common.h"
 #include "hacks.h"
-#include "mkvmerge.h"
+#include "output_control.h"
 #include "p_video.h"
 #include "p_vorbis.h"
-
-#include <ebml/StdIOCallback.h>
 
 class kax_cluster_c: public KaxCluster {
 public:
@@ -85,12 +84,10 @@ cluster_helper_c::free_contents(ch_contents_t *clstr) {
   assert(!((clstr->num_packets != 0) && (clstr->packets == NULL)));
   for (i = 0; i < clstr->num_packets; i++) {
     p = clstr->packets[i];
-    if (p->data != NULL)
-      safefree(p->data);
+    safefree(p->data);
     safefree(p);
   }
-  if (clstr->packets != NULL)
-    safefree(clstr->packets);
+  safefree(clstr->packets);
   safefree(clstr);
 }
 
@@ -122,6 +119,13 @@ cluster_helper_c::add_packet(packet_t *packet) {
     packet->fref = RND_TIMECODE_SCALE(packet->fref);
 
   timecode = get_timecode();
+
+  mxverb(4, "cluster_helper_c::add_packet(): new packet { source %lld/%s "
+         "timecode: %lld duration: %lld bref: %lld fref: %lld "
+         "assigned_timecode: %lld }\n",
+         packet->source->ti->id, packet->source->ti->fname,
+         packet->timecode, packet->duration, packet->bref, packet->fref,
+         packet->assigned_timecode);
 
   if (clusters == NULL)
     add_cluster(new kax_cluster_c());

@@ -8,16 +8,14 @@
  *
  * $Id$
  *
- * command line parameter parsing, looping, output handling
+ * command line parameter parsing
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
-// {{{ includes
-
 #include "os.h"
 
-#include <ctype.h>
 #include <errno.h>
+#include <ctype.h>
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 #include <signal.h>
 #endif
@@ -32,39 +30,15 @@
 #include <windows.h>
 #endif
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <typeinfo>
 #include <vector>
 
-#include <ebml/EbmlHead.h>
-#include <ebml/EbmlSubHead.h>
-#include <ebml/EbmlVersion.h>
-#include <ebml/EbmlVoid.h>
-
-#include <matroska/FileKax.h>
-#include <matroska/KaxAttached.h>
-#include <matroska/KaxAttachments.h>
-#include <matroska/KaxBlock.h>
-#include <matroska/KaxChapters.h>
-#include <matroska/KaxCluster.h>
-#include <matroska/KaxClusterData.h>
-#include <matroska/KaxCues.h>
-#include <matroska/KaxInfo.h>
-#include <matroska/KaxInfoData.h>
-#include <matroska/KaxSeekHead.h>
-#include <matroska/KaxSegment.h>
 #include <matroska/KaxTags.h>
-#include <matroska/KaxTag.h>
-#include <matroska/KaxTagMulti.h>
-#include <matroska/KaxTracks.h>
-#include <matroska/KaxTrackEntryData.h>
-#include <matroska/KaxTrackAudio.h>
-#include <matroska/KaxTrackVideo.h>
-#include <matroska/KaxVersion.h>
 
 #include "chapters.h"
-#include "cluster_helper.h"
 #include "common.h"
 #include "commonebml.h"
 #include "extern_data.h"
@@ -72,163 +46,21 @@
 #include "iso639.h"
 #include "mkvmerge.h"
 #include "mm_io.h"
-#include "r_aac.h"
-#include "r_ac3.h"
-#include "r_avi.h"
-#include "r_dts.h"
-#include "r_flac.h"
-#include "r_matroska.h"
-#include "r_mp3.h"
-#include "r_mpeg.h"
-#include "r_ogm.h"
-#include "r_qtmp4.h"
-#include "r_real.h"
-#include "r_srt.h"
-#include "r_ssa.h"
-#include "r_tta.h"
-#include "r_vobsub.h"
-#include "r_wav.h"
+#include "output_control.h"
 #include "tagparser.h"
 #include "tag_common.h"
-#include "xml_element_mapping.h"
 
 using namespace libmatroska;
 using namespace std;
 
-namespace libmatroska {
-
-  class KaxMyDuration: public KaxDuration {
-	public:
-		KaxMyDuration(const EbmlFloat::Precision prec): KaxDuration() {
-      SetPrecision(prec);
-    }
-  };
-}
-
-// }}}
-
-// {{{ global structs and variables
-
 typedef struct {
-  char *ext;
-  int   type;
-  char *desc;
+  const char *ext;
+  int type;
+  const char *desc;
 } file_type_t;
-
-typedef struct filelist_tag {
-  char *name;
-  mm_io_c *fp;
-
-  int type, status;
-
-  packet_t *pack;
-
-  generic_reader_c *reader;
-
-  track_info_c *ti;
-  bool appending;
-} filelist_t;
-
-typedef struct {
-  int status;
-  packet_t *pack;
-  generic_packetizer_c *packetizer;
-} packetizer_t;
-
-typedef struct {
-  char *name, *mime_type, *description;
-  int64_t size;
-  bool to_all_files;
-} attachment_t;
-
-typedef struct {
-  int64_t file_id;
-  int64_t track_id;
-} track_order_t;
-
-typedef struct {
-  int64_t src_file_id;
-  int64_t src_track_id;
-  int64_t dst_file_id;
-  int64_t dst_track_id;
-} append_spec_t;
-
-vector<packetizer_t *> packetizers;
-vector<filelist_t> files;
-vector<attachment_t> attachments;
-vector<track_order_t> track_order;
-vector<append_spec_t> append_mapping;
-int64_t attachment_sizes_first = 0, attachment_sizes_others = 0;
-
-// Variables set by the command line parser.
-string outfile;
-int64_t file_sizes = 0;
-int max_blocks_per_cluster = 65535;
-int64_t max_ns_per_cluster = 2000000000;
-bool write_cues = true, cue_writing_requested = false;
-bool video_track_present = false;
-bool write_meta_seek_for_clusters = true;
-bool no_lacing = false, no_linking = true;
-int64_t split_after = -1;
-bool split_by_time = false;
-int split_max_num_files = 65535;
-bool use_durations = false;
-
-#define TIMECODE_SCALE_MODE_NORMAL      0
-#define TIMECODE_SCALE_MODE_FIXED       1
-#define TIMECODE_SCALE_MODE_AUTO        2
-
-double timecode_scale = TIMECODE_SCALE;
-static int timecode_scale_mode = TIMECODE_SCALE_MODE_NORMAL;
-
-float video_fps = -1.0;
-int default_tracks[3], default_tracks_priority[3];
-
-bool identifying = false, identify_verbose = false;
-
-cluster_helper_c *cluster_helper = NULL;
-KaxSegment *kax_segment;
-KaxTracks *kax_tracks;
-KaxTrackEntry *kax_last_entry;
-KaxCues *kax_cues;
-KaxSeekHead *kax_sh_main = NULL, *kax_sh_cues = NULL;
-KaxChapters *kax_chapters = NULL;
-
-static KaxInfo *kax_infos;
-static KaxMyDuration *kax_duration;
-
-static KaxTags *kax_tags = NULL;
-static KaxTags *tags_from_cue_chapters = NULL;
-static KaxChapters *chapters_in_this_file = NULL;
-
-static KaxAttachments *kax_as = NULL;
-
-static EbmlVoid *kax_sh_void = NULL;
-static EbmlVoid *kax_chapters_void = NULL;
-static EbmlVoid *void_after_track_headers = NULL;
-
-static string chapter_file_name;
-static string chapter_language;
-static string chapter_charset;
-
-string segment_title;
-bool segment_title_set = false;
-
-int64_t tags_size = 0;
-static bool accept_tags = true;
-
-int file_num = 1;
-bool splitting = false;
 
 // Specs say that track numbers should start at 1.
 static int track_number = 1;
-
-string default_language = "und";
-
-static mm_io_c *out = NULL;
-
-static bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
-static bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -237,8 +69,6 @@ file_type_t file_types[] =
    {"ac3 ", TYPEAC3, "A/52 (aka AC3)"},
    {"avi ", TYPEAVI, "AVI (Audio/Video Interleaved)"},
    {"dts ", TYPEDTS, "DTS (Digital Theater System)"},
-   {"m1v ", TYPEMPEG, "MPEG 1 video elementary stream"},
-   {"m2v ", TYPEMPEG, "MPEG 2 video elementary stream"},
    {"mp2 ", TYPEMP3, "MPEG1 layer II audio (CBR and VBR/ABR)"},
    {"mp3 ", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
    {"mkv ", TYPEMATROSKA, "general Matroska files"},
@@ -263,7 +93,7 @@ file_type_t file_types[] =
    {"    ", -1,      "MP3 audio"},
    {"    ", -1,      "simple text subtitles"},
    {"    ", -1,      "uncompressed PCM audio"},
-   {"    ", -1,      "Video"},
+   {"    ", -1,      "Video (not MPEG1/2)"},
    {"    ", -1,      "Vorbis audio"},
    {NULL,  -1,      NULL}};
 
@@ -303,10 +133,11 @@ usage() {
     "                           Do not write meta seek data for clusters.\n"
     "  --disable-lacing         Do not Use lacing.\n"
     "  --enable-durations       Enable block durations for all blocks.\n"
-    "  --append-to <SFID1:STID1=DFID1:DTID1,SFID1:STID2=DFID2:DTID2,...>\n"
+    "  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
     "                           A comma separated list of file and track IDs\n"
     "                           that controls which track of a file is\n"
-    "                           appended to another track of another file.\n"
+    "                           appended to another track of the preceding\n"
+    "                           file.\n"
     "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
     "\n File splitting and linking (more global options):\n"
     "  --split <d[K,M,G]|HH:MM:SS|s>\n"
@@ -451,8 +282,8 @@ create_track_number(generic_reader_c *reader,
   if (found) {
     found = false;
     for (i = 0; i < packetizers.size(); i++)
-      if ((packetizers[i]->packetizer != NULL) &&
-          (packetizers[i]->packetizer->get_track_num() == tnum)) {
+      if ((packetizers[i].packetizer != NULL) &&
+          (packetizers[i].packetizer->get_track_num() == tnum)) {
         tnum = track_number;
         break;
       }
@@ -465,191 +296,44 @@ create_track_number(generic_reader_c *reader,
   return tnum;
 }
 
-/** \brief Probe the file type
+/** \brief Identify a file type and its contents
  *
- * Opens the input file and calls the \c probe_file function for each known
- * file reader class. Uses \c mm_text_io_c for subtitle probing.
- */
-static int
-get_type(char *filename) {
-  mm_io_c *mm_io;
-  mm_text_io_c *mm_text_io;
-  uint64_t size;
-  int type, i;
-  const int probe_sizes[] = {16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024,
-                             256 * 1024, 0};
-
-  mm_io = NULL;
-  mm_text_io = NULL;
-  size = 0;
-  try {
-    mm_io = new mm_io_c(filename, MODE_READ);
-    mm_io->setFilePointer(0, seek_end);
-    size = mm_io->getFilePointer();
-    mm_io->setFilePointer(0, seek_current);
-  } catch (exception &ex) {
-    mxerror(_("The source file '%s' could not be opened successfully, or "
-              "retrieving its size by seeking to the end did not work.\n"),
-            filename);
-  }
-
-  type = TYPEUNKNOWN;
-  if (avi_reader_c::probe_file(mm_io, size))
-    type = TYPEAVI;
-  else if (kax_reader_c::probe_file(mm_io, size))
-    type = TYPEMATROSKA;
-  else if (wav_reader_c::probe_file(mm_io, size))
-    type = TYPEWAV;
-  else if (ogm_reader_c::probe_file(mm_io, size))
-    type = TYPEOGM;
-  else if (flac_reader_c::probe_file(mm_io, size))
-    type = TYPEFLAC;
-  else if (real_reader_c::probe_file(mm_io, size))
-    type = TYPEREAL;
-  else if (qtmp4_reader_c::probe_file(mm_io, size))
-    type = TYPEQTMP4;
-  else if (tta_reader_c::probe_file(mm_io, size))
-    type = TYPETTA;
-  else {
-    for (i = 0; (probe_sizes[i] != 0) && (type == TYPEUNKNOWN); i++)
-      if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
-        type = TYPEMP3;
-      else if (ac3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
-        type = TYPEAC3;
-  }
-  if (type != TYPEUNKNOWN)
-    ;
-  else if (mp3_reader_c::probe_file(mm_io, size, 2 * 1024 * 1024, 10))
-    type = TYPEMP3;
-  else if (dts_reader_c::probe_file(mm_io, size))
-    type = TYPEDTS;
-  else if (aac_reader_c::probe_file(mm_io, size))
-    type = TYPEAAC;
-  else if (mpeg_es_reader_c::probe_file(mm_io, size))
-    type = TYPEMPEG;
-  else {
-    delete mm_io;
-
-    try {
-      mm_text_io = new mm_text_io_c(filename);
-      mm_text_io->setFilePointer(0, seek_end);
-      size = mm_text_io->getFilePointer();
-      mm_text_io->setFilePointer(0, seek_current);
-    } catch (exception &ex) {
-      mxerror(_("The source file '%s' could not be opened successfully, or "
-                "retrieving its size by seeking to the end did not work.\n"),
-              filename);
-    }
-
-    if (srt_reader_c::probe_file(mm_text_io, size))
-      type = TYPESRT;
-    else if (ssa_reader_c::probe_file(mm_text_io, size))
-      type = TYPESSA;
-    else if (vobsub_reader_c::probe_file(mm_text_io, size))
-      type = TYPEVOBSUB;
-    else
-      type = TYPEUNKNOWN;
-
-    mm_io = mm_text_io;
-  }
-
-  delete mm_io;
-
-  file_sizes += size;
-
-  return type;
-}
-
-/** \brief Fix the file after mkvmerge has been interrupted
- *
- * On Unix like systems mkvmerge will install a signal handler. On \c SIGUSR1
- * all debug information will be dumped to \c stdout if mkvmerge has been
- * compiled with \c -DDEBUG.
- *
- * On \c SIGINT mkvmerge will try to sanitize the current output file
- * by writing the cues, the meta seek information and by updating the
- * segment duration and the segment length.
- */
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
-static void
-sighandler(int signum) {
-#ifdef DEBUG
-  if (signum == SIGUSR1)
-    debug_facility.dump_info();
-#endif // DEBUG
-
-  if (out == NULL)
-    mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
-
-  mxwarn(_("\nmkvmerge received a SIGINT (probably because the user pressed "
-           "Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during "
-           "this process you'll have to kill it manually.\n"));
-
-  mxinfo(_("The file is being fixed, part 1/4..."));
-  // Render the cues.
-  if (write_cues && cue_writing_requested)
-    kax_cues->Render(*out);
-  mxinfo(_(" done\n"));
-
-  mxinfo(_("The file is being fixed, part 2/4..."));
-  // Now re-render the kax_duration and fill in the biggest timecode
-  // as the file's duration.
-  out->save_pos(kax_duration->GetElementPosition());
-  *(static_cast<EbmlFloat *>(kax_duration)) =
-    irnd((double)(cluster_helper->get_max_timecode() -
-                  cluster_helper->get_first_timecode()) /
-         (double)((int64_t)timecode_scale));
-  kax_duration->Render(*out);
-  out->restore_pos();
-  mxinfo(_(" done\n"));
-
-  mxinfo(_("The file is being fixed, part 3/4..."));
-  // Write meta seek information if it is not disabled.
-  if (cue_writing_requested)
-    kax_sh_main->IndexThis(*kax_cues, *kax_segment);
-
-  if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
-    kax_sh_main->UpdateSize();
-    if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
-      mxwarn(_("This should REALLY not have happened. The space reserved for "
-               "the first meta seek element was too small. %s\n"), BUGMSG);
-  }
-  mxinfo(_(" done\n"));
-
-  mxinfo(_("The file is being fixed, part 4/4..."));
-  // Set the correct size for the segment.
-  if (kax_segment->ForceSize(out->getFilePointer() -
-                             kax_segment->GetElementPosition() -
-                             kax_segment->HeadSize()))
-    kax_segment->OverwriteHead(*out);
-  mxinfo(_(" done\n"));
-
-  mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
-}
-#endif
-
-static int display_counter = 1;
-static generic_reader_c *display_reader = NULL;
-
-/** \brief Selects a reader for displaying its progress information
+ * This function called for \c --identify. It sets up dummy track info
+ * data for the reader, probes the input file, creates the file reader
+ * and calls its identify function.
  */
 static void
-display_progress(bool force) {
-  generic_reader_c *winner;
-  int i;
+identify(const string &filename) {
+  track_info_c ti;
+  filelist_t file;
 
-  if (((display_counter % 500) == 0) || force) {
-    display_counter = 0;
-    if (display_reader == NULL) {
-      winner = files[0].reader;
-      for (i = 1; i < files.size(); i++)
-        if (files[i].reader->display_priority() > winner->display_priority())
-          winner = files[i].reader;
-      display_reader = winner;
-    }
-    display_reader->display_progress(force);
-  }
-  display_counter++;
+  memset(&file, 0, sizeof(filelist_t));
+
+  file.name = from_utf8_c(cc_local_utf8, filename);
+  file.type = get_file_type(file.name);
+  ti.fname = file.name;
+  
+  if (file.type == TYPEUNKNOWN)
+    mxerror(_("File %s has unknown type. Please have a look "
+              "at the supported file types ('mkvmerge --list-types') and "
+              "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
+              "file type is supported but not recognized properly.\n"),
+            file.name);
+
+  file.appending = false;
+  file.fp = NULL;
+  file.status = EMOREDATA;
+  file.pack = NULL;
+  file.ti = new track_info_c(ti);
+
+  files.push_back(file);
+
+  verbose = 0;
+  identifying = true;
+  suppress_warnings = true;
+  create_readers();
+
+  files[0].reader->identify();
 }
 
 /** \brief Parse tags and add them to the list of all tags
@@ -687,38 +371,6 @@ parse_and_add_tags(const char *file_name) {
   }
 
   delete tags;
-}
-
-/** \brief Add some tags to the list of all tags
- */
-void
-add_tags(KaxTag *tags) {
-  if (!accept_tags)
-    return;
-
-  if (tags->ListSize() == 0)
-    return;
-
-  if (kax_tags == NULL)
-    kax_tags = new KaxTags;
-
-  kax_tags->PushElement(*tags);
-}
-
-static bool accept_packetizer;
-/** \brief Add a packetizer to the list of packetizers
- */
-void
-add_packetizer_globally(generic_packetizer_c *packetizer) {
-  packetizer_t *pack;
-
-  if (!accept_packetizer)
-    return;
-  pack = (packetizer_t *)safemalloc(sizeof(packetizer_t));
-  pack->packetizer = packetizer;
-  pack->status = EMOREDATA;
-  pack->pack = NULL;
-  packetizers.push_back(pack);
 }
 
 /** \brief Parse the \c --atracks / \c --vtracks / \c --stracks argument
@@ -1310,442 +962,15 @@ parse_append_to(const string &s,
   entries = split(s, ",");
   strip(entries);
   foreach(entry, entries) {
-    if (mxsscanf((*entry).c_str(), "%lld:%lld=%lld:%lld",
-                 &mapping.src_file_id, &mapping.src_track_id,
-                 &mapping.dst_file_id, &mapping.dst_track_id) != 4)
-      mxerror(_("'%s' is not a valid mapping of track IDs in '--append-to "
-                "%s'.\n"), (*entry).c_str(), s.c_str());
+    if ((mxsscanf((*entry).c_str(), "%lld:%lld:%lld:%lld",
+                  &mapping.src_file_id, &mapping.src_track_id,
+                  &mapping.dst_file_id, &mapping.dst_track_id) != 4) ||
+        (mapping.src_file_id < 0) || (mapping.src_track_id < 0) ||
+        (mapping.dst_file_id < 0) || (mapping.dst_track_id < 0))
+      mxerror(_("'%s' is not a valid mapping of file and track IDs in "
+                "'--append-to %s'.\n"), (*entry).c_str(), s.c_str());
     append_mapping.push_back(mapping);
   }
-}
-
-static void
-set_timecode_scale() {
-  vector<packetizer_t *>::const_iterator ptzr;
-  bool video_present, audio_present;
-  int64_t highest_sample_rate;
-
-  video_present = false;
-  audio_present = false;
-  highest_sample_rate = 0;
-    
-  foreach(ptzr, packetizers)
-    if ((*ptzr)->packetizer->get_track_type() == track_video)
-      video_present = true;
-    else if ((*ptzr)->packetizer->get_track_type() == track_audio) {
-      int64_t sample_rate;
-
-      audio_present = true;
-      sample_rate = (int64_t)(*ptzr)->packetizer->get_audio_sampling_freq();
-      if (sample_rate > highest_sample_rate)
-        highest_sample_rate = sample_rate;
-    }
-
-  if (timecode_scale_mode != TIMECODE_SCALE_MODE_FIXED) {
-    if (audio_present && (highest_sample_rate > 0) &&
-        (!video_present ||
-         (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))) {
-      int64_t max_ns_with_timecode_scale;
-
-      timecode_scale = (double)1000000000.0 / (double)highest_sample_rate -
-        1.0;
-      max_ns_with_timecode_scale = (int64_t)(32700 * timecode_scale);
-      if (max_ns_with_timecode_scale < max_ns_per_cluster)
-        max_ns_per_cluster = max_ns_with_timecode_scale;
-
-      mxverb(2, "mkvmerge: using sample precision timestamps. highest sample "
-             "rate: %lld, new timecode_scale: %f, "
-             "max_ns_with_timecode_scale: %lld, max_ns_per_cluster: %lld\n",
-             highest_sample_rate, timecode_scale, max_ns_with_timecode_scale,
-             max_ns_per_cluster);
-    }
-  }
-
-  KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
-  *(static_cast<EbmlUInteger *>(&time_scale)) = (int64_t)timecode_scale;
-
-  kax_cues->SetGlobalTimecodeScale((int64_t)timecode_scale);
-}
-
-/** \brief Render the basic EBML and Matroska headers
- *
- * Renders the segment information and track headers. Also reserves
- * some space with EBML Void elements so that the headers can be
- * overwritten safely by the rerender_headers function.
- */
-static void
-render_headers(mm_io_c *rout) {
-  EbmlHead head;
-  bool first_file;
-  int i;
-
-  first_file = splitting && (file_num == 1);
-  try {
-    EDocType &doc_type = GetChild<EDocType>(head);
-    *static_cast<EbmlString *>(&doc_type) = "matroska";
-    EDocTypeVersion &doc_type_ver = GetChild<EDocTypeVersion>(head);
-    *(static_cast<EbmlUInteger *>(&doc_type_ver)) = 1;
-    EDocTypeReadVersion &doc_type_read_ver =
-      GetChild<EDocTypeReadVersion>(head);
-    *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
-
-    head.Render(*rout);
-
-    kax_infos = &GetChild<KaxInfo>(*kax_segment);
-
-    if (!video_track_present ||
-        (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))
-      kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_64);
-    else
-      kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_32);
-    *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
-    kax_infos->PushElement(*kax_duration);
-
-    if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      string version = string("libebml v") + EbmlCodeVersion +
-        string(" + libmatroska v") + KaxCodeVersion;
-      *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
-        cstr_to_UTFstring(version.c_str());
-      *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
-        cstr_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
-      GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
-    } else {
-      *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
-        cstr_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
-      *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
-        cstr_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
-      GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(0);
-    }
-
-    if (segment_title.length() > 0)
-      *((EbmlUnicodeString *)&GetChild<KaxTitle>(*kax_infos)) =
-        cstrutf8_to_UTFstring(segment_title.c_str());
-
-    // Generate the segment UIDs.
-    if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      if (file_num == 1) {
-        seguid_current.generate_random();
-        seguid_next.generate_random();
-      } else {
-        seguid_prev = seguid_current;
-        seguid_current = seguid_next;
-        seguid_next.generate_random();
-      }
-    } else {
-      memset(seguid_current.data(), 0, 128 / 8);
-      memset(seguid_prev.data(), 0, 128 / 8);
-      memset(seguid_next.data(), 0, 128 / 8);
-    }
-
-    // Set the segment UIDs.
-    KaxSegmentUID &kax_seguid = GetChild<KaxSegmentUID>(*kax_infos);
-    kax_seguid.CopyBuffer(seguid_current.data(), 128 / 8);
-
-    if (!no_linking) {
-      if (!first_file) {
-        KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
-        kax_prevuid.CopyBuffer(seguid_prev.data(), 128 / 8);
-      } else if (seguid_link_previous != NULL) {
-        KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
-        kax_prevuid.CopyBuffer(seguid_link_previous->data(), 128 / 8);
-      }
-      if (splitting) {
-        KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
-        kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
-      } else if (seguid_link_next != NULL) {
-        KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
-        kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
-      }
-    }
-
-    kax_segment->WriteHead(*rout, 8);
-
-    // Reserve some space for the meta seek stuff.
-    kax_sh_main = new KaxSeekHead();
-    kax_sh_void = new EbmlVoid();
-    kax_sh_void->SetSize(4096);
-    kax_sh_void->Render(*rout);
-    if (write_meta_seek_for_clusters)
-      kax_sh_cues = new KaxSeekHead();
-
-    kax_tracks = &GetChild<KaxTracks>(*kax_segment);
-    kax_last_entry = NULL;
-
-    for (i = 0; i < track_order.size(); i++)
-      if ((track_order[i].file_id >= 0) &&
-          (track_order[i].file_id < files.size()) &&
-          !files[track_order[i].file_id].appending)
-        files[track_order[i].file_id].reader->
-          set_headers_for_track(track_order[i].track_id);
-    for (i = 0; i < files.size(); i++)
-      if (!files[i].appending)
-        files[i].reader->set_headers();
-    set_timecode_scale();
-    for (i = 0; i < packetizers.size(); i++)
-      if (packetizers[i]->packetizer != NULL)
-        packetizers[i]->packetizer->fix_headers();
-
-    kax_infos->Render(*rout, true);
-    kax_sh_main->IndexThis(*kax_infos, *kax_segment);
-
-    kax_tracks->Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
-    kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
-
-    // Reserve some small amount of space for header changes by the
-    // packetizers.
-    void_after_track_headers = new EbmlVoid;
-    void_after_track_headers->SetSize(1024);
-    void_after_track_headers->Render(*rout);
-  } catch (exception &ex) {
-    mxerror(_("The track headers could not be rendered correctly. %s.\n"),
-            BUGMSG);
-  }
-}
-
-/** \brief Overwrites the track headers with current values
- *
- * Can be used by packetizers that have to modify their headers
- * depending on the track contents.
- */
-void
-rerender_track_headers() {
-  int64_t new_void_size;
-
-  kax_tracks->UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
-  new_void_size = void_after_track_headers->GetElementPosition() +
-    void_after_track_headers->GetSize() -
-    kax_tracks->GetElementPosition() -
-    kax_tracks->ElementSize();
-  out->save_pos(kax_tracks->GetElementPosition());
-  kax_tracks->Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
-  delete void_after_track_headers;
-  void_after_track_headers = new EbmlVoid;
-  void_after_track_headers->SetSize(new_void_size);
-  void_after_track_headers->Render(*out);
-  out->restore_pos();
-}
-
-/** \brief Render all attachments into the output file at the current position
- */
-static void
-render_attachments(IOCallback *rout) {
-  KaxAttachments *other_as;
-  KaxAttached *kax_a;
-  KaxFileData *fdata;
-  vector<attachment_t>::const_iterator attch;
-  int i;
-  char *name;
-  binary *buffer;
-  int64_t size;
-  mm_io_c *io;
-
-  other_as = new KaxAttachments;
-  for (i = 0; i < files.size(); i++)
-    files[i].reader->add_attachments(other_as);
-  for (i = 0, size = 0; i < other_as->ListSize(); i++) {
-    kax_a = static_cast<KaxAttached *>((*other_as)[i]);
-    fdata = FindChild<KaxFileData>(*kax_a);
-    if (fdata != NULL)
-      size += fdata->GetSize();
-  }
-
-  if (!(((file_num == 1) && ((attachment_sizes_first + size) > 0)) ||
-        ((attachment_sizes_others + size) > 0))) {
-    delete other_as;
-    return;
-  }
-
-  if (kax_as != NULL)
-    delete kax_as;
-  kax_as = new KaxAttachments();
-  kax_a = NULL;
-  foreach(attch, attachments) {
-    if ((file_num == 1) || (*attch).to_all_files) {
-      if (kax_a == NULL)
-        kax_a = &GetChild<KaxAttached>(*kax_as);
-      else
-        kax_a = &GetNextChild<KaxAttached>(*kax_as, *kax_a);
-
-      if ((*attch).description != NULL)
-        *static_cast<EbmlUnicodeString *>
-          (&GetChild<KaxFileDescription>(*kax_a)) =
-          cstrutf8_to_UTFstring((*attch).description);
-
-      if ((*attch).mime_type != NULL)
-        *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*kax_a)) =
-          (*attch).mime_type;
-
-      name = &(*attch).name[strlen((*attch).name) - 1];
-      while ((name != (*attch).name) && (*name != PATHSEP))
-        name--;
-      if (*name == PATHSEP)
-        name++;
-      if (*name == 0)
-        die("Internal error: *name == 0 on %d.", __LINE__);
-
-      *static_cast<EbmlUnicodeString *>
-        (&GetChild<KaxFileName>(*kax_a)) = cstr_to_UTFstring(name);
-
-      *static_cast<EbmlUInteger *>
-        (&GetChild<KaxFileUID>(*kax_a)) =
-        create_unique_uint32(UNIQUE_ATTACHMENT_IDS);
-
-      try {
-        io = new mm_io_c((*attch).name, MODE_READ);
-        size = io->get_size();
-        buffer = new binary[size];
-        io->read(buffer, size);
-        delete io;
-
-        fdata = &GetChild<KaxFileData>(*kax_a);
-        fdata->SetBuffer(buffer, size);
-      } catch (...) {
-        mxerror(_("The attachment '%s' could not be read.\n"), (*attch).name);
-      }
-    }
-  }
-
-  while (other_as->ListSize() > 0) {
-    kax_as->PushElement(*(*other_as)[0]);
-    other_as->Remove(0);
-  }
-  delete other_as;
-
-  kax_as->Render(*rout);
-}
-
-/** \brief Creates the file readers
- *
- * For each file the appropriate file reader class is instantiated.
- * The newly created class must read all track information in its
- * contrsuctor and throw an exception in case of an error. Otherwise
- * it is assumed that the file can be hanlded.
- */
-static void
-create_readers() {
-  vector<append_spec_t>::const_iterator amap;
-  vector<int64_t>::const_iterator id;
-  vector<filelist_t>::iterator file;
-
-  foreach(file, files) {
-    accept_packetizer = !file->appending;
-    try {
-      switch ((*file).type) {
-        case TYPEMATROSKA:
-          (*file).reader = new kax_reader_c((*file).ti);
-          break;
-        case TYPEOGM:
-          (*file).reader = new ogm_reader_c((*file).ti);
-          break;
-        case TYPEAVI:
-          (*file).reader = new avi_reader_c((*file).ti);
-          break;
-        case TYPEREAL:
-          (*file).reader = new real_reader_c((*file).ti);
-          break;
-        case TYPEWAV:
-          (*file).reader = new wav_reader_c((*file).ti);
-          break;
-        case TYPESRT:
-          (*file).reader = new srt_reader_c((*file).ti);
-          break;
-        case TYPEMP3:
-          (*file).reader = new mp3_reader_c((*file).ti);
-          break;
-        case TYPEAC3:
-          (*file).reader = new ac3_reader_c((*file).ti);
-          break;
-        case TYPEDTS:
-          (*file).reader = new dts_reader_c((*file).ti);
-          break;
-        case TYPEAAC:
-          (*file).reader = new aac_reader_c((*file).ti);
-          break;
-        case TYPESSA:
-          (*file).reader = new ssa_reader_c((*file).ti);
-          break;
-        case TYPEVOBSUB:
-          (*file).reader = new vobsub_reader_c((*file).ti);
-          break;
-        case TYPEQTMP4:
-          (*file).reader = new qtmp4_reader_c((*file).ti);
-          break;
-#if defined(HAVE_FLAC_FORMAT_H)
-        case TYPEFLAC:
-          (*file).reader = new flac_reader_c((*file).ti);
-          break;
-#endif
-        case TYPETTA:
-          (*file).reader = new tta_reader_c((*file).ti);
-          break;
-        case TYPEMPEG:
-          (*file).reader = new mpeg_es_reader_c((*file).ti);
-          break;
-        default:
-          mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);
-          break;
-      }
-    } catch (error_c error) {
-      mxerror(_("The demultiplexer failed to initialize:\n%s\n)"),
-              error.get_error());
-    }
-  }
-
-  if (!identifying) {
-    foreach(file, files)
-      (*file).reader->create_packetizers();
-    foreach(file, files)
-      (*file).reader->check_track_ids_and_packetizers();
-
-    foreach(amap, append_mapping) {
-      if (((*amap).src_file_id < 0) || ((*amap).src_file_id >= files.size()))
-        mxerror("There is no file with the ID '%lld'. The argument for "
-                "--append-to was invalid.\n", (*amap).src_file_id);
-      if (((*amap).dst_file_id < 0) || ((*amap).dst_file_id >= files.size()))
-        mxerror("There is no file with the ID '%lld'. The argument for "
-                "--append-to was invalid.\n", (*amap).dst_file_id);
-    }
-  }
-}
-
-/** \brief Identify a file type and its contents
- *
- * This function called for \c --identify. It sets up dummy track info
- * data for the reader, probes the input file, creates the file reader
- * and calls its identify function.
- */
-static void
-identify(const string &filename) {
-  track_info_c ti;
-  filelist_t file;
-
-  memset(&file, 0, sizeof(filelist_t));
-
-  file.name = from_utf8_c(cc_local_utf8, filename);
-  file.type = get_type(file.name);
-  ti.fname = file.name;
-  
-  if (file.type == TYPEUNKNOWN)
-    mxerror(_("File %s has unknown type. Please have a look "
-              "at the supported file types ('mkvmerge --list-types') and "
-              "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
-              "file type is supported but not recognized properly.\n"),
-            file.name);
-
-  file.appending = false;
-  file.fp = NULL;
-  file.status = EMOREDATA;
-  file.pack = NULL;
-  file.ti = new track_info_c(ti);
-
-  files.push_back(file);
-
-  verbose = 0;
-  identifying = true;
-  suppress_warnings = true;
-  create_readers();
-
-  files[0].reader->identify();
 }
 
 /** \brief Sets the priority mkvmerge runs with
@@ -2241,14 +1466,14 @@ parse_args(vector<string> &args) {
 
       if (no_next_arg)
         mxerror(_("'--timecode-scale' lacks its argument.\n"));
-      if (timecode_scale_mode != TIMECODE_SCALE_MODE_NORMAL)
+      if (timecode_scale_mode != timecode_scale_mode_normal)
         mxerror(_("'--timecode-scale' was used more than once.\n"));
 
       if (!parse_int(next_arg, temp))
         mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
 
       if (temp == -1)
-        timecode_scale_mode = TIMECODE_SCALE_MODE_AUTO;
+        timecode_scale_mode = timecode_scale_mode_auto;
       else {
         if ((temp > 10000000) || (temp < 1000))
           mxerror(_("The given timecode scale factor is outside the valid "
@@ -2256,7 +1481,7 @@ parse_args(vector<string> &args) {
                     "even if a video track is present').\n"));
 
         timecode_scale = temp;
-        timecode_scale_mode = TIMECODE_SCALE_MODE_FIXED;
+        timecode_scale_mode = timecode_scale_mode_fixed;
       }
       sit++;
     }
@@ -2455,6 +1680,9 @@ parse_args(vector<string> &args) {
 
     }
 
+    else if (this_arg.length() == 0)
+      mxerror("An empty file name is not valid.\n");
+
     // The argument is an input file.
     else {
       if (outfile == this_arg)
@@ -2480,10 +1708,13 @@ parse_args(vector<string> &args) {
           mxerror(_("A single '+' is not a valid command line option. If you "
                     "want to append a file use '+' directly followed by the "
                     "file name, e.g. '+movie_part_2.avi'."));
+        if (files.size() == 0)
+          mxerror("The first file cannot be appended because there are no "
+                  "files to append to.\n");
         file.appending = true;
       }
       file.name = from_utf8_c(cc_local_utf8, this_arg);
-      file.type = get_type(file.name);
+      file.type = get_file_type(file.name);
       ti->fname = from_utf8_c(cc_local_utf8, this_arg);
 
       if (file.type == TYPEUNKNOWN)
@@ -2525,12 +1756,6 @@ parse_args(vector<string> &args) {
   if ((split_after <= 0) && !no_linking)
     mxwarn(_("'--link', '--link-to-previous' and '--link-to-next' are "
              "only useful in combination with '--split'.\n"));
-
-  for (i = 0; i < attachments.size(); i++) {
-    attachment_sizes_first += attachments[i].size;
-    if (attachments[i].to_all_files)
-      attachment_sizes_others += attachments[i].size;
-  }
 
   delete ti;
   safefree(attachment.description);
@@ -2614,530 +1839,13 @@ handle_args(int argc,
   parse_args(args);
 }
 
-/** \brief Global program initialization
- *
- * Both platform dependant and independant initialization is done here.
- * For Unix like systems a signal handler is installed. The locale's
- * \c LC_MESSAGES is set.
- */
-static void
-setup() {
-#if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
-  if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("The locale could not be set properly. Check the "
-            "LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
-  textdomain("mkvtoolnix");
-#endif
-
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
-  signal(SIGUSR1, sighandler);
-  signal(SIGINT, sighandler);
-#endif
-
-  srand(time(NULL));
-  cc_local_utf8 = utf8_init(NULL);
-
-  cluster_helper = new cluster_helper_c();
-
-  xml_element_map_init();
-}
-
 /** \brief Initialize global variables
  */
 static void
 init_globals() {
-  track_number = 1;
-  cluster_helper = NULL;
-  kax_sh_main = NULL;
-  kax_sh_cues = NULL;
-  kax_sh_void = NULL;
-  video_fps = -1.0;
   memset(default_tracks, 0, sizeof(default_tracks));
   memset(default_tracks_priority, 0, sizeof(default_tracks_priority));
-  display_counter = 1;
-  display_reader = NULL;
-  timecode_scale = TIMECODE_SCALE;
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
-}
-
-/** \brief Deletes the file readers
- */
-static void
-destroy_readers() {
-  vector<filelist_t>::const_iterator file;
-
-  foreach(file, files)
-    if ((*file).reader != NULL)
-      delete (*file).reader;
-
-  while (packetizers.size()) {
-    safefree(packetizers[packetizers.size() - 1]);
-    packetizers.pop_back();
-  }
-}
-
-/** \brief Uninitialization
- *
- * Frees memory and shuts down the readers.
- */
-static void
-cleanup() {
-  delete cluster_helper;
-  vector<filelist_t>::const_iterator file;
-  vector<attachment_t>::const_iterator att;
-
-  destroy_readers();
-
-  foreach(file, files) {
-    delete (*file).ti;
-    safefree((*file).name);
-  }
-  files.clear();
-
-  foreach(att, attachments) {
-    safefree((*att).mime_type);
-    safefree((*att).description);
-    safefree((*att).name);
-  }
-  attachments.clear();
-
-  if (kax_tags != NULL)
-    delete kax_tags;
-  if (tags_from_cue_chapters != NULL)
-    delete tags_from_cue_chapters;
-  if (kax_chapters != NULL)
-    delete kax_chapters;
-  if (kax_as != NULL)
-    delete kax_as;
-
-  utf8_done();
-}
-
-/** \brief Transform the output filename and insert the current file number
- *
- * Rules and search order:
- * \arg %d
- * \arg %[0-9]+d
- * \arg . ("-%03d" will be inserted before the .)
- * \arg "-%03d" will be appended
- */
-string
-create_output_name() {
-  int p, p2, i;
-  bool ok;
-  char buffer[20];
-  string s;
-
-  s = outfile;
-  p2 = 0;
-  // First possibility: %d
-  p = s.find("%d");
-  if (p >= 0) {
-    mxprints(buffer, "%d", file_num);
-    s.replace(p, 2, buffer);
-
-    return s;
-  }
-
-  // Now search for something like %02d
-  ok = false;
-  p = s.find("%");
-  if (p >= 0) {
-    p2 = s.find("d", p + 1);
-    if (p2 >= 0)
-      for (i = p + 1; i < p2; i++)
-        if (!isdigit(s[i]))
-          break;
-      ok = true;
-  }
-
-  if (ok) {                     // We've found e.g. %02d
-    string format(&s.c_str()[p]), len = format;
-    format.erase(p2 - p + 1);
-    len.erase(0, 1);
-    len.erase(p2 - p - 1);
-    char *buffer2 = new char[strtol(len.c_str(), NULL, 10) + 1];
-    mxprints(buffer2, format.c_str(), file_num);
-    s.replace(p, format.size(), buffer2);
-    delete [] buffer2;
-
-    return s;
-  }
-
-  mxprints(buffer, "-%03d", file_num);
-
-  // See if we can find a '.'.
-  p = s.rfind(".");
-  if (p >= 0)
-    s.insert(p, buffer);
-  else
-    s.append(buffer);
-
-  return s;
-}
-
-void
-add_tags_from_cue_chapters() {
-  int i;
-  uint32_t tuid;
-  bool found;
-
-  if (tags_from_cue_chapters == NULL)
-    return;
-
-  found = false;
-  tuid = 0;
-  for (i = 0; i < ptzrs_in_header_order.size(); i++)
-    if (ptzrs_in_header_order[i]->get_track_type() == 'v') {
-      found = true;
-      tuid = ptzrs_in_header_order[i]->get_uid();
-      break;
-    }
-  if (!found) {
-    for (i = 0; i < ptzrs_in_header_order.size(); i++)
-      if (ptzrs_in_header_order[i]->get_track_type() == 'a') {
-        found = true;
-        tuid = ptzrs_in_header_order[i]->get_uid();
-        break;
-      }
-  }
-  if (!found)
-    tuid = ptzrs_in_header_order[0]->get_uid();
-
-  for (i = 0; i < tags_from_cue_chapters->ListSize(); i++) {
-    KaxTagTargets *targets;
-
-    targets = &GetChild<KaxTagTargets>
-      (*static_cast<KaxTag *>((*tags_from_cue_chapters)[i]));
-    *static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets)) = tuid;
-  }
-
-  if (kax_tags == NULL)
-    kax_tags = tags_from_cue_chapters;
-  else {
-    while (tags_from_cue_chapters->ListSize() > 0) {
-      kax_tags->PushElement(*(*tags_from_cue_chapters)[0]);
-      tags_from_cue_chapters->Remove(0);
-    }
-    delete tags_from_cue_chapters;
-  }
-  tags_from_cue_chapters = NULL;
-}
-
-/** \brief Creates the next output file
- *
- * Creates a new file name depending on the split settings. Opens that
- * file for writing and calls \c render_headers(). Also renders
- * attachments if they exist and the chapters if no splitting is used.
- */
-void
-create_next_output_file() {
-  string this_outfile;
-
-  kax_segment = new KaxSegment();
-  kax_cues = new KaxCues();
-  kax_cues->SetGlobalTimecodeScale((int64_t)timecode_scale);
-
-  if (splitting)
-    this_outfile = create_output_name();
-  else
-    this_outfile = outfile;
-  this_outfile = from_utf8(cc_local_utf8, this_outfile);
-
-  // Open the output file.
-  try {
-    out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
-  } catch (exception &ex) {
-    mxerror(_("The output file '%s' could not be opened for writing (%s).\n"),
-            this_outfile.c_str(), strerror(errno));
-  }
-  if (verbose)
-    mxinfo(_("The file '%s\' has been opened for writing.\n"),
-           this_outfile.c_str());
-
-  cluster_helper->set_output(out);
-  render_headers(out);
-  render_attachments(out);
-  if (kax_chapters != NULL) {
-    fix_mandatory_chapter_elements(kax_chapters);
-    sort_ebml_master(kax_chapters);
-    if (splitting) {
-      kax_chapters_void = new EbmlVoid;
-      kax_chapters->UpdateSize(true);
-      kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
-      kax_chapters_void->Render(*out);
-      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
-        EbmlVoid evoid;
-        evoid.SetSize(100);
-        evoid.Render(*out);
-      }
-    } else {
-      chapters_in_this_file =
-        static_cast<KaxChapters *>(kax_chapters->Clone());
-      kax_chapters->Render(*out, true);
-      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
-        EbmlVoid evoid;
-        evoid.SetSize(100);
-        evoid.Render(*out);
-      }
-    }
-  }
-
-  add_tags_from_cue_chapters();
-
-  if (kax_tags != NULL) {
-    fix_mandatory_tag_elements(kax_tags);
-    sort_ebml_master(kax_tags);
-    if (!kax_tags->CheckMandatory())
-      mxerror(_("Some tag elements are missing (this error "
-                "should not have occured - another similar error should have "
-                "occured earlier). %s\n"), BUGMSG);
-
-    kax_tags->UpdateSize();
-    tags_size = kax_tags->ElementSize();
-  }
-
-  file_num++;
-}
-
-/** \brief Finishes and closes the current file
- *
- * Renders the data that is generated during the muxing run. The cues
- * and meta seek information are rendered at the end. If splitting is
- * active the chapters are stripped to those that actually lie in this
- * file and rendered at the front.  The segment duration and the
- * segment size are set to their actual values.
- */
-void
-finish_file(bool last_file) {
-  int i;
-  KaxChapters *chapters_here;
-  KaxTags *tags_here;
-  int64_t start, end, offset;
-
-  mxinfo("\n");
-
-  // Render the cues.
-  if (write_cues && cue_writing_requested) {
-    if (verbose >= 1)
-      mxinfo(_("The cue entries (the index) are being written..."));
-    kax_cues->Render(*out);
-    if (verbose >= 1)
-      mxinfo("\n");
-  }
-
-  // Now re-render the kax_duration and fill in the biggest timecode
-  // as the file's duration.
-  out->save_pos(kax_duration->GetElementPosition());
-  mxverb(3, "mkvmerge: kax_duration: gmt %lld tcs %f du %lld\n",
-         cluster_helper->get_max_timecode(), timecode_scale,
-         irnd((double)(cluster_helper->get_max_timecode() -
-                       cluster_helper->get_first_timecode()) /
-              (double)((int64_t)timecode_scale)));
-  *(static_cast<EbmlFloat *>(kax_duration)) =
-    irnd((double)(cluster_helper->get_max_timecode() -
-                  cluster_helper->get_first_timecode()) /
-         (double)((int64_t)timecode_scale));
-  kax_duration->Render(*out);
-
-  // If splitting is active and this is the last part then remove the
-  // 'next segment UID' and re-render the kax_infos.
-  if (splitting && last_file) {
-    EbmlVoid *void_after_infos;
-    int64_t void_size;
-    bool changed;
-
-    void_size = kax_infos->ElementSize();
-    for (i = 0, changed = false; i < kax_infos->ListSize(); i++)
-      if (EbmlId(*(*kax_infos)[i]) == KaxNextUID::ClassInfos.GlobalId) {
-        delete (*kax_infos)[i];
-        kax_infos->Remove(i);
-        changed = true;
-        break;
-      }
-
-    if (changed) {
-      out->setFilePointer(kax_infos->GetElementPosition());
-      kax_infos->UpdateSize();
-      void_size -= kax_infos->ElementSize();
-      kax_infos->Render(*out);
-      mxverb(2, "splitting: removed nextUID; void size: %lld\n", void_size);
-      void_after_infos = new EbmlVoid();
-      void_after_infos->SetSize(void_size);
-      void_after_infos->UpdateSize();
-      void_after_infos->SetSize(void_size - void_after_infos->HeadSize());
-      void_after_infos->Render(*out);
-      delete void_after_infos;
-    }
-  }
-  out->restore_pos();
-
-  // If splitting is active: Select the chapters that lie in this file
-  // and render them in the space that was resesrved at the beginning.
-  if ((kax_chapters != NULL) && splitting) {
-    if (no_linking)
-      offset = cluster_helper->get_timecode_offset();
-    else
-      offset = 0;
-    start = cluster_helper->get_first_timecode() + offset;
-    end = cluster_helper->get_max_timecode() + offset;
-
-    chapters_here = copy_chapters(kax_chapters);
-    chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
-                                                 offset);
-    if (chapters_here != NULL) {
-      kax_chapters_void->ReplaceWith(*chapters_here, *out, true, false);
-      chapters_in_this_file =
-        static_cast<KaxChapters *>(chapters_here->Clone());
-    }
-    delete kax_chapters_void;
-    kax_chapters_void = NULL;
-  } else
-    chapters_here = NULL;
-
-  // Render the meta seek information with the cues
-  if (write_meta_seek_for_clusters && (kax_sh_cues->ListSize() > 0) &&
-      !hack_engaged(ENGAGE_NO_META_SEEK)) {
-    kax_sh_cues->UpdateSize();
-    kax_sh_cues->Render(*out);
-    kax_sh_main->IndexThis(*kax_sh_cues, *kax_segment);
-  }
-
-  // Render the tags if we have some.
-  if (kax_tags != NULL) {
-    if (chapters_in_this_file == NULL) {
-      KaxChapters temp_chapters;
-      tags_here = select_tags_for_chapters(*kax_tags, temp_chapters);
-   } else
-      tags_here = select_tags_for_chapters(*kax_tags, *chapters_in_this_file);
-    if (tags_here != NULL) {
-      fix_mandatory_tag_elements(tags_here);
-      tags_here->UpdateSize();
-      tags_here->Render(*out, true);
-    }
-  } else
-    tags_here = NULL;
-
-  // Write meta seek information if it is not disabled.
-  if (cue_writing_requested)
-    kax_sh_main->IndexThis(*kax_cues, *kax_segment);
-
-  if (tags_here != NULL) {
-    kax_sh_main->IndexThis(*tags_here, *kax_segment);
-    delete tags_here;
-  }
-  if (chapters_in_this_file != NULL) {
-    delete chapters_in_this_file;
-    chapters_in_this_file = NULL;
-  }
-
-  if (chapters_here != NULL) {
-    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
-      kax_sh_main->IndexThis(*chapters_here, *kax_segment);
-    delete chapters_here;
-  } else if (!splitting && (kax_chapters != NULL))
-    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
-      kax_sh_main->IndexThis(*kax_chapters, *kax_segment);
-
-  if (kax_as != NULL) {
-    kax_sh_main->IndexThis(*kax_as, *kax_segment);
-    delete kax_as;
-    kax_as = NULL;
-  }
-
-  if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
-    kax_sh_main->UpdateSize();
-    if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
-      mxwarn(_("This should REALLY not have happened. The space reserved for "
-               "the first meta seek element was too small. Size needed: %lld. "
-               "%s\n"), kax_sh_main->ElementSize(), BUGMSG);
-  }
-
-  // Set the correct size for the segment.
-  if (kax_segment->ForceSize(out->getFilePointer() -
-                             kax_segment->GetElementPosition() -
-                             kax_segment->HeadSize()))
-    kax_segment->OverwriteHead(*out);
-
-  delete out;
-  delete kax_segment;
-  delete kax_cues;
-  delete kax_sh_void;
-  delete kax_sh_main;
-  delete void_after_track_headers;
-  if (kax_sh_cues != NULL)
-    delete kax_sh_cues;
-
-  for (i = 0; i < packetizers.size(); i++)
-    packetizers[i]->packetizer->reset();;
-}
-
-/** \brief Request packets and handle the next one
- *
- * Requests packets from each packetizer, selects the packet with the
- * lowest timecode and hands it over to the cluster helper for
- * rendering.  Also displays the progress.
- */
-void
-main_loop() {
-  packet_t *pack;
-  int i;
-  packetizer_t *ptzr, *winner;
-
-  // Let's go!
-  while (1) {
-    // Step 1: Make sure a packet is available for each output
-    // as long we havne't already processed the last one.
-    for (i = 0; i < packetizers.size(); i++) {
-      ptzr = packetizers[i];
-      if (ptzr->status == EHOLDING)
-        ptzr->status = EMOREDATA;
-      while ((ptzr->pack == NULL) && (ptzr->status == EMOREDATA) &&
-             (ptzr->packetizer->packet_available() < 1))
-        ptzr->status = ptzr->packetizer->read();
-      if (ptzr->status != EMOREDATA)
-        ptzr->packetizer->force_duration_on_last_packet();
-      if (ptzr->pack == NULL)
-        ptzr->pack = ptzr->packetizer->get_packet();
-    }
-
-    // Step 2: Pick the packet with the lowest timecode and
-    // stuff it into the Matroska file.
-    winner = NULL;
-    for (i = 0; i < packetizers.size(); i++) {
-      ptzr = packetizers[i];
-      if (ptzr->pack != NULL) {
-        if ((winner == NULL) || (winner->pack == NULL))
-          winner = ptzr;
-        else if (ptzr->pack &&
-                 (ptzr->pack->assigned_timecode <
-                  winner->pack->assigned_timecode))
-          winner = ptzr;
-      }
-    }
-    if ((winner != NULL) && (winner->pack != NULL))
-      pack = winner->pack;
-    else                        // exit if there are no more packets
-      break;
-
-    // Step 3: Add the winning packet to a cluster. Full clusters will be
-    // rendered automatically.
-    cluster_helper->add_packet(pack);
-
-    winner->pack = NULL;
-
-    // display some progress information
-    if (verbose >= 1)
-      display_progress(false);
-  }
-
-  // Render all remaining packets (if there are any).
-  if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
-    cluster_helper->render();
-
-  if (verbose >= 1)
-    display_progress(true);
 }
 
 /** \brief Setup and high level program control

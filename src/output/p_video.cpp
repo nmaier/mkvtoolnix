@@ -22,9 +22,8 @@
 #include "common.h"
 #include "hacks.h"
 #include "matroska.h"
-#include "mkvmerge.h"
 #include "mpeg4_common.h"
-#include "pr_generic.h"
+#include "output_control.h"
 #include "p_video.h"
 
 extern "C" {

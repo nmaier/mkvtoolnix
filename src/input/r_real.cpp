@@ -21,15 +21,15 @@
 
 #include <matroska/KaxTrackVideo.h>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "error.h"
-#include "r_real.h"
 #include "p_aac.h"
 #include "p_ac3.h"
 #include "p_passthrough.h"
 #include "p_realaudio.h"
 #include "p_video.h"
+#include "output_control.h"
+#include "r_real.h"
 
 #define PFX "real_reader: "
 

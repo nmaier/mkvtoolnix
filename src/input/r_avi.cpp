@@ -28,11 +28,11 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "mkvmerge.h"
 #include "aac_common.h"
 #include "common.h"
 #include "error.h"
 #include "mpeg4_common.h"
+#include "output_control.h"
 #include "r_avi.h"
 #include "p_aac.h"
 #include "p_ac3.h"

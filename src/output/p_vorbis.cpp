@@ -13,7 +13,7 @@
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
-#include "config.h"
+#include "os.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,10 +26,9 @@
 #include <vorbis/codec.h>
 
 #include "common.h"
-#include "pr_generic.h"
-#include "p_vorbis.h"
 #include "matroska.h"
-#include "mkvmerge.h"
+#include "output_control.h"
+#include "p_vorbis.h"
 
 using namespace libmatroska;
 

@@ -38,6 +38,10 @@ __debug_dump_elements(EbmlElement *e,
 
   for (i = 0; i < level; i++)
     mxprint(stdout, " ");
+  if (e == NULL) {
+    mxprint(stdout, "NULL!\n");
+    return;
+  }
   mxprint(stdout, "%s", e->Generic().DebugName);
 
   if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {

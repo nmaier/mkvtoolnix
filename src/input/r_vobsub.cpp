@@ -20,10 +20,9 @@
 #include <errno.h>
 
 #include "common.h"
-#include "hacks.h"
 #include "iso639.h"
-#include "mkvmerge.h"
 #include "mm_io.h"
+#include "output_control.h"
 #include "p_vobsub.h"
 #include "r_vobsub.h"
 #include "subtitles.h"

@@ -330,11 +330,21 @@ Read the timecodes to be used for the specific track ID from \fIfilename\fR.
 These timecodes forcefully override the timecodes that \fBmkvmerge\fR
 normally calculates. Read the section about \fBEXTERNAL TIMECODE FILES\fR.
 .TP
-\fB\-\-append\-to\fR <\fISTID1:DTID1\fR,[\fISTID2:DTID2\fR...]>
-This option controls to which track a track of the current file is appended
-to. Each pair of track IDs maps the first ID from the following input file
-to the second ID from the previous input file. If this option has been omitted
-then a mapping of 0:0,1:1,2:2... is used.
+\fB\-\-append\-to\fR <\fISFID1:STID1:DFID1:DTID1\fR[,...]>
+This option controls to which track another track is appended.
+Each spec contains four IDs: a file ID, a track ID, another file ID and
+a second track ID.
+The first pair identifies the track that is to be appended, the second pair
+the track the first one is appended to.
+.br
+If this option has been omitted then a standard mapping is used.
+This standard mapping appends each track from the current file to a track
+from the previous file with the same track ID.
+This allows for easy appending if a movie has been split into two parts
+and both file have the same number of tracks and track IDs with the
+command
+.br
+\fBmkvmerge -o output.mkv part1.mkv +part2.mkv\fR
 
 .LP
 Options that only apply to video tracks:

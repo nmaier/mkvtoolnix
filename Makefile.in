@@ -147,8 +147,8 @@ install-trans:
 	done
 
 SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
-		-I. -Ilibrmff -Isrc -Isrc/common -Isrc/input -Isrc/output \
-		-Isrc/mpegparser
+		-I. -Ilibrmff -Isrc/merge -Isrc/info -Isrc/common -Isrc/input \
+		-Isrc/output -Isrc/mpegparser
 SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
 		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output \
 		-Lsrc/mpegparser
@@ -163,6 +163,7 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
 		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
+		$(wildcard src/merge/*cpp) $(wildcard src/info/*.cpp) \
 		$(wildcard src/mpegparser/*.cpp)
 
 ifeq ($(V),1)
@@ -300,13 +301,10 @@ src/output/libmtxoutput.a: $(libmtxoutput_OBJECTS)
 	$(Q)$(RANLIB) $@
 
 #
-# src
+# src/merge
 #
 
-mkvmerge_SOURCES = src/mkvmerge.cpp \
-			src/cluster_helper.cpp \
-			src/pr_generic.cpp \
-			src/timecode_factory.cpp
+mkvmerge_SOURCES = $(wildcard src/merge/*.cpp)
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF) \
@@ -317,12 +315,20 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS)
 
-mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
+#
+# src/info
+#
+
+mkvinfo_SOURCES = $(wildcard src/info/*.cpp)
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
 mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 		$(WXWINDOWS_LIBS) \
 		$(ICONV_LIBS) $(LIBINTL_LIBS)
+
+#
+# src/extract
+#
 
 mkvextract_SOURCES = $(wildcard src/extract/*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
@@ -330,10 +336,18 @@ mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat
 
+#
+# src
+#
+
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
 base64tool_LDADD = -lmtxcommon $(ICONV_LIBS) $(LIBINTL_LIBS)
+
+#
+# src/mmg
+#
 
 mmg_SOURCES = $(wildcard src/mmg/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))

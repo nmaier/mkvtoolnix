@@ -1541,6 +1541,8 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
 
 void
 kax_reader_c::set_packetizer_headers(kax_track_t *t) {
+  if (appending)
+    return;
   if (t->default_track)
     PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : 
                                         t->type == 'a' ? DEFTRACK_TYPE_AUDIO :
@@ -1836,7 +1838,7 @@ kax_reader_c::read(generic_packetizer_c *,
   if (saved_l1 == NULL)         // We're done.
     return 0;
 
-  if (get_queued_bytes() > 20 * 1024 * 1024)
+  if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
     return EHOLDING;
 
   debug_enter("kax_reader_c::read");
