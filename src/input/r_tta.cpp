@@ -76,14 +76,16 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
     size -= id3_tag_present_at_end(*mm_io);
 
     do {
-      seek_point = mm_io->read_uint32();
+      seek_point = mm_io->read_uint32_le();
       seek_sum += seek_point + 4;
       seek_points.push_back(seek_point);
     } while (seek_sum < size);
 
     mxverb(2, "tta: ch %u bps %u sr %u dl %u seek_sum %lld size %lld num %u\n",
-           get_uint16(&header.channels), get_uint16(&header.bits_per_sample),
-           get_uint32(&header.sample_rate), get_uint32(&header.data_length),
+           get_uint16_le(&header.channels),
+           get_uint16_le(&header.bits_per_sample),
+           get_uint32_le(&header.sample_rate),
+           get_uint32_le(&header.data_length),
            seek_sum, size, seek_points.size());
 
     if (seek_sum != size)
@@ -113,9 +115,9 @@ tta_reader_c::create_packetizer(int64_t) {
 
   if (NPTZR() != 0)
     return;
-  ttapacketizer = new tta_packetizer_c(this, get_uint16(&header.channels),
-                                       get_uint16(&header.bits_per_sample),
-                                       get_uint32(&header.sample_rate), ti);
+  ttapacketizer = new tta_packetizer_c(this, get_uint16_le(&header.channels),
+                                       get_uint16_le(&header.bits_per_sample),
+                                       get_uint32_le(&header.sample_rate), ti);
   add_packetizer(ttapacketizer);
   mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname.c_str(),
          (int64_t)0);
@@ -142,13 +144,13 @@ tta_reader_c::read(generic_packetizer_c *,
   if (pos >= seek_points.size()) {
     double samples_left;
 
-    samples_left = (double)get_uint32(&header.data_length) -
+    samples_left = (double)get_uint32_le(&header.data_length) -
       (seek_points.size() - 1) * TTA_FRAME_TIME *
-      get_uint32(&header.sample_rate);
+      get_uint32_le(&header.sample_rate);
     mxverb(2, "tta: samples_left %f\n", samples_left);
 
     PTZR0->process(mem, -1, irnd(samples_left * 1000000000.0l /
-                                 get_uint32(&header.sample_rate)));
+                                 get_uint32_le(&header.sample_rate)));
   } else
     PTZR0->process(mem);
   bytes_processed += nread;

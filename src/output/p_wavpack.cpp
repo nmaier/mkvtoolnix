@@ -59,8 +59,8 @@ wavpack_packetizer_c::process(memory_c &mem,
                               int64_t,
                               int64_t) {
   debug_enter("wavpack_packetizer_c::process");
-  int64_t samples = get_uint32(&mem.data[12]);
-  int64_t sample_index = get_uint32(&mem.data[8]);
+  int64_t samples = get_uint32_le(&mem.data[12]);
+  int64_t sample_index = get_uint32_le(&mem.data[8]);
 
   if (duration == -1) {
     add_packet(mem, irnd(sample_index * 1000000000 / sample_rate),

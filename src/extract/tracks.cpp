@@ -527,15 +527,15 @@ create_output_files() {
           memcpy(&wh->riff.id, "RIFF", 4);
           memcpy(&wh->riff.wave_id, "WAVE", 4);
           memcpy(&wh->format.id, "fmt ", 4);
-          put_uint32(&wh->format.len, 16);
-          put_uint16(&wh->common.wFormatTag, 1);
-          put_uint16(&wh->common.wChannels, tracks[i].a_channels);
-          put_uint32(&wh->common.dwSamplesPerSec, (int)tracks[i].a_sfreq);
-          put_uint32(&wh->common.dwAvgBytesPerSec,
+          put_uint32_le(&wh->format.len, 16);
+          put_uint16_le(&wh->common.wFormatTag, 1);
+          put_uint16_le(&wh->common.wChannels, tracks[i].a_channels);
+          put_uint32_le(&wh->common.dwSamplesPerSec, (int)tracks[i].a_sfreq);
+          put_uint32_le(&wh->common.dwAvgBytesPerSec,
                      tracks[i].a_channels * (int)tracks[i].a_sfreq *
                      tracks[i].a_bps / 8);
-          put_uint16(&wh->common.wBlockAlign, 4);
-          put_uint16(&wh->common.wBitsPerSample, tracks[i].a_bps);
+          put_uint16_le(&wh->common.wBlockAlign, 4);
+          put_uint16_le(&wh->common.wBitsPerSample, tracks[i].a_bps);
           memcpy(&wh->data.id, "data", 4);
 
           tracks[i].out->write(wh, sizeof(wave_header));
@@ -1020,8 +1020,8 @@ close_files() {
         case FILE_TYPE_WAV:
           // Fix the header with the real number of bytes written.
           tracks[i].out->setFilePointer(0);
-          put_uint32(&tracks[i].wh.riff.len, tracks[i].bytes_written + 36);
-          put_uint32(&tracks[i].wh.data.len, tracks[i].bytes_written);
+          put_uint32_le(&tracks[i].wh.riff.len, tracks[i].bytes_written + 36);
+          put_uint32_le(&tracks[i].wh.data.len, tracks[i].bytes_written);
           tracks[i].out->write(&tracks[i].wh, sizeof(wave_header));
           delete tracks[i].out;
 
@@ -1065,12 +1065,12 @@ close_files() {
 
           memcpy(tta_header.signature, "TTA1", 4);
           if (tracks[i].a_bps != 3)
-            put_uint16(&tta_header.audio_format, 1);
+            put_uint16_le(&tta_header.audio_format, 1);
           else
-            put_uint16(&tta_header.audio_format, 3);
-          put_uint16(&tta_header.channels, tracks[i].a_channels);
-          put_uint16(&tta_header.bits_per_sample, tracks[i].a_bps);
-          put_uint32(&tta_header.sample_rate, (int)tracks[i].a_sfreq);
+            put_uint16_le(&tta_header.audio_format, 3);
+          put_uint16_le(&tta_header.channels, tracks[i].a_channels);
+          put_uint16_le(&tta_header.bits_per_sample, tracks[i].a_bps);
+          put_uint32_le(&tta_header.sample_rate, (int)tracks[i].a_sfreq);
           mxverb(2, "bw: %lld num: %d\n", tracks[i].bytes_written,
                  tracks[i].frame_sizes.size());
           if (tracks[i].last_duration <= 0)
@@ -1078,24 +1078,24 @@ close_files() {
                                                 tracks[i].a_sfreq) *
               1000000000ll;
           mxverb(2, "ladu: %lld\n", tracks[i].last_duration);
-          put_uint32(&tta_header.data_length,
+          put_uint32_le(&tta_header.data_length,
                      (uint32_t)(tracks[i].a_sfreq *
                                 (TTA_FRAME_TIME *
                                  (tracks[i].frame_sizes.size() - 1) +
                                  (double)tracks[i].last_duration /
                                  1000000000.0l)));
-          put_uint32(&tta_header.crc,
+          put_uint32_le(&tta_header.crc,
                      calc_crc32((unsigned char *)&tta_header,
                                 sizeof(tta_file_header_t) - 4));
           tracks[i].out->write(&tta_header, sizeof(tta_file_header_t));
           buffer = (unsigned char *)safemalloc(tracks[i].frame_sizes.size() *
                                                4);
           for (k = 0; k < tracks[i].frame_sizes.size(); k++)
-            put_uint32(buffer + 4 * k, tracks[i].frame_sizes[k]);
+            put_uint32_le(buffer + 4 * k, tracks[i].frame_sizes[k]);
           tracks[i].out->write(buffer, tracks[i].frame_sizes.size() * 4);
           crc = calc_crc32(buffer, tracks[i].frame_sizes.size() * 4);
           mxverb(2, "crc: 0x%08x\n", crc);
-          tracks[i].out->write_uint32(crc);
+          tracks[i].out->write_uint32_le(crc);
           safefree(buffer);
 
           mxinfo(_("\nThe temporary TTA file for track ID %lld is being "
@@ -1502,12 +1502,12 @@ extract_tracks(const char *file_name) {
                   unsigned char *fcc = (unsigned char *)&bih->bi_compression;
                   mxprints(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
                            fcc[0], fcc[1], fcc[2], fcc[3],
-                           get_uint32(&bih->bi_compression));
+                           get_uint32_le(&bih->bi_compression));
                 } else if (ms_compat && (kax_track_type == 'a') &&
                            (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
                   alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
                   mxprints(pbuffer, " (format tag: 0x%04x)",
-                           get_uint16(&wfe->w_format_tag));
+                           get_uint16_le(&wfe->w_format_tag));
                 } else
                   pbuffer[0] = 0;
                 show_element(l3, 3, _("CodecPrivate, length %llu%s"),

@@ -376,43 +376,43 @@ mm_io_c::read_uint8() {
 }
 
 uint16_t
-mm_io_c::read_uint16() {
+mm_io_c::read_uint16_le() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
     throw exception();
 
-  return get_uint16(buffer);
+  return get_uint16_le(buffer);
 }
 
 uint32_t
-mm_io_c::read_uint24() {
+mm_io_c::read_uint24_le() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
     throw exception();
 
-  return get_uint24(buffer);
+  return get_uint24_le(buffer);
 }
 
 uint32_t
-mm_io_c::read_uint32() {
+mm_io_c::read_uint32_le() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
     throw exception();
 
-  return get_uint32(buffer);
+  return get_uint32_le(buffer);
 }
 
 uint64_t
-mm_io_c::read_uint64() {
+mm_io_c::read_uint64_le() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
     throw exception();
 
-  return get_uint64(buffer);
+  return get_uint64_le(buffer);
 }
 
 uint16_t
@@ -461,26 +461,26 @@ mm_io_c::write_uint8(unsigned char value) {
 }
 
 int
-mm_io_c::write_uint16(uint16_t value) {
+mm_io_c::write_uint16_le(uint16_t value) {
   uint16_t buffer;
 
-  put_uint16(&buffer, value);
+  put_uint16_le(&buffer, value);
   return write(&buffer, sizeof(uint16_t));
 }
 
 int
-mm_io_c::write_uint32(uint32_t value) {
+mm_io_c::write_uint32_le(uint32_t value) {
   uint32_t buffer;
 
-  put_uint32(&buffer, value);
+  put_uint32_le(&buffer, value);
   return write(&buffer, sizeof(uint32_t));
 }
 
 int
-mm_io_c::write_uint64(uint64_t value) {
+mm_io_c::write_uint64_le(uint64_t value) {
   uint64_t buffer;
 
-  put_uint64(&buffer, value);
+  put_uint64_le(&buffer, value);
   return write(&buffer, sizeof(uint64_t));
 }
 

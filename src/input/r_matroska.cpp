@@ -335,7 +335,7 @@ kax_reader_c::verify_tracks() {
 
             bih = (alBITMAPINFOHEADER *)t->private_data;
             
-            u = get_uint32(&bih->bi_width);
+            u = get_uint32_le(&bih->bi_width);
             if (t->v_width != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility "
@@ -346,7 +346,7 @@ kax_reader_c::verify_tracks() {
                 t->v_width = u;
             }
 
-            u = get_uint32(&bih->bi_height);
+            u = get_uint32_le(&bih->bi_height);
             if (t->v_height != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility "
@@ -393,8 +393,8 @@ kax_reader_c::verify_tracks() {
             t->ms_compat = 1;
 
             wfe = (alWAVEFORMATEX *)t->private_data;
-            t->a_formattag = get_uint16(&wfe->w_format_tag);
-            u = get_uint32(&wfe->n_samples_per_sec);
+            t->a_formattag = get_uint16_le(&wfe->w_format_tag);
+            u = get_uint32_le(&wfe->n_samples_per_sec);
             if (((uint32_t)t->a_sfreq) != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility mode for "
@@ -405,7 +405,7 @@ kax_reader_c::verify_tracks() {
                 t->a_sfreq = (float)u;
             }
 
-            u = get_uint16(&wfe->n_channels);
+            u = get_uint16_le(&wfe->n_channels);
             if (t->a_channels != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility mode for "
@@ -416,7 +416,7 @@ kax_reader_c::verify_tracks() {
                 t->a_channels = u;
             }
 
-            u = get_uint16(&wfe->w_bits_per_sample);
+            u = get_uint16_le(&wfe->w_bits_per_sample);
             if (t->a_bps != u) {
               if (verbose && (t->a_formattag == 0x0001))
                 mxwarn(PFX "(MS compatibility mode for "

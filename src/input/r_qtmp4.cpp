@@ -1105,7 +1105,8 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
       throw exception();
     mxverb(2, PFX "%*sesds: decoder specific descriptor, len: %u\n", lsp, "",
            len);
-    mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n", lsp + 2, "");
+    mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n", lsp + 2,
+           "");
     mxhexdump(3, e->decoder_config, e->decoder_config_len);
 
     tag = memio.read_uint8();
@@ -1152,14 +1153,14 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         bih = (alBITMAPINFOHEADER *)
           safemalloc(sizeof(alBITMAPINFOHEADER));
         memset(bih, 0, sizeof(alBITMAPINFOHEADER));
-        put_uint32(&bih->bi_size, sizeof(alBITMAPINFOHEADER));
-        put_uint32(&bih->bi_width, dmx->v_width);
-        put_uint32(&bih->bi_height, dmx->v_height);
-        put_uint16(&bih->bi_planes, 1);
-        put_uint16(&bih->bi_bit_count, dmx->v_bitdepth);
+        put_uint32_le(&bih->bi_size, sizeof(alBITMAPINFOHEADER));
+        put_uint32_le(&bih->bi_width, dmx->v_width);
+        put_uint32_le(&bih->bi_height, dmx->v_height);
+        put_uint16_le(&bih->bi_planes, 1);
+        put_uint16_le(&bih->bi_bit_count, dmx->v_bitdepth);
         memcpy(&bih->bi_compression, "DIVX", 4);
-        put_uint32(&bih->bi_size_image, get_uint32(&bih->bi_width) *
-                   get_uint32(&bih->bi_height) * 3);
+        put_uint32_le(&bih->bi_size_image, get_uint32_le(&bih->bi_width) *
+                   get_uint32_le(&bih->bi_height) * 3);
         ti->private_size = sizeof(alBITMAPINFOHEADER);
         ti->private_data = (unsigned char *)bih;
         dmx->ptzr =

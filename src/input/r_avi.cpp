@@ -174,7 +174,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
 
     ti->private_data = (unsigned char *)avi->bitmap_info_header;
     if (ti->private_data != NULL)
-      ti->private_size = get_uint32(&avi->bitmap_info_header->bi_size);
+      ti->private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
     ti->id = 0;                 // ID for the video track.
     vptzr = add_packetizer(new video_packetizer_c(this, NULL,
                                                   AVI_frame_rate(avi),
@@ -244,13 +244,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.samples_per_second = AVI_audio_rate(avi);
   demuxer.channels = AVI_audio_channels(avi);
   demuxer.bits_per_sample = AVI_audio_bits(avi);
-  ti->avi_block_align = get_uint16(&wfe->n_block_align);
-  ti->avi_avg_bytes_per_sec = get_uint32(&wfe->n_avg_bytes_per_sec);
-  ti->avi_samples_per_chunk = get_uint32(&avi->stream_headers[aid].dw_scale);
+  ti->avi_block_align = get_uint16_le(&wfe->n_block_align);
+  ti->avi_avg_bytes_per_sec = get_uint32_le(&wfe->n_avg_bytes_per_sec);
+  ti->avi_samples_per_chunk =
+    get_uint32_le(&avi->stream_headers[aid].dw_scale);
 
-  if (get_uint16(&wfe->cb_size) > 0) {
+  if (get_uint16_le(&wfe->cb_size) > 0) {
     ti->private_data = (unsigned char *)(wfe + 1);
-    ti->private_size = get_uint16(&wfe->cb_size);
+    ti->private_size = get_uint16_le(&wfe->cb_size);
   } else {
     ti->private_data = NULL;
     ti->private_size = 0;

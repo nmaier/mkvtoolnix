@@ -76,7 +76,7 @@ file_type_t file_types[] =
    {"mp2 ", FILE_TYPE_MP3, "MPEG-1 layer II audio (CBR and VBR/ABR)"},
    {"mp3 ", FILE_TYPE_MP3, "MPEG-1 layer III audio (CBR and VBR/ABR)"},
    {"mkv ", FILE_TYPE_MATROSKA, "general Matroska files"},
-   {"ogg ", FILE_TYPE_OGM, "general OGG media stream, audio/video embedded in OGG"},
+   {"ogg ", FILE_TYPE_OGM, "audio/video embedded in OGG"},
    {"mov ", FILE_TYPE_QTMP4, "Quicktime/MP4 audio and video"},
    {"rm  ", FILE_TYPE_REAL, "RealMedia audio and video"},
    {"srt ", FILE_TYPE_SRT, "SRT text subtitles"},

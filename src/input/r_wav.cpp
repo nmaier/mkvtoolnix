@@ -83,9 +83,9 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
     throw error_c("wav_reader: Source is not a valid WAVE file.");
   if (mm_io->read(&wheader, sizeof(wheader)) != sizeof(wheader))
     throw error_c("wav_reader: could not read WAVE header.");
-  bps = get_uint16(&wheader.common.wChannels) *
-    get_uint16(&wheader.common.wBitsPerSample) *
-    get_uint32(&wheader.common.dwSamplesPerSec) / 8;
+  bps = get_uint16_le(&wheader.common.wChannels) *
+    get_uint16_le(&wheader.common.wBitsPerSample) *
+    get_uint32_le(&wheader.common.dwSamplesPerSec) / 8;
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
   ti->id = 0;                   // ID for this track.
@@ -94,10 +94,10 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   while (1) {
     if (!strncmp((char *)wheader.data.id, "data", 4))
       break;
-    if ((mm_io->getFilePointer() + get_uint32(&wheader.data.len) +
+    if ((mm_io->getFilePointer() + get_uint32_le(&wheader.data.len) +
          sizeof(struct chunk_struct)) > size)
       throw error_c("wav_reader: No 'data' chunk found.");
-    mm_io->setFilePointer(get_uint32(&wheader.data.len), seek_current);
+    mm_io->setFilePointer(get_uint32_le(&wheader.data.len), seek_current);
     if (mm_io->read(&wheader.data, sizeof(struct chunk_struct)) !=
         sizeof(struct chunk_struct))
       throw error_c("wav_reader: No 'data' chunk found.");
@@ -156,9 +156,10 @@ wav_reader_c::create_packetizer(int64_t) {
   if (!is_dts) {
     generic_packetizer_c *ptzr;
     ptzr =
-      new pcm_packetizer_c(this, get_uint32(&wheader.common.dwSamplesPerSec),
-                           get_uint16(&wheader.common.wChannels),
-                           get_uint16(&wheader.common.wBitsPerSample), ti);
+      new pcm_packetizer_c(this,
+                           get_uint32_le(&wheader.common.dwSamplesPerSec),
+                           get_uint16_le(&wheader.common.wChannels),
+                           get_uint16_le(&wheader.common.wBitsPerSample), ti);
     add_packetizer(ptzr);
     mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
            (int64_t)0);
@@ -245,7 +246,7 @@ wav_reader_c::read(generic_packetizer_c *,
 
 int
 wav_reader_c::get_progress() {
-  return 100 * bytes_processed / (get_uint32(&wheader.riff.len) -
+  return 100 * bytes_processed / (get_uint32_le(&wheader.riff.len) -
                                   sizeof(wheader) + 8);
 }
 

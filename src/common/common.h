@@ -135,17 +135,17 @@ void MTX_DLL_API _trace(const char *func, const char *file, int line);
 void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
 
 #define get_fourcc(b) get_uint32_be(b)
-uint16_t MTX_DLL_API get_uint16(const void *buf);
-uint32_t MTX_DLL_API get_uint24(const void *buf);
-uint32_t MTX_DLL_API get_uint32(const void *buf);
-uint64_t MTX_DLL_API get_uint64(const void *buf);
+uint16_t MTX_DLL_API get_uint16_le(const void *buf);
+uint32_t MTX_DLL_API get_uint24_le(const void *buf);
+uint32_t MTX_DLL_API get_uint32_le(const void *buf);
+uint64_t MTX_DLL_API get_uint64_le(const void *buf);
 uint16_t MTX_DLL_API get_uint16_be(const void *buf);
 uint32_t MTX_DLL_API get_uint24_be(const void *buf);
 uint32_t MTX_DLL_API get_uint32_be(const void *buf);
 uint64_t MTX_DLL_API get_uint64_be(const void *buf);
-void MTX_DLL_API put_uint16(void *buf, uint16_t value);
-void MTX_DLL_API put_uint32(void *buf, uint32_t value);
-void MTX_DLL_API put_uint64(void *buf, uint64_t value);
+void MTX_DLL_API put_uint16_le(void *buf, uint16_t value);
+void MTX_DLL_API put_uint32_le(void *buf, uint32_t value);
+void MTX_DLL_API put_uint64_le(void *buf, uint64_t value);
 void MTX_DLL_API put_uint16_be(void *buf, uint16_t value);
 void MTX_DLL_API put_uint32_be(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
@@ -451,8 +451,8 @@ public:
   byte_cursor_c(const unsigned char *ndata, int nsize);
 
   virtual unsigned char get_uint8();
-  virtual unsigned short get_uint16();
-  virtual unsigned int get_uint32();
+  virtual unsigned short get_uint16_le();
+  virtual unsigned int get_uint32_le();
   virtual unsigned short get_uint16_be();
   virtual unsigned int get_uint32_be();
   virtual void get_bytes(unsigned char *dst, int n);

@@ -511,7 +511,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     else if (write_cues && !added_to_cues) {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
-      if (((source->get_cue_creation() == CUE_STRATEGY_IFRAMES) && (pack->bref == -1))
+      if (((source->get_cue_creation() == CUE_STRATEGY_IFRAMES) &&
+           (pack->bref == -1))
           ||
           // ... or if the user requested entries for all frames ...
           (source->get_cue_creation() == CUE_STRATEGY_ALL) ||

@@ -40,7 +40,7 @@ wavpack_reader_c::probe_file(mm_io_c *mm_io,
     return 0;
   }
   if (!strncmp(header.ck_id, "wvpk", 4)) {
-    header.version = get_uint16(&header.version);
+    header.version = get_uint16_le(&header.version);
     if ((header.version >> 8) == 4)
       return 1;
   }
@@ -120,14 +120,14 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
                                          WV_KEEP_HEADER_POSITION);
 
   // keep the header minus the ID & size (all found in Matroska)
-  put_uint16(chunk, dummy_header.version);
+  put_uint16_le(chunk, dummy_header.version);
   chunk[2] = dummy_header.track_no;
   chunk[3] = dummy_header.index_no;
-  put_uint32(&chunk[4], dummy_header.total_samples);
-  put_uint32(&chunk[8], dummy_header.block_index);
-  put_uint32(&chunk[12], dummy_header.block_samples);
-  put_uint32(&chunk[16], dummy_header.flags);
-  put_uint32(&chunk[20], dummy_header.crc);
+  put_uint32_le(&chunk[4], dummy_header.total_samples);
+  put_uint32_le(&chunk[8], dummy_header.block_index);
+  put_uint32_le(&chunk[12], dummy_header.block_samples);
+  put_uint32_le(&chunk[16], dummy_header.flags);
+  put_uint32_le(&chunk[20], dummy_header.crc);
 
   if (mm_io->read(&chunk[sizeof(wavpack_header_t) - WV_KEEP_HEADER_POSITION],
                   data_size) < 0)

@@ -77,13 +77,13 @@ extract_vorbis_comments(unsigned char *buffer,
   comments = NULL;
   try {
     in.skip(7);                 // 0x03 "vorbis"
-    n = in.read_uint32();       // vendor_length
+    n = in.read_uint32_le();       // vendor_length
     in.skip(n);                 // vendor_string
-    n = in.read_uint32();       // user_comment_list_length
+    n = in.read_uint32_le();       // user_comment_list_length
     comments = (char **)safemalloc((n + 1) * sizeof(char *));
     memset(comments, 0, (n + 1) * sizeof(char *));
     for (i = 0; i < n; i++) {
-      len = in.read_uint32();
+      len = in.read_uint32_le();
       comments[i] = (char *)safemalloc(len + 1);
       if (in.read(comments[i], len) != len)
         throw false;
@@ -414,21 +414,21 @@ ogm_reader_c::create_packetizer(int64_t tid) {
       case OGM_STREAM_TYPE_VIDEO:
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
-        put_uint32(&bih.bi_size, sizeof(alBITMAPINFOHEADER));
-        put_uint32(&bih.bi_width, get_uint32(&sth->sh.video.width));
-        put_uint32(&bih.bi_height, get_uint32(&sth->sh.video.height));
-        put_uint16(&bih.bi_planes, 1);
-        put_uint16(&bih.bi_bit_count, 24);
+        put_uint32_le(&bih.bi_size, sizeof(alBITMAPINFOHEADER));
+        put_uint32_le(&bih.bi_width, get_uint32_le(&sth->sh.video.width));
+        put_uint32_le(&bih.bi_height, get_uint32_le(&sth->sh.video.height));
+        put_uint16_le(&bih.bi_planes, 1);
+        put_uint16_le(&bih.bi_bit_count, 24);
         memcpy(&bih.bi_compression, sth->subtype, 4);
-        put_uint32(&bih.bi_size_image, get_uint32(&bih.bi_width) *
-                   get_uint32(&bih.bi_height) * 3);
+        put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) *
+                   get_uint32_le(&bih.bi_height) * 3);
         ti->private_data = (unsigned char *)&bih;
         ti->private_size = sizeof(alBITMAPINFOHEADER);
 
         ptzr = new video_packetizer_c(this, NULL, (double)10000000.0 /
-                                      get_uint64(&sth->time_unit),
-                                      get_uint32(&sth->sh.video.width),
-                                      get_uint32(&sth->sh.video.height),
+                                      get_uint64_le(&sth->time_unit),
+                                      get_uint32_le(&sth->sh.video.width),
+                                      get_uint32_le(&sth->sh.video.height),
                                       false, ti);
 
         mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
@@ -438,25 +438,28 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         break;
 
       case OGM_STREAM_TYPE_PCM:
-        ptzr = new pcm_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                    get_uint16(&sth->sh.audio.channels),
-                                    get_uint16(&sth->bits_per_sample), ti);
+        ptzr = new pcm_packetizer_c(this,
+                                    get_uint64_le(&sth->samples_per_unit),
+                                    get_uint16_le(&sth->sh.audio.channels),
+                                    get_uint16_le(&sth->bits_per_sample), ti);
 
         mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
                (int64_t)tid);
         break;
 
       case OGM_STREAM_TYPE_MP3:
-        ptzr = new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                    get_uint16(&sth->sh.audio.channels),
+        ptzr = new mp3_packetizer_c(this,
+                                    get_uint64_le(&sth->samples_per_unit),
+                                    get_uint16_le(&sth->sh.audio.channels),
                                     true, ti);
         mxinfo(FMT_TID "Using the MP3 output module.\n", ti->fname.c_str(),
                (int64_t)tid);
         break;
 
       case OGM_STREAM_TYPE_AC3:
-        ptzr = new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                    get_uint16(&sth->sh.audio.channels), 0,
+        ptzr = new ac3_packetizer_c(this,
+                                    get_uint64_le(&sth->samples_per_unit),
+                                    get_uint16_le(&sth->sh.audio.channels), 0,
                                     ti);
         mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname.c_str(),
                (int64_t)tid);
@@ -477,8 +480,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         }
         if (!aac_info_extracted) {
           sbr = false;
-          channels = get_uint16(&sth->sh.audio.channels);
-          sample_rate = get_uint64(&sth->samples_per_unit);
+          channels = get_uint16_le(&sth->sh.audio.channels);
+          sample_rate = get_uint64_le(&sth->samples_per_unit);
           profile = AAC_PROFILE_LC;
         }
         mxverb(2, "ogm_reader: %lld/%s: profile %d, channels %d, sample_rate "
@@ -681,7 +684,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       dmx->stype = OGM_STREAM_TYPE_VIDEO;
       dmx->native_mode = false;
       if (video_fps < 0)
-        video_fps = 10000000.0 / (float)get_uint64(&sth->time_unit);
+        video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
       dmx->in_use = true;
 
       return;

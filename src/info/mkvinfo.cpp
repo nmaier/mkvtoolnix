@@ -995,13 +995,13 @@ def_handle(tracks) {
             fourcc_buffer =
               mxsprintf(" (FourCC: %c%c%c%c, 0x%08x)",
                         fcc[0], fcc[1], fcc[2], fcc[3],
-                        get_uint32(&bih->bi_compression));
+                        get_uint32_le(&bih->bi_compression));
           } else if (ms_compat && (kax_track_type == 'a') &&
                      (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
             alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
             fourcc_buffer =
               mxsprintf(" (format tag: 0x%04x)",
-                        get_uint16(&wfe->w_format_tag));
+                        get_uint16_le(&wfe->w_format_tag));
           }
           if (calc_checksums && !show_summary)
             fourcc_buffer +=

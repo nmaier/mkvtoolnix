@@ -223,26 +223,26 @@ byte_cursor_c::get_uint32_be() {
 }
 
 unsigned short
-byte_cursor_c::get_uint16() {
+byte_cursor_c::get_uint16_le() {
   unsigned short v;
 
   if ((pos + 2) > size)
     throw exception();
 
-  v = ::get_uint16(&data[pos]);
+  v = ::get_uint16_le(&data[pos]);
   pos += 2;
 
   return v;
 }
 
 unsigned int
-byte_cursor_c::get_uint32() {
+byte_cursor_c::get_uint32_le() {
   unsigned int v;
 
   if ((pos + 4) > size)
     throw exception();
 
-  v = ::get_uint32(&data[pos]);
+  v = ::get_uint32_le(&data[pos]);
   pos += 4;
 
   return v;
@@ -308,7 +308,7 @@ _trace(const char *func,
 */
 
 uint16_t
-get_uint16(const void *buf) {
+get_uint16_le(const void *buf) {
   uint16_t ret;
   unsigned char *tmp;
 
@@ -321,7 +321,7 @@ get_uint16(const void *buf) {
 }
 
 uint32_t
-get_uint24(const void *buf) {
+get_uint24_le(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -335,7 +335,7 @@ get_uint24(const void *buf) {
 }
 
 uint32_t
-get_uint32(const void *buf) {
+get_uint32_le(const void *buf) {
   uint32_t ret;
   unsigned char *tmp;
 
@@ -350,7 +350,7 @@ get_uint32(const void *buf) {
 }
 
 uint64_t
-get_uint64(const void *buf) {
+get_uint64_le(const void *buf) {
   uint64_t ret;
   unsigned char *tmp;
 
@@ -430,7 +430,7 @@ get_uint64_be(const void *buf) {
 }
 
 void
-put_uint16(void *buf,
+put_uint16_le(void *buf,
            uint16_t value) {
   unsigned char *tmp;
 
@@ -441,7 +441,7 @@ put_uint16(void *buf,
 }
 
 void
-put_uint32(void *buf,
+put_uint32_le(void *buf,
            uint32_t value) {
   unsigned char *tmp;
 
@@ -454,7 +454,7 @@ put_uint32(void *buf,
 }
 
 void
-put_uint64(void *buf,
+put_uint64_le(void *buf,
            uint64_t value) {
   unsigned char *tmp;
 
