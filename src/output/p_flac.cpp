@@ -64,6 +64,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
 
   num_packets = 0;
   avg_duration = 0;
+  last_mem = NULL;
 
   set_track_type(track_audio);
   if (use_durations)
