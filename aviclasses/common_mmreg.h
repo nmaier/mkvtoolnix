@@ -19,15 +19,15 @@
 #ifndef __TOOLS_COMMON_MMREG_H__
 #define __TOOLS_COMMON_MMREG_H__
 
+#include "os.h"
+
 #include "ac_common.h"
 #include "common_endian.h"
 
 //////////////////////////////////////////////////////////////////////
 // Some data 'copied' from mmreg.h (Microsoft files)
 
-#pragma pack(push,1)
-
-typedef struct w32waveformat_tag {
+typedef struct __attribute__((__packed__)) w32waveformat_tag {
      uint16_le  wFormatTag;      /* format type */
      uint16_le  nChannels;      /* number of channels (i.e. mono, stereo...) */
      uint32_le    nSamplesPerSec;    /* sample rate */
@@ -37,7 +37,7 @@ typedef struct w32waveformat_tag {
 
 #define WAVE_FORMAT_PCM     1
 
-typedef struct w32pcmwaveformat_tag {
+typedef struct __attribute__((__packed__)) w32pcmwaveformat_tag {
      w32WAVEFORMAT  wf;
      uint16_le  wBitsPerSample;
 } w32PCMWAVEFORMAT;
@@ -53,7 +53,7 @@ typedef struct w32pcmwaveformat_tag {
 #endif
 #define WAVE_FORMAT_AC3        0x2000 // ATSC/A-52 (Dolby AC3)
 
-typedef struct tw32WAVEFORMATEX {
+typedef struct __attribute__((__packed__)) tw32WAVEFORMATEX {
   uint16_le  wFormatTag;      // format type
   uint16_le  nChannels;      // number of channels (i.e. mono, stereo...)
   uint32_le  nSamplesPerSec;    // sample rate
@@ -66,7 +66,7 @@ typedef struct tw32WAVEFORMATEX {
 // Microsoft MPEG audio WAV definition
 //
 // MPEG-1 audio wave format (audio layer only).   (0x0050)
-typedef struct w32mpeg1waveformat_tag {
+typedef struct __attribute__((__packed__)) w32mpeg1waveformat_tag {
   w32WAVEFORMATEX  wfx;
   uint16_le    fwHeadLayer;
   uint32_le    dwHeadBitrate;
@@ -98,7 +98,7 @@ typedef struct w32mpeg1waveformat_tag {
 
 // WAVE_FORMAT_MPEGLAYER3 format sructure
 //
-typedef struct w32mpeglayer3waveformat_tag {
+typedef struct __attribute__((__packed__)) w32mpeglayer3waveformat_tag {
   w32WAVEFORMATEX  wfx;
   uint16_le    wID;
   uint32_le    fdwFlags;
@@ -114,7 +114,5 @@ typedef struct w32mpeglayer3waveformat_tag {
 #define MPEGLAYER3_FLAG_PADDING_ISO      0x00000000
 #define MPEGLAYER3_FLAG_PADDING_ON       0x00000001
 #define MPEGLAYER3_FLAG_PADDING_OFF      0x00000002
-
-#pragma pack(pop)
 
 #endif // __TOOLS_COMMON_MMREG_H__

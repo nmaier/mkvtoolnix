@@ -83,9 +83,7 @@
     uint32_le  dwOffsetField2;
   };
 
-#pragma pack(push,1)
-
-typedef struct _avisuperindex_chunk {
+typedef struct __attribute__((__packed__)) _avisuperindex_chunk {
   uint32_le fcc;          // ’ix##’
   uint32_le cb;          // size of this structure
   uint16_le wLongsPerEntry;    // must be 4 (size of each entry in aIndex array)
@@ -98,7 +96,7 @@ typedef struct _avisuperindex_chunk {
   struct _avisuperindex_entry aIndex[];
 } AVISUPERINDEX, * PAVISUPERINDEX;
 
-typedef struct _avistdindex_chunk {
+typedef struct __attribute__((__packed__)) _avistdindex_chunk {
   uint32_le fcc;          // ’ix##’
   uint32_le cb;
   uint16_le wLongsPerEntry;    // must be sizeof(aIndex[0])/sizeof(DWORD)
@@ -124,8 +122,6 @@ typedef struct _avistdindex_chunk {
   uint32_le    dwReserved3;
   struct  _avifieldindex_entry aIndex[];
 } AVIFIELDINDEX, * PAVIFIELDINDEX;*/
-
-#pragma pack(pop)
 
 ///////////////////////////////////////////////////////////////////////////
 

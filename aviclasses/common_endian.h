@@ -19,6 +19,8 @@
 #ifndef __TOOLS_COMMON_ENDIAN_H__
 #define __TOOLS_COMMON_ENDIAN_H__
 
+#include "os.h"
+
 #include "ac_common.h"
 
 #undef LIL_ENDIAN
