@@ -739,14 +739,13 @@ dnl
 
       if test "$wxwver_ok" = "1" ; then
         WXWINDOWS_CFLAGS=`wx-config --cxxflags`
-        WXWINDOWS_LDFLAGS=`wx-config --ldflags`
         WXWINDOWS_LIBS=`wx-config --libs`
         AC_CACHE_VAL(am_cv_wx_compilation, [
           AC_LANG_PUSH(C++)
           ac_save_CXXFLAGS="$CXXFLAGS"
           ac_save_LIBS="$LIBS"
           CXXFLAGS="$CXXFLAGS $WXWINDOWS_CFLAGS"
-          LIBS="$LDFLAGS $WXWINDOWS_LDFLAGS $WXWINDOWS_LIBS"
+          LIBS="$LDFLAGS $WXWINDOWS_LIBS"
           AC_TRY_LINK([
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
@@ -778,7 +777,6 @@ wxTreeItemId id;
   fi
 
 AC_SUBST(WXWINDOWS_CFLAGS)
-AC_SUBST(WXWINDOWS_LDFLAGS)
 AC_SUBST(WXWINDOWS_LIBS)
 AC_SUBST(MMG_SUBDIRS)
 AC_SUBST(USE_WXWINDOWS)
