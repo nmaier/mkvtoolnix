@@ -804,15 +804,42 @@ AM_CONDITIONAL(HAVE_WXWINDOWS, test x"$have_wxwindows" = "xyes")
 dnl
 dnl Option to use the (old) avilib library instead of the AVI classes
 dnl
-AC_ARG_ENABLE(aviclasses,
-  [  --enable-aviclasses           Use AVIclasses instead of avilib],
-  have_aviclasses=yes, have_aviclasses=no)
+AC_ARG_WITH(avilib,
+  [  --with-avilib=version         Which avilib should be used (old, classes or 0.6.10)],
+  with_avilib_given=yes, with_avilib_given=no)
 
-  if test "x$have_aviclasses" = "xyes"; then
+  if test "x$with_avilib_given" = "xyes"; then
+    case "${with_avilib}" in
+      old)
+        have_avilib=yes
+        ;;
+      classes)
+        have_aviclasses=yes
+        ;;
+      "0.6.10")
+        have_avilib0_6_10=yes
+        ;;
+      *)
+        echo "*** Unknown AVI library string \"${with_avilib}\". Supported "
+        echo "*** values are:"
+        echo "*** old     - the old and tested avilib, no OpenDML support"
+        echo "*** 0.6.10  - the new avilib with OpenDML support"
+        echo "*** classes - AVI access classes by Cyrius with OpenDML support"
+        exit 1
+        ;;
+    esac
+  fi
+  if test "x$have_aviclasses" = "xyes"; then 
     AC_DEFINE(HAVE_AVICLASSES, 1,
-      [Define if the newer AVIclasses should be used])
+      [Define if the newer AVIclasses should be used.])
     AVICLASSES_LIBS="-laviclasses"
   fi
+  if test "x$have_avilib0_6_10" = "xyes"; then
+    AC_DEFINE(HAVE_AVILIB0_6_10, 1,
+      [Define if the newer avilib from transcode 0.6.10 should be used.])
+  fi
+  AM_CONDITIONAL(HAVE_AVILIB, test x"$have_avilib0_6_10" != "xyes")
+  AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" == "xyes")
   AM_CONDITIONAL(HAVE_AVICLASSES, test x"$have_aviclasses" = "xyes")
 
   AVILIB_LIBS="-lavi"
@@ -825,5 +852,4 @@ CXXFLAGS="-Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFIL
 CPPFLAGS="@EXTRA_CFLAGS@"
 LDFLAGS="@EXTRA_LDFLAGS@"
 
-AC_OUTPUT(Makefile avilib/Makefile aviclasses/Makefile src/Makefile src/mmg/Makefile doc/Makefile)
-
+AC_OUTPUT(Makefile avilib/Makefile avilib-0.6.10/Makefile aviclasses/Makefile src/Makefile src/mmg/Makefile doc/Makefile)
