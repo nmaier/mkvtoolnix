@@ -70,19 +70,17 @@ void tab_settings::on_browse(wxCommandEvent &evt) {
                    _T("Executable files (*.exe)|*.exe|" ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     tc_mkvmerge->SetValue(dlg.GetPath());
-    mkvmerge_path = "\"" + dlg.GetPath() + "\"";
+    mkvmerge_path = dlg.GetPath();
     save_preferences();
   }
 }
 
 void tab_settings::load_preferences() {
-  wxString s;
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
 
-  if (!cfg->Read("/mkvmerge/executable", &s))
-    s = "mkvmerge";
-  mkvmerge_path = "\"" + s + "\"";
-  tc_mkvmerge->SetValue(s);
+  if (!cfg->Read("/mkvmerge/executable", &mkvmerge_path))
+    mkvmerge_path = "mkvmerge";
+  tc_mkvmerge->SetValue(mkvmerge_path);
 }
 
 void tab_settings::save_preferences() {

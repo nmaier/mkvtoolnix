@@ -268,7 +268,7 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
 
-    command = mkvmerge_path + " -i \"" + dlg.GetPath() + "\"";
+    command = "\"" + mkvmerge_path + "\" -i \"" + dlg.GetPath() + "\"";
     result = wxExecute(command, output, errors);
     if ((result > 0) && (result < 10)) {
       name.Printf("'mkvmerge -i' failed. Return code: %d\n\n", result);

@@ -34,7 +34,8 @@
 #include "mmg.h"
 #include "common.h"
 
-wxApp *app;
+mmg_app *app;
+mmg_dialog *mdlg;
 wxString last_open_dir;
 wxString mkvmerge_path;
 vector<mmg_file_t> files;
@@ -90,6 +91,20 @@ wxString shell_escape(wxString source) {
     else if (source[i] == '\\')
       escaped += "\\\\";
     else if (source[i] == '\n')
+      escaped += " ";
+    else
+      escaped += source[i];
+  }
+
+  return escaped;
+}
+
+wxString no_cr(wxString source) {
+  uint32_t i;
+  wxString escaped;
+
+  for (i = 0; i < source.Length(); i++) {
+    if (source[i] == '\n')
       escaped += " ";
     else
       escaped += source[i];
@@ -179,7 +194,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   sbs_low2->Add(tc_cmdline, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
   last_open_dir = "";
-  cmdline = mkvmerge_path + " -o \"" + tc_output->GetValue() + "\" ";
+  cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" ";
   tc_cmdline->SetValue(cmdline);
   cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
   cmdline_timer.Start(1000);
@@ -302,7 +317,10 @@ void mmg_dialog::save(wxString file_name) {
 }
 
 void mmg_dialog::on_run(wxCommandEvent &evt) {
+  mux_dialog *mdlg;
   update_command_line();
+  mdlg = new mux_dialog(this);
+  delete mdlg;
 }
 
 void mmg_dialog::on_about(wxCommandEvent &evt) {
@@ -351,6 +369,10 @@ wxString &mmg_dialog::get_command_line() {
   return cmdline;
 }
 
+wxArrayString &mmg_dialog::get_command_line_args() {
+  return clargs;
+}
+
 void mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
   update_command_line();
 }
@@ -362,10 +384,15 @@ void mmg_dialog::update_command_line() {
   mmg_file_t *f;
   mmg_track_t *t;
   mmg_attachment_t *a;
-  wxString sid, old_cmdline;
+  wxString sid, old_cmdline, arg;
 
   old_cmdline = cmdline;
-  cmdline = mkvmerge_path + " -o \"" + tc_output->GetValue() + "\" ";
+  cmdline = "\"" + mkvmerge_path + "\" -o \"" + tc_output->GetValue() + "\" ";
+
+  clargs.Clear();
+  clargs.Add(mkvmerge_path);
+  clargs.Add("-o");
+  clargs.Add(tc_output->GetValue());
 
   tracks_present = false;
   for (fidx = 0; fidx < files.size(); fidx++) {
@@ -385,69 +412,120 @@ void mmg_dialog::update_command_line() {
       if (t->type == 'a') {
         no_audio = false;
         cmdline += "-a " + sid + " ";
+        clargs.Add("-a");
+        clargs.Add(sid);
 
-        if (t->aac_is_sbr)
+        if (t->aac_is_sbr) {
           cmdline += "--aac-is-sbr " + sid + " ";
+          clargs.Add("--aac-is-sbr");
+          clargs.Add(sid);
+        }
 
       } else if (t->type == 'v') {
         no_video = false;
         cmdline += "-d " + sid + " ";
+        clargs.Add("-d");
+        clargs.Add(sid);
 
       } else if (t->type == 's') {
         no_subs = false;
         cmdline += "-s " + sid + " ";
+        clargs.Add("-s");
+        clargs.Add(sid);
 
-        if (t->sub_charset->Length() > 0)
+        if (t->sub_charset->Length() > 0) {
           cmdline += "--sub-charset \"" + sid + ":" +
             shell_escape(*t->sub_charset) + "\" ";
+          clargs.Add("--sub-charset");
+          clargs.Add(sid + ":" + shell_escape(*t->sub_charset));
+        }
       }
 
-      if (*t->language != "none")
+      if (*t->language != "none") {
         cmdline += "--language " + sid + ":" +
           extract_language_code(*t->language) + " ";
+        clargs.Add("--language");
+        clargs.Add(sid + ":" + extract_language_code(*t->language));
+      }
 
       if (*t->cues != "default") {
         cmdline += "--cues " + sid + ":";
-        if (*t->cues == "only for I frames")
+        clargs.Add("--cues");
+        if (*t->cues == "only for I frames") {
           cmdline += "iframes ";
-        else if (*t->cues == "for all frames")
+          clargs.Add(sid + ":iframes");
+        } else if (*t->cues == "for all frames") {
           cmdline += "all ";
-        else if (*t->cues == "none")
+          clargs.Add(sid + ":all");
+        } else if (*t->cues == "none") {
           cmdline += "none ";
-        else
+          clargs.Add(sid + ":none");
+        } else
           mxerror("Unknown cues option '%s'. Should not have happened.\n",
                   t->cues->c_str());
       }
 
       if ((t->delay->Length() > 0) || (t->stretch->Length() > 0)) {
         cmdline += "--sync " + sid + ":";
-        if (t->delay->Length() > 0)
+        arg = sid + ":";
+        if (t->delay->Length() > 0) {
           cmdline += *t->delay;
-        else
+          arg += *t->delay;
+        } else {
           cmdline += "0";
-        if (t->stretch->Length() > 0)
+          arg += "0";
+        }
+        if (t->stretch->Length() > 0) {
           cmdline += "," + *t->stretch;
+          arg += *t->stretch;
+        }
         cmdline += " ";
+        clargs.Add("--sync");
+        clargs.Add(arg);
       }
 
-      if (t->track_name->Length() > 0)
+      if (t->track_name->Length() > 0) {
         cmdline += "--track-name \"" + sid + ":" +
           shell_escape(*t->track_name) + "\" ";
+        clargs.Add("--track-name");
+        clargs.Add(sid + ":" + *t->track_name);
+      }
 
-      if (t->default_track)
+      if (t->default_track) {
         cmdline += "--default-track " + sid + " ";
+        clargs.Add("--default-track");
+        clargs.Add(sid);
+      }
 
-      if (t->tags->Length() > 0)
+      if (t->tags->Length() > 0) {
         cmdline += "--tags \"" + sid + ":" +
           shell_escape(*t->tags) + "\" ";
+        clargs.Add("--tags");
+        clargs.Add(sid + ":" + *t->tags);
+      }
     }
 
     if (tracks_present_here) {
       tracks_present = true;
 
-      if (f->no_chapters)
+      if (f->no_chapters) {
         cmdline += "--no-chapters ";
+        clargs.Add("--no-chapters");
+      }
+      if (no_video) {
+        cmdline += "-D ";
+        clargs.Add("-D");
+      }
+      if (no_audio) {
+        cmdline += "-A ";
+        clargs.Add("-A");
+      }
+      if (no_subs) {
+        cmdline += "-S ";
+        clargs.Add("-S");
+      }
       cmdline += "\"" + *f->file_name + "\" ";
+      clargs.Add(*f->file_name);
     }
   }
 
@@ -456,77 +534,129 @@ void mmg_dialog::update_command_line() {
 
     cmdline += "--attachment-mime-type \"" +
       shell_escape(*a->mime_type) + "\" ";
-    if (a->description->Length() > 0)
+    clargs.Add("--attachment-mime-type");
+    clargs.Add(*a->mime_type);
+    if (a->description->Length() > 0) {
       cmdline += "--attachment-description \"" +
         shell_escape(*a->description) + "\" ";
-    if (a->style == 0)
+      clargs.Add("--attachment-description");
+      clargs.Add(no_cr(*a->description));
+    }
+    if (a->style == 0) {
       cmdline += "--attach-file \"";
-    else
+      clargs.Add("--attach-file");
+    } else {
       cmdline += "--attach-file-once \"";
+      clargs.Add("--attach-file-once");
+    }
     cmdline += shell_escape(*a->file_name) + "\" ";
+    clargs.Add(*a->file_name);
   }
 
-  if (global_page->tc_title->GetValue().Length() > 0)
+  if (global_page->tc_title->GetValue().Length() > 0) {
     cmdline += "--title \"" +
       shell_escape(global_page->tc_title->GetValue()) + "\" ";
-
-  if (global_page->cb_split->IsChecked()) {
-    if (global_page->rb_split_by_size->GetValue())
-      cmdline += "--split \"" +
-        shell_escape(global_page->cob_split_by_size->GetValue()) + "\" ";
-    else
-      cmdline += "--split \"" +
-        shell_escape(global_page->cob_split_by_time->GetValue()) + "\" ";
-
-    if (global_page->tc_split_max_files->GetValue().Length() > 0)
-      cmdline += "--split-max-files \"" +
-        shell_escape(global_page->tc_split_max_files->GetValue()) + "\" ";
-
-    if (global_page->cb_dontlink->IsChecked())
-      cmdline += "--dont-link ";
+    clargs.Add("--title");
+    clargs.Add(global_page->tc_title->GetValue());
   }
 
-  if (global_page->cob_aspect_ratio->GetValue().Length() > 0)
+  if (global_page->cb_split->IsChecked()) {
+    clargs.Add("--split");
+    if (global_page->rb_split_by_size->GetValue()) {
+      cmdline += "--split \"" +
+        shell_escape(global_page->cob_split_by_size->GetValue()) + "\" ";
+      clargs.Add(global_page->cob_split_by_size->GetValue());
+    } else {
+      cmdline += "--split \"" +
+        shell_escape(global_page->cob_split_by_time->GetValue()) + "\" ";
+      clargs.Add(global_page->cob_split_by_time->GetValue());
+    }
+
+    if (global_page->tc_split_max_files->GetValue().Length() > 0) {
+      cmdline += "--split-max-files \"" +
+        shell_escape(global_page->tc_split_max_files->GetValue()) + "\" ";
+      clargs.Add("--split-max-files");
+      clargs.Add(global_page->tc_split_max_files->GetValue());
+    }
+
+    if (global_page->cb_dontlink->IsChecked()) {
+      cmdline += "--dont-link ";
+      clargs.Add("--dont-link");
+    }
+  }
+
+  if (global_page->cob_aspect_ratio->GetValue().Length() > 0) {
     cmdline += "--aspect-ratio \"" +
       shell_escape(global_page->cob_aspect_ratio->GetValue()) + "\" ";
+    clargs.Add("--aspect-ratio");
+    clargs.Add(global_page->cob_aspect_ratio->GetValue());
+  }
 
-  if (global_page->cob_fourcc->GetValue().Length() > 0)
+  if (global_page->cob_fourcc->GetValue().Length() > 0) {
     cmdline += "--fourcc \"" +
       shell_escape(global_page->cob_fourcc->GetValue()) + "\" ";
+    clargs.Add("--fourcc");
+    clargs.Add(global_page->cob_fourcc->GetValue());
+  }
 
-  if (global_page->tc_previous_segment_uid->GetValue().Length() > 0)
+  if (global_page->tc_previous_segment_uid->GetValue().Length() > 0) {
     cmdline += "--link-to-previous \"" +
       shell_escape(global_page->tc_previous_segment_uid->GetValue()) + "\" ";
+    clargs.Add("--link-to-previous");
+    clargs.Add(global_page->tc_previous_segment_uid->GetValue());
+  }
 
-  if (global_page->tc_next_segment_uid->GetValue().Length() > 0)
+  if (global_page->tc_next_segment_uid->GetValue().Length() > 0) {
     cmdline += "--link-to-next \"" +
       shell_escape(global_page->tc_next_segment_uid->GetValue()) + "\" ";
+    clargs.Add("--link-to-next");
+    clargs.Add(global_page->tc_next_segment_uid->GetValue());
+  }
 
   if (global_page->tc_chapters->GetValue().Length() > 0) {
     cmdline += "--chapters \"" +
       shell_escape(global_page->tc_chapters->GetValue()) + "\" ";
-    if (global_page->cob_chap_language->GetValue().Length() > 0)
+    clargs.Add("--chapters");
+    clargs.Add(global_page->tc_chapters->GetValue());
+    if (global_page->cob_chap_language->GetValue().Length() > 0) {
       cmdline += "--chapter-language \"" +
         shell_escape(extract_language_code(global_page->
                                            cob_chap_language->GetValue())) +
         "\" ";
-    if (global_page->cob_chap_charset->GetValue().Length() > 0)
+      clargs.Add("--chapter-language");
+      clargs.Add(extract_language_code(global_page->
+                                   cob_chap_language->GetValue()));
+    }
+
+    if (global_page->cob_chap_charset->GetValue().Length() > 0) {
       cmdline += "--chapter-charset \"" +
         shell_escape(global_page->cob_chap_charset->GetValue()) + "\" ";
+      clargs.Add("--chapter-charset");
+      clargs.Add(global_page->cob_chap_charset->GetValue());
+    }
   }
 
-  if (global_page->tc_global_tags->GetValue().Length() > 0)
+  if (global_page->tc_global_tags->GetValue().Length() > 0) {
     cmdline += "--global-tags \"" +
       shell_escape(global_page->tc_global_tags->GetValue()) + "\" ";
+    clargs.Add("--global-tags");
+    clargs.Add(global_page->tc_global_tags->GetValue());
+  }
 
-  if (global_page->cb_no_cues->IsChecked())
+  if (global_page->cb_no_cues->IsChecked()) {
     cmdline += "--no-cues ";
+    clargs.Add("--no-cues");
+  }
 
-  if (global_page->cb_no_clusters->IsChecked())
+  if (global_page->cb_no_clusters->IsChecked()) {
     cmdline += "--no-clusters-in-meta-seek ";
+    clargs.Add("--no-clusters-in-meta-seek");
+  }
 
-  if (global_page->cb_enable_lacing->IsChecked())
+  if (global_page->cb_enable_lacing->IsChecked()) {
     cmdline += "--enable-lacing ";
+    clargs.Add("--enable-lacing");
+  }
 
   if (old_cmdline != cmdline)
     tc_cmdline->SetValue(cmdline);
@@ -545,14 +675,6 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
   EVT_MENU(ID_M_HELP_ABOUT, mmg_dialog::on_about)
 END_EVENT_TABLE();
-
-class mmg_app: public wxApp {
-protected:
-  mmg_dialog *mdlg;
-
-public:
-  virtual bool OnInit();
-};
 
 bool mmg_app::OnInit() {
   app = this;

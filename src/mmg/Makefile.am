@@ -8,6 +8,7 @@ mmg_SOURCES = mmg.cpp mmg.h \
 			../common.cpp ../common.h \
 			extern_data.cpp extern_data.h \
 			../iso639.cpp ../iso639.h \
+			mux_dialog.cpp \
 			tab_attachments.cpp \
 			tab_input.cpp \
 			tab_global.cpp \

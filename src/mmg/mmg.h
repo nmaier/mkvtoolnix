@@ -26,6 +26,7 @@
 #include <stdint.h>
 
 #include "wx/confbase.h"
+#include "wx/process.h"
 
 using namespace std;
 
@@ -89,6 +90,9 @@ using namespace std;
 #define ID_CB_NOCUES 10052
 #define ID_CB_NOCLUSTERSINMETASEEK 10053
 #define ID_CB_ENABLELACING 10054
+#define ID_B_MUX_OK 10055
+#define ID_B_MUX_SAVELOG 10056
+#define ID_B_MUX_ABORT 10057
 
 #define ID_M_FILE_LOAD 20000
 #define ID_M_FILE_SAVE 20001
@@ -246,6 +250,38 @@ public:
   void load(wxConfigBase *cfg);
 };
 
+class mux_dialog: public wxDialog {
+  DECLARE_CLASS(mux_dialog);
+  DECLARE_EVENT_TABLE();
+protected:
+  long pid;
+  wxStaticText *st_label;
+  wxGauge *g_progress;
+  wxProcess *process;
+  wxString log;
+  wxButton *b_ok, *b_save_log, *b_abort;
+  wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
+public:
+
+  mux_dialog(wxWindow *parent);
+  ~mux_dialog();
+
+  void update_window(wxString text);
+  void update_gauge(long value);
+
+  void on_ok(wxCommandEvent &evt);
+  void on_save_log(wxCommandEvent &evt);
+  void on_abort(wxCommandEvent &evt);
+};
+
+class mux_process: public wxProcess {
+public:
+  mux_dialog *dlg;
+
+  mux_process(mux_dialog *mdlg);
+  virtual void OnTerminate(int pid, int status);
+};
+
 class mmg_dialog: public wxFrame {    
   DECLARE_CLASS(mmg_dialog);
   DECLARE_EVENT_TABLE();
@@ -254,6 +290,7 @@ protected:
   wxTextCtrl *tc_output, *tc_cmdline;
 
   wxString cmdline;
+  wxArrayString clargs;
 
   wxTimer cmdline_timer;
   wxTimer status_bar_timer;
@@ -281,6 +318,7 @@ public:
   void on_update_command_line(wxTimerEvent &evt);
   void update_command_line();
   wxString &get_command_line();
+  wxArrayString &get_command_line_args();
 
   void load(wxString file_name);
   void save(wxString file_name);
@@ -289,6 +327,12 @@ public:
   void set_status_bar(wxString text);
 };
 
+class mmg_app: public wxApp {
+public:
+  virtual bool OnInit();
+};
+
 extern mmg_dialog *mdlg;
+extern mmg_app *app;
 
 #endif // __MMG_DIALOG_H
