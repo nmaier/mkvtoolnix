@@ -42,6 +42,13 @@ UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const char *c);
 char *MTX_DLL_API UTFstring_to_cstr(const UTFstring &u);
 char *MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
 
+#define is_id(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
+
+#define FINDFIRST(p, c) (static_cast<c *> \
+  (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
+#define FINDNEXT(p, c, e) (static_cast<c *> \
+  (((EbmlMaster *)p)->FindNextElt(*e, false)))
+
 template <typename type>type &GetEmptyChild(EbmlMaster &master) {
   EbmlElement *e;
   EbmlMaster *m;

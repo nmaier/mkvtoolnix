@@ -35,9 +35,6 @@ using namespace libmatroska;
 
 // {{{ simple chapter output
 
-#define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-#define is_id2(e, ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-
 class chapter_entry_c {
 public:
   string name;
@@ -118,13 +115,13 @@ write_chapter_display_simple(KaxChapterDisplay *display,
 
   for (i = 0; i < display->ListSize(); i++) {
     e = (*display)[i];
-    if (is_id(KaxChapterString)) {
+    if (is_id(e, KaxChapterString)) {
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
       handle_name(level - 1, s);
       safefree(s);
 
-    } else if (is_id(KaxChapterAtom))
+    } else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
 
   }
@@ -139,7 +136,7 @@ write_chapter_track_simple(KaxChapterTrack *track,
   for (i = 0; i < track->ListSize(); i++) {
     e = (*track)[i];
 
-    if (is_id(KaxChapterAtom))
+    if (is_id(e, KaxChapterAtom))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
 
   }
@@ -155,17 +152,17 @@ write_chapter_atom_simple(KaxChapterAtom *atom,
   for (i = 0; i < atom->ListSize(); i++) {
     e = (*atom)[i];
 
-    if (is_id(KaxChapterTimeStart)) {
+    if (is_id(e, KaxChapterTimeStart)) {
       v = uint64(*static_cast<EbmlUInteger *>(e)) / 1000000;
       handle_start_time(level, v);
 
-    } else if (is_id(KaxChapterTrack))
+    } else if (is_id(e, KaxChapterTrack))
       write_chapter_track_simple((KaxChapterTrack *)e, level + 1);
 
-    else if (is_id(KaxChapterDisplay))
+    else if (is_id(e, KaxChapterDisplay))
       write_chapter_display_simple((KaxChapterDisplay *)e, level + 1);
 
-    else if (is_id(KaxChapterAtom))
+    else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
 
   }
@@ -184,10 +181,10 @@ write_chapters_simple(int &chapter_num,
   chapter_entries.clear();
 
   for (i = 0; i < chapters->ListSize(); i++) {
-    if (is_id2((*chapters)[i], KaxEditionEntry)) {
+    if (is_id((*chapters)[i], KaxEditionEntry)) {
       edition = (KaxEditionEntry *)(*chapters)[i];
       for (j = 0; j < edition->ListSize(); j++)
-        if (is_id2((*edition)[j], KaxChapterAtom))
+        if (is_id((*edition)[j], KaxChapterAtom))
           write_chapter_atom_simple((KaxChapterAtom *)(*edition)[j], 2);
     }
   }
@@ -240,7 +237,7 @@ write_chapter_display_xml(KaxChapterDisplay *display,
   string_found = false;
   for (i = 0; i < display->ListSize(); i++) {
     e = (*display)[i];
-    if (is_id(KaxChapterString)) {
+    if (is_id(e, KaxChapterString)) {
       pt(level + 1, "<ChapterString>");
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
@@ -249,20 +246,20 @@ write_chapter_display_xml(KaxChapterDisplay *display,
       safefree(s);
       string_found = true;
 
-    } else if (is_id(KaxChapterLanguage)) {
+    } else if (is_id(e, KaxChapterLanguage)) {
       pt(level + 1, "<ChapterLanguage>");
       mxprint(o, "%s</ChapterLanguage>\n", string(*static_cast
                                                   <EbmlString *>(e)).c_str());
       language_found = true;
 
 
-    } else if (is_id(KaxChapterCountry)) {
+    } else if (is_id(e, KaxChapterCountry)) {
       pt(level + 1, "<ChapterCountry>");
       mxprint(o, "%s</ChapterCountry>\n", string(*static_cast
                                                  <EbmlString *>(e)).c_str());
 
 
-    } else if (is_id(KaxChapterAtom))
+    } else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
 
   }
@@ -285,12 +282,12 @@ write_chapter_track_xml(KaxChapterTrack *track,
 
   for (i = 0; i < track->ListSize(); i++) {
     e = (*track)[i];
-    if (is_id(KaxChapterTrackNumber)) {
+    if (is_id(e, KaxChapterTrackNumber)) {
       pt(level + 1, "<ChapterTrackNumber>");
       mxprint(o, "%u</ChapterTrackNumber\n",
               uint32(*static_cast<EbmlUInteger *>(e)));
 
-    } else if (is_id(KaxChapterAtom))
+    } else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
 
   }
@@ -311,41 +308,41 @@ write_chapter_atom_xml(KaxChapterAtom *atom,
   start_time_found = false;
   for (i = 0; i < atom->ListSize(); i++) {
     e = (*atom)[i];
-    if (is_id(KaxChapterUID)) {
+    if (is_id(e, KaxChapterUID)) {
       pt(level + 1, "<!-- <ChapterUID>");
       mxprint(o, "%u</ChapterUID> -->\n",
               uint32(*static_cast<EbmlUInteger *>(e)));
 
-    } else if (is_id(KaxChapterTimeStart)) {
+    } else if (is_id(e, KaxChapterTimeStart)) {
       pt(level + 1, "<ChapterTimeStart>");
       v = uint64(*static_cast<EbmlUInteger *>(e));
       mxprint(o, FMT_TIMECODEN "</ChapterTimeStart>\n",
               ARG_TIMECODEN(v));
       start_time_found = true;
 
-    } else if (is_id(KaxChapterTimeEnd)) {
+    } else if (is_id(e, KaxChapterTimeEnd)) {
       pt(level + 1, "<ChapterTimeEnd>");
       v = uint64(*static_cast<EbmlUInteger *>(e));
       mxprint(o, FMT_TIMECODEN "</ChapterTimeEnd>\n",
               ARG_TIMECODEN(v));
 
-    } else if (is_id(KaxChapterFlagHidden)) {
+    } else if (is_id(e, KaxChapterFlagHidden)) {
       pt(level + 1, "<ChapterFlagHidden>");
       mxprint(o, "%u</ChapterFlagHidden>\n",
               uint8(*static_cast<EbmlUInteger *>(e)));
 
-    } else if (is_id(KaxChapterFlagEnabled)) {
+    } else if (is_id(e, KaxChapterFlagEnabled)) {
       pt(level + 1, "<ChapterFlagEnabled>");
       mxprint(o, "%u</ChapterFlagEnabled>\n",
               uint8(*static_cast<EbmlUInteger *>(e)));
 
-    } else if (is_id(KaxChapterTrack))
+    } else if (is_id(e, KaxChapterTrack))
       write_chapter_track_xml((KaxChapterTrack *)e, level + 1);
 
-    else if (is_id(KaxChapterDisplay))
+    else if (is_id(e, KaxChapterDisplay))
       write_chapter_display_xml((KaxChapterDisplay *)e, level + 1);
 
-    else if (is_id(KaxChapterAtom))
+    else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_xml((KaxChapterAtom *)e, level + 1);
 
   }
@@ -365,11 +362,11 @@ write_chapters_xml(KaxChapters *chapters,
   o = out;
 
   for (i = 0; i < chapters->ListSize(); i++) {
-    if (is_id2((*chapters)[i], KaxEditionEntry)) {
+    if (is_id((*chapters)[i], KaxEditionEntry)) {
       mxprint(out, "  <EditionEntry>\n");
       edition = (KaxEditionEntry *)(*chapters)[i];
       for (j = 0; j < edition->ListSize(); j++)
-        if (is_id2((*edition)[j], KaxChapterAtom))
+        if (is_id((*edition)[j], KaxChapterAtom))
           write_chapter_atom_xml((KaxChapterAtom *)(*edition)[j], 2);
       mxprint(out, "  </EditionEntry>\n");
     }

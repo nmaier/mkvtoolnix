@@ -33,6 +33,10 @@ namespace libmatroska {
 
 using namespace libmatroska;
 
+namespace libmatroska {
+  class KaxChapterAtom;
+};
+
 KaxChapters *MTX_DLL_API
 parse_chapters(const char *file_name, int64_t min_tc = 0,
                int64_t max_tc = -1, int64_t offset = 0,
@@ -74,6 +78,10 @@ select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc,
                              int64_t max_tc, int64_t offset);
 
 extern string MTX_DLL_API default_chapter_language, default_chapter_country;
+
+int64_t MTX_DLL_API get_chapter_uid(KaxChapterAtom &atom);
+int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom);
+string MTX_DLL_API get_chapter_name(KaxChapterAtom &atom);
 
 #endif // __CHAPTERS_H
 

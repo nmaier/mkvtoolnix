@@ -62,11 +62,6 @@ public:
   }
 };
 
-#define FINDFIRST(p, c) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
-#define FINDNEXT(p, c, e) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindNextElt(*e, false)))
-
 class chapter_node_data_c: public wxTreeItemData {
 public:
   bool is_atom;
@@ -1689,8 +1684,6 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
   set_display_values(cdisplay);
   tc_chapter_name->SetFocus();
 }
-
-#define is_id(e, c) (EbmlId(*(e)) == c::ClassInfos.GlobalId)
 
 void
 tab_chapters::on_flag_hidden(wxCommandEvent &evt) {

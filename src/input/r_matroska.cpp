@@ -91,10 +91,6 @@ using namespace libmatroska;
 
 #define in_parent(p) (in->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
-#define FINDFIRST(p, c) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
-#define FINDNEXT(p, c, e) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindNextElt(*e, false)))
 
 // }}}
 

@@ -63,9 +63,6 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
-#define FINDFIRST(p, c) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
-
 static string
 get_simple_tag(const char *name,
                EbmlMaster &m) {
@@ -181,40 +178,6 @@ get_global_tag(const char *name,
     return "";
 
   return get_simple_tag(name, *tag);
-}
-
-static int64_t
-get_chapter_start(KaxChapterAtom &atom) {
-  KaxChapterTimeStart *start;
-
-  start = FINDFIRST(&atom, KaxChapterTimeStart);
-  if (start == NULL)
-    return -1;
-  return uint64(*static_cast<EbmlUInteger *>(start));
-}
-
-static string
-get_chapter_name(KaxChapterAtom &atom) {
-  KaxChapterDisplay *display;
-  KaxChapterString *name;
-
-  display = FINDFIRST(&atom, KaxChapterDisplay);
-  if (display == NULL)
-    return "";
-  name = FINDFIRST(display, KaxChapterString);
-  if (name == NULL)
-    return "";
-  return UTFstring_to_cstrutf8(UTFstring(*name));
-}
-
-static int64_t
-get_chapter_uid(KaxChapterAtom &atom) {
-  KaxChapterUID *uid;
-
-  uid = FINDFIRST(&atom, KaxChapterUID);
-  if (uid == NULL)
-    return -1;
-  return uint64(*static_cast<EbmlUInteger *>(uid));
 }
 
 static int64_t

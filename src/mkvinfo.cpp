@@ -327,7 +327,6 @@ parse_args(int argc,
                            (p->GetElementPosition() + p->ElementSize()))
 #define in_parent(p) (in->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
-#define is_id(e, c) (EbmlId(*(e)) == c::ClassInfos.GlobalId)
 
 bool
 is_global(EbmlStream *es,

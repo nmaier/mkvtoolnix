@@ -309,7 +309,7 @@ mkvextract_SOURCES = $(wildcard src/mkvextract*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
-		$(ICONV_LIBS) $(LIBINTL_LIBS)
+		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat
 
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))

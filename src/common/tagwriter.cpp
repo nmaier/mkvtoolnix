@@ -187,20 +187,18 @@ print_unknown(int level,
 
 #define pr_b(n) print_binary(level, n, e)
 
-#define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
-
 #define pr_unk() print_unknown(level, e)
 
 static void
 handle_multicomments(EbmlElement *e,
                      int level) {
-  if (is_id(KaxTagMultiCommentName))
+  if (is_id(e, KaxTagMultiCommentName))
     pr_s("Name");
 
-  else if (is_id(KaxTagMultiCommentComments))
+  else if (is_id(e, KaxTagMultiCommentComments))
     pr_us("Comments");
 
-  else if (is_id(KaxTagMultiCommentLanguage))
+  else if (is_id(e, KaxTagMultiCommentLanguage))
     pr_s("Language");
 
   else
@@ -212,16 +210,16 @@ handle_simpletags(EbmlElement *e,
                   int level) {
   int i;
 
-  if (is_id(KaxTagName))
+  if (is_id(e, KaxTagName))
     pr_us("Name");
 
-  else if (is_id(KaxTagString))
+  else if (is_id(e, KaxTagString))
     pr_us("String");
 
-  else if (is_id(KaxTagBinary))
+  else if (is_id(e, KaxTagBinary))
     pr_b("Binary");
 
-  else if (is_id(KaxTagSimple)) {
+  else if (is_id(e, KaxTagSimple)) {
     for (i = 0; i < level; i++)
       mxprint(o, "  ");
     mxprint(o, "<Simple>\n");
@@ -239,16 +237,16 @@ static void
 handle_level5(EbmlElement *e) {
   int i, level = 5;
 
-  if (is_id(KaxTagMultiPriceCurrency))
+  if (is_id(e, KaxTagMultiPriceCurrency))
     pr_s("Currency");
 
-  else if (is_id(KaxTagMultiPriceAmount))
+  else if (is_id(e, KaxTagMultiPriceAmount))
     pr_f("Amount");
 
-  else if (is_id(KaxTagMultiPricePriceDate))
+  else if (is_id(e, KaxTagMultiPricePriceDate))
     pr_d("PriceDate");
 
-  else if (is_id(KaxTagMultiComment)) {
+  else if (is_id(e, KaxTagMultiComment)) {
     mxprint(o, "          <MultiComment>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_multicomments((*(EbmlMaster *)e)[i], 6);
@@ -263,94 +261,94 @@ static void
 handle_level4(EbmlElement *e) {
   int i, level = 4;
 
-  if (is_id(KaxTagMultiCommercialType))
+  if (is_id(e, KaxTagMultiCommercialType))
     pr_ui("CommercialType");
 
-  else if (is_id(KaxTagMultiCommercialAddress))
+  else if (is_id(e, KaxTagMultiCommercialAddress))
     pr_us("Address");
 
-  else if (is_id(KaxTagMultiCommercialURL))
+  else if (is_id(e, KaxTagMultiCommercialURL))
     pr_s("URL");
 
-  else if (is_id(KaxTagMultiCommercialEmail))
+  else if (is_id(e, KaxTagMultiCommercialEmail))
     pr_s("Email");
 
-  else if (is_id(KaxTagMultiPrice)) {
+  else if (is_id(e, KaxTagMultiPrice)) {
     mxprint(o, "        <MultiPrice>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level5((*(EbmlMaster *)e)[i]);
     mxprint(o, "        </MultiPrice>\n");
 
-  } else if (is_id(KaxTagMultiDateType))
+  } else if (is_id(e, KaxTagMultiDateType))
     pr_ui("DateType");
 
-  else if (is_id(KaxTagMultiDateDateBegin))
+  else if (is_id(e, KaxTagMultiDateDateBegin))
     pr_d("Begin");
 
-  else if (is_id(KaxTagMultiDateDateEnd))
+  else if (is_id(e, KaxTagMultiDateDateEnd))
     pr_d("End");
 
-  else if (is_id(KaxTagMultiEntityType))
+  else if (is_id(e, KaxTagMultiEntityType))
     pr_ui("EntityType");
 
-  else if (is_id(KaxTagMultiEntityName))
+  else if (is_id(e, KaxTagMultiEntityName))
     pr_us("Name");
 
-  else if (is_id(KaxTagMultiEntityURL))
+  else if (is_id(e, KaxTagMultiEntityURL))
     pr_s("URL");
 
-  else if (is_id(KaxTagMultiEntityEmail))
+  else if (is_id(e, KaxTagMultiEntityEmail))
     pr_s("Email");
   
-  else if (is_id(KaxTagMultiEntityAddress))
+  else if (is_id(e, KaxTagMultiEntityAddress))
     pr_us("Address");
 
-  else if (is_id(KaxTagMultiIdentifierType))
+  else if (is_id(e, KaxTagMultiIdentifierType))
     pr_ui("IdentifierType");
 
-  else if (is_id(KaxTagMultiIdentifierBinary))
+  else if (is_id(e, KaxTagMultiIdentifierBinary))
     pr_b("Binary");
 
-  else if (is_id(KaxTagMultiIdentifierString))
+  else if (is_id(e, KaxTagMultiIdentifierString))
     pr_us("String");
 
-  else if (is_id(KaxTagMultiLegalType))
+  else if (is_id(e, KaxTagMultiLegalType))
     pr_ui("LegalType");
 
-  else if (is_id(KaxTagMultiLegalURL))
+  else if (is_id(e, KaxTagMultiLegalURL))
     pr_s("URL");
 
-  else if (is_id(KaxTagMultiLegalAddress))
+  else if (is_id(e, KaxTagMultiLegalAddress))
     pr_us("Address");
  
-  else if (is_id(KaxTagMultiLegalContent))
+  else if (is_id(e, KaxTagMultiLegalContent))
     pr_us("Content");
 
-  else if (is_id(KaxTagMultiTitleType))
+  else if (is_id(e, KaxTagMultiTitleType))
     pr_ui("TitleType");
 
-  else if (is_id(KaxTagMultiTitleName))
+  else if (is_id(e, KaxTagMultiTitleName))
     pr_us("Name");
 
-  else if (is_id(KaxTagMultiTitleSubTitle))
+  else if (is_id(e, KaxTagMultiTitleSubTitle))
     pr_us("SubTitle");
 
-  else if (is_id(KaxTagMultiTitleEdition))
+  else if (is_id(e, KaxTagMultiTitleEdition))
     pr_us("Edition");
 
-  else if (is_id(KaxTagMultiTitleAddress))
+  else if (is_id(e, KaxTagMultiTitleAddress))
     pr_us("Address");
 
-  else if (is_id(KaxTagMultiTitleURL))
+  else if (is_id(e, KaxTagMultiTitleURL))
     pr_s("URL");
 
-  else if (is_id(KaxTagMultiTitleEmail))
+  else if (is_id(e, KaxTagMultiTitleEmail))
     pr_s("Email");
 
-  else if (is_id(KaxTagMultiTitleLanguage))
+  else if (is_id(e, KaxTagMultiTitleLanguage))
     pr_s("Language");
 
-  else if (is_id(KaxTagMultiComment)) {
+  else if (is_id(e, KaxTagMultiComment)) {
     mxprint(o, "        <MultiComment>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_multicomments((*(EbmlMaster *)e)[i], 5);
@@ -365,157 +363,157 @@ static void
 handle_level3(EbmlElement *e) {
   int i, level = 3;
 
-  if (is_id(KaxTagTrackUID))
+  if (is_id(e, KaxTagTrackUID))
     pr_ui("TrackUID");
 
-  else if (is_id(KaxTagChapterUID))
+  else if (is_id(e, KaxTagChapterUID))
     pr_ui("ChapterUID");
 
-  else if (is_id(KaxTagSubject))
+  else if (is_id(e, KaxTagSubject))
     pr_us("Subject");
 
-  else if (is_id(KaxTagBibliography))
+  else if (is_id(e, KaxTagBibliography))
     pr_us("Bibliography");
 
-  else if (is_id(KaxTagLanguage))
+  else if (is_id(e, KaxTagLanguage))
     pr_s("Language");
 
-  else if (is_id(KaxTagRating))
+  else if (is_id(e, KaxTagRating))
     pr_b("Rating");
 
-  else if (is_id(KaxTagEncoder))
+  else if (is_id(e, KaxTagEncoder))
     pr_us("Encoder");
 
-  else if (is_id(KaxTagEncodeSettings))
+  else if (is_id(e, KaxTagEncodeSettings))
     pr_us("EncodeSettings");
 
-  else if (is_id(KaxTagFile))
+  else if (is_id(e, KaxTagFile))
     pr_us("File");
 
-  else if (is_id(KaxTagArchivalLocation))
+  else if (is_id(e, KaxTagArchivalLocation))
     pr_us("ArchivalLocation");
 
-  else if (is_id(KaxTagKeywords))
+  else if (is_id(e, KaxTagKeywords))
     pr_us("Keywords");
 
-  else if (is_id(KaxTagMood))
+  else if (is_id(e, KaxTagMood))
     pr_us("Mood");
 
-  else if (is_id(KaxTagRecordLocation))
+  else if (is_id(e, KaxTagRecordLocation))
     pr_s("RecordLocation");
 
-  else if (is_id(KaxTagSource))
+  else if (is_id(e, KaxTagSource))
     pr_us("Source");
 
-  else if (is_id(KaxTagSourceForm))
+  else if (is_id(e, KaxTagSourceForm))
     pr_us("SourceForm");
 
-  else if (is_id(KaxTagProduct))
+  else if (is_id(e, KaxTagProduct))
     pr_us("Product");
 
-  else if (is_id(KaxTagOriginalMediaType))
+  else if (is_id(e, KaxTagOriginalMediaType))
     pr_us("OriginalMediaType");
 
-  else if (is_id(KaxTagPlayCounter))
+  else if (is_id(e, KaxTagPlayCounter))
     pr_ui("PlayCounter");
 
-  else if (is_id(KaxTagPopularimeter))
+  else if (is_id(e, KaxTagPopularimeter))
     pr_ui("Popularimeter");
 
-  else if (is_id(KaxTagAudioGenre))
+  else if (is_id(e, KaxTagAudioGenre))
     pr_s("AudioGenre");
 
-  else if (is_id(KaxTagVideoGenre))
+  else if (is_id(e, KaxTagVideoGenre))
     pr_b("VideoGenre");
 
-  else if (is_id(KaxTagSubGenre))
+  else if (is_id(e, KaxTagSubGenre))
     pr_s("SubGenre");
 
-  else if (is_id(KaxTagAudioEncryption))
+  else if (is_id(e, KaxTagAudioEncryption))
     pr_b("AudioEncryption");
 
-  else if (is_id(KaxTagAudioGain))
+  else if (is_id(e, KaxTagAudioGain))
     pr_f("AudioGain");
 
-  else if (is_id(KaxTagAudioPeak))
+  else if (is_id(e, KaxTagAudioPeak))
     pr_f("AudioPeak");
 
-  else if (is_id(KaxTagBPM))
+  else if (is_id(e, KaxTagBPM))
     pr_f("BPM");
 
-  else if (is_id(KaxTagEqualisation))
+  else if (is_id(e, KaxTagEqualisation))
     pr_b("Equalisation");
 
-  else if (is_id(KaxTagDiscTrack))
+  else if (is_id(e, KaxTagDiscTrack))
     pr_ui("DiscTrack");
 
-  else if (is_id(KaxTagSetPart))
+  else if (is_id(e, KaxTagSetPart))
     pr_ui("SetPart");
 
-  else if (is_id(KaxTagInitialKey))
+  else if (is_id(e, KaxTagInitialKey))
     pr_s("InitialKey");
 
-  else if (is_id(KaxTagOfficialAudioFileURL))
+  else if (is_id(e, KaxTagOfficialAudioFileURL))
     pr_s("OfficialAudioFileURL");
 
-  else if (is_id(KaxTagOfficialAudioSourceURL))
+  else if (is_id(e, KaxTagOfficialAudioSourceURL))
     pr_s("OfficialAudioSourceURL");
 
-  else if (is_id(KaxTagCaptureDPI))
+  else if (is_id(e, KaxTagCaptureDPI))
     pr_ui("CaptureDPI");
 
-  else if (is_id(KaxTagCaptureLightness))
+  else if (is_id(e, KaxTagCaptureLightness))
     pr_b("CaptureLightness");
 
-  else if (is_id(KaxTagCapturePaletteSetting))
+  else if (is_id(e, KaxTagCapturePaletteSetting))
     pr_ui("CapturePaletteSetting");
 
-  else if (is_id(KaxTagCaptureSharpness))
+  else if (is_id(e, KaxTagCaptureSharpness))
     pr_b("CaptureSharpness");
 
-  else if (is_id(KaxTagCropped))
+  else if (is_id(e, KaxTagCropped))
     pr_us("Cropped");
 
-  else if (is_id(KaxTagOriginalDimensions))
+  else if (is_id(e, KaxTagOriginalDimensions))
     pr_s("OriginalDimensions");
 
-  else if (is_id(KaxTagCommercial)) {
+  else if (is_id(e, KaxTagCommercial)) {
     mxprint(o, "      <Commercial>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Commercial>\n");
 
-  } else if (is_id(KaxTagDate)) {
+  } else if (is_id(e, KaxTagDate)) {
     mxprint(o, "      <Date>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Date>\n");
 
-  } else if (is_id(KaxTagEntity)) {
+  } else if (is_id(e, KaxTagEntity)) {
     mxprint(o, "      <Entity>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Entity>\n");
 
-  } else if (is_id(KaxTagIdentifier)) {
+  } else if (is_id(e, KaxTagIdentifier)) {
     mxprint(o, "      <Identifier>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Identifier>\n");
 
-  } else if (is_id(KaxTagLegal)) {
+  } else if (is_id(e, KaxTagLegal)) {
     mxprint(o, "      <Legal>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Legal>\n");
 
-  } else if (is_id(KaxTagTitle)) {
+  } else if (is_id(e, KaxTagTitle)) {
     mxprint(o, "      <Title>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
     mxprint(o, "      </Title>\n");
 
-  } else if (is_id(KaxTagMultiComment)) {
+  } else if (is_id(e, KaxTagMultiComment)) {
     mxprint(o, "      <MultiComment>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_multicomments((*(EbmlMaster *)e)[i], 4);
@@ -529,79 +527,79 @@ static void
 handle_level2(EbmlElement *e) {
   int i, level = 2;
 
-  if (is_id(KaxTagTargets)) {
+  if (is_id(e, KaxTagTargets)) {
     mxprint(o, "    <Targets>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </Targets>\n");
 
-  } else if (is_id(KaxTagGeneral)) {
+  } else if (is_id(e, KaxTagGeneral)) {
     mxprint(o, "    <General>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </General>\n");
 
-  } else if (is_id(KaxTagGenres)) {
+  } else if (is_id(e, KaxTagGenres)) {
     mxprint(o, "    <Genres>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </Genres>\n");
 
-  } else if (is_id(KaxTagAudioSpecific)) {
+  } else if (is_id(e, KaxTagAudioSpecific)) {
     mxprint(o, "    <AudioSpecific>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </AudioSpecific>\n");
 
-  } else if (is_id(KaxTagImageSpecific)) {
+  } else if (is_id(e, KaxTagImageSpecific)) {
     mxprint(o, "    <ImageSpecific>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </ImageSpecific>\n");
 
-  } else if (is_id(KaxTagMultiCommercial)) {
+  } else if (is_id(e, KaxTagMultiCommercial)) {
     mxprint(o, "    <MultiCommercial>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiCommercial>\n");
 
-  } else if (is_id(KaxTagMultiDate)) {
+  } else if (is_id(e, KaxTagMultiDate)) {
     mxprint(o, "    <MultiDate>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiDate>\n");
 
-  } else if (is_id(KaxTagMultiEntity)) {
+  } else if (is_id(e, KaxTagMultiEntity)) {
     mxprint(o, "    <MultiEntity>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiEntity>\n");
 
-  } else if (is_id(KaxTagMultiIdentifier)) {
+  } else if (is_id(e, KaxTagMultiIdentifier)) {
     mxprint(o, "    <MultiIdentifier>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiIdentifier>\n");
 
-  } else if (is_id(KaxTagMultiLegal)) {
+  } else if (is_id(e, KaxTagMultiLegal)) {
     mxprint(o, "    <MultiLegal>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiLegal>\n");
 
-  } else if (is_id(KaxTagMultiTitle)) {
+  } else if (is_id(e, KaxTagMultiTitle)) {
     mxprint(o, "    <MultiTitle>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level3((*(EbmlMaster *)e)[i]);
     mxprint(o, "    </MultiTitle>\n");
 
-  } else if (is_id(KaxTagMultiComment)) {
+  } else if (is_id(e, KaxTagMultiComment)) {
     mxprint(o, "    <MultiComment>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_multicomments((*(EbmlMaster *)e)[i], 3);
     mxprint(o, "    </MultiComment>\n");
 
-  } else if (is_id(KaxTagSimple)) {
+  } else if (is_id(e, KaxTagSimple)) {
     mxprint(o, "    <Simple>\n");
     for (i = 0; i < (int)((EbmlMaster *)e)->ListSize(); i++)
       handle_simpletags((*((EbmlMaster *)e))[i], level + 1);
@@ -615,7 +613,7 @@ static void
 handle_level1(EbmlElement *e) {
   int i, level = 1;
 
-  if (is_id(KaxTag)) {
+  if (is_id(e, KaxTag)) {
     mxprint(o, "  <Tag>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level2((*(EbmlMaster *)e)[i]);

@@ -316,8 +316,6 @@ parse_chapters(const char *file_name,
   return NULL;
 }
 
-#define is_id(c) (EbmlId(*e) == c::ClassInfos.GlobalId)
-
 static EbmlMaster *
 copy_chapters_recursive(EbmlMaster *src) {
   uint32_t i;
@@ -337,63 +335,63 @@ copy_chapters_recursive(EbmlMaster *src) {
     if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL)
       dst->PushElement(*copy_chapters_recursive(m));
     else {
-      if (is_id(KaxChapterUID)) {
+      if (is_id(e, KaxChapterUID)) {
         KaxChapterUID *esrc, *edst;
         edst = new KaxChapterUID;
         esrc = static_cast<KaxChapterUID *>(e);
         *edst = *esrc;
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterTimeStart)) {
+      } else if (is_id(e, KaxChapterTimeStart)) {
         KaxChapterTimeStart *esrc, *edst;
         edst = new KaxChapterTimeStart;
         esrc = static_cast<KaxChapterTimeStart *>(e);
         *edst = *esrc;
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterTimeEnd)) {
+      } else if (is_id(e, KaxChapterTimeEnd)) {
         KaxChapterTimeEnd *esrc, *edst;
         edst = new KaxChapterTimeEnd;
         esrc = static_cast<KaxChapterTimeEnd *>(e);
         *edst = *esrc;
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterFlagHidden)) {
+      } else if (is_id(e, KaxChapterFlagHidden)) {
         KaxChapterFlagHidden *esrc, *edst;
         edst = new KaxChapterFlagHidden;
         esrc = static_cast<KaxChapterFlagHidden *>(e);
         *edst = *esrc;
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterFlagEnabled)) {
+      } else if (is_id(e, KaxChapterFlagEnabled)) {
         KaxChapterFlagEnabled *esrc, *edst;
         edst = new KaxChapterFlagEnabled;
         esrc = static_cast<KaxChapterFlagEnabled *>(e);
         *edst = *esrc;
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterTrackNumber)) {
+      } else if (is_id(e, KaxChapterTrackNumber)) {
         KaxChapterTrackNumber *esrc, *edst;
         edst = new KaxChapterTrackNumber;
         esrc = static_cast<KaxChapterTrackNumber *>(e);
         *edst = *esrc;
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterString)) {
+      } else if (is_id(e, KaxChapterString)) {
         KaxChapterString *esrc, *edst;
         edst = new KaxChapterString;
         esrc = static_cast<KaxChapterString *>(e);
         *static_cast<EbmlUnicodeString *>(edst) = UTFstring(*esrc);
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterLanguage)) {
+      } else if (is_id(e, KaxChapterLanguage)) {
         KaxChapterLanguage *esrc, *edst;
         edst = new KaxChapterLanguage;
         esrc = static_cast<KaxChapterLanguage *>(e);
         *static_cast<EbmlString *>(edst) = string(*esrc);
         dst->PushElement(*edst);
 
-      } else if (is_id(KaxChapterCountry)) {
+      } else if (is_id(e, KaxChapterCountry)) {
         KaxChapterCountry *esrc, *edst;
         edst = new KaxChapterCountry;
         esrc = static_cast<KaxChapterCountry *>(e);
@@ -447,4 +445,40 @@ copy_chapters(KaxChapters *source) {
   }
 
   return dst;
+}
+
+// Some helper functions for easy access to libmatroska's chapter structure.
+
+int64_t
+get_chapter_start(KaxChapterAtom &atom) {
+  KaxChapterTimeStart *start;
+
+  start = FINDFIRST(&atom, KaxChapterTimeStart);
+  if (start == NULL)
+    return -1;
+  return uint64(*static_cast<EbmlUInteger *>(start));
+}
+
+string
+get_chapter_name(KaxChapterAtom &atom) {
+  KaxChapterDisplay *display;
+  KaxChapterString *name;
+
+  display = FINDFIRST(&atom, KaxChapterDisplay);
+  if (display == NULL)
+    return "";
+  name = FINDFIRST(display, KaxChapterString);
+  if (name == NULL)
+    return "";
+  return UTFstring_to_cstrutf8(UTFstring(*name));
+}
+
+int64_t
+get_chapter_uid(KaxChapterAtom &atom) {
+  KaxChapterUID *uid;
+
+  uid = FINDFIRST(&atom, KaxChapterUID);
+  if (uid == NULL)
+    return -1;
+  return uint64(*static_cast<EbmlUInteger *>(uid));
 }
