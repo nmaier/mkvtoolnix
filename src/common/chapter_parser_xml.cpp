@@ -60,8 +60,6 @@ end_edition_entry(void *pdata) {
       create_unique_uint32(UNIQUE_EDITION_IDS);
     m->PushElement(*euid);
   }
-  GetChild<KaxEditionFlagDefault>(*m);
-  GetChild<KaxEditionFlagHidden>(*m);
 }
 
 static void
@@ -107,9 +105,6 @@ end_chapter_atom(void *pdata) {
       create_unique_uint32(UNIQUE_CHAPTER_IDS);
     m->PushElement(*cuid);
   }
-
-  GetChild<KaxChapterFlagHidden>(*m);
-  GetChild<KaxChapterFlagEnabled>(*m);
 }
 
 static void
@@ -320,7 +315,36 @@ parse_xml_chapters(mm_text_io_c *in,
   if (error.length() > 0)
     throw error_c(error);
 
+  fix_mandatory_chapter_elements(chapters);
+
   return chapters;
+}
+
+void
+fix_mandatory_chapter_elements(EbmlElement *e) {
+  if (e == NULL)
+    return;
+
+  if (dynamic_cast<KaxEditionEntry *>(e) != NULL) {
+    KaxEditionEntry &ee = *static_cast<KaxEditionEntry *>(e);
+    GetChild<KaxEditionFlagDefault>(ee);
+    GetChild<KaxEditionFlagHidden>(ee);
+
+  } else if (dynamic_cast<KaxChapterAtom *>(e) != NULL) {
+    KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
+
+    GetChild<KaxChapterFlagHidden>(a);
+    GetChild<KaxChapterFlagEnabled>(a);
+  }
+
+  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
+    EbmlMaster *m;
+    int i;
+
+    m = static_cast<EbmlMaster *>(e);
+    for (i = 0; i < m->ListSize(); i++)
+      fix_mandatory_chapter_elements((*m)[i]);
+  }
 }
 
 // }}}

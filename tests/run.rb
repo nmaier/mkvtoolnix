@@ -126,6 +126,12 @@ class Results
     @results[name]["status"] = status
     save
   end
+
+  def set_hash(name, hash)
+    raise "Test does not exist" unless (exist?(name))
+    @results[name]["hash"] = hash
+    save
+  end
 end
 
 def merge(*args)
@@ -159,6 +165,7 @@ def main
   test_new = false
   test_date_after = nil
   test_date_before = nil
+  update_failed = false
   tests = Array.new
   dir_entries = Dir.entries(".")
   ARGV.each do |arg|
@@ -166,6 +173,8 @@ def main
       test_failed = true
     elsif ((arg == "-n") or (arg == "--new"))
       test_new = true
+    elsif ((arg == "-u") or (arg == "--update-failed"))
+      update_failed = true
     elsif (arg =~ /-d([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
       test_date_after = Time.local($1, $2, $3, $4, $5, $6)
     elsif (arg =~ /-D([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
@@ -241,8 +250,14 @@ def main
       elsif (results.hash?(class_name) != result)
         puts("  FAILED: checksum is different. Commands:")
         puts("    " + current_test.commands.join("\n    "))
-        results.set(class_name, "failed")
-        num_failed += 1
+        if (update_failed)
+          puts("  UPDATING result")
+          results.set_hash(class_name, result)
+          results.set(class_name, "passed")
+        else
+          results.set(class_name, "failed")
+          num_failed += 1
+        end
       else
         results.set(class_name, "passed")
       end

@@ -2788,6 +2788,8 @@ create_next_output_file() {
   render_headers(out);
   render_attachments(out);
   if (kax_chapters != NULL) {
+    fix_mandatory_chapter_elements(kax_chapters);
+    sort_ebml_master(kax_chapters);
     if (splitting) {
       kax_chapters_void = new EbmlVoid;
       kax_chapters->UpdateSize();
@@ -2812,6 +2814,7 @@ create_next_output_file() {
 
   if (kax_tags != NULL) {
     fix_mandatory_tag_elements(kax_tags);
+    sort_ebml_master(kax_tags);
     if (!kax_tags->CheckMandatory())
       mxerror(_("Some tag elements are missing (this error "
                 "should not have occured - another similar error should have "
