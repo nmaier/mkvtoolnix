@@ -1694,9 +1694,10 @@ create_readers() {
   }
 
   if (!identifying) {
-    for (i = 0; i < files.size(); i++) {
+    for (i = 0; i < files.size(); i++)
       files[i]->reader->create_packetizers();
-    }
+    for (i = 0; i < files.size(); i++)
+      files[i]->reader->check_track_ids_and_packetizers();
   }
 }
 

@@ -286,6 +286,8 @@ public:
   virtual int add_packetizer(generic_packetizer_c *ptzr);
   virtual void set_timecode_offset(int64_t offset);
 
+  virtual void check_track_ids_and_packetizers();
+
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
 };

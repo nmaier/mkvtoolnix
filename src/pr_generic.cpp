@@ -1314,6 +1314,13 @@ generic_reader_c::display_progress(bool) {
     act_wchar = 0;
 }
 
+void
+generic_reader_c::check_track_ids_and_packetizers() {
+  if (reader_packetizers.size() == 0)
+    mxwarn(FMT_FN "No tracks will be copied from this file. This usually "
+           "indicates a mistake in the command line.\n", ti->fname);
+}
+
 //
 //--------------------------------------------------------------------
 
