@@ -1,3 +1,8 @@
+2004-06-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Video extraction was not working correctly
+	on big endian systems.
+
 2004-06-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The job manager did not always catch all of
@@ -131,7 +136,7 @@
 	* mmg: Removed the 'advanced' tab. Those options shouldn't be used
 	anyway.
 
-	* mkvmerge: bug fix: The OGM reader was not Endian safe.
+	* mkvmerge: bug fix: The OGM reader was not endian safe.
 
 2004-05-20  Moritz Bunkus  <moritz@bunkus.org>
 
