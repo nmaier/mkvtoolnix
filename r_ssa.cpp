@@ -51,6 +51,9 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   string line, global;
   int64_t old_pos;
+  bool is_ass;
+
+  is_ass = false;
 
   try {
     mm_io = new mm_io_c(ti->fname, MODE_READ);
@@ -76,12 +79,19 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
         break;
       }
 
-      // Else just append the current line and some DOS style newlines.
+      // A normal line. Let's see if this file is ASS and not SSA.
+      if (!strcasecmp(line.c_str(), "ScriptType: v4.00+") ||
+          !strcasecmp(line.c_str(), "[V4+ Styles]"))
+        is_ass = true;
+
+      // Now just append the current line and some DOS style newlines.
       global += "\r\n";
       global += line;
     }
 
-    textsubs_packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTSSA,
+    textsubs_packetizer = new textsubs_packetizer_c(this, is_ass ? 
+                                                    MKV_S_TEXTASS :
+                                                    MKV_S_TEXTSSA,
                                                     global.c_str(),
                                                     global.length(), ti);
   } catch (exception &ex) {
