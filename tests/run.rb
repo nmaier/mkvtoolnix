@@ -5,6 +5,7 @@ class Test
 
   def initialize
     @description = "dummy test class"
+    @tmp_num = 0
   end
 
   def run
@@ -15,6 +16,10 @@ class Test
     begin
       return run
     rescue
+      n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
+      Dir.entries("/tmp").each do |e|
+        File.unlink("/tmp/#{e}") if (e =~ /^#{n}/)
+      end
       return nil
     end
   end
@@ -32,12 +37,19 @@ class Test
     end
   end
 
+  def tmp_name
+    @tmp_num ||= 0
+    @tmp_num += 1
+    return "/tmp/mkvtoolnix-auto-test-" + $$.to_s + "-" + @tmp_num.to_s
+  end
+
   def tmp
-    @tmp ||= "/tmp/mkvtoolnix-auto-test-" + $$.to_s
+    @tmp ||= tmp_name
+    return @tmp
   end
 
   def hash_file(name)
-    return `md5sum #{file}`.chomp.gsub(/\s+.*/, "")
+    return `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
   end
 
   def hash_tmp(erase = true)
@@ -120,6 +132,7 @@ def main
 
   num_tests = 0
   num_failed = 0
+  start = Time.now
   Dir.entries(".").sort.each do |entry|
     next unless (FileTest.file?(entry) and (entry =~ /^test-.*\.rb$/))
 
@@ -168,12 +181,16 @@ def main
         results.set(class_name, "passed")
       end
     else
+      puts("  FAILED: no result from test")
+      results.set(class_name, "failed")
       num_failed += 1
     end
   end
+  duration = Time.now - start
 
   puts("#{num_failed}/#{num_tests} failed (" +
-      (num_tests > 0 ? (num_failed * 100 / num_tests).to_s : "0") + "%)")
+      (num_tests > 0 ? (num_failed * 100 / num_tests).to_s : "0") + "%). " +
+        "Tests took #{duration}s.")
 
   exit(num_failed > 0 ? 1 : 0)
 end
