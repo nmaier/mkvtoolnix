@@ -433,45 +433,45 @@ int add_kax_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
 }
 
 int utf8_init(const char *charset) {
-  const char *lc_charset;
+  string lc_charset;
   iconv_t ict_from_utf8, ict_to_utf8;
   int i;
 
   if ((charset == NULL) || (*charset == 0)) {
     setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW)
-    lc_charset = "US-ASCII";
+    lc_charset = "CP" + to_string(GetACP());
 #elif defined(SYS_UNIX)
     lc_charset = nl_langinfo(CODESET);
 #else
-    lc_charset = (char *)locale_charset();
+    lc_charset = locale_charset();
 #endif
-    if (!strcmp(lc_charset, "UTF8") || !strcmp(lc_charset, "UTF-8"))
+    if ((lc_charset == "UTF8") || (lc_charset == "UTF-8"))
       return -1;
   } else
     lc_charset = charset;
 
   for (i = 0; i < num_kax_convs; i++)
-    if (!strcmp(kax_convs[i].charset, lc_charset))
+    if (kax_convs[i].charset == lc_charset)
       return i;
 
-  ict_to_utf8 = iconv_open("UTF-8", lc_charset);
+  ict_to_utf8 = iconv_open("UTF-8", lc_charset.c_str());
   if (ict_to_utf8 == (iconv_t)(-1))
     mxwarn("Could not initialize the iconv library for "
            "the conversion from %s to UFT-8. "
            "Some strings will not be converted to UTF-8 and the resulting "
            "Matroska file might not comply with the Matroska specs ("
-           "error: %d, %s).\n", lc_charset, errno, strerror(errno));
+           "error: %d, %s).\n", lc_charset.c_str(), errno, strerror(errno));
 
-  ict_from_utf8 = iconv_open(lc_charset, "UTF-8");
+  ict_from_utf8 = iconv_open(lc_charset.c_str(), "UTF-8");
   if (ict_from_utf8 == (iconv_t)(-1))
     mxwarn("Could not initialize the iconv library for "
            "the conversion from UFT-8 to %s. "
            "Some strings cannot be converted from UTF-8 and might be "
-           "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
-           strerror(errno));
+           "displayed incorrectly (error: %d, %s).\n", lc_charset.c_str(),
+           errno, strerror(errno));
 
-  return add_kax_conv(lc_charset, ict_from_utf8, ict_to_utf8);
+  return add_kax_conv(lc_charset.c_str(), ict_from_utf8, ict_to_utf8);
 }
 
 void utf8_done() {
@@ -1094,10 +1094,10 @@ void debug_c::add_packetizer(void *ptzr) {
 
 void debug_c::dump_info() {
   int i;
+#if defined SYS_UNIX
   debug_data_t *entry;
   uint64_t diff_calls, diff_time;
 
-#if defined SYS_UNIX
   mxprint(stderr, "\nDBG> dumping time info:\n");
   for (i = 0; i < entries.size(); i++) {
     entry = entries[i];
