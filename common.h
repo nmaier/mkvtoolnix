@@ -77,6 +77,9 @@ void _trace(const char *func, const char *file, int line);
 uint16_t get_uint16(const void *buf);
 uint32_t get_uint32(const void *buf);
 uint64_t get_uint64(const void *buf);
+void put_uint16(void *buf, uint16_t value);
+void put_uint32(void *buf, uint32_t value);
+void put_uint64(void *buf, uint64_t value);
 
 extern int cc_local_utf8;
 

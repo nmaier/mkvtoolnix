@@ -220,6 +220,41 @@ uint64_t get_uint64(const void *buf) {
   return ret;
 }
 
+void put_uint16(void *buf, uint16_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[0] = value & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+}
+
+void put_uint32(void *buf, uint32_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[0] = value & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+  tmp[2] = (value >>= 8) & 0xff;
+  tmp[3] = (value >>= 8) & 0xff;
+}
+
+void put_uint64(void *buf, uint64_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[0] = value & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+  tmp[2] = (value >>= 8) & 0xff;
+  tmp[3] = (value >>= 8) & 0xff;
+  tmp[4] = (value >>= 8) & 0xff;
+  tmp[5] = (value >>= 8) & 0xff;
+  tmp[6] = (value >>= 8) & 0xff;
+  tmp[7] = (value >>= 8) & 0xff;
+}
+
 /*
  * Character map conversion stuff
  */
@@ -550,6 +585,9 @@ char *UTFstring_to_cstr(const UTFstring &u) {
 bool parse_int(const char *s, int64_t &value) {
   const char *p;
   int sign;
+
+  if (*s == 0)
+    return false;
 
   sign = 1;
   value = 0;
