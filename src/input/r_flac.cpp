@@ -278,8 +278,7 @@ flac_reader_c::parse_file() {
 #endif
   }
 
-  mxinfo("+-> Pre-parsing FLAC file: 100%%\nSTATE: %u and OK? %u\n", (uint32_t)
-         state, ok);
+  mxinfo("+-> Pre-parsing FLAC file: 100%%\n");
 
   if ((blocks.size() == 0) || (blocks[0].type != FLAC_BLOCK_TYPE_HEADERS))
     mxerror(FPFX "Could not read all header packets.\n");
@@ -330,21 +329,17 @@ flac_reader_c::read_cb(FLAC__byte buffer[],
   wanted_bytes = *bytes;
   bytes_read = file->read((unsigned char *)buffer, wanted_bytes);
   *bytes = bytes_read;
-  mxverb(2, "flac readcb: wants %u got %u\n", wanted_bytes, bytes_read);
   return FLAC__SEEKABLE_STREAM_DECODER_READ_STATUS_OK;
 }
 
 FLAC__StreamDecoderWriteStatus
 flac_reader_c::write_cb(const FLAC__Frame *,
                         const FLAC__int32 * const []) {
-  mxverb(2, "flac writecb\n");
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
 void
 flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
-  mxverb(2, FPFX "metadata cb");
-
   switch (metadata->type) {
     case FLAC__METADATA_TYPE_STREAMINFO:
       mxverb(2, FPFX "STREAMINFO block (%u bytes):\n", metadata->length);
@@ -380,7 +375,6 @@ flac_reader_c::error_cb(FLAC__StreamDecoderErrorStatus status) {
 FLAC__SeekableStreamDecoderSeekStatus
 flac_reader_c::seek_cb(uint64_t new_pos) {
   file->setFilePointer(new_pos, seek_beginning);
-  mxverb(2, "flac seekcb to %llu got %lld\n", new_pos, file->getFilePointer());
   if (file->getFilePointer() == new_pos)
     return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_OK;
   return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_ERROR;
@@ -389,20 +383,17 @@ flac_reader_c::seek_cb(uint64_t new_pos) {
 FLAC__SeekableStreamDecoderTellStatus
 flac_reader_c::tell_cb(uint64_t &absolute_byte_offset) {
   absolute_byte_offset = file->getFilePointer();
-  mxverb(2, "flac tellcb is %llu\n", absolute_byte_offset);
   return FLAC__SEEKABLE_STREAM_DECODER_TELL_STATUS_OK;
 }
 
 FLAC__SeekableStreamDecoderLengthStatus
 flac_reader_c::length_cb(uint64_t &stream_length) {
   stream_length = file_size;
-  mxverb(2, "flac lengthcb is %llu\n", stream_length);
   return FLAC__SEEKABLE_STREAM_DECODER_LENGTH_STATUS_OK;
 }
 
 FLAC__bool
 flac_reader_c::eof_cb() {
-  mxverb(2, "flac EOFcb\n");
   return file->getFilePointer() >= file_size;
 }
 
