@@ -1,3 +1,24 @@
+/*
+  mkvmerge GUI -- utility for splicing together matroska files
+      from component media subtypes
+
+  extern_data.cpp
+
+  Written by Moritz Bunkus <moritz@bunkus.org>
+  Parts of this code were written by Florian Wager <root@sirelvis.de>
+
+  Distributed under the GPL
+  see the file COPYING for details
+  or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version $Id$
+    \brief Data for ComboBoxes
+    \author Moritz Bunkus <moritz@bunkus.org>
+*/
+
 #include "os.h"
 #include "extern_data.h"
 
