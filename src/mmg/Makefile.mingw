@@ -1,0 +1,41 @@
+# mkvtoolnix - Makefile for MinGW
+# because I was fed up fighting against libtool
+
+# Put all the user changeable options into one file
+include ../../Makefile.mingw.options
+
+PROGRAMS = mmg
+CXXFLAGS += $(WXWINDOWS_CFLAGS)
+
+SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/src -I$(TOP)/src/common
+SYSTEM_LIBDIRS = -L$(TOP)/src/common
+
+mmg_SOURCES = mmg.cpp \
+			extern_data.cpp \
+			kax_analyzer.cpp \
+			mux_dialog.cpp \
+			tab_advanced.cpp \
+			tab_attachments.cpp \
+			tab_chapters.cpp \
+			tab_input.cpp \
+			tab_global.cpp \
+			tab_settings.cpp
+mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
+mmg_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON) $(DEP_KAXCOMMON)
+mmg_LDADD = -lmtxkaxcommon -lmtxebmlcommon -lmtxcommon \
+		-lmatroska -lebml -liconv -lexpat \
+		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
+		-mwindows
+
+LINK = $(LD) $(LDFLAGS) $(LIBRARIES) $(SYSTEM_LIBDIRS)
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+
+all: $(PROGRAMS)
+
+mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
+	$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
+
+clean:
+	rm -f *.o $(PROGRAMS)

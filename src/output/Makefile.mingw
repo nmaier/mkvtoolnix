@@ -1,0 +1,40 @@
+# mkvtoolnix - Makefile for MinGW
+# because I was fed up fighting against libtool
+
+# Put all the user changeable options into one file
+include ../../Makefile.mingw.options
+
+LIBRARIES = libmtxoutput.a
+
+SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/avilib-0.6.10 $(AVICLASSES_INCLUDES) \
+		-I$(TOP)/src -I$(TOP)/src/common -I$(TOP)/src/input \
+		-I$(TOP)/src/output
+
+
+libmtxoutput_SOURCES = p_aac.cpp \
+			p_ac3.cpp \
+			p_dts.cpp \
+			p_flac.cpp \
+			p_mp3.cpp \
+			p_passthrough.cpp \
+			p_pcm.cpp \
+			p_textsubs.cpp \
+			p_video.cpp \
+			p_vobsub.cpp \
+			p_vorbis.cpp
+libmtxoutput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxoutput_SOURCES))
+
+RUNAR = $(AR) rcu
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+
+all: $(LIBRARIES)
+
+libmtxoutput.a: $(libmtxoutput_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxoutput_OBJECTS)
+	ranlib $@
+
+clean:
+	rm -f *.o $(LIBRARIES)

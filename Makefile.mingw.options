@@ -1,0 +1,75 @@
+# Add paths here for your other include files.
+TOP=c:/cygwin/usr/local/src/mkvtoolnix
+INCLUDES = -Ic:/cygwin/usr/local/src/libebml \
+	-Ic:/cygwin/usr/local/src/libmatroska \
+	-Ic:/cygwin/usr/local/include
+LIBRARIES = -Lc:/cygwin/usr/local/src/libebml/make/mingw32 \
+	-Lc:/cygwin/usr/local/src/libmatroska/make/mingw32 \
+	-Lc:/cygwin/usr/local/lib
+
+# Which AVI libraries should be used for reading AVIs?
+# Default is to use aviclasses.
+AVILIB = aviclasses
+
+# Which compression libraries should be supported?
+# zlib is always used, possible other values are bzlib and lzo.
+COMPRESSION_LIBS = bzlib lzo
+
+# Anything you'd like to have added to the CFLAGS?
+#CFLAGS =
+#CXXFLAGS =
+#LDFLAGS =
+
+# Activate debugging options?
+DEBUG = yes
+
+# Comment out if you don't have wxWindows installed.
+WXWINDOWS = yes
+
+# Chose the programs to use.
+CXX = g++.exe
+CC = gcc.exe
+LD = g++.exe
+AR = ar.exe
+
+#
+# Don't chagen anything below this line.
+#
+ifneq (,$(DEBUG))
+CFLAGS += -g -DDEBUG
+CXXFLAGS += -g -DDEBUG
+endif
+
+ifneq (,$(findstring aviclasses,$(AVILIB)))
+CXXFLAGS += -DHAVE_AVICLASSES=1
+AVICLASSES_INCLUDES = -I$(TOP)/aviclasses
+AVICLASSES_LIBDIRS = -L$(TOP)/aviclasses
+AVICLASSES_LIBRARIES = -laviclasses
+DEP_AVICLASSES = $(TOP)/aviclasses/libaviclasses.a
+endif
+
+ifneq (,$(findstring bzlib,$(COMPRESSION_LIBS)))
+CXXFLAGS += -DHAVE_BZLIB_H=1
+COMPRESSION_LIBRARIES = -lbz2
+endif
+
+ifneq (,$(findstring bzlib,$(LZO_LIBS)))
+CXXFLAGS += -DHAVE_LZO1X_H=1
+COMPRESSION_LIBRARIES += -llzo1x
+endif
+
+ifneq (,$(WXWINDOWS))
+CXXFLAGS += -DHAVE_WXWINDOWS=1
+WXWINDOWS_LIBS = $(shell wx-config --libs)
+WXWINDOWS_CFLAGS = $(shell wx-config --cflags)
+WXWINDOWS_LDFLAGS = $(shell wx-config --ldflags)
+endif
+
+DEP_COMMON = $(TOP)/src/common/libmtxcommon.a
+DEP_EBMLCOMMON = $(TOP)/src/common/libmtxebmlcommon.a
+DEP_KAXCOMMON = $(TOP)/src/common/libmtxkaxcommon.a
+DEP_COMP = $(TOP)/src/common/libmtxcomp.a
+DEP_INPUT = $(TOP)/src/input/libmtxinput.a
+DEP_OUTPUT = $(TOP)/src/output/libmtxoutput.a
+DEP_AVILIB = $(TOP)/avilib-0.6.10/libavi.a
+DEP_AVI = $(DEP_AVILIB)  $(DEP_AVICLASSES)

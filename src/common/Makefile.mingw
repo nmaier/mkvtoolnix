@@ -1,0 +1,64 @@
+# mkvtoolnix - Makefile for MinGW
+# because I was fed up fighting against libtool
+
+# Put all the user changeable options into one file
+include ../../Makefile.mingw.options
+
+LIBRARIES = libmtxcommon.a libmtxebmlcommon.a libmtxkaxcommon.a \
+		libmtxcomp.a
+
+SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/src -I$(TOP)/src/common
+
+libmtxcommon_SOURCES = base64.cpp \
+			aac_common.cpp \
+			ac3_common.cpp \
+			common.cpp \
+			dts_common.cpp \
+			iso639.cpp \
+			mp3_common.cpp
+libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
+
+libmtxebmlcommon_SOURCES = commonebml.cpp \
+			mm_io.cpp
+libmtxebmlcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxebmlcommon_SOURCES))
+
+libmtxkaxcommon_SOURCES = chapters.cpp \
+			chapter_parser_xml.cpp \
+			chapter_writer.cpp \
+			tagparser_start.cpp \
+			tagparser_end.cpp \
+			tagwriter.cpp
+libmtxkaxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxkaxcommon_SOURCES))
+
+libmtxcomp_SOURCES = compression.cpp
+libmtxcomp_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcomp_SOURCES))
+
+RUNAR = $(AR) rcu
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+
+all: $(LIBRARIES)
+
+libmtxcommon.a: $(libmtxcommon_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxcommon_OBJECTS)
+	ranlib $@
+
+libmtxebmlcommon.a: $(libmtxebmlcommon_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxebmlcommon_OBJECTS)
+	ranlib $@
+
+libmtxkaxcommon.a: $(libmtxkaxcommon_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxkaxcommon_OBJECTS)
+	ranlib $@
+
+libmtxcomp.a: $(libmtxcomp_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libmtxcomp_OBJECTS)
+	ranlib $@
+
+clean:
+	rm -f *.o $(LIBRARIES)

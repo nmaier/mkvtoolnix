@@ -1,0 +1,29 @@
+# mkvtoolnix - Makefile for MinGW
+# because I was fed up fighting against libtool
+
+# Put all the user changeable options into one file
+include ../Makefile.mingw.options
+
+LIBRARIES = libavi.a
+
+SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/avilib-0.6.10 -I$(TOP)/src/common
+
+libavi_SOURCES = avidump.c \
+			avilib.c \
+			avimisc.c
+libavi_OBJECTS := $(patsubst %.c,%.o,$(libavi_SOURCES))
+
+RUNAR = $(AR) rcu
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+
+all: $(LIBRARIES)
+
+libavi.a: $(libavi_OBJECTS)
+	rm -f $@
+	$(RUNAR) $@ $(libavi_OBJECTS)
+	ranlib $@
+
+clean:
+	rm -f *.o $(LIBRARIES)

@@ -1,0 +1,40 @@
+# mkvtoolnix - Makefile for MinGW
+# because I was fed up fighting against libtool
+
+# Put all the user changeable options into one file
+include Makefile.mingw.options
+
+#
+# System settings. Don't change anything below here.
+#
+ifneq (,$(findstring aviclasses,$(AVILIB)))
+SUBDIRS = avilib-0.6.10 aviclasses src
+else
+SUBDIRS = avilib-0.6.10 src
+endif
+
+# And now the targets.
+.PHONY: config.h
+
+all: config.h subdirs
+
+subdirs:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
+	done
+
+clean:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
+	done
+
+config.h:
+	if [ ! -f config.h ]; then \
+	  cp config.h.mingw config.h ; \
+	else \
+	  true; \
+	fi
