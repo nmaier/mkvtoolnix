@@ -2525,7 +2525,7 @@ int main(int argc, char **argv) {
   int res;
 
   setup();
-  parse_args(argc, argv, initial_file, use_gui);
+  parse_args(argc, argv, initial_file);
 
   res = console_main(argc, argv);
   cleanup();
