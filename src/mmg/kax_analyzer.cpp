@@ -42,20 +42,19 @@ using namespace libebml;
 //            data[i]->pos, data[i]->size);
 // }
 
-kax_analyzer_c::kax_analyzer_c(wxWindow *nparent,
-                               string nname):
-  wxDialog(nparent, -1, wxT("Analysis running"), wxDefaultPosition,
+kax_analyzer_dlg_c::kax_analyzer_dlg_c(wxWindow *_parent,
+                                       mm_io_c *_file,
+                                       vector<analyzer_data_c *> &_data):
+  wxDialog(_parent, -1, wxT("Analysis running"), wxDefaultPosition,
 #ifdef SYS_WINDOWS
            wxSize(300, 130),
 #else
            wxSize(300, 100),
 #endif
-           wxCAPTION), file_name(nname), segment(NULL) {
-  try {
-    file = new mm_io_c(file_name.c_str(), MODE_SAFE);
-  } catch (...) {
-    throw error_c(string("Could not open the file " + file_name + "."));
-  }
+           wxCAPTION),
+  data(_data),
+  file(_file),
+  segment(NULL) {
 
   new wxStaticText(this, -1, _("Analyzing Matroska file"), wxPoint(10, 10));
   g_progress =
@@ -71,39 +70,12 @@ kax_analyzer_c::kax_analyzer_c(wxWindow *nparent,
 #endif
 }
 
-kax_analyzer_c::~kax_analyzer_c() {
-  uint32_t i;
-
-  delete file;
-  for (i = 0; i < data.size(); i++)
-    delete data[i];
-  if (segment != NULL)
-    delete segment;
-}
-
-bool
-kax_analyzer_c::probe(string file_name) {
-  try {
-    unsigned char data[4];
-    mm_io_c in(file_name.c_str(), MODE_READ);
-
-    if (in.read(data, 4) != 4)
-      return false;
-    if ((data[0] != 0x1A) || (data[1] != 0x45) ||
-        (data[2] != 0xDF) || (data[3] != 0xA3))
-      return false;
-    return true;
-  } catch (...) {
-    return false;
-  }
-}
-
 #define PFX "Not a valid Matroska file "
 #define in_parent(p) (file->getFilePointer() < \
                       (p->GetElementPosition() + p->ElementSize()))
 
 bool
-kax_analyzer_c::process() {
+kax_analyzer_dlg_c::process() {
   int upper_lvl_el;
   uint32_t i;
   int64_t file_size;
@@ -169,8 +141,6 @@ kax_analyzer_c::process() {
                             0xFFFFFFFFL, true);
   } // while (l1 != NULL)
 
-  Show(false);
-
   if (l1 != NULL)
     delete l1;
 
@@ -184,6 +154,65 @@ kax_analyzer_c::process() {
   }
 
   return true;
+}
+
+void
+kax_analyzer_dlg_c::on_abort(wxCommandEvent &evt) {
+  abort = true;
+}
+
+kax_analyzer_c::kax_analyzer_c(wxWindow *_parent,
+                               string _name):
+  file_name(_name),
+  segment(NULL) {
+  try {
+    file = new mm_io_c(file_name.c_str(), MODE_SAFE);
+  } catch (...) {
+    throw error_c(string("Could not open the file " + file_name + "."));
+  }
+
+  dlg = new kax_analyzer_dlg_c(_parent, file, data);
+}
+
+kax_analyzer_c::~kax_analyzer_c() {
+  uint32_t i;
+
+  delete file;
+  for (i = 0; i < data.size(); i++)
+    delete data[i];
+  if (segment != NULL)
+    delete segment;
+}
+
+bool
+kax_analyzer_c::probe(string file_name) {
+  try {
+    unsigned char data[4];
+    mm_io_c in(file_name.c_str(), MODE_READ);
+
+    if (in.read(data, 4) != 4)
+      return false;
+    if ((data[0] != 0x1A) || (data[1] != 0x45) ||
+        (data[2] != 0xDF) || (data[3] != 0xA3))
+      return false;
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+bool
+kax_analyzer_c::process() {
+  bool result;
+
+  if (dlg == NULL)
+    return false;
+
+  result = dlg->process();
+  segment = dlg->segment;
+  dlg->Destroy();
+
+  return result;
 }
 
 EbmlElement *
@@ -606,12 +635,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
   return false;
 }
 
-void
-kax_analyzer_c::on_abort(wxCommandEvent &evt) {
-  abort = true;
-}
-
-IMPLEMENT_CLASS(kax_analyzer_c, wxDialog);
-BEGIN_EVENT_TABLE(kax_analyzer_c, wxDialog)
-  EVT_BUTTON(ID_B_ANALYZER_ABORT, kax_analyzer_c::on_abort)
+IMPLEMENT_CLASS(kax_analyzer_dlg_c, wxDialog);
+BEGIN_EVENT_TABLE(kax_analyzer_dlg_c, wxDialog)
+  EVT_BUTTON(ID_B_ANALYZER_ABORT, kax_analyzer_dlg_c::on_abort)
 END_EVENT_TABLE();

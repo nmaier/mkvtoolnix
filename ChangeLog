@@ -1,3 +1,9 @@
+2004-09-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The 'Matroska file analysis' window that occurs
+	when reading chapters from a Matroska file did not disappear if it
+	was minimized when the process finished.
+
 2004-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added a new parameter
