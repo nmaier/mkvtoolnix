@@ -3,7 +3,7 @@ TOP=c:/cygwin/usr/local/src/mkvtoolnix
 INCLUDES = -Ic:/cygwin/usr/local/src/libebml \
 	-Ic:/cygwin/usr/local/src/libmatroska \
 	-Ic:/cygwin/usr/local/include
-LIBRARIES = -Lc:/cygwin/usr/local/src/libebml/make/mingw32 \
+LIBDIRS = -Lc:/cygwin/usr/local/src/libebml/make/mingw32 \
 	-Lc:/cygwin/usr/local/src/libmatroska/make/mingw32 \
 	-Lc:/cygwin/usr/local/lib
 
@@ -20,6 +20,12 @@ COMPRESSION_LIBS = bzlib lzo
 #CXXFLAGS =
 #LDFLAGS =
 
+# Have libebml and libmatroska been compiled as DLLs?
+#CXXFLAGS += -DEBML_DLL -DMATROSKA_DLL
+
+# Build mkvtoolnix with DLLs?
+#MTX_DLLS = yes
+
 # Activate debugging options?
 DEBUG = yes
 
@@ -31,6 +37,7 @@ CXX = g++.exe
 CC = gcc.exe
 LD = g++.exe
 AR = ar.exe
+RANLIB = ranlib.exe
 
 #
 # Don't chagen anything below this line.
@@ -53,7 +60,7 @@ CXXFLAGS += -DHAVE_BZLIB_H=1
 COMPRESSION_LIBRARIES = -lbz2
 endif
 
-ifneq (,$(findstring bzlib,$(LZO_LIBS)))
+ifneq (,$(findstring lzo,$(LZO_LIBS)))
 CXXFLAGS += -DHAVE_LZO1X_H=1
 COMPRESSION_LIBRARIES += -llzo1x
 endif
@@ -65,10 +72,16 @@ WXWINDOWS_CFLAGS = $(shell wx-config --cflags)
 WXWINDOWS_LDFLAGS = $(shell wx-config --ldflags)
 endif
 
+ifneq (,$(findstring yes,$(MTX_DLLS)))
+DEP_COMMON = $(TOP)/src/common/libmtxcommon.dll
+DEP_EBMLCOMMON = $(TOP)/src/common/libmtxebmlcommon.dll
+DEP_KAXCOMMON = $(TOP)/src/common/libmtxkaxcommon.dll
+CXXFLAGS += MTX_DLL
+else
 DEP_COMMON = $(TOP)/src/common/libmtxcommon.a
 DEP_EBMLCOMMON = $(TOP)/src/common/libmtxebmlcommon.a
 DEP_KAXCOMMON = $(TOP)/src/common/libmtxkaxcommon.a
-DEP_COMP = $(TOP)/src/common/libmtxcomp.a
+endif
 DEP_INPUT = $(TOP)/src/input/libmtxinput.a
 DEP_OUTPUT = $(TOP)/src/output/libmtxoutput.a
 DEP_AVILIB = $(TOP)/avilib-0.6.10/libavi.a

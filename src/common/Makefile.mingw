@@ -4,8 +4,12 @@
 # Put all the user changeable options into one file
 include ../../Makefile.mingw.options
 
-LIBRARIES = libmtxcommon.a libmtxebmlcommon.a libmtxkaxcommon.a \
-		libmtxcomp.a
+ifneq (,$(findstring yes,$(MTX_DLLS)))
+LIBRARIES = libmtxcommon.dll libmtxebmlcommon.dll libmtxkaxcommon.dll
+CXXFLAGS += -DMTX_DLL_EXPORT
+else
+LIBRARIES = libmtxcommon.a libmtxebmlcommon.a libmtxkaxcommon.a
+endif
 
 SYSTEM_INCLUDES = -I$(TOP) -I$(TOP)/src -I$(TOP)/src/common
 
@@ -13,6 +17,7 @@ libmtxcommon_SOURCES = base64.cpp \
 			aac_common.cpp \
 			ac3_common.cpp \
 			common.cpp \
+			compression.cpp \
 			dts_common.cpp \
 			iso639.cpp \
 			mp3_common.cpp
@@ -30,51 +35,37 @@ libmtxkaxcommon_SOURCES = chapters.cpp \
 			tagwriter.cpp
 libmtxkaxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxkaxcommon_SOURCES))
 
-libmtxcomp_SOURCES = compression.cpp
-libmtxcomp_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcomp_SOURCES))
-
-RUNAR = $(AR) rcu
-
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+ALL_SOURCES = $(libmtxcommon_SOURCES) $(libmtxebmlcommon_SOURCES) \
+		$(libmtxkaxcommon_SOURCES)
+EXTRA_CLEAN = lib*.dll
 
 all: $(LIBRARIES)
+
+include ../../Makefile.common
+
+libmtxcommon.dll: $(libmtxcommon_OBJECTS)
+	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
+		-liconv -lz $(COMPRESSION_LIBRARIES)
+
+libmtxebmlcommon.dll: $(libmtxebmlcommon_OBJECTS)
+	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxebmlcommon_OBJECTS) \
+		-L. -lmtxcommon -lebml
+
+libmtxkaxcommon.dll: $(libmtxkaxcommon_OBJECTS)
+	$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxkaxcommon_OBJECTS) \
+		-L. -lmtxcommon -lmatroska -lebml -lmtxebmlcommon -lexpat
 
 libmtxcommon.a: $(libmtxcommon_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libmtxcommon_OBJECTS)
-	ranlib $@
+	$(RANLIB) $@
 
 libmtxebmlcommon.a: $(libmtxebmlcommon_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libmtxebmlcommon_OBJECTS)
-	ranlib $@
+	$(RANLIB) $@
 
 libmtxkaxcommon.a: $(libmtxkaxcommon_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libmtxkaxcommon_OBJECTS)
-	ranlib $@
-
-libmtxcomp.a: $(libmtxcomp_OBJECTS)
-	rm -f $@
-	$(RUNAR) $@ $(libmtxcomp_OBJECTS)
-	ranlib $@
-
-clean:
-	rm -f *.o $(LIBRARIES)
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		$(libmtxcommon_SOURCES) $(libmtxebmlcommon_SOURCES) \
-		$(libmtxkaxcommon_SOURCES) $(libmtxcomp_SOURCES) > .depend
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif
+	$(RANLIB) $@

@@ -13,32 +13,13 @@ libavi_SOURCES = avidump.c \
 			avimisc.c
 libavi_OBJECTS := $(patsubst %.c,%.o,$(libavi_SOURCES))
 
-RUNAR = $(AR) rcu
-
-.c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+ALL_SOURCES = $(libavi_SOURCES)
 
 all: $(LIBRARIES)
+
+include ../Makefile.mingw.common
 
 libavi.a: $(libavi_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libavi_OBJECTS)
-	ranlib $@
-
-clean:
-	rm -f *.o $(LIBRARIES) .depend
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	$(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-	  $(libavi_SOURCES) > .depend
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif
+	$(RANLIB) $@

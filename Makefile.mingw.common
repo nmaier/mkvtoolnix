@@ -1,0 +1,48 @@
+RUNAR = $(AR) rcu
+
+LINK = $(LD) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
+LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
+		-shared -Wl,--export-all
+
+CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+
+# Some general rules
+.cpp.o:
+	$(CXXCOMPILE) -c -o $@ $<
+
+.c.o:
+	$(CCOMPILE) -c -o $@ $<
+
+subdirs:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making all in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
+	done
+
+clean:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making clean in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
+	done
+	rm -f *.o lib*.a $(EXTRA_CLEAN)
+
+depend:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making depend in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw depend) || exit 1; \
+	done
+ifneq (,$(ALL_SOURCES))
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
+		$(ALL_SOURCES) > .depend
+endif
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif

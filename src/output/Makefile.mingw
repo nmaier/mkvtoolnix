@@ -24,33 +24,13 @@ libmtxoutput_SOURCES = p_aac.cpp \
 			p_vorbis.cpp
 libmtxoutput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxoutput_SOURCES))
 
-RUNAR = $(AR) rcu
-
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+ALL_SOURCES = $(libmtxoutput_SOURCES)
 
 all: $(LIBRARIES)
+
+include ../../Makefile.common
 
 libmtxoutput.a: $(libmtxoutput_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libmtxoutput_OBJECTS)
 	ranlib $@
-
-clean:
-	rm -f *.o $(LIBRARIES)
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		$(libmtxoutput_SOURCES) > .depend
-
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif

@@ -27,30 +27,12 @@ mmg_LDADD = -lmtxkaxcommon -lmtxebmlcommon -lmtxcommon \
 		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
 		-mwindows
 
-LINK = $(LD) $(LDFLAGS) $(LIBRARIES) $(SYSTEM_LIBDIRS)
-
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+ALL_SOURCES = $(mmg_SOURCES)
+EXTRA_CLEAN = $(PROGRAMS)
 
 all: $(PROGRAMS)
 
+include ../../Makefile.common
+
 mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 	$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
-
-clean:
-	rm -f *.o $(PROGRAMS)
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		$(mmg_SOURCES) > .depend
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif

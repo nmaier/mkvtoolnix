@@ -27,17 +27,24 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
   echo ''
 
   for i in `find -name Makefile.mingw`; do
-    n=`echo $i | sed 's/\.mingw$//'`
+    n=`echo $i | sed 's/\.mingw//'`
     echo "Creating $n from $i"
-    sed "s/-f Makefile\.mingw//g" < $i > $n
+    sed -e "s/Makefile.mingw.common/Makefile.common/g" < $i > $n
   done
-  echo "Creating config.h from config.h.mingw"
-  cp config.h.mingw config.h
-  echo ''
+  echo "Creating Makefile.common from Makefile.mingw.common"
+  sed -e "s!-f Makefile.mingw!!g" < Makefile.mingw.common > Makefile.common
 
-  echo 'Creating dependencies (calling "make depend")'
-  echo ''
-  make depend
+  if test "x$1" = "x"; then
+    echo "Creating config.h from config.h.mingw"
+    cp config.h.mingw config.h
+    echo ''
+    echo 'Creating dependencies (calling "make depend")'
+    echo ''
+    make depend
+  else
+    echo 'Not creating config.h.'
+    echo 'Not creating the dependencies.'
+  fi
 
   exit $?
 fi

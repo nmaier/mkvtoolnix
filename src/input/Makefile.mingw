@@ -28,33 +28,13 @@ libmtxinput_SOURCES = r_aac.cpp \
 			subtitles.cpp
 libmtxinput_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxinput_SOURCES))
 
-RUNAR = $(AR) rcu
-
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+ALL_SOURCES = $(libmtxinput_SOURCES)
 
 all: $(LIBRARIES)
+
+include ../../Makefile.common
 
 libmtxinput.a: $(libmtxinput_OBJECTS)
 	rm -f $@
 	$(RUNAR) $@ $(libmtxinput_OBJECTS)
-	ranlib $@
-
-clean:
-	rm -f *.o $(LIBRARIES)
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		$(libmtxinput_SOURCES) > .depend
-
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif
+	$(RANLIB) $@

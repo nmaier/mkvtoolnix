@@ -19,21 +19,21 @@ mkvmerge_SOURCES = mkvmerge.cpp \
 mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON) $(DEP_KAXCOMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI)
-mkvmerge_LDADD = -lmtxinput -lmtxoutput -lmtxcomp \
+mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxkaxcommon -lmtxebmlcommon -lmtxcommon \
 		-lmatroska -lebml \
 		-lavi $(AVICLASSES_LIBDIRS) $(AVICLASSES_LIBRARIES) \
-		-lvorbis -lflac -logg \
-		-liconv -lexpat \
-		-lz $(COMPRESSION_LIBRARIES)
+		-lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
+		-lexpat -liconv
 
 mkvinfo_SOURCES = mkvinfo.cpp \
 			mkvinfo_gui.cpp \
 			mkvinfo_tag_types.cpp
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON)
-mkvinfo_LDADD = -lmtxebmlcommon -lmtxcommon -lmatroska -lebml -liconv \
-		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS)
+mkvinfo_LDADD = -lmtxebmlcommon -lmtxcommon -lmatroska -lebml \
+		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
+		-liconv
 
 mkvextract_SOURCES = mkvextract.cpp \
 			mkvextract_attachments.cpp \
@@ -43,29 +43,24 @@ mkvextract_SOURCES = mkvextract.cpp \
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON) $(DEP_KAXCOMMON) \
 		$(DEP_AVILIB)
-mkvextract_LDADD = -lmtxebmlcommon -lmtxkaxcommon -lmtxcommon -lebml -liconv \
-		-lvorbis -logg -lavi -lmatroska -lebml
+mkvextract_LDADD = -lmtxebmlcommon -lmtxkaxcommon -lmtxcommon \
+		-lvorbis -logg -lavi -lmatroska -lebml -liconv
 
 base64tool_SOURCES = base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON) $(DEP_EBMLCOMMON)
-base64tool_LDADD = -lmtxebmlcommon -lmtxcommon -lebml -liconv
+base64tool_LDADD = -lmtxcommon -lmtxebmlcommon -liconv
 
+# Definitions that are needed before the inclusions.
 SUBDIRS = common input output mmg
-
-LINK = $(LD) $(LDFLAGS) $(LIBRARIES) $(SYSTEM_LIBDIRS)
-
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -c -o $@ $<
+ALL_SOURCES = $(mkvmerge_SOURCES) $(mkvinfo_SOURCES) $(mkvextract_SOURCES) \
+		$(base64tool_SOURCES)
+EXTRA_CLEAN = $(PROGRAMS)
 
 all: subdirs $(PROGRAMS)
 
-subdirs:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making all in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
-	done
+# Include the common stuff.
+include ../Makefile.mingw.common
 
 mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 	$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
@@ -78,33 +73,3 @@ mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 
 base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
 	$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
-
-clean:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making clean in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
-	done
-	rm -f *.o $(PROGRAMS)
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making depend in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw depend) || exit 1; \
-	done
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		$(mkvmerge_SOURCES) $(mkvinfo_SOURCES) $(mkvextract_SOURCES) \
-		$(base64tool_SOURCES) > .depend
-
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif

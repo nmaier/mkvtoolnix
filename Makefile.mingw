@@ -13,39 +13,6 @@ else
 SUBDIRS = avilib-0.6.10 src
 endif
 
-# And now the targets.
-.PHONY: config.h
-
 all: subdirs
 
-subdirs:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making all in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
-	done
-
-clean:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making clean in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
-	done
-
-Makefile: Makefile.mingw
-	@echo Re-copying Makefile from Makefile.mingw
-	sed "s/-f Makefile\.mingw//g" < $< > $@
-
-depend:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making depend in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw depend) || exit 1; \
-	done
-
-#
-# include dependency files if they exist
-#
-ifneq ($(wildcard .depend),)
-include .depend
-endif
+include Makefile.mingw.common
