@@ -101,14 +101,16 @@ bool use_gui = false;
 bool calc_checksums = false;
 bool show_summary = false;
 
-void add_track(kax_track_t *s) {
+void
+add_track(kax_track_t *s) {
   tracks = (kax_track_t **)saferealloc(tracks, sizeof(kax_track_t *) *
                                    (num_tracks + 1));
   tracks[num_tracks] = s;
   num_tracks++;
 }
 
-kax_track_t *find_track(int tnum) {
+kax_track_t *
+find_track(int tnum) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -118,7 +120,8 @@ kax_track_t *find_track(int tnum) {
   return NULL;
 }
 
-kax_track_t *find_track_by_uid(int tuid) {
+kax_track_t *
+find_track_by_uid(int tuid) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -128,7 +131,8 @@ kax_track_t *find_track_by_uid(int tuid) {
   return NULL;
 }
 
-void usage() {
+void
+usage() {
   mxinfo(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
@@ -144,10 +148,40 @@ void usage() {
     "  -V, --version  Show version information.\n");
 }
 
+string
+UTFstring_to_string_local(const UTFstring &src) {
+  string retval;
+  char *str;
+  str = UTFstring_to_cstr(src);
+  retval = str;
+  safefree(str);
+  return retval;
+}
+
+#if defined(HAVE_WXWINDOWS) && WXUNICODE
+string
+UTFstring_to_string(const UTFstring &src) {
+  string retval;
+  char *str;
+
+  if (!use_gui)
+    return UTFstring_to_string_local(src);
+  str = UTFstring_to_cstrutf8(src);
+  retval = str;
+  safefree(str);
+  return retval;
+}
+#else  // HAVE_WXWINDOWS && WXUNICODE
+#define UTFstring_to_string(src) UTFstring_to_string_local(src)
+#endif // HAVE_WXWINDOWS && WXUNICODE
+#define UTF2STR(s) UTFstring_to_string(UTFstring(s)).c_str()
+
 #define ARGS_BUFFER_LEN (200 * 1024) // Ok let's be ridiculous here :)
 static char args_buffer[ARGS_BUFFER_LEN];
 
-void show_error(const char *fmt, ...) {
+void
+show_error(const char *fmt,
+           ...) {
   va_list ap;
   string new_fmt;
 
@@ -159,7 +193,7 @@ void show_error(const char *fmt, ...) {
 
 #ifdef HAVE_WXWINDOWS
   if (use_gui)
-    frame->show_error(args_buffer);
+    frame->show_error(wxS(args_buffer));
   else
 #endif
     mxinfo("(%s) %s\n", NAME, args_buffer);
@@ -172,8 +206,13 @@ void show_error(const char *fmt, ...) {
 #define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
                                                      ## args)
 
-void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
-                   const char *fmt, ...) {
+void
+_show_element(EbmlElement *l,
+              EbmlStream *es,
+              bool skip,
+              int level,
+              const char *fmt,
+              ...) {
   va_list ap;
   char level_buffer[10];
   string new_fmt;
@@ -206,7 +245,7 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
     if (l != NULL)
       mxprints(&args_buffer[strlen(args_buffer)], " at %llu",
                l->GetElementPosition());
-    frame->add_item(level, args_buffer);
+    frame->add_item(level, wxS(args_buffer));
   }
 #endif // HAVE_WXWINDOWS
 
@@ -224,7 +263,10 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
 
 // {{{ FUNCTION parse_args
 
-void parse_args(int argc, char **argv, char *&file_name) {
+void
+parse_args(int argc,
+           char **argv,
+           char *&file_name) {
   int i;
 
   verbose = 0;
@@ -272,7 +314,10 @@ void parse_args(int argc, char **argv, char *&file_name) {
                       (p->GetElementPosition() + p->ElementSize()))
 #define is_id(e, c) (EbmlId(*(e)) == c::ClassInfos.GlobalId)
 
-bool is_global(EbmlStream *es, EbmlElement *l, int level) {
+bool
+is_global(EbmlStream *es,
+          EbmlElement *l,
+          int level) {
   if (is_id(l, EbmlVoid)) {
     EbmlVoid *v;
     string s;
@@ -293,7 +338,10 @@ bool is_global(EbmlStream *es, EbmlElement *l, int level) {
   return false;
 }
 
-bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level) {
+bool
+parse_multicomment(EbmlStream *es,
+                   EbmlElement *l0,
+                   int level) {
   EbmlMaster *m0;
   EbmlElement *l1;
   int i0;
@@ -311,13 +359,9 @@ bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level) {
         show_element(l1, level + 1, "Name: %s", string(c_name).c_str());
 
       } else if (is_id(l1, KaxTagMultiCommentComments)) {
-        char *str;
-
         KaxTagMultiCommentComments &c_comments =
           *static_cast<KaxTagMultiCommentComments *>(l1);
-        str = UTFstring_to_cstr(UTFstring(c_comments));
-        show_element(l1, level + 1, "Comments: %s", str);
-        safefree(str);
+        show_element(l1, level + 1, "Comments: %s", UTF2STR(c_comments));
 
       } else if (is_id(l1, KaxTagMultiCommentLanguage)) {
         KaxTagMultiCommentLanguage &c_language =
@@ -339,12 +383,13 @@ bool parse_multicomment(EbmlStream *es, EbmlElement *l0, int level) {
 
 string format_binary(EbmlBinary &bin, int max_len = 10);
 
-bool parse_simpletag(EbmlStream *es, EbmlElement *l0, int level) {
+bool parse_simpletag(EbmlStream *es,
+                     EbmlElement *l0,
+                     int level) {
   EbmlMaster *m0;
   EbmlElement *l1;
   int i0;
   string s;
-  char *str;
 
   if (is_id(l0, KaxTagSimple)) {
     show_element(l0, level, "Simple tag");
@@ -355,15 +400,11 @@ bool parse_simpletag(EbmlStream *es, EbmlElement *l0, int level) {
 
       if (is_id(l1, KaxTagName)) {
         KaxTagName &c_name = *static_cast<KaxTagName *>(l1);
-        str = UTFstring_to_cstr(UTFstring(c_name));
-        show_element(l1, level + 1, "Name: %s", str);
-        safefree(str);
+        show_element(l1, level + 1, "Name: %s", UTF2STR(c_name));
 
       } else if (is_id(l1, KaxTagString)) {
         KaxTagString &c_string = *static_cast<KaxTagString *>(l1);
-        str = UTFstring_to_cstr(UTFstring(c_string));
-        show_element(l1, level + 1, "String: %s", str);
-        safefree(str);
+        show_element(l1, level + 1, "String: %s", UTF2STR(c_string));
 
       } else if (is_id(l1, KaxTagBinary)) {
         KaxTagBinary &c_binary = *static_cast<KaxTagBinary *>(l1);
@@ -383,7 +424,10 @@ bool parse_simpletag(EbmlStream *es, EbmlElement *l0, int level) {
   return false;
 }
 
-bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level) {
+bool
+parse_chapter_atom(EbmlStream *es,
+                   EbmlElement *l0,
+                   int level) {
   EbmlMaster *m0, *m1;
   EbmlElement *l1, *l2;
   int i0, i1;
@@ -438,12 +482,9 @@ bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level) {
           l2 = (*m1)[i1];
 
           if (is_id(l2, KaxChapterString)) {
-            char *str;
             KaxChapterString &c_string =
               *static_cast<KaxChapterString *>(l2);
-            str = UTFstring_to_cstr(UTFstring(c_string));
-            show_element(l2, level + 2, "String: %s", str);
-            safefree(str);
+            show_element(l2, level + 2, "String: %s", UTF2STR(c_string));
 
           } else if (is_id(l2, KaxChapterLanguage)) {
             KaxChapterLanguage &c_lang =
@@ -484,7 +525,9 @@ bool parse_chapter_atom(EbmlStream *es, EbmlElement *l0, int level) {
 }
 
 #if defined(COMP_MSC) || defined(COMP_MINGW)
-struct tm *gmtime_r(const time_t *timep, struct tm *result) {
+struct tm *
+gmtime_r(const time_t *timep,
+         struct tm *result) {
   struct tm *aresult;
 
   aresult = gmtime(timep);
@@ -493,7 +536,9 @@ struct tm *gmtime_r(const time_t *timep, struct tm *result) {
   return result;
 }
 
-char *asctime_r(const struct tm *tm, char *buf) {
+char *
+asctime_r(const struct tm *tm,
+          char *buf) {
   char *abuf;
 
   abuf = asctime(tm);
@@ -516,7 +561,9 @@ char *asctime_r(const struct tm *tm, char *buf) {
 #define A5 A4 A4
 #define A6 A5 A5
 
-uint32_t calc_adler32(const unsigned char *buffer, int size) {
+uint32_t
+calc_adler32(const unsigned char *buffer,
+             int size) {
   register uint32_t sum2, check;
   register int k;
 
@@ -543,7 +590,8 @@ uint32_t calc_adler32(const unsigned char *buffer, int size) {
 
 // }}}
 
-void sort_master(EbmlMaster &m) {
+void
+sort_master(EbmlMaster &m) {
   int i, sp_idx;
   vector<EbmlElement *> tmp;
   int64_t smallest_pos;
@@ -570,8 +618,12 @@ void sort_master(EbmlMaster &m) {
   }
 }
 
-void read_master(EbmlMaster *m, EbmlStream *es, const EbmlSemanticContext &ctx,
-                 int &upper_lvl_el, EbmlElement *&l2) {
+void
+read_master(EbmlMaster *m,
+            EbmlStream *es,
+            const EbmlSemanticContext &ctx,
+            int &upper_lvl_el,
+            EbmlElement *&l2) {
 
   m->Read(*es, ctx, upper_lvl_el, l2, true);
   if (m->ListSize() == 0)
@@ -580,7 +632,9 @@ void read_master(EbmlMaster *m, EbmlStream *es, const EbmlSemanticContext &ctx,
   sort_master(*m);
 }
 
-string format_binary(EbmlBinary &bin, int max_len) {
+string
+format_binary(EbmlBinary &bin,
+              int max_len) {
   int len, i;
   string result;
 
@@ -605,7 +659,8 @@ string format_binary(EbmlBinary &bin, int max_len) {
   return result;
 }
 
-bool process_file(const char *file_name) {
+bool
+process_file(const char *file_name) {
   int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
@@ -617,7 +672,6 @@ bool process_file(const char *file_name) {
   int lf_tnum, i1, i2, i3, i4, i5;
   char kax_track_type;
   bool ms_compat, bref_found, fref_found;
-  char *str;
   string strc;
   mm_io_c *in;
 
@@ -702,15 +756,12 @@ bool process_file(const char *file_name) {
 
           } else if (is_id(l2, KaxMuxingApp)) {
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
-            str = UTFstring_to_cstr(UTFstring(muxingapp));
-            show_element(l2, 2, "Muxing application: %s", str);
-            safefree(str);
+            show_element(l2, 2, "Muxing application: %s", UTF2STR(muxingapp));
 
           } else if (is_id(l2, KaxWritingApp)) {
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
-            str = UTFstring_to_cstr(UTFstring(writingapp));
-            show_element(l2, 2, "Writing application: %s", str);
-            safefree(str);
+            show_element(l2, 2, "Writing application: %s",
+                         UTF2STR(writingapp));
 
           } else if (is_id(l2, KaxDateUTC)) {
             struct tm tmutc;
@@ -745,9 +796,7 @@ bool process_file(const char *file_name) {
 
           } else if (is_id(l2, KaxPrevFilename)) {
             KaxPrevFilename &filename = *static_cast<KaxPrevFilename *>(l2);
-            str = UTFstring_to_cstr(UTFstring(filename));
-            show_element(l2, 2, "Previous filename: %s", str);
-            safefree(str);
+            show_element(l2, 2, "Previous filename: %s", UTF2STR(filename));
 
           } else if (is_id(l2, KaxNextUID)) {
             KaxNextUID &uid = *static_cast<KaxNextUID *>(l2);
@@ -760,22 +809,16 @@ bool process_file(const char *file_name) {
 
           } else if (is_id(l2, KaxNextFilename)) {
             KaxNextFilename &filename = *static_cast<KaxNextFilename *>(l2);
-            str = UTFstring_to_cstr(UTFstring(filename));
-            show_element(l2, 2, "Next filename: %s", str);
-            safefree(str);
+            show_element(l2, 2, "Next filename: %s", UTF2STR(filename));
 
           } else if (is_id(l2, KaxSegmentFilename)) {
             KaxSegmentFilename &filename =
               *static_cast<KaxSegmentFilename *>(l2);
-            str = UTFstring_to_cstr(UTFstring(filename));
-            show_element(l2, 2, "Segment filename: %s", str);
-            safefree(str);
+            show_element(l2, 2, "Segment filename: %s", UTF2STR(filename));
 
           } else if (is_id(l2, KaxTitle)) {
             KaxTitle &title = *static_cast<KaxTitle *>(l2);
-            str = UTFstring_to_cstr(UTFstring(title));
-            show_element(l2, 2, "Title: %s", str);
-            safefree(str);
+            show_element(l2, 2, "Title: %s", UTF2STR(title));
 
           }
 
@@ -1001,9 +1044,7 @@ bool process_file(const char *file_name) {
 
               } else if (is_id(l3, KaxTrackName)) {
                 KaxTrackName &name = *static_cast<KaxTrackName *>(l3);
-                str = UTFstring_to_cstr(UTFstring(name));
-                show_element(l3, 3, "Name: %s", str);
-                safefree(str);
+                show_element(l3, 3, "Name: %s", UTF2STR(name));
 
               } else if (is_id(l3, KaxCodecID)) {
                 KaxCodecID &codec_id = *static_cast<KaxCodecID *>(l3);
@@ -1043,17 +1084,13 @@ bool process_file(const char *file_name) {
 
               } else if (is_id(l3, KaxCodecName)) {
                 KaxCodecName &c_name = *static_cast<KaxCodecName *>(l3);
-                str = UTFstring_to_cstr(UTFstring(c_name));
-                show_element(l3, 3, "Codec name: %s", str);
-                safefree(str);
+                show_element(l3, 3, "Codec name: %s", UTF2STR(c_name));
 
 #if MATROSKA_VERSION >= 2
               } else if (is_id(l3, KaxCodecSettings)) {
                 KaxCodecSettings &c_sets =
                   *static_cast<KaxCodecSettings *>(l3);
-                str = UTFstring_to_cstr(UTFstring(c_sets));
-                show_element(l3, 3, "Codec settings: %s", str);
-                safefree(str);
+                show_element(l3, 3, "Codec settings: %s", UTF2STR(c_sets));
 
               } else if (is_id(l3, KaxCodecInfoURL)) {
                 KaxCodecInfoURL &c_infourl =
@@ -1375,7 +1412,7 @@ bool process_file(const char *file_name) {
 #ifdef HAVE_WXWINDOWS
         if (use_gui)
           frame->show_progress(100 * cluster->GetElementPosition() /
-                               file_size, "Parsing file");
+                               file_size, wxT("Parsing file"));
 #endif // HAVE_WXWINDOWS
 
         upper_lvl_el = 0;
@@ -1720,16 +1757,12 @@ bool process_file(const char *file_name) {
               if (is_id(l3, KaxFileDescription)) {
                 KaxFileDescription &f_desc =
                   *static_cast<KaxFileDescription *>(l3);
-                str = UTFstring_to_cstr(UTFstring(f_desc));
-                show_element(l3, 3, "File description: %s", str);
-                safefree(str);
+                show_element(l3, 3, "File description: %s", UTF2STR(f_desc));
 
               } else if (is_id(l3, KaxFileName)) {
                 KaxFileName &f_name =
                   *static_cast<KaxFileName *>(l3);
-                str = UTFstring_to_cstr(UTFstring(f_name));
-                show_element(l3, 3, "File name: %s", str);
-                safefree(str);
+                show_element(l3, 3, "File name: %s", UTF2STR(f_name));
 
               } else if (is_id(l3, KaxMimeType)) {
                 KaxMimeType &mime_type =
@@ -1837,16 +1870,13 @@ bool process_file(const char *file_name) {
                   if (is_id(l4, KaxTagSubject)) {
                     KaxTagSubject &subject =
                       *static_cast<KaxTagSubject *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(subject));
-                    show_element(l4, 4, "Subject: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Subject: %s", UTF2STR(subject));
 
                   } else if (is_id(l4, KaxTagBibliography)) {
                     KaxTagBibliography &bibliography =
                       *static_cast<KaxTagBibliography *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(bibliography));
-                    show_element(l4, 4, "Bibliography: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Bibliography: %s",
+                                 UTF2STR(bibliography));
 
                   } else if (is_id(l4, KaxTagLanguage)) {
                     KaxTagLanguage &language =
@@ -1863,44 +1893,34 @@ bool process_file(const char *file_name) {
                   } else if (is_id(l4, KaxTagEncoder)) {
                     KaxTagEncoder &encoder =
                       *static_cast<KaxTagEncoder *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(encoder));
-                    show_element(l4, 4, "Encoder: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Encoder: %s", UTF2STR(encoder));
 
                   } else if (is_id(l4, KaxTagEncodeSettings)) {
                     KaxTagEncodeSettings &encode_settings =
                       *static_cast<KaxTagEncodeSettings *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(encode_settings));
-                    show_element(l4, 4, "Encode settings: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Encode settings: %s",
+                                 UTF2STR(encode_settings));
 
                   } else if (is_id(l4, KaxTagFile)) {
                     KaxTagFile &file =
                       *static_cast<KaxTagFile *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(file));
-                    show_element(l4, 4, "File: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "File: %s", UTF2STR(file));
 
                   } else if (is_id(l4, KaxTagArchivalLocation)) {
                     KaxTagArchivalLocation &archival_location =
                       *static_cast<KaxTagArchivalLocation *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(archival_location));
-                    show_element(l4, 4, "Archival location: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Archival location: %s",
+                                 UTF2STR(archival_location));
 
                   } else if (is_id(l4, KaxTagKeywords)) {
                     KaxTagKeywords &keywords =
                       *static_cast<KaxTagKeywords *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(keywords));
-                    show_element(l4, 4, "Keywords: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Keywords: %s", UTF2STR(keywords));
 
                   } else if (is_id(l4, KaxTagMood)) {
                     KaxTagMood &mood =
                       *static_cast<KaxTagMood *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(mood));
-                    show_element(l4, 4, "Mood: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Mood: %s", UTF2STR(mood));
 
                   } else if (is_id(l4, KaxTagRecordLocation)) {
                     KaxTagRecordLocation &record_location =
@@ -1911,37 +1931,29 @@ bool process_file(const char *file_name) {
                   } else if (is_id(l4, KaxTagSource)) {
                     KaxTagSource &source =
                       *static_cast<KaxTagSource *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(source));
-                    show_element(l4, 4, "Source: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Source: %s", UTF2STR(source));
 
                   } else if (is_id(l4, KaxTagSourceForm)) {
                     KaxTagSourceForm &source_form =
                       *static_cast<KaxTagSourceForm *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(source_form));
-                    show_element(l4, 4, "Source form: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Source form: %s",
+                                 UTF2STR(source_form));
 
                   } else if (is_id(l4, KaxTagProduct)) {
                     KaxTagProduct &product =
                       *static_cast<KaxTagProduct *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(product));
-                    show_element(l4, 4, "Product: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Product: %s", UTF2STR(product));
 
                   } else if (is_id(l4, KaxTagOriginalMediaType)) {
                     KaxTagOriginalMediaType &original_media_type =
                       *static_cast<KaxTagOriginalMediaType *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(original_media_type));
-                    show_element(l4, 4, "Original media type: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Original media type: %s",
+                                 UTF2STR(original_media_type));
 
                   } else if (is_id(l4, KaxTagEncoder)) {
                     KaxTagEncoder &encoder =
                       *static_cast<KaxTagEncoder *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(encoder));
-                    show_element(l4, 4, "Encoder: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Encoder: %s", UTF2STR(encoder));
 
                   } else if (is_id(l4, KaxTagPlayCounter)) {
                     KaxTagPlayCounter &play_counter =
@@ -2095,9 +2107,7 @@ bool process_file(const char *file_name) {
                   } else if (is_id(l4, KaxTagCropped)) {
                     KaxTagCropped &cropped =
                       *static_cast<KaxTagCropped *>(l4);
-                    str = UTFstring_to_cstr(UTFstring(cropped));
-                    show_element(l4, 4, "Cropped: %s", str);
-                    safefree(str);
+                    show_element(l4, 4, "Cropped: %s", UTF2STR(cropped));
 
                   } else if (is_id(l4, KaxTagOriginalDimensions)) {
                     KaxTagOriginalDimensions &original_dimensions =
@@ -2139,10 +2149,7 @@ bool process_file(const char *file_name) {
                       } else if (is_id(l5, KaxTagMultiCommercialAddress)) {
                         KaxTagMultiCommercialAddress &c_address =
                           *static_cast<KaxTagMultiCommercialAddress *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(c_address));
-                        show_element(l5, 5, "Address: %s",
-                                     str);
-                        safefree(str);
+                        show_element(l5, 5, "Address: %s", UTF2STR(c_address));
 
                       } else if (is_id(l5, KaxTagMultiCommercialURL)) {
                         KaxTagMultiCommercialURL &c_url =
@@ -2306,16 +2313,12 @@ bool process_file(const char *file_name) {
                       } else if (is_id(l5, KaxTagMultiEntityName)) {
                         KaxTagMultiEntityName &e_name =
                           *static_cast<KaxTagMultiEntityName *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(e_name));
-                        show_element(l5, 5, "Name: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Name: %s", UTF2STR(e_name));
 
                       } else if (is_id(l5, KaxTagMultiEntityAddress)) {
                         KaxTagMultiEntityAddress &e_address =
                           *static_cast<KaxTagMultiEntityAddress *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(e_address));
-                        show_element(l5, 5, "Address: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Address: %s", UTF2STR(e_address));
 
                       } else if (is_id(l5, KaxTagMultiEntityURL)) {
                         KaxTagMultiEntityURL &e_URL =
@@ -2373,9 +2376,7 @@ bool process_file(const char *file_name) {
                       } else if (is_id(l5, KaxTagMultiIdentifierString)) {
                         KaxTagMultiIdentifierString &i_string =
                           *static_cast<KaxTagMultiIdentifierString *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(i_string));
-                        show_element(l5, 5, "String: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "String: %s", UTF2STR(i_string));
 
                       } else if (!is_global(es, l5, 5) &&
                                  !parse_multicomment(es, l5, 5))
@@ -2416,9 +2417,7 @@ bool process_file(const char *file_name) {
                       } else if (is_id(l5, KaxTagMultiLegalAddress)) {
                         KaxTagMultiLegalAddress &l_address =
                           *static_cast<KaxTagMultiLegalAddress *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(l_address));
-                        show_element(l5, 5, "Address: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Address: %s", UTF2STR(l_address));
 
                       } else if (is_id(l5, KaxTagMultiLegalURL)) {
                         KaxTagMultiLegalURL &l_URL =
@@ -2428,9 +2427,7 @@ bool process_file(const char *file_name) {
                       } else if (is_id(l5, KaxTagMultiLegalContent)) {
                         KaxTagMultiLegalContent &l_content =
                           *static_cast<KaxTagMultiLegalContent *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(l_content));
-                        show_element(l5, 5, "Content: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Content: %s", UTF2STR(l_content));
 
                       } else if (!is_global(es, l5, 5) &&
                                  !parse_multicomment(es, l5, 5))
@@ -2471,30 +2468,23 @@ bool process_file(const char *file_name) {
                       } else if (is_id(l5, KaxTagMultiTitleName)) {
                         KaxTagMultiTitleName &t_name =
                           *static_cast<KaxTagMultiTitleName *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(t_name));
-                        show_element(l5, 5, "Name: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Name: %s", UTF2STR(t_name));
 
                       } else if (is_id(l5, KaxTagMultiTitleSubTitle)) {
                         KaxTagMultiTitleSubTitle &t_sub_title =
                           *static_cast<KaxTagMultiTitleSubTitle *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(t_sub_title));
-                        show_element(l5, 5, "Sub title: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Sub title: %s",
+                                     UTF2STR(t_sub_title));
 
                       } else if (is_id(l5, KaxTagMultiTitleEdition)) {
                         KaxTagMultiTitleEdition &t_edition =
                           *static_cast<KaxTagMultiTitleEdition *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(t_edition));
-                        show_element(l5, 5, "Edition: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Edition: %s", UTF2STR(t_edition));
 
                       } else if (is_id(l5, KaxTagMultiTitleAddress)) {
                         KaxTagMultiTitleAddress &t_address =
                           *static_cast<KaxTagMultiTitleAddress *>(l5);
-                        str = UTFstring_to_cstr(UTFstring(t_address));
-                        show_element(l5, 5, "Address: %s", str);
-                        safefree(str);
+                        show_element(l5, 5, "Address: %s", UTF2STR(t_address));
 
                       } else if (is_id(l5, KaxTagMultiTitleURL)) {
                         KaxTagMultiTitleURL &t_URL =
@@ -2580,7 +2570,9 @@ bool process_file(const char *file_name) {
   }
 }
 
-int console_main(int argc, char **argv) {
+int
+console_main(int argc,
+             char **argv) {
   char *file_name;
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN)
@@ -2598,7 +2590,8 @@ int console_main(int argc, char **argv) {
     return 1;
 }
 
-void setup() {
+void
+setup() {
 #if !defined(COMP_MSC)
   if (setlocale(LC_CTYPE, "") == NULL)
     mxerror("Could not set the locale properly. Check the "
@@ -2608,12 +2601,15 @@ void setup() {
   cc_local_utf8 = utf8_init(NULL);
 }
 
-void cleanup() {
+void
+cleanup() {
   utf8_done();
 }
 
 #if !defined HAVE_WXWINDOWS
-int main(int argc, char **argv) {
+int
+main(int argc,
+     char **argv) {
   char *initial_file;
   int res;
 
@@ -2628,7 +2624,9 @@ int main(int argc, char **argv) {
 
 #elif defined(SYS_UNIX) || defined(SYS_APPLE)
 
-int main(int argc, char **argv) {
+int
+main(int argc,
+     char **argv) {
   char *initial_file;
   int res;
 

@@ -44,6 +44,8 @@ extern bool use_gui;
 
 #ifdef HAVE_WXWINDOWS
 
+#include "wxcommon.h"
+
 class mi_app: public wxApp {
 public:
   virtual bool OnInit();
@@ -73,10 +75,10 @@ public:
   mi_frame(const wxString &title, const wxPoint &pos, const wxSize &size,
            long style = wxDEFAULT_FRAME_STYLE);
 
-  void open_file(const char *file_name);
-  void show_progress(int percent, const char *msg);
-  void show_error(const char *msg);
-  void add_item(int level, const char *text);
+  void open_file(wxString file_name);
+  void show_progress(int percent, wxString msg);
+  void show_error(wxString msg);
+  void add_item(int level, wxString text);
 
 protected:
   void on_file_open(wxCommandEvent &event);
@@ -85,6 +87,7 @@ protected:
   void on_options_showall(wxCommandEvent &event);
   void on_options_expandimportant(wxCommandEvent &event);
   void on_help_about(wxCommandEvent &event);
+  void on_right_click(wxTreeEvent &event);
 
   void expand_elements();
   void expand_all_elements(wxTreeItemId &root, bool expand = true);
