@@ -63,8 +63,9 @@ you're really desperate for space or for testing purposes. See also option
 Tells \fBmkvmerge\fR not to create a meta seek element at the end of the file
 containing all clusters. See also the section about \fBMATROSKA FILE LAYOUT\fR.
 .TP
-\fB\-\-no\-lacing\fR
-Disable lacing for all tracks. This will increase the file's size, especially
+\fB\-\-enable\-lacing\fR
+Permits lacing for all tracks. Some track types like video won't use lacing
+even if this option is given. This will increase the file's size, especially
 if there are many audio tracks. This option is not intended for everyday use.
 
 .LP
