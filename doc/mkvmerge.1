@@ -988,13 +988,13 @@ This might be the case for audio-only files.
 .LP
 \fBmkvmerge\fR allows the user to chose the timecodes for a specific track
 himself. This can be used in order to create files with variable frame rate
-video. A frame in this case is the unit that
+video or include gaps in audio. A frame in this case is the unit that
 \fBmkvmerge\fR creates separately per Matroska block. For video this
 is exactly one frame, for audio this is one packet of the specific
 audio type. E.g. for AC3 this would be a packet containing 1536
-samples. However, it should only be used for video tracks.
+samples.
 .LP
-There are two formats that are recognized by \fBmkvmerge\fR. The first
+There are three formats that are recognized by \fBmkvmerge\fR. The first
 line always contains the version number. Empty lines, lines containing only
 whitespace and lines beginning with '#' are ignored.
 .LP
@@ -1032,6 +1032,31 @@ lines as there are frames in the track. Example for 25fps:
 \fB40\fR
 .br
 \fB80\fR
+.br
+etc.
+\fBTimecode file format v3\fR
+.LP
+In this format each line contains a duration in seconds followed by an 
+optional number of frames per second.
+Both can be floating point numbers.
+If the number of frames per second is not present the default one is used.
+For audio you should let the codec calculate the frame timecodes itself.
+For that you should be using 0.0 as the number of frames per second.
+You can also create gaps in the stream by using the \fBgap\fR keyword followed
+by the duration of the gap.
+Example for an audio file:
+.br
+\fB# timecode format v3\fR
+.br
+\fBassume 0.0\fR
+.br
+\fB25.325\fR
+.br
+\fB7.530,38.236\fR
+.br
+\fBgap, 10.050\fR
+.br
+\fB2.000,38.236\fR
 .br
 etc.
 

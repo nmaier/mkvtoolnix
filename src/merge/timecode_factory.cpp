@@ -336,7 +336,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       t.duration = (int64_t)(1000000000.0 * dur);
     }
 
-    if ((t.fps <= 0) || (t.duration <= 0)) {
+    if ((t.fps < 0) || (t.duration <= 0)) {
       mxwarn(_("Line %d of the timecode file '%s' contains inconsistent data "
                "(e.g. the duration or the FPS are smaller than zero).\n"),
              line_no, file_name.c_str());
@@ -368,33 +368,29 @@ timecode_factory_v3_c::get_next(int64_t &timecode,
                                 bool peek_only) {
   bool result = (current_timecode == 0);
 
-  timecode = current_offset + current_timecode;
   if (durations[current_duration].is_gap) {
     size_t duration_index = current_duration;
-    duration = 0;
     while (durations[duration_index].is_gap) {
-      duration += durations[duration_index].duration;
+      current_offset += durations[duration_index].duration;
       duration_index++;
     }
     if (!peek_only) {
-      current_offset += duration;
-      current_timecode = 0;
       current_duration = duration_index;
     }
     result = true;
+  }
 
-  } else {
-    // If default_fps is 0 then the duration is unchanged, usefull for audio.
-    if (durations[current_duration].fps) {
-      duration = (int64_t)(1000000000.0 / durations[current_duration].fps);
-    }
-    if (!peek_only) {
-      current_timecode += duration;
-      if (current_timecode >= durations[current_duration].duration) {
-        current_offset += durations[current_duration].duration;
-        current_timecode = 0;
-        current_duration++;
-      }
+  timecode = current_offset + current_timecode;
+  // If default_fps is 0 then the duration is unchanged, usefull for audio.
+  if (durations[current_duration].fps) {
+    duration = (int64_t)(1000000000.0 / durations[current_duration].fps);
+  }
+  if (!peek_only) {
+    current_timecode += duration;
+    if (current_timecode >= durations[current_duration].duration) {
+      current_offset += durations[current_duration].duration;
+      current_timecode = 0;
+      current_duration++;
     }
   }
 
