@@ -89,7 +89,7 @@ bitvalue_c::bitvalue_c(string s,
 
   for (i = 0; i < len; i++) {
     // Space or tab?
-    if (isblank(s[i])) {
+    if (isblanktab(s[i])) {
       previous_was_space = true;
       continue;
     }
