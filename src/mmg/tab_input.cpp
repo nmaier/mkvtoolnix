@@ -338,7 +338,8 @@ void tab_input::audio_track_mode(wxString ctype) {
   cob_cues->Enable(true);
   cob_sub_charset->Enable(false);
   cb_default->Enable(true);
-  cb_aac_is_sbr->Enable(lctype.Find("aac") >= 0);
+  cb_aac_is_sbr->Enable((lctype.Find("aac") >= 0) ||
+                        (lctype.Find("mp4a") >= 0));
   tc_tags->Enable(true);
   b_browse_tags->Enable(true);
   cob_aspect_ratio->Enable(false);
