@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.46 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.47 2003/05/26 21:49:11 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -180,7 +180,7 @@ void generic_packetizer_c::set_as_default_track(int type) {
   else if (type == track_subtitle)
     idx = 2;
   else
-    die("Unknown track type");
+    die("Unknown track type %d.", type);
 
   if (default_tracks[idx] == 0)
     default_tracks[idx] = -1 * hserialno;
@@ -196,7 +196,7 @@ void generic_packetizer_c::force_default_track(int type) {
   else if (type == track_subtitle)
     idx = 2;
   else
-    die("Unknown track type");
+    die("Unknown track type %d.", type);
 
   if (default_tracks[idx] > 0)
     fprintf(stdout, "Warning: Another default track for %s tracks has already "
@@ -336,7 +336,7 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   if (data == NULL)
     return;
   if (timecode < 0)
-    die("timecode < 0");
+    die("timecode < 0 (%lld)", timecode);
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.7 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: p_aac.cpp,v 1.8 2003/05/26 21:49:11 mosu Exp $
     \brief AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -179,7 +179,7 @@ void aac_packetizer_c::set_headers() {
     else if (profile == AAC_PROFILE_LTP)
       set_codec_id(MKV_A_AAC_4LTP);
     else
-      die("aac_packetizer: Unknown AAC MPEG-4 object type...");
+      die("aac_packetizer: Unknown AAC MPEG-4 object type %d.", profile);
   } else {
     if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_2MAIN);
@@ -188,7 +188,7 @@ void aac_packetizer_c::set_headers() {
     else if (profile == AAC_PROFILE_SSR)
       set_codec_id(MKV_A_AAC_2SSR);
     else
-      die("aac_packetizer: Unknown AAC MPEG-2 profile...");
+      die("aac_packetizer: Unknown AAC MPEG-2 profile %d.", profile);
   }
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);

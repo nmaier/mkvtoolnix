@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.31 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: common.h,v 1.32 2003/05/26 21:49:11 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -79,8 +79,8 @@ using namespace std;
 
 #define TIMECODE_SCALE 1000000
 
-#define die(s) _die(s, __FILE__, __LINE__)
-void _die(const char *s, const char *file, int line);
+#define die(fmt, args...) _die(fmt, __FILE__, __LINE__, ## args)
+void _die(const char *fmt, const char *file, int line, ...);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);

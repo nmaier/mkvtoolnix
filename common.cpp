@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.26 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: common.cpp,v 1.27 2003/05/26 21:49:11 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -27,6 +27,7 @@
 #endif
 #include <locale.h>
 #include <malloc.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,8 +40,17 @@
 
 int verbose = 1;
 
-void _die(const char *s, const char *file, int line) {
-  fprintf(stderr, "die @ %s/%d : %s\n", file, line, s);
+void _die(const char *fmt, const char *file, int line, ...) {
+  va_list ap;
+
+  fprintf(stderr, "die @ %s/%d : ", file, line);
+  va_start(ap, line);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
+  fprintf(stderr, "\n");
+#ifdef DEBUG
+  debug_c::dump_info();
+#endif
   exit(1);
 }
 
@@ -212,7 +222,7 @@ char *to_utf8(int handle, char *local) {
   }
 
   if (handle >= num_mkv_convs)
-    die("Invalid conversion handle.");
+    die("Invalid conversion handle %d (num: %d).", handle, num_mkv_convs);
 
   return convert_charset(mkv_convs[handle].ict_to_utf8, local);
 }
@@ -226,7 +236,7 @@ char *from_utf8(int handle, char *utf8) {
   }
 
   if (handle >= num_mkv_convs)
-    die("Invalid conversion handle.");
+    die("Invalid conversion handle %d (num: %d).", handle, num_mkv_convs);
 
   return convert_charset(mkv_convs[handle].ict_from_utf8, utf8);
 }
@@ -282,8 +292,8 @@ char *_safestrdup(const char *s, const char *file, int line) {
 
   copy = strdup(s);
   if (copy == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL\n", file,
-            line);
+    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL (%s)\n", file,
+            line, s);
     exit(1);
   }
 
@@ -299,8 +309,8 @@ unsigned char *_safestrdup(const unsigned char *s, const char *file,
 
   copy = strdup((const char *)s);
   if (copy == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL\n", file,
-            line);
+    fprintf(stderr, "die @ %s/%d : in safestrdup: strdup == NULL (%s)\n", file,
+            line, s);
     exit(1);
   }
 
@@ -315,8 +325,8 @@ void *_safememdup(const void *s, size_t size, const char *file, int line) {
 
   copy = malloc(size);
   if (copy == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safememdup: malloc == NULL\n", file,
-            line);
+    fprintf(stderr, "die @ %s/%d : in safememdup: malloc == NULL (%d)\n", file,
+            line, size);
     exit(1);
   }
   memcpy(copy, s, size);
@@ -329,8 +339,8 @@ void *_safemalloc(size_t size, const char *file, int line) {
 
   mem = malloc(size);
   if (mem == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safemalloc: malloc == NULL\n", file,
-            line);
+    fprintf(stderr, "die @ %s/%d : in safemalloc: malloc == NULL (%d)\n", file,
+            line, size);
     exit(1);
   }
 
@@ -340,8 +350,8 @@ void *_safemalloc(size_t size, const char *file, int line) {
 void *_saferealloc(void *mem, size_t size, const char *file, int line) {
   mem = realloc(mem, size);
   if (mem == NULL) {
-    fprintf(stderr, "die @ %s/%d : in safemalloc: realloc == NULL\n", file,
-            line);
+    fprintf(stderr, "die @ %s/%d : in safemalloc: realloc == NULL (%d)\n",
+            file, line, size);
     exit(1);
   }
 
@@ -444,11 +454,8 @@ void debug_c::leave(const char *label) {
       break;
     }
 
-  if ((entry == NULL) || (entry->entered_at == 0)) {
-    string s("leave without enter: ");
-    s += label;
-    die(s.c_str());
-  }
+  if ((entry == NULL) || (entry->entered_at == 0))
+    die("leave without enter: %s", label);
 
   entry->number_of_calls++;
   entry->elapsed_time += (uint64_t)tv.tv_sec * (uint64_t)1000000 +

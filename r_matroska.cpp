@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.40 2003/05/25 15:35:39 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.41 2003/05/26 21:49:11 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -416,12 +416,7 @@ int mkv_reader_c::read_headers() {
     // Create the interface between MPlayer's IO system and
     // libmatroska's IO system.
     in = new StdIOCallback(ti->fname, MODE_READ);
-    if (in == NULL)
-      die("new");
-
     es = new EbmlStream(*in);
-    if (es == NULL)
-      die("new");
 
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
@@ -1150,7 +1145,7 @@ int mkv_reader_c::demuxing_requested(mkv_track_t *t) {
   else if (t->type == 's')
     tracks = ti->stracks;
   else
-    die("internal bug - unknown stream type");
+    die("internal bug - unknown stream type %d", t->type);
 
   if (tracks == NULL)
     return 1;

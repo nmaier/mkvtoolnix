@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.19 2003/05/21 22:17:33 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.20 2003/05/26 21:49:11 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -283,12 +283,10 @@ void cluster_helper_c::check_clusters(int num) {
       if (p->bref == -1)
         continue;
       clstr = find_packet_cluster(p->bref);
-      if (clstr == NULL) {
-        fprintf(stderr, "Error: backward refenrece could not be resolved "
-                "(%lld -> %lld). Called from line %d.\n",
-                p->timecode, p->bref, num);
-        die("internal error");
-      }
+      if (clstr == NULL)
+        die("Error: backward refenrece could not be resolved "
+            "(%lld -> %lld). Called from line %d.\n",
+            p->timecode, p->bref, num);
     }
   }
 }
@@ -328,11 +326,9 @@ int cluster_helper_c::free_clusters() {
         if (p->bref == -1)
           continue;
         clstr = find_packet_cluster(p->bref);
-        if (clstr == NULL) {
-          fprintf(stderr, "Error: backward refenrece could not be resolved "
-                  "(%lld).\n", p->bref);
-          die("internal error");
-        }
+        if (clstr == NULL)
+          die("Error: backward refenrece could not be resolved "
+              "(%lld).\n", p->bref);
         clstr->is_referenced = 1;
       }
     }
