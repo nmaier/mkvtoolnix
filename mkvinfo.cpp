@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.17 2003/04/20 21:03:41 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.18 2003/04/20 21:17:29 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -303,6 +303,7 @@ void process_file() {
                     break;
                   case track_subtitle:
                     fprintf(stdout, "Subtitles");
+                    break;
                   default:
                     fprintf(stdout, "unknown");
                     break;
@@ -606,8 +607,7 @@ void process_file() {
                   *static_cast<KaxBlockDuration *>(l3);
                 duration.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + block duration: %.3fms", NAME,
-                        ((float)uint64(duration)) * tc_scale /
-                        1000000000000.0);
+                        ((float)uint64(duration)) * tc_scale / 1000000.0);
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
