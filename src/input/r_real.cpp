@@ -971,7 +971,9 @@ real_reader_c::get_information_from_data() {
   real_demuxer_t *dmx;
   bool information_found;
   rmff_frame_t *frame;
+  int64_t old_pos;
 
+  old_pos = file->io->tell(file->handle);
   information_found = true;
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
@@ -1004,8 +1006,7 @@ real_reader_c::get_information_from_data() {
     }
   }
 
-  file->io->seek(file->handle, file->first_data_header_offset + 10,
-                 SEEK_SET);
+  file->io->seek(file->handle, old_pos, SEEK_SET);
   file->num_packets_read = 0;
 }
 
