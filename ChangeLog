@@ -1,3 +1,8 @@
+2005-03-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: If the TEMP environment variable contains spaces
+	then the calls to mkvmerge when adding files failed.
+
 2005-03-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Extracting the FPS from some AVC MP4 files

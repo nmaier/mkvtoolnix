@@ -764,7 +764,7 @@ tab_input::add_file(const wxString &file_name,
                  wxUCS(strerror(errno)));
     wxMessageBox(error, wxT("File creation failed"), wxOK | wxCENTER |
                  wxICON_ERROR);
-    throw 0;
+    return;
   }
   opt_file->Write(wxT("--output-charset\nUTF-8\n--identify-verbose\n"));
   arg_utf8 = to_utf8(file_name);
@@ -772,8 +772,19 @@ tab_input::add_file(const wxString &file_name,
   opt_file->Write(wxT("\n"));
   delete opt_file;
 
-  command = wxT("\"") + mkvmerge_path + wxT("\" @") + opt_file_name;
+  command = wxT("\"") + mkvmerge_path + wxT("\" \"@") + opt_file_name +
+    wxT("\"");
+
+  wxLogMessage(wxT("identify 1: command: ``%s''"), command.c_str());
+
   result = wxExecute(command, output, errors);
+
+  wxLogMessage(wxT("identify 1: result: %d"), result);
+  for (i = 0; i < output.Count(); i++)
+    wxLogMessage(wxT("identify 1: output[%d]: ``%s''"), i, output[i].c_str());
+  for (i = 0; i < errors.Count(); i++)
+    wxLogMessage(wxT("identify 1: errors[%d]: ``%s''"), i, errors[i].c_str());
+
   wxRemoveFile(opt_file_name);
   if ((result < 0) || (result > 1)) {
     name.Printf(wxT("File identification failed for '%s'. Return code: "

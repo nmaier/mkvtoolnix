@@ -155,8 +155,10 @@ job_run_dialog::start_next_job() {
   mdlg->load(wxString::Format(wxT("%s/jobs/%d.mmg"), wxGetCwd().c_str(),
                               jobs[ndx].id));
 
-  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"),
+  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"),
+                       get_temp_dir().c_str(),
                        (int)wxGetProcessId(), (int)time(NULL));
+  
   try {
     opt_file = new wxFile(opt_file_name, wxFile::write);
   } catch (...) {
@@ -191,8 +193,8 @@ job_run_dialog::start_next_job() {
 
   process = new wxProcess(this, 1);
   process->Redirect();
-  pid = wxExecute((*arg_list)[0] + wxT(" @") + opt_file_name, wxEXEC_ASYNC,
-                  process);
+  pid = wxExecute((*arg_list)[0] + wxT(" \"@") + opt_file_name + wxT("\""),
+                  wxEXEC_ASYNC, process);
   out = process->GetInputStream();
 
   *jobs[ndx].log = wxT("");

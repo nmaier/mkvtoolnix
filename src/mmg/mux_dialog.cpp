@@ -144,8 +144,8 @@ mux_dialog::mux_dialog(wxWindow *parent):
   }
   delete opt_file;
 
-  pid = wxExecute((*arg_list)[0] + wxT(" @") + opt_file_name, wxEXEC_ASYNC,
-                  process);
+  pid = wxExecute((*arg_list)[0] + wxT(" \"@") + opt_file_name + wxT("\""),
+                  wxEXEC_ASYNC, process);
   out = process->GetInputStream();
 
   line = "";
