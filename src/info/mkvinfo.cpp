@@ -248,44 +248,43 @@ _show_element(EbmlElement *l,
 // {{{ FUNCTION parse_args
 
 void
-parse_args(int argc,
-           char **argv,
-           char *&file_name) {
+parse_args(vector<string> args,
+           string &file_name) {
   int i;
 
   verbose = 0;
-  file_name = NULL;
+  file_name = "";
 
   use_gui = false;
 
-  for (i = 1; i < argc; i++)
-    if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--gui")) {
+  for (i = 0; i < args.size(); i++)
+    if ((args[i] == "-g") || (args[i] == "--gui")) {
 #ifndef HAVE_WXWINDOWS
-      mxerror(Y("mkvinfo was compiled without GUI support.\n"));
+      mxerror("mkvinfo was compiled without GUI support.\n");
 #else // HAVE_WXWINDOWS
       use_gui = true;
 #endif // HAVE_WXWINDOWS
-    } else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
+    } else if ((args[i] == "-V") || (args[i] == "--version")) {
       mxinfo("mkvinfo v" VERSION "\n");
       mxexit(0);
-    } else if (!strcmp(argv[i], "-v") || ! strcmp(argv[i], "--verbose"))
+    } else if ((args[i] == "-v") || (args[i] == "--verbose"))
       verbose++;
-    else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
-             !strcmp(argv[i], "--help")) {
+    else if ((args[i] == "-h") || (args[i] == "-?") ||
+             (args[i] == "--help")) {
       usage();
       mxexit(0);
-    } else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--checksum"))
+    } else if ((args[i] == "-c") || (args[i] == "--checksum"))
       calc_checksums = true;
-    else if (!strcmp(argv[i], "-C") || !strcmp(argv[i], "--check-mode")) {
+    else if ((args[i] == "-C") || (args[i] == "--check-mode")) {
       calc_checksums = true;
       verbose = 4;
-    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--summary")) {
+    } else if ((args[i] == "-s") || (args[i] == "--summary")) {
       calc_checksums = true;
       show_summary = true;
-    } else if (file_name != NULL)
-      mxerror(Y("Only one input file is allowed.\n"));
+    } else if (file_name != "")
+      mxerror("Only one input file is allowed.\n");
     else
-      file_name = argv[i];
+      file_name = args[i];
 }
 
 // }}}
@@ -1930,9 +1929,8 @@ cleanup() {
 }
 
 int
-console_main(int argc,
-             char **argv) {
-  char *file_name;
+console_main(vector<string> args) {
+  string file_name;
   bool ok;
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN)
@@ -1940,12 +1938,12 @@ console_main(int argc,
 #endif
 
   setup();
-  parse_args(argc, argv, file_name);
-  if (file_name == NULL) {
+  parse_args(args, file_name);
+  if (file_name == "") {
     usage();
     mxexit(0);
   }
-  ok = process_file(file_name);
+  ok = process_file(file_name.c_str());
   cleanup();
 
   if (ok)
@@ -1958,7 +1956,7 @@ console_main(int argc,
 int
 main(int argc,
      char **argv) {
-  return console_main(argc, argv);
+  return console_main(command_line_utf8(argc, argv));
 }
 
 #elif defined(SYS_UNIX) || defined(SYS_APPLE)
@@ -1966,15 +1964,17 @@ main(int argc,
 int
 main(int argc,
      char **argv) {
-  char *initial_file;
+  vector<string> args;
+  string initial_file;
 
-  parse_args(argc, argv, initial_file);
+  args = command_line_utf8(argc, argv);
+  parse_args(args, initial_file);
 
   if (use_gui) {
     wxEntry(argc, argv);
     return 0;
   } else
-    return console_main(argc, argv);
+    return console_main(args);
 }
 
 #endif // HAVE_WXWINDOWS

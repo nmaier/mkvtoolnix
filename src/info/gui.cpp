@@ -50,22 +50,21 @@ enum {
 
 bool
 mi_app::OnInit() {
-  char *initial_file;
-  char **args;
+  string initial_file;
+  vector<string> args;
 #if WXUNICODE
   int i;
 
-  args = (char **)safemalloc(argc * sizeof(char *));
-  for (i = 0; i < argc; i++)
-    args[i] = safestrdup(wxMB(wxString(argv[i])));
+  for (i = 1; i < argc; i++)
+    args.push_back(string(wxMB(wxString(argv[i]))));
 #else
-  args = argv;
+  args = command_line_utf8(argc, argv);
 #endif
 
-  parse_args(argc, args, initial_file);
+  parse_args(args, initial_file);
 
   if (!use_gui) {
-    console_main(argc, args);
+    console_main(args);
     return false;
   }
 
@@ -77,14 +76,8 @@ mi_app::OnInit() {
   while (Pending())
     Dispatch();
 
-  if (initial_file != NULL)
-    frame->open_file(wxU(initial_file));
-
-#if WXUNICODE
-  for (i = 0; i < argc; i++)
-    safefree(args[i]);
-  safefree(args);
-#endif
+  if (initial_file != "")
+    frame->open_file(wxU(initial_file.c_str()));
 
   return true;
 }

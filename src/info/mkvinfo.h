@@ -20,6 +20,7 @@
 #include "os.h"
 
 #include <string>
+#include <vector>
 
 #include "config.h"
 
@@ -33,8 +34,8 @@
 
 using namespace std;
 
-void parse_args(int argc, char **argv, char *&file_name);
-int console_main(int argc, char **argv);
+void parse_args(vector<string> args, string &file_name);
+int console_main(vector<string> args);
 bool process_file(const string &file_name);
 void setup();
 void cleanup();
