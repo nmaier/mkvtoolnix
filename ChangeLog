@@ -1,3 +1,9 @@
+2004-07-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Broken VobSub .idx files which contain
+	timestamps going backwards no longer crash mkvmerge. A warning
+	will be printed for such inconsistencies.
+
 2004-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The Matroska reader contained a nice little

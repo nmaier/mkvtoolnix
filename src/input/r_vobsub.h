@@ -30,11 +30,20 @@
 #include "pr_generic.h"
 #include "p_vobsub.h"
 
+class vobsub_entry_c {
+public:
+  int64_t position;
+  int64_t timestamp;
+  int64_t duration;
+
+  bool operator < (const vobsub_entry_c &cmp) const;
+};
+
 class vobsub_track_c {
 public:
   char *language;
   int ptzr;
-  vector<int64_t> positions, timecodes, durations;
+  vector<vobsub_entry_c> entries;
   int idx, aid;
   bool mpeg_version_warning_printed;
   int64_t packet_num, spu_size, overhead;

@@ -70,6 +70,11 @@ using namespace std;
 
 #define PFX "vobsub_reader: "
 
+bool
+vobsub_entry_c::operator < (const vobsub_entry_c &cmp) const {
+  return timestamp < cmp.timestamp;
+}
+
 int
 vobsub_reader_c::probe_file(mm_io_c *mm_io,
                             int64_t size) {
@@ -160,39 +165,41 @@ vobsub_reader_c::~vobsub_reader_c() {
 
 void
 vobsub_reader_c::create_packetizer(int64_t tid) {
-  uint32_t i, k;
-  int64_t avg_duration;
+  uint32_t k;
+  int64_t avg_duration, duration;
   char language[4];
   const char *c;
+  vobsub_track_c *track;
 
   if ((tid < tracks.size()) && demuxing_requested('s', tid) &&
       (tracks[tid]->ptzr == -1)) {
-    i = tid;
-    ti->id = i;
-    if ((c = map_iso639_1_to_iso639_2(tracks[i]->language)) != NULL) {
+    track = tracks[tid];
+    ti->id = tid;
+    if ((c = map_iso639_1_to_iso639_2(tracks[tid]->language)) != NULL) {
       strcpy(language, c);
       ti->language = language;
     } else
       ti->language = NULL;
-    tracks[i]->ptzr =
+    track->ptzr =
       add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(),
                                              idx_data.length(), ti));
-    if (tracks[i]->timecodes.size() > 0) {
+    if (track->entries.size() > 0) {
       avg_duration = 0;
-      for (k = 0; k < (tracks[i]->timecodes.size() - 1); k++) {
-        tracks[i]->durations.push_back(tracks[i]->timecodes[k + 1] -
-                                       tracks[i]->timecodes[k]);
-        avg_duration += tracks[i]->timecodes[k + 1] - tracks[i]->timecodes[k];
+      for (k = 0; k < (track->entries.size() - 1); k++) {
+        duration = track->entries[k + 1].timestamp -
+          track->entries[k].timestamp;
+        track->entries[k].duration = duration;
+        avg_duration += duration;
       }
     } else
       avg_duration = 1000000000;
 
-    if (tracks[i]->timecodes.size() > 1)
-      avg_duration /= (tracks[i]->timecodes.size() - 1);
-    tracks[i]->durations.push_back(avg_duration);
+    if (track->entries.size() > 1)
+      avg_duration /= (track->entries.size() - 1);
+    track->entries[track->entries.size() - 1].duration = avg_duration;
 
     mxinfo(FMT_TID "Using the VobSub subtitle output module (language: %s).\n",
-           ti->fname, (int64_t)i, tracks[i]->language);
+           ti->fname, (int64_t)tid, track->language);
     ti->language = NULL;
   }
 }
@@ -211,16 +218,22 @@ vobsub_reader_c::parse_headers() {
   const char *sline;
   char language[3];
   vobsub_track_c *track;
-  int64_t filepos, timestamp;
+  int64_t filepos, timestamp, line_no, last_timestamp;
   int hour, minute, second, msecond, idx;
   uint32_t i, k, tsize;
+  vobsub_entry_c entry;
+  bool sort_required;
 
   language[0] = 0;
   track = NULL;
+  line_no = 0;
+  last_timestamp = 0;
+  sort_required = false;
 
   while (1) {
     if (!idx_file->getline2(line))
       break;
+    line_no++;
 
     if ((line.length() == 0) || (line[0] == '#'))
       continue;
@@ -235,12 +248,19 @@ vobsub_reader_c::parse_headers() {
       } else
         language[0] = 0;
       if (track != NULL) {
-        if (track->timecodes.size() == 0)
+        if (track->entries.size() == 0)
           delete track;
-        else
+        else {
           tracks.push_back(track);
+          if (sort_required) {
+            mxverb(2, PFX "Sorting track %u\n", tracks.size());
+            stable_sort(track->entries.begin(), track->entries.end());
+          }
+        }
       }
       track = new vobsub_track_c(language);
+      last_timestamp = 0;
+      sort_required = false;
       continue;
     }
 
@@ -260,14 +280,28 @@ vobsub_reader_c::parse_headers() {
         filepos = filepos * 16 + hexvalue(sline[idx]);
         idx++;
       }
-      track->positions.push_back(filepos);
+      entry.position = filepos;
 
       sscanf(&sline[11], "%02d:%02d:%02d:%03d", &hour, &minute, &second,
              &msecond);
       timestamp = (int64_t)hour * 60 * 60 * 1000 +
         (int64_t)minute * 60 * 1000 + (int64_t)second * 1000 +
         (int64_t)msecond;
-      track->timecodes.push_back(timestamp * 1000000);
+      entry.timestamp = timestamp * 1000000;
+      track->entries.push_back(entry);
+
+      if ((timestamp < last_timestamp) &&
+          demuxing_requested('s', tracks.size())) {
+        mxwarn(PFX "'%s', line %lld: The current timestamp (" FMT_TIMECODE
+               ") is smaller than the last one (" FMT_TIMECODE"). mkvmerge "
+               "will sort the entries according to their timestamps. This "
+               "might result in the wrong order for some subtitle entries. If "
+               "this is the case then you have to fix the .idx file "
+               "manually.\n", ti->fname, line_no,
+               ARG_TIMECODE(timestamp), ARG_TIMECODE(last_timestamp));
+        sort_required = true;
+      }
+      last_timestamp = timestamp;
 
       continue;
     }
@@ -276,32 +310,29 @@ vobsub_reader_c::parse_headers() {
     idx_data += "\n";
   }
   if (track != NULL) {
-    if (track->timecodes.size() == 0)
+    if (track->entries.size() == 0)
       delete track;
-    else
+    else {
       tracks.push_back(track);
+      if (sort_required) {
+        mxverb(2, PFX "Sorting track %u\n", tracks.size());
+        stable_sort(track->entries.begin(), track->entries.end());
+      }
+    }
   }
 
-  if (!identifying) {
+  if (!identifying && (verbose > 1)) {
     tsize = tracks.size();
-    for (i = 0; i < tsize; i++)
-      if (tracks[i]->positions.size() != tracks[i]->timecodes.size())
-        mxerror(PFX "Have %u positions and %u timecodes. This "
-                "should not have happened. Please file a bug report.\n",
-                tracks[i]->positions.size(), tracks[i]->timecodes.size());
-
-    if (verbose > 1) {
-      for (i = 0; i < tsize; i++) {
-        mxinfo("vobsub_reader: Track number %u\n", i);
-        for (k = 0; k < tracks[i]->positions.size(); k++)
-          mxinfo("vobsub_reader:  %04u position: %12lld (0x%04x%08x), "
-                 "timecode: %12lld (" FMT_TIMECODE ")\n", k,
-                 tracks[i]->positions[k],
-                 (uint32_t)(tracks[i]->positions[k] >> 32),
-                 (uint32_t)(tracks[i]->positions[k] & 0xffffffff),
-                 tracks[i]->timecodes[k] / 1000000,
-                 ARG_TIMECODE_NS(tracks[i]->timecodes[k]));
-      }
+    for (i = 0; i < tsize; i++) {
+      mxinfo("vobsub_reader: Track number %u\n", i);
+      for (k = 0; k < tracks[i]->entries.size(); k++)
+        mxinfo("vobsub_reader:  %04u position: %12lld (0x%04x%08x), "
+               "timecode: %12lld (" FMT_TIMECODE ")\n", k,
+               tracks[i]->entries[k].position,
+               (uint32_t)(tracks[i]->entries[k].position >> 32),
+               (uint32_t)(tracks[i]->entries[k].position & 0xffffffff),
+               tracks[i]->entries[k].timestamp / 1000000,
+               ARG_TIMECODE_NS(tracks[i]->entries[k].timestamp));
     }
   }
 }
@@ -542,16 +573,16 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr,
       break;
     }
 
-  if ((track == NULL) || (track->idx >= track->positions.size()))
+  if ((track == NULL) || (track->idx >= track->entries.size()))
     return 0;
 
   id = i;
-  sub_file->setFilePointer(track->positions[track->idx]);
-  extract_one_spu_packet(track->timecodes[track->idx],
-                         track->durations[track->idx], id);
+  sub_file->setFilePointer(track->entries[track->idx].position);
+  extract_one_spu_packet(track->entries[track->idx].timestamp,
+                         track->entries[track->idx].duration, id);
   track->idx++;
 
-  if (track->idx >= track->timecodes.size()) {
+  if (track->idx >= track->entries.size()) {
     flush_packetizers();
     return 0;
   } else
