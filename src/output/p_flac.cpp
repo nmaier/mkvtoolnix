@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if !defined(COMP_MSC)
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 

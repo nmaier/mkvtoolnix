@@ -25,7 +25,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #if defined(SYS_WINDOWS)
 #include <stdarg.h>
 #include <windef.h>
