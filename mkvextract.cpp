@@ -227,7 +227,7 @@ void parse_args(int argc, char **argv, char *&file_name) {
     }
 
   if (file_name == NULL) {
-    fprintf(stderr, "Error: No input file given.\n\n");
+    fprintf(stdout, "Error: No input file given.\n\n");
     usage();
     exit(0);
   }
