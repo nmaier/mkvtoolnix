@@ -677,11 +677,13 @@ rmff_read_headers(rmff_file_t *file) {
       if (size > 0) {
         mdpr->name = (char *)safemalloc(size + 1);
         io->read(fh, mdpr->name, size);
+        mdpr->name[size] = 0;
       }
       size = read_uint8(); /* mime_type_len */
       if (size > 0) {
         mdpr->mime_type = (char *)safemalloc(size + 1);
         io->read(fh, mdpr->mime_type, size);
+        mdpr->mime_type[size] = 0;
       }
       size = read_uint32_be();  /* type_specific_size */
       rmff_put_uint32_be(&mdpr->type_specific_size, size);
