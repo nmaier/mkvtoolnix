@@ -1550,8 +1550,9 @@ tab_input::load(wxConfigBase *cfg) {
       tracks.push_back(t);
 
       fix_format("%s (ID %lld, type: %s) from %s", format);
-      name = fi.file_name->AfterLast(wxT(PSEP));
-      name += wxT(" (") + fi.file_name->BeforeLast(wxT(PSEP)) + wxT(")");
+      name = files[fidx].file_name->AfterLast(wxT(PSEP));
+      name += wxT(" (") + files[fidx].file_name->BeforeLast(wxT(PSEP)) +
+        wxT(")");
       label.Printf(wxU(format.c_str()), t->ctype->c_str(), t->id,
                    t->type == 'a' ? wxT("audio") :
                    t->type == 'v' ? wxT("video") :
