@@ -426,7 +426,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 
     if (0 == enc.comp_algo) {
 #if !defined(HAVE_ZLIB_H)
-      mxwarn(PFX "Track %d was compressed with zlib but mkvmerge has not "
+      mxwarn("Track %d was compressed with zlib but mkvmerge has not "
              "been compiled with support for zlib compression.\n", tid);
       ok = false;
       break;
@@ -436,7 +436,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 #endif
     } else if (1 == enc.comp_algo) {
 #if !defined(HAVE_BZLIB_H)
-      mxwarn(PFX "Track %d was compressed with bzlib but mkvmerge has not "
+      mxwarn("Track %d was compressed with bzlib but mkvmerge has not "
              "been compiled with support for bzlib compression.\n", tid);
       ok = false;
       break;
@@ -446,7 +446,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 #endif
     } else if (enc.comp_algo == 2) {
 #if !defined(HAVE_LZO1X_H)
-      mxwarn(PFX "Track %d was compressed with lzo1x but mkvmerge has not "
+      mxwarn("Track %d was compressed with lzo1x but mkvmerge has not "
              "been compiled with support for lzo1x compression.\n", tid);
       ok = false;
       break;
