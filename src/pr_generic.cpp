@@ -363,26 +363,23 @@ void generic_packetizer_c::set_headers() {
     if (hvideo_pixel_height != -1) {
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxVideoPixelHeight>(video))) = hvideo_pixel_height;
-      if ((ti->aspect_ratio != 1.0) &&
-          ((hvideo_pixel_width / hvideo_pixel_height) != ti->aspect_ratio)) {
-        KaxVideoDisplayHeight &dheight =
-          GetChild<KaxVideoDisplayHeight>(video);
-        *(static_cast<EbmlUInteger *>(&dheight)) = hvideo_pixel_height;
-        dheight.SetDefaultSize(4);
-      }
+      KaxVideoDisplayHeight &dheight =
+        GetChild<KaxVideoDisplayHeight>(video);
+      *(static_cast<EbmlUInteger *>(&dheight)) = hvideo_pixel_height;
+      dheight.SetDefaultSize(4);
     }
 
     if (hvideo_pixel_width != -1) {
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxVideoPixelWidth>(video))) = hvideo_pixel_width;
-      if ((ti->aspect_ratio != 1.0) &&
-          ((hvideo_pixel_width / hvideo_pixel_height) != ti->aspect_ratio)) {
-        KaxVideoDisplayWidth &dwidth =
-          GetChild<KaxVideoDisplayWidth>(video);
+      KaxVideoDisplayWidth &dwidth =
+        GetChild<KaxVideoDisplayWidth>(video);
+      if (ti->aspect_ratio != 1.0)
         *(static_cast<EbmlUInteger *>(&dwidth)) =
           (uint64_t)(hvideo_pixel_height * ti->aspect_ratio);
-        dwidth.SetDefaultSize(4);
-      }
+      else
+        *(static_cast<EbmlUInteger *>(&dwidth)) = hvideo_pixel_width;
+      dwidth.SetDefaultSize(4);
     }
 
   } else if (htrack_type == track_audio) {
