@@ -32,8 +32,8 @@ tab_global::tab_global(wxWindow *parent):
           wxTAB_TRAVERSAL) {
   wxStaticBoxSizer *siz_fs_title, *siz_split, *siz_linking_box, *siz_chapters;
   wxStaticBoxSizer *siz_gl_tags;
-  wxFlexGridSizer *siz_linking, *siz_chap_l1_l2, *siz_fg;
-  wxBoxSizer *siz_all, *siz_line, *siz_line2;
+  wxFlexGridSizer *siz_linking, *siz_chap_l1_l2;
+  wxBoxSizer *siz_all, *siz_line;
   wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3;
   wxButton *b_browse_chapters, *b_browse_global_tags;
   uint32_t i;
@@ -90,19 +90,15 @@ tab_global::tab_global(wxWindow *parent):
   st_split->Enable(false);
   siz_line->Add(st_split, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
-  siz_fg = new wxFlexGridSizer(2);
-  siz_fg->AddGrowableCol(0);
-  siz_fg->AddGrowableCol(1);
-
-  siz_line2 = new wxBoxSizer(wxHORIZONTAL);
   rb_split_by_size =
     new wxRadioButton(this, ID_RB_SPLITBYSIZE, wxT("by size:"),
                       wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
   rb_split_by_size->Enable(false);
-  siz_line2->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+//   rb_split_by_size->SetSizeHints(0, -1);
+  siz_line->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_split_by_size =
     new wxComboBox(this, ID_CB_SPLITBYSIZE, wxT(""), wxDefaultPosition,
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_split_by_size->Append(wxT(""));
   cob_split_by_size->Append(wxT("350M"));
   cob_split_by_size->Append(wxT("650M"));
@@ -117,17 +113,16 @@ tab_global::tab_global(wxWindow *parent):
                                     "are based on 1024 (G = 1024^3, M = "
                                     "1024^2, K = 1024)."));
   cob_split_by_size->Enable(false);
-  siz_line2->Add(cob_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-  siz_fg->Add(siz_line2, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5);
+  siz_line->Add(cob_split_by_size, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT |
+                wxGROW, 10);
 
-  siz_line2 = new wxBoxSizer(wxHORIZONTAL);
   rb_split_by_time = new wxRadioButton(this, ID_RB_SPLITBYTIME,
                                        wxT("by time:"));
   rb_split_by_time->Enable(false);
-  siz_line2->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_line->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_split_by_time =
     new wxComboBox(this, ID_CB_SPLITBYTIME, wxT(""), wxDefaultPosition,
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+                   wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_split_by_time->Append(wxT(""));
   cob_split_by_time->Append(wxT("01:00:00"));
   cob_split_by_time->Append(wxT("1800s"));
@@ -138,8 +133,8 @@ tab_global::tab_global(wxWindow *parent):
                                     "Examples: 01:00:00 (after one hour) or "
                                     "1800s (after 1800 seconds)."));
   cob_split_by_time->Enable(false);
-  siz_line2->Add(cob_split_by_time, 0, wxALIGN_CENTER_VERTICAL, 0);
-  siz_fg->Add(siz_line2, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 5);
+//   cob_split_by_time->SetSizeHints(0, -1);
+  siz_line->Add(cob_split_by_time, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
 
 //   siz_line2 = new wxBoxSizer(wxHORIZONTAL);
 //   rb_split_chapters =
@@ -159,8 +154,7 @@ tab_global::tab_global(wxWindow *parent):
 //   rb_split_each_chapter->Enable(false);
 //   siz_fg->Add(rb_split_each_chapter, 0, 0, 0);
 
-  siz_line->Add(siz_fg, 0, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
-  siz_split->Add(siz_line, 0, wxLEFT | wxRIGHT, 5);
+  siz_split->Add(siz_line, 0, wxLEFT | wxRIGHT | wxGROW, 5);
 
   siz_linking_box =
     new wxStaticBoxSizer(new wxStaticBox(this, -1,

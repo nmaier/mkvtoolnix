@@ -155,6 +155,8 @@ public:
 
   void on_add_cli_options(wxCommandEvent &evt);
 
+  void on_close(wxCloseEvent &evt);
+
   void load_job_queue();
   void save_job_queue();
 };
