@@ -1074,8 +1074,7 @@ ogm_reader_c::read_headers() {
 }
 
 /*
- * General reader. Before returning it MUST guarantee that each demuxer has
- * a page available OR that the corresponding stream is finished.
+ * General reader. Read a page and hand it over for processing.
  */
 int
 ogm_reader_c::read(generic_packetizer_c *) {
