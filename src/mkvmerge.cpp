@@ -299,6 +299,7 @@ static void usage() {
     "  -S, --nosubs             Don't copy any text track from this file.\n"
     "  --no-chapters            Don't keep chapters from a Matroska file.\n"
     "  --no-attachments         Don't keep attachments from a Matroska file.\n"
+    "  --no-tags                Don't keep tags from a Matroska file.\n"
     "  -y, --sync <TID:d[,o[/p]]>\n"
     "                           Synchronize, delay the audio track with the\n"
     "                           id TID by d ms. \n"
@@ -1440,6 +1441,9 @@ static void parse_args(int argc, char **argv) {
 
     } else if (!strcmp(this_arg, "--no-attachments")) {
       ti.no_attachments = true;
+
+    } else if (!strcmp(this_arg, "--no-tags")) {
+      ti.no_tags = true;
 
     } else if (!strcmp(this_arg, "--dump-packets")) {
       if (next_arg == NULL)
