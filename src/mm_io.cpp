@@ -71,10 +71,6 @@ mm_io_c::~mm_io_c() {
   safefree(file_name);
 }
 
-const char *mm_io_c::get_file_name() {
-  return file_name;
-}
-
 uint64 mm_io_c::getFilePointer() {
   return ftello((FILE *)file);
 }
@@ -226,6 +222,10 @@ bool mm_io_c::eof() {
 }
 
 #endif
+
+const char *mm_io_c::get_file_name() {
+  return file_name;
+}
 
 string mm_io_c::getline() {
   char c;
