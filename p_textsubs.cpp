@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.12 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.13 2003/05/05 14:57:45 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -116,7 +116,7 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   *idx2 = 0;
 
   if (!ti->no_utf8_subs) {
-    char *utf8_subs = to_utf8(subs);
+    char *utf8_subs = to_utf8(cc_local_utf8, subs);
     add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, -1, -1,
                length);
     free(utf8_subs);

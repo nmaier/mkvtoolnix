@@ -13,13 +13,15 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.13 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: common.cpp,v 1.14 2003/05/05 14:57:45 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <errno.h>
 #include <iconv.h>
+#include <langinfo.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,109 +73,134 @@ uint32_t get_uint32(const void *buf) {
  * Character map conversion stuff
  */
 
-static iconv_t ict_to_utf8, ict_from_utf8;
-static int iconv_initialized = -1;
+typedef struct {
+  iconv_t ict_from_utf8, ict_to_utf8;
+  char *charset;
+} mkv_conv_t;
 
-void utf8_init() {
-  char *lc_ctype;
+static mkv_conv_t *mkv_convs = NULL;
+static int num_mkv_convs = 0;
+int cc_local_utf8 = -1;
 
-  lc_ctype = getenv("LC_CTYPE");
-  if (lc_ctype == NULL)
-    lc_ctype = "ISO8859-15";
+int add_mkv_conv(const char *charset, iconv_t ict_from, iconv_t ict_to) {
+  mkv_conv_t *c;
+  int i;
 
-  iconv_initialized = 0;
+  for (i = 0; i < num_mkv_convs; i++)
+    if (!strcmp(mkv_convs[i].charset, charset))
+      return i;
 
-  ict_to_utf8 = iconv_open("UTF8", lc_ctype);
+  mkv_convs = (mkv_conv_t *)realloc(mkv_convs, (num_mkv_convs + 1) *
+                                    sizeof(mkv_conv_t));
+  if (mkv_convs == NULL)
+    die("realloc");
+  c = &mkv_convs[num_mkv_convs];
+  c->charset = strdup(charset);
+  if (c->charset == NULL)
+    die("strdup");
+  c->ict_from_utf8 = ict_from;
+  c->ict_to_utf8 = ict_to;
+  num_mkv_convs++;
+
+  return num_mkv_convs - 1;
+}
+
+int utf8_init(char *charset) {
+  char *lc_charset;
+  iconv_t ict_from_utf8, ict_to_utf8;
+  int i;
+
+  if ((charset == NULL) || (*charset == 0)) {
+    setlocale(LC_CTYPE, "");
+    lc_charset = nl_langinfo(CODESET);
+    if (!strcmp(lc_charset, "UTF8") || !strcmp(lc_charset, "UTF-8"))
+      return -1;
+  } else
+    lc_charset = charset;
+
+  for (i = 0; i < num_mkv_convs; i++)
+    if (!strcmp(mkv_convs[i].charset, lc_charset))
+      return i;
+
+  ict_to_utf8 = iconv_open("UTF8", lc_charset);
   if (ict_to_utf8 == (iconv_t)(-1))
     fprintf(stdout, "Warning: Could not initialize the iconv library for "
             "the conversion from %s to UFT8. "
-            "Strings will not be converted to UTF-8 and the resulting "
+            "Some strings will not be converted to UTF-8 and the resulting "
             "Matroska file might not comply with the Matroska specs ("
-            "error: %d, %s).\n", lc_ctype, errno, strerror(errno));
-  else
-    iconv_initialized = 1;
+            "error: %d, %s).\n", lc_charset, errno, strerror(errno));
 
-  ict_from_utf8 = iconv_open(lc_ctype, "UTF8");
+  ict_from_utf8 = iconv_open(lc_charset, "UTF8");
   if (ict_from_utf8 == (iconv_t)(-1))
     fprintf(stdout, "Warning: Could not initialize the iconv library for "
             "the conversion from UFT8 to %s. "
-            "Strings cannot be converted from UTF-8 and might be displayed "
-            "incorrectly (error: %d, %s).\n", lc_ctype, errno,
+            "Some strings cannot be converted from UTF-8 and might be "
+            "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
             strerror(errno));
-  else
-    iconv_initialized |= 2;
+
+  return add_mkv_conv(lc_charset, ict_from_utf8, ict_to_utf8);
 }
 
 void utf8_done() {
-  if (iconv_initialized < 0)
-    return;
+  int i;
 
-  if (iconv_initialized & 1)
-    iconv_close(ict_to_utf8);
-  if (iconv_initialized & 2)
-    iconv_close(ict_from_utf8);
+  for (i = 0; i < num_mkv_convs; i++)
+    free(mkv_convs[i].charset);
+  if (mkv_convs != NULL)
+    free(mkv_convs);
 }
 
-char *to_utf8(char *local) {
-  char *utf8, *slocal, *sutf8;
-  size_t llocal, lutf8;
+static char *convert_charset(iconv_t ict, char *src) {
+  char *dst, *psrc, *pdst;
+  size_t lsrc, ldst;
   int len;
 
-  if (iconv_initialized == -1)
-    utf8_init();
-
-  if (ict_to_utf8 == (iconv_t)(-1)) {
-    utf8 = strdup(local);
-    if (utf8 == NULL)
-      die("strdup");
-    return utf8;
-  }
-
-  len = strlen(local) * 4;
-  utf8 = (char *)malloc(len + 1);
-  if (utf8 == NULL)
+  len = strlen(src) * 4;
+  dst = (char *)malloc(len + 1);
+  if (dst == NULL)
     die("malloc");
-  memset(utf8, 0, len + 1);
+  memset(dst, 0, len + 1);
 
-  iconv(ict_to_utf8, NULL, 0, NULL, 0);      // Reset the iconv state.
-  llocal = len / 4;
-  lutf8 = len;
-  slocal = local;
-  sutf8 = utf8;
-  iconv(ict_to_utf8, &slocal, &llocal, &sutf8, &lutf8);
+  iconv(ict, NULL, 0, NULL, 0);      // Reset the iconv state.
+  lsrc = len / 4;
+  ldst = len;
+  psrc = src;
+  pdst = dst;
+  fprintf(stdout, "ic: %d\n", iconv(ict, &psrc, &lsrc, &pdst, &ldst));
 
-  return utf8;
+  return dst;
 }
 
-char *from_utf8(char *utf8) {
-  char *local, *slocal, *sutf8;
-  int len;
-  size_t llocal, lutf8;
+char *to_utf8(int handle, char *local) {
+  char *copy;
 
-  if (iconv_initialized == -1)
-    utf8_init();
-
-  if (ict_from_utf8 == (iconv_t)(-1)) {
-    local = strdup(utf8);
-    if (local == NULL)
+  if (handle == -1) {
+    copy = strdup(local);
+    if (copy == NULL)
       die("strdup");
-    return local;
+    return copy;
   }
 
-  len = strlen(utf8) * 4;
-  local = (char *)malloc(len + 1);
-  if (local == NULL)
-    die("malloc");
-  memset(local, 0, len + 1);
+  if (handle >= num_mkv_convs)
+    die("Invalid conversion handle.");
 
-  iconv(ict_from_utf8, NULL, 0, NULL, 0);      // Reset the iconv state.
-  llocal = len;
-  lutf8 = len / 4;
-  slocal = local;
-  sutf8 = utf8;
-  iconv(ict_from_utf8, &sutf8, &lutf8, &slocal, &llocal);
+  return convert_charset(mkv_convs[handle].ict_to_utf8, local);
+}
 
-  return local;
+char *from_utf8(int handle, char *utf8) {
+  char *copy;
+
+  if (handle == -1) {
+    copy = strdup(utf8);
+    if (copy == NULL)
+      die("strdup");
+    return copy;
+  }
+
+  if (handle >= num_mkv_convs)
+    die("Invalid conversion handle.");
+
+  return convert_charset(mkv_convs[handle].ict_from_utf8, utf8);
 }
 
 /*

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.53 2003/05/04 10:05:41 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.54 2003/05/05 14:57:45 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -927,6 +927,7 @@ int main(int argc, char **argv) {
   nice(2);
 
   srand(time(NULL));
+  cc_local_utf8 = utf8_init(NULL);
 
   kax_segment = new KaxSegment();
   kax_cues = new KaxCues();
