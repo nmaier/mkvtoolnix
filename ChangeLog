@@ -1,3 +1,19 @@
+2003-07-14  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvinfo: Support for the elements dealing with attachments
+        (KaxAttachments, KaxAttached, KaxFileDescription, KaxFileName,
+        KaxMimeType, KaxFileData).
+
+2003-07-13  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Changed the RealVideo packaging method: Subpackets are
+        assembled into complete packets so the demuxer does not have to do
+        that anymore.
+
+        * mkvmerge: DisplayWidth and DisplayHeight, which form the display
+        aspect ratio, are now always written to ease changing them later
+        without having to completely remux the file.
+
 2003-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Fixed some infinite-reading-from-a-file bug that

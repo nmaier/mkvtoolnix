@@ -49,6 +49,7 @@ extern "C" {
 #include <ebml/EbmlVoid.h>
 #include <matroska/FileKax.h>
 
+#include <matroska/KaxAttached.h>
 #include <matroska/KaxAttachements.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
@@ -1335,6 +1336,103 @@ bool process_file(const char *file_name) {
             upper_lvl_el = 0;
             l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
+          } else {
+            delete l2;
+            l2 = l3;
+          }
+
+        } // while (l2 != NULL)
+
+        // Weee! Attachments!
+      } else if (EbmlId(*l1) == KaxAttachements::ClassInfos.GlobalId) {
+        show_element(l1, 1, "Attachements");
+
+        upper_lvl_el = 0;
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true);
+        while (l2 != NULL) {
+          if (upper_lvl_el > 0)
+            break;
+          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
+            break;
+
+          if (EbmlId(*l2) == KaxAttached::ClassInfos.GlobalId) {
+            show_element(l2, 2, "Attached");
+
+            upper_lvl_el = 0;
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true);
+            while (l3 != NULL) {
+              if (upper_lvl_el > 0)
+                break;
+              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
+                break;
+
+              if (EbmlId(*l3) == KaxFileDescription::ClassInfos.GlobalId) {
+                KaxFileDescription &f_desc =
+                  *static_cast<KaxFileDescription *>(l3);
+                f_desc.ReadData(es->I_O());
+                str = UTFstring_to_cstr(UTFstring(f_desc));
+                show_element(l3, 3, "File description: %s", str);
+                safefree(str);
+
+              } else if (EbmlId(*l3) == KaxFileName::ClassInfos.GlobalId) {
+                KaxFileName &f_name =
+                  *static_cast<KaxFileName *>(l3);
+                f_name.ReadData(es->I_O());
+                str = UTFstring_to_cstr(UTFstring(f_name));
+                show_element(l3, 3, "File name: %s", str);
+                safefree(str);
+
+              } else if (EbmlId(*l3) == KaxMimeType::ClassInfos.GlobalId) {
+                KaxMimeType &mime_type =
+                  *static_cast<KaxMimeType *>(l3);
+                mime_type.ReadData(es->I_O());
+                show_element(l3, 3, "Mime type: %s",
+                             string(mime_type).c_str());
+
+              } else if (EbmlId(*l3) == KaxFileData::ClassInfos.GlobalId) {
+                KaxFileData &f_data =
+                  *static_cast<KaxFileData *>(l3);
+                f_data.ReadData(es->I_O());
+                show_element(l3, 3, "File data, size: %u", f_data.GetSize());
+
+              } else if (!is_ebmlvoid(l3, 3, upper_lvl_el))
+                show_unknown_element(l3, 3);
+
+              if (upper_lvl_el > 0) { // we're coming from l4
+                assert(1 == 0);
+
+              } else if (upper_lvl_el == 0) {
+                l3->SkipData(*es, l3->Generic().Context);
+                delete l3;
+                upper_lvl_el = 0;
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true);
+              } else {
+                delete l3;
+                l3 = l4;
+              }
+
+            } // while (l3 != NULL)
+
+          } else if (!is_ebmlvoid(l2, 2, upper_lvl_el))
+            show_unknown_element(l2, 2);
+
+          if (upper_lvl_el > 0) {    // we're coming from l3
+            upper_lvl_el--;
+            delete l2;
+            l2 = l3;
+            if (upper_lvl_el > 0)
+              break;
+
+          } else if (upper_lvl_el == 0) {
+            l2->SkipData(*es,
+                         l2->Generic().Context);
+            delete l2;
+            upper_lvl_el = 0;
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true);
           } else {
             delete l2;
             l2 = l3;
