@@ -1828,14 +1828,15 @@ static void parse_args(int argc, char **argv) {
     mxexit();
   }
 
-  if (no_linking) {
-    if ((seguid_link_previous != NULL) || (seguid_link_next != NULL))
-      mxerror("'--dont-link' cannot be used together with "
-              "'--link-to-previous' or '--link-to-next'.\n");
-
-    if (split_after <= 0)
-      mxwarn("'--dont-link' is only useful in combination with '--split'.\n");
+  if (no_linking &&
+      ((seguid_link_previous != NULL) || (seguid_link_next != NULL))) {
+    mxwarn("'--link' must be used if '--link-to-previous' or "
+           "'--link-to-next' are used as well. Turning it on.\n");
+    no_linking = false;
   }
+  if ((split_after <= 0) && !no_linking)
+    mxwarn("'--link', '--link-to-previous' and '--link-to-next' are "
+           "only useful in combination with '--split'.\n");
 
   for (i = 0; i < attachments.size(); i++) {
     attachment_sizes_first += attachments[i]->size;
