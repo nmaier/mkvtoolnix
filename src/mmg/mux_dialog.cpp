@@ -57,7 +57,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   wxFile *opt_file;
   uint32_t i;
   wxArrayString *arg_list;
-  wxBoxSizer *siz_all, *siz_buttons, *siz_progress;
+  wxBoxSizer *siz_all, *siz_buttons;
   wxStaticBoxSizer *siz_status, *siz_output;
 
   c = 0;
@@ -67,11 +67,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   st_label = new wxStaticText(this, -1, wxT(""));
   siz_status->Add(st_label, 0, wxGROW | wxALIGN_LEFT | wxALL, 5);
   g_progress = new wxGauge(this, -1, 100, wxDefaultPosition, wxSize(250, 15));
-  siz_progress = new wxBoxSizer(wxHORIZONTAL);
-  siz_progress->Add(0, 0, 1, wxGROW, 0);
-  siz_progress->Add(g_progress, 0, wxALL, 5);
-  siz_progress->Add(0, 0, 1, wxGROW, 0);
-  siz_status->Add(siz_progress, 0, wxGROW);
+  siz_status->Add(g_progress, 1, wxALL | wxGROW, 5);
 
   siz_output =
     new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Output")),
