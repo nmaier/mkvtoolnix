@@ -356,15 +356,6 @@ void avi_reader_c::add_audio_demuxer(int aid) {
   mxverb(2, "7: sizeof(w32WAVE...) %d, sps %d, c %d, bps %d, mf %d\n",
          sizeof(w32WAVEFORMATEX), demuxer->samples_per_second,
          demuxer->channels, demuxer->bits_per_sample, demuxer->maxframes);
-#else
-  wfe = avi->wave_format_ex[aid];
-  AVI_set_audio_track(avi, aid);
-  audio_format = AVI_audio_format(avi);
-  demuxer->samples_per_second = AVI_audio_rate(avi);
-  demuxer->channels = AVI_audio_channels(avi);
-  demuxer->bits_per_sample = AVI_audio_bits(avi);
-#endif
-
   if (wfe->cbSize > 0) {
     ti->private_data = (unsigned char *)(wfe + 1);
     ti->private_size = wfe->cbSize;
@@ -372,6 +363,22 @@ void avi_reader_c::add_audio_demuxer(int aid) {
     ti->private_data = NULL;
     ti->private_size = 0;
   }
+#else
+  wfe = avi->wave_format_ex[aid];
+  AVI_set_audio_track(avi, aid);
+  audio_format = AVI_audio_format(avi);
+  demuxer->samples_per_second = AVI_audio_rate(avi);
+  demuxer->channels = AVI_audio_channels(avi);
+  demuxer->bits_per_sample = AVI_audio_bits(avi);
+
+  if (wfe->cb_size > 0) {
+    ti->private_data = (unsigned char *)(wfe + 1);
+    ti->private_size = wfe->cb_size;
+  } else {
+    ti->private_data = NULL;
+    ti->private_size = 0;
+  }
+#endif
 
   switch(audio_format) {
     case 0x0001: // raw PCM audio

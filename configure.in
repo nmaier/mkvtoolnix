@@ -804,18 +804,18 @@ AM_CONDITIONAL(HAVE_WXWINDOWS, test x"$have_wxwindows" = "xyes")
 dnl
 dnl Option to use the (old) avilib library instead of the AVI classes
 dnl
-AC_ARG_ENABLE(avilib,
-  [  --enable-avilib               Use avilib instead of AVIclasses],
-  have_aviclasses=no, have_aviclasses=yes)
+AC_ARG_ENABLE(aviclasses,
+  [  --enable-aviclasses           Use AVIclasses instead of avilib],
+  have_aviclasses=yes, have_aviclasses=no)
 
   if test "x$have_aviclasses" = "xyes"; then
     AC_DEFINE(HAVE_AVICLASSES, 1,
       [Define if the newer AVIclasses should be used])
+    AVICLASSES_LIBS="-laviclasses"
   fi
+  AM_CONDITIONAL(HAVE_AVICLASSES, test x"$have_aviclasses" = "xyes")
 
   AVILIB_LIBS="-lavi"
-
-  AVICLASSES_LIBS="-laviclasses"
 
 AC_SUBST(AVILIB_LIBS)
 AC_SUBST(AVICLASSES_LIBS)
