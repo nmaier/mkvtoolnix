@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.37 2003/05/09 10:05:26 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.38 2003/05/11 09:42:59 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -57,6 +57,7 @@
 #include "KaxInfoData.h"
 #include "KaxSeekHead.h"
 #include "KaxSegment.h"
+#include "KaxTags.h"
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
 #include "KaxTrackAudio.h"
@@ -721,6 +722,8 @@ void process_file() {
                         "KaxAttachements" :
                         (id == KaxChapters::ClassInfos.GlobalId) ?
                         "KaxChapters" :
+                        (id == KaxTags::ClassInfos.GlobalId) ?
+                        "KaxTags" :
                         "unknown");
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
@@ -1144,6 +1147,12 @@ void process_file() {
                                      0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
+      } else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
+        fprintf(stdout, "(%s) |+ Tags (skipping all subelements!)", NAME);
+        if (verbose > 1)
+          fprintf(stdout, " at %llu", l1->GetElementPosition());
+        fprintf(stdout, "\n");
+
       } else if (!is_ebmlvoid(l1, 1)) {
         fprintf(stdout, "(%s) |+ unknown element, level 1: %s", NAME,
                 typeid(*l1).name());
