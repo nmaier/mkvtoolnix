@@ -1,3 +1,11 @@
+2003-08-28  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Real reader: For RV40 the actual dimensions were also
+        used for the aspect ratio/display dimensions. This has been fixed:
+        the actual dimensions are used for PixelWidth/PixelHeight, the
+        dimensions stored in the RM container are used for the aspect
+        ratio/DisplayWidth & DisplayHeight. Reported by Karl Lillevold.
+
 2003-08-27  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v0.6.4.

@@ -546,8 +546,6 @@ int real_reader_c::read() {
     return 0;
 
   try {
-    if (num_packets == 2962)
-      printf("yugga\n");
     fpos = io->getFilePointer();
     if ((file_size - fpos) < 12)
       return finish();
@@ -920,19 +918,26 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
 
   if (get_rv_dimensions(buffer, size, width, height)) {
     if ((dmx->width != width) || (dmx->height != height)) {
-      dmx->width = width;
-      dmx->height = height;
+      if (!ti->aspect_ratio_given) {
+        disp_width = dmx->width;
+        disp_height = dmx->height;
 
-      if (!ti->aspect_ratio_given)
-        ti->aspect_ratio = (float)width / (float)height;
-
-      if (ti->aspect_ratio > ((float)width / (float)height)) {
-        disp_width = (uint32_t)(height * ti->aspect_ratio);
-        disp_height = height;
+        dmx->width = width;
+        dmx->height = height;
 
       } else {
-        disp_width = width;
-        disp_height = (uint32_t)(width / ti->aspect_ratio);
+        dmx->width = width;
+        dmx->height = height;
+
+        if (ti->aspect_ratio > ((float)width / (float)height)) {
+          disp_width = (uint32_t)(height * ti->aspect_ratio);
+          disp_height = height;
+
+        } else {
+          disp_width = width;
+          disp_height = (uint32_t)(width / ti->aspect_ratio);
+        }
+
       }
 
       track_entry = dmx->packetizer->get_track_entry();
