@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_019attachments2 < Test
-  def initialize
-    @description = "mkvmerge / attachments and splitting / in(*)"
+  def description
+    return "mkvmerge / attachments and splitting / in(*)"
   end
 
   def run

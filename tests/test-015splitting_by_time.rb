@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_015splitting_by_time < Test
-  def initialize
-    @description = "mkvmerge / splitting by time / in(AVI)"
+  def description
+    return "mkvmerge / splitting by time / in(AVI)"
   end
 
   def run

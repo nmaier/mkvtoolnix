@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_013vobsubs < Test
-  def initialize
-    @description = "mkvmerge / subtitles / in(VobSub)"
+  def description
+    return "mkvmerge / subtitles / in(VobSub)"
   end
 
   def run

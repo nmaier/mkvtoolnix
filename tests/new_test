@@ -10,8 +10,8 @@ cat > test-$N.rb <<EOF
 #!/usr/bin/ruby -w
 
 class T_${1} < Test
-  def initialize
-    @description = "INSERT DESCRIPTION"
+  def description
+    return "INSERT DESCRIPTION"
   end
 
   def run

@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_011srt < Test
-  def initialize
-    @description = "mkvmerge / subtitles / in(SRT)"
+  def description
+    return "mkvmerge / subtitles / in(SRT)"
   end
 
   def run

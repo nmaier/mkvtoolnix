@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 
 class T_012ssa < Test
-  def initialize
-    @description = "mkvmerge / subtitles / in(SSA)"
+  def description
+    return "mkvmerge / subtitles / in(SSA)"
   end
 
   def run
