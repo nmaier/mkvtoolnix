@@ -18,6 +18,7 @@
 
 #include "os.h"
 
+#include "dts_common.h"
 #include "smart_pointers.h"
 #include "pr_generic.h"
 #include "M2VParser.h"
@@ -54,9 +55,10 @@ struct mpeg_ps_track_t {
   int ptzr;
 
   char type;                    // 'v' for video, 'a' for audio, 's' for subs
+  int id;
   uint32_t fourcc;
 
-  int64_t first_timecode;
+  int64_t timecode_offset;
 
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
@@ -64,9 +66,10 @@ struct mpeg_ps_track_t {
   int raw_seq_hdr_size;
 
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
+  dts_header_t dts_header;
 
   mpeg_ps_track_t():
-    ptzr(-1), type(0), fourcc(0),
+    ptzr(-1), type(0), fourcc(0), timecode_offset(-1),
     v_version(0), v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
     v_frame_rate(0), v_aspect_ratio(0),
     raw_seq_hdr(NULL), raw_seq_hdr_size(0),
@@ -84,8 +87,9 @@ private:
   mm_io_c *mm_io;
   int64_t bytes_processed, size, duration;
 
-  int id2idx[256];
+  int id2idx[512];
   int version;
+  bool file_done;
 
   vector<mpeg_ps_track_ptr> tracks;
 
@@ -102,7 +106,7 @@ public:
   virtual void found_new_stream(int id);
 
   virtual bool read_timestamp(int c, int64_t &timestamp);
-  virtual bool parse_packet(int id, int64_t &timestamp, int &size);
+  virtual bool parse_packet(int id, int64_t &timestamp, int &size, int &aid);
   virtual bool find_next_packet(int &id);
   virtual bool find_next_packet_for_id(int id);
 
