@@ -1370,9 +1370,10 @@ bool process_file(const char *file_name) {
                 KaxBlock &block = *static_cast<KaxBlock *>(l3);
                 block.SetParent(*cluster);
                 show_element(l3, 3, "Block (track number %u, %d frame(s), "
-                             "timecode %.3fs)", block.TrackNum(),
-                             block.NumberFrames(),
-                             (float)block.GlobalTimecode() / 1000000000.0);
+                             "timecode %.3fs = " FMT_TIMECODE ")",
+                             block.TrackNum(), block.NumberFrames(),
+                             (float)block.GlobalTimecode() / 1000000000.0,
+                             ARG_TIMECODE_NS(block.GlobalTimecode()));
                 lf_timecode = block.GlobalTimecode() / 1000000;
                 lf_tnum = block.TrackNum();
                 for (i = 0; i < (int)block.NumberFrames(); i++) {
