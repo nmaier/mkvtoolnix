@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.10 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: queue.cpp,v 1.11 2003/04/17 12:29:08 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -61,6 +61,8 @@ int64_t q_c::add_packet(unsigned char  *data, int length,
   
   if (data == NULL)
     return 0;
+  if (timestamp < 0)
+    die("timecode < 0");
   qpage = (q_page_t *)malloc(sizeof(q_page_t));
   if (qpage == NULL)
     die("malloc");
