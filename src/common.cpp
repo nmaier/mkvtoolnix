@@ -232,15 +232,15 @@ int byte_cursor_c::get_len() {
 void die(const char *fmt, ...) {
   va_list ap;
 
-  mxprint(stderr, "'die' called: ");
+  mxprint(stdout, "'die' called: ");
   va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
+  vfprintf(stdout, fmt, ap);
   va_end(ap);
-  mxprint(stderr, "\n");
+  mxprint(stdout, "\n");
 #ifdef DEBUG
   debug_facility.dump_info();
 #endif
-  exit(1);
+  exit(2);
 }
 
 void _trace(const char *func, const char *file, int line) {
@@ -1098,10 +1098,10 @@ void debug_c::dump_info() {
   debug_data_t *entry;
   uint64_t diff_calls, diff_time;
 
-  mxprint(stderr, "\nDBG> dumping time info:\n");
+  mxprint(stdout, "\nDBG> dumping time info:\n");
   for (i = 0; i < entries.size(); i++) {
     entry = entries[i];
-    mxprint(stderr, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
+    mxprint(stdout, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
             "time/call: %.3fms", entry->label, entry->number_of_calls,
             entry->elapsed_time / 1000000.0,
             entry->elapsed_time / (float)entry->number_of_calls / 1000.0);
@@ -1110,17 +1110,17 @@ void debug_c::dump_info() {
     if ((entry->last_elapsed_time != 0) &&
         (entry->last_number_of_calls != 0) &&
         (diff_calls > 0)) {
-      mxprint(stderr, ", since the last call: # calls: %llu, elapsed time: "
+      mxprint(stdout, ", since the last call: # calls: %llu, elapsed time: "
               "%.3fs, time/call: %.3fms", diff_calls, diff_time / 1000000.0,
               diff_time / (float)diff_calls / 1000.0);
     }
-    mxprint(stderr, "\n");
+    mxprint(stdout, "\n");
     entry->last_elapsed_time = entry->elapsed_time;
     entry->last_number_of_calls = entry->number_of_calls;
   }
 #endif // defined SYS_UNIX
 
-  mxprint(stderr, "DBG> dumping packetzer info:\n");
+  mxprint(stdout, "DBG> dumping packetzer info:\n");
   for (i = 0; i < packetizers.size(); i++)
     packetizers[i]->dump_debug_info();
 }
@@ -1224,10 +1224,9 @@ static void mxmsg(int level, const char *fmt, va_list &ap) {
   stream = stdout;
   prefix = NULL;
 
-  if (level == MXMSG_ERROR) {
+  if (level == MXMSG_ERROR)
     prefix = "Error: ";
-    stream = stderr;
-  } else if (level == MXMSG_WARNING)
+  else if (level == MXMSG_WARNING)
     prefix = "Warning: ";
   else if (level == MXMSG_DEBUG)
     prefix = "DBG> ";

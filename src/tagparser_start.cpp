@@ -782,23 +782,23 @@ void tperror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
   string new_fmt;
 
-  mxprint(stderr, "Tag parsing error in '%s', line %d, column %d: ",
+  mxprint(stdout, "Tag parsing error in '%s', line %d, column %d: ",
           pdata->file_name, XML_GetCurrentLineNumber(pdata->parser),
           XML_GetCurrentColumnNumber(pdata->parser));
   fix_format(fmt, new_fmt);
   va_start(ap, fmt);
-  vfprintf(stderr, new_fmt.c_str(), ap);
+  vfprintf(stdout, new_fmt.c_str(), ap);
   va_end(ap);
-  mxprint(stderr, "\n");
+  mxprint(stdout, "\n");
 
 #ifdef DEBUG
   int i;
-  mxprint(stderr, "Parent names:\n");
+  mxprint(stdout, "Parent names:\n");
   for (i = 0; i < pdata->parent_names->size(); i++)
-    mxprint(stderr, "  %s\n", (*pdata->parent_names)[i].c_str());
-  mxprint(stderr, "Parent types:\n");
+    mxprint(stdout, "  %s\n", (*pdata->parent_names)[i].c_str());
+  mxprint(stdout, "Parent types:\n");
   for (i = 0; i < pdata->parents->size(); i++)
-    mxprint(stderr, "  %d\n", (*pdata->parents)[i]);
+    mxprint(stdout, "  %d\n", (*pdata->parents)[i]);
 #endif
 
   mxexit(2);

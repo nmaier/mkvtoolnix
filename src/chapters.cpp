@@ -64,12 +64,12 @@ static void chapter_error(const char *fmt, ...) {
   va_list ap;
   string new_fmt;
 
-  mxprint(stderr, "Error parsing chapters: ");
+  mxprint(stdout, "Error parsing chapters: ");
   va_start(ap, fmt);
   fix_format(fmt, new_fmt);
-  vfprintf(stderr, new_fmt.c_str(), ap);
+  vfprintf(stdout, new_fmt.c_str(), ap);
   va_end(ap);
-  mxprint(stderr, "\n");
+  mxprint(stdout, "\n");
   mxexit(2);
 }
 

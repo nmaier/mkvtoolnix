@@ -1863,7 +1863,7 @@ void create_next_output_file(bool last_file, bool first_file) {
   try {
     out = new mm_io_c(this_outfile.c_str(), MODE_CREATE);
   } catch (exception &ex) {
-    mxerror("Couldn't open output file %s (%s).\n", this_outfile.c_str(),
+    mxerror("Couldn't open output file '%s' (%s).\n", this_outfile.c_str(),
             strerror(errno));
   }
   if (verbose)
