@@ -1,3 +1,10 @@
+2004-10-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Timecodes for Vorbis were wrong on rare
+	occasions (when reading laced Vorbis from a Matroska file and
+	changing the lacing, e.g. when splitting for the second and all
+	following files).
+
 2004-10-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge/mkvinfo/mkvextract: bug fix: The chapter and tag
