@@ -872,6 +872,7 @@ tab_input::add_file(const wxString &file_name) {
     clb_tracks->Check(clb_tracks->GetCount() - 1, true);
   }
 
+  st_tracks->Enable(true);
   clb_tracks->Enable(true);
 }
 
@@ -937,6 +938,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   b_track_down->Enable(false);
   no_track_mode();
   if (tracks.size() == 0) {
+    st_tracks->Enable(false);
     clb_tracks->Enable(false);
     selected_track = -1;
   }
@@ -1558,6 +1560,7 @@ tab_input::load(wxConfigBase *cfg) {
       clb_tracks->Check(i, true);
     }
   }
+  st_tracks->Enable(tracks.size() > 0);
   clb_tracks->Enable(tracks.size() > 0);
 }
 
