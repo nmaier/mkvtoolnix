@@ -385,6 +385,7 @@ int cluster_helper_c::render() {
       if (def_duration != block_duration)
         last_block_group->SetBlockDuration(block_duration * 1000000);
 
+      block_duration = 0;
       durations.clear();
     }
 
