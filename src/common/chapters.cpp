@@ -357,6 +357,13 @@ parse_chapters(const string &file_name,
     result = parse_chapters(in, min_tc, max_tc, offset, language, charset,
                             exception_on_error, is_simple_format, tags);
     delete in;
+  } catch (error_c &e) {
+    if (in != NULL)
+      delete in;
+    if (exception_on_error)
+      throw;
+    mxerror("Could not parse the chapters in '%s': %s\n", file_name.c_str(),
+            e.get_error());
   } catch (...) {
     if (in != NULL)
       delete in;
