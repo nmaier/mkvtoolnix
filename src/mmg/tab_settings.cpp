@@ -27,9 +27,10 @@
 #include "wx/statline.h"
 #include "wx/config.h"
 
-#include "mmg.h"
 #include "common.h"
 #include "matroskalogo_big.xpm"
+#include "mmg.h"
+#include "tab_settings.h"
 
 tab_settings::tab_settings(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),

@@ -27,8 +27,9 @@
 #include "wx/statline.h"
 #include "wx/config.h"
 
-#include "mmg.h"
 #include "common.h"
+#include "mmg.h"
+#include "tab_global.h"
 
 tab_global::tab_global(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),

@@ -29,14 +29,16 @@
 
 #include <ebml/EbmlStream.h>
 
-#include "mmg.h"
 #include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
 #include "error.h"
 #include "extern_data.h"
 #include "iso639.h"
+#include "mmg.h"
+#include "mmg_dialog.h"
 #include "kax_analyzer.h"
+#include "tab_chapters.h"
 
 using namespace std;
 using namespace libebml;

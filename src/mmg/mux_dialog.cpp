@@ -42,8 +42,11 @@
 #include <io.h>
 #endif
 
-#include "mmg.h"
 #include "common.h"
+#include "mm_io.h"
+#include "mmg.h"
+#include "mmg_dialog.h"
+#include "mux_dialog.h"
 
 mux_dialog::mux_dialog(wxWindow *parent):
   wxDialog(parent, -1, "mkvmerge is running", wxDefaultPosition,

@@ -33,12 +33,20 @@
 #include "wx/statusbr.h"
 #include "wx/statline.h"
 
-#include "mmg.h"
 #include "chapters.h"
 #include "common.h"
 #ifdef SYS_UNIX
 #include "matroskalogo_big.xpm"
 #endif
+#include "mmg.h"
+#include "mmg_dialog.h"
+#include "mux_dialog.h"
+#include "tab_advanced.h"
+#include "tab_attachments.h"
+#include "tab_chapters.h"
+#include "tab_input.h"
+#include "tab_global.h"
+#include "tab_settings.h"
 
 mmg_app *app;
 mmg_dialog *mdlg;

@@ -26,9 +26,10 @@
 #include "wx/listctrl.h"
 #include "wx/statline.h"
 
-#include "mmg.h"
 #include "common.h"
 #include "extern_data.h"
+#include "mmg.h"
+#include "tab_attachments.h"
 
 vector<mmg_attachment_t> attachments;
 
