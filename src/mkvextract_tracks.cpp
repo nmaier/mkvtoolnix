@@ -986,7 +986,6 @@ close_files() {
         case TYPETTA: {
           mm_io_c *temp_file;
           tta_file_header_t tta_header;
-          vector<int64_t>::iterator frame_size;
           unsigned char *buffer;
           uint32_t crc;
           int nread;

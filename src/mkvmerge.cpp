@@ -1182,7 +1182,7 @@ set_timecode_scale() {
         max_ns_per_cluster = max_ns_with_timecode_scale;
 
       mxverb(2, "mkvmerge: using sample precision timestamps. highest sample "
-             "rate: %lld, new timecode_scale: %lf, "
+             "rate: %lld, new timecode_scale: %f, "
              "max_ns_with_timecode_scale: %lld, max_ns_per_cluster: %lld\n",
              highest_sample_rate, timecode_scale, max_ns_with_timecode_scale,
              max_ns_per_cluster);
