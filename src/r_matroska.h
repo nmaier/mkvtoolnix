@@ -32,7 +32,6 @@
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
-#include <ebml/StdIOCallback.h>
 
 using namespace LIBMATROSKA_NAMESPACE;
 
@@ -85,7 +84,7 @@ private:
   int64_t tc_scale;
   uint32_t cluster_tc;
 
-  StdIOCallback *in;
+  mm_io_c *in;
 
   EbmlStream *es;
   EbmlElement *saved_l1, *saved_l2, *segment;
