@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.2 2003/02/19 09:31:24 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.3 2003/02/25 14:24:43 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -57,6 +57,7 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
   range.end *= fps;
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
+  avi_compat_mode = 1;
   set_private_data(pr_data, pd_size);
   set_header();
 //  add_index(serialno);
@@ -64,7 +65,7 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
 
 void video_packetizer_c::set_header() {
   using namespace LIBMATROSKA_NAMESPACE;
-  int set_codec_private;
+  int set_codec_private = 0;
   char *codecstr;
   
   if (kax_last_entry == NULL)

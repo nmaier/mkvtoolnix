@@ -1041,9 +1041,12 @@ int AVI_close(avi_t *AVI)
    //if(AVI->audio_index) free(AVI->audio_index);
    if (AVI->bitmap_info_header)
      free(AVI->bitmap_info_header);
-   for (i = 0; i < AVI_MAX_TRACKS; i++)
+   for (i = 0; i < AVI->anum; i++) {
      if (AVI->wave_format_ex[i])
        free(AVI->wave_format_ex[i]);
+     if (AVI->track[i].audio_chunks)
+       free(AVI->track[i].audio_index);
+   }
    free(AVI);
 
    return ret;
