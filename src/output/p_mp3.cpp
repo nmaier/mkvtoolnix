@@ -33,13 +33,11 @@ using namespace libmatroska;
 
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, int nlayer,
-                                   track_info_t *nti) throw (error_c):
-  generic_packetizer_c(nreader, nti),
-  byte_buffer(128 * 1024) {
+                                   int nchannels, track_info_t *nti)
+  throw (error_c):
+  generic_packetizer_c(nreader, nti), byte_buffer(128 * 1024) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
-  layer = nlayer;
   bytes_output = 0;
   packetno = 0;
   spf = 1152;
@@ -59,6 +57,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   int pos, size;
   unsigned char *buf;
   double pims;
+  string codec_id;
 
   if (byte_buffer.get_size() == 0)
     return 0;
@@ -81,6 +80,10 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 
   if (packetno == 0) {
     spf = mp3header->samples_per_channel;
+    codec_id = MKV_A_MP3;
+    codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
+    *(static_cast<EbmlString *>
+      (&GetChild<KaxCodecID>(*track_entry))) = codec_id;
     if ((spf != 1152) && use_durations) {
       set_track_default_duration_ns((int64_t)(1000000000.0 * spf *
                                               ti->async.linear /
@@ -88,8 +91,8 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
       *(static_cast<EbmlUInteger *>
         (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
         (int64_t)(1000000000.0 * spf * ti->async.linear / samples_per_sec);
-      rerender_headers(out);
     }
+    rerender_headers(out);
   }
 
   if ((pos + mp3header->framesize) > byte_buffer.get_size())
@@ -141,11 +144,7 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 }
 
 void mp3_packetizer_c::set_headers() {
-  string codec_id;
-
-  codec_id = MKV_A_MP3;
-  codec_id[codec_id.length() - 1] = (char)(layer + '0');
-  set_codec_id(codec_id.c_str());
+  set_codec_id(MKV_A_MP3);
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 

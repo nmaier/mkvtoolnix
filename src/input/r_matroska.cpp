@@ -1269,12 +1269,9 @@ void kax_reader_c::create_packetizers() {
               mxinfo("+-> Using the PCM output module for track ID %u.\n",
                      t->tnum);
           } else if (t->a_formattag == 0x0055) {
-            int layer;
-
-            layer = t->codec_id[strlen(t->codec_id) - 1] - '0';
             t->packetizer = new mp3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, layer, &nti);
+                                                 t->a_channels, &nti);
             if (verbose)
               mxinfo("+-> Using the MPEG audio output module for track ID %u."
                      "\n", t->tnum);

@@ -1,5 +1,9 @@
 2003-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: When reading MP3 audio tracks from a Matroska
+	file with the A_MS/ACM CodecID (MS compatibility mode) the layer
+	was not identified correctly.
+
 	* mkvmerge: Improved the file type detection for AC3 and AAC files
 	a bit.
 

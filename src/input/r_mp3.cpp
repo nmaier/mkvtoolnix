@@ -98,8 +98,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
     mp3packetizer = new mp3_packetizer_c(this, mp3header.sampling_frequency,
-                                         mp3header.channels, mp3header.layer,
-                                         ti);
+                                         mp3header.channels, ti);
     if (verbose)
       mxinfo("Using MP2/MP3 demultiplexer for %s.\n+-> Using "
              "MPEG audio output module for audio stream.\n", ti->fname);

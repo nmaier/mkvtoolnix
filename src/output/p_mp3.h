@@ -32,12 +32,12 @@ class mp3_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, spf, layer;
+  int channels, spf;
   byte_buffer_c byte_buffer;
 
 public:
   mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, int nlayer, track_info_t *nti)
+                   int nchannels, track_info_t *nti)
     throw (error_c);
   virtual ~mp3_packetizer_c();
 

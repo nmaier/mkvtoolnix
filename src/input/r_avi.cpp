@@ -398,7 +398,7 @@ void avi_reader_c::add_audio_demuxer(int aid) {
                aid + 1);
       demuxer->packetizer = new mp3_packetizer_c(this,
                                                  demuxer->samples_per_second,
-                                                 demuxer->channels, 3, ti);
+                                                 demuxer->channels, ti);
       break;
     case 0x2000: // AC3
       if (verbose)
