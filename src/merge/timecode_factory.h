@@ -33,6 +33,13 @@ public:
   }
 };
 
+class timecode_duration_c {
+public:
+  double fps;
+  int64_t duration;
+  bool is_gap;
+};
+
 class timecode_factory_c {
 protected:
   string file_name, source_name;
@@ -127,28 +134,27 @@ public:
 
 class timecode_factory_v3_c: public timecode_factory_c {
 protected:
-  vector<timecode_range_c> ranges;
-  uint32_t current_range;
-  int64_t frameno;
+  vector<timecode_duration_c> durations;
+  size_t current_duration;
+  int64_t current_timecode;
+  int64_t current_offset;
   double default_fps;
 
 public:
   timecode_factory_v3_c(const string &_file_name, const string &_source_name,
                         int64_t _tid):
     timecode_factory_c(_file_name, _source_name, _tid),
-    current_range(0),
-    frameno(0),
+    current_duration(0),
+    current_timecode(0),
+    current_offset(0),
     default_fps(0.0) {
   }
-  void parse(mm_io_c &in);
-  bool get_next(int64_t &timecode, int64_t &duration,
+  virtual void parse(mm_io_c &in);
+  virtual bool get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false);
-  bool ContainGap() {
+  virtual bool contains_gap() {
     return true;
   }
-
-protected:
-  virtual int64_t get_at(int64_t frame);
 };
 
 #endif // __TIMECODE_FACTORY_H

@@ -139,7 +139,7 @@ typedef struct {
   int length, ref_priority;
   int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
   int64_t unmodified_assigned_timecode, unmodified_duration;
-  bool duration_mandatory, superseeded;
+  bool duration_mandatory, superseeded, gap_following;
   generic_packetizer_c *source;
 } packet_t;
 

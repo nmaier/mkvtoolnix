@@ -273,12 +273,12 @@ timecode_factory_v2_c::get_next(int64_t &timecode,
 void
 timecode_factory_v3_c::parse(mm_io_c &in) {
   string line;
-  timecode_range_c t;
+  timecode_duration_c t;
   vector<string> fields;
-  vector<timecode_range_c>::iterator iit;
-  vector<timecode_range_c>::const_iterator pit;
-  uint32_t i, line_no;
-  bool done;
+  vector<timecode_duration_c>::iterator iit;
+  vector<timecode_duration_c>::const_iterator pit;
+  uint32_t line_no;
+  double dur;
 
   line_no = 1;
   do {
@@ -310,100 +310,95 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
     if ((line.length() == 0) || (line[0] == '#'))
       continue;
 
-    if (mxsscanf(line, "%lld,%lld,%lf", &t.start_frame, &t.end_frame, &t.fps)
-        != 3) {
-      mxwarn(_("Line %d of the timecode file '%s' could not be parsed.\n"),
-             line_no, file_name.c_str());
-      continue;
+    if (starts_with_case(line, "gap,")) {
+      line.erase(0, 4);
+      strip(line);
+      t.is_gap = true;
+      t.fps = default_fps;
+      if (!parse_double(line.c_str(), dur))
+        mxerror(_("The timecode file '%s' does not contain a valid 'Gap' line "
+                  "with the duration of the gap.\n"),
+                file_name.c_str());
+      t.duration = (int64_t)(1000000000.0 * dur);
+
+    } else {
+      int res;
+
+      t.is_gap = false;
+      res = mxsscanf(line, "%lf,%lf", &dur, &t.fps);
+      if (res == 1) {
+        t.fps = default_fps;
+      } else if (res != 2) {
+        mxwarn(_("Line %d of the timecode file '%s' could not be parsed.\n"),
+               line_no, file_name.c_str());
+        continue;
+      }
+      t.duration = (int64_t)(1000000000.0 * dur);
     }
 
-    if ((t.fps <= 0) || (t.start_frame < 0) || (t.end_frame < 0) ||
-        (t.end_frame < t.start_frame)) {
+    if ((t.fps <= 0) || (t.duration <= 0)) {
       mxwarn(_("Line %d of the timecode file '%s' contains inconsistent data "
-               "(e.g. the start frame number is bigger than the end frame "
-               "number, or some values are smaller than zero).\n"),
+               "(e.g. the duration or the FPS are smaller than zero).\n"),
              line_no, file_name.c_str());
       continue;
     }
 
-    ranges.push_back(t);
+    durations.push_back(t);
   }
 
   mxverb(3, "ext_timecodes: Version 3, default fps %f, %u entries.\n",
-         default_fps, ranges.size());
+         default_fps, durations.size());
 
-  if (ranges.size() == 0) {
+  if (durations.size() == 0) {
     mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),
            file_name.c_str());
-    t.start_frame = 0;
-  } else {
-    sort(ranges.begin(), ranges.end());
-    do {
-      done = true;
-      iit = ranges.begin();
-      for (i = 0; i < (ranges.size() - 1); i++) {
-        iit++;
-        if (ranges[i].end_frame <
-            (ranges[i + 1].start_frame - 1)) {
-          t.start_frame = ranges[i].end_frame + 1;
-          t.end_frame = ranges[i + 1].start_frame - 1;
-          t.fps = default_fps;
-          ranges.insert(iit, t);
-          done = false;
-          break;
-        }
-      }
-    } while (!done);
-    if (ranges[0].start_frame != 0) {
-      t.start_frame = 0;
-      t.end_frame = ranges[0].start_frame - 1;
-      t.fps = default_fps;
-      ranges.insert(ranges.begin(), t);
-    }
-    t.start_frame = ranges[ranges.size() - 1].end_frame + 1;
   }
-  t.end_frame = 0xfffffffffffffffll;
+  t.duration = 0xfffffffffffffffll;
+  t.is_gap = false;
   t.fps = default_fps;
-  ranges.push_back(t);
-
-  ranges[0].base_timecode = 0.0;
-  pit = ranges.begin();
-  for (iit = ranges.begin() + 1; iit < ranges.end(); iit++, pit++)
-    iit->base_timecode = pit->base_timecode +
-      ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000000000.0 /
-      pit->fps;
-
-  for (iit = ranges.begin(); iit < ranges.end(); iit++)
-    mxverb(3, "ranges: entry %lld -> %lld at %f with %f\n",
-           iit->start_frame, iit->end_frame, iit->fps, iit->base_timecode);
+  durations.push_back(t);
+  for (iit = durations.begin(); iit < durations.end(); iit++)
+    mxverb(4, "durations:%s entry for %lld with %f FPS\n",
+           iit->is_gap ? " gap" : "", iit->duration, iit->fps);
 }
 
 bool 
 timecode_factory_v3_c::get_next(int64_t &timecode,
                                 int64_t &duration,
                                 bool peek_only) {
-  timecode = get_at(frameno);
-  duration = get_at(frameno + 1) - timecode;
-  if (!peek_only) {
-    frameno++;
-    if ((frameno > ranges[current_range].end_frame) &&
-        (current_range < (ranges.size() - 1)))
-      current_range++;
+  bool result = (current_timecode == 0);
+
+  timecode = current_offset + current_timecode;
+  if (durations[current_duration].is_gap) {
+    size_t duration_index = current_duration;
+    duration = 0;
+    while (durations[duration_index].is_gap) {
+      duration += durations[duration_index].duration;
+      duration_index++;
+    }
+    if (!peek_only) {
+      current_offset += duration;
+      current_timecode = 0;
+      current_duration = duration_index;
+    }
+    result = true;
+
+  } else {
+    // If default_fps is 0 then the duration is unchanged, usefull for audio.
+    if (durations[current_duration].fps) {
+      duration = (int64_t)(1000000000.0 / durations[current_duration].fps);
+    }
+    if (!peek_only) {
+      current_timecode += duration;
+      if (current_timecode >= durations[current_duration].duration) {
+        current_offset += durations[current_duration].duration;
+        current_timecode = 0;
+        current_duration++;
+      }
+    }
   }
 
-  mxverb(4, "ext_timecodes v3: tc %lld dur %lld for %lld\n", timecode,
-         duration, frameno - 1);
-  return true;
+  mxverb(3, "ext_timecodes v3: tc %lld dur %lld\n", timecode, duration);
+
+  return result;
 }
-
-int64_t
-timecode_factory_v3_c::get_at(int64_t frame) {
-  timecode_range_c *t;
-
-  t = &ranges[current_range];
-  if ((frame > t->end_frame) && (current_range < (ranges.size() - 1)))
-    t = &ranges[current_range + 1];
-  return (int64_t)(t->base_timecode + 1000000000.0 *
-                   (frame - t->start_frame) / t->fps);
-}
-

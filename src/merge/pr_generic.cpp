@@ -865,7 +865,8 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
   safety_last_duration = pack->duration;
 
   factory_timecode = pack->timecode;
-  timecode_factory->get_next(factory_timecode, pack->duration);
+  pack->gap_following =
+    timecode_factory->get_next(factory_timecode, pack->duration);
   pack->assigned_timecode = factory_timecode + ti->packet_delay;
 
   if (max_timecode_seen < (pack->assigned_timecode + pack->duration))

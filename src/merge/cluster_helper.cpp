@@ -122,8 +122,10 @@ cluster_helper_c::add_packet(packet_t *packet) {
 
   if (clusters.size() == 0)
     add_cluster(new kax_cluster_c());
-  else if (((packet->assigned_timecode - timecode) > max_ns_per_cluster) &&
-           all_references_resolved(clusters.back())) {
+  else if ((packet->gap_following && (clusters.back()->packets.size() != 0))
+           || 
+           (((packet->assigned_timecode - timecode) > max_ns_per_cluster) &&
+            all_references_resolved(clusters.back()))) {
     render();
     add_cluster(new kax_cluster_c());
   }
