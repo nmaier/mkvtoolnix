@@ -132,7 +132,7 @@ dnl
 dnl Debugging and profiling options
 dnl
 AC_ARG_ENABLE([debug],
-  [  --enable-debug                compile with debug information])
+  [  --enable-debug          compile with debug information (no)])
   if test x"$enable_debug" = x"yes"; then
     dnl debug information
     DEBUG_CFLAGS="-g -DDEBUG"
@@ -142,7 +142,7 @@ AC_ARG_ENABLE([debug],
     OPTIMIZATION_CFLAGS="-O3"
   fi
 AC_ARG_ENABLE([profiling],
-    [  --enable-profiling            compile with profiling information])
+    [  --enable-profiling      compile with profiling information (no)])
   if test x"$enable_profiling" = x"yes"; then
     dnl profiling information
     PROFILING_CFLAGS="-pg"
@@ -690,45 +690,51 @@ AC_SUBST(BZ2_LIBS)
 dnl
 dnl Check for wxWindows
 dnl
+  AC_ARG_ENABLE([gui],
+    [  --enable-gui            compile mkvinfo's GUI and mmg (yes)])
   AC_MSG_CHECKING(for wxWindows)
-  if wx-config --cxxflags > /dev/null 2>&1; then
-    wxwversion=`wx-config --version`
-    wxw_ver_req_major=2
-    wxw_ver_req_minor=4
-    wxw_ver_req_micro=0
-    set - `echo $wxwversion | sed 's/\./\ /g'`
-    if test "x$1" = "x" -o $1 -lt ${wxw_ver_req_major} ; then
-      wxwver_ok=0
-    elif test $1 -gt ${wxw_ver_req_major} ; then
-      wxwver_ok=1
-    else
-      if test "x$2" = "x" -o $2 -lt ${wxw_ver_req_minor} ; then
+  if test x"$enable_gui" = x"yes" -o x"$enable_gui" = "x"; then
+    if wx-config --cxxflags > /dev/null 2>&1; then
+      wxwversion=`wx-config --version`
+      wxw_ver_req_major=2
+      wxw_ver_req_minor=4
+      wxw_ver_req_micro=0
+      set - `echo $wxwversion | sed 's/\./\ /g'`
+      if test "x$1" = "x" -o $1 -lt ${wxw_ver_req_major} ; then
         wxwver_ok=0
-      elif test $2 -gt ${wxw_ver_req_minor} ; then
+      elif test $1 -gt ${wxw_ver_req_major} ; then
         wxwver_ok=1
       else
-        if test "x$3" = "x" -o $3 -lt ${wxw_ver_req_micro} ; then
+        if test "x$2" = "x" -o $2 -lt ${wxw_ver_req_minor} ; then
           wxwver_ok=0
-        else
+        elif test $2 -gt ${wxw_ver_req_minor} ; then
           wxwver_ok=1
+        else
+          if test "x$3" = "x" -o $3 -lt ${wxw_ver_req_micro} ; then
+            wxwver_ok=0
+          else
+            wxwver_ok=1
+          fi
         fi
       fi
-    fi
 
-    if test "$wxwver_ok" = "1" ; then
-      WXWINDOWS_CFLAGS=`wx-config --cxxflags`
-      WXWINDOWS_LDFLAGS=`wx-config --ldflags`
-      WXWINDOWS_LIBS=`wx-config --libs`
-      AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
-      MMG_SUBDIRS=mmg
-      AC_MSG_RESULT($wxwversion ok)
-      have_wxwindows=yes
-      USE_WXWINDOWS=yes
+      if test "$wxwver_ok" = "1" ; then
+        WXWINDOWS_CFLAGS=`wx-config --cxxflags`
+        WXWINDOWS_LDFLAGS=`wx-config --ldflags`
+        WXWINDOWS_LIBS=`wx-config --libs`
+        AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
+        MMG_SUBDIRS=mmg
+        AC_MSG_RESULT($wxwversion ok)
+        have_wxwindows=yes
+        USE_WXWINDOWS=yes
+      else
+        AC_MSG_RESULT(no: version $wxwversion is too old)
+      fi
     else
-      AC_MSG_RESULT(no: version $wxwversion is too old)
+      AC_MSG_RESULT(no: wx-config was not found)
     fi
   else
-    AC_MSG_RESULT(no: wx-config was not found)
+    AC_MSG_RESULT(no: disabled by user request)
   fi
 
 AC_SUBST(WXWINDOWS_CFLAGS)
