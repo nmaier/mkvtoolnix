@@ -86,7 +86,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *_master,
   if ((NULL == priv) || (2 > priv->GetSize()))
     mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
             "\" element and cannot be extracted.\n", tid, codec_id.c_str());
-  memcpy(version, &binary(*priv), 2);
+  memcpy(version, priv->GetBuffer(), 2);
 
   channels = kt_get_a_channels(track);
 

@@ -13,6 +13,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include <cctype>
+
 #include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlString.h>

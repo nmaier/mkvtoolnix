@@ -49,7 +49,8 @@ xtr_rmff_c::create_file(xtr_base_c *_master,
     mxerror("Memory allocation error: %d (%s).\n",
             rmff_last_error, rmff_last_error_msg);
 
-  rmff_set_type_specific_data(rmtrack, (const unsigned char *)&binary(*priv),
+  rmff_set_type_specific_data(rmtrack,
+                              (const unsigned char *)priv->GetBuffer(),
                               priv->GetSize());
 
   if ('V' == codec_id[0])

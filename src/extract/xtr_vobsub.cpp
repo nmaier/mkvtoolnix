@@ -77,10 +77,10 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
 
   private_size = priv->GetSize();
 
-  new_priv = const_cast<unsigned char *>(&binary(*priv));
+  new_priv = const_cast<unsigned char *>(priv->GetBuffer());
   if (!content_decoder.reverse(new_priv, private_size,
                                CONTENT_ENCODING_SCOPE_CODECPRIVATE))
-    private_data.set(safememdup(&binary(*priv), private_size));
+    private_data.set(safememdup(priv->GetBuffer(), private_size));
   else
     private_data.set(new_priv);
 
@@ -106,7 +106,7 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
               master->tid);
 
     if ((private_size != vmaster->private_size) ||
-        memcmp(&binary(*priv), vmaster->private_data.get(), private_size))
+        memcmp(priv->GetBuffer(), vmaster->private_data.get(), private_size))
       mxerror("Two VobSub tracks can only be extracted into the same file "
               "if their CodecPrivate data matches. This is not the case "
               "for the tracks %lld and %lld.\n", tid, master->tid);

@@ -18,6 +18,8 @@
 
 #include "os.h"
 
+#include <memory>
+
 #include <matroska/KaxTracks.h>
 
 #include "common.h"

@@ -361,7 +361,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
       if (cc_settings != NULL) {
         enc.comp_settings = (unsigned char *)
-          safememdup(&binary(*cc_settings), cc_settings->GetSize());
+          safememdup(cc_settings->GetBuffer(), cc_settings->GetSize());
         enc.comp_settings_len = cc_settings->GetSize();
       }
     }
@@ -382,7 +382,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
       if (ce_ekeyid != NULL) {
         enc.enc_keyid = (unsigned char *)
-          safememdup(&binary(*ce_ekeyid), ce_ekeyid->GetSize());
+          safememdup(ce_ekeyid->GetBuffer(), ce_ekeyid->GetSize());
         enc.enc_keyid_len = ce_ekeyid->GetSize();
       }
 
@@ -397,14 +397,14 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
       if (ce_skeyid != NULL) {
         enc.sig_keyid = (unsigned char *)
-          safememdup(&binary(*ce_skeyid), ce_skeyid->GetSize());
+          safememdup(ce_skeyid->GetBuffer(), ce_skeyid->GetSize());
         enc.sig_keyid_len = ce_skeyid->GetSize();
       }
 
       ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
       if (ce_signature != NULL) {
         enc.signature = (unsigned char *)
-          safememdup(&binary(*ce_signature), ce_signature->GetSize());
+          safememdup(ce_signature->GetBuffer(), ce_signature->GetSize());
         enc.signature_len = ce_signature->GetSize();
       }
 

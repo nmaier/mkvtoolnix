@@ -39,7 +39,7 @@ xtr_flac_c::create_file(xtr_base_c *_master,
 
   xtr_base_c::create_file(_master, track);
 
-  out->write(&binary(*priv), priv->GetSize());
+  out->write(priv->GetBuffer(), priv->GetSize());
 }
 
 // ------------------------------------------------------------------------
@@ -186,7 +186,7 @@ xtr_oggflac_c::create_file(xtr_base_c *_master,
   flush_pages();
   op.b_o_s = 0;
   op.packetno = 1;
-  ptr = &binary(*priv);
+  ptr = priv->GetBuffer();
   if ((priv->GetSize() >= 4) && (ptr[0] == 'f') &&
       (ptr[1] == 'L') && (ptr[2] == 'a') && (ptr[3] == 'C')) {
     ptr += 4;
@@ -221,7 +221,7 @@ xtr_oggvorbis_c::create_file(xtr_base_c *_master,
     mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
             "\" element and cannot be extracted.\n", tid, codec_id.c_str());
 
-  c = (const unsigned char *)&binary(*priv);
+  c = (const unsigned char *)priv->GetBuffer();
   if ((priv->GetSize() == 0) || (c[0] != 2))
     mxerror("Track %lld with the CodecID '%s' does not contain valid headers."
             "\n", tid, codec_id.c_str());

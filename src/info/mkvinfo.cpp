@@ -399,7 +399,7 @@ format_binary(EbmlBinary &bin,
   else
     len = bin.GetSize();
   char *buffer = new char[40 + len * 5 + 1 + 3 + 24];
-  const unsigned char *b = (const unsigned char *)&binary(bin);
+  const binary *b = bin.GetBuffer();
   buffer[0] = 0;
   mxprints(buffer, "length %lld, data:", bin.GetSize());
   for (i = 0; i < len; i++)
@@ -408,7 +408,7 @@ format_binary(EbmlBinary &bin,
     mxprints(&buffer[strlen(buffer)], "...");
   if (calc_checksums)
     mxprints(&buffer[strlen(buffer)], " (adler: 0x%08x)",
-             calc_adler32(&binary(bin), bin.GetSize()));
+             calc_adler32(bin.GetBuffer(), bin.GetSize()));
   result = buffer;
   strip(result);
   delete [] buffer;
@@ -525,7 +525,7 @@ def_handle(info) {
     } else if (is_id(l2, KaxSegmentUID)) {
       KaxSegmentUID &uid = *static_cast<KaxSegmentUID *>(l2);
       char *buffer = new char[uid.GetSize() * 5 + 1];
-      const unsigned char *b = (const unsigned char *)&binary(uid);
+      const binary *b = uid.GetBuffer();
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
@@ -535,7 +535,7 @@ def_handle(info) {
     } else if (is_id(l2, KaxSegmentFamily)) {
       KaxSegmentFamily &uid = *static_cast<KaxSegmentFamily *>(l2);
       char *buffer = new char[uid.GetSize() * 5 + 1];
-      const unsigned char *b = (const unsigned char *)&binary(uid);
+      const binary *b = uid.GetBuffer();
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
@@ -548,7 +548,7 @@ def_handle(info) {
     else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
       char* buffer = new char[uid.GetSize() * 5 + 1];
-      const unsigned char *b = (const unsigned char *)&binary(uid);
+      const binary *b = uid.GetBuffer();
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
@@ -562,7 +562,7 @@ def_handle(info) {
     } else if (is_id(l2, KaxNextUID)) {
       KaxNextUID &uid = *static_cast<KaxNextUID *>(l2);
       char *buffer = new char[uid.GetSize() * 5 + 1];
-      const unsigned char *b = (const unsigned char *)&binary(uid);
+      const binary *b = uid.GetBuffer();
       buffer[0] = 0;
       for (i = 0; i < uid.GetSize(); i++)
         mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
@@ -1029,8 +1029,7 @@ def_handle(tracks) {
           KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);
           if (ms_compat && (kax_track_type == 'v') &&
               (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
-            alBITMAPINFOHEADER *bih =
-              (alBITMAPINFOHEADER *)&binary(c_priv);
+            alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)c_priv.GetBuffer();
             unsigned char *fcc = (unsigned char *)&bih->bi_compression;
             fourcc_buffer =
               mxsprintf(" (FourCC: %c%c%c%c, 0x%08x)",
@@ -1038,7 +1037,7 @@ def_handle(tracks) {
                         get_uint32_le(&bih->bi_compression));
           } else if (ms_compat && (kax_track_type == 'a') &&
                      (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
-            alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
+            alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)c_priv.GetBuffer();
             fourcc_buffer =
               mxsprintf(" (format tag: 0x%04x)",
                         get_uint16_le(&wfe->w_format_tag));
@@ -1046,7 +1045,7 @@ def_handle(tracks) {
           if (calc_checksums && !show_summary)
             fourcc_buffer +=
               mxsprintf(" (adler: 0x%08x)",
-                        calc_adler32(&binary(c_priv), c_priv.GetSize()));
+                        calc_adler32(c_priv.GetBuffer(), c_priv.GetSize()));
           show_element(l3, 3, "CodecPrivate, length %d%s",
                        (int)c_priv.GetSize(), fourcc_buffer.c_str());
 

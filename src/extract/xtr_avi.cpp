@@ -60,7 +60,7 @@ xtr_avi_c::create_file(xtr_base_c *_master,
     writing_app += mxsprintf(" %s", VERSION);
   avi->writing_app = safestrdup(writing_app.c_str());
 
-  bih = (const alBITMAPINFOHEADER *)&binary(*priv);
+  bih = (const alBITMAPINFOHEADER *)priv->GetBuffer();
   memcpy(ccodec, &bih->bi_compression, 4);
   ccodec[4] = 0;
   AVI_set_video(avi, kt_get_v_pixel_width(track), kt_get_v_pixel_height(track),

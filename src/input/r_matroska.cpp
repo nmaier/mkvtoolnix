@@ -1130,7 +1130,7 @@ kax_reader_c::read_headers() {
                      kcodecpriv->GetSize());
             track->private_size = kcodecpriv->GetSize();
             if (track->private_size > 0)
-              track->private_data = safememdup(&binary(*kcodecpriv),
+              track->private_data = safememdup(kcodecpriv->GetBuffer(),
                                                track->private_size);
           }
 

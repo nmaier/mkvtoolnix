@@ -113,7 +113,7 @@ xtr_ssa_c::create_file(xtr_base_c *_master,
   xtr_base_c::create_file(_master, track);
   out->write_bom(sub_charset);
 
-  pd = (const unsigned char *)&binary(*priv);
+  pd = (const unsigned char *)priv->GetBuffer();
   priv_size = priv->GetSize();
   bom_len = 0;
   // Skip any BOM that might be present.

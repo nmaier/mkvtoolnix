@@ -15,6 +15,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include <cctype>
+
 #include "wavpack_common.h"
 #include "common.h"
 
