@@ -1385,12 +1385,9 @@ mmg_dialog::update_command_line() {
     clargs.Add(a->file_name);
   }
 
-  if (global_page->tc_title->GetValue().Length() > 0) {
+  if (title_was_present || (global_page->tc_title->GetValue().Length() > 0)) {
     clargs.Add(wxT("--title"));
     clargs.Add(global_page->tc_title->GetValue());
-  } else if (title_was_present) {
-    clargs.Add(wxT("--title"));
-    clargs.Add(wxT(""));
   }
 
   if (global_page->cb_split->IsChecked()) {
