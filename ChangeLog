@@ -1,5 +1,8 @@
 2003-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: Fixed support for reading MultiComment tags from
+        XML tag files.
+
         * mkvmerge: Allow some slightly broken Matroska files to be
         processed correctly if the reference blocks are off by at most 1ms.
 

@@ -523,7 +523,11 @@ static void start_level3(parser_data_t *pdata, const char *name) {
     } else
       perror_nochild();
 
-  } else
+  } else if ((parent == E_MultiComment) &&
+             is_multicomment(pdata, name, pdata->m_comment))
+      return;
+
+  else
     die("Unknown parent: level 3, %d", parent);
 }
 
@@ -716,7 +720,11 @@ static void start_level4(parser_data_t *pdata, const char *name) {
     } else
       perror_nochild();
 
-  } else
+  } else if ((parent == E_MultiComment) &&
+             is_multicomment(pdata, name, pdata->m_comment))
+      return;
+
+  else
     die("Unknown parent: level 4, %d", parent);
 }
 
@@ -742,10 +750,13 @@ static void start_level5(parser_data_t *pdata, const char *name) {
     } else if (!strcmp(name, "PriceDate")) {
       check_instances(pdata->m_price, KaxTagMultiPricePriceDate);
       pdata->parents->push_back(E_PriceDate);
-    } else
-      perror_nochild();
+    } 
 
-  } else
+  } else if ((parent == E_MultiComment) &&
+             is_multicomment(pdata, name, pdata->m_comment))
+      return;
+
+  else
     die("Unknown parent: level 5, %d", parent);
 }
 
