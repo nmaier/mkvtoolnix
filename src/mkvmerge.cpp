@@ -198,6 +198,7 @@ file_type_t file_types[] =
 #ifdef HAVE_OGGVORBIS
    {"ogg", TYPEOGM, "general OGG media stream, audio/video embedded in OGG"},
 #endif // HAVE_OGGVORBIS
+   {"mov", TYPEQTMP4, "Quicktime/MP4 audio and video"},
    {"rm ", TYPEREAL, "RealMedia audio and video"},
    {"srt", TYPESRT, "SRT text subtitles"},
    {"ssa", TYPESSA, "SSA/ASS text subtitles"},
@@ -334,14 +335,14 @@ static int get_type(char *filename) {
     type = TYPEMATROSKA;
   else if (wav_reader_c::probe_file(mm_io, size))
     type = TYPEWAV;
-  else if (mp4_reader_c::probe_file(mm_io, size))
-    mxerror("MP4/Quicktime files are not supported (%s).\n", filename);
 #ifdef HAVE_OGGVORBIS
   else if (ogm_reader_c::probe_file(mm_io, size))
     type = TYPEOGM;
 #endif // HAVE_OGGVORBIS
   else if (real_reader_c::probe_file(mm_io, size))
     type = TYPEREAL;
+  else if (qtmp4_reader_c::probe_file(mm_io, size))
+    type = TYPEQTMP4;
   else if (mp3_reader_c::probe_file(mm_io, size))
     type = TYPEMP3;
   else if (ac3_reader_c::probe_file(mm_io, size))
@@ -926,6 +927,9 @@ static void create_readers() {
           break;
         case TYPESSA:
           file->reader = new ssa_reader_c(file->ti);
+          break;
+        case TYPEQTMP4:
+          file->reader = new qtmp4_reader_c(file->ti);
           break;
         default:
           mxerror("EVIL internal bug! (unknown file type)\n");

@@ -1215,6 +1215,17 @@ static void mxmsg(int level, const char *fmt, va_list &ap) {
   fflush(stream);
 }
 
+void mxverb(int level, const char *fmt, ...) {
+  va_list ap;
+
+  if (verbose < level)
+    return;
+
+  va_start(ap, fmt);
+  mxmsg(MXMSG_INFO, fmt, ap);
+  va_end(ap);
+}
+
 void mxinfo(const char *fmt, ...) {
   va_list ap;
 

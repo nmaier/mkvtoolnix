@@ -63,6 +63,7 @@ using namespace libebml;
 #define TYPEAAC      12
 #define TYPESSA      13
 #define TYPEREAL     14
+#define TYPEQTMP4    15
 
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
@@ -83,6 +84,7 @@ void fix_format(const char *fmt, string &new_fmt);
 void mxwarn(const char *fmt, ...);
 void mxerror(const char *fmt, ...);
 void mxinfo(const char *fmt, ...);
+void mxverb(int level, const char *fmt, ...);
 void mxdebug(const char *fmt, ...);
 void mxexit(int code = -1);
 
