@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.2 2003/04/13 15:23:03 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.3 2003/04/17 12:35:45 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -52,7 +52,6 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "KaxInfoData.h"
 #include "KaxCluster.h"
 #include "KaxClusterData.h"
-#include "KaxBlockAdditional.h"
 #include "StdIOCallback.h"
 #include "KaxTrackAudio.h"
 #include "KaxTrackVideo.h"
@@ -61,6 +60,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <dmalloc.h>
 #endif
 
+using namespace std;
 using namespace LIBMATROSKA_NAMESPACE;
 
 /*
@@ -736,7 +736,7 @@ int mkv_reader_c::read_headers() {
       }
     } // while (l1 != NULL)
     
-  } catch (std::exception &ex) {
+  } catch (exception &ex) {
     fprintf(stdout, "Error: matroska_reader: caught exception\n");
     return 0;
   }
@@ -901,10 +901,8 @@ int mkv_reader_c::read() {
                     found_data++;
                   }
                 }
-              } else if ((EbmlId(*l3) !=
-                          KaxBlockVirtual::ClassInfos.GlobalId) &&
-                         (EbmlId(*l3) !=
-                          KaxBlockAdditional::ClassInfos.GlobalId))
+              } else if (!(EbmlId(*l3) ==
+                           KaxBlockVirtual::ClassInfos.GlobalId))
                  printf("[mkv]   Uknown element@3: %s\n", typeid(*l3).name());
 
               if (upper_lvl_el > 0) {		// we're coming from l4
