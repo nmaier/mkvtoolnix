@@ -58,8 +58,6 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
 }
 
 void video_packetizer_c::set_headers() {
-  alBITMAPINFOHEADER *bih;
-
   if (codec_id != NULL)
     set_codec_id(codec_id);
   else
