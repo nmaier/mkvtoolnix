@@ -210,7 +210,7 @@ parse_simple_chapters(mm_text_io_c *in,
             atom = &GetNextChild<KaxChapterAtom>(*edition, *atom);
 
           *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
-            create_unique_uint32();
+            create_unique_uint32(UNIQUE_CHAPTER_IDS);
 
           *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
             (start - offset) * 1000000;

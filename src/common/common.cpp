@@ -683,41 +683,80 @@ from_utf8(int handle,
  * Random unique uint32_t numbers
  */
 
-static vector<uint32_t> ru_numbers;
+static vector<uint32_t> ru_numbers[4];
+static bool random_seeded = false;
 
 void
-clear_list_of_unique_uint32() {
-  ru_numbers.clear();
+clear_list_of_unique_uint32(int category) {
+  int i;
+
+  assert((category >= -1) && (category <= 3));
+  if (category == UNIQUE_ALL_IDS)
+    for (i = 0; i < 4; i++)
+      clear_list_of_unique_uint32(i);
+  else
+    ru_numbers[category].clear();
 }
 
 bool
-is_unique_uint32(uint32_t number) {
+is_unique_uint32(uint32_t number,
+                 int category) {
   int i;
+
+  assert((category >= 0) && (category <= 3));
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
-  for (i = 0; i < ru_numbers.size(); i++)
-    if (ru_numbers[i] == number)
+  for (i = 0; i < ru_numbers[category].size(); i++)
+    if (ru_numbers[category][i] == number)
       return false;
 
   return true;
 }
 
 void
-add_unique_uint32(uint32_t number) {
+add_unique_uint32(uint32_t number,
+                  int category) {
+  assert((category >= 0) && (category <= 3));
+
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
-    ru_numbers.push_back(ru_numbers.size() + 1);
+    ru_numbers[category].push_back(ru_numbers[category].size() + 1);
   else
-    ru_numbers.push_back(number);
+    ru_numbers[category].push_back(number);
+}
+
+bool
+remove_unique_uint32(uint32_t number,
+                     int category) {
+  vector<uint32_t>::iterator dit;
+
+  assert((category >= 0) && (category <= 3));
+
+  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
+    return true;
+  foreach(dit, ru_numbers[category])
+    if (*dit == number) {
+      ru_numbers[category].erase(dit);
+      return true;
+    }
+
+  return false;
 }
 
 uint32_t
-create_unique_uint32() {
+create_unique_uint32(int category) {
   uint32_t rnumber, half;
 
+  assert((category >= 0) && (category <= 3));
+
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-    ru_numbers.push_back(ru_numbers.size() + 1);
-    return ru_numbers.size();
+    ru_numbers[category].push_back(ru_numbers[category].size() + 1);
+    return ru_numbers[category].size();
+  }
+
+  if (!random_seeded) {
+    srand(time(NULL));
+    random_seeded = true;
   }
 
   do {
@@ -725,8 +764,8 @@ create_unique_uint32() {
     rnumber = half;
     half = (uint32_t)(65535.0 * rand() / RAND_MAX);
     rnumber |= (half << 16);
-  } while ((rnumber == 0) || !is_unique_uint32(rnumber));
-  add_unique_uint32(rnumber);
+  } while ((rnumber == 0) || !is_unique_uint32(rnumber, category));
+  add_unique_uint32(rnumber, category);
 
   return rnumber;
 }

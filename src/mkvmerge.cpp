@@ -1456,7 +1456,8 @@ render_attachments(IOCallback *rout) {
         (&GetChild<KaxFileName>(*kax_a)) = cstr_to_UTFstring(name);
 
       *static_cast<EbmlUInteger *>
-        (&GetChild<KaxFileUID>(*kax_a)) = create_unique_uint32();
+        (&GetChild<KaxFileUID>(*kax_a)) =
+        create_unique_uint32(UNIQUE_ATTACHMENT_IDS);
 
       try {
         io = new mm_io_c(attch->name, MODE_READ);
@@ -2491,7 +2492,7 @@ init_globals() {
   display_counter = 1;
   display_reader = NULL;
   timecode_scale = TIMECODE_SCALE;
-  clear_list_of_unique_uint32();
+  clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
 }
 
 /** \brief Deletes the file readers

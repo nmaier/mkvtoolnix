@@ -186,10 +186,17 @@ char *MTX_DLL_API from_utf8(int handle, const char *utf8);
 string &MTX_DLL_API to_utf8(int handle, string &local);
 string &MTX_DLL_API from_utf8(int handle, string &utf8);
 
-void MTX_DLL_API clear_list_of_unique_uint32();
-bool MTX_DLL_API is_unique_uint32(uint32_t number);
-void MTX_DLL_API add_unique_uint32(uint32_t number);
-uint32_t MTX_DLL_API create_unique_uint32();
+#define UNIQUE_ALL_IDS        -1
+#define UNIQUE_TRACK_IDS       0
+#define UNIQUE_CHAPTER_IDS     1
+#define UNIQUE_EDITION_IDS     2
+#define UNIQUE_ATTACHMENT_IDS  3
+
+void MTX_DLL_API clear_list_of_unique_uint32(int category);
+bool MTX_DLL_API is_unique_uint32(uint32_t number, int category);
+void MTX_DLL_API add_unique_uint32(uint32_t number, int category);
+bool MTX_DLL_API remove_unique_uint32(uint32_t number, int category);
+uint32_t MTX_DLL_API create_unique_uint32(int category);
 
 #define safefree(p) if ((p) != NULL) free(p);
 #define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
