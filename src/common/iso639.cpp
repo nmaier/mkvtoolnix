@@ -176,7 +176,7 @@ const iso639_language_t iso639_languages[] =
    {"Flemish; Dutch", "dut", "nl"},
    {"Fon", "fon", NULL},
    {"French", "fre", "fr"},
-   {"French", "fra*", "fr"},
+   {"French", "fra", "fr"},
    {"French, Middle (ca.1400-1600)", "frm", NULL},
    {"French, Old (842-ca.1400)", "fro", NULL},
    {"Frisian", "fry", "fy"},
