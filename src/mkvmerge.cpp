@@ -1029,7 +1029,7 @@ parse_compression(char *s,
  * the form \c TID:value, e.g. \c 0:XVID.
  */
 static void
-parse_language(char *s,
+parse_language(const char *s,
                language_t &lang,
                const char *opt,
                const char *topic,
@@ -1051,10 +1051,16 @@ parse_language(char *s,
     mxerror(_("Invalid %s specified in '--%s %s'.\n"), topic, opt,
             orig.c_str());
 
-  if (check && !is_valid_iso639_2_code(s))
-    mxerror(_("'%s' is not a valid ISO639-2 code. See "
-              "'mkvmerge --list-languages' for a list of all languages "
-              "and their respective ISO639-2 codes.\n"), s);
+  if (check && !is_valid_iso639_2_code(s)) {
+    const char *iso639_2;
+
+    iso639_2 = map_iso639_1_to_iso639_2(s);
+    if (iso639_2 == NULL)
+      mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code. "
+                "See 'mkvmerge --list-languages' for a list of all languages "
+                "and their respective ISO639-2 codes.\n"), s);
+    s = iso639_2;
+  }
   
   lang.language = safestrdup(s);
 }

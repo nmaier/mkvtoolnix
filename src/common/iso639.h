@@ -29,5 +29,7 @@ const char *MTX_DLL_API map_iso639_1_to_iso639_2(const char *iso639_1_code);
 const char *MTX_DLL_API map_iso639_2_to_iso639_1(const char *iso639_2_code);
 const char *MTX_DLL_API map_english_name_to_iso639_2(const char *name);
 void MTX_DLL_API list_iso639_languages();
+bool MTX_DLL_API is_popular_language(const char *lang);
+bool MTX_DLL_API is_popular_language_code(const char *code);
 
 #endif // __ISO639_H

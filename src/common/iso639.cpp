@@ -595,12 +595,20 @@ list_iso639_languages() {
 
 const char *
 map_iso639_1_to_iso639_2(const char *iso639_1_code) {
-  uint32_t i;
+  int i, ndx;
 
+  ndx = -1;
   for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++)
     if ((iso639_languages[i].iso639_1_code != NULL) &&
-        !strcmp(iso639_1_code, iso639_languages[i].iso639_1_code))
-      return iso639_languages[i].iso639_2_code;
+        !strcmp(iso639_1_code, iso639_languages[i].iso639_1_code)) {
+      if (is_popular_language_code(iso639_languages[i].iso639_2_code))
+        return iso639_languages[i].iso639_2_code;
+      else if (ndx == -1)
+        ndx = i;
+    }
+
+  if (ndx >= 0)
+    return iso639_languages[ndx].iso639_2_code;
 
   return NULL;
 }
@@ -630,4 +638,40 @@ map_english_name_to_iso639_2(const char *name) {
   }
 
   return NULL;
+}
+
+bool
+is_popular_language(const char *lang) {
+  return
+    !strcmp(lang, "Chinese") ||
+    !strcmp(lang, "Dutch") ||
+    !strcmp(lang, "English") ||
+    !strcmp(lang, "Finnish") ||
+    !strcmp(lang, "French") ||
+    !strcmp(lang, "German") ||
+    !strcmp(lang, "Italian") ||
+    !strcmp(lang, "Japanese") ||
+    !strcmp(lang, "Norwegian") ||
+    !strcmp(lang, "Portuguese") ||
+    !strcmp(lang, "Russian") ||
+    !strcmp(lang, "Spanish") ||
+    !strcmp(lang, "Swedish");
+}
+
+bool
+is_popular_language_code(const char *code) {
+  return
+    !strcmp(code, "zho") || // Chinese
+    !strcmp(code, "dut") || // Dutch
+    !strcmp(code, "eng") || // English
+    !strcmp(code, "fin") || // Finnish
+    !strcmp(code, "fre") || // French
+    !strcmp(code, "ger") || // German
+    !strcmp(code, "ita") || // Italian
+    !strcmp(code, "jpn") || // Japanese
+    !strcmp(code, "nor") || // Norwegian
+    !strcmp(code, "por") || // Portuguese
+    !strcmp(code, "rus") || // Russian
+    !strcmp(code, "spa") || // Spanish
+    !strcmp(code, "swe");   // Swedish
 }

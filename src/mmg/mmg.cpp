@@ -493,42 +493,6 @@ format_date_time(time_t date_time) {
   return s;
 }
 
-bool
-is_popular_language(const char *lang) {
-  return
-    !strcmp(lang, "Chinese") ||
-    !strcmp(lang, "Dutch") ||
-    !strcmp(lang, "English") ||
-    !strcmp(lang, "Finnish") ||
-    !strcmp(lang, "French") ||
-    !strcmp(lang, "German") ||
-    !strcmp(lang, "Italian") ||
-    !strcmp(lang, "Japanese") ||
-    !strcmp(lang, "Norwegian") ||
-    !strcmp(lang, "Portuguese") ||
-    !strcmp(lang, "Russian") ||
-    !strcmp(lang, "Spanish") ||
-    !strcmp(lang, "Swedish");
-}
-
-bool
-is_popular_language_code(const char *code) {
-  return
-    !strcmp(code, "zho") || // Chinese
-    !strcmp(code, "dut") || // Dutch
-    !strcmp(code, "eng") || // English
-    !strcmp(code, "fin") || // Finnish
-    !strcmp(code, "fre") || // French
-    !strcmp(code, "ger") || // German
-    !strcmp(code, "ita") || // Italian
-    !strcmp(code, "jpn") || // Japanese
-    !strcmp(code, "nor") || // Norwegian
-    !strcmp(code, "por") || // Portuguese
-    !strcmp(code, "rus") || // Russian
-    !strcmp(code, "spa") || // Spanish
-    !strcmp(code, "swe");   // Swedish
-}
-
 #if defined(SYS_WINDOWS)
 wxString
 format_tooltip(const wxString &s) {
