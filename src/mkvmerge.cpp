@@ -1431,6 +1431,8 @@ identify(const char *filename) {
             "contact me at moritz@bunkus.org if your file type is "
             "supported but not recognized properly.\n", file->name);
 
+  file->first = true;
+  file->last = true;
   file->fp = NULL;
   file->status = EMOREDATA;
   file->pack = NULL;
