@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.69 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.70 2003/05/21 19:55:49 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -41,6 +41,7 @@
 
 #include "EbmlHead.h"
 #include "EbmlSubHead.h"
+#include "EbmlVersion.h"
 #include "EbmlVoid.h"
 
 #include "FileKax.h"
@@ -77,6 +78,11 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
+
+// #ifndef LIBEBML_VERSION
+// // 0.4.3 was the first libebml version with this definition.
+// #define LIBEBML_VERSION 000402
+// #endif
 
 typedef struct {
   char *ext;
@@ -577,7 +583,16 @@ static void render_headers(mm_io_callback *out) {
     kax_duration = &GetChild<KaxDuration>(*kax_infos);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
 
-    kax_segment->Render(static_cast<IOCallback &>(*out));
+    *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
+      L"libmatroska 0.4.3";
+    *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
+      L"mkvmerge 0.3.4";
+
+#if LIBEBML_VERSION >= 000403
+    kax_segment->WriteHead(*out, 5);
+#else
+    kax_segment->Render(*out);
+#endif
 
     // Reserve some space for the meta seek stuff.
     if (write_cues && write_meta_seek) {
@@ -588,6 +603,10 @@ static void render_headers(mm_io_callback *out) {
       kax_seekhead_void->SetSize(meta_seek_size);
       kax_seekhead_void->Render(static_cast<IOCallback &>(*out));
     }
+
+#if LIBEBML_VERSION >= 000403
+    kax_infos->Render(*out);
+#endif
 
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
@@ -1104,7 +1123,7 @@ int main(int argc, char **argv) {
   int i;
   packetizer_t *ptzr, *winner;
   filelist_t *file;
-  KaxTags *kax_tags;
+  int64_t old_pos;
 
   nice(2);
 
@@ -1193,16 +1212,11 @@ int main(int argc, char **argv) {
       fprintf(stdout, "\n");
   }
 
-  // Render a dummy KaxTags element for now.
-  kax_tags = &GetChild<KaxTags>(*kax_segment);
-  kax_tags->Render(*static_cast<mm_io_callback *>(out));
-
   // Write meta seek information if it is not disabled.
   if (write_meta_seek) {
     if (write_cues && cue_writing_requested)
       kax_seekhead->IndexThis(*kax_cues, *kax_segment);
 
-    kax_seekhead->IndexThis(*kax_tags, *kax_segment);
     kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead,
                                        *static_cast<mm_io_callback *>(out),
@@ -1218,7 +1232,6 @@ int main(int argc, char **argv) {
       if (write_cues && cue_writing_requested)
         kax_seekhead->IndexThis(*kax_cues, *kax_segment);
 
-      kax_seekhead->IndexThis(*kax_tags, *kax_segment);
       kax_seekhead->UpdateSize();
       kax_seekhead_void->ReplaceWith(*kax_seekhead,
                                      *static_cast<mm_io_callback *>(out),
@@ -1226,13 +1239,23 @@ int main(int argc, char **argv) {
     }
   }
 
-  // Now re-render the kax_infos and fill in the biggest timecode
+  // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
+  old_pos = out->getFilePointer();
+  out->setFilePointer(kax_duration->GetElementPosition());
   *(static_cast<EbmlFloat *>(kax_duration)) =
     cluster_helper->get_max_timecode() * 1000000.0 / TIMECODE_SCALE;
-  out->setFilePointer(kax_infos->GetElementPosition());
-  kax_infos->Render(*out);
+  kax_duration->Render(*out);
+  out->setFilePointer(old_pos);
 
+#if LIBEBML_VERSION >= 000403
+  // Set the correct size for the segment.
+  if (kax_segment->ForceSize(out->getFilePointer() -
+                             kax_segment->GetElementPosition() -
+                             kax_segment->HeadSize()))
+    kax_segment->OverwriteHead(*out);
+#endif
+  
   delete cluster_helper;
 
   file = input;
