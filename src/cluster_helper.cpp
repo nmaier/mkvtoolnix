@@ -477,6 +477,9 @@ int cluster_helper_c::render() {
     last_source = source;
   }
 
+  for (k = 0, block_duration = 0; k < durations.size(); k++)
+    block_duration += durations[k];
+
   if (elements_in_cluster > 0) {
     def_duration = last_source->get_track_default_duration_ns() / 1000000;
     if ((block_duration != 0) && (def_duration != block_duration)) {

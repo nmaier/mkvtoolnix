@@ -1,3 +1,8 @@
+2003-08-22  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Bugfix: If a subtitle packet was the last packet in a
+        cluster then its duration was not written resulting in a broken file.
+
 2003-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvinfo: Added support for the following elements:
