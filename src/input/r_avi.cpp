@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+// This one goes out to haali ;)
+#include <sys/types.h>
 
 #ifdef HAVE_AVICLASSES
 #include "common_mmreg.h"
