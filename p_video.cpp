@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.7 2003/02/28 14:50:04 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.8 2003/02/28 18:54:14 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -129,9 +129,9 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
       last_id = add_packet(buf, size,
                            (u_int64_t)(1000.0 * frames_output / fps));
     else
-      // This is a P frame - let's reference the last key frame (I frame).
-      add_packet(buf, size, (u_int64_t)(1000.0 * frames_output / fps),
-                 last_id);
+      // This is a P frame - let's reference the last frame.
+      last_id = add_packet(buf, size,
+                           (u_int64_t)(1000.0 * frames_output / fps), last_id);
     frames_output += num_frames;
   }
   packetno++;
