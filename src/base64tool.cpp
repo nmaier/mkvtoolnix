@@ -1,15 +1,15 @@
 /*
- * base64util - Utility for encoding and decoding Base64 files.
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * command line parameter parsing, looping, output handling
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   base64util - Utility for encoding and decoding Base64 files.
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   command line parameter parsing, looping, output handling
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include <errno.h>

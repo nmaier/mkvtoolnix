@@ -1,13 +1,13 @@
 /*
- * vsscanf for Win32
- *
- * Written 5/2003 by <mgix@mgix.com>
- *
- * This code is in the Public Domain
- *
- * Read http://www.flipcode.org/cgi-bin/fcarticles.cgi?show=4&id=64176 for
- * an explanation.
- *
+   vsscanf for Win32
+  
+   Written 5/2003 by <mgix@mgix.com>
+  
+   This code is in the Public Domain
+  
+   Read http://www.flipcode.org/cgi-bin/fcarticles.cgi?show=4&id=64176 for
+   an explanation.
+  
  */
 
 #include "config.h"

@@ -1,16 +1,16 @@
 /** \brief command line parsing
- *
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * \file
- * \version $Id$
- *
- * \author Written by Moritz Bunkus <moritz@bunkus.org>.
+  
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   \file
+   \version $Id$
+  
+   \author Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -304,10 +304,10 @@ create_track_number(generic_reader_c *reader,
 }
 
 /** \brief Identify a file type and its contents
- *
- * This function called for \c --identify. It sets up dummy track info
- * data for the reader, probes the input file, creates the file reader
- * and calls its identify function.
+  
+   This function called for \c --identify. It sets up dummy track info
+   data for the reader, probes the input file, creates the file reader
+   and calls its identify function.
  */
 static void
 identify(const string &filename) {
@@ -344,8 +344,8 @@ identify(const string &filename) {
 }
 
 /** \brief Parse tags and add them to the list of all tags
- *
- * Also tests the tags for missing mandatory elements.
+  
+   Also tests the tags for missing mandatory elements.
  */
 void
 parse_and_add_tags(const string &file_name) {
@@ -381,8 +381,8 @@ parse_and_add_tags(const string &file_name) {
 }
 
 /** \brief Parse the \c --atracks / \c --vtracks / \c --stracks argument
- *
- * The argument is a comma separated list of track IDs.
+  
+   The argument is a comma separated list of track IDs.
  */
 static void
 parse_tracks(string s,
@@ -404,11 +404,11 @@ parse_tracks(string s,
 }
 
 /** \brief Parse the \c --sync argument
- *
- * The argument must have the form <tt>TID:d</tt> or
- * <tt>TID:d,l1/l2</tt>, e.g. <tt>0:200</tt>.  The part before the
- * comma is the displacement in ms. The optional part after comma is
- * the linear factor which defaults to 1 if not given.
+  
+   The argument must have the form <tt>TID:d</tt> or
+   <tt>TID:d,l1/l2</tt>, e.g. <tt>0:200</tt>.  The part before the
+   comma is the displacement in ms. The optional part after comma is
+   the linear factor which defaults to 1 if not given.
  */
 static void
 parse_sync(string s,
@@ -468,8 +468,8 @@ parse_sync(string s,
 }
 
 /** \brief Parse the \c --aspect-ratio argument
- *
- * The argument must have the form \c TID:w/h or \c TID:float, e.g. \c 0:16/9
+  
+   The argument must have the form \c TID:w/h or \c TID:float, e.g. \c 0:16/9
  */
 static void
 parse_aspect_ratio(const string &s,
@@ -529,8 +529,8 @@ parse_aspect_ratio(const string &s,
 }
 
 /** \brief Parse the \c --display-dimensions argument
- *
- * The argument must have the form \c TID:wxh, e.g. \c 0:640x480.
+  
+   The argument must have the form \c TID:wxh, e.g. \c 0:640x480.
  */
 static void
 parse_display_dimensions(const string s,
@@ -562,9 +562,9 @@ parse_display_dimensions(const string s,
 }
 
 /** \brief Parse the \c --cropping argument
- *
- * The argument must have the form \c TID:left,top,right,bottom e.g.
- * \c 0:10,5,10,5
+  
+   The argument must have the form \c TID:left,top,right,bottom e.g.
+   \c 0:10,5,10,5
  */
 static void
 parse_cropping(const string &s,
@@ -599,16 +599,16 @@ parse_cropping(const string &s,
 }
 
 /** \brief Parse the \c --split argument
- *
- * The \c --split option takes several formats.
- *
- * \arg size based: If only a number is given or the number is
- * postfixed with '<tt>K</tt>', '<tt>M</tt>' or '<tt>G</tt>' this is
- * interpreted as the size after which to split.
- *
- * \arg time based: If a number postfixed with '<tt>s</tt>' or in a
- * format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
- * given then this is interpreted as the time after which to split.
+  
+   The \c --split option takes several formats.
+  
+   \arg size based: If only a number is given or the number is
+   postfixed with '<tt>K</tt>', '<tt>M</tt>' or '<tt>G</tt>' this is
+   interpreted as the size after which to split.
+  
+   \arg time based: If a number postfixed with '<tt>s</tt>' or in a
+   format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
+   given then this is interpreted as the time after which to split.
  */
 static void
 parse_split(const string &arg) {
@@ -686,10 +686,10 @@ parse_split(const string &arg) {
 }
 
 /** \brief Parse the \c --delay argument
- *
- * time based: A number that must be postfixed with <tt>s</tt>,
- * <tt>ms</tt>, <tt>us</tt> or <tt>ns</tt> to specify seconds,
- * milliseconds, microseconds and nanoseconds respectively.
+  
+   time based: A number that must be postfixed with <tt>s</tt>,
+   <tt>ms</tt>, <tt>us</tt> or <tt>ns</tt> to specify seconds,
+   milliseconds, microseconds and nanoseconds respectively.
  */
 static void
 parse_delay(const string &s,
@@ -734,8 +734,8 @@ parse_delay(const string &s,
 }
 
 /** \brief Parse the \c --cues argument
- *
- * The argument must have the form \c TID:cuestyle, e.g. \c 0:none.
+  
+   The argument must have the form \c TID:cuestyle, e.g. \c 0:none.
  */
 static void
 parse_cues(const string &s,
@@ -770,8 +770,8 @@ parse_cues(const string &s,
 }
 
 /** \brief Parse the \c --compression argument
- *
- * The argument must have the form \c TID:compression, e.g. \c 0:bz2.
+  
+   The argument must have the form \c TID:compression, e.g. \c 0:bz2.
  */
 static void
 parse_compression(const string &s,
@@ -816,9 +816,9 @@ parse_compression(const string &s,
 }
 
 /** \brief Parse the argument for a couple of options
- *
- * Some options have similar parameter styles. The arguments must have
- * the form \c TID:value, e.g. \c 0:XVID.
+  
+   Some options have similar parameter styles. The arguments must have
+   the form \c TID:value, e.g. \c 0:XVID.
  */
 static void
 parse_language(const string &s,
@@ -861,8 +861,8 @@ parse_language(const string &s,
 }
 
 /** \brief Parse the \c --subtitle-charset argument
- *
- * The argument must have the form \c TID:charset, e.g. \c 0:ISO8859-15.
+  
+   The argument must have the form \c TID:charset, e.g. \c 0:ISO8859-15.
  */
 static void
 parse_sub_charset(const string &s,
@@ -890,8 +890,8 @@ parse_sub_charset(const string &s,
 }
 
 /** \brief Parse the \c --tags argument
- *
- * The argument must have the form \c TID:filename, e.g. \c 0:tags.xml.
+  
+   The argument must have the form \c TID:filename, e.g. \c 0:tags.xml.
  */
 static void
 parse_tags(const string &s,
@@ -920,8 +920,8 @@ parse_tags(const string &s,
 }
 
 /** \brief Parse the \c --fourcc argument
- *
- * The argument must have the form \c TID:fourcc, e.g. \c 0:XVID.
+  
+   The argument must have the form \c TID:fourcc, e.g. \c 0:XVID.
  */
 static void
 parse_fourcc(const string &s,
@@ -948,8 +948,8 @@ parse_fourcc(const string &s,
 }
 
 /** \brief Parse the argument for \c --track-order
- *
- * The argument must be a comma separated list of track IDs.
+  
+   The argument must be a comma separated list of track IDs.
  */
 static void
 parse_track_order(const string &s) {
@@ -997,12 +997,12 @@ parse_append_to(const string &s,
 }
 
 /** \brief Sets the priority mkvmerge runs with
- *
- * Depending on the OS different functions are used. On Unix like systems
- * the process is being nice'd if priority is negative ( = less important).
- * Only the super user can increase the priority, but you shouldn't do
- * such work as root anyway.
- * On Windows SetPriorityClass is used.
+  
+   Depending on the OS different functions are used. On Unix like systems
+   the process is being nice'd if priority is negative ( = less important).
+   Only the super user can increase the priority, but you shouldn't do
+   such work as root anyway.
+   On Windows SetPriorityClass is used.
  */
 static void
 set_process_priority(int priority) {
@@ -1083,17 +1083,17 @@ guess_mime_type(string file_name) {
 }
 
 /** \brief Parses and handles command line arguments
- *
- * Also probes input files for their type and creates the appropriate
- * file reader.
- *
- * Options are parsed in several passes because some options must be
- * handled/known before others. The first pass finds
- * '<tt>--identify</tt>'. The second pass handles options that only
- * print some information and exit right afterwards
- * (e.g. '<tt>--version</tt>' or '<tt>--list-types</tt>'). The third
- * pass looks for '<tt>--output-file</tt>'. The fourth pass handles
- * everything else.
+  
+   Also probes input files for their type and creates the appropriate
+   file reader.
+  
+   Options are parsed in several passes because some options must be
+   handled/known before others. The first pass finds
+   '<tt>--identify</tt>'. The second pass handles options that only
+   print some information and exit right afterwards
+   (e.g. '<tt>--version</tt>' or '<tt>--list-types</tt>'). The third
+   pass looks for '<tt>--output-file</tt>'. The fourth pass handles
+   everything else.
  */
 static void
 parse_args(vector<string> &args) {
@@ -1780,10 +1780,10 @@ parse_args(vector<string> &args) {
 }
 
 /** \brief Reads command line arguments from a file
- *
- * Each line contains exactly one command line argument or a
- * comment. Arguments are converted to UTF-8 and appended to the array
- * \c args.
+  
+   Each line contains exactly one command line argument or a
+   comment. Arguments are converted to UTF-8 and appended to the array
+   \c args.
  */
 static void
 read_args_from_file(vector<string> &args,
@@ -1827,10 +1827,10 @@ read_args_from_file(vector<string> &args,
 }
 
 /** \brief Expand the command line parameters
- *
- * Takes each command line paramter, converts it to UTF-8, and reads more
- * commands from command files if the argument starts with '@'. Puts all
- * arguments into a new array.
+  
+   Takes each command line paramter, converts it to UTF-8, and reads more
+   commands from command files if the argument starts with '@'. Puts all
+   arguments into a new array.
  */
 static void
 handle_args(int argc,
@@ -1866,10 +1866,10 @@ init_globals() {
 }
 
 /** \brief Setup and high level program control
- *
- * Calls the functions for setup, handling the command line arguments,
- * creating the readers, the main loop, finishing the current output
- * file and cleaning up.
+  
+   Calls the functions for setup, handling the command line arguments,
+   creating the readers, the main loop, finishing the current output
+   file and cleaning up.
  */
 int
 main(int argc,

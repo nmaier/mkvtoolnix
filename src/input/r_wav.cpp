@@ -1,18 +1,18 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * WAV reader module
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
- * Initial DTS support by Peter Niemayer <niemayer@isg.de> and
- *   modified by Moritz Bunkus.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   WAV reader module
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+   Initial DTS support by Peter Niemayer <niemayer@isg.de> and
+     modified by Moritz Bunkus.
  */
 
 #include "os.h"

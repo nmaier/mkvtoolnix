@@ -1,16 +1,16 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * OGG media stream reader
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   OGG media stream reader
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -267,7 +267,7 @@ flac_header_extractor_c::read_page() {
 #endif // HAVE_FLAC_FORMAT_H
 
 /*
- * Probes a file by simply comparing the first four bytes to 'OggS'.
+   Probes a file by simply comparing the first four bytes to 'OggS'.
  */
 int
 ogm_reader_c::probe_file(mm_io_c *mm_io,
@@ -290,8 +290,8 @@ ogm_reader_c::probe_file(mm_io_c *mm_io,
 }
 
 /*
- * Opens the file for processing, initializes an ogg_sync_state used for
- * reading from an OGG stream.
+   Opens the file for processing, initializes an ogg_sync_state used for
+   reading from an OGG stream.
  */
 ogm_reader_c::ogm_reader_c(track_info_c *nti)
   throw (error_c):
@@ -347,8 +347,8 @@ ogm_reader_c::find_demuxer(int serialno) {
 }
 
 /*
- * Reads an OGG page from the stream. Returns 0 if there are no more pages
- * left, EMOREDATA otherwise.
+   Reads an OGG page from the stream. Returns 0 if there are no more pages
+   left, EMOREDATA otherwise.
  */
 int
 ogm_reader_c::read_page(ogg_page *og) {
@@ -571,7 +571,7 @@ ogm_reader_c::create_packetizers() {
 }
 
 /*
- * Checks every demuxer if it has a page available.
+   Checks every demuxer if it has a page available.
  */
 int
 ogm_reader_c::packet_available() {
@@ -598,10 +598,10 @@ ogm_reader_c::handle_new_stream_and_packets(ogg_page *og) {
 }
 
 /*
- * The page is the beginning of a new stream. Check the contents for known
- * stream headers. If it is a known stream and the user has requested that
- * it should be extracted then allocate a new packetizer based on the
- * stream type and store the needed data in a new ogm_demuxer_t.
+   The page is the beginning of a new stream. Check the contents for known
+   stream headers. If it is a known stream and the user has requested that
+   it should be extracted then allocate a new packetizer based on the
+   stream type and store the needed data in a new ogm_demuxer_t.
  */
 void
 ogm_reader_c::handle_new_stream(ogg_page *og) {
@@ -735,12 +735,12 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 }
 
 /*
- * Process the contents of a page. First find the demuxer associated with
- * the page's serial number. If there is no such demuxer then either the
- * OGG file is damaged (very rare) or the page simply belongs to a stream
- * that the user didn't want extracted.
- * If the demuxer is found then hand over all packets in this page to the
- * associated packetizer.
+   Process the contents of a page. First find the demuxer associated with
+   the page's serial number. If there is no such demuxer then either the
+   OGG file is damaged (very rare) or the page simply belongs to a stream
+   that the user didn't want extracted.
+   If the demuxer is found then hand over all packets in this page to the
+   associated packetizer.
  */
 void
 ogm_reader_c::process_page(ogg_page *og) {
@@ -857,7 +857,7 @@ ogm_reader_c::process_header_page(ogg_page *og) {
 }
 
 /*
- * Search and store additional headers for the Ogg streams.
+   Search and store additional headers for the Ogg streams.
  */
 void
 ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
@@ -911,8 +911,8 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
 }
 
 /*
- * Read all header packets and - for Vorbis streams - the comment and
- * codec data packets.
+   Read all header packets and - for Vorbis streams - the comment and
+   codec data packets.
  */
 int
 ogm_reader_c::read_headers() {
@@ -954,7 +954,7 @@ ogm_reader_c::read_headers() {
 }
 
 /*
- * General reader. Read a page and hand it over for processing.
+   General reader. Read a page and hand it over for processing.
  */
 file_status_e
 ogm_reader_c::read(generic_packetizer_c *,

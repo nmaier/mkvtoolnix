@@ -1,20 +1,20 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * Quicktime and MP4 reader
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
- * The second half of the parse_headers() function after the
- *   "// process chunkmap:" comment was taken from mplayer's
- *   demux_mov.c file which is distributed under the GPL as well. Thanks to
- *   the original authors.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   Quicktime and MP4 reader
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+   The second half of the parse_headers() function after the
+     "// process chunkmap:" comment was taken from mplayer's
+     demux_mov.c file which is distributed under the GPL as well. Thanks to
+     the original authors.
  */
 
 #include "os.h"

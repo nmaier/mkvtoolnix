@@ -1,16 +1,16 @@
 /** MPEG video helper functions (MPEG 1, 2 and 4)
- *
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * \file
- * \version $Id$
- *
- * \author Written by Moritz Bunkus <moritz@bunkus.org>.
+  
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   \file
+   \version $Id$
+  
+   \author Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #ifndef __MPEG4_COMMON_H
@@ -49,13 +49,13 @@ enum mpeg_video_type_e {
 };
 
 /** Pointers to MPEG4 video frames and their data
- *
- * MPEG4 video can be stored in a "packed" format, e.g. in AVI. This means
- * that one AVI chunk may contain more than one video frame. This is
- * usually the case with B frames due to limitations in how AVI and
- * Windows' media frameworks work. With ::mpeg4_find_frame_types
- * such packed frames can be analyzed. The results are stored in these
- * structures: one structure for one frame in the analyzed chunk.
+  
+   MPEG4 video can be stored in a "packed" format, e.g. in AVI. This means
+   that one AVI chunk may contain more than one video frame. This is
+   usually the case with B frames due to limitations in how AVI and
+   Windows' media frameworks work. With ::mpeg4_find_frame_types
+   such packed frames can be analyzed. The results are stored in these
+   structures: one structure for one frame in the analyzed chunk.
  */
 typedef struct {
   /** The beginning of the frame data. This is a pointer into an existing

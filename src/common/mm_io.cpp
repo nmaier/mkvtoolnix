@@ -1,16 +1,16 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * IO callback class implementation
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   IO callback class implementation
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -289,7 +289,7 @@ mm_file_io_c::~mm_file_io_c() {
 }
 
 /*
- * Abstract base class.
+   Abstract base class.
  */
 
 string
@@ -623,8 +623,8 @@ mm_io_c::printf(const char *fmt,
 }
 
 /*
- * Proxy class that does I/O on a mm_io_c handed over in the ctor.
- * Useful for e.g. doing text I/O on other I/Os (file, mem).
+   Proxy class that does I/O on a mm_io_c handed over in the ctor.
+   Useful for e.g. doing text I/O on other I/Os (file, mem).
  */
 
 void
@@ -637,7 +637,7 @@ mm_proxy_io_c::close() {
 }
 
 /*
- * Dummy class for output to /dev/null. Needed for two pass stuff.
+   Dummy class for output to /dev/null. Needed for two pass stuff.
  */
 
 mm_null_io_c::mm_null_io_c() {
@@ -682,7 +682,7 @@ mm_null_io_c::close() {
 }
 
 /*
- * IO callback class working on memory
+   IO callback class working on memory
  */
 mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
                          uint64_t _mem_size,
@@ -787,7 +787,7 @@ mm_mem_io_c::eof() {
 }
 
 /*
- * Class for handling UTF-8/UTF-16/UTF-32 text files.
+   Class for handling UTF-8/UTF-16/UTF-32 text files.
  */
 
 mm_text_io_c::mm_text_io_c(mm_io_c *_in,
@@ -952,7 +952,7 @@ mm_text_io_c::setFilePointer(int64 offset,
 }
 
 /*
- * Class for reading from stdin & writing to stdout.
+   Class for reading from stdin & writing to stdout.
  */
 
 mm_stdio_c::mm_stdio_c() {

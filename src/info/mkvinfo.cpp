@@ -1,15 +1,15 @@
 /*
- * mkvinfo -- utility for gathering information about Matroska files
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * retrieves and displays information about a Matroska file
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvinfo -- utility for gathering information about Matroska files
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   retrieves and displays information about a Matroska file
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 // {{{ includes

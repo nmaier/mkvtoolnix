@@ -1,24 +1,24 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * definitions for the OGM file format
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   definitions for the OGM file format
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #ifndef __OGGSTREAMS_H
 #define __OGGSTREAMS_H
 
 /*
- * Taken from http://tobias.everwicked.com/packfmt.htm
- *
+   Taken from http://tobias.everwicked.com/packfmt.htm
+  
 
  First packet (header)
  ---------------------
@@ -61,8 +61,8 @@
  0x0001+  | data                    | packet contents
  lenbytes |                         |
 
- *
- *
+  
+  
  */
 
 //// OggDS headers

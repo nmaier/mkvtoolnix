@@ -1,17 +1,17 @@
 
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * helper functions, common variables
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   helper functions, common variables
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -277,7 +277,7 @@ byte_cursor_c::get_len() {
 }
 
 /*
- * Control functions
+   Control functions
  */
 
 void
@@ -304,7 +304,7 @@ _trace(const char *func,
 }
 
 /*
- * Endianess stuff
+   Endianess stuff
  */
 
 uint16_t
@@ -512,7 +512,7 @@ put_uint64_be(void *buf,
 }
 
 /*
- * Character map conversion stuff
+   Character map conversion stuff
  */
 
 typedef struct {
@@ -689,7 +689,7 @@ from_utf8(int handle,
 }
 
 /*
- * Random unique uint32_t numbers
+   Random unique uint32_t numbers
  */
 
 static vector<uint32_t> ru_numbers[4];
@@ -784,7 +784,7 @@ create_unique_uint32(unique_id_category_e category) {
 }
 
 /*
- * Miscellaneous stuff
+   Miscellaneous stuff
  */
 
 static uint64_t _safedupped = 0;
@@ -853,7 +853,7 @@ dump_malloc_report() {
 }
 
 /*
- * standard string processing
+   standard string processing
  */
 
 vector<string>
@@ -1067,7 +1067,7 @@ downcase(const string &s) {
 }
 
 /*
- * Integer parsing
+   Integer parsing
  */
 
 uint32_t
@@ -1161,7 +1161,7 @@ to_string(int64_t i) {
 
 #ifdef DEBUG
 /*
- * debugging stuff
+   debugging stuff
  */
 
 debug_c debug_facility;
@@ -1286,7 +1286,7 @@ debug_c::dump_info() {
 #endif // DEBUG
 
 /*
- * Other related news
+   Other related news
  */
 
 void
@@ -1524,13 +1524,13 @@ mxsprintf(const char *fmt,
 }
 
 /** \brief Platform independant version of sscanf
- *
- * This is a platform independant version of sscanf. It first fixes the format
- * string (\see fix_format) and then calls sscanf.
- *
- * \param str The string to parse
- * \param fmt The format string
- * \returns The number of elements assigned
+  
+   This is a platform independant version of sscanf. It first fixes the format
+   string (\see fix_format) and then calls sscanf.
+  
+   \param str The string to parse
+   \param fmt The format string
+   \returns The number of elements assigned
  */
 int
 mxsscanf(const string &str,

@@ -1,18 +1,18 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * chapter parser for CUE sheets
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
- * Patches by Nicolas Le Guen <nleguen@pepper-prod.com> and
- * Vegard Pettersen <vegard_p@broadpark.no>
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   chapter parser for CUE sheets
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+   Patches by Nicolas Le Guen <nleguen@pepper-prod.com> and
+   Vegard Pettersen <vegard_p@broadpark.no>
  */
 
 #include <ctype.h>

@@ -1,16 +1,16 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * Vorbis packetizer
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   Vorbis packetizer
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -130,12 +130,12 @@ vorbis_packetizer_c::set_headers() {
 }
 
 /*
- * Some notes - processing is straight-forward if no AV synchronization
- * is needed - the packet is simply stored in the Matroska file.
- * Unfortunately things are not that easy if AV sync is done. For a
- * negative displacement packets are simply discarded if their timecode
- * is set before the displacement. For positive displacements the packetizer
- * has to generate silence packets and put them into the Matroska file first.
+   Some notes - processing is straight-forward if no AV synchronization
+   is needed - the packet is simply stored in the Matroska file.
+   Unfortunately things are not that easy if AV sync is done. For a
+   negative displacement packets are simply discarded if their timecode
+   is set before the displacement. For positive displacements the packetizer
+   has to generate silence packets and put them into the Matroska file first.
  */
 int
 vorbis_packetizer_c::process(memory_c &mem,

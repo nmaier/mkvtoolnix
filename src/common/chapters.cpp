@@ -1,16 +1,16 @@
 /** \brief chapter parser and helper functions
- *
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * \file
- * \version $Id$
- *
- * \author Written by Moritz Bunkus <moritz@bunkus.org>.
+  
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   \file
+   \version $Id$
+  
+   \author Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include <ctype.h>
@@ -68,14 +68,14 @@ string default_chapter_country;
                           !isblanktab(*(s + 14)))
 
 /** \brief Format an error message and throw an exception.
- *
- * A \c printf like function that throws an ::error_c exception with
- * the formatted message.
- *
- * The parameters are checked for validity.
- *
- * \param fmt The \c printf like format.
- * \param ... Optional arguments for the format.
+  
+   A \c printf like function that throws an ::error_c exception with
+   the formatted message.
+  
+   The parameters are checked for validity.
+  
+   \param fmt The \c printf like format.
+   \param ... Optional arguments for the format.
  */
 static void
 chapter_error(const char *fmt,
@@ -100,17 +100,17 @@ chapter_error(const char *fmt,
 }
 
 /** \brief Reads the start of a file and checks for OGM style comments.
- *
- * The first lines are read. OGM style comments are recognized if the first
- * non-empty line contains <tt>CHAPTER01=...</tt> and the first non-empty
- * line afterwards contains <tt>CHAPTER01NAME=...</tt>.
- *
- * The parameters are checked for validity.
- *
- * \param in The file to read from.
- *
- * \return \c true if the file contains OGM style comments and \c false
- *   otherwise.
+  
+   The first lines are read. OGM style comments are recognized if the first
+   non-empty line contains <tt>CHAPTER01=...</tt> and the first non-empty
+   line afterwards contains <tt>CHAPTER01NAME=...</tt>.
+  
+   The parameters are checked for validity.
+  
+   \param in The file to read from.
+  
+   \return \c true if the file contains OGM style comments and \c false
+     otherwise.
  */
 bool
 probe_simple_chapters(mm_text_io_c *in) {
@@ -151,28 +151,28 @@ probe_simple_chapters(mm_text_io_c *in) {
 // CHAPTER01NAME=Hallo Welt
 
 /** \brief Parse simple OGM style comments
- *
- * The file \a in is read. The content is assumed to be OGM style comments.
- *
- * The parameters are checked for validity.
- *
- * \param in The text file to read from.
- * \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
- *   given then only those chapters that lie in the timerange
- *   <tt>[min_tc..max_tc]</tt> are kept.
- * \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
- *   given then only those chapters that lie in the timerange
- *   <tt>[min_tc..max_tc]</tt> are kept.
- * \param offset An optional offset that is subtracted from all start and
- *   end timecodes after the timerange check has been made.
- * \param language This language is added as the \c KaxChapterLanguage
- *   for all entries.
- * \param charset The charset the chapters are supposed to be it. The entries
- *   will be converted to UTF-8 if necessary.
- * \param exception_on_error If set to \c true then an exception is thrown
- *   if an error occurs. Otherwise \c NULL will be returned.
- *
- * \return The chapters parsed from the file or \c NULL if an error occured.
+  
+   The file \a in is read. The content is assumed to be OGM style comments.
+  
+   The parameters are checked for validity.
+  
+   \param in The text file to read from.
+   \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
+     given then only those chapters that lie in the timerange
+     <tt>[min_tc..max_tc]</tt> are kept.
+   \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
+     given then only those chapters that lie in the timerange
+     <tt>[min_tc..max_tc]</tt> are kept.
+   \param offset An optional offset that is subtracted from all start and
+     end timecodes after the timerange check has been made.
+   \param language This language is added as the \c KaxChapterLanguage
+     for all entries.
+   \param charset The charset the chapters are supposed to be it. The entries
+     will be converted to UTF-8 if necessary.
+   \param exception_on_error If set to \c true then an exception is thrown
+     if an error occurs. Otherwise \c NULL will be returned.
+  
+   \return The chapters parsed from the file or \c NULL if an error occured.
  */
 KaxChapters *
 parse_simple_chapters(mm_text_io_c *in,
@@ -305,38 +305,38 @@ parse_simple_chapters(mm_text_io_c *in,
 }
 
 /** \brief Probe a file for different chapter formats and parse the file.
- *
- * The file \a file_name is opened and checked for supported chapter formats.
- * These include simple OGM style chapters, CUE sheets and mkvtoolnix' own
- * XML chapter format.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param file_name The name of the text file to read from.
- * \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
- *   given then only those chapters that lie in the timerange
- *   <tt>[min_tc..max_tc]</tt> are kept.
- * \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
- *   given then only those chapters that lie in the timerange
- *   <tt>[min_tc..max_tc]</tt> are kept.
- * \param offset An optional offset that is subtracted from all start and
- *   end timecodes after the timerange check has been made.
- * \param language This language is added as the \c KaxChapterLanguage
- *   for entries that don't specifiy it.
- * \param charset The charset the chapters are supposed to be it. The entries
- *   will be converted to UTF-8 if necessary. This parameter is ignored for XML
- *   chapter files.
- * \param exception_on_error If set to \c true then an exception is thrown
- *   if an error occurs. Otherwise \c NULL will be returned.
- * \param is_simple_format This boolean will be set to \c true if the chapter
- *   format is either the OGM style format or a CUE sheet. May be \c NULL if
- *   the caller is not interested in the result.
- * \param tags When parsing a CUE sheet tags will be created along with the
- *   chapter entries. These tags will be stored in this parameter.
- *
- * \return The chapters parsed from the file or \c NULL if an error occured.
- *
- * \see ::parse_chapters(mm_text_io_c *in,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
+  
+   The file \a file_name is opened and checked for supported chapter formats.
+   These include simple OGM style chapters, CUE sheets and mkvtoolnix' own
+   XML chapter format.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param file_name The name of the text file to read from.
+   \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
+     given then only those chapters that lie in the timerange
+     <tt>[min_tc..max_tc]</tt> are kept.
+   \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
+     given then only those chapters that lie in the timerange
+     <tt>[min_tc..max_tc]</tt> are kept.
+   \param offset An optional offset that is subtracted from all start and
+     end timecodes after the timerange check has been made.
+   \param language This language is added as the \c KaxChapterLanguage
+     for entries that don't specifiy it.
+   \param charset The charset the chapters are supposed to be it. The entries
+     will be converted to UTF-8 if necessary. This parameter is ignored for XML
+     chapter files.
+   \param exception_on_error If set to \c true then an exception is thrown
+     if an error occurs. Otherwise \c NULL will be returned.
+   \param is_simple_format This boolean will be set to \c true if the chapter
+     format is either the OGM style format or a CUE sheet. May be \c NULL if
+     the caller is not interested in the result.
+   \param tags When parsing a CUE sheet tags will be created along with the
+     chapter entries. These tags will be stored in this parameter.
+  
+   \return The chapters parsed from the file or \c NULL if an error occured.
+  
+   \see ::parse_chapters(mm_text_io_c *in,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
  */
 KaxChapters *
 parse_chapters(const string &file_name,
@@ -372,38 +372,38 @@ parse_chapters(const string &file_name,
 }
 
 /** \brief Probe a file for different chapter formats and parse the file.
- *
- * The file \a in is checked for supported chapter formats. These include
- * simple OGM style chapters, CUE sheets and mkvtoolnix' own XML chapter
- * format.
- *
- * The parameters are checked for validity.
- *
- * \param in The text file to read from.
- * \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
- *   given then only those chapters that lie in the timerange
- *   <tt>[min_tc..max_tc]</tt> are kept.
- * \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
- *   given then only those chapters that lie in the timerange
- *   <tt>[min_tc..max_tc]</tt> are kept.
- * \param offset An optional offset that is subtracted from all start and
- *   end timecodes after the timerange check has been made.
- * \param language This language is added as the \c KaxChapterLanguage
- *   for entries that don't specifiy it.
- * \param charset The charset the chapters are supposed to be it. The entries
- *   will be converted to UTF-8 if necessary. This parameter is ignored for XML
- *   chapter files.
- * \param exception_on_error If set to \c true then an exception is thrown
- *   if an error occurs. Otherwise \c NULL will be returned.
- * \param is_simple_format This boolean will be set to \c true if the chapter
- *   format is either the OGM style format or a CUE sheet. May be \c NULL if
- *   the caller is not interested in the result.
- * \param tags When parsing a CUE sheet tags will be created along with the
- *   chapter entries. These tags will be stored in this parameter.
- *
- * \return The chapters parsed from the file or \c NULL if an error occured.
- *
- * \see ::parse_chapters(const string &file_name,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
+  
+   The file \a in is checked for supported chapter formats. These include
+   simple OGM style chapters, CUE sheets and mkvtoolnix' own XML chapter
+   format.
+  
+   The parameters are checked for validity.
+  
+   \param in The text file to read from.
+   \param min_tc An optional timecode. If both \a min_tc and \a max_tc are
+     given then only those chapters that lie in the timerange
+     <tt>[min_tc..max_tc]</tt> are kept.
+   \param max_tc An optional timecode. If both \a min_tc and \a max_tc are
+     given then only those chapters that lie in the timerange
+     <tt>[min_tc..max_tc]</tt> are kept.
+   \param offset An optional offset that is subtracted from all start and
+     end timecodes after the timerange check has been made.
+   \param language This language is added as the \c KaxChapterLanguage
+     for entries that don't specifiy it.
+   \param charset The charset the chapters are supposed to be it. The entries
+     will be converted to UTF-8 if necessary. This parameter is ignored for XML
+     chapter files.
+   \param exception_on_error If set to \c true then an exception is thrown
+     if an error occurs. Otherwise \c NULL will be returned.
+   \param is_simple_format This boolean will be set to \c true if the chapter
+     format is either the OGM style format or a CUE sheet. May be \c NULL if
+     the caller is not interested in the result.
+   \param tags When parsing a CUE sheet tags will be created along with the
+     chapter entries. These tags will be stored in this parameter.
+  
+   \return The chapters parsed from the file or \c NULL if an error occured.
+  
+   \see ::parse_chapters(const string &file_name,int64_t min_tc,int64_t max_tc, int64_t offset,const string &language,const string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
  */
 KaxChapters *
 parse_chapters(mm_text_io_c *in,
@@ -448,13 +448,13 @@ parse_chapters(mm_text_io_c *in,
 }
 
 /** \brief Get the start timecode for a chapter atom.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param atom The atom for which the start timecode should be returned.
- *
- * \return The start timecode or \c -1 if the atom doesn't contain such a
- *   child element.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param atom The atom for which the start timecode should be returned.
+  
+   \return The start timecode or \c -1 if the atom doesn't contain such a
+     child element.
  */
 int64_t
 get_chapter_start(KaxChapterAtom &atom) {
@@ -467,13 +467,13 @@ get_chapter_start(KaxChapterAtom &atom) {
 }
 
 /** \brief Get the name for a chapter atom.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param atom The atom for which the name should be returned.
- *
- * \return The atom's name UTF-8 coded or \c "" if the atom doesn't contain
- *   such a child element.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param atom The atom for which the name should be returned.
+  
+   \return The atom's name UTF-8 coded or \c "" if the atom doesn't contain
+     such a child element.
  */
 string
 get_chapter_name(KaxChapterAtom &atom) {
@@ -490,13 +490,13 @@ get_chapter_name(KaxChapterAtom &atom) {
 }
 
 /** \brief Get the unique ID for a chapter atom.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param atom The atom for which the unique ID should be returned.
- *
- * \return The ID or \c -1 if the atom doesn't contain such a
- *   child element.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param atom The atom for which the unique ID should be returned.
+  
+   \return The ID or \c -1 if the atom doesn't contain such a
+     child element.
  */
 int64_t
 get_chapter_uid(KaxChapterAtom &atom) {
@@ -509,17 +509,17 @@ get_chapter_uid(KaxChapterAtom &atom) {
 }
 
 /** \brief Add missing mandatory elements
- *
- * The Matroska specs and \c libmatroska say that several elements are
- * mandatory. This function makes sure that they all exist by adding them
- * with their default values if they're missing. It works recursively. See
- * <a href="http://www.matroska.org/technical/specs/chapters/index.html">
- * the Matroska chapter specs</a> for a list or mandatory elements.
- *
- * The parameters are checked for validity.
- *
- * \param e An element that really is an \c EbmlMaster. \a e's children
- *   should be checked.
+  
+   The Matroska specs and \c libmatroska say that several elements are
+   mandatory. This function makes sure that they all exist by adding them
+   with their default values if they're missing. It works recursively. See
+   <a href="http://www.matroska.org/technical/specs/chapters/index.html">
+   the Matroska chapter specs</a> for a list or mandatory elements.
+  
+   The parameters are checked for validity.
+  
+   \param e An element that really is an \c EbmlMaster. \a e's children
+     should be checked.
  */
 void
 fix_mandatory_chapter_elements(EbmlElement *e) {
@@ -573,19 +573,19 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
 }
 
 /** \brief Remove all chapter atoms that are outside of a time range
- *
- * All chapter atoms that lie completely outside the timecode range
- * given with <tt>[min_tc..max_tc]</tt> are deleted. This is the workhorse
- * for ::select_chapters_in_timeframe
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param min_tc The minimum timecode to accept.
- * \param max_tc The maximum timecode to accept.
- * \param offset This value is subtracted from both the start and end timecode
- *   for each chapter after the decision whether or not to keep it has been
- *   made.
- * \param m The master containing the elements to check.
+  
+   All chapter atoms that lie completely outside the timecode range
+   given with <tt>[min_tc..max_tc]</tt> are deleted. This is the workhorse
+   for ::select_chapters_in_timeframe
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param min_tc The minimum timecode to accept.
+   \param max_tc The maximum timecode to accept.
+   \param offset This value is subtracted from both the start and end timecode
+     for each chapter after the decision whether or not to keep it has been
+     made.
+   \param m The master containing the elements to check.
  */
 static void
 remove_entries(int64_t min_tc,
@@ -651,20 +651,20 @@ remove_entries(int64_t min_tc,
 }
 
 /** \brief Remove all chapter atoms that are outside of a time range
- *
- * All chapter atoms that lie completely outside the timecode range
- * given with <tt>[min_tc..max_tc]</tt> are deleted.
- *
- * The parameters are checked for validity.
- *
- * \param chapters The chapters to check.
- * \param min_tc The minimum timecode to accept.
- * \param max_tc The maximum timecode to accept.
- * \param offset This value is subtracted from both the start and end timecode
- *   for each chapter after the decision whether or not to keep it has been
- *   made.
- *
- * \return \a chapters if there are entries left and \c NULL otherwise.
+  
+   All chapter atoms that lie completely outside the timecode range
+   given with <tt>[min_tc..max_tc]</tt> are deleted.
+  
+   The parameters are checked for validity.
+  
+   \param chapters The chapters to check.
+   \param min_tc The minimum timecode to accept.
+   \param max_tc The maximum timecode to accept.
+   \param offset This value is subtracted from both the start and end timecode
+     for each chapter after the decision whether or not to keep it has been
+     made.
+  
+   \return \a chapters if there are entries left and \c NULL otherwise.
  */
 KaxChapters *
 select_chapters_in_timeframe(KaxChapters *chapters,
@@ -718,14 +718,14 @@ select_chapters_in_timeframe(KaxChapters *chapters,
 }
 
 /** \brief Find an edition with a specific UID.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param chapters The chapters in which to look for the edition.
- * \param uid The requested unique edition ID. The special value \c 0
- *   results in the first edition being returned.
- *
- * \return A pointer to the edition or \c NULL if none has been found.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param chapters The chapters in which to look for the edition.
+   \param uid The requested unique edition ID. The special value \c 0
+     results in the first edition being returned.
+  
+   \return A pointer to the edition or \c NULL if none has been found.
  */
 KaxEditionEntry *
 find_edition_with_uid(KaxChapters &chapters,
@@ -750,14 +750,14 @@ find_edition_with_uid(KaxChapters &chapters,
 }
 
 /** \brief Find a chapter atom with a specific UID.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param chapters The chapters in which to look for the atom.
- * \param uid The requested unique atom ID. The special value \c 0 results in
- *   the first atom in the first edition being returned.
- *
- * \return A pointer to the atom or \c NULL if none has been found.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param chapters The chapters in which to look for the atom.
+   \param uid The requested unique atom ID. The special value \c 0 results in
+     the first atom in the first edition being returned.
+  
+   \return A pointer to the atom or \c NULL if none has been found.
  */
 KaxChapterAtom *
 find_chapter_with_uid(KaxChapters &chapters,
@@ -792,18 +792,18 @@ find_chapter_with_uid(KaxChapters &chapters,
 }
 
 /** \brief Move all chapter atoms to another container keeping editions intact
- *
- * This function moves all chapter atoms from \a src to \a dst.
- * If there's already an edition in \a dst with the same UID as the current
- * one in \a src, then all atoms will be put into that edition. Otherwise
- * the complete edition will simply be moved over.
- *
- * After processing \a src will be empty.
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param dst The container the atoms and editions will be put into.
- * \param src The container the atoms and editions will be taken from.
+  
+   This function moves all chapter atoms from \a src to \a dst.
+   If there's already an edition in \a dst with the same UID as the current
+   one in \a src, then all atoms will be put into that edition. Otherwise
+   the complete edition will simply be moved over.
+  
+   After processing \a src will be empty.
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param dst The container the atoms and editions will be put into.
+   \param src The container the atoms and editions will be taken from.
  */
 void
 move_chapters_by_edition(KaxChapters &dst,
@@ -842,17 +842,17 @@ move_chapters_by_edition(KaxChapters &dst,
 }
 
 /** \brief Adjust all start and end timecodes by an offset
- *
- * All start and end timecodes are adjusted by an offset. This is done
- * recursively. 
- *
- * Its parameters don't have to be checked for validity.
- *
- * \param master A master containint the elements to adjust. This can be
- *   a KaxChapters, KaxEditionEntry or KaxChapterAtom object.
- * \param offset The offset to add to each timecode. Can be negative. If
- *   the resulting timecode would be smaller than zero then it will be set
- *   to zero.
+  
+   All start and end timecodes are adjusted by an offset. This is done
+   recursively. 
+  
+   Its parameters don't have to be checked for validity.
+  
+   \param master A master containint the elements to adjust. This can be
+     a KaxChapters, KaxEditionEntry or KaxChapterAtom object.
+   \param offset The offset to add to each timecode. Can be negative. If
+     the resulting timecode would be smaller than zero then it will be set
+     to zero.
  */
 void
 adjust_chapter_timecodes(EbmlMaster &master,

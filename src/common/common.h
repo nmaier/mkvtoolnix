@@ -1,18 +1,18 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * definitions used in all programs, helper functions
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
- * The bit_cursor_c class was originally written by Peter Niemayer
- *   <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   definitions used in all programs, helper functions
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+   The bit_cursor_c class was originally written by Peter Niemayer
+     <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #ifndef __COMMON_H

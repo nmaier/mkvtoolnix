@@ -1,18 +1,18 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * checksum calculations
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
- * The crc32 code was written by Alexander Djourik <sasha@iszf.irk.ru> and
- *   Pavel Zhilin <pzh@iszf.irk.ru>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   checksum calculations
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+   The crc32 code was written by Alexander Djourik <sasha@iszf.irk.ru> and
+     Pavel Zhilin <pzh@iszf.irk.ru>.
  */
 
 #include "checksums.h"
@@ -56,11 +56,11 @@ calc_adler32(const unsigned char *buffer,
 /* The following applies to the calc_crc32 function. Its license is GPL. */
 
 /*
- * Description:	 CRC32 functions
- * Developed by: Alexander Djourik <sasha@iszf.irk.ru>
- *               Pavel Zhilin <pzh@iszf.irk.ru>
- *
- * Copyright (c) 1999-2004 Alexander Djourik. All rights reserved.
+   Description:	 CRC32 functions
+   Developed by: Alexander Djourik <sasha@iszf.irk.ru>
+                 Pavel Zhilin <pzh@iszf.irk.ru>
+  
+   Copyright (c) 1999-2004 Alexander Djourik. All rights reserved.
  */
 
 static const unsigned long crc32_table[256] = {

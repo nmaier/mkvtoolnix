@@ -1,16 +1,16 @@
 /** MPEG video helper functions (MPEG 1, 2 and 4)
- *
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * \file
- * \version $Id$
- *
- * \author Written by Moritz Bunkus <moritz@bunkus.org>.
+  
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   \file
+   \version $Id$
+  
+   \author Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -19,18 +19,18 @@
 #include "mpeg4_common.h"
 
 /** Extract the pixel aspect ratio from a MPEG4 video frame
- *
- * This function searches a buffer containing a MPEG4 video frame
- * for the pixel aspectc ratio. If it is found then the numerator
- * and the denominator are returned.
- *
- * \param buffer The buffer containing the MPEG4 video frame.
- * \param size The size of the buffer in bytes.
- * \param par_num The numerator, if found, is stored in this variable.
- * \param par_den The denominator, if found, is stored in this variable.
- *
- * \return \c true if the pixel aspect ratio was found and \c false
- *   otherwise.
+  
+   This function searches a buffer containing a MPEG4 video frame
+   for the pixel aspectc ratio. If it is found then the numerator
+   and the denominator are returned.
+  
+   \param buffer The buffer containing the MPEG4 video frame.
+   \param size The size of the buffer in bytes.
+   \param par_num The numerator, if found, is stored in this variable.
+   \param par_den The denominator, if found, is stored in this variable.
+  
+   \return \c true if the pixel aspect ratio was found and \c false
+     otherwise.
  */
 bool
 mpeg4_extract_par(const unsigned char *buffer,
@@ -97,18 +97,18 @@ mpeg4_extract_par(const unsigned char *buffer,
 }
 
 /** Find frame boundaries and frame types in a packed video frame
- *
- * This function searches a buffer containing one or more MPEG4 video frames
- * for the frame boundaries and their types. This may be the case for B frames
- * if they're glued to another frame like they are in AVI files.
- *
- * \param buffer The buffer containing the MPEG4 video frame(s).
- * \param size The size of the buffer in bytes.
- * \param frames The data for each frame that is found is put into this
- *   variable. See ::video_frame_t
- *
- * \return Nothing. If no frames were found (e.g. only the dummy header for
- *   a dummy frame) then \a frames will contain no elements.
+  
+   This function searches a buffer containing one or more MPEG4 video frames
+   for the frame boundaries and their types. This may be the case for B frames
+   if they're glued to another frame like they are in AVI files.
+  
+   \param buffer The buffer containing the MPEG4 video frame(s).
+   \param size The size of the buffer in bytes.
+   \param frames The data for each frame that is found is put into this
+     variable. See ::video_frame_t
+  
+   \return Nothing. If no frames were found (e.g. only the dummy header for
+     a dummy frame) then \a frames will contain no elements.
  */
 void
 mpeg4_find_frame_types(const unsigned char *buffer,
@@ -171,18 +171,18 @@ mpeg4_find_frame_types(const unsigned char *buffer,
 }
 
 /** \brief Extract the FPS from a MPEG video sequence header
- *
- * This function looks for a MPEG sequence header in a buffer containing
- * a MPEG1 or MPEG2 video frame. If such a header is found its
- * FPS index is extracted and returned. This index can be mapped to the
- * actual number of frames per second with the function
- * ::mpeg_video_get_fps
- *
- * \param buffer The buffer to search for the header.
- * \param size The buffer size.
- *
- * \return The index or \c -1 if no MPEG sequence header was found or
- *   if the buffer was too small.
+  
+   This function looks for a MPEG sequence header in a buffer containing
+   a MPEG1 or MPEG2 video frame. If such a header is found its
+   FPS index is extracted and returned. This index can be mapped to the
+   actual number of frames per second with the function
+   ::mpeg_video_get_fps
+  
+   \param buffer The buffer to search for the header.
+   \param size The buffer size.
+  
+   \return The index or \c -1 if no MPEG sequence header was found or
+     if the buffer was too small.
  */
 int
 mpeg1_2_extract_fps_idx(const unsigned char *buffer,
@@ -218,13 +218,13 @@ mpeg1_2_extract_fps_idx(const unsigned char *buffer,
 }
 
 /** \brief Get the number of frames per second
- *
- * Converts the index returned by ::mpeg_video_extract_fps_idx to a number.
- *
- * \param idx The index as to convert.
- *
- * \return The number of frames per second or \c -1.0 if the index was
- *   invalid.
+  
+   Converts the index returned by ::mpeg_video_extract_fps_idx to a number.
+  
+   \param idx The index as to convert.
+  
+   \return The number of frames per second or \c -1.0 if the index was
+     invalid.
  */
 double
 mpeg1_2_get_fps(int idx) {

@@ -1,16 +1,16 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * RealMedia demultiplexer module
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   RealMedia demultiplexer module
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include <ctype.h>
@@ -34,8 +34,8 @@
 #define PFX "real_reader: "
 
 /*
- * Description of the RealMedia file format:
- * http://www.pcisys.net/~melanson/codecs/rmff.htm
+   Description of the RealMedia file format:
+   http://www.pcisys.net/~melanson/codecs/rmff.htm
  */
 
 int

@@ -1,16 +1,16 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * helper functions that need libebml/libmatroska
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   helper functions that need libebml/libmatroska
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
@@ -54,7 +54,7 @@ __debug_dump_elements(EbmlElement *e,
 #endif
 
 /*
- * UTFstring <-> C string conversion
+   UTFstring <-> C string conversion
  */
 
 UTFstring

@@ -1,16 +1,16 @@
 /*
- * mkvmerge -- utility for splicing together matroska files
- * from component media subtypes
- *
- * Distributed under the GPL
- * see the file COPYING for details
- * or visit http://www.gnu.org/copyleft/gpl.html
- *
- * $Id$
- *
- * Matroska reader
- *
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+  
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+  
+   $Id$
+  
+   Matroska reader
+  
+   Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 // {{{ includes
@@ -96,8 +96,8 @@ using namespace libmatroska;
 // {{{ FUNCTION kax_reader::probe_file()
 
 /*
- * Probes a file by simply comparing the first four bytes to the EBML
- * head signature.
+   Probes a file by simply comparing the first four bytes to the EBML
+   head signature.
  */
 int
 kax_reader_c::probe_file(mm_io_c *mm_io,
