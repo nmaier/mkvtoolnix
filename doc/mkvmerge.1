@@ -316,7 +316,7 @@ $ \fBmkvmerge --identify outofsync.ogg\fP
 .LP
 Now you can use that ID in the following command line:
 .LP
-$ \fBmkvmerge -o goodsync.mkv -A source.avi -s 12345:200 outofsync.ogg\fP
+$ \fBmkvmerge -o goodsync.mkv -A source.avi -y 12345:200 outofsync.ogg\fP
 .LP
 This would add 200ms of silence at the beginning of the audio track with the
 ID 12345 taken from \fIoutofsync.ogg\fP.
@@ -329,7 +329,7 @@ I transcoded was 0.2 seconds out of sync at the end of the movie which
 was 77340 frames long. At 29.97fps 0.2 seconds correspond to approx. 6
 frames. So I did
 .LP
-$ \fBmkvmerge -o goodsync.mkv -s 23456:0,77346/77340 outofsync.mkv\fP
+$ \fBmkvmerge -o goodsync.mkv -y 23456:0,77346/77340 outofsync.mkv\fP
 .LP
 The result was fine.
 .LP
