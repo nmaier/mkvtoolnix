@@ -715,7 +715,13 @@ mmg_dialog::mmg_dialog():
 
   load_job_queue();
 
-  SetIcon(wxICON(matroskalogo_big));
+#if defined SYS_WINDOWS
+  wxIcon icon;
+  icon.LoadFile(wxT("matroskalogo_big.ico"), wxBITMAP_TYPE_ICO);
+  SetIcon(icon);
+#else
+  SetIcon(wxIcon((const char *)matroskalogo_big_xpm, wxBITMAP_TYPE_XPM));
+#endif
 
   set_status_bar(wxT("mkvmerge GUI ready"));
 
