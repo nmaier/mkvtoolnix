@@ -245,7 +245,10 @@ void parse_args(int argc, char **argv, char *&file_name) {
       mxexit(0);
     } else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--checksum"))
       calc_checksums = true;
-    else if (file_name != NULL)
+    else if (!strcmp(argv[i], "-C") || !strcmp(argv[i], "--check-mode")) {
+      calc_checksums = true;
+      verbose = 4;
+    } else if (file_name != NULL)
       mxerror("Only one input file is allowed.\n");
     else
       file_name = argv[i];
