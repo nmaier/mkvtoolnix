@@ -1624,7 +1624,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                      ((fourcc != NULL) && IS_MPEG4_L2_FOURCC(fourcc))) {
             bool is_native;
 
-            mxinfo(FMT_TID "Using the MPEG-4 layer 2 video output module.\n",
+            mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                    ti->fname.c_str(), (int64_t)t->tnum);
             is_native = IS_MPEG4_L2_CODECID(t->codec_id);
             t->ptzr =
@@ -1636,7 +1636,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                              nti));
 
           } else if (t->codec_id == MKV_V_MPEG4_AVC) {
-            mxinfo(FMT_TID "Using the MPEG-4 layer 10 (AVC) video output "
+            mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
                    "module.\n", ti->fname.c_str(), (int64_t)t->tnum);
             t->ptzr =
               add_packetizer(new mpeg4_p10_video_packetizer_c(this,

@@ -1387,7 +1387,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                                          ti));
         safefree(bih);
         ti->private_data = NULL;
-        mxinfo(FMT_TID "Using the MPEG-4 layer 2 video output module.\n",
+        mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                ti->fname.c_str(), (int64_t)dmx->id);
 
       } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) ||
@@ -1464,7 +1464,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           dmx->avc_use_bframes = true;
         else
           PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
-        mxinfo(FMT_TID "Using the MPEG-4 layer 10 (AVC) video output "
+        mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
                "module.\n", ti->fname.c_str(), (int64_t)dmx->id);
 
       } else {

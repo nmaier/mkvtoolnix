@@ -181,7 +181,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
                                                        false,
                                                        ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the MPEG-4 layer 2 video output module for "
+        mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module for "
                "this track.\n", ti->fname.c_str(), (int64_t)0);
     } else {
       vptzr = add_packetizer(new video_packetizer_c(this, NULL,
