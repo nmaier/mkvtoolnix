@@ -51,6 +51,7 @@ typedef struct {
   float fps;
 
   char fourcc[5], type;
+  bool is_aac;
   bool rv_dimensions;
 
   unsigned char *private_data;

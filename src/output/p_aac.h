@@ -41,7 +41,7 @@ class aac_packetizer_c: public generic_packetizer_c {
 private:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, id, profile;
+  int channels, id, profile, samples_per_packet;
   bool headerless, emphasis_present;
   byte_buffer_c byte_buffer;
 
@@ -56,6 +56,7 @@ public:
                       int64_t length = -1, int64_t bref = -1,
                       int64_t fref = -1);
   virtual void set_headers();
+  virtual void set_samples_per_packet(int nsamples_per_packet);
 
 private:
   virtual unsigned char *get_aac_packet(unsigned long *header,

@@ -30,6 +30,7 @@
 #include "common.h"
 #include "error.h"
 #include "r_real.h"
+#include "p_aac.h"
 #include "p_ac3.h"
 #include "p_passthrough.h"
 #include "p_video.h"
@@ -426,6 +427,7 @@ void real_reader_c::parse_headers() {
 void real_reader_c::create_packetizer(int64_t tid) {
   int i;
   real_demuxer_t *dmx;
+  bool duplicate_data;
 
   dmx = NULL;
   for (i = 0; i < demuxers.size(); i++)
@@ -440,6 +442,7 @@ void real_reader_c::create_packetizer(int64_t tid) {
     ti->id = dmx->id;
     ti->private_data = dmx->private_data;
     ti->private_size = dmx->private_size;
+    duplicate_data = false;
 
     if (dmx->type == 'v') {
       char buffer[20];
@@ -467,9 +470,41 @@ void real_reader_c::create_packetizer(int64_t tid) {
         dmx->packetizer =
           new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels,
                                   dmx->bsid, ti);
-        if (verbose)
-          mxinfo("+-> Using AC3 output module for stream "
-                 "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+        mxverb(1, "+-> Using the AC3 output module for stream "
+               "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+
+      } else if (!strcasecmp(dmx->fourcc, "raac") ||
+                 !strcasecmp(dmx->fourcc, "racp")) {
+        int profile;
+
+        if (!strcasecmp(dmx->fourcc, "racp"))
+          profile = AAC_PROFILE_SBR;
+        else
+          profile = AAC_PROFILE_LC;
+        for (i = 0; i < (int)ti->aac_is_sbr->size(); i++)
+          if (((*ti->aac_is_sbr)[i] == -1) ||
+              ((*ti->aac_is_sbr)[i] == dmx->id)) {
+            profile = AAC_PROFILE_SBR;
+            break;
+          }
+        ti->private_data = NULL;
+        ti->private_size = 0;
+        dmx->is_aac = true;
+        dmx->packetizer =
+          new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
+                               dmx->samples_per_second, dmx->channels, ti,
+                               false, true);
+        ((aac_packetizer_c *)dmx->packetizer)->set_samples_per_packet(2048);
+        mxverb(1, "+-> Using the AAC output module for stream "
+               "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+        if (profile != AAC_PROFILE_SBR)
+          mxwarn("RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. "
+                 "In some cases this can NOT be detected automatically. "
+                 "Therefore you have to specifiy '--aac-is-sbr %u' manually "
+                 "for this input file if the file actually contains SBR AAC. "
+                 "The file will be muxed in the WRONG way otherwise. Also "
+                 "read mkvmerge's documentation.\n", dmx->id);
+        duplicate_data = true;
 
       } else {
         ptzr = new passthrough_packetizer_c(this, ti);
@@ -492,7 +527,7 @@ void real_reader_c::create_packetizer(int64_t tid) {
       }
     }
 
-    dmx->packetizer->duplicate_data_on_add(false);
+    dmx->packetizer->duplicate_data_on_add(duplicate_data);
   }
 }
 
@@ -607,6 +642,46 @@ int real_reader_c::read(generic_packetizer_c *) {
     if (dmx->type == 'v') {
       assemble_packet(dmx, chunk, length, timecode, (flags & 2) == 2);
       safefree(chunk);
+    } else if (dmx->is_aac) {
+      uint32_t num_sub_packets, data_idx, i, sub_length, len_check;
+
+      if (length < 2) {
+        mxwarn("real_reader: Short AAC audio packet for track ID %u of "
+               "'%s' (length: %u < 2)\n", dmx->id, ti->fname, length);
+        safefree(chunk);
+        return EMOREDATA;
+      }
+      num_sub_packets = chunk[1] >> 4;
+      mxverb(2, "real_reader: num_sub_packets = %u\n", num_sub_packets);
+      if (length < (2 + num_sub_packets * 2)) {
+        mxwarn("real_reader: Short AAC audio packet for track ID %u of "
+               "'%s' (length: %u < %u)\n", dmx->id, ti->fname, length,
+               2 + num_sub_packets * 2);
+        safefree(chunk);
+        return EMOREDATA;
+      }
+      len_check = 2 + num_sub_packets * 2;
+      for (i = 0; i < num_sub_packets; i++) {
+        sub_length = get_uint16_be(&chunk[2 + i * 2]);
+        mxverb(2, "real_reader: %u: length %u\n", i, sub_length);
+        len_check += sub_length;
+      }
+      if (len_check != length) {
+        mxwarn("real_reader: Inconsistent AAC audio packet for track ID %u of "
+               "'%s' (length: %u != len_check %u)\n", dmx->id, ti->fname,
+               length, len_check);
+        safefree(chunk);
+        return EMOREDATA;
+      }
+      data_idx = 2 + num_sub_packets * 2;
+      for (i = 0; i < num_sub_packets; i++) {
+        sub_length = get_uint16_be(&chunk[2 + i * 2]);
+        dmx->packetizer->process(&chunk[data_idx], sub_length);
+        data_idx += sub_length;
+      }
+      safefree(chunk);
+      return EMOREDATA;
+
     } else {
       if ((timecode - last_timecode) <= (5 * 60 * 1000)) {
         if (dmx->c_data != NULL)
@@ -687,8 +762,12 @@ void real_reader_c::identify() {
   mxinfo("File '%s': container: RealMedia\n", ti->fname);
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
-    mxinfo("Track ID %d: %s (%s)\n", demuxer->id,
-           demuxer->type == 'a' ? "audio" : "video", demuxer->fourcc);
+    if (!strcasecmp(demuxer->fourcc, "raac") ||
+        !strcasecmp(demuxer->fourcc, "racp"))
+      mxinfo("Track ID %d: audio (AAC)\n", demuxer->id);
+    else
+      mxinfo("Track ID %d: %s (%s)\n", demuxer->id,
+             demuxer->type == 'a' ? "audio" : "video", demuxer->fourcc);
   }
 }
 

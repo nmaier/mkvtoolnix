@@ -48,10 +48,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   emphasis_present = nemphasis_present;
 
   set_track_type(track_audio);
-  if (use_durations)
-    set_track_default_duration_ns((int64_t)(1024000000000.0 *
-                                            ti->async.linear /
-                                            samples_per_sec));
+  set_samples_per_packet(1024);
   duplicate_data_on_add(headerless);
 }
 
@@ -72,7 +69,7 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
   if ((pos + aacheader->bytes) > size)
     return NULL;
 
-  pims = 1024000.0 / samples_per_sec;
+  pims = samples_per_packet * 1000.0 / samples_per_sec;
 
   if (needs_negative_displacement(pims)) {
     /*
@@ -179,8 +176,11 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
     if (timecode != -1)
       my_timecode = timecode;
     else
-      die("aac_packetizer_c::process: headerless && timecode == -1\n");
-    duration = (int64_t)(1000.0 * 1024 * ti->async.linear / samples_per_sec);
+      my_timecode = (int64_t)(1000.0 * packetno * samples_per_packet /
+                              samples_per_sec);
+    duration = (int64_t)(1000.0 * samples_per_packet * ti->async.linear /
+                         samples_per_sec);
+    packetno++;
 
     if (needs_negative_displacement(duration)) {
       displace(-duration);
@@ -203,18 +203,30 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
   byte_buffer.add(buf, size);
   while ((packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
-      my_timecode = (int64_t)(1000.0 * packetno * 1024 / samples_per_sec);
+      my_timecode = (int64_t)(1000.0 * packetno * samples_per_packet /
+                              samples_per_sec);
     else
       my_timecode = timecode + ti->async.displacement;
     my_timecode = (int64_t)(my_timecode * ti->async.linear);
     add_packet(packet, aacheader.data_byte_size, my_timecode,
-               (int64_t)(1000.0 * 1024 * ti->async.linear / samples_per_sec));
+               (int64_t)(1000.0 * samples_per_packet * ti->async.linear /
+                         samples_per_sec));
     packetno++;
   }
 
   debug_leave("aac_packetizer_c::process");
 
   return EMOREDATA;
+}
+
+void
+aac_packetizer_c::set_samples_per_packet(int nsamples_per_packet) {
+  samples_per_packet = nsamples_per_packet;
+  if (use_durations)
+    set_track_default_duration_ns((int64_t)(samples_per_packet *
+                                            1000000000.0 *
+                                            ti->async.linear /
+                                            samples_per_sec));
 }
 
 void aac_packetizer_c::dump_debug_info() {
