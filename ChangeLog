@@ -1,5 +1,10 @@
 2003-09-19  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bugfix: If attachments were given with path components
+        then the path component wasn't discarded for the attachment's
+        description on Windows (normally only the file name should be used
+        as the attachment's name).
+
         * mmg: Fixed wrong order of the options --chapters,
         --chapter-language and --chapter-charset.
 

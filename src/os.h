@@ -44,4 +44,10 @@
 #include <stdint.h>
 #endif // !COMP_CYGWIN
 
+#if defined(SYS_WINDOWS)
+# define PATHSEP '\\'
+#else
+# define PATHSEP '/'
+#endif
+
 #endif

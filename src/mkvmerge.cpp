@@ -891,9 +891,9 @@ static void render_attachments(IOCallback *out) {
           attch->mime_type;
 
       name = &attch->name[strlen(attch->name) - 1];
-      while ((name != attch->name) && (*name != '/'))
+      while ((name != attch->name) && (*name != PATHSEP))
         name--;
-      if (*name == '/')
+      if (*name == PATHSEP)
         name++;
       if (*name == 0)
         die("Internal error: *name == 0 on %d.", __LINE__);
