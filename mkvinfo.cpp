@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.41 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.42 2003/05/21 20:54:40 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -206,7 +206,7 @@ void process_file() {
   EbmlStream *es;
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
-  char track_type;
+  char track_type, *s;
 
   try {
     delete_object = 1;
@@ -221,26 +221,39 @@ void process_file() {
       fprintf(stdout, "(%s) no head found\n", NAME);
       exit(0);
     }
-    // Don't verify its data for now.
-    l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
-    delete l0;
-    fprintf(stdout, "(%s) + EBML head\n", NAME);
-
-    // Next element must be a segment
-    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
-    if (l0 == NULL) {
-      fprintf(stdout, "(%s) No segment/level 0 element found.\n", NAME);
-      exit(0);
-    }
-    if (!(EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)) {
-      fprintf(stdout, "(%s) Next level 0 element is not a segment but %s\n",
-              NAME, typeid(*l0).name());
-      exit(0);
-    }
-    fprintf(stdout, "(%s) + segment", NAME);
+    fprintf(stdout, "(%s) + EBML head", NAME);
     if (verbose > 1)
       fprintf(stdout, " at %llu", l0->GetElementPosition());
     fprintf(stdout, "\n");
+      
+    // Don't verify its data for now.
+    l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
+    delete l0;
+
+    while (1) {
+      // Next element must be a segment
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
+      if (l0 == NULL) {
+        fprintf(stdout, "(%s) No segment/level 0 element found.\n", NAME);
+        exit(0);
+      }
+      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
+        fprintf(stdout, "(%s) + segment", NAME);
+        if (verbose > 1)
+          fprintf(stdout, " at %llu", l0->GetElementPosition());
+        fprintf(stdout, "\n");
+        break;
+      }
+
+      fprintf(stdout, "(%s) Next level 0 element is not a segment but %s",
+              NAME, typeid(*l0).name());
+      if (verbose > 1)
+        fprintf(stdout, " at %llu", l0->GetElementPosition());
+      fprintf(stdout, "\n");
+
+      l0->SkipData(static_cast<EbmlStream &>(*es), l0->Generic().Context);
+      delete l0;
+    }
 
     upper_lvl_el = 0;
     exit_loop = 0;
@@ -278,6 +291,26 @@ void process_file() {
             duration.ReadData(es->I_O());
             fprintf(stdout, "(%s) | + Duration: %.3fs", NAME,
                     float(duration) * tc_scale / 1000000000.0);
+            if (verbose > 1)
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
+            fprintf(stdout, "\n");
+
+          } else if (EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) {
+            KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
+            muxingapp.ReadData(es->I_O());
+            s = unicode_string_to_cstr(UTFstring(muxingapp));
+            fprintf(stdout, "(%s) | + Muxing application: %s", NAME, s);
+            safefree(s);
+            if (verbose > 1)
+              fprintf(stdout, " at %llu", l2->GetElementPosition());
+            fprintf(stdout, "\n");
+
+          } else if (EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) {
+            KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
+            writingapp.ReadData(es->I_O());
+            s = unicode_string_to_cstr(UTFstring(writingapp));
+            fprintf(stdout, "(%s) | + Writing application: %s", NAME, s);
+            safefree(s);
             if (verbose > 1)
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
