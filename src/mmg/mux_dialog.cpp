@@ -37,10 +37,11 @@
 mux_dialog::mux_dialog(wxWindow *parent):
   wxDialog(parent, -1, "mkvmerge is running", wxDefaultPosition,
 #ifdef SYS_WINDOWS
-           wxSize(500, 560), wxCAPTION) {
+           wxSize(500, 560),
 #else
-           wxSize(500, 520), wxCAPTION) {
+           wxSize(500, 520),
 #endif
+           wxCAPTION) {
   char c;
   long value;
   wxString line, tmp;
@@ -183,7 +184,11 @@ void mux_dialog::on_save_log(wxCommandEvent &evt) {
 }
 
 void mux_dialog::on_abort(wxCommandEvent &evt) {
-  wxKill(pid);
+#if defined(SYS_WINDOWS)
+  wxKill(pid, wxSIGKILL);
+#else
+  wxKill(pid, wxSIGTERM);
+#endif
 }
 
 mux_process::mux_process(mux_dialog *mdlg):
@@ -197,7 +202,13 @@ void mux_process::OnTerminate(int pid, int status) {
   s.Printf("mkvmerge %s with a return code of %d. %s\n",
            (status != 0) && (status != 1) ? "FAILED" : "finished", status,
            status == 0 ? "Everything went fine." :
-           status == 1 ? "There were warnings." : "There were ERRORs.");
+           status == 1 ? "There were warnings"
+#if defined(SYS_WINDOWS)
+           ", or the process was terminated."
+#else
+           "."
+#endif
+           : status == 2 ? "There were ERRORs." : "");
   dlg->update_window(s);
 }
 
