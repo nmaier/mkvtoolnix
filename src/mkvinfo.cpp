@@ -179,7 +179,7 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
 
 #define show_warning(l, f, args...) show_element(NULL, l, f, ## args)
 #define show_unknown_element(e, l) \
-  show_element(e, l, "Unknown element: %s", typeid(*e).name())
+  show_element(e, l, "Unknown element: %s", e->Generic().DebugName)
 
 void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
   int i;
