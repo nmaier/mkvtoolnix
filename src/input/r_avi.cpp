@@ -375,7 +375,6 @@ avi_reader_c::add_audio_demuxer(int aid) {
   } else {
     ti->private_data = NULL;
     ti->private_size = 0;
-    codec_data_size = 0;
   }
 #else
   wfe = avi->wave_format_ex[aid];
