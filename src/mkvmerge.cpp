@@ -1927,7 +1927,11 @@ void finish_file() {
       kax_seekhead->UpdateSize();
     if (kax_seekhead_void->ReplaceWith(*kax_seekhead, *out, true) == 0) {
       mxprint(stdout, "Warning: Could not update the meta seek information "
-              "as the space reserved for them was too small. Re-run "
+              "with all cluster entries as the space reserved for them was "
+              "too small. This is NOT fatal! The resulting file will be "
+              "fine. All important elements (attachments, chapters, cues, "
+              "tags) are still indexed in the meta seek. If you really want "
+              "to have all clusters indexed in the meta seek, then re-run "
               "mkvmerge with the additional parameters '--meta-seek-size "
               "%lld'.\n", kax_seekhead->ElementSize() + 100);
 
