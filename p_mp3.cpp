@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.10 2003/04/13 15:23:02 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.11 2003/04/17 12:22:56 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,8 +36,7 @@
 
 mp3_packetizer_c::mp3_packetizer_c(unsigned long nsamples_per_sec,
                                    int nchannels, track_info_t *nti)
-  throw (error_c):
-  q_c(nti) {
+  throw (error_c): q_c(nti) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bytes_output = 0;
@@ -192,7 +191,7 @@ void mp3_packetizer_c::set_header() {
 }
 
 int mp3_packetizer_c::process(unsigned char *buf, int size,
-                              int64_t timecode = -1, int64_t) {
+                              int64_t timecode, int64_t) {
   unsigned char *packet;
   unsigned long header;
   mp3_header_t mp3header;
