@@ -531,6 +531,8 @@ mmg_dialog::mmg_dialog():
   wxFrame(NULL, -1, wxT("mkvmerge GUI v" VERSION " ('" VERSIONNAME "')")) {
   wxBoxSizer *bs_main;
   wxPanel *panel;
+  wxConfigBase *cfg;
+  int window_pos_x, window_pos_y;
 
   mdlg = this;
 
@@ -705,6 +707,12 @@ mmg_dialog::mmg_dialog():
   SetSizeHints(520, 718);
   SetSize(520, 718);
 #endif
+
+  cfg = wxConfigBase::Get();
+  cfg->SetPath(wxT("/GUI"));
+  if (cfg->Read(wxT("window_position_x"), &window_pos_x) &&
+      cfg->Read(wxT("window_position_y"), &window_pos_y))
+    Move(window_pos_x, window_pos_y);
 
   last_open_dir = wxT("");
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
@@ -1682,6 +1690,21 @@ mmg_dialog::on_add_cli_options(wxCommandEvent &evt) {
 }
 
 void
+mmg_dialog::on_close(wxCloseEvent &evt) {
+  int x, y;
+  wxConfigBase *cfg;
+
+  GetPosition(&x, &y);
+  cfg = wxConfigBase::Get();
+  cfg->SetPath(wxT("/GUI"));
+  cfg->Write(wxT("window_position_x"), x);
+  cfg->Write(wxT("window_position_y"), y);
+  cfg->Flush();
+
+  Destroy();
+}
+
+void
 set_on_top(bool on_top) {
   long style;
 
@@ -1746,6 +1769,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_WINDOW_GLOBAL, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_SETTINGS, mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_CHAPTEREDITOR, mmg_dialog::on_window_selected)
+  EVT_CLOSE(mmg_dialog::on_close)
 END_EVENT_TABLE();
 
 bool
