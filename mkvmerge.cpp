@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.40 2003/04/20 15:07:11 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.41 2003/04/20 16:39:03 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -97,7 +97,7 @@ char *outfile = NULL;
 filelist_t *input= NULL;
 int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
-int write_cues = 1;
+int write_cues = 1, cue_writing_requested = 0;
 
 float video_fps = -1.0;
 
@@ -107,7 +107,9 @@ KaxInfo          *kax_infos;
 KaxTracks        *kax_tracks;
 KaxTrackEntry    *kax_last_entry;
 KaxCues          *kax_cues;
-int               track_number = 0;
+
+// Specs say that track numbers should start at 1.
+int               track_number = 1;
 
 KaxDuration      *kax_duration;
 
@@ -931,9 +933,19 @@ int main(int argc, char **argv) {
   if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
     cluster_helper->render(out);
 
+  if (verbose == 1) {
+    display_progress(1);
+    fprintf(stdout, "\n");
+  }
+  
   // Render the cues.
-  if (write_cues)
+  if (write_cues && cue_writing_requested) {
+    if (verbose == 1)
+      fprintf(stdout, "Writing cue entries (the index)...");
     kax_cues->Render(*static_cast<StdIOCallback *>(out));
+    if (verbose == 1)
+      fprintf(stdout, "\n");
+  }
 
   // Now re-render the kax_infos and fill in the biggest timecode
   // as the file's duration.
@@ -944,11 +956,6 @@ int main(int argc, char **argv) {
 
   delete cluster_helper;
 
-  if (verbose == 1) {
-    display_progress(1);
-    fprintf(stdout, "\n");
-  }
-  
   file = input;
   while (file) {
     filelist_t *next = file->next;
