@@ -107,18 +107,25 @@ off_t
 xio_lseek(int fd,
           off_t offset,
           int whence) {
+  int64_t expected_pos;
   seek_mode smode;
 
   if ((fd < 0) || (fd >= MAX_INSTANCES) || (instances[fd] == NULL))
-    return -1;
-  if (whence == SEEK_SET)
+    return (off_t)-1;
+  if (whence == SEEK_SET) {
     smode = seek_beginning;
-  else if (whence == SEEK_END)
+    expected_pos = offset;
+  } else if (whence == SEEK_END) {
     smode = seek_end;
-  else
+    expected_pos = instances[fd]->get_size() - offset;
+  } else {
     smode = seek_current;
+    expected_pos = instances[fd]->getFilePointer() + offset;
+  }
   instances[fd]->setFilePointer(offset, smode);
-  return instances[fd]->getFilePointer();
+  if (instances[fd]->getFilePointer() != expected_pos)
+    return (off_t)-1;
+  return expected_pos;
 }
 
 int
