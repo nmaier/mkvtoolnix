@@ -576,110 +576,6 @@ create_output_files() {
 }
 
 static void
-unpack_real_video_frames(kax_track_t *track,
-                         unsigned char *src,
-                         uint32_t size,
-                         uint32_t timecode,
-                         bool is_key) {
-  unsigned char *src_ptr, *ptr, *dst;
-  int num_subpackets, i, offset, total_len;
-  vector<uint32_t> packet_offsets, packet_lengths;
-  rmff_frame_t *frame;
-
-  track->packetno++;
-  src_ptr = src;
-  num_subpackets = *src_ptr + 1;
-  src_ptr++;
-  if (size < (num_subpackets * 8 + 1)) {
-    mxwarn("RealVideo unpacking failed: frame size too small. Could not "
-           "extract sub packet offsets. Skipping a frame.\n");
-    return;
-  }
-  for (i = 0; i < num_subpackets; i++) {
-    src_ptr += 4;
-    packet_offsets.push_back(get_uint32(src_ptr));
-    src_ptr += 4;
-  }
-  if ((packet_offsets[packet_offsets.size() - 1] + (src_ptr - src)) >= size) {
-    mxwarn("RealVideo unpacking failed: frame size too small. Expected at "
-           "least %u bytes, but the frame contains only %u. Skipping this "
-           "frame.\n", packet_offsets[packet_offsets.size() - 1] +
-           (src_ptr - src), size);
-    return;
-  }
-  total_len = size - (src_ptr - src);
-  for (i = 0; i < (num_subpackets - 1); i++)
-    packet_lengths.push_back(packet_offsets[i + 1] - packet_offsets[i]);
-  packet_lengths.push_back(total_len -
-                           packet_offsets[packet_offsets.size() - 1]);
-
-  dst = (unsigned char *)safemalloc(size * 2);
-  for (i = 0; i < num_subpackets; i++) {
-    ptr = dst;
-    if (num_subpackets == 1) {
-      *ptr = 0xc0;              // complete frame
-      ptr++;
-
-    } else {
-      *ptr = (num_subpackets >> 1) & 0x7f; // number of subpackets
-      if (i == (num_subpackets - 1)) // last fragment?
-        *ptr |= 0x80;
-      ptr++;
-
-      *ptr = i + 1;             // fragment number
-      *ptr |= ((num_subpackets & 0x01) << 7); // number of subpackets
-      ptr++;
-    }
-
-    // total packet length:
-    if (total_len > 0x3fff) {
-      put_uint16_be(ptr, ((total_len & 0x3fff0000) >> 16));
-      ptr += 2;
-      put_uint16_be(ptr, total_len & 0x0000ffff);
-    } else
-      put_uint16_be(ptr, 0x4000 | total_len);
-    ptr += 2;
-
-    // fragment offset from beginning/end:
-    if (num_subpackets == 1)
-      offset = timecode;
-    else if (i < (num_subpackets - 1))
-      offset = packet_offsets[i];
-    else
-      // If it's the last packet then the 'offset' is the fragment's length.
-      offset = packet_lengths[i];
-
-    if (offset > 0x3fff) {
-      put_uint16_be(ptr, ((offset & 0x3fff0000) >> 16));
-      ptr += 2;
-      put_uint16_be(ptr, offset & 0x0000ffff);
-    } else
-      put_uint16_be(ptr, 0x4000 | offset);
-    ptr += 2;
-
-    // sequence number = frame number & 0xff
-    *ptr = (track->packetno - 1) & 0xff;
-    ptr++;
-
-    memcpy(ptr, src_ptr, packet_lengths[i]);
-    src_ptr += packet_lengths[i];
-    ptr += packet_lengths[i];
-
-    frame = rmff_allocate_frame(ptr - dst, dst);
-    if (frame == NULL)
-      mxerror("Memory allocation error: Could not get a rmff_frame_t.\n");
-    frame->timecode = timecode;
-    if (is_key)
-      frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
-    if (rmff_write_frame(track->rmtrack, frame) != RMFF_ERR_OK)
-      mxwarn("Could not write a RealVideo fragment.\n");
-    rmff_release_frame(frame);
-    track->subpacketno++;
-  }
-  safefree(dst);
-}
-
-static void
 handle_data(KaxBlock *block,
             int64_t block_duration,
             bool has_ref) {
@@ -946,19 +842,17 @@ handle_data(KaxBlock *block,
         break;
 
       case TYPEREAL:
-        if (track->track_type == 'v') {
-          unpack_real_video_frames(track, data.Buffer(), data.Size(), start,
-                                   !has_ref);
-          break;
-        }
-
         rmf_frame = rmff_allocate_frame(data.Size(), data.Buffer());
         if (rmf_frame == NULL)
-          mxerror("Could not allocate memory for a RealAudio frame.\n");
+          mxerror("Could not allocate memory for a RealAudio/RealVideo "
+                  "frame.\n");
         rmf_frame->timecode = start;
         if (!has_ref)
           rmf_frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
-        rmff_write_frame(track->rmtrack, rmf_frame);
+        if (track->track_type == 'v')
+          rmff_write_packed_video_frame(track->rmtrack, rmf_frame);
+        else
+          rmff_write_frame(track->rmtrack, rmf_frame);
         rmff_release_frame(rmf_frame);
         break;
 
