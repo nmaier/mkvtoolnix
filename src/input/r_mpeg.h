@@ -32,7 +32,7 @@ private:
   mm_io_c *mm_io;
   int64_t bytes_processed, size;
 
-  int version, width, height;
+  int version, width, height, dwidth, dheight;
   double frame_rate, aspect_ratio;
 
 public:
@@ -58,7 +58,7 @@ struct mpeg_ps_track_t {
 
   int64_t first_timecode;
 
-  int v_version, v_width, v_height;
+  int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
   unsigned char *raw_seq_hdr;
   int raw_seq_hdr_size;
@@ -67,7 +67,7 @@ struct mpeg_ps_track_t {
 
   mpeg_ps_track_t():
     ptzr(-1), type(0), fourcc(0),
-    v_version(0), v_width(0), v_height(0),
+    v_version(0), v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
     v_frame_rate(0), v_aspect_ratio(0),
     raw_seq_hdr(NULL), raw_seq_hdr_size(0),
     a_channels(0), a_sample_rate(0), a_bits_per_sample(0), a_bsid(0) {
