@@ -172,7 +172,7 @@ vorbis_packetizer_c::process(memory_c &mem,
       last_bs = this_bs;
       samples_here = (this_bs + last_bs) / 4;
       memory_c mem(zero, 2, false);
-      add_packet(mem, samples * 1000 / vi.rate,
+      add_packet(mem, samples * 1000000000 / vi.rate,
                  samples_here * 1000000000 / vi.rate);
     }
   }
