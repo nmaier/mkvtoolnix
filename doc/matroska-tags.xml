@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!doctype Tags system "matroskatags.dtd">
+
+<Tags>
+  <Tag>
+    <Targets>
+      <TrackUID>1</TrackUID>
+      <ChapterUID>2</ChapterUID>
+    </Targets>
+
+    <General>
+      <Subject>Subject</Subject>
+      <Biography>Biography</Biography>
+      <Language>Language</Language>
+      <Rating>Rating</Rating>
+      <Encoder>Encoder</Encoder>
+      <EncodeSettings>EncodeSettings</EncodeSettings>
+      <File>File</File>
+      <ArchivalLocation>ArchivalLocation</ArchivalLocation>
+      <Keywords>Keywords</Keywords>
+      <Mood>Mood</Mood>
+      <RecordLocation>RecordLocation</RecordLocation>
+      <Source>Source</Source>
+      <SourceForm>SourceForm</SourceForm>
+      <Product>Product</Product>
+      <OriginalMediaType>OriginalMediaType</OriginalMediaType>
+      <PlayCounter>PlayCounter</PlayCounter>
+      <Popularimeter>Popularimeter</Popularimeter>
+    </General>
+
+    <Genres>
+      <AudioGenre>AudioGenre</AudioGenre>
+      <VideoGenre>VideoGenre</VideoGenre>
+      <SubGenre>SubGenre</SubGenre>
+    </Genres>
+
+    <AudioSpecific>
+      <AudioEncryption>AudioEncryption</AudioEncryption>
+      <AudioGain>AudioGain</AudioGain>
+      <AudioPeak>AudioPeak</AudioPeak>
+      <BPM>BPM</BPM>
+      <Equalisation>Equalisation</Equalisation>
+      <DiscTrack>DiscTrack</DiscTrack>
+      <SetPart>SetPart</SetPart>
+      <InitialKey>InitialKey</InitialKey>
+      <OfficialFileURL>OfficialFileURL</OfficialFileURL>
+      <OfficialSourceURL>OfficialSourceURL</OfficialSourceURL>
+    </AudioSpecific>
+
+    <ImageSpecific>
+      <CaptureDPI>CaptureDPI</CaptureDPI>
+      <CaptureLightness>CaptureLightness</CaptureLightness>
+      <CapturePaletteSetting>CapturePaletteSetting</CapturePaletteSetting>
+      <CaptureSharpness>CaptureSharpness</CaptureSharpness>
+      <Cropped>Cropped</Cropped>
+      <OriginalDimensions>OriginalDimensions</OriginalDimensions>
+    </ImageSpecific>
+
+    <MultiCommercial>
+      <Commercial>
+        <CommercialType>CommercialType</CommercialType>
+        <Address>Address</Address>
+        <URL>URL</URL>
+        <Email>Email</Email>
+        <MultiPrice>
+          <Currency>Currency</Currency>
+          <Amount>Amount</Amount>
+          <PriceDate>PriceDate</PriceDate>
+        </MultiPrice>
+      </Commercial>
+    </MultiCommercial>
+
+    <MultiDate>
+      <Date>
+        <DateType>DateType</DateType>
+        <DateBegin>DateBegin</DateBegin>
+        <DateEnd>DateEnd</DateEnd>
+      </Date>
+    </MultiDate>
+
+    <MultiEntity>
+      <Entity>
+        <EntityType>EntityType</EntityType>
+        <Name>Name</Name>
+        <URL>URL</URL>
+        <Email>Email</Email>
+        <Address>Address</Address>
+      </Entity>
+    </MultiEntity>
+
+    <MultiIdentifier>
+      <Identifier>
+        <IdentifierType>IdentifierType</IdentifierType>
+        <IdentifierBinary>IdentifierBinary</IdentifierBinary>
+        <IdentifierString>IdentifierString</IdentifierString>
+      </Identifier>
+    </MultiIdentifier>
+
+    <MultiLegal>
+      <Legal>
+        <LegalType>LegalType</LegalType>
+        <URL>URL</URL>
+        <Address>Address</Address>
+      </Legal>
+    </MultiLegal>
+
+    <MultiTitle>
+      <Title>
+        <TitleType>TitleType</TitleType>
+        <Name>Name</Name>
+        <SubTitle>SubTitle</SubTitle>
+        <Edition>Edition</Edition>
+        <Address>Address</Address>
+        <URL>URL</URL>
+        <Email>Email</Email>
+        <Language>Language</Language>
+      </Title>
+    </MultiTitle>
+
+    <MultiComment>
+      <CommentName>CommentName</CommentName>
+      <Comments>Comments</Comments>
+      <Language>Language</Language>
+    </MultiComment>
+
+  </Tag>
+</Tags>
+
