@@ -556,12 +556,17 @@ real_demuxer_t *real_reader_c::find_demuxer(int id) {
 
 int real_reader_c::finish() {
   int i;
+  int64_t dur;
   real_demuxer_t *dmx;
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
     if ((dmx->type == 'a') && (dmx->c_data != NULL)) {
-      int64_t dur = dmx->c_timecode / dmx->c_numpackets;
+      if (dmx->is_aac) {
+        safefree(dmx->c_data);
+        continue;
+      }
+      dur = dmx->c_timecode / dmx->c_numpackets;
       dmx->packetizer->process(dmx->c_data, dmx->c_len, dmx->c_timecode + dur,
                                dur, dmx->c_keyframe ? -1 : dmx->c_reftimecode);
     }
@@ -623,6 +628,8 @@ int real_reader_c::read(generic_packetizer_c *) {
     }
 
     dmx = find_demuxer(id);
+    mxverb(4, "real_reader: %u/'%s': timecode = %u\n", dmx->id, ti->fname,
+           timecode);
 
     if (dmx == NULL) {
       io->skip(length - 12);
@@ -642,45 +649,43 @@ int real_reader_c::read(generic_packetizer_c *) {
     if (dmx->type == 'v') {
       assemble_packet(dmx, chunk, length, timecode, (flags & 2) == 2);
       safefree(chunk);
-    } else if (dmx->is_aac) {
-      uint32_t num_sub_packets, data_idx, i, sub_length, len_check;
 
-      if (length < 2) {
-        mxwarn("real_reader: Short AAC audio packet for track ID %u of "
-               "'%s' (length: %u < 2)\n", dmx->id, ti->fname, length);
-        safefree(chunk);
+    } else if (dmx->is_aac) {
+      if ((dmx->c_data == NULL) && (dmx->c_numpackets == 0)) {
+        // Cache the very first packet in order to find the number of
+        // samples per AAC frame ( = the duration).
+        dmx->c_data = chunk;
+        dmx->c_len = length;
+        dmx->c_timecode = timecode;
+        dmx->c_numpackets = 1;
         return EMOREDATA;
+
+      } else if (dmx->c_data != NULL) {
+        if ((dmx->c_len < 2) || ((dmx->c_data[1] & 0xf0) == 0))
+          mxerror("real_reader: The AAC track %u of '%s' contains an invalid "
+                  "data packet (either it's too short or the number of "
+                  "AAC sub packets is 0). Aborting.\n", dmx->id, ti->fname);
+
+        // We've got the first packet cached. Now calculate the number of
+        // samples and store that in dmx->c_reftimecode.
+        dmx->c_reftimecode = (timecode - dmx->c_timecode) *
+          dmx->samples_per_second / 1000;
+        // Now devide the number of samples in this first packet by the
+        // number of AAC frames in that packet. Also round it to the nearest
+        // power of 2.
+        dmx->c_reftimecode /= chunk[1] >> 4;
+        dmx->c_reftimecode = round_to_nearest_pow2(dmx->c_reftimecode);
+        deliver_aac_frames(dmx, dmx->c_data, dmx->c_len);
+        dmx->c_data = NULL;
+        mxverb(2, "real_reader: %u/'%s': Samples per AAC frame: %lld\n",
+               dmx->id, ti->fname, dmx->c_reftimecode);
+        if (dmx->c_reftimecode != 2048) {
+          ((aac_packetizer_c *)dmx->packetizer)->
+            set_samples_per_packet(dmx->c_reftimecode);
+          rerender_track_headers();
+        }
       }
-      num_sub_packets = chunk[1] >> 4;
-      mxverb(2, "real_reader: num_sub_packets = %u\n", num_sub_packets);
-      if (length < (2 + num_sub_packets * 2)) {
-        mxwarn("real_reader: Short AAC audio packet for track ID %u of "
-               "'%s' (length: %u < %u)\n", dmx->id, ti->fname, length,
-               2 + num_sub_packets * 2);
-        safefree(chunk);
-        return EMOREDATA;
-      }
-      len_check = 2 + num_sub_packets * 2;
-      for (i = 0; i < num_sub_packets; i++) {
-        sub_length = get_uint16_be(&chunk[2 + i * 2]);
-        mxverb(2, "real_reader: %u: length %u\n", i, sub_length);
-        len_check += sub_length;
-      }
-      if (len_check != length) {
-        mxwarn("real_reader: Inconsistent AAC audio packet for track ID %u of "
-               "'%s' (length: %u != len_check %u)\n", dmx->id, ti->fname,
-               length, len_check);
-        safefree(chunk);
-        return EMOREDATA;
-      }
-      data_idx = 2 + num_sub_packets * 2;
-      for (i = 0; i < num_sub_packets; i++) {
-        sub_length = get_uint16_be(&chunk[2 + i * 2]);
-        dmx->packetizer->process(&chunk[data_idx], sub_length);
-        data_idx += sub_length;
-      }
-      safefree(chunk);
-      return EMOREDATA;
+      deliver_aac_frames(dmx, chunk, length);
 
     } else {
       if ((timecode - last_timecode) <= (5 * 60 * 1000)) {
@@ -710,6 +715,49 @@ int real_reader_c::read(generic_packetizer_c *) {
   }
 
   return EMOREDATA;
+}
+
+void
+real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
+                                  unsigned char *chunk,
+                                  uint32_t length) {
+  uint32_t num_sub_packets, data_idx, i, sub_length, len_check;
+
+  if (length < 2) {
+    mxwarn("real_reader: Short AAC audio packet for track ID %u of "
+           "'%s' (length: %u < 2)\n", dmx->id, ti->fname, length);
+    safefree(chunk);
+    return;
+  }
+  num_sub_packets = chunk[1] >> 4;
+  mxverb(2, "real_reader: num_sub_packets = %u\n", num_sub_packets);
+  if (length < (2 + num_sub_packets * 2)) {
+    mxwarn("real_reader: Short AAC audio packet for track ID %u of "
+           "'%s' (length: %u < %u)\n", dmx->id, ti->fname, length,
+           2 + num_sub_packets * 2);
+    safefree(chunk);
+    return;
+  }
+  len_check = 2 + num_sub_packets * 2;
+  for (i = 0; i < num_sub_packets; i++) {
+    sub_length = get_uint16_be(&chunk[2 + i * 2]);
+    mxverb(2, "real_reader: %u: length %u\n", i, sub_length);
+    len_check += sub_length;
+  }
+  if (len_check != length) {
+    mxwarn("real_reader: Inconsistent AAC audio packet for track ID %u of "
+           "'%s' (length: %u != len_check %u)\n", dmx->id, ti->fname,
+           length, len_check);
+    safefree(chunk);
+    return;
+  }
+  data_idx = 2 + num_sub_packets * 2;
+  for (i = 0; i < num_sub_packets; i++) {
+    sub_length = get_uint16_be(&chunk[2 + i * 2]);
+    dmx->packetizer->process(&chunk[data_idx], sub_length);
+    data_idx += sub_length;
+  }
+  safefree(chunk);
 }
 
 // }}}
