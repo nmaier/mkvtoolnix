@@ -64,6 +64,7 @@ struct mmg_track_t {
     type(0), id(0), source(0),
     enabled(false), display_dimensions_selected(false),
     default_track(false), aac_is_sbr(false), track_name_was_present(false),
+    language(wxT("und")), cues(wxT("default")), sub_charset(wxT("default")),
     appending(false) {};
 };
 typedef counted_ptr<mmg_track_t> mmg_track_ptr;
@@ -120,6 +121,8 @@ wxString format_date_time(time_t date_time);
 wxString get_temp_dir();
 
 wxString create_track_order(bool all);
+
+int default_track_checked(char type);
 
 void wxdie(const wxString &errmsg);
 

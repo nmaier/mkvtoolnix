@@ -2070,6 +2070,8 @@ kax_reader_c::identify() {
              (tracks[i]->v_dheight != tracks[i]->v_height)))
           info += mxsprintf("display_dimensions:%ux%u ",
                             tracks[i]->v_dwidth, tracks[i]->v_dheight);
+        info += mxsprintf("default_track:%d ",
+                          tracks[i]->default_track ? 1 : 0);
         info += "]";
       } else
         info = "";

@@ -557,6 +557,16 @@ create_append_mapping() {
   return s;
 }
 
+int
+default_track_checked(char type) {
+  int i;
+
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->type == type)
+      return i;
+  return -1;
+}
+
 void
 wxdie(const wxString &errmsg) {
   wxMessageBox(errmsg, wxT("A serious error has occured"),

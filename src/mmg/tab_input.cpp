@@ -741,6 +741,8 @@ tab_input::add_file(const wxString &file_name,
   unsigned int i, k;
   wxFile *opt_file;
   string arg_utf8;
+  bool default_video_track_found, default_audio_track_found;
+  bool default_subtitle_track_found;
 
   opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"),
                        get_temp_dir().c_str(),
@@ -790,6 +792,9 @@ tab_input::add_file(const wxString &file_name,
     return;
   }
 
+  default_audio_track_found = -1 != default_track_checked('a');
+  default_video_track_found = -1 != default_track_checked('v');
+  default_subtitle_track_found = -1 != default_track_checked('s');
   for (i = 0; i < output.Count(); i++) {
     if (output[i].Find(wxT("Track")) == 0) {
       wxString info;
@@ -812,19 +817,6 @@ tab_input::add_file(const wxString &file_name,
       parse_int(wxMB(id), track->id);
       track->ctype = exact;
       track->enabled = true;
-      track->language = wxT("und");
-      track->sub_charset = wxT("default");
-      track->cues = wxT("default");
-      track->track_name = wxT("");
-      track->delay = wxT("");
-      track->stretch = wxT("");
-      track->tags = wxT("");
-      track->aspect_ratio = wxT("");
-      track->dwidth = wxT("");
-      track->dheight = wxT("");
-      track->fourcc = wxT("");
-      track->compression = wxT("");
-      track->timecodes = wxT("");
 
       if (info.length() > 0) {
         args = split(info, wxU(" "));
@@ -832,11 +824,14 @@ tab_input::add_file(const wxString &file_name,
           pair = split(args[k], wxU(":"), 2);
           if (pair.size() != 2)
             continue;
+
           if (pair[0] == wxT("track_name")) {
             track->track_name = from_utf8(unescape(pair[1]));
             track->track_name_was_present = true;
+
           } else if (pair[0] == wxT("language"))
             track->language = unescape(pair[1]);
+
           else if (pair[0] == wxT("display_dimensions")) {
             vector<wxString> dims;
             int64_t width, height;
@@ -847,6 +842,21 @@ tab_input::add_file(const wxString &file_name,
               track->dwidth.Printf(wxT("%d"), (int)width);
               track->dheight.Printf(wxT("%d"), (int)height);
               track->display_dimensions_selected = true;
+            }
+
+          } else if ((pair[0] == wxT("default_track")) &&
+                     (pair[1] == wxT("1"))) {
+            if (('a' == track->type) && !default_audio_track_found) {
+              track->default_track = true;
+              default_audio_track_found = true;
+
+            } else if (('v' == track->type) && !default_video_track_found) {
+              track->default_track = true;
+              default_video_track_found = true;
+
+            } else if (('s' == track->type) && !default_subtitle_track_found) {
+              track->default_track = true;
+              default_subtitle_track_found = true;
             }
           }
         }
@@ -1204,19 +1214,21 @@ tab_input::on_track_enabled(wxCommandEvent &evt) {
 
 void
 tab_input::on_default_track_clicked(wxCommandEvent &evt) {
-  uint32_t i;
   mmg_track_t *t;
 
   if (selected_track == -1)
     return;
 
   t = tracks[selected_track];
+  if (cb_default->GetValue()) {
+    int idx;
+
+    idx = default_track_checked(t->type);
+    if (-1 != idx)
+      tracks[idx]->default_track = false;
+  }
+
   t->default_track = cb_default->GetValue();
-  if (cb_default->GetValue())
-    for (i = 0; i < tracks.size(); i++) {
-      if ((i != selected_track) && (tracks[i]->type == t->type))
-        tracks[i]->default_track = false;
-    }
 }
 
 void
