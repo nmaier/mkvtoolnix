@@ -6,7 +6,7 @@ class T_013vobsubs < Test
   end
 
   def run
-    merge("data/ally1-short.idx")
+    merge("data/vobsub/ally1-short.idx")
     return hash_tmp
   end
 end

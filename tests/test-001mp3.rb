@@ -6,7 +6,7 @@ class T_001mp3 < Test
   end
 
   def run
-    merge("data/v.mp3")
+    merge("data/simple/v.mp3")
     return hash_tmp
   end
 end

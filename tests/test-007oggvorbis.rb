@@ -6,7 +6,7 @@ class T_007oggvorbis < Test
   end
 
   def run
-    merge("data/v.ogg")
+    merge("data/ogg/v.ogg")
     return hash_tmp
   end
 end

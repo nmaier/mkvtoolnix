@@ -6,7 +6,7 @@ class T_014splitting_by_size < Test
   end
 
   def run
-    merge(tmp + "-%03d ", "--split-max-files 2 --split 4m data/v.avi")
+    merge(tmp + "-%03d ", "--split-max-files 2 --split 4m data/avi/v.avi")
     if (!FileTest.exist?(tmp + "-001"))
       error("First split file does not exist.")
     end

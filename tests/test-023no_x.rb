@@ -6,11 +6,11 @@ class T_023no_x < Test
   end
 
   def run
-    merge("-A --no-attachments data/complex.mkv")
+    merge("-A --no-attachments data/mkv/complex.mkv")
     hash = hash_tmp
-    merge("-D --no-chapters data/complex.mkv")
+    merge("-D --no-chapters data/mkv/complex.mkv")
     hash += "-" + hash_tmp
-    merge("-S --no-tags data/complex.mkv")
+    merge("-S --no-tags data/mkv/complex.mkv")
     return hash + "-" + hash_tmp
   end
 end

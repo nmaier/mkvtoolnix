@@ -6,7 +6,7 @@ class T_006oggflac < Test
   end
 
   def run
-    merge("data/v.flac.ogg")
+    merge("data/ogg/v.flac.ogg")
     return hash_tmp
   end
 end

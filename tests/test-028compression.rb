@@ -7,7 +7,7 @@ class T_028compression < Test
 
   def run
     merge("--compression 1:none --compression 2:zlib --compression 3:bz2 " +
-           "--compression 4:lzo data/ally1-short.idx")
+           "--compression 4:lzo data/vobsub/ally1-short.idx")
     return hash_tmp
   end
 end
