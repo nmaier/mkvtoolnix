@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.45 2003/05/22 10:38:37 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.46 2003/05/22 17:54:43 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -37,7 +37,9 @@
 #include <typeinfo>
 #endif
 
-#include "StdIOCallback.h"
+extern "C" {
+#include "avilib/avilib.h"
+}
 
 #include "EbmlHead.h"
 #include "EbmlSubHead.h"
@@ -65,54 +67,31 @@
 
 #include "common.h"
 #include "matroska.h"
-
-typedef struct {
-  uint32_t  bi_size;
-  uint32_t  bi_width;
-  uint32_t  bi_height;
-  uint16_t  bi_planes;
-  uint16_t  bi_bit_count;
-  uint32_t  bi_compression;
-  uint32_t  bi_size_image;
-  uint32_t  bi_x_pels_per_meter;
-  uint32_t  bi_y_pels_per_meter;
-  uint32_t  bi_clr_used;
-  uint32_t  bi_clr_important;
-} BITMAPINFOHEADER;
-
-typedef struct {
-  uint16_t  w_format_tag;
-  uint16_t  n_channels;
-  uint32_t  n_samples_per_sec;
-  uint32_t  n_avg_bytes_per_sec;
-  uint16_t  n_block_align;
-  uint16_t  w_bits_per_sample;
-  uint16_t  cb_size;
-} WAVEFORMATEX;
+#include "mm_io_callback.h"
 
 #define NAME "MKVInfo"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
 
-typedef struct track_t {
+typedef struct {
   unsigned int tnum, tuid;
   char type;
   int64_t size;
-} track_t;
+} mkv_track_t;
 
-track_t **tracks = NULL;
+mkv_track_t **tracks = NULL;
 int num_tracks = 0;
-StdIOCallback *in = NULL;
+mm_io_callback *in = NULL;
 
-void add_track(track_t *s) {
-  tracks = (track_t **)saferealloc(tracks, sizeof(track_t *) *
+void add_track(mkv_track_t *s) {
+  tracks = (mkv_track_t **)saferealloc(tracks, sizeof(mkv_track_t *) *
                                    (num_tracks + 1));
   tracks[num_tracks] = s;
   num_tracks++;
 }
 
-track_t *find_track(int tnum) {
+mkv_track_t *find_track(int tnum) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -122,7 +101,7 @@ track_t *find_track(int tnum) {
   return NULL;
 }
 
-track_t *find_track_by_uid(int tuid) {
+mkv_track_t *find_track_by_uid(int tuid) {
   int i;
 
   for (i = 0; i < num_tracks; i++)
@@ -172,7 +151,7 @@ static void parse_args(int argc, char **argv) {
 
   /* open input file */
   try {
-    in = new StdIOCallback(infile, MODE_READ);
+    in = new mm_io_callback(infile, MODE_READ);
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Couldn't open input file %s (%s).\n", infile,
             strerror(errno));
@@ -206,7 +185,7 @@ void process_file() {
   EbmlStream *es;
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
-  char track_type;
+  char mkv_track_type;
   bool ms_compat;
 
   try {
@@ -366,7 +345,7 @@ void process_file() {
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            track_type = '?';
+            mkv_track_type = '?';
             ms_compat = false;
 
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
@@ -407,19 +386,19 @@ void process_file() {
                 switch (uint8(ttype)) {
                   case track_audio:
                     fprintf(stdout, "Audio");
-                    track_type = 'a';
+                    mkv_track_type = 'a';
                     break;
                   case track_video:
                     fprintf(stdout, "Video");
-                    track_type = 'v';
+                    mkv_track_type = 'v';
                     break;
                   case track_subtitle:
                     fprintf(stdout, "Subtitles");
-                    track_type = 's';
+                    mkv_track_type = 's';
                     break;
                   default:
                     fprintf(stdout, "unknown");
-                    track_type = '?';
+                    mkv_track_type = '?';
                     break;
                 }
                 if (verbose > 1)
@@ -585,9 +564,9 @@ void process_file() {
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
                 if ((!strcmp((char *)&binary(codec_id), MKV_V_MSCOMP) &&
-                     (track_type == 'v')) ||
+                     (mkv_track_type == 'v')) ||
                     (!strcmp((char *)&binary(codec_id), MKV_A_ACM) &&
-                     (track_type == 'a')))
+                     (mkv_track_type == 'a')))
                   ms_compat = true;
 
               } else if (EbmlId(*l3) == KaxCodecPrivate::ClassInfos.GlobalId) {
@@ -595,14 +574,14 @@ void process_file() {
                 c_priv.ReadData(es->I_O());
                 fprintf(stdout, "(%s) |  + CodecPrivate, length %llu",
                         NAME, c_priv.GetSize());
-                if (ms_compat && (track_type == 'v') &&
+                if (ms_compat && (mkv_track_type == 'v') &&
                     (c_priv.GetSize() >= sizeof(BITMAPINFOHEADER))) {
                   BITMAPINFOHEADER *bih = (BITMAPINFOHEADER *)&binary(c_priv);
                   unsigned char *fcc = (unsigned char *)&bih->bi_compression;
                   fprintf(stdout, " (FourCC: %c%c%c%c, 0x%08x)",
                           fcc[0], fcc[1], fcc[2], fcc[3],
                           get_uint32(&bih->bi_compression));
-                } else if (ms_compat && (track_type == 'a') &&
+                } else if (ms_compat && (mkv_track_type == 'a') &&
                            (c_priv.GetSize() >= sizeof(WAVEFORMATEX))) {
                   WAVEFORMATEX *wfe = (WAVEFORMATEX *)&binary(c_priv);
                   fprintf(stdout, " (format tag: 0x%04x)",

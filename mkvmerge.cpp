@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.77 2003/05/22 17:11:29 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.78 2003/05/22 17:54:43 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -37,8 +37,6 @@
 #include <typeinfo>
 #endif
 
-#include "IOCallback.h"
-
 #include "EbmlHead.h"
 #include "EbmlSubHead.h"
 #include "EbmlVersion.h"
@@ -61,6 +59,7 @@
 #include "KaxVersion.h"
 
 #include "mkvmerge.h"
+#include "mm_io_callback.h"
 #include "cluster_helper.h"
 #include "common.h"
 #include "iso639.h"
@@ -134,89 +133,6 @@ int64_t meta_seek_size = 0;
 
 // Specs say that track numbers should start at 1.
 int track_number = 1;
-
-class mm_io_callback: public IOCallback {
-protected:
-  FILE *file;
-
-public:
-  mm_io_callback(const char *path, const open_mode mode);
-  virtual ~mm_io_callback();
-
-  virtual uint64 getFilePointer();
-  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
-  virtual size_t write(const void *buffer, size_t size);
-  virtual void close();
-};
-
-mm_io_callback::mm_io_callback(const char *path, const open_mode mode) {
-  char *cmode;
-
-  switch (mode) {
-    case MODE_READ:
-      cmode = "rb";
-      break;
-    case MODE_WRITE:
-      cmode = "wb";
-      break;
-    case MODE_CREATE:
-      cmode = "wb+";
-      break;
-    default:
-      throw 0;
-  }
-
-  file = fopen(path, cmode);
-
-  if (file == NULL) {
-    fprintf(stderr, "Error: Could not open the file: %d (%s)\n", errno,
-            strerror(errno));
-    exit(1);
-  }
-}
-
-mm_io_callback::~mm_io_callback() {
-  close();
-}
-
-uint64 mm_io_callback::getFilePointer() {
-  return ftello(file);
-}
-
-void mm_io_callback::setFilePointer(int64 offset, seek_mode mode) {
-  int whence;
-
-  if (mode == seek_beginning)
-    whence = SEEK_SET;
-  else if (mode == seek_end)
-    whence = SEEK_END;
-  else
-    whence = SEEK_CUR;
-
-  fseeko(file, offset, whence);
-}
-
-size_t mm_io_callback::write(const void *buffer, size_t size) {
-  size_t bwritten;
-
-  bwritten = fwrite(buffer, 1, size, file);
-  if (ferror(file) != 0) {
-    fprintf(stderr, "Error writing to the output file: %d (%s)\n", errno,
-            strerror(errno));
-    exit(1);
-  }
-
-  return bwritten;
-}
-
-uint32 mm_io_callback::read(void *buffer, size_t size) {
-  return fread(buffer, 1, size, file);
-}
-
-void mm_io_callback::close() {
-  fclose(file);
-}
 
 mm_io_callback *out;
 
