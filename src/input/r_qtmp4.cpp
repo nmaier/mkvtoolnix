@@ -242,17 +242,24 @@ qtmp4_reader_c::parse_headers() {
 
     if ((dmx->type == 'a') &&
         !strncasecmp(dmx->fourcc, "MP4A", 4)) {
-      if ((dmx->esds.object_type_id != 64) && // AAC
-          (dmx->esds.object_type_id != 103) && // AAC, too?
-          (dmx->esds.object_type_id != 107)) { // MP2/3
+      if ((dmx->esds.object_type_id != MP4OTI_MPEG4Audio) && // AAC..
+          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioMain) &&
+          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioLowComplexity) &&
+          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioScaleableSamplingRate)
+          &&
+          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioPart3) && // MP3...
+          (dmx->esds.object_type_id != MP4OTI_MPEG1Audio)) {
         mxwarn(PFX "The audio track %u is using an unsupported 'object type "
                "id' of %u in the 'esds' atom. Skipping this track.\n",
                dmx->id, dmx->esds.object_type_id);
         continue;
       }
-
-      if (((dmx->esds.object_type_id == 64) ||
-           (dmx->esds.object_type_id == 103)) &&
+ 
+      if (((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
+           (dmx->esds.object_type_id == MP4OTI_MPEG2AudioMain) ||
+           (dmx->esds.object_type_id == MP4OTI_MPEG2AudioLowComplexity) ||
+           (dmx->esds.object_type_id ==
+            MP4OTI_MPEG2AudioScaleableSamplingRate)) &&
           (dmx->esds.decoder_config == NULL)) {
         mxwarn(PFX "The AAC track %u is missing the esds atom/the decoder "
                "config. Skipping this track.\n", dmx->id);
@@ -1162,8 +1169,12 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                "\n", ti->fname, (int64_t)dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
-                 ((dmx->esds.object_type_id == 64) ||
-                  (dmx->esds.object_type_id == 103))) {
+                 ((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
+                  (dmx->esds.object_type_id == MP4OTI_MPEG2AudioMain) ||
+                  (dmx->esds.object_type_id ==
+                   MP4OTI_MPEG2AudioLowComplexity) ||
+                  (dmx->esds.object_type_id ==
+                   MP4OTI_MPEG2AudioScaleableSamplingRate))) {
         int profile, sample_rate, channels, output_sample_rate;
         bool sbraac;
 
@@ -1193,7 +1204,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                   dmx->esds.decoder_config_len);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
-                 (dmx->esds.object_type_id == 107)) {
+                 ((dmx->esds.object_type_id == MP4OTI_MPEG2AudioPart3) ||
+                  (dmx->esds.object_type_id == MP4OTI_MPEG1Audio))) {
         dmx->ptzr =
           add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate,
                                               dmx->a_channels, true, ti));
