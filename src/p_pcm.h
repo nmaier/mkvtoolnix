@@ -32,10 +32,12 @@ private:
   int64_t bytes_output, remaining_sync;
   unsigned long samples_per_sec;
   unsigned char *tempbuf;
+  bool big_endian;
 
 public:
   pcm_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, int nbits_per_sample, track_info_t *nti)
+                   int nchannels, int nbits_per_sample, track_info_t *nti,
+                   bool nbig_endian = false)
     throw (error_c);
   virtual ~pcm_packetizer_c();
 

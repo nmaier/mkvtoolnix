@@ -34,7 +34,8 @@ using namespace libmatroska;
 pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
-                                   track_info_t *nti) throw (error_c):
+                                   track_info_t *nti, bool nbig_endian)
+  throw (error_c):
   generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bps = nchannels * nbits_per_sample * nsamples_per_sec / 8;
@@ -45,6 +46,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
   remaining_sync = 0;
+  big_endian = nbig_endian;
 
   set_track_type(track_audio);
   set_track_default_duration_ns((int64_t)(1000000000.0 * ti->async.linear /
@@ -57,7 +59,10 @@ pcm_packetizer_c::~pcm_packetizer_c() {
 }
 
 void pcm_packetizer_c::set_headers() {
-  set_codec_id(MKV_A_PCM);
+  if (big_endian)
+    set_codec_id(MKV_A_PCM_BE);
+  else
+    set_codec_id(MKV_A_PCM);
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
   set_audio_bit_depth(bits_per_sample);
