@@ -236,7 +236,7 @@ void extract_attachments(const char *file_name) {
           break;
 
       } else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
-        int i, k;
+        int k;
         EbmlElement *el;
         KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
         int64_t pos;

@@ -30,7 +30,7 @@ enum {
 bool mi_app::OnInit() {
   char *initial_file;
 
-  parse_args(argc, argv, initial_file, use_gui);
+  parse_args(argc, argv, initial_file);
 
   if (!use_gui) {
     console_main(argc, argv);

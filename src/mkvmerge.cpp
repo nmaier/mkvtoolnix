@@ -957,7 +957,7 @@ static void parse_track_order(const char *s, track_info_c &ti) {
 
 // {{{ render functions (render_headers, render_attachments)
 
-static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
+static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
   EbmlHead head;
   int i;
 
@@ -970,7 +970,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       GetChild<EDocTypeReadVersion>(head);
     *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
 
-    head.Render(*out);
+    head.Render(*rout);
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
     KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
@@ -1024,17 +1024,17 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       }
     }
 
-    kax_segment->WriteHead(*out, 8);
+    kax_segment->WriteHead(*rout, 8);
 
     // Reserve some space for the meta seek stuff.
     kax_sh_main = new KaxSeekHead();
     kax_sh_void = new EbmlVoid();
     kax_sh_void->SetSize(4096);
-    kax_sh_void->Render(*out);
+    kax_sh_void->Render(*rout);
     if (write_meta_seek_for_clusters)
       kax_sh_cues = new KaxSeekHead();
 
-    kax_infos->Render(*out);
+    kax_infos->Render(*rout);
     kax_sh_main->IndexThis(*kax_infos, *kax_segment);
 
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
@@ -1043,14 +1043,14 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
     for (i = 0; i < files.size(); i++)
       files[i]->reader->set_headers();
 
-    kax_tracks->Render(*out);
+    kax_tracks->Render(*rout);
     kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
 
     // Reserve some small amount of space for header changes by the
     // packetizers.
     void_after_track_headers = new EbmlVoid;
     void_after_track_headers->SetSize(1024);
-    void_after_track_headers->Render(*out);
+    void_after_track_headers->Render(*rout);
   } catch (exception &ex) {
     mxerror("Could not render the track headers.\n");
   }
@@ -1073,7 +1073,7 @@ void rerender_track_headers() {
   out->restore_pos();
 }
 
-static void render_attachments(IOCallback *out) {
+static void render_attachments(IOCallback *rout) {
   KaxAttachments *other_as;
   KaxAttached *kax_a;
   KaxFileData *fdata;
@@ -1157,7 +1157,7 @@ static void render_attachments(IOCallback *out) {
   }
   delete other_as;
 
-  kax_as->Render(*out);
+  kax_as->Render(*rout);
 }
 
 // }}}
@@ -2050,9 +2050,9 @@ string create_output_name() {
     format.erase(p2 - p + 1);
     len.erase(0, 1);
     len.erase(p2 - p - 1);
-    char buffer[strtol(len.c_str(), NULL, 10) + 1];
-    mxprints(buffer, format.c_str(), file_num);
-    s.replace(p, format.size(), buffer);
+    char buffer2[strtol(len.c_str(), NULL, 10) + 1];
+    mxprints(buffer2, format.c_str(), file_num);
+    s.replace(p, format.size(), buffer2);
 
     return s;
   }

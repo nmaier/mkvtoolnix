@@ -34,7 +34,7 @@
 
 #define NAME "MKVInfo"
 
-void parse_args(int argc, char **argv, char *&file_name, bool &use_gui);
+void parse_args(int argc, char **argv, char *&file_name);
 int console_main(int argc, char **argv);
 bool process_file(const char *file_name);
 void setup();

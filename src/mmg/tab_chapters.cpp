@@ -488,9 +488,9 @@ bool tab_chapters::load(wxString name) {
                                     &source_is_simple_format);
       source_is_kax_file = false;
     }
-  } catch (error_c e) {
+  } catch (error_c ex) {
     analyzer = NULL;
-    s = (const char *)e;
+    s = (const char *)ex;
     break_line(s);
     while (s[s.Length() - 1] == '\n')
       s.Remove(s.Length() - 1);

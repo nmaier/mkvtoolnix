@@ -216,7 +216,7 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
 
 // {{{ FUNCTION parse_args
 
-void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
+void parse_args(int argc, char **argv, char *&file_name) {
   int i;
 
   verbose = 0;
@@ -746,7 +746,6 @@ bool process_file(const char *file_name) {
             safefree(str);
 
           } else if (is_id(l2, KaxSegmentFilename)) {
-            char *str;
             KaxSegmentFilename &filename =
               *static_cast<KaxSegmentFilename *>(l2);
             str = UTFstring_to_cstr(UTFstring(filename));
@@ -754,7 +753,6 @@ bool process_file(const char *file_name) {
             safefree(str);
 
           } else if (is_id(l2, KaxTitle)) {
-            char *str;
             KaxTitle &title = *static_cast<KaxTitle *>(l2);
             str = UTFstring_to_cstr(UTFstring(title));
             show_element(l2, 2, "Title: %s", str);
@@ -2496,7 +2494,7 @@ int console_main(int argc, char **argv) {
   nice(2);
 #endif
 
-  parse_args(argc, argv, file_name, use_gui);
+  parse_args(argc, argv, file_name);
   if (file_name == NULL) {
     usage();
     mxexit(0);
@@ -2542,7 +2540,7 @@ int main(int argc, char **argv) {
   int res;
 
   setup();
-  parse_args(argc, argv, initial_file, use_gui);
+  parse_args(argc, argv, initial_file);
 
   if (use_gui) {
     wxEntry(argc, argv);

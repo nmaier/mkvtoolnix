@@ -367,7 +367,7 @@ int cluster_helper_c::render() {
   int i, k, elements_in_cluster, num_cue_elements_here;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
-  int64_t max_timecode;
+  int64_t max_cl_timecode;
   splitpoint_t *sp;
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
@@ -377,7 +377,7 @@ int cluster_helper_c::render() {
   if ((clusters == NULL) || (num_clusters == 0))
     return 0;
 
-  max_timecode = 0;
+  max_cl_timecode = 0;
   walk_clusters();
   clstr = clusters[num_clusters - 1];
   cluster = clstr->cluster;
@@ -430,7 +430,7 @@ int cluster_helper_c::render() {
     if (i == 0)
       static_cast<kax_cluster_c *>
         (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
-    max_timecode = pack->assigned_timecode;
+    max_cl_timecode = pack->assigned_timecode;
 
     data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
@@ -586,7 +586,7 @@ int cluster_helper_c::render() {
     for (i = 0; i < render_groups.size(); i++)
       set_duration_and_timeslices(render_groups[i]);
     static_cast<kax_cluster_c *>(cluster)->
-      set_max_timecode(max_timecode - timecode_offset);
+      set_max_timecode(max_cl_timecode - timecode_offset);
     cluster->Render(*out, *kax_cues);
 
     if (kax_sh_cues != NULL)

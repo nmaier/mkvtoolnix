@@ -234,9 +234,9 @@ void mux_dialog::on_abort(wxCommandEvent &evt) {
 #endif
 }
 
-mux_process::mux_process(mux_dialog *mdlg):
+mux_process::mux_process(mux_dialog *mux_dlg):
   wxProcess(wxPROCESS_REDIRECT), 
-  dlg(mdlg) {
+  dlg(mux_dlg) {
 }
 
 void mux_process::OnTerminate(int pid, int status) {
