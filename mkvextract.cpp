@@ -123,6 +123,8 @@ typedef struct {
   int64_t packetno, last_end;
   int header_sizes[3];
   unsigned char *headers[3];
+
+  int aac_id, aac_profile, aac_srate_idx;
 } mkv_track_t;
 
 vector<mkv_track_t> tracks;
@@ -392,16 +394,73 @@ void create_output_files() {
                     "information. Skipping track.\n", tracks[i].tid);
             continue;
           }
+
         } else if (!strncmp(tracks[i].codec_id, "A_AAC", 5)) {
-          fprintf(stdout, "Warning: Extraction of AAC is not supported - yet. "
-                  "I promise I'll implement it. Really Soon Now (tm)! "
-                  "Skipping track.\n");
-          continue;
+          if (strlen(tracks[i].codec_id) < strlen("A_AAC/MPEG4/LC")) {
+            fprintf(stdout, "Warning: Track ID %lld has an unknown AAC "
+                    "type. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+
+          // A_AAC/MPEG4/MAIN
+          // 0123456789012345
+          if (tracks[i].codec_id[10] == '4')
+            tracks[i].aac_id = 0;
+          else if (tracks[i].codec_id[10] == '2')
+            tracks[i].aac_id = 1;
+          else {
+            fprintf(stdout, "Warning: Track ID %lld has an unknown AAC "
+                    "type. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+
+          if (!strcmp(&tracks[i].codec_id[12], "MAIN"))
+            tracks[i].aac_profile = 0;
+          else if (!strcmp(&tracks[i].codec_id[12], "LC"))
+            tracks[i].aac_profile = 1;
+          else if (!strcmp(&tracks[i].codec_id[12], "SSR"))
+            tracks[i].aac_profile = 2;
+          else if (!strcmp(&tracks[i].codec_id[12], "LTP"))
+            tracks[i].aac_profile = 3;
+          else {
+            fprintf(stdout, "Warning: Track ID %lld has an unknown AAC "
+                    "type. Skipping track.\n", tracks[i].tid);
+            continue;
+          }
+
+          if (92017 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 0;
+          else if (75132 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 1;
+          else if (55426 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 2;
+          else if (46009 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 3;
+          else if (37566 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 4;
+          else if (27713 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 5;
+          else if (23004 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 6;
+          else if (18783 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 7;
+          else if (13856 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 8;
+          else if (11502 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 9;
+          else if (9391 <= tracks[i].a_sfreq)
+            tracks[i].aac_srate_idx = 10;
+          else
+            tracks[i].aac_srate_idx = 11;
+
+          tracks[i].type = TYPEAAC;
+
         } else if (!strcmp(tracks[i].codec_id, MKV_A_DTS)) {
           fprintf(stdout, "Warning: Extraction of DTS is not supported - yet. "
                   "I promise I'll implement it. Really Soon Now (tm)! "
                   "Skipping track.\n");
           continue;
+
         } else {
           fprintf(stdout, "Warning: Unsupported CodecID '%s' for ID %lld. "
                   "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
@@ -546,7 +605,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
   mkv_track_t *track;
   int i, len, num;
   int64_t start, end;
-  char *s, buffer[200], *s2;
+  char *s, buffer[200], *s2, adts[56 / 8];
   vector<string> fields;
   string line, comma = ",";
   ssa_line_c ssa_line;
@@ -686,6 +745,65 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         ssa_line.num = num;
         ssa_line.line = safestrdup(line.c_str());
         tracks[i].ssa_lines.push_back(ssa_line);
+
+        break;
+
+      case TYPEAAC:
+        // Recreate the ADTS headers. What a fun. Like runing headlong into
+        // a solid wall. But less painful. Well such is life, you know.
+        // But then again I've just seen a beautiful girl walking by my
+        // window, and suddenly the world is a bright place. Everything's
+        // a matter of perspective. And if I didn't enjoy writing even this
+        // code then I wouldn't do it at all. So let's get to it!
+
+        memset(adts, 0, 56 / 8);
+
+        // sync word, 12 bits
+        adts[0] = 0xff;
+        adts[1] = 0xf0;
+
+        // ID, 1 bit
+        adts[1] |= track->aac_id << 3;
+        // layer: 2 bits = 00
+
+        // protection absent: 1 bit = 1 (ASSUMPTION!)
+        adts[1] |= 1;
+
+        // profile, 2 bits
+        adts[2] = track->aac_profile << 6;
+
+        // sampling frequency index, 4 bits
+        adts[2] |= track->aac_srate_idx << 2;
+
+        // private, 1 bit = 0 (ASSUMPTION!)
+
+        // channels, 3 bits
+        adts[2] |= (track->a_channels & 4) >> 2;
+        adts[3] |= (track->a_channels & 3) << 6;
+
+        // original/copy, 1 bit = 0(ASSUMPTION!)
+
+        // home, 1 bit = 0 (ASSUMPTION!)
+
+        // copyright id bit, 1 bit = 0 (ASSUMPTION!)
+
+        // copyright id start, 1 bit = 0 (ASSUMPTION!)
+
+        // frame length, 13 bits
+        len = data.Size() + 7;
+        adts[3] |= len >> 11;
+        adts[4] = (len >> 3) & 0xff;
+        adts[5] = (len & 7) << 5;
+
+        // adts buffer fullness, 11 bits, 0x7ff = VBR (ASSUMPTION!)
+        adts[5] |= 0x1f;
+        adts[6] = 0xfc;
+
+        // number of raw frames, 2 bits, 0 (meaning 1 frame) (ASSUMPTION!)
+
+        // Write the ADTS header and the data itself.
+        track->mm_io->write(adts, 56 / 8);
+        track->mm_io->write(data.Buffer(), data.Size());
 
         break;
 
