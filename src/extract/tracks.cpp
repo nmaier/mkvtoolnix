@@ -360,6 +360,16 @@ check_output_files() {
 
           tracks[i].type = FILE_TYPE_TTA;
 
+        } else if (!strcmp(tracks[i].codec_id, MKV_A_WAVPACK4)) {
+          if (tracks[i].private_data == NULL) {
+            mxwarn(_("Track ID %lld is missing some critical "
+                     "information. The track will be skipped.\n"),
+                   tracks[i].tid);
+            continue;
+          }
+
+          tracks[i].type = FILE_TYPE_WAVPACK4;
+
         } else {
           mxwarn(_("Unsupported CodecID '%s' for ID %lld. "
                    "The track will be skipped.\n"), tracks[i].codec_id,
@@ -927,6 +937,12 @@ handle_data(KaxBlock *block,
         else
           rmff_write_frame(track->rmtrack, rmf_frame);
         rmff_release_frame(rmf_frame);
+        break;
+
+      case FILE_TYPE_WAVPACK4:
+        // _todo_ support hybrid mode ?
+        track->out->write(data.Buffer(), data.Size());
+        track->bytes_written += data.Size();
         break;
 
       case FILE_TYPE_TTA:

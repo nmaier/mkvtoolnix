@@ -44,6 +44,7 @@
 #define MKV_A_REAL_ATRC  "A_REAL/ATRC"
 #define MKV_A_FLAC       "A_FLAC"
 #define MKV_A_TTA        "A_TTA1"
+#define MKV_A_WAVPACK4   "A_WAVPACK4"
 
 #define MKV_V_MPEG1      "V_MPEG1"
 #define MKV_V_MPEG2      "V_MPEG2"

@@ -78,6 +78,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_vobsub.h"
 #include "p_vobbtn.h"
 #include "p_vorbis.h"
+#include "p_wavpack.h"
 
 using namespace std;
 using namespace libmatroska;
@@ -512,6 +513,8 @@ kax_reader_c::verify_tracks() {
 #endif
           } else if (t->codec_id == MKV_A_TTA)
             t->a_formattag = FOURCC('T', 'T', 'A', '1');
+          else if (t->codec_id == MKV_A_WAVPACK4)
+            t->a_formattag = FOURCC('W', 'V', 'P', '4');
         }
 
         if (t->a_sfreq == 0.0)
@@ -1742,6 +1745,19 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                 nti));
           mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname.c_str(),
                  (int64_t)t->tnum);
+
+        } else if (t->a_formattag == FOURCC('W', 'V', 'P', '4')) {
+          /* _todo_:
+             safefree(nti->private_data);
+             nti->private_data = NULL;
+             nti->private_size = 0;*/
+          wavpack_meta_t meta;
+          meta.bits_per_sample = t->a_bps;
+          meta.channel_count = t->a_channels;
+          meta.sample_rate = (uint32_t)t->a_sfreq;
+          t->ptzr = add_packetizer(new wavpack_packetizer_c(this, meta, nti));
+          mxinfo(FMT_TID "Using the WAVPACK output module.\n",
+                 ti->fname.c_str(), (int64_t)t->tnum);
 
         } else
           init_passthrough_packetizer(t);

@@ -11,6 +11,7 @@
    \version $Id$
   
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
+   \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
 #include "os.h"
@@ -81,6 +82,7 @@ file_type_t file_types[] =
    {"srt ", FILE_TYPE_SRT, "SRT text subtitles"},
    {"ssa ", FILE_TYPE_SSA, "SSA/ASS text subtitles"},
    {"idx ", FILE_TYPE_VOBSUB, "VobSub subtitles"},
+   {"btn ", FILE_TYPE_VOBBTN, "VobBtn buttons"},
    {"wav ", FILE_TYPE_WAV, "WAVE (uncompressed PCM)"},
 #if defined(HAVE_FLAC_FORMAT_H)
    {"flac", FILE_TYPE_FLAC, "FLAC lossless audio"},
@@ -88,6 +90,7 @@ file_type_t file_types[] =
    {"tta ", FILE_TYPE_TTA, "TTA lossless audio"},
    {"m1v ", FILE_TYPE_MPEG, "MPEG-1 video elementary stream"},
    {"m2v ", FILE_TYPE_MPEG, "MPEG-2 video elementary stream"},
+   {"wv  ", FILE_TYPE_WAVPACK4, "WAVPACK lossless audio"},
    {"output modules:", -1, ""},
    {"    ", -1,      "AAC audio"},
    {"    ", -1,      "AC3 audio"},

@@ -88,6 +88,7 @@
 #include "r_vobbtn.h"
 #include "r_vobsub.h"
 #include "r_wav.h"
+#include "r_wavpack.h"
 #include "tag_common.h"
 #include "xml_element_mapping.h"
 
@@ -288,6 +289,8 @@ get_file_type(const string &filename) {
     type = FILE_TYPE_QTMP4;
   else if (tta_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_TTA;
+  else if (wavpack_reader_c::probe_file(mm_io, size))
+    type = FILE_TYPE_WAVPACK4;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(mm_io, size, probe_sizes[i], 5))
@@ -1118,6 +1121,9 @@ create_readers() {
           break;
         case FILE_TYPE_VOBBTN:
           file->reader = new vobbtn_reader_c(file->ti);
+          break;
+        case FILE_TYPE_WAVPACK4:
+          file->reader = new wavpack_reader_c(file->ti);
           break;
         default:
           mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);
