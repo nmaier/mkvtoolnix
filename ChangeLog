@@ -1,5 +1,8 @@
 2004-07-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The default track feature did not work
+	correctly with the new --track-order.
+
 	* mkvmerge: new feature: Added support for TTA lossless audio
 	files.
 

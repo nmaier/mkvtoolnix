@@ -62,6 +62,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   safety_last_timecode = 0;
   last_cue_timecode = -1;
   timecode_offset = 0;
+  default_track_warning_printed = false;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -296,10 +297,6 @@ generic_packetizer_c::set_track_type(int type) {
 
   if ((type == track_audio) && (ti->cues == CUES_UNSPECIFIED))
     ti->cues = CUES_SPARSE;
-  if (ti->default_track)
-    set_as_default_track(type, DEFAULT_TRACK_PRIORITY_CMDLINE);
-  else
-    set_as_default_track(type, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
 }
 
 void
@@ -459,27 +456,18 @@ generic_packetizer_c::set_video_display_height(int height) {
 void
 generic_packetizer_c::set_as_default_track(int type,
                                            int priority) {
-  int idx;
-
-  idx = 0;
-  if (type == track_audio)
-    idx = 0;
-  else if (type == track_video)
-    idx = 1;
-  else if (type == track_subtitle)
-    idx = 2;
-  else
-    die("pr_generic.cpp/generic_packetizer_c::set_as_default_track(): Unknown "
-        "track type %d.", type);
-
-  if (default_tracks_priority[idx] < priority) {
-    default_tracks_priority[idx] = priority;
-    default_tracks[idx] = hserialno;
-  } else if (priority == DEFAULT_TRACK_PRIORITY_CMDLINE)
+  if (default_tracks_priority[type] < priority) {
+    default_tracks_priority[type] = priority;
+    default_tracks[type] = hserialno;
+  } else if ((priority == DEFAULT_TRACK_PRIORITY_CMDLINE) &&
+             (default_tracks[type] != hserialno) &&
+             !default_track_warning_printed) {
     mxwarn("Another default track for %s tracks has already "
            "been set. Not setting the 'default' flag for track %lld of "
-           "'%s'.\n", idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle",
+           "'%s'.\n", type == 0 ? "audio" : type == 'v' ? "video" : "subtitle",
            ti->id, ti->fname);
+    default_track_warning_printed = true;
+  }
 }
 
 void
@@ -548,12 +536,10 @@ generic_packetizer_c::set_headers() {
   else
     idx = 2;
 
-  if (default_tracks[idx] == hserialno)
-    *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 1;
+  if (ti->default_track)
+    set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
   else
-    *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 0;
+    set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
 
   if (ti->language != NULL)
     *(static_cast<EbmlString *>
@@ -680,6 +666,25 @@ generic_packetizer_c::set_headers() {
       ti->tags->Remove(0);
     }
   }
+}
+
+void
+generic_packetizer_c::fix_headers() {
+  int idx;
+
+  if (htrack_type == track_audio)
+    idx = 0;
+  else if (htrack_type == track_video)
+    idx = 1;
+  else
+    idx = 2;
+
+  if (default_tracks[idx] == hserialno)
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 1;
+  else
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 0;
 }
 
 void

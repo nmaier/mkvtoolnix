@@ -296,6 +296,7 @@ protected:
   // by set_headers().
   int hserialno, htrack_type, htrack_min_cache, htrack_max_cache;
   int64_t htrack_default_duration;
+  bool default_track_warning_printed;
   uint32_t huid;
 
   char *hcodec_id;
@@ -364,6 +365,7 @@ public:
     return free_refs;
   }
   virtual void set_headers();
+  virtual void fix_headers();
   virtual int process(memory_c &mem,
                       int64_t timecode = -1, int64_t length = -1,
                       int64_t bref = -1, int64_t fref = -1) = 0;

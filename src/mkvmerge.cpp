@@ -1233,6 +1233,9 @@ render_headers(mm_io_c *rout) {
     for (i = 0; i < files.size(); i++)
       if (files[i]->first)
         files[i]->reader->set_headers();
+    for (i = 0; i < packetizers.size(); i++)
+      if (packetizers[i]->packetizer != NULL)
+        packetizers[i]->packetizer->fix_headers();
 
     kax_tracks->Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
     kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
