@@ -1,3 +1,15 @@
+2003-09-11  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Released v0.6.6.1.
+
+        * mkvmerge: When splitting is active and the source is a Matroska
+        file then splitpoints were borked, and the first pass was slow as
+        your average mole.
+
+        * mkvmerge: The track UIDs are kept when reading Matroska files
+        even when splitting is active.
+
+
 2003-09-08  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v0.6.6.
