@@ -501,7 +501,7 @@ int main ()
     elif test ${mver[[1]]} -lt 4 ; then
       mver_ok=0
     else
-      if test ${mver[[2]]} -ge 2 ; then
+      if test ${mver[[2]]} -ge 3 ; then
         mver_ok=1
       else
         mver_ok=0
@@ -514,7 +514,7 @@ int main ()
   else
     AC_MSG_RESULT($matroska_version too old)
     echo '*** Your Matroska version is too old. Upgrade to at least version'
-    echo '*** 0.4.2 or CVS from 2003-05-06 12:00 CET and re-run configure.'
+    echo '*** 0.4.3 and re-run configure.'
     exit 1
   fi
 

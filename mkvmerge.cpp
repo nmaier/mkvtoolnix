@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.71 2003/05/21 21:05:47 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.72 2003/05/21 21:14:40 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -78,11 +78,6 @@
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;
-
-// #ifndef LIBEBML_VERSION
-// // 0.4.3 was the first libebml version with this definition.
-// #define LIBEBML_VERSION 000402
-// #endif
 
 typedef struct {
   char *ext;
@@ -589,11 +584,7 @@ static void render_headers(mm_io_callback *out) {
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
       cstr_to_UTFstring(VERSIONINFO);
 
-#if LIBEBML_VERSION >= 000403
     kax_segment->WriteHead(*out, 5);
-#else
-    kax_segment->Render(*out);
-#endif
 
     // Reserve some space for the meta seek stuff.
     if (write_cues && write_meta_seek) {
@@ -605,9 +596,7 @@ static void render_headers(mm_io_callback *out) {
       kax_seekhead_void->Render(static_cast<IOCallback &>(*out));
     }
 
-#if LIBEBML_VERSION >= 000403
     kax_infos->Render(*out);
-#endif
 
     kax_tracks = &GetChild<KaxTracks>(*kax_segment);
     kax_last_entry = NULL;
@@ -1249,13 +1238,11 @@ int main(int argc, char **argv) {
   kax_duration->Render(*out);
   out->setFilePointer(old_pos);
 
-#if LIBEBML_VERSION >= 000403
   // Set the correct size for the segment.
   if (kax_segment->ForceSize(out->getFilePointer() -
                              kax_segment->GetElementPosition() -
                              kax_segment->HeadSize()))
     kax_segment->OverwriteHead(*out);
-#endif
   
   delete cluster_helper;
 
