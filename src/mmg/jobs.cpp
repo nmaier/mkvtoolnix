@@ -742,13 +742,13 @@ job_dialog::start_jobs(vector<int> &jobs_to_start) {
   mdlg->save(temp_settings, true);
 
 #ifdef SYS_WINDOWS
-  mdlg->Show(false);
+  mdlg->Iconize(true);
   Show(false);
 #endif
   delete new job_run_dialog(this, jobs_to_start);
 #ifdef SYS_WINDOWS
-  mdlg->Show(true);
   Show(true);
+  mdlg->Iconize(false);
 #endif
 
   mdlg->load(temp_settings, true);
