@@ -209,6 +209,7 @@ const iso639_language_t iso639_languages[] =
    {"Hausa", "hau", "ha"},
    {"Hawaiian", "haw", NULL},
    {"Hebrew", "heb", "he"},
+   {"Hebrew", "heb", "iw"},
    {"Herero", "her", "hz"},
    {"Hiligaynon", "hil", NULL},
    {"Himachali", "him", NULL},
