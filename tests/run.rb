@@ -159,6 +159,8 @@ def main
   test_new = false
   test_date_after = nil
   test_date_before = nil
+  tests = Array.new
+  dir_entries = Dir.entries(".")
   ARGV.each do |arg|
     if ((arg == "-f") or (arg == "--failed"))
       test_failed = true
@@ -168,19 +170,22 @@ def main
       test_date_after = Time.local($1, $2, $3, $4, $5, $6)
     elsif (arg =~ /-D([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
       test_date_before = Time.local($1, $2, $3, $4, $5, $6)
+    elsif (arg =~ /^[0-9]{3}$/)
+      dir_entries.each { |e| tests.push(e) if (e =~ /^test-#{arg}/) }
     else
       puts("Unknown argument '#{arg}'.")
       exit(2)
     end
   end
   test_all = (!test_failed && !test_new)
+  tests = dir_entries unless (tests.size > 0)
 
   ENV['PATH'] = "../src:" + ENV['PATH']
 
   num_tests = 0
   num_failed = 0
   start = Time.now
-  Dir.entries(".").sort.each do |entry|
+  tests.sort.each do |entry|
     next unless (FileTest.file?(entry) and (entry =~ /^test-.*\.rb$/))
 
     class_name = "T_" + entry.gsub(/^test-/, "").gsub(/\.rb$/, "")
