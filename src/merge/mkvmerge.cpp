@@ -1,4 +1,5 @@
-/*
+/** \brief command line parsing
+ *
  * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
  *
@@ -6,10 +7,10 @@
  * see the file COPYING for details
  * or visit http://www.gnu.org/copyleft/gpl.html
  *
- * $Id$
+ * \file
+ * \version $Id$
  *
- * command line parameter parsing
- * Written by Moritz Bunkus <moritz@bunkus.org>.
+ * \author Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
 #include "os.h"
