@@ -394,6 +394,68 @@ void mm_null_io_c::close() {
 }
 
 /*
+ * IO callback class working on memory
+ */
+mm_mem_io_c::mm_mem_io_c(unsigned char *nmem, uint64_t nsize) {
+  mem = nmem;
+  mem_size = nsize;
+  pos = 0;
+}
+
+uint64_t mm_mem_io_c::getFilePointer() {
+  return pos;
+}
+
+void mm_mem_io_c::setFilePointer(int64 offset, seek_mode mode) {
+  int64_t npos;
+
+  if ((mem == NULL) || (mem_size == 0))
+    throw exception();
+
+  if (mode == seek_beginning)
+    npos = offset;
+  else if (mode == seek_end)
+    npos = mem_size - offset;
+  else
+    npos = pos + offset;
+
+  if ((npos < 0) || (npos >= mem_size))
+    throw exception();
+
+  pos = npos;
+}
+
+uint32 mm_mem_io_c::read(void *buffer, size_t size) {
+  int64_t rbytes;
+
+  rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
+  memcpy(buffer, &mem[pos], rbytes);
+  pos += rbytes;
+
+  return rbytes;
+}
+
+size_t mm_mem_io_c::write(const void *buffer, size_t size) {
+  int64_t wbytes;
+
+  wbytes = (pos + size) >= mem_size ? mem_size - pos : size;
+  memcpy(&mem[pos], buffer, wbytes);
+  pos += wbytes;
+
+  return wbytes;
+}
+
+void mm_mem_io_c::close() {
+  mem = NULL;
+  mem_size = 0;
+  pos = 0;
+}
+
+bool mm_mem_io_c::eof() {
+  return pos >= mem_size;
+}
+
+/*
  * Class for handling UTF-8/UTF-16/UTF-32 text files.
  */
 

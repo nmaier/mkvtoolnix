@@ -48,7 +48,7 @@ public:
   virtual ~mm_io_c();
 
   virtual uint64 getFilePointer();
-  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
+  virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size);
   virtual unsigned char read_uint8();
   virtual uint16_t read_uint16();
@@ -79,10 +79,26 @@ public:
   mm_null_io_c();
 
   virtual uint64 getFilePointer();
-  virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
+  virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size);
   virtual size_t write(const void *buffer, size_t size);
   virtual void close();
+};
+
+class mm_mem_io_c: public mm_io_c {
+protected:
+  int64_t pos, mem_size;
+  unsigned char *mem;
+
+public:
+  mm_mem_io_c(unsigned char *nmem, uint64_t nsize);
+
+  virtual uint64 getFilePointer();
+  virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
+  virtual uint32 read(void *buffer, size_t size);
+  virtual size_t write(const void *buffer, size_t size);
+  virtual void close();
+  virtual bool eof();
 };
 
 enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE,
