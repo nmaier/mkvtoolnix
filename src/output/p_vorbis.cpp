@@ -194,7 +194,9 @@ vorbis_packetizer_c::process(memory_c &mem,
 
   if (timecode > (expected_timecode + 100000000)) {
     chosen_timecode = timecode;
-    duration = timecode - last_timecode;
+    duration = timecode -
+      (last_timecode + last_samples_sum * 1000000000 / vi.rate +
+       timecode_offset);
     last_timecode = timecode;
     last_samples_sum = 0;
   } else {
@@ -218,7 +220,7 @@ vorbis_packetizer_c::process(memory_c &mem,
          "(last_samples_sum: %lld)\n",
          chosen_timecode, timecode, expected_timecode,
          samples_here, last_samples_sum);
-  add_packet(mem, expected_timecode, duration);
+  add_packet(mem, chosen_timecode, duration);
 
   debug_leave("vorbis_packetizer_c::process");
 
