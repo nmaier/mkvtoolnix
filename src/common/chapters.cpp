@@ -464,7 +464,7 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*a.atom)) = cuid;
 
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*a.atom)) =
-    (a.start - a.offset) * 1000000;
+    a.start - a.offset;
 
   display = &GetChild<KaxChapterDisplay>(*a.atom);
 
@@ -501,7 +501,7 @@ parse_cue_chapters(mm_text_io_c *in,
                    const char *charset,
                    bool exception_on_error,
                    KaxTags **tags) {
-  int index, min, sec, csec;
+  int index, min, sec, frames;
   cue_parser_args_t a;
   string line;
   
@@ -522,13 +522,6 @@ parse_cue_chapters(mm_text_io_c *in,
   else
     a.language = language;
 
-  // The core now uses ns precision timecodes.
-  if (min_tc > 0)
-    min_tc /= 1000000;
-  if (max_tc > 0)
-    max_tc /= 1000000;
-  if (offset > 0)
-    offset /= 1000000;
   a.min_tc = min_tc;
   a.max_tc = max_tc;
   a.offset = offset;
@@ -560,11 +553,13 @@ parse_cue_chapters(mm_text_io_c *in,
       } else if (starts_with_case(line, "index ")) {
         line.erase(0, 6);
         strip(line);
-        if (sscanf(line.c_str(), "%d %d:%d:%d", &index, &min, &sec, &csec) < 4)
+        if (sscanf(line.c_str(), "%d %d:%d:%d", &index, &min, &sec, &frames) <
+            4)
           mxerror("Cue sheet parser: Invalid INDEX entry in line %d.\n",
                   a.line_num);
         if ((a.start == -1) || (index == 1))
-          a.start = (min * 60 * 100 + sec * 100 + csec) * 10;
+          a.start = min * 60 * 1000000000ll + sec * 1000000000ll + frames *
+            1000000000ll / 75;
 
       } else if (starts_with_case(line, "track ")) {
         if ((line.length() < 5) || strcasecmp(&line[line.length() - 5],

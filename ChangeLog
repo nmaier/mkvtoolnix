@@ -1,5 +1,9 @@
 2004-07-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The CUE sheet parser interpreted a timestamp
+	as HH:MM:SS (hours, minutes, seconds). The correct spec is
+	HH:MM:FF (hours, minutes, frames with 1 frame = 1/75 second).
+
 	* Released v0.9.3.
 
 	* mmg: bug fix: The 'default track' checkbox was broken.
