@@ -174,7 +174,6 @@ start_next_level(parser_data_t *pdata,
 
   if (!strcmp(name, "ChapterAtom")) {
     KaxChapterAtom *catom;
-    KaxChapterUID *cuid;
 
     if (strcmp(parent_name, "EditionEntry") &&
         strcmp(parent_name, "ChapterAtom"))
@@ -184,23 +183,35 @@ start_next_level(parser_data_t *pdata,
     catom = &AddEmptyChild<KaxChapterAtom>(*m);
     pdata->parents->push_back(catom);
 
-    cuid = &GetChild<KaxChapterUID>(*catom);
-    *(static_cast<EbmlUInteger *>(cuid)) = create_unique_uint32();
+  } else if (!strcmp(name, "EditionUID")) {
+    KaxEditionUID *euid;
+
+    if (strcmp(parent_name, "EditionEntry"))
+      cperror_nochild();
+
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxEditionUID::ClassInfos, false) != NULL)
+      cperror_oneinstance();
+
+    euid = new KaxEditionUID;
+    m->PushElement(*euid);
+    pdata->parents->push_back(euid);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterUID")) {
-    cperror(pdata, "ChapterUID values are generated automatically.");
-//     KaxChapterUID *cuid;
+    KaxChapterUID *cuid;
 
-//     if (strcmp(parent_name, "ChapterAtom"))
-//       cperror_nochild();
+    if (strcmp(parent_name, "ChapterAtom"))
+      cperror_nochild();
 
-//     m = static_cast<EbmlMaster *>(parent_elt);
-//     if (m->FindFirstElt(KaxChapterAtom::ClassInfos, false) != NULL)
-//       cperror_oneinstance();
+    m = static_cast<EbmlMaster *>(parent_elt);
+    if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) != NULL)
+      cperror_oneinstance();
 
-//     cuid = new KaxChapterUID;
-//     m->PushElement(*cuid);
-//     pdata->parents->push_back(cuid);
+    cuid = new KaxChapterUID;
+    m->PushElement(*cuid);
+    pdata->parents->push_back(cuid);
+    pdata->data_allowed = true;
 
   } else if (!strcmp(name, "ChapterTimeStart")) {
     KaxChapterTimeStart *cts;
@@ -393,11 +404,41 @@ end_this_level(parser_data_t *pdata,
                const char *name) {
   EbmlMaster *m;
 
-  if (!strcmp(name, "ChapterAtom")) {
+  if (!strcmp(name, "EditionUID")) {
+    KaxEditionUID *euid;
+
+    el_get_uint(pdata, parent_elt);
+    euid = static_cast<KaxEditionUID *>(parent_elt);
+    if (!is_unique_uint32(uint32(*euid))) {
+      mxwarn("Chapter parser: The EditionUID %u is not unique and could "
+             "not be reused. A new one will be created.\n", uint32(*euid));
+      *static_cast<EbmlUInteger *>(euid) = create_unique_uint32();
+    }
+
+  } else if (!strcmp(name, "ChapterUID")) {
+    KaxChapterUID *cuid;
+
+    el_get_uint(pdata, parent_elt);
+    cuid = static_cast<KaxChapterUID *>(parent_elt);
+    if (!is_unique_uint32(uint32(*cuid))) {
+      mxwarn("Chapter parser: The ChapterUID %u is not unique and could "
+             "not be reused. A new one will be created.\n", uint32(*cuid));
+      *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32();
+    }
+
+  } else if (!strcmp(name, "ChapterAtom")) {
     m = static_cast<EbmlMaster *>(parent_elt);
     if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
       cperror(pdata, "<ChapterAtom> is missing the <ChapterTimeStart> "
               "child.");
+
+    if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) == NULL) {
+      KaxChapterUID *cuid;
+
+      cuid = new KaxChapterUID;
+      *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32();
+      m->PushElement(*cuid);
+    }
 
   } else if (!strcmp(name, "ChapterTimeStart"))
     el_get_time(pdata, parent_elt);
@@ -457,17 +498,31 @@ end_element(void *user_data,
   if (pdata->data_allowed && (pdata->bin == NULL))
     cperror(pdata, "Element <%s> does not contain any data.", name);
 
-  if (pdata->depth == 1)
-    ;                           // Nothing to do here!
-  else if (pdata->depth == 2) {
+  if (pdata->depth == 1) {
     m = static_cast<EbmlMaster *>(parent_elt);
     if (m->ListSize() == 0)
       cperror(pdata, "At least one <EditionEntry> element is needed.");
 
-  } else if (pdata->depth == 3) {
+  } else if (pdata->depth == 2) {
+    int i, num;
+    KaxEditionUID *euid;
+
     m = static_cast<EbmlMaster *>(parent_elt);
-    if (m->ListSize() == 0)
+    num = 0;
+    euid = NULL;
+    for (i = 0; i < m->ListSize(); i++) {
+      if (is_id((*m)[i], KaxEditionUID))
+        euid = dynamic_cast<KaxEditionUID *>((*m)[i]);
+      else if (is_id((*m)[i], KaxChapterAtom))
+        num++;
+    }
+    if (num == 0)
       cperror(pdata, "At least one <ChapterAtom> element is needed.");
+    if (euid == NULL) {
+      euid = new KaxEditionUID;
+      *static_cast<EbmlUInteger *>(euid) = create_unique_uint32();
+      m->PushElement(*euid);
+    }
 
   } else
     end_this_level(pdata, name);

@@ -76,6 +76,7 @@ extract_chapters(const char *file_name,
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   EbmlStream *es;
   mm_io_c *in;
+  mm_stdio_c out;
   bool chapters_extracted = false;
   int next_chapter = 1;
 
@@ -137,14 +138,19 @@ extract_chapters(const char *file_name,
           debug_dump_elements(&chapters, 0);
 
         if (!chapters_extracted && !chapter_format_simple) {
-          mxinfo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Chapters>\n");
+          out.write_bom("UTF-8");
+          out.printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                     "\n"
+                     "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
+                     "\n"
+                     "<Chapters>\n");
           chapters_extracted = true;
         }
 
         if (chapter_format_simple)
-          write_chapters_simple(next_chapter, &chapters, stdout);
+          write_chapters_simple(next_chapter, &chapters, &out);
         else
-          write_chapters_xml(&chapters, stdout);
+          write_chapters_xml(&chapters, &out);
 
       } else
         l1->SkipData(*es, l1->Generic().Context);
@@ -188,5 +194,5 @@ extract_chapters(const char *file_name,
   }
 
   if (chapters_extracted && !chapter_format_simple)
-    mxinfo("</Chapters>\n");
+    out.printf("</Chapters>\n");
 }
