@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.42 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.43 2003/04/23 13:10:43 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -818,10 +818,11 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
       continue;
 
     space = strchr(buffer, ' ');
-    if (space != NULL) {
+    if ((space != NULL) && (buffer[0] == '-')) {
       *space = 0;
       space++;
-    }
+    } else
+      space = NULL;
     args = add_string(num_args, args, buffer);
     if (space != NULL)
       args = add_string(num_args, args, space);
