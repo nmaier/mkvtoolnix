@@ -191,10 +191,12 @@ bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 // be used by the author.
 #define ENGAGE_SPACE_AFTER_CHAPTERS "space_after_chapters"
 #define ENGAGE_NO_CHAPTERS_IN_META_SEEK "no_chapters_in_meta_seek"
+#define ENGAGE_NO_META_SEEK "no_meta_seek"
 
 const char *mosu_hacks[] = {
   ENGAGE_SPACE_AFTER_CHAPTERS,
   ENGAGE_NO_CHAPTERS_IN_META_SEEK,
+  ENGAGE_NO_META_SEEK,
   NULL
 };
 vector<const char *> engaged_hacks;
@@ -2009,7 +2011,8 @@ void finish_file() {
     chapters_here = NULL;
 
   // Render the meta seek information with the cues
-  if (write_meta_seek_for_clusters && (kax_sh_cues->ListSize() > 0)) {
+  if (write_meta_seek_for_clusters && (kax_sh_cues->ListSize() > 0) &&
+      !hack_engaged(ENGAGE_NO_META_SEEK)) {
     kax_sh_cues->UpdateSize();
     kax_sh_cues->Render(*out);
     kax_sh_main->IndexThis(*kax_sh_cues, *kax_segment);
@@ -2042,7 +2045,7 @@ void finish_file() {
     kax_as = NULL;
   }
 
-  if (kax_sh_main->ListSize() > 0) {
+  if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     kax_sh_main->UpdateSize();
     if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
       mxwarn("This should REALLY not have happened. The space reserved for "
