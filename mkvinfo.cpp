@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.42 2003/05/21 20:54:40 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.43 2003/05/21 21:01:57 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -206,7 +206,7 @@ void process_file() {
   EbmlStream *es;
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE;
-  char track_type, *s;
+  char track_type;
 
   try {
     delete_object = 1;
@@ -298,9 +298,8 @@ void process_file() {
           } else if (EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) {
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
             muxingapp.ReadData(es->I_O());
-            s = unicode_string_to_cstr(UTFstring(muxingapp));
-            fprintf(stdout, "(%s) | + Muxing application: %s", NAME, s);
-            safefree(s);
+            fprintf(stdout, "(%s) | + Muxing application: %ls", NAME,
+                    UTFstring(muxingapp).c_str());
             if (verbose > 1)
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
@@ -308,9 +307,8 @@ void process_file() {
           } else if (EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) {
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
             writingapp.ReadData(es->I_O());
-            s = unicode_string_to_cstr(UTFstring(writingapp));
-            fprintf(stdout, "(%s) | + Writing application: %s", NAME, s);
-            safefree(s);
+            fprintf(stdout, "(%s) | + Writing application: %ls", NAME,
+                    UTFstring(writingapp).c_str());
             if (verbose > 1)
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
