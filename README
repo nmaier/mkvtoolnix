@@ -41,10 +41,10 @@ If you want to compile from source then get the newest versions of
 libebml and libmatroska. Normally the 'latest official release' will
 work with the latest release of mkvtoolnix. At the time of writing
 these versions where:
-- libebml 0.6.0:
-http://matroska.free.fr/downloads/libebml/libebml-0.6.0.tar.gz
-- libmatroska 0.5.2:
-http://matroska.free.fr/downloads/libmatroska/libmatroska-0.5.2.tar.gz
+- libebml 0.6.2:
+http://matroska.free.fr/downloads/libebml/libebml-0.6.2.tar.gz
+- libmatroska 0.6.1:
+http://matroska.free.fr/downloads/libmatroska/libmatroska-0.5.1.tar.gz
 
 Alternatively you can get the two libraries via CVS:
 
@@ -93,32 +93,19 @@ Example
 Here's a *very* brief example of how you could use mkvmerge
 with mencoder in order to rip a DVD:
 
-a) Extract the audio to PCM audio and let mencoder calculate the
-video frame numbers:
+a) Extract the audio to PCM audio:
 
-mencoder -dvd 1 -ovc frameno -oac pcm -o frameno.avi
+mplayer -ao pcm -aofile audio.wav -vo null -vc dummy dvd://1
 
-If you're low on disk space and can invest a bit more time then you
-tell mencoder to encode to MP3 instead:
-
-mencoder -dvd 1 -ovc frameno -oac mp3lame -lameopts br=32 -o frameno.avi
-
-b) Extract the audio again, this time to a plain WAV file:
-
-mplayer -dvd 1 -vc dummy -vo null -hardframedrop -ao pcm -aofile audio.wav
-
-At the moment selecting a non-existant video codec with -vc results
-in the fastest audio dump.
-
-c) Normalize the sound (optional)
+b) Normalize the sound (optional)
 
 normalize audio.wav
 
-d) Encode the audio to Vorbis:
+c) Encode the audio to Vorbis:
 
 oggenc -q3 -oaudio-q3.ogg audio.wav
 
-e) Somehow calculate the bitrate for your video. Use something like...
+d) Somehow calculate the bitrate for your video. Use something like...
 
 video_size = (target_size - audio-size) / 1.005
 video_bitrate = video_size / length / 1024 * 8
@@ -129,7 +116,7 @@ length in seconds
   (about 0.5%, that's correct ;)).
 video_bitrate will be in kbit/s
 
-f) Use the two-pass encoding for the video:
+e) Use the two-pass encoding for the video:
 
 mencoder -dvd 1 -oac copy -ovc lavc \
   -lavcopts vcodec=mpeg4:vbitrate=1000:vhq:vqmin=2:vpass=1 \
@@ -141,7 +128,7 @@ mencoder -dvd 1 -oac copy -ovc lavc \
   -vop scale=....,crop=..... \
   -o movie.avi
 
-g) Merge:
+f) Merge:
 
 mkvmerge -o movie.mkv -A movie.avi audio-q3.ogg
 
