@@ -94,10 +94,13 @@ int vobsub_packetizer_c::extract_duration(unsigned char *data, int buf_size,
     next_ctrlblk = (data[i] << 8) | data[i + 1];
     i += 2;
 
-    if((next_ctrlblk > packet_size) || (next_ctrlblk < data_size))
-      mxerror(PFX "Inconsistent data in the SPU packets (next_ctrlblk: %d, "
-              "packet_size: %d, data_size: %d, timecode: " FMT_TIMECODE ")\n",
-              next_ctrlblk, packet_size, data_size, TIMECODE);
+    if((next_ctrlblk > packet_size) || (next_ctrlblk < data_size)) {
+      mxwarn(PFX "Inconsistent data in the SPU packets (next_ctrlblk: %d, "
+             "packet_size: %d, data_size: %d, timecode: " FMT_TIMECODE "). "
+             "Skipping this packet. This is NOT fatal.\n", next_ctrlblk,
+             packet_size, data_size, TIMECODE);
+      return -2;
+    }
 
     if (data[i] <= 0x06)
       len = lengths[data[i]];
@@ -135,8 +138,10 @@ int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
            FMT_TIMECODE ").\n", TIMECODE);
     duration = default_duration;
   }
-  timecode = (int64_t)((float)timecode * ti->async.linear);
-  add_packet(buf, size, timecode, duration, true);
+  if (duration != -2) {
+    timecode = (int64_t)((float)timecode * ti->async.linear);
+    add_packet(buf, size, timecode, duration, true);
+  }
   safefree(buf);
 
   return -1;
