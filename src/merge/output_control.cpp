@@ -139,7 +139,7 @@ bool identifying = false, identify_verbose = false;
 
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment *kax_segment;
-KaxTracks *kax_tracks;
+KaxTracks kax_tracks;
 KaxTrackEntry *kax_last_entry;
 KaxCues *kax_cues;
 KaxSeekHead *kax_sh_main = NULL, *kax_sh_cues = NULL;
@@ -621,30 +621,30 @@ render_headers(mm_io_c *rout) {
     if (write_meta_seek_for_clusters)
       kax_sh_cues = new KaxSeekHead();
 
-    kax_tracks = &GetChild<KaxTracks>(*kax_segment);
-    kax_last_entry = NULL;
-
-    for (i = 0; i < track_order.size(); i++)
-      if ((track_order[i].file_id >= 0) &&
-          (track_order[i].file_id < files.size()) &&
-          !files[track_order[i].file_id].appending)
-        files[track_order[i].file_id].reader->
-          set_headers_for_track(track_order[i].track_id);
-    for (i = 0; i < files.size(); i++)
-      if (!files[i].appending)
-        files[i].reader->set_headers();
-    set_timecode_scale();
-    for (i = 0; i < packetizers.size(); i++)
-      if (packetizers[i].packetizer != NULL)
-        packetizers[i].packetizer->fix_headers();
+    if (first_file) {
+      kax_last_entry = NULL;
+      for (i = 0; i < track_order.size(); i++)
+        if ((track_order[i].file_id >= 0) &&
+            (track_order[i].file_id < files.size()) &&
+            !files[track_order[i].file_id].appending)
+          files[track_order[i].file_id].reader->
+            set_headers_for_track(track_order[i].track_id);
+      for (i = 0; i < files.size(); i++)
+        if (!files[i].appending)
+          files[i].reader->set_headers();
+      set_timecode_scale();
+      for (i = 0; i < packetizers.size(); i++)
+        if (packetizers[i].packetizer != NULL)
+          packetizers[i].packetizer->fix_headers();
+    }
 
     kax_infos->Render(*rout, true);
     kax_sh_main->IndexThis(*kax_infos, *kax_segment);
 
     if (packetizers.size() > 0) {
-      kax_tracks->Render(*rout,
-                         !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
-      kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
+      kax_segment->PushElement(kax_tracks);
+      kax_tracks.Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+      kax_sh_main->IndexThis(kax_tracks, *kax_segment);
 
       // Reserve some small amount of space for header changes by the
       // packetizers.
@@ -668,13 +668,12 @@ void
 rerender_track_headers() {
   int64_t new_void_size;
 
-  kax_tracks->UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+  kax_tracks.UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
   new_void_size = void_after_track_headers->GetElementPosition() +
     void_after_track_headers->GetSize() -
-    kax_tracks->GetElementPosition() -
-    kax_tracks->ElementSize();
-  out->save_pos(kax_tracks->GetElementPosition());
-  kax_tracks->Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+    kax_tracks.GetElementPosition() - kax_tracks.ElementSize();
+  out->save_pos(kax_tracks.GetElementPosition());
+  kax_tracks.Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
   delete void_after_track_headers;
   void_after_track_headers = new EbmlVoid;
   void_after_track_headers->SetSize(new_void_size);
@@ -1589,6 +1588,13 @@ finish_file(bool last_file) {
     kax_segment->OverwriteHead(*out);
 
   delete out;
+
+  // The tracks element must not be deleted.
+  for (i = 0; i < kax_segment->ListSize(); ++i)
+    if (NULL == dynamic_cast<KaxTracks *>((*kax_segment)[i]))
+      delete (*kax_segment)[i];
+  kax_segment->RemoveAll();
+
   delete kax_segment;
   delete kax_cues;
   delete kax_sh_void;
@@ -1596,9 +1602,6 @@ finish_file(bool last_file) {
   delete void_after_track_headers;
   if (kax_sh_cues != NULL)
     delete kax_sh_cues;
-
-  for (i = 0; i < packetizers.size(); i++)
-    packetizers[i].packetizer->reset();
 }
 
 static void establish_deferred_connections(filelist_t &file);

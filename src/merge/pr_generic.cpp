@@ -567,10 +567,10 @@ generic_packetizer_c::set_headers() {
 
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
-      track_entry = &GetChild<KaxTrackEntry>(*kax_tracks);
+      track_entry = &GetChild<KaxTrackEntry>(kax_tracks);
     else
       track_entry =
-        &GetNextChild<KaxTrackEntry>(*kax_tracks, *kax_last_entry);
+        &GetNextChild<KaxTrackEntry>(kax_tracks, *kax_last_entry);
     kax_last_entry = track_entry;
     track_entry->SetGlobalTimecodeScale((int64_t)timecode_scale);
   }

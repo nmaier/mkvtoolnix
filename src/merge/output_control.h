@@ -145,7 +145,7 @@ extern string segmentinfo_file_name;
 extern KaxTags *tags_from_cue_chapters;
 
 extern KaxSegment *kax_segment;
-extern KaxTracks *kax_tracks;
+extern KaxTracks kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
 extern KaxCues *kax_cues;
 extern KaxSeekHead *kax_sh_main, *kax_sh_cues;

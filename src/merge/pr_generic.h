@@ -496,9 +496,6 @@ public:
   virtual file_status_e read() {
     return reader->read(this);
   }
-  virtual void reset() {
-    track_entry = NULL;
-  }
 
   virtual void add_packet(memory_c &mem, int64_t timecode,
                           int64_t duration, bool duration_mandatory = false,
