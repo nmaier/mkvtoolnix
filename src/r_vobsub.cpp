@@ -181,6 +181,7 @@ void vobsub_reader_c::create_packetizers() {
       mxinfo("+-> Using VobSub subtitle output module for subtitle track "
              "%u (language: %s).\n", i, tracks[i]->language);
   }
+  ti->language = NULL;
 }
 
 void vobsub_reader_c::parse_headers() {
