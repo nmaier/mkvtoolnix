@@ -1799,6 +1799,7 @@ void create_next_output_file(bool last_file, bool first_file) {
 void finish_file() {
   int i;
   KaxChapters *chapters_here;
+  int64_t start, end, offset;
 
   // Render the cues.
   if (write_cues && cue_writing_requested) {
@@ -1819,9 +1820,14 @@ void finish_file() {
   out->restore_pos();
 
   if ((kax_chapters != NULL) && (pass > 0)) {
-    chapters_here = parse_chapters(chapter_file_name,
-                                   cluster_helper->get_first_timecode(),
-                                   cluster_helper->get_max_timecode());
+    if (no_linking)
+      offset = cluster_helper->get_timecode_offset();
+    else
+      offset = 0;
+    start = cluster_helper->get_first_timecode() + offset;
+    end = cluster_helper->get_max_timecode() + offset;
+
+    chapters_here = parse_chapters(chapter_file_name, start, end, offset);
     kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
     delete kax_chapters_void;
     kax_chapters_void = NULL;

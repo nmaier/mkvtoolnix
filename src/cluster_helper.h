@@ -72,6 +72,7 @@ public:
   int get_cluster_content_size();
   int64_t get_max_timecode();
   int64_t get_first_timecode();
+  int64_t get_timecode_offset();
   void find_next_splitpoint();
   int get_next_splitpoint();
 

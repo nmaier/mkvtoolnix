@@ -28,7 +28,7 @@
 using namespace libmatroska;
 
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc = 0,
-                            int64_t max_tc = -1);
+                            int64_t max_tc = -1, int64_t offset = 0);
 
 void write_chapters_xml(KaxChapters *chapters, FILE *out);
 

@@ -103,7 +103,7 @@ static bool probe_simple_chapters(mm_text_io_c *in) {
 // CHAPTER01NAME=Hallo Welt
 
 static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
-                                          int64_t max_tc) {
+                                          int64_t max_tc, int64_t offset) {
   KaxChapters *chaps;
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
@@ -118,6 +118,8 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   mode = 0;
   atom = NULL;
   edition = NULL;
+
+  printf("off: %lld\n", offset);
 
   while (in->getline2(line)) {
     strip(line);
@@ -158,7 +160,7 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
         *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
           create_unique_uint32();
         *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
-          (start - min_tc) * 1000000;
+          (start - offset) * 1000000;
         display = &GetChild<KaxChapterDisplay>(*atom);
         *static_cast<EbmlUnicodeString *>
           (&GetChild<KaxChapterString>(*display)) =
@@ -178,12 +180,13 @@ static bool probe_xml_chapters(mm_text_io_c *) {
   return false;
 }
 
-static KaxChapters *parse_xml_chapters(mm_text_io_c *, int64_t, int64_t) {
+static KaxChapters *parse_xml_chapters(mm_text_io_c *, int64_t, int64_t,
+                                       int64_t) {
   return NULL;
 }
 
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
-                            int64_t max_tc) {
+                            int64_t max_tc, int64_t offset) {
   mm_text_io_c *in;
 
   try {
@@ -194,10 +197,10 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   }
 
   if (probe_simple_chapters(in))
-    return parse_simple_chapters(in, min_tc, max_tc);
+    return parse_simple_chapters(in, min_tc, max_tc, offset);
 
   if (probe_xml_chapters(in))
-    return parse_xml_chapters(in, min_tc, max_tc);
+    return parse_xml_chapters(in, min_tc, max_tc, offset);
 
   mxprint(stderr, "Error: Unknown file format for '%s'. It does not contain "
           "a supported chapter format.\n", file_name);

@@ -666,3 +666,7 @@ int64_t cluster_helper_c::get_max_timecode() {
 int64_t cluster_helper_c::get_first_timecode() {
   return first_timecode;
 }
+
+int64_t cluster_helper_c::get_timecode_offset() {
+  return timecode_offset;
+}
