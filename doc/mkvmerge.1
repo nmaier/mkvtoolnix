@@ -56,7 +56,7 @@ imprecise seeking and/or processing.
 Tells \fBmkvmerge\fR not to create and write the cue data which can be compared
 to an index in an AVI. Matroska files can be played back without the cue
 data, but seeking will probably be imprecise and slower. Use this only if
-you're really desparate for space or for testing purposes. See also option
+you're really desperate for space or for testing purposes. See also option
 \fB\-\-cues\fR which can be specified for each input file.
 .TP
 \fB\-\-no\-meta\-seek\fR
@@ -84,7 +84,7 @@ File splitting and linking (still global):
 Splits the output file after a given size or a given time. For splitting after
 a specific size the parameter \fId\fR may end with k, m or g to indicate
 that the size is in KB, MB or GB respectively. For time-based splitting use
-the form HH:MM:SS or add 's' to the number of seconds \fIn\fRafter which the
+the form HH:MM:SS or add 's' to the number of seconds \fIn\fR after which the
 file should be split.
 .br
 For this splitting mode the output filename is treated differently than for
@@ -185,7 +185,7 @@ section \fBTRACK IDS\fR).
 linear drifts. \fIp\fR defaults to 1000 if omitted. Both \fIo\fR and
 \fIp\fR can be floating point numbers.
 .br
-Defaults: no manual synch correction (which is the same as \fId\fR = 0 and
+Defaults: no manual sync correction (which is the same as \fId\fR = 0 and
 \fIo\fR/\fIp\fR = 1.0).
 .br
 This option can be used multiple times for an input file applying to several
@@ -210,7 +210,7 @@ tracks by selecting different track IDs each time.
 Sets the 'default' flag for the given track (see section \fBTRACK IDS\fR).
 If the user does not explicitly select a track himself then the player should
 prefer the track that has his 'default' flag set. Only one track of each kind
-(audio, video, subttiles) can have his 'default' flag set.
+(audio, video, subtitles) can have his 'default' flag set.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
@@ -235,7 +235,7 @@ Forces the FourCC to the specified value. Works only for video tracks.
 .TP
 \fB\-\-aspect\-ratio\fR <\fIar\fR|\fIw\fR/\fIh\fR>
 Sets the aspect ratio for the track. The ratio can be given either as a
-floating point number or as 'widht/height', e.g. 16/9.
+floating point number or as 'width/height', e.g. 16/9.
 .LP
 Options that only apply to subtitle tracks:
 .TP
@@ -271,7 +271,7 @@ Show version information.
 \fB@\fR\fIoptionsfile\fR
 Reads additional command line arguments from the file \fIoptionsfile\fR.
 Lines whose first non-whitespace character is a hash mark (#) are treated
-as comments and ignored. Whitespaces at the start and end of a line will
+as comments and ignored. White spaces at the start and end of a line will
 be stripped. If a space is encountered and the line starts with '\-' then
 the line will be split into exactly two arguments - the string before the
 space and the string after it. There is no meta character escaping.
@@ -309,7 +309,7 @@ After a couple of minutes you can join video and audio:
 .LP
 $ \fBmkvmerge -o MyMovie-with-sound.mkv MyMovie.avi MyMovie.ogg\fP
 .LP
-If your AVI already contains an audio track then it will be copied aswell
+If your AVI already contains an audio track then it will be copied as well
 (if \fBmkvmerge\fR supports the audio format). To avoid that simply do
 .LP
 $ \fBmkvmerge -o MyMovie-with-sound.mkv -A MyMovie.avi MyMovie.ogg\fP
@@ -440,8 +440,8 @@ header page.
 Matroska files: The track's ID is the track number as reported by \fBmkvinfo\fR
 or \fBmkvmerge \-\-identify\fR. It is \fBnot\fR the track UID.
 .LP
-The special track ID '-1' is a wildcard and applies the given switch to all
-tracks that are read from an input file. This was the bahviour of these
+The special track ID '-1' is a wild card and applies the given switch to all
+tracks that are read from an input file. This was the behaviour of these
 switches prior to version 0.4.4.
 .LP
 The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
@@ -477,7 +477,7 @@ markup is not supported correctly.
 .SH FILE LINKING
 .LP
 Matroska supports file linking which simply says that a specific file is the
-predecessor or successsor of the current file. To be precise, it's not really
+predecessor or successor of the current file. To be precise, it's not really
 the files that are linked but the Matroska segments. As most files will
 probably only contain one Matroska segment I simply say 'file linking'
 although 'segment linking' would be more appropriate.
