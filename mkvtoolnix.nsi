@@ -325,7 +325,7 @@ Section "Program files" SEC01
   File "doc\COPYING.txt"
   File "doc\README*"
   SetOutPath "$INSTDIR\doc\images"
-  File "doc\images\*.png"
+  File "doc\images\*.gif"
   SetOutPath "$INSTDIR\examples"
   File "examples\*.cue"
   File "examples\*.dtd"
