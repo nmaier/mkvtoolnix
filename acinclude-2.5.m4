@@ -668,27 +668,14 @@ AC_DEFUN(PATH_WXWINDOWS,
   AC_SUBST(WXWINDOWS_LIBS)
 ])
 
-dnl Check if --with-expat[=PREFIX] is specified and
-dnl Expat >= 1.95.0 is installed in the system.
-dnl If yes, substitute EXPAT_CFLAGS, EXPAT_LIBS with regard to
-dnl the specified PREFIX and set with_expat to PREFIX, or 'yes' if PREFIX
-dnl has not been specified. Also HAVE_LIBEXPAT, HAVE_EXPAT_H are defined.
-dnl If --with-expat has not been specified, set with_expat to 'no'.
-dnl In addition, an Automake conditional EXPAT_INSTALLED is set accordingly.
-dnl This is necessary to adapt a whole lot of packages that have expat
-dnl bundled as a static library.
-AC_DEFUN(AM_WITH_EXPAT,
+AC_DEFUN(PATH_EXPAT,
 [ AC_ARG_WITH(expat,
 	      [  --with-expat=PREFIX           Path to where the Expat library is installed],
-	      , with_expat=no)
-
-  AC_MSG_CHECKING(for Expat)
-  AM_CONDITIONAL(EXPAT_INSTALLED, test $with_expat != no)
+	      , with_expat_given=no)
 
   EXPAT_CFLAGS=
   EXPAT_LIBS=
-  if test $with_expat != no; then
-	if test $with_expat != yes; then
+	if test "$with_expat" != "yes"; then
 		EXPAT_CFLAGS="-I$with_expat/include"
 		EXPAT_LIBS="-L$with_expat/lib"
 	fi
@@ -697,24 +684,57 @@ AC_DEFUN(AM_WITH_EXPAT,
 		       expat_found=yes ],
 		     [ expat_found=no ],
 		     "$EXPAT_LIBS")
-	if test $expat_found = no; then
+	if test "$expat_found" = "no"; then
 		AC_MSG_ERROR([Could not find the Expat library])
 	fi
 	expat_save_CFLAGS="$CFLAGS"
 	CFLAGS="$CFLAGS $EXPAT_CFLAGS"
 	AC_CHECK_HEADERS(expat.h, , expat_found=no)
-	if test $expat_found = no; then
+	if test "$expat_found" = "no"; then
 		AC_MSG_ERROR([Could not find expat.h])
 	fi
 	CFLAGS="$expat_save_CFLAGS"
-  fi
 
   if test "x$expat_found" = "xno"; then
     exit 1
-  else
-    AC_MSG_RESULT(yes)
   fi
 
   AC_SUBST(EXPAT_CFLAGS)
   AC_SUBST(EXPAT_LIBS)
+])
+
+AC_DEFUN(PATH_ZLIB,
+[ AC_ARG_WITH(zlib,
+	      [  --with-zlib=PREFIX            Path to where the zlib library is installed],
+	      , with_zlib_given=no)
+
+  ZLIB_CFLAGS=
+  ZLIB_LIBS=
+  if test "$with_zlib" != "yes"; then
+    ZLIB_CFLAGS="-I$with_zlib/include"
+    ZLIB_LIBS="-L$with_zlib/lib"
+  fi
+
+	AC_CHECK_LIB(z, zlibVersion,
+		     [ ZLIB_LIBS="$ZLIB_LIBS -lz"
+		       zlib_found=yes ],
+		     [ zlib_found=no ],
+		     "$ZLIB_LIBS")
+  if test "$zlib_found" = "no"; then
+    AC_MSG_ERROR([Could not find the zlib library])
+  fi
+	zlib_save_CFLAGS="$CFLAGS"
+	CFLAGS="$CFLAGS $ZLIB_CFLAGS"
+  AC_CHECK_HEADERS(zlib.h, , zlib_found=no)
+  if test "$zlib_found" = "no"; then
+    AC_MSG_ERROR([Could not find zlib.h])
+  fi
+	CFLAGS="$zlib_save_CFLAGS"
+
+  if test "x$zlib_found" = "xno"; then
+    exit 1
+  fi
+
+  AC_SUBST(ZLIB_CFLAGS)
+  AC_SUBST(ZLIB_LIBS)
 ])
