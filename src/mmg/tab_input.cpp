@@ -869,7 +869,7 @@ tab_input::add_file(const wxString &file_name) {
                  t->type == 's' ? wxT("subtitles") : wxT("unknown"),
                  name.c_str());
     clb_tracks->Append(label);
-    clb_tracks->Check(i, true);
+    clb_tracks->Check(clb_tracks->GetCount() - 1, true);
   }
 
   clb_tracks->Enable(true);
