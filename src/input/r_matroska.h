@@ -105,6 +105,8 @@ typedef struct {
 
   compression_c *zlib_compressor, *bzlib_compressor, *lzo1x_compressor;
 
+  KaxTag *tag;
+
   generic_packetizer_c *packetizer;
   bool headers_set;
 } kax_track_t;
@@ -129,6 +131,7 @@ private:
   string title;
 
   vector<kax_attachment_t> attachments;
+  vector<int64_t> handled_tags, handled_attachments, handled_chapters;
 
 public:
   kax_reader_c(track_info_c *nti) throw (error_c);
@@ -157,6 +160,7 @@ protected:
   virtual int packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
+  virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual int64_t get_queued_bytes();
   virtual bool reverse_encodings(kax_track_t *track, unsigned char *&data,
                                  uint32_t &size, uint32_t type);

@@ -88,6 +88,13 @@ using namespace libmatroska;
 #define MAP_TRACK_TYPE_STRING(c) ((c) == 'a' ? "audio" : \
                                   (c) == 'v' ? "video" : "subtite")
 
+#define in_parent(p) (in->getFilePointer() < \
+                      (p->GetElementPosition() + p->ElementSize()))
+#define FINDFIRST(p, c) (static_cast<c *> \
+  (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
+#define FINDNEXT(p, c, e) (static_cast<c *> \
+  (((EbmlMaster *)p)->FindNextElt(*e, false)))
+
 // }}}
 
 #define is_ebmlvoid(e) (EbmlId(*e) == EbmlVoid::ClassInfos.GlobalId)
@@ -167,6 +174,8 @@ kax_reader_c::~kax_reader_c() {
         delete tracks[i]->lzo1x_compressor;
       if (tracks[i]->kax_c_encodings != NULL)
         delete tracks[i]->kax_c_encodings;
+      if (tracks[i]->tag != NULL)
+        delete tracks[i]->tag;
       safefree(tracks[i]);
     }
 
@@ -582,6 +591,16 @@ kax_reader_c::handle_attachments(mm_io_c *io,
   bool found;
   kax_attachment_t matt;
 
+  found = false;
+  for (i = 0; i < handled_attachments.size(); i++)
+    if (handled_attachments[i] == pos) {
+      found = true;
+      break;
+    }
+  if (found)
+    return;
+  handled_attachments.push_back(pos);
+
   data = NULL;
   io->save_pos(pos);
   l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
@@ -664,10 +683,21 @@ kax_reader_c::handle_chapters(mm_io_c *io,
                               int64_t pos) {
   KaxChapters *chapters;
   EbmlElement *l1, *l2;
-  int upper_lvl_el;
+  int upper_lvl_el, i;
+  bool found;
 
   if (ti->no_chapters || (kax_chapters != NULL))
     return;
+
+  found = false;
+  for (i = 0; i < handled_chapters.size(); i++)
+    if (handled_chapters[i] == pos) {
+      found = true;
+      break;
+    }
+  if (found)
+    return;
+  handled_chapters.push_back(pos);
 
   io->save_pos(pos);
   l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
@@ -688,24 +718,95 @@ kax_reader_c::handle_chapters(mm_io_c *io,
   io->restore_pos();
 }
 
+void
+kax_reader_c::handle_tags(mm_io_c *io,
+                          EbmlElement *l0,
+                          int64_t pos) {
+  KaxTags *tags;
+  KaxTag *tag;
+  KaxTagTargets *target;
+  KaxTagTrackUID *tuid;
+  EbmlElement *l1, *l2;
+  int upper_lvl_el, tid, i;
+  bool is_global, found;
+  kax_track_t *track;
+
+  if (ti->no_tags)
+    return;
+
+  found = false;
+  for (i = 0; i < handled_tags.size(); i++)
+    if (handled_tags[i] == pos) {
+      found = true;
+      break;
+    }
+  if (found)
+    return;
+  handled_tags.push_back(pos);
+
+  io->save_pos(pos);
+  l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                           true);
+
+  if ((l1 != NULL) && (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId)) {
+    tags = (KaxTags *)l1;
+    l2 = NULL;
+    upper_lvl_el = 0;
+    tags->Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
+
+    while (tags->ListSize() > 0) {
+      if (!(EbmlId(*(*tags)[0]) == KaxTag::ClassInfos.GlobalId)) {
+        delete (*tags)[0];
+        tags->Remove(0);
+        continue;
+      }
+
+      is_global = false;
+      tid = -1;
+      tag = static_cast<KaxTag *>((*tags)[0]);
+      target = FINDFIRST(tag, KaxTagTargets);
+      if (target != NULL) {
+        tuid = FINDFIRST(target, KaxTagTrackUID);
+        if (tuid == NULL)
+          is_global = true;
+        else {
+          found = false;
+          track = find_track_by_uid(uint32(*tuid));
+          if (track != NULL) {
+            found = true;
+            if (track->tag != NULL)
+              delete track->tag;
+            track->tag = tag;
+          }
+        }
+      } else
+        is_global = true;
+
+      if (is_global)
+        add_tags(tag);
+      else if (!found)
+        delete tag;
+      tags->Remove(0);
+    }
+
+  } else if (l1 != NULL)
+    delete l1;
+
+  io->restore_pos();
+}
+
 // }}}
 
 // {{{ FUNCTION kax_reader_c::read_headers()
 
-#define in_parent(p) (in->getFilePointer() < \
-                      (p->GetElementPosition() + p->ElementSize()))
-#define FINDFIRST(p, c) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
-#define FINDNEXT(p, c, e) (static_cast<c *> \
-  (((EbmlMaster *)p)->FindNextElt(*e, false)))
-
 int
 kax_reader_c::read_headers() {
-  int upper_lvl_el;
+  int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
   kax_track_t *track;
   bool exit_loop;
+  vector<int64_t> deferred_tags, deferred_chapters, deferred_attachments;
 
   exit_loop = false;
   try {
@@ -1155,18 +1256,22 @@ kax_reader_c::read_headers() {
         l1->SkipData(*es, l1->Generic().Context);
 
       } else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)
-        handle_attachments(in, l0, l1->GetElementPosition());
+        deferred_attachments.push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId)
-        handle_chapters(in, l0, l1->GetElementPosition());
+        deferred_chapters.push_back(l1->GetElementPosition());
+
+      else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId)
+        deferred_tags.push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
-        int i, k;
+        int k;
         EbmlElement *el;
         KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
         int64_t pos;
-        bool is_attachments, is_chapters;
+        bool is_attachments, is_chapters, is_tags;
 
+        i = 0;
         seek_head.Read(*es, KaxSeekHead::ClassInfos.Context, i, el, true);
         for (i = 0; i < seek_head.ListSize(); i++)
           if (EbmlId(*seek_head[i]) == KaxSeek::ClassInfos.GlobalId) {
@@ -1174,6 +1279,7 @@ kax_reader_c::read_headers() {
             pos = -1;
             is_attachments = false;
             is_chapters = false;
+            is_tags = false;
 
             for (k = 0; k < seek.ListSize(); k++)
               if (EbmlId(*seek[k]) == KaxSeekID::ClassInfos.GlobalId) {
@@ -1183,18 +1289,21 @@ kax_reader_c::read_headers() {
                   is_attachments = true;
                 else if (id == KaxChapters::ClassInfos.GlobalId)
                   is_chapters = true;
+                else if (id == KaxTags::ClassInfos.GlobalId)
+                  is_tags = true;
 
               } else if (EbmlId(*seek[k]) ==
                          KaxSeekPosition::ClassInfos.GlobalId)
                 pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
 
             if (pos != -1) {
+              pos = ((KaxSegment *)l0)->GetGlobalPosition(pos);
               if (is_attachments)
-                handle_attachments(in, l0,
-                                   ((KaxSegment *)l0)->GetGlobalPosition(pos));
+                deferred_attachments.push_back(pos);
               else if (is_chapters)
-                handle_chapters(in, l0,
-                                ((KaxSegment *)l0)->GetGlobalPosition(pos));
+                deferred_chapters.push_back(pos);
+              else if (is_tags)
+                deferred_tags.push_back(pos);
             }
           }
 
@@ -1235,6 +1344,13 @@ kax_reader_c::read_headers() {
                                0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
+
+    for (i = 0; i < deferred_attachments.size(); i++)
+      handle_attachments(in, l0, deferred_attachments[i]);
+    for (i = 0; i < deferred_chapters.size(); i++)
+      handle_chapters(in, l0, deferred_chapters[i]);
+    for (i = 0; i < deferred_tags.size(); i++)
+      handle_tags(in, l0, deferred_tags[i]);
 
   } catch (exception &ex) {
     mxerror(PFX "caught exception\n");

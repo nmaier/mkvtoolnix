@@ -325,6 +325,9 @@ public:
   }
 
   virtual int set_uid(uint32_t uid);
+  virtual int get_uid() {
+    return huid;
+  }
   virtual void set_track_type(int type);
   virtual int get_track_type() {
     return htrack_type;

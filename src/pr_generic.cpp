@@ -125,6 +125,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     tags = &(*ti->all_tags)[i];
     if ((tags->id == ti->id) || (tags->id == -1)) { // -1 == all tracks
       ti->tags_ptr = tags;
+      if (ti->tags != NULL)
+        delete ti->tags;
       ti->tags = new KaxTags;
       parse_xml_tags(ti->tags_ptr->file_name, ti->tags);
       break;
