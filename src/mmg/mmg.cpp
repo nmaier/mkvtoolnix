@@ -107,7 +107,7 @@ mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,
   file_menu->Append(ID_M_FILE_SAVE, _T("&Save settings\tCtrl-S"),
                     _T("Save muxing settings to a file"));
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_EXIT, _T("E&xit\tCtrl-X"),
+  file_menu->Append(ID_M_FILE_EXIT, _T("&Quit\tCtrl-Q"),
                     _T("Quit the application"));
 
   wxMenu *muxing_menu = new wxMenu();

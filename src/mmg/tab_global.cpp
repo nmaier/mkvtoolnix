@@ -232,7 +232,7 @@ tab_global::tab_global(wxWindow *parent):
                                 "you probably want to use the tags associated "
                                 "with a track on the 'input' tab."));
   wxButton *b_browse_global_tags =
-    new wxButton(this, ID_B_BROWSECHAPTERS, _("Browse"), wxPoint(400, 375),
+    new wxButton(this, ID_B_BROWSEGLOBALTAGS, _("Browse"), wxPoint(400, 375),
                  wxDefaultSize, 0);
   b_browse_global_tags->SetToolTip(_T("The difference between tags associated "
                                       "with a track and global tags is "
@@ -265,23 +265,22 @@ tab_global::tab_global(wxWindow *parent):
 }
 
 void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
-//   wxFileDialog dlg(NULL, "Choose the mkvmerge executable",
-// #ifdef SYS_WINDOWS
-//                    tc_mkvmerge->GetValue().BeforeLast('\\'), "",
-//                    _T("Executable files (*.exe)|*.exe|All files (*.*)|*.*"),
-// #else
-//                    tc_mkvmerge->GetValue().BeforeLast('/'), "",
-//                    _T("All files (*)|*"),
-// #endif
-//                    wxOPEN);
-//   if(dlg.ShowModal() == wxID_OK) {
-//     tc_mkvmerge->SetValue(dlg.GetPath());
-//     mkvmerge_path = "\"" + dlg.GetPath() + "\"";
-//     save();
-//   }
+  wxFileDialog dlg(NULL, "Choose the tags file", last_open_dir, "",
+                   _T("Tag files (*.xml)|*.xml|" ALLFILES), wxOPEN);
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
+    tc_global_tags->SetValue(dlg.GetPath());
+  }
 }
 
 void tab_global::on_browse_chapters(wxCommandEvent &evt) {
+  wxFileDialog dlg(NULL, "Choose the chapter file", last_open_dir, "",
+                   _T("Chapter files (*.xml;*.txt)|*.xml;*.txt|" ALLFILES),
+                   wxOPEN);
+  if(dlg.ShowModal() == wxID_OK) {
+    last_open_dir = dlg.GetDirectory();
+    tc_chapters->SetValue(dlg.GetPath());
+  }
 }
 
 void tab_global::on_split_clicked(wxCommandEvent &evt) {
@@ -306,10 +305,90 @@ void tab_global::on_splitby_clicked(wxCommandEvent &evt) {
 }
 
 void tab_global::load(wxConfigBase *cfg) {
+  wxString s;
+  bool b, ec, er;
+
+  cfg->SetPath("/global");
+  cfg->Read("segment_title", &s);
+  tc_title->SetValue(s);
+
+  cfg->Read("enable_splitting", &ec);
+  cb_split->SetValue(ec);
+  cfg->Read("split_by_size", &er);
+  if (er)
+    rb_split_by_size->SetValue(true);
+  else
+    rb_split_by_time->SetValue(true);
+  cfg->Read("split_after_bytes", &s);
+  cob_split_by_size->SetValue(s);
+  cfg->Read("split_after_time", &s);
+  cob_split_by_time->SetValue(s);
+  cfg->Read("split_max_files", &s);
+  tc_split_max_files->SetValue(s);
+  cfg->Read("dont_link", &b);
+  cb_dontlink->SetValue(b);
+
+  rb_split_by_size->Enable(ec);
+  cob_split_by_size->Enable(ec && er);
+  rb_split_by_time->Enable(ec);
+  cob_split_by_time->Enable(ec && !er);
+  cb_dontlink->Enable(ec);
+  tc_split_max_files->Enable(ec);
+
+  cfg->Read("aspect_ratio", &s);
+  cob_aspect_ratio->SetValue(s);
+  cfg->Read("fourcc", &s);
+  cob_fourcc->SetValue(s);
+
+  cfg->Read("previous_segment_uid", &s);
+  tc_previous_segment_uid->SetValue(s);
+  cfg->Read("next_segment_uid", &s);
+  tc_next_segment_uid->SetValue(s);
+
+  cfg->Read("chapters", &s);
+  tc_chapters->SetValue(s);
+  cfg->Read("chapter_language", &s);
+  cob_chap_language->SetValue(s);
+  cfg->Read("chapter_charset", &s);
+  cob_chap_charset->SetValue(s);
+
+  cfg->Read("global_tags", &s);
+  tc_global_tags->SetValue(s);
+
+  cfg->Read("no_cues", &b);
+  cb_no_cues->SetValue(b);
+  cfg->Read("no_clusters", &b);
+  cb_no_clusters->SetValue(b);
+  cfg->Read("enable_lacing", &b);
+  cb_enable_lacing->SetValue(b);
 }
 
 void tab_global::save(wxConfigBase *cfg) {
+  cfg->SetPath("/global");
+  cfg->Write("segment_title", tc_title->GetValue());
 
+  cfg->Write("enable_splitting", cb_split->IsChecked());
+  cfg->Write("split_by_size", rb_split_by_size->GetValue());
+  cfg->Write("split_after_bytes", cob_split_by_size->GetValue());
+  cfg->Write("split_after_time", cob_split_by_time->GetValue());
+  cfg->Write("split_max_files", tc_split_max_files->GetValue());
+  cfg->Write("dont_link", cb_dontlink->IsChecked());
+
+  cfg->Write("aspect_ratio", cob_aspect_ratio->GetValue());
+  cfg->Write("fourcc", cob_fourcc->GetValue());
+
+  cfg->Write("previous_segment_uid", tc_previous_segment_uid->GetValue());
+  cfg->Write("next_segment_uid", tc_next_segment_uid->GetValue());
+
+  cfg->Write("chapters", tc_chapters->GetValue());
+  cfg->Write("chapter_language", cob_chap_language->GetValue());
+  cfg->Write("chapter_charset", cob_chap_charset->GetValue());
+
+  cfg->Write("global_tags", tc_global_tags->GetValue());
+
+  cfg->Write("no_cues", cb_no_cues->IsChecked());
+  cfg->Write("no_clusters", cb_no_clusters->IsChecked());
+  cfg->Write("enable_lacing", cb_enable_lacing->IsChecked());
 }
 
 IMPLEMENT_CLASS(tab_global, wxPanel);
