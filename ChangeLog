@@ -1,7 +1,11 @@
 2004-12-15  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: Fixed negative audio displacement for a couple of
-	formats.
+	* mmg: bug fix: One was able to crash mmg by pressing 'ok' in the
+	muxing dialog right after muxing finished, especially if the
+	'abort' button was hit before. This mostly happened on Linux.
+
+	* mkvmerge: bug fix: Fixed negative audio displacement for a
+	couple of formats.
 
 2004-12-13  Moritz Bunkus  <moritz@bunkus.org>
 
