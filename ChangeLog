@@ -1,3 +1,26 @@
+2003-03-04 11:16  mosu
+
+	* mp3_common.cpp, mp3_common.h, p_ac3.cpp, p_ac3.h, p_mp3.cpp,
+	p_mp3.h, p_pcm.cpp, p_pcm.h, p_video.cpp, p_video.h,
+	pr_generic.cpp, pr_generic.h, queue.cpp, queue.h, r_ac3.cpp,
+	r_avi.cpp, r_avi.h, r_mp3.cpp, r_ogm.cpp, r_ogm.h, r_wav.cpp:
+	Changed all pointers to general data to unsigned char *
+
+2003-03-04 11:15  mosu
+
+	* p_vorbis.cpp, p_vorbis.h: Added audio sync handling for Vorbis
+	streams.
+
+2003-03-04 10:27  mosu
+
+	* common.h, mkvmerge.cpp, p_ac3.cpp, p_ac3.h, p_mp3.cpp, p_mp3.h,
+	p_pcm.cpp, p_pcm.h, p_video.cpp, p_video.h, p_vorbis.cpp,
+	p_vorbis.h, r_ac3.cpp, r_ac3.h, r_avi.cpp, r_avi.h, r_microdvd.cpp,
+	r_microdvd.h, r_mp3.cpp, r_mp3.h, r_ogm.cpp, r_ogm.h, r_srt.cpp,
+	r_srt.h, r_vobsub.cpp, r_vobsub.h, r_wav.cpp, r_wav.h: Removed
+	range processing. This is a left-over from the days when there was
+	no ogmsplit.
+
 2003-03-04 00:21  mosu
 
 	* p_video.h: Small annoying bug - default value is -1 not 0 (-1
