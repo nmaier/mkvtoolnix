@@ -38,6 +38,13 @@ LICENCE:        Copyright (c) 2001 Bob Trower, Trantor Standard Systems Inc.
 
 */
 
+/*!
+    \file
+    \version $Id$
+    \brief base64 encoding and decoding functions
+    \author Moritz Bunkus <moritz@bunkus.org>
+*/
+
 #include <ctype.h>
 
 #include <exception>
