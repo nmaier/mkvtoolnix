@@ -56,7 +56,6 @@ cluster_helper_c::cluster_helper_c() {
   out = NULL;
   timecode_offset = 0;
   last_packets = NULL;
-  first_timecode = 0;
   first_timecode_in_file = -1;
   bytes_in_file = 0;
 }
@@ -183,11 +182,8 @@ cluster_helper_c::add_packet(packet_t *packet) {
       bytes_in_file = 0;
       first_timecode_in_file = -1;
 
-      if (no_linking) {
+      if (no_linking)
         timecode_offset = packet->assigned_timecode;
-        first_timecode = 0;
-      } else
-        first_timecode = -1;
     }
   }
 
@@ -396,8 +392,6 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       render_groups.push_back(render_group);
     }
 
-    if (first_timecode == -1)
-      first_timecode = pack->assigned_timecode;
     if (i == 0)
       static_cast<kax_cluster_c *>
         (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
@@ -744,14 +738,4 @@ cluster_helper_c::get_duration() {
          max_timecode_and_duration, first_timecode_in_file,
          max_timecode_and_duration - first_timecode_in_file);
   return max_timecode_and_duration - first_timecode_in_file;
-}
-
-int64_t
-cluster_helper_c::get_first_timecode() {
-  return first_timecode;
-}
-
-int64_t
-cluster_helper_c::get_timecode_offset() {
-  return timecode_offset;
 }

@@ -1428,10 +1428,10 @@ finish_file(bool last_file) {
   // that was resesrved at the beginning.
   if (kax_chapters != NULL) {
     if (no_linking)
-      offset = cluster_helper->get_timecode_offset();
+      offset = cluster_helper->get_first_timecode_in_file();
     else
       offset = 0;
-    start = cluster_helper->get_first_timecode() + offset;
+    start = cluster_helper->get_first_timecode_in_file();
     end = start + cluster_helper->get_duration();
 
     chapters_here = copy_chapters(kax_chapters);
