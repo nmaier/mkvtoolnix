@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.51 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.52 2003/05/03 19:40:09 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -227,6 +227,8 @@ static int get_type(char *filename) {
   }
   if (avi_reader_c::probe_file(f, size))
     return TYPEAVI;
+  else if (mkv_reader_c::probe_file(f, size))
+    return TYPEMATROSKA;
   else if (wav_reader_c::probe_file(f, size))
     return TYPEWAV;
 #ifdef HAVE_OGGVORBIS
@@ -239,8 +241,6 @@ static int get_type(char *filename) {
     return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
     return TYPEAC3;
- else if (mkv_reader_c::probe_file(f, size))
-   return TYPEMATROSKA;
 //     else if (microdvd_reader_c::probe_file(f, size))
 //     return TYPEMICRODVD;
 //   else if (vobsub_reader_c::probe_file(f, size)) 
