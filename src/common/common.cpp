@@ -1540,6 +1540,7 @@ mxsscanf(const string &str,
   string new_fmt;
   int result;
 
+  mxverb(5, "mxsscanf: str: %s /// fmt: %s\n", str.c_str(), fmt);
   fix_format(fmt, new_fmt);
   va_start(ap, fmt);
   result = vsscanf(str.c_str(), new_fmt.c_str(), ap);
