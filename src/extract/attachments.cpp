@@ -78,7 +78,6 @@ handle_attachments(KaxAttachments *atts) {
   int i, k;
   string name, type;
   int64_t size, id;
-  char *str;
   bool found;
   mm_io_c *out;
 
@@ -98,9 +97,7 @@ handle_attachments(KaxAttachments *atts) {
 
       if (EbmlId(*e) == KaxFileName::ClassInfos.GlobalId) {
         KaxFileName &fname = *static_cast<KaxFileName *>(e);
-        str = UTFstring_to_cstr(UTFstring(fname));
-        name = str;
-        safefree(str);
+        name = UTFstring_to_cstr(UTFstring(fname));
 
       } else if (EbmlId(*e) == KaxMimeType::ClassInfos.GlobalId) {
         KaxMimeType &mtype = *static_cast<KaxMimeType *>(e);

@@ -258,12 +258,7 @@ UTFstring_to_wxString(const UTFstring &u) {
 #else
 wxString
 UTFstring_to_wxString(const UTFstring &u) {
-  wxString retval;
-  char *c;
-  c = UTFstring_to_cstr(u);
-  retval = c;
-  safefree(c);
-  return retval;
+  return wxString(UTFstring_to_cstr(u).c_str());
 }
 #endif
 

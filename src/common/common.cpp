@@ -951,10 +951,11 @@ strip(vector<string> &v,
 }
 
 string
-escape(const char *src) {
+escape(const string &source) {
   string dst;
+  string::const_iterator src;
 
-  while (*src != 0) {
+  for (src = source.begin(); src < source.end(); src++) {
     if (*src == '\\')
       dst += "\\\\";
     else if (*src == '"')
@@ -963,21 +964,21 @@ escape(const char *src) {
       dst += "\\s";
     else
       dst += *src;
-    src++;
   }
 
   return dst;
 }
 
 string
-unescape(const char *src) {
+unescape(const string &source) {
   string dst;
-  const char *next_char;
+  string::const_iterator src, next_char;
 
+  src = source.begin();
   next_char = src + 1;
-  while (*src != 0) {
+  while (src != source.end()) {
     if (*src == '\\') {
-      if (*next_char == 0)      // This is an error...
+      if (next_char == source.end()) // This is an error...
         dst += '\\';
       else {
         if (*next_char == '2')
@@ -998,10 +999,12 @@ unescape(const char *src) {
 }
 
 string
-escape_xml(const char *src) {
+escape_xml(const string &source) {
   string dst;
+  string::const_iterator src;
 
-  while (*src != 0) {
+  src = source.begin();
+  while (src != source.end()) {
     if (*src == '&')
       dst += "&amp;";
     else if (*src == '>')

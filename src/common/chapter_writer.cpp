@@ -60,14 +60,14 @@ static vector<chapter_entry_c> chapter_entries;
 
 static void
 handle_name(int level,
-            const char *name) {
+            const string &name) {
   int i, j;
   vector<chapter_entry_c>::iterator itr;
 
   for (i = 0; i < chapter_start_times.size(); i++) {
     chapter_entry_c &e = chapter_start_times[i];
     if (e.level == level) {
-      chapter_entries.push_back(chapter_entry_c(string(name), e.start, level));
+      chapter_entries.push_back(chapter_entry_c(name, e.start, level));
       itr = chapter_start_times.begin();
       for (j = 0; j < i; j++)
         itr++;
@@ -107,7 +107,7 @@ write_chapter_display_simple(KaxChapterDisplay *display,
                              int level) {
   int i;
   EbmlElement *e;
-  char *s;
+  string s;
 
   for (i = 0; i < display->ListSize(); i++) {
     e = (*display)[i];
@@ -115,7 +115,6 @@ write_chapter_display_simple(KaxChapterDisplay *display,
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
       handle_name(level - 1, s);
-      safefree(s);
 
     } else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
@@ -230,8 +229,7 @@ write_xml_element_rec(int level,
   EbmlMaster *m;
   int elt_idx, i;
   bool found;
-  char *s;
-  string x;
+  string s;
 
   elt_idx = parent_idx;
   found = false;
@@ -286,16 +284,15 @@ write_xml_element_rec(int level,
       break;
 
     case ebmlt_string:
-      x = escape_xml(string(*dynamic_cast<EbmlString *>(e)).c_str());
-      out->printf("%s</%s>\n", x.c_str(), chapter_elements[elt_idx].name);
+      s = escape_xml(string(*dynamic_cast<EbmlString *>(e)));
+      out->printf("%s</%s>\n", s.c_str(), chapter_elements[elt_idx].name);
       break;
 
     case ebmlt_ustring:
       s = UTFstring_to_cstrutf8(UTFstring(*static_cast
                                           <EbmlUnicodeString *>(e)).c_str());
-      x = escape_xml(s);
-      out->printf("%s</%s>\n", x.c_str(), chapter_elements[elt_idx].name);
-      safefree(s);
+      s = escape_xml(s);
+      out->printf("%s</%s>\n", s.c_str(), chapter_elements[elt_idx].name);
       break;
 
     case ebmlt_time:
