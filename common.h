@@ -74,6 +74,7 @@ using namespace LIBEBML_NAMESPACE;
 #define TYPEMATROSKA 10
 #define TYPEDTS      11
 #define TYPEAAC      12
+#define TYPESSA      13
 
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \

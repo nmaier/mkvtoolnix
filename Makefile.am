@@ -32,6 +32,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			r_mp3.cpp r_mp3.h \
 			r_mp4.cpp r_mp4.h \
 			r_srt.cpp r_srt.h \
+			r_ssa.cpp r_ssa.h \
 			r_ogm.cpp r_ogm.h \
 			r_wav.cpp r_wav.h \
 			subtitles.cpp subtitles.h

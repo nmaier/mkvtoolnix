@@ -74,6 +74,7 @@
 #include "r_ogm.h"
 #endif
 #include "r_srt.h"
+#include "r_ssa.h"
 #include "r_matroska.h"
 #include "r_mp4.h"
 
@@ -159,6 +160,7 @@ file_type_t file_types[] =
    {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
    {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
    {"srt", TYPESRT, "SRT text subtitles"},
+   {"ssa", TYPESSA, "SSA/ASS text subtitles"},
 //    {"   ", TYPEMICRODVD, "MicroDVD text subtitles"},
 //    {"idx", TYPEVOBSUB, "VobSub subtitles"},
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
@@ -295,6 +297,8 @@ static int get_type(char *filename) {
     type = TYPEDTS;
   else if (aac_reader_c::probe_file(mm_io, size))
     type = TYPEAAC;
+  else if (ssa_reader_c::probe_file(mm_io, size))
+    type = TYPESSA;
   else
     type = TYPEUNKNOWN;
 
@@ -735,6 +739,14 @@ static void create_readers() {
             fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
                     "AAC files.\n");
           file->reader = new aac_reader_c(file->ti);
+          break;
+        case TYPESSA:
+          if ((file->ti->stracks->size() != 0) || file->ti->no_subs ||
+              (file->ti->atracks->size() != 0) || file->ti->no_audio ||
+              (file->ti->vtracks->size() != 0) || file->ti->no_video)
+            fprintf(stderr, "Warning: -a/-A/-d/-D/-s/-S are ignored for "
+                    "SSA/ASS files.\n");
+          file->reader = new ssa_reader_c(file->ti);
           break;
         default:
           fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
