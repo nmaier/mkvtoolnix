@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.32 2003/04/17 17:01:11 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.33 2003/04/17 18:15:18 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -103,6 +103,7 @@ KaxSegment       *kax_segment;
 KaxInfo          *kax_infos;
 KaxTracks        *kax_tracks;
 KaxTrackEntry    *kax_last_entry;
+KaxCues          *kax_cues;
 int               track_number = 0;
 
 KaxDuration      *kax_duration;
@@ -454,6 +455,7 @@ static void parse_args(int argc, char **argv) {
   try {
     render_head(out);
 
+    kax_cues = new KaxCues();
     kax_segment = new KaxSegment();
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
@@ -816,6 +818,9 @@ int main(int argc, char **argv) {
   // Render all remaining packets (if there are any).
   if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
     cluster_helper->render(out);
+
+  // Render the cues.
+  kax_cues->Render(*static_cast<StdIOCallback *>(out));
 
   // Now re-render the kax_infos and fill in the biggest timecode
   // as the file's duration.

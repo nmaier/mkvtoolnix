@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.17 2003/04/17 17:01:11 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.18 2003/04/17 18:15:18 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,6 +36,7 @@ using namespace LIBMATROSKA_NAMESPACE;
 extern KaxSegment *kax_segment;
 extern KaxTracks *kax_tracks;
 extern KaxTrackEntry *kax_last_entry;
+extern KaxCues *kax_cues;
 extern int track_number;
 
 struct packet_t;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.15 2003/04/17 17:01:11 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.16 2003/04/17 18:15:18 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -194,7 +194,6 @@ int cluster_helper_c::get_cluster_content_size() {
 }
 
 int cluster_helper_c::render(IOCallback *out) {
-  KaxCues dummy_cues;
   KaxCluster *cluster;
   KaxBlockGroup *new_group;
   int i;
@@ -243,7 +242,7 @@ int cluster_helper_c::render(IOCallback *out) {
     last_block_group = new_group;
   }
 
-  cluster->Render(static_cast<StdIOCallback &>(*out), dummy_cues);
+  cluster->Render(static_cast<StdIOCallback &>(*out), *kax_cues);
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
