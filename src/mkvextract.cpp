@@ -103,7 +103,7 @@ kax_track_t *find_track(int tid) {
   return NULL;
 }
 
-char typenames[14][20] = {"unknown", "Ogg" "AVI", "WAV", "SRT", "MP3", "AC3",
+char typenames[14][20] = {"unknown", "Ogg", "AVI", "WAV", "SRT", "MP3", "AC3",
                           "chapter", "MicroDVD", "VobSub", "Matroska", "DTS",
                           "AAC", "SSA/ASS"};
 

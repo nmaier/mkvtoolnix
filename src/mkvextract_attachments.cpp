@@ -220,11 +220,7 @@ void extract_attachments(const char *file_name) {
     // We've got our segment, so let's find the attachments
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
-    while (l1 != NULL) {
-      if (upper_lvl_el > 0)
-        break;
-      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
-        break;
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId) {
         handle_attachments(in, es, l0, l1->GetElementPosition());
@@ -282,29 +278,35 @@ void extract_attachments(const char *file_name) {
 
 
       } else
-        upper_lvl_el = 0;
+        l1->SkipData(*es, l1->Generic().Context);
 
       if (done)
         break;
 
-      if (upper_lvl_el > 0) {    // we're coming from l2
-        upper_lvl_el--;
+      if (!in_parent(l0)) {
         delete l1;
-        l1 = l2;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
         if (upper_lvl_el > 0)
           break;
-
-      } else if (upper_lvl_el == 0) {
-        l1->SkipData(*es, l1->Generic().Context);
-        delete l1;
-        upper_lvl_el = 0;
-        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-
-      } else {
         delete l1;
         l1 = l2;
+        continue;
+
+      } else if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
       }
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 

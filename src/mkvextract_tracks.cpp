@@ -17,6 +17,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+// {{{ includes
+
 #include <errno.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -78,6 +80,10 @@ extern "C" {
 using namespace libmatroska;
 using namespace std;
 
+// }}}
+
+// {{{ FUNCTIONS flush_ogg_pages(), write_ogg_pages()
+
 static void flush_ogg_pages(kax_track_t &track) {
   ogg_page page;
 
@@ -95,6 +101,10 @@ static void write_ogg_pages(kax_track_t &track) {
     track.out->write(page.body, page.body_len);
   }
 }
+
+// }}}
+
+// {{{ FUNCTION create_output_files()
 
 static void create_output_files() {
   int i, k, offset;
@@ -333,7 +343,7 @@ static void create_output_files() {
         }
 
         mxprint(stderr, "Extracting track ID %lld to a %s file '%s'.\n",
-                tracks[i].tid, typenames[tracks[i].type - 1],
+                tracks[i].tid, typenames[tracks[i].type],
                 tracks[i].out_name);
 
         if (tracks[i].type == TYPEOGM) {
@@ -401,6 +411,10 @@ static void create_output_files() {
     }
   }
 }
+
+// }}}
+
+// {{{ FUNCTION handle_data()
 
 static void handle_data(KaxBlock *block, int64_t block_duration,
                         bool has_ref) {
@@ -619,6 +633,10 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
   delete block;
 }
 
+// }}}
+
+// {{{ FUNCTION close_files()
+
 static void close_files() {
   int i, k;
   ogg_packet op;
@@ -677,6 +695,10 @@ static void close_files() {
     }
   }
 }
+
+// }}}
+
+// {{{ FUNCTION extract_tracks()
 
 bool extract_tracks(const char *file_name) {
   int upper_lvl_el;
@@ -744,11 +766,7 @@ bool extract_tracks(const char *file_name) {
     // We've got our segment, so let's find the tracks
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
-    while (l1 != NULL) {
-      if (upper_lvl_el > 0)
-        break;
-      if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
-        break;
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
@@ -757,11 +775,7 @@ bool extract_tracks(const char *file_name) {
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
@@ -769,14 +783,24 @@ bool extract_tracks(const char *file_name) {
             tc_scale = uint64(ktc_scale);
             show_element(l2, 2, "Timecode scale: %llu", tc_scale);
           } else
-            upper_lvl_el = 0;
-
-          if (upper_lvl_el == 0) {
             l2->SkipData(*es, l2->Generic().Context);
+
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
+            break;
           }
+
+          if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
+          }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         }
 
@@ -788,11 +812,7 @@ bool extract_tracks(const char *file_name) {
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxTrackEntry::ClassInfos.GlobalId) {
             // We actually found a track entry :) We're happy now.
@@ -805,11 +825,7 @@ bool extract_tracks(const char *file_name) {
             upper_lvl_el = 0;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, true, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               // Now evaluate the data belonging to this track
               if (EbmlId(*l3) == KaxTrackNumber::ClassInfos.GlobalId) {
@@ -858,11 +874,7 @@ bool extract_tracks(const char *file_name) {
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) ==
                       KaxAudioSamplingFreq::ClassInfos.GlobalId) {
@@ -892,14 +904,24 @@ bool extract_tracks(const char *file_name) {
                     if (track != NULL)
                       track->a_bps = uint8(bps);
                   } else
-                    upper_lvl_el = 0;
-
-                  if (upper_lvl_el == 0) {
                     l4->SkipData(*es, l4->Generic().Context);
+
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    break;
                   }
+
+                  if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context,
+                                           upper_lvl_el, 0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -909,11 +931,7 @@ bool extract_tracks(const char *file_name) {
                 upper_lvl_el = 0;
                 l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
                                          0xFFFFFFFFL, true, 1);
-                while (l4 != NULL) {
-                  if (upper_lvl_el > 0)
-                    break;
-                  if ((upper_lvl_el < 0) && !fits_parent(l4, l3))
-                    break;
+                while ((l4 != NULL) && (upper_lvl_el <= 0)) {
 
                   if (EbmlId(*l4) == KaxVideoPixelWidth::ClassInfos.GlobalId) {
                     KaxVideoPixelWidth &width =
@@ -942,14 +960,24 @@ bool extract_tracks(const char *file_name) {
                       track->v_fps = float(framerate);
 
                   } else
-                    upper_lvl_el = 0;
-
-                  if (upper_lvl_el == 0) {
                     l4->SkipData(*es, l4->Generic().Context);
+
+                  if (!in_parent(l3)) {
                     delete l4;
-                    l4 = es->FindNextElement(l3->Generic().Context,
-                                             upper_lvl_el, 0xFFFFFFFFL, true);
+                    break;
                   }
+
+                  if (upper_lvl_el < 0) {
+                    upper_lvl_el++;
+                    if (upper_lvl_el < 0)
+                      break;
+
+                  }
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context,
+                                           upper_lvl_el, 0xFFFFFFFFL, true);
 
                 } // while (l4 != NULL)
 
@@ -1005,47 +1033,62 @@ bool extract_tracks(const char *file_name) {
                   track->v_fps = 1000000000.0 / (float)uint64(def_duration);
 
               } else
-                upper_lvl_el = 0;
+                l3->SkipData(*es, l3->Generic().Context);
 
-              if (upper_lvl_el > 0) {  // we're coming from l4
-                upper_lvl_el--;
+              if (!in_parent(l2)) {
                 delete l3;
-                l3 = l4;
+                break;
+              }
+
+              if (upper_lvl_el > 0) {
+                upper_lvl_el--;
                 if (upper_lvl_el > 0)
                   break;
-              } else if (upper_lvl_el == 0) {
-                l3->SkipData(*es,
-                             l3->Generic().Context);
-                delete l3;
-                upper_lvl_el = 0;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
-              } else {
                 delete l3;
                 l3 = l4;
+                continue;
+
+              } else if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
               }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             }
 
           } else
-            upper_lvl_el = 0;
+            l2->SkipData(*es, l2->Generic().Context);
 
-          if (upper_lvl_el > 0) {  // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es, l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -1064,11 +1107,7 @@ bool extract_tracks(const char *file_name) {
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
                                  0xFFFFFFFFL, true, 1);
-        while (l2 != NULL) {
-          if (upper_lvl_el > 0)
-            break;
-          if ((upper_lvl_el < 0) && !fits_parent(l2, l1))
-            break;
+        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
 
           if (EbmlId(*l2) == KaxClusterTimecode::ClassInfos.GlobalId) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
@@ -1085,11 +1124,7 @@ bool extract_tracks(const char *file_name) {
             has_reference = false;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, false, 1);
-            while (l3 != NULL) {
-              if (upper_lvl_el > 0)
-                break;
-              if ((upper_lvl_el < 0) && !fits_parent(l3, l2))
-                break;
+            while ((l3 != NULL) && (upper_lvl_el <= 0)) {
 
               delete_element = true;
 
@@ -1121,15 +1156,27 @@ bool extract_tracks(const char *file_name) {
                              ((float)int64(reference)) * tc_scale / 1000000.0);
 
                 has_reference = true;
-              }
-
-              if (upper_lvl_el == 0) {
+              } else
                 l3->SkipData(*es, l3->Generic().Context);
+
+              if (!in_parent(l2)) {
                 if (delete_element)
                   delete l3;
-                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
-                                         0xFFFFFFFFL, true, 1);
+                break;
               }
+
+              if (upper_lvl_el < 0) {
+                upper_lvl_el++;
+                if (upper_lvl_el < 0)
+                  break;
+
+              }
+
+              l3->SkipData(*es, l3->Generic().Context);
+              if (delete_element)
+                delete l3;
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true);
 
             } // while (l3 != NULL)
 
@@ -1138,51 +1185,62 @@ bool extract_tracks(const char *file_name) {
             handle_data(block, block_duration, has_reference);
 
           } else
-            upper_lvl_el = 0;
+            l2->SkipData(*es, l2->Generic().Context);
 
-          if (upper_lvl_el > 0) {    // we're coming from l3
-            upper_lvl_el--;
+          if (!in_parent(l1)) {
             delete l2;
-            l2 = l3;
+            break;
+          }
+
+          if (upper_lvl_el > 0) {
+            upper_lvl_el--;
             if (upper_lvl_el > 0)
               break;
-
-          } else if (upper_lvl_el == 0) {
-            l2->SkipData(*es,
-                         l2->Generic().Context);
-            delete l2;
-            upper_lvl_el = 0;
-            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true, 1);
-
-          } else {
             delete l2;
             l2 = l3;
+            continue;
+
+          } else if (upper_lvl_el < 0) {
+            upper_lvl_el++;
+            if (upper_lvl_el < 0)
+              break;
+
           }
+
+          l2->SkipData(*es, l2->Generic().Context);
+          delete l2;
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                   0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
       } else
-        upper_lvl_el = 0;
+        l1->SkipData(*es, l1->Generic().Context);
 
-      if (upper_lvl_el > 0) {    // we're coming from l2
-        upper_lvl_el--;
+      if (!in_parent(l0)) {
         delete l1;
-        l1 = l2;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
         if (upper_lvl_el > 0)
           break;
-
-      } else if (upper_lvl_el == 0) {
-        l1->SkipData(*es, l1->Generic().Context);
-        delete l1;
-        upper_lvl_el = 0;
-        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-
-      } else {
         delete l1;
         l1 = l2;
+        continue;
+
+      } else if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+        if (upper_lvl_el < 0)
+          break;
+
       }
+
+      l1->SkipData(*es, l1->Generic().Context);
+      delete l1;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 
@@ -1203,3 +1261,5 @@ bool extract_tracks(const char *file_name) {
     return false;
   }
 }
+
+// }}}

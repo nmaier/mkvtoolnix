@@ -88,6 +88,8 @@ extern char typenames[14][20];
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
+#define in_parent(p) (in->getFilePointer() < \
+                      (p->GetElementPosition() + p->ElementSize()))
 
 // Helper functions in mkvextract.cpp
 void show_element(EbmlElement *l, int level, const char *fmt, ...);
