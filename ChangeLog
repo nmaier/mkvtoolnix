@@ -1,5 +1,11 @@
 2004-06-13  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: Dropped supoprt for 'aviclasses' (one of the two
+	libraries for accessing AVI files). This mostly affects the
+	Windows users as I've used aviclasses and not avilib on Windows so
+	far. The 0.9.0-pre-builds so far haven't shown any problems,
+	though, so I hope this doesn't break anything.
+
 	* mmg: bug fix: The job manager did not handle the conversion
 	of non-ASCII characters correctly.
 
