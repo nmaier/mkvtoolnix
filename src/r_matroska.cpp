@@ -31,25 +31,6 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
 }
 
-#include "matroska.h"
-#include "mkvmerge.h"
-#include "mm_io.h"
-#include "chapters.h"
-#include "common.h"
-#include "pr_generic.h"
-#include "r_matroska.h"
-
-#include "p_aac.h"
-#include "p_ac3.h"
-#include "p_dts.h"
-#include "p_mp3.h"
-#include "p_passthrough.h"
-#include "p_pcm.h"
-#include "p_textsubs.h"
-#include "p_video.h"
-#include "p_vobsub.h"
-#include "p_vorbis.h"
-
 #include <ebml/EbmlContexts.h>
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlStream.h>
@@ -73,6 +54,25 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
+
+#include "matroska.h"
+#include "mkvmerge.h"
+#include "mm_io.h"
+#include "chapters.h"
+#include "common.h"
+#include "pr_generic.h"
+#include "r_matroska.h"
+
+#include "p_aac.h"
+#include "p_ac3.h"
+#include "p_dts.h"
+#include "p_mp3.h"
+#include "p_passthrough.h"
+#include "p_pcm.h"
+#include "p_textsubs.h"
+#include "p_video.h"
+#include "p_vobsub.h"
+#include "p_vorbis.h"
 
 using namespace std;
 using namespace libmatroska;

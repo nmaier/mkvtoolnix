@@ -28,6 +28,7 @@
 #include "common.h"
 #include "mkvmerge.h"
 #include "p_video.h"
+#include "p_vorbis.h"
 
 #include <ebml/StdIOCallback.h>
 
@@ -457,19 +458,20 @@ int cluster_helper_c::render() {
           new_block_group->AddFrame(track_entry, 1000000 *
                                     (pack->timecode - timecode_offset),
                                     *data_buffer, *bref_packet->group,
-                                    *fref_packet->group);
+                                    *fref_packet->group, LACING_AUTO);
       } else {
         render_group->more_data =
           new_block_group->AddFrame(track_entry, 1000000 *
                                     (pack->timecode - timecode_offset),
-                                    *data_buffer, *bref_packet->group);
+                                    *data_buffer, *bref_packet->group,
+                                    LACING_AUTO);
       }
 
     } else {                    // This is a key frame. No references.
       render_group->more_data =
         new_block_group->AddFrame(track_entry,
                                   (pack->timecode - timecode_offset) * 1000000,
-                                  *data_buffer);
+                                  *data_buffer, LACING_AUTO);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);

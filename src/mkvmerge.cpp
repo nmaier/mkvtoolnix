@@ -853,7 +853,7 @@ static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
       }
     }
 
-    kax_segment->WriteHead(*out, 5);
+    kax_segment->WriteHead(*out, 8);
 
     // Reserve some space for the meta seek stuff.
     kax_sh_main = new KaxSeekHead();
@@ -2160,6 +2160,12 @@ void main_loop() {
 
 // {{{ FUNCTION main(int argc, char **argv)
 
+#ifdef DEBUG
+namespace libmatroska {
+extern int64_t numLacingFixed, numLacingXiph, numLacingEbml;
+}
+#endif
+
 int main(int argc, char **argv) {
   time_t start, end;
 
@@ -2232,6 +2238,10 @@ int main(int argc, char **argv) {
 
   cleanup();
 
+#ifdef DEBUG
+  mxverb(2, "lacing: fixed: %lld, xiph: %lld, ebml: %lld\n", numLacingFixed,
+         numLacingXiph, numLacingEbml);
+#endif
   mxexit();
 }
 
