@@ -949,6 +949,9 @@ def_handle(tracks) {
             case track_subtitle:
               kax_track_type = 's';
               break;
+            case track_buttons:
+              kax_track_type = 'b';
+              break;
             default:
               kax_track_type = '?';
               break;
@@ -957,6 +960,7 @@ def_handle(tracks) {
                        kax_track_type == 'a' ? "audio" :
                        kax_track_type == 'v' ? "video" :
                        kax_track_type == 's' ? "subtitles" :
+                       kax_track_type == 'b' ? "buttons" :
                        "unknown");
 
 #if MATROSKA_VERSION >= 2
@@ -1101,7 +1105,8 @@ def_handle(tracks) {
         mxinfo(Y("Track %lld: %s, codec ID: %s%s%s%s\n"), kax_track_number,
                kax_track_type == 'a' ? Y("audio") :
                kax_track_type == 'v' ? Y("video") :
-               kax_track_type == 's' ? Y("subtitles") : Y("unknown"),
+               kax_track_type == 's' ? Y("subtitles") :
+               kax_track_type == 'b' ? Y("butons") : Y("unknown"),
                kax_codec_id.c_str(), fourcc_buffer.c_str(),
                summary.size() > 0 ? ", " : "",
                join(", ", summary).c_str());
