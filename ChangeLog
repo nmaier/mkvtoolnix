@@ -1,3 +1,12 @@
+2004-09-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Some Matroska files that e.g. have had their
+	timecodes offset with the Matroska Stream Editor or other means
+	may contain timecodes that caused mkvmerge to print a warning
+	about "timecode < last_timecode". A new fix implements a
+	workaround and a warning message with a proper explanation for
+	this case.
+
 2004-09-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Older Matroska files containing chapters

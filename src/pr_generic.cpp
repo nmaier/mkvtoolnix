@@ -57,6 +57,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   free_refs = -1;
   enqueued_bytes = 0;
   safety_last_timecode = 0;
+  safety_last_duration = 0;
   last_cue_timecode = -1;
   timecode_offset = 0;
   default_track_warning_printed = false;
@@ -790,12 +791,41 @@ generic_packetizer_c::add_packet(memory_c &mem,
   // 'timecode < safety_last_timecode' may only occur for B frames. In this
   // case we have the coding order, e.g. IPB1B2 and the timecodes
   // I: 0, P: 120, B1: 40, B2: 80.
-  if ((timecode < safety_last_timecode) && (fref < 0))
-    mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-           "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
-           "'%s'. %s\n", ARG_TIMECODE_NS(timecode),
-           ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname, BUGMSG);
+  if ((timecode < safety_last_timecode) && (fref < 0)) {
+    if (htrack_type == track_audio) {
+      int64_t needed_timecode_offset;
+
+      needed_timecode_offset = safety_last_timecode +
+        safety_last_duration - timecode;
+      timecode_offset += needed_timecode_offset;
+      timecode += needed_timecode_offset;
+      if (bref >= 0)
+        bref += needed_timecode_offset;
+      if (fref >= 0)
+        fref += needed_timecode_offset;
+      mxwarn(FMT_TID "The current packet's "
+             "timecode is smaller than that of the previous packet. This "
+             "usually means that the source file is a Matroska file that "
+             "has not been created 100%% correctly. The timecodes of all "
+             "packets will be adjusted by %lldms in order not to lose any "
+             "data. This may throw A/V sync off, but that can be corrected "
+             "with mkvmerge's \"--sync\" option. If you already use "
+             "\"--sync\" and you still get this warning then do NOT worry "
+             "-- this is normal. "
+             "If this error happens more than once and you get this message "
+             "more than once for a particular track then "
+             "either is the source file badly mastered, or mkvmerge "
+             "contains a bug. In this case you should contact the author "
+             "Moritz Bunkus <moritz@bunkus.org>.\n", ti->fname, ti->id,
+             (needed_timecode_offset + 500000) / 1000000);
+    } else
+      mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
+             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
+             "'%s'. %s\n", ARG_TIMECODE_NS(timecode),
+             ARG_TIMECODE_NS(safety_last_timecode), ti->id, ti->fname, BUGMSG);
+  }
   safety_last_timecode = timecode;
+  safety_last_duration = duration;
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
   memset(pack, 0, sizeof(packet_t));

@@ -34,7 +34,7 @@
 
 class aac_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t bytes_output, packetno;
+  int64_t bytes_output, packetno, last_timecode, num_packets_same_tc;
   unsigned long samples_per_sec;
   int channels, id, profile;
   bool headerless, emphasis_present;
