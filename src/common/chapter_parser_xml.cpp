@@ -330,12 +330,35 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     GetChild<KaxEditionFlagDefault>(ee);
     GetChild<KaxEditionFlagHidden>(ee);
     GetChild<KaxEditionProcessed>(ee);
+    if (FINDFIRST(&ee, KaxEditionUID) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxEditionUID>(ee)) =
+        create_unique_uint32(UNIQUE_EDITION_IDS);
 
   } else if (dynamic_cast<KaxChapterAtom *>(e) != NULL) {
     KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
 
     GetChild<KaxChapterFlagHidden>(a);
     GetChild<KaxChapterFlagEnabled>(a);
+    if (FINDFIRST(&a, KaxChapterUID) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(a)) =
+        create_unique_uint32(UNIQUE_CHAPTER_IDS);
+    if (FINDFIRST(&a, KaxChapterTimeStart) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(a)) = 0;
+
+  } else if (dynamic_cast<KaxChapterTrack *>(e) != NULL) {
+    KaxChapterTrack &t = *static_cast<KaxChapterTrack *>(e);
+
+    if (FINDFIRST(&t, KaxChapterTrackNumber) == NULL)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTrackNumber>(t)) = 0;
+
+  } else if (dynamic_cast<KaxChapterDisplay *>(e) != NULL) {
+    KaxChapterDisplay &d = *static_cast<KaxChapterDisplay *>(e);
+
+    if (FINDFIRST(&d, KaxChapterString) == NULL)
+      *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(d)) = L"";
+    if (FINDFIRST(&d, KaxChapterLanguage) == NULL)
+      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(d)) = "und";
+
   }
 
   if (dynamic_cast<EbmlMaster *>(e) != NULL) {

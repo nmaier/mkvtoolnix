@@ -1,3 +1,8 @@
+2004-09-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Older Matroska files containing chapters
+	caused mkvmerge to abort muxing.
+
 2004-09-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge was only copying the last tag of a
