@@ -958,16 +958,21 @@ static void render_headers(mm_io_c *rout, bool last_file, bool first_file) {
     kax_duration = &GetChild<KaxDuration>(*kax_infos);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
 
-    string version = string("libebml v") + EbmlCodeVersion +
-      string(" + libmatroska v") + KaxCodeVersion;
-    *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
-      cstr_to_UTFstring(version.c_str());
-    *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
-      cstr_to_UTFstring(VERSIONINFO);
-    if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA))
+    if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
+      string version = string("libebml v") + EbmlCodeVersion +
+        string(" + libmatroska v") + KaxCodeVersion;
+      *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
+        cstr_to_UTFstring(version.c_str());
+      *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
+        cstr_to_UTFstring(VERSIONINFO);
       GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(time(NULL));
-    else
+    } else {
+      *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
+        cstr_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
+      *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
+        cstr_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
       GetChild<KaxDateUTC>(*kax_infos).SetEpochDate(0);
+    }
 
     if (segment_title.length() > 0)
       *((EbmlUnicodeString *)&GetChild<KaxTitle>(*kax_infos)) =
