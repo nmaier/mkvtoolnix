@@ -42,6 +42,7 @@ protected:
   wxButton *b_add_attachment, *b_remove_attachment;
   wxComboBox *cob_mimetype, *cob_style;
   wxTextCtrl *tc_description;
+  wxStaticText *st_description, *st_mimetype, *st_style;
 
   int selected_attachment;
 

@@ -78,8 +78,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
   sb_bottom = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options"));
   siz_box_bottom = new wxStaticBoxSizer(sb_bottom, wxVERTICAL);
 
-  siz_box_bottom->Add(new wxStaticText(this, wxID_STATIC, wxT("Description:")),
-                      0, wxALIGN_LEFT | wxLEFT, 5);
+  st_description = new wxStaticText(this, wxID_STATIC, wxT("Description:"));
+  siz_box_bottom->Add(st_description, 0, wxALIGN_LEFT | wxLEFT, 5);
   tc_description =
     new wxTextCtrl(this, ID_TC_DESCRIPTION, wxT(""), wxDefaultPosition,
                    wxDefaultSize, wxTE_MULTILINE | wxTE_WORDWRAP);
@@ -88,12 +88,11 @@ tab_attachments::tab_attachments(wxWindow *parent):
   siz_ddlists = new wxFlexGridSizer(2, 3, 0, 0);
   siz_ddlists->AddGrowableCol(0);
   siz_ddlists->AddGrowableCol(2);
-  siz_ddlists->Add(new wxStaticText(this, wxID_STATIC, wxT("MIME type:")),
-                   1, wxALIGN_LEFT | wxLEFT | wxRIGHT, 5);
+  st_mimetype = new wxStaticText(this, wxID_STATIC, wxT("MIME type:"));
+  siz_ddlists->Add(st_mimetype, 1, wxALIGN_LEFT | wxLEFT | wxRIGHT, 5);
   siz_ddlists->Add(5, 5, 0, 0, 0);
-  siz_ddlists->Add(new wxStaticText(this, wxID_STATIC,
-                                    wxT("Attachment style:")),
-                   1, wxALIGN_LEFT | wxRIGHT, 5);
+  st_style = new wxStaticText(this, wxID_STATIC, wxT("Attachment style:"));
+  siz_ddlists->Add(st_style, 1, wxALIGN_LEFT | wxRIGHT, 5);
 
   cob_mimetype =
     new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxDefaultPosition,
@@ -135,8 +134,11 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
 void
 tab_attachments::enable(bool e) {
+  st_description->Enable(e);
   tc_description->Enable(e);
+  st_mimetype->Enable(e);
   cob_mimetype->Enable(e);
+  st_style->Enable(e);
   cob_style->Enable(e);
 }
 
