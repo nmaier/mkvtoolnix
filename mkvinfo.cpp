@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.19 2003/04/21 16:20:35 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.20 2003/04/22 20:35:32 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -699,8 +699,8 @@ void process_file() {
               if (EbmlId(*l3) == KaxCueTime::ClassInfos.GlobalId) {
                 KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
                 cue_time.ReadData(es->I_O());
-                fprintf(stdout, "(%s) |  + found cue time: %llu", NAME,
-                        uint64(cue_time));
+                fprintf(stdout, "(%s) |  + found cue time: %.3fs", NAME,
+                        ((float)uint64(cue_time)) * tc_scale / 1000000000.0);
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
