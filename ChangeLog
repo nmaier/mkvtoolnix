@@ -66,6 +66,13 @@
 	* mkvmerge: bug fix: Fixed a buffer overflow in the UTF-8 file
 	reading routines.
 
+2004-11-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Implemented concatenating files with chapters.
+
+	* mkvmerge: Changed the "progress" output. It's now correct for
+	file concatenation, too.
+
 2004-11-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.0.
