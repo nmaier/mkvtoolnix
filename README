@@ -1,5 +1,5 @@
-MKVToolNix 0.2
-==============
+MKVToolNix 0.3.0
+================
 
 These tools allow information about (mkvinfo) or extraction
 from (mkvdemux) or creation of (mkvmerge) or the splitting of
@@ -31,7 +31,19 @@ Installation
 ------------
 
 Installation is not trivial but not impossible either. You first need
-libebml and libmatroska, which can be obtained via cvs:
+libebml and libmatroska.
+
+If you run Debian/unstable on a x86 then you can get binary
+packages from my apt repository. Just add the following lines to
+/etc/apt/sources.lst:
+
+deb http://www.bunkus.org/debian/unstable/ ./
+deb-src http://www.bunkus.org/debian/unstable/ ./
+
+Run 'apt-get update' and 'apt-get install libebml-dev
+libmatroska-dev mkvtoolnix'.
+
+If you want to compile from source then get the two libraries via CVS:
 
 cvs -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska login
 
@@ -44,20 +56,31 @@ cvs -z3 -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska \
   co libebml
 
 Change to libebml/make/linux and run 'make'. Change to
-libmatroska/make/linux. Once more run 'make'.
+libmatroska/make/linux. Once more run 'make'. As root run 'make
+install' in both directories. This will install the libraries into
+/usr/local/lib and the header files into /usr/local/include/ebml and
+/usr/local/include/matroska respectively.
 
 After you've compiled the two libraries you can now compile MkvToolNix
 itself:
 
 bunzip2 < mkvtoolnix-...tar.bz2 | tar xvf -
 cd mkvtoolnix-...
+./configure
+make
+make install
+
+The last step must be run as root and is optional.
+
+If the configure script cannot find the EBML and Matroska headers,
+then you'll have to manually point it to their locations:
+
 ./configure --with-matroska-include=/where/i/put/libmatroska/src \
   --with-matroska-lib=/where/i/put/libmatroska/make/linux \
   --with-ebml-include=/where/i/put/libebml/src \
   --with-ebml-lib=/where/i/put/libebml/make/linux
-make
 
-And you're done.
+Now run 'make' and 'make install'.
 
 Example
 -------
