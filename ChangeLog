@@ -1,3 +1,12 @@
+2004-11-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added reading DTS from AVIs and from
+	Matroska files.
+
+	* mkvmerge: bug fix: A variable initialization was missing which
+	very recent gcc versions (3.4.2) did not like very much. Also
+	fixed a small compilation bug.
+
 2004-10-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The handling of external timecode files was

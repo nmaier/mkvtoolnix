@@ -1647,14 +1647,15 @@ kax_reader_c::create_packetizer(int64_t tid) {
           mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname,
                  (int64_t)t->tnum);
         } else if (t->a_formattag == 0x2001) {
-          mxerror("Reading DTS from Matroska not implemented yet,"
-                  "cannot we get a complete DTS_Header here for construction"
-                  "of the packetizer?");
-          /*
-            t->packetizer = new dts_packetizer_c(this,
-                                                 (unsigned long)t->a_sfreq,
-                                                 nti);
-          */
+          dts_header_t dtsheader;
+
+          dtsheader.core_sampling_frequency = (unsigned int)t->a_sfreq;
+          dtsheader.audio_channels = t->a_channels;
+          t->ptzr =
+            add_packetizer(new dts_packetizer_c(this, dtsheader, nti, true));
+          mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname,
+                 (int64_t)t->tnum);
+
         } else if (t->a_formattag == 0xFFFE) {
           t->ptzr =
             add_packetizer(new vorbis_packetizer_c(this,

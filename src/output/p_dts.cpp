@@ -21,14 +21,16 @@
 
 #include "pr_generic.h"
 #include "dts_common.h"
-#include "p_dts.h"
 #include "matroska.h"
+#include "mkvmerge.h"
+#include "p_dts.h"
 
 using namespace libmatroska;
 
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
                                    const dts_header_t &dtsheader,
-                                   track_info_c *nti)
+                                   track_info_c *nti,
+                                   bool _get_first_header_later)
   throw (error_c):
   generic_packetizer_c(nreader, nti) {
   //packetno = 0;
@@ -41,6 +43,7 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
 
   first_header = dtsheader;
   last_header = dtsheader;
+  get_first_header_later = _get_first_header_later;
 
   set_track_type(track_audio);
 }
@@ -106,6 +109,14 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     return 0;
   if ((pos + dtsheader.frame_byte_size) > buffer_size)
     return 0;
+
+  if (get_first_header_later) {
+    first_header = dtsheader;
+    last_header = dtsheader;
+    get_first_header_later = false;
+    set_headers();
+    rerender_track_headers();
+  }
 
   if (dtsheader != last_header) {
     mxinfo("DTS header information changed! - New format:\n");
