@@ -1059,8 +1059,10 @@ void rerender_track_headers() {
   int64_t new_void_size;
 
   kax_tracks->UpdateSize();
-  new_void_size = kax_tracks->GetElementPosition() + kax_tracks->GetSize() -
-    void_after_track_headers->GetElementPosition() + 1024;
+  new_void_size = void_after_track_headers->GetElementPosition() +
+    void_after_track_headers->GetSize() -
+    kax_tracks->GetElementPosition() -
+    kax_tracks->ElementSize();
   out->save_pos(kax_tracks->GetElementPosition());
   kax_tracks->Render(*out);
   delete void_after_track_headers;
