@@ -23,12 +23,11 @@
 #include <string.h>
 #include <zlib.h>
 
-extern "C" {
-#include <avilib.h>
-}
-
 #include "common.h"
+#include "matroska.h"
 #include "mkvmerge.h"
+#include "p_passthrough.h"
+#include "p_video.h"
 #include "r_mp4.h"
 
 using namespace std;
@@ -179,6 +178,40 @@ void qtmp4_reader_c::parse_headers() {
   for (idx = 0; idx < demuxers.size(); idx++) {
     dmx = demuxers[idx];
 
+    if (((dmx->type == 'v') &&
+         strncasecmp(dmx->fourcc, "svq", 3) &&
+         strncasecmp(dmx->fourcc, "cvid", 4)) ||
+        ((dmx->type == 'a') &&
+         strncasecmp(dmx->fourcc, "QDM", 3))) {
+      mxwarn(PFX "Unknown/unsupported FourCC '%.4s' for track %u.\n",
+             &dmx->fourcc, dmx->id);
+      free_demuxer(dmx);
+
+      continue;
+    }
+
+    if ((dmx->type == 'v') &&
+        ((dmx->v_width == 0) || (dmx->v_height == 0) ||
+         (*((uint32_t *)dmx->fourcc) == 0))) {
+      mxwarn(PFX "Track %u is missing some data. Broken header atoms?\n",
+             dmx->id);
+      continue;
+    }
+
+    if ((dmx->type == 'a') &&
+        ((dmx->a_channels == 0) || (dmx->a_samplerate == 0.0))) {
+      mxwarn(PFX "Track %u is missing some data. Broken header atoms?\n",
+             dmx->id);
+      continue;
+    }
+
+    if (dmx->type == '?') {
+      mxwarn(PFX "Track %u has an unknown type.\n", dmx->id);
+      continue;
+    }
+
+    dmx->ok = true;
+
     last = dmx->chunk_table_len;
 
     // process chunkmap:
@@ -192,9 +225,6 @@ void qtmp4_reader_c::parse_headers() {
       }
       last = dmx->chunkmap_table[i].first_chunk;
     }
-
-//     for (i = 0; i < dmx->chunk_table_len; i++)
-//       mxverb(2, "2Chunk %5d size: %u\n", i, dmx->chunk_table[i].size);
 
     // calc pts of chunks:
     s = 0;
@@ -221,7 +251,6 @@ void qtmp4_reader_c::parse_headers() {
         mxerror(PFX "Constant samplesize & variable duration not yet "
                 "supported. Contact the author if you have such a sample "
                 "file.\n");
-
       continue;
     }
 
@@ -243,15 +272,10 @@ void qtmp4_reader_c::parse_headers() {
 
       for (i = 0; i < dmx->chunk_table[j].size; i++) {
         dmx->sample_table[s].pos = pos;
-//         mxverb(2, "Sample %5d: pts=%8d  off=0x%08X  size=%d\n", s,
-//                dmx->sample_table[s].pts,
-//                (int)dmx->sample_table[s].pos,
-//                dmx->sample_table[s].size);
         pos += dmx->sample_table[s].size;
         s++;
       }
     }
-
   }
 
   mxverb(2, PFX "Number of valid tracks found: %u\n", demuxers.size());
@@ -338,7 +362,7 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
                "", get_uint32_be(&mdhd.time_scale),
                get_uint32_be(&mdhd.duration));
         new_dmx->timescale = get_uint32_be(&mdhd.time_scale);
-        new_dmx->duration = get_uint32_be(&mdhd.duration);
+        new_dmx->global_duration = get_uint32_be(&mdhd.duration);
 
       } else if (atom == FOURCC('h', 'd', 'l', 'r')) {
         hdlr_atom_t hdlr;
@@ -391,9 +415,6 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
         for (i = 0; i < count; i++) {
           new_dmx->durmap_table[i].number = io->read_uint32_be();
           new_dmx->durmap_table[i].duration = io->read_uint32_be();
-//           mxverb(2, "Durmap %5d: num %8d dur %8d\n",
-//                  i, new_dmx->durmap_table[i].number,
-//                  new_dmx->durmap_table[i].duration);
         }
         new_dmx->durmap_table_len = count;
 
@@ -454,6 +475,8 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
             tmp = get_uint32_be(&sv1_stsd.v0.sample_rate);
             new_dmx->a_samplerate = (float)((tmp & 0xffff0000) >> 16) +
               (float)(tmp & 0x0000ffff) / 65536.0;
+
+            memcpy(&new_dmx->a_stsd, &sv1_stsd, sizeof(sound_v1_stsd_atom_t));
 
           } else if (new_dmx->type == 'v') {
             if ((size < sizeof(video_stsd_atom_t)) ||
@@ -665,24 +688,75 @@ int qtmp4_reader_c::read() {
       continue;
 
     if (dmx->sample_size != 0) {
-//       if (dmx->pos >= dmx->chunk_table_len)
-//         continue;
+      if (dmx->pos >= dmx->chunk_table_len)
+        continue;
 
-//       if (dmx->packetizer->packets_available() >= 2) {
-//         chunks_left = true;
-//         continue;
-//       }
+      io->setFilePointer(dmx->chunk_table[dmx->pos].pos);
+      timecode = 1000 * ((uint64_t)dmx->chunk_table[dmx->pos].samples *
+                         (uint64_t)dmx->duration) / (uint64_t)dmx->timescale;
 
-      mxerror(PFX "sample size != 0\n");
+      if (dmx->sample_size != 1) {
+        if (!dmx->warning_printed) {
+          mxwarn(PFX "Track %u: sample_size (%u) != 1.\n", dmx->id,
+                 dmx->sample_size);
+          dmx->warning_printed = true;
+        }
+        frame_size = dmx->chunk_table[dmx->pos].size * dmx->sample_size;
+      } else
+        frame_size = dmx->chunk_table[dmx->pos].size;
+
+      if (dmx->type == 'a') {
+        if (get_uint16_be(&dmx->a_stsd.v0.version) == 1) {
+          frame_size *= get_uint32_be(&dmx->a_stsd.v1.bytes_per_frame);
+          frame_size /= get_uint32_be(&dmx->a_stsd.v1.samples_per_packet);
+        } else
+          frame_size = frame_size * dmx->a_channels *
+            dmx->a_stsd.v0.sample_size / 8;
+
+      }
+
+      mxverb(2, "\nfixed ssize: pos: %lld, timecode: %lld, frame_size: %u\n",
+             io->getFilePointer(), timecode, frame_size);
+
+      if (dmx->keyframe_table_len == 0)
+        is_keyframe = true;
+      else {
+        is_keyframe = false;
+        for (k = 0; k < dmx->keyframe_table_len; k++)
+          if (dmx->keyframe_table[k] == (frame + 1)) {
+            is_keyframe = true;
+            break;
+          }
+      }
+
+      buffer = (unsigned char *)safemalloc(frame_size);
+      if (io->read(buffer, frame_size) != frame_size) {
+        safefree(buffer);
+        done = true;
+
+        return 0;
+      }
+
+      if ((dmx->pos + 1) < dmx->chunk_table_len)
+        duration = 1000 * ((uint64_t)dmx->chunk_table[dmx->pos + 1].samples *
+                           (uint64_t)dmx->duration) /
+          (uint64_t)dmx->timescale - timecode;
+      else
+        duration = dmx->avg_duration;
+      dmx->avg_duration = (dmx->avg_duration * dmx->pos + duration) /
+        (dmx->pos + 1);
+
+      dmx->packetizer->process(buffer, frame_size, timecode, duration,
+                               is_keyframe ? VFT_IFRAME :
+                               VFT_PFRAMEAUTOMATIC);
+      dmx->pos++;
+
+      if (dmx->pos < dmx->chunk_table_len)
+        chunks_left = true;
 
     } else {
       if (dmx->pos >= dmx->sample_table_len)
         continue;
-
-      if (dmx->packetizer->packet_available() >= 2) {
-        chunks_left = true;
-        continue;
-      }
 
       frame = dmx->pos;
 
@@ -735,83 +809,52 @@ int qtmp4_reader_c::read() {
   }
 }
 
-#define NATIVE_ID
-
 void qtmp4_reader_c::create_packetizers() {
   uint32_t i;
   qtmp4_demuxer_t *dmx;
-#ifndef NATIVE_ID
-  alBITMAPINFOHEADER bih;
-  unsigned char *private_data;
-#else
-  string codec_id;
-#endif
-  char old_fourcc[4];
+  passthrough_packetizer_c *ptzr;
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
+    if (!dmx->ok)
+      continue;
+
     if (!demuxing_requested(dmx->type, dmx->id))
       continue;
 
+    ti->id = dmx->id;
     if (dmx->type == 'v') {
-#ifdef NATIVE_ID
-      ti->id = dmx->id;
-      memcpy(old_fourcc, ti->fourcc, 4);
-      if (ti->fourcc[0] == 0) {
-        memcpy(ti->fourcc, dmx->fourcc, 4);
-        ti->fourcc[4] = 0;
-      }
 
       ti->private_size = dmx->v_desc_size;
       ti->private_data = (unsigned char *)dmx->v_desc;
-      if (!strncasecmp(ti->fourcc, "SVQ", 3))
-        codec_id = "V_SORENSON/V" + to_string(ti->fourcc[3] - '0');
-      else if (!strncasecmp(ti->fourcc, "cvid", 4))
-        codec_id = "V_CINEPAK";
-      else
-        mxerror(PFX "Unknown/unsupported FourCC '%s'.\n", ti->fourcc);
       dmx->packetizer =
-        new video_packetizer_c(this, codec_id.c_str(), 0.0, dmx->v_width,
+        new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0, dmx->v_width,
                                dmx->v_height, false, ti);
       ti->private_data = NULL;
-      memcpy(ti->fourcc, old_fourcc, 4);
-#else
-      memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
-
-      // AVI compatibility mode. Fill in the values we've got and guess
-      // the others.
-      bih.bi_size = sizeof(alBITMAPINFOHEADER) + dmx->v_desc_size;
-      bih.bi_width = dmx->v_width;
-      bih.bi_height = dmx->v_height;
-      bih.bi_planes = 1;
-      bih.bi_bit_count = dmx->v_bitdepth == 0 ? 24 : dmx->v_bitdepth;
-      bih.bi_size_image = bih.bi_width * bih.bi_height * 3;
-
-      ti->id = dmx->id;
-      memcpy(old_fourcc, ti->fourcc, 4);
-      if (ti->fourcc[0] == 0) {
-        memcpy(ti->fourcc, dmx->fourcc, 4);
-        ti->fourcc[4] = 0;
-      }
-      memcpy(&bih.bi_compression, ti->fourcc, 4);
-
-      ti->private_size = sizeof(alBITMAPINFOHEADER) + dmx->v_desc_size;
-      private_data = (unsigned char *)safemalloc(ti->private_size);
-      memcpy(private_data, &bih, sizeof(alBITMAPINFOHEADER));
-      memcpy(&private_data[sizeof(alBITMAPINFOHEADER)], dmx->v_desc,
-             dmx->v_desc_size);
-      ti->private_data = private_data;
-      dmx->packetizer =
-        new video_packetizer_c(this, NULL, 0.0, dmx->v_width, dmx->v_height,
-                               false, ti);
-      safefree(private_data);
-      ti->private_data = NULL;
-      memcpy(ti->fourcc, old_fourcc, 4);
-#endif
 
       dmx->packetizer->duplicate_data_on_add(false);
 
-      mxinfo(PFX "Using the video packetizer for track %u.\n", dmx->id);
+      mxinfo("+-> Using the video packetizer for track %u.\n", dmx->id);
+
+    } else {
+      if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
+          !strncasecmp(dmx->fourcc, "QDM2", 4)) {
+        ptzr = new passthrough_packetizer_c(this, ti);
+        dmx->packetizer = ptzr;
+
+        ptzr->set_track_type(track_audio);
+        ptzr->set_codec_id(dmx->fourcc[3] == '2' ? MKV_A_QDMC2 : MKV_A_QDMC);
+        ptzr->set_codec_private(dmx->a_priv, dmx->a_priv_size);
+        ptzr->set_audio_sampling_freq(dmx->a_samplerate);
+        ptzr->set_audio_channels(dmx->a_channels);
+        ptzr->set_audio_bit_depth(dmx->a_bitdepth);
+
+        if (verbose)
+          mxinfo("+-> Using generic audio output module for stream "
+                 "%u (FourCC: %.4s).\n", dmx->id, dmx->fourcc);
+
+      } else
+        die(PFX "Should not have happened #1.");
     }
   }
 }

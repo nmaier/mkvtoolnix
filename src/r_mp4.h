@@ -67,15 +67,19 @@ typedef struct {
 } qt_sample_t;
 
 typedef struct {
+  bool ok;
+
   char type;
   uint32_t id;
   char fourcc[4];
   uint32_t pos;
 
   uint32_t timescale;
-  uint32_t duration;
+  uint32_t global_duration;
   uint32_t avg_duration;
   uint32_t sample_size;
+
+  uint32_t duration;
 
   qt_sample_t *sample_table;
   uint32_t sample_table_len;
@@ -95,6 +99,11 @@ typedef struct {
   uint32_t v_desc_size;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
+  unsigned char *a_priv;
+  uint32_t a_priv_size;
+  sound_v1_stsd_atom_t a_stsd;
+
+  bool warning_printed;
 
   generic_packetizer_c *packetizer;
 } qtmp4_demuxer_t;

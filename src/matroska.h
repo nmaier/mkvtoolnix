@@ -38,12 +38,15 @@
 #define MKV_A_PCM        "A_PCM/INT/LIT"
 #define MKV_A_VORBIS     "A_VORBIS"
 #define MKV_A_ACM        "A_MS/ACM"
+#define MKV_A_QDMC       "A_QDESIGNMUSIC"
+#define MKV_A_QDMC2      "A_QDESIGNMUSIC/V2"
 
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 #define MKV_V_REALV1     "V_REAL/RV10"
 #define MKV_V_REALV2     "V_REAL/RV20"
 #define MKV_V_REALV3     "V_REAL/RV30"
 #define MKV_V_REALV4     "V_REAL/RV40"
+#define MKV_V_QUICKTIME  "V_QUICKTIME"
 
 #define MKV_S_TEXTUTF8   "S_TEXT/UTF8"
 #define MKV_S_TEXTSSA    "S_TEXT/SSA"
