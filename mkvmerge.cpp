@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.36 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.37 2003/04/18 13:51:32 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -97,6 +97,7 @@ char *outfile = NULL;
 filelist_t *input= NULL;
 int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
+int write_cues = 1;
 
 float video_fps = -1.0;
 
@@ -149,6 +150,7 @@ static void usage(void) {
     "                           If the number is postfixed with 'ms' then\n"
     "                           put at most n milliseconds of data into each\n"
     "                           cluster.\n"
+    "  --no-cues                Do not write the cue data (the index).\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -511,7 +513,8 @@ static void parse_args(int argc, char **argv) {
         max_ms_per_cluster = 65535;
       }
       i++;
-    }
+    } else if (!strcmp(argv[i], "--no-cues"))
+      write_cues = 0;
 
     // Options that apply to the next input file only.
     else if (!strcmp(argv[i], "-A") || !strcmp(argv[i], "--noaudio"))
@@ -822,7 +825,8 @@ int main(int argc, char **argv) {
     cluster_helper->render(out);
 
   // Render the cues.
-  kax_cues->Render(*static_cast<StdIOCallback *>(out));
+  if (write_cues)
+    kax_cues->Render(*static_cast<StdIOCallback *>(out));
 
   // Now re-render the kax_infos and fill in the biggest timecode
   // as the file's duration.

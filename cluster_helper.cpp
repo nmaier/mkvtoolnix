@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.5 2003/04/18 13:12:51 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.6 2003/04/18 13:51:32 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -207,7 +207,7 @@ int cluster_helper_c::render(IOCallback *out) {
     }
     if (new_group == NULL)
       new_group = last_block_group;
-    else
+    else if (write_cues)
       kax_cues->AddBlockGroup(*new_group);
     pack->group = new_group;
     last_block_group = new_group;

@@ -28,6 +28,12 @@ postfixed with 'ms' then put at most \fIn\fR milliseconds of data into
 each cluster. The maximum length for a cluster is 65535ms. Programs will
 only be able to seek to clusters, so creating larger clusters may lead to
 imprecise seeking and/or processing.
+.TP
+\fB\-\-no\-cues\fR
+Tells mkvmerge not to create and write the cue data which can be compared
+to an index in an AVI. Matroska files can be played back without the cue
+data, but seeking will probably be imprecise and slower. Use this only if
+you're really desparate for space or for testing purposes.
 .LP
 Options that can be used for each input file:
 .TP
