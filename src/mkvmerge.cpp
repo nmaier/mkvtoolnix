@@ -1039,7 +1039,7 @@ static void identify(const char *filename) {
   ti.languages = new vector<language_t>;
   ti.sub_charsets = new vector<language_t>;
   ti.all_tags = new vector<tags_t>;
-  ti.aspect_ratio = 1.0;
+  ti.aspect_ratio = 0.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
@@ -1096,7 +1096,7 @@ static void parse_args(int argc, char **argv) {
   ti.languages = new vector<language_t>;
   ti.sub_charsets = new vector<language_t>;
   ti.all_tags = new vector<tags_t>;
-  ti.aspect_ratio = 1.0;
+  ti.aspect_ratio = 0.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;

@@ -1113,7 +1113,7 @@ void kax_reader_c::create_packetizers() {
                                                  t->v_width,
                                                  t->v_height,
                                                  t->v_bframes, &nti);
-          if (nti.aspect_ratio == 1.0) { // The user didn't set it.
+          if (nti.aspect_ratio == 0.0) { // The user didn't set it.
             if (t->v_dwidth == 0)
               t->v_dwidth = t->v_width;
             if (t->v_dheight == 0)
