@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.11 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.12 2003/04/18 12:00:46 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,13 +23,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "pr_generic.h"
 #include "ac3_common.h"
 #include "p_ac3.h"
-
-#include "KaxTracks.h"
-#include "KaxTrackAudio.h"
+#include "matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -155,42 +152,16 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   return buf;
 }
 
-#define AC3CODECID "A_DOL_AC3"
-
 void ac3_packetizer_c::set_header() {
   using namespace LIBMATROSKA_NAMESPACE;
-  
-  if (kax_last_entry == NULL)
-    track_entry =
-      &GetChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks));
-  else
-    track_entry =
-      &GetNextChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks),
-        static_cast<KaxTrackEntry &>(*kax_last_entry));
-  kax_last_entry = track_entry;
 
-  if (serialno == -1)
-    serialno = track_number++;
-  KaxTrackNumber &tnumber =
-    GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
-  *(static_cast<EbmlUInteger *>(&tnumber)) = serialno;
-  
-  *(static_cast<EbmlUInteger *>
-    (&GetChild<KaxTrackType>(static_cast<KaxTrackEntry &>(*track_entry)))) =
-      track_audio;
+  set_serial(-1);
+  set_track_type(track_audio);
+  set_codec_id(MKV_A_AC3);
+  set_audio_sampling_freq((float)samples_per_sec);
+  set_audio_channels(channels);
 
-  KaxCodecID &codec_id =
-    GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
-  codec_id.CopyBuffer((binary *)AC3CODECID, countof(AC3CODECID));
-
-  KaxTrackAudio &audio =
-    GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
-
-  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(audio);
-  *(static_cast<EbmlFloat *>(&kax_freq)) = (float)samples_per_sec;
-  
-  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(audio);
-  *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
+  generic_packetizer_c::set_header();
 }
 
 int ac3_packetizer_c::process(unsigned char *buf, int size,

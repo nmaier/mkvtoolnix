@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.2 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.3 2003/04/18 12:00:46 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -181,7 +181,7 @@ int cluster_helper_c::render(IOCallback *out) {
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>
-      (*((generic_packetizer_c *)pack->source)->track_entry);
+      (*((generic_packetizer_c *)pack->source)->get_track_entry());
 
     if (pack->bref != 0) {      // P and B frames: add backward reference.
       bref_packet = find_packet(pack->bref);

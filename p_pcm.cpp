@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.12 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.13 2003/04/18 12:00:46 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,9 +27,7 @@
 #include "common.h"
 #include "pr_generic.h"
 #include "p_pcm.h"
-
-#include "KaxTracks.h"
-#include "KaxTrackAudio.h"
+#include "matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -50,6 +48,11 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
   bits_per_sample = nbits_per_sample;
   bytes_output = 0;
   remaining_sync = 0;
+
+  if (bits_per_sample != 16)
+    throw error_c("Error: pcm_packetizer: Only files with 16bits per sample "
+                  "are supported at the moment.\n");
+
   set_header();
 }
 
@@ -58,50 +61,16 @@ pcm_packetizer_c::~pcm_packetizer_c() {
     free(tempbuf);
 }
 
-// void pcm_packetizer_c::reset() {
-// }
-
-#define APCM "A_PCM16IN"
-
 void pcm_packetizer_c::set_header() {
   using namespace LIBMATROSKA_NAMESPACE;
-  
-  if (kax_last_entry == NULL)
-    track_entry =
-      &GetChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks));
-  else
-    track_entry =
-      &GetNextChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks),
-        static_cast<KaxTrackEntry &>(*kax_last_entry));
-  kax_last_entry = track_entry;
 
-  if (serialno <= 0)
-    serialno = track_number++;
-  KaxTrackNumber &tnumber =
-    GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
-  *(static_cast<EbmlUInteger *>(&tnumber)) = serialno;
-  
-  *(static_cast<EbmlUInteger *>
-    (&GetChild<KaxTrackType>(static_cast<KaxTrackEntry &>(*track_entry)))) =
-      track_audio;
+  set_serial(-1);
+  set_track_type(track_audio);
+  set_codec_id(MKV_A_PCM16);
+  set_audio_sampling_freq((float)samples_per_sec);
+  set_audio_channels(channels);
 
-  KaxCodecID &codec_id =
-    GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
-  if (bits_per_sample != 16) {
-    fprintf(stderr, "Error: pcm_packetizer: Only files with 16bits per sample "
-            "are supported at the moment.\n");
-    exit(1);
-  }
-  codec_id.CopyBuffer((binary *)APCM, countof(APCM));
-
-  KaxTrackAudio &audio =
-    GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
-
-  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(audio);
-  *(static_cast<EbmlFloat *>(&kax_freq)) = (float)samples_per_sec;
-  
-  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(audio);
-  *(static_cast<EbmlUInteger *>(&kax_chans)) = channels;
+  generic_packetizer_c::set_header();
 }
 
 int pcm_packetizer_c::process(unsigned char *buf, int size,

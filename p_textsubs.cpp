@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.4 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.5 2003/04/18 12:00:46 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,13 +23,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "p_textsubs.h"
-
-#include "KaxTracks.h"
-#include "KaxTrackVideo.h"
+#include "matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -44,33 +41,14 @@ textsubs_packetizer_c::textsubs_packetizer_c(track_info_t *nti)
 textsubs_packetizer_c::~textsubs_packetizer_c() {
 }
 
-#define STEXTSIMPLE "S_TEXT/SIMPLE"
-
 void textsubs_packetizer_c::set_header() {
   using namespace LIBMATROSKA_NAMESPACE;
-  
-  if (kax_last_entry == NULL)
-    track_entry =
-      &GetChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks));
-  else
-    track_entry =
-      &GetNextChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks),
-        static_cast<KaxTrackEntry &>(*kax_last_entry));
-  kax_last_entry = track_entry;
-  
-  if (serialno == -1)
-    serialno = track_number++;
-  KaxTrackNumber &tnumber =
-    GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
-  *(static_cast<EbmlUInteger *>(&tnumber)) = serialno;
-  
-  *(static_cast<EbmlUInteger *>
-    (&GetChild<KaxTrackType>(static_cast<KaxTrackEntry &>(*track_entry)))) =
-      track_subtitle;
 
-  KaxCodecID &codec_id =
-    GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
-  codec_id.CopyBuffer((binary *)STEXTSIMPLE, countof(STEXTSIMPLE));
+  set_serial(-1);
+  set_track_type(track_subtitle);
+  set_codec_id(MKV_S_TEXTSIMPLE);
+
+  generic_packetizer_c::set_header();
 }
 
 int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.21 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.22 2003/04/18 12:00:46 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -51,19 +51,52 @@ typedef struct {
 
 class generic_packetizer_c: public q_c {
 protected:
-  int serialno;
   track_info_t *ti;
   int64_t free_refs;
-public:
+
   KaxTrackEntry *track_entry;
+
+  // Header entries. Can be set via set_XXX and will be 'rendered'
+  // by set_header().
+  int hserialno, htrack_type, htrack_min_cache, htrack_max_cache;
+
+  char *hcodec_id;
+  unsigned char *hcodec_private;
+  int hcodec_private_length;
+
+  float haudio_sampling_freq;
+  int haudio_channels;
+
+  int hvideo_pixel_width, hvideo_pixel_height;
+  float hvideo_frame_rate;
+public:
 
   generic_packetizer_c(track_info_t *nti) throw (error_c);
   virtual ~generic_packetizer_c();
-  virtual void      set_free_refs(int64_t nfree_refs);
-  virtual int64_t   get_free_refs();
-  virtual void      set_header() = 0;
-  virtual int       process(unsigned char *data, int size,
-                            int64_t timecode = -1, int64_t length = -1) = 0;
+
+  virtual void set_free_refs(int64_t nfree_refs);
+  virtual int64_t get_free_refs();
+  virtual void set_header();
+  virtual int process(unsigned char *data, int size,
+                      int64_t timecode = -1,int64_t length = -1) = 0;
+
+  virtual KaxTrackEntry *get_track_entry();
+
+  virtual void set_serial(int serial = -1);
+  virtual void set_track_type(int type);
+
+  virtual void set_codec_id(char *id);
+  virtual void set_codec_private(unsigned char *cp, int length);
+
+  virtual void set_track_min_cache(int min_cache);
+  virtual void set_track_max_cache(int max_cache);
+
+  virtual void set_audio_sampling_freq(float freq);
+  virtual void set_audio_channels(int channels);
+
+  virtual void set_video_pixel_width(int width);
+  virtual void set_video_pixel_height(int height);
+  virtual void set_video_frame_rate(float frame_rate);
 };
  
 class generic_reader_c {

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.10 2003/04/18 10:28:14 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.11 2003/04/18 12:00:46 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,14 +31,10 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "mkvmerge.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "p_vorbis.h"
-// #include "vorbis_header_utils.h"
-
-#include "KaxTracks.h"
-#include "KaxTrackAudio.h"
+#include "matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -95,37 +91,9 @@ void vorbis_packetizer_c::set_header() {
   unsigned char *buffer;
   int n, offset, i, lsize;
   
-  if (kax_last_entry == NULL)
-    track_entry =
-      &GetChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks));
-  else
-    track_entry =
-      &GetNextChild<KaxTrackEntry>(static_cast<KaxTracks &>(*kax_tracks),
-        static_cast<KaxTrackEntry &>(*kax_last_entry));
-  kax_last_entry = track_entry;
-
-  if (serialno == -1)
-    serialno = track_number++;
-  KaxTrackNumber &tnumber =
-    GetChild<KaxTrackNumber>(static_cast<KaxTrackEntry &>(*track_entry));
-  *(static_cast<EbmlUInteger *>(&tnumber)) = serialno;
-  
-  *(static_cast<EbmlUInteger *>
-    (&GetChild<KaxTrackType>(static_cast<KaxTrackEntry &>(*track_entry)))) =
-      track_audio;
-
-  KaxCodecID &codec_id =
-    GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
-  codec_id.CopyBuffer((binary *)AVORBIS, countof(AVORBIS));
-
-  KaxTrackAudio &audio =
-    GetChild<KaxTrackAudio>(static_cast<KaxTrackEntry &>(*track_entry));
-
-  KaxAudioSamplingFreq &kax_freq = GetChild<KaxAudioSamplingFreq>(audio);
-  *(static_cast<EbmlFloat *>(&kax_freq)) = (float)vi.rate;
-  
-  KaxAudioChannels &kax_chans = GetChild<KaxAudioChannels>(audio);
-  *(static_cast<EbmlUInteger *>(&kax_chans)) = vi.channels;
+  set_serial(-1);
+  set_track_type(track_audio);
+  set_codec_id(MKV_A_VORBIS);
 
   // We use lacing for the blocks. The first bytes is the number of
   // packets being laced which is one less than the number of blocks that
@@ -157,11 +125,14 @@ void vorbis_packetizer_c::set_header() {
   }
   memcpy(&buffer[offset], headers[2].packet, headers[2].bytes);
 
-  KaxCodecPrivate &codec_private = 
-    GetChild<KaxCodecPrivate>(static_cast<KaxTrackEntry &>(*track_entry));
-  codec_private.CopyBuffer((binary *)buffer, lsize);
+  set_codec_private(buffer, lsize);
 
   free(buffer);
+
+  set_audio_sampling_freq((float)vi.rate);
+  set_audio_channels(vi.channels);
+
+  generic_packetizer_c::set_header();
 }
 
 /* 
