@@ -19,6 +19,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+#include "os.h"
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
@@ -30,6 +32,12 @@
 #include "wx/listctrl.h"
 #include "wx/statusbr.h"
 #include "wx/statline.h"
+
+#if defined(SYS_WINDOWS)
+#include <windef.h>
+#include <winbase.h>
+#include <io.h>
+#endif
 
 #include "mmg.h"
 #include "common.h"
@@ -106,8 +114,13 @@ mux_dialog::mux_dialog(wxWindow *parent):
 //   pid = wxExecute(static_cast<mmg_dialog *>(parent)->get_command_line(),
 //                   wxEXEC_ASYNC, process);
 // #endif
+#if defined(SYS_WINDOWS)
+  opt_file_name.Printf("mmg-mkvmerge-options-%d-%d",
+                       (int)GetCurrentProcessId(), (int)time(NULL));
+#else
   opt_file_name.Printf("mmg-mkvmerge-options-%d-%d", getpid(),
                        (int)time(NULL));
+#endif
   try {
     opt_file = new mm_io_c(opt_file_name.c_str(), MODE_CREATE);
   } catch (...) {
