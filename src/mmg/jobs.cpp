@@ -598,34 +598,55 @@ job_dialog::swap_rows(int lower, int higher) {
 
 void
 job_dialog::on_up(wxCommandEvent &evt) {
-  int i;
+  vector<bool> selected;
+  bool first;
+  int i, j;
 
   i = 0;
-  while ((i < jobs.size()) && lv_jobs->IsSelected(i))
-    i++;
+  first = true;
+  for (j = 0; j < lv_jobs->GetItemCount(); j++) {
+    selected.push_back(lv_jobs->IsSelected(j));
+    if (lv_jobs->IsSelected(j) && first)
+      i++;
+    else
+      first = false;
+  }
   for (; i < jobs.size(); i++)
-    if (lv_jobs->IsSelected(i)) {
+    if (selected[i]) {
       swap_rows(i - 1, i);
-      lv_jobs->Select(i - 1, true);
-      lv_jobs->Select(i, false);
+      selected[i - 1] = true;
+      selected[i] = false;
     }
+  for (i = 0; i < selected.size(); i++)
+    lv_jobs->Select(i, selected[i]);
 
   mdlg->save_job_queue();
 }
 
 void
 job_dialog::on_down(wxCommandEvent &evt) {
-  int i;
+  vector<bool> selected;
+  bool first;
+  int i, j;
 
-  i = jobs.size() - 1;
-  while ((i >= 0) && lv_jobs->IsSelected(i))
-    i--;
+  first = true;
+  i = lv_jobs->GetItemCount() - 1;
+  for (j = i; j >= 0; j--) {
+    selected.insert(selected.begin(), lv_jobs->IsSelected(j));
+    if (lv_jobs->IsSelected(j) && first)
+      i--;
+    else
+      first = false;
+  }
+
   for (; i >= 0; i--)
     if (lv_jobs->IsSelected(i)) {
       swap_rows(i + 1, i);
-      lv_jobs->Select(i + 1, true);
-      lv_jobs->Select(i, false);
+      selected[i + 1] =  true;
+      selected[i] = false;
     }
+  for (i = 0; i < selected.size(); i++)
+    lv_jobs->Select(i, selected[i]);
 
   mdlg->save_job_queue();
 }
