@@ -95,6 +95,7 @@ extern bool title_was_present;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
+bool is_popular_language(const char *lang);
 wxString shell_escape(wxString source);
 vector<wxString> split(const wxString &src, const char *pattern = ",",
                        int max_num = -1);

@@ -93,6 +93,9 @@ extract_language_code(wxString source) {
   wxString copy;
   int pos;
 
+  if (source.Find("---") == 0)
+    return "---";
+
   copy = source;
   if ((pos = copy.Find(" (")) >= 0)
     copy.Remove(pos);
@@ -240,6 +243,24 @@ to_utf8_wx(wxString &src) {
   safefree(utf8);
 
   return retval;
+}
+
+bool
+is_popular_language(const char *lang) {
+  return
+    !strcmp(lang, "Chinese") ||
+    !strcmp(lang, "Dutch") ||
+    !strcmp(lang, "English") ||
+    !strcmp(lang, "Finnish") ||
+    !strcmp(lang, "French") ||
+    !strcmp(lang, "German") ||
+    !strcmp(lang, "Italian") ||
+    !strcmp(lang, "Japanese") ||
+    !strcmp(lang, "Norwegian") ||
+    !strcmp(lang, "Portuguese") ||
+    !strcmp(lang, "Russian") ||
+    !strcmp(lang, "Spanish") ||
+    !strcmp(lang, "Swedish");
 }
 
 mmg_dialog::mmg_dialog(): wxFrame(NULL, -1, "mkvmerge GUI v" VERSION,

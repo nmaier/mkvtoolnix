@@ -45,7 +45,7 @@ bool title_was_present = false;
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
-  uint32_t i;
+  uint32_t i, insert_idx;
   wxString language;
 
   new wxStaticText(this, wxID_STATIC, _("Input files:"), wxPoint(5, 5),
@@ -122,6 +122,17 @@ tab_input::tab_input(wxWindow *parent):
       sorted_iso_codes.Add(language);
     }
     sorted_iso_codes.Sort();
+    sorted_iso_codes.Insert("---common---", 0);
+    insert_idx = 1;
+    for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
+      if (!is_popular_language(iso639_languages[i].english_name))
+        continue;
+      language.Printf("%s (%s)", iso639_languages[i].iso639_2_code,
+                      iso639_languages[i].english_name);
+      sorted_iso_codes.Insert(language, insert_idx);
+      insert_idx++;
+    }
+    sorted_iso_codes.Insert("---all---", insert_idx);
   }
 
   cob_language =
