@@ -80,8 +80,6 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_t *nti) throw (error_c) :
     if (!qtmp4_reader_c::probe_file(io, file_size))
       throw error_c(PFX "Source is not a valid Quicktime/MP4 file.");
 
-    done = false;
-
     if (verbose)
       mxinfo("Using Quicktime/MP4 demultiplexer for %s.\n", ti->fname);
 
@@ -96,9 +94,15 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_t *nti) throw (error_c) :
 
 qtmp4_reader_c::~qtmp4_reader_c() {
   qtmp4_demuxer_t *dmx;
+  uint32_t max_chunks;
 
   while (demuxers.size() > 0) {
     dmx = demuxers[demuxers.size() - 1];
+    if (dmx->sample_size == 0)
+      max_chunks = dmx->sample_table_len;
+    else
+      max_chunks = dmx->chunk_table_len;
+    mxverb(2, PFX "demuxer %d: %u/%u chunks\n", dmx->id, dmx->pos, max_chunks);
     free_demuxer(dmx);
     free(dmx);
     demuxers.pop_back();
@@ -189,7 +193,7 @@ void qtmp4_reader_c::parse_headers() {
 
     }
 
-  } while (!headers_parsed && !io->eof());
+  } while (!io->eof() && (!headers_parsed || (mdat_pos == -1)));
 
   if (!headers_parsed)
     mxerror(PFX "Have not found any header atoms.\n");
@@ -765,9 +769,6 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
   int64_t timecode, duration;
   unsigned char *buffer;
 
-  if (done)
-    return 0;
-
   chunks_left = false;
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
@@ -816,8 +817,10 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
 
       buffer = (unsigned char *)safemalloc(frame_size);
       if (io->read(buffer, frame_size) != frame_size) {
+        mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
+               "position %lld. Aborting.\n", frame, dmx->chunk_table_len,
+               frame_size, dmx->chunk_table[dmx->pos].pos);
         safefree(buffer);
-        done = true;
 
         return 0;
       }
@@ -870,8 +873,10 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
       buffer = (unsigned char *)safemalloc(frame_size);
       io->setFilePointer(dmx->sample_table[frame].pos);
       if (io->read(buffer, frame_size) != frame_size) {
+        mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
+               "position %lld. Aborting.\n", frame, dmx->sample_table_len,
+               frame_size, dmx->sample_table[frame].pos);
         safefree(buffer);
-        done = true;
 
         return 0;
       }
@@ -880,17 +885,16 @@ int qtmp4_reader_c::read(generic_packetizer_c *ptzr) {
                                is_keyframe ? VFT_IFRAME :
                                VFT_PFRAMEAUTOMATIC);
       dmx->pos++;
-
+      if (dmx->pos == 3252)
+        mxverb(2, PFX "\njo?\n");
       if (dmx->pos < dmx->sample_table_len)
         chunks_left = true;
     }
 
     if (chunks_left)
       return EMOREDATA;
-    else {
-      done = true;
+    else
       return 0;
-    }
   }
 
   return 0;
@@ -996,6 +1000,7 @@ void qtmp4_reader_c::create_packetizers() {
   qtmp4_demuxer_t *dmx;
   passthrough_packetizer_c *ptzr;
 
+  main_dmx = -1;
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
     if (!dmx->ok)
@@ -1084,6 +1089,9 @@ void qtmp4_reader_c::create_packetizers() {
       } else
         die(PFX "Should not have happened #1.");
     }
+
+    if (main_dmx == -1)
+      main_dmx = i;
   }
 }
 
@@ -1100,8 +1108,16 @@ int qtmp4_reader_c::display_priority() {
 }
 
 void qtmp4_reader_c::display_progress() {
-  mxinfo("progress: %lld bytes (%lld%%)\r", io->getFilePointer() - mdat_pos,
-         (io->getFilePointer() - mdat_pos) * 100 / mdat_size);
+  uint32_t max_chunks;
+  qtmp4_demuxer_t *dmx;
+
+  dmx = demuxers[main_dmx];
+  if (dmx->sample_size == 0)
+    max_chunks = dmx->sample_table_len;
+  else
+    max_chunks = dmx->chunk_table_len;
+  mxinfo("progress: %d/%d chunks (%d%%)\r", dmx->pos, max_chunks,
+         dmx->pos * 100 / max_chunks);
 }
 
 void qtmp4_reader_c::identify() {

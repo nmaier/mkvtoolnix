@@ -115,9 +115,9 @@ private:
   mm_io_c *io;
   vector<qtmp4_demuxer_t *> demuxers;
   int64_t file_size, mdat_pos, mdat_size;
-  bool done;
   qtmp4_demuxer_t *new_dmx;
   uint32_t compression_algorithm;
+  int main_dmx;
 
 public:
   qtmp4_reader_c(track_info_t *nti) throw (error_c);
