@@ -14,7 +14,8 @@
 */
 
 #include <errno.h>
-#include <string.h>
+
+#include <algorithm>
 
 #include "wx/wxprec.h"
 
@@ -636,47 +637,73 @@ tab_input::enable_ar_controls(mmg_track_t *track) {
 
 void
 tab_input::on_add_file(wxCommandEvent &evt) {
-  wxString media_files;
+  static struct { wxChar *title, *extensions; } file_types[] = {
+    { wxT("AAC (Advanced Audio Coding)"), wxT("aac m4a mp4") },
+    { wxT("A/52 (aka AC3)"), wxT("ac3") },
+    { wxT("AVI (Audio/Video Interleaved)"), wxT("avi") },
+    { wxT("DTS (Digital Theater System)"), wxT("dts") },
+    { wxT("FLAC (Free Lossless Audio Codec)"), wxT("flac ogg") },
+    { wxT("MP4 audio/video files"), wxT("mp4") },
+    { wxT("MPEG audio files"), wxT("mp2 mp3") },
+    { wxT("MPEG program streams"), wxT("mpg mpeg m2v") },
+    { wxT("MPEG video elementary streams"), wxT("m1v m2v") },
+    { wxT("Matroska audio/video files"), wxT("mka mks mkv") },
+    { wxT("QuickTime audio/video files"), wxT("mov") },
+    { wxT("Ogg/OGM audio/video files"), wxT("ogg ogm") },
+    { wxT("RealMedia audio/video files"), wxT("ra ram rm rmvb rv") },
+    { wxT("SRT text subtitles"), wxT("srt") },
+    { wxT("SSA/ASS text subtitles"), wxT("ass ssa") },
+    { wxT("TTA (The lossless True Audio codec)"), wxT("tta") },
+    { wxT("VobSub subtitles"), wxT("idx") },
+    { wxT("WAVE (uncompressed PCM audio)"), wxT("wav") },
+    { wxT("WAVPACK v4 audio"), wxT("wv") },
+    { wxT("VobButtons"), wxT("btn") },
+    { NULL, NULL}
+  };
+  wxString media_files, rest, a_exts;
+  vector<wxString> all_extensions;
+  int ft, ae;
 
-  media_files = wxT("Media files (*.aac;*.ac3;*.ass;*.avi;*.btn;*.dts;");
-  if (capabilities[wxT("FLAC")] == wxT("true"))
-    media_files += wxT("*.flac;");
-  media_files += wxT("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
-                     "*.mkv;*.mov;*.mp4;*.mpeg;*.mpg;*.ogm;*.ogg;"
-                     "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
-                     "*.srt;*.ssa;*.tta;*.wav;*.wv)|"
-                     "*.aac;*.ac3;*.ass;*.avi;*.dts;");
-  if (capabilities[wxT("FLAC")] == wxT("true"))
-    media_files += wxT("*.flac;");
-  media_files += wxT("*.idx;*.m1v;*.m2v;*.m4a;*.mp2;*.mp3;*.mka;"
-                     "*.mkv;*.mov;*.mp4;*.mpeg;*.mpg;*.ogm;*.ogg;"
-                     "*.ra;*.ram;*.rm;*.rmvb;*.rv;"
-                     "*.srt;*.ssa;*.tta;*.wav;*.wv|"
-                     "AAC (Advanced Audio Coding) (*.aac;*.m4a;*.mp4)|"
-                     "*.aac;*.m4a;*.mp4|"
-                     "A/52 (aka AC3) (*.ac3)|*.ac3|"
-                     "AVI (Audio/Video Interleaved) (*.avi)|*.avi|"
-                     "DTS (Digital Theater System) (*.dts)|*.dts|");
-  if (capabilities[wxT("FLAC")] == wxT("true"))
-    media_files += wxT("FLAC (Free Lossless Audio Codec) (*.flac;*.ogg)|"
-                       "*.flac;*.ogg|");
-  media_files += wxT("MPEG audio files (*.mp2;*.mp3)|*.mp2;*.mp3|"
-                     "MPEG program streams (*.mpg;*.mpeg;*.m2v)|*.mpg;*.mpeg;"
-                     "*.m2v|"
-                     "MPEG video elementary streams (*.m1v;*.m2v)|*.m1v;*.m2v|"
-                     "Matroska A/V files (*.mka;*.mkv)|*.mka;*.mkv|"
-                     "QuickTime/MP4 A/V (*.mov;*.mp4)|*.mov;*.mp4|"
-                     "Audio/Video embedded in OGG (*.ogg;*.ogm)|*.ogg;*.ogm|"
-                     "RealMedia Files (*.ra;*.ram;*.rm;*.rmvb;*.rv)|"
-                     "*.ra;*.ram;*.rm;*.rmvb;*.rv|"
-                     "SRT text subtitles (*.srt)|*.srt|"
-                     "SSA/ASS text subtitles (*.ssa;*.ass)|*.ssa;*.ass|"
-                     "TTA (The lossless True Audio codec) (*.tta)|*.tta|"
-                     "VobSub subtitles (*.idx)|*.idx|"
-                     "WAVE (uncompressed PCM) (*.wav)|*.wav|"
-                     "WAVPACK v4 (*.wv)|*.wv|"
-                     "VobButtons (*.btn)|*.btn|"
-                     ALLFILES);
+  for (ft = 0; file_types[ft].title != NULL; ft++) {
+    vector<wxString> extensions;
+    wxString s_exts;
+    int e;
+
+    if ((wxString(file_types[ft].title).Find(wxT("FLAC")) >= 0) &&
+        (capabilities[wxT("FLAC")] != wxT("true")))
+      continue;
+
+    extensions = split(file_types[ft].extensions, wxT(" "));
+    for (e = 0; e < extensions.size(); e++) {
+      bool found;
+
+      if (s_exts.Length() > 0)
+        s_exts += wxT(";");
+      s_exts += wxString::Format(wxT("*.%s"), extensions[e].c_str());
+
+      found = false;
+      for (ae = 0; ae < all_extensions.size(); ae++)
+        if (all_extensions[ae] == extensions[e]) {
+          found = true;
+          break;
+        }
+      if (!found)
+        all_extensions.push_back(extensions[e]);
+    }
+
+    rest += wxString::Format(wxT("|%s (%s)|%s"), file_types[ft].title,
+                             s_exts.c_str(), s_exts.c_str());
+  }
+
+  sort(all_extensions.begin(), all_extensions.end());
+  for (ae = 0; ae < all_extensions.size(); ae++) {
+    if (a_exts.Length() > 0)
+      a_exts += wxT(";");
+    a_exts += wxString::Format(wxT("*.%s"), all_extensions[ae].c_str());
+  }
+
+  media_files.Printf(wxT("Media files (%s)|%s%s|%s"), a_exts.c_str(),
+                     a_exts.c_str(), rest.c_str(), wxT(ALLFILES));
   wxFileDialog dlg(NULL, wxT("Choose an input file"), last_open_dir, wxT(""),
                    media_files, wxOPEN);
 
