@@ -24,6 +24,7 @@ namespace libmatroska {
   extern EbmlId MATROSKA_DLL_API KaxEditionUID_TheId;
   extern EbmlId MATROSKA_DLL_API KaxEditionFlagHidden_TheId;
   extern EbmlId MATROSKA_DLL_API KaxEditionFlagDefault_TheId;
+  extern EbmlId MATROSKA_DLL_API KaxEditionProcessed_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterAtom_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterUID_TheId;
   extern EbmlId MATROSKA_DLL_API KaxChapterTimeStart_TheId;
@@ -70,6 +71,8 @@ xml_element_map_init() {
      NULL},
     {"EditionFlagHidden", ebmlt_bool, 2, 0, 0, KaxEditionFlagHidden_TheId,
      NULL, NULL},
+    {"EditionProcessed", ebmlt_uint, 2, 0, NO_MAX_VALUE,
+     KaxEditionProcessed_TheId, NULL, NULL},
     {"EditionFlagDefault", ebmlt_bool, 2, 0, 0, KaxEditionFlagDefault_TheId,
      NULL, NULL},
 
