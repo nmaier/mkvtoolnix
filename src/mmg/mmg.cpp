@@ -851,6 +851,11 @@ mmg_dialog::update_command_line() {
   clargs.Add(tc_output->GetValue());
   args_start = clargs.Count();
 
+  if (settings_page->cob_priority->GetValue() != wxS("normal")) {
+    clargs.Add("--priority");
+    clargs.Add(settings_page->cob_priority->GetValue());
+  }
+
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
     tracks_selected_here = false;

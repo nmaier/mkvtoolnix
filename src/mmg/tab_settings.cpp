@@ -35,7 +35,7 @@
 tab_settings::tab_settings(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
-  new wxStaticBox(this, -1, wxS("mkvmrge executable"), wxPoint(10, 5),
+  new wxStaticBox(this, -1, wxS("mkvmerge executable"), wxPoint(10, 5),
                   wxSize(475, 50));
   tc_mkvmerge =
     new wxTextCtrl(this, ID_TC_MKVMERGE, wxS(""), wxPoint(15, 25),
@@ -43,6 +43,23 @@ tab_settings::tab_settings(wxWindow *parent):
 
   new wxButton(this, ID_B_BROWSEMKVMERGE, wxS("Browse"), wxPoint(395, 25),
                wxDefaultSize, 0);
+
+  new wxStaticBox(this, -1, wxS("Miscellaneous options"), wxPoint(10, 65),
+                  wxSize(475, 50));
+  new wxStaticText(this, -1, wxS("Process priority:"), wxPoint(15, 85));
+  cob_priority =
+    new wxComboBox(this, ID_COB_PRIORITY, wxS(""), wxPoint(120, 85 + YOFF),
+                   wxSize(90, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_priority->SetToolTip(wxS("Sets the priority that mkvmerge will run "
+                               "with."));
+#if defined(SYS_WINDOWS)
+  cob_priority->Append(wxS("highest"));
+  cob_priority->Append(wxS("higher"));
+#endif
+  cob_priority->Append(wxS("normal"));
+  cob_priority->Append(wxS("lower"));
+  cob_priority->Append(wxS("lowest"));
+
 
   new wxStaticBox(this, -1, wxS("About"), wxPoint(10, 350),
                   wxSize(475, 104));
@@ -61,6 +78,7 @@ tab_settings::tab_settings(wxWindow *parent):
 }
 
 tab_settings::~tab_settings() {
+  save_preferences();
 }
 
 void
@@ -82,20 +100,38 @@ tab_settings::on_browse(wxCommandEvent &evt) {
 }
 
 void
+tab_settings::on_priority_selected(wxCommandEvent &evt) {
+  save_preferences();
+}
+
+void
 tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
+  wxString priority;
+  int i;
 
   cfg->SetPath(wxS("/GUI"));
   if (!cfg->Read(wxS("mkvmerge_executable"), &mkvmerge_path))
     mkvmerge_path = wxS("mkvmerge");
   tc_mkvmerge->SetValue(mkvmerge_path);
   query_mkvmerge_capabilities();
+
+  if (!cfg->Read(wxS("process_priority"), &priority))
+    priority = wxS("normal");
+  cob_priority->SetSelection(0);
+  for (i = 0; i < cob_priority->GetCount(); i++)
+    if (priority == cob_priority->GetString(i)) {
+      cob_priority->SetSelection(i);
+      break;
+    }
 }
 
 void
 tab_settings::save_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
-  cfg->Write(wxS("/GUI/mkvmerge_executable"), tc_mkvmerge->GetValue());
+  cfg->SetPath(wxS("/GUI"));
+  cfg->Write(wxS("mkvmerge_executable"), tc_mkvmerge->GetValue());
+  cfg->Write(wxS("process_priority"), cob_priority->GetValue());
   cfg->Flush();
 }
 
@@ -138,4 +174,5 @@ tab_settings::query_mkvmerge_capabilities() {
 IMPLEMENT_CLASS(tab_settings, wxPanel);
 BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
+  EVT_COMBOBOX(ID_COB_PRIORITY, tab_settings::on_priority_selected)
 END_EVENT_TABLE();

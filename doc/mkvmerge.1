@@ -355,7 +355,7 @@ The default is 'zlib' compression.
 Other options:
 .TP
 \fB\-i\fR, \fB\-\-identify\fR <\fIfilename\fR>
-Will let mkvmerge probe the single file and report its type, the tracks
+Will let \fBmkvmerge\fR probe the single file and report its type, the tracks
 contained in the file and their track IDs. If this option is used then the
 only other option allowed is the filename.
 .TP
@@ -365,6 +365,13 @@ Lists supported input file types.
 \fB\-\-list\-languages\fR
 Lists all languages and their ISO639-2 code which can be used with the
 \fB\-\-language\fR option.
+.TP
+\fB\-\-priority\fR <\fIpriority\fR>
+Sets the process priority that \fBmkvmerge\fR runs with. Valid values are
+"lowest", "lower", "normal", "higher" and "highest". If nothing is given then
+"normal" is used. On Unix like systems \fBmkvmerge\fR will use the nice(2)
+function. Therefore only the super user can use "higher" and "highest". On
+Windows all values are useable for every user.
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 Show usage information.

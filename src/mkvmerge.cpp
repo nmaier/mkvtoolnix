@@ -334,6 +334,7 @@ usage() {
     "  -l, --list-types         Lists supported input file types.\n"
     "  --list-languages         Lists all ISO639 languages and their\n"
     "                           ISO639-2 codes.\n"
+    "  --priority <priority>    Set the priority mkvmerge runs with.\n"
     "  -h, --help               Show this help.\n"
     "  -V, --version            Show version information.\n"
     "  @optionsfile             Reads additional command line options from\n"
@@ -1408,6 +1409,60 @@ identify(const char *filename) {
   file->reader->identify();
 }
 
+/** \brief Sets the priority mkvmerge runs with
+ *
+ * Depending on the OS different functions are used. On Unix like systems
+ * the process is being nice'd if priority is negative ( = less important).
+ * Only the super user can increase the priority, but you shouldn't do
+ * such work as root anyway.
+ * On Windows SetPriorityClass is used.
+ */
+static void
+set_process_priority(int priority) {
+#if defined(SYS_WINDOWS)
+  switch (priority) {
+    case -2:
+      SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
+      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_IDLE);
+      break;
+    case -1:
+      SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
+      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
+      break;
+    case 0:
+      SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
+      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+      break;
+    case 1:
+      SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
+      break;
+    case 2:
+      SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+      break;
+  }
+#else
+  switch (priority) {
+    case -2:
+      nice(19);
+      break;
+    case -1:
+      nice(2);
+      break;
+    case 0:
+      nice(0);
+      break;
+    case 1:
+      nice(-2);
+      break;
+    case 2:
+      nice(-5);
+      break;
+  }
+#endif
+}
+
 /** \brief Parses and handles command line arguments
  *
  * Also probes input files for their type and creates the appropriate
@@ -1424,6 +1479,8 @@ identify(const char *filename) {
 static void
 parse_args(int argc,
            char **argv) {
+  const char *process_priorities[5] = {"lowest", "lower", "normal", "higher",
+                                       "highest"};
   track_info_c *ti;
   int i, j;
   filelist_t *file;
@@ -1542,6 +1599,22 @@ parse_args(int argc,
       if (next_arg == NULL)
         mxerror("'--engage' lacks its argument.\n");
       engage_hacks(next_arg);
+      i++;
+
+    } else if (!strcmp(this_arg, "--priority")) {
+      bool found;
+
+      if (next_arg == NULL)
+        mxerror("'--priority' lacks its argument.\n");
+      found = false;
+      for (j = 0; j < 5; j++)
+        if (!strcmp(next_arg, process_priorities[j])) {
+          set_process_priority(j - 2);
+          found = true;
+          break;
+        }
+      if (!found)
+        mxerror("'%s' is not a valid priority class.\n", next_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-q"))
@@ -2123,7 +2196,7 @@ handle_args(int argc,
  *
  * Both platform dependant and independant initialization is done here.
  * For Unix like systems a signal handler is installed. The locale's
- * \c LC_CTYPE is set and the process priority is decreased.
+ * \c LC_CTYPE is set.
  */
 static void
 setup() {
@@ -2136,12 +2209,6 @@ setup() {
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   signal(SIGUSR1, sighandler);
   signal(SIGINT, sighandler);
-
-  nice(2);
-#endif
-#if defined(SYS_WINDOWS)
-  SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
-  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 #endif
 
   srand(time(NULL));

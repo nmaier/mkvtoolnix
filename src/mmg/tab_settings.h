@@ -24,19 +24,22 @@
 
 #define ID_TC_MKVMERGE                     15000
 #define ID_B_BROWSEMKVMERGE                15001
+#define ID_COB_PRIORITY                    15002
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
   DECLARE_EVENT_TABLE();
-protected:
+public:
   wxTextCtrl *tc_mkvmerge;
   wxCheckBox *cb_show_commandline;
+  wxComboBox *cob_priority;
 
 public:
   tab_settings(wxWindow *parent);
   virtual ~tab_settings();
 
   void on_browse(wxCommandEvent &evt);
+  void on_priority_selected(wxCommandEvent &evt);
 
   void load_preferences();
   void save_preferences();
