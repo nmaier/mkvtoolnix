@@ -18,8 +18,12 @@ if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
   sed -e "s!-f Makefile.mingw!!g" < Makefile.mingw.common > Makefile.common
 
   if test "x$1" = "x"; then
-    echo "Creating Makefile.options from Makefile.mingw.options"
-    cp Makefile.mingw.options Makefile.options
+    if [ ! -f Makefile.options ]; then
+      echo "Creating Makefile.options from Makefile.mingw.options"
+      cp Makefile.mingw.options Makefile.options
+    else
+      echo 'Not overwriting Makefile.options.'
+    fi
     echo "Creating config.h from config.h.mingw"
     cp config.h.mingw config.h
     echo ''

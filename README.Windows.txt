@@ -1,7 +1,14 @@
 mkvtoolnix 0.8.1 and Windows
 ----------------------------
 
----[ NOTE ]-----------------------------------------------------------
+---[ NOTE 1 ]---------------------------------------------------------
+Versions after 0.8.1 require a new runtime DLL archive. Please download
+it from http://www.bunkus.org/videotools/mkvtoolnix/
+
+Thanks.
+---[ NOTE 1 ]---------------------------------------------------------
+
+---[ NOTE 2 ]---------------------------------------------------------
 THIS FILE IS OUTDATED!
 I don't use cygwin anymore but mingw. Unfortunately compilation of
 all required libraries is FAR from easy with mingw as almost every
@@ -10,7 +17,7 @@ package needs some kind of patch of specialized Makefile.
 I'll update this file with build instructions for mingw when I
 find the time to do so. They're basically the instructions below
 with some additional steps here and there.
----[ NOTE ]----------------------------------------------------------
+---[ NOTE 2 ]--------------------------------------------------------
 
 Since 2003-05-09 it is possible to compile mkvtoolnix under the cygwin
 environment under Windows. These are some very short build and
