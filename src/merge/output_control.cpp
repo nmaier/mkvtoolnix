@@ -308,8 +308,10 @@ get_file_type(const string &filename) {
     type = FILE_TYPE_AAC;
   else if (vobbtn_reader_c::probe_file(mm_io, size))
     type = FILE_TYPE_VOBBTN;
+  else if (mpeg_ps_reader_c::probe_file(mm_io, size))
+    type = FILE_TYPE_MPEG_PS;
   else if (mpeg_es_reader_c::probe_file(mm_io, size))
-    type = FILE_TYPE_MPEG;
+    type = FILE_TYPE_MPEG_ES;
   else {
     delete mm_io;
 
@@ -1116,8 +1118,11 @@ create_readers() {
         case FILE_TYPE_TTA:
           file->reader = new tta_reader_c(file->ti);
           break;
-        case FILE_TYPE_MPEG:
+        case FILE_TYPE_MPEG_ES:
           file->reader = new mpeg_es_reader_c(file->ti);
+          break;
+        case FILE_TYPE_MPEG_PS:
+          file->reader = new mpeg_ps_reader_c(file->ti);
           break;
         case FILE_TYPE_VOBBTN:
           file->reader = new vobbtn_reader_c(file->ti);

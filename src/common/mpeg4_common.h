@@ -22,6 +22,22 @@
 #define MPEGVIDEO_SEQUENCE_START_CODE             0x000001b3
 /** Start code for a MPEG-1 and -2 packet */
 #define MPEGVIDEO_PACKET_START_CODE               0x000001ba
+#define MPEGVIDEO_SYSTEM_HEADER_START_CODE        0x000001bb
+#define MPEGVIDEO_MPEG_PROGRAM_END_CODE           0x000001b9
+
+#define MPEGVIDEO_START_CODE_PREFIX               0x000001
+#define MPEGVIDEO_PROGRAM_STREAM_MAP              0xbc
+#define MPEGVIDEO_PRIVATE_STREAM_1                0xbd
+#define MPEGVIDEO_PADDING_STREAM                  0xbe
+#define MPEGVIDEO_PRIVATE_STREAM_2                0xbf
+#define MPEGVIDEO_ECM_STREAM                      0xf0
+#define MPEGVIDEO_EMM_STREAM                      0xf1
+#define MPEGVIDEO_PROGRAM_STREAM_DIRECTORY        0xff
+#define MPEGVIDEO_DSMCC_STREAM                    0xf2
+#define MPEGVIDEO_ITUTRECH222TYPEE_STREAM         0xf8
+
+#define mpeg_is_start_code(v) \
+  ((((v) >> 8) & 0xffffff) == MPEGVIDEO_START_CODE_PREFIX)
 
 /** MPEG-1/-2 frame rate: 24000/1001 frames per second */
 #define MPEGVIDEO_FPS_23_976    0x01

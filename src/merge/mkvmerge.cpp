@@ -88,8 +88,9 @@ file_type_t file_types[] =
    {"flac", FILE_TYPE_FLAC, "FLAC lossless audio"},
 #endif
    {"tta ", FILE_TYPE_TTA, "TTA lossless audio"},
-   {"m1v ", FILE_TYPE_MPEG, "MPEG-1 video elementary stream"},
-   {"m2v ", FILE_TYPE_MPEG, "MPEG-2 video elementary stream"},
+   {"m1v ", FILE_TYPE_MPEG_ES, "MPEG-1 video elementary stream"},
+   {"m2v ", FILE_TYPE_MPEG_ES, "MPEG-2 video elementary stream"},
+   {"mpg ", FILE_TYPE_MPEG_PS, "MPEG program stream"},
    {"wv  ", FILE_TYPE_WAVPACK4, "WAVPACK lossless audio"},
    {"output modules:", -1, ""},
    {"    ", -1,      "AAC audio"},

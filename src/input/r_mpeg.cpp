@@ -234,3 +234,212 @@ mpeg_es_reader_c::identify() {
   mxinfo("File '%s': container: MPEG elementary stream (ES)\n" 
          "Track ID 0: video (MPEG %d)\n", ti->fname.c_str(), version);
 }
+
+// ------------------------------------------------------------------------
+
+#define PS_PROBE_SIZE 1024 * 1024
+
+int
+mpeg_ps_reader_c::probe_file(mm_io_c *mm_io,
+                             int64_t size) {
+  try {
+    autofree_ptr<unsigned char> af_buf(safemalloc(PS_PROBE_SIZE));
+    unsigned char *buf = af_buf;
+    int num_read;
+
+    mm_io->setFilePointer(0, seek_beginning);
+    num_read = mm_io->read(buf, PS_PROBE_SIZE);
+    if (num_read < 4)
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+
+    if (get_uint32_be(buf) != MPEGVIDEO_PACKET_START_CODE)
+      return 0;
+
+    return 1;
+
+  } catch (exception &ex) {
+    return 0;
+  }
+}
+
+mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
+  throw (error_c):
+  generic_reader_c(nti) {
+  try {
+    uint32_t header;
+    uint8_t byte;
+    bool streams_found[256], done;
+    int i;
+
+    mm_io = new mm_file_io_c(ti->fname);
+    size = mm_io->get_size();
+
+    bytes_processed = 0;
+
+    memset(streams_found, 0, sizeof(bool) * 256);
+    header = mm_io->read_uint32_be();
+    done = mm_io->eof();
+    version = -1;
+
+    while (!done) {
+      uint8_t stream_id;
+      uint16_t pes_packet_length;
+
+      switch (header) {
+        case MPEGVIDEO_PACKET_START_CODE:
+          mxverb(3, "mpeg_ps: packet start at %lld\n",
+                 mm_io->getFilePointer() - 4);
+
+          if (version == -1) {
+            byte = mm_io->read_uint8();
+            if ((byte & 0xc0) != 0)
+              version = 2;      // MPEG-2 PS
+            else
+              version = 1;
+            mm_io->skip(-1);
+          }
+
+          mm_io->skip(2 * 4);   // pack header
+          if (version == 2) {
+            mm_io->skip(1);
+            byte = mm_io->read_uint8() & 0x07;
+            mm_io->skip(byte);  // stuffing bytes
+          }
+          header = mm_io->read_uint32_be();
+          break;
+
+        case MPEGVIDEO_SYSTEM_HEADER_START_CODE:
+          mxverb(3, "mpeg_ps: system header start code at %lld\n",
+                 mm_io->getFilePointer() - 4);
+
+          mm_io->skip(2 * 4);   // system header
+          byte = mm_io->read_uint8();
+          while ((byte & 0x80) == 0x80) {
+            mm_io->skip(2);     // P-STD info
+            byte = mm_io->read_uint8();
+          }
+          mm_io->skip(-1);
+          header = mm_io->read_uint32_be();
+          break;
+
+        case MPEGVIDEO_MPEG_PROGRAM_END_CODE:
+          done = true;
+          break;
+
+        default:
+          if (!mpeg_is_start_code(header)) {
+            mxverb(3, "mpeg_ps: unknown header 0x%08x at %lld\n",
+                   header, mm_io->getFilePointer() - 4);
+            done = true;
+            break;
+          }
+
+          stream_id = header & 0xff;
+          streams_found[stream_id] = true;
+          pes_packet_length = mm_io->read_uint16_be();
+          mxverb(3, "mpeg_ps: id 0x%02x len %u at %lld\n", stream_id,
+                 pes_packet_length, mm_io->getFilePointer() - 4 - 2);
+
+          switch (stream_id) {
+            
+          }
+
+          mm_io->skip(pes_packet_length);
+
+          header = mm_io->read_uint32_be();
+          while (!mpeg_is_start_code(header) && !mm_io->eof() &&
+                 (mm_io->getFilePointer() < PS_PROBE_SIZE)) {
+            header <<= 8;
+            header |= mm_io->read_uint8();
+          }
+          if (!mpeg_is_start_code(header))
+            done = true;
+
+          break;
+      }
+
+      done |= mm_io->eof() || (mm_io->getFilePointer() >= PS_PROBE_SIZE);
+    } // while (!done)
+
+    mxverb(3, "mpeg_ps: Streams found: ");
+    for (i = 0; i < 256; i++)
+      if (streams_found[i])
+        mxverb(3, "%02x ", i);
+    mxverb(3, "\n");
+
+  } catch (exception &ex) {
+    throw error_c("mpeg_ps_reader: Could not open the file.");
+  }
+  if (verbose)
+    mxinfo(FMT_FN "Using the MPEG PS demultiplexer.\n", ti->fname.c_str());
+}
+
+mpeg_ps_reader_c::~mpeg_ps_reader_c() {
+  delete mm_io;
+}
+
+void
+mpeg_ps_reader_c::create_packetizer(int64_t) {
+}
+
+file_status_e
+mpeg_ps_reader_c::read(generic_packetizer_c *,
+                       bool) {
+  return FILE_STATUS_DONE;
+}
+
+bool
+mpeg_ps_reader_c::read_frame(M2VParser &parser,
+                             mm_io_c &in,
+                             int64_t max_size) {
+//   int bytes_probed;
+
+//   bytes_probed = 0;
+//   while (true) {
+//     int state;
+
+//     state = parser.GetState();
+
+//     if (state == MPV_PARSER_STATE_NEED_DATA) {
+//       unsigned char *buffer;
+//       int bytes_read, bytes_to_read;
+
+//       if ((max_size != -1) && (bytes_probed > max_size))
+//         return false;
+
+//       bytes_to_read = (parser.GetFreeBufferSpace() < READ_SIZE) ?
+//         parser.GetFreeBufferSpace() : READ_SIZE;
+//       buffer = new unsigned char[bytes_to_read];
+//       bytes_read = in.read(buffer, bytes_to_read);
+//       if (bytes_read == 0) {
+//         delete [] buffer;
+//         break;
+//       }
+//       bytes_probed += bytes_read;
+
+//       parser.WriteData(buffer, bytes_read);
+//       delete [] buffer;
+
+//     } else if (state == MPV_PARSER_STATE_FRAME)
+//       return true;
+
+//     else if ((state == MPV_PARSER_STATE_EOS) ||
+//              (state == MPV_PARSER_STATE_ERROR))
+//       return false;
+//   }
+
+  return false;
+}
+
+int
+mpeg_ps_reader_c::get_progress() {
+  return 100 * bytes_processed / size;
+}
+
+void
+mpeg_ps_reader_c::identify() {
+  mxinfo("File '%s': container: MPEG %d program stream (PS)\n",
+         ti->fname.c_str(), version);
+}
+
