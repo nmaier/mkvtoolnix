@@ -74,7 +74,7 @@ mi_frame::mi_frame(const wxString &title, const wxPoint &pos,
   menu_bar = new wxMenuBar();
 
   menu_file->Append(mi_file_open, _T("&Open\tCtrl-O"),
-                    _T("Open a Maotroska file"));
+                    _T("Open a Matroska file"));
   menu_file->Append(mi_file_savetext, _T("&Save info as text\tCtrl-S"),
                     _T("Saves the information from the current file to a "
                        "text file"));
