@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.6 2003/02/19 09:31:24 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.7 2003/02/23 22:51:49 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,7 +35,7 @@ extern "C" {
 #include "p_video.h"
 //#include "p_pcm.h"
 #include "p_mp3.h"
-//#include "p_ac3.h"
+#include "p_ac3.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -299,6 +299,7 @@ avi_reader_c::~avi_reader_c() {
 
 int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   avi_demuxer_t *demuxer, *append_to;
+  WAVEFORMATEX *wfe;
   
   append_to = ademuxers;
   while ((append_to != NULL) && (append_to->next != NULL))
@@ -309,6 +310,7 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
     die("malloc");
   memset(demuxer, 0, sizeof(avi_demuxer_t));
   demuxer->aid = aid;
+  wfe = avi->wave_format_ex[aid];
   switch (AVI_audio_format(avi)) {
     case 0x0001: // raw PCM audio
       if (verbose)
@@ -329,9 +331,8 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-      demuxer->packetizer = new mp3_packetizer_c(avi->wave_format_ex[aid],
-                                                 avi->wave_format_ex[aid] ?
-                                                   sizeof(WAVEFORMATEX) : 0,
+      demuxer->packetizer = new mp3_packetizer_c(wfe, wfe ? wfe->cb_size +
+                                                 sizeof(WAVEFORMATEX) : 0,
                                                  demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
@@ -344,10 +345,12 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-/*      demuxer->packetizer = new ac3_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new ac3_packetizer_c(wfe, wfe ? wfe->cb_size +
+                                                 sizeof(WAVEFORMATEX) : 0,
+                                                 demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
-                                                 &async, &range, comments);*/
+                                                 &async, &range);
       break;
     default:
       fprintf(stderr, "Error: Unknown audio format 0x%04x for audio stream " \
@@ -501,17 +504,17 @@ int avi_reader_c::read() {
           if (nread <= 0)
             demuxer->eos = 1;
           else
-            ((mp3_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);
+            ((mp3_packetizer_c *)demuxer->packetizer)->process(chunk, nread,
+                                                               0);
           
           break;
         case 0x2000: // AC3
           nread = AVI_read_audio(avi, chunk, 16384);
           if (nread <= 0)
             demuxer->eos = 1;
-/*          else
-            ((ac3_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);
-*/
-          
+          else
+            ((ac3_packetizer_c *)demuxer->packetizer)->process(chunk, nread,
+                                                               0);
           break;
       }
     }

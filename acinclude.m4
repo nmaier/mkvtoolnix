@@ -393,7 +393,7 @@ dnl
 AC_DEFUN(PATH_CXXVERSION,
 [dnl 
   AC_MSG_CHECKING($CXX version)
-  CXXVER="`$CXX -v 2>&1 | grep version | sed 's;.*version \([[0-9]]*\)\..*;\1;'`"
+  CXXVER="`$CXX --version 2>&1 | head -n 1 | sed 's;.*\([[0-9]][[0-9]]*\)\.[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*.*;\1;'`"
   CXXVER_CFLAGS=
   if test "x$CXXVER" == "x2"; then
     CXXVER_CFLAGS=-DGCC2

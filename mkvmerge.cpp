@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.9 2003/02/23 21:36:22 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.10 2003/02/23 22:51:49 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -51,6 +51,7 @@
 #include "common.h"
 #include "queue.h"
 #include "r_avi.h"
+#include "r_ac3.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -183,23 +184,23 @@ static int get_type(char *filename) {
   }
   if (avi_reader_c::probe_file(f, size))
     return TYPEAVI;
-/*  else if (wav_reader_c::probe_file(f, size))
-    return TYPEWAV;
-  else if (ogm_reader_c::probe_file(f, size))
-    return TYPEOGM;
-  else if (srt_reader_c::probe_file(f, size))
-    return TYPESRT;
-  else if (mp3_reader_c::probe_file(f, size))
-    return TYPEMP3;
+//   else if (wav_reader_c::probe_file(f, size))
+//     return TYPEWAV;
+//   else if (ogm_reader_c::probe_file(f, size))
+//     return TYPEOGM;
+//   else if (srt_reader_c::probe_file(f, size))
+//     return TYPESRT;
+//   else if (mp3_reader_c::probe_file(f, size))
+//     return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
     return TYPEAC3;
-  else if (microdvd_reader_c::probe_file(f, size))
-    return TYPEMICRODVD;
-  else if (vobsub_reader_c::probe_file(f, size)) 
-    return TYPEVOBSUB;
-  else if (chapter_information_probe(f, size))
-    return TYPECHAPTERS;
-  else*/
+//     else if (microdvd_reader_c::probe_file(f, size))
+//     return TYPEMICRODVD;
+//   else if (vobsub_reader_c::probe_file(f, size)) 
+//     return TYPEVOBSUB;
+//   else if (chapter_information_probe(f, size))
+//     return TYPECHAPTERS;
+  else
     return TYPEUNKNOWN;
 }
 
@@ -622,61 +623,60 @@ static void parse_args(int argc, char **argv) {
             file->reader = new avi_reader_c(file->name, astreams, vstreams,
                                             &async, &range, fourcc);
             break;
-/*          case TYPEWAV:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "WAVE files.\n");
-            file->reader = new wav_reader_c(file->name, &async, &range,
-                                            comments);
-            break;
-          case TYPESRT:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "SRT files.\n");
-            file->reader = new srt_reader_c(file->name, &async, &range,
-                                            comments);
-            break;
-          case TYPEMP3:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "MP3 files.\n");
-            file->reader = new mp3_reader_c(file->name, &async, &range,
-                                            comments);
-            break;
+//           case TYPEWAV:
+//             if ((astreams != NULL) || (vstreams != NULL) ||
+//                 (tstreams != NULL))
+//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+//                       "WAVE files.\n");
+//             file->reader = new wav_reader_c(file->name, &async, &range,
+//                                             comments);
+//             break;
+//           case TYPESRT:
+//             if ((astreams != NULL) || (vstreams != NULL) ||
+//                 (tstreams != NULL))
+//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+//                       "SRT files.\n");
+//             file->reader = new srt_reader_c(file->name, &async, &range,
+//                                             comments);
+//             break;
+//           case TYPEMP3:
+//             if ((astreams != NULL) || (vstreams != NULL) ||
+//                 (tstreams != NULL))
+//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+//                       "MP3 files.\n");
+//             file->reader = new mp3_reader_c(file->name, &async, &range,
+//                                             comments);
+//             break;
           case TYPEAC3:
             if ((astreams != NULL) || (vstreams != NULL) ||
                 (tstreams != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "AC3 files.\n");
-            file->reader = new ac3_reader_c(file->name, &async, &range,
-                                            comments);
+            file->reader = new ac3_reader_c(file->name, &async, &range);
             break;
-          case TYPECHAPTERS:
-            if (chapters != NULL) {
-              fprintf(stderr, "Error: only one chapter file allowed.\n");
-              exit(1);
-            }
-            chapters = chapter_information_read(file->name);
-            break;
-          case TYPEMICRODVD:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "MicroDVD files.\n");
-            file->reader = new microdvd_reader_c(file->name, &async, &range,
-                                                 comments);
-            break;
-          case TYPEVOBSUB:
-            if ((astreams != NULL) || (vstreams != NULL) ||
-                (tstreams != NULL))
-              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-                      "VobSub files.\n");
-            file->reader = new vobsub_reader_c(file->name, &async, &range,
-                                               comments);
-            break;*/
+//           case TYPECHAPTERS:
+//             if (chapters != NULL) {
+//               fprintf(stderr, "Error: only one chapter file allowed.\n");
+//               exit(1);
+//             }
+//             chapters = chapter_information_read(file->name);
+//             break;
+//           case TYPEMICRODVD:
+//             if ((astreams != NULL) || (vstreams != NULL) ||
+//                 (tstreams != NULL))
+//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+//                       "MicroDVD files.\n");
+//             file->reader = new microdvd_reader_c(file->name, &async, &range,
+//                                                  comments);
+//             break;
+//           case TYPEVOBSUB:
+//             if ((astreams != NULL) || (vstreams != NULL) ||
+//                 (tstreams != NULL))
+//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+//                       "VobSub files.\n");
+//             file->reader = new vobsub_reader_c(file->name, &async, &range,
+//                                                comments);
+//             break;
           default:
             fprintf(stderr, "EVIL internal bug! (unknown file type)\n");
             exit(1);

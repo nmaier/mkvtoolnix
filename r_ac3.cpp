@@ -1,30 +1,38 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
-  from component media subtypes
+  mkvmerge -- utility for splicing together matroska files
+      from component media subtypes
 
-  r_ac3.cpp
-  AC3 demultiplexer module
+  r_avi.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
 */
+
+/*!
+    \file
+    \version \$Id: r_ac3.cpp,v 1.2 2003/02/23 22:51:49 mosu Exp $
+    \brief AVI demultiplexer module
+    \author Moritz Bunkus         <moritz @ bunkus.org>
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 
-#include <ogg/ogg.h>
+extern "C" {
+#include <avilib.h>
+}
 
-#include "ogmmerge.h"
-#include "ogmstreams.h"
+#include "common.h"
+#include "error.h"
+#include "mkvmerge.h"
 #include "queue.h"
 #include "r_ac3.h"
-#include "ac3_common.h"
+#include "p_ac3.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -52,8 +60,8 @@ int ac3_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;    
 }
 
-ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync,
-                           range_t *nrange, char **ncomments) throw (error_c) {
+ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync, range_t *nrange)
+  throw (error_c) {
   int          pos;
   ac3_header_t ac3header;
   
@@ -77,10 +85,10 @@ ac3_reader_c::ac3_reader_c(char *fname, audio_sync_t *nasync,
     throw error_c("ac3_reader: No valid AC3 packet found in the first " \
                   "4096 bytes.\n");
   bytes_processed = 0;
-  ac3packetizer = new ac3_packetizer_c(ac3header.sample_rate,
+  ac3packetizer = new ac3_packetizer_c(NULL, 0, ac3header.sample_rate,
                                        ac3header.channels,
                                        ac3header.bit_rate / 1000,
-                                       nasync, nrange, ncomments);
+                                       nasync, nrange);
   if (verbose)
     fprintf(stderr, "Using AC3 demultiplexer for %s.\n+-> Using " \
             "AC3 output module for audio stream.\n", fname);
@@ -99,39 +107,35 @@ int ac3_reader_c::read() {
   int nread, last_frame;
   
   do {
-    if (ac3packetizer->page_available())
+    if (ac3packetizer->packet_available())
       return EMOREDATA;
 
     nread = fread(chunk, 1, 4096, file);
-    if (nread <= 0) {
-      ac3packetizer->produce_eos_packet();
+    if (nread <= 0)
       return 0;
-    }
-    last_frame = (nread == 4096 ? 0 : 1);
+
+    if (nread < 4096)
+      last_frame = 1;
+    else
+      last_frame = 0;
+
     ac3packetizer->process((char *)chunk, nread, last_frame);
     bytes_processed += nread;
 
     if (last_frame)
       return 0;
+
   } while (1);
 }
 
-int ac3_reader_c::serial_in_use(int serial) {
-  return ac3packetizer->serial_in_use(serial);
+packet_t *ac3_reader_c::get_packet() {
+  return ac3packetizer->get_packet();
 }
 
-ogmmerge_page_t *ac3_reader_c::get_header_page(int header_type) {
-  return ac3packetizer->get_header_page(header_type);
-}
-
-ogmmerge_page_t *ac3_reader_c::get_page() {
-  return ac3packetizer->get_page();
-}
-
-void ac3_reader_c::reset() {
-  if (ac3packetizer != NULL)
-    ac3packetizer->reset();
-}
+// void ac3_reader_c::reset() {
+//   if (ac3packetizer != NULL)
+//     ac3packetizer->reset();
+// }
 
 int ac3_reader_c::display_priority() {
   return DISPLAYPRIORITY_HIGH - 1;
