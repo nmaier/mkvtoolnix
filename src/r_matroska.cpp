@@ -1346,41 +1346,41 @@ int kax_reader_c::read(generic_packetizer_c *) {
                 (block_track->sub_type == 't')) {
               mxwarn("Text subtitle block does not "
                      "contain a block duration element. This file is "
-                     "broken.\n");
-            } else {
-
-              last_timecode = block->GlobalTimecode() / 1000000;
-              if (block_bref != VFT_IFRAME)
-                block_bref += (int64_t)last_timecode;
-              if (block_fref != VFT_NOBFRAME)
-                block_fref += (int64_t)last_timecode;
-
-              for (i = 0; i < (int)block->NumberFrames(); i++) {
-                DataBuffer &data = block->GetBuffer(i);
-                if ((block_track->type == 's') &&
-                    (block_track->sub_type == 't')) {
-                  char *lines;
-
-                  lines = (char *)safemalloc(data.Size() + 1);
-                  lines[data.Size()] = 0;
-                  memcpy(lines, data.Buffer(), data.Size());
-                  block_track->packetizer->process((unsigned char *)lines, 0,
-                                                   (int64_t)last_timecode,
-                                                   block_duration,
-                                                   block_bref,
-                                                   block_fref);
-                  safefree(lines);
-                } else
-                  block_track->packetizer->process((unsigned char *)
-                                                   data.Buffer(), data.Size(),
-                                                   (int64_t)last_timecode,
-                                                   block_duration,
-                                                   block_bref,
-                                                   block_fref);
-              }
-              block_track->units_processed += block->NumberFrames();
-
+                     "broken. Assuming a duration of 1000ms.\n");
+              block_duration = 1000;
             }
+
+            last_timecode = block->GlobalTimecode() / 1000000;
+            if (block_bref != VFT_IFRAME)
+              block_bref += (int64_t)last_timecode;
+            if (block_fref != VFT_NOBFRAME)
+              block_fref += (int64_t)last_timecode;
+
+            for (i = 0; i < (int)block->NumberFrames(); i++) {
+              DataBuffer &data = block->GetBuffer(i);
+              if ((block_track->type == 's') &&
+                  (block_track->sub_type == 't')) {
+                char *lines;
+
+                lines = (char *)safemalloc(data.Size() + 1);
+                lines[data.Size()] = 0;
+                memcpy(lines, data.Buffer(), data.Size());
+                block_track->packetizer->process((unsigned char *)lines, 0,
+                                                 (int64_t)last_timecode,
+                                                 block_duration,
+                                                 block_bref,
+                                                 block_fref);
+                safefree(lines);
+              } else
+                block_track->packetizer->process((unsigned char *)
+                                                 data.Buffer(), data.Size(),
+                                                 (int64_t)last_timecode,
+                                                 block_duration,
+                                                 block_bref,
+                                                 block_fref);
+            }
+
+            block_track->units_processed += block->NumberFrames();
           }
 
           found_data = true;
