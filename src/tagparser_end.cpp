@@ -479,7 +479,7 @@ static void end_level4(parser_data_t *pdata, const char *name) {
   parent = (*pdata->parents)[pdata->parents->size() - 2];
 
   if (parent == E_Commercial) {
-    if (!strcmp(name, "Type"))
+    if (!strcmp(name, "CommercialType"))
       el_get_uint(pdata, &GetChild<KaxTagMultiCommercialType>
                   (*pdata->commercial), 1);
     else if (!strcmp(name, "Address"))
@@ -494,7 +494,7 @@ static void end_level4(parser_data_t *pdata, const char *name) {
     }
 
   } else if (parent == E_Date) {
-    if (!strcmp(name, "Type"))
+    if (!strcmp(name, "DateType"))
       el_get_uint(pdata, &GetChild<KaxTagMultiDateType>
                   (*pdata->date), 1);
     else if (!strcmp(name, "Begin"))
@@ -505,7 +505,7 @@ static void end_level4(parser_data_t *pdata, const char *name) {
                   (*pdata->date));
 
   } else if (parent == E_Entity) {
-    if (!strcmp(name, "Type"))
+    if (!strcmp(name, "EntityType"))
       el_get_uint(pdata, &GetChild<KaxTagMultiEntityType>
                   (*pdata->entity), 1);
     else if (!strcmp(name, "Name"))
@@ -520,7 +520,7 @@ static void end_level4(parser_data_t *pdata, const char *name) {
                         (*pdata->entity));
 
   } else if (parent == E_Identifier) {
-    if (!strcmp(name, "Type"))
+    if (!strcmp(name, "IdentifierType"))
       el_get_uint(pdata, &GetChild<KaxTagMultiIdentifierType>
                   (*pdata->identifier), 1);
     else if (!strcmp(name, "Binary"))
@@ -531,7 +531,7 @@ static void end_level4(parser_data_t *pdata, const char *name) {
                         (*pdata->identifier));
 
   } else if (parent == E_Legal) {
-    if (!strcmp(name, "Type"))
+    if (!strcmp(name, "LegalType"))
       el_get_uint(pdata, &GetChild<KaxTagMultiLegalType>
                   (*pdata->legal), 1);
     else if (!strcmp(name, "URL"))
@@ -544,7 +544,7 @@ static void end_level4(parser_data_t *pdata, const char *name) {
                         (*pdata->legal));
 
   } else if (parent == E_Title) {
-    if (!strcmp(name, "Type"))
+    if (!strcmp(name, "TitleType"))
       el_get_uint(pdata, &GetChild<KaxTagMultiTitleType>
                   (*pdata->title), 1);
     else if (!strcmp(name, "Name"))

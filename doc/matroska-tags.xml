@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!--<!doctype Tags system "matroskatags.dtd">-->
+<!DOCTYPE Tags SYSTEM "matroskatags.dtd">
 
 <Tags>
   <Tag>
@@ -71,7 +71,7 @@
 
     <MultiCommercial>
       <Commercial>
-        <Type>1</Type>
+        <CommercialType>1</CommercialType>
         <Address>Address</Address>
         <URL>URL</URL>
         <Email>Email</Email>
@@ -86,7 +86,7 @@
 
     <MultiDate>
       <Date>
-        <Type>2</Type>
+        <DateType>2</DateType>
         <Begin>2003-07-18T20:00:00+0100</Begin>
         <End>2003-07-18T20:00:00+0000</End>
       </Date>
@@ -94,7 +94,7 @@
 
     <MultiEntity>
       <Entity>
-        <Type>3</Type>
+        <EntityType>3</EntityType>
         <Name>Name</Name>
         <URL>URL</URL>
         <Email>Email</Email>
@@ -104,7 +104,7 @@
 
     <MultiIdentifier>
       <Identifier>
-        <Type>4</Type>
+        <IdentifierType>4</IdentifierType>
         <!-- Binary data can also be read from a file. This is indicated
              by the @ as the first character. The rest is the file name.
              The file itself is read as-is and NOT assumed to be Base64
@@ -116,7 +116,7 @@
 
     <MultiLegal>
       <Legal>
-        <Type>3</Type>
+        <LegalType>3</LegalType>
         <URL>URL</URL>
         <Address>Address</Address>
         <Content>(C) Content</Content>
@@ -125,7 +125,7 @@
 
     <MultiTitle>
       <Title>
-        <Type>2</Type>
+        <TitleType>2</TitleType>
         <Name>Name</Name>
         <SubTitle>SubTitle</SubTitle>
         <Edition>Edition</Edition>
@@ -136,7 +136,7 @@
       </Title>
       <!-- Let's test whether a complete second Title entry works. -->
       <Title>
-        <Type>3</Type>
+        <TitleType>3</TitleType>
         <Name>Name2</Name>
         <SubTitle>SubTitle2</SubTitle>
         <Edition>Edition2</Edition>

@@ -540,7 +540,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
 
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "Type")) {
+    if (!strcmp(name, "CommercialType")) {
       check_instances(pdata->commercial, KaxTagMultiCommercialType);
       pdata->parents->push_back(E_CommercialType);
     } else if (!strcmp(name, "Address")) {
@@ -582,7 +582,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
 
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "Type")) {
+    if (!strcmp(name, "DateType")) {
       check_instances(pdata->date, KaxTagMultiDateType);
       pdata->parents->push_back(E_DateType);
     } else if (!strcmp(name, "Begin")) {
@@ -600,7 +600,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
 
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "Type")) {
+    if (!strcmp(name, "EntityType")) {
       check_instances(pdata->entity, KaxTagMultiEntityType);
       pdata->parents->push_back(E_EntityType);
     } else if (!strcmp(name, "Name")) {
@@ -635,7 +635,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
 
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "Type")) {
+    if (!strcmp(name, "IdentifierType")) {
       check_instances(pdata->identifier, KaxTagMultiIdentifierType);
       pdata->parents->push_back(E_IdentifierType);
     } else if (!strcmp(name, "Binary")) {
@@ -653,7 +653,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
 
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "Type")) {
+    if (!strcmp(name, "LegalType")) {
       check_instances(pdata->legal, KaxTagMultiLegalType);
       pdata->parents->push_back(E_LegalType);
     } else if (!strcmp(name, "URL")) {
@@ -679,7 +679,7 @@ static void start_level4(parser_data_t *pdata, const char *name) {
 
     pdata->data_allowed = true;
 
-    if (!strcmp(name, "Type")) {
+    if (!strcmp(name, "TitleType")) {
       check_instances(pdata->title, KaxTagMultiTitleType);
       pdata->parents->push_back(E_TitleType);
     } else if (!strcmp(name, "Name")) {

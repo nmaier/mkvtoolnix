@@ -1,5 +1,5 @@
-<!element Tags (Tag*)>
-<!element Tag (
+<!ELEMENT Tags (Tag*)>
+<!ELEMENT Tag (
           Targets,
           General?,
           Genres?,
@@ -13,14 +13,14 @@
           MultiTitle?,
           MultiComment*)>
 
-<!element Targets (
+<!ELEMENT Targets (
           TrackUID*,
           ChapterUID*,
           MultiComment*)>
-<!element TrackUID (#PCDATA)>
-<!element ChapterUID (#PCDATA)>
+<!ELEMENT TrackUID (#PCDATA)>
+<!ELEMENT ChapterUID (#PCDATA)>
 
-<!element General (
+<!ELEMENT General (
           Subject?,
           Bibliography?,
           Language?,
@@ -39,34 +39,34 @@
           PlayCounter?,
           Popularimeter?,
           MultiComment*)>
-<!element Subject (#PCDATA)>
-<!element Biography (#PCDATA)>
-<!element Language (#PCDATA)>
-<!element Rating (#PCDATA)>
-<!element Encoder (#PCDATA)>
-<!element EncodeSettings (#PCDATA)>
-<!element File (#PCDATA)>
-<!element ArchivalLocation (#PCDATA)>
-<!element Keywords (#PCDATA)>
-<!element Mood (#PCDATA)>
-<!element RecordLocation (#PCDATA)>
-<!element Source (#PCDATA)>
-<!element SourceForm (#PCDATA)>
-<!element Product (#PCDATA)>
-<!element OriginalMediaType (#PCDATA)>
-<!element PlayCounter (#PCDATA)>
-<!element Popularimeter (#PCDATA)>
+<!ELEMENT Subject (#PCDATA)>
+<!ELEMENT Biography (#PCDATA)>
+<!ELEMENT Language (#PCDATA)>
+<!ELEMENT Rating (#PCDATA)>
+<!ELEMENT Encoder (#PCDATA)>
+<!ELEMENT EncodeSettings (#PCDATA)>
+<!ELEMENT File (#PCDATA)>
+<!ELEMENT ArchivalLocation (#PCDATA)>
+<!ELEMENT Keywords (#PCDATA)>
+<!ELEMENT Mood (#PCDATA)>
+<!ELEMENT RecordLocation (#PCDATA)>
+<!ELEMENT Source (#PCDATA)>
+<!ELEMENT SourceForm (#PCDATA)>
+<!ELEMENT Product (#PCDATA)>
+<!ELEMENT OriginalMediaType (#PCDATA)>
+<!ELEMENT PlayCounter (#PCDATA)>
+<!ELEMENT Popularimeter (#PCDATA)>
 
-<!element Genres (
+<!ELEMENT Genres (
           AudioGenre*,
           VideoGenre*,
           SubGenre?,
           MultiComment*)>
-<!element AudioGenre (#PCDATA)>
-<!element VideoGenre (#PCDATA)>
-<!element SubGenre (#PCDATA)>
+<!ELEMENT AudioGenre (#PCDATA)>
+<!ELEMENT VideoGenre (#PCDATA)>
+<!ELEMENT SubGenre (#PCDATA)>
 
-<!element AudioSpecific (
+<!ELEMENT AudioSpecific (
           AudioEncryption?,
           AudioGain?,
           AudioPeak?,
@@ -78,18 +78,18 @@
           OfficialAudioFileURL?,
           OfficialAudioSourceURL?,
           MultiComment*)>
-<!element AudioEncryption (#PCDATA)>
-<!element AudioGain (#PCDATA)>
-<!element AudioPeak (#PCDATA)>
-<!element BPM (#PCDATA)>
-<!element Equalisation (#PCDATA)>
-<!element DiscTrack (#PCDATA)>
-<!element SetPart (#PCDATA)>
-<!element InitialKey (#PCDATA)>
-<!element OfficialAudioFileURL (#PCDATA)>
-<!element OfficialAudioSourceURL (#PCDATA)>
+<!ELEMENT AudioEncryption (#PCDATA)>
+<!ELEMENT AudioGain (#PCDATA)>
+<!ELEMENT AudioPeak (#PCDATA)>
+<!ELEMENT BPM (#PCDATA)>
+<!ELEMENT Equalisation (#PCDATA)>
+<!ELEMENT DiscTrack (#PCDATA)>
+<!ELEMENT SetPart (#PCDATA)>
+<!ELEMENT InitialKey (#PCDATA)>
+<!ELEMENT OfficialAudioFileURL (#PCDATA)>
+<!ELEMENT OfficialAudioSourceURL (#PCDATA)>
 
-<!element ImageSpecific (
+<!ELEMENT ImageSpecific (
           CaptureDPI?,
           CaptureLightness?,
           CapturePaletteSetting?,
@@ -97,74 +97,77 @@
           Cropped?,
           OriginalDimensions,
           MultiComment*)>
-<!element CaptureDPI (#PCDATA)>
-<!element CaptureLightness (#PCDATA)>
-<!element CapturePaletteSetting (#PCDATA)>
-<!element CaptureSharpness (#PCDATA)>
-<!element Cropped (#PCDATA)>
-<!element OriginalDimensions (#PCDATA)>
+<!ELEMENT CaptureDPI (#PCDATA)>
+<!ELEMENT CaptureLightness (#PCDATA)>
+<!ELEMENT CapturePaletteSetting (#PCDATA)>
+<!ELEMENT CaptureSharpness (#PCDATA)>
+<!ELEMENT Cropped (#PCDATA)>
+<!ELEMENT OriginalDimensions (#PCDATA)>
 
-<!element MultiCommercial (Commercial+)>
-<!element Commercial(
-          Type,
+<!ELEMENT MultiCommercial (Commercial+)>
+<!ELEMENT Commercial(
+          CommercialType,
           Address?,
           URL*,
           Email*,
           MultiPrice*,
           MultiComment*)>
-<!element Type (#PCDATA)>
-<!element Address (#PCDATA)>
-<!element URL (#PCDATA)>
-<!element Email (#PCDATA)>
-<!element MultiPrice (
+<!ELEMENT CommercialType (#PCDATA)>
+<!ELEMENT Address (#PCDATA)>
+<!ELEMENT URL (#PCDATA)>
+<!ELEMENT Email (#PCDATA)>
+<!ELEMENT MultiPrice (
           Currency?,
           Amount?,
           PriceDate?,
           MultiComment*)>
-<!element Currency (#PCDATA)>
-<!element Amount (#PCDATA)>
-<!element PriceDate (#PCDATA)>
+<!ELEMENT Currency (#PCDATA)>
+<!ELEMENT Amount (#PCDATA)>
+<!ELEMENT PriceDate (#PCDATA)>
 
-<!element MultiDate (Date+)>
-<!element Date (
-          Type,
+<!ELEMENT MultiDate (Date+)>
+<!ELEMENT Date (
+          DateType,
           Begin?,
           End?,
           MultiComment*)>
-<!element Begin (#PCDATA)>
-<!element End (#PCDATA)>
+<!ELEMENT DateType (#PCDATA)>
+<!ELEMENT Begin (#PCDATA)>
+<!ELEMENT End (#PCDATA)>
 
-<!element MultiEntity (Entity+)>
-<!element Entity (
+<!ELEMENT MultiEntity (Entity+)>
+<!ELEMENT Entity (
           EntityType,
           Name?,
           URL*,
           Email*,
           Address?,
           MultiComment*)>
-<!element EntityType (#PCDATA)>
-<!element Name (#PCDATA)>
+<!ELEMENT EntityType (#PCDATA)>
+<!ELEMENT Name (#PCDATA)>
 
-<!element MultiIdentifier (Identifier+)>
-<!element Identifier (
-          Type,
+<!ELEMENT MultiIdentifier (Identifier+)>
+<!ELEMENT Identifier (
+          IdentifierType,
           Binary?,
           String?,
           MultiComment*)>
-<!element Binary (#PCDATA)>
-<!element String (#PCDATA)>
+<!ELEMENT IdentifierType (#PCDATA)>
+<!ELEMENT Binary (#PCDATA)>
+<!ELEMENT String (#PCDATA)>
 
-<!element MultiLegal (Legal+)>
-<!element Legal (
-          Type,
+<!ELEMENT MultiLegal (Legal+)>
+<!ELEMENT Legal (
+          LegalType,
           URL*,
           Address?,
           Content?,
           MultiComment*)>
-<!element Content (#PCDATA)>
+<!ELEMENT LegalType (#PCDATA)>
+<!ELEMENT Content (#PCDATA)>
 
-<!element MultiTitle (Title+)>
-<!element Title (
+<!ELEMENT MultiTitle (Title+)>
+<!ELEMENT Title (
           TitleType,
           Name?,
           SubTitle?,
@@ -174,11 +177,12 @@
           Email*,
           Language?,
           MultiComment*)>
-<!element SubTitle (#PCDATA)>
-<!element Edition (#PCDATA)>
+<!ELEMENT TitleType (#PCDATA)>
+<!ELEMENT SubTitle (#PCDATA)>
+<!ELEMENT Edition (#PCDATA)>
 
-<!element MultiComment (
+<!ELEMENT MultiComment (
           Name?,
           Comments,
           Language?)>
-<!element Comments (#PCDATA)>
+<!ELEMENT Comments (#PCDATA)>

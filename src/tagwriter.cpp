@@ -156,7 +156,7 @@ static void handle_level4(EbmlElement *e) {
   int i, level = 4;
 
   if (is_id(KaxTagMultiCommercialType))
-    pr_ui("Type");
+    pr_ui("CommercialType");
 
   else if (is_id(KaxTagMultiCommercialAddress))
     pr_us("Address");
@@ -174,7 +174,7 @@ static void handle_level4(EbmlElement *e) {
     mxprint(o, "        </MultiPrice>\n");
 
   } else if (is_id(KaxTagMultiDateType))
-    pr_ui("Type");
+    pr_ui("DateType");
 
   else if (is_id(KaxTagMultiDateDateBegin))
     pr_d("Begin");
@@ -183,7 +183,7 @@ static void handle_level4(EbmlElement *e) {
     pr_d("End");
 
   else if (is_id(KaxTagMultiEntityType))
-    pr_ui("Type");
+    pr_ui("EntityType");
 
   else if (is_id(KaxTagMultiEntityName))
     pr_us("Name");
@@ -207,7 +207,7 @@ static void handle_level4(EbmlElement *e) {
     pr_us("String");
 
   else if (is_id(KaxTagMultiLegalType))
-    pr_ui("Type");
+    pr_ui("LegalType");
 
   else if (is_id(KaxTagMultiLegalURL))
     pr_s("URL");
@@ -219,7 +219,7 @@ static void handle_level4(EbmlElement *e) {
     pr_us("Content");
 
   else if (is_id(KaxTagMultiTitleType))
-    pr_ui("Type");
+    pr_ui("TitleType");
 
   else if (is_id(KaxTagMultiTitleName))
     pr_us("Name");
@@ -379,7 +379,7 @@ static void handle_level3(EbmlElement *e) {
     mxprint(o, "      <Entity>\n");
     for (i = 0; i < ((EbmlMaster *)e)->ListSize(); i++)
       handle_level4((*(EbmlMaster *)e)[i]);
-    mxprint(o, "      </Enetity>\n");
+    mxprint(o, "      </Entity>\n");
 
   } else if (is_id(KaxTagIdentifier)) {
     mxprint(o, "      <Identifier>\n");
