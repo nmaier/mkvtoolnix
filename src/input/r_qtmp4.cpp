@@ -176,7 +176,7 @@ void qtmp4_reader_c::parse_headers() {
       tmp = io->read_uint32_be();
       mxverb(2, PFX "  File type major brand: %c%c%c%c\n", BE2STR(tmp));
       tmp = io->read_uint32_be();
-      mxverb(2, PFX "  File type minor brand: %c%c%c%c\n", BE2STR(tmp));
+      mxverb(2, PFX "  File type minor brand: 0x%08x\n", tmp);
       for (i = 0; i < ((atom_size - 16) / 4); i++) {
         tmp = io->read_uint32();
         mxverb(2, PFX "  File type compatible brands #%d: %.4s\n", i, &tmp);
@@ -1083,6 +1083,12 @@ void qtmp4_reader_c::create_packetizer(int64_t tid) {
             sbraac = true;
             mxverb(2, ", SBR sample_rate_idx: %d", osrate_idx);
             profile = AAC_PROFILE_SBR;
+          } else if (aac_sampling_freq[srate_idx] < 44100) {
+            sbraac = true;
+            profile = AAC_PROFILE_SBR;
+            osrate_idx =
+              get_aac_sampling_freq_idx(aac_sampling_freq[srate_idx] * 2);
+            mxverb(2, ", implicit SBR sample_rate_idx: %d", osrate_idx);
           } else
             sbraac = false;
           mxverb(2, "\n");

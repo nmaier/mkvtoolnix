@@ -1,3 +1,10 @@
+2003-12-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: There are MP4 files that actually contain HE-AAC but
+	don't have the 5 byte identifier. mkvmerge will also assume SBR if
+	there's only the 2 byte identifier with a sampling frequency <
+	44100Hz.
+
 2003-12-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Wrong display output and illegal memory

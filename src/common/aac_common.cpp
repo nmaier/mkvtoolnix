@@ -181,3 +181,13 @@ int find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header,
 
   return -1;
 }
+
+int get_aac_sampling_freq_idx(int sampling_freq) {
+  int i;
+
+  for (i = 0; i < 16; i++)
+    if (sampling_freq >= (aac_sampling_freq[i] - 1000))
+      return i;
+
+  return 0;                     // should never happen
+}
