@@ -279,6 +279,8 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
   wxString s;
   const char *status;
 
+  process_input();
+
   ndx = jobs_to_start[current_job];
   exit_code = evt.GetExitCode();
   if (abort) {

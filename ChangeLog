@@ -1,3 +1,8 @@
+2004-06-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The job manager did not always catch all of
+	mkvmerge's output, especially if a job failed.
+
 2004-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: new feature: --track-order now controls the track
