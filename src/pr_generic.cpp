@@ -728,8 +728,8 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   // case we have the coding order, e.g. IPB1B2 and the timecodes
   // I: 0, P: 120, B1: 40, B2: 80.
   if ((timecode < safety_last_timecode) && (fref < 0))
-    die("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-        "last_timecode (%lld < %lld)", timecode, safety_last_timecode);
+    mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
+           "last_timecode (%lld < %lld)", timecode, safety_last_timecode);
   safety_last_timecode = timecode;
 
   pack = (packet_t *)safemalloc(sizeof(packet_t));
