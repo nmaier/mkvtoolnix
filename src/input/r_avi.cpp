@@ -255,6 +255,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
                                         demuxer.channels,
                                         demuxer.bits_per_sample, ti);
       break;
+    case 0x0050: // MP2
     case 0x0055: // MP3
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname,
@@ -586,6 +587,9 @@ avi_reader_c::identify() {
     switch (AVI_audio_format(avi)) {
       case 0x0001:
         type = "PCM";
+        break;
+      case 0x0050:
+        type = "MP2";
         break;
       case 0x0055:
         type = "MP3";
