@@ -13,6 +13,8 @@
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */
 
+#include <ctype.h>
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
