@@ -1,24 +1,25 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
-  from component media subtypes
+  mkvmerge -- utility for splicing together matroska files
+      from component media subtypes
 
-  ac3common.cpp
-  AC3 header decoding functions
+  ac3_common.h
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
 */
+
+/*!
+    \file
+    \version \$Id: ac3_common.h,v 1.2 2003/02/16 17:04:38 mosu Exp $
+    \brief definitions and helper functions for AC3 data
+    \author Moritz Bunkus         <moritz @ bunkus.org>
+*/
+
 #ifndef __AC3COMMON_H
 #define __AC3COMMON_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #define A52_CHANNEL 0
 #define A52_MONO 1
@@ -45,8 +46,5 @@ typedef struct {
 
 int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header);
 
-#ifdef __cplusplus
-}
-#endif
+#endif // __AC3COMMON_H
 
-#endif

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.2 2003/02/16 12:17:10 mosu Exp $
+    \version \$Id: queue.cpp,v 1.3 2003/02/16 17:04:39 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -71,6 +71,7 @@ int q_c::add_packet(char *data, int length, u_int64_t timestamp,
   qpage->pack->length = length;
   qpage->pack->timestamp = timestamp;
   qpage->pack->is_key = is_key;
+  qpage->pack->source = this;
   qpage->next = NULL;
   if (current != NULL)
     current->next = qpage;

@@ -1,17 +1,21 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
+  mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
   mp3_common.cpp
-  common routines for MP3 handling
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: mp3_common.cpp,v 1.2 2003/02/16 17:04:38 mosu Exp $
+    \brief helper functions for MP3 data
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include "mp3_common.h"

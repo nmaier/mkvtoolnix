@@ -13,13 +13,13 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.3 2003/02/16 12:17:10 mosu Exp $
+    \version \$Id: common.h,v 1.4 2003/02/16 17:04:38 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __COMMON_H
+#define __COMMON_H
 
 #define VERSION "0.0.1"
 #define VERSIONINFO "mkvmerge v" VERSION
@@ -67,6 +67,10 @@ typedef double stamp_t;
 #define die(s) _die(s, __FILE__, __LINE__)
 void _die(const char *s, const char *file, int line);
 
-extern int verbose;
+char *map_video_codec_fourcc(char *fourcc, int *set_codec_private);
+char *map_audio_codec_id(int id, int bps, int *set_codec_private);
 
-#endif // __COMMON_H__
+extern int verbose;
+extern float video_fps;
+
+#endif // __COMMON_H

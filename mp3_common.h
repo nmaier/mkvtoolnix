@@ -1,25 +1,25 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
+  mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
   mp3_common.h
-  common routines for MP3 handling
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
+/*!
+    \file
+    \version \$Id: mp3_common.h,v 1.2 2003/02/16 17:04:38 mosu Exp $
+    \brief helper functions for MP3 data
+    \author Moritz Bunkus         <moritz @ bunkus.org>
+*/
+
 #ifndef __MP3_COMMON_H
 #define __MP3_COMMON_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int mp3_tabsel[2][16];
 extern long mp3_freqs[9];
@@ -39,10 +39,5 @@ typedef struct {
 
 int find_mp3_header(char *buf, int size, unsigned long *_header);
 void decode_mp3_header(unsigned long header, mp3_header_t *h);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif

@@ -6,11 +6,15 @@ SUBDIRS = avilib
 
 bin_PROGRAMS = mkvmerge
 
-mkvmerge_SOURCES = mkvmerge.cpp \
+mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
+			ac3_common.cpp ac3_common.h \
 			common.cpp common.h \
+			mp3_common.cpp mp3_common.h \
+			p_mp3.cpp p_mp3.h \
+			p_video.cpp p_video.h \
 			queue.cpp queue.h \
-			r_generic.h p_generic.h \
-			r_avi.cpp r_avi.h
+			r_avi.cpp r_avi.h \
+			rp_generic.h
 
 #mkvmerge_LDADD = @OGG_LIBS@ @VORBIS_LIBS@ @VORBISENC_LIBS@ @AVILIB_LIBS@ \
 #		@DMALLOC_LIBS@ @PROFILING_LIBS@ @MATROSKA_LIBS@

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.4 2003/02/16 12:17:10 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.5 2003/02/16 17:04:38 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -75,11 +75,15 @@ typedef struct filelist_tag {
 } filelist_t;
 
 char *outfile = NULL;
-filelist_t *input;
+filelist_t *input= NULL;
 int create_index = 0;
 int force_flushing = 0;
 
 float video_fps = -1.0;
+
+KaxTracks     *kax_tracks;
+KaxTrackEntry *kax_last_entry;
+int            track_number = 1;
 
 /*int                  idx_num = 0;
 int                 *idx_serials = NULL;
@@ -152,13 +156,6 @@ static void usage(void) {
     "  -h, --help               Show this help.\n"
     "  -V, --version            Show version information.\n"
   );
-}
-
-static void set_defaults(void) {
-  /* set defaults */
-  outfile = NULL;
-  input = NULL;
-  verbose = 1;
 }
 
 static int get_type(char *filename) {
@@ -565,8 +562,8 @@ static void parse_args(int argc, char **argv) {
           case TYPEAVI:
             if (tstreams != NULL)
               fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
-            file->reader = new avi_reader_c(file->name);/*, astreams, vstreams,
-                                            &async, &range, comments, fourcc);*/
+            file->reader = new avi_reader_c(file->name, astreams, vstreams,
+                                            &async, &range, fourcc);
             break;
 /*          case TYPEWAV:
             if ((astreams != NULL) || (vstreams != NULL) ||
@@ -748,26 +745,24 @@ void add_to_index(int serial, ogg_int64_t granulepos, int64_t filepos) {
   idx_num_entries[i]++;
 }*/
 
-int write_packet(packet_t *pack, filelist_t *file) {
-/*  ogg_page *page;
-  off_t bytes;
+int write_packet(packet_t *pack, filelist_t *file, StdIOCallback *out) {
+  KaxCluster cluster;
+  KaxClusterTimecode &timecode = GetChild<KaxClusterTimecode>(cluster);
+  *(static_cast<EbmlUInteger *>(&timecode)) = 0;
   
-  page = mpage->og;
+  KaxBlockGroup &block_group = GetChild<KaxBlockGroup>(cluster);
+  KaxBlock &block = GetChild<KaxBlock>(block_group);
+  DataBuffer data = DataBuffer((binary *)pack->data, pack->length);
+  KaxTrackEntry &track_entry =
+    static_cast<KaxTrackEntry &>(*pack->source->track_entry);
+  block.AddFrame(track_entry, pack->timestamp, data);
+
+  cluster.Render(static_cast<StdIOCallback &>(*out));
+
   if (verbose > 1)
-    fprintf(stdout, "%f (timestamp) written %spage for %s\n",
-            mpage->timestamp, s, (file != NULL) ? file->name : "an index");
-  bytes = fwrite(page->header, 1, page->header_len, out);
-  if (bytes != page->header_len) {
-    fprintf(stderr, "Error: Output error writing to %s: %d (%s).\n",
-            outfile, errno, strerror(errno));
-    return 1;
-  }
-  bytes = fwrite(page->body, 1, page->body_len, out);
-  if (bytes != page->body_len) {
-    fprintf(stderr, "Error: Output error writing to %s: %d (%s).\n",
-            outfile, errno, strerror(errno));
-    return 1;
-  }*/
+    fprintf(stdout, "timestamp %llu, size %d, written packet for %s (%s)\n",
+            pack->timestamp, pack->length, file->name,
+            typeid(*pack->source).name());
 
   free(pack->data);
   free(pack);
@@ -793,14 +788,15 @@ int main(int argc, char **argv) {
   KaxSegment kax_segment;
 //  KaxTracks &kax_tracks;
   filelist_t *file, *winner;
-  int first_pages = 1;
   packet_t *pack;
-  int i, result;
+  int result;
   StdIOCallback *out;
 
   nice(2);
 
-  set_defaults();
+  kax_tracks = &GetChild<KaxTracks>(kax_segment);
+  kax_last_entry = NULL;
+  
   parse_args(argc, argv);
   
   /* open output file */
@@ -814,6 +810,7 @@ int main(int argc, char **argv) {
   try {
     render_head(out);
     kax_segment.Render(static_cast<StdIOCallback &>(*out));
+    kax_tracks->Render(static_cast<StdIOCallback &>(*out));
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Could not render the file header.\n");
     exit(1);
@@ -864,13 +861,13 @@ int main(int argc, char **argv) {
       add_to_index(mpage->index_serial, ogg_page_granulepos(page), ftell(out));
     if ((result = write_ogg_page(mpage, "", file)) != 0)
       exit(result);*/
-    if ((result = write_packet(pack, file)) != 0)
+    if ((result = write_packet(pack, winner, out)) != 0)
       exit(result);
     
     winner->pack = NULL;
     
     /* display some progress information */
-    if (verbose == 1)
+    if (verbose >= 1)
       display_progress(0);
   }
 

@@ -13,13 +13,13 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.4 2003/02/16 12:17:11 mosu Exp $
+    \version \$Id: r_avi.h,v 1.5 2003/02/16 17:04:39 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#ifndef __R_AVI_H__
-#define __R_AVI_H__
+#ifndef __R_AVI_H
+#define __R_AVI_H
 
 #include <stdio.h>
 
@@ -27,10 +27,10 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "r_generic.h"
-#include "p_generic.h"
+#include "pr_generic.h"
 #include "common.h"
 #include "error.h"
+#include "p_video.h"
 
 #define RAVI_UNKNOWN 0
 #define RAVI_DIVX3   1
@@ -49,8 +49,7 @@ class avi_reader_c: public generic_reader_c {
   private:
     char               *chunk;
     avi_t              *avi;
-//    video_packetizer_c *vpacketizer;
-    generic_packetizer_c *vpacketizer;
+    video_packetizer_c *vpacketizer;
     avi_demuxer_t      *ademuxers;
     double              fps;
     int                 frames;
@@ -66,11 +65,9 @@ class avi_reader_c: public generic_reader_c {
     int                 is_divx, rederive_keyframes;
      
   public:
-//    avi_reader_c(char *fname, unsigned char *astreams,
-//                 unsigned char *vstreams, audio_sync_t *nasync,
-//                 range_t *nrange, char **ncomments, char *nfourcc)
-//                 throw (error_c);
-    avi_reader_c(char *fname) throw (error_c);
+    avi_reader_c(char *fname, unsigned char *astreams,
+                 unsigned char *vstreams, audio_sync_t *nasync,
+                 range_t *nrange, char *nfourcc) throw (error_c);
     virtual ~avi_reader_c();
 
     virtual int       read();
@@ -87,4 +84,4 @@ class avi_reader_c: public generic_reader_c {
                                   int suggestion);
 };
 
-#endif  /* __R_AVI_H__*/
+#endif  // __R_AVI_H

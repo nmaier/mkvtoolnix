@@ -13,17 +13,16 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.2 2003/02/16 12:17:11 mosu Exp $
+    \version \$Id: queue.h,v 1.3 2003/02/16 17:04:39 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#ifndef __QUEUE_H__
-#define __QUEUE_H__
+#ifndef __QUEUE_H
+#define __QUEUE_H
 
 #include "error.h"
-#include "r_generic.h"
-#include "p_generic.h"
+#include "pr_generic.h"
 
 // q_page_t is used internally only
 typedef struct q_page {
@@ -41,7 +40,7 @@ class q_c: public generic_packetizer_c {
     virtual ~q_c();
     
     virtual int              add_packet(char *data, int lenth,
-                                        u_int64_t timestamp, int is_key);
+                                        u_int64_t timestamp, int is_key = 0);
     virtual packet_t        *get_packet();
     virtual int              packet_available();
     virtual stamp_t          get_smallest_timestamp();
@@ -49,4 +48,4 @@ class q_c: public generic_packetizer_c {
     virtual long             get_queued_bytes();
 };
 
-#endif  /* __QUEUE_H__ */
+#endif  // __QUEUE_H

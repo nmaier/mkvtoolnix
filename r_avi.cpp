@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.3 2003/02/16 12:17:11 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.4 2003/02/16 17:04:39 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,9 +32,9 @@ extern "C" {
 #include "mkvmerge.h"
 #include "queue.h"
 #include "r_avi.h"
-//#include "p_video.h"
+#include "p_video.h"
 //#include "p_pcm.h"
-//#include "p_mp3.h"
+#include "p_mp3.h"
 //#include "p_ac3.h"
 
 #ifdef DMALLOC
@@ -61,11 +61,10 @@ int avi_reader_c::probe_file(FILE *file, u_int64_t size) {
  * allocates and initializes local storage for a particular
  * substream conversion.
  */
-/*avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
+avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
                            unsigned char *vstreams, audio_sync_t *nasync,
-                           range_t *nrange, char **ncomments, char *nfourcc)
-                           throw (error_c) {*/
-avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
+                           range_t *nrange, char *nfourcc)
+                           throw (error_c) {
   int            fsize, i;
   u_int64_t      size;
   FILE          *f;
@@ -102,7 +101,7 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
     throw error_c(s);
   }
   
-/*  if (astreams != NULL)
+  if (astreams != NULL)
     this->astreams = (unsigned char *)strdup((char *)astreams);
   else
     this->astreams = NULL;
@@ -111,14 +110,14 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
   else
     this->vstreams = NULL;
 
-  if (ncomments == NULL)
+/*  if (ncomments == NULL)
     comments = ncomments;
   else
     comments = dup_comments(ncomments);*/
     
   fps = AVI_frame_rate(avi);
-/*  if (video_fps < 0)
-    video_fps = fps;*/
+  if (video_fps < 0)
+    video_fps = fps;
   frames = 0;
   fsize = 0;
   maxframes = AVI_video_frames(avi);
@@ -127,7 +126,7 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
       fsize = AVI_frame_size(avi, i);
   max_frame_size = fsize;
 
-/*  if (vstreams != NULL) {
+  if (vstreams != NULL) {
     extract_video = 0;
     for (i = 0; i < strlen((char *)vstreams); i++) {
       if (vstreams[i] > 1)
@@ -137,7 +136,7 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
         extract_video = 1;
     }
   }
-  if (extract_video) {*/
+  if (extract_video) {
     codec = AVI_video_compressor(avi);
     if (!strcasecmp(codec, "DIV3") ||
         !strcasecmp(codec, "AP41") || // Angel Potion
@@ -153,22 +152,22 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
     else
       is_divx = 0;
 
-/*    if (nfourcc != NULL)
-      codec = nfourcc;*/
-/*    vpacketizer = new video_packetizer_c(codec, AVI_frame_rate(avi),
+    if (nfourcc != NULL)
+      codec = nfourcc;
+    vpacketizer = new video_packetizer_c(codec, AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
-                                         fsize, NULL, nrange, comments);*/
+                                         fsize, NULL, nrange, 1);
     if (verbose)
       fprintf(stderr, "+-> Using video output module for video stream.\n");
-/*  } else
+  } else
     vpacketizer = NULL;
 
   memcpy(&async, nasync, sizeof(audio_sync_t));
-  memcpy(&range, nrange, sizeof(range_t));*/
+  memcpy(&range, nrange, sizeof(range_t));
   ademuxers = NULL;
-/*  if (astreams != NULL) { // use only specific audio streams (or none at all)
+  if (astreams != NULL) { // use only specific audio streams (or none at all)
     for (i = 0; i < strlen((char *)astreams); i++) {
       if (astreams[i] > AVI_audio_tracks(avi))
         fprintf(stderr, "Warning: avi_reader: the AVI does not contain an " \
@@ -205,7 +204,7 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
     demuxer = demuxer->next;
   }
   max_frame_size = fsize;
-  chunk = (char *)malloc(fsize);
+  chunk = (char *)malloc(fsize < 16384 ? 16384 : fsize);
   if (chunk == NULL)
     die("malloc");
   act_wchar = 0;
@@ -217,26 +216,24 @@ avi_reader_c::avi_reader_c(char *fname) throw (error_c) {
 avi_reader_c::~avi_reader_c() {
   struct avi_demuxer_t *demuxer, *tmp;
   
-/*  if (astreams != NULL)
+  if (astreams != NULL)
     free(astreams);
   if (vstreams != NULL)
-    free(vstreams);*/
+    free(vstreams);
   if (avi != NULL)
     AVI_close(avi);
   if (chunk != NULL)
     free(chunk);
-/*  if (vpacketizer != NULL)
-    delete vpacketizer;*/
+  if (vpacketizer != NULL)
+    delete vpacketizer;
   demuxer = ademuxers;
   while (demuxer) {
-/*    if (demuxer->packetizer != NULL)
-      delete demuxer->packetizer;*/
+    if (demuxer->packetizer != NULL)
+      delete demuxer->packetizer;
     tmp = demuxer->next;
     free(demuxer);
     demuxer = tmp;
   }
-/*  if (comments != NULL)
-    free_comments(comments);*/
   if (old_chunk != NULL)
     free(old_chunk);
 }
@@ -273,10 +270,10 @@ int avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
-/*      demuxer->packetizer = new mp3_packetizer_c(demuxer->samples_per_second,
+      demuxer->packetizer = new mp3_packetizer_c(demuxer->samples_per_second,
                                                  demuxer->channels,
                                                  demuxer->bits_per_sample,
-                                                 &async, &range, comments);*/
+                                                 &async, &range);
       break;
     case 0x2000: // AC3
       if (verbose)
@@ -338,11 +335,11 @@ int avi_reader_c::read() {
   int done, frames_read;
   
   need_more_data = 0;
-  if (/*(vpacketizer != NULL) &&*/ !video_done) {
+  if ((vpacketizer != NULL) && !video_done) {
 /*    if (frames == 0)
       vpacketizer->set_chapter_info(chapter_info);*/
     last_frame = 0;
-    while (/*!vpacketizer->page_available() &&*/ !last_frame) {
+    while (!vpacketizer->packet_available() && !last_frame) {
       done = 0;
       
       // Make sure we have a frame to work with.
@@ -354,7 +351,6 @@ int avi_reader_c::read() {
           exit(1);
         }
         if (nread < 0) {
-//          vpacketizer->flush_pages();
           frames = maxframes + 1;
           break;
         }
@@ -378,7 +374,7 @@ int avi_reader_c::read() {
           exit(1);
         }
         if (nread < 0) {
-//          vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 1);
+          vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 1);
           frames = maxframes + 1;
           break;
         }
@@ -394,7 +390,7 @@ int avi_reader_c::read() {
         frames++;
       }
       if (nread > 0) {
-//        vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 0);
+        vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 0);
         if (! last_frame) {
           if (old_chunk != NULL)
             free(old_chunk);
@@ -407,11 +403,10 @@ int avi_reader_c::read() {
           old_key = key;
           old_nread = nread;
         } else if (nread > 0)
-;//          vpacketizer->process(chunk, nread, 1, key, 1);
+          vpacketizer->process(chunk, nread, 1, key, 1);
       }
     }
     if (last_frame) {
-//      vpacketizer->flush_pages();
       frames = maxframes + 1;
       video_done = 1;
     } else if (frames != (maxframes + 1))
@@ -420,7 +415,7 @@ int avi_reader_c::read() {
   
   demuxer = ademuxers;
   while (demuxer != NULL) {
-    while (!demuxer->eos /*&& !demuxer->packetizer->page_available()*/) {
+    while (!demuxer->eos && !demuxer->packetizer->packet_available()) {
       AVI_set_audio_track(avi, demuxer->aid);
       switch (AVI_audio_format(avi)) {
         case 0x0001: // raw PCM
@@ -436,35 +431,20 @@ int avi_reader_c::read() {
             ((pcm_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);*/
           break;
         case 0x0055: // MP3
-          nread = AVI_read_audio_chunk(avi, NULL);
-          if (nread > max_frame_size) {
-            chunk = (char *)realloc(chunk, max_frame_size);
-            max_frame_size = nread;
-          }
-          nread = AVI_read_audio_chunk(avi, chunk);
-          if (nread <= 0) {
+          nread = AVI_read_audio(avi, chunk, 16384);
+          if (nread <= 0)
             demuxer->eos = 1;
-/*            demuxer->packetizer->produce_eos_packet();
-            demuxer->packetizer->flush_pages();*/
-          } /*else
-            ((mp3_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);*/
+          else
+            ((mp3_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);
           
           break;
         case 0x2000: // AC3
-          nread = AVI_read_audio_chunk(avi, NULL);
-          if (nread > max_frame_size) {
-            chunk = (char *)realloc(chunk, max_frame_size);
-            max_frame_size = nread;
-          }
-          nread = AVI_read_audio_chunk(avi, chunk);
-          if (nread <= 0) {
+          nread = AVI_read_audio(avi, chunk, 16384);
+          if (nread <= 0)
             demuxer->eos = 1;
-/*            demuxer->packetizer->produce_eos_packet();
-            demuxer->packetizer->flush_pages();*/
-          } {/*else {
-            ((ac3_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);*/
-            demuxer->bytes_processed += nread;
-          }
+/*          else
+            ((ac3_packetizer_c *)demuxer->packetizer)->process(chunk, nread, 0);
+*/
           
           break;
       }
@@ -475,47 +455,10 @@ int avi_reader_c::read() {
   }
   
   if (need_more_data)
-    return 1;
+    return EMOREDATA;
   else 
     return 0;  
 }
-
-/*int avi_reader_c::serial_in_use(int serial) {
-  avi_demuxer_t *demuxer;
-  
-  if ((vpacketizer != NULL) && (vpacketizer->serial_in_use(serial)))
-    return 1;
-  demuxer = ademuxers;
-  while (demuxer != NULL) {
-    if (demuxer->packetizer->serial_in_use(serial))
-      return 1;
-    demuxer = demuxer->next;
-  }
-  return 0;
-}
-
-ogmmerge_page_t *avi_reader_c::get_header_page(int header_type) {
-  ogmmerge_page_t *ompage = NULL;
-  avi_demuxer_t   *demuxer;
-  
-  if (vpacketizer) {
-    ompage = vpacketizer->get_header_page(header_type);
-    if (ompage != NULL)
-      return ompage;
-  }
-  
-  demuxer = ademuxers;
-  while (demuxer != NULL) {
-    if (demuxer->packetizer != NULL) {
-      ompage = demuxer->packetizer->get_header_page(header_type);
-      if (ompage != NULL)
-        return ompage;
-    }
-    demuxer = demuxer->next;
-  }
-  
-  return NULL;
-}*/
 
 packet_t *avi_reader_c::get_packet() {
   generic_packetizer_c *winner;
@@ -545,28 +488,28 @@ packet_t *avi_reader_c::get_packet() {
 }
 
 int avi_reader_c::display_priority() {
-//  if (vpacketizer != NULL)
+  if (vpacketizer != NULL)
     return DISPLAYPRIORITY_HIGH;
-//  else
-//    return DISPLAYPRIORITY_LOW;
+  else
+    return DISPLAYPRIORITY_LOW;
 }
 
 static char wchar[] = "-\\|/-\\|/-";
 
 void avi_reader_c::display_progress() {
-//  if (vpacketizer != NULL) {
+  if (vpacketizer != NULL) {
     int myframes = frames;
     if (frames == (maxframes + 1))
       myframes--;
     fprintf(stdout, "progress: %d/%ld frames (%ld%%)\r",
             myframes, AVI_video_frames(avi),
             myframes * 100 / AVI_video_frames(avi));
-/*  } else {
+  } else {
     fprintf(stdout, "working... %c\r", wchar[act_wchar]);
     act_wchar++;
     if (act_wchar == strlen(wchar))
       act_wchar = 0;
-  }*/
+  }
   fflush(stdout);
 }
 

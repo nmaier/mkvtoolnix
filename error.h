@@ -13,13 +13,13 @@
 
 /*!
     \file
-    \version \$Id: error.h,v 1.2 2003/02/16 12:17:10 mosu Exp $
+    \version \$Id: error.h,v 1.3 2003/02/16 17:04:38 mosu Exp $
     \brief class definitions for the error exception class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#ifndef __ERROR_H__
-#define __ERROR_H__
+#ifndef __ERROR_H
+#define __ERROR_H
 
 #include <malloc.h>
 #include <string.h>
@@ -33,4 +33,4 @@ class error_c {
     char *get_error()     { return error; };
 };
 
-#endif // __ERROR_H__
+#endif // __ERROR_H

@@ -1,18 +1,23 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
-  from component media subtypes
+  mkvmerge -- utility for splicing together matroska files
+      from component media subtypes
 
-  ac3common.c
-  AC3 common functions
+  ac3_common.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
 */
+
+/*!
+    \file
+    \version \$Id: ac3_common.cpp,v 1.2 2003/02/16 17:04:38 mosu Exp $
+    \brief helper function for AC3 data
+    \author Moritz Bunkus         <moritz @ bunkus.org>
+*/
+
 #include <malloc.h>
 #include <string.h>
 

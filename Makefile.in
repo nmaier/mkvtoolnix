@@ -100,11 +100,15 @@ SUBDIRS = avilib
 
 bin_PROGRAMS = mkvmerge
 
-mkvmerge_SOURCES = mkvmerge.cpp \
+mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
+			ac3_common.cpp ac3_common.h \
 			common.cpp common.h \
+			mp3_common.cpp mp3_common.h \
+			p_mp3.cpp p_mp3.h \
+			p_video.cpp p_video.h \
 			queue.cpp queue.h \
-			r_generic.h p_generic.h \
-			r_avi.cpp r_avi.h
+			r_avi.cpp r_avi.h \
+			rp_generic.h
 
 
 
@@ -118,8 +122,9 @@ CONFIG_CLEAN_FILES =
 bin_PROGRAMS = mkvmerge$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_mkvmerge_OBJECTS = mkvmerge.$(OBJEXT) common.$(OBJEXT) \
-	queue.$(OBJEXT) r_avi.$(OBJEXT)
+am_mkvmerge_OBJECTS = mkvmerge.$(OBJEXT) ac3_common.$(OBJEXT) \
+	common.$(OBJEXT) mp3_common.$(OBJEXT) p_mp3.$(OBJEXT) \
+	p_video.$(OBJEXT) queue.$(OBJEXT) r_avi.$(OBJEXT)
 mkvmerge_OBJECTS = $(am_mkvmerge_OBJECTS)
 mkvmerge_DEPENDENCIES =
 mkvmerge_LDFLAGS =
@@ -131,7 +136,9 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/common.Po ./$(DEPDIR)/mkvmerge.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/ac3_common.Po ./$(DEPDIR)/common.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/mkvmerge.Po ./$(DEPDIR)/mp3_common.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/p_mp3.Po ./$(DEPDIR)/p_video.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/queue.Po ./$(DEPDIR)/r_avi.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -209,8 +216,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ac3_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mkvmerge.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp3_common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/p_mp3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/p_video.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/queue.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_avi.Po@am__quote@
 
