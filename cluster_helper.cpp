@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.14 2003/05/06 07:51:24 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.15 2003/05/08 18:46:25 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -184,15 +184,15 @@ int cluster_helper_c::render(IOCallback *out) {
         fref_packet = find_packet(pack->fref);
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
-        cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
+        cluster->AddFrame(track_entry, pack->timecode * 1000000,
                           *data_buffer, new_group, *bref_packet->group,
                           *fref_packet->group);
       } else {
-        cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
+        cluster->AddFrame(track_entry, pack->timecode * 1000000,
                           *data_buffer, new_group, *bref_packet->group);
       }
     } else {                    // This is a key frame. No references.
-      cluster->AddFrame(track_entry, pack->timecode * 1000000LL,
+      cluster->AddFrame(track_entry, pack->timecode * 1000000,
                         *data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.38 2003/05/06 10:22:55 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.39 2003/05/08 18:46:25 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -350,7 +350,7 @@ int generic_packetizer_c::packet_available() {
 
 int64_t generic_packetizer_c::get_smallest_timecode() {
   if (packet_queue.size() == 0)
-    return 0x0FFFFFFFLL;
+    return 0x0FFFFFFF;
 
   return packet_queue.front()->timecode;
 }
