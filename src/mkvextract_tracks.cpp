@@ -127,18 +127,18 @@ static void create_output_files() {
       // Video tracks: 
       if (tracks[i].track_type == 'v') {
         tracks[i].type = TYPEAVI;
+        if (strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
+          mxwarn("Extraction of video tracks with a CodecId "
+                 "other than " MKV_V_MSCOMP " is not supported at the "
+                 "moment. Skipping track %lld.\n", tracks[i].tid);
+          continue;
+        }
+
         if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
             (tracks[i].v_fps == 0.0) || (tracks[i].private_data == NULL) ||
             (tracks[i].private_size < sizeof(alBITMAPINFOHEADER))) {
           mxwarn("Track ID %lld is missing some critical "
                  "information. Skipping track.\n", tracks[i].tid);
-          continue;
-        }
-
-        if (strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
-          mxwarn("Extraction of video tracks with a CodecId "
-                 "other than " MKV_V_MSCOMP " is not supported at the "
-                 "moment. Skipping track %lld.\n", tracks[i].tid);
           continue;
         }
 
@@ -415,10 +415,15 @@ static void create_output_files() {
 
 // {{{ FUNCTION handle_data()
 
+#define myrnd(a) ((int)(a) == (int)((a) + 0.5) ? (int)(a) : (int)((a) + 0.5))
+#define myabs(a) ((a) < 0 ? (a) * -1 : (a))
+
+static int dropped = 0;
+
 static void handle_data(KaxBlock *block, int64_t block_duration,
                         bool has_ref) {
   kax_track_t *track;
-  int i, len, num;
+  int i, k, len, num;
   int64_t start, end;
   char *s, buffer[200], *s2, adts[56 / 8];
   vector<string> fields;
@@ -431,6 +436,9 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
     return;
   }
 
+  if (block_duration == -1)
+    block_duration = track->default_duration;
+
   start = block->GlobalTimecode() / 1000000; // in ms
   end = start + block_duration;
 
@@ -440,6 +448,11 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
       case TYPEAVI:
         AVI_write_frame(track->avi, (char *)data.Buffer(), data.Size(),
                         has_ref ? 0 : 1);
+        if (myabs(block_duration - (int64_t)(1000.0 / track->v_fps)) > 1) {
+          int nfr = myrnd(block_duration * track->v_fps / 1000.0);
+          for (k = 2; k <= nfr; k++)
+            AVI_write_frame(track->avi, "", 0, 0);
+        }
         break;
 
       case TYPEOGM:
@@ -693,6 +706,8 @@ static void close_files() {
       }
     }
   }
+
+  mxinfo("\nDROPPED: %u\n", dropped);
 }
 
 // }}}
@@ -1028,8 +1043,10 @@ bool extract_tracks(const char *file_name) {
                              "a video track)",
                              (float)uint64(def_duration) / 1000000.0,
                              1000000000.0 / (float)uint64(def_duration));
-                if (track != NULL)
+                if (track != NULL) {
                   track->v_fps = 1000000000.0 / (float)uint64(def_duration);
+                  track->default_duration = uint64(def_duration) / 1000000;
+                }
 
               } else
                 l3->SkipData(*es, l3->Generic().Context);
@@ -1119,7 +1136,7 @@ bool extract_tracks(const char *file_name) {
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             show_element(l2, 2, "Block group");
 
-            block_duration = 0;
+            block_duration = -1;
             has_reference = false;
             l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
                                      0xFFFFFFFFL, false, 1);

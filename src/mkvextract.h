@@ -67,6 +67,8 @@ typedef struct {
   float v_fps;
   int v_width, v_height;
 
+  int64_t default_duration;
+
   int srt_num;
   int conv_handle;
   vector<ssa_line_c> ssa_lines;
