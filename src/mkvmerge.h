@@ -53,7 +53,7 @@ extern float video_fps;
 extern bool write_cues, cue_writing_requested, video_track_present;
 extern bool no_lacing, no_linking;
 
-extern bool identifying;
+extern bool identifying, identify_verbose;
 
 extern char *dump_packets;
 

@@ -1483,17 +1483,28 @@ void kax_reader_c::set_headers() {
 
 void kax_reader_c::identify() {
   int i;
+  string info;
 
   mxinfo("File '%s': container: Matroska\n", ti->fname);
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->ok)
-      mxinfo("Track ID %d: %s (%s%s%s)\n", tracks[i]->tnum,
+    if (tracks[i]->ok) {
+      if (identify_verbose) {
+        info = " [";
+        if (tracks[i]->language != NULL)
+          info += string("language:") + string(tracks[i]->language) +
+            string(" ");
+        info += "]";
+      } else
+        info = "";
+      mxinfo("Track ID %d: %s (%s%s%s)%s\n", tracks[i]->tnum,
              tracks[i]->type == 'v' ? "video" :
              tracks[i]->type == 'a' ? "audio" :
              tracks[i]->type == 's' ? "subtitles" : "unknown",
              tracks[i]->codec_id,
              tracks[i]->ms_compat ? ", " : "",
-             tracks[i]->ms_compat ? tracks[i]->v_fourcc : "");
+             tracks[i]->ms_compat ? tracks[i]->v_fourcc : "",
+             info.c_str());
+    }
 
   for (i = 0; i < attachments.size(); i++) {
     mxinfo("Attachment ID %lld: type '%s', size %lld bytes, ",

@@ -146,7 +146,7 @@ int split_max_num_files = 65535;
 float video_fps = -1.0;
 int default_tracks[3];
 
-bool identifying = false;
+bool identifying = false, identify_verbose = false;
 
 char *dump_packets = NULL;
 
@@ -1078,7 +1078,10 @@ static void parse_args(int argc, char **argv) {
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
   if ((argc == 2) &&
-      (!strcmp(argv[0], "-i") || !strcmp(argv[0], "--identify"))) {
+      (!strcmp(argv[0], "-i") || !strcmp(argv[0], "--identify") ||
+       !strcmp(argv[0], "--identify-verbose"))) {
+    if (!strcmp(argv[0], "--identify-verbose"))
+      identify_verbose = true;
     identify(argv[1]);
     mxexit();
   }

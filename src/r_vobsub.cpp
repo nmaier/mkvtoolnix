@@ -26,6 +26,7 @@
 
 #include "common.h"
 #include "iso639.h"
+#include "mkvmerge.h"
 #include "mm_io.h"
 #include "p_vobsub.h"
 #include "r_vobsub.h"
@@ -338,10 +339,21 @@ void vobsub_reader_c::display_progress(bool final) {
 
 void vobsub_reader_c::identify() {
   uint32_t i;
+  string info;
+  const char *language;
 
   mxinfo("File '%s': container: VobSub\n", ti->fname);
-  for (i = 0; i < tracks.size(); i++)
-    mxinfo("Track ID %u: subtitles (VobSub)\n", i);
+  for (i = 0; i < tracks.size(); i++) {
+    if (identify_verbose) {
+      language = map_iso639_1_to_iso639_2(tracks[i]->language);
+      if (language != NULL)
+        info = " [language:" + string(language) + "]";
+      else
+        info = "";
+    } else
+      info = "";
+    mxinfo("Track ID %u: subtitles (VobSub)%s\n", i, info.c_str());
+  }
 }
 
 void vobsub_reader_c::set_headers() {
