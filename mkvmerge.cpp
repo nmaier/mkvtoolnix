@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.90 2003/06/08 15:38:03 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.91 2003/06/08 16:14:05 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -119,6 +119,8 @@ bool write_meta_seek = true;
 int64_t meta_seek_size = 0;
 bool no_lacing = false;
 int64_t split_after = -1;
+bool split_by_time = false;
+int split_max_num_files = 65535;
 
 float video_fps = -1.0;
 int default_tracks[3];
@@ -189,7 +191,10 @@ static void usage(void) {
     "  --no-meta-seek           Do not write any meta seek information.\n"
     "  --meta-seek-size <d>     Reserve d bytes for the meta seek entries.\n"
     "  --no-lacing              Do not use lacing.\n"
-    "  --split <d[K,M,G]>       Create a new file after d bytes (KB, MB, GB)\n"
+    "  --split <d[K,M,G]|HH:MM:SS|ns>\n"
+    "                           Create a new file after d bytes (KB, MB, GB)\n"
+    "                           or after a specific time.\n"
+    "  --split-max-files <n>    Create at most n files.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -431,49 +436,78 @@ static float parse_aspect_ratio(char *s) {
   return w/h;
 }
 
-// static double parse_time(char *s) {
-//   char *c, *a, *dot;
-//   int num_colons;
-//   double seconds;
+static void parse_split(const char *arg) {
+  int64_t modifier;
+  char *s, *p;
 
-//   dot = strchr(s, '.');
-//   if (dot != NULL) {
-//     *dot = 0;
-//     dot++;
-//   }
-//   for (c = s, num_colons = 0; *c; c++) {
-//     if (*c == ':')
-//       num_colons++;
-//     else if ((*c < '0') || (*c > '9')) {
-//       fprintf(stderr, "Error: illegal character '%c' in time range.\n", *c);
-//       exit(1);
-//     }
-//   }
-//   if (num_colons > 2) {
-//     fprintf(stderr, "Error: illegal time range: %s.\n", s);
-//     exit(1);
-//   }
-//   if (num_colons == 0) {
-//     seconds = strtod(s, NULL);
-//     if (dot != NULL)
-//       seconds += strtod(dot, NULL) / 1000.0;
-//   }
-//   for (a = s, c = s, seconds = 0; *c; c++) {
-//     if (*c == ':') {
-//       *c = 0;
-//       seconds *= 60;
-//       seconds += atoi(a);
-//       a = c + 1;
-//     }
-//   }
-//   seconds *= 60;
-//   seconds += atoi(a);
+  if ((arg == NULL) || (arg[0] == 0) || (arg[1] == 0)) {
+    fprintf(stderr, "Error: Invalid format for --split.\n");
+    exit(1);
+  }
 
-//   if (dot != NULL)
-//     seconds += strtod(dot, NULL) / 1000.0;
+  s = safestrdup(arg);
 
-//   return seconds;
-// }
+  // HH:MM:SS
+  if ((strlen(s) == 8) && (s[2] == ':') && (s[5] == ':') &&
+      isdigit(s[0]) && isdigit(s[1]) && isdigit(s[3]) &&
+      isdigit(s[4]) && isdigit(s[6]) && isdigit(s[7])) {
+    int secs, mins, hours;
+
+    s[2] = 0;
+    s[5] = 0;
+    hours = strtol(s, NULL, 10);
+    mins = strtol(&s[3], NULL, 10);
+    secs = strtol(&s[6], NULL, 10);
+    split_after = secs + mins * 60 + hours * 3600;
+    if ((hours < 0) || (mins < 0) || (mins > 59) ||
+        (secs < 0) || (secs > 59) || (split_after < 10)) {
+      fprintf(stderr, "Error: Invalid time for --split.\n");
+      exit(1);
+    }
+
+    split_after *= 1000;
+    split_by_time = true;
+    safefree(s);
+    return;
+  }
+
+  // Number of seconds: e.g. 1000s or 4254S
+  if ((s[strlen(s) - 1] == 's') || (s[strlen(s) - 1] == 'S')) {
+    s[strlen(s) - 1] = 0;
+    split_after = strtol(s, NULL, 10);
+    if (split_after < 10) {
+      fprintf(stderr, "Error: Invalid time for --split.\n");
+      exit(1);
+    }
+
+    split_after *= 1000;
+    split_by_time = true;
+    safefree(s);
+    return;
+  }
+
+  // Size in bytes/KB/MB/GB
+  p = &s[strlen(s) - 1];
+  if ((*p == 'k') || (*p == 'K'))
+    modifier = 1024;
+  else if ((*p == 'm') || (*p == 'M'))
+    modifier = 1024 * 1024;
+  else if ((*p == 'g') || (*p == 'G'))
+    modifier = 1024 * 1024 * 1024;
+  else
+    modifier = 1;
+  if (modifier != 1)
+    *p = 0;
+  split_after = strtol(s, NULL, 10);
+  split_after *= modifier;
+  if (split_after <= (1024 * 1024)) {
+    fprintf(stderr, "Error: invalid split size.\n");
+    exit(1);
+  }
+
+  safefree(s);
+  split_by_time = false;
+}
 
 static void render_headers(mm_io_c *out) {
   EbmlHead head;
@@ -540,7 +574,6 @@ static void render_headers(mm_io_c *out) {
 static void parse_args(int argc, char **argv) {
   track_info_t ti;
   int i, j, noaudio, novideo, nosubs;
-  int64_t modifier;
   filelist_t *file;
   char *s;
 
@@ -609,27 +642,18 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: --split lacks the size.\n");
         exit(1);
       }
-      s = &argv[i + 1][strlen(argv[i + 1]) - 1];
-      if ((*s == 'k') || (*s == 'K')) {
-        modifier = 1024;
-        *s = 0;
-      } else if ((*s == 'm') || (*s == 'M')) {
-        modifier = 1024 * 1024;
-        *s = 0;
-      } else if ((*s == 'g') || (*s == 'G')) {
-        modifier = 1024 * 1024 * 1024;
-        *s = 0;
-      } else
-        modifier = 1;
+      parse_split(argv[i + 1]);
+      i++;
 
-      split_after = strtoll(argv[i + 1], NULL, 10);
-      if (split_after <= 0) {
-        fprintf(stderr, "Error: invalid split size.\n");
+    } else if (!strcmp(argv[i], "--split-max-files")) {
+      if (((i + 1) >= argc) || (argv[i + 1][0] == 0)) {
+        fprintf(stderr, "Error: --split-max-files lacks the number of files."
+                "\n");
         exit(1);
       }
-      split_after *= modifier;
-      if (split_after <= (1024 * 1024)) {
-        fprintf(stderr, "Error: invalid split size.\n");
+      split_max_num_files = strtol(argv[i + 1], NULL, 10);
+      if (split_max_num_files < 2) {
+        fprintf(stderr, "Error: Wrong argument to --split-max-files.\n");
         exit(1);
       }
       i++;

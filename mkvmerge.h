@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.h,v 1.14 2003/06/08 15:38:03 mosu Exp $
+    \version \$Id: mkvmerge.h,v 1.15 2003/06/08 16:14:05 mosu Exp $
     \brief definition of global variables found in mkvmerge.cpp
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -51,8 +51,10 @@ void create_next_output_file();
 void finish_file();
 string create_output_name();
 
-extern int pass, max_ms_per_cluster, max_blocks_per_cluster;
+extern int pass, file_num, max_ms_per_cluster, max_blocks_per_cluster;
 extern int default_tracks[3];
 extern int64_t split_after;
+extern int split_max_num_files;
+extern bool split_by_time;
 
 #endif // __MKVMERGE_H

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.23 2003/06/08 15:38:03 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.24 2003/06/08 16:14:05 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -178,25 +178,36 @@ int cluster_helper_c::get_cluster_content_size() {
 
 void cluster_helper_c::find_next_splitpoint() {
   int i;
-  int64_t last_size, size_now;
+  int64_t last, now;
   splitpoint_t *sp;
 
-  if (next_splitpoint >= splitpoints.size()) {
+  if ((next_splitpoint >= splitpoints.size()) ||
+      (file_num > split_max_num_files)) {
     next_splitpoint = splitpoints.size();
     return;
   }
 
   sp = splitpoints[next_splitpoint];
-  last_size = sp->filepos + sp->cues_size;
+  if (split_by_time)
+    last = sp->timecode;
+  else
+    last = sp->filepos + sp->cues_size;
 
   i = next_splitpoint + 1;
   while (i < splitpoints.size()) {
     sp = splitpoints[i];
 
-    size_now = sp->filepos + sp->cues_size;
-    if ((size_now - last_size + header_overhead) > split_after) {
-      i--;
-      break;
+    if (split_by_time) {
+      if ((sp->timecode - last) > split_after) {
+        i--;
+        break;
+      }
+    } else {
+      now = sp->filepos + sp->cues_size;
+      if ((now - last + header_overhead) > split_after) {
+        i--;
+        break;
+      }
     }
 
     i++;
@@ -205,13 +216,17 @@ void cluster_helper_c::find_next_splitpoint() {
   if (i == next_splitpoint)
     i++;
 
-//   if (i < splitpoints.size()) {
-//     size_now = splitpoints[i]->filepos + splitpoints[i]->cues_size;
-//     fprintf(stdout, "Found a splitpoint: last: %d, next: %d, last_size: %lld,"
-//             " size now: %lld, diff: %lld\n", next_splitpoint, i, last_size,
-//             size_now, size_now - last_size);
-//   } else
-//     fprintf(stdout, "No more splitpoints found.\n");
+  if (i < splitpoints.size()) {
+    if (split_by_time)
+      now = splitpoints[i]->timecode;
+    else
+      now = splitpoints[i]->filepos + splitpoints[i]->cues_size;
+    fprintf(stdout, "Found a splitpoint: last: %d, next: %d, last_size: %lld,"
+            " size now: %lld, diff: %lld\n", next_splitpoint, i, last,
+            now, now - last);
+  } else
+    fprintf(stdout, "No more splitpoints found.\n");
+
   next_splitpoint = i;
 }
 
