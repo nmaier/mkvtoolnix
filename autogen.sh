@@ -45,9 +45,11 @@ export WANT_AUTOCONF_2_5=1
 AUTOCONFVER=`autoconf --version | head -n 1 | sed 's;[^0-9\.];;g'`
 case $AUTOCONFVER in
   2.1*)
+    echo Using autoconf-2.1 style files.
     cp acinclude-2.1.m4 acinclude.m4
     ;;
   *)
+    echo Using autoconf-2.5 style files.
     cp acinclude-2.5.m4 acinclude.m4
     ;;
 esac
