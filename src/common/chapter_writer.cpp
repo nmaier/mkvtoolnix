@@ -229,6 +229,7 @@ write_xml_element_rec(int level,
   EbmlMaster *m;
   int elt_idx, i;
   bool found;
+  char *s;
 
   elt_idx = parent_idx;
   found = false;
@@ -287,8 +288,10 @@ write_xml_element_rec(int level,
       break;
 
     case ebmlt_ustring:
-      o->printf("jadda</%s>\n",
-                chapter_elements[elt_idx].name);
+      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
+                                          <EbmlUnicodeString *>(e)).c_str());
+      o->printf("%s</%s>\n", s, chapter_elements[elt_idx].name);
+      safefree(s);
       break;
 
     case ebmlt_time:
