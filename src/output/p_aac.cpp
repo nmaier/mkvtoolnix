@@ -126,10 +126,7 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
 
 void
 aac_packetizer_c::set_headers() {
-  if ((ti->private_size > 0) && (ti->private_size != 2) &&
-      (ti->private_size != 5))
-    set_codec_id(MKV_A_AAC);
-  else if (id == AAC_ID_MPEG4) {
+  if (id == AAC_ID_MPEG4) {
     if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_4MAIN);
     else if (profile == AAC_PROFILE_LC)
@@ -157,7 +154,8 @@ aac_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 
-  if ((ti->private_data != NULL) && (ti->private_size > 0))
+  if ((ti->private_data != NULL) && (ti->private_size > 0) &&
+      (ti->private_size != 2) && (ti->private_size != 5))
     set_codec_private(ti->private_data, ti->private_size);
 
   generic_packetizer_c::set_headers();

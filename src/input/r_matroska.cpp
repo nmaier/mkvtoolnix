@@ -495,14 +495,7 @@ kax_reader_c::verify_tracks() {
                      (t->codec_id == MKV_A_AAC_2SBR) ||
                      (t->codec_id == MKV_A_AAC_4SBR))
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
-          else if (t->codec_id == MKV_A_AAC) {
-            if ((t->private_data == NULL) || (t->private_size < 2)) {
-              mxwarn(PFX "The AAC track number %u is missing its private "
-                     "data. Ignoring this track.\n", t->tnum);
-              continue;
-            }
-            t->a_formattag = FOURCC('M', 'P', '4', 'A');
-          } else if (starts_with(t->codec_id, MKV_A_REAL_COOK,
+          else if (starts_with(t->codec_id, MKV_A_REAL_COOK,
                                  strlen("A_REAL/")))
             t->a_formattag = FOURCC('r', 'e', 'a', 'l');
           else if (t->codec_id == MKV_A_FLAC) {
@@ -1659,7 +1652,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
             int channels, sfreq, osfreq;
             bool sbr;
 
-            if (t->codec_id == MKV_A_AAC) {
+            if ((t->private_data != NULL) && (ti->private_size >= 2)) {
               id = AAC_ID_MPEG4;
               if (!parse_aac_data((unsigned char *)t->private_data,
                                   t->private_size, profile, channels, sfreq,
