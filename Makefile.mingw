@@ -47,7 +47,7 @@ DEP_RMFF = librmff/librmff.a
 #
 SUBDIRS = avilib-0.6.10 src
 
-APPLICATIONS=src/mkvmerge src/mkvinfo src/mkvextract src/base64tool src/mmg
+APPLICATIONS=src/mkvmerge src/mkvinfo src/mkvextract src/base64tool src/mmg/mmg
 
 all: config.h $(APPLICATIONS)
 
@@ -209,7 +209,7 @@ src/mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 src/base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
 	$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
 
-src/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
+src/mmg/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 	$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
 
 #
