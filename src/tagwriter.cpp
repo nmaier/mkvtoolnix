@@ -50,11 +50,6 @@ static void print_tag(int level, const char *name, const char *fmt, ...) {
   mxprint(o, "</%s>\n", name);
 }
 
-static void print_tag_and_free(int level, const char *name, char *str) {
-  print_tag(level, name, "%s", str);
-  safefree(str);
-}
-
 static void print_binary(int level, const char *name, EbmlElement *e) {
   EbmlBinary *b;
   string s;
@@ -121,6 +116,38 @@ static void print_date(int level, const char *name, EbmlElement *e) {
   mxprint(o, "</%s>\n", name);
 }
 
+static void print_string(int level, const char *name, const char *src) {
+  int idx;
+  string s;
+
+  idx = 0;
+  s = "";
+  while (src[idx] != 0) {
+    if (src[idx] == '&')
+      s += "&amp;";
+    else if (src[idx] == '<')
+      s += "&lt;";
+    else if (src[idx] == '>')
+      s += "&gt;";
+    else if (src[idx] == '"')
+      s += "&quot;";
+    else
+      s += src[idx];
+    idx++;
+  }
+  for (idx = 0; idx < level; idx++)
+    mxprint(o, "  ");
+  mxprint(o, "<%s>%s</%s>\n", name, s.c_str(), name);
+}
+
+static void print_utf_string(int level, const char *name, EbmlElement *e) {
+  char *s;
+
+  s = UTFstring_to_cstrutf8(*static_cast<EbmlUnicodeString *>(e));
+  print_string(level, name, s);
+  safefree(s);
+}
+
 static void print_unknown(int level, EbmlElement *e) {
   int idx;
 
@@ -135,11 +162,9 @@ static void print_unknown(int level, EbmlElement *e) {
                            int64(*static_cast<EbmlSInteger *>(e)))
 #define pr_f(n) print_tag(level, n, "%f", \
                           float(*static_cast<EbmlFloat *>(e)))
-#define pr_s(n) print_tag(level, n, "%s", \
-                          string(*static_cast<EbmlString *>(e)).c_str())
-#define pr_us(n) print_tag_and_free(level, n, \
-                                    UTFstring_to_cstrutf8(UTFstring( \
-                                      *static_cast<EbmlUnicodeString *>(e))))
+#define pr_s(n) print_string(level, n, \
+                             string(*static_cast<EbmlString *>(e)).c_str())
+#define pr_us(n) print_utf_string(level, n, e)
 #define pr_d(n) print_date(level, n, e)
 
 #define pr_b(n) print_binary(level, n, e)

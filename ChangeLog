@@ -1,3 +1,9 @@
+2003-08-25  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvextract: Strings are postprocessed so that the special
+        characters &, <, >, " are replaced by their HTML equivalents
+        &amp;, &lt, &gt; and &quot;.
+
 2003-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Disabled lacing by default and renamed --no-lacing to
