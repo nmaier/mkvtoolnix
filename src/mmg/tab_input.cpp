@@ -38,6 +38,7 @@ using namespace std;
 
 wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
+bool title_was_present = false;
 
 tab_input::tab_input(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
@@ -522,9 +523,10 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
             pair = split(args[k].c_str(), ":", 2);
             if (pair.size() != 2)
               continue;
-            if (pair[0] == "track_name")
+            if (pair[0] == "track_name") {
               *track.track_name = unescape(pair[1].c_str()).c_str();
-            else if (pair[0] == "language")
+              track.track_name_was_present = true;
+            } else if (pair[0] == "language")
               *track.language = unescape(pair[1].c_str()).c_str();
           }
         }
@@ -569,8 +571,10 @@ void tab_input::on_add_file(wxCommandEvent &evt) {
           args = split(info.c_str(), " ");
           for (k = 0; k < args.size(); k++) {
             pair = split(args[k].c_str(), ":", 2);
-            if ((pair.size() == 2) && (pair[0] == "title"))
+            if ((pair.size() == 2) && (pair[0] == "title")) {
               *file.title = unescape(pair[1].c_str()).c_str();
+              title_was_present = true;
+            }
           }
         }
       }

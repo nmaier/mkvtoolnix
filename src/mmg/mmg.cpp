@@ -699,7 +699,7 @@ void mmg_dialog::update_command_line() {
         clargs.Add(arg);
       }
 
-      if (t->track_name->Length() > 0) {
+      if ((t->track_name->Length() > 0) || t->track_name_was_present) {
         cmdline += "--track-name \"" + sid + ":" +
           shell_escape(*t->track_name) + "\" ";
         clargs.Add("--track-name");
@@ -834,6 +834,10 @@ void mmg_dialog::update_command_line() {
       shell_escape(global_page->tc_title->GetValue()) + "\" ";
     clargs.Add("--title");
     clargs.Add(global_page->tc_title->GetValue());
+  } else if (title_was_present) {
+    cmdline += "--title \"\"";
+    clargs.Add("--title");
+    clargs.Add("");
   }
 
   if (global_page->cb_split->IsChecked()) {

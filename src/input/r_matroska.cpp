@@ -1533,8 +1533,10 @@ void kax_reader_c::create_packetizers() {
     create_packetizer((*ti->track_order)[i]);
   for (i = 0; i < tracks.size(); i++)
     create_packetizer(tracks[i]->tnum);
-  if (segment_title.length() == 0)
+  if (segment_title_set == false) {
     segment_title = title;
+    segment_title_set = true;
+  }
 }
 
 // }}}

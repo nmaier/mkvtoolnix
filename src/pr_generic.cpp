@@ -537,7 +537,7 @@ void generic_packetizer_c::set_headers() {
     *(static_cast<EbmlString *>
       (&GetChild<KaxTrackLanguage>(*track_entry))) = "eng";
 
-  if (ti->track_name != NULL)
+  if ((ti->track_name != NULL) && (ti->track_name[0] != 0))
     *(static_cast<EbmlUnicodeString *>
       (&GetChild<KaxTrackName>(*track_entry))) =
       cstrutf8_to_UTFstring(ti->track_name);

@@ -183,6 +183,7 @@ typedef struct {
   bool enabled, display_dimensions_selected;
 
   bool default_track, aac_is_sbr;
+  bool track_name_was_present;
   wxString *language, *track_name, *cues, *delay, *stretch, *sub_charset;
   wxString *tags, *fourcc, *aspect_ratio, *compression, *timecodes;
   wxString *dwidth, *dheight;
@@ -190,6 +191,7 @@ typedef struct {
 
 typedef struct {
   wxString *file_name, *title;
+  bool title_was_present;
   int container;
   vector<mmg_track_t> *tracks;
   bool no_chapters, no_attachments, no_tags;
@@ -208,6 +210,7 @@ extern vector<mmg_file_t> files;
 extern vector<mmg_attachment_t> attachments;
 extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
+extern bool title_was_present;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);

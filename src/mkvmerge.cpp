@@ -178,6 +178,7 @@ char *chapter_language = NULL;
 char *chapter_charset = NULL;
 
 string segment_title;
+bool segment_title_set = false;
 
 int64_t tags_size = 0;
 bool accept_tags = true;
@@ -843,7 +844,7 @@ static void parse_language(char *s, language_t &lang, const char *opt,
     mxerror("Invalid track ID specified in '--%s %s'.\n", opt, orig.c_str());
 
   s = &colon[1];
-  if (*s == 0)
+  if (check && (*s == 0))
     mxerror("Invalid %s specified in '--%s %s'.\n", topic, opt, orig.c_str());
 
   if (check && !is_valid_iso639_2_code(s))
@@ -1370,11 +1371,12 @@ static void parse_args(int argc, char **argv) {
 
     else if (!strcmp(this_arg, "--title")) {
       char *tmp;
-      if ((next_arg == NULL) || (next_arg[0] == 0))
+      if (next_arg == NULL)
         mxerror("'--title' lacks the title.\n");
 
       tmp = to_utf8(cc_command_line, next_arg);
       segment_title = tmp;
+      segment_title_set = true;
       safefree(tmp);
       i++;
 
@@ -1857,6 +1859,12 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
 
   while (!mm_io->eof() && mm_io->getline2(buffer)) {
     strip(buffer);
+
+    if (buffer == "#EMPTY#") {
+      args = add_string(num_args, args, "");
+      continue;
+    }
+
     if ((buffer[0] == '#') || (buffer[0] == 0))
       continue;
 
