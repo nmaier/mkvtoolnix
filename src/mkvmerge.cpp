@@ -849,7 +849,7 @@ static void render_attachments(IOCallback *out) {
       if (attch->description != NULL)
         *static_cast<EbmlUnicodeString *>
           (&GetChild<KaxFileDescription>(*kax_a)) =
-          cstr_to_UTFstring(attch->mime_type);;
+          cstr_to_UTFstring(attch->description);
 
       if (attch->mime_type != NULL)
         *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*kax_a)) =
