@@ -181,7 +181,7 @@ private:
   EbmlElement *saved_l1, *saved_l2, *segment;
   KaxCluster *cluster;
 
-  double segment_duration;
+  int64_t segment_duration;
   int64_t last_timecode, first_timecode;
   string title;
 

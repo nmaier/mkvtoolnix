@@ -133,7 +133,7 @@ kax_reader_c::kax_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
 
-  segment_duration = 0.0;
+  segment_duration = 0;
   first_timecode = -1;
   writing_app_ver = -1;
 
@@ -878,9 +878,10 @@ kax_reader_c::read_headers() {
 
         kduration = FINDFIRST(l1, KaxDuration);
         if (kduration != NULL) {
-          segment_duration = float(*kduration) * tc_scale / 1000000000.0;
+          segment_duration = irnd(double(*kduration) * tc_scale);
           if (verbose > 1)
-            mxinfo(PFX "| + duration: %.3fs\n", segment_duration);
+            mxinfo(PFX "| + duration: %.3fs\n", segment_duration /
+                   1000000000.0);
         }
 
         ktitle = FINDFIRST(l1, KaxTitle);
@@ -2183,9 +2184,8 @@ kax_reader_c::read(generic_packetizer_c *,
 
 int
 kax_reader_c::get_progress() {
-  if (segment_duration != 0.0)
-    return (int64_t)((last_timecode - first_timecode) / 10000000.0 /
-                     segment_duration);
+  if (segment_duration != 0)
+    return (last_timecode - first_timecode) * 100 / segment_duration;
 
   return 100 * in->getFilePointer() / file_size;
 }
@@ -2211,11 +2211,19 @@ kax_reader_c::identify() {
   int i;
   string info;
 
-  if (identify_verbose && (title.length() > 0))
-    mxinfo("File '%s': container: Matroska [title:%s]\n", ti->fname.c_str(),
-           escape(title).c_str());
-  else
-    mxinfo("File '%s': container: Matroska\n", ti->fname.c_str());
+  if (identify_verbose) {
+    if (!title.empty())
+      info = mxsprintf("title:%s", escape(title).c_str());
+    if (0 != segment_duration) {
+      if (!info.empty())
+        info += " ";
+      info += mxsprintf("duration:%lld", segment_duration);
+    }
+    if (!info.empty())
+      info = mxsprintf(" [%s]", info.c_str());
+  }
+  mxinfo("File '%s': container: Matroska%s\n", ti->fname.c_str(),
+         info.c_str());
   for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->ok) {
       if (identify_verbose) {
