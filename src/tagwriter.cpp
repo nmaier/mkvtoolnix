@@ -61,8 +61,17 @@ static void print_binary(int level, const char *name, EbmlElement *e) {
   b = (EbmlBinary *)e;
   s = base64_encode((const unsigned char *)b->GetBuffer(), b->GetSize(), true,
                     72 - level - 2);
+  if (s[s.length() - 1] == '\n')
+    s.erase(s.length() - 1);
+
   for (i = 0; i < level; i++)
     mxprint(o, "  ");
+
+  if ((level * 2 + 2 * strlen(name) + 2 + 3 + s.length()) <= 78) {
+    mxprint(o, "<%s>%s</%s>\n", name, s.c_str(), name);
+    return;
+  }
+
   mxprint(o, "<%s>\n", name);
 
   for (i = 0; i < (level + 2); i++)
@@ -77,8 +86,10 @@ static void print_binary(int level, const char *name, EbmlElement *e) {
       old_idx = idx + 1;
     }
 
-  if (s[s.length() - 1] != '\n')
-    mxprint(o, "\n");
+  if (old_idx < s.length())
+    mxprint(o, "%s", s.substr(old_idx).c_str());
+
+  mxprint(o, "\n");
 
   for (i = 0; i < level; i++)
     mxprint(o, "  ");
@@ -483,7 +494,7 @@ static void dumpsizes(EbmlElement *e, int level) {
 
   for (i = 0; i < level; i++)
     printf(" ");
-  printf("%s", typeid(*e).name());
+  printf("%s", e->Generic().DebugName);
 
   try {
     EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
@@ -503,7 +514,7 @@ void write_tags_xml(KaxTags &tags, FILE *out) {
 
   o = out;
 
-   dumpsizes(&tags, 0);
+//   dumpsizes(&tags, 0);
 
   for (i = 0; i < tags.ListSize(); i++)
     handle_level1(tags[i]);
