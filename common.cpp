@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.17 2003/05/09 05:26:02 mosu Exp $
+    \version \$Id: common.cpp,v 1.18 2003/05/09 06:08:53 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -151,6 +151,9 @@ static char *convert_charset(iconv_t ict, char *src) {
   char *dst, *psrc, *pdst;
   size_t lsrc, ldst;
   int len;
+
+  if (ict == (iconv_t)(-1))
+    return safestrdup(src);
 
   len = strlen(src) * 4;
   dst = (char *)safemalloc(len + 1);
