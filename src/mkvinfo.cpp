@@ -307,8 +307,6 @@ char *asctime_r(const struct tm *tm, char *buf) {
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
-#define parent_done(p) (in->getFilePointer() >= \
-                        (p->GetElementPosition() + p->ElementSize()))
 
 bool process_file(const char *file_name) {
   int upper_lvl_el, i;
@@ -374,14 +372,11 @@ bool process_file(const char *file_name) {
       delete l0;
     }
 
-    while (1) {
-      if (parent_done(l0))
-        break;
-
-      upper_lvl_el = 0;
-      // We've got our segment, so let's find the tracks
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                               0xFFFFFFFFL, true);
+    upper_lvl_el = 0;
+    // We've got our segment, so let's find the tracks
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
+    while (l1 != NULL) {
       if (upper_lvl_el > 0)
         break;
       if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
