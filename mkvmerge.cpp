@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.27 2003/04/11 12:50:19 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.28 2003/04/11 15:28:45 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -25,7 +25,9 @@
 #include <string.h>
 #include <time.h>
 
+#ifndef WIN32
 #include <unistd.h>
+#endif
 
 #include <iostream>
 
