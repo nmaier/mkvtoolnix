@@ -252,7 +252,7 @@ avi_t* AVI_open_output_file(char * filename)
 
 #if defined(SYS_UNIX)
    AVI->fdes = open(filename, O_RDWR|O_CREAT, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) &~ mask);
-#elif defined(COMP_MINGW)
+#elif defined(COMP_MINGW) || defined(COMP_CYGWIN)
    AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, (S_IRUSR | S_IWUSR) &~ mask);
 #else
    AVI->fdes = open(filename, O_RDWR|O_CREAT|O_BINARY, (S_IRUSR | S_IWUSR | S_IGRP | S_IROTH) &~ mask);

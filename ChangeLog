@@ -1,5 +1,10 @@
 2003-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Switched from cygwin to MinGW32 for the Windows binaries.
+
+        * Fixed a double free() on cleanup (after writing the cues) which
+        resulted in a segfault sometimes.
+
         * Added a SSA/ASS reader.
 
 2003-06-19  Moritz Bunkus  <moritz@bunkus.org>
