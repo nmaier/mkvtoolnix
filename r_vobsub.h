@@ -14,8 +14,8 @@
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
-#ifndef __R_VOBSUB_H__
-#define __R_VOBSUB_H__
+#ifndef __R_VOBSUB_
+#define __R_VOBSUB_
 
 #include <stdio.h>
 
@@ -60,4 +60,4 @@ class vobsub_reader_c: public generic_reader_c {
                                                    char *id, int index);
 };
 
-#endif  /* __R_VOBSUB_H__*/
+#endif  /* __R_VOBSUB_*/

@@ -13,13 +13,13 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.2 2003/02/23 23:23:10 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.3 2003/02/24 12:32:17 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
-#ifndef __R_MP3_H__
-#define __R_MP3_H__
+#ifndef __R_MP3_
+#define __R_MP3_
 
 #include <stdio.h>
 
@@ -52,4 +52,4 @@ class mp3_reader_c: public generic_reader_c {
     static int               probe_file(FILE *file, u_int64_t size);
 };
 
-#endif  /* __R_MP3_H__*/
+#endif  /* __R_MP3_*/

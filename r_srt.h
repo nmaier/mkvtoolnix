@@ -14,8 +14,8 @@
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
-#ifndef __R_SRT_H__
-#define __R_SRT_H__
+#ifndef __R_SRT_
+#define __R_SRT_
 
 #include <stdio.h>
 
@@ -51,4 +51,4 @@ class srt_reader_c: public generic_reader_c {
     static int               probe_file(FILE *file, u_int64_t size);
 };
 
-#endif  /* __R_SRT_H__*/
+#endif  /* __R_SRT_*/

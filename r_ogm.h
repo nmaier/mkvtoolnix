@@ -14,8 +14,8 @@
   or visit http://www.gnu.org/copyleft/gpl.html
 */
 
-#ifndef __R_OGM_H__
-#define __R_OGM_H__
+#ifndef __R_OGM_
+#define __R_OGM_
 
 #include <stdio.h>
 
@@ -92,4 +92,4 @@ class ogm_reader_c: public generic_reader_c {
 };
 
 
-#endif  /* __R_OGM_H__*/
+#endif  /* __R_OGM_*/

@@ -11,7 +11,7 @@
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
 */
-#ifndef __MKVMERGE_H__
-#define __MKVMERGE_H__
+#ifndef __MKVMERGE_
+#define __MKVMERGE_
 
-#endif  /* __MKVMERGE_H__ */
+#endif  /* __MKVMERGE_ */
