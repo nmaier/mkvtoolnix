@@ -43,6 +43,9 @@ void write_chapters_xml(KaxChapters *chapters, FILE *out);
 void write_chapters_simple(int &chapter_num, KaxChapters *chapters, FILE *out);
 
 KaxChapters *copy_chapters(KaxChapters *source);
+KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters,
+                                          int64_t min_tc, int64_t max_tc,
+                                          int64_t offset, bool validate);
 
 #endif // __CHAPTERS_H
 

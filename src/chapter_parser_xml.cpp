@@ -601,6 +601,38 @@ bool probe_xml_chapters(mm_text_io_c *in) {
   return false;
 }
 
+KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters,
+                                          int64_t min_tc, int64_t max_tc,
+                                          int64_t offset, bool validate) {
+  uint32_t i;
+  KaxEditionEntry *eentry;
+
+  for (i = 0; i < chapters->ListSize(); i++) {
+    if (validate)
+      validate_chapters(0, -1, *static_cast<EbmlMaster *>((*chapters)[i]));
+    remove_entries(min_tc, max_tc, offset,
+                   *static_cast<EbmlMaster *>((*chapters)[i]));
+  }
+
+  i = 0;
+  while (i < chapters->ListSize()) {
+    eentry = static_cast<KaxEditionEntry *>((*chapters)[i]);
+    if (eentry->ListSize() == 0) {
+      chapters->Remove(i);
+      delete eentry;
+
+    } else
+      i++;
+  }
+
+  if (chapters->ListSize() == 0) {
+    delete chapters;
+    chapters = NULL;
+  }
+
+  return chapters;
+}
+
 KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
                                 int64_t max_tc, int64_t offset) {
   bool done;
@@ -608,10 +640,8 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
   XML_Parser parser;
   XML_Error xerror;
   char *emsg;
-  int i;
   string buffer;
   KaxChapters *chapters;
-  KaxEditionEntry *eentry;
 
   done = 0;
 
@@ -650,29 +680,9 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
 
   chapters = pdata->chapters;
   if (chapters != NULL) {
-
-    for (i = 0; i < chapters->ListSize(); i++) {
-      validate_chapters(0, -1, *static_cast<EbmlMaster *>((*chapters)[i]));
-      remove_entries(min_tc, max_tc, offset,
-                     *static_cast<EbmlMaster *>((*chapters)[i]));
-    }
-
-    i = 0;
-    while (i < chapters->ListSize()) {
-      eentry = static_cast<KaxEditionEntry *>((*chapters)[i]);
-      if (eentry->ListSize() == 0) {
-        chapters->Remove(i);
-        delete eentry;
-
-      } else
-        i++;
-    }
-
-    if (chapters->ListSize() == 0) {
-      delete chapters;
-      chapters = NULL;
-
-    } else if (!chapters->CheckMandatory())
+    chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc, offset,
+                                            true);
+    if ((chapters != NULL) && !chapters->CheckMandatory())
       die("chapters->CheckMandatory() failed. Should not have happened!");
   }
 

@@ -1900,8 +1900,9 @@ void finish_file() {
     start = cluster_helper->get_first_timecode() + offset;
     end = cluster_helper->get_max_timecode() + offset;
 
-    chapters_here = parse_chapters(chapter_file_name, start, end, offset,
-                                   chapter_language, chapter_charset);
+    chapters_here = copy_chapters(kax_chapters);
+    chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
+                                                 offset, false);
     if (chapters_here != NULL)
       kax_chapters_void->ReplaceWith(*chapters_here, *out, true);
     delete kax_chapters_void;
