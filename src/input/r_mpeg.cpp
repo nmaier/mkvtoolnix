@@ -30,21 +30,52 @@
 int
 mpeg_es_reader_c::probe_file(mm_io_c *mm_io,
                              int64_t size) {
-  unsigned char buf[PROBESIZE];
+  unsigned char *buf;
+  int num_read, i;
+  uint32_t value;
   M2VParser parser;
 
   if (size < PROBESIZE)
     return 0;
   try {
+    buf = (unsigned char *)safemalloc(READ_SIZE);
     mm_io->setFilePointer(0, seek_beginning);
-    if (mm_io->read(buf, PROBESIZE) != PROBESIZE)
-      mm_io->setFilePointer(0, seek_beginning);
+    num_read = mm_io->read(buf, READ_SIZE);
+    if (num_read < 4) {
+      safefree(buf);
+      return 0;
+    }
     mm_io->setFilePointer(0, seek_beginning);
 
-    if ((buf[0] != 0x00) || (buf[1] != 0x00) || (buf[2] != 0x01))
+    // MPEG TS starts with 0x47.
+    if (buf[0] == 0x47) {
+      safefree(buf);
+      return 0;
+    }
+
+    // MPEG PS starts with 0x000001ba.
+    value = get_uint32_be(buf);
+    if (value == MPEGVIDEO_PACKET_START_CODE) {
+      safefree(buf);
+      return 0;
+    }
+
+    // Let's look for a MPEG ES start code inside the first 1 MB.
+    for (i = 4; i <= num_read; i++) {
+      if (value == MPEGVIDEO_SEQUENCE_START_CODE)
+        break;
+      if (i < num_read) {
+        value <<= 8;
+        value |= buf[i];
+        i++;
+      }
+    }
+    safefree(buf);
+    if (value != MPEGVIDEO_SEQUENCE_START_CODE)
       return 0;
 
-    if (!read_frame(parser, *mm_io, 1024 * 1024))
+    // Let's try to read one frame.
+    if (!read_frame(parser, *mm_io, READ_SIZE))
       return 0;
 
   } catch (exception &ex) {
@@ -170,8 +201,8 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
       if ((max_size != -1) && (bytes_probed > max_size))
         return false;
 
-      bytes_to_read = (parser.GetBufferFreeSpace() < READ_SIZE) ?
-        parser.GetBufferFreeSpace() : READ_SIZE;
+      bytes_to_read = (parser.GetFreeBufferSpace() < READ_SIZE) ?
+        parser.GetFreeBufferSpace() : READ_SIZE;
       buffer = new unsigned char[bytes_to_read];
       bytes_read = in.read(buffer, bytes_to_read);
       if (bytes_read == 0)

@@ -137,7 +137,7 @@ public:
 
   uint32_t GetState();
 
-  int32_t GetFreeSpace(){
+  int32_t GetFreeBufferSpace(){
     return (myBuffer->buf_capacity - myBuffer->bytes_in_buf);
   }
 

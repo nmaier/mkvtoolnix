@@ -102,8 +102,8 @@ public:
   virtual MPEGFrame * ReadFrame();        
     
   //Returns the max amount of data that can be written to the buffer
-  int32_t GetBufferFreeSpace(){
-    return mpgBuf->GetFreeSpace();  
+  int32_t GetFreeBufferSpace(){
+    return mpgBuf->GetFreeBufferSpace();  
   }
         
   //Writes data to the internal buffer.

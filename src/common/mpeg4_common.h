@@ -20,6 +20,8 @@
 #define MPEGVIDEO_OBJECT_PLAIN_START_CODE         0x000001b6
 /** Start code for a MPEG-1 and -2 sequence header */
 #define MPEGVIDEO_SEQUENCE_START_CODE             0x000001b3
+/** Start code for a MPEG-1 and -2 packet */
+#define MPEGVIDEO_PACKET_START_CODE               0x000001ba
 
 /** MPEG-1/-2 frame rate: 24000/1001 frames per second */
 #define MPEGVIDEO_FPS_23_976    0x01
