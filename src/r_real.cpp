@@ -174,6 +174,7 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
     mxprint(stdout, "Using RealMedia demultiplexer for %s.\n", ti->fname);
 
   parse_headers();
+  get_information_from_data();
   if (!identifying)
     create_packetizers();
 }
@@ -468,7 +469,7 @@ void real_reader_c::create_packetizers() {
       if (!strncmp(dmx->fourcc, "dnet", 4)) {
         dmx->packetizer =
           new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels,
-                                  ti);
+                                  dmx->bsid, ti);
         if (verbose)
           mxprint(stdout, "+-> Using AC3 output module for stream "
                   "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
@@ -945,3 +946,68 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
 }
 
 // }}}
+
+void real_reader_c::get_information_from_data() {
+  uint32_t length, id;
+  int i;
+  unsigned char *chunk;
+  real_demuxer_t *dmx;
+  bool done;
+
+  io->save_pos();
+
+  done = true;
+  for (i = 0; i < demuxers.size(); i++) {
+    dmx = demuxers[i];
+    if (!strcasecmp(dmx->fourcc, "DNET")) {
+      dmx->bsid = -1;
+      done = false;
+    }
+  }
+
+  try {
+    while (!done) {
+      io->skip(2);
+      length = io->read_uint16_be();
+      id = io->read_uint16_be();
+      io->skip(4 + 1 + 1);
+
+      if (length < 12)
+        die("real_reader: Data packet too small.");
+
+      dmx = find_demuxer(id);
+
+      if (dmx == NULL) {
+        io->skip(length - 12);
+        continue;
+      }
+
+      length -= 12;
+
+      chunk = (unsigned char *)safemalloc(length);
+      if (io->read(chunk, length) != length)
+        break;
+
+      num_packets++;
+
+      if (!strcasecmp(dmx->fourcc, "DNET"))
+        dmx->bsid = chunk[4] >> 3;
+
+      safefree(chunk);
+
+      done = true;
+      for (i = 0; i < demuxers.size(); i++) {
+        dmx = demuxers[i];
+        if (!strcasecmp(dmx->fourcc, "DNET") && (dmx->bsid == -1))
+          done = false;
+
+      }
+    }
+
+    io->restore_pos();
+    num_packets = 0;
+
+  } catch (exception &ex) {
+  }
+}
+

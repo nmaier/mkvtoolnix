@@ -177,10 +177,10 @@ public:
   virtual int set_uid(uint32_t uid);
   virtual void set_track_type(int type);
   virtual int get_track_type();
-  virtual void set_language(char *language);
+  virtual void set_language(const char *language);
 
-  virtual void set_codec_id(char *id);
-  virtual void set_codec_private(unsigned char *cp, int length);
+  virtual void set_codec_id(const char *id);
+  virtual void set_codec_private(const unsigned char *cp, int length);
 
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);

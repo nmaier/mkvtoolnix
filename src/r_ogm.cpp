@@ -291,7 +291,7 @@ void ogm_reader_c::create_packetizers() {
         try {
           dmx->packetizer =
             new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
-                                 get_uint16(&sth->sh.audio.channels), ti);
+                                 get_uint16(&sth->sh.audio.channels), 0, ti);
         } catch (error_c &error) {
           mxprint(stderr, "Error: ogm_reader: could not initialize AC3 "
                   "packetizer for stream id %d. Will try to continue and "

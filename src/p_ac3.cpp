@@ -32,7 +32,7 @@ using namespace libmatroska;
 
 ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti)
+                                   int nchannels, int nbsid, track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
@@ -40,6 +40,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   buffer_size = 0;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
+  bsid = nbsid;
 
   set_track_type(track_audio);
   set_track_default_duration_ns((int64_t)(1536000000000.0 *ti->async.linear /
@@ -148,7 +149,13 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
 }
 
 void ac3_packetizer_c::set_headers() {
-  set_codec_id(MKV_A_AC3);
+  string id = MKV_A_AC3;
+
+  if (bsid == 9)
+    id += "/BSID9";
+  else if (bsid == 10)
+    id += "/BSID10";
+  set_codec_id(id.c_str());
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 
@@ -190,9 +197,10 @@ void ac3_packetizer_c::dump_debug_info() {
 
 ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
                                          unsigned long nsamples_per_sec,
-                                         int nchannels, track_info_t *nti)
+                                         int nchannels, int nbsid,
+                                         track_info_t *nti)
   throw (error_c): ac3_packetizer_c(nreader, nsamples_per_sec, nchannels,
-                                    nti) {
+                                    nbsid, nti) {
   bsb_present = false;
 }
 

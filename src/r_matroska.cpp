@@ -335,7 +335,7 @@ void kax_reader_c::verify_tracks() {
         } else {
           if (!strcmp(t->codec_id, MKV_A_MP3))
             t->a_formattag = 0x0055;
-          else if (!strcmp(t->codec_id, MKV_A_AC3))
+          else if (!strncmp(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)))
             t->a_formattag = 0x2000;
           else if (!strcmp(t->codec_id, MKV_A_DTS))
             t->a_formattag = 0x2001;
@@ -1141,9 +1141,17 @@ void kax_reader_c::create_packetizers() {
               mxprint(stdout, "Matroska demultiplexer (%s): using the MP3 "
                       "output module for track ID %u.\n", ti->fname, t->tnum);
           } else if (t->a_formattag == 0x2000) {
+            int bsid;
+
+            if (!strcmp(t->codec_id, "A_AC3/BSID9"))
+              bsid = 9;
+            else if (!strcmp(t->codec_id, "A_AC3/BSID10"))
+              bsid = 10;
+            else
+              bsid = 0;
             t->packetizer = new ac3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, &nti);
+                                                 t->a_channels, bsid, &nti);
             if (verbose)
               mxprint(stdout, "Matroska demultiplexer (%s): using the AC3 "
                       "output module for track ID %u.\n", ti->fname, t->tnum);

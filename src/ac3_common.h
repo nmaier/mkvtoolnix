@@ -42,6 +42,7 @@ typedef struct {
   int channels;
   int flags;
   int bytes;
+  int bsid;
 } ac3_header_t;
 
 int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header);

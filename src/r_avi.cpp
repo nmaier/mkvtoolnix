@@ -229,7 +229,7 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
       demuxer->packetizer = new ac3_packetizer_c(this,
                                                  demuxer->samples_per_second,
-                                                 demuxer->channels, ti);
+                                                 demuxer->channels, 0, ti);
       break;
     default:
       mxprint(stderr, "Error: Unknown audio format 0x%04x for audio track ID "

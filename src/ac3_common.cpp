@@ -22,6 +22,21 @@
 
 #include "ac3_common.h"
 
+/*
+  <S_O> AC3 Header:
+  <S_O> AAAAAAAA AAAAAAAA BBBBBBBB BBBBBBBB CCDDDDDD EEEEEFFF
+  <S_O> A = sync, always 0x0B77
+  <S_O> B = CRC 16 of 5/8 frame
+  <S_O> C = samplerate:
+  <S_O>  if E <= 8: 00 = 48kHz; 01 = 44,1kHz; 10 = 32kHz; 11 = reserved
+  <S_O>  if E = 9:  00 = 24kHz; 01 = 22,05kHz; 10 = 16kHz; 11 = reserved
+  <S_O>  if E = 10: 00 = 12kHz; 01 = 11,025kHz; 10 = 8KHz; 11 = reserved
+  <S_O> D = framesize code, 12/24KHz is like 48kHz, 8/16kHz like 32kHz etc.
+  <S_O> E = bitstream ID, if <=8 compatible to all standard decoders
+  <S_O>  9 and 10 = low samplerate additions
+  <S_O> F = bitstream mode
+*/
+
 int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header) {
   static int rate[] = { 32,  40,  48,  56,  64,  80,  96, 112, 128, 160,
                        192, 224, 256, 320, 384, 448, 512, 576, 640};
@@ -90,6 +105,7 @@ int find_ac3_header(unsigned char *buf, int size, ac3_header_t *ac3_header) {
     }
     if (header.flags & A52_LFE)
       header.channels++;
+    header.bsid = (buf[i + 5] >> 3);
     memcpy(ac3_header, &header, sizeof(ac3_header_t));
 
     return i;

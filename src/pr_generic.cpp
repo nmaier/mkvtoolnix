@@ -232,7 +232,7 @@ int generic_packetizer_c::get_track_num() {
   return hserialno;
 }
 
-void generic_packetizer_c::set_codec_id(char *id) {
+void generic_packetizer_c::set_codec_id(const char *id) {
   safefree(hcodec_id);
   if (id == NULL) {
     hcodec_id = NULL;
@@ -241,7 +241,8 @@ void generic_packetizer_c::set_codec_id(char *id) {
   hcodec_id = safestrdup(id);
 }
 
-void generic_packetizer_c::set_codec_private(unsigned char *cp, int length) {
+void generic_packetizer_c::set_codec_private(const unsigned char *cp,
+                                             int length) {
   safefree(hcodec_private);
   if (cp == NULL) {
     hcodec_private = NULL;
@@ -330,7 +331,7 @@ void generic_packetizer_c::force_default_track(int type) {
     default_tracks[idx] = hserialno;
 }
 
-void generic_packetizer_c::set_language(char *language) {
+void generic_packetizer_c::set_language(const char *language) {
   safefree(ti->language);
   ti->language = safestrdup(language);
 }

@@ -1,5 +1,8 @@
 2003-08-14  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: Low bitrate AC3 tracks from Real's DNET are identified
+        as A_AC3/BSID9 or A_AC3/BSID10.
+
         * mkvmerge: The RealMedia reader takes the number of packets into
         account when reading which results in better end-of-file detection.
 

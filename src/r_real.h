@@ -44,7 +44,7 @@ typedef struct {
 
   uint32_t start_time, preroll;
 
-  int channels, bits_per_sample, samples_per_second;
+  int channels, bits_per_sample, samples_per_second, bsid;
 
   int width, height;
   float fps;
@@ -97,6 +97,7 @@ protected:
                                  uint32_t &height);
   virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
                               int size);
+  virtual void get_information_from_data();
 };
 
 #endif  // __R_REAL_H

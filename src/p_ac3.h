@@ -31,12 +31,13 @@ class ac3_packetizer_c: public generic_packetizer_c {
 protected:
   int64_t bytes_output, packetno;
   unsigned long samples_per_sec;
-  int channels, buffer_size;
+  int channels, buffer_size, bsid;
   unsigned char *packet_buffer;
 
 public:
   ac3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, track_info_t *nti) throw (error_c);
+                   int nchannels, int nbsid, track_info_t *nti)
+    throw (error_c);
   virtual ~ac3_packetizer_c();
 
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
@@ -62,7 +63,8 @@ protected:
 public:
   ac3_bs_packetizer_c(generic_reader_c *nreader,
                       unsigned long nsamples_per_sec,
-                      int nchannels, track_info_t *nti) throw (error_c);
+                      int nchannels, int nbsid, track_info_t *nti)
+    throw (error_c);
 
 protected:
   virtual void add_to_buffer(unsigned char *buf, int size);
