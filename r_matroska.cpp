@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.14 2003/04/29 16:23:12 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.15 2003/04/30 18:55:22 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -1009,7 +1009,7 @@ int mkv_reader_c::read() {
 
           }
         } // while (l2 != NULL)
-      } else if (EbmlId(*l1) != KaxCues::ClassInfos.GlobalId)
+      } else if (!(EbmlId(*l1) == KaxCues::ClassInfos.GlobalId))
          printf("[mkv] Unknown element@1: %s\n", typeid(*l1).name());
 
       if (exit_loop)

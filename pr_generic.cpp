@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.27 2003/04/29 16:23:12 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.28 2003/04/30 18:55:22 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -87,7 +87,7 @@ KaxTrackEntry *generic_packetizer_c::get_track_entry() {
   return track_entry;
 }
 
-void generic_packetizer_c::set_serial(int serial = -1) {
+void generic_packetizer_c::set_serial(int serial) {
   hserialno = serial;
 }
 
