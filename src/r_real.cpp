@@ -209,7 +209,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            printf("title: '%s'\n", buffer);
+            mxprint(stdout, "title: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -220,7 +220,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            printf("author: '%s'\n", buffer);
+            mxprint(stdout, "author: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -231,7 +231,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            printf("copyright: '%s'\n", buffer);
+            mxprint(stdout, "copyright: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -242,7 +242,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            printf("comment: '%s'\n", buffer);
+            mxprint(stdout, "comment: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -263,7 +263,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            printf("stream_name: '%s'\n", buffer);
+            mxprint(stdout, "stream_name: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -274,7 +274,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            printf("mime_type: '%s'\n", buffer);
+            mxprint(stdout, "mime_type: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -307,6 +307,7 @@ void real_reader_c::parse_headers() {
               ((float)(i & 0x0000ffff)) / 65536.0;
             dmx->private_data = (unsigned char *)safememdup(buffer, size);
             dmx->private_size = size;
+            dmx->kf_last_timecode = -1;
 
             demuxers.push_back(dmx);
 
@@ -574,6 +575,15 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
   dp_hdr_t *dp_hdr;
   uint32_t *extra;
 
+  if (verbose > 1)
+    mxprint(stdout, "KEY: %s\n", keyframe ? "true" : "false");
+  if ((timecode == dmx->kf_last_timecode) &&
+      (dmx->kf_last_timecode >= 0))
+    keyframe = false;
+  dmx->kf_last_timecode = timecode;
+  if (verbose > 1) 
+    mxprint(stdout, "NEW KEY: %s\n", keyframe ? "true" : "false");
+
   try {
     vpkg_subseq = 0;
     vpkg_seqnum = -1;
@@ -583,33 +593,38 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       // bit 6: 1=short header (only one block?)
       vpkg_header = bc.get_byte();
 
-      printf("\nPACKET: size: %d; fib: ", size);
+      if (verbose > 1)
+        mxprint(stdout, "\nPACKET: size: %d; fib: ", size);
       if ((vpkg_header & 0xc0) == 0x40) {
         // seems to be a very short header
         // 2 bytes, purpose of the second byte yet unknown
         bc.skip(1);
         vpkg_offset = 0;
         vpkg_length = bc.get_len();
-        printf("short\n");
+        if (verbose > 1)
+          mxprint(stdout, "short\n");
 
       } else {
         if ((vpkg_header & 0x40) == 0) {
           // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
           vpkg_subseq = bc.get_byte() & 0x7f;
-          printf("subseq: %d ", vpkg_subseq);
+          if (verbose > 1)
+            mxprint(stdout, "subseq: %d ", vpkg_subseq);
         }
 
         // size of the complete packet
         // bit 14 is always one (same applies to the offset)
         vpkg_length = bc.get_word();
-        printf("l: %02x %02x ", vpkg_length >> 8,
-               vpkg_length & 0xff);
+        if (verbose > 1)
+          mxprint(stdout, "l: %02x %02x ", vpkg_length >> 8,
+                  vpkg_length & 0xff);
 
         if ((vpkg_length & 0xc000) == 0) {
           vpkg_length <<= 16;
           vpkg_length |= bc.get_word();
-          printf("l+: %02x %02x ",
-                 (vpkg_length >> 8) & 0xff, vpkg_length & 0xff);
+          if (verbose > 1)
+            mxprint(stdout, "l+: %02x %02x ",
+                    (vpkg_length >> 8) & 0xff, vpkg_length & 0xff);
         } else
           vpkg_length &= 0x3fff;
 
@@ -618,36 +633,42 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         // _end_ of the packet, so it's equal to fragment size!!!
         vpkg_offset = bc.get_word();
 
-        printf("o: %02x %02x ", vpkg_offset >> 8,
-               vpkg_offset & 0xff);
+        if (verbose > 1)
+          mxprint(stdout, "o: %02x %02x ", vpkg_offset >> 8,
+                  vpkg_offset & 0xff);
 
         if ((vpkg_offset & 0xc000) == 0) {
           vpkg_offset <<= 16;
           vpkg_offset |= bc.get_word();
-          printf("o+: %02x %02x ",
-                 (vpkg_offset >> 8 ) &0xff, vpkg_offset & 0xff);
+          if (verbose > 1)
+            mxprint(stdout, "o+: %02x %02x ",
+                    (vpkg_offset >> 8 ) &0xff, vpkg_offset & 0xff);
         } else
           vpkg_offset &= 0x3fff;
 
         vpkg_seqnum = bc.get_byte();
-        printf("seq: %02x\n", vpkg_seqnum);
+        if (verbose > 1)
+          mxprint(stdout, "seq: %02x\n", vpkg_seqnum);
       }
 
-      printf("block: hdr=0x%0x, len=%d, offset=%d, seqnum=%d\n",
-             vpkg_header, vpkg_length, vpkg_offset, vpkg_seqnum);
+      if (verbose > 1)
+        mxprint(stdout, "block: hdr=0x%0x, len=%d, offset=%d, seqnum=%d\n",
+                vpkg_header, vpkg_length, vpkg_offset, vpkg_seqnum);
 
       if (dmx->last_packet) {
         dp_hdr = (dp_hdr_t *)dmx->last_packet;
         dp_data = dmx->last_packet + sizeof(dp_hdr_t);
         extra = (uint32_t *)(dmx->last_packet + dp_hdr->chunktab);
-        printf("we have an incomplete packet "
-               "(oldseq=%d new=%d)\n", dmx->last_seq, vpkg_seqnum);
+        if (verbose > 1)
+          mxprint(stdout, "we have an incomplete packet "
+                  "(oldseq=%d new=%d)\n", dmx->last_seq, vpkg_seqnum);
 
         // we have an incomplete packet:
         if (dmx->last_seq != vpkg_seqnum) {
           // this fragment is for new packet, close the old one
-          printf("closing probably incomplete packet, "
-                 "len: %d\n", dmx->ctb_len);
+          if (verbose > 1)
+            mxprint(stdout, "closing probably incomplete packet, "
+                    "len: %d\n", dmx->ctb_len);
 
           buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
                                                8 * (dp_hdr->chunks + 1));
@@ -655,6 +676,8 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
           memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
           memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
                  dp_hdr->len);
+          if (verbose > 1)
+            mxprint(stdout, "PROCESS\n");
           dmx->packetizer->process(buffer, 1 + dp_hdr->len +
                                    8 * (dp_hdr->chunks + 1), dp_hdr->timestamp,
                                    -1, dmx->keyframe ? VFT_IFRAME :
@@ -665,12 +688,15 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         } else {
           // append data to it!
           dp_hdr->chunks++;
-          printf("[chunks=%d  subseq=%d]\n", dp_hdr->chunks, vpkg_subseq);
+          if (verbose > 1)
+            mxprint(stdout, "[chunks=%d  subseq=%d]\n", dp_hdr->chunks,
+                    vpkg_subseq);
 
           if ((int)(dp_hdr->chunktab + 8 * (1 + dp_hdr->chunks)) >
               dmx->ctb_len) {
             // increase buffer size, this should not happen!
-            printf("chunktab buffer too small!!!!!\n");
+            if (verbose > 1)
+              mxprint(stdout, "chunktab buffer too small!!!!!\n");
             dmx->ctb_len = dp_hdr->chunktab + 8 * (4 + dp_hdr->chunks);
             dmx->last_packet = (unsigned char *)realloc(dmx->last_packet,
                                                         dmx->ctb_len);
@@ -686,9 +712,10 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
           if ((vpkg_header & 0xc0) == 0x80) {
             // last fragment!
             if ((int)dp_hdr->len != (vpkg_length - vpkg_offset))
-              printf("warning! assembled.len=%d  "
-                     "frag.len=%d  total.len=%d\n",
-                     dmx->ctb_len, vpkg_offset, vpkg_length - vpkg_offset);
+              if (verbose > 1)
+                mxprint(stdout, "warning! assembled.len=%d  "
+                        "frag.len=%d  total.len=%d\n",
+                        dmx->ctb_len, vpkg_offset, vpkg_length - vpkg_offset);
             bc.get_bytes(dp_data + dp_hdr->len, vpkg_offset);
             if (((dp_data[dp_hdr->len] & 0x20) != 0) &&
                 !strcmp(dmx->fourcc, "RV30"))
@@ -696,8 +723,9 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
             else
               dp_hdr->len += vpkg_offset;
 
-            printf("fragment (%d bytes) appended, %d "
-                   "bytes left\n", vpkg_offset, bc.get_len());
+            if (verbose > 1)
+              mxprint(stdout, "fragment (%d bytes) appended, %d "
+                      "bytes left\n", vpkg_offset, bc.get_len());
 
             // we know that this is the last fragment. we can close the packet!
             buffer = (unsigned char *)safemalloc(1 + dp_hdr->len +
@@ -706,6 +734,8 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
             memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
             memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
                    dp_hdr->len);
+            if (verbose > 1)
+              mxprint(stdout, "PROCESS\n");
             dmx->packetizer->process(buffer, 1 + dp_hdr->len +
                                      8 * (dp_hdr->chunks + 1),
                                      dp_hdr->timestamp, -1, dmx->keyframe ?
@@ -718,9 +748,10 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
 
           // non-last fragment:
           if ((int)dp_hdr->len != vpkg_offset)
-            printf("warning! assembled.len=%d  "
-                   "offset=%d  frag.len=%d  total.len=%d  \n", dmx->ctb_len,
-                   vpkg_offset, bc.get_len(), vpkg_length);
+            if (verbose > 1)
+              mxprint(stdout, "warning! assembled.len=%d  "
+                      "offset=%d  frag.len=%d  total.len=%d  \n", dmx->ctb_len,
+                      vpkg_offset, bc.get_len(), vpkg_length);
           len = bc.get_len();
           bc.get_bytes(dp_data + dp_hdr->len, len);
           if ((dp_data[dp_hdr->len] & 0x20) &&
@@ -767,6 +798,8 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       buffer[0] = dp_hdr->chunks;
       memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
       memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data, dp_hdr->len);
+      if (verbose > 1)
+        mxprint(stdout, "PROCESS\n");
       dmx->packetizer->process(buffer, 1 + dp_hdr->len +
                                8 * (dp_hdr->chunks + 1), dp_hdr->timestamp, -1,
                                dmx->keyframe ? VFT_IFRAME :
@@ -776,7 +809,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
     }
 
   } catch(...) {
-    fprintf(stderr, "real_reader: Caught exception during parsing of a video "
+    mxprint(stderr, "real_reader: Caught exception during parsing of a video "
             "packet. Aborting.\n");
     exit(1);
   }

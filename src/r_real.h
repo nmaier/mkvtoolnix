@@ -50,7 +50,7 @@ typedef struct {
   int private_size;
 
   unsigned char *last_packet;
-  int last_seq, last_len, ctb_len;
+  int last_seq, last_len, ctb_len, kf_last_timecode;
   bool keyframe;
 } real_demuxer_t;
 
