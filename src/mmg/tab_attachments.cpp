@@ -140,11 +140,16 @@ tab_attachments::enable(bool e) {
 void
 tab_attachments::on_add_attachment(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, wxT("Choose an attachment file"), last_open_dir,
-                   wxT(""), wxT(ALLFILES), wxOPEN);
+                   wxT(""), wxT(ALLFILES), wxOPEN | wxMULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
+    wxArrayString files;
+    int i;
+
     last_open_dir = dlg.GetDirectory();
-    add_attachment(dlg.GetPath());
+    dlg.GetPaths(files);
+    for (i = 0; i < files.Count(); i++)
+      add_attachment(files[i]);
   }
 }
 

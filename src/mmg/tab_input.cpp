@@ -712,11 +712,16 @@ tab_input::select_file(bool append) {
   wxFileDialog dlg(NULL,
                    append ? wxT("Choose an input file to add") :
                    wxT("Chose an input file to append"),
-                   last_open_dir, wxT(""), media_files, wxOPEN);
+                   last_open_dir, wxT(""), media_files, wxOPEN | wxMULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
+    wxArrayString files;
+    int i;
+
     last_open_dir = dlg.GetDirectory();
-    add_file(dlg.GetPath(), append);
+    dlg.GetPaths(files);
+    for (i = 0; i < files.Count(); i++)
+      add_file(files[i], append);
   }
 }
 
@@ -771,8 +776,8 @@ tab_input::add_file(const wxString &file_name,
   result = wxExecute(command, output, errors);
   wxRemoveFile(opt_file_name);
   if ((result < 0) || (result > 1)) {
-    name.Printf(wxT("File identification failed. Return code: %d\n\n"),
-                result);
+    name.Printf(wxT("File identification failed for '%s'. Return code: "
+                    "%d\n\n"), file_name.c_str(), result);
     for (i = 0; i < output.Count(); i++)
       name += break_line(output[i]) + wxT("\n");
     name += wxT("\n");
