@@ -152,7 +152,7 @@ void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
 
 extern int MTX_DLL_API cc_local_utf8;
 
-int MTX_DLL_API utf8_init(const char *charset);
+int MTX_DLL_API utf8_init(const string &charset);
 void MTX_DLL_API utf8_done();
 char *MTX_DLL_API to_utf8_c(int handle, const char *local);
 inline char *

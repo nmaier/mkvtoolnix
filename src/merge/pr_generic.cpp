@@ -1378,6 +1378,8 @@ track_info_c::operator =(const track_info_c &src) {
   no_attachments = src.no_attachments;
   no_tags = src.no_tags;
 
+  chapter_charset = src.chapter_charset;
+
   avi_block_align = src.avi_block_align;
   avi_samples_per_sec = src.avi_samples_per_sec;
   avi_avg_bytes_per_sec = src.avi_avg_bytes_per_sec;

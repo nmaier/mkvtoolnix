@@ -541,12 +541,12 @@ add_kax_conv(const char *charset,
 }
 
 int
-utf8_init(const char *charset) {
+utf8_init(const string &charset) {
   string lc_charset;
   iconv_t ict_from_utf8, ict_to_utf8;
   int i;
 
-  if ((charset == NULL) || (*charset == 0)) {
+  if (charset == "") {
     setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW) || defined(COMP_MSC)
     lc_charset = "CP" + to_string(GetACP());

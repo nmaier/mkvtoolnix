@@ -1743,7 +1743,7 @@ mmg_app::OnInit() {
   uint32_t i;
   wxString k, v;
 
-  cc_local_utf8 = utf8_init(NULL);
+  cc_local_utf8 = utf8_init("");
   xml_element_map_init();
 
   cfg = new wxConfig(wxT("mkvmergeGUI"));

@@ -374,7 +374,7 @@ parse_cue_chapters(mm_text_io_c *in,
 
   if (in->get_byte_order() == BO_NONE) {
     a.do_convert = true;
-    a.cc_utf8 = utf8_init(charset.c_str());
+    a.cc_utf8 = utf8_init(charset);
 
   } else {
     a.do_convert = false;

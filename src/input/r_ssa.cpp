@@ -82,7 +82,8 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
     for (i = 0; i < ti->sub_charsets->size(); i++)
       if ((*ti->sub_charsets)[i].id == 0) {
         sub_charset_found = true;
-        cc_utf8 = utf8_init((*ti->sub_charsets)[i].language);
+        cc_utf8 = utf8_init((*ti->sub_charsets)[i].language == NULL ? "" :
+                            (*ti->sub_charsets)[i].language);
         break;
       }
 
@@ -90,7 +91,7 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
       if (mm_io->get_byte_order() != BO_NONE)
         cc_utf8 = utf8_init("UTF-8");
       else
-        cc_utf8 = utf8_init(ti->sub_charset);
+        cc_utf8 = utf8_init(ti->sub_charset == NULL ? "" : ti->sub_charset);
     }
 
     ti->id = 0;                 // ID for this track.

@@ -1417,6 +1417,7 @@ parse_args(vector<string> &args) {
                   "'--chapter-charset %s'.\n"), next_arg.c_str());
 
       chapter_charset = next_arg;
+      ti->chapter_charset = next_arg;
       sit++;
 
     } else if ((this_arg == "--cue-chapter-name-format")) {
@@ -1829,7 +1830,7 @@ handle_args(int argc,
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
           mxerror(_("'--command-line-charset' is missing its argument.\n"));
-        cc_command_line = utf8_init(argv[i + 1]);
+        cc_command_line = utf8_init(argv[i + 1] == NULL ? "" : argv[i + 1]);
         i++;
       } else
         args.push_back(to_utf8(cc_command_line, argv[i]));

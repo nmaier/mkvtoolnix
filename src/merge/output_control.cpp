@@ -1766,7 +1766,7 @@ setup() {
 #endif
 
   srand(time(NULL));
-  cc_local_utf8 = utf8_init(NULL);
+  cc_local_utf8 = utf8_init("");
 
   cluster_helper = new cluster_helper_c();
 

@@ -223,6 +223,10 @@ public:
 
   bool no_chapters, no_attachments, no_tags;
 
+  // Some file formats can contain chapters, but for some the charset
+  // cannot be identified unambiguously (*cough* OGM *cough*).
+  string chapter_charset;
+
   // The following variables are needed for the broken way of
   // syncing audio in AVIs: by prepending it with trash. Thanks to
   // the nandub author for this really, really sucky implementation.

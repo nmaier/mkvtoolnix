@@ -252,7 +252,7 @@ parse_args(int argc,
       if ((i + 1) >= argc)
         mxerror(_("'-c' lacks a charset.\n"));
 
-      conv_handle = utf8_init(argv[i + 1]);
+      conv_handle = utf8_init(argv[i + 1] == NULL ? "" : argv[i + 1]);
       sub_charset = argv[i + 1];
       i++;
 
@@ -405,7 +405,7 @@ main(int argc,
 #endif
 
   srand(time(NULL));
-  utf8_init(NULL);
+  utf8_init("");
   conv_utf8 = utf8_init("UTF-8");
 
   xml_element_map_init();

@@ -1891,7 +1891,7 @@ setup() {
   textdomain("mkvtoolnix");
 #endif
 
-  cc_local_utf8 = utf8_init(NULL);
+  cc_local_utf8 = utf8_init("");
 
   xml_element_map_init();
 }
