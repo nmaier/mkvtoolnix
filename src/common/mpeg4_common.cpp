@@ -6,6 +6,11 @@
    Distributed under the GPL
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
+
+   Part of this code (the functions \c decode_rbsp_trailing() ) were
+   taken or inspired and modified from the ffmpeg project (
+   http://ffmpeg.sourceforge.net/index.php ). These functions were
+   licensed under the LGPL.
   
    \file
    \version $Id$
@@ -168,6 +173,188 @@ mpeg4_find_frame_types(const unsigned char *buffer,
     else
       fit++;
   }
+}
+
+#define NAL_SPS			7
+
+/** \brief identifies the exact end of the bitstream
+ * @return the length of the trailing, or 0 if damaged
+ */
+static int
+decode_rbsp_trailing(const uint8_t *src) {
+  int v;
+  int r;
+
+  v = *src;
+  for (r = 1; r < 9; r++) {
+    if (v & 1)
+      return r;
+    v >>= 1;
+  }
+  return 0;
+}
+
+/** \brief Decodes a network abstraction layer unit.
+ * @param consumed is the number of bytes used as input
+ * @param length is the length of the array
+ * @param dst_length is the number of decoded bytes
+ * @returns decoded bytes, might be src+1 if no escapes 
+ */
+static uint8_t *
+decode_nal(const uint8_t *src,
+           int length,
+           int &dst_length,
+           int &consumed,
+           int &nal_unit_type) {
+  int i, si, di;
+  uint8_t *dst;
+
+  nal_unit_type = src[0] & 0x1F;
+
+  src++;
+  length--;
+  for (i = 0; (i + 1) < length; i += 2) {
+    if (src[i] != 0)
+      continue;
+    if ((i > 0) && (src[i - 1] == 0))
+      i--;
+    if (((i + 2) < length) && (src[i + 1] == 0) && (src[i + 2] <= 3)) {
+      if (src[i + 2] != 3) {
+        /* startcode, so we must be past the end */
+        length = i;
+      }
+      break;
+    }
+  }
+
+  if (i >= (length - 1)) { //no escaped 0
+    dst_length = length;
+    consumed = length + 1; //+1 for the header
+    return (uint8_t *)safememdup(src, length);
+  }
+
+  dst = (uint8_t *)safemalloc(length);
+
+  si = 0;
+  di = 0;
+  while (si < length) { 
+    //remove escapes (very rare 1:2^22)
+    if (((si + 2) < length) && (src[si] == 0) && (src[si + 1] == 0) &&
+        (src[si + 2] <= 3)) {
+      if (src[si + 2] == 3) { //escape
+        dst[di++] = 0;
+        dst[di++] = 0;
+        si += 3;
+        continue;
+      } else //next start code
+        break;
+    }
+
+    dst[di++] = src[si++];
+  }
+
+  dst_length = di;
+  consumed = si + 1; //+1 for the header
+  return dst;
+}
+
+static bool
+decode_seq_parameter_set(bit_cursor_c &bits,
+                         uint32_t &par_num,
+                         uint32_t &par_den) {
+//   bool ok;
+
+//   ok = true;
+//   ok &= bits.skip_bits(8);      // profile_idc
+//   ok &= bits.skip_bits(4);      // constraint_setX_flag
+//   ok &= bits.skip_bits(4);      // reserved
+//   ok &= bits.skip_bits(
+  return false;
+}
+
+static bool
+decode_nal_units(const uint8_t *buffer,
+                 int buf_size,
+                 uint32_t &par_num,
+                 uint32_t &par_den) {
+  int nal_length_size;
+  int buf_index;
+
+  nal_length_size = 2;
+  buf_index = 0;
+
+  while (true) {
+    int consumed;
+    int dst_length;
+    int bit_length;
+    uint8_t *ptr;
+    int i, nalsize = 0;
+    int nal_unit_type;
+
+    if (buf_index >= buf_size)
+      break;
+    nalsize = 0;
+    for (i = 0; i < nal_length_size; i++)
+      nalsize = (nalsize << 8) | buffer[buf_index++];
+
+    nal_unit_type = -1;
+    ptr = decode_nal(buffer + buf_index, buf_size - buf_index,
+                     dst_length, consumed, nal_unit_type);
+
+    if (ptr[dst_length - 1] == 0)
+      dst_length--;
+    bit_length = 8 * dst_length - decode_rbsp_trailing(ptr + dst_length - 1);
+
+    if (nal_unit_type == NAL_SPS) {
+      bit_cursor_c bc(ptr, (bit_length + 7) / 8);
+      bool result;
+
+      result = decode_seq_parameter_set(bc, par_num, par_den);
+      safefree(ptr);
+      return result;
+    }
+
+    buf_index += consumed;
+    safefree(ptr);
+  }
+
+  return false;
+}
+
+/** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
+  
+   This function searches a buffer containing the MPEG4 layer 10 (AVC) codec
+   initialization for the pixel aspectc ratio. If it is found then the
+   numerator and the denominator are returned.
+  
+   \param buffer The buffer containing the MPEG4 layer 10 codec data.
+   \param size The size of the buffer in bytes.
+   \param par_num The numerator, if found, is stored in this variable.
+   \param par_den The denominator, if found, is stored in this variable.
+  
+   \return \c true if the pixel aspect ratio was found and \c false
+     otherwise.
+*/
+bool
+mpeg4_l10_extract_par(const uint8_t *buffer,
+                      int buf_size,
+                      uint32_t &par_num,
+                      uint32_t &par_den) {
+  const uint8_t *p;
+  int cnt, i, nalsize;
+
+  p = buffer;
+  // Decode sps from avcC
+  cnt = *(p + 5) & 0x1f; // Number of sps
+  p += 6;
+  for (i = 0; i < cnt; i++) {
+    nalsize = get_uint16_be(p) + 2;
+    if (decode_nal_units(p, nalsize, par_num, par_den))
+      return true;
+    p += nalsize;
+  }
+
+  return false;
 }
 
 /** \brief Extract the FPS from a MPEG video sequence header

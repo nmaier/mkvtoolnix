@@ -142,9 +142,10 @@ video_packetizer_c::process(memory_c &mem,
   debug_enter("video_packetizer_c::process");
 
   if (!aspect_ratio_extracted) {
-    if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) ||
-        (mpeg_video == MPEG_VIDEO_V4_LAYER_10))
+    if (mpeg_video == MPEG_VIDEO_V4_LAYER_2)
       extract_mpeg4_aspect_ratio(mem.data, mem.size);
+    else if (mpeg_video == MPEG_VIDEO_V4_LAYER_10)
+      extract_mpeg4_aspect_ratio(ti->private_data, ti->private_size);
     aspect_ratio_extracted = true;
   }
 
@@ -270,14 +271,18 @@ video_packetizer_c::extract_mpeg4_aspect_ratio(const unsigned char *buffer,
   if (ti->aspect_ratio_given || ti->display_dimensions_given)
     return;
 
-  if (mpeg4_extract_par(buffer, size, num, den)) {
+  if (((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
+       mpeg4_extract_par(buffer, size, num, den))
+      ||
+      ((mpeg_video == MPEG_VIDEO_V4_LAYER_10) &&
+       mpeg4_l10_extract_par(buffer, size, num, den))) {
     ti->aspect_ratio_given = true;
     ti->aspect_ratio = (float)hvideo_pixel_width /
       (float)hvideo_pixel_height * (float)num / (float)den;
     generic_packetizer_c::set_headers();
     rerender_track_headers();
     mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
-           "from the MPEG4 data and set the display dimensions to "
+           "from the MPEG4 video data and set the display dimensions to "
            "%u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
            (uint32_t)ti->display_width, (uint32_t)ti->display_height);
   }
