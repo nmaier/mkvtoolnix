@@ -29,6 +29,12 @@
 
 #include "librmff.h"
 
+typedef struct rmff_bitrate_t {
+  uint32_t *timecodes;
+  uint32_t *frame_sizes;
+  uint32_t num_entries;
+} rmff_bitrate_t;
+
 typedef struct rmff_file_internal_t {
   uint32_t max_bit_rate;
   uint32_t avg_bit_rate;
@@ -42,6 +48,7 @@ typedef struct rmff_file_internal_t {
   uint32_t index_offset;
   int num_index_chunks;
   uint32_t total_bytes;
+  rmff_bitrate_t bitrate;
 } rmff_file_internal_t;
 
 typedef struct rmff_track_internal_t {
@@ -52,9 +59,8 @@ typedef struct rmff_track_internal_t {
   uint32_t highest_timecode;
   uint32_t num_packets;
   int index_this;
-  uint32_t last_timecode;
-  uint32_t bytes_since_timecode_change;
   uint32_t total_bytes;
+  rmff_bitrate_t bitrate;
 } rmff_track_internal_t;
 
 int rmff_last_error = RMFF_ERR_OK;
@@ -1160,6 +1166,53 @@ rmff_copy_track_headers(rmff_track_t *dst,
   dst->type = src->type;
 }
 
+static uint32_t
+rmff_update_max_bitrate(rmff_bitrate_t *bitrate,
+                        uint32_t timecode,
+                        uint32_t frame_size) {
+  uint32_t i, max_bit_rate, total_size;
+
+  bitrate->timecodes = (uint32_t *)saferealloc(bitrate->timecodes,
+                                               (bitrate->num_entries + 1) *
+                                               sizeof(uint32_t));
+  bitrate->timecodes[bitrate->num_entries] = timecode;
+  bitrate->frame_sizes = (uint32_t *)saferealloc(bitrate->frame_sizes,
+                                                 (bitrate->num_entries + 1) *
+                                                 sizeof(uint32_t));
+  bitrate->frame_sizes[bitrate->num_entries] = frame_size;
+  bitrate->num_entries++;
+
+  if ((bitrate->timecodes[bitrate->num_entries - 1] -
+       bitrate->timecodes[0]) < 1000)
+    return 0;
+
+  total_size = 0;
+  for (i = 0; i < bitrate->num_entries; i++)
+    total_size += bitrate->frame_sizes[i];
+  max_bit_rate = (uint32_t)
+    ((int64_t)total_size * 8 * 1000 /
+     (bitrate->timecodes[bitrate->num_entries - 1] -
+      bitrate->timecodes[0]));
+  i = 0;
+  while ((i < bitrate->num_entries) &&
+         ((bitrate->timecodes[bitrate->num_entries - 1] -
+           bitrate->timecodes[i]) >= 1000))
+    i++;
+  memmove(&bitrate->timecodes[0], &bitrate->timecodes[i],
+          (bitrate->num_entries - i) * sizeof(uint32_t));
+  bitrate->timecodes = (uint32_t *)saferealloc(bitrate->timecodes,
+                                               (bitrate->num_entries - i) *
+                                               sizeof(uint32_t));
+  memmove(&bitrate->frame_sizes[0], &bitrate->frame_sizes[i],
+          (bitrate->num_entries - i) * sizeof(uint32_t));
+  bitrate->frame_sizes = (uint32_t *)saferealloc(bitrate->frame_sizes,
+                                                 (bitrate->num_entries - i) *
+                                                 sizeof(uint32_t));
+  bitrate->num_entries -= i;
+
+  return max_bit_rate;
+}
+
 int
 rmff_write_frame(rmff_track_t *track,
                  rmff_frame_t *frame) {
@@ -1196,39 +1249,33 @@ rmff_write_frame(rmff_track_t *track,
   if (bw != wanted_len)
     return set_error(RMFF_ERR_IO, "Could not write the frame", RMFF_ERR_IO);
 
-  if (wanted_len > fint->max_packet_size)
-    fint->max_packet_size = wanted_len;
+  if (frame->size > fint->max_packet_size)
+    fint->max_packet_size = frame->size;
   fint->avg_packet_size = (fint->avg_packet_size * fint->num_packets +
-                           wanted_len) / (fint->num_packets + 1);
+                           frame->size) / (fint->num_packets + 1);
   fint->num_packets++;
   fint->total_bytes += frame->size;
   if (frame->timecode > fint->highest_timecode)
     fint->highest_timecode = frame->timecode;
   fint->data_contents_size += wanted_len;
 
-  if (wanted_len > tint->max_packet_size)
-    tint->max_packet_size = wanted_len;
+  if (frame->size > tint->max_packet_size)
+    tint->max_packet_size = frame->size;
   tint->avg_packet_size = (tint->avg_packet_size * tint->num_packets +
-                           wanted_len) / (tint->num_packets + 1);
+                           frame->size) / (tint->num_packets + 1);
   tint->num_packets++;
   tint->total_bytes += frame->size;
-
-  /* Update the max_bit_rates. Crude... */
   if (frame->timecode > tint->highest_timecode)
     tint->highest_timecode = frame->timecode;
-  if (frame->timecode != tint->last_timecode) {
-    if (tint->last_timecode != 0) {
-      bit_rate = (int64_t)tint->bytes_since_timecode_change * 8 * 1000 /
-        (frame->timecode - tint->last_timecode);
-      if (bit_rate > tint->max_bit_rate)
-        tint->max_bit_rate = bit_rate;
-      if (bit_rate > fint->max_bit_rate)
-        fint->max_bit_rate = bit_rate;
-    }
-    tint->last_timecode = frame->timecode;
-    tint->bytes_since_timecode_change = frame->size;
-  } else
-    tint->bytes_since_timecode_change += frame->size;
+
+  bit_rate = rmff_update_max_bitrate(&fint->bitrate, frame->timecode,
+                                     frame->size);
+  if (bit_rate > fint->max_bit_rate)
+    fint->max_bit_rate = bit_rate;
+  bit_rate = rmff_update_max_bitrate(&tint->bitrate, frame->timecode,
+                                     frame->size);
+  if (bit_rate > tint->max_bit_rate)
+    tint->max_bit_rate = bit_rate;
 
   return clear_error();
 }
