@@ -1034,7 +1034,7 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
-                    wxT("' does already exists. Do you want to overwrite it?"),
+                    wxT("' does already exist. Do you want to overwrite it?"),
                     wxT("Overwrite existing file?"), wxYES_NO) != wxYES))
     return;
 
@@ -1627,7 +1627,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
     return;
 
   line = wxT("The output file '") + tc_output->GetValue() +
-    wxT("' does already exists. Do you want to overwrite it?");
+    wxT("' does already exist. Do you want to overwrite it?");
   if (settings_page->cb_ask_before_overwriting->IsChecked() &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(break_line(line, 60), wxT("Overwrite existing file?"),
