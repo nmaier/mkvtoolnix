@@ -46,6 +46,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_ac3.h"
 #include "p_dts.h"
 #include "p_aac.h"
+#include "p_vobsub.h"
 
 #include <ebml/EbmlContexts.h>
 #include <ebml/EbmlHead.h>
@@ -424,8 +425,53 @@ void kax_reader_c::verify_tracks() {
 
         break;
 
-      case 's':                 // Text subtitles do not need any data
-        t->ok = 1;              // except the CodecID.
+      case 's':
+        if (!strncmp(t->codec_id, MKV_S_VOBSUB, strlen(MKV_S_VOBSUB))) {
+          if (t->private_data == NULL) {
+            if (verbose)
+              mxwarn(PFX "CodecID for track %u is '%s', but there was no "
+                     "private data found.\n", t->tnum, t->codec_id);
+            continue;
+          }
+
+          c = (unsigned char *)t->private_data;
+          if (c[0] > 1) {
+            if (verbose)
+              mxwarn(PFX "VobSub track does not contain valid headers.\n");
+            continue;
+          }
+
+          offset = 1;
+          t->header_sizes[c[0]] = t->private_size;
+          for (i = 0; i < c[0]; i++) {
+            length = 0;
+            while ((c[offset] == (unsigned char)255) &&
+                   (length < t->private_size)) {
+              length += 255;
+              offset++;
+            }
+            if (offset >= (t->private_size - 1)) {
+              if (verbose)
+                mxwarn(PFX "VobSub track does not "
+                       "contain valid headers.\n");
+              continue;
+            }
+            length += c[offset];
+            offset++;
+            t->header_sizes[i] = length;
+            t->header_sizes[c[0]] -= length;
+          }
+          t->header_sizes[c[0]] -= offset;
+
+          t->headers[0] = &c[offset];
+          if (c[0] == 1)
+            t->headers[1] = & c[offset + t->header_sizes[0]];
+          else {
+            t->headers[1] = NULL;
+            t->header_sizes[1] = 0;
+          }
+        }
+        t->ok = 1;
         break;
 
       default:                  // unknown track type!? error in demuxer...
@@ -1110,14 +1156,44 @@ void kax_reader_c::create_packetizers() {
           break;
 
         case 's':
-          t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
-                                                    t->private_data,
-                                                    t->private_size, false,
-                                                    true, &nti);
-          if (verbose)
-            mxinfo("Matroska demultiplexer (%s): using the text "
-                   "subtitle output module for track ID %u.\n", ti->fname,
-                   t->tnum);
+          if (!strncmp(t->codec_id, MKV_S_VOBSUB, strlen(MKV_S_VOBSUB))) {
+            int compression;
+            char *cstr;
+
+            if ((cstr = strchr(t->codec_id, '/')) != NULL) {
+              cstr++;
+              if (!strcmp(cstr, "LZO"))
+                compression = COMPRESSION_LZO;
+              else if (!strcmp(cstr, "Z") || !strcmp(cstr, "ZLIB"))
+                compression = COMPRESSION_ZLIB;
+              else if (!strcmp(cstr, "BZ2"))
+                compression = COMPRESSION_BZ2;
+              else
+                mxerror(PFX "Unsupported compression method '%s'.\n", cstr);
+            } else
+              compression = COMPRESSION_NONE;
+            t->packetizer =
+              new vobsub_packetizer_c(this, t->headers[0], t->header_sizes[0],
+                                      t->headers[1], t->header_sizes[1],
+                                      compression, COMPRESSION_ZLIB, &nti);
+            if (verbose)
+              mxinfo("Matroska demultiplexer (%s): using the VobSub "
+                     "output module for track ID %u.\n", ti->fname, t->tnum);
+
+            t->sub_type = 'v';
+
+          } else {
+            t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
+                                                      t->private_data,
+                                                      t->private_size, false,
+                                                      true, &nti);
+            if (verbose)
+              mxinfo("Matroska demultiplexer (%s): using the text "
+                     "subtitle output module for track ID %u.\n", ti->fname,
+                     t->tnum);
+
+            t->sub_type = 't';
+          }
           break;
 
         default:
@@ -1225,7 +1301,8 @@ int kax_reader_c::read(generic_packetizer_c *) {
           }
 
           if ((block_track != NULL) && (block_track->packetizer != NULL)) {
-            if ((block_track->type == 's') && (block_duration == -1)) {
+            if ((block_track->type == 's') && (block_duration == -1) &&
+                (block_track->sub_type == 't')) {
               mxwarn("Text subtitle block does not "
                      "contain a block duration element. This file is "
                      "broken.\n");
@@ -1239,7 +1316,8 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
               for (i = 0; i < (int)block->NumberFrames(); i++) {
                 DataBuffer &data = block->GetBuffer(i);
-                if (block_track->type == 's') {
+                if ((block_track->type == 's') &&
+                    (block_track->sub_type == 't')) {
                   char *lines;
 
                   lines = (char *)safemalloc(data.Size() + 1);

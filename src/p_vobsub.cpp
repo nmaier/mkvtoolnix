@@ -59,7 +59,7 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
   if (nti->compression == COMPRESSION_UNSPECIFIED)
     compression_type = ncompression_type;
   else
-    compression_type = ti->compression;
+    compression_type = nti->compression;
   compressed_type = ncompressed_type;
 
   raw_size = 0;

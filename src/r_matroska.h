@@ -50,6 +50,7 @@ typedef struct {
   int ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs
+  char sub_type; // 't' = text, 'v' = VobSub
 
   // Parameters for video tracks
   uint32_t v_width, v_height, v_dwidth, v_dheight;
