@@ -1050,7 +1050,7 @@ void kax_reader_c::create_packetizers() {
             memcpy(nti.fourcc, t->v_fourcc, 5);
           if (verbose)
             mxinfo("+-> Using video output module for track ID %u.\n",
-                   ti->fname, t->tnum);
+                   t->tnum);
           t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
                                                  t->v_width,
                                                  t->v_height,
@@ -1071,7 +1071,7 @@ void kax_reader_c::create_packetizers() {
                                                  &nti);
             if (verbose)
               mxinfo("+-> Using the PCM output module for track ID %u.\n",
-                     ti->fname, t->tnum);
+                     t->tnum);
           } else if (t->a_formattag == 0x0055) {
             int layer;
 
@@ -1081,7 +1081,7 @@ void kax_reader_c::create_packetizers() {
                                                  t->a_channels, layer, &nti);
             if (verbose)
               mxinfo("+-> Using the MPEG audio output module for track ID %u."
-                     "\n", ti->fname, t->tnum);
+                     "\n", t->tnum);
           } else if (t->a_formattag == 0x2000) {
             int bsid;
 
@@ -1096,7 +1096,7 @@ void kax_reader_c::create_packetizers() {
                                                  t->a_channels, bsid, &nti);
             if (verbose)
               mxinfo("+-> Using the AC3 output module for track ID %u.\n",
-                     ti->fname, t->tnum);
+                     t->tnum);
           } else if (t->a_formattag == 0x2001) {
             mxerror("Reading DTS from Matroska not implemented yet,"
                     "cannot we get a complete DTS_Header here for construction"
@@ -1116,7 +1116,7 @@ void kax_reader_c::create_packetizers() {
                                                     t->header_sizes[2], &nti);
             if (verbose)
               mxinfo("+-> Using the Vorbis output module for track ID %u.\n",
-                     ti->fname, t->tnum);
+                     t->tnum);
           } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
             // A_AAC/MPEG2/MAIN
             // 0123456789012345
@@ -1157,7 +1157,7 @@ void kax_reader_c::create_packetizers() {
                                                  false, true);
             if (verbose)
               mxinfo("+-> Using the AAC output module for track ID %u.\n",
-                     ti->fname, t->tnum);
+                     t->tnum);
 
           } else if (t->a_formattag == FOURCC('r', 'e', 'a', 'l')) {
             passthrough_packetizer_c *ptzr;
@@ -1219,8 +1219,8 @@ void kax_reader_c::create_packetizers() {
               new vobsub_packetizer_c(this, t->private_data, t->private_size,
                                       compression, compressed, &nti);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the VobSub "
-                     "output module for track ID %u.\n", ti->fname, t->tnum);
+              mxinfo("+-> Using the VobSub output module for track ID %u.\n",
+                     t->tnum);
 
             t->sub_type = 'v';
 
@@ -1230,9 +1230,8 @@ void kax_reader_c::create_packetizers() {
                                                       t->private_size, false,
                                                       true, &nti);
             if (verbose)
-              mxinfo("Matroska demultiplexer (%s): using the text "
-                     "subtitle output module for track ID %u.\n", ti->fname,
-                     t->tnum);
+              mxinfo("+-> Using the text subtitle output module for track ID "
+                     "%u.\n", t->tnum);
 
             t->sub_type = 't';
           }
