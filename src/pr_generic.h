@@ -229,9 +229,11 @@ class generic_reader_c {
 protected:
   track_info_c *ti;
   vector<generic_packetizer_c *> reader_packetizers;
+  generic_reader_c *connected_to;
 public:
   generic_reader_c(track_info_c *nti) {
     ti = new track_info_c(*nti);
+    connected_to = NULL;
   }
   virtual ~generic_reader_c() {
     delete ti;
@@ -245,6 +247,7 @@ public:
   virtual void add_attachments(KaxAttachments *a) {
   }
   virtual void add_packetizer(generic_packetizer_c *ptzr);
+  virtual void connect(generic_reader_c *prior);
 
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
@@ -356,6 +359,9 @@ public:
   }
   virtual int get_track_num() {
     return hserialno;
+  }
+  virtual int64_t get_source_track_num() {
+    return ti->id;
   }
 
   virtual int set_uid(uint32_t uid);

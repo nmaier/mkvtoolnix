@@ -117,6 +117,7 @@ typedef struct filelist_tag {
   generic_reader_c *reader;
 
   track_info_c *ti;
+  bool first, last;
 } filelist_t;
 
 typedef struct {
@@ -590,11 +591,16 @@ add_tags(KaxTag *tags) {
   kax_tags->PushElement(*tags);
 }
 
+static bool accept_packetizer;
 /** \brief Add a packetizer to the list of packetizers
  */
 void
 add_packetizer_globally(generic_packetizer_c *packetizer) {
-  packetizer_t *pack = (packetizer_t *)safemalloc(sizeof(packetizer_t));
+  packetizer_t *pack;
+
+  if (!accept_packetizer)
+    return;
+  pack = (packetizer_t *)safemalloc(sizeof(packetizer_t));
   pack->packetizer = packetizer;
   pack->status = EMOREDATA;
   pack->pack = NULL;
@@ -1173,7 +1179,8 @@ render_headers(mm_io_c *rout) {
     kax_last_entry = NULL;
 
     for (i = 0; i < files.size(); i++)
-      files[i]->reader->set_headers();
+      if (files[i]->first)
+        files[i]->reader->set_headers();
 
     kax_tracks->Render(*rout, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
     kax_sh_main->IndexThis(*kax_tracks, *kax_segment);
@@ -1315,6 +1322,7 @@ create_readers() {
 
   for (i = 0; i < files.size(); i++) {
     file = files[i];
+    accept_packetizer = file->first;
     try {
       switch (file->type) {
         case TYPEMATROSKA:
@@ -1368,6 +1376,8 @@ create_readers() {
     } catch (error_c error) {
       mxerror("Demultiplexer failed to initialize:\n%s\n", error.get_error());
     }
+    if (!file->first)
+      file->reader->connect(files[i - 1]->reader);
   }
 }
 
@@ -2037,7 +2047,17 @@ parse_args(int argc,
         mxerror("'-S' and '-s' used on the same source file.\n");
 
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
+      file->first = true;
+      file->last = true;
 
+      if (this_arg[0] == '+') {
+        this_arg++;
+        if (files.size() == 0)
+          mxerror("Cannot append '%s' because there has been no prior file.\n",
+                  this_arg);
+        file->first = false;
+        files[files.size() - 1]->last = false;
+      }
       file->name = from_utf8(cc_local_utf8, this_arg);
       file->type = get_type(file->name);
       ti->fname = from_utf8(cc_local_utf8, this_arg);
