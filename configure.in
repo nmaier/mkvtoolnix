@@ -201,6 +201,7 @@ AC_CACHE_CHECK([if being compiled with mingw32],
     LIBMTXCOMMONDLL=0
   fi
 
+AC_SUBST(MINGW)
 AC_SUBST(MINGW_LIBS)
 AC_SUBST(MINGW_GUIAPP)
 AC_SUBST(LIBMTXCOMMONDLL)
@@ -789,6 +790,18 @@ wxTreeItemId id;
           LIBS="$ac_save_LIBS"
         ])
         if test x"$am_cv_wx_compilation" = x1; then
+          if test "x$MINGW" = "x1" ; then
+            WXWINDOWS_INCLUDES=""
+            set - `echo $WXWINDOWS_CFLAGS`
+            while test "x$1" != "x" ; do
+              case "$1" in
+                -I*)
+                  WXWINDOWS_INCLUDES="$WXWINDOWS_INCLUDES $1"
+                  ;;
+              esac
+              shift
+            done
+          fi
           AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
           MMG_SUBDIRS=mmg
           AC_MSG_RESULT($wxwversion ok)
@@ -813,6 +826,7 @@ wxTreeItemId id;
   fi
 
 AC_SUBST(WXWINDOWS_CFLAGS)
+AC_SUBST(WXWINDOWS_INCLUDES)
 AC_SUBST(WXWINDOWS_LIBS)
 AC_SUBST(MMG_SUBDIRS)
 AC_SUBST(USE_WXWINDOWS)

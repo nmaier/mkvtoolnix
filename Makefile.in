@@ -71,13 +71,14 @@ MATROSKA_CFLAGS = @MATROSKA_CFLAGS@
 MATROSKA_LIBS = @MATROSKA_LIBS@
 MINGW_GUIAPP = @MINGW_GUIAPP@
 MINGW_LIBS = @MINGW_LIBS@
+MINGW = @MINGW@
 OGG_LIBS = @OGG_LIBS@
 VORBIS_LIBS = @VORBIS_LIBS@
 WXWINDOWS_CFLAGS = @WXWINDOWS_CFLAGS@
+WXWINDOWS_INCLUDES = @WXWINDOWS_INCLUDES@
 WXWINDOWS_LIBS = @WXWINDOWS_LIBS@
 ZLIB_LIBS = @ZLIB_LIBS@
 LIBINTL_LIBS = @LIBINTL_LIBS@
-MINGW_GUIAPP = @MINGW_GUIAPP@
 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
@@ -102,6 +103,10 @@ CXXFLAGS_SRC_COMMON += -DMTX_DLL_EXPORT
 CXXFLAGS_NO_SRC_COMMON += -DMTX_DLL
 else
 LIBMTXCOMMONEXT = a
+endif
+
+ifeq (1,$(MINGW))
+MMG_RESOURCES = src/mmg/mmg-resources.rc
 endif
 
 DEP_COMMON = src/common/libmtxcommon.$(LIBMTXCOMMONEXT)
@@ -173,6 +178,7 @@ LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
 		-shared -Wl,--export-all
 CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+RCCOMPILE = windres $(WXWINDOWS_INCLUDES) -Isrc/mmg
 
 ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard librmff/*.c) \
@@ -208,6 +214,10 @@ endif
 %.o: %.c
 	@echo '      CC ' $<
 	$(Q)$(CCOMPILE) -c -o $@ $<
+
+%.o: %.rc
+	@echo ' WINDRES ' $<
+	$(Q)$(RCCOMPILE) -o $@ $<
 
 %.mo: %.po
 	@echo '  MSGFMT ' $<
@@ -396,7 +406,8 @@ base64tool_LDADD = -lmtxcommon $(ICONV_LIBS) $(LIBINTL_LIBS)
 #
 
 mmg_SOURCES = $(wildcard src/mmg/*.cpp)
-mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES))
+mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
+		$(patsubst %.rc,%.o,$(MMG_RESOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP)
