@@ -29,9 +29,9 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels,
                                    int nbsid,
-                                   track_info_c *nti)
+                                   track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   packetno = 0;
   bytes_output = 0;
   samples_per_sec = nsamples_per_sec;
@@ -39,7 +39,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
   bsid = nbsid;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1536000000000.0 *ti->async.linear /
+  set_track_default_duration((int64_t)(1536000000000.0 *ti.async.linear /
                                        samples_per_sec));
   enable_avi_audio_sync(true);
 }
@@ -83,15 +83,15 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
         mxinfo("The AC3 track %lld from '%s' contained %d bytes of non-AC3 "
                "data at the beginning. This corresponds to a delay of %lldms. "
                "This delay will be used instead of the non-AC3 data.\n",
-               ti->id, ti->fname.c_str(), pos, offset / 1000000);
+               ti.id, ti.fname.c_str(), pos, offset / 1000000);
         warning_printed = true;
       }
     }
     if (!warning_printed)
       mxwarn("The AC3 track %lld from '%s' contained %d bytes of non-AC3 data "
              "at the beginning which were skipped. The audio/video "
-             "synchronization may have been lost.\n", ti->id,
-             ti->fname.c_str(), pos);
+             "synchronization may have been lost.\n", ti.id,
+             ti.fname.c_str(), pos);
     byte_buffer.remove(pos);
     packet_buffer = byte_buffer.get_buffer();
     size = byte_buffer.get_size();
@@ -164,11 +164,11 @@ ac3_packetizer_c::process(memory_c &mem,
       my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /
                               samples_per_sec);
     else
-      my_timecode = timecode + ti->async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti->async.linear);
+      my_timecode = timecode + ti.async.displacement;
+    my_timecode = (int64_t)(my_timecode * ti.async.linear);
     memory_c mem(packet, ac3header.bytes, true);
     add_packet(mem, my_timecode,
-               (int64_t)(1000000000.0 * 1536 * ti->async.linear /
+               (int64_t)(1000000000.0 * 1536 * ti.async.linear /
                          samples_per_sec));
     packetno++;
   }
@@ -201,9 +201,9 @@ ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
                                          unsigned long nsamples_per_sec,
                                          int nchannels,
                                          int nbsid,
-                                         track_info_c *nti)
+                                         track_info_c &_ti)
   throw (error_c):
-  ac3_packetizer_c(nreader, nsamples_per_sec, nchannels, nbsid, nti) {
+  ac3_packetizer_c(nreader, nsamples_per_sec, nchannels, nbsid, _ti) {
   bsb_present = false;
 }
 

@@ -29,9 +29,9 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels,
                                    bool source_is_good,
-                                   track_info_c *nti)
+                                   track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti), byte_buffer(128 * 1024) {
+  generic_packetizer_c(nreader, _ti), byte_buffer(128 * 1024) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bytes_output = 0;
@@ -41,7 +41,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
   valid_headers_found = source_is_good;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1152000000000.0 * ti->async.linear /
+  set_track_default_duration((int64_t)(1152000000000.0 * ti.async.linear /
                                           samples_per_sec));
   enable_avi_audio_sync(true);
 }
@@ -57,20 +57,20 @@ mp3_packetizer_c::handle_garbage(int64_t bytes) {
   if (packetno == 0) {
     int64_t offset;
 
-    offset = handle_avi_audio_sync(bytes, !(ti->avi_block_align % 384) ||
-                                   !(ti->avi_block_align % 576));
+    offset = handle_avi_audio_sync(bytes, !(ti.avi_block_align % 384) ||
+                                   !(ti.avi_block_align % 576));
     if (offset != -1) {
       mxinfo("The MPEG audio track %lld from '%s' contained %lld bytes of "
              "garbage at the beginning. This corresponds to a delay of "
              "%lldms. This delay will be used instead of the garbage data."
-             "\n", ti->id, ti->fname.c_str(), bytes, offset / 1000000);
+             "\n", ti.id, ti.fname.c_str(), bytes, offset / 1000000);
       warning_printed = true;
     }
   }
   if (!warning_printed)
     mxwarn("The MPEG audio track %lld from '%s' contained %lld bytes of "
            "garbage at the beginning which were skipped. The audio/video "
-           "synchronization may have been lost.\n", ti->id, ti->fname.c_str(),
+           "synchronization may have been lost.\n", ti.id, ti.fname.c_str(),
            bytes);
 }
 
@@ -135,7 +135,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     set_codec_id(codec_id.c_str());
     if (spf != 1152)
       set_track_default_duration((int64_t)(1000000000.0 * spf *
-                                           ti->async.linear /
+                                           ti.async.linear /
                                            samples_per_sec));
     rerender_track_headers();
   }
@@ -206,11 +206,11 @@ mp3_packetizer_c::process(memory_c &mem,
     if (timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
     else
-      my_timecode = timecode + ti->async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti->async.linear);
+      my_timecode = timecode + ti.async.displacement;
+    my_timecode = (int64_t)(my_timecode * ti.async.linear);
     memory_c mem(packet, mp3header.framesize, true);
     add_packet(mem, my_timecode,
-               (int64_t)(1000000000.0 * spf * ti->async.linear /
+               (int64_t)(1000000000.0 * spf * ti.async.linear /
                          samples_per_sec));
     packetno++;
   }

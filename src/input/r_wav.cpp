@@ -66,13 +66,13 @@ wav_reader_c::probe_file(mm_io_c *mm_io,
   return 1;
 }
 
-wav_reader_c::wav_reader_c(track_info_c *nti)
+wav_reader_c::wav_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   int64_t size;
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     mm_io->setFilePointer(0, seek_end);
     size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);
@@ -88,7 +88,7 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
     get_uint32_le(&wheader.common.dwSamplesPerSec) / 8;
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
-  ti->id = 0;                   // ID for this track.
+  ti.id = 0;                   // ID for this track.
   is_dts = false;
 
   while (1) {
@@ -104,7 +104,7 @@ wav_reader_c::wav_reader_c(track_info_c *nti)
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti.fname.c_str());
 
   {
     // check wether .wav file contains DTS data...
@@ -161,7 +161,7 @@ wav_reader_c::create_packetizer(int64_t) {
                            get_uint16_le(&wheader.common.wChannels),
                            get_uint16_le(&wheader.common.wBitsPerSample), ti);
     add_packetizer(ptzr);
-    mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
+    mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
            (int64_t)0);
 
   } else {
@@ -170,7 +170,7 @@ wav_reader_c::create_packetizer(int64_t) {
     // the bitrate...
     ((dts_packetizer_c *)PTZR0)->skipping_is_normal = true;
     mxinfo(FMT_TID "Using the DTS output module. %s %s\n",
-           ti->fname.c_str(), (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" :
+           ti.fname.c_str(), (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" :
            "", (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
     if (verbose > 1)
       print_dts_header(&dtsheader);
@@ -253,5 +253,5 @@ wav_reader_c::get_progress() {
 void
 wav_reader_c::identify() {
   mxinfo("File '%s': container: WAV\nTrack ID 0: audio (%s)\n",
-         ti->fname.c_str(), is_dts ? "DTS" : "PCM");
+         ti.fname.c_str(), is_dts ? "DTS" : "PCM");
 }

@@ -37,8 +37,8 @@ using namespace libmatroska;
 flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
                                      unsigned char *nheader,
                                      int nl_header,
-                                     track_info_c *nti)
-  throw (error_c): generic_packetizer_c(nreader, nti) {
+                                     track_info_c &_ti)
+  throw (error_c): generic_packetizer_c(nreader, _ti) {
   int result;
 
   if ((nl_header < 4) || (nheader[0] != 'f') || (nheader [1] != 'L') ||
@@ -57,17 +57,17 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
   if (!(result & FLAC_HEADER_STREAM_INFO))
     mxerror(_(FMT_TID "The FLAC headers could not be parsed: the stream info "
               "structure was not found.\n"),
-            ti->fname.c_str(), (int64_t)ti->id);
+            ti.fname.c_str(), (int64_t)ti.id);
   num_packets = 0;
 
   set_track_type(track_audio);
   if (stream_info.min_blocksize == stream_info.max_blocksize)
     set_track_default_duration((int64_t)(1000000000ll *
                                          stream_info.min_blocksize *
-                                         ti->async.linear /
+                                         ti.async.linear /
                                          stream_info.sample_rate));
 
-  if ((ti->async.displacement != 0) || (ti->async.linear != 1.0))
+  if ((ti.async.displacement != 0) || (ti.async.linear != 1.0))
     mxwarn("FLAC packetizer: Audio synchronization has not been "
            "implemented for FLAC yet.\n");
 }
@@ -100,7 +100,7 @@ flac_packetizer_c::process(memory_c &mem,
   duration = flac_get_num_samples(mem.data, mem.size, stream_info);
   if (duration == -1) {
     mxwarn(_(FMT_TID "Packet number %lld contained an invalid FLAC header "
-             "and is being skipped.\n"), ti->fname.c_str(), (int64_t)ti->id,
+             "and is being skipped.\n"), ti.fname.c_str(), (int64_t)ti.id,
            num_packets + 1);
     debug_leave("flac_packetizer_c::process");
     return FILE_STATUS_MOREDATA;

@@ -40,7 +40,7 @@ private:
   subtitles_c subs;
 
 public:
-  ssa_reader_c(track_info_c *nti) throw (error_c);
+  ssa_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~ssa_reader_c();
 
   virtual void parse_file();

@@ -32,7 +32,7 @@ protected:
 
 public:
   ac3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, int nbsid, track_info_c *nti)
+                   int nchannels, int nbsid, track_info_c &_ti)
     throw (error_c);
   virtual ~ac3_packetizer_c();
 
@@ -62,7 +62,7 @@ protected:
 public:
   ac3_bs_packetizer_c(generic_reader_c *nreader,
                       unsigned long nsamples_per_sec,
-                      int nchannels, int nbsid, track_info_c *nti)
+                      int nchannels, int nbsid, track_info_c &_ti)
     throw (error_c);
 
 protected:

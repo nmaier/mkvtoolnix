@@ -144,11 +144,11 @@ real_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-real_reader_c::real_reader_c(track_info_c *nti)
+real_reader_c::real_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
 
-  file = rmff_open_file_with_io(ti->fname.c_str(), RMFF_OPEN_MODE_READING,
+  file = rmff_open_file_with_io(ti.fname.c_str(), RMFF_OPEN_MODE_READING,
                                 &mm_io_file_io);
   if (file == NULL) {
     if (rmff_last_error == RMFF_ERR_NOT_RMFF)
@@ -163,7 +163,7 @@ real_reader_c::real_reader_c(track_info_c *nti)
   done = false;
 
   if (verbose)
-    mxinfo(FMT_FN "Using the RealMedia demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the RealMedia demultiplexer.\n", ti.fname.c_str());
 
   parse_headers();
   get_information_from_data();
@@ -185,7 +185,7 @@ real_reader_c::~real_reader_c() {
     safefree(demuxer);
   }
   demuxers.clear();
-  ti->private_data = NULL;
+  ti.private_data = NULL;
   rmff_close_file(file);
 }
 
@@ -317,9 +317,9 @@ real_reader_c::create_packetizer(int64_t tid) {
 
   if (dmx->ptzr == -1) {
     track = dmx->track;
-    ti->id = track->id;
-    ti->private_data = dmx->private_data;
-    ti->private_size = dmx->private_size;
+    ti.id = track->id;
+    ti.private_data = dmx->private_data;
+    ti.private_size = dmx->private_size;
 
     if (track->type == RMFF_TRACK_TYPE_VIDEO) {
       char buffer[20];
@@ -333,7 +333,7 @@ real_reader_c::create_packetizer(int64_t tid) {
         dmx->rv_dimensions = true;
 
       mxinfo(FMT_TID "Using the video output module (FourCC: %s).\n",
-             ti->fname.c_str(), (int64_t)track->id, dmx->fourcc);
+             ti.fname.c_str(), (int64_t)track->id, dmx->fourcc);
 
     } else {
       ra_packetizer_c *ptzr;
@@ -344,7 +344,7 @@ real_reader_c::create_packetizer(int64_t tid) {
                                                  dmx->channels, dmx->bsid,
                                                  ti));
         mxinfo(FMT_TID "Using the AC3 output module (FourCC: %s).\n",
-               ti->fname.c_str(), (int64_t)track->id, dmx->fourcc);
+               ti.fname.c_str(), (int64_t)track->id, dmx->fourcc);
 
       } else if (!strcasecmp(dmx->fourcc, "raac") ||
                  !strcasecmp(dmx->fourcc, "racp")) {
@@ -385,23 +385,23 @@ real_reader_c::create_packetizer(int64_t tid) {
         }
         if (sbr)
           profile = AAC_PROFILE_SBR;
-        for (i = 0; i < (int)ti->aac_is_sbr.size(); i++)
-          if ((ti->aac_is_sbr[i] == -1) || (ti->aac_is_sbr[i] == track->id)) {
+        for (i = 0; i < (int)ti.aac_is_sbr.size(); i++)
+          if ((ti.aac_is_sbr[i] == -1) || (ti.aac_is_sbr[i] == track->id)) {
             profile = AAC_PROFILE_SBR;
             break;
           }
         mxverb(2, PFX "2. profile: %d, channels: %d, sample_rate: "
                "%d, output_sample_rate: %d, sbr: %d\n", profile, channels,
                sample_rate, output_sample_rate, (int)sbr);
-        ti->private_data = NULL;
-        ti->private_size = 0;
+        ti.private_data = NULL;
+        ti.private_size = 0;
         dmx->is_aac = true;
         dmx->ptzr =
           add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                               sample_rate, channels, ti, false,
                                               true));
         mxinfo(FMT_TID "Using the AAC output module (FourCC: %s).\n",
-               ti->fname.c_str(), (int64_t)track->id, dmx->fourcc);
+               ti.fname.c_str(), (int64_t)track->id, dmx->fourcc);
         if (profile == AAC_PROFILE_SBR)
           PTZR(dmx->ptzr)->set_audio_output_sampling_freq(output_sample_rate);
         else if (!extra_data_parsed)
@@ -428,7 +428,7 @@ real_reader_c::create_packetizer(int64_t tid) {
         dmx->segments = new vector<rv_segment_t>;
 
         mxinfo(FMT_TID "Using the RealAudio output module (FourCC: %s).\n",
-               ti->fname.c_str(), (int64_t)track->id, dmx->fourcc);
+               ti.fname.c_str(), (int64_t)track->id, dmx->fourcc);
       }
     }
   }
@@ -491,7 +491,7 @@ real_reader_c::read(generic_packetizer_c *,
   if (size <= 0) {
     if (file->num_packets_read < file->num_packets_in_chunk)
       mxwarn(PFX "%s: File contains fewer frames than expected or is "
-             "corrupt after frame %u.\n", ti->fname.c_str(),
+             "corrupt after frame %u.\n", ti.fname.c_str(),
              file->num_packets_read);
     return finish();
   }
@@ -502,7 +502,7 @@ real_reader_c::read(generic_packetizer_c *,
   if (frame == NULL) {
     if (file->num_packets_read < file->num_packets_in_chunk)
       mxwarn(PFX "%s: File contains fewer frames than expected or is "
-             "corrupt after frame %u.\n", ti->fname.c_str(),
+             "corrupt after frame %u.\n", ti.fname.c_str(),
              file->num_packets_read);
     return finish();
   }
@@ -549,7 +549,7 @@ real_reader_c::queue_one_audio_frame(real_demuxer_t *dmx,
   dmx->segments->push_back(segment);
   dmx->last_timecode = timecode;
   mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
-         "0x%08x\n", dmx->track->id, ti->fname.c_str(), mem.size, timecode,
+         "0x%08x\n", dmx->track->id, ti.fname.c_str(), mem.size, timecode,
          flags);
 }
 
@@ -585,7 +585,7 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx,
   for (i = 0; i < dmx->segments->size(); i++) {
     segment = (*dmx->segments)[i];
     mxverb(2, "delivering audio for %u/'%s' length %llu timecode %llu flags "
-           "0x%08x duration %llu\n", dmx->track->id, ti->fname.c_str(),
+           "0x%08x duration %llu\n", dmx->track->id, ti.fname.c_str(),
            segment.size, dmx->last_timecode, (uint32_t)segment.flags,
            duration);
     memory_c mem(segment.data, segment.size, true);
@@ -610,7 +610,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   length = mem.size;
   if (length < 2) {
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
-           "'%s' (length: %u < 2)\n", dmx->track->id, ti->fname.c_str(),
+           "'%s' (length: %u < 2)\n", dmx->track->id, ti.fname.c_str(),
            length);
     return;
   }
@@ -618,7 +618,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   mxverb(2, PFX "num_sub_packets = %u\n", num_sub_packets);
   if (length < (2 + num_sub_packets * 2)) {
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
-           "'%s' (length: %u < %u)\n", dmx->track->id, ti->fname.c_str(),
+           "'%s' (length: %u < %u)\n", dmx->track->id, ti.fname.c_str(),
            length, 2 + num_sub_packets * 2);
     return;
   }
@@ -631,7 +631,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   if (len_check != length) {
     mxwarn(PFX "Inconsistent AAC audio packet for track ID %u of "
            "'%s' (length: %u != len_check %u)\n", dmx->track->id,
-           ti->fname.c_str(), length, len_check);
+           ti.fname.c_str(), length, len_check);
     return;
   }
   data_idx = 2 + num_sub_packets * 2;
@@ -653,7 +653,7 @@ real_reader_c::identify() {
   int i;
   real_demuxer_t *demuxer;
 
-  mxinfo("File '%s': container: RealMedia\n", ti->fname.c_str());
+  mxinfo("File '%s': container: RealMedia\n", ti.fname.c_str());
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
     if (!strcasecmp(demuxer->fourcc, "raac") ||
@@ -757,31 +757,31 @@ real_reader_c::set_dimensions(real_demuxer_t *dmx,
 
   if (get_rv_dimensions(buffer, size, width, height)) {
     if ((dmx->width != width) || (dmx->height != height)) {
-      if (!ti->aspect_ratio_given && !ti->display_dimensions_given) {
+      if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
         disp_width = dmx->width;
         disp_height = dmx->height;
 
         dmx->width = width;
         dmx->height = height;
 
-      } else if (ti->display_dimensions_given) {
-        disp_width = ti->display_width;
-        disp_height = ti->display_height;
+      } else if (ti.display_dimensions_given) {
+        disp_width = ti.display_width;
+        disp_height = ti.display_height;
 
         dmx->width = width;
         dmx->height = height;
 
-      } else {                  // ti->aspect_ratio_given == true
+      } else {                  // ti.aspect_ratio_given == true
         dmx->width = width;
         dmx->height = height;
 
-        if (ti->aspect_ratio > ((float)width / (float)height)) {
-          disp_width = (uint32_t)(height * ti->aspect_ratio);
+        if (ti.aspect_ratio > ((float)width / (float)height)) {
+          disp_width = (uint32_t)(height * ti.aspect_ratio);
           disp_height = height;
 
         } else {
           disp_width = width;
-          disp_height = (uint32_t)(width / ti->aspect_ratio);
+          disp_height = (uint32_t)(width / ti.aspect_ratio);
         }
 
       }

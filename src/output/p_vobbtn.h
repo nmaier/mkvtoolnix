@@ -29,7 +29,7 @@ protected:
   int width, height;
 public:
   vobbtn_packetizer_c(generic_reader_c *nreader, int nwidth, int nheight,
-                      track_info_c *nti) throw (error_c);
+                      track_info_c &_ti) throw (error_c);
   virtual ~vobbtn_packetizer_c();
 
   virtual int process(memory_c &mem,

@@ -37,7 +37,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *_reader,
                                        double _fps,
                                        int _width,
                                        int _height,
-                                       track_info_c *_ti):
+                                       track_info_c &_ti):
   generic_packetizer_c(_reader, _ti),
   fps(_fps), width(_width), height(_height),
   frames_output(0), ref_timecode(-1), duration_shift(0) {
@@ -52,18 +52,18 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *_reader,
   else
     set_codec_id(MKV_V_MSCOMP);
 
-  set_codec_private(ti->private_data, ti->private_size);
+  set_codec_private(ti.private_data, ti.private_size);
   check_fourcc();
 }
 
 void
 video_packetizer_c::check_fourcc() {
   if ((hcodec_id == MKV_V_MSCOMP) &&
-      (ti->private_data != NULL) &&
-      (ti->private_size >= sizeof(alBITMAPINFOHEADER)) &&
-      (ti->fourcc[0] != 0))
-    memcpy(&((alBITMAPINFOHEADER *)ti->private_data)->bi_compression,
-           ti->fourcc, 4);
+      (ti.private_data != NULL) &&
+      (ti.private_size >= sizeof(alBITMAPINFOHEADER)) &&
+      (ti.fourcc[0] != 0))
+    memcpy(&((alBITMAPINFOHEADER *)ti.private_data)->bi_compression,
+           ti.fourcc, 4);
 }
 
 void
@@ -139,12 +139,12 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src) {
   if ((width != vsrc->width) || (height != vsrc->height) ||
       (fps != vsrc->fps) || (hcodec_id != vsrc->hcodec_id))
     return CAN_CONNECT_NO_PARAMETERS;
-  if (((ti->private_data == NULL) && (vsrc->ti->private_data != NULL)) ||
-      ((ti->private_data != NULL) && (vsrc->ti->private_data == NULL)) ||
-      (ti->private_size != vsrc->ti->private_size))
+  if (((ti.private_data == NULL) && (vsrc->ti.private_data != NULL)) ||
+      ((ti.private_data != NULL) && (vsrc->ti.private_data == NULL)) ||
+      (ti.private_size != vsrc->ti.private_size))
     return CAN_CONNECT_NO_PARAMETERS;
-  if ((ti->private_data != NULL) &&
-      memcmp(ti->private_data, vsrc->ti->private_data, ti->private_size))
+  if ((ti.private_data != NULL) &&
+      memcmp(ti.private_data, vsrc->ti.private_data, ti.private_size))
     return CAN_CONNECT_NO_PARAMETERS;
   return CAN_CONNECT_YES;
 }
@@ -160,16 +160,16 @@ mpeg1_2_video_packetizer_c(generic_reader_c *_reader,
                            int _dwidth,
                            int _dheight,
                            bool _framed,
-                           track_info_c *_ti):
+                           track_info_c &_ti):
   video_packetizer_c(_reader, "V_MPEG1", _fps, _width, _height, _ti),
   framed(_framed), aspect_ratio_extracted(false) {
 
   set_codec_id(mxsprintf("V_MPEG%d", _version));
-  if (!ti->aspect_ratio_given && !ti->display_dimensions_given) {
+  if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
     if ((_dwidth > 0) && (_dheight > 0)) {
-      ti->display_dimensions_given = true;
-      ti->display_width = _dwidth;
-      ti->display_height = _dheight;
+      ti.display_dimensions_given = true;
+      ti.display_width = _dwidth;
+      ti.display_height = _dheight;
     }
   } else
     aspect_ratio_extracted = true;
@@ -267,11 +267,11 @@ mpeg1_2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
                                                  int size) {
   float ar;
 
-  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+  if (ti.aspect_ratio_given || ti.display_dimensions_given)
     return;
 
   if (mpeg1_2_extract_ar(buffer, size, ar)) {
-    ti->display_dimensions_given = true;
+    ti.display_dimensions_given = true;
     if ((ar <= 0) || (ar == 1))
       set_video_display_width(width);
     else
@@ -301,7 +301,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             int _width,
                             int _height,
                             bool _input_is_native,
-                            track_info_c *_ti):
+                            track_info_c &_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
   timecodes_generated(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
@@ -318,9 +318,9 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
   } else {
     set_codec_id(MKV_V_MPEG4_ASP);
     if (!input_is_native) {
-      safefree(ti->private_data);
-      ti->private_data = NULL;
-      ti->private_size = 0;
+      safefree(ti.private_data);
+      ti.private_data = NULL;
+      ti.private_size = 0;
     }
   }
 }
@@ -353,13 +353,13 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
   vector<video_frame_t> frames;
   vector<video_frame_t>::iterator frame;
 
-  if (NULL == ti->private_data) {
+  if (NULL == ti.private_data) {
     uint32_t pos, size;
 
     if (mpeg4_p2_find_config_data(mem.data, mem.size, pos, size)) {
-      ti->private_data = (unsigned char *)safememdup(&mem.data[pos], size);
-      ti->private_size = size;
-      set_codec_private(ti->private_data, ti->private_size);
+      ti.private_data = (unsigned char *)safememdup(&mem.data[pos], size);
+      ti.private_size = size;
+      set_codec_private(ti.private_data, ti.private_size);
       rerender_track_headers();
     }
   }
@@ -517,22 +517,22 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
                                                   int size) {
   uint32_t num, den;
 
-  if (ti->aspect_ratio_given || ti->display_dimensions_given) {
+  if (ti.aspect_ratio_given || ti.display_dimensions_given) {
     aspect_ratio_extracted = true;
     return;
   }
 
   if (mpeg4_p2_extract_par(buffer, size, num, den)) {
     aspect_ratio_extracted = true;
-    ti->aspect_ratio_given = true;
-    ti->aspect_ratio = (float)hvideo_pixel_width /
+    ti.aspect_ratio_given = true;
+    ti.aspect_ratio = (float)hvideo_pixel_width /
       (float)hvideo_pixel_height * (float)num / (float)den;
     generic_packetizer_c::set_headers();
     rerender_track_headers();
     mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
            "from the MPEG4 layer 2 video data and set the display dimensions "
-           "to %u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
-           (uint32_t)ti->display_width, (uint32_t)ti->display_height);
+           "to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
+           (uint32_t)ti.display_width, (uint32_t)ti.display_height);
   } else if (50 <= frames_output)
     aspect_ratio_extracted = true;
 }
@@ -544,10 +544,10 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                              double _fps,
                              int _width,
                              int _height,
-                             track_info_c *_ti):
+                             track_info_c &_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_AVC, _fps, _width, _height, _ti) {
 
-  if ((ti->private_data != NULL) && (ti->private_size > 0))
+  if ((ti.private_data != NULL) && (ti.private_size > 0))
     extract_aspect_ratio();
 }
 
@@ -555,27 +555,27 @@ void
 mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
 
-  if (ti->aspect_ratio_given || ti->display_dimensions_given)
+  if (ti.aspect_ratio_given || ti.display_dimensions_given)
     return;
 
-  if (mpeg4_p10_extract_par(ti->private_data, ti->private_size, num, den) &&
+  if (mpeg4_p10_extract_par(ti.private_data, ti.private_size, num, den) &&
       (0 != num) && (0 != den)) {
     double par = (double)num / (double)den;
 
     if (par >= 1) {
-      ti->display_width = irnd(width * par);
-      ti->display_height = height;
+      ti.display_width = irnd(width * par);
+      ti.display_height = height;
 
     } else {
-      ti->display_width = width;
-      ti->display_height = irnd(height / par);
+      ti.display_width = width;
+      ti.display_height = irnd(height / par);
 
     }
 
-    ti->display_dimensions_given = true;
+    ti.display_dimensions_given = true;
     mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
            "from the MPEG-4 layer 10 (AVC) video data and set the display "
-           "dimensions to %u/%u.\n", (int64_t)ti->id, ti->fname.c_str(),
-           (uint32_t)ti->display_width, (uint32_t)ti->display_height);
+           "dimensions to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
+           (uint32_t)ti.display_width, (uint32_t)ti.display_height);
   }
 }

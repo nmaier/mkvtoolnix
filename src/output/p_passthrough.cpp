@@ -26,9 +26,9 @@
 using namespace libmatroska;
 
 passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *nreader,
-                                                   track_info_c *nti)
+                                                   track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   packets_processed = 0;
   bytes_processed = 0;
   sync_to_keyframe = false;
@@ -70,8 +70,8 @@ passthrough_packetizer_c::process(memory_c &mem,
   }
   while ((duration > 0) && needs_positive_displacement(duration)) {
     add_packet(mem,
-               (int64_t)((timecode + ti->async.displacement) *
-                         ti->async.linear),
+               (int64_t)((timecode + ti.async.displacement) *
+                         ti.async.linear),
                duration, duration_mandatory, bref, fref);
     displace(duration);
   }
@@ -79,12 +79,12 @@ passthrough_packetizer_c::process(memory_c &mem,
   if (sync_to_keyframe && (bref != -1))
     return FILE_STATUS_MOREDATA;
   sync_to_keyframe = false;
-  timecode = (int64_t)((timecode + ti->async.displacement) * ti->async.linear);
-  duration = (int64_t)(duration * ti->async.linear);
+  timecode = (int64_t)((timecode + ti.async.displacement) * ti.async.linear);
+  duration = (int64_t)(duration * ti.async.linear);
   if (bref >= 0)
-    bref = (int64_t)((bref + ti->async.displacement) * ti->async.linear);
+    bref = (int64_t)((bref + ti.async.displacement) * ti.async.linear);
   if (fref >= 0)
-    fref = (int64_t)((fref + ti->async.displacement) * ti->async.linear);
+    fref = (int64_t)((fref + ti.async.displacement) * ti.async.linear);
   add_packet(mem, timecode, duration, duration_mandatory, bref, fref);
 
   debug_leave("passthrough_packetizer_c::process");

@@ -29,10 +29,10 @@ using namespace libmatroska;
 
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
                                    const dts_header_t &dtsheader,
-                                   track_info_c *nti,
+                                   track_info_c &_ti,
                                    bool _get_first_header_later)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   //packetno = 0;
   samples_written = 0;
   bytes_written = 0;
@@ -202,11 +202,11 @@ dts_packetizer_c::process(memory_c &mem,
       my_timecode = (int64_t)(((double)samples_written * 1000000000.0) /
                               ((double)dtsheader.core_sampling_frequency));
     else
-      my_timecode = timecode + ti->async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti->async.linear);
+      my_timecode = timecode + ti.async.displacement;
+    my_timecode = (int64_t)(my_timecode * ti.async.linear);
     memory_c mem(packet, dtsheader.frame_byte_size, true);
     add_packet(mem, my_timecode, (int64_t)(packet_len_in_ns *
-                                           ti->async.linear));
+                                           ti.async.linear));
 
     bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);

@@ -84,11 +84,11 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
   return 0;
 }
 
-qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
+qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   try {
-    io = new mm_file_io_c(ti->fname);
+    io = new mm_file_io_c(ti.fname);
     io->setFilePointer(0, seek_end);
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);
@@ -97,7 +97,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
 
     if (verbose)
       mxinfo(FMT_FN "Using the Quicktime/MP4 demultiplexer.\n",
-             ti->fname.c_str());
+             ti.fname.c_str());
 
     parse_headers();
 
@@ -107,7 +107,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c *nti)
 }
 
 qtmp4_reader_c::~qtmp4_reader_c() {
-  ti->private_data = NULL;
+  ti.private_data = NULL;
 
   delete io;
 }
@@ -1023,7 +1023,7 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
     if (dmx->references.size() == 0)
       mxerror(FMT_FN "The video track does not start with a key "
               "frame but contains B frames. This is not supported.\n",
-              ti->fname.c_str());
+              ti.fname.c_str());
 
     // The current frame is a B frame if the timecode is going
     // backwards. Otherwise it's a P frame.
@@ -1036,7 +1036,7 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
       if (dmx->references.size() < 2)
         mxerror(FMT_FN "The video track does not start with a key "
                 "frame and a P frame but contains B frames. This is not "
-                "supported.\n", ti->fname.c_str());
+                "supported.\n", ti.fname.c_str());
       if (dmx->avc_use_bframes)
         fref = dmx->references[1];
 
@@ -1361,7 +1361,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     return;
 
   if (dmx->ok && demuxing_requested(dmx->type, dmx->id) && (dmx->ptzr == -1)) {
-    ti->id = dmx->id;
+    ti.id = dmx->id;
     if (dmx->type == 'v') {
       if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
         alBITMAPINFOHEADER *bih;
@@ -1377,17 +1377,17 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         memcpy(&bih->bi_compression, "DIVX", 4);
         put_uint32_le(&bih->bi_size_image, get_uint32_le(&bih->bi_width) *
                    get_uint32_le(&bih->bi_height) * 3);
-        ti->private_size = sizeof(alBITMAPINFOHEADER);
-        ti->private_data = (unsigned char *)bih;
+        ti.private_size = sizeof(alBITMAPINFOHEADER);
+        ti.private_data = (unsigned char *)bih;
         dmx->ptzr =
           add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0,
                                                          dmx->v_width,
                                                          dmx->v_height, false,
                                                          ti));
         safefree(bih);
-        ti->private_data = NULL;
+        ti.private_data = NULL;
         mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
-               ti->fname.c_str(), (int64_t)dmx->id);
+               ti.fname.c_str(), (int64_t)dmx->id);
 
       } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) ||
                  !strncasecmp(dmx->fourcc, "mpg2", 4)) {
@@ -1400,7 +1400,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                                         dmx->v_height, 0, 0,
                                                         false, ti));
         mxinfo(FMT_TID "Using the MPEG-%d video output module.\n",
-               ti->fname.c_str(), (int64_t)dmx->id, version);
+               ti.fname.c_str(), (int64_t)dmx->id, version);
 
       } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
         double fps;
@@ -1415,7 +1415,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                  "As it is missing the timecodes for this track might be "
                  "wrong. You should watch the resulting file and make sure "
                  "that it looks like you expected it to.\n",
-                 ti->fname.c_str(), (int64_t)dmx->id);
+                 ti.fname.c_str(), (int64_t)dmx->id);
 
         fps = 0.0;
         if ((dmx->durmap_table.size() == 1) &&
@@ -1457,31 +1457,31 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           }
         }
 
-        ti->private_size = dmx->priv_size;
-        ti->private_data = dmx->priv;
+        ti.private_size = dmx->priv_size;
+        ti.private_data = dmx->priv;
         dmx->ptzr =
           add_packetizer(new mpeg4_p10_video_packetizer_c(this, fps,
                                                           dmx->v_width,
                                                           dmx->v_height, ti));
-        ti->private_data = NULL;
+        ti.private_data = NULL;
 
         if (hack_engaged(ENGAGE_AVC_USE_BFRAMES))
           dmx->avc_use_bframes = true;
         else
           PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
         mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
-               "module.\n", ti->fname.c_str(), (int64_t)dmx->id);
+               "module.\n", ti.fname.c_str(), (int64_t)dmx->id);
 
       } else {
-        ti->private_size = dmx->v_stsd_size;
-        ti->private_data = (unsigned char *)dmx->v_stsd;
+        ti.private_size = dmx->v_stsd_size;
+        ti.private_data = (unsigned char *)dmx->v_stsd;
         dmx->ptzr =
           add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0,
                                                 dmx->v_width, dmx->v_height,
                                                 ti));
-        ti->private_data = NULL;
+        ti.private_data = NULL;
         mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
-               ti->fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+               ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
       }
 
     } else {
@@ -1498,7 +1498,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         ptzr->set_audio_bit_depth(dmx->a_bitdepth);
 
         mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s)."
-               "\n", ti->fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+               "\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
                  ((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
@@ -1519,8 +1519,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                  channels, output_sample_rate, (int)sbraac);
           if (sbraac)
             profile = AAC_PROFILE_SBR;
-          ti->private_data = dmx->esds.decoder_config;
-          ti->private_size = dmx->esds.decoder_config_len;
+          ti.private_data = dmx->esds.decoder_config;
+          ti.private_size = dmx->esds.decoder_config_len;
           dmx->ptzr =
             add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
                                                 sample_rate, channels, ti,
@@ -1528,14 +1528,14 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           if (sbraac)
             PTZR(dmx->ptzr)->
               set_audio_output_sampling_freq(output_sample_rate);
-          mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname.c_str(),
+          mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
                  (int64_t)dmx->id);
-          ti->private_data = NULL;
-          ti->private_size = 0;
+          ti.private_data = NULL;
+          ti.private_size = 0;
 
         } else
           mxerror(FMT_TID "AAC found, but decoder config data has length %u."
-                  "\n", ti->fname.c_str(), (int64_t)dmx->id,
+                  "\n", ti.fname.c_str(), (int64_t)dmx->id,
                   dmx->esds.decoder_config_len);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
@@ -1545,7 +1545,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate,
                                               dmx->a_channels, true, ti));
         mxinfo(FMT_TID "Using the MPEG audio output module.\n",
-               ti->fname.c_str(), (int64_t)dmx->id);
+               ti.fname.c_str(), (int64_t)dmx->id);
 
       } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
                  !strncasecmp(dmx->fourcc, "swot", 4)) {
@@ -1554,7 +1554,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                                               dmx->a_channels, dmx->a_bitdepth,
                                               ti, (dmx->a_bitdepth > 8) &&
                                               (dmx->fourcc[0] == 't')));
-        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
                (int64_t)dmx->id);
 
       } else
@@ -1592,7 +1592,7 @@ void
 qtmp4_reader_c::identify() {
   uint32_t i;
 
-  mxinfo("File '%s': container: Quicktime/MP4\n", ti->fname.c_str());
+  mxinfo("File '%s': container: Quicktime/MP4\n", ti.fname.c_str());
   for (i = 0; i < demuxers.size(); i++) {
     qtmp4_demuxer_ptr &dmx = demuxers[i];
     mxinfo("Track ID %u: %s (%.4s)\n", dmx->id,

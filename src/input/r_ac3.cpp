@@ -35,13 +35,13 @@ ac3_reader_c::probe_file(mm_io_c *mm_io,
   return (find_valid_headers(mm_io, probe_size, num_headers) != -1) ? 1 : 0;
 }
 
-ac3_reader_c::ac3_reader_c(track_info_c *nti)
+ac3_reader_c::ac3_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   int pos;
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
     chunk = (unsigned char *)safemalloc(4096);
     if (mm_io->read(chunk, 4096) != 4096)
@@ -55,9 +55,9 @@ ac3_reader_c::ac3_reader_c(track_info_c *nti)
     throw error_c("ac3_reader: No valid AC3 packet found in the first "
                   "4096 bytes.\n");
   bytes_processed = 0;
-  ti->id = 0;                   // ID for this track.
+  ti.id = 0;                   // ID for this track.
   if (verbose)
-    mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti.fname.c_str());
 }
 
 ac3_reader_c::~ac3_reader_c() {
@@ -71,7 +71,7 @@ ac3_reader_c::create_packetizer(int64_t) {
     return;
   add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
                                       ac3header.channels, ac3header.bsid, ti));
-  mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -101,7 +101,7 @@ ac3_reader_c::get_progress() {
 void
 ac3_reader_c::identify() {
   mxinfo("File '%s': container: AC3\nTrack ID 0: audio (AC3)\n",
-         ti->fname.c_str());
+         ti.fname.c_str());
 }
 
 int

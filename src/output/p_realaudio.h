@@ -37,7 +37,7 @@ public:
   ra_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
                   int nchannels, int nbits_per_sample, uint32_t nfourcc,
                   unsigned char *nprivate_data, int nprivate_size,
-                  track_info_c *nti)
+                  track_info_c &_ti)
     throw (error_c);
   virtual ~ra_packetizer_c();
 

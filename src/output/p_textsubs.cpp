@@ -31,14 +31,14 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
                                              int nglobal_size,
                                              bool nrecode,
                                              bool is_utf8,
-                                             track_info_c *nti)
+                                             track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   packetno = 0;
   recode = nrecode;
   if (recode) {
-    if ((ti->sub_charset != "") || !is_utf8)
-      cc_utf8 = utf8_init(ti->sub_charset);
+    if ((ti.sub_charset != "") || !is_utf8)
+      cc_utf8 = utf8_init(ti.sub_charset);
     else
       cc_utf8 = utf8_init("UTF-8");
   }
@@ -79,9 +79,9 @@ textsubs_packetizer_c::process(memory_c &mem,
   end = start + length;
   // Adjust the start and end values according to the audio adjustment.
   start += initial_displacement;
-  start = (int64_t)(ti->async.linear * start);
+  start = (int64_t)(ti.async.linear * start);
   end += initial_displacement;
-  end = (int64_t)(ti->async.linear * end);
+  end = (int64_t)(ti.async.linear * end);
 
   if (end < 0)
     return FILE_STATUS_MOREDATA;

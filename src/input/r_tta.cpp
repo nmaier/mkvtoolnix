@@ -49,15 +49,15 @@ tta_reader_c::probe_file(mm_io_c *mm_io,
   return 0;
 }
 
-tta_reader_c::tta_reader_c(track_info_c *nti)
+tta_reader_c::tta_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   uint32_t seek_point;
   int64_t seek_sum;
   int tag_size;
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
 
     if (identifying)
@@ -70,7 +70,7 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
 
     if (mm_io->read(&header, sizeof(tta_file_header_t)) !=
         sizeof(tta_file_header_t))
-      mxerror(FMT_FN "The file header is too short.\n", ti->fname.c_str());
+      mxerror(FMT_FN "The file header is too short.\n", ti.fname.c_str());
     seek_sum = mm_io->getFilePointer() + 4 - tag_size;
 
     size -= id3_tag_present_at_end(*mm_io);
@@ -90,19 +90,19 @@ tta_reader_c::tta_reader_c(track_info_c *nti)
 
     if (seek_sum != size)
       mxerror(FMT_FN "The seek table in this TTA file seems to be broken.\n",
-              ti->fname.c_str());
+              ti.fname.c_str());
 
     mm_io->skip(4);
 
     bytes_processed = 0;
     pos = 0;
-    ti->id = 0;                 // ID for this track.
+    ti.id = 0;                 // ID for this track.
 
   } catch (...) {
     throw error_c("tta_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the TTA demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the TTA demultiplexer.\n", ti.fname.c_str());
 }
 
 tta_reader_c::~tta_reader_c() {
@@ -119,7 +119,7 @@ tta_reader_c::create_packetizer(int64_t) {
                                        get_uint16_le(&header.bits_per_sample),
                                        get_uint32_le(&header.sample_rate), ti);
   add_packetizer(ttapacketizer);
-  mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the TTA output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -169,5 +169,5 @@ tta_reader_c::get_progress() {
 void
 tta_reader_c::identify() {
   mxinfo("File '%s': container: TTA\nTrack ID 0: audio (TTA)\n",
-         ti->fname.c_str());
+         ti.fname.c_str());
 }

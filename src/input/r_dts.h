@@ -35,7 +35,7 @@ private:
   dts_header_t dtsheader;
 
 public:
-  dts_reader_c(track_info_c *nti) throw (error_c);
+  dts_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~dts_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);

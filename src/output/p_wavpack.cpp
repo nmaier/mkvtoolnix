@@ -26,9 +26,9 @@ using namespace libmatroska;
 
 wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *nreader,
                                            wavpack_meta_t &meta,
-                                           track_info_c *nti)
+                                           track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   sample_rate = meta.sample_rate;
   channels = meta.channel_count;
   bits_per_sample = meta.bits_per_sample;
@@ -42,7 +42,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *nreader,
 void
 wavpack_packetizer_c::set_headers() {
   set_codec_id(MKV_A_WAVPACK4);
-  set_codec_private(ti->private_data, ti->private_size);
+  set_codec_private(ti.private_data, ti.private_size);
   set_audio_sampling_freq((float)sample_rate);
   set_audio_channels(channels);
   set_audio_bit_depth(bits_per_sample);

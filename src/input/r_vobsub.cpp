@@ -88,19 +88,19 @@ vobsub_reader_c::probe_file(mm_io_c *mm_io,
   return 1;
 }
 
-vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
+vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   string sub_name, line;
   int len;
 
   try {
-    idx_file = new mm_text_io_c(new mm_file_io_c(ti->fname));
+    idx_file = new mm_text_io_c(new mm_file_io_c(ti.fname));
   } catch (...) {
     throw error_c(PFX "Cound not open the source file.");
   }
 
-  sub_name = ti->fname;
+  sub_name = ti.fname;
   len = sub_name.rfind(".");
   if (len >= 0)
     sub_name.erase(len);
@@ -121,7 +121,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
   if (!idx_file->getline2(line) ||
       strncasecmp(line.c_str(), "# VobSub index file, v", len) ||
       (line.length() < (len + 1)))
-    mxerror(PFX "%s: No version number found.\n", ti->fname.c_str());
+    mxerror(PFX "%s: No version number found.\n", ti.fname.c_str());
 
   version = line[len] - '0';
   len++;
@@ -133,12 +133,12 @@ vobsub_reader_c::vobsub_reader_c(track_info_c *nti)
     mxerror(PFX "%s: Only v7 and newer VobSub files are supported. If you "
             "have an older version then use the VSConv utility from "
             "http://sourceforge.net/projects/guliverkli/ to convert these "
-            "files to v7 files.\n", ti->fname.c_str());
+            "files to v7 files.\n", ti.fname.c_str());
 
   parse_headers();
   if (verbose)
     mxinfo(FMT_FN "Using the VobSub subtitle reader (SUB file '%s').\n",
-           ti->fname.c_str(), sub_name.c_str());
+           ti.fname.c_str(), sub_name.c_str());
 }
 
 vobsub_reader_c::~vobsub_reader_c() {
@@ -168,12 +168,12 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
   if ((tid < tracks.size()) && demuxing_requested('s', tid) &&
       (tracks[tid]->ptzr == -1)) {
     track = tracks[tid];
-    ti->id = tid;
+    ti.id = tid;
     if ((c = map_iso639_1_to_iso639_2(tracks[tid]->language)) != NULL) {
       strcpy(language, c);
-      ti->language = language;
+      ti.language = language;
     } else
-      ti->language = "";
+      ti.language = "";
     track->ptzr =
       add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(),
                                              idx_data.length(), ti));
@@ -195,8 +195,8 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
     num_indices += track->entries.size();
 
     mxinfo(FMT_TID "Using the VobSub subtitle output module (language: %s).\n",
-           ti->fname.c_str(), (int64_t)tid, track->language);
-    ti->language = "";
+           ti.fname.c_str(), (int64_t)tid, track->language);
+    ti.language = "";
   }
 }
 
@@ -295,7 +295,7 @@ vobsub_reader_c::parse_headers() {
                "will sort the entries according to their timestamps. This "
                "might result in the wrong order for some subtitle entries. If "
                "this is the case then you have to fix the .idx file "
-               "manually.\n", ti->fname.c_str(), line_no,
+               "manually.\n", ti.fname.c_str(), line_no,
                ARG_TIMECODE(timestamp), ARG_TIMECODE(last_timestamp));
         sort_required = true;
       }
@@ -353,8 +353,8 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
   duration = spu_extract_duration(buf, size, timecode);
   if (duration == -1) {
     mxverb(2, PFX "Could not extract the duration for a SPU packet in track "
-           "%lld of '%s' (timecode: " FMT_TIMECODE ").\n", ti->id,
-           ti->fname.c_str(), ARG_TIMECODE(timecode));
+           "%lld of '%s' (timecode: " FMT_TIMECODE ").\n", ti.id,
+           ti.fname.c_str(), ARG_TIMECODE(timecode));
     duration = default_duration;
   }
   if (duration != -2) {
@@ -594,7 +594,7 @@ vobsub_reader_c::identify() {
   string info;
   const char *language;
 
-  mxinfo("File '%s': container: VobSub\n", ti->fname.c_str());
+  mxinfo("File '%s': container: VobSub\n", ti.fname.c_str());
   for (i = 0; i < tracks.size(); i++) {
     if (identify_verbose) {
       language = map_iso639_1_to_iso639_2(tracks[i]->language);

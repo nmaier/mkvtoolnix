@@ -34,7 +34,7 @@ private:
   wavpack_meta_t meta, meta_correc;
 
 public:
-  wavpack_reader_c(track_info_c *nti) throw (error_c);
+  wavpack_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~wavpack_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);

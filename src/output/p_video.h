@@ -37,7 +37,7 @@ protected:
 public:
   video_packetizer_c(generic_reader_c *_reader, const char *_codec_id,
                      double _fps, int _width, int _height,
-                     track_info_c *_ti);
+                     track_info_c &_ti);
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
@@ -64,7 +64,7 @@ public:
   mpeg1_2_video_packetizer_c(generic_reader_c *_reader, int _version,
                              double _fps, int _width, int _height,
                              int _dwidth, int _dheight, bool _framed,
-                             track_info_c *_ti);
+                             track_info_c &_ti);
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
@@ -87,7 +87,7 @@ protected:
 public:
   mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                               double _fps, int _width, int _height,
-                              bool _input_is_native, track_info_c *_ti);
+                              bool _input_is_native, track_info_c &_ti);
 
   virtual int process(memory_c &mem, int64_t old_timecode = -1,
                       int64_t duration = -1, int64_t bref = VFT_IFRAME,
@@ -110,7 +110,7 @@ class mpeg4_p10_video_packetizer_c: public video_packetizer_c {
 public:
   mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                                double _fps, int _width, int _height,
-                               track_info_c *_ti);
+                               track_info_c &_ti);
 
 protected:
   virtual void extract_aspect_ratio();

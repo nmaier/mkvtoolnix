@@ -293,12 +293,12 @@ ogm_reader_c::probe_file(mm_io_c *mm_io,
    Opens the file for processing, initializes an ogg_sync_state used for
    reading from an OGG stream.
 */
-ogm_reader_c::ogm_reader_c(track_info_c *nti)
+ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     mm_io->setFilePointer(0, seek_end);
     file_size = mm_io->getFilePointer();
     mm_io->setFilePointer(0, seek_beginning);
@@ -311,7 +311,7 @@ ogm_reader_c::ogm_reader_c(track_info_c *nti)
   ogg_sync_init(&oy);
 
   if (verbose)
-    mxinfo(FMT_FN "Using the OGG/OGM demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the OGG/OGM demultiplexer.\n", ti.fname.c_str());
 
   if (read_headers() <= 0)
     throw error_c("ogm_reader: Could not read all header packets.");
@@ -403,11 +403,11 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   if ((dmx->ptzr == -1) && dmx->in_use) {
     memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
     sth = (stream_header *)&dmx->packet_data[0][1];
-    ti->private_data = NULL;
-    ti->private_size = 0;
-    ti->id = tid;
-    ti->language = dmx->language;
-    ti->track_name = dmx->title;
+    ti.private_data = NULL;
+    ti.private_size = 0;
+    ti.id = tid;
+    ti.language = dmx->language;
+    ti.track_name = dmx->title;
 
     ptzr = NULL;
     switch (dmx->stype) {
@@ -422,8 +422,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         memcpy(&bih.bi_compression, sth->subtype, 4);
         put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) *
                    get_uint32_le(&bih.bi_height) * 3);
-        ti->private_data = (unsigned char *)&bih;
-        ti->private_size = sizeof(alBITMAPINFOHEADER);
+        ti.private_data = (unsigned char *)&bih;
+        ti.private_size = sizeof(alBITMAPINFOHEADER);
 
         ptzr = new video_packetizer_c(this, NULL, (double)10000000.0 /
                                       get_uint64_le(&sth->time_unit),
@@ -431,9 +431,9 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                                       get_uint32_le(&sth->sh.video.height),
                                       ti);
 
-        mxinfo(FMT_TID "Using the video output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(),
                (int64_t)tid);
-        ti->private_data = NULL;
+        ti.private_data = NULL;
 
         break;
 
@@ -443,7 +443,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                                     get_uint16_le(&sth->sh.audio.channels),
                                     get_uint16_le(&sth->bits_per_sample), ti);
 
-        mxinfo(FMT_TID "Using the PCM output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
                (int64_t)tid);
         break;
 
@@ -452,7 +452,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                                     get_uint64_le(&sth->samples_per_unit),
                                     get_uint16_le(&sth->sh.audio.channels),
                                     true, ti);
-        mxinfo(FMT_TID "Using the MP3 output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the MP3 output module.\n", ti.fname.c_str(),
                (int64_t)tid);
         break;
 
@@ -461,7 +461,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                                     get_uint64_le(&sth->samples_per_unit),
                                     get_uint16_le(&sth->sh.audio.channels), 0,
                                     ti);
-        mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(),
                (int64_t)tid);
 
         break;
@@ -485,8 +485,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
           profile = AAC_PROFILE_LC;
         }
         mxverb(2, "ogm_reader: %lld/%s: profile %d, channels %d, sample_rate "
-               "%d, sbr %d, output_sample_rate %d, ex %d\n", ti->id,
-               ti->fname.c_str(),
+               "%d, sbr %d, output_sample_rate %d, ex %d\n", ti.id,
+               ti.fname.c_str(),
                profile, channels, sample_rate, (int)sbr, output_sample_rate,
                (int)aac_info_extracted);
         ptzr = new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate,
@@ -494,7 +494,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         if (sbr)
           ptzr->set_audio_output_sampling_freq(output_sample_rate);
 
-        mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
                (int64_t)tid);
 
         break;
@@ -517,7 +517,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                                   dmx->packet_data[2], dmx->packet_sizes[2],
                                   ti);
 
-        mxinfo(FMT_TID "Using the Vorbis output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the Vorbis output module.\n", ti.fname.c_str(),
                (int64_t)tid);
 
         break;
@@ -526,7 +526,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         ptzr = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true,
                                          false, ti);
         mxinfo(FMT_TID "Using the text subtitle output module.\n",
-               ti->fname.c_str(), (int64_t)tid);
+               ti.fname.c_str(), (int64_t)tid);
 
         break;
 
@@ -547,7 +547,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         ptzr = new flac_packetizer_c(this, buf, size, ti);
         safefree(buf);
 
-        mxinfo(FMT_TID "Using the FLAC output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the FLAC output module.\n", ti.fname.c_str(),
                (int64_t)tid);
 
         break;
@@ -560,8 +560,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
     }
     if (ptzr != NULL)
       dmx->ptzr = add_packetizer(ptzr);
-    ti->language = "";
-    ti->track_name = "";
+    ti.language = "";
+    ti.track_name = "";
   }
 }
 
@@ -657,7 +657,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     mxerror("mkvmerge has not been compiled with FLAC support but handling "
             "of this stream has been requested.\n");
 #else
-    dmx->fhe = new flac_header_extractor_c(ti->fname, dmx->serialno);
+    dmx->fhe = new flac_header_extractor_c(ti.fname, dmx->serialno);
     if (!dmx->fhe->extract())
       mxerror("ogm_reader: Could not read the FLAC header packets for "
               "stream id %d.\n", sdemuxers.size() - 1);
@@ -896,7 +896,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
       mxwarn("ogm_reader: Missing header/comment packets for stream %d in "
              "'%s'. This file is broken but should be muxed correctly. If "
              "not please contact the author Moritz Bunkus "
-             "<moritz@bunkus.org>.\n", dmx->serialno, ti->fname.c_str());
+             "<moritz@bunkus.org>.\n", dmx->serialno, ti.fname.c_str());
       dmx->headers_read = true;
       ogg_stream_reset(&dmx->os);
       return;
@@ -1014,7 +1014,7 @@ ogm_reader_c::identify() {
         break;
       }
 
-  mxinfo("File '%s': container: Ogg/OGM%s\n", ti->fname.c_str(), info.c_str());
+  mxinfo("File '%s': container: Ogg/OGM%s\n", ti.fname.c_str(), info.c_str());
   for (i = 0; i < sdemuxers.size(); i++) {
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
       sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
@@ -1080,8 +1080,8 @@ ogm_reader_c::handle_stream_comments() {
     return;
 
   charset_warning_printed = false;
-  if (ti->chapter_charset != "")
-    cch = utf8_init(ti->chapter_charset);
+  if (ti.chapter_charset != "")
+    cch = utf8_init(ti.chapter_charset);
   else
     cch = utf8_init("");
 
@@ -1147,13 +1147,13 @@ ogm_reader_c::handle_stream_comments() {
     }
 
     if (((title != "") || (chapters.size() > 0)) &&
-        !charset_warning_printed && (ti->chapter_charset == "")) {
+        !charset_warning_printed && (ti.chapter_charset == "")) {
       mxwarn("The Ogg/OGM file '%s' contains chapter or title information. "
              "Unfortunately the charset used to store this information in "
              "the file cannot be identified unambiguously. mkvmerge assumes "
              "that your system's current charset is appropriate. This can "
              "be overridden with the '--chapter-charset <charset>' "
-             "switch.\n", ti->fname.c_str());
+             "switch.\n", ti.fname.c_str());
       charset_warning_printed = true;
     }
 
@@ -1168,7 +1168,7 @@ ogm_reader_c::handle_stream_comments() {
       title = "";
     }
 
-    if ((chapters.size() > 0) && !ti->no_chapters && (kax_chapters == NULL)) {
+    if ((chapters.size() > 0) && !ti.no_chapters && (kax_chapters == NULL)) {
       out = NULL;
       try {
         out = new mm_mem_io_c(NULL, 0, 1000);
@@ -1177,7 +1177,7 @@ ogm_reader_c::handle_stream_comments() {
           out->puts_unl(to_utf8(cch, chapters[j]));
           out->puts_unl("\n");
         }
-        out->set_file_name(ti->fname);
+        out->set_file_name(ti.fname);
         kax_chapters = parse_chapters(new mm_text_io_c(out));
       } catch (...) {
         if (out != NULL)

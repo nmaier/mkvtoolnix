@@ -33,7 +33,7 @@ private:
 public:
   textsubs_packetizer_c(generic_reader_c *nreader, const char *ncodec_id,
                         const void *nglobal_data, int nglobal_size,
-                        bool nrecode, bool is_utf8, track_info_c *nti)
+                        bool nrecode, bool is_utf8, track_info_c &_ti)
     throw (error_c);
   virtual ~textsubs_packetizer_c();
 

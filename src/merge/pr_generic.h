@@ -355,7 +355,7 @@ public:
 
 class generic_reader_c {
 public:
-  track_info_c *ti;
+  track_info_c ti;
   vector<generic_packetizer_c *> reader_packetizers;
   generic_packetizer_c *ptzr_first_packet;
   vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
@@ -365,7 +365,7 @@ public:
   int num_video_tracks, num_audio_tracks, num_subtitle_tracks;
 
 public:
-  generic_reader_c(track_info_c *nti);
+  generic_reader_c(track_info_c &_ti);
   virtual ~generic_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false)
@@ -440,7 +440,7 @@ protected:
   int64_t last_cue_timecode;
 
 public:
-  track_info_c *ti;
+  track_info_c ti;
   generic_reader_c *reader;
   int connected_to;
   int64_t correction_timecode_offset;
@@ -448,7 +448,7 @@ public:
   bool relaxed_timecode_checking;
 
 public:
-  generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
+  generic_packetizer_c(generic_reader_c *nreader, track_info_c &_ti)
     throw (error_c);
   virtual ~generic_packetizer_c();
 
@@ -507,10 +507,10 @@ public:
   virtual void dump_debug_info() = 0;
 
   virtual void set_cue_creation(cue_strategy_e create_cue_data) {
-    ti->cues = create_cue_data;
+    ti.cues = create_cue_data;
   }
   virtual cue_strategy_e get_cue_creation() {
-    return ti->cues;
+    return ti.cues;
   }
   virtual int64_t get_last_cue_timecode() {
     return last_cue_timecode;
@@ -526,7 +526,7 @@ public:
     return hserialno;
   }
   virtual int64_t get_source_track_num() {
-    return ti->id;
+    return ti.id;
   }
 
   virtual int set_uid(uint32_t uid);
@@ -561,7 +561,7 @@ public:
   virtual void set_video_display_width(int width);
   virtual void set_video_display_height(int height);
   virtual void set_video_aspect_ratio(float ar) {
-    ti->aspect_ratio = ar;
+    ti.aspect_ratio = ar;
   }
   virtual void set_video_pixel_cropping(int left, int top, int right,
                                         int bottom);
@@ -578,11 +578,11 @@ public:
 
   inline bool needs_negative_displacement(float) {
     return ((initial_displacement < 0) &&
-            (ti->async.displacement > initial_displacement));
+            (ti.async.displacement > initial_displacement));
   }
   inline bool needs_positive_displacement(float duration) {
     return ((initial_displacement > 0) &&
-            (iabs(ti->async.displacement - initial_displacement) >
+            (iabs(ti.async.displacement - initial_displacement) >
              (duration / 2)));
   }
   virtual void displace(float by_ns);
@@ -595,12 +595,12 @@ public:
                        int64_t _append_timecode_offset = -1);
 
   virtual void enable_avi_audio_sync(bool enable) {
-    ti->avi_audio_sync_enabled = enable;
+    ti.avi_audio_sync_enabled = enable;
   }
   virtual int64_t handle_avi_audio_sync(int64_t num_bytes, bool vbr);
   virtual void add_avi_block_size(int64_t block_size) {
-    if (ti->avi_audio_sync_enabled)
-      ti->avi_block_sizes.push_back(block_size);
+    if (ti.avi_audio_sync_enabled)
+      ti.avi_block_sizes.push_back(block_size);
   }
 
   virtual void set_displacement_maybe(int64_t displacement);

@@ -31,7 +31,7 @@ private:
 
 public:
   wavpack_packetizer_c(generic_reader_c *nreader, wavpack_meta_t & meta,
-                       track_info_c *nti)
+                       track_info_c &_ti)
     throw (error_c);
 
   virtual int process(memory_c &mem, int64_t timecode = -1,

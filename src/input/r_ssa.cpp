@@ -44,9 +44,9 @@ ssa_reader_c::probe_file(mm_text_io_c *mm_io,
   return 1;
 }
 
-ssa_reader_c::ssa_reader_c(track_info_c *nti)
+ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   string line;
   int64_t old_pos;
   char section;
@@ -57,16 +57,16 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
   section = 0;
 
   try {
-    mm_io = new mm_text_io_c(new mm_file_io_c(ti->fname));
+    mm_io = new mm_text_io_c(new mm_file_io_c(ti.fname));
 
     if (!ssa_reader_c::probe_file(mm_io, 0))
       throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
 
     sub_charset_found = false;
-    for (i = 0; i < ti->sub_charsets.size(); i++)
-      if ((ti->sub_charsets[i].id == 0) || (ti->sub_charsets[i].id == -1)) {
+    for (i = 0; i < ti.sub_charsets.size(); i++)
+      if ((ti.sub_charsets[i].id == 0) || (ti.sub_charsets[i].id == -1)) {
         sub_charset_found = true;
-        cc_utf8 = utf8_init(ti->sub_charsets[i].charset);
+        cc_utf8 = utf8_init(ti.sub_charsets[i].charset);
         break;
       }
 
@@ -74,10 +74,10 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
       if (mm_io->get_byte_order() != BO_NONE)
         cc_utf8 = utf8_init("UTF-8");
       else
-        cc_utf8 = utf8_init(ti->sub_charset);
+        cc_utf8 = utf8_init(ti.sub_charset);
     }
 
-    ti->id = 0;                 // ID for this track.
+    ti.id = 0;                 // ID for this track.
     global = mm_io->getline();  // [Script Info]
     while (!mm_io->eof()) {
       old_pos = mm_io->getFilePointer();
@@ -115,7 +115,7 @@ ssa_reader_c::ssa_reader_c(track_info_c *nti)
     throw error_c("ssa_reader: Could not open the source file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the SSA/ASS subtitle reader.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the SSA/ASS subtitle reader.\n", ti.fname.c_str());
   parse_file();
 }
 
@@ -132,7 +132,7 @@ ssa_reader_c::create_packetizer(int64_t) {
                                            MKV_S_TEXTSSA, global.c_str(),
                                            global.length(), false, false,
                                            ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -280,5 +280,5 @@ ssa_reader_c::get_progress() {
 void
 ssa_reader_c::identify() {
   mxinfo("File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
-         "(SSA/ASS)\n", ti->fname.c_str());
+         "(SSA/ASS)\n", ti.fname.c_str());
 }

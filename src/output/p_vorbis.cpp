@@ -39,9 +39,9 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
                                          int l_codecsetup,
-                                         track_info_c *nti)
+                                         track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   int i;
 
   last_bs = 0;
@@ -69,8 +69,8 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
   set_track_type(track_audio);
   if (use_durations)
     set_track_default_duration((int64_t)(1024000000000.0 *
-                                            ti->async.linear / vi.rate));
-  ti->async.displacement = initial_displacement;
+                                            ti.async.linear / vi.rate));
+  ti.async.displacement = initial_displacement;
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
@@ -201,14 +201,14 @@ vorbis_packetizer_c::process(memory_c &mem,
     last_samples_sum = 0;
   } else {
     chosen_timecode = expected_timecode;
-    duration = (int64_t)(samples_here * 1000000000 * ti->async.linear /
+    duration = (int64_t)(samples_here * 1000000000 * ti.async.linear /
                          vi.rate);
   }
 
   last_samples_sum += samples_here;
 
   // Handle the linear sync - simply multiply with the given factor.
-  chosen_timecode = (int64_t)((double)chosen_timecode * ti->async.linear);
+  chosen_timecode = (int64_t)((double)chosen_timecode * ti.async.linear);
 
   // If a negative sync value was used we may have to skip this packet.
   if (chosen_timecode < 0) {

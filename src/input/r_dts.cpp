@@ -49,13 +49,13 @@ dts_reader_c::probe_file(mm_io_c *mm_io,
   return 1;
 }
 
-dts_reader_c::dts_reader_c(track_info_c *nti)
+dts_reader_c::dts_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   int pos;
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
     chunk = (unsigned char *)safemalloc(max_dts_packet_size);
     if (mm_io->read(chunk, max_dts_packet_size) != max_dts_packet_size)
@@ -71,10 +71,10 @@ dts_reader_c::dts_reader_c(track_info_c *nti)
     throw error_c("dts_reader: No valid DTS packet found in the first "
                   "max_dts_packet_size bytes.\n");
   bytes_processed = 0;
-  ti->id = 0;                   // ID for this track.
+  ti.id = 0;                   // ID for this track.
 
   if (verbose)
-    mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti.fname.c_str());
 }
 
 dts_reader_c::~dts_reader_c() {
@@ -87,7 +87,7 @@ dts_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
   add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
-  mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(),
          (int64_t)0);
   print_dts_header(&dtsheader);
 }
@@ -118,5 +118,5 @@ dts_reader_c::get_progress() {
 void
 dts_reader_c::identify() {
   mxinfo("File '%s': container: DTS\nTrack ID 0: audio (DTS)\n",
-         ti->fname.c_str());
+         ti.fname.c_str());
 }

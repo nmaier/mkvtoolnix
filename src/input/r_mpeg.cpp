@@ -92,16 +92,16 @@ mpeg_es_reader_c::probe_file(mm_io_c *mm_io,
   return 1;
 }
 
-mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
+mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
 
   try {
     MPEG2SequenceHeader seq_hdr;
     M2VParser parser;
     MPEGChunk *raw_seq_hdr;
 
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
 
     // Let's find the first frame. We need its information like
@@ -125,9 +125,9 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     dheight = height;
     raw_seq_hdr = parser.GetRealSequenceHeader();
     if (raw_seq_hdr != NULL) {
-      ti->private_data = (unsigned char *)
+      ti.private_data = (unsigned char *)
         safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
-      ti->private_size = raw_seq_hdr->GetSize();
+      ti.private_size = raw_seq_hdr->GetSize();
     }
 
     mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %e AR %e\n",
@@ -137,7 +137,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     throw error_c("mpeg_es_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the MPEG ES demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the MPEG ES demultiplexer.\n", ti.fname.c_str());
 }
 
 mpeg_es_reader_c::~mpeg_es_reader_c() {
@@ -154,7 +154,7 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
                                                 false, ti));
 
   mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
-         ti->fname.c_str(), (int64_t)0);
+         ti.fname.c_str(), (int64_t)0);
 }
 
 file_status_e
@@ -233,7 +233,7 @@ mpeg_es_reader_c::get_progress() {
 void
 mpeg_es_reader_c::identify() {
   mxinfo("File '%s': container: MPEG elementary stream (ES)\n"
-         "Track ID 0: video (MPEG %d)\n", ti->fname.c_str(), version);
+         "Track ID 0: video (MPEG %d)\n", ti.fname.c_str(), version);
 }
 
 // ------------------------------------------------------------------------
@@ -264,16 +264,16 @@ mpeg_ps_reader_c::probe_file(mm_io_c *mm_io,
   }
 }
 
-mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
+mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   try {
     uint32_t header;
     uint8_t byte;
     bool done;
     int i;
 
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
     file_done = false;
 
@@ -392,7 +392,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
     throw error_c("mpeg_ps_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the MPEG PS demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the MPEG PS demultiplexer.\n", ti.fname.c_str());
 }
 
 mpeg_ps_reader_c::~mpeg_ps_reader_c() {
@@ -473,7 +473,7 @@ mpeg_ps_reader_c::parse_packet(int id,
 
     if ((c & 0x30) != 0x00)
       mxerror(FMT_FN "Reading encrypted VOBs is not supported.\n",
-              ti->fname.c_str());
+              ti.fname.c_str());
     pts_flags = mm_io->read_uint8() >> 6;
     hdrlen = mm_io->read_uint8();
     length -= 2;
@@ -676,11 +676,11 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     id2idx[id] = tracks.size();
     tracks.push_back(track);
   } catch(const char *msg) {
-    mxerror(FMT_FN "%s\n", ti->fname.c_str(), msg);
+    mxerror(FMT_FN "%s\n", ti.fname.c_str(), msg);
   } catch(...) {
     mxerror(FMT_FN "Error parsing a MPEG PS packet during the "
             "header reading phase. This stream seems to be badly damaged.\n",
-            ti->fname.c_str());
+            ti.fname.c_str());
   }
 }
 
@@ -766,7 +766,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   if (!demuxing_requested(tracks[id]->type, id))
     return;
 
-  ti->id = id;
+  ti.id = id;
   mpeg_ps_track_ptr &track = tracks[id];
   if (track->type == 'a') {
     if ((track->fourcc == FOURCC('M', 'P', '1', ' ')) ||
@@ -777,7 +777,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                                             track->a_channels, true, ti));
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG audio output module.\n",
-               ti->fname.c_str(), id);
+               ti.fname.c_str(), id);
 
     } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
       track->ptzr =
@@ -785,14 +785,14 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                                             track->a_channels,
                                             track->a_bsid, ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the AC3 output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(),
                id);
 
     } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
       track->ptzr =
         add_packetizer(new dts_packetizer_c(this, track->dts_header, ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname.c_str(),
+        mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(),
                id);
 
     } else
@@ -803,8 +803,8 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         (track->fourcc == FOURCC('m', 'p', 'g', '2'))) {
       mpeg1_2_video_packetizer_c *ptzr;
 
-      ti->private_data = track->raw_seq_hdr;
-      ti->private_size = track->raw_seq_hdr_size;
+      ti.private_data = track->raw_seq_hdr;
+      ti.private_size = track->raw_seq_hdr_size;
       ptzr =
         new mpeg1_2_video_packetizer_c(this, track->v_version,
                                        track->v_frame_rate,
@@ -812,12 +812,12 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                                        track->v_dwidth, track->v_dheight,
                                        false, ti);
       track->ptzr = add_packetizer(ptzr);
-      ti->private_data = NULL;
-      ti->private_size = 0;
+      ti.private_data = NULL;
+      ti.private_size = 0;
 
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
-               ti->fname.c_str(), id);
+               ti.fname.c_str(), id);
 
     } else
       mxerror("mpeg_ps_reader: Should not have happened #2. %s", BUGMSG);
@@ -919,7 +919,7 @@ mpeg_ps_reader_c::identify() {
   int i;
 
   mxinfo("File '%s': container: MPEG %d program stream (PS)\n",
-         ti->fname.c_str(), version);
+         ti.fname.c_str(), version);
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ps_track_ptr &track = tracks[i];
     mxinfo("Track ID %d: %s (%s)\n", i,

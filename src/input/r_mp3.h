@@ -34,7 +34,7 @@ private:
   mp3_header_t mp3header;
 
 public:
-  mp3_reader_c(track_info_c *nti) throw (error_c);
+  mp3_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~mp3_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);

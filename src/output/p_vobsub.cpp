@@ -33,8 +33,8 @@ using namespace libmatroska;
 vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
                                          const void *nidx_data,
                                          int nidx_data_size,
-                                         track_info_c *nti) throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+                                         track_info_c &_ti) throw (error_c):
+  generic_packetizer_c(nreader, _ti) {
 
   idx_data = (unsigned char *)safememdup(nidx_data, nidx_data_size);
   idx_data_size = nidx_data_size;
@@ -69,7 +69,7 @@ vobsub_packetizer_c::process(memory_c &mem,
   if (timecode < 0)
     return FILE_STATUS_MOREDATA;
 
-  timecode = (int64_t)((float)timecode * ti->async.linear);
+  timecode = (int64_t)((float)timecode * ti.async.linear);
   add_packet(mem, timecode, duration, true);
 
   return FILE_STATUS_MOREDATA;

@@ -34,7 +34,7 @@ private:
 public:
   aac_packetizer_c(generic_reader_c *nreader, int nid, int nprofile,
                    unsigned long nsamples_per_sec, int nchannels,
-                   track_info_c *nti, bool emphasis_present,
+                   track_info_c &_ti, bool emphasis_present,
                    bool nheaderless = false) throw (error_c);
   virtual ~aac_packetizer_c();
 

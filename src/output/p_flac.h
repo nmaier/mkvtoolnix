@@ -37,7 +37,7 @@ private:
 public:
   flac_packetizer_c(generic_reader_c *nreader,
                     unsigned char *nheader, int nl_header,
-                    track_info_c *nti) throw (error_c);
+                    track_info_c &_ti) throw (error_c);
   virtual ~flac_packetizer_c();
 
   virtual int process(memory_c &mem, int64_t timecode = -1,

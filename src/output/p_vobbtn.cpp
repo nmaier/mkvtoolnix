@@ -33,9 +33,9 @@ using namespace libmatroska;
 vobbtn_packetizer_c::vobbtn_packetizer_c(generic_reader_c *nreader,
                                          int nwidth,
                                          int nheight,
-                                         track_info_c *nti)
+                                         track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti),
+  generic_packetizer_c(nreader, _ti),
   previous_timecode(0),
   width(nwidth),
   height(nheight) {
@@ -76,9 +76,9 @@ vobbtn_packetizer_c::process(memory_c &mem,
     timecode = previous_timecode;
     previous_timecode += duration;
   } else
-    timecode = timecode + ti->async.displacement;
+    timecode = timecode + ti.async.displacement;
 
-  timecode = (int64_t)(timecode * ti->async.linear);
+  timecode = (int64_t)(timecode * ti.async.linear);
   add_packet(mem, timecode, duration, true);
 
   return FILE_STATUS_MOREDATA;

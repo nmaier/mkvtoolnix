@@ -29,10 +29,10 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels,
                                    int nbits_per_sample,
-                                   track_info_c *nti,
+                                   track_info_c &_ti,
                                    bool nbig_endian)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   int i;
 
   packetno = 0;
@@ -51,7 +51,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
   packet_size = samples_per_sec / i;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1000000000.0 * ti->async.linear *
+  set_track_default_duration((int64_t)(1000000000.0 * ti.async.linear *
                                        packet_size / samples_per_sec));
 
   packet_size *= channels * bits_per_sample / 8;

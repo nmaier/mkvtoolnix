@@ -31,7 +31,7 @@ private:
   subtitles_c subs;
 
 public:
-  srt_reader_c(track_info_c *nti) throw (error_c);
+  srt_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~srt_reader_c();
 
   virtual void parse_file();

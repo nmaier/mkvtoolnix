@@ -32,7 +32,7 @@ private:
 
 public:
   pcm_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, int nbits_per_sample, track_info_c *nti,
+                   int nchannels, int nbits_per_sample, track_info_c &_ti,
                    bool nbig_endian = false)
     throw (error_c);
   virtual ~pcm_packetizer_c();

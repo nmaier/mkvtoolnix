@@ -47,19 +47,19 @@ wavpack_reader_c::probe_file(mm_io_c *mm_io,
   return 0;
 }
 
-wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
+wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   int32_t packet_size;
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
 
     packet_size = wv_parse_frame(mm_io, header, meta, true, true);
     if (packet_size < 0)
       mxerror(FMT_FN "The file header was not read correctly.\n",
-              ti->fname.c_str());
+              ti.fname.c_str());
   } catch (...) {
     throw error_c("wavpack_reader: Could not open the file.");
   }
@@ -72,12 +72,12 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
   meta.has_correction = false;
   try {
     if (header.flags & WV_HYBRID_FLAG) {
-      mm_io_correc = new mm_file_io_c(ti->fname + "c");
+      mm_io_correc = new mm_file_io_c(ti.fname + "c");
       packet_size = wv_parse_frame(mm_io_correc, header_correc, meta_correc,
                                    true, true);
       if (packet_size < 0)
         mxerror(FMT_FN "The correction file header was not read correctly.\n",
-                ti->fname.c_str());
+                ti.fname.c_str());
       mm_io_correc->setFilePointer(mm_io_correc->getFilePointer() -
                                    sizeof(wavpack_header_t), seek_beginning);
       meta.has_correction = true;
@@ -85,11 +85,11 @@ wavpack_reader_c::wavpack_reader_c(track_info_c *nti)
   } catch (...) {
     if (verbose)
       mxinfo(FMT_FN "Could not open the corresponding correction file '%s'.\n",
-             ti->fname.c_str(), (ti->fname + "c").c_str());
+             ti.fname.c_str(), (ti.fname + "c").c_str());
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the WAVPACK demultiplexer%s.\n", ti->fname.c_str(),
+    mxinfo(FMT_FN "Using the WAVPACK demultiplexer%s.\n", ti.fname.c_str(),
            meta.has_correction ? " with a correction file" : "");
 }
 
@@ -105,12 +105,12 @@ wavpack_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
   put_uint16_le(&version_le, header.version);
-  ti->private_data = (unsigned char *)&version_le;
-  ti->private_size = sizeof(uint16_t);
+  ti.private_data = (unsigned char *)&version_le;
+  ti.private_size = sizeof(uint16_t);
   add_packetizer(new wavpack_packetizer_c(this, meta, ti));
-  ti->private_data = NULL;
+  ti.private_data = NULL;
 
-  mxinfo(FMT_TID "Using the WAVPACK output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the WAVPACK output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -250,5 +250,5 @@ wavpack_reader_c::get_progress() {
 void
 wavpack_reader_c::identify() {
   mxinfo("File '%s': container: WAVPACK\nTrack ID 0: audio (WAVPACK)\n",
-         ti->fname.c_str());
+         ti.fname.c_str());
 }

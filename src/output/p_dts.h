@@ -39,7 +39,7 @@ public:
   bool skipping_is_normal;
 
   dts_packetizer_c(generic_reader_c *nreader, const dts_header_t &dts_header,
-                   track_info_c *nti, bool _get_first_header_later = false)
+                   track_info_c &_ti, bool _get_first_header_later = false)
     throw (error_c);
   virtual ~dts_packetizer_c();
 

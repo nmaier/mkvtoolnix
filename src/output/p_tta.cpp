@@ -29,16 +29,16 @@ tta_packetizer_c::tta_packetizer_c(generic_reader_c *nreader,
                                    int nchannels,
                                    int nbits_per_sample,
                                    int nsample_rate,
-                                   track_info_c *nti)
+                                   track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   sample_rate = nsample_rate;
   channels = nchannels;
   bits_per_sample = nbits_per_sample;
   samples_output = 0;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1000000000.0 * ti->async.linear *
+  set_track_default_duration((int64_t)(1000000000.0 * ti.async.linear *
                                        TTA_FRAME_TIME));
 }
 
@@ -65,7 +65,7 @@ tta_packetizer_c::process(memory_c &mem,
 
   if (duration == -1) {
     add_packet(mem, irnd(samples_output * 1000000000 / sample_rate),
-               irnd(1000000000.0 * ti->async.linear * TTA_FRAME_TIME));
+               irnd(1000000000.0 * ti.async.linear * TTA_FRAME_TIME));
     samples_output += irnd(TTA_FRAME_TIME * sample_rate);
   } else {
     mxverb(2, "tta_packetizer: incomplete block with duration %lld\n",

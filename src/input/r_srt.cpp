@@ -62,20 +62,20 @@ srt_reader_c::probe_file(mm_text_io_c *mm_io,
   return 1;
 }
 
-srt_reader_c::srt_reader_c(track_info_c *nti)
+srt_reader_c::srt_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
 
   try {
-    mm_io = new mm_text_io_c(new mm_file_io_c(ti->fname));
+    mm_io = new mm_text_io_c(new mm_file_io_c(ti.fname));
     if (!srt_reader_c::probe_file(mm_io, 0))
       throw error_c("srt_reader: Source is not a valid SRT file.");
-    ti->id = 0;                 // ID for this track.
+    ti.id = 0;                 // ID for this track.
   } catch (...) {
     throw error_c("srt_reader: Could not open the source file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti.fname.c_str());
   parse_file();
 }
 
@@ -93,7 +93,7 @@ srt_reader_c::create_packetizer(int64_t) {
   is_utf8 = mm_io->get_byte_order() != BO_NONE;
   add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
                                            true, is_utf8, ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -138,7 +138,7 @@ srt_reader_c::parse_file() {
       for (i = 0; i < s.length(); i++)
         if (!isdigit(s[i])) {
           mxwarn(FMT_FN "Error in line %d: expected subtitle number "
-                 "and found some text.\n", ti->fname.c_str(), line_number);
+                 "and found some text.\n", ti.fname.c_str(), line_number);
           non_number_found = true;
           break;
         }
@@ -150,7 +150,7 @@ srt_reader_c::parse_file() {
       if ((s.length() < 29) || !issrttimecode(s.c_str())) {
         mxwarn(FMT_FN "Error in line %d: expected a SRT timecode "
                "line but found something else. Aborting this file.\n",
-               ti->fname.c_str(), line_number);
+               ti.fname.c_str(), line_number);
         break;
       }
 
@@ -182,7 +182,7 @@ srt_reader_c::parse_file() {
       if (!timecode_warning_printed && (start < previous_start)) {
         mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller "
                "than that of the previous entry. All entries from this file "
-               "will be sorted by their start time.\n", ti->fname.c_str(),
+               "will be sorted by their start time.\n", ti.fname.c_str(),
                line_number);
         timecode_warning_printed = true;
       }
@@ -248,5 +248,5 @@ srt_reader_c::get_progress() {
 void
 srt_reader_c::identify() {
   mxinfo("File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
-         ti->fname.c_str());
+         ti.fname.c_str());
 }

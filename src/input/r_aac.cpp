@@ -65,13 +65,13 @@ aac_reader_c::probe_file(mm_io_c *mm_io,
 #define INITCHUNKSIZE 16384
 #define SINITCHUNKSIZE "16384"
 
-aac_reader_c::aac_reader_c(track_info_c *nti)
+aac_reader_c::aac_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   int adif, i;
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
     chunk = (unsigned char *)safemalloc(INITCHUNKSIZE);
     if (mm_io->read(chunk, INITCHUNKSIZE) != INITCHUNKSIZE)
@@ -89,10 +89,10 @@ aac_reader_c::aac_reader_c(track_info_c *nti)
       adif = 0;
     }
     bytes_processed = 0;
-    ti->id = 0;                 // ID for this track.
+    ti.id = 0;                 // ID for this track.
 
-    for (i = 0; i < ti->aac_is_sbr.size(); i++)
-      if ((ti->aac_is_sbr[i] == 0) || (ti->aac_is_sbr[i] == -1)) {
+    for (i = 0; i < ti.aac_is_sbr.size(); i++)
+      if ((ti.aac_is_sbr[i] == 0) || (ti.aac_is_sbr[i] == -1)) {
         aacheader.profile = AAC_PROFILE_SBR;
         break;
       }
@@ -100,7 +100,7 @@ aac_reader_c::aac_reader_c(track_info_c *nti)
     throw error_c("aac_reader: Could not open the file.");
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the AAC demultiplexer.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the AAC demultiplexer.\n", ti.fname.c_str());
 }
 
 aac_reader_c::~aac_reader_c() {
@@ -128,7 +128,7 @@ aac_reader_c::create_packetizer(int64_t) {
   add_packetizer(aacpacketizer);
   if (aacheader.profile == AAC_PROFILE_SBR)
     aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
-  mxinfo(FMT_TID "Using the AAC output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -186,5 +186,5 @@ aac_reader_c::get_progress() {
 void
 aac_reader_c::identify() {
   mxinfo("File '%s': container: AAC\nTrack ID 0: audio (AAC)\n",
-         ti->fname.c_str());
+         ti.fname.c_str());
 }

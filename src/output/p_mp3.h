@@ -33,7 +33,7 @@ private:
 
 public:
   mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, bool source_is_good, track_info_c *nti)
+                   int nchannels, bool source_is_good, track_info_c &_ti)
     throw (error_c);
   virtual ~mp3_packetizer_c();
 

@@ -54,16 +54,16 @@ vobbtn_reader_c::probe_file(mm_io_c *mm_io,
   return 1;
 }
 
-vobbtn_reader_c::vobbtn_reader_c(track_info_c *nti)
+vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
 
   try {
-    btn_file = new mm_file_io_c(ti->fname);
+    btn_file = new mm_file_io_c(ti.fname);
     size = btn_file->get_size();
   } catch (...) {
     string emsg = PFX "Could not open the button file '";
-    emsg += ti->fname;
+    emsg += ti.fname;
     emsg += "'.";
     throw error_c(emsg.c_str());
   }
@@ -76,7 +76,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c *nti)
   btn_file->setFilePointer(16, seek_beginning);
 
   if (verbose)
-    mxinfo(FMT_FN "Using the VobBtn button reader.\n", ti->fname.c_str());
+    mxinfo(FMT_FN "Using the VobBtn button reader.\n", ti.fname.c_str());
 }
 
 vobbtn_reader_c::~vobbtn_reader_c() {
@@ -85,7 +85,7 @@ vobbtn_reader_c::~vobbtn_reader_c() {
 
 void
 vobbtn_reader_c::create_packetizer(int64_t tid) {
-  ti->id = tid;
+  ti.id = tid;
   add_packetizer(new vobbtn_packetizer_c(this, width, height, ti));
 }
 
@@ -122,7 +122,7 @@ vobbtn_reader_c::get_progress() {
 
 void
 vobbtn_reader_c::identify() {
-  mxinfo("File '%s': container: VobBtn\n", ti->fname.c_str());
+  mxinfo("File '%s': container: VobBtn\n", ti.fname.c_str());
   mxinfo("Track ID 0: MPEG PCI buttons (width %d / height %d)\n", width,
          height);
 }

@@ -30,11 +30,11 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
                                    int nprofile,
                                    unsigned long nsamples_per_sec,
                                    int nchannels,
-                                   track_info_c *nti,
+                                   track_info_c &_ti,
                                    bool nemphasis_present,
                                    bool nheaderless)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   packetno = 0;
   bytes_output = 0;
   samples_per_sec = nsamples_per_sec;
@@ -47,7 +47,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
   last_timecode = -1;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1024 * 1000000000.0 * ti->async.linear /
+  set_track_default_duration((int64_t)(1024 * 1000000000.0 * ti.async.linear /
                                        samples_per_sec));
 }
 
@@ -154,9 +154,9 @@ aac_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 
-  if ((ti->private_data != NULL) && (ti->private_size > 0) &&
-      (ti->private_size != 2) && (ti->private_size != 5))
-    set_codec_private(ti->private_data, ti->private_size);
+  if ((ti.private_data != NULL) && (ti.private_size > 0) &&
+      (ti.private_size != 2) && (ti.private_size != 5))
+    set_codec_private(ti.private_data, ti.private_size);
 
   generic_packetizer_c::set_headers();
 }
@@ -190,7 +190,7 @@ aac_packetizer_c::process(memory_c &mem,
     } else
       my_timecode = (int64_t)(1024 * 1000000000.0 * packetno /
                               samples_per_sec);
-    duration = (int64_t)(1024 * 1000000000.0 * ti->async.linear /
+    duration = (int64_t)(1024 * 1000000000.0 * ti.async.linear /
                          samples_per_sec);
     packetno++;
 
@@ -199,12 +199,12 @@ aac_packetizer_c::process(memory_c &mem,
       return FILE_STATUS_MOREDATA;
     }
     while (needs_positive_displacement(duration)) {
-      add_packet(mem, my_timecode + ti->async.displacement, duration);
+      add_packet(mem, my_timecode + ti.async.displacement, duration);
       displace(duration);
     }
 
-    my_timecode = (int64_t)((my_timecode + ti->async.displacement) *
-                            ti->async.linear);
+    my_timecode = (int64_t)((my_timecode + ti.async.displacement) *
+                            ti.async.linear);
     mxverb(2, "aac: my_tc = %lld\n", my_timecode);
     add_packet(mem, my_timecode, duration);
 
@@ -219,12 +219,12 @@ aac_packetizer_c::process(memory_c &mem,
       my_timecode = (int64_t)(1024 * 1000000000.0 * packetno /
                               samples_per_sec);
     else
-      my_timecode = timecode + ti->async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti->async.linear);
+      my_timecode = timecode + ti.async.displacement;
+    my_timecode = (int64_t)(my_timecode * ti.async.linear);
     memory_c mem(packet, aacheader.data_byte_size, true);
     add_packet(mem, my_timecode,
                (int64_t)(1024 * 1000000000.0 *
-                         ti->async.linear / samples_per_sec));
+                         ti.async.linear / samples_per_sec));
     packetno++;
   }
 

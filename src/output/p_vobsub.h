@@ -30,7 +30,7 @@ private:
 public:
   vobsub_packetizer_c(generic_reader_c *nreader,
                       const void *nidx_data, int nidx_data_size,
-                      track_info_c *nti)
+                      track_info_c &_ti)
     throw (error_c);
   virtual ~vobsub_packetizer_c();
 

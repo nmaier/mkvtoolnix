@@ -31,9 +31,9 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *nreader,
                                  uint32_t nfourcc,
                                  unsigned char *nprivate_data,
                                  int nprivate_size,
-                                 track_info_c *nti)
+                                 track_info_c &_ti)
   throw (error_c):
-  generic_packetizer_c(nreader, nti) {
+  generic_packetizer_c(nreader, _ti) {
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bits_per_sample = nbits_per_sample;
@@ -44,7 +44,7 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *nreader,
   buffer_until_keyframe = false;
   if (initial_displacement < 0) {
     mxwarn("Track %lld/'%s': Negative '--sync' is not supported for "
-           "RealAudio tracks.\n", ti->id, ti->fname.c_str());
+           "RealAudio tracks.\n", ti.id, ti.fname.c_str());
     initial_displacement = 0;
   }
 

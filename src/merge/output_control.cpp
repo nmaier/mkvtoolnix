@@ -1017,13 +1017,13 @@ check_append_mapping() {
     src_file = files.begin() + amap->src_file_id;
     src_ptzr = NULL;
     foreach(gptzr, src_file->reader->reader_packetizers)
-      if ((*gptzr)->ti->id == amap->src_track_id)
+      if ((*gptzr)->ti.id == amap->src_track_id)
         src_ptzr = (*gptzr);
 
     dst_file = files.begin() + amap->dst_file_id;
     dst_ptzr = NULL;
     foreach(gptzr, dst_file->reader->reader_packetizers)
-      if ((*gptzr)->ti->id == amap->dst_track_id)
+      if ((*gptzr)->ti.id == amap->dst_track_id)
         dst_ptzr = (*gptzr);
 
     if ((src_ptzr == NULL) || (dst_ptzr == NULL))
@@ -1144,63 +1144,63 @@ create_readers() {
     try {
       switch (file->type) {
         case FILE_TYPE_MATROSKA:
-          file->reader = new kax_reader_c(file->ti);
+          file->reader = new kax_reader_c(*file->ti);
           break;
         case FILE_TYPE_OGM:
-          file->reader = new ogm_reader_c(file->ti);
+          file->reader = new ogm_reader_c(*file->ti);
           break;
         case FILE_TYPE_AVI:
-          file->reader = new avi_reader_c(file->ti);
+          file->reader = new avi_reader_c(*file->ti);
           break;
         case FILE_TYPE_REAL:
-          file->reader = new real_reader_c(file->ti);
+          file->reader = new real_reader_c(*file->ti);
           break;
         case FILE_TYPE_WAV:
-          file->reader = new wav_reader_c(file->ti);
+          file->reader = new wav_reader_c(*file->ti);
           break;
         case FILE_TYPE_SRT:
-          file->reader = new srt_reader_c(file->ti);
+          file->reader = new srt_reader_c(*file->ti);
           break;
         case FILE_TYPE_MP3:
-          file->reader = new mp3_reader_c(file->ti);
+          file->reader = new mp3_reader_c(*file->ti);
           break;
         case FILE_TYPE_AC3:
-          file->reader = new ac3_reader_c(file->ti);
+          file->reader = new ac3_reader_c(*file->ti);
           break;
         case FILE_TYPE_DTS:
-          file->reader = new dts_reader_c(file->ti);
+          file->reader = new dts_reader_c(*file->ti);
           break;
         case FILE_TYPE_AAC:
-          file->reader = new aac_reader_c(file->ti);
+          file->reader = new aac_reader_c(*file->ti);
           break;
         case FILE_TYPE_SSA:
-          file->reader = new ssa_reader_c(file->ti);
+          file->reader = new ssa_reader_c(*file->ti);
           break;
         case FILE_TYPE_VOBSUB:
-          file->reader = new vobsub_reader_c(file->ti);
+          file->reader = new vobsub_reader_c(*file->ti);
           break;
         case FILE_TYPE_QTMP4:
-          file->reader = new qtmp4_reader_c(file->ti);
+          file->reader = new qtmp4_reader_c(*file->ti);
           break;
 #if defined(HAVE_FLAC_FORMAT_H)
         case FILE_TYPE_FLAC:
-          file->reader = new flac_reader_c(file->ti);
+          file->reader = new flac_reader_c(*file->ti);
           break;
 #endif
         case FILE_TYPE_TTA:
-          file->reader = new tta_reader_c(file->ti);
+          file->reader = new tta_reader_c(*file->ti);
           break;
         case FILE_TYPE_MPEG_ES:
-          file->reader = new mpeg_es_reader_c(file->ti);
+          file->reader = new mpeg_es_reader_c(*file->ti);
           break;
         case FILE_TYPE_MPEG_PS:
-          file->reader = new mpeg_ps_reader_c(file->ti);
+          file->reader = new mpeg_ps_reader_c(*file->ti);
           break;
         case FILE_TYPE_VOBBTN:
-          file->reader = new vobbtn_reader_c(file->ti);
+          file->reader = new vobbtn_reader_c(*file->ti);
           break;
         case FILE_TYPE_WAVPACK4:
-          file->reader = new wavpack_reader_c(file->ti);
+          file->reader = new wavpack_reader_c(*file->ti);
           break;
         default:
           mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);
@@ -1618,7 +1618,7 @@ append_track(packetizer_t &ptzr,
   // Find the generic_packetizer_c that we will be appending to the one
   // stored in ptzr.
   foreach(gptzr, src_file.reader->reader_packetizers)
-    if (amap.src_track_id == (*gptzr)->ti->id)
+    if (amap.src_track_id == (*gptzr)->ti.id)
       break;
   if (gptzr == src_file.reader->reader_packetizers.end())
     die("Could not find gptzr when appending. %s\n", BUGMSG);
@@ -1666,9 +1666,9 @@ append_track(packetizer_t &ptzr,
 
   mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
          "file no. %lld ('%s').\n",
-         (*gptzr)->ti->id, amap.src_file_id, (*gptzr)->ti->fname.c_str(),
-         ptzr.packetizer->ti->id, amap.dst_file_id,
-         ptzr.packetizer->ti->fname.c_str());
+         (*gptzr)->ti.id, amap.src_file_id, (*gptzr)->ti.fname.c_str(),
+         ptzr.packetizer->ti.id, amap.dst_file_id,
+         ptzr.packetizer->ti.fname.c_str());
 
   // Is the current file currently used for displaying the progress? If yes
   // then replace it with the next one.
@@ -1710,12 +1710,12 @@ append_track(packetizer_t &ptzr,
       foreach(cmp_amap, append_mapping)
         if ((cmp_amap->src_file_id == amap.src_file_id) &&
             (cmp_amap->src_track_id ==
-             src_file.reader->ptzr_first_packet->ti->id) &&
+             src_file.reader->ptzr_first_packet->ti.id) &&
             (cmp_amap->dst_file_id == amap.dst_file_id))
           break;
       if (cmp_amap != append_mapping.end()) {
         foreach(gptzr, dst_file.reader->reader_packetizers)
-          if ((*gptzr)->ti->id == cmp_amap->dst_track_id) {
+          if ((*gptzr)->ti.id == cmp_amap->dst_track_id) {
             timecode_adjustment = (*gptzr)->max_timecode_seen;
             break;
           }
@@ -1725,12 +1725,12 @@ append_track(packetizer_t &ptzr,
 
   if (ptzr.packetizer->get_track_type() == track_subtitle) {
     mxverb(2, "append_track: new timecode_adjustment for subtitle track: "
-           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti->id);
+           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
   } else {
     mxverb(2, "append_track: new timecode_adjustment for NON subtitle track: "
-           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti->id);
+           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }
@@ -1775,7 +1775,7 @@ append_tracks_maybe() {
       continue;
     foreach(amap, append_mapping)
       if ((amap->dst_file_id == ptzr->file) &&
-          (amap->dst_track_id == ptzr->packetizer->ti->id))
+          (amap->dst_track_id == ptzr->packetizer->ti.id))
         break;
     if (amap == append_mapping.end())
       continue;

@@ -32,14 +32,14 @@ mp3_reader_c::probe_file(mm_io_c *mm_io,
   return (find_valid_headers(mm_io, probe_range, num_headers) != -1) ? 1 : 0;
 }
 
-mp3_reader_c::mp3_reader_c(track_info_c *nti)
+mp3_reader_c::mp3_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(nti) {
+  generic_reader_c(_ti) {
   int pos;
   unsigned char buf[16384];
 
   try {
-    mm_io = new mm_file_io_c(ti->fname);
+    mm_io = new mm_file_io_c(ti.fname);
     size = mm_io->get_size();
 
     pos = find_valid_headers(mm_io, 2 * 1024 * 1024, 5);
@@ -50,13 +50,13 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
     decode_mp3_header(buf, &mp3header);
     mm_io->setFilePointer(pos, seek_beginning);
     if (verbose)
-      mxinfo(FMT_FN "Using the MP2/MP3 demultiplexer.\n", ti->fname.c_str());
+      mxinfo(FMT_FN "Using the MP2/MP3 demultiplexer.\n", ti.fname.c_str());
     if ((pos > 0) && verbose)
       mxwarn("mp3_reader: skipping %d bytes at the beginning of '%s' (no "
-                 "valid MP3 header found).\n", pos, ti->fname.c_str());
+                 "valid MP3 header found).\n", pos, ti.fname.c_str());
 
     bytes_processed = 0;
-    ti->id = 0;                 // ID for this track.
+    ti.id = 0;                 // ID for this track.
   } catch (...) {
     throw error_c("mp3_reader: Could not open the source file.");
   }
@@ -72,7 +72,7 @@ mp3_reader_c::create_packetizer(int64_t) {
     return;
   add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency,
                                       mp3header.channels, false, ti));
-  mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti->fname.c_str(),
+  mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(),
          (int64_t)0);
 }
 
@@ -102,7 +102,7 @@ mp3_reader_c::get_progress() {
 void
 mp3_reader_c::identify() {
   mxinfo("File '%s': container: MP2/MP3\nTrack ID 0: audio (MPEG-%s layer "
-         "%d)\n", ti->fname.c_str(),
+         "%d)\n", ti.fname.c_str(),
          mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5",
          mp3header.layer);
 }

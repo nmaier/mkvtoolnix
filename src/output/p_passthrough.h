@@ -27,7 +27,7 @@ private:
   bool sync_to_keyframe, sync_complete_group;
 
 public:
-  passthrough_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
+  passthrough_packetizer_c(generic_reader_c *nreader, track_info_c &_ti)
     throw (error_c);
 
   virtual int process(memory_c &mem, int64_t timecode = -1,

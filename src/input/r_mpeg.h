@@ -37,7 +37,7 @@ private:
   double frame_rate, aspect_ratio;
 
 public:
-  mpeg_es_reader_c(track_info_c *nti) throw (error_c);
+  mpeg_es_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~mpeg_es_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
@@ -94,7 +94,7 @@ private:
   vector<mpeg_ps_track_ptr> tracks;
 
 public:
-  mpeg_ps_reader_c(track_info_c *nti) throw (error_c);
+  mpeg_ps_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~mpeg_ps_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
