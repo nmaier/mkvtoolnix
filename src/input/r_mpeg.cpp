@@ -162,8 +162,8 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
   unsigned char *chunk;
   int num_read;
 
-  chunk = (unsigned char *)safemalloc(6022);
-  num_read = mm_io->read(chunk, 6022);
+  chunk = (unsigned char *)safemalloc(20000);
+  num_read = mm_io->read(chunk, 20000);
   if (num_read <= 0) {
     safefree(chunk);
     return FILE_STATUS_DONE;
