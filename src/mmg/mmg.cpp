@@ -1523,8 +1523,10 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
       wxT("' does already exist. Do you really want to add another one "
           "with the same description?");
     break_line(line, 60);
+    ok = true;
     for (i = 0; i < jobs.size(); i++)
       if (description == *jobs[i].description) {
+        ok = false;
         result = wxMessageBox(line, wxT("Description already exists"),
                               wxYES_NO | wxCANCEL);
         if (result == wxYES)
