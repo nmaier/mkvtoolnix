@@ -401,6 +401,7 @@ create_track_number(generic_reader_c *reader,
   int64_t tnum;
 
   found = false;
+  file_num = -1;
   for (i = 0; i < files.size(); i++)
     if (files[i]->reader == reader) {
       found = true;
