@@ -2217,7 +2217,7 @@ kax_reader_c::reverse_encodings(kax_track_t *track,
   int new_size;
   unsigned char *new_data, *old_data;
   bool modified;
-  vector<kax_content_encoding_t>::iterator ce;
+  vector<kax_content_encoding_t>::const_iterator ce;
   compression_c *compressor;
 
   if (track->c_encodings->size() == 0)

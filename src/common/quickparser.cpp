@@ -35,7 +35,7 @@ kax_quickparser_c::kax_quickparser_c(mm_io_c &_in,
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL;
   segment_child_t new_child, *child;
-  vector<segment_child_t>::iterator it;
+  vector<segment_child_t>::const_iterator it;
 
   in.setFilePointer(0, seek_beginning);
   EbmlStream es(in);

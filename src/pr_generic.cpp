@@ -1065,7 +1065,7 @@ generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
 
 void
 generic_reader_c::set_timecode_offset(int64_t offset) {
-  vector<packetizer_container_t>::iterator it;
+  vector<packetizer_container_t>::const_iterator it;
 
   max_timecode_seen = offset;
   foreach(it, reader_packetizers)
@@ -1074,7 +1074,7 @@ generic_reader_c::set_timecode_offset(int64_t offset) {
 
 void
 generic_reader_c::set_headers() {
-  vector<packetizer_container_t>::iterator it;
+  vector<packetizer_container_t>::const_iterator it;
 
   foreach(it, reader_packetizers)
     it->orig->set_headers();
@@ -1082,7 +1082,7 @@ generic_reader_c::set_headers() {
 
 void
 generic_reader_c::set_headers_for_track(int64_t tid) {
-  vector<packetizer_container_t>::iterator it;
+  vector<packetizer_container_t>::const_iterator it;
 
   foreach(it, reader_packetizers)
     if (it->orig->ti->id == tid) {

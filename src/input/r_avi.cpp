@@ -185,7 +185,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
 void
 avi_reader_c::create_packetizers() {
   uint32_t i, bps;
-  vector<avi_demuxer_t>::iterator demuxer;
+  vector<avi_demuxer_t>::const_iterator demuxer;
 
   create_packetizer(0);
 
@@ -207,7 +207,7 @@ avi_reader_c::create_packetizers() {
 void
 avi_reader_c::add_audio_demuxer(int aid) {
   generic_packetizer_c *packetizer;
-  vector<avi_demuxer_t>::iterator it;
+  vector<avi_demuxer_t>::const_iterator it;
   avi_demuxer_t demuxer;
   alWAVEFORMATEX *wfe;
   uint32_t audio_format;
@@ -353,7 +353,7 @@ avi_reader_c::is_keyframe(unsigned char *data,
 int
 avi_reader_c::read(generic_packetizer_c *ptzr,
                    bool force) {
-  vector<avi_demuxer_t>::iterator demuxer;
+  vector<avi_demuxer_t>::const_iterator demuxer;
   int key, last_frame, frames_read, size;
   long nread;
   bool need_more_data, done;

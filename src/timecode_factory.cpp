@@ -67,7 +67,8 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   string line;
   timecode_range_c t;
   vector<string> fields;
-  vector<timecode_range_c>::iterator iit, pit;
+  vector<timecode_range_c>::iterator iit;
+  vector<timecode_range_c>::const_iterator pit;
   uint32_t i, line_no;
   bool done;
   const char *name;
@@ -161,7 +162,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 
   ranges[0].base_timecode = 0.0;
   pit = ranges.begin();
-  for (iit = pit + 1; iit < ranges.end(); iit++, pit++)
+  for (iit = ranges.begin() + 1; iit < ranges.end(); iit++, pit++)
     iit->base_timecode = pit->base_timecode +
       ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000000000.0 /
       pit->fps;

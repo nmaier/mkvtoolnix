@@ -24,7 +24,7 @@
 
 void
 subtitles_c::process(textsubs_packetizer_c *p) {
-  deque<sub_t>::iterator current;
+  deque<sub_t>::const_iterator current;
 
   foreach(current, entries) {
     memory_c mem((unsigned char *)(*current).subs.c_str(), 0, false);
