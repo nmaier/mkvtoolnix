@@ -1,5 +1,8 @@
 2004-07-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Block durations with 0s length (e.g. entries
+	in a SSA file) were not written.
+
 	* mkvmerge: bug fix: The FLAC packetizer gets the duration
 	from the FLAC packet itself.
 

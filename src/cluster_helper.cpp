@@ -337,8 +337,12 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
          block_duration, RND_TIMECODE_SCALE(def_duration),
          use_durations ? 1 : 0, rg->duration_mandatory ? 1 : 0);
 
-  if ((block_duration > 0) && (block_duration != def_duration) &&
-      (use_durations || rg->duration_mandatory))
+  if (rg->duration_mandatory) {
+    if ((block_duration == 0) ||
+        ((block_duration > 0) && (block_duration != def_duration)))
+      group->SetBlockDuration(block_duration);
+  } else if (use_durations && (block_duration > 0) &&
+             (block_duration != def_duration))
     group->SetBlockDuration(block_duration);
 }
 
