@@ -805,43 +805,57 @@ dnl
 dnl Option to use the (old) avilib library instead of the AVI classes
 dnl
 AC_ARG_WITH(avilib,
-  [  --with-avilib=version         Which avilib should be used (old, classes or 0.6.10)],
+  [  --with-avilib=version         Which avilib should be used (old, noclasses, 0.6.10)],
   with_avilib_given=yes, with_avilib_given=no)
 
-  if test "x$with_avilib_given" = "xyes"; then
-    case "${with_avilib}" in
-      old)
-        have_avilib=yes
-        ;;
-      classes)
-        have_aviclasses=yes
-        ;;
-      "0.6.10")
-        have_avilib0_6_10=yes
-        ;;
-      *)
-        echo "*** Unknown AVI library string \"${with_avilib}\". Supported "
-        echo "*** values are:"
-        echo "*** old     - the old and tested avilib, no OpenDML support"
-        echo "*** 0.6.10  - the new avilib with OpenDML support"
-        echo "*** classes - AVI access classes by Cyrius with OpenDML support"
-        exit 1
-        ;;
-    esac
-  fi
   AC_MSG_CHECKING(which AVI libraries to use)
+  # Defaults: use aviclasses and prefer the new avilib.
+  have_aviclasses=yes
+  if test "x$with_avilib_given" = "xyes"; then
+    set - `echo ${with_avilib} | sed 's/,/ /g'`
+    while test "x$1" != "x"; do
+      case "$1" in
+        old)
+          have_avilib=yes
+          ;;
+        noclasses)
+          have_aviclasses=no
+          ;;
+        "0.6.10")
+          have_avilib0_6_10=yes
+          ;;
+        *)
+          echo ""
+          echo "*** Unknown AVI library \"$1\" in \"${with_avilib}\". "
+          echo "*** Supported values are:"
+          echo "*** old       - the old and tested avilib, no OpenDML support"
+          echo "*** 0.6.10    - the new avilib with OpenDML support"
+          echo "*** noclasses - Do not use the AVI classes by Cyrius with "
+          echo "***             OpenDML support"
+          exit 1
+          ;;
+      esac
+      shift
+    done
+  fi
   if test "x$have_aviclasses" = "xyes"; then 
     AC_DEFINE(HAVE_AVICLASSES, 1,
       [Define if the newer AVIclasses should be used.])
     AVICLASSES_LIBS="-laviclasses"
     avi_libs_to_use="classes "
   fi
-  if test "x$have_avilib0_6_10" = "xyes"; then
+  if test "x$have_avilib0_6_10" = "xyes" -a "x$have_avilib" = "xyes"; then
+    echo ""
+    echo "*** You cannot include both the old avilib and the new"
+    echo "*** one (0.6.10)."
+    exit 1
+  fi
+  if test "x$have_avilib" = "xyes"; then
+    avi_libs_to_use="${avi_libs_to_use}old "
+  else
     AC_DEFINE(HAVE_AVILIB0_6_10, 1,
       [Define if the newer avilib from transcode 0.6.10 should be used.])
     avi_libs_to_use="${avi_libs_to_use}0.6.10 "
-  else
-    avi_libs_to_use="${avi_libs_to_use}old "
   fi
   AM_CONDITIONAL(HAVE_AVILIB, test x"$have_avilib0_6_10" != "xyes")
   AM_CONDITIONAL(HAVE_AVILIB0_6_10, test x"$have_avilib0_6_10" == "xyes")
