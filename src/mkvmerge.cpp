@@ -18,6 +18,8 @@
     \author Moritz Bunkus <moritz@bunkus.org>
 */
 
+// {{{ includes
+
 #include "os.h"
 
 #include <errno.h>
@@ -86,6 +88,10 @@
 
 using namespace libmatroska;
 using namespace std;
+
+// }}}
+
+// {{{ global structs and variables
 
 typedef struct {
   char *ext;
@@ -206,7 +212,11 @@ file_type_t file_types[] =
 #endif // HAVE_OGGVORBIS
    {NULL,  -1,      NULL}};
 
-static void usage(void) {
+// }}}
+
+// {{{ FUNCTION usage()
+
+static void usage() {
   mxprint(stdout,
     "mkvmerge -o out [global options] [options] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
@@ -292,14 +302,9 @@ static void usage(void) {
   );
 }
 
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
-static void sighandler(int signum) {
-#ifdef DEBUG
-  if (signum == SIGUSR1)
-    debug_c::dump_info();
-#endif // DEBUG
-}
-#endif
+// }}}
+
+// {{{ FUNCTION get_type(char *filename)
 
 static int get_type(char *filename) {
   mm_io_c *mm_io;
@@ -374,6 +379,19 @@ static int get_type(char *filename) {
   return type;
 }
 
+// }}}
+
+// {{{ helper functions (sighandler, display_progress)
+
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
+static void sighandler(int signum) {
+#ifdef DEBUG
+  if (signum == SIGUSR1)
+    debug_c::dump_info();
+#endif // DEBUG
+}
+#endif
+
 static int display_counter = 1;
 
 static void display_progress(int force) {
@@ -391,6 +409,10 @@ static void display_progress(int force) {
   }
   display_counter++;
 }
+
+// }}}
+
+// {{{ command line parsing, helper functions
 
 void parse_and_add_tags(const char *file_name) {
   KaxTags *tags;
@@ -727,6 +749,10 @@ static void parse_tags(char *s, tags_t &tags) {
   tags.file_name = s;
 }
 
+// }}}
+
+// {{{ render functions (render_headers, render_attachments)
+
 static void render_headers(mm_io_c *out, bool last_file, bool first_file) {
   EbmlHead head;
   int i;
@@ -898,6 +924,10 @@ static void render_attachments(IOCallback *out) {
   kax_as->Render(*out);
 }
 
+// }}}
+
+// {{{ FUNCTION create_readers()
+
 static void create_readers() {
   filelist_t *file;
   int i;
@@ -994,6 +1024,10 @@ static void create_readers() {
   }
 }
 
+// }}}
+
+// {{{ FUNCTION identify(const char *filename)
+
 static void identify(const char *filename) {
   track_info_t ti;
   filelist_t *file;
@@ -1037,6 +1071,10 @@ static void identify(const char *filename) {
 
   file->reader->identify();
 }
+
+// }}}
+
+// {{{ FUNCTION parse_args(int argc, char **argv)
 
 static void parse_args(int argc, char **argv) {
   track_info_t ti;
@@ -1521,6 +1559,10 @@ static void parse_args(int argc, char **argv) {
   }
 }
 
+// }}}
+
+// {{{ command line parsing helper functions
+
 static char **add_string(int &num, char **values, const char *new_string) {
   values = (char **)saferealloc(values, (num + 1) * sizeof(char *));
   values[num] = safestrdup(new_string);
@@ -1582,6 +1624,10 @@ static void handle_args(int argc, char **argv) {
   if (args != NULL)
     safefree(args);
 }
+
+// }}}
+
+// {{{ global setup and cleanup functions
 
 static void setup() {
 #if ! defined(COMP_MSC)
@@ -1656,6 +1702,10 @@ static void cleanup() {
 
   utf8_done();
 }
+
+// }}}
+
+// {{{ output file creation and finishing
 
 // Transform the output filename and insert the current file number.
 // Rules and search order:
@@ -1896,6 +1946,10 @@ void finish_file() {
     packetizers[i]->packetizer->reset();;
 }
 
+// }}}
+
+// {{{ FUNCTION main_loop()
+
 void main_loop() {
   packet_t *pack;
   int i;
@@ -1954,6 +2008,10 @@ void main_loop() {
     mxprint(stdout, "\n");
   }
 }
+
+// }}}
+
+// {{{ FUNCTION main(int argc, char **argv)
 
 int main(int argc, char **argv) {
   init_globals();
@@ -2014,3 +2072,5 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+
+// }}}
