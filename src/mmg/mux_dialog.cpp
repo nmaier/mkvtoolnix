@@ -22,6 +22,7 @@
 #include "os.h"
 
 #include <errno.h>
+#include <unistd.h>
 
 #include "wx/wxprec.h"
 
