@@ -68,6 +68,10 @@ extern "C" {
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
+#include <matroska/KaxVersion.h>
+#if LIBMATROSKA_VERSION >= 000503
+#include <matroska/KaxContentEncoding.h>
+#endif
 
 #include "mkvinfo.h"
 #include "mkvinfo_tag_types.h"
@@ -512,6 +516,31 @@ void read_master(EbmlMaster *m, EbmlStream *es, const EbmlSemanticContext &ctx,
   sort_master(*m);
 }
 
+string format_binary(EbmlBinary &bin, int max_len = 10) {
+  int len, i;
+  string result;
+
+  if (bin.GetSize() > max_len)
+    len = max_len;
+  else
+    len = bin.GetSize();
+  char buffer[40 + len * 5 + 1 + 3 + 24];
+  const unsigned char *b = (const unsigned char *)&binary(bin);
+  buffer[0] = 0;
+  mxprints(buffer, "length %u, data:", bin.GetSize());
+  for (i = 0; i < len; i++)
+    mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+  if (len < bin.GetSize())
+    mxprints(&buffer[strlen(buffer)], "...");
+  if (calc_checksums)
+    mxprints(&buffer[strlen(buffer)], " (adler: 0x%08x)",
+             calc_adler32(&binary(bin), bin.GetSize()));
+  result = buffer;
+  strip(result);
+
+  return result;
+}
+
 bool process_file(const char *file_name) {
   int upper_lvl_el, i;
   // Elements for different levels
@@ -738,13 +767,9 @@ bool process_file(const char *file_name) {
                   } else if (is_id(l4, KaxAudioPosition)) {
                     KaxAudioPosition &positions =
                       *static_cast<KaxAudioPosition *>(l4);
-                    char buffer[positions.GetSize() * 5 + 1];
-                    const unsigned char *b = (const unsigned char *)
-                      &binary(positions);
-                    buffer[0] = 0;
-                    for (i = 0; i < positions.GetSize(); i++)
-                      mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
-                    show_element(l4, 4, "Channel positions:%s", buffer);
+                    strc = format_binary(positions);
+                    show_element(l4, 4, "Channel positions: %s",
+                                 strc.c_str());
 
                   } else if (is_id(l4, KaxAudioBitDepth)) {
                     KaxAudioBitDepth &bps =
@@ -794,13 +819,8 @@ bool process_file(const char *file_name) {
                   } else if (is_id(l4, KaxVideoColourSpace)) {
                     KaxVideoColourSpace &cspace =
                       *static_cast<KaxVideoColourSpace *>(l4);
-                    char buffer[cspace.GetSize() * 5 + 1];
-                    const unsigned char *b = (const unsigned char *)
-                      &binary(cspace);
-                    buffer[0] = 0;
-                    for (i = 0; i < cspace.GetSize(); i++)
-                      mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
-                    show_element(l4, 4, "Colour space:%s", buffer);
+                    strc = format_binary(cspace);
+                    show_element(l4, 4, "Colour space: %s", strc.c_str());
 
                   } else if (is_id(l4, KaxVideoGamma)) {
                     KaxVideoGamma &gamma =
@@ -991,15 +1011,153 @@ bool process_file(const char *file_name) {
                   *static_cast<KaxTrackLanguage *>(l3);
                 show_element(l3, 3, "Language: %s", string(language).c_str());
 
+#if LIBMATROSKA_VERSION >= 000503
+              } else if (is_id(l3, KaxContentEncoding)) {
+                show_element(l3, 3, "Content encoding");
+
+                m3 = static_cast<EbmlMaster *>(l3);
+                for (i3 = 0; i3 < m3->ListSize(); i3++) {
+                  l4 = (*m3)[i3];
+
+                  if (is_id(l4, KaxContentEncodingOrder)) {
+                    KaxContentEncodingOrder &ce_order =
+                      *static_cast<KaxContentEncodingOrder *>(l4);
+                    show_element(l4, 4, "Order: %u", uint32(ce_order));
+
+                  } else if (is_id(l4,  KaxContentEncodingScope)) {
+                    string scope;
+                    KaxContentEncodingScope &ce_scope =
+                      *static_cast<KaxContentEncodingScope *>(l4);
+                    if ((uint32(ce_scope) & 0x01) == 0x01)
+                      scope = "1: all frames";
+                    if ((uint32(ce_scope) & 0x02) == 0x02) {
+                      if (scope.length() > 0)
+                        scope += ", ";
+                      scope += "2: codec private data";
+                    }
+                    if ((uint32(ce_scope) & 0xfc) != 0x00) {
+                      if (scope.length() > 0)
+                        scope += ", ";
+                      scope += "rest: unknown";
+                    }
+                    if (scope.length() == 0)
+                      scope = "unknown";
+                    show_element(l4, 4, "Scope: %u (%s)", uint32(ce_scope),
+                                 scope.c_str());
+
+                  } else if (is_id(l4,  KaxContentEncodingType)) {
+                    uint32_t ce_type;
+                    ce_type =
+                      uint32(*static_cast<KaxContentEncodingType *>(l4));
+                    show_element(l4, 4, "Type: %u (%s)", ce_type,
+                                 ce_type == 0 ? "compression" :
+                                 ce_type == 1 ? "encryption" :
+                                 "unknown");
+
+                  } else if (is_id(l4, KaxContentCompression)) {
+                    show_element(l4, 4, "Content compression");
+
+                    m4 = static_cast<EbmlMaster *>(l4);
+                    for (i4 = 0; i4 < m4->ListSize(); i4++) {
+                      l5 = (*m4)[i4];
+
+                      if (is_id(l5, KaxContentCompAlgo)) {
+                        uint32_t c_algo =
+                          uint32(*static_cast<KaxContentCompAlgo *>(l5));
+                        show_element(l5, 5, "Algorithm: %u (%s)", c_algo,
+                                     c_algo == 0 ? "ZLIB" :
+                                     c_algo == 1 ? "bzLib" :
+                                     "unknown");
+
+                      } else if (is_id(l5, KaxContentCompSettings)) {
+                        KaxContentCompSettings &c_settings =
+                          *static_cast<KaxContentCompSettings *>(l5);
+                        strc = format_binary(c_settings);
+                        show_element(l5, 5, "Settings: %s", strc.c_str());
+
+                      } else if (!is_global(es, l5, 5))
+                        show_unknown_element(l5, 5);
+
+                    }
+
+                  } else if (is_id(l4, KaxContentEncryption)) {
+                    show_element(l4, 4, "Content encryption");
+
+                    m4 = static_cast<EbmlMaster *>(l4);
+                    for (i4 = 0; i4 < m4->ListSize(); i4++) {
+                      l5 = (*m4)[i4];
+
+                      if (is_id(l5, KaxContentEncAlgo)) {
+                        uint32_t e_algo =
+                          uint32(*static_cast<KaxContentEncAlgo *>(l5));
+                        show_element(l5, 5, "Encryption algorithm: %u (%s)",
+                                     e_algo,
+                                     e_algo == 0 ? "none" :
+                                     e_algo == 1 ? "DES" :
+                                     e_algo == 2 ? "3DES" :
+                                     e_algo == 3 ? "Twofish" :
+                                     e_algo == 4 ? "Blowfish" :
+                                     e_algo == 5 ? "AES" :
+                                     "unknown");
+
+                      } else if (is_id(l5, KaxContentEncKeyID)) {
+                        KaxContentEncKeyID &e_keyid =
+                          *static_cast<KaxContentEncKeyID *>(l5);
+                        strc = format_binary(e_keyid);
+                        show_element(l5, 5, "Encryption key ID: %s",
+                                     strc.c_str());
+
+                      } else if (is_id(l5, KaxContentSigAlgo)) {
+                        uint32_t s_algo =
+                          uint32(*static_cast<KaxContentSigAlgo *>(l5));
+                        show_element(l5, 5, "Signature algorithm: %u (%s)",
+                                     s_algo,
+                                     s_algo == 0 ? "none" :
+                                     s_algo == 1 ? "RSA" :
+                                     "unknown");
+
+                      } else if (is_id(l5, KaxContentSigHashAlgo)) {
+                        uint32_t s_halgo =
+                          uint32(*static_cast<KaxContentSigHashAlgo *>(l5));
+                        show_element(l5, 5, "Signature hash algorithm: %u "
+                                     "(%s)", s_halgo,
+                                     s_halgo == 0 ? "none" :
+                                     s_halgo == 1 ? "SHA1-160" :
+                                     s_halgo == 2 ? "MD5" :
+                                     "unknown");
+
+                      } else if (is_id(l5, KaxContentSigKeyID)) {
+                        KaxContentSigKeyID &s_keyid =
+                          *static_cast<KaxContentSigKeyID *>(l5);
+                        strc = format_binary(s_keyid);
+                        show_element(l5, 5, "Signature key ID: %s",
+                                     strc.c_str());
+
+                      } else if (is_id(l5, KaxContentSignature)) {
+                        KaxContentSignature &sig =
+                          *static_cast<KaxContentSignature *>(l5);
+                        strc = format_binary(sig);
+                        show_element(l5, 5, "Signature: %s", strc.c_str());
+
+                      } else if (!is_global(es, l5, 5))
+                        show_unknown_element(l5, 5);
+
+                    }
+
+                  } else if (!is_global(es, l4, 4))
+                    show_unknown_element(l4, 4);
+
+                }
+#endif
               } else if (!is_global(es, l3, 3))
                 show_unknown_element(l3, 3);
 
-            } // while (l3 != NULL)
+            }
 
           } else if (!is_global(es, l2, 2))
             show_unknown_element(l2, 2);
 
-        } // while (l2 != NULL)
+        }
 
       } else if ((is_id(l1, KaxSeekHead)) &&
                  (verbose < 2) && !use_gui)
@@ -1143,14 +1301,9 @@ bool process_file(const char *file_name) {
                 }
 
               } else if (is_id(l3, KaxBlockVirtual)) {
-                char adler[100];
                 KaxBlockVirtual &bvirt = *static_cast<KaxBlockVirtual *>(l3);
-                adler[0] = 0;
-                if (calc_checksums)
-                  mxprints(adler, " (adler: 0x%08x)",
-                           calc_adler32(&binary(bvirt), bvirt.GetSize()));
-                show_element(l3, 3, "Block virtual, length: %u%s",
-                             bvirt.GetSize(), adler);
+                strc = format_binary(bvirt);
+                show_element(l3, 3, "Block virtual: %s", strc.c_str());
 
               } else if (is_id(l3, KaxBlockDuration)) {
                 KaxBlockDuration &duration =
@@ -1201,18 +1354,11 @@ bool process_file(const char *file_name) {
                                      uint64(add_id));
 
                       } else if (is_id(l5, KaxBlockAdditional)) {
-                        char adler[100];
                         KaxBlockAdditional &block =
                           *static_cast<KaxBlockAdditional *>(l5);
-                        if (calc_checksums)
-                          mxprints(adler, " (adler: 0x%08x)",
-                                   calc_adler32(&binary(block),
-                                                block.GetSize()));
-                        else
-                          adler[0] = 0;
-
-                        show_element(l5, 5, "Block additional, size: %u%s",
-                                     block.GetSize(), adler);
+                        strc = format_binary(block);
+                        show_element(l5, 5, "Block additional: %s",
+                                     strc.c_str());
                         
                       } else if (!is_global(es, l5, 5))
                         show_unknown_element(l5, 5);
@@ -1557,18 +1703,9 @@ bool process_file(const char *file_name) {
                                  string(language).c_str());
 
                   } else if (is_id(l4, KaxTagRating)) {
-                    char buf[8];
-                    const binary *b;
-
                     KaxTagRating &rating =
                       *static_cast<KaxTagRating *>(l4);
-                    strc = "Rating: length " + to_string(rating.GetSize()) +
-                      ", data: ";
-                    b = &binary(rating);
-                    for (i = 0; i < rating.GetSize(); i++) {
-                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                      strc += buf;
-                    }
+                    strc = "Rating: " + format_binary(rating);
                     show_element(l4, 4, strc.c_str());
 
                   } else if (is_id(l4, KaxTagEncoder)) {
@@ -1686,18 +1823,9 @@ bool process_file(const char *file_name) {
                                  string(audio_genre).c_str());
 
                   } else if (is_id(l4, KaxTagVideoGenre)) {
-                    char buf[8];
-                    const binary *b;
-
                     KaxTagVideoGenre &video_genre =
                       *static_cast<KaxTagVideoGenre *>(l4);
-                    strc = "Video genre: length " +
-                      to_string(video_genre.GetSize()) + ", data: ";
-                    b = &binary(video_genre);
-                    for (i = 0; i < video_genre.GetSize(); i++) {
-                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                      strc += buf;
-                    }
+                    strc = "Video genre: " + format_binary(video_genre);
                     show_element(l4, 4, strc.c_str());
 
                   } else if (is_id(l4, KaxTagSubGenre)) {
@@ -1720,18 +1848,9 @@ bool process_file(const char *file_name) {
                   l4 = (*m3)[i3];
 
                   if (is_id(l4, KaxTagAudioEncryption)) {
-                    char buf[8];
-                    const binary *b;
-
                     KaxTagAudioEncryption &encryption =
                       *static_cast<KaxTagAudioEncryption *>(l4);
-                    strc = "Audio encryption: length " +
-                      to_string(encryption.GetSize()) + ", data: ";
-                    b = &binary(encryption);
-                    for (i = 0; i < encryption.GetSize(); i++) {
-                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                      strc += buf;
-                    }
+                    strc = "Audio encryption: " + format_binary(encryption);
                     show_element(l4, 4, strc.c_str());
 
                   } else if (is_id(l4, KaxTagAudioGain)) {
@@ -1749,18 +1868,9 @@ bool process_file(const char *file_name) {
                     show_element(l4, 4, "BPM: %.3f", float(bpm));
 
                   } else if (is_id(l4, KaxTagEqualisation)) {
-                    char buf[8];
-                    const binary *b;
-
                     KaxTagEqualisation &equalisation =
                       *static_cast<KaxTagEqualisation *>(l4);
-                    strc = "Equalisation: length " +
-                      to_string(equalisation.GetSize()) + ", data: ";
-                    b = &binary(equalisation);
-                    for (i = 0; i < equalisation.GetSize(); i++) {
-                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                      strc += buf;
-                    }
+                    strc = "Equalisation: " + format_binary(equalisation);
                     show_element(l4, 4, strc.c_str());
 
                   } else if (is_id(l4, KaxTagDiscTrack)) {
@@ -1811,18 +1921,10 @@ bool process_file(const char *file_name) {
                                  uint32(capture_dpi));
 
                   } else if (is_id(l4, KaxTagCaptureLightness)) {
-                    char buf[8];
-                    const binary *b;
-
                     KaxTagCaptureLightness &capture_lightness =
                       *static_cast<KaxTagCaptureLightness *>(l4);
-                    strc = "Capture lightness: length " +
-                      to_string(capture_lightness.GetSize()) + ", data: ";
-                    b = &binary(capture_lightness);
-                    for (i = 0; i < capture_lightness.GetSize(); i++) {
-                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                      strc += buf;
-                    }
+                    strc = "Capture lightness: " +
+                      format_binary(capture_lightness);
                     show_element(l4, 4, strc.c_str());
 
                   } else if (is_id(l4, KaxTagCapturePaletteSetting)) {
@@ -1832,18 +1934,10 @@ bool process_file(const char *file_name) {
                                  uint32(capture_palette_setting));
 
                   } else if (is_id(l4, KaxTagCaptureSharpness)) {
-                    char buf[8];
-                    const binary *b;
-
                     KaxTagCaptureSharpness &capture_sharpness =
                       *static_cast<KaxTagCaptureSharpness *>(l4);
-                    strc = "Capture sharpness: length " +
-                      to_string(capture_sharpness.GetSize()) + ", data: ";
-                    b = &binary(capture_sharpness);
-                    for (i = 0; i < capture_sharpness.GetSize(); i++) {
-                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                      strc += buf;
-                    }
+                    strc = "Capture sharpness: " +
+                      format_binary(capture_sharpness);
                     show_element(l4, 4, strc.c_str());
 
                   } else if (is_id(l4, KaxTagCropped)) {
@@ -2119,18 +2213,9 @@ bool process_file(const char *file_name) {
                                      identifier_types[type - 1] : "unknown");
 
                       } else if (is_id(l5, KaxTagMultiIdentifierBinary)) {
-                        char buf[8];
-                        const binary *b;
-
                         KaxTagMultiIdentifierBinary &i_binary =
                           *static_cast<KaxTagMultiIdentifierBinary *>(l5);
-                        strc = "Binary: length " +
-                          to_string(i_binary.GetSize()) + ", data: ";
-                        b = &binary(i_binary);
-                        for (i = 0; i < i_binary.GetSize(); i++) {
-                          mxprints(buf, "0x%02x ", (unsigned char)b[i]);
-                          strc += buf;
-                        }
+                        strc = "Binary: " + format_binary(i_binary);
                         show_element(l5, 5, strc.c_str());
 
                       } else if (is_id(l5, KaxTagMultiIdentifierString)) {
