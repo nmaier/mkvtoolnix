@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.50 2003/05/28 11:31:55 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.51 2003/05/29 18:35:19 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -136,9 +136,12 @@ void show_error(const char *fmt, ...) {
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
   va_end(ap);
 
-  // Now this is where the future GUI code will add this entry to the
-  // tree view or whatever. For now just dump the stuff to stdout.
-  fprintf(stdout, "(%s) %s\n", NAME, args_buffer);
+#ifdef HAVE_WXWINDOWS
+  if (use_gui)
+    frame->show_error(args_buffer);
+  else
+#endif
+    fprintf(stdout, "(%s) %s\n", NAME, args_buffer);
 }
 
 void show_element(EbmlElement *l, int level, const char *fmt, ...) {
@@ -707,7 +710,7 @@ bool process_file(const char *file_name) {
 
 #ifdef HAVE_WXWINDOWS
         frame->show_progress(100 * cluster->GetElementPosition() /
-                             file_size);
+                             file_size, "Parsing file");
 #endif // HAVE_WXWINDOWS
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,

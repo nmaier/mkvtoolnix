@@ -82,7 +82,7 @@ mi_frame::mi_frame(const wxString &title, const wxPoint &pos,
   menu_options->Check(mi_options_showall, show_all_elements);
 //   menu_options->AppendCheckItem(mi_options_expandall,
 //                                 _T("&Expand all elements\tCtrl-E"),
-//                                 _T("Show all items expanded and not only "
+//                                 _T("Show all elements expanded and not only "
 //                                    "the most important ones"));
 //   menu_options->Check(mi_options_expandall, false);
   menu_help->Append(mi_help_about, _T("&About...\tF1"),
@@ -106,11 +106,12 @@ void mi_frame::open_file(const char *file_name) {
   last_percent = -1;
   tree->Freeze();
   tree->Hide();
+  num_elements = 0;
   if (process_file(file_name)) {
     file_open = true;
     menu_file->Enable(mi_file_savetext, true);
     current_file = file_name;
-    expand_items();
+    expand_elements();
     tree->Thaw();
     tree->Show();
   } else {
@@ -120,13 +121,13 @@ void mi_frame::open_file(const char *file_name) {
   SetStatusText(_T("ready"));
 }
 
-void mi_frame::show_progress(int percent) {
+void mi_frame::show_progress(int percent, const char *msg) {
   wxString s;
   mi_app *app;
 
   if ((percent / 5) == (last_percent / 5))
     return;
-  s.Printf("Parsing file: %d%%", percent);
+  s.Printf("%s: %d%%", msg, percent);
   SetStatusText(s);
   app = &wxGetApp();
   while (app->Pending())
@@ -134,7 +135,7 @@ void mi_frame::show_progress(int percent) {
   last_percent = percent;
 }
 
-void mi_frame::expand_all_items(wxTreeItemId &root, bool expand) {
+void mi_frame::expand_all_elements(wxTreeItemId &root, bool expand) {
   wxTreeItemId child;
   long cookie;
 
@@ -144,24 +145,24 @@ void mi_frame::expand_all_items(wxTreeItemId &root, bool expand) {
     tree->Collapse(root);
   child = tree->GetFirstChild(root, cookie);
   while (child > 0) {
-    expand_all_items(child, expand);
+    expand_all_elements(child, expand);
     child = tree->GetNextChild(root, cookie);
   }
 }
 
-void mi_frame::expand_items() {
+void mi_frame::expand_elements() {
   wxTreeItemId l0, l1;
   long cl0, cl1;
 
   Freeze();
 
   if (show_all_elements_expanded) {
-    expand_all_items(item_ids[0]);
+    expand_all_elements(item_ids[0]);
     Thaw();
     return;
   }
 
-  expand_all_items(item_ids[0], false);
+  expand_all_elements(item_ids[0], false);
   tree->Expand(item_ids[0]);
 
   l0 = tree->GetFirstChild(item_ids[0], cl0);
@@ -172,7 +173,7 @@ void mi_frame::expand_items() {
       while (l1 > 0) {
         if ((tree->GetItemText(l1).find("Segment information") == 0) ||
             (tree->GetItemText(l1).find("Segment tracks") == 0))
-          expand_all_items(l1);
+          expand_all_elements(l1);
         l1 = tree->GetNextChild(l0, cl1);
       }
     }
@@ -185,6 +186,36 @@ void mi_frame::expand_items() {
 
 void mi_frame::add_item(int level, const char *text) {
   item_ids[level + 1] = tree->AppendItem(item_ids[level], text);
+  num_elements++;
+}
+
+void mi_frame::show_error(const char *msg) {
+  wxMessageBox(msg, _T("Error"), wxOK | wxICON_ERROR | wxCENTER, this);
+}
+
+void mi_frame::save_elements(wxTreeItemId &root, int level, FILE *f) {
+  wxTreeItemId child;
+  long cookie;
+  char level_buffer[10];
+  int pcnt_before, pcnt_now;
+
+  if (level >= 0) {
+    memset(&level_buffer[1], ' ', 9);
+    level_buffer[0] = '|';
+    level_buffer[level] = 0;
+    fprintf(f, "(%s) %s+ %s\n", NAME, level_buffer,
+            tree->GetItemText(root).c_str());
+    pcnt_before = elements_saved * 100 / num_elements;
+    pcnt_now = (elements_saved + 1) * 100 / num_elements;
+    if ((pcnt_before / 5) != (pcnt_now / 5))
+      show_progress(pcnt_now, "Writing info");
+    elements_saved++;
+  }
+  child = tree->GetFirstChild(root, cookie);
+  while (child > 0) {
+    save_elements(child, level + 1, f);
+    child = tree->GetNextChild(root, cookie);
+  }
 }
 
 void mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
@@ -197,18 +228,25 @@ void mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
+  FILE *f;
+
   wxFileDialog file_dialog(this, _T("Select output file"), _T(""), _T(""),
                            _T("Text files (*.txt)|*.txt|All files|*.*"),
                            wxSAVE | wxOVERWRITE_PROMPT);
   file_dialog.SetDirectory(wxGetWorkingDirectory());
   if (file_dialog.ShowModal() == wxID_OK) {
-    wxString info;
-    info.Printf(_T("Full file name: %s\nPath: %s\nName: %s"),
-                file_dialog.GetPath().c_str(),
-                file_dialog.GetDirectory().c_str(),
-                file_dialog.GetFilename().c_str());
-    wxMessageDialog msg_dialog(this, info, _T("Selected file"));
-    msg_dialog.ShowModal();
+    f = fopen(file_dialog.GetPath().c_str(), "w");
+    if (f == NULL) {
+      wxString s;
+      s.Printf("Could not create the file '%s'.",
+               file_dialog.GetPath().c_str());
+      show_error(s.c_str());
+      return;
+    }
+
+    save_elements(item_ids[0], -1, f);
+
+    fclose(f);
   }
 }
 
@@ -232,7 +270,7 @@ void mi_frame::on_options_expandall(wxCommandEvent &WXUNUSED(event)) {
   menu_options->Check(mi_options_expandall, show_all_elements_expanded);
   if (file_open) {
     tree->Hide();
-    expand_items();
+    expand_elements();
     tree->Show();
   }
 }
@@ -241,7 +279,8 @@ void mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
   wxString msg;
   msg.Printf(_T("mkvinfo v" VERSION".\n\nThis program is licensed under the "
                 "GPL v2 (see COPYING).\nIt was written by Moritz Bunkus "
-                "<moritz@bunkus.org>.\nhttp://www.bunkus.org/videotools/"
+                "<moritz@bunkus.org>.\nSources and the latest binaries are "
+                "always available at\nhttp://www.bunkus.org/videotools/"
                 "mkvtoolnix/"));
   wxMessageBox(msg, _T("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
 }

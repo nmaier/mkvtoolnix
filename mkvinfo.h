@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.h,v 1.2 2003/05/28 11:31:55 mosu Exp $
+    \version \$Id: mkvinfo.h,v 1.3 2003/05/29 18:35:19 mosu Exp $
     \brief definition of global variables and functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -50,6 +50,7 @@ private:
   bool show_all_elements, show_all_elements_expanded;
   bool file_open;
   int last_percent;
+  int64_t num_elements, elements_saved;
   wxString current_file;
 
   wxTreeCtrl *tree;
@@ -60,7 +61,8 @@ public:
            long style = wxDEFAULT_FRAME_STYLE);
 
   void open_file(const char *file_name);
-  void show_progress(int percent);
+  void show_progress(int percent, const char *msg);
+  void show_error(const char *msg);
   void add_item(int level, const char *text);
 
 protected:
@@ -71,8 +73,10 @@ protected:
   void on_options_expandall(wxCommandEvent &event);
   void on_help_about(wxCommandEvent &event);
 
-  void expand_items();
-  void expand_all_items(wxTreeItemId &root, bool expand = true);
+  void expand_elements();
+  void expand_all_elements(wxTreeItemId &root, bool expand = true);
+
+  void save_elements(wxTreeItemId &root, int level, FILE *f);
 
 private:
   DECLARE_EVENT_TABLE()
