@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.10 2003/02/26 19:20:26 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.11 2003/02/28 13:01:29 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -182,7 +182,7 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
     for (i = 0; i < strlen((char *)vstreams); i++) {
       if (vstreams[i] > 1)
         fprintf(stderr, "Warning: avi_reader: only one video stream per AVI " \
-                "is supported. Will not ignore -d %d.\n", vstreams[i]);
+                "is supported. Will ignore -d %d.\n", vstreams[i]);
       else if (vstreams[i] == 1)
         extract_video = 1;
     }

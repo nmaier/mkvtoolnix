@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.7 2003/02/27 19:51:53 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.8 2003/02/28 13:01:29 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -59,7 +59,7 @@ public:
   packet_t    *get_packet(int num);
   int          get_packet_count();
   int          render(IOCallback *out);
-  int          free_ref(u_int64_t pid);
+  int          free_ref(u_int64_t pid, void *source);
   int          free_clusters();
   int          get_cluster_content_size();
 
@@ -69,7 +69,6 @@ private:
   packet_t    *find_packet(u_int64_t pid);
   void         free_contents(ch_contents *clstr);
   void         check_clusters(int num);
-  int          free_ref_recursive(u_int64_t pid, void *source);
 };
 
 extern cluster_helper_c *cluster_helper;

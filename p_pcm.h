@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.h,v 1.3 2003/02/27 09:52:37 mosu Exp $
+    \version \$Id: p_pcm.h,v 1.4 2003/02/28 13:01:29 mosu Exp $
     \brief class definition for the PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,7 +28,7 @@ class pcm_packetizer_c: public q_c {
 private:
   int            packetno;
   int            bps;
-  u_int64_t      bytes_output;
+  u_int64_t      bytes_output, remaining_sync;
   unsigned long  samples_per_sec;
   int            channels;
   int            bits_per_sample;

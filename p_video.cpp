@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.5 2003/02/27 19:51:53 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.6 2003/02/28 13:01:29 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -59,7 +59,6 @@ video_packetizer_c::video_packetizer_c(void *pr_data, int pd_size,
   frames_output = 0;
   avi_compat_mode = 1;
   last_id = 1;
-  last_keyframe = NULL;
   set_private_data(pr_data, pd_size);
   set_header();
 }
@@ -147,11 +146,7 @@ video_packetizer_c::~video_packetizer_c() {
 
 void video_packetizer_c::added_packet_to_cluster(packet_t *packet) {
   if (packet->bref == 0) {      // this is a keyframe
-    // Free the last key frame and all others that (indirectly) reference it.
-    if (last_keyframe != NULL)
-      cluster_helper->free_ref(last_keyframe->id);
-    // Save this key frame so that we can later free all references to it
-    // (and make references to it in the first place).
-    last_keyframe = packet;
+    // Free all previous frames up until this on.
+    cluster_helper->free_ref(packet->id - 1, this);
   }
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.4 2003/02/27 19:51:53 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.5 2003/02/28 13:01:29 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -309,17 +309,18 @@ int cluster_helper_c::free_clusters() {
   for (i = 0; i < num_clusters; i++) {
     for (k = 0; k < clusters[i]->num_packets; k++) {
       p = clusters[i]->packets[k];
-      if (!p->superseeded)
+      if (!p->superseeded) {
         clusters[i]->is_referenced = 1;
-      if (p->bref == 0)
-        continue;
-      clstr = find_packet_cluster(p->bref);
-      if (clstr == NULL) {
-        fprintf(stderr, "Error: backward refenrece could not be resolved "
-                "(%llu).\n", p->bref);
-        die("internal error");
+        if (p->bref == 0)
+          continue;
+        clstr = find_packet_cluster(p->bref);
+        if (clstr == NULL) {
+          fprintf(stderr, "Error: backward refenrece could not be resolved "
+                  "(%llu).\n", p->bref);
+          die("internal error");
+        }
+        clstr->is_referenced = 1;
       }
-      clstr->is_referenced = 1;
     }
   }
 
@@ -366,49 +367,20 @@ int cluster_helper_c::free_clusters() {
   return 1;
 }
 
-int cluster_helper_c::free_ref(u_int64_t pid) {
+int cluster_helper_c::free_ref(u_int64_t pid, void *source) {
+  int i, k;
   packet_t *p;
-  int l;
 
-  p = find_packet(pid);
-//   fprintf(stdout, "> asked to prune %llu\n", pid);
-  assert(p != NULL);
-  free_ref_recursive(pid, p->source);
-
-  l = num_clusters;
+  for (i = 0; i < num_clusters; i++)
+    for (k = 0; k < clusters[i]->num_packets; k++) {
+      p = clusters[i]->packets[k];
+      if ((source == p->source) && (p->id <= pid))
+        p->superseeded = 1;
+    }
 
   walk_clusters();
   free_clusters();
   walk_clusters();
-
-  fprintf(stdout, "freed %d of %d, new: %d\n", l - num_clusters, l,
-          num_clusters);
-
-  return 1;
-}
-
-int cluster_helper_c::free_ref_recursive(u_int64_t pid, void *source) {
-  int i, k;
-  packet_t *p;
-
-  if (clusters == NULL)
-    return 0;
-
-  for (i = 0; i < num_clusters; i++) {
-    if (!clusters[i]->rendered)
-      continue;
-    for (k = 0; k < clusters[i]->num_packets; k++) {
-      p = clusters[i]->packets[k];
-      if (p->bref == 0)
-        continue;
-      if ((source == p->source) && (p->bref <= pid)) {
-//         fprintf(stdout, ". cleaning %llu\n", p->id);
-        p->superseeded = 1;
-        p->bref = 0;
-        free_ref_recursive(p->id, source);
-      }
-    }
-  }
 
   return 1;
 }
