@@ -374,7 +374,7 @@ int main ()
 
   ebml_ver_req_major=0
   ebml_ver_req_minor=6
-  ebml_ver_req_micro=4
+  ebml_ver_req_micro=5
 
   AC_MSG_CHECKING(Ebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro})
 
