@@ -1279,13 +1279,23 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          else if(lasttag == 2)
          {
             WAVEFORMATEX wfe;
+            int wfes;
             
-            memcpy(&wfe, hdrl_data + i, sizeof(WAVEFORMATEX));
+            if ((hdrl_len - i) < sizeof(WAVEFORMATEX))
+              wfes = hdrl_len - i;
+            else
+              wfes = sizeof(WAVEFORMATEX);
+            memset(&wfe, 0, sizeof(WAVEFORMATEX));
+            memcpy(&wfe, hdrl_data + i, wfes);
             AVI->wave_format_ex[AVI->aptr] =
               (WAVEFORMATEX *)malloc(sizeof(WAVEFORMATEX) + wfe.cb_size);
-            if (AVI->wave_format_ex[AVI->aptr] != NULL)
-              memcpy(AVI->wave_format_ex[AVI->aptr], hdrl_data + i,
-                     sizeof(WAVEFORMATEX) + wfe.cb_size);
+            if (AVI->wave_format_ex[AVI->aptr] != NULL) {
+              memcpy(AVI->wave_format_ex[AVI->aptr], &wfe,
+                     sizeof(WAVEFORMATEX));
+              if (wfe.cb_size > 0)
+                memcpy(AVI->wave_format_ex[AVI->aptr] + sizeof(WAVEFORMATEX),
+                       hdrl_data + i + sizeof(WAVEFORMATEX), wfe.cb_size);
+            }
 
             AVI->track[AVI->aptr].a_fmt   = str2ushort(hdrl_data+i  );
 
