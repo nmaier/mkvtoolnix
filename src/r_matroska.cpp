@@ -392,6 +392,8 @@ void kax_reader_c::verify_tracks() {
                      !strcmp(t->codec_id, MKV_A_AAC_4LC) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4SSR) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4LTP) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_4SBR) ||
+                     !strcmp(t->codec_id, MKV_A_AAC_2SBR) ||
                      !strcmp(t->codec_id, MKV_A_AAC_4SBR))
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
           else {
@@ -1179,7 +1181,7 @@ void kax_reader_c::create_packetizers() {
           } else if (t->a_formattag == FOURCC('M', 'P', '4', 'A')) {
             // A_AAC/MPEG2/MAIN
             // 0123456789012345
-            int id, profile;
+            int id, profile, sbridx;
 
             if (t->codec_id[10] == '2')
               id = AAC_ID_MPEG2;
@@ -1198,11 +1200,18 @@ void kax_reader_c::create_packetizers() {
               profile = AAC_PROFILE_SSR;
             else if (!strcmp(&t->codec_id[12], "LTP"))
               profile = AAC_PROFILE_LTP;
+            else if (!strcmp(&t->codec_id[12], "LC/SBR"))
+              profile = AAC_PROFILE_SBR;
             else {
               mxprint(stderr, "Error: matroska_reader: Malformed codec id "
                       "%s for track %d.\n", t->codec_id, t->tnum);
               exit(1);
             }
+            for (sbridx = 0; sbridx < ti->aac_is_sbr->size(); sbridx++)
+              if ((*ti->aac_is_sbr)[sbridx] == t->tnum) {
+                profile = AAC_PROFILE_SBR;
+                break;
+              }
 
             t->packetizer = new aac_packetizer_c(this, id, profile,
                                                  (unsigned long)t->a_sfreq,

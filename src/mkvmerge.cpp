@@ -279,6 +279,7 @@ static void usage() {
     "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
     "                           code, see --list-languages).\n"
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
+    "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -1043,6 +1044,7 @@ static void identify(const char *filename) {
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
   ti.stracks = new vector<int64_t>;
+  ti.aac_is_sbr = new vector<int64_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -1096,6 +1098,7 @@ static void parse_args(int argc, char **argv) {
   ti.languages = new vector<language_t>;
   ti.sub_charsets = new vector<language_t>;
   ti.all_tags = new vector<tags_t>;
+  ti.aac_is_sbr = new vector<int64_t>;
   ti.aspect_ratio = 0.0;
   ti.atracks = new vector<int64_t>;
   ti.vtracks = new vector<int64_t>;
@@ -1474,6 +1477,18 @@ static void parse_args(int argc, char **argv) {
       parse_tags(argv[i + 1], tags);
       ti.all_tags->push_back(tags);
       i++;
+
+    } else if (!strcmp(argv[i], "--aac-is-sbr")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: %s lacks the track ID.\n", argv[i]);
+        exit(1);
+      }
+      if (!parse_int(argv[i + 1], id) || (id < 0)) {
+        mxprint(stderr, "Error: '%s' is not a valid track ID.\n", argv[i + 1]);
+        exit(1);
+      }
+      ti.aac_is_sbr->push_back(id);
+      i++;
     }
 
     // The argument is an input file.
@@ -1523,6 +1538,7 @@ static void parse_args(int argc, char **argv) {
       delete ti.languages;
       delete ti.sub_charsets;
       delete ti.all_tags;
+      delete ti.aac_is_sbr;
       memset(&ti, 0, sizeof(track_info_t));
       ti.audio_syncs = new vector<audio_sync_t>;
       ti.cue_creations = new vector<cue_creation_t>;
@@ -1530,6 +1546,7 @@ static void parse_args(int argc, char **argv) {
       ti.languages = new vector<language_t>;
       ti.sub_charsets = new vector<language_t>;
       ti.all_tags = new vector<tags_t>;
+      ti.aac_is_sbr = new vector<int64_t>;
       ti.aspect_ratio = 0.0;
       ti.atracks = new vector<int64_t>;
       ti.vtracks = new vector<int64_t>;

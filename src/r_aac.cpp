@@ -56,7 +56,7 @@ int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  int adif;
+  int adif, i;
   aac_header_t aacheader;
 
   try {
@@ -77,12 +77,24 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
         throw error_c("aac_reader: No valid AAC packet found in the first "
                       SINITCHUNKSIZE " bytes.\n");
       guess_adts_version();
-      mxprint(stdout, "emphasis_present: %s\n", emphasis_present ? "true" :
-              "false");
       adif = 0;
     }
     bytes_processed = 0;
     ti->id = 0;                 // ID for this track.
+
+    for (i = 0; i < ti->aac_is_sbr->size(); i++)
+      if ((*ti->aac_is_sbr)[i] == 0) {
+        aacheader.profile = AAC_PROFILE_SBR;
+        break;
+      }
+    if (aacheader.profile != AAC_PROFILE_SBR)
+      mxprint(stdout,
+              "WARNING! AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
+              "This can NOT be detected automatically. Therefore you have to "
+              "specifiy '--aac-is-sbr 0' manually for this input file if the "
+              "file actually contains SBR AAC. The file will be muxed in the "
+              "WRONG way otherwise. Also read mkvmerge's documentation.\n");
+
     aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
                                          aacheader.sample_rate,
                                          aacheader.channels, ti,

@@ -614,6 +614,7 @@ track_info_t *duplicate_track_info(track_info_t *src) {
   dst->all_tags = new vector<tags_t>(*src->all_tags);
   for (i = 0; i < src->all_tags->size(); i++)
     (*dst->all_tags)[i].file_name = safestrdup((*src->all_tags)[i].file_name);
+  dst->aac_is_sbr = new vector<int64_t>(*src->aac_is_sbr);
   dst->private_data = (unsigned char *)safememdup(src->private_data,
                                                   src->private_size);
   dst->sub_charset = safestrdup(src->sub_charset);
@@ -643,6 +644,7 @@ void free_track_info(track_info_t *ti) {
   for (i = 0; i < ti->all_tags->size(); i++)
     safefree((*ti->all_tags)[i].file_name);
   delete ti->all_tags;
+  delete ti->aac_is_sbr;
   safefree(ti->language);
   safefree(ti->private_data);
   safefree(ti->sub_charset);

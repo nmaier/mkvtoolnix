@@ -1,3 +1,9 @@
+2003-08-18  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: Implemented a switch that has to be used for SBR AAC /
+        AAC+ / HE-AAC if the source file is an AAC file and the AAC file
+        contains SBR AAC data (no automatic detection possible in this case!).
+
 2003-08-14  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Low bitrate AC3 tracks from Real's DNET are identified

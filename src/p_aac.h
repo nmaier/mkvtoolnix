@@ -34,6 +34,7 @@
 #define AAC_PROFILE_LC   1
 #define AAC_PROFILE_SSR  2
 #define AAC_PROFILE_LTP  3
+#define AAC_PROFILE_SBR  4
 
 class aac_packetizer_c: public generic_packetizer_c {
 private:

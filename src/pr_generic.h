@@ -109,6 +109,8 @@ typedef struct {
   vector<tags_t> *all_tags;     // As given on the command line
   tags_t *tags_ptr;             // For this very track
   KaxTags *tags;                // For this very track
+
+  vector<int64_t> *aac_is_sbr;  // For AAC+/HE-AAC/SBR
 } track_info_t;
 
 class generic_reader_c;

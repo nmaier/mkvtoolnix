@@ -184,6 +184,8 @@ void aac_packetizer_c::set_headers() {
       set_codec_id(MKV_A_AAC_4SSR);
     else if (profile == AAC_PROFILE_LTP)
       set_codec_id(MKV_A_AAC_4LTP);
+    else if (profile == AAC_PROFILE_SBR)
+      set_codec_id(MKV_A_AAC_4SBR);
     else
       die("aac_packetizer: Unknown AAC MPEG-4 object type %d.", profile);
   } else {
@@ -193,6 +195,8 @@ void aac_packetizer_c::set_headers() {
       set_codec_id(MKV_A_AAC_2LC);
     else if (profile == AAC_PROFILE_SSR)
       set_codec_id(MKV_A_AAC_2SSR);
+    else if (profile == AAC_PROFILE_SBR)
+      set_codec_id(MKV_A_AAC_2SBR);
     else
       die("aac_packetizer: Unknown AAC MPEG-2 profile %d.", profile);
   }

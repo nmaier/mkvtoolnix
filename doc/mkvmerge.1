@@ -226,6 +226,21 @@ tracks by selecting different track IDs each time.
 \fB\-t\fR, \fB\-\-tags\fR <\fITID\fR:\fIfile\fR>
 Read tags for the track with the number \fITID\fR from the \fIfile\fR. See
 the section about tags below for details.
+.TP
+\fB\-\-aab\-is\-sbr\fR <\fITID\fR>
+Tells \fBmkvmerge\fR that the track with the ID \fITID\fR is SBR AAC (also
+known as HE-AAC or AAC+). This options is needed if a) the source file is an
+AAC file (NOT for a Matroska file) and b) the AAC file contains SBR AAC data.
+The reason for this switch is that it is technically impossible to
+automatically tell normal AAC data from SBR AAC data without decoding a
+complete AAC frame. As there are several patent issues with AAC decoders I
+won't implement this decoding stage. So for SBR AAC files this switch is
+mandatory. The resulting file might not play back correctly or even not at
+all if the switch was omitted.
+.br
+If the source file is a Matroska file then the CodecID should be enough to
+detect SBR AAC. However, if the CodecID is wrong then this switch can be used
+to correct that.
 
 .LP
 Options that only apply to video tracks:
