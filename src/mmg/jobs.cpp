@@ -274,7 +274,7 @@ void
 job_run_dialog::on_end_process(wxProcessEvent &evt) {
   int exit_code, ndx;
   wxString s;
-  const char *status;
+  const wxChar *status;
 
   process_input();
 
@@ -282,16 +282,16 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
   exit_code = evt.GetExitCode();
   if (abort) {
     jobs[ndx].status = JOBS_ABORTED;
-    status = "aborted";
+    status = wxT("aborted");
   } else if (exit_code == 0) {
     jobs[ndx].status = JOBS_DONE;
-    status = "completed OK";
+    status = wxT("completed OK");
   } else if (exit_code == 1) {
     jobs[ndx].status = JOBS_DONE_WARNINGS;
-    status = "completed with warnings";
+    status = wxT("completed with warnings");
   } else {
     jobs[ndx].status = JOBS_FAILED;
-    status = "failed";
+    status = wxT("failed");
   }
   jobs[ndx].finished_on = time(NULL);
 

@@ -1,5 +1,8 @@
 2005-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The job status in the job runner dialog was broken
+	on Unicode builds on all systems.
+
 	* mmg: bug fix: "Splitting by time" was not selectable on Windows
 	Unicode builds (problem with wxWidgets 2.5.3).
 
