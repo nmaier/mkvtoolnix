@@ -24,7 +24,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(HAVE_ZLIB_H)
 #include <zlib.h>
+#endif
 
 #include "common.h"
 #include "matroska.h"
@@ -685,6 +687,7 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
         compression_algorithm = algo;
 
       } else if (atom == FOURCC('c', 'm', 'v', 'd')) {
+#if defined(HAVE_ZLIB_H)
         uint32_t moov_size, cmov_size, next_atom, next_atom_hsize;
         uint64_t next_atom_pos, next_atom_size;
         unsigned char *moov_buf, *cmov_buf;
@@ -751,6 +754,10 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
         io = old_io;
         safefree(moov_buf);
         safefree(cmov_buf);
+#else // HAVE_ZLIB_H
+        mxerror("mkvmerge was not compiled with zlib. Compressed headers "
+                "in QuickTime/MP4 files are therefore not supported.\n");
+#endif // HAVE_ZLIB_H
       }
 
     }

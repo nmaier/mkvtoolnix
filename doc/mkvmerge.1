@@ -263,7 +263,7 @@ Forces the FourCC to the specified value. Works only for video tracks.
 Sets the aspect ratio for the track. The ratio can be given either as a
 floating point number or as 'width/height', e.g. 16/9.
 .LP
-Options that only apply to subtitle tracks:
+Options that only apply to text subtitle tracks:
 .TP
 \fB\-\-sub\-charset\fR <\fITID\fR:\fIcharset\fR>
 Sets the charset for the conversion to UTF-8 for UTF-8 subtitles for the given
@@ -273,6 +273,13 @@ files as these are always stored in UTF-8.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
+.LP
+Options that only apply to VobSub subtitle tracks:
+.TP
+\fB\-\-compression\fR <\fITID\fR:\fImethod\fR>
+Selects the compression method to be used for the VobSub track. Note that the
+player also has to support this method! Valid values are 'none' and 'zlib'.
+The default is 'zlib' compression.
 .LP
 Other options:
 .TP

@@ -1190,7 +1190,11 @@ void kax_reader_c::create_packetizers() {
             } else
               compressed = COMPRESSION_NONE;
 
+#if defined(HAVE_ZLIB_H)
             compression = COMPRESSION_ZLIB;
+#else
+            compression = COMPRESSION_NONE;
+#endif
             for (idx = 0; idx < ti->compression_list->size(); idx++)
               if (((*ti->compression_list)[idx].id == t->tnum) ||
                   ((*ti->compression_list)[idx].id == -1)) {

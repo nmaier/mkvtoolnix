@@ -299,6 +299,10 @@ static void usage() {
     "  --sub-charset <TID:charset>\n"
     "                           Sets the charset the text subtitles are\n"
     "                           written in for the conversion to UTF-8.\n"
+    "\n Options that only apply to VobSub subtitle tracks:\n"
+    "  --compression <TID:method>\n"
+    "                           Sets the compression method used for the\n"
+    "                           specified track ('none' or 'zlib').\n"
     "\n\n Other options:\n"
     "  -i, --identify <file>    Print information about the source file.\n"
     "  -l, --list-types         Lists supported input file types.\n"
@@ -689,8 +693,7 @@ static void parse_compression(char *s, cue_creation_t &compression) {
     compression.cues = COMPRESSION_NONE;
   else
     mxerror("'%s' is an unsupported argument for --compression. Available "
-            "compression methods are 'none', 'lzo', 'zlib' and 'bz2'.\n",
-            orig.c_str());
+            "compression methods are 'none', and 'zlib'.\n", orig.c_str());
 }
 
 static void parse_language(char *s, language_t &lang, const char *opt,

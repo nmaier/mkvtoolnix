@@ -64,16 +64,20 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
 
     compressor = compression_c::create(compression_type);
     if (compressor == NULL)
-      mxerror("vobsub_packetizer: Compression schmeme %d not implemented.",
-              compression_type);
+      mxerror("vobsub_packetizer: Compression schmeme %d (%s) not "
+              "implemented.\n", compression_type,
+              (compression_type > 0) && (compression_type <= COMPRESSION_NUM) ?
+              compression_schemes[compression_type] : "unknown");
 
     if (compression_type != COMPRESSION_NONE)
       compression = compression_schemes[compression_type];
 
     decompressor = compression_c::create(compressed_type);
     if (decompressor == NULL)
-      mxerror("vobsub_packetizer: Compression schmeme %d not implemented.",
-              compressed_type);
+      mxerror("vobsub_packetizer: Compression schmeme %d (%s) not "
+              "implemented.\n", compressed_type,
+              (compressed_type > 0) && (compressed_type <= COMPRESSION_NUM) ?
+              compression_schemes[compressed_type] : "unknown");
   }
 
   mxverb(2, "vobsub_packetizer: Using %s compression.\n", compression);

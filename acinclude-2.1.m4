@@ -729,14 +729,7 @@ AC_DEFUN(PATH_ZLIB,
 	zlib_save_CFLAGS="$CFLAGS"
 	CFLAGS="$CFLAGS $ZLIB_CFLAGS"
   AC_CHECK_HEADERS(zlib.h, , zlib_found=no)
-  if test "$zlib_found" = "no"; then
-    AC_MSG_ERROR([Could not find zlib.h])
-  fi
 	CFLAGS="$zlib_save_CFLAGS"
-
-  if test "x$zlib_found" = "xno"; then
-    exit 1
-  fi
 
   AC_SUBST(ZLIB_CFLAGS)
   AC_SUBST(ZLIB_LIBS)
@@ -765,14 +758,7 @@ AC_DEFUN(PATH_LZO,
 	lzo_save_CFLAGS="$CFLAGS"
 	CFLAGS="$CFLAGS $LZO_CFLAGS"
   AC_CHECK_HEADERS(lzo1x.h, , lzo_found=no)
-  if test "$lzo_found" = "no"; then
-    AC_MSG_ERROR([Could not find lzo1x.h])
-  fi
 	CFLAGS="$lzo_save_CFLAGS"
-
-  if test "x$lzo_found" = "xno"; then
-    exit 1
-  fi
 
   AC_SUBST(LZO_CFLAGS)
   AC_SUBST(LZO_LIBS)
@@ -801,14 +787,7 @@ AC_DEFUN(PATH_BZ2,
 	bz2_save_CFLAGS="$CFLAGS"
 	CFLAGS="$CFLAGS $BZ2_CFLAGS"
   AC_CHECK_HEADERS(bzlib.h, , bz2_found=no)
-  if test "$bz2_found" = "no"; then
-    AC_MSG_ERROR([Could not find bzlib.h])
-  fi
 	CFLAGS="$bz2_save_CFLAGS"
-
-  if test "x$bz2_found" = "xno"; then
-    exit 1
-  fi
 
   AC_SUBST(BZ2_CFLAGS)
   AC_SUBST(BZ2_LIBS)
