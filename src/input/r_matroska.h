@@ -105,6 +105,8 @@ typedef struct {
 
   int ptzr;
   bool headers_set;
+
+  bool ignore_duration_hack;
 } kax_track_t;
 
 class kax_reader_c: public generic_reader_c {
@@ -128,6 +130,9 @@ private:
 
   vector<kax_attachment_t> attachments;
   vector<int64_t> handled_tags, handled_attachments, handled_chapters;
+
+  string writing_app;
+  int64_t writing_app_ver;
 
 public:
   kax_reader_c(track_info_c *nti) throw (error_c);

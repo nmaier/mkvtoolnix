@@ -126,9 +126,9 @@ kax_reader_c::kax_reader_c(track_info_c *nti)
   throw (error_c):
   generic_reader_c(nti) {
 
-  title = "";
   segment_duration = 0.0;
   first_timecode = -1;
+  writing_app_ver = -1;
 
   if (!read_headers())
     throw error_c(PFX "Failed to read the headers.");
@@ -506,6 +506,18 @@ kax_reader_c::verify_tracks() {
               t->header_sizes[0] - t->header_sizes[1];
 
             t->a_formattag = 0xFFFE;
+
+            // mkvmerge around 0.6.x had a bug writing a default duration
+            // for Vorbis tracks but not the correct durations for the
+            // individual packets. This comes back to haunt us because
+            // when regenerating the timestamps from lacing those durations
+            // are used and add up to too large a value. The result is the
+            // usual "timecode < last_timecode" message.
+            // Workaround: do not use durations for such tracks.
+            if ((writing_app == "mkvmerge") && (writing_app_ver != -1) &&
+                (writing_app_ver < 0x07000000))
+              t->ignore_duration_hack = true;
+
           } else if (!strcmp(t->codec_id, MKV_A_AAC_2MAIN) ||
                      !strcmp(t->codec_id, MKV_A_AAC_2LC) ||
                      !strcmp(t->codec_id, MKV_A_AAC_2SSR) ||
@@ -856,6 +868,7 @@ kax_reader_c::read_headers() {
         KaxTimecodeScale *ktc_scale;
         KaxDuration *kduration;
         KaxTitle *ktitle;
+        KaxWritingApp *kwriting_app;
 
         // General info about this Matroska file
         if (verbose > 1)
@@ -889,6 +902,78 @@ kax_reader_c::read_headers() {
           tmp = UTFstring_to_cstrutf8(UTFstring(*ktitle));
           title = tmp;
           safefree(tmp);
+        }
+
+        // Let's try to parse the "writing application" string. This usually
+        // contains the name and version number of the application used for
+        // creating this Matroska file. Examples are:
+        // 
+        // mkvmerge v0.6.6
+        // mkvmerge v0.9.6 ('Every Little Kiss') built on Oct  7 2004 18:37:49
+        // VirtualDubMod 1.5.4.1 (build 2178/release)
+        // AVI-Mux GUI 1.16.8 MPEG test build 1, Aug 24 2004  12:42:57
+        // 
+        // The idea is to first replace known application names that contain
+        // spaces with one that doesn't. Then split the whole string up on
+        // spaces into at most three parts. If the result is at least two parts
+        // long then try to parse the version number from the second and
+        // store a lower case version of the first as the application's name.
+        kwriting_app = FINDFIRST(l1, KaxWritingApp);
+        if (kwriting_app != NULL) {
+          char *tmp;
+          int idx;
+          vector<string> parts, ver_parts;
+          string s;
+
+          tmp = UTFstring_to_cstrutf8(UTFstring(*kwriting_app));
+          if (verbose > 1)
+            mxinfo(PFX "| + writing app: %s\n", tmp);
+          s = tmp;
+          safefree(tmp);
+          strip(s);
+          if (starts_with_case(s, "avi-mux gui"))
+            s.replace(0, strlen("avi-mux gui"), "avimuxgui");
+
+          parts = split(s.c_str(), " ", 3);
+          if (parts.size() < 2) {
+            writing_app = "";
+            for (idx = 0; idx < s.size(); idx++)
+              writing_app += tolower(s[idx]);
+            writing_app_ver = -1;
+
+          } else {
+            bool failed;
+
+            writing_app = "";
+            for (idx = 0; idx < parts[0].size(); idx++)
+              writing_app += tolower(parts[0][idx]);
+            s = "";
+            for (idx = 0; idx < parts[1].size(); idx++)
+              if (isdigit(parts[1][idx]) || (parts[1][idx] == '.'))
+                s += parts[1][idx];
+            ver_parts = split(s.c_str(), ".");
+            for (idx = ver_parts.size(); idx < 4; idx++)
+              ver_parts.push_back("0");
+
+            failed = false;
+            writing_app_ver = 0;
+            for (idx = 0; idx < 4; idx++) {
+              int num;
+
+              if (!parse_int(ver_parts[idx].c_str(), num) || (num < 0) ||
+                  (num > 255)) {
+                failed = true;
+                break;
+              }
+              writing_app_ver <<= 8;
+              writing_app_ver |= num;
+            }
+            if (failed)
+              writing_app_ver = -1;
+          }
+
+          mxverb(3, PFX "|   (writing_app '%s', writing_app_ver 0x%08x)\n",
+                 writing_app.c_str(), (uint32_t)writing_app_ver);
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {
@@ -1823,21 +1908,31 @@ kax_reader_c::read(generic_packetizer_c *,
             block_track = find_track_by_num(block->TrackNum());
           }
 
+          duration = static_cast<KaxBlockDuration *>
+            (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
+          if (duration != NULL)
+            block_duration = (int64_t)uint64(*duration) * tc_scale /
+              block->NumberFrames();
+          else if (block_track->v_frate != 0)
+            block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
+          frame_duration = (block_duration == -1) ? 0 : block_duration;
+
+          if ((block_track->type == 's') && (block_duration == -1))
+            block_duration = 0;
+
+          if (block_track->ignore_duration_hack) {
+            frame_duration = 0;
+            if (block_duration > 0)
+              block_duration = 0;
+          }
+
+          last_timecode = block->GlobalTimecode();
+
           if ((block_track != NULL) && (block_track->ptzr != -1) &&
               block_track->passthrough) {
             // The handling for passthrough is a bit different. We don't have
             // any special cases, e.g. 0 terminating a string for the subs
             // and stuff. Just pass everything through as it is.
-            duration = static_cast<KaxBlockDuration *>
-              (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
-            if (duration != NULL)
-              block_duration = (int64_t)uint64(*duration) * tc_scale /
-                block->NumberFrames();
-            else if (block_track->v_frate != 0)
-              block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
-            frame_duration = (block_duration == -1) ? 0 : block_duration;
-
-            last_timecode = block->GlobalTimecode();
             if (bref_found)
                 block_bref += last_timecode;
             if (fref_found)
@@ -1855,19 +1950,6 @@ kax_reader_c::read(generic_packetizer_c *,
 
           } else if ((block_track != NULL) &&
                      (block_track->ptzr != -1)) {
-            duration = static_cast<KaxBlockDuration *>
-              (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
-            if (duration != NULL)
-              block_duration = (int64_t)uint64(*duration) * tc_scale /
-                block->NumberFrames();
-            else if (block_track->v_frate != 0)
-              block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
-            frame_duration = (block_duration == -1) ? 0 : block_duration;
-
-            if ((block_track->type == 's') && (block_duration == -1))
-              block_duration = 0;
-
-            last_timecode = block->GlobalTimecode();
             if (bref_found) {
               if (block_track->a_formattag == FOURCC('r', 'e', 'a', 'l'))
                 block_bref = block_track->previous_timecode;
