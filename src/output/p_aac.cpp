@@ -44,6 +44,8 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader,
   profile = nprofile;
   headerless = nheaderless;
   emphasis_present = nemphasis_present;
+  num_packets_same_tc = 0;
+  last_timecode = -1;
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1024 * 1000000000.0 * ti->async.linear /
@@ -171,9 +173,18 @@ aac_packetizer_c::process(memory_c &mem,
 
   my_timecode = 0;
   if (headerless) {
-    if (timecode != -1)
+    if (timecode != -1) {
       my_timecode = timecode;
-    else
+      if (last_timecode == timecode) {
+        num_packets_same_tc++;
+        my_timecode +=
+          (int64_t)(num_packets_same_tc * 1024 * 1000000000.0 /
+                    samples_per_sec);
+      } else {
+        last_timecode = timecode;
+        num_packets_same_tc = 0;
+      }
+    } else
       my_timecode = (int64_t)(1024 * 1000000000.0 * packetno /
                               samples_per_sec);
     duration = (int64_t)(1024 * 1000000000.0 * ti->async.linear /
@@ -191,6 +202,7 @@ aac_packetizer_c::process(memory_c &mem,
         
     my_timecode = (int64_t)((my_timecode + ti->async.displacement) *
                             ti->async.linear);
+    mxverb(2, "aac: my_tc = %lld\n", my_timecode);
     add_packet(mem, my_timecode, duration);
 
     debug_leave("aac_packetizer_c::process");
