@@ -108,7 +108,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     displace(-pins);
     byte_buffer.remove(ac3header->bytes);
 
-    return NULL;
+    return get_ac3_packet(header, ac3header);
   }
 
   buf = (unsigned char *)safememdup(packet_buffer, ac3header->bytes);

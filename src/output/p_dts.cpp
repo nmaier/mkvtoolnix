@@ -135,7 +135,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     displace(-pins);
     remove_dts_packet(pos, dtsheader.frame_byte_size);
 
-    return 0;
+    return get_dts_packet(dtsheader);
   }
 
   if (verbose && (pos > 0) && !skipping_is_normal)

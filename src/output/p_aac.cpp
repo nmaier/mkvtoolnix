@@ -79,7 +79,7 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
     displace(-pins);
     byte_buffer.remove(pos + aacheader->bytes);
 
-    return NULL;
+    return get_aac_packet(header, aacheader);
   }
 
   if (verbose && (pos > 0))

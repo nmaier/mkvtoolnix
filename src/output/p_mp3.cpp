@@ -153,7 +153,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     displace(-pins);
     byte_buffer.remove(mp3header->framesize);
 
-    return NULL;
+    return get_mp3_packet(mp3header);
   }
 
   buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
