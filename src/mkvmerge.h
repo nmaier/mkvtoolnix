@@ -71,7 +71,7 @@ extern int pass, file_num;
 extern bool fast_mode;
 
 extern int max_ms_per_cluster, max_blocks_per_cluster;
-extern int default_tracks[3];
+extern int default_tracks[3], default_tracks_priority[3];
 extern int64_t split_after;
 extern int split_max_num_files;
 extern bool split_by_time;

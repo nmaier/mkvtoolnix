@@ -82,6 +82,8 @@ using namespace std;
 using namespace libmatroska;
 
 #define PFX "matroska_reader: "
+#define MAP_TRACK_TYPE(c) ((c) == 'a' ? track_audio : \
+                           (c) == 'v' ? track_video : track_subtitle)
 
 // }}}
 
@@ -1247,8 +1249,6 @@ void kax_reader_c::create_packetizer(int64_t tid) {
     nti->private_data =
       (unsigned char *)safememdup(t->private_data, t->private_size);
     nti->private_size = t->private_size;
-    if (nti->default_track == 0)
-      nti->default_track = t->default_track;
     if (nti->language == NULL)
       nti->language = safestrdup(t->language);
     if (nti->track_name == NULL)
@@ -1447,6 +1447,9 @@ void kax_reader_c::create_packetizer(int64_t tid) {
         mxerror(PFX "Unsupported track type for track %d.\n", t->tnum);
         break;
     }
+    if (t->default_track)
+      t->packetizer->set_as_default_track(MAP_TRACK_TYPE(t->type),
+                                          DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
     if (t->tuid != 0)
       if (!t->packetizer->set_uid(t->tuid))
         mxwarn(PFX "Could not keep the track UID %u because it is already "

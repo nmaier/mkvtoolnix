@@ -152,7 +152,7 @@ bool dump_splitpoints = false;
 bool use_timeslices = false, use_durations = false;
 
 float video_fps = -1.0;
-int default_tracks[3];
+int default_tracks[3], default_tracks_priority[3];
 
 bool identifying = false, identify_verbose = false;
 
@@ -1924,9 +1924,8 @@ static void init_globals() {
   kax_sh_cues = NULL;
   kax_sh_void = NULL;
   video_fps = -1.0;
-  default_tracks[0] = 0;
-  default_tracks[1] = 0;
-  default_tracks[2] = 0;
+  memset(default_tracks, 0, sizeof(default_tracks));
+  memset(default_tracks_priority, 0, sizeof(default_tracks_priority));
   display_counter = 1;
   display_reader = NULL;
   clear_list_of_unique_uint32();

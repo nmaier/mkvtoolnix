@@ -56,6 +56,11 @@ enum copy_packet_mode_t {
   cp_no
 };
 
+#define DEFAULT_TRACK_PRIOIRTY_NONE          0
+#define DEFAULT_TRACK_PRIORITY_FROM_TYPE    10
+#define DEFAULT_TRACK_PRIORITY_FROM_SOURCE  50
+#define DEFAULT_TRACK_PRIORITY_CMDLINE     255  
+
 typedef struct {
   KaxBlockGroup *group;
   KaxBlock *block;
@@ -273,8 +278,7 @@ public:
   virtual void set_video_display_height(int height);
   virtual void set_video_aspect_ratio(float ar);
 
-  virtual void set_as_default_track(int type);
-  virtual void force_default_track(int type);
+  virtual void set_as_default_track(int type, int priority);
 
   virtual void set_tag_track_uid();
 

@@ -316,9 +316,9 @@ void generic_packetizer_c::set_track_type(int type) {
   htrack_type = type;
 
   if (ti->default_track)
-    force_default_track(type);
+    set_as_default_track(type, DEFAULT_TRACK_PRIORITY_CMDLINE);
   else
-    set_as_default_track(type);
+    set_as_default_track(type, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
 }
 
 int generic_packetizer_c::get_track_type() {
@@ -472,7 +472,7 @@ void generic_packetizer_c::set_video_aspect_ratio(float ar) {
   ti->aspect_ratio = ar;
 }
 
-void generic_packetizer_c::set_as_default_track(int type) {
+void generic_packetizer_c::set_as_default_track(int type, int priority) {
   int idx;
 
   idx = 0;
@@ -486,30 +486,14 @@ void generic_packetizer_c::set_as_default_track(int type) {
     die("pr_generic.cpp/generic_packetizer_c::set_as_default_track(): Unknown "
         "track type %d.", type);
 
-  if (default_tracks[idx] == 0)
-    default_tracks[idx] = -1 * hserialno;
-}
-
-void generic_packetizer_c::force_default_track(int type) {
-  int idx;
-
-  idx = 0;
-  if (type == track_audio)
-    idx = 0;
-  else if (type == track_video)
-    idx = 1;
-  else if (type == track_subtitle)
-    idx = 2;
-  else
-    die("pr_generic.cpp/generic_packetizer_c::force_default_track(): Unknown "
-        "track type %d.", type);
-
-  if ((default_tracks[idx] > 0) && !identifying)
-    mxwarn("Another default track for %s tracks has already "
-           "been set. Not setting the 'default' flag for this track.\n",
-           idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle");
-  else
+  if (default_tracks_priority[idx] < priority) {
+    default_tracks_priority[idx] = priority;
     default_tracks[idx] = hserialno;
+  } else if (priority == DEFAULT_TRACK_PRIORITY_CMDLINE)
+    mxwarn("Another default track for %s tracks has already "
+           "been set. Not setting the 'default' flag for track %lld of "
+           "'%s'.\n", idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle",
+           ti->id, ti->fname);
 }
 
 void generic_packetizer_c::set_language(const char *language) {
@@ -580,8 +564,7 @@ void generic_packetizer_c::set_headers() {
   else
     idx = 2;
 
-  if ((default_tracks[idx] == hserialno) ||
-      (default_tracks[idx] == -1 * hserialno))
+  if (default_tracks[idx] == hserialno)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackFlagDefault>(*track_entry))) = 1;
   else
