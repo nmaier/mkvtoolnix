@@ -100,7 +100,7 @@ vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync,
   all_packetizers = NULL;
   num_packetizers = 0;
   if (verbose)
-    fprintf(stderr, "Using VobSub subtitle reader for %s/%s.\n+-> Using " \
+    fprintf(stdout, "Using VobSub subtitle reader for %s/%s.\n+-> Using " \
             "VobSub subtitle output module for subtitles.\n", fname, name);
   free(name);
   memcpy(&async, nasync, sizeof(audio_sync_t));
@@ -133,8 +133,8 @@ void vobsub_reader_c::add_vobsub_packetizer(int width, int height,
                                                 langidx, id, index,
                                                 &async, &range, comments);
   } catch (error_c error) {
-    fprintf(stderr, "vobsub_reader: Could not create a new vobsub_packetizer: "
-            "%s\n", error.get_error());
+    fprintf(stderr, "Error: vobsub_reader: Could not create a new "
+            "vobsub_packetizer: %s\n", error.get_error());
     exit(1);
   }
   all_packetizers[num_packetizers] = vobsub_packetizer;

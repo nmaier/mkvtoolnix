@@ -73,7 +73,7 @@ srt_reader_c::srt_reader_c(char *fname, audio_sync_t *nasync,
     throw error_c("srt_reader: Source is not a valid SRT file.");
   textsubspacketizer = new textsubs_packetizer_c(nasync, nrange, ncomments);
   if (verbose)
-    fprintf(stderr, "Using SRT subtitle reader for %s.\n+-> Using " \
+    fprintf(stdout, "Using SRT subtitle reader for %s.\n+-> Using " \
             "text subtitle output module for subtitles.\n", fname);
 }
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.2 2003/02/23 23:23:10 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.3 2003/02/25 13:25:51 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -101,7 +101,7 @@ mp3_reader_c::mp3_reader_c(char *fname, audio_sync_t *nasync,
                                          [mp3header.bitrate_index],
                                        nasync, nrange);
   if (verbose)
-    fprintf(stderr, "Using MP3 demultiplexer for %s.\n+-> Using " \
+    fprintf(stdout, "Using MP3 demultiplexer for %s.\n+-> Using " \
             "MP3 output module for audio stream.\n", fname);
 }
 

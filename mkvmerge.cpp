@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.13 2003/02/25 13:17:33 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.14 2003/02/25 13:25:51 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -678,12 +678,12 @@ static void parse_args(int argc, char **argv) {
 //                                                comments);
 //             break;
           default:
-            fprintf(stderr, "EVIL internal bug! (unknown file type)\n");
+            fprintf(stderr, "Error: EVIL internal bug! (unknown file type)\n");
             exit(1);
             break;
         }
       } catch (error_c error) {
-        fprintf(stderr, "Demultiplexer failed to initialize:\n%s\n",
+        fprintf(stderr, "Error: Demultiplexer failed to initialize:\n%s\n",
                 error.get_error());
         exit(1);
       }

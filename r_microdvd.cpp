@@ -67,7 +67,7 @@ microdvd_reader_c::microdvd_reader_c(char *fname, audio_sync_t *nasync,
     throw error_c("microdvd_reader: Source is not a valid MicroDVD file.");
   textsubspacketizer = new textsubs_packetizer_c(nasync, nrange, ncomments);
   if (verbose)
-    fprintf(stderr, "Using MicroDVD subtitle reader for %s.\n+-> Using " \
+    fprintf(stdout, "Using MicroDVD subtitle reader for %s.\n+-> Using " \
             "text subtitle output module for subtitles.\n", fname);
 }
 
@@ -83,9 +83,9 @@ int microdvd_reader_c::read() {
   int i, j, lineno;
 
   if (video_fps < 0.0) {
-    fprintf(stderr, "microdvd_reader: You have to add a video source before "
-                    "a MicroDVD source. Otherwise the frame numbers cannot be "
-                    "converted to time stamps.");
+    fprintf(stderr, "Error: microdvd_reader: You have to add a video source "
+            "before a MicroDVD source. Otherwise the frame numbers cannot be "
+            "converted to time stamps.");
     exit(1);
   }
   

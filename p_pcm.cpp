@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.1 2003/02/24 13:12:27 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.2 2003/02/25 13:25:51 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -89,7 +89,7 @@ void pcm_packetizer_c::set_header() {
   KaxCodecID &codec_id =
     GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
   if (bits_per_sample != 16) {
-    fprintf(stderr, "pcm_packetizer: Only files with 16bits per sample "
+    fprintf(stderr, "Error: pcm_packetizer: Only files with 16bits per sample "
             "are supported at the moment.\n");
     exit(1);
   }

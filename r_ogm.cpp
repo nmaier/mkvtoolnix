@@ -105,7 +105,7 @@ ogm_reader_c::ogm_reader_c(char *fname, unsigned char *astreams,
   } else
     fourcc = NULL;
   if (verbose)
-    fprintf(stderr, "Using OGG/OGM demultiplexer for %s.\n", fname);
+    fprintf(stdout, "Using OGG/OGM demultiplexer for %s.\n", fname);
   filename = strdup(fname);
   if (filename == NULL)
     die("malloc");

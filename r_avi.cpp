@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.7 2003/02/23 22:51:49 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.8 2003/02/25 13:25:51 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -139,7 +139,7 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
   fclose(f);
 
   if (verbose)
-    fprintf(stderr, "Using AVI demultiplexer for %s. Opening file. This "
+    fprintf(stdout, "Using AVI demultiplexer for %s. Opening file. This "
             "may take some time depending on the file's size.\n", fname);
   rederive_keyframes = 0;
   if ((avi = AVI_open_input_file(fname, 1)) == NULL) {
@@ -215,7 +215,7 @@ avi_reader_c::avi_reader_c(char *fname, unsigned char *astreams,
                                          24, // fixme!
                                          fsize, NULL, nrange, 1);
     if (verbose)
-      fprintf(stderr, "+-> Using video output module for video stream.\n");
+      fprintf(stdout, "+-> Using video output module for video stream.\n");
   } else
     vpacketizer = NULL;
 

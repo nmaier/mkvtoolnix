@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.2 2003/02/24 12:31:17 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.3 2003/02/25 13:25:51 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -83,7 +83,7 @@ wav_reader_c::wav_reader_c(char *fname, audio_sync_t *nasync,
                                        wheader.common.wBitsPerSample, nasync,
                                        nrange);
   if (verbose)
-    fprintf(stderr, "Using WAV demultiplexer for %s.\n+-> Using " \
+    fprintf(stdout, "Using WAV demultiplexer for %s.\n+-> Using " \
             "PCM output module for audio stream.\n", fname);
 }
 
