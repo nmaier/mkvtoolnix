@@ -27,6 +27,8 @@
 #include "mp3_common.h"
 #include "r_mpeg.h"
 #include "smart_pointers.h"
+#include "p_ac3.h"
+#include "p_mp3.h"
 #include "p_video.h"
 
 #define PROBESIZE 4
@@ -146,7 +148,7 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
                                                 (int)(height * aspect_ratio),
                                                 height, ti));
 
-  mxinfo(FMT_TID "Using the MPEG 1/2 video output module.\n",
+  mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
          ti->fname.c_str(), (int64_t)0);
 }
 
@@ -156,8 +158,8 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
   unsigned char *chunk;
   int num_read;
 
-  chunk = (unsigned char *)safemalloc(20000);
-  num_read = mm_io->read(chunk, 20000);
+  chunk = (unsigned char *)safemalloc(6022);
+  num_read = mm_io->read(chunk, 6022);
   if (num_read <= 0) {
     safefree(chunk);
     return FILE_STATUS_DONE;
@@ -351,6 +353,8 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c *nti)
         mxverb(3, "%02x ", i);
     mxverb(3, "\n");
 
+    mm_io->setFilePointer(0, seek_beginning);
+
   } catch (exception &ex) {
     throw error_c("mpeg_ps_reader: Could not open the file.");
   }
@@ -454,6 +458,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       throw false;
 
     mpeg_ps_track_ptr track(new mpeg_ps_track_t);
+    track->first_timecode = timecode;
 
     if (id < 0xe0) {
       track->type = 'a';
@@ -537,6 +542,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
           throw "Error parsing the first AC3 audio frame.";
         track->a_channels = header.channels;
         track->a_sample_rate = header.sample_rate;
+        track->a_bsid = header.bsid;
 
 //       } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
 
@@ -563,14 +569,13 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 }
 
 bool
-mpeg_ps_reader_c::find_next_packet_for_id(int id) {
+mpeg_ps_reader_c::find_next_packet(int &id) {
   try {
     uint32_t header;
 
     header = mm_io->read_uint32_be();
     while (1) {
-      uint8_t stream_id, byte;
-      uint16_t pes_packet_length;
+      uint8_t byte;
 
       switch (header) {
         case MPEGVIDEO_PACKET_START_CODE:
@@ -610,14 +615,8 @@ mpeg_ps_reader_c::find_next_packet_for_id(int id) {
           if (!mpeg_is_start_code(header))
             return false;
 
-          stream_id = header & 0xff;
-          if (stream_id == id)
-            return true;
-
-          pes_packet_length = mm_io->read_uint16_be();
-          mm_io->skip(pes_packet_length);
-
-          header = mm_io->read_uint32_be();
+          id = header & 0xff;
+          return true;
 
           break;
       }
@@ -627,19 +626,129 @@ mpeg_ps_reader_c::find_next_packet_for_id(int id) {
   }
 }
 
+bool
+mpeg_ps_reader_c::find_next_packet_for_id(int id) {
+  int new_id;
+
+  try {
+    while (find_next_packet(new_id)) {
+      if (id == new_id)
+        return true;
+      mm_io->skip(mm_io->read_uint16_be());
+    }
+  } catch(...) {
+  }
+  return false;
+}
+
 void
-mpeg_ps_reader_c::create_packetizer(int64_t) {
+mpeg_ps_reader_c::create_packetizer(int64_t id) {
+  if ((id < 0) || (id >= tracks.size()))
+    return;
+  if (tracks[id]->ptzr >= 0)
+    return;
+  if (!demuxing_requested(tracks[id]->type, id))
+    return;
+
+  mpeg_ps_track_ptr &track = tracks[id];
+  if (track->type == 'a') {
+    if ((track->fourcc == FOURCC('M', 'P', '1', ' ')) ||
+        (track->fourcc == FOURCC('M', 'P', '2', ' ')) ||
+        (track->fourcc == FOURCC('M', 'P', '3', ' '))) {
+      track->ptzr =
+        add_packetizer(new mp3_packetizer_c(this, track->a_sample_rate,
+                                            track->a_channels, true, ti));
+      if (verbose)
+        mxinfo(FMT_TID "Using the MPEG audio output module.\n",
+               ti->fname.c_str(), id);
+
+    } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
+      track->ptzr =
+        add_packetizer(new ac3_packetizer_c(this, track->a_sample_rate,
+                                            track->a_channels,
+                                            track->a_bsid, ti));
+      if (verbose)
+        mxinfo(FMT_TID "Using the AC3 output module.\n",
+               ti->fname.c_str(), id);
+
+    } else
+      mxerror("mpeg_ps_reader: Should not have happened #1. %s", BUGMSG);
+
+  } else {                      // if (track->type == 'a')
+    if ((track->fourcc == FOURCC('m', 'p', 'g', '1')) ||
+        (track->fourcc == FOURCC('m', 'p', 'g', '2'))) {
+      mpeg_12_video_packetizer_c *ptzr;
+
+      ti->private_data = track->raw_seq_hdr;
+      ti->private_size = track->raw_seq_hdr_size;
+      ptzr =
+        new mpeg_12_video_packetizer_c(this, track->v_version,
+                                       track->v_frame_rate,
+                                       track->v_width, track->v_height,
+                                       (int)(track->v_height *
+                                             track->v_aspect_ratio),
+                                       track->v_height, ti);
+      track->ptzr = add_packetizer(ptzr);
+      ti->private_data = NULL;
+      ti->private_size = 0;
+
+      if (verbose)
+        mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
+               ti->fname.c_str(), id);
+      
+    } else
+      mxerror("mpeg_ps_reader: Should not have happened #2. %s", BUGMSG);
+  }
+}
+
+void
+mpeg_ps_reader_c::create_packetizers() {
+  int i;
+
+  for (i = 0; i < tracks.size(); i++)
+    create_packetizer(i);
 }
 
 file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
+  int64_t timecode, packet_pos;
+  int new_id, length;
+  unsigned char *buf;
+
+  try {
+    while (find_next_packet(new_id)) {
+      if ((id2idx[new_id] == -1) ||
+          (tracks[id2idx[new_id]]->ptzr == -1)) {
+        mm_io->skip(mm_io->read_uint16_be());
+        continue;
+      }
+      packet_pos = mm_io->getFilePointer() - 4;
+      if (!parse_packet(new_id, timecode, length))
+        return FILE_STATUS_DONE;
+
+      mxverb(2, "mpeg_ps: packet for %d length %d at %lld\n", new_id, length,
+             packet_pos);
+
+      buf = (unsigned char *)safemalloc(length);
+      if (mm_io->read(buf, length) != length) {
+        safefree(buf);
+        return FILE_STATUS_DONE;
+      }
+
+      memory_c mem(buf, length, true);
+      PTZR(tracks[id2idx[new_id]]->ptzr)->process(mem);
+
+      return FILE_STATUS_MOREDATA;
+    }
+  } catch(...) {
+  }
   return FILE_STATUS_DONE;
 }
 
 int
 mpeg_ps_reader_c::get_progress() {
-  return 100 * bytes_processed / size;
+  return 100 * mm_io->getFilePointer() / size;
 }
 
 void

@@ -56,19 +56,21 @@ struct mpeg_ps_track_t {
   char type;                    // 'v' for video, 'a' for audio, 's' for subs
   uint32_t fourcc;
 
+  int64_t first_timecode;
+
   int v_version, v_width, v_height;
   double v_frame_rate, v_aspect_ratio;
   unsigned char *raw_seq_hdr;
   int raw_seq_hdr_size;
 
-  int a_channels, a_sample_rate, a_bits_per_sample;
+  int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
 
   mpeg_ps_track_t():
-    ptzr(0), type(0), fourcc(0),
+    ptzr(-1), type(0), fourcc(0),
     v_version(0), v_width(0), v_height(0),
     v_frame_rate(0), v_aspect_ratio(0),
     raw_seq_hdr(NULL), raw_seq_hdr_size(0),
-    a_channels(0), a_sample_rate(0), a_bits_per_sample(0) {
+    a_channels(0), a_sample_rate(0), a_bits_per_sample(0), a_bsid(0) {
   };
   ~mpeg_ps_track_t() {
     safefree(raw_seq_hdr);
@@ -95,11 +97,13 @@ public:
   virtual int get_progress();
   virtual void identify();
   virtual void create_packetizer(int64_t id);
+  virtual void create_packetizers();
 
   virtual void found_new_stream(int id);
 
   virtual bool read_timestamp(int c, int64_t &timestamp);
   virtual bool parse_packet(int id, int64_t &timestamp, int &size);
+  virtual bool find_next_packet(int &id);
   virtual bool find_next_packet_for_id(int id);
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
