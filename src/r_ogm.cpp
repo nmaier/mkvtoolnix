@@ -565,7 +565,9 @@ void ogm_reader_c::process_page(ogg_page *og) {
 
       } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {
         dmx->units_processed++;
-        if ((op.bytes - 1 - hdrlen) > 1)
+        if (((op.bytes - 1 - hdrlen) > 2) ||
+            ((op.packet[hdrlen + 1] != ' ') &&
+             (op.packet[hdrlen + 1] != 0) && !iscr(op.packet[hdrlen + 1])))
           dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 -
                                    hdrlen, ogg_page_granulepos(og), lenbytes);
 

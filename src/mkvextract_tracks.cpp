@@ -514,6 +514,11 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
           track->warning_printed = true;
         }
 
+        buffer[0] = *data.Buffer();
+        if ((data.Size() < 2) &&
+            ((buffer[0] != ' ') || (buffer[0] != 0) || !iscr(buffer[0])))
+          break;
+
         // Do the charset conversion.
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());

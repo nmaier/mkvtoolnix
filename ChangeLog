@@ -1,3 +1,10 @@
+2003-10-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvextract: The Matroska reader and the OGM reader
+	(mkvmerge) as well as mkvextract will discard empty or 'cleaning
+	only' subtitle packets as they are appear in OGMs in order to mark
+	the end of an entry.
+
 2003-10-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added the ability to read timecodes from

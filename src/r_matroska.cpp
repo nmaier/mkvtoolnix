@@ -1548,17 +1548,21 @@ int kax_reader_c::read(generic_packetizer_c *) {
                                               1);
               if ((block_track->type == 's') &&
                   (block_track->sub_type == 't')) {
-                char *lines;
+                if ((re_size > 2) ||
+                    ((re_size > 0) && (*re_buffer != ' ') &&
+                     (*re_buffer != 0) && !iscr(*re_buffer))) {
+                  char *lines;
 
-                lines = (char *)safemalloc(re_size + 1);
-                lines[re_size] = 0;
-                memcpy(lines, re_buffer, re_size);
-                block_track->packetizer->process((unsigned char *)lines, 0,
-                                                 (int64_t)last_timecode,
-                                                 block_duration,
-                                                 block_bref,
-                                                 block_fref);
-                safefree(lines);
+                  lines = (char *)safemalloc(re_size + 1);
+                  lines[re_size] = 0;
+                  memcpy(lines, re_buffer, re_size);
+                  block_track->packetizer->process((unsigned char *)lines, 0,
+                                                   (int64_t)last_timecode,
+                                                   block_duration,
+                                                   block_bref,
+                                                   block_fref);
+                  safefree(lines);
+                }
               } else
                 block_track->packetizer->process(re_buffer, re_size,
                                                  (int64_t)last_timecode,
