@@ -127,6 +127,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   hcodec_private_length = 0;
 
   haudio_sampling_freq = -1.0;
+  haudio_output_sampling_freq = -1.0;
   haudio_channels = -1;
   haudio_bit_depth = -1;
 
@@ -273,6 +274,10 @@ int64_t generic_packetizer_c::get_track_default_duration_ns() {
 
 void generic_packetizer_c::set_audio_sampling_freq(float freq) {
   haudio_sampling_freq = freq;
+}
+
+void generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
+  haudio_output_sampling_freq = freq;
 }
 
 void generic_packetizer_c::set_audio_channels(int channels) {
@@ -462,15 +467,20 @@ void generic_packetizer_c::set_headers() {
       GetChild<KaxTrackAudio>(*track_entry);
 
     if (haudio_sampling_freq != -1.0)
-      *(static_cast<EbmlFloat *> (&GetChild<KaxAudioSamplingFreq>(audio))) =
+      *(static_cast<EbmlFloat *>(&GetChild<KaxAudioSamplingFreq>(audio))) =
         haudio_sampling_freq;
 
+    if (haudio_output_sampling_freq != -1.0)
+      *(static_cast<EbmlFloat *>
+        (&GetChild<KaxAudioOutputSamplingFreq>(audio))) =
+        haudio_output_sampling_freq;
+
     if (haudio_channels != -1)
-      *(static_cast<EbmlUInteger *> (&GetChild<KaxAudioChannels>(audio))) =
+      *(static_cast<EbmlUInteger *>(&GetChild<KaxAudioChannels>(audio))) =
         haudio_channels;
 
     if (haudio_bit_depth != -1)
-      *(static_cast<EbmlUInteger *> (&GetChild<KaxAudioBitDepth>(audio))) =
+      *(static_cast<EbmlUInteger *>(&GetChild<KaxAudioBitDepth>(audio))) =
         haudio_bit_depth;
 
   }

@@ -136,7 +136,7 @@ protected:
   unsigned char *hcodec_private;
   int hcodec_private_length;
 
-  float haudio_sampling_freq;
+  float haudio_sampling_freq, haudio_output_sampling_freq;
   int haudio_channels, haudio_bit_depth;
 
   int hvideo_pixel_width, hvideo_pixel_height;
@@ -193,6 +193,7 @@ public:
   virtual int64_t get_track_default_duration_ns();
 
   virtual void set_audio_sampling_freq(float freq);
+  virtual void set_audio_output_sampling_freq(float freq);
   virtual void set_audio_channels(int channels);
   virtual void set_audio_bit_depth(int bit_depth);
 
