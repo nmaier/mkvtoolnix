@@ -1363,6 +1363,10 @@ track_info_c::operator =(const track_info_c &src) {
   no_video = src.no_video;
   no_subs = src.no_subs;
   no_buttons = src.no_buttons;
+  atracks = src.atracks;
+  btracks = src.btracks;
+  stracks = src.stracks;
+  vtracks = src.vtracks;
 
   private_size = src.private_size;
   private_data = (unsigned char *)safememdup(src.private_data, private_size);
