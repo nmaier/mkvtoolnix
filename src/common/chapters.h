@@ -65,5 +65,7 @@ KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters,
                                           int64_t min_tc, int64_t max_tc,
                                           int64_t offset, bool validate);
 
+extern string default_chapter_language, default_chapter_country;
+
 #endif // __CHAPTERS_H
 

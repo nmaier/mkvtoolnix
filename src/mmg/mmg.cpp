@@ -34,6 +34,7 @@
 #include "wx/statline.h"
 
 #include "mmg.h"
+#include "chapters.h"
 #include "common.h"
 #ifdef SYS_UNIX
 #include "matroskalogo_big.xpm"
@@ -1114,9 +1115,9 @@ bool mmg_app::OnInit() {
   }
   cfg->SetPath("/chapter_editor");
   if (cfg->Read("default_language", &k))
-    tab_chapters::default_language = k;
+    default_chapter_language = k.c_str();
   if (cfg->Read("default_country", &k))
-    tab_chapters::default_country = k;
+    default_chapter_country = k.c_str();
 
   app = this;
   mdlg = new mmg_dialog();
@@ -1133,8 +1134,8 @@ int mmg_app::OnExit() {
   cfg->SetPath("/GUI");
   cfg->Write("last_directory", last_open_dir);
   cfg->SetPath("/chapter_editor");
-  cfg->Write("default_language", tab_chapters::default_language);
-  cfg->Write("default_country", tab_chapters::default_country);
+  cfg->Write("default_language", default_chapter_language.c_str());
+  cfg->Write("default_country", default_chapter_country.c_str());
   cfg->Flush();
 
   delete cfg;

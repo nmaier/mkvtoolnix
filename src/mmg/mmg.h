@@ -395,8 +395,6 @@ public:
 
   kax_analyzer_c *analyzer;
 
-  static wxString default_language, default_country;
-
 public:
   tab_chapters(wxWindow *parent, wxMenu *nm_chapters);
   ~tab_chapters();

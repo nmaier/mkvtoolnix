@@ -41,9 +41,6 @@ using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
-wxString tab_chapters::default_language = "";
-wxString tab_chapters::default_country = "";
-
 class chapter_node_data_c: public wxTreeItemData {
 public:
   bool is_atom;
@@ -781,14 +778,15 @@ void tab_chapters::on_add_chapter(wxCommandEvent &evt) {
     delete (*chapter)[0];
     chapter->Remove(0);
   }
-  if ((default_language.Length() > 0) || (default_country.Length() > 0)) {
+  if ((default_chapter_language.length() > 0) ||
+      (default_chapter_country.length() > 0)) {
     KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
-    if (default_language.Length() > 0)
+    if (default_chapter_language.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
-        default_language.c_str();
-    if (default_country.Length() > 0)
+        default_chapter_language.c_str();
+    if (default_chapter_country.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
-        default_country.c_str();
+        default_chapter_country.c_str();
   }
   s = create_chapter_label(*chapter);
 
@@ -858,14 +856,15 @@ void tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
     delete (*chapter)[0];
     chapter->Remove(0);
   }
-  if ((default_language.Length() > 0) || (default_country.Length() > 0)) {
+  if ((default_chapter_language.length() > 0) ||
+      (default_chapter_country.length() > 0)) {
     KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
-    if (default_language.Length() > 0)
+    if (default_chapter_language.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
-        default_language.c_str();
-    if (default_country.Length() > 0)
+        default_chapter_language.c_str();
+    if (default_chapter_country.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
-        default_country.c_str();
+        default_chapter_country.c_str();
   }
   m->PushElement(*chapter);
   s = create_chapter_label(*chapter);
@@ -1063,16 +1062,17 @@ void tab_chapters::verify_country_codes(string s, vector<string> &parts) {
 
 void tab_chapters::on_set_default_values(wxCommandEvent &evt) {
   vector<string> parts;
-  chapter_values_dlg dlg(this, true, default_language, default_country);
+  chapter_values_dlg dlg(this, true, default_chapter_language.c_str(),
+                         default_chapter_country.c_str());
 
   if (dlg.ShowModal() != wxID_OK)
     return;
 
   verify_language_codes(dlg.tc_language->GetValue().c_str(), parts);
-  default_language = join(" ", parts).c_str();
+  default_chapter_language = join(" ", parts);
 
   verify_country_codes(dlg.tc_country->GetValue().c_str(), parts);
-  default_country = join(" ", parts).c_str();
+  default_chapter_country = join(" ", parts);
 }
 
 void tab_chapters::set_values_recursively(wxTreeItemId id, string &s,

@@ -32,6 +32,9 @@
 using namespace std;
 using namespace libmatroska;
 
+string default_chapter_language;
+string default_chapter_country;
+
 // {{{ defines for chapter line recognition
 
 #define isequal(s) (*(s) == '=')
@@ -152,8 +155,12 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   } else
     do_convert = false;
 
-  if (language == NULL)
-    language = "eng";
+  if (language == NULL) {
+    if (default_chapter_language.length() > 0)
+      language = default_chapter_language.c_str();
+    else
+      language = "eng";
+  }
 
   try {
     while (in->getline2(line)) {
@@ -211,6 +218,11 @@ KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
 
           *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
             language;
+
+          if (default_chapter_country.length() > 0)
+            *static_cast<EbmlString *>
+              (&GetChild<KaxChapterCountry>(*display)) =
+              default_chapter_country;
 
           num++;
         }
