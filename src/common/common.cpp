@@ -1192,6 +1192,7 @@ void debug_c::enter(const char *label) {
 
   if (entry == NULL) {
     entry = (debug_data_t *)safemalloc(sizeof(debug_data_t));
+    memset(entry, 0, sizeof(debug_data_t));
     entry->label = label;
     entries.push_back(entry);
   }
