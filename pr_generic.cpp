@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.12 2003/04/13 15:44:27 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.13 2003/04/17 12:27:17 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -57,6 +57,7 @@ cluster_helper_c::cluster_helper_c() {
   num_clusters = 0;
   clusters = NULL;
   cluster_content_size = 0;
+  last_block_group = NULL;
 }
 
 cluster_helper_c::~cluster_helper_c() {
@@ -110,13 +111,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
     die("realloc");
 
   c->packets[c->num_packets] = packet;
-  if (c->num_packets == 0) {
-    KaxClusterTimecode &timecode = GetChild<KaxClusterTimecode>(*c->cluster);
-    *(static_cast<EbmlUInteger *>(&timecode)) = packet->timestamp;
-  }
-
   c->num_packets++;
-
   cluster_content_size += packet->length;
 
   walk_clusters();
@@ -177,6 +172,8 @@ void cluster_helper_c::add_cluster(KaxCluster *cluster) {
   num_clusters++;
   c->cluster = cluster;
   cluster_content_size = 0;
+  cluster->SetParent(kax_segment);
+  cluster->SetPreviousTimecode(0);
 }
 
 int cluster_helper_c::get_cluster_content_size() {
@@ -186,8 +183,8 @@ int cluster_helper_c::get_cluster_content_size() {
 int cluster_helper_c::render(IOCallback *out) {
   KaxCues dummy_cues;
   KaxCluster *cluster;
+  KaxBlockGroup *new_group;
   int i;
-  int64_t cluster_timecode;
   ch_contents_t *clstr;
   packet_t *pack, *bref_packet, *fref_packet;
 
@@ -197,18 +194,11 @@ int cluster_helper_c::render(IOCallback *out) {
   walk_clusters();
   clstr = clusters[num_clusters - 1];
   cluster = clstr->cluster;
-  cluster_timecode = get_timecode();
-  if (verbose > 1)
-    fprintf(stdout, "cluster_helper_c::render: cluster_timecode %lld\n",
-            cluster_timecode);
 
   for (i = 0; i < clstr->num_packets; i++) {
     pack = clstr->packets[i];
-    if (verbose > 1)
-      fprintf(stdout, "  cluster_helper_c::render: pack->timestamp %lld\n",
-              pack->timestamp);
+    pack->rendered = 1;
 
-    pack->group = &cluster->GetNewBlock();
     pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*pack->source->track_entry);
@@ -221,18 +211,24 @@ int cluster_helper_c::render(IOCallback *out) {
         fref_packet = find_packet(pack->fref);
         assert(fref_packet != NULL);
         assert(fref_packet->group != NULL);
-        pack->group->AddFrame(track_entry, pack->timestamp,
-                              *pack->data_buffer, *bref_packet->group,
-                              *fref_packet->group);
-      } else
-        pack->group->AddFrame(track_entry, pack->timestamp,
-                              *pack->data_buffer, *bref_packet->group);
+        cluster->AddFrame(track_entry, pack->timestamp * 1000000LL,
+                          *pack->data_buffer, new_group, *bref_packet->group,
+                          *fref_packet->group);
+      } else {
+        cluster->AddFrame(track_entry, pack->timestamp * 1000000LL,
+                          *pack->data_buffer, new_group, *bref_packet->group);
+      }
     } else {                    // This is a key frame. No references.
-      pack->group->AddFrame(track_entry, pack->timestamp, *pack->data_buffer);
+      cluster->AddFrame(track_entry, pack->timestamp * 1000000LL,
+                        *pack->data_buffer, new_group);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->id - 1, pack->source);
     }
+    if (new_group == NULL)
+      new_group = last_block_group;
+    pack->group = new_group;
+    last_block_group = new_group;
   }
 
   cluster->Render(static_cast<StdIOCallback &>(*out), dummy_cues);
@@ -286,15 +282,17 @@ void cluster_helper_c::check_clusters(int num) {
   for (i = 0; i < num_clusters; i++) {
     for (k = 0; k < clusters[i]->num_packets; k++) {
       p = clusters[i]->packets[k];
+      if (p->rendered && p->superseeded)
+        continue;
       if (p->bref == 0)
         continue;
       clstr = find_packet_cluster(p->bref);
       if (clstr == NULL) {
         fprintf(stderr, "Error: backward refenrece could not be resolved "
-                "(%llu). Called from %d.\n", p->bref, num);
+                "(%lld -> %lld), id %lld. Called from line %d.\n",
+                p->timestamp, p->bref, p->id, num);
         die("internal error");
       }
-      clstr->is_referenced = 1;
     }
   }
 }
