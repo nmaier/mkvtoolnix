@@ -153,6 +153,15 @@ tab_settings::on_browse(wxCommandEvent &evt) {
 #endif
                    wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
+    wxString file_name;
+
+    file_name = dlg.GetPath().AfterLast('/').AfterLast('\\').Lower();
+    if ((file_name == wxT("mmg.exe")) || (file_name == wxT("mmg"))) {
+      wxMessageBox(wxT("Please do not select 'mmg' itself as the 'mkvmerge' "
+                       "executable."), wxT("Wrong file chosen"),
+                   wxOK | wxCENTER | wxICON_ERROR);
+      return;
+    }
     tc_mkvmerge->SetValue(dlg.GetPath());
     mkvmerge_path = dlg.GetPath();
     save_preferences();

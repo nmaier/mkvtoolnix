@@ -1,3 +1,9 @@
+2004-10-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: Added an error message if the user selects 'mmg' as the
+	'mkvmerge executable' because that would lead to an infinite
+	number of 'mmg's being spawned.
+
 2004-10-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: If LFE is on for DTS then the number of
