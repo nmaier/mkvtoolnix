@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.6 2003/02/27 09:52:37 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.7 2003/02/27 19:51:53 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -23,10 +23,12 @@
 
 #include <stdio.h>
 
-#include "common.h"
+#include "IOCallback.h"
 #include "KaxBlock.h"
 #include "KaxCluster.h"
 #include "KaxTracks.h"
+
+#include "common.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 
@@ -36,25 +38,41 @@ extern int track_number;
 
 struct packet_t;
 
+typedef struct {
+  KaxCluster  *cluster;
+  packet_t   **packets;
+  int          num_packets, is_referenced, rendered;
+} ch_contents;
+
 class cluster_helper_c {
 private:
-  int          refcount;
-  KaxCluster  *cluster;
-  packet_t   **packet_q;
-  int          num_packets;
+  ch_contents **clusters;
+  int           num_clusters, cluster_content_size;
 public:
-  cluster_helper_c(KaxCluster *ncluster = NULL);
+  cluster_helper_c();
   virtual ~cluster_helper_c();
 
-  KaxCluster *get_cluster();
-  int         add_ref();
-  void        add_packet(packet_t *packet);
-  u_int64_t   get_timecode();
-  packet_t   *get_packet(int num);
-  int         get_packet_count();
-  int         release();
-  KaxCluster &operator *();
+  void         add_cluster(KaxCluster *cluster);
+  KaxCluster  *get_cluster();
+  void         add_packet(packet_t *packet);
+  u_int64_t    get_timecode();
+  packet_t    *get_packet(int num);
+  int          get_packet_count();
+  int          render(IOCallback *out);
+  int          free_ref(u_int64_t pid);
+  int          free_clusters();
+  int          get_cluster_content_size();
+
+private:
+  int          find_cluster(KaxCluster *cluster);
+  ch_contents *find_packet_cluster(u_int64_t pid);
+  packet_t    *find_packet(u_int64_t pid);
+  void         free_contents(ch_contents *clstr);
+  void         check_clusters(int num);
+  int          free_ref_recursive(u_int64_t pid, void *source);
 };
+
+extern cluster_helper_c *cluster_helper;
 
 class generic_packetizer_c {
 protected:
@@ -71,8 +89,7 @@ public:
   virtual void      set_header() = 0;
   virtual stamp_t   get_smallest_timestamp() = 0;
   virtual void      set_private_data(void *data, int size);
-  virtual void      added_packet_to_cluster(packet_t *packet,
-                                            cluster_helper_c *helper);
+  virtual void      added_packet_to_cluster(packet_t *packet);
 };
  
 class generic_reader_c {
@@ -91,8 +108,8 @@ typedef struct packet_t {
   KaxBlock            *block;
   KaxCluster          *cluster;
   char                *data;
-  int                  length;
-  u_int64_t            timestamp, id, ref;
+  int                  length, superseeded;
+  u_int64_t            timestamp, id, bref, fref;
   generic_packetizer_c *source;
 } packet_t;
 

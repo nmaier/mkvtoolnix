@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.17 2003/02/27 09:35:55 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.18 2003/02/27 19:51:53 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -88,9 +88,6 @@ int max_blocks_per_cluster = 65535;
 int max_ms_per_cluster = 1000;
 
 float video_fps = -1.0;
-
-packet_t **packet_queue = NULL;
-int num_packets_in_packetq = 0;
 
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment        kax_segment;
@@ -735,54 +732,18 @@ static void parse_args(int argc, char **argv) {
   }*/
 }
 
-static void write_packetq() {
-  KaxCues dummy_cues;
-  KaxBlockGroup *last_group = NULL;
-  KaxCluster *cluster;
-  int i, num_packets;
-  u_int64_t cluster_timecode;
-
-  cluster = cluster_helper->get_cluster();
-  cluster_timecode = cluster_helper->get_timecode();
-  num_packets = cluster_helper->get_packet_count();
-
-  for (i = 0; i < num_packets; i++) {
-    packet_t *pack;
-
-    pack = cluster_helper->get_packet(i);
-
-    if (last_group == NULL)
-      pack->group = &GetChild<KaxBlockGroup>(*cluster);
-    else
-      pack->group = &GetNextChild<KaxBlockGroup>(*cluster, *last_group);
-    last_group = pack->group;
-    pack->block = &GetChild<KaxBlock>(*pack->group);
-    pack->data_buffer = new DataBuffer((binary *)pack->data, pack->length);
-    KaxTrackEntry &track_entry =
-      static_cast<KaxTrackEntry &>(*pack->source->track_entry);
-
-    pack->block->AddFrame(track_entry, pack->timestamp - cluster_timecode,
-                          *pack->data_buffer);
-    pack->source->added_packet_to_cluster(pack, cluster_helper);
-  }
-
-  cluster->Render(static_cast<StdIOCallback &>(*out), dummy_cues);
-
-  cluster_helper->release();
-}
-
 static int write_packet(packet_t *pack) {
   u_int64_t timecode;
-
-  if (cluster_helper == NULL)
-    cluster_helper = new cluster_helper_c();
 
   cluster_helper->add_packet(pack);
   timecode = cluster_helper->get_timecode();
 
   if (((pack->timestamp - timecode) > max_ms_per_cluster) ||
-      (num_packets_in_packetq > max_blocks_per_cluster))
-    write_packetq();
+      (cluster_helper->get_packet_count() > max_blocks_per_cluster) ||
+      (cluster_helper->get_cluster_content_size() > 1500000)) {
+    cluster_helper->render(out);
+    cluster_helper->add_cluster(new KaxCluster());
+  }
 
   return 1;
 }
@@ -792,6 +753,9 @@ int main(int argc, char **argv) {
   packet_t *pack;
 
   nice(2);
+
+  cluster_helper = new cluster_helper_c();
+  cluster_helper->add_cluster(new KaxCluster());
 
   parse_args(argc, argv);
   
@@ -845,8 +809,10 @@ int main(int argc, char **argv) {
       display_progress(0);
   }
 
-  if (num_packets_in_packetq > 0)
-    write_packetq();
+  if ((cluster_helper != NULL) && (cluster_helper->get_packet_count() > 0))
+    cluster_helper->render(out);
+
+  delete cluster_helper;
 
   if (verbose == 1) {
     display_progress(1);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.4 2003/02/27 09:35:55 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.5 2003/02/27 19:51:53 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -126,9 +126,11 @@ int video_packetizer_c::process(char *buf, int size, int num_frames,
   if ((packetno >= range.start) &&
       ((range.end == 0) || (packetno < range.end))) {
     if (key)
+      // Add a key frame and save its ID so that we can reference it later.
       last_id = add_packet(buf, size,
                            (u_int64_t)(1000.0 * frames_output / fps));
     else
+      // This is a P frame - let's reference the last key frame (I frame).
       add_packet(buf, size, (u_int64_t)(1000.0 * frames_output / fps),
                  last_id);
     frames_output += num_frames;
@@ -143,13 +145,13 @@ video_packetizer_c::~video_packetizer_c() {
     free(tempbuf);
 }
 
-void video_packetizer_c::added_packet_to_cluster(packet_t *packet,
-                                                 cluster_helper_c *helper) {
-  if (packet->ref == 0) {       // this is a keyframe
-    if (last_helper)
-      last_helper->release();
-    last_helper = helper;
+void video_packetizer_c::added_packet_to_cluster(packet_t *packet) {
+  if (packet->bref == 0) {      // this is a keyframe
+    // Free the last key frame and all others that (indirectly) reference it.
+    if (last_keyframe != NULL)
+      cluster_helper->free_ref(last_keyframe->id);
+    // Save this key frame so that we can later free all references to it
+    // (and make references to it in the first place).
     last_keyframe = packet;
-    last_helper->add_ref();
   }
 }

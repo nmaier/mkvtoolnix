@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.h,v 1.5 2003/02/27 09:52:37 mosu Exp $
+    \version \$Id: p_video.h,v 1.6 2003/02/27 19:51:53 mosu Exp $
     \brief class definition for the video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,7 +35,6 @@ private:
   range_t           range;
   u_int64_t         last_id;
   packet_t         *last_keyframe;
-  cluster_helper_c *last_helper;
 
 public:
   video_packetizer_c(void *, int, char *, double, int, int, int, int,
@@ -45,8 +44,7 @@ public:
   virtual int  process(char *buf, int size, int num_frames, int key,
                        int last_frame);
   virtual void set_header();
-  virtual void added_packet_to_cluster(packet_t *packet,
-                                       cluster_helper_c *helper);
+  virtual void added_packet_to_cluster(packet_t *packet);
 };
 
 #endif // __P_VIDEO_H

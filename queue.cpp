@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.5 2003/02/27 09:35:55 mosu Exp $
+    \version \$Id: queue.cpp,v 1.6 2003/02/27 19:51:53 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -31,10 +31,11 @@
 #include <dmalloc.h>
 #endif
 
+u_int64_t q_c::id = 1;
+
 q_c::q_c() throw (error_c) : generic_packetizer_c() {
   first = NULL;
   current = NULL;
-  id = 1;
 }
 
 q_c::~q_c() {
@@ -54,7 +55,7 @@ q_c::~q_c() {
 }
 
 u_int64_t q_c::add_packet(char *data, int length, u_int64_t timestamp,
-                          u_int64_t ref) {
+                          u_int64_t bref, u_int64_t fref) {
   q_page_t *qpage;
   
   if (data == NULL)
@@ -71,7 +72,8 @@ u_int64_t q_c::add_packet(char *data, int length, u_int64_t timestamp,
   memcpy(qpage->pack->data, data, length);
   qpage->pack->length = length;
   qpage->pack->timestamp = timestamp;
-  qpage->pack->ref = ref;
+  qpage->pack->bref = bref;
+  qpage->pack->fref = fref;
   qpage->pack->source = this;
   qpage->pack->id = id;
   id++;
