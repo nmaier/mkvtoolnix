@@ -75,19 +75,17 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   }
 
   if ((mpeg_video == MPEG_VIDEO_NONE) && (ncodec_id != NULL) &&
-      (!strcmp(ncodec_id, "V_MPEG1") || !strcmp(ncodec_id, "V_MPEG2")))
+      (!strcmp(ncodec_id, MKV_V_MPEG1) || !strcmp(ncodec_id, MKV_V_MPEG2)))
     mpeg_video = (ncodec_id[6] == '1') ? MPEG_VIDEO_V1 : MPEG_VIDEO_V2;
 
-  if (ncodec_id != NULL)
+  if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
+      hack_engaged(ENGAGE_NATIVE_MPEG4))
+    set_codec_id(MKV_V_MPEG4_ASP);
+  else if (ncodec_id != NULL)
     set_codec_id(ncodec_id);
-  else if ((mpeg_video == MPEG_VIDEO_V4_LAYER_2) &&
-           hack_engaged(ENGAGE_NATIVE_MPEG4)) {
-    if (bframes)
-      set_codec_id(MKV_V_MPEG4_ASP);
-    else
-      set_codec_id(MKV_V_MPEG4_SP);
-  } else
+  else
     set_codec_id(MKV_V_MSCOMP);
+
   if (((mpeg_video != MPEG_VIDEO_V4_LAYER_2) ||
        !hack_engaged(ENGAGE_NATIVE_MPEG4)) &&
       (hcodec_id != "") && (hcodec_id == MKV_V_MSCOMP) &&
