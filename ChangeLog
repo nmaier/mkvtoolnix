@@ -1,3 +1,8 @@
+2004-04-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: On some rare occasions chapters were not
+	written correctly when splitting was active.
+
 2004-04-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: On non-Windows systems some combinations of
