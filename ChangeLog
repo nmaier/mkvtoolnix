@@ -1,3 +1,12 @@
+2004-08-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvinfo, mkvextract: Added support for the new tag
+	elements ('tag language' and 'default/original language').
+
+	* mkvmerge: new feature: If there was no MIME type given for an
+	attachment then mkvmerge will try to guess it based on the file's
+	extension just like mmg.
+
 2004-08-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvextract, mmg: Changes to the chapter

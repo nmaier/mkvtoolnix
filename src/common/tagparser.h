@@ -114,6 +114,8 @@ using namespace libmatroska;
 #define E_Simple                         82
 #define E_String                         83
 #define E_Binary                         84
+#define E_TagLanguage                    85
+#define E_DefaultLanguage                86
 
 // MAX: 81
 
@@ -194,5 +196,7 @@ void MTX_DLL_API tperror(parser_data_t *pdata, const char *fmt, ...);
 void MTX_DLL_API end_xml_tag_element(void *user_data, const char *name);
 
 void MTX_DLL_API parse_xml_tags(const char *name, KaxTags *tags);
+
+void MTX_DLL_API fix_mandatory_tag_elements(EbmlElement *e);
 
 #endif // __TAGPARSER_H

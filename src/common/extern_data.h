@@ -1,5 +1,5 @@
 /*
- * mkvmerge GUI -- utility for splicing together matroska files
+ * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
  *
  * Distributed under the GPL

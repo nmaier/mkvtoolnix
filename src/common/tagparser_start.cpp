@@ -792,6 +792,14 @@ handle_simple_tag(parser_data_t *pdata,
                 "as children under one 'Simple' tag.\n");
     pdata->parents->push_back(E_Binary);
 
+  } else if (!strcmp(name, "TagLanguage")) {
+    check_instances(p_simple, KaxTagLangue);
+    pdata->parents->push_back(E_TagLanguage);
+
+  } else if (!strcmp(name, "DefaultLanguage")) {
+    check_instances(p_simple, KaxTagDefault);
+    pdata->parents->push_back(E_DefaultLanguage);
+
   } else
     tperror_nochild();
 }
@@ -957,4 +965,23 @@ parse_xml_tags(const char *name,
   delete pdata->parents;
   delete pdata->simple_tags;
   safefree(pdata);
+}
+
+void
+fix_mandatory_tag_elements(EbmlElement *e) {
+  if (dynamic_cast<KaxTagSimple *>(e) != NULL) {
+    KaxTagSimple &s = *static_cast<KaxTagSimple *>(e);
+    GetChild<KaxTagLangue>(s);
+    GetChild<KaxTagDefault>(s);
+
+  }
+
+  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
+    EbmlMaster *m;
+    int i;
+
+    m = static_cast<EbmlMaster *>(e);
+    for (i = 0; i < m->ListSize(); i++)
+      fix_mandatory_tag_elements((*m)[i]);
+  }
 }
