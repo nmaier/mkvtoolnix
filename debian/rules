@@ -13,6 +13,7 @@ export DH_COMPAT=4
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
+INSTPREFIX=$(CURDIR)/debian/mkvtoolnix/usr
 
 CFLAGS = -Wall -g
 
@@ -64,20 +65,29 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	$(MAKE) install prefix=$(CURDIR)/debian/mkvtoolnix/usr
+	$(MAKE) install prefix=$(INSTPREFIX)
 
 
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
+	dh_installdocs doc/mkvmerge-gui.html
+	dh_installexamples examples/*xml examples/*dtd
+	dh_installman
+	dh_installchangelogs ChangeLog
+
+	# Install the images belonging the GUI guide.
+	install -d $(INSTPREFIX)/share/doc/mkvtoolnix/images
+	for i in doc/images/*png; do \
+		install -m 0644 $$i \
+			$(INSTPREFIX)/share/doc/mkvtoolnix/images/; \
+	done
 
 # Build architecture-dependent files here.
 binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf	
-	dh_installdocs doc/mkvmerge-gui.html
-	dh_installexamples examples/*xml examples/*dtd
 #	dh_installmenu
 #	dh_installlogrotate
 #	dh_installemacsen
@@ -85,9 +95,7 @@ binary-arch: build install
 #	dh_installmime
 #	dh_installinit
 #	dh_installcron
-	dh_installman
 #	dh_installinfo
-	dh_installchangelogs ChangeLog
 	dh_link
 	dh_strip
 	dh_compress
