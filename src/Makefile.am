@@ -6,6 +6,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 			aac_common.cpp aac_common.h \
 			ac3_common.cpp ac3_common.h \
 			base64.cpp base64.h \
+			chapters.cpp chapters.h \
 			dts_common.cpp dts_common.h \
 			cluster_helper.cpp cluster_helper.h \
 			common.cpp common.h \

@@ -45,6 +45,7 @@
 #include <matroska/KaxAttached.h>
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
+#include <matroska/KaxChapters.h>
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxClusterData.h>
 #include <matroska/KaxCues.h>
@@ -61,6 +62,7 @@
 #include <matroska/KaxTrackVideo.h>
 #include <matroska/KaxVersion.h>
 
+#include "chapters.h"
 #include "cluster_helper.h"
 #include "common.h"
 #include "iso639.h"
@@ -151,6 +153,7 @@ KaxDuration *kax_duration;
 KaxSeekHead *kax_seekhead = NULL;
 KaxTags *kax_tags = NULL;
 KaxAttachments *kax_as = NULL;
+KaxChapters *kax_chapters = NULL;
 
 string title;
 
@@ -236,6 +239,7 @@ static void usage(void) {
     "                           Creates a file attachment inside the\n"
     "                           firsts Matroska file written.\n"
     "  --global-tags <file>     Read global tags from a XML file.\n"
+    "  --chapters <file>        Read chapter information from the file.\n"
     "\n Options for each input file:\n"
     "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
     "                           audio tracks.\n"
@@ -1300,6 +1304,15 @@ static void parse_args(int argc, char **argv) {
       }
       parse_and_add_tags(argv[i + 1]);
       i++;
+
+    } else if (!strcmp(argv[i], "--chapters")) {
+      if ((i + 1) >= argc) {
+        mxprint(stderr, "Error: --chapters lacks the file name.\n");
+        exit(1);
+      }
+      kax_chapters = parse_chapters(argv[i + 1]);
+      i++;
+
     }
 
     // Options that apply to the next input file only.
@@ -1628,6 +1641,10 @@ static void cleanup() {
   safefree(outfile);
   if (kax_tags != NULL)
     delete kax_tags;
+  if (kax_chapters != NULL)
+    delete kax_chapters;
+  if (kax_as != NULL)
+    delete kax_as;
 
   utf8_done();
 }
@@ -1708,6 +1725,8 @@ void create_next_output_file(bool last_file, bool first_file) {
     cluster_helper->set_output(out);
     render_headers(out, last_file, first_file);
     render_attachments(out);
+    if (kax_chapters != NULL)
+      kax_chapters->Render(*out);
 
     if (kax_tags != NULL) {
       if (!kax_tags->CheckMandatory()) {
@@ -1742,6 +1761,8 @@ void create_next_output_file(bool last_file, bool first_file) {
   cluster_helper->set_output(out);
   render_headers(out, last_file, first_file);
   render_attachments(out);
+  if (kax_chapters != NULL)
+    kax_chapters->Render(*out);
 
   if (kax_tags != NULL) {
     if (!kax_tags->CheckMandatory()) {
@@ -1793,6 +1814,9 @@ void finish_file() {
 
     if (kax_tags != NULL)
       kax_seekhead->IndexThis(*kax_tags, *kax_segment);
+
+    if (kax_chapters != NULL)
+      kax_seekhead->IndexThis(*kax_chapters, *kax_segment);
 
     if (kax_as != NULL) {
       kax_seekhead->IndexThis(*kax_as, *kax_segment);
