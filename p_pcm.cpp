@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.6 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.7 2003/03/05 17:44:32 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -43,6 +43,7 @@ pcm_packetizer_c::pcm_packetizer_c(unsigned long nsamples_per_sec,
   tempbuf = (unsigned char *)malloc(bps + 128);
   if (tempbuf == NULL)
     die("malloc");
+  tempbuf_size = bps;
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   bits_per_sample = nbits_per_sample;
@@ -106,10 +107,11 @@ int pcm_packetizer_c::process(unsigned char *buf, int size, int last_frame) {
   int i, bytes_per_packet, remaining_bytes, complete_packets;
   unsigned char *new_buf;
 
-  if (size > bps) { 
-    fprintf(stderr, "FATAL: pcm_packetizer: size (%d) > bps (%d)\n", size,
-            bps);
-    exit(1);
+  if (size > tempbuf_size) { 
+    tempbuf = (unsigned char *)realloc(tempbuf, size + 128);
+    if (tempbuf == NULL)
+      die("realloc");
+    tempbuf_size = size;
   }
 
   new_buf = buf;

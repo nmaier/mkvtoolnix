@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.7 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: common.h,v 1.8 2003/03/05 17:44:32 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -66,7 +66,7 @@ typedef struct {
   unsigned char *private_data;
   int private_size;
 
-  char *fourcc;
+  char fourcc[5];
 
   audio_sync_t async;
 } track_info_t;

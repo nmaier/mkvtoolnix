@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.21 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.22 2003/03/05 17:44:32 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -532,12 +532,13 @@ static void parse_args(int argc, char **argv) {
         fprintf(stderr, "Error: -f lacks the FourCC.\n");
         exit(1);
       }
-      ti.fourcc = argv[i + 1];
-      if (strlen(ti.fourcc) != 4) {
+      if (strlen(argv[i + 1]) != 4) {
         fprintf(stderr, "Error: The FourCC must be exactly four chars "
                 "long.\n");
         exit(1);
       }
+      memcpy(ti.fourcc, argv[i + 1], 4);
+      ti.fourcc[4] = 0;
       i++;
     } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sync")) {
       if ((i + 1) >= argc) {

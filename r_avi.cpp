@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.14 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.15 2003/03/05 17:44:32 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -136,11 +136,16 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     ti->private_data = (unsigned char *)avi->bitmap_info_header;
     if (ti->private_data != NULL)
       ti->private_size = avi->bitmap_info_header->bi_size;
-    vpacketizer = new video_packetizer_c(ti->fourcc, AVI_frame_rate(avi),
+    if (ti->fourcc[0] == 0) {
+      memcpy(ti->fourcc, codec, 4);
+      ti->fourcc[4] = 0;
+    } else
+      memcpy(&avi->bitmap_info_header->bi_compression, ti->fourcc, 4);
+    vpacketizer = new video_packetizer_c(AVI_frame_rate(avi),
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
-                                         fsize, 1, ti);
+                                         1, ti);
     if (verbose)
       fprintf(stdout, "+-> Using video output module for video stream.\n");
   } else
@@ -328,11 +333,6 @@ int avi_reader_c::read() {
       // Make sure we have a frame to work with.
       if (old_chunk == NULL) {
         nread = AVI_read_frame(avi, (char *)chunk, &key);
-        if (nread > max_frame_size) {
-          fprintf(stderr, "FATAL: r_avi: nread (%d) > max_frame_size (%d)\n",
-                  nread, max_frame_size);
-          exit(1);
-        }
         if (nread < 0) {
           frames = maxframes + 1;
           break;
@@ -351,11 +351,6 @@ int avi_reader_c::read() {
       // Check whether we have identical frames
       while (!done && (frames <= (maxframes - 1))) {
         nread = AVI_read_frame(avi, (char *)chunk, &key);
-        if (nread > max_frame_size) {
-          fprintf(stderr, "FATAL: r_avi: nread (%d) > max_frame_size (%d)\n",
-                  nread, max_frame_size);
-          exit(1);
-        }
         if (nread < 0) {
           vpacketizer->process(old_chunk, old_nread, frames_read, old_key, 1);
           frames = maxframes + 1;

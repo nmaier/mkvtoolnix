@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.13 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.14 2003/03/05 17:44:32 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,22 +35,15 @@
 #include <dmalloc.h>
 #endif
 
-video_packetizer_c::video_packetizer_c(char *ncodec, double nfps, int nwidth,
+video_packetizer_c::video_packetizer_c(double nfps, int nwidth,
                                        int nheight, int nbpp,
-                                       int nmax_frame_size,
                                        int navi_compat_mode, track_info_t *nti)
   throw (error_c) : q_c(nti) {
   packetno = 0;
-  memcpy(codec, ncodec, 4);
-  codec[4] = 0;
   fps = nfps;
   width = nwidth;
   height = nheight;
   bpp = nbpp;
-  max_frame_size = nmax_frame_size;
-  tempbuf = (unsigned char *)malloc(max_frame_size + 1);
-  if (tempbuf == NULL)
-    die("malloc");
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
   avi_compat_mode = 1;
@@ -85,7 +78,7 @@ void video_packetizer_c::set_header() {
   KaxCodecID &codec_id =
     GetChild<KaxCodecID>(static_cast<KaxTrackEntry &>(*track_entry));
   if (!avi_compat_mode) {
-    codecstr = map_video_codec_fourcc(codec, &set_codec_private);
+    codecstr = map_video_codec_fourcc(ti->fourcc, &set_codec_private);
     codec_id.CopyBuffer((binary *)codecstr, countof(codecstr));
   } else
     codec_id.CopyBuffer((binary *)"V_MS/VFW/FOURCC",
@@ -114,12 +107,6 @@ int video_packetizer_c::process(unsigned char *buf, int size, int num_frames,
                                 int64_t old_timecode) {
   u_int64_t timecode;
 
-  if (size > max_frame_size) {
-    fprintf(stderr, "FATAL: p_video: size (%d) > max_frame_size (%d)\n",
-            size, max_frame_size);
-    exit(1);
-  }
-
   if (old_timecode == -1)
     timecode = (u_int64_t)(1000.0 * frames_output / fps);
   else
@@ -139,6 +126,4 @@ int video_packetizer_c::process(unsigned char *buf, int size, int num_frames,
 }
 
 video_packetizer_c::~video_packetizer_c() {
-  if (tempbuf != NULL)
-    free(tempbuf);
 }

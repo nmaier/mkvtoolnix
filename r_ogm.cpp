@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.9 2003/03/05 13:51:20 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.10 2003/03/05 17:44:32 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -178,7 +178,7 @@ int ogm_reader_c::read_page(ogg_page *og) {
     np = ogg_sync_pageseek(&oy, og);
     // np < 0 is the error case. Should not happen with local OGG files.
     if (np < 0) {
-      fprintf(stderr, "FATAL: ogm_reader: ogg_sync_pageseek failed\n");
+      fprintf(stderr, "Fatal: ogm_reader: ogg_sync_pageseek failed\n");
       exit(1);
     }
 
@@ -186,7 +186,7 @@ int ogm_reader_c::read_page(ogg_page *og) {
     if (np == 0) {
       buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
       if (!buf) {
-        fprintf(stderr, "FATAL: ogm_reader: ogg_sync_buffer failed\n");
+        fprintf(stderr, "Fatal: ogm_reader: ogg_sync_buffer failed\n");
         exit(1);
       }
 
@@ -217,7 +217,6 @@ void ogm_reader_c::create_packetizers() {
   vorbis_comment vc;
   ogg_packet op;
   BITMAPINFOHEADER bih;
-  char *codec;
   stream_header *sth;
   int i;
   ogm_demuxer_t *dmx;
@@ -232,10 +231,10 @@ void ogm_reader_c::create_packetizers() {
 
     switch (dmx->stype) {
       case OGM_STREAM_TYPE_VIDEO:
-        if (ti->fourcc == NULL)
-          codec = sth->subtype;
-        else
-          codec = ti->fourcc;
+        if (ti->fourcc[0] == 0) {
+          memcpy(ti->fourcc, sth->subtype, 4);
+          ti->fourcc[4] = 0;
+        }
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
         bih.bi_size = sizeof(BITMAPINFOHEADER);
@@ -243,19 +242,18 @@ void ogm_reader_c::create_packetizers() {
         bih.bi_height = sth->sh.video.height;
         bih.bi_planes = 1;
         bih.bi_bit_count = 24;
-        memcpy(&bih.bi_compression, codec, 4);
+        memcpy(&bih.bi_compression, ti->fourcc, 4);
         bih.bi_size_image = sth->sh.video.width * sth->sh.video.height * 3;
         ti->private_data = (unsigned char *)&bih;
         ti->private_size = sizeof(BITMAPINFOHEADER);
+
         try {
           dmx->packetizer =
-            new video_packetizer_c(codec,
-                                   (double)10000000 / (double)sth->time_unit, 
+            new video_packetizer_c((double)10000000 / (double)sth->time_unit, 
                                    sth->sh.video.width, sth->sh.video.height,
-                                   sth->bits_per_sample, sth->buffersize, 1,
-                                   ti);
+                                   sth->bits_per_sample, 1, ti);
         } catch (error_c &error) {
-          fprintf(stderr, "Fatal: ogm_reader: could not initialize video "
+          fprintf(stderr, "Error: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free(dmx);
@@ -275,7 +273,7 @@ void ogm_reader_c::create_packetizers() {
                                  sth->sh.audio.channels, 
                                  sth->bits_per_sample, ti);
         } catch (error_c &error) {
-          fprintf(stderr, "Fatal: ogm_reader: could not initialize PCM "
+          fprintf(stderr, "Error: ogm_reader: could not initialize PCM "
                   "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
@@ -294,7 +292,7 @@ void ogm_reader_c::create_packetizers() {
                                  sth->sh.audio.channels,
                                  sth->sh.audio.avgbytespersec * 8 / 1000, ti);
         } catch (error_c &error) {
-          fprintf(stderr, "Fatal: ogm_reader: could not initialize MP3 "
+          fprintf(stderr, "Error: ogm_reader: could not initialize MP3 "
                   "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
@@ -313,7 +311,7 @@ void ogm_reader_c::create_packetizers() {
                                  sth->sh.audio.channels,
                                  sth->sh.audio.avgbytespersec * 8 / 1000, ti);
         } catch (error_c &error) {
-          fprintf(stderr, "FATAL: ogm_reader: could not initialize AC3 "
+          fprintf(stderr, "Error: ogm_reader: could not initialize AC3 "
                   "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
@@ -344,7 +342,7 @@ void ogm_reader_c::create_packetizers() {
                                     dmx->packet_data[2], dmx->packet_sizes[2],
                                     ti);
         } catch (error_c &error) {
-          fprintf(stderr, "FATAL: ogm_reader: could not initialize Vorbis "
+          fprintf(stderr, "Error: ogm_reader: could not initialize Vorbis "
                   "packetizer for stream id %d. Will try to continue and "
                   "ignore this stream.\n", numstreams);
           free_demuxer(i);
@@ -392,7 +390,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   u_int32_t         codec_id;
 
   if (ogg_stream_init(&new_oss, ogg_page_serialno(og))) {
-    fprintf(stderr, "Fatal: ogm_reader: ogg_stream_init for stream number "
+    fprintf(stderr, "Error: ogm_reader: ogg_stream_init for stream number "
             "%d failed. Will try to continue and ignore this stream.",
             numstreams + 1);
     return;
@@ -517,7 +515,7 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
 //         dmx->packetizer =
 //           new textsubs_packetizer_c(&async);
 //       } catch (error_c error) {
-//         fprintf(stderr, "FATAL: ogm_reader: could not initialize text "
+//         fprintf(stderr, "Error: ogm_reader: could not initialize text "
 //                 "subtitle packetizer for stream id %d. Will try to "
 //                 "continue and ignore this stream.\n", numstreams);
 //         free(dmx);
