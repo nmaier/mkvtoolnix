@@ -73,7 +73,7 @@ textsubs_packetizer_c::process(memory_c &mem,
                                int64_t,
                                int64_t) {
   int num_newlines;
-  char *subs, *idx1, *idx2, *utf8_subs;
+  char *subs, *idx1, *idx2;
   int64_t end;
 
   end = start + length;
@@ -129,9 +129,12 @@ textsubs_packetizer_c::process(memory_c &mem,
   *idx2 = 0;
 
   if (recode) {
-    utf8_subs = to_utf8_c(cc_utf8, subs);
+    string utf8_subs;
+
+    utf8_subs = to_utf8(cc_utf8, subs);
     safefree(subs);
-    memory_c mem((unsigned char *)utf8_subs, strlen(utf8_subs), true);
+    memory_c mem((unsigned char *)utf8_subs.c_str(), utf8_subs.length(),
+                 false);
     add_packet(mem, start, length, true);
   } else {
     memory_c mem((unsigned char *)subs, strlen(subs), true);

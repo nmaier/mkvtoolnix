@@ -118,7 +118,6 @@ usage() {
     "  -o, --output out         Write to the file 'out'.\n"
     "  --title <title>          Title for this output file.\n"
     "  --global-tags <file>     Read global tags from a XML file.\n"
-    "  --command-line-charset   Charset for strings on the command line\n"
     "\n Chapter handling:\n"
     "  --chapters <file>        Read chapter information from the file.\n"
     "  --chapter-language <lng> Set the 'language' element in chapter entries."
@@ -237,10 +236,12 @@ usage() {
     "  --list-languages         Lists all ISO639 languages and their\n"
     "                           ISO639-2 codes.\n"
     "  --priority <priority>    Set the priority mkvmerge runs with.\n"
-    "  -h, --help               Show this help.\n"
-    "  -V, --version            Show version information.\n"
+    "  --command-line-charset   Charset for strings on the command line\n"
+    "  --output-charset         Output messages in this charset\n"
     "  @optionsfile             Reads additional command line options from\n"
     "                           the specified file (see man page).\n"
+    "  -h, --help               Show this help.\n"
+    "  -V, --version            Show version information.\n"
     "\n\nPlease read the man page/the HTML documentation to mkvmerge. It\n"
     "explains several details in great length which are not obvious from\n"
     "this listing.\n"
@@ -328,7 +329,7 @@ identify(const string &filename) {
 
   memset(&file, 0, sizeof(filelist_t));
 
-  file.name = from_utf8_c(cc_local_utf8, filename);
+  file.name = safestrdup(filename);
   file.type = get_file_type(file.name);
   ti.fname = file.name;
   
@@ -947,7 +948,7 @@ parse_tags(const string &s,
     mxerror(_("Invalid tags file name specified in '%s %s'.\n"), opt.c_str(),
             s.c_str());
 
-  tags.file_name = from_utf8_c(cc_local_utf8, parts[1]);
+  tags.file_name = safestrdup(parts[1]);
   ti.all_tags.push_back(tags);
 }
 
@@ -1209,6 +1210,25 @@ parse_args(vector<string> &args) {
 
   ti = new track_info_c;
 
+  // Really important: Which charset does the user want?
+  i = 0;
+  while (i < args.size()) {
+    this_arg = args[i];
+    if ((i + 1) == args.size())
+      next_arg = "";
+    else
+      next_arg = args[i + 1];
+
+    if (this_arg == "--output-charset") {
+      if (next_arg == "")
+        mxerror("Missing argument for '--output-charset'.\n");
+      cc_stdio = utf8_init(next_arg);
+      args.erase(args.begin() + i, args.begin() + i + 2);
+
+    } else
+      i++;
+  }
+
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
   if (((args.size() == 2) || (args.size() == 3)) &&
@@ -1467,7 +1487,7 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'%s' lacks the file name.\n"), this_arg.c_str());
 
-      attachment.name = from_utf8(cc_local_utf8, next_arg);
+      attachment.name = next_arg;
       if (attachment.mime_type == "")
         attachment.mime_type = guess_mime_type(next_arg);
 
@@ -1493,7 +1513,7 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--global-tags' lacks the file name.\n"));
 
-      parse_and_add_tags(from_utf8(cc_local_utf8, next_arg));
+      parse_and_add_tags(next_arg);
       sit++;
 
     } else if (this_arg == "--chapter-language") {
@@ -1551,7 +1571,7 @@ parse_args(vector<string> &args) {
         mxerror(_("Only one chapter file allowed in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
 
-      chapter_file_name = from_utf8(cc_local_utf8, next_arg);
+      chapter_file_name = next_arg;
       if (kax_chapters != NULL)
         delete kax_chapters;
       kax_chapters = parse_chapters(chapter_file_name, 0, -1, 0,
@@ -1789,8 +1809,7 @@ parse_args(vector<string> &args) {
       if (no_next_arg)
         mxerror(_("'--timecodes' lacks its argument.\n"));
 
-      s = from_utf8(cc_local_utf8, next_arg);
-      parse_language(s, lang, "timecodes", "timecodes", false);
+      parse_language(next_arg, lang, "timecodes", "timecodes", false);
       ti->all_ext_timecodes.push_back(ext_timecodes_t(lang.language, lang.id));
       sit++;
 
@@ -1856,9 +1875,9 @@ parse_args(vector<string> &args) {
                   "files to append to.\n");
         file.appending = true;
       }
-      file.name = from_utf8_c(cc_local_utf8, this_arg);
+      file.name = safestrdup(this_arg);
       file.type = get_file_type(file.name);
-      ti->fname = from_utf8(cc_local_utf8, this_arg);
+      ti->fname = this_arg;
 
       if (file.type == FILE_TYPE_IS_UNKNOWN)
         mxerror(_("The file '%s' has unknown type. Please have a look "

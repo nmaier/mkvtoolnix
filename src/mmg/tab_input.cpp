@@ -989,7 +989,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
-  b_append_file->Enable(false);
+  b_append_file->Enable(tracks.size() > 0);
   b_track_up->Enable(false);
   b_track_down->Enable(false);
   no_track_mode();
@@ -1447,7 +1447,6 @@ tab_input::load(wxConfigBase *cfg) {
   selected_file = -1;
   selected_track = -1;
   b_remove_file->Enable(false);
-  b_append_file->Enable(false);
 
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];

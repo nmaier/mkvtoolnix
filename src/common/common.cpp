@@ -542,24 +542,33 @@ add_kax_conv(const char *charset,
   return kax_convs.size() - 1;
 }
 
+string
+get_local_charset() {
+  string lc_charset;
+
+  setlocale(LC_CTYPE, "");
+#if defined(COMP_MINGW) || defined(COMP_MSC)
+  lc_charset = "CP" + to_string(GetACP());
+#elif defined(SYS_SOLARIS)
+  lc_charset = nl_langinfo(CODESET);
+  if (parse_int(lc_charset, i))
+    lc_charset = string("ISO") + lc_charset + string("-US");
+#else
+  lc_charset = nl_langinfo(CODESET);
+#endif
+
+  return lc_charset;
+}
+
 int
 utf8_init(const string &charset) {
   string lc_charset;
   iconv_t ict_from_utf8, ict_to_utf8;
   int i;
 
-  if (charset == "") {
-    setlocale(LC_CTYPE, "");
-#if defined(COMP_MINGW) || defined(COMP_MSC)
-    lc_charset = "CP" + to_string(GetACP());
-#elif defined(SYS_SOLARIS)
-    lc_charset = nl_langinfo(CODESET);
-    if (parse_int(lc_charset, i))
-      lc_charset = string("ISO") + lc_charset + string("-US");
-#else
-    lc_charset = nl_langinfo(CODESET);
-#endif
-  } else
+  if (charset == "")
+    lc_charset = get_local_charset();
+  else
     lc_charset = charset;
 
   if ((lc_charset == "UTF8") || (lc_charset == "UTF-8"))
@@ -602,17 +611,18 @@ utf8_done() {
   kax_convs.clear();
 }
 
-static char *
+static string
 convert_charset(iconv_t ict,
-                const char *src) {
+                const string &src) {
   char *dst, *psrc, *pdst, *srccopy;
   size_t lsrc, ldst;
   int len;
+  string result;
 
   if (ict == (iconv_t)(-1))
-    return safestrdup(src);
+    return src;
 
-  len = strlen(src) * 4;
+  len = src.length() * 4;
   dst = (char *)safemalloc(len + 1);
   memset(dst, 0, len + 1);
 
@@ -624,19 +634,19 @@ convert_charset(iconv_t ict,
   pdst = dst;
   iconv(ict, (ICONV_CONST char **)&psrc, &lsrc, &pdst, &ldst);
   safefree(srccopy);
+  result = dst;
+  safefree(dst);
 
-  return dst;
+  return result;
 }
 
-char *
-to_utf8_c(int handle,
-          const char *local) {
-  char *copy;
+string
+to_utf8(int handle,
+        const string &local) {
+  string s;
 
-  if (handle == -1) {
-    copy = safestrdup(local);
-    return copy;
-  }
+  if (handle == -1)
+    return local;
 
   if (handle >= kax_convs.size())
     die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %d).",
@@ -646,27 +656,12 @@ to_utf8_c(int handle,
 }
 
 string
-to_utf8(int handle,
-        const string &local) {
+from_utf8(int handle,
+          const string &utf8) {
   string s;
-  char *cutf8;
 
-  cutf8 = to_utf8_c(handle, local.c_str());
-  s = cutf8;
-  safefree(cutf8);
-
-  return s;
-}
-
-char *
-from_utf8_c(int handle,
-            const char *utf8) {
-  char *copy;
-
-  if (handle == -1) {
-    copy = safestrdup(utf8);
-    return copy;
-  }
+  if (handle == -1)
+    return utf8;
 
   if (handle >= kax_convs.size())
     die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %d).",
@@ -675,17 +670,9 @@ from_utf8_c(int handle,
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
 
-string
-from_utf8(int handle,
-          const string &utf8) {
-  string s;
-  char *clocal;
-
-  clocal = from_utf8_c(handle, utf8.c_str());
-  s = clocal;
-  safefree(clocal);
-
-  return s;
+void
+init_cc_stdio() {
+  cc_stdio = utf8_init(get_local_charset());
 }
 
 /*
@@ -1330,6 +1317,8 @@ fix_format(const char *fmt,
 #endif
 }
 
+int cc_stdio = -1;
+
 void
 mxprint(void *stream,
         const char *fmt,
@@ -1361,7 +1350,7 @@ static void
 mxmsg(int level,
       const char *fmt,
       va_list &ap) {
-  string new_fmt;
+  string new_fmt, output;
   bool nl;
   FILE *stream;
   char *prefix;
@@ -1390,7 +1379,8 @@ mxmsg(int level,
   if (prefix != NULL)
     fprintf(stream, prefix);
 
-  vfprintf(stream, new_fmt.c_str(), ap);
+  output = from_utf8(cc_stdio, mxvsprintf(new_fmt.c_str(), ap));
+  fputs(output.c_str(), stream);
   fflush(stream);
 }
 
@@ -1504,15 +1494,13 @@ get_varg_len(const char *fmt,
 }
 
 string
-mxsprintf(const char *fmt,
-          ...) {
-  va_list ap;
+mxvsprintf(const char *fmt,
+           va_list &ap) {
   string new_fmt, dst;
   char *new_string;
   int len;
 
   fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
   len = get_varg_len(new_fmt.c_str(), ap);
   new_string = (char *)safemalloc(len + 1);
   vsprintf(new_string, new_fmt.c_str(), ap);
@@ -1521,6 +1509,19 @@ mxsprintf(const char *fmt,
   safefree(new_string);
 
   return dst;
+}
+
+string
+mxsprintf(const char *fmt,
+          ...) {
+  va_list ap;
+  string result;
+
+  va_start(ap, fmt);
+  result = mxvsprintf(fmt, ap);
+  va_end(ap);
+
+  return result;
 }
 
 /** \brief Platform independant version of sscanf

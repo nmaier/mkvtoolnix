@@ -670,7 +670,8 @@ handle_data(KaxBlock *block,
   kax_track_t *track;
   int i, k, len, num;
   int64_t start, end;
-  char *s, buffer[200], *s2, adts[56 / 8];
+  char *s, buffer[200], adts[56 / 8];
+  string s2;
   vector<string> fields;
   vector<uint32_t> flags;
   string line, comma = ",";
@@ -745,12 +746,11 @@ handle_data(KaxBlock *block,
         s = (char *)safemalloc(data.Size() + 1);
         memcpy(s, data.Buffer(), data.Size());
         s[data.Size()] = 0;
-        s2 = from_utf8_c(track->conv_handle, s);
+        s2 = from_utf8(track->conv_handle, s);
         safefree(s);
-        len = strlen(s2);
+        len = s2.length();
         s = (char *)safemalloc(len + 3);
-        strcpy(s, s2);
-        safefree(s2);
+        strcpy(s, s2.c_str());
         s[len] = '\n';
         s[len + 1] = '\n';
         s[len + 2] = 0;

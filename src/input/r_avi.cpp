@@ -101,11 +101,7 @@ avi_reader_c::avi_reader_c(track_info_c *nti)
   delete io;
   if ((avi = AVI_open_input_file(ti->fname.c_str(), 1)) == NULL) {
     const char *msg = PFX "Could not initialize AVI source. Reason: ";
-    char *s, *error;
-    error = AVI_strerror();
-    s = (char *)safemalloc(strlen(msg) + strlen(error) + 1);
-    mxprints(s, "%s%s", msg, error);
-    throw error_c(s, true);
+    throw error_c(mxsprintf("%s%s", msg, AVI_strerror()));
   }
 
   fps = AVI_frame_rate(avi);

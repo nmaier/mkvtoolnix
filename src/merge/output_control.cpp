@@ -1300,7 +1300,6 @@ create_next_output_file() {
     this_outfile = create_output_name();
   else
     this_outfile = outfile;
-  this_outfile = from_utf8(cc_local_utf8, this_outfile);
 
   // Open the output file.
   try {
@@ -1842,6 +1841,7 @@ setup() {
 
   srand(time(NULL));
   cc_local_utf8 = utf8_init("");
+  init_cc_stdio();
 
   cluster_helper = new cluster_helper_c();
 

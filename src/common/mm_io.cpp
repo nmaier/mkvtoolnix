@@ -36,6 +36,7 @@ using namespace std;
 #if !defined(SYS_WINDOWS)
 mm_file_io_c::mm_file_io_c(const string &path,
                            const open_mode mode) {
+  string local_path;
   char *cmode;
 
   switch (mode) {
@@ -55,7 +56,8 @@ mm_file_io_c::mm_file_io_c(const string &path,
       throw 0;
   }
 
-  file = (FILE *)fopen(path.c_str(), cmode);
+  local_path = from_utf8(cc_local_utf8, path);
+  file = (FILE *)fopen(local_path.c_str(), cmode);
 
   if (file == NULL)
     throw exception();

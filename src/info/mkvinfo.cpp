@@ -157,17 +157,7 @@ usage() {
 #endif
 }
 
-#if defined(HAVE_WXWINDOWS) && WXUNICODE
-string
-UTFstring_to_string(const UTFstring &src) {
-  if (!use_gui)
-    return UTFstring_to_cstr(src);
-  return UTFstring_to_cstrutf8(src);
-}
-#else  // HAVE_WXWINDOWS && WXUNICODE
-#define UTFstring_to_string(src) UTFstring_to_cstr(src)
-#endif // HAVE_WXWINDOWS && WXUNICODE
-#define UTF2STR(s) UTFstring_to_string(UTFstring(s)).c_str()
+#define UTF2STR(s) UTFstring_to_cstrutf8(UTFstring(s)).c_str()
 
 #define ARGS_BUFFER_LEN (200 * 1024) // Ok let's be ridiculous here :)
 static char args_buffer[ARGS_BUFFER_LEN];
@@ -1929,6 +1919,7 @@ setup() {
 #endif
 
   cc_local_utf8 = utf8_init("");
+  init_cc_stdio();
 
   xml_element_map_init();
 }

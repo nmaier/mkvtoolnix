@@ -127,6 +127,7 @@ void MTX_DLL_API mxverb(int level, const char *fmt, ...);
 void MTX_DLL_API mxdebug(const char *fmt, ...);
 int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...);
 #endif
+string MTX_DLL_API mxvsprintf(const char *fmt, va_list &ap);
 void MTX_DLL_API mxexit(int code = -1);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
@@ -150,24 +151,14 @@ void MTX_DLL_API put_uint16_be(void *buf, uint16_t value);
 void MTX_DLL_API put_uint32_be(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
 
-extern int MTX_DLL_API cc_local_utf8;
-
+extern int MTX_DLL_API cc_local_utf8, cc_stdio;
+void MTX_DLL_API init_cc_stdio();
+string MTX_DLL_API get_local_charset();
 int MTX_DLL_API utf8_init(const string &charset);
 void MTX_DLL_API utf8_done();
-char *MTX_DLL_API to_utf8_c(int handle, const char *local);
-inline char *
-to_utf8_c(int handle,
-          const string &local) {
-  return to_utf8_c(handle, local.c_str());
-}
-char *MTX_DLL_API from_utf8_c(int handle, const char *utf8);
-inline char *
-from_utf8_c(int handle,
-            const string &utf8) {
-  return from_utf8_c(handle, utf8.c_str());
-}
 string MTX_DLL_API to_utf8(int handle, const string &local);
 string MTX_DLL_API from_utf8(int handle, const string &utf8);
+
 
 enum unique_id_category_e {
   UNIQUE_ALL_IDS = -1,

@@ -38,12 +38,6 @@ Sets the general title for the output file, e.g. the movie name.
 Read global tags from the XML \fIfile\fR. See the section about tags
 below for details.
 .TP
-\fB\-\-command\-line\-charset\fR <\fIcharset\fR>
-Sets the charset to convert strings given on the command line from. It defaults
-to the charset given by system's current locale. This settings applies to
-arguments of the following options: \fB\-\-title\fR, \fB\-\-track\-name\fR and
-\fB\-\-attachment\-description\fR.
-.TP
 \fB\-\-default\-language\fR <\fIlng\fR>
 Sets the default language code. Unless overridden with the \fB\-\-language\fR
 option this language code will be used. The default language code is 'und'
@@ -453,11 +447,15 @@ Sets the process priority that \fBmkvmerge\fR runs with. Valid values are
 function. Therefore only the super user can use "higher" and "highest". On
 Windows all values are useable for every user.
 .TP
-\fB\-h\fR, \fB\-\-help\fR
-Show usage information.
+\fB\-\-command\-line\-charset\fR <\fIcharset\fR>
+Sets the charset to convert strings given on the command line from. It defaults
+to the charset given by system's current locale. This settings applies to
+arguments of the following options: \fB\-\-title\fR, \fB\-\-track\-name\fR and
+\fB\-\-attachment\-description\fR.
 .TP
-\fB\-V\fR, \fB\-\-version\fR
-Show version information.
+\fB\-\-output\-charset\fR <\fIcharset\fR>
+Sets the charset to which strings are converted that are to be output.
+It defaults to the charset given by system's current locale.
 .TP
 \fB@\fR\fIoptionsfile\fR
 Reads additional command line arguments from the file \fIoptionsfile\fR.
@@ -482,6 +480,12 @@ my file.mkv
 a movie.avi
 .br
 sound.ogg
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show usage information.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Show version information.
 
 
 .SH USAGE
