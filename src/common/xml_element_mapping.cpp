@@ -70,6 +70,10 @@ xml_element_map_init() {
     {"ChapterPhysicalEquiv", ebmlt_uint, 3, 0, NO_MAX_VALUE, no_id, NULL,
      NULL, NULL},
 
+    {"ChapterProcess", ebmlt_master, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessTime", ebmlt_uint, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterProcessCommand", ebmlt_binary, 4, 0, 0, no_id, NULL, NULL, NULL},
+
     {"ChapterTrack", ebmlt_master, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterTrackNumber", ebmlt_uint, 4, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      NULL},
