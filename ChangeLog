@@ -1,5 +1,9 @@
 2004-05-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: On some occasions the chapter editor thought there
+	was no language associated with a chapter name and complained
+	about that.
+
 	* mmg: Removed the 'advanced' tab. Those options shouldn't be used
 	anyway.
 

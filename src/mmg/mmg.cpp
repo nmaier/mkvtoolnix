@@ -1164,7 +1164,7 @@ mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
       ((evt.GetId() - ID_M_CHAPTERS_LOADLAST1) >= last_chapters.size()))
     return;
 
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->load(last_chapters[evt.GetId() -
                                           ID_M_CHAPTERS_LOADLAST1]);
 }
@@ -1215,43 +1215,43 @@ mmg_dialog::update_chapter_menu() {
 
 void
 mmg_dialog::on_new_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_new_chapters(evt);
 }
 
 void
 mmg_dialog::on_load_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_load_chapters(evt);
 }
 
 void
 mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_save_chapters(evt);
 }
 
 void
 mmg_dialog::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_save_chapters_to_kax_file(evt);
 }
 
 void
 mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_save_chapters_as(evt);
 }
 
 void
 mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_verify_chapters(evt);
 }
 
 void
 mmg_dialog::on_set_default_chapter_values(wxCommandEvent &evt) {
-  notebook->SetSelection(5);
+  notebook->SetSelection(4);
   chapter_editor_page->on_set_default_values(evt);
 }
 
@@ -1491,8 +1491,12 @@ mmg_app::OnInit() {
       last_chapters.push_back(v);
   }
   cfg->SetPath(wxT("/chapter_editor"));
-  if (cfg->Read(wxT("default_language"), &k))
+  if (cfg->Read(wxT("default_language"), &k)) {
+    if (k.length() == 0)
+      k = wxT("eng");
     default_chapter_language = to_utf8(k).c_str();
+  } else
+    default_chapter_language = "eng";
   if (cfg->Read(wxT("default_country"), &k))
     default_chapter_country = to_utf8(k).c_str();
 
