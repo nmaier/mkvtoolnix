@@ -64,11 +64,8 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
   unsigned char *buf, *src, *packet_buffer;
   double pims;
 
-  buf = NULL;
   packet_buffer = byte_buffer.get_buffer();
   size = byte_buffer.get_size();
-  if (buf == NULL)
-    return NULL;
   pos = find_aac_header(packet_buffer, size, aacheader, emphasis_present);
   if (pos < 0)
     return NULL;
