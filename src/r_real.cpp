@@ -620,7 +620,7 @@ int real_reader_c::read() {
 
 // }}}
 
-// {{{ get_packet(), display_*(), set_headers(), identify()
+// {{{ FUNCTIONS get_packet(), display_*(), set_headers(), identify()
 
 packet_t *real_reader_c::get_packet() {
   generic_packetizer_c *winner;
@@ -850,6 +850,8 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
 
 // }}}
 
+// {{{ FUNCTIONS real_reader_c::get_rv_dimensions(), set_dimensions()
+
 bool real_reader_c::get_rv_dimensions(unsigned char *buf, int size,
                                       uint32_t &width, uint32_t &height) {
   const uint32_t cw[8] = {160, 176, 240, 320, 352, 640, 704, 0};
@@ -938,3 +940,5 @@ void real_reader_c::set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
     dmx->rv_dimensions = true;
   }
 }
+
+// }}}
