@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.h,v 1.14 2003/04/18 14:27:07 mosu Exp $
+    \version \$Id: queue.h,v 1.15 2003/04/20 21:18:51 mosu Exp $
     \brief class definition for the queueing class
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -34,7 +34,7 @@ typedef struct packet_t {
   KaxCluster *cluster;
   unsigned char *data;
   int length, superseeded;
-  int64_t timecode, bref, fref;
+  int64_t timecode, bref, fref, duration;
   void *source;
 } packet_t;
 
@@ -54,7 +54,8 @@ public:
   virtual ~q_c();
     
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
-                          int64_t bref = -1, int64_t fref = -1);
+                          int64_t bref = -1, int64_t fref = -1,
+                          int64_t duration = -1);
   virtual packet_t *get_packet();
   virtual int packet_available();
   virtual int64_t get_smallest_timecode();

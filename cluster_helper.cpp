@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: cluster_helper.cpp,v 1.9 2003/04/20 16:39:03 mosu Exp $
+    \version \$Id: cluster_helper.cpp,v 1.10 2003/04/20 21:18:51 mosu Exp $
     \brief cluster helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -222,6 +222,8 @@ int cluster_helper_c::render(IOCallback *out) {
         cue_writing_requested = 1;
       }
     }
+    if (pack->duration != -1)
+      new_group->SetBlockDuration(pack->duration * 1000000);
     pack->group = new_group;
     last_block_group = new_group;
   }
