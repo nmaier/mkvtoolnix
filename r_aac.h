@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_aac.h,v 1.3 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_aac.h,v 1.4 2003/05/23 06:34:57 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -23,17 +23,18 @@
 
 #include <stdio.h>
 
+#include "mm_io.h"
 #include "pr_generic.h"
 #include "common.h"
 #include "error.h"
-//#include "p_aac.h"
+#include "p_aac.h"
 #include "aac_common.h"
 
 class aac_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  FILE *file;
-  class aac_packetizer_c *aacpacketizer;
+  mm_io_c *mm_io;
+  aac_packetizer_c *aacpacketizer;
   int64_t bytes_processed, size;
 
 public:
@@ -46,7 +47,7 @@ public:
   virtual void display_progress();
   virtual void set_headers();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 };
 
 #endif // __R_AAC_H

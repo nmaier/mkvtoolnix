@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.26 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.27 2003/05/23 06:34:58 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
     \author Peter Niemayer <niemayer@isg.de>
@@ -86,18 +86,19 @@ void dts_14_to_dts_16(unsigned short * src, const unsigned long srcwords,
   }
 }
 
-int wav_reader_c::probe_file(FILE *file, int64_t size) {
+int wav_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   wave_header wheader;
 
   if (size < sizeof(wave_header))
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    return 0;
-  if (fread((char *)&wheader, 1, sizeof(wheader), file) != sizeof(wheader)) {
-    fseeko(file, 0, SEEK_SET);
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read((char *)&wheader, sizeof(wheader)) != sizeof(wheader))
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
   }
-  fseeko(file, 0, SEEK_SET);
   if (strncmp((char *)wheader.riff.id, "RIFF", 4) ||
       strncmp((char *)wheader.riff.wave_id, "WAVE", 4) ||
       strncmp((char *)wheader.data.id, "data", 4))
@@ -113,16 +114,17 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
   pcmpacketizer = 0;
   dtspacketizer = 0;
 
-  if ((file = fopen(ti->fname, "rb")) == NULL)
-    throw error_c("wav_reader: Could not open source file.");
-  if (fseeko(file, 0, SEEK_END) != 0)
-    throw error_c("wav_reader: Could not seek to end of file.");
-  size = ftello(file);
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    throw error_c("wav_reader: Could not seek to beginning of file.");
-  if (!wav_reader_c::probe_file(file, size))
+  try {
+    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io->setFilePointer(0, seek_end);
+    size = mm_io->getFilePointer();
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
+    throw error_c("wav_reader: Could not open the source file.");
+  }
+  if (!wav_reader_c::probe_file(mm_io, size))
     throw error_c("wav_reader: Source is not a valid WAVE file.");
-  if (fread(&wheader, 1, sizeof(wheader), file) != sizeof(wheader))
+  if (mm_io->read(&wheader, sizeof(wheader)) != sizeof(wheader))
     throw error_c("wav_reader: could not read WAVE header.");
   bps = wheader.common.wChannels * wheader.common.wBitsPerSample *
     wheader.common.dwSamplesPerSec / 8;
@@ -135,8 +137,8 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
     unsigned short buf[2][max_dts_packet_size/2];
     int cur_buf = 0;
 
-    long rlen = fread(obuf, 1, max_dts_packet_size, file);
-    fseeko(file, sizeof(wheader), SEEK_SET);
+    long rlen = mm_io->read(obuf, max_dts_packet_size);
+    mm_io->setFilePointer(sizeof(wheader), seek_beginning);
 
     for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
       memcpy(buf[cur_buf], obuf, rlen);
@@ -192,8 +194,7 @@ wav_reader_c::wav_reader_c(track_info_t *nti) throw (error_c):
 }
 
 wav_reader_c::~wav_reader_c() {
-  if (file != NULL)
-    fclose(file);
+  delete mm_io;
   if (chunk != NULL)
     safefree(chunk);
   if (pcmpacketizer != NULL)
@@ -206,7 +207,7 @@ int wav_reader_c::read() {
   if (pcmpacketizer) {
     int nread;
 
-    nread = fread(chunk, 1, bps, file);
+    nread = mm_io->read(chunk, bps);
     if (nread <= 0)
       return 0;
 
@@ -223,7 +224,7 @@ int wav_reader_c::read() {
   if (dtspacketizer) {
     unsigned short buf[2][max_dts_packet_size/2];
     int cur_buf = 0;
-    long rlen = fread(buf[cur_buf], 1, max_dts_packet_size, file);
+    long rlen = mm_io->read(buf[cur_buf], max_dts_packet_size);
 
     if (rlen <= 0)
       return 0;

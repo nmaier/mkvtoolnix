@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.33 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.34 2003/05/23 06:34:57 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -47,18 +47,19 @@ extern "C" {                    // for BITMAPINFOHEADER
 /*
  * Probes a file by simply comparing the first four bytes to 'OggS'.
  */
-int ogm_reader_c::probe_file(FILE *file, int64_t size) {
+int ogm_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    return 0;
-  if (fread(data, 1, 4, file) != 4) {
-    fseeko(file, 0, SEEK_SET);
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read(data, 4) != 4)
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
   }
-  fseeko(file, 0, SEEK_SET);
   if (strncmp((char *)data, "OggS", 4))
     return 0;
   return 1;
@@ -72,14 +73,15 @@ ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int64_t size;
 
-  if ((file = fopen(ti->fname, "rb")) == NULL)
-    throw error_c("ogm_reader: Could not open source file.");
-  if (fseeko(file, 0, SEEK_END) != 0)
-    throw error_c("ogm_reader: Could not seek to end of file.");
-  size = ftello(file);
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    throw error_c("ogm_reader: Could not seek to beginning of file.");
-  if (!ogm_reader_c::probe_file(file, size))
+  try {
+    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io->setFilePointer(0, seek_end);
+    size = mm_io->getFilePointer();
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
+    throw error_c("ogm_reader: Could not open the source file.");
+  }
+  if (!ogm_reader_c::probe_file(mm_io, size))
     throw error_c("ogm_reader: Source is not a valid OGG media file.");
 
   ogg_sync_init(&oy);
@@ -187,7 +189,7 @@ int ogm_reader_c::read_page(ogg_page *og) {
         exit(1);
       }
 
-      if ((nread = fread(buf, 1, BUFFER_SIZE, file)) <= 0)
+      if ((nread = mm_io->read(buf, BUFFER_SIZE)) <= 0)
         return 0;
 
       ogg_sync_wrote(&oy, nread);
@@ -659,7 +661,7 @@ int ogm_reader_c::read_headers() {
     }
   }
 
-  fseeko(file, 0, SEEK_SET);
+  mm_io->setFilePointer(0, seek_beginning);
   ogg_sync_clear(&oy);
   ogg_sync_init(&oy);
 

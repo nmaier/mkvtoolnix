@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.33 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.34 2003/05/23 06:34:57 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -36,17 +36,19 @@ extern "C" {
 #include "p_mp3.h"
 #include "p_ac3.h"
 
-int avi_reader_c::probe_file(FILE *file, int64_t size) {
+int avi_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char data[12];
 
   if (size < 12)
     return 0;
-  fseeko(file, 0, SEEK_SET);
-  if (fread(data, 1, 12, file) != 12) {
-    fseeko(file, 0, SEEK_SET);
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read(data, 12) != 12)
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
   }
-  fseeko(file, 0, SEEK_SET);
   if(strncasecmp((char *)data, "RIFF", 4) ||
      strncasecmp((char *)data+8, "AVI ", 4))
     return 0;
@@ -61,20 +63,21 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   int fsize, i, extract_video = 1;
   int64_t size;
-  FILE *f;
+  mm_io_c *mm_io;
   avi_demuxer_t *demuxer;
   char *codec;
 
-  if ((f = fopen(ti->fname, "rb")) == NULL)
-    throw error_c("avi_reader: Could not open source file.");
-  if (fseeko(f, 0, SEEK_END) != 0)
-    throw error_c("avi_reader: Could not seek to end of file.");
-  size = ftello(f);
-  if (fseeko(f, 0, SEEK_SET) != 0)
-    throw error_c("avi_reader: Could not seek to beginning of file.");
-  if (!avi_reader_c::probe_file(f, size))
-    throw error_c("avi_reader: Source is not a valid AVI file.");
-  fclose(f);
+  try {
+    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io->setFilePointer(0, seek_end);
+    size = mm_io->getFilePointer();
+    mm_io->setFilePointer(0, seek_beginning);
+    if (!avi_reader_c::probe_file(mm_io, size))
+      throw error_c("avi_reader: Source is not a valid AVI file.");
+    delete mm_io;
+  } catch (exception &ex) {
+    throw error_c("avi_reader: Could not read the source file.");
+  }
 
   if (verbose)
     fprintf(stdout, "Using AVI demultiplexer for %s. Opening file. This "

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.h,v 1.14 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_ogm.h,v 1.15 2003/05/23 06:34:58 mosu Exp $
     \brief class definitions for the OGG media stream reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -25,6 +25,7 @@
 
 #include <ogg/ogg.h>
 
+#include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
 
@@ -47,7 +48,7 @@ typedef struct {
 class ogm_reader_c: public generic_reader_c {
 private:
   ogg_sync_state oy;
-  FILE *file;
+  mm_io_c *mm_io;
   int act_wchar, num_sdemuxers, nastreams, nvstreams, ntstreams, numstreams;
   ogm_demuxer_t   **sdemuxers;
   char **comments;
@@ -64,7 +65,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
   virtual ogm_demuxer_t *find_demuxer(int serialno);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.h,v 1.11 2003/05/20 06:30:25 mosu Exp $
+    \version \$Id: r_srt.h,v 1.12 2003/05/23 06:34:58 mosu Exp $
     \brief class definition for the Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+#include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
 
@@ -31,7 +32,7 @@
 class srt_reader_c: public generic_reader_c {
 private:
   char chunk[2048];
-  FILE *file;
+  mm_io_c *mm_io;
   textsubs_packetizer_c *textsubs_packetizer;
   int act_wchar;
 
@@ -46,7 +47,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 };
 
 #endif  // __R_SRT_H

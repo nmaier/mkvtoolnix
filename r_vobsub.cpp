@@ -52,17 +52,17 @@
                                 iscommafileposstr(s + 23) && \
                                 isfilepos(s + 34))
 
-int vobsub_reader_c::probe_file(FILE *file, int64_t size) {
+int vobsub_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   char chunk[2048];
 
-  if (fseeko(file, 0, SEEK_SET) != 0)
+  if (mm_io->setFilePointer(0, seek_beginning) != 0)
     return 0;
-  if (fgets(chunk, 2047, file) == NULL)
+  if (fgets(chunk, 2047) == NULL)
     return 0;
   if (strncmp(chunk, "# VobSub index file, v7",
               strlen("# VobSub index file, v7")))
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
+  if (mm_io->setFilePointer(0, seek_beginning) != 0)
     return 0;
   return 1;
 }
@@ -73,7 +73,7 @@ vobsub_reader_c::vobsub_reader_c(char *fname, audio_sync_t *nasync)
 
   if ((file = fopen(fname, "r")) == NULL)
     throw error_c("vobsub_reader: Could not open source file.");
-  if (!vobsub_reader_c::probe_file(file, 0))
+  if (!vobsub_reader_c::probe_file(0))
     throw error_c("vobsub_reader: Source is not a valid VobSub index file.");
 
   name = safestrdup(fname);
@@ -142,7 +142,7 @@ int vobsub_reader_c::read() {
   last_start = -1;
   last_filepos = -1;
   while (1) {
-    if (fgets(chunk, 2047, file) == NULL)
+    if (fgets(chunk, 2047) == NULL)
       break;
     lineno++;
     if ((*chunk == 0) || (strchr("#\n\r", *chunk) != NULL))
@@ -249,7 +249,7 @@ int vobsub_reader_c::read() {
       filepos = strtoll(&chunk[34], NULL, 16);
 
       if ((last_start != -1) && (last_filepos != -1)) {
-        if (fseeko(subfile, last_filepos, SEEK_SET) != 0)
+        if (mm_io->setFilePointer(subfile, last_filepos, seek_beginning) != 0)
           fprintf(stderr, "Warning: vobsub_reader: Could not seek to position "
                   "%lld. Ignoring this entry.\n", last_filepos);
         else if (last_filepos == filepos)
@@ -257,7 +257,7 @@ int vobsub_reader_c::read() {
                   "entry start at the same position in the file. Ignored.\n");
         else {
           s = (char *)safemalloc(filepos - last_filepos);
-          if (fread(s, 1, filepos - last_filepos, subfile) !=
+          if (mm_io->read(s, 1, filepos - last_filepos, subfile) !=
               (filepos - last_filepos))
             fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
                     "from the sub file. Ignored.\n");
@@ -276,14 +276,14 @@ int vobsub_reader_c::read() {
   }
   if ((last_start != -1) && (last_filepos != -1) &&
       (vobsub_packetizer != NULL)) {
-    if (fseeko(subfile, 0, SEEK_END) != 0) {
+    if (mm_io->setFilePointer(subfile, 0, seek_end) != 0) {
       fprintf(stderr, "Warning: vobsub_reader: Could not seek to end of "
               "the sub file. Ignoring last entry.\n");
       vobsub_packetizer->produce_eos_packet();
       return 0;
     }
-    filepos = ftello(subfile);
-    if (fseeko(subfile, last_filepos, SEEK_SET) != 0)
+    filepos = mm_io->getFilePointer();
+    if (mm_io->setFilePointer(subfile, last_filepos, seek_beginning) != 0)
       fprintf(stderr, "Warning: vobsub_reader: Could not seek to position "
               "%lld. Ignoring this entry.\n", last_filepos);
     else if (last_filepos == filepos)
@@ -291,7 +291,7 @@ int vobsub_reader_c::read() {
               "entry start at the same position in the file. Ignored.\n");
     else {
       s = (char *)safemalloc(filepos - last_filepos);
-      if (fread(s, 1, filepos - last_filepos, subfile) !=
+      if (mm_io->read(s, 1, filepos - last_filepos, subfile) !=
           (filepos - last_filepos))
         fprintf(stderr, "Warning: vobsub_reader: Could not read entry "
                 "from the sub file. Ignored.\n");

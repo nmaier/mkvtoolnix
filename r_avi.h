@@ -13,7 +13,7 @@
 
 /*!
     \file r_avi.h
-    \version \$Id: r_avi.h,v 1.15 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_avi.h,v 1.16 2003/05/23 06:34:57 mosu Exp $
     \brief class definitions for the AVI demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -27,6 +27,7 @@ extern "C" {
 #include <avilib.h>
 }
 
+#include "mm_io.h"
 #include "pr_generic.h"
 #include "common.h"
 #include "error.h"
@@ -65,7 +66,7 @@ public:
   virtual void display_progress();
   virtual void set_headers();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
   virtual int add_audio_demuxer(avi_t *avi, int aid);

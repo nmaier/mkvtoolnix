@@ -29,7 +29,7 @@
 class vobsub_reader_c: public generic_reader_c {
 private:
   char chunk[2048];
-  FILE *file, *subfile;
+  mm_io_c *mm_io, *subfile;
   vobsub_packetizer_c  *vobsub_packetizer, **all_packetizers;
   int num_packetizers, act_wchar;
   char **comments;
@@ -49,7 +49,7 @@ public:
   virtual void display_progress();
   virtual void set_headers();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
   virtual void add_vobsub_packetizer(int width, int height,

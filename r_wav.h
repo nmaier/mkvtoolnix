@@ -14,7 +14,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.h,v 1.13 2003/05/20 06:30:25 mosu Exp $
+    \version \$Id: r_wav.h,v 1.14 2003/05/23 06:34:58 mosu Exp $
     \brief class definitions for the WAV reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 
+#include "mm_io.h"
 #include "common.h"
 #include "error.h"
 
@@ -37,7 +38,7 @@ extern "C" {
 class wav_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  FILE *file;
+  mm_io_c *mm_io;
   class pcm_packetizer_c *pcmpacketizer;
   class dts_packetizer_c *dtspacketizer;
   int dts_swap_bytes, dts_14_16;
@@ -56,7 +57,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 };
 
 #endif // __R_WAV_H

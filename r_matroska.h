@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.14 2003/05/22 11:11:05 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.15 2003/05/23 06:34:57 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+#include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
 #include "error.h"
@@ -107,7 +108,7 @@ public:
   virtual void display_progress();
   virtual void set_headers();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 
 private:
   virtual int demuxing_requested(mkv_track_t *t);

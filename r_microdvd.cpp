@@ -27,13 +27,13 @@
 #include "r_microdvd.h"
 #include "subtitles.h"
 
-int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
+int microdvd_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   char chunk[2048];
   int i;
 
-  if (fseeko(file, 0, SEEK_SET) != 0)
+  if (mm_io->setFilePointer(0, seek_beginning) != 0)
     return 0;
-  if (fgets(chunk, 2047, file) == NULL)
+  if (fgets(chunk, 2047) == NULL)
     return 0;
   if ((chunk[0] != '{') || !isdigit(chunk[1]))
     return 0;
@@ -48,7 +48,7 @@ int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   if ((chunk[i] != '}') || (chunk[i + 1] == 0) || (chunk[i + 1] == '\n') ||
       (chunk[i + 1] == '\r'))
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
+  if (mm_io->setFilePointer(0, seek_beginning) != 0)
     return 0;
   return 1;
 }
@@ -57,7 +57,7 @@ microdvd_reader_c::microdvd_reader_c(char *fname, audio_sync_t *nasync,
                                      char **ncomments) throw (error_c) {
   if ((file = fopen(fname, "r")) == NULL)
     throw error_c("microdvd_reader: Could not open source file.");
-  if (!microdvd_reader_c::probe_file(file, 0))
+  if (!microdvd_reader_c::probe_file(0))
     throw error_c("microdvd_reader: Source is not a valid MicroDVD file.");
   textsubspacketizer = new textsubs_packetizer_c(nasync);
   if (verbose)
@@ -85,7 +85,7 @@ int microdvd_reader_c::read() {
 
   lineno = 0;
   while (1) {
-    if (fgets(chunk, 2047, file) == NULL)
+    if (fgets(chunk, 2047) == NULL)
       break;
 
     lineno++;

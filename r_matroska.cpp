@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.38 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.39 2003/05/23 06:34:57 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -74,18 +74,19 @@ using namespace LIBMATROSKA_NAMESPACE;
  * Probes a file by simply comparing the first four bytes to the EBML
  * head signature.
  */
-int mkv_reader_c::probe_file(FILE *file, int64_t size) {
+int mkv_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char data[4];
 
   if (size < 4)
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    return 0;
-  if (fread(data, 1, 4, file) != 4) {
-    fseeko(file, 0, SEEK_SET);
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read(data, 4) != 4)
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
   }
-  fseeko(file, 0, SEEK_SET);
   if ((data[0] != 0x1A) || (data[1] != 0x45) ||
       (data[2] != 0xDF) || (data[3] != 0xA3))
     return 0;

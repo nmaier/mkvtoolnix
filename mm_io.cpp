@@ -2,7 +2,7 @@
   mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
-  mm_io_callback.cpp
+  mm_io_c.cpp
 
   Written by Moritz Bunkus <moritz@bunkus.org>
 
@@ -13,19 +13,23 @@
 
 /*!
     \file
-    \version \$Id: mm_io.cpp,v 1.1 2003/05/22 17:54:43 mosu Exp $
+    \version \$Id: mm_io.cpp,v 1.2 2003/05/23 06:34:57 mosu Exp $
     \brief IO callback class implementation
     \author Moritz Bunkus <moritz@bunkus.org>
 */
+
+#include <exception>
 
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "mm_io_callback.h"
+#include "mm_io.h"
 
-mm_io_callback::mm_io_callback(const char *path, const open_mode mode) {
+using namespace std;
+
+mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   char *cmode;
 
   switch (mode) {
@@ -44,22 +48,19 @@ mm_io_callback::mm_io_callback(const char *path, const open_mode mode) {
 
   file = fopen(path, cmode);
 
-  if (file == NULL) {
-    fprintf(stderr, "Error: Could not open the file: %d (%s)\n", errno,
-            strerror(errno));
-    exit(1);
-  }
+  if (file == NULL)
+    throw exception();
 }
 
-mm_io_callback::~mm_io_callback() {
+mm_io_c::~mm_io_c() {
   close();
 }
 
-uint64 mm_io_callback::getFilePointer() {
+uint64 mm_io_c::getFilePointer() {
   return ftello(file);
 }
 
-void mm_io_callback::setFilePointer(int64 offset, seek_mode mode) {
+void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
   int whence;
 
   if (mode == seek_beginning)
@@ -69,10 +70,11 @@ void mm_io_callback::setFilePointer(int64 offset, seek_mode mode) {
   else
     whence = SEEK_CUR;
 
-  fseeko(file, offset, whence);
+  if (fseeko(file, offset, whence) != 0)
+    throw exception();
 }
 
-size_t mm_io_callback::write(const void *buffer, size_t size) {
+size_t mm_io_c::write(const void *buffer, size_t size) {
   size_t bwritten;
 
   bwritten = fwrite(buffer, 1, size, file);
@@ -85,12 +87,20 @@ size_t mm_io_callback::write(const void *buffer, size_t size) {
   return bwritten;
 }
 
-uint32 mm_io_callback::read(void *buffer, size_t size) {
+uint32 mm_io_c::read(void *buffer, size_t size) {
   return fread(buffer, 1, size, file);
 }
 
-void mm_io_callback::close() {
+void mm_io_c::close() {
   fclose(file);
+}
+
+bool mm_io_c::eof() {
+  return feof(file) != 0 ? true : false;
+}
+
+char *mm_io_c::gets(char *buffer, size_t max_size) {
+  return fgets(buffer, max_size, file);
 }
 
 /*

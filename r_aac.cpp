@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.6 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_aac.cpp,v 1.7 2003/05/23 06:34:57 mosu Exp $
     \brief AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,20 +29,20 @@
 #include "r_aac.h"
 #include "p_aac.h"
 
-int aac_reader_c::probe_file(FILE *file, int64_t size) {
+int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   char buf[4096];
   aac_header_t aacheader;
 
   if (size < 4096)
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    return 0;
-  if (fread(buf, 1, 4096, file) != 4096) {
-    fseeko(file, 0, SEEK_SET);
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read(buf, 4096) != 4096)
+      mm_io->setFilePointer(0, seek_beginning);
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
   }
-  fseeko(file, 0, SEEK_SET);
-
   if (parse_aac_adif_header((unsigned char *)buf, 4096, &aacheader))
     return 1;
   if (find_aac_header((unsigned char *)buf, 4096, &aacheader) < 0)
@@ -56,38 +56,37 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
   int adif;
   aac_header_t aacheader;
 
-  if ((file = fopen(ti->fname, "rb")) == NULL)
-    throw error_c("aac_reader: Could not open source file.");
-  if (fseeko(file, 0, SEEK_END) != 0)
-    throw error_c("aac_reader: Could not seek to end of file.");
-  size = ftello(file);
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    throw error_c("aac_reader: Could not seek to beginning of file.");
-  chunk = (unsigned char *)safemalloc(4096);
-  if (fread(chunk, 1, 4096, file) != 4096)
-    throw error_c("aac_reader: Could not read 4096 bytes.");
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    throw error_c("aac_reader: Could not seek to beginning of file.");
-  if (parse_aac_adif_header(chunk, 4096, &aacheader)) {
-    throw error_c("aac_reader: ADIF header files are not supported.");
-    adif = 1;
-  } else if (find_aac_header(chunk, 4096, &aacheader) < 0)
-    throw error_c("aac_reader: No valid AAC packet found in the first " \
-                  "4096 bytes.\n");
-  else
-    adif = 0;
-  bytes_processed = 0;
-  aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
-                                       aacheader.sample_rate,
-                                       aacheader.channels, ti);
+  try {
+    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io->setFilePointer(0, seek_end);
+    size = mm_io->getFilePointer();
+    mm_io->setFilePointer(0, seek_beginning);
+    chunk = (unsigned char *)safemalloc(4096);
+    if (mm_io->read(chunk, 4096) != 4096)
+      throw error_c("aac_reader: Could not read 4096 bytes.");
+    mm_io->setFilePointer(0, seek_beginning);
+    if (parse_aac_adif_header(chunk, 4096, &aacheader)) {
+      throw error_c("aac_reader: ADIF header files are not supported.");
+      adif = 1;
+    } else if (find_aac_header(chunk, 4096, &aacheader) < 0)
+      throw error_c("aac_reader: No valid AAC packet found in the first " \
+                    "4096 bytes.\n");
+    else
+      adif = 0;
+    bytes_processed = 0;
+    aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
+                                         aacheader.sample_rate,
+                                         aacheader.channels, ti);
+  } catch (exception &ex) {
+    throw error_c("aac_reader: Could not open the file.");
+  }
   if (verbose)
     fprintf(stdout, "Using AAC demultiplexer for %s.\n+-> Using " \
             "AAC output module for audio stream.\n", ti->fname);
 }
 
 aac_reader_c::~aac_reader_c() {
-  if (file != NULL)
-    fclose(file);
+  delete mm_io;
   if (chunk != NULL)
     safefree(chunk);
   if (aacpacketizer != NULL)
@@ -97,7 +96,7 @@ aac_reader_c::~aac_reader_c() {
 int aac_reader_c::read() {
   int nread;
 
-  nread = fread(chunk, 1, 4096, file);
+  nread = mm_io->read(chunk, 4096);
   if (nread <= 0)
     return 0;
 

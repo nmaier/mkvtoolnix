@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.46 2003/05/22 17:54:43 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.47 2003/05/23 06:34:57 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -67,7 +67,7 @@ extern "C" {
 
 #include "common.h"
 #include "matroska.h"
-#include "mm_io_callback.h"
+#include "mm_io.h"
 
 #define NAME "MKVInfo"
 
@@ -82,7 +82,7 @@ typedef struct {
 
 mkv_track_t **tracks = NULL;
 int num_tracks = 0;
-mm_io_callback *in = NULL;
+mm_io_c *in = NULL;
 
 void add_track(mkv_track_t *s) {
   tracks = (mkv_track_t **)saferealloc(tracks, sizeof(mkv_track_t *) *
@@ -151,7 +151,7 @@ static void parse_args(int argc, char **argv) {
 
   /* open input file */
   try {
-    in = new mm_io_callback(infile, MODE_READ);
+    in = new mm_io_c(infile, MODE_READ);
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Couldn't open input file %s (%s).\n", infile,
             strerror(errno));

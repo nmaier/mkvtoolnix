@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.14 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.15 2003/05/23 06:34:58 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,6 +29,8 @@
 #include "r_srt.h"
 #include "subtitles.h"
 
+using namespace std;
+
 #define iscolon(s) (*(s) == ':')
 #define iscomma(s) (*(s) == ',')
 #define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
@@ -42,33 +44,38 @@
 #define issrttimecode(s) (istimecode(s) && isarrow(s + 12) && \
                            istimecode(s + 17))
 
-int srt_reader_c::probe_file(FILE *file, int64_t size) {
+int srt_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   char chunk[2048];
 
-  if (fseeko(file, 0, SEEK_SET) != 0)
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->gets(chunk, 2047) == NULL)
+      return 0;
+    if ((chunk[0] != '1') || ((chunk[1] != '\n') && (chunk[1] != '\r')))
+      return 0;
+    if (mm_io->gets(chunk, 2047) == NULL)
+      return 0;
+    if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
+      return 0;
+    if (mm_io->gets(chunk, 2047) == NULL)
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
-  if (fgets(chunk, 2047, file) == NULL)
-    return 0;
-  if ((chunk[0] != '1') || ((chunk[1] != '\n') && (chunk[1] != '\r')))
-    return 0;
-  if (fgets(chunk, 2047, file) == NULL)
-    return 0;
-  if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
-    return 0;
-  if (fgets(chunk, 2047, file) == NULL)
-    return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    return 0;
+  }
   return 1;
 }
 
 srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
-  if ((file = fopen(ti->fname, "r")) == NULL)
-    throw error_c("srt_reader: Could not open source file.");
-  if (!srt_reader_c::probe_file(file, 0))
-    throw error_c("srt_reader: Source is not a valid SRT file.");
-  textsubs_packetizer = new textsubs_packetizer_c(this, ti);
+  try {
+    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    if (!srt_reader_c::probe_file(mm_io, 0))
+      throw error_c("srt_reader: Source is not a valid SRT file.");
+    textsubs_packetizer = new textsubs_packetizer_c(this, ti);
+  } catch (exception &ex) {
+    throw error_c("srt_reader: Could not open the source file.");
+  }
   if (verbose)
     fprintf(stdout, "Using SRT subtitle reader for %s.\n+-> Using " \
             "text subtitle output module for subtitles.\n", ti->fname);
@@ -85,9 +92,9 @@ int srt_reader_c::read() {
   subtitles_c subs;
 
   while (1) {
-    if (fgets(chunk, 2047, file) == NULL)
+    if (mm_io->gets(chunk, 2047) == NULL)
       break;
-    if (fgets(chunk, 2047, file) == NULL)
+    if (mm_io->gets(chunk, 2047) == NULL)
       break;
     if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
       break;
@@ -111,7 +118,7 @@ int srt_reader_c::read() {
           atol(&chunk[23]) * 1000 + atol(&chunk[26]);
     subtitles = NULL;
     while (1) {
-      if (fgets(chunk, 2047, file) == NULL)
+      if (mm_io->gets(chunk, 2047) == NULL)
         break;
       chunk[2047] = 0;
       if ((*chunk == '\n') || (*chunk == '\r'))

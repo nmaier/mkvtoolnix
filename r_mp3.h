@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.h,v 1.13 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: r_mp3.h,v 1.14 2003/05/23 06:34:57 mosu Exp $
     \brief class definitions for the MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+#include "mm_io.h"
 #include "common.h"
 #include "error.h"
 
@@ -31,7 +32,7 @@
 class mp3_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
-  FILE *file;
+  mm_io_c *mm_io;
   class mp3_packetizer_c *mp3packetizer;
   int64_t bytes_processed, size;
 
@@ -46,7 +47,7 @@ public:
   virtual int display_priority();
   virtual void display_progress();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 };
 
 #endif  // __R_MP3_H

@@ -28,7 +28,7 @@
 class microdvd_reader_c: public generic_reader_c {
 private:
   char chunk[2048];
-  FILE *file;
+  mm_io_c *mm_io;
   textsubs_packetizer_c *textsubspacketizer;
   int act_wchar;
 
@@ -46,7 +46,7 @@ public:
   virtual void display_progress();
   virtual void set_headers();
 
-  static int probe_file(FILE *file, int64_t size);
+  static int probe_file(mm_io_c *mm_io, int64_t size);
 };
 
 #endif  // __R_MICRODVD_H

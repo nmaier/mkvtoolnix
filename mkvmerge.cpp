@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.78 2003/05/22 17:54:43 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.79 2003/05/23 06:34:57 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -59,7 +59,7 @@
 #include "KaxVersion.h"
 
 #include "mkvmerge.h"
-#include "mm_io_callback.h"
+#include "mm_io.h"
 #include "cluster_helper.h"
 #include "common.h"
 #include "iso639.h"
@@ -87,7 +87,7 @@ typedef struct {
 
 typedef struct filelist_tag {
   char *name;
-  FILE *fp;
+  mm_io_c *fp;
 
   int type;
 
@@ -134,7 +134,7 @@ int64_t meta_seek_size = 0;
 // Specs say that track numbers should start at 1.
 int track_number = 1;
 
-mm_io_callback *out;
+mm_io_c *out;
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -224,59 +224,55 @@ static void usage(void) {
 }
 
 static int get_type(char *filename) {
-  FILE *f = fopen(filename, "rb");
+  mm_io_c *mm_io;
   off_t size;
   int type;
 
-  if (f == NULL) {
-    fprintf(stderr, "Error: could not open source file (%s).\n", filename);
+  try {
+    mm_io = new mm_io_c(filename, MODE_READ);
+    mm_io->setFilePointer(0, seek_end);
+    size = mm_io->getFilePointer();
+    mm_io->setFilePointer(0, seek_current);
+  } catch (exception &ex) {
+    fprintf(stderr, "Error: could not open source file or seek properly in it "
+            "(%s).\n", filename);
     exit(1);
   }
-  if (fseeko(f, 0, SEEK_END) != 0) {
-    fprintf(stderr, "Error: could not seek to end of file (%s).\n", filename);
-    exit(1);
-  }
-  size = ftello(f);
-  if (fseeko(f, 0, SEEK_SET) != 0) {
-    fprintf(stderr, "Error: could not seek to beginning of file (%s).\n",
-            filename);
-    exit(1);
-  }
-  if (avi_reader_c::probe_file(f, size))
+  if (avi_reader_c::probe_file(mm_io, size))
     type = TYPEAVI;
-  else if (mkv_reader_c::probe_file(f, size))
+  else if (mkv_reader_c::probe_file(mm_io, size))
     type = TYPEMATROSKA;
-  else if (wav_reader_c::probe_file(f, size))
+  else if (wav_reader_c::probe_file(mm_io, size))
     type = TYPEWAV;
-  else if (mp4_reader_c::probe_file(f, size)) {
+  else if (mp4_reader_c::probe_file(mm_io, size)) {
     fprintf(stderr, "Error: MP4/Quicktime files are not supported (%s).\n",
             filename);
     exit(1);
   }
 #ifdef HAVE_OGGVORBIS
-  else if (ogm_reader_c::probe_file(f, size))
+  else if (ogm_reader_c::probe_file(mm_io, size))
     type = TYPEOGM;
 #endif // HAVE_OGGVORBIS
-  else if (srt_reader_c::probe_file(f, size))
+  else if (srt_reader_c::probe_file(mm_io, size))
     type = TYPESRT;
-  else if (mp3_reader_c::probe_file(f, size))
+  else if (mp3_reader_c::probe_file(mm_io, size))
     type = TYPEMP3;
-  else if (ac3_reader_c::probe_file(f, size))
+  else if (ac3_reader_c::probe_file(mm_io, size))
     type = TYPEAC3;
-  else if (dts_reader_c::probe_file(f, size))
+  else if (dts_reader_c::probe_file(mm_io, size))
     type = TYPEDTS;
-  else if (aac_reader_c::probe_file(f, size))
+  else if (aac_reader_c::probe_file(mm_io, size))
     type = TYPEAAC;
-//     else if (microdvd_reader_c::probe_file(f, size))
+//     else if (microdvd_reader_c::probe_file(mm_io, size))
 //     type = TYPEMICRODVD;
-//   else if (vobsub_reader_c::probe_file(f, size))
+//   else if (vobsub_reader_c::probe_file(mm_io, size))
 //     type = TYPEVOBSUB;
-//   else if (chapter_information_probe(f, size))
+//   else if (chapter_information_probe(mm_io, size))
 //     type = TYPECHAPTERS;
   else
     type = TYPEUNKNOWN;
 
-  fclose(f);
+  delete mm_io;
 
   file_sizes += size;
 
@@ -479,7 +475,7 @@ static float parse_aspect_ratio(char *s) {
 //   return seconds;
 // }
 
-static void render_headers(mm_io_callback *out) {
+static void render_headers(mm_io_c *out) {
   EbmlHead head;
   filelist_t *file;
 
@@ -970,17 +966,18 @@ static char *strip(char *s) {
 }
 
 static char **read_args_from_file(int &num_args, char **args, char *filename) {
-  FILE *f;
+  mm_io_c *mm_io;
   char buffer[8192], *space;
 
-  f = fopen(filename, "r");
-  if (f == NULL) {
+  try {
+    mm_io = new mm_io_c(filename, MODE_READ);
+  } catch (exception &ex) {
     fprintf(stderr, "Error: Could not open file '%s' for reading command line "
             "arguments from.", filename);
     exit(1);
   }
 
-  while (!feof(f) && (fgets(buffer, 8191, f) != NULL)) {
+  while (!mm_io->eof() && (mm_io->gets(buffer, 8191) != NULL)) {
     buffer[8191] = 0;
     strip(buffer);
     if ((buffer[0] == '#') || (buffer[0] == 0))
@@ -996,6 +993,8 @@ static char **read_args_from_file(int &num_args, char **args, char *filename) {
     if (space != NULL)
       args = add_string(num_args, args, space);
   }
+
+  delete mm_io;
 
   return args;
 }
@@ -1059,7 +1058,7 @@ int main(int argc, char **argv) {
 
   // Open the output file.
   try {
-    out = new mm_io_callback(outfile, MODE_CREATE);
+    out = new mm_io_c(outfile, MODE_CREATE);
   } catch (std::exception &ex) {
     fprintf(stderr, "Error: Couldn't open output file %s (%s).\n", outfile,
             strerror(errno));

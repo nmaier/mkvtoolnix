@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.21 2003/05/22 16:14:29 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.22 2003/05/23 06:34:57 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -29,7 +29,7 @@
 #include "r_mp3.h"
 #include "p_mp3.h"
 
-int mp3_reader_c::probe_file(FILE *file, int64_t size) {
+int mp3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   unsigned char buf[4096];
   int pos;
   unsigned long header;
@@ -37,13 +37,14 @@ int mp3_reader_c::probe_file(FILE *file, int64_t size) {
 
   if (size < 4096)
     return 0;
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    return 0;
-  if (fread(buf, 1, 4096, file) != 4096) {
-    fseeko(file, 0, SEEK_SET);
+  try {
+    mm_io->setFilePointer(0, seek_beginning);
+    if (mm_io->read(buf, 4096) != 4096)
+      return 0;
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
     return 0;
   }
-  fseeko(file, 0, SEEK_SET);
 
   pos = find_mp3_header(buf, 4096, &header);
   if (pos < 0)
@@ -67,18 +68,18 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
   unsigned long header;
   mp3_header_t mp3header;
 
-  if ((file = fopen(ti->fname, "rb")) == NULL)
-    throw error_c("mp3_reader: Could not open source file.");
-  if (fseeko(file, 0, SEEK_END) != 0)
-    throw error_c("mp3_reader: Could not seek to end of file.");
-  size = ftello(file);
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    throw error_c("mp3_reader: Could not seek to beginning of file.");
-  chunk = (unsigned char *)safemalloc(4096);
-  if (fread(chunk, 1, 4096, file) != 4096)
-    throw error_c("mp3_reader: Could not read 4096 bytes.");
-  if (fseeko(file, 0, SEEK_SET) != 0)
-    throw error_c("mp3_reader: Could not seek to beginning of file.");
+  try {
+    mm_io = new mm_io_c(ti->fname, MODE_READ);
+    mm_io->setFilePointer(0, seek_end);
+    size = mm_io->getFilePointer();
+    mm_io->setFilePointer(0, seek_beginning);
+    chunk = (unsigned char *)safemalloc(4096);
+    if (mm_io->read(chunk, 4096) != 4096)
+      throw error_c("mp3_reader: Could not read 4096 bytes.");
+    mm_io->setFilePointer(0, seek_beginning);
+  } catch (exception &ex) {
+    throw error_c("mp3_reader: Could not open the source file.");
+  }
   pos = find_mp3_header(chunk, 4096, &header);
   if (pos < 0)
     throw error_c("mp3_reader: No valid MP3 packet found in the first " \
@@ -95,8 +96,7 @@ mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
 }
 
 mp3_reader_c::~mp3_reader_c() {
-  if (file != NULL)
-    fclose(file);
+  delete mm_io;
   if (chunk != NULL)
     safefree(chunk);
   if (mp3packetizer != NULL)
@@ -106,7 +106,7 @@ mp3_reader_c::~mp3_reader_c() {
 int mp3_reader_c::read() {
   int nread;
 
-  nread = fread(chunk, 1, 4096, file);
+  nread = mm_io->read(chunk, 4096);
   if (nread <= 0)
     return 0;
 
