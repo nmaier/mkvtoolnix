@@ -1,0 +1,167 @@
+.TH MKVEXTRACT "1" "October 2003" "mkvextract v0.7.2" "User Commands"
+
+
+.SH NAME
+mkvextract \- extract tracks from Matroska files into other files
+
+
+.SH SYNOPSIS
+.B mkvextract
+tracks <\fIinname\fR> [\fIoptions\fR] [\fITID1\fR:\fIout1\fR [\fITID2\fR:\fIout2\fR ...]]
+.br
+.B mkvextract
+tags <\fIinname\fR> [\fIoptions\fR]
+.br
+.B mkvextract
+attachments <\fIinname\fR> [\fIoptions\fR] [\fIAID1\fR:\fIout1\fR [\fIAID2\fR:\fIout2\fR ...]]
+.br
+.B mkvextract
+chapters <\fIinname\fR> [\fIoptions\fR]
+.br
+.B mkvextract
+<\-h|\-V>
+
+
+.SH DESCRIPTION
+.LP
+This program extracts specific parts from a Matroska file to other useful
+formats. The first argument tells \fBmkvextract\fR what to extract. Currently
+supported is the extraction of \fBtracks\fR, \fBtags\fR, \fBattachments\fR and
+\fBchapters\fR.
+The second argument is the name of the source file. It must be a Matroska file.
+
+.LP
+Command line syntax for the \fBtracks\fR extraction mode:
+.TP
+\fB\-c\fR \fIcharset\fR
+Sets the charset to convert the next text subtitle track to. Only valid if the
+next track ID targets a text subtitle track. It defaults to UTF-8.
+.TP
+\fITID\fR:\fIoutname\fR
+Causes extraction of the track with the ID \fITID\fR into the file
+\fIoutname\fR if such a track exists in the source file. This option can be
+given multiple times. The track IDs are the same as the ones output by
+\fBmkvmerge\fR's \fB--identify\fR option.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
+Command line syntax for the \fBtags\fR extraction mode:
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
+Command line syntax for the \fBattachments\fR extraction mode:
+.TP
+\fIAID\fR:\fIoutname\fR
+Causes extraction of the attachment with the ID \fIAID\fR into the file
+\fIoutname\fR if such an attachment exists in the source file. This option can
+be given multiple times. The attachment IDs are the same as the ones output by
+\fBmkvmerge\fR's \fB--identify\fR option.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
+Command line syntax for the \fBchapters\fR extraction mode:
+.TP
+\fB\-s\fR, \fB\-\-simple\fR
+Exports the chapter infomartion in the simple format used in the OGM tools
+(CHAPTER01=..., CHAPTER01NAME=...). In this mode some information has to be
+discarded. Default is to output the chapters in XML format.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
+If one of the following options is used as the only command line argument
+additional information about \fBmkvextract\fR is output.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show usage information.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Show version information.
+
+
+.SH NOTES
+The decision about the output format is based on the track type, not on the
+extension used for the output file name. The following track types are
+supported at the moment:
+.TP
+V_MS/VFW/FOURCC
+Fixed FPS video tracks with this CodecID are written to AVI files.
+.TP
+A_MPEG/L3, A_AC3
+These will be extracted to raw MP3 and AC3 files.
+.TP
+A_PCM/INT/LIT
+Raw PCM data will be written to a WAV file.
+.TP
+A_AAC/MPEG2/*
+All MPEG2 AAC files will be written into an AAC file with ADTS headers before
+each packet.
+.TP
+A_AAC/MPEG4/*
+All MPEG4 AAC files will be written into an AAC file with ADTS headers before
+each packet. The ADTS headers will not contain the deprecated emphasis field.
+.TP
+A_VORBIS
+Vorbis audio will be written into an Ogg/Vorbis file.
+.TP
+S_TEXT/UTF8
+Simple text subtitles will be written as SRT files.
+.TP
+S_TEXT/SSA, S_TEXT/ASS
+SSA and ASS text subtitles will be written as SSA/ASS files respectively.
+.LP
+\fBTags\fR are converted to a XML format. This format is the same that
+\fBmkvmerge\fR supports for reading tags.
+.LP
+\fBAttachments\fR are written to they output file as they are. No conversion
+whatsoever is done.
+.LP
+\fBChapters\fR are converted to a XML format. This format is the same that
+\fBmkvmerge\fR supports for reading chapters. \fBNOTE:\fR At the moment
+\fBmkvmerge\fR does not yet support this format, but it will in the upcoming
+release which will be in mid August.
+
+
+.SH EXAMPLES
+Let's assume you've made a Matroska file with one video track, two audio tracks
+and two subtitle tracks, and you need the second audio track and the first
+subtitle track. So first fire up \fBmkvmerge\fR with the \fB--identify\fR
+option:
+.LP
+$ \fBmkvmerge -i movie.mkv\fR
+.br
+File 'movie.mkv': container: Matroska
+.br
+Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
+.br
+Track ID 2: audio (A_MPEG/L3)
+.br
+Track ID 3: audio (A_VORBIS)
+.br
+Track ID 4: subtitles (S_TEXT/UTF8)
+.br
+Track ID 5: subtitles (S_TEXT/UTF8)
+.LP
+Now you can call \fBmkvmextract\fR like this:
+.LP
+$ \fBmkvextract tracks movie.mkv 3:audio.ogg 4:subtitles.srt\fR
+
+
+.SH AUTHOR
+.I mkvextract
+was written by Moritz Bunkus <moritz@bunkus.org>.
+.SH SEE ALSO
+.BR mkvmerge (1),
+.BR mkvinfo (1)
+.SH WWW
+The newest version can always be found at
+.UR http://www.bunkus.org/videotools/mkvtoolnix/
+<http://www.bunkus.org/videotools/mkvtoolnix/>
+.UE

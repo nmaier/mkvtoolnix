@@ -1,0 +1,21 @@
+Source: mkvtoolnix
+Section: graphics
+Priority: optional
+Maintainer: Moritz Bunkus <moritz@bunkus.org>
+Build-Depends: debhelper (>> 3.0.0), libebml-dev (>= 0.6.2-1), libmatroska-dev (>= 0.6.1-1), libogg-dev, libvorbis-dev, libwxgtk2.4-dev, libexpat1-dev, zlib1g-dev, liblzo-dev, libbz2-dev
+Standards-Version: 3.5.8
+
+Package: mkvtoolnix
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: create and work with Matroska media files
+ Matroska is aiming to become the standard of Multimedia Container
+ Formats. It is based on EBML (Extensible Binary Meta Language), a
+ kind of binary version of XML. These tools can work with Matroska files:
+   * mkvmerge creates Matroska files from various other formats.
+   * mkvinfo lists information about the tracks contained in a Matroska
+     file.
+   * mkvextract extracts tracks from a Matroska file into other suitable
+     file formats.
+   * base64tool can encode to and decode from base64.
+   * mmg is a full featured GUI for mkvmerge.

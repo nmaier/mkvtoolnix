@@ -1,0 +1,34 @@
+.TH BASE64TOOL "1" "October 2003" "base64tool v0.7.2" "User Commands"
+
+
+.SH NAME
+base64tool \- encode files into Base64 encoding and decode Base64 encoded files
+
+
+.SH SYNOPSIS
+.B base64tool
+<\fIencode\fR|\fIdecode\fR> <\fIinput\fR> <\fIoutput\fR> [\fImaxlen\fR]
+
+
+.SH DESCRIPTION
+.LP
+This program can either encode a file with Base64 encoding suited for
+inclusion of binary data into text files such as XML files and decode
+Base64 encoded data back into its original form. The first argument
+controls whether \fBbase64tool\fR will encode or decode. The second
+argument is name of the file that data is read from. The third
+argument is the name of the file that output is written to. The file
+will be overwritten if it exists.
+.LP
+When encoding an optional fourth parameter, \fImaxlen\fR, specifies
+the maximum line length to output. It defaults to 72 if left out.
+
+
+.SH AUTHOR
+.I base64tool
+was written by Moritz Bunkus <moritz@bunkus.org>.
+.SH WWW
+The newest version can always be found at
+.UR http://www.bunkus.org/videotools/mkvtoolnix/
+<http://www.bunkus.org/videotools/mkvtoolnix/>
+.UE
