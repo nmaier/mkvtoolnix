@@ -117,7 +117,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c *nti)
     height = seq_hdr.height;
     frame_rate = seq_hdr.frameRate;
     aspect_ratio = seq_hdr.aspectRatio;
-    if (aspect_ratio <= 0)
+    if ((aspect_ratio <= 0) || (aspect_ratio == 1))
       dwidth = width;
     else
       dwidth = (int)(height * aspect_ratio);
@@ -514,7 +514,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
         track->v_height = seq_hdr.height;
         track->v_frame_rate = seq_hdr.frameRate;
         track->v_aspect_ratio = seq_hdr.aspectRatio;
-        if (track->v_aspect_ratio <= 0)
+        if ((track->v_aspect_ratio <= 0) || (track->v_aspect_ratio == 1))
           track->v_dwidth = track->v_width;
         else
           track->v_dwidth = (int)(track->v_height * track->v_aspect_ratio);
