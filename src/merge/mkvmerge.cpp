@@ -1103,12 +1103,8 @@ parse_args(vector<string> &args) {
   vector<string>::const_iterator sit;
   string this_arg, next_arg;
   bool no_next_arg;
-  audio_sync_t async;
-  cue_creation_t cues;
   int64_t id;
-  language_t lang;
   attachment_t attachment;
-  tags_t tags;
   mm_io_c *io;
 
   ti = new track_info_c;
@@ -1151,7 +1147,7 @@ parse_args(vector<string> &args) {
         mxinfo("  %s  %s\n", file_types[i].ext, file_types[i].desc);
       mxexit(0);
 
-    } else if ((this_arg == "--list-languages")) {
+    } else if (this_arg == "--list-languages") {
       list_iso639_languages();
       mxexit(0);
 
@@ -1160,7 +1156,7 @@ parse_args(vector<string> &args) {
                 "No other options are allowed if '%s' is used.\n"),
               this_arg.c_str(), this_arg.c_str());
 
-    else if ((this_arg == "--capabilities")) {
+    else if (this_arg == "--capabilities") {
       print_capabilities();
       mxexit(0);
 
@@ -1189,7 +1185,7 @@ parse_args(vector<string> &args) {
       outfile = next_arg;
       sit++;
 
-    } else if ((this_arg == "--engage")) {
+    } else if (this_arg == "--engage") {
       if (no_next_arg)
         mxerror(_("'--engage' lacks its argument.\n"));
       engage_hacks(next_arg);
@@ -1236,13 +1232,13 @@ parse_args(vector<string> &args) {
         mxerror(_("'%s' is not a valid priority class.\n"), next_arg.c_str());
       sit++;
 
-    } else if ((this_arg == "-q"))
+    } else if (this_arg == "-q")
       verbose = 0;
 
     else if ((this_arg == "-v") || (this_arg == "--verbose"))
       verbose++;
 
-    else if ((this_arg == "--title")) {
+    else if (this_arg == "--title") {
       if (no_next_arg)
         mxerror(_("'--title' lacks the title.\n"));
 
@@ -1250,14 +1246,14 @@ parse_args(vector<string> &args) {
       segment_title_set = true;
       sit++;
 
-    } else if ((this_arg == "--split")) {
+    } else if (this_arg == "--split") {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(_("'--split' lacks the size.\n"));
 
       parse_split(next_arg);
       sit++;
 
-    } else if ((this_arg == "--split-max-files")) {
+    } else if (this_arg == "--split-max-files") {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(_("'--split-max-files' lacks the number of files.\n"));
 
@@ -1267,10 +1263,10 @@ parse_args(vector<string> &args) {
 
       sit++;
 
-    } else if ((this_arg == "--link")) {
+    } else if (this_arg == "--link") {
       no_linking = false;
 
-    } else if ((this_arg == "--link-to-previous")) {
+    } else if (this_arg == "--link-to-previous") {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(_("'--link-to-previous' lacks the next UID.\n"));
 
@@ -1287,7 +1283,7 @@ parse_args(vector<string> &args) {
 
       sit++;
 
-    } else if ((this_arg == "--link-to-next")) {
+    } else if (this_arg == "--link-to-next") {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(_("'--link-to-next' lacks the previous UID.\n"));
 
@@ -1304,7 +1300,7 @@ parse_args(vector<string> &args) {
 
       sit++;
 
-    } else if ((this_arg == "--cluster-length")) {
+    } else if (this_arg == "--cluster-length") {
       int idx;
 
       if (no_next_arg)
@@ -1333,19 +1329,19 @@ parse_args(vector<string> &args) {
 
       sit++;
 
-    } else if ((this_arg == "--no-cues"))
+    } else if (this_arg == "--no-cues")
       write_cues = false;
 
-    else if ((this_arg == "--no-clusters-in-meta-seek"))
+    else if (this_arg == "--no-clusters-in-meta-seek")
       write_meta_seek_for_clusters = false;
 
-    else if ((this_arg == "--disable-lacing"))
+    else if (this_arg == "--disable-lacing")
       no_lacing = true;
 
-    else if ((this_arg == "--enable-durations"))
+    else if (this_arg == "--enable-durations")
       use_durations = true;
 
-    else if ((this_arg == "--attachment-description")) {
+    else if (this_arg == "--attachment-description") {
       if (no_next_arg)
         mxerror(_("'--attachment-description' lacks the description.\n"));
 
@@ -1355,7 +1351,7 @@ parse_args(vector<string> &args) {
       attachment.description = next_arg;
       sit++;
 
-    } else if ((this_arg == "--attachment-mime-type")) {
+    } else if (this_arg == "--attachment-mime-type") {
       if (no_next_arg)
         mxerror(_("'--attachment-mime-type' lacks the MIME type.\n"));
 
@@ -1375,7 +1371,7 @@ parse_args(vector<string> &args) {
       if (attachment.mime_type == "")
         attachment.mime_type = guess_mime_type(next_arg);
 
-      if ((this_arg == "--attach-file"))
+      if (this_arg == "--attach-file")
         attachment.to_all_files = true;
       try {
         io = new mm_file_io_c(attachment.name);
@@ -1393,14 +1389,14 @@ parse_args(vector<string> &args) {
 
       sit++;
 
-    } else if ((this_arg == "--global-tags")) {
+    } else if (this_arg == "--global-tags") {
       if (no_next_arg)
         mxerror(_("'--global-tags' lacks the file name.\n"));
 
       parse_and_add_tags(from_utf8(cc_local_utf8, next_arg));
       sit++;
 
-    } else if ((this_arg == "--chapter-language")) {
+    } else if (this_arg == "--chapter-language") {
       if (no_next_arg)
         mxerror(_("'--chapter-language' lacks the language.\n"));
 
@@ -1421,7 +1417,7 @@ parse_args(vector<string> &args) {
       chapter_language = next_arg;
       sit++;
 
-    } else if ((this_arg == "--chapter-charset")) {
+    } else if (this_arg == "--chapter-charset") {
       if (no_next_arg)
         mxerror(_("'--chapter-charset' lacks the charset.\n"));
 
@@ -1437,7 +1433,7 @@ parse_args(vector<string> &args) {
       ti->chapter_charset = next_arg;
       sit++;
 
-    } else if ((this_arg == "--cue-chapter-name-format")) {
+    } else if (this_arg == "--cue-chapter-name-format") {
       if (no_next_arg)
         mxerror(_("'--cue-chapter-name-format' lacks the format.\n"));
       if (chapter_file_name != "")
@@ -1447,7 +1443,7 @@ parse_args(vector<string> &args) {
       cue_to_chapter_name_format = next_arg;
       sit++;
 
-    } else if ((this_arg == "--chapters")) {
+    } else if (this_arg == "--chapters") {
       if (no_next_arg)
         mxerror(_("'--chapters' lacks the file name.\n"));
 
@@ -1464,22 +1460,22 @@ parse_args(vector<string> &args) {
                                     NULL, &tags_from_cue_chapters);
       sit++;
 
-    } else if ((this_arg == "--no-chapters")) {
+    } else if (this_arg == "--no-chapters") {
       ti->no_chapters = true;
 
-    } else if ((this_arg == "--no-attachments")) {
+    } else if (this_arg == "--no-attachments") {
       ti->no_attachments = true;
 
-    } else if ((this_arg == "--no-tags")) {
+    } else if (this_arg == "--no-tags") {
       ti->no_tags = true;
 
-    } else if ((this_arg == "--meta-seek-size")) {
+    } else if (this_arg == "--meta-seek-size") {
       mxwarn(_("The option '--meta-seek-size' is no longer supported. Please "
                "read mkvmerge's documentation, especially the section about "
                "the MATROSKA FILE LAYOUT."));
       sit++;
 
-    } else if ((this_arg == "--timecode-scale")) {
+    } else if (this_arg == "--timecode-scale") {
       int64_t temp;
 
       if (no_next_arg)
@@ -1543,28 +1539,28 @@ parse_args(vector<string> &args) {
       parse_fourcc(next_arg, this_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--aspect-ratio")) {
+    } else if (this_arg == "--aspect-ratio") {
       if (no_next_arg)
         mxerror(_("'--aspect-ratio' lacks the aspect ratio.\n"));
 
       parse_aspect_ratio(next_arg, this_arg, false, *ti);
       sit++;
 
-    } else if ((this_arg == "--aspect-ratio-factor")) {
+    } else if (this_arg == "--aspect-ratio-factor") {
       if (no_next_arg)
         mxerror(_("'--aspect-ratio-factor' lacks the aspect ratio factor.\n"));
 
       parse_aspect_ratio(next_arg, this_arg, true, *ti);
       sit++;
 
-    } else if ((this_arg == "--display-dimensions")) {
+    } else if (this_arg == "--display-dimensions") {
       if (no_next_arg)
         mxerror(_("'--display-dimensions' lacks the dimensions.\n"));
 
       parse_display_dimensions(next_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--cropping")) {
+    } else if (this_arg == "--cropping") {
       if (no_next_arg)
         mxerror(_("'--cropping' lacks the crop parameters.\n"));
 
@@ -1578,21 +1574,21 @@ parse_args(vector<string> &args) {
       parse_sync(next_arg, this_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--cues")) {
+    } else if (this_arg == "--cues") {
       if (no_next_arg)
         mxerror(_("'--cues' lacks its argument.\n"));
 
       parse_cues(next_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--delay")) {
+    } else if (this_arg == "--delay") {
       if (no_next_arg)
         mxerror(_("'--delay' lacks the delay to apply.\n"));
 
       parse_delay(next_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--default-track")) {
+    } else if (this_arg == "--default-track") {
       if (no_next_arg)
         mxerror(_("'--default-track' lacks the track ID.\n"));
 
@@ -1603,7 +1599,9 @@ parse_args(vector<string> &args) {
       ti->default_track_flags.push_back(id);
       sit++;
 
-    } else if ((this_arg == "--language")) {
+    } else if (this_arg == "--language") {
+      language_t lang;
+
       if (no_next_arg)
         mxerror(_("'--language' lacks its argument.\n"));
 
@@ -1611,7 +1609,7 @@ parse_args(vector<string> &args) {
       ti->languages.push_back(lang);
       sit++;
 
-    } else if ((this_arg == "--default-language")) {
+    } else if (this_arg == "--default-language") {
       if (no_next_arg)
         mxerror(_("'--default-language' lacks its argument.\n"));
 
@@ -1623,7 +1621,7 @@ parse_args(vector<string> &args) {
       default_language = next_arg;
       sit++;
 
-    } else if ((this_arg == "--sub-charset")) {
+    } else if (this_arg == "--sub-charset") {
       if (no_next_arg)
         mxerror(_("'--sub-charset' lacks its argument.\n"));
 
@@ -1637,7 +1635,7 @@ parse_args(vector<string> &args) {
       parse_tags(next_arg, this_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--aac-is-sbr")) {
+    } else if (this_arg == "--aac-is-sbr") {
       if (no_next_arg)
         mxerror(_("'%s' lacks the track ID.\n"), this_arg.c_str());
 
@@ -1648,7 +1646,7 @@ parse_args(vector<string> &args) {
       ti->aac_is_sbr.push_back(id);
       sit++;
 
-    } else if ((this_arg == "--compression")) {
+    } else if (this_arg == "--compression") {
       compression_method_t compression;
 
       if (no_next_arg)
@@ -1657,7 +1655,9 @@ parse_args(vector<string> &args) {
       parse_compression(next_arg, *ti);
       sit++;
 
-    } else if ((this_arg == "--track-name")) {
+    } else if (this_arg == "--track-name") {
+      language_t lang;
+
       if (no_next_arg)
         mxerror(_("'--track-name' lacks its argument.\n"));
 
@@ -1665,7 +1665,8 @@ parse_args(vector<string> &args) {
       ti->track_names.push_back(track_name_t(lang.language, lang.id));
       sit++;
 
-    } else if ((this_arg == "--timecodes")) {
+    } else if (this_arg == "--timecodes") {
+      language_t lang;
       string s;
 
       if (no_next_arg)
@@ -1676,7 +1677,7 @@ parse_args(vector<string> &args) {
       ti->all_ext_timecodes.push_back(ext_timecodes_t(lang.language, lang.id));
       sit++;
 
-    } else if ((this_arg == "--track-order")) {
+    } else if (this_arg == "--track-order") {
       if (no_next_arg)
         mxerror(_("'--track-order' lacks its argument.\n"));
       if (track_order.size() > 0)
@@ -1685,7 +1686,7 @@ parse_args(vector<string> &args) {
       parse_track_order(next_arg);
       sit++;
 
-    } else if ((this_arg == "--append-to")) {
+    } else if (this_arg == "--append-to") {
       if (no_next_arg)
         mxerror(_("'--append-to' lacks its argument.\n"));
 
