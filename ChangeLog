@@ -1,3 +1,154 @@
+2003-04-17 19:23  mosu
+
+	* mkvinfo.cpp: Support for KaxReferenceBlock and KaxBlockDuration.
+
+2003-04-17 19:01  mosu
+
+	* mkvmerge.cpp, pr_generic.cpp, pr_generic.h: KaxInfo are now
+	rendered correctly and filled with useful information
+	(KaxTimecodeScale and KaxDuration). The latter is updated after
+	writing the complete file in order to have the correct length
+	available.
+
+2003-04-17 18:19  mosu
+
+	* p_video.cpp: Preliminary support for KaxTrackMinCache and
+	*MaxCache - fixed to 1 at the moment.
+
+2003-04-17 18:18  mosu
+
+	* mkvinfo.cpp: Support for the movie duration (KaxDuration under
+	the segment infos).
+
+2003-04-17 17:58  mosu
+
+	* mkvinfo.cpp: Support for KaxMinCache and KaxMaxCache.
+
+2003-04-17 15:28  mosu
+
+	* acinclude.m4: Removed the C profiling library from the
+	--enable-profiling options. Now only -pg is being added to the
+	CFLAGS and CXXFLAGS.
+
+2003-04-17 15:27  mosu
+
+	* pr_generic.cpp, pr_generic.h: Removed the "rendered" flag from
+	the packets as the clusters already contain such a flag. Speedup by
+	storing the last freed reference ID in the packetizer. This way the
+	cluster/packet list is only walked after rendering a cluster and
+	not for each packet that is being added.
+
+2003-04-17 14:36  mosu
+
+	* .cvsignore: Added data directory.
+
+2003-04-17 14:36  mosu
+
+	* r_wav.cpp: Fixed the process calls - the third parameter is not
+	the "last_frame" flag anymore but the timecode.
+
+2003-04-17 14:35  mosu
+
+	* r_matroska.cpp: Some namespace fixes/cleanups. Removed
+	KaxBlockAdditional which has been removed from the specs. Operator
+	!= not defined, so changed to !(... == ...).
+
+2003-04-17 14:31  mosu
+
+	* r_avi.cpp, r_ogm.cpp: Set ti->private_data to NULL. Otherwise
+	data would be freed twice in the end.
+
+2003-04-17 14:30  mosu
+
+	* r_ac3.cpp, r_mp3.cpp: Fixed the process calls - the third
+	parameter is not the "last_frame" flag anymore but the timecode.
+
+2003-04-17 14:29  mosu
+
+	* queue.cpp: More sanity checks.
+
+2003-04-17 14:28  mosu
+
+	* pr_generic.h: New variable for the packets: "rendered" which is
+	set to 1 as soon as AddFrame has been called for that packet.
+
+2003-04-17 14:27  mosu
+
+	* pr_generic.cpp: Mandatory fixes for the new libmatroska code:
+	Timecodes are always absolute and in ns; AddFrame is called on
+	clusters not on block groups anymore; cluster timecodes do not have
+	to be set manually anymore. New variable for the packets:
+	"rendered" which is set to 1 as soon as AddFrame has been called
+	for that packet.
+
+2003-04-17 14:23  mosu
+
+	* p_pcm.cpp: Explicit type conversion in order to avoid compiler
+	warnings.
+
+2003-04-17 14:22  mosu
+
+	* p_mp3.cpp: Removed the default value from the function
+	definition.
+
+2003-04-17 14:22  mosu
+
+	* mkvmerge.cpp: Added KaxTimecodeScale with its default value
+	(mandatory for the new libmatroska).
+
+2003-04-17 14:21  mosu
+
+	* common.h: Added trace() function in order to ease the debugging
+	process. #define for the standard timecode scale added.
+
+2003-04-17 14:21  mosu
+
+	* common.cpp: Added trace() function in order to ease the debugging
+	process.
+
+2003-04-17 14:10  mosu
+
+	* avilib/avilib.c: Fixed an inavlid access to non-allocated space
+	if there is some private data after the WAVEFORMATEX structure in
+	the AVI.
+
+2003-04-16 22:10  mosu
+
+	* mkvinfo.cpp: Necessary changes to the reading process regarding
+	timecodes.
+
+2003-04-13 17:44  mosu
+
+	* pr_generic.cpp: libebml now takes absolute timecodes for
+	AddFrame.
+
+2003-04-13 17:23  mosu
+
+	* mkvinfo.cpp, mkvmerge.cpp, p_ac3.cpp, p_ac3.h, p_mp3.cpp,
+	p_mp3.h, p_pcm.h, p_video.cpp, p_video.h, p_vorbis.cpp, p_vorbis.h,
+	pr_generic.cpp, pr_generic.h, queue.cpp, queue.h, r_ac3.cpp,
+	r_ac3.h, r_avi.cpp, r_avi.h, r_matroska.cpp, r_matroska.h,
+	r_microdvd.cpp, r_microdvd.h, r_mp3.cpp, r_mp3.h, r_ogm.cpp,
+	r_ogm.h, r_srt.cpp, r_srt.h, r_vobsub.cpp, r_vobsub.h, r_wav.cpp,
+	r_wav.h: Changed all u_int64_t to int64_t. Some crappy MS compilers
+	obviously cannot convert u_int64_t to double. And I do not need
+	them that badly.
+
+2003-04-13 16:00  mosu
+
+	* acinclude.m4, mkvinfo.cpp, mkvmerge.cpp: Renamed GCC2 to
+	LIBEBML_GCC2 as GCC2 seemed to be too general a term to be used in
+	other programs.
+
+2003-04-11 17:28  mosu
+
+	* mkvmerge.cpp: #ifdef to make mkvmerge.cpp compile under Windows
+	from Shelly.
+
+2003-04-11 17:18  mosu
+
+	* acinclude.m4: Simplified the gcc version check.
+
 2003-04-11 15:44  mosu
 
 	* COPYING: standard GPL
