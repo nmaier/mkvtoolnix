@@ -68,7 +68,7 @@ int mp3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-mp3_reader_c::mp3_reader_c(track_info_t *nti) throw (error_c):
+mp3_reader_c::mp3_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   int pos, ptr, buf_size;
   unsigned char buf[16384];

@@ -69,7 +69,7 @@ int aac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 #define INITCHUNKSIZE 16384
 #define SINITCHUNKSIZE "16384"
 
-aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
+aac_reader_c::aac_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   int adif, i;
   aac_header_t aacheader;

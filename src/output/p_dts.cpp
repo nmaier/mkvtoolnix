@@ -86,7 +86,7 @@ bool operator!=(const dts_header_t &l, const dts_header_t &r) {
 
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
                                    const dts_header_t &dtsheader,
-                                   track_info_t *nti)
+                                   track_info_c *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   //packetno = 0;
   samples_written = 0;

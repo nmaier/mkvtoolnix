@@ -34,7 +34,7 @@ using namespace libmatroska;
 aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
                                    int nprofile,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti,
+                                   int nchannels, track_info_c *nti,
                                    bool nemphasis_present,
                                    bool nheaderless)
   throw (error_c): generic_packetizer_c(nreader, nti) {

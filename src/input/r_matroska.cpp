@@ -115,7 +115,7 @@ int kax_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
 
 // {{{ C'TOR
 
-kax_reader_c::kax_reader_c(track_info_t *nti) throw (error_c):
+kax_reader_c::kax_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
 
   title = "";
@@ -1231,23 +1231,24 @@ int kax_reader_c::read_headers() {
 void kax_reader_c::create_packetizers() {
   int i;
   kax_track_t *t;
-  track_info_t nti;
+  track_info_c *nti;
 
   for (i = 0; i < tracks.size(); i++) {
     t = tracks[i];
 
-    memcpy(&nti, ti, sizeof(track_info_t));
-    nti.private_data = (unsigned char *)t->private_data;
-    nti.private_size = t->private_size;
-    if (nti.default_track == 0)
-      nti.default_track = t->default_track;
-    if (nti.language == NULL)
-      nti.language = t->language;
-    if (nti.track_name == NULL)
-      nti.track_name = t->track_name;
+    nti = new track_info_c(*ti);
+    nti->private_data =
+      (unsigned char *)safememdup(t->private_data, t->private_size);
+    nti->private_size = t->private_size;
+    if (nti->default_track == 0)
+      nti->default_track = t->default_track;
+    if (nti->language == NULL)
+      nti->language = safestrdup(t->language);
+    if (nti->track_name == NULL)
+      nti->track_name = safestrdup(t->track_name);
 
     if (t->ok && demuxing_requested(t->type, t->tnum)) {
-      nti.id = t->tnum;         // ID for this track.
+      nti->id = t->tnum;         // ID for this track.
       switch (t->type) {
 
         case 'v':
@@ -1257,8 +1258,8 @@ void kax_reader_c::create_packetizers() {
           t->packetizer = new video_packetizer_c(this, t->codec_id, t->v_frate,
                                                  t->v_width,
                                                  t->v_height,
-                                                 t->v_bframes, &nti);
-          if (!nti.aspect_ratio_given) { // The user didn't set it.
+                                                 t->v_bframes, nti);
+          if (!nti->aspect_ratio_given) { // The user didn't set it.
             if (t->v_dwidth != 0)
               t->packetizer->set_video_display_width(t->v_dwidth);
             if (t->v_dheight != 0)
@@ -1271,14 +1272,14 @@ void kax_reader_c::create_packetizers() {
             t->packetizer = new pcm_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
                                                  t->a_channels, t->a_bps,
-                                                 &nti);
+                                                 nti);
             if (verbose)
               mxinfo("+-> Using the PCM output module for track ID %u.\n",
                      t->tnum);
           } else if (t->a_formattag == 0x0055) {
             t->packetizer = new mp3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, &nti);
+                                                 t->a_channels, nti);
             if (verbose)
               mxinfo("+-> Using the MPEG audio output module for track ID %u."
                      "\n", t->tnum);
@@ -1293,7 +1294,7 @@ void kax_reader_c::create_packetizers() {
               bsid = 0;
             t->packetizer = new ac3_packetizer_c(this,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, bsid, &nti);
+                                                 t->a_channels, bsid, nti);
             if (verbose)
               mxinfo("+-> Using the AC3 output module for track ID %u.\n",
                      t->tnum);
@@ -1304,7 +1305,7 @@ void kax_reader_c::create_packetizers() {
             /*
               t->packetizer = new dts_packetizer_c(this,
                                                    (unsigned long)t->a_sfreq,
-                                                   &nti);
+                                                   nti);
             */
           } else if (t->a_formattag == 0xFFFE) {
             t->packetizer = new vorbis_packetizer_c(this,
@@ -1313,7 +1314,7 @@ void kax_reader_c::create_packetizers() {
                                                     t->headers[1],
                                                     t->header_sizes[1],
                                                     t->headers[2],
-                                                    t->header_sizes[2], &nti);
+                                                    t->header_sizes[2], nti);
             if (verbose)
               mxinfo("+-> Using the Vorbis output module for track ID %u.\n",
                      t->tnum);
@@ -1355,7 +1356,7 @@ void kax_reader_c::create_packetizers() {
 
             t->packetizer = new aac_packetizer_c(this, id, profile,
                                                  (unsigned long)t->a_sfreq,
-                                                 t->a_channels, &nti,
+                                                 t->a_channels, nti,
                                                  false, true);
             if (verbose)
               mxinfo("+-> Using the AAC output module for track ID %u.\n",
@@ -1382,14 +1383,15 @@ void kax_reader_c::create_packetizers() {
 #if defined(HAVE_FLAC_FORMAT_H)
           } else if ((t->a_formattag == FOURCC('f', 'L', 'a', 'C')) ||
                      (t->a_formattag == 0xf1ac)) {
-            nti.private_data = NULL;
-            nti.private_size = 0;
+            safefree(nti->private_data);
+            nti->private_data = NULL;
+            nti->private_size = 0;
             if (t->a_formattag == FOURCC('f', 'L', 'a', 'C'))
               t->packetizer =
                 new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
                                       t->a_bps,
                                       (unsigned char *)t->private_data,
-                                      t->private_size, &nti);
+                                      t->private_size, nti);
             else
               t->packetizer =
                 new flac_packetizer_c(this, (int)t->a_sfreq, t->a_channels,
@@ -1397,7 +1399,7 @@ void kax_reader_c::create_packetizers() {
                                       ((unsigned char *)t->private_data) +
                                       sizeof(alWAVEFORMATEX),
                                       t->private_size - sizeof(alWAVEFORMATEX),
-                                      &nti);
+                                      nti);
             if (verbose)
               mxinfo("+-> Using the FLAC output module for track ID %u.\n",
                      t->tnum);
@@ -1416,7 +1418,7 @@ void kax_reader_c::create_packetizers() {
           if (!strcmp(t->codec_id, MKV_S_VOBSUB)) {
             t->packetizer =
               new vobsub_packetizer_c(this, t->private_data, t->private_size,
-                                      false, &nti);
+                                      false, nti);
             if (verbose)
               mxinfo("+-> Using the VobSub output module for track ID %u.\n",
                      t->tnum);
@@ -1427,7 +1429,7 @@ void kax_reader_c::create_packetizers() {
             t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
                                                       t->private_data,
                                                       t->private_size, false,
-                                                      true, &nti);
+                                                      true, nti);
             if (verbose)
               mxinfo("+-> Using the text subtitle output module for track ID "
                      "%u.\n", t->tnum);
@@ -1446,6 +1448,8 @@ void kax_reader_c::create_packetizers() {
                  "UID %u because it is already allocated for the new "
                  "file.\n", t->tuid);
     }
+
+    delete nti;
   }
 
   if (segment_title.length() == 0)

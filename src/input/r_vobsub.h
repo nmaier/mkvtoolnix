@@ -61,7 +61,7 @@ private:
   vector<vobsub_track_c *> tracks;
 
 public:
-  vobsub_reader_c(track_info_t *nti) throw (error_c);
+  vobsub_reader_c(track_info_c *nti) throw (error_c);
   virtual ~vobsub_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

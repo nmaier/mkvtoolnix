@@ -33,7 +33,7 @@ using namespace libmatroska;
 
 ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, int nbsid, track_info_t *nti)
+                                   int nchannels, int nbsid, track_info_c *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
@@ -159,7 +159,7 @@ void ac3_packetizer_c::dump_debug_info() {
 ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *nreader,
                                          unsigned long nsamples_per_sec,
                                          int nchannels, int nbsid,
-                                         track_info_t *nti)
+                                         track_info_c *nti)
   throw (error_c): ac3_packetizer_c(nreader, nsamples_per_sec, nchannels,
                                     nbsid, nti) {
   bsb_present = false;

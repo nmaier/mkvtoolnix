@@ -65,7 +65,7 @@ int srt_reader_c::probe_file(mm_text_io_c *mm_io, int64_t) {
   return 1;
 }
 
-srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
+srt_reader_c::srt_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   bool is_utf8;
 

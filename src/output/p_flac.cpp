@@ -43,7 +43,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *nreader,
                                      int nsample_rate, int nchannels,
                                      int nbits_per_sample,
                                      unsigned char *nheader, int nl_header,
-                                     track_info_t *nti)
+                                     track_info_c *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   last_timecode = 0;
   sample_rate = nsample_rate;

@@ -34,7 +34,7 @@ using namespace libmatroska;
 pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
                                    int nchannels, int nbits_per_sample,
-                                   track_info_t *nti, bool nbig_endian)
+                                   track_info_c *nti, bool nbig_endian)
   throw (error_c):
   generic_packetizer_c(nreader, nti) {
   packetno = 0;

@@ -85,7 +85,7 @@ int vobsub_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-vobsub_reader_c::vobsub_reader_c(track_info_t *nti) throw (error_c):
+vobsub_reader_c::vobsub_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   string sub_name, line;
   int len;

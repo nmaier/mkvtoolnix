@@ -62,7 +62,7 @@ int ssa_reader_c::probe_file(mm_text_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
+ssa_reader_c::ssa_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   string line, global;
   int64_t old_pos;

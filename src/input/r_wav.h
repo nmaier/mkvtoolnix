@@ -50,7 +50,7 @@ private:
   bool is_dts;
 
 public:
-  wav_reader_c(track_info_t *nti) throw (error_c);
+  wav_reader_c(track_info_c *nti) throw (error_c);
   virtual ~wav_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

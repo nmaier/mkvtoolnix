@@ -32,7 +32,7 @@ private:
   bool sync_to_keyframe;
 
 public:
-  passthrough_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
+  passthrough_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
     throw (error_c);
 
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,

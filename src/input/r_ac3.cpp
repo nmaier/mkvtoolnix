@@ -62,7 +62,7 @@ int ac3_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-ac3_reader_c::ac3_reader_c(track_info_t *nti) throw (error_c):
+ac3_reader_c::ac3_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   int pos;
   ac3_header_t ac3header;

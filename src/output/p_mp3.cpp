@@ -33,7 +33,7 @@ using namespace libmatroska;
 
 mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *nreader,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, track_info_t *nti)
+                                   int nchannels, track_info_c *nti)
   throw (error_c):
   generic_packetizer_c(nreader, nti), byte_buffer(128 * 1024) {
   samples_per_sec = nsamples_per_sec;

@@ -52,7 +52,7 @@ private:
   vector<flac_block_t>::iterator current_block;
 
 public:
-  flac_reader_c(track_info_t *nti) throw (error_c);
+  flac_reader_c(track_info_c *nti) throw (error_c);
   virtual ~flac_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

@@ -37,7 +37,7 @@ private:
 
 public:
   mp3_packetizer_c(generic_reader_c *nreader, unsigned long nsamples_per_sec,
-                   int nchannels, track_info_t *nti)
+                   int nchannels, track_info_c *nti)
     throw (error_c);
   virtual ~mp3_packetizer_c();
 

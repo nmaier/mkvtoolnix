@@ -123,7 +123,7 @@ private:
   vector<kax_attachment_t> attachments;
 
 public:
-  kax_reader_c(track_info_t *nti) throw (error_c);
+  kax_reader_c(track_info_c *nti) throw (error_c);
   virtual ~kax_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

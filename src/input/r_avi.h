@@ -72,7 +72,7 @@ private:
   int video_done, maxframes, is_divx, rederive_keyframes;
 
 public:
-  avi_reader_c(track_info_t *nti) throw (error_c);
+  avi_reader_c(track_info_c *nti) throw (error_c);
   virtual ~avi_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

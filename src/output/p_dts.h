@@ -42,7 +42,7 @@ public:
   bool skipping_is_normal;
 
   dts_packetizer_c(generic_reader_c *nreader, const dts_header_t &dts_header,
-                   track_info_t *nti) throw (error_c);
+                   track_info_c *nti) throw (error_c);
   virtual ~dts_packetizer_c();
 
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,

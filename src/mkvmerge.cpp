@@ -110,7 +110,7 @@ typedef struct filelist_tag {
 
   generic_reader_c *reader;
 
-  track_info_t *ti;
+  track_info_c *ti;
 } filelist_t;
 
 typedef struct {
@@ -636,7 +636,7 @@ static void parse_sync(char *s, audio_sync_t &async, const char *opt) {
   async.displacement = atoi(s);
 }
 
-static void parse_aspect_ratio(char *s, const char *opt, track_info_t &ti) {
+static void parse_aspect_ratio(char *s, const char *opt, track_info_c &ti) {
   char *div, *c;
   float w, h;
   string orig = s;
@@ -678,7 +678,7 @@ static void parse_aspect_ratio(char *s, const char *opt, track_info_t &ti) {
   ti.display_properties->push_back(dprop);
 }
 
-static void parse_display_dimensions(char *s, track_info_t &ti) {
+static void parse_display_dimensions(char *s, track_info_c &ti) {
   char *x, *c;
   string orig = s;
   int w, h;
@@ -906,7 +906,7 @@ static void parse_tags(char *s, tags_t &tags, const char *opt) {
   tags.file_name = s;
 }
 
-static void parse_fourcc(char *s, const char *opt, track_info_t &ti) {
+static void parse_fourcc(char *s, const char *opt, track_info_c &ti) {
   char *c;
   string orig = s;
   fourcc_t fourcc;
@@ -1181,26 +1181,8 @@ static void create_readers() {
 // {{{ FUNCTION identify(const char *filename)
 
 static void identify(const char *filename) {
-  track_info_t ti;
+  track_info_c ti;
   filelist_t *file;
-
-  memset(&ti, 0, sizeof(track_info_t));
-  ti.audio_syncs = new vector<audio_sync_t>;
-  ti.cue_creations = new vector<cue_creation_t>;
-  ti.default_track_flags = new vector<int64_t>;
-  ti.languages = new vector<language_t>;
-  ti.sub_charsets = new vector<language_t>;
-  ti.all_tags = new vector<tags_t>;
-  ti.aspect_ratio = 0.0;
-  ti.atracks = new vector<int64_t>;
-  ti.vtracks = new vector<int64_t>;
-  ti.stracks = new vector<int64_t>;
-  ti.aac_is_sbr = new vector<int64_t>;
-  ti.compression_list = new vector<cue_creation_t>;
-  ti.track_names = new vector<language_t>;
-  ti.all_ext_timecodes = new vector<language_t>;
-  ti.all_fourccs = new vector<fourcc_t>;
-  ti.display_properties = new vector<display_properties_t>;
 
   file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
@@ -1217,7 +1199,7 @@ static void identify(const char *filename) {
   file->fp = NULL;
   file->status = EMOREDATA;
   file->pack = NULL;
-  file->ti = duplicate_track_info(&ti);
+  file->ti = new track_info_c(ti);
 
   files.push_back(file);
 
@@ -1233,7 +1215,7 @@ static void identify(const char *filename) {
 // {{{ FUNCTION parse_args(int argc, char **argv)
 
 static void parse_args(int argc, char **argv) {
-  track_info_t ti;
+  track_info_c *ti;
   int i, j, cc_command_line;
   filelist_t *file;
   char *s, *this_arg, *next_arg;
@@ -1245,23 +1227,7 @@ static void parse_args(int argc, char **argv) {
   tags_t tags;
   mm_io_c *io;
 
-  memset(&ti, 0, sizeof(track_info_t));
-  ti.audio_syncs = new vector<audio_sync_t>;
-  ti.cue_creations = new vector<cue_creation_t>;
-  ti.default_track_flags = new vector<int64_t>;
-  ti.languages = new vector<language_t>;
-  ti.sub_charsets = new vector<language_t>;
-  ti.all_tags = new vector<tags_t>;
-  ti.aac_is_sbr = new vector<int64_t>;
-  ti.aspect_ratio = 0.0;
-  ti.atracks = new vector<int64_t>;
-  ti.vtracks = new vector<int64_t>;
-  ti.stracks = new vector<int64_t>;
-  ti.compression_list = new vector<cue_creation_t>;
-  ti.track_names = new vector<language_t>;
-  ti.all_ext_timecodes = new vector<language_t>;
-  ti.all_fourccs = new vector<fourcc_t>;
-  ti.display_properties = new vector<display_properties_t>;
+  ti = new track_info_c;
   attachment = (attachment_t *)safemalloc(sizeof(attachment_t));
   memset(attachment, 0, sizeof(attachment_t));
   memset(&tags, 0, sizeof(tags_t));
@@ -1607,13 +1573,13 @@ static void parse_args(int argc, char **argv) {
       i++;
 
     } else if (!strcmp(this_arg, "--no-chapters")) {
-      ti.no_chapters = true;
+      ti->no_chapters = true;
 
     } else if (!strcmp(this_arg, "--no-attachments")) {
-      ti.no_attachments = true;
+      ti->no_attachments = true;
 
     } else if (!strcmp(this_arg, "--no-tags")) {
-      ti.no_tags = true;
+      ti->no_tags = true;
 
     } else if (!strcmp(this_arg, "--dump-packets")) {
       if (next_arg == NULL)
@@ -1633,54 +1599,54 @@ static void parse_args(int argc, char **argv) {
 
     // Options that apply to the next input file only.
     else if (!strcmp(this_arg, "-A") || !strcmp(this_arg, "--noaudio"))
-      ti.no_audio = true;
+      ti->no_audio = true;
 
     else if (!strcmp(this_arg, "-D") || !strcmp(this_arg, "--novideo"))
-      ti.no_video = true;
+      ti->no_video = true;
 
     else if (!strcmp(this_arg, "-S") || !strcmp(this_arg, "--nosubs"))
-      ti.no_subs = true;
+      ti->no_subs = true;
 
     else if (!strcmp(this_arg, "-a") || !strcmp(this_arg, "--atracks")) {
       if (next_arg == NULL)
         mxerror("'%s' lacks the stream number(s).\n", this_arg);
 
-      parse_tracks(next_arg, ti.atracks, this_arg);
+      parse_tracks(next_arg, ti->atracks, this_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-d") || !strcmp(this_arg, "--vtracks")) {
       if (next_arg == NULL)
         mxerror("'%s' lacks the stream number(s).\n", this_arg);
 
-      parse_tracks(next_arg, ti.vtracks, this_arg);
+      parse_tracks(next_arg, ti->vtracks, this_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-s") || !strcmp(this_arg, "--stracks")) {
       if (next_arg == NULL)
         mxerror("'%s' lacks the stream number(s).\n", this_arg);
 
-      parse_tracks(next_arg, ti.stracks, this_arg);
+      parse_tracks(next_arg, ti->stracks, this_arg);
       i++;
 
     } else if (!strcmp(this_arg, "-f") || !strcmp(this_arg, "--fourcc")) {
       if (next_arg == NULL)
         mxerror("'%s' lacks the FourCC.\n", this_arg);
 
-      parse_fourcc(next_arg, this_arg, ti);
+      parse_fourcc(next_arg, this_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "--aspect-ratio")) {
       if (next_arg == NULL)
         mxerror("'--aspect-ratio' lacks the aspect ratio.\n");
 
-      parse_aspect_ratio(next_arg, this_arg, ti);
+      parse_aspect_ratio(next_arg, this_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "--display-dimensions")) {
       if (next_arg == NULL)
         mxerror("'--display-dimensions' lacks the dimensions.\n");
 
-      parse_display_dimensions(next_arg, ti);
+      parse_display_dimensions(next_arg, *ti);
       i++;
 
     } else if (!strcmp(this_arg, "-y") || !strcmp(this_arg, "--sync")) {
@@ -1688,7 +1654,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'%s' lacks the audio delay.\n", this_arg);
 
       parse_sync(next_arg, async, this_arg);
-      ti.audio_syncs->push_back(async);
+      ti->audio_syncs->push_back(async);
       i++;
 
     } else if (!strcmp(this_arg, "--cues")) {
@@ -1696,7 +1662,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--cues' lacks its argument.\n");
 
       parse_cues(next_arg, cues);
-      ti.cue_creations->push_back(cues);
+      ti->cue_creations->push_back(cues);
       i++;
 
     } else if (!strcmp(this_arg, "--default-track")) {
@@ -1707,7 +1673,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("Invalid track ID specified in '%s %s'.\n", this_arg,
                 next_arg);
 
-      ti.default_track_flags->push_back(id);
+      ti->default_track_flags->push_back(id);
       i++;
 
     } else if (!strcmp(this_arg, "--language")) {
@@ -1715,7 +1681,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--language' lacks its argument.\n");
 
       parse_language(next_arg, lang, "language", "language", true);
-      ti.languages->push_back(lang);
+      ti->languages->push_back(lang);
       i++;
 
     } else if (!strcmp(this_arg, "--sub-charset")) {
@@ -1723,7 +1689,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--sub-charset' lacks its argument.\n");
 
       parse_sub_charset(next_arg, lang);
-      ti.sub_charsets->push_back(lang);
+      ti->sub_charsets->push_back(lang);
       i++;
 
     } else if (!strcmp(this_arg, "-t") || !strcmp(this_arg, "--tags")) {
@@ -1731,7 +1697,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'%s' lacks its argument.\n", this_arg);
 
       parse_tags(next_arg, tags, this_arg);
-      ti.all_tags->push_back(tags);
+      ti->all_tags->push_back(tags);
       i++;
 
     } else if (!strcmp(this_arg, "--aac-is-sbr")) {
@@ -1742,7 +1708,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("Invalid track ID specified in '%s %s'.\n", this_arg,
                 next_arg);
 
-      ti.aac_is_sbr->push_back(id);
+      ti->aac_is_sbr->push_back(id);
       i++;
 
     } else if (!strcmp(this_arg, "--compression")) {
@@ -1750,7 +1716,7 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--compression' lacks its argument.\n");
 
       parse_compression(next_arg, cues);
-      ti.compression_list->push_back(cues);
+      ti->compression_list->push_back(cues);
       i++;
 
     } else if (!strcmp(this_arg, "--track-name")) {
@@ -1759,7 +1725,7 @@ static void parse_args(int argc, char **argv) {
 
       parse_language(next_arg, lang, "track-name", "track name", false);
       lang.language = to_utf8(cc_command_line, lang.language);
-      ti.track_names->push_back(lang);
+      ti->track_names->push_back(lang);
       i++;
 
     } else if (!strcmp(this_arg, "--timecodes")) {
@@ -1767,27 +1733,27 @@ static void parse_args(int argc, char **argv) {
         mxerror("'--timecodes' lacks its argument.\n");
 
       parse_language(next_arg, lang, "timecodes", "timecodes", false);
-      ti.all_ext_timecodes->push_back(lang);
+      ti->all_ext_timecodes->push_back(lang);
       i++;
 
     }
 
     // The argument is an input file.
     else {
-      if ((ti.atracks->size() != 0) && ti.no_audio)
+      if ((ti->atracks->size() != 0) && ti->no_audio)
         mxerror("'-A' and '-a' used on the same source file.\n");
 
-      if ((ti.vtracks->size() != 0) && ti.no_video)
+      if ((ti->vtracks->size() != 0) && ti->no_video)
         mxerror("'-D' and '-d' used on the same source file.\n");
 
-      if ((ti.stracks->size() != 0) && ti.no_subs)
+      if ((ti->stracks->size() != 0) && ti->no_subs)
         mxerror("'-S' and '-s' used on the same source file.\n");
 
       file = (filelist_t *)safemalloc(sizeof(filelist_t));
 
-      file->name = this_arg;
+      file->name = safestrdup(this_arg);
       file->type = get_type(file->name);
-      ti.fname = this_arg;
+      ti->fname = safestrdup(this_arg);
 
       if (file->type == TYPEUNKNOWN)
         mxerror("File '%s' has unknown type. Please have a look "
@@ -1799,46 +1765,13 @@ static void parse_args(int argc, char **argv) {
       if (file->type != TYPECHAPTERS) {
         file->status = EMOREDATA;
         file->pack = NULL;
-        file->ti = duplicate_track_info(&ti);
+        file->ti = ti;
 
         files.push_back(file);
       } else
         safefree(file);
 
-      delete ti.atracks;
-      delete ti.vtracks;
-      delete ti.stracks;
-      delete ti.audio_syncs;
-      delete ti.cue_creations;
-      delete ti.default_track_flags;
-      delete ti.languages;
-      delete ti.sub_charsets;
-      delete ti.all_tags;
-      delete ti.aac_is_sbr;
-      delete ti.compression_list;
-      for (j = 0; j < ti.track_names->size(); j++)
-        safefree((*ti.track_names)[j].language);
-      delete ti.track_names;
-      delete ti.all_ext_timecodes;
-      delete ti.all_fourccs;
-      delete ti.display_properties;
-      memset(&ti, 0, sizeof(track_info_t));
-      ti.audio_syncs = new vector<audio_sync_t>;
-      ti.cue_creations = new vector<cue_creation_t>;
-      ti.default_track_flags = new vector<int64_t>;
-      ti.languages = new vector<language_t>;
-      ti.sub_charsets = new vector<language_t>;
-      ti.all_tags = new vector<tags_t>;
-      ti.aac_is_sbr = new vector<int64_t>;
-      ti.aspect_ratio = 0.0;
-      ti.atracks = new vector<int64_t>;
-      ti.vtracks = new vector<int64_t>;
-      ti.stracks = new vector<int64_t>;
-      ti.compression_list = new vector<cue_creation_t>;
-      ti.track_names = new vector<language_t>;
-      ti.all_ext_timecodes = new vector<language_t>;
-      ti.all_fourccs = new vector<fourcc_t>;
-      ti.display_properties = new vector<display_properties_t>;
+      ti = new track_info_c;
     }
   }
 
@@ -1862,23 +1795,7 @@ static void parse_args(int argc, char **argv) {
       attachment_sizes_others += attachments[i]->size;
   }
 
-  delete ti.audio_syncs;
-  delete ti.cue_creations;
-  delete ti.default_track_flags;
-  delete ti.languages;
-  delete ti.sub_charsets;
-  delete ti.all_tags;
-  delete ti.aac_is_sbr;
-  delete ti.atracks;
-  delete ti.vtracks;
-  delete ti.stracks;
-  delete ti.compression_list;
-  for (j = 0; j < ti.track_names->size(); j++)
-    safefree((*ti.track_names)[j].language);
-  delete ti.track_names;
-  delete ti.all_ext_timecodes;
-  delete ti.all_fourccs;
-  delete ti.display_properties;
+  delete ti;
   safefree(attachment);
 }
 
@@ -2013,7 +1930,7 @@ static void cleanup() {
 
   while (files.size()) {
     file = files[files.size() - 1];
-    free_track_info(file->ti);
+    delete file->ti;
     safefree(file);
     files.pop_back();
   }

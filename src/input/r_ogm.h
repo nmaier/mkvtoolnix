@@ -103,7 +103,7 @@ private:
   int64_t file_size;
 
 public:
-  ogm_reader_c(track_info_t *nti) throw (error_c);
+  ogm_reader_c(track_info_c *nti) throw (error_c);
   virtual ~ogm_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

@@ -40,7 +40,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
                                        const char *ncodec_id,
                                        double nfps, int nwidth,
                                        int nheight, bool nbframes,
-                                       track_info_t *nti)
+                                       track_info_c *nti)
   throw (error_c) : generic_packetizer_c(nreader, nti) {
   fps = nfps;
   width = nwidth;

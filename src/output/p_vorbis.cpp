@@ -43,7 +43,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *nreader,
                                          unsigned char *d_comments,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
-                                         int l_codecsetup, track_info_t *nti)
+                                         int l_codecsetup, track_info_c *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   int i;
 

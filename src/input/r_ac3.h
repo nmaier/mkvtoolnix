@@ -40,7 +40,7 @@ private:
   int64_t bytes_processed, size;
 
 public:
-  ac3_reader_c(track_info_t *nti) throw (error_c);
+  ac3_reader_c(track_info_c *nti) throw (error_c);
   virtual ~ac3_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

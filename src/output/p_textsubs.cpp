@@ -34,7 +34,7 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
                                              const char *ncodec_id,
                                              const void *nglobal_data,
                                              int nglobal_size, bool nrecode,
-                                             bool is_utf8, track_info_t *nti)
+                                             bool is_utf8, track_info_c *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   recode = nrecode;

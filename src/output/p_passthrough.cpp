@@ -32,7 +32,7 @@
 using namespace libmatroska;
 
 passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *nreader,
-                                                   track_info_t *nti)
+                                                   track_info_c *nti)
   throw (error_c):
   generic_packetizer_c(nreader, nti) {
   packets_processed = 0;

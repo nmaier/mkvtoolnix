@@ -37,7 +37,7 @@ private:
 public:
   vobsub_packetizer_c(generic_reader_c *nreader,
                       const void *nidx_data, int nidx_data_size,
-                      bool nextract_from_mpeg, track_info_t *nti)
+                      bool nextract_from_mpeg, track_info_c *nti)
     throw (error_c);
   virtual ~vobsub_packetizer_c();
 

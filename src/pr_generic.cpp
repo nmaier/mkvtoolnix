@@ -37,7 +37,7 @@
 using namespace std;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
-                                           track_info_t *nti) throw(error_c) {
+                                           track_info_c *nti) throw(error_c) {
   int i;
   audio_sync_t *as;
   cue_creation_t *cc;
@@ -56,7 +56,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   duplicate_data = true;
 
   track_entry = NULL;
-  ti = duplicate_track_info(nti);
+  ti = new track_info_c(*nti);
   free_refs = -1;
   enqueued_bytes = 0;
   safety_last_timecode = 0;
@@ -224,7 +224,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
-  free_track_info(ti);
+  delete ti;
 
   safefree(hcodec_id);
   safefree(hcodec_private);
@@ -926,12 +926,12 @@ void generic_packetizer_c::displace(float by_ms) {
 
 //--------------------------------------------------------------------
 
-generic_reader_c::generic_reader_c(track_info_t *nti) {
-  ti = duplicate_track_info(nti);
+generic_reader_c::generic_reader_c(track_info_c *nti) {
+  ti = new track_info_c(*nti);
 }
 
 generic_reader_c::~generic_reader_c() {
-  free_track_info(ti);
+  delete ti;
 }
 
 bool generic_reader_c::demuxing_requested(char type, int64_t id) {
@@ -967,98 +967,168 @@ bool generic_reader_c::demuxing_requested(char type, int64_t id) {
 
 //--------------------------------------------------------------------
 
-track_info_t *duplicate_track_info(track_info_t *src) {
-  track_info_t *dst;
-  int i;
+track_info_c::track_info_c():
+  initialized(true),
+  id(0), fname(NULL),
+  no_audio(false), no_video(false), no_subs(false),
+  private_data(NULL), private_size(0),
+  aspect_ratio(0.0), display_width(0), display_height(0),
+  aspect_ratio_given(false), display_dimensions_given(false),
+  cues(0), default_track(false), language(NULL), sub_charset(NULL),
+  tags_ptr(NULL), tags(NULL),
+  compression(COMPRESSION_NONE),
+  track_name(NULL), ext_timecodes(NULL),
+  no_chapters(false), no_attachments(false), no_tags(false) {
+  atracks = new vector<int64_t>;
+  vtracks = new vector<int64_t>;
+  stracks = new vector<int64_t>;
 
-  if (src == NULL)
-    return NULL;
-
-  dst = (track_info_t *)safememdup(src, sizeof(track_info_t));
-  dst->fname = safestrdup(src->fname);
-  dst->atracks = new vector<int64_t>(*src->atracks);
-  dst->vtracks = new vector<int64_t>(*src->vtracks);
-  dst->stracks = new vector<int64_t>(*src->stracks);
-  dst->audio_syncs = new vector<audio_sync_t>(*src->audio_syncs);
-  dst->cue_creations = new vector<cue_creation_t>(*src->cue_creations);
-  dst->default_track_flags = new vector<int64_t>(*src->default_track_flags);
-  dst->languages = new vector<language_t>(*src->languages);
-  for (i = 0; i < src->languages->size(); i++)
-    (*dst->languages)[i].language = safestrdup((*src->languages)[i].language);
-  dst->language = safestrdup(src->language);
-  dst->sub_charsets = new vector<language_t>(*src->sub_charsets);
-  for (i = 0; i < src->sub_charsets->size(); i++)
-    (*dst->sub_charsets)[i].language =
-      safestrdup((*src->sub_charsets)[i].language);
-  dst->sub_charset = safestrdup(src->sub_charset);
-  dst->all_tags = new vector<tags_t>(*src->all_tags);
-  for (i = 0; i < src->all_tags->size(); i++)
-    (*dst->all_tags)[i].file_name = safestrdup((*src->all_tags)[i].file_name);
-  dst->aac_is_sbr = new vector<int64_t>(*src->aac_is_sbr);
-  dst->private_data = (unsigned char *)safememdup(src->private_data,
-                                                  src->private_size);
-  dst->compression_list = new vector<cue_creation_t>(*src->compression_list);
-  dst->track_names = new vector<language_t>(*src->track_names);
-  for (i = 0; i < src->track_names->size(); i++)
-    (*dst->track_names)[i].language =
-      safestrdup((*src->track_names)[i].language);
-  dst->track_name = safestrdup(src->track_name);
-  dst->all_ext_timecodes = new vector<language_t>(*src->all_ext_timecodes);
-  for (i = 0; i < src->all_ext_timecodes->size(); i++)
-    (*dst->all_ext_timecodes)[i].language =
-      safestrdup((*src->all_ext_timecodes)[i].language);
-  dst->ext_timecodes = safestrdup(src->ext_timecodes);
-  dst->tags = NULL;
-  dst->all_fourccs = new vector<fourcc_t>(*src->all_fourccs);
-  dst->fourcc[0] = 0;
-  dst->display_properties =
-    new vector<display_properties_t>(*src->display_properties);
-  dst->aspect_ratio_given = false;
-  dst->display_dimensions_given = false;
-
-  return dst;
+  all_fourccs = new vector<fourcc_t>;
+  memset(fourcc, 0, 5);
+  display_properties = new vector<display_properties_t>;
+  audio_syncs = new vector<audio_sync_t>;
+  cue_creations = new vector<cue_creation_t>;
+  default_track_flags = new vector<int64_t>;
+  languages = new vector<language_t>;
+  sub_charsets = new vector<language_t>;
+  all_tags = new vector<tags_t>;
+  aac_is_sbr = new vector<int64_t>;
+  compression_list = new vector<cue_creation_t>;
+  track_names = new vector<language_t>;
+  all_ext_timecodes = new vector<language_t>;
 }
 
-void free_track_info(track_info_t *ti) {
-  int i;
+track_info_c::track_info_c(const track_info_c &src):
+  initialized(false) {
+  *this = src;
+}
 
-  if (ti == NULL)
+track_info_c::~track_info_c() {
+  free_contents();
+}
+
+void track_info_c::free_contents() {
+  uint32_t i;
+
+  if (!initialized)
     return;
 
-  safefree(ti->fname);
-  delete ti->atracks;
-  delete ti->vtracks;
-  delete ti->stracks;
-  delete ti->audio_syncs;
-  delete ti->cue_creations;
-  delete ti->default_track_flags;
-  for (i = 0; i < ti->languages->size(); i++)
-    safefree((*ti->languages)[i].language);
-  delete ti->languages;
-  safefree(ti->language);
-  for (i = 0; i < ti->sub_charsets->size(); i++)
-    safefree((*ti->sub_charsets)[i].language);
-  delete ti->sub_charsets;
-  safefree(ti->sub_charset);
-  for (i = 0; i < ti->all_tags->size(); i++)
-    safefree((*ti->all_tags)[i].file_name);
-  delete ti->all_tags;
-  delete ti->aac_is_sbr;
-  delete ti->compression_list;
-  for (i = 0; i < ti->track_names->size(); i++)
-    safefree((*ti->track_names)[i].language);
-  delete ti->track_names;
-  safefree(ti->track_name);
-  for (i = 0; i < ti->all_ext_timecodes->size(); i++)
-    safefree((*ti->all_ext_timecodes)[i].language);
-  delete ti->all_ext_timecodes;
-  safefree(ti->ext_timecodes);
-  safefree(ti->private_data);
-  if (ti->tags != NULL)
-    delete ti->tags;
-  delete ti->all_fourccs;
-  delete ti->display_properties;
-  safefree(ti);
+  safefree(fname);
+  delete atracks;
+  delete vtracks;
+  delete stracks;
+  delete audio_syncs;
+  delete cue_creations;
+  delete default_track_flags;
+  for (i = 0; i < languages->size(); i++)
+    safefree((*languages)[i].language);
+  delete languages;
+  safefree(language);
+  for (i = 0; i < sub_charsets->size(); i++)
+    safefree((*sub_charsets)[i].language);
+  delete sub_charsets;
+  safefree(sub_charset);
+  for (i = 0; i < all_tags->size(); i++)
+    safefree((*all_tags)[i].file_name);
+  delete all_tags;
+  delete aac_is_sbr;
+  delete compression_list;
+  for (i = 0; i < track_names->size(); i++)
+    safefree((*track_names)[i].language);
+  delete track_names;
+  safefree(track_name);
+  for (i = 0; i < all_ext_timecodes->size(); i++)
+    safefree((*all_ext_timecodes)[i].language);
+  delete all_ext_timecodes;
+  safefree(ext_timecodes);
+  safefree(private_data);
+  if (tags != NULL)
+    delete tags;
+  delete all_fourccs;
+  delete display_properties;
+
+  initialized = false;
+}
+
+track_info_c &track_info_c::operator =(const track_info_c &src) {
+  uint32_t i;
+
+  free_contents();
+
+  id = src.id;
+  fname = safestrdup(src.fname);
+
+  no_audio = src.no_audio;
+  no_video = src.no_video;
+  no_subs = src.no_subs;
+
+  atracks = new vector<int64_t>(*src.atracks);
+  vtracks = new vector<int64_t>(*src.vtracks);
+  stracks = new vector<int64_t>(*src.stracks);
+
+  private_size = src.private_size;
+  private_data = (unsigned char *)safememdup(src.private_data, private_size);
+
+  all_fourccs = new vector<fourcc_t>(*src.all_fourccs);
+  memcpy(fourcc, src.fourcc, 5);
+
+  display_properties =
+    new vector<display_properties_t>(*src.display_properties);
+  aspect_ratio = src.aspect_ratio;
+  aspect_ratio_given = false;
+  display_dimensions_given = false;
+
+  audio_syncs = new vector<audio_sync_t>(*src.audio_syncs);
+  memcpy(&async, &src.async, sizeof(audio_sync_t));
+
+  cue_creations = new vector<cue_creation_t>(*src.cue_creations);
+  cues = src.cues;
+
+  default_track_flags = new vector<int64_t>(*src.default_track_flags);
+  default_track = src.default_track;
+
+  languages = new vector<language_t>(*src.languages);
+  for (i = 0; i < src.languages->size(); i++)
+    (*languages)[i].language = safestrdup((*src.languages)[i].language);
+  language = safestrdup(src.language);
+
+  sub_charsets = new vector<language_t>(*src.sub_charsets);
+  for (i = 0; i < src.sub_charsets->size(); i++)
+    (*sub_charsets)[i].language =
+      safestrdup((*src.sub_charsets)[i].language);
+  sub_charset = safestrdup(src.sub_charset);
+
+  all_tags = new vector<tags_t>(*src.all_tags);
+  for (i = 0; i < src.all_tags->size(); i++)
+    (*all_tags)[i].file_name = safestrdup((*src.all_tags)[i].file_name);
+  tags_ptr = src.tags_ptr;
+  tags = NULL;
+//   tags = src.tags;
+
+  aac_is_sbr = new vector<int64_t>(*src.aac_is_sbr);
+
+  compression_list = new vector<cue_creation_t>(*src.compression_list);
+  compression = src.compression;
+
+  track_names = new vector<language_t>(*src.track_names);
+  for (i = 0; i < src.track_names->size(); i++)
+    (*track_names)[i].language =
+      safestrdup((*src.track_names)[i].language);
+  track_name = safestrdup(src.track_name);
+
+  all_ext_timecodes = new vector<language_t>(*src.all_ext_timecodes);
+  for (i = 0; i < src.all_ext_timecodes->size(); i++)
+    (*all_ext_timecodes)[i].language =
+      safestrdup((*src.all_ext_timecodes)[i].language);
+  ext_timecodes = safestrdup(src.ext_timecodes);
+
+  no_chapters = src.no_chapters;
+  no_attachments = src.no_attachments;
+  no_tags = src.no_tags;
+
+  initialized = true;
+
+  return *this;
 }
 
 struct ltstr {
@@ -1068,7 +1138,7 @@ struct ltstr {
 };
 static map<const char *, string, ltstr> pass_data;
 
-void set_pass_data(track_info_t *ti, unsigned char *data, int size) {
+void set_pass_data(track_info_c *ti, unsigned char *data, int size) {
   string key, value;
 
   key = string(ti->fname) + string("::") + to_string(ti->id);
@@ -1078,7 +1148,7 @@ void set_pass_data(track_info_t *ti, unsigned char *data, int size) {
   pass_data[key.c_str()] = value;
 }
 
-unsigned char *retrieve_pass_data(track_info_t *ti, int &size) {
+unsigned char *retrieve_pass_data(track_info_c *ti, int &size) {
   map<const char *, string, ltstr>::iterator it;
   string key, value;
   unsigned char *data;

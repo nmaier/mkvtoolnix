@@ -45,7 +45,7 @@ private:
   int cc_utf8;
 
 public:
-  ssa_reader_c(track_info_t *nti) throw (error_c);
+  ssa_reader_c(track_info_c *nti) throw (error_c);
   virtual ~ssa_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

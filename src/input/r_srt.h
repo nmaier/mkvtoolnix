@@ -38,7 +38,7 @@ private:
   int act_wchar;
 
 public:
-  srt_reader_c(track_info_t *nti) throw (error_c);
+  srt_reader_c(track_info_c *nti) throw (error_c);
   virtual ~srt_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

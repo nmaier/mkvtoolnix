@@ -41,7 +41,7 @@ private:
   bool emphasis_present;
 
 public:
-  aac_reader_c(track_info_t *nti) throw (error_c);
+  aac_reader_c(track_info_c *nti) throw (error_c);
   virtual ~aac_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

@@ -120,7 +120,7 @@ private:
   int main_dmx;
 
 public:
-  qtmp4_reader_c(track_info_t *nti) throw (error_c);
+  qtmp4_reader_c(track_info_c *nti) throw (error_c);
   virtual ~qtmp4_reader_c();
 
   virtual int read(generic_packetizer_c *ptzr);

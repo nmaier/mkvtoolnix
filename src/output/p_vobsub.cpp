@@ -40,7 +40,7 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *nreader,
                                          const void *nidx_data,
                                          int nidx_data_size,
                                          bool nextract_from_mpeg,
-                                         track_info_t *nti) throw (error_c):
+                                         track_info_c *nti) throw (error_c):
   generic_packetizer_c(nreader, nti) {
 
   idx_data = (unsigned char *)safememdup(nidx_data, nidx_data_size);

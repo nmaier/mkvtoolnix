@@ -87,7 +87,10 @@ typedef struct {
   int64_t id;
 } fourcc_t;
 
-typedef struct {
+class track_info_c {
+protected:
+  bool initialized;
+public:
   // The track ID.
   int64_t id;
 
@@ -138,7 +141,15 @@ typedef struct {
   char *ext_timecodes;          // For this very track
 
   bool no_chapters, no_attachments, no_tags;
-} track_info_t;
+
+public:
+  track_info_c();
+  track_info_c(const track_info_c &src);
+  virtual ~track_info_c();
+
+  track_info_c &operator =(const track_info_c &src);
+  virtual void free_contents();
+};
 
 class timecode_range_c {
 public:
@@ -158,7 +169,7 @@ protected:
   generic_reader_c *reader;
   bool duplicate_data;
 
-  track_info_t *ti;
+  track_info_c *ti;
   int64_t initial_displacement;
   int64_t free_refs, enqueued_bytes, safety_last_timecode;
 
@@ -191,7 +202,7 @@ protected:
   int ext_timecodes_version;
 
 public:
-  generic_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
+  generic_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
     throw (error_c);
   virtual ~generic_packetizer_c();
 
@@ -272,9 +283,9 @@ protected:
 
 class generic_reader_c {
 protected:
-  track_info_t *ti;
+  track_info_c *ti;
 public:
-  generic_reader_c(track_info_t *nti);
+  generic_reader_c(track_info_c *nti);
   virtual ~generic_reader_c();
   virtual int read(generic_packetizer_c *ptzr) = 0;
   virtual int display_priority() = 0;
@@ -290,9 +301,9 @@ protected:
   virtual bool demuxing_requested(char type, int64_t id);
 };
 
-track_info_t *duplicate_track_info(track_info_t *src);
-void free_track_info(track_info_t *ti);
-void set_pass_data(track_info_t *ti, unsigned char *data, int size);
-unsigned char *retrieve_pass_data(track_info_t *ti, int &size);
+track_info_c *duplicate_track_info(track_info_c *src);
+void free_track_info(track_info_c *ti);
+void set_pass_data(track_info_c *ti, unsigned char *data, int size);
+unsigned char *retrieve_pass_data(track_info_c *ti, int &size);
 
 #endif  // __PR_GENERIC_H

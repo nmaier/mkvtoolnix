@@ -44,7 +44,7 @@ public:
                       unsigned char *d_header, int l_header,
                       unsigned char *d_comments, int l_comments,
                       unsigned char *d_codecsetup, int l_codecsetup,
-                      track_info_t *nti) throw (error_c);
+                      track_info_c *nti) throw (error_c);
   virtual ~vorbis_packetizer_c();
 
   virtual int process(unsigned char *data, int size, int64_t timecode = -1,

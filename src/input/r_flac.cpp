@@ -82,7 +82,7 @@ int flac_reader_c::probe_file(mm_io_c *mm_io, int64_t size) {
   return 1;
 }
 
-flac_reader_c::flac_reader_c(track_info_t *nti) throw (error_c):
+flac_reader_c::flac_reader_c(track_info_c *nti) throw (error_c):
   generic_reader_c(nti) {
   unsigned char *buf;
   uint32_t size;
