@@ -1233,8 +1233,8 @@ debug_c::add_packetizer(void *ptzr) {
 
 void
 debug_c::dump_info() {
-  int i;
 #if defined(SYS_UNIX) || defined(SYS_APPLE)
+  int i;
   debug_data_t *entry;
   uint64_t diff_calls, diff_time;
 
