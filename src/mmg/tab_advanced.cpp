@@ -36,8 +36,8 @@ tab_advanced::tab_advanced(wxWindow *parent):
           wxTAB_TRAVERSAL) {
   uint32_t i;
 
-  new wxStaticBox(this, -1, _("Other options"),
-                  wxPoint(10, 5), wxSize(475, 50));
+//   new wxStaticBox(this, -1, _("Other options"),
+//                   wxPoint(10, 5), wxSize(475, 50));
 //   new wxStaticText(this, -1, _("Command line charset:"), wxPoint(15, 25));
   cob_cl_charset =
     new wxComboBox(this, ID_CB_CLCHARSET, "", wxPoint(155, 25),
