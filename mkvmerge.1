@@ -1,9 +1,12 @@
-.TH MKVMERGE "1" "April 2003" "mkvmerge v0.5.0" "User Commands"
+.TH MKVMERGE "1" "June 2003" "mkvmerge v0.5.0" "User Commands"
+
 .SH NAME
 mkvmerge \- Merge multimedia streams into a Matroska file
+
 .SH SYNOPSIS
 .B mkvmerge
 [\fIglobal options\fR] \-o \fIout\fR [\fIoptions\fR] <file1> [[\fIoptions\fR] <file2> ...] [@optionsfile]
+
 .SH DESCRIPTION
 .LP
 This program takes the input from several media files and joins
@@ -129,6 +132,9 @@ linear drifts. \fIp\fR defaults to 1000 if omitted. Both \fIo\fR and
 .br
 Defaults: no manual synch correction (which is the same as \fId\fR = 0 and
 \fIo\fR/\fIp\fR = 1.0).
+.br
+This option can be used multiple times for an input file applying to several
+tracks by selecting different track IDs each time.
 .TP
 \fB\-\-cues\fR <\fITID\fR:\fInone\fR|\fIiframes\fR|\fIall\fR>
 Controls for which tracks cue (index) entries are created for the given track
@@ -141,17 +147,26 @@ the file very big.
 The default is \fIiframes\fR for video tracks and \fInone\fR for all others.
 See also option \fB\-\-no\-cues\fR which inhibits the creation of cue
 entries regardless of the \fB\-\-cues\fR options used.
+.br
+This option can be used multiple times for an input file applying to several
+tracks by selecting different track IDs each time.
 .TP
 \fB\-\-default\-track\fR <\fITID\fR>
 Sets the 'default' flag for the given track (see section \fBTRACK IDS\fR).
 If the user does not explicitly select a track himself then the player should
 prefer the track that has his 'default' flag set. Only one track of each kind
 (audio, video, subttiles) can have his 'default' flag set.
+.br
+This option can be used multiple times for an input file applying to several
+tracks by selecting different track IDs each time.
 .TP
 \fB\-\-language\fR <\fITID\fR:\fIlanguage\fR>
 Sets the language for the given track (see section \fBTRACK IDS\fR). Only
 ISO639-2 codes are allowed. All languages including their ISO639-2 codes can be
 listed with the \fB\-\-list\-languages\fR option.
+.br
+This option can be used multiple times for an input file applying to several
+tracks by selecting different track IDs each time.
 .LP
 Options that only apply to video tracks:
 .TP
@@ -164,9 +179,14 @@ floating point number or as 'widht/height', e.g. 16/9.
 .LP
 Options that only apply to subtitle tracks:
 .TP
-\fB\-\-sub\-charset\fR <\fIcharset\fR>
-Sets the charset for the conversion to UTF-8 for UTF-8 subtitles. If not
-specified the charset will be derived from the current locale settings.
+\fB\-\-sub\-charset\fR <\fITID\fR:\fIcharset\fR>
+Sets the charset for the conversion to UTF-8 for UTF-8 subtitles for the given
+track ID. If not specified the charset will be derived from the current locale
+settings. Note that a charset is not needed for subtitles read from Matroska
+files as these are always stored in UTF-8.
+.br
+This option can be used multiple times for an input file applying to several
+tracks by selecting different track IDs each time.
 .LP
 Other options:
 .TP
@@ -310,7 +330,33 @@ $ \fBsrttool -s -w -i mymovie.srtx -o mymovie.srt\fP
 The resulting file can be used as another input file for \fBmkvmerge\fR:
 .LP
 $ \fBmkvmerge -o mymovie.mkv mymovie.avi mymovie.srt\fP
-
+.LP
+If you want to specify the language for a given track then this is easily
+done. First find out the ISO639-2 code for your language. \fBmkvmerge\fR
+can list all of those codes for you:
+.LP
+$ \fBmkvmerge --list-languages\fR
+.LP
+Search the list for the languages you need. Let's assume you have put two
+audio tracks into a Matroska file and want to set their language codes and
+that their track IDs are 2 and 3. This can be done with
+.LP
+$ \fBmkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut
+without-lang-codes.mkv\fR
+.LP
+As you can see you can use the \fB--language\fR switch multiple times.
+.LP
+Maybe you'd also like to have the player use the Dutch language as the default
+language. You also have extra subtitles, e.g. in English and French, and want
+to have the player display the French ones by default. This can be done with
+.LP
+$ \fBmkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut
+--default-track 3 without-lang-codes.mkv --language 0:eng english.srt
+--default-track 0 --language 0:fre french.srt\fR
+.LP
+If you do not see the language or default track flags that you've specified
+in \fBmkvinfo\fR's output then please read the section about \fBDEFAULT
+VALUES\fR.
 
 .SH SUBTITLES
 .LP
@@ -387,11 +433,22 @@ or \fBmkvmerge \-\-identify\fR. It is \fBnot\fR the track UID.
 .LP
 The special track ID '-1' is a wildcard and applies the given switch to all
 tracks that are read from an input file. This was the bahviour of these
-switches prior to version 0.5.0.
+switches prior to version 0.4.4.
 .LP
 The options that use the track IDs are: \fB\-\-atracks\fR, \fB\-\-vtracks\fR,
 \fB\-\-stracks\fR, \fB\-\-sync\fR, \fB\-\-default-track\fR, \fB\-\-cues\fR
 and \fB\-\-language\fR.
+
+.SH DEFAULT VALUES
+.LP
+The Matroska specs say that some elements have a default value. Usually an
+element is not written to the file if its value is equal to its default
+value in order to save space. The elements that the user might miss in
+\fBmkvinfo\fR's output are the \fIlanguage\fR and the \fIdefault track flag\fR.
+The default value for the \fIlanguage\fR is English (\fIeng\fR),
+and the default value for the \fIdefault track flag\fR is \fItrue\fR. Therefore
+if you used \fB--language 0:eng\fR for a track then it will not show up
+in \fBmkvinfo\fR's output.
 
 .SH NOTES
 .LP
@@ -434,6 +491,9 @@ or removing packets at the beginning.
 *
 Text subtitles can be read from SRT (SubRipper / subrip) files or
 taken from other OGM files.
+.TP
+*
+SSA/ASS subtitles from SSA/ASS files
 .LP
 What not works:
 .TP
@@ -454,7 +514,7 @@ a lot of other stuff, like tags, user information etc.
 .I mkvmerge
 was written by Moritz Bunkus <moritz@bunkus.org>.
 .SH SEE ALSO
-.BR mkvinfo (1)
+.BR mkvinfo (1),
 .BR mkvextract (1)
 .SH WWW
 The newest version can always be found at
