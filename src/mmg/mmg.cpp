@@ -782,7 +782,8 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_about(wxCommandEvent &evt) {
-  wxMessageBox(wxT("mkvmerge GUI v" VERSION "\n"
+  wxMessageBox(wxT("mkvmerge GUI v" VERSION " built on " __DATE__ " "
+                   __TIME__ "\n"
                    "This GUI was written by Moritz Bunkus <moritz@bunkus.org>"
                    "\nBased on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
                    "mkvmerge GUI is licensed under the GPL.\n"
