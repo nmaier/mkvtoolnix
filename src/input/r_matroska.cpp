@@ -1699,7 +1699,7 @@ kax_reader_c::read(generic_packetizer_c *) {
   KaxReferenceBlock *ref_block;
   KaxBlockDuration *duration;
   KaxClusterTimecode *ctc;
-  int64_t block_fref, block_bref, block_duration;
+  int64_t block_fref, block_bref, block_duration, frame_duration;
   kax_track_t *block_track;
   bool found_data, bref_found, fref_found;
 
@@ -1787,6 +1787,7 @@ kax_reader_c::read(generic_packetizer_c *) {
                 block->NumberFrames();
             else if (block_track->v_frate != 0)
               block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
+            frame_duration = (block_duration == -1) ? 0 : block_duration;
 
             last_timecode = block->GlobalTimecode();
             if (bref_found)
@@ -1799,8 +1800,9 @@ kax_reader_c::read(generic_packetizer_c *) {
               memory_c mem((unsigned char *)data.Buffer(), data.Size(),
                            false);
               ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->
-                process(mem, last_timecode, block_duration,
-                        block_bref, block_fref, duration != NULL);
+                process(mem, last_timecode + i * frame_duration,
+                        block_duration, block_bref, block_fref,
+                        duration != NULL);
             }
 
           } else if ((block_track != NULL) &&
@@ -1812,6 +1814,7 @@ kax_reader_c::read(generic_packetizer_c *) {
                 block->NumberFrames();
             else if (block_track->v_frate != 0)
               block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
+            frame_duration = (block_duration == -1) ? 0 : block_duration;
 
             if ((block_track->type == 's') && (block_duration == -1) &&
                 (block_track->sub_type == 't')) {
@@ -1861,8 +1864,8 @@ kax_reader_c::read(generic_packetizer_c *) {
               } else {
                 memory_c mem(re_buffer, re_size, re_modified);
                 PTZR(block_track->ptzr)->
-                  process(mem, (int64_t)last_timecode, block_duration,
-                          block_bref, block_fref);
+                  process(mem, (int64_t)last_timecode + i * frame_duration,
+                          block_duration, block_bref, block_fref);
               }
             }
 

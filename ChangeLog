@@ -1,3 +1,10 @@
+2004-06-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Matroska tracks can use lacing (several
+	frames inside one Matroska block with only one timecode for the
+	whole block). mkvmerge did not recreate the timecodes for the
+	frames 1..n in the lacing correctly.
+
 2004-06-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: feature removed: Dropped support for 'time
