@@ -3057,7 +3057,7 @@ finish_file(bool last_file) {
     if (tags_here != NULL) {
       fix_mandatory_tag_elements(tags_here);
       tags_here->UpdateSize();
-      tags_here->Render(*out);
+      tags_here->Render(*out, true);
     }
   } else
     tags_here = NULL;
