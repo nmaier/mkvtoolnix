@@ -87,8 +87,7 @@ tab_chapters::tab_chapters(wxWindow *parent, wxMenu *nm_chapters):
   new wxStaticText(this, wxID_STATIC, _("Chapters:"), wxPoint(10, 5),
                    wxDefaultSize, 0);
   tc_chapters =
-    new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxPoint(10, 24), wxSize(350, 250),
-                   wxSIMPLE_BORDER | wxTR_HAS_BUTTONS);
+    new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxPoint(10, 24), wxSize(350, 250));
 
   b_add_chapter =
     new wxButton(this, ID_B_ADDCHAPTER, _("Add chapter"), wxPoint(370, 24),
