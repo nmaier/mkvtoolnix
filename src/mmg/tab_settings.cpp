@@ -120,6 +120,15 @@ tab_settings::tab_settings(wxWindow *parent):
   siz_misc->Add(cb_warn_usage, 0, wxLEFT, 5);
   siz_misc->Add(0, 5, 0, 0, 0);
 
+  cb_gui_debugging =
+    new wxCheckBox(this, ID_CB_GUI_DEBUGGING, wxT("Show mmg's debug window"));
+  cb_gui_debugging->SetToolTip(TIP("Shows mmg's debug window in which "
+                                   "debug messages will appear. This is only "
+                                   "useful if you're helping the author "
+                                   "debug a problem in mmg."));
+  siz_misc->Add(cb_gui_debugging, 0, wxLEFT, 5);
+  siz_misc->Add(0, 5, 0, 0, 0);
+
   siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
                                    wxHORIZONTAL);
   siz_about->Add(new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm)),
@@ -144,6 +153,9 @@ tab_settings::tab_settings(wxWindow *parent):
   siz_all->Add(0, 0, 1, wxGROW, 0);
   siz_all->Add(siz_about, 0, wxGROW | wxALL, 5);
   SetSizer(siz_all);
+
+  log_window = new wxLogWindow(this, wxT("mmg debug output"), false);
+  wxLog::SetActiveTarget(log_window);
 
   load_preferences();
 }
@@ -191,6 +203,12 @@ tab_settings::on_on_top_selected(wxCommandEvent &evt) {
 }
 
 void
+tab_settings::on_gui_debugging_selected(wxCommandEvent &evt) {
+  save_preferences();
+  log_window->Show(cb_gui_debugging->IsChecked());
+}
+
+void
 tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
   wxString priority;
@@ -221,6 +239,9 @@ tab_settings::load_preferences() {
   mdlg->set_on_top(b);
   cfg->Read(wxT("warn_usage"), &b, true);
   cb_warn_usage->SetValue(b);
+  cfg->Read(wxT("gui_debugging"), &b, false);
+  cb_gui_debugging->SetValue(b);
+  log_window->Show(b);
 }
 
 void
@@ -237,6 +258,7 @@ tab_settings::save_preferences() {
              cb_filenew_after_add_to_jobqueue->IsChecked());
   cfg->Write(wxT("on_top"), cb_on_top->IsChecked());
   cfg->Write(wxT("warn_usage"), cb_warn_usage->IsChecked());
+  cfg->Write(wxT("gui_debugging"), cb_gui_debugging->IsChecked());
   cfg->Flush();
 }
 
@@ -260,6 +282,7 @@ tab_settings::query_mkvmerge_capabilities() {
   vector<wxString> parts;
   int result, i;
 
+  wxLogMessage(wxT("Querying mkvmerge's capabilities"));
   tmp = wxT("\"") + mkvmerge_path + wxT("\" --capabilities");
 #if defined(SYS_WINDOWS)
   result = wxExecute(tmp, output);
@@ -301,6 +324,7 @@ tab_settings::query_mkvmerge_capabilities() {
     for (i = 0; i < output.Count(); i++) {
       tmp = output[i];
       strip(tmp);
+      wxLogMessage(wxT("Capability: %s"), tmp.c_str());
       parts = split(tmp, wxU("="), 2);
       if (parts.size() == 1)
         capabilities[parts[0]] = wxT("true");
@@ -318,4 +342,5 @@ BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_CHECKBOX(ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_ON_TOP, tab_settings::on_on_top_selected)
   EVT_CHECKBOX(ID_CB_WARN_USAGE, tab_settings::on_xyz_selected)
+  EVT_CHECKBOX(ID_CB_GUI_DEBUGGING, tab_settings::on_gui_debugging_selected)
 END_EVENT_TABLE();
