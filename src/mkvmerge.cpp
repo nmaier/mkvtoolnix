@@ -1003,15 +1003,20 @@ parse_compression(char *s,
     mxerror(_("Invalid compression option specified in '--compression %s'.\n"),
             orig.c_str());
 
+  compression.cues = -1;
+#ifdef HAVE_LZO1X_H
   if (!strcasecmp(s, "lzo") || !strcasecmp(s, "lzo1x"))
     compression.cues = COMPRESSION_LZO;
-  else if (!strcasecmp(s, "zlib"))
+#endif
+  if (!strcasecmp(s, "zlib"))
     compression.cues = COMPRESSION_ZLIB;
-  else if (!strcasecmp(s, "bz2") || !strcasecmp(s, "bzlib"))
+#ifdef HAVE_BZLIB_H
+  if (!strcasecmp(s, "bz2") || !strcasecmp(s, "bzlib"))
     compression.cues = COMPRESSION_BZ2;
-  else if (!strcmp(s, "none"))
+#endif
+  if (!strcmp(s, "none"))
     compression.cues = COMPRESSION_NONE;
-  else
+  if (compression.cues == -1)
     mxerror(_("'%s' is an unsupported argument for --compression. Available "
               "compression methods are 'none' and 'zlib'.\n"), orig.c_str());
 }
