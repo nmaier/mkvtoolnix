@@ -244,7 +244,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
   mxverb(4, "ext_timecodes v2 max is %lld = %lld\n", dur_sum,
          dur_map[dur_sum]);
   if (dur_sum > 0)
-    default_fps = (double)1.0 / dur_sum;
+    default_fps = (double)1000000000.0 / dur_sum;
   durations.push_back(dur_sum);
 }
 

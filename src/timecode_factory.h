@@ -87,7 +87,7 @@ public:
   virtual void get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false);
   virtual double get_default_duration(double proposal) {
-    return default_fps != 0.0 ? 1 / default_fps : proposal;
+    return default_fps != 0.0 ? (double)1000000000.0 / default_fps : proposal;
   }
 
 protected:
@@ -116,7 +116,7 @@ public:
   virtual void get_next(int64_t &timecode, int64_t &duration,
                         bool peek_only = false);
   virtual double get_default_duration(double proposal) {
-    return default_fps != 0.0 ? 1 / default_fps : proposal;
+    return default_fps != 0.0 ? (double)1000000000.0 / default_fps : proposal;
   }
 };
 
