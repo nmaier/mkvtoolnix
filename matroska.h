@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: matroska.h,v 1.3 2003/04/20 21:05:42 mosu Exp $
+    \version \$Id: matroska.h,v 1.4 2003/04/20 21:09:18 mosu Exp $
     \brief Definitions for the various Codec IDs
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -21,7 +21,7 @@
 #ifndef __MATROSKA_H
 #define __MATROSKA_H
 
-// see http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/specs/codex.html?rev=HEAD&content-type=text/html
+// see http://cvs.corecodec.org/cgi-bin/cvsweb.cgi/~checkout~/matroska/doc/website/specs/codex.html?rev=HEAD&content-type=text/html
 
 #define MKV_A_MP3        "A_MPEGLAYER3"
 #define MKV_A_AC3        "A_AC3"
