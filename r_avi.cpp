@@ -132,7 +132,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
                                          AVI_video_width(avi),
                                          AVI_video_height(avi),
                                          24, // fixme!
-                                         1, ti);
+                                         1, false, ti);
     if (verbose)
       fprintf(stdout, "+-> Using video output module for video track ID 0.\n");
   } else
@@ -311,7 +311,7 @@ int avi_reader_c::read() {
         debug_leave("AVI_read_frame");
         if (nread < 0) {
           vpacketizer->process(old_chunk, old_nread, -1, -1,
-                               old_key ? -1 : 0);
+                               old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
           frames = maxframes + 1;
           break;
         }
@@ -328,7 +328,7 @@ int avi_reader_c::read() {
       }
       if (nread > 0) {
         vpacketizer->process(old_chunk, old_nread, -1, -1,
-                             old_key ? -1 : 0);
+                             old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
         if (! last_frame) {
           if (old_chunk != NULL)
             safefree(old_chunk);
@@ -339,7 +339,7 @@ int avi_reader_c::read() {
           old_nread = nread;
         } else if (nread > 0)
           vpacketizer->process(chunk, nread, -1, -1,
-                               key ? -1 : 0);
+                               key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
       }
     }
 

@@ -35,7 +35,8 @@ using namespace LIBMATROSKA_NAMESPACE;
 video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
                                        double nfps, int nwidth,
                                        int nheight, int nbpp,
-                                       int navi_compat_mode, track_info_t *nti)
+                                       bool navi_compat_mode, bool nbframes,
+                                       track_info_t *nti)
   throw (error_c) : generic_packetizer_c(nreader, nti) {
   fps = nfps;
   width = nwidth;
@@ -44,6 +45,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *nreader,
   avi_compat_mode = navi_compat_mode;
   frames_output = 0;
   avi_compat_mode = 1;
+  bframes = nbframes;
   ref_timecode = -1;
   if (get_cue_creation() == CUES_UNSPECIFIED)
     set_cue_creation(CUES_IFRAMES);
@@ -59,9 +61,15 @@ void video_packetizer_c::set_headers() {
   // Set MinCache and MaxCache to 1 for I- and P-frames. If you only
   // have I-frames then both can be set to 0 (e.g. MJPEG). 2 is needed
   // if there are B-frames as well.
-  set_track_min_cache(1);
-  set_track_max_cache(1);
-  set_track_default_duration_ns((int64_t)(1000000000.0 / fps));
+  if (bframes) {
+    set_track_min_cache(2);
+    set_track_max_cache(2);
+  } else {
+    set_track_min_cache(1);
+    set_track_max_cache(1);
+  }
+  if (fps != 0.0)
+    set_track_default_duration_ns((int64_t)(1000000000.0 / fps));
 
   set_video_pixel_width(width);
   set_video_pixel_height(height);
@@ -69,9 +77,15 @@ void video_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
+// Semantics:
+// bref == 0: I frame, no references
+// bref > 0: P or B frame, use timecode of last I / P frame as the bref
+// bref < 0: P or B frame, use this bref as the backward reference
+// fref == 0: P frame, no forward reference
+// fref > 0: B frame with given forward reference
 int video_packetizer_c::process(unsigned char *buf, int size,
-                                int64_t old_timecode, int64_t, int64_t bref,
-                                int64_t) {
+                                int64_t old_timecode, int64_t flags,
+                                int64_t bref, int64_t fref) {
   int64_t timecode;
 
   debug_enter("video_packetizer_c::process");
@@ -81,14 +95,19 @@ int video_packetizer_c::process(unsigned char *buf, int size,
   else
     timecode = old_timecode;
 
-  if (bref == -1) {
+  if (bref == VFT_IFRAME) {
     // Add a key frame and save its timecode so that we can reference it later.
-    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps));
+    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps), false, -1, -1,
+               bframes ? 2 : 0);
     ref_timecode = timecode;
   } else {
-    // This is a P frame - let's reference the last frame.
-    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps), 0, ref_timecode);
-    ref_timecode = timecode;
+    // P or B frame. Use our last timecode if the bref is -2, or the provided
+    // one otherwise. The forward ref is always taken from the reader.
+    add_packet(buf, size, timecode, (int64_t)(1000.0 / fps), false,
+               bref == VFT_PFRAMEAUTOMATIC ? ref_timecode : bref, fref, 
+               fref != VFT_NOBFRAME ? 0 : bframes ? 2 : 0);
+    if (fref == VFT_NOBFRAME)
+      ref_timecode = timecode;
   }
 
   frames_output++;

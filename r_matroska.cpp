@@ -238,11 +238,6 @@ void mkv_reader_c::verify_tracks() {
               continue;
             }
           }
-        } else {
-          if (verbose)
-            printf("matroska_reader: Native CodecIDs for video tracks are not "
-                   "supported yet (track %u).\n", t->tnum);
-          continue;
         }
 
         if (t->v_width == 0) {
@@ -774,6 +769,8 @@ int mkv_reader_c::read_headers() {
                 if (verbose > 1)
                   fprintf(stdout, "matroska_reader: |  + MinCache: %u\n",
                           uint32(min_cache));
+                if (uint32(min_cache) > 1)
+                  track->v_bframes = true;
 
               } else if (EbmlId(*l3) ==
                          KaxTrackMaxCache::ClassInfos.GlobalId) {
@@ -904,7 +901,8 @@ void mkv_reader_c::create_packetizers() {
             fprintf(stdout, "Matroska demultiplexer (%s): using video output "
                     "module for track ID %u.\n", ti->fname, t->tnum);
           t->packetizer = new video_packetizer_c(this, t->v_frate, t->v_width,
-                                                 t->v_height, 24, 1, &nti);
+                                                 t->v_height, 24, 1,
+                                                 t->v_bframes, &nti);
           if (nti.aspect_ratio == 1.0) { // The user didn't set it.
             if (t->v_dwidth == 0)
               t->v_dwidth = t->v_width;
@@ -1034,7 +1032,7 @@ int mkv_reader_c::read() {
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
   KaxBlock *block;
-  int64_t fref, bref, block_duration, block_ref1, block_ref2;
+  int64_t block_fref, block_bref, block_duration;
   mkv_track_t *block_track;
 
   if (num_tracks == 0)
@@ -1092,8 +1090,8 @@ int mkv_reader_c::read() {
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
 
             block_duration = -1;
-            block_ref1 = -1;
-            block_ref2 = -1;
+            block_bref = VFT_IFRAME;
+            block_fref = VFT_NOBFRAME;
             block_track = NULL;
             block = NULL;
 
@@ -1120,10 +1118,10 @@ int mkv_reader_c::read() {
                 KaxReferenceBlock &ref = *static_cast<KaxReferenceBlock *>(l3);
                 ref.ReadData(es->I_O());
 
-                if (block_ref1 == -1)
-                  block_ref1 = int64(ref);
+                if (int64(ref) < 0) // backwards reference
+                  block_bref = int64(ref) * tc_scale / 1000000;
                 else
-                  block_ref2 = int64(ref);
+                  block_fref = int64(ref) * tc_scale / 1000000;
 
               } else if (EbmlId(*l3) ==
                          KaxBlockDuration::ClassInfos.GlobalId) {
@@ -1134,7 +1132,9 @@ int mkv_reader_c::read() {
                 block_duration = (int64_t)uint64(duration);
 
               } else if (!(EbmlId(*l3) ==
-                           KaxBlockVirtual::ClassInfos.GlobalId))
+                           KaxBlockVirtual::ClassInfos.GlobalId) &&
+                         !(EbmlId(*l3) ==
+                           KaxReferencePriority::ClassInfos.GlobalId))
                  printf("matroska_reader:   Uknown element@3: %s\n",
                         typeid(*l3).name());
 
@@ -1158,14 +1158,10 @@ int mkv_reader_c::read() {
               }
 
               last_timecode = block->GlobalTimecode() / 1000000;
-
-              if (block_ref1 > 0) {
-                fref = block_ref1;
-                bref = block_ref2;
-              } else {
-                fref = block_ref2;
-                bref = block_ref1;
-              }
+              if (block_bref != VFT_IFRAME)
+                block_bref += (int64_t)last_timecode;
+              if (block_fref != VFT_NOBFRAME)
+                block_fref += (int64_t)last_timecode;
 
               for (i = 0; i < (int)block->NumberFrames(); i++) {
                 DataBuffer &data = block->GetBuffer(i);
@@ -1177,13 +1173,17 @@ int mkv_reader_c::read() {
                   memcpy(lines, data.Buffer(), data.Size());
                   block_track->packetizer->process((unsigned char *)lines, 0,
                                                    (int64_t)last_timecode,
-                                                   block_duration, bref, fref);
+                                                   block_duration,
+                                                   block_bref,
+                                                   block_fref);
                   safefree(lines);
                 } else
                   block_track->packetizer->process((unsigned char *)
                                                    data.Buffer(), data.Size(),
                                                    (int64_t)last_timecode,
-                                                   block_duration, bref, fref);
+                                                   block_duration,
+                                                   block_bref,
+                                                   block_fref);
               }
               block_track->units_processed += block->NumberFrames();
 
@@ -1304,7 +1304,8 @@ void mkv_reader_c::set_headers() {
   int i;
 
   for (i = 0; i < num_tracks; i++)
-    if (demuxing_requested(tracks[i]->type, tracks[i]->tnum))
+    if (demuxing_requested(tracks[i]->type, tracks[i]->tnum) &&
+        tracks[i]->ok)
       tracks[i]->packetizer->set_headers();
 }
 

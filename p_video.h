@@ -26,26 +26,26 @@
 #include "common.h"
 #include "pr_generic.h"
 
-#define VFT_IFRAME 0x10000000L
-#define VFT_PFRAME 0x20000000L
-#define VFT_BFRAME 0x40000000L
-#define VNUMFRAMES 0x0000FFFFL
+#define VFT_IFRAME -1
+#define VFT_NOBFRAME -1
+#define VFT_PFRAMEAUTOMATIC -2
 
 class video_packetizer_c: public generic_packetizer_c {
 private:
   double fps;
-  int width, height, bpp, frames_output, avi_compat_mode;
+  int width, height, bpp, frames_output;
   int64_t ref_timecode;
+  bool avi_compat_mode, bframes;
 
 public:
   video_packetizer_c(generic_reader_c *nreader, double nfps, int nwidth,
-                     int nheight, int nbpp, int navi_compat_mode,
-                     track_info_t *nti) throw (error_c);
+                     int nheight, int nbpp, bool navi_compat_mode,
+                     bool nbframes, track_info_t *nti) throw (error_c);
   virtual ~video_packetizer_c();
 
   virtual int process(unsigned char *buf, int size, int64_t old_timecode = -1,
-                      int64_t flags = VFT_IFRAME, int64_t bref = -1,
-                      int64_t fref = -1);
+                      int64_t duration = -1, int64_t bref = VFT_IFRAME,
+                      int64_t fref = VFT_NOBFRAME);
   virtual void set_headers();
 
   virtual void dump_debug_info();

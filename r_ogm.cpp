@@ -236,7 +236,7 @@ void ogm_reader_c::create_packetizers() {
                                    get_uint32(&sth->sh.video.width),
                                    get_uint32(&sth->sh.video.height),
                                    get_uint16(&sth->bits_per_sample),
-                                   1, ti);
+                                   1, false, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
@@ -562,8 +562,9 @@ void ogm_reader_c::process_page(ogg_page *og) {
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
 //         flags = hdrlen > 0 ? lenbytes : 1;
         dmx->packetizer->process(&op.packet[hdrlen + 1], op.bytes - 1 - hdrlen,
-                                 -1, -1, (*op.packet & PACKET_IS_SYNCPOINT ?
-                                          -1 : 0));
+                                 -1, -1,
+                                 (*op.packet & PACKET_IS_SYNCPOINT ?
+                                  VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
         dmx->units_processed += (hdrlen > 0 ? lenbytes : 1);
 
       } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {

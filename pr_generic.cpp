@@ -413,8 +413,10 @@ void generic_packetizer_c::duplicate_data_on_add(bool duplicate) {
 
 void generic_packetizer_c::add_packet(unsigned char  *data, int length,
                                       int64_t timecode,
-                                      int64_t duration, int duration_mandatory,
-                                      int64_t bref, int64_t fref) {
+                                      int64_t duration,
+                                      bool duration_mandatory,
+                                      int64_t bref, int64_t fref,
+                                      int ref_priority) {
   packet_t *pack;
 
   if (data == NULL)
@@ -433,6 +435,8 @@ void generic_packetizer_c::add_packet(unsigned char  *data, int length,
   pack->timecode = timecode;
   pack->bref = bref;
   pack->fref = fref;
+  pack->ref_priority = ref_priority;
+  printf("added ref: %d\n", pack->ref_priority);
   pack->duration = duration;
   pack->duration_mandatory = duration_mandatory;
   pack->source = this;

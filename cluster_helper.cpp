@@ -27,6 +27,7 @@
 #include "cluster_helper.h"
 #include "common.h"
 #include "mkvmerge.h"
+#include "p_video.h"
 
 #include "StdIOCallback.h"
 
@@ -276,13 +277,33 @@ int cluster_helper_c::render() {
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
     // Now put the packet into the cluster.
-    if (pack->bref != -1) {      // P and B frames: add backward reference.
+    if (pack->bref != VFT_IFRAME) { // P and B frames: add backward reference.
       bref_packet = find_packet(pack->bref);
-      assert(bref_packet != NULL);
+      if (bref_packet == NULL) {
+        string err = "bref_packet == NULL. Wanted bref: " +
+          to_string(pack->bref) + ". Contents of the queue:\n";
+        for (i = 0; i < clstr->num_packets; i++) {
+          pack = clstr->packets[i];
+          err += "Packet " + to_string(i) + ", timecode " +
+            to_string(pack->timecode) + ", bref " + to_string(pack->bref) +
+            ", fref " + to_string(pack->fref) + "\n";
+        }
+        die(err.c_str());
+      }
       assert(bref_packet->group != NULL);
-      if (pack->fref != -1) {    // It's even a B frame: add forward reference.
+      if (pack->fref != VFT_NOBFRAME) { // It's even a B frame: add forward ref
         fref_packet = find_packet(pack->fref);
-        assert(fref_packet != NULL);
+        if (fref_packet == NULL) {
+          string err = "fref_packet == NULL. Wanted fref: " +
+            to_string(pack->fref) + ". Contents of the queue:\n";
+          for (i = 0; i < clstr->num_packets; i++) {
+            pack = clstr->packets[i];
+            err += "Packet " + to_string(i) + ", timecode " +
+              to_string(pack->timecode) + ", bref " + to_string(pack->bref) +
+              ", fref " + to_string(pack->fref) + "\n";
+          }
+          die(err.c_str());
+        }
         assert(fref_packet->group != NULL);
         cluster->AddFrame(track_entry,
                           (pack->timecode - timecode_offset) * 1000000,
@@ -303,6 +324,14 @@ int cluster_helper_c::render() {
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);
     }
+
+
+    printf("NBG: %p, rp: %d\n", new_block_group, pack->ref_priority);
+    // Set the reference priority if it was wanted.
+    if ((new_block_group != NULL) && (pack->ref_priority > 0))
+      *static_cast<EbmlUInteger *>
+        (&GetChild<KaxReferencePriority>(*new_block_group)) =
+        pack->ref_priority;
 
     elements_in_cluster++;
 

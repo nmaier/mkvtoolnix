@@ -1591,6 +1591,11 @@ int main(int argc, char **argv) {
 
     create_readers();
 
+    if (packetizers.size() == 0) {
+      fprintf(stdout, "Error: No streams to output found. Aborting.\n");
+      exit(0);
+    }
+
     pass = 1;
     create_next_output_file(true, true);
     main_loop();
@@ -1616,6 +1621,11 @@ int main(int argc, char **argv) {
   } else {
 
     create_readers();
+
+    if (packetizers.size() == 0) {
+      fprintf(stdout, "Error: No streams to output found. Aborting.\n");
+      exit(0);
+    }
 
     pass = 0;
     create_next_output_file(true, true);

@@ -1,7 +1,10 @@
 2003-06-29  Moritz Bunkus  <moritz@bunkus.org>
 
-        * Implemented time slice durations , default block duration and
-        block durations for slices where necessary.
+        * mkvmerge: Support for handling native video tracks (e.g. B
+        frames) when reading Matroska files.
+
+        * mkvmerge: Implemented time slice durations , default block
+        duration and block durations for slices where necessary.
 
 2003-06-24  Moritz Bunkus  <moritz@bunkus.org>
 

@@ -678,6 +678,14 @@ bool parse_int(const char *s, int &value) {
   return result;
 }
 
+string to_string(int64_t i) {
+  char buf[100];
+
+  sprintf(buf, "%lld", i);
+
+  return string(buf);
+}
+
 #ifdef DEBUG
 /*
  * debugging stuff

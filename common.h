@@ -113,6 +113,7 @@ char *UTFstring_to_cstr(const UTFstring &u);
 
 bool parse_int(const char *s, int64_t &value);
 bool parse_int(const char *s, int &value);
+string to_string(int64_t i);
 
 extern int verbose;
 

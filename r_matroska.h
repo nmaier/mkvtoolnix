@@ -48,6 +48,7 @@ typedef struct {
   uint32_t v_width, v_height, v_dwidth, v_dheight;
   float v_frate;
   char v_fourcc[5];
+  bool v_bframes;
 
   // Parameters for audio tracks
   uint32_t a_channels, a_bps, a_formattag;

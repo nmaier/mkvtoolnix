@@ -51,8 +51,9 @@ typedef struct {
   KaxBlock *block;
   KaxCluster *cluster;
   unsigned char *data;
-  int length, superseeded, duration_mandatory;
+  int length, superseeded, ref_priority;
   int64_t timecode, bref, fref, duration, packet_num;
+  bool duration_mandatory;
   void *source;
 } packet_t;
 
@@ -137,8 +138,9 @@ public:
 
   virtual void duplicate_data_on_add(bool duplicate);
   virtual void add_packet(unsigned char *data, int lenth, int64_t timecode,
-                          int64_t duration, int duration_mandatory = 0,
-                          int64_t bref = -1, int64_t fref = -1);
+                          int64_t duration,
+                          bool duration_mandatory = 0, int64_t bref = -1,
+                          int64_t fref = -1, int ref_priority = -1);
   virtual packet_t *get_packet();
   virtual int packet_available();
   virtual int64_t get_smallest_timecode();
