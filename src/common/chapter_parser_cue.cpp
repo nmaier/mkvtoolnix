@@ -132,6 +132,7 @@ typedef struct {
   string genre;
   string global_disc_id;
   string isrc;
+  string global_rem;
   string global_comment;
   string comment;
   const char *language;
@@ -202,6 +203,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   create_tag2(a.date, a.global_date, "DATE");
   create_tag2(a.genre, a.global_genre, "GENRE");
   create_tag1(a.isrc, "ISRC");
+  create_tag1(a.global_comment, "COMMENTS");
   create_tag1(a.comment, "COMMENTS");
 
   (*tags)->PushElement(*tag);
@@ -227,6 +229,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   create_tag1(a.global_disc_id, "DISCID");
   create_tag1(a.global_catalog, "CATALOG");
   create_tag1(a.global_comment, "COMMENTS");
+  create_tag1(a.global_rem, "COMMENTS");
 
   (*tags)->PushElement(*tag);
 }
@@ -454,6 +457,12 @@ parse_cue_chapters(mm_text_io_c *in,
           a.global_comment = get_quoted(line, 12);
         else
           a.comment = get_quoted(line, 12);
+
+      } else if (starts_with_case(line, "rem ")) {
+        if (a.num == 0)
+          a.global_rem = get_quoted(line, 4);
+        else
+          a.comment = get_quoted(line, 4);
 
       } else if (starts_with_case(line, "isrc "))
         a.isrc = get_quoted(line, 5);
