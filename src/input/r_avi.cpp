@@ -669,7 +669,8 @@ avi_reader_c::read(generic_packetizer_c *ptzr) {
       debug_leave("AVI_read_audio");
 
       if (nread > 0) {
-        if (nread >= size)
+        size = AVI_read_audio_chunk(avi, NULL);
+        if (size > 0)
           need_more_data = true;
         memory_c mem(audio_chunk, nread, true);
         PTZR(demuxer->ptzr)->add_avi_block_size(nread);
