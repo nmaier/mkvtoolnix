@@ -189,18 +189,27 @@ bitvalue_c *seguid_link_previous = NULL, *seguid_link_next = NULL;
 
 // Some hacks that are configurable via command line but which should ONLY!
 // be used by the author.
-#define ENGAGE_SPACE_AFTER_CHAPTERS 0x0000000000000001LLU
+#define ENGAGE_SPACE_AFTER_CHAPTERS "space_after_chapters"
+#define ENGAGE_NO_CHAPTERS_IN_META_SEEK "no_chapters_in_meta_seek"
 
-typedef struct {
-  const char *arg;
-  uint64_t value;
-} mosu_hack_t;
-
-const mosu_hack_t mosu_hacks[] = {
-  {"space_after_chapters", ENGAGE_SPACE_AFTER_CHAPTERS},
-  {NULL, 0}
+const char *mosu_hacks[] = {
+  ENGAGE_SPACE_AFTER_CHAPTERS,
+  ENGAGE_NO_CHAPTERS_IN_META_SEEK,
+  NULL
 };
-uint64_t engage_hacks = 0;
+vector<const char *> engaged_hacks;
+
+bool hack_engaged(const char *hack) {
+  uint32_t i;
+
+  if (hack == NULL)
+    return false;
+  for (i = 0; i < engaged_hacks.size(); i++)
+    if (engaged_hacks[i] == hack)
+      return true;
+
+  return false;
+}
 
 file_type_t file_types[] =
   {{"---", TYPEUNKNOWN, "<unknown>"},
@@ -1178,17 +1187,15 @@ static void parse_args(int argc, char **argv) {
       engage_args = split(next_arg, ",");
       for (aidx = 0; aidx < engage_args.size(); aidx++) {
         valid_hack = false;
-        for (hidx = 0; mosu_hacks[hidx].arg != NULL; hidx++)
-          if (engage_args[aidx] == mosu_hacks[hidx].arg) {
+        for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
+          if (engage_args[aidx] == mosu_hacks[hidx]) {
             valid_hack = true;
-            engage_hacks |= mosu_hacks[hidx].value;
+            engaged_hacks.push_back(mosu_hacks[hidx]);
             break;
           }
         if (!valid_hack)
           mxerror("'%s' is not a valid hack.\n", engage_args[aidx].c_str());
       }
-      mxverb(2, "Enabled hacks: 0x%08x%08x\n", (uint32_t)(engage_hacks >> 32),
-             (uint32_t)(engage_hacks & 0xffffffff));
       i++;
 
     } else if (!strcmp(this_arg, "-q"))
@@ -1887,7 +1894,7 @@ void create_next_output_file(bool last_file, bool first_file) {
       kax_chapters->UpdateSize();
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
-      if (engage_hacks & ENGAGE_SPACE_AFTER_CHAPTERS) {
+      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
         EbmlVoid evoid;
         evoid.SetSize(100);
         evoid.Render(*out);
@@ -1930,14 +1937,14 @@ void create_next_output_file(bool last_file, bool first_file) {
       kax_chapters_void = new EbmlVoid;
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
-      if (engage_hacks & ENGAGE_SPACE_AFTER_CHAPTERS) {
+      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
         EbmlVoid evoid;
         evoid.SetSize(100);
         evoid.Render(*out);
       }
     } else {
       kax_chapters->Render(*out);
-      if (engage_hacks & ENGAGE_SPACE_AFTER_CHAPTERS) {
+      if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
         EbmlVoid evoid;
         evoid.SetSize(100);
         evoid.Render(*out);
@@ -2022,10 +2029,12 @@ void finish_file() {
     kax_sh_main->IndexThis(*kax_tags, *kax_segment);
 
   if (chapters_here != NULL) {
-    kax_sh_main->IndexThis(*chapters_here, *kax_segment);
+    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
+      kax_sh_main->IndexThis(*chapters_here, *kax_segment);
     delete chapters_here;
   } else if ((pass == 0) && (kax_chapters != NULL))
-    kax_sh_main->IndexThis(*kax_chapters, *kax_segment);
+    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
+      kax_sh_main->IndexThis(*kax_chapters, *kax_segment);
 
   if (kax_as != NULL) {
     kax_sh_main->IndexThis(*kax_as, *kax_segment);
