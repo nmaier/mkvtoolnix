@@ -82,7 +82,7 @@ main(int argc,
   }
 
   try {
-    out = new mm_file_io_c(argv[3], MODE_WRITE);
+    out = new mm_file_io_c(argv[3], MODE_CREATE);
   } catch(...) {
     mxerror(_("The file '%s' could not be opened for writing (%d, %s).\n"),
             argv[3], errno, strerror(errno));

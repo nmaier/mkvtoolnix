@@ -1278,7 +1278,7 @@ write_all_cuesheets(KaxChapters &chapters,
       cue_file_name += ".cue";
 
       try {
-        out = new mm_file_io_c(cue_file_name.c_str(), MODE_WRITE);
+        out = new mm_file_io_c(cue_file_name.c_str(), MODE_CREATE);
       } catch(...) {
         mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
                 cue_file_name.c_str(), strerror(errno));

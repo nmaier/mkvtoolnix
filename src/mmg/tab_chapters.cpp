@@ -778,7 +778,7 @@ tab_chapters::save() {
   wxString err;
 
   try {
-    out = new mm_file_io_c(wxMB(file_name), MODE_WRITE);
+    out = new mm_file_io_c(wxMB(file_name), MODE_CREATE);
 #if defined(SYS_WINDOWS)
     out->use_dos_style_newlines(true);
 #endif

@@ -44,13 +44,13 @@ mm_file_io_c::mm_file_io_c(const string &path,
       cmode = "rb";
       break;
     case MODE_WRITE:
-      cmode = "wb";
+      cmode = "a+b";
       break;
     case MODE_CREATE:
-      cmode = "wb+";
+      cmode = "w+b";
       break;
     case MODE_SAFE:
-      cmode = "r+b";
+      cmode = "rb";
       break;
     default:
       throw 0;
@@ -122,7 +122,7 @@ mm_file_io_c::truncate(int64_t pos) {
   return ftruncate(fileno((FILE *)file), pos);
 }
 
-#else // SYS_UNIX
+#else // SYS_WINDOWS
 
 HANDLE
 CreateFileUtf8(LPCSTR lpFileName,

@@ -130,7 +130,7 @@ handle_attachments(KaxAttachments *atts) {
                  "is written to '%s'.\n"), id, type.c_str(), size,
                tracks[k].out_name);
         try {
-          out = new mm_file_io_c(tracks[k].out_name, MODE_WRITE);
+          out = new mm_file_io_c(tracks[k].out_name, MODE_CREATE);
         } catch (...) {
           mxerror(_("The file '%s' could not be opened for writing "
                     "(%d, %s).\n"),
