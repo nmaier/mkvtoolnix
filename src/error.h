@@ -31,9 +31,15 @@ class error_c {
 private:
   string error;
 public:
-  error_c(const char *nerror) { error = nerror; };
+  error_c(char *nerror, bool freeit = false) {
+    error = nerror;
+    if (freeit)
+      safefree(nerror);
+  };
   error_c(const string &nerror) { error = nerror; };
-  const char *get_error() { return error.c_str(); };
+  error_c(const error_c &e) { error = e.error; };
+  const char *get_error() const { return error.c_str(); };
+  operator const char *() const { return error.c_str(); };
 };
 
 #endif // __ERROR_H

@@ -27,6 +27,7 @@
 #include <matroska/KaxChapters.h>
 
 #include "common.h"
+#include "error.h"
 #include "iso639.h"
 #include "mm_io.h"
 
@@ -64,18 +65,25 @@ typedef struct {
 static void cperror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
   string new_fmt;
+  char *new_string;
+  int len;
 
-  mxprint(stdout, "Error: Chapter parser failed for '%s', line %d, "
+  fix_format(fmt, new_fmt);
+  len = snprintf(NULL, 0, "Error: Chapter parser failed for '%s', line %d, "
+                 "column %d: ", pdata->file_name,
+                 XML_GetCurrentLineNumber(pdata->parser),
+                 XML_GetCurrentColumnNumber(pdata->parser));
+  va_start(ap, fmt);
+  len += vsnprintf(NULL, 0, new_fmt.c_str(), ap);
+  new_string = (char *)safemalloc(len + 2);
+  sprintf(new_string, "Error: Chapter parser failed for '%s', line %d, "
           "column %d: ", pdata->file_name,
           XML_GetCurrentLineNumber(pdata->parser),
           XML_GetCurrentColumnNumber(pdata->parser));
-  fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
-  vfprintf(stdout, new_fmt.c_str(), ap);
+  vsprintf(&new_string[strlen(new_string)], new_fmt.c_str(), ap);
   va_end(ap);
-  mxprint(stdout, "\n");
-
-  mxexit(2);
+  strcat(new_string, "\n");
+  throw error_c(new_string, true);
 }
 
 static void el_get_uint(parser_data_t *pdata, EbmlElement *el,
@@ -610,13 +618,14 @@ KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters,
 }
 
 KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
-                                int64_t max_tc, int64_t offset) {
+                                int64_t max_tc, int64_t offset,
+                                bool exception_on_error = false) {
   bool done;
   parser_data_t *pdata;
   XML_Parser parser;
   XML_Error xerror;
   char *emsg;
-  string buffer;
+  string buffer, error;
   KaxChapters *chapters;
 
   done = 0;
@@ -635,31 +644,40 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
 
   in->setFilePointer(0);
 
-  done = !in->getline2(buffer);
-  while (!done) {
-    buffer += "\n";
-    if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
-      xerror = XML_GetErrorCode(parser);
-      if (xerror == XML_ERROR_INVALID_TOKEN)
-        emsg = " Remember that special characters like &, <, > and \" "
-          "must be escaped in the usual HTML way: &amp; for '&', "
-          "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
-      else
-        emsg = "";
-      mxerror("XML parser error at line %d of '%s': %s.%s Aborting.\n",
-              XML_GetCurrentLineNumber(parser), pdata->file_name,
-              XML_ErrorString(xerror), emsg);
-    }
+  error = "";
 
+  try {
     done = !in->getline2(buffer);
-  } while (!done);
+    while (!done) {
+      buffer += "\n";
+      if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
+        xerror = XML_GetErrorCode(parser);
+        if (xerror == XML_ERROR_INVALID_TOKEN)
+          emsg = " Remember that special characters like &, <, > and \" "
+            "must be escaped in the usual HTML way: &amp; for '&', "
+            "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
+        else
+          emsg = "";
+        mxerror("XML parser error at line %d of '%s': %s.%s Aborting.\n",
+                XML_GetCurrentLineNumber(parser), pdata->file_name,
+                XML_ErrorString(xerror), emsg);
+      }
 
-  chapters = pdata->chapters;
-  if (chapters != NULL) {
-    chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc, offset,
-                                            true);
-    if ((chapters != NULL) && !chapters->CheckMandatory())
-      die("chapters->CheckMandatory() failed. Should not have happened!");
+      done = !in->getline2(buffer);
+    } while (!done);
+
+    chapters = pdata->chapters;
+    if (chapters != NULL) {
+      chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc, offset,
+                                              true);
+      if ((chapters != NULL) && !chapters->CheckMandatory())
+        die("chapters->CheckMandatory() failed. Should not have happened!");
+    }
+  } catch (error_c e) {
+    if (!exception_on_error)
+      mxerror("%s", e.get_error());
+    error = (const char *)e;
+    chapters = NULL;
   }
 
   XML_ParserFree(parser);
@@ -668,6 +686,9 @@ KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
 
   if ((chapters != NULL) && (verbose > 1))
     debug_dump_elements(chapters, 0);
+
+  if (error.length() > 0)
+    throw error_c(error);
 
   return chapters;
 }

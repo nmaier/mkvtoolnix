@@ -1680,6 +1680,12 @@ static void handle_args(int argc, char **argv) {
 // {{{ global setup and cleanup functions
 
 static void setup() {
+  if ((snprintf(NULL, 0, "hallo") != 5) ||
+      (vsnprintf(NULL, 0, "hallo", NULL) != 5))
+    mxerror("Your system does not return proper values for the snprintf() "
+            "and vsnprintf functions. mkvmerge cannot run securely on this "
+            "system.\n");
+
 #if ! defined(COMP_MSC)
   if (setlocale(LC_CTYPE, "") == NULL)
     mxerror("Could not set the locale properly. Check the "

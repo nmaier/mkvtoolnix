@@ -26,6 +26,7 @@
 #include <matroska/KaxChapters.h>
 
 #include "chapters.h"
+#include "error.h"
 
 using namespace std;
 using namespace libmatroska;
@@ -63,21 +64,26 @@ using namespace libmatroska;
 static void chapter_error(const char *fmt, ...) {
   va_list ap;
   string new_fmt;
+  char *new_error;
+  int len;
 
-  mxprint(stdout, "Error parsing chapters: ");
+  len = snprintf(NULL, 0, "Error: Simple chapter parser: ");
   va_start(ap, fmt);
   fix_format(fmt, new_fmt);
-  vfprintf(stdout, new_fmt.c_str(), ap);
+  len += vsnprintf(NULL, 0, new_fmt.c_str(), ap);
+  new_error = (char *)safemalloc(len + 2);
+  strcpy(new_error, "Error: Simple chapter parser: ");
+  vsprintf(&new_error[strlen(new_error)], new_fmt.c_str(), ap);
+  strcat(new_error, "\n");
   va_end(ap);
-  mxprint(stdout, "\n");
-  mxexit(2);
+  throw error_c(new_error, true);
 }
 
 // }}}
 
 // {{{ simple chapter parsing
 
-static bool probe_simple_chapters(mm_text_io_c *in) {
+bool probe_simple_chapters(mm_text_io_c *in) {
   string line;
 
   in->setFilePointer(0);
@@ -112,10 +118,11 @@ static bool probe_simple_chapters(mm_text_io_c *in) {
 // CHAPTER01=00:00:00.000
 // CHAPTER01NAME=Hallo Welt
 
-static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
-                                          int64_t max_tc, int64_t offset,
-                                          const char *language,
-                                          const char *charset) {
+KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
+                                   int64_t max_tc, int64_t offset,
+                                   const char *language,
+                                   const char *charset,
+                                   bool exception_on_error) {
   KaxChapters *chaps;
   KaxEditionEntry *edition;
   KaxChapterAtom *atom;
@@ -145,65 +152,71 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
   if (language == NULL)
     language = "eng";
 
-  while (in->getline2(line)) {
-    strip(line);
-    if (line.length() == 0)
-      continue;
+  try {
+    while (in->getline2(line)) {
+      strip(line);
+      if (line.length() == 0)
+        continue;
 
-    if (mode == 0) {
-      if (!ischapterline(line.c_str()))
-        chapter_error("'%s' is not a CHAPTERxx=... line.", line.c_str());
-      parse_int(line.substr(10, 2).c_str(), hour);
-      parse_int(line.substr(13, 2).c_str(), minute);
-      parse_int(line.substr(16, 2).c_str(), second);
-      parse_int(line.substr(19, 3).c_str(), msecs);
-      if (hour > 23)
-        chapter_error("Invalid hour: %d", hour);
-      if (minute > 59)
-        chapter_error("Invalid minute: %d", minute);
-      if (second > 59)
-        chapter_error("Invalid second: %d", second);
-      start = msecs + second * 1000 + minute * 1000 * 60 +
-        hour * 1000 * 60 * 60;
-      mode = 1;
+      if (mode == 0) {
+        if (!ischapterline(line.c_str()))
+          chapter_error("'%s' is not a CHAPTERxx=... line.", line.c_str());
+        parse_int(line.substr(10, 2).c_str(), hour);
+        parse_int(line.substr(13, 2).c_str(), minute);
+        parse_int(line.substr(16, 2).c_str(), second);
+        parse_int(line.substr(19, 3).c_str(), msecs);
+        if (hour > 23)
+          chapter_error("Invalid hour: %d", hour);
+        if (minute > 59)
+          chapter_error("Invalid minute: %d", minute);
+        if (second > 59)
+          chapter_error("Invalid second: %d", second);
+        start = msecs + second * 1000 + minute * 1000 * 60 +
+          hour * 1000 * 60 * 60;
+        mode = 1;
 
-    } else {
-      if (!ischapternameline(line.c_str()))
-        chapter_error("'%s' is not a CHAPTERxxNAME=... line.", line.c_str());
-      name = line.substr(14);
-      mode = 0;
+      } else {
+        if (!ischapternameline(line.c_str()))
+          chapter_error("'%s' is not a CHAPTERxxNAME=... line.", line.c_str());
+        name = line.substr(14);
+        mode = 0;
 
-      if ((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))) {
-        if (edition == NULL)
-          edition = &GetChild<KaxEditionEntry>(*chaps);
-        if (atom == NULL)
-          atom = &GetChild<KaxChapterAtom>(*edition);
-        else
-          atom = &GetNextChild<KaxChapterAtom>(*edition, *atom);
+        if ((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))) {
+          if (edition == NULL)
+            edition = &GetChild<KaxEditionEntry>(*chaps);
+          if (atom == NULL)
+            atom = &GetChild<KaxChapterAtom>(*edition);
+          else
+            atom = &GetNextChild<KaxChapterAtom>(*edition, *atom);
 
-        *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
-          create_unique_uint32();
+          *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*atom)) =
+            create_unique_uint32();
 
-        *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
-          (start - offset) * 1000000;
+          *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
+            (start - offset) * 1000000;
 
-        display = &GetChild<KaxChapterDisplay>(*atom);
+          display = &GetChild<KaxChapterDisplay>(*atom);
 
-        if (do_convert) {
-          recoded_string = to_utf8(cc_utf8, name.c_str());
-          wchar_string = cstrutf8_to_UTFstring(recoded_string);
-          safefree(recoded_string);
-        } else
-          wchar_string = cstrutf8_to_UTFstring(name.c_str());
-        *static_cast<EbmlUnicodeString *>
-          (&GetChild<KaxChapterString>(*display)) = wchar_string;
+          if (do_convert) {
+            recoded_string = to_utf8(cc_utf8, name.c_str());
+            wchar_string = cstrutf8_to_UTFstring(recoded_string);
+            safefree(recoded_string);
+          } else
+            wchar_string = cstrutf8_to_UTFstring(name.c_str());
+          *static_cast<EbmlUnicodeString *>
+            (&GetChild<KaxChapterString>(*display)) = wchar_string;
 
-        *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
-          language;
+          *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
+            language;
 
-        num++;
+          num++;
+        }
       }
     }
+  } catch (error_c e) {
+    delete in;
+    delete chaps;
+    throw error_c(e);
   }
 
   delete in;
@@ -220,26 +233,39 @@ static KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
 
 KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
                             int64_t max_tc, int64_t offset,
-                            const char *language, const char *charset) {
+                            const char *language, const char *charset,
+                            bool exception_on_error) {
   mm_text_io_c *in;
 
   try {
     in = new mm_text_io_c(file_name);
   } catch (...) {
-    mxerror("Could not open '%s' for reading.\n", file_name);
+    if (exception_on_error)
+      throw error_c(string("Could not open '") + string(file_name) +
+                    string("' for reading.\n"));
+    else
+      mxerror("Could not open '%s' for reading.\n", file_name);
   }
 
-  if (probe_simple_chapters(in))
-    return parse_simple_chapters(in, min_tc, max_tc, offset, language,
-                                 charset);
+  try {
+    if (probe_simple_chapters(in))
+      return parse_simple_chapters(in, min_tc, max_tc, offset, language,
+                                   charset, exception_on_error);
 
-  if (probe_xml_chapters(in))
-    return parse_xml_chapters(in, min_tc, max_tc, offset);
+    if (probe_xml_chapters(in))
+      return parse_xml_chapters(in, min_tc, max_tc, offset,
+                                exception_on_error);
 
-  delete in;
+    delete in;
 
-  mxerror("Unknown file format for '%s'. It does not contain "
-          "a supported chapter format.\n", file_name);
+    throw error_c(string("Unknown file format for '") + string(file_name) +
+                  string("'. It does not contain a supported chapter "
+                         "format.\n"));
+  } catch (error_c e) {
+    if (exception_on_error)
+      throw e;
+    mxerror("%s", e.get_error());
+  }
 
   return NULL;
 }
