@@ -62,12 +62,15 @@ extern "C" {
 #include "KaxSeekHead.h"
 #include "KaxSegment.h"
 #include "KaxTags.h"
+#include "KaxTag.h"
+#include "KaxTagMulti.h"
 #include "KaxTracks.h"
 #include "KaxTrackEntryData.h"
 #include "KaxTrackAudio.h"
 #include "KaxTrackVideo.h"
 
 #include "mkvinfo.h"
+#include "mkvinfo_tag_types.h"
 #include "common.h"
 #include "matroska.h"
 #include "mm_io.h"
@@ -246,12 +249,14 @@ bool process_file(const char *file_name) {
   int upper_lvl_el, i;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
-  EbmlElement *l5 = NULL;
+  EbmlElement *l5 = NULL, *l6 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
   char mkv_track_type;
   bool ms_compat;
+  char *str;
+  string strc;
   mm_io_c *in;
 
   // open input file
@@ -334,7 +339,6 @@ bool process_file(const char *file_name) {
                          float(duration) * tc_scale / 1000000000.0);
 
           } else if (EbmlId(*l2) == KaxMuxingApp::ClassInfos.GlobalId) {
-            char *str;
             KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
             muxingapp.ReadData(es->I_O());
             str = UTFstring_to_cstr(UTFstring(muxingapp));
@@ -342,7 +346,6 @@ bool process_file(const char *file_name) {
             safefree(str);
 
           } else if (EbmlId(*l2) == KaxWritingApp::ClassInfos.GlobalId) {
-            char *str;
             KaxWritingApp &writingapp = *static_cast<KaxWritingApp *>(l2);
             writingapp.ReadData(es->I_O());
             str = UTFstring_to_cstr(UTFstring(writingapp));
@@ -1161,8 +1164,1175 @@ bool process_file(const char *file_name) {
                                      0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
+
+        // Let's handle some TAGS.
       } else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
-        show_element(l1, 1, "Tags (skipping all subelements!)");
+        show_element(l1, 1, "Tags");
+
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
+        while (l2 != NULL) {
+          if (upper_lvl_el != 0)
+            break;
+
+          if (EbmlId(*l2) == KaxTag::ClassInfos.GlobalId) {
+            show_element(l2, 2, "Tag");
+
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
+            while (l3 != NULL) {
+              if (upper_lvl_el != 0)
+                break;
+
+              if (EbmlId(*l3) == KaxTagTargets::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Targets");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagTrackUID::ClassInfos.GlobalId) {
+                    KaxTagTrackUID &trackuid =
+                      *static_cast<KaxTagTrackUID *>(l4);
+                    trackuid.ReadData(es->I_O());
+                    show_element(l4, 4, "Track UID: %llu", uint64(trackuid));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagChapterUID::ClassInfos.GlobalId) {
+                    KaxTagChapterUID &chapteruid =
+                      *static_cast<KaxTagChapterUID *>(l4);
+                    chapteruid.ReadData(es->I_O());
+                    show_element(l4, 4, "Chapter UID: %llu",
+                                 uint64(chapteruid));
+
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true, 1);
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) == KaxTagGeneral::ClassInfos.GlobalId) {
+                show_element(l3, 3, "General");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagSubject::ClassInfos.GlobalId) {
+                    KaxTagSubject &subject =
+                      *static_cast<KaxTagSubject *>(l4);
+                    subject.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(subject));
+                    show_element(l4, 4, "Subject: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagBibliography::ClassInfos.GlobalId) {
+                    KaxTagBibliography &bibliography =
+                      *static_cast<KaxTagBibliography *>(l4);
+                    bibliography.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(bibliography));
+                    show_element(l4, 4, "Bibliography: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagLanguage::ClassInfos.GlobalId) {
+                    KaxTagLanguage &language =
+                      *static_cast<KaxTagLanguage *>(l4);
+                    language.ReadData(es->I_O());
+                    show_element(l4, 4, "Language: %s",
+                                 string(language).c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagRating::ClassInfos.GlobalId) {
+                    char buf[8];
+                    const binary *b;
+
+                    KaxTagRating &rating =
+                      *static_cast<KaxTagRating *>(l4);
+                    rating.ReadData(es->I_O());
+                    strc = "Rating: length " + to_string(rating.GetSize()) +
+                      ", data: ";
+                    b = &binary(rating);
+                    for (i = 0; i < rating.GetSize(); i++) {
+                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      strc += buf;
+                    }
+                    show_element(l4, 4, strc.c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagEncoder::ClassInfos.GlobalId) {
+                    KaxTagEncoder &encoder =
+                      *static_cast<KaxTagEncoder *>(l4);
+                    encoder.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(encoder));
+                    show_element(l4, 4, "Encoder: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagEncodeSettings::ClassInfos.GlobalId) {
+                    KaxTagEncodeSettings &encode_settings =
+                      *static_cast<KaxTagEncodeSettings *>(l4);
+                    encode_settings.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(encode_settings));
+                    show_element(l4, 4, "Encode settings: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagFile::ClassInfos.GlobalId) {
+                    KaxTagFile &file =
+                      *static_cast<KaxTagFile *>(l4);
+                    file.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(file));
+                    show_element(l4, 4, "File: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagArchivalLocation::ClassInfos.GlobalId) {
+                    KaxTagArchivalLocation &archival_location =
+                      *static_cast<KaxTagArchivalLocation *>(l4);
+                    archival_location.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(archival_location));
+                    show_element(l4, 4, "Archival location: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagKeywords::ClassInfos.GlobalId) {
+                    KaxTagKeywords &keywords =
+                      *static_cast<KaxTagKeywords *>(l4);
+                    keywords.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(keywords));
+                    show_element(l4, 4, "Keywords: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagMood::ClassInfos.GlobalId) {
+                    KaxTagMood &mood =
+                      *static_cast<KaxTagMood *>(l4);
+                    mood.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(mood));
+                    show_element(l4, 4, "Mood: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagRecordLocation::ClassInfos.GlobalId) {
+                    KaxTagRecordLocation &record_location =
+                      *static_cast<KaxTagRecordLocation *>(l4);
+                    record_location.ReadData(es->I_O());
+                    show_element(l4, 4, "Record location: %s",
+                                 string(record_location).c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagSource::ClassInfos.GlobalId) {
+                    KaxTagSource &source =
+                      *static_cast<KaxTagSource *>(l4);
+                    source.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(source));
+                    show_element(l4, 4, "Source: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagSourceForm::ClassInfos.GlobalId) {
+                    KaxTagSourceForm &source_form =
+                      *static_cast<KaxTagSourceForm *>(l4);
+                    source_form.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(source_form));
+                    show_element(l4, 4, "Source form: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagProduct::ClassInfos.GlobalId) {
+                    KaxTagProduct &product =
+                      *static_cast<KaxTagProduct *>(l4);
+                    product.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(product));
+                    show_element(l4, 4, "Product: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagOriginalMediaType::ClassInfos.GlobalId) {
+                    KaxTagOriginalMediaType &original_media_type =
+                      *static_cast<KaxTagOriginalMediaType *>(l4);
+                    original_media_type.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(original_media_type));
+                    show_element(l4, 4, "Original media type: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagEncoder::ClassInfos.GlobalId) {
+                    KaxTagEncoder &encoder =
+                      *static_cast<KaxTagEncoder *>(l4);
+                    encoder.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(encoder));
+                    show_element(l4, 4, "Encoder: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagPlayCounter::ClassInfos.GlobalId) {
+                    KaxTagPlayCounter &play_counter =
+                      *static_cast<KaxTagPlayCounter *>(l4);
+                    play_counter.ReadData(es->I_O());
+                    show_element(l4, 4, "Play counter: %llu", 
+                                 uint64(play_counter));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagPopularimeter::ClassInfos.GlobalId) {
+                    KaxTagPopularimeter &popularimeter =
+                      *static_cast<KaxTagPopularimeter *>(l4);
+                    popularimeter.ReadData(es->I_O());
+                    show_element(l4, 4, "Popularimeter: %lld", 
+                                 int64(popularimeter));
+
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true, 1);
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) == KaxTagGenres::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Genres");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagAudioGenre::ClassInfos.GlobalId) {
+                    KaxTagAudioGenre &audio_genre =
+                      *static_cast<KaxTagAudioGenre *>(l4);
+                    audio_genre.ReadData(es->I_O());
+                    show_element(l4, 4, "Audio genre: %s",
+                                 string(audio_genre).c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagVideoGenre::ClassInfos.GlobalId) {
+                    char buf[8];
+                    const binary *b;
+
+                    KaxTagVideoGenre &video_genre =
+                      *static_cast<KaxTagVideoGenre *>(l4);
+                    video_genre.ReadData(es->I_O());
+                    strc = "Video genre: length " +
+                      to_string(video_genre.GetSize()) + ", data: ";
+                    b = &binary(video_genre);
+                    for (i = 0; i < video_genre.GetSize(); i++) {
+                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      strc += buf;
+                    }
+                    show_element(l4, 4, strc.c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagSubGenre::ClassInfos.GlobalId) {
+                    KaxTagSubGenre &sub_genre =
+                      *static_cast<KaxTagSubGenre *>(l4);
+                    sub_genre.ReadData(es->I_O());
+                    show_element(l4, 4, "Sub genre: %s",
+                                 string(sub_genre).c_str());
+
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true, 1);
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagAudioSpecific::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Audio specific");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) ==
+                      KaxTagAudioEncryption::ClassInfos.GlobalId) {
+                    char buf[8];
+                    const binary *b;
+
+                    KaxTagAudioEncryption &encryption =
+                      *static_cast<KaxTagAudioEncryption *>(l4);
+                    encryption.ReadData(es->I_O());
+                    strc = "Audio encryption: length " +
+                      to_string(encryption.GetSize()) + ", data: ";
+                    b = &binary(encryption);
+                    for (i = 0; i < encryption.GetSize(); i++) {
+                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      strc += buf;
+                    }
+                    show_element(l4, 4, strc.c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagAudioGain::ClassInfos.GlobalId) {
+                    KaxTagAudioGain &audio_gain =
+                      *static_cast<KaxTagAudioGain *>(l4);
+                    audio_gain.ReadData(es->I_O());
+                    show_element(l4, 4, "Audio gain: %.3f", float(audio_gain));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagAudioPeak::ClassInfos.GlobalId) {
+                    KaxTagAudioPeak &audio_peak =
+                      *static_cast<KaxTagAudioPeak *>(l4);
+                    audio_peak.ReadData(es->I_O());
+                    show_element(l4, 4, "Audio peak: %.3f", float(audio_peak));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagBPM::ClassInfos.GlobalId) {
+                    KaxTagBPM &bpm = *static_cast<KaxTagBPM *>(l4);
+                    bpm.ReadData(es->I_O());
+                    show_element(l4, 4, "BPM: %.3f", float(bpm));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagEqualisation::ClassInfos.GlobalId) {
+                    char buf[8];
+                    const binary *b;
+
+                    KaxTagEqualisation &equalisation =
+                      *static_cast<KaxTagEqualisation *>(l4);
+                    equalisation.ReadData(es->I_O());
+                    strc = "Equalisation: length " +
+                      to_string(equalisation.GetSize()) + ", data: ";
+                    b = &binary(equalisation);
+                    for (i = 0; i < equalisation.GetSize(); i++) {
+                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      strc += buf;
+                    }
+                    show_element(l4, 4, strc.c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagDiscTrack::ClassInfos.GlobalId) {
+                    KaxTagDiscTrack &disc_track =
+                      *static_cast<KaxTagDiscTrack *>(l4);
+                    disc_track.ReadData(es->I_O());
+                    show_element(l4, 4, "Disc track: %u", uint32(disc_track));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagSetPart::ClassInfos.GlobalId) {
+                    KaxTagSetPart &set_part =
+                      *static_cast<KaxTagSetPart *>(l4);
+                    set_part.ReadData(es->I_O());
+                    show_element(l4, 4, "Set part: %u", uint32(set_part));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagInitialKey::ClassInfos.GlobalId) {
+                    KaxTagInitialKey &initial_key =
+                      *static_cast<KaxTagInitialKey *>(l4);
+                    initial_key.ReadData(es->I_O());
+                    show_element(l4, 4, "Initial key: %s",
+                                 string(initial_key).c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagOfficialAudioFileURL::ClassInfos.GlobalId) {
+                    KaxTagOfficialAudioFileURL &official_file_url =
+                      *static_cast<KaxTagOfficialAudioFileURL *>(l4);
+                    official_file_url.ReadData(es->I_O());
+                    show_element(l4, 4, "Official audio file URL: %s",
+                                 string(official_file_url).c_str());
+
+                  } else if (EbmlId(*l4) == KaxTagOfficialAudioSourceURL::
+                             ClassInfos.GlobalId) {
+                    KaxTagOfficialAudioSourceURL &official_source_url =
+                      *static_cast<KaxTagOfficialAudioSourceURL *>(l4);
+                    official_source_url.ReadData(es->I_O());
+                    show_element(l4, 4, "Official audio source URL: %s",
+                                 string(official_source_url).c_str());
+
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true, 1);
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagImageSpecific::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Image specific");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagCaptureDPI::ClassInfos.GlobalId) {
+                    KaxTagCaptureDPI &capture_dpi =
+                      *static_cast<KaxTagCaptureDPI *>(l4);
+                    capture_dpi.ReadData(es->I_O());
+                    show_element(l4, 4, "Capture DPI: %u",
+                                 uint32(capture_dpi));
+
+                  } else if (EbmlId(*l4) ==
+                      KaxTagCaptureLightness::ClassInfos.GlobalId) {
+                    char buf[8];
+                    const binary *b;
+
+                    KaxTagCaptureLightness &capture_lightness =
+                      *static_cast<KaxTagCaptureLightness *>(l4);
+                    capture_lightness.ReadData(es->I_O());
+                    strc = "Capture lightness: length " +
+                      to_string(capture_lightness.GetSize()) + ", data: ";
+                    b = &binary(capture_lightness);
+                    for (i = 0; i < capture_lightness.GetSize(); i++) {
+                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      strc += buf;
+                    }
+                    show_element(l4, 4, strc.c_str());
+
+                  } else if (EbmlId(*l4) == KaxTagCapturePaletteSetting::
+                             ClassInfos.GlobalId) {
+                    KaxTagCapturePaletteSetting &capture_palette_setting =
+                      *static_cast<KaxTagCapturePaletteSetting *>(l4);
+                    capture_palette_setting.ReadData(es->I_O());
+                    show_element(l4, 4, "Capture palette setting: %u",
+                                 uint32(capture_palette_setting));
+
+                  } else if (EbmlId(*l4) ==
+                      KaxTagCaptureSharpness::ClassInfos.GlobalId) {
+                    char buf[8];
+                    const binary *b;
+
+                    KaxTagCaptureSharpness &capture_sharpness =
+                      *static_cast<KaxTagCaptureSharpness *>(l4);
+                    capture_sharpness.ReadData(es->I_O());
+                    strc = "Capture sharpness: length " +
+                      to_string(capture_sharpness.GetSize()) + ", data: ";
+                    b = &binary(capture_sharpness);
+                    for (i = 0; i < capture_sharpness.GetSize(); i++) {
+                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      strc += buf;
+                    }
+                    show_element(l4, 4, strc.c_str());
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagCropped::ClassInfos.GlobalId) {
+                    KaxTagCropped &cropped =
+                      *static_cast<KaxTagCropped *>(l4);
+                    cropped.ReadData(es->I_O());
+                    str = UTFstring_to_cstr(UTFstring(cropped));
+                    show_element(l4, 4, "Cropped: %s", str);
+                    safefree(str);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxTagOriginalDimensions::ClassInfos.GlobalId) {
+                    KaxTagOriginalDimensions &original_dimensions =
+                      *static_cast<KaxTagOriginalDimensions *>(l4);
+                    original_dimensions.ReadData(es->I_O());
+                    show_element(l4, 4, "Original dimensions: %s",
+                                 string(original_dimensions).c_str());
+
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  l4->SkipData(*es, l4->Generic().Context);
+                  delete l4;
+                  l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                           0xFFFFFFFFL, true, 1);
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagMultiCommercial::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Multi commercial");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagCommercial::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Commercial");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxTagMultiCommercialType::ClassInfos.GlobalId) {
+                        int type;
+
+                        KaxTagMultiCommercialType &c_type =
+                          *static_cast<KaxTagMultiCommercialType *>(l5);
+                        c_type.ReadData(es->I_O());
+                        type = uint32(c_type);
+                        show_element(l5, 5, "Type: %u (%s)", type,
+                                     (type >= 1) &&
+                                     (type <= NUM_COMMERCIAL_TYPES) ?
+                                     commercial_types[type - 1] : "unknown");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiCommercialAddress::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiCommercialAddress &c_address =
+                          *static_cast<KaxTagMultiCommercialAddress *>(l5);
+                        c_address.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(c_address));
+                        show_element(l5, 5, "Address: %s",
+                                     str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiCommercialURL::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiCommercialURL &c_url =
+                          *static_cast<KaxTagMultiCommercialURL *>(l5);
+                        c_url.ReadData(es->I_O());
+                        show_element(l5, 5, "URL: %s",
+                                     string(c_url).c_str());
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiCommercialEmail::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiCommercialEmail &c_email =
+                          *static_cast<KaxTagMultiCommercialEmail *>(l5);
+                        c_email.ReadData(es->I_O());
+                        show_element(l5, 5, "Email: %s",
+                                     string(c_email).c_str());
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiPrice::ClassInfos.GlobalId) {
+                        show_element(l5, 5, "Multi price");
+
+                        l6 = es->FindNextElement(l5->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                        while (l6 != NULL) {
+
+                          if (upper_lvl_el > 0)
+                            break;
+
+                          if (EbmlId(*l6) ==
+                              KaxTagMultiPriceCurrency::ClassInfos.GlobalId) {
+                            KaxTagMultiPriceCurrency &p_currency =
+                              *static_cast<KaxTagMultiPriceCurrency *>(l6);
+                            p_currency.ReadData(es->I_O());
+                            show_element(l6, 6, "Currency: %s",
+                                         string(p_currency).c_str());
+
+                          } else if (EbmlId(*l6) ==
+                                     KaxTagMultiPriceAmount::
+                                     ClassInfos.GlobalId) {
+                            KaxTagMultiPriceAmount &p_amount =
+                              *static_cast<KaxTagMultiPriceAmount *>(l6);
+                            p_amount.ReadData(es->I_O());
+                            show_element(l6, 6, "Amount: %.3f",
+                                         float(p_amount));
+
+                          } else if (EbmlId(*l6) ==
+                                     KaxTagMultiPricePriceDate::
+                                     ClassInfos.GlobalId) {
+                            struct tm tmutc;
+                            time_t temptime;
+                            char buffer[40];
+                            KaxTagMultiPricePriceDate &p_pdate =
+                              *static_cast<KaxTagMultiPricePriceDate *>(l6);
+                            p_pdate.ReadData(es->I_O());
+
+                            temptime = p_pdate.GetEpochDate();
+                            if ((gmtime_r(&temptime, &tmutc) != NULL) &&
+                                (asctime_r(&tmutc, buffer) != NULL)) {
+                              buffer[strlen(buffer) - 1] = 0;
+                              show_element(l6, 6, "Price date: %s UTC",
+                                           buffer);
+                            } else
+                              show_element(l6, 6, "Price date (invalid, "
+                                           "value: %d)", temptime);
+
+                          } else if (!is_ebmlvoid(l6, 6))
+                            show_unknown_element(l6, 6);
+
+                          l6->SkipData(*es, l6->Generic().Context);
+                          delete l6;
+                          l6 = es->FindNextElement(l5->Generic().Context,
+                                                   upper_lvl_el, 0xFFFFFFFFL,
+                                                   true, 1);
+
+                        } // while (l6 != NULL)
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      if (upper_lvl_el > 0) {    // we're coming from l6
+                        upper_lvl_el--;
+                        delete l5;
+                        l5 = l6;
+                        if (upper_lvl_el > 0)
+                          break;
+
+                      } else {
+                        l5->SkipData(*es, l5->Generic().Context);
+                        delete l5;
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
+                      }
+                    } // while (l5 != NULL)
+                    
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagMultiDate::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Multi date");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagDate::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Date");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxTagMultiDateType::ClassInfos.GlobalId) {
+                        int type;
+                        KaxTagMultiDateType &d_type =
+                          *static_cast<KaxTagMultiDateType *>(l5);
+                        d_type.ReadData(es->I_O());
+                        type = uint32(d_type);
+                        show_element(l5, 5, "Type: %u (%s)", type,
+                                     (type >= 1) &&
+                                     (type <= NUM_DATE_TYPES) ?
+                                     date_types[type - 1] : "unknown");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiDateDateBegin::
+                                 ClassInfos.GlobalId) {
+                        struct tm tmutc;
+                        time_t temptime;
+                        char buffer[40];
+                        KaxTagMultiDateDateBegin &d_begin =
+                          *static_cast<KaxTagMultiDateDateBegin *>(l6);
+                        d_begin.ReadData(es->I_O());
+
+                        temptime = d_begin.GetEpochDate();
+                        if ((gmtime_r(&temptime, &tmutc) != NULL) &&
+                            (asctime_r(&tmutc, buffer) != NULL)) {
+                          buffer[strlen(buffer) - 1] = 0;
+                          show_element(l5, 5, "Begin: %s UTC", buffer);
+                        } else
+                          show_element(l5, 5, "Begin (invalid, value: %d)",
+                                       temptime);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiDateDateEnd::ClassInfos.GlobalId) {
+                        struct tm tmutc;
+                        time_t temptime;
+                        char buffer[40];
+                        KaxTagMultiDateDateEnd &d_end =
+                          *static_cast<KaxTagMultiDateDateEnd *>(l6);
+                        d_end.ReadData(es->I_O());
+
+                        temptime = d_end.GetEpochDate();
+                        if ((gmtime_r(&temptime, &tmutc) != NULL) &&
+                            (asctime_r(&tmutc, buffer) != NULL)) {
+                          buffer[strlen(buffer) - 1] = 0;
+                          show_element(l5, 5, "End: %s UTC", buffer);
+                        } else
+                          show_element(l5, 5, "End (invalid, value: %d)",
+                                       temptime);
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true, 1);
+                    } // while (l5 != NULL)
+                    
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagMultiEntity::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Multi entity");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagEntity::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Entity");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxTagMultiEntityType::ClassInfos.GlobalId) {
+                        int type;
+                        KaxTagMultiEntityType &e_type =
+                          *static_cast<KaxTagMultiEntityType *>(l5);
+                        e_type.ReadData(es->I_O());
+                        type = uint32(e_type);
+                        show_element(l5, 5, "Type: %u (%s)", type,
+                                     (type >= 1) &&
+                                     (type <= NUM_ENTITY_TYPES) ?
+                                     entity_types[type - 1] : "unknown");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiEntityName::ClassInfos.GlobalId) {
+                        KaxTagMultiEntityName &e_name =
+                          *static_cast<KaxTagMultiEntityName *>(l5);
+                        e_name.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(e_name));
+                        show_element(l5, 5, "Name: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiEntityAddress::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiEntityAddress &e_address =
+                          *static_cast<KaxTagMultiEntityAddress *>(l5);
+                        e_address.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(e_address));
+                        show_element(l5, 5, "Address: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiEntityURL::ClassInfos.GlobalId) {
+                        KaxTagMultiEntityURL &e_URL =
+                          *static_cast<KaxTagMultiEntityURL *>(l5);
+                        e_URL.ReadData(es->I_O());
+                        show_element(l5, 5, "URL: %s", string(e_URL).c_str());
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiEntityEmail::ClassInfos.GlobalId) {
+                        KaxTagMultiEntityEmail &e_email =
+                          *static_cast<KaxTagMultiEntityEmail *>(l5);
+                        e_email.ReadData(es->I_O());
+                        show_element(l5, 5, "Email: %s",
+                                     string(e_email).c_str());
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true, 1);
+                    } // while (l5 != NULL)
+                    
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagMultiIdentifier::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Multi identifier");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagIdentifier::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Identifier");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxTagMultiIdentifierType::ClassInfos.GlobalId) {
+                        int type;
+                        KaxTagMultiIdentifierType &i_type =
+                          *static_cast<KaxTagMultiIdentifierType *>(l5);
+                        i_type.ReadData(es->I_O());
+                        type = uint32(i_type);
+                        show_element(l5, 5, "Type: %u (%s)", type,
+                                     (type >= 1) &&
+                                     (type <= NUM_IDENTIFIER_TYPES) ?
+                                     identifier_types[type - 1] : "unknown");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiIdentifierBinary::
+                                 ClassInfos.GlobalId) {
+                        char buf[8];
+                        const binary *b;
+
+                        KaxTagMultiIdentifierBinary &i_binary =
+                          *static_cast<KaxTagMultiIdentifierBinary *>(l5);
+                        i_binary.ReadData(es->I_O());
+                        strc = "Binary: length " +
+                          to_string(i_binary.GetSize()) + ", data: ";
+                        b = &binary(i_binary);
+                        for (i = 0; i < i_binary.GetSize(); i++) {
+                          sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                          strc += buf;
+                        }
+                        show_element(l5, 5, strc.c_str());
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiIdentifierString::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiIdentifierString &i_string =
+                          *static_cast<KaxTagMultiIdentifierString *>(l5);
+                        i_string.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(i_string));
+                        show_element(l5, 5, "String: %s", str);
+                        safefree(str);
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true, 1);
+                    } // while (l5 != NULL)
+                    
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagMultiLegal::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Multi legal");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagLegal::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Legal");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxTagMultiLegalType::ClassInfos.GlobalId) {
+                        int type;
+                        KaxTagMultiLegalType &l_type =
+                          *static_cast<KaxTagMultiLegalType *>(l5);
+                        l_type.ReadData(es->I_O());
+                        type = uint32(l_type);
+                        show_element(l5, 5, "Type: %u (%s)", type,
+                                     (type >= 1) &&
+                                     (type <= NUM_LEGAL_TYPES) ?
+                                     legal_types[type - 1] : "unknown");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiLegalAddress::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiLegalAddress &l_address =
+                          *static_cast<KaxTagMultiLegalAddress *>(l5);
+                        l_address.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(l_address));
+                        show_element(l5, 5, "Address: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiLegalURL::ClassInfos.GlobalId) {
+                        KaxTagMultiLegalURL &l_URL =
+                          *static_cast<KaxTagMultiLegalURL *>(l5);
+                        l_URL.ReadData(es->I_O());
+                        show_element(l5, 5, "URL: %s", string(l_URL).c_str());
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true, 1);
+                    } // while (l5 != NULL)
+                    
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
+              } else if (EbmlId(*l3) ==
+                         KaxTagMultiTitle::ClassInfos.GlobalId) {
+                show_element(l3, 3, "Multi title");
+
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+                while (l4 != NULL) {
+                  if (upper_lvl_el != 0)
+                    break;
+
+                  if (EbmlId(*l4) == KaxTagTitle::ClassInfos.GlobalId) {
+                    show_element(l4, 4, "Title");
+
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                    while (l5 != NULL) {
+                      if (upper_lvl_el != 0)
+                        break;
+
+                      if (EbmlId(*l5) ==
+                          KaxTagMultiTitleType::ClassInfos.GlobalId) {
+                        int type;
+                        KaxTagMultiTitleType &t_type =
+                          *static_cast<KaxTagMultiTitleType *>(l5);
+                        t_type.ReadData(es->I_O());
+                        type = uint32(t_type);
+                        show_element(l5, 5, "Type: %u (%s)", type,
+                                     (type >= 1) &&
+                                     (type <= NUM_TITLE_TYPES) ?
+                                     title_types[type - 1] : "unknown");
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleName::ClassInfos.GlobalId) {
+                        KaxTagMultiTitleName &t_name =
+                          *static_cast<KaxTagMultiTitleName *>(l5);
+                        t_name.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(t_name));
+                        show_element(l5, 5, "Name: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleSubTitle::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiTitleSubTitle &t_sub_title =
+                          *static_cast<KaxTagMultiTitleSubTitle *>(l5);
+                        t_sub_title.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(t_sub_title));
+                        show_element(l5, 5, "Sub title: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleEdition::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiTitleEdition &t_edition =
+                          *static_cast<KaxTagMultiTitleEdition *>(l5);
+                        t_edition.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(t_edition));
+                        show_element(l5, 5, "Edition: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleAddress::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiTitleAddress &t_address =
+                          *static_cast<KaxTagMultiTitleAddress *>(l5);
+                        t_address.ReadData(es->I_O());
+                        str = UTFstring_to_cstr(UTFstring(t_address));
+                        show_element(l5, 5, "Address: %s", str);
+                        safefree(str);
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleURL::ClassInfos.GlobalId) {
+                        KaxTagMultiTitleURL &t_URL =
+                          *static_cast<KaxTagMultiTitleURL *>(l5);
+                        t_URL.ReadData(es->I_O());
+                        show_element(l5, 5, "URL: %s", string(t_URL).c_str());
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleEmail::ClassInfos.GlobalId) {
+                        KaxTagMultiTitleEmail &t_email =
+                          *static_cast<KaxTagMultiTitleEmail *>(l5);
+                        t_email.ReadData(es->I_O());
+                        show_element(l5, 5, "Email: %s",
+                                     string(t_email).c_str());
+
+                      } else if (EbmlId(*l5) ==
+                                 KaxTagMultiTitleLanguage::
+                                 ClassInfos.GlobalId) {
+                        KaxTagMultiTitleLanguage &t_language =
+                          *static_cast<KaxTagMultiTitleLanguage *>(l5);
+                        t_language.ReadData(es->I_O());
+                        show_element(l5, 5, "Language: %s",
+                                     string(t_language).c_str());
+
+                      } else if (!is_ebmlvoid(l5, 5))
+                        show_unknown_element(l5, 5);
+
+                      l5->SkipData(*es, l5->Generic().Context);
+                      delete l5;
+                      l5 = es->FindNextElement(l4->Generic().Context,
+                                               upper_lvl_el, 0xFFFFFFFFL,
+                                               true, 1);
+                    } // while (l5 != NULL)
+                    
+                  } else if (!is_ebmlvoid(l4, 4))
+                    show_unknown_element(l4, 4);
+
+                  if (upper_lvl_el > 0) {    // we're coming from l5
+                    upper_lvl_el--;
+                    delete l4;
+                    l4 = l5;
+                    if (upper_lvl_el > 0)
+                      break;
+
+                  } else {
+                    l4->SkipData(*es, l4->Generic().Context);
+                    delete l4;
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
+                  }
+
+                } // while (l4 != NULL)
+
+              } else if (!is_ebmlvoid(l3, 3))
+                show_unknown_element(l3, 3);
+
+              if (upper_lvl_el > 0) { // we're coming from l4
+                upper_lvl_el--;
+                delete l3;
+                l3 = l4;
+                if (upper_lvl_el > 0)
+                  break;
+
+              } else {
+                l3->SkipData(*es, l3->Generic().Context);
+                delete l3;
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
+              }
+            } // while (l3 != NULL)
+
+          } else if (!is_ebmlvoid(l2, 2))
+            show_unknown_element(l2, 2);
+
+          if (upper_lvl_el > 0) {    // we're coming from l3
+            upper_lvl_el--;
+            delete l2;
+            l2 = l3;
+            if (upper_lvl_el > 0)
+              break;
+
+          } else {
+            l2->SkipData(*es,
+                         l2->Generic().Context);
+            delete l2;
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
+          }
+        } // while (l2 != NULL)
 
       } else if (!is_ebmlvoid(l1, 1))
         show_unknown_element(l1, 1);

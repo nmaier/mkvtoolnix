@@ -1,3 +1,37 @@
+2003-07-02  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvinfo: Added support for allmost all tags (totally untested):
+        KaxTag KaxTagArchivalLocation KaxTagAudioEncryption
+        KaxTagAudioGain KaxTagAudioGenre KaxTagAudioPeak
+        KaxTagAudioSpecific KaxTagBibliography KaxTagBPM KaxTagCaptureDPI
+        KaxTagCaptureLightness KaxTagCapturePaletteSetting
+        KaxTagCaptureSharpness KaxTagChapterUID KaxTagCommercial
+        KaxTagCropped KaxTagDate KaxTagDiscTrack KaxTagEncoder
+        KaxTagEncodeSettings KaxTagEntity KaxTagEqualisation KaxTagFile
+        KaxTagGeneral KaxTagGenres KaxTagIdentifier KaxTagImageSpecific
+        KaxTagInitialKey KaxTagKeywords KaxTagLanguage KaxTagLegal
+        KaxTagMood KaxTagMultiCommercial KaxTagMultiCommercialAddress
+        KaxTagMultiCommercialEmail KaxTagMultiCommercialType
+        KaxTagMultiCommercialURL KaxTagMultiDate KaxTagMultiDateDateBegin
+        KaxTagMultiDateDateEnd KaxTagMultiDateType KaxTagMultiEntity
+        KaxTagMultiEntityAddress KaxTagMultiEntityEmail
+        KaxTagMultiEntityName KaxTagMultiEntityType KaxTagMultiEntityURL
+        KaxTagMultiIdentifier KaxTagMultiIdentifierBinary
+        KaxTagMultiIdentifierString KaxTagMultiIdentifierType
+        KaxTagMultiLegal KaxTagMultiLegalAddress KaxTagMultiLegalType
+        KaxTagMultiLegalURL KaxTagMultiPrice KaxTagMultiPriceAmount
+        KaxTagMultiPriceCurrency KaxTagMultiPricePriceDate
+        KaxTagMultiTitle KaxTagMultiTitleAddress KaxTagMultiTitleEdition
+        KaxTagMultiTitleEmail KaxTagMultiTitleLanguage
+        KaxTagMultiTitleName KaxTagMultiTitleSubTitle KaxTagMultiTitleType
+        KaxTagMultiTitleURL KaxTagOfficialAudioFileURL
+        KaxTagOfficialAudioSourceURL KaxTagOriginalDimensions
+        KaxTagOriginalMediaType KaxTagPlayCounter KaxTagPopularimeter
+        KaxTagProduct KaxTagRating KaxTagRecordLocation KaxTags
+        KaxTagSetPart KaxTagSource KaxTagSourceForm KaxTagSubGenre
+        KaxTagSubject KaxTagTargets KaxTagTitle KaxTagTrackUID
+        KaxTagVideoGenre
+
 2003-06-29  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: Support for handling native video tracks (e.g. B

@@ -40,6 +40,7 @@ mkvmerge_SOURCES = mkvmerge.cpp mkvmerge.h \
 mkvinfo_SOURCES = mkvinfo.cpp mkvinfo.h \
 			common.cpp common.h \
 			mkvinfo_gui.cpp \
+			mkvinfo_tag_types.cpp mkvinfo_tag_types.h \
 			mm_io.cpp mm_io.h \
 			iso639.cpp iso639.h
 
