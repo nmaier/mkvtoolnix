@@ -1058,14 +1058,23 @@ ogm_reader_c::flush_packetizers() {
 
 void
 ogm_reader_c::handle_stream_comments() {
-  int i, j;
+  int i, j, cch;
   ogm_demuxer_t *dmx;
   char **comments;
   const char *iso639_2;
-  vector<string> comment;
-  vector<char *> chapters;
+  vector<string> comment, chapters;
   mm_mem_io_c *out;
-  bool comments_in_utf8;
+  string title;
+  bool charset_warning_printed;
+
+  if (identifying)
+    return;
+
+  charset_warning_printed = false;
+  if (ti->chapter_charset != "")
+    cch = utf8_init(ti->chapter_charset);
+  else
+    cch = utf8_init("");
 
   for (i = 0; i < sdemuxers.size(); i++) {
     dmx = sdemuxers[i];
@@ -1078,22 +1087,12 @@ ogm_reader_c::handle_stream_comments() {
       continue;
     chapters.clear();
 
-    comments_in_utf8 = true;
-    for (j = 0; comments[j] != NULL; j++)
-      if (!is_valid_utf8_string(comments[j])) {
-        comments_in_utf8 = false;
-        break;
-      }
-
     for (j = 0; comments[j] != NULL; j++) {
       mxverb(2, "ogm_reader: commment for #%d for %d: %s\n", j, i,
              comments[j]);
       comment = split(comments[j], "=", 2);
       if (comment.size() != 2)
         continue;
-
-      if (!comments_in_utf8)
-        comment[1] = to_utf8(cc_local_utf8, comment[1]);
 
       if (comment[0] == "LANGUAGE") {
         iso639_2 = map_english_name_to_iso639_2(comment[1].c_str());
@@ -1133,27 +1132,43 @@ ogm_reader_c::handle_stream_comments() {
           dmx->language = safestrdup(iso639_2);
         }
 
-      } else if (comment[0] == "TITLE") {
-        if (!segment_title_set && (segment_title.length() == 0) &&
-            (dmx->stype == OGM_STREAM_TYPE_VIDEO))
-          segment_title = comment[1].c_str();
-        safefree(dmx->title);
-        dmx->title = safestrdup(comment[1].c_str());
+      } else if (comment[0] == "TITLE")
+        title = comment[1];
 
-      } else if (starts_with(comment[0], "CHAPTER")) {
-        if (comments_in_utf8)
-          chapters.push_back(safestrdup(comments[j]));
-        else
-          chapters.push_back(to_utf8_c(cc_local_utf8, comments[j]));
-      }
+      else if (starts_with(comment[0], "CHAPTER"))
+        chapters.push_back(comments[j]);
     }
+
+    if (((title != "") || (chapters.size() > 0)) && 
+        !charset_warning_printed && (ti->chapter_charset == "")) {
+      mxwarn("The Ogg/OGM file '%s' contains chapter or title information. "
+             "Unfortunately the charset used to store this information in "
+             "the file cannot be identified unambiguously. mkvmerge assumes "
+             "that your system's current charset is appropriate. This can "
+             "be overridden with the '--chapter-charset <charset>' "
+             "switch.\n", ti->fname);
+      charset_warning_printed = true;
+    }
+
+    if (title != "") {
+      title = to_utf8(cch, title);
+      if (!segment_title_set && (segment_title.length() == 0) &&
+          (dmx->stype == OGM_STREAM_TYPE_VIDEO)) {
+        segment_title = title;
+        segment_title_set = true;
+      }
+      safefree(dmx->title);
+      dmx->title = safestrdup(title.c_str());
+      title = "";
+    }
+
     if ((chapters.size() > 0) && !ti->no_chapters && (kax_chapters == NULL)) {
       out = NULL;
       try {
         out = new mm_mem_io_c(NULL, 0, 1000);
         out->write_bom("UTF-8");
         for (j = 0; j < chapters.size(); j++) {
-          out->puts_unl(chapters[j]);
+          out->puts_unl(to_utf8(cch, chapters[j]));
           out->puts_unl("\n");
         }
         out->set_file_name(ti->fname);
@@ -1163,8 +1178,6 @@ ogm_reader_c::handle_stream_comments() {
           delete out;
       }
     }
-    for (j = 0; j < chapters.size(); j++)
-      safefree(chapters[j]);
     free_string_array(comments);
   }
 }
