@@ -57,7 +57,7 @@ mi_app::OnInit() {
     Dispatch();
 
   if (initial_file != NULL)
-    frame->open_file(wxS(initial_file));
+    frame->open_file(wxU(initial_file));
 
 #if WXUNICODE
   for (i = 0; i < argc; i++)
@@ -169,7 +169,7 @@ mi_frame::show_progress(int percent,
   wxString s;
   
   if ((percent / 5) != (last_percent / 5)) {
-    s.Printf(wxT(WXS ": %d%%"), wxCS(msg), percent);
+    s.Printf(wxT("%s: %d%%"), msg.c_str(), percent);
     SetStatusText(s);
     last_percent = percent;
   }
@@ -287,9 +287,9 @@ mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
     f = fopen(wxMB(file_dialog.GetPath()), "w");
     if (f == NULL) {
       wxString s;
-      s.Printf(wxT("Could not create the file '" WXS "'."),
-               wxCS(file_dialog.GetPath()));
-      show_error(s.c_str());
+      s.Printf(wxT("Could not create the file '%s'."),
+               file_dialog.GetPath().c_str());
+      show_error(s);
       return;
     }
 
@@ -367,8 +367,8 @@ mi_dndfile::OnDropFiles(wxCoord x, wxCoord y,
       frame->open_file(dnd_file);
     } else {
       wxString msg;
-      msg.Printf(wxT("The dragged file '" WXS "'\nis not a Matroska file."),
-                 wxCS(dnd_file));
+      msg.Printf(wxT("The dragged file '%s'\nis not a Matroska file."),
+                 dnd_file.c_str());
       frame->show_error(msg.c_str());
       break;
     }

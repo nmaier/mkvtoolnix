@@ -193,7 +193,7 @@ show_error(const char *fmt,
 
 #ifdef HAVE_WXWINDOWS
   if (use_gui)
-    frame->show_error(wxS(args_buffer));
+    frame->show_error(wxU(args_buffer));
   else
 #endif
     mxinfo("(%s) %s\n", NAME, args_buffer);
@@ -245,7 +245,7 @@ _show_element(EbmlElement *l,
     if (l != NULL)
       mxprints(&args_buffer[strlen(args_buffer)], " at %llu",
                l->GetElementPosition());
-    frame->add_item(level, wxS(args_buffer));
+    frame->add_item(level, wxU(args_buffer));
   }
 #endif // HAVE_WXWINDOWS
 

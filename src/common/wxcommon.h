@@ -23,21 +23,23 @@
 //# error Sorry, mkvtoolnix cannot be compiled if wxWindows has been built with Unicode support.
 # if defined(SYS_WINDOWS)
 #  error Sorry, mkvtoolnix cannot be compiled on Windows if wxWindows has been built with Unicode support.
-#  define wxS(s)                /* not implemented yet */
+#  define wxU(s)                /* not implemented yet */
 # else
-#  define wxS(s) wxString(s, wxConvUTF8)
+#  define wxU(s) wxString(s, wxConvUTF8)
 # endif
-# define WXS "%ls"
-# define wxCS(s) ((const wchar_t *)s.wc_str())
-# define wxMB(s) ((const char *)s.mb_str(wxConvUTF8))
-# define wxCS2WS(s) wxS(s.c_str())
+# define wxCS(s) ((const wchar_t *)(s).c_str())
+# define wxMB(s) ((const char *)(s).mb_str(wxConvUTF8))
+# define wxMBL(s) ((const char *)(s).mb_str(wxConvLocal))
+# define wxCS2WS(s) wxU((s).c_str())
+# define wxUCS(s) wxU(s).c_str()
 # define WXUNICODE 1
 #else
-# define wxS(s) s
-# define WXS "%s"
-# define wxCS(s) ((const char *)s.c_str())
-# define wxMB(s) ((const char *)s.c_str())
+# define wxU(s) s
+# define wxCS(s) ((const char *)(s).c_str())
+# define wxMB(s) ((const char *)(s).c_str())
+# define wxMBL(s) ((const char *)(s).c_str())
 # define wxCS2WS(s) s
+# define wxUCS(s) wxString(s).c_str()
 # define WXUNICODE 0
 #endif
 
