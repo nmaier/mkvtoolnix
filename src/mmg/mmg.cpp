@@ -701,10 +701,6 @@ void mmg_dialog::update_command_line() {
   }
 
   if (global_page->tc_chapters->GetValue().Length() > 0) {
-    cmdline += "--chapters \"" +
-      shell_escape(global_page->tc_chapters->GetValue()) + "\" ";
-    clargs.Add("--chapters");
-    clargs.Add(global_page->tc_chapters->GetValue());
     if (global_page->cob_chap_language->GetValue().Length() > 0) {
       cmdline += "--chapter-language \"" +
         shell_escape(extract_language_code(global_page->
@@ -721,6 +717,11 @@ void mmg_dialog::update_command_line() {
       clargs.Add("--chapter-charset");
       clargs.Add(global_page->cob_chap_charset->GetValue());
     }
+
+    cmdline += "--chapters \"" +
+      shell_escape(global_page->tc_chapters->GetValue()) + "\" ";
+    clargs.Add("--chapters");
+    clargs.Add(global_page->tc_chapters->GetValue());
   }
 
   if (global_page->tc_global_tags->GetValue().Length() > 0) {
