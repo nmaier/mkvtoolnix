@@ -31,6 +31,7 @@ private:
 
   unsigned char *packet_buffer;
 
+  bool get_first_header_later;
   dts_header_t first_header;
   dts_header_t last_header;
 
@@ -38,7 +39,8 @@ public:
   bool skipping_is_normal;
 
   dts_packetizer_c(generic_reader_c *nreader, const dts_header_t &dts_header,
-                   track_info_c *nti) throw (error_c);
+                   track_info_c *nti, bool _get_first_header_later = false)
+    throw (error_c);
   virtual ~dts_packetizer_c();
 
   virtual int process(memory_c &mem, int64_t timecode = -1,

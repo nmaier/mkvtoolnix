@@ -36,6 +36,7 @@ extern "C" {
 #include "r_avi.h"
 #include "p_aac.h"
 #include "p_ac3.h"
+#include "p_dts.h"
 #include "p_mp3.h"
 #include "p_pcm.h"
 #include "p_video.h"
@@ -270,6 +271,17 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new ac3_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels, 0, ti);
       break;
+    case 0x2001: { // DTS
+      dts_header_t dtsheader;
+
+      dtsheader.core_sampling_frequency = demuxer.samples_per_second;
+      dtsheader.audio_channels = demuxer.channels;
+      if (verbose)
+        mxinfo(FMT_TID "Using the DTS output module.\n", ti->fname,
+               (int64_t)aid + 1);
+      packetizer = new dts_packetizer_c(this, dtsheader, ti, true);
+      break;
+    }
     case 0x00ff: { // AAC
       int profile, channels, sample_rate, output_sample_rate;
       bool is_sbr;
@@ -596,6 +608,9 @@ avi_reader_c::identify() {
         break;
       case 0x2000:
         type = "AC3";
+        break;
+      case 0x2001:
+        type = "DTS";
         break;
       case 0x00ff:
         type = "AAC";
