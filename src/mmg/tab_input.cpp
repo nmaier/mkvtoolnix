@@ -679,32 +679,57 @@ tab_input::on_add_file(wxCommandEvent &evt) {
 void
 tab_input::add_file(const wxString &file_name) {
   mmg_file_t file;
-  wxString name, command, id, type, exact, video_track_name;
+  wxString name, command, id, type, exact, video_track_name, opt_file_name;
   wxArrayString output, errors;
   vector<wxString> args, pair;
   int result, pos;
   unsigned int i, k;
+  wxFile *opt_file;
+  string arg_utf8;
 
-  command = wxT("\"") + mkvmerge_path + wxT("\" --identify-verbose \"") +
-    file_name + wxT("\"");
+  opt_file_name.Printf(wxT("mmg-mkvmerge-options-%d-%d"),
+                       (int)wxGetProcessId(), (int)time(NULL));
+  try {
+    const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
+    opt_file = new wxFile(opt_file_name, wxFile::write);
+    opt_file->Write(utf8_bom, 3);
+  } catch (...) {
+    wxString error;
+    error.Printf(wxT("Could not create a temporary file for mkvmerge's "
+                     "command line option called '%s' (error code %d, "
+                     "%s)."), opt_file_name.c_str(), errno,
+                 wxUCS(strerror(errno)));
+    wxMessageBox(error, wxT("File creation failed"), wxOK | wxCENTER |
+                 wxICON_ERROR);
+    throw 0;
+  }
+  opt_file->Write(wxT("--identify-verbose\n"));
+  arg_utf8 = to_utf8(file_name);
+  opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
+  opt_file->Write(wxT("\n"));
+  delete opt_file;
+
+  command = wxT("\"") + mkvmerge_path + wxT("\" @") + opt_file_name;
   result = wxExecute(command, output, errors);
+  wxRemoveFile(opt_file_name);
   if ((result < 0) || (result > 1)) {
-    name.Printf(wxT("'mkvmerge -i' failed. Return code: %d\n\n"), result);
+    name.Printf(wxT("File identification failed. Return code: %d\n\n"),
+                result);
     for (i = 0; i < output.Count(); i++)
       name += break_line(output[i]) + wxT("\n");
     name += wxT("\n");
     for (i = 0; i < errors.Count(); i++)
       name += break_line(errors[i]) + wxT("\n");
-    wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
+    wxMessageBox(name, wxT("File identification failed"), wxOK | wxCENTER |
                  wxICON_ERROR);
     return;
   } else if (result > 0) {
-    name.Printf(wxT("'mkvmerge -i' failed. Return code: %d. Errno: %d "
+    name.Printf(wxT("File identification failed. Return code: %d. Errno: %d "
                     "(%s). Make sure that you've selected a mkvmerge "
                     "executable on the 'settings' tab."), result, errno,
                 wxUCS(strerror(errno)));
     break_line(name, 60);
-    wxMessageBox(name, wxT("'mkvmerge -i' failed"), wxOK | wxCENTER |
+    wxMessageBox(name, wxT("File identification failed"), wxOK | wxCENTER |
                  wxICON_ERROR);
     return;
   }

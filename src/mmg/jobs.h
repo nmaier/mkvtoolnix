@@ -72,7 +72,7 @@ protected:
   wxCheckBox *cb_abort_after_current;
   wxTimer *t_update;
   wxInputStream *out;
-  wxString line;
+  string line;
   wxProcess *process;
   wxString opt_file_name;
   wxTextCtrl *tc_log;
