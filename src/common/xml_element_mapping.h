@@ -36,9 +36,10 @@ typedef struct {
   int level;
   int64_t min_value;
   int64_t max_value;
-  const EbmlId id;
+  EbmlId id;
   parser_element_callback_t start_hook;
   parser_element_callback_t end_hook;
+  const char *debug_name;
 } parser_element_t;
 
 extern parser_element_t MTX_DLL_API *chapter_elements;

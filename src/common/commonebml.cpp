@@ -381,6 +381,31 @@ find_ebml_callbacks(const EbmlCallbacks &base,
 }
 
 const EbmlCallbacks &
+find_ebml_callbacks(const EbmlCallbacks &base,
+                    const char *debug_name) {
+  const EbmlSemanticContext &context = base.Context;
+  int i;
+
+  if (!strcmp(debug_name, base.DebugName))
+    return base;
+
+  for (i = 0; i < context.Size; i++)
+    if (!strcmp(debug_name, context.MyTable[i].GetCallbacks.DebugName))
+      return context.MyTable[i].GetCallbacks;
+
+  for (i = 0; i < context.Size; i++) {
+    if (!(context != context.MyTable[i].GetCallbacks.Context))
+      continue;
+    try {
+      return find_ebml_callbacks(context.MyTable[i].GetCallbacks, debug_name);
+    } catch (...) {
+    }
+  }
+
+  throw "";
+}
+
+const EbmlCallbacks &
 find_ebml_parent_callbacks(const EbmlCallbacks &base,
                            const EbmlId &id) {
   const EbmlSemanticContext &context = base.Context;
