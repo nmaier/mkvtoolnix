@@ -363,7 +363,7 @@ AC_SUBST(VORBIS_LIBS)
 dnl
 dnl Check for libFLAC
 dnl
-  AC_CHECK_LIB(FLAC, FLAC__stream_decoder_new,
+  AC_CHECK_LIB(FLAC, FLAC__seekable_stream_decoder_new,
                [ FLAC_LIBS="-lFLAC -lm"
                  flac_found=yes ],
                [ flac_found=no ],
@@ -375,7 +375,7 @@ dnl
                     ])
   fi
   if test x"$flac_found" = xyes ; then
-    AC_CHECK_LIB(FLAC, FLAC__stream_decoder_skip_single_frame,
+    AC_CHECK_LIB(FLAC, FLAC__seekable_stream_decoder_skip_single_frame,
                  [ flac_decoder_skip_found=yes ],
                  [ flac_decoder_skip_found=no ],
                  $FLAC_LIBS)

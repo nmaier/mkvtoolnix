@@ -23,7 +23,7 @@
 #if defined(HAVE_FLAC_FORMAT_H)
 #include <vector>
 
-#include <FLAC/stream_decoder.h>
+#include <FLAC/seekable_stream_decoder.h>
 
 #include "p_flac.h"
 
@@ -38,10 +38,9 @@ typedef struct {
 class flac_reader_c: public generic_reader_c {
 private:
   mm_io_c *file;
-  unsigned char *read_buffer;
-  int pos, size, sample_rate;
-  bool metadata_parsed, done;
-  int64_t samples, packet_start, file_size, old_progress;
+  int sample_rate;
+  bool metadata_parsed;
+  int64_t samples, file_size;
   unsigned char *header;
   int header_size;
   vector<flac_block_t> blocks;
@@ -61,7 +60,7 @@ public:
 
   static int probe_file(mm_io_c *mm_io, int64_t size);
 
-  virtual FLAC__StreamDecoderReadStatus
+  virtual FLAC__SeekableStreamDecoderReadStatus
   read_cb(FLAC__byte buffer[], unsigned *bytes);
 
   virtual FLAC__StreamDecoderWriteStatus
@@ -69,10 +68,16 @@ public:
 
   virtual void metadata_cb(const FLAC__StreamMetadata *metadata);
   virtual void error_cb(FLAC__StreamDecoderErrorStatus status);
+  virtual FLAC__SeekableStreamDecoderSeekStatus
+  seek_cb(uint64_t new_pos);
+  virtual FLAC__SeekableStreamDecoderTellStatus
+  tell_cb(uint64_t &absolute_byte_offset);
+  virtual FLAC__SeekableStreamDecoderLengthStatus
+  length_cb(uint64_t &stream_length);
+  virtual FLAC__bool eof_cb();
 
 protected:
   virtual bool parse_file();
-  virtual bool fill_buffer();
 };
 
 #else  // HAVE_FLAC_FORMAT_H
