@@ -124,11 +124,11 @@ find_consecutive_ac3_headers(const unsigned char *buf,
   if (pos < 0)
     return -1;
   mxverb(2, "ac3_reader: Found tag at %d size %d\n", pos, ac3header.bytes);
-  base = pos + 1;
 
   if (num == 1)
     return pos;
 
+  base = pos;
   do {
     mxverb(2, "find_cons_ac3_h: starting with base at %d\n", base);
     offset = ac3header.bytes;
