@@ -45,12 +45,10 @@ export WANT_AUTOCONF_2_5=1
 AUTOCONFVER=`autoconf --version | head -n 1 | sed 's;[^0-9\.];;g'`
 case $AUTOCONFVER in
   2.1*)
-    echo Using autoconf-2.1 style files.
-    cp acinclude-2.1.m4 acinclude.m4
-    ;;
-  *)
-    echo Using autoconf-2.5 style files.
-    cp acinclude-2.5.m4 acinclude.m4
+    echo autoconf 2.5 or later is required to build mkvtoolnix.
+    echo "Download the appropriate package for your distribution,"
+    echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+    exit 1
     ;;
 esac
 
