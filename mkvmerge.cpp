@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.22 2003/03/05 17:44:32 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.23 2003/03/06 23:39:40 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -57,6 +57,7 @@
 #ifdef HAVE_OGGVORBIS
 #include "r_ogm.h"
 #endif
+#include "r_srt.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -108,7 +109,7 @@ file_type_t file_types[] =
 #endif // HAVE_OGGVORBIS
    {"avi", TYPEAVI, "AVI (Audio/Video Interleaved)"},
    {"wav", TYPEWAV, "WAVE (uncompressed PCM)"},
-//    {"srt", TYPESRT, "SRT text subtitles"},
+   {"srt", TYPESRT, "SRT text subtitles"},
 //    {"   ", TYPEMICRODVD, "MicroDVD text subtitles"},
 //    {"idx", TYPEVOBSUB, "VobSub subtitles"},
    {"mp3", TYPEMP3, "MPEG1 layer III audio (CBR and VBR/ABR)"},
@@ -192,8 +193,8 @@ static int get_type(char *filename) {
   else if (ogm_reader_c::probe_file(f, size))
     return TYPEOGM;
 #endif // HAVE_OGGVORBIS
-//   else if (srt_reader_c::probe_file(f, size))
-//     return TYPESRT;
+  else if (srt_reader_c::probe_file(f, size))
+    return TYPESRT;
   else if (mp3_reader_c::probe_file(f, size))
     return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
@@ -617,13 +618,13 @@ static void parse_args(int argc, char **argv) {
                       "WAVE files.\n");
             file->reader = new wav_reader_c(&ti);
             break;
-//           case TYPESRT:
-//             if ((astreams != NULL) || (vstreams != NULL) ||
-//                 (tstreams != NULL))
-//               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
-//                       "SRT files.\n");
-//             file->reader = new srt_reader_c(file->name, &async);
-//             break;
+          case TYPESRT:
+            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
+                (ti.tstreams != NULL))
+              fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
+                      "SRT files.\n");
+            file->reader = new srt_reader_c(&ti);
+            break;
           case TYPEMP3:
             if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
                 (ti.tstreams != NULL))

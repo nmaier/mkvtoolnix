@@ -1,17 +1,21 @@
 /*
-  ogmmerge -- utility for splicing together ogg bitstreams
+  mkvmerge -- utility for splicing together matroska files
       from component media subtypes
 
   r_srt.cpp
-  SRT text subtitle reader module
 
   Written by Moritz Bunkus <moritz@bunkus.org>
-  Based on Xiph.org's 'oggmerge' found in their CVS repository
-  See http://www.xiph.org
 
   Distributed under the GPL
   see the file COPYING for details
   or visit http://www.gnu.org/copyleft/gpl.html
+*/
+
+/*!
+    \file
+    \version \$Id: r_srt.cpp,v 1.4 2003/03/06 23:39:40 mosu Exp $
+    \brief Subripper subtitle reader
+    \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include <ctype.h>
@@ -20,11 +24,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <ogg/ogg.h>
-
-#include "ogmmerge.h"
-#include "ogmstreams.h"
-#include "queue.h"
+#include "pr_generic.h"
 #include "r_srt.h"
 #include "subtitles.h"
 
@@ -65,24 +65,25 @@ int srt_reader_c::probe_file(FILE *file, u_int64_t size) {
   return 1;
 }
 
-srt_reader_c::srt_reader_c(char *fname, audio_sync_t *nasync) throw (error_c) {
-  if ((file = fopen(fname, "r")) == NULL)
+srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
+  generic_reader_c(nti) {
+  if ((file = fopen(ti->fname, "r")) == NULL)
     throw error_c("srt_reader: Could not open source file.");
   if (!srt_reader_c::probe_file(file, 0))
     throw error_c("srt_reader: Source is not a valid SRT file.");
-  textsubspacketizer = new textsubs_packetizer_c(nasync);
+  textsubs_packetizer = new textsubs_packetizer_c(ti);
   if (verbose)
     fprintf(stdout, "Using SRT subtitle reader for %s.\n+-> Using " \
-            "text subtitle output module for subtitles.\n", fname);
+            "text subtitle output module for subtitles.\n", ti->fname);
 }
 
 srt_reader_c::~srt_reader_c() {
-  if (textsubspacketizer != NULL)
-    delete textsubspacketizer;
+  if (textsubs_packetizer != NULL)
+    delete textsubs_packetizer;
 }
 
 int srt_reader_c::read() {
-  ogg_int64_t start, end;
+  int64_t start, end;
   char *subtitles;
   subtitles_c subs;
 
@@ -93,7 +94,8 @@ int srt_reader_c::read() {
       break;
     if ((strlen(chunk) < 29) ||  !issrttimestamp(chunk))
       break;
-  
+    chunk[2047] = 0;
+
 // 00:00:00,000 --> 00:00:00,000
 // 01234567890123456789012345678
 //           1         2  
@@ -114,6 +116,7 @@ int srt_reader_c::read() {
     while (1) {
       if (fgets(chunk, 2047, file) == NULL)
         break;
+      chunk[2047] = 0;
       if ((*chunk == '\n') || (*chunk == '\r'))
         break;
       if (subtitles == NULL) {
@@ -138,30 +141,17 @@ int srt_reader_c::read() {
     fprintf(stdout, "srt_reader: Warning: The subtitle file seems to be " \
             "badly broken. The output file might not be playable " \
             "correctly.\n");
-  subs.process(textsubspacketizer);
+  subs.process(textsubs_packetizer);
 
   return 0;
 }
 
-int srt_reader_c::serial_in_use(int serial) {
-  return textsubspacketizer->serial_in_use(serial);
-}
-
-ogmmerge_page_t *srt_reader_c::get_header_page(int header_type) {
-  return textsubspacketizer->get_header_page(header_type);
-}
-
-ogmmerge_page_t *srt_reader_c::get_page() {
-  return textsubspacketizer->get_page();
+packet_t *srt_reader_c::get_packet() {
+  return textsubs_packetizer->get_packet();
 }
 
 int srt_reader_c::display_priority() {
   return DISPLAYPRIORITY_LOW;
-}
-
-void srt_reader_c::reset() {
-  if (textsubspacketizer != NULL)
-    textsubspacketizer->reset();
 }
 
 static char wchar[] = "-\\|/-\\|/-";

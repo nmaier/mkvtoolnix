@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.2 2003/02/25 13:17:33 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.3 2003/03/06 23:39:40 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -288,6 +288,8 @@ void process_file() {
                   case track_video:
                     fprintf(stdout, "Video");
                     break;
+                  case track_subtitle:
+                    fprintf(stdout, "Subtitles");
                   default:
                     fprintf(stdout, "unknown");
                     break;
