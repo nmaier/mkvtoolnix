@@ -1,5 +1,9 @@
 2005-01-30  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: It was possible to create chapter entries with
+	invalid or even empty language entries. Not only are those
+	invalid, such XML files can also not be loaded by mmg.
+
 	* mmg: bug fix: Overwriting a chapter file did not erase the
 	previous file. So if the previous file was bigger than the current
 	chapters then garbage remained at the end of the file.

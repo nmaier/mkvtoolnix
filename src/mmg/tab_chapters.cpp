@@ -121,7 +121,9 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
 
     siz_input->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
                    0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_language = new wxComboBox(this, wxID_STATIC, wxT(""));
+    cob_language = new wxComboBox(this, wxID_STATIC, wxT(""),
+                                  wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                  wxCB_DROPDOWN | wxCB_READONLY);
     siz_input->Add(cob_language, 0, wxGROW, 0);
 
     siz_input->Add(0, 1, 1, wxGROW, 0);
@@ -130,7 +132,9 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
 
     siz_input->Add(new wxStaticText(this, wxID_STATIC, wxT("Country:")),
                    0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_country = new wxComboBox(this, wxID_STATIC, wxT(""));
+    cob_country = new wxComboBox(this, wxID_STATIC, wxT(""),
+                                 wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                 wxCB_DROPDOWN | wxCB_READONLY);
     siz_input->Add(cob_country, 0, wxGROW, 0);
 
   } else {
@@ -153,7 +157,9 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
       new wxCheckBox(this, ID_CVD_CB_LANGUAGE, wxT("Set language to:"));
     cb_language->SetValue(false);
     siz_input->Add(cb_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_language = new wxComboBox(this, wxID_STATIC, wxT(""));
+    cob_language = new wxComboBox(this, wxID_STATIC, wxT(""),
+                                  wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                  wxCB_DROPDOWN | wxCB_READONLY);
     cob_language->Enable(false);
     siz_input->Add(cob_language, 0, wxGROW, 0);
 
@@ -165,7 +171,9 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
       new wxCheckBox(this, ID_CVD_CB_COUNTRY, wxT("Set country to:"));
     cb_country->SetValue(false);
     siz_input->Add(cb_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_country = new wxComboBox(this, wxID_STATIC, wxT(""));
+    cob_country = new wxComboBox(this, wxID_STATIC, wxT(""),
+                                 wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                 wxCB_DROPDOWN | wxCB_READONLY);
     cob_country->Enable(false);
     siz_input->Add(cob_country, 0, wxGROW, 0);
 
@@ -173,7 +181,6 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
 
   siz_all->Add(siz_input, 3, wxGROW | wxLEFT | wxRIGHT, 25);
 
-  cob_language->Append(wxT(""));
   for (i = 0; i < sorted_iso_codes.Count(); i++) {
     cob_language->Append(sorted_iso_codes[i]);
     if (extract_language_code(sorted_iso_codes[i]) == old_def_language)
@@ -380,7 +387,9 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   cob_language_code =
-    new wxComboBox(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxT(""));
+    new wxComboBox(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxT(""),
+                   wxDefaultPosition, wxDefaultSize, 0, NULL,
+                   wxCB_DROPDOWN | wxCB_READONLY);
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language_code->Append(sorted_iso_codes[i]);
   cob_language_code->SetValue(wxT(""));
@@ -391,7 +400,9 @@ tab_chapters::tab_chapters(wxWindow *parent,
   st_country = new wxStaticText(this, wxID_STATIC, wxT("Country:"));
   siz_line->Add(st_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_country_code =
-    new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxT(""));
+    new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxT(""),
+                   wxDefaultPosition, wxDefaultSize, 0, NULL,
+                   wxCB_DROPDOWN | wxCB_READONLY);
   cob_country_code->Append(wxT(""));
   for (i = 0; cctlds[i] != NULL; i++)
     cob_country_code->Append(wxU(cctlds[i]));
@@ -822,6 +833,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   KaxChapterLanguage *language;
   KaxChapterString *cs;
   wxString label;
+  string lang;
   uint32_t i;
 
   if (dynamic_cast<KaxEditionUID *>(e) != NULL)
@@ -863,6 +875,16 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   if (language == NULL) {
     wxMessageBox(wxT("The chapter '") + label +
                  wxT("' is missing its language."),
+                 wxT("Chapter verification error"), wxCENTER | wxOK |
+                 wxICON_ERROR);
+    return false;
+  }
+  lang = string(*language);
+  if ((0 == lang.size()) || !is_valid_iso639_2_code(lang.c_str())) {
+    wxMessageBox(wxT("The selected language '") + wxU(lang.c_str()) +
+                 wxT("' for the chapter '") + label +
+                 wxT("' is not a valid language code. Please select one of "
+                     "the predefined ones."),
                  wxT("Chapter verification error"), wxCENTER | wxOK |
                  wxICON_ERROR);
     return false;
@@ -1320,15 +1342,23 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
 
 void
 tab_chapters::on_set_default_values(wxCommandEvent &evt) {
-  vector<string> parts;
+  wxString language;
+
   chapter_values_dlg dlg(this, true, wxU(default_chapter_language.c_str()),
                          wxU(default_chapter_country.c_str()));
 
   if (dlg.ShowModal() != wxID_OK)
     return;
 
-  default_chapter_language =
-    wxMB(extract_language_code(dlg.cob_language->GetValue()));
+  language = extract_language_code(dlg.cob_language->GetValue());
+  if (!is_valid_iso639_2_code(to_utf8(language.c_str()).c_str())) {
+    wxMessageBox(wxT("The language '") + language +
+                 wxT("' is not a valid language and cannot be selected."),
+                 wxT("Invalid language selected"),
+                 wxICON_ERROR | wxOK);
+    return;
+  }
+  default_chapter_language = wxMB(language);
   default_chapter_country = wxMB(dlg.cob_country->GetValue());
 }
 
@@ -1405,6 +1435,13 @@ tab_chapters::on_set_values(wxCommandEvent &evt) {
 
   if (dlg.cb_language->IsChecked()) {
     s = extract_language_code(dlg.cob_language->GetValue());
+    if (!is_valid_iso639_2_code(to_utf8(s.c_str()).c_str())) {
+      wxMessageBox(wxT("The language '") + s +
+                   wxT("' is not a valid language and cannot be selected."),
+                   wxT("Invalid language selected"),
+                   wxICON_ERROR | wxOK);
+      return;
+    }
     set_values_recursively(id, s, true);
   }
   if (dlg.cb_country->IsChecked()) {

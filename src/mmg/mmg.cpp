@@ -1904,12 +1904,16 @@ mmg_app::OnInit() {
   cfg->SetPath(wxT("/chapter_editor"));
   if (cfg->Read(wxT("default_language"), &k)) {
     if (k.length() == 0)
-      k = wxT("eng");
+      k = wxT("und");
     default_chapter_language = to_utf8(k).c_str();
+    if (!is_valid_iso639_2_code(default_chapter_language.c_str()))
+      default_chapter_language = "und";
   } else
-    default_chapter_language = "eng";
-  if (cfg->Read(wxT("default_country"), &k))
+    default_chapter_language = "und";
+  if (cfg->Read(wxT("default_country"), &k) && (0 < k.length()))
     default_chapter_country = to_utf8(k).c_str();
+  if (!is_valid_iso639_1_code(default_chapter_country.c_str()))
+    default_chapter_country = "";
 
   app = this;
   mdlg = new mmg_dialog();
