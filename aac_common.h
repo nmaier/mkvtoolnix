@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: aac_common.h,v 1.3 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: aac_common.h,v 1.4 2003/05/19 20:51:12 mosu Exp $
     \brief definitions and helper functions for AAC data
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -28,7 +28,7 @@ typedef struct {
   int bytes;
   int id;                       // 0 = MPEG-4, 1 = MPEG-2
   int profile;
-  int header_bit_size, header_byte_size;
+  int header_bit_size, header_byte_size, data_byte_size;
 } aac_header_t;
 
 int parse_aac_adif_header(unsigned char *buf, int size,

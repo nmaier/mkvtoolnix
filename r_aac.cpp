@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_aac.cpp,v 1.3 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: r_aac.cpp,v 1.4 2003/05/19 20:51:12 mosu Exp $
     \brief AAC demultiplexer module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -77,9 +77,9 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
   else
     adif = 0;
   bytes_processed = 0;
-  aacpacketizer = new aac_packetizer_c(this, aacheader.id,
+  aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
                                        aacheader.sample_rate,
-                                       aacheader.channels, adif, ti);
+                                       aacheader.channels, ti);
   if (verbose)
     fprintf(stdout, "Using AAC demultiplexer for %s.\n+-> Using " \
             "AAC output module for audio stream.\n", ti->fname);

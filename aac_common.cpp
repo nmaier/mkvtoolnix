@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: aac_common.cpp,v 1.4 2003/05/19 18:24:52 mosu Exp $
+    \version \$Id: aac_common.cpp,v 1.5 2003/05/19 20:51:12 mosu Exp $
     \brief helper function for AAC data
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -159,6 +159,8 @@ static int is_adts_header(unsigned char *buf, int size, int bpos,
   if (!protection_absent)
     aac_header->header_bit_size += 16;
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
+  aac_header->data_byte_size = aac_header->bytes -
+    aac_header->header_bit_size / 8;
 
   return 1;
 }

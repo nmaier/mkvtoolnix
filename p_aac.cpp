@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_aac.cpp,v 1.3 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: p_aac.cpp,v 1.4 2003/05/19 20:51:12 mosu Exp $
     \brief AAC output module
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -31,8 +31,9 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
+                                   int nprofile,
                                    unsigned long nsamples_per_sec,
-                                   int nchannels, int adif, track_info_t *nti)
+                                   int nchannels, track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   bytes_output = 0;
@@ -41,7 +42,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *nreader, int nid,
   samples_per_sec = nsamples_per_sec;
   channels = nchannels;
   id = nid;
-  is_adif = adif;
+  profile = nprofile;
 
   set_track_type(track_audio);
   duplicate_data_on_add(false);
@@ -92,8 +93,8 @@ void aac_packetizer_c::remove_aac_packet(int pos, int framesize) {
 
 unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
                                                 aac_header_t *aacheader) {
-  int pos;
-  unsigned char *buf;
+  int pos, i, up_shift, down_shift;
+  unsigned char *buf, *src;
   double pims;
   
   if (packet_buffer == NULL)
@@ -125,7 +126,25 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
     fprintf(stdout, "aac_packetizer: skipping %d bytes (no valid AAC header "
             "found). This might make audio/video go out of sync, but this "
             "stream is damaged.\n", pos);
-  buf = (unsigned char *)safememdup(packet_buffer + pos, aacheader->bytes);
+  if ((aacheader->header_bit_size % 8) == 0)
+    buf = (unsigned char *)safememdup(packet_buffer + pos +
+                                      aacheader->header_byte_size,
+                                      aacheader->data_byte_size);
+  else {
+    // Header is not byte aligned, i.e. MPEG-4 ADTS
+    // This code is from mpeg4ip/server/mp4creator/aac.cpp
+    up_shift = aacheader->header_bit_size % 8;
+    down_shift = 8 - up_shift;
+    src = packet_buffer + pos + aacheader->header_bit_size / 8;
+
+    buf = (unsigned char *)safemalloc(aacheader->data_byte_size);
+
+    buf[0] = src[0] << up_shift;
+    for (i = 1; i < aacheader->data_byte_size; i++) {
+      buf[i - 1] |= (src[i] >> down_shift);
+      buf[i] = (src[i] << up_shift);
+    }
+  }
   
   if (ti->async.displacement > 0) {
     /*
@@ -148,10 +167,27 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
 }
 
 void aac_packetizer_c::set_headers() {
-  if (id == 0)
-    set_codec_id(MKV_A_AAC_4LC);
-  else
-    set_codec_id(MKV_A_AAC_2LC);
+  if (id == 0) {
+    if (profile == 0)
+      set_codec_id(MKV_A_AAC_4MAIN);
+    else if (profile == 1)
+      set_codec_id(MKV_A_AAC_4LC);
+    else if (profile == 2)
+      set_codec_id(MKV_A_AAC_4SSR);
+    else if (profile == 3)
+      set_codec_id(MKV_A_AAC_4LTP);
+    else
+      die("aac_packetizer: Unknown AAC MPEG-4 object type...");
+  } else {
+    if (profile == 0)
+      set_codec_id(MKV_A_AAC_2MAIN);
+    else if (profile == 1)
+      set_codec_id(MKV_A_AAC_2LC);
+    else if (profile == 2)
+      set_codec_id(MKV_A_AAC_2SSR);
+    else
+      die("aac_packetizer: Unknown AAC MPEG-2 profile...");
+  }
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 
@@ -174,7 +210,7 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
       my_timecode = (int64_t)(1000.0 * packetno * 1024 * ti->async.linear / 
                               samples_per_sec);
 
-    add_packet(packet, aacheader.bytes, my_timecode,
+    add_packet(packet, aacheader.data_byte_size, my_timecode,
                (int64_t)(1000.0 * 1024 * ti->async.linear / samples_per_sec));
     packetno++;
   }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: matroska.h,v 1.12 2003/05/18 20:57:07 mosu Exp $
+    \version \$Id: matroska.h,v 1.13 2003/05/19 20:51:12 mosu Exp $
     \brief Definitions for the various Codec IDs
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -23,8 +23,13 @@
 
 // see http://cvs.corecodec.org/cgi-bin/cvsweb.cgi/~checkout~/matroska/doc/website/specs/codex.html?rev=HEAD&content-type=text/html
 
+#define MKV_A_AAC_2MAIN  "A_AAC/MPEG2/MAIN"
 #define MKV_A_AAC_2LC    "A_AAC/MPEG2/LC"
+#define MKV_A_AAC_2SSR   "A_AAC/MPEG2/SSR"
+#define MKV_A_AAC_4MAIN  "A_AAC/MPEG4/MAIN"
 #define MKV_A_AAC_4LC    "A_AAC/MPEG4/LC"
+#define MKV_A_AAC_4SSR   "A_AAC/MPEG4/SSR"
+#define MKV_A_AAC_4LTP   "A_AAC/MPEG4/LTP"
 #define MKV_A_AAC_4SBR   "A_AAC/MPEG4/SBR"
 #define MKV_A_AC3        "A_AC3"
 #define MKV_A_DTS        "A_DTS"
