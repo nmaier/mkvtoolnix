@@ -103,8 +103,6 @@ namespace libmatroska {
   };
 }
 
-
-
 // }}}
 
 // {{{ global structs and variables
@@ -1398,9 +1396,11 @@ render_headers(mm_io_c *rout) {
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
 
-    kax_duration = new KaxMyDuration(video_track_present ?
-                                     EbmlFloat::FLOAT_32 :
-                                     EbmlFloat::FLOAT_64);
+    if (!video_track_present ||
+        (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))
+      kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_64);
+    else
+      kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_32);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
     kax_infos->PushElement(*kax_duration);
 
