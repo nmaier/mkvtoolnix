@@ -832,12 +832,8 @@ generic_packetizer_c::add_packet(memory_c &mem,
   if (compressor != NULL) {
     pack->data = compressor->compress(mem.data, length);
     mem.release();
-  } else if (!mem.is_free)
-    pack->data = (unsigned char *)safememdup(mem.data, mem.size);
-  else {
-    pack->data = mem.data;
-    mem.lock();
-  }
+  } else
+    pack->data = mem.grab();
   pack->length = length;
   pack->timecode = timecode;
   pack->bref = bref;
@@ -890,23 +886,10 @@ generic_packetizer_c::add_packet(memories_c &mems,
       mems[i]->release();
     }
   } else {
-    if (!mems[0]->is_free)
-      pack->data = (unsigned char *)safememdup(mems[0]->data, length);
-    else {
-      pack->data = mems[0]->data;
-      mems[0]->lock();
-    }
+    pack->data = mems[0]->grab();
     for (i = 1; i < mems.size(); i++) {
-      if (!mems[i]->is_free) {
-        add_length = mems[i]->size;
-        pack->data_adds[i - 1] = (unsigned char *)safememdup(mems[i]->data,
-                                                             add_length);
-        pack->data_adds_lengths[i - 1] = add_length;
-      } else {
-        pack->data_adds[i - 1] = mems[i]->data;
-        pack->data_adds_lengths[i - 1] = mems[i]->size;
-        mems[i]->lock();
-      }
+      pack->data_adds[i - 1] = mems[i]->grab();
+      pack->data_adds_lengths[i - 1] = mems[i]->size;
     }
   }
   pack->length = length;

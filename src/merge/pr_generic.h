@@ -88,14 +88,14 @@ public:
     is_free = false;
     return 0;
   }
-  memory_c *grab() {
+  unsigned char *grab() {
     if (size == 0)
       die("memory_c::grab(): size == 0\n");
     if (is_free) {
       is_free = false;
-      return new memory_c(data, size, true);
+      return data;
     }
-    return new memory_c((unsigned char *)safememdup(data, size), size, true);
+    return (unsigned char *)safememdup(data, size);
   }
   int release() {
     if (is_free) {
