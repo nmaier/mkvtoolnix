@@ -16,6 +16,9 @@ tags <\fIinname\fR> [\fIoptions\fR]
 attachments <\fIinname\fR> [\fIoptions\fR] [\fIAID1\fR:\fIout1\fR [\fIAID2\fR:\fIout2\fR ...]]
 .br
 .B mkvextract
+chapters <\fIinname\fR> [\fIoptions\fR]
+.br
+.B mkvextract
 <\-h|\-V>
 
 
@@ -23,7 +26,8 @@ attachments <\fIinname\fR> [\fIoptions\fR] [\fIAID1\fR:\fIout1\fR [\fIAID2\fR:\f
 .LP
 This program extracts specific parts from a Matroska file to other useful
 formats. The first argument tells \fBmkvextract\fR what to extract. Currently
-supported is the extraction of \fBtracks\fR, \fBtags\fR and \fBattachments\fR.
+supported is the extraction of \fBtracks\fR, \fBtags\fR, \fBattachments\fR and
+\fBchapters\fR.
 The second argument is the name of the source file. It must be a Matroska file.
 
 .LP
@@ -56,6 +60,12 @@ Causes extraction of the attachment with the ID \fIAID\fR into the file
 \fIoutname\fR if such an attachment exists in the source file. This option can
 be given mutliple times. The attachment IDs are the same as the ones output by
 \fBmkvmerge\fR's \fB--identify\fR option.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
+Command line syntax for the \fBchapters\fR extraction mode:
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 Be verbose and show all the important Matroska elements as they're read.
@@ -107,6 +117,11 @@ SSA and ASS text subtitles will be written as SSA/ASS files respectively.
 .LP
 \fBAttachments\fR are written to they output file as they are. No conversion
 whatsoever is done.
+.LP
+\fBChapters\fR are converted to a XML format. This format is the same that
+\fBmkvmerge\fR supports for reading chapters. \fBNOTE:\fR At the moment
+\fBmkvmerge\fR does not yet support this format, but it will in the upcoming
+release which will be in mid August.
 
 
 .SH EXAMPLES
