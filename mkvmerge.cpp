@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.70 2003/05/21 19:55:49 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.71 2003/05/21 21:05:47 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -583,10 +583,11 @@ static void render_headers(mm_io_callback *out) {
     kax_duration = &GetChild<KaxDuration>(*kax_infos);
     *(static_cast<EbmlFloat *>(kax_duration)) = 0.0;
 
+    string version = string("libmatroska ") + KaxCodeVersion;
     *((EbmlUnicodeString *)&GetChild<KaxMuxingApp>(*kax_infos)) =
-      L"libmatroska 0.4.3";
+      cstr_to_UTFstring(version.c_str());
     *((EbmlUnicodeString *)&GetChild<KaxWritingApp>(*kax_infos)) =
-      L"mkvmerge 0.3.4";
+      cstr_to_UTFstring(VERSIONINFO);
 
 #if LIBEBML_VERSION >= 000403
     kax_segment->WriteHead(*out, 5);

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.h,v 1.27 2003/05/20 06:30:24 mosu Exp $
+    \version \$Id: common.h,v 1.28 2003/05/21 21:05:47 mosu Exp $
     \brief definitions used in all programs, helper functions
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -35,6 +35,8 @@
 #define strcasecmp _stricmp
 #define nice(a)
 #endif
+
+#include "EbmlUnicodeString.h"
 
 #include "config.h"
 
@@ -104,6 +106,9 @@ unsigned char *_safestrdup(const unsigned char *s, const char *file, int line);
 void *_safememdup(const void *src, size_t size, const char *file, int line);
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
 void *_saferealloc(void *mem, size_t size, const char *file, int line);
+
+UTFstring cstr_to_UTFstring(const char *c);
+char *UTFstring_to_cstr(const UTFstring &u);
 
 extern int verbose;
 

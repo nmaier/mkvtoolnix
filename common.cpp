@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: common.cpp,v 1.23 2003/05/19 18:24:52 mosu Exp $
+    \version \$Id: common.cpp,v 1.24 2003/05/21 21:05:47 mosu Exp $
     \brief helper functions, common variables
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -342,4 +342,48 @@ void *_saferealloc(void *mem, size_t size, const char *file, int line) {
   }
 
   return mem;
+}
+
+/*
+ * UTFstring <-> C string conversion
+ */
+
+UTFstring cstr_to_UTFstring(const char *c) {
+#ifdef NO_WSTRING
+  return UTFstring(c);
+#else
+  wchar_t *new_string;
+  const char *sptr;
+  UTFstring u;
+  int len;
+
+  len = strlen(c);
+  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
+  memset(new_string, 0, (len + 1) * sizeof(wchar_t));
+  new_string[len] = L'\0';
+  sptr = c;
+  mbsrtowcs(new_string, &sptr, len, NULL);
+  u = UTFstring(new_string);
+  safefree(new_string);
+
+  return u;
+#endif
+}
+
+char *UTFstring_to_cstr(const UTFstring &u) {
+#ifdef NO_WSTRING
+  return safestrdup(u.c_str());
+#else
+  const wchar_t *sptr;
+  char *new_string;
+  int len;
+
+  len = u.size();
+  new_string = (char *)safemalloc(len * 4 + 1);
+  memset(new_string, 0, len * 4 + 1);
+  sptr = u.c_str();
+  wcsrtombs(new_string, &sptr, len, NULL);
+
+  return new_string;
+#endif
 }
