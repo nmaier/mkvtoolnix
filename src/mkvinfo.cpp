@@ -1558,6 +1558,8 @@ def_handle2(block_group,
   lf_timecode = 0;
   lf_tnum = 0;
 
+  bduration = -1.0;
+
   m2 = static_cast<EbmlMaster *>(l2);
   for (i2 = 0; i2 < m2->ListSize(); i2++) {
     l3 = (*m2)[i2];

@@ -226,6 +226,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.aid = aid;
   demuxer.ptzr = -1;
   ti->id = aid + 1;             // ID for this audio track.
+  packetizer = NULL;
 
   wfe = avi->wave_format_ex[aid];
   AVI_set_audio_track(avi, aid);
@@ -364,6 +365,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
   int64_t duration;
 
   key = 0;
+  nread = 0;
   if ((vptzr != -1) && !video_done && (PTZR(vptzr) == ptzr)) {
     debug_enter("avi_reader_c::read (video)");
 

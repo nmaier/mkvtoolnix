@@ -228,6 +228,8 @@ job_run_dialog::process_input() {
   if (process == NULL)
     return;
 
+  c = wxT('\0');
+
   while (process->IsInputAvailable()) {
     if (!out->Eof()) {
       c = out->GetC();

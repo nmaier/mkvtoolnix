@@ -997,6 +997,7 @@ close_files() {
           int nread;
           string temp_name;
 
+          temp_file = NULL;
           temp_name = tracks[i].out->get_file_name();
           delete tracks[i].out;
           try {
@@ -1084,6 +1085,8 @@ write_all_cuesheets(KaxChapters &chapters,
                     KaxTags &tags) {
   int i;
   mm_io_c *out;
+
+  out = NULL;
 
   for (i = 0; i < tracks.size(); i++) {
     if (tracks[i].extract_cuesheet) {
