@@ -566,26 +566,6 @@ static void handle_level1(EbmlElement *e) {
 
 }
 
-static void dumpsizes(EbmlElement *e, int level) {
-  int i;
-
-  for (i = 0; i < level; i++)
-    mxprint(stdout, " ");
-  mxprint(stdout, "%s", e->Generic().DebugName);
-
-  try {
-    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
-    if (m != NULL) {
-      mxprint(stdout, " (size: %u)\n", m->ListSize());
-      for (i = 0; i < m->ListSize(); i++)
-        dumpsizes((*m)[i], level + 1);
-    } else
-      mxprint(stdout, "\n");
-  } catch (...) {
-      mxprint(stdout, "\n");
-  }
-}
-
 void write_tags_xml(KaxTags &tags, FILE *out) {
   int i;
 

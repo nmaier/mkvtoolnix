@@ -300,6 +300,8 @@ public:
   void leave(const char *label);
   void add_packetizer(void *ptzr);
   void dump_info();
+
+  static void dump_elements(EbmlElement *e, int level);
 };
 
 extern debug_c debug_facility;

@@ -1093,6 +1093,27 @@ void debug_c::dump_info() {
     packetizers[i]->dump_debug_info();
 }
 
+void debug_c::dump_elements(EbmlElement *e, int level) {
+  int i;
+
+  for (i = 0; i < level; i++)
+    mxprint(stdout, " ");
+  mxprint(stdout, "%s", e->Generic().DebugName);
+
+  try {
+    EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
+    if (m != NULL) {
+      mxprint(stdout, " (size: %u)\n", m->ListSize());
+      for (i = 0; i < m->ListSize(); i++)
+        dump_elements((*m)[i], level + 1);
+    } else
+      mxprint(stdout, "\n");
+  } catch (...) {
+      mxprint(stdout, "\n");
+  }
+}
+
+
 #endif // DEBUG
 
 /*
