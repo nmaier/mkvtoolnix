@@ -124,3 +124,16 @@ parser_element_t tag_elements[] = {
 
   {NULL, ebmlt_master, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL}
 };
+
+int
+xml_element_map_index(const parser_element_t *element_map,
+                      const char *name) {
+  int i;
+
+  for (i = 0; element_map[i].name != NULL; i++)
+    if (!strcmp(name, element_map[i].name))
+      return i;
+
+  return -1;
+}
+

@@ -44,4 +44,12 @@ typedef struct {
 extern parser_element_t chapter_elements[];
 extern parser_element_t tag_elements[];
 
+#define chapter_element_map_index(name) \
+   xml_element_map_index(chapter_elements, name)
+#define tag_element_map_index(name) \
+   xml_element_map_index(tag_elements, name)
+
+int MTX_DLL_API xml_element_map_index(const parser_element_t *element_map,
+                                      const char *name);
+
 #endif

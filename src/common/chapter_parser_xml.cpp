@@ -55,8 +55,19 @@ typedef struct {
 
 #define parent_elt (*((parser_data_t *)pdata)->parents) \
                       [((parser_data_t *)pdata)->parents->size() - 1]
-#define parent_name parent_elt->Generic().DebugName
+#define parent_name _parent_name(parent_elt)
 #define CPDATA (parser_data_t *)pdata
+
+static const char *
+_parent_name(EbmlElement *e) {
+  int i;
+
+  for (i = 0; chapter_elements[i].name != NULL; i++)
+    if (chapter_elements[i].id == e->Generic().GlobalId)
+      return chapter_elements[i].name;
+
+  return "(none)";
+}
 
 static void
 cperror(parser_data_t *pdata,
@@ -109,16 +120,10 @@ el_get_uint(parser_data_t *pdata,
 
 static void
 el_get_string(parser_data_t *pdata,
-              EbmlElement *el,
-              bool check_language = false) {
+              EbmlElement *el) {
   strip(*pdata->bin);
   if (pdata->bin->length() == 0)
     cperror(pdata, "Expected a string but found only whitespaces.");
-
-  if (check_language && !is_valid_iso639_2_code(pdata->bin->c_str()))
-    cperror(pdata, "'%s' is not a valid ISO639-2 language code. See the "
-            "output of 'mkvmerge --list-languages' for a list of all "
-            "valid language codes.", pdata->bin->c_str());
 
   *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
 }
@@ -425,7 +430,7 @@ end_element(void *user_data,
         el_get_uint(pdata, parent_elt, 0, true);
         break;
       case ebmlt_string:
-        el_get_string(pdata, parent_elt, false);
+        el_get_string(pdata, parent_elt);
         break;
       case ebmlt_ustring:
         el_get_utf8string(pdata, parent_elt);
@@ -440,10 +445,6 @@ end_element(void *user_data,
     if (chapter_elements[elt_idx].end_hook != NULL)
       chapter_elements[elt_idx].end_hook(pdata);
   }
-
-
-//   } else
-//     end_this_level(pdata, name);
 
   if (pdata->bin != NULL) {
     delete pdata->bin;
@@ -566,18 +567,6 @@ select_chapters_in_timeframe(KaxChapters *chapters,
   return chapters;
 }
 
-static int
-cet_index(const char *name) {
-  int i;
-
-  for (i = 0; chapter_elements[i].name != NULL; i++)
-    if (!strcmp(name, chapter_elements[i].name))
-      return i;
-
-  assert(false);
-  return -1;
-}
-
 KaxChapters *
 parse_xml_chapters(mm_text_io_c *in,
                    int64_t min_tc,
@@ -596,15 +585,22 @@ parse_xml_chapters(mm_text_io_c *in,
     chapter_elements[i].start_hook = NULL;
     chapter_elements[i].end_hook = NULL;
   }
-  chapter_elements[cet_index("EditionEntry")].end_hook = end_edition_entry;
-  chapter_elements[cet_index("EditionUID")].end_hook = end_edition_uid;
-  chapter_elements[cet_index("ChapterAtom")].end_hook = end_chapter_atom;
-  chapter_elements[cet_index("ChapterUID")].end_hook = end_chapter_uid;
-  chapter_elements[cet_index("ChapterTrack")].end_hook = end_chapter_track;
-  chapter_elements[cet_index("ChapterDisplay")].end_hook = end_chapter_display;
-  chapter_elements[cet_index("ChapterLanguage")].end_hook =
+  chapter_elements[chapter_element_map_index("EditionEntry")].end_hook =
+    end_edition_entry;
+  chapter_elements[chapter_element_map_index("EditionUID")].end_hook =
+    end_edition_uid;
+  chapter_elements[chapter_element_map_index("ChapterAtom")].end_hook =
+    end_chapter_atom;
+  chapter_elements[chapter_element_map_index("ChapterUID")].end_hook =
+    end_chapter_uid;
+  chapter_elements[chapter_element_map_index("ChapterTrack")].end_hook =
+    end_chapter_track;
+  chapter_elements[chapter_element_map_index("ChapterDisplay")].end_hook =
+    end_chapter_display;
+  chapter_elements[chapter_element_map_index("ChapterLanguage")].end_hook =
     end_chapter_language;
-  chapter_elements[cet_index("ChapterCountry")].end_hook = end_chapter_country;
+  chapter_elements[chapter_element_map_index("ChapterCountry")].end_hook =
+    end_chapter_country;
 
   done = 0;
 
