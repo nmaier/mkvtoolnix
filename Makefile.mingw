@@ -47,7 +47,8 @@ DEP_RMFF = librmff/librmff.a
 #
 SUBDIRS = avilib-0.6.10 src
 
-APPLICATIONS=src/mkvmerge src/mkvinfo src/mkvextract src/base64tool src/mmg/mmg
+APPLICATIONS=src/mkvmerge$(EXT) src/mkvinfo$(EXT) src/mkvextract$(EXT) \
+	src/base64tool$(EXT) src/mmg/mmg$(EXT)
 
 all: config.h $(APPLICATIONS)
 
@@ -203,7 +204,7 @@ mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
-		-lavi -lvorbis -lflac -logg -lz $(COMPRESSION_LIBRARIES) \
+		-lavi -lvorbis -lFLAC -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat -liconv -lrmff
 
 mkvinfo_SOURCES = $(wildcard src/mkvinfo*.cpp)
@@ -231,23 +232,23 @@ mmg_LDADD = -lmtxcommon -lmatroska -lebml -liconv -lexpat \
 		$(WXWINDOWS_LDFLAGS) $(WXWINDOWS_LIBS) \
 		-mwindows
 
-src/mkvmerge: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
+src/mkvmerge$(EXT): $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
 
-src/mkvinfo: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
+src/mkvinfo$(EXT): $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
-src/mkvextract: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
+src/mkvextract$(EXT): $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
 
-src/base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
+src/base64tool$(EXT): $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
 
-src/mmg/mmg: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
+src/mmg/mmg$(EXT): $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
 

@@ -27,6 +27,9 @@ DEBUG = yes
 # Comment out if you don't have wxWindows installed.
 WXWINDOWS = yes
 
+# Does '.exe' have to be appended explicitely, or is this done automatically?
+#EXT=.exe
+
 # Chose the programs to use.
 CXX = g++.exe
 CC = gcc.exe
