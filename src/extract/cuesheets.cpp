@@ -182,7 +182,7 @@ get_chapter_index(int idx,
   int i;
   string sidx;
 
-  sidx = mxsprintf("INDEX 0%d", idx);
+  sidx = mxsprintf("INDEX %02d", idx);
   for (i = 0; i < atom.ListSize(); i++)
     if ((EbmlId(*atom[i]) == KaxChapterAtom::ClassInfos.GlobalId) &&
         (get_chapter_name(*static_cast<KaxChapterAtom *>(atom[i])) == sidx))
@@ -281,9 +281,10 @@ write_cuesheet(const char *file_name,
                mm_io_c &out) {
   KaxTag *tag;
   string s;
-  int i;
-  int64_t index_00, index_01;
-
+  int i, j;
+  int64_t temp_index;
+  vector<int64_t> indices;
+  
   if (chapters.ListSize() == 0)
     return;
 
@@ -311,37 +312,28 @@ write_cuesheet(const char *file_name,
       print_if_available("ARTIST", "    PERFORMER \"%s\"\n");
       print_if_available("ISRC", "    ISRC %s\n");
       print_if_available("CDAUDIO_TRACK_FLAGS", "    FLAGS %s\n");
-      index_00 = get_chapter_index(0, atom);
-      index_01 = get_chapter_index(1, atom);
-      if (index_01 == -1) {
-        index_01 = get_chapter_start(atom);
-        if (index_01 == -1)
-          index_01 = 0;
-      }
-      if (index_00 != -1)
-        out.printf("    INDEX 00 %02lld:%02lld:%02lld\n", 
-                   index_00 / 1000000 / 1000 / 60,
-                   (index_00 / 1000000 / 1000) % 60,
-                   irnd((double)(index_00 % 1000000000ll) * 75.0 /
+	  
+      j = 0;
+      do {
+        if ((temp_index = get_chapter_index(j, atom)) != -1)	
+          indices.push_back(temp_index);
+        j++;
+      } while ((temp_index != -1) && (j <= 99));
+
+      for (j = 0; j < indices.size(); j++) {
+        out.printf("    INDEX %02d %02lld:%02lld:%02lld\n", 
+                   j,
+                   indices[j] / 1000000 / 1000 / 60,
+                   (indices[j] / 1000000 / 1000) % 60,
+                   irnd((double)(indices[j] % 1000000000ll) * 75.0 /
                         1000000000.0));
-      out.printf("    INDEX 01 %02lld:%02lld:%02lld\n", 
-                 index_01 / 1000000 / 1000 / 60,
-                 (index_01 / 1000000 / 1000) % 60,
-                 irnd((double)(index_01 % 1000000000ll) * 75.0 /
-                      1000000000.0));
+      }
+      indices.clear();
+
       print_if_available("DATE", "    REM DATE \"%s\"\n");
       print_if_available("GENRE", "    REM GENRE \"%s\"\n");
       print_comments("    ", *tag, out);
-    } else {
-      index_01 = get_chapter_start(atom);
-      out.printf("    TITLE \"%s\"\n",
-                 get_chapter_name(atom).c_str());
-      out.printf("    INDEX 01 %02lld:%02lld:%02lld\n", 
-                 index_01 / 1000000 / 1000 / 60,
-                 (index_01 / 1000000 / 1000) % 60,
-                 irnd((double)(index_01 % 1000000000ll) * 75.0 /
-                      1000000000.0));
-    }
+    } 
   }
 }
 
