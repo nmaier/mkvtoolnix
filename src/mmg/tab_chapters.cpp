@@ -416,7 +416,8 @@ void tab_chapters::on_save_chapters(wxCommandEvent &evt) {
     return;
 
   if (source_is_kax_file) {
-    analyzer->update_element(chapters);
+    if (analyzer->update_element(chapters))
+      mdlg->set_status_bar(_("Chapters written."));
     return;
   }
 
