@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.24 2003/04/27 09:15:05 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.25 2003/04/28 07:12:53 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -174,7 +174,7 @@ void process_file() {
       die("new EbmlStream");
     
     // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL, false);
+    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
       fprintf(stdout, "(%s) no head found\n", NAME);
       exit(0);
@@ -185,7 +185,7 @@ void process_file() {
     fprintf(stdout, "(%s) + EBML head\n", NAME);
     
     // Next element must be a segment
-    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL, false);
+    l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
       fprintf(stdout, "(%s) No segment/level 0 element found.\n", NAME);
       exit(0);
@@ -202,8 +202,8 @@ void process_file() {
     upper_lvl_el = 0;
     exit_loop = 0;
     // We've got our segment, so let's find the tracks
-    l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                        true);
+    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                             true, 1);
     while (l1 != NULL) {
       if (upper_lvl_el != 0)
         break;
@@ -215,8 +215,8 @@ void process_file() {
           fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
 
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
@@ -257,8 +257,8 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         }
 
@@ -270,8 +270,8 @@ void process_file() {
           fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
         
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
@@ -283,8 +283,8 @@ void process_file() {
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
             while (l3 != NULL) {
               if (upper_lvl_el != 0)
                 break;
@@ -341,8 +341,8 @@ void process_file() {
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
-                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
                   if (upper_lvl_el != 0)
                     break;
@@ -394,8 +394,9 @@ void process_file() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
                   }
                 } // while (l4 != NULL)
 
@@ -404,8 +405,8 @@ void process_file() {
                 if (verbose > 1)
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
-                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
                   if (upper_lvl_el != 0)
                     break;
@@ -456,8 +457,9 @@ void process_file() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
                   }
                 } // while (l4 != NULL)
 
@@ -541,8 +543,8 @@ void process_file() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
               }
             } // while (l3 != NULL)
 
@@ -564,8 +566,8 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
 
@@ -575,8 +577,8 @@ void process_file() {
           fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
 
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
@@ -587,8 +589,8 @@ void process_file() {
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
             while (l3 != NULL) {
               if (upper_lvl_el != 0)
                 break;
@@ -644,8 +646,8 @@ void process_file() {
               l3->SkipData(static_cast<EbmlStream &>(*es),
                            l3->Generic().Context);
               delete l3;
-              l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                  0xFFFFFFFFL, true);
+              l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                       0xFFFFFFFFL, true, 1);
             } // while (l3 != NULL)
 
 
@@ -668,8 +670,8 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
 
@@ -682,8 +684,8 @@ void process_file() {
           exit(0);
         cluster = (KaxCluster *)l1;
 
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
@@ -706,8 +708,8 @@ void process_file() {
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, false);
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, false, 1);
             while (l3 != NULL) {
               if (upper_lvl_el > 0)
                 break;
@@ -771,8 +773,8 @@ void process_file() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
               }
             } // while (l3 != NULL)
 
@@ -795,8 +797,8 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
 
@@ -806,8 +808,8 @@ void process_file() {
           fprintf(stdout, " at %llu", l1->GetElementPosition());
         fprintf(stdout, "\n");
 
-        l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
         while (l2 != NULL) {
           if (upper_lvl_el != 0)
             break;
@@ -818,8 +820,8 @@ void process_file() {
               fprintf(stdout, " at %llu", l2->GetElementPosition());
             fprintf(stdout, "\n");
 
-            l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
             while (l3 != NULL) {
               if (upper_lvl_el != 0)
                 break;
@@ -840,8 +842,8 @@ void process_file() {
                   fprintf(stdout, " at %llu", l3->GetElementPosition());
                 fprintf(stdout, "\n");
 
-                l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l4 = es->FindNextElement(l3->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
                 while (l4 != NULL) {
                   if (upper_lvl_el != 0)
                     break;
@@ -896,8 +898,9 @@ void process_file() {
                     fprintf(stdout, "\n");
 
 
-                    l5 = es->FindNextID(l4->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
+                    l5 = es->FindNextElement(l4->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
                     while (l5 != NULL) {
                       if (upper_lvl_el != 0)
                         break;
@@ -966,8 +969,9 @@ void process_file() {
                         l5->SkipData(static_cast<EbmlStream &>(*es),
                                      l5->Generic().Context);
                         delete l5;
-                        l5 = es->FindNextID(l4->Generic().Context,
-                                            upper_lvl_el, 0xFFFFFFFFL, true);
+                        l5 = es->FindNextElement(l4->Generic().Context,
+                                                 upper_lvl_el, 0xFFFFFFFFL,
+                                                 true, 1);
                       }
                     } // while (l5 != NULL)
 
@@ -990,8 +994,9 @@ void process_file() {
                     l4->SkipData(static_cast<EbmlStream &>(*es),
                                  l4->Generic().Context);
                     delete l4;
-                    l4 = es->FindNextID(l3->Generic().Context, upper_lvl_el,
-                                        0xFFFFFFFFL, true);
+                    l4 = es->FindNextElement(l3->Generic().Context,
+                                             upper_lvl_el, 0xFFFFFFFFL, true,
+                                             1);
                   }
                 } // while (l4 != NULL)
 
@@ -1014,8 +1019,8 @@ void process_file() {
                 l3->SkipData(static_cast<EbmlStream &>(*es),
                              l3->Generic().Context);
                 delete l3;
-                l3 = es->FindNextID(l2->Generic().Context, upper_lvl_el,
-                                    0xFFFFFFFFL, true);
+                l3 = es->FindNextElement(l2->Generic().Context, upper_lvl_el,
+                                         0xFFFFFFFFL, true, 1);
               }
             } // while (l3 != NULL)
 
@@ -1038,8 +1043,8 @@ void process_file() {
             l2->SkipData(static_cast<EbmlStream &>(*es),
                          l2->Generic().Context);
             delete l2;
-            l2 = es->FindNextID(l1->Generic().Context, upper_lvl_el,
-                                0xFFFFFFFFL, true);
+            l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
+                                     0xFFFFFFFFL, true, 1);
           }
         } // while (l2 != NULL)
       } else {
@@ -1062,8 +1067,8 @@ void process_file() {
       } else {
         l1->SkipData(static_cast<EbmlStream &>(*es), l1->Generic().Context);
         delete l1;
-        l1 = es->FindNextID(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                            true);
+        l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                                 0xFFFFFFFFL, true, 1);
       }
     } // while (l1 != NULL)
     
