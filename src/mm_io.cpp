@@ -89,11 +89,9 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
   size_t bwritten;
 
   bwritten = fwrite(buffer, 1, size, (FILE *)file);
-  if (ferror((FILE *)file) != 0) {
-    mxprint(stderr, "Error writing to the output file: %d (%s)\n", errno,
+  if (ferror((FILE *)file) != 0)
+    mxerror("Cound not write to the output file: %d (%s)\n", errno,
             strerror(errno));
-    exit(1);
-  }
 
   return bwritten;
 }

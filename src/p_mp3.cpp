@@ -142,8 +142,8 @@ unsigned char *mp3_packetizer_c::get_mp3_packet(unsigned long *header,
   }
 
   if ((verbose > 1) && (pos > 1))
-    mxprint(stdout, "mp3_packetizer: skipping %d bytes (no valid MP3 header "
-            "found).\n", pos);
+    mxwarn("mp3_packetizer: skipping %d bytes (no valid MP3 header found).\n",
+           pos);
   buf = (unsigned char *)safememdup(packet_buffer + pos, mp3header->framesize
                                     + 4);
 
@@ -192,8 +192,8 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
     packetno++;
 
     if ((4 - ((header >> 17) & 3)) != 3) {
-      mxprint(stdout, "Warning: p_mp3: packet is not a valid MP3 packet ("
-              "packet number %lld)\n", packetno);
+      mxwarn("p_mp3: packet is not a valid MP3 packet (packet number %lld)\n",
+             packetno);
       safefree(packet);
       packetno++;
       debug_leave("mp3_packetizer_c::process");
@@ -214,6 +214,6 @@ int mp3_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void mp3_packetizer_c::dump_debug_info() {
-  mxprint(stderr, "DBG> mp3_packetizer_c: queue: %d; buffer_size: %d\n",
+  mxdebug("mp3_packetizer_c: queue: %d; buffer_size: %d\n",
           packet_queue.size(), buffer_size);
 }

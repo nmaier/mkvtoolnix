@@ -121,7 +121,7 @@ kax_track_t *find_track_by_uid(int tuid) {
 }
 
 void usage() {
-  mxprint(stdout,
+  mxinfo(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
 #ifdef HAVE_WXWINDOWS
@@ -153,7 +153,7 @@ void show_error(const char *fmt, ...) {
     frame->show_error(args_buffer);
   else
 #endif
-    mxprint(stdout, "(%s) %s\n", NAME, args_buffer);
+    mxinfo("(%s) %s\n", NAME, args_buffer);
 }
 
 void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
@@ -175,10 +175,10 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
     memset(&level_buffer[1], ' ', 9);
     level_buffer[0] = '|';
     level_buffer[level] = 0;
-    mxprint(stdout, "%s+ %s", level_buffer, args_buffer);
+    mxinfo("%s+ %s", level_buffer, args_buffer);
     if ((verbose > 1) && (l != NULL))
-      mxprint(stdout, " at %llu", l->GetElementPosition());
-    mxprint(stdout, "\n");
+      mxinfo(" at %llu", l->GetElementPosition());
+    mxinfo("\n");
   }
 #ifdef HAVE_WXWINDOWS
   else {
@@ -215,26 +215,24 @@ void parse_args(int argc, char **argv, char *&file_name, bool &use_gui) {
   for (i = 1; i < argc; i++)
     if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--gui")) {
 #ifndef HAVE_WXWINDOWS
-      mxprint(stderr, "Error: mkvinfo was compiled without GUI support.\n");
-      exit(1);
+      mxerror("mkvinfo was compiled without GUI support.\n");
 #else // HAVE_WXWINDOWS
       use_gui = true;
 #endif // HAVE_WXWINDOWS
     } else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")) {
-      mxprint(stdout, "mkvinfo v" VERSION "\n");
-      exit(0);
+      mxinfo("mkvinfo v" VERSION "\n");
+      mxexit(0);
     } else if (!strcmp(argv[i], "-v") || ! strcmp(argv[i], "--verbose"))
       verbose++;
     else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "-?") ||
              !strcmp(argv[i], "--help")) {
       usage();
-      exit(0);
+      mxexit(0);
     } else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--checksum"))
       calc_checksums = true;
-    else if (file_name != NULL) {
-      mxprint(stderr, "Error: Only one input file is allowed.\n");
-      exit(1);
-    } else
+    else if (file_name != NULL)
+      mxerror("Only one input file is allowed.\n");
+    else
       file_name = argv[i];
 }
 
@@ -3575,7 +3573,7 @@ int console_main(int argc, char **argv) {
   parse_args(argc, argv, file_name, use_gui);
   if (file_name == NULL) {
     usage();
-    exit(1);
+    mxexit(0);
   }
   if (process_file(file_name))
     return 0;
@@ -3585,11 +3583,9 @@ int console_main(int argc, char **argv) {
 
 void setup() {
 #if defined(SYS_UNIX)
-  if (setlocale(LC_CTYPE, "") == NULL) {
-    mxprint(stderr, "Error: Could not set the locale properly. Check the "
+  if (setlocale(LC_CTYPE, "") == NULL)
+    mxerror("Could not set the locale properly. Check the "
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
-    exit(1);
-  }
 #endif
 
   cc_local_utf8 = utf8_init(NULL);

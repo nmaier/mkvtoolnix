@@ -88,12 +88,11 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
         break;
       }
     if (aacheader.profile != AAC_PROFILE_SBR)
-      mxprint(stdout,
-              "WARNING! AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
-              "This can NOT be detected automatically. Therefore you have to "
-              "specifiy '--aac-is-sbr 0' manually for this input file if the "
-              "file actually contains SBR AAC. The file will be muxed in the "
-              "WRONG way otherwise. Also read mkvmerge's documentation.\n");
+      mxwarn("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
+             "This can NOT be detected automatically. Therefore you have to "
+             "specifiy '--aac-is-sbr 0' manually for this input file if the "
+             "file actually contains SBR AAC. The file will be muxed in the "
+             "WRONG way otherwise. Also read mkvmerge's documentation.\n");
 
     aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
                                          aacheader.sample_rate,
@@ -103,8 +102,8 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("aac_reader: Could not open the file.");
   }
   if (verbose)
-    mxprint(stdout, "Using AAC demultiplexer for %s.\n+-> Using "
-            "AAC output module for audio stream.\n", ti->fname);
+    mxinfo("Using AAC demultiplexer for %s.\n+-> Using "
+           "AAC output module for audio stream.\n", ti->fname);
 }
 
 aac_reader_c::~aac_reader_c() {
@@ -164,9 +163,9 @@ int aac_reader_c::display_priority() {
 }
 
 void aac_reader_c::display_progress() {
-  mxprint(stdout, "progress: %lld/%lld bytes (%d%%)\r",
-          bytes_processed, size,
-          (int)(bytes_processed * 100L / size));
+  mxinfo("Progress: %lld/%lld bytes (%d%%)\r",
+         bytes_processed, size,
+         (int)(bytes_processed * 100L / size));
   fflush(stdout);
 }
 
@@ -175,6 +174,5 @@ void aac_reader_c::set_headers() {
 }
 
 void aac_reader_c::identify() {
-  mxprint(stdout, "File '%s': container: AAC\nTrack ID 0: audio (AAC)\n",
-          ti->fname);
+  mxinfo("File '%s': container: AAC\nTrack ID 0: audio (AAC)\n", ti->fname);
 }

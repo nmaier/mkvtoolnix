@@ -565,17 +565,17 @@ void list_iso639_languages() {
   int i;
 
   i = 0;
-  mxprint(stdout, "                             English language name | "
-          "ISO639-2 code | ISO639-1 code\n"
-                  "---------------------------------------------------+-"
-          "--------------+--------------\n");
+  mxinfo("                             English language name | "
+         "ISO639-2 code | ISO639-1 code\n"
+         "---------------------------------------------------+-"
+         "--------------+--------------\n");
   while (iso639_languages[i].iso639_2_code != NULL) {
-    mxprint(stdout, "%50s | %13s | %13s\n",
-            iso639_languages[i].english_name != NULL ?
-            iso639_languages[i].english_name : "",
-            iso639_languages[i].iso639_2_code,
-            iso639_languages[i].iso639_1_code != NULL ?
-            iso639_languages[i].iso639_1_code : "");
+    mxinfo("%50s | %13s | %13s\n",
+           iso639_languages[i].english_name != NULL ?
+           iso639_languages[i].english_name : "",
+           iso639_languages[i].iso639_2_code,
+           iso639_languages[i].iso639_1_code != NULL ?
+           iso639_languages[i].iso639_1_code : "");
     i++;
   }
 }

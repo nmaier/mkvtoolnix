@@ -104,11 +104,6 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *nreader,
 }
 
 dts_packetizer_c::~dts_packetizer_c() {
-  mxprint(stderr,"wrote %lld bytes DTS data equivalent of %lld PCM samples at "
-          "%d Hz, that is %f seconds of sound\n",
-          bytes_written, samples_written, first_header.core_sampling_frequency,
-          ((double)samples_written) /
-          (double)first_header.core_sampling_frequency);
   safefree(packet_buffer);
 }
 
@@ -165,7 +160,7 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     return 0;
 
   if (dtsheader != last_header) {
-    mxprint(stderr,"DTS header information changed! - New format:\n");
+    mxinfo("DTS header information changed! - New format:\n");
     print_dts_header(&dtsheader);
     last_header = dtsheader;
   }
@@ -188,9 +183,9 @@ unsigned char *dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   }
 
   if (verbose && (pos > 0) && !skipping_is_normal)
-    mxprint(stdout, "dts_packetizer: skipping %d bytes (no valid DTS header "
-            "found). This might make audio/video go out of sync, but this "
-            "stream is damaged.\n", pos);
+    mxwarn("dts_packetizer: skipping %d bytes (no valid DTS header "
+           "found). This might make audio/video go out of sync, but this "
+           "stream is damaged.\n", pos);
 
   buf = (unsigned char *)safememdup(packet_buffer + pos,
                                     dtsheader.frame_byte_size);
@@ -245,9 +240,6 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
       my_timecode = (int64_t)(((double)samples_written*1000.0) /
                               ((double)dtsheader.core_sampling_frequency));
 
-//     mxprint(stderr,"DTS packet timecode %lld  len %lld\n", my_timecode,
-//             packet_len_in_ms);
-
     add_packet(packet, dtsheader.frame_byte_size, my_timecode,
                packet_len_in_ms);
 
@@ -261,5 +253,5 @@ int dts_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void dts_packetizer_c::dump_debug_info() {
-  mxprint(stderr, "DBG> dts_packetizer_c: queue: %d\n", packet_queue.size());
+  mxdebug("dts_packetizer_c: queue: %d\n", packet_queue.size());
 }

@@ -207,7 +207,7 @@ void mi_frame::save_elements(wxTreeItemId &root, int level, FILE *f) {
     memset(&level_buffer[1], ' ', 9);
     level_buffer[0] = '|';
     level_buffer[level] = 0;
-    mxprint(f, "(%s) %s+ %s\n", NAME, level_buffer,
+    fprintf(f, "(%s) %s+ %s\n", NAME, level_buffer,
             tree->GetItemText(root).c_str());
     pcnt_before = elements_saved * 100 / num_elements;
     pcnt_now = (elements_saved + 1) * 100 / num_elements;

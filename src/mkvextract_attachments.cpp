@@ -139,14 +139,13 @@ static void handle_attachments(mm_io_c *in, EbmlStream *es, EbmlElement *l0,
             }
 
           if (found && !tracks[k].done) {
-            mxprint(stdout, "Writing attachment #%lld, type %s, size %lld, "
-                    "to '%s'.\n", id, type.c_str(), size, tracks[k].out_name);
+            mxinfo("Writing attachment #%lld, type %s, size %lld, "
+                   "to '%s'.\n", id, type.c_str(), size, tracks[k].out_name);
             try {
               out = new mm_io_c(tracks[k].out_name, MODE_WRITE);
             } catch (...) {
-              mxprint(stderr, "Error: Could not create '%s' (%d, %s).\n",
+              mxerror("Could not create '%s' (%d, %s).\n",
                       tracks[k].out_name, errno, strerror(errno));
-              exit(1);
             }
             out->write(fdata->GetBuffer(), fdata->GetSize());
             delete out;
@@ -321,6 +320,5 @@ void extract_attachments(const char *file_name) {
 
   for (i = 0; i < tracks.size(); i++)
     if (!tracks[i].done)
-      mxprint(stdout, "An attachment with the ID %lld was not found.\n",
-              tracks[i].tid);
+      mxinfo("An attachment with the ID %lld was not found.\n", tracks[i].tid);
 }

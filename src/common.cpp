@@ -244,7 +244,7 @@ void die(const char *fmt, ...) {
 }
 
 void _trace(const char *func, const char *file, int line) {
-  mxprint(stdout, "trace: %s:%s (%d)\n", file, func, line);
+  mxdebug("trace: %s:%s (%d)\n", file, func, line);
 }
 
 /*
@@ -431,19 +431,19 @@ int utf8_init(const char *charset) {
 
   ict_to_utf8 = iconv_open("UTF-8", lc_charset);
   if (ict_to_utf8 == (iconv_t)(-1))
-    mxprint(stdout, "Warning: Could not initialize the iconv library for "
-            "the conversion from %s to UFT-8. "
-            "Some strings will not be converted to UTF-8 and the resulting "
-            "Matroska file might not comply with the Matroska specs ("
-            "error: %d, %s).\n", lc_charset, errno, strerror(errno));
+    mxwarn("Could not initialize the iconv library for "
+           "the conversion from %s to UFT-8. "
+           "Some strings will not be converted to UTF-8 and the resulting "
+           "Matroska file might not comply with the Matroska specs ("
+           "error: %d, %s).\n", lc_charset, errno, strerror(errno));
 
   ict_from_utf8 = iconv_open(lc_charset, "UTF-8");
   if (ict_from_utf8 == (iconv_t)(-1))
-    mxprint(stdout, "Warning: Could not initialize the iconv library for "
-            "the conversion from UFT-8 to %s. "
-            "Some strings cannot be converted from UTF-8 and might be "
-            "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
-            strerror(errno));
+    mxwarn("Could not initialize the iconv library for "
+           "the conversion from UFT-8 to %s. "
+           "Some strings cannot be converted from UTF-8 and might be "
+           "displayed incorrectly (error: %d, %s).\n", lc_charset, errno,
+           strerror(errno));
 
   return add_kax_conv(lc_charset, ict_from_utf8, ict_to_utf8);
 }
@@ -1068,4 +1068,87 @@ void mxprints(char *dst, const char *fmt, ...) {
   va_start(ap, fmt);
   vsprintf(dst, new_fmt.c_str(), ap);
   va_end(ap);
+}
+
+static void mxmsg(int level, const char *fmt, va_list &ap) {
+  string new_fmt;
+  bool nl;
+  FILE *stream;
+  char *prefix;
+
+  fix_format(fmt, new_fmt);
+
+  if (new_fmt[0] == '\n') {
+    nl = true;
+    new_fmt.erase(0, 1);
+  } else
+    nl = false;
+
+  stream = stdout;
+  prefix = NULL;
+
+  if (level == MXMSG_ERROR) {
+    prefix = "Error: ";
+    stream = stderr;
+  } else if (level == MXMSG_WARNING)
+    prefix = "Warning: ";
+  else if (level == MXMSG_DEBUG)
+    prefix = "DBG> ";
+
+  if (nl)
+    fprintf(stream, "\n");
+
+  if (prefix != NULL)
+    fprintf(stream, prefix);
+
+  vfprintf(stream, new_fmt.c_str(), ap);
+  fflush(stream);
+}
+
+void mxinfo(const char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  mxmsg(MXMSG_INFO, fmt, ap);
+  va_end(ap);
+}
+
+static bool warning_issued = false;
+
+void mxwarn(const char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  mxmsg(MXMSG_WARNING, fmt, ap);
+  va_end(ap);
+
+  warning_issued = true;
+}
+
+void mxerror(const char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  mxmsg(MXMSG_ERROR, fmt, ap);
+  va_end(ap);
+
+  exit(2);
+}
+
+void mxdebug(const char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  mxmsg(MXMSG_DEBUG, fmt, ap);
+  va_end(ap);
+}
+
+void mxexit(int code) {
+  if (code != -1)
+    exit(code);
+
+  if (warning_issued)
+    exit(1);
+
+  exit(0);
 }

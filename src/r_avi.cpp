@@ -76,8 +76,8 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
   }
 
   if (verbose)
-    mxprint(stdout, "Using AVI demultiplexer for %s. Opening file. This "
-            "may take some time depending on the file's size.\n", ti->fname);
+    mxinfo("Using AVI demultiplexer for %s. Opening file. This "
+           "may take some time depending on the file's size.\n", ti->fname);
   rederive_keyframes = 0;
   if ((avi = AVI_open_input_file(ti->fname, 1)) == NULL) {
     const char *msg = "avi_reader: Could not initialize AVI source. Reason: ";
@@ -128,7 +128,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
                                          AVI_video_width(avi),
                                          AVI_video_height(avi), false, ti);
     if (verbose)
-      mxprint(stdout, "+-> Using video output module for video track ID 0.\n");
+      mxinfo("+-> Using video output module for video track ID 0.\n");
   } else
     vpacketizer = NULL;
 
@@ -199,8 +199,8 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
   switch (AVI_audio_format(avi)) {
     case 0x0001: // raw PCM audio
       if (verbose)
-        mxprint(stdout, "+-> Using PCM output module for audio track ID %d.\n",
-                aid + 1);
+        mxinfo("+-> Using PCM output module for audio track ID %d.\n",
+               aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_bits(avi);
@@ -211,8 +211,8 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       break;
     case 0x0055: // MP3
       if (verbose)
-        mxprint(stdout, "+-> Using MP3 output module for audio track ID %d.\n",
-                aid + 1);
+        mxinfo("+-> Using MP3 output module for audio track ID %d.\n",
+               aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
@@ -222,8 +222,8 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
       break;
     case 0x2000: // AC3
       if (verbose)
-        mxprint(stdout, "+-> Using AC3 output module for audio track ID %d.\n",
-                aid + 1);
+        mxinfo("+-> Using AC3 output module for audio track ID %d.\n",
+               aid + 1);
       demuxer->samples_per_second = AVI_audio_rate(avi);
       demuxer->channels = AVI_audio_channels(avi);
       demuxer->bits_per_sample = AVI_audio_mp3rate(avi);
@@ -232,8 +232,8 @@ void avi_reader_c::add_audio_demuxer(avi_t *avi, int aid) {
                                                  demuxer->channels, 0, ti);
       break;
     default:
-      mxprint(stderr, "Error: Unknown audio format 0x%04x for audio track ID "
-              "%d.\n", AVI_audio_format(avi), aid + 1);
+      mxerror("Unknown audio format 0x%04x for audio track ID %d.\n",
+              AVI_audio_format(avi), aid + 1);
       return;
   }
 
@@ -326,8 +326,6 @@ int avi_reader_c::read() {
         if (! last_frame) {
           if (old_chunk != NULL)
             safefree(old_chunk);
-          if (nread == 0)
-            mxprint(stdout, "hmm\n");
           old_chunk = (unsigned char *)safememdup(chunk, nread);
           old_key = key;
           old_nread = nread;
@@ -422,11 +420,11 @@ void avi_reader_c::display_progress() {
     int myframes = frames;
     if (frames == (maxframes + 1))
       myframes--;
-    mxprint(stdout, "progress: %d/%ld frames (%ld%%)\r",
-            myframes, AVI_video_frames(avi),
-            myframes * 100 / AVI_video_frames(avi));
+    mxinfo("Progress: %d/%ld frames (%ld%%)\r",
+           myframes, AVI_video_frames(avi),
+           myframes * 100 / AVI_video_frames(avi));
   } else {
-    mxprint(stdout, "working... %c\r", wchar[act_wchar]);
+    mxinfo("Working... %c\r", wchar[act_wchar]);
     act_wchar++;
     if (act_wchar == strlen(wchar))
       act_wchar = 0;
@@ -448,8 +446,8 @@ void avi_reader_c::identify() {
   int i;
   const char *type;
 
-  mxprint(stdout, "File '%s': container: AVI\nTrack ID 0: video (%s)\n",
-          ti->fname, AVI_video_compressor(avi));
+  mxinfo("File '%s': container: AVI\nTrack ID 0: video (%s)\n",
+         ti->fname, AVI_video_compressor(avi));
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
     switch (AVI_audio_format(avi)) {
@@ -465,6 +463,6 @@ void avi_reader_c::identify() {
       default:
         type = "unknown";
     }
-    mxprint(stdout, "Track ID %d: audio (%s)\n", i + 1, type);
+    mxinfo("Track ID %d: audio (%s)\n", i + 1, type);
   }
 }

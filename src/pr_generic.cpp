@@ -169,11 +169,9 @@ void generic_packetizer_c::set_tag_track_uid() {
     *(static_cast<EbmlUInteger *>(&GetChild<KaxTagTrackUID>(*targets))) =
       huid;
 
-    if (!tag->CheckMandatory()) {
-      mxprint(stderr, "Error parsing the tags in '%s': some mandatory "
+    if (!tag->CheckMandatory())
+      mxerror("Could not parse the tags in '%s': some mandatory "
               "elements are missing.\n", ti->tags_ptr->file_name);
-      exit(1);
-    }
   }
 }
 
@@ -324,9 +322,9 @@ void generic_packetizer_c::force_default_track(int type) {
         "track type %d.", type);
 
   if (default_tracks[idx] > 0)
-    mxprint(stdout, "Warning: Another default track for %s tracks has already "
-            "been set. Not setting the 'default' flag for this track.\n",
-            idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle");
+    mxwarn("Another default track for %s tracks has already "
+           "been set. Not setting the 'default' flag for this track.\n",
+           idx == 0 ? "audio" : idx == 'v' ? "video" : "subtitle");
   else
     default_tracks[idx] = hserialno;
 }

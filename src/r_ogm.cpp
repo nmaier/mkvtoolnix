@@ -95,7 +95,7 @@ ogm_reader_c::ogm_reader_c(track_info_t *nti) throw (error_c):
   num_sdemuxers = 0;
 
   if (verbose)
-    mxprint(stdout, "Using OGG/OGM demultiplexer for %s.\n", ti->fname);
+    mxinfo("Using OGG/OGM demultiplexer for %s.\n", ti->fname);
 
   if (read_headers() <= 0)
     throw error_c("ogm_reader: Could not read all header packets.");
@@ -163,15 +163,13 @@ int ogm_reader_c::read_page(ogg_page *og) {
     if (np <= 0) {
       // np < 0 is the error case. Should not happen with local OGG files.
       if (np < 0)
-        mxprint(stdout, "Warning: ogm_reader: Could not find the next Ogg "
-                "page. This indicates a damaged Ogg/Ogm file. Will try to "
-                "continue.\n");
+        mxwarn("ogm_reader: Could not find the next Ogg "
+               "page. This indicates a damaged Ogg/Ogm file. Will try to "
+               "continue.\n");
 
       buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
-      if (!buf) {
-        mxprint(stderr, "Fatal: ogm_reader: ogg_sync_buffer failed\n");
-        exit(1);
-      }
+      if (!buf)
+        mxerror("ogm_reader: ogg_sync_buffer failed\n");
 
       if ((nread = mm_io->read(buf, BUFFER_SIZE)) <= 0)
         return 0;
@@ -237,16 +235,16 @@ void ogm_reader_c::create_packetizers() {
                                    get_uint32(&sth->sh.video.height),
                                    false, ti);
         } catch (error_c &error) {
-          mxprint(stderr, "Error: ogm_reader: could not initialize video "
-                  "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", dmx->serial);
+          mxwarn("ogm_reader: could not initialize video "
+                 "packetizer for stream id %d. Will try to continue and "
+                 "ignore this stream.\n", dmx->serial);
           safefree(dmx);
           continue;
         }
 
         if (verbose)
-          mxprint(stdout, "OGG/OGM demultiplexer (%s): using video output "
-                  "module for stream %d.\n", ti->fname, dmx->serial);
+          mxinfo("OGG/OGM demultiplexer (%s): using video output "
+                 "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -257,16 +255,16 @@ void ogm_reader_c::create_packetizers() {
                                  get_uint16(&sth->sh.audio.channels),
                                  get_uint16(&sth->bits_per_sample), ti);
         } catch (error_c &error) {
-          mxprint(stderr, "Error: ogm_reader: could not initialize PCM "
-                  "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", dmx->serial);
+          mxwarn("ogm_reader: could not initialize PCM "
+                 "packetizer for stream id %d. Will try to continue and "
+                 "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          mxprint(stdout, "OGG/OGM demultiplexer (%s): using PCM output "
-                  "module for stream %d.\n", ti->fname, dmx->serial);
+          mxinfo("OGG/OGM demultiplexer (%s): using PCM output "
+                 "module for stream %d.\n", ti->fname, dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_MP3:
@@ -275,16 +273,16 @@ void ogm_reader_c::create_packetizers() {
             new mp3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
                                  get_uint16(&sth->sh.audio.channels), ti);
         } catch (error_c &error) {
-          mxprint(stderr, "Error: ogm_reader: could not initialize MP3 "
-                  "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", dmx->serial);
+          mxwarn("Error: ogm_reader: could not initialize MP3 "
+                 "packetizer for stream id %d. Will try to continue and "
+                 "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          mxprint(stdout, "OGG/OGM demultiplexer (%s): using MP3 output "
-                  "module for stream %d.\n", ti->fname, dmx->serial);
+          mxinfo("OGG/OGM demultiplexer (%s): using MP3 output "
+                 "module for stream %d.\n", ti->fname, dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_AC3:
@@ -293,16 +291,16 @@ void ogm_reader_c::create_packetizers() {
             new ac3_packetizer_c(this, get_uint64(&sth->samples_per_unit),
                                  get_uint16(&sth->sh.audio.channels), 0, ti);
         } catch (error_c &error) {
-          mxprint(stderr, "Error: ogm_reader: could not initialize AC3 "
-                  "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", dmx->serial);
+          mxwarn("ogm_reader: could not initialize AC3 "
+                 "packetizer for stream id %d. Will try to continue and "
+                 "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          mxprint(stdout, "OGG/OGM demultiplexer (%s): using AC3 output "
-                  "module for stream %d.\n", ti->fname, dmx->serial);
+          mxinfo("OGG/OGM demultiplexer (%s): using AC3 output "
+                 "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -325,16 +323,16 @@ void ogm_reader_c::create_packetizers() {
                                     dmx->packet_data[2], dmx->packet_sizes[2],
                                     ti);
         } catch (error_c &error) {
-          mxprint(stderr, "Error: ogm_reader: could not initialize Vorbis "
-                  "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", dmx->serial);
+          mxwarn("Error: ogm_reader: could not initialize Vorbis "
+                 "packetizer for stream id %d. Will try to continue and "
+                 "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          mxprint(stdout, "OGG/OGM demultiplexer (%s): using Vorbis output "
-                  "module for stream %d.\n", ti->fname, dmx->serial);
+          mxinfo("OGG/OGM demultiplexer (%s): using Vorbis output "
+                 "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -344,16 +342,16 @@ void ogm_reader_c::create_packetizers() {
                                                       NULL, 0, true, false,
                                                       ti);
         } catch (error_c &error) {
-          mxprint(stderr, "Error: ogm_reader: could not initialize the "
-                  "text subtitles packetizer for stream id %d. Will try to "
-                  "continue and ignore this stream.\n", dmx->serial);
+          mxwarn("ogm_reader: could not initialize the "
+                 "text subtitles packetizer for stream id %d. Will try to "
+                 "continue and ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
-          mxprint(stdout, "OGG/OGM demultiplexer (%s): using text subtitle "
-                  "output module for stream %d.\n", ti->fname, dmx->serial);
+          mxinfo("OGG/OGM demultiplexer (%s): using text subtitle "
+                 "output module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -393,9 +391,9 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
   uint32_t codec_id;
 
   if (ogg_stream_init(&new_oss, ogg_page_serialno(og))) {
-    mxprint(stderr, "Error: ogm_reader: ogg_stream_init for stream number "
-            "%d failed. Will try to continue and ignore this stream.",
-            numstreams + 1);
+    mxwarn("ogm_reader: ogg_stream_init for stream number "
+           "%d failed. Will try to continue and ignore this stream.",
+           numstreams + 1);
     return;
   }
 
@@ -477,8 +475,8 @@ void ogm_reader_c::handle_new_stream(ogg_page *og) {
       else if (codec_id == 0x2000)
         dmx->stype = OGM_STREAM_TYPE_AC3;
       else {
-        mxprint(stderr, "Error: ogm_reader: Unknown audio stream type %u. "
-                "Ignoring stream id %d.\n", codec_id, numstreams);
+        mxwarn("ogm_reader: Unknown audio stream type %u. "
+               "Ignoring stream id %d.\n", codec_id, numstreams);
         safefree(dmx->packet_data[0]);
         safefree(dmx);
         return;
@@ -728,14 +726,14 @@ void ogm_reader_c::display_progress() {
 
   for (i = 0; i < num_sdemuxers; i++)
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
-      mxprint(stdout, "progress: %d frames (%d%%)\r",
-              sdemuxers[i]->units_processed, (int)(mm_io->getFilePointer() *
-                                                   100 / file_size));
+      mxinfo("progress: %d frames (%d%%)\r",
+             sdemuxers[i]->units_processed, (int)(mm_io->getFilePointer() *
+                                                  100 / file_size));
       fflush(stdout);
       return;
     }
 
-  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
+  mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
@@ -754,26 +752,26 @@ void ogm_reader_c::identify() {
   stream_header *sth;
   char fourcc[5];
 
-  mxprint(stdout, "File '%s': container: Ogg/OGM\n", ti->fname);
+  mxinfo("File '%s': container: Ogg/OGM\n", ti->fname);
   for (i = 0; i < num_sdemuxers; i++) {
     sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
     memcpy(fourcc, sth->subtype, 4);
     fourcc[4] = 0;
-    mxprint(stdout, "Track ID %u: %s (%s)\n", sdemuxers[i]->serial,
-            (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
-             sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
-             sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
-             sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3) ? "audio" :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? "video" :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
-            "unknown",
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ? "Vorbis" :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ? "PCM" :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ? "MP3" :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
-            "unknown");
+    mxinfo("Track ID %u: %s (%s)\n", sdemuxers[i]->serial,
+           (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3) ? "audio" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? "video" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
+           "unknown",
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ? "Vorbis" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ? "PCM" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ? "MP3" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
+           "unknown");
   }
 }
 

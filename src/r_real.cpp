@@ -171,7 +171,7 @@ real_reader_c::real_reader_c(track_info_t *nti) throw (error_c):
   done = false;
 
   if (verbose)
-    mxprint(stdout, "Using RealMedia demultiplexer for %s.\n", ti->fname);
+    mxinfo("Using RealMedia demultiplexer for %s.\n", ti->fname);
 
   parse_headers();
   get_information_from_data();
@@ -250,7 +250,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            mxprint(stdout, "title: '%s'\n", buffer);
+            mxinfo("title: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -261,7 +261,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            mxprint(stdout, "author: '%s'\n", buffer);
+            mxinfo("author: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -272,7 +272,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            mxprint(stdout, "copyright: '%s'\n", buffer);
+            mxinfo("copyright: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -283,7 +283,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            mxprint(stdout, "comment: '%s'\n", buffer);
+            mxinfo("comment: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -304,7 +304,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            mxprint(stdout, "stream_name: '%s'\n", buffer);
+            mxinfo("stream_name: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -315,7 +315,7 @@ void real_reader_c::parse_headers() {
           if (io->read(buffer, size) != size)
             throw exception();
           if (verbose > 1)
-            mxprint(stdout, "mime_type: '%s'\n", buffer);
+            mxinfo("mime_type: '%s'\n", buffer);
           safefree(buffer);
         }
 
@@ -378,9 +378,9 @@ void real_reader_c::parse_headers() {
               slen = (unsigned char)p[0];
               p++;
               if (slen != 4) {
-                mxprint(stdout, "real_reader: Warning: Couldn't find RealAudio"
-                        " FourCC for id %u (description length: %d) Skipping "
-                        "track.\n", id, slen);
+                mxwarn("real_reader: Couldn't find RealAudio"
+                       " FourCC for id %u (description length: %d) Skipping "
+                       "track.\n", id, slen);
                 ok = false;
               } else {
                 memcpy(dmx->fourcc, p, 4);
@@ -416,11 +416,11 @@ void real_reader_c::parse_headers() {
         break;                  // We're finished!
 
       } else {
-        mxprint(stderr, "real_reader: Unknown header type (0x%08x, "
-                "%c%c%c%c).\n", object_id, (char)(object_id >> 24),
-                (char)((object_id & 0x00ff0000) >> 16),
-                (char)((object_id & 0x0000ff00) >> 8),
-                (char)(object_id & 0x000000ff));
+        mxwarn("real_reader: Unknown header type (0x%08x, "
+               "%c%c%c%c).\n", object_id, (char)(object_id >> 24),
+               (char)((object_id & 0x00ff0000) >> 16),
+               (char)((object_id & 0x0000ff00) >> 8),
+               (char)(object_id & 0x000000ff));
         throw exception();
       }
     }
@@ -455,8 +455,8 @@ void real_reader_c::create_packetizers() {
         dmx->rv_dimensions = true;
 
       if (verbose)
-        mxprint(stdout, "+-> Using video output module for stream %u (FourCC: "
-                "%s).\n", dmx->id, dmx->fourcc);
+        mxinfo("+-> Using video output module for stream %u (FourCC: "
+               "%s).\n", dmx->id, dmx->fourcc);
 
       dmx->f_merged = false;
       dmx->segments = new vector<rv_segment_t>;
@@ -470,8 +470,8 @@ void real_reader_c::create_packetizers() {
           new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels,
                                   dmx->bsid, ti);
         if (verbose)
-          mxprint(stdout, "+-> Using AC3 output module for stream "
-                  "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+          mxinfo("+-> Using AC3 output module for stream "
+                 "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
 
       } else {
         ptzr = new passthrough_packetizer_c(this, ti);
@@ -489,8 +489,8 @@ void real_reader_c::create_packetizers() {
         ptzr->set_audio_bit_depth(dmx->bits_per_sample);
 
         if (verbose)
-          mxprint(stdout, "+-> Using generic audio output module for stream "
-                  "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
+          mxinfo("+-> Using generic audio output module for stream "
+                 "%u (FourCC: %s).\n", dmx->id, dmx->fourcc);
       }
     }
 
@@ -574,10 +574,11 @@ int real_reader_c::read() {
     flags = io->read_uint8();
 
     if (length < 12) {
-      mxprint(stdout, "Warning: real_reader: %s: Data packet length is too "
-              "small: %u. Other values: object_version: 0x%04x, id: 0x%04x, "
-              "timecode: %u, flags: 0x%02x. File position: %lld. Aborting.\n",
-              ti->fname, length, object_version, id, timecode, flags, fpos);
+      mxwarn("real_reader: %s: Data packet length is too "
+             "small: %u. Other values: object_version: 0x%04x, id: 0x%04x, "
+             "timecode: %u, flags: 0x%02x. File position: %lld. Aborting "
+             "this file.\n", ti->fname, length, object_version, id, timecode,
+             flags, fpos);
       return finish();
     }
 
@@ -664,8 +665,8 @@ int real_reader_c::display_priority() {
 }
 
 void real_reader_c::display_progress() {
-  mxprint(stdout, "progress: %lld/%lld packets (%lld%%)\r", num_packets,
-          num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
+  mxinfo("progress: %lld/%lld packets (%lld%%)\r", num_packets,
+         num_packets_in_chunk, num_packets * 100 / num_packets_in_chunk);
 }
 
 void real_reader_c::set_headers() {
@@ -679,12 +680,11 @@ void real_reader_c::identify() {
   int i;
   real_demuxer_t *demuxer;
 
-  mxprint(stdout, "File '%s': container: RealMedia\n", ti->fname);
+  mxinfo("File '%s': container: RealMedia\n", ti->fname);
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
-    mxprint(stdout, "Track ID %d: %s (%s)\n", demuxer->id,
-            demuxer->type == 'a' ? "audio" : "video",
-            demuxer->fourcc);
+    mxinfo("Track ID %d: %s (%s)\n", demuxer->id,
+           demuxer->type == 'a' ? "audio" : "video", demuxer->fourcc);
   }
 }
 
@@ -712,10 +712,10 @@ void real_reader_c::deliver_segments(real_demuxer_t *dmx, int64_t timecode) {
   }
 
   if (len != total) {
-    mxprint(stdout, "\nWarning: real_reader_c: packet assembly failed. "
-            "Expected packet length was %d but found only %d sub packets "
-            "containing %d bytes. Sub packet number: %lld. Trying to "
-            "continue.\n", len, dmx->segments->size(), total, num_packets);
+    mxwarn("\nreal_reader: packet assembly failed. "
+           "Expected packet length was %d but found only %d sub packets "
+           "containing %d bytes. Sub packet number: %lld. Trying to "
+           "continue.\n", len, dmx->segments->size(), total, num_packets);
     len = 0;
     for (i = 0; i < dmx->segments->size(); i++) {
       segment = &(*dmx->segments)[i];

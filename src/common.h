@@ -23,6 +23,7 @@
 
 #include "os.h"
 
+#include <stdarg.h>
 #include <stdint.h>
 
 #include <vector>
@@ -70,10 +71,20 @@ using namespace libebml;
 
 #define TIMECODE_SCALE 1000000
 
+#define MXMSG_INFO      1
+#define MXMSG_WARNING   2
+#define MXMSG_ERROR     4
+#define MXMSG_DEBUG     8
+
 void die(const char *fmt, ...);
 void mxprint(void *stream, const char *fmt, ...);
 void mxprints(char *dst, const char *fmt, ...);
 void fix_format(const char *fmt, string &new_fmt);
+void mxwarn(const char *fmt, ...);
+void mxerror(const char *fmt, ...);
+void mxinfo(const char *fmt, ...);
+void mxdebug(const char *fmt, ...);
+void mxexit(int code = -1);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);

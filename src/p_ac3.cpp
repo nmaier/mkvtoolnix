@@ -123,9 +123,9 @@ unsigned char *ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   }
 
   if (verbose && (pos > 1))
-    mxprint(stdout, "ac3_packetizer: skipping %d bytes (no valid AC3 header "
-            "found). This might make audio/video go out of sync, but this "
-            "stream is damaged.\n", pos);
+    mxwarn("ac3_packetizer: skipping %d bytes (no valid AC3 header "
+           "found). This might make audio/video go out of sync, but this "
+           "stream is damaged.\n", pos);
   buf = (unsigned char *)safememdup(packet_buffer + pos, ac3header->bytes);
 
   if (ti->async.displacement > 0) {
@@ -191,7 +191,7 @@ int ac3_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void ac3_packetizer_c::dump_debug_info() {
-  mxprint(stderr, "DBG> ac3_packetizer_c: queue: %d; buffer size: %d\n",
+  mxdebug("ac3_packetizer_c: queue: %d; buffer size: %d\n",
           packet_queue.size(), buffer_size);
 }
 
@@ -212,10 +212,10 @@ void ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf, int size) {
   bool new_bsb_present;
 
   if (((size % 2) == 1) && !warning_printed) {
-    mxprint(stdout, "WARNING! Untested code. If mkvmerge crashes, "
-            "or if the resulting file does not contain the complete and "
-            "correct audio track, then please contact the author, Moritz "
-            "Bunkus, at moritz@bunkus.org.\n");
+    mxwarn("Untested code. If mkvmerge crashes, "
+           "or if the resulting file does not contain the complete and "
+           "correct audio track, then please contact the author, Moritz "
+           "Bunkus, at moritz@bunkus.org.\n");
     warning_printed = true;
   }
 

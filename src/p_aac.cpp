@@ -131,9 +131,9 @@ unsigned char *aac_packetizer_c::get_aac_packet(unsigned long *header,
   }
 
   if (verbose && (pos > 0))
-    mxprint(stdout, "aac_packetizer: skipping %d bytes (no valid AAC header "
-            "found). This might make audio/video go out of sync, but this "
-            "stream is damaged.\n", pos);
+    mxwarn("aac_packetizer: skipping %d bytes (no valid AAC header "
+           "found). This might make audio/video go out of sync, but this "
+           "stream is damaged.\n", pos);
   if ((aacheader->header_bit_size % 8) == 0)
     buf = (unsigned char *)safememdup(packet_buffer + pos +
                                       aacheader->header_byte_size,
@@ -249,6 +249,6 @@ int aac_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void aac_packetizer_c::dump_debug_info() {
-  mxprint(stderr, "DBG> aac_packetizer_c: queue: %d; buffer size: %d\n",
+  mxdebug("aac_packetizer_c: queue: %d; buffer size: %d\n",
           packet_queue.size(), buffer_size);
 }

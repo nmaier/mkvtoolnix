@@ -141,8 +141,8 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("ssa_reader: Could not open the source file.");
   }
   if (verbose)
-    mxprint(stdout, "Using SSA/ASS subtitle reader for %s.\n+-> Using "
-            "text subtitle output module for subtitles.\n", ti->fname);
+    mxinfo("Using SSA/ASS subtitle reader for %s.\n+-> Using "
+           "text subtitle output module for subtitles.\n", ti->fname);
 }
 
 ssa_reader_c::~ssa_reader_c() {
@@ -236,8 +236,7 @@ int ssa_reader_c::read() {
     stime = get_element("Start", fields);
     start = parse_time(stime);
     if (start < 0) {
-      mxprint(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
+      mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
       continue;
     }
 
@@ -245,13 +244,11 @@ int ssa_reader_c::read() {
     stime = get_element("End", fields);
     end = parse_time(stime);
     if (end < 0) {
-      mxprint(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
+      mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
       continue;
     }
     if (end < start) {
-      mxprint(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
+      mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
       continue;
     }
 
@@ -304,11 +301,10 @@ int ssa_reader_c::display_priority() {
 static char wchar[] = "-\\|/-\\|/-";
 
 void ssa_reader_c::display_progress() {
-  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
+  mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
-  fflush(stdout);
 }
 
 void ssa_reader_c::set_headers() {
@@ -316,6 +312,6 @@ void ssa_reader_c::set_headers() {
 }
 
 void ssa_reader_c::identify() {
-  mxprint(stdout, "File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
-          "(SSA/ASS)\n", ti->fname);
+  mxinfo("File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
+         "(SSA/ASS)\n", ti->fname);
 }

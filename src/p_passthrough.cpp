@@ -58,7 +58,7 @@ int passthrough_packetizer_c::process(unsigned char *buf, int size,
 }
 
 void passthrough_packetizer_c::dump_debug_info() {
-  mxprint(stderr, "DBG> passthrough_packetizer_c: packets processed: %lld, "
+  mxdebug("passthrough_packetizer_c: packets processed: %lld, "
           "bytes processed: %lld, packets in queue: %d\n",
           packets_processed, bytes_processed, packet_queue.size());
 }

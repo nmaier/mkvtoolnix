@@ -129,7 +129,7 @@ void cluster_helper_c::add_packet(packet_t *packet) {
     old_max_timecode = max_timecode;
     max_timecode = packet->timecode;
 
-    mxprint(stdout, "\n");
+    mxinfo("\n");
     finish_file();
     create_next_output_file(next_splitpoint >= splitpoints.size());
 
@@ -667,10 +667,10 @@ int cluster_helper_c::free_clusters() {
   }
 
 #ifdef PRINT_CLUSTERS
-  mxprint(stdout, "numcl: %8d freed: %3d ", num_clusters, num_freed);
+  mxdebug("numcl: %8d freed: %3d ", num_clusters, num_freed);
   for (i = 0; i < num_clusters; i++)
-    mxprint(stdout, "#");
-  mxprint(stdout, "\n");
+    mxinfo("#");
+  mxinfo("\n");
 #endif
 
   return 1;

@@ -78,18 +78,18 @@ int subtitles_c::check() {
         for (c = short_subs; *c != 0; c++)
           if (*c == '\n')
             *c = ' ';
-        mxprint(stdout, "subtitles: Warning: current entry ends after "
-                "the next one starts. This end: %02lld:%02lld:%02lld,%03lld"
-                "  next start: %02lld:%02lld:%02lld,%03lld  (\"%s\"...)\n",
-                current->end / (60 * 60 * 1000),
-                (current->end / (60 * 1000)) % 60,
-                (current->end / 1000) % 60,
-                current->end % 1000,
-                current->next->start / (60 * 60 * 1000),
-                (current->next->start / (60 * 1000)) % 60,
-                (current->next->start / 1000) % 60,
-                current->next->start % 1000,
-                short_subs);
+        mxwarn("subtitles: current entry ends after "
+               "the next one starts. This end: %02lld:%02lld:%02lld,%03lld"
+               "  next start: %02lld:%02lld:%02lld,%03lld  (\"%s\"...)\n",
+               current->end / (60 * 60 * 1000),
+               (current->end / (60 * 1000)) % 60,
+               (current->end / 1000) % 60,
+               current->end % 1000,
+               current->next->start / (60 * 60 * 1000),
+               (current->next->start / (60 * 1000)) % 60,
+               (current->next->start / 1000) % 60,
+               current->next->start % 1000,
+               short_subs);
       }
       current->end = current->next->start - 1;
     }
@@ -108,19 +108,19 @@ int subtitles_c::check() {
         for (c = short_subs; *c != 0; c++)
           if (*c == '\n')
             *c = ' ';
-        mxprint(stdout, "subtitles: Warning: after fixing the time the "
-                "current entry begins after it ends. This start: "
-                "%02lld:%02lld:%02lld,%03lld  this end: %02lld:%02lld:"
-                "%02lld,%03lld  (\"%s\"...)\n",
-                current->start / (60 * 60 * 1000),
-                (current->start / (60 * 1000)) % 60,
-                (current->start / 1000) % 60,
-                current->start % 1000,
-                current->end / (60 * 60 * 1000),
-                (current->end / (60 * 1000)) % 60,
-                (current->end / 1000) % 60,
-                current->end % 1000,
-                short_subs);
+        mxwarn("subtitles: after fixing the time the "
+               "current entry begins after it ends. This start: "
+               "%02lld:%02lld:%02lld,%03lld  this end: %02lld:%02lld:"
+               "%02lld,%03lld  (\"%s\"...)\n",
+               current->start / (60 * 60 * 1000),
+               (current->start / (60 * 1000)) % 60,
+               (current->start / 1000) % 60,
+               current->start % 1000,
+               current->end / (60 * 60 * 1000),
+               (current->end / (60 * 1000)) % 60,
+               (current->end / 1000) % 60,
+               current->end % 1000,
+               short_subs);
        }
     }
     current = current->next;

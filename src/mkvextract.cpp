@@ -143,7 +143,7 @@ void usage() {
 "  -h, --help     Show this help.\n"
 "  -V, --version  Show version information.\n";
 
-  mxprint(stdout, usage_infos);
+  mxinfo(usage_infos);
 }
 
 // }}}
@@ -163,17 +163,17 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
 
   if (argc < 2) {
     usage();
-    exit(0);
+    mxexit(0);
   }
 
   if (!strcmp(argv[1], "-V") || !strcmp(argv[1], "--version")) {
-    mxprint(stdout, "mkvextract v" VERSION "\n");
-    exit(0);
+    mxinfo("mkvextract v" VERSION "\n");
+    mxexit(0);
 
   } else if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "-?") ||
              !strcmp(argv[1], "--help")) {
     usage();
-    exit(0);
+    mxexit(0);
   }
 
   if (!strcmp(argv[1], "tracks"))
@@ -184,14 +184,12 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
     mode = MODE_ATTACHMENTS;
   else if (!strcmp(argv[1], "chapters"))
     mode = MODE_CHAPTERS;
-  else {
-    mxprint(stderr, "Unknown mode '%s'.\n", argv[1]);
-    exit(1);
-  }
+  else
+    mxerror("Unknown mode '%s'.\n", argv[1]);
 
   if (argc < 3) {
     usage();
-    exit(0);
+    mxexit(0);
   }
 
   file_name = argv[2];
@@ -203,50 +201,40 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
     if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose"))
       verbose++;
     else if (!strcmp(argv[i], "-c")) {
-      if (mode != MODE_TRACKS) {
-        mxprint(stderr, "Error: -c is only allowed when extracting tracks.\n");
-        exit(1);
-      }
-      if ((i + 1) >= argc) {
-        mxprint(stderr, "Error: -c lacks a charset.\n");
-        exit(1);
-      }
+      if (mode != MODE_TRACKS)
+        mxerror("-c is only allowed when extracting tracks.\n");
+
+      if ((i + 1) >= argc)
+        mxerror("-c lacks a charset.\n");
+
       conv_handle = utf8_init(argv[i + 1]);
       i++;
 
-    } else if (mode == MODE_TAGS) {
-      mxprint(stderr, "Error: No further options allowed when extracting "
-              "%s.\n", argv[1]);
-      exit(1);
+    } else if (mode == MODE_TAGS)
+      mxerror("No further options allowed when extracting %s.\n", argv[1]);
 
-    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
-      if (mode != MODE_CHAPTERS) {
-        mxprint(stderr, "Error: %s is only allowed for chapter extraction.\n",
-                argv[i]);
-        exit(1);
-      }
+    else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--simple")) {
+      if (mode != MODE_CHAPTERS)
+        mxerror("%s is only allowed for chapter extraction.\n", argv[i]);
+
       chapter_format_simple = true;
 
     } else {
       copy = safestrdup(argv[i]);
       colon = strchr(copy, ':');
-      if (colon == NULL) {
-        mxprint(stderr, "Error: Missing %s ID in argument '%s'.\n",
+      if (colon == NULL)
+        mxerror("Missing %s ID in argument '%s'.\n",
                 mode == MODE_TRACKS ? "track" : "attachment", argv[i]);
-        exit(1);
-      }
+
       *colon = 0;
-      if (!parse_int(copy, tid) || (tid < 0)) {
-        mxprint(stderr, "Error: Invalid %s ID in argument '%s'.\n",
+      if (!parse_int(copy, tid) || (tid < 0))
+        mxerror("Invalid %s ID in argument '%s'.\n",
                 mode == MODE_TRACKS ? "track" : "attachment", argv[i]);
-        exit(1);
-      }
+
       colon++;
-      if (*colon == 0) {
-        mxprint(stderr, "Error: Missing output file name in argument '%s'.\n",
-                argv[i]);
-        exit(1);
-      }
+      if (*colon == 0)
+        mxerror("Missing output file name in argument '%s'.\n", argv[i]);
+
       memset(&track, 0, sizeof(kax_track_t));
       track.tid = tid;
       track.out_name = safestrdup(colon);
@@ -259,9 +247,9 @@ void parse_args(int argc, char **argv, char *&file_name, int &mode) {
     return;
 
   if (tracks.size() == 0) {
-    mxprint(stdout, "Nothing to do.\n\n");
+    mxinfo("Nothing to do.\n\n");
     usage();
-    exit(0);
+    mxexit(0);
   }
 }
 
@@ -292,10 +280,10 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   memset(&level_buffer[1], ' ', 9);
   level_buffer[0] = '|';
   level_buffer[level] = 0;
-  mxprint(stderr, "(%s) %s+ %s", NAME, level_buffer, args_buffer);
+  mxinfo("(%s) %s+ %s", NAME, level_buffer, args_buffer);
   if (l != NULL)
-    mxprint(stderr, " at %llu", l->GetElementPosition());
-  mxprint(stderr, "\n");
+    mxinfo(" at %llu", l->GetElementPosition());
+  mxinfo("\n");
 }
 
 void show_error(const char *fmt, ...) {
@@ -308,7 +296,7 @@ void show_error(const char *fmt, ...) {
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
-  mxprint(stderr, "(%s) %s\n", NAME, args_buffer);
+  mxinfo("(%s) %s\n", NAME, args_buffer);
 }
 
 // }}}
@@ -330,7 +318,7 @@ int main(int argc, char **argv) {
     extract_tracks(input_file);
 
     if (verbose == 0)
-      mxprint(stderr, "Progress: 100%%\n");
+      mxinfo("Progress: 100%%\n");
 
   } else if (mode == MODE_TAGS)
     extract_tags(input_file);

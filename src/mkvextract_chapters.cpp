@@ -138,8 +138,7 @@ void extract_chapters(const char *file_name, bool chapter_format_simple) {
                       true);
 
         if (!chapters_extracted && !chapter_format_simple) {
-          mxprint(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-                  "<Chapters>\n");
+          mxinfo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Chapters>\n");
           chapters_extracted = true;
         }
 
@@ -190,5 +189,5 @@ void extract_chapters(const char *file_name, bool chapter_format_simple) {
   }
 
   if (chapters_extracted && !chapter_format_simple)
-    mxprint(stdout, "</Chapters>\n");
+    mxinfo("</Chapters>\n");
 }

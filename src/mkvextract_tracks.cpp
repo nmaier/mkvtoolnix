@@ -119,8 +119,8 @@ static void create_output_files() {
       tracks[i].in_use = false;
 
       if (tracks[i].codec_id == NULL) {
-        mxprint(stderr, "Warning: Track ID %lld is missing the CodecID. "
-                "Skipping track.\n", tracks[i].tid);
+        mxwarn("Track ID %lld is missing the CodecID. Skipping track.\n",
+               tracks[i].tid);
         continue;
       }
 
@@ -130,37 +130,37 @@ static void create_output_files() {
         if ((tracks[i].v_width == 0) || (tracks[i].v_height == 0) ||
             (tracks[i].v_fps == 0.0) || (tracks[i].private_data == NULL) ||
             (tracks[i].private_size < sizeof(alBITMAPINFOHEADER))) {
-          mxprint(stderr, "Warning: Track ID %lld is missing some critical "
-                  "information. Skipping track.\n", tracks[i].tid);
+          mxwarn("Track ID %lld is missing some critical "
+                 "information. Skipping track.\n", tracks[i].tid);
           continue;
         }
 
         if (strcmp(tracks[i].codec_id, MKV_V_MSCOMP)) {
-          mxprint(stderr, "Warning: Extraction of video tracks with a CodecId "
-                  "other than " MKV_V_MSCOMP " is not supported at the "
-                  "moment. Skipping track %lld.\n", tracks[i].tid);
+          mxwarn("Extraction of video tracks with a CodecId "
+                 "other than " MKV_V_MSCOMP " is not supported at the "
+                 "moment. Skipping track %lld.\n", tracks[i].tid);
           continue;
         }
 
       } else if (tracks[i].track_type == 'a') {
         if ((tracks[i].a_sfreq == 0.0) || (tracks[i].a_channels == 0)) {
-          mxprint(stderr, "Warning: Track ID %lld is missing some critical "
-                  "information. Skipping track.\n", tracks[i].tid);
+          mxwarn("Track ID %lld is missing some critical "
+                 "information. Skipping track.\n", tracks[i].tid);
           continue;
         }
 
         if (!strcmp(tracks[i].codec_id, MKV_A_VORBIS)) {
           tracks[i].type = TYPEOGM; // Yeah, I know, I know...
           if (tracks[i].private_data == NULL) {
-            mxprint(stderr, "Warning: Track ID %lld is missing some critical "
-                    "information. Skipping track.\n", tracks[i].tid);
+            mxwarn("Track ID %lld is missing some critical "
+                   "information. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
           c = (unsigned char *)tracks[i].private_data;
           if (c[0] != 2) {
-            mxprint(stderr, "Error: Vorbis track ID %lld does not contain "
-                    "valid headers. Skipping track.\n", tracks[i].tid);
+            mxwarn("Vorbis track ID %lld does not contain "
+                   "valid headers. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
@@ -174,8 +174,8 @@ static void create_output_files() {
               offset++;
             }
             if (offset >= (tracks[i].private_size - 1)) {
-              mxprint(stderr, "Error: Vorbis track ID %lld does not contain "
-                      "valid headers. Skipping track.\n", tracks[i].tid);
+              mxwarn("Vorbis track ID %lld does not contain "
+                     "valid headers. Skipping track.\n", tracks[i].tid);
               is_ok = false;
               break;
             }
@@ -201,15 +201,15 @@ static void create_output_files() {
         else if (!strcmp(tracks[i].codec_id, MKV_A_PCM)) {
           tracks[i].type = TYPEWAV; // Yeah, I know, I know...
           if (tracks[i].a_bps == 0) {
-            mxprint(stderr, "Warning: Track ID %lld is missing some critical "
-                    "information. Skipping track.\n", tracks[i].tid);
+            mxwarn("Track ID %lld is missing some critical "
+                   "information. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
         } else if (!strncmp(tracks[i].codec_id, "A_AAC", 5)) {
           if (strlen(tracks[i].codec_id) < strlen("A_AAC/MPEG4/LC")) {
-            mxprint(stderr, "Warning: Track ID %lld has an unknown AAC "
-                    "type. Skipping track.\n", tracks[i].tid);
+            mxwarn("Track ID %lld has an unknown AAC "
+                   "type. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
@@ -220,8 +220,8 @@ static void create_output_files() {
           else if (tracks[i].codec_id[10] == '2')
             tracks[i].aac_id = 1;
           else {
-            mxprint(stderr, "Warning: Track ID %lld has an unknown AAC "
-                    "type. Skipping track.\n", tracks[i].tid);
+            mxwarn("Track ID %lld has an unknown AAC "
+                   "type. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
@@ -234,8 +234,8 @@ static void create_output_files() {
           else if (!strcmp(&tracks[i].codec_id[12], "LTP"))
             tracks[i].aac_profile = 3;
           else {
-            mxprint(stderr, "Warning: Track ID %lld has an unknown AAC "
-                    "type. Skipping track.\n", tracks[i].tid);
+            mxwarn("Track ID %lld has an unknown AAC "
+                   "type. Skipping track.\n", tracks[i].tid);
             continue;
           }
 
@@ -267,14 +267,14 @@ static void create_output_files() {
           tracks[i].type = TYPEAAC;
 
         } else if (!strcmp(tracks[i].codec_id, MKV_A_DTS)) {
-          mxprint(stderr, "Warning: Extraction of DTS is not supported - yet. "
-                  "I promise I'll implement it. Really Soon Now (tm)! "
-                  "Skipping track.\n");
+          mxwarn("Extraction of DTS is not supported - yet. "
+                 "I promise I'll implement it. Really Soon Now (tm)! "
+                 "Skipping track.\n");
           continue;
 
         } else {
-          mxprint(stderr, "Warning: Unsupported CodecID '%s' for ID %lld. "
-                  "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
+          mxwarn("Unsupported CodecID '%s' for ID %lld. "
+                 "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
           continue;
         }
 
@@ -285,27 +285,27 @@ static void create_output_files() {
                  !strcmp(tracks[i].codec_id, MKV_S_TEXTASS))
           tracks[i].type = TYPESSA;
         else {
-          mxprint(stderr, "Warning: Unsupported CodecID '%s' for ID %lld. "
-                  "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
+          mxwarn("Unsupported CodecID '%s' for ID %lld. "
+                 "Skipping track.\n", tracks[i].codec_id, tracks[i].tid);
           continue;
         }
 
       } else {
-        mxprint(stderr, "Warning: Unknown track type for ID %lld. Skipping "
-                "track.\n", tracks[i].tid);
+        mxwarn("Unknown track type for ID %lld. Skipping "
+               "track.\n", tracks[i].tid);
         continue;
       }
 
       tracks[i].in_use = true;
       something_to_do = true;
     } else
-      mxprint(stderr, "Warning: There is no track with the ID '%lld' in the "
-              "input file.\n", tracks[i].tid);
+      mxwarn("There is no track with the ID '%lld' in the "
+             "input file.\n", tracks[i].tid);
   }
 
   if (!something_to_do) {
-    mxprint(stderr, "Nothing to do. Exiting.\n");
-    exit(0);
+    mxinfo("Nothing to do. Exiting.\n");
+    mxexit(0);
   }
 
   // Now finally create some files. Hell, I *WANT* to create something now.
@@ -317,11 +317,9 @@ static void create_output_files() {
         char ccodec[5];
 
         tracks[i].avi = AVI_open_output_file(tracks[i].out_name);
-        if (tracks[i].avi == NULL) {
-          mxprint(stderr, "Error: Could not create '%s'. Reason: %s.\n",
+        if (tracks[i].avi == NULL)
+          mxerror("Could not create '%s'. Reason: %s.\n",
                   tracks[i].out_name, AVI_strerror());
-          exit(1);
-        }
 
         bih = (alBITMAPINFOHEADER *)tracks[i].private_data;
         memcpy(ccodec, &bih->bi_compression, 4);
@@ -329,22 +327,21 @@ static void create_output_files() {
         AVI_set_video(tracks[i].avi, tracks[i].v_width, tracks[i].v_height,
                       tracks[i].v_fps, ccodec);
 
-        mxprint(stderr, "Extracting track ID %lld to an AVI file '%s'.\n",
-                tracks[i].tid, tracks[i].out_name);
+        mxinfo("Extracting track ID %lld to an AVI file '%s'.\n",
+               tracks[i].tid, tracks[i].out_name);
 
       } else {
 
         try {
           tracks[i].out = new mm_io_c(tracks[i].out_name, MODE_CREATE);
         } catch (exception &ex) {
-          mxprint(stderr, "Error: Could not create '%s'. Reason: %d (%s). "
+          mxerror("Could not create '%s'. Reason: %d (%s). "
                   "Aborting.\n", tracks[i].out_name, errno, strerror(errno));
-          exit(1);
         }
 
-        mxprint(stderr, "Extracting track ID %lld to a %s file '%s'.\n",
-                tracks[i].tid, typenames[tracks[i].type],
-                tracks[i].out_name);
+        mxinfo("Extracting track ID %lld to a %s file '%s'.\n",
+               tracks[i].tid, typenames[tracks[i].type],
+               tracks[i].out_name);
 
         if (tracks[i].type == TYPEOGM) {
           ogg_stream_init(&tracks[i].osstate, rand());
@@ -514,16 +511,16 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         fields = split(s, ",", 9);
         safefree(s);
         if (fields.size() != 9) {
-          mxprint(stderr, "Warning: Invalid format for a SSA line ('%s'). "
-                  "Ignoring this entry.\n", s);
+          mxwarn("Invalid format for a SSA line ('%s'). Ignoring this entry."
+                 "\n", s);
           continue;
         }
 
         // Convert the ReadOrder entry so that we can re-order the entries
         // later.
         if (!parse_int(fields[0].c_str(), num)) {
-          mxprint(stderr, "Warning: Invalid format for a SSA line ('%s'). "
-                  "Ignoring this entry.\n", s);
+          mxwarn("Invalid format for a SSA line ('%s'). "
+                 "Ignoring this entry.\n", s);
           continue;
         }
 
@@ -1101,8 +1098,8 @@ bool extract_tracks(const char *file_name) {
         cluster = (KaxCluster *)l1;
 
         if (verbose == 0)
-          mxprint(stderr, "Progress: %d%%\r", (int)(in->getFilePointer() *
-                                                    100 / file_size));
+          mxinfo("Progress: %d%%\r", (int)(in->getFilePointer() * 100 /
+                                           file_size));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,

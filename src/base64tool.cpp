@@ -31,7 +31,7 @@
 using namespace std;
 
 void usage(int retval) {
-  mxprint(stdout,
+  mxinfo(
     "base64util <encode|decode> <input> <output> [maxlen]\n"
     "\n"
     "  encode - Read from <input>, encode to Base64 and write to <output>.\n"
@@ -57,17 +57,13 @@ int main(int argc, char *argv[]) {
     mode = 'e';
   else if (!strcmp(argv[1], "decode"))
     mode = 'd';
-  else {
-    mxprint(stdout, "Error: invalid mode '%s'.\n\n", argv[1]);
-    usage(1);
-  }
+  else
+    mxerror("Invalid mode '%s'.\n", argv[1]);
 
   maxlen = 72;
   if ((argc == 5) && (mode == 'e')) {
-    if (!parse_int(argv[4], maxlen) || (maxlen < 4)) {
-      mxprint(stdout, "Error: Max line length must be >= 4.\n\n");
-      exit(1);
-    }
+    if (!parse_int(argv[4], maxlen) || (maxlen < 4))
+      mxerror("Max line length must be >= 4.\n\n");
   } else if ((argc > 5) || ((argc > 4) && (mode == 'd')))
     usage(1);
 
@@ -81,17 +77,15 @@ int main(int argc, char *argv[]) {
       in = intext;
     }
   } catch(...) {
-    mxprint(stdout, "Error: Could not open '%s' for reading (%d, %s).\n",
+    mxerror("Could not open '%s' for reading (%d, %s).\n",
             argv[2], errno, strerror(errno));
-    exit(1);
   }
 
   try {
     out = new mm_io_c(argv[3], MODE_WRITE);
   } catch(...) {
-    mxprint(stdout, "Error: Could not open '%s' for writing (%d, %s).\n",
+    mxerror("Could not open '%s' for writing (%d, %s).\n",
             argv[3], errno, strerror(errno));
-    exit(1);
   }
 
   in->save_pos();
@@ -122,10 +116,9 @@ int main(int argc, char *argv[]) {
     try {
       size = base64_decode(s, buffer);
     } catch(...) {
-      mxprint(stdout, "Error decoding data.\n");
       delete in;
       delete out;
-      exit(1);
+      mxerror("Could not decode data.\n");
     }
     out->write(buffer, size);
 
@@ -133,7 +126,7 @@ int main(int argc, char *argv[]) {
     delete out;
   }
 
-  mxprint(stdout, "Done.\n");
+  mxinfo("Done.\n");
 
   return 0;
 }

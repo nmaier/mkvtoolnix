@@ -201,8 +201,7 @@ int vorbis_packetizer_c::process(unsigned char *data, int size,
 }
 
 void vorbis_packetizer_c::dump_debug_info() {
-  mxprint(stderr, "DBG> vorbis_packetizer_c: queue: %d\n",
-          packet_queue.size());
+  mxdebug("vorbis_packetizer_c: queue: %d\n", packet_queue.size());
 }
 
 #endif // HAVE_OGGVORBIS

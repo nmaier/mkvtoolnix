@@ -71,7 +71,7 @@ static void chapter_error(const char *fmt, ...) {
   vfprintf(stderr, new_fmt.c_str(), ap);
   va_end(ap);
   mxprint(stderr, "\n");
-  exit(1);
+  mxexit(2);
 }
 
 #define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
@@ -227,8 +227,7 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   try {
     in = new mm_text_io_c(file_name);
   } catch (...) {
-    mxprint(stderr, "Error: Could not open '%s' for reading.\n", file_name);
-    exit(1);
+    mxerror("Could not open '%s' for reading.\n", file_name);
   }
 
   if (probe_simple_chapters(in))
@@ -237,10 +236,10 @@ KaxChapters *parse_chapters(const char *file_name, int64_t min_tc,
   if (probe_xml_chapters(in))
     return parse_xml_chapters(in, min_tc, max_tc, offset);
 
-  mxprint(stderr, "Error: Unknown file format for '%s'. It does not contain "
-          "a supported chapter format.\n", file_name);
   delete in;
-  exit(1);
+
+  mxerror("Unknown file format for '%s'. It does not contain "
+          "a supported chapter format.\n", file_name);
 
   return NULL;
 }

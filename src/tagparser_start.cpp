@@ -834,7 +834,7 @@ void perror(parser_data_t *pdata, const char *fmt, ...) {
     mxprint(stderr, "  %d\n", (*pdata->parents)[i]);
 #endif
 
-  exit(1);
+  mxexit(2);
 }
 
 static void add_data(void *user_data, const XML_Char *s, int len) {
@@ -869,8 +869,7 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
   try {
     io = new mm_io_c(name, MODE_READ);
   } catch(...) {
-    mxprint(stderr, "Error: Could not open '%s' for reading.\n", name);
-    exit(1);
+    mxerror("Could not open '%s' for reading.\n", name);
   }
 
   done = 0;
@@ -893,12 +892,11 @@ void parse_xml_tags(const char *name, KaxTags *tags) {
     len = io->read(buffer, 5000);
     if (len != 5000)
       done = 1;
-    if (XML_Parse(parser, buffer, len, done) == 0) {
-      mxprint(stderr, "XML parser error at  line %d of '%s': %s. Aborting.\n",
+    if (XML_Parse(parser, buffer, len, done) == 0)
+      mxerror("XML parser error at  line %d of '%s': %s. Aborting.\n",
               XML_GetCurrentLineNumber(parser), name,
               XML_ErrorString(XML_GetErrorCode(parser)));
-      exit(1);
-    }
+
   } while (!done);
 
   delete io;

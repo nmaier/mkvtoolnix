@@ -81,8 +81,8 @@ srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
     throw error_c("srt_reader: Could not open the source file.");
   }
   if (verbose)
-    mxprint(stdout, "Using SRT subtitle reader for %s.\n+-> Using "
-            "text subtitle output module for subtitles.\n", ti->fname);
+    mxinfo("Using SRT subtitle reader for %s.\n+-> Using "
+           "text subtitle output module for subtitles.\n", ti->fname);
 }
 
 srt_reader_c::~srt_reader_c() {
@@ -140,9 +140,9 @@ int srt_reader_c::read() {
   }
 
   if ((subs.check() != 0) && verbose)
-    mxprint(stdout, "srt_reader: Warning: The subtitle file seems to be "
-            "badly broken. The output file might not be playable "
-            "correctly.\n");
+    mxwarn("srt_reader: The subtitle file seems to be "
+           "badly broken. The output file might not be playable "
+           "correctly.\n");
   subs.process(textsubs_packetizer);
 
   return 0;
@@ -159,11 +159,10 @@ int srt_reader_c::display_priority() {
 static char wchar[] = "-\\|/-\\|/-";
 
 void srt_reader_c::display_progress() {
-  mxprint(stdout, "working... %c\r", wchar[act_wchar]);
+  mxinfo("working... %c\r", wchar[act_wchar]);
   act_wchar++;
   if (act_wchar == strlen(wchar))
     act_wchar = 0;
-  fflush(stdout);
 }
 
 void srt_reader_c::set_headers() {
@@ -171,6 +170,6 @@ void srt_reader_c::set_headers() {
 }
 
 void srt_reader_c::identify() {
-  mxprint(stdout, "File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
-          ti->fname);
+  mxinfo("File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
+         ti->fname);
 }
