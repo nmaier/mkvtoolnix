@@ -75,6 +75,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_passthrough.h"
 #include "p_pcm.h"
 #include "p_textsubs.h"
+#include "p_tta.h"
 #include "p_video.h"
 #include "p_vobsub.h"
 #include "p_vorbis.h"
@@ -535,7 +536,8 @@ kax_reader_c::verify_tracks() {
                    "Ignoring track %u.\n", t->tnum);
             continue;
 #endif
-          }
+          } else if (!strcmp(t->codec_id, MKV_A_TTA))
+            t->a_formattag = FOURCC('T', 'T', 'A', '1');
         }
 
         if (t->a_sfreq == 0.0)
@@ -1616,6 +1618,17 @@ kax_reader_c::create_packetizer(int64_t tid) {
                  (int64_t)t->tnum);
 
 #endif
+        } else if (t->a_formattag == FOURCC('T', 'T', 'A', '1')) {
+          safefree(nti->private_data);
+          nti->private_data = NULL;
+          nti->private_size = 0;
+          t->ptzr =
+            add_packetizer(new tta_packetizer_c(this, t->a_channels,
+                                                t->a_bps, (int32_t)t->a_sfreq,
+                                                nti));
+          mxinfo(FMT_TID "Using the TTA output module.\n", ti->fname,
+                 (int64_t)t->tnum);
+
         } else
           init_passthrough_packetizer(t);
 

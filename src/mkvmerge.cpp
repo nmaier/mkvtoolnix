@@ -89,6 +89,7 @@
 #include "r_real.h"
 #include "r_srt.h"
 #include "r_ssa.h"
+#include "r_tta.h"
 #include "r_vobsub.h"
 #include "r_wav.h"
 #include "tagparser.h"
@@ -218,8 +219,9 @@ file_type_t file_types[] =
    {"idx ", TYPEVOBSUB, "VobSub subtitles"},
    {"wav ", TYPEWAV, "WAVE (uncompressed PCM)"},
 #if defined(HAVE_FLAC_FORMAT_H)
-   {"flac", TYPEFLAC, "FLAC lossless audio (slow!)"},
+   {"flac", TYPEFLAC, "FLAC lossless audio"},
 #endif
+   {"tta",  TYPETTA, "TTA lossless audio"},
    {"output modules:", -1, ""},
    {"    ", -1,      "AAC audio"},
    {"    ", -1,      "AC3 audio"},
@@ -414,6 +416,8 @@ get_type(char *filename) {
     type = TYPEREAL;
   else if (qtmp4_reader_c::probe_file(mm_io, size))
     type = TYPEQTMP4;
+  else if (tta_reader_c::probe_file(mm_io, size))
+    type = TYPETTA;
   else if (mp3_reader_c::probe_file(mm_io, size))
     type = TYPEMP3;
   else if (ac3_reader_c::probe_file(mm_io, size))
@@ -1417,6 +1421,9 @@ create_readers() {
           file->reader = new flac_reader_c(file->ti);
           break;
 #endif
+        case TYPETTA:
+          file->reader = new tta_reader_c(file->ti);
+          break;
         default:
           mxerror("EVIL internal bug! (unknown file type)\n");
           break;
