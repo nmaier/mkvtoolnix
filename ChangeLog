@@ -1,3 +1,9 @@
+2004-08-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Added 'EditionUID' to valid elements below '<Targets>'
+	in XML tags. Fixed the creation of the 'Targets' with
+	--global-tags and --tags.
+
 2004-08-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvinfo, mkvextract: Added support for the new tag

@@ -243,7 +243,7 @@ generic_packetizer_c::~generic_packetizer_c() {
 
 void
 generic_packetizer_c::set_tag_track_uid() {
-  int is, it;
+  int is, it, k;
   KaxTag *tag;
   KaxTagTargets *targets;
   EbmlElement *el;
@@ -256,11 +256,17 @@ generic_packetizer_c::set_tag_track_uid() {
 
     for (it = 0; it < tag->ListSize(); it++) {
       el = (*tag)[it];
-      if (el->Generic().GlobalId == KaxTagTargets::ClassInfos.GlobalId) {
-        tag->Remove(it);
-        delete el;
-        it--;
-        continue;
+      if (is_id(el, KaxTagTargets)) {
+        targets = static_cast<KaxTagTargets *>(el);
+        k = 0;
+        while (k < targets->ListSize()) {
+          el = (*targets)[k];
+          if (is_id(el, KaxTagTrackUID)) {
+            targets->Remove(k);
+            delete el;
+          } else
+            k++;
+        }
       }
     }
 

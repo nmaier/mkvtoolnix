@@ -229,14 +229,24 @@ start_level3(parser_data_t *pdata,
           &GetNextEmptyChild<KaxTagTrackUID>(*pdata->targets,
                                              *pdata->track_uid);
       pdata->parents->push_back(E_TrackUID);
+
     } else if (!strcmp(name, "ChapterUID")) {
       if (pdata->chapter_uid == NULL)
         pdata->chapter_uid = &GetEmptyChild<KaxTagChapterUID>(*pdata->targets);
       else
         pdata->chapter_uid =
           &GetNextEmptyChild<KaxTagChapterUID>(*pdata->targets,
-                                          *pdata->chapter_uid);
+                                               *pdata->chapter_uid);
       pdata->parents->push_back(E_ChapterUID);
+
+    } else if (!strcmp(name, "EditionUID")) {
+      if (pdata->edition_uid == NULL)
+        pdata->edition_uid = &GetEmptyChild<KaxTagEditionUID>(*pdata->targets);
+      else
+        pdata->edition_uid =
+          &GetNextEmptyChild<KaxTagEditionUID>(*pdata->targets,
+                                               *pdata->edition_uid);
+      pdata->parents->push_back(E_EditionUID);
 
     } else
       tperror_nochild();
