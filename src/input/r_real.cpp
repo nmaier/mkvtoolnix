@@ -803,3 +803,11 @@ real_reader_c::flush_packetizers() {
     if (demuxers[i]->ptzr != -1)
       PTZR(demuxers[i]->ptzr)->flush();
 }
+
+void
+real_reader_c::add_available_track_ids() {
+  int i;
+
+  for (i = 0; i < demuxers.size(); i++)
+    available_track_ids.push_back(demuxers[i]->track->id);
+}

@@ -262,6 +262,7 @@ class generic_reader_c {
 public:
   track_info_c *ti;
   vector<packetizer_container_t> reader_packetizers;
+  vector<int64_t> requested_track_ids, available_track_ids;
   generic_reader_c *connected_to;
   int64_t max_timecode_seen;
 
@@ -287,6 +288,10 @@ public:
   virtual void set_timecode_offset(int64_t offset);
 
   virtual void check_track_ids_and_packetizers();
+  virtual void add_requested_track_id(int64_t id);
+  virtual void add_available_track_ids() {
+    available_track_ids.push_back(0);
+  }
 
 protected:
   virtual bool demuxing_requested(char type, int64_t id);

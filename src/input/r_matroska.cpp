@@ -2194,3 +2194,11 @@ kax_reader_c::flush_packetizers() {
       PTZR(tracks[i]->ptzr)->flush();
 }
 
+void
+kax_reader_c::add_available_track_ids() {
+  int i;
+
+  for (i = 0; i < tracks.size(); i++)
+    available_track_ids.push_back(tracks[i]->tnum);
+}
+
