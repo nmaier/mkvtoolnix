@@ -1,5 +1,10 @@
 2003-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: On Windows the 'isspace()' function used to trim
+        leading and trailing white spaces from tags considered some parts
+        of valid UTF-8 character sequences to be white spaces as
+        well. Fixed by replacing 'isspace()' with 'isblank()'.
+
         * mkvmerge: Support for chosing the charset and language used in
         simple chapter files. Suggestion by Liisachan.
 

@@ -120,7 +120,7 @@ int base64_decode(const string &src, unsigned char *dst) {
         i++;
       } else if (c == '=')
         pad++;
-      else if (!isspace(c) && (c != '\r') && (c != '\n'))
+      else if (!isblank(c) && (c != '\r') && (c != '\n'))
         return -1;
     }
 

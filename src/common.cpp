@@ -892,10 +892,10 @@ void strip(string &s, bool newlines) {
   c = s.c_str();
   i = 0;
   if (newlines)
-    while ((c[i] != 0) && (isspace(c[i]) || (c[i] == '\r') || (c[i] == '\n')))
+    while ((c[i] != 0) && (isblank(c[i]) || (c[i] == '\r') || (c[i] == '\n')))
       i++;
   else
-    while ((c[i] != 0) && isspace(c[i]))
+    while ((c[i] != 0) && isblank(c[i]))
       i++;
 
   if (i > 0)
@@ -906,11 +906,11 @@ void strip(string &s, bool newlines) {
   i = 0;
 
   if (newlines)
-    while ((i < len) && (isspace(c[len - i - 1]) || (c[len - i - 1] == '\r') ||
+    while ((i < len) && (isblank(c[len - i - 1]) || (c[len - i - 1] == '\r') ||
                          c[len - i - 1] == '\n'))
       i++;
   else
-    while ((i < len) && isspace(c[len - i - 1]))
+    while ((i < len) && isblank(c[len - i - 1]))
       i++;
 
   if (i > 0)

@@ -169,7 +169,7 @@ int vobsub_reader_c::read() {
       }
     } else if (!strncmp(chunk, "id:", 3)) {
       s = &chunk[3];
-      while (isspace(*s))
+      while (isblank(*s))
         s++;
       s2 = strchr(s, ',');
       if (s2 == NULL) {
@@ -181,7 +181,7 @@ int vobsub_reader_c::read() {
       *s2 = 0;
       id = safestrdup(s);
       s = s2 + 1;
-      while (isspace(*s))
+      while (isblank(*s))
         s++;
       if (strncmp(s, "index:", 6)) {
         mxprint(stdout, "vobsub_reader: Warning: Incorrect \"id:\" entry "
@@ -190,7 +190,7 @@ int vobsub_reader_c::read() {
         continue;
       }
       s += 6;
-      while (isspace(*s))
+      while (isblank(*s))
         s++;
       index = strtol(s, NULL, 10);
       if ((index < 0) || (errno != 0)) {

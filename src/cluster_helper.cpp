@@ -33,7 +33,7 @@
 
 vector<splitpoint_t *> cluster_helper_c::splitpoints;
 
-//#define walk_clusters() check_clusters(__LINE__)
+// #define walk_clusters() check_clusters(__LINE__)
 #define walk_clusters()
 
 cluster_helper_c::cluster_helper_c() {
@@ -588,7 +588,7 @@ void cluster_helper_c::check_clusters(int num) {
   }
 }
 
-//#define PRINT_CLUSTERS
+// #define PRINT_CLUSTERS
 
 int cluster_helper_c::free_clusters() {
   int i, k, idx;

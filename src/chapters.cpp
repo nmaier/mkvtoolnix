@@ -56,7 +56,7 @@ using namespace libmatroska;
                           istwodigits(s + 7) && \
                           isname(s + 9) && \
                           isequal(s + 13) && \
-                          !isspace(*(s + 14)))
+                          !isblank(*(s + 14)))
 
 // }}}
 // {{{ helper functions

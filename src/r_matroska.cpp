@@ -1360,7 +1360,6 @@ int kax_reader_c::read() {
               }
               block_track->units_processed += block->NumberFrames();
 
-
             }
           }
 
