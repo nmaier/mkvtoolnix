@@ -1341,12 +1341,10 @@ mmg_dialog::update_command_line() {
   }
 
 #if WXUNICODE
-  string utf8;
-  char *tmp;
+  string utf8, tmp;
   utf8 = to_utf8(cmdline);
   tmp = to_utf8(utf8_init("ISO8859-1"), utf8.c_str());
-  cmdline = wxU(tmp);
-  safefree(tmp);
+  cmdline = wxU(tmp.c_str());
 #else
   cmdline = to_utf8(cmdline).c_str();
 #endif

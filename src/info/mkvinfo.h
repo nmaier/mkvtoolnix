@@ -19,6 +19,8 @@
 
 #include "os.h"
 
+#include <string>
+
 #include "config.h"
 
 #ifdef HAVE_WXWINDOWS
@@ -29,9 +31,11 @@
 
 #define NAME "MKVInfo"
 
+using namespace std;
+
 void parse_args(int argc, char **argv, char *&file_name);
 int console_main(int argc, char **argv);
-bool process_file(const char *file_name);
+bool process_file(const string &file_name);
 void setup();
 void cleanup();
 

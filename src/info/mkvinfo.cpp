@@ -1734,7 +1734,7 @@ def_handle(tags) {
 }
 
 bool
-process_file(const char *file_name) {
+process_file(const string &file_name) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
@@ -1749,7 +1749,7 @@ process_file(const char *file_name) {
   try {
     in = new mm_file_io_c(file_name);
   } catch (std::exception &ex) {
-    show_error("Error: Couldn't open input file %s (%s).\n", file_name,
+    show_error("Error: Couldn't open input file %s (%s).\n", file_name.c_str(),
                strerror(errno));
     return false;
   }

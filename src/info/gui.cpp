@@ -153,11 +153,11 @@ mi_frame::mi_frame(const wxString &title,
 
 void
 mi_frame::open_file(wxString file_name) {
-  char *cfile_name;
+  string cfile_name;
 #if WXUNICODE
   cfile_name = from_utf8(cc_local_utf8, wxMB(file_name));
 #else
-  cfile_name = safestrdup(wxMB(file_name));
+  cfile_name = wxMB(file_name);
 #endif
   tree->DeleteAllItems();
   item_ids[0] = tree->AddRoot(file_name);
@@ -181,7 +181,6 @@ mi_frame::open_file(wxString file_name) {
   menu_options->Enable(mi_options_showall, true);
   SetStatusText(wxT("ready"));
   tree->Refresh();
-  safefree(cfile_name);
 }
 
 void
