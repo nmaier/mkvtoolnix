@@ -51,6 +51,7 @@ typedef struct {
 
   unsigned char *last_packet;
   int last_seq, last_len, ctb_len;
+  bool keyframe;
 } real_demuxer_t;
 
 class real_reader_c: public generic_reader_c {

@@ -568,26 +568,22 @@ void real_reader_c::identify() {
 void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
                                     int size, int64_t timecode,
                                     bool keyframe) {
-  int vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum, i, len;
+  int vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum, len;
   byte_cursor_c bc(p, size);
   unsigned char *dp_data, *buffer;
   dp_hdr_t *dp_hdr;
+  uint32_t *extra;
 
   try {
     vpkg_subseq = 0;
     vpkg_seqnum = -1;
 
     while (bc.get_len() > 2) {
-      uint32_t *extra;
-
       // bit 7: 1=last block in block chain
       // bit 6: 1=short header (only one block?)
       vpkg_header = bc.get_byte();
 
       printf("\nPACKET: size: %d; fib: ", size);
-      for (i = 0; i < 8; i++)
-        printf("0x%02x ", p[i]);
-      printf("hdr: 0x%02x ", vpkg_header);
       if ((vpkg_header & 0xc0) == 0x40) {
         // seems to be a very short header
         // 2 bytes, purpose of the second byte yet unknown
@@ -599,7 +595,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       } else {
         if ((vpkg_header & 0x40) == 0) {
           // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
-          vpkg_subseq = bc.get_byte();
+          vpkg_subseq = bc.get_byte() & 0x7f;
           printf("subseq: %d ", vpkg_subseq);
         }
 
@@ -637,6 +633,9 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
         printf("seq: %02x\n", vpkg_seqnum);
       }
 
+      printf("block: hdr=0x%0x, len=%d, offset=%d, seqnum=%d\n",
+             vpkg_header, vpkg_length, vpkg_offset, vpkg_seqnum);
+
       if (dmx->last_packet) {
         dp_hdr = (dp_hdr_t *)dmx->last_packet;
         dp_data = dmx->last_packet + sizeof(dp_hdr_t);
@@ -656,12 +655,12 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
           memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
           memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
                  dp_hdr->len);
+          dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                                   8 * (dp_hdr->chunks + 1), dp_hdr->timestamp,
+                                   -1, dmx->keyframe ? VFT_IFRAME :
+                                   VFT_PFRAMEAUTOMATIC);
           safefree(dmx->last_packet);
           dmx->last_packet = NULL;
-          dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                                   8 * (dp_hdr->chunks + 1), timecode, -1,
-                                   keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC,
-                                   VFT_NOBFRAME);
 
         } else {
           // append data to it!
@@ -691,7 +690,7 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
                      "frag.len=%d  total.len=%d\n",
                      dmx->ctb_len, vpkg_offset, vpkg_length - vpkg_offset);
             bc.get_bytes(dp_data + dp_hdr->len, vpkg_offset);
-            if ((dp_data[dp_hdr->len] & 0x20) &&
+            if (((dp_data[dp_hdr->len] & 0x20) != 0) &&
                 !strcmp(dmx->fourcc, "RV30"))
               dp_hdr->chunks--;
             else
@@ -707,12 +706,11 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
             memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
             memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data,
                    dp_hdr->len);
-            safefree(dmx->last_packet);
-            dmx->last_packet = NULL;
             dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                                     8 * (dp_hdr->chunks + 1), timecode, -1,
-                                     keyframe ? VFT_IFRAME :
-                                     VFT_PFRAMEAUTOMATIC);
+                                     8 * (dp_hdr->chunks + 1),
+                                     dp_hdr->timestamp, -1, dmx->keyframe ?
+                                     VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+            safefree(dmx->last_packet);
             dmx->last_packet = NULL;
             // continue parsing
             continue;
@@ -739,12 +737,15 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       dmx->ctb_len = sizeof(dp_hdr_t) + vpkg_length +
         8 * (1 + 2 * (vpkg_header & 0x3f));
       dmx->last_packet = (unsigned char *)malloc(dmx->ctb_len);
-
+      dmx->keyframe = keyframe;
       // the timestamp seems to be in milliseconds
       dmx->last_seq = vpkg_seqnum;
       dp_hdr = (dp_hdr_t *)dmx->last_packet;
-      dp_hdr->chunks=0;
-      dp_hdr->timestamp = timecode;
+      dp_hdr->chunks = 0;
+      if ((vpkg_header & 0xc0) == 0xc0)
+        dp_hdr->timestamp = vpkg_offset;
+      else
+        dp_hdr->timestamp = timecode;
       dp_hdr->chunktab = sizeof(dp_hdr_t) + vpkg_length;
       dp_data = dmx->last_packet + sizeof(dp_hdr_t);
       extra = (uint32_t *)(dmx->last_packet + dp_hdr->chunktab);
@@ -766,12 +767,12 @@ void real_reader_c::assemble_packet(real_demuxer_t *dmx, unsigned char *p,
       buffer[0] = dp_hdr->chunks;
       memcpy(&buffer[1], extra, 8 * (dp_hdr->chunks + 1));
       memcpy(&buffer[1 + 8 * (dp_hdr->chunks + 1)], dp_data, dp_hdr->len);
+      dmx->packetizer->process(buffer, 1 + dp_hdr->len +
+                               8 * (dp_hdr->chunks + 1), dp_hdr->timestamp, -1,
+                               dmx->keyframe ? VFT_IFRAME :
+                               VFT_PFRAMEAUTOMATIC);
       safefree(dmx->last_packet);
       dmx->last_packet = NULL;
-      dmx->packetizer->process(buffer, 1 + dp_hdr->len +
-                               8 * (dp_hdr->chunks + 1), timecode, -1,
-                               keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
-      break;
     }
 
   } catch(...) {
