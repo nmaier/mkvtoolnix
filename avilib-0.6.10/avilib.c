@@ -31,6 +31,7 @@
 #include <io.h>
 #define ftruncate _chsize
 #define strncasecmp _strnicmp
+#define snprintf _snprintf
 #define strtoll(x,y,z) _atoi64(x)
 #else // COMP_...
 #include <unistd.h>

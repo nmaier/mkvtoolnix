@@ -4,6 +4,9 @@
 /* Define to 1 if you have the <expat.h> header file. */
 #define HAVE_EXPAT_H 1
 
+/* Define if FLAC__stream_decoder_skip_single_frame exists */
+#define HAVE_FLAC_DECODER_SKIP 1
+
 /* Define to 1 if you have the <FLAC/format.h> header file. */
 #define HAVE_FLAC_FORMAT_H 1
 
