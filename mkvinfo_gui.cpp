@@ -29,26 +29,21 @@ enum {
 
 bool mi_app::OnInit() {
   char *initial_file;
+  bool use_gui;
 
   parse_args(argc, argv, initial_file, use_gui);
 
-  if (use_gui) {
-    frame = new mi_frame(_T("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
-    frame->Show(true);
-    frame->Refresh(true);
-    frame->Update();
-    while (Pending())
-      Dispatch();
+  frame = new mi_frame(_T("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
+  frame->Show(true);
+  frame->Refresh(true);
+  frame->Update();
+  while (Pending())
+    Dispatch();
 
-    if (initial_file != NULL)
-      frame->open_file(initial_file);
+  if (initial_file != NULL)
+    frame->open_file(initial_file);
 
-    return true;
-  } else {
-    console_main(argc, argv);
-
-    return false;
-  }
+  return true;
 }
 
 mi_frame::mi_frame(const wxString &title, const wxPoint &pos,
@@ -328,7 +323,6 @@ BEGIN_EVENT_TABLE(mi_frame, wxFrame)
   EVT_MENU(mi_help_about, mi_frame::on_help_about)
 END_EVENT_TABLE()
 
-  // IMPLEMENT_APP_NO_MAIN(mi_app)
-IMPLEMENT_APP(mi_app)
+IMPLEMENT_APP_NO_MAIN(mi_app)
 
 #endif // HAVE_WXWINDOWS

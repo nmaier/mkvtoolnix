@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.53 2003/05/31 09:08:02 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.54 2003/06/03 08:18:12 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -1038,8 +1038,18 @@ int console_main(int argc, char **argv) {
     return 1;
 }
 
-#ifndef HAVE_WXWINDOWS
 int main(int argc, char **argv) {
+  char *initial_file;
+
+  parse_args(argc, argv, initial_file, use_gui);
+
+#ifdef HAVE_WXWINDOWS
+  if (use_gui) {
+    wxEntry(argc, argv);
+    return 0;
+  } else
+    return console_main(argc, argv);
+#else
   return console_main(argc, argv);
+#endif
 }
-#endif // HAVE_WXWINDOWS
