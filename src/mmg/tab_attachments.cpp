@@ -165,7 +165,8 @@ tab_attachments::add_attachment(const wxString &file_name) {
          i++) {
       if (mime_types[i].extensions[0] == 0)
         continue;
-      extensions = split(wxU(mime_types[i].extensions), wxT(" "));
+      // Don't use wxT(" ") here as it is ambiguous which split() to use then.
+      extensions = split(wxU(mime_types[i].extensions), wxU(" "));
       for (j = 0; j < extensions.size(); j++)
         if (!wxStricmp(extensions[j], ext)) {
           attch.mime_type = wxU(mime_types[i].name);
