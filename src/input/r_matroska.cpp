@@ -1629,16 +1629,15 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
           if ((block_track != NULL) && (block_track->packetizer != NULL) &&
               block_track->passthrough) {
+            // The handling for passthrough is a bit different. We don't have
+            // any special cases, e.g. 0 terminating a string for the subs
+            // and stuff. Just pass everything through as it is.
             duration = static_cast<KaxBlockDuration *>
               (block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
-            if (duration != NULL) {
-              int frames;
-
-              frames = block->NumberFrames();
-              block_duration = (int64_t)uint64(*duration) / frames;
-              ((passthrough_packetizer_c *)
-               block_track->packetizer)->force_duration(frames);
-            } else if (block_track->v_frate != 0)
+            if (duration != NULL)
+              block_duration = (int64_t)uint64(*duration) /
+                block->NumberFrames();
+            else if (block_track->v_frate != 0)
               block_duration = (int64_t)(1000.0 / block_track->v_frate);
 
             last_timecode = block->GlobalTimecode() / 1000000;
@@ -1649,12 +1648,10 @@ int kax_reader_c::read(generic_packetizer_c *) {
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {
               DataBuffer &data = block->GetBuffer(i);
-              block_track->packetizer->process((unsigned char *)data.Buffer(),
-                                               data.Size(),
-                                               (int64_t)last_timecode,
-                                               block_duration,
-                                               block_bref,
-                                               block_fref);
+              ((passthrough_packetizer_c *)block_track->packetizer)->
+                process((unsigned char *)data.Buffer(), data.Size(),
+                        (int64_t)last_timecode, block_duration,
+                        block_bref, block_fref, duration != NULL);
             }
 
           } else if ((block_track != NULL) &&
@@ -1848,11 +1845,11 @@ void kax_reader_c::set_headers() {
     if ((tracks[i]->packetizer != NULL) && tracks[i]->passthrough) {
       tracks[i]->packetizer->get_track_entry()->
         EnableLacing(tracks[i]->lacing_flag);
-      if (tracks[i]->kax_c_encodings != NULL) {
-        tracks[i]->packetizer->get_track_entry()->
-          PushElement(*tracks[i]->kax_c_encodings);
-        tracks[i]->kax_c_encodings = NULL;
-      }
+//       if (tracks[i]->kax_c_encodings != NULL) {
+//         tracks[i]->packetizer->get_track_entry()->
+//           PushElement(*tracks[i]->kax_c_encodings);
+//         tracks[i]->kax_c_encodings = NULL;
+//       }
     }
   }
 }

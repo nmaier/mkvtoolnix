@@ -30,16 +30,17 @@ class passthrough_packetizer_c: public generic_packetizer_c {
 private:
   int64_t packets_processed, bytes_processed;
   bool sync_to_keyframe;
-  int duration_forced;
 
 public:
   passthrough_packetizer_c(generic_reader_c *nreader, track_info_c *nti)
     throw (error_c);
 
-  virtual void force_duration(int n_frames);
   virtual int process(unsigned char *buf, int size, int64_t timecode = -1,
                       int64_t duration = -1, int64_t bref = -1,
                       int64_t fref = -1);
+  virtual int process(unsigned char *buf, int size, int64_t timecode,
+                      int64_t duration, int64_t bref, int64_t fref,
+                      bool duration_mandatory);
   virtual void set_headers();
 
   virtual void dump_debug_info();
