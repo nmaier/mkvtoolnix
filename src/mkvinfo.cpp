@@ -651,6 +651,13 @@ bool process_file(const char *file_name) {
                              kax_track_type == 's' ? "subtitles" :
                              "unknown");
 
+              } else if (EbmlId(*l3) ==
+                         KaxTrackFlagEnabled::ClassInfos.GlobalId) {
+                KaxTrackFlagEnabled &fenabled =
+                  *static_cast<KaxTrackFlagEnabled *>(l3);
+                fenabled.ReadData(es->I_O());
+                show_element(l3, 3, "Enabled: %u", uint8(fenabled));
+
               } else if (EbmlId(*l3) == KaxTrackAudio::ClassInfos.GlobalId) {
                 show_element(l3, 3, "Audio track");
 
@@ -662,7 +669,7 @@ bool process_file(const char *file_name) {
                   if (EbmlId(*l4) ==
                       KaxAudioSamplingFreq::ClassInfos.GlobalId) {
                     KaxAudioSamplingFreq &freq =
-                      *static_cast<KaxAudioSamplingFreq*>(l4);
+                      *static_cast<KaxAudioSamplingFreq *>(l4);
                     freq.ReadData(es->I_O());
                     show_element(l4, 4, "Sampling frequency: %f",
                                  float(freq));
@@ -670,14 +677,26 @@ bool process_file(const char *file_name) {
                   } else if (EbmlId(*l4) ==
                              KaxAudioChannels::ClassInfos.GlobalId) {
                     KaxAudioChannels &channels =
-                      *static_cast<KaxAudioChannels*>(l4);
+                      *static_cast<KaxAudioChannels *>(l4);
                     channels.ReadData(es->I_O());
                     show_element(l4, 4, "Channels: %u", uint8(channels));
 
                   } else if (EbmlId(*l4) ==
+                             KaxAudioPosition::ClassInfos.GlobalId) {
+                    KaxAudioPosition &positions =
+                      *static_cast<KaxAudioPosition *>(l4);
+                    char buffer[positions.GetSize() * 5 + 1];
+                    const unsigned char *b = (const unsigned char *)
+                      &binary(positions);
+                    buffer[0] = 0;
+                    for (i = 0; i < positions.GetSize(); i++)
+                      mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+                    show_element(l4, 4, "Channel positions:%s", buffer);
+
+                  } else if (EbmlId(*l4) ==
                              KaxAudioBitDepth::ClassInfos.GlobalId) {
                     KaxAudioBitDepth &bps =
-                      *static_cast<KaxAudioBitDepth*>(l4);
+                      *static_cast<KaxAudioBitDepth *>(l4);
                     bps.ReadData(es->I_O());
                     show_element(l4, 4, "Bit depth: %u", uint8(bps));
 
@@ -737,6 +756,36 @@ bool process_file(const char *file_name) {
                       *static_cast<KaxVideoDisplayHeight *>(l4);
                     height.ReadData(es->I_O());
                     show_element(l4, 4, "Display height: %u", uint16(height));
+
+                  } else if (EbmlId(*l4) ==
+                             KaxVideoDisplayUnit::ClassInfos.GlobalId) {
+                    KaxVideoDisplayUnit &unit =
+                      *static_cast<KaxVideoDisplayUnit *>(l4);
+                    unit.ReadData(es->I_O());
+                    show_element(l4, 4, "Display unit: %u%s", uint16(unit),
+                                 uint16(unit) == 0 ? " (pixels)" :
+                                 uint16(unit) == 1 ? " (centimeters)" :
+                                 uint16(unit) == 2 ? " (inches)" : "");
+
+                  } else if (EbmlId(*l4) ==
+                             KaxVideoColourSpace::ClassInfos.GlobalId) {
+                    KaxVideoColourSpace &cspace =
+                      *static_cast<KaxVideoColourSpace *>(l4);
+                    cspace.ReadData(es->I_O());
+                    char buffer[cspace.GetSize() * 5 + 1];
+                    const unsigned char *b = (const unsigned char *)
+                      &binary(cspace);
+                    buffer[0] = 0;
+                    for (i = 0; i < cspace.GetSize(); i++)
+                      mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+                    show_element(l4, 4, "Colour space:%s", buffer);
+
+                  } else if (EbmlId(*l4) ==
+                             KaxVideoGamma::ClassInfos.GlobalId) {
+                    KaxVideoGamma &gamma =
+                      *static_cast<KaxVideoGamma *>(l4);
+                    gamma.ReadData(es->I_O());
+                    show_element(l4, 4, "Gamma: %f", float(gamma));
 
                   } else if (EbmlId(*l4) ==
                              KaxVideoFrameRate::ClassInfos.GlobalId) {
