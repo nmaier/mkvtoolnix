@@ -2015,7 +2015,26 @@ parse_args(int argc,
                "the MATROSKA FILE LAYOUT."));
       i++;
 
+    } else if (!strcmp(this_arg, "--timecode-scale")) {
+      int64_t temp;
+
+      if (next_arg == NULL)
+        mxerror(_("'--timecode-scale' lacks its argument.\n"));
+      if (timecode_scale_forced)
+        mxerror(_("'--timecode-scale' was used more than once.\n"));
+
+      if (!parse_int(next_arg, temp))
+        mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
+
+      if ((temp > 10000000) || (temp < 1000))
+        mxerror(_("The given timecode scale factor is outside the valid "
+                  "range (1000...10000000).\n"));
+
+      timecode_scale = temp;
+      timecode_scale_forced = true;
+      i++;
     }
+
 
     // Options that apply to the next input file only.
     else if (!strcmp(this_arg, "-A") || !strcmp(this_arg, "--noaudio"))
@@ -2185,24 +2204,6 @@ parse_args(int argc,
       parse_append_to(next_arg, *ti);
       i++;
 
-    } else if (!strcmp(this_arg, "--timecode-scale")) {
-      int64_t temp;
-
-      if (next_arg == NULL)
-        mxerror(_("'--timecode-scale' lacks its argument.\n"));
-      if (timecode_scale_forced)
-        mxerror(_("'--timecode-scale' was used more than once.\n"));
-
-      if (!parse_int(next_arg, temp))
-        mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
-
-      if ((temp > 10000000) || (temp < 1000))
-        mxerror(_("The given timecode scale factor is outside the valid "
-                  "range (1000...10000000).\n"));
-
-      timecode_scale = temp;
-      timecode_scale_forced = true;
-      i++;
     }
 
     // The argument is an input file.
