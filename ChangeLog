@@ -1,5 +1,8 @@
 2005-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: It was possible to select a file for appending
+	even though no file was added first.
+
 	* mkvmerge: bug fix: mkvmerge was wrongly outputting large numbers
 	of warnings when Remuxing AVC/h.264 video from a Matroska file.
 

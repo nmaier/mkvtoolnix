@@ -1492,6 +1492,7 @@ tab_input::load(wxConfigBase *cfg) {
   selected_file = -1;
   selected_track = -1;
   b_remove_file->Enable(false);
+  b_append_file->Enable(false);
 
   files.clear();
   tracks.clear();
