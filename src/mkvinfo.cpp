@@ -307,6 +307,8 @@ char *asctime_r(const struct tm *tm, char *buf) {
 
 #define fits_parent(l, p) (l->GetElementPosition() < \
                            (p->GetElementPosition() + p->ElementSize()))
+#define parent_done(p) (in->getFilePointer() >= \
+                        (p->GetElementPosition() + p->ElementSize()))
 
 bool process_file(const char *file_name) {
   int upper_lvl_el, i;
@@ -372,11 +374,14 @@ bool process_file(const char *file_name) {
       delete l0;
     }
 
-    upper_lvl_el = 0;
-    // We've got our segment, so let's find the tracks
-    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                             true, 1);
-    while (l1 != NULL) {
+    while (1) {
+      if (parent_done(l0))
+        break;
+
+      upper_lvl_el = 0;
+      // We've got our segment, so let's find the tracks
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
       if (upper_lvl_el > 0)
         break;
       if ((upper_lvl_el < 0) && !fits_parent(l1, l0))
@@ -2975,11 +2980,6 @@ int console_main(int argc, char **argv) {
 
 void setup() {
 #if defined(SYS_UNIX)
-  if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
-    mxprint(stderr, "Error: Could not set the locale 'en_US.UTF-8'. Make sure "
-            "that your system supports this locale.\n");
-    exit(1);
-  }
   if (setlocale(LC_CTYPE, "") == NULL) {
     mxprint(stderr, "Error: Could not set the locale properly. Check the "
             "LANG, LC_ALL and LC_CTYPE environment variables.\n");
