@@ -92,8 +92,14 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   ch_contents_t *c;
   int64_t timecode;
 
+  timecode = get_timecode();
+
   if (clusters == NULL)
     add_cluster(new KaxCluster());
+  else if ((packet->timecode - timecode) > max_ms_per_cluster) {
+    render();
+    add_cluster(new KaxCluster());
+  }
 
   packet->packet_num = packet_num;
   packet_num++;
@@ -114,7 +120,6 @@ void cluster_helper_c::add_packet(packet_t *packet) {
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
   if (((packet->timecode - timecode) > max_ms_per_cluster) ||
-      ((packet->timecode - timecode) > (60000 * 1000000 / TIMECODE_SCALE)) ||
       (get_packet_count() > max_blocks_per_cluster) ||
       (get_cluster_content_size() > 1500000)) {
     render();

@@ -996,20 +996,21 @@ static void parse_args(int argc, char **argv) {
       if (s != NULL) {
         *s = 0;
         if (!parse_int(argv[i + 1], max_ms_per_cluster) ||
-            (max_ms_per_cluster < 0) ||
-            (max_ms_per_cluster > 65535)) {
-          fprintf(stderr, "Error: Cluster length out of range (0..65535).\n");
+            (max_ms_per_cluster < 100) ||
+            (max_ms_per_cluster > 32000)) {
+          fprintf(stderr, "Error: Cluster length out of range (100..32000)."
+                  "\n");
           exit(1);
         }
         max_blocks_per_cluster = 65535;
       } else {
         if (!parse_int(argv[i + 1], max_blocks_per_cluster) ||
             (max_blocks_per_cluster < 0) ||
-            (max_blocks_per_cluster > 65535)) {
-          fprintf(stderr, "Error: Cluster length out of range (0..65535).\n");
+            (max_blocks_per_cluster > 60000)) {
+          fprintf(stderr, "Error: Cluster length out of range (0..60000).\n");
           exit(1);
         }
-        max_ms_per_cluster = 65535;
+        max_ms_per_cluster = 32000;
       }
       i++;
 
