@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.15 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.16 2003/04/20 17:22:04 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -257,14 +257,14 @@ void ogm_reader_c::create_packetizers() {
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize video "
                   "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", numstreams);
+                  "ignore this stream.\n", dmx->serial);
           free(dmx);
           continue;
         }
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using video output "
-                    "module for stream %d.\n", ti->fname, numstreams);
+                    "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -277,14 +277,14 @@ void ogm_reader_c::create_packetizers() {
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize PCM "
                   "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", numstreams);
+                  "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using PCM output "
-                    "module for stream %d.\n", ti->fname, numstreams);
+                    "module for stream %d.\n", ti->fname, dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_MP3:
@@ -295,14 +295,14 @@ void ogm_reader_c::create_packetizers() {
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize MP3 "
                   "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", numstreams);
+                  "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using MP3 output "
-                    "module for stream %d.\n", ti->fname, numstreams);
+                    "module for stream %d.\n", ti->fname, dmx->serial);
         break;
 
       case OGM_STREAM_TYPE_AC3:
@@ -313,14 +313,14 @@ void ogm_reader_c::create_packetizers() {
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize AC3 "
                   "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", numstreams);
+                  "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using AC3 output "
-                    "module for stream %d.\n", ti->fname, numstreams);
+                    "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
 
@@ -344,14 +344,14 @@ void ogm_reader_c::create_packetizers() {
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize Vorbis "
                   "packetizer for stream id %d. Will try to continue and "
-                  "ignore this stream.\n", numstreams);
+                  "ignore this stream.\n", dmx->serial);
           free_demuxer(i);
           continue;
         }
 
         if (verbose)
           fprintf(stdout, "OGG/OGM demultiplexer (%s): using Vorbis output "
-                    "module for stream %d.\n", ti->fname, numstreams);
+                    "module for stream %d.\n", ti->fname, dmx->serial);
 
         break;
     }
