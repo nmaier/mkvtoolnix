@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.h,v 1.3 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: r_matroska.h,v 1.4 2003/04/20 20:08:02 mosu Exp $
     \brief class definitions for the Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,10 +35,6 @@ using namespace LIBMATROSKA_NAMESPACE;
 
 // default values for Matroska elements
 #define MKVD_TIMECODESCALE 1000000 // 1000000 = 1ms
-
-// see http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/specs/codex.html?rev=HEAD&content-type=text/html
-#define MKV_MSVCM "V_MS/VFW/FOURCC"
-#define MKV_MSACM "A_MS/ACM"
 
 typedef struct {
   u_int32_t tnum;
@@ -93,10 +89,13 @@ private:
 
   KaxCluster *cluster;
 
-  mkv_track_t *current_track;
   buffer_t **buffers;
   int num_buffers;
-  int64_t block_timecode;
+
+  float segment_duration, last_timecode;
+
+  int64_t block_timecode, block_duration, block_ref1, block_ref2;
+  mkv_track_t *block_track;
      
 public:
   mkv_reader_c(track_info_t *nti) throw (error_c);
@@ -121,6 +120,7 @@ private:
   virtual void         handle_subtitles(mkv_track_t *t, KaxBlock &block);
   virtual void         add_buffer(DataBuffer &dbuffer);
   virtual void         free_buffers();
+  virtual void         handle_blocks();
 };
 
 

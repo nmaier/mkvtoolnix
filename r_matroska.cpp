@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.7 2003/04/20 19:58:35 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.8 2003/04/20 20:08:02 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -253,11 +253,11 @@ void mkv_reader_c::verify_tracks() {
       case 'v':                 // video track
         if (t->codec_id == NULL)
           continue;
-        if (!strcmp(t->codec_id, MKV_MSVCM)) {
+        if (!strcmp(t->codec_id, MKV_V_MSCOMP)) {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(BITMAPINFOHEADER))) {
-            printf("[mkv] WARNING: CodecID for track %u is '" MKV_MSVCM "', "
-                   "but there was no BITMAPINFOHEADER struct present. "
+            printf("[mkv] WARNING: CodecID for track %u is '" MKV_V_MSCOMP
+                   "', but there was no BITMAPINFOHEADER struct present. "
                    "Therefore we don't have a FourCC to identify the video "
                    "codec used.\n", t->tnum);
             continue;
@@ -315,10 +315,10 @@ void mkv_reader_c::verify_tracks() {
       case 'a':                 // audio track
         if (t->codec_id == NULL)
           continue;
-        if (!strcmp(t->codec_id, MKV_MSACM)) {
+        if (!strcmp(t->codec_id, MKV_A_ACM)) {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(WAVEFORMATEX))) {
-            printf("[mkv] WARNING: CodecID for track %u is '" MKV_MSACM "', "
+            printf("[mkv] WARNING: CodecID for track %u is '" MKV_A_ACM "', "
                    "but there was no WAVEFORMATEX struct present. "
                    "Therefore we don't have a format ID to identify the audio "
                    "codec used.\n", t->tnum);
