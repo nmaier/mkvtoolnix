@@ -645,7 +645,7 @@ void
 tab_input::on_add_file(wxCommandEvent &evt) {
   wxString media_files;
 
-  media_files = wxT("Media files (*.aac;*.ac3;*.ass;*.avi;*.dts;");
+  media_files = wxT("Media files (*.aac;*.ac3;*.ass;*.avi;*.btn;*.dts;");
   if (capabilities[wxT("FLAC")] == wxT("true"))
     media_files += wxT("*.flac;");
   media_files += wxT("*.idx;*.m4a;*.mp2;*.mp3;*.mka;"
@@ -680,6 +680,7 @@ tab_input::on_add_file(wxCommandEvent &evt) {
                      "VobSub subtitles (*.idx)|*.idx|"
                      "WAVE (uncompressed PCM) (*.wav)|*.wav|"
                      "WAVPACK v4 (*.wv)|*.wv|"
+                     "VobButtons (*.btn)|*.btn|"
                      ALLFILES);
   wxFileDialog dlg(NULL, wxT("Choose an input file"), last_open_dir, wxT(""),
                    media_files, wxOPEN);
