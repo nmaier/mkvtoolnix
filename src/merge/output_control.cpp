@@ -571,13 +571,13 @@ render_headers(mm_io_c *rout) {
       }
     }
 
-    // Set the chapterlink elements
+    // Set the chaptertranslate elements
     if (kax_info_chap != NULL) {
-      // copy the KaxChapterLink's in the current KaxInfo
-      KaxChapterLink *link = FINDFIRST(kax_info_chap, KaxChapterLink);
-      while (link != NULL) {
-        kax_infos->PushElement(*new KaxChapterLink(*link));
-        link = FINDNEXT(kax_info_chap, KaxChapterLink, link);
+      // copy the KaxChapterTranslates in the current KaxInfo
+      KaxChapterTranslate *tr = FINDFIRST(kax_info_chap, KaxChapterTranslate);
+      while (tr != NULL) {
+        kax_infos->PushElement(*new KaxChapterTranslate(*tr));
+        tr = FINDNEXT(kax_info_chap, KaxChapterTranslate, tr);
       }
     }
 

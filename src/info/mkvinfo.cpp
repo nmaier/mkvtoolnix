@@ -441,34 +441,35 @@ format_binary(EbmlBinary &bin,
 
 
 void
-def_handle(chapterlink) {
+def_handle(chaptertranslate) {
   EbmlMaster *m2;
   int i2;
 
-  show_element(l2, 2, "Chapter Link");
+  show_element(l2, 2, "Chapter Translate");
 
   m2 = static_cast<EbmlMaster *>(l2);
   for (i2 = 0; i2 < m2->ListSize(); i2++) {
     l3 = (*m2)[i2];
 
-    if (is_id(l3, KaxChapterLinkEditionUID)) {
-      KaxChapterLinkEditionUID &link_edition_uid =
-        *static_cast<KaxChapterLinkEditionUID *>(l3);
-      show_element(l3, 3, "Chapter Link Edition UID: %llu",
-                   uint64(link_edition_uid));
+    if (is_id(l3, KaxChapterTranslateEditionUID)) {
+      KaxChapterTranslateEditionUID &translate_edition_uid =
+        *static_cast<KaxChapterTranslateEditionUID *>(l3);
+      show_element(l3, 3, "Chapter Translate Edition UID: %llu",
+                   uint64(translate_edition_uid));
 
-    } else if (is_id(l3, KaxChapterLinkCodec)) {
-      KaxChapterLinkCodec &link_codec =
-        *static_cast<KaxChapterLinkCodec *>(l3);
-      show_element(l3, 3, "Chapter Link Codec: %llu",
-                   uint64(link_codec));
+    } else if (is_id(l3, KaxChapterTranslateCodec)) {
+      KaxChapterTranslateCodec &translate_codec =
+        *static_cast<KaxChapterTranslateCodec *>(l3);
+      show_element(l3, 3, "Chapter Translate Codec: %llu",
+                   uint64(translate_codec));
 
-    } else if (is_id(l3, KaxChapterLinkID)) {
+    } else if (is_id(l3, KaxChapterTranslateID)) {
       string strc;
 
-      KaxChapterLinkID &link_id = *static_cast<KaxChapterLinkID *>(l3);
-      strc = format_binary(*static_cast<EbmlBinary *>(&link_id));
-      show_element(l3, 3, "Chapter Link ID: %s", strc.c_str());
+      KaxChapterTranslateID &translate_id =
+        *static_cast<KaxChapterTranslateID *>(l3);
+      strc = format_binary(*static_cast<EbmlBinary *>(&translate_id));
+      show_element(l3, 3, "Chapter Translate ID: %s", strc.c_str());
     }
   }
 }
@@ -541,8 +542,8 @@ def_handle(info) {
       show_element(l2, 2, "Family UID:%s", buffer);
       delete [] buffer;
 
-    } else if (is_id(l2, KaxChapterLink))
-       handle(chapterlink);
+    } else if (is_id(l2, KaxChapterTranslate))
+       handle(chaptertranslate);
 
     else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);

@@ -127,12 +127,12 @@ xml_element_map_init() {
 
     {"SegmentFamily", EBMLT_BINARY, 1, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"ChapterLink", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterLinkEditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL,
+    {"ChapterTranslate", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterTranslateEditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL,
      NULL, NULL},
-    {"ChapterLinkCodec", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL,
-     NULL},
-    {"ChapterLinkID", EBMLT_BINARY, 2, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterTranslateCodec", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL,
+     NULL, NULL},
+    {"ChapterTranslateID", EBMLT_BINARY, 2, 0, 0, no_id, NULL, NULL, NULL},
 
     {NULL, EBMLT_MASTER, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
   };
