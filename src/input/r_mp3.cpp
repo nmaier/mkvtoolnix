@@ -163,7 +163,8 @@ mp3_reader_c::find_valid_headers(mm_io_c *mm_io) {
       mxverb(2, "mp3_reader: Second header search, second header? %d\n", pos2);
       if (pos2 < 0)
         return -1;
-      decode_mp3_header(&buf[offset + pos + pos2], &mp3header);
+      decode_mp3_header(&buf[offset + pos + mp3header.framesize + pos2],
+                        &mp3header);
       mxverb(2, "mp3_reader: Second header search, second header at %d + %d "
              "(version: %d, layer: %d, sampling freq: %d, channels: %d, "
              "bitrate: %d)\n", offset + pos, pos2, mp3header.version,

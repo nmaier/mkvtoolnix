@@ -1,3 +1,9 @@
+2004-06-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The improved MP3 garbage detection was broken
+	resulting in an error message from mkvmerge in some weird
+	situations.
+
 2004-06-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Matroska tracks can use lacing (several
