@@ -484,17 +484,17 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         s[len + 2] = 0;
 
         // Print the entry's number.
-        sprintf(buffer, "%d\n", tracks[i].srt_num);
+        mxprints(buffer, "%d\n", tracks[i].srt_num);
         tracks[i].srt_num++;
         tracks[i].out->write(buffer, strlen(buffer));
 
         // Print the timestamps.
-        sprintf(buffer, "%02lld:%02lld:%02lld,%03lld --> %02lld:%02lld:%02lld,"
-                "%03lld\n",
-                start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
-                (start / 1000) % 60, start % 1000,
-                end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
-                (end / 1000) % 60, end % 1000);
+        mxprints(buffer, "%02lld:%02lld:%02lld,%03lld --> %02lld:%02lld:"
+                 "%02lld,%03lld\n",
+                 start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
+                 (start / 1000) % 60, start % 1000,
+                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
+                 (end / 1000) % 60, end % 1000);
         tracks[i].out->write(buffer, strlen(buffer));
 
         // Print the text itself.
@@ -534,14 +534,14 @@ static void handle_data(KaxBlock *block, int64_t block_duration,
         line = string("Dialogue: Marked=0,");
 
         // Append the start and end time.
-        sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
-                start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
-                (start / 1000) % 60, (start % 1000) / 10);
+        mxprints(buffer, "%lld:%02lld:%02lld.%02lld",
+                 start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
+                 (start / 1000) % 60, (start % 1000) / 10);
         line += string(buffer) + comma;
 
-        sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
-                end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
-                (end / 1000) % 60, (end % 1000) / 10);
+        mxprints(buffer, "%lld:%02lld:%02lld.%02lld",
+                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
+                 (end / 1000) % 60, (end % 1000) / 10);
         line += string(buffer) + comma;
 
         // Append the other fields.
@@ -1002,14 +1002,14 @@ bool extract_tracks(const char *file_name) {
                   alBITMAPINFOHEADER *bih =
                     (alBITMAPINFOHEADER *)&binary(c_priv);
                   unsigned char *fcc = (unsigned char *)&bih->bi_compression;
-                  sprintf(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
-                          fcc[0], fcc[1], fcc[2], fcc[3],
-                          get_uint32(&bih->bi_compression));
+                  mxprints(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
+                           fcc[0], fcc[1], fcc[2], fcc[3],
+                           get_uint32(&bih->bi_compression));
                 } else if (ms_compat && (kax_track_type == 'a') &&
                            (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
                   alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
-                  sprintf(pbuffer, " (format tag: 0x%04x)",
-                          get_uint16(&wfe->w_format_tag));
+                  mxprints(pbuffer, " (format tag: 0x%04x)",
+                           get_uint16(&wfe->w_format_tag));
                 } else
                   pbuffer[0] = 0;
                 show_element(l3, 3, "CodecPrivate, length %llu%s",

@@ -282,7 +282,7 @@ int ssa_reader_c::read() {
   for (i = 0; i < clines.size(); i++) {
     char buffer[20];
     // Let the packetizer handle this line.
-    sprintf(buffer, "%d", clines[i].num);
+    mxprints(buffer, "%d", clines[i].num);
     line = string(buffer) + string(clines[i].line);
     textsubs_packetizer->process((unsigned char *)line.c_str(), 0,
                                  clines[i].start,

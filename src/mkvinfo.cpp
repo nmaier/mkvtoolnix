@@ -140,10 +140,12 @@ static char args_buffer[ARGS_BUFFER_LEN];
 
 void show_error(const char *fmt, ...) {
   va_list ap;
+  string new_fmt;
 
+  fix_format(fmt, new_fmt);
   va_start(ap, fmt);
   args_buffer[ARGS_BUFFER_LEN - 1] = 0;
-  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
+  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
 #ifdef HAVE_WXWINDOWS
@@ -158,13 +160,15 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
                    const char *fmt, ...) {
   va_list ap;
   char level_buffer[10];
+  string new_fmt;
 
   if (level > 9)
     die("mkvinfo.cpp/show_element(): level > 9: %d", level);
 
+  fix_format(fmt, new_fmt);
   va_start(ap, fmt);
   args_buffer[ARGS_BUFFER_LEN - 1] = 0;
-  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
+  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
   if (!use_gui) {
@@ -179,8 +183,8 @@ void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
 #ifdef HAVE_WXWINDOWS
   else {
     if (l != NULL)
-      sprintf(&args_buffer[strlen(args_buffer)], " at %llu",
-              l->GetElementPosition());
+      mxprints(&args_buffer[strlen(args_buffer)], " at %llu",
+               l->GetElementPosition());
     frame->add_item(level, args_buffer);
   }
 #endif // HAVE_WXWINDOWS
@@ -515,7 +519,7 @@ bool process_file(const char *file_name) {
             const unsigned char *b = (const unsigned char *)&binary(uid);
             buffer[0] = 0;
             for (i = 0; i < uid.GetSize(); i++)
-              sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+              mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
             show_element(l2, 2, "Segment UID:%s", buffer);
 
           } else if (EbmlId(*l2) == KaxPrevUID::ClassInfos.GlobalId) {
@@ -525,7 +529,7 @@ bool process_file(const char *file_name) {
             const unsigned char *b = (const unsigned char *)&binary(uid);
             buffer[0] = 0;
             for (i = 0; i < uid.GetSize(); i++)
-              sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+              mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
             show_element(l2, 2, "Previous segment UID:%s", buffer);
 
           } else if (EbmlId(*l2) == KaxNextUID::ClassInfos.GlobalId) {
@@ -535,7 +539,7 @@ bool process_file(const char *file_name) {
             const unsigned char *b = (const unsigned char *)&binary(uid);
             buffer[0] = 0;
             for (i = 0; i < uid.GetSize(); i++)
-              sprintf(&buffer[strlen(buffer)], " 0x%02x", b[i]);
+              mxprints(&buffer[strlen(buffer)], " 0x%02x", b[i]);
             show_element(l2, 2, "Next segment UID:%s", buffer);
 
           } else if (EbmlId(*l2) == KaxSegmentFilename::ClassInfos.GlobalId) {
@@ -782,14 +786,14 @@ bool process_file(const char *file_name) {
                   alBITMAPINFOHEADER *bih =
                     (alBITMAPINFOHEADER *)&binary(c_priv);
                   unsigned char *fcc = (unsigned char *)&bih->bi_compression;
-                  sprintf(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
-                          fcc[0], fcc[1], fcc[2], fcc[3],
-                          get_uint32(&bih->bi_compression));
+                  mxprints(pbuffer, " (FourCC: %c%c%c%c, 0x%08x)",
+                           fcc[0], fcc[1], fcc[2], fcc[3],
+                           get_uint32(&bih->bi_compression));
                 } else if (ms_compat && (kax_track_type == 'a') &&
                            (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
                   alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)&binary(c_priv);
-                  sprintf(pbuffer, " (format tag: 0x%04x)",
-                          get_uint16(&wfe->w_format_tag));
+                  mxprints(pbuffer, " (format tag: 0x%04x)",
+                           get_uint16(&wfe->w_format_tag));
                 } else
                   pbuffer[0] = 0;
                 show_element(l3, 3, "CodecPrivate, length %d%s",
@@ -930,8 +934,8 @@ bool process_file(const char *file_name) {
                 EbmlId id(b, s);
                 pbuffer[0] = 0;
                 for (i = 0; i < s; i++)
-                  sprintf(&pbuffer[strlen(pbuffer)], "0x%02x ",
-                          ((unsigned char *)b)[i]);
+                  mxprints(&pbuffer[strlen(pbuffer)], "0x%02x ",
+                           ((unsigned char *)b)[i]);
                 show_element(l3, 3, "Seek ID: %s (%s)", pbuffer,
                              (id == KaxInfo::ClassInfos.GlobalId) ?
                              "KaxInfo" :
@@ -948,8 +952,6 @@ bool process_file(const char *file_name) {
                              (id == KaxTags::ClassInfos.GlobalId) ?
                              "KaxTags" :
                              "unknown");
-                if (id == KaxCues::ClassInfos.GlobalId)
-                  printf("yugga\n");
 
               } else if (EbmlId(*l3) == KaxSeekPosition::ClassInfos.GlobalId) {
                 KaxSeekPosition &seek_pos =
@@ -1067,8 +1069,8 @@ bool process_file(const char *file_name) {
                 for (i = 0; i < (int)block.NumberFrames(); i++) {
                   DataBuffer &data = block.GetBuffer(i);
                   if (calc_checksums)
-                    sprintf(adler, " (adler: 0x%08x)",
-                            calc_adler32(data.Buffer(), data.Size()));
+                    mxprints(adler, " (adler: 0x%08x)",
+                             calc_adler32(data.Buffer(), data.Size()));
                   else
                     adler[0] = 0;
                   show_element(NULL, 4, "Frame with size %u%s", data.Size(),
@@ -1708,7 +1710,7 @@ bool process_file(const char *file_name) {
                       ", data: ";
                     b = &binary(rating);
                     for (i = 0; i < rating.GetSize(); i++) {
-                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                       strc += buf;
                     }
                     show_element(l4, 4, strc.c_str());
@@ -1895,7 +1897,7 @@ bool process_file(const char *file_name) {
                       to_string(video_genre.GetSize()) + ", data: ";
                     b = &binary(video_genre);
                     for (i = 0; i < video_genre.GetSize(); i++) {
-                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                       strc += buf;
                     }
                     show_element(l4, 4, strc.c_str());
@@ -1961,7 +1963,7 @@ bool process_file(const char *file_name) {
                       to_string(encryption.GetSize()) + ", data: ";
                     b = &binary(encryption);
                     for (i = 0; i < encryption.GetSize(); i++) {
-                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                       strc += buf;
                     }
                     show_element(l4, 4, strc.c_str());
@@ -1998,7 +2000,7 @@ bool process_file(const char *file_name) {
                       to_string(equalisation.GetSize()) + ", data: ";
                     b = &binary(equalisation);
                     for (i = 0; i < equalisation.GetSize(); i++) {
-                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                       strc += buf;
                     }
                     show_element(l4, 4, strc.c_str());
@@ -2101,7 +2103,7 @@ bool process_file(const char *file_name) {
                       to_string(capture_lightness.GetSize()) + ", data: ";
                     b = &binary(capture_lightness);
                     for (i = 0; i < capture_lightness.GetSize(); i++) {
-                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                       strc += buf;
                     }
                     show_element(l4, 4, strc.c_str());
@@ -2126,7 +2128,7 @@ bool process_file(const char *file_name) {
                       to_string(capture_sharpness.GetSize()) + ", data: ";
                     b = &binary(capture_sharpness);
                     for (i = 0; i < capture_sharpness.GetSize(); i++) {
-                      sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                      mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                       strc += buf;
                     }
                     show_element(l4, 4, strc.c_str());
@@ -2685,7 +2687,7 @@ bool process_file(const char *file_name) {
                           to_string(i_binary.GetSize()) + ", data: ";
                         b = &binary(i_binary);
                         for (i = 0; i < i_binary.GetSize(); i++) {
-                          sprintf(buf, "0x%02x ", (unsigned char)b[i]);
+                          mxprints(buf, "0x%02x ", (unsigned char)b[i]);
                           strc += buf;
                         }
                         show_element(l5, 5, strc.c_str());

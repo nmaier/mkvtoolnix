@@ -275,6 +275,7 @@ static char args_buffer[ARGS_BUFFER_LEN];
 void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   va_list ap;
   char level_buffer[10];
+  string new_fmt;
 
   if (level > 9)
     die("mkvextract.cpp/show_element(): level > 9: %d", level);
@@ -282,9 +283,10 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
   if (verbose == 0)
     return;
 
+  fix_format(fmt, new_fmt);
   va_start(ap, fmt);
   args_buffer[ARGS_BUFFER_LEN - 1] = 0;
-  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
+  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
   memset(&level_buffer[1], ' ', 9);
@@ -298,10 +300,12 @@ void show_element(EbmlElement *l, int level, const char *fmt, ...) {
 
 void show_error(const char *fmt, ...) {
   va_list ap;
+  string new_fmt;
 
+  fix_format(fmt, new_fmt);
   va_start(ap, fmt);
   args_buffer[ARGS_BUFFER_LEN - 1] = 0;
-  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, fmt, ap);
+  vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
   mxprint(stderr, "(%s) %s\n", NAME, args_buffer);

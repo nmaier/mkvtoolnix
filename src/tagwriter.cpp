@@ -38,10 +38,12 @@ static FILE *o;
 static void print_tag(int level, const char *name, const char *fmt, ...) {
   int idx;
   va_list ap;
+  string new_fmt;
 
+  fix_format(fmt, new_fmt);
   for (idx = 0; idx < level; idx++)
-    fprintf(o, "  ");
-  fprintf(o, "<%s>", name);
+    mxprint(o, "  ");
+  mxprint(o, "<%s>", name);
   va_start(ap, fmt);
   vfprintf(o, fmt, ap);
   va_end(ap);
@@ -103,17 +105,17 @@ static void print_date(int level, const char *name, EbmlElement *e) {
   char buffer[100];
 
   for (idx = 0; idx < level; idx++)
-    fprintf(o, "  ");
-  fprintf(o, "<%s>", name);
+    mxprint(o, "  ");
+  mxprint(o, "<%s>", name);
 
   tme = ((EbmlDate *)e)->GetEpochDate();
   tm = gmtime(&tme);
   if (tm == NULL)
-    fprintf(o, "INVALID: %llu", (uint64_t)tme);
+    mxprint(o, "INVALID: %llu", (uint64_t)tme);
   else {
     buffer[99] = 0;
     strftime(buffer, 99, "%Y-%m-%dT%H:%M:%S+0000", tm);
-    fprintf(o, buffer);
+    mxprint(o, buffer);
   }
   
   mxprint(o, "</%s>\n", name);
@@ -123,8 +125,8 @@ static void print_unknown(int level, EbmlElement *e) {
   int idx;
 
   for (idx = 0; idx < level; idx++)
-    fprintf(o, "  ");
-  fprintf(o, "<!-- Unknown element: %s -->\n", e->Generic().DebugName);
+    mxprint(o, "  ");
+  mxprint(o, "<!-- Unknown element: %s -->\n", e->Generic().DebugName);
 }
 
 #define pr_ui(n) print_tag(level, n, "%llu", \
@@ -543,19 +545,19 @@ static void dumpsizes(EbmlElement *e, int level) {
   int i;
 
   for (i = 0; i < level; i++)
-    printf(" ");
-  printf("%s", e->Generic().DebugName);
+    mxprint(stdout, " ");
+  mxprint(stdout, "%s", e->Generic().DebugName);
 
   try {
     EbmlMaster *m = &dynamic_cast<EbmlMaster &>(*e);
     if (m != NULL) {
-      printf(" (size: %u)\n", m->ListSize());
+      mxprint(stdout, " (size: %u)\n", m->ListSize());
       for (i = 0; i < m->ListSize(); i++)
         dumpsizes((*m)[i], level + 1);
     } else
-      printf("\n");
+      mxprint(stdout, "\n");
   } catch (...) {
-      printf("\n");
+      mxprint(stdout, "\n");
   }
 }
 

@@ -84,7 +84,7 @@ avi_reader_c::avi_reader_c(track_info_t *nti) throw (error_c):
     char *s, *error;
     error = AVI_strerror();
     s = (char *)safemalloc(strlen(msg) + strlen(error) + 1);
-    sprintf(s, "%s%s", msg, error);
+    mxprints(s, "%s%s", msg, error);
     throw error_c(s);
   }
 

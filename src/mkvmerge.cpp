@@ -1740,7 +1740,7 @@ string create_output_name() {
   // First possibility: %d
   p = s.find("%d");
   if (p >= 0) {
-    sprintf(buffer, "%d", file_num);
+    mxprints(buffer, "%d", file_num);
     s.replace(p, 2, buffer);
 
     return s;
@@ -1764,13 +1764,13 @@ string create_output_name() {
     len.erase(0, 1);
     len.erase(p2 - p - 1);
     char buffer[strtol(len.c_str(), NULL, 10) + 1];
-    sprintf(buffer, format.c_str(), file_num);
+    mxprints(buffer, format.c_str(), file_num);
     s.replace(p, format.size(), buffer);
 
     return s;
   }
 
-  sprintf(buffer, "-%03d", file_num);
+  mxprints(buffer, "-%03d", file_num);
 
   // See if we can find a '.'.
   p = s.rfind(".");

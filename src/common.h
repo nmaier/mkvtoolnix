@@ -72,6 +72,8 @@ using namespace libebml;
 
 void die(const char *fmt, ...);
 void mxprint(void *stream, const char *fmt, ...);
+void mxprints(char *dst, const char *fmt, ...);
+void fix_format(const char *fmt, string &new_fmt);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)
 void _trace(const char *func, const char *file, int line);

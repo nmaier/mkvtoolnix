@@ -166,10 +166,8 @@ uint64 mm_io_c::getFilePointer() {
   DWORD low;
   
   low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
-  if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR)) {
-    printf("nonono\n");
+  if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
     return (uint64)-1;
-  }
 
   return (((uint64)high) << 32) | (uint64)low;
 }

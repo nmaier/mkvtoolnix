@@ -1009,11 +1009,63 @@ void debug_c::dump_info() {
 /*
  * Other related news
  */
+
+void fix_format(const char *fmt, string &new_fmt) {
+#if defined(COMP_MINGW) || defined(COMP_MSC)
+  int i, len;
+  bool state;
+
+  new_fmt = "";
+  len = strlen(fmt);
+  state = false;
+  for (i = 0; i < len; i++) {
+    if (fmt[i] == '%') {
+      state = !state;
+      new_fmt += '%';
+
+    } else if (!state)
+      new_fmt += fmt[i];
+
+    else {
+      if (((i + 3) <= len) && (fmt[i] == 'l') && (fmt[i + 1] == 'l') &&
+          ((fmt[i + 2] == 'u') || (fmt[i + 2] == 'd'))) {
+        new_fmt += "I64";
+        new_fmt += fmt[i + 2];
+        i += 2;
+        state = false;
+
+      } else {
+        new_fmt += fmt[i];
+        if (isalpha(fmt[i]))
+          state = false;
+      }
+    }
+  }
+
+#else
+
+  new_fmt = fmt;
+
+#endif
+}
+
 void mxprint(void *stream, const char *fmt, ...) {
   va_list ap;
+  string new_fmt;
 
+  fix_format(fmt, new_fmt);
   va_start(ap, fmt);
-  vfprintf((FILE *)stream, fmt, ap);
+  vfprintf((FILE *)stream, new_fmt.c_str(), ap);
   fflush((FILE *)stream);
+  va_end(ap);
+}
+
+void mxprints(char *dst, const char *fmt, ...) {
+  va_list ap;
+  string new_fmt;
+
+  fix_format(fmt, new_fmt);
+  va_start(ap, fmt);
+  vsprintf(dst, new_fmt.c_str(), ap);
   va_end(ap);
 }

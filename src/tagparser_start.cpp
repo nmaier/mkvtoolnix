@@ -813,23 +813,25 @@ void start_element(void *user_data, const char *name,
 
 void perror(parser_data_t *pdata, const char *fmt, ...) {
   va_list ap;
+  string new_fmt;
 
-  fprintf(stderr, "Tag parsing error in '%s', line %d, column %d: ",
+  mxprint(stderr, "Tag parsing error in '%s', line %d, column %d: ",
           pdata->file_name, XML_GetCurrentLineNumber(pdata->parser),
           XML_GetCurrentColumnNumber(pdata->parser));
+  fix_format(fmt, new_fmt);
   va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
+  vfprintf(stderr, new_fmt.c_str(), ap);
   va_end(ap);
-  fprintf(stderr, "\n");
+  mxprint(stderr, "\n");
 
 #ifdef DEBUG
   int i;
-  fprintf(stderr, "Parent names:\n");
+  mxprint(stderr, "Parent names:\n");
   for (i = 0; i < pdata->parent_names->size(); i++)
-    fprintf(stderr, "  %s\n", (*pdata->parent_names)[i].c_str());
-  fprintf(stderr, "Parent types:\n");
+    mxprint(stderr, "  %s\n", (*pdata->parent_names)[i].c_str());
+  mxprint(stderr, "Parent types:\n");
   for (i = 0; i < pdata->parents->size(); i++)
-    fprintf(stderr, "  %d\n", (*pdata->parents)[i]);
+    mxprint(stderr, "  %d\n", (*pdata->parents)[i]);
 #endif
 
   exit(1);

@@ -412,7 +412,6 @@ void real_reader_c::parse_headers() {
         num_packets_in_chunk = io->read_uint32_be();
         num_packets = 0;
         io->skip(4);            // next_data_header
-        printf("HEAD#: %lld\n", num_packets_in_chunk);
 
         break;                  // We're finished!
 
@@ -447,7 +446,7 @@ void real_reader_c::create_packetizers() {
     if (dmx->type == 'v') {
       char buffer[20];
 
-      sprintf(buffer, "V_REAL/%s", dmx->fourcc);
+      mxprints(buffer, "V_REAL/%s", dmx->fourcc);
       dmx->packetizer = new video_packetizer_c(this, buffer, dmx->fps,
                                                dmx->width, dmx->height,
                                                false, ti);
@@ -478,9 +477,9 @@ void real_reader_c::create_packetizers() {
         ptzr = new passthrough_packetizer_c(this, ti);
         dmx->packetizer = ptzr;
 
-        sprintf(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]), 
-                toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
-                toupper(dmx->fourcc[3]));
+        mxprints(buffer, "A_REAL/%c%c%c%c", toupper(dmx->fourcc[0]),
+                 toupper(dmx->fourcc[1]), toupper(dmx->fourcc[2]),
+                 toupper(dmx->fourcc[3]));
 
         ptzr->set_track_type(track_audio);
         ptzr->set_codec_id(buffer);

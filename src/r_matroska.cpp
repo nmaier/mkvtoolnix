@@ -221,11 +221,11 @@ void kax_reader_c::verify_tracks() {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(alBITMAPINFOHEADER))) {
             if (verbose)
-              printf("matroska_reader: WARNING: CodecID for track %u is '"
-                     MKV_V_MSCOMP
-                     "', but there was no BITMAPINFOHEADER struct present. "
-                     "Therefore we don't have a FourCC to identify the video "
-                     "codec used.\n", t->tnum);
+              mxprint(stdout, "matroska_reader: WARNING: CodecID for track %u "
+                      "is '" MKV_V_MSCOMP
+                      "', but there was no BITMAPINFOHEADER struct present. "
+                      "Therefore we don't have a FourCC to identify the video "
+                      "codec used.\n", t->tnum);
             continue;
           } else {
             t->ms_compat = 1;
@@ -235,9 +235,10 @@ void kax_reader_c::verify_tracks() {
             u = get_uint32(&bih->bi_width);
             if (t->v_width != u) {
               if (verbose)
-                printf("matroska_reader: WARNING: (MS compatibility mode, "
-                       "track %u) Matrosa says video width is %u, but the "
-                       "BITMAPINFOHEADER says %u.\n", t->tnum, t->v_width, u);
+                mxprint(stdout, "matroska_reader: WARNING: (MS compatibility "
+                        "mode, track %u) Matrosa says video width is %u, but "
+                        "the BITMAPINFOHEADER says %u.\n", t->tnum, t->v_width,
+                        u);
               if (t->v_width == 0)
                 t->v_width = u;
             }
@@ -245,9 +246,9 @@ void kax_reader_c::verify_tracks() {
             u = get_uint32(&bih->bi_height);
             if (t->v_height != u) {
               if (verbose)
-                printf("matroska_reader: WARNING: (MS compatibility mode, "
-                       "track %u) Matrosa video height is %u, but the "
-                       "BITMAPINFOHEADER says %u.\n", t->tnum, t->v_height, u);
+                mxprint(stdout, "matroska_reader: WARNING: (MS compatibility "
+                        "mode, track %u) Matrosa video height is %u, but the "
+                        "BITMAPINFOHEADER says %u.\n", t->tnum, t->v_height, u);
               if (t->v_height == 0)
                 t->v_height = u;
             }
@@ -256,8 +257,9 @@ void kax_reader_c::verify_tracks() {
 
             if (t->v_frate == 0.0) {
               if (verbose)
-                printf("matroska_reader: ERROR: (MS compatibility mode, track "
-                       "%u) No VideoFrameRate element was found.\n", t->tnum);
+                mxprint(stdout, "matroska_reader: ERROR: (MS compatibility "
+                        "mode, track %u) No VideoFrameRate/DefaultDuration "
+                        "element was found.\n", t->tnum);
               continue;
             }
           }
@@ -265,14 +267,14 @@ void kax_reader_c::verify_tracks() {
 
         if (t->v_width == 0) {
           if (verbose)
-            printf("matroska_reader: The width for track %u was not set.\n",
-                   t->tnum);
+            mxprint(stdout, "matroska_reader: The width for track %u was not "
+                    "set.\n", t->tnum);
           continue;
         }
         if (t->v_height == 0) {
           if (verbose)
-            printf("matroska_reader: The height for track %u was not set.\n",
-                   t->tnum);
+            mxprint(stdout, "matroska_reader: The height for track %u was not "
+                    "set.\n", t->tnum);
           continue;
         }
 
@@ -288,10 +290,11 @@ void kax_reader_c::verify_tracks() {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(alWAVEFORMATEX))) {
             if (verbose)
-              printf("matroska_reader: WARNING: CodecID for track %u is '"
-                     MKV_A_ACM "', but there was no WAVEFORMATEX struct "
-                     "present. Therefore we don't have a format ID to "
-                     "identify the audio codec used.\n", t->tnum);
+              mxprint(stdout, "matroska_reader: WARNING: CodecID for track "
+                      "%u is '"
+                      MKV_A_ACM "', but there was no WAVEFORMATEX struct "
+                      "present. Therefore we don't have a format ID to "
+                      "identify the audio codec used.\n", t->tnum);
             continue;
           } else {
             t->ms_compat = 1;
@@ -300,10 +303,11 @@ void kax_reader_c::verify_tracks() {
             u = get_uint32(&wfe->n_samples_per_sec);
             if (((uint32_t)t->a_sfreq) != u) {
               if (verbose)
-                printf("matroska_reader: WARNING: (MS compatibility mode for "
-                       "track %u) Matroska says that there are %u samples per "
-                       "second, but WAVEFORMATEX says that there are %u.\n",
-                       t->tnum, (uint32_t)t->a_sfreq, u);
+                mxprint(stdout, "matroska_reader: WARNING: (MS compatibility "
+                        "mode for "
+                        "track %u) Matroska says that there are %u samples per"
+                        " second, but WAVEFORMATEX says that there are %u.\n",
+                        t->tnum, (uint32_t)t->a_sfreq, u);
               if (t->a_sfreq == 0.0)
                 t->a_sfreq = (float)u;
             }
@@ -311,10 +315,11 @@ void kax_reader_c::verify_tracks() {
             u = get_uint16(&wfe->n_channels);
             if (t->a_channels != u) {
               if (verbose)
-                printf("matroska_reader: WARNING: (MS compatibility mode for "
-                       "track %u) Matroska says that there are %u channels, "
-                       "but the WAVEFORMATEX says that there are %u.\n",
-                       t->tnum, t->a_channels, u);
+                mxprint(stdout, "matroska_reader: WARNING: (MS compatibility "
+                        "mode for "
+                        "track %u) Matroska says that there are %u channels, "
+                        "but the WAVEFORMATEX says that there are %u.\n",
+                        t->tnum, t->a_channels, u);
               if (t->a_channels == 0)
                 t->a_channels = u;
             }
@@ -322,10 +327,11 @@ void kax_reader_c::verify_tracks() {
             u = get_uint16(&wfe->w_bits_per_sample);
             if (t->a_bps != u) {
               if (verbose)
-                printf("matroska_reader: WARNING: (MS compatibility mode for "
-                       "track %u) Matroska says that there are %u bits per "
-                       "sample, but the WAVEFORMATEX says that there are %u."
-                       "\n", t->tnum, t->a_bps, u);
+                mxprint(stdout, "matroska_reader: WARNING: (MS compatibility "
+                        "mode for "
+                        "track %u) Matroska says that there are %u bits per "
+                        "sample, but the WAVEFORMATEX says that there are %u."
+                        "\n", t->tnum, t->a_bps, u);
               if (t->a_bps == 0)
                 t->a_bps = u;
             }
@@ -344,17 +350,18 @@ void kax_reader_c::verify_tracks() {
           else if (!strcmp(t->codec_id, MKV_A_VORBIS)) {
             if (t->private_data == NULL) {
               if (verbose)
-                printf("matroska_reader: WARNING: CodecID for track %u is "
-                       "'A_VORBIS', but there are no header packets present.",
-                       t->tnum);
+                mxprint(stdout, "matroska_reader: WARNING: CodecID for track "
+                        "%u is "
+                        "'A_VORBIS', but there are no header packets present.",
+                        t->tnum);
               continue;
             }
 
             c = (unsigned char *)t->private_data;
             if (c[0] != 2) {
               if (verbose)
-                printf("matroska_reader: Vorbis track does not contain valid "
-                       "headers.\n");
+                mxprint(stdout, "matroska_reader: Vorbis track does not "
+                        "contain valid headers.\n");
               continue;
             }
 
@@ -368,8 +375,8 @@ void kax_reader_c::verify_tracks() {
               }
               if (offset >= (t->private_size - 1)) {
                 if (verbose)
-                  printf("matroska_reader: Vorbis track does not contain valid"
-                         " headers.\n");
+                  mxprint(stdout, "matroska_reader: Vorbis track does not "
+                          "contain valid headers.\n");
                 continue;
               }
               length += c[offset];
@@ -397,30 +404,30 @@ void kax_reader_c::verify_tracks() {
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
           else {
             if (verbose)
-              printf("matroska_reader: Unknown/unsupported audio codec ID '%s'"
-                     " for track %u.\n", t->codec_id, t->tnum);
+              mxprint(stdout, "matroska_reader: Unknown/unsupported audio "
+                      "codec ID '%s' for track %u.\n", t->codec_id, t->tnum);
             continue;
           }
         }
 
         if (t->a_sfreq == 0.0) {
           if (verbose)
-            printf("matroska_reader: The sampling frequency was not set for "
-                   "track %u.\n", t->tnum);
+            mxprint(stdout, "matroska_reader: The sampling frequency was not "
+                    "set for track %u.\n", t->tnum);
           continue;
         }
 
         if (t->a_channels == 0) {
           if (verbose)
-            printf("matroska_reader: The number of channels was not set for "
-                   "track %u.\n", t->tnum);
+            mxprint(stdout, "matroska_reader: The number of channels was not "
+                    "set for track %u.\n", t->tnum);
           continue;
         }
 
         if (t->a_formattag == 0) {
           if (verbose)
-            printf("matroska_reader: The audio format tag was not set for "
-                   "track %u.\n", t->tnum);
+            mxprint(stdout, "matroska_reader: The audio format tag was not "
+                    "set for track %u.\n", t->tnum);
           continue;
         }
 
@@ -435,13 +442,13 @@ void kax_reader_c::verify_tracks() {
 
       default:                  // unknown track type!? error in demuxer...
         if (verbose)
-          printf("matroska_reader: Error: matroska_reader: unknown demuxer "
-                 "type for track %u: '%c'\n", t->tnum, t->type);
+          mxprint(stdout, "matroska_reader: Error: matroska_reader: unknown "
+                  "demuxer type for track %u: '%c'\n", t->tnum, t->type);
         continue;
     }
 
     if (t->ok && (verbose > 1))
-      printf("matroska_reader: Track %u seems to be ok.\n", t->tnum);
+      mxprint(stdout, "matroska_reader: Track %u seems to be ok.\n", t->tnum);
   }
 }
 
@@ -714,22 +721,22 @@ int kax_reader_c::read_headers() {
                 switch (uint8(ttype)) {
                   case track_audio:
                     if (verbose > 1)
-                      printf("Audio\n");
+                      mxprint(stdout, "Audio\n");
                     track->type = 'a';
                     break;
                   case track_video:
                     if (verbose > 1)
-                      printf("Video\n");
+                      mxprint(stdout, "Video\n");
                     track->type = 'v';
                     break;
                   case track_subtitle:
                     if (verbose > 1)
-                      printf("Subtitle\n");
+                      mxprint(stdout, "Subtitle\n");
                     track->type = 's';
                     break;
                   default:
                     if (verbose > 1)
-                      printf("unknown\n");
+                      mxprint(stdout, "unknown\n");
                     track->type = '?';
                     break;
                 }
@@ -1416,7 +1423,7 @@ int kax_reader_c::read() {
 
 
   } catch (exception ex) {
-    printf("matroska_reader: exception caught\n");
+    mxprint(stdout, "matroska_reader: exception caught\n");
     return 0;
   }
 

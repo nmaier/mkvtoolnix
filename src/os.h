@@ -22,7 +22,7 @@
 
 #if defined(COMP_MSC)
 # define PACKAGE "mkvtoolnix"
-# define VERSION "0.6.2"
+# define VERSION "0.6.3"
 
 # define strncasecmp _strnicmp
 # define strcasecmp _stricmp
@@ -30,6 +30,14 @@
 # define vsnprintf _vsnprintf
 # define vfprintf _vfprintf
 #endif // COMP_MSC
+
+#if defined(COMP_MINGW) || defined(COMP_MSC)
+# define LLD "%I64d"
+# define LLU "%I64u"
+#else
+# define LLD "%lld"
+# define LLU "%llu"
+#endif // COMP_MINGW || COMP_MSC
 
 #if !defined(COMP_CYGWIN)
 #include <stdint.h>
