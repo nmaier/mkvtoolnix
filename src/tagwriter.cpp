@@ -119,6 +119,14 @@ static void print_date(int level, const char *name, EbmlElement *e) {
   mxprint(o, "</%s>\n", name);
 }
 
+static void print_unknown(int level, EbmlElement *e) {
+  int idx;
+
+  for (idx = 0; idx < level; idx++)
+    fprintf(o, "  ");
+  fprintf(o, "<!-- Unknown element: %s -->\n", e->Generic().DebugName);
+}
+
 #define pr_ui(n) print_tag(level, n, "%llu", \
                            uint64(*static_cast<EbmlUInteger *>(e)))
 #define pr_si(n) print_tag(level, n, "%lld", \
@@ -136,6 +144,8 @@ static void print_date(int level, const char *name, EbmlElement *e) {
 
 #define is_id(ref) (e->Generic().GlobalId == ref::ClassInfos.GlobalId)
 
+#define pr_unk() print_unknown(level, e)
+
 static void handle_level5(EbmlElement *e) {
   int level = 5;
 
@@ -149,7 +159,7 @@ static void handle_level5(EbmlElement *e) {
     pr_d("PriceDate");
 
   else
-    mxprint(stderr, "          Unknown element: %s\n", typeid(*e).name());
+    pr_unk();
 }
 
 static void handle_level4(EbmlElement *e) {
@@ -243,7 +253,7 @@ static void handle_level4(EbmlElement *e) {
     pr_s("Language");
 
   else
-    mxprint(stderr, "        Unknown element: %s\n", typeid(*e).name());
+    pr_unk();
 }
 
 static void handle_level3(EbmlElement *e) {
@@ -400,11 +410,11 @@ static void handle_level3(EbmlElement *e) {
     mxprint(o, "      </Title>\n");
 
   } else
-    mxprint(stderr, "      Unknown element: %s\n", typeid(*e).name());
+    pr_unk();
 }
 
 static void handle_level2(EbmlElement *e) {
-  int i;
+  int i, level = 2;
 
   if (is_id(KaxTagTargets)) {
     mxprint(o, "    <Targets>\n");
@@ -473,11 +483,11 @@ static void handle_level2(EbmlElement *e) {
     mxprint(o, "    </MultiTitle>\n");
 
   } else
-    mxprint(stderr, "    Unknown element: %s\n", typeid(*e).name());
+    pr_unk();
 }
 
 static void handle_level1(EbmlElement *e) {
-  int i;
+  int i, level = 1;
 
   if (is_id(KaxTag)) {
     mxprint(o, "  <Tag>\n");
@@ -485,7 +495,7 @@ static void handle_level1(EbmlElement *e) {
       handle_level2((*(EbmlMaster *)e)[i]);
     mxprint(o, "  </Tag>\n");
   } else
-    mxprint(stderr, "  Unknown element: %s\n", typeid(*e).name());
+    pr_unk();
 
 }
 
