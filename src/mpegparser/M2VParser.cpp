@@ -129,7 +129,7 @@ int32_t M2VParser::InitParser(){
   MPEGChunk* chunk;
   //MPEGChunk* seqHdrChunk;    
   for(int i = 0; i < chunks.size(); i++){
-    chunk = chunks.at(i);        
+    chunk = chunks[i];        
     if(chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE){
       //Copy the header for later, we must copy because the actual chunk will be deleted in a bit
       binary * hdrData = new binary[chunk->GetSize()];
@@ -199,7 +199,7 @@ int32_t M2VParser::CountBFrames(){
   if(m_eos) return 0;
   if(notReachedFirstGOP) return 0;
   for(int i = 1; i < chunks.size(); i++){
-    MPEGChunk* c = chunks.at(i);
+    MPEGChunk* c = chunks[i];
     if(c->GetType() == MPEG_VIDEO_PICTURE_START_CODE){
       MPEG2PictureHeader h = ParsePictureHeader(c);
       if(h.frameType == MPEG2_B_FRAME){
