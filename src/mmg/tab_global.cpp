@@ -136,7 +136,7 @@ tab_global::tab_global(wxWindow *parent):
                                      "feature please read mkvmerge's "
                                      "documentation."));
 
-  new wxStaticBox(this, -1, _("Chapters"), wxPoint(10, 220), wxSize(475, 75));
+  new wxStaticBox(this, -1, _("Chapters"), wxPoint(10, 220), wxSize(475, 100));
   new wxStaticText(this, -1, _("Chapter file:"), wxPoint(15, 240),
                    wxDefaultSize, 0);
   tc_chapters =
@@ -184,22 +184,33 @@ tab_global::tab_global(wxWindow *parent):
                                   "recognized correctly then this option "
                                   "can be used to correct that. This option "
                                   "is ignored for XML chapter files."));
+  new wxStaticText(this, -1, _("Cue name format:"), wxPoint(15, 290),
+                   wxDefaultSize, 0);
+  tc_cue_name_format =
+    new wxTextCtrl(this, ID_TC_CUENAMEFORMAT, _(""), wxPoint(125, 290 + YOFF),
+                   wxSize(135, -1));
+  tc_cue_name_format->SetToolTip("mkvmerge can read CUE sheets for audio "
+                                 "cds and automatically convert them to "
+                                 "chapters. This option controls how the "
+                                 "chapter names are created. The sequence "
+                                 "'%p' is replaced by the track's PERFORMER, "
+                                 "the sequence '%t' by the "
+                                 "track's TITLE, '%n' by the track's number "
+                                 "and '%N' by the track's number padded with "
+                                 "a leading 0 for track numbers < 10. The "
+                                 "rest is copied as is. If nothing is "
+                                 "entered then '%p - %t' will be used.");
 
-  new wxStaticBox(this, -1, _("Global tags"), wxPoint(10, 300),
+  new wxStaticBox(this, -1, _("Global tags"), wxPoint(10, 325),
                   wxSize(475, 50));
-  new wxStaticText(this, -1, _("Tag file:"), wxPoint(15, 320),
+  new wxStaticText(this, -1, _("Tag file:"), wxPoint(15, 345),
                    wxDefaultSize, 0);
   tc_global_tags =
-    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 320 + YOFF),
+    new wxTextCtrl(this, ID_TC_GLOBALTAGS, _(""), wxPoint(100, 345 + YOFF),
                    wxSize(290, -1));
-  tc_global_tags->SetToolTip(_T("The difference between tags associated with "
-                                "a track and global tags is explained in "
-                                "mkvmerge's documentation. Most of the time "
-                                "you probably want to use the tags associated "
-                                "with a track on the 'input' tab."));
   wxButton *b_browse_global_tags =
     new wxButton(this, ID_B_BROWSEGLOBALTAGS, _("Browse"),
-                 wxPoint(400, 320 + YOFF), wxDefaultSize, 0);
+                 wxPoint(400, 345 + YOFF), wxDefaultSize, 0);
   b_browse_global_tags->SetToolTip(_T("The difference between tags associated "
                                       "with a track and global tags is "
                                       "explained in mkvmerge's documentation. "
@@ -219,8 +230,8 @@ void tab_global::on_browse_global_tags(wxCommandEvent &evt) {
 
 void tab_global::on_browse_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose the chapter file", last_open_dir, "",
-                   _T("Chapter files (*.xml;*.txt)|*.xml;*.txt|" ALLFILES),
-                   wxOPEN);
+                   _T("Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|"
+                      ALLFILES), wxOPEN);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     tc_chapters->SetValue(dlg.GetPath());
@@ -293,6 +304,8 @@ void tab_global::load(wxConfigBase *cfg) {
   cob_chap_language->SetValue(s);
   cfg->Read("chapter_charset", &s);
   cob_chap_charset->SetValue(s);
+  cfg->Read("cue_name_format", &s);
+  tc_cue_name_format->SetValue(s);
 
   cfg->Read("global_tags", &s);
   tc_global_tags->SetValue(s);
@@ -315,6 +328,7 @@ void tab_global::save(wxConfigBase *cfg) {
   cfg->Write("chapters", tc_chapters->GetValue());
   cfg->Write("chapter_language", cob_chap_language->GetValue());
   cfg->Write("chapter_charset", cob_chap_charset->GetValue());
+  cfg->Write("cue_name_format", tc_cue_name_format->GetValue());
 
   cfg->Write("global_tags", tc_global_tags->GetValue());
 }

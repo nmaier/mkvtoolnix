@@ -331,8 +331,8 @@ void tab_chapters::fix_missing_languages(EbmlMaster &master) {
 
 void tab_chapters::on_load_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, "Choose a chapter file", last_open_dir, "",
-                   _T("Chapter files (*.xml;*.txt;*.mka;*.mkv)|*.xml;*.txt;"
-                      "*.mka;*.mkv|" ALLFILES), wxOPEN);
+                   _T("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;"
+                      "*.txt;*.mka;*.mkv;*.cue|" ALLFILES), wxOPEN);
 
   if (dlg.ShowModal() == wxID_OK)
     if (load(dlg.GetPath()))

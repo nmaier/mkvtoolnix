@@ -251,9 +251,17 @@ tab_input::tab_input(wxWindow *parent):
   tc_timecodes =
     new wxTextCtrl(this, ID_TC_TIMECODES, _(""), wxPoint(90, 430 + YOFF),
                    wxSize(280, -1));
+  tc_timecodes->SetToolTip("mkvmerge can read and use timecodes from an "
+                           "external text file. This feature is a very "
+                           "advanced feature. Almost all users should leave "
+                           "this entry empty.");
   b_browse_timecodes =
     new wxButton(this, ID_B_BROWSE_TIMECODES, _("Browse"),
                  wxPoint(390, 430 + YOFF), wxDefaultSize, 0);
+  b_browse_timecodes->SetToolTip("mkvmerge can read and use timecodes from an "
+                                 "external text file. This feature is a very "
+                                 "advanced feature. Almost all users should "
+                                 "leave this entry empty.");
 
   no_track_mode();
   selected_file = -1;

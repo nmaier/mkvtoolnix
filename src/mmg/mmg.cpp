@@ -847,6 +847,13 @@ void mmg_dialog::update_command_line() {
       clargs.Add(global_page->cob_chap_charset->GetValue());
     }
 
+    if (global_page->tc_cue_name_format->GetValue().Length() > 0) {
+      cmdline += "--cue-chapter-name-format \"" +
+        shell_escape(global_page->tc_cue_name_format->GetValue()) + "\" ";
+      clargs.Add("--cue-chapter-name-format");
+      clargs.Add(global_page->tc_cue_name_format->GetValue());
+    }
+
     cmdline += "--chapters \"" +
       shell_escape(global_page->tc_chapters->GetValue()) + "\" ";
     clargs.Add("--chapters");
@@ -909,7 +916,7 @@ void mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
       ((evt.GetId() - ID_M_CHAPTERS_LOADLAST1) >= last_chapters.size()))
     return;
 
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->load(last_chapters[evt.GetId() -
                                           ID_M_CHAPTERS_LOADLAST1]);
 }
@@ -957,32 +964,32 @@ void mmg_dialog::update_chapter_menu() {
 }
 
 void mmg_dialog::on_new_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->on_new_chapters(evt);
 }
 
 void mmg_dialog::on_load_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->on_load_chapters(evt);
 }
 
 void mmg_dialog::on_save_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->on_save_chapters(evt);
 }
 
 void mmg_dialog::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->on_save_chapters_to_kax_file(evt);
 }
 
 void mmg_dialog::on_save_chapters_as(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->on_save_chapters_as(evt);
 }
 
 void mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
+  notebook->SetSelection(5);
   chapter_editor_page->on_verify_chapters(evt);
 }
 
