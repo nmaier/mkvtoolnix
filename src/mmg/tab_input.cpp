@@ -60,10 +60,8 @@ public:
 };
 
 #if defined(SYS_WINDOWS)
-#define LINESPACING 5
 #define GROUPSPACING 10
 #else
-#define LINESPACING 2
 #define GROUPSPACING 5
 #endif
 
@@ -76,7 +74,7 @@ tab_input::tab_input(wxWindow *parent):
   wxArrayString popular_languages;
   wxFlexGridSizer *siz_fg;
   wxStaticBoxSizer *siz_toptions;
-  wxBoxSizer *siz_line, *siz_column, *siz_all;
+  wxBoxSizer *siz_line, *siz_column, *siz_all, *siz_box;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(0, 5, 0, 0, 0);
@@ -152,7 +150,7 @@ tab_input::tab_input(wxWindow *parent):
   b_track_down->Enable(false);
   siz_column->Add(b_track_down, 0, 0, 0);
   siz_line->Add(siz_column, 0, wxALIGN_TOP | wxLEFT, 10);
-  siz_all->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_all->Add(siz_line, 3, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
@@ -164,6 +162,11 @@ tab_input::tab_input(wxWindow *parent):
   siz_fg = new wxFlexGridSizer(4);
   siz_fg->AddGrowableCol(1);
   siz_fg->AddGrowableCol(3);
+
+  for (i = 0; i < siz_fg->GetCols(); i++)
+    siz_fg->Add(0, 1, 1, wxGROW, 0);
+  siz_fg->AddGrowableRow(0);
+
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
@@ -211,7 +214,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_language->Append(wxT("none"));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
-  siz_fg->Add(cob_language, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(cob_language, 0, wxGROW | wxRIGHT, 15);
 
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -220,17 +223,18 @@ tab_input::tab_input(wxWindow *parent):
                            "negative. Only applies to audio and subtitle "
                            "tracks. Some audio formats cannot be delayed at "
                            "the moment."));
-  siz_fg->Add(tc_delay, 1, wxGROW, 0);
+  siz_fg->Add(tc_delay, 0, wxGROW, 0);
 
-  for (i = 0; i < 4; i++)
-    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+  for (i = 0; i < siz_fg->GetCols(); i++)
+    siz_fg->Add(0, 1, 1, wxGROW, 0);
+  siz_fg->AddGrowableRow(2);
 
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Track name:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_track_name = new wxTextCtrl(this, ID_TC_TRACKNAME, wxT(""));
   tc_track_name->SetToolTip(wxT("Name for this track, e.g. \"director's "
                                 "comments\"."));
-  siz_fg->Add(tc_track_name, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(tc_track_name, 0, wxGROW | wxRIGHT, 15);
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Stretch by:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxT(""));
@@ -238,10 +242,11 @@ tab_input::tab_input(wxWindow *parent):
                              "factor. This should be a positive floating "
                              "point number. Not all formats can be stretched "
                              "at the moment."));
-  siz_fg->Add(tc_stretch, 1, wxGROW, 0);
+  siz_fg->Add(tc_stretch, 0, wxGROW, 0);
 
-  for (i = 0; i < 4; i++)
-    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+  for (i = 0; i < siz_fg->GetCols(); i++)
+    siz_fg->Add(0, 1, 1, wxGROW, 0);
+  siz_fg->AddGrowableRow(4);
 
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Cues:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -255,7 +260,7 @@ tab_input::tab_input(wxWindow *parent):
   cob_cues->Append(wxT("only for I frames"));
   cob_cues->Append(wxT("for all frames"));
   cob_cues->Append(wxT("none"));
-  siz_fg->Add(cob_cues, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(cob_cues, 0, wxGROW | wxRIGHT, 15);
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Subtitle charset:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_sub_charset =
@@ -276,10 +281,11 @@ tab_input::tab_input(wxWindow *parent):
 
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_sub_charset->Append(sorted_charsets[i]);
-  siz_fg->Add(cob_sub_charset, 1, wxGROW, 0);
+  siz_fg->Add(cob_sub_charset, 0, wxGROW, 0);
 
-  for (i = 0; i < 4; i++)
-    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+  for (i = 0; i < siz_fg->GetCols(); i++)
+    siz_fg->Add(0, 1, 1, wxGROW, 0);
+  siz_fg->AddGrowableRow(6);
 
   siz_fg->Add(new wxStaticText(this, -1, wxT("FourCC:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -296,7 +302,7 @@ tab_input::tab_input(wxWindow *parent):
                              "tracks that use the AVI compatibility mode "
                              "or for QuickTime video tracks. This option "
                              "CANNOT be used to change Matroska's CodecID."));
-  siz_fg->Add(cob_fourcc, 1, wxGROW | wxRIGHT, 15);
+  siz_fg->Add(cob_fourcc, 0, wxGROW | wxRIGHT, 15);
   siz_fg->Add(new wxStaticText(this, -1, wxT("Compression:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_compression =
@@ -314,10 +320,11 @@ tab_input::tab_input(wxWindow *parent):
                                   "VobSubs will be automatically compressed "
                                   "with zlib. 'none' results is files that "
                                   "are a lot larger."));
-  siz_fg->Add(cob_compression, 1, wxGROW, 0);
-  siz_toptions->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_fg->Add(cob_compression, 0, wxGROW, 0);
+  siz_toptions->Add(siz_fg, 4, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
+  siz_box = new wxBoxSizer(wxVERTICAL);
+  siz_box->Add(0, 1, 1, wxGROW, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   rb_aspect_ratio =
@@ -364,9 +371,9 @@ tab_input::tab_input(wxWindow *parent):
                                     "The width must be set as well, or this "
                                     "field will be ignored."));
   siz_line->Add(tc_display_height, 2, wxGROW, 0);
-  siz_toptions->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_box->Add(siz_line, 0, wxGROW, 0);
 
-  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
+  siz_box->Add(0, 1, 1, wxGROW, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_default =
@@ -387,12 +394,15 @@ tab_input::tab_input(wxWindow *parent):
                                 "from MP4 or Matroska files."));
   siz_line->Add(1, 0, 1, wxGROW, 0);
   siz_line->Add(cb_aac_is_sbr, 0, 0, 0);
-  siz_toptions->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
-
-  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
+  siz_box->Add(siz_line, 0, wxGROW, 0);
+  siz_toptions->Add(siz_box, 2, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_fg = new wxFlexGridSizer(3);
   siz_fg->AddGrowableCol(1);
+  for (i = 0; i < 3; i++)
+    siz_fg->Add(0, 1, 1, wxGROW, 0);
+  siz_fg->AddGrowableRow(0);
+
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Tags:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_tags = new wxTextCtrl(this, ID_TC_TAGS, wxT(""));
@@ -401,7 +411,8 @@ tab_input::tab_input(wxWindow *parent):
   siz_fg->Add(b_browse_tags, 0, wxALIGN_CENTER_VERTICAL, 10);
 
   for (i = 0; i < 3; i++)
-    siz_fg->Add(0, LINESPACING, 0, 0, 0);
+    siz_fg->Add(0, 1, 1, wxGROW, 0);
+  siz_fg->AddGrowableRow(2);
 
   siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Timecodes:")),
               0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -419,9 +430,8 @@ tab_input::tab_input(wxWindow *parent):
                                      "Almost all users should leave this "
                                      "entry empty."));
   siz_fg->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL);
-  siz_toptions->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 10);
-  siz_toptions->Add(0, LINESPACING, 0, 0, 0);
-  siz_all->Add(siz_toptions, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_toptions->Add(siz_fg, 2, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_all->Add(siz_toptions, 8, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
   SetSizer(siz_all);
 
