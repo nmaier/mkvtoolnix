@@ -80,6 +80,8 @@ flac_get_num_samples(unsigned char *mem,
   if (!bits.get_bits(4, value))
     return -1;
 
+  free_sample_size = 0;
+  samples = 0;
   if (value == 0)
     samples = stream_info.min_blocksize;
   else if (value == 1)

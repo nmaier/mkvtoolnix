@@ -2492,6 +2492,7 @@ add_tags_from_cue_chapters() {
     return;
 
   found = false;
+  tuid = 0;
   for (i = 0; i < ptzrs_in_header_order.size(); i++)
     if (ptzrs_in_header_order[i]->get_track_type() == 'v') {
       found = true;
