@@ -42,7 +42,9 @@ typedef struct {
   int bsid;
 } ac3_header_t;
 
-int MTX_DLL_API find_ac3_header(unsigned char *buf, int size,
+int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size,
                                 ac3_header_t *ac3_header);
+int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf,
+                                             int size, int num);
 
 #endif // __AC3COMMON_H

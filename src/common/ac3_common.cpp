@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "ac3_common.h"
+#include "common.h"
 
 /*
   <S_O> AC3 Header:
@@ -33,7 +34,7 @@
 */
 
 int
-find_ac3_header(unsigned char *buf,
+find_ac3_header(const unsigned char *buf,
                 int size,
                 ac3_header_t *ac3_header) {
   static int rate[] = { 32,  40,  48,  56,  64,  80,  96, 112, 128, 160,
@@ -108,6 +109,56 @@ find_ac3_header(unsigned char *buf,
 
     return i;
   }
+
+  return -1;
+}
+
+int
+find_consecutive_ac3_headers(const unsigned char *buf,
+                             int size,
+                             int num) {
+  int i, pos, base, offset;
+  ac3_header_t ac3header, new_header;
+
+  pos = find_ac3_header(&buf[base], size - base, &ac3header);
+  if (pos < 0)
+    return -1;
+  mxverb(2, "ac3_reader: Found tag at %d size %d\n", base + pos,
+         ac3header.bytes);
+  base = pos + 1;
+
+  if (num == 1)
+    return pos;
+
+  do {
+    mxverb(2, "find_cons_ac3_h: starting with base at %d\n", base);
+    offset = ac3header.bytes;
+    for (i = 0; i < (num - 1); i++) {
+      if ((size - base - offset) < 4)
+        break;
+      pos = find_ac3_header(&buf[base + offset], size - base - offset,
+                            &new_header);
+      if (pos == 0) {
+        if ((new_header.bsid == ac3header.bsid) &&
+            (new_header.channels == ac3header.channels) &&
+            (new_header.sample_rate == ac3header.sample_rate)) {
+          mxverb(2, "find_cons_ac3_h: found good header %d\n", i);
+          offset += new_header.bytes;
+          continue;
+        } else
+          break;
+      } else
+        break;
+    }
+    if (i == (num - 1))
+      return base;
+    base++;
+    offset = 0;
+    pos = find_ac3_header(&buf[base], size - base, &ac3header);
+    if (pos == -1)
+      return -1;
+    base += pos;
+  } while (base < (size - 5));
 
   return -1;
 }

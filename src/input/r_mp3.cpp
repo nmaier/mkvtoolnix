@@ -27,8 +27,10 @@
 
 int
 mp3_reader_c::probe_file(mm_io_c *mm_io,
-                         int64_t) {
-  return (find_valid_headers(mm_io) != -1) ? 1 : 0;
+                         int64_t,
+                         int64_t probe_range,
+                         int num_headers) {
+  return (find_valid_headers(mm_io, probe_range, num_headers) != -1) ? 1 : 0;
 }
 
 mp3_reader_c::mp3_reader_c(track_info_c *nti)
@@ -41,7 +43,7 @@ mp3_reader_c::mp3_reader_c(track_info_c *nti)
     mm_io = new mm_io_c(ti->fname, MODE_READ);
     size = mm_io->get_size();
 
-    pos = find_valid_headers(mm_io);
+    pos = find_valid_headers(mm_io, 2 * 1024 * 1024, 5);
     if (pos < 0)
       throw error_c("Could not find a valid MP3 packet.");
     mm_io->setFilePointer(pos, seek_beginning);
@@ -116,15 +118,17 @@ mp3_reader_c::identify() {
 }
 
 int
-mp3_reader_c::find_valid_headers(mm_io_c *mm_io) {
+mp3_reader_c::find_valid_headers(mm_io_c *mm_io,
+                                 int64_t probe_range,
+                                 int num_headers) {
   unsigned char *buf;
   int pos, nread;
 
   try {
     mm_io->setFilePointer(0, seek_beginning);
-    buf = (unsigned char *)safemalloc(2 * 1024 * 1024);
-    nread = mm_io->read(buf, 2 * 1024 * 1024);
-    pos = find_consecutive_mp3_headers(buf, nread, 5);
+    buf = (unsigned char *)safemalloc(probe_range);
+    nread = mm_io->read(buf, probe_range);
+    pos = find_consecutive_mp3_headers(buf, nread, num_headers);
     safefree(buf);
     mm_io->setFilePointer(0, seek_beginning);
     return pos;
