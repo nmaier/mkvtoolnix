@@ -377,7 +377,7 @@ off_t_to_char(off_t val, int base, int len)
 	*(--p) = digit[ val % base ];
 	val = val / base;
     }
-    return p;
+    return (unsigned char *)p;
 }    
 
 /* Reads a chunk ID and the chunk's size from file f at actual
