@@ -2094,8 +2094,9 @@ int main(int argc, char **argv) {
 
     end = time(NULL);
 
-    mxinfo("\nPass 1 took %u seconds.\nPass 2: merging the files. This will "
-           "take even longer.\n\n", end - start);
+    mxinfo("\nPass 1 took %u second%s.\nPass 2: merging the files. This will "
+           "take even longer.\n\n", end - start,
+           (end - start) == 1 ? "" : "s");
 
     start = time(NULL);
 
@@ -2114,7 +2115,8 @@ int main(int argc, char **argv) {
     finish_file();
 
     end = time(NULL);
-    mxinfo("Pass 2 took %u seconds.\n", end - start);
+    mxinfo("Pass 2 took %u second%s.\n", end - start,
+           (end - start) == 1 ? "" : "s");
 
   } else {
 
@@ -2131,7 +2133,8 @@ int main(int argc, char **argv) {
     finish_file();
 
     end = time(NULL);
-    mxinfo("Muxing took %u seconds.\n", end - start);
+    mxinfo("Muxing took %u second%s.\n", end - start,
+           (end - start) == 1 ? "" : "s");
   }
 
   cleanup();
