@@ -98,6 +98,8 @@ aac_reader_c::aac_reader_c(track_info_t *nti) throw (error_c):
                                          aacheader.sample_rate,
                                          aacheader.channels, ti,
                                          emphasis_present);
+    if (aacheader.profile == AAC_PROFILE_SBR)
+      aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
   } catch (exception &ex) {
     throw error_c("aac_reader: Could not open the file.");
   }

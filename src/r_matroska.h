@@ -59,7 +59,7 @@ typedef struct {
 
   // Parameters for audio tracks
   uint32_t a_channels, a_bps, a_formattag;
-  float a_sfreq;
+  float a_sfreq, a_osfreq;
 
   void *private_data;
   unsigned int private_size;

@@ -742,6 +742,16 @@ int kax_reader_c::read_headers() {
                              "frequency: %f\n", track->a_sfreq);
 
                   } else if (EbmlId(*l4) ==
+                             KaxAudioOutputSamplingFreq::ClassInfos.GlobalId) {
+                    KaxAudioOutputSamplingFreq &freq =
+                      *static_cast<KaxAudioOutputSamplingFreq*>(l4);
+                    freq.ReadData(es->I_O());
+                    track->a_osfreq = float(freq);
+                    if (verbose > 1)
+                      mxinfo("matroska_reader: |   + Output sampling "
+                             "frequency: %f\n", track->a_osfreq);
+
+                  } else if (EbmlId(*l4) ==
                              KaxAudioChannels::ClassInfos.GlobalId) {
                     KaxAudioChannels &channels =
                       *static_cast<KaxAudioChannels*>(l4);
@@ -1207,6 +1217,9 @@ void kax_reader_c::create_packetizers() {
           } else
             mxerror("matroska_reader: Unsupported track type "
                     "for track %d.\n", t->tnum);
+
+          if ((t->packetizer != NULL) && (t->a_osfreq != 0.0))
+            t->packetizer->set_audio_output_sampling_freq(t->a_osfreq);
 
           break;
 
