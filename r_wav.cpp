@@ -31,6 +31,8 @@
 #elif __GNUC__ == 2
 #define __USE_XOPEN
 #include <unistd.h>
+#else
+#include <unistd.h>
 #endif
 
 #include "mkvmerge.h"

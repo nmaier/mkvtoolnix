@@ -32,9 +32,7 @@
 #define ftruncate _chsize
 #define strncasecmp _strnicmp
 typedef int ssize_t;
-
-#elif defined(COMP_CYGWIN)
-
+#else // COMP_...
 #include <unistd.h>
 #endif
 
