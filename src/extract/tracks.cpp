@@ -970,8 +970,8 @@ close_files() {
         case TYPEWAV:
           // Fix the header with the real number of bytes written.
           tracks[i].out->setFilePointer(0);
-          tracks[i].wh.riff.len = tracks[i].bytes_written + 36;
-          tracks[i].wh.data.len = tracks[i].bytes_written;
+          put_uint32(&tracks[i].wh.riff.len, tracks[i].bytes_written + 36);
+          put_uint32(&tracks[i].wh.data.len, tracks[i].bytes_written);
           tracks[i].out->write(&tracks[i].wh, sizeof(wave_header));
           delete tracks[i].out;
 

@@ -1,3 +1,7 @@
+2004-09-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: The WAV writer was not endian safe.
+
 2004-09-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The charset was not set correctly on Solaris.
