@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.30 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.31 2003/05/02 20:34:48 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -82,8 +82,8 @@ protected:
   float hvideo_frame_rate;
 
   int hdefault_track;
-public:
 
+public:
   generic_packetizer_c(track_info_t *nti) throw (error_c);
   virtual ~generic_packetizer_c();
 
@@ -101,6 +101,7 @@ public:
 
   virtual void set_serial(int serial = -1);
   virtual void set_track_type(int type);
+  virtual void set_language(char *language);
 
   virtual void set_codec_id(char *id);
   virtual void set_codec_private(unsigned char *cp, int length);

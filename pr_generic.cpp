@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.cpp,v 1.29 2003/05/01 22:38:54 mosu Exp $
+    \version \$Id: pr_generic.cpp,v 1.30 2003/05/02 20:34:48 mosu Exp $
     \brief functions common for all readers/packetizers
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -174,6 +174,14 @@ void generic_packetizer_c::set_as_default_track(char type) {
   }
 }
 
+void generic_packetizer_c::set_language(char *language) {
+  if (ti->language != NULL)
+    free(ti->language);
+  ti->language = strdup(language);
+  if (ti->language == NULL)
+    die("strdup");
+}
+
 void generic_packetizer_c::set_header() {
   if (track_entry == NULL) {
     if (kax_last_entry == NULL)
@@ -324,6 +332,11 @@ track_info_t *duplicate_track_info(track_info_t *src) {
       die("malloc");
     memcpy(dst->private_data, src->private_data, src->private_size);
   }
+  if (src->language != NULL) {
+    dst->language = strdup(src->language);
+    if (dst->language == NULL)
+      die("strdup");
+  }
 
   return dst;
 }
@@ -342,6 +355,8 @@ void free_track_info(track_info_t *ti) {
     free(ti->stracks);
   if (ti->private_data != NULL)
     free(ti->private_data);
+  if (ti->language != NULL)
+    free(ti->language);
 
   free(ti);
 }
