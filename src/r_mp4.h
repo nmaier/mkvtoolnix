@@ -71,6 +71,7 @@ private:
   int64_t file_size;
   bool done;
   qtmp4_demuxer_t *new_dmx;
+  uint32_t compression_algorithm;
 
 public:
   qtmp4_reader_c(track_info_t *nti) throw (error_c);

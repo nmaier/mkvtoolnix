@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <zlib.h>
 
 #include "common.h"
 #include "mkvmerge.h"
@@ -133,10 +134,9 @@ void qtmp4_reader_c::parse_headers() {
   headers_parsed = false;
   do {
     read_atom(atom, atom_size, atom_pos, atom_hsize);
+    mxverb(2, PFX "'%c%c%c%c' atom at %lld\n", BE2STR(atom), atom_pos);
 
     if (atom == FOURCC('f', 't', 'y', 'p')) {
-      mxverb(2, PFX "'ftyp' header at %lld\n", atom_pos);
-
       tmp = io->read_uint32_be();
       if (tmp == FOURCC('i', 's', 'o', 'm'))
         mxverb(2, PFX "File type major brand: ISO Media File\n");
@@ -150,33 +150,20 @@ void qtmp4_reader_c::parse_headers() {
       }
 
     } else if (atom == FOURCC('m', 'o', 'o', 'v')) {
-      mxverb(2, PFX "'moov' atom at %lld\n", atom_pos);
-
       handle_header_atoms(atom, atom_size - atom_hsize,
                           atom_pos + atom_hsize, 1);
 
     } else if (atom == FOURCC('w', 'i', 'd', 'e')) {
-      mxverb(2, PFX "'wide' atom at %lld\n", atom_pos);
       skip_atom();
 
     } else if (atom == FOURCC('m', 'd', 'a', 't')) {
-      mxverb(2, PFX "'mdat' atom at %lld\n", atom_pos);
       headers_parsed = true;
 
     } else if ((atom == FOURCC('f', 'r', 'e', 'e')) ||
                (atom == FOURCC('s', 'k', 'i', 'p')) ||
-               (atom == FOURCC('j', 'u', 'n', 'k'))) {
-      mxverb(2, PFX "'%c%c%c%c' atom at %lld\n", BE2STR(atom), atom_pos);
-      skip_atom();
-
-    } else if ((atom == FOURCC('p', 'n', 'o', 't')) ||
+               (atom == FOURCC('j', 'u', 'n', 'k')) ||
+               (atom == FOURCC('p', 'n', 'o', 't')) ||
                (atom == FOURCC('P', 'I', 'C', 'T'))) {
-      mxverb(2, PFX "'%c%c%c%c' atom at %lld\n", BE2STR(atom), atom_pos);
-      skip_atom();
-
-    } else {
-      mxwarn(PFX "Unknown/unsupported atom '%c%c%c%c' with size %lld found "
-             "at %lld. Skipping.\n", BE2STR(atom), atom_size, atom_pos);
       skip_atom();
 
     }
@@ -200,8 +187,13 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
            "", BE2STR(atom), atom_size, atom_pos);
 
     if (parent == FOURCC('m', 'o', 'o', 'v')) {
-      
-      if (atom == FOURCC('m', 'v', 'h', 'd')) {
+
+      if (atom == FOURCC('c', 'm', 'o', 'v')) {
+        compression_algorithm = 0;
+        handle_header_atoms(atom, atom_size - atom_hsize,
+                            atom_pos + atom_hsize, level + 1);
+
+      } else if (atom == FOURCC('m', 'v', 'h', 'd')) {
         mvhd_atom_t mvhd;
 
         if ((atom_size - atom_hsize) < sizeof(mvhd_atom_t))
@@ -471,6 +463,84 @@ void qtmp4_reader_c::handle_header_atoms(uint32_t parent, int64_t parent_size,
         mxverb(2, PFX "%*sChunk offset table: %u entries\n", (level + 1) * 2,
                "", count);
 
+      }
+
+    } else if (parent == FOURCC('c', 'm', 'o', 'v')) {
+      if (atom == FOURCC('d', 'c', 'o', 'm')) {
+        uint32_t algo;
+
+        algo = io->read_uint32_be();
+        mxverb(2, PFX "%*sCompression algorithm: %c%c%c%c\n", (level + 1) * 2,
+               "", BE2STR(algo));
+        compression_algorithm = algo;
+
+      } else if (atom == FOURCC('c', 'm', 'v', 'd')) {
+        uint32_t moov_size, cmov_size, next_atom, next_atom_hsize;
+        uint64_t next_atom_pos, next_atom_size;
+        unsigned char *moov_buf, *cmov_buf;
+        int zret;
+        z_stream zs;
+        mm_io_c *old_io;
+
+        moov_size = io->read_uint32_be();
+        mxverb(2, PFX "%*sUncompressed size: %u\n", (level + 1) * 2, "",
+               moov_size);
+
+        if (compression_algorithm != FOURCC('z', 'l', 'i', 'b'))
+          mxerror(PFX "This file uses compressed headers with an "
+                  "unknown or unsupported compression algorithm '%c%c%c%c'. "
+                  "Aborting.\n", BE2STR(compression_algorithm));
+
+        old_io = io;
+        cmov_size = atom_size - atom_hsize;
+        cmov_buf = (unsigned char *)safemalloc(cmov_size);
+        moov_buf = (unsigned char *)safemalloc(moov_size + 16);
+
+        if (io->read(cmov_buf, cmov_size) != cmov_size)
+          throw exception();
+
+        zs.zalloc = (alloc_func)NULL;
+        zs.zfree = (free_func)NULL;
+        zs.opaque = (voidpf)NULL;
+        zs.next_in = cmov_buf;
+        zs.avail_in = cmov_size;
+        zs.next_out = moov_buf;
+        zs.avail_out = moov_size;
+
+        zret = inflateInit(&zs);
+        if (zret != Z_OK)
+          mxerror(PFX "This file uses compressed headers, but the zlib "
+                  "library could not be initialized. Error code from zlib: "
+                  "%d. Aborting.\n", zret);
+
+        zret = inflate(&zs, Z_NO_FLUSH);
+        if ((zret != Z_OK) && (zret != Z_STREAM_END))
+          mxerror(PFX "This file uses compressed headers, but they could not "
+                  "be uncompressed. Error code from zlib: %d. Aborting.\n",
+                  zret);
+
+        if (moov_size != zs.total_out)
+          mxwarn(PFX "This file uses compressed headers, but the expected "
+                 "uncompressed size (%u) was not what is available after "
+                 "uncompressing (%u).\n", moov_size, zs.total_out);
+        zret = inflateEnd(&zs);
+
+        io = new mm_mem_io_c(moov_buf, zs.total_out);
+        while (!io->eof()) {
+          read_atom(next_atom, next_atom_size, next_atom_pos, next_atom_hsize);
+          mxverb(2, PFX "%*s'%c%c%c%c' atom at %lld\n", (level + 1) * 2, "",
+                 BE2STR(next_atom), next_atom_pos);
+
+          if (next_atom == FOURCC('m', 'o', 'o', 'v'))
+            handle_header_atoms(next_atom, next_atom_size - next_atom_hsize,
+                                next_atom_pos + next_atom_hsize, level + 2);
+
+          io->setFilePointer(next_atom_pos + next_atom_size);
+        }
+        delete io;
+        io = old_io;
+        safefree(moov_buf);
+        safefree(cmov_buf);
       }
 
     }
