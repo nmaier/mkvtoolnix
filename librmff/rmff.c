@@ -1464,7 +1464,7 @@ rmff_write_packed_video_frame(rmff_track_t *track,
   offsets = (uint32_t *)safemalloc(num_subpackets * sizeof(uint32_t));
   for (i = 0; i < num_subpackets; i++) {
     src_ptr += 4;
-    offsets[i] = rmff_get_uint32_me(src_ptr);
+    offsets[i] = rmff_get_uint32_le(src_ptr);
     src_ptr += 4;
   }
   if ((offsets[num_subpackets - 1] + (src_ptr - frame->data)) >= frame->size) {
