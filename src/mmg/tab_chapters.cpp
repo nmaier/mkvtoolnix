@@ -1,23 +1,17 @@
 /*
-  mkvmerge GUI -- utility for splicing together matroska files
-      from component media subtypes
-
-  tab_chapters.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id: tab_chapters.cpp 1045 2003-09-17 11:56:16Z mosu $
-    \brief "chapter editor" tab
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge GUI -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id: tab_chapters.cpp 1045 2003-09-17 11:56:16Z mosu $
+ *
+ * "chapter editor" tab
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <errno.h>
 #include <stdio.h>

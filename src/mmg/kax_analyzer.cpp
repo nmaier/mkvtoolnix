@@ -1,23 +1,17 @@
 /*
-  mkvmerge GUI -- utility for splicing together matroska files
-      from component media subtypes
-
-  kax_analyzer.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief Matroska file analyzer
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge GUI -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * Matroska file analyzer
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 // The Debian g++ 3.3.1 has problems in its standard C++ headers with min
 // being defined differently. So just include these files now when min

@@ -1,22 +1,17 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  mm_io_c.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief IO callback class implementation
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * IO callback class implementation
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include "os.h"
 

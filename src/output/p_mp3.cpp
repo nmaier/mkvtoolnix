@@ -1,22 +1,17 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  p_mp3.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief MP3 output module
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * MP3 output module
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <stdlib.h>
 #include <stdio.h>

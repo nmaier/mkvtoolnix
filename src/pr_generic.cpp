@@ -8,7 +8,7 @@
  *
  * $Id$
  *
- *  functions common for all readers/packetizers
+ * functions common for all readers/packetizers
  *
  * Written by Moritz Bunkus <moritz@bunkus.org>.
  */

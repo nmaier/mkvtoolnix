@@ -1,22 +1,19 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  checksums.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief checksum calculations
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * checksum calculations
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ * The crc32 code was written by Alexander Djourik <sasha@iszf.irk.ru> and
+ *   Pavel Zhilin <pzh@iszf.irk.ru>.
+ */
 
 #include "checksums.h"
 

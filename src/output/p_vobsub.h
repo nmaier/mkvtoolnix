@@ -1,22 +1,17 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  p_vobsub.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief class definition for the VobSub output module
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * class definition for the VobSub output module
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #ifndef __P_VOBSUB_H
 #define __P_VOBSUB_H

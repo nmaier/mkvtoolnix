@@ -1,6 +1,6 @@
 /*
  * mkvmerge -- utility for splicing together matroska files
- *     from component media subtypes
+ * from component media subtypes
  *
  * Distributed under the GPL
  * see the file COPYING for details

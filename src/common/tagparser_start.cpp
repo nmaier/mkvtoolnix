@@ -1,22 +1,17 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  tagparser_start.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief XML tag parser. Functions for the start tags + helper functions
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * XML tag parser. Functions for the start tags + helper functions
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <ctype.h>
 #include <errno.h>

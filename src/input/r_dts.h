@@ -1,22 +1,18 @@
 /*
-  mkvmerge -- utility for splicing together matroska files
-      from component media subtypes
-
-  r_avi.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file r_avi.h
-    \version $Id$
-    \brief class definitions for the AVI demultiplexer module
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * class definitions for the DTS demultiplexer module
+ *
+ * Written by Peter Niemayer <niemayer@isg.de>.
+ * Modified by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #ifndef __R_DTS_H
 #define __R_DTS_H

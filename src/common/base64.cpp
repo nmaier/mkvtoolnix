@@ -2,8 +2,6 @@
  * base64.cpp
  * Base64 encoding and decoding.
  *
- * Written by Moritz Bunkus <moritz@bunkus.org>
- *
  * Part of this file (the two encoding functions) were adopted from
  * http://base64.sourceforge.net/ and are licensed under the MIT license
  * (following):

@@ -1,23 +1,17 @@
 /*
-  mkvmerge GUI -- utility for splicing together matroska files
-      from component media subtypes
-
-  tab_input.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <flo.wagner@gmx.de>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief "settings" tab
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge GUI -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * "settings" tab
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include "wx/wxprec.h"
 

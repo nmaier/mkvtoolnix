@@ -1,23 +1,17 @@
 /*
-  mkvmerge GUI -- utility for splicing together matroska files
-      from component media subtypes
-
-  kax_analyzer.h
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-  Parts of this code were written by Florian Wager <root@sirelvis.de>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief Matroska file analyzer
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvmerge GUI -- utility for splicing together matroska files
+ * from component media subtypes
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * Matroska file analyzer
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #ifndef __KAX_ANALYZER_H
 #define __KAX_ANALYZER_H

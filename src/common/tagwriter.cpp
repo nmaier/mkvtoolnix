@@ -1,21 +1,16 @@
 /*
-  mkvextract -- extract tracks from Matroska files into other files
-
-  tagwriter.cpp
-
-  Written by Moritz Bunkus <moritz@bunkus.org>
-
-  Distributed under the GPL
-  see the file COPYING for details
-  or visit http://www.gnu.org/copyleft/gpl.html
-*/
-
-/*!
-    \file
-    \version $Id$
-    \brief writes tags in XML format
-    \author Moritz Bunkus <moritz@bunkus.org>
-*/
+ * mkvextract -- extract tracks from Matroska files into other files
+ *
+ * Distributed under the GPL
+ * see the file COPYING for details
+ * or visit http://www.gnu.org/copyleft/gpl.html
+ *
+ * $Id$
+ *
+ * writes tags in XML format
+ *
+ * Written by Moritz Bunkus <moritz@bunkus.org>.
+ */
 
 #include <stdarg.h>
 #include <stdio.h>

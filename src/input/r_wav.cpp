@@ -2,8 +2,6 @@
  * mkvmerge -- utility for splicing together matroska files
  * from component media subtypes
  *
- * mkvtoolnix was written by Moritz Bunkus <moritz@bunkus.org>
- *
  * Distributed under the GPL
  * see the file COPYING for details
  * or visit http://www.gnu.org/copyleft/gpl.html
