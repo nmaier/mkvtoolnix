@@ -1,5 +1,7 @@
 2004-10-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Released v0.9.6.
+
 	* mkvextract: bug fix: The track extraction was creating the
 	output file twice if the Matroska file contained a copy of the
 	track headers. This resulted in the first extracted file being
