@@ -424,3 +424,45 @@ find_ebml_semantic(const EbmlCallbacks &base,
   throw "";
 }
 
+EbmlMaster *
+sort_ebml_master(EbmlMaster *m) {
+  int first_element, first_master, i;
+  EbmlElement *e;
+
+  if (m == NULL)
+    return m;
+
+  first_element = -1;
+  first_master = -1;
+  for (i = 0; i < m->ListSize(); i++) {
+    if ((dynamic_cast<EbmlMaster *>((*m)[i]) != NULL) &&
+        (first_master == -1))
+      first_master = i;
+    else if ((dynamic_cast<EbmlMaster *>((*m)[i]) == NULL) &&
+             (first_master != -1) && (first_element == -1))
+      first_element = i;
+    if ((first_master != -1) && (first_element != -1))
+      break;
+  }
+
+  if (first_master == -1)
+    return m;
+
+  while (first_element != -1) {
+    e = (*m)[first_element];
+    m->Remove(first_element);
+    m->InsertElement(*e, first_master);
+    first_master++;
+    for (first_element++; first_element < m->ListSize(); first_element++)
+      if (dynamic_cast<EbmlMaster *>((*m)[first_element]) == NULL)
+        break;
+    if (first_element >= m->ListSize())
+      first_element = -1;
+  }
+
+  for (i = 0; i < m->ListSize(); i++)
+    if (dynamic_cast<EbmlMaster *>((*m)[i]) != NULL)
+      sort_ebml_master(dynamic_cast<EbmlMaster *>((*m)[i]));
+
+  return m;
+}
