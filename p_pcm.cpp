@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.2 2003/02/25 13:25:51 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.3 2003/02/28 13:00:26 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -50,6 +50,7 @@ pcm_packetizer_c::pcm_packetizer_c(void *nprivate_data, int nprivate_size,
   bytes_output = 0;
   memcpy(&async, nasync, sizeof(audio_sync_t));
   memcpy(&range, nrange, sizeof(range_t));
+  remaining_sync = 0;
   set_private_data(nprivate_data, nprivate_size);
   set_header();
 }
@@ -107,6 +108,7 @@ void pcm_packetizer_c::set_header() {
 
 int pcm_packetizer_c::process(char *buf, int size, int last_frame) {
   int i, bytes_per_packet, remaining_bytes, complete_packets;
+  char *new_buf;
 
   if (size > bps) { 
     fprintf(stderr, "FATAL: pcm_packetizer: size (%d) > bps (%d)\n", size,
@@ -114,20 +116,55 @@ int pcm_packetizer_c::process(char *buf, int size, int last_frame) {
     exit(1);
   }
 
+  new_buf = buf;
+
+  if (async.displacement != 0) {
+    if (async.displacement > 0) {
+      // Add silence.
+      int pad_size;
+
+      pad_size = bps * async.displacement / 1000;
+      new_buf = (char *)malloc(size + pad_size);
+      if (new_buf == NULL)
+        die("malloc");
+      memset(new_buf, 0, pad_size);
+      memcpy(&new_buf[pad_size], buf, size);
+      size += pad_size;
+    } else
+      // Skip bytes.
+      remaining_sync = -1 * bps * async.displacement / 1000;
+    async.displacement = 0;
+  }
+
+  if (remaining_sync > 0) {
+    if (remaining_sync > size) {
+      remaining_sync -= size;
+      return EMOREDATA;
+    }
+    memmove(buf, &buf[remaining_sync], size - remaining_sync);
+    size -= remaining_sync;
+    remaining_sync = 0;
+  }
+
   bytes_per_packet = bps / pcm_interleave;
   complete_packets = size / bytes_per_packet;
   remaining_bytes = size % bytes_per_packet;
 
   for (i = 0; i < complete_packets; i++) {
-    add_packet(buf + i * bytes_per_packet, bytes_per_packet,
-               bytes_output * 1000 / bps);
+    add_packet(new_buf + i * bytes_per_packet, bytes_per_packet,
+               (bytes_output * 1000 / bps) * async.linear);
     bytes_output += bytes_per_packet;
+    packetno++;
   }
   if (remaining_bytes != 0) {
-    add_packet(buf + complete_packets * bytes_per_packet, remaining_bytes,
-               bytes_output * 1000 / bps);
+    add_packet(new_buf + complete_packets * bytes_per_packet, remaining_bytes,
+               (bytes_output * 1000 / bps) * async.linear);
     bytes_output += remaining_bytes;
+    packetno++;
   }
+
+  if (new_buf != buf)
+    free(new_buf);
 
   if (last_frame)
     return 0;
