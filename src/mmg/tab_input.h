@@ -74,6 +74,11 @@ protected:
   wxComboBox *cob_compression;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
   wxTextCtrl *tc_display_width, *tc_display_height;
+  wxStaticText *st_file_options, *st_tracks;
+  wxStaticText *st_language, *st_delay, *st_track_name, *st_stretch;
+  wxStaticText *st_cues, *st_sub_charset, *st_fourcc, *st_compression;
+  wxStaticText *st_or, *st_x, *st_tags, *st_timecodes;
+  wxStaticBox *sb_track_options;
 
   wxTimer value_copy_timer;
 

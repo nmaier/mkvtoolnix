@@ -108,8 +108,9 @@ tab_input::tab_input(wxWindow *parent):
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("File options:")),
-                0, wxALIGN_CENTER_VERTICAL, 0);
+  st_file_options = new wxStaticText(this, wxID_STATIC, wxT("File options:"));
+  st_file_options->Enable(false);
+  siz_line->Add(st_file_options, 0, wxALIGN_CENTER_VERTICAL, 0);
   cb_no_chapters = new wxCheckBox(this, ID_CB_NOCHAPTERS, wxT("No chapters"));
   cb_no_chapters->SetValue(false);
   cb_no_chapters->SetToolTip(wxT("Do not copy chapters from this file. Only "
@@ -133,8 +134,9 @@ tab_input::tab_input(wxWindow *parent):
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
-  siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Tracks:")),
-               0, wxALIGN_LEFT | wxLEFT, 10);
+  st_tracks = new wxStaticText(this, wxID_STATIC, wxT("Tracks:"));
+  st_tracks->Enable(false);
+  siz_all->Add(st_tracks, 0, wxALIGN_LEFT | wxLEFT, 10);
   siz_all->Add(0, 5, 0, 0, 0);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_column = new wxBoxSizer(wxVERTICAL);
@@ -155,10 +157,10 @@ tab_input::tab_input(wxWindow *parent):
 
   siz_all->Add(0, GROUPSPACING, 0, 0, 0);
 
-  siz_toptions =
-    new wxStaticBoxSizer(new wxStaticBox(this, wxID_STATIC,
-                                         wxT("Track options")),
-                         wxVERTICAL);
+  sb_track_options = new wxStaticBox(this, wxID_STATIC,
+                                     wxT("Track options"));
+  sb_track_options->Enable(false);
+  siz_toptions = new wxStaticBoxSizer(sb_track_options, wxVERTICAL);
 
   siz_fg = new wxFlexGridSizer(4);
   siz_fg->AddGrowableCol(1);
@@ -168,8 +170,9 @@ tab_input::tab_input(wxWindow *parent):
     siz_fg->Add(0, 1, 1, wxGROW, 0);
   siz_fg->AddGrowableRow(0);
 
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_language = new wxStaticText(this, wxID_STATIC, wxT("Language:"));
+  st_language->Enable(false);
+  siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   if (sorted_iso_codes.Count() == 0) {
     for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
@@ -217,8 +220,9 @@ tab_input::tab_input(wxWindow *parent):
     cob_language->Append(sorted_iso_codes[i]);
   siz_fg->Add(cob_language, 0, wxGROW | wxRIGHT, 15);
 
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_delay = new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):"));
+  st_delay->Enable(false);
+  siz_fg->Add(st_delay, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_delay = new wxTextCtrl(this, ID_TC_DELAY, wxT(""));
   tc_delay->SetToolTip(wxT("Delay this track by a couple of ms. Can be "
                            "negative. Only applies to audio and subtitle "
@@ -230,14 +234,17 @@ tab_input::tab_input(wxWindow *parent):
     siz_fg->Add(0, 1, 1, wxGROW, 0);
   siz_fg->AddGrowableRow(2);
 
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Track name:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_track_name = new wxStaticText(this, wxID_STATIC, wxT("Track name:"));
+  st_track_name->Enable(false);
+  siz_fg->Add(st_track_name, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_track_name = new wxTextCtrl(this, ID_TC_TRACKNAME, wxT(""));
   tc_track_name->SetToolTip(wxT("Name for this track, e.g. \"director's "
                                 "comments\"."));
   siz_fg->Add(tc_track_name, 0, wxGROW | wxRIGHT, 15);
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Stretch by:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+
+  st_stretch = new wxStaticText(this, wxID_STATIC, wxT("Stretch by:"));
+  st_stretch->Enable(false);
+  siz_fg->Add(st_stretch, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxT(""));
   tc_stretch->SetToolTip(wxT("Stretch the audio or subtitle track by a "
                              "factor. This should be a positive floating "
@@ -249,8 +256,9 @@ tab_input::tab_input(wxWindow *parent):
     siz_fg->Add(0, 1, 1, wxGROW, 0);
   siz_fg->AddGrowableRow(4);
 
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Cues:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_cues = new wxStaticText(this, wxID_STATIC, wxT("Cues:"));
+  st_cues->Enable(false);
+  siz_fg->Add(st_cues, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_cues =
     new wxComboBox(this, ID_CB_CUES, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
@@ -262,8 +270,11 @@ tab_input::tab_input(wxWindow *parent):
   cob_cues->Append(wxT("for all frames"));
   cob_cues->Append(wxT("none"));
   siz_fg->Add(cob_cues, 0, wxGROW | wxRIGHT, 15);
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Subtitle charset:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+
+  st_sub_charset = new wxStaticText(this, wxID_STATIC,
+                                    wxT("Subtitle charset:"));
+  st_sub_charset->Enable(false);
+  siz_fg->Add(st_sub_charset, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_sub_charset =
     new wxComboBox(this, ID_CB_SUBTITLECHARSET, wxT(""),
                    wxDefaultPosition, wxDefaultSize, 0, NULL,
@@ -288,8 +299,9 @@ tab_input::tab_input(wxWindow *parent):
     siz_fg->Add(0, 1, 1, wxGROW, 0);
   siz_fg->AddGrowableRow(6);
 
-  siz_fg->Add(new wxStaticText(this, -1, wxT("FourCC:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_fourcc = new wxStaticText(this, -1, wxT("FourCC:"));
+  st_fourcc->Enable(false);
+  siz_fg->Add(st_fourcc, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_fourcc =
     new wxComboBox(this, ID_CB_FOURCC, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
@@ -304,8 +316,10 @@ tab_input::tab_input(wxWindow *parent):
                              "or for QuickTime video tracks. This option "
                              "CANNOT be used to change Matroska's CodecID."));
   siz_fg->Add(cob_fourcc, 0, wxGROW | wxRIGHT, 15);
-  siz_fg->Add(new wxStaticText(this, -1, wxT("Compression:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+
+  st_compression = new wxStaticText(this, -1, wxT("Compression:"));
+  st_compression->Enable(false);
+  siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   cob_compression =
     new wxComboBox(this, ID_CB_COMPRESSION, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
@@ -351,8 +365,9 @@ tab_input::tab_input(wxWindow *parent):
                                    "point number 'f' (e.g. 2.35)."));
   siz_line->Add(cob_aspect_ratio, 3, wxGROW | wxRIGHT, 10);
 
-  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("or")),
-                0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_or = new wxStaticText(this, wxID_STATIC, wxT("or"));
+  st_or->Enable(false);
+  siz_line->Add(st_or, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   rb_display_dimensions =
     new wxRadioButton(this, ID_RB_DISPLAYDIMENSIONS,
@@ -365,8 +380,9 @@ tab_input::tab_input(wxWindow *parent):
                                    "The height must be set as well, or this "
                                    "field will be ignored."));
   siz_line->Add(tc_display_width, 2, wxGROW, 0);
-  siz_line->Add(new wxStaticText(this, wxID_STATIC, wxT("x")),
-                0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+  st_x = new wxStaticText(this, wxID_STATIC, wxT("x"));
+  st_x->Enable(false);
+  siz_line->Add(st_x, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_display_height = new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, wxT(""));
   tc_display_height->SetToolTip(wxT("Sets the display height of the track."
                                     "The width must be set as well, or this "
@@ -404,8 +420,9 @@ tab_input::tab_input(wxWindow *parent):
     siz_fg->Add(0, 1, 1, wxGROW, 0);
   siz_fg->AddGrowableRow(0);
 
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Tags:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_tags = new wxStaticText(this, wxID_STATIC, wxT("Tags:"));
+  st_tags->Enable(false);
+  siz_fg->Add(st_tags, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_tags = new wxTextCtrl(this, ID_TC_TAGS, wxT(""));
   siz_fg->Add(tc_tags, 1, wxGROW | wxRIGHT, 10);
   b_browse_tags = new wxButton(this, ID_B_BROWSETAGS, wxT("Browse"));
@@ -415,8 +432,9 @@ tab_input::tab_input(wxWindow *parent):
     siz_fg->Add(0, 1, 1, wxGROW, 0);
   siz_fg->AddGrowableRow(2);
 
-  siz_fg->Add(new wxStaticText(this, wxID_STATIC, wxT("Timecodes:")),
-              0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  st_timecodes = new wxStaticText(this, wxID_STATIC, wxT("Timecodes:"));
+  st_timecodes->Enable(false);
+  siz_fg->Add(st_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
   tc_timecodes = new wxTextCtrl(this, ID_TC_TIMECODES, wxT(""));
   tc_timecodes->SetToolTip(wxT("mkvmerge can read and use timecodes from an "
                                "external text file. This feature is a very "
@@ -448,6 +466,20 @@ tab_input::tab_input(wxWindow *parent):
 
 void
 tab_input::no_track_mode() {
+  sb_track_options->Enable(false);
+  st_language->Enable(false);
+  st_delay->Enable(false);
+  st_track_name->Enable(false);
+  st_stretch->Enable(false);
+  st_cues->Enable(false);
+  st_sub_charset->Enable(false);
+  st_fourcc->Enable(false);
+  st_compression->Enable(false);
+  st_or->Enable(false);
+  st_x->Enable(false);
+  st_tags->Enable(false);
+  st_timecodes->Enable(false);
+
   cob_language->Enable(false);
   tc_delay->Enable(false);
   tc_track_name->Enable(false);
@@ -472,6 +504,20 @@ tab_input::no_track_mode() {
 void
 tab_input::audio_track_mode(wxString ctype) {
   wxString lctype;
+
+  sb_track_options->Enable(true);
+  st_language->Enable(true);
+  st_delay->Enable(true);
+  st_track_name->Enable(true);
+  st_stretch->Enable(true);
+  st_cues->Enable(true);
+  st_sub_charset->Enable(false);
+  st_fourcc->Enable(false);
+  st_compression->Enable(false);
+  st_or->Enable(false);
+  st_x->Enable(false);
+  st_tags->Enable(true);
+  st_timecodes->Enable(true);
 
   lctype = ctype.Lower();
   cob_language->Enable(true);
@@ -498,6 +544,20 @@ tab_input::audio_track_mode(wxString ctype) {
 
 void
 tab_input::video_track_mode(wxString) {
+  sb_track_options->Enable(true);
+  st_language->Enable(true);
+  st_delay->Enable(false);
+  st_track_name->Enable(true);
+  st_stretch->Enable(false);
+  st_cues->Enable(true);
+  st_sub_charset->Enable(false);
+  st_fourcc->Enable(true);
+  st_compression->Enable(false);
+  st_or->Enable(true);
+  st_x->Enable(true);
+  st_tags->Enable(true);
+  st_timecodes->Enable(true);
+
   cob_language->Enable(true);
   tc_delay->Enable(false);
   tc_track_name->Enable(true);
@@ -519,6 +579,20 @@ tab_input::video_track_mode(wxString) {
 void
 tab_input::subtitle_track_mode(wxString ctype) {
   wxString lctype;
+
+  sb_track_options->Enable(true);
+  st_language->Enable(true);
+  st_delay->Enable(true);
+  st_track_name->Enable(true);
+  st_stretch->Enable(true);
+  st_cues->Enable(true);
+  st_sub_charset->Enable(true);
+  st_fourcc->Enable(false);
+  st_compression->Enable(true);
+  st_or->Enable(false);
+  st_x->Enable(false);
+  st_tags->Enable(true);
+  st_timecodes->Enable(true);
 
   lctype = ctype.Lower();
   cob_language->Enable(true);
@@ -823,6 +897,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   files.erase(eit);
   lb_input_files->Delete(selected_file);
   selected_file = -1;
+  st_file_options->Enable(false);
   cb_no_chapters->Enable(false);
   cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
@@ -948,6 +1023,7 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   b_file_down->Enable(new_sel < (files.size() - 1));
   f = &files[new_sel];
   if (f->container == TYPEMATROSKA) {
+    st_file_options->Enable(true);
     cb_no_chapters->Enable(true);
     cb_no_attachments->Enable(true);
     cb_no_tags->Enable(true);
@@ -955,6 +1031,7 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
     cb_no_attachments->SetValue(f->no_attachments);
     cb_no_tags->SetValue(f->no_tags);
   } else {
+    st_file_options->Enable(false);
     cb_no_chapters->Enable(false);
     cb_no_attachments->Enable(false);
     cb_no_tags->Enable(false);
