@@ -38,6 +38,7 @@ class ssa_line_c {
 public:
   char *line;
   int64_t start, end;
+  int num;
 
   bool operator < (const ssa_line_c &cmp) const;
 };
@@ -65,7 +66,10 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
   generic_reader_c(nti) {
   string line, global;
   int64_t old_pos;
+  char section;
   bool is_ass;
+
+  cc_utf8 = utf8_init(ti->sub_charset);
 
   is_ass = false;
 
@@ -90,17 +94,33 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
       if (!strcasecmp(line.c_str(), "ScriptType: v4.00+") ||
           !strcasecmp(line.c_str(), "[V4+ Styles]"))
         is_ass = true;
+      else if (!strcasecmp(line.c_str(), "[Events]"))
+        section = 'e';
+      // Analyze the format string.
+      else if (!strncasecmp(line.c_str(), "Format: ", strlen("Format: ")) &&
+               (section == 'e')) {
+        format = split(&line.c_str()[strlen("Format: ")]);
+        strip(format);
+      }
 
       // Now just append the current line and some DOS style newlines.
-      global += "\r\n";
-      global += line;
+      // But not if we've already encountered the [Events] section.
+      if (section != 'e') {
+        global += "\r\n";
+        global += line;
+      }
     }
+
+    if (format.size() == 0)
+      throw error_c("ssa_reader: Invalid format. Could not find the "
+                    "\"Format\" line in the \"[Events]\" section.");
 
     textsubs_packetizer = new textsubs_packetizer_c(this, is_ass ? 
                                                     MKV_S_TEXTASS :
                                                     MKV_S_TEXTSSA,
                                                     global.c_str(),
-                                                    global.length(), ti);
+                                                    global.length(), false,
+                                                    ti);
   } catch (exception &ex) {
     throw error_c("ssa_reader: Could not open the source file.");
   }
@@ -112,6 +132,16 @@ ssa_reader_c::ssa_reader_c(track_info_t *nti) throw (error_c):
 ssa_reader_c::~ssa_reader_c() {
   if (textsubs_packetizer != NULL)
     delete textsubs_packetizer;
+}
+
+string ssa_reader_c::get_element(const char *index, vector<string> &fields) {
+  int i;
+
+  for (i = 0; i < format.size(); i++)
+    if (format[i] == index)
+      return fields[i];
+
+  return string("");
 }
 
 int64_t ssa_reader_c::parse_time(string &stime) {
@@ -152,12 +182,28 @@ int64_t ssa_reader_c::parse_time(string &stime) {
   return tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000;
 }
 
+string ssa_reader_c::recode_text(vector<string> &fields) {
+  char *s;
+  string res;
+
+  // TODO: Handle \fe encoding changes.
+  res = get_element("Text", fields);
+  s = to_utf8(cc_utf8, res.c_str());
+  res = s;
+  safefree(s);
+
+  return res;
+}
+
 int ssa_reader_c::read() {
-  string line, stime, orig_line;
-  int pos1, pos2, i;
+  string line, stime, orig_line, comma;
+  int i, num;
   int64_t start, end;
   vector<ssa_line_c> clines;
+  vector<string> fields;
   ssa_line_c cline;
+
+  num = 1;
 
   do {
     line = mm_io->getline();
@@ -167,53 +213,45 @@ int ssa_reader_c::read() {
 
     line.erase(0, strlen("Dialogue: ")); // Trim the start.
 
-    pos1 = line.find(',');      // Find and parse the start time.
-    if (pos1 < 0) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
-      continue;
-    }
-    pos2 = line.find(',', pos1 + 1);
-    if (pos2 < 0) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
-      continue;
-    }
+    // Split the line into fields.
+    fields = split(line.c_str(), ",", format.size());
 
-    stime = line.substr(pos1 + 1, pos2 - pos1 - 1);
+    // Parse the start time.
+    stime = get_element("Start", fields);
     start = parse_time(stime);
     if (start < 0) {
       fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
               orig_line.c_str());
       continue;
     }
-    line.erase(pos1, pos2 - pos1);
 
-    pos1 = line.find(',');      // Find and parse the end time.
-    if (pos1 < 0) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
-      continue;
-    }
-    pos2 = line.find(',', pos1 + 1);
-    if (pos2 < 0) {
-      fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
-              orig_line.c_str());
-      continue;
-    }
-
-    stime = line.substr(pos1 + 1, pos2 - pos1 - 1);
+    // Parse the end time.
+    stime = get_element("Start", fields);
     end = parse_time(stime);
-    if (end < 0) {
+    if (start < 0) {
       fprintf(stderr, "ssa_reader: Warning: Malformed line? (%s)\n",
               orig_line.c_str());
       continue;
     }
-    line.erase(pos1, pos2 - pos1);
+
+    // Specs say that the following fields are to put into the block:
+    // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+    comma = ",";
+    line = comma + get_element("Layer", fields) + comma +
+      get_element("Style", fields) + comma +
+      get_element("Name", fields) + comma + 
+      get_element("MarginL", fields) + comma +
+      get_element("MarginR", fields) + comma +
+      get_element("MarginV", fields) + comma +
+      get_element("Effect", fields) + comma +
+      recode_text(fields);
 
     cline.line = safestrdup(line.c_str());
     cline.start = start;
     cline.end = end;
+    cline.num = num;
+    num++;
 
     clines.push_back(cline);
   } while (!mm_io->eof());
@@ -221,8 +259,11 @@ int ssa_reader_c::read() {
   stable_sort(clines.begin(), clines.end());
 
   for (i = 0; i < clines.size(); i++) {
+    char buffer[20];
     // Let the packetizer handle this line.
-    textsubs_packetizer->process((unsigned char *)clines[i].line, 0,
+    sprintf(buffer, "%d", clines[i].num);
+    line = string(buffer) + string(clines[i].line);
+    textsubs_packetizer->process((unsigned char *)line.c_str(), 0,
                                  clines[i].start,
                                  clines[i].end - clines[i].start);
     safefree(clines[i].line);

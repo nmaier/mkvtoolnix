@@ -33,11 +33,13 @@ using namespace LIBMATROSKA_NAMESPACE;
 textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
                                              const char *ncodec_id,
                                              const void *nglobal_data,
-                                             int nglobal_size,
+                                             int nglobal_size, bool nrecode,
                                              track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
-  cc_utf8 = utf8_init(ti->sub_charset);
+  recode = nrecode;
+  if (recode)
+    cc_utf8 = utf8_init(ti->sub_charset);
   global_size = nglobal_size;
   global_data = safememdup(nglobal_data, global_size);
   codec_id = safestrdup(ncodec_id);
@@ -118,10 +120,13 @@ int textsubs_packetizer_c::process(unsigned char *_subs, int, int64_t start,
   }
   *idx2 = 0;
 
-  utf8_subs = to_utf8(cc_utf8, subs);
-  add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, length,
-             1, -1, -1);
-  safefree(utf8_subs);
+  if (recode) {
+    utf8_subs = to_utf8(cc_utf8, subs);
+    add_packet((unsigned char *)utf8_subs, strlen(utf8_subs), start, length,
+               1, -1, -1);
+    safefree(utf8_subs);
+  } else
+    add_packet((unsigned char *)subs, strlen(subs), start, length, 1, -1, -1);
 
   safefree(subs);
 

@@ -272,7 +272,7 @@ string mm_io_c::getline() {
 
 #endif
 
-size_t mm_io_c::writeline_unix_newlines(const char *s) {
+size_t mm_io_c::puts_unl(const char *s) {
   int i;
   size_t bytes_written;
 

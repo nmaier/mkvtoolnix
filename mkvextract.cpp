@@ -510,7 +510,7 @@ void create_output_files() {
           s = (char *)safemalloc(tracks[i].private_size + 1);
           memcpy(s, tracks[i].private_data, tracks[i].private_size);
           s[tracks[i].private_size] = 0;
-          tracks[i].mm_io->writeline_unix_newlines(s);
+          tracks[i].mm_io->puts_unl(s);
           safefree(s);
         }
       }
@@ -596,7 +596,7 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         tracks[i].mm_io->write(buffer, strlen(buffer));
 
         // Print the text itself.
-        tracks[i].mm_io->writeline_unix_newlines(s);
+        tracks[i].mm_io->puts_unl(s);
         safefree(s);
         break;
 
@@ -623,22 +623,22 @@ void handle_data(KaxBlock *block, int64_t block_duration, bool has_ref) {
         }
 
         // Print "Dialogue: "
-        tracks[i].mm_io->writeline_unix_newlines("Dialogue: ");
+        tracks[i].mm_io->puts_unl("Dialogue: ");
         *s2 = 0;
         s2++;
-        tracks[i].mm_io->writeline_unix_newlines(s);
-        tracks[i].mm_io->writeline_unix_newlines(",");
+        tracks[i].mm_io->puts_unl(s);
+        tracks[i].mm_io->puts_unl(",");
         sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
                 start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
                 (start / 1000) % 60, (start % 1000) / 10);
-        tracks[i].mm_io->writeline_unix_newlines(buffer);
-        tracks[i].mm_io->writeline_unix_newlines(",");
+        tracks[i].mm_io->puts_unl(buffer);
+        tracks[i].mm_io->puts_unl(",");
         sprintf(buffer, "%lld:%02lld:%02lld.%02lld",
                 end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                 (end / 1000) % 60, (end % 1000) / 10);
-        tracks[i].mm_io->writeline_unix_newlines(buffer);
-        tracks[i].mm_io->writeline_unix_newlines(",");
-        tracks[i].mm_io->writeline_unix_newlines(s2);
+        tracks[i].mm_io->puts_unl(buffer);
+        tracks[i].mm_io->puts_unl(",");
+        tracks[i].mm_io->puts_unl(s2);
         safefree(s);
         break;
 

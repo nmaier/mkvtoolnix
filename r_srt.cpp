@@ -75,7 +75,7 @@ srt_reader_c::srt_reader_c(track_info_t *nti) throw (error_c):
       throw error_c("srt_reader: Source is not a valid SRT file.");
     ti->id = 0;                 // ID for this track.
     textsubs_packetizer = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL,
-                                                    0, ti);
+                                                    0, true, ti);
   } catch (exception &ex) {
     throw error_c("srt_reader: Could not open the source file.");
   }

@@ -1006,7 +1006,8 @@ void mkv_reader_c::create_packetizers() {
           nti.sub_charset = "UTF-8";
           t->packetizer = new textsubs_packetizer_c(this, t->codec_id,
                                                     t->private_data,
-                                                    t->private_size, &nti);
+                                                    t->private_size, false,
+                                                    &nti);
           if (verbose)
             fprintf(stdout, "Matroska demultiplexer (%s): using the text "
                     "subtitle output module for track ID %u.\n", ti->fname,
