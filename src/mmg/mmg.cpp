@@ -38,9 +38,7 @@
 #include "common.h"
 #include "commonebml.h"
 #include "jobs.h"
-#if defined(SYS_UNIX) || defined(SYS_APPLE)
-#include "matroskalogo_big.xpm"
-#endif
+#include "matroskalogo.xpm"
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "mux_dialog.h"
@@ -766,13 +764,7 @@ mmg_dialog::mmg_dialog():
 
   load_job_queue();
 
-#if defined SYS_WINDOWS
-  wxIcon icon;
-  icon.LoadFile(wxT("matroskalogo_big.ico"), wxBITMAP_TYPE_ICO);
-  SetIcon(icon);
-#else
-  SetIcon(wxICON(matroskalogo_big));
-#endif
+  SetIcon(wxIcon(matroskalogo_xpm));
 
   help = NULL;
 
