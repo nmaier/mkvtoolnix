@@ -219,7 +219,7 @@ job_dialog::on_delete(wxCommandEvent &evt) {
     }
 
     if (selected.size() == 0)
-      return;
+      break;
   }
 
   mdlg->save_job_queue();
