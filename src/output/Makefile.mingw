@@ -38,3 +38,15 @@ libmtxoutput.a: $(libmtxoutput_OBJECTS)
 
 clean:
 	rm -f *.o $(LIBRARIES)
+
+depend:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
+		$(libmtxoutput_SOURCES) > .depend
+
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif

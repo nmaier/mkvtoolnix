@@ -18,23 +18,37 @@ endif
 
 all: config.h subdirs
 
-subdirs:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
-	done
-
-clean:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
-	done
-
 config.h:
 	if [ ! -f config.h ]; then \
 	  cp config.h.mingw config.h ; \
 	else \
 	  true; \
 	fi
+
+subdirs:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making all in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
+	done
+
+clean:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making clean in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
+	done
+
+depend:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making depend in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw depend) || exit 1; \
+	done
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif

@@ -2,6 +2,44 @@
 # Run this to set up the build system: configure, makefiles, etc.
 # (based on the version in enlightenment's cvs)
 
+# For MinGW I use my very own Makefile system. So just copy them over
+# to Makefile for convenience's sake.
+if gcc -v 2>&1 | grep -i mingw > /dev/null 2> /dev/null; then
+  echo Detected MinGW. Will copy the Makefile,mingw to Makefile and
+  echo make some adjustments.
+  echo ''
+  if gcc -o ___getcwd contrib/getcwd.c ; then
+    REALCWD=`./___getcwd`
+    echo Automatically patching Makefile.mingw.options with the
+    echo real top dir: $REALCWD
+    if grep ^TOP Makefile.mingw.options > /dev/null 2> /dev/null; then
+      sed "s/^TOP.=/TOP = $REALCWD/" < Makefile.mingw.options > mf-tmp
+    else
+      echo "# TOP dir set automatically by autogen.sh" > mf-tmp
+      echo "TOP = $REALCWD" >> mf-tmp
+    fi
+    mv mf-tmp Makefile.mingw.options
+  else
+    echo Could not compile a test program for getting the
+    echo top level directory. Set it yourself in Makefile.mingw.options
+  fi
+  rm -f ___getcwd.*
+  echo ''
+
+  for i in `find -name Makefile.mingw`; do
+    n=`echo $i | sed 's/\.mingw$//'`
+    echo "Creating $n from $i"
+    sed "s/Makefile\.mingw\([^\.]\)/Makefile\1/g" < $i > $n
+  done
+  echo ''
+
+  echo 'Creating dependencies (calling "make depend")'
+  echo ''
+  make depend
+
+  exit $?
+fi
+
 package="mkvtoolnix"
 
 olddir=`pwd`

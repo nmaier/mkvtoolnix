@@ -63,7 +63,7 @@ all: subdirs $(PROGRAMS)
 subdirs:
 	list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
+	  echo "Making all in $$subdir"; \
 	  (cd $$subdir && make -f Makefile.mingw) || exit 1; \
 	done
 
@@ -82,7 +82,25 @@ base64tool: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
 clean:
 	list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
+	  echo "Making clean in $$subdir"; \
 	  (cd $$subdir && make -f Makefile.mingw clean) || exit 1; \
 	done
 	rm -f *.o $(PROGRAMS)
+
+depend:
+	list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	  echo "Making depend in $$subdir"; \
+	  (cd $$subdir && make -f Makefile.mingw depend) || exit 1; \
+	done
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
+		$(mkvmerge_SOURCES) $(mkvinfo_SOURCES) $(mkvextract_SOURCES) \
+		$(base64tool_SOURCES) > .depend
+
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif

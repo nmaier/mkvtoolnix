@@ -62,3 +62,15 @@ libmtxcomp.a: $(libmtxcomp_OBJECTS)
 
 clean:
 	rm -f *.o $(LIBRARIES)
+
+depend:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
+		$(libmtxcommon_SOURCES) $(libmtxebmlcommon_SOURCES) \
+		$(libmtxkaxcommon_SOURCES) $(libmtxcomp_SOURCES) > .depend
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif

@@ -26,4 +26,15 @@ libavi.a: $(libavi_OBJECTS)
 	ranlib $@
 
 clean:
-	rm -f *.o $(LIBRARIES)
+	rm -f *.o $(LIBRARIES) .depend
+
+depend:
+	$(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
+	  $(libavi_SOURCES) > .depend
+
+#
+# include dependency files if they exist
+#
+ifneq ($(wildcard .depend),)
+include .depend
+endif
