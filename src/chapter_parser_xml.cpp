@@ -573,7 +573,7 @@ static void remove_entries(int64_t min_tc, int64_t max_tc, int64_t offset,
         uint64(*static_cast<EbmlUInteger *>(cts)) - (offset * 1000000);
       if (cte != NULL) {
         end_tc =  uint64(*static_cast<EbmlUInteger *>(cte)) / 1000000;
-        if (end_tc > max_tc)
+        if ((max_tc >= 0) && (end_tc > max_tc))
           end_tc = max_tc;
         end_tc -= offset;
         *static_cast<EbmlUInteger *>(cte) = end_tc * 1000000;
