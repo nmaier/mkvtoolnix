@@ -1747,7 +1747,7 @@ kax_reader_c::read(generic_packetizer_c *,
   KaxClusterTimecode *ctc;
   int64_t block_fref, block_bref, block_duration, frame_duration;
   kax_track_t *block_track;
-  bool found_data, bref_found, fref_found;
+  bool found_cluster, bref_found, fref_found;
 
   if (tracks.size() == 0)
     return 0;
@@ -1762,7 +1762,7 @@ kax_reader_c::read(generic_packetizer_c *,
 
   debug_enter("kax_reader_c::read");
 
-  found_data = false;
+  found_cluster = false;
   upper_lvl_el = 0;
   l1 = saved_l1;
   saved_l1 = NULL;
@@ -1771,6 +1771,7 @@ kax_reader_c::read(generic_packetizer_c *,
     while ((l1 != NULL) && (upper_lvl_el <= 0)) {
 
       if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
+        found_cluster = true;
         cluster = (KaxCluster *)l1;
         cluster->Read(*es, KaxCluster::ClassInfos.Context, upper_lvl_el, l2,
                       true);
@@ -1914,7 +1915,6 @@ kax_reader_c::read(generic_packetizer_c *,
             block_track->units_processed += block->NumberFrames();
           }
 
-          found_data = true;
         }
 
       }
@@ -1955,7 +1955,7 @@ kax_reader_c::read(generic_packetizer_c *,
 
   debug_leave("kax_reader_c::read");
 
-  if (found_data)
+  if (found_cluster)
     return EMOREDATA;
   else {
     flush_packetizers();
