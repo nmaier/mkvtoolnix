@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: matroska.h,v 1.6 2003/04/23 08:16:39 mosu Exp $
+    \version \$Id: matroska.h,v 1.7 2003/04/24 20:36:45 mosu Exp $
     \brief Definitions for the various Codec IDs
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -32,5 +32,6 @@
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 
 #define MKV_S_TEXTASCII  "S_TEXT/ASCII"
+#define MKV_S_TEXTUTF8   "S_TEXT/UTF8"
 
 #endif // __MATROSKA_H

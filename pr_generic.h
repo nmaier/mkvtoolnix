@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: pr_generic.h,v 1.26 2003/04/21 08:29:50 mosu Exp $
+    \version \$Id: pr_generic.h,v 1.27 2003/04/24 20:36:45 mosu Exp $
     \brief class definition for the generic reader and packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -49,6 +49,7 @@ typedef struct {
   // Options used by the packetizers.
   unsigned char *private_data;
   int private_size;
+  int no_utf8_subs;
 
   char fourcc[5];
 

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.44 2003/04/23 14:38:53 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.45 2003/04/24 20:36:45 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -30,6 +30,7 @@
 #endif
 
 #include <iostream>
+#include <string>
 
 #ifdef LIBEBML_GCC2
 #include <typeinfo>
@@ -51,6 +52,7 @@
 #include "KaxCues.h"
 #include "KaxInfo.h"
 #include "KaxInfoData.h"
+#include "KaxVersion.h"
 
 #include "mkvmerge.h"
 #include "cluster_helper.h"
@@ -71,6 +73,7 @@
 #endif
 
 using namespace LIBMATROSKA_NAMESPACE;
+using namespace std;
 
 typedef struct {
   char *ext;
@@ -170,13 +173,16 @@ static void usage(void) {
     "                           linear drifts. p defaults to 1000 if\n"
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
-    "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
-    "                           Works only for video tracks.\n"
     "  --default-track          Sets the 'default' flag for this track.\n"
     "  --cues <none|iframes|    Create cue (index) entries for this track:\n"
     "          all>             None at all, only for I frames, for all.\n"
-    "\n"
-    " Other options:\n"
+    "\n Options that only apply to video tracks:\n"
+    "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
+    "                           Works only for video tracks.\n"
+    "\n Options that only apply to text subtitle tracks:\n"
+    "  --no-utf8-subs           Outputs text subtitles unmodified and do not\n"
+    "                           convert the text to UTF-8.\n"
+    "\n\n Other options:\n"
     "  -l, --list-types         Lists supported input file types.\n"
     "  -h, --help               Show this help.\n"
     "  -V, --version            Show version information.\n"
@@ -597,6 +603,8 @@ static void parse_args(int argc, char **argv) {
       i++;
     } else if (!strcmp(argv[i], "--default-track"))
       ti.default_track = 1;
+    else if (!strcmp(argv[i], "--no-utf8-subs"))
+      ti.no_utf8_subs = 1;
 
     // The argument is an input file.
     else {

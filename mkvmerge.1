@@ -73,9 +73,6 @@ linear drifts. \fIp\fR defaults to 1000 if omitted. Both \fIo\fR and
 Defaults: no manual synch correction (which is the same as \fId\fR = 0 and
 \fIo\fR/\fIp\fR = 1.0).
 .TP
-\fB\-f\fR, \fB\-\-fourcc\fR <\fIFourCC\fR>
-Forces the FourCC to the specified value. Works only for video tracks.
-.TP
 \fB\-\-cues\fR <\fInone\fR|\fIiframes\fR|\fIall\fR>
 Controls for which tracks cue (index) entries are created. \fInone\fR inhibits
 the creation of cue entries for all tracks contained in the following
@@ -93,6 +90,20 @@ Sets the 'default' flag for all tracks read from this file. If the user does
 not explicitly select a track himself then the player should prefer the
 track that has his 'default' flag set. Only one track of each kind (audio,
 video, subttiles) can have his 'default' flag set.
+.LP
+Options that only apply to video tracks:
+.TP
+\fB\-f\fR, \fB\-\-fourcc\fR <\fIFourCC\fR>
+Forces the FourCC to the specified value. Works only for video tracks.
+.LP
+Options that only apply to text subtitle tracks:
+.TP
+\fB\-\-no\-utf8\-subs\fR
+With this option text subtitles will not be recoded, and the track's
+CodecId will be set to S_TEXT/ASCII. Without this option the text subtitles
+will be converted to UTF\-8, and the track's CodecId will be set to
+S_TEXT/UTF8. \fBmkvmerge\fR uses the value of \fILC_CTYPE\fR as the source
+charset or ISO\-8859\-15 if \fILC_CTYPE\fR is not set.
 .LP
 Other options:
 .TP
