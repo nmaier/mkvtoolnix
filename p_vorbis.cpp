@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_vorbis.cpp,v 1.16 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: p_vorbis.cpp,v 1.17 2003/05/04 10:05:41 mosu Exp $
     \brief Vorbis packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -35,10 +35,6 @@
 #include "pr_generic.h"
 #include "p_vorbis.h"
 #include "matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 

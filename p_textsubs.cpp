@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_textsubs.cpp,v 1.11 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: p_textsubs.cpp,v 1.12 2003/05/04 10:05:41 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,10 +27,6 @@
 #include "pr_generic.h"
 #include "p_textsubs.h"
 #include "matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 

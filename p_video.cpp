@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_video.cpp,v 1.29 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: p_video.cpp,v 1.30 2003/05/04 10:05:41 mosu Exp $
     \brief video output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,10 +28,6 @@
 #include "pr_generic.h"
 #include "p_video.h"
 #include "matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 

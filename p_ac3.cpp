@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_ac3.cpp,v 1.16 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: p_ac3.cpp,v 1.17 2003/05/04 10:05:41 mosu Exp $
     \brief AC3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,10 +27,6 @@
 #include "ac3_common.h"
 #include "p_ac3.h"
 #include "matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 

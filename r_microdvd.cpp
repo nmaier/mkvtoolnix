@@ -28,10 +28,6 @@
 #include "r_microdvd.h"
 #include "subtitles.h"
 
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
-
 int microdvd_reader_c::probe_file(FILE *file, int64_t size) {
   char chunk[2048];
   int i;

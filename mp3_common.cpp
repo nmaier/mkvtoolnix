@@ -13,17 +13,13 @@
 
 /*!
     \file
-    \version \$Id: mp3_common.cpp,v 1.4 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: mp3_common.cpp,v 1.5 2003/05/04 10:05:41 mosu Exp $
     \brief helper functions for MP3 data
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
 
 #include "mp3_common.h"
 #include "common.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 int mp3_tabsel[2][16] =
   {{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320},

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.8 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.9 2003/05/04 10:05:41 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,10 +28,6 @@
 #include "pr_generic.h"
 #include "r_srt.h"
 #include "subtitles.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 #define iscolon(s) (*(s) == ':')
 #define iscomma(s) (*(s) == ',')

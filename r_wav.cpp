@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_wav.cpp,v 1.12 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_wav.cpp,v 1.13 2003/05/04 10:05:41 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -33,10 +33,6 @@
 extern "C" {
 #include <avilib.h> // for wave_header
 }
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 int wav_reader_c::probe_file(FILE *file, int64_t size) {
   wave_header wheader;

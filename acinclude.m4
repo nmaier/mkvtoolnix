@@ -263,21 +263,6 @@ fi
   AC_SUBST(PROFILING_LIBS)
 ])
 
-AC_DEFUN(PATH_DMALLOC,[
-AC_ARG_ENABLE([dmalloc],
-    [  --enable-dmalloc              link against dmalloc])
-if test x"$enable_dmalloc" = x"yes"; then
-    dnl debug information
-    DMALLOC_CFLAGS="-DDMALLOC"
-    DMALLOC_LIBS="-ldmalloc"
-else
-    DMALLOC_CFLAGS=""
-    DMALLOC_LIBS=""
-fi
-  AC_SUBST(DMALLOC_CFLAGS)
-  AC_SUBST(DMALLOC_LIBS)
-])
-
 # Configure paths for libebml
 
 dnl PATH_EBML([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])

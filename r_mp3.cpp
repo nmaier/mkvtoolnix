@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_mp3.cpp,v 1.12 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_mp3.cpp,v 1.13 2003/05/04 10:05:41 mosu Exp $
     \brief MP3 reader module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -29,10 +29,6 @@
 #include "queue.h"
 #include "r_mp3.h"
 #include "p_mp3.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 int mp3_reader_c::probe_file(FILE *file, int64_t size) { 
   unsigned char buf[4096];

@@ -12,7 +12,7 @@
 
 /*!
     \file
-    \version \$Id: mkvinfo.cpp,v 1.29 2003/05/03 09:48:29 mosu Exp $
+    \version \$Id: mkvinfo.cpp,v 1.30 2003/05/04 10:05:41 mosu Exp $
     \brief retrieves and displays information about a Matroska file
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -63,10 +63,6 @@
 #include "KaxTrackVideo.h"
 
 #include "common.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 #define NAME "MKVInfo"
 

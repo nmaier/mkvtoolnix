@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_avi.cpp,v 1.23 2003/05/02 21:49:42 mosu Exp $
+    \version \$Id: r_avi.cpp,v 1.24 2003/05/04 10:05:41 mosu Exp $
     \brief AVI demultiplexer module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -36,10 +36,6 @@ extern "C" {
 #include "p_pcm.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 int avi_reader_c::probe_file(FILE *file, int64_t size) {
   unsigned char data[12];

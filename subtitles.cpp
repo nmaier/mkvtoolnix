@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: subtitles.cpp,v 1.3 2003/04/18 10:08:24 mosu Exp $
+    \version \$Id: subtitles.cpp,v 1.4 2003/05/04 10:05:41 mosu Exp $
     \brief subtitle helper
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,10 +27,6 @@
 #include "mkvmerge.h"
 #include "common.h"
 #include "subtitles.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 subtitles_c::subtitles_c() {
   first = NULL;

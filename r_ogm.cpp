@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_ogm.cpp,v 1.21 2003/05/03 10:03:52 mosu Exp $
+    \version \$Id: r_ogm.cpp,v 1.22 2003/05/04 10:05:41 mosu Exp $
     \brief OGG media stream reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -45,10 +45,6 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_textsubs.h"
 #include "p_mp3.h"
 #include "p_ac3.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 /*
  * Probes a file by simply comparing the first four bytes to 'OggS'.

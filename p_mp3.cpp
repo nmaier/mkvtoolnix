@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_mp3.cpp,v 1.19 2003/05/03 19:41:08 mosu Exp $
+    \version \$Id: p_mp3.cpp,v 1.20 2003/05/04 10:05:41 mosu Exp $
     \brief MP3 output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -27,10 +27,6 @@
 #include "mp3_common.h"
 #include "p_mp3.h"
 #include "matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 

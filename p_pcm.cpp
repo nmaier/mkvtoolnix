@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: p_pcm.cpp,v 1.18 2003/05/02 21:49:41 mosu Exp $
+    \version \$Id: p_pcm.cpp,v 1.19 2003/05/04 10:05:41 mosu Exp $
     \brief PCM output module
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -28,10 +28,6 @@
 #include "pr_generic.h"
 #include "p_pcm.h"
 #include "matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 

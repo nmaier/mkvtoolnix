@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.19 2003/05/03 20:22:18 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.20 2003/05/04 10:05:41 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -62,10 +62,6 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "KaxTrackVideo.h"
 
 #include "StdIOCallback.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace std;
 using namespace LIBMATROSKA_NAMESPACE;

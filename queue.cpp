@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: queue.cpp,v 1.17 2003/05/02 20:11:34 mosu Exp $
+    \version \$Id: queue.cpp,v 1.18 2003/05/04 10:05:41 mosu Exp $
     \brief packet queueing class used by every packetizer
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -26,10 +26,6 @@
 
 #include "common.h"
 #include "queue.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 q_c::q_c() {
   first = NULL;

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.52 2003/05/03 19:40:09 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.53 2003/05/04 10:05:41 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -71,10 +71,6 @@
 #endif
 #include "r_srt.h"
 #include "r_matroska.h"
-
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;

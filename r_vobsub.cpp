@@ -28,10 +28,6 @@
 #include "r_vobsub.h"
 #include "subtitles.h"
 
-#ifdef DMALLOC
-#include <dmalloc.h>
-#endif
-
 #define istimecodestr(s)      (!strncmp(s, "timecode: ", 11))
 #define iscommafileposstr(s)   (!strncmp(s, ", filepos: ", 11))
 #define iscolon(s)             (*(s) == ':')
