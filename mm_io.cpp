@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mm_io.cpp,v 1.2 2003/05/23 06:34:57 mosu Exp $
+    \version \$Id: mm_io.cpp,v 1.3 2003/05/23 09:51:22 mosu Exp $
     \brief IO callback class implementation
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -24,11 +24,17 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef __CYGWIN__
+#include <stdarg.h>
+#include <w32api/windef.h>
+#include <w32api/winbase.h>
+#endif
 
 #include "mm_io.h"
 
 using namespace std;
 
+#ifndef __CYGWIN__
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
   char *cmode;
 
@@ -46,7 +52,7 @@ mm_io_c::mm_io_c(const char *path, const open_mode mode) {
       throw 0;
   }
 
-  file = fopen(path, cmode);
+  file = (FILE *)fopen(path, cmode);
 
   if (file == NULL)
     throw exception();
@@ -57,7 +63,7 @@ mm_io_c::~mm_io_c() {
 }
 
 uint64 mm_io_c::getFilePointer() {
-  return ftello(file);
+  return ftello((FILE *)file);
 }
 
 void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
@@ -70,15 +76,15 @@ void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
   else
     whence = SEEK_CUR;
 
-  if (fseeko(file, offset, whence) != 0)
+  if (fseeko((FILE *)file, offset, whence) != 0)
     throw exception();
 }
 
 size_t mm_io_c::write(const void *buffer, size_t size) {
   size_t bwritten;
 
-  bwritten = fwrite(buffer, 1, size, file);
-  if (ferror(file) != 0) {
+  bwritten = fwrite(buffer, 1, size, (FILE *)file);
+  if (ferror((FILE *)file) != 0) {
     fprintf(stderr, "Error writing to the output file: %d (%s)\n", errno,
             strerror(errno));
     exit(1);
@@ -88,34 +94,151 @@ size_t mm_io_c::write(const void *buffer, size_t size) {
 }
 
 uint32 mm_io_c::read(void *buffer, size_t size) {
-  return fread(buffer, 1, size, file);
+  return fread(buffer, 1, size, (FILE *)file);
 }
 
 void mm_io_c::close() {
-  fclose(file);
+  fclose((FILE *)file);
 }
 
 bool mm_io_c::eof() {
-  return feof(file) != 0 ? true : false;
+  return feof((FILE *)file) != 0 ? true : false;
 }
 
 char *mm_io_c::gets(char *buffer, size_t max_size) {
-  return fgets(buffer, max_size, file);
+  return fgets(buffer, max_size, (FILE *)file);
 }
+
+#else // __CYGWIN__
+
+mm_io_c::mm_io_c(const char *path, const open_mode mode) {
+  DWORD access_mode, share_mode, disposition;
+
+  switch (mode) {
+    case MODE_READ:
+      access_mode = GENERIC_READ;
+      share_mode = FILE_SHARE_READ;
+      disposition = OPEN_EXISTING;
+      break;
+    case MODE_WRITE:
+      access_mode = GENERIC_WRITE;
+      share_mode = 0;
+      disposition = OPEN_ALWAYS;
+      break;
+    case MODE_CREATE:
+      access_mode = GENERIC_WRITE;
+      share_mode = 0;
+      disposition = CREATE_ALWAYS;
+      break;
+    default:
+      throw exception();
+  }
+
+  file = (void *)CreateFile(path, access_mode, share_mode, NULL, disposition,
+                            0, NULL);
+  if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
+    throw exception();
+}
+
+mm_io_c::~mm_io_c() {
+  close();
+}
+
+void mm_io_c::close() {
+  CloseHandle((HANDLE)file);
+}
+
+uint64 mm_io_c::getFilePointer() {
+  LONG dummy = 0;
+
+  return SetFilePointer((HANDLE)file, 0, &dummy, FILE_CURRENT);
+}
+
+void mm_io_c::setFilePointer(int64 offset, seek_mode mode) {
+  DWORD method;
+  LONG high;
+
+  switch (mode) {
+    case seek_beginning:
+      method = FILE_BEGIN;
+      break;
+    case seek_current:
+      method = FILE_CURRENT;
+      break;
+    case seek_end:
+      method = FILE_END;
+      break;
+  }
+
+  high = offset >> 32;
+  SetFilePointer((HANDLE)file, offset & 0xffffffff, &high, method);
+}
+
+uint32 mm_io_c::read(void *buffer, size_t size) {
+  DWORD bytes_read;
+
+  if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL))
+    return 0;
+
+  return bytes_read;
+}
+
+size_t mm_io_c::write(const void *buffer,size_t size) {
+  DWORD bytes_written;
+
+  if (!WriteFile((HANDLE)file, buffer, size, &bytes_written, NULL))
+    return 0;
+
+  return bytes_written;
+}
+
+bool mm_io_c::eof() {
+  return false;
+}
+
+char *mm_io_c::gets(char *buffer, size_t max_size) {
+  // This will not be fast... But it shouldn't matter. gets is only
+  // used by the text subtitle readers.
+  DWORD bytes_read;
+  int idx;
+
+  idx = 0;
+  do {
+    if (!ReadFile((HANDLE)file, &buffer[idx], 1, &bytes_read, NULL)) {
+      if (idx == 0)
+        return NULL;
+      else {
+        if (idx <= max_size)
+          buffer[idx] = 0;
+        return buffer;
+      }
+    }
+    if (buffer[idx] == '\n') {
+      if ((idx + 1) < max_size)
+        buffer[idx + 1] = 0;
+      return buffer;
+    }
+    idx++;
+  } while (idx < max_size);
+
+  return buffer;
+}
+
+#endif
 
 /*
  * Dummy class for output to /dev/null. Needed for two pass stuff.
  */
 
-mm_devnull_io_callback::mm_devnull_io_callback() {
+mm_null_io_c::mm_null_io_c() {
   pos = 0;
 }
 
-uint64 mm_devnull_io_callback::getFilePointer() {
+uint64 mm_null_io_c::getFilePointer() {
   return pos;
 }
 
-void mm_devnull_io_callback::setFilePointer(int64 offset, seek_mode mode) {
+void mm_null_io_c::setFilePointer(int64 offset, seek_mode mode) {
   if (mode == seek_beginning)
     pos = offset;
   else if (mode == seek_end)
@@ -124,18 +247,18 @@ void mm_devnull_io_callback::setFilePointer(int64 offset, seek_mode mode) {
     pos += offset;
 }
 
-uint32 mm_devnull_io_callback::read(void *buffer, size_t size) {
+uint32 mm_null_io_c::read(void *buffer, size_t size) {
   memset(buffer, 0, size);
   pos += size;
 
   return size;
 }
 
-size_t mm_devnull_io_callback::write(const void *buffer, size_t size) {
+size_t mm_null_io_c::write(const void *buffer, size_t size) {
   pos += size;
 
   return size;
 }
 
-void mm_devnull_io_callback::close() {
+void mm_null_io_c::close() {
 }

@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_srt.cpp,v 1.15 2003/05/23 06:34:58 mosu Exp $
+    \version \$Id: r_srt.cpp,v 1.16 2003/05/23 09:51:22 mosu Exp $
     \brief Subripper subtitle reader
     \author Moritz Bunkus <moritz@bunkus.org>
 */
@@ -96,9 +96,9 @@ int srt_reader_c::read() {
       break;
     if (mm_io->gets(chunk, 2047) == NULL)
       break;
+    chunk[2047] = 0;
     if ((strlen(chunk) < 29) ||  !issrttimecode(chunk))
       break;
-    chunk[2047] = 0;
 
 // 00:00:00,000 --> 00:00:00,000
 // 01234567890123456789012345678
