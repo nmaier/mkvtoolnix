@@ -526,17 +526,21 @@ dnl
 AC_DEFUN(PATH_CXXVERSION,
 [dnl 
   AC_MSG_CHECKING($CXX version)
-  CXXVER="`$CXX --version 2>&1 | head -n 1 | sed 's;.*\([[0-9]][[0-9]]*\)\.[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*.*;\1;'`"
+  CXXVER=`$CXX -dumpversion`
   CXXVER_CFLAGS=
-  if test "x$CXXVER" == "x2"; then
-    CXXVER_CFLAGS=-DGCC2
-    AC_MSG_RESULT(v2)
-  elif test "x$CXXVER" != "x3"; then
-    AC_MSG_RESULT(unknown)
-    echo "*** Unknown C++ compiler or version. Please contact Moritz Bunkus"
-    echo "*** <moritz@bunkus.org> if compilation fails."
-  else
-    AC_MSG_RESULT(v$CXXVER)
-  fi
+  case "$CXXVER" in
+    2.*)
+      CXXVER_CFLAGS=-DGCC2
+      AC_MSG_RESULT(v2)
+      ;;
+    3*)
+      AC_MSG_RESULT(v3)
+      ;;
+    *)
+      AC_MSG_RESULT(unknown)
+      echo "*** Unknown C++ compiler or version. Please contact Moritz Bunkus"
+      echo "*** <moritz@bunkus.org> if compilation fails."
+      ;;
+  esac
   AC_SUBST(CXXVER_CFLAGS)
 ])
