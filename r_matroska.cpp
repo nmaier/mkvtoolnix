@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: r_matroska.cpp,v 1.4 2003/04/18 08:42:20 mosu Exp $
+    \version \$Id: r_matroska.cpp,v 1.5 2003/04/18 08:47:01 mosu Exp $
     \brief Matroska reader
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -333,7 +333,7 @@ void mkv_reader_c::verify_tracks() {
             }
 
             c = (unsigned char *)t->private_data;
-            if (c[0] != 3) {
+            if (c[0] != 2) {
               printf("[mkv] Vorbis track does not contain valid headers.\n");
               continue;
             }
