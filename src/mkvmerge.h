@@ -39,7 +39,6 @@ extern KaxTrackEntry *kax_last_entry;
 extern KaxCues *kax_cues;
 extern KaxSeekHead *kax_sh_main, *kax_sh_cues;
 extern KaxChapters *kax_chapters;
-extern int track_number;
 extern int64_t tags_size;
 extern string segment_title;
 extern bool segment_title_set;
@@ -53,6 +52,8 @@ extern bool no_lacing, no_linking, use_durations;
 extern bool identifying, identify_verbose;
 
 extern char *dump_packets;
+
+int64_t create_track_number(generic_reader_c *reader, int64_t tid);
 
 bool hack_engaged(const char *hack);
 

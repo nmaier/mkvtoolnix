@@ -391,6 +391,50 @@ print_capabilities() {
 #endif
 }
 
+int64_t
+create_track_number(generic_reader_c *reader,
+                    int64_t tid) {
+  bool found;
+  int i, file_num;
+  int64_t tnum;
+
+  found = false;
+  for (i = 0; i < files.size(); i++)
+    if (files[i]->reader == reader) {
+      found = true;
+      file_num = i;
+      break;
+    }
+
+  if (!found)
+    die(_("create_track_number: file_num not found. %s\n"), BUGMSG);
+
+  tnum = -1;
+  found = false;
+  for (i = 0; i < track_order.size(); i++)
+    if ((track_order[i].file_id == file_num) &&
+        (track_order[i].track_id == tid)) {
+      found = true;
+      tnum = i + 1;
+      break;
+    }
+  if (found) {
+    found = false;
+    for (i = 0; i < packetizers.size(); i++)
+      if ((packetizers[i]->packetizer != NULL) &&
+          (packetizers[i]->packetizer->get_track_num() == tnum)) {
+        tnum = track_number;
+        break;
+      }
+  } else
+    tnum = track_number;
+
+  if (tnum >= track_number)
+    track_number = tnum + 1;
+
+  return tnum;
+}
+
 /** \brief Probe the file type
  *
  * Opens the input file and calls the \c probe_file function for each known
