@@ -2804,7 +2804,7 @@ create_next_output_file() {
     sort_ebml_master(kax_chapters);
     if (splitting) {
       kax_chapters_void = new EbmlVoid;
-      kax_chapters->UpdateSize();
+      kax_chapters->UpdateSize(true);
       kax_chapters_void->SetSize(kax_chapters->ElementSize() + 10);
       kax_chapters_void->Render(*out);
       if (hack_engaged(ENGAGE_SPACE_AFTER_CHAPTERS)) {
@@ -2941,7 +2941,7 @@ finish_file(bool last_file) {
   // Render the tags if we have some.
   if (kax_tags != NULL) {
     fix_mandatory_tag_elements(kax_tags);
-    kax_tags->UpdateSize(false);
+    kax_tags->UpdateSize();
     kax_tags->Render(*out);
   }
 

@@ -329,6 +329,7 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     KaxEditionEntry &ee = *static_cast<KaxEditionEntry *>(e);
     GetChild<KaxEditionFlagDefault>(ee);
     GetChild<KaxEditionFlagHidden>(ee);
+    GetChild<KaxEditionProcessed>(ee);
 
   } else if (dynamic_cast<KaxChapterAtom *>(e) != NULL) {
     KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
