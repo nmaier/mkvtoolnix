@@ -114,6 +114,23 @@ char *mm_io_c::gets(char *buffer, size_t max_size) {
   return fgets(buffer, max_size, (FILE *)file);
 }
 
+string mm_io_c::getline() {
+  char c;
+  string s;
+
+  while (!feof((FILE *)file)) {
+    if (fread(&c, 1, 1, (FILE *)file) == 1) {
+      if (c == '\r')
+        continue;
+      if (c == '\n')
+        return s;
+      s += c;
+    }
+  }
+
+  return s;
+}
+
 #else // __CYGWIN__
 
 mm_io_c::mm_io_c(const char *path, const open_mode mode) {
@@ -232,6 +249,25 @@ char *mm_io_c::gets(char *buffer, size_t max_size) {
   } while (idx < max_size);
 
   return buffer;
+}
+
+string mm_io_c::getline() {
+  char c;
+  string s;
+  DWORD bytes_read;
+
+  do {
+    ReadFile((HANDLE)file, &c, 1, &bytes_read, NULL);
+    if (bytes_read == 1) {
+      if (c == '\r')
+        continue;
+      if (c == '\n')
+        return s;
+      s += c;
+    }
+  } while (bytes_read == 1);
+
+  return s;
 }
 
 #endif

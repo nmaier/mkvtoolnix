@@ -25,8 +25,11 @@
 #include <stdint.h>
 #endif // __CYGWIN__
 
+#include <string>
+
 #include "IOCallback.h"
 
+using namespace std;
 using namespace LIBEBML_NAMESPACE;
 
 class mm_io_c: public IOCallback {
@@ -44,6 +47,7 @@ public:
   virtual void close();
   virtual bool eof();
   virtual char *gets(char *buffer, size_t max_size);
+  virtual string getline();
 };
 
 class mm_null_io_c: public mm_io_c {
