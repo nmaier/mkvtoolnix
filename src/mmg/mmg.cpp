@@ -704,6 +704,12 @@ void mmg_dialog::update_command_line() {
         clargs.Add("--compression");
         clargs.Add(sid + ":" + *t->compression);
       }
+
+      if (t->timecodes->Length() > 0) {
+        cmdline += "--timecodes " + sid + ":" + *t->timecodes + " ";
+        clargs.Add("--timecodes");
+        clargs.Add(sid + ":" + *t->timecodes);
+      }
     }
 
     if (aids.length() > 0) {

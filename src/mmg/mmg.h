@@ -125,6 +125,8 @@ using namespace libmatroska;
 #define ID_CB_COMPRESSION 10078
 #define ID_CB_CLCHARSET 10079
 #define ID_TC_CUENAMEFORMAT 10080
+#define ID_TC_TIMECODES 10081
+#define ID_B_BROWSE_TIMECODES 10082
 
 #define ID_M_FILE_NEW 20000
 #define ID_M_FILE_LOAD 20001
@@ -169,7 +171,7 @@ typedef struct {
 
   bool default_track, aac_is_sbr;
   wxString *language, *track_name, *cues, *delay, *stretch, *sub_charset;
-  wxString *tags, *fourcc, *aspect_ratio, *compression;
+  wxString *tags, *fourcc, *aspect_ratio, *compression, *timecodes;
 } mmg_track_t;
 
 typedef struct {
@@ -202,13 +204,13 @@ class tab_input: public wxPanel {
   DECLARE_EVENT_TABLE();
 protected:
   wxListBox *lb_input_files;
-  wxButton *b_add_file, *b_remove_file, *b_browse_tags;
+  wxButton *b_add_file, *b_remove_file, *b_browse_tags, *b_browse_timecodes;
   wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
   wxCheckBox *cb_default, *cb_aac_is_sbr;
   wxCheckListBox *clb_tracks;
   wxComboBox *cob_language, *cob_cues, *cob_sub_charset;
   wxComboBox *cob_aspect_ratio, *cob_fourcc;
-  wxTextCtrl *tc_delay, *tc_track_name, *tc_stretch, *tc_tags;
+  wxTextCtrl *tc_delay, *tc_track_name, *tc_stretch, *tc_tags, *tc_timecodes;
   wxComboBox *cob_compression;
 
   wxTimer value_copy_timer;
@@ -240,6 +242,8 @@ public:
   void on_fourcc_changed(wxCommandEvent &evt);
   void on_compression_selected(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
+  void on_timecodes_changed(wxCommandEvent &evt);
+  void on_browse_timecodes_clicked(wxCommandEvent &evt);
 
   void no_track_mode();
   void audio_track_mode(wxString ctype);
