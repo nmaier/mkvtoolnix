@@ -44,6 +44,13 @@ typedef struct {
   int64_t *last_packets;
 } splitpoint_t;
 
+typedef struct {
+  vector<KaxBlockGroup *> groups;
+  vector<int64_t> durations;
+  generic_packetizer_c *source;
+  bool more_data, duration_mandatory;
+} render_groups_t;
+
 class cluster_helper_c {
 private:
   ch_contents_t **clusters;
@@ -82,6 +89,7 @@ private:
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);
+  void set_duration_and_timeslices(render_groups_t *rg);
 };
 
 extern cluster_helper_c *cluster_helper;

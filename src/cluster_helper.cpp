@@ -292,14 +292,7 @@ void cluster_helper_c::set_output(mm_io_c *nout) {
   out = nout;
 }
 
-typedef struct {
-  vector<KaxBlockGroup *> groups;
-  vector<int64_t> durations;
-  generic_packetizer_c *source;
-  bool more_data, duration_mandatory;
-} render_groups_t;
-
-static void set_duration_and_timeslices(render_groups_t *rg) {
+void cluster_helper_c::set_duration_and_timeslices(render_groups_t *rg) {
   uint32_t i;
   int64_t block_duration, def_duration;
   KaxBlockGroup *group;
@@ -347,6 +340,13 @@ static void set_duration_and_timeslices(render_groups_t *rg) {
     }
   }
 }
+
+/*
+  <+Asylum> The chicken and the egg are lying in bed next to each
+            other after a good hard shag, the chicken is smoking a
+            cigarette, the egg says "Well that answers that bloody
+            question doesn't it"
+*/
 
 int cluster_helper_c::render() {
   KaxCluster *cluster;
