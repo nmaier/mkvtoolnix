@@ -682,7 +682,10 @@ bool process_file(const char *file_name) {
           }
         } // while (l2 != NULL)
 
-      } else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
+      } else if ((EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) &&
+                 (verbose < 2) && !use_gui)
+        show_element(l1, 1, "Seek head (subentries will be skipped)");
+      else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId) {
         show_element(l1, 1, "Seek head");
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -874,7 +877,10 @@ bool process_file(const char *file_name) {
           }
         } // while (l2 != NULL)
 
-      } else if (EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) {
+      } else if ((EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) &&
+                 (verbose < 2))
+        show_element(l1, 1, "Cues (subentries will be skipped)");
+      else if (EbmlId(*l1) == KaxCues::ClassInfos.GlobalId) {
         show_element(l1, 1, "Cues");
 
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,

@@ -1,5 +1,9 @@
 2003-06-22  Moritz Bunkus  <moritz@bunkus.org>
 
+        * Modified the verbosity levels for mkvinfo: The seek head subentries
+        and cue subentries will only be shown at level 2 to make the 
+        output easier to read. 
+
         * The language and default track settings are now kept again if
         not overridden when reading from Matroska files.
 

@@ -33,14 +33,17 @@ and print more information about the current file.
 level 0
 will print only the track headers it finds and their types. \fBmkvinfo\fR
 will exit as soon as the headers are parsed completely (more technical:
-as soon as the first cluster is encountered).
+as soon as the first cluster is encountered). In this level the seek head
+entries and the cues will not be displayed - even if they're located in
+front of the track informatio.
 .TP
 level 1
-will also print all Matroska elements ancountered for the complete file.
+will also print all Matroska elements ancountered for the complete file but
+the seek head entries and the cue entries.
 .TP
 level 2
-will also print the file position at which each Matroska element can be
-found at.
+will also print the seek head entries, the cue entries and the file position
+at which each Matroska element can be found at.
 .LP
 .SH AUTHOR
 .I mkvinfo
