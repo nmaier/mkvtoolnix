@@ -13,7 +13,7 @@
 
 /*!
     \file
-    \version \$Id: mkvmerge.cpp,v 1.25 2003/03/23 20:27:53 mosu Exp $
+    \version \$Id: mkvmerge.cpp,v 1.26 2003/04/11 10:19:39 mosu Exp $
     \brief command line parameter parsing, looping, output handling
     \author Moritz Bunkus         <moritz @ bunkus.org>
 */
@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
 #include <unistd.h>
 
 #include <iostream>
@@ -58,7 +59,7 @@
 #include "r_ogm.h"
 #endif
 #include "r_srt.h"
-//#include "r_matroska.h"
+#include "r_matroska.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
@@ -140,19 +141,16 @@ static void usage(void) {
     "                           put at most n milliseconds of data into each\n"
     "                           cluster.\n"
     "\n Options for each input file:\n"
-    "  -a, --astreams <n,m,...> Copy the n'th audio stream, NOT the stream with"
-  "\n                           the serial number n. Default: copy all audio\n"
-    "                           streams.\n"
-    "  -d, --vstreams <n,m,...> Copy the n'th video stream, NOT the stream with"
-  "\n                           the serial number n. Default: copy all video\n"
-    "                           streams.\n"
-//     "  -t, --tstreams <n,m,...> Copy the n'th text stream, NOT the stream with"
-//   "\n                           the serial number n. Default: copy all text\n"
-//     "                           streams.\n"
-    "  -A, --noaudio            Don't copy any audio stream from this file.\n"
-    "  -D, --novideo            Don't copy any video stream from this file.\n"
-//     "  -T, --notext             Don't copy any text stream from this file.\n"
-    "  -s, --sync <d[,o[/p]]>   Ssynchronize, delay the audio stream by d ms.\n"
+    "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
+    "                           audio tracks.\n"
+    "  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
+    "                           video tracks.\n"
+    "  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
+    "                           all subtitle tracks.\n"
+    "  -A, --noaudio            Don't copy any audio track from this file.\n"
+    "  -D, --novideo            Don't copy any video track from this file.\n"
+    "  -S, --nosubs             Don't copy any text track from this file.\n"
+    "  -y, --sync <d[,o[/p]]>   Ssynchronize, delay the audio track by d ms.\n"
     "                           d > 0: Pad with silent samples.\n"
     "                           d < 0: Remove samples from the beginning.\n"
     "                           o/p: Adjust the timestamps by o/p to fix\n"
@@ -160,7 +158,7 @@ static void usage(void) {
     "                           omitted. Both o and p can be floating point\n"
     "                           numbers.\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
-    "                           Works only for video streams.\n"
+    "                           Works only for video tracks.\n"
     "\n"
     " Other options:\n"
     "  -l, --list-types         Lists supported input file types.\n"
@@ -201,8 +199,8 @@ static int get_type(char *filename) {
     return TYPEMP3;
   else if (ac3_reader_c::probe_file(f, size))
     return TYPEAC3;
-//  else if (mkv_reader_c::probe_file(f, size))
-//    return TYPEMATROSKA;
+ else if (mkv_reader_c::probe_file(f, size))
+   return TYPEMATROSKA;
 //     else if (microdvd_reader_c::probe_file(f, size))
 //     return TYPEMICRODVD;
 //   else if (vobsub_reader_c::probe_file(f, size)) 
@@ -245,15 +243,15 @@ void display_progress(int force) {
   display_counter++;
 }
 
-static unsigned char *parse_streams(char *s) {
+static unsigned char *parse_tracks(char *s) {
   char *c = s;
   char *nstart;
-  int n, nstreams;
-  unsigned char *streams;
+  int n, ntracks;
+  unsigned char *tracks;
   
   nstart = NULL;
-  streams = NULL;
-  nstreams = 0;
+  tracks = NULL;
+  ntracks = 0;
   while (*c) {
     if ((*c >= '0') && (*c <= '9')) {
       if (nstart == NULL)
@@ -267,13 +265,13 @@ static unsigned char *parse_streams(char *s) {
                   n);
           exit(1);
         }
-        streams = (unsigned char *)realloc(streams, nstreams + 2);
-        if (streams == NULL)
+        tracks = (unsigned char *)realloc(tracks, ntracks + 2);
+        if (tracks == NULL)
           die("malloc");
-        streams[nstreams] = (unsigned char)n;
-        streams[nstreams + 1] = 0;
+        tracks[ntracks] = (unsigned char)n;
+        tracks[ntracks + 1] = 0;
         nstart = NULL;
-        nstreams++;
+        ntracks++;
       } else
         fprintf(stderr, "Warning: useless use of ','\n");
     } else if (!isspace(*c)) {
@@ -291,16 +289,16 @@ static unsigned char *parse_streams(char *s) {
               n);
       exit(1);
     }
-    streams = (unsigned char *)realloc(streams, nstreams + 2);
-    if (streams == NULL)
+    tracks = (unsigned char *)realloc(tracks, ntracks + 2);
+    if (tracks == NULL)
       die("malloc");
-    streams[nstreams] = (unsigned char)n;
-    streams[nstreams + 1] = 0;
+    tracks[ntracks] = (unsigned char)n;
+    tracks[ntracks + 1] = 0;
     nstart = NULL;
-    nstreams++;
+    ntracks++;
   }
   
-  return streams;
+  return tracks;
 }
 
 static void parse_sync(char *s, audio_sync_t *async) {
@@ -394,13 +392,13 @@ static void render_head(StdIOCallback *out) {
 static void parse_args(int argc, char **argv) {
   track_info_t     ti;
   int              i, j;
-  int              noaudio, novideo, notext;
+  int              noaudio, novideo, nosubs;
   filelist_t      *file;
   char            *s;
 
   noaudio = 0;
   novideo = 0;
-  notext  = 0;
+  nosubs  = 0;
 
   memset(&ti, 0, sizeof(track_info_t));
   ti.async.linear = 1.0;
@@ -503,35 +501,35 @@ static void parse_args(int argc, char **argv) {
       noaudio = 1;
     else if (!strcmp(argv[i], "-D") || !strcmp(argv[i], "--novideo"))
       novideo = 1;
-//     else if (!strcmp(argv[i], "-T") || !strcmp(argv[i], "--notext"))
-//       notext = 1;
-    else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--astreams")) {
+    else if (!strcmp(argv[i], "-S") || !strcmp(argv[i], "--nosubs"))
+      nosubs = 1;
+    else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--atracks")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -a lacks the stream number(s).\n");
         exit(1);
       }
-      if (ti.astreams != NULL)
-        free(ti.astreams);
-      ti.astreams = parse_streams(argv[i + 1]);
+      if (ti.atracks != NULL)
+        free(ti.atracks);
+      ti.atracks = parse_tracks(argv[i + 1]);
       i++;
-    } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vstreams")) {
+    } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--vtracks")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -d lacks the stream number(s).\n");
         exit(1);
       }
-      if (ti.vstreams != NULL)
-        free(ti.vstreams);
-      ti.vstreams = parse_streams(argv[i + 1]);
+      if (ti.vtracks != NULL)
+        free(ti.vtracks);
+      ti.vtracks = parse_tracks(argv[i + 1]);
       i++;
-//     } else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--tstreams")) {
-//       if ((i + 1) >= argc) {
-//         fprintf(stderr, "Error: -t lacks the stream number(s).\n");
-//         exit(1);
-//       }
-//       if (tstreams != NULL)
-//         free(tstreams);
-//       tstreams = parse_streams(argv[i + 1]);
-//       i++;
+    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stracks")) {
+      if ((i + 1) >= argc) {
+        fprintf(stderr, "Error: -s lacks the stream number(s).\n");
+        exit(1);
+      }
+      if (ti.stracks != NULL)
+        free(ti.stracks);
+      ti.stracks = parse_tracks(argv[i + 1]);
+      i++;
     } else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fourcc")) {
       if ((i + 1) >= argc) {
         fprintf(stderr, "Error: -f lacks the FourCC.\n");
@@ -545,9 +543,9 @@ static void parse_args(int argc, char **argv) {
       memcpy(ti.fourcc, argv[i + 1], 4);
       ti.fourcc[4] = 0;
       i++;
-    } else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sync")) {
+    } else if (!strcmp(argv[i], "-y") || !strcmp(argv[i], "--sync")) {
       if ((i + 1) >= argc) {
-        fprintf(stderr, "Error: -s lacks the audio delay.\n");
+        fprintf(stderr, "Error: -y lacks the audio delay.\n");
         exit(1);
       }
       parse_sync(argv[i + 1], &ti.async);
@@ -556,35 +554,35 @@ static void parse_args(int argc, char **argv) {
 
     // The argument is an input file.
     else {
-      if ((ti.astreams != NULL) && noaudio) {
+      if ((ti.atracks != NULL) && noaudio) {
         fprintf(stderr, "Error: -A and -a used on the same source file.\n");
         exit(1);
       }
-      if ((ti.vstreams != NULL) && novideo) {
+      if ((ti.vtracks != NULL) && novideo) {
         fprintf(stderr, "Error: -D and -d used on the same source file.\n");
         exit(1);
       }
-      if ((ti.tstreams != NULL) && notext) {
-        fprintf(stderr, "Error: -T and -t used on the same source file.\n");
+      if ((ti.stracks != NULL) && nosubs) {
+        fprintf(stderr, "Error: -S and -s used on the same source file.\n");
         exit(1);
       }
       if (noaudio) {
-        ti.astreams = (unsigned char *)malloc(1);
-        if (ti.astreams == NULL)
+        ti.atracks = (unsigned char *)malloc(1);
+        if (ti.atracks == NULL)
           die("malloc");
-        *ti.astreams = 0;
+        *ti.atracks = 0;
       }
       if (novideo) {
-        ti.vstreams = (unsigned char *)malloc(1);
-        if (ti.vstreams == NULL)
+        ti.vtracks = (unsigned char *)malloc(1);
+        if (ti.vtracks == NULL)
           die("malloc");
-        *ti.vstreams = 0;
+        *ti.vtracks = 0;
       }
-      if (notext) {
-        ti.tstreams = (unsigned char *)malloc(1);
-        if (ti.tstreams == NULL)
+      if (nosubs) {
+        ti.stracks = (unsigned char *)malloc(1);
+        if (ti.stracks == NULL)
           die("malloc");
-        *ti.tstreams = 0;
+        *ti.stracks = 0;
       }
       file = (filelist_t *)malloc(sizeof(filelist_t));
       if (file == NULL)
@@ -605,43 +603,43 @@ static void parse_args(int argc, char **argv) {
       file->fp = NULL;
       try {
         switch (file->type) {
-//          case TYPEMATROSKA:
-//            file->reader = new mkv_reader_c(&ti);
-//            break;
+          case TYPEMATROSKA:
+            file->reader = new mkv_reader_c(&ti);
+            break;
 #ifdef HAVE_OGGVORBIS
           case TYPEOGM:
             file->reader = new ogm_reader_c(&ti);
             break;
 #endif // HAVE_OGGVORBIS
           case TYPEAVI:
-            if (ti.tstreams != NULL)
+            if (ti.stracks != NULL)
               fprintf(stderr, "Warning: -t/-T are ignored for AVI files.\n");
             file->reader = new avi_reader_c(&ti);
             break;
           case TYPEWAV:
-            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
-                (ti.tstreams != NULL))
+            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
+                (ti.stracks != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "WAVE files.\n");
             file->reader = new wav_reader_c(&ti);
             break;
           case TYPESRT:
-            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
-                (ti.tstreams != NULL))
+            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
+                (ti.stracks != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "SRT files.\n");
             file->reader = new srt_reader_c(&ti);
             break;
           case TYPEMP3:
-            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
-                (ti.tstreams != NULL))
+            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
+                (ti.stracks != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "MP3 files.\n");
             file->reader = new mp3_reader_c(&ti);
             break;
           case TYPEAC3:
-            if ((ti.astreams != NULL) || (ti.vstreams != NULL) ||
-                (ti.tstreams != NULL))
+            if ((ti.atracks != NULL) || (ti.vtracks != NULL) ||
+                (ti.stracks != NULL))
               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
                       "AC3 files.\n");
             file->reader = new ac3_reader_c(&ti);
@@ -654,15 +652,15 @@ static void parse_args(int argc, char **argv) {
 //             chapters = chapter_information_read(file->name);
 //             break;
 //           case TYPEMICRODVD:
-//             if ((astreams != NULL) || (vstreams != NULL) ||
-//                 (tstreams != NULL))
+//             if ((atracks != NULL) || (vtracks != NULL) ||
+//                 (stracks != NULL))
 //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
 //                       "MicroDVD files.\n");
 //             file->reader = new microdvd_reader_c(file->name, &async);
 //             break;
 //           case TYPEVOBSUB:
-//             if ((astreams != NULL) || (vstreams != NULL) ||
-//                 (tstreams != NULL))
+//             if ((atracks != NULL) || (vtracks != NULL) ||
+//                 (stracks != NULL))
 //               fprintf(stderr, "Warning: -a/-A/-d/-D/-t/-T are ignored for " \
 //                       "VobSub files.\n");
 //             file->reader = new vobsub_reader_c(file->name, &async);
@@ -688,13 +686,13 @@ static void parse_args(int argc, char **argv) {
 
       noaudio = 0;
       novideo = 0;
-      notext = 0;
-      if (ti.astreams != NULL)
-        free(ti.astreams);
-      if (ti.vstreams != NULL)
-        free(ti.vstreams);
-      if (ti.tstreams != NULL)
-        free(ti.tstreams);
+      nosubs = 0;
+      if (ti.atracks != NULL)
+        free(ti.atracks);
+      if (ti.vtracks != NULL)
+        free(ti.vtracks);
+      if (ti.stracks != NULL)
+        free(ti.stracks);
       memset(&ti, 0, sizeof(track_info_t));
       ti.async.linear = 1.0;
     }
