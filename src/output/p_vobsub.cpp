@@ -164,8 +164,9 @@ int vobsub_packetizer_c::deliver_packet(unsigned char *buf, int size,
 
   duration = extract_duration(buf, size, timecode);
   if (duration == -1) {
-    mxverb(3, PFX "Could not extract the duration for a SPU packet (timecode: "
-           FMT_TIMECODE ").\n", ARG_TIMECODE(timecode - initial_displacement));
+    mxverb(2, PFX "Could not extract the duration for a SPU packet in track "
+           "%lld of '%s' (timecode: " FMT_TIMECODE ").\n", ti->id, ti->fname,
+           ARG_TIMECODE(timecode - initial_displacement));
     duration = default_duration;
   }
   if (duration != -2) {
@@ -195,6 +196,9 @@ int vobsub_packetizer_c::process(unsigned char *srcbuf, int size,
   timecode += initial_displacement;
   if (timecode < 0)
     return EMOREDATA;
+
+  if ((timecode >= 834000) && (timecode < 838000))
+    mxverb(5, "yuck");
 
   if (extract_from_mpeg) {
     mm_mem_io_c in(srcbuf, size);

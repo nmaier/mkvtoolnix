@@ -200,10 +200,10 @@ void vobsub_reader_c::parse_headers() {
   const char *sline;
   char language[3];
   vobsub_track_c *track;
-  int64_t filepos, timestamp, next_pos, this_pos;
+  int64_t filepos, timestamp;
   int hour, minute, second, msecond, idx;
-  vector<int64_t> *positions, sorted_positions;
-  uint32_t i, k, l, tsize, psize, ssize;
+  vector<int64_t> *positions;
+  uint32_t i, k, tsize, psize;
 
   language[0] = 0;
   track = NULL;
@@ -264,28 +264,15 @@ void vobsub_reader_c::parse_headers() {
   if (!identifying) {
     filepos = sub_file->get_size();
     tsize = tracks.size();
-    for (i = 0; i < tsize; i++) {
-      positions = &tracks[i]->positions;
-      psize = positions->size();
-      for (k = 0; k < psize; k++)
-        sorted_positions.push_back((*positions)[k]);
-    }
-    sort(sorted_positions.begin(), sorted_positions.end());
-    ssize = sorted_positions.size();
 
     for (i = 0; i < tsize; i++) {
       positions = &tracks[i]->positions;
       psize = positions->size();
       for (k = 0; k < psize; k++) {
-        next_pos = filepos;
-        this_pos = (*positions)[k];
-        for (l = 0; l < ssize; l++)
-          if (sorted_positions[l] > this_pos) {
-            next_pos = sorted_positions[l];
-            break;
-          }
-
-        tracks[i]->sizes.push_back(next_pos - this_pos);
+        if (k < (psize - 1))
+          tracks[i]->sizes.push_back((*positions)[k + 1] - (*positions)[k]);
+        else
+          tracks[i]->sizes.push_back(filepos - (*positions)[k]);
       }
     }
 
