@@ -274,7 +274,7 @@ dnl
 dnl Check for libFLAC
 dnl
   AC_CHECK_LIB(FLAC, FLAC__stream_decoder_new,
-               [ FLAC_LIBS="-lflac -m"
+               [ FLAC_LIBS="-lFLAC -lm"
                  flac_found=yes ],
                [ flac_found=no ],
                "$FLAC_LIBS")

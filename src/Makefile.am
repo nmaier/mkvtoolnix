@@ -36,7 +36,7 @@ mkvmerge_SOURCES = mkvmerge.cpp \
 mkvmerge_LDADD = -lmtxinput -lmtxoutput -lmtxcommon \
 		@AVILIB_LIBS@ @AVICLASSES_LIBS@ \
 		@MATROSKA_LIBS@ @EBML_LIBS@ \
-		@VORBIS_LIBS@ @OGG_LIBS@ \
+		@VORBIS_LIBS@ @FLAC_LIBS@ @OGG_LIBS@ \
 		@ICONV_LIBS@ @MINGW_LIBS@ @EXPAT_LIBS@ \
 		@ZLIB_LIBS@ @LZO_LIBS@ @BZ2_LIBS@ \
 		@PROFILING_LIBS@
