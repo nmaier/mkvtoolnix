@@ -341,7 +341,7 @@ void ogm_reader_c::create_packetizers() {
 
       case OGM_STREAM_TYPE_TEXT:
         try {
-          dmx->packetizer = new textsubs_packetizer_c(this, ti);
+          dmx->packetizer = new textsubs_packetizer_c(this, NULL, 0, ti);
         } catch (error_c &error) {
           fprintf(stderr, "Error: ogm_reader: could not initialize the "
                   "text subtitles packetizer for stream id %d. Will try to "

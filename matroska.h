@@ -40,7 +40,9 @@
 
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 
-#define MKV_S_TEXTASCII  "S_TEXT/ASCII"
 #define MKV_S_TEXTUTF8   "S_TEXT/UTF8"
+#define MKV_S_TEXTSSA    "S_TEXT/SSA"
+#define MKV_S_TEXTASS    "S_TEXT/ASS"
+#define MKV_S_TEXTUSF    "S_TEXT/USF"
 
 #endif // __MATROSKA_H

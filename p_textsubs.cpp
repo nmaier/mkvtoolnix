@@ -31,19 +31,26 @@
 using namespace LIBMATROSKA_NAMESPACE;
 
 textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *nreader,
+                                             const void *nglobal_data,
+                                             int nglobal_size,
                                              track_info_t *nti)
   throw (error_c): generic_packetizer_c(nreader, nti) {
   packetno = 0;
   cc_utf8 = utf8_init(ti->sub_charset);
+  global_size = nglobal_size;
+  global_data = safememdup(global_data, global_size);
 
   set_track_type(track_subtitle);
 }
 
 textsubs_packetizer_c::~textsubs_packetizer_c() {
+  safefree(global_data);
 }
 
 void textsubs_packetizer_c::set_headers() {
   set_codec_id(MKV_S_TEXTUTF8);
+  if (global_data != NULL)
+    set_codec_private((unsigned char *)global_data, global_size);
 
   generic_packetizer_c::set_headers();
 

@@ -28,9 +28,12 @@
 class textsubs_packetizer_c: public generic_packetizer_c {
 private:
   int packetno, cc_utf8;
+  void *global_data;
+  int global_size;
 
 public:
-  textsubs_packetizer_c(generic_reader_c *nreader, track_info_t *nti)
+  textsubs_packetizer_c(generic_reader_c *nreader, const void *nglobal_data,
+                        int nglobal_size, track_info_t *nti)
     throw (error_c);
   virtual ~textsubs_packetizer_c();
 
