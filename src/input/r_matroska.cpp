@@ -1797,7 +1797,10 @@ kax_reader_c::read(generic_packetizer_c *,
         cluster->InitTimecode(cluster_tc, tc_scale);
         if (first_timecode == -1) {
           first_timecode = cluster_tc * tc_scale;
-          if ((chapters != NULL) && (first_timecode > 0))
+
+          // If we're appending this file to another one then the core
+          // needs the timecodes shifted to zero.
+          if (appending && (chapters != NULL) && (first_timecode > 0))
             adjust_chapter_timecodes(*chapters, -first_timecode);
         }
 
@@ -1873,6 +1876,10 @@ kax_reader_c::read(generic_packetizer_c *,
           }
 
           last_timecode = block->GlobalTimecode();
+          // If we're appending this file to another one then the core
+          // needs the timecodes shifted to zero.
+          if (appending)
+            last_timecode -= first_timecode;
 
           if ((block_track != NULL) && (block_track->ptzr != -1) &&
               block_track->passthrough) {

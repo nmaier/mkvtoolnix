@@ -1,5 +1,10 @@
 2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Appending files that were created with
+	mkvmerge's "--link" option was broken. The timecodes for both the
+	chapters and the actual media data blocks were not adjusted
+	correctly. Fixes Anthill bugs 115 and 116.
+
 	* mkvmerge: bug fix: If chapters are present in several appended
 	files and there were atoms who shared the same UID then those
 	entries were present multiple times in the output files. Now such
