@@ -10,7 +10,8 @@
 	* mkvmerge: bug fix: Failing calls to posix_fadvise upon adding a
 	file to mmg caused mmg to think that the file identification
 	failed. Now warnings for posix_fadvise are not output anymore, and
-	posix_fadvise is silently switched off for that file.
+	posix_fadvise is silently switched off for that file. Fixes
+	Anthill bug 123.
 
 	* mkvmerge: bug fix: Appending files that were created with
 	mkvmerge's "--link" option was broken. The timecodes for both the
