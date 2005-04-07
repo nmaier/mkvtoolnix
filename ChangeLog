@@ -1,5 +1,10 @@
 2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Failing calls to posix_fadvise upon adding a
+	file to mmg caused mmg to think that the file identification
+	failed. Now warnings for posix_fadvise are not output anymore, and
+	posix_fadvise is silently switched off for that file.
+
 	* mkvmerge: bug fix: Appending files that were created with
 	mkvmerge's "--link" option was broken. The timecodes for both the
 	chapters and the actual media data blocks were not adjusted
@@ -8,7 +13,8 @@
 	* mkvmerge: bug fix: If chapters are present in several appended
 	files and there were atoms who shared the same UID then those
 	entries were present multiple times in the output files. Now such
-	entries are merged into one chapter entry.
+	entries are merged into one chapter entry. Fixes the second part
+	of Anthill bug 122.
 
 2005-04-06  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -16,12 +22,13 @@
 	enabled then mkvmerge would not treat chapters correctly that
 	spanned across several files. Now the spanning chapters are kept
 	in all files, and their start timecodes are adjusted accordingly.
+	Fixes the first part of Anthill bug 122.
 
 2005-03-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: On Windows mkvinfo was linked without the
 	console subsystem resulting in no output at all if run without the
-	GUI (-g).
+	GUI (-g). Fixes Anthill Bug 118.
 
 2005-03-23  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -34,7 +41,7 @@
 	* mkvmerge: bug fix: Appending VobSubs with more than one track in
 	a .idx file and video files at the same time was broken resulting
 	in parts of some of the VobSub tracks not ending up in the
-	resulting Matroska file.
+	resulting Matroska file. Fixes Anthill bug 114.
 
 2005-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -42,7 +49,7 @@
 	appending tracks (this is more or less cosmetic).
 
 	* mkvmerge: bug fix: Splitting by time was broken for audio-only
-	files.
+	files. Fixes Anthill bug 112.
 
 	* mkvmerge: bug fix: The --fourcc switch was not working.
 
