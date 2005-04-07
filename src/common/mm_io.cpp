@@ -104,7 +104,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   if (use_posix_fadvise && use_posix_fadvise_here &&
       (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
                           advise))) {
-    mxwarn(FADVISE_WARNING, path.c_str(), errno, strerror(errno));
+    mxverb(2, FADVISE_WARNING, path.c_str(), errno, strerror(errno));
     use_posix_fadvise_here = false;
   }
 # endif
@@ -149,7 +149,7 @@ mm_file_io_c::write(const void *buffer,
     write_count = 0;
     if (0 != posix_fadvise(fileno((FILE *)file), 0, pos,
                            POSIX_FADV_DONTNEED)) {
-      mxwarn(FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+      mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
       use_posix_fadvise_here = false;
     }
   }
@@ -173,13 +173,13 @@ mm_file_io_c::read(void *buffer,
       int fd = fileno((FILE *)file);
       read_count = 0;
       if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
-        mxwarn(FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
         use_posix_fadvise_here = false;
       }
       if (use_posix_fadvise_here && 
           (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
                               POSIX_FADV_WILLNEED))) {
-        mxwarn(FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
         use_posix_fadvise_here = false;
       }
     }
