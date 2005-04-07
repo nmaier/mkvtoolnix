@@ -41,6 +41,7 @@ struct track_spec_t {
   bool embed_in_ogg;
   bool extract_cuesheet;
 
+  int extract_raw;
   int extract_blockadd_level;
 
   bool done;

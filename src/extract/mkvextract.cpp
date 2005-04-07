@@ -100,6 +100,9 @@ usage() {
 "                   information and tags for this track.\n"
 "  --blockadd level Keep only the BlockAdditions up to this level\n"
 "                   (default: keep all levels)\n"
+"  --raw            Extract the data to a raw file.\n"
+"  --fullraw        Extract the data to a raw file including the CodecPrivate"
+"                   as a header.\n"
 "  TID:out          Write track with the ID TID to the file 'out'.\n"
 "\n"
 " Example:\n"
@@ -157,6 +160,7 @@ parse_args(vector<string> args,
   int64_t tid;
   track_spec_t track;
   bool embed_in_ogg, extract_cuesheet;
+  int extract_raw;
   int extract_blockadd_level = -1;
 
   file_name = "";
@@ -201,6 +205,7 @@ parse_args(vector<string> args,
   sub_charset = "UTF-8";
   embed_in_ogg = true;
   extract_cuesheet = false;
+  extract_raw = 0;
 
   // Now process all the other options.
   for (i = 2; i < args.size(); i++)
@@ -246,6 +251,16 @@ parse_args(vector<string> args,
                 args[i + 1].c_str());
       i++;
 
+    } else if ((args[i] == "--raw")) {
+      if (mode != MODE_TRACKS)
+        mxerror(_("'--raw' is only allowed when extracting tracks.\n"));
+      extract_raw = 1;
+
+    } else if ((args[i] == "--fullraw")) {
+      if (mode != MODE_TRACKS)
+        mxerror(_("'--fullraw' is only allowed when extracting tracks.\n"));
+      extract_raw = 2;
+
    } else if (mode == MODE_TAGS)
       mxerror(_("No further options allowed when extracting %s.\n"),
               args[0].c_str());
@@ -290,11 +305,13 @@ parse_args(vector<string> args,
       track.embed_in_ogg = embed_in_ogg;
       track.extract_cuesheet = extract_cuesheet;
       track.extract_blockadd_level = extract_blockadd_level;
+      track.extract_raw = extract_raw;
       tracks.push_back(track);
       safefree(copy);
       sub_charset = "UTF-8";
       embed_in_ogg = true;
       extract_cuesheet = false;
+      extract_raw = 0;
 
     } else
       mxerror(_("Unrecognized command line option '%s'. Maybe you put a "

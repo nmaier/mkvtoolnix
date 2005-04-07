@@ -1,5 +1,9 @@
 2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: new feature: Added the extraction of the raw
+	data with the "--raw" and "--fullraw" flags. Patch by Steve Lhomme
+	(see AUTHORS).
+
 	* mkvextract: bug fix: WAVPACK extraction did not update the
 	"number of samples" header field. Patch by Steve Lhomme (see
 	AUTHORS).

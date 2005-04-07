@@ -56,4 +56,11 @@ public:
                                       int64_t new_tid, track_spec_t &tspec);
 };
 
+class xtr_fullraw_c : public xtr_base_c {
+public:
+  xtr_fullraw_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec):
+    xtr_base_c(_codec_id, _tid, tspec) {}
+  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+};
+
 #endif

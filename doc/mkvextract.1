@@ -34,26 +34,43 @@ supported is the extraction of \fBtracks\fR, \fBtags\fR, \fBattachments\fR,
 The second argument is the name of the source file. It must be a Matroska file.
 
 .LP
-Command line syntax for the \fBtracks\fR extraction mode:
+The following command line options are available for each track in the
+\fBtracks\fR extraction mode.
+They have to appear in front of the track specification (see below) they should
+be applied to.
 .TP
 \fB\-c\fR \fIcharset\fR
 Sets the charset to convert the next text subtitle track to. Only valid if the
 next track ID targets a text subtitle track. It defaults to UTF-8.
 .TP
-\fB\-\-no\-ogg\fR
-Only valid for FLAC tracks. Normally FLAC tracks are embedded in an Ogg
-transport stream. With this switch they are extracted to raw FLAC files
-instead.
+\fB\-\-blockadd\fR \fIlevel\fR
+Keep only the BlockAdditions up to this level.
+The default is to keep all levels.
+This option only affects certain kinds of codecs like WAVPACK4.
 .TP
 \fB\-\-cuesheet\fR
 Causes \fBmkvextract\fR to extract a CUE sheet from the chapter information
 and tag data for the following track into a file whose name is the track's
 output name with ".cue" appended to it.
 .TP
-\fB\-\-blockadd\fR \fIlevel\fR
-Keep only the BlockAdditions up to this level.
-The default is to keep all levels.
-This option only affects certain kinds of codecs like WAVPACK4.
+\fB\-\-fullraw\fR
+Extracts the raw data into a file without any container data around it.
+The contents of the CodecPrivate element will be written to the file first
+if the track contains such a header element.
+This mode works with all CodecIDs, even the ones that \fBmkvextract\fR doesn't
+support otherwise, but the resulting files might not be usable.
+.TP
+\fB\-\-no\-ogg\fR
+Only valid for FLAC tracks. Normally FLAC tracks are embedded in an Ogg
+transport stream. With this switch they are extracted to raw FLAC files
+instead.
+.TP
+\fB\-\-raw\fR
+Extracts the raw data into a file without any container data around it.
+Unlike the \fB\-\-fullraw\fR flag this flag does not cause the contents of
+the CodecPrivate element to be written to the file.
+This mode works with all CodecIDs, even the ones that \fBmkvextract\fR doesn't
+support otherwise, but the resulting files might not be usable.
 .TP
 \fITID\fR:\fIoutname\fR
 Causes extraction of the track with the ID \fITID\fR into the file
@@ -214,6 +231,12 @@ the same output name for those tracks that you want to end up in the same
 file:
 .LP
 $ \fBmkvextract tracks movie2.mkv 1:extracted.rm 3:extracted.rm\fR
+.LP
+Sometimes you the raw data of a track might even be useful, e.g. for MPEG-1
+tracks.
+In this case you can use a track flag like this:
+.LP
+$ \fBmkvextract tracks movie3.mkv --fullraw 1:extracted.mpeg\fR
 
 .SH AUTHOR
 .I mkvextract

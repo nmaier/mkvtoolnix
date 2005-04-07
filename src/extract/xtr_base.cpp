@@ -95,10 +95,15 @@ xtr_base_c *
 xtr_base_c::create_extractor(const string &new_codec_id,
                              int64_t new_tid,
                              track_spec_t &tspec) {
+  // Raw format
+  if (1 == tspec.extract_raw)
+    return new xtr_base_c(new_codec_id, new_tid, tspec);
+  else if (2 == tspec.extract_raw)
+    return new xtr_fullraw_c(new_codec_id, new_tid, tspec);
   // Audio formats
-  if ((new_codec_id == MKV_A_AC3) ||
-      starts_with_case(new_codec_id, "A_MPEG/L") ||
-      (new_codec_id == MKV_A_DTS))
+  else if ((new_codec_id == MKV_A_AC3) ||
+           starts_with_case(new_codec_id, "A_MPEG/L") ||
+           (new_codec_id == MKV_A_DTS))
     return new xtr_base_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_PCM)
     return new xtr_wav_c(new_codec_id, new_tid, tspec);
@@ -139,3 +144,15 @@ xtr_base_c::create_extractor(const string &new_codec_id,
   return NULL;
 }
 
+void
+xtr_fullraw_c::create_file(xtr_base_c *_master,
+                           KaxTrackEntry &track) {
+  KaxCodecPrivate *priv;
+
+  xtr_base_c::create_file(_master, track);
+
+  priv = FINDFIRST(&track, KaxCodecPrivate);
+
+  if ((NULL != priv) && (0 != priv->GetSize()))
+    out->write(priv->GetBuffer(), priv->GetSize());
+}
