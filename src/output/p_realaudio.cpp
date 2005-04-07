@@ -51,7 +51,6 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
 }
 
 ra_packetizer_c::~ra_packetizer_c() {
-  safefree(private_data);
 }
 
 void
