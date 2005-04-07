@@ -1,5 +1,12 @@
 2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: RealMedia files contain a "FPS" field in
+	their track headers. Unfortunately this field does not always
+	contain the actual FPS of a video track but the maximum number of
+	FPS that the encoder has output or should output. Therefore
+	mkvmerge does not use a "default duration" element for RealVideo
+	tracks anymore. Fixes Anthill bug 113.
+
 	* mkvmerge: bug fix: Failing calls to posix_fadvise upon adding a
 	file to mmg caused mmg to think that the file identification
 	failed. Now warnings for posix_fadvise are not output anymore, and
