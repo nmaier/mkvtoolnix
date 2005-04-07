@@ -1,5 +1,9 @@
 2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: WAVPACK extraction did not update the
+	"number of samples" header field. Patch by Steve Lhomme (see
+	AUTHORS).
+
 	* mkvmerge: bug fix: RealMedia files contain a "FPS" field in
 	their track headers. Unfortunately this field does not always
 	contain the actual FPS of a video track but the maximum number of

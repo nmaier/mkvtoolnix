@@ -211,5 +211,12 @@ xtr_wavpack4_c::handle_block(KaxBlock &block,
 
 void
 xtr_wavpack4_c::finish_file() {
-  delete corr_out;
+  out->setFilePointer(12);
+  out->write_uint32_le(number_of_samples);
+
+  if (NULL != corr_out) {
+    corr_out->setFilePointer(12);
+    corr_out->write_uint32_le(number_of_samples);
+    delete corr_out;
+  }
 }
