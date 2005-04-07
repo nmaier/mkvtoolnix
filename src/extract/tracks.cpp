@@ -289,14 +289,12 @@ extract_tracks(const char *file_name,
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
   EbmlStream *es;
   KaxCluster *cluster;
-  KaxBlock *block;
   uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
   bool tracks_found;
   mm_io_c *in;
   KaxChapters all_chapters;
   KaxTags all_tags;
 
-  block = NULL;
   // open input file
   try {
     in = new mm_file_io_c(file_name);
