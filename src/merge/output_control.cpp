@@ -1513,7 +1513,9 @@ finish_file(bool last_file) {
     if (splitting)
       chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
                                                    offset);
+
     if (chapters_here != NULL) {
+      merge_chapter_entries(*chapters_here);
       sort_ebml_master(chapters_here);
       kax_chapters_void->ReplaceWith(*chapters_here, *out, true, true);
       chapters_in_this_file =

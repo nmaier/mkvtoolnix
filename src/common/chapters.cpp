@@ -457,18 +457,43 @@ parse_chapters(mm_text_io_c *in,
    Its parameters don't have to be checked for validity.
 
    \param atom The atom for which the start timecode should be returned.
+   \param value_if_not_found The value to return if no start timecode child
+     element was found. Defaults to -1.
 
-   \return The start timecode or \c -1 if the atom doesn't contain such a
-     child element.
+   \return The start timecode or \c value_if_not_found if the atom doesn't
+     contain such a child element.
 */
 int64_t
-get_chapter_start(KaxChapterAtom &atom) {
+get_chapter_start(KaxChapterAtom &atom,
+                  int64_t value_if_not_found) {
   KaxChapterTimeStart *start;
 
   start = FINDFIRST(&atom, KaxChapterTimeStart);
-  if (start == NULL)
-    return -1;
-  return uint64(*static_cast<EbmlUInteger *>(start));
+  if (NULL == start)
+    return value_if_not_found;
+  return uint64(*start);
+}
+
+/** \brief Get the end timecode for a chapter atom.
+
+   Its parameters don't have to be checked for validity.
+
+   \param atom The atom for which the end timecode should be returned.
+   \param value_if_not_found The value to return if no end timecode child
+     element was found. Defaults to -1.
+
+   \return The start timecode or \c value_if_not_found if the atom doesn't
+     contain such a child element.
+*/
+int64_t
+get_chapter_end(KaxChapterAtom &atom,
+                int64_t value_if_not_found) {
+  KaxChapterTimeEnd *end;
+
+  end = FINDFIRST(&atom, KaxChapterTimeEnd);
+  if (NULL == end)
+    return value_if_not_found;
+  return uint64(*end);
 }
 
 /** \brief Get the name for a chapter atom.
@@ -730,10 +755,115 @@ remove_entries(int64_t min_tc,
   delete []entries;
 }
 
+/** \brief Merge all chapter atoms sharing the same UID
+
+   If two or more chapters with the same UID are encountered on the same
+   level then those are merged into a single chapter. The start timecode
+   is the minimum start timecode of all the chapters, and the end timecode
+   is the maximum end timecode of all the chapters.
+
+   The parameters do not have to be checked for validity.
+
+   \param master The master containing the elements to check.
+*/
+void
+merge_chapter_entries(EbmlMaster &master) {
+  int i, k;
+
+  // Iterate over all children of the atomaster.
+  for (i = 0; master.ListSize() > i; ++i) {
+    KaxChapterAtom *atom, *merge_this;
+    int64_t uid, start_tc, end_tc;
+
+    // Not every child is a chapter atomaster. Skip those.
+    atom = dynamic_cast<KaxChapterAtom *>(master[i]);
+    if (NULL == atom)
+      continue;
+
+    uid = get_chapter_uid(*atom);
+    if (-1 == uid)
+      continue;
+
+    // First get the start and end time, if present.
+    start_tc = get_chapter_start(*atom, 0);
+    end_tc = get_chapter_end(*atom);
+
+    mxverb(3, "chapters: merge_entries: looking for %lld with %lld, %lld\n",
+           uid, start_tc, end_tc);
+
+    // Now iterate over all remaining atoms and find those with the same
+    // UID.
+    k = i + 1;
+    while (true) {
+      int64_t merge_start_tc, merge_end_tc;
+
+      merge_this = NULL;
+      for (; master.ListSize() > k; ++k) {
+        KaxChapterAtom *cmp_atom;
+
+        cmp_atom = dynamic_cast<KaxChapterAtom *>(master[k]);
+        if (NULL == cmp_atom)
+          continue;
+
+        if (get_chapter_uid(*cmp_atom) == uid) {
+          merge_this = cmp_atom;
+          break;
+        }
+      }
+
+      // If we haven't found an atom with the same UID then we're done here.
+      if (NULL == merge_this)
+        break;
+
+      // Do the merger! First get the start and end timecodes if present.
+      merge_start_tc = get_chapter_start(*merge_this, 0);
+      merge_end_tc = get_chapter_end(*merge_this);
+
+      // Then compare them to the ones we have for the soon-to-be merged
+      // chapter and assign accordingly.
+      if (merge_start_tc < start_tc)
+        start_tc = merge_start_tc;
+      if ((-1 == end_tc) || (merge_end_tc > end_tc))
+        end_tc = merge_end_tc;
+
+      mxverb(3, "chapters: merge_entries:   found one at %d with %lld, %lld; "
+             "merged to %lld, %lld\n", k, merge_start_tc, merge_end_tc,
+             start_tc, end_tc);
+
+      // Finally remove the entry itself.
+      delete master[k];
+      master.Remove(k);
+    }
+
+    // Assign the start and end timecode to the chapter. Only assign an
+    // end timecode if one was present in at least one of the merged
+    // chapter atoms.
+    *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*atom)) =
+      start_tc;
+
+    if (-1 != end_tc)
+      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeEnd>(*atom)) =
+        end_tc;
+  }
+
+  // Recusively merge atoms.
+  for (i = 0; master.ListSize() > i; ++i)
+    if (NULL != dynamic_cast<EbmlMaster *>(master[i]))
+      merge_chapter_entries(*static_cast<EbmlMaster *>(master[i]));
+}
+
 /** \brief Remove all chapter atoms that are outside of a time range
 
    All chapter atoms that lie completely outside the timecode range
    given with <tt>[min_tc..max_tc]</tt> are deleted.
+
+   Chapters which start before the window but end inside or after the window
+   are kept as well, and their start timecode is adjusted.
+
+   If two or more chapters with the same UID are encountered on the same
+   level then those are merged into a single chapter. The start timecode
+   is the minimum start timecode of all the chapters, and the end timecode
+   is the maximum end timecode of all the chapters.
 
    The parameters are checked for validity.
 

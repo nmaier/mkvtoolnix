@@ -89,7 +89,10 @@ select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc,
 extern string MTX_DLL_API default_chapter_language, default_chapter_country;
 
 int64_t MTX_DLL_API get_chapter_uid(KaxChapterAtom &atom);
-int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom);
+int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom,
+                                      int64_t value_if_not_found = -1);
+int64_t MTX_DLL_API get_chapter_end(KaxChapterAtom &atom,
+                                    int64_t value_if_not_found = -1);
 string MTX_DLL_API get_chapter_name(KaxChapterAtom &atom);
 
 void MTX_DLL_API fix_mandatory_chapter_elements(EbmlElement *e);
@@ -100,5 +103,6 @@ KaxChapterAtom *MTX_DLL_API find_chapter_with_uid(KaxChapters &chapters,
 
 void MTX_DLL_API move_chapters_by_edition(KaxChapters &dst, KaxChapters &src);
 void MTX_DLL_API adjust_chapter_timecodes(EbmlMaster &master, int64_t offset);
+void MTX_DLL_API merge_chapter_entries(EbmlMaster &master);
 #endif // __CHAPTERS_H
 

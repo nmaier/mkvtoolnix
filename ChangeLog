@@ -1,3 +1,10 @@
+2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If chapters are present in several appended
+	files and there were atoms who shared the same UID then those
+	entries were present multiple times in the output files. Now such
+	entries are merged into one chapter entry.
+
 2005-04-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: If chapters were present and splitting was
