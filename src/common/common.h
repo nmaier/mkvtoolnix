@@ -131,7 +131,7 @@ void MTX_DLL_API mxverb(int level, const char *fmt, ...);
 void MTX_DLL_API mxdebug(const char *fmt, ...);
 int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...);
 #endif
-string MTX_DLL_API mxvsprintf(const char *fmt, va_list &ap);
+string MTX_DLL_API mxvsprintf(const char *fmt, va_list ap);
 void MTX_DLL_API mxexit(int code = -1);
 
 #define trace() _trace(__func__, __FILE__, __LINE__)

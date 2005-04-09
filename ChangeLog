@@ -1,3 +1,8 @@
+2005-04-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: My output functions did not work on AMD64
+	systems. Fixes Anthill bug 120.
+
 2005-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: new feature: Added the extraction of the raw

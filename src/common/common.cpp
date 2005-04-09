@@ -1266,7 +1266,7 @@ mxprints(char *dst,
 static void
 mxmsg(int level,
       const char *fmt,
-      va_list &ap) {
+      va_list ap) {
   string new_fmt, output;
   bool nl;
   FILE *stream;
@@ -1397,7 +1397,11 @@ get_varg_len(const char *fmt,
   size = 1024;
   dst = (char *)safemalloc(size);
   while (1) {
-    result = vsnprintf(dst, size - 1, fmt, ap);
+    va_list ap2;
+
+    va_copy(ap2, ap);
+    result = vsnprintf(dst, size - 1, fmt, ap2);
+    va_end(ap2);
     if (result >= 0) {
       safefree(dst);
       return result;
@@ -1412,16 +1416,18 @@ get_varg_len(const char *fmt,
 
 string
 mxvsprintf(const char *fmt,
-           va_list &ap) {
+           va_list ap) {
   string new_fmt, dst;
   char *new_string;
   int len;
+  va_list ap2;
 
   fix_format(fmt, new_fmt);
   len = get_varg_len(new_fmt.c_str(), ap);
   new_string = (char *)safemalloc(len + 1);
-  vsprintf(new_string, new_fmt.c_str(), ap);
-  va_end(ap);
+  va_copy(ap2, ap);
+  vsprintf(new_string, new_fmt.c_str(), ap2);
+  va_end(ap2);
   dst = new_string;
   safefree(new_string);
 
