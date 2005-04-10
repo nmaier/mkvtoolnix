@@ -30,10 +30,12 @@ class MTX_DLL_API mm_io_c: public IOCallback {
 protected:
   bool dos_style_newlines;
   stack<int64_t> positions;
+  int64_t m_current_position;
 
 public:
   mm_io_c():
-    dos_style_newlines(false) {
+    dos_style_newlines(false),
+    m_current_position(0) {
   }
   virtual ~mm_io_c() { }
 
@@ -102,6 +104,9 @@ public:
   virtual ~mm_file_io_c();
 
   virtual uint64 getFilePointer();
+#if defined(SYS_WINDOWS)
+  virtual uint64 get_real_file_pointer();
+#endif
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size);
   virtual size_t write(const void *buffer, size_t size);

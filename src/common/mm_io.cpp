@@ -110,11 +110,6 @@ mm_file_io_c::mm_file_io_c(const string &path,
 # endif
 }
 
-uint64
-mm_file_io_c::getFilePointer() {
-  return ftello((FILE *)file);
-}
-
 void
 mm_file_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
@@ -129,6 +124,13 @@ mm_file_io_c::setFilePointer(int64 offset,
 
   if (fseeko((FILE *)file, offset, whence) != 0)
     throw error_c("seeking failed");
+
+  if (mode == seek_beginning)
+    m_current_position = offset;
+  else if (mode == seek_end)
+    m_current_position = ftello((FILE *)file);
+  else
+    m_current_position += offset;
 }
 
 size_t
@@ -154,6 +156,8 @@ mm_file_io_c::write(const void *buffer,
     }
   }
 # endif
+
+  m_current_position += bwritten;
 
   return bwritten;
 }
@@ -185,6 +189,8 @@ mm_file_io_c::read(void *buffer,
     }
   }
 # endif
+
+  m_current_position += bread;
 
   return bread;
 }
@@ -288,7 +294,7 @@ mm_file_io_c::close() {
 }
 
 uint64
-mm_file_io_c::getFilePointer() {
+mm_file_io_c::get_real_file_pointer() {
   LONG high = 0;
   DWORD low;
 
@@ -302,7 +308,7 @@ mm_file_io_c::getFilePointer() {
 void
 mm_file_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  DWORD method;
+  DWORD method, low;
   LONG high;
 
   switch (mode) {
@@ -321,7 +327,13 @@ mm_file_io_c::setFilePointer(int64 offset,
   }
 
   high = (LONG)(offset >> 32);
-  SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high, method);
+  low = SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high,
+                       method);
+
+  if ((INVALID_SET_FILE_POINTER == low) && (GetLastError() != NO_ERROR))
+    throw error_c("seeking failed");
+
+  m_current_position = (int64_t)low + ((int64_t)high << 32);
 }
 
 uint32
@@ -331,11 +343,14 @@ mm_file_io_c::read(void *buffer,
 
   if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
     _eof = true;
+    m_current_position = get_real_file_pointer();
     return 0;
   }
 
   if (size != bytes_read)
     _eof = true;
+
+  m_current_position += bytes_read;
 
   return bytes_read;
 }
@@ -376,6 +391,8 @@ mm_file_io_c::write(const void *buffer,
       LocalFree(error_msg);
   }
 
+  m_current_position += bytes_written;
+
   return bytes_written;
 }
 
@@ -405,6 +422,11 @@ mm_file_io_c::setup() {
 }
 
 #endif // SYS_UNIX
+
+uint64
+mm_file_io_c::getFilePointer() {
+  return m_current_position;
+}
 
 mm_file_io_c::~mm_file_io_c() {
   close();
