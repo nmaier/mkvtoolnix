@@ -1397,11 +1397,15 @@ get_varg_len(const char *fmt,
   size = 1024;
   dst = (char *)safemalloc(size);
   while (1) {
+#if defined(COMP_MSC)
+    result = vsnprintf(dst, size - 1, fmt, ap);
+#else
     va_list ap2;
 
     va_copy(ap2, ap);
     result = vsnprintf(dst, size - 1, fmt, ap2);
     va_end(ap2);
+#endif // defined(COMP_MSC)
     if (result >= 0) {
       safefree(dst);
       return result;
@@ -1420,14 +1424,20 @@ mxvsprintf(const char *fmt,
   string new_fmt, dst;
   char *new_string;
   int len;
+#if !defined(COMP_MSC)
   va_list ap2;
+#endif
 
   fix_format(fmt, new_fmt);
   len = get_varg_len(new_fmt.c_str(), ap);
   new_string = (char *)safemalloc(len + 1);
+#if defined(COMP_MSC)
+  vsprintf(new_string, new_fmt.c_str(), ap);
+#else
   va_copy(ap2, ap);
   vsprintf(new_string, new_fmt.c_str(), ap2);
   va_end(ap2);
+#endif // defined(COMP_MSC)
   dst = new_string;
   safefree(new_string);
 
