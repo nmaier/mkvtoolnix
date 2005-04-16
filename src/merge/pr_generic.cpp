@@ -50,7 +50,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   reader = nreader;
 
   track_entry = NULL;
-  free_refs = -1;
+  m_free_refs = -1;
+  m_next_free_refs = -1;
   enqueued_bytes = 0;
   safety_last_timecode = 0;
   safety_last_duration = 0;
@@ -1073,7 +1074,8 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
 void
 generic_packetizer_c::connect(generic_packetizer_c *src,
                               int64_t _append_timecode_offset) {
-  free_refs = src->free_refs;
+  m_free_refs = src->m_free_refs;
+  m_next_free_refs = src->m_next_free_refs;
   track_entry = src->track_entry;
   hserialno = src->hserialno;
   htrack_type = src->htrack_type;

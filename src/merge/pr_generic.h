@@ -447,7 +447,7 @@ protected:
   deque<packet_t *> packet_queue, deferred_packets;
 
   int64_t initial_displacement;
-  int64_t free_refs, enqueued_bytes;
+  int64_t m_free_refs, m_next_free_refs, enqueued_bytes;
   int64_t safety_last_timecode, safety_last_duration;
 
   KaxTrackEntry *track_entry;
@@ -522,11 +522,12 @@ public:
     return enqueued_bytes;
   }
 
-  virtual void set_free_refs(int64_t nfree_refs) {
-    free_refs = nfree_refs;
+  virtual void set_free_refs(int64_t free_refs) {
+    m_free_refs = m_next_free_refs;
+    m_next_free_refs = free_refs;
   }
   virtual int64_t get_free_refs() {
-    return free_refs;
+    return m_free_refs;
   }
   virtual void set_headers();
   virtual void fix_headers();
