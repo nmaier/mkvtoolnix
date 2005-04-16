@@ -1,5 +1,7 @@
 2005-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Released v1.4.2.
+
 	* mkvmerge: bug fix: In rare occasions involving B frames mkvmerge
 	freed data too early. In such a case it was eating more and more
 	memory finally exiting with a message about not finding a packet
