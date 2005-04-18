@@ -195,9 +195,8 @@ mpeg1_2_video_packetizer_c::process(memory_c &mem,
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(mem.data, mem.size);
 
-  if (framed) {
-    assert(0);
-  }
+  if (framed)
+    return video_packetizer_c::process(mem, timecode, duration, bref, fref);
 
   state = parser.GetState();
   if ((state == MPV_PARSER_STATE_EOS) ||
