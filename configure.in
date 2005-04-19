@@ -460,11 +460,19 @@ AC_SUBST(VORBIS_LIBS)
 dnl
 dnl Check for libFLAC
 dnl
-  AC_CHECK_LIB(FLAC, FLAC__seekable_stream_decoder_new,
-               [ FLAC_LIBS="-lFLAC -lm"
-                 flac_found=yes ],
-               [ flac_found=no ],
-               "-lm")
+  AC_ARG_WITH([flac],
+              AC_HELP_STRING([--without-flac], [do not build with flac support]),
+              [ with_flac=${withval} ], [ with_flac=yes ])
+
+  if test "$with_flac" != "no"; then
+    AC_CHECK_LIB(FLAC, FLAC__seekable_stream_decoder_new,
+                 [ FLAC_LIBS="-lFLAC -lm"
+                   flac_found=yes ],
+                 [ flac_found=no ],
+                 "-lm")
+  else
+    flac_found=no
+  fi
   if test "$flac_found" = "yes"; then
     AC_CHECK_MEMBER(FLAC__StreamMetadata_StreamInfo.sample_rate, ,
                     [ flac_found=no ],
@@ -487,7 +495,6 @@ dnl
     FLAC_LIBS=""
     opt_features_no="$opt_features_no; FLAC audio"
   fi
-
 
 AC_SUBST(FLAC_LIBS)
 
