@@ -197,8 +197,10 @@ mm_file_io_c::read(void *buffer,
 
 void
 mm_file_io_c::close() {
-  if (file != NULL)
+  if (NULL != file) {
     fclose((FILE *)file);
+    file = NULL;
+  }
 }
 
 bool
@@ -288,8 +290,10 @@ mm_file_io_c::mm_file_io_c(const string &path,
 
 void
 mm_file_io_c::close() {
-  if (file != NULL)
+  if (NULL != file) {
     CloseHandle((HANDLE)file);
+    file = NULL;
+  }
   file_name = "";
 }
 
@@ -965,37 +969,38 @@ mm_mem_io_c::eof() {
 
 mm_text_io_c::mm_text_io_c(mm_io_c *_in,
                            bool _delete_in):
-  mm_proxy_io_c(_in, _delete_in) {
+  mm_proxy_io_c(_in, _delete_in),
+  byte_order(BO_NONE),
+  bom_len(0) {
   unsigned char buffer[4];
+  int num_read;
 
   _in->setFilePointer(0, seek_beginning);
-  if (_in->read(buffer, 4) != 4) {
-    _in->close();
-    if (_delete_in)
-      delete _in;
-    throw error_c("end-of-file reading the BOM");
+
+  num_read = _in->read(buffer, 4);
+  if (2 > num_read) {
+    _in->setFilePointer(0, seek_beginning);
+    return;
   }
 
-  if ((buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
+  if ((3 <= num_read) &&
+      (buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
     byte_order = BO_UTF8;
     bom_len = 3;
-  } else if ((buffer[0] == 0xff) && (buffer[1] == 0xfe) &&
+  } else if ((4 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe) &&
              (buffer[2] == 0x00) && (buffer[3] == 0x00)) {
     byte_order = BO_UTF32_LE;
     bom_len = 4;
-  } else if ((buffer[0] == 0x00) && (buffer[1] == 0x00) &&
+  } else if ((4 <= num_read) && (buffer[0] == 0x00) && (buffer[1] == 0x00) &&
              (buffer[2] == 0xfe) && (buffer[3] == 0xff)) {
     byte_order = BO_UTF32_BE;
     bom_len = 4;
-  } else if ((buffer[0] == 0xff) && (buffer[1] == 0xfe)) {
+  } else if ((2 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe)) {
     byte_order = BO_UTF16_LE;
     bom_len = 2;
-  } else if ((buffer[0] == 0xfe) && (buffer[1] == 0xff)) {
+  } else if ((2 <= num_read) && (buffer[0] == 0xfe) && (buffer[1] == 0xff)) {
     byte_order = BO_UTF16_BE;
     bom_len = 2;
-  } else {
-    byte_order = BO_NONE;
-    bom_len = 0;
   }
 
   _in->setFilePointer(bom_len, seek_beginning);
