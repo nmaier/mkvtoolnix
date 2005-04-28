@@ -217,7 +217,10 @@ parse_aac_data(unsigned char *data,
     mxverb(4, "%02x ", data[i]);
   mxverb(4, "\n");
 
-  profile = (data[0] >> 3) - 1;
+  profile = data[0] >> 3;
+  if (0 == profile)
+    return false;
+  --profile;
   sample_rate = aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
   channels = (data[1] & 0x7f) >> 3;
   if (size == 5) {
