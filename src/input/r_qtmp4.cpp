@@ -1475,9 +1475,12 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         bool sbraac;
 
         if (dmx->esds.decoder_config_len >= 2) {
-          parse_aac_data(dmx->esds.decoder_config,
-                         dmx->esds.decoder_config_len, profile, channels,
-                         sample_rate, output_sample_rate, sbraac);
+          if (!parse_aac_data(dmx->esds.decoder_config,
+                              dmx->esds.decoder_config_len, profile, channels,
+                              sample_rate, output_sample_rate, sbraac))
+            mxerror(FMT_TID "This AAC track does not contain valid headers. "
+                    "Could not parse the AAC information.\n", ti.fname.c_str(),
+                    (int64_t)dmx->id);
           mxverb(2, PFX "AAC: profile: %d, sample_rate: %d, channels: "
                  "%d, output_sample_rate: %d, sbr: %d\n", profile, sample_rate,
                  channels, output_sample_rate, (int)sbraac);

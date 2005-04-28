@@ -361,9 +361,12 @@ real_reader_c::create_packetizer(int64_t tid) {
           mxverb(2, PFX "extra_len: %u\n", extra_len);
           if (dmx->extra_data_size >= (4 + extra_len)) {
             extra_data_parsed = true;
-            parse_aac_data(&dmx->extra_data[4 + 1], extra_len - 1,
-                           profile, channels, sample_rate, output_sample_rate,
-                           sbr);
+            if (!parse_aac_data(&dmx->extra_data[4 + 1], extra_len - 1,
+                                profile, channels, sample_rate,
+                                output_sample_rate, sbr))
+              mxerror(FMT_TID "This AAC track does not contain valid headers. "
+                      "Could not parse the AAC information.\n",
+                      ti.fname.c_str(), (int64_t)track->id);
             mxverb(2, PFX "1. profile: %d, channels: %d, "
                    "sample_rate: %d, output_sample_rate: %d, sbr: %d\n",
                    profile, channels, sample_rate, output_sample_rate,
