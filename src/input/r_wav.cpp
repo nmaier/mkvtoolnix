@@ -51,16 +51,14 @@ wav_reader_c::probe_file(mm_io_c *io,
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
-    if (io->read((char *)&wheader, sizeof(wheader)) != sizeof(wheader))
+    if (io->read(&wheader.riff, sizeof(wheader.riff)) != sizeof(wheader.riff))
       return 0;
     io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
   if (strncmp((char *)wheader.riff.id, "RIFF", 4) ||
-      strncmp((char *)wheader.riff.wave_id, "WAVE", 4) ||
-      (strncmp((char *)wheader.data.id, "data", 4) &&
-       strncmp((char *)wheader.data.id, "PAD ", 4)))
+      strncmp((char *)wheader.riff.wave_id, "WAVE", 4))
     return 0;
 
   return 1;
@@ -81,8 +79,18 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
   }
   if (!wav_reader_c::probe_file(io, size))
     throw error_c("wav_reader: Source is not a valid WAVE file.");
-  if (io->read(&wheader, sizeof(wheader)) != sizeof(wheader))
+
+  if (io->read(&wheader.riff, sizeof(wheader.riff)) != sizeof(wheader.riff))
     throw error_c("wav_reader: could not read WAVE header.");
+
+  if (!skip_to_chunk("fmt "))
+    throw error_c("wav_reader: No format chunk found.");
+  if ((io->read(&wheader.format, sizeof(wheader.format)) !=
+       sizeof(wheader.format)) ||
+      (io->read(&wheader.common, sizeof(wheader.common)) !=
+       sizeof(wheader.common)))
+    throw error_c("wav_reader: The format chunk could not be read.");
+
   bps = get_uint16_le(&wheader.common.wChannels) *
     get_uint16_le(&wheader.common.wBitsPerSample) *
     get_uint32_le(&wheader.common.dwSamplesPerSec) / 8;
@@ -91,17 +99,11 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
   ti.id = 0;                   // ID for this track.
   is_dts = false;
 
-  while (1) {
-    if (!strncmp((char *)wheader.data.id, "data", 4))
-      break;
-    if ((io->getFilePointer() + get_uint32_le(&wheader.data.len) +
-         sizeof(struct chunk_struct)) > size)
-      throw error_c("wav_reader: No 'data' chunk found.");
-    io->setFilePointer(get_uint32_le(&wheader.data.len), seek_current);
-    if (io->read(&wheader.data, sizeof(struct chunk_struct)) !=
-        sizeof(struct chunk_struct))
-      throw error_c("wav_reader: No 'data' chunk found.");
-  }
+  if (!skip_to_chunk("data"))
+    throw error_c("wav_reader: No data chunk was found.");
+
+  if (io->read(&wheader.data, sizeof(wheader.data)) != sizeof(wheader.data))
+    throw error_c("wav_reader: Could not read the data chunk header.");
 
   if (verbose)
     mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti.fname.c_str());
@@ -242,6 +244,26 @@ wav_reader_c::read(generic_packetizer_c *,
   }
 
   return FILE_STATUS_DONE;
+}
+
+bool
+wav_reader_c::skip_to_chunk(const char *id) {
+  chunk_struct chunk;
+
+  while (true) {
+    if (io->read(&chunk, sizeof(chunk)) != sizeof(chunk))
+      return false;
+
+    if (!memcmp(&chunk.id, id, 4)) {
+      io->setFilePointer(-(int)sizeof(chunk), seek_current);
+      break;
+    }
+
+    if (!io->setFilePointer2(get_uint32_le(&chunk.len), seek_current))
+      return false;
+  }
+
+  return true;
 }
 
 int

@@ -1,3 +1,8 @@
+2005-04-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Support WAV files that use other RIFF chunks
+	than the usual "fmt " followed by "data".
+
 2005-04-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Remuxing MPEG1/2 tracks resulted in a failing
