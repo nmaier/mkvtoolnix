@@ -25,9 +25,9 @@
 #include "mm_io.h"
 #include "random.h"
 
-#if defined(SYS_WINDOWS)
-
 bool random_c::m_seeded = false;
+
+#if defined(SYS_WINDOWS)
 
 void
 random_c::generate_bytes(void *destination,
