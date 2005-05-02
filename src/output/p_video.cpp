@@ -358,14 +358,20 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
   vector<video_frame_t>::iterator frame;
 
   if (NULL == ti.private_data) {
-    uint32_t pos, size;
+    memory_c *config_data;
 
-    if (mpeg4_p2_find_config_data(mem.data, mem.size, pos, size)) {
-      ti.private_data = (unsigned char *)safememdup(&mem.data[pos], size);
-      ti.private_size = size;
+    config_data = mpeg4_p2_parse_config_data(mem.data, mem.size);
+    if (NULL != config_data) {
+      ti.private_data = config_data->grab();
+      ti.private_size = config_data->size;
+      delete config_data;
       set_codec_private(ti.private_data, ti.private_size);
       rerender_track_headers();
-    }
+
+    } else
+      mxerror("Could not find the codec configuration data in the first "
+              "MPEG-4 part 2 video frame. This track cannot be stored in "
+              "native mode.\n");
   }
 
   mpeg4_p2_find_frame_types(mem.data, mem.size, frames);

@@ -32,7 +32,7 @@
    and the denominator are returned.
 
    \param buffer The buffer containing the MPEG4 video frame.
-   \param size The size of the buffer in bytes.
+   \param buffer_size The size of the buffer in bytes.
    \param par_num The numerator, if found, is stored in this variable.
    \param par_den The denominator, if found, is stored in this variable.
 
@@ -41,7 +41,7 @@
 */
 bool
 mpeg4_p2_extract_par(const unsigned char *buffer,
-                     int size,
+                     int buffer_size,
                      uint32_t &par_num,
                      uint32_t &par_den) {
   const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
@@ -50,7 +50,7 @@ mpeg4_p2_extract_par(const unsigned char *buffer,
                                 1, 1,  1,  1,  1,  1, 1, 1};
   uint32_t marker, aspect_ratio_info, num, den;
   bool b;
-  bit_cursor_c bits(buffer, size);
+  bit_cursor_c bits(buffer, buffer_size);
 
   while (!bits.eof()) {
     if (!bits.peek_bits(32, marker))
@@ -110,7 +110,7 @@ mpeg4_p2_extract_par(const unsigned char *buffer,
    if they're glued to another frame like they are in AVI files.
 
    \param buffer The buffer containing the MPEG4 video frame(s).
-   \param size The size of the buffer in bytes.
+   \param buffer_size The size of the buffer in bytes.
    \param frames The data for each frame that is found is put into this
      variable. See ::video_frame_t
 
@@ -119,24 +119,22 @@ mpeg4_p2_extract_par(const unsigned char *buffer,
 */
 void
 mpeg4_p2_find_frame_types(const unsigned char *buffer,
-                          int size,
+                          int buffer_size,
                           vector<video_frame_t> &frames) {
-  mm_mem_io_c bytes(buffer, size);
+  mm_mem_io_c bytes(buffer, buffer_size);
   uint32_t marker, frame_type;
-  int first_frame_start;
-  bool first_frame;
+  bool frame_found;
   video_frame_t frame;
   vector<video_frame_t>::iterator fit;
 
   frames.clear();
-  mxverb(3, "\nmpeg4_frames: start search in %d bytes\n", size);
+  mxverb(3, "\nmpeg4_frames: start search in %d bytes\n", buffer_size);
 
-  if (4 > size)
+  if (4 > buffer_size)
     return;
 
   frame.pos = 0;
-  first_frame = true;
-  first_frame_start = 0;
+  frame_found = false;
 
   try {
     marker = bytes.read_uint32_be();
@@ -147,37 +145,26 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
         continue;
       }
 
-      mxverb(3, "mpeg4_frames:   found start code at %lld\n",
-             bytes.getFilePointer() - 4);
-      if (marker == MPEGVIDEO_OBJECT_PLAIN_START_CODE) {
-        if (0 > first_frame_start)
-          first_frame_start = bytes.getFilePointer() - 4;
-
-        frame_type = bytes.read_uint8() >> 6;
-        if (!first_frame) {
-          frame.size = bytes.getFilePointer() - 5 - frame.pos;
+      mxverb(3, "mpeg4_frames:   found start code at %lld: 0x%02x\n",
+             bytes.getFilePointer() - 4, marker & 0xff);
+      if (marker == MPEGVIDEO_VOP_START_CODE) {
+        if (frame_found) {
+          frame.size = bytes.getFilePointer() - 4 - frame.pos;
           frames.push_back(frame);
-          frame.pos = bytes.getFilePointer() - 5;
-        } else {
-          first_frame = false;
-          frame.pos = first_frame_start;
-        }
+        } else
+          frame_found = true;
+
+        frame.pos = bytes.getFilePointer() - 4;
+        frame_type = bytes.read_uint8() >> 6;
         frame.type = 0 == frame_type ? FRAME_TYPE_I :
           2 == frame_type ? FRAME_TYPE_B : FRAME_TYPE_P;
-
-      } else if (first_frame &&
-                 ((MPEGVIDEO_VOS_START_CODE == marker) ||
-                  (MPEGVIDEO_VISUAL_OBJECT_START_CODE == marker) ||
-                  (0x00000140 > marker)))
-        first_frame_start = -1;
-      else
-        first_frame_start = bytes.getFilePointer() - 4;
+      }
 
       marker = bytes.read_uint32_be();
     }
 
-    if (!first_frame) {
-      frame.size = size - frame.pos;
+    if (frame_found) {
+      frame.size = buffer_size - frame.pos;
       frames.push_back(frame);
     }
 
@@ -208,31 +195,35 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
    contains this only in the ESDS' decoder_config.
 
    \param buffer The buffer to be searched.
-   \param size The size of the buffer in bytes.
+   \param buffer_size The size of the buffer in bytes.
    \param data_pos This is set to the start position of the configuration
      data inside the \c buffer if such data was found.
    \param data_pos This is set to the length of the configuration
      data inside the \c buffer if such data was found.
 
-   \return \c true if such configuration data was found and \c false
-     otherwise.
+   \return \c NULL if no configuration data was found and a pointer to
+     a memory_c object otherwise. This object has to be deleted manually.
 */
-bool
-mpeg4_p2_find_config_data(const unsigned char *buffer,
-                          int size,
-                          uint32_t &data_pos,
-                          uint32_t &data_size) {
+memory_c *
+mpeg4_p2_parse_config_data(const unsigned char *buffer,
+                           int buffer_size) {
+  memory_c *mem;
   const unsigned char *p, *end;
-  uint32_t marker;
-  bool start_found;
+  unsigned char *dst;
+  uint32_t marker, size;
+  int vos_offset;
 
-  if (size < 5)
-    return false;
-  start_found = false;
-  mxverb(3, "\nmpeg4_config_data: start search in %d bytes\n", size);
+  if (buffer_size < 5)
+    return NULL;
+
+  mxverb(3, "\nmpeg4_config_data: start search in %d bytes\n", buffer_size);
+
   marker = get_uint32_be(buffer) >> 8;
   p = buffer + 3;
-  end = buffer + size;
+  end = buffer + buffer_size;
+  vos_offset = -1;
+  size = 0;
+
   while (p < end) {
     marker = (marker << 8) | *p;
     ++p;
@@ -240,27 +231,41 @@ mpeg4_p2_find_config_data(const unsigned char *buffer,
       continue;
 
     mxverb(3, "mpeg4_config_data:   found start code at %d: 0x%02x\n",
-           p - buffer, marker & 0xff);
-    if (MPEGVIDEO_VOS_START_CODE == marker) {
-      start_found = true;
-      data_pos = p - 4 - buffer;
-
-    } else if (start_found &&
-               (MPEGVIDEO_VISUAL_OBJECT_START_CODE != marker) &&
-               (0x00000140 < marker)) {
-      p -= 4;
+           p - buffer - 4, marker & 0xff);
+    if (MPEGVIDEO_VOS_START_CODE == marker)
+      vos_offset = p - 4 - buffer;
+    else if ((MPEGVIDEO_VOP_START_CODE == marker) ||
+             (MPEGVIDEO_GOP_START_CODE == marker)) {
+      size = p - 4 - buffer;
       break;
     }
   }
 
-  if (start_found) {
-    data_size = p - buffer - data_pos;
-    mxverb(3, "mpeg4_config_data:   found GOOD config at %u with size %u\n",
-           data_pos, data_size);
-    return true;
+  if (0 == size)
+    return NULL;
+
+  if (-1 == vos_offset) {
+    mem = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
+    dst = mem->data;
+    put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
+    dst[4] = 0xf5;
+    memcpy(dst + 5, buffer, size);
+
+  } else {
+    mem = new memory_c((unsigned char *)safemalloc(size), size, true);
+    dst = mem->data;
+    put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
+    if (3 >= buffer[vos_offset + 4])
+      dst[4] = 0xf5;
+    else
+      dst[4] = buffer[vos_offset + 4];
+    memcpy(dst + 5, buffer, vos_offset);
+    memcpy(dst + 5 + vos_offset, buffer + vos_offset + 5,
+           size - vos_offset - 5); 
   }
 
-  return false;
+  mxverb(3, "mpeg4_config_data:   found GOOD config with size %u\n", size);
+  return mem;
 }
 
 static int64_t
@@ -300,7 +305,7 @@ read_golomb_se(bit_cursor_c &bits) {
    numerator and the denominator are returned.
 
    \param buffer The buffer containing the MPEG4 layer 10 codec data.
-   \param size The size of the buffer in bytes.
+   \param buffer_size The size of the buffer in bytes.
    \param par_num The numerator, if found, is stored in this variable.
    \param par_den The denominator, if found, is stored in this variable.
 
@@ -309,11 +314,11 @@ read_golomb_se(bit_cursor_c &bits) {
 */
 bool
 mpeg4_p10_extract_par(const uint8_t *buffer,
-                      int buf_size,
+                      int buffer_size,
                       uint32_t &par_num,
                       uint32_t &par_den) {
   try {
-    mm_mem_io_c avcc(buffer, buf_size);
+    mm_mem_io_c avcc(buffer, buffer_size);
     int num_sps, sps;
 
     avcc.skip(5);
@@ -326,8 +331,8 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
 
       length = avcc.read_uint16_be();
       bit_cursor_c bits(&buffer[avcc.getFilePointer()],
-                        (length + avcc.getFilePointer()) >  buf_size ?
-                        buf_size - avcc.getFilePointer() : length);
+                        (length + avcc.getFilePointer()) >  buffer_size ?
+                        buffer_size - avcc.getFilePointer() : length);
       ok = bits.get_bits(8, nal_unit_type);
       if (!ok)
         throw false;
@@ -432,30 +437,30 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
    ::mpeg_video_get_fps
 
    \param buffer The buffer to search for the header.
-   \param size The buffer size.
+   \param buffer_size The buffer size.
 
    \return The index or \c -1 if no MPEG sequence header was found or
      if the buffer was too small.
 */
 int
 mpeg1_2_extract_fps_idx(const unsigned char *buffer,
-                        int size) {
+                        int buffer_size) {
   uint32_t marker;
   int idx;
 
-  mxverb(3, "mpeg_video_fps: start search in %d bytes\n", size);
-  if (size < 8) {
+  mxverb(3, "mpeg_video_fps: start search in %d bytes\n", buffer_size);
+  if (buffer_size < 8) {
     mxverb(3, "mpeg_video_fps: sequence header too small\n");
     return -1;
   }
   marker = get_uint32_be(buffer);
   idx = 4;
-  while ((idx < size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
+  while ((idx < buffer_size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
     marker <<= 8;
     marker |= buffer[idx];
     idx++;
   }
-  if (idx >= size) {
+  if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_fps: no sequence header start code found\n");
     return -1;
   }
@@ -463,7 +468,7 @@ mpeg1_2_extract_fps_idx(const unsigned char *buffer,
   mxverb(3, "mpeg_video_fps: found sequence header start code at %d\n",
          idx - 4);
   idx += 3;                     // width and height
-  if (idx >= size) {
+  if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_fps: sequence header too small\n");
     return -1;
   }
@@ -477,30 +482,30 @@ mpeg1_2_extract_fps_idx(const unsigned char *buffer,
    aspect ratio is extracted and returned.
 
    \param buffer The buffer to search for the header.
-   \param size The buffer size.
+   \param buffer_size The buffer size.
 
    \return \c true if a MPEG sequence header was found and \c false otherwise.
 */
 bool
 mpeg1_2_extract_ar(const unsigned char *buffer,
-                   int size,
+                   int buffer_size,
                    float &ar) {
   uint32_t marker;
   int idx;
 
-  mxverb(3, "mpeg_video_ar: start search in %d bytes\n", size);
-  if (size < 8) {
+  mxverb(3, "mpeg_video_ar: start search in %d bytes\n", buffer_size);
+  if (buffer_size < 8) {
     mxverb(3, "mpeg_video_ar: sequence header too small\n");
     return -1;
   }
   marker = get_uint32_be(buffer);
   idx = 4;
-  while ((idx < size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
+  while ((idx < buffer_size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
     marker <<= 8;
     marker |= buffer[idx];
     idx++;
   }
-  if (idx >= size) {
+  if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_ar: no sequence header start code found\n");
     return -1;
   }
@@ -508,7 +513,7 @@ mpeg1_2_extract_ar(const unsigned char *buffer,
   mxverb(3, "mpeg_video_ar: found sequence header start code at %d\n",
          idx - 4);
   idx += 3;                     // width and height
-  if (idx >= size) {
+  if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_ar: sequence header too small\n");
     return -1;
   }

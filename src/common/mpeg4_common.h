@@ -16,9 +16,13 @@
 #ifndef __MPEG4_COMMON_H
 #define __MPEG4_COMMON_H
 
-/** Start code for a MPEG4 (?) video object plain */
-#define MPEGVIDEO_OBJECT_PLAIN_START_CODE         0x000001b6
-/** Start code for a MPEG-1 and -2 sequence header */
+#include "common_memory.h"
+
+/** Start code for a MPEG-4 part 2 (?) video object plain */
+#define MPEGVIDEO_VOP_START_CODE                  0x000001b6
+/** Strt code for a MPEG-4 part 2 group of pictures */
+#define MPEGVIDEO_GOP_START_CODE                  0x000001b3
+/** Start code for a MPEG-1/-2 sequence header */
 #define MPEGVIDEO_SEQUENCE_START_CODE             0x000001b3
 /** Start code for a MPEG-1 and -2 packet */
 #define MPEGVIDEO_PACKET_START_CODE               0x000001ba
@@ -134,22 +138,22 @@ struct video_frame_t {
     timecode(0), duration(0), bref(0), fref(0) {};
 };
 
-bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer, int size,
+bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer,
+                                      int buffer_size,
                                       uint32_t &par_num, uint32_t &par_den);
 void MTX_DLL_API mpeg4_p2_find_frame_types(const unsigned char *buffer,
-                                           int size,
+                                           int buffer_size,
                                            vector<video_frame_t> &frames);
-bool MTX_DLL_API mpeg4_p2_find_config_data(const unsigned char *buffer,
-                                           int size, uint32_t &data_pos,
-                                           uint32_t &data_size);
+memory_c * MTX_DLL_API
+mpeg4_p2_parse_config_data(const unsigned char *buffer, int buffer_size);
 
-bool MTX_DLL_API mpeg4_p10_extract_par(const uint8_t *buffer, int buf_size,
+bool MTX_DLL_API mpeg4_p10_extract_par(const uint8_t *buffer, int buffer_size,
                                        uint32_t &par_num, uint32_t &par_den);
 
 int MTX_DLL_API mpeg1_2_extract_fps_idx(const unsigned char *buffer,
-                                        int size);
+                                        int buffer_size);
 double MTX_DLL_API mpeg1_2_get_fps(int idx);
-bool MTX_DLL_API mpeg1_2_extract_ar(const unsigned char *buffer, int size,
-                                    float &ar);
+bool MTX_DLL_API mpeg1_2_extract_ar(const unsigned char *buffer,
+                                    int buffer_size, float &ar);
 
 #endif /* __MPEG4_COMMON_H */
