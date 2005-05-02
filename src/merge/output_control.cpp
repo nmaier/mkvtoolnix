@@ -1947,7 +1947,6 @@ setup() {
 #endif
 
   mm_file_io_c::setup();
-  srand(time(NULL));
   cc_local_utf8 = utf8_init("");
   init_cc_stdio();
 

@@ -14,6 +14,7 @@
 
 #include "common.h"
 #include "commonebml.h"
+#include "random.h"
 
 #include "xtr_ogg.h"
 
@@ -61,7 +62,7 @@ xtr_oggbase_c::create_file(xtr_base_c *_master,
   if (no_variable_data)
     ogg_stream_init(&os, 1804289383);
   else
-    ogg_stream_init(&os, rand());
+    ogg_stream_init(&os, random_c::generate_31bits());
 }
 
 void
@@ -172,7 +173,7 @@ xtr_oggflac_c::create_file(xtr_base_c *_master,
   if (no_variable_data)
     ogg_stream_init(&os, 1804289383);
   else
-    ogg_stream_init(&os, rand());
+    ogg_stream_init(&os, random_c::generate_31bits());
 
   // Handle the three header packets: Headers, comments, codec
   // setup data.

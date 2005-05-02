@@ -60,6 +60,7 @@ using namespace libebml;
 #include "error.h"
 #include "hacks.h"
 #include "mm_io.h"
+#include "random.h"
 
 int verbose = 1;
 bool suppress_warnings = false;
@@ -185,10 +186,7 @@ bitvalue_c::data()
 
 void
 bitvalue_c::generate_random() {
-  int i;
-
-  for (i = 0; i < bitsize / 8; i++)
-    value[i] = (unsigned char)(255.0 * rand() / RAND_MAX);
+  random_c::generate_bytes(value, bitsize / 8);
 }
 
 /*
@@ -597,7 +595,6 @@ init_cc_stdio() {
 */
 
 static vector<uint32_t> ru_numbers[4];
-static bool random_seeded = false;
 
 void
 clear_list_of_unique_uint32(unique_id_category_e category) {
@@ -661,7 +658,7 @@ remove_unique_uint32(uint32_t number,
 
 uint32_t
 create_unique_uint32(unique_id_category_e category) {
-  uint32_t rnumber, half;
+  uint32_t rnumber;
 
   assert((category >= UNIQUE_TRACK_IDS) &&
          (category <= UNIQUE_ATTACHMENT_IDS));
@@ -671,16 +668,8 @@ create_unique_uint32(unique_id_category_e category) {
     return ru_numbers[category].size();
   }
 
-  if (!random_seeded) {
-    srand(time(NULL));
-    random_seeded = true;
-  }
-
   do {
-    half = (uint32_t)(65535.0 * rand() / RAND_MAX);
-    rnumber = half;
-    half = (uint32_t)(65535.0 * rand() / RAND_MAX);
-    rnumber |= (half << 16);
+    rnumber = random_c::generate_32bits();
   } while ((rnumber == 0) || !is_unique_uint32(rnumber, category));
   add_unique_uint32(rnumber, category);
 
