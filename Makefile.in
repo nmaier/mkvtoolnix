@@ -107,6 +107,7 @@ endif
 
 ifeq (1,$(MINGW))
 MMG_RESOURCES = src/mmg/mmg-resources.rc
+LIBRPCRT = -lrpcrt4
 endif
 
 DEP_COMMON = src/common/libmtxcommon.$(LIBMTXCOMMONEXT)
@@ -319,7 +320,8 @@ libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
 src/common/libmtxcommon.dll: $(libmtxcommon_OBJECTS)
 	@echo '  LD/DLL ' $@
 	$(Q)$(LINKSHARED) -Wl,--out-implib=$@.a -o $@ $(libmtxcommon_OBJECTS) \
-		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml -lexpat
+		-liconv -lz $(COMPRESSION_LIBRARIES) -lmatroska -lebml \
+		-lexpat -lrpcrt4
 
 src/common/libmtxcommon.a: $(libmtxcommon_OBJECTS)
 	@rm -f $@
@@ -369,7 +371,7 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lmtxcommon -lmatroska -lebml \
 		-lavi -lrmff -lmpegparser \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
-		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS)
+		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 
 #
 # src/info
@@ -380,7 +382,7 @@ mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
 mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 		$(WXWINDOWS_LIBS) \
-		$(ICONV_LIBS) $(LIBINTL_LIBS)
+		$(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 
 #
 # src/extract
@@ -391,7 +393,7 @@ mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
-		-lz $(COMPRESSION_LIBRARIES)
+		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT)
 
 #
 # src
@@ -400,7 +402,8 @@ mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
-base64tool_LDADD = -lmtxcommon $(ICONV_LIBS) $(LIBINTL_LIBS)
+base64tool_LDADD = -lmtxcommon $(ICONV_LIBS) $(LIBINTL_LIBS) \
+		$(LIBRPCRT)
 
 #
 # src/mmg
@@ -411,7 +414,8 @@ mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
 		$(patsubst %.rc,%.o,$(MMG_RESOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
-		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP)
+		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP) \
+		$(LIBRPCRT)
 
 mkvmerge: src/mkvmerge@EXEEXT@
 

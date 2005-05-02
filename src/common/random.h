@@ -23,8 +23,9 @@
 
 class MTX_DLL_API random_c {
 private:
-#if !defined(SYS_WINDOWS)
   static bool m_seeded;
+
+#if !defined(SYS_WINDOWS)
   static auto_ptr<mm_file_io_c> m_dev_urandom;
   static bool m_tried_dev_urandom;
 #endif

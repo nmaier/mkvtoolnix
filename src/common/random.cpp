@@ -18,6 +18,8 @@
 #if !defined(SYS_WINDOWS)
 # include <sys/time.h>
 # include <time.h>
+#else
+# include <windows.h>
 #endif
 
 #include "mm_io.h"
@@ -25,9 +27,41 @@
 
 #if defined(SYS_WINDOWS)
 
+bool random_c::m_seeded = false;
+
+void
+random_c::generate_bytes(void *destination,
+                         int num_bytes) {
+  int i, num_left;
+
+  i = 0;
+  while (num_bytes > 0) {
+    UUID uuid;
+    RPC_STATUS status;
+
+    status = UuidCreate(&uuid);
+    if ((RPC_S_OK != status) && (RPC_S_UUID_LOCAL_ONLY != status)) {
+      if (!m_seeded) {
+        srand(GetTickCount());
+        m_seeded = true;
+      }
+
+      while (0 > num_bytes) {
+        ((unsigned char *)destination)[i + num_bytes] =
+          (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
+        --num_bytes;
+      }
+    }
+
+    num_left = num_bytes > 8 ? 8 : num_bytes;
+    memcpy((unsigned char *)destination + i, &uuid.Data4, num_left);
+    num_bytes -= num_left;
+    i += num_left;
+  }
+}
+
 #else  // defined(SYS_WINDOWS)
 
-bool random_c::m_seeded = false;
 auto_ptr<mm_file_io_c> random_c::m_dev_urandom;
 bool random_c::m_tried_dev_urandom = false;
 
