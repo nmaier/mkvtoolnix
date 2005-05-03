@@ -71,6 +71,7 @@ xml_element_map_init() {
     {"ChapterFlagEnabled", EBMLT_BOOL, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterPhysicalEquiv", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL,
      NULL, NULL},
+    {"ChapterSegmentUID", EBMLT_BINARY, 3, 16, 16, no_id, NULL, NULL, NULL},
 
     {"ChapterProcess", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterProcessCodecID", EBMLT_UINT, 4, 0, NO_MAX_VALUE, no_id, NULL,
