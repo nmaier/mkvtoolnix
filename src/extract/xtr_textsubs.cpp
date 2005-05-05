@@ -164,7 +164,7 @@ xtr_ssa_c::create_file(xtr_base_c *_master,
   if (pos2 < 0)
     pos2 = sconv.length();
   ssa_format = split(sconv.substr(pos1 + 7, pos2 - pos1 - 7), ",");
-  strip(ssa_format);
+  strip(ssa_format, true);
   for (pos1 = 0; pos1 < ssa_format.size(); pos1++)
     ssa_format[pos1] = downcase(ssa_format[pos1]);
 
