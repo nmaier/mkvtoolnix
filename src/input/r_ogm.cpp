@@ -1170,10 +1170,8 @@ ogm_reader_c::handle_stream_comments() {
       try {
         out = new mm_mem_io_c(NULL, 0, 1000);
         out->write_bom("UTF-8");
-        for (j = 0; j < chapters.size(); j++) {
-          out->puts_unl(to_utf8(cch, chapters[j]));
-          out->puts_unl("\n");
-        }
+        for (j = 0; j < chapters.size(); j++)
+          out->puts(to_utf8(cch, chapters[j]) + string("\n"));
         out->set_file_name(ti.fname);
         kax_chapters = parse_chapters(new mm_text_io_c(out));
       } catch (...) {

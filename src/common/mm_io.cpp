@@ -482,7 +482,7 @@ mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
 }
 
 size_t
-mm_io_c::puts_unl(const string &s) {
+mm_io_c::puts(const string &s) {
   int i;
   size_t bytes_written;
   const char *cs;
@@ -490,8 +490,13 @@ mm_io_c::puts_unl(const string &s) {
   cs = s.c_str();
   bytes_written = 0;
   for (i = 0; cs[i] != 0; i++)
-    if (cs[i] != '\r')
+    if (cs[i] != '\r') {
+#if defined(SYS_WINDOWS)
+      if ('\n' == cs[i])
+        bytes_written += write("\r", 1);
+#endif
       bytes_written += write(&cs[i], 1);
+    }
 
   return bytes_written;
 }

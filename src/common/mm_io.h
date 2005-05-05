@@ -69,7 +69,7 @@ public:
 
   virtual string getline();
   virtual bool getline2(string &s);
-  virtual size_t puts_unl(const string &s);
+  virtual size_t puts(const string &s);
   virtual bool write_bom(const string &charset);
   virtual int getch();
 

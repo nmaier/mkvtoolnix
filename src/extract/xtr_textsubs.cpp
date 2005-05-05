@@ -76,7 +76,7 @@ xtr_srt_c::handle_block(KaxBlock &block,
                      end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                      (end / 1000) % 60, end % 1000,
                      from_utf8(conv, text).c_str());
-  out->puts_unl(buffer);
+  out->puts(buffer);
   delete []text;
 }
 
@@ -169,7 +169,7 @@ xtr_ssa_c::create_file(xtr_base_c *_master,
     ssa_format[pos1] = downcase(ssa_format[pos1]);
 
   sconv = from_utf8(conv, sconv);
-  out->puts_unl(sconv);
+  out->puts(sconv);
 }
 
 void
@@ -275,6 +275,6 @@ xtr_ssa_c::finish_file() {
   // write them.
   sort(lines.begin(), lines.end());
   for (i = 0; i < lines.size(); i++)
-    out->puts_unl(lines[i].line.c_str());
+    out->puts(lines[i].line.c_str());
 }
 
