@@ -37,7 +37,7 @@ using namespace libmatroska;
 
 #define CPDATA (parser_data_t *)pdata
 
-static void
+void
 end_edition_entry(void *pdata) {
   EbmlMaster *m;
   KaxEditionUID *euid;
@@ -62,7 +62,7 @@ end_edition_entry(void *pdata) {
   }
 }
 
-static void
+void
 end_edition_uid(void *pdata) {
   KaxEditionUID *euid;
 
@@ -75,7 +75,7 @@ end_edition_uid(void *pdata) {
   }
 }
 
-static void
+void
 end_chapter_uid(void *pdata) {
   KaxChapterUID *cuid;
 
@@ -88,7 +88,7 @@ end_chapter_uid(void *pdata) {
   }
 }
 
-static void
+void
 end_chapter_atom(void *pdata) {
   EbmlMaster *m;
 
@@ -107,7 +107,7 @@ end_chapter_atom(void *pdata) {
   }
 }
 
-static void
+void
 end_chapter_track(void *pdata) {
   EbmlMaster *m;
 
@@ -117,7 +117,7 @@ end_chapter_track(void *pdata) {
                "child.");
 }
 
-static void
+void
 end_chapter_display(void *pdata) {
   EbmlMaster *m;
 
@@ -134,7 +134,7 @@ end_chapter_display(void *pdata) {
   }
 }
 
-static void
+void
 end_chapter_language(void *pdata) {
   EbmlString *s;
 
@@ -144,7 +144,7 @@ end_chapter_language(void *pdata) {
                string(*s).c_str());
 }
 
-static void
+void
 end_chapter_country(void *pdata) {
   EbmlString *s;
 
@@ -181,28 +181,6 @@ parse_xml_chapters(mm_text_io_c *in,
   KaxChapters *chapters;
   EbmlMaster *m;
   string error;
-  int i;
-
-  for (i = 0; chapter_elements[i].name != NULL; i++) {
-    chapter_elements[i].start_hook = NULL;
-    chapter_elements[i].end_hook = NULL;
-  }
-  chapter_elements[chapter_element_map_index("EditionEntry")].end_hook =
-    end_edition_entry;
-  chapter_elements[chapter_element_map_index("EditionUID")].end_hook =
-    end_edition_uid;
-  chapter_elements[chapter_element_map_index("ChapterAtom")].end_hook =
-    end_chapter_atom;
-  chapter_elements[chapter_element_map_index("ChapterUID")].end_hook =
-    end_chapter_uid;
-  chapter_elements[chapter_element_map_index("ChapterTrack")].end_hook =
-    end_chapter_track;
-  chapter_elements[chapter_element_map_index("ChapterDisplay")].end_hook =
-    end_chapter_display;
-  chapter_elements[chapter_element_map_index("ChapterLanguage")].end_hook =
-    end_chapter_language;
-  chapter_elements[chapter_element_map_index("ChapterCountry")].end_hook =
-    end_chapter_country;
 
   try {
     m = parse_xml_elements("Chapter", chapter_elements, in);

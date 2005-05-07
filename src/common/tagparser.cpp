@@ -39,7 +39,7 @@ using namespace libmatroska;
 
 #define CPDATA (parser_data_t *)pdata
 
-static void
+void
 end_simple_tag(void *pdata) {
   KaxTagSimple *simple;
 
@@ -57,7 +57,6 @@ parse_xml_tags(const string &name,
   KaxTags *new_tags;
   EbmlMaster *m;
   mm_text_io_c *in;
-  int i;
 
   in = NULL;
   try {
@@ -65,12 +64,6 @@ parse_xml_tags(const string &name,
   } catch(...) {
     mxerror("Could not open '%s' for reading.\n", name.c_str());
   }
-
-  for (i = 0; tag_elements[i].name != NULL; i++) {
-    tag_elements[i].start_hook = NULL;
-    tag_elements[i].end_hook = NULL;
-  }
-  tag_elements[tag_element_map_index("Simple")].end_hook = end_simple_tag;
 
   try {
     m = parse_xml_elements("Tag", tag_elements, in);

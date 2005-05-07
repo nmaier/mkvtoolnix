@@ -18,8 +18,10 @@
 #include <matroska/KaxConfig.h>
 #include <matroska/KaxSegment.h>
 
+#include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
+#include "tagparser.h"
 #include "xml_element_mapping.h"
 
 using namespace libmatroska;
@@ -56,15 +58,19 @@ xml_element_map_init() {
   static parser_element_t _chapter_elements[] = {
     {"Chapters", EBMLT_MASTER, 0, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"EditionEntry", EBMLT_MASTER, 1, 0, 0, no_id, NULL, NULL, NULL},
-    {"EditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
+    {"EditionEntry", EBMLT_MASTER, 1, 0, 0, no_id, NULL, end_edition_entry,
+     NULL},
+    {"EditionUID", EBMLT_UINT, 2, 0, NO_MAX_VALUE, no_id, NULL,
+     end_edition_uid, NULL},
     {"EditionFlagHidden", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionFlagOrdered", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionFlagDefault", EBMLT_BOOL, 2, 0, 0, no_id, NULL, NULL, NULL},
     {"EditionProcessed", EBMLT_SKIP, 2, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"ChapterAtom", EBMLT_MASTER, 2, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL, NULL},
+    {"ChapterAtom", EBMLT_MASTER, 2, 0, 0, no_id, NULL, end_chapter_atom,
+     NULL},
+    {"ChapterUID", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL,
+     end_chapter_uid, NULL},
     {"ChapterTimeStart", EBMLT_TIME, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterTimeEnd", EBMLT_TIME, 3, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterFlagHidden", EBMLT_BOOL, 3, 0, 0, no_id, NULL, NULL, NULL},
@@ -83,14 +89,18 @@ xml_element_map_init() {
     {"ChapterProcessTime", EBMLT_UINT, 5, 0, 0, no_id, NULL, NULL, NULL},
     {"ChapterProcessData", EBMLT_BINARY, 5, 0, 0, no_id, NULL, NULL, NULL},
 
-    {"ChapterTrack", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterTrack", EBMLT_MASTER, 3, 0, 0, no_id, NULL, end_chapter_track,
+     NULL},
     {"ChapterTrackNumber", EBMLT_UINT, 4, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      NULL},
 
-    {"ChapterDisplay", EBMLT_MASTER, 3, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterDisplay", EBMLT_MASTER, 3, 0, 0, no_id, NULL, end_chapter_display,
+     NULL},
     {"ChapterString", EBMLT_USTRING, 4, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterLanguage", EBMLT_STRING, 4, 0, 0, no_id, NULL, NULL, NULL},
-    {"ChapterCountry", EBMLT_STRING, 4, 0, 0, no_id, NULL, NULL, NULL},
+    {"ChapterLanguage", EBMLT_STRING, 4, 0, 0, no_id, NULL,
+     end_chapter_language, NULL},
+    {"ChapterCountry", EBMLT_STRING, 4, 0, 0, no_id, NULL, end_chapter_country,
+     NULL},
 
     {NULL, EBMLT_MASTER, 0, 0, 0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
   };
@@ -113,7 +123,8 @@ xml_element_map_init() {
     {"TargetTypeValue", EBMLT_UINT, 3, 0, NO_MAX_VALUE, no_id, NULL, NULL,
      "TagTargetTypeValue"},
 
-    {"Simple", EBMLT_MASTER, 2, 0, 0, no_id, NULL, NULL, "TagSimple"},
+    {"Simple", EBMLT_MASTER, 2, 0, 0, no_id, NULL, end_simple_tag,
+     "TagSimple"},
     {"Name", EBMLT_USTRING, 3, 0, 0,  no_id, NULL, NULL, "TagName"},
     {"String", EBMLT_USTRING, 3, 0, 0, no_id, NULL, NULL, "TagString"},
     {"Binary", EBMLT_BINARY, 3, 0, 0, no_id, NULL, NULL, "TagBinary"},
