@@ -368,10 +368,8 @@ tab_global::load(wxConfigBase *cfg) {
   cfg->Read(wxT("enable_splitting"), &ec);
   cb_split->SetValue(ec);
   cfg->Read(wxT("split_by_size"), &er);
-  if (er)
-    rb_split_by_size->SetValue(true);
-  else
-    rb_split_by_time->SetValue(true);
+  rb_split_by_time->SetValue(!er);
+  rb_split_by_size->SetValue(er);
   cfg->Read(wxT("split_after_bytes"), &s);
   cob_split_by_size->SetValue(s);
   cfg->Read(wxT("split_after_time"), &s);
