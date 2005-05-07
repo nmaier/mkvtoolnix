@@ -1,5 +1,8 @@
 2005-05-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: bug fix: Removed the restriction of max. ten levels of
+	nested elements.
+
 	* mmg: bug fix: If splitting was enabled and "splitting by time"
 	selected and the user chose "new" from the "File" menu then
 	"splitting by time" was not selectable anymore. This happened

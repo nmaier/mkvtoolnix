@@ -198,16 +198,12 @@ _show_element(EbmlElement *l,
               const char *fmt,
               ...) {
   va_list ap;
-  char level_buffer[10];
   string new_fmt;
   EbmlMaster *m;
   int i;
 
   if (show_summary)
     return;
-
-  if (level > 9)
-    die("mkvinfo.cpp/show_element(): level > 9: %d", level);
 
   fix_format(fmt, new_fmt);
   va_start(ap, fmt);
@@ -216,6 +212,9 @@ _show_element(EbmlElement *l,
   va_end(ap);
 
   if (!use_gui) {
+    char *level_buffer;
+
+    level_buffer = new char[level + 1];
     memset(&level_buffer[1], ' ', 9);
     level_buffer[0] = '|';
     level_buffer[level] = 0;
@@ -223,6 +222,7 @@ _show_element(EbmlElement *l,
     if ((verbose > 1) && (l != NULL))
       mxinfo(" at %llu", l->GetElementPosition());
     mxinfo("\n");
+    delete []level_buffer;
   }
 #ifdef HAVE_WXWINDOWS
   else {
