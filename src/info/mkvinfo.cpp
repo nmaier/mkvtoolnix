@@ -215,7 +215,7 @@ _show_element(EbmlElement *l,
     char *level_buffer;
 
     level_buffer = new char[level + 1];
-    memset(&level_buffer[1], ' ', 9);
+    memset(&level_buffer[1], ' ', level);
     level_buffer[0] = '|';
     level_buffer[level] = 0;
     mxinfo("%s+ %s", level_buffer, args_buffer);
