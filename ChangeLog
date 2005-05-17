@@ -1,3 +1,9 @@
+2005-05-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: The MPEG packets are now padded to 2048
+	byte boundaries as some programs require them to be. Patch by  
+	Mike Matsnev (see AUTHORS).
+
 2005-05-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: Removed the restriction of max. ten levels of
