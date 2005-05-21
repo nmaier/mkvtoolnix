@@ -49,7 +49,8 @@ enum file_type_e {
   FILE_TYPE_VOBBTN,
   FILE_TYPE_WAVPACK4,
   FILE_TYPE_MPEG_PS,
-  FILE_TYPE_MAX = FILE_TYPE_MPEG_PS
+  FILE_TYPE_USF,
+  FILE_TYPE_MAX = FILE_TYPE_USF
 };
 
 int64_t create_track_number(generic_reader_c *reader, int64_t tid);

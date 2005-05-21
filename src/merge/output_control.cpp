@@ -85,6 +85,7 @@
 #include "r_srt.h"
 #include "r_ssa.h"
 #include "r_tta.h"
+#include "r_usf.h"
 #include "r_vobbtn.h"
 #include "r_vobsub.h"
 #include "r_wav.h"
@@ -359,6 +360,8 @@ get_file_type(filelist_t &file) {
       type = FILE_TYPE_SSA;
     else if (vobsub_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_VOBSUB;
+    else if (usf_reader_c::probe_file(text_io, size))
+      type = FILE_TYPE_USF;
     else
       type = FILE_TYPE_IS_UNKNOWN;
 
@@ -1151,52 +1154,28 @@ create_readers() {
   foreach(file, files) {
     try {
       switch (file->type) {
-        case FILE_TYPE_MATROSKA:
-          file->reader = new kax_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_OGM:
-          file->reader = new ogm_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_AVI:
-          file->reader = new avi_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_REAL:
-          file->reader = new real_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_WAV:
-          file->reader = new wav_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_SRT:
-          file->reader = new srt_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_MP3:
-          file->reader = new mp3_reader_c(*file->ti);
+        case FILE_TYPE_AAC:
+          file->reader = new aac_reader_c(*file->ti);
           break;
         case FILE_TYPE_AC3:
           file->reader = new ac3_reader_c(*file->ti);
           break;
+        case FILE_TYPE_AVI:
+          file->reader = new avi_reader_c(*file->ti);
+          break;
         case FILE_TYPE_DTS:
           file->reader = new dts_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_AAC:
-          file->reader = new aac_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_SSA:
-          file->reader = new ssa_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_VOBSUB:
-          file->reader = new vobsub_reader_c(*file->ti);
-          break;
-        case FILE_TYPE_QTMP4:
-          file->reader = new qtmp4_reader_c(*file->ti);
           break;
 #if defined(HAVE_FLAC_FORMAT_H)
         case FILE_TYPE_FLAC:
           file->reader = new flac_reader_c(*file->ti);
           break;
 #endif
-        case FILE_TYPE_TTA:
-          file->reader = new tta_reader_c(*file->ti);
+        case FILE_TYPE_MATROSKA:
+          file->reader = new kax_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_MP3:
+          file->reader = new mp3_reader_c(*file->ti);
           break;
         case FILE_TYPE_MPEG_ES:
           file->reader = new mpeg_es_reader_c(*file->ti);
@@ -1204,8 +1183,35 @@ create_readers() {
         case FILE_TYPE_MPEG_PS:
           file->reader = new mpeg_ps_reader_c(*file->ti);
           break;
+        case FILE_TYPE_OGM:
+          file->reader = new ogm_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_QTMP4:
+          file->reader = new qtmp4_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_REAL:
+          file->reader = new real_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_SSA:
+          file->reader = new ssa_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_SRT:
+          file->reader = new srt_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_TTA:
+          file->reader = new tta_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_USF:
+          file->reader = new usf_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_WAV:
+          file->reader = new wav_reader_c(*file->ti);
+          break;
         case FILE_TYPE_VOBBTN:
           file->reader = new vobbtn_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_VOBSUB:
+          file->reader = new vobsub_reader_c(*file->ti);
           break;
         case FILE_TYPE_WAVPACK4:
           file->reader = new wavpack_reader_c(*file->ti);
