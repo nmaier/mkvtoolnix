@@ -885,7 +885,8 @@ unescape(const string &source) {
 }
 
 string
-escape_xml(const string &source) {
+escape_xml(const string &source,
+           bool escape_quotes) {
   string dst;
   string::const_iterator src;
 
@@ -897,6 +898,8 @@ escape_xml(const string &source) {
       dst += "&gt;";
     else if (*src == '<')
       dst += "&lt;";
+    else if (escape_quotes && (*src == '"'))
+      dst += "&quot;";
     else
       dst += *src;
     src++;
