@@ -23,8 +23,30 @@
 
 #include <ebml/IOCallback.h>
 
+#include "error.h"
+
 using namespace std;
 using namespace libebml;
+
+class MTX_DLL_API mm_io_error_c: public error_c {
+public:
+  mm_io_error_c(const string &_error): error_c(_error) { }
+};
+
+class MTX_DLL_API mm_io_eof_error_c: public mm_io_error_c {
+public:
+  mm_io_eof_error_c(): mm_io_error_c("end-of-file") { }
+};
+
+class MTX_DLL_API mm_io_seek_error_c: public mm_io_error_c {
+public:
+  mm_io_seek_error_c(): mm_io_error_c("seeking failed") { }
+};
+
+class MTX_DLL_API mm_io_open_error_c: public mm_io_error_c {
+public:
+  mm_io_open_error_c(): mm_io_error_c("opening the file failed") { }
+};
 
 class MTX_DLL_API mm_io_c: public IOCallback {
 protected:

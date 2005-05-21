@@ -91,14 +91,14 @@ mm_file_io_c::mm_file_io_c(const string &path,
 # endif
       break;
     default:
-      throw error_c("Unknown open mode");
+      throw mm_io_error_c("Unknown open mode");
   }
 
   local_path = from_utf8(cc_local_utf8, path);
   file = (FILE *)fopen(local_path.c_str(), cmode);
 
   if (file == NULL)
-    throw error_c(mxsprintf("Error opening file %s", path.c_str()));
+    throw mm_io_open_error_c();
 
 # if HAVE_POSIX_FADVISE
   if (use_posix_fadvise && use_posix_fadvise_here &&
@@ -123,7 +123,7 @@ mm_file_io_c::setFilePointer(int64 offset,
     whence = SEEK_CUR;
 
   if (fseeko((FILE *)file, offset, whence) != 0)
-    throw error_c("seeking failed");
+    throw mm_io_seek_error_c();
 
   if (mode == seek_beginning)
     m_current_position = offset;
@@ -275,14 +275,14 @@ mm_file_io_c::mm_file_io_c(const string &path,
       disposition = CREATE_ALWAYS;
       break;
     default:
-      throw error_c("Unknown open mode");
+      throw mm_io_error_c("Unknown open mode");
   }
 
   file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL,
                                 disposition, 0, NULL);
   _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
-    throw error_c(mxsprintf("Error opening file %s", path.c_str()));
+    throw mm_io_open_error_c();
 
   file_name = path;
   dos_style_newlines = true;
@@ -335,7 +335,7 @@ mm_file_io_c::setFilePointer(int64 offset,
                        method);
 
   if ((INVALID_SET_FILE_POINTER == low) && (GetLastError() != NO_ERROR))
-    throw error_c("seeking failed");
+    throw mm_io_seek_error_c();
 
   m_current_position = (int64_t)low + ((int64_t)high << 32);
 }
@@ -447,7 +447,7 @@ mm_io_c::getline() {
   string s;
 
   if (eof())
-    throw error_c("end-of-file");
+    throw mm_io_eof_error_c();
 
   while (read(&c, 1) == 1) {
     if (c == '\r')
