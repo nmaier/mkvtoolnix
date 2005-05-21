@@ -1221,8 +1221,9 @@ create_readers() {
           break;
       }
     } catch (error_c error) {
-      mxerror(_("The demultiplexer failed to initialize:\n%s\n)"),
-              error.get_error());
+      mxerror(_("The demultiplexer for the file '%s' failed to initialize:"
+                "\n%s\n"),
+              file->ti->fname.c_str(), error.get_error());
     }
   }
 
