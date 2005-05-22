@@ -233,17 +233,19 @@ usf_reader_c::start_cb(const char *name,
       }
   } else if (node == "USFSubtitles.subtitles.subtitle") {
     usf_entry_t entry;
+    int64_t duration;
 
-    m_copy_buffer = "<subtitle";
+    duration = -1;
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "start"))
         entry.m_start = parse_timecode(atts[i + 1]);
       else if (!strcmp(atts[i], "stop"))
         entry.m_end = parse_timecode(atts[i + 1]);
-      else
-        m_copy_buffer += string(" ") + atts[i] + "=\"" +
-          escape_xml(atts[i + 1], true) + "\"";
-    m_copy_buffer += ">";
+      else if (!strcmp(atts[i], "duration"))
+        duration = parse_timecode(atts[i + 1]);
+    if (-1 == entry.m_end)
+      entry.m_end = duration;
+    m_copy_buffer = "";
     m_copy_depth = 1;
     m_strip = true;
 
@@ -290,6 +292,7 @@ usf_reader_c::end_cb(const char *name) {
       if (node == "USFSubtitles.subtitles.subtitle") {
         usf_track_t &track = m_tracks[m_tracks.size() - 1];
 
+        m_copy_buffer.erase(m_copy_buffer.length() - 11);
         track.m_entries[track.m_entries.size() - 1].m_text = m_copy_buffer;
 
       } else
