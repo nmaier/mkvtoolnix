@@ -243,8 +243,8 @@ usf_reader_c::start_cb(const char *name,
         entry.m_end = parse_timecode(atts[i + 1]);
       else if (!strcmp(atts[i], "duration"))
         duration = parse_timecode(atts[i + 1]);
-    if (-1 == entry.m_end)
-      entry.m_end = duration;
+    if ((-1 == entry.m_end) && (-1 != entry.m_start) && (-1 != duration))
+      entry.m_end = entry.m_start + duration;
     m_copy_buffer = "";
     m_copy_depth = 1;
     m_strip = true;
