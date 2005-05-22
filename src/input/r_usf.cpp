@@ -13,15 +13,22 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <errno.h>
 #include <expat.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+#include <algorithm>
+
+#include "iso639.h"
+#include "matroska.h"
 #include "mm_io.h"
 #include "output_control.h"
 #include "pr_generic.h"
+#include "p_textsubs.h"
 #include "r_usf.h"
 
 using namespace std;
@@ -86,50 +93,69 @@ usf_reader_c::probe_file(mm_text_io_c *io,
 usf_reader_c::usf_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
-  m_parser(NULL), m_copy_depth(0), m_strip(false) {
+  m_parser(NULL), m_copy_depth(0), m_longest_track(-1), m_strip(false) {
 
   try {
     mm_text_io_c io(new mm_file_io_c(ti.fname));
-    XML_Parser parser;
     string line;
+    int i;
 
     if (!usf_reader_c::probe_file(&io, 0))
       throw error_c("usf_reader: Source is not a valid USF file.");
 
-    parser = XML_ParserCreate(NULL);
-    XML_SetUserData(parser, this);
-    XML_SetElementHandler(parser, usf_xml_start_cb, usf_xml_end_cb);
-    XML_SetCharacterDataHandler(parser, usf_xml_add_data_cb);
+    m_parser = XML_ParserCreate(NULL);
+    XML_SetUserData(m_parser, this);
+    XML_SetElementHandler(m_parser, usf_xml_start_cb, usf_xml_end_cb);
+    XML_SetCharacterDataHandler(m_parser, usf_xml_add_data_cb);
 
     io.setFilePointer(0);
 
+    if (setjmp(m_parse_error_jmp) == 1)
+      throw error_c(m_parse_error);
+
     while (io.getline2(line)) {
-      if (XML_Parse(parser, line.c_str(), line.length(), io.eof()) == 0) {
+      if (XML_Parse(m_parser, line.c_str(), line.length(), io.eof()) == 0) {
         XML_Error xerror;
         string error;
 
-        xerror = XML_GetErrorCode(parser);
+        xerror = XML_GetErrorCode(m_parser);
         error = mxsprintf("XML parser error at line %d of '%s': %s. ",
-                          XML_GetCurrentLineNumber(parser), ti.fname.c_str(),
+                          XML_GetCurrentLineNumber(m_parser), ti.fname.c_str(),
                           XML_ErrorString(xerror));
         if (xerror == XML_ERROR_INVALID_TOKEN)
           error += "Remember that special characters like &, <, > and \" "
             "must be escaped in the usual HTML way: &amp; for '&', "
             "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
-        XML_ParserFree(parser);
         throw error_c(error);
       }
+    }
+
+    for (i = 0; m_tracks.size() > i; ++i) {
+      stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
+      m_tracks[i].m_current_entry = m_tracks[i].m_entries.begin();
+      if ((-1 == m_longest_track) ||
+          (m_tracks[m_longest_track].m_entries.size() <
+           m_tracks[i].m_entries.size()))
+        m_longest_track = i;
+
+      if ((m_default_language != "") && (m_tracks[i].m_language == ""))
+        m_tracks[i].m_language = m_default_language;
     }
 
   } catch (mm_io_error_c &error) {
     throw error_c("usf_reader: Could not open the source file.");
   }
 
+  XML_ParserFree(m_parser);
+  m_parser = NULL;
+
   if (verbose)
     mxinfo(FMT_FN "Using the USF subtitle reader.\n", ti.fname.c_str());
 }
 
 usf_reader_c::~usf_reader_c() {
+  if (NULL != m_parser)
+    XML_ParserFree(m_parser);
 }
 
 string
@@ -178,12 +204,15 @@ usf_reader_c::start_cb(const char *name,
     node += m_parents[i];
   }
 
-  mxinfo("start: %s\n", node.c_str());
-
   if (node == "USFSubtitles.metadata.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code")) {
-        m_default_language = atts[i + 1];
+        if (is_valid_iso639_2_code(atts[i + 1]))
+          m_default_language = atts[i + 1];
+        else if (!identifying)
+          mxwarn(FMT_FN "The default language code '%s' is not a valid "
+                 "ISO639-2 language code and will be ignored.\n",
+                 ti.fname.c_str(), atts[i + 1]);
         break;
       }
 
@@ -194,7 +223,12 @@ usf_reader_c::start_cb(const char *name,
   } else if (node == "USFSubtitles.subtitles.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code")) {
-        m_tracks[m_tracks.size() - 1].m_language = atts[i + 1];
+        if (is_valid_iso639_2_code(atts[i + 1]))
+          m_tracks[m_tracks.size() - 1].m_language = atts[i + 1];
+        else if (!identifying)
+          mxwarn(FMT_TID "The language code '%s' is not a valid "
+                 "ISO639-2 language code and will be ignored.\n",
+                 ti.fname.c_str(), (int64_t)m_tracks.size(), atts[i + 1]);
         break;
       }
   } else if (node == "USFSubtitles.subtitles.subtitle") {
@@ -267,8 +301,6 @@ usf_reader_c::end_cb(const char *name) {
   }
 
   m_data_buffer = "";
-
-  mxinfo("end: %s\n", node.c_str());
 }
 
 void
@@ -278,35 +310,102 @@ usf_reader_c::add_data_cb(const XML_Char *s,
 }
 
 void
-usf_reader_c::create_packetizer(int64_t) {
+usf_reader_c::create_packetizer(int64_t tid) {
+  if ((0 > tid) || (m_tracks.size() <= tid))
+    return;
+
+  usf_track_t &track = m_tracks[tid];
+
+  if (!demuxing_requested('s', tid) || (-1 != track.m_ptzr))
+    return;
+
+  ti.language = track.m_language;
+  track.m_ptzr =
+    add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUSF,
+                                             m_private_data.c_str(),
+                                             m_private_data.length(), false,
+                                             true, ti));
+  PTZR(track.m_ptzr)->set_default_compression_method(COMPRESSION_ZLIB);
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
+         tid);
 }
 
 void
-usf_reader_c::parse_file() {
+usf_reader_c::create_packetizers() {
+  int i;
+
+  for (i = 0; m_tracks.size() > i; ++i)
+    create_packetizer(i);
 }
 
 file_status_e
-usf_reader_c::read(generic_packetizer_c *,
+usf_reader_c::read(generic_packetizer_c *ptzr,
                    bool) {
-  return FILE_STATUS_DONE;
+  int i;
+  usf_track_t *track;
+
+  track = NULL;
+  for (i = 0; m_tracks.size() > i; ++i)
+    if (PTZR(m_tracks[i].m_ptzr) == ptzr) {
+      track = &m_tracks[i];
+      break;
+    }
+
+  if (NULL == track)
+    return FILE_STATUS_DONE;
+
+  if (track->m_entries.end() == track->m_current_entry)
+    return FILE_STATUS_DONE;
+
+  const usf_entry_t &entry = *(track->m_current_entry);
+  // A length of 0 here is OK because the text subtitle packetizer assumes
+  // that the data is a zero-terminated string.
+  memory_c mem((unsigned char *)entry.m_text.c_str(), 0, false);
+  PTZR(track->m_ptzr)->process(mem, entry.m_start, entry.m_end -
+                               entry.m_start);
+  ++(track->m_current_entry);
+
+  if (track->m_entries.end() == track->m_current_entry)
+    return FILE_STATUS_DONE;
+  return FILE_STATUS_MOREDATA;
 }
 
 int
 usf_reader_c::get_progress() {
-  return 0;
+  if (-1 == m_longest_track)
+    return 0;
+  usf_track_t &track = m_tracks[m_longest_track];
+  if (track.m_entries.size() == 0)
+    return 0;
+  return 100 -
+    distance(track.m_current_entry,
+             (vector<usf_entry_t>::const_iterator)track.m_entries.end()) *
+    100 / track.m_entries.size();
 }
 
 int64_t
 usf_reader_c::parse_timecode(const char *s) {
-  return -2;
+  int hour, minute, second, millisecond;
+
+  if ((mxsscanf(s, "%d:%d:%d.%d", &hour, &minute, &second, &millisecond) !=
+       4) ||
+      (0 > hour) || (0 > minute) || (59 < minute) || (0 > second) ||
+      (59 < second) || (999 < millisecond)) {
+    m_parse_error = string("Invalid start or stop timecode in line ") +
+      to_string(XML_GetCurrentLineNumber(m_parser)) + ", column " +
+      to_string(XML_GetCurrentColumnNumber(m_parser));
+    longjmp(m_parse_error_jmp, 1);
+  }
+
+  return (((int64_t)hour) * 3600000ll + ((int64_t)minute) * 60000ll +
+          ((int64_t)second) * 1000ll + millisecond) * 1000000ll;
 }
 
 void
 usf_reader_c::identify() {
-  int i, k;
+  int i;
 
   mxinfo("File '%s': container: USF\n", ti.fname.c_str());
-  mxinfo("  private data: %s\n", m_private_data.c_str());
   for (i = 0; m_tracks.size() > i; ++i) {
     usf_track_t &track = m_tracks[i];
     string info;
@@ -319,11 +418,5 @@ usf_reader_c::identify() {
       mxinfo("%s]", info.c_str());
     }
     mxinfo("\n");
-
-    for (k = 0; track.m_entries.size() > k; ++k) {
-      usf_entry_t &entry = track.m_entries[k];
-      mxinfo("  entry %d from %lld to %lld: %s\n", k, entry.m_start,
-             entry.m_end, entry.m_text.c_str());
-    }
   }
 }
