@@ -45,6 +45,8 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *_reader,
   }
 
   set_track_type(track_subtitle);
+  if (codec_id == MKV_S_TEXTUSF)
+    set_default_compression_method(COMPRESSION_ZLIB);
 }
 
 textsubs_packetizer_c::~textsubs_packetizer_c() {

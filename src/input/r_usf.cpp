@@ -328,7 +328,6 @@ usf_reader_c::create_packetizer(int64_t tid) {
                                              m_private_data.c_str(),
                                              m_private_data.length(), false,
                                              true, ti));
-  PTZR(track.m_ptzr)->set_default_compression_method(COMPRESSION_ZLIB);
   mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
          tid);
 }
