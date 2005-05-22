@@ -225,8 +225,9 @@ string MTX_DLL_API join(const char *pattern, vector<string> &strings);
 void MTX_DLL_API strip(string &s, bool newlines = false);
 void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
 string MTX_DLL_API escape(const string &src);
-string MTX_DLL_API escape_xml(const string &src, bool escape_quotes = false);
 string MTX_DLL_API unescape(const string &src);
+string MTX_DLL_API escape_xml(const string &src, bool escape_quotes = false);
+string MTX_DLL_API create_xml_node_name(const char *name, const char **atts);
 bool MTX_DLL_API starts_with(const string &s, const char *start,
                              int maxlen = -1);
 inline bool

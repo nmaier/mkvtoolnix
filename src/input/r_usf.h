@@ -87,7 +87,6 @@ public:
 
 private:
   virtual int64_t parse_timecode(const char *s);
-  virtual string create_node_name(const char *name, const char **atts);
 };
 
 #endif  // __R_USF_H

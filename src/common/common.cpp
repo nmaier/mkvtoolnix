@@ -908,6 +908,21 @@ escape_xml(const string &source,
   return dst;
 }
 
+string
+create_xml_node_name(const char *name,
+                     const char **atts) {
+  int i;
+  string node_name;
+
+  node_name = string("<") + name;
+  for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
+    node_name += string(" ") + atts[i] + "=\"" +
+      escape_xml(atts[i + 1], true) + "\"";
+  node_name += ">";
+
+  return node_name;
+}
+
 bool
 starts_with(const string &s,
             const char *start,

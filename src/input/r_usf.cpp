@@ -158,21 +158,6 @@ usf_reader_c::~usf_reader_c() {
     XML_ParserFree(m_parser);
 }
 
-string
-usf_reader_c::create_node_name(const char *name,
-                               const char **atts) {
-  int i;
-  string node_name;
-
-  node_name = string("<") + name;
-  for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
-    node_name += string(" ") + atts[i] + "=\"" +
-      escape_xml(atts[i + 1], true) + "\"";
-  node_name += ">";
-
-  return node_name;
-}
-
 void
 usf_reader_c::start_cb(const char *name,
                        const char **atts) {
@@ -190,7 +175,8 @@ usf_reader_c::start_cb(const char *name,
     // Just copy the data.
     if (m_strip)
       strip(m_data_buffer);
-    m_copy_buffer += m_data_buffer + create_node_name(name, atts);
+    m_copy_buffer += escape_xml(m_data_buffer) +
+      create_xml_node_name(name, atts);
     ++m_copy_depth;
     m_data_buffer = "";
 
@@ -254,7 +240,8 @@ usf_reader_c::start_cb(const char *name,
   } else if (m_parents.size() == 2) {
     m_copy_depth = 1;
     strip(m_data_buffer);
-    m_copy_buffer = m_data_buffer + create_node_name(name, atts);
+    m_copy_buffer = escape_xml(m_data_buffer) +
+      create_xml_node_name(name, atts);
     m_strip = true;
 
   }
@@ -285,7 +272,7 @@ usf_reader_c::end_cb(const char *name) {
       m_copy_buffer.erase(m_copy_buffer.length() - 1);
       m_copy_buffer += "/>";
     } else
-      m_copy_buffer += m_data_buffer + "</" + name + ">";
+      m_copy_buffer += escape_xml(m_data_buffer) + "</" + name + ">";
     --m_copy_depth;
 
     if (0 == m_copy_depth) {
