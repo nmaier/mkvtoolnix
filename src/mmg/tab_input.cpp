@@ -660,6 +660,7 @@ tab_input::select_file(bool append) {
     { wxT("SRT text subtitles"), wxT("srt") },
     { wxT("SSA/ASS text subtitles"), wxT("ass ssa") },
     { wxT("TTA (The lossless True Audio codec)"), wxT("tta") },
+    { wxT("USF text subtitles"), wxT("usf xml") },
     { wxT("VobSub subtitles"), wxT("idx") },
     { wxT("WAVE (uncompressed PCM audio)"), wxT("wav") },
     { wxT("WAVPACK v4 audio"), wxT("wv") },
