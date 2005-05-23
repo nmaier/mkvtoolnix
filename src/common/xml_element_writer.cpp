@@ -233,7 +233,7 @@ xml_formatter_c::write_header() {
     throw xml_formatter_error_c("The header has already been written.");
 
 #if defined(SYS_WINDOWS)
-  m_out->use_dos_style_newlines(yes);
+  m_out->use_dos_style_newlines(true);
 #endif
   m_out->write_bom(m_encoding);
   m_out->printf("<?xml version=\"1.0\" encoding=\"%s\"?>\n",
