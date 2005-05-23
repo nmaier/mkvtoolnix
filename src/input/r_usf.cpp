@@ -171,6 +171,26 @@ usf_reader_c::start_cb(const char *name,
     // Nothing to do for the root element.
     return;
 
+  // Generate the full path to this node.
+  for (i = 0; m_parents.size() > i; ++i) {
+    if (!node.empty())
+      node += ".";
+    node += m_parents[i];
+  }
+
+  if (node == "USFSubtitles.metadata.language") {
+    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
+      if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
+        if (is_valid_iso639_2_code(atts[i + 1]))
+          m_default_language = atts[i + 1];
+        else if (!identifying)
+          mxwarn(FMT_FN "The default language code '%s' is not a valid "
+                 "ISO639-2 language code and will be ignored.\n",
+                 ti.fname.c_str(), atts[i + 1]);
+        break;
+      }
+  }
+
   if (0 != m_copy_depth) {
     // Just copy the data.
     if (m_strip)
@@ -183,32 +203,13 @@ usf_reader_c::start_cb(const char *name,
     return;
   }
 
-  // Generate the full path to this node.
-  for (i = 0; m_parents.size() > i; ++i) {
-    if (!node.empty())
-      node += ".";
-    node += m_parents[i];
-  }
-
-  if (node == "USFSubtitles.metadata.language") {
-    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
-      if (!strcmp(atts[i], "code")) {
-        if (is_valid_iso639_2_code(atts[i + 1]))
-          m_default_language = atts[i + 1];
-        else if (!identifying)
-          mxwarn(FMT_FN "The default language code '%s' is not a valid "
-                 "ISO639-2 language code and will be ignored.\n",
-                 ti.fname.c_str(), atts[i + 1]);
-        break;
-      }
-
-  } else if (node == "USFSubtitles.subtitles") {
+  if (node == "USFSubtitles.subtitles") {
     usf_track_t new_track;
     m_tracks.push_back(new_track);
 
   } else if (node == "USFSubtitles.subtitles.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
-      if (!strcmp(atts[i], "code")) {
+      if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
         if (is_valid_iso639_2_code(atts[i + 1]))
           m_tracks[m_tracks.size() - 1].m_language = atts[i + 1];
         else if (!identifying)
@@ -217,6 +218,7 @@ usf_reader_c::start_cb(const char *name,
                  ti.fname.c_str(), (int64_t)m_tracks.size(), atts[i + 1]);
         break;
       }
+
   } else if (node == "USFSubtitles.subtitles.subtitle") {
     usf_entry_t entry;
     int64_t duration;
