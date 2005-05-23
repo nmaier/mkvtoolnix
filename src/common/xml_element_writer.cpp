@@ -166,3 +166,165 @@ write_xml_element_rec(int level,
   }
 }
 
+// ------------------------------------------------------------------------
+
+static void
+xml_formatter_start_cb(void *user_data,
+                       const char *name,
+                       const char **atts) {
+  ((xml_formatter_c *)user_data)->start_element_cb(name, atts);
+}
+
+static void
+xml_formatter_end_cb(void *user_data,
+                     const char *name) {
+  ((xml_formatter_c *)user_data)->end_element_cb(name);
+}
+
+static void
+xml_formatter_add_data_cb(void *user_data,
+                          const XML_Char *s,
+                          int len) {
+  ((xml_formatter_c *)user_data)->add_data_cb(s, len);
+}
+
+xml_formatter_c::xml_formatter_c(mm_io_c *out,
+                                 const string &encoding):
+  m_out(out), m_encoding(encoding), m_cc_utf8(0), m_header_written(false),
+  m_parser(NULL), m_state(XMLF_STATE_NONE) {
+
+  m_cc_utf8 = utf8_init(m_encoding);
+
+  m_parser = XML_ParserCreate(NULL);
+  XML_SetUserData(m_parser, this);
+  XML_SetElementHandler(m_parser, xml_formatter_start_cb,
+                        xml_formatter_end_cb);
+  XML_SetCharacterDataHandler(m_parser, xml_formatter_add_data_cb);
+}
+
+xml_formatter_c::~xml_formatter_c() {
+  if (NULL != m_parser)
+    XML_ParserFree(m_parser);
+}
+
+void
+xml_formatter_c::set_doctype(const string &dtd,
+                             const string &file) {
+  if (m_header_written)
+    throw xml_formatter_error_c("The header has already been written.");
+
+  m_dtd = dtd;
+  m_dtd_file = file;
+}
+
+void
+xml_formatter_c::set_stylesheet(const string &type,
+                                const string &file) {
+  if (m_header_written)
+    throw xml_formatter_error_c("The header has already been written.");
+
+  m_stylesheet_type = type;
+  m_stylesheet_file = file;
+}
+
+void
+xml_formatter_c::write_header() {
+  if (m_header_written)
+    throw xml_formatter_error_c("The header has already been written.");
+
+#if defined(SYS_WINDOWS)
+  m_out->use_dos_style_newlines(yes);
+#endif
+  m_out->write_bom(m_encoding);
+  m_out->printf("<?xml version=\"1.0\" encoding=\"%s\"?>\n",
+                escape_xml(m_encoding, true).c_str());
+  if ((m_dtd != "") && (m_dtd_file != ""))
+    m_out->printf("\n<!-- DOCTYPE %s SYSTEM \"%s\" -->\n", m_dtd.c_str(),
+                  escape_xml(m_dtd_file, true).c_str());
+  if ((m_stylesheet_type != "") && (m_stylesheet_file != ""))
+    m_out->printf("\n<?xml-stylesheet type=\"%s\" href=\"%s\"?>\n",
+                  escape_xml(m_stylesheet_type, true).c_str(),
+                  escape_xml(m_stylesheet_file, true).c_str());
+
+  m_header_written = true;
+}
+
+void
+xml_formatter_c::format(const string &text) {
+  if (XML_Parse(m_parser, text.c_str(), text.length(), 0) == 0) {
+    XML_Error xerror;
+
+    xerror = XML_GetErrorCode(m_parser);
+    throw xml_formatter_error_c(mxsprintf("XML parser error at line %d: %s.",
+                                          XML_GetCurrentLineNumber(m_parser),
+                                          XML_ErrorString(xerror)));
+  }
+}
+
+void
+xml_formatter_c::flush() {
+}
+
+void
+xml_formatter_c::start_element_cb(const char *name,
+                                  const char **atts) {
+  string element;
+
+  strip(m_data_buffer, true);
+  m_data_buffer = escape_xml(from_utf8(m_cc_utf8, m_data_buffer));
+
+  if (XMLF_STATE_START == m_state)
+    m_out->printf(">");
+  else if (XMLF_STATE_DATA == m_state)
+    m_out->printf("%s", m_data_buffer.c_str());
+
+  element = create_xml_node_name(name, atts);
+  element.erase(element.length() - 1);
+  m_out->printf("\n%*s%s", m_depth * 2, "", element.c_str());
+
+  ++m_depth;
+  m_data_buffer = "";
+  m_state = XMLF_STATE_START;
+}
+
+void
+xml_formatter_c::end_element_cb(const char *name) {
+  strip(m_data_buffer, true);
+  m_data_buffer = escape_xml(from_utf8(m_cc_utf8, m_data_buffer));
+
+  --m_depth;
+
+  if (XMLF_STATE_END == m_state)
+    m_out->printf("\n%*s</%s>", m_depth * 2, "", name);
+  else if (XMLF_STATE_START == m_state) {
+    if (m_data_buffer == "")
+      m_out->printf("/>");
+    else
+      m_out->printf(">\n%*s%s\n%*s</%s>", (m_depth + 1) * 2, "",
+                    m_data_buffer.c_str(), m_depth * 2, "");
+  } else if (XMLF_STATE_DATA == m_state)
+    m_out->printf("%s\n%*s</%s>", m_data_buffer.c_str(), m_depth * 2, "",
+                  name);
+
+  m_data_buffer = "";
+  m_state = XMLF_STATE_END;
+}
+
+void
+xml_formatter_c::add_data_cb(const XML_Char *s,
+                             int len) {
+  string test_data_buffer;
+
+  m_data_buffer.append((const char *)s, len);
+  test_data_buffer = m_data_buffer;
+  strip(test_data_buffer, true);
+  if (test_data_buffer == "")
+    return;
+
+  if ((XMLF_STATE_START == m_state) && (test_data_buffer != ""))
+    m_out->printf(">\n%*s", m_depth * 2, "");
+  else if (XMLF_STATE_END == m_state)
+    m_out->printf("\n%*s", m_depth * 2, "");
+  m_state = XMLF_STATE_DATA;
+}
+
