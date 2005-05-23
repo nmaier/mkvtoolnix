@@ -1,5 +1,9 @@
 2005-05-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: On Windows mmg could be crashed by adding a file
+	and clicking into the empty space in the "track" selection
+	box. Fixes Anthill bug 133.
+
 	* mkvextract: new feature: Implemented the extraction of USF
 	subtitles.
 

@@ -1241,6 +1241,9 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
 
   selected_track = -1;
   new_sel = clb_tracks->GetSelection();
+  if (0 > new_sel)
+    return;
+
   t = tracks[new_sel];
   f = &files[t->source];
 
