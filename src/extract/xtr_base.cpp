@@ -84,6 +84,10 @@ xtr_base_c::handle_block(KaxBlock &block,
 }
 
 void
+xtr_base_c::finish_track() {
+}
+
+void
 xtr_base_c::finish_file() {
 }
 
@@ -140,6 +144,8 @@ xtr_base_c::create_extractor(const string &new_codec_id,
     return new xtr_ssa_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_S_VOBSUB)
     return new xtr_vobsub_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_S_TEXTUSF)
+    return new xtr_usf_c(new_codec_id, new_tid, tspec);
 
   return NULL;
 }

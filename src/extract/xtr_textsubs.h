@@ -20,6 +20,8 @@
 #include <string>
 #include <vector>
 
+#include "xml_element_writer.h"
+
 #include "xtr_base.h"
 
 using namespace std;
@@ -66,6 +68,31 @@ public:
   virtual void handle_block(KaxBlock &block, KaxBlockAdditions *additions,
                             int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref);
+  virtual void finish_file();
+};
+
+class xtr_usf_c: public xtr_base_c {
+private:
+  struct usf_entry_t {
+    string m_text;
+    int64_t m_start, m_end;
+
+    usf_entry_t(const string &text, int64_t start, int64_t end):
+      m_text(text), m_start(start), m_end(end) { }
+  };
+
+  string m_sub_charset, m_codec_private, m_language;
+  counted_ptr<xml_formatter_c> m_formatter;
+  vector<usf_entry_t> m_entries;
+
+public:
+  xtr_usf_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+
+  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void handle_block(KaxBlock &block, KaxBlockAdditions *additions,
+                            int64_t timecode, int64_t duration, int64_t bref,
+                            int64_t fref);
+  virtual void finish_track();
   virtual void finish_file();
 };
 

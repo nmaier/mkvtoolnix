@@ -278,3 +278,145 @@ xtr_ssa_c::finish_file() {
     out->puts(lines[i].line.c_str());
 }
 
+// ------------------------------------------------------------------------
+
+xtr_usf_c::xtr_usf_c(const string &_codec_id,
+                     int64_t _tid,
+                     track_spec_t &tspec):
+  xtr_base_c(_codec_id, _tid, tspec),
+  m_sub_charset(tspec.sub_charset) {
+
+  if (m_sub_charset == "")
+    m_sub_charset = "UTF-8";
+}
+
+void
+xtr_usf_c::create_file(xtr_base_c *_master,
+                       KaxTrackEntry &track) {
+  KaxCodecPrivate *priv;
+  KaxTrackLanguage *language;
+  unsigned char *new_priv;
+  uint32_t private_size;
+
+  priv = FINDFIRST(&track, KaxCodecPrivate);
+  if (NULL == priv)
+    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
+            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+
+  if (!content_decoder.initialize(track))
+    mxerror("Tracks with unsupported content encoding schemes (compression "
+            "or encryption) cannot be extracted.\n");
+
+  private_size = priv->GetSize();
+
+  new_priv = const_cast<unsigned char *>(priv->GetBuffer());
+  if (!content_decoder.reverse(new_priv, private_size,
+                               CONTENT_ENCODING_SCOPE_CODECPRIVATE)) {
+    m_codec_private.append((const char *)new_priv, private_size);
+  } else {
+    m_codec_private.append((const char *)new_priv, private_size);
+    safefree(new_priv);
+  }
+
+  language = FINDFIRST(&track, KaxTrackLanguage);
+  if (NULL == language)
+    m_language = "eng";
+  else
+    m_language = string(*language);
+
+  if (NULL != _master) {
+    xtr_usf_c *usf_master;
+
+    usf_master = dynamic_cast<xtr_usf_c *>(_master);
+    if (NULL == usf_master)
+      mxerror("Cannot write track %lld with the CodecID '%s' to the file '%s' "
+              "because track %lld with the CodecID '%s' is already being "
+              "written to the same file.\n", tid, codec_id.c_str(),
+              file_name.c_str(), _master->tid, _master->codec_id.c_str());
+    if (m_codec_private != usf_master->m_codec_private)
+      mxerror("Cannot write track %lld with the CodecID '%s' to the file '%s' "
+              "because track %lld with the CodecID '%s' is already being "
+              "written to the same file, and their CodecPrivate data (the "
+              "USF styles etc) do not match.\n", tid, codec_id.c_str(),
+              file_name.c_str(), _master->tid, _master->codec_id.c_str());
+
+    m_formatter = usf_master->m_formatter;
+    master = usf_master;
+
+  } else {
+    try {
+      out = new mm_file_io_c(file_name, MODE_CREATE);
+
+      m_formatter =
+        counted_ptr<xml_formatter_c>(new xml_formatter_c(out, m_sub_charset));
+      m_formatter->set_doctype("USFSubtitles", "USFV100.dtd");
+      m_formatter->set_stylesheet("text/xsl", "USFV100.xsl");
+      m_formatter->write_header();
+      m_formatter->format("<USFSubtitles version=\"1.00\">\n");
+      m_formatter->format(m_codec_private + "\n");
+    } catch (mm_io_error_c &error) {
+      mxerror("Failed to create the file '%s': %d (%s)\n", file_name.c_str(),
+              errno, strerror(errno));
+    } catch (xml_formatter_error_c &error) {
+      mxerror("Failed to parse the USF codec private data for track %lld: "
+              "%s\n", tid, error.get_error());
+      
+    }
+  }
+}
+
+void
+xtr_usf_c::handle_block(KaxBlock &block,
+                        KaxBlockAdditions *additions,
+                        int64_t timecode,
+                        int64_t duration,
+                        int64_t bref,
+                        int64_t fref) {
+  if (0 == block.NumberFrames())
+    return;
+
+  DataBuffer &data_buffer = block.GetBuffer(0);
+  usf_entry_t entry("", timecode, timecode + duration);
+  uint32_t size = data_buffer.Size();
+  unsigned char *data = data_buffer.Buffer();
+  bool free_mem = content_decoder.reverse(data, size,
+                                          CONTENT_ENCODING_SCOPE_BLOCK);
+  entry.m_text.append((const char *)data, size);
+  if (free_mem)
+    safefree(data);
+  m_entries.push_back(entry);
+}
+
+void
+xtr_usf_c::finish_track() {
+  vector<usf_entry_t>::const_iterator entry;
+
+  try {
+    m_formatter->format(mxsprintf("<subtitles>\n<language code=\"%s\"/>\n",
+                                  m_language.c_str()));
+    foreach(entry, m_entries)
+      m_formatter->format(mxsprintf("<subtitle start=\"" FMT_TIMECODE
+                                    "\" stop=\"" FMT_TIMECODE
+                                    "\">%s</subtitle>\n",
+                                    ARG_TIMECODE_NS(entry->m_start),
+                                    ARG_TIMECODE_NS(entry->m_end),
+                                    entry->m_text.c_str()));
+    m_formatter->format("</subtitles>\n");
+  } catch (xml_formatter_error_c &error) {
+    mxerror("Failed to parse an USF subtitle entry for track %lld: %s\n", tid,
+            error.get_error());
+  }
+}
+
+void
+xtr_usf_c::finish_file() {
+  try {
+    if (NULL == master) {
+      m_formatter->format("</USFSubtitles>");
+      out->printf("\n");
+    }
+  } catch (xml_formatter_error_c &error) {
+    mxerror("Failed to parse the USF end tag for track %lld: %s\n", tid,
+            error.get_error());
+  }
+}

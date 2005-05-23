@@ -203,6 +203,8 @@ close_extractors() {
   int i;
 
   for (i = 0; i < extractors.size(); i++)
+    extractors[i]->finish_track();
+  for (i = 0; i < extractors.size(); i++)
     if (NULL != extractors[i]->master)
       extractors[i]->finish_file();
   for (i = 0; i < extractors.size(); i++) {

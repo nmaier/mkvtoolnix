@@ -48,6 +48,7 @@ public:
   virtual void handle_block(KaxBlock &block, KaxBlockAdditions *additions,
                             int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref);
+  virtual void finish_track();
   virtual void finish_file();
 
   virtual void headers_done();
