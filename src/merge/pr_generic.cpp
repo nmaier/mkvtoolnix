@@ -36,6 +36,70 @@
 
 using namespace std;
 
+int64_t packet_t::packet_id_counter = 0;
+
+packet_t::packet_t():
+  group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+  ref_priority(0),
+  timecode(0), bref(0), fref(0), duration(0),
+  packet_num(0),
+  assigned_timecode(0), unmodified_assigned_timecode(0),
+  unmodified_duration(0),
+  duration_mandatory(false), superseeded(false), gap_following(false),
+  source(NULL) {
+
+  packet_id = packet_id_counter;
+  ++packet_id_counter;
+}
+
+packet_t::packet_t(memory_cptr n_memory,
+                   int64_t n_timecode,
+                   int64_t n_duration,
+                   int64_t n_bref,
+                   int64_t n_fref):
+  group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+  ref_priority(0),
+  timecode(n_timecode), bref(n_bref), fref(n_fref),
+  duration(n_duration),
+  packet_num(0),
+  assigned_timecode(0), unmodified_assigned_timecode(0),
+  unmodified_duration(0),
+  duration_mandatory(false), superseeded(false), gap_following(false),
+  source(NULL), memory(n_memory) {
+
+  packet_id = packet_id_counter;
+  ++packet_id_counter;
+}
+
+packet_t::packet_t(memory_c *n_memory,
+                   int64_t n_timecode,
+                   int64_t n_duration,
+                   int64_t n_bref,
+                   int64_t n_fref):
+  group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+  ref_priority(0),
+  timecode(n_timecode), bref(n_bref), fref(n_fref),
+  duration(n_duration),
+  packet_num(0),
+  assigned_timecode(0), unmodified_assigned_timecode(0),
+  unmodified_duration(0),
+  duration_mandatory(false), superseeded(false), gap_following(false),
+  source(NULL), memory(memory_cptr(n_memory)) {
+
+  packet_id = packet_id_counter;
+  ++packet_id_counter;
+}
+
+packet_t::~packet_t() {
+  vector<unsigned char *>::iterator i;
+
+  safefree(data);
+  foreach(i, data_adds)
+    safefree(*i);
+}
+
+// ---------------------------------------------------------------------
+
 vector<generic_packetizer_c *> ptzrs_in_header_order;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
@@ -808,92 +872,46 @@ generic_packetizer_c::fix_headers() {
 }
 
 void
-generic_packetizer_c::add_packet(memory_c &mem,
-                                 int64_t timecode,
-                                 int64_t duration,
-                                 bool duration_mandatory,
-                                 int64_t bref,
-                                 int64_t fref,
-                                 int ref_priority) {
-  int length;
-  packet_t *pack;
-
-  if (reader->ptzr_first_packet == NULL)
-    reader->ptzr_first_packet = this;
-
-  pack = new packet_t;
-
-  length = mem.size;
-  if (NULL != compressor.get()) {
-    pack->data = compressor->compress(mem.data, length);
-    mem.release();
-  } else
-    pack->data = mem.grab();
-  pack->length = length;
-  pack->timecode = timecode;
-  pack->bref = bref;
-  pack->fref = fref;
-  pack->ref_priority = ref_priority;
-  pack->duration = duration;
-  pack->duration_mandatory = duration_mandatory;
-  pack->source = this;
-
-  enqueued_bytes += pack->length;
-
-  if (connected_to != 1)
-    add_packet2(pack);
-  else
-    deferred_packets.push_back(pack);
-}
-
-void
-generic_packetizer_c::add_packet(memories_c &mems,
-                                 int64_t timecode,
-                                 int64_t duration,
-                                 bool duration_mandatory,
-                                 int64_t bref,
-                                 int64_t fref,
-                                 int ref_priority) {
+generic_packetizer_c::add_packet(packet_cptr packet) {
   int length, add_length, i;
-  packet_t *pack;
+  packet_cptr pack(new packet_t);
+
+  pack->timecode = packet->timecode;
+  pack->duration = packet->duration;
+  pack->duration_mandatory = packet->duration_mandatory;
+  pack->bref = packet->bref;
+  pack->fref = packet->fref;
 
   if (reader->ptzr_first_packet == NULL)
     reader->ptzr_first_packet = this;
 
-  pack = new packet_t;
   // strip elements to be removed
   if ((htrack_max_add_block_ids != -1) &&
-      (htrack_max_add_block_ids < (mems.size() - 1)))
-    mems.resize(htrack_max_add_block_ids + 1);
+      (htrack_max_add_block_ids < packet->memory_adds.size()))
+    packet->memory_adds.resize(htrack_max_add_block_ids);
 
-  pack->data_adds.resize(mems.size() - 1);
-  pack->data_adds_lengths.resize(mems.size() - 1);
+  pack->data_adds.resize(packet->memory_adds.size());
+  pack->data_adds_lengths.resize(packet->memory_adds.size());
 
-  length = mems[0]->size;
+  length = packet->memory->size;
   if (NULL != compressor.get()) {
-    pack->data = compressor->compress(mems[0]->data, length);
-    mems[0]->release();
-    for (i = 1; i < mems.size(); i++) {
-      add_length = mems[i]->size;
-      pack->data_adds[i - 1] = compressor->compress(mems[i]->data,
-                                                    add_length);
-      pack->data_adds_lengths[i - 1] = add_length;
-      mems[i]->release();
+    pack->data = compressor->compress(packet->memory->data, length);
+    packet->memory->release();
+    for (i = 0; i < packet->memory_adds.size(); i++) {
+      add_length = packet->memory_adds[i]->size;
+      pack->data_adds[i] = compressor->compress(packet->memory_adds[i]->data,
+                                                add_length);
+      pack->data_adds_lengths[i] = add_length;
+      packet->memory_adds[i]->release();
     }
   } else {
-    pack->data = mems[0]->grab();
-    for (i = 1; i < mems.size(); i++) {
-      pack->data_adds[i - 1] = mems[i]->grab();
-      pack->data_adds_lengths[i - 1] = mems[i]->size;
+    pack->data = packet->memory->grab();
+    for (i = 0; i < packet->memory_adds.size(); i++) {
+      pack->data_adds[i] = packet->memory_adds[i]->grab();
+      pack->data_adds_lengths[i] = packet->memory_adds[i]->size;
     }
   }
   pack->length = length;
-  pack->timecode = timecode;
-  pack->bref = bref;
-  pack->fref = fref;
-  pack->ref_priority = ref_priority;
-  pack->duration = duration;
-  pack->duration_mandatory = duration_mandatory;
   pack->source = this;
 
   enqueued_bytes += pack->length;
@@ -905,7 +923,7 @@ generic_packetizer_c::add_packet(memories_c &mems,
 }
 
 void
-generic_packetizer_c::add_packet2(packet_t *pack) {
+generic_packetizer_c::add_packet2(packet_cptr pack) {
   int64_t factory_timecode;
 
   pack->timecode += correction_timecode_offset + append_timecode_offset;
@@ -923,7 +941,6 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
   }
 
   if (pack->timecode < 0) {
-    delete pack;
     return;
   }
 
@@ -983,19 +1000,19 @@ generic_packetizer_c::add_packet2(packet_t *pack) {
 
 void
 generic_packetizer_c::process_deferred_packets() {
-  deque<packet_t *>::iterator packet;
+  deque<packet_cptr>::iterator packet;
 
   foreach(packet, deferred_packets)
     add_packet2(*packet);
   deferred_packets.clear();
 }
 
-packet_t *
+packet_cptr
 generic_packetizer_c::get_packet() {
-  packet_t *pack;
+  packet_cptr pack;
 
   if (packet_queue.size() == 0)
-    return NULL;
+    return packet_cptr(NULL);
 
   pack = packet_queue.front();
   packet_queue.pop_front();
@@ -1024,14 +1041,12 @@ generic_packetizer_c::displace(float by_ns) {
 
 void
 generic_packetizer_c::force_duration_on_last_packet() {
-  packet_t *packet;
-
   if (packet_queue.empty()) {
     mxverb(2, "force_duration_on_last_packet: packet queue is empty for "
            "'%s'/%lld\n", ti.fname.c_str(), ti.id);
     return;
   }
-  packet = packet_queue.back();
+  packet_cptr &packet = packet_queue.back();
   packet->duration_mandatory = true;
   mxverb(2, "force_duration_on_last_packet: forcing at " FMT_TIMECODE " with "
          "%.3fms for '%s'/%lld\n", ARG_TIMECODE_NS(packet->timecode),

@@ -186,28 +186,27 @@ mp3_packetizer_c::set_headers() {
 }
 
 int
-mp3_packetizer_c::process(memory_c &mem,
-                          int64_t timecode,
-                          int64_t,
-                          int64_t,
-                          int64_t) {
-  unsigned char *packet;
+mp3_packetizer_c::process(packet_cptr packet) {
+  unsigned char *mp3_packet;
   mp3_header_t mp3header;
-  int64_t my_timecode;
+  int64_t my_timecode, timecode;
 
   debug_enter("mp3_packetizer_c::process");
 
-  byte_buffer.add(mem.data, mem.size);
-  while ((packet = get_mp3_packet(&mp3header)) != NULL) {
+  timecode = packet->timecode;
+  packet->duration = (int64_t)(1000000000.0 * spf * ti.async.linear /
+                               samples_per_sec);
+
+  byte_buffer.add(packet->memory->data, packet->memory->size);
+  while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
     else
       my_timecode = timecode + ti.async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti.async.linear);
-    memory_c mem(packet, mp3header.framesize, true);
-    add_packet(mem, my_timecode,
-               (int64_t)(1000000000.0 * spf * ti.async.linear /
-                         samples_per_sec));
+    packet->timecode = (int64_t)(my_timecode * ti.async.linear);
+    packet->memory = memory_cptr(new memory_c(mp3_packet, mp3header.framesize,
+                                              true));
+    add_packet(packet);
     packetno++;
   }
 

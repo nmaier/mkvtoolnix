@@ -55,49 +55,19 @@ wavpack_packetizer_c::set_headers() {
 }
 
 int
-wavpack_packetizer_c::process(memory_c &mem,
-                              int64_t,
-                              int64_t duration,
-                              int64_t,
-                              int64_t) {
+wavpack_packetizer_c::process(packet_cptr packet) {
   debug_enter("wavpack_packetizer_c::process");
-  int64_t samples = get_uint32_le(mem.data);
+  int64_t samples = get_uint32_le(packet->memory->data);
 
-  if (duration == -1) {
-    add_packet(mem, irnd(samples_output * 1000000000 / sample_rate),
-               irnd(samples * 1000000000 / sample_rate));
-  } else {
+  if (-1 == packet->duration)
+    packet->duration = irnd(samples * 1000000000 / sample_rate);
+  else
     mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
-           duration);
-    add_packet(mem, irnd((double)samples_output * 1000000000 / sample_rate),
-               duration);
-  }
+           packet->duration);
+  if (-1 == packet->timecode)
+    packet->timecode = irnd((double)samples_output * 1000000000 / sample_rate);
   samples_output += samples;
-
-  debug_leave("wavpack_packetizer_c::process");
-
-  return FILE_STATUS_MOREDATA;
-}
-
-int
-wavpack_packetizer_c::process(memories_c &mems,
-                              int64_t,
-                              int64_t duration,
-                              int64_t,
-                              int64_t) {
-  debug_enter("wavpack_packetizer_c::process");
-  int64_t samples = get_uint32_le(mems[0]->data);
-
-  if (duration == -1) {
-    add_packet(mems, irnd(samples_output * 1000000000 / sample_rate),
-               irnd(samples * 1000000000 / sample_rate));
-  } else {
-    mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
-           duration);
-    add_packet(mems, irnd((double)samples_output * 1000000000 / sample_rate),
-               duration);
-  }
-  samples_output += samples;
+  add_packet(packet);
 
   debug_leave("wavpack_packetizer_c::process");
 

@@ -94,6 +94,10 @@ enum default_track_priority_e {
 #define FMT_TID "'%s' track %lld: "
 
 struct packet_t {
+  static int64_t packet_id_counter;
+
+  int64_t packet_id;
+
   KaxBlockGroup *group;
   KaxBlock *block;
   KaxCluster *cluster;
@@ -106,24 +110,21 @@ struct packet_t {
   vector<unsigned char *> data_adds;
   vector<int> data_adds_lengths;
 
-  packet_t():
-    group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
-    ref_priority(0),
-    timecode(0), bref(0), fref(0), duration(0),
-    packet_num(0),
-    assigned_timecode(0), unmodified_assigned_timecode(0),
-    unmodified_duration(0),
-    duration_mandatory(false), superseeded(false), gap_following(false),
-    source(NULL) {}
+  memory_cptr memory;
+  memories_c memory_adds;
 
-  virtual ~packet_t() {
-    vector<unsigned char *>::iterator i;
+  packet_t();
+  packet_t(memory_cptr n_memory, int64_t n_timecode = -1,
+           int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
+  packet_t(memory_c *n_memory, int64_t n_timecode = -1,
+           int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
+//   packet_t(const packet_t &packet);
 
-    safefree(data);
-    foreach(i, data_adds)
-      safefree(*i);
-  }
+  virtual ~packet_t();
+
+//   packet_t &operator =(const packet_t &packet);
 };
+typedef counted_ptr<packet_t> packet_cptr;
 
 struct cue_creation_t {
   cue_strategy_e cues;
@@ -404,7 +405,7 @@ enum connection_result_e {
 
 class generic_packetizer_c {
 protected:
-  deque<packet_t *> packet_queue, deferred_packets;
+  deque<packet_cptr > packet_queue, deferred_packets;
 
   int64_t initial_displacement;
   int64_t m_free_refs, m_next_free_refs, enqueued_bytes;
@@ -457,19 +458,15 @@ public:
     return reader->read(this);
   }
 
-  virtual void add_packet(memory_c &mem, int64_t timecode,
-                          int64_t duration, bool duration_mandatory = false,
-                          int64_t bref = -1, int64_t fref = -1,
-                          int ref_priority = -1);
-  virtual void add_packet(memories_c &mems, int64_t timecode,
-                          int64_t duration, bool duration_mandatory = false,
-                          int64_t bref = -1, int64_t fref = -1,
-                          int ref_priority = -1);
-  virtual void add_packet2(packet_t *pack);
+  inline void add_packet(packet_t *packet) {
+    add_packet(packet_cptr(packet));
+  }
+  virtual void add_packet(packet_cptr packet);
+  virtual void add_packet2(packet_cptr pack);
   virtual void process_deferred_packets();
 
-  virtual packet_t *get_packet();
-  virtual int packet_available() {
+  virtual packet_cptr get_packet();
+  inline int packet_available() {
     return packet_queue.size();
   }
   virtual void flush() {
@@ -478,28 +475,23 @@ public:
     return (packet_queue.size() == 0) ? 0x0FFFFFFF :
       packet_queue.front()->timecode;
   }
-  virtual int64_t get_queued_bytes() {
+  inline int64_t get_queued_bytes() {
     return enqueued_bytes;
   }
 
-  virtual void set_free_refs(int64_t free_refs) {
+  inline void set_free_refs(int64_t free_refs) {
     m_free_refs = m_next_free_refs;
     m_next_free_refs = free_refs;
   }
-  virtual int64_t get_free_refs() {
+  inline int64_t get_free_refs() {
     return m_free_refs;
   }
   virtual void set_headers();
   virtual void fix_headers();
-  virtual int process(memory_c &mem,
-                      int64_t timecode = -1, int64_t length = -1,
-                      int64_t bref = -1, int64_t fref = -1) = 0;
-
-  virtual int process(memories_c &mems,
-                      int64_t timecode = -1, int64_t length = -1,
-                      int64_t bref = -1, int64_t fref = -1) {
-    return process(*mems[0], timecode, length, bref, fref);
+  inline int process(packet_t *packet) {
+    return process(packet_cptr(packet));
   }
+  virtual int process(packet_cptr packet) = 0;
 
   virtual void dump_debug_info() = 0;
 

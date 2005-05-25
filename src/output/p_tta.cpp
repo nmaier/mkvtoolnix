@@ -54,24 +54,20 @@ tta_packetizer_c::set_headers() {
 }
 
 int
-tta_packetizer_c::process(memory_c &mem,
-                          int64_t,
-                          int64_t duration,
-                          int64_t,
-                          int64_t) {
+tta_packetizer_c::process(packet_cptr packet) {
   debug_enter("tta_packetizer_c::process");
 
-  if (duration == -1) {
-    add_packet(mem, irnd(samples_output * 1000000000 / sample_rate),
-               irnd(1000000000.0 * ti.async.linear * TTA_FRAME_TIME));
+  packet->timecode = irnd((double)samples_output * 1000000000 / sample_rate);
+  if (-1 == packet->duration) {
+    packet->duration = irnd(1000000000.0 * ti.async.linear * TTA_FRAME_TIME);
     samples_output += irnd(TTA_FRAME_TIME * sample_rate);
+
   } else {
     mxverb(2, "tta_packetizer: incomplete block with duration %lld\n",
-           duration);
-    add_packet(mem, irnd((double)samples_output * 1000000000 / sample_rate),
-               duration);
-    samples_output += irnd(duration * sample_rate / 1000000000ll);
+           packet->duration);
+    samples_output += irnd(packet->duration * sample_rate / 1000000000ll);
   }
+  add_packet(packet);
 
   debug_leave("tta_packetizer_c::process");
 

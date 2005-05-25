@@ -64,20 +64,7 @@ cluster_helper_c::~cluster_helper_c() {
   int i;
 
   for (i = 0; i < clusters.size(); i++)
-    free_contents(clusters[i]);
-}
-
-void
-cluster_helper_c::free_contents(ch_contents_t *clstr) {
-  vector<packet_t *>::iterator i;
-
-  assert(clstr != NULL);
-  assert(clstr->cluster != NULL);
-  delete clstr->cluster;
-
-  foreach(i, clstr->packets)
-    delete *i;
-  delete clstr;
+    delete clusters[i];
 }
 
 KaxCluster *
@@ -88,9 +75,8 @@ cluster_helper_c::get_cluster() {
 }
 
 void
-cluster_helper_c::add_packet(packet_t *packet) {
+cluster_helper_c::add_packet(packet_cptr packet) {
   ch_contents_t *c;
-  packet_t *p;
   int64_t timecode, additional_size;
   int i;
   bool split;
@@ -141,7 +127,7 @@ cluster_helper_c::add_packet(packet_t *packet) {
         additional_size = 21;
         // Add sizes for all frames.
         for (i = 0; i < c->packets.size(); i++) {
-          p = c->packets[i];
+          packet_cptr &p = c->packets[i];
           additional_size += p->length;
           if (p->bref == -1)
             additional_size += 10;
@@ -211,13 +197,14 @@ cluster_helper_c::add_packet(packet_t *packet) {
 bool
 cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
   int i;
-  packet_t *pack;
 
   for (i = 0; i < cluster->packets.size(); i++) {
-    pack = cluster->packets[i];
-    if ((pack->bref != -1) && (find_packet(pack->bref, pack->source) == NULL))
+    packet_cptr &pack = cluster->packets[i];
+    if ((pack->bref != -1) &&
+        (find_packet(pack->bref, pack->source).get() == NULL))
       return false;
-    if ((pack->fref != -1) && (find_packet(pack->fref, pack->source) == NULL))
+    if ((pack->fref != -1) &&
+        (find_packet(pack->fref, pack->source).get() == NULL))
       return false;
   }
 
@@ -233,17 +220,17 @@ cluster_helper_c::get_timecode() {
   return clusters.back()->packets[0]->assigned_timecode;
 }
 
-packet_t *
+packet_cptr
 cluster_helper_c::get_packet(int num) {
   ch_contents_t *c;
 
   if (clusters.size() == 0)
-    return NULL;
+    return packet_cptr(NULL);
   c = clusters.back();
   if (c->packets.size())
-    return NULL;
+    return packet_cptr(NULL);
   if ((num < 0) || (num > c->packets.size()))
-    return NULL;
+    return packet_cptr(NULL);
   return c->packets[num];
 }
 
@@ -344,7 +331,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   KaxBlockGroup *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
-  packet_t *pack, *bref_packet, *fref_packet;
+  packet_cptr pack, bref_packet, fref_packet;
   int64_t max_cl_timecode;
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
@@ -399,6 +386,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     max_cl_timecode = pack->assigned_timecode;
 
     data_buffer = new DataBuffer((binary *)pack->data, pack->length);
+    
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
@@ -423,7 +411,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     // Now put the packet into the cluster.
     if (pack->bref != -1) { // P and B frames: add backward reference.
       bref_packet = find_packet(pack->bref, pack->source);
-      if (bref_packet == NULL) {
+      if (bref_packet.get() == NULL) {
         string err = "bref_packet == NULL. Wanted bref: " +
           to_string(pack->bref) + ". Contents of the queue:\n";
         for (k = 0; k < clstr->packets.size(); k++) {
@@ -437,7 +425,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       assert(bref_packet->group != NULL);
       if (pack->fref != -1) { // It's even a B frame: add forward ref
         fref_packet = find_packet(pack->fref, pack->source);
-        if (fref_packet == NULL) {
+        if (fref_packet.get() == NULL) {
           string err = "fref_packet == NULL. Wanted fref: " +
             to_string(pack->fref) + ". Contents of the queue:\n";
           for (k = 0; k < clstr->packets.size(); k++) {
@@ -576,7 +564,6 @@ ch_contents_t *
 cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
                                       generic_packetizer_c *source) {
   int i, k;
-  packet_t *pack;
 
   if (clusters.size() == 0)
     return NULL;
@@ -584,7 +571,7 @@ cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
   // Be a bit fuzzy and allow timecodes that are 10us off.
   for (i = 0; i < clusters.size(); i++)
     for (k = 0; k < clusters[i]->packets.size(); k++) {
-      pack = clusters[i]->packets[k];
+      packet_cptr &pack = clusters[i]->packets[k];
       if ((pack->source == source) &&
           (iabs(pack->timecode - ref_timecode) <= 10000))
         return clusters[i];
@@ -593,36 +580,34 @@ cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
   return NULL;
 }
 
-packet_t *
+packet_cptr
 cluster_helper_c::find_packet(int64_t ref_timecode,
                               generic_packetizer_c *source) {
   int i, k;
-  packet_t *pack;
 
   if (clusters.size() == 0)
-    return NULL;
+    return packet_cptr(NULL);
 
   // Be a bit fuzzy and allow timecodes that are 10us off.
   for (i = 0; i < clusters.size(); i++)
     for (k = 0; k < clusters[i]->packets.size(); k++) {
-      pack = clusters[i]->packets[k];
+      packet_cptr &pack = clusters[i]->packets[k];
       if ((pack->source == source) &&
           (iabs(pack->timecode - ref_timecode) <= 10000))
         return pack;
     }
 
-  return NULL;
+  return packet_cptr(NULL);
 }
 
 void
 cluster_helper_c::check_clusters(int num) {
   int i, k;
-  packet_t *p;
   ch_contents_t *clstr;
 
   for (i = 0; i < clusters.size(); i++) {
     for (k = 0; k < clusters[i]->packets.size(); k++) {
-      p = clusters[i]->packets[k];
+      packet_cptr &p = clusters[i]->packets[k];
       if (clusters[i]->rendered && p->superseeded)
         continue;
       if (p->bref == -1)
@@ -641,7 +626,6 @@ cluster_helper_c::check_clusters(int num) {
 int
 cluster_helper_c::free_clusters() {
   int i, k;
-  packet_t *p;
   ch_contents_t *clstr;
 #ifdef PRINT_CLUSTERS
   int num_freed = 0;
@@ -657,7 +641,7 @@ cluster_helper_c::free_clusters() {
   // an appropriate free_refs entry.
   for (i = 0; i < clusters.size(); i++) {
     for (k = 0; k < clusters[i]->packets.size(); k++) {
-      p = clusters[i]->packets[k];
+      packet_cptr &p = clusters[i]->packets[k];
       if (p->source->get_free_refs() > p->timecode)
         p->superseeded = true;
     }
@@ -666,7 +650,7 @@ cluster_helper_c::free_clusters() {
   // Part 2 - Mark all clusters that are still referenced.
   for (i = 0; i < clusters.size(); i++) {
     for (k = 0; k < clusters[i]->packets.size(); k++) {
-      p = clusters[i]->packets[k];
+      packet_cptr &p = clusters[i]->packets[k];
       if (!p->superseeded) {
         clusters[i]->is_referenced = true;
         if (p->bref == -1)
@@ -691,7 +675,7 @@ cluster_helper_c::free_clusters() {
     }
 
     if (!clusters[i]->is_referenced) {
-      free_contents(clusters[i]);
+      delete clusters[i];
       clusters[i] = NULL;
 #ifdef PRINT_CLUSTERS
       num_freed++;

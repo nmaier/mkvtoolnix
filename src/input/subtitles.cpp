@@ -22,12 +22,13 @@
 #include "subtitles.h"
 
 void
-subtitles_c::process(textsubs_packetizer_c *p) {
+subtitles_c::process(generic_packetizer_c *p) {
   if (empty() || (current == entries.end()))
     return;
 
-  memory_c mem((unsigned char *)current->subs.c_str(), 0, false);
-  p->process(mem, current->start, current->end - current->start);
+  p->process(new packet_t(new memory_c((unsigned char *)current->subs.c_str(),
+                                       0, false),
+                          current->start, current->end - current->start));
   current++;
 }
 

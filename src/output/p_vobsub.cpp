@@ -56,17 +56,14 @@ vobsub_packetizer_c::set_headers() {
 }
 
 int
-vobsub_packetizer_c::process(memory_c &mem,
-                             int64_t timecode,
-                             int64_t duration,
-                             int64_t,
-                             int64_t) {
-  timecode += initial_displacement;
-  if (timecode < 0)
+vobsub_packetizer_c::process(packet_cptr packet) {
+  packet->timecode += initial_displacement;
+  if (packet->timecode < 0)
     return FILE_STATUS_MOREDATA;
 
-  timecode = (int64_t)((float)timecode * ti.async.linear);
-  add_packet(mem, timecode, duration, true);
+  packet->timecode = (int64_t)((float)packet->timecode * ti.async.linear);
+  packet->duration_mandatory = true;
+  add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
 }

@@ -110,8 +110,7 @@ vobbtn_reader_c::read(generic_packetizer_c *ptzr,
     return FILE_STATUS_DONE;
   }
 
-  memory_c mem(chunk, nread, false);
-  PTZR0->process(mem);
+  PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
   return FILE_STATUS_MOREDATA;
 }
 

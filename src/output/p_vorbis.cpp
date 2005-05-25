@@ -136,21 +136,17 @@ vorbis_packetizer_c::set_headers() {
    has to generate silence packets and put them into the Matroska file first.
 */
 int
-vorbis_packetizer_c::process(memory_c &mem,
-                             int64_t timecode,
-                             int64_t,
-                             int64_t,
-                             int64_t) {
+vorbis_packetizer_c::process(packet_cptr packet) {
   unsigned char zero[2];
   ogg_packet op;
-  int64_t this_bs, samples_here, samples_needed, expected_timecode, duration;
+  int64_t this_bs, samples_here, samples_needed, expected_timecode;
   int64_t chosen_timecode;
 
   debug_enter("vorbis_packetizer_c::process");
 
   // Remember the very first timecode we received.
-  if ((samples == 0) && (timecode > 0))
-    timecode_offset = timecode;
+  if ((samples == 0) && (packet->timecode > 0))
+    timecode_offset = packet->timecode;
 
   // Positive displacement, first packet? Well then lets create silence.
   if ((samples == 0) && (initial_displacement > 0)) {
@@ -170,17 +166,17 @@ vorbis_packetizer_c::process(memory_c &mem,
       samples += samples_here;
       last_bs = this_bs;
       samples_here = (this_bs + last_bs) / 4;
-      memory_c mem(zero, 2, false);
-      add_packet(mem, samples * 1000000000 / vi.rate,
-                 samples_here * 1000000000 / vi.rate);
+      add_packet(new packet_t(new memory_c(zero, 2, false),
+                              samples * 1000000000 / vi.rate,
+                              samples_here * 1000000000 / vi.rate));
     }
     last_samples_sum = samples;
   }
 
   // Update the number of samples we have processed so that we can
   // calculate the timecode on the next call.
-  op.packet = mem.data;
-  op.bytes = mem.size;
+  op.packet = packet->memory->data;
+  op.bytes = packet->memory->size;
   this_bs = vorbis_packet_blocksize(&vi, &op);
   samples_here = (this_bs + last_bs) / 4;
   last_bs = this_bs;
@@ -188,21 +184,21 @@ vorbis_packetizer_c::process(memory_c &mem,
 
   expected_timecode = last_timecode + last_samples_sum * 1000000000 / vi.rate +
     timecode_offset;
-  timecode += initial_displacement;
+  packet->timecode += initial_displacement;
   if (initial_displacement < 0)
     expected_timecode += initial_displacement;
 
-  if (timecode > (expected_timecode + 100000000)) {
-    chosen_timecode = timecode;
-    duration = timecode -
+  if (packet->timecode > (expected_timecode + 100000000)) {
+    chosen_timecode = packet->timecode;
+    packet->duration = packet->timecode -
       (last_timecode + last_samples_sum * 1000000000 / vi.rate +
        timecode_offset);
-    last_timecode = timecode;
+    last_timecode = packet->timecode;
     last_samples_sum = 0;
   } else {
     chosen_timecode = expected_timecode;
-    duration = (int64_t)(samples_here * 1000000000 * ti.async.linear /
-                         vi.rate);
+    packet->duration = (int64_t)(samples_here * 1000000000 * ti.async.linear /
+                                 vi.rate);
   }
 
   last_samples_sum += samples_here;
@@ -218,9 +214,10 @@ vorbis_packetizer_c::process(memory_c &mem,
 
   mxverb(2, "Vorbis: samples_here at %lld (orig %lld expected %lld): %lld "
          "(last_samples_sum: %lld)\n",
-         chosen_timecode, timecode, expected_timecode,
+         chosen_timecode, packet->timecode, expected_timecode,
          samples_here, last_samples_sum);
-  add_packet(mem, chosen_timecode, duration);
+  packet->timecode = chosen_timecode;
+  add_packet(packet);
 
   debug_leave("vorbis_packetizer_c::process");
 

@@ -432,9 +432,12 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
         nread = AVI_read_frame(avi, (char *)chunk, &key);
         debug_leave("AVI_read_frame");
         if (nread < 0) {
-          memory_c mem(old_chunk, old_nread, true);
-          PTZR(vptzr)->process(mem, -1, -1,
-                               old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+          PTZR(vptzr)->process(new packet_t(new memory_c(old_chunk, old_nread,
+                                                         true),
+                                            -1, -1,
+                                            old_key ? VFT_IFRAME :
+                                            VFT_PFRAMEAUTOMATIC,
+                                            VFT_NOBFRAME));
           bytes_processed += old_nread;
           old_chunk = NULL;
           mxwarn(PFX "Reading frame number %d resulted in an error. "
@@ -456,9 +459,12 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
       }
       duration = (int64_t)(1000000000.0 * frames_read / fps);
       if (nread > 0) {
-        memory_c mem(old_chunk, old_nread, true);
-        PTZR(vptzr)->process(mem, -1, duration,
-                             old_key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+        PTZR(vptzr)->process(new packet_t(new memory_c(old_chunk, old_nread,
+                                                       true),
+                                          -1, duration,
+                                          old_key ? VFT_IFRAME :
+                                          VFT_PFRAMEAUTOMATIC,
+                                          VFT_NOBFRAME));
         bytes_processed += old_nread;
         old_chunk = NULL;
         if (! last_frame) {
@@ -469,9 +475,11 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
           old_key = key;
           old_nread = nread;
         } else if (nread > 0) {
-          memory_c mem(chunk, nread, false);
-          PTZR(vptzr)->process(mem, -1, duration,
-                               key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+          PTZR(vptzr)->process(new packet_t(new memory_c(chunk, nread, false),
+                                            -1, duration,
+                                            key ? VFT_IFRAME :
+                                            VFT_PFRAMEAUTOMATIC,
+                                            VFT_NOBFRAME));
           bytes_processed += nread;
         }
       }
@@ -516,9 +524,9 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
         size = AVI_read_audio_chunk(avi, NULL);
         if (size > 0)
           need_more_data = true;
-        memory_c mem(audio_chunk, nread, true);
         PTZR(demuxer->ptzr)->add_avi_block_size(nread);
-        PTZR(demuxer->ptzr)->process(mem);
+        PTZR(demuxer->ptzr)->process(new packet_t(new memory_c(audio_chunk,
+                                                               nread, true)));
         bytes_processed += nread;
       } else
         safefree(audio_chunk);

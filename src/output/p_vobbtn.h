@@ -33,9 +33,7 @@ public:
                       track_info_c &_ti) throw (error_c);
   virtual ~vobbtn_packetizer_c();
 
-  virtual int process(memory_c &mem,
-                      int64_t old_timecode = -1, int64_t duration = -1,
-                      int64_t bref = -1, int64_t fref = -1);
+  virtual int process(packet_cptr packet);
   virtual void set_headers();
 
   virtual void dump_debug_info();

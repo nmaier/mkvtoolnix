@@ -308,9 +308,9 @@ flac_reader_c::read(generic_packetizer_c *,
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
-  memory_c mem(buf, current_block->len, true);
   samples_here = flac_get_num_samples(buf, current_block->len, stream_info);
-  PTZR0->process(mem, samples * 1000000000 / sample_rate);
+  PTZR0->process(new packet_t(new memory_c(buf, current_block->len, true),
+                              samples * 1000000000 / sample_rate));
   samples += samples_here;
   current_block++;
 

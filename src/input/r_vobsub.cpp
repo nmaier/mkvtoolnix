@@ -357,10 +357,10 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
            ti.fname.c_str(), ARG_TIMECODE(timecode));
     duration = default_duration;
   }
-  if (duration != -2) {
-    memory_c mem(buf, size, true);
-    ptzr->process(mem, timecode, duration);
-  } else
+  if (duration != -2)
+    ptzr->process(new packet_t(new memory_c(buf, size, true), timecode,
+                               duration));
+  else
     safefree(buf);
 
   return -1;

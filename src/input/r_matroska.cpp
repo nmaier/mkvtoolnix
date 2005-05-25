@@ -1893,12 +1893,14 @@ kax_reader_c::read(generic_packetizer_c *,
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {
               DataBuffer &data = block->GetBuffer(i);
-              memory_c mem((unsigned char *)data.Buffer(), data.Size(),
-                           false);
+              packet_t *packet =
+                new packet_t(new memory_c((unsigned char *)data.Buffer(),
+                                          data.Size(), false),
+                             last_timecode + i * frame_duration,
+                             block_duration, block_bref, block_fref);
+              packet->duration_mandatory = duration != NULL;
               ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->
-                process(mem, last_timecode + i * frame_duration,
-                        block_duration, block_bref, block_fref,
-                        duration != NULL);
+                process(packet_cptr(packet));
             }
 
           } else if ((block_track != NULL) &&
@@ -1932,21 +1934,22 @@ kax_reader_c::read(generic_packetizer_c *,
                   lines = (char *)safemalloc(re_size + 1);
                   lines[re_size] = 0;
                   memcpy(lines, re_buffer, re_size);
-                  memory_c mem((unsigned char *)lines, 0, true);
                   PTZR(block_track->ptzr)->
-                    process(mem, (int64_t)last_timecode, block_duration,
-                            block_bref, block_fref);
+                    process(new packet_t(new memory_c((unsigned char *)lines,
+                                                      0, true),
+                                         last_timecode, block_duration,
+                                         block_bref, block_fref));
                   if (re_modified)
                     safefree(re_buffer);
                 }
               } else {
-                memory_c mem(re_buffer, re_size, re_modified);
-                if (blockadd) {
-                  memories_c mems;
-                  mems.resize(blockadd->ListSize() + 1);
-                  mems[0] = &mem;
+                memory_c *mem = new memory_c(re_buffer, re_size, re_modified);
+                packet_cptr packet(new packet_t(mem, last_timecode + i *
+                                                frame_duration, block_duration,
+                                                block_bref, block_fref));
 
-                  for (i=0; i<blockadd->ListSize(); i++) {
+                if (blockadd) {
+                  for (i = 0; i < blockadd->ListSize(); i++) {
                     if (!(is_id((*blockadd)[i], KaxBlockMore)))
                       continue;
                     blockmore = static_cast<KaxBlockMore *>((*blockadd)[i]);
@@ -1957,20 +1960,13 @@ kax_reader_c::read(generic_packetizer_c *,
                     memory_c *blockadded =
                       new memory_c(blockadd_data->GetBuffer(),
                                    blockadd_data->GetSize(), false);
-                    mems[blockadd_id] = blockadded;
+                    packet->memory_adds.push_back(memory_cptr(blockadded));
                   }
 
-                  PTZR(block_track->ptzr)->
-                    process(mems, (int64_t)last_timecode + i * frame_duration,
-                            block_duration, block_bref, block_fref);
+                  PTZR(block_track->ptzr)->process(packet);
 
-                  for (i = 1; i<mems.size(); i++)
-                    delete mems[i];
-                } else {
-                  PTZR(block_track->ptzr)->
-                    process(mem, (int64_t)last_timecode + i * frame_duration,
-                            block_duration, block_bref, block_fref);
-                }
+                } else
+                  PTZR(block_track->ptzr)->process(packet);
               }
             }
 

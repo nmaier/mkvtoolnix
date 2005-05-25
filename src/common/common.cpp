@@ -428,29 +428,30 @@ put_uint64_be(void *buf,
    Character map conversion stuff
 */
 
-typedef struct {
+struct kax_conv_t {
   iconv_t ict_from_utf8, ict_to_utf8;
-  char *charset;
-} kax_conv_t;
+  string charset;
+
+  kax_conv_t(iconv_t n_ict_from_utf8, iconv_t n_ict_to_utf8,
+             const string &n_charset):
+    ict_from_utf8(n_ict_from_utf8), ict_to_utf8(n_ict_to_utf8),
+    charset(n_charset) { }
+};
 
 static vector<kax_conv_t> kax_convs;
 int cc_local_utf8 = -1;
 
 int
-add_kax_conv(const char *charset,
+add_kax_conv(const string &charset,
              iconv_t ict_from,
              iconv_t ict_to) {
-  kax_conv_t c;
   int i;
 
   for (i = 0; i < kax_convs.size(); i++)
-    if (!strcmp(kax_convs[i].charset, charset))
+    if (kax_convs[i].charset == charset)
       return i;
 
-  c.charset = safestrdup(charset);
-  c.ict_from_utf8 = ict_from;
-  c.ict_to_utf8 = ict_to;
-  kax_convs.push_back(c);
+  kax_convs.push_back(kax_conv_t(ict_from, ict_to, charset));
 
   return kax_convs.size() - 1;
 }
@@ -521,7 +522,6 @@ utf8_done() {
       iconv_close(kax_convs[i].ict_from_utf8);
     if (kax_convs[i].ict_to_utf8 != (iconv_t)(-1))
       iconv_close(kax_convs[i].ict_to_utf8);
-    safefree(kax_convs[i].charset);
   }
   kax_convs.clear();
 }

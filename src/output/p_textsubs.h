@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "pr_generic.h"
-#include "pr_generic.h"
 #include "smart_pointers.h"
 
 class textsubs_packetizer_c: public generic_packetizer_c {
@@ -38,9 +37,7 @@ public:
     throw (error_c);
   virtual ~textsubs_packetizer_c();
 
-  virtual int  process(memory_c &mem, int64_t start = -1,
-                       int64_t length = -1, int64_t bref = -1,
-                       int64_t fref = -1);
+  virtual int process(packet_cptr packet);
   virtual void set_headers();
 
   virtual void dump_debug_info();

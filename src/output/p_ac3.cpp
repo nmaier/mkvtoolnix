@@ -143,30 +143,28 @@ ac3_packetizer_c::set_headers() {
 }
 
 int
-ac3_packetizer_c::process(memory_c &mem,
-                          int64_t timecode,
-                          int64_t,
-                          int64_t,
-                          int64_t) {
-  unsigned char *packet;
+ac3_packetizer_c::process(packet_cptr packet) {
+  unsigned char *ac3_packet;
   unsigned long header;
   ac3_header_t ac3header;
-  int64_t my_timecode;
+  int64_t my_timecode, timecode;
 
   debug_enter("ac3_packetizer_c::process");
 
-  add_to_buffer(mem.data, mem.size);
-  while ((packet = get_ac3_packet(&header, &ac3header)) != NULL) {
+  timecode = packet->timecode;
+  packet->duration = 
+    (int64_t)(1000000000.0 * 1536 * ti.async.linear / samples_per_sec);
+  add_to_buffer(packet->memory->data, packet->memory->size);
+  while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /
                               samples_per_sec);
     else
       my_timecode = timecode + ti.async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti.async.linear);
-    memory_c mem(packet, ac3header.bytes, true);
-    add_packet(mem, my_timecode,
-               (int64_t)(1000000000.0 * 1536 * ti.async.linear /
-                         samples_per_sec));
+    packet->timecode = (int64_t)(my_timecode * ti.async.linear);
+    packet->memory = memory_cptr(new memory_c(ac3_packet, ac3header.bytes,
+                                              true));
+    add_packet(packet);
     packetno++;
   }
 

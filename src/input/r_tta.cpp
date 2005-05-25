@@ -140,7 +140,7 @@ tta_reader_c::read(generic_packetizer_c *,
   }
   pos++;
 
-  memory_c mem(buf, nread, true);
+  memory_cptr mem(new memory_c(buf, nread, true));
   if (pos >= seek_points.size()) {
     double samples_left;
 
@@ -149,10 +149,11 @@ tta_reader_c::read(generic_packetizer_c *,
       get_uint32_le(&header.sample_rate);
     mxverb(2, "tta: samples_left %f\n", samples_left);
 
-    PTZR0->process(mem, -1, irnd(samples_left * 1000000000.0l /
-                                 get_uint32_le(&header.sample_rate)));
+    PTZR0->process(new packet_t(mem, -1,
+                                irnd(samples_left * 1000000000.0l /
+                                     get_uint32_le(&header.sample_rate))));
   } else
-    PTZR0->process(mem);
+    PTZR0->process(new packet_t(mem));
   bytes_processed += nread;
 
   if (pos >= seek_points.size())

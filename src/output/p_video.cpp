@@ -90,36 +90,30 @@ video_packetizer_c::set_headers() {
 // fref > 0: B frame with given forward reference (absolute reference,
 //           not relative!)
 int
-video_packetizer_c::process(memory_c &mem,
-                            int64_t old_timecode,
-                            int64_t duration,
-                            int64_t bref,
-                            int64_t fref) {
-  int64_t timecode;
+video_packetizer_c::process(packet_cptr packet) {
+  if (packet->timecode == -1)
+    packet->timecode = (int64_t)(1000000000.0 * frames_output / fps) +
+      duration_shift;
 
-  if (old_timecode == -1)
-    timecode = (int64_t)(1000000000.0 * frames_output / fps) + duration_shift;
+  if (packet->duration == -1)
+    packet->duration = (int64_t)(1000000000.0 / fps);
   else
-    timecode = old_timecode;
-
-  if (duration == -1)
-    duration = (int64_t)(1000000000.0 / fps);
-  else
-    duration_shift += duration - (int64_t)(1000000000.0 / fps);
+    duration_shift += packet->duration - (int64_t)(1000000000.0 / fps);
   frames_output++;
 
-  if (bref == VFT_IFRAME) {
+  if (VFT_IFRAME == packet->bref)
     // Add a key frame and save its timecode so that we can reference it later.
-    add_packet(mem, timecode, duration);
-    ref_timecode = timecode;
-  } else {
+    ref_timecode = packet->timecode;
+
+  else {
     // P or B frame. Use our last timecode if the bref is -2, or the provided
     // one otherwise. The forward ref is always taken from the reader.
-    add_packet(mem, timecode, duration, false,
-               bref == VFT_PFRAMEAUTOMATIC ? ref_timecode : bref, fref);
-    if (fref == VFT_NOBFRAME)
-      ref_timecode = timecode;
+    if (VFT_PFRAMEAUTOMATIC == packet->bref)
+      packet->bref = ref_timecode;
+    if (VFT_NOBFRAME == packet->fref)
+      ref_timecode = packet->timecode;
   }
+  add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
 }
@@ -181,30 +175,27 @@ mpeg1_2_video_packetizer_c(generic_reader_c *_reader,
 }
 
 int
-mpeg1_2_video_packetizer_c::process(memory_c &mem,
-                                    int64_t timecode,
-                                    int64_t duration,
-                                    int64_t bref,
-                                    int64_t fref) {
+mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   unsigned char *data_ptr;
   int new_bytes, state;
 
   if (fps < 0.0)
-    extract_fps(mem.data, mem.size);
+    extract_fps(packet->memory->data, packet->memory->size);
 
   if (!aspect_ratio_extracted)
-    extract_aspect_ratio(mem.data, mem.size);
+    extract_aspect_ratio(packet->memory->data, packet->memory->size);
 
   if (framed)
-    return video_packetizer_c::process(mem, timecode, duration, bref, fref);
+    return video_packetizer_c::process(packet);
 
   state = parser.GetState();
   if ((state == MPV_PARSER_STATE_EOS) ||
       (state == MPV_PARSER_STATE_ERROR))
     return FILE_STATUS_DONE;
 
-  data_ptr = mem.data;
-  new_bytes = mem.size;
+  memory_cptr old_memory = packet->memory;
+  data_ptr = old_memory->data;
+  new_bytes = old_memory->size;
 
   do {
     int bytes_to_add;
@@ -228,9 +219,13 @@ mpeg1_2_video_packetizer_c::process(memory_c &mem,
       if (hcodec_private == NULL)
         create_private_data();
 
-      memory_c new_mem(frame->data, frame->size, true);
-      video_packetizer_c::process(new_mem, frame->timecode, frame->duration,
-                                  frame->firstRef, frame->secondRef);
+      packet->memory = memory_cptr(new memory_c(frame->data, frame->size,
+                                                true));
+      packet->timecode = frame->timecode;
+      packet->duration = frame->duration;
+      packet->bref = frame->firstRef;
+      packet->fref = frame->secondRef;
+      video_packetizer_c::process(packet);
       frame->data = NULL;
       delete frame;
 
@@ -243,10 +238,9 @@ mpeg1_2_video_packetizer_c::process(memory_c &mem,
 
 void
 mpeg1_2_video_packetizer_c::flush() {
-  memory_c dummy((unsigned char *)"", 0, false);
-
   parser.SetEOS();
-  process(dummy);
+  generic_packetizer_c::process(new packet_t(new memory_c((unsigned char *)"",
+                                                          0, false)));
   video_packetizer_c::flush();
 }
 
@@ -330,37 +324,29 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
 }
 
 int
-mpeg4_p2_video_packetizer_c::process(memory_c &mem,
-                                     int64_t old_timecode,
-                                     int64_t duration,
-                                     int64_t bref,
-                                     int64_t fref) {
+mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
   if (!aspect_ratio_extracted)
-    extract_aspect_ratio(mem.data, mem.size);
+    extract_aspect_ratio(packet->memory->data, packet->memory->size);
 
   if (input_is_native == output_is_native)
-    return
-      video_packetizer_c::process(mem, old_timecode, duration, bref, fref);
+    return video_packetizer_c::process(packet);
 
   if (input_is_native)
-    return process_native(mem, old_timecode, duration, bref, fref);
+    return process_native(packet);
 
-  return process_non_native(mem, old_timecode, duration, bref, fref);
+  return process_non_native(packet);
 }
 
 int
-mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
-                                                int64_t old_timecode,
-                                                int64_t old_duration,
-                                                int64_t bref,
-                                                int64_t fref) {
+mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   vector<video_frame_t> frames;
   vector<video_frame_t>::iterator frame;
 
   if (NULL == ti.private_data) {
     memory_c *config_data;
 
-    config_data = mpeg4_p2_parse_config_data(mem.data, mem.size);
+    config_data = mpeg4_p2_parse_config_data(packet->memory->data,
+                                             packet->memory->size);
     if (NULL != config_data) {
       ti.private_data = config_data->grab();
       ti.private_size = config_data->size;
@@ -374,17 +360,17 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
               "native mode.\n");
   }
 
-  mpeg4_p2_find_frame_types(mem.data, mem.size, frames);
+  mpeg4_p2_find_frame_types(packet->memory->data, packet->memory->size, frames);
 
   // Add a timecode and a duration if they've been given.
-  if (-1 != old_timecode)
-    available_timecodes.push_back(old_timecode);
+  if (-1 != packet->timecode)
+    available_timecodes.push_back(packet->timecode);
   else if (0.0 == fps)
     mxerror("Cannot convert non-native MPEG4 video frames into native ones "
             "if the source container provides neither timecodes nor a "
             "number of frames per second.\n");
-  if (-1 != old_duration)
-    available_durations.push_back(old_duration);
+  if (-1 != packet->duration)
+    available_durations.push_back(packet->duration);
 
   foreach(frame, frames) {
     // Maybe we can flush queued frames now. But only if we don't have
@@ -394,21 +380,21 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
 
     // Add a timecode and a duration for each frame if none have been
     // given and we have a fixed number of FPS.
-    if (-1 == old_timecode) {
+    if (-1 == packet->timecode) {
       available_timecodes.push_back((int64_t)(timecodes_generated *
                                               1000000000.0 / fps));
       ++timecodes_generated;
     }
-    if (-1 == old_duration)
+    if (-1 == packet->duration)
       available_durations.push_back((int64_t)(1000000000.0 / fps));
 
     // Copy the data. If there's only one frame in this packet then
     // we might save a memcpy.
-    if ((1 == frames.size()) && (frame->size == mem.size))
-      frame->data = mem.grab();
+    if ((1 == frames.size()) && (frame->size == packet->memory->size))
+      frame->data = packet->memory->grab();
     else
-      frame->data = (unsigned char *)safememdup(&mem.data[frame->pos],
-                                                frame->size);
+      frame->data = (unsigned char *)
+        safememdup(&packet->memory->data[frame->pos], frame->size);
     queued_frames.push_back(*frame);
   }
 
@@ -416,11 +402,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(memory_c &mem,
 }
 
 int
-mpeg4_p2_video_packetizer_c::process_native(memory_c &mem,
-                                            int64_t old_timecode,
-                                            int64_t duration,
-                                            int64_t bref,
-                                            int64_t fref) {
+mpeg4_p2_video_packetizer_c::process_native(packet_cptr packet) {
   // Not implemented yet.
   return FILE_STATUS_MOREDATA;
 }
@@ -503,11 +485,13 @@ mpeg4_p2_video_packetizer_c::flush_frames() {
     }      
   }
 
-  for (i = 0; i < queued_frames.size(); ++i) {
-    memory_c mem(queued_frames[i].data, queued_frames[i].size, true);
-    add_packet(mem, queued_frames[i].timecode, queued_frames[i].duration,
-               false, queued_frames[i].bref, queued_frames[i].fref);
-  }
+  for (i = 0; i < queued_frames.size(); ++i)
+    add_packet(new packet_t(new memory_c(queued_frames[i].data,
+                                         queued_frames[i].size, true),
+                            queued_frames[i].timecode,
+                            queued_frames[i].duration,
+                            queued_frames[i].bref,
+                            queued_frames[i].fref));
 
   available_timecodes.erase(available_timecodes.begin(),
                             available_timecodes.begin() +

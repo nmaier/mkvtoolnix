@@ -167,12 +167,9 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
     databuffer += block_size;
   }
 
-  memory_c mem(chunk, data_size, true);
+  packet_cptr packet(new packet_t(new memory_c(chunk, data_size, true)));
 
   // find the if there is a correction file data corresponding
-  memories_c mems;
-  mems.push_back(&mem);
-
   if (io_correc) {
     do {
       initial_position = io_correc->getFilePointer();
@@ -230,14 +227,13 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
         databuffer += block_size;
       }
 
-      memory_c mem_correc(chunk_correc, data_size, true);
-      mems.push_back(&mem_correc);
-      PTZR0->process(mems);
+      packet->memory_adds.push_back(memory_cptr(new memory_c(chunk_correc,
+                                                             data_size,
+                                                             true)));
     }
   }
 
-  if (mems.size() == 1)
-    PTZR0->process(mem);
+  PTZR0->process(packet);
 
   return FILE_STATUS_MOREDATA;
 }

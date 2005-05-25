@@ -230,7 +230,7 @@ srt_reader_c::read(generic_packetizer_c *,
   if (subs.empty())
     return FILE_STATUS_DONE;
 
-  subs.process((textsubs_packetizer_c *)PTZR0);
+  subs.process(PTZR0);
 
   return subs.empty() ? FILE_STATUS_DONE : FILE_STATUS_MOREDATA;
 }

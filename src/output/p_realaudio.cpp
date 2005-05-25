@@ -74,11 +74,7 @@ ra_packetizer_c::set_headers() {
 }
 
 int
-ra_packetizer_c::process(memory_c &mem,
-                         int64_t timecode,
-                         int64_t duration,
-                         int64_t bref,
-                         int64_t) {
+ra_packetizer_c::process(packet_cptr packet) {
 //   bool buffer_this;
 //   int64_t buffered_duration;
 //   int i;
@@ -136,8 +132,10 @@ ra_packetizer_c::process(memory_c &mem,
 //     }
 //   }
 
-  add_packet(mem, timecode + initial_displacement, duration, false,
-             bref == -1 ? bref : bref + initial_displacement);
+  packet->timecode += initial_displacement;
+  if (-1 != packet->bref)
+    packet->bref += initial_displacement;
+  add_packet(packet);
 
   debug_leave("ra_packetizer_c::process");
 

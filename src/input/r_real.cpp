@@ -591,10 +591,11 @@ real_reader_c::deliver_audio_frames(real_demuxer_t *dmx,
            "0x%08x duration %llu\n", dmx->track->id, ti.fname.c_str(),
            segment.size, dmx->last_timecode, (uint32_t)segment.flags,
            duration);
-    memory_c mem(segment.data, segment.size, true);
-    PTZR(dmx->ptzr)->process(mem, dmx->last_timecode, duration,
-                             (segment.flags & 2) == 2 ? -1 :
-                             dmx->ref_timecode);
+    PTZR(dmx->ptzr)->process(new packet_t(new memory_c(segment.data,
+                                                       segment.size, true),
+                                          dmx->last_timecode, duration,
+                                          (segment.flags & 2) == 2 ? -1 :
+                                          dmx->ref_timecode));
     if ((segment.flags & 2) == 2)
       dmx->ref_timecode = dmx->last_timecode;
   }
@@ -640,8 +641,8 @@ real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
   data_idx = 2 + num_sub_packets * 2;
   for (i = 0; i < num_sub_packets; i++) {
     sub_length = get_uint16_be(&chunk[2 + i * 2]);
-    memory_c mem(&chunk[data_idx], sub_length, false);
-    PTZR(dmx->ptzr)->process(mem);
+    PTZR(dmx->ptzr)->process(new packet_t(new memory_c(&chunk[data_idx],
+                                                       sub_length, false)));
     data_idx += sub_length;
   }
 }
@@ -683,13 +684,15 @@ real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
   }
   assembled = rmff_get_packed_video_frame(dmx->track);
   while (assembled != NULL) {
-    memory_c mem(assembled->data, assembled->size, true);
     if (!dmx->rv_dimensions)
       set_dimensions(dmx, assembled->data, assembled->size);
-    PTZR(dmx->ptzr)->process(mem, (int64_t)assembled->timecode * 1000000, -1,
-                             (assembled->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
-                             RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME :
-                             VFT_PFRAMEAUTOMATIC);
+    packet_t *packet =
+      new packet_t(new memory_c(assembled->data, assembled->size, true),
+                   (int64_t)assembled->timecode * 1000000, -1,
+                   (assembled->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
+                   RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME :
+                   VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME);
+    PTZR(dmx->ptzr)->process(packet);
     assembled->allocated_by_rmff = 0;
     rmff_release_frame(assembled);
     assembled = rmff_get_packed_video_frame(dmx->track);

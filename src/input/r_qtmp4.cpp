@@ -1006,7 +1006,7 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
                                           int64_t timecode,
                                           int64_t duration,
                                           bool is_keyframe,
-                                          memory_c &mem) {
+                                          memory_cptr mem) {
   int64_t bref, fref, old_timecode;
   bool is_bframe;
 
@@ -1073,7 +1073,7 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
           1000000000 / dmx->timescale) / 1000000,
          timecode / 1000000, bref, fref);
 
-  PTZR(dmx->ptzr)->process(mem, timecode, duration, bref, fref);
+  PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration, bref, fref));
 
   if (timecode > dmx->max_timecode)
     dmx->max_timecode = timecode;
@@ -1156,9 +1156,11 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       dmx->avg_duration = (dmx->avg_duration * dmx->pos + duration) /
         (dmx->pos + 1);
 
-      memory_c mem(buffer, frame_size, true);
-      PTZR(dmx->ptzr)->process(mem, timecode, duration, is_keyframe ?
-                               VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+      PTZR(dmx->ptzr)->process(new packet_t(new memory_c(buffer, frame_size,
+                                                         true),
+                                            timecode, duration, is_keyframe ?
+                                            VFT_IFRAME : VFT_PFRAMEAUTOMATIC,
+                                            VFT_NOBFRAME));
       dmx->pos++;
 
       if (dmx->pos < dmx->chunk_table.size())
@@ -1224,14 +1226,16 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         }
       }
 
-      memory_c mem(buffer, frame_size, true);
+      memory_cptr mem(new memory_c(buffer, frame_size, true));
       if ((dmx->type == 'v') && (dmx->pos < dmx->frame_offset_table.size()) &&
           !strncasecmp(dmx->fourcc, "avc1", 4))
         handle_video_with_bframes(dmx, timecode, duration, is_keyframe, mem);
 
       else
-        PTZR(dmx->ptzr)->process(mem, timecode, duration, is_keyframe ?
-                                 VFT_IFRAME : VFT_PFRAMEAUTOMATIC);
+        PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration,
+                                              is_keyframe ? VFT_IFRAME :
+                                              VFT_PFRAMEAUTOMATIC,
+                                              VFT_NOBFRAME));
 
       dmx->pos++;
       if (dmx->pos < dmx->sample_table.size())

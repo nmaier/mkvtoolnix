@@ -30,12 +30,7 @@ public:
   passthrough_packetizer_c(generic_reader_c *_reader, track_info_c &_ti)
     throw (error_c);
 
-  virtual int process(memory_c &mem, int64_t timecode = -1,
-                      int64_t duration = -1, int64_t bref = -1,
-                      int64_t fref = -1);
-  virtual int process(memory_c &mem, int64_t timecode,
-                      int64_t duration, int64_t bref, int64_t fref,
-                      bool duration_mandatory);
+  virtual int process(packet_cptr packet);
   virtual void set_headers();
   virtual void always_sync_complete_group(bool sync);
 

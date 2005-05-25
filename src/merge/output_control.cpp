@@ -341,8 +341,6 @@ get_file_type(filelist_t &file) {
   else if (mpeg_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_ES;
   else {
-    delete io;
-
     try {
       text_io = new mm_text_io_c(new mm_file_io_c(file.name));
       text_io->setFilePointer(0, seek_end);
@@ -365,7 +363,7 @@ get_file_type(filelist_t &file) {
     else
       type = FILE_TYPE_IS_UNKNOWN;
 
-    io = text_io;
+    delete text_io;
   }
 
   delete io;
@@ -428,7 +426,6 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   vector<filelist_t>::iterator file;
   packetizer_t pack;
 
-  memset(&pack, 0, sizeof(packetizer_t));
   pack.packetizer = packetizer;
   pack.orig_packetizer = packetizer;
   pack.status = FILE_STATUS_MOREDATA;
@@ -1858,7 +1855,7 @@ main_loop() {
   // Let's go!
   while (1) {
     vector<packetizer_t>::iterator ptzr, winner;
-    packet_t *pack;
+    packet_cptr pack;
     bool appended_a_track;
 
     // Step 1: Make sure a packet is available for each output
@@ -1867,13 +1864,14 @@ main_loop() {
       if (ptzr->status == FILE_STATUS_HOLDING)
         ptzr->status = FILE_STATUS_MOREDATA;
       ptzr->old_status = ptzr->status;
-      while ((ptzr->pack == NULL) && (ptzr->status == FILE_STATUS_MOREDATA) &&
+      while ((ptzr->pack.get() == NULL) &&
+             (ptzr->status == FILE_STATUS_MOREDATA) &&
              (ptzr->packetizer->packet_available() < 1))
         ptzr->status = ptzr->packetizer->read();
       if ((ptzr->status != FILE_STATUS_MOREDATA) &&
           (ptzr->old_status == FILE_STATUS_MOREDATA))
         ptzr->packetizer->force_duration_on_last_packet();
-      if (ptzr->pack == NULL)
+      if (ptzr->pack.get() == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
 
       // Has this packetizer changed its status from "data available" to
@@ -1897,10 +1895,10 @@ main_loop() {
     // stuff it into the Matroska file.
     winner = packetizers.end();
     foreach(ptzr, packetizers) {
-      if (ptzr->pack != NULL) {
-        if ((winner == packetizers.end()) || (winner->pack == NULL))
+      if (ptzr->pack.get() != NULL) {
+        if ((winner == packetizers.end()) || (winner->pack.get() == NULL))
           winner = ptzr;
-        else if (ptzr->pack &&
+        else if ((NULL != ptzr->pack.get()) &&
                  (ptzr->pack->assigned_timecode <
                   winner->pack->assigned_timecode))
           winner = ptzr;
@@ -1910,14 +1908,14 @@ main_loop() {
     // Append the next track if appending is wanted.
     appended_a_track = append_tracks_maybe();
 
-    if ((winner != packetizers.end()) && (winner->pack != NULL)) {
+    if ((winner != packetizers.end()) && (winner->pack.get() != NULL)) {
       pack = winner->pack;
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be
       // rendered automatically.
       cluster_helper->add_packet(pack);
 
-      winner->pack = NULL;
+      winner->pack = packet_cptr(NULL);
 
       // display some progress information
       if (verbose >= 1)
@@ -2001,6 +1999,8 @@ cleanup() {
   delete seguid_link_previous;
   delete seguid_link_next;
   delete seguid_forced;
+
+  delete cluster_helper;
 
   utf8_done();
 }

@@ -214,7 +214,8 @@ protected:
 
   virtual void handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
                                          int64_t timecode, int64_t duration,
-                                         bool is_keyframe, memory_c &mem);
+                                         bool is_keyframe,
+                                         memory_cptr mem);
 
   virtual void handle_cmov_atom(qt_atom_t parent, int level);
   virtual void handle_cmvd_atom(qt_atom_t parent, int level);

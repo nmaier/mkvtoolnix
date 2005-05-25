@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "common.h"
+#include "smart_pointers.h"
 
 class MTX_DLL_API memory_c {
 public:
@@ -61,6 +62,7 @@ public:
   }
 };
 
-typedef std::vector<memory_c *> memories_c;
+typedef counted_ptr<memory_c> memory_cptr;
+typedef std::vector<memory_cptr> memories_c;
 
 #endif // __COMMON_MEMORY_H

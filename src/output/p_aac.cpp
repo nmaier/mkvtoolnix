@@ -156,18 +156,15 @@ aac_packetizer_c::set_headers() {
 }
 
 int
-aac_packetizer_c::process(memory_c &mem,
-                          int64_t timecode,
-                          int64_t,
-                          int64_t,
-                          int64_t) {
-  unsigned char *packet;
+aac_packetizer_c::process(packet_cptr packet) {
+  unsigned char *aac_packet;
   unsigned long header;
   aac_header_t aacheader;
-  int64_t my_timecode, duration;
+  int64_t my_timecode, duration, timecode;
 
   debug_enter("aac_packetizer_c::process");
 
+  timecode = packet->timecode;
   my_timecode = 0;
   if (headerless) {
     if (timecode != -1) {
@@ -192,33 +189,36 @@ aac_packetizer_c::process(memory_c &mem,
       displace(-duration);
       return FILE_STATUS_MOREDATA;
     }
+    packet->duration = duration;
     while (needs_positive_displacement(duration)) {
-      add_packet(mem, my_timecode + ti.async.displacement, duration);
+      packet->timecode = my_timecode + ti.async.displacement;
+      add_packet(packet);
       displace(duration);
     }
 
-    my_timecode = (int64_t)((my_timecode + ti.async.displacement) *
-                            ti.async.linear);
-    mxverb(2, "aac: my_tc = %lld\n", my_timecode);
-    add_packet(mem, my_timecode, duration);
+    packet->timecode = (int64_t)((my_timecode + ti.async.displacement) *
+                                 ti.async.linear);
+    mxverb(2, "aac: my_tc = %lld\n", packet->timecode);
+    add_packet(packet);
 
     debug_leave("aac_packetizer_c::process");
 
     return FILE_STATUS_MOREDATA;
   }
 
-  byte_buffer.add(mem.data, mem.size);
-  while ((packet = get_aac_packet(&header, &aacheader)) != NULL) {
+  byte_buffer.add(packet->memory->data, packet->memory->size);
+  while ((aac_packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1024 * 1000000000.0 * packetno /
                               samples_per_sec);
     else
       my_timecode = timecode + ti.async.displacement;
-    my_timecode = (int64_t)(my_timecode * ti.async.linear);
-    memory_c mem(packet, aacheader.data_byte_size, true);
-    add_packet(mem, my_timecode,
-               (int64_t)(1024 * 1000000000.0 *
-                         ti.async.linear / samples_per_sec));
+    packet->timecode = (int64_t)(my_timecode * ti.async.linear);
+    packet->duration =
+      (int64_t)(1024 * 1000000000.0 * ti.async.linear / samples_per_sec);
+    packet->memory = memory_cptr(new memory_c(aac_packet,
+                                              aacheader.data_byte_size, true));
+    add_packet(packet);
     packetno++;
   }
 

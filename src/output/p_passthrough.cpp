@@ -38,52 +38,46 @@ passthrough_packetizer_c::set_headers() {
 }
 
 int
-passthrough_packetizer_c::process(memory_c &mem,
-                                  int64_t timecode,
-                                  int64_t duration,
-                                  int64_t bref,
-                                  int64_t fref) {
-  return process(mem, timecode, duration, bref, fref, false);
-}
+passthrough_packetizer_c::process(packet_cptr packet) {
+  int64_t timecode;
 
-int
-passthrough_packetizer_c::process(memory_c &mem,
-                                  int64_t timecode,
-                                  int64_t duration,
-                                  int64_t bref,
-                                  int64_t fref,
-                                  bool duration_mandatory) {
   debug_enter("passthrough_packetizer_c::process");
 
+  timecode = packet->timecode;
   packets_processed++;
-  bytes_processed += mem.size;
-  if ((duration > 0) && needs_negative_displacement(duration)) {
-    displace(-duration);
+  bytes_processed += packet->memory->size;
+  if ((packet->duration > 0) &&
+      needs_negative_displacement(packet->duration)) {
+    displace(-packet->duration);
     sync_to_keyframe = true;
     return FILE_STATUS_MOREDATA;
   }
-  if ((duration > 0) && needs_positive_displacement(duration) &&
+  if ((packet->duration > 0) &&
+      needs_positive_displacement(packet->duration) &&
       sync_complete_group) {
     // Not implemented yet.
   }
-  while ((duration > 0) && needs_positive_displacement(duration)) {
-    add_packet(mem,
-               (int64_t)((timecode + ti.async.displacement) *
-                         ti.async.linear),
-               duration, duration_mandatory, bref, fref);
-    displace(duration);
+  while ((packet->duration > 0) &&
+         needs_positive_displacement(packet->duration)) {
+    packet->timecode = (int64_t)((timecode + ti.async.displacement) *
+                                 ti.async.linear);
+    add_packet(packet);
+    displace(packet->duration);
   }
 
-  if (sync_to_keyframe && (bref != -1))
+  if (sync_to_keyframe && (packet->bref != -1))
     return FILE_STATUS_MOREDATA;
   sync_to_keyframe = false;
-  timecode = (int64_t)((timecode + ti.async.displacement) * ti.async.linear);
-  duration = (int64_t)(duration * ti.async.linear);
-  if (bref >= 0)
-    bref = (int64_t)((bref + ti.async.displacement) * ti.async.linear);
-  if (fref >= 0)
-    fref = (int64_t)((fref + ti.async.displacement) * ti.async.linear);
-  add_packet(mem, timecode, duration, duration_mandatory, bref, fref);
+  packet->timecode = (int64_t)((timecode + ti.async.displacement) *
+                               ti.async.linear);
+  packet->duration = (int64_t)(packet->duration * ti.async.linear);
+  if (packet->bref >= 0)
+    packet->bref = (int64_t)((packet->bref + ti.async.displacement) *
+                             ti.async.linear);
+  if (packet->fref >= 0)
+    packet->fref = (int64_t)((packet->fref + ti.async.displacement) *
+                             ti.async.linear);
+  add_packet(packet);
 
   debug_leave("passthrough_packetizer_c::process");
   return FILE_STATUS_MOREDATA;

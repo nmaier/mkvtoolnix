@@ -42,25 +42,31 @@ class mm_io_c;
 class generic_packetizer_c;
 class generic_reader_c;
 
-typedef struct {
+struct append_spec_t {
   int64_t src_file_id;
   int64_t src_track_id;
   int64_t dst_file_id;
   int64_t dst_track_id;
-} append_spec_t;
+};
 
-typedef struct packetizer_t {
+struct packetizer_t {
   file_status_e status, old_status;
-  packet_t *pack;
+  packet_cptr pack;
   generic_packetizer_c *packetizer, *orig_packetizer;
   int64_t file, orig_file;
   bool deferred;
-} packetizer_t;
 
-typedef struct {
+  packetizer_t():
+    status(FILE_STATUS_MOREDATA), old_status(FILE_STATUS_MOREDATA),
+    packetizer(NULL), orig_packetizer(NULL),
+    file(0), orig_file(0),
+    deferred(false) { }
+};
+
+struct deferred_connection_t {
   append_spec_t amap;
   packetizer_t *ptzr;
-} deferred_connection_t;
+};
 
 struct filelist_t {
   string name;
@@ -68,7 +74,7 @@ struct filelist_t {
 
   file_type_e type;
 
-  packet_t *pack;
+  packet_cptr pack;
 
   generic_reader_c *reader;
 
@@ -81,7 +87,7 @@ struct filelist_t {
 
   filelist_t():
     size(0), type(FILE_TYPE_IS_UNKNOWN),
-    pack(NULL), reader(NULL),
+    reader(NULL),
     ti(NULL), appending(false), appended_to(false), done(false),
     num_unfinished_packetizers(0), old_num_unfinished_packetizers(0),
     deferred_max_timecode_seen(-1) {}
@@ -104,10 +110,10 @@ struct attachment_t {
   }
 };
 
-typedef struct {
+struct track_order_t {
   int64_t file_id;
   int64_t track_id;
-} track_order_t;
+};
 
 enum timecode_scale_mode_e {
   TIMECODE_SCALE_MODE_NORMAL = 0,

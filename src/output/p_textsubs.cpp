@@ -64,35 +64,31 @@ textsubs_packetizer_c::set_headers() {
 }
 
 int
-textsubs_packetizer_c::process(memory_c &mem,
-                               int64_t start,
-                               int64_t length,
-                               int64_t,
-                               int64_t) {
+textsubs_packetizer_c::process(packet_cptr packet) {
   int num_newlines;
   char *subs, *idx1, *idx2;
   int64_t end;
 
-  end = start + length;
+  end = packet->timecode + packet->duration;
   // Adjust the start and end values according to the audio adjustment.
-  start += initial_displacement;
-  start = (int64_t)(ti.async.linear * start);
+  packet->timecode += initial_displacement;
+  packet->timecode = (int64_t)(ti.async.linear * packet->timecode);
   end += initial_displacement;
   end = (int64_t)(ti.async.linear * end);
 
   if (end < 0)
     return FILE_STATUS_MOREDATA;
-  else if (start < 0)
-    start = 0;
+  else if (packet->timecode < 0)
+    packet->timecode = 0;
 
-  if (length < 0) {
+  if (packet->duration < 0) {
     mxwarn("textsubs_packetizer: Ignoring an entry which starts after it ends."
            "\n");
     return FILE_STATUS_MOREDATA;
   }
 
   // Count the number of lines.
-  idx1 = (char *)mem.data;
+  idx1 = (char *)packet->memory->data;
   subs = NULL;
   num_newlines = 0;
   while (*idx1 != 0) {
@@ -100,10 +96,11 @@ textsubs_packetizer_c::process(memory_c &mem,
       num_newlines++;
     idx1++;
   }
-  subs = (char *)safemalloc(strlen((char *)mem.data) + num_newlines * 2 + 1);
+  subs = (char *)safemalloc(strlen((char *)packet->memory->data) +
+                            num_newlines * 2 + 1);
 
   // Unify the new lines into DOS style newlines.
-  idx1 = (char *)mem.data;
+  idx1 = (char *)packet->memory->data;
   idx2 = subs;
   while (*idx1 != 0) {
     if (*idx1 == '\n') {
@@ -125,17 +122,21 @@ textsubs_packetizer_c::process(memory_c &mem,
   }
   *idx2 = 0;
 
+  packet->duration_mandatory = true;
   if (recode) {
     string utf8_subs;
 
     utf8_subs = to_utf8(cc_utf8, subs);
     safefree(subs);
-    memory_c mem((unsigned char *)utf8_subs.c_str(), utf8_subs.length(),
-                 false);
-    add_packet(mem, start, length, true);
+    packet->memory =
+      memory_cptr(new memory_c((unsigned char *)utf8_subs.c_str(),
+                               utf8_subs.length(), false));
+    add_packet(packet);
+
   } else {
-    memory_c mem((unsigned char *)subs, strlen(subs), true);
-    add_packet(mem, start, length, true);
+    packet->memory =
+      memory_cptr(new memory_c((unsigned char *)subs, strlen(subs), true));
+    add_packet(packet);
   }
 
   return FILE_STATUS_MOREDATA;

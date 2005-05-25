@@ -191,8 +191,7 @@ wav_reader_c::read(generic_packetizer_c *,
       return FILE_STATUS_DONE;
     }
 
-    memory_c mem(chunk, nread, false);
-    PTZR0->process(mem);
+    PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
 
     bytes_processed += nread;
 
@@ -231,8 +230,8 @@ wav_reader_c::read(generic_packetizer_c *,
       erlen = words * 7 * sizeof(short);
     }
 
-    memory_c mem((unsigned char *)buf[cur_buf], erlen, false);
-    PTZR0->process(mem);
+    PTZR0->process(new packet_t(new memory_c((unsigned char *)buf[cur_buf],
+                                             erlen, false)));
 
     bytes_processed += rlen;
 

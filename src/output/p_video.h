@@ -39,9 +39,7 @@ public:
                      double _fps, int _width, int _height,
                      track_info_c &_ti);
 
-  virtual int process(memory_c &mem, int64_t old_timecode = -1,
-                      int64_t duration = -1, int64_t bref = VFT_IFRAME,
-                      int64_t fref = VFT_NOBFRAME);
+  virtual int process(packet_cptr packet);
   virtual void set_headers();
 
   virtual void dump_debug_info();
@@ -67,9 +65,7 @@ public:
                              int _dwidth, int _dheight, bool _framed,
                              track_info_c &_ti);
 
-  virtual int process(memory_c &mem, int64_t old_timecode = -1,
-                      int64_t duration = -1, int64_t bref = VFT_IFRAME,
-                      int64_t fref = VFT_NOBFRAME);
+  virtual int process(packet_cptr packet);
   virtual void flush();
 
 protected:
@@ -90,18 +86,12 @@ public:
                               double _fps, int _width, int _height,
                               bool _input_is_native, track_info_c &_ti);
 
-  virtual int process(memory_c &mem, int64_t old_timecode = -1,
-                      int64_t duration = -1, int64_t bref = VFT_IFRAME,
-                      int64_t fref = VFT_NOBFRAME);
+  virtual int process(packet_cptr packet);
   virtual void flush();
 
 protected:
-  virtual int process_native(memory_c &mem, int64_t old_timecode,
-                             int64_t old_duration, int64_t bref,
-                             int64_t fref);
-  virtual int process_non_native(memory_c &mem, int64_t old_timecode,
-                                 int64_t old_duration, int64_t bref,
-                                 int64_t fref);
+  virtual int process_native(packet_cptr packet);
+  virtual int process_non_native(packet_cptr packet);
   virtual void flush_frames_maybe(frame_type_e next_frame);
   virtual void flush_frames();
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);

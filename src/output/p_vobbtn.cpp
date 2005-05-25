@@ -60,26 +60,22 @@ vobbtn_packetizer_c::set_headers() {
 }
 
 int
-vobbtn_packetizer_c::process(memory_c &mem,
-                             int64_t timecode,
-                             int64_t duration,
-                             int64_t,
-                             int64_t) {
-
+vobbtn_packetizer_c::process(packet_cptr packet) {
   int32_t vobu_start, vobu_end;
 
-  vobu_start = get_uint32_be(mem.data + 0x0d);
-  vobu_end = get_uint32_be(mem.data + 0x11);
+  vobu_start = get_uint32_be(packet->memory->data + 0x0d);
+  vobu_end = get_uint32_be(packet->memory->data + 0x11);
 
-  duration = (int64_t)(100000.0 * (float)(vobu_end - vobu_start) / 9);
-  if (timecode == -1) {
-    timecode = previous_timecode;
-    previous_timecode += duration;
+  packet->duration = (int64_t)(100000.0 * (float)(vobu_end - vobu_start) / 9);
+  if (packet->timecode == -1) {
+    packet->timecode = previous_timecode;
+    previous_timecode += packet->duration;
   } else
-    timecode = timecode + ti.async.displacement;
+    packet->timecode += ti.async.displacement;
 
-  timecode = (int64_t)(timecode * ti.async.linear);
-  add_packet(mem, timecode, duration, true);
+  packet->timecode = (int64_t)(packet->timecode * ti.async.linear);
+  packet->duration_mandatory = true;
+  add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
 }

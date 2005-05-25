@@ -87,25 +87,20 @@ flac_packetizer_c::set_headers() {
 }
 
 int
-flac_packetizer_c::process(memory_c &mem,
-                           int64_t timecode,
-                           int64_t,
-                           int64_t,
-                           int64_t) {
-  int64_t duration;
-
+flac_packetizer_c::process(packet_cptr packet) {
   debug_enter("flac_packetizer_c::process");
 
-  duration = flac_get_num_samples(mem.data, mem.size, stream_info);
-  if (duration == -1) {
+  packet->duration = flac_get_num_samples(packet->memory->data,
+                                          packet->memory->size, stream_info);
+  if (packet->duration == -1) {
     mxwarn(_(FMT_TID "Packet number %lld contained an invalid FLAC header "
              "and is being skipped.\n"), ti.fname.c_str(), (int64_t)ti.id,
            num_packets + 1);
     debug_leave("flac_packetizer_c::process");
     return FILE_STATUS_MOREDATA;
   }
-  duration = duration * 1000000000ll / stream_info.sample_rate;
-  add_packet(mem, timecode, duration);
+  packet->duration = packet->duration * 1000000000ll / stream_info.sample_rate;
+  add_packet(packet);
   num_packets++;
   debug_leave("flac_packetizer_c::process");
 

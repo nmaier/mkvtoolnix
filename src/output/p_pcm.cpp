@@ -71,11 +71,7 @@ pcm_packetizer_c::set_headers() {
 }
 
 int
-pcm_packetizer_c::process(memory_c &mem,
-                          int64_t,
-                          int64_t,
-                          int64_t,
-                          int64_t) {
+pcm_packetizer_c::process(packet_cptr packet) {
   unsigned char *new_buf;
 
   debug_enter("pcm_packetizer_c::process");
@@ -98,22 +94,25 @@ pcm_packetizer_c::process(memory_c &mem,
   }
 
   if (skip_bytes) {
-    if (skip_bytes > mem.size) {
-      skip_bytes -= mem.size;
+    if (skip_bytes > packet->memory->size) {
+      skip_bytes -= packet->memory->size;
       return FILE_STATUS_MOREDATA;
     }
-    mem.size -= skip_bytes;
-    new_buf = &mem.data[skip_bytes];
+    packet->memory->size -= skip_bytes;
+    new_buf = &packet->memory->data[skip_bytes];
     skip_bytes = 0;
   } else
-    new_buf = mem.data;
+    new_buf = packet->memory->data;
 
-  buffer.add(new_buf, mem.size);
+  buffer.add(new_buf, packet->memory->size);
 
   while (buffer.get_size() >= packet_size) {
-    memory_c mem(buffer.get_buffer(), packet_size, false);
-    add_packet(mem, (int64_t)bytes_output * 1000000000ll / bps,
-               (int64_t)packet_size * 1000000000ll / bps);
+    packet->memory = memory_cptr(new memory_c(buffer.get_buffer(),
+                                              packet_size, false));
+    packet->timecode = (int64_t)bytes_output * 1000000000ll / bps;
+    packet->duration = (int64_t)packet_size * 1000000000ll / bps;
+    add_packet(packet);
+               
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }
@@ -129,9 +128,9 @@ pcm_packetizer_c::flush() {
 
   size = buffer.get_size();
   if (size > 0) {
-    memory_c mem(buffer.get_buffer(), size, false);
-    add_packet(mem, (int64_t)bytes_output * 1000000000ll / bps,
-               (int64_t)size * 1000000000ll / bps);
+    add_packet(new packet_t(new memory_c(buffer.get_buffer(), size, false),
+                            (int64_t)bytes_output * 1000000000ll / bps,
+                            (int64_t)size * 1000000000ll / bps));
     bytes_output += size;
     buffer.remove(size);
   }

@@ -170,10 +170,8 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
     return FILE_STATUS_DONE;
   }
 
-  if (num_read > 0) {
-    memory_c mem(chunk, num_read, true);
-    PTZR0->process(mem);
-  }
+  if (num_read > 0)
+    PTZR0->process(new packet_t(new memory_c(chunk, num_read, true)));
   if (num_read < 20000)
     PTZR0->flush();
 
@@ -888,8 +886,8 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         return FILE_STATUS_DONE;
       }
 
-      memory_c mem(buf, length, true);
-      PTZR(tracks[id2idx[new_id]]->ptzr)->process(mem);
+      PTZR(tracks[id2idx[new_id]]->ptzr)->
+        process(new packet_t(new memory_c(buf, length, true)));
 
       return FILE_STATUS_MOREDATA;
     }

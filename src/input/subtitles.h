@@ -54,7 +54,7 @@ public:
   int get_num_processed() {
     return std::distance(entries.begin(), current);
   }
-  void process(textsubs_packetizer_c *);
+  void process(generic_packetizer_c *);
   void sort() {
     std::stable_sort(entries.begin(), entries.end());
     reset();

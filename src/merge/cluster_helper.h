@@ -34,7 +34,7 @@ using namespace std;
 
 struct ch_contents_t {
   KaxCluster *cluster;
-  vector<packet_t *> packets;
+  vector<packet_cptr> packets;
   bool is_referenced, rendered;
 
   ch_contents_t():
@@ -42,14 +42,18 @@ struct ch_contents_t {
     is_referenced(false),
     rendered(false) {
   }
+
+  ~ch_contents_t() {
+    delete cluster;
+  }
 };
 
-typedef struct {
+struct render_groups_t {
   vector<KaxBlockGroup *> groups;
   vector<int64_t> durations;
   generic_packetizer_c *source;
   bool more_data, duration_mandatory;
-} render_groups_t;
+};
 
 class cluster_helper_c {
 private:
@@ -68,9 +72,9 @@ public:
   void set_output(mm_io_c *nout);
   void add_cluster(KaxCluster *cluster);
   KaxCluster *get_cluster();
-  void add_packet(packet_t *packet);
+  void add_packet(packet_cptr packet);
   int64_t get_timecode();
-  packet_t *get_packet(int num);
+  packet_cptr get_packet(int num);
   int get_packet_count();
   int render(bool flush = false);
   int free_ref(int64_t ref_timecode, generic_packetizer_c *source);
@@ -85,8 +89,8 @@ private:
   int find_cluster(KaxCluster *cluster);
   ch_contents_t *find_packet_cluster(int64_t ref_timecode,
                                      generic_packetizer_c *source);
-  packet_t *find_packet(int64_t ref_timecode,
-                        generic_packetizer_c *source);
+  packet_cptr find_packet(int64_t ref_timecode,
+                          generic_packetizer_c *source);
   void free_contents(ch_contents_t *clstr);
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);
