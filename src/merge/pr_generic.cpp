@@ -36,59 +36,59 @@
 
 using namespace std;
 
-int64_t packet_t::packet_id_counter = 0;
+// int64_t packet_t::packet_id_counter = 0;
 
-packet_t::packet_t():
-  group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
-  ref_priority(0),
-  timecode(0), bref(0), fref(0), duration(0),
-  packet_num(0),
-  assigned_timecode(0), unmodified_assigned_timecode(0),
-  unmodified_duration(0),
-  duration_mandatory(false), superseeded(false), gap_following(false),
-  source(NULL) {
+// packet_t::packet_t():
+//   group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+//   ref_priority(0),
+//   timecode(0), bref(0), fref(0), duration(0),
+//   packet_num(0),
+//   assigned_timecode(0), unmodified_assigned_timecode(0),
+//   unmodified_duration(0),
+//   duration_mandatory(false), superseeded(false), gap_following(false),
+//   source(NULL) {
 
-  packet_id = packet_id_counter;
-  ++packet_id_counter;
-}
+//   packet_id = packet_id_counter;
+//   ++packet_id_counter;
+// }
 
-packet_t::packet_t(memory_cptr n_memory,
-                   int64_t n_timecode,
-                   int64_t n_duration,
-                   int64_t n_bref,
-                   int64_t n_fref):
-  group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
-  ref_priority(0),
-  timecode(n_timecode), bref(n_bref), fref(n_fref),
-  duration(n_duration),
-  packet_num(0),
-  assigned_timecode(0), unmodified_assigned_timecode(0),
-  unmodified_duration(0),
-  duration_mandatory(false), superseeded(false), gap_following(false),
-  source(NULL), memory(n_memory) {
+// packet_t::packet_t(memory_cptr n_memory,
+//                    int64_t n_timecode,
+//                    int64_t n_duration,
+//                    int64_t n_bref,
+//                    int64_t n_fref):
+//   group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+//   ref_priority(0),
+//   timecode(n_timecode), bref(n_bref), fref(n_fref),
+//   duration(n_duration),
+//   packet_num(0),
+//   assigned_timecode(0), unmodified_assigned_timecode(0),
+//   unmodified_duration(0),
+//   duration_mandatory(false), superseeded(false), gap_following(false),
+//   source(NULL), memory(n_memory) {
 
-  packet_id = packet_id_counter;
-  ++packet_id_counter;
-}
+//   packet_id = packet_id_counter;
+//   ++packet_id_counter;
+// }
 
-packet_t::packet_t(memory_c *n_memory,
-                   int64_t n_timecode,
-                   int64_t n_duration,
-                   int64_t n_bref,
-                   int64_t n_fref):
-  group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
-  ref_priority(0),
-  timecode(n_timecode), bref(n_bref), fref(n_fref),
-  duration(n_duration),
-  packet_num(0),
-  assigned_timecode(0), unmodified_assigned_timecode(0),
-  unmodified_duration(0),
-  duration_mandatory(false), superseeded(false), gap_following(false),
-  source(NULL), memory(memory_cptr(n_memory)) {
+// packet_t::packet_t(memory_c *n_memory,
+//                    int64_t n_timecode,
+//                    int64_t n_duration,
+//                    int64_t n_bref,
+//                    int64_t n_fref):
+//   group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+//   ref_priority(0),
+//   timecode(n_timecode), bref(n_bref), fref(n_fref),
+//   duration(n_duration),
+//   packet_num(0),
+//   assigned_timecode(0), unmodified_assigned_timecode(0),
+//   unmodified_duration(0),
+//   duration_mandatory(false), superseeded(false), gap_following(false),
+//   source(NULL), memory(memory_cptr(n_memory)) {
 
-  packet_id = packet_id_counter;
-  ++packet_id_counter;
-}
+//   packet_id = packet_id_counter;
+//   ++packet_id_counter;
+// }
 
 packet_t::~packet_t() {
   vector<unsigned char *>::iterator i;
@@ -872,43 +872,36 @@ generic_packetizer_c::fix_headers() {
 }
 
 void
-generic_packetizer_c::add_packet(packet_cptr packet) {
+generic_packetizer_c::add_packet(packet_cptr pack) {
   int length, add_length, i;
-  packet_cptr pack(new packet_t);
-
-  pack->timecode = packet->timecode;
-  pack->duration = packet->duration;
-  pack->duration_mandatory = packet->duration_mandatory;
-  pack->bref = packet->bref;
-  pack->fref = packet->fref;
 
   if (reader->ptzr_first_packet == NULL)
     reader->ptzr_first_packet = this;
 
   // strip elements to be removed
   if ((htrack_max_add_block_ids != -1) &&
-      (htrack_max_add_block_ids < packet->memory_adds.size()))
-    packet->memory_adds.resize(htrack_max_add_block_ids);
+      (htrack_max_add_block_ids < pack->memory_adds.size()))
+    pack->memory_adds.resize(htrack_max_add_block_ids);
 
-  pack->data_adds.resize(packet->memory_adds.size());
-  pack->data_adds_lengths.resize(packet->memory_adds.size());
+  pack->data_adds.resize(pack->memory_adds.size());
+  pack->data_adds_lengths.resize(pack->memory_adds.size());
 
-  length = packet->memory->size;
+  length = pack->memory->size;
   if (NULL != compressor.get()) {
-    pack->data = compressor->compress(packet->memory->data, length);
-    packet->memory->release();
-    for (i = 0; i < packet->memory_adds.size(); i++) {
-      add_length = packet->memory_adds[i]->size;
-      pack->data_adds[i] = compressor->compress(packet->memory_adds[i]->data,
+    pack->data = compressor->compress(pack->memory->data, length);
+    pack->memory->release();
+    for (i = 0; i < pack->memory_adds.size(); i++) {
+      add_length = pack->memory_adds[i]->size;
+      pack->data_adds[i] = compressor->compress(pack->memory_adds[i]->data,
                                                 add_length);
       pack->data_adds_lengths[i] = add_length;
-      packet->memory_adds[i]->release();
+      pack->memory_adds[i]->release();
     }
   } else {
-    pack->data = packet->memory->grab();
-    for (i = 0; i < packet->memory_adds.size(); i++) {
-      pack->data_adds[i] = packet->memory_adds[i]->grab();
-      pack->data_adds_lengths[i] = packet->memory_adds[i]->size;
+    pack->data = pack->memory->grab();
+    for (i = 0; i < pack->memory_adds.size(); i++) {
+      pack->data_adds[i] = pack->memory_adds[i]->grab();
+      pack->data_adds_lengths[i] = pack->memory_adds[i]->size;
     }
   }
   pack->length = length;

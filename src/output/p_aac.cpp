@@ -189,13 +189,13 @@ aac_packetizer_c::process(packet_cptr packet) {
       displace(-duration);
       return FILE_STATUS_MOREDATA;
     }
-    packet->duration = duration;
     while (needs_positive_displacement(duration)) {
-      packet->timecode = my_timecode + ti.async.displacement;
-      add_packet(packet);
+      add_packet(new packet_t(packet->memory->clone(), my_timecode +
+                              ti.async.displacement, duration));
       displace(duration);
     }
 
+    packet->duration = duration;
     packet->timecode = (int64_t)((my_timecode + ti.async.displacement) *
                                  ti.async.linear);
     mxverb(2, "aac: my_tc = %lld\n", packet->timecode);
@@ -213,12 +213,11 @@ aac_packetizer_c::process(packet_cptr packet) {
                               samples_per_sec);
     else
       my_timecode = timecode + ti.async.displacement;
-    packet->timecode = (int64_t)(my_timecode * ti.async.linear);
-    packet->duration =
-      (int64_t)(1024 * 1000000000.0 * ti.async.linear / samples_per_sec);
-    packet->memory = memory_cptr(new memory_c(aac_packet,
-                                              aacheader.data_byte_size, true));
-    add_packet(packet);
+    add_packet(new packet_t(new memory_c(aac_packet,
+                                         aacheader.data_byte_size, true),
+                            (int64_t)(my_timecode * ti.async.linear),
+                            (int64_t)(1024 * 1000000000.0 * ti.async.linear /
+                                      samples_per_sec)));
     packetno++;
   }
 

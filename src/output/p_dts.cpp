@@ -170,32 +170,26 @@ dts_packetizer_c::set_headers() {
 
 int
 dts_packetizer_c::process(packet_cptr packet) {
-  int64_t my_timecode, timecode;
+  dts_header_t dtsheader;
+  unsigned char *dts_packet;
+  int64_t my_timecode;
 
   debug_enter("dts_packetizer_c::process");
 
-  timecode = packet->timecode;
-  if (timecode != -1)
-    my_timecode = timecode;
-
   add_to_buffer(packet->memory->data, packet->memory->size);
-
-  dts_header_t dtsheader;
-  unsigned char *dts_packet;
   while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
     int64_t packet_len_in_ns =
       (int64_t)get_dts_packet_length_in_nanoseconds(&dtsheader);
 
-    if (timecode == -1)
+    if (packet->timecode == -1)
       my_timecode = (int64_t)(((double)samples_written * 1000000000.0) /
                               ((double)dtsheader.core_sampling_frequency));
     else
-      my_timecode = timecode + ti.async.displacement;
-    packet->timecode = (int64_t)(my_timecode * ti.async.linear);
-    packet->duration = (int64_t)(packet_len_in_ns * ti.async.linear);
-    packet->memory =
-      memory_cptr(new memory_c(dts_packet, dtsheader.frame_byte_size, true));
-    add_packet(packet);
+      my_timecode = packet->timecode + ti.async.displacement;
+    add_packet(new packet_t(new memory_c(dts_packet, dtsheader.frame_byte_size,
+                                         true),
+                            (int64_t)(my_timecode * ti.async.linear),
+                            (int64_t)(packet_len_in_ns * ti.async.linear)));
 
     bytes_written += dtsheader.frame_byte_size;
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);

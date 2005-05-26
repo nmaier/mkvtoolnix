@@ -59,9 +59,13 @@ passthrough_packetizer_c::process(packet_cptr packet) {
   }
   while ((packet->duration > 0) &&
          needs_positive_displacement(packet->duration)) {
-    packet->timecode = (int64_t)((timecode + ti.async.displacement) *
-                                 ti.async.linear);
-    add_packet(packet);
+    packet_t *new_packet =
+      new packet_t(packet->memory->clone(),
+                   (int64_t)((timecode + ti.async.displacement) *
+                             ti.async.linear),
+                   packet->duration, packet->bref, packet->fref);
+    new_packet->duration_mandatory = packet->duration_mandatory;
+    add_packet(new_packet);
     displace(packet->duration);
   }
 

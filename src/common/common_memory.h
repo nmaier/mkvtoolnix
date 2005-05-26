@@ -35,16 +35,20 @@ public:
     if (data == NULL)
       die("memory_c::memory_c: data = %p, size = %u\n", data, size);
   }
+
   memory_c(const memory_c &src) {
     die("memory_c::memory_c(const memory_c &) called\n");
   }
+
   ~memory_c() {
     release();
   }
+
   int lock() {
     is_free = false;
     return 0;
   }
+
   unsigned char *grab() {
     if (is_free) {
       is_free = false;
@@ -52,6 +56,7 @@ public:
     }
     return (unsigned char *)safememdup(data, size);
   }
+
   int release() {
     if (is_free) {
       safefree(data);
@@ -59,6 +64,10 @@ public:
       is_free = false;
     }
     return 0;
+  }
+
+  memory_c *clone() const {
+    return new memory_c((unsigned char *)safememdup(data, size), size, true);
   }
 };
 

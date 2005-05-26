@@ -107,12 +107,10 @@ pcm_packetizer_c::process(packet_cptr packet) {
   buffer.add(new_buf, packet->memory->size);
 
   while (buffer.get_size() >= packet_size) {
-    packet->memory = memory_cptr(new memory_c(buffer.get_buffer(),
-                                              packet_size, false));
-    packet->timecode = (int64_t)bytes_output * 1000000000ll / bps;
-    packet->duration = (int64_t)packet_size * 1000000000ll / bps;
-    add_packet(packet);
-               
+    add_packet(new packet_t(new memory_c(buffer.get_buffer(), packet_size,
+                                         false),
+                            (int64_t)bytes_output * 1000000000ll / bps,
+                            (int64_t)packet_size * 1000000000ll / bps));
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }

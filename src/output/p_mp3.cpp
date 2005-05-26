@@ -189,24 +189,21 @@ int
 mp3_packetizer_c::process(packet_cptr packet) {
   unsigned char *mp3_packet;
   mp3_header_t mp3header;
-  int64_t my_timecode, timecode;
+  int64_t my_timecode;
 
   debug_enter("mp3_packetizer_c::process");
 
-  timecode = packet->timecode;
-  packet->duration = (int64_t)(1000000000.0 * spf * ti.async.linear /
-                               samples_per_sec);
-
   byte_buffer.add(packet->memory->data, packet->memory->size);
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
-    if (timecode == -1)
+    if (packet->timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
     else
-      my_timecode = timecode + ti.async.displacement;
-    packet->timecode = (int64_t)(my_timecode * ti.async.linear);
-    packet->memory = memory_cptr(new memory_c(mp3_packet, mp3header.framesize,
-                                              true));
-    add_packet(packet);
+      my_timecode = packet->timecode + ti.async.displacement;
+    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize,
+                                         true),
+                            (int64_t)(my_timecode * ti.async.linear),
+                            (int64_t)(1000000000.0 * spf * ti.async.linear /
+                                      samples_per_sec)));
     packetno++;
   }
 

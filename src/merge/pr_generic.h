@@ -94,9 +94,9 @@ enum default_track_priority_e {
 #define FMT_TID "'%s' track %lld: "
 
 struct packet_t {
-  static int64_t packet_id_counter;
+//   static int64_t packet_id_counter;
 
-  int64_t packet_id;
+//   int64_t packet_id;
 
   KaxBlockGroup *group;
   KaxBlock *block;
@@ -113,16 +113,52 @@ struct packet_t {
   memory_cptr memory;
   memories_c memory_adds;
 
-  packet_t();
-  packet_t(memory_cptr n_memory, int64_t n_timecode = -1,
-           int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
-  packet_t(memory_c *n_memory, int64_t n_timecode = -1,
-           int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
-//   packet_t(const packet_t &packet);
+//   packet_t();
+//   packet_t(memory_cptr n_memory, int64_t n_timecode = -1,
+//            int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
+//   packet_t(memory_c *n_memory, int64_t n_timecode = -1,
+//            int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
+  packet_t():
+    group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+    ref_priority(0),
+    timecode(0), bref(0), fref(0), duration(0),
+    packet_num(0),
+    assigned_timecode(0), unmodified_assigned_timecode(0),
+    unmodified_duration(0),
+    duration_mandatory(false), superseeded(false), gap_following(false),
+    source(NULL) { }
 
-  virtual ~packet_t();
+  packet_t(memory_cptr n_memory,
+           int64_t n_timecode = -1,
+           int64_t n_duration = -1,
+           int64_t n_bref = -1,
+           int64_t n_fref = -1):
+    group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+    ref_priority(0),
+    timecode(n_timecode), bref(n_bref), fref(n_fref),
+    duration(n_duration),
+    packet_num(0),
+    assigned_timecode(0), unmodified_assigned_timecode(0),
+    unmodified_duration(0),
+    duration_mandatory(false), superseeded(false), gap_following(false),
+    source(NULL), memory(n_memory) { }
 
-//   packet_t &operator =(const packet_t &packet);
+  packet_t(memory_c *n_memory,
+           int64_t n_timecode = -1,
+           int64_t n_duration = -1,
+           int64_t n_bref = -1,
+           int64_t n_fref = -1):
+    group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
+    ref_priority(0),
+    timecode(n_timecode), bref(n_bref), fref(n_fref),
+    duration(n_duration),
+    packet_num(0),
+    assigned_timecode(0), unmodified_assigned_timecode(0),
+    unmodified_duration(0),
+    duration_mandatory(false), superseeded(false), gap_following(false),
+    source(NULL), memory(memory_cptr(n_memory)) { }
+
+  ~packet_t();
 };
 typedef counted_ptr<packet_t> packet_cptr;
 
