@@ -1980,6 +1980,7 @@ destroy_readers() {
 void
 cleanup() {
   delete cluster_helper;
+  cluster_helper = NULL;
   vector<filelist_t>::const_iterator file;
 
   destroy_readers();
@@ -1991,16 +1992,22 @@ cleanup() {
   attachments.clear();
 
   delete kax_tags;
+  kax_tags = NULL;
   delete tags_from_cue_chapters;
+  tags_from_cue_chapters = NULL;
   delete kax_chapters;
+  kax_chapters = NULL;
   delete kax_as;
+  kax_as = NULL;
   delete kax_info_chap;
+  kax_info_chap = NULL;
 
   delete seguid_link_previous;
+  seguid_link_previous = NULL;
   delete seguid_link_next;
+  seguid_link_next = NULL;
   delete seguid_forced;
-
-  delete cluster_helper;
+  seguid_forced = NULL;
 
   utf8_done();
 }
