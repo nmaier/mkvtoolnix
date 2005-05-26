@@ -33,7 +33,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libebml.lib libmatroska.lib iconv.lib zdll.lib libexpat.lib libFLAC_static.lib ogg_static_d.lib vorbis_static_d.lib"
+				AdditionalDependencies="libebml.lib libmatroska.lib iconv.lib zdll.lib libexpat.lib libFLAC_static.lib ogg_static_d.lib vorbis_static_d.lib Rpcrt4.lib"
 				OutputFile="$(OutDir)/mkvmerge.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\work\libmatroska\make\vc7\lib\static\Debug;..\..\work\libebml\make\vc7\lib\Debug;..\..\..\flac\obj\debug\lib;c:\usr\lib;..\..\..\zlib;..\..\..\expat\lib\Debug;..\..\..\libogg\win32\Static_Debug;..\..\..\libvorbis\win32\Vorbis_Static_Debug"
@@ -308,6 +308,12 @@
 			</File>
 			<File
 				RelativePath=".\src\input\r_tta.h">
+			</File>
+			<File
+				RelativePath=".\src\input\r_usf.cpp">
+			</File>
+			<File
+				RelativePath=".\src\input\r_usf.h">
 			</File>
 			<File
 				RelativePath=".\src\input\r_vobbtn.cpp">

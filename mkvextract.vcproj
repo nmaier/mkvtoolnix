@@ -33,7 +33,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libebml.lib libmatroska.lib iconv.lib zdll.lib libexpat.lib libFLAC_static.lib ogg_static_d.lib vorbis_static_d.lib"
+				AdditionalDependencies="libebml.lib libmatroska.lib iconv.lib zdll.lib libexpat.lib libFLAC_static.lib ogg_static_d.lib vorbis_static_d.lib Rpcrt4.lib"
 				OutputFile="$(OutDir)/mkvextract.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\work\libmatroska\make\vc7\lib\static\Debug;..\..\work\libebml\make\vc7\lib\Debug;..\..\..\flac\obj\debug\lib;c:\usr\lib;..\..\..\zlib;..\..\..\expat\lib\Debug;..\..\..\libogg\win32\Static_Debug;..\..\..\libvorbis\win32\Vorbis_Static_Debug"
@@ -140,6 +140,33 @@
 			<File
 				RelativePath=".\src\extract\tracks.cpp">
 			</File>
+			<File
+				RelativePath=".\src\extract\xtr_aac.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_avi.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_base.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_ogg.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_rmff.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_textsubs.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_tta.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_vobsub.cpp">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_wav.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -147,6 +174,30 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath=".\src\extract\mkvextract.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_aac.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_avi.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_base.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_ogg.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_rmff.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_textsubs.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_tta.h">
+			</File>
+			<File
+				RelativePath=".\src\extract\xtr_vobsub.h">
 			</File>
 		</Filter>
 		<Filter
