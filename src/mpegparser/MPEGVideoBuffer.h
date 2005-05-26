@@ -33,10 +33,12 @@
 #define MPEG_VIDEO_GOP_START_CODE  0xb8
 #define MPEG_VIDEO_USER_START_CODE  0xb2
 
-#define MPEG2_BUFFER_STATE_NEED_MORE_DATA  1
-#define MPEG2_BUFFER_STATE_CHUNK_READY    2
-#define MPEG2_BUFFER_STATE_EMPTY    0
-#define MPEG2_BUFFER_INVALID        -1
+enum MPEG2BufferState_e {
+  MPEG2_BUFFER_STATE_NEED_MORE_DATA,
+  MPEG2_BUFFER_STATE_CHUNK_READY,
+  MPEG2_BUFFER_STATE_EMPTY,
+  MPEG2_BUFFER_INVALID
+};
 
 #define MPEG2_I_FRAME 1
 #define MPEG2_P_FRAME 2
@@ -90,11 +92,11 @@ public:
       delete [] data;
   }
 
-  uint8_t GetType(){
+  inline uint8_t GetType() const {
     return type;
   }
 
-  uint32_t GetSize(){
+  inline uint32_t GetSize() const{
     return size;
   }
 
@@ -106,19 +108,19 @@ public:
     return data[i];
   }
 
-  binary * GetPointer(){
+  inline binary * GetPointer(){
     return data;
   }
 };
 
-MPEG2SequenceHeader ParseSequenceHeader(MPEGChunk* chunk);
-MPEG2PictureHeader ParsePictureHeader(MPEGChunk* chunk);
-MPEG2GOPHeader ParseGOPHeader(MPEGChunk* chunk);
+void ParseSequenceHeader(MPEGChunk* chunk, MPEG2SequenceHeader & hdr);
+bool ParsePictureHeader(MPEGChunk* chunk, MPEG2PictureHeader & hdr);
+bool ParseGOPHeader(MPEGChunk* chunk, MPEG2GOPHeader & hdr);
 
 class MPEGVideoBuffer{
 private:
   CircBuffer * myBuffer;
-  uint32_t state;
+  MPEG2BufferState_e state;
   int32_t chunkStart;
   int32_t chunkEnd;
   void UpdateState();
@@ -135,7 +137,7 @@ public:
     delete myBuffer;
   }
 
-  uint32_t GetState();
+  inline MPEG2BufferState_e GetState() const { return state; }
 
   int32_t GetFreeBufferSpace(){
     return (myBuffer->buf_capacity - myBuffer->bytes_in_buf);

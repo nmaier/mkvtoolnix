@@ -27,10 +27,12 @@
 #include <stdio.h>
 #include <queue>
 
-#define MPV_PARSER_STATE_FRAME       0
-#define MPV_PARSER_STATE_NEED_DATA   1
-#define MPV_PARSER_STATE_EOS        -1
-#define MPV_PARSER_STATE_ERROR      -2
+enum MPEG2ParserState_e {
+  MPV_PARSER_STATE_FRAME,
+  MPV_PARSER_STATE_NEED_DATA,
+  MPV_PARSER_STATE_EOS,
+  MPV_PARSER_STATE_ERROR
+};
 
 class MPEGFrame {
 public:
@@ -68,13 +70,13 @@ private:
   MediaTime nextSkipDuration;
   MediaTime secondRef;
   uint8_t mpegVersion;
-  int32_t parserState;
+  MPEG2ParserState_e parserState;
   MPEGVideoBuffer * mpgBuf;
 
   int32_t InitParser();
   void DumpQueues();
   int32_t FillQueues();
-  int32_t CountBFrames();
+  MediaTime CountBFrames();
   void ShoveRef(MediaTime ref);
   MediaTime GetFrameDuration(MPEG2PictureHeader picHdr);
   int32_t QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr);
@@ -94,7 +96,7 @@ public:
     return seqHdrChunk;
   }
 
-  uint8_t GetMPEGVersion(){
+  uint8_t GetMPEGVersion() const{
     return mpegVersion;
   }
 
@@ -110,7 +112,7 @@ public:
   int32_t WriteData(binary* data, uint32_t dataSize);
 
   //Returns the current state of the parser
-  int32_t GetState();
+  MPEG2ParserState_e GetState();
 
   //Sets "end of stream" status on the buffer, forces timestamping of frames waiting.
   //Do not call this without good reason.

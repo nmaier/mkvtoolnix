@@ -70,21 +70,12 @@ void MPEGVideoBuffer::UpdateState(){
     if(test != -1)  //We found a new startcode
       chunkEnd = test;
   }
-  if(chunkStart == -1){
+  if(chunkStart == -1 || chunkEnd == -1){
     state = MPEG2_BUFFER_STATE_NEED_MORE_DATA;
-    return;
-  }else if(chunkEnd == -1){
-    state = MPEG2_BUFFER_STATE_NEED_MORE_DATA;
-    return;
   }else{
     assert(chunkStart >= 0 && chunkStart < chunkEnd && chunkEnd > 0);
     state = MPEG2_BUFFER_STATE_CHUNK_READY;
-    return;
   }
-}
-
-uint32_t MPEGVideoBuffer::GetState(){
-  return state;
 }
 
 MPEGChunk * MPEGVideoBuffer::ReadChunk(){
@@ -121,14 +112,9 @@ int32_t MPEGVideoBuffer::Feed(binary* data, uint32_t numBytes){
   return res;
 }
 
-MPEG2SequenceHeader ParseSequenceHeader(MPEGChunk* chunk){
-  MPEG2SequenceHeader hdr;
+void ParseSequenceHeader(MPEGChunk* chunk, MPEG2SequenceHeader & hdr){
   binary* pos = chunk->GetPointer();
   uint8_t haveSeqExt = 0;
-  if(chunk->GetType() != MPEG_VIDEO_SEQUENCE_START_CODE){
-    //printf("Don't feed parse_sequence_header a chunk that isn't a sequence header!!!\n");
-    return hdr;
-  }
   //Parse out the resolution info, horizontal first
   pos+=4; //Skip the start code
   hdr.width = (((unsigned int)pos[0]) << 4) | (((unsigned int) pos[1])>>4);  //xx x0 00
@@ -206,18 +192,15 @@ MPEG2SequenceHeader ParseSequenceHeader(MPEGChunk* chunk){
   }else{
     hdr.progressiveSequence = 0;
   }
-
-  return hdr;
 }
 
-MPEG2GOPHeader ParseGOPHeader(MPEGChunk* chunk){
-  MPEG2GOPHeader hdr;
-  binary* pos = chunk->GetPointer();
-  uint32_t timecode;
+bool ParseGOPHeader(MPEGChunk* chunk, MPEG2GOPHeader & hdr){
   if(chunk->GetType() != MPEG_VIDEO_GOP_START_CODE){
     //printf("Don't feed parse_gop_header a chunk that isn't a gop header!!!\n");
-    return hdr;
+    return false;
   }
+  binary* pos = chunk->GetPointer();
+  uint32_t timecode;
   pos+=4; //skip the startcode
   //Parse GOP timecode structure
   timecode = ((uint32_t)pos[0] << 24) |
@@ -234,19 +217,17 @@ MPEG2GOPHeader ParseGOPHeader(MPEGChunk* chunk){
   }else{
     hdr.closedGOP = 0;
   }
-  return hdr;
+  return true;
 }
 
-MPEG2PictureHeader ParsePictureHeader(MPEGChunk* chunk){
-  MPEG2PictureHeader hdr;
-  binary* pos = chunk->GetPointer();
-//   int i = 0;
-  int havePicExt = 0;
-  uint32_t temp = 0;
+bool ParsePictureHeader(MPEGChunk* chunk, MPEG2PictureHeader & hdr){
   if(chunk->GetType() != MPEG_VIDEO_PICTURE_START_CODE){
     //printf("Don't feed parse_picture_header a chunk that isn't a picture!!!\n");
-    return hdr;
+    return false;
   }
+  binary* pos = chunk->GetPointer();
+  int havePicExt = 0;
+  uint32_t temp = 0;
   pos+=4;
   temp = (((uint32_t)pos[0]) << 8) | (pos[1] & 0xC0);
   hdr.temporalReference = temp >> 6;
@@ -284,5 +265,5 @@ MPEG2PictureHeader ParsePictureHeader(MPEGChunk* chunk){
     hdr.progressive = (pos[0] & 0x80);
   }
 
-  return hdr;
+  return true;
 }
