@@ -34,6 +34,7 @@ using namespace std;
 #define ENGAGE_NO_DEFAULT_HEADER_VALUES "no_default_header_values"
 #define ENGAGE_FORCE_PASSTHROUGH_PACKETIZER "force_passthrough_packetizer"
 #define ENGAGE_AVC_USE_BFRAMES "avc_use_bframes"
+#define ENGAGE_WRITE_HEADERS_TWICE "write_headers_twice"
 
 void MTX_DLL_API engage_hacks(const string &hacks);
 bool MTX_DLL_API hack_engaged(const string &hack);

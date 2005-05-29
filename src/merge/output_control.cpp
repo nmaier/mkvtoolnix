@@ -1441,6 +1441,14 @@ finish_file(bool last_file) {
 
   mxinfo("\n");
 
+  // Render the track headers a second time if the user has requested that.
+  if (hack_engaged(ENGAGE_WRITE_HEADERS_TWICE)) {
+    EbmlElement *second_tracks = kax_tracks.Clone();
+    second_tracks->Render(*out);
+    kax_sh_main->IndexThis(*second_tracks, *kax_segment);
+    delete second_tracks;
+  }
+
   // Render the cues.
   if (write_cues && cue_writing_requested) {
     if (verbose >= 1)
@@ -1502,6 +1510,12 @@ finish_file(bool last_file) {
     }
   }
   out->restore_pos();
+
+  // Render the segment info a second time if the user has requested that.
+  if (hack_engaged(ENGAGE_WRITE_HEADERS_TWICE)) {
+    kax_infos->Render(*out);
+    kax_sh_main->IndexThis(*kax_infos, *kax_segment);
+  }
 
   // Select the chapters that lie in this file and render them in the space
   // that was resesrved at the beginning.
