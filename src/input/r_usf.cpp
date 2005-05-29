@@ -130,6 +130,8 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
       }
     }
 
+    m_private_data += "</USFSubtitles>";
+
     for (i = 0; m_tracks.size() > i; ++i) {
       stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
       m_tracks[i].m_current_entry = m_tracks[i].m_entries.begin();
@@ -167,10 +169,6 @@ usf_reader_c::start_cb(const char *name,
   m_previous_start = name;
   m_parents.push_back(name);
 
-  if (1 >= m_parents.size())
-    // Nothing to do for the root element.
-    return;
-
   // Generate the full path to this node.
   for (i = 0; m_parents.size() > i; ++i) {
     if (!node.empty())
@@ -203,7 +201,10 @@ usf_reader_c::start_cb(const char *name,
     return;
   }
 
-  if (node == "USFSubtitles.subtitles") {
+  if (node == "USFSubtitles")
+    m_private_data += create_xml_node_name(name, atts);
+
+  else if (node == "USFSubtitles.subtitles") {
     usf_track_t new_track;
     m_tracks.push_back(new_track);
 

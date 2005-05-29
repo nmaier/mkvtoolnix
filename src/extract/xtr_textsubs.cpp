@@ -345,6 +345,14 @@ xtr_usf_c::create_file(xtr_base_c *_master,
 
   } else {
     try {
+      int end_tag_pos;
+      string codec_private_mod, end_tag = "</USFSubtitles>";
+
+      codec_private_mod = m_codec_private;
+      end_tag_pos = codec_private_mod.find(end_tag);
+      if (0 <= end_tag_pos)
+        codec_private_mod.erase(end_tag_pos, end_tag.length());
+
       out = new mm_file_io_c(file_name, MODE_CREATE);
 
       m_formatter =
@@ -352,8 +360,7 @@ xtr_usf_c::create_file(xtr_base_c *_master,
       m_formatter->set_doctype("USFSubtitles", "USFV100.dtd");
       m_formatter->set_stylesheet("text/xsl", "USFV100.xsl");
       m_formatter->write_header();
-      m_formatter->format("<USFSubtitles version=\"1.00\">\n");
-      m_formatter->format(m_codec_private + "\n");
+      m_formatter->format(codec_private_mod + "\n");
     } catch (mm_io_error_c &error) {
       mxerror("Failed to create the file '%s': %d (%s)\n", file_name.c_str(),
               errno, strerror(errno));
