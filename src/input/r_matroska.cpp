@@ -89,8 +89,10 @@ using namespace libmatroska;
                                   (c) == 'b' ? "buttons" : \
                                   (c) == 'v' ? "video" : "subtitle")
 
-#define in_parent(p) (in->getFilePointer() < \
-                      (p->GetElementPosition() + p->ElementSize()))
+#define in_parent(p) \
+  (!p->IsFiniteSize() || \
+   (in->getFilePointer() < \
+    (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
 // }}}
 

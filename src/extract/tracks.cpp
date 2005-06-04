@@ -328,7 +328,7 @@ extract_tracks(const char *file_name,
 
     while (1) {
       // Next element must be a segment
-      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
+      l0 = es->FindNextID(KaxSegment::ClassInfos, 0); //0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
         show_error(_("No segment/level 0 element found."));
         return false;
@@ -349,7 +349,6 @@ extract_tracks(const char *file_name,
     l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                              true, 1);
     while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
         show_element(l1, 1, _("Segment information"));

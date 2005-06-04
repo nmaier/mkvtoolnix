@@ -1,3 +1,8 @@
+2005-06-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvinfo, mkvextract: bug fix: Inifite sized segments
+	were not handled correctly.
+
 2005-05-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: On Windows mmg could be crashed by adding a file
