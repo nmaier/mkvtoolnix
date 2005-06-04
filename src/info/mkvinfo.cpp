@@ -30,6 +30,7 @@
 #include <unistd.h>
 #endif
 
+#include <algorithm>
 #include <iostream>
 #include <typeinfo>
 
@@ -291,10 +292,10 @@ parse_args(vector<string> args,
 
 // {{{ is_global, parse_multicomment/chapter_atom, asctime_r, gmtime_r
 
-#define fits_parent(l, p) (l->GetElementPosition() < \
-                           (p->GetElementPosition() + p->ElementSize()))
-#define in_parent(p) (in->getFilePointer() < \
-                      (p->GetElementPosition() + p->ElementSize()))
+#define in_parent(p) \
+  (!p->IsFiniteSize() || \
+   (in->getFilePointer() < \
+    (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
 bool
 is_global(EbmlStream *es,
@@ -346,32 +347,34 @@ asctime_r(const struct tm *tm,
 
 // }}}
 
+struct master_sorter_t {
+  int m_index;
+  int64_t m_pos;
+
+  inline master_sorter_t(int index, int64_t pos):
+    m_index(index), m_pos(pos) { }
+
+  inline bool operator <(const master_sorter_t &cmp) const {
+    return m_pos < cmp.m_pos;
+  }
+};
+
 void
 sort_master(EbmlMaster &m) {
-  int i, sp_idx;
+  int i;
   vector<EbmlElement *> tmp;
-  int64_t smallest_pos;
-  EbmlMaster *m2;
+  vector<master_sorter_t> sort_me;
 
-  while (m.ListSize() > 0) {
-    sp_idx = 0;
-    smallest_pos = m[0]->GetElementPosition();
+  for (i = 0; m.ListSize() > i; ++i)
+    sort_me.push_back(master_sorter_t(i, m[i]->GetElementPosition()));
+  sort(sort_me.begin(), sort_me.end());
 
-    for (i = 1; i < m.ListSize(); i++)
-      if (m[i]->GetElementPosition() < smallest_pos) {
-        sp_idx = i;
-        smallest_pos = m[i]->GetElementPosition();
-      }
+  for (i = 0; sort_me.size() > i; ++i)
+    tmp.push_back(m[sort_me[i].m_index]);
+  m.RemoveAll();
 
-    tmp.push_back(m[sp_idx]);
-    m.Remove(sp_idx);
-  }
-
-  for (i = 0; i < tmp.size(); i++) {
+  for (i = 0; tmp.size() > i; ++i)
     m.PushElement(*tmp[i]);
-    if ((m2 = dynamic_cast<EbmlMaster *>(tmp[i])) != NULL)
-      sort_master(*m2);
-  }
 }
 
 void
