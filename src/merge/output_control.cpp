@@ -125,9 +125,6 @@ bool write_cues = true, cue_writing_requested = false;
 generic_packetizer_c *video_packetizer = NULL;
 bool write_meta_seek_for_clusters = true;
 bool no_lacing = false, no_linking = true;
-int64_t split_after = -1;
-bool split_by_time = false;
-int split_max_num_files = 65535;
 bool use_durations = false;
 
 double timecode_scale = TIMECODE_SCALE;
@@ -173,7 +170,8 @@ int64_t tags_size = 0;
 static bool accept_tags = true;
 
 int file_num = 1;
-bool splitting = false;
+
+int split_max_num_files = 65535;
 
 string default_language = "und";
 
@@ -601,7 +599,7 @@ render_headers(mm_io_c *rout) {
       KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
       kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
     }
-    if (!no_linking && splitting) {
+    if (!no_linking && cluster_helper->splitting()) {
       KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
       kax_nextuid.CopyBuffer(seguid_next.data(), 128 / 8);
 
@@ -1380,7 +1378,7 @@ create_next_output_file() {
   kax_cues = new KaxCues();
   kax_cues->SetGlobalTimecodeScale((int64_t)timecode_scale);
 
-  if (splitting)
+  if (cluster_helper->splitting())
     this_outfile = create_output_name();
   else
     this_outfile = outfile;
@@ -1528,7 +1526,7 @@ finish_file(bool last_file) {
     end = start + cluster_helper->get_duration();
 
     chapters_here = copy_chapters(kax_chapters);
-    if (splitting)
+    if (cluster_helper->splitting())
       chapters_here = select_chapters_in_timeframe(chapters_here, start, end,
                                                    offset);
 
@@ -1584,7 +1582,7 @@ finish_file(bool last_file) {
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       kax_sh_main->IndexThis(*chapters_here, *kax_segment);
     delete chapters_here;
-  } else if (!splitting && (kax_chapters != NULL))
+  } else if (!cluster_helper->splitting() && (kax_chapters != NULL))
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       kax_sh_main->IndexThis(*kax_chapters, *kax_segment);
 

@@ -55,6 +55,22 @@ struct render_groups_t {
   bool more_data, duration_mandatory;
 };
 
+struct split_point_t {
+  enum split_point_type_e {
+    SPT_DURATION,
+    SPT_SIZE,
+    SPT_TIME,
+    SPT_CHAPTER
+  };
+
+  int64_t m_point;
+  split_point_type_e m_type;
+  bool m_use_once;
+
+  split_point_t(int64_t point, split_point_type_e type, bool use_once):
+    m_point(point), m_type(type), m_use_once(use_once) { }
+};
+
 class cluster_helper_c {
 private:
   vector<ch_contents_t *> clusters;
@@ -64,6 +80,9 @@ private:
   int64_t packet_num, timecode_offset, *last_packets;
   int64_t bytes_in_file, first_timecode_in_file;
   mm_io_c *out;
+
+  vector<split_point_t> split_points;
+  vector<split_point_t>::iterator current_split_point;
 
 public:
   cluster_helper_c();
@@ -83,6 +102,11 @@ public:
   int64_t get_duration();
   int64_t get_first_timecode_in_file() {
     return first_timecode_in_file;
+  }
+
+  void add_split_point(const split_point_t &split_point);
+  bool splitting() {
+    return !split_points.empty();
   }
 
 private:

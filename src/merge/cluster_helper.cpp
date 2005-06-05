@@ -46,7 +46,9 @@ public:
 // #define walk_clusters() check_clusters(__LINE__)
 #define walk_clusters()
 
-cluster_helper_c::cluster_helper_c() {
+cluster_helper_c::cluster_helper_c():
+  current_split_point(split_points.begin()) {
+
   cluster_content_size = 0;
   max_timecode_and_duration = 0;
   last_cluster_tc = 0;
@@ -112,7 +114,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     add_cluster(new kax_cluster_c());
   }
 
-  if (splitting && (file_num <= split_max_num_files) &&
+  if (splitting() &&
+      (split_points.end() != current_split_point) &&
+      (file_num <= split_max_num_files) &&
       (packet->bref == -1) &&
       ((packet->source->get_track_type() == track_video) ||
        (video_packetizer == NULL))) {
@@ -120,7 +124,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     c = clusters[clusters.size() - 1];
 
     // Maybe we want to start a new file now.
-    if (!split_by_time) {
+    if (split_point_t::SPT_SIZE == current_split_point->m_type) {
 
       if (c->packets.size() > 0) {
         // Cluster + Cluster timecode (roughly)
@@ -146,12 +150,14 @@ cluster_helper_c::add_packet(packet_cptr packet) {
              "additional_size: %lld, bytes_in_file: %lld, sum: %lld\n",
              header_overhead, additional_size, bytes_in_file,
              header_overhead + additional_size + bytes_in_file);
-      if ((header_overhead + additional_size + bytes_in_file) >= split_after)
+      if ((header_overhead + additional_size + bytes_in_file) >=
+          current_split_point->m_point)
         split = true;
 
-    } else if ((0 <= first_timecode_in_file) && 
+    } else if ((split_point_t::SPT_DURATION == current_split_point->m_type) &&
+               (0 <= first_timecode_in_file) && 
                (packet->assigned_timecode - first_timecode_in_file) >=
-               (split_after * 1000000ull))
+               (current_split_point->m_point * 1000000ull))
       split = true;
 
     if (split) {
@@ -171,6 +177,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
       if (no_linking)
         timecode_offset = packet->assigned_timecode;
+
+      if (current_split_point->m_use_once)
+        ++current_split_point;
     }
   }
 
@@ -345,7 +354,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   cluster = clstr->cluster;
 
   // Splitpoint stuff
-  if ((header_overhead == -1) && splitting)
+  if ((header_overhead == -1) && splitting())
     header_overhead = out->getFilePointer() + tags_size;
 
   elements_in_cluster = 0;
@@ -723,4 +732,11 @@ cluster_helper_c::get_duration() {
          max_timecode_and_duration, first_timecode_in_file,
          max_timecode_and_duration - first_timecode_in_file);
   return max_timecode_and_duration - first_timecode_in_file;
+}
+
+void
+cluster_helper_c::add_split_point(const split_point_t &split_point) {
+  split_points.push_back(split_point);
+  if (1 == split_points.size())
+    current_split_point = split_points.begin();
 }

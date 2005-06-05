@@ -43,6 +43,7 @@
 #include <matroska/KaxTags.h>
 
 #include "chapters.h"
+#include "cluster_helper.h"
 #include "common.h"
 #include "commonebml.h"
 #include "extern_data.h"
@@ -655,7 +656,7 @@ parse_cropping(const string &s,
 */
 static void
 parse_split(const string &arg) {
-  int64_t modifier;
+  int64_t split_after, modifier;
   char mod;
   string s;
 
@@ -680,13 +681,14 @@ parse_split(const string &arg) {
       msecs = 0;
 
     mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
-    split_after = secs + mins * 60 + hours * 3600;
     if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
       mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
               arg.c_str());
 
-    split_after = split_after * 1000 + msecs;
-    split_by_time = true;
+    split_after = (int64_t)(secs + mins * 60 + hours * 3600) * 1000ll + msecs;
+    cluster_helper->add_split_point(split_point_t(split_after,
+                                                  split_point_t::SPT_DURATION,
+                                                  false));
     return;
   }
 
@@ -700,7 +702,9 @@ parse_split(const string &arg) {
               arg.c_str());
 
     split_after *= 1000;
-    split_by_time = true;
+    cluster_helper->add_split_point(split_point_t(split_after,
+                                                  split_point_t::SPT_DURATION,
+                                                  false));
     return;
   }
 
@@ -719,8 +723,9 @@ parse_split(const string &arg) {
   if (!parse_int(s, split_after))
     mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
 
-  split_after *= modifier;
-  split_by_time = false;
+  cluster_helper->add_split_point(split_point_t(split_after * modifier,
+                                                split_point_t::SPT_SIZE,
+                                                false));
 }
 
 /** \brief Parse the \c --delay argument
@@ -1927,7 +1932,7 @@ parse_args(vector<string> args) {
     }
   }
 
-  if ((split_after <= 0) && !no_linking)
+  if (!cluster_helper->splitting() && !no_linking)
     mxwarn(_("'--link' is only useful in combination with '--split'.\n"));
 
   delete ti;
@@ -1958,9 +1963,6 @@ main(int argc,
   setup();
 
   parse_args(command_line_utf8(argc, argv));
-
-  if (split_after > 0)
-    splitting = true;
 
   start = time(NULL);
 

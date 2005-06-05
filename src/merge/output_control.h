@@ -172,14 +172,13 @@ extern bool no_lacing, no_linking, use_durations;
 extern bool identifying, identify_verbose;
 
 extern int file_num;
-extern bool splitting;
 
 extern int64_t max_ns_per_cluster;
 extern int max_blocks_per_cluster;
 extern int default_tracks[3], default_tracks_priority[3];
-extern int64_t split_after;
+
+extern bool splitting;
 extern int split_max_num_files;
-extern bool split_by_time;
 
 extern double timecode_scale;
 
