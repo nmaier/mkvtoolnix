@@ -59,7 +59,7 @@ struct split_point_t {
   enum split_point_type_e {
     SPT_DURATION,
     SPT_SIZE,
-    SPT_TIME,
+    SPT_TIMECODE,
     SPT_CHAPTER
   };
 

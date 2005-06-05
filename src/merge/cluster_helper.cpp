@@ -157,7 +157,11 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     } else if ((split_point_t::SPT_DURATION == current_split_point->m_type) &&
                (0 <= first_timecode_in_file) && 
                (packet->assigned_timecode - first_timecode_in_file) >=
-               (current_split_point->m_point * 1000000ull))
+               current_split_point->m_point)
+      split = true;
+
+    else if ((split_point_t::SPT_TIMECODE == current_split_point->m_type) &&
+             (packet->assigned_timecode >= current_split_point->m_point))
       split = true;
 
     if (split) {
@@ -737,6 +741,5 @@ cluster_helper_c::get_duration() {
 void
 cluster_helper_c::add_split_point(const split_point_t &split_point) {
   split_points.push_back(split_point);
-  if (1 == split_points.size())
-    current_split_point = split_points.begin();
+  current_split_point = split_points.begin();
 }

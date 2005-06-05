@@ -155,6 +155,9 @@ usage() {
     "  --split <d[K,M,G]|HH:MM:SS|s>\n"
     "                           Create a new file after d bytes (KB, MB, GB)\n"
     "                           or after a specific time.\n"
+    "  --split timecodes:A[,B...]\n"
+    "                           Create a new file after each timecode A, B\n"
+    "                           etc.\n"
     "  --split-max-files <n>    Create at most n files.\n"
     "  --link                   Link splitted files.\n"
     "  --link-to-previous <SID> Link the first file to the given SID.\n"
@@ -642,6 +645,47 @@ parse_cropping(const string &s,
   ti.pixel_crop_list.push_back(crop);
 }
 
+/** \brief Parse one timecode used in different formats to \c --split
+
+  This function recognizes two different timecode formats:
+  A number postfixed with '<tt>s</tt>' or a string with the format
+  '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>'.
+
+  \return \c true if the format was recognized.
+*/
+static bool
+parse_split_one_timecode(string s,
+                         int64_t &split_after) {
+  int secs, mins, hours, msecs;
+
+  // Number of seconds postfixed by 's'.
+  if (!s.empty() && ('s' == s[s.length() - 1])) {
+    s.erase(s.length() - 1);
+    if (!parse_int(s, split_after))
+      return false;
+
+    split_after *= 1000000000ll;
+    return true;
+  }
+
+  // HH:MM:SS[.mmm]
+  if (s.size() == 12) {
+    if ((s[8] != '.') || !parse_int(s.substr(9), msecs))
+      return false;
+    s.erase(8);
+  } else
+    msecs = 0;
+
+  mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
+  if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
+    return false;
+
+  split_after = (int64_t)(secs + mins * 60 + hours * 3600) * 1000ll + msecs;
+  split_after *= 1000000ll;
+
+  return true;
+}
+
 /** \brief Parse the duration formats to \c --split
 
   This function is called by ::parse_split if the format specifies
@@ -649,45 +693,45 @@ parse_cropping(const string &s,
 */
 static void
 parse_split_duration(const string &arg) {
-  int secs, mins, hours, msecs;
   int64_t split_after;
   string s = arg;
 
   if (starts_with_case(s, "duration:"))
     s.erase(0, strlen("duration:"));
 
-  // Number of seconds postfixed by 's'.
-  if (!s.empty() && ('s' == s[s.length() - 1])) {
-    s.erase(s.length() - 1);
-    if (!parse_int(s, split_after))
+  if (!parse_split_one_timecode(s, split_after))
       mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
               arg.c_str());
 
-    split_after *= 1000;
-    cluster_helper->add_split_point(split_point_t(split_after,
-                                                  split_point_t::SPT_DURATION,
-                                                  false));
-    return;
-  }
-
-  // HH:MM:SS
-  if (s.size() == 12) {
-    if ((s[8] != '.') || !parse_int(s.substr(9), msecs))
-      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
-              arg.c_str());
-    s.erase(8);
-  } else
-    msecs = 0;
-
-  mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
-  if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
-    mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
-            arg.c_str());
-
-  split_after = (int64_t)(secs + mins * 60 + hours * 3600) * 1000ll + msecs;
   cluster_helper->add_split_point(split_point_t(split_after,
                                                 split_point_t::SPT_DURATION,
                                                 false));
+}
+
+/** \brief Parse the timecode format to \c --split
+
+  This function is called by ::parse_split if the format specifies
+  a timecodes after which a new file should be started.
+*/
+static void
+parse_split_timecodes(const string &arg) {
+  int64_t split_after;
+  string s = arg;
+  vector<string> timecodes;
+  vector<string>::const_iterator timecode;
+
+  if (starts_with_case(s, "timecodes:"))
+    s.erase(0, 10);
+
+  timecodes = split(s, ",");
+  foreach(timecode, timecodes) {
+    if (!parse_split_one_timecode(*timecode, split_after))
+      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
+              arg.c_str());
+    cluster_helper->add_split_point(split_point_t(split_after,
+                                                  split_point_t::SPT_TIMECODE,
+                                                  true));
+  }
 }
 
 /** \brief Parse the size format to \c --split
@@ -758,6 +802,9 @@ parse_split(const string &arg) {
 
   else if (starts_with_case(s, "size:"))
     parse_split_size(arg);
+
+  else if (starts_with_case(s, "timecodes:"))
+    parse_split_timecodes(arg);
 
   else if (((s.size() == 8) || (s.size() == 12)) &&
            (s[2] == ':') && (s[5] == ':') &&

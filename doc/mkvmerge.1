@@ -30,6 +30,8 @@ Suppress status output.
 .TP
 \fB\-o\fR, \fB\-\-output\fR \fIout\fR
 Write to the file '\fIout\fR'.
+If splitting is used then this parameter is treated a bit differently.
+See the \fB\-\-split\fR parameter discussion for details.
 .TP
 \fB\-\-title\fR <\fItitle\fR>
 Sets the general title for the output file, e.g. the movie name.
@@ -136,13 +138,41 @@ even if a video track is present.
 .LP
 File splitting and linking (more global options):
 .TP
-\fB\-\-split\fR <\fId[k|m|g]\fR> or \fB\-\-split\fR <\fIHH:MM:SS.mmm\fR|\fIns\fR>
-Splits the output file after a given size or a given time. For splitting after
-a specific size the parameter \fId\fR may end with k, m or g to indicate
-that the size is in KB, MB or GB respectively. For time-based splitting use
-the form HH:MM:SS.mmm for specifying the duration in milliseconds, HH:MM:SS or
-a number \fIn\fR followed by 's' for the duration in seconds after which the
-file should be split.
+\fB\-\-split\fR size:<\fId[k|m|g]\fR> or shorter \fB\-\-split\fR <\fId[k|m|g]\fR>
+.TP
+\fB\-\-split\fR duration:<\fIHH:MM:SS.mmm\fR|\fIn\fRs> or shorter \fB\-\-split\fR <\fIHH:MM:SS.mmm\fR|\fIn\fRs>
+.TP
+\fB\-\-split\fR timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR...]]
+Splits the output file after a given size or a given time.
+At the moment \fBmkvmerge\fR supports three different modes.
+.br
+1. Splitting by size.
+.br
+The parameter \fId\fR may end with \fBk\fR, \fBm\fR or \fBg\fR to indicate
+that the size is in KB, MB or GB respectively.
+Otherwise a size in Bytes is assumed.
+After the current output file has reached this size limit a new one will
+be started.
+The \fBsize:\fR prefix may be omitted for compatibility reasons.
+.br
+2. Splitting after a duration.
+.br
+The paramter must have the form \fIHH:MM:SS.mmm\fR for specifying the duration
+in milliseconds, \fIHH:MM:SS\fR or a number \fIn\fR followed by the letter 's'
+for the duration in seconds.
+After the duration of the contents in the current output has reached this limit
+a new output file will be started.
+The \fBduration:\fR prefix may be omitted for compatibility reasons.
+.br
+3. Splitting after specific timecodes.
+.br
+The parameters \fIA\fR, \fIB\fR etc must all have the same format as the ones
+used for the duration (see above).
+The list of timecodes is separated by commas.
+After the current file has reached the current split point's timecode a new
+file is created.
+Then the next split point given in this list is used.
+The \fRtimecodes:\fR prefix must not be omitted.
 .br
 For this splitting mode the output filename is treated differently than for
 the normal operation. It may contain a printf like expression '%d' including
@@ -756,8 +786,8 @@ $ \fBmkvmerge -o output.mkv -A video.avi sound.ogg \-\-attachment\-description
 .LP
 The Matroska chapter system is more powerful than the old known system used
 by OGMs. The full specs can be found at
-.UR http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html
-<http://cvs.corecodec.org/cgi-bin/viewcvs.cgi/*checkout*/matroska/doc/website/technical/specs/chapters/index.html>
+.UR http://www.matroska.org/technical/specs/chapters/index.html
+<http://www.matroska.org/technical/specs/chapters/index.html>
 .LP
 \fBmkvmerge\fR supports two kinds of chapter files as its input. The first
 format, called 'simple chapter format', is the same format that the OGM tools
