@@ -642,61 +642,23 @@ parse_cropping(const string &s,
   ti.pixel_crop_list.push_back(crop);
 }
 
-/** \brief Parse the \c --split argument
+/** \brief Parse the duration formats to \c --split
 
-   The \c --split option takes several formats.
-
-   \arg size based: If only a number is given or the number is
-   postfixed with '<tt>K</tt>', '<tt>M</tt>' or '<tt>G</tt>' this is
-   interpreted as the size after which to split.
-
-   \arg time based: If a number postfixed with '<tt>s</tt>' or in a
-   format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
-   given then this is interpreted as the time after which to split.
+  This function is called by ::parse_split if the format specifies
+  a duration after which a new file should be started.
 */
 static void
-parse_split(const string &arg) {
-  int64_t split_after, modifier;
-  char mod;
-  string s;
+parse_split_duration(const string &arg) {
+  int secs, mins, hours, msecs;
+  int64_t split_after;
+  string s = arg;
 
-  if (arg.size() < 2)
-    mxerror(_("Invalid format for '--split' in '--split %s'.\n"), arg.c_str());
+  if (starts_with_case(s, "duration:"))
+    s.erase(0, strlen("duration:"));
 
-  s = arg;
-
-  // HH:MM:SS
-  if (((s.size() == 8) || (s.size() == 12)) &&
-      (s[2] == ':') && (s[5] == ':') &&
-      isdigit(s[0]) && isdigit(s[1]) && isdigit(s[3]) &&
-      isdigit(s[4]) && isdigit(s[6]) && isdigit(s[7])) {
-    int secs, mins, hours, msecs;
-
-    if (s.size() == 12) {
-      if ((s[8] != '.') || !parse_int(s.substr(9), msecs))
-        mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
-                arg.c_str());
-      s.erase(8);
-    } else
-      msecs = 0;
-
-    mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
-    if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
-      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
-              arg.c_str());
-
-    split_after = (int64_t)(secs + mins * 60 + hours * 3600) * 1000ll + msecs;
-    cluster_helper->add_split_point(split_point_t(split_after,
-                                                  split_point_t::SPT_DURATION,
-                                                  false));
-    return;
-  }
-
-  mod = tolower(s[s.size() - 1]);
-
-  // Number of seconds: e.g. 1000s or 4254S
-  if (mod == 's') {
-    s.erase(s.size() - 1);
+  // Number of seconds postfixed by 's'.
+  if (!s.empty() && ('s' == s[s.length() - 1])) {
+    s.erase(s.length() - 1);
     if (!parse_int(s, split_after))
       mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
               arg.c_str());
@@ -708,7 +670,45 @@ parse_split(const string &arg) {
     return;
   }
 
+  // HH:MM:SS
+  if (s.size() == 12) {
+    if ((s[8] != '.') || !parse_int(s.substr(9), msecs))
+      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
+              arg.c_str());
+    s.erase(8);
+  } else
+    msecs = 0;
+
+  mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
+  if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
+    mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
+            arg.c_str());
+
+  split_after = (int64_t)(secs + mins * 60 + hours * 3600) * 1000ll + msecs;
+  cluster_helper->add_split_point(split_point_t(split_after,
+                                                split_point_t::SPT_DURATION,
+                                                false));
+}
+
+/** \brief Parse the size format to \c --split
+
+  This function is called by ::parse_split if the format specifies
+  a size after which a new file should be started.
+*/
+static void
+parse_split_size(const string &arg) {
+  int64_t modifier, split_after;
+  string s = arg;
+  char mod;
+
+  if (starts_with_case(s, "size:"))
+    s.erase(0, strlen("size:"));
+
+  if (s.empty())
+    mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
+
   // Size in bytes/KB/MB/GB
+  mod = s[s.length() - 1];
   modifier = 1;
   if (mod == 'k')
     modifier = 1024;
@@ -718,6 +718,7 @@ parse_split(const string &arg) {
     modifier = 1024 * 1024 * 1024;
   else if (!isdigit(mod))
     mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
+
   if (modifier != 1)
     s.erase(s.size() - 1);
   if (!parse_int(s, split_after))
@@ -726,6 +727,58 @@ parse_split(const string &arg) {
   cluster_helper->add_split_point(split_point_t(split_after * modifier,
                                                 split_point_t::SPT_SIZE,
                                                 false));
+}
+
+/** \brief Parse the \c --split argument
+
+   The \c --split option takes several formats.
+
+   \arg size based: If only a number is given or the number is
+   postfixed with '<tt>K</tt>', '<tt>M</tt>' or '<tt>G</tt>' this is
+   interpreted as the size after which to split.
+   This format is parsed by ::parse_split_size
+
+   \arg time based: If a number postfixed with '<tt>s</tt>' or in a
+   format matching '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>' is
+   given then this is interpreted as the time after which to split.
+   This format is parsed by ::parse_split_duration
+*/
+static void
+parse_split(const string &arg) {
+  string s;
+
+  if (arg.size() < 2)
+    mxerror(_("Invalid format for '--split' in '--split %s'.\n"), arg.c_str());
+
+  s = arg;
+
+  // HH:MM:SS
+  if (starts_with_case(s, "duration:"))
+    parse_split_duration(arg);
+
+  else if (starts_with_case(s, "size:"))
+    parse_split_size(arg);
+
+  else if (((s.size() == 8) || (s.size() == 12)) &&
+           (s[2] == ':') && (s[5] == ':') &&
+           isdigit(s[0]) && isdigit(s[1]) && isdigit(s[3]) &&
+           isdigit(s[4]) && isdigit(s[6]) && isdigit(s[7]))
+    // HH:MM:SS
+    parse_split_duration(arg);
+
+  else {
+    char mod = tolower(s[s.size() - 1]);
+
+    if ('s' == mod)
+      parse_split_duration(arg);
+
+    else if (('k' == mod) || ('m' == mod) || ('g' == mod) || isdigit(mod))
+      parse_split_size(arg);
+
+    else
+      mxerror(_("Invalid format for '--split' in '--split %s'.\n"),
+              arg.c_str());
+  }
 }
 
 /** \brief Parse the \c --delay argument
