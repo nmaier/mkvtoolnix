@@ -1,5 +1,9 @@
 2005-06-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: If mmg was minimized when it was closed (e.g. with
+	Windows' "Show desktop" function) then it didn't show up after a
+	restart and could only be shown by maximizing it.
+
 	* mkvmerge: bug fix: If a OGM style chapter file contains empty
 	chapter names ('CHAPTER01NAME=' without something after the '=')
 	then this chapter's timecode is used as the name instead of

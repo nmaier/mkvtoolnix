@@ -780,7 +780,9 @@ mmg_dialog::mmg_dialog():
   cfg = wxConfigBase::Get();
   cfg->SetPath(wxT("/GUI"));
   if (cfg->Read(wxT("window_position_x"), &window_pos_x) &&
-      cfg->Read(wxT("window_position_y"), &window_pos_y))
+      cfg->Read(wxT("window_position_y"), &window_pos_y) &&
+      (0 < window_pos_x) && (0xffff > window_pos_x) &&
+      (0 < window_pos_y) && (0xffff > window_pos_y))
     Move(window_pos_x, window_pos_y);
   cfg->Read(wxT("warned_chapterditor_not_empty"),
             &warned_chapter_editor_not_empty, false);
