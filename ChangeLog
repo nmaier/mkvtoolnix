@@ -1,3 +1,10 @@
+2005-06-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If a OGM style chapter file contains empty
+	chapter names ('CHAPTER01NAME=' without something after the '=')
+	then this chapter's timecode is used as the name instead of
+	aborting.
+
 2005-06-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added splitting after specific

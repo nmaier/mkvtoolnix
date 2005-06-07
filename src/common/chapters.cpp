@@ -58,12 +58,11 @@ string default_chapter_country;
                           isseparator(s + 18) && \
                           isthreedigits(s + 19))
 /** Does \c s point to a valid OGM style chapter name entry? */
-#define ischapternameline(s) ((strlen(s) >= 15) && \
+#define ischapternameline(s) ((strlen(s) >= 14) && \
                           ischapter(s) && \
                           istwodigits(s + 7) && \
                           isname(s + 9) && \
-                          isequal(s + 13) && \
-                          !isblanktab(*(s + 14)))
+                          isequal(s + 13))
 
 /** \brief Format an error message and throw an exception.
 
@@ -187,7 +186,7 @@ parse_simple_chapters(mm_text_io_c *in,
   KaxChapterAtom *atom;
   KaxChapterDisplay *display;
   int64_t start, hour, minute, second, msecs;
-  string name, line, use_language;
+  string name, line, use_language, s_timecode;
   int mode, num, cc_utf8;
   bool do_convert;
   UTFstring wchar_string;
@@ -247,11 +246,14 @@ parse_simple_chapters(mm_text_io_c *in,
         start = msecs + second * 1000 + minute * 1000 * 60 +
           hour * 1000 * 60 * 60;
         mode = 1;
+        s_timecode = line.substr(10);
 
       } else {
         if (!ischapternameline(line.c_str()))
           chapter_error("'%s' is not a CHAPTERxxNAME=... line.", line.c_str());
         name = line.substr(14);
+        if (name == "")
+          name = s_timecode;
         mode = 0;
 
         if ((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))) {
