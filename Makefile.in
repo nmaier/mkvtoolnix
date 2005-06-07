@@ -382,7 +382,7 @@ mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
 mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 		$(WXWINDOWS_LIBS) \
-		$(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
+		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 
 #
 # src/extract
@@ -402,7 +402,7 @@ mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
-base64tool_LDADD = -lmtxcommon $(ICONV_LIBS) $(LIBINTL_LIBS) \
+base64tool_LDADD = -lmtxcommon -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) \
 		$(LIBRPCRT)
 
 #
