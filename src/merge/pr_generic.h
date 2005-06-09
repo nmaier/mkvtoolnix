@@ -94,10 +94,6 @@ enum default_track_priority_e {
 #define FMT_TID "'%s' track %lld: "
 
 struct packet_t {
-//   static int64_t packet_id_counter;
-
-//   int64_t packet_id;
-
   KaxBlockGroup *group;
   KaxBlock *block;
   KaxCluster *cluster;
@@ -113,11 +109,6 @@ struct packet_t {
   memory_cptr memory;
   memories_c memory_adds;
 
-//   packet_t();
-//   packet_t(memory_cptr n_memory, int64_t n_timecode = -1,
-//            int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
-//   packet_t(memory_c *n_memory, int64_t n_timecode = -1,
-//            int64_t n_duration = -1, int64_t n_bref = -1, int64_t n_fref = -1);
   packet_t():
     group(NULL), block(NULL), cluster(NULL), data(NULL), length(0),
     ref_priority(0),
