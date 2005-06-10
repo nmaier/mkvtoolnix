@@ -899,14 +899,6 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
   return FILE_STATUS_DONE;
 }
 
-void
-mpeg_ps_reader_c::flush_packetizers() {
-  vector<generic_packetizer_c *>::iterator i;
-
-  foreach(i, reader_packetizers)
-    (*i)->flush();
-}
-
 int
 mpeg_ps_reader_c::get_progress() {
   return 100 * io->getFilePointer() / size;

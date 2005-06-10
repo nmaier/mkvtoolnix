@@ -858,15 +858,6 @@ real_reader_c::get_information_from_data() {
 }
 
 void
-real_reader_c::flush_packetizers() {
-  uint32_t i;
-
-  for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->ptzr != -1)
-      PTZR(demuxers[i]->ptzr)->flush();
-}
-
-void
 real_reader_c::add_available_track_ids() {
   int i;
 

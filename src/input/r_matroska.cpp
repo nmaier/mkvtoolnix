@@ -2158,15 +2158,6 @@ kax_reader_c::add_attachments(KaxAttachments *a) {
 }
 
 void
-kax_reader_c::flush_packetizers() {
-  uint32_t i;
-
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->ptzr != -1)
-      PTZR(tracks[i]->ptzr)->flush();
-}
-
-void
 kax_reader_c::add_available_track_ids() {
   int i;
 

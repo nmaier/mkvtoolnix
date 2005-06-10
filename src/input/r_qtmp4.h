@@ -210,7 +210,6 @@ protected:
   virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_ptr &dmx,
                                int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
-  virtual void flush_packetizers();
 
   virtual void handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
                                          int64_t timecode, int64_t duration,

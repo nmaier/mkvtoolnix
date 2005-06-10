@@ -381,6 +381,8 @@ public:
 
   virtual int64_t get_queued_bytes();
 
+  virtual void flush_packetizers();
+
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
 };
@@ -466,6 +468,8 @@ protected:
 
   int64_t last_cue_timecode;
 
+  bool has_been_flushed;
+
 public:
   track_info_c ti;
   generic_reader_c *reader;
@@ -497,6 +501,7 @@ public:
     return packet_queue.size();
   }
   virtual void flush() {
+    has_been_flushed = true;
   }
   virtual int64_t get_smallest_timecode() {
     return (packet_queue.size() == 0) ? 0x0FFFFFFF :

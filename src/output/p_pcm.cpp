@@ -132,6 +132,8 @@ pcm_packetizer_c::flush() {
     bytes_output += size;
     buffer.remove(size);
   }
+
+  generic_packetizer_c::flush();
 }
 
 void

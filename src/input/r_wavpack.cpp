@@ -130,14 +130,18 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
   while (dummy_meta.channel_count < meta.channel_count) {
     extra_frames_number++;
     block_size = wv_parse_frame(io, dummy_header, dummy_meta, false, false);
-    if (block_size == -1)
+    if (block_size == -1) {
+      PTZR0->flush();
       return FILE_STATUS_DONE;
+    }
     data_size += block_size;
     io->skip(block_size);
   }
 
-  if (data_size < 0)
+  if (data_size < 0) {
+    PTZR0->flush();
     return FILE_STATUS_DONE;
+  }
 
   data_size += 3 * sizeof(uint32_t);
   if (extra_frames_number)
@@ -162,8 +166,10 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
       put_uint32_le(databuffer, block_size);
       databuffer += 4;
     }
-    if (io->read(databuffer, block_size) < 0)
+    if (io->read(databuffer, block_size) < 0) {
+      PTZR0->flush();
       return FILE_STATUS_DONE;
+    }
     databuffer += block_size;
   }
 
@@ -181,8 +187,10 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
         extra_frames_number++;
         block_size = wv_parse_frame(io_correc, dummy_header_correc,
                                     dummy_meta, false, false);
-        if (block_size == -1)
+        if (block_size == -1) {
+          PTZR0->flush();
           return FILE_STATUS_DONE;
+        }
         data_size += block_size;
         io_correc->skip(block_size);
       }

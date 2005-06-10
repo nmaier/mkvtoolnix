@@ -111,8 +111,6 @@ public:
   virtual bool find_next_packet(int &id);
   virtual bool find_next_packet_for_id(int id);
 
-  virtual void flush_packetizers();
-
   static int probe_file(mm_io_c *io, int64_t size);
 };
 

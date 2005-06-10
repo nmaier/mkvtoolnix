@@ -195,12 +195,10 @@ wav_reader_c::read(generic_packetizer_c *,
 
     bytes_processed += nread;
 
-    if (nread != bps) {
+    if ((nread != bps) || io->eof()) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
-    } else if (io->eof())
-      return FILE_STATUS_DONE;
-    else
+    } else
       return FILE_STATUS_MOREDATA;
   }
 

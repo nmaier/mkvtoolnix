@@ -358,8 +358,11 @@ usf_reader_c::read(generic_packetizer_c *ptzr,
                                             entry.m_start));
   ++(track->m_current_entry);
 
-  if (track->m_entries.end() == track->m_current_entry)
+  if (track->m_entries.end() == track->m_current_entry) {
+    PTZR(track->m_ptzr)->flush();
     return FILE_STATUS_DONE;
+  }
+
   return FILE_STATUS_MOREDATA;
 }
 

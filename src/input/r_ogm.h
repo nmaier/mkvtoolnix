@@ -123,7 +123,6 @@ private:
   virtual int read_headers();
   virtual void process_header_page(ogg_page *pg);
   virtual void process_header_packets(ogm_demuxer_t *dmx);
-  virtual void flush_packetizers();
   virtual void handle_stream_comments();
 };
 

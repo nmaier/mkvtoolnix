@@ -156,8 +156,10 @@ tta_reader_c::read(generic_packetizer_c *,
     PTZR0->process(new packet_t(mem));
   bytes_processed += nread;
 
-  if (pos >= seek_points.size())
+  if (pos >= seek_points.size()) {
+    PTZR0->flush();
     return FILE_STATUS_DONE;
+  }
 
   return FILE_STATUS_MOREDATA;
 }

@@ -182,7 +182,6 @@ protected:
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
-  virtual void flush_packetizers();
 };
 
 

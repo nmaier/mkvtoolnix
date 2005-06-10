@@ -72,6 +72,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   max_timecode_seen = 0;
   default_track_warning_printed = false;
   connected_to = 0;
+  has_been_flushed = false;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -1251,6 +1252,14 @@ generic_reader_c::get_queued_bytes() {
     bytes += (*it)->get_queued_bytes();
 
   return bytes;
+}
+
+void
+generic_reader_c::flush_packetizers() {
+  vector<generic_packetizer_c *>::const_iterator it;
+
+  foreach(it, reader_packetizers)
+    (*it)->flush();
 }
 
 //

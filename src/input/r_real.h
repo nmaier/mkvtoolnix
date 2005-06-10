@@ -87,7 +87,6 @@ protected:
   virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
                               int size);
   virtual void get_information_from_data();
-  virtual void flush_packetizers();
   virtual void deliver_aac_frames(real_demuxer_t *dmx, memory_c &mem);
   virtual void queue_audio_frames(real_demuxer_t *dmx, memory_c &mem,
                                   uint64_t timecode, uint32_t flags);

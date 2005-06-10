@@ -264,7 +264,11 @@ ssa_reader_c::read(generic_packetizer_c *,
 
   subs.process((textsubs_packetizer_c *)PTZR0);
 
-  return subs.empty() ? FILE_STATUS_DONE : FILE_STATUS_MOREDATA;
+  if (subs.empty()) {
+    flush_packetizers();
+    return FILE_STATUS_DONE;
+  }
+  return FILE_STATUS_MOREDATA;
 }
 
 int

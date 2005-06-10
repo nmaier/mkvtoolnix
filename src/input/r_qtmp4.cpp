@@ -1574,15 +1574,6 @@ qtmp4_reader_c::identify() {
 }
 
 void
-qtmp4_reader_c::flush_packetizers() {
-  uint32_t i;
-
-  for (i = 0; i < demuxers.size(); i++)
-    if (demuxers[i]->ptzr != -1)
-      PTZR(demuxers[i]->ptzr)->flush();
-}
-
-void
 qtmp4_reader_c::add_available_track_ids() {
   int i;
 

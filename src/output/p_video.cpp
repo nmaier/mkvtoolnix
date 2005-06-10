@@ -360,7 +360,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
               "native mode.\n");
   }
 
-  mpeg4_p2_find_frame_types(packet->memory->data, packet->memory->size, frames);
+  mpeg4_p2_find_frame_types(packet->memory->data, packet->memory->size,
+                            frames);
 
   // Add a timecode and a duration if they've been given.
   if (-1 != packet->timecode)
@@ -505,6 +506,7 @@ mpeg4_p2_video_packetizer_c::flush_frames() {
 void
 mpeg4_p2_video_packetizer_c::flush() {
   flush_frames();
+  generic_packetizer_c::flush();
 }
 
 void

@@ -1061,15 +1061,6 @@ ogm_reader_c::identify() {
 }
 
 void
-ogm_reader_c::flush_packetizers() {
-  int i;
-
-  for (i = 0; i < sdemuxers.size(); i++)
-    if (sdemuxers[i]->ptzr != -1)
-      PTZR(sdemuxers[i]->ptzr)->flush();
-}
-
-void
 ogm_reader_c::handle_stream_comments() {
   int i, j, cch;
   ogm_demuxer_t *dmx;
