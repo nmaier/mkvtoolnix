@@ -225,6 +225,8 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       packet->duration = frame->duration;
       packet->bref = frame->firstRef;
       packet->fref = frame->secondRef;
+      packet->time_factor =
+        MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;
       video_packetizer_c::process(packet);
       frame->data = NULL;
       delete frame;
