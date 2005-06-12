@@ -414,19 +414,23 @@ void
 mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
   int i, num_bframes;
 
-  if (0 == queued_frames.size())
+  if ((0 == queued_frames.size()) || (FRAME_TYPE_B == next_frame))
     return;
+
+  if ((FRAME_TYPE_I == next_frame) ||
+      (FRAME_TYPE_P == queued_frames[0].type)) {
+    flush_frames();
+    return;
+  }
 
   num_bframes = 0;
   for (i = 0; i < queued_frames.size(); ++i)
     if (FRAME_TYPE_B == queued_frames[i].type)
       ++num_bframes;
 
-  if ((FRAME_TYPE_I == next_frame) ||
-      (num_bframes > 0) || (FRAME_TYPE_P == queued_frames[0].type))
+  if ((0 < num_bframes) || (2 <= queued_frames.size()))
     flush_frames();
 }
-
 
 void
 mpeg4_p2_video_packetizer_c::flush_frames() {
