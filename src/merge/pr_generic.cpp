@@ -36,6 +36,8 @@
 
 using namespace std;
 
+int64_t packet_t::packet_number_counter = 0;
+
 packet_t::~packet_t() {
   vector<unsigned char *>::iterator i;
 
