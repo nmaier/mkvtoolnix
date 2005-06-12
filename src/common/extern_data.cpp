@@ -16,7 +16,9 @@
 #include "os.h"
 #include "extern_data.h"
 
-#define NULL 0
+#ifndef NULL
+# define NULL 0
+#endif
 
 #ifdef SYS_UNIX
 const char *sub_charsets[] = {
