@@ -95,6 +95,7 @@ protected:
   virtual void flush_frames_maybe(frame_type_e next_frame);
   virtual void flush_frames();
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
+  virtual void fix_codec_string();
 };
 
 class mpeg4_p10_video_packetizer_c: public video_packetizer_c {

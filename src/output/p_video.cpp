@@ -353,6 +353,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
       ti.private_data = config_data->grab();
       ti.private_size = config_data->size;
       delete config_data;
+      fix_codec_string();
       set_codec_private(ti.private_data, ti.private_size);
       rerender_track_headers();
 
@@ -402,6 +403,40 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   }
 
   return FILE_STATUS_MOREDATA;
+}
+
+void
+mpeg4_p2_video_packetizer_c::fix_codec_string() {
+  static const unsigned char start_code[4] = {0x00, 0x00, 0x01, 0xb2};
+  unsigned char *end_pos;
+  int i, size;
+
+  if ((NULL == ti.private_data) || (0 == ti.private_size))
+    return;
+
+  size = ti.private_size;
+  for (i = 0; 9 < size;) {
+    if (memcmp(&ti.private_data[i], start_code, 4) != 0) {
+      ++i;
+      --size;
+      continue;
+    }
+
+    i += 8;
+    size -= 8;
+    if (strncasecmp((const char *)&ti.private_data[i - 4], "divx", 4) != 0)
+      continue;
+
+    end_pos = (unsigned char *)memchr(&ti.private_data[i], 0, size);
+    if (NULL == end_pos)
+      end_pos = &ti.private_data[i + size];
+
+    --end_pos;
+    if ('p' == *end_pos)
+      *end_pos = 'n';
+
+    return;
+  }
 }
 
 int

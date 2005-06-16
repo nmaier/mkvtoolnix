@@ -1,3 +1,11 @@
+2005-06-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fixes: Improved the native MPEG-4 generation a lot
+	(thanks to Haali for testing and pushing me). The codec version
+	string inside the MPEG-4 initialization data is now checked if it
+	indicates "DivX packed bitstream" and changed to not indicate it
+	anymore.
+
 2005-06-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: If mmg was minimized when it was closed (e.g. with
