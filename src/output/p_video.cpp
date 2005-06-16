@@ -338,7 +338,7 @@ mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
 
   return process_non_native(packet);
 }
-static int numcalls=0;
+
 int
 mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   vector<video_frame_t> frames;
@@ -364,11 +364,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
 
   mpeg4_p2_find_frame_types(packet->memory->data, packet->memory->size,
                             frames);
-  mxinfo("%d frames, %d at for %lld: ", frames.size(), available_timecodes.size(),
-         packet->timecode / 1000000);
-  for (int qi = 0; qi < frames.size(); qi++)
-    mxinfo("%c ", FRAME_TYPE_TO_CHAR(frames[qi].type));
-  mxinfo("\n");
+
   // Add a timecode and a duration if they've been given.
   if (-1 != packet->timecode)
     available_timecodes.push_back(packet->timecode);
@@ -405,17 +401,6 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     queued_frames.push_back(*frame);
   }
 
-  int i;
-    mxinfo("Qdump:\n  qf: ");
-    for (i = 0; i < queued_frames.size(); i++)
-      mxinfo("%c ", FRAME_TYPE_TO_CHAR(queued_frames[i].type));
-    mxinfo("\n  at: ");
-    for (i = 0; i < available_timecodes.size(); i++)
-      mxinfo("%lld ", available_timecodes[i] / 1000000);
-    mxinfo("\n  ad: ");
-    for (i = 0; i < available_durations.size(); i++)
-      mxinfo("%lld ", available_durations[i] / 1000000);
-    mxinfo("\n");
   return FILE_STATUS_MOREDATA;
 }
 
@@ -461,16 +446,6 @@ mpeg4_p2_video_packetizer_c::flush_frames() {
     else
       timecode = available_timecodes[0];
 
-    mxinfo("Qdump:\n  qf: ");
-    for (i = 0; i < queued_frames.size(); i++)
-      mxinfo("%c ", FRAME_TYPE_TO_CHAR(queued_frames[i].type));
-    mxinfo("\n  at: ");
-    for (i = 0; i < available_timecodes.size(); i++)
-      mxinfo("%lld ", available_timecodes[i] / 1000000);
-    mxinfo("\n  ad: ");
-    for (i = 0; i < available_durations.size(); i++)
-      mxinfo("%lld ", available_durations[i] / 1000000);
-    mxinfo("\n");
     mxerror("Invalid/unsupported sequence of MPEG4 video frames regarding "
             "B frames. If your video plays normally around timecode "
             FMT_TIMECODE " then this is a bug in mkvmerge and you should "
