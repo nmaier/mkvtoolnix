@@ -171,11 +171,10 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 }
 
 bool
-timecode_factory_v1_c::get_next(int64_t &timecode,
-                                int64_t &duration,
+timecode_factory_v1_c::get_next(packet_cptr &packet,
                                 bool peek_only) {
-  timecode = get_at(frameno);
-  duration = get_at(frameno + 1) - timecode;
+  packet->assigned_timecode = get_at(frameno);
+  packet->duration = get_at(frameno + 1) - packet->assigned_timecode;
   if (!peek_only) {
     frameno++;
     if ((frameno > ranges[current_range].end_frame) &&
@@ -183,8 +182,8 @@ timecode_factory_v1_c::get_next(int64_t &timecode,
       current_range++;
   }
 
-  mxverb(4, "ext_timecodes v1: tc %lld dur %lld for %lld\n", timecode,
-         duration, frameno - 1);
+  mxverb(4, "ext_timecodes v1: tc %lld dur %lld for %lld\n",
+         packet->assigned_timecode, packet->duration, frameno - 1);
   return false;
 }
 
@@ -249,8 +248,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
 }
 
 bool
-timecode_factory_v2_c::get_next(int64_t &timecode,
-                                int64_t &duration,
+timecode_factory_v2_c::get_next(packet_cptr &packet,
                                 bool peek_only) {
   if ((frameno >= timecodes.size()) && !warning_printed) {
     mxwarn(FMT_TID "The number of external timecodes %u is "
@@ -262,8 +260,8 @@ timecode_factory_v2_c::get_next(int64_t &timecode,
     return false;
   }
 
-  timecode = timecodes[frameno];
-  duration = durations[frameno];
+  packet->assigned_timecode = timecodes[frameno];
+  packet->duration = durations[frameno];
   if (!peek_only)
     frameno++;
   return false;
@@ -362,8 +360,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
 }
 
 bool
-timecode_factory_v3_c::get_next(int64_t &timecode,
-                                int64_t &duration,
+timecode_factory_v3_c::get_next(packet_cptr &packet,
                                 bool peek_only) {
   bool result = false;
 
@@ -379,13 +376,14 @@ timecode_factory_v3_c::get_next(int64_t &timecode,
     result = true;
   }
 
-  timecode = current_offset + current_timecode;
+  packet->assigned_timecode = current_offset + current_timecode;
   // If default_fps is 0 then the duration is unchanged, usefull for audio.
   if (durations[current_duration].fps) {
-    duration = (int64_t)(1000000000.0 / durations[current_duration].fps);
+    packet->duration =
+      (int64_t)(1000000000.0 / durations[current_duration].fps);
   }
   if (!peek_only) {
-    current_timecode += duration;
+    current_timecode += packet->duration;
     if (current_timecode >= durations[current_duration].duration) {
       current_offset += durations[current_duration].duration;
       current_timecode = 0;
@@ -393,7 +391,8 @@ timecode_factory_v3_c::get_next(int64_t &timecode,
     }
   }
 
-  mxverb(3, "ext_timecodes v3: tc %lld dur %lld\n", timecode, duration);
+  mxverb(3, "ext_timecodes v3: tc %lld dur %lld\n", packet->assigned_timecode,
+         packet->duration);
 
   return result;
 }

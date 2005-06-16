@@ -866,8 +866,6 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
 void
 generic_packetizer_c::add_packet2(packet_cptr pack) {
-  int64_t factory_timecode;
-
   pack->timecode += correction_timecode_offset + append_timecode_offset;
   if (pack->bref >= 0)
     pack->bref += correction_timecode_offset + append_timecode_offset;
@@ -927,10 +925,9 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   safety_last_timecode = pack->timecode;
   safety_last_duration = pack->duration;
 
-  factory_timecode = pack->timecode;
-  pack->gap_following =
-    timecode_factory->get_next(factory_timecode, pack->duration);
-  pack->assigned_timecode = factory_timecode + ti.packet_delay;
+  pack->assigned_timecode = pack->timecode;
+  pack->gap_following = timecode_factory->get_next(pack);
+  pack->assigned_timecode += ti.packet_delay;
 
   mxverb(2, "mux: track %lld assigned_timecode %lld\n", ti.id,
          pack->assigned_timecode);

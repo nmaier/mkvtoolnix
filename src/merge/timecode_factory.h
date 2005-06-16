@@ -16,8 +16,12 @@
 #ifndef __TIMECODE_FACTORY_H
 #define __TIMECODE_FACTORY_H
 
+#include "os.h"
+
 #include <string>
 #include <vector>
+
+#include "packet.h"
 
 using namespace std;
 
@@ -57,13 +61,12 @@ public:
 
   virtual void parse(mm_io_c &) {
   }
-  virtual bool get_next(int64_t &timecode, int64_t &duration,
-                        bool peek_only = false) {
+  virtual bool get_next(packet_cptr &packet, bool peek_only = false) {
     // No gap is following!
     return false;
   }
-  virtual bool peek_next(int64_t &timecode, int64_t &duration) {
-    return get_next(timecode, duration, true);
+  virtual bool peek_next(packet_cptr &packet) {
+    return get_next(packet, true);
   }
   virtual double get_default_duration(double proposal) {
     return proposal;
@@ -97,8 +100,7 @@ public:
   }
 
   virtual void parse(mm_io_c &in);
-  virtual bool get_next(int64_t &timecode, int64_t &duration,
-                        bool peek_only = false);
+  virtual bool get_next(packet_cptr &packet, bool peek_only = false);
   virtual double get_default_duration(double proposal) {
     return default_fps != 0.0 ? (double)1000000000.0 / default_fps : proposal;
   }
@@ -126,8 +128,7 @@ public:
   }
 
   virtual void parse(mm_io_c &in);
-  virtual bool get_next(int64_t &timecode, int64_t &duration,
-                        bool peek_only = false);
+  virtual bool get_next(packet_cptr &packet, bool peek_only = false);
   virtual double get_default_duration(double proposal) {
     return default_fps != 0.0 ? (double)1000000000.0 / default_fps : proposal;
   }
@@ -151,8 +152,7 @@ public:
     default_fps(0.0) {
   }
   virtual void parse(mm_io_c &in);
-  virtual bool get_next(int64_t &timecode, int64_t &duration,
-                        bool peek_only = false);
+  virtual bool get_next(packet_cptr &packet, bool peek_only = false);
   virtual bool contains_gap() {
     return true;
   }
