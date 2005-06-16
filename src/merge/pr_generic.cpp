@@ -932,6 +932,9 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
     timecode_factory->get_next(factory_timecode, pack->duration);
   pack->assigned_timecode = factory_timecode + ti.packet_delay;
 
+  mxverb(2, "mux: track %lld assigned_timecode %lld\n", ti.id,
+         pack->assigned_timecode);
+
   if (max_timecode_seen < (pack->assigned_timecode + pack->duration))
     max_timecode_seen = pack->assigned_timecode + pack->duration;
   if (reader->max_timecode_seen < max_timecode_seen)
