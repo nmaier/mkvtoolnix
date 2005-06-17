@@ -78,7 +78,7 @@ class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
   deque<video_frame_t> queued_frames;
   deque<int64_t> available_timecodes, available_durations;
-  int64_t timecodes_generated, last_i_p_frame;
+  int64_t timecodes_generated, last_i_p_frame, previous_timecode;
   bool aspect_ratio_extracted, input_is_native, output_is_native;
 
 public:
@@ -93,9 +93,10 @@ protected:
   virtual int process_native(packet_cptr packet);
   virtual int process_non_native(packet_cptr packet);
   virtual void flush_frames_maybe(frame_type_e next_frame);
-  virtual void flush_frames();
+  virtual void flush_frames(bool end_of_file);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void fix_codec_string();
+  virtual void handle_missing_timecodes(bool end_of_file);
 };
 
 class mpeg4_p10_video_packetizer_c: public video_packetizer_c {

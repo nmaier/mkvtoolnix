@@ -303,7 +303,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             bool _input_is_native,
                             track_info_c &_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
-  timecodes_generated(0),
+  timecodes_generated(0), last_i_p_frame(0), previous_timecode(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
   output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
 
@@ -402,6 +402,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     queued_frames.push_back(*frame);
   }
 
+  previous_timecode = available_timecodes.back();
+
   return FILE_STATUS_MOREDATA;
 }
 
@@ -454,7 +456,7 @@ mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
 
   if ((FRAME_TYPE_I == next_frame) ||
       (FRAME_TYPE_P == queued_frames[0].type)) {
-    flush_frames();
+    flush_frames(false);
     return;
   }
 
@@ -464,29 +466,89 @@ mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
       ++num_bframes;
 
   if ((0 < num_bframes) || (2 <= queued_frames.size()))
-    flush_frames();
+    flush_frames(false);
 }
 
-void
-mpeg4_p2_video_packetizer_c::flush_frames() {
-  int i, num_bframes, b_offset;
-  int64_t b_bref, b_fref;
+/** \brief Handle frame sequences in which too few timecodes are available
 
-  if ((available_timecodes.size() < queued_frames.size()) ||
-      (available_durations.size() < queued_frames.size())) {
+   This function gets called if mkvmerge wants to flush its frame queue
+   but it doesn't have enough timecodes and/or durations available for
+   each queued frame. This can happen in two cases:
+
+   1. A picture sequence is found that mkvmerge does not support. An
+      example: Two frames have been read. The first contained a
+      P and a B frame (that's OK so far), but the second one contained
+      another P or I frame without an intermediate dummy frame.
+
+   2. The end of the file has been reached but the frame queue contains
+      more frames than the timecode queue. For example: The last frame
+      contained two frames, a P and a B frame. Right afterwards the
+      end of the file is reached. In this case a dummy frame is missing.
+ 
+   Both cases can be solved if the source file provides a FPS for this
+   track. Otherwise such frames have to be dropped.
+*/
+void
+mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
+  if (0.0 < fps) {
+    while (available_timecodes.size() < queued_frames.size()) {
+      previous_timecode = (int64_t)(previous_timecode +  1000000000.0 / fps);
+      available_timecodes.push_back(previous_timecode);
+      mxverb(3, "mpeg4_p2::flush_frames(): Needed new timecode %lld\n",
+             previous_timecode);
+    }
+    while (available_durations.size() < queued_frames.size()) {
+      available_durations.push_back((int64_t)(1000000000.0 / fps));
+      mxverb(3, "mpeg4_p2::flush_frames(): Needed new duration %lld\n",
+             available_durations.back());
+    }
+
+  } else {
     int64_t timecode;
+    int num_dropped, i;
+
+    if (available_timecodes.size() < available_durations.size()) {
+      num_dropped = queued_frames.size() - available_timecodes.size();
+      available_durations.erase(available_durations.begin() + 
+                                available_timecodes.size(),
+                                available_durations.end());
+    } else {
+      num_dropped = queued_frames.size() - available_durations.size();
+      available_timecodes.erase(available_timecodes.begin() + 
+                                available_durations.size(),
+                                available_timecodes.end());
+    }
+
+    for (i = available_timecodes.size(); queued_frames.size() > i; ++i)
+      safefree(queued_frames[i].data);
+    queued_frames.erase(queued_frames.begin() + available_timecodes.size(),
+                        queued_frames.end());
 
     if (available_timecodes.empty())
       timecode = 0;
     else
-      timecode = available_timecodes[0];
+      timecode = available_timecodes.front();
 
-    mxerror("Invalid/unsupported sequence of MPEG4 video frames regarding "
-            "B frames. If your video plays normally around timecode "
-            FMT_TIMECODE " then this is a bug in mkvmerge and you should "
-            "contact the author Moritz Bunkus <moritz@bunkus.org>.\n",
-            ARG_TIMECODE_NS(timecode));
+    mxwarn(FMT_TID "During MPEG-4 part 2 B frame handling: The frame queue "
+           "contains more frames than timecodes are available that "
+           "can be assigned to them because %s. Therefore %d frame%s to be "
+           "dropped. The video might be broken around timecode "
+           FMT_TIMECODE ".\n", ti.fname.c_str(), (int64_t)ti.id,
+           end_of_file ? "the end of the source file was encountered" :
+           "an unsupported sequence of frames was encountered",
+           num_dropped, 1 == num_dropped ? " has" : "s have",
+           ARG_TIMECODE_NS(timecode));
   }
+}
+
+void
+mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
+  int i, num_bframes, b_offset;
+  int64_t b_bref, b_fref;
+
+  if ((available_timecodes.size() < queued_frames.size()) ||
+      (available_durations.size() < queued_frames.size()))
+    handle_missing_timecodes(end_of_file);
 
   if ((2 <= queued_frames.size()) && (FRAME_TYPE_B != queued_frames[1].type))
     b_offset = 1;
@@ -546,7 +608,7 @@ mpeg4_p2_video_packetizer_c::flush_frames() {
 
 void
 mpeg4_p2_video_packetizer_c::flush() {
-  flush_frames();
+  flush_frames(true);
   generic_packetizer_c::flush();
 }
 
