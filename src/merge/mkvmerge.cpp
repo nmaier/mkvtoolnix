@@ -752,7 +752,7 @@ parse_split_size(const string &arg) {
     mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
 
   // Size in bytes/KB/MB/GB
-  mod = s[s.length() - 1];
+  mod = tolower(s[s.length() - 1]);
   modifier = 1;
   if (mod == 'k')
     modifier = 1024;
