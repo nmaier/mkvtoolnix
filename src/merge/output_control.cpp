@@ -1555,7 +1555,7 @@ finish_file(bool last_file) {
     if (chapters_in_this_file == NULL) {
       KaxChapters temp_chapters;
       tags_here = select_tags_for_chapters(*kax_tags, temp_chapters);
-   } else
+    } else
       tags_here = select_tags_for_chapters(*kax_tags, *chapters_in_this_file);
     if (tags_here != NULL) {
       fix_mandatory_tag_elements(tags_here);
