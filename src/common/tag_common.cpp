@@ -40,15 +40,22 @@ fix_mandatory_tag_elements(EbmlElement *e) {
   if (dynamic_cast<KaxTag *>(e) != NULL) {
     KaxTag &t = *static_cast<KaxTag *>(e);
     GetChild<KaxTagTargets>(t);
+    GetChild<KaxTagSimple>(t);
 
   } else if (dynamic_cast<KaxTagSimple *>(e) != NULL) {
     KaxTagSimple &s = *static_cast<KaxTagSimple *>(e);
-    GetChild<KaxTagLangue>(s);
-    GetChild<KaxTagDefault>(s);
+    KaxTagName &n = GetChild<KaxTagName>(s);
+    *static_cast<EbmlUnicodeString *>(&n) = UTFstring(n);
+    KaxTagLangue &l = GetChild<KaxTagLangue>(s);
+    *static_cast<EbmlString *>(&l) = string(l);
+    KaxTagDefault &d = GetChild<KaxTagDefault>(s);
+    *static_cast<EbmlUInteger *>(&d) = uint64(d);
 
   } else if (dynamic_cast<KaxTagTargets *>(e) != NULL) {
     KaxTagTargets &t = *static_cast<KaxTagTargets *>(e);
     GetChild<KaxTagTargetTypeValue>(t);
+    KaxTagTargetTypeValue &v = GetChild<KaxTagTargetTypeValue>(t);
+    *static_cast<EbmlUInteger *>(&v) = uint64(v);
 
   }
 
