@@ -264,7 +264,8 @@ tab_settings::save(wxConfigBase *cfg) {
 }
 
 void
-tab_settings::load(wxConfigBase *cfg) {
+tab_settings::load(wxConfigBase *cfg,
+                   int version) {
 }
 
 bool

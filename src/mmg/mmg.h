@@ -42,6 +42,8 @@
 #define YOFF2 (-3)
 #endif
 
+#define MMG_CONFIG_FILE_VERSION_MAX 2
+
 using namespace std;
 using namespace libebml;
 

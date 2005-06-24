@@ -33,8 +33,8 @@ tab_global::tab_global(wxWindow *parent):
   wxStaticBoxSizer *siz_fs_title, *siz_split, *siz_linking_box, *siz_chapters;
   wxStaticBoxSizer *siz_gl_tags;
   wxFlexGridSizer *siz_linking, *siz_chap_l1_l2;
-  wxBoxSizer *siz_all, *siz_line;
-  wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3;
+  wxBoxSizer *siz_all, *siz_line, *siz_line2;
+  wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3, *siz_col;
   wxButton *b_browse_chapters, *b_browse_global_tags;
   uint32_t i;
 
@@ -50,52 +50,25 @@ tab_global::tab_global(wxWindow *parent):
                     wxLEFT | wxRIGHT, 5);
 
   siz_split =
-    new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Split")),
+    new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Splitting")),
                          wxVERTICAL);
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  cb_split = new wxCheckBox(this, ID_CB_SPLIT, wxT("Enable splitting"));
+  cb_split = new wxCheckBox(this, ID_CB_SPLIT, wxT("Enable splitting..."));
   cb_split->SetToolTip(TIP("Enables splitting of the output into more than "
                            "one file. You can split after a given size "
                            "or after a given amount of time has passed."));
-  siz_line->Add(cb_split, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_split->Add(cb_split, 0, wxLEFT | wxBOTTOM, 5);
 
-  cb_link = new wxCheckBox(this, ID_CB_LINK, wxT("link files"));
-  cb_link->SetToolTip(TIP("Use 'segment linking' for the resulting "
-                          "files. For an in-depth explanation of this "
-                          "feature consult the mkvmerge documentation."));
-  cb_link->SetValue(false);
-  cb_link->Enable(false);
-  siz_line->Add(cb_link, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  siz_line->Add(1, 15, 0, 0, 0);
 
-  st_split_max_files = new wxStaticText(this, wxID_STATIC,
-                                  wxT("max. number of files:"));
-  st_split_max_files->Enable(false);
-  siz_line->Add(st_split_max_files, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  tc_split_max_files = new wxTextCtrl(this, ID_TC_SPLITMAXFILES, wxT(""));
-  tc_split_max_files->SetToolTip(TIP("The maximum number of files that will "
-                                     "be created even if the last file might "
-                                     "contain more bytes/time than wanted. "
-                                     "Useful e.g. when you want exactly two "
-                                     "files."));
-  tc_split_max_files->Enable(false);
-  siz_line->Add(tc_split_max_files, 0, wxALIGN_CENTER_VERTICAL, 0);
-
-  siz_split->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
-
-  siz_split->Add(0, 5, 0, 0, 0);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_split = new wxStaticText(this, -1, wxT("Split..."));
-  st_split->Enable(false);
-  siz_line->Add(st_split, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   rb_split_by_size =
-    new wxRadioButton(this, ID_RB_SPLITBYSIZE, wxT("by size:"),
+    new wxRadioButton(this, ID_RB_SPLITBYSIZE, wxT("...after this size:"),
                       wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
   rb_split_by_size->Enable(false);
 //   rb_split_by_size->SetSizeHints(0, -1);
-  siz_line->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_line2 = new wxBoxSizer(wxHORIZONTAL);
+  siz_line2->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_split_by_size =
     new wxComboBox(this, ID_CB_SPLITBYSIZE, wxT(""), wxDefaultPosition,
                    wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
@@ -107,34 +80,64 @@ tab_global::tab_global(wxWindow *parent):
   cob_split_by_size->Append(wxT("800M"));
   cob_split_by_size->Append(wxT("1000M"));
   cob_split_by_size->SetToolTip(TIP("The size after which a new output file "
-                                    "is being started. The letters 'G', 'M' "
+                                    "is started. The letters 'G', 'M' "
                                     "and 'K' can be used to indicate giga/"
                                     "mega/kilo bytes respectively. All units "
                                     "are based on 1024 (G = 1024^3, M = "
                                     "1024^2, K = 1024)."));
   cob_split_by_size->Enable(false);
-  siz_line->Add(cob_split_by_size, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT |
+  siz_line2->Add(cob_split_by_size, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT |
                 wxGROW, 10);
 
   rb_split_by_time = new wxRadioButton(this, ID_RB_SPLITBYTIME,
-                                       wxT("by time:"));
+                                       wxT("...after this duration:"));
   rb_split_by_time->Enable(false);
-  siz_line->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_line2->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_split_by_time =
     new wxComboBox(this, ID_CB_SPLITBYTIME, wxT(""), wxDefaultPosition,
                    wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
   cob_split_by_time->Append(wxT(""));
   cob_split_by_time->Append(wxT("01:00:00"));
   cob_split_by_time->Append(wxT("1800s"));
-  cob_split_by_time->SetToolTip(TIP("The time after which a new output file "
-                                    "is being started. The time can be given "
+  cob_split_by_time->SetToolTip(TIP("The duration after which a new output "
+                                    "file is started. The time can be given "
                                     "either in the form HH:MM:SS or as the "
                                     "number of seconds followed by 's'. "
                                     "Examples: 01:00:00 (after one hour) or "
                                     "1800s (after 1800 seconds)."));
   cob_split_by_time->Enable(false);
-//   cob_split_by_time->SetSizeHints(0, -1);
-  siz_line->Add(cob_split_by_time, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
+  siz_line2->Add(cob_split_by_time, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
+
+  siz_col = new wxBoxSizer(wxVERTICAL);
+  siz_col->Add(siz_line2, 0, wxGROW, 0);
+
+  siz_line2 = new wxBoxSizer(wxHORIZONTAL);
+  rb_split_after_timecodes =
+    new wxRadioButton(this, ID_RB_SPLITAFTERTIMECODES,
+                      wxT("...after timecodes:"));
+  rb_split_after_timecodes->Enable(false);
+  siz_line2->Add(rb_split_after_timecodes, 0, wxALIGN_CENTER_VERTICAL |
+                 wxRIGHT, 5);
+
+  tc_split_after_timecodes = new wxTextCtrl(this, ID_TC_SPLITAFTERTIMECODES,
+                                      wxT(""));
+  tc_split_after_timecodes->
+    SetToolTip(TIP("The timecodes after which a new output "
+                   "file is started. The timecodes can be given "
+                   "either in the form HH:MM:SS or as the "
+                   "number of seconds followed by 's'. If two or more "
+                   "timecodes are used then you have to separate them with "
+                   "commatas. The formats can be mixed, too. "
+                   "Examples: 01:00:00,01:30:00 (after one hour and after "
+                   "one hour and thirty minutes) or "
+                   "1800s,3000s,00:10:00 (after three, five and ten "
+                   "minutes)."));
+  tc_split_after_timecodes->Enable(false);
+  siz_line2->Add(tc_split_after_timecodes, 1,
+                 wxALIGN_CENTER_VERTICAL | wxGROW, 5);
+
+  siz_col->Add(siz_line2, 0, wxBOTTOM | wxTOP | wxGROW, 5);
+  siz_line->Add(siz_col, 1, wxALIGN_TOP | wxGROW | wxLEFT, 10);
 
 //   siz_line2 = new wxBoxSizer(wxHORIZONTAL);
 //   rb_split_chapters =
@@ -155,6 +158,35 @@ tab_global::tab_global(wxWindow *parent):
 //   siz_fg->Add(rb_split_each_chapter, 0, 0, 0);
 
   siz_split->Add(siz_line, 0, wxLEFT | wxRIGHT | wxGROW, 5);
+
+
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  cb_link = new wxCheckBox(this, ID_CB_LINK, wxT("link files"));
+  cb_link->SetToolTip(TIP("Use 'segment linking' for the resulting "
+                          "files. For an in-depth explanation of this "
+                          "feature consult the mkvmerge documentation."));
+  cb_link->SetValue(false);
+  cb_link->Enable(false);
+  siz_line->Add(cb_link, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
+  siz_line->Add(0, 1, 1, wxGROW, 0);
+
+  st_split_max_files = new wxStaticText(this, wxID_STATIC,
+                                  wxT("max. number of files:"));
+  st_split_max_files->Enable(false);
+  siz_line->Add(st_split_max_files, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  tc_split_max_files = new wxTextCtrl(this, ID_TC_SPLITMAXFILES, wxT(""));
+  tc_split_max_files->SetToolTip(TIP("The maximum number of files that will "
+                                     "be created even if the last file might "
+                                     "contain more bytes/time than wanted. "
+                                     "Useful e.g. when you want exactly two "
+                                     "files. If you leave this empty then "
+                                     "there is no limit for the number of "
+                                     "files mkvmerge might create."));
+  tc_split_max_files->Enable(false);
+  siz_line->Add(tc_split_max_files, 0, wxALIGN_CENTER_VERTICAL, 0);
+
+  siz_split->Add(siz_line, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxGROW, 5);
 
   siz_linking_box =
     new wxStaticBoxSizer(new wxStaticBox(this, -1,
@@ -324,56 +356,114 @@ tab_global::on_browse_chapters(wxCommandEvent &evt) {
 
 void
 tab_global::on_split_clicked(wxCommandEvent &evt) {
-  bool ec, er;
+  bool ec, es, et;
 
   ec = cb_split->IsChecked();
-  er = rb_split_by_size->GetValue();
+  es = rb_split_by_size->GetValue();
+  et = rb_split_by_time->GetValue();
+
   st_split_max_files->Enable(ec);
-  st_split->Enable(ec);
-  rb_split_by_size->Enable(ec);
-  cob_split_by_size->Enable(ec && er);
-  rb_split_by_time->Enable(ec);
-  cob_split_by_time->Enable(ec && !er);
   cb_link->Enable(ec);
   tc_split_max_files->Enable(ec);
+
+  rb_split_by_size->Enable(ec);
+  cob_split_by_size->Enable(ec && es);
+
+  rb_split_by_time->Enable(ec);
+  cob_split_by_time->Enable(ec && et);
+
+  rb_split_after_timecodes->Enable(ec);
+  tc_split_after_timecodes->Enable(ec && !es && !et);
 }
 
 void
 tab_global::on_splitby_time_clicked(wxCommandEvent &evt) {
   cob_split_by_size->Enable(false);
   cob_split_by_time->Enable(true);
+  tc_split_after_timecodes->Enable(false);
+
   rb_split_by_size->SetValue(false);
   rb_split_by_time->SetValue(true);
+  rb_split_after_timecodes->SetValue(false);
 }
 
 void
 tab_global::on_splitby_size_clicked(wxCommandEvent &evt) {
   cob_split_by_size->Enable(true);
   cob_split_by_time->Enable(false);
+  tc_split_after_timecodes->Enable(false);
+
   rb_split_by_size->SetValue(true);
   rb_split_by_time->SetValue(false);
+  rb_split_after_timecodes->SetValue(false);
 }
 
 void
-tab_global::load(wxConfigBase *cfg) {
+tab_global::on_splitafter_timecodes_clicked(wxCommandEvent &evt) {
+  cob_split_by_size->Enable(false);
+  cob_split_by_time->Enable(false);
+  tc_split_after_timecodes->Enable(true);
+
+  rb_split_by_size->SetValue(false);
+  rb_split_by_time->SetValue(false);
+  rb_split_after_timecodes->SetValue(true);
+}
+
+void
+tab_global::load(wxConfigBase *cfg,
+                 int version) {
   wxString s;
   bool b, ec, er;
 
   cfg->SetPath(wxT("/global"));
-  cfg->Read(wxT("segment_title"), &s);
+  cfg->Read(wxT("segment_title"), &s, wxT(""));
   tc_title->SetValue(s);
 
-  ec = false;
-  er = true;
-  cfg->Read(wxT("enable_splitting"), &ec);
+  cfg->Read(wxT("enable_splitting"), &ec, false);
   cb_split->SetValue(ec);
-  cfg->Read(wxT("split_by_size"), &er);
-  rb_split_by_time->SetValue(!er);
-  rb_split_by_size->SetValue(er);
+
+  rb_split_by_size->Enable(ec);
+  cob_split_by_size->Enable(false);
+  rb_split_by_time->Enable(ec);
+  cob_split_by_time->Enable(false);
+  rb_split_after_timecodes->Enable(ec);
+  tc_split_after_timecodes->Enable(false);
+
+  cb_link->Enable(ec);
+  st_split_max_files->Enable(ec);
+  tc_split_max_files->Enable(ec);
+
+  if (1 == version) {
+    // Version 1 only know two split methods: by time and by size.
+    // It stored that in the boolean "split_by_size".
+    cfg->Read(wxT("split_by_size"), &er, true);
+    rb_split_by_size->SetValue(er);
+    cob_split_by_size->Enable(ec && er);
+    rb_split_by_time->SetValue(!er);
+    cob_split_by_time->Enable(ec && !er);
+  } else {
+    wxString split_mode;
+
+    rb_split_by_time->SetValue(false);
+    rb_split_by_size->SetValue(false);
+    cfg->Read(wxT("split_mode"), &split_mode, wxT("size"));
+    if (split_mode == wxT("duration")) {
+      rb_split_by_time->SetValue(true);
+      cob_split_by_time->Enable(true);
+    } else if (split_mode == wxT("timecodes")) {
+      rb_split_after_timecodes->SetValue(true);
+      tc_split_after_timecodes->Enable(true);
+    } else {
+      rb_split_by_size->SetValue(true);
+      cob_split_by_size->Enable(true);
+    }
+  }
   cfg->Read(wxT("split_after_bytes"), &s);
   cob_split_by_size->SetValue(s);
   cfg->Read(wxT("split_after_time"), &s);
   cob_split_by_time->SetValue(s);
+  cfg->Read(wxT("split_after_timecodes"), &s);
+  tc_split_after_timecodes->SetValue(s);
   cfg->Read(wxT("split_max_files"), &s);
   tc_split_max_files->SetValue(s);
 
@@ -386,13 +476,6 @@ tab_global::load(wxConfigBase *cfg) {
     cb_link->SetValue(!b);
   else
     cb_link->SetValue(false);
-
-  rb_split_by_size->Enable(ec);
-  cob_split_by_size->Enable(ec && er);
-  rb_split_by_time->Enable(ec);
-  cob_split_by_time->Enable(ec && !er);
-  cb_link->Enable(ec);
-  tc_split_max_files->Enable(ec);
 
   cfg->Read(wxT("previous_segment_uid"), &s);
   tc_previous_segment_uid->SetValue(s);
@@ -420,9 +503,16 @@ tab_global::save(wxConfigBase *cfg) {
   cfg->Write(wxT("segment_title"), tc_title->GetValue());
 
   cfg->Write(wxT("enable_splitting"), cb_split->IsChecked());
-  cfg->Write(wxT("split_by_size"), rb_split_by_size->GetValue());
+  if (rb_split_by_size->GetValue())
+    cfg->Write(wxT("split_mode"), wxT("size"));
+  else if (rb_split_by_time->GetValue())
+    cfg->Write(wxT("split_mode"), wxT("duration"));
+  else
+    cfg->Write(wxT("split_mode"), wxT("timecodes"));
   cfg->Write(wxT("split_after_bytes"), cob_split_by_size->GetValue());
   cfg->Write(wxT("split_after_time"), cob_split_by_time->GetValue());
+  cfg->Write(wxT("split_after_timecodes"),
+             tc_split_after_timecodes->GetValue());
   cfg->Write(wxT("split_max_files"), tc_split_max_files->GetValue());
   cfg->Write(wxT("link"), cb_link->IsChecked());
 
@@ -440,93 +530,133 @@ tab_global::save(wxConfigBase *cfg) {
 }
 
 bool
-tab_global::validate_settings() {
-  string s;
+tab_global::is_valid_split_size() {
   int64_t dummy_i, mod;
   char c;
+  string s = wxMB(cob_split_by_size->GetValue());
+
+  strip(s);
+  if (s.length() == 0) {
+    wxMessageBox(wxT("Splitting by size was selected, but no size has "
+                     "been given."), wxT("mkvmerge GUI error"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+  c = s[s.length() - 1];
+  mod = 1;
+  if (tolower(c) == 'k')
+    mod = 1024;
+  else if (tolower(c) == 'm')
+    mod = 1024 * 1024;
+  else if (tolower(c) == 'g')
+    mod = 1024 * 1024 * 1024;
+  if (mod != 1)
+    s.erase(s.length() - 1);
+  else if (!isdigit(c)) {
+    wxMessageBox(wxT("The format of the split size is invalid."),
+                 wxT("mkvmerge GUI error"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+  if ((s.length() == 0) || !parse_int(s, dummy_i)) {
+    wxMessageBox(wxT("The format of the split size is invalid."),
+                 wxT("mkvmerge GUI error"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+  if ((dummy_i * mod) < 1024 * 1024) {
+    wxMessageBox(wxT("The format of the split size is invalid (size too "
+                     "small)."), wxT("mkvmerge GUI error"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+
+  return true;
+}
+
+bool
+tab_global::is_valid_split_timecode(string s,
+                                    const wxString &type) {
+  int64_t dummy_i;
+  char c;
+
+  strip(s);
+  if (s.length() == 0) {
+    wxMessageBox(wxT("Splitting by ") + type +
+                 wxT(" was selected, but nothing was entered."),
+                 wxT("mkvmerge GUI error"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+  c = s[s.length() - 1];
+  if (tolower(c) == 's') {
+    s.erase(s.length() - 1);
+    if ((s.length() == 0) || !parse_int(s, dummy_i) ||
+        (dummy_i <= 0)) {
+      wxMessageBox(wxT("The format of the split ") + type +
+                   wxT(" is invalid."),
+                   wxT("mkvmerge GUI error"), wxOK | wxCENTER |
+                   wxICON_ERROR);
+      return false;
+    }
+
+  } else if (((s.length() == 8) &&
+              ((s[2] != ':') || (s[5] != ':') ||
+               !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
+               !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7])))
+             ||
+             ((s.length() == 12) &&
+              ((s[2] != ':') || (s[5] != ':') || (s[8] != '.') ||
+               !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
+               !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7]) ||
+               !isdigit(s[9]) || !isdigit(s[10]) || !isdigit(s[11])))
+             ||
+             ((s.length() != 8) && (s.length() != 12))) {
+    wxMessageBox(wxT("The format of the split ") + type + wxT(" is invalid."),
+                 wxT("mkvmerge GUI error"),
+                 wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  }
+
+  return true;
+}
+
+bool
+tab_global::is_valid_split_timecode_list() {
+  string s = wxMB(tc_split_after_timecodes->GetValue());
+  vector<string> parts;
+  vector<string>::const_iterator i;
+
+  parts = split(s, ",");
+  foreach(i, parts)
+    if (!is_valid_split_timecode(*i, wxT("timecode list")))
+      return false;
+
+  return true;
+}
+
+bool
+tab_global::validate_settings() {
+  int64_t dummy_i;
+  string s;
 
   if (cb_split->GetValue()) {
     if (rb_split_by_size->GetValue()) {
-      s = wxMB(cob_split_by_size->GetValue());
-      strip(s);
-      if (s.length() == 0) {
-        wxMessageBox(wxT("Splitting by size was selected, but no size has "
-                         "been given."), wxT("mkvmerge GUI error"),
-                     wxOK | wxCENTER | wxICON_ERROR);
+      if (!is_valid_split_size())
         return false;
-      }
-      c = s[s.length() - 1];
-      mod = 1;
-      if (tolower(c) == 'k')
-        mod = 1024;
-      else if (tolower(c) == 'm')
-        mod = 1024 * 1024;
-      else if (tolower(c) == 'g')
-        mod = 1024 * 1024 * 1024;
-      if (mod != 1)
-        s.erase(s.length() - 1);
-      else if (!isdigit(c)) {
-        wxMessageBox(wxT("The format of the split size is invalid."),
-                     wxT("mkvmerge GUI error"),
-                     wxOK | wxCENTER | wxICON_ERROR);
-        return false;
-      }
-      if ((s.length() == 0) || !parse_int(s, dummy_i)) {
-        wxMessageBox(wxT("The format of the split size is invalid."),
-                     wxT("mkvmerge GUI error"),
-                     wxOK | wxCENTER | wxICON_ERROR);
-        return false;
-      }
-      if ((dummy_i * mod) < 1024 * 1024) {
-        wxMessageBox(wxT("The format of the split size is invalid (size too "
-                         "small)."), wxT("mkvmerge GUI error"),
-                     wxOK | wxCENTER | wxICON_ERROR);
-        return false;
-      }
 
-    } else {
-      s = wxMB(cob_split_by_time->GetValue());
-      strip(s);
-      if (s.length() == 0) {
-        wxMessageBox(wxT("Splitting by time was selected, but no time has "
-                         "been given."), wxT("mkvmerge GUI error"),
-                     wxOK | wxCENTER | wxICON_ERROR);
+    } else if (rb_split_by_time->GetValue()) {
+      if (!is_valid_split_timecode(wxMB(cob_split_by_time->GetValue()),
+                                   wxT("duration")))
         return false;
-      }
-      c = s[s.length() - 1];
-      if (tolower(c) == 's') {
-        s.erase(s.length() - 1);
-        if ((s.length() == 0) || !parse_int(s, dummy_i) ||
-            (dummy_i <= 0)) {
-          wxMessageBox(wxT("The format of the split time is invalid."),
-                       wxT("mkvmerge GUI error"), wxOK | wxCENTER |
-                       wxICON_ERROR);
-          return false;
-        }
 
-      } else if (((s.length() == 8) &&
-                  ((s[2] != ':') || (s[5] != ':') ||
-                   !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
-                   !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7])))
-                 ||
-                 ((s.length() == 12) &&
-                  ((s[2] != ':') || (s[5] != ':') || (s[8] != '.') ||
-                   !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
-                   !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7]) ||
-                   !isdigit(s[9]) || !isdigit(s[10]) || !isdigit(s[11])))
-                 ||
-                 ((s.length() != 8) && (s.length() != 12))) {
-        wxMessageBox(wxT("The format of the split time is invalid."),
-                     wxT("mkvmerge GUI error"),
-                     wxOK | wxCENTER | wxICON_ERROR);
-        return false;
-      }
-    }
+    } else if (!is_valid_split_timecode_list())
+      return false;
 
     s = wxMB(tc_split_max_files->GetValue());
     strip(s);
-    if ((s.length() > 0) && (!parse_int(s, dummy_i) ||
-                             (dummy_i <= 1))) {
+    if ((s.length() > 0) &&
+        (!parse_int(s, dummy_i) || (dummy_i <= 1))) {
       wxMessageBox(wxT("Invalid number of max. split files given."),
                    wxT("mkvmerge GUI error"), wxOK | wxCENTER | wxICON_ERROR);
       return false;
@@ -543,4 +673,6 @@ BEGIN_EVENT_TABLE(tab_global, wxPanel)
   EVT_CHECKBOX(ID_CB_SPLIT, tab_global::on_split_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE, tab_global::on_splitby_size_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITBYTIME, tab_global::on_splitby_time_clicked)
+  EVT_RADIOBUTTON(ID_RB_SPLITAFTERTIMECODES,
+                  tab_global::on_splitafter_timecodes_clicked)
 END_EVENT_TABLE();

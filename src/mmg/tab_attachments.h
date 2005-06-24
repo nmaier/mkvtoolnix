@@ -57,7 +57,7 @@ public:
   void enable(bool e);
 
   void save(wxConfigBase *cfg);
-  void load(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg, int version);
   bool validate_settings();
 };
 

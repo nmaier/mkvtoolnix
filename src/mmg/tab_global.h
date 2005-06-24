@@ -36,6 +36,8 @@
 #define ID_RB_SPLITAFTERCHAPTERS          13017
 #define ID_TC_SPLITAFTERCHAPTERS          13018
 #define ID_RB_SPLITAFTEREACHCHAPTER       13019
+#define ID_RB_SPLITAFTERTIMECODES         13020
+#define ID_TC_SPLITAFTERTIMECODES         13021
 
 class tab_global: public wxPanel {
   DECLARE_CLASS(tab_global);
@@ -44,13 +46,13 @@ public:
   wxTextCtrl *tc_chapters, *tc_global_tags, *tc_split_max_files, *tc_title;
   wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid;
   wxTextCtrl *tc_split_bytes, *tc_split_time, *tc_cue_name_format;
-  wxTextCtrl *tc_split_chapters;
+  wxTextCtrl *tc_split_chapters, *tc_split_after_timecodes;
   wxCheckBox *cb_split, *cb_link;
   wxRadioButton *rb_split_by_size, *rb_split_by_time, *rb_split_each_chapter;
-  wxRadioButton *rb_split_chapters;
+  wxRadioButton *rb_split_chapters, *rb_split_after_timecodes;
   wxComboBox *cob_split_by_size, *cob_split_by_time;
   wxComboBox *cob_chap_language, *cob_chap_charset;
-  wxStaticText *st_split, *st_split_max_files;
+  wxStaticText *st_split_max_files;
 
 public:
   tab_global(wxWindow *parent);
@@ -60,10 +62,15 @@ public:
   void on_split_clicked(wxCommandEvent &evt);
   void on_splitby_size_clicked(wxCommandEvent &evt);
   void on_splitby_time_clicked(wxCommandEvent &evt);
+  void on_splitafter_timecodes_clicked(wxCommandEvent &evt);
 
   void save(wxConfigBase *cfg);
-  void load(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg, int version);
   bool validate_settings();
+
+  bool is_valid_split_size();
+  bool is_valid_split_timecode(string s, const wxString &type);
+  bool is_valid_split_timecode_list();
 };
 
 #endif // __TAB_GLOBAL_H

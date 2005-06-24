@@ -52,7 +52,7 @@ public:
   void save_preferences();
 
   void save(wxConfigBase *cfg);
-  void load(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg, int version);
   bool validate_settings();
 
   void query_mkvmerge_capabilities();

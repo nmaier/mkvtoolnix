@@ -873,10 +873,10 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
   tc_output->SetValue(wxT(""));
 
-  input_page->load(cfg);
-  attachments_page->load(cfg);
-  global_page->load(cfg);
-  settings_page->load(cfg);
+  input_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  attachments_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  global_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  settings_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
 
   delete cfg;
   wxRemoveFile(tmp_name);
@@ -910,7 +910,8 @@ mmg_dialog::load(wxString file_name,
 
   cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
   cfg->SetPath(wxT("/mkvmergeGUI"));
-  if (!cfg->Read(wxT("file_version"), &version) || (version != 1)) {
+  if (!cfg->Read(wxT("file_version"), &version) || (1 > version) ||
+      (MMG_CONFIG_FILE_VERSION_MAX < version)) {
     if (used_for_jobs)
       return;
     wxMessageBox(wxT("The file does not seem to be a valid mkvmerge GUI "
@@ -922,10 +923,10 @@ mmg_dialog::load(wxString file_name,
   tc_output->SetValue(s);
   cfg->Read(wxT("cli_options"), &cli_options, wxT(""));
 
-  input_page->load(cfg);
-  attachments_page->load(cfg);
-  global_page->load(cfg);
-  settings_page->load(cfg);
+  input_page->load(cfg, version);
+  attachments_page->load(cfg, version);
+  global_page->load(cfg, version);
+  settings_page->load(cfg, version);
 
   delete cfg;
 
@@ -955,7 +956,7 @@ mmg_dialog::save(wxString file_name,
 
   cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
   cfg->SetPath(wxT("/mkvmergeGUI"));
-  cfg->Write(wxT("file_version"), 1);
+  cfg->Write(wxT("file_version"), MMG_CONFIG_FILE_VERSION_MAX);
   cfg->Write(wxT("gui_version"), wxT(VERSION));
   cfg->Write(wxT("output_file_name"), tc_output->GetValue());
   cfg->Write(wxT("cli_options"), cli_options);
@@ -1502,9 +1503,13 @@ mmg_dialog::update_command_line() {
   if (global_page->cb_split->IsChecked()) {
     clargs.Add(wxT("--split"));
     if (global_page->rb_split_by_size->GetValue())
-      clargs.Add(global_page->cob_split_by_size->GetValue());
+      clargs.Add(wxT("size:") + global_page->cob_split_by_size->GetValue());
+    else if (global_page->rb_split_by_time->GetValue())
+      clargs.Add(wxT("duration:") +
+                 global_page->cob_split_by_time->GetValue());
     else
-      clargs.Add(global_page->cob_split_by_time->GetValue());
+      clargs.Add(wxT("timecodes:") +
+                 global_page->tc_split_after_timecodes->GetValue());
 
     if (global_page->tc_split_max_files->GetValue().Length() > 0) {
       clargs.Add(wxT("--split-max-files"));

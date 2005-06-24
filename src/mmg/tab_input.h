@@ -122,7 +122,7 @@ public:
   void enable_ar_controls(mmg_track_t *track);
 
   void save(wxConfigBase *cfg);
-  void load(wxConfigBase *cfg);
+  void load(wxConfigBase *cfg, int version);
   bool validate_settings();
 };
 

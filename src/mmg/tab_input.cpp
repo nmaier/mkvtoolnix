@@ -1553,7 +1553,8 @@ tab_input::save(wxConfigBase *cfg) {
 }
 
 void
-tab_input::load(wxConfigBase *cfg) {
+tab_input::load(wxConfigBase *cfg,
+                int version) {
   long fidx, tidx, i;
   wxString s, c, id, track_order;
   string format;

@@ -265,7 +265,8 @@ tab_attachments::save(wxConfigBase *cfg) {
 }
 
 void
-tab_attachments::load(wxConfigBase *cfg) {
+tab_attachments::load(wxConfigBase *cfg,
+                      int version) {
   int num, i;
 
   enable(false);
