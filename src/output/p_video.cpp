@@ -219,15 +219,13 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       if (hcodec_private == NULL)
         create_private_data();
 
-      packet->memory = memory_cptr(new memory_c(frame->data, frame->size,
-                                                true));
-      packet->timecode = frame->timecode;
-      packet->duration = frame->duration;
-      packet->bref = frame->firstRef;
-      packet->fref = frame->secondRef;
-      packet->time_factor =
+      packet_t *new_packet =
+        new packet_t(new memory_c(frame->data, frame->size, true),
+                     frame->timecode, frame->duration,
+                     frame->firstRef, frame->secondRef);
+      new_packet->time_factor =
         MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;
-      video_packetizer_c::process(packet);
+      video_packetizer_c::process(packet_cptr(new_packet));
       frame->data = NULL;
       delete frame;
 
