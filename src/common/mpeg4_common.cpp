@@ -563,3 +563,23 @@ mpeg1_2_get_fps(int idx) {
       return fps[idx - 1];
   }
 }
+
+/** \brief Check whether or not a FourCC refers to MPEG-4 part 2 video
+
+   \param fourcc A pointer to a string with four characters
+
+   \return true if the FourCC refers to a MPEG-4 part 2 video codec.
+*/
+bool
+is_mpeg4_p2_fourcc(const void *fourcc) {
+  static const char *mpeg4_p2_fourccs[] = {
+    "MP42", "DIV2", "DIVX", "XVID", "DX50", "FMP4", "DXGM",
+    NULL
+  };
+  int i;
+
+  for (i = 0; NULL != mpeg4_p2_fourccs[i]; ++i)
+    if (!strncasecmp((const char *)fourcc, mpeg4_p2_fourccs[i], 4))
+      return true;
+  return false;
+}

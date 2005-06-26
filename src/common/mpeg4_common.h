@@ -156,4 +156,6 @@ double MTX_DLL_API mpeg1_2_get_fps(int idx);
 bool MTX_DLL_API mpeg1_2_extract_ar(const unsigned char *buffer,
                                     int buffer_size, float &ar);
 
+bool MTX_DLL_API is_mpeg4_p2_fourcc(const void *fourcc);
+
 #endif /* __MPEG4_COMMON_H */

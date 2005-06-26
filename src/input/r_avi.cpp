@@ -159,11 +159,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
         !strcasecmp(codec, "MPG3") ||
         !strcasecmp(codec, "MP43"))
       is_divx = RAVI_DIVX3;
-    else if (!strcasecmp(codec, "MP42") ||
-             !strcasecmp(codec, "DIV2") ||
-             !strcasecmp(codec, "DIVX") ||
-             !strcasecmp(codec, "XVID") ||
-             !strcasecmp(codec, "DX50"))
+    else if (is_mpeg4_p2_fourcc(codec))
       is_divx = RAVI_MPEG4;
     else
       is_divx = 0;
@@ -181,8 +177,8 @@ avi_reader_c::create_packetizer(int64_t tid) {
                                                        false,
                                                        ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module for "
-               "this track.\n", ti.fname.c_str(), (int64_t)0);
+        mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
+               ti.fname.c_str(), (int64_t)0);
     } else {
       vptzr = add_packetizer(new video_packetizer_c(this, NULL,
                                                     AVI_frame_rate(avi),
@@ -190,7 +186,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
                                                     AVI_video_height(avi),
                                                     ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the video output module for the video track.\n",
+        mxinfo(FMT_TID "Using the video output module.\n",
                ti.fname.c_str(), (int64_t)0);
     }
   }

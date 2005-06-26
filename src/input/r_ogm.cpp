@@ -395,6 +395,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   bool sbr, aac_info_extracted;
   ogm_demuxer_t *dmx;
   generic_packetizer_c *ptzr;
+  double fps;
+  int width, height;
 
   if ((tid < 0) || (tid >= sdemuxers.size()))
     return;
@@ -425,14 +427,20 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         ti.private_data = (unsigned char *)&bih;
         ti.private_size = sizeof(alBITMAPINFOHEADER);
 
-        ptzr = new video_packetizer_c(this, NULL, (double)10000000.0 /
-                                      get_uint64_le(&sth->time_unit),
-                                      get_uint32_le(&sth->sh.video.width),
-                                      get_uint32_le(&sth->sh.video.height),
-                                      ti);
+        fps = (double)10000000.0 / get_uint64_le(&sth->time_unit);
+        width = get_uint32_le(&sth->sh.video.width);
+        height = get_uint32_le(&sth->sh.video.height);
+        if (is_mpeg4_p2_fourcc(sth->subtype)) {
+          ptzr = new mpeg4_p2_video_packetizer_c(this, fps, width, height,
+                                                 false, ti);
+          mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
+                 ti.fname.c_str(), (int64_t)tid);
+        } else {
+          ptzr = new video_packetizer_c(this, NULL, fps, width, height, ti);
+          mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(),
+                 (int64_t)tid);
+        }
 
-        mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(),
-               (int64_t)tid);
         ti.private_data = NULL;
 
         break;
