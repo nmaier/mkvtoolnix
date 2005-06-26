@@ -139,7 +139,7 @@ int32_t M2VParser::InitParser(){
 
       //Look for sequence extension to identify mpeg2
       binary* pData = chunk->GetPointer();
-      for(size_t j = 3; i < chunk->GetSize() - 4; i++){
+      for(size_t j = 3; j < chunk->GetSize() - 4; j++){
         if(pData[j] == 0x00 && pData[j+1] == 0x00 && pData[j+2] == 0x01 && pData[j+3] == 0xb5 && ((pData[j+4] & 0xF0) == 0x10)){
           mpegVersion = 2;
           break;
