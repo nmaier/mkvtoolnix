@@ -294,6 +294,7 @@ usf_reader_c::end_cb(const char *name) {
   }
 
   m_data_buffer = "";
+  m_previous_start = "";
 }
 
 void
