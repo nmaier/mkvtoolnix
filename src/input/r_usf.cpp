@@ -236,7 +236,6 @@ usf_reader_c::start_cb(const char *name,
       entry.m_end = entry.m_start + duration;
     m_copy_buffer = "";
     m_copy_depth = 1;
-    m_strip = true;
 
     m_tracks[m_tracks.size() - 1].m_entries.push_back(entry);
 
@@ -283,6 +282,7 @@ usf_reader_c::end_cb(const char *name) {
         usf_track_t &track = m_tracks[m_tracks.size() - 1];
 
         m_copy_buffer.erase(m_copy_buffer.length() - 11);
+        strip(m_copy_buffer);
         track.m_entries[track.m_entries.size() - 1].m_text = m_copy_buffer;
 
       } else
