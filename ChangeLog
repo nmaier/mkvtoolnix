@@ -1,3 +1,16 @@
+2005-06-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The track language read from old Matroska
+	files was wrongfully set to "und" if it was not written although
+	the specs say that "eng" is the default value.
+
+	* mkvmerge: bug fix: USF subtitles: If identical tags were nested
+	(e.g. "font") and both were closed right after each other then the
+	result looked like "</font/>".
+
+	* mkvmerge: bug fix: Native MPEG-4 was not working if read from
+	OGM files.
+
 2005-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added an input box for mkvmerge's new "split
