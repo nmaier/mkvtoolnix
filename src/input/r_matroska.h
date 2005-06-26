@@ -110,6 +110,7 @@ struct kax_track_t {
                  a_sfreq(0.0), a_osfreq(0.0),
                  private_data(NULL), private_size(0),
                  default_track(false),
+                 language("eng"),
                  units_processed(0),
                  ok(false),
                  previous_timecode(0),
