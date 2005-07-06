@@ -102,7 +102,7 @@ usage() {
 "                   (default: keep all levels)\n"
 "  --raw            Extract the data to a raw file.\n"
 "  --fullraw        Extract the data to a raw file including the CodecPrivate"
-"                   as a header.\n"
+"\n                   as a header.\n"
 "  TID:out          Write track with the ID TID to the file 'out'.\n"
 "\n"
 " Example:\n"
