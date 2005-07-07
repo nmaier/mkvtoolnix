@@ -366,7 +366,7 @@ xtr_usf_c::create_file(xtr_base_c *_master,
               errno, strerror(errno));
     } catch (xml_formatter_error_c &error) {
       mxerror("Failed to parse the USF codec private data for track %lld: "
-              "%s\n", tid, error.get_error());
+              "%s\n", tid, error.get_error().c_str());
       
     }
   }
@@ -411,7 +411,7 @@ xtr_usf_c::finish_track() {
     m_formatter->format("</subtitles>\n");
   } catch (xml_formatter_error_c &error) {
     mxerror("Failed to parse an USF subtitle entry for track %lld: %s\n", tid,
-            error.get_error());
+            error.get_error().c_str());
   }
 }
 
@@ -424,6 +424,6 @@ xtr_usf_c::finish_file() {
     }
   } catch (xml_formatter_error_c &error) {
     mxerror("Failed to parse the USF end tag for track %lld: %s\n", tid,
-            error.get_error());
+            error.get_error().c_str());
   }
 }

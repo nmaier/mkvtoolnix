@@ -33,104 +33,58 @@
 
 using namespace std;
 
-static void
-usf_xml_find_root_cb(void *user_data,
-                     const char *name,
-                     const char **atts) {
-  string &root_element = *(string *)user_data;
+class usf_xml_find_root_c: public xml_parser_c {
+public:
+  string m_root_element;
 
-  if (root_element == "")
-    root_element = name;
-}
+public:
+  usf_xml_find_root_c(mm_text_io_c *io):
+    xml_parser_c(io) {
+  }
 
-static void
-usf_xml_start_cb(void *user_data,
-                 const char *name,
-                 const char **atts) {
-  ((usf_reader_c *)user_data)->start_cb(name, atts);
-}
-
-static void
-usf_xml_end_cb(void *user_data,
-               const char *name) {
-  ((usf_reader_c *)user_data)->end_cb(name);
-}
-
-static void
-usf_xml_add_data_cb(void *user_data,
-                    const XML_Char *s,
-                    int len) {
-  ((usf_reader_c *)user_data)->add_data_cb(s, len);
-}
+  virtual void start_element_cb(const char *name,
+                                const char **atts) {
+    if (m_root_element == "")
+      m_root_element = name;
+  }
+};
 
 int
 usf_reader_c::probe_file(mm_text_io_c *io,
                          int64_t) {
-  XML_Parser parser;
-  string root_element, line;
-
-  parser = XML_ParserCreate(NULL);
-  XML_SetUserData(parser, &root_element);
-  XML_SetElementHandler(parser, usf_xml_find_root_cb, NULL);
-
   try {
-    io->setFilePointer(0);
+    usf_xml_find_root_c root_finder(io);
 
-    while (io->getline2(line)) {
-      if ((XML_Parse(parser, line.c_str(), line.length(), 0) == 0) ||
-          (root_element != ""))
-        break;
-    }
+    io->setFilePointer(0);
+    while (root_finder.parse_one_xml_line() &&
+           (root_finder.m_root_element == ""))
+      ;
+
+    return (root_finder.m_root_element == "USFSubtitles" ? 1 : 0);
 
   } catch(...) {
   }
 
-  XML_ParserFree(parser);
-
-  return (root_element == "USFSubtitles" ? 1 : 0);
+  return 0;
 }
 
 usf_reader_c::usf_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
-  m_parser(NULL), m_copy_depth(0), m_longest_track(-1), m_strip(false) {
+  m_copy_depth(0), m_longest_track(-1), m_strip(false) {
 
   try {
-    mm_text_io_c io(new mm_file_io_c(ti.fname));
+    m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.fname));
     string line;
     int i;
 
-    if (!usf_reader_c::probe_file(&io, 0))
+    if (!usf_reader_c::probe_file(m_xml_source, 0))
       throw error_c("usf_reader: Source is not a valid USF file.");
 
-    m_parser = XML_ParserCreate(NULL);
-    XML_SetUserData(m_parser, this);
-    XML_SetElementHandler(m_parser, usf_xml_start_cb, usf_xml_end_cb);
-    XML_SetCharacterDataHandler(m_parser, usf_xml_add_data_cb);
-
-    io.setFilePointer(0);
-
-    if (setjmp(m_parse_error_jmp) == 1)
-      throw error_c(m_parse_error);
-
-    while (io.getline2(line)) {
-      if (XML_Parse(m_parser, line.c_str(), line.length(), io.eof()) == 0) {
-        XML_Error xerror;
-        string error;
-
-        xerror = XML_GetErrorCode(m_parser);
-        error = mxsprintf("XML parser error at line %d of '%s': %s. ",
-                          XML_GetCurrentLineNumber(m_parser), ti.fname.c_str(),
-                          XML_ErrorString(xerror));
-        if (xerror == XML_ERROR_INVALID_TOKEN)
-          error += "Remember that special characters like &, <, > and \" "
-            "must be escaped in the usual HTML way: &amp; for '&', "
-            "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
-        throw error_c(error);
-      }
-    }
-
+    parse_xml_file();
     m_private_data += "</USFSubtitles>";
+
+    delete m_xml_source;
 
     for (i = 0; m_tracks.size() > i; ++i) {
       stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
@@ -144,25 +98,23 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
         m_tracks[i].m_language = m_default_language;
     }
 
+  } catch (xml_parser_error_c &error) {
+    throw error_c(error.get_error());
+
   } catch (mm_io_error_c &error) {
     throw error_c("usf_reader: Could not open the source file.");
   }
-
-  XML_ParserFree(m_parser);
-  m_parser = NULL;
 
   if (verbose)
     mxinfo(FMT_FN "Using the USF subtitle reader.\n", ti.fname.c_str());
 }
 
 usf_reader_c::~usf_reader_c() {
-  if (NULL != m_parser)
-    XML_ParserFree(m_parser);
 }
 
 void
-usf_reader_c::start_cb(const char *name,
-                       const char **atts) {
+usf_reader_c::start_element_cb(const char *name,
+                               const char **atts) {
   int i;
   string node;
 
@@ -252,7 +204,7 @@ usf_reader_c::start_cb(const char *name,
 }
 
 void
-usf_reader_c::end_cb(const char *name) {
+usf_reader_c::end_element_cb(const char *name) {
   int i;
   string node;
 
@@ -387,12 +339,8 @@ usf_reader_c::parse_timecode(const char *s) {
   if ((mxsscanf(s, "%d:%d:%d.%d", &hour, &minute, &second, &millisecond) !=
        4) ||
       (0 > hour) || (0 > minute) || (59 < minute) || (0 > second) ||
-      (59 < second) || (999 < millisecond)) {
-    m_parse_error = string("Invalid start or stop timecode in line ") +
-      to_string(XML_GetCurrentLineNumber(m_parser)) + ", column " +
-      to_string(XML_GetCurrentColumnNumber(m_parser));
-    longjmp(m_parse_error_jmp, 1);
-  }
+      (59 < second) || (999 < millisecond))
+    throw xml_parser_error_c("Invalid start or stop timecode", m_xml_parser);
 
   return (((int64_t)hour) * 3600000ll + ((int64_t)minute) * 60000ll +
           ((int64_t)second) * 1000ll + millisecond) * 1000000ll;

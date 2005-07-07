@@ -94,8 +94,8 @@ parse_xml_segmentinfo(mm_text_io_c *in,
     assert(info != NULL);
   } catch (error_c e) {
     if (!exception_on_error)
-      mxerror("%s", e.get_error());
-    error = (const char *)e;
+      mxerror("%s", e.get_error().c_str());
+    error = e.get_error();
     info = NULL;
   }
 

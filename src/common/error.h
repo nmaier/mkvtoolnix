@@ -21,8 +21,9 @@
 using namespace std;
 
 class MTX_DLL_API error_c {
-private:
+protected:
   string error;
+
 public:
   error_c():
     error("unknown error") {
@@ -36,12 +37,11 @@ public:
     error(_error) {
   }
 
-  const char *get_error() const {
-    return error.c_str();
+  virtual ~error_c() {
   }
 
-  operator const char *() const {
-    return error.c_str();
+  virtual string get_error() const {
+    return error;
   }
 };
 

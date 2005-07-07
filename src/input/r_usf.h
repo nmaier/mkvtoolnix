@@ -26,6 +26,7 @@
 #include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
+#include "xml_element_parser.h"
 
 struct usf_entry_t {
   int64_t m_start, m_end;
@@ -53,9 +54,8 @@ struct usf_track_t {
     m_ptzr(-1) { }
 };
 
-class usf_reader_c: public generic_reader_c {
+class usf_reader_c: public generic_reader_c, public xml_parser_c {
 private:
-  XML_Parser m_parser;
   int m_copy_depth;
 
   vector<usf_track_t> m_tracks;
@@ -65,9 +65,6 @@ private:
   vector<string> m_parents;
   string m_data_buffer, m_copy_buffer, m_previous_start;
   bool m_strip;
-
-  jmp_buf m_parse_error_jmp;
-  string m_parse_error;
 
 public:
   usf_reader_c(track_info_c &_ti) throw (error_c);
@@ -81,8 +78,8 @@ public:
 
   static int probe_file(mm_text_io_c *io, int64_t size);
 
-  virtual void start_cb(const char *name, const char **atts);
-  virtual void end_cb(const char *name);
+  virtual void start_element_cb(const char *name, const char **atts);
+  virtual void end_element_cb(const char *name);
   virtual void add_data_cb(const XML_Char *s, int len);
 
 private:

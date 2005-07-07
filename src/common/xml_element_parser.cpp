@@ -532,7 +532,7 @@ parse_xml_elements(const char *parser_name,
     }
 
   } catch (error_c e) {
-    error = (const char *)e;
+    error = e.get_error();
   }
 
   root_element = pdata->root_element;
@@ -549,4 +549,118 @@ parse_xml_elements(const char *parser_name,
   }
 
   return root_element;
+}
+
+// -------------------------------------------------------------------
+
+static void
+xml_parser_start_element_cb(void *user_data,
+                            const char *name,
+                            const char **atts) {
+  xml_parser_c *parser = ((xml_parser_c *)user_data);
+
+  try {
+    parser->start_element_cb(name, atts);
+  } catch (xml_parser_error_c &e) {
+    parser->throw_error(e);
+  }
+}
+
+static void
+xml_parser_end_element_cb(void *user_data,
+                          const char *name) {
+  xml_parser_c *parser = ((xml_parser_c *)user_data);
+
+  try {
+    parser->end_element_cb(name);
+  } catch (xml_parser_error_c &e) {
+    parser->throw_error(e);
+  }
+}
+
+static void
+xml_parser_add_data_cb(void *user_data,
+                       const XML_Char *s,
+                       int len) {
+  xml_parser_c *parser = ((xml_parser_c *)user_data);
+
+  try {
+    parser->add_data_cb(s, len);
+  } catch (xml_parser_error_c &e) {
+    parser->throw_error(e);
+  }
+}
+
+xml_parser_c::xml_parser_c(mm_text_io_c *xml_source):
+  m_xml_parser_state(XMLP_STATE_INITIAL),
+  m_xml_source(xml_source),
+  m_xml_parser(NULL) {
+}
+
+xml_parser_c::xml_parser_c():
+  m_xml_parser_state(XMLP_STATE_INITIAL),
+  m_xml_parser(NULL) {
+}
+
+void
+xml_parser_c::setup_xml_parser() {
+  if (NULL != m_xml_parser)
+    XML_ParserFree(m_xml_parser);
+
+  m_xml_parser = XML_ParserCreate(NULL);
+  XML_SetUserData(m_xml_parser, this);
+  XML_SetElementHandler(m_xml_parser, xml_parser_start_element_cb,
+                        xml_parser_end_element_cb);
+  XML_SetCharacterDataHandler(m_xml_parser, xml_parser_add_data_cb);
+}
+
+xml_parser_c::~xml_parser_c() {
+  if (NULL != m_xml_parser)
+    XML_ParserFree(m_xml_parser);
+}
+
+void
+xml_parser_c::parse_xml_file() {
+  m_xml_source->setFilePointer(0);
+
+  while (parse_one_xml_line())
+    ;
+}
+
+bool
+xml_parser_c::parse_one_xml_line() {
+  string line;
+
+  if (NULL == m_xml_parser)
+    setup_xml_parser();
+
+  if (setjmp(m_parser_error_jmp_buf) == 1)
+    throw m_saved_parser_error;
+
+  if (!m_xml_source->getline2(line))
+    return false;
+
+  line += "\n";
+  if ((XML_Parse(m_xml_parser, line.c_str(), line.length(),
+                 m_xml_source->eof()) == 0) &&
+      (XML_GetErrorCode(m_xml_parser) != XML_ERROR_FINISHED)) {
+    string error;
+    XML_Error xerror;
+
+    xerror = XML_GetErrorCode(m_xml_parser);
+    error = XML_ErrorString(xerror);
+    if (xerror == XML_ERROR_INVALID_TOKEN)
+      error += "Remember that special characters like &, <, > and \" "
+        "must be escaped in the usual HTML way: &amp; for '&', "
+        "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
+    throw xml_parser_error_c(error, m_xml_parser);
+  }
+
+  return true;
+}
+
+void
+xml_parser_c::throw_error(const xml_parser_error_c &error) {
+  m_saved_parser_error = error;
+  longjmp(m_parser_error_jmp_buf, 1);
 }

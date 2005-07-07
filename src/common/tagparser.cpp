@@ -77,7 +77,7 @@ parse_xml_tags(const string &name,
       delete new_tags;
     }
   } catch (error_c e) {
-    mxerror("%s", e.get_error());
+    mxerror("%s", e.get_error().c_str());
   }
 
   delete in;

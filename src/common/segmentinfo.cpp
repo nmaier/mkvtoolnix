@@ -54,7 +54,7 @@ parse_segmentinfo(const string &file_name,
   } catch (error_c &e) {
     if (exception_on_error)
       throw e;
-    mxerror("%s\n", e.get_error());
+    mxerror("%s\n", e.get_error().c_str());
   }
 
   return NULL;

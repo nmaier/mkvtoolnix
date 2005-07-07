@@ -16,12 +16,15 @@
 #ifndef __XML_ELEMENT_PARSER_H
 #define __XML_ELEMENT_PARSER_H
 
+#include "os.h"
+
 #include <expat.h>
 #include <setjmp.h>
 
 #include <string>
 #include <vector>
 
+#include "common.h"
 #include "xml_element_mapping.h"
 
 namespace libebml {
@@ -33,6 +36,62 @@ class mm_text_io_c;
 
 using namespace std;
 using namespace libebml;
+
+class MTX_DLL_API xml_parser_error_c: public error_c {
+public:
+  int m_line, m_column;
+
+public:
+  xml_parser_error_c(const string &message, XML_Parser &parser):
+    error_c(message), m_line(XML_GetCurrentLineNumber(parser)),
+    m_column(XML_GetCurrentColumnNumber(parser)) {
+  }
+
+  xml_parser_error_c():
+    error_c("no error"), m_line(-1), m_column(-1) {
+  }
+
+  virtual string get_error() {
+    return mxsprintf("Line %d, column %d: ", m_line, m_column) + error;
+  }
+};
+
+class MTX_DLL_API xml_parser_c {
+private:
+  jmp_buf m_parser_error_jmp_buf;
+  xml_parser_error_c m_saved_parser_error;
+
+protected:
+  enum state_t {
+    XMLP_STATE_INITIAL,
+    XMLP_STATE_IN_HEADER,
+    XMLP_STATE_AFTER_HEADER
+  };
+
+  state_t m_xml_parser_state;
+  mm_text_io_c *m_xml_source;
+
+  XML_Parser m_xml_parser;
+
+public:
+  xml_parser_c(mm_text_io_c *xml_source);
+  xml_parser_c();
+  virtual ~xml_parser_c();
+
+  void setup_xml_parser();
+
+  virtual void start_element_cb(const char *name, const char **atts) {
+  }
+  virtual void end_element_cb(const char *name) {
+  }
+  virtual void add_data_cb(const XML_Char *s, int len) {
+  }
+
+  virtual void parse_xml_file();
+  virtual bool parse_one_xml_line();
+
+  virtual void throw_error(const xml_parser_error_c &error);
+};
 
 typedef struct {
   XML_Parser parser;

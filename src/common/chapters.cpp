@@ -365,7 +365,7 @@ parse_chapters(const string &file_name,
     if (exception_on_error)
       throw;
     mxerror("Could not parse the chapters in '%s': %s\n", file_name.c_str(),
-            e.get_error());
+            e.get_error().c_str());
   } catch (...) {
     if (in != NULL)
       delete in;
@@ -448,7 +448,7 @@ parse_chapters(mm_text_io_c *in,
   } catch (error_c e) {
     if (exception_on_error)
       throw e;
-    mxerror("%s", e.get_error());
+    mxerror("%s", e.get_error().c_str());
   }
 
   return NULL;

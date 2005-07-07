@@ -190,8 +190,8 @@ parse_xml_chapters(mm_text_io_c *in,
                                             offset);
   } catch (error_c e) {
     if (!exception_on_error)
-      mxerror("%s", e.get_error());
-    error = (const char *)e;
+      mxerror("%s", e.get_error().c_str());
+    error = e.get_error();
     chapters = NULL;
   }
 

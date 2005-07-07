@@ -663,7 +663,7 @@ tab_chapters::load(wxString name) {
     }
   } catch (error_c ex) {
     analyzer = NULL;
-    s = wxU((const char *)ex);
+    s = wxU(ex.get_error().c_str());
     break_line(s);
     while (s[s.Length() - 1] == wxT('\n'))
       s.Remove(s.Length() - 1);
