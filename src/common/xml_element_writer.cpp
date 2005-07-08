@@ -168,43 +168,20 @@ write_xml_element_rec(int level,
 
 // ------------------------------------------------------------------------
 
-static void
-xml_formatter_start_cb(void *user_data,
-                       const char *name,
-                       const char **atts) {
-  ((xml_formatter_c *)user_data)->start_element_cb(name, atts);
-}
-
-static void
-xml_formatter_end_cb(void *user_data,
-                     const char *name) {
-  ((xml_formatter_c *)user_data)->end_element_cb(name);
-}
-
-static void
-xml_formatter_add_data_cb(void *user_data,
-                          const XML_Char *s,
-                          int len) {
-  ((xml_formatter_c *)user_data)->add_data_cb(s, len);
-}
-
 xml_formatter_c::xml_formatter_c(mm_io_c *out,
                                  const string &encoding):
-  m_out(out), m_encoding(encoding), m_cc_utf8(0), m_header_written(false),
-  m_parser(NULL), m_state(XMLF_STATE_NONE) {
+  m_out(out),
+  m_temp_io(auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL,
+                                                                    100000,
+                                                                    4000)))),
+  m_encoding(encoding), m_cc_utf8(0), m_header_written(false),
+  m_state(XMLF_STATE_NONE) {
 
+  m_xml_source = m_temp_io.get();
   m_cc_utf8 = utf8_init(m_encoding);
-
-  m_parser = XML_ParserCreate(NULL);
-  XML_SetUserData(m_parser, this);
-  XML_SetElementHandler(m_parser, xml_formatter_start_cb,
-                        xml_formatter_end_cb);
-  XML_SetCharacterDataHandler(m_parser, xml_formatter_add_data_cb);
 }
 
 xml_formatter_c::~xml_formatter_c() {
-  if (NULL != m_parser)
-    XML_ParserFree(m_parser);
 }
 
 void
@@ -251,13 +228,18 @@ xml_formatter_c::write_header() {
 
 void
 xml_formatter_c::format(const string &text) {
-  if (XML_Parse(m_parser, text.c_str(), text.length(), 0) == 0) {
-    XML_Error xerror;
+  try {
+    m_temp_io->save_pos();
+    m_temp_io->write(text.c_str(), text.length());
+    m_temp_io->restore_pos();
 
-    xerror = XML_GetErrorCode(m_parser);
+    while (parse_one_xml_line())
+      ;
+
+  } catch (xml_parser_error_c &error) {
     throw xml_formatter_error_c(mxsprintf("XML parser error at line %d: %s.",
-                                          XML_GetCurrentLineNumber(m_parser),
-                                          XML_ErrorString(xerror)));
+                                          error.m_line,
+                                          error.get_error().c_str()));
   }
 }
 

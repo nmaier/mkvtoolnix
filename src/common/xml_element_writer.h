@@ -48,14 +48,14 @@ public:
     error_c(_error) { }
 };
 
-class xml_formatter_c {
+class xml_formatter_c: public xml_parser_c {
 private:
   mm_io_c *m_out;
+  auto_ptr<mm_text_io_c> m_temp_io;
   string m_encoding, m_dtd, m_dtd_file, m_stylesheet_type, m_stylesheet_file;
   int m_cc_utf8;
   bool m_header_written;
 
-  XML_Parser m_parser;
   string m_data_buffer;
   int m_depth;
 
