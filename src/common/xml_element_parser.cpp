@@ -643,9 +643,8 @@ xml_parser_c::parse_one_xml_line() {
   handle_xml_encoding(line);
 
   line += "\n";
-  if ((XML_Parse(m_xml_parser, line.c_str(), line.length(),
-                 m_xml_source->eof()) == 0) &&
-      (XML_GetErrorCode(m_xml_parser) != XML_ERROR_FINISHED)) {
+  if (XML_Parse(m_xml_parser, line.c_str(), line.length(),
+                m_xml_source->eof()) == 0) {
     string error;
     XML_Error xerror;
 
