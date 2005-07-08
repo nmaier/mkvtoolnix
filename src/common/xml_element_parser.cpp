@@ -640,6 +640,8 @@ xml_parser_c::parse_one_xml_line() {
   if (!m_xml_source->getline2(line))
     return false;
 
+  handle_xml_encoding(line);
+
   line += "\n";
   if ((XML_Parse(m_xml_parser, line.c_str(), line.length(),
                  m_xml_source->eof()) == 0) &&
@@ -664,3 +666,71 @@ xml_parser_c::throw_error(const xml_parser_error_c &error) {
   m_saved_parser_error = error;
   longjmp(m_parser_error_jmp_buf, 1);
 }
+
+void
+xml_parser_c::handle_xml_encoding(string &line) {
+  int pos;
+  string new_line;
+
+  if ((XMLP_STATE_AFTER_HEADER == m_xml_parser_state) ||
+      (BO_NONE == m_xml_source->get_byte_order()))
+    return;
+
+  pos = 0;
+
+  if (XMLP_STATE_INITIAL == m_xml_parser_state) {
+    pos = line.find("<?xml");
+    if (0 > pos)
+      return;
+    m_xml_parser_state = XMLP_STATE_ATTRIBUTE_NAME;
+    pos += 5;
+    new_line = line.substr(0, pos);
+  }
+
+  while ((line.length() > pos) &&
+         (XMLP_STATE_AFTER_HEADER != m_xml_parser_state)) {
+    char cur_char = line[pos];
+    ++pos;
+
+    if (XMLP_STATE_ATTRIBUTE_NAME == m_xml_parser_state) {
+      if (('?' == cur_char) && (line.length() > pos) &&
+          ('>' == line[pos])) {
+        new_line += "?>" + line.substr(pos + 1, line.length() - pos - 1);
+        m_xml_parser_state = XMLP_STATE_AFTER_HEADER;
+
+      } else if ('"' == cur_char)
+        m_xml_parser_state = XMLP_STATE_ATTRIBUTE_VALUE;
+
+      else if ((' ' != cur_char) && ('=' != cur_char))
+        m_xml_attribute_name += cur_char;
+
+    } else {
+      // XMLP_STATE_ATTRIBUTE_VALUE
+      if ('"' == cur_char) {
+        m_xml_parser_state = XMLP_STATE_ATTRIBUTE_NAME;
+        strip(m_xml_attribute_name);
+        strip(m_xml_attribute_value);
+        if (m_xml_attribute_name == "encoding") {
+          m_xml_attribute_value = downcase(m_xml_attribute_value);
+          if ((m_xml_source->get_byte_order() == BO_NONE) &&
+              ((m_xml_attribute_value == "utf-8") ||
+               (m_xml_attribute_value == "utf8")))
+            m_xml_source->set_byte_order(BO_UTF8);
+
+          else if (starts_with_case(m_xml_attribute_value, "utf"))
+            m_xml_attribute_value = "UTF-8";
+        }
+
+        new_line += " " + m_xml_attribute_name + "=\"" +
+          m_xml_attribute_value + "\"";
+        m_xml_attribute_name = "";
+        m_xml_attribute_value = "";
+
+      } else
+        m_xml_attribute_value += cur_char;
+    }
+  }
+
+  line = new_line;
+}
+

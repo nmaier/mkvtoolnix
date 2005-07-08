@@ -1,3 +1,9 @@
+2005-07-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed support for USF subtitles stored in
+	UTF-16 and UTF-32. Added support for USF subtitles stored in UTF-8
+	without a BOM.
+
 2005-07-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.5.0.

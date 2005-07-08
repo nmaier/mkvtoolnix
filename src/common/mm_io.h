@@ -235,6 +235,9 @@ public:
   virtual string getline();
   virtual int read_next_char(char *buffer);
   virtual byte_order_e get_byte_order();
+  virtual void set_byte_order(byte_order_e new_byte_order) {
+    byte_order = new_byte_order;
+  }
 };
 
 class MTX_DLL_API mm_stdio_c: public mm_io_c {

@@ -60,11 +60,13 @@ class MTX_DLL_API xml_parser_c {
 private:
   jmp_buf m_parser_error_jmp_buf;
   xml_parser_error_c m_saved_parser_error;
+  string m_xml_attribute_name, m_xml_attribute_value;
 
 protected:
   enum state_t {
     XMLP_STATE_INITIAL,
-    XMLP_STATE_IN_HEADER,
+    XMLP_STATE_ATTRIBUTE_NAME,
+    XMLP_STATE_ATTRIBUTE_VALUE,
     XMLP_STATE_AFTER_HEADER
   };
 
@@ -91,6 +93,9 @@ public:
   virtual bool parse_one_xml_line();
 
   virtual void throw_error(const xml_parser_error_c &error);
+
+private:
+  void handle_xml_encoding(string &line);
 };
 
 typedef struct {
