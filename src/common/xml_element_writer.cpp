@@ -310,3 +310,12 @@ xml_formatter_c::add_data_cb(const XML_Char *s,
   m_state = XMLF_STATE_DATA;
 }
 
+void
+xml_formatter_c::format_fixed(const string &text) {
+  if (XMLF_STATE_START == m_state)
+    m_out->printf(">\n%*s", m_depth * 2, "");
+  else if (XMLF_STATE_END == m_state)
+    m_out->printf("\n%*s", m_depth * 2, "");
+  m_state = XMLF_STATE_DATA;
+  m_out->printf("%s", text.c_str());
+}

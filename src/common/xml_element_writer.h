@@ -76,6 +76,7 @@ public:
 
   virtual void write_header();
   virtual void format(const string &text);
+  virtual void format_fixed(const string &text);
   virtual void flush();
 
   virtual void start_element_cb(const char *name, const char **atts);

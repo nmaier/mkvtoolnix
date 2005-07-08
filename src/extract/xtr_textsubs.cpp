@@ -401,13 +401,16 @@ xtr_usf_c::finish_track() {
   try {
     m_formatter->format(mxsprintf("<subtitles>\n<language code=\"%s\"/>\n",
                                   m_language.c_str()));
-    foreach(entry, m_entries)
+    foreach(entry, m_entries) {
+      string text = entry->m_text;
+      strip(text, true);
       m_formatter->format(mxsprintf("<subtitle start=\"" FMT_TIMECODE
-                                    "\" stop=\"" FMT_TIMECODE
-                                    "\">%s</subtitle>\n",
+                                    "\" stop=\"" FMT_TIMECODE "\">",
                                     ARG_TIMECODE_NS(entry->m_start),
-                                    ARG_TIMECODE_NS(entry->m_end),
-                                    entry->m_text.c_str()));
+                                    ARG_TIMECODE_NS(entry->m_end)));
+      m_formatter->format_fixed(text);
+      m_formatter->format("</subtitle>\n");
+    }
     m_formatter->format("</subtitles>\n");
   } catch (xml_formatter_error_c &error) {
     mxerror("Failed to parse an USF subtitle entry for track %lld: %s\n", tid,
