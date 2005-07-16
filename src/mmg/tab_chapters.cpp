@@ -2016,7 +2016,7 @@ tab_chapters::parse_time(wxString s) {
   c = utf8s.c_str();
   while (*c != 0) {
     if (!isdigit(*c)) {
-      if (parse_timecode(utf8s.c_str(), &nsecs))
+      if (parse_timecode(utf8s, nsecs))
         return nsecs;
       return -1;
     }

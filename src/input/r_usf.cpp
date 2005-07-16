@@ -179,11 +179,11 @@ usf_reader_c::start_element_cb(const char *name,
     duration = -1;
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "start"))
-        entry.m_start = parse_timecode(atts[i + 1]);
+        entry.m_start = try_to_parse_timecode(atts[i + 1]);
       else if (!strcmp(atts[i], "stop"))
-        entry.m_end = parse_timecode(atts[i + 1]);
+        entry.m_end = try_to_parse_timecode(atts[i + 1]);
       else if (!strcmp(atts[i], "duration"))
-        duration = parse_timecode(atts[i + 1]);
+        duration = try_to_parse_timecode(atts[i + 1]);
     if ((-1 == entry.m_end) && (-1 != entry.m_start) && (-1 != duration))
       entry.m_end = entry.m_start + duration;
     m_copy_buffer = "";
@@ -333,17 +333,13 @@ usf_reader_c::get_progress() {
 }
 
 int64_t
-usf_reader_c::parse_timecode(const char *s) {
-  int hour, minute, second, millisecond;
+usf_reader_c::try_to_parse_timecode(const char *s) {
+  int64_t timecode;
 
-  if ((mxsscanf(s, "%d:%d:%d.%d", &hour, &minute, &second, &millisecond) !=
-       4) ||
-      (0 > hour) || (0 > minute) || (59 < minute) || (0 > second) ||
-      (59 < second) || (999 < millisecond))
+  if (!parse_timecode(s, timecode))
     throw xml_parser_error_c("Invalid start or stop timecode", m_xml_parser);
 
-  return (((int64_t)hour) * 3600000ll + ((int64_t)minute) * 60000ll +
-          ((int64_t)second) * 1000ll + millisecond) * 1000000ll;
+  return timecode;
 }
 
 void

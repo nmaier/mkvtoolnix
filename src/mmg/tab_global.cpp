@@ -54,8 +54,9 @@ tab_global::tab_global(wxWindow *parent):
                          wxVERTICAL);
   cb_split = new wxCheckBox(this, ID_CB_SPLIT, wxT("Enable splitting..."));
   cb_split->SetToolTip(TIP("Enables splitting of the output into more than "
-                           "one file. You can split after a given size "
-                           "or after a given amount of time has passed."));
+                           "one file. You can split after a given size, "
+                           "after a given amount of time has passed in each "
+                           "file or after a list of timecodes."));
   siz_split->Add(cb_split, 0, wxLEFT | wxBOTTOM, 5);
 
 
@@ -101,8 +102,13 @@ tab_global::tab_global(wxWindow *parent):
   cob_split_by_time->Append(wxT("1800s"));
   cob_split_by_time->SetToolTip(TIP("The duration after which a new output "
                                     "file is started. The time can be given "
-                                    "either in the form HH:MM:SS or as the "
-                                    "number of seconds followed by 's'. "
+                                    "either in the form HH:MM:SS.nnnnnnnnn "
+                                    "or as the number of seconds followed by "
+                                    "'s'. You may omit the number of hours "
+                                    "'HH' and the number of nanoseconds "
+                                    "'nnnnnnnnn'. If given then you may use "
+                                    "up to nine digits after the decimal "
+                                    "point. "
                                     "Examples: 01:00:00 (after one hour) or "
                                     "1800s (after 1800 seconds)."));
   cob_split_by_time->Enable(false);
@@ -124,10 +130,15 @@ tab_global::tab_global(wxWindow *parent):
   tc_split_after_timecodes->
     SetToolTip(TIP("The timecodes after which a new output "
                    "file is started. The timecodes can be given "
-                   "either in the form HH:MM:SS or as the "
-                   "number of seconds followed by 's'. If two or more "
+                   "either in the form HH:MM:SS.nnnnnnnnn "
+                   "or as the number of seconds followed by "
+                   "'s'. You may omit the number of hours "
+                   "'HH' and the number of nanoseconds "
+                   "'nnnnnnnnn'. If given then you may use "
+                   "up to nine digits after the decimal "
+                   "point. If two or more "
                    "timecodes are used then you have to separate them with "
-                   "commatas. The formats can be mixed, too. "
+                   "commas. The formats can be mixed, too. "
                    "Examples: 01:00:00,01:30:00 (after one hour and after "
                    "one hour and thirty minutes) or "
                    "1800s,3000s,00:10:00 (after three, five and ten "

@@ -645,47 +645,6 @@ parse_cropping(const string &s,
   ti.pixel_crop_list.push_back(crop);
 }
 
-/** \brief Parse one timecode used in different formats to \c --split
-
-  This function recognizes two different timecode formats:
-  A number postfixed with '<tt>s</tt>' or a string with the format
-  '<tt>HH:MM:SS</tt>' or '<tt>HH:MM:SS.mmm</tt>'.
-
-  \return \c true if the format was recognized.
-*/
-static bool
-parse_split_one_timecode(string s,
-                         int64_t &split_after) {
-  int secs, mins, hours, msecs;
-
-  // Number of seconds postfixed by 's'.
-  if (!s.empty() && ('s' == s[s.length() - 1])) {
-    s.erase(s.length() - 1);
-    if (!parse_int(s, split_after))
-      return false;
-
-    split_after *= 1000000000ll;
-    return true;
-  }
-
-  // HH:MM:SS[.mmm]
-  if (s.size() == 12) {
-    if ((s[8] != '.') || !parse_int(s.substr(9), msecs))
-      return false;
-    s.erase(8);
-  } else
-    msecs = 0;
-
-  mxsscanf(s.c_str(), "%d:%d:%d", &hours, &mins, &secs);
-  if ((hours < 0) || (mins < 0) || (mins > 59) || (secs < 0) || (secs > 59))
-    return false;
-
-  split_after = (int64_t)(secs + mins * 60 + hours * 3600) * 1000ll + msecs;
-  split_after *= 1000000ll;
-
-  return true;
-}
-
 /** \brief Parse the duration formats to \c --split
 
   This function is called by ::parse_split if the format specifies
@@ -699,9 +658,9 @@ parse_split_duration(const string &arg) {
   if (starts_with_case(s, "duration:"))
     s.erase(0, strlen("duration:"));
 
-  if (!parse_split_one_timecode(s, split_after))
-      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
-              arg.c_str());
+  if (!parse_timecode(s, split_after))
+      mxerror(_("Invalid time for '--split' in '--split %s'. Additional error "
+                "message: %s\n"), arg.c_str(), timecode_parser_error.c_str());
 
   cluster_helper->add_split_point(split_point_t(split_after,
                                                 split_point_t::SPT_DURATION,
@@ -725,9 +684,9 @@ parse_split_timecodes(const string &arg) {
 
   timecodes = split(s, ",");
   foreach(timecode, timecodes) {
-    if (!parse_split_one_timecode(*timecode, split_after))
-      mxerror(_("Invalid time for '--split' in '--split %s'.\n"),
-              arg.c_str());
+    if (!parse_timecode(*timecode, split_after))
+      mxerror(_("Invalid time for '--split' in '--split %s'. Additional error "
+                "message: %s.\n"), arg.c_str(), timecode_parser_error.c_str());
     cluster_helper->add_split_point(split_point_t(split_after,
                                                   split_point_t::SPT_TIMECODE,
                                                   true));

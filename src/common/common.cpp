@@ -1532,46 +1532,131 @@ mxhexdump(int level,
   mxinfo("%s\n", output);
 }
 
-const char *timecode_parser_error = NULL;
+string timecode_parser_error;
 
 static bool
-set_tcp_error(const char *error) {
+set_tcp_error(const string &error) {
   timecode_parser_error = error;
   return false;
 }
 
 bool
-parse_timecode(const char *src,
-               int64_t *timecode) {
+parse_timecode(const string &src,
+               int64_t &timecode) {
   // Recognized format:
-  // HH:MM:SS and HH:MM:SS.nnn with up to nine 'n' for ns precision
-  //              012345678901...
-  int h, m, s, n, i;
-  char format[10];
+  // 1. XXXXXXXs   with XXXXXX being a number of seconds followed
+  //    by the letter 's',
+  // 2. HH:MM:SS.nnnnnnnnn  with up to nine digits 'n' for ns precision;
+  // HH: is optional; HH, MM and SS can be either one or two digits.
+  int h, m, s, n, i, values[4], num_values, num_digits, num_colons;
+  bool decimal_point_found;
 
-  if ((strlen(src) < 8) || (strlen(src) > 18) || (src[2] != ':') ||
-      (src[5] != ':'))
-    return set_tcp_error("Invalid format");
-  if (sscanf(src, "%02d:%02d:%02d", &h, &m, &s) != 3)
-    return set_tcp_error("Invalid format (non-numbers encountered)");
-  if (m > 59)
-    return set_tcp_error("Invalid minute");
-  if (s > 59)
-    return set_tcp_error("Invalid second");
-  if (strlen(src) > 9) {
-    if (src[8] != '.')
-      return set_tcp_error("Invalid format (expected a dot '.' after the "
-                           "seconds)");
-    sprintf(format, "%%0%dd", strlen(src) - 8);
-    if (sscanf(&src[9], format, &n) != 1)
-      return set_tcp_error("Invalid format (non-numbers encountered)");
-    for (i = strlen(src); i < 18; i++)
+  if (src.empty())
+    return false;
+
+  // Number of seconds postfixed by 's'.
+  if ('s' == src[src.length() - 1]) {
+    string tmp = src;
+
+    tmp.erase(tmp.length() - 1);
+    if (!parse_int(tmp, timecode))
+      return set_tcp_error("Non-digits found but expected a nunber of seconds "
+                           "before the 's' at the end");
+
+    timecode *= 1000000000ll;
+    return true;
+  }
+
+  num_digits = 0;
+  num_colons = 0;
+  num_values = 1;
+  decimal_point_found = false;
+  memset(&values, 0, sizeof(int) * 4);
+
+  for (i = 0; src.length() > i; ++i) {
+    if (isdigit(src[i])) {
+      if (decimal_point_found && (9 == num_digits))
+        return set_tcp_error("Invalid format: More than nine nano-second "
+                             "digits");
+      values[num_values - 1] = values[num_values - 1] * 10 + src[i] - '0';
+      ++num_digits;
+
+    } else if (':' == src[i]) {
+      if (decimal_point_found)
+        return set_tcp_error("Invalid format: Colon inside nano-second part");
+      if (2 == num_colons)
+        return set_tcp_error("Invalid format: More than two colons");
+      if (0 == num_digits)
+        return set_tcp_error("Invalid format: No digits before colon");
+      ++num_colons;
+      ++num_values;
+      num_digits = 0;
+
+    } else if ('.' == src[i]) {
+      if (decimal_point_found)
+        return set_tcp_error("Invalid format: Second decimal point after "
+                             "first decimal point");
+
+      if (0 == num_digits)
+        return set_tcp_error("Invalid format: No digits before decimal point");
+      ++num_values;
+      num_digits = 0;
+      decimal_point_found = true;
+
+    } else
+      return set_tcp_error(mxsprintf("Invalid format: unknown character '%c' "
+                                     "found", src[i]));
+  }
+
+  if (1 > num_colons)
+    return set_tcp_error("Invalid format: At least minutes and seconds "
+                         "have to be given, but no colon was found");
+
+  if ((':' == src[src.length() - 1]) || ('.' == src[src.length() - 1]))
+    return set_tcp_error("Invalid format: The last character is a colon or a "
+                         "decimal point instead of a digit");
+
+  // No error has been found. Now find out whoich parts have been
+  // set and which haven't.
+
+  if (4 == num_values) {
+    h = values[0];
+    m = values[1];
+    s = values[2];
+    n = values[3];
+    for (; 9 > num_digits; ++num_digits)
       n *= 10;
-  } else
+
+  } else if (2 == num_values) {
+    h = 0;
+    m = values[0];
+    s = values[1];
     n = 0;
-  if (timecode != NULL)
-    *timecode = ((int64_t)h * 60 * 60 + (int64_t)m * 60 + (int64_t)s) *
-      1000000000 + n;
+
+  } else if (decimal_point_found) {
+    h = 0;
+    m = values[0];
+    s = values[1];
+    n = values[2];
+    for (; 9 > num_digits; ++num_digits)
+      n *= 10;
+
+  } else {
+    h = values[0];
+    m = values[1];
+    s = values[2];
+    n = 0;
+
+  }
+
+  if (m > 59)
+    return set_tcp_error(mxsprintf("Invalid number of minutes: %d > 59", m));
+  if (s > 59)
+    return set_tcp_error(mxsprintf("Invalid number of seconds: %d > 59", s));
+
+  timecode = ((int64_t)h * 60 * 60 + (int64_t)m * 60 + (int64_t)s) *
+    1000000000ll + n;
+
   timecode_parser_error = "no error";
   return true;
 }

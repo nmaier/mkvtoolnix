@@ -93,8 +93,8 @@ using namespace std;
                             (int32_t)(((t) / 1000000000) % 60), \
                             (int32_t)((t) % 1000000000)
 #define ARG_TIMECODEN(t) ARG_TIMECODENINT((int64_t)(t))
-extern const char * MTX_DLL_API timecode_parser_error;
-extern bool MTX_DLL_API parse_timecode(const char *src, int64_t *timecode);
+extern string MTX_DLL_API timecode_parser_error;
+extern bool MTX_DLL_API parse_timecode(const string &s, int64_t &timecode);
 
 extern bool MTX_DLL_API suppress_warnings;
 void MTX_DLL_API fix_format(const char *fmt, string &new_fmt);

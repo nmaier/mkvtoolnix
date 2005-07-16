@@ -140,7 +140,7 @@ File splitting and linking (more global options):
 .TP
 \fB\-\-split\fR size:<\fId[k|m|g]\fR> or shorter \fB\-\-split\fR <\fId[k|m|g]\fR>
 .TP
-\fB\-\-split\fR duration:<\fIHH:MM:SS.mmm\fR|\fIn\fRs> or shorter \fB\-\-split\fR <\fIHH:MM:SS.mmm\fR|\fIn\fRs>
+\fB\-\-split\fR duration:<\fIHH:MM:SS.nnnnnnnnn\fR|\fIn\fRs> or shorter \fB\-\-split\fR <\fIHH:MM:SS.nnnnnnnnn\fR|\fIn\fRs>
 .TP
 \fB\-\-split\fR timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR...]]
 Splits the output file after a given size or a given time.
@@ -157,9 +157,13 @@ The \fBsize:\fR prefix may be omitted for compatibility reasons.
 .br
 2. Splitting after a duration.
 .br
-The paramter must have the form \fIHH:MM:SS.mmm\fR for specifying the duration
-in milliseconds, \fIHH:MM:SS\fR or a number \fIn\fR followed by the letter 's'
-for the duration in seconds.
+The paramter must have the form \fIHH:MM:SS.nnnnnnnnn\fR for specifying the
+duration in up to nano-second precision or a number \fIn\fR followed by the
+letter 's' for the duration in seconds.
+"HH" is the number of hours, "MM" the number of minutes, "SS" the number
+of seconds and "nnnnnnnnn" the number of nanoseconds.
+Both the number of hours and the number of nanoseconds can be omitted.
+There can be up to nine digits after the decimal point.
 After the duration of the contents in the current output has reached this limit
 a new output file will be started.
 The \fBduration:\fR prefix may be omitted for compatibility reasons.

@@ -116,11 +116,12 @@ el_get_time(parser_data_t *pdata,
   const char *errmsg = "Expected a time in the following format: HH:MM:SS.nnn"
     " (HH = hour, MM = minute, SS = second, nnn = millisecond up to "
     "nanosecond. You may use up to nine digits for 'n' which would mean "
-    "nanosecond precision). Found '%s' instead. Additional error message: %s";
+    "nanosecond precision). You may omit the hour as well. "
+    "Found '%s' instead. Additional error message: %s";
   int64_t usec;
 
   strip(*pdata->bin);
-  if (!parse_timecode(pdata->bin->c_str(), &usec))
+  if (!parse_timecode(*pdata->bin, usec))
     xmlp_error(pdata, errmsg, pdata->bin->c_str(), timecode_parser_error);
 
   *(static_cast<EbmlUInteger *>(el)) = usec;

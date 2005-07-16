@@ -83,7 +83,7 @@ public:
   virtual void add_data_cb(const XML_Char *s, int len);
 
 private:
-  virtual int64_t parse_timecode(const char *s);
+  virtual int64_t try_to_parse_timecode(const char *s);
 };
 
 #endif  // __R_USF_H
