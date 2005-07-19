@@ -1,3 +1,9 @@
+2005-07-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: AVC/H.264 references were wrong, and muxing
+	of AVC from Matroska files with proper references resulted in
+	unplayable files.
+
 2005-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed support for USF subtitles stored in
