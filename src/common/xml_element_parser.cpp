@@ -122,7 +122,8 @@ el_get_time(parser_data_t *pdata,
 
   strip(*pdata->bin);
   if (!parse_timecode(*pdata->bin, usec))
-    xmlp_error(pdata, errmsg, pdata->bin->c_str(), timecode_parser_error);
+    xmlp_error(pdata, errmsg, pdata->bin->c_str(),
+               timecode_parser_error.c_str());
 
   *(static_cast<EbmlUInteger *>(el)) = usec;
 }
