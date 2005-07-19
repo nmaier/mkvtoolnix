@@ -200,7 +200,7 @@ kax_reader_c::new_kax_track() {
 }
 
 kax_track_t *
-kax_reader_c::find_track_by_num(uint32_t n,
+kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
   int i;
 
@@ -213,7 +213,7 @@ kax_reader_c::find_track_by_num(uint32_t n,
 }
 
 kax_track_t *
-kax_reader_c::find_track_by_uid(uint32_t uid,
+kax_reader_c::find_track_by_uid(uint64_t uid,
                                 kax_track_t *c) {
   int i;
 
@@ -266,7 +266,7 @@ kax_reader_c::verify_tracks() {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(alBITMAPINFOHEADER))) {
             if (verbose)
-              mxwarn(PFX "CodecID for track %u is '" MKV_V_MSCOMP
+              mxwarn(PFX "CodecID for track %llu is '" MKV_V_MSCOMP
                      "', but there was no BITMAPINFOHEADER struct present. "
                      "Therefore we don't have a FourCC to identify the video "
                      "codec used.\n", t->tnum);
@@ -280,7 +280,7 @@ kax_reader_c::verify_tracks() {
             if (t->v_width != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility "
-                       "mode, track %u) Matrosa says video width is %u, but "
+                       "mode, track %llu) Matrosa says video width is %llu, but "
                        "the BITMAPINFOHEADER says %u.\n", t->tnum, t->v_width,
                        u);
               if (t->v_width == 0)
@@ -291,8 +291,9 @@ kax_reader_c::verify_tracks() {
             if (t->v_height != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility "
-                       "mode, track %u) Matrosa video height is %u, but the "
-                       "BITMAPINFOHEADER says %u.\n", t->tnum, t->v_height, u);
+                       "mode, track %llu) Matrosa video height is %llu, but "
+                       "the BITMAPINFOHEADER says %u.\n", t->tnum, t->v_height,
+                       u);
               if (t->v_height == 0)
                 t->v_height = u;
             }
@@ -303,12 +304,12 @@ kax_reader_c::verify_tracks() {
 
         if (t->v_width == 0) {
           if (verbose)
-            mxwarn(PFX "The width for track %u was not set.\n", t->tnum);
+            mxwarn(PFX "The width for track %llu was not set.\n", t->tnum);
           continue;
         }
         if (t->v_height == 0) {
           if (verbose)
-            mxwarn(PFX "The height for track %u was not set.\n", t->tnum);
+            mxwarn(PFX "The height for track %llu was not set.\n", t->tnum);
           continue;
         }
 
@@ -324,7 +325,7 @@ kax_reader_c::verify_tracks() {
           if ((t->private_data == NULL) ||
               (t->private_size < sizeof(alWAVEFORMATEX))) {
             if (verbose)
-              mxwarn(PFX "CodecID for track %u is '"
+              mxwarn(PFX "CodecID for track %llu is '"
                      MKV_A_ACM "', but there was no WAVEFORMATEX struct "
                      "present. Therefore we don't have a format ID to "
                      "identify the audio codec used.\n", t->tnum);
@@ -339,9 +340,9 @@ kax_reader_c::verify_tracks() {
             if (((uint32_t)t->a_sfreq) != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility mode for "
-                       "track %u) Matroska says that there are %u samples per"
-                       " second, but WAVEFORMATEX says that there are %u.\n",
-                       t->tnum, (uint32_t)t->a_sfreq, u);
+                       "track %llu) Matroska says that there are %u samples "
+                       "per second, but WAVEFORMATEX says that there are "
+                       "%u.\n", t->tnum, (uint32_t)t->a_sfreq, u);
               if (t->a_sfreq == 0.0)
                 t->a_sfreq = (float)u;
             }
@@ -350,9 +351,9 @@ kax_reader_c::verify_tracks() {
             if (t->a_channels != u) {
               if (verbose)
                 mxwarn(PFX "(MS compatibility mode for "
-                       "track %u) Matroska says that there are %u channels, "
-                       "but the WAVEFORMATEX says that there are %u.\n",
-                       t->tnum, t->a_channels, u);
+                       "track %llu) Matroska says that there are %llu "
+                       "channels, but the WAVEFORMATEX says that there are "
+                       "%u.\n", t->tnum, t->a_channels, u);
               if (t->a_channels == 0)
                 t->a_channels = u;
             }
@@ -361,8 +362,8 @@ kax_reader_c::verify_tracks() {
             if (t->a_bps != u) {
               if (verbose && (t->a_formattag == 0x0001))
                 mxwarn(PFX "(MS compatibility mode for "
-                       "track %u) Matroska says that there are %u bits per "
-                       "sample, but the WAVEFORMATEX says that there are %u."
+                       "track %llu) Matroska says that there are %llu bits per"
+                       " sample, but the WAVEFORMATEX says that there are %u."
                        "\n", t->tnum, t->a_bps, u);
               if (t->a_bps == 0)
                 t->a_bps = u;
@@ -380,7 +381,7 @@ kax_reader_c::verify_tracks() {
           else if (t->codec_id == MKV_A_VORBIS) {
             if (t->private_data == NULL) {
               if (verbose)
-                mxwarn(PFX "CodecID for track %u is "
+                mxwarn(PFX "CodecID for track %llu is "
                        "'A_VORBIS', but there are no header packets present.",
                        t->tnum);
               continue;
@@ -473,7 +474,7 @@ kax_reader_c::verify_tracks() {
         if (t->codec_id == MKV_S_VOBSUB) {
           if (t->private_data == NULL) {
             if (verbose)
-              mxwarn(PFX "CodecID for track %u is '%s', but there was no "
+              mxwarn(PFX "CodecID for track %llu is '%s', but there was no "
                      "private data found.\n", t->tnum, t->codec_id.c_str());
             continue;
           }
@@ -484,7 +485,7 @@ kax_reader_c::verify_tracks() {
       case 'b':
         if (t->codec_id != MKV_B_VOBBTN) {
           if (verbose)
-            mxwarn(PFX "CodecID '%s' for track %u is unknown.\n",
+            mxwarn(PFX "CodecID '%s' for track %llu is unknown.\n",
                    t->codec_id.c_str(), t->tnum);
           continue;
         }
@@ -494,12 +495,12 @@ kax_reader_c::verify_tracks() {
       default:                  // unknown track type!? error in demuxer...
         if (verbose)
           mxwarn(PFX "matroska_reader: unknown "
-                 "demuxer type for track %u: '%c'\n", t->tnum, t->type);
+                 "demuxer type for track %llu: '%c'\n", t->tnum, t->type);
         continue;
     }
 
     if (t->ok && (verbose > 1))
-      mxinfo(PFX "Track %u seems to be ok.\n", t->tnum);
+      mxinfo(PFX "Track %llu seems to be ok.\n", t->tnum);
   }
 }
 
@@ -569,7 +570,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
           } else if (EbmlId(*l2) == KaxFileUID::ClassInfos.GlobalId) {
             KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
-            id = uint32(fuid);
+            id = uint64(fuid);
 
           } else if (EbmlId(*l2) == KaxFileData::ClassInfos.GlobalId) {
             KaxFileData &fdata = *static_cast<KaxFileData *>(l2);
@@ -707,7 +708,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
           is_global = true;
         else {
           found = false;
-          track = find_track_by_uid(uint32(*tuid));
+          track = find_track_by_uid(uint64(*tuid));
           if (track != NULL) {
             found = true;
             contains_tag = false;
@@ -946,16 +947,16 @@ kax_reader_c::read_headers() {
           track->tnum = uint8(*ktnum);
           if ((find_track_by_num(track->tnum, track) != NULL) && (verbose > 1))
             mxwarn(PFX "|  + There's more than one track with "
-                   "the number %u.\n", track->tnum);
+                   "the number %llu.\n", track->tnum);
 
           ktuid = FINDFIRST(ktentry, KaxTrackUID);
           if (ktuid == NULL)
             mxerror(PFX "A track is missing its track UID.\n");
           if (verbose > 1)
-            mxinfo(PFX "|  + Track UID: %u\n", uint32(*ktuid));
-          track->tuid = uint32(*ktuid);
+            mxinfo(PFX "|  + Track UID: %llu\n", uint64(*ktuid));
+          track->tuid = uint64(*ktuid);
           if ((find_track_by_uid(track->tuid, track) != NULL) && (verbose > 1))
-            mxwarn(PFX "|  + There's more than one track with the UID %u.\n",
+            mxwarn(PFX "|  + There's more than one track with the UID %llu.\n",
                    track->tnum);
 
           kdefdur = FINDFIRST(ktentry, KaxTrackDefaultDuration);
@@ -1024,7 +1025,7 @@ kax_reader_c::read_headers() {
             if (ka_channels != NULL) {
               track->a_channels = uint8(*ka_channels);
               if (verbose > 1)
-                mxinfo(PFX "|   + Channels: %u\n", track->a_channels);
+                mxinfo(PFX "|   + Channels: %llu\n", track->a_channels);
             } else
               track->a_channels = 1;
 
@@ -1033,7 +1034,7 @@ kax_reader_c::read_headers() {
             if (ka_bitdepth != NULL) {
               track->a_bps = uint8(*ka_bitdepth);
               if (verbose > 1)
-                mxinfo(PFX "|   + Bit depth: %u\n", track->a_bps);
+                mxinfo(PFX "|   + Bit depth: %llu\n", track->a_bps);
             }
           }
 
@@ -1051,32 +1052,32 @@ kax_reader_c::read_headers() {
 
             kv_pwidth = FINDFIRST(ktvideo, KaxVideoPixelWidth);
             if (kv_pwidth != NULL) {
-              track->v_width = uint16(*kv_pwidth);
+              track->v_width = uint64(*kv_pwidth);
               if (verbose > 1)
-                mxinfo(PFX "|   + Pixel width: %u\n", track->v_width);
+                mxinfo(PFX "|   + Pixel width: %llu\n", track->v_width);
             } else
               mxerror(PFX "Pixel width is missing.\n");
 
             kv_pheight = FINDFIRST(ktvideo, KaxVideoPixelHeight);
             if (kv_pheight != NULL) {
-              track->v_height = uint16(*kv_pheight);
+              track->v_height = uint64(*kv_pheight);
               if (verbose > 1)
-                mxinfo(PFX "|   + Pixel height: %u\n", track->v_height);
+                mxinfo(PFX "|   + Pixel height: %llu\n", track->v_height);
             } else
               mxerror(PFX "Pixel height is missing.\n");
 
             kv_dwidth = FINDFIRST(ktvideo, KaxVideoDisplayWidth);
             if (kv_dwidth != NULL) {
-              track->v_dwidth = uint16(*kv_dwidth);
+              track->v_dwidth = uint64(*kv_dwidth);
               if (verbose > 1)
-                mxinfo(PFX "|   + Display width: %u\n", track->v_dwidth);
+                mxinfo(PFX "|   + Display width: %llu\n", track->v_dwidth);
             }
 
             kv_dheight = FINDFIRST(ktvideo, KaxVideoDisplayHeight);
             if (kv_dheight != NULL) {
-              track->v_dheight = uint16(*kv_dheight);
+              track->v_dheight = uint64(*kv_dheight);
               if (verbose > 1)
-                mxinfo(PFX "|   + Display height: %u\n", track->v_dheight);
+                mxinfo(PFX "|   + Display height: %llu\n", track->v_dheight);
             }
 
             // For older files.
@@ -1089,30 +1090,31 @@ kax_reader_c::read_headers() {
 
             kv_pcleft = FINDFIRST(ktvideo, KaxVideoPixelCropLeft);
             if (kv_pcleft != NULL) {
-              track->v_pcleft = uint16(*kv_pcleft);
+              track->v_pcleft = uint64(*kv_pcleft);
               if (verbose > 1)
-                mxinfo(PFX "|   + Pixel crop left: %u\n", track->v_pcleft);
+                mxinfo(PFX "|   + Pixel crop left: %llu\n", track->v_pcleft);
             }
 
             kv_pctop = FINDFIRST(ktvideo, KaxVideoPixelCropTop);
             if (kv_pctop != NULL) {
-              track->v_pctop = uint16(*kv_pctop);
+              track->v_pctop = uint64(*kv_pctop);
               if (verbose > 1)
-                mxinfo(PFX "|   + Pixel crop top: %u\n", track->v_pctop);
+                mxinfo(PFX "|   + Pixel crop top: %llu\n", track->v_pctop);
             }
 
             kv_pcright = FINDFIRST(ktvideo, KaxVideoPixelCropRight);
             if (kv_pcright != NULL) {
-              track->v_pcright = uint16(*kv_pcright);
+              track->v_pcright = uint64(*kv_pcright);
               if (verbose > 1)
-                mxinfo(PFX "|   + Pixel crop right: %u\n", track->v_pcright);
+                mxinfo(PFX "|   + Pixel crop right: %llu\n", track->v_pcright);
             }
 
             kv_pcbottom = FINDFIRST(ktvideo, KaxVideoPixelCropBottom);
             if (kv_pcbottom != NULL) {
-              track->v_pcbottom = uint16(*kv_pcbottom);
+              track->v_pcbottom = uint64(*kv_pcbottom);
               if (verbose > 1)
-                mxinfo(PFX "|   + Pixel crop bottom: %u\n", track->v_pcbottom);
+                mxinfo(PFX "|   + Pixel crop bottom: %llu\n",
+                       track->v_pcbottom);
             }
 
           }
@@ -1139,37 +1141,37 @@ kax_reader_c::read_headers() {
           ktmincache = FINDFIRST(ktentry, KaxTrackMinCache);
           if (ktmincache != NULL) {
             if (verbose > 1)
-              mxinfo(PFX "|  + MinCache: %u\n", uint32(*ktmincache));
-            if (uint32(*ktmincache) > 1)
+              mxinfo(PFX "|  + MinCache: %llu\n", uint64(*ktmincache));
+            if (uint64(*ktmincache) > 1)
               track->v_bframes = true;
-            track->min_cache = uint32(*ktmincache);
+            track->min_cache = uint64(*ktmincache);
           }
 
           ktmaxcache = FINDFIRST(ktentry, KaxTrackMaxCache);
           if (ktmaxcache != NULL) {
-            mxverb(2, PFX "|  + MaxCache: %u\n", uint32(*ktmaxcache));
-            track->max_cache = uint32(*ktmaxcache);
+            mxverb(2, PFX "|  + MaxCache: %llu\n", uint64(*ktmaxcache));
+            track->max_cache = uint64(*ktmaxcache);
           }
 
           ktfdefault = FINDFIRST(ktentry, KaxTrackFlagDefault);
           if (ktfdefault != NULL) {
             if (verbose > 1)
-              mxinfo(PFX "|  + Default flag: %d\n", uint32(*ktfdefault));
-            track->default_track = uint32(*ktfdefault);
+              mxinfo(PFX "|  + Default flag: %llu\n", uint64(*ktfdefault));
+            track->default_track = uint64(*ktfdefault);
           }
 
           ktflacing = FINDFIRST(ktentry, KaxTrackFlagLacing);
           if (ktflacing != NULL) {
-            mxverb(2, PFX "|  + Lacing flag: %d\n", uint32(*ktflacing));
-            track->lacing_flag = uint32(*ktflacing);
+            mxverb(2, PFX "|  + Lacing flag: %llu\n", uint64(*ktflacing));
+            track->lacing_flag = uint64(*ktflacing);
           } else
             track->lacing_flag = true;
 
           ktmax_blockadd_id = FINDFIRST(ktentry, KaxMaxBlockAdditionID);
           if (ktmax_blockadd_id != NULL) {
-            mxverb(2, PFX "|  + Max Block Addition ID: %u\n",
-                   uint32(*ktmax_blockadd_id));
-            track->max_blockadd_id = uint32(*ktmax_blockadd_id);
+            mxverb(2, PFX "|  + Max Block Addition ID: %llu\n",
+                   uint64(*ktmax_blockadd_id));
+            track->max_blockadd_id = uint64(*ktmax_blockadd_id);
           } else
             track->max_blockadd_id = 0;
 
@@ -1377,7 +1379,7 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
                                         DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
   if (t->tuid != 0)
     if (!PTZR(t->ptzr)->set_uid(t->tuid))
-      mxwarn(PFX "Could not keep the track UID %u because it is already "
+      mxwarn(PFX "Could not keep the track UID %llu because it is already "
              "allocated for the new file.\n", t->tuid);
 }
 
@@ -2083,14 +2085,14 @@ kax_reader_c::identify() {
         if ((tracks[i]->v_dwidth != 0) && (tracks[i]->v_dheight != 0) &&
             ((tracks[i]->v_dwidth != tracks[i]->v_width) ||
              (tracks[i]->v_dheight != tracks[i]->v_height)))
-          info += mxsprintf("display_dimensions:%ux%u ",
+          info += mxsprintf("display_dimensions:%llux%llu ",
                             tracks[i]->v_dwidth, tracks[i]->v_dheight);
-        info += mxsprintf("default_track:%d ",
+        info += mxsprintf("default_track:%u ",
                           tracks[i]->default_track ? 1 : 0);
         info += "]";
       } else
         info = "";
-      mxinfo("Track ID %d: %s (%s%s%s)%s\n", tracks[i]->tnum,
+      mxinfo("Track ID %llu: %s (%s%s%s)%s\n", tracks[i]->tnum,
              tracks[i]->type == 'v' ? "video" :
              tracks[i]->type == 'a' ? "audio" :
              tracks[i]->type == 'b' ? "buttons" :

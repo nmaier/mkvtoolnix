@@ -47,7 +47,7 @@ typedef struct {
 } kax_attachment_t;
 
 struct kax_track_t {
-  uint32_t tnum, tuid;
+  uint64_t tnum, tuid;
 
   string codec_id;
   bool ms_compat;
@@ -60,14 +60,14 @@ struct kax_track_t {
   bool lacing_flag;
 
   // Parameters for video tracks
-  uint32_t v_width, v_height, v_dwidth, v_dheight;
-  uint32_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
+  uint64_t v_width, v_height, v_dwidth, v_dheight;
+  uint64_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
   float v_frate;
   char v_fourcc[5];
   bool v_bframes;
 
   // Parameters for audio tracks
-  uint32_t a_channels, a_bps, a_formattag;
+  uint64_t a_channels, a_bps, a_formattag;
   float a_sfreq, a_osfreq;
 
   void *private_data;
@@ -176,8 +176,8 @@ protected:
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
   virtual kax_track_t *new_kax_track();
-  virtual kax_track_t *find_track_by_num(uint32_t num, kax_track_t *c = NULL);
-  virtual kax_track_t *find_track_by_uid(uint32_t uid, kax_track_t *c = NULL);
+  virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
+  virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
   virtual void verify_tracks();
   virtual int packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
