@@ -677,3 +677,19 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
            (uint32_t)ti.display_width, (uint32_t)ti.display_height);
   }
 }
+
+int
+mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
+  if ((0 > packet->bref) && (0 > packet->fref))
+    ref_timecode = packet->timecode;
+  else {
+    packet->fref = -1;
+    packet->bref = ref_timecode;
+    if (packet->timecode > ref_timecode)
+      ref_timecode = packet->timecode;
+  }
+
+  add_packet(packet);
+
+  return FILE_STATUS_MOREDATA;
+}

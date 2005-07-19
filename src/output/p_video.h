@@ -104,6 +104,7 @@ public:
   mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                                double _fps, int _width, int _height,
                                track_info_c &_ti);
+  virtual int process(packet_cptr packet);
 
 protected:
   virtual void extract_aspect_ratio();
