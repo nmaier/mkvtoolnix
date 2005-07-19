@@ -1640,21 +1640,21 @@ def_handle2(block_group,
         mxinfo(Y("%c frame, track %u, timecode %lld (" FMT_TIMECODE
                  "), duration %.3f, size %d, adler 0x%08x\n"),
                bref_found && fref_found ? 'B' :
-               bref_found ? 'P' : !fref_found ? 'I' : '?',
+               bref_found ? 'P' : !fref_found ? 'I' : 'P',
                lf_tnum, lf_timecode, ARG_TIMECODE(lf_timecode),
                bduration, frame_sizes[fidx], frame_adlers[fidx]);
       else
         mxinfo(Y("%c frame, track %u, timecode %lld (" FMT_TIMECODE
                  "), size %d, adler 0x%08x\n"),
                bref_found && fref_found ? 'B' :
-               bref_found ? 'P' : !fref_found ? 'I' : '?',
+               bref_found ? 'P' : !fref_found ? 'I' : 'P',
                lf_tnum, lf_timecode, ARG_TIMECODE(lf_timecode),
                frame_sizes[fidx], frame_adlers[fidx]);
     }
   } else if (verbose > 2)
     show_element(NULL, 2, Y("[%c frame for track %u, timecode %lld]"),
                  bref_found && fref_found ? 'B' :
-                 bref_found ? 'P' : !fref_found ? 'I' : '?',
+                 bref_found ? 'P' : !fref_found ? 'I' : 'P',
                  lf_tnum, lf_timecode);
 }
 
