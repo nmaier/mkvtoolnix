@@ -620,9 +620,9 @@ def_handle2(audio_track,
     } else if (is_id(l4, KaxAudioChannels)) {
       KaxAudioChannels &channels =
         *static_cast<KaxAudioChannels *>(l4);
-      show_element(l4, 4, "Channels: %u", uint32(channels));
-      summary.push_back(mxsprintf("channels: %u",
-                                  uint32(channels)));
+      show_element(l4, 4, "Channels: %llu", uint64(channels));
+      summary.push_back(mxsprintf("channels: %llu",
+                                  uint64(channels)));
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l4, KaxAudioPosition)) {
@@ -638,9 +638,9 @@ def_handle2(audio_track,
     } else if (is_id(l4, KaxAudioBitDepth)) {
       KaxAudioBitDepth &bps =
         *static_cast<KaxAudioBitDepth *>(l4);
-      show_element(l4, 4, "Bit depth: %u", uint32(bps));
-      summary.push_back(mxsprintf("bits per sample: %u",
-                                  uint32(bps)));
+      show_element(l4, 4, "Bit depth: %llu", uint64(bps));
+      summary.push_back(mxsprintf("bits per sample: %llu",
+                                  uint64(bps)));
 
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
@@ -664,56 +664,56 @@ def_handle2(video_track,
     if (is_id(l4, KaxVideoPixelWidth)) {
       KaxVideoPixelWidth &width =
         *static_cast<KaxVideoPixelWidth *>(l4);
-      show_element(l4, 4, "Pixel width: %u", uint16(width));
-      summary.push_back(mxsprintf("pixel width: %u", uint32(width)));
+      show_element(l4, 4, "Pixel width: %llu", uint64(width));
+      summary.push_back(mxsprintf("pixel width: %llu", uint64(width)));
 
     } else if (is_id(l4, KaxVideoPixelHeight)) {
       KaxVideoPixelHeight &height =
         *static_cast<KaxVideoPixelHeight *>(l4);
-      show_element(l4, 4, "Pixel height: %u", uint16(height));
-      summary.push_back(mxsprintf("pixel height: %u", uint32(height)));
+      show_element(l4, 4, "Pixel height: %llu", uint64(height));
+      summary.push_back(mxsprintf("pixel height: %llu", uint64(height)));
 
     } else if (is_id(l4, KaxVideoDisplayWidth)) {
       KaxVideoDisplayWidth &width =
         *static_cast<KaxVideoDisplayWidth *>(l4);
-      show_element(l4, 4, "Display width: %u", uint16(width));
-      summary.push_back(mxsprintf("display width: %u", uint32(width)));
+      show_element(l4, 4, "Display width: %llu", uint64(width));
+      summary.push_back(mxsprintf("display width: %llu", uint64(width)));
 
     } else if (is_id(l4, KaxVideoDisplayHeight)) {
       KaxVideoDisplayHeight &height =
         *static_cast<KaxVideoDisplayHeight *>(l4);
-      show_element(l4, 4, "Display height: %u", uint16(height));
-      summary.push_back(mxsprintf("display height: %u", uint32(height)));
+      show_element(l4, 4, "Display height: %llu", uint64(height));
+      summary.push_back(mxsprintf("display height: %llu", uint64(height)));
 
     } else if (is_id(l4, KaxVideoPixelCropLeft)) {
       KaxVideoPixelCropLeft &left =
         *static_cast<KaxVideoPixelCropLeft *>(l4);
-      show_element(l4, 4, "Pixel crop left: %u", uint16(left));
-      summary.push_back(mxsprintf("pixel crop left: %u", uint32(left)));
+      show_element(l4, 4, "Pixel crop left: %llu", uint64(left));
+      summary.push_back(mxsprintf("pixel crop left: %llu", uint64(left)));
 
     } else if (is_id(l4, KaxVideoPixelCropTop)) {
       KaxVideoPixelCropTop &top =
         *static_cast<KaxVideoPixelCropTop *>(l4);
-      show_element(l4, 4, "Pixel crop top: %u", uint16(top));
-      summary.push_back(mxsprintf("pixel crop top: %u", uint32(top)));
+      show_element(l4, 4, "Pixel crop top: %llu", uint64(top));
+      summary.push_back(mxsprintf("pixel crop top: %llu", uint64(top)));
 
     } else if (is_id(l4, KaxVideoPixelCropRight)) {
       KaxVideoPixelCropRight &right =
         *static_cast<KaxVideoPixelCropRight *>(l4);
-      show_element(l4, 4, "Pixel crop right: %u", uint16(right));
-      summary.push_back(mxsprintf("pixel crop right: %u", uint32(right)));
+      show_element(l4, 4, "Pixel crop right: %llu", uint64(right));
+      summary.push_back(mxsprintf("pixel crop right: %llu", uint64(right)));
 
     } else if (is_id(l4, KaxVideoPixelCropBottom)) {
       KaxVideoPixelCropBottom &bottom =
         *static_cast<KaxVideoPixelCropBottom *>(l4);
-      show_element(l4, 4, "Pixel crop bottom: %u", uint16(bottom));
-      summary.push_back(mxsprintf("pixel crop bottom: %u", uint32(bottom)));
+      show_element(l4, 4, "Pixel crop bottom: %llu", uint64(bottom));
+      summary.push_back(mxsprintf("pixel crop bottom: %llu", uint64(bottom)));
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l4, KaxVideoDisplayUnit)) {
       KaxVideoDisplayUnit &unit =
         *static_cast<KaxVideoDisplayUnit *>(l4);
-      show_element(l4, 4, "Display unit: %u%s", uint16(unit),
+      show_element(l4, 4, "Display unit: %llu%s", uint64(unit),
                    uint16(unit) == 0 ? " (pixels)" :
                    uint16(unit) == 1 ? " (centimeters)" :
                    uint16(unit) == 2 ? " (inches)" : "");
@@ -726,13 +726,13 @@ def_handle2(video_track,
     } else if (is_id(l4, KaxVideoFlagInterlaced)) {
       KaxVideoFlagInterlaced &f_interlaced =
         *static_cast<KaxVideoFlagInterlaced *>(l4);
-      show_element(l4, 4, "Interlaced: %u",
-                   uint8(f_interlaced));
+      show_element(l4, 4, "Interlaced: %llu",
+                   uint64(f_interlaced));
 
     } else if (is_id(l4, KaxVideoStereoMode)) {
       KaxVideoStereoMode &stereo =
         *static_cast<KaxVideoStereoMode *>(l4);
-      show_element(l4, 4, "Stereo mode: %u%s", uint8(stereo),
+      show_element(l4, 4, "Stereo mode: %llu%s", uint64(stereo),
                    uint8(stereo) == 0 ? " (mono)" :
                    uint8(stereo) == 1 ? " (right eye)" :
                    uint8(stereo) == 2 ? " (left eye)" :
@@ -741,8 +741,8 @@ def_handle2(video_track,
     } else if (is_id(l4, KaxVideoAspectRatio)) {
       KaxVideoAspectRatio &ar_type =
         *static_cast<KaxVideoAspectRatio *>(l4);
-      show_element(l4, 4, "Aspect ratio type: %u%s",
-                   uint8(ar_type),
+      show_element(l4, 4, "Aspect ratio type: %llu%s",
+                   uint64(ar_type),
                    uint8(ar_type) == 0 ? " (free resizing)" :
                    uint8(ar_type) == 1 ? " (keep aspect ratio)" :
                    uint8(ar_type) == 2 ? " (fixed)" : "");
@@ -786,7 +786,7 @@ def_handle(content_encodings) {
         if (is_id(l5, KaxContentEncodingOrder)) {
           KaxContentEncodingOrder &ce_order =
             *static_cast<KaxContentEncodingOrder *>(l5);
-          show_element(l5, 5, "Order: %u", uint32(ce_order));
+          show_element(l5, 5, "Order: %llu", uint64(ce_order));
 
         } else if (is_id(l5,  KaxContentEncodingScope)) {
           string scope;
@@ -806,14 +806,14 @@ def_handle(content_encodings) {
           }
           if (scope.length() == 0)
             scope = "unknown";
-          show_element(l5, 5, "Scope: %u (%s)", uint32(ce_scope),
+          show_element(l5, 5, "Scope: %llu (%s)", uint64(ce_scope),
                        scope.c_str());
 
         } else if (is_id(l5,  KaxContentEncodingType)) {
-          uint32_t ce_type;
+          uint64_t ce_type;
           ce_type =
-            uint32(*static_cast<KaxContentEncodingType *>(l5));
-          show_element(l5, 5, "Type: %u (%s)", ce_type,
+            uint64(*static_cast<KaxContentEncodingType *>(l5));
+          show_element(l5, 5, "Type: %llu (%s)", ce_type,
                        ce_type == 0 ? "compression" :
                        ce_type == 1 ? "encryption" :
                        "unknown");
@@ -826,9 +826,9 @@ def_handle(content_encodings) {
             l6 = (*m5)[i5];
 
             if (is_id(l6, KaxContentCompAlgo)) {
-              uint32_t c_algo =
-                uint32(*static_cast<KaxContentCompAlgo *>(l6));
-              show_element(l6, 6, "Algorithm: %u (%s)", c_algo,
+              uint64_t c_algo =
+                uint64(*static_cast<KaxContentCompAlgo *>(l6));
+              show_element(l6, 6, "Algorithm: %llu (%s)", c_algo,
                            c_algo == 0 ? "ZLIB" :
                            c_algo == 1 ? "bzLib" :
                            "unknown");
@@ -852,9 +852,9 @@ def_handle(content_encodings) {
             l6 = (*m5)[i5];
 
             if (is_id(l6, KaxContentEncAlgo)) {
-              uint32_t e_algo =
-                uint32(*static_cast<KaxContentEncAlgo *>(l6));
-              show_element(l6, 6, "Encryption algorithm: %u "
+              uint64_t e_algo =
+                uint64(*static_cast<KaxContentEncAlgo *>(l6));
+              show_element(l6, 6, "Encryption algorithm: %llu "
                            "(%s)", e_algo,
                            e_algo == 0 ? "none" :
                            e_algo == 1 ? "DES" :
@@ -872,19 +872,19 @@ def_handle(content_encodings) {
                            strc.c_str());
 
             } else if (is_id(l6, KaxContentSigAlgo)) {
-              uint32_t s_algo =
-                uint32(*static_cast<KaxContentSigAlgo *>(l6));
-              show_element(l6, 6, "Signature algorithm: %u (%s)",
+              uint64_t s_algo =
+                uint64(*static_cast<KaxContentSigAlgo *>(l6));
+              show_element(l6, 6, "Signature algorithm: %llu (%s)",
                            s_algo,
                            s_algo == 0 ? "none" :
                            s_algo == 1 ? "RSA" :
                            "unknown");
 
             } else if (is_id(l6, KaxContentSigHashAlgo)) {
-              uint32_t s_halgo =
-                uint32(*static_cast<KaxContentSigHashAlgo *>
+              uint64_t s_halgo =
+                uint64(*static_cast<KaxContentSigHashAlgo *>
                        (l6));
-              show_element(l6, 6, "Signature hash algorithm: %u "
+              show_element(l6, 6, "Signature hash algorithm: %llu "
                            "(%s)", s_halgo,
                            s_halgo == 0 ? "none" :
                            s_halgo == 1 ? "SHA1-160" :
@@ -966,18 +966,18 @@ def_handle(tracks) {
 
         else if (is_id(l3, KaxTrackNumber)) {
           KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
-          show_element(l3, 3, "Track number: %u", uint32(tnum));
-          if (find_track(uint32(tnum)) != NULL)
+          show_element(l3, 3, "Track number: %llu", uint64(tnum));
+          if (find_track(uint64(tnum)) != NULL)
             show_warning(3, "Warning: There's more than one "
-                         "track with the number %u.", uint32(tnum));
-          kax_track_number = uint32(tnum);
+                         "track with the number %llu.", uint64(tnum));
+          kax_track_number = uint64(tnum);
 
         } else if (is_id(l3, KaxTrackUID)) {
           KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
-          show_element(l3, 3, "Track UID: %u", uint32(tuid));
-          if (find_track_by_uid(uint32(tuid)) != NULL)
+          show_element(l3, 3, "Track UID: %llu", uint64(tuid));
+          if (find_track_by_uid(uint64(tuid)) != NULL)
             show_warning(3, "Warning: There's more than one "
-                         "track with the UID %u.", uint32(tuid));
+                         "track with the UID %llu.", uint64(tuid));
 
         } else if (is_id(l3, KaxTrackType)) {
           KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
@@ -1010,7 +1010,7 @@ def_handle(tracks) {
         } else if (is_id(l3, KaxTrackFlagEnabled)) {
           KaxTrackFlagEnabled &fenabled =
             *static_cast<KaxTrackFlagEnabled *>(l3);
-          show_element(l3, 3, "Enabled: %u", uint8(fenabled));
+          show_element(l3, 3, "Enabled: %llu", uint64(fenabled));
 #endif
 
         } else if (is_id(l3, KaxTrackName)) {
@@ -1077,23 +1077,23 @@ def_handle(tracks) {
         } else if (is_id(l3, KaxCodecDecodeAll)) {
           KaxCodecDecodeAll &c_decodeall =
             *static_cast<KaxCodecDecodeAll *>(l3);
-          show_element(l3, 3, "Codec decode all: %u",
-                       uint16(c_decodeall));
+          show_element(l3, 3, "Codec decode all: %llu",
+                       uint64(c_decodeall));
 
         } else if (is_id(l3, KaxTrackOverlay)) {
           KaxTrackOverlay &overlay = *static_cast<KaxTrackOverlay *>(l3);
-          show_element(l3, 3, "Track overlay: %u", uint16(overlay));
+          show_element(l3, 3, "Track overlay: %llu", uint64(overlay));
 #endif // MATROSKA_VERSION >= 2
 
         } else if (is_id(l3, KaxTrackMinCache)) {
           KaxTrackMinCache &min_cache =
             *static_cast<KaxTrackMinCache *>(l3);
-          show_element(l3, 3, "MinCache: %u", uint32(min_cache));
+          show_element(l3, 3, "MinCache: %llu", uint64(min_cache));
 
         } else if (is_id(l3, KaxTrackMaxCache)) {
           KaxTrackMaxCache &max_cache =
             *static_cast<KaxTrackMaxCache *>(l3);
-          show_element(l3, 3, "MaxCache: %u", uint32(max_cache));
+          show_element(l3, 3, "MaxCache: %llu", uint64(max_cache));
 
         } else if (is_id(l3, KaxTrackDefaultDuration)) {
           KaxTrackDefaultDuration &def_duration =
@@ -1111,17 +1111,17 @@ def_handle(tracks) {
         } else if (is_id(l3, KaxTrackFlagLacing)) {
           KaxTrackFlagLacing &f_lacing =
             *static_cast<KaxTrackFlagLacing *>(l3);
-          show_element(l3, 3, "Lacing flag: %d", uint32(f_lacing));
+          show_element(l3, 3, "Lacing flag: %llu", uint64(f_lacing));
 
         } else if (is_id(l3, KaxTrackFlagDefault)) {
           KaxTrackFlagDefault &f_default =
             *static_cast<KaxTrackFlagDefault *>(l3);
-          show_element(l3, 3, "Default flag: %d", uint32(f_default));
+          show_element(l3, 3, "Default flag: %llu", uint64(f_default));
 
         } else if (is_id(l3, KaxTrackFlagForced)) {
           KaxTrackFlagForced &f_forced =
             *static_cast<KaxTrackFlagForced *>(l3);
-          show_element(l3, 3, "Forced flag: %d", uint32(f_forced));
+          show_element(l3, 3, "Forced flag: %llu", uint64(f_forced));
 
         } else if (is_id(l3, KaxTrackLanguage)) {
           KaxTrackLanguage &language =
@@ -1138,8 +1138,8 @@ def_handle(tracks) {
         } else if (is_id(l3, KaxMaxBlockAdditionID)) {
           KaxMaxBlockAdditionID &max_block_add_id =
             *static_cast<KaxMaxBlockAdditionID *>(l3);
-          show_element(l3, 3, "Max BlockAddition ID: %u",
-                       uint32(max_block_add_id));
+          show_element(l3, 3, "Max BlockAddition ID: %llu",
+                       uint64(max_block_add_id));
 
         } else if (is_id(l3, KaxContentEncodings))
           handle(content_encodings);
@@ -1278,7 +1278,7 @@ def_handle(cues) {
 
             if (is_id(l4, KaxCueTrack)) {
               KaxCueTrack &cue_track = *static_cast<KaxCueTrack *>(l4);
-              show_element(l4, 4, "Cue track: %u", uint32(cue_track));
+              show_element(l4, 4, "Cue track: %llu", uint64(cue_track));
 
             } else if (is_id(l4, KaxCueClusterPosition)) {
               KaxCueClusterPosition &cue_cp =
@@ -1400,7 +1400,7 @@ def_handle(attachments) {
         } else if (is_id(l3, KaxFileUID)) {
           KaxFileUID &f_uid =
             *static_cast<KaxFileUID *>(l3);
-          show_element(l3, 3, "File UID: %u", uint32(f_uid));
+          show_element(l3, 3, "File UID: %llu", uint64(f_uid));
 
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
@@ -1442,8 +1442,7 @@ def_handle2(block_group,
   vector<int> frame_sizes;
   vector<uint32_t> frame_adlers;
   bool fref_found, bref_found;
-  uint32_t lf_tnum;
-  uint64_t lf_timecode;
+  uint64_t lf_tnum, lf_timecode;
   float bduration;
 
   show_element(l2, 2, "Block group");
@@ -1514,8 +1513,8 @@ def_handle2(block_group,
     } else if (is_id(l3, KaxReferencePriority)) {
       KaxReferencePriority &priority =
         *static_cast<KaxReferencePriority *>(l3);
-      show_element(l3, 3, "Reference priority: %u",
-                   uint32(priority));
+      show_element(l3, 3, "Reference priority: %llu",
+                   uint64(priority));
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockVirtual)) {
@@ -1588,14 +1587,14 @@ def_handle2(block_group,
             if (is_id(l5, KaxSliceLaceNumber)) {
               KaxSliceLaceNumber &slace_number =
                 *static_cast<KaxSliceLaceNumber *>(l5);
-              show_element(l5, 5, "Lace number: %u",
-                           uint32(slace_number));
+              show_element(l5, 5, "Lace number: %llu",
+                           uint64(slace_number));
 
             } else if (is_id(l5, KaxSliceFrameNumber)) {
               KaxSliceFrameNumber &sframe_number =
                 *static_cast<KaxSliceFrameNumber *>(l5);
-              show_element(l5, 5, "Frame number: %u",
-                           uint32(sframe_number));
+              show_element(l5, 5, "Frame number: %llu",
+                           uint64(sframe_number));
 
             } else if (is_id(l5, KaxSliceDelay)) {
               KaxSliceDelay &sdelay =
@@ -1614,7 +1613,7 @@ def_handle2(block_group,
             } else if (is_id(l5, KaxSliceBlockAddID)) {
               KaxSliceBlockAddID &sbaid =
                 *static_cast<KaxSliceBlockAddID *>(l5);
-              show_element(l5, 5, "Block additional ID: %u",
+              show_element(l5, 5, "Block additional ID: %llu",
                            uint64(sbaid));
 
             } else if (!is_global(es, l5, 5))
@@ -1637,14 +1636,14 @@ def_handle2(block_group,
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (bduration != -1.0)
-        mxinfo(Y("%c frame, track %u, timecode %lld (" FMT_TIMECODE
+        mxinfo(Y("%c frame, track %llu, timecode %lld (" FMT_TIMECODE
                  "), duration %.3f, size %d, adler 0x%08x\n"),
                bref_found && fref_found ? 'B' :
                bref_found ? 'P' : !fref_found ? 'I' : 'P',
                lf_tnum, lf_timecode, ARG_TIMECODE(lf_timecode),
                bduration, frame_sizes[fidx], frame_adlers[fidx]);
       else
-        mxinfo(Y("%c frame, track %u, timecode %lld (" FMT_TIMECODE
+        mxinfo(Y("%c frame, track %llu, timecode %lld (" FMT_TIMECODE
                  "), size %d, adler 0x%08x\n"),
                bref_found && fref_found ? 'B' :
                bref_found ? 'P' : !fref_found ? 'I' : 'P',
@@ -1652,7 +1651,7 @@ def_handle2(block_group,
                frame_sizes[fidx], frame_adlers[fidx]);
     }
   } else if (verbose > 2)
-    show_element(NULL, 2, Y("[%c frame for track %u, timecode %lld]"),
+    show_element(NULL, 2, Y("[%c frame for track %llu, timecode %lld]"),
                  bref_found && fref_found ? 'B' :
                  bref_found ? 'P' : !fref_found ? 'I' : 'P',
                  lf_tnum, lf_timecode);

@@ -1,5 +1,9 @@
 2005-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: bug fix: Very large values were not displayed correctly
+	for a lot of elements (meaning they were truncated to 16 or 32
+	bits prior to displaying).
+
 	* mkvmerge: bug fix: AVC/H.264 references were wrong, and muxing
 	of AVC from Matroska files with proper references resulted in
 	unplayable files.
