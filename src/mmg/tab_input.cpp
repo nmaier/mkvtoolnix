@@ -713,7 +713,7 @@ tab_input::select_file(bool append) {
                      a_exts.c_str(), rest.c_str(), wxT(ALLFILES));
   wxFileDialog dlg(NULL,
                    append ? wxT("Choose an input file to append") :
-                   wxT("Chose an input file to add"),
+                   wxT("Choose an input file to add"),
                    last_open_dir, wxT(""), media_files, wxOPEN | wxMULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {

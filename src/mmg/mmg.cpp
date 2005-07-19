@@ -96,7 +96,7 @@ wxString cli_options[][2] = {
         "will use a value of 1000000 which means that timecodes and "
         "durations will have a precision of 1ms. For files that will not "
         "contain a video track but at least one audio track mkvmerge "
-        "will automatically chose a timecode scale factor so that all "
+        "will automatically choose a timecode scale factor so that all "
         "timecodes and durations have a precision of one sample. This "
         "causes bigger overhead but allows precise seeking and extraction. "
         "If the magical value -1 is used then mkvmerge will use sample "
@@ -1150,7 +1150,7 @@ mmg_dialog::muxing_has_finished() {
 void
 mmg_dialog::on_help(wxCommandEvent &evt) {
   if (help == NULL) {
-    wxDirDialog dlg(this, wxT("Chose the location of the mkvmerge GUI "
+    wxDirDialog dlg(this, wxT("Chosoe the location of the mkvmerge GUI "
                               "help files"));
     wxString help_path;
     wxConfigBase *cfg;
