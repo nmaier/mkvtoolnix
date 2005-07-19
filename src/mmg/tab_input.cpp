@@ -709,8 +709,10 @@ tab_input::select_file(bool append) {
     a_exts += wxString::Format(wxT("*.%s"), all_extensions[ae].c_str());
   }
 
-  media_files.Printf(wxT("All supported media files|%s%s|%s"),
-                     a_exts.c_str(), rest.c_str(), wxT(ALLFILES));
+  media_files = wxT("All supported media files|");
+  media_files += a_exts + rest;
+  media_files += wxT("|");
+  media_files += wxT(ALLFILES);
   wxFileDialog dlg(NULL,
                    append ? wxT("Choose an input file to append") :
                    wxT("Choose an input file to add"),
