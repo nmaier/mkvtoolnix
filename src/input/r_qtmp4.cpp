@@ -310,6 +310,8 @@ qtmp4_reader_c::parse_headers() {
         dmx->chunk_table[j].size = dmx->chunkmap_table[i].samples_per_chunk;
       }
       last = dmx->chunkmap_table[i].first_chunk;
+      if (dmx->chunk_table.size() <= last)
+        break;
     }
 
     // calc pts of chunks:
