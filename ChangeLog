@@ -1,3 +1,9 @@
+2005-07-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: Files with non-ASCII chars weren't opened
+	because conversion to UTF-8 was done before the charset routines
+	were initialized.
+
 2005-07-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed a crash if a track in a MP4/QuickTime

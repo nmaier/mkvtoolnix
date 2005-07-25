@@ -1988,7 +1988,6 @@ console_main(vector<string> args) {
   nice(2);
 #endif
 
-  setup();
   parse_args(args, file_name);
   if (file_name == "") {
     usage();
@@ -2017,6 +2016,8 @@ main(int argc,
      char **argv) {
   vector<string> args;
   string initial_file;
+
+  setup();
 
   args = command_line_utf8(argc, argv);
   parse_args(args, initial_file);

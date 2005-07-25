@@ -68,7 +68,6 @@ mi_app::OnInit() {
     return false;
   }
 
-  setup();
   frame = new mi_frame(wxT("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
   frame->Show(true);
   frame->Refresh(true);
