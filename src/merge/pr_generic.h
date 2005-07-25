@@ -567,6 +567,9 @@ public:
   }
 
   virtual void set_displacement_maybe(int64_t displacement);
+
+protected:
+  inline bool has_enough_packets() const;
 };
 
 extern vector<generic_packetizer_c *> ptzrs_in_header_order;

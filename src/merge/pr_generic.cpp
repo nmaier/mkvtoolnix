@@ -924,18 +924,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   }
   safety_last_timecode = pack->timecode;
   safety_last_duration = pack->duration;
-
-  pack->assigned_timecode = pack->timecode;
-  pack->gap_following = timecode_factory->get_next(pack);
-  pack->assigned_timecode += ti.packet_delay;
-
-  mxverb(2, "mux: track %lld assigned_timecode %lld\n", ti.id,
-         pack->assigned_timecode);
-
-  if (max_timecode_seen < (pack->assigned_timecode + pack->duration))
-    max_timecode_seen = pack->assigned_timecode + pack->duration;
-  if (reader->max_timecode_seen < max_timecode_seen)
-    reader->max_timecode_seen = max_timecode_seen;
+  pack->timecode_before_factory = pack->timecode;
 
   packet_queue.push_back(pack);
 }
@@ -949,14 +938,60 @@ generic_packetizer_c::process_deferred_packets() {
   deferred_packets.clear();
 }
 
+bool 
+generic_packetizer_c::has_enough_packets() const {
+  if (packet_queue.size() < 2)
+    return false;
+
+  const packet_cptr &pack = packet_queue.front();
+  deque<packet_cptr>::const_iterator packet = packet_queue.begin();
+
+  ++packet;
+  while ((packet_queue.end() != packet) &&
+         ((*packet)->timecode_before_factory <= pack->timecode_before_factory)) 
+    ++packet;
+  return (packet_queue.end() != packet);
+}
+
 packet_cptr
 generic_packetizer_c::get_packet() {
+  deque<packet_cptr>::iterator p_timecoded, p_tmp;
+  int64_t factory_timecode, min_timecode;
   packet_cptr pack;
 
   if (packet_queue.size() == 0)
     return packet_cptr(NULL);
 
   pack = packet_queue.front();
+
+  // use the timecode factory on all previous packets up to the one extracted
+  do {
+    // find the next packet to feed the timecode factory
+    min_timecode = pack->timecode_before_factory;
+    p_timecoded = packet_queue.begin();
+    for (p_tmp = packet_queue.begin(); packet_queue.end() != p_tmp; ++p_tmp) {
+      if (!(*p_tmp)->factory_applied &&
+          (min_timecode > (*p_tmp)->timecode_before_factory)) {
+        min_timecode = (*p_tmp)->timecode_before_factory;
+        p_timecoded = p_tmp;
+      }
+    }
+
+    if (!(*p_timecoded)->factory_applied) {
+      factory_timecode = (*p_timecoded)->timecode;
+      (*p_timecoded)->gap_following = timecode_factory->get_next(*p_timecoded);
+      (*p_timecoded)->assigned_timecode = factory_timecode + ti.packet_delay;
+      (*p_timecoded)->factory_applied = true;
+
+      if (max_timecode_seen <
+          ((*p_timecoded)->assigned_timecode + (*p_timecoded)->duration))
+        max_timecode_seen = (*p_timecoded)->assigned_timecode +
+          (*p_timecoded)->duration;
+      if (reader->max_timecode_seen < max_timecode_seen)
+        reader->max_timecode_seen = max_timecode_seen;
+    }
+  } while (packet_queue.begin() != p_timecoded);
+
   packet_queue.pop_front();
 
   enqueued_bytes -= pack->length;

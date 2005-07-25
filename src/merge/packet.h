@@ -43,8 +43,9 @@ struct packet_t {
   unsigned char *data;
   int length, ref_priority, time_factor;
   int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
+  int64_t timecode_before_factory;
   int64_t unmodified_assigned_timecode, unmodified_duration;
-  bool duration_mandatory, superseeded, gap_following;
+  bool duration_mandatory, superseeded, gap_following, factory_applied;
   generic_packetizer_c *source;
   vector<unsigned char *> data_adds;
   vector<int> data_adds_lengths;
@@ -57,10 +58,10 @@ struct packet_t {
     ref_priority(0), time_factor(1),
     timecode(0), bref(0), fref(0), duration(0),
     packet_num(packet_number_counter++),
-    assigned_timecode(0), unmodified_assigned_timecode(0),
-    unmodified_duration(0),
+    assigned_timecode(0), timecode_before_factory(0),
+    unmodified_assigned_timecode(0), unmodified_duration(0),
     duration_mandatory(false), superseeded(false), gap_following(false),
-    source(NULL) { }
+    factory_applied(false), source(NULL) { }
 
   packet_t(memory_cptr n_memory,
            int64_t n_timecode = -1,
@@ -72,10 +73,10 @@ struct packet_t {
     timecode(n_timecode), bref(n_bref), fref(n_fref),
     duration(n_duration),
     packet_num(packet_number_counter++),
-    assigned_timecode(0), unmodified_assigned_timecode(0),
-    unmodified_duration(0),
+    assigned_timecode(0), timecode_before_factory(0),
+    unmodified_assigned_timecode(0), unmodified_duration(0),
     duration_mandatory(false), superseeded(false), gap_following(false),
-    source(NULL), memory(n_memory) { }
+    factory_applied(false), source(NULL), memory(n_memory) { }
 
   packet_t(memory_c *n_memory,
            int64_t n_timecode = -1,
@@ -87,10 +88,10 @@ struct packet_t {
     timecode(n_timecode), bref(n_bref), fref(n_fref),
     duration(n_duration),
     packet_num(packet_number_counter++),
-    assigned_timecode(0), unmodified_assigned_timecode(0),
-    unmodified_duration(0),
+    assigned_timecode(0), timecode_before_factory(0),
+    unmodified_assigned_timecode(0), unmodified_duration(0),
     duration_mandatory(false), superseeded(false), gap_following(false),
-    source(NULL), memory(memory_cptr(n_memory)) { }
+    factory_applied(false), source(NULL), memory(memory_cptr(n_memory)) { }
 
   ~packet_t();
 };

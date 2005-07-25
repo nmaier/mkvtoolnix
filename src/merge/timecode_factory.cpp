@@ -365,14 +365,17 @@ timecode_factory_v3_c::get_next(packet_cptr &packet,
   bool result = false;
 
   if (durations[current_duration].is_gap) {
+    // find the next non-gap
     size_t duration_index = current_duration;
-    while (durations[duration_index].is_gap) {
+    while (durations[duration_index].is_gap ||
+           (0 == durations[duration_index].duration)) {
       current_offset += durations[duration_index].duration;
       duration_index++;
     }
     if (!peek_only) {
       current_duration = duration_index;
     }
+    // yes, there is a gap before this frame
     result = true;
   }
 
@@ -382,6 +385,7 @@ timecode_factory_v3_c::get_next(packet_cptr &packet,
     packet->duration =
       (int64_t)(1000000000.0 / durations[current_duration].fps);
   }
+  packet->duration /= packet->time_factor;
   if (!peek_only) {
     current_timecode += packet->duration;
     if (current_timecode >= durations[current_duration].duration) {
