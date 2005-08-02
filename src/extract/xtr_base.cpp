@@ -24,6 +24,7 @@
 #include "matroska.h"
 
 #include "xtr_aac.h"
+#include "xtr_avc.h"
 #include "xtr_avi.h"
 #include "xtr_base.h"
 #include "xtr_ogg.h"
@@ -130,6 +131,8 @@ xtr_base_c::create_extractor(const string &new_codec_id,
   // Video formats
   else if (new_codec_id == MKV_V_MSCOMP)
     return new xtr_avi_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_V_MPEG4_AVC)
+    return new xtr_avc_c(new_codec_id, new_tid, tspec);
   else if (starts_with_case(new_codec_id, "V_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
 

@@ -1,3 +1,9 @@
+2005-08-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: new feature: Added support for extracting h.264 /
+	AVC tracks into proper h.264 ES streams supported by
+	e.g. MP4Box. Patch by Matt Rice (see AUTHORS).
+
 2005-07-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: Files with non-ASCII chars weren't opened
