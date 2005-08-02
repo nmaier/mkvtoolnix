@@ -171,16 +171,13 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 }
 
 bool
-timecode_factory_v1_c::get_next(packet_cptr &packet,
-                                bool peek_only) {
+timecode_factory_v1_c::get_next(packet_cptr &packet) {
   packet->assigned_timecode = get_at(frameno);
   packet->duration = get_at(frameno + 1) - packet->assigned_timecode;
-  if (!peek_only) {
-    frameno++;
-    if ((frameno > ranges[current_range].end_frame) &&
-        (current_range < (ranges.size() - 1)))
-      current_range++;
-  }
+  frameno++;
+  if ((frameno > ranges[current_range].end_frame) &&
+      (current_range < (ranges.size() - 1)))
+    current_range++;
 
   mxverb(4, "ext_timecodes v1: tc %lld dur %lld for %lld\n",
          packet->assigned_timecode, packet->duration, frameno - 1);
@@ -248,8 +245,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
 }
 
 bool
-timecode_factory_v2_c::get_next(packet_cptr &packet,
-                                bool peek_only) {
+timecode_factory_v2_c::get_next(packet_cptr &packet) {
   if ((frameno >= timecodes.size()) && !warning_printed) {
     mxwarn(FMT_TID "The number of external timecodes %u is "
            "smaller than the number of frames in this track. "
@@ -262,8 +258,8 @@ timecode_factory_v2_c::get_next(packet_cptr &packet,
 
   packet->assigned_timecode = timecodes[frameno];
   packet->duration = durations[frameno];
-  if (!peek_only)
-    frameno++;
+  frameno++;
+
   return false;
 }
 
@@ -360,8 +356,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
 }
 
 bool
-timecode_factory_v3_c::get_next(packet_cptr &packet,
-                                bool peek_only) {
+timecode_factory_v3_c::get_next(packet_cptr &packet) {
   bool result = false;
 
   if (durations[current_duration].is_gap) {
@@ -372,9 +367,7 @@ timecode_factory_v3_c::get_next(packet_cptr &packet,
       current_offset += durations[duration_index].duration;
       duration_index++;
     }
-    if (!peek_only) {
-      current_duration = duration_index;
-    }
+    current_duration = duration_index;
     // yes, there is a gap before this frame
     result = true;
   }
@@ -386,13 +379,11 @@ timecode_factory_v3_c::get_next(packet_cptr &packet,
       (int64_t)(1000000000.0 / durations[current_duration].fps);
   }
   packet->duration /= packet->time_factor;
-  if (!peek_only) {
-    current_timecode += packet->duration;
-    if (current_timecode >= durations[current_duration].duration) {
-      current_offset += durations[current_duration].duration;
-      current_timecode = 0;
-      current_duration++;
-    }
+  current_timecode += packet->duration;
+  if (current_timecode >= durations[current_duration].duration) {
+    current_offset += durations[current_duration].duration;
+    current_timecode = 0;
+    current_duration++;
   }
 
   mxverb(3, "ext_timecodes v3: tc %lld dur %lld\n", packet->assigned_timecode,

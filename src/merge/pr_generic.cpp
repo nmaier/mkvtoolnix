@@ -927,6 +927,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   pack->timecode_before_factory = pack->timecode;
 
   packet_queue.push_back(pack);
+  apply_factory();
 }
 
 void
@@ -948,55 +949,81 @@ generic_packetizer_c::has_enough_packets() const {
 
   ++packet;
   while ((packet_queue.end() != packet) &&
-         ((*packet)->timecode_before_factory <= pack->timecode_before_factory)) 
+         ((*packet)->timecode_before_factory <= pack->timecode_before_factory))
     ++packet;
   return (packet_queue.end() != packet);
 }
 
 packet_cptr
 generic_packetizer_c::get_packet() {
-  deque<packet_cptr>::iterator p_timecoded, p_tmp;
-  int64_t factory_timecode, min_timecode;
-  packet_cptr pack;
-
   if (packet_queue.size() == 0)
     return packet_cptr(NULL);
 
-  pack = packet_queue.front();
-
-  // use the timecode factory on all previous packets up to the one extracted
-  do {
-    // find the next packet to feed the timecode factory
-    min_timecode = pack->timecode_before_factory;
-    p_timecoded = packet_queue.begin();
-    for (p_tmp = packet_queue.begin(); packet_queue.end() != p_tmp; ++p_tmp) {
-      if (!(*p_tmp)->factory_applied &&
-          (min_timecode > (*p_tmp)->timecode_before_factory)) {
-        min_timecode = (*p_tmp)->timecode_before_factory;
-        p_timecoded = p_tmp;
-      }
-    }
-
-    if (!(*p_timecoded)->factory_applied) {
-      factory_timecode = (*p_timecoded)->timecode;
-      (*p_timecoded)->gap_following = timecode_factory->get_next(*p_timecoded);
-      (*p_timecoded)->assigned_timecode = factory_timecode + ti.packet_delay;
-      (*p_timecoded)->factory_applied = true;
-
-      if (max_timecode_seen <
-          ((*p_timecoded)->assigned_timecode + (*p_timecoded)->duration))
-        max_timecode_seen = (*p_timecoded)->assigned_timecode +
-          (*p_timecoded)->duration;
-      if (reader->max_timecode_seen < max_timecode_seen)
-        reader->max_timecode_seen = max_timecode_seen;
-    }
-  } while (packet_queue.begin() != p_timecoded);
-
+  packet_cptr pack = packet_queue.front();
   packet_queue.pop_front();
 
   enqueued_bytes -= pack->length;
 
   return pack;
+}
+
+void
+generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
+  packet->gap_following = timecode_factory->get_next(packet);
+  packet->factory_applied = true;
+
+  if (max_timecode_seen < (packet->assigned_timecode + packet->duration))
+    max_timecode_seen = packet->assigned_timecode + packet->duration;
+  if (reader->max_timecode_seen < max_timecode_seen)
+    reader->max_timecode_seen = max_timecode_seen;
+}
+
+void
+generic_packetizer_c::apply_factory() {
+  deque<packet_cptr>::iterator p_start, p_end, p_current;
+
+  if (packet_queue.empty())
+    return;
+
+  // Find the first packet to which the factory hasn't been applied yet.
+  p_start = packet_queue.begin();
+  while (packet_queue.end() != p_start) {
+    while ((packet_queue.end() != p_start) && (*p_start)->factory_applied)
+      ++p_start;
+
+    if (packet_queue.end() == p_start)
+      return;
+
+    // Find the next packet with a timecode bigger than the start packet's
+    // timecode. All packets between those two including the start packet
+    // and excluding the end packet can be timestamped.
+    p_end = p_start + 1;
+    while ((packet_queue.end() != p_end) &&
+           ((*p_end)->timecode_before_factory <
+            (*p_start)->timecode_before_factory))
+      ++p_end;
+
+    // Abort if no such packet was found, but keep on assigning if the
+    // packetizer has been flushed already.
+    // Subtitles are a special case. They don't have B frames. But they
+    // may have big gaps. So apply the factory right now, too.
+    if (!has_been_flushed && (get_track_type() != track_subtitle) &&
+        (packet_queue.end() == p_end))
+      return;
+  
+    // Now assign timecodes to the ones between p_start and p_end...
+    for (p_current = p_start + 1; p_current != p_end; ++p_current)
+      apply_factory_once(*p_current);
+    // ...and to p_start itself.
+    apply_factory_once(*p_start);
+
+    mxverb(4, "apply_factory(): source %lld t %lld tbf %lld at %lld\n",
+           (*p_start)->source->get_source_track_num(),
+           (*p_start)->timecode, (*p_start)->timecode_before_factory,
+           (*p_start)->assigned_timecode);
+
+    p_start = p_end;
+  }
 }
 
 void
@@ -1100,6 +1127,12 @@ generic_packetizer_c::contains_gap() {
     return timecode_factory->contains_gap();
   else
     return false;
+}
+
+void
+generic_packetizer_c::flush() {
+  has_been_flushed = true;
+  apply_factory();
 }
 
 //--------------------------------------------------------------------

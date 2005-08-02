@@ -1811,8 +1811,7 @@ append_tracks_maybe() {
       continue;
     if (!files[ptzr->orig_file].appended_to)
       continue;
-    if ((ptzr->status == FILE_STATUS_MOREDATA) ||
-        (ptzr->status == FILE_STATUS_HOLDING))
+    if (FILE_STATUS_DONE_AND_DRY != ptzr->status)
       continue;
     foreach(amap, append_mapping)
       if ((amap->dst_file_id == ptzr->file) &&
@@ -1878,18 +1877,20 @@ main_loop() {
       ptzr->old_status = ptzr->status;
       while ((ptzr->pack.get() == NULL) &&
              (ptzr->status == FILE_STATUS_MOREDATA) &&
-             (ptzr->packetizer->packet_available() < 1))
+             !ptzr->packetizer->packet_available())
         ptzr->status = ptzr->packetizer->read();
       if ((ptzr->status != FILE_STATUS_MOREDATA) &&
           (ptzr->old_status == FILE_STATUS_MOREDATA))
         ptzr->packetizer->force_duration_on_last_packet();
       if (ptzr->pack.get() == NULL)
         ptzr->pack = ptzr->packetizer->get_packet();
+      if ((NULL == ptzr->pack.get()) && (FILE_STATUS_DONE == ptzr->status))
+        ptzr->status = FILE_STATUS_DONE_AND_DRY;
 
       // Has this packetizer changed its status from "data available" to
       // "file done" during this loop? If so then decrease the number of
       // unfinished packetizers in the corresponding file structure.
-      if ((ptzr->status == FILE_STATUS_DONE) &&
+      if ((ptzr->status == FILE_STATUS_DONE_AND_DRY) &&
           (ptzr->old_status != ptzr->status)) {
         filelist_t &file = files[ptzr->file];
 

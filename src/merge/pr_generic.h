@@ -65,6 +65,7 @@ class generic_reader_c;
 
 enum file_status_e {
   FILE_STATUS_DONE = 0,
+  FILE_STATUS_DONE_AND_DRY,
   FILE_STATUS_HOLDING,
   FILE_STATUS_MOREDATA
 };
@@ -438,15 +439,12 @@ public:
   virtual void process_deferred_packets();
 
   virtual packet_cptr get_packet();
-  inline int packet_available() {
-    return packet_queue.size();
+  inline bool packet_available() {
+    return !packet_queue.empty() && packet_queue.front()->factory_applied;
   }
-  virtual void flush() {
-    has_been_flushed = true;
-  }
+  virtual void flush();
   virtual int64_t get_smallest_timecode() {
-    return (packet_queue.size() == 0) ? 0x0FFFFFFF :
-      packet_queue.front()->timecode;
+    return packet_queue.empty() ? 0x0FFFFFFF : packet_queue.front()->timecode;
   }
   inline int64_t get_queued_bytes() {
     return enqueued_bytes;
@@ -567,6 +565,9 @@ public:
   }
 
   virtual void set_displacement_maybe(int64_t displacement);
+
+  virtual void apply_factory();
+  virtual void apply_factory_once(packet_cptr &packet);
 
 protected:
   inline bool has_enough_packets() const;
