@@ -1953,7 +1953,7 @@ main_loop() {
 */
 void
 setup() {
-  init_mm_stdio();
+  init_stdio();
 #if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
   if (setlocale(LC_MESSAGES, "") == NULL)
     mxerror("The locale could not be set properly. Check the "

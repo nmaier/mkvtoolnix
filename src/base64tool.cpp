@@ -26,16 +26,16 @@
 using namespace std;
 
 void
-usage(int retval) {
-  mxinfo(_(
+set_usage() {
+  usage_text = _(
     "base64util <encode|decode> <input> <output> [maxlen]\n"
     "\n"
     "  encode - Read from <input>, encode to Base64 and write to <output>.\n"
     "           Max line length can be specified and is 72 if left out.\n"
     "  decode - Read from <input>, decode to binary and write to <output>.\n"
-    ));
+    );
 
-  exit(retval);
+  version_info = "base64util v" VERSION;
 }
 
 int
@@ -49,7 +49,8 @@ main(int argc,
   mm_io_c *in, *out;
   mm_text_io_c *intext;
 
-  init_mm_stdio();
+  init_stdio();
+  set_usage();
 
   if (argc < 4)
     usage(0);
@@ -70,7 +71,7 @@ main(int argc,
     if (!parse_int(argv[4], maxlen) || (maxlen < 4))
       mxerror(_("Max line length must be >= 4.\n\n"));
   } else if ((argc > 5) || ((argc > 4) && (mode == 'd')))
-    usage(1);
+    usage(2);
 
   maxlen = ((maxlen + 3) / 4) * 4;
 

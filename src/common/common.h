@@ -141,8 +141,9 @@ void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
 
 class mm_io_c;
 
-void MTX_DLL_API init_mm_stdio();
-void MTX_DLL_API set_mm_stdio(mm_io_c *);
+void MTX_DLL_API init_stdio();
+void MTX_DLL_API redirect_stdio(mm_io_c *new_stdio);
+bool MTX_DLL_API stdio_redirected();
 
 #define get_fourcc(b) get_uint32_be(b)
 uint16_t MTX_DLL_API get_uint16_le(const void *buf);
@@ -160,8 +161,10 @@ void MTX_DLL_API put_uint16_be(void *buf, uint16_t value);
 void MTX_DLL_API put_uint32_be(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
 
-extern int MTX_DLL_API cc_local_utf8, cc_stdio;
+extern int MTX_DLL_API cc_local_utf8;
 void MTX_DLL_API init_cc_stdio();
+void MTX_DLL_API set_cc_stdio(const string &charset);
+extern string MTX_DLL_API stdio_charset;
 string MTX_DLL_API get_local_charset();
 int MTX_DLL_API utf8_init(const string &charset);
 void MTX_DLL_API utf8_done();
@@ -169,6 +172,10 @@ string MTX_DLL_API to_utf8(int handle, const string &local);
 string MTX_DLL_API from_utf8(int handle, const string &utf8);
 
 vector<string> MTX_DLL_API command_line_utf8(int argc, char **argv);
+extern string MTX_DLL_API usage_text, version_info;
+void MTX_DLL_API usage(int exit_code = 0);
+void MTX_DLL_API handle_common_cli_args(vector<string> &args,
+                                        const string &redirect_output_short);
 
 enum unique_id_category_e {
   UNIQUE_ALL_IDS = -1,

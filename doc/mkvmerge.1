@@ -491,6 +491,13 @@ arguments of the following options: \fB\-\-title\fR, \fB\-\-track\-name\fR and
 Sets the charset to which strings are converted that are to be output.
 It defaults to the charset given by system's current locale.
 .TP
+\fB-r\fR, \fB\-\-redirect\-output\fR <\fIfilename\fR>
+Writes all messages to the file \fIfilename\fR instead of to the console.
+While this can be done easily with output redirection there are cases in which
+this option is needed: when the terminal reinterprets the output before
+writing it to a file.
+The charset set with \fB\-\-output-charset\fR is honored.
+.TP
 \fB@\fR\fIoptionsfile\fR
 Reads additional command line arguments from the file \fIoptionsfile\fR.
 Lines whose first non-whitespace character is a hash mark (#) are treated

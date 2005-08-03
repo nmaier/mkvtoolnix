@@ -111,8 +111,8 @@ file_type_t file_types[] =
 /** \brief Outputs usage information
 */
 static void
-usage() {
-  mxinfo(_(
+set_usage() {
+  usage_text = _(
     "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]"
     "\n\n Global options:\n"
     "  -v, --verbose            verbose status\n"
@@ -245,6 +245,8 @@ usage() {
     "  --priority <priority>    Set the priority mkvmerge runs with.\n"
     "  --command-line-charset   Charset for strings on the command line\n"
     "  --output-charset <cset>  Output messages in this charset\n"
+    "  -r, --redirect-output <file>\n"
+    "                           Redirects all messages into this file.\n"
     "  @optionsfile             Reads additional command line options from\n"
     "                           the specified file (see man page).\n"
     "  -h, --help               Show this help.\n"
@@ -252,7 +254,9 @@ usage() {
     "\n\nPlease read the man page/the HTML documentation to mkvmerge. It\n"
     "explains several details in great length which are not obvious from\n"
     "this listing.\n"
-  ));
+  );
+
+  version_info = "mkvmerge v" VERSION " ('" VERSIONNAME "')";
 }
 
 static bool print_malloc_report = false;
@@ -261,7 +265,7 @@ static bool print_malloc_report = false;
 */
 static void
 print_capabilities() {
-  mxinfo("VERSION=" VERSIONINFO "\n");
+  mxinfo("VERSION=%s\n", version_info.c_str());
 #if defined(HAVE_AVICLASSES)
   mxinfo("AVICLASSES\n");
 #endif
@@ -1290,24 +1294,7 @@ parse_args(vector<string> args) {
 
   ti = new track_info_c;
 
-  // Really important: Which charset does the user want?
-  i = 0;
-  while (i < args.size()) {
-    this_arg = args[i];
-    if ((i + 1) == args.size())
-      next_arg = "";
-    else
-      next_arg = args[i + 1];
-
-    if (this_arg == "--output-charset") {
-      if (next_arg == "")
-        mxerror("Missing argument for '--output-charset'.\n");
-      cc_stdio = utf8_init(next_arg);
-      args.erase(args.begin() + i, args.begin() + i + 2);
-
-    } else
-      i++;
-  }
+  handle_common_cli_args(args, "");
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -1331,16 +1318,7 @@ parse_args(vector<string> args) {
       next_arg = *(sit + 1);
     no_next_arg = (sit + 1) == args.end();
 
-    if ((this_arg == "-V") || (this_arg == "--version")) {
-      mxinfo(VERSIONINFO " built on " __DATE__ " " __TIME__ "\n");
-      mxexit(0);
-
-    } else if ((this_arg == "-h") || (this_arg == "-?") ||
-               (this_arg == "--help")) {
-      usage();
-      mxexit(0);
-
-    } else if ((this_arg == "-l") || (this_arg == "--list-types")) {
+    if ((this_arg == "-l") || (this_arg == "--list-types")) {
       mxinfo(_("Known file types:\n  ext  description\n"
                "  ---  --------------------------\n"));
       for (i = 1; file_types[i].ext; i++)
@@ -1364,7 +1342,7 @@ parse_args(vector<string> args) {
 
   }
 
-  mxinfo(VERSIONINFO " built on " __DATE__ " " __TIME__ "\n");
+  mxinfo("%s built on %s %s\n", version_info.c_str(), __DATE__, __TIME__);
 
   // Now parse options that are needed right at the beginning.
   foreach(sit, args) {
@@ -1395,8 +1373,7 @@ parse_args(vector<string> args) {
 
   if (outfile == "") {
     mxinfo(_("Error: no output file name was given.\n\n"));
-    usage();
-    mxexit(2);
+    usage(2);
   }
 
   foreach(sit, args) {
@@ -2018,7 +1995,7 @@ main(int argc,
   time_t start, end;
 
   init_globals();
-
+  set_usage();
   setup();
 
   parse_args(command_line_utf8(argc, argv));

@@ -131,9 +131,9 @@ find_track_by_uid(int tuid) {
 }
 
 void
-usage() {
+set_usage() {
 #ifdef HAVE_WXWINDOWS
-  mxinfo(Y(
+  usage_text = Y(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
     "  -g, --gui      Start the GUI (and open inname if it was given).\n"
@@ -142,14 +142,14 @@ usage() {
     "                 description of what mkvinfo outputs.\n"
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
-    "  -o, --output file.ext\n"
-    "                 Redirect the output to a file named 'file.ext'.\n"
     "  --output-charset <charset>\n"
     "                 Output messages in this charset\n"
+    "  -r, -o, --redirect-output file.ext\n"
+    "                 Redirect all messages to this file.\n"
     "  -h, --help     Show this help.\n"
-    "  -V, --version  Show version information.\n"));
+    "  -V, --version  Show version information.\n");
 #else
-  mxinfo(Y(
+  usage_text = Y(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
     "  inname         Use 'inname' as the source.\n"
@@ -157,13 +157,15 @@ usage() {
     "                 description of what mkvinfo outputs.\n"
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
-    "  -o, --output file.ext\n"
-    "                 Redirect the output to a file named 'file.ext'.\n"
     "  --output-charset <charset>\n"
     "                 Output messages in this charset\n"
+    "  -r, -o, --redirect-output file.ext\n"
+    "                 Redirect all messages to this file.\n"
     "  -h, --help     Show this help.\n"
-    "  -V, --version  Show version information.\n"));
+    "  -V, --version  Show version information.\n");
 #endif
+
+  version_info = "mkvinfo v" VERSION " ('" VERSIONNAME "')";
 }
 
 #define UTF2STR(s) UTFstring_to_cstrutf8(UTFstring(s)).c_str()
@@ -259,7 +261,6 @@ _show_element(EbmlElement *l,
 void
 parse_args(vector<string> args,
            string &file_name) {
-  static bool stdio_redirected = false;
   int i;
 
   verbose = 0;
@@ -267,6 +268,9 @@ parse_args(vector<string> args,
 
   use_gui = false;
 
+  handle_common_cli_args(args, "-o");
+
+  // Now parse the rest of the arguments.
   for (i = 0; i < args.size(); i++)
     if ((args[i] == "-g") || (args[i] == "--gui")) {
 #ifndef HAVE_WXWINDOWS
@@ -274,15 +278,6 @@ parse_args(vector<string> args,
 #else // HAVE_WXWINDOWS
       use_gui = true;
 #endif // HAVE_WXWINDOWS
-    } else if ((args[i] == "-V") || (args[i] == "--version")) {
-      mxinfo("mkvinfo v" VERSION "\n");
-      mxexit(0);
-    } else if ((args[i] == "-v") || (args[i] == "--verbose"))
-      verbose++;
-    else if ((args[i] == "-h") || (args[i] == "-?") ||
-             (args[i] == "--help")) {
-      usage();
-      mxexit(0);
     } else if ((args[i] == "-c") || (args[i] == "--checksum"))
       calc_checksums = true;
     else if ((args[i] == "-C") || (args[i] == "--check-mode")) {
@@ -291,24 +286,6 @@ parse_args(vector<string> args,
     } else if ((args[i] == "-s") || (args[i] == "--summary")) {
       calc_checksums = true;
       show_summary = true;
-    } else if ((args[i] == "-o") || (args[i] == "--output")) {
-      if ((i + 1) == args.size())
-        mxerror("'%s' is missing the file name.\n", args[i].c_str());
-      try {
-        if (!stdio_redirected)
-          set_mm_stdio(new mm_file_io_c(args[i + 1], MODE_CREATE));
-        stdio_redirected = true;
-        ++i;
-      } catch(mm_io_open_error_c &e) {
-        mxerror("Could not open the file '%s' for directing the output.\n",
-                args[i + 1].c_str());
-      }
-    } else if (args[i] == "--output-charset") {
-      if ((i + 1) == args.size())
-        mxerror("Missing argument for '--output-charset'.\n");
-      cc_stdio = utf8_init(args[i + 1]);
-      ++i;
-
     } else if (file_name != "")
       mxerror("Only one input file is allowed.\n");
     else
@@ -1986,7 +1963,8 @@ process_file(const string &file_name) {
 
 void
 setup() {
-  init_mm_stdio();
+  init_stdio();
+  set_usage();
 
 #if defined(HAVE_LIBINTL_H)
   if (setlocale(LC_MESSAGES, "") == NULL)

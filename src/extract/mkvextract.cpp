@@ -80,8 +80,8 @@ using namespace std;
 bool no_variable_data = false;
 
 void
-usage() {
-  const char *usage_infos = N_(
+set_usage() {
+  usage_text = N_(
 "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 "   or  mkvextract tags <inname> [options]\n"
 "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
@@ -151,7 +151,7 @@ usage() {
 "  -h, --help     Show this help.\n"
 "  -V, --version  Show version information.\n");
 
-  mxinfo(_(usage_infos));
+  version_info = "mkvextract v" VERSION " ('" VERSIONNAME "')";
 }
 
 static bool chapter_format_simple = false;
@@ -175,20 +175,10 @@ parse_args(vector<string> args,
   sub_charset = NULL;
   verbose = 0;
 
-  if (args.size() < 1) {
-    usage();
-    mxexit(0);
-  }
+  handle_common_cli_args(args, "-o");
 
-  if ((args[0] == "-V") || (args[0] == "--version")) {
-    mxinfo("mkvextract v" VERSION " ('" VERSIONNAME "')\n");
-    mxexit(0);
-
-  } else if ((args[0] == "-h") || (args[0] == "-?") ||
-             (args[0] == "--help")) {
+  if (args.size() < 1)
     usage();
-    mxexit(0);
-  }
 
   if (args[0] == "tracks")
     mode = MODE_TRACKS;
@@ -219,10 +209,7 @@ parse_args(vector<string> args,
 
   // Now process all the other options.
   for (i = 2; i < args.size(); i++)
-    if ((args[i] == "-v") || (args[i] == "--verbose"))
-      verbose++;
-
-    else if ((args[i] == "--no-variable-data"))
+    if ((args[i] == "--no-variable-data"))
       no_variable_data = true;
 
     else if ((args[i] == "-f") || (args[i] == "--parse-fully"))
@@ -336,7 +323,6 @@ parse_args(vector<string> args,
   if (tracks.size() == 0) {
     mxinfo(_("Nothing to do.\n\n"));
     usage();
-    mxexit(0);
   }
 }
 
@@ -395,7 +381,8 @@ main(int argc,
   int mode;
   vector<track_spec_t> tracks;
 
-  init_mm_stdio();
+  init_stdio();
+  set_usage();
 
 #if defined(SYS_UNIX)
   nice(2);

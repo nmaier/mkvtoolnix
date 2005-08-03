@@ -586,9 +586,18 @@ from_utf8(int handle,
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
 
+static int cc_stdio = -1;
+string stdio_charset;
+
 void
 init_cc_stdio() {
-  cc_stdio = utf8_init(get_local_charset());
+  set_cc_stdio(get_local_charset());
+}
+
+void
+set_cc_stdio(const string &charset) {
+  stdio_charset = charset;
+  cc_stdio = utf8_init(charset);
 }
 
 /*
@@ -1242,8 +1251,6 @@ fix_format(const char *fmt,
 #endif
 }
 
-int cc_stdio = -1;
-
 void
 mxprint(void *stream,
         const char *fmt,
@@ -1272,15 +1279,23 @@ mxprints(char *dst,
 }
 
 counted_ptr<mm_io_c> mm_stdio;
+static bool mm_stdio_redirected = false;
 
 void
-init_mm_stdio() {
-  set_mm_stdio(new mm_stdio_c());
+init_stdio() {
+  mm_stdio = counted_ptr<mm_io_c>(new mm_stdio_c());
+  mm_stdio_redirected = false;
 }
 
 void
-set_mm_stdio(mm_io_c *stdio) {
+redirect_stdio(mm_io_c *stdio) {
   mm_stdio = counted_ptr<mm_io_c>(stdio);
+  mm_stdio_redirected = true;
+}
+
+bool
+stdio_redirected() {
+  return mm_stdio_redirected;
 }
 
 static void
@@ -1816,3 +1831,84 @@ command_line_utf8(int,
   return args;
 }
 #endif // !defined(SYS_WINDOWS)
+
+string usage_text, version_info;
+
+/** Handle command line arguments common to all programs
+
+   Iterates over the list of command line arguments and handles the ones
+   that are common to all programs. These include --output-charset,
+   --redirect-output, --help, --version and --verbose along with their
+   short counterparts.
+
+   \param args A vector of strings containing the command line arguments.
+     The ones that have been handled are removed from the vector.
+   \param redirect_output_short The name of the short option that is
+     recognized for --redirect-output. If left empty then no short
+     version is accepted.
+*/
+void
+handle_common_cli_args(vector<string> &args,
+                       const string &redirect_output_short) {
+  int i;
+
+  // First see if there's an output charset given.
+  i = 0;
+  while (args.size() > i) {
+    if (args[i] == "--output-charset") {
+      if ((i + 1) == args.size())
+        mxerror("Missing argument for '--output-charset'.\n");
+      set_cc_stdio(args[i + 1]);
+      args.erase(args.begin() + i, args.begin() + i + 2);
+    } else
+      ++i;
+  }
+
+  // Now let's see if the user wants the output redirected.
+  i = 0;
+  while (args.size() > i) {
+    if ((args[i] == "--redirect-output") || (args[i] == "-r") ||
+        ((redirect_output_short != "") &&
+         (args[i] == redirect_output_short))) {
+      if ((i + 1) == args.size())
+        mxerror("'%s' is missing the file name.\n", args[i].c_str());
+      try {
+        if (!stdio_redirected()) {
+          mm_file_io_c *file = new mm_file_io_c(args[i + 1], MODE_CREATE);
+          file->write_bom(stdio_charset);
+          redirect_stdio(file);
+        }
+        args.erase(args.begin() + i, args.begin() + i + 2);
+      } catch(mm_io_open_error_c &e) {
+        mxerror("Could not open the file '%s' for directing the output.\n",
+                args[i + 1].c_str());
+      }
+    } else
+      ++i;
+  }
+
+  // Last find the --help and --version arguments.
+  i = 0;
+  while (args.size() > i) {
+    if ((args[i] == "-V") || (args[i] == "--version")) {
+      mxinfo("%s built on %s %s\n", version_info.c_str(), __DATE__, __TIME__);
+      mxexit(0);
+
+    } else if ((args[i] == "-v") || (args[i] == "--verbose")) {
+      ++verbose;
+      args.erase(args.begin() + i, args.begin() + i + 1);
+
+    } else if ((args[i] == "-h") || (args[i] == "-?") ||
+             (args[i] == "--help"))
+      usage();
+
+    else
+      ++i;
+  }
+}
+
+void
+usage(int exit_code) {
+  mxinfo("%s\n", usage_text.c_str());
+  mxexit(exit_code);
+}
