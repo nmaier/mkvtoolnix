@@ -57,7 +57,7 @@ tab_global::tab_global(wxWindow *parent):
                            "one file. You can split after a given size, "
                            "after a given amount of time has passed in each "
                            "file or after a list of timecodes."));
-  siz_split->Add(cb_split, 0, wxLEFT | wxBOTTOM, 5);
+  siz_split->Add(cb_split, 0, wxLEFT | wxTOP | wxBOTTOM, 5);
 
 
 
