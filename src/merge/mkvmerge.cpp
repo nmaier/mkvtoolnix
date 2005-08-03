@@ -244,7 +244,7 @@ usage() {
     "                           ISO639-2 codes.\n"
     "  --priority <priority>    Set the priority mkvmerge runs with.\n"
     "  --command-line-charset   Charset for strings on the command line\n"
-    "  --output-charset         Output messages in this charset\n"
+    "  --output-charset <cset>  Output messages in this charset\n"
     "  @optionsfile             Reads additional command line options from\n"
     "                           the specified file (see man page).\n"
     "  -h, --help               Show this help.\n"
