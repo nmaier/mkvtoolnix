@@ -52,10 +52,11 @@ bool
 mi_app::OnInit() {
   string initial_file;
   vector<string> args;
+
+  setup();
+
 #if WXUNICODE
   int i;
-
-  init_mm_stdio();
 
   for (i = 1; i < argc; i++)
     args.push_back(string(wxMB(wxString(argv[i]))));

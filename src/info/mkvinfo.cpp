@@ -259,6 +259,7 @@ _show_element(EbmlElement *l,
 void
 parse_args(vector<string> args,
            string &file_name) {
+  static bool stdio_redirected = false;
   int i;
 
   verbose = 0;
@@ -294,9 +295,11 @@ parse_args(vector<string> args,
       if ((i + 1) == args.size())
         mxerror("'%s' is missing the file name.\n", args[i].c_str());
       try {
-        set_mm_stdio(new mm_file_io_c(args[i + 1], MODE_CREATE));
+        if (!stdio_redirected)
+          set_mm_stdio(new mm_file_io_c(args[i + 1], MODE_CREATE));
+        stdio_redirected = true;
         ++i;
-      } catch(...) {
+      } catch(mm_io_open_error_c &e) {
         mxerror("Could not open the file '%s' for directing the output.\n",
                 args[i + 1].c_str());
       }
@@ -2032,7 +2035,8 @@ console_main(vector<string> args) {
 int
 main(int argc,
      char **argv) {
-  init_mm_stdio();
+  setup();
+
   return console_main(command_line_utf8(argc, argv));
 }
 
