@@ -142,6 +142,8 @@ usage() {
     "                 description of what mkvinfo outputs.\n"
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
+    "  -o, --output file.ext\n"
+    "                 Redirect the output to a file named 'file.ext'.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n"));
 #else
@@ -153,6 +155,8 @@ usage() {
     "                 description of what mkvinfo outputs.\n"
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
+    "  -o, --output file.ext\n"
+    "                 Redirect the output to a file named 'file.ext'.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n"));
 #endif
@@ -282,6 +286,16 @@ parse_args(vector<string> args,
     } else if ((args[i] == "-s") || (args[i] == "--summary")) {
       calc_checksums = true;
       show_summary = true;
+    } else if ((args[i] == "-o") || (args[i] == "--output")) {
+      if ((i + 1) == args.size())
+        mxerror("'%s' is missing the file name.\n", args[i].c_str());
+      try {
+        set_mm_stdio(new mm_file_io_c(args[i + 1], MODE_CREATE));
+        ++i;
+      } catch(...) {
+        mxerror("Could not open the file '%s' for directing the output.\n",
+                args[i + 1].c_str());
+      }
     } else if (file_name != "")
       mxerror("Only one input file is allowed.\n");
     else
@@ -1959,6 +1973,8 @@ process_file(const string &file_name) {
 
 void
 setup() {
+  init_mm_stdio();
+
 #if defined(HAVE_LIBINTL_H)
   if (setlocale(LC_MESSAGES, "") == NULL)
     mxerror("Could not set the locale properly. Check the "
@@ -2006,6 +2022,7 @@ console_main(vector<string> args) {
 int
 main(int argc,
      char **argv) {
+  init_mm_stdio();
   return console_main(command_line_utf8(argc, argv));
 }
 

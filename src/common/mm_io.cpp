@@ -1166,3 +1166,8 @@ mm_stdio_c::write(const void *buffer,
 void
 mm_stdio_c::close() {
 }
+
+void
+mm_stdio_c::flush() {
+  fflush(stdout);
+}

@@ -384,6 +384,8 @@ main(int argc,
   int mode;
   vector<track_spec_t> tracks;
 
+  init_mm_stdio();
+
 #if defined(SYS_UNIX)
   nice(2);
 #endif

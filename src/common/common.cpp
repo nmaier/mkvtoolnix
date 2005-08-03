@@ -61,6 +61,7 @@ using namespace libebml;
 #include "hacks.h"
 #include "mm_io.h"
 #include "random.h"
+#include "smart_pointers.h"
 
 int verbose = 1;
 bool suppress_warnings = false;
@@ -1270,13 +1271,24 @@ mxprints(char *dst,
   va_end(ap);
 }
 
+counted_ptr<mm_io_c> mm_stdio;
+
+void
+init_mm_stdio() {
+  set_mm_stdio(new mm_stdio_c());
+}
+
+void
+set_mm_stdio(mm_io_c *stdio) {
+  mm_stdio = counted_ptr<mm_io_c>(stdio);
+}
+
 static void
 mxmsg(int level,
       const char *fmt,
       va_list ap) {
   string new_fmt, output;
   bool nl;
-  FILE *stream;
   char *prefix;
 
   fix_format(fmt, new_fmt);
@@ -1287,7 +1299,6 @@ mxmsg(int level,
   } else
     nl = false;
 
-  stream = stdout;
   prefix = NULL;
 
   if (level == MXMSG_ERROR)
@@ -1298,14 +1309,14 @@ mxmsg(int level,
     prefix = "DBG> ";
 
   if (nl)
-    fprintf(stream, "\n");
+    mm_stdio->puts("\n");
 
   if (prefix != NULL)
-    fprintf(stream, prefix);
+    mm_stdio->puts(prefix);
 
   output = from_utf8(cc_stdio, mxvsprintf(new_fmt.c_str(), ap));
-  fputs(output.c_str(), stream);
-  fflush(stream);
+  mm_stdio->puts(output);
+  mm_stdio->flush();
 }
 
 void

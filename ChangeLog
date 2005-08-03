@@ -1,5 +1,9 @@
 2005-08-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: new feature: Added a command line switch "-o" for
+	redirecting the output to a file (for systems which re-interpret
+	stdout).
+
 	* mkvmerge: bug fix: The combination of using external timecode
 	files and video tracks with B frames was not working as
 	intended. The user had to order the timecodes in the timecode file

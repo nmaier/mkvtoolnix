@@ -49,6 +49,8 @@ main(int argc,
   mm_io_c *in, *out;
   mm_text_io_c *intext;
 
+  init_mm_stdio();
+
   if (argc < 4)
     usage(0);
 

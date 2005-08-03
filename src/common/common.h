@@ -139,6 +139,11 @@ void MTX_DLL_API _trace(const char *func, const char *file, int line);
 
 void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
 
+class mm_io_c;
+
+void MTX_DLL_API init_mm_stdio();
+void MTX_DLL_API set_mm_stdio(mm_io_c *);
+
 #define get_fourcc(b) get_uint32_be(b)
 uint16_t MTX_DLL_API get_uint16_le(const void *buf);
 uint32_t MTX_DLL_API get_uint24_le(const void *buf);

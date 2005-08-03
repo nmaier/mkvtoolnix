@@ -86,6 +86,8 @@ public:
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size) = 0;
   virtual bool eof() = 0;
+  virtual void flush() {
+  }
 
   virtual string get_file_name() const = 0;
 
@@ -255,6 +257,7 @@ public:
   virtual string get_file_name() const {
     return "";
   }
+  virtual void flush();
 };
 
 #endif // __MM_IO_H
