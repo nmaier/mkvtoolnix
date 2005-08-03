@@ -55,6 +55,8 @@ mi_app::OnInit() {
 #if WXUNICODE
   int i;
 
+  init_mm_stdio();
+
   for (i = 1; i < argc; i++)
     args.push_back(string(wxMB(wxString(argv[i]))));
 #else
