@@ -144,6 +144,8 @@ usage() {
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
     "  -o, --output file.ext\n"
     "                 Redirect the output to a file named 'file.ext'.\n"
+    "  --output-charset <charset>\n"
+    "                 Output messages in this charset\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n"));
 #else
@@ -157,6 +159,8 @@ usage() {
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
     "  -o, --output file.ext\n"
     "                 Redirect the output to a file named 'file.ext'.\n"
+    "  --output-charset <charset>\n"
+    "                 Output messages in this charset\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n"));
 #endif
@@ -296,6 +300,12 @@ parse_args(vector<string> args,
         mxerror("Could not open the file '%s' for directing the output.\n",
                 args[i + 1].c_str());
       }
+    } else if (args[i] == "--output-charset") {
+      if ((i + 1) == args.size())
+        mxerror("Missing argument for '--output-charset'.\n");
+      cc_stdio = utf8_init(args[i + 1]);
+      ++i;
+
     } else if (file_name != "")
       mxerror("Only one input file is allowed.\n");
     else
