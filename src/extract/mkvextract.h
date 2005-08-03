@@ -67,5 +67,7 @@ void extract_attachments(const char *file_name,
 void extract_cuesheet(const char *file_name, bool parse_fully);
 void write_cuesheet(const char *file_name, KaxChapters &chapters,
                     KaxTags &tags, int64_t tuid, mm_io_c &out);
+void extract_timecodes(const string &file_name, vector<track_spec_t> &tspecs,
+                       int version);
 
 #endif // __MKVEXTRACT_H

@@ -70,11 +70,12 @@ using namespace std;
 
 #define NAME "mkvextract"
 
-#define MODE_TRACKS      0
-#define MODE_TAGS        1
-#define MODE_ATTACHMENTS 2
-#define MODE_CHAPTERS    3
-#define MODE_CUESHEET    4
+#define MODE_TRACKS       0
+#define MODE_TAGS         1
+#define MODE_ATTACHMENTS  2
+#define MODE_CHAPTERS     3
+#define MODE_CUESHEET     4
+#define MODE_TIMECODES_V2 5
 
 bool no_variable_data = false;
 
@@ -86,6 +87,7 @@ usage() {
 "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 "\n   or  mkvextract chapters <inname> [options]\n"
 "   or  mkvextract cuesheet <inname> [options]\n"
+"   or  mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]\n"
 "   or  mkvextract <-h|-V>\n"
 "\n"
 " The first word tells mkvextract what to extract. The second must be the\n"
@@ -137,6 +139,12 @@ usage() {
 " Example:\n"
 " mkvextract cuesheet \"audiofile.mka\" > audiofile.cue\n"
 "\n"
+" The sixth mode finds the timecodes of all blocks for a track and outpus\n"
+" a timecode v2 file with these timecodes.\n"
+"\n"
+" Example:\n"
+" mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt\n"
+"\n"
 " These options can be used instead of the mode keyword to obtain\n"
 " further information:\n"
 "  -v, --verbose  Increase verbosity.\n"
@@ -182,16 +190,18 @@ parse_args(vector<string> args,
     mxexit(0);
   }
 
-  if ((args[0] == "tracks"))
+  if (args[0] == "tracks")
     mode = MODE_TRACKS;
-  else if ((args[0] == "tags"))
+  else if (args[0] == "tags")
     mode = MODE_TAGS;
-  else if ((args[0] == "attachments"))
+  else if (args[0] == "attachments")
     mode = MODE_ATTACHMENTS;
-  else if ((args[0] == "chapters"))
+  else if (args[0] == "chapters")
     mode = MODE_CHAPTERS;
-  else if ((args[0] == "cuesheet"))
+  else if (args[0] == "cuesheet")
     mode = MODE_CUESHEET;
+  else if (args[0] == "timecodes_v2")
+    mode = MODE_TIMECODES_V2;
   else
     mxerror(_("Unknown mode '%s'.\n"), args[0].c_str());
 
@@ -276,11 +286,12 @@ parse_args(vector<string> args,
 
       chapter_format_simple = true;
 
-    } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS)) {
+    } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS) ||
+               (MODE_TIMECODES_V2 == mode)) {
       copy = safestrdup(args[i].c_str());
       colon = strchr(copy, ':');
       if (colon == NULL)
-        mxerror(mode == MODE_TRACKS ?
+        mxerror((MODE_TRACKS == mode) || (MODE_TIMECODES_V2 == mode) ?
                 _("Missing track ID in argument '%s'.\n") :
                 _("Missing attachment ID in argument '%s'.\n"),
                 args[i].c_str());
@@ -288,7 +299,7 @@ parse_args(vector<string> args,
       *colon = 0;
       if (!parse_int(copy, tid) || (tid < 0))
         mxerror("Invalid %s ID in argument '%s'.\n",
-                mode == MODE_TRACKS ?
+                (MODE_TRACKS == mode) || (MODE_TIMECODES_V2 == mode) ?
                 _("Invalid track ID in argument '%s'.\n") :
                 _("Invalid attachment ID in argument '%s'.\n"),
                 args[i].c_str());
@@ -422,6 +433,9 @@ main(int argc,
 
   else if (mode == MODE_CUESHEET)
     extract_cuesheet(input_file.c_str(), parse_fully);
+
+  else if (mode == MODE_TIMECODES_V2)
+    extract_timecodes(input_file, tracks, 2);
 
   else
     die("mkvextract: Unknown mode!?");

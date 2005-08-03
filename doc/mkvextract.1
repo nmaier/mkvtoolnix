@@ -22,6 +22,9 @@ chapters <\fIinname\fR> [\fIoptions\fR]
 cuesheet <\fIinname\fR> [\fIoptions\fR]
 .br
 .B mkvextract
+timecodes_v2 <\fIinname\fR> [\fITID1\fR:\fIout1\fR [\fITID2\fR:\fIout2\fR ...]]
+.br
+.B mkvextract
 <\-h|\-V>
 
 
@@ -30,7 +33,7 @@ cuesheet <\fIinname\fR> [\fIoptions\fR]
 This program extracts specific parts from a Matroska file to other useful
 formats. The first argument tells \fBmkvextract\fR what to extract. Currently
 supported is the extraction of \fBtracks\fR, \fBtags\fR, \fBattachments\fR,
-\fBchapters\fR and \fBCUE sheets\fR.
+\fBchapters\fR, \fBCUE sheets\fR and \fBtimecodes\fR.
 The second argument is the name of the source file. It must be a Matroska file.
 
 .LP
@@ -123,6 +126,12 @@ Command line syntax for the \fBcuesheet\fR extraction mode:
 Be verbose and show all the important Matroska elements as they're read.
 
 .LP
+Command line syntax for the \fBtimecodes_v2\fR extraction mode:
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Be verbose and show all the important Matroska elements as they're read.
+
+.LP
 If one of the following options is used as the only command line argument
 additional information about \fBmkvextract\fR is output.
 .TP
@@ -137,6 +146,10 @@ Show version information.
 The decision about the output format is based on the track type, not on the
 extension used for the output file name. The following track types are
 supported at the moment:
+.TP
+V_MPEG4/ISO/AVC
+H.264 / AVC video tracks are written to H.264 elementary streams which
+can be processed further with e.g. MP4Box from the GPAC package.
 .TP
 V_MS/VFW/FOURCC
 Fixed FPS video tracks with this CodecID are written to AVI files.
@@ -185,7 +198,10 @@ whatsoever is done.
 \fBChapters\fR are converted to a XML format. This format is the same that
 \fBmkvmerge\fR supports for reading chapters. Alternatively a stripped-down
 version can be output in the simple OGM style format.
-
+.LP
+\fBTimecodes\fR are first sorted and then output as a timecode v2 format
+compliant file ready to be fed to mkvmerge.
+The extraction to other formats (v1 and v3) is not supported.
 
 .SH EXAMPLES
 Let's assume you've made a Matroska file with one video track, two audio tracks
@@ -237,6 +253,11 @@ tracks.
 In this case you can use a track flag like this:
 .LP
 $ \fBmkvextract tracks movie3.mkv --fullraw 1:extracted.mpeg\fR
+.LP
+If you need the timecodes for all the blocks of track 2 from a file then
+you can let mkvextract create a timecode v2 format file like this:
+.LP
+$ \fBmkvextract timecodes_v2 input.mkv 2:timecodes-track2.txt\fR
 
 .SH AUTHOR
 .I mkvextract

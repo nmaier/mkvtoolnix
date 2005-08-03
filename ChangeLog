@@ -1,5 +1,10 @@
 2005-08-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: new feature: Added a new extraction mode for
+	outputting timecodes in a timecode v2 format file. It is called
+	"timecode_v2" and takes the same arguments as the "tracks"
+	extraction mode.
+
 	* mkvinfo: new feature: Added a command line switch
 	"--output-charset" which sets the charset that strings read from
 	Matroska files are output in (e.g. if you want the output in UTF-8
