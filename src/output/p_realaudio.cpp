@@ -47,7 +47,7 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
     initial_displacement = 0;
   }
 
-  set_track_type(track_audio);
+  set_track_type(track_audio, TFA_SHORT_QUEUEING);
 }
 
 ra_packetizer_c::~ra_packetizer_c() {

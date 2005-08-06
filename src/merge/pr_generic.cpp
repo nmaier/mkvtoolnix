@@ -75,6 +75,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   default_track_warning_printed = false;
   connected_to = 0;
   has_been_flushed = false;
+  timecode_factory_application_mode = TFA_AUTOMATIC;
 
   // Let's see if the user specified audio sync for this track.
   found = false;
@@ -278,6 +279,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 
 generic_packetizer_c::~generic_packetizer_c() {
   safefree(hcodec_private);
+  if (!packet_queue.empty())
+    mxerror("Packet queue not empty for new track ID %lld (flushed: %d). "
+            "Frames have been lost during remux. %s\n", ti.id,
+            has_been_flushed, BUGMSG);
 }
 
 void
@@ -338,7 +343,8 @@ generic_packetizer_c::set_uid(uint32_t uid) {
 }
 
 void
-generic_packetizer_c::set_track_type(int type) {
+generic_packetizer_c::set_track_type(int type,
+                                     timecode_factory_application_e tfa_mode) {
   htrack_type = type;
 
   if ((type == track_audio) && (ti.cues == CUE_STRATEGY_UNSPECIFIED))
@@ -351,6 +357,16 @@ generic_packetizer_c::set_track_type(int type) {
       video_packetizer = this;
   } else
     reader->num_subtitle_tracks++;
+
+  if ((TFA_AUTOMATIC == tfa_mode) &&
+      (TFA_AUTOMATIC == timecode_factory_application_mode))
+    timecode_factory_application_mode =
+      (track_video == type) ? TFA_FULL_QUEUEING :
+      (track_subtitle == type) ? TFA_IMMEDIATE :
+      (track_buttons == type) ? TFA_IMMEDIATE :
+      TFA_FULL_QUEUEING;
+  else if (TFA_AUTOMATIC != tfa_mode)
+    timecode_factory_application_mode = tfa_mode;
 }
 
 void
@@ -625,8 +641,9 @@ generic_packetizer_c::set_headers() {
       (&GetChild<KaxMaxBlockAdditionID>(*track_entry))) =
       htrack_max_add_block_ids;
 
-  htrack_default_duration =
-    (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
+  if (NULL != timecode_factory)
+    htrack_default_duration =
+      (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
   if (htrack_default_duration != -1.0)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
@@ -927,7 +944,11 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   pack->timecode_before_factory = pack->timecode;
 
   packet_queue.push_back(pack);
-  apply_factory();
+  if ((NULL == timecode_factory) ||
+      (TFA_IMMEDIATE == timecode_factory_application_mode))
+    apply_factory_once(pack);
+  else
+    apply_factory();
 }
 
 void
@@ -956,7 +977,7 @@ generic_packetizer_c::has_enough_packets() const {
 
 packet_cptr
 generic_packetizer_c::get_packet() {
-  if (packet_queue.size() == 0)
+  if ((packet_queue.size() == 0) || !packet_queue.front()->factory_applied)
     return packet_cptr(NULL);
 
   packet_cptr pack = packet_queue.front();
@@ -969,8 +990,16 @@ generic_packetizer_c::get_packet() {
 
 void
 generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
-  packet->gap_following = timecode_factory->get_next(packet);
+  if (NULL == timecode_factory) {
+    packet->assigned_timecode = packet->timecode;
+    packet->gap_following = false;
+  } else
+    packet->gap_following = timecode_factory->get_next(packet);
   packet->factory_applied = true;
+
+  mxverb(4, "apply_factory_once(): source %lld t %lld tbf %lld at %lld\n",
+         packet->source->get_source_track_num(), packet->timecode,
+         packet->timecode_before_factory, packet->assigned_timecode);
 
   if (max_timecode_seen < (packet->assigned_timecode + packet->duration))
     max_timecode_seen = packet->assigned_timecode + packet->duration;
@@ -980,20 +1009,30 @@ generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
 
 void
 generic_packetizer_c::apply_factory() {
-  deque<packet_cptr>::iterator p_start, p_end, p_current;
+  packet_cptr_di p_start;
 
   if (packet_queue.empty())
     return;
 
   // Find the first packet to which the factory hasn't been applied yet.
   p_start = packet_queue.begin();
+  while ((packet_queue.end() != p_start) && (*p_start)->factory_applied)
+    ++p_start;
+
+  if (packet_queue.end() == p_start)
+    return;
+
+  if (TFA_SHORT_QUEUEING == timecode_factory_application_mode)
+    apply_factory_short_queueing(p_start);
+  else
+    apply_factory_full_queueing(p_start);
+}
+
+void
+generic_packetizer_c::apply_factory_short_queueing(packet_cptr_di &p_start) {
+  packet_cptr_di p_end, p_current;
+
   while (packet_queue.end() != p_start) {
-    while ((packet_queue.end() != p_start) && (*p_start)->factory_applied)
-      ++p_start;
-
-    if (packet_queue.end() == p_start)
-      return;
-
     // Find the next packet with a timecode bigger than the start packet's
     // timecode. All packets between those two including the start packet
     // and excluding the end packet can be timestamped.
@@ -1005,10 +1044,7 @@ generic_packetizer_c::apply_factory() {
 
     // Abort if no such packet was found, but keep on assigning if the
     // packetizer has been flushed already.
-    // Subtitles are a special case. They don't have B frames. But they
-    // may have big gaps. So apply the factory right now, too.
-    if (!has_been_flushed && (get_track_type() != track_subtitle) &&
-        (packet_queue.end() == p_end))
+    if (!has_been_flushed && (packet_queue.end() == p_end))
       return;
   
     // Now assign timecodes to the ones between p_start and p_end...
@@ -1017,10 +1053,66 @@ generic_packetizer_c::apply_factory() {
     // ...and to p_start itself.
     apply_factory_once(*p_start);
 
-    mxverb(4, "apply_factory(): source %lld t %lld tbf %lld at %lld\n",
-           (*p_start)->source->get_source_track_num(),
-           (*p_start)->timecode, (*p_start)->timecode_before_factory,
-           (*p_start)->assigned_timecode);
+    p_start = p_end;
+  }
+}
+
+struct packet_sorter_t {
+  int m_index;
+  static deque<packet_cptr> *m_packet_queue;
+
+  packet_sorter_t(int index):
+    m_index(index) {}
+
+  bool operator <(const packet_sorter_t &cmp) const {
+    return (*m_packet_queue)[m_index]->timecode <
+      (*m_packet_queue)[cmp.m_index]->timecode;
+  }
+};
+
+deque<packet_cptr> *packet_sorter_t::m_packet_queue = NULL;
+
+void
+generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
+  packet_cptr_di p_end, p_current;
+  vector<packet_sorter_t> sorter;
+  bool needs_sorting;
+  int64_t previous_timecode;
+  int i;
+
+  packet_sorter_t::m_packet_queue = &packet_queue;
+
+  while (packet_queue.end() != p_start) {
+    // Find the next I frame packet.
+    p_end = p_start + 1;
+    while ((packet_queue.end() != p_end) &&
+           ((0 <= (*p_end)->fref) || (0 <= (*p_end)->bref)))
+      ++p_end;
+
+    // Abort if no such packet was found, but keep on assigning if the
+    // packetizer has been flushed already.
+    if (!has_been_flushed && (packet_queue.end() == p_end))
+      return;
+
+    // Now sort the frames by their timecode as the factory has to be
+    // applied to the packets in the same order as they're timestamped.
+    sorter.clear();
+    needs_sorting = false;
+    previous_timecode = 0;
+    i = distance(packet_queue.begin(), p_start);
+    for (p_current = p_start; p_current != p_end; ++i, ++p_current) {
+      sorter.push_back(packet_sorter_t(i));
+      if (packet_queue[i]->timecode < previous_timecode)
+        needs_sorting = true;
+      previous_timecode = packet_queue[i]->timecode;
+    }
+
+    if (needs_sorting)
+      sort(sorter.begin(), sorter.end());
+
+    // Finally apply the factory.
+    for (i = 0; sorter.size() > i; ++i)
+      apply_factory_once(packet_queue[sorter[i].m_index]);
 
     p_start = p_end;
   }

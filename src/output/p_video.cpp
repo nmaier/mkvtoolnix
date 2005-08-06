@@ -172,6 +172,8 @@ mpeg1_2_video_packetizer_c(generic_reader_c *_reader,
     }
   } else
     aspect_ratio_extracted = true;
+
+  timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 }
 
 int
@@ -185,8 +187,12 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(packet->memory->data, packet->memory->size);
 
-  if (framed)
-    return video_packetizer_c::process(packet);
+  if (framed) {
+    if (0 != packet->memory->size)
+      return video_packetizer_c::process(packet);
+    else
+      return FILE_STATUS_MOREDATA;
+  }
 
   state = parser.GetState();
   if ((state == MPV_PARSER_STATE_EOS) ||
@@ -321,6 +327,8 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
       ti.private_size = 0;
     }
   }
+
+  timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 }
 
 int

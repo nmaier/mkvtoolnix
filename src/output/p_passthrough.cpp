@@ -30,6 +30,8 @@ passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *_reader,
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
   packets_processed(0), bytes_processed(0), sync_to_keyframe(false) {
+
+  timecode_factory_application_mode = TFA_FULL_QUEUEING;
 }
 
 void

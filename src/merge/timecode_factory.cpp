@@ -33,7 +33,7 @@ timecode_factory_c::create(const string &_file_name,
   timecode_factory_c *factory;
 
   if (_file_name == "")
-    return new timecode_factory_c("", _source_name, _tid);
+    return NULL;
 
   in = NULL;                    // avoid gcc warning
   try {
@@ -270,6 +270,13 @@ timecode_factory_v2_c::get_next(packet_cptr &packet) {
            "the way you intended them to be. mkvmerge might even crash.\n",
            source_name.c_str(), tid, timecodes.size());
     warning_printed = true;
+    if (timecodes.empty()) {
+      packet->assigned_timecode = 0;
+      packet->duration = 0;
+    } else {
+      packet->assigned_timecode = timecodes.back();
+      packet->duration = timecodes.back();
+    }
     return false;
   }
 

@@ -27,6 +27,13 @@ using namespace std;
 
 class mm_io_c;
 
+enum timecode_factory_application_e {
+  TFA_AUTOMATIC,
+  TFA_IMMEDIATE,
+  TFA_SHORT_QUEUEING,
+  TFA_FULL_QUEUEING
+};
+
 class timecode_range_c {
 public:
   int64_t start_frame, end_frame;

@@ -374,9 +374,11 @@ enum connection_result_e {
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 
+typedef deque<packet_cptr>::iterator packet_cptr_di;
+
 class generic_packetizer_c {
 protected:
-  deque<packet_cptr > packet_queue, deferred_packets;
+  deque<packet_cptr> packet_queue, deferred_packets;
 
   int64_t initial_displacement;
   int64_t m_free_refs, m_next_free_refs, enqueued_bytes;
@@ -407,6 +409,7 @@ protected:
   compressor_ptr compressor;
 
   timecode_factory_c *timecode_factory;
+  timecode_factory_application_e timecode_factory_application_mode;
 
   int64_t last_cue_timecode;
 
@@ -493,7 +496,9 @@ public:
   virtual int get_uid() {
     return huid;
   }
-  virtual void set_track_type(int type);
+  virtual void set_track_type(int type,
+                              timecode_factory_application_e tfa_mode =
+                              TFA_AUTOMATIC);
   virtual int get_track_type() {
     return htrack_type;
   }
@@ -568,6 +573,8 @@ public:
 
   virtual void apply_factory();
   virtual void apply_factory_once(packet_cptr &packet);
+  virtual void apply_factory_short_queueing(packet_cptr_di &p_start);
+  virtual void apply_factory_full_queueing(packet_cptr_di &p_start);
 
 protected:
   inline bool has_enough_packets() const;
