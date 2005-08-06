@@ -1769,8 +1769,10 @@ kax_reader_c::read(generic_packetizer_c *,
 
   l0 = segment;
 
-  if (saved_l1 == NULL)         // We're done.
+  if (saved_l1 == NULL) {       // We're done.
+    flush_packetizers();
     return FILE_STATUS_DONE;
+  }
 
   if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
     return FILE_STATUS_HOLDING;
