@@ -1680,9 +1680,9 @@ parse_args(vector<string> args) {
       if (temp == -1)
         timecode_scale_mode = TIMECODE_SCALE_MODE_AUTO;
       else {
-        if ((temp > 10000000) || (temp < 1000))
+        if ((temp > 10000000) || (temp < 1))
           mxerror(_("The given timecode scale factor is outside the valid "
-                    "range (1000...10000000 or -1 for 'sample precision "
+                    "range (1...10000000 or -1 for 'sample precision "
                     "even if a video track is present').\n"));
 
         timecode_scale = temp;
