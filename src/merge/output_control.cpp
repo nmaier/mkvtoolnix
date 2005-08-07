@@ -444,7 +444,7 @@ static void
 set_timecode_scale() {
   vector<packetizer_t>::const_iterator ptzr;
   bool video_present, audio_present;
-  int64_t highest_sample_rate;
+  int64_t highest_sample_rate, max_ns_with_timecode_scale;
 
   video_present = false;
   audio_present = false;
@@ -465,22 +465,14 @@ set_timecode_scale() {
   if (timecode_scale_mode != TIMECODE_SCALE_MODE_FIXED) {
     if (audio_present && (highest_sample_rate > 0) &&
         (!video_present ||
-         (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO))) {
-      int64_t max_ns_with_timecode_scale;
-
+         (timecode_scale_mode == TIMECODE_SCALE_MODE_AUTO)))
       timecode_scale = (double)1000000000.0 / (double)highest_sample_rate -
         1.0;
-      max_ns_with_timecode_scale = (int64_t)(32700 * timecode_scale);
-      if (max_ns_with_timecode_scale < max_ns_per_cluster)
-        max_ns_per_cluster = max_ns_with_timecode_scale;
-
-      mxverb(2, "mkvmerge: using sample precision timestamps. highest sample "
-             "rate: %lld, new timecode_scale: %f, "
-             "max_ns_with_timecode_scale: %lld, max_ns_per_cluster: %lld\n",
-             highest_sample_rate, timecode_scale, max_ns_with_timecode_scale,
-             max_ns_per_cluster);
-    }
   }
+
+  max_ns_with_timecode_scale = (int64_t)(32700 * timecode_scale);
+  if (max_ns_with_timecode_scale < max_ns_per_cluster)
+    max_ns_per_cluster = max_ns_with_timecode_scale;
 
   KaxTimecodeScale &time_scale = GetChild<KaxTimecodeScale>(*kax_infos);
   *(static_cast<EbmlUInteger *>(&time_scale)) = (int64_t)timecode_scale;
