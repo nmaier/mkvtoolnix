@@ -465,6 +465,8 @@ get_local_charset() {
 #if defined(COMP_MINGW) || defined(COMP_MSC)
   lc_charset = "CP" + to_string(GetACP());
 #elif defined(SYS_SOLARIS)
+  int i;
+
   lc_charset = nl_langinfo(CODESET);
   if (parse_int(lc_charset, i))
     lc_charset = string("ISO") + lc_charset + string("-US");
