@@ -1103,10 +1103,13 @@ default FPS is used. Example:
 .LP
 \fBTimecode file format v2\fR
 .LP
-In this format each line contains a timecode for the next frame. This
-timecode must be given in ms precision. It can be a floating point number,
-but it doesn't have to be. You \fBmust\fR give at least as many timecode
-lines as there are frames in the track. Example for 25fps:
+In this format each line contains a timecode for the next frame.
+This timecode must be given in ms precision.
+It can be a floating point number, but it doesn't have to be.
+You \fBmust\fR give at least as many timecode lines as there are frames in
+the track.
+The timecodes in this file must be sorted.
+Example for 25fps:
 .br
 \fB# timecode format v2\fR
 .br
@@ -1117,6 +1120,7 @@ lines as there are frames in the track. Example for 25fps:
 \fB80\fR
 .br
 etc.
+.LP
 \fBTimecode file format v3\fR
 .LP
 In this format each line contains a duration in seconds followed by an 
@@ -1142,6 +1146,12 @@ Example for an audio file:
 \fB2.000,38.236\fR
 .br
 etc.
+.LP
+\fBTimecode file format v4\fR
+.LP
+This format is identical to the v2 format.
+The only difference is that the timecodes do not have to be sorted.
+This format should almost never be used.
 
 
 .SH EXIT CODES

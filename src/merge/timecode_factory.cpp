@@ -24,40 +24,41 @@
 using namespace std;
 
 timecode_factory_c *
-timecode_factory_c::create(const string &_file_name,
-                           const string &_source_name,
-                           int64_t _tid) {
+timecode_factory_c::create(const string &file_name,
+                           const string &source_name,
+                           int64_t tid) {
   mm_io_c *in;
   string line;
   int version;
   timecode_factory_c *factory;
 
-  if (_file_name == "")
+  if (file_name == "")
     return NULL;
 
   in = NULL;                    // avoid gcc warning
   try {
-    in = new mm_text_io_c(new mm_file_io_c(_file_name));
+    in = new mm_text_io_c(new mm_file_io_c(file_name));
   } catch(...) {
     mxerror(_("The timecode file '%s' could not be opened for reading.\n"),
-            _file_name.c_str());
+            file_name.c_str());
   }
 
   if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") ||
       !parse_int(&line[strlen("# timecode format v")], version))
     mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
               "format line. The very first line must look like "
-              "'# timecode format v1'.\n"), _file_name.c_str());
+              "'# timecode format v1'.\n"), file_name.c_str());
   factory = NULL;               // avoid gcc warning
   if (version == 1)
-    factory = new timecode_factory_v1_c(_file_name, _source_name, _tid);
-  else if (version == 2)
-    factory = new timecode_factory_v2_c(_file_name, _source_name, _tid);
+    factory = new timecode_factory_v1_c(file_name, source_name, tid);
+  else if ((2 == version) || (4 == version))
+    factory = new timecode_factory_v2_c(file_name, source_name, tid,
+                                        version);
   else if (version == 3)
-    factory = new timecode_factory_v3_c(_file_name, _source_name, _tid);
+    factory = new timecode_factory_v3_c(file_name, source_name, tid);
   else
     mxerror(_("The timecode file '%s' contains an unsupported/unrecognized "
-              "format (version %d).\n"), _file_name.c_str(), version);
+              "format (version %d).\n"), file_name.c_str(), version);
 
   factory->parse(*in);
   delete in;
@@ -80,7 +81,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     if (!in.getline2(line))
       mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line"
                 " with the default number of frames per second.\n"),
-              file_name.c_str());
+              m_file_name.c_str());
     line_no++;
     strip(line);
     if ((line.length() != 0) && (line[0] != '#'))
@@ -90,13 +91,13 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   if (!starts_with_case(line, "assume "))
     mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
               "with the default number of frames per second.\n"),
-            file_name.c_str());
+            m_file_name.c_str());
   line.erase(0, 6);
   strip(line);
-  if (!parse_double(line.c_str(), default_fps))
+  if (!parse_double(line.c_str(), m_default_fps))
     mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
               "with the default number of frames per second.\n"),
-            file_name.c_str());
+            m_file_name.c_str());
 
   while (in.getline2(line)) {
     line_no++;
@@ -107,7 +108,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     if (mxsscanf(line, "%lld,%lld,%lf", &t.start_frame, &t.end_frame, &t.fps)
         != 3) {
       mxwarn(_("Line %d of the timecode file '%s' could not be parsed.\n"),
-             line_no, file_name.c_str());
+             line_no, m_file_name.c_str());
       continue;
     }
 
@@ -116,71 +117,70 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
       mxwarn(_("Line %d of the timecode file '%s' contains inconsistent data "
                "(e.g. the start frame number is bigger than the end frame "
                "number, or some values are smaller than zero).\n"),
-             line_no, file_name.c_str());
+             line_no, m_file_name.c_str());
       continue;
     }
 
-    ranges.push_back(t);
+    m_ranges.push_back(t);
   }
 
   mxverb(3, "ext_timecodes: Version 1, default fps %f, %u entries.\n",
-         default_fps, ranges.size());
+         m_default_fps, m_ranges.size());
 
-  if (ranges.size() == 0)
+  if (m_ranges.size() == 0)
     t.start_frame = 0;
   else {
-    sort(ranges.begin(), ranges.end());
+    sort(m_ranges.begin(), m_ranges.end());
     do {
       done = true;
-      iit = ranges.begin();
-      for (i = 0; i < (ranges.size() - 1); i++) {
+      iit = m_ranges.begin();
+      for (i = 0; i < (m_ranges.size() - 1); i++) {
         iit++;
-        if (ranges[i].end_frame <
-            (ranges[i + 1].start_frame - 1)) {
-          t.start_frame = ranges[i].end_frame + 1;
-          t.end_frame = ranges[i + 1].start_frame - 1;
-          t.fps = default_fps;
-          ranges.insert(iit, t);
+        if (m_ranges[i].end_frame < (m_ranges[i + 1].start_frame - 1)) {
+          t.start_frame = m_ranges[i].end_frame + 1;
+          t.end_frame = m_ranges[i + 1].start_frame - 1;
+          t.fps = m_default_fps;
+          m_ranges.insert(iit, t);
           done = false;
           break;
         }
       }
     } while (!done);
-    if (ranges[0].start_frame != 0) {
+    if (m_ranges[0].start_frame != 0) {
       t.start_frame = 0;
-      t.end_frame = ranges[0].start_frame - 1;
-      t.fps = default_fps;
-      ranges.insert(ranges.begin(), t);
+      t.end_frame = m_ranges[0].start_frame - 1;
+      t.fps = m_default_fps;
+      m_ranges.insert(m_ranges.begin(), t);
     }
-    t.start_frame = ranges[ranges.size() - 1].end_frame + 1;
+    t.start_frame = m_ranges[m_ranges.size() - 1].end_frame + 1;
   }
   t.end_frame = 0xfffffffffffffffll;
-  t.fps = default_fps;
-  ranges.push_back(t);
+  t.fps = m_default_fps;
+  m_ranges.push_back(t);
 
-  ranges[0].base_timecode = 0.0;
-  pit = ranges.begin();
-  for (iit = ranges.begin() + 1; iit < ranges.end(); iit++, pit++)
+  m_ranges[0].base_timecode = 0.0;
+  pit = m_ranges.begin();
+  for (iit = m_ranges.begin() + 1; iit < m_ranges.end(); iit++, pit++)
     iit->base_timecode = pit->base_timecode +
       ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000000000.0 /
       pit->fps;
 
-  for (iit = ranges.begin(); iit < ranges.end(); iit++)
+  for (iit = m_ranges.begin(); iit < m_ranges.end(); iit++)
     mxverb(3, "ranges: entry %lld -> %lld at %f with %f\n",
            iit->start_frame, iit->end_frame, iit->fps, iit->base_timecode);
 }
 
 bool
 timecode_factory_v1_c::get_next(packet_cptr &packet) {
-  packet->assigned_timecode = get_at(frameno);
-  packet->duration = get_at(frameno + 1) - packet->assigned_timecode;
-  frameno++;
-  if ((frameno > ranges[current_range].end_frame) &&
-      (current_range < (ranges.size() - 1)))
-    current_range++;
+  packet->assigned_timecode = get_at(m_frameno);
+  packet->duration = get_at(m_frameno + 1) - packet->assigned_timecode;
+  m_frameno++;
+  if ((m_frameno > m_ranges[m_current_range].end_frame) &&
+      (m_current_range < (m_ranges.size() - 1)))
+    m_current_range++;
 
   mxverb(4, "ext_timecodes v1: tc %lld dur %lld for %lld\n",
-         packet->assigned_timecode, packet->duration, frameno - 1);
+         packet->assigned_timecode, packet->duration, m_frameno - 1);
   return false;
 }
 
@@ -188,9 +188,9 @@ int64_t
 timecode_factory_v1_c::get_at(int64_t frame) {
   timecode_range_c *t;
 
-  t = &ranges[current_range];
-  if ((frame > t->end_frame) && (current_range < (ranges.size() - 1)))
-    t = &ranges[current_range + 1];
+  t = &m_ranges[m_current_range];
+  if ((frame > t->end_frame) && (m_current_range < (m_ranges.size() - 1)))
+    t = &m_ranges[m_current_range + 1];
   return (int64_t)(t->base_timecode + 1000000000.0 *
                    (frame - t->start_frame) / t->fps);
 }
@@ -203,7 +203,6 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
   map<int64_t, int64_t> dur_map;
   map<int64_t, int64_t>::const_iterator it;
   int64_t duration, dur_sum;
-  bool warning_printed = false;
 
   dur_sum = 0;
   line_no = 0;
@@ -215,74 +214,74 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
       continue;
     if (!parse_double(line.c_str(), timecode))
       mxerror(_("The line %d of the timecode file '%s' does not contain a "
-                "valid floating point number.\n"), line_no, file_name.c_str());
-    if ((timecode < previous_timecode) && !warning_printed) {
-      mxwarn("The timecode v2 file '%s' contains timecodes that are not "
-             "ordered. Due to a bug in mkvmerge versions up to and including "
-             "v1.5.0 this was necessary if the track to which the timecode "
-             "file was applied contained B frames. Starting with v1.5.1 "
-             "mkvmerge now handles this correctly, and the timecodes in the "
-             "timecode file must be ordered normally. For example, the frame "
-             "sequence 'IPBBP...' at 25 FPS requires a timecode file with "
-             "the first timecodes being '0', '40', '80', '120' etc and not "
-             "'0', '120', '40', '80' etc. The current file will most "
-             "likely not work how you expect it to.\n",
-             in.get_file_name().c_str());
-      warning_printed = true;
-    }
+                "valid floating point number.\n"), line_no,
+              m_file_name.c_str());
+    if ((2 == m_version) && (timecode < previous_timecode))
+      mxerror("The timecode v2 file '%s' contains timecodes that are not "
+              "ordered. Due to a bug in mkvmerge versions up to and including "
+              "v1.5.0 this was necessary if the track to which the timecode "
+              "file was applied contained B frames. Starting with v1.5.1 "
+              "mkvmerge now handles this correctly, and the timecodes in the "
+              "timecode file must be ordered normally. For example, the frame "
+              "sequence 'IPBBP...' at 25 FPS requires a timecode file with "
+              "the first timecodes being '0', '40', '80', '120' etc and not "
+              "'0', '120', '40', '80' etc.\n\nIf you really have to specify "
+              "non-sorted timecodes then use the timecode format v4. It is "
+              "identical to format v2 but allows non-sorted timecodes.\n",
+              in.get_file_name().c_str());
     previous_timecode = timecode;
-    timecodes.push_back((int64_t)(timecode * 1000000));
-    if (timecodes.size() > 1) {
-      duration = timecodes[timecodes.size() - 1] -
-        timecodes[timecodes.size() - 2];
+    m_timecodes.push_back((int64_t)(timecode * 1000000));
+    if (m_timecodes.size() > 1) {
+      duration = m_timecodes[m_timecodes.size() - 1] -
+        m_timecodes[m_timecodes.size() - 2];
       if (dur_map.find(duration) == dur_map.end())
         dur_map[duration] = 1;
       else
         dur_map[duration] = dur_map[duration] + 1;
       dur_sum += duration;
-      durations.push_back(duration);
+      m_durations.push_back(duration);
     }
   }
-  if (timecodes.size() == 0)
+  if (m_timecodes.size() == 0)
     mxerror(_("The timecode file '%s' does not contain any valid entry.\n"),
-            file_name.c_str());
+            m_file_name.c_str());
 
   dur_sum = -1;
   foreach(it, dur_map) {
     if ((dur_sum < 0) || (dur_map[dur_sum] < (*it).second))
       dur_sum = (*it).first;
-    mxverb(4, "ext_timecodes v2 dur_map %lld = %lld\n", (*it).first,
+    mxverb(4, "ext_m_timecodes v2 dur_map %lld = %lld\n", (*it).first,
            (*it).second);
   }
-  mxverb(4, "ext_timecodes v2 max is %lld = %lld\n", dur_sum,
+  mxverb(4, "ext_m_timecodes v2 max is %lld = %lld\n", dur_sum,
          dur_map[dur_sum]);
   if (dur_sum > 0)
-    default_fps = (double)1000000000.0 / dur_sum;
-  durations.push_back(dur_sum);
+    m_default_fps = (double)1000000000.0 / dur_sum;
+  m_durations.push_back(dur_sum);
 }
 
 bool
 timecode_factory_v2_c::get_next(packet_cptr &packet) {
-  if ((frameno >= timecodes.size()) && !warning_printed) {
+  if ((m_frameno >= m_timecodes.size()) && !m_warning_printed) {
     mxwarn(FMT_TID "The number of external timecodes %u is "
            "smaller than the number of frames in this track. "
            "The remaining frames of this track might not be timestamped "
            "the way you intended them to be. mkvmerge might even crash.\n",
-           source_name.c_str(), tid, timecodes.size());
-    warning_printed = true;
-    if (timecodes.empty()) {
+           m_source_name.c_str(), m_tid, m_timecodes.size());
+    m_warning_printed = true;
+    if (m_timecodes.empty()) {
       packet->assigned_timecode = 0;
       packet->duration = 0;
     } else {
-      packet->assigned_timecode = timecodes.back();
-      packet->duration = timecodes.back();
+      packet->assigned_timecode = m_timecodes.back();
+      packet->duration = m_timecodes.back();
     }
     return false;
   }
 
-  packet->assigned_timecode = timecodes[frameno];
-  packet->duration = durations[frameno];
-  frameno++;
+  packet->assigned_timecode = m_timecodes[m_frameno];
+  packet->duration = m_durations[m_frameno];
+  m_frameno++;
 
   return false;
 }
@@ -302,7 +301,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
     if (!in.getline2(line))
       mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line"
                 " with the default number of frames per second.\n"),
-              file_name.c_str());
+              m_file_name.c_str());
     line_no++;
     strip(line);
     if ((line.length() != 0) && (line[0] != '#'))
@@ -312,14 +311,14 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
   if (!starts_with_case(line, "assume "))
     mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
               "with the default number of frames per second.\n"),
-            file_name.c_str());
+            m_file_name.c_str());
   line.erase(0, 6);
   strip(line);
 
-  if (!parse_double(line.c_str(), default_fps))
+  if (!parse_double(line.c_str(), m_default_fps))
     mxerror(_("The timecode file '%s' does not contain a valid 'Assume' line "
               "with the default number of frames per second.\n"),
-            file_name.c_str());
+            m_file_name.c_str());
 
   while (in.getline2(line)) {
     line_no++;
@@ -331,11 +330,11 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       line.erase(0, 4);
       strip(line);
       t.is_gap = true;
-      t.fps = default_fps;
+      t.fps = m_default_fps;
       if (!parse_double(line.c_str(), dur))
         mxerror(_("The timecode file '%s' does not contain a valid 'Gap' line "
                   "with the duration of the gap.\n"),
-                file_name.c_str());
+                m_file_name.c_str());
       t.duration = (int64_t)(1000000000.0 * dur);
 
     } else {
@@ -344,10 +343,10 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       t.is_gap = false;
       res = mxsscanf(line, "%lf,%lf", &dur, &t.fps);
       if (res == 1) {
-        t.fps = default_fps;
+        t.fps = m_default_fps;
       } else if (res != 2) {
         mxwarn(_("Line %d of the timecode file '%s' could not be parsed.\n"),
-               line_no, file_name.c_str());
+               line_no, m_file_name.c_str());
         continue;
       }
       t.duration = (int64_t)(1000000000.0 * dur);
@@ -356,25 +355,25 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
     if ((t.fps < 0) || (t.duration <= 0)) {
       mxwarn(_("Line %d of the timecode file '%s' contains inconsistent data "
                "(e.g. the duration or the FPS are smaller than zero).\n"),
-             line_no, file_name.c_str());
+             line_no, m_file_name.c_str());
       continue;
     }
 
-    durations.push_back(t);
+    m_durations.push_back(t);
   }
 
   mxverb(3, "ext_timecodes: Version 3, default fps %f, %u entries.\n",
-         default_fps, durations.size());
+         m_default_fps, m_durations.size());
 
-  if (durations.size() == 0) {
+  if (m_durations.size() == 0) {
     mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),
-           file_name.c_str());
+           m_file_name.c_str());
   }
   t.duration = 0xfffffffffffffffll;
   t.is_gap = false;
-  t.fps = default_fps;
-  durations.push_back(t);
-  for (iit = durations.begin(); iit < durations.end(); iit++)
+  t.fps = m_default_fps;
+  m_durations.push_back(t);
+  for (iit = m_durations.begin(); iit < m_durations.end(); iit++)
     mxverb(4, "durations:%s entry for %lld with %f FPS\n",
            iit->is_gap ? " gap" : "", iit->duration, iit->fps);
 }
@@ -383,31 +382,31 @@ bool
 timecode_factory_v3_c::get_next(packet_cptr &packet) {
   bool result = false;
 
-  if (durations[current_duration].is_gap) {
+  if (m_durations[m_current_duration].is_gap) {
     // find the next non-gap
-    size_t duration_index = current_duration;
-    while (durations[duration_index].is_gap ||
-           (0 == durations[duration_index].duration)) {
-      current_offset += durations[duration_index].duration;
+    size_t duration_index = m_current_duration;
+    while (m_durations[duration_index].is_gap ||
+           (0 == m_durations[duration_index].duration)) {
+      m_current_offset += m_durations[duration_index].duration;
       duration_index++;
     }
-    current_duration = duration_index;
+    m_current_duration = duration_index;
     // yes, there is a gap before this frame
     result = true;
   }
 
-  packet->assigned_timecode = current_offset + current_timecode;
+  packet->assigned_timecode = m_current_offset + m_current_timecode;
   // If default_fps is 0 then the duration is unchanged, usefull for audio.
-  if (durations[current_duration].fps) {
+  if (m_durations[m_current_duration].fps) {
     packet->duration =
-      (int64_t)(1000000000.0 / durations[current_duration].fps);
+      (int64_t)(1000000000.0 / m_durations[m_current_duration].fps);
   }
   packet->duration /= packet->time_factor;
-  current_timecode += packet->duration;
-  if (current_timecode >= durations[current_duration].duration) {
-    current_offset += durations[current_duration].duration;
-    current_timecode = 0;
-    current_duration++;
+  m_current_timecode += packet->duration;
+  if (m_current_timecode >= m_durations[m_current_duration].duration) {
+    m_current_offset += m_durations[m_current_duration].duration;
+    m_current_timecode = 0;
+    m_current_duration++;
   }
 
   mxverb(3, "ext_timecodes v3: tc %lld dur %lld\n", packet->assigned_timecode,
