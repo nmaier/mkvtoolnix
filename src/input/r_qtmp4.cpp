@@ -75,7 +75,8 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
 
     if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
         (atom == FOURCC('f', 't', 'y', 'p')) ||
-        (atom == FOURCC('m', 'd', 'a', 't')))
+        (atom == FOURCC('m', 'd', 'a', 't')) ||
+        (atom == FOURCC('p', 'n', 'o', 't')))
         return 1;
 
   } catch (...) {
