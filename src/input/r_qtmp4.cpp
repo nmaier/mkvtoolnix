@@ -172,14 +172,8 @@ qtmp4_reader_c::parse_headers() {
       mdat_size = atom.size;
       skip_atom();
 
-    } else if ((atom.fourcc == FOURCC('f', 'r', 'e', 'e')) ||
-               (atom.fourcc == FOURCC('s', 'k', 'i', 'p')) ||
-               (atom.fourcc == FOURCC('j', 'u', 'n', 'k')) ||
-               (atom.fourcc == FOURCC('p', 'n', 'o', 't')) ||
-               (atom.fourcc == FOURCC('P', 'I', 'C', 'T'))) {
+    } else
       skip_atom();
-
-    }
 
   } while (!io->eof() && (!headers_parsed || (mdat_pos == -1)));
 
