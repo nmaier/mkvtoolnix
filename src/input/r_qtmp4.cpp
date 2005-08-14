@@ -836,8 +836,10 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_ptr &new_dmx,
 
       if (get_uint16_be(&sv1_stsd.v0.version) == 1)
         stsd_size = sizeof(sound_v1_stsd_atom_t);
-      else
+      else if (get_uint16_be(&sv1_stsd.v0.version) == 0)
         stsd_size = sizeof(sound_v0_stsd_atom_t);
+      else if (get_uint16_be(&sv1_stsd.v0.version) == 2)
+        stsd_size = 68;
 
       memcpy(&new_dmx->a_stsd, &sv1_stsd, sizeof(sound_v1_stsd_atom_t));
 
