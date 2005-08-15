@@ -310,8 +310,6 @@ public:
     create_packetizer(0);
   }
 
-  virtual void add_attachments(KaxAttachments *a) {
-  }
   virtual int add_packetizer(generic_packetizer_c *ptzr);
   virtual void set_timecode_offset(int64_t offset);
 

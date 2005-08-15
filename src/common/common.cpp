@@ -57,6 +57,7 @@ using namespace libebml;
 
 #include "base64.h"
 #include "common.h"
+#include "common_memory.h"
 #include "error.h"
 #include "hacks.h"
 #include "mm_io.h"
@@ -1913,4 +1914,12 @@ void
 usage(int exit_code) {
   mxinfo("%s\n", usage_text.c_str());
   mxexit(exit_code);
+}
+
+buffer_t::buffer_t():
+  buffer(NULL), size(0) {
+}
+
+buffer_t::~buffer_t() {
+  safefree(buffer);
 }

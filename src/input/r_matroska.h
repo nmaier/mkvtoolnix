@@ -39,13 +39,6 @@ using namespace libebml;
 using namespace libmatroska;
 using namespace std;
 
-typedef struct {
-  string mime_type;
-  UTFstring name, description;
-  unsigned char *data;
-  int64 size, id;
-} kax_attachment_t;
-
 struct kax_track_t {
   uint64_t tnum, tuid;
 
@@ -149,7 +142,6 @@ private:
   int64_t last_timecode, first_timecode;
   string title;
 
-  vector<kax_attachment_t> attachments;
   vector<int64_t> handled_tags, handled_attachments, handled_chapters;
 
   string writing_app;
@@ -166,7 +158,6 @@ public:
   virtual void identify();
   virtual void create_packetizers();
   virtual void create_packetizer(int64_t tid);
-  virtual void add_attachments(KaxAttachments *a);
   virtual void add_available_track_ids();
 
   static int probe_file(mm_io_c *io, int64_t size);

@@ -21,6 +21,7 @@
 
 #include "mkvmerge.h"
 #include "pr_generic.h"
+#include "smart_pointers.h"
 
 namespace libmatroska {
   class KaxChapters;
@@ -95,8 +96,9 @@ struct filelist_t {
 
 struct attachment_t {
   string name, mime_type, description;
-  int64_t size;
+  int64_t id;
   bool to_all_files;
+  counted_ptr<buffer_t> data;
 
   attachment_t() {
     clear();
@@ -105,8 +107,9 @@ struct attachment_t {
     name = "";
     mime_type = "";
     description = "";
-    size = 0;
+    id = 0;
     to_all_files = false;
+    data = counted_ptr<buffer_t>(NULL);
   }
 };
 
@@ -196,5 +199,7 @@ void create_next_output_file();
 void finish_file(bool last_file = false);
 void rerender_track_headers();
 string create_output_name();
+
+int64_t add_attachment(attachment_t attachment);
 
 #endif // __OUTPUT_CONTROL_H

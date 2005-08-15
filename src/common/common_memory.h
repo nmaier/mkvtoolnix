@@ -74,4 +74,12 @@ public:
 typedef counted_ptr<memory_c> memory_cptr;
 typedef std::vector<memory_cptr> memories_c;
 
+struct buffer_t {
+  unsigned char *buffer;
+  int size;
+
+  buffer_t();
+  ~buffer_t();
+};
+
 #endif // __COMMON_MEMORY_H

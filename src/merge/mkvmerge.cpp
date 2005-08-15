@@ -1551,17 +1551,22 @@ parse_args(vector<string> args) {
       if (this_arg == "--attach-file")
         attachment.to_all_files = true;
       try {
+        attachment.data = counted_ptr<buffer_t>(new buffer_t);
         io = new mm_file_io_c(attachment.name);
-        attachment.size = io->get_size();
+        attachment.data->size = io->get_size();
+        if (0 == attachment.data->size)
+          mxerror("The size of attachment '%s' is 0.\n",
+                  attachment.name.c_str());
+        attachment.data->buffer = (unsigned char *)
+          safemalloc(attachment.data->size);
+        io->read(attachment.data->buffer, attachment.data->size);
         delete io;
-        if (attachment.size == 0)
-          throw error_c("Empty attachment");
       } catch (...) {
-        mxerror(_("The attachment '%s' could not be read, or its "
-                  "size is 0.\n"), attachment.name.c_str());
+        mxerror(_("The attachment '%s' could not be read.\n"),
+                attachment.name.c_str());
       }
 
-      attachments.push_back(attachment);
+      add_attachment(attachment);
       attachment.clear();
 
       sit++;

@@ -154,9 +154,6 @@ kax_reader_c::~kax_reader_c() {
     if (tracks[i] != NULL)
       delete tracks[i];
 
-  for (i = 0; i < attachments.size(); i++)
-    safefree(attachments[i].data);
-
   if (saved_l1 != NULL)
     delete saved_l1;
   if (in != NULL)
@@ -521,7 +518,6 @@ kax_reader_c::handle_attachments(mm_io_c *io,
   int64_t size, id;
   unsigned char *data;
   bool found;
-  kax_attachment_t matt;
 
   found = false;
   for (i = 0; i < handled_attachments.size(); i++)
@@ -581,23 +577,16 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
         if ((id != -1) && (size != -1) && (mime_type.length() > 0) &&
             (name.length() > 0)) {
-          found = false;
+          attachment_t matt;
 
-          for (k = 0; k < attachments.size(); k++)
-            if (attachments[k].id == id) {
-              found = true;
-              break;
-            }
-
-          if (!found) {
-            matt.name = name;
-            matt.mime_type = mime_type;
-            matt.description = description;
-            matt.size = size;
-            matt.id = id;
-            matt.data = (unsigned char *)safememdup(data, size);
-            attachments.push_back(matt);
-          }
+          matt.name = UTFstring_to_cstrutf8(name);
+          matt.mime_type = mime_type;
+          matt.description = UTFstring_to_cstrutf8(description);
+          matt.id = id;
+          matt.data = counted_ptr<buffer_t>(new buffer_t);
+          matt.data->size = size;
+          matt.data->buffer = (unsigned char *)safememdup(data, size);
+          add_attachment(matt);
         }
       }
     }
@@ -1285,8 +1274,9 @@ kax_reader_c::read_headers() {
 
     } // while (l1 != NULL)
 
-    for (i = 0; i < deferred_attachments.size(); i++)
-      handle_attachments(in, l0, deferred_attachments[i]);
+    if (!ti.no_attachments)
+      for (i = 0; i < deferred_attachments.size(); i++)
+        handle_attachments(in, l0, deferred_attachments[i]);
     for (i = 0; i < deferred_chapters.size(); i++)
       handle_chapters(in, l0, deferred_chapters[i]);
     for (i = 0; i < deferred_tags.size(); i++)
@@ -2110,56 +2100,19 @@ kax_reader_c::identify() {
     }
 
   for (i = 0; i < attachments.size(); i++) {
-    mxinfo("Attachment ID %lld: type '%s', size %lld bytes, ",
+    mxinfo("Attachment ID %lld: type '%s', size %d bytes, ",
            attachments[i].id, attachments[i].mime_type.c_str(),
-           attachments[i].size);
+           attachments[i].data->size);
     if (attachments[i].description.length() > 0)
-      mxinfo("description '%s', ",
-             UTFstring_to_cstrutf8(attachments[i].description).c_str());
+      mxinfo("description '%s', ", attachments[i].description.c_str());
     if (attachments[i].name.length() == 0)
       mxinfo("no file name given\n");
     else
-      mxinfo("file name '%s'\n",
-             UTFstring_to_cstrutf8(attachments[i].name).c_str());
+      mxinfo("file name '%s'\n", attachments[i].name.c_str());
   }
 }
 
 // }}}
-
-void
-kax_reader_c::add_attachments(KaxAttachments *a) {
-  uint32_t i;
-  KaxAttached *attached;
-  KaxFileData *fdata;
-  binary *buffer;
-
-  if (ti.no_attachments)
-    return;
-
-  for (i = 0; i < attachments.size(); i++) {
-    attached = new KaxAttached;
-    if (attachments[i].description.length() > 0)
-      *static_cast<EbmlUnicodeString *>
-        (&GetChild<KaxFileDescription>(*attached)) =
-        attachments[i].description;
-
-    *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*attached)) =
-      attachments[i].mime_type;
-
-    *static_cast<EbmlUnicodeString *>(&GetChild<KaxFileName>(*attached)) =
-      attachments[i].name;
-
-    *static_cast<EbmlUInteger *>(&GetChild<KaxFileUID>(*attached)) =
-      attachments[i].id;
-
-    fdata = &GetChild<KaxFileData>(*attached);
-    buffer = new binary[attachments[i].size];
-    memcpy(buffer, attachments[i].data, attachments[i].size);
-    fdata->SetBuffer(buffer, attachments[i].size);
-
-    a->PushElement(*attached);
-  }
-}
 
 void
 kax_reader_c::add_available_track_ids() {
