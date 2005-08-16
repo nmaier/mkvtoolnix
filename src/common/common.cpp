@@ -1333,7 +1333,7 @@ mxmsg(int level,
     mm_stdio->puts(prefix);
 
   output = from_utf8(cc_stdio, mxvsprintf(new_fmt.c_str(), ap));
-  mm_stdio->write(output.c_str(), output.length());
+  mm_stdio->puts(output);
   mm_stdio->flush();
 }
 

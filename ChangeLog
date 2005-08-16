@@ -1,3 +1,8 @@
+2005-08-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvtoolnix: bug fix: On Windows the command line output was
+	terminated with CR CR NL instead of just CR NL.
+
 2005-08-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The Quicktime/MP4 reader wasn't skipping

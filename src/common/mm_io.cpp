@@ -484,21 +484,21 @@ mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
 size_t
 mm_io_c::puts(const string &s) {
   int i;
-  size_t bytes_written;
   const char *cs;
+  string output, h;
 
   cs = s.c_str();
-  bytes_written = 0;
   for (i = 0; cs[i] != 0; i++)
     if (cs[i] != '\r') {
 #if defined(SYS_WINDOWS)
       if ('\n' == cs[i])
-        bytes_written += write("\r", 1);
+        output += "\r";
 #endif
-      bytes_written += write(&cs[i], 1);
-    }
+      output += cs[i];
+    } else if ('\n' != cs[i + 1])
+      output += "\r";
 
-  return bytes_written;
+  return write(output.c_str(), output.length());
 }
 
 uint32_t
@@ -1160,7 +1160,23 @@ mm_stdio_c::read(void *buffer,
 size_t
 mm_stdio_c::write(const void *buffer,
                   size_t size) {
+#if defined(SYS_WINDOWS)
+  int i, bytes_written;
+  const char *s;
+
+  bytes_written = 0;
+  s = (const char *)buffer;
+  for (i = 0; i < size; ++i)
+    if (('\r' != s[i]) ||
+        (((i + 1) < size) && ('\n' != s[i + 1])))
+      bytes_written += fwrite(&s[i], 1, 1, stdout);
+
+  return bytes_written;
+
+#else  // defined(SYS_WINDOWS)
+
   return fwrite(buffer, 1, size, stdout);
+#endif // defined(SYS_WINDOWS)
 }
 
 void
