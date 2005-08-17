@@ -1167,9 +1167,10 @@ mm_stdio_c::write(const void *buffer,
   bytes_written = 0;
   s = (const char *)buffer;
   for (i = 0; i < size; ++i)
-    if (('\r' != s[i]) ||
-        (((i + 1) < size) && ('\n' != s[i + 1])))
+    if (('\r' != s[i]) || ((i + 1) == size) || ('\n' != s[i + 1]))
       bytes_written += fwrite(&s[i], 1, 1, stdout);
+
+  fflush(stdout);
 
   return bytes_written;
 
