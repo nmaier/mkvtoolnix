@@ -120,9 +120,9 @@ video_packetizer_c::process(packet_cptr packet) {
 
 void
 video_packetizer_c::dump_debug_info() {
-  mxdebug("video_packetizer_c: queue: %d; frames_output: %d; "
-          "ref_timecode: %lld\n", packet_queue.size(), frames_output,
-          ref_timecode);
+  mxdebug("video_packetizer_c: queue: %u; frames_output: %d; "
+          "ref_timecode: %lld\n", (unsigned int)packet_queue.size(),
+          frames_output, ref_timecode);
 }
 
 connection_result_e

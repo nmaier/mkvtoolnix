@@ -207,8 +207,9 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   fields = split(s, ",", 9);
   if (9 < fields.size()) {
     mxwarn("Invalid format for a SSA line ('%s') at timecode " FMT_TIMECODE
-           ": Too many fields found (%d instead of 9). This entry will be "
-           "skipped.\n", s, ARG_TIMECODE_NS(timecode), fields.size());
+           ": Too many fields found (%u instead of 9). This entry will be "
+           "skipped.\n", s, ARG_TIMECODE_NS(timecode),
+           (unsigned int)fields.size());
     return;
   }
   while (9 != fields.size())

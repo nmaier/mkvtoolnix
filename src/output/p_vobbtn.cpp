@@ -82,7 +82,8 @@ vobbtn_packetizer_c::process(packet_cptr packet) {
 
 void
 vobbtn_packetizer_c::dump_debug_info() {
-  mxdebug("vobbtn_packetizer_c: queue: %d\n", packet_queue.size());
+  mxdebug("vobbtn_packetizer_c: queue: %u\n",
+          (unsigned int)packet_queue.size());
 }
 
 connection_result_e

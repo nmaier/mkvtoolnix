@@ -97,8 +97,9 @@ passthrough_packetizer_c::always_sync_complete_group(bool sync) {
 void
 passthrough_packetizer_c::dump_debug_info() {
   mxdebug("passthrough_packetizer_c: packets processed: %lld, "
-          "bytes processed: %lld, packets in queue: %d\n",
-          packets_processed, bytes_processed, packet_queue.size());
+          "bytes processed: %lld, packets in queue: %u\n",
+          packets_processed, bytes_processed,
+          (unsigned int)packet_queue.size());
 }
 
 connection_result_e

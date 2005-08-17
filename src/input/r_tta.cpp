@@ -86,7 +86,7 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
            get_uint16_le(&header.bits_per_sample),
            get_uint32_le(&header.sample_rate),
            get_uint32_le(&header.data_length),
-           seek_sum, size, seek_points.size());
+           seek_sum, size, (unsigned int)seek_points.size());
 
     if (seek_sum != size)
       mxerror(FMT_FN "The seek table in this TTA file seems to be broken.\n",

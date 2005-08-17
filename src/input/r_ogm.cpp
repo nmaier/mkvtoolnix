@@ -626,8 +626,8 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   sdemuxers.push_back(dmx);
   if (ogg_stream_init(&dmx->os, ogg_page_serialno(og))) {
     mxwarn("ogm_reader: ogg_stream_init for stream number "
-           "%d failed. Will try to continue and ignore this stream.",
-           sdemuxers.size());
+           "%u failed. Will try to continue and ignore this stream.",
+           (unsigned int)sdemuxers.size());
     return;
   }
 
@@ -668,7 +668,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     dmx->fhe = new flac_header_extractor_c(ti.fname, dmx->serialno);
     if (!dmx->fhe->extract())
       mxerror("ogm_reader: Could not read the FLAC header packets for "
-              "stream id %d.\n", sdemuxers.size() - 1);
+              "stream id %u.\n", (unsigned int)sdemuxers.size() - 1);
     dmx->flac_header_packets = dmx->fhe->num_header_packets;
     dmx->vorbis_rate = dmx->fhe->sample_rate;
     dmx->channels = dmx->fhe->channels;
@@ -717,7 +717,8 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         dmx->stype = OGM_STREAM_TYPE_AAC;
       else {
         mxwarn("ogm_reader: Unknown audio stream type %u. "
-               "Ignoring stream id %d.\n", codec_id, sdemuxers.size() - 1);
+               "Ignoring stream id %u.\n", codec_id,
+               (unsigned int)sdemuxers.size() - 1);
         return;
       }
 

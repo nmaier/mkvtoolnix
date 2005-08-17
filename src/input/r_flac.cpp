@@ -222,7 +222,7 @@ flac_reader_c::parse_file() {
   result =
     (int)FLAC__seekable_stream_decoder_process_until_end_of_metadata(decoder);
   mxverb(2, FPFX "extract->metadata, result: %d, mdp: %d, num blocks: %u\n",
-         result, metadata_parsed, blocks.size());
+         result, metadata_parsed, (unsigned int)blocks.size());
 
   if (!metadata_parsed)
     mxerror(FMT_FN "No metadata block found. This file is broken.\n",

@@ -120,7 +120,7 @@ bitvalue_c::bitvalue_c(string s,
 
     // Input too long?
     if ((allowed_bitlength > 0) && ((s2.length() * 4) >= allowed_bitlength))
-      throw error_c(mxsprintf("input too long: %d > %d", s2.length() * 4,
+      throw error_c(mxsprintf("input too long: %d > %d", (int)s2.length() * 4,
                               allowed_bitlength));
 
     // Store the value.
@@ -568,8 +568,8 @@ to_utf8(int handle,
     return local;
 
   if (handle >= kax_convs.size())
-    die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %d).",
-        handle, kax_convs.size());
+    die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %u).",
+        handle, (unsigned int)kax_convs.size());
 
   return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
@@ -583,8 +583,8 @@ from_utf8(int handle,
     return utf8;
 
   if (handle >= kax_convs.size())
-    die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %d).",
-        handle, kax_convs.size());
+    die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %u).",
+        handle, (unsigned int)kax_convs.size());
 
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
 }
@@ -711,7 +711,8 @@ _safememdup(const void *s,
   copy = malloc(size);
   if (copy == NULL)
     die("common.cpp/safememdup() called from file %s, line %d: malloc() "
-        "returned NULL for a size of %d bytes.", file, line, size);
+        "returned NULL for a size of %u bytes.", file, line,
+        (unsigned int)size);
   memcpy(copy, s, size);
 
   return copy;
@@ -728,7 +729,8 @@ _safemalloc(size_t size,
   mem = malloc(size);
   if (mem == NULL)
     die("common.cpp/safemalloc() called from file %s, line %d: malloc() "
-        "returned NULL for a size of %d bytes.", file, line, size);
+        "returned NULL for a size of %u bytes.", file, line,
+        (unsigned int)size);
 
   return mem;
 }
@@ -741,7 +743,8 @@ _saferealloc(void *mem,
   mem = realloc(mem, size);
   if (mem == NULL)
     die("common.cpp/saferealloc() called from file %s, line %d: realloc() "
-        "returned NULL for a size of %d bytes.", file, line, size);
+        "returned NULL for a size of %u bytes.", file, line,
+        (unsigned int)size);
 
   return mem;
 }

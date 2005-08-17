@@ -451,8 +451,8 @@ parse_cue_chapters(mm_text_io_c *in,
 
         if (!index_ok)
           mxerror("Cue sheet parser: Invalid INDEX number (got %d, "
-                  "expected %d) in line %d,\n",
-                  index, a.start_indices.size(), a.line_num);
+                  "expected %u) in line %d,\n",
+                  index, (unsigned int)a.start_indices.size(), a.line_num);
 
       } else if (starts_with_case(line, "track ")) {
         if ((line.length() < 5) ||

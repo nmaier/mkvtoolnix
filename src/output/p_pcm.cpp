@@ -138,7 +138,7 @@ pcm_packetizer_c::flush() {
 
 void
 pcm_packetizer_c::dump_debug_info() {
-  mxdebug("pcm_packetizer_c: queue: %d\n", packet_queue.size());
+  mxdebug("pcm_packetizer_c: queue: %u\n", (unsigned int)packet_queue.size());
 }
 
 connection_result_e

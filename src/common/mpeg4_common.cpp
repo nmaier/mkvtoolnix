@@ -172,7 +172,8 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
   }
 
   if (2 <= verbose) {
-    mxverb(2, "mpeg4_frames:   summary: found %d frames ", frames.size());
+    mxverb(2, "mpeg4_frames:   summary: found %u frames ",
+           (unsigned int)frames.size());
     for (fit = frames.begin(); fit < frames.end(); fit++)
       mxverb(2, "'%c' (%d at %d) ", FRAME_TYPE_TO_CHAR(fit->type), fit->size,
              fit->pos);
@@ -230,8 +231,8 @@ mpeg4_p2_parse_config_data(const unsigned char *buffer,
     if (!mpeg_is_start_code(marker))
       continue;
 
-    mxverb(3, "mpeg4_config_data:   found start code at %d: 0x%02x\n",
-           p - buffer - 4, marker & 0xff);
+    mxverb(3, "mpeg4_config_data:   found start code at %u: 0x%02x\n",
+           (unsigned int)(p - buffer - 4), marker & 0xff);
     if (MPEGVIDEO_VOS_START_CODE == marker)
       vos_offset = p - 4 - buffer;
     else if ((MPEGVIDEO_VOP_START_CODE == marker) ||

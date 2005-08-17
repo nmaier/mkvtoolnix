@@ -125,7 +125,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   }
 
   mxverb(3, "ext_timecodes: Version 1, default fps %f, %u entries.\n",
-         m_default_fps, m_ranges.size());
+         m_default_fps, (unsigned int)m_ranges.size());
 
   if (m_ranges.size() == 0)
     t.start_frame = 0;
@@ -267,7 +267,7 @@ timecode_factory_v2_c::get_next(packet_cptr &packet) {
            "smaller than the number of frames in this track. "
            "The remaining frames of this track might not be timestamped "
            "the way you intended them to be. mkvmerge might even crash.\n",
-           m_source_name.c_str(), m_tid, m_timecodes.size());
+           m_source_name.c_str(), m_tid, (unsigned int)m_timecodes.size());
     m_warning_printed = true;
     if (m_timecodes.empty()) {
       packet->assigned_timecode = 0;
@@ -363,7 +363,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
   }
 
   mxverb(3, "ext_timecodes: Version 3, default fps %f, %u entries.\n",
-         m_default_fps, m_durations.size());
+         m_default_fps, (unsigned int)m_durations.size());
 
   if (m_durations.size() == 0) {
     mxwarn(_("The timecode file '%s' does not contain any valid entry.\n"),

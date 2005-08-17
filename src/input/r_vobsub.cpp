@@ -251,7 +251,7 @@ vobsub_reader_c::parse_headers() {
         else {
           tracks.push_back(track);
           if (sort_required) {
-            mxverb(2, PFX "Sorting track %u\n", tracks.size());
+            mxverb(2, PFX "Sorting track %u\n", (unsigned int)tracks.size());
             stable_sort(track->entries.begin(), track->entries.end());
           }
         }
@@ -313,7 +313,7 @@ vobsub_reader_c::parse_headers() {
     else {
       tracks.push_back(track);
       if (sort_required) {
-        mxverb(2, PFX "Sorting track %u\n", tracks.size());
+        mxverb(2, PFX "Sorting track %u\n", (unsigned int)tracks.size());
         stable_sort(track->entries.begin(), track->entries.end());
       }
     }

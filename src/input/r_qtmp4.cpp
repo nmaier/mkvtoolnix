@@ -372,10 +372,11 @@ qtmp4_reader_c::parse_headers() {
           push_back(dmx->raw_frame_offset_table[j].offset);
     }
     mxverb(3, PFX "Frame offset table: %u entries\n",
-           dmx->frame_offset_table.size());
+           (unsigned int)dmx->frame_offset_table.size());
   }
 
-  mxverb(2, PFX "Number of valid tracks found: %u\n", demuxers.size());
+  mxverb(2, PFX "Number of valid tracks found: %u\n",
+         (unsigned int)demuxers.size());
 }
 
 void
@@ -567,8 +568,8 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_ptr &new_dmx,
   hdlr_atom_t hdlr;
 
   if (atom.size < sizeof(hdlr_atom_t))
-    mxerror(PFX "'hdlr' atom is too small. Expected size: >= %d. Actual "
-            "size: %lld.\n", sizeof(hdlr_atom_t), atom.size);
+    mxerror(PFX "'hdlr' atom is too small. Expected size: >= %u. Actual "
+            "size: %lld.\n", (unsigned int)sizeof(hdlr_atom_t), atom.size);
   if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Component type: %.4s subtype: %.4s\n",
@@ -590,8 +591,8 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_ptr &new_dmx,
   mdhd_atom_t mdhd;
 
   if (atom.size < sizeof(mdhd_atom_t))
-    mxerror(PFX "'mdhd' atom is too small. Expected size: >= %d. Actual "
-            "size: %lld.\n", sizeof(mdhd_atom_t), atom.size);
+    mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual "
+            "size: %lld.\n", (unsigned int)sizeof(mdhd_atom_t), atom.size);
   if (io->read(&mdhd, sizeof(mdhd_atom_t)) != sizeof(mdhd_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Time scale: %u, duration: %u\n", level * 2, "",
@@ -686,8 +687,8 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
   mvhd_atom_t mvhd;
 
   if ((atom.size - atom.hsize) < sizeof(mvhd_atom_t))
-    mxerror(PFX "'mvhd' atom is too small. Expected size: >= %d. Actual "
-            "size: %lld.\n", sizeof(mvhd_atom_t), atom.size - atom.hsize);
+    mxerror(PFX "'mvhd' atom is too small. Expected size: >= %u. Actual "
+            "size: %lld.\n", (unsigned int)sizeof(mvhd_atom_t), atom.size);
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Time scale: %u\n", level * 2, "",
@@ -969,8 +970,8 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_ptr &new_dmx,
   tkhd_atom_t tkhd;
 
   if (atom.size < sizeof(tkhd_atom_t))
-    mxerror(PFX "'tkhd' atom is too small. Expected size: >= %d. Actual "
-            "size: %lld.\n", sizeof(tkhd_atom_t), atom.size);
+    mxerror(PFX "'tkhd' atom is too small. Expected size: >= %u. Actual "
+            "size: %lld.\n", (unsigned int)sizeof(tkhd_atom_t), atom.size);
   if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Track ID: %u\n", level * 2, "",
@@ -1137,8 +1138,9 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       buffer = (unsigned char *)safemalloc(frame_size);
       if (io->read(buffer, frame_size) != frame_size) {
         mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-               "position %lld. Aborting.\n", frame, dmx->chunk_table.size(),
-               frame_size, dmx->chunk_table[dmx->pos].pos);
+               "position %lld. Aborting.\n", frame,
+               (unsigned int)dmx->chunk_table.size(), frame_size,
+               dmx->chunk_table[dmx->pos].pos);
         safefree(buffer);
         flush_packetizers();
 
@@ -1203,7 +1205,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         if (io->read(buffer + dmx->esds.decoder_config_len, frame_size) !=
             frame_size) {
           mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-                 "position %lld. Aborting.\n", frame, dmx->chunk_table.size(),
+                 "position %lld. Aborting.\n", frame,
+                 (unsigned int)dmx->chunk_table.size(),
                  frame_size, dmx->chunk_table[dmx->pos].pos);
           safefree(buffer);
           flush_packetizers();
@@ -1216,7 +1219,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         io->setFilePointer(dmx->sample_table[frame].pos);
         if (io->read(buffer, frame_size) != frame_size) {
           mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-                 "position %lld. Aborting.\n", frame, dmx->sample_table.size(),
+                 "position %lld. Aborting.\n", frame,
+                 (unsigned int)dmx->sample_table.size(),
                  frame_size, dmx->sample_table[frame].pos);
           safefree(buffer);
           flush_packetizers();
@@ -1617,7 +1621,7 @@ qtmp4_demuxer_t::calculate_fps() {
       fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
 
     mxverb(3, PFX "calculate_fps: case 2: max_tc %lld s_t.s %u fps %f\n",
-           max_tc, sample_table.size(), fps);
+           max_tc, (unsigned int)sample_table.size(), fps);
     return fps;
   }
 
@@ -1634,7 +1638,7 @@ qtmp4_demuxer_t::calculate_fps() {
       fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
 
     mxverb(3, PFX "calculate_fps: case 3: max_tc %lld s_t.s %u fps %f\n",
-           max_tc, sample_table.size(), fps);
+           max_tc, (unsigned int)sample_table.size(), fps);
     return fps;
   }
 

@@ -214,8 +214,8 @@ mp3_packetizer_c::process(packet_cptr packet) {
 
 void
 mp3_packetizer_c::dump_debug_info() {
-  mxdebug("mp3_packetizer_c: queue: %d; buffer_size: %d\n",
-          packet_queue.size(), byte_buffer.get_size());
+  mxdebug("mp3_packetizer_c: queue: %u; buffer_size: %d\n",
+          (unsigned int)packet_queue.size(), byte_buffer.get_size());
 }
 
 connection_result_e
