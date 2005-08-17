@@ -106,20 +106,17 @@ rmff_get_error_str(int code) {
     return "Unknown error";
 }
 
-static int
+static void
 set_error(int error_number,
-          const char *error_msg,
-          int return_value) {
+          const char *error_msg) {
   rmff_last_error = error_number;
   if (error_msg == NULL)
     rmff_last_error_msg = rmff_get_error_str(error_number);
   else
     rmff_last_error_msg = error_msg;
-
-  return return_value;
 }
 
-#define clear_error() set_error(RMFF_ERR_OK, NULL, RMFF_ERR_OK)
+#define clear_error() set_error(RMFF_ERR_OK, NULL)
 
 uint16_t
 rmff_get_uint16_be(const void *buf) {
@@ -218,8 +215,10 @@ file_read_uint8(mb_file_io_t *io,
                 void *fh) {
   unsigned char tmp;
 
-  if (io->read(fh, &tmp, 1) != 1)
-    return set_error(RMFF_ERR_IO, NULL, 0);
+  if (io->read(fh, &tmp, 1) != 1) {
+    set_error(RMFF_ERR_IO, NULL);
+    return 0;
+  }
   return tmp;
 }
 
@@ -228,8 +227,10 @@ file_read_uint16_be(mb_file_io_t *io,
                     void *fh) {
   unsigned char tmp[2];
 
-  if (io->read(fh, tmp, 2) != 2)
-    return set_error(RMFF_ERR_IO, NULL, 0);
+  if (io->read(fh, tmp, 2) != 2) {
+    set_error(RMFF_ERR_IO, NULL);
+    return 0;
+  }
   return rmff_get_uint16_be(tmp);
 }
 
@@ -238,8 +239,10 @@ file_read_uint32_be(mb_file_io_t *io,
                     void *fh) {
   unsigned char tmp[4];
 
-  if (io->read(fh, tmp, 4) != 4)
-    return set_error(RMFF_ERR_IO, NULL, 0);
+  if (io->read(fh, tmp, 4) != 4) {
+    set_error(RMFF_ERR_IO, NULL);
+    return 0;
+  }
   return rmff_get_uint32_be(tmp);
 }
 
@@ -381,7 +384,8 @@ open_file_for_reading(const char *path,
   if ((io->read(file_h, signature, 4) != 4) ||
       strcmp(signature, ".RMF")) {
     io->close(file_h);
-    return (rmff_file_t *)set_error(RMFF_ERR_NOT_RMFF, NULL, 0);
+    set_error(RMFF_ERR_NOT_RMFF, NULL);
+    return NULL;
   }
 
   file = (rmff_file_t *)safecalloc(sizeof(rmff_file_t));
@@ -411,7 +415,8 @@ open_file_for_writing(const char *path,
 
   if (io->write(file_h, signature, 4) != 4) {
     io->close(file_h);
-    return (rmff_file_t *)set_error(RMFF_ERR_IO, NULL, 0);
+    set_error(RMFF_ERR_IO, NULL);
+    return NULL;
   }
 
   file = (rmff_file_t *)safecalloc(sizeof(rmff_file_t));
@@ -442,8 +447,10 @@ rmff_open_file_with_io(const char *path,
                        int mode,
                        mb_file_io_t *io) {
   if ((path == NULL) || (io == NULL) ||
-      ((mode != RMFF_OPEN_MODE_READING) && (mode != RMFF_OPEN_MODE_WRITING)))
-    return (rmff_file_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+      ((mode != RMFF_OPEN_MODE_READING) && (mode != RMFF_OPEN_MODE_WRITING))) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return NULL;
+  }
 
   if (mode == RMFF_OPEN_MODE_READING)
     return open_file_for_reading(path, io);
@@ -495,8 +502,13 @@ rmff_close_file(rmff_file_t *file) {
 }
 
 
-#define skip(num) { if (io->seek(fh, num, SEEK_CUR) != 0) \
-                      return set_error(RMFF_ERR_IO, NULL, -1); }
+#define skip(num) \
+{ \
+  if (io->seek(fh, num, SEEK_CUR) != 0) {\
+    set_error(RMFF_ERR_IO, NULL); \
+    return -1; \
+  } \
+}
 
 static void
 add_to_index(rmff_track_t *track,
@@ -579,16 +591,20 @@ rmff_read_headers(rmff_file_t *file) {
   int prop_header_found;
   int64_t old_pos;
 
-  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
   if (file->headers_read)
     return 0;
 
   io = file->io;
   fh = file->handle;
   fint = (rmff_file_internal_t *)file->internal;
-  if (io->seek(fh, 0, SEEK_SET))
-    return set_error(RMFF_ERR_IO, NULL, -1);
+  if (io->seek(fh, 0, SEEK_SET)) {
+    set_error(RMFF_ERR_IO, NULL);
+    return RMFF_ERR_IO;
+  }
 
   rmf = &file->rmf_header;
 
@@ -708,9 +724,11 @@ rmff_read_headers(rmff_file_t *file) {
                 rmffFOURCC('.', 'r', 'a', 0xfd))) {
         track->type = RMFF_TRACK_TYPE_AUDIO;
         if ((rmff_get_uint16_be(&ra4p->version1) == 5) &&
-            (size < sizeof(real_audio_v5_props_t)))
-          return set_error(RMFF_ERR_DATA, "RealAudio v5 data indicated but "
-                           "data too small", RMFF_ERR_DATA);
+            (size < sizeof(real_audio_v5_props_t))) {
+          set_error(RMFF_ERR_DATA, "RealAudio v5 data indicated but "
+                    "data too small");
+          return RMFF_ERR_DATA;
+        }
       }
 
       track->internal = safecalloc(sizeof(rmff_track_internal_t));
@@ -728,7 +746,8 @@ rmff_read_headers(rmff_file_t *file) {
 
     } else {
       /* Unknown header type */
-      return set_error(RMFF_ERR_DATA, NULL, RMFF_ERR_DATA);
+      set_error(RMFF_ERR_DATA, NULL);
+      return RMFF_ERR_DATA;
     }
   }
 
@@ -741,7 +760,8 @@ rmff_read_headers(rmff_file_t *file) {
     file->headers_read = 1;
     return 0;
   }
-  return set_error(RMFF_ERR_DATA, NULL, RMFF_ERR_DATA);
+  set_error(RMFF_ERR_DATA, NULL);
+  return RMFF_ERR_DATA;
 }
 
 int
@@ -754,13 +774,17 @@ rmff_get_next_frame_size(rmff_file_t *file) {
   int64_t old_pos;
 
   if ((file == NULL) || (!file->headers_read) || (file->io == NULL) ||
-      (file->handle == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+      (file->handle == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
   io = file->io;
   fh = file->handle;
   old_pos = io->tell(fh);
-  if ((file->size - old_pos) < 12)
-    return set_error(RMFF_ERR_EOF, NULL, RMFF_ERR_EOF);
+  if ((file->size - old_pos) < 12) {
+    set_error(RMFF_ERR_EOF, NULL);
+    return RMFF_ERR_EOF;
+  }
 
   object_version = read_uint16_be();
   length = read_uint16_be();
@@ -772,8 +796,10 @@ rmff_get_next_frame_size(rmff_file_t *file) {
     return result;
   }
   io->seek(fh, old_pos, SEEK_SET);
-  if (object_id == rmffFOURCC('I', 'N', 'D', 'X'))
-    return set_error(RMFF_ERR_EOF, NULL, RMFF_ERR_EOF);
+  if (object_id == rmffFOURCC('I', 'N', 'D', 'X')) {
+    set_error(RMFF_ERR_EOF, NULL);
+    return RMFF_ERR_EOF;
+  }
   return length - 12;
 }
 
@@ -788,13 +814,17 @@ rmff_read_next_frame(rmff_file_t *file,
   void *fh;
 
   if ((file == NULL) || (!file->headers_read) || (file->io == NULL) ||
-      (file->handle == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING))
-    return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+      (file->handle == NULL) || (file->open_mode != RMFF_OPEN_MODE_READING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return NULL;
+  }
   io = file->io;
   fh = file->handle;
   fint = (rmff_file_internal_t *)file->internal;
-  if ((file->size - io->tell(fh)) < 12)
-    return (rmff_frame_t *)set_error(RMFF_ERR_EOF, NULL, 0);
+  if ((file->size - io->tell(fh)) < 12) {
+    set_error(RMFF_ERR_EOF, NULL);
+    return NULL;
+  }
 
   object_version = read_uint16_be();
   length = read_uint16_be();
@@ -806,8 +836,10 @@ rmff_read_next_frame(rmff_file_t *file,
     return rmff_read_next_frame(file, buffer);
   }
   if ((file->num_packets_read >= file->num_packets_in_chunk) ||
-      (object_id == rmffFOURCC('I', 'N', 'D', 'X')))
-    return (rmff_frame_t *)set_error(RMFF_ERR_EOF, NULL, 0);
+      (object_id == rmffFOURCC('I', 'N', 'D', 'X'))) {
+    set_error(RMFF_ERR_EOF, NULL);
+    return NULL;
+  }
 
   frame = (rmff_frame_t *)safecalloc(sizeof(rmff_frame_t));
   if (buffer == NULL) {
@@ -822,7 +854,8 @@ rmff_read_next_frame(rmff_file_t *file,
   frame->flags = read_uint8();
   if (io->read(fh, frame->data, frame->size) != frame->size) {
     rmff_release_frame(frame);
-    return (rmff_frame_t *)set_error(RMFF_ERR_EOF, NULL, 0);
+    set_error(RMFF_ERR_EOF, NULL);
+    return NULL;
   }
   file->num_packets_read++;
 
@@ -834,8 +867,10 @@ rmff_allocate_frame(uint32_t size,
                     void *buffer) {
   rmff_frame_t *frame;
 
-  if (size == 0)
-    return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+  if (size == 0) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return NULL;
+  }
   frame = (rmff_frame_t *)safecalloc(sizeof(rmff_frame_t));
   if (buffer == NULL) {
     buffer = safemalloc(size);
@@ -912,8 +947,10 @@ rmff_add_track(rmff_file_t *file,
   rmff_track_internal_t *tint;
   int i, id, found;
 
-  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
-    return (rmff_track_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return NULL;
+  }
 
   id = 0;
   do {
@@ -1042,8 +1079,8 @@ write_cont_header(rmff_file_t *file) {
 
   if (bw == wanted_len)
     return 0;
-  return set_error(RMFF_ERR_IO, "Could not write the CONT header",
-                   RMFF_ERR_IO);
+  set_error(RMFF_ERR_IO, "Could not write the CONT header");
+  return RMFF_ERR_IO;
 }
 
 static int
@@ -1093,10 +1130,12 @@ write_mdpr_header(rmff_track_t *track) {
       io->write(fh, track->mdpr_header.type_specific_data,
                 rmff_get_uint32_be(&track->mdpr_header.type_specific_size));
 
-  if (wanted_len != bw)
-    return set_error(RMFF_ERR_IO, "Could not write the MDPR header",
-                     RMFF_ERR_IO);
-  return clear_error();
+  if (wanted_len != bw) {
+    set_error(RMFF_ERR_IO, "Could not write the MDPR header");
+    return RMFF_ERR_IO;
+  }
+  clear_error();
+  return RMFF_ERR_OK;
 }
 
 static int
@@ -1116,10 +1155,12 @@ write_data_header(rmff_file_t *file) {
   bw += write_uint32_be(fint->num_packets); /* num_packets_in_chunk */
   bw += write_uint32_be(0);     /* next_data_header_offset */
 
-  if (bw != 18)
-    return set_error(RMFF_ERR_IO, "Could not write the DATA header",
-                     RMFF_ERR_IO);
-  return clear_error();
+  if (bw != 18) {
+    set_error(RMFF_ERR_IO, "Could not write the DATA header");
+    return RMFF_ERR_IO;
+  }
+  clear_error();
+  return RMFF_ERR_OK;
 }
 
 int
@@ -1130,8 +1171,10 @@ rmff_write_headers(rmff_file_t *file) {
   rmff_file_internal_t *fint;
   const char *signature = ".RMF";
 
-  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
 
   io = file->io;
   fh = file->handle;
@@ -1152,14 +1195,16 @@ rmff_write_headers(rmff_file_t *file) {
   bw += write_uint32_be(0);     /* file_version */
   bw += write_uint32_be(num_headers);
 
-  if (bw != 18)
-    return set_error(RMFF_ERR_IO, "Could not write the file header",
-                     RMFF_ERR_IO);
+  if (bw != 18) {
+    set_error(RMFF_ERR_IO, "Could not write the file header");
+    return RMFF_ERR_IO;
+  }
 
   bw = write_prop_header(file);
-  if (bw != 0x32)
-    return set_error(RMFF_ERR_IO, "Could not write the PROP header",
-                     RMFF_ERR_IO);
+  if (bw != 0x32) {
+    set_error(RMFF_ERR_IO, "Could not write the PROP header");
+    return RMFF_ERR_IO;
+  }
 
   if (file->cont_header_present) {
     bw = write_cont_header(file);
@@ -1179,7 +1224,8 @@ rmff_write_headers(rmff_file_t *file) {
   if (bw < RMFF_ERR_OK)
     return bw;
 
-  return clear_error();
+  clear_error();
+  return RMFF_ERR_OK;
 }
 
 int
@@ -1191,8 +1237,10 @@ rmff_fix_headers(rmff_file_t *file) {
   rmff_track_internal_t *tint;
   int i;
 
-  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
 
   fint = (rmff_file_internal_t *)file->internal;
 
@@ -1308,8 +1356,10 @@ rmff_write_frame(rmff_track_t *track,
   int64_t pos;
 
   if ((track == NULL) || (frame == NULL) || (frame->data == NULL) ||
-      (track->file->open_mode != RMFF_OPEN_MODE_WRITING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+      (track->file->open_mode != RMFF_OPEN_MODE_WRITING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
 
   io = track->file->io;
   fh = track->file->handle;
@@ -1329,8 +1379,10 @@ rmff_write_frame(rmff_track_t *track,
   bw += write_uint8(frame->flags);
   bw += io->write(fh, frame->data, frame->size);
 
-  if (bw != wanted_len)
-    return set_error(RMFF_ERR_IO, "Could not write the frame", RMFF_ERR_IO);
+  if (bw != wanted_len) {
+    set_error(RMFF_ERR_IO, "Could not write the frame");
+    return RMFF_ERR_IO;
+  }
 
   if (frame->size > fint->max_packet_size)
     fint->max_packet_size = frame->size;
@@ -1360,7 +1412,8 @@ rmff_write_frame(rmff_track_t *track,
   if (bit_rate > tint->max_bit_rate)
     tint->max_bit_rate = bit_rate;
 
-  return clear_error();
+  clear_error();
+  return RMFF_ERR_OK;
 }
 
 rmff_track_t *
@@ -1369,8 +1422,10 @@ rmff_find_track_with_id(rmff_file_t *file,
   int i;
 
   clear_error();
-  if (file == 0)
-    return (rmff_track_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+  if (file == 0) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return NULL;
+  }
   for (i = 0; i < file->num_tracks; i++)
     if (file->tracks[i]->id == id)
       return file->tracks[i];
@@ -1387,8 +1442,10 @@ rmff_write_index(rmff_file_t *file) {
   int i, j, bw, wanted_len;
   int64_t pos;
 
-  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+  if ((file == NULL) || (file->open_mode != RMFF_OPEN_MODE_WRITING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
 
   fh = file->handle;
   io = file->io;
@@ -1399,8 +1456,10 @@ rmff_write_index(rmff_file_t *file) {
     if (file->tracks[i]->num_index_entries > 0)
       fint->num_index_chunks++;
 
-  if (fint->num_index_chunks == 0)
-    return clear_error();
+  if (fint->num_index_chunks == 0) {
+    clear_error();
+    return RMFF_ERR_OK;
+  }
 
   io->seek(fh, 0, SEEK_END);
 
@@ -1435,13 +1494,15 @@ rmff_write_index(rmff_file_t *file) {
         bw += write_uint32_be(track->index[j].pos);
         bw += write_uint32_be(track->index[j].packet_number);
       }
-      if (bw != wanted_len)
-        return set_error(RMFF_ERR_IO, "Could not write the INDX chunk",
-                         RMFF_ERR_IO);
+      if (bw != wanted_len) {
+        set_error(RMFF_ERR_IO, "Could not write the INDX chunk");
+        return RMFF_ERR_IO;
+      }
     }
   }
 
-  return clear_error();
+  clear_error();
+  return RMFF_ERR_OK;
 }
 
 int
@@ -1455,17 +1516,20 @@ rmff_write_packed_video_frame(rmff_track_t *track,
 
   if ((track == NULL) || (frame == NULL) ||
       (track->file == NULL) ||
-      (track->file->open_mode != RMFF_OPEN_MODE_WRITING))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+      (track->file->open_mode != RMFF_OPEN_MODE_WRITING)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
 
   tint = (rmff_track_internal_t *)track->internal;
   src_ptr = frame->data;
   num_subpackets = *src_ptr + 1;
   src_ptr++;
-  if (frame->size < (num_subpackets * 8 + 1))
-    return set_error(RMFF_ERR_DATA, "RealVideo unpacking failed: frame size "
-                     "too small. Could not extract sub packet offsets.",
-                     RMFF_ERR_DATA);
+  if (frame->size < (num_subpackets * 8 + 1)) {
+    set_error(RMFF_ERR_DATA, "RealVideo unpacking failed: frame size "
+              "too small. Could not extract sub packet offsets.");
+    return RMFF_ERR_DATA;
+  }
 
   offsets = (uint32_t *)safemalloc(num_subpackets * sizeof(uint32_t));
   for (i = 0; i < num_subpackets; i++) {
@@ -1475,9 +1539,10 @@ rmff_write_packed_video_frame(rmff_track_t *track,
   }
   if ((offsets[num_subpackets - 1] + (src_ptr - frame->data)) >= frame->size) {
     safefree(offsets);
-    return set_error(RMFF_ERR_DATA, "RealVideo unpacking failed: frame size "
-                     "too small. The sub packet offsets indicate a size "
-                     "larger than the actual size.", RMFF_ERR_DATA);
+    set_error(RMFF_ERR_DATA, "RealVideo unpacking failed: frame size "
+              "too small. The sub packet offsets indicate a size "
+              "larger than the actual size.");
+    return RMFF_ERR_DATA;
   }
   total_len = frame->size - (src_ptr - frame->data);
   lengths = (uint32_t *)safemalloc(num_subpackets * sizeof(uint32_t));
@@ -1543,8 +1608,9 @@ rmff_write_packed_video_frame(rmff_track_t *track,
       safefree(offsets);
       safefree(lengths);
       safefree(dst);
-      return set_error(RMFF_ERR_IO, "Memory allocation error: Could not get a "
-                       "rmff_frame_t", RMFF_ERR_IO);
+      set_error(RMFF_ERR_IO, "Memory allocation error: Could not get a "
+                "rmff_frame_t");
+      return RMFF_ERR_IO;
     }
     spframe->timecode = frame->timecode;
     spframe->flags = frame->flags;
@@ -1562,7 +1628,8 @@ rmff_write_packed_video_frame(rmff_track_t *track,
 
   tint->num_packed_frames++;
 
-  return set_error(RMFF_ERR_OK, NULL, RMFF_ERR_OK);
+  clear_error();
+  return RMFF_ERR_OK;
 }
 
 inline uint16_t
@@ -1609,13 +1676,8 @@ deliver_segments(rmff_track_t *track,
     sprintf(error_msg_buffer, "Packet assembly failed. "
             "Expected packet length was %d but found only %d sub packets "
             "containing %d bytes.", len, tint->num_segments, total);
-    return set_error(RMFF_ERR_DATA, error_msg_buffer, RMFF_ERR_DATA);
-    len = 0;
-    for (i = 0; i < tint->num_segments; i++) {
-      segment = &tint->segments[i];
-      segment->offset = len;
-      len += segment->size;
-    }
+    set_error(RMFF_ERR_DATA, error_msg_buffer);
+    return RMFF_ERR_DATA;
   }
 
   len += 1 + 2 * 4 * (tint->f_merged ? 1: tint->num_segments);
@@ -1674,8 +1736,10 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
   rmff_video_segment_t *segment;
 
   if ((track == NULL) || (frame == NULL) || (frame->data == NULL) ||
-      (frame->size == 0))
-    return set_error(RMFF_ERR_PARAMETERS, NULL, RMFF_ERR_PARAMETERS);
+      (frame->size == 0)) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return RMFF_ERR_PARAMETERS;
+  }
 
   tint = (rmff_track_internal_t *)track->internal;
   if (tint->num_segments == 0) {
@@ -1709,27 +1773,33 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
 
     } else {
       if ((vpkg_header & 0x40) == 0) {
-        if (data_len < 1)
-          return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                           "data available", RMFF_ERR_DATA);
+        if (data_len < 1) {
+          set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                    "data available");
+          return RMFF_ERR_DATA;
+        }
         // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
         vpkg_subseq = data_get_uint8(&data, &data_len) & 0x7f;
       }
 
       // size of the complete packet
       // bit 14 is always one (same applies to the offset)
-      if (data_len < 2)
-        return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                         "data available", RMFF_ERR_DATA);
+      if (data_len < 2) {
+        set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                  "data available");
+        return RMFF_ERR_DATA;
+      }
       vpkg_length = data_get_uint16_be(&data, &data_len);
 
       if ((vpkg_length & 0x8000) == 0x8000)
         tint->f_merged = 1;
 
       if ((vpkg_length & 0x4000) == 0) {
-        if (data_len < 2)
-          return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                           "data available", RMFF_ERR_DATA);
+        if (data_len < 2) {
+          set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                    "data available");
+          return RMFF_ERR_DATA;
+        }
         vpkg_length <<= 16;
         vpkg_length |= data_get_uint16_be(&data, &data_len);
         vpkg_length &= 0x3fffffff;
@@ -1740,15 +1810,19 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
       // offset of the following data inside the complete packet
       // Note: if (hdr&0xC0)==0x80 then offset is relative to the
       // _end_ of the packet, so it's equal to fragment size!!!
-      if (data_len < 2)
-        return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                         "data available", RMFF_ERR_DATA);
+      if (data_len < 2) {
+        set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                  "data available");
+        return RMFF_ERR_DATA;
+      }
       vpkg_offset = data_get_uint16_be(&data, &data_len);
 
       if ((vpkg_offset & 0x4000) == 0) {
-        if (data_len < 2)
-          return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                           "data available", RMFF_ERR_DATA);
+        if (data_len < 2) {
+          set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                    "data available");
+          return RMFF_ERR_DATA;
+        }
         vpkg_offset <<= 16;
         vpkg_offset |= data_get_uint16_be(&data, &data_len);
         vpkg_offset &= 0x3fffffff;
@@ -1756,9 +1830,11 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
       } else
         vpkg_offset &= 0x3fff;
 
-      if (data_len < 1)
-        return set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
-                         "data available", RMFF_ERR_DATA);
+      if (data_len < 1) {
+        set_error(RMFF_ERR_DATA, "Assembly failed: not enough frame "
+                  "data available");
+        return RMFF_ERR_DATA;
+      }
       vpkg_seqnum = data_get_uint8(&data, &data_len);
 
       if ((vpkg_header & 0xc0) == 0xc0) {
@@ -1805,12 +1881,16 @@ rmff_get_packed_video_frame(rmff_track_t *track) {
   rmff_track_internal_t *tint;
   rmff_frame_t *frame;
 
-  if (track == NULL)
-    return (rmff_frame_t *)set_error(RMFF_ERR_PARAMETERS, NULL, 0);
+  if (track == NULL) {
+    set_error(RMFF_ERR_PARAMETERS, NULL);
+    return NULL;
+  }
 
   tint = (rmff_track_internal_t *)track->internal;
-  if (tint->num_assembled_frames == 0)
-    return (rmff_frame_t *)set_error(RMFF_ERR_OK, NULL, 0);
+  if (tint->num_assembled_frames == 0) {
+    clear_error();
+    return NULL;
+  }
 
   frame = tint->assembled_frames[0];
   tint->num_assembled_frames--;
@@ -1825,6 +1905,6 @@ rmff_get_packed_video_frame(rmff_track_t *track) {
                   sizeof(rmff_frame_t *));
   }
 
-  set_error(RMFF_ERR_OK, NULL, 0);
+  clear_error();
   return frame;
 }
