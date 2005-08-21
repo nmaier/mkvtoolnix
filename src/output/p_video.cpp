@@ -66,6 +66,42 @@ video_packetizer_c::check_fourcc() {
            ti.fourcc, 4);
     set_codec_private(ti.private_data, ti.private_size);
   }
+
+  if (!hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE) &&
+      (hcodec_id == MKV_V_MSCOMP) &&
+      (ti.private_data != NULL) &&
+      (ti.private_size >= sizeof(alBITMAPINFOHEADER))) {
+    const char *avc_fourccs[] = {
+      "h264", "x264", "avc1", NULL
+    };
+    const char *fourcc;
+    int i;
+
+    fourcc = (const char *)
+      &((alBITMAPINFOHEADER *)ti.private_data)->bi_compression;
+    for (i = 0; NULL != avc_fourccs[i]; ++i)
+      if (!strncasecmp(fourcc, avc_fourccs[i], 4))
+        mxerror(FMT_TID "You are trying to put AVC/h.264 video from an AVI "
+                "or a similar VfW (Video for Windows) compatible source into "
+                "a Matroska file in the so-called 'VfW compatibility mode'. "
+                "Please note that this is not the official way to store "
+                "AVC/h.264 video in Matroska. Therefore proper playback of "
+                "such files cannot be guaranteed, and we strongly urge you "
+                "not to continue to do this.\n"
+                "At the moment mkvmerge does not support converting from "
+                "VfW-mode AVC/h.264 tracks to native Matroska-mode AVC/h.264 "
+                "tracks. You can, however, first import the video track "
+                "into a MP4 file with e.g. 'MP4Box' (use Google). Then "
+                "you can use mkvmerge and put the video into a Matroska "
+                "file.\n"
+                "If you really know what you are doing then you can force "
+                "mkvmerge to put this AVC/h.264 track into a Matroska file "
+                "even in VfW mode if you add '--engage allow_avc_in_vfw_mode' "
+                "to the command line. You can do that in mmg with the "
+                "'Add command line options' menu entry in the 'Muxing' "
+                "menu.\n",
+                ti.fname.c_str(), (int64_t)ti.id);
+  }
 }
 
 void

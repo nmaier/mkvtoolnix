@@ -38,6 +38,7 @@ static const char *mosu_hacks[] = {
   ENGAGE_FORCE_PASSTHROUGH_PACKETIZER,
   ENGAGE_AVC_USE_BFRAMES,
   ENGAGE_WRITE_HEADERS_TWICE,
+  ENGAGE_ALLOW_AVC_IN_VFW_MODE,
   NULL
 };
 static vector<string> engaged_hacks;
