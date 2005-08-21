@@ -378,7 +378,7 @@ parse_number_with_unit(const string &s,
   if (display_s == "")
     display_s = s;
 
-  if (s.length() < 3)
+  if (s.length() < 2)
     mxerror(_("'%s' is not a valid %s in '%s %s'.\n"),
             s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
 
@@ -398,6 +398,10 @@ parse_number_with_unit(const string &s,
     mxerror(_("'%s' does not contain a valid unit ('s', 'ms', 'us' or 'ns') "
               "in '%s %s'.\n"), s.c_str(), argument.c_str(),
             display_s.c_str());
+
+  if (s.length() < (unit_length + 1))
+    mxerror(_("'%s' is not a valid %s in '%s %s'.\n"),
+            s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
 
   if (!parse_int(s.substr(0, s.length() - unit_length), value))
     mxerror(_("'%s' does not contain a valid number in front of the unit in "
