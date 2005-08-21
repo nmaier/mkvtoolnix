@@ -87,7 +87,7 @@ video_packetizer_c::check_fourcc() {
                 "Please note that this is not the official way to store "
                 "AVC/h.264 video in Matroska. Therefore proper playback of "
                 "such files cannot be guaranteed, and we strongly urge you "
-                "not to continue to do this.\n"
+                "to use the native Matroska-mode.\n"
                 "At the moment mkvmerge does not support converting from "
                 "VfW-mode AVC/h.264 tracks to native Matroska-mode AVC/h.264 "
                 "tracks. You can, however, first import the video track "
