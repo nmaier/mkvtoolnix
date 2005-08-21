@@ -55,14 +55,24 @@ xtr_avc_c::create_file(xtr_base_c *_master,
     mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
             "\" element and cannot be extracted.\n", tid, codec_id.c_str());
 
+  if (priv->GetSize() < 6)
+    mxerror("Track %lld CodecPrivate is too small.\n", tid);
+
   binary *buf = priv->GetBuffer();
   nal_size_size = 1 + (buf[4] & 3);
 
-  int pos = 6;
-  while (priv->GetSize() > pos) {
+  int i, pos = 6, numsps = buf[5] & 0x1f, numpps;
+
+  for (i = 0; (i < numsps) && (priv->GetSize() > pos); ++i)
     write_nal(buf, pos, priv->GetSize(), 2);
-    ++pos;
-  }
+
+  if (priv->GetSize() <= pos)
+    return;
+
+  numpps = buf[pos++];
+
+  for (i = 0; (i < numpps) && (priv->GetSize() > pos); ++i)
+    write_nal(buf, pos, priv->GetSize(), 2);
 }
 
 void
