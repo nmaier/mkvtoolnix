@@ -883,11 +883,14 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
 void
 generic_packetizer_c::add_packet2(packet_cptr pack) {
-  pack->timecode += correction_timecode_offset + append_timecode_offset;
+  pack->timecode += correction_timecode_offset + append_timecode_offset +
+    ti.packet_delay;
   if (pack->bref >= 0)
-    pack->bref += correction_timecode_offset + append_timecode_offset;
+    pack->bref += correction_timecode_offset + append_timecode_offset +
+      ti.packet_delay;
   if (pack->fref >= 0)
-    pack->fref += correction_timecode_offset + append_timecode_offset;
+    pack->fref += correction_timecode_offset + append_timecode_offset +
+      ti.packet_delay;
 
   if ((htrack_min_cache < 2) && (pack->fref >= 0)) {
     set_track_min_cache(2);

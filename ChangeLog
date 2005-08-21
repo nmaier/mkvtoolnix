@@ -1,5 +1,7 @@
 2005-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: --delay was not working at all.
+
 	* mkvmerge: bug fix: Single digit numbers followed by 's' were not
 	recognized as valid numbers with a unit (e.g. in '--delay 0:9s').
 
