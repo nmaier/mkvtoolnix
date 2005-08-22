@@ -1269,7 +1269,7 @@ handle_segmentinfo(KaxInfo *kax_info_chap) {
   uid = FINDFIRST(kax_info_chap, KaxNextUID);
   if (NULL != uid)
     seguid_link_next = new bitvalue_c(*uid);
-  
+
   uid = FINDFIRST(kax_info_chap, KaxPrevUID);
   if (NULL != uid)
     seguid_link_previous = new bitvalue_c(*uid);

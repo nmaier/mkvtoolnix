@@ -264,7 +264,7 @@ extract_timecodes(const string &file_name,
 
       } else if ((EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) &&
                  !tracks_found) {
-        
+
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
         show_element(l1, 1, _("Segment tracks"));

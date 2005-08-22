@@ -27,20 +27,20 @@
 #pragma pack(push,1)
 #endif
 struct PACKED_STRUCTURE mpeg_es_header_t {
-  uint8_t	pfx[3];               // 00 00 01
-  uint8_t	stream_id;            // BD
-  uint8_t	len[2];
-  uint8_t	flags[2];
-  uint8_t	hlen;
-  uint8_t	pts[5];
-  uint8_t	lidx;
+  uint8_t pfx[3];               // 00 00 01
+  uint8_t stream_id;            // BD
+  uint8_t len[2];
+  uint8_t flags[2];
+  uint8_t hlen;
+  uint8_t pts[5];
+  uint8_t lidx;
 };
 
 struct PACKED_STRUCTURE mpeg_ps_header_t {
-  uint8_t	pfx[4];               // 00 00 01 BA
-  uint8_t	scr[6];
-  uint8_t	muxr[3];
-  uint8_t	stlen;
+  uint8_t pfx[4];               // 00 00 01 BA
+  uint8_t scr[6];
+  uint8_t muxr[3];
+  uint8_t stlen;
 };
 #if defined(COMP_MSC)
 #pragma pack(pop)

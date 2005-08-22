@@ -262,7 +262,7 @@ mpeg4_p2_parse_config_data(const unsigned char *buffer,
       dst[4] = buffer[vos_offset + 4];
     memcpy(dst + 5, buffer, vos_offset);
     memcpy(dst + 5 + vos_offset, buffer + vos_offset + 5,
-           size - vos_offset - 5); 
+           size - vos_offset - 5);
   }
 
   mxverb(3, "mpeg4_config_data:   found GOOD config with size %u\n", size);

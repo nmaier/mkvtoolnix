@@ -158,7 +158,7 @@ job_run_dialog::start_next_job() {
   opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"),
                        get_temp_dir().c_str(),
                        (int)wxGetProcessId(), (int)time(NULL));
-  
+
   try {
     opt_file = new wxFile(opt_file_name, wxFile::write);
   } catch (...) {

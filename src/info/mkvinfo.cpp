@@ -480,7 +480,7 @@ def_handle(chaptertranslate) {
     }
   }
 }
-    
+
 void
 def_handle(info) {
   EbmlMaster *m1;

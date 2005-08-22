@@ -963,7 +963,7 @@ generic_packetizer_c::process_deferred_packets() {
   deferred_packets.clear();
 }
 
-bool 
+bool
 generic_packetizer_c::has_enough_packets() const {
   if (packet_queue.size() < 2)
     return false;
@@ -1049,7 +1049,7 @@ generic_packetizer_c::apply_factory_short_queueing(packet_cptr_di &p_start) {
     // packetizer has been flushed already.
     if (!has_been_flushed && (packet_queue.end() == p_end))
       return;
-  
+
     // Now assign timecodes to the ones between p_start and p_end...
     for (p_current = p_start + 1; p_current != p_end; ++p_current)
       apply_factory_once(*p_current);

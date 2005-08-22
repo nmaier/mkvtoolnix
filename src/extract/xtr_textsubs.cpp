@@ -368,7 +368,7 @@ xtr_usf_c::create_file(xtr_base_c *_master,
     } catch (xml_formatter_error_c &error) {
       mxerror("Failed to parse the USF codec private data for track %lld: "
               "%s\n", tid, error.get_error().c_str());
-      
+
     }
   }
 }

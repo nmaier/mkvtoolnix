@@ -126,7 +126,7 @@ enum timecode_scale_mode_e {
 
 class family_uids_c: public vector<bitvalue_c> {
 public:
-	bool add_family_uid(const KaxSegmentFamily &family);
+  bool add_family_uid(const KaxSegmentFamily &family);
 };
 
 extern vector<packetizer_t> packetizers;

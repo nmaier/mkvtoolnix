@@ -155,7 +155,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
         split = true;
 
     } else if ((split_point_t::SPT_DURATION == current_split_point->m_type) &&
-               (0 <= first_timecode_in_file) && 
+               (0 <= first_timecode_in_file) &&
                (packet->assigned_timecode - first_timecode_in_file) >=
                current_split_point->m_point)
       split = true;
@@ -399,7 +399,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     max_cl_timecode = pack->assigned_timecode;
 
     data_buffer = new DataBuffer((binary *)pack->data, pack->length);
-    
+
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
 

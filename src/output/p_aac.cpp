@@ -35,7 +35,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *_reader,
                                    bool _headerless)
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
-  bytes_output(0), packetno(0), last_timecode(-1), num_packets_same_tc(0), 
+  bytes_output(0), packetno(0), last_timecode(-1), num_packets_same_tc(0),
   samples_per_sec(_samples_per_sec), channels(_channels), id(_id),
   profile(_profile), headerless(_headerless),
   emphasis_present(_emphasis_present) {
@@ -250,4 +250,3 @@ aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
   }
   return CAN_CONNECT_YES;
 }
-

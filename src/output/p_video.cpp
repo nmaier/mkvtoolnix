@@ -526,7 +526,7 @@ mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
       more frames than the timecode queue. For example: The last frame
       contained two frames, a P and a B frame. Right afterwards the
       end of the file is reached. In this case a dummy frame is missing.
- 
+
    Both cases can be solved if the source file provides a FPS for this
    track. Otherwise such frames have to be dropped.
 */
@@ -551,12 +551,12 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
 
     if (available_timecodes.size() < available_durations.size()) {
       num_dropped = queued_frames.size() - available_timecodes.size();
-      available_durations.erase(available_durations.begin() + 
+      available_durations.erase(available_durations.begin() +
                                 available_timecodes.size(),
                                 available_durations.end());
     } else {
       num_dropped = queued_frames.size() - available_durations.size();
-      available_timecodes.erase(available_timecodes.begin() + 
+      available_timecodes.erase(available_timecodes.begin() +
                                 available_durations.size(),
                                 available_timecodes.end());
     }
@@ -628,7 +628,7 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
       queued_frames[i].bref = b_bref;
       queued_frames[i].fref = b_fref;
       ++num_bframes;
-    }      
+    }
   }
 
   for (i = 0; i < queued_frames.size(); ++i)

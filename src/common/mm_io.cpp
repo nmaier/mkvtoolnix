@@ -64,7 +64,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   write_count = 0;
   use_posix_fadvise_here = use_posix_fadvise;
 # endif
-  
+
   switch (mode) {
     case MODE_READ:
       cmode = "rb";
@@ -167,7 +167,7 @@ mm_file_io_c::read(void *buffer,
                    size_t size) {
   int64_t bread;
 
-  bread = fread(buffer, 1, size, (FILE *)file); 
+  bread = fread(buffer, 1, size, (FILE *)file);
 
 # if HAVE_POSIX_FADVISE
   if (use_posix_fadvise && use_posix_fadvise_here && (0 <= bread)) {
@@ -180,7 +180,7 @@ mm_file_io_c::read(void *buffer,
         mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
         use_posix_fadvise_here = false;
       }
-      if (use_posix_fadvise_here && 
+      if (use_posix_fadvise_here &&
           (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
                               POSIX_FADV_WILLNEED))) {
         mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));

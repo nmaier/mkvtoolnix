@@ -1535,7 +1535,7 @@ append_track(packetizer_t &ptzr,
 
   if (NULL != deferred_file)
     src_file.deferred_max_timecode_seen =
-      deferred_file->reader->max_timecode_seen;      
+      deferred_file->reader->max_timecode_seen;
 
   // Find the generic_packetizer_c that we will be appending to the one
   // stored in ptzr.
