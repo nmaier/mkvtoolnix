@@ -75,10 +75,11 @@ typedef counted_ptr<memory_c> memory_cptr;
 typedef std::vector<memory_cptr> memories_c;
 
 struct buffer_t {
-  unsigned char *buffer;
-  int size;
+  unsigned char *m_buffer;
+  int m_size;
 
   buffer_t();
+  buffer_t(unsigned char *buffer, int m_size);
   ~buffer_t();
 };
 

@@ -1219,9 +1219,9 @@ set_process_priority(int priority) {
 }
 
 static string
-guess_mime_type(string file_name) {
-  vector<string> extensions;
-  int i, k;
+guess_mime_type_and_report(string file_name) {
+  string mime_type;
+  int i;
 
   i = file_name.rfind('.');
   if (i < 0)
@@ -1231,17 +1231,11 @@ guess_mime_type(string file_name) {
             file_name.c_str());
   file_name.erase(0, i + 1);
 
-  for (i = 0; mime_types[i].name != NULL; i++) {
-    if (mime_types[i].extensions[0] == 0)
-      continue;
-
-    extensions = split(mime_types[i].extensions, " ");
-    for (k = 0; k < extensions.size(); k++)
-      if (!strcasecmp(extensions[k].c_str(), file_name.c_str())) {
-        mxinfo(_("Automatic MIME type recognition for '%s': %s\n"),
-               file_name.c_str(), mime_types[i].name);
-        return mime_types[i].name;
-      }
+  mime_type = guess_mime_type(file_name);
+  if (mime_type != "") {
+    mxinfo(_("Automatic MIME type recognition for '%s': %s\n"),
+           file_name.c_str(), mime_type.c_str());
+    return mime_type;
   }
 
   mxerror(_("No MIME type has been set for the attachment '%s', and "
@@ -1555,20 +1549,20 @@ parse_args(vector<string> args) {
 
       attachment.name = next_arg;
       if (attachment.mime_type == "")
-        attachment.mime_type = guess_mime_type(next_arg);
+        attachment.mime_type = guess_mime_type_and_report(next_arg);
 
       if (this_arg == "--attach-file")
         attachment.to_all_files = true;
       try {
         attachment.data = counted_ptr<buffer_t>(new buffer_t);
         io = new mm_file_io_c(attachment.name);
-        attachment.data->size = io->get_size();
-        if (0 == attachment.data->size)
+        attachment.data->m_size = io->get_size();
+        if (0 == attachment.data->m_size)
           mxerror("The size of attachment '%s' is 0.\n",
                   attachment.name.c_str());
-        attachment.data->buffer = (unsigned char *)
-          safemalloc(attachment.data->size);
-        io->read(attachment.data->buffer, attachment.data->size);
+        attachment.data->m_buffer = (unsigned char *)
+          safemalloc(attachment.data->m_size);
+        io->read(attachment.data->m_buffer, attachment.data->m_size);
         delete io;
       } catch (...) {
         mxerror(_("The attachment '%s' could not be read.\n"),

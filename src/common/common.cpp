@@ -1920,9 +1920,14 @@ usage(int exit_code) {
 }
 
 buffer_t::buffer_t():
-  buffer(NULL), size(0) {
+  m_buffer(NULL), m_size(0) {
+}
+
+buffer_t::buffer_t(unsigned char *buffer,
+                   int size):
+  m_buffer(buffer), m_size(size) {
 }
 
 buffer_t::~buffer_t() {
-  safefree(buffer);
+  safefree(m_buffer);
 }

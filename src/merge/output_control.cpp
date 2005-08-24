@@ -435,7 +435,7 @@ add_attachment(attachment_t attachment) {
           ||
           ((i->name == attachment.name) &&
            (i->description == attachment.description) &&
-           (i->data->size == attachment.data->size)))
+           (i->data->m_size == attachment.data->m_size)))
         return attachment.id;
     add_unique_uint32(attachment.id, UNIQUE_ATTACHMENT_IDS);
   } else
@@ -747,7 +747,7 @@ render_attachments(IOCallback *rout) {
         (&GetChild<KaxFileUID>(*kax_a)) = attch->id;
 
       fdata = &GetChild<KaxFileData>(*kax_a);
-      fdata->CopyBuffer(attch->data->buffer, attch->data->size);
+      fdata->CopyBuffer(attch->data->m_buffer, attch->data->m_size);
     }
   }
 
@@ -1132,9 +1132,9 @@ create_readers() {
 
     // Calculate the size of all attachments for split control.
     foreach(att, attachments) {
-      attachment_sizes_first += att->data->size;
+      attachment_sizes_first += att->data->m_size;
       if (att->to_all_files)
-        attachment_sizes_others += att->data->size;
+        attachment_sizes_others += att->data->m_size;
     }
 
     calc_max_chapter_size();

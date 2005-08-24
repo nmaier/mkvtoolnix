@@ -24,4 +24,6 @@ extern MTX_DLL_API const char *sub_charsets[];
 extern MTX_DLL_API const mime_type_t mime_types[];
 extern MTX_DLL_API const char *cctlds[];
 
+string MTX_DLL_API guess_mime_type(string ext);
+
 #endif // __EXTERN_DATA_H

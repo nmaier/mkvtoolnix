@@ -584,8 +584,8 @@ kax_reader_c::handle_attachments(mm_io_c *io,
           matt.description = UTFstring_to_cstrutf8(description);
           matt.id = id;
           matt.data = counted_ptr<buffer_t>(new buffer_t);
-          matt.data->size = size;
-          matt.data->buffer = (unsigned char *)safememdup(data, size);
+          matt.data->m_size = size;
+          matt.data->m_buffer = (unsigned char *)safememdup(data, size);
           add_attachment(matt);
         }
       }
@@ -2102,7 +2102,7 @@ kax_reader_c::identify() {
   for (i = 0; i < attachments.size(); i++) {
     mxinfo("Attachment ID %lld: type '%s', size %d bytes, ",
            attachments[i].id, attachments[i].mime_type.c_str(),
-           attachments[i].data->size);
+           attachments[i].data->m_size);
     if (attachments[i].description.length() > 0)
       mxinfo("description '%s', ", attachments[i].description.c_str());
     if (attachments[i].name.length() == 0)

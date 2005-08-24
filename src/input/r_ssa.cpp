@@ -21,9 +21,12 @@
 
 #include <algorithm>
 
+#include "base64.h"
+#include "extern_data.h"
 #include "pr_generic.h"
 #include "r_ssa.h"
 #include "matroska.h"
+#include "output_control.h"
 
 using namespace std;
 
@@ -46,81 +49,46 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
 
 ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
-  string line;
-  int64_t old_pos;
-  char section;
+  generic_reader_c(_ti),
+  m_cc_utf8(0),
+  m_is_ass(false) {
+
+  auto_ptr<mm_text_io_c> io;
   bool sub_charset_found;
   int i;
 
-  is_ass = false;
-  section = 0;
 
   try {
-    io = new mm_text_io_c(new mm_file_io_c(ti.fname));
-
-    if (!ssa_reader_c::probe_file(io, 0))
-      throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
-
-    sub_charset_found = false;
-    for (i = 0; i < ti.sub_charsets.size(); i++)
-      if ((ti.sub_charsets[i].id == 0) || (ti.sub_charsets[i].id == -1)) {
-        sub_charset_found = true;
-        cc_utf8 = utf8_init(ti.sub_charsets[i].charset);
-        break;
-      }
-
-    if (!sub_charset_found) {
-      if (io->get_byte_order() != BO_NONE)
-        cc_utf8 = utf8_init("UTF-8");
-      else
-        cc_utf8 = utf8_init(ti.sub_charset);
-    }
-
-    ti.id = 0;                 // ID for this track.
-    global = io->getline();  // [Script Info]
-    while (!io->eof()) {
-      old_pos = io->getFilePointer();
-      line = io->getline();
-
-      if (!strncasecmp(line.c_str(), "Dialogue: ", strlen("Dialogue: "))) {
-        // End of global data - restore file position to just before this
-        // line end bail out.
-        io->setFilePointer(old_pos);
-        break;
-      }
-
-      // A normal line. Let's see if this file is ASS and not SSA.
-      if (!strcasecmp(line.c_str(), "ScriptType: v4.00+") ||
-          !strcasecmp(line.c_str(), "[V4+ Styles]"))
-        is_ass = true;
-      else if (!strcasecmp(line.c_str(), "[Events]"))
-        section = 'e';
-      // Analyze the format string.
-      else if (!strncasecmp(line.c_str(), "Format: ", strlen("Format: ")) &&
-               (section == 'e')) {
-        format = split(&line.c_str()[strlen("Format: ")]);
-        strip(format);
-      }
-
-      global += "\r\n";
-      global += line;
-    }
-
-    if (format.size() == 0)
-      throw error_c("ssa_reader: Invalid format. Could not find the "
-                    "\"Format\" line in the \"[Events]\" section.");
-
+    io = auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(ti.fname)));
   } catch (...) {
     throw error_c("ssa_reader: Could not open the source file.");
   }
+
+  if (!ssa_reader_c::probe_file(io.get(), 0))
+    throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
+
+  sub_charset_found = false;
+  for (i = 0; i < ti.sub_charsets.size(); i++)
+    if ((ti.sub_charsets[i].id == 0) || (ti.sub_charsets[i].id == -1)) {
+      sub_charset_found = true;
+      m_cc_utf8 = utf8_init(ti.sub_charsets[i].charset);
+      break;
+    }
+
+  if (!sub_charset_found) {
+    if (io->get_byte_order() != BO_NONE)
+      m_cc_utf8 = utf8_init("UTF-8");
+    else
+      m_cc_utf8 = utf8_init(ti.sub_charset);
+  }
+
+  parse_file(io.get());
+
   if (verbose)
     mxinfo(FMT_FN "Using the SSA/ASS subtitle reader.\n", ti.fname.c_str());
-  parse_file();
 }
 
 ssa_reader_c::~ssa_reader_c() {
-  delete io;
 }
 
 void
@@ -128,9 +96,9 @@ ssa_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new textsubs_packetizer_c(this, is_ass ?  MKV_S_TEXTASS :
-                                           MKV_S_TEXTSSA, global.c_str(),
-                                           global.length(), false, false,
+  add_packetizer(new textsubs_packetizer_c(this, m_is_ass ?  MKV_S_TEXTASS :
+                                           MKV_S_TEXTSSA, m_global.c_str(),
+                                           m_global.length(), false, false,
                                            ti));
   mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
          (int64_t)0);
@@ -141,8 +109,8 @@ ssa_reader_c::get_element(const char *index,
                           vector<string> &fields) {
   int i;
 
-  for (i = 0; i < format.size(); i++)
-    if (format[i] == index)
+  for (i = 0; i < m_format.size(); i++)
+    if (m_format[i] == index)
       return fields[i];
 
   return string("");
@@ -191,80 +159,243 @@ ssa_reader_c::parse_time(string &stime) {
 string
 ssa_reader_c::recode_text(vector<string> &fields) {
   // TODO: Handle \fe encoding changes.
-  return to_utf8(cc_utf8, get_element("Text", fields));
+  return to_utf8(m_cc_utf8, get_element("Text", fields));
 }
 
 void
-ssa_reader_c::parse_file() {
+ssa_reader_c::parse_file(mm_text_io_c *io) {
   string line, stime, orig_line, comma;
+  string attachment_name, attachment_data_uu;
   int num;
   int64_t start, end;
   vector<string> fields;
+  ssa_section_e section, previous_section;
+  bool add_to_global;
 
   num = 0;
 
-  do {
-    line = io->getline();
-    orig_line = line;
-    if (strncasecmp(line.c_str(), "Dialogue: ", strlen("Dialogue: ")))
-      continue;
+  section = SSA_SECTION_NONE;
+  previous_section = SSA_SECTION_NONE;
+  ti.id = 0;                 // ID for this track.
+  while (!io->eof()) {
+    if (!io->getline2(line))
+      break;
 
-    line.erase(0, strlen("Dialogue: ")); // Trim the start.
+    add_to_global = true;
 
-    // Split the line into fields.
-    fields = split(line.c_str(), ",", format.size());
-    while (fields.size() < format.size())
-      fields.push_back(string(""));
+    // A normal line. Let's see if this file is ASS and not SSA.
+    if (!strcasecmp(line.c_str(), "ScriptType: v4.00+"))
+      m_is_ass = true;
 
-    // Parse the start time.
-    stime = get_element("Start", fields);
-    start = parse_time(stime);
-    if (start < 0) {
-      mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
-      continue;
+    else if (!strcasecmp(line.c_str(), "[V4+ Styles]")) {
+      m_is_ass = true;
+      section = SSA_SECTION_V4STYLES;
+
+    } else if (!strcasecmp(line.c_str(), "[V4 Styles]"))
+      section = SSA_SECTION_V4STYLES;
+
+    else if (!strcasecmp(line.c_str(), "[Script Info]"))
+      section = SSA_SECTION_INFO;
+
+    else if (!strcasecmp(line.c_str(), "[Events]"))
+      section = SSA_SECTION_EVENTS;
+
+    else if (!strcasecmp(line.c_str(), "[Graphics]")) {
+      section = SSA_SECTION_GRAPHICS;
+      add_to_global = false;
+
+    } else if (!strcasecmp(line.c_str(), "[Fonts]")) {
+      section = SSA_SECTION_FONTS;
+      add_to_global = false;
+
+    } else if (SSA_SECTION_EVENTS == section) {
+      if (starts_with_case(line, "Format: ")) {
+        // Analyze the format string.
+        m_format = split(&line.c_str()[strlen("Format: ")]);
+        strip(m_format);
+
+      } else if (starts_with_case(line, "Dialogue: ")) {
+        if (m_format.size() == 0)
+          throw error_c("ssa_reader: Invalid format. Could not find the "
+                        "\"Format\" line in the \"[Events]\" section.");
+
+        orig_line = line;
+
+        line.erase(0, strlen("Dialogue: ")); // Trim the start.
+
+        // Split the line into fields.
+        fields = split(line.c_str(), ",", m_format.size());
+        while (fields.size() < m_format.size())
+          fields.push_back(string(""));
+
+        // Parse the start time.
+        stime = get_element("Start", fields);
+        start = parse_time(stime);
+        if (start < 0) {
+          mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
+          continue;
+        }
+
+        // Parse the end time.
+        stime = get_element("End", fields);
+        end = parse_time(stime);
+        if (end < 0) {
+          mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
+          continue;
+        }
+        if (end < start) {
+          mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
+          continue;
+        }
+
+        // Specs say that the following fields are to put into the block:
+        // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+        comma = ",";
+        line = to_string(num) + comma + get_element("Layer", fields) + comma +
+          get_element("Style", fields) + comma +
+          get_element("Name", fields) + comma +
+          get_element("MarginL", fields) + comma +
+          get_element("MarginR", fields) + comma +
+          get_element("MarginV", fields) + comma +
+          get_element("Effect", fields) + comma +
+          recode_text(fields);
+
+        m_subs.add(start, end, line);
+        num++;
+
+        add_to_global = false;
+      }
+
+    } else if ((SSA_SECTION_FONTS == section) ||
+               (SSA_SECTION_GRAPHICS == section)) {
+      if (starts_with_case(line, "fontname:")) {
+        add_attachment_maybe(attachment_name, attachment_data_uu,
+                             section);
+
+        line.erase(0, strlen("fontname:"));
+        strip(line, true);
+        attachment_name = line;
+
+      } else {
+        strip(line, true);
+        attachment_data_uu += line;
+      }
+
+      add_to_global = false;
     }
 
-    // Parse the end time.
-    stime = get_element("End", fields);
-    end = parse_time(stime);
-    if (end < 0) {
-      mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
-      continue;
-    }
-    if (end < start) {
-      mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
-      continue;
+    if (add_to_global) {
+      m_global += line;
+      m_global += "\r\n";
     }
 
-    // Specs say that the following fields are to put into the block:
-    // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+    if (previous_section != section)
+      add_attachment_maybe(attachment_name, attachment_data_uu,
+                           previous_section);
+    previous_section = section;
+  }
 
-    comma = ",";
-    line = to_string(num) + comma + get_element("Layer", fields) + comma +
-      get_element("Style", fields) + comma +
-      get_element("Name", fields) + comma +
-      get_element("MarginL", fields) + comma +
-      get_element("MarginR", fields) + comma +
-      get_element("MarginV", fields) + comma +
-      get_element("Effect", fields) + comma +
-      recode_text(fields);
+  m_subs.sort();
+}
 
-    subs.add(start, end, line);
-    num++;
-  } while (!io->eof());
+void
+ssa_reader_c::add_attachment_maybe(string &name,
+                                   string &data_uu,
+                                   ssa_section_e section) {
+  if (ti.no_attachments || (name == "") || (data_uu == "") ||
+      ((SSA_SECTION_FONTS != section) && (SSA_SECTION_GRAPHICS != section))) {
+    name = "";
+    data_uu = "";
+    return;
+  }
 
-  subs.sort();
+  attachment_t attachment;
+  string type = SSA_SECTION_FONTS == section ? "font" : "picture";
+  string short_name;
+  buffer_t *buffer = new buffer_t;
+  const unsigned char *p;
+  int pos, allocated;
+
+  short_name = ti.fname;
+  pos = short_name.rfind('/');
+  if (0 < pos)
+    short_name.erase(0, pos + 1);
+  pos = short_name.rfind('\\');
+  if (0 < pos)
+    short_name.erase(0, pos + 1);
+  attachment.name = to_utf8(m_cc_utf8, name);
+  attachment.description = "Imported " + type + " from " + short_name;
+  attachment.to_all_files = true;
+
+//   mxinfo("att %s: %s\n", name.c_str(), data_uu.c_str());
+
+  allocated = 1024;
+  buffer = new buffer_t((unsigned char *)safemalloc(allocated), 0);
+
+  p = (const unsigned char *)data_uu.c_str();
+  for (pos = 0; data_uu.length() > (pos + 4); pos += 4)
+    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], *buffer, 3, allocated);
+  switch (data_uu.length() % 4) {
+    case 2:
+      decode_chars(p[pos], p[pos + 1], 0, 0, *buffer, 1, allocated);
+      break;
+    case 3:
+      decode_chars(p[pos], p[pos + 1], p[pos + 2], 0, *buffer, 2, allocated);
+      break;
+  }
+
+  attachment.data = counted_ptr<buffer_t>(buffer);
+
+  pos = name.rfind('.');
+  if (0 < pos) {
+    name.erase(0, pos + 1);
+    attachment.mime_type = guess_mime_type(name);
+  }
+  if (attachment.mime_type == "")
+    attachment.mime_type = "application/octet-stream";
+
+  add_attachment(attachment);
+
+  name = "";
+  data_uu = "";
+}
+
+void
+ssa_reader_c::decode_chars(unsigned char c1,
+                           unsigned char c2,
+                           unsigned char c3,
+                           unsigned char c4,
+                           buffer_t &buffer,
+                           int bytes_to_add,
+                           int &allocated) {
+  uint32_t value, i;
+  unsigned char bytes[3];
+
+  value = ((c1 - 33) << 18) + ((c2 - 33) << 12) + ((c3 - 33) << 6) + (c4 - 33);
+  bytes[2] = value & 0xff;
+  bytes[1] = (value & 0xff00) >> 8;
+  bytes[0] = (value & 0xff0000) >> 16;
+
+  if ((buffer.m_size + bytes_to_add) > allocated) {
+    allocated += 1024;
+    buffer.m_buffer = (unsigned char *)realloc(buffer.m_buffer, allocated);
+  }
+
+  for (i = 0; i < bytes_to_add; ++i)
+    buffer.m_buffer[buffer.m_size + i] = bytes[i];
+  buffer.m_size += bytes_to_add;
 }
 
 file_status_e
 ssa_reader_c::read(generic_packetizer_c *,
                    bool) {
-  if (subs.empty())
+  if (m_subs.empty())
     return FILE_STATUS_DONE;
 
-  subs.process((textsubs_packetizer_c *)PTZR0);
+  m_subs.process((textsubs_packetizer_c *)PTZR0);
 
-  if (subs.empty()) {
+  if (m_subs.empty()) {
     flush_packetizers();
     return FILE_STATUS_DONE;
   }
@@ -275,10 +406,10 @@ int
 ssa_reader_c::get_progress() {
   int num_entries;
 
-  num_entries = subs.get_num_entries();
+  num_entries = m_subs.get_num_entries();
   if (num_entries == 0)
     return 100;
-  return 100 * subs.get_num_processed() / num_entries;
+  return 100 * m_subs.get_num_processed() / num_entries;
 }
 
 void

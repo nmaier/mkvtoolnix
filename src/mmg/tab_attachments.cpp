@@ -49,7 +49,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   uint32_t i;
   wxStaticBox *sb_top;
   wxStaticBoxSizer *siz_box_top, *siz_box_bottom;
- wxFlexGridSizer *siz_ddlists;
+  wxFlexGridSizer *siz_ddlists;
   wxBoxSizer *siz_buttons, *siz_all;
 
   sb_top = new wxStaticBox(this, wxID_STATIC, wxT("Attachments"));
@@ -157,28 +157,14 @@ void
 tab_attachments::add_attachment(const wxString &file_name) {
   mmg_attachment_t attch;
   wxString name, ext;
-  uint32_t i, j;
-  vector<wxString> extensions;
 
   attch.file_name = file_name;
   name = file_name.AfterLast(wxT(PSEP));
   ext = name.AfterLast(wxT('.'));
   name += wxString(wxT(" (")) + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
   lb_attachments->Append(name);
-  if (ext.Length() > 0) {
-    for (i = 0; (mime_types[i].name != NULL) && (attch.mime_type == wxT(""));
-         i++) {
-      if (mime_types[i].extensions[0] == 0)
-        continue;
-      // Don't use wxT(" ") here as it is ambiguous which split() to use then.
-      extensions = split(wxU(mime_types[i].extensions), wxU(" "));
-      for (j = 0; j < extensions.size(); j++)
-        if (!wxStricmp(extensions[j], ext)) {
-          attch.mime_type = wxU(mime_types[i].name);
-          break;
-        }
-    }
-  }
+  if (ext.Length() > 0)
+    attch.mime_type = wxU(guess_mime_type(wxMB(ext)).c_str());
   attch.style = 0;
 
   attachments.push_back(attch);
