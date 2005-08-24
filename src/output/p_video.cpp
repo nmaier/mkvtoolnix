@@ -585,51 +585,28 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
 
 void
 mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
-  int i, num_bframes, b_offset;
-  int64_t b_bref, b_fref;
+  int i;
 
   if ((available_timecodes.size() < queued_frames.size()) ||
       (available_durations.size() < queued_frames.size()))
     handle_missing_timecodes(end_of_file);
 
-  if ((2 <= queued_frames.size()) && (FRAME_TYPE_B != queued_frames[1].type))
-    b_offset = 1;
+  queued_frames[0].timecode = available_timecodes[queued_frames.size() - 1];
+  queued_frames[0].duration = available_durations[queued_frames.size() - 1];
+  queued_frames[0].fref = -1;
+  if (FRAME_TYPE_I == queued_frames[0].type)
+    queued_frames[0].bref = -1;
   else
-    b_offset = 0;
+    queued_frames[0].bref = last_i_p_frame;
 
-  num_bframes = 0;
-  b_fref = -1;
-  b_bref = last_i_p_frame;
-  for (i = 0; i < queued_frames.size(); ++i) {
-    if (FRAME_TYPE_I == queued_frames[i].type) {
-      queued_frames[i].timecode = available_timecodes[0];
-      queued_frames[i].duration = available_durations[0];
-      queued_frames[i].bref = -1;
-      queued_frames[i].fref = -1;
-      if (-1 == last_i_p_frame) {
-        last_i_p_frame = queued_frames[i].timecode;
-        b_bref = queued_frames[i].timecode;
-      }
-      b_fref = queued_frames[i].timecode;
-
-    } else if (FRAME_TYPE_P == queued_frames[i].type) {
-      queued_frames[i].timecode =
-        available_timecodes[queued_frames.size() - 1];
-      queued_frames[i].duration =
-        available_durations[queued_frames.size() - 1];
-      queued_frames[i].bref = last_i_p_frame;
-      last_i_p_frame = queued_frames[i].timecode;
-      b_fref = last_i_p_frame;
-      queued_frames[i].fref = -1;
-
-    } else {
-      queued_frames[i].timecode = available_timecodes[num_bframes + b_offset];
-      queued_frames[i].duration = available_durations[num_bframes + b_offset];
-      queued_frames[i].bref = b_bref;
-      queued_frames[i].fref = b_fref;
-      ++num_bframes;
-    }
+  for (i = 1; queued_frames.size() > i; ++i) {
+    queued_frames[i].timecode = available_timecodes[i - 1];
+    queued_frames[i].duration = available_durations[i - 1];
+    queued_frames[i].fref = queued_frames[0].timecode;
+    queued_frames[i].bref = last_i_p_frame;
   }
+
+  last_i_p_frame = queued_frames[0].timecode;
 
   for (i = 0; i < queued_frames.size(); ++i)
     add_packet(new packet_t(new memory_c(queued_frames[i].data,

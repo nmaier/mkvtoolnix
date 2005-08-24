@@ -1,5 +1,8 @@
 2005-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Native MPEG-4 ASP storage was still bugged:
+	timecodes were assigned twice, frames referenced themselves.
+
 	* mkvmerge: bug fix: Embedded fonts and pictures in a SSA/ASS file
 	are not discarded any longer. They are converted to Matroska
 	attachments instead. Other sections that were discarded are added
