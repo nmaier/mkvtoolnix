@@ -347,9 +347,8 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
   output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
 
-  if (input_is_native && !output_is_native)
-    mxerror("mkvmerge does not support muxing from native MPEG-4 to "
-            "AVI compatibility mode at the moment.\n");
+  if (input_is_native)
+    output_is_native = true;
 
   if (!output_is_native) {
     set_codec_id(MKV_V_MSCOMP);
@@ -586,6 +585,9 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
 void
 mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
   int i;
+
+  if (queued_frames.empty())
+    return;
 
   if ((available_timecodes.size() < queued_frames.size()) ||
       (available_durations.size() < queued_frames.size()))
