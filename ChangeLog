@@ -1,3 +1,13 @@
+2005-08-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If a Matroska file with a MPEG-4 part 2 video
+	track was muxed into a Matroska file and the source file did not
+	contain the display width/height elements for that track then the
+	aspect ratio was extracted from the video data itself which
+	clashes with the Matroska specs which say that display
+	width/height default to the pixel width/height if they're not
+	present.
+
 2005-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Native MPEG-4 ASP storage was still bugged:

@@ -202,6 +202,7 @@ mpeg1_2_video_packetizer_c(generic_reader_c *_reader,
   set_codec_id(mxsprintf("V_MPEG%d", _version));
   if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
     if ((_dwidth > 0) && (_dheight > 0)) {
+      aspect_ratio_extracted = true;
       ti.display_dimensions_given = true;
       ti.display_width = _dwidth;
       ti.display_height = _dheight;

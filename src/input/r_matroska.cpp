@@ -1060,14 +1060,16 @@ kax_reader_c::read_headers() {
               track->v_dwidth = uint64(*kv_dwidth);
               if (verbose > 1)
                 mxinfo(PFX "|   + Display width: %llu\n", track->v_dwidth);
-            }
+            } else
+              track->v_dwidth = track->v_width;
 
             kv_dheight = FINDFIRST(ktvideo, KaxVideoDisplayHeight);
             if (kv_dheight != NULL) {
               track->v_dheight = uint64(*kv_dheight);
               if (verbose > 1)
                 mxinfo(PFX "|   + Display height: %llu\n", track->v_dheight);
-            }
+            } else
+              track->v_dheight = track->v_height;
 
             // For older files.
             kv_frate = FINDFIRST(ktvideo, KaxVideoFrameRate);
@@ -2074,11 +2076,8 @@ kax_reader_c::identify() {
         if (tracks[i]->track_name != "")
           info += mxsprintf("track_name:%s ",
                             escape(tracks[i]->track_name).c_str());
-        if ((tracks[i]->v_dwidth != 0) && (tracks[i]->v_dheight != 0) &&
-            ((tracks[i]->v_dwidth != tracks[i]->v_width) ||
-             (tracks[i]->v_dheight != tracks[i]->v_height)))
-          info += mxsprintf("display_dimensions:%llux%llu ",
-                            tracks[i]->v_dwidth, tracks[i]->v_dheight);
+        info += mxsprintf("display_dimensions:%llux%llu ",
+                          tracks[i]->v_dwidth, tracks[i]->v_dheight);
         info += mxsprintf("default_track:%u ",
                           tracks[i]->default_track ? 1 : 0);
         info += "]";
