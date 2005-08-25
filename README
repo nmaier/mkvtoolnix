@@ -24,68 +24,88 @@ Moritz Bunkus <moritz@bunkus.org>
 Installation
 ------------
 
-Installation is not trivial but not impossible either. You first need
-libebml and libmatroska.
+If you want to compile the tools yourself then you must first decide
+if you want to use a 'proper' release version or the current
+development version. As both Matroska and MKVToolNix are under heavy
+development there might be features available in the Subversion
+repository that are not available in the releases. On the other hand
+the Subversion repository version might not even compile.
 
-If you run Debian/unstable on a x86 then you can get binary
-packages from my apt repository. Just add the following lines to
-/etc/apt/sources.lst:
+* Requirements
 
-deb http://www.bunkus.org/debian/unstable/ ./
-deb-src http://www.bunkus.org/debian/unstable/ ./
+In order to compile MKVToolNix you need a couple of libraries. Most of
+them should be available pre-compiled for your distribution. The
+libraries you absolutely need are:
 
-Run 'apt-get update' and 'apt-get install libebml-dev
-libmatroska-dev mkvtoolnix'.
+- libebml and libmatroska for low-level access to Matroska files.
+  Instructions on how to compile them are a bit further down in this
+  file.
+- expat ( http://expat.sourceforge.net/ ) -- a light-weight XML
+  parser library
+- libOgg ( http://downloads.xiph.org/releases/ogg/ ) and libVorbis
+  ( http://downloads.xiph.org/releases/vorbis/ ) for access to Ogg/OGM
+  files and Vorbis support
+- zlib ( http://www.zlib.net/ ) -- a compression library
 
-If you want to compile from source then get the newest versions of
-libebml and libmatroska. Normally the 'latest official release' will
-work with the latest release of mkvtoolnix. At the time of writing
-these versions where:
-- libebml 0.6.2:
-http://matroska.free.fr/downloads/libebml/libebml-0.6.2.tar.gz
-- libmatroska 0.6.1:
-http://matroska.free.fr/downloads/libmatroska/libmatroska-0.5.1.tar.gz
+Other libraries are optional and only limit the features that are
+built. These include:
 
-Alternatively you can get the two libraries via CVS:
+- wxWidgets ( http://www.wxwidgets.org/ ) -- a cross-platform GUI
+  toolkit. You need this if you want to use mmg (the mkvmerge GUI) or
+  mkvinfo's GUI.
+- libFLAC ( http://downloads.xiph.org/releases/flac/ ) for FLAC
+  support (Free Lossless Audio Codec)
+- lzo ( http://www.oberhumer.com/opensource/lzo/ ) and bzip2 (
+  http://www.bzip.org/ ) are compression libraries. These are the
+  least important libraries as almost no application supports Matroska
+  content that is compressed with either of these libs. The
+  aforementioned zlib is what every program supports.
 
-cvs -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska login
+* Building libmatroska and libebml
 
-Just hit the enter key if you're prompted for a password. Now check out
-the sources themselves:
+Start with the two libraries. Either get libebml 0.7.5 from
+http://dl.matroska.org/downloads/libebml/ and libmatroska 0.7.7 from
+http://dl.matroska.org/downloads/libmatroska/ or a fresh copy from the
+Subversion repository:
 
-cvs -z3 -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska \
-  co libmatroska
-cvs -z3 -d:pserver:anonymous@cvs.corecodec.org:/cvsroot/matroska \
-  co libebml
+svn co https://svn.matroska.org/svn/matroska/trunk/libebml
+svn co https://svn.matroska.org/svn/matroska/trunk/libmatroska
 
-Change to libebml/make/linux and run 'make'. Change to
-libmatroska/make/linux. Once more run 'make'. As root run 'make
-install' in both directories. This will install the libraries into
-/usr/local/lib and the header files into /usr/local/include/ebml and
-/usr/local/include/matroska respectively.
+Change to "libebml/make/linux" and run "make staticlib". If you have
+root-access then run "make install_staticlib" as "root" in order to
+install the files. Change to "libmatroska/make/linux". Once more run
+"make staticlib". If you have root-access then run "make
+install_staticlib" as "root" in order to install the files.
 
-After you've compiled the two libraries you can now compile MkvToolNix
-itself. If you want to use the GUI for mkvinfo then you also need
-wxWindows v2.4.0 or later (http://www.wxwindows.org/). If configure
-finds the wx-config script then support for the GUI will be enabled.
+* Building MKVtoolNix
 
-bunzip2 < mkvtoolnix-...tar.bz2 | tar xvf -
-cd mkvtoolnix-...
-./configure
-make
-make install
+Either download the release 1.5.5 from
+http://www.bunkus.org/videotools/mkvtoolnix/sources/mkvtoolnix-1.5.5.tar.bz2
+and unpack it or get a fresh copy from my Subversion repository.  All
+you need for Subversion repository access is to download a Subversion
+client from the Subversion homepage at http://subversion.tigris.org/ .
+There are clients for both Unix/Linux and Windows. It basically works
+like CVS. So the typical way to check out a fresh copy looks like
+this:
 
-The last step must be run as root and is optional.
+svn co https://svn.bunkus.org/mosu/trunk/prog/video/mkvtoolnix
 
-If the configure script cannot find the EBML and Matroska headers,
-then you'll have to manually point it to their locations:
+    Additional step if you're using the development version from the
+    Subversion respository:
 
-./configure --with-matroska-include=/where/i/put/libmatroska \
-  --with-matroska-lib=/where/i/put/libmatroska/make/linux \
-  --with-ebml-include=/where/i/put/libebml \
-  --with-ebml-lib=/where/i/put/libebml/make/linux
+    Change to the MKVtoolNix directory and run "./autogen.sh" which
+    will generate the "configure" script.
 
-Now run 'make' and 'make install'.
+If you have run "make install" for both libraries then "configure"
+should automatically find the libraries' position. Otherwise you need
+to tell "configure" where the "libebml" and "libmatroska" include and
+library files are:
+
+./configure \
+  --with-extra-includes=/where/i/put/libebml\;/where/i/put/libmatroska \
+  --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linue
+
+Now run "make" and, as "root", "make install".
 
 Example
 -------
