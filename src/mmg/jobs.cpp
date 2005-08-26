@@ -148,7 +148,7 @@ job_run_dialog::start_next_job() {
   ndx = jobs_to_start[current_job];
   st_jobs->SetLabel(wxString::Format(wxT("Processing job %d/%d"),
                                      current_job + 1,
-                                     jobs_to_start.size()));
+                                     (int)jobs_to_start.size()));
   st_current->SetLabel(wxString::Format(wxT("Current job ID %d:"),
                                         jobs[ndx].id));
 

@@ -38,6 +38,8 @@ parse_aac_adif_header(unsigned char *buf,
   int channels;
   bit_cursor_c bc(buf, size);
 
+  profile = 0;
+  sfreq_index = 0;
   eob = false;
   comment_field_bytes = 0;
   channels = 0;

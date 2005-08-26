@@ -560,7 +560,7 @@ tab_chapters::add_recursively(wxTreeItemId &parent,
     e = master[i];
     if (EbmlId(*e) == KaxEditionEntry::ClassInfos.GlobalId) {
       s.Printf(wxT("Edition %d"),
-               tc_chapters->GetChildrenCount(tid_root, false) + 1);
+               (int)tc_chapters->GetChildrenCount(tid_root, false) + 1);
       eentry = static_cast<KaxEditionEntry *>(e);
       this_item =
         tc_chapters->AppendItem(parent, s, -1, -1,
@@ -959,7 +959,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
       create_unique_uint32(UNIQUE_EDITION_IDS);
     eentry->PushElement(*euid);
     d = new chapter_node_data_c(eentry);
-    s.Printf(wxT("EditionEntry %u"), chapters->ListSize());
+    s.Printf(wxT("EditionEntry %u"), (unsigned int)chapters->ListSize());
     id = tc_chapters->AppendItem(tid_root, s, -1, -1, d);
   }
 
@@ -1039,7 +1039,7 @@ tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
     eentry = new KaxEditionEntry;
     chapters->PushElement(*eentry);
     d = new chapter_node_data_c(eentry);
-    s.Printf(wxT("EditionEntry %u"), chapters->ListSize());
+    s.Printf(wxT("EditionEntry %u"), (unsigned int)chapters->ListSize());
     id = tc_chapters->AppendItem(tid_root, s, -1, -1, d);
   }
   if (d->is_atom)

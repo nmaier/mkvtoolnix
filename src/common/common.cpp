@@ -1046,6 +1046,7 @@ parse_int(const char *s,
   int64_t tmp;
   bool result;
 
+  tmp = 0;
   result = parse_int(s, tmp);
   value = tmp;
 
