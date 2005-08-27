@@ -20,6 +20,7 @@
 #include "os.h"
 
 #include <deque>
+#include <map>
 #include <vector>
 
 #include <matroska/KaxAttachments.h>
@@ -73,16 +74,8 @@ enum file_status_e {
 struct audio_sync_t {
   int64_t displacement;
   double linear;
-  int64_t id;
 
-  audio_sync_t(): displacement(0), linear(0.0), id(0) {}
-};
-
-struct packet_delay_t {
-  int64_t delay;
-  int64_t id;
-
-  packet_delay_t(): delay(0), id(0) {}
+  audio_sync_t(): displacement(0), linear(0.0) {}
 };
 
 enum default_track_priority_e {
@@ -95,96 +88,19 @@ enum default_track_priority_e {
 #define FMT_FN "'%s': "
 #define FMT_TID "'%s' track %lld: "
 
-struct cue_creation_t {
-  cue_strategy_e cues;
-  int64_t id;
-
-  cue_creation_t(): cues(CUE_STRATEGY_NONE), id(0) {}
-};
-
-struct compression_method_t {
-  compression_method_e method;
-  int64_t id;
-
-  compression_method_t(): method(COMPRESSION_UNSPECIFIED), id(0) {}
-};
-
-struct language_t {
-  string language;
-  int64_t id;
-
-  language_t(): id(0) {}
-};
-
-struct track_name_t {
-  string name;
-  int64_t id;
-
-  track_name_t(): id(0) {}
-  track_name_t(const string &_name, int64_t _id): name(_name), id(_id) {}
-};
-
-struct ext_timecodes_t {
-  string ext_timecodes;
-  int64_t id;
-
-  ext_timecodes_t(): id(0) {}
-  ext_timecodes_t(const string &_ext_timecodes, int64_t _id):
-    ext_timecodes(_ext_timecodes), id(_id) {}
-};
-
-struct subtitle_charset_t {
-  string charset;
-  int64_t id;
-
-  subtitle_charset_t(): id(0) {}
-};
-
-struct tags_t {
-  string file_name;
-  int64_t id;
-
-  tags_t(): id(0) {}
-};
-
 struct display_properties_t {
   float aspect_ratio;
   bool ar_factor;
   int width, height;
-  int64_t id;
 
   display_properties_t(): aspect_ratio(0), ar_factor(false), width(0),
-                          height(0), id(0) {}
-};
-
-typedef struct fourcc_t {
-  char fourcc[5];
-  int64_t id;
-
-  fourcc_t(): id(0) {
-    memset(fourcc, 0, 5);
-  }
+                          height(0) {}
 };
 
 struct pixel_crop_t {
   int left, top, right, bottom;
-  int64_t id;
 
-  pixel_crop_t(): left(0), top(0), right(0), bottom(0), id(0) {}
-};
-
-struct max_blockadd_id_t {
-  int64_t max_blockadd_id;
-  int64_t id;
-
-  max_blockadd_id_t(): max_blockadd_id(0), id(0) {}
-};
-
-struct default_duration_t {
-  int64_t default_duration;
-  int64_t id;
-
-  default_duration_t(): default_duration(0), id(0) {}
+  pixel_crop_t(): left(0), top(0), right(0), bottom(0) {}
 };
 
 class track_info_c {
@@ -203,51 +119,52 @@ public:
   unsigned char *private_data;
   int private_size;
 
-  vector<fourcc_t> all_fourccs;
-  char fourcc[5];
-  vector<display_properties_t> display_properties;
+  map<int64_t, string> all_fourccs;
+  string fourcc;
+  map<int64_t, display_properties_t> display_properties;
   float aspect_ratio;
   int display_width, display_height;
   bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
 
-  vector<audio_sync_t> audio_syncs; // As given on the command line
+  map<int64_t, audio_sync_t> audio_syncs; // As given on the command line
   audio_sync_t async;           // For this very track
 
-  vector<cue_creation_t> cue_creations; // As given on the command line
+  map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
   cue_strategy_e cues;          // For this very track
 
   vector<int64_t> default_track_flags; // As given on the command line
   bool default_track;           // For this very track
 
-  vector<language_t> languages; // As given on the command line
+  map<int64_t, string> languages; // As given on the command line
   string language;              // For this very track
 
-  vector<subtitle_charset_t> sub_charsets; // As given on the command line
+  map<int64_t, string> sub_charsets; // As given on the command line
   string sub_charset;           // For this very track
 
-  vector<tags_t> all_tags;     // As given on the command line
-  int tags_ptr;                 // For this very track
+  map<int64_t, string> all_tags;     // As given on the command line
+  string tags_file_name;        // For this very track
   KaxTags *tags;                // For this very track
 
   vector<int64_t> aac_is_sbr;  // For AAC+/HE-AAC/SBR
 
-  vector<packet_delay_t> packet_delays; // As given on the command line
+  map<int64_t, int64_t> packet_delays; // As given on the command line
   int64_t packet_delay;         // For this very track
 
-  vector<compression_method_t> compression_list; // As given on the cmd line
+  map<int64_t, compression_method_e> compression_list; // As given on the cmd line
   compression_method_e compression; // For this very track
 
-  vector<track_name_t> track_names; // As given on the command line
+  map<int64_t, string> track_names; // As given on the command line
   string track_name;            // For this very track
 
-  vector<ext_timecodes_t> all_ext_timecodes; // As given on the command line
+  map<int64_t, string> all_ext_timecodes; // As given on the command line
   string ext_timecodes;         // For this very track
 
-  vector<pixel_crop_t> pixel_crop_list; // As given on the command line
+  map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
   pixel_crop_t pixel_cropping;  // For this very track
+  bool pixel_cropping_specified;
 
-  vector<default_duration_t> default_durations; // As given on the command line
-  vector<max_blockadd_id_t> max_blockadd_ids; // As given on the command line
+  map<int64_t, int64_t> default_durations; // As given on the command line
+  map<int64_t, int> max_blockadd_ids; // As given on the command line
 
   bool no_chapters, no_attachments, no_tags;
 

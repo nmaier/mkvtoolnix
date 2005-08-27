@@ -54,7 +54,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_c &_ti)
   throw(error_c): ti(_ti) {
   int i;
-  bool found;
 
 #ifdef DEBUG
   debug_facility.add_packetizer(this);
@@ -78,125 +77,93 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   timecode_factory_application_mode = TFA_AUTOMATIC;
 
   // Let's see if the user specified audio sync for this track.
-  found = false;
-  for (i = 0; i < ti.audio_syncs.size(); i++) {
-    audio_sync_t &as = ti.audio_syncs[i];
-    if ((as.id == ti.id) || (as.id == -1)) { // -1 == all tracks
-      found = true;
-      ti.async = as;
-      break;
-    }
-  }
-  if (!found && (ti.async.linear == 0.0)) {
+  if (map_has_key(ti.audio_syncs, ti.id))
+    ti.async = ti.audio_syncs[ti.id];
+  else if (map_has_key(ti.audio_syncs, -1))
+    ti.async = ti.audio_syncs[-1];
+  if (0.0 == ti.async.linear)
     ti.async.linear = 1.0;
-    ti.async.displacement = 0;
-  } else
-    ti.async.displacement *= (int64_t)1000000; // ms to ns
+  ti.async.displacement *= (int64_t)1000000; // ms to ns
   initial_displacement = ti.async.displacement;
   ti.async.displacement = 0;
 
   // Let's see if the user has specified a delay for this track.
-  ti.packet_delay = 0;
-  for (i = 0; i < ti.packet_delays.size(); i++) {
-    packet_delay_t &pd = ti.packet_delays[i];
-    if ((pd.id == ti.id) || (pd.id == -1)) { // -1 == all tracks
-      ti.packet_delay = pd.delay;
-      break;
-    }
-  }
+  if (map_has_key(ti.packet_delays, ti.id))
+    ti.packet_delay = ti.packet_delays[ti.id];
+  else if (map_has_key(ti.packet_delays, -1))
+    ti.packet_delay = ti.packet_delays[-1];
 
   // Let's see if the user has specified which cues he wants for this track.
-  ti.cues = CUE_STRATEGY_UNSPECIFIED;
-  for (i = 0; i < ti.cue_creations.size(); i++) {
-    cue_creation_t &cc = ti.cue_creations[i];
-    if ((cc.id == ti.id) || (cc.id == -1)) { // -1 == all tracks
-      ti.cues = cc.cues;
-      break;
-    }
-  }
+  if (map_has_key(ti.cue_creations, ti.id))
+    ti.cues = ti.cue_creations[ti.id];
+  else if (map_has_key(ti.cue_creations, -1))
+    ti.cues = ti.cue_creations[-1];
 
   // Let's see if the user has given a default track flag for this track.
-  for (i = 0; i < ti.default_track_flags.size(); i++) {
-    int64_t id = ti.default_track_flags[i];
-    if ((id == ti.id) || (id == -1)) { // -1 == all tracks
+  for (i = 0; ti.default_track_flags.size() > i; ++i)
+    if ((-1 == ti.default_track_flags[i]) ||
+        (ti.id == ti.default_track_flags[i])) {
       ti.default_track = true;
       break;
     }
-  }
 
   // Let's see if the user has specified a language for this track.
-  for (i = 0; i < ti.languages.size(); i++) {
-    language_t &lang = ti.languages[i];
-    if ((lang.id == ti.id) || (lang.id == -1)) { // -1 == all tracks
-      ti.language = lang.language;
-      break;
-    }
-  }
+  if (map_has_key(ti.languages, ti.id))
+    ti.language = ti.languages[ti.id];
+  else if (map_has_key(ti.languages, -1))
+    ti.language = ti.languages[-1];
 
   // Let's see if the user has specified a sub charset for this track.
-  for (i = 0; i < ti.sub_charsets.size(); i++) {
-    subtitle_charset_t &sc = ti.sub_charsets[i];
-    if ((sc.id == ti.id) || (sc.id == -1)) { // -1 == all tracks
-      ti.sub_charset = sc.charset;
-      break;
-    }
-  }
+  if (map_has_key(ti.sub_charsets, ti.id))
+    ti.sub_charset = ti.sub_charsets[ti.id];
+  else if (map_has_key(ti.sub_charsets, -1))
+    ti.sub_charset = ti.sub_charsets[-1];
 
   // Let's see if the user has specified a sub charset for this track.
-  for (i = 0; i < ti.all_tags.size(); i++) {
-    tags_t &tags = ti.all_tags[i];
-    if ((tags.id == ti.id) || (tags.id == -1)) { // -1 == all tracks
-      ti.tags_ptr = i;
-      if (ti.tags != NULL)
-        delete ti.tags;
-      ti.tags = new KaxTags;
-      parse_xml_tags(ti.all_tags[ti.tags_ptr].file_name, ti.tags);
-      break;
-    }
+  if (map_has_key(ti.all_tags, ti.id))
+    ti.tags_file_name = ti.all_tags[ti.id];
+  else if (map_has_key(ti.all_tags, -1))
+    ti.tags_file_name = ti.all_tags[-1];
+  if (ti.tags_file_name != "") {
+    ti.tags = new KaxTags;
+    parse_xml_tags(ti.tags_file_name, ti.tags);
   }
 
   // Let's see if the user has specified how this track should be compressed.
-  ti.compression = COMPRESSION_UNSPECIFIED;
-  for (i = 0; i < ti.compression_list.size(); i++) {
-    compression_method_t &cm = ti.compression_list[i];
-    if ((cm.id == ti.id) || (cm.id == -1)) { // -1 == all tracks
-      ti.compression = cm.method;
-      break;
-    }
-  }
+  if (map_has_key(ti.compression_list, ti.id))
+    ti.compression = ti.compression_list[ti.id];
+  else if (map_has_key(ti.compression_list, -1))
+    ti.compression = ti.compression_list[-1];
 
   // Let's see if the user has specified a name for this track.
-  for (i = 0; i < ti.track_names.size(); i++) {
-    track_name_t &tn = ti.track_names[i];
-    if ((tn.id == ti.id) || (tn.id == -1)) { // -1 == all tracks
-      ti.track_name = tn.name;
-      break;
-    }
-  }
+  if (map_has_key(ti.track_names, ti.id))
+    ti.track_name = ti.track_names[ti.id];
+  else if (map_has_key(ti.track_names, -1))
+    ti.track_name = ti.track_names[-1];
 
   // Let's see if the user has specified external timecodes for this track.
-  for (i = 0; i < ti.all_ext_timecodes.size(); i++) {
-    ext_timecodes_t &et = ti.all_ext_timecodes[i];
-    if ((et.id == ti.id) || (et.id == -1)) { // -1 == all tracks
-      ti.ext_timecodes = et.ext_timecodes;
-      break;
-    }
-  }
+  if (map_has_key(ti.all_ext_timecodes, ti.id))
+    ti.ext_timecodes = ti.all_ext_timecodes[ti.id];
+  else if (map_has_key(ti.all_ext_timecodes, -1))
+    ti.ext_timecodes = ti.all_ext_timecodes[-1];
 
   // Let's see if the user has specified an aspect ratio or display dimensions
   // for this track.
-  for (i = 0; i < ti.display_properties.size(); i++) {
+  i = -2;
+  if (map_has_key(ti.display_properties, ti.id))
+    i = ti.id;
+  else if (map_has_key(ti.display_properties, -1))
+    i = -1;
+  if (-2 != i) {
     display_properties_t &dprop = ti.display_properties[i];
-    if ((dprop.id == ti.id) || (dprop.id == -1)) { // -1 == all tracks
-      if (dprop.aspect_ratio < 0) {
-        ti.display_width = dprop.width;
-        ti.display_height = dprop.height;
-        ti.display_dimensions_given = true;
-      } else {
-        ti.aspect_ratio = dprop.aspect_ratio;
-        ti.aspect_ratio_given = true;
-        ti.aspect_ratio_is_factor = dprop.ar_factor;
-      }
+    if (dprop.aspect_ratio < 0) {
+      ti.display_width = dprop.width;
+      ti.display_height = dprop.height;
+      ti.display_dimensions_given = true;
+    } else {
+      ti.aspect_ratio = dprop.aspect_ratio;
+      ti.aspect_ratio_given = true;
+      ti.aspect_ratio_is_factor = dprop.ar_factor;
     }
   }
   if (ti.aspect_ratio_given && ti.display_dimensions_given)
@@ -205,49 +172,37 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
             _("Aspect ratio factor") : _("Aspect ratio"), ti.id,
             ti.fname.c_str());
 
-  memset(ti.fourcc, 0, 5);
   // Let's see if the user has specified a FourCC for this track.
-  for (i = 0; i < ti.all_fourccs.size(); i++) {
-    fourcc_t &fourcc = ti.all_fourccs[i];
-    if ((fourcc.id == ti.id) || (fourcc.id == -1)) { // -1 == all tracks
-      memcpy(ti.fourcc, fourcc.fourcc, 4);
-      ti.fourcc[4] = 0;
-      break;
-    }
-  }
+  if (map_has_key(ti.all_fourccs, ti.id))
+    ti.fourcc = ti.all_fourccs[ti.id];
+  else if (map_has_key(ti.all_fourccs, -1))
+    ti.fourcc = ti.all_fourccs[-1];
 
-  memset(&ti.pixel_cropping, 0, sizeof(pixel_crop_t));
-  ti.pixel_cropping.id = -2;
   // Let's see if the user has specified a FourCC for this track.
-  for (i = 0; i < ti.pixel_crop_list.size(); i++) {
-    pixel_crop_t &cropping = ti.pixel_crop_list[i];
-    if ((cropping.id == ti.id) || (cropping.id == -1)) { // -1 == all tracks
-      ti.pixel_cropping = cropping;
-      break;
-    }
-  }
+  ti.pixel_cropping_specified = true;
+  if (map_has_key(ti.pixel_crop_list, ti.id))
+    ti.pixel_cropping = ti.pixel_crop_list[ti.id];
+  else if (map_has_key(ti.pixel_crop_list, -1))
+    ti.pixel_cropping = ti.pixel_crop_list[-1];
+  else
+    ti.pixel_cropping_specified = false;
 
   // Let's see if the user has specified a default duration for this track.
   htrack_default_duration = -1;
-  default_duration_forced = false;
-  for (i = 0; i < ti.default_durations.size(); i++) {
-    default_duration_t &dd = ti.default_durations[i];
-    if ((dd.id == ti.id) || (dd.id == -1)) { // -1 == all tracks
-      htrack_default_duration = dd.default_duration;
-      default_duration_forced = true;
-      break;
-    }
-  }
+  default_duration_forced = true;
+  if (map_has_key(ti.default_durations, ti.id))
+    htrack_default_duration = ti.default_durations[ti.id];
+  else if (map_has_key(ti.default_durations, -1))
+    htrack_default_duration = ti.default_durations[-1];
+  else
+    default_duration_forced = false;
 
   // Let's see if the user has set a max_block_add_id
   htrack_max_add_block_ids = -1;
-  for (i = 0; i < ti.max_blockadd_ids.size(); i++) {
-    max_blockadd_id_t &mbi = ti.max_blockadd_ids[i];
-    if ((mbi.id == ti.id) || (mbi.id == -1)) { // -1 == all tracks
-      htrack_max_add_block_ids = mbi.max_blockadd_id;
-      break;
-    }
-  }
+  if (map_has_key(ti.max_blockadd_ids, ti.id))
+    htrack_max_add_block_ids = ti.max_blockadd_ids[ti.id];
+  else if (map_has_key(ti.max_blockadd_ids, -1))
+    htrack_max_add_block_ids = ti.max_blockadd_ids[-1];
 
   // Set default header values to 'unset'.
   if (!reader->appending)
@@ -323,8 +278,8 @@ generic_packetizer_c::set_tag_track_uid() {
     if (!tag->CheckMandatory())
       mxerror(_("The tags in '%s' could not be parsed: some mandatory "
                 "elements are missing.\n"),
-              ti.tags_ptr >= 0 ? ti.all_tags[ti.tags_ptr].file_name.c_str()
-              : ti.fname.c_str());
+              ti.tags_file_name != "" ? ti.tags_file_name.c_str():
+              ti.fname.c_str());
   }
 }
 
@@ -554,7 +509,6 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
                                                int top,
                                                int right,
                                                int bottom) {
-  ti.pixel_cropping.id = 0;
   ti.pixel_cropping.left = left;
   ti.pixel_cropping.top = top;
   ti.pixel_cropping.right = right;
@@ -726,7 +680,7 @@ generic_packetizer_c::set_headers() {
       dheight.SetDefaultSize(4);
       ti.display_height = disp_height;
 
-      if (ti.pixel_cropping.id != -2) {
+      if (ti.pixel_cropping_specified) {
         *(static_cast<EbmlUInteger *>
           (&GetChild<KaxVideoPixelCropLeft>(video))) =
           ti.pixel_cropping.left;
@@ -1232,16 +1186,16 @@ generic_packetizer_c::flush() {
 
 //--------------------------------------------------------------------
 
-#define add_all_requested_track_ids(container) \
-  for (i = 0; i < ti.container.size(); i++) \
-    add_requested_track_id(ti.container[i].id);
+#define add_all_requested_track_ids(type, container) \
+  for (map<int64_t, type>::const_iterator i = ti.container.begin(); \
+       ti.container.end() != i; ++i) \
+    add_requested_track_id(i->first);
 #define add_all_requested_track_ids2(container) \
-  for (i = 0; i < ti.container.size(); i++) \
+  for (int i = 0; i < ti.container.size(); i++) \
     add_requested_track_id(ti.container[i]);
 
 generic_reader_c::generic_reader_c(track_info_c &_ti):
   ti(_ti) {
-  int i;
 
   max_timecode_seen = 0;
   appending = false;
@@ -1255,20 +1209,20 @@ generic_reader_c::generic_reader_c(track_info_c &_ti):
   add_all_requested_track_ids2(vtracks);
   add_all_requested_track_ids2(stracks);
   add_all_requested_track_ids2(btracks);
-  add_all_requested_track_ids(all_fourccs);
-  add_all_requested_track_ids(display_properties);
-  add_all_requested_track_ids(audio_syncs);
-  add_all_requested_track_ids(cue_creations);
+  add_all_requested_track_ids(string, all_fourccs);
+  add_all_requested_track_ids(display_properties_t, display_properties);
+  add_all_requested_track_ids(audio_sync_t, audio_syncs);
+  add_all_requested_track_ids(cue_strategy_e, cue_creations);
   add_all_requested_track_ids2(default_track_flags);
-  add_all_requested_track_ids(languages);
-  add_all_requested_track_ids(sub_charsets);
-  add_all_requested_track_ids(all_tags);
+  add_all_requested_track_ids(string, languages);
+  add_all_requested_track_ids(string, sub_charsets);
+  add_all_requested_track_ids(string, all_tags);
   add_all_requested_track_ids2(aac_is_sbr);
-  add_all_requested_track_ids(packet_delays);
-  add_all_requested_track_ids(compression_list);
-  add_all_requested_track_ids(track_names);
-  add_all_requested_track_ids(all_ext_timecodes);
-  add_all_requested_track_ids(pixel_crop_list);
+  add_all_requested_track_ids(int64_t, packet_delays);
+  add_all_requested_track_ids(compression_method_e, compression_list);
+  add_all_requested_track_ids(string, track_names);
+  add_all_requested_track_ids(string, all_ext_timecodes);
+  add_all_requested_track_ids(pixel_crop_t, pixel_crop_list);
 }
 
 generic_reader_c::~generic_reader_c() {
@@ -1445,22 +1399,20 @@ track_info_c::track_info_c():
   aspect_ratio_given(false),
   aspect_ratio_is_factor(false),
   display_dimensions_given(false),
-  cues(CUE_STRATEGY_NONE),
+  cues(CUE_STRATEGY_UNSPECIFIED),
   default_track(false),
-  tags_ptr(-1),
   tags(NULL),
   packet_delay(0),
-  compression(COMPRESSION_NONE),
+  compression(COMPRESSION_UNSPECIFIED),
+  pixel_cropping_specified(false),
   no_chapters(false),
   no_attachments(false),
   no_tags(false),
   avi_audio_sync_enabled(false) {
 
-  memset(fourcc, 0, 5);
   async.linear = 1.0;
   async.displacement = 0;
   memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
-  pixel_cropping.id = -2;
 }
 
 void
@@ -1495,7 +1447,6 @@ track_info_c::operator =(const track_info_c &src) {
   private_data = (unsigned char *)safememdup(src.private_data, private_size);
 
   all_fourccs = src.all_fourccs;
-  memcpy(fourcc, src.fourcc, 5);
 
   display_properties = src.display_properties;
   aspect_ratio = src.aspect_ratio;
@@ -1519,7 +1470,7 @@ track_info_c::operator =(const track_info_c &src) {
   sub_charset = src.sub_charset;
 
   all_tags = src.all_tags;
-  tags_ptr = src.tags_ptr;
+  tags_file_name = src.tags_file_name;
   if (src.tags != NULL)
     tags = static_cast<KaxTags *>(src.tags->Clone());
   else
@@ -1541,6 +1492,7 @@ track_info_c::operator =(const track_info_c &src) {
 
   pixel_crop_list = src.pixel_crop_list;
   pixel_cropping = src.pixel_cropping;
+  pixel_cropping_specified = src.pixel_cropping_specified;
 
   no_chapters = src.no_chapters;
   no_attachments = src.no_attachments;

@@ -54,9 +54,6 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   m_is_ass(false) {
 
   auto_ptr<mm_text_io_c> io;
-  bool sub_charset_found;
-  int i;
-
 
   try {
     io = auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(ti.fname)));
@@ -67,20 +64,14 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   if (!ssa_reader_c::probe_file(io.get(), 0))
     throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
 
-  sub_charset_found = false;
-  for (i = 0; i < ti.sub_charsets.size(); i++)
-    if ((ti.sub_charsets[i].id == 0) || (ti.sub_charsets[i].id == -1)) {
-      sub_charset_found = true;
-      m_cc_utf8 = utf8_init(ti.sub_charsets[i].charset);
-      break;
-    }
-
-  if (!sub_charset_found) {
-    if (io->get_byte_order() != BO_NONE)
-      m_cc_utf8 = utf8_init("UTF-8");
-    else
-      m_cc_utf8 = utf8_init(ti.sub_charset);
-  }
+  if (map_has_key(ti.sub_charsets, 0))
+    m_cc_utf8 = utf8_init(ti.sub_charsets[0]);
+  else if (map_has_key(ti.sub_charsets, -1))
+    m_cc_utf8 = utf8_init(ti.sub_charsets[-1]);
+  else if (io->get_byte_order() != BO_NONE)
+    m_cc_utf8 = utf8_init("UTF-8");
+  else
+    m_cc_utf8 = cc_local_utf8;
 
   parse_file(io.get());
 

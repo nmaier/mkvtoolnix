@@ -1338,7 +1338,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
       if (t->v_dheight != 0)
         ptzr->set_video_display_height(t->v_dheight);
     }
-    if ((ptzr->ti.pixel_cropping.id == -2) &&
+    if (!ptzr->ti.pixel_cropping_specified &&
         ((t->v_pcleft > 0) || (t->v_pctop > 0) ||
          (t->v_pcright > 0) || (t->v_pcbottom > 0)))
       ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
@@ -1488,7 +1488,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
             if (t->v_dheight != 0)
               PTZR(t->ptzr)->set_video_display_height(t->v_dheight);
           }
-          if ((PTZR(t->ptzr)->ti.pixel_cropping.id == -2) &&
+          if (!PTZR(t->ptzr)->ti.pixel_cropping_specified &&
               ((t->v_pcleft > 0) || (t->v_pctop > 0) ||
                (t->v_pcright > 0) || (t->v_pcbottom > 0)))
             PTZR(t->ptzr)->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,

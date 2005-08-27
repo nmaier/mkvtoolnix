@@ -287,6 +287,7 @@ extern int MTX_DLL_API verbose;
 #define mxfind(value, cont) std::find(cont.begin(), cont.end(), value)
 #define mxfind2(it, value, cont) \
   ((id = std::find((cont).begin(), (cont).end(), value)) != (cont).end())
+#define map_has_key(m, k) ((m).end() != (m).find(k))
 
 class MTX_DLL_API bitvalue_c {
 private:
