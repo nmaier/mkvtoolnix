@@ -151,14 +151,15 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   // Next find the block duration if there is one.
   kduration = FINDFIRST(&blockgroup, KaxBlockDuration);
   if (NULL == kduration)
-    duration = extractor->m_default_duration;
+    duration = extractor->m_default_duration * block->NumberFrames();
   else
     duration = uint64(*kduration) * tc_scale;
 
   // Pass the block to the extractor.
   for (i = 0; block->NumberFrames() > i; ++i)
-    extractor->m_timecodes.push_back(block->GlobalTimecode() + i *
-                                     (duration / block->NumberFrames()));
+    extractor->m_timecodes.push_back((int64_t)(block->GlobalTimecode() + i *
+                                               (double)duration /
+                                               block->NumberFrames()));
 }
 
 void

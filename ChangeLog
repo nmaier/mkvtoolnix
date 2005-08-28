@@ -1,3 +1,8 @@
+2005-08-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: The extracted timecodes were wrong for
+	blocks with laced frames.
+
 2005-08-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: If a Matroska file with a MPEG-4 part 2 video
