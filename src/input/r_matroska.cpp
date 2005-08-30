@@ -2076,8 +2076,9 @@ kax_reader_c::identify() {
         if (tracks[i]->track_name != "")
           info += mxsprintf("track_name:%s ",
                             escape(tracks[i]->track_name).c_str());
-        info += mxsprintf("display_dimensions:%llux%llu ",
-                          tracks[i]->v_dwidth, tracks[i]->v_dheight);
+        if ((0 != tracks[i]->v_dwidth) && (0 != tracks[i]->v_dheight))
+          info += mxsprintf("display_dimensions:%llux%llu ",
+                            tracks[i]->v_dwidth, tracks[i]->v_dheight);
         info += mxsprintf("default_track:%u ",
                           tracks[i]->default_track ? 1 : 0);
         info += "]";
