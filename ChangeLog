@@ -1,7 +1,5 @@
 2005-08-30  Moritz Bunkus  <moritz@bunkus.org>
 
-	* Released v1.5.6.
-
 	* mkvmerge: bug fix: Display dimensions were reported for all
 	tracks, even if they weren't present. In that case they allegedly
 	were "0x0" which caused mmg to add "--display-dimensions ...:0x0"
