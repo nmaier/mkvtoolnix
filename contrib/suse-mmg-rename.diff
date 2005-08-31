@@ -1,0 +1,38 @@
+--- mkvtoolnix-1.4.0/Makefile.in	2005-02-11 21:38:00.000000000 +0100
++++ mkvtoolnix-1.4.0-mmg-renamed/Makefile.in	2005-02-26 16:05:51.000000000 +0100
+@@ -123,8 +123,8 @@
+ 		src/mkvextract@EXEEXT@ src/base64tool@EXEEXT@
+ MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1 doc/base64tool.1
+ ifeq (yes,$(USE_WXWINDOWS))
+-APPLICATIONS += src/mmg/mmg@EXEEXT@
+-MANPAGES += doc/mmg.1
++APPLICATIONS += src/mmg/mkvmerge-gui@EXEEXT@
++MANPAGES += doc/mkvmerge-gui.1
+ endif
+ 
+ TRANSLATIONS = @TRANSLATIONS@
+@@ -139,6 +139,7 @@
+ 
+ install-programs: $(APPLICATIONS)
+ 	$(mkinstalldirs) $(DESTDIR)$(bindir)
++	mv src/mmg/mmg@EXEEXT@ src/mmg/mkvmerge-gui@EXEEXT@
+ 	@list='$(APPLICATIONS)'; for p in $$list; do \
+ 	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+ 	  if test -f $$p ; then \
+@@ -151,6 +152,7 @@
+ 
+ install-mans:
+ 	$(mkinstalldirs) $(DESTDIR)$(man1dir)
++	mv doc/mmg.1 doc/mkvmerge-gui.1
+ 	for i in $(MANPAGES); do \
+ 	  inst=`echo $$i | sed -e 's/^.*\///'`; \
+ 	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
+@@ -443,6 +445,8 @@
+ 	@echo '    LINK ' $@
+ 	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
+ 
++src/mmg/mkvmerge-gui@EXEEXT@: src/mmg/mmg@EXEEXT@
++
+ #
+ # include dependency files if they exist
+ #

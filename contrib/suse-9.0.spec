@@ -14,13 +14,13 @@ BuildRequires: aaa_base attr bash bind-utils bison bzip2 coreutils cpio cpp crac
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
-Version: 1.5.5
+Version: 1.5.6
 Release: 1
 Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
 Group:        Productivity/Multimedia/Other
 Source:       %{name}-%{version}.tar.bz2
-Patch:        mmg-rename.diff
+Patch:        suse-mmg-rename.diff
 Summary:      tools to create, alter and inspect Matroska files
 BuildRoot:    %{_tmppath}/%{name}-%{version}-build
 Prefix:       /usr
