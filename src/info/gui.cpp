@@ -149,11 +149,8 @@ mi_frame::mi_frame(const wxString &title,
 void
 mi_frame::open_file(wxString file_name) {
   string cfile_name;
-#if WXUNICODE
-  cfile_name = from_utf8(cc_local_utf8, wxMB(file_name));
-#else
+
   cfile_name = wxMB(file_name);
-#endif
   tree->DeleteAllItems();
   item_ids[0] = tree->AddRoot(file_name);
   last_percent = -1;

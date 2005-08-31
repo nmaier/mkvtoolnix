@@ -1,3 +1,8 @@
+2005-08-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: The GUI couldn't open files with non-ASCII
+	chars in the file name.
+
 2005-08-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Display dimensions were reported for all
