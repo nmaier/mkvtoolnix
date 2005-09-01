@@ -1155,17 +1155,45 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
   if (help == NULL) {
     wxDirDialog dlg(this, wxT("Chosoe the location of the mkvmerge GUI "
                               "help files"));
+    vector<wxString> potential_help_paths;
+    vector<wxString>::const_iterator php;
     wxString help_path;
     wxConfigBase *cfg;
     bool first;
 
-    help_path = wxGetCwd();
     cfg = wxConfigBase::Get();
     cfg->SetPath(wxT("/GUI"));
-    if (!cfg->Read(wxT("help_path"), &help_path))
-      if (cfg->Read(wxT("installation_path"), &help_path))
-        help_path += wxT("/doc");
-    first = true;
+
+    if (cfg->Read(wxT("installation_path"), &help_path)) {
+      help_path += wxT("/doc");
+      potential_help_paths.push_back(help_path);
+    }
+#if !defined(SYS_WINDOWS)
+    // Debian, probably others
+    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix"));
+    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix/doc"));
+    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-gui"));
+    // SuSE
+    potential_help_paths.push_back(wxT("/usr/share/doc/packages/mkvtoolnix"));
+    // Fedora Core
+    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-" VERSION));
+    // (Almost the) same for /usr/local
+    potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix"));
+    potential_help_paths.push_back(wxT("/usr/local/share/doc/packages/mkvtoolnix"));
+    potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix-" VERSION));
+#endif
+    if (cfg->Read(wxT("help_path"), &help_path))
+      potential_help_paths.push_back(help_path);
+    potential_help_paths.push_back(wxGetCwd() + wxT("/doc"));
+    potential_help_paths.push_back(wxGetCwd());
+
+    help_path = wxT("");
+    foreach(php, potential_help_paths)
+      if (wxFileExists(*php + wxT("/mkvmerge-gui.hhp"))) {
+        help_path = *php;
+        break;
+      }
+
     while (!wxFileExists(help_path + wxT("/mkvmerge-gui.hhp"))) {
       if (first) {
         wxMessageBox(wxT("The mkvmerge GUI help file was not found. This "
@@ -1187,8 +1215,8 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
       if (dlg.ShowModal() == wxID_CANCEL)
         return;
       help_path = dlg.GetPath();
+      cfg->Write(wxT("help_path"), help_path);
     }
-    cfg->Write(wxT("help_path"), help_path);
     help = new wxHtmlHelpController;
     help->AddBook(wxFileName(help_path + wxT("/mkvmerge-gui.hhp")), false);
   }
