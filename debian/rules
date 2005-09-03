@@ -74,16 +74,6 @@ binary-indep: build install
 	dh_installchangelogs ChangeLog
 	dh_installdocs
 
-# Install the images belonging the GUI guide.
-	install -d $(INSTPREFIX)/share/doc/mkvtoolnix/doc/images
-	for i in doc/mkvmerge-gui.*; do \
-		install -m 0644 $$i \
-			$(INSTPREFIX)/share/doc/mkvtoolnix/doc/; \
-	done
-	for i in doc/images/*gif; do \
-		install -m 0644 $$i \
-			$(INSTPREFIX)/share/doc/mkvtoolnix/doc/images/; \
-	done
 # Create HTML files from the man page.
 	for i in doc/mkvmerge.1; do \
 		groff -man -Thtml $$i > $(INSTPREFIX)/share/doc/mkvtoolnix/doc/`basename $$i .1`.html; \

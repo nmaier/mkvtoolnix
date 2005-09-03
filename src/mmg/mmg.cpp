@@ -1181,6 +1181,9 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
     potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix"));
     potential_help_paths.push_back(wxT("/usr/local/share/doc/packages/mkvtoolnix"));
     potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix-" VERSION));
+    // New location
+    potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR));
+    potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR "-" VERSION));
 #endif
     if (cfg->Read(wxT("help_path"), &help_path))
       potential_help_paths.push_back(help_path);

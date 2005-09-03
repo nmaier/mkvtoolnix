@@ -87,7 +87,8 @@ LDFLAGS = @LDFLAGS@
 
 CFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
 CXXFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
-CXXFLAGS += -DMTX_LOCALE_DIR=\"$(localedir)\"
+CXXFLAGS += -DMTX_LOCALE_DIR=\"$(localedir)\" \
+	-DMTX_PKG_DATA_DIR=\"$(pkgdatadir)\"
 
 # Which additional stuff to compile
 USE_WXWINDOWS = @USE_WXWINDOWS@
@@ -136,7 +137,7 @@ HTMLHELPBOOKS = mkvmerge-gui-book
 
 all: $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
-install: install-programs install-mans install-trans
+install: install-programs install-mans install-trans install-guide
 
 install-programs: $(APPLICATIONS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -152,18 +153,29 @@ install-programs: $(APPLICATIONS)
 
 install-mans:
 	$(mkinstalldirs) $(DESTDIR)$(man1dir)
-	for i in $(MANPAGES); do \
+	@for i in $(MANPAGES); do \
 	  inst=`echo $$i | sed -e 's/^.*\///'`; \
 	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
 	  $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst; \
 	done
 
 install-trans:
-	for i in $(TRANSLATIONS); do \
-		echo "$(mkinstalldirs) $(DESTDIR)$(localedir)/$$i/LC_MESSAGES"; \
-		$(mkinstalldirs) $(DESTDIR)$(localedir)/$$i/LC_MESSAGES; \
-		echo "$(INSTALL_DATA) po/$$i.mo $(DESTDIR)$(localedir)/$$i/LC_MESSAGES/mkvtoolnix.mo"; \
-		$(INSTALL_DATA) po/$$i.mo $(DESTDIR)$(localedir)/$$i/LC_MESSAGES/mkvtoolnix.mo; \
+	@for i in $(TRANSLATIONS); do \
+	  echo "$(mkinstalldirs) $(DESTDIR)$(localedir)/$$i/LC_MESSAGES"; \
+	  $(mkinstalldirs) $(DESTDIR)$(localedir)/$$i/LC_MESSAGES; \
+	  echo "$(INSTALL_DATA) po/$$i.mo $(DESTDIR)$(localedir)/$$i/LC_MESSAGES/mkvtoolnix.mo"; \
+	  $(INSTALL_DATA) po/$$i.mo $(DESTDIR)$(localedir)/$$i/LC_MESSAGES/mkvtoolnix.mo; \
+	done
+
+install-guide:
+	$(mkinstalldirs) $(pkgdatadir)
+	@for i in doc/mkvmerge-gui.*; do \
+	  echo " $(INSTALL_DATA) $$i $(pkgdatadir)/"; \
+	  $(INSTALL_DATA) $$i $(pkgdatadir)/; \
+	done
+	@for i in doc/images/*gif; do \
+	  echo " $(INSTALL_DATA) $$i $(pkgdatadir)/"; \
+	  $(INSTALL_DATA) $$i $(pkgdatadir)/; \
 	done
 
 SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
