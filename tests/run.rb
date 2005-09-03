@@ -25,7 +25,7 @@ class Test
     n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
     Dir.entries("/tmp").each do |e|
       File.unlink("/tmp/#{e}") if ((e =~ /^#{n}/) and
-                                    File.exists?("/tmp/#{e}")))
+                                    File.exists?("/tmp/#{e}"))
     end
   end
 
