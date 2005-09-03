@@ -246,8 +246,10 @@ clean:
 		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk
 
 distclean dist-clean: clean
-	rm -f configure config.h config.h.in config.log config.cache \
-		Makefile */Makefile */*/Makefile
+	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile
+
+maintainer-clean: distclean
+	rm -f configure config.h.in
 
 depend:
 	@echo Calculating dependecies:
