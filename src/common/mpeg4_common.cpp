@@ -38,7 +38,7 @@ mpeg4_p2_extract_par_internal(const unsigned char *buffer,
   bit_cursor_c bits(buffer, buffer_size);
 
   while (!bits.eof()) {
-    bits.peek_bits(32, marker);
+    marker = bits.peek_bits(32);
 
     if ((marker & 0xffffff00) != 0x00000100) {
       bits.skip_bits(8);
@@ -63,11 +63,11 @@ mpeg4_p2_extract_par_internal(const unsigned char *buffer,
       bits.skip_bits(3);        // vo_priority
     }
 
-    bits.get_bits(4, aspect_ratio_info);
+    aspect_ratio_info = bits.get_bits(4);
     mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
     if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
-      bits.get_bits(8, num);
-      bits.get_bits(8, den);
+      num = bits.get_bits(8);
+      den = bits.get_bits(8);
     } else {
       num = ar_nums[aspect_ratio_info];
       den = ar_dens[aspect_ratio_info];
@@ -291,7 +291,7 @@ read_golomb_ue(bit_cursor_c &bits) {
     i++;
   }
 
-  bits.get_bits(i, value);
+  value = bits.get_bits(i);
 
   return ((1 << i) - 1) + value;
 }
@@ -339,8 +339,7 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
       bit_cursor_c bits(&buffer[avcc.getFilePointer()],
                         (length + avcc.getFilePointer()) >  buffer_size ?
                         buffer_size - avcc.getFilePointer() : length);
-      bits.get_bits(8, nal_unit_type);
-      nal_unit_type &= 0x1f;
+      nal_unit_type = bits.get_bits(8) & 0x1f;
       mxverb(4, "mpeg4_p10_extract_par: nal_unit_type %d\n", nal_unit_type);
       if (nal_unit_type != 7)   // 7 = SPS
         continue;
@@ -390,7 +389,7 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
         throw false;
       }
 
-      bits.get_bits(8, ar_type);
+      ar_type = bits.get_bits(8);
       if ((ar_type != 0xff) &&  // custom AR
           (ar_type > 13)) {
         mxverb(4, "mpeg4_p10_extract_par: wrong ar_type %d\n", ar_type);
@@ -412,8 +411,8 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
         return true;
       }
 
-      bits.get_bits(16, par_num);
-      bits.get_bits(16, par_den);
+      par_num = bits.get_bits(16);
+      par_den = bits.get_bits(16);
       mxverb(4, "mpeg4_p10_extract_par: ar_type %d num %d den %d\n",
              ar_type, par_num, par_den);
       return true;

@@ -115,31 +115,31 @@ find_dts_header_internal(const unsigned char *buf,
 
   unsigned int t;
 
-  bc.get_bits(1, t);
+  t = bc.get_bit();
   dts_header->frametype = (t)? dts_header_s::FRAMETYPE_NORMAL :
     dts_header_s::FRAMETYPE_TERMINATION;
 
-  bc.get_bits(5, t);
+  t = bc.get_bits(5);
   dts_header->deficit_sample_count = (t+1) % 32;
 
-  bc.get_bits(1, t);
+  t = bc.get_bit();
   dts_header->crc_present = (t)? true : false;
 
-  bc.get_bits(7, t);
+  t = bc.get_bits(7);
   if (t < 5)  {
     mxwarn("DTS_Header problem: invalid number of blocks in frame\n");
     //return -1;
   }
   dts_header->num_pcm_sample_blocks = t + 1;
 
-  bc.get_bits(14, t);
+  t = bc.get_bits(14);
   if (t < 95) {
     mxwarn("DTS_Header problem: invalid frame bytes size\n");
     return -1;
   }
   dts_header->frame_byte_size = t+1;
 
-  bc.get_bits(6, t);
+  t = bc.get_bits(6);
   if (t >= 16) {
     dts_header->audio_channels = -1;
     dts_header->audio_channel_arrangement = "unknown (user defined)";
@@ -149,14 +149,14 @@ find_dts_header_internal(const unsigned char *buf,
       channel_arrangements[t].description;
   }
 
-  bc.get_bits(4, t);
+  t = bc.get_bits(4);
   dts_header->core_sampling_frequency = core_samplefreqs[t];
   if (dts_header->core_sampling_frequency < 0) {
     mxwarn("DTS_Header problem: invalid core sampling frequency\n");
     return -1;
   }
 
-  bc.get_bits(5, t);
+  t = bc.get_bits(5);
   dts_header->transmission_bitrate = transmission_bitrates[t];
 
   dts_header->embedded_down_mix = bc.get_bit();
@@ -165,7 +165,7 @@ find_dts_header_internal(const unsigned char *buf,
   dts_header->auxiliary_data = bc.get_bit();
   dts_header->hdcd_master = bc.get_bit();
 
-  bc.get_bits(3, t);
+  t = bc.get_bits(3);
   dts_header->extension_audio_descriptor =
     (dts_header_s::extension_audio_descriptor_e)t;
 
@@ -173,21 +173,21 @@ find_dts_header_internal(const unsigned char *buf,
 
   dts_header->audio_sync_word_in_sub_sub = bc.get_bit();
 
-  bc.get_bits(2, t);
+  t = bc.get_bits(2);
   dts_header->lfe_type = (dts_header_s::lfe_type_e)t;
 
   dts_header->predictor_history_flag = bc.get_bit();
 
   if (dts_header->crc_present) {
-    bc.get_bits(16, t);
+    t = bc.get_bits(16);
     // unsigned short header_CRC_sum = t; // not used yet
   }
 
-  bc.get_bits(1, t);
+  t = bc.get_bit();
   dts_header->multirate_interpolator =
     (dts_header_s::multirate_interpolator_e)t;
 
-  bc.get_bits(4, t);
+  t = bc.get_bits(4);
   dts_header->encoder_software_revision = t;
   if (t > 7) {
     mxwarn("DTS_Header problem: encoded with an incompatible new "
@@ -195,10 +195,10 @@ find_dts_header_internal(const unsigned char *buf,
     return -1;
   }
 
-  bc.get_bits(2, t);
+  t = bc.get_bits(2);
   dts_header->copy_history = t;
 
-  bc.get_bits(3, t);
+  t = bc.get_bits(3);
   switch (t) {
     case spr_16:
       dts_header->source_pcm_resolution = 16;
@@ -239,7 +239,7 @@ find_dts_header_internal(const unsigned char *buf,
 
   dts_header->surround_sum_difference = bc.get_bit();
 
-  bc.get_bits(4, t);
+  t = bc.get_bits(4);
   if (dts_header->encoder_software_revision == 7) {
     dts_header->dialog_normalization_gain = -((int)t);
   } else if (dts_header->encoder_software_revision == 6) {

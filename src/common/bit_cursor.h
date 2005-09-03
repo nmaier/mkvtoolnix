@@ -42,8 +42,9 @@ public:
     return out_of_data;
   }
 
-  void get_bits(unsigned int n, uint64_t &r) {
-    // returns false if less bits are available than asked for
+  uint64_t get_bits(unsigned int n) {
+    uint64_t r;
+
     r = 0;
 
     while (n > 0) {
@@ -71,36 +72,19 @@ public:
 
       n -= b;
     }
+
+    return r;
   }
 
-  void get_bits(unsigned int n, int64_t &r) {
-    uint64_t t;
-    get_bits(n, t);
-    r = (int64_t)t;
+  int get_bit() {
+    return get_bits(1);
   }
 
-  void get_bits(unsigned int n, int &r) {
-    uint64_t t;
-    get_bits(n, t);
-    r = (int)t;
-  }
-
-  void get_bits(unsigned int n, unsigned int &r) {
-    uint64_t t;
-    get_bits(n, t);
-    r = (unsigned int)t;
-  }
-
-  bool get_bit() {
-    uint64_t t;
-    get_bits(1, t);
-    return t;
-  }
-
-  void peek_bits(unsigned int n, uint64_t &r) {
+  uint64_t peek_bits(unsigned int n) {
+    uint64_t r;
     int tmp_bits_valid;
     const unsigned char *tmp_byte_position;
-    // returns false if less bits are available than asked for
+
     r = 0;
     tmp_byte_position = byte_position;
     tmp_bits_valid = bits_valid;
@@ -128,30 +112,8 @@ public:
 
       n -= b;
     }
-  }
 
-  void peek_bits(unsigned int n, int64_t &r) {
-    uint64_t t;
-    peek_bits(n, t);
-    r = (int64_t)t;
-  }
-
-  void peek_bits(unsigned int n, int &r) {
-    uint64_t t;
-    peek_bits(n, t);
-    r = (int)t;
-  }
-
-  void peek_bits(unsigned int n, unsigned int &r) {
-    uint64_t t;
-    peek_bits(n, t);
-    r = (unsigned int)t;
-  }
-
-  bool peek_bit() {
-    uint64_t t;
-    peek_bits(1, t);
-    return t;
+    return r;
   }
 
   void byte_align() {
@@ -202,7 +164,7 @@ public:
 
   uint64_t copy_bits(unsigned int n, bit_cursor_c &src) {
     uint64_t value;
-    src.get_bits(n, value);
+    value = src.get_bits(n);
     put_bits(n, value);
     return value;
   }

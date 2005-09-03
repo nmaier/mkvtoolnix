@@ -31,7 +31,7 @@ flac_skip_utf8(bit_cursor_c &bits,
   uint32_t value;
   int num;
 
-  bits.get_bits(8, value);
+  value = bits.get_bits(8);
 
   if (!(value & 0x80))          /* 0xxxxxxx */
     num = 0;
@@ -66,8 +66,7 @@ flac_get_num_samples_internal(unsigned char *mem,
   int samples;
 
   // Sync word: 11 1111 1111 1110
-  bits.peek_bits(14, value);
-  if (value != 0x3ffe)
+  if (bits.peek_bits(14) != 0x3ffe)
     return -1;
 
   bits.skip_bits(14);
@@ -76,7 +75,7 @@ flac_get_num_samples_internal(unsigned char *mem,
   bits.skip_bits(2);
 
   // Block size
-  bits.get_bits(4, value);
+  value = bits.get_bits(4);
 
   free_sample_size = 0;
   samples = 0;
@@ -98,7 +97,7 @@ flac_get_num_samples_internal(unsigned char *mem,
   bits.skip_bits(4);
 
   // Sample size (3 bits) and zero bit padding (1 bit)
-  bits.get_bits(4, value);
+  bits.skip_bits(4);
 
   if (stream_info.min_blocksize != stream_info.max_blocksize) {
     if (!flac_skip_utf8(bits, 64))
@@ -107,13 +106,10 @@ flac_get_num_samples_internal(unsigned char *mem,
       return -1;
 
   if ((free_sample_size == 6) || (free_sample_size == 7)) {
-    bits.get_bits(8, value);
-
-    samples = value;
+    samples = bits.get_bits(8);
     if (free_sample_size == 7) {
-      bits.get_bits(8, value);
       samples <<= 8;
-      samples |= value;
+      samples |= bits.get_bits(8);
     }
     samples++;
   }

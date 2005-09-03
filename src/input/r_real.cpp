@@ -713,25 +713,25 @@ real_reader_c::get_rv_dimensions(unsigned char *buf,
   try {
     bc.skip_bits(13);
     bc.skip_bits(13);
-    bc.get_bits(3, v);
+    v = bc.get_bits(3);
 
     w = cw[v];
     if (w == 0) {
       do {
-        bc.get_bits(8, c);
+        c = bc.get_bits(8);
         w += (c << 2);
       } while (c == 255);
     }
 
-    bc.get_bits(3, c);
+    c = bc.get_bits(3);
     h = ch1[c];
     if (h == 0) {
-      bc.get_bits(1, v);
+      v = bc.get_bits(1);
       c = ((c << 1) | v) & 3;
       h = ch2[c];
       if (h == 0) {
         do {
-          bc.get_bits(8, c);
+          c = bc.get_bits(8);
           h += (c << 2);
         } while (c == 255);
       }
